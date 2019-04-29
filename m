@@ -2,87 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8907EE9F8
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Apr 2019 20:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3EAEA07
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Apr 2019 20:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728966AbfD2SQk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Apr 2019 14:16:40 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:46815 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728748AbfD2SQk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Apr 2019 14:16:40 -0400
-Received: by mail-pl1-f194.google.com with SMTP id bi2so664627plb.13;
-        Mon, 29 Apr 2019 11:16:40 -0700 (PDT)
+        id S1728983AbfD2SWC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Apr 2019 14:22:02 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40135 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728844AbfD2SWC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Apr 2019 14:22:02 -0400
+Received: by mail-pl1-f196.google.com with SMTP id b3so5459146plr.7
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Apr 2019 11:22:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aLkZ493/1cphoGwpLIb9H6qasE7OtGYtVCVCps4qXrE=;
-        b=GMgnYuebgPvTcDZfKu1oiDfjT9Cr/8GS7nbUkYUo7edo0jBZ9y6tQD4ZT+7ALW8fvO
-         hjlDHcZh5eSmUp4OL1fV5RdAI2CIL+JBEiGKe03m4OSunGl7+OmUMOpq+gFdh4YfWbof
-         2htMal6QOv6GayZoEhBigogFJCWGNMsUgEcasXMkCW15Ky+yEkEvV0Uqymk7FIjOWI/u
-         25tEb2V7t1EctnVpq2SPHE2X2LJWEaL9yGhUjn+1EeFd2LcvbQqhbLYJyFcGbuMGu9vc
-         f41LW2XFicz/6omOPjHB4m2c5p4V0bbekO6Iv7j8iq/2ftbb2rV3srEA7MxOOMmqlYiO
-         aV5w==
-X-Gm-Message-State: APjAAAUuuEu+T9rrdaa6Bc8gR5JVROXbjh3XS2RB8NdtwdGJCw0a1Kau
-        T29xojDjM8lh1Vhk6D+BXYCeBkFF
-X-Google-Smtp-Source: APXvYqwaDN3hsVmsoZIUFFdHMxshS0Ml2pvXLwfgKp2v4Jta1b0Rlg3VKQSEOvS12SWIGVS4Gp4+bw==
-X-Received: by 2002:a17:902:5910:: with SMTP id o16mr9150656pli.289.1556561799622;
-        Mon, 29 Apr 2019 11:16:39 -0700 (PDT)
-Received: from ?IPv6:2620:15c:2cd:203:5cdc:422c:7b28:ebb5? ([2620:15c:2cd:203:5cdc:422c:7b28:ebb5])
-        by smtp.gmail.com with ESMTPSA id d15sm11992646pfr.179.2019.04.29.11.16.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Apr 2019 11:16:38 -0700 (PDT)
-Message-ID: <1556561798.161891.166.camel@acm.org>
-Subject: Re: [PATCH V4 3/3] scsi: core: avoid to pre-allocate big chunk for
- sg list
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gdxr67cGcWjm0r9fdtWRtUdHDiHf8cgaxy42FtsjKGM=;
+        b=IF6ofVvKCvOaCR2g/hP/AZQPnCHm4TAyxXbi51xV7AxK2y0Kmrj9JkG+6ztUtSIJiL
+         7H0z1558X5oRPAXQv4HdArSJNeyIBXbOSS0B0blVLlWw4dumrbqxEVhKyYtyVsM/LA5w
+         2iBLTiv61vJn7jkxfCsFwTtuTe5ozBlJIcXPl4HJFl2+45uQqZ0WnSM2Y8Ir+B7ZeNwq
+         Ib7OEPMgfKvfjT6BwRzqGR2TlaHkqIjDRdjT7e+yjUK3yZ6+Fo77Y2tZ8l/6kcfdultD
+         M1po3K2Ibzq7GMIIdU/sCFTr4saHMf0mRlt9FngET3jEBuo8cvcF0Tu3KstJYWmms3Au
+         wGHA==
+X-Gm-Message-State: APjAAAXR1HNpn352J7PVRUm5D9I4PAIrI003PSpOBoV7jaZie00Y5Um2
+        NDR5YN3S+ovm1X7vk+J35KE=
+X-Google-Smtp-Source: APXvYqzmkDeeuyP82YzV9Nug9tIhfO6I/Q3Kqps9FM4EDy1OnPnuwYPtUR4QCwUfWNxVuacYpJEj8g==
+X-Received: by 2002:a17:902:6842:: with SMTP id f2mr11035654pln.189.1556562122013;
+        Mon, 29 Apr 2019 11:22:02 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:203:5cdc:422c:7b28:ebb5])
+        by smtp.gmail.com with ESMTPSA id z22sm35657227pgv.23.2019.04.29.11.22.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Apr 2019 11:22:01 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
-To:     Ming Lei <ming.lei@redhat.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-block@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.com>
-Date:   Mon, 29 Apr 2019 11:16:38 -0700
-In-Reply-To: <20190428073932.9898-4-ming.lei@redhat.com>
-References: <20190428073932.9898-1-ming.lei@redhat.com>
-         <20190428073932.9898-4-ming.lei@redhat.com>
-Content-Type: text/plain; charset="UTF-7"
-X-Mailer: Evolution 3.26.2-1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH 0/2] Revert the patches that rework sd probing
+Date:   Mon, 29 Apr 2019 11:21:51 -0700
+Message-Id: <20190429182153.206292-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.20.GIT
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 2019-04-28 at 15:39 +-0800, Ming Lei wrote:
-+AD4 Now scsi+AF8-mq+AF8-setup+AF8-tags() pre-allocates a big buffer for IO sg list,
-+AD4 and the buffer size is scsi+AF8-mq+AF8-sgl+AF8-size() which depends on smaller
-+AD4 value between shost-+AD4-sg+AF8-tablesize and SG+AF8-CHUNK+AF8-SIZE.
-+AD4 
-+AD4 Modern HBA's DMA is often capable of deadling with very big segment
-+AD4 number, so scsi+AF8-mq+AF8-sgl+AF8-size() is often big. Suppose the max sg number
-+AD4 of SG+AF8-CHUNK+AF8-SIZE is taken, scsi+AF8-mq+AF8-sgl+AF8-size() will be 4KB.
-+AD4 
-+AD4 Then if one HBA has lots of queues, and each hw queue's depth is
-+AD4 high, pre-allocation for sg list can consume huge memory.
-+AD4 For example of lpfc, nr+AF8-hw+AF8-queues can be 70, each queue's depth
-+AD4 can be 3781, so the pre-allocation for data sg list is 70+ACo-3781+ACo-2k
-+AD4 +AD0-517MB for single HBA.
-+AD4 
-+AD4 There is Red Hat internal report that scsi+AF8-debug based tests can't
-+AD4 be run any more since legacy io path is killed because too big
-+AD4 pre-allocation.
-+AD4 
-+AD4 So switch to runtime allocation for sg list, meantime pre-allocate 2
-+AD4 inline sg entries. This way has been applied to NVMe PCI for a while,
-+AD4 so it should be fine for SCSI too. Also runtime sg entries allocation
-+AD4 has verified and run always in the original legacy io path.
-+AD4 
-+AD4 Not see performance effect in my big BS test on scsi+AF8-debug.
+Hi Martin,
 
-Reviewed-by: Bart Van Assche +ADw-bvanassche+AEA-acm.org+AD4
+For a not yet fully root-caused reason patch "sd: Rely on the driver core
+for asynchronous probing" causes trouble with suspend/resume. Since not
+much time is left before the merge window opens, revert this patch and
+also a patch that depends on it.
 
+Thanks,
+
+Bart.
+
+Bart Van Assche (2):
+  sd: Revert "Inline sd_probe_part2()"
+  sd: Revert "Rely on the driver core for asynchronous probing"
+
+ drivers/scsi/scsi.c      |  14 +++++
+ drivers/scsi/scsi_pm.c   |  22 +++++++-
+ drivers/scsi/scsi_priv.h |   3 ++
+ drivers/scsi/sd.c        | 110 +++++++++++++++++++++++----------------
+ 4 files changed, 103 insertions(+), 46 deletions(-)
+
+-- 
+2.21.0.196.g041f5ea1cf98
 
