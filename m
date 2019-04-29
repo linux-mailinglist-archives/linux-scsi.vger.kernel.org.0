@@ -2,154 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A61B7DBC4
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Apr 2019 08:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B6EE195
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Apr 2019 13:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727421AbfD2GFg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Apr 2019 02:05:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47356 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727016AbfD2GFe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Apr 2019 02:05:34 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BA09CABD5;
-        Mon, 29 Apr 2019 06:05:31 +0000 (UTC)
-Subject: Re: [PATCH V8 4/7] blk-mq: split blk_mq_alloc_and_init_hctx into two
- parts
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        James Smart <james.smart@broadcom.com>,
-        Bart Van Assche <bart.vanassche@wdc.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-References: <20190428081408.27331-1-ming.lei@redhat.com>
- <20190428081408.27331-5-ming.lei@redhat.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <24ecd123-5707-9b70-d284-b3228951813f@suse.de>
-Date:   Mon, 29 Apr 2019 08:05:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727933AbfD2LvM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Apr 2019 07:51:12 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:47702 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727857AbfD2LvM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Apr 2019 07:51:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=j38JudO0qhU870Yr7jDI/6QZJ039LfXF1doZeEZ7TeQ=; b=Z/nRoZb3biXgz/w5MCCNWRTeS
+        xWTSP8tEduOOJuU0KVkn4MTHPPRdNw8urSwBcY4Dxi32FUWESD3Tdwa9XQ6nIjGyEGovvwbshcG2b
+        OZhV22rF9JHCVLHZUebOFaRbQ1qH6R+1Y8H3UWNFzG75Ze/CspFfyrkA35OkazX7vpDk7tb0p4Jn3
+        qj8RfWXcfNXQJuo8vpTexSwKMCWyIvsgkUBph1S4w+l7Y3g3sHHkA6YWJ8MCYcbHOttJZXOfE1WlW
+        OA1d4EVitpvcZGayfc2Hj510r1MhEJvmiWoMbB/9T7OY9NqeqKk4U4nXmZFQ9q7v6COdedpHrIIqf
+        RW6XmXpfg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hL4oI-00087V-Vz; Mon, 29 Apr 2019 11:51:02 +0000
+Date:   Mon, 29 Apr 2019 04:51:02 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Ondrej Zary <linux@zary.sk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Rik Faith <faith@cs.unc.edu>,
+        "David A . Hinds" <dahinds@users.sourceforge.net>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] fdomain: Resurrect driver (core)
+Message-ID: <20190429115102.GB25365@infradead.org>
+References: <20190422173323.15365-1-linux@zary.sk>
+ <20190422173323.15365-2-linux@zary.sk>
+ <20190424060212.GA5506@infradead.org>
+ <201904282152.32077.linux@zary.sk>
 MIME-Version: 1.0
-In-Reply-To: <20190428081408.27331-5-ming.lei@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201904282152.32077.linux@zary.sk>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/28/19 10:14 AM, Ming Lei wrote:
-> Split blk_mq_alloc_and_init_hctx into two parts, and one is
-> blk_mq_alloc_hctx() for allocating all hctx resources, another
-> is blk_mq_init_hctx() for initializing hctx, which serves as
-> counter-part of blk_mq_exit_hctx().
+On Sun, Apr 28, 2019 at 09:52:31PM +0200, Ondrej Zary wrote:
+> On Wednesday 24 April 2019 08:02:12 Christoph Hellwig wrote:
+> > > +static void fdomain_work(struct work_struct *work)
+> > > +{
+> > > +	struct fdomain *fd = container_of(work, struct fdomain, work);
+> > > +	struct Scsi_Host *sh = container_of((void *)fd, struct Scsi_Host,
+> > > +					    hostdata);
+> > 
+> > This looks odd.  We should never need a void cast for container_of.
 > 
-> Cc: Dongli Zhang <dongli.zhang@oracle.com>
-> Cc: James Smart <james.smart@broadcom.com>
-> Cc: Bart Van Assche <bart.vanassche@wdc.com>
-> Cc: linux-scsi@vger.kernel.org,
-> Cc: Martin K . Petersen <martin.petersen@oracle.com>,
-> Cc: Christoph Hellwig <hch@lst.de>,
-> Cc: James E . J . Bottomley <jejb@linux.vnet.ibm.com>,
-> Reviewed-by: Hannes Reinecke <hare@suse.com>
-> Tested-by: James Smart <james.smart@broadcom.com>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->   block/blk-mq.c | 138 ++++++++++++++++++++++++++++++++-------------------------
->   1 file changed, 77 insertions(+), 61 deletions(-)
-> 
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index d98cb9614dfa..44ecca6b0cac 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -2284,15 +2284,70 @@ static void blk_mq_exit_hw_queues(struct request_queue *q,
->   	}
->   }
->   
-> +static int blk_mq_hw_ctx_size(struct blk_mq_tag_set *tag_set)
-> +{
-> +	int hw_ctx_size = sizeof(struct blk_mq_hw_ctx);
-> +
-> +	BUILD_BUG_ON(ALIGN(offsetof(struct blk_mq_hw_ctx, srcu),
-> +			   __alignof__(struct blk_mq_hw_ctx)) !=
-> +		     sizeof(struct blk_mq_hw_ctx));
-> +
-> +	if (tag_set->flags & BLK_MQ_F_BLOCKING)
-> +		hw_ctx_size += sizeof(struct srcu_struct);
-> +
-> +	return hw_ctx_size;
-> +}
-> +
->   static int blk_mq_init_hctx(struct request_queue *q,
->   		struct blk_mq_tag_set *set,
->   		struct blk_mq_hw_ctx *hctx, unsigned hctx_idx)
->   {
-> -	int node;
-> +	hctx->queue_num = hctx_idx;
->   
-> -	node = hctx->numa_node;
-> +	cpuhp_state_add_instance_nocalls(CPUHP_BLK_MQ_DEAD, &hctx->cpuhp_dead);
-> +
-> +	hctx->tags = set->tags[hctx_idx];
-> +
-> +	if (set->ops->init_hctx &&
-> +	    set->ops->init_hctx(hctx, set->driver_data, hctx_idx))
-> +		goto unregister_cpu_notifier;
-> +
-> +	if (blk_mq_init_request(set, hctx->fq->flush_rq, hctx_idx,
-> +				hctx->numa_node))
-> +		goto exit_hctx;
-> +	return 0;
-> +
-> + exit_hctx:
-> +	if (set->ops->exit_hctx)
-> +		set->ops->exit_hctx(hctx, hctx_idx);
-> + unregister_cpu_notifier:
-> +	blk_mq_remove_cpuhp(hctx);
-> +	return -1;
-> +}
-> +
-> +static struct blk_mq_hw_ctx *
-> +blk_mq_alloc_hctx(struct request_queue *q,
-> +		struct blk_mq_tag_set *set,
-> +		unsigned hctx_idx, int node)
-> +{
-> +	struct blk_mq_hw_ctx *hctx;
-> +
-> +	hctx = kzalloc_node(blk_mq_hw_ctx_size(set),
-> +			GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY,
-> +			node);
-> +	if (!hctx)
-> +		goto fail_alloc_hctx;
-> +
-> +	if (!zalloc_cpumask_var_node(&hctx->cpumask,
-> +				GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY,
-> +				node))
-> +		goto free_hctx;
-> +
-> +	atomic_set(&hctx->nr_active, 0);
-> +	hctx->numa_node = node;
->   	if (node == NUMA_NO_NODE)
-> -		node = hctx->numa_node = set->numa_node;
-> +		hctx->numa_node = set->numa_node;
-> +	node = hctx->numa_node;
->   
->   	INIT_DELAYED_WORK(&hctx->run_work, blk_mq_run_work_fn);
->   	spin_lock_init(&hctx->lock);
-The 'hctx_idx' argument is now unused, and should be removed from the 
-function definition.
+> This cast is present in all drivers involving container_of, struct Scsi_Host and hostdata. hostdata in struct Scsi_Host is defined as "unsigned long hostdata[0]"...
 
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke		   Teamlead Storage & Networking
-hare@suse.de			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+Oh, right - it is the hostdata mess.  Sorry for the noise!
