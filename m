@@ -2,124 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 004EEE4D8
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Apr 2019 16:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 768B0E996
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Apr 2019 19:59:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbfD2Oh5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Apr 2019 10:37:57 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:37782 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728344AbfD2Oh4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Apr 2019 10:37:56 -0400
-Received: by mail-lj1-f193.google.com with SMTP id b12so8401814lji.4
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Apr 2019 07:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IhVM6N9/ZHwDg5/p6KViIfb3xYATqPgBSZ+xC/95p58=;
-        b=hg44RwuD4tqtKlAlm1NzdO9gWuodYNXK8Cfcx4i0OIdI9kpSKjPGMcwG5E6O3Hrbz8
-         BVC3gwSNd37jZGWH7pWcYMAsPWojxS6d87p8Q1rL/IBaOTVlG1NYa7B6LapD/6NPifhU
-         KpadrjxqWhGWO84brjcGJo5aEqj/Hiw7b/hcg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IhVM6N9/ZHwDg5/p6KViIfb3xYATqPgBSZ+xC/95p58=;
-        b=BtjQsEtqX+7rBBXQI1+aeh8uRgmFMXJP6s+cPbOP7KYSf6Yaj6xOFhoDNG3KN4HPUE
-         fEV8HG/luPgs3+g61QFOiReO7a9Y7Cd1mY+4D93Gmni6boo+ZE12MRQ054pQw5+ihHvD
-         lQwDSmkDx6xTBJBO5fPFH0ITZvEkXCUS37ZQ2sUJGaW9gVSaFDdfys0AqN7UXTEWs/wg
-         Hth34AhaiUNj70NTPWU9jdi2uiz6ZR5zXaP735CnTiTHZOO6U/TSuHjzpyvJHsqdznVQ
-         MCLSEJOzu56SwGXTZ2eyB25h7kS/jPkwJBKuYEDuuNcq490FtP4c0J3qgCyvevF43pkA
-         5Omg==
-X-Gm-Message-State: APjAAAUdTpVa3GZCihTuBpDC9eXh3qrwdPD2ERK9Xs/m6LsMLx2cViIa
-        p+FmJ5chxprZSERGsVDBzZT16qla4SA3BZI+exDNqg==
-X-Google-Smtp-Source: APXvYqxK4DCIG480RYBCjB0mnvhALsEumxVTGCSIBXtLOi3xCtNUpuuTec3OfiLR2rKpWXuo2SSVTokiOlQUU/yA4x8=
-X-Received: by 2002:a2e:6516:: with SMTP id z22mr4418724ljb.192.1556548674587;
- Mon, 29 Apr 2019 07:37:54 -0700 (PDT)
+        id S1728929AbfD2R7W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Apr 2019 13:59:22 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:49440 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728748AbfD2R7W (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Apr 2019 13:59:22 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3THwhZX114862;
+        Mon, 29 Apr 2019 17:59:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=PIjFVMADhjDCKo9/pSr9e/vXUxLxAyaIGzsn3QRp5Sk=;
+ b=uXKdY/njdjFyv/lzt8Z2f+rJz2Niz64UnFssMfFDVYMb3UMEQGs92dfgVYhOGNms4mnQ
+ bA6GUA8s1RchjWt+qOKSLV/L4MqWxclLhBMvIJhDoG/pl8XINIBbuQNMgVC/cFxpZsJ+
+ AKyd/tL/xWUggF1mkYMsCpZV4PwTtCIa/MS0i1md1yN6qG5hu62NlIlIoLpOEhajkMGl
+ RibfGqY68J/gXxWNjTia18pG00QdtnnacrzKbkM/2L2bptTCl5de+DFIWGwgJ3y4LmWz
+ mEJRCeamNHY5h4Xous9pj9v5KJczx/PIOc/ist6A66DbUP5ZhACrGY+irrwGybbP29N9 8w== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 2s4ckd87th-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Apr 2019 17:59:13 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x3THwdwD032518;
+        Mon, 29 Apr 2019 17:59:13 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2s4d4a2veh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Apr 2019 17:59:12 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x3THxCma028952;
+        Mon, 29 Apr 2019 17:59:12 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 29 Apr 2019 10:59:11 -0700
+To:     Himanshu Madhani <hmadhani@marvell.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "linux-scsi\@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "Christoph Hellwig" <hch@lst.de>
+Subject: Re: [PATCH 00/35] qla2xxx source code cleanup and bug fixes
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190417214443.243152-1-bvanassche@acm.org>
+        <1556229869.161891.147.camel@acm.org>
+        <61A50A60-DF18-4EF3-83C4-124BA6AEFE9D@marvell.com>
+Date:   Mon, 29 Apr 2019 13:59:08 -0400
+In-Reply-To: <61A50A60-DF18-4EF3-83C4-124BA6AEFE9D@marvell.com> (Himanshu
+        Madhani's message of "Thu, 25 Apr 2019 23:05:39 +0000")
+Message-ID: <yq15zqwzo9f.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-References: <1556271435-27252-3-git-send-email-shivasharan.srikanteshwara@broadcom.com>
- <20190426130618.82E892067D@mail.kernel.org>
-In-Reply-To: <20190426130618.82E892067D@mail.kernel.org>
-From:   Shivasharan Srikanteshwara 
-        <shivasharan.srikanteshwara@broadcom.com>
-Date:   Mon, 29 Apr 2019 20:07:43 +0530
-Message-ID: <CAOHJnDt3NcyHvYAB1AWt4Z6CqOQz7CKQrNLQj+GoYK-JhJOhAQ@mail.gmail.com>
-Subject: Re: [PATCH 02/21] megaraid_sas: Fix calculation of target ID
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-scsi@vger.kernel.org,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9242 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=940
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1904290123
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9242 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=976 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1904290123
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Apr 26, 2019 at 6:36 PM Sasha Levin <sashal@kernel.org> wrote:
->
-> Hi,
->
-> [This is an automated email]
->
-> This commit has been processed because it contains a -stable tag.
-> The stable tag indicates that it's relevant for the following trees: all
->
-> The bot has tested the following trees: v5.0.9, v4.19.36, v4.14.113, v4.9.170, v4.4.178, v3.18.138.
->
-> v5.0.9: Build OK!
-> v4.19.36: Build OK!
-> v4.14.113: Build OK!
-> v4.9.170: Failed to apply! Possible dependencies:
->     15dd03811d99 ("scsi: megaraid_sas: NVME Interface detection and prop settings")
->     18103efcacee ("scsi: megaraid-sas: request irqs later")
->     2493c67e518c ("scsi: megaraid_sas: 128 MSIX Support")
->     45f4f2eb3da3 ("scsi: megaraid_sas: Add new pci device Ids for SAS3.5 Generic Megaraid Controllers")
->     69c337c0f8d7 ("scsi: megaraid_sas: SAS3.5 Generic Megaraid Controllers Fast Path for RAID 1/10 Writes")
->     96188a89cc6d ("scsi: megaraid_sas: NVME interface target prop added")
->     d0fc91d67c59 ("scsi: megaraid_sas: Send SYNCHRONIZE_CACHE for VD to firmware")
->     d889344e4e59 ("scsi: megaraid_sas: Dynamic Raid Map Changes for SAS3.5 Generic Megaraid Controllers")
->     fad119b707f8 ("scsi: megaraid_sas: switch to pci_alloc_irq_vectors")
->     fdd84e2514b0 ("scsi: megaraid_sas: SAS3.5 Generic Megaraid Controllers Stream Detection and IO Coalescing")
->
-> v4.4.178: Failed to apply! Possible dependencies:
->     15dd03811d99 ("scsi: megaraid_sas: NVME Interface detection and prop settings")
->     179ac14291a0 ("megaraid_sas: Reply Descriptor Post Queue (RDPQ) support")
->     18365b138508 ("megaraid_sas: Task management support")
->     2216c30523b0 ("megaraid_sas: Update device queue depth based on interface type")
->     2c048351c8e3 ("megaraid_sas: Syncing request flags macro names with firmware")
->     6d40afbc7d13 ("megaraid_sas: MFI IO timeout handling")
->     96188a89cc6d ("scsi: megaraid_sas: NVME interface target prop added")
->     d889344e4e59 ("scsi: megaraid_sas: Dynamic Raid Map Changes for SAS3.5 Generic Megaraid Controllers")
->
-> v3.18.138: Failed to apply! Possible dependencies:
->     0b48d12d0365 ("megaraid_sas: Make PI enabled VD 8 byte DMA aligned")
->     0d5b47a724ba ("megaraid_sas: Expose TAPE drives unconditionally")
->     16b8528d2060 ("megaraid_sas: use raw_smp_processor_id()")
->     18365b138508 ("megaraid_sas: Task management support")
->     2216c30523b0 ("megaraid_sas: Update device queue depth based on interface type")
->     2be2a98845e6 ("megaraid_sas : Modify return value of megasas_issue_blocked_cmd() and wait_and_poll() to consider command status returned by firmware")
->     4026e9aac3ff ("megaraid_sas : Use Block layer tag support for internal command indexing")
->     4a5c814d9339 ("megaraid_sas : Add separate functions for building sysPD IOs and non RW LDIOs")
->     5765c5b8b38a ("megaraid_sas : Support for Avago's Single server High Availability product")
->     7497cde883b1 ("megaraid_sas: add support for secure JBOD")
->     8a232bb39917 ("megaraid_sas : add missing __iomem annotations")
->     96188a89cc6d ("scsi: megaraid_sas: NVME interface target prop added")
->     aed335eecf8f ("megaraid_sas: Make tape drives visible on PERC5 controllers")
->     d009b5760f57 ("megaraid_sas: online Firmware upgrade support for Extended VD feature")
->     da0dc9fb4e6b ("megaraid_sas: fix whitespace errors")
->
->
-> How should we proceed with this patch?
->
-Hi Sasha,
-This patch is applicable for 4.11.x and later stable trees only.
-I will send out a v2 of this patch with appropriate kernel version requirement
-along with the -stable tag.
 
-Thanks,
-Shivasharan
-> --
-> Thanks,
-> Sasha
+Himanshu,
+
+> Still reviewing it. About half way done. Will ACK if no issues found
+> during testing.
+
+Gentle poke. There are just a couple of days left before the merge
+window and we'll need some -next/0-day coverage.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
