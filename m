@@ -2,74 +2,145 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 406F4EC87
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Apr 2019 00:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB558EE0D
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Apr 2019 02:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729526AbfD2WJU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Mon, 29 Apr 2019 18:09:20 -0400
-Received: from mail.wl.linuxfoundation.org ([198.145.29.98]:57392 "EHLO
-        mail.wl.linuxfoundation.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729437AbfD2WJU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Apr 2019 18:09:20 -0400
-Received: from mail.wl.linuxfoundation.org (localhost [127.0.0.1])
-        by mail.wl.linuxfoundation.org (Postfix) with ESMTP id 00948289F3
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Apr 2019 22:09:19 +0000 (UTC)
-Received: by mail.wl.linuxfoundation.org (Postfix, from userid 486)
-        id E67AB289F0; Mon, 29 Apr 2019 22:09:19 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
-        pdx-wl-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=2.0 tests=BAYES_00,NO_RECEIVED,
-        NO_RELAYS autolearn=unavailable version=3.3.1
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 199887] Fibre login failure on older adapters
-Date:   Mon, 29 Apr 2019 22:09:19 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-qla2xxx@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: QLOGIC QLA2XXX
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: whiteheadm@acm.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-qla2xxx@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-199887-11613-mhJZX0kYkY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-199887-11613@https.bugzilla.kernel.org/>
-References: <bug-199887-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1729678AbfD3Asx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Apr 2019 20:48:53 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:39404 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728997AbfD3Asx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Apr 2019 20:48:53 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 2DC1B59445;
+        Tue, 30 Apr 2019 00:48:52 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 27C8817C5D;
+        Tue, 30 Apr 2019 00:48:43 +0000 (UTC)
+Date:   Tue, 30 Apr 2019 08:48:38 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        James Smart <james.smart@broadcom.com>,
+        Bart Van Assche <bart.vanassche@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Subject: Re: [PATCH V8 1/7] blk-mq: grab .q_usage_counter when queuing
+ request from plug code path
+Message-ID: <20190430004837.GA18120@ming.t460p>
+References: <20190428081408.27331-1-ming.lei@redhat.com>
+ <20190428081408.27331-2-ming.lei@redhat.com>
+ <1556561379.161891.164.camel@acm.org>
 MIME-Version: 1.0
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1556561379.161891.164.camel@acm.org>
+User-Agent: Mutt/1.9.1 (2017-09-22)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Tue, 30 Apr 2019 00:48:52 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=199887
+On Mon, Apr 29, 2019 at 11:09:39AM -0700, Bart Van Assche wrote:
+> On Sun, 2019-04-28 at 16:14 +0800, Ming Lei wrote:
+> > Just like aio/io_uring, we need to grab 2 refcount for queuing one
+> > request, one is for submission, another is for completion.
+> > 
+> > If the request isn't queued from plug code path, the refcount grabbed
+> > in generic_make_request() serves for submission. In theroy, this
+> > refcount should have been released after the sumission(async run queue)
+> > is done. blk_freeze_queue() works with blk_sync_queue() together
+> > for avoiding race between cleanup queue and IO submission, given async
+> > run queue activities are canceled because hctx->run_work is scheduled with
+> > the refcount held, so it is fine to not hold the refcount when
+> > running the run queue work function for dispatch IO.
+> > 
+> > However, if request is staggered into plug list, and finally queued
+> > from plug code path, the refcount in submission side is actually missed.
+> > And we may start to run queue after queue is removed because the queue's
+> > kobject refcount isn't guaranteed to be grabbed in flushing plug list
+> > context, then kernel oops is triggered, see the following race:
+> > 
+> > blk_mq_flush_plug_list():
+> >         blk_mq_sched_insert_requests()
+> >                 insert requests to sw queue or scheduler queue
+> >                 blk_mq_run_hw_queue
+> > 
+> > Because of concurrent run queue, all requests inserted above may be
+> > completed before calling the above blk_mq_run_hw_queue. Then queue can
+> > be freed during the above blk_mq_run_hw_queue().
+> > 
+> > Fixes the issue by grab .q_usage_counter before calling
+> > blk_mq_sched_insert_requests() in blk_mq_flush_plug_list(). This way is
+> > safe because the queue is absolutely alive before inserting request.
+> > 
+> > Cc: Dongli Zhang <dongli.zhang@oracle.com>
+> > Cc: James Smart <james.smart@broadcom.com>
+> > Cc: Bart Van Assche <bart.vanassche@wdc.com>
+> > Cc: linux-scsi@vger.kernel.org,
+> > Cc: Martin K . Petersen <martin.petersen@oracle.com>,
+> > Cc: Christoph Hellwig <hch@lst.de>,
+> > Cc: James E . J . Bottomley <jejb@linux.vnet.ibm.com>,
+> > Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> > Reviewed-by: Johannes Thumshirn <jthumshirn@suse.de>
+> > Reviewed-by: Hannes Reinecke <hare@suse.com>
+> > Tested-by: James Smart <james.smart@broadcom.com>
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> 
+> I added my "Reviewed-by" to a previous version of this patch but not
+> to this version of this patch. Several "Reviewed-by" tags probably
+> should be removed.
 
-Matthew Whitehead (whiteheadm@acm.org) changed:
+Fine.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |whiteheadm@acm.org
+> 
+> > diff --git a/block/blk-mq-sched.c b/block/blk-mq-sched.c
+> > index aa6bc5c02643..dfe83e7935d6 100644
+> > --- a/block/blk-mq-sched.c
+> > +++ b/block/blk-mq-sched.c
+> > @@ -414,6 +414,13 @@ void blk_mq_sched_insert_requests(struct blk_mq_hw_ctx *hctx,
+> >  {
+> >         struct elevator_queue *e;
+> >  
+> > +       /*
+> > +        * blk_mq_sched_insert_requests() is called from flush plug
+> > +        * context only, and hold one usage counter to prevent queue
+> > +        * from being released.
+> > +        */
+> > +       percpu_ref_get(&hctx->queue->q_usage_counter);
+> > +
+> >         e = hctx->queue->elevator;
+> >         if (e && e->type->ops.insert_requests)
+> >                 e->type->ops.insert_requests(hctx, list, false);
+> > @@ -432,6 +439,8 @@ void blk_mq_sched_insert_requests(struct blk_mq_hw_ctx *hctx,
+> >         }
+> >  
+> >         blk_mq_run_hw_queue(hctx, run_queue_async);
+> > +
+> > +       percpu_ref_put(&hctx->queue->q_usage_counter);
+> >  }
+> 
+> I think that 'hctx' can disappear if all requests queued by this function
+> finish just before blk_mq_run_hw_queue() returns and if the number of hardware
+> queues is changed from another thread.
 
---- Comment #2 from Matthew Whitehead (whiteheadm@acm.org) ---
-I have reproduced this problem with similar hardware, an ISP2300. The problem
-is not present using the 4.9.171 kernel, and it is present on the 4.14.114
-kernel, so the suspicion that it was introduced in 4.11 is likely.
+updating nr_hw_queues needs to freeze queues in the same tagset first,
+and the added percpu_ref_get() will prevent that from happening.
 
-I will attempt to test it on a similar ISP6312 next.
+> Shouldn't the request queue pointer be
+> stored in a local variable instead of reading hctx->queue twice?
 
--- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+Yeah, it is much cleaner, will do it in V9.
+
+BTW, one big problem in this patch(V8) is that the usage counter isn't
+put in the early return branch.
+
+thanks,
+Ming
