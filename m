@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 352FD101ED
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Apr 2019 23:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1AE8101EE
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Apr 2019 23:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727387AbfD3Vj3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Apr 2019 17:39:29 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33588 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726155AbfD3Vj2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Apr 2019 17:39:28 -0400
-Received: by mail-pg1-f194.google.com with SMTP id k19so7461790pgh.0
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Apr 2019 14:39:28 -0700 (PDT)
+        id S1727388AbfD3Vja (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Apr 2019 17:39:30 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33072 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726155AbfD3Vj3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Apr 2019 17:39:29 -0400
+Received: by mail-pf1-f193.google.com with SMTP id z28so2407448pfk.0
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Apr 2019 14:39:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=n89y6uCweejceG0PyPvn60VcWvTyT1rqrfzI2gNhFO4=;
-        b=DLyiSBq4W1/s3OTNUkV7xoYk7MkZD6RH09P0mnvZ+0eB+EfX/4E/FAYmkEGihLooNe
-         1Ri76jt0Gr278bYWGsKHjAnxxqosRZ9UsVV9dbKkN80Jh+zA+vxCMKGU+9g3UxfwbsB7
-         3vhZ577GhKoQjcY3kHSlBncBs4OnHd3ljvOuv3SfnSm1+sWBWCzuDbgsYCzl27kyHd+5
-         m94JY2bmn+ilPqAtpo66+IoN29k59x3hVvyYzEK0ALS7J3YfINABsQzNN995u5/szD2D
-         1RtBqQlHv3TX8yAqxG1OEV6F0aZyC8gfyXST5Ap7siPwvnrs1lKdzaux+gOd/XJVEbCP
-         tkfA==
-X-Gm-Message-State: APjAAAU96wY4BsmCwnu5vdtkiuLw9R9qTac5Na9lZGblEZT/mKCgfBqp
-        hjbyj6C22g4Mxmkq2JnZ0no=
-X-Google-Smtp-Source: APXvYqzKBd4bddxDvCFx7OpVKXdv2kLzGPyik1r3V5aSTkSbuxhe9LKldkbcbeWUjHyrlrjpe8JWFQ==
-X-Received: by 2002:a65:62c3:: with SMTP id m3mr42960670pgv.159.1556660367810;
-        Tue, 30 Apr 2019 14:39:27 -0700 (PDT)
+        bh=EfAcBuXThS+7jaQPLbyImV91LIDg9kl8z4j/a/RqlS0=;
+        b=lhdrMAfVK1ejB1I2P0zpGrDqja1AsI2BBp4S9SyVsmj8d+mjXUeglc3k/T080LQpff
+         F5DBzrhDzkBgAO290mtMQVY4tjtPv5CoSD8ahDsB8dgNLOgJ3hGMysjxblWuZcO/xh29
+         07GFWDIud3n1/G8zA9aNvL+n8Ba10a+Ks/qGpVUS6aAUKbTtbglBqFBVmmjTBWCDMsIv
+         tz4KU8R8X1PyQWL4kiTfW5ZXsap7BleUcrNA40GuMOmVE3lgBCdOikaMYDnEDPCDAoDP
+         l/67N7YLjIppw+qDHLtE3N6jZTi9hvxXEizT0T6ZEIL8kRtPh+OMq32GewolmwTgI/uj
+         49sg==
+X-Gm-Message-State: APjAAAVTvoRERrAKKgKTT3XC+C4vtqe4xrxk30pBB29ifIncW+KxO1R0
+        tOLLeNGx3yI2MVVha6Sk8M4=
+X-Google-Smtp-Source: APXvYqzOmb4VfW5bp//y4pEg5izP76qppmRiaMNcH5A35rkESTJNV2DstcPPBzIn0ZmOpAMegO0sng==
+X-Received: by 2002:aa7:8a92:: with SMTP id a18mr74725479pfc.218.1556660369072;
+        Tue, 30 Apr 2019 14:39:29 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:203:5cdc:422c:7b28:ebb5])
-        by smtp.gmail.com with ESMTPSA id h4sm39379820pgv.61.2019.04.30.14.39.26
+        by smtp.gmail.com with ESMTPSA id h4sm39379820pgv.61.2019.04.30.14.39.27
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 14:39:27 -0700 (PDT)
+        Tue, 30 Apr 2019 14:39:28 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -41,11 +41,10 @@ Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
         Lee Duncan <lduncan@suse.com>, Hannes Reinecke <hare@suse.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: [PATCH v2 1/2] sd: Rely on the driver core for asynchronous probing
-Date:   Tue, 30 Apr 2019 14:39:18 -0700
-Message-Id: <20190430213919.97437-2-bvanassche@acm.org>
+        Johannes Thumshirn <jthumshirn@suse.de>
+Subject: [PATCH v2 2/2] sd: Inline sd_probe_part2()
+Date:   Tue, 30 Apr 2019 14:39:19 -0700
+Message-Id: <20190430213919.97437-3-bvanassche@acm.org>
 X-Mailer: git-send-email 2.20.GIT
 In-Reply-To: <20190430213919.97437-1-bvanassche@acm.org>
 References: <20190430213919.97437-1-bvanassche@acm.org>
@@ -56,28 +55,8 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As explained during the 2018 LSF/MM session about increasing SCSI disk
-probing concurrency, the problems with the current probing approach are as
-follows:
-
-- The driver core is unaware of asynchronous SCSI LUN probing.
-  wait_for_device_probe() waits for all asynchronous probes except
-  asynchronous SCSI disk probes.
-
-- There is unnecessary serialization between sd_probe() and sd_remove().
-  This can lead to a deadlock.
-
-Hence this patch that modifies the sd driver such that it uses the driver
-core framework for asynchronous probing. The async domain and
-get_device()/put_device() pairs that became superfluous due to this change
-are removed.
-
-This patch does not affect the time needed for loading the scsi_debug
-kernel module with parameters delay=0 and max_luns=256.
-
-This patch depends on commit ef0ff68351be ("driver core: Probe devices
-asynchronously instead of the driver") that went upstream in kernel version
-v5.1-rc1.
+Make sd_probe() easier to read by inlining sd_probe_part2(). This
+patch does not change any functionality.
 
 Cc: Lee Duncan <lduncan@suse.com>
 Cc: Hannes Reinecke <hare@suse.com>
@@ -85,127 +64,130 @@ Cc: Luis Chamberlain <mcgrof@kernel.org>
 Cc: Johannes Thumshirn <jthumshirn@suse.de>
 Cc: Christoph Hellwig <hch@lst.de>
 Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Dan Williams <dan.j.williams@intel.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/scsi.c      | 12 +++---------
- drivers/scsi/scsi_pm.c   |  6 +-----
- drivers/scsi/scsi_priv.h |  1 -
- drivers/scsi/sd.c        | 12 +++---------
- 4 files changed, 7 insertions(+), 24 deletions(-)
+ drivers/scsi/sd.c | 101 ++++++++++++++++++++--------------------------
+ 1 file changed, 43 insertions(+), 58 deletions(-)
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index 99a7b9f520ae..f5cd632606cf 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -85,15 +85,10 @@ unsigned int scsi_logging_level;
- EXPORT_SYMBOL(scsi_logging_level);
- #endif
- 
--/* sd, scsi core and power management need to coordinate flushing async actions */
--ASYNC_DOMAIN(scsi_sd_probe_domain);
--EXPORT_SYMBOL(scsi_sd_probe_domain);
--
- /*
-- * Separate domain (from scsi_sd_probe_domain) to maximize the benefit of
-- * asynchronous system resume operations.  It is marked 'exclusive' to avoid
-- * being included in the async_synchronize_full() that is invoked by
-- * dpm_resume()
-+ * Domain for asynchronous system resume operations.  It is marked 'exclusive'
-+ * to avoid being included in the async_synchronize_full() that is invoked by
-+ * dpm_resume().
-  */
- ASYNC_DOMAIN_EXCLUSIVE(scsi_sd_pm_domain);
- EXPORT_SYMBOL(scsi_sd_pm_domain);
-@@ -820,7 +815,6 @@ static void __exit exit_scsi(void)
- 	scsi_exit_devinfo();
- 	scsi_exit_procfs();
- 	scsi_exit_queue();
--	async_unregister_domain(&scsi_sd_probe_domain);
- }
- 
- subsys_initcall(init_scsi);
-diff --git a/drivers/scsi/scsi_pm.c b/drivers/scsi/scsi_pm.c
-index 7639df91b110..bc8c72a6356d 100644
---- a/drivers/scsi/scsi_pm.c
-+++ b/drivers/scsi/scsi_pm.c
-@@ -175,11 +175,7 @@ static int scsi_bus_resume_common(struct device *dev,
- 
- static int scsi_bus_prepare(struct device *dev)
- {
--	if (scsi_is_sdev_device(dev)) {
--		/* sd probing uses async_schedule.  Wait until it finishes. */
--		async_synchronize_full_domain(&scsi_sd_probe_domain);
--
--	} else if (scsi_is_host_device(dev)) {
-+	if (scsi_is_host_device(dev)) {
- 		/* Wait until async scanning is finished */
- 		scsi_complete_async_scans();
- 	}
-diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
-index 5f21547b2ad2..cc2859d76d81 100644
---- a/drivers/scsi/scsi_priv.h
-+++ b/drivers/scsi/scsi_priv.h
-@@ -175,7 +175,6 @@ static inline void scsi_autopm_put_host(struct Scsi_Host *h) {}
- #endif /* CONFIG_PM */
- 
- extern struct async_domain scsi_sd_pm_domain;
--extern struct async_domain scsi_sd_probe_domain;
- 
- /* scsi_dh.c */
- #ifdef CONFIG_SCSI_DH
 diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 2b2bc4b49d78..ae6634885afe 100644
+index ae6634885afe..ab79c50539eb 100644
 --- a/drivers/scsi/sd.c
 +++ b/drivers/scsi/sd.c
-@@ -567,6 +567,7 @@ static struct scsi_driver sd_template = {
- 		.name		= "sd",
- 		.owner		= THIS_MODULE,
- 		.probe		= sd_probe,
-+		.probe_type	= PROBE_PREFER_ASYNCHRONOUS,
- 		.remove		= sd_remove,
- 		.shutdown	= sd_shutdown,
- 		.pm		= &sd_pm_ops,
-@@ -3284,12 +3285,8 @@ static int sd_format_disk_name(char *prefix, int index, char *buf, int buflen)
+@@ -3285,63 +3285,6 @@ static int sd_format_disk_name(char *prefix, int index, char *buf, int buflen)
  	return 0;
  }
  
--/*
-- * The asynchronous part of sd_probe
-- */
--static void sd_probe_async(void *data, async_cookie_t cookie)
-+static void sd_probe_part2(struct scsi_disk *sdkp)
- {
--	struct scsi_disk *sdkp = data;
- 	struct scsi_device *sdp;
- 	struct gendisk *gd;
- 	u32 index;
-@@ -3343,7 +3340,6 @@ static void sd_probe_async(void *data, async_cookie_t cookie)
- 	sd_printk(KERN_NOTICE, sdkp, "Attached SCSI %sdisk\n",
- 		  sdp->removable ? "removable " : "");
- 	scsi_autopm_put_device(sdp);
--	put_device(&sdkp->dev);
- }
- 
+-static void sd_probe_part2(struct scsi_disk *sdkp)
+-{
+-	struct scsi_device *sdp;
+-	struct gendisk *gd;
+-	u32 index;
+-	struct device *dev;
+-
+-	sdp = sdkp->device;
+-	gd = sdkp->disk;
+-	index = sdkp->index;
+-	dev = &sdp->sdev_gendev;
+-
+-	gd->major = sd_major((index & 0xf0) >> 4);
+-	gd->first_minor = ((index & 0xf) << 4) | (index & 0xfff00);
+-
+-	gd->fops = &sd_fops;
+-	gd->private_data = &sdkp->driver;
+-	gd->queue = sdkp->device->request_queue;
+-
+-	/* defaults, until the device tells us otherwise */
+-	sdp->sector_size = 512;
+-	sdkp->capacity = 0;
+-	sdkp->media_present = 1;
+-	sdkp->write_prot = 0;
+-	sdkp->cache_override = 0;
+-	sdkp->WCE = 0;
+-	sdkp->RCD = 0;
+-	sdkp->ATO = 0;
+-	sdkp->first_scan = 1;
+-	sdkp->max_medium_access_timeouts = SD_MAX_MEDIUM_TIMEOUTS;
+-
+-	sd_revalidate_disk(gd);
+-
+-	gd->flags = GENHD_FL_EXT_DEVT;
+-	if (sdp->removable) {
+-		gd->flags |= GENHD_FL_REMOVABLE;
+-		gd->events |= DISK_EVENT_MEDIA_CHANGE;
+-	}
+-
+-	blk_pm_runtime_init(sdp->request_queue, dev);
+-	device_add_disk(dev, gd, NULL);
+-	if (sdkp->capacity)
+-		sd_dif_config_host(sdkp);
+-
+-	sd_revalidate_disk(gd);
+-
+-	if (sdkp->security) {
+-		sdkp->opal_dev = init_opal_dev(sdp, &sd_sec_submit);
+-		if (sdkp->opal_dev)
+-			sd_printk(KERN_NOTICE, sdkp, "supports TCG Opal\n");
+-	}
+-
+-	sd_printk(KERN_NOTICE, sdkp, "Attached SCSI %sdisk\n",
+-		  sdp->removable ? "removable " : "");
+-	scsi_autopm_put_device(sdp);
+-}
+-
  /**
-@@ -3435,8 +3431,7 @@ static int sd_probe(struct device *dev)
+  *	sd_probe - called during driver initialization and whenever a
+  *	new scsi device is attached to the system. It is called once
+@@ -3431,7 +3374,49 @@ static int sd_probe(struct device *dev)
  	get_device(dev);
  	dev_set_drvdata(dev, sdkp);
  
--	get_device(&sdkp->dev);	/* prevent release before async_schedule */
--	async_schedule_domain(sd_probe_async, sdkp, &scsi_sd_probe_domain);
-+	sd_probe_part2(sdkp);
+-	sd_probe_part2(sdkp);
++	gd->major = sd_major((index & 0xf0) >> 4);
++	gd->first_minor = ((index & 0xf) << 4) | (index & 0xfff00);
++
++	gd->fops = &sd_fops;
++	gd->private_data = &sdkp->driver;
++	gd->queue = sdkp->device->request_queue;
++
++	/* defaults, until the device tells us otherwise */
++	sdp->sector_size = 512;
++	sdkp->capacity = 0;
++	sdkp->media_present = 1;
++	sdkp->write_prot = 0;
++	sdkp->cache_override = 0;
++	sdkp->WCE = 0;
++	sdkp->RCD = 0;
++	sdkp->ATO = 0;
++	sdkp->first_scan = 1;
++	sdkp->max_medium_access_timeouts = SD_MAX_MEDIUM_TIMEOUTS;
++
++	sd_revalidate_disk(gd);
++
++	gd->flags = GENHD_FL_EXT_DEVT;
++	if (sdp->removable) {
++		gd->flags |= GENHD_FL_REMOVABLE;
++		gd->events |= DISK_EVENT_MEDIA_CHANGE;
++	}
++
++	blk_pm_runtime_init(sdp->request_queue, dev);
++	device_add_disk(dev, gd, NULL);
++	if (sdkp->capacity)
++		sd_dif_config_host(sdkp);
++
++	sd_revalidate_disk(gd);
++
++	if (sdkp->security) {
++		sdkp->opal_dev = init_opal_dev(sdp, &sd_sec_submit);
++		if (sdkp->opal_dev)
++			sd_printk(KERN_NOTICE, sdkp, "supports TCG Opal\n");
++	}
++
++	sd_printk(KERN_NOTICE, sdkp, "Attached SCSI %sdisk\n",
++		  sdp->removable ? "removable " : "");
++	scsi_autopm_put_device(sdp);
  
  	return 0;
  
-@@ -3472,7 +3467,6 @@ static int sd_remove(struct device *dev)
- 	scsi_autopm_get_device(sdkp->device);
- 
- 	async_synchronize_full_domain(&scsi_sd_pm_domain);
--	async_synchronize_full_domain(&scsi_sd_probe_domain);
- 	device_del(&sdkp->dev);
- 	del_gendisk(sdkp->disk);
- 	sd_shutdown(dev);
 -- 
 2.21.0.196.g041f5ea1cf98
 
