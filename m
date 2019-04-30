@@ -2,60 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45C4FF13E
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Apr 2019 09:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92673F1AC
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Apr 2019 09:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726436AbfD3HYk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Apr 2019 03:24:40 -0400
-Received: from sonic310-23.consmr.mail.ne1.yahoo.com ([66.163.186.204]:33315
-        "EHLO sonic310-23.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725769AbfD3HYk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 30 Apr 2019 03:24:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1556609078; bh=dJka9g6uu3ZGnnYodeQiywj4aqYTn67ItSAv2feKoEY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=mVgdHoaaLTLohHs//cCvgjvse10IYZE8j98ORMHUmPaBt5LwWguwWNdYrH0Fk+nSiovsejMuRZt78Bo+3HZNdDive1UpCfNMwLWke07X9xY29Y248xjOnjMadKiK3MdADdF9MQVLUIhVLiA+8r4vT79YRE9bCAEIQ3WAihAVq6PtESxjnFJyOXl+CeowrjmfcFZG3bNQqK//Efn3fPqr84TZe3MJpeYdwdH9BqJnrnqUXdStyeoh3/3iKCAJCH6QoG2GBfeTa4W3FCR2pfff6NIUQ8IsUsb7LSRlTGO9C/Mt1Yv7gku0LxMlYr90VL7gvwO/XX251tL13d+U4Ta/xA==
-X-YMail-OSG: J9DgcMEVM1mXgqMotP1k.CojBQ5q6wbtFr76aY7cKQyywD_XkwUdN.oyUYjMSO9
- 8.jNY33rOVQ.o4L.TyN7m.bDYyiFXtYhwbLl7mMMW5QLQSho8ZITCpnHXae9pKuTV794KBGxq9cJ
- noshTEZZkvzVbCBLxo.r4RfP06ZMldO.r7JV0aTrfnD_xhq7DMO8bQXjLGzolq3hKECOd2rP01Vn
- YffHZvL36zcheUgIPpdulDwVPvlA50gIKJtoljocFpE0hA3VgF3rqjmt_gWq995gyX_ctF_ma8k5
- 1bCE.KRXP9nXxVsRXyqvvG1AzVFVR6BpSL8BQgJeGu6BtiUHNqMTMamvNlBFxAcnkM0D_nGNgAkd
- HH0GvSV0Njt0GqEVvJ0qVCxNWO8gwYl0aOe5QMt8ZXmNR4NwcT1oy67S2DozLEoEL8ZUUh8bb.ds
- 7t7rOTGSDjJUht291sNhvGj8Vx1aCzpuNmSWYDoN6lakNnzPVjVbms6SzC2eUbHGsljAZ7QlH2iI
- YLky6QfJgYL_syzQkuOHfSoIZ7k1ZjqkgKI6CTj18yT.jX_w6sNbTJevwoxUBMy0jxfTXgYpYVeC
- F0kyB3AlD_r6ATbGgZCq0AQMTvhSQbGpsHM5dBZmF7M2hKh9e24GgbR1wFWOWQubbiqJSpVzGUgZ
- MjcpJTBWAqSc2U5eb3nqzIazO.Q0PdoBuXplg9sATeq64abTYCSvgcxP0TJ8rxxXiS2.1VN1aAsq
- mJO805DUr6cR7LOHE22Y77GEYV9niZGiXj9AbrVGqOAJ609OXIwN.2VNjd3z.oi50yOkegu0OLjk
- wy24ypatcvE044wFx_hxAYD9ndroMGPYbauXeeMcVQFGDS9vqAmu40pOOe9XHuURcP0kPC0Nx5jB
- Ccpcf4rCUMZJedrcvnTrCyHRqE6aXNsp9K6gr.keoUkzjZDzizu9GE2lXXOCXbJy2lAyTT6Rzfne
- G7qmDBwbPi0GRYqiGQXzyAWMjbnpKfk8zKmrVVjPu2EndWqwkjsTX2APliWdT20ulnsrjiv3sA18
- p5mR343EwG39c1YFOpyl81_C2g8Yca1CKurV_6wOXFDHalDdIsKjEes68UR5ktJVr673L.OLscP8
- M1IwYs0YSJwtfok1IBpMprcbpX_J6YoDj6SA8rGDFDju2m9Jj3FMstDOf.vD0v7xYvBulYvMUQ1m
- _Ukd5Tg--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.ne1.yahoo.com with HTTP; Tue, 30 Apr 2019 07:24:38 +0000
-Date:   Tue, 30 Apr 2019 07:24:34 +0000 (UTC)
-From:   "Mrs Amina.Kadi" <mrrasaq.saud3@outlook.fr>
-Reply-To: "Mrs Amina.Kadi" <mrsamina.kadi1@barid.com>
-Message-ID: <1013701068.2571359.1556609074830@mail.yahoo.com>
-Subject: Compliment of the day to you Dear Friend.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1013701068.2571359.1556609074830.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.13554 YahooMailBasic Mozilla/5.0 (Windows NT 6.1; rv:66.0) Gecko/20100101 Firefox/66.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726129AbfD3HzL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Apr 2019 03:55:11 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:49537 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725938AbfD3HzL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Apr 2019 03:55:11 -0400
+Received: from infong122.kundenserver.de ([82.165.81.184]) by
+ mrelayeu.kundenserver.de (mreue011 [172.19.35.7]) with ESMTPA (Nemesis) id
+ 1MGiF0-1hXyWt1Kj4-00Dod3 for <linux-scsi@vger.kernel.org>; Tue, 30 Apr 2019
+ 09:55:09 +0200
+Received: from 185.17.149.170 (IP may be forged by CGI script)
+    by infong122.kundenserver.de with HTTP
+    id zRvyAH-1gthph17VE-00jL3W; Tue, 30 Apr 2019 09:55:09 +0200
+X-Sender-Info: <137869571@infong122.kundenserver.de>
+Date:   Tue, 30 Apr 2019 09:55:09 +0200
+Message-Id: <zRvyAH-1gthph17VE-00jL3W@infong122.kundenserver.de>
+To:     linux-scsi@vger.kernel.org
+Subject: Kontaktformular
+From:   info@ra-erdmann.com
+X-Provags-ID: V03:K1:nPk0U2XDZqLIjRzNrxkdxvGQAy5EfZpYV9KUJvklbUd9pmwFDrf
+ E2BP28pKHb6GaQrAbKF3PCxxLFgweclM5MwroIDkmWZFks35pHafoaQppLS7xLVzVnup3i6
+ cZxUHITxkmGsfwiA/gzZ1LsRpSR5YCbzGasGtk9lZNinv/8SSZsEwtRBwdfmSxUij59HUWE
+ DCw/BTSAJu4AB0Ql3GwchmXCHqCGFgsfv4GL2gOwjA=
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Sm5TM/1VKVE=:hFvIgDi5vV9VJ5ABjNW4Bh
+ 6Tjr2rCLdYnLH2praeOKhsIaKPejjZBnUQ9kpVXM44L9RUHlpUyDhB3jp3+o3E70rDKEOhWj7
+ QkFWzi/mE6YkXibPWdY63xbfFW4YTsVyuBO0yFsavXqnKEjbpuIhBPGwMhrsjYS2x5u+s6adG
+ /IsWOTkXK0uqyeY4Pwg8Oogu/v3qtg7I8Q4QzZgpEhYEegVXlYmvEZ5HBwTVZZRPwS2F9w8Ah
+ +v0TC4bKjWd8kbKRWvKpmo406Xa4ZDL2QQ2PqoIC/jM12RyQhJTo81UDFKkLq5MoPbZoFHL1V
+ SDjvJ50hg4CrkO2f0SkN3YYSfjmdx2DZzIZoKjfx5kXv/gUR3b+2lrvX+mtENDNxeWYHVq29Y
+ 1eEPjxeoXnbwd3u2JFgsAz/uGO7Ts5haymso5UPM97pVqMud1/ulVpLlKYvm8hUc20We0S1Mf
+ NpT9hpfU2loXig+odtAvbed2cIX+baK3TNMT7V7kGPHMuKLqV2kGSw2UFp4BibUvQyv+zZCfq
+ 1jj5ua92+kagaITxl9PAmCEt1pbkX614IoK9rzD4d2qJx5Llc2263pYCvc7Jk0lcqI5Cahkbk
+ rKRPNl9vs8sHiH4jY9hu2AqIdzA20mmEZ28/WWjL1IRr26kH62QuZxJfl0VZGeSHTYsdWT6hX
+ ERgAmiOXPA513nroKnmyuvVVNaZ53AlO2hgPQLhqTAgGv10Y2WNQe5JVftz/FipheYRfcLsxP
+ AqnE06/dNinFSJczectikp7qyrh1S3ocs+eiug==
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Sehr geehrte Frau/Herr JeffreytaH, 
 
+vielen Dank für Ihre Kontaktanfrage! 
 
-Compliment of the day to you Dear Friend.
+Wir werden Ihre Anfrage schnellst möglich beantworten und bitten um etwas Geduld. 
 
-Dear Friend.
- 
-  I am Mrs. Amina Kadi. am sending this brief letter to solicit your
-partnership to transfer $5.5 million US Dollars. I shall send you
-more information and procedures when I receive positive response from
-you.
+Mit freundlichen Grüßen, 
+Dr. jur. Erdmann
+- Rechtsanwalt - 
 
-Mrs. Amina Kadi
+Goethering 3
+49074 Osnabrück
+Tel.: 0541 600 187 20
+Fax: 0541 600 187 28
+Email: info@ra-erdmann.com
