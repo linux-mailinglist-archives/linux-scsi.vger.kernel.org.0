@@ -2,72 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C290E10B05
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 May 2019 18:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8EC10C82
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 May 2019 19:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727232AbfEAQPp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 May 2019 12:15:45 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:48440 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727218AbfEAQPl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 May 2019 12:15:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
-        :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=cC6LJAycF0WEXN1PiWNfS+TYLowm8sPMN91Aj88qDwo=; b=XMp1By9pBXIazfy6Hr5U4dnsqH
-        oT+8Ype/+4B+jECj/8pA+ARGFcm4khCv4XGAzxQD21x4c1PsBCBi/X4Z2gJJiMV51EbuURFSZ0N4A
-        fmAWGhtPmOgWjbH7DUCyXMq3OP8646AntV2HGVQ6zgAtRUosYs/ug3WRUGe6nICZYcnB545jWKkwJ
-        h7e5GkijeNRpAfhKGnMDDMTX9J+LCB60hMsslrpQkNbq2eua2qgNFQq8oKQPDUL5DTQaGvq9xIvlo
-        WPjK2+vhjgI//AAgJbVyvRct3MtbkKqlmT9ORMIeETlYZHkL6rboggzADjcgHdVyJDrhU7zjsWu6F
-        3/W/Nk1Q==;
-Received: from adsl-173-228-226-134.prtc.net ([173.228.226.134] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hLrtP-0005hN-FZ; Wed, 01 May 2019 16:15:35 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Hannes Reinecke <hare@suse.de>, Lee Duncan <lduncan@suse.com>,
-        Chris Leech <cleech@redhat.com>, Willem Riede <osst@riede.org>,
-        Doug Gilbert <dgilbert@interlog.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        =?UTF-8?q?Kai=20M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
-        linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
-        osst-users@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Chriosstoph Hellwig <hch@losst.de>
-Subject: [PATCH 24/24] osst: add a SPDX tag to osst.c
-Date:   Wed,  1 May 2019 12:14:17 -0400
-Message-Id: <20190501161417.32592-25-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190501161417.32592-1-hch@lst.de>
-References: <20190501161417.32592-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        id S1726079AbfEAR7k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 May 2019 13:59:40 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45637 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726069AbfEAR7j (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 May 2019 13:59:39 -0400
+Received: by mail-pl1-f194.google.com with SMTP id o5so8487872pls.12
+        for <linux-scsi@vger.kernel.org>; Wed, 01 May 2019 10:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=OJeUrYuVQqKoglVvcE7k+He6ncO55aj4gaMDVceaXdM=;
+        b=srPwei2KszJOGKGjZW3/VYCK4nx+R4oki+J2Ub7S8/qkCQt1CxeB2hzTHbBjQYAM5k
+         vWpHfVCBTH1kWD/KmkjaoLdUOT29ic3eYLPP1NR0YkCGnrQNhMbrNBYjRc5VG+gHs2yz
+         TSu1j3fwopChUb322YdblC71wxdRMTV64RaFKueo1vjjiPAOx0hcIHLVcvM7ZpcFRvpi
+         Xykm5rawIgrqxKCc2xHDg1luuSdCGVFL16wOiMu3erOqjW6/sgyGdi1DVzCUoRZ/wzPu
+         xc9h8U7I2e/P+QPVkARwYkYvwPPSQvwNTmTB0H0fqUfGoSWajJaD+phfD2D4PTCWrZP+
+         UCVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=OJeUrYuVQqKoglVvcE7k+He6ncO55aj4gaMDVceaXdM=;
+        b=ItExTo+kAbhcnr9GaNoj5YSOEX0VpBoq72cP3tT3xLRprNNXAYAEnGP3imB7G2VLMV
+         fvln+VOhoYQRLj6OPRTRc9D4NfprzcP3+2AiTTsczsee7LDtqTc5HqrEzIy5i5BMqBud
+         TYudXamd8CRWcSwmNaHi8b7rTP4ZqU3YO3Uhp5KwoFq503epoM3Z81cuZFGeb2PSfIwl
+         ZZAx88x1Bij1VqeDmuUhM67RGEg+y2GFZ+NJf19QH66p1P4JnH0A+5VkVFIKkjNQr/pG
+         wLTAnrdXcT2GyO+lgZX2EuEPOR6LTozUGQGlaaBbOYplkOdtYiDEdyBI5zXa4gmbv64a
+         yEqw==
+X-Gm-Message-State: APjAAAUNU2/BxkC84eOPy5N9OLYjScBO0xEv9asiCpUAPsLvhML26Mux
+        TnQ/gZ5RmgMybpbmjyIqwBgXuj3d
+X-Google-Smtp-Source: APXvYqzH055jCPNN+iC2pNu0cCGyKeufZBjKYY75Fz3eX5hjFcKKFGYwn2T4ivz+fU3dML85JWk0rg==
+X-Received: by 2002:a17:902:e407:: with SMTP id ci7mr33749632plb.219.1556733579092;
+        Wed, 01 May 2019 10:59:39 -0700 (PDT)
+Received: from pallmd1.broadcom.com ([192.19.223.250])
+        by smtp.gmail.com with ESMTPSA id z7sm72906679pgh.81.2019.05.01.10.59.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 01 May 2019 10:59:38 -0700 (PDT)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>
+Subject: [PATCH 0/4] lpfc updated for 12.2.0.2
+Date:   Wed,  1 May 2019 10:59:22 -0700
+Message-Id: <20190501175926.4551-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.13.7
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-osst.c is the only osst file missing licensing information.  Add a
-GPLv2 tag for the default kernel license.
+Update lpfc to revision 12.2.0.2
 
-Signed-off-by: Chriosstoph Hellwig <hch@losst.de>
----
- drivers/scsi/osst.c | 1 +
- 1 file changed, 1 insertion(+)
+A quick patch set that resolves lockdep checking issues and
+addresses a couple of bugs found when inspecting the paths
+for the lockdeps.
 
-diff --git a/drivers/scsi/osst.c b/drivers/scsi/osst.c
-index be3c73ebbfde..fe4f0e7d6359 100644
---- a/drivers/scsi/osst.c
-+++ b/drivers/scsi/osst.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: GPL-2.0
- /*
-   SCSI Tape Driver for Linux version 1.1 and newer. See the accompanying
-   file Documentation/scsi/st.txt for more information.
+The patches were cut against Martin's 5.2/scsi-queue tree
+
+
+James Smart (4):
+  lpfc: resolve lockdep warnings
+  lpfc: correct rcu unlock issue in lpfc_nvme_info_show
+  lpfc: add check for loss of ndlp when sending RRQ
+  lpfc: Update lpfc version to 12.2.0.2
+
+ drivers/scsi/lpfc/lpfc_attr.c    | 37 ++++++++++++++++++-------------
+ drivers/scsi/lpfc/lpfc_els.c     |  5 ++++-
+ drivers/scsi/lpfc/lpfc_sli.c     | 48 ++++++++++++++++++++++++++--------------
+ drivers/scsi/lpfc/lpfc_version.h |  2 +-
+ 4 files changed, 58 insertions(+), 34 deletions(-)
+
 -- 
-2.20.1
+2.13.7
 
