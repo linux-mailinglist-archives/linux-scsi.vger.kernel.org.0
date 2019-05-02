@@ -2,71 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C309911280
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 May 2019 07:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2A5112CC
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 May 2019 07:58:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725780AbfEBFN1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 May 2019 01:13:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55542 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725681AbfEBFN1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 2 May 2019 01:13:27 -0400
-Received: from localhost (unknown [37.142.3.125])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1AD6B2081C;
-        Thu,  2 May 2019 05:13:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556774006;
-        bh=CrH2zf+C2T7OR/wQ8PNnjw3DEiFgZssh6zb6un90Zps=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LWEwJ23DjdMowrXBg/ptNJY41dX3+6r/soZmIhRqjhArv/nEMECbV0p6BWdu5SCvd
-         I1Re0hhrd7ewlsJVYEe40l2fgrUFv4LFxbUJ7E9Rs8ivC99nE/4OsZvU8t+dEFK7lQ
-         jth9gdv6zlczoDm2VKJjyb0Vx0Dufh59VlSWVZF8=
-Date:   Thu, 2 May 2019 08:13:20 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     michal.kalderon@marvell.com, David Miller <davem@davemloft.net>
-Cc:     ariel.elior@marvell.com, jgg@ziepe.ca, dledford@redhat.com,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH net-next 07/10] qed*: Add iWARP 100g support
-Message-ID: <20190502051320.GF7676@mtr-leonro.mtl.com>
-References: <20190501095722.6902-1-michal.kalderon@marvell.com>
- <20190501095722.6902-8-michal.kalderon@marvell.com>
- <20190501.203522.1577716429222042609.davem@davemloft.net>
+        id S1726225AbfEBF6m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 May 2019 01:58:42 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60776 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725763AbfEBF6m (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 2 May 2019 01:58:42 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id F1D2FAC4B;
+        Thu,  2 May 2019 05:58:40 +0000 (UTC)
+Subject: Re: [PATCH 01/24] scsi: add SPDX tags to scsi midlayer files missing
+ licensing information
+To:     Christoph Hellwig <hch@lst.de>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Willem Riede <osst@riede.org>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        =?UTF-8?Q?Kai_M=c3=a4kisara?= <Kai.Makisara@kolumbus.fi>,
+        linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
+        osst-users@lists.sourceforge.net, linux-kernel@vger.kernel.org
+References: <20190501161417.32592-1-hch@lst.de>
+ <20190501161417.32592-2-hch@lst.de>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <2ae616f8-e150-0213-537c-d035ce0f6d57@suse.de>
+Date:   Thu, 2 May 2019 07:58:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190501.203522.1577716429222042609.davem@davemloft.net>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190501161417.32592-2-hch@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 01, 2019 at 08:35:22PM -0400, David Miller wrote:
-> From: Michal Kalderon <michal.kalderon@marvell.com>
-> Date: Wed, 1 May 2019 12:57:19 +0300
->
-> > diff --git a/drivers/infiniband/hw/qedr/main.c b/drivers/infiniband/hw/qedr/main.c
-> > index d93c8a893a89..8bc6775abb79 100644
-> > --- a/drivers/infiniband/hw/qedr/main.c
-> > +++ b/drivers/infiniband/hw/qedr/main.c
-> > @@ -52,6 +52,10 @@ MODULE_DESCRIPTION("QLogic 40G/100G ROCE Driver");
-> >  MODULE_AUTHOR("QLogic Corporation");
-> >  MODULE_LICENSE("Dual BSD/GPL");
-> >
-> > +static uint iwarp_cmt;
-> > +module_param(iwarp_cmt, uint, 0444);
-> > +MODULE_PARM_DESC(iwarp_cmt, " iWARP: Support CMT mode. 0 - Disabled, 1 - Enabled. Default: Disabled");
-> > +
->
-> Sorry no, this is totally beneath us.
+On 5/1/19 6:13 PM, Christoph Hellwig wrote:
+> Add the default kernel GPLv2 annotation to SCSI midlayer files missing
+> any licensing information.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
+>   drivers/scsi/hosts.c        | 1 +
+>   drivers/scsi/scsi.c         | 1 +
+>   drivers/scsi/scsi_debugfs.h | 1 +
+>   drivers/scsi/scsi_error.c   | 1 +
+>   drivers/scsi/scsi_ioctl.c   | 1 +
+>   drivers/scsi/scsi_lib.c     | 1 +
+>   drivers/scsi/scsi_pm.c      | 1 +
+>   drivers/scsi/scsi_sysfs.c   | 1 +
+>   8 files changed, 8 insertions(+)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.com>
 
-It is not acceptable for RDMA too.
+Cheers,
 
-Also please don't use comments inside function calls, it complicates
-various checkers without real need.
-dev->ops->iwarp_set_engine_affin(dev->cdev, true /* reset */);
-                                                ^^^^^^^^^^^^^^
-Thanks
+Hannes
+-- 
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
