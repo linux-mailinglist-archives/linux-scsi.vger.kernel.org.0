@@ -2,345 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC5312EC9
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 May 2019 15:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8032A1371D
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 May 2019 05:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfECNHu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 May 2019 09:07:50 -0400
-Received: from mout.perfora.net ([74.208.4.196]:38797 "EHLO mout.perfora.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726377AbfECNHt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 3 May 2019 09:07:49 -0400
-Received: from [192.168.0.76] ([108.168.115.11]) by mrelay.perfora.net
- (mreueus001 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M10Kf-1gTTBS1VYV-00vBDJ;
- Fri, 03 May 2019 15:07:41 +0200
-Reply-To: tomkcpr@mdevsys.com
-Subject: Re: Kernel panic w/ message request_threaded_irq ->
- qla2x00_request_irqs -> qla2x00_probe_one -> mod_timer
-To:     Laurence Oberman <loberman@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org
-References: <012262e1-697c-577b-cf99-bbd960661c70@mdevsys.com>
- <749372e4ebd5857ecc9b0947d6f8582a6f199bf4.camel@redhat.com>
- <1555342788.161891.95.camel@acm.org>
- <d6cef9727e9446101a9913651d58df60914c7b61.camel@redhat.com>
- <fa7e07d1-5266-4f55-b3f5-f41a85e679d8@mdevsys.com>
- <8ab70c91-9e11-4e8b-f4cf-d705bec1d4c1@mdevsys.com>
- <156112a88d3bc8e2edc32253e4b19f62b6254580.camel@redhat.com>
-From:   TomK <tomkcpr@mdevsys.com>
-Message-ID: <b6afdebe-f43a-2534-0b78-21c85dd3a8f8@mdevsys.com>
-Date:   Fri, 3 May 2019 09:07:27 -0400
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+        id S1726981AbfEDDRY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 May 2019 23:17:24 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:35489 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbfEDDRY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 May 2019 23:17:24 -0400
+Received: by mail-pf1-f193.google.com with SMTP id t87so3269785pfa.2
+        for <linux-scsi@vger.kernel.org>; Fri, 03 May 2019 20:17:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=KKGFqNu9PDflpLWnxkdE78BprD3Rse5s4h3gSjN22zw=;
+        b=d8Xjw62yLsSZ0ZdENVRDLcUXttWTWrxLninpIBVJV95/zF8gyrjSmNQ9OVcO1QQD41
+         bNbH29TPYs+SfNTEnQ3A0WCS+S4xETfFPpMX4PFV1VBuirIwGFJ+EisqYzlAHfXooMqB
+         xCWRSqblHm5jihWHMjml9rx+nO5ZDWRzNTzyEbFg5Sg4FOuAkGsSj5ickhV6fPpu3GkU
+         F9+qjmMa/WUIZHrXMwRjLs24E5V2gh14m3debzKCKeLj7UkBfquqF/t2hE5+993LhHZr
+         SEhNRxhsGUlO7nkGwiOS7tIdmZLcsAQI0GomhP3pDwkdI27se/V4WxrOuVAtkVNvF5mh
+         z4sA==
+X-Gm-Message-State: APjAAAW6k9mY8LT3nI63aNmP0xgeZhdf71qpYVUHn7FcPuPEAnt8zLrF
+        5G6MiTdmctKaCz/35vMtr1HNXoye
+X-Google-Smtp-Source: APXvYqxQezxpI5zcupk5wV5vxt+m+nBKXOsF+v9wyBSENsiJ1JZ6hliuhU8G9NJX6LL/UiUaA5e26w==
+X-Received: by 2002:a65:5342:: with SMTP id w2mr15057211pgr.220.1556939843342;
+        Fri, 03 May 2019 20:17:23 -0700 (PDT)
+Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
+        by smtp.gmail.com with ESMTPSA id s6sm4561416pfb.128.2019.05.03.20.17.22
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 May 2019 20:17:22 -0700 (PDT)
+Subject: Re: [PATCH 0/4] lpfc updated for 12.2.0.2
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+References: <20190501175926.4551-1-jsmart2021@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <8b11d5d2-fe7c-14c6-7224-3d0ec824f432@acm.org>
+Date:   Fri, 3 May 2019 20:17:21 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <156112a88d3bc8e2edc32253e4b19f62b6254580.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20190501175926.4551-1-jsmart2021@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:mU3digpcb1WcFhIiHubgy/KfIGUFlD7yy0/tikUfd/R6FZ+yYW+
- kC05AG+mesAztc5VecWkKbi6XlwdjbeNM+st4l7BAhQx39hPBOCTN8VzHuZb+Tz3HpBBk+V
- 7byQKgORofuChWs5o/jy1VgJ7iw7M0wVKBtE/9dS/DBTo8Z96Lb6MCJlBF7yw5xJksbNS2Q
- sc6zsnbc8eUhSSD2tCmPg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:eerRO/gVEdY=:0py+jvHtdWcNI2UCd/JPU1
- icRnd9YI2BMhFhi/Q12GOIdMa04iWqPVXCmv17GMEwqaQN1PTwuJtH/wIAovx5LyJPf2GsZsH
- WPsiNX2bPmwM4n04Gb4BYzG+q0jJJQ22uX/ivpuesErTCh6iUtea6lLo49brAqshX4oIgHi5I
- /kfzqAikTQKxfVjtd8PE3uMdVWbx0bP8c9L8vxQ4UDg4UtJKQ0stzvSR7HHdectUVcn191cPi
- IH8b9QX2WpnS7UbLAqMTjYketefL81GzaAkJOQF3DT+Cfl82HM4JFO9UXJMEBiaXPjVNH2TjL
- Btn4LV27R4ySOjHyvcb05knayX4gr8i/0JpdcMJkjAzWdYnFqcwmM61UwLZFHc7a5/nAy9JLz
- Dx6BuUftLCKUbsfjQduoafmxuJCqrZy5fpZRAu6ebinP5j52ENPHp8Ga/2lLvirhEudE4FqD7
- Bu2gjeEe0IMSqYzQzGbAwTOqbua8QLkkCcse0LZzJ91yRcNM2VWdTU5h6/ePRdYaBWhORAWnF
- m1dcw0vsGP7wTbbE4kF3c2jaoNhBbdAZzDGQue7VJX3/m2tmn7c2WbaLWFUNY9oLSMTAA8y8j
- MsOmgCc3dKcKTaL+E1B56Jz+j77qWm4n6RH+k3ddn/M675sfxqjdvzojlGUGJitHSrGkRu3VB
- Vw2ITtcIr/pxVD6mmiLgL1FFuugwuPpBzA/l7uWJ53UDYEX/D0gN/5ut+PQvVOXnTxuErzB/M
- o5n2hXX5NhPzujT00up34TeV42i1ej82cig4tqaFa8pe2zP9f7dIJeYa1CM=
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/2/2019 10:00 PM, Laurence Oberman wrote:
-> On Sun, 2019-04-28 at 12:11 -0400, TomK wrote:
->> On 4/15/2019 10:26 PM, TomK wrote:
->>> On 4/15/2019 3:35 PM, Laurence Oberman wrote:
->>>> On Mon, 2019-04-15 at 08:39 -0700, Bart Van Assche wrote:
->>>>> On Mon, 2019-04-15 at 08:55 -0400, Laurence Oberman wrote:
->>>>>> On Sun, 2019-04-14 at 23:25 -0400, TomK wrote:
->>>>>>> Hey All,
->>>>>>>
->>>>>>> I'm getting a kernel panic on an Gigabyte GA-890XA-UD3
->>>>>>> motherboard
->>>>>>> that
->>>>>>> I've got a QLE2464 card in as a target (FC).  The kernel
->>>>>>> has
->>>>>>> been
->>>>>>> crashing / panicking in the last 1-2 months about once a
->>>>>>> week.  Before
->>>>>>> that, it was rock solid for 4-5 years.  I've upgraded to
->>>>>>> kernel
->>>>>>> 4.18.19
->>>>>>> but that hasn't made much of a difference.  Since the
->>>>>>> message
->>>>>>> includes
->>>>>>> qla2x00_request_irqs I thought I would try here first.
->>>>>>>
->>>>>>> Tried to get more info on this but:
->>>>>>>
->>>>>>> 1) Keyboard doesn't work and locks up when the panic
->>>>>>> occurs.  No
->>>>>>> USB
->>>>>>> ports work.  Tried the PS/2 port but nothing.
->>>>>>>
->>>>>>> 2) Unable to capture a kdump.  Can't get to the kdump
->>>>>>> vmcore due
->>>>>>> to
->>>>>>> 1).
->>>>>>>
->>>>>>> The two screenshots is pretty much all I can capture.
->>>>>>> Tried
->>>>>>> things
->>>>>>> like
->>>>>>> clocksource=rtc in the kernel parms and disabling hpet1
->>>>>>> but
->>>>>>> apparently I
->>>>>>> haven't disabled it everywhere since it still shows up.
->>>>>>>
->>>>>>> Wondering if anyone recognizes these messages or has any
->>>>>>> idea
->>>>>>> what
->>>>>>> could
->>>>>>> be the issue here?  Even a hint would be appreciated.
->>>>>>>
->>>>>>   
->>>>>> Hello Tom
->>>>>> I have had similar issues and reported them to
->>>>>> Himanshu@Cavium
->>>>>> I have kept all my target servers at kernel 4.5 as it been
->>>>>> the only
->>>>>> version that has always been stable.
->>>>>> If your motherboard has an NMI (virtual or physical) set all
->>>>>> of
->>>>>> these
->>>>>> in /etc/sysctl.conf
->>>>>> Run sysctl -a;dracut -f and reboot
->>>>>>
->>>>>> kernel.nmi_watchdog = 1
->>>>>> kernel.panic_on_io_nmi = 1
->>>>>> kernel.panic_on_unrecovered_nmi =
->>>>>> kernel.unknown_nmi_panic = 1
->>>>>>
->>>>>> When the issue shows up press the virtual/physical NMI
->>>>>>
->>>>>> This is with the assumption that generic kdump is properly
->>>>>> setup
->>>>>> and
->>>>>> dmesg | grep crash shows memory resrved by the crashkernel
->>>>>> and that
->>>>>> you
->>>>>> have tested kdump manually.
->>>>>>
->>>>>> Other options are use a USB serial port to capture the full
->>>>>> log if
->>>>>> you
->>>>>> cannot get kdump to work.
->>>>>   
->>>>> That approach may provide further evidence about kernel bugs
->>>>> but it
->>>>> is not
->>>>> guaranteed that that approach will lead to a solution. It would
->>>>> help
->>>>> if
->>>>> either or both of you could do the following on a test system:
->>>>> * Check out branch qla2xxx-for-next of my kernel repo on
->>>>> github
->>>>>     (https://github.com/bvanassche/linux/tree/qla2xxx-for-next).
->>>>>   
->>>>> * Enable lockdep and KASAN in the kernel config
->>>>> (CONFIG_PROVE_LOCKING
->>>>> and
->>>>>     CONFIG_KASAN).
->>>>> * Build and install that kernel.
->>>>> * Run your favorite workload.
->>>>>
->>>>> Please note that the qla2xxx-for-next branch is based on the
->>>>> v5.1-rc1
->>>>> kernel
->>>>> and hence should not be installed on any production system.
->>>>>
->>>>> Thanks,
->>>>>
->>>>> Bart.
->>>>   
->>>> Hello Bart
->>>> OK, I will get to this by Thursday, wont be able to change the
->>>> targetserver kernel until then.
->>>> Regards
->>>> Laurence
->>>>
->>>   
->>> Same.  I'll try this out closer to the weekend.
->>>
->>> Not an NMI motherboard.  This is a 9-10 year old AMD board meant as
->>> a desktop or home server.
->>>
->>> I'll have to read more about the USB Serial port to capture further
->>> info.  That's interesting.
->>>
->>> For the time being, I've disabled HPET in BIOS.  ( Appears the
->>> kernel boot parameter method wasn't enough. )
->>>
->>>
->>
->> Hey Guy's,
->> Did some of what you suggested, including the USB serial setup:
->> 1) One of DB9 RS232 Serial Null Modem Cable F/F
->> 2) Two of USB to RS232 Serial Port DB9 9 Pin Male
->> however, when the kernel came down it took the USB support with it
->> and so minicom went offline:
->>   CTRL-A Z for help |115200 8N1 | NOR | Minicom 2.6.2  | VT102 |
->> Offline
->> But I did enable full logging for the QLA module:
->> echo 0x7fffffff >
->> /sys/module/qla2xxx/parameters/ql2xextended_error_logging
->> Did all that, minus the Kernel v5.1-rc1 implementation, and this is
->> what was picked up from the minicom USB to Serial capture before
->> things went south:
->> 1235905 ^Mqla2xxx [0000:04:00.0]-e818: is_send_status=1, cmd-
->>> bufflen=512, cmd->sg_cnt=1, cmd-
->>>                                                                     
->>             
->> dma_data_directi
->>                                                                       
->>                               on=1
->> se_cmd[0000
->>                                                                       
->>                          00009c9ea758]
->> qp
->>                                                                       
->>                  0
->> 1235906 ^Mqla2xxx [0000:04:00.0]-e818: is_send_status=1, cmd-
->>> bufflen=4096, cmd->sg_cnt=0,
->> cmd-
->>                
->>> dma_data_direct
->>                                                                       
->>                               ion=2
->> se_cmd[000
->>                                                                       
->>                         0000096ae11b7]
->> q
->>                                                                       
->>                p 0
->> 1235907 ^Mqla2xxx [0000:04:00.0]-e818: is_send_status=1, cmd-
->>> bufflen=20480, cmd->sg_cnt=0,
->> cmd
->>               
->> ->dma_data_direc
->>                                                                       
->>                               tion=2
->> se_cmd[00
->>                                                                       
->>                       
->> 0000001738f793]
->>                                                                       
->>                               qp 0
->> 1235908 ^Mqla2xxx [0000:04:00.0]-e818: is_send_status=1, cmd-
->>> bufflen=20480, cmd->sg_cnt=0,
->> cmd
->>               
->> ->dma_data_direc
->>                                                                       
->>                               tion=2
->> se_cmd[00
->>                                                                       
->>                       
->> 000000e8160a90]
->>                                                                       
->>                               qp 0
->> 1235909 ^MDetected MISCOMPARE for addr: 0000000033045258 buf:
->> 00000000f9849912
->> 1235910 ^MTarget/fileio: Send MISCOMPARE check condition and sense
->> 1235911 ^Mqla2xxx [0000:04:00.0]-e818: is_send_status=1, cmd-
->>> bufflen=512, cmd->sg_cnt=0, cmd-
->>>                                                                     
->>             
->> dma_data_directi
->>                                                                       
->>                               on=2
->> se_cmd[0000
->>                                                                       
->>                          0000363ae214]
->> qp
->>                                                                       
->>                  0
->> 1235912 ^Mqla2xxx [0000:04:00.0]-e817: Skipping EXPLICIT_CONFORM and
->> CTIO7_FLAGS_CONFORM_REQ
->> fo
->>               r FCP READ w/
->> no
->>                                                                       
->>                 n GOOD status
->> 1235913 ^Mqla2xxx [0000:04:00.0]-e874:2: qlt_free_cmd:
->> se_cmd[000000001db805fd] ox_id 00c8
->> 1235914 ^Mqla2xxx [0000:04:00.0]-e872:2: qlt_24xx_atio_pkt_all_vps:
->> qla_target(0): type 6
->> ox_id
->>                   00db
->> 1235915 ^Mqla2xxx [0000:04:00.0]-e872:2: qlt_24xx_atio_pkt_all_vps:
->> qla_target(0): type 6
->> ox_id
->>                   00dc
->> 1235916 ^Mqla2xxx [0000:04:00.0]-e874:2: qlt_free_cmd:
->> se_cmd[00000000f67a701f] ox_id 00c9
->> 1235917 ^Mqla2xxx [0000:04:00.0]-e872:2: qlt_24xx_atio_pkt_all_vps:
->> qla_target(0): type 6
->> ox_id
->>                   00dd
->> 1235918 ^Mqla2xxx [0000:04:00.0]-e872:2: qlt_24xx_atio_pkt_all_vps:
->> qla_target(0): type 6
->> ox_id
->>                   00de
->>
->> On an earlier crash, captured the attached image.  This time there
->> was nothing on the monitor and the keyboard didn't refresh it.  No
->> signal.
->> When looking this up, closest I could see online is the following:
->>
-> https://target-devel.vger.kernel.narkive.com/XiM5Csx8/luns-become-unavailable-with-current-git-head
->> They too run ESXi .
->> To read the file I used the AnsiEsc plugin for VIM:
->> https://www.vim.org/scripts/script.php?script_id=302
->> This started to occur once had a VMware based MySQL and PostgreSQL
->> cluster configured.  Takes a few days for the issue to occur so from
->> that perspective, appears to be memory related.
->> Firmware that I'm using is:
->>      supported_classes   = "Class 3"
->>      supported_speeds    = "1 Gbit, 2 Gbit, 4 Gbit"
->>      symbolic_name       = "QLE2464 FW:v8.04.00 DVR:v10.00.00.05-k"
->> Targetcli, rtslib and configshell versions I'm using are:
->>
->> # rpm -aq|grep -Ei "targetcli|rtslib|configshell"
->> python-rtslib-3.0.pre4.9~g6fd0bbf-1.el6.noarch
->> python-configshell-1.1.fb4-1.el6.noarch
->> targetcli-3.0.pre4.5~ga125182-1.el6.noarch
->>
->>
->> -- 
->> Thx,
->> TK.
+On 5/1/19 10:59 AM, James Smart wrote:
+> Update lpfc to revision 12.2.0.2
 > 
-> I missed this email, Been buried in customer cases.
-> I also need to still run some tests.
-> Sorry, reading now
+> A quick patch set that resolves lockdep checking issues and
+> addresses a couple of bugs found when inspecting the paths
+> for the lockdeps.
 > 
+> The patches were cut against Martin's 5.2/scsi-queue tree
 
-No worries.  Would be very interested to see what you find.
+Hi James,
 
-In the meantime later tonight I'll be trying to 1) find more recent 
-firmware for the card, 2) try to use the newer kernel v5.1-rc1 outlined 
-above 3) try the 4.5 kernel later on the weekend.
+While testing this patch series I hit the kernel warning shown below. Is
+this kernel warning perhaps a regression due to patch 1/4 in this series?
+
+Thanks,
+
+Bart.
 
 
--- 
-Thx,
-TK.
+lpfc 0000:00:0a.0: 1:(0):2753 PLOGI failure DID:010000 Status:x3/x103
+WARNING: CPU: 0 PID: 178 at drivers/scsi/lpfc/lpfc_sli.c:2994
+lpfc_sli_iocbq_lookup+0x1aa/0x1c0 [lpfc]
+CPU: 0 PID: 178 Comm: lpfc_worker_1 Tainted: G           O
+5.1.0-rc7-dbg+ #3
+Hardware name: Bochs Bochs, BIOS Bochs 01/01/2011
+RIP: 0010:lpfc_sli_iocbq_lookup+0x1aa/0x1c0 [lpfc]
+Call Trace:
+ lpfc_sli_sp_handle_rspiocb+0x43b/0xa30 [lpfc]
+ ? check_chain_key+0x13f/0x200
+ ? lpfc_sli_handle_fast_ring_event+0x7d0/0x7d0 [lpfc]
+ ? memcpy+0x45/0x50
+ ? lpfc_sli4_iocb_param_transfer+0xf7/0x420 [lpfc]
+ lpfc_sli_handle_slow_ring_event_s4+0x252/0x320 [lpfc]
+ lpfc_sli_handle_slow_ring_event+0x32/0x40 [lpfc]
+ lpfc_do_work+0x1050/0x19f0 [lpfc]
+ ? mark_held_locks+0x34/0xb0
+ ? lpfc_unregister_unused_fcf+0xb0/0xb0 [lpfc]
+ ? finish_wait+0x110/0x110
+ ? _raw_spin_unlock_irqrestore+0x42/0x70
+ ? __kthread_parkme+0xb5/0xd0
+ kthread+0x1d2/0x1f0
+ ? lpfc_unregister_unused_fcf+0xb0/0xb0 [lpfc]
+ ? kthread_create_on_node+0xc0/0xc0
+ ret_from_fork+0x24/0x50
+irq event stamp: 50416
+hardirqs last  enabled at (50415): [<ffffffff819d04c7>]
+_raw_spin_unlock_irqrestore+0x57/0x70
+hardirqs last disabled at (50416): [<ffffffff819d01e8>]
+_raw_spin_lock_irqsave+0x18/0x60
+softirqs last  enabled at (44458): [<ffffffff81c00451>]
+__do_softirq+0x451/0x5b7
+softirqs last disabled at (44447): [<ffffffff810af1ad>] irq_exit+0xdd/0x100
