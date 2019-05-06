@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5DBE14F40
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 May 2019 17:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C902A14E48
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 May 2019 17:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726561AbfEFPIm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 May 2019 11:08:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56470 "EHLO mail.kernel.org"
+        id S1728171AbfEFOlK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 May 2019 10:41:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726576AbfEFOgL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 6 May 2019 10:36:11 -0400
+        id S1727417AbfEFOlJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 6 May 2019 10:41:09 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3CEFC20C01;
-        Mon,  6 May 2019 14:36:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 463382087F;
+        Mon,  6 May 2019 14:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557153370;
-        bh=ksd2GxFaR8I8MVeWhGJ40R65aUuMdI4nHDD1YSmkOkE=;
+        s=default; t=1557153668;
+        bh=uzE4VR4HRlm7d0oPV9h7NAz0AP5E+Uj+eaq3Q2ozYtY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JZHriexZkGAqFUifdd+l5V/JS+vNrEDC9F6Ik0Qw/4iU80ue0ZXPvZVXGaAuBeLMZ
-         qm1l9HQoOukQ2BSk7nPQz1Ksbyr2FEVpwPsOSAJbBUsyhJAEZKN+Gw5PPITaOm8NSf
-         U7RX5/dM6z7q9M6RGI5v56O5w2wyEd4WDCKOUZeE=
+        b=XP971QCOULhxtfl1gvNBnh4IDdXAX1Gg3OMATAFs+lfKYjBDvVA/bQno0GZokPysV
+         gwihPSpknXTjSp7wpa62ggpA5ot/5MOIruT/hCu1ik/DoJ8lLJ+8T9Bv4pWapkFYSQ
+         hqAXAt+n37yLGUswo7c1XpRoJrQjML9loVHcKmdE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,13 +35,13 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         SCSI ML <linux-scsi@vger.kernel.org>,
         DM ML <dm-devel@redhat.com>,
         Xose Vazquez Perez <xose.vazquez@gmail.com>,
-        "Sasha Levin (Microsoft)" <sashal@kernel.org>
-Subject: [PATCH 5.0 063/122] scsi: core: add new RDAC LENOVO/DE_Series device
-Date:   Mon,  6 May 2019 16:32:01 +0200
-Message-Id: <20190506143100.615679234@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 51/99] scsi: core: add new RDAC LENOVO/DE_Series device
+Date:   Mon,  6 May 2019 16:32:24 +0200
+Message-Id: <20190506143058.699453486@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190506143054.670334917@linuxfoundation.org>
-References: <20190506143054.670334917@linuxfoundation.org>
+In-Reply-To: <20190506143053.899356316@linuxfoundation.org>
+References: <20190506143053.899356316@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -67,7 +67,7 @@ Cc: DM ML <dm-devel@redhat.com>
 Signed-off-by: Xose Vazquez Perez <xose.vazquez@gmail.com>
 Reviewed-by: Martin Wilck <mwilck@suse.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin (Microsoft) <sashal@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
  drivers/scsi/scsi_devinfo.c | 1 +
  drivers/scsi/scsi_dh.c      | 1 +
