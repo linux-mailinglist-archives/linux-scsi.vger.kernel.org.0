@@ -2,49 +2,41 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27DA615740
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 03:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 999D915764
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 03:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfEGBZp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 May 2019 21:25:45 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43945 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbfEGBZp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 May 2019 21:25:45 -0400
-Received: by mail-pg1-f195.google.com with SMTP id t22so7356717pgi.10;
-        Mon, 06 May 2019 18:25:44 -0700 (PDT)
+        id S1726190AbfEGBnn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 May 2019 21:43:43 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33973 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725994AbfEGBnn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 May 2019 21:43:43 -0400
+Received: by mail-pf1-f196.google.com with SMTP id b3so7737857pfd.1
+        for <linux-scsi@vger.kernel.org>; Mon, 06 May 2019 18:43:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+        h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=B1TBQ08ugs3m4sIfITw+AiGXxU4fEWXaDojwh4qY/20=;
-        b=psg1Pwm8B52cxSZbwbWfSCwZ1tEsU4Cmrd0JxKRDN4nINzgTbbvwHWPUbfnS8Ae3lE
-         JqLXu+mPhLUTlukVxtzSazuaZ5tlVxpDl2AeR7LUjp5xZQqX1uVXHysjWaaVvipaPP0+
-         oEIBW379/MQiq0yfNb0ONi+bQPNGPGATIltH79IPx4aqeAlYELUCEh1vKYuZQYIXLt7M
-         QokmBIYpvzV7qeqA6boDj8lVSMTuK8tfqoXjnExykXL7oY8+q4QCzur6sdIndbhCtaCm
-         dTnEpWznWCx+WT1fCdtH9Kdj9xLH9S0q7lEHp4VdbSuUwcdzhYolZZmOUG+HvBuTjLng
-         6yZQ==
-X-Gm-Message-State: APjAAAVi86BqM8vVjWyMhc5CCx6wzRnE6qC+nzwvRE3ZLXao/L/KqVHM
-        QCZ3r8scup2NG27D8cw6FK0=
-X-Google-Smtp-Source: APXvYqyphd2/TpNoEqoJW0JjbWvCHzgio35/s3Wy84FGPgaaFDOWnrSxtnG4rF8vSAokTB6OHff03A==
-X-Received: by 2002:a62:e718:: with SMTP id s24mr15023495pfh.247.1557192344473;
-        Mon, 06 May 2019 18:25:44 -0700 (PDT)
+        bh=H/0j026Kt8NlSYd1DjIdB4o20MjrDq6JvaS75mWmC/Q=;
+        b=NYAO4JmxGozK+0TPLqx1Csw438Th8yRY1a4EmZnhOkqf7RXqsBIBzxu/ETZgv8fl/9
+         U5LNgt8YSSjjIqgOICa92p3Hz0s5jb3Mm4xtmBaxwpdaRxednh06zPlGhiDwLuEmAnNg
+         uRLwoUUB1AYlDxJKdGJm/0AbJuBE+9eawJVHUzxtygAtwSADBznIOZWMOWG7oZkUHUbW
+         2VhGEhd6k/8N4LZRND7WfrY3pgTrLFzPFaZnJyNJzefUm+OzkdPJj8mIboB2CKriA1BA
+         v+pb6MNNHpldA8Mb20zc+x80Zm9hX5jAbBKXL75vAwpdhrQauQAUui62hAiayXeksw9J
+         28hQ==
+X-Gm-Message-State: APjAAAVa20qioD5b1n1zipq+Hfmj/DIoiPPEN7D38ruvjcgfzzWjn0hG
+        dHoUSNJ0Cf7wvA9fG82kKGZ4nZMp
+X-Google-Smtp-Source: APXvYqw/e01hurIU8yLVV0R8f+0/EZQ1Pl8yyfeGmAPhNHlGQUseMgjVMo1sZ+p4ClQJtxWJxBnkQg==
+X-Received: by 2002:aa7:925a:: with SMTP id 26mr37263132pfp.152.1557193421962;
+        Mon, 06 May 2019 18:43:41 -0700 (PDT)
 Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
-        by smtp.gmail.com with ESMTPSA id p7sm13955980pgn.64.2019.05.06.18.25.43
+        by smtp.gmail.com with ESMTPSA id f14sm17444115pgj.24.2019.05.06.18.43.41
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 May 2019 18:25:43 -0700 (PDT)
-Subject: Re: [RFC PATCH 4/4] f2fs: Wire up f2fs to use inline encryption via
- fscrypt
-To:     Satya Tangirala <satyat@google.com>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Parshuram Raju Thombare <pthombar@cadence.com>,
-        Ladvine D Almeida <ladvine.dalmeida@synopsys.com>,
-        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>
-References: <20190506223544.195371-1-satyat@google.com>
- <20190506223544.195371-5-satyat@google.com>
+        Mon, 06 May 2019 18:43:41 -0700 (PDT)
+Subject: Re: [PATCH v2 0/4] lpfc updated for 12.2.0.2
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+References: <20190507002650.23210-1-jsmart2021@gmail.com>
 From:   Bart Van Assche <bvanassche@acm.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
@@ -70,12 +62,12 @@ Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
  //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
  mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
  goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <58ca036a-7635-9b6f-d778-c89802a50129@acm.org>
-Date:   Mon, 6 May 2019 18:25:42 -0700
+Message-ID: <630178e7-faee-1a62-edab-fc1521cf8495@acm.org>
+Date:   Mon, 6 May 2019 18:43:40 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190506223544.195371-5-satyat@google.com>
+In-Reply-To: <20190507002650.23210-1-jsmart2021@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -84,14 +76,9 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/6/19 3:35 PM, Satya Tangirala wrote:
-> +static inline u64 hw_crypt_dun(struct inode *inode, struct page *page)
-> +{
-> +	return (((u64)inode->i_ino) << 32) | (page->index & 0xFFFFFFFF);
-> +}
+On 5/6/19 5:26 PM, James Smart wrote:
+> Update lpfc to revision 12.2.0.2
 
-How about using lower_32_bits() instead of "& 0xFFFFFFFF"?
+For the whole series:
 
-Thanks,
-
-Bart.
+Tested-by: Bart Van Assche <bvanassche@acm.org>
