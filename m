@@ -2,94 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B581156E7
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 02:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9E0156EB
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 02:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbfEGA0T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 May 2019 20:26:19 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45702 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726073AbfEGA0T (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 May 2019 20:26:19 -0400
-Received: by mail-pf1-f196.google.com with SMTP id e24so7623689pfi.12;
-        Mon, 06 May 2019 17:26:18 -0700 (PDT)
+        id S1726312AbfEGA1g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 May 2019 20:27:36 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:35075 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726181AbfEGA1g (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 May 2019 20:27:36 -0400
+Received: by mail-pg1-f195.google.com with SMTP id h1so7312631pgs.2
+        for <linux-scsi@vger.kernel.org>; Mon, 06 May 2019 17:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Aqwi13k1gojDp35uBRuknUsbcvo62Bj8CUXw3XYWxFk=;
+        b=bvFdrt0D56Ktqb/TM5HI3oPUp2E7PFc2+0fxsscUsTKyXFEASmP8WwQZCw6o6BAfqf
+         YirP15UapHJc4D1Kk9kCkL3+eXYvmFddykdpyBwL9zTlALsMmyaFmBq6UneZuuH86pAk
+         +GGElzcfeyuxxdf8MmntFjQl1jv9zrazQxV8TnPS44jwcjW0JIvpGt6rhmbB4HF1eX/3
+         T+92Neafy5h6Tk7SM2aXwe2MKudDBfqcveDSxUV7GL0NleEDrBavy6l3xpVi1ZBVhqL3
+         jt7AchLm2M3tYtaXZvosydF8+4V3FrNH+cN0wMGkKbH8WkNP2/ZvRg6ccb7T3i95s1l9
+         BTUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=VrIvR2LcO4VKk0aGC25htWLS/3P/QjF+EC5aTakaR7k=;
-        b=LovSGITnvFmsdK4ysZKkXrS5hadqyTHy3+KRRaW4K7mh6eD18al3DJ2XLppeA5/ZFO
-         9n81lKODOkcsjNo54STBLh78QizxPgWmyj5IcnX/kQ/Tlp6tcts6ndeKzjvuzyh/aogd
-         Q9KgUm0d7UidxG1357qflazKyAoCAic/2ak9M9d8JMZM4OAX15tuRShVeV+j2bC+ycDn
-         3pvnwwMVFzbi6APdgwHhP1Uk/YDUJ4dDCf2KzgB6jArn9CLZ28JJbtzbIpvH0FFTWeqp
-         +kNx6asAxkfXDWtmNLzeKPIH7VIcL11rAe4T3woFmFmkpOoYDq/V3aqaVcgMMEOB/SoN
-         SpZA==
-X-Gm-Message-State: APjAAAV7gRwCY0FnL33zneUYxH0luMeFk1xiSJnwcHXvgbwX64+++l+4
-        6TgWts9JNkGdNzwPur4CYUA=
-X-Google-Smtp-Source: APXvYqzev1QRpR78bsytAXlIw/CuDVITui+KPCGj6nOuGQ0fHMD0nRcYQhEiuPaWQlxpkGFTkw6LRw==
-X-Received: by 2002:a63:d016:: with SMTP id z22mr36690345pgf.116.1557188778223;
-        Mon, 06 May 2019 17:26:18 -0700 (PDT)
-Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
-        by smtp.gmail.com with ESMTPSA id q128sm15553366pfb.164.2019.05.06.17.26.16
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 May 2019 17:26:17 -0700 (PDT)
-Subject: Re: [RFC PATCH 0/4] Inline Encryption Support
-To:     Satya Tangirala <satyat@google.com>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Parshuram Raju Thombare <pthombar@cadence.com>,
-        Ladvine D Almeida <ladvine.dalmeida@synopsys.com>,
-        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>
-References: <20190506223544.195371-1-satyat@google.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <7962e452-ed5f-bd40-f696-c6b486fbef74@acm.org>
-Date:   Mon, 6 May 2019 17:26:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190506223544.195371-1-satyat@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Aqwi13k1gojDp35uBRuknUsbcvo62Bj8CUXw3XYWxFk=;
+        b=K0YPycoHw+PxYUsOlN62UMWdtJgmeBe+iQU1p+vXLFeEQH2zBUd9zHNN8FPUz7hQJ1
+         JgVjaWxdkamhIu9vduvz0cg5R6i51Zu2FO30r2n+UbBnq/+KPTK3EzBHW9Mvvtblix7X
+         LUlsIZpchORWONM9l2gpd5H/XQ48/FC1sUSnefcnALwZyX9xfUlmpK0nNM1tUfsgp7D7
+         SnyY4mYM+n1AAxeyzAGxn83GjdGivKWxp2m30ZBGAgLjrfcFJvuj2dxatjFskJXFaEc1
+         SwCyeTNDhFqEFoVr2+gy55ORMv7h9Q0NX7kEXU9/LpT2G3JWsUOyLoTOOLqLiwLysJVD
+         t1Fg==
+X-Gm-Message-State: APjAAAX16hCl7hzX0lnOaMlubA+9ufseYIwSAEhNqCDdDkbcxuvMF5ji
+        QEYoLN9bSK5OtnV7cp6bUutkFCwk
+X-Google-Smtp-Source: APXvYqxVRJcUaQ0NqdLS4z7CkEx/FJdBz8uFQIb6G7ug3WhKBiRwYrOsoRcoqzHzQ+tZSM/bipRakQ==
+X-Received: by 2002:aa7:99c7:: with SMTP id v7mr37832632pfi.103.1557188855333;
+        Mon, 06 May 2019 17:27:35 -0700 (PDT)
+Received: from pallmd1.broadcom.com ([192.19.223.250])
+        by smtp.gmail.com with ESMTPSA id r8sm14756623pfn.11.2019.05.06.17.27.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 06 May 2019 17:27:34 -0700 (PDT)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>
+Subject: [PATCH v2 0/4] lpfc updated for 12.2.0.2
+Date:   Mon,  6 May 2019 17:26:46 -0700
+Message-Id: <20190507002650.23210-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.13.7
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/6/19 3:35 PM, Satya Tangirala wrote:
-> This patch series adds support for Inline Encryption to the block layer,
-> fscrypt and f2fs.
+Update lpfc to revision 12.2.0.2
 
-The worst time for posting a patch series is during the merge window.
+A quick patch set that resolves lockdep checking issues and
+addresses a couple of bugs found when inspecting the paths
+for the lockdeps.
 
-Please address the checkpatch warnings triggered by this patch series.
+The patches were cut against Martin's 5.2/scsi-queue tree
 
-Thanks,
+v2:
+  update patch 1 with fix for around lpfc_sli_iocbq_lookup()
 
-Bart.
+James Smart (4):
+  lpfc: resolve lockdep warnings
+  lpfc: correct rcu unlock issue in lpfc_nvme_info_show
+  lpfc: add check for loss of ndlp when sending RRQ
+  lpfc: Update lpfc version to 12.2.0.2
+
+ drivers/scsi/lpfc/lpfc_attr.c    | 37 +++++++++++-------
+ drivers/scsi/lpfc/lpfc_els.c     |  5 ++-
+ drivers/scsi/lpfc/lpfc_sli.c     | 84 +++++++++++++++++++++++++---------------
+ drivers/scsi/lpfc/lpfc_version.h |  2 +-
+ 4 files changed, 80 insertions(+), 48 deletions(-)
+
+-- 
+2.13.7
+
