@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F29CB15BE2
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 07:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6C715AF5
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 07:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728071AbfEGF6V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 May 2019 01:58:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57002 "EHLO mail.kernel.org"
+        id S1728107AbfEGFuO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 May 2019 01:50:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727658AbfEGFhM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 7 May 2019 01:37:12 -0400
+        id S1729042AbfEGFkN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 7 May 2019 01:40:13 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3071120675;
-        Tue,  7 May 2019 05:37:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D38E214AE;
+        Tue,  7 May 2019 05:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557207432;
-        bh=+agNTwg/jhZpl+avmXspwR4Lh16PJZ5+3wdGOLlFBWA=;
+        s=default; t=1557207612;
+        bh=0lXt05TCRZdQkuVRMf8JxGKjSOx8H7tZZ4rq+/yUapg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GZy0O64BUqy6PTXM3J9JOGlF4rNbyFckqR62lMgY0AsudP+COVdEFoJ3O04WQo/gN
-         1EcsW/e8P6bMTmKfTd5Edjje4/VNUtWx/+Nz4r7JBWy1sBX+xhTPXzHtAJKQSHTZ0I
-         bqTJQrRh8SCJ5jUdZZtF0vBRSofeMQWBz+JmdSJ4=
+        b=M15DwTnazETUyojdPwDWNKfgfFiSJStb1YFGtXqCjehpDYxEEGfQXmwQcZLX/oAg2
+         8mUmyUiuWxZb9xCpYGA3p6rfTqlszRxcONeRDYCMAiaWrOHVsQntJpWpmyfgyUK6XF
+         mUD1k0QBa3MyuW7peoSALDhUOMUSWvbUl12XCj2s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Matthew Whitehead <tedheadster@gmail.com>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 40/81] scsi: aic7xxx: fix EISA support
-Date:   Tue,  7 May 2019 01:35:11 -0400
-Message-Id: <20190507053554.30848-40-sashal@kernel.org>
+        Sasha Levin <alexander.levin@microsoft.com>,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 56/95] scsi: raid_attrs: fix unused variable warning
+Date:   Tue,  7 May 2019 01:37:45 -0400
+Message-Id: <20190507053826.31622-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190507053554.30848-1-sashal@kernel.org>
-References: <20190507053554.30848-1-sashal@kernel.org>
+In-Reply-To: <20190507053826.31622-1-sashal@kernel.org>
+References: <20190507053826.31622-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,98 +44,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Arnd Bergmann <arnd@arndb.de>
 
-[ Upstream commit 144ec97493af34efdb77c5aba146e9c7de8d0a06 ]
+[ Upstream commit 0eeec01488da9b1403c8c29e73eacac8af9e4bf2 ]
 
-Instead of relying on the now removed NULL argument to
-pci_alloc_consistent, switch to the generic DMA API, and store the struct
-device so that we can pass it.
+I ran into a new warning on randconfig kernels:
 
-Fixes: 4167b2ad5182 ("PCI: Remove NULL device handling from PCI DMA API")
-Reported-by: Matthew Whitehead <tedheadster@gmail.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Tested-by: Matthew Whitehead <tedheadster@gmail.com>
+drivers/scsi/raid_class.c: In function 'raid_match':
+drivers/scsi/raid_class.c:64:24: error: unused variable 'i' [-Werror=unused-variable]
+
+This looks like a very old problem that for some reason was very hard to
+run into, but it is very easy to fix, by replacing the incorrect #ifdef
+with a simpler IS_ENABLED() check.
+
+Fixes: fac829fdcaf4 ("[SCSI] raid_attrs: fix dependency problems")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Sasha Levin <alexander.levin@microsoft.com>
 ---
- drivers/scsi/aic7xxx/aic7770_osm.c     |  1 +
- drivers/scsi/aic7xxx/aic7xxx.h         |  1 +
- drivers/scsi/aic7xxx/aic7xxx_osm.c     | 10 ++++------
- drivers/scsi/aic7xxx/aic7xxx_osm_pci.c |  1 +
- 4 files changed, 7 insertions(+), 6 deletions(-)
+ drivers/scsi/raid_class.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/aic7xxx/aic7770_osm.c b/drivers/scsi/aic7xxx/aic7770_osm.c
-index 3d401d02c019..bdd177e3d762 100644
---- a/drivers/scsi/aic7xxx/aic7770_osm.c
-+++ b/drivers/scsi/aic7xxx/aic7770_osm.c
-@@ -91,6 +91,7 @@ aic7770_probe(struct device *dev)
- 	ahc = ahc_alloc(&aic7xxx_driver_template, name);
- 	if (ahc == NULL)
- 		return (ENOMEM);
-+	ahc->dev = dev;
- 	error = aic7770_config(ahc, aic7770_ident_table + edev->id.driver_data,
- 			       eisaBase);
- 	if (error != 0) {
-diff --git a/drivers/scsi/aic7xxx/aic7xxx.h b/drivers/scsi/aic7xxx/aic7xxx.h
-index 4ce4e903a759..7f6e83296dfa 100644
---- a/drivers/scsi/aic7xxx/aic7xxx.h
-+++ b/drivers/scsi/aic7xxx/aic7xxx.h
-@@ -949,6 +949,7 @@ struct ahc_softc {
- 	 * Platform specific device information.
- 	 */
- 	ahc_dev_softc_t		  dev_softc;
-+	struct device		  *dev;
+diff --git a/drivers/scsi/raid_class.c b/drivers/scsi/raid_class.c
+index 2c146b44d95f..cddd78893b46 100644
+--- a/drivers/scsi/raid_class.c
++++ b/drivers/scsi/raid_class.c
+@@ -63,8 +63,7 @@ static int raid_match(struct attribute_container *cont, struct device *dev)
+ 	 * emulated RAID devices, so start with SCSI */
+ 	struct raid_internal *i = ac_to_raid_internal(cont);
  
- 	/*
- 	 * Bus specific device information.
-diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
-index c6be3aeb302b..306d0bf33478 100644
---- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
-+++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
-@@ -861,8 +861,8 @@ int
- ahc_dmamem_alloc(struct ahc_softc *ahc, bus_dma_tag_t dmat, void** vaddr,
- 		 int flags, bus_dmamap_t *mapp)
- {
--	*vaddr = pci_alloc_consistent(ahc->dev_softc,
--				      dmat->maxsize, mapp);
-+	/* XXX: check if we really need the GFP_ATOMIC and unwind this mess! */
-+	*vaddr = dma_alloc_coherent(ahc->dev, dmat->maxsize, mapp, GFP_ATOMIC);
- 	if (*vaddr == NULL)
- 		return ENOMEM;
- 	return 0;
-@@ -872,8 +872,7 @@ void
- ahc_dmamem_free(struct ahc_softc *ahc, bus_dma_tag_t dmat,
- 		void* vaddr, bus_dmamap_t map)
- {
--	pci_free_consistent(ahc->dev_softc, dmat->maxsize,
--			    vaddr, map);
-+	dma_free_coherent(ahc->dev, dmat->maxsize, vaddr, map);
- }
+-#if defined(CONFIG_SCSI) || defined(CONFIG_SCSI_MODULE)
+-	if (scsi_is_sdev_device(dev)) {
++	if (IS_ENABLED(CONFIG_SCSI) && scsi_is_sdev_device(dev)) {
+ 		struct scsi_device *sdev = to_scsi_device(dev);
  
- int
-@@ -1124,8 +1123,7 @@ ahc_linux_register_host(struct ahc_softc *ahc, struct scsi_host_template *templa
+ 		if (i->f->cookie != sdev->host->hostt)
+@@ -72,7 +71,6 @@ static int raid_match(struct attribute_container *cont, struct device *dev)
  
- 	host->transportt = ahc_linux_transport_template;
- 
--	retval = scsi_add_host(host,
--			(ahc->dev_softc ? &ahc->dev_softc->dev : NULL));
-+	retval = scsi_add_host(host, ahc->dev);
- 	if (retval) {
- 		printk(KERN_WARNING "aic7xxx: scsi_add_host failed\n");
- 		scsi_host_put(host);
-diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm_pci.c b/drivers/scsi/aic7xxx/aic7xxx_osm_pci.c
-index 0fc14dac7070..717d8d1082ce 100644
---- a/drivers/scsi/aic7xxx/aic7xxx_osm_pci.c
-+++ b/drivers/scsi/aic7xxx/aic7xxx_osm_pci.c
-@@ -250,6 +250,7 @@ ahc_linux_pci_dev_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		}
+ 		return i->f->is_raid(dev);
  	}
- 	ahc->dev_softc = pci;
-+	ahc->dev = &pci->dev;
- 	error = ahc_pci_config(ahc, entry);
- 	if (error != 0) {
- 		ahc_free(ahc);
+-#endif
+ 	/* FIXME: look at other subsystems too */
+ 	return 0;
+ }
 -- 
 2.20.1
 
