@@ -2,83 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C9C168CD
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 19:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4866016A30
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 20:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbfEGRH0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 May 2019 13:07:26 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43143 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726381AbfEGRH0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 May 2019 13:07:26 -0400
-Received: by mail-pf1-f196.google.com with SMTP id c6so3769622pfa.10
-        for <linux-scsi@vger.kernel.org>; Tue, 07 May 2019 10:07:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=4z2u4bzz9iAHqXSwhW/gdsQ9hBMNYvHh74EOpQ3IDEw=;
-        b=f/1kVZ38I1V3jEaUJquoMGU+8VWaqHwuHYIvoPvttFGhoB8EJfsRjsalbpAGNFfhPZ
-         1+aO/2umqmXWefUiUuOzGQHM029b3fijICa2DwRabRebzr8gBFGCZ9yJGK94Y+D+66Es
-         5Cl8WpsszKk3kWa5OXr8aq92PIpOjfHkAkP1Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=4z2u4bzz9iAHqXSwhW/gdsQ9hBMNYvHh74EOpQ3IDEw=;
-        b=m5Mr49Rc4NqeYaq+TIJ/PKKWQkmpKEtMkgQzHrHlnZYzXsVJa4g33SG4WO7gBJ+13q
-         ErGy1T5LJe6lfbaAt6NY6SF3uVv7kJZtkcvVdGnzP1R5Ah9gDZQU2CxQeHMWeD/QtLC+
-         UoZoGwE3SUNIZ6yl+/7fhyIQuJkMLEity/343tfKVc4+VFQsCgKCqgf90LU/yDbnSIH+
-         IkSjC3C4xGLq9nREnURIFfMJlmxyVUug2akkJh1ZXvM70S7lXpcbYG4GDEUMl+KXVGwN
-         wUSlP6BeyNOmpSJcHm5J2nFASIX/e5Cb1pooMeMsbHess022lQ4PsrNqJh2Mi+WNUwbT
-         D3oQ==
-X-Gm-Message-State: APjAAAWa2qnDRvTw3sQRLDrGpATeimXyTWG3Tf4PtGYW2tKKIWTG0kGA
-        VcFhaV2tcNRhvAtwY9dx1WEL6XvvOk1YUc/6Kkt8QaY1XB4nBLEQQjrpbpHjJeUo4FFcn/d5OAj
-        E4MG6yFha8dQp3eEGAn4wTKJ6qh/+IfaBJJD/iC5+XXN19v77koSNiWHBLzZdSEg/atf4nJDCTp
-        qlwSlnFmITHNkDyReAIdjv
-X-Google-Smtp-Source: APXvYqwI0pB/QQFDvD8gHjCN81aRF1xZOr/tqyoaLZfF4uGahdDE5gaZ9e+8R8tP9wfbUd8Iqr2sZg==
-X-Received: by 2002:a62:f245:: with SMTP id y5mr42333584pfl.12.1557248844651;
-        Tue, 07 May 2019 10:07:24 -0700 (PDT)
-Received: from dhcp-135-24-192-142.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id r74sm17527791pfa.71.2019.05.07.10.07.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 07 May 2019 10:07:23 -0700 (PDT)
-From:   Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
-        sasikumar.pc@broadcom.com,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-Subject: [PATCH v2 21/21] megaraid_sas: Update driver version to 07.708.03.00
-Date:   Tue,  7 May 2019 10:05:50 -0700
-Message-Id: <1557248750-4099-22-git-send-email-shivasharan.srikanteshwara@broadcom.com>
-X-Mailer: git-send-email 2.4.3
-In-Reply-To: <1557248750-4099-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
-References: <1557248750-4099-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
+        id S1726851AbfEGSb5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 May 2019 14:31:57 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:24095 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726602AbfEGSb5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 May 2019 14:31:57 -0400
+Authentication-Results: esa5.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=don.brace@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com
+Received-SPF: Pass (esa5.microchip.iphmx.com: domain of
+  don.brace@microsemi.com designates 208.19.99.222 as permitted
+  sender) identity=mailfrom; client-ip=208.19.99.222;
+  receiver=esa5.microchip.iphmx.com;
+  envelope-from="don.brace@microsemi.com";
+  x-sender="don.brace@microsemi.com"; x-conformance=spf_only;
+  x-record-type="v=spf1"; x-record-text="v=spf1
+  ip4:208.19.100.20 ip4:208.19.100.21 ip4:208.19.100.22
+  ip4:208.19.100.23 ip4:208.19.99.221 ip4:208.19.99.222
+  ip4:208.19.99.223 ip4:208.19.99.225 -all"
+Received-SPF: None (esa5.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@smtp.microsemi.com) identity=helo;
+  client-ip=208.19.99.222; receiver=esa5.microchip.iphmx.com;
+  envelope-from="don.brace@microsemi.com";
+  x-sender="postmaster@smtp.microsemi.com";
+  x-conformance=spf_only
+X-Ironport-Dmarc-Check-Result: validskip
+X-IronPort-AV: E=Sophos;i="5.60,443,1549954800"; 
+   d="scan'208";a="30471168"
+Received: from unknown (HELO smtp.microsemi.com) ([208.19.99.222])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 May 2019 11:31:57 -0700
+Received: from AUSMBX2.microsemi.net (10.201.34.32) by AUSMBX2.microsemi.net
+ (10.201.34.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 7 May 2019
+ 13:31:54 -0500
+Received: from [127.0.1.1] (10.238.32.34) by ausmbx2.microsemi.net
+ (10.201.34.32) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
+ Transport; Tue, 7 May 2019 13:31:54 -0500
+Subject: [PATCH 0/7] hpsa updates
+From:   Don Brace <don.brace@microsemi.com>
+To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
+        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
+        <bader.alisaleh@microchip.com>, <gerry.morong@microchip.com>,
+        <mahesh.rajashekhara@microchip.com>, <hch@infradead.org>,
+        <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
+        <POSWALD@suse.com>, <shunyong.yang@hxt-semitech.com>
+CC:     <linux-scsi@vger.kernel.org>
+Date:   Tue, 7 May 2019 13:31:54 -0500
+Message-ID: <155725372104.27200.12250663760304977059.stgit@brunhilda>
+User-Agent: StGit/0.19
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+These patches are based on Linus's tree
+
+The changes are:
+hpsa-correct-simple-mode
+ - correct interrupt setup for simple-mode
+hpsa-use-local-workqueues-instead-of-system-workqueues
+ - use driver workqueue to avoid stalling OS.
+hpsa-check-for-tag-collision
+ - correct rare multipath issue.
+hpsa-wait-longer-for-ptraid-commands
+ - correct rare multipath issue.
+hpsa-do-not-complete-cmds-for-deleted-devices
+ - correct rare multipath issue.
+hpsa-correct-device-resets
+ - fix race condition in reset handler
+hpsa-update-driver-version
+ - update to track changes
+
 ---
- drivers/scsi/megaraid/megaraid_sas.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index 56b3204d3fc6..e138d1447e43 100644
---- a/drivers/scsi/megaraid/megaraid_sas.h
-+++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -33,8 +33,8 @@
- /*
-  * MegaRAID SAS Driver meta data
-  */
--#define MEGASAS_VERSION				"07.707.51.00-rc1"
--#define MEGASAS_RELDATE				"February 7, 2019"
-+#define MEGASAS_VERSION				"07.708.03.00-rc1"
-+#define MEGASAS_RELDATE				"March 14, 2019"
- 
- /*
-  * Device IDs
--- 
-2.16.1
+Don Brace (7):
+      hpsa: correct simple mode
+      hpsa: use local workqueues instead of system workqueues
+      hpsa: check for tag collision
+      hpsa: wait longer for ptraid commands
+      hpsa: do-not-complete-cmds-for-deleted-devices
+      hpsa: correct device resets
+      hpsa: update driver version
 
+
+ drivers/scsi/hpsa.c     |  278 ++++++++++++++++++++++++++++-------------------
+ drivers/scsi/hpsa.h     |    6 +
+ drivers/scsi/hpsa_cmd.h |    2 
+ 3 files changed, 174 insertions(+), 112 deletions(-)
+
+--
+Signature
