@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FCE15C95
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 08:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29CB15BE2
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 May 2019 07:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727490AbfEGFeU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 May 2019 01:34:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54246 "EHLO mail.kernel.org"
+        id S1728071AbfEGF6V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 May 2019 01:58:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726593AbfEGFeT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 7 May 2019 01:34:19 -0400
+        id S1727658AbfEGFhM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 7 May 2019 01:37:12 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E1AAF20B7C;
-        Tue,  7 May 2019 05:34:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3071120675;
+        Tue,  7 May 2019 05:37:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557207258;
-        bh=4WDsxqcuvjI5qV+O755VFvUqGwI8cZxOq1FN+sJQFBc=;
+        s=default; t=1557207432;
+        bh=+agNTwg/jhZpl+avmXspwR4Lh16PJZ5+3wdGOLlFBWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eKyIU31fuW8MYLVNqcjL9De5+cKCHRMaLt8Exm62W8sshW9IL+Z0CY9+2Tr9YQKPE
-         MqwlSQDNw6p5vtLosL3uTgfOX+TnE6fn2ywwmzjEW07Hz0RYtV7MU0SBJd8zewAA7h
-         Oz8ioPBcjFXwSyvPBtiruOAU0RrjEKV0Namw/zKI=
+        b=GZy0O64BUqy6PTXM3J9JOGlF4rNbyFckqR62lMgY0AsudP+COVdEFoJ3O04WQo/gN
+         1EcsW/e8P6bMTmKfTd5Edjje4/VNUtWx/+Nz4r7JBWy1sBX+xhTPXzHtAJKQSHTZ0I
+         bqTJQrRh8SCJ5jUdZZtF0vBRSofeMQWBz+JmdSJ4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christoph Hellwig <hch@lst.de>,
         Matthew Whitehead <tedheadster@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.0 55/99] scsi: aic7xxx: fix EISA support
-Date:   Tue,  7 May 2019 01:31:49 -0400
-Message-Id: <20190507053235.29900-55-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 40/81] scsi: aic7xxx: fix EISA support
+Date:   Tue,  7 May 2019 01:35:11 -0400
+Message-Id: <20190507053554.30848-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190507053235.29900-1-sashal@kernel.org>
-References: <20190507053235.29900-1-sashal@kernel.org>
+In-Reply-To: <20190507053554.30848-1-sashal@kernel.org>
+References: <20190507053554.30848-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -78,10 +78,10 @@ index 3d401d02c019..bdd177e3d762 100644
  			       eisaBase);
  	if (error != 0) {
 diff --git a/drivers/scsi/aic7xxx/aic7xxx.h b/drivers/scsi/aic7xxx/aic7xxx.h
-index 5614921b4041..88b90f9806c9 100644
+index 4ce4e903a759..7f6e83296dfa 100644
 --- a/drivers/scsi/aic7xxx/aic7xxx.h
 +++ b/drivers/scsi/aic7xxx/aic7xxx.h
-@@ -943,6 +943,7 @@ struct ahc_softc {
+@@ -949,6 +949,7 @@ struct ahc_softc {
  	 * Platform specific device information.
  	 */
  	ahc_dev_softc_t		  dev_softc;
@@ -90,10 +90,10 @@ index 5614921b4041..88b90f9806c9 100644
  	/*
  	 * Bus specific device information.
 diff --git a/drivers/scsi/aic7xxx/aic7xxx_osm.c b/drivers/scsi/aic7xxx/aic7xxx_osm.c
-index 3c9c17450bb3..d5c4a0d23706 100644
+index c6be3aeb302b..306d0bf33478 100644
 --- a/drivers/scsi/aic7xxx/aic7xxx_osm.c
 +++ b/drivers/scsi/aic7xxx/aic7xxx_osm.c
-@@ -860,8 +860,8 @@ int
+@@ -861,8 +861,8 @@ int
  ahc_dmamem_alloc(struct ahc_softc *ahc, bus_dma_tag_t dmat, void** vaddr,
  		 int flags, bus_dmamap_t *mapp)
  {
@@ -104,7 +104,7 @@ index 3c9c17450bb3..d5c4a0d23706 100644
  	if (*vaddr == NULL)
  		return ENOMEM;
  	return 0;
-@@ -871,8 +871,7 @@ void
+@@ -872,8 +872,7 @@ void
  ahc_dmamem_free(struct ahc_softc *ahc, bus_dma_tag_t dmat,
  		void* vaddr, bus_dmamap_t map)
  {
@@ -114,7 +114,7 @@ index 3c9c17450bb3..d5c4a0d23706 100644
  }
  
  int
-@@ -1123,8 +1122,7 @@ ahc_linux_register_host(struct ahc_softc *ahc, struct scsi_host_template *templa
+@@ -1124,8 +1123,7 @@ ahc_linux_register_host(struct ahc_softc *ahc, struct scsi_host_template *templa
  
  	host->transportt = ahc_linux_transport_template;
  
