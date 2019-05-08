@@ -2,54 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B8517FD9
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 20:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC5A1812B
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 22:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727469AbfEHSaO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 May 2019 14:30:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58160 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726976AbfEHSaO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 8 May 2019 14:30:14 -0400
-Subject: Re: [GIT PULL] first round of SCSI updates for the 5.1+ merge window
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557340213;
-        bh=ArU7WW62CINzg8xZQvtrCBnxq4yjzqir/mFHPpnHq/A=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=bZrGIxQDMTz5vUUR4c/1TQhILPYNMUBj+Ym0hYROba6B6tY1zMtsItEHVm1o6esxz
-         gYHuNJVarQ5nJ5MOuZi2MPuvUpt7Wbam3PoruHi4wnaSFk6WHe94qKnR9yPmp/wJmS
-         SG6h1iCtf9qRYJVHvvzKWY0GD1dQvqvlrp1JPFIA=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1557291792.9245.31.camel@HansenPartnership.com>
-References: <1557291792.9245.31.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1557291792.9245.31.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
-X-PR-Tracked-Commit-Id: d4023db71108375e4194e92730ba0d32d7f07813
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d1cd7c85f9e29740fddec6f25d8bf061937bf58d
-Message-Id: <155734021345.8790.11973657663525037842.pr-tracker-bot@kernel.org>
-Date:   Wed, 08 May 2019 18:30:13 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1727026AbfEHUks (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 May 2019 16:40:48 -0400
+Received: from mail-yw1-f41.google.com ([209.85.161.41]:45743 "EHLO
+        mail-yw1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726470AbfEHUkr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 16:40:47 -0400
+Received: by mail-yw1-f41.google.com with SMTP id w18so11140ywa.12
+        for <linux-scsi@vger.kernel.org>; Wed, 08 May 2019 13:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quadstor-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=IRLgqr7G6M5oNo5Sn5vI/dABACGqET6tzlr6b1OSoYQ=;
+        b=nsIhTDy5fFoR5ybyISoreJYb0QVwhk348U6WjWUfoMOKMXqpaMhRlZ0dVVARU57ywH
+         jFB3cda0RYxEYdoELXXVUKbdzFGVbqIzuyZm/q2VlU0Z2Auus57daaE7tS3OqSvqB0bo
+         nkjqluE/a8HKo0Vzjybda85b0PUuIOMPSSIcXoQKFsskPjVxfReZCopZa7F6pOYNyiu8
+         +90QR71m9lmisvLF/6ZZuzyVkmO654z2sUpSClM8aGn5LaVSegFX3l3jhWLaHdGBzudz
+         XarF9WNhjAICZSIujE2+J2ANMeLKU5VJXbR9RLK4f9bzZ4QIi2ZEUykuqss5Yxf+B/yy
+         eZxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=IRLgqr7G6M5oNo5Sn5vI/dABACGqET6tzlr6b1OSoYQ=;
+        b=QV8HmZY4vrWWuvO3VxAlFsaCs8O1SewTLB7IwEFcXDkb6AXzaZiejtcemcG6Zksnbo
+         nsVkoZ3l/cg/Wzz+QClhQ9Ao+Bx5+ke+3tGG8hTCitfZvaMAiQ324cmr044zhzWT2LB+
+         ggT26X+Fx5RrJvjon4iqJGmDK1y4FRTqiobVC6+2Hw3dpITnn/Q4TQGUHDl684d/eSjr
+         B+GVb1yUJf8Dh58plM+eRTGK8N9CgPT8g1uWMpv2Sk1P5ITtWACPUyEXmR4O+BA6avej
+         NclHQw2EnReE+xH52OwTsZ1dAQpyjiDmCSGCLD2mbb8WVgv93kYj6uAIYFf/JxKLrCKT
+         hc/w==
+X-Gm-Message-State: APjAAAVRk4W86BzL8axE2UqLOp9/y+MN3pWDIbAy0Z8yqfuN+ngM8uBM
+        bR6SPZTS7sNsaqVuLqozpS3Pp3/VvC+pjLjXFsYJUHxsvuA=
+X-Google-Smtp-Source: APXvYqwd/qWJ0pDnfJeCbauNXCx5yILZjRrkoPUFZGrp+M5VHFp7ax9GHFAfHcZ86c4SWVNmD8ZiyENmgeb2vcsgC+M=
+X-Received: by 2002:a25:690d:: with SMTP id e13mr40353ybc.178.1557348046359;
+ Wed, 08 May 2019 13:40:46 -0700 (PDT)
+MIME-Version: 1.0
+From:   Shivaram Upadhyayula <shivaram.u@quadstor.com>
+Date:   Thu, 9 May 2019 02:10:35 +0530
+Message-ID: <CAN-_EfwKNP5bK-ew7d+T4k8V3faOeFpR8-s_k6PGECSUFoMH9w@mail.gmail.com>
+Subject: Problems with logout in qlt_free_session_done
+To:     linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Tue, 07 May 2019 22:03:12 -0700:
+Hi,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+There seem to be a few issues when trying to do a logout
+qla_target.c:qlt_free_session_done in 4.19.41
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d1cd7c85f9e29740fddec6f25d8bf061937bf58d
+1. When the logout timesout qla2x00_sp_timeout is called. This
+function assumes sp->qpair is valid, but this isn't the case if mq is
+not enabled
 
-Thank you!
+2. qla2x00_async_iocb_timeout also assumes that sp->qpair is valid.
+Also only if qla24xx_async_abort_cmd() fails is sp->done() called,
+sp->done in this case is qlt_logo_completion_handler() which will
+never be called if qla24xx_async_abort_cmd() succeeds
+
+3. qla24xx_async_abort_cmd() can lead to "scheduling while atomic" if
+called from qla2x00_async_iocb_timeout. The wait parameter can be used
+to alloc with GFP_ATOMIC
+
+Please see diff https://www.quadstor.com/patches/srb-logout.diff
+generated against 4.9.41
+
+Regards,
+Shivaram
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Virtual Tape Library https://www.quadstor.com/virtual-tape-library.html
+Storage Virtualization with VAAI
+https://www.quadstor.com/storage-virtualization.html
