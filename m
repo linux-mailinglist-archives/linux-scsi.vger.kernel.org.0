@@ -2,180 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9202E178CE
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 13:49:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4F3179EA
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 15:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728290AbfEHLtM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 May 2019 07:49:12 -0400
-Received: from [66.55.73.32] ([66.55.73.32]:47450 "EHLO
-        ushosting.nmnhosting.com" rhost-flags-FAIL-FAIL-OK-OK)
-        by vger.kernel.org with ESMTP id S1727972AbfEHLtM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 07:49:12 -0400
-X-Greylist: delayed 459 seconds by postgrey-1.27 at vger.kernel.org; Wed, 08 May 2019 07:49:11 EDT
-Received: from mail2.nmnhosting.com (unknown [202.169.106.97])
-        by ushosting.nmnhosting.com (Postfix) with ESMTPS id DDDBC2DC005C;
-        Wed,  8 May 2019 07:41:31 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=d-silva.org;
-        s=201810a; t=1557315692;
-        bh=qGJ1gft/kRGbomR5Gk2AnhkGNE1jEj5BAJb5oyv/unk=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date:From;
-        b=D+zmQJifkhs/X6hPId/5NOett9ofrnDtUcWmjqgDQKc3MmGh9k5veKFfjfUsCtBRf
-         FZFf+wE05oyytQb7I5QSxpb8YxDDNMe6ras9l+lOOdI2I4wiVfcvVdJcxhmp074fZd
-         eRfG22Mm+p4YPGTk3H20/tVbabqxfxaCBFrcWbKEadAx4wluAml+keUbhh37xxzXH1
-         jtnTkpsPpKimyEG7DXFY/jeFQeaJwfUkTK4Y4DMRUEvIV24VAnYN4wKYIXpQo7fIGQ
-         VGyU0Ocndb2O+pHLhMLiHTXnhHlfJTLiOr/fkcrymF6eMLuTxDHq2RU1TzLj/TXOk3
-         0DHxjm3K4DlaD2QfxJxOwBDRpmGvsUA8eIUifWm1Sn5HQZJb+LlRhYErwP2ZYDV3+C
-         49RUeWCn3gF4iQu8ftb0irqDnHSyUrWFqyq4nWWgrsBOv2CSo+ZX1rkDkY6YAan0OZ
-         R5UsEzcVLiOBK726gA7kr8p0v149w9/LtDfcs4XWO4JVXsDJSNWwTjckKovyK9ONYa
-         5CpWuRo7c7nrXNmuqkuBSzsJddB0icDr3C5q9J7R5hsEiM6ZjPf1kRCxaGMNO/56Lw
-         6LX/sDBs5uEivJwatqdQjgbEIoWnyCHietGWGP4y8wVI8SHGxaoZVonCIdFTE8Jl3v
-         W7xdnNfZrPNxEU3wwX3/F4u4=
-Received: from Hawking (ntp.lan [10.0.1.1])
-        (authenticated bits=0)
-        by mail2.nmnhosting.com (8.15.2/8.15.2) with ESMTPSA id x48BfEeD017421
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 8 May 2019 21:41:15 +1000 (AEST)
-        (envelope-from alastair@d-silva.org)
-From:   "Alastair D'Silva" <alastair@d-silva.org>
-To:     "'David Laight'" <David.Laight@ACULAB.COM>,
-        "'Alastair D'Silva'" <alastair@au1.ibm.com>
-Cc:     "'Jani Nikula'" <jani.nikula@linux.intel.com>,
-        "'Joonas Lahtinen'" <joonas.lahtinen@linux.intel.com>,
-        "'Rodrigo Vivi'" <rodrigo.vivi@intel.com>,
-        "'David Airlie'" <airlied@linux.ie>,
-        "'Daniel Vetter'" <daniel@ffwll.ch>,
-        "'Dan Carpenter'" <dan.carpenter@oracle.com>,
-        "'Karsten Keil'" <isdn@linux-pingi.de>,
-        "'Jassi Brar'" <jassisinghbrar@gmail.com>,
-        "'Tom Lendacky'" <thomas.lendacky@amd.com>,
-        "'David S. Miller'" <davem@davemloft.net>,
-        "'Jose Abreu'" <Jose.Abreu@synopsys.com>,
-        "'Kalle Valo'" <kvalo@codeaurora.org>,
-        "'Stanislaw Gruszka'" <sgruszka@redhat.com>,
-        "'Benson Leung'" <bleung@chromium.org>,
-        "'Enric Balletbo i Serra'" <enric.balletbo@collabora.com>,
-        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
-        "'Martin K. Petersen'" <martin.petersen@oracle.com>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        "'Alexander Viro'" <viro@zeniv.linux.org.uk>,
-        "'Petr Mladek'" <pmladek@suse.com>,
-        "'Sergey Senozhatsky'" <sergey.senozhatsky@gmail.com>,
-        "'Steven Rostedt'" <rostedt@goodmis.org>,
-        "'Andrew Morton'" <akpm@linux-foundation.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <ath10k@lists.infradead.org>,
-        <linux-wireless@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linux-fbdev@vger.kernel.org>, <devel@driverdev.osuosl.org>,
-        <linux-fsdevel@vger.kernel.org>
-References: <20190508070148.23130-1-alastair@au1.ibm.com> <20190508070148.23130-5-alastair@au1.ibm.com> <c98a499a4e824bcd824d5ad53d037c67@AcuMS.aculab.com>
-In-Reply-To: <c98a499a4e824bcd824d5ad53d037c67@AcuMS.aculab.com>
-Subject: RE: [PATCH v2 4/7] lib/hexdump.c: Replace ascii bool in hex_dump_to_buffer with flags
-Date:   Wed, 8 May 2019 21:41:15 +1000
-Message-ID: <0a1c01d50592$f90f6f00$eb2e4d00$@d-silva.org>
+        id S1727159AbfEHNHT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 May 2019 09:07:19 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:42123 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725910AbfEHNHT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 09:07:19 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212])
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <colin.king@canonical.com>)
+        id 1hOMI0-0001aa-Po; Wed, 08 May 2019 13:07:16 +0000
+Subject: Re: [PATCH] mptsas: fix undefined behaviour of a shift of an int by
+ more than 31 places
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190504164010.24937-1-colin.king@canonical.com>
+ <1557027274.2821.2.camel@HansenPartnership.com>
+From:   Colin Ian King <colin.king@canonical.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <de7e3aaf-0155-5007-c228-510f0d0de428@canonical.com>
+Date:   Wed, 8 May 2019 14:07:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQGz7QD7bMLLz3XdMyQiMIIzLY+D4AHts+RHAcfZVGymhZij0A==
-Content-Language: en-au
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail2.nmnhosting.com [10.0.1.20]); Wed, 08 May 2019 21:41:26 +1000 (AEST)
+In-Reply-To: <1557027274.2821.2.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> -----Original Message-----
-> From: David Laight <David.Laight@ACULAB.COM>
-> Sent: Wednesday, 8 May 2019 7:20 PM
-> To: 'Alastair D'Silva' <alastair@au1.ibm.com>; alastair@d-silva.org
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>; Joonas Lahtinen
-> <joonas.lahtinen@linux.intel.com>; Rodrigo Vivi =
-<rodrigo.vivi@intel.com>;
-> David Airlie <airlied@linux.ie>; Daniel Vetter <daniel@ffwll.ch>; Dan
-> Carpenter <dan.carpenter@oracle.com>; Karsten Keil <isdn@linux-
-> pingi.de>; Jassi Brar <jassisinghbrar@gmail.com>; Tom Lendacky
-> <thomas.lendacky@amd.com>; David S. Miller <davem@davemloft.net>;
-> Jose Abreu <Jose.Abreu@synopsys.com>; Kalle Valo
-> <kvalo@codeaurora.org>; Stanislaw Gruszka <sgruszka@redhat.com>;
-> Benson Leung <bleung@chromium.org>; Enric Balletbo i Serra
-> <enric.balletbo@collabora.com>; James E.J. Bottomley
-> <jejb@linux.ibm.com>; Martin K. Petersen <martin.petersen@oracle.com>;
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Alexander Viro
-> <viro@zeniv.linux.org.uk>; Petr Mladek <pmladek@suse.com>; Sergey
-> Senozhatsky <sergey.senozhatsky@gmail.com>; Steven Rostedt
-> <rostedt@goodmis.org>; Andrew Morton <akpm@linux-foundation.org>;
-> intel-gfx@lists.freedesktop.org; dri-devel@lists.freedesktop.org; =
-linux-
-> kernel@vger.kernel.org; netdev@vger.kernel.org;
-> ath10k@lists.infradead.org; linux-wireless@vger.kernel.org; linux-
-> scsi@vger.kernel.org; linux-fbdev@vger.kernel.org;
-> devel@driverdev.osuosl.org; linux-fsdevel@vger.kernel.org
-> Subject: RE: [PATCH v2 4/7] lib/hexdump.c: Replace ascii bool in
-> hex_dump_to_buffer with flags
->=20
-> From: Alastair D'Silva
-> > Sent: 08 May 2019 08:02
-> > To: alastair@d-silva.org
-> ...
-> > --- a/include/linux/printk.h
-> > +++ b/include/linux/printk.h
-> > @@ -480,13 +480,13 @@ enum {
-> >  	DUMP_PREFIX_OFFSET
-> >  };
-> >
-> > -extern int hex_dump_to_buffer(const void *buf, size_t len, int =
-rowsize,
-> > -			      int groupsize, char *linebuf, size_t linebuflen,
-> > -			      bool ascii);
-> > -
-> >  #define HEXDUMP_ASCII			(1 << 0)
-> >  #define HEXDUMP_SUPPRESS_REPEATED	(1 << 1)
->=20
-> These ought to be BIT(0) and BIT(1)
+On 05/05/2019 04:34, James Bottomley wrote:
+> On Sat, 2019-05-04 at 17:40 +0100, Colin King wrote:
+>> From: Colin Ian King <colin.king@canonical.com>
+>>
+>> Currently the shift of int value 1 by more than 31 places can result
+>> in undefined behaviour. Fix this by making the 1 a ULL value before
+>> the shift operation.
+> 
+> Fusion SAS is pretty ancient.  I thought the largest one ever produced
+> had four phys, so how did you produce the overflow?
 
-Thanks, I'll address that.
+This was an issue found by static analysis with Coverity; so I guess
+won't happen in the wild, in which case the patch could be ignored.
 
->=20
-> > +extern int hex_dump_to_buffer(const void *buf, size_t len, int =
-rowsize,
-> > +			      int groupsize, char *linebuf, size_t linebuflen,
-> > +			      u64 flags);
->=20
-> Why 'u64 flags' ?
-> How many flags do you envisage ??
-> Your HEXDUMP_ASCII (etc) flags are currently signed values and might =
-get
-> sign extended causing grief.
-> 'unsigned int flags' is probably sufficient.
+Colin
 
-I was trying to avoid having to change the prototype again in the =
-future, but it's not a big deal, if enough work goes in to require more =
-than 32 bits, it can be updated at that point.
-
->=20
-> I've not really looked at the code, it seems OTT in places though.
-
-I'll wait for more concrete criticisms here, this it a bit too vague to =
-take any action on.
-
-> If someone copies it somewhere where the performance matters (I've =
-user
-> space code which is dominated by its tracing!) then you don't want all =
-the
-> function calls and conditionals even if you want some of the =
-functionality.
-
-Calling hexdump (even in it's unaltered form) in performance critical =
-code is always going to suck. As you mentioned before, it's all based =
-around printf. A performance conscious user would be better off building =
-their code around hex_asc_hi/lo instead (see lib/vsprintf.c:hex_string).
-
---=20
-Alastair D'Silva           mob: 0423 762 819
-skype: alastair_dsilva     msn: alastair@d-silva.org
-blog: http://alastair.d-silva.org    Twitter: @EvilDeece
-
-
+> 
+> James
+> 
 
