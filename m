@@ -2,125 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C86A9174ED
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 11:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CA017537
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 11:36:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727100AbfEHJT4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 8 May 2019 05:19:56 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:21531 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726753AbfEHJT4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 05:19:56 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-20-fr8XoZJNPVSqTqULhvI6mg-1; Wed, 08 May 2019 10:19:52 +0100
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b::d117) by AcuMS.aculab.com
- (fd9f:af1c:a25b::d117) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed,
- 8 May 2019 10:19:51 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 8 May 2019 10:19:51 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Alastair D'Silva' <alastair@au1.ibm.com>,
-        "alastair@d-silva.org" <alastair@d-silva.org>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Dan Carpenter" <dan.carpenter@oracle.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jose Abreu" <Jose.Abreu@synopsys.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "Stanislaw Gruszka" <sgruszka@redhat.com>,
-        Benson Leung <bleung@chromium.org>,
-        "Enric Balletbo i Serra" <enric.balletbo@collabora.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "ath10k@lists.infradead.org" <ath10k@lists.infradead.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: RE: [PATCH v2 4/7] lib/hexdump.c: Replace ascii bool in
- hex_dump_to_buffer with flags
-Thread-Topic: [PATCH v2 4/7] lib/hexdump.c: Replace ascii bool in
- hex_dump_to_buffer with flags
-Thread-Index: AQHVBWwP4v5z/92cRUaSHokPgMaM4aZg8Maw
-Date:   Wed, 8 May 2019 09:19:51 +0000
-Message-ID: <c98a499a4e824bcd824d5ad53d037c67@AcuMS.aculab.com>
-References: <20190508070148.23130-1-alastair@au1.ibm.com>
- <20190508070148.23130-5-alastair@au1.ibm.com>
-In-Reply-To: <20190508070148.23130-5-alastair@au1.ibm.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S1727075AbfEHJf7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 May 2019 05:35:59 -0400
+Received: from smtp04.smtpout.orange.fr ([80.12.242.126]:58365 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726943AbfEHJf7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 05:35:59 -0400
+Received: from [192.168.1.41] ([92.148.209.44])
+        by mwinf5d59 with ME
+        id 9lbw200030y1A8U03lbwXh; Wed, 08 May 2019 11:35:57 +0200
+X-ME-Helo: [192.168.1.41]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 08 May 2019 11:35:57 +0200
+X-ME-IP: 92.148.209.44
+Subject: Re: [PATCH] scsi: bnx2fc: fix incorrect cast to u64 on shift
+ operation
+To:     Colin King <colin.king@canonical.com>,
+        QLogic-Storage-Upstream@qlogic.com,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190504164829.26631-1-colin.king@canonical.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <718d3ec2-c3e6-bdfa-bbd2-7988f7783bde@wanadoo.fr>
+Date:   Wed, 8 May 2019 11:35:55 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-MC-Unique: fr8XoZJNPVSqTqULhvI6mg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20190504164829.26631-1-colin.king@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Alastair D'Silva
-> Sent: 08 May 2019 08:02
-> To: alastair@d-silva.org
-...
-> --- a/include/linux/printk.h
-> +++ b/include/linux/printk.h
-> @@ -480,13 +480,13 @@ enum {
->  	DUMP_PREFIX_OFFSET
->  };
-> 
-> -extern int hex_dump_to_buffer(const void *buf, size_t len, int rowsize,
-> -			      int groupsize, char *linebuf, size_t linebuflen,
-> -			      bool ascii);
-> -
->  #define HEXDUMP_ASCII			(1 << 0)
->  #define HEXDUMP_SUPPRESS_REPEATED	(1 << 1)
+Le 04/05/2019 à 18:48, Colin King a écrit :
+> From: Colin Ian King <colin.king@canonical.com>
+>
+> Currently an int is being shifted and the result is being cast to a u64
+> which leads to undefined behaviour if the shift is more than 31 bits. Fix
+> this by casting the integer value 1 to u64 before the shift operation.
+>
+> Addresses-Coverity: ("Bad shift operation")
+> Fixes: 7b594769120b ("[SCSI] bnx2fc: Handle REC_TOV error code from firmware")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>   drivers/scsi/bnx2fc/bnx2fc_hwi.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/scsi/bnx2fc/bnx2fc_hwi.c b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+> index 19734ec7f42e..747f019fb393 100644
+> --- a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+> +++ b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+> @@ -830,7 +830,7 @@ static void bnx2fc_process_unsol_compl(struct bnx2fc_rport *tgt, u16 wqe)
+>   			((u64)err_entry->data.err_warn_bitmap_hi << 32) |
+>   			(u64)err_entry->data.err_warn_bitmap_lo;
+>   		for (i = 0; i < BNX2FC_NUM_ERR_BITS; i++) {
+> -			if (err_warn_bit_map & (u64) (1 << i)) {
+> +			if (err_warn_bit_map & ((u64)1 << i)) {
+>   				err_warn = i;
+>   				break;
+>   			}
 
-These ought to be BIT(0) and BIT(1)
 
-> +extern int hex_dump_to_buffer(const void *buf, size_t len, int rowsize,
-> +			      int groupsize, char *linebuf, size_t linebuflen,
-> +			      u64 flags);
+Hi, just for the records and if you need additional ack, see
 
-Why 'u64 flags' ?
-How many flags do you envisage ??
-Your HEXDUMP_ASCII (etc) flags are currently signed values and might
-get sign extended causing grief.
-'unsigned int flags' is probably sufficient.
+    https://lkml.org/lkml/2016/11/26/172
 
-I've not really looked at the code, it seems OTT in places though.
+just my 2c :-)
 
-If someone copies it somewhere where the performance matters
-(I've user space code which is dominated by its tracing!)
-then you don't want all the function calls and conditionals
-even if you want some of the functionality.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+CJ
 
