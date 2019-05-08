@@ -2,395 +2,153 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2249D1720C
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 09:02:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC81D1744B
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 10:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbfEHHC5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 May 2019 03:02:57 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54292 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726878AbfEHHC5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 03:02:57 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x48726ef128213
-        for <linux-scsi@vger.kernel.org>; Wed, 8 May 2019 03:02:55 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sbq4h89dg-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Wed, 08 May 2019 03:02:54 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <alastair@au1.ibm.com>;
-        Wed, 8 May 2019 08:02:50 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 8 May 2019 08:02:41 +0100
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4872euL55181412
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 8 May 2019 07:02:40 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 130A8AE058;
-        Wed,  8 May 2019 07:02:40 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2C072AE053;
-        Wed,  8 May 2019 07:02:39 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  8 May 2019 07:02:39 +0000 (GMT)
-Received: from adsilva.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 7E655A03C4;
-        Wed,  8 May 2019 17:02:35 +1000 (AEST)
-From:   "Alastair D'Silva" <alastair@au1.ibm.com>
-To:     alastair@d-silva.org
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Stanislaw Gruszka <sgruszka@redhat.com>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH v2 7/7] lib/hexdump.c: Optionally retain byte ordering
-Date:   Wed,  8 May 2019 17:01:47 +1000
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190508070148.23130-1-alastair@au1.ibm.com>
-References: <20190508070148.23130-1-alastair@au1.ibm.com>
+        id S1727003AbfEHI41 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 May 2019 04:56:27 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:35876 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725815AbfEHI41 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 04:56:27 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x488orBO015373;
+        Wed, 8 May 2019 01:56:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfpt0818;
+ bh=0kNdc5bsJDd8lcNUq0d71aKDUe7atUQ5nsvzFriQjbk=;
+ b=C5sNLivwV1t0ocEqBh1aGV9cYG6oljNYDKsbmhcK5IfUjWvf5fNHdIqsOwWDQpBzNTXW
+ 1M9+bkNdpcCz5D61z+K2L8DaaC+xy5w0RfqONHCrIhAWYSNYAzzfMxa9/q0y1eA5vcyo
+ OnJmNg6MuLLsgPAX1O3qe2LkCgEWXE8y+8sFoEKyfss/e9ZweDfgqfXqhMkgOuxMN2Gq
+ wcINDJRciKMNyFwJnfGmuDDh5u/cDR3x0bRzFTgPxi21xlE+qcNwna0D9u8v/LHoseWo
+ 2O9vtfJpYLp57ImGYsiYetlSYedCmOyDmGN7EcMnWSbIa+0ZTbpDsy02UdgRcIpnM20N cA== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2sbgjbb0qy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 08 May 2019 01:56:22 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Wed, 8 May
+ 2019 01:56:21 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.36.55) by
+ SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Wed, 8 May 2019 01:56:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector1-marvell-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0kNdc5bsJDd8lcNUq0d71aKDUe7atUQ5nsvzFriQjbk=;
+ b=gmjFxs6mvgPcTOQAI3U97uphFpwzgQbzMYZMPiv9J9za837200Qpgs12rHpWAbHNH3T95koKMSO5vc1q1QDa49nAGK8sJqvs3obfuq1yTFucFk9xBDr7u4twGZaPhrwAq0ErWR9ap8u6FvTqNP1eEd/28p/cJ3ajKM0WCVaIqS4=
+Received: from MN2PR18MB2527.namprd18.prod.outlook.com (20.179.82.202) by
+ MN2PR18MB2893.namprd18.prod.outlook.com (20.179.22.202) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1856.11; Wed, 8 May 2019 08:56:17 +0000
+Received: from MN2PR18MB2527.namprd18.prod.outlook.com
+ ([fe80::1ca6:aae9:ec4a:d4e7]) by MN2PR18MB2527.namprd18.prod.outlook.com
+ ([fe80::1ca6:aae9:ec4a:d4e7%3]) with mapi id 15.20.1856.012; Wed, 8 May 2019
+ 08:56:17 +0000
+From:   Saurav Kashyap <skashyap@marvell.com>
+To:     Colin King <colin.king@canonical.com>,
+        "QLogic-Storage-Upstream@qlogic.com" 
+        <QLogic-Storage-Upstream@qlogic.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] scsi: bnx2fc: fix incorrect cast to u64 on shift
+ operation
+Thread-Topic: [PATCH] scsi: bnx2fc: fix incorrect cast to u64 on shift
+ operation
+Thread-Index: AQHVApk55OnNuhA+90ehxt2QaOq1PKZhTrgA
+Date:   Wed, 8 May 2019 08:56:17 +0000
+Message-ID: <D8F89753.18F6C%skashyap@marvell.com>
+References: <20190504164829.26631-1-colin.king@canonical.com>
+In-Reply-To: <20190504164829.26631-1-colin.king@canonical.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [114.143.185.87]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4ebc7e49-a0b9-45d0-8c6f-08d6d393084e
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:MN2PR18MB2893;
+x-ms-traffictypediagnostic: MN2PR18MB2893:
+x-microsoft-antispam-prvs: <MN2PR18MB28930503536D0CEBABBD4845D2320@MN2PR18MB2893.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0031A0FFAF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(346002)(136003)(376002)(396003)(39850400004)(199004)(189003)(13464003)(51914003)(86362001)(305945005)(71200400001)(71190400001)(53546011)(64756008)(76176011)(316002)(6506007)(6246003)(2501003)(54906003)(81166006)(53936002)(26005)(7736002)(446003)(5660300002)(81156014)(186003)(8676002)(110136005)(6512007)(8936002)(6436002)(36756003)(91956017)(11346002)(73956011)(486006)(66066001)(6486002)(66476007)(14454004)(66446008)(76116006)(66556008)(66946007)(99286004)(68736007)(229853002)(25786009)(478600001)(2906002)(4326008)(2616005)(14444005)(476003)(3846002)(6116002)(256004)(102836004);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB2893;H:MN2PR18MB2527.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: marvell.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: obSBiAtQgzQ0/Z4tHh+cx0qQ3QEYAF/IOF7H6zwwlgn/lMNue/Dpdr/O+obINPziKKrbtwmj88XIlJPcGjz9hb5jpcgitgH6oumvbOLpJAuQdk1Q7tKNmBnTAP26fSFHVNyWpiGEsjuMJA4XI/02ArdBvo8SNUR7CN1awSEfCwi9Kgi9Qnk9ayGerrhD6Y7XZQpGUWfnCkZpAEXhGeEPU/tdOJqHgpnIOEsEdFRzRwtTxHgfKSW5Tr4RAeOhYMhBl2fEctaly1rzOXb4dZw3IkfwZJrSDBdcHIWP6CVk6dqpp/17q1DBW6S8vtkStMJQhdyyMF7EyM/TEQLLakLDkBov5nF6v7naWPbPVTZ3UjqfkR1RsUT0rAX2ZGiIuOEslClaoD2pbzD5aRQe7hjkDFCAh4gUJWdJoAm7npRrmck=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7736346B17E9C5488A89DB364FC4654D@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19050807-4275-0000-0000-00000332844E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19050807-4276-0000-0000-00003841F1F4
-Message-Id: <20190508070148.23130-8-alastair@au1.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-08_05:,,
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ebc7e49-a0b9-45d0-8c6f-08d6d393084e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2019 08:56:17.0751
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB2893
+X-OriginatorOrg: marvell.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-08_06:,,
  signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905080046
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Alastair D'Silva <alastair@d-silva.org>
 
-The behaviour of hexdump groups is to print the data out as if
-it was a native-endian number.
 
-This patch tweaks the documentation to make this clear, and also
-adds the HEXDUMP_RETAIN_BYTE_ORDER flag to allow groups of
-multiple bytes to be printed without affecting the ordering
-of the printed bytes.
+-----Original Message-----
+From: <linux-scsi-owner@vger.kernel.org> on behalf of Colin King
+<colin.king@canonical.com>
+Date: Saturday, 4 May 2019 at 10:18 PM
+To: "QLogic-Storage-Upstream@qlogic.com"
+<QLogic-Storage-Upstream@qlogic.com>, "James E . J . Bottomley"
+<jejb@linux.ibm.com>, "Martin K . Petersen" <martin.petersen@oracle.com>,
+"linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Cc: "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] scsi: bnx2fc: fix incorrect cast to u64 on shift operation
 
-Signed-off-by: Alastair D'Silva <alastair@d-silva.org>
----
- include/linux/printk.h |  1 +
- lib/hexdump.c          | 30 +++++++++++++++++----
- lib/test_hexdump.c     | 60 +++++++++++++++++++++++++++++-------------
- 3 files changed, 68 insertions(+), 23 deletions(-)
+>From: Colin Ian King <colin.king@canonical.com>
+>
+>Currently an int is being shifted and the result is being cast to a u64
+>which leads to undefined behaviour if the shift is more than 31 bits. Fix
+>this by casting the integer value 1 to u64 before the shift operation.
+>
+>Addresses-Coverity: ("Bad shift operation")
+>Fixes: 7b594769120b ("[SCSI] bnx2fc: Handle REC_TOV error code from
+>firmware")
+>Signed-off-by: Colin Ian King <colin.king@canonical.com>
+>---
+> drivers/scsi/bnx2fc/bnx2fc_hwi.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+>b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+>index 19734ec7f42e..747f019fb393 100644
+>--- a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+>+++ b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+>@@ -830,7 +830,7 @@ static void bnx2fc_process_unsol_compl(struct
+>bnx2fc_rport *tgt, u16 wqe)
+> 			((u64)err_entry->data.err_warn_bitmap_hi << 32) |
+> 			(u64)err_entry->data.err_warn_bitmap_lo;
+> 		for (i =3D 0; i < BNX2FC_NUM_ERR_BITS; i++) {
+>-			if (err_warn_bit_map & (u64) (1 << i)) {
+>+			if (err_warn_bit_map & ((u64)1 << i)) {
+> 				err_warn =3D i;
+> 				break;
+> 			}
+>--=20
+>2.20.1
 
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index 5231a14e4593..15277d50159c 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -488,6 +488,7 @@ enum {
- #define HEXDUMP_2_GRP_SPACES		(1 << 5)
- #define HEXDUMP_4_GRP_SPACES		(1 << 6)
- #define HEXDUMP_8_GRP_SPACES		(1 << 7)
-+#define HEXDUMP_RETAIN_BYTE_ORDER	(1 << 8)
- 
- extern int hex_dump_to_buffer(const void *buf, size_t len, int rowsize,
- 			      int groupsize, char *linebuf, size_t linebuflen,
-diff --git a/lib/hexdump.c b/lib/hexdump.c
-index febd614406d1..bfc9800630ae 100644
---- a/lib/hexdump.c
-+++ b/lib/hexdump.c
-@@ -127,7 +127,8 @@ static void separator_parameters(u64 flags, int groupsize, int *sep_chars,
-  * @buf: data blob to dump
-  * @len: number of bytes in the @buf
-  * @rowsize: number of bytes to print per line; must be a multiple of groupsize
-- * @groupsize: number of bytes to print at a time (1, 2, 4, 8; default = 1)
-+ * @groupsize: number of bytes to convert to a native endian number and print:
-+ * 	       1, 2, 4, 8; default = 1
-  * @linebuf: where to put the converted data
-  * @linebuflen: total size of @linebuf, including space for terminating NUL
-  * @flags: A bitwise OR of the following flags:
-@@ -138,6 +139,9 @@ static void separator_parameters(u64 flags, int groupsize, int *sep_chars,
-  *	HEXDUMP_2_GRP_SPACES:		insert a ' ' after every 2 groups
-  *	HEXDUMP_4_GRP_SPACES:		insert a ' ' after every 4 groups
-  *	HEXDUMP_8_GRP_SPACES:		insert a ' ' after every 8 groups
-+ *	HEXDUMP_RETAIN_BYTE_ORDER:	Retain the byte ordering of groups
-+ *					instead of treating each group as a
-+ *					native-endian number
-  *
-  * hex_dump_to_buffer() works on one "line" of output at a time, converting
-  * <groupsize> bytes of input to hexadecimal (and optionally printable ASCII)
-@@ -171,6 +175,7 @@ int hex_dump_to_buffer(const void *buf, size_t len, int rowsize, int groupsize,
- 	int ret;
- 	int sep_chars = 0;
- 	char sep = 0;
-+	bool big_endian = (flags & HEXDUMP_RETAIN_BYTE_ORDER) ? 1 : 0;
- 
- 	if (!is_power_of_2(groupsize) || groupsize > 8)
- 		groupsize = 1;
-@@ -202,10 +207,13 @@ int hex_dump_to_buffer(const void *buf, size_t len, int rowsize, int groupsize,
- 		const u64 *ptr8 = buf;
- 
- 		for (j = 0; j < ngroups; j++) {
-+			u64 val = big_endian ?
-+					be64_to_cpu(get_unaligned(ptr8 + j)) :
-+					get_unaligned(ptr8 + j);
- 			ret = snprintf(linebuf + lx, linebuflen - lx,
- 				       "%s%16.16llx",
- 				       j ? group_separator(j, flags) : "",
--				       get_unaligned(ptr8 + j));
-+				       val);
- 			if (ret >= linebuflen - lx)
- 				goto overflow1;
- 			lx += ret;
-@@ -214,10 +222,14 @@ int hex_dump_to_buffer(const void *buf, size_t len, int rowsize, int groupsize,
- 		const u32 *ptr4 = buf;
- 
- 		for (j = 0; j < ngroups; j++) {
-+			u32 val = big_endian ?
-+					be32_to_cpu(get_unaligned(ptr4 + j)) :
-+					get_unaligned(ptr4 + j);
-+
- 			ret = snprintf(linebuf + lx, linebuflen - lx,
- 				       "%s%8.8x",
- 				       j ? group_separator(j, flags) : "",
--				       get_unaligned(ptr4 + j));
-+				       val);
- 			if (ret >= linebuflen - lx)
- 				goto overflow1;
- 			lx += ret;
-@@ -226,10 +238,14 @@ int hex_dump_to_buffer(const void *buf, size_t len, int rowsize, int groupsize,
- 		const u16 *ptr2 = buf;
- 
- 		for (j = 0; j < ngroups; j++) {
-+			u16 val = big_endian ?
-+					be16_to_cpu(get_unaligned(ptr2 + j)) :
-+					get_unaligned(ptr2 + j);
-+
- 			ret = snprintf(linebuf + lx, linebuflen - lx,
- 				       "%s%4.4x",
- 				       j ? group_separator(j, flags) : "",
--				       get_unaligned(ptr2 + j));
-+				       val);
- 			if (ret >= linebuflen - lx)
- 				goto overflow1;
- 			lx += ret;
-@@ -331,7 +347,8 @@ static void announce_skipped(const char *level, const char *prefix_str,
-  * @prefix_type: controls whether prefix of an offset, address, or none
-  *  is printed (%DUMP_PREFIX_OFFSET, %DUMP_PREFIX_ADDRESS, %DUMP_PREFIX_NONE)
-  * @rowsize: number of bytes to print per line; must be a multiple of groupsize
-- * @groupsize: number of bytes to print at a time (1, 2, 4, 8; default = 1)
-+ * @groupsize: number of bytes to convert to a native endian number and print:
-+ * 	       1, 2, 4, 8; default = 1
-  * @buf: data blob to dump
-  * @len: number of bytes in the @buf
-  * @ascii: include ASCII after the hex output
-@@ -342,6 +359,9 @@ static void announce_skipped(const char *level, const char *prefix_str,
-  *	HEXDUMP_2_GRP_LINES:		insert a '|' after every 2 groups
-  *	HEXDUMP_4_GRP_LINES:		insert a '|' after every 4 groups
-  *	HEXDUMP_8_GRP_LINES:		insert a '|' after every 8 groups
-+ *	HEXDUMP_RETAIN_BYTE_ORDER:	Retain the byte ordering of groups
-+ *					instead of treating each group as a
-+ *					native-endian number
-  *
-  * Given a buffer of u8 data, print_hex_dump() prints a hex + ASCII dump
-  * to the kernel log at the specified kernel log level, with an optional
-diff --git a/lib/test_hexdump.c b/lib/test_hexdump.c
-index ae340c5c1c6f..1e510e934568 100644
---- a/lib/test_hexdump.c
-+++ b/lib/test_hexdump.c
-@@ -98,14 +98,15 @@ static unsigned failed_tests __initdata;
- 
- static void __init test_hexdump_prepare_test(size_t len, int rowsize,
- 					     int groupsize, char *test,
--					     size_t testlen, bool ascii)
-+					     size_t testlen, u64 flags)
- {
- 	char *p;
- 	const char * const *result;
- 	size_t l = len;
- 	int gs = groupsize, rs = rowsize;
- 	unsigned int i;
--	const bool is_be = IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
-+	const bool is_be = IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) ||
-+			(flags & HEXDUMP_RETAIN_BYTE_ORDER);
- 
- 	if (l > rs)
- 		l = rs;
-@@ -142,7 +143,7 @@ static void __init test_hexdump_prepare_test(size_t len, int rowsize,
- 		p--;
- 
- 	/* ASCII part */
--	if (ascii) {
-+	if (flags & HEXDUMP_ASCII) {
- 		do {
- 			*p++ = ' ';
- 		} while (p < test + rs * 2 + rs / gs + 1);
-@@ -157,7 +158,7 @@ static void __init test_hexdump_prepare_test(size_t len, int rowsize,
- #define TEST_HEXDUMP_BUF_SIZE		(64 * 3 + 2 + 64 + 1)
- 
- static void __init test_hexdump(size_t len, int rowsize, int groupsize,
--				bool ascii)
-+				u64 flags)
- {
- 	char test[TEST_HEXDUMP_BUF_SIZE];
- 	char real[TEST_HEXDUMP_BUF_SIZE];
-@@ -166,11 +167,11 @@ static void __init test_hexdump(size_t len, int rowsize, int groupsize,
- 
- 	memset(real, FILL_CHAR, sizeof(real));
- 	hex_dump_to_buffer(data_b, len, rowsize, groupsize, real, sizeof(real),
--			   ascii ? HEXDUMP_ASCII : 0);
-+			   flags);
- 
- 	memset(test, FILL_CHAR, sizeof(test));
- 	test_hexdump_prepare_test(len, rowsize, groupsize, test, sizeof(test),
--				  ascii);
-+				  flags);
- 
- 	if (memcmp(test, real, TEST_HEXDUMP_BUF_SIZE)) {
- 		pr_err("Len: %zu row: %d group: %d\n", len, rowsize, groupsize);
-@@ -193,7 +194,7 @@ static void __init test_hexdump_set(int rowsize, bool ascii)
- 
- static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 					 int rowsize, int groupsize,
--					 bool ascii)
-+					 u64 flags)
- {
- 	char test[TEST_HEXDUMP_BUF_SIZE];
- 	char buf[TEST_HEXDUMP_BUF_SIZE];
-@@ -205,7 +206,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 	memset(buf, FILL_CHAR, sizeof(buf));
- 
- 	rc = hex_dump_to_buffer(data_b, len, rowsize, groupsize, buf, buflen,
--				ascii ? HEXDUMP_ASCII : 0);
-+				flags);
- 
- 	/*
- 	 * Caller must provide the data length multiple of groupsize. The
-@@ -222,12 +223,12 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 		  - 1 /* no trailing space */;
- 	}
- 
--	expected_len = (ascii) ? ascii_len : hex_len;
-+	expected_len = (flags & HEXDUMP_ASCII) ? ascii_len : hex_len;
- 
- 	fill_point = min_t(int, expected_len + 1, buflen);
- 	if (buflen) {
- 		test_hexdump_prepare_test(len, rowsize, groupsize, test,
--					  sizeof(test), ascii);
-+					  sizeof(test), flags);
- 		test[fill_point - 1] = '\0';
- 	}
- 	memset(test + fill_point, FILL_CHAR, sizeof(test) - fill_point);
-@@ -237,8 +238,8 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 	buf[sizeof(buf) - 1] = '\0';
- 
- 	if (!match) {
--		pr_err("rowsize: %u groupsize: %u ascii: %d Len: %zu buflen: %zu strlen: %zu\n",
--			rowsize, groupsize, ascii, len, buflen,
-+		pr_err("rowsize: %u groupsize: %u flags: %llx Len: %zu buflen: %zu strlen: %zu\n",
-+			rowsize, groupsize, flags, len, buflen,
- 			strnlen(buf, sizeof(buf)));
- 		pr_err("Result: %d '%-.*s'\n", rc, (int)buflen, buf);
- 		pr_err("Expect: %d '%-.*s'\n", expected_len, (int)buflen, test);
-@@ -247,7 +248,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 	}
- }
- 
--static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
-+static void __init test_hexdump_overflow_set(size_t buflen, u64 flags)
- {
- 	unsigned int i = 0;
- 	int rs = (get_random_int() % 4 + 1) * 16;
-@@ -256,7 +257,7 @@ static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
- 		int gs = 1 << i;
- 		size_t len = get_random_int() % rs + gs;
- 
--		test_hexdump_overflow(buflen, rounddown(len, gs), rs, gs, ascii);
-+		test_hexdump_overflow(buflen, rounddown(len, gs), rs, gs, flags);
- 	} while (i++ < 3);
- }
- 
-@@ -264,20 +265,43 @@ static int __init test_hexdump_init(void)
- {
- 	unsigned int i;
- 	int rowsize;
-+	u64 flags;
- 
-+	flags = 0;
- 	rowsize = (get_random_int() % 4 + 1) * 16;
- 	for (i = 0; i < 16; i++)
--		test_hexdump_set(rowsize, false);
-+		test_hexdump_set(rowsize, flags);
- 
-+	flags = HEXDUMP_ASCII;
- 	rowsize = (get_random_int() % 4 + 1) * 16;
- 	for (i = 0; i < 16; i++)
--		test_hexdump_set(rowsize, true);
-+		test_hexdump_set(rowsize, flags);
- 
-+	flags = HEXDUMP_RETAIN_BYTE_ORDER;
-+	rowsize = (get_random_int() % 2 + 1) * 16;
-+	for (i = 0; i < 16; i++)
-+		test_hexdump_set(rowsize, flags);
-+
-+	flags = HEXDUMP_ASCII | HEXDUMP_RETAIN_BYTE_ORDER;
-+	rowsize = (get_random_int() % 2 + 1) * 16;
-+	for (i = 0; i < 16; i++)
-+		test_hexdump_set(rowsize, flags);
-+
-+	flags = 0;
-+	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
-+		test_hexdump_overflow_set(i, flags);
-+
-+	flags = HEXDUMP_ASCII;
-+	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
-+		test_hexdump_overflow_set(i, flags);
-+
-+	flags = HEXDUMP_RETAIN_BYTE_ORDER;
- 	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
--		test_hexdump_overflow_set(i, false);
-+		test_hexdump_overflow_set(i, flags);
- 
-+	flags = HEXDUMP_ASCII | HEXDUMP_RETAIN_BYTE_ORDER;
- 	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
--		test_hexdump_overflow_set(i, true);
-+		test_hexdump_overflow_set(i, flags);
- 
- 	if (failed_tests == 0)
- 		pr_info("all %u tests passed\n", total_tests);
--- 
-2.21.0
+Thanks for the Patch.
+
+Acked-by: Saurav Kashyap <skashyap@marvell.com>
+
+>
 
