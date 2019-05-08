@@ -2,75 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA8D17A34
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 15:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E422017B7D
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 May 2019 16:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728754AbfEHNRx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 May 2019 09:17:53 -0400
-Received: from mga14.intel.com ([192.55.52.115]:42061 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727506AbfEHNRx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 8 May 2019 09:17:53 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 May 2019 06:17:52 -0700
-X-ExtLoop1: 1
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.86])
-  by fmsmga001.fm.intel.com with ESMTP; 08 May 2019 06:17:50 -0700
-Received: from andy by smile with local (Exim 4.92)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1hOMSD-0000ml-Sq; Wed, 08 May 2019 16:17:49 +0300
-Date:   Wed, 8 May 2019 16:17:49 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org,
-        jic23@kernel.org, lars@metafoo.de
-Subject: Re: [PATCH 3/3][V3] iio: Handle enumerated properties with gaps
-Message-ID: <20190508131749.GM9224@smile.fi.intel.com>
-References: <20190508111913.7276-1-alexandru.ardelean@analog.com>
- <20190508111913.7276-3-alexandru.ardelean@analog.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190508111913.7276-3-alexandru.ardelean@analog.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1727364AbfEHOYa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 May 2019 10:24:30 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:51052 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726914AbfEHOYa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 10:24:30 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id D13058EE2B1;
+        Wed,  8 May 2019 07:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1557325469;
+        bh=xydTi/hn1JDJTRyeJqcJB5CNRIzFduahaKTlPNfO1IM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=g9J2++dy2yHjw1VgAG+xuKtM3+Ffdl90VFrw8hMWS5OgnG15ZSG29vx3WWHYinwv9
+         NaciE0RfPfGVsVKEOEphmxnK7sbh/ih6GLZ8a7E9qR9BsXxXllu2adpGkb7yLMZFup
+         w6Bk1ctdc12FOZRshyvo/zvuvq7udEKyH3RQjoOs=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xgX-hAvPV0kW; Wed,  8 May 2019 07:24:29 -0700 (PDT)
+Received: from [153.66.254.194] (unknown [50.35.68.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 22C688EE0D2;
+        Wed,  8 May 2019 07:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1557325469;
+        bh=xydTi/hn1JDJTRyeJqcJB5CNRIzFduahaKTlPNfO1IM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=g9J2++dy2yHjw1VgAG+xuKtM3+Ffdl90VFrw8hMWS5OgnG15ZSG29vx3WWHYinwv9
+         NaciE0RfPfGVsVKEOEphmxnK7sbh/ih6GLZ8a7E9qR9BsXxXllu2adpGkb7yLMZFup
+         w6Bk1ctdc12FOZRshyvo/zvuvq7udEKyH3RQjoOs=
+Message-ID: <1557325468.3196.2.camel@HansenPartnership.com>
+Subject: Re: [PATCH] mptsas: fix undefined behaviour of a shift of an int by
+ more than 31 places
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Colin Ian King <colin.king@canonical.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 08 May 2019 07:24:28 -0700
+In-Reply-To: <de7e3aaf-0155-5007-c228-510f0d0de428@canonical.com>
+References: <20190504164010.24937-1-colin.king@canonical.com>
+         <1557027274.2821.2.camel@HansenPartnership.com>
+         <de7e3aaf-0155-5007-c228-510f0d0de428@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 08, 2019 at 02:19:13PM +0300, Alexandru Ardelean wrote:
-> From: Lars-Peter Clausen <lars@metafoo.de>
+On Wed, 2019-05-08 at 14:07 +0100, Colin Ian King wrote:
+> On 05/05/2019 04:34, James Bottomley wrote:
+> > On Sat, 2019-05-04 at 17:40 +0100, Colin King wrote:
+> > > From: Colin Ian King <colin.king@canonical.com>
+> > > 
+> > > Currently the shift of int value 1 by more than 31 places can
+> > > result in undefined behaviour. Fix this by making the 1 a ULL
+> > > value before the shift operation.
+> > 
+> > Fusion SAS is pretty ancient.  I thought the largest one ever
+> > produced had four phys, so how did you produce the overflow?
 > 
-> Some enums might have gaps or reserved values in the middle of their value
-> range. E.g. consider a 2-bit enum where the values 0, 1 and 3 have a
-> meaning, but 2 is a reserved value and can not be used.
-> 
-> Add support for such enums to the IIO enum helper functions. A reserved
-> values is marked by setting its entry in the items array to NULL rather
-> than the normal descriptive string value.
-> 
-> Also, `__sysfs_match_string()` now supports NULL gaps, so that doesn't
-> require any changes.
+> This was an issue found by static analysis with Coverity; so I guess
+> won't happen in the wild, in which case the patch could be ignored.
 
-> -	for (i = 0; i < e->num_items; ++i)
-> +	for (i = 0; i < e->num_items; ++i) {
-> +		if (!e->items[i])
-> +			continue;
->  		len += scnprintf(buf + len, PAGE_SIZE - len, "%s ", e->items[i]);
-> +	}
+The point I was more making is that if we thought this could ever
+happen in practice, we'd need more error handling than simply this:
+we'd be setting the phy_bitmap to zero which would be every bit as bad
+as some random illegal value.
 
-The problem here that the user will have no clue where the gap is happened, to
-solve this we need either bitmap of array, where set bits shows defined items,
-or use comma-separated list of values. The latter would need another node since
-we don't break user space.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+James
 
