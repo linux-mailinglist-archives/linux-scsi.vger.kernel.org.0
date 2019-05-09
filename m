@@ -2,97 +2,206 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B8E18B35
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 May 2019 16:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 336AF18C51
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 May 2019 16:51:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726690AbfEIOGP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 May 2019 10:06:15 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45763 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726195AbfEIOGO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 May 2019 10:06:14 -0400
-Received: by mail-pf1-f196.google.com with SMTP id s11so1372370pfm.12
-        for <linux-scsi@vger.kernel.org>; Thu, 09 May 2019 07:06:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=6oAL+cNkb4Uc/uSRIsXRaDfyfKgTUYhkep+tSwBssfQ=;
-        b=j25A6TcLHot6PvtTlFzf0kSQH2ScO2KUVzV/sodOov72O82jLfpw2rSfwoeS3JsQTI
-         6N9xD8kM86hFguisTTgciSiWEynQ4UqJmVO5lT6ZIeKjezgr6kVhJ3dC6OKH3tWaRJ5u
-         4rbTxBmCITMeUWlqPM3kfw7+PKQhYpuofbsSM5xTY5WTrt6cc2+K2L8MGiaBc8Uby5z5
-         dXRi0iwr97N/oF809R/AjqxLHlK7FUFsMnjWcRLcTdVICDcj5kO15R/z5zjqn1vx4zCM
-         ZIm2SwgUwstlBqGeFvOY5seLnr+uuJzTpceWMzZV5Vy6ejTu+GsAM/Rd8eaM/eM2D+q9
-         XMNA==
-X-Gm-Message-State: APjAAAX50azMS0a8PpFGsL4YE/Lcn+m1Vpqxeo/CLR0zdlj2euH+ZAni
-        dqoIV14pa+PakSeFPBUm1P0=
-X-Google-Smtp-Source: APXvYqxajpA9uuK+M0Eqb9/7PBKGr8ydfEliMPZhSlmU+RFwpwBKZAVzMYPbAyE/p7bza85Qf3qg5Q==
-X-Received: by 2002:a65:5c82:: with SMTP id a2mr5811958pgt.378.1557410773622;
-        Thu, 09 May 2019 07:06:13 -0700 (PDT)
-Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
-        by smtp.gmail.com with ESMTPSA id s85sm3544676pfa.23.2019.05.09.07.06.11
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 07:06:12 -0700 (PDT)
-Subject: Re: [PATCH] qla2xxx: always allocate qla_tgt_wq
-To:     Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@marvell.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-References: <20190509131821.87338-1-hare@suse.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <1df9eb38-8ff9-bf21-4a49-4190eea9f2b4@acm.org>
-Date:   Thu, 9 May 2019 07:06:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726764AbfEIOu5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 May 2019 10:50:57 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:48518 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726187AbfEIOu4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 May 2019 10:50:56 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 3B676271413EEE816D2A;
+        Thu,  9 May 2019 22:50:52 +0800 (CST)
+Received: from [127.0.0.1] (10.177.31.96) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.439.0; Thu, 9 May 2019
+ 22:50:49 +0800
+Subject: Re: [PATCH] scsi: qedi: remove memset/memcpy to nfunc and use func
+ instead
+To:     <QLogic-Storage-Upstream@cavium.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <mojha@codeaurora.org>,
+        <skashyap@marvell.com>, <gregkh@linuxfoundation.org>
+References: <20190412094829.15868-1-colin.king@canonical.com>
+ <20190420040554.41888-1-yuehaibing@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <2907a552-a557-afeb-de56-88c958480f0c@huawei.com>
+Date:   Thu, 9 May 2019 22:50:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
 MIME-Version: 1.0
-In-Reply-To: <20190509131821.87338-1-hare@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20190420040554.41888-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.177.31.96]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/9/19 6:18 AM, Hannes Reinecke wrote:
-> The 'qla_tgt_wq' workqueue is used for generic command aborts,
-> not just target-related functions. So allocate the workqueue
-> always to avoid a kernel crash when aborting commands.
 
-Hi Hannes,
+Friendly ping, could someone review this patch ?
 
-Can the abort code be called directly? This means not queueing the abort
-work? Do you perhaps know why the target workqueue is used for
-processing aborts? In other words, can the abort functions be modified
-to use one of the system workqueues instead of always allocating the
-target workqueue?
+On 2019/4/20 12:05, Yue Haibing wrote:
+> From: YueHaibing <yuehaibing@huawei.com>
+> 
+> KASAN report this:
+> 
+> BUG: KASAN: global-out-of-bounds in qedi_dbg_err+0xda/0x330 [qedi]
+> Read of size 31 at addr ffffffffc12b0ae0 by task syz-executor.0/2429
+> 
+> CPU: 0 PID: 2429 Comm: syz-executor.0 Not tainted 5.0.0-rc7+ #45
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1 04/01/2014
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0xfa/0x1ce lib/dump_stack.c:113
+>  print_address_description+0x1c4/0x270 mm/kasan/report.c:187
+>  kasan_report+0x149/0x18d mm/kasan/report.c:317
+>  memcpy+0x1f/0x50 mm/kasan/common.c:130
+>  qedi_dbg_err+0xda/0x330 [qedi]
+>  ? 0xffffffffc12d0000
+>  qedi_init+0x118/0x1000 [qedi]
+>  ? 0xffffffffc12d0000
+>  ? 0xffffffffc12d0000
+>  ? 0xffffffffc12d0000
+>  do_one_initcall+0xfa/0x5ca init/main.c:887
+>  do_init_module+0x204/0x5f6 kernel/module.c:3460
+>  load_module+0x66b2/0x8570 kernel/module.c:3808
+>  __do_sys_finit_module+0x238/0x2a0 kernel/module.c:3902
+>  do_syscall_64+0x147/0x600 arch/x86/entry/common.c:290
+>  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x462e99
+> Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f2d57e55c58 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+> RAX: ffffffffffffffda RBX: 000000000073bfa0 RCX: 0000000000462e99
+> RDX: 0000000000000000 RSI: 00000000200003c0 RDI: 0000000000000003
+> RBP: 00007f2d57e55c70 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f2d57e566bc
+> R13: 00000000004bcefb R14: 00000000006f7030 R15: 0000000000000004
+> 
+> The buggy address belongs to the variable:
+>  __func__.67584+0x0/0xffffffffffffd520 [qedi]
+> 
+> Memory state around the buggy address:
+>  ffffffffc12b0980: fa fa fa fa 00 04 fa fa fa fa fa fa 00 00 05 fa
+>  ffffffffc12b0a00: fa fa fa fa 00 00 04 fa fa fa fa fa 00 05 fa fa
+>> ffffffffc12b0a80: fa fa fa fa 00 06 fa fa fa fa fa fa 00 02 fa fa
+>                                                           ^
+>  ffffffffc12b0b00: fa fa fa fa 00 00 04 fa fa fa fa fa 00 00 03 fa
+>  ffffffffc12b0b80: fa fa fa fa 00 00 02 fa fa fa fa fa 00 00 04 fa
+> 
+> Currently the qedi_dbg_* family of functions can overrun the end
+> of the source string if it is less than the destination buffer
+> length because of the use of a fixed sized memcpy. Remove the
+> memset/memcpy calls to nfunc and just use func instead as it
+> is always a null terminated string.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: ace7f46ba5fd ("scsi: qedi: Add QLogic FastLinQ offload iSCSI driver framework.")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/scsi/qedi/qedi_dbg.c | 32 ++++++++------------------------
+>  1 file changed, 8 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/scsi/qedi/qedi_dbg.c b/drivers/scsi/qedi/qedi_dbg.c
+> index 8fd28b0..3383314 100644
+> --- a/drivers/scsi/qedi/qedi_dbg.c
+> +++ b/drivers/scsi/qedi/qedi_dbg.c
+> @@ -16,10 +16,6 @@ qedi_dbg_err(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
+>  {
+>  	va_list va;
+>  	struct va_format vaf;
+> -	char nfunc[32];
+> -
+> -	memset(nfunc, 0, sizeof(nfunc));
+> -	memcpy(nfunc, func, sizeof(nfunc) - 1);
+>  
+>  	va_start(va, fmt);
+>  
+> @@ -28,9 +24,9 @@ qedi_dbg_err(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
+>  
+>  	if (likely(qedi) && likely(qedi->pdev))
+>  		pr_err("[%s]:[%s:%d]:%d: %pV", dev_name(&qedi->pdev->dev),
+> -		       nfunc, line, qedi->host_no, &vaf);
+> +		       func, line, qedi->host_no, &vaf);
+>  	else
+> -		pr_err("[0000:00:00.0]:[%s:%d]: %pV", nfunc, line, &vaf);
+> +		pr_err("[0000:00:00.0]:[%s:%d]: %pV", func, line, &vaf);
+>  
+>  	va_end(va);
+>  }
+> @@ -41,10 +37,6 @@ qedi_dbg_warn(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
+>  {
+>  	va_list va;
+>  	struct va_format vaf;
+> -	char nfunc[32];
+> -
+> -	memset(nfunc, 0, sizeof(nfunc));
+> -	memcpy(nfunc, func, sizeof(nfunc) - 1);
+>  
+>  	va_start(va, fmt);
+>  
+> @@ -56,9 +48,9 @@ qedi_dbg_warn(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
+>  
+>  	if (likely(qedi) && likely(qedi->pdev))
+>  		pr_warn("[%s]:[%s:%d]:%d: %pV", dev_name(&qedi->pdev->dev),
+> -			nfunc, line, qedi->host_no, &vaf);
+> +			func, line, qedi->host_no, &vaf);
+>  	else
+> -		pr_warn("[0000:00:00.0]:[%s:%d]: %pV", nfunc, line, &vaf);
+> +		pr_warn("[0000:00:00.0]:[%s:%d]: %pV", func, line, &vaf);
+>  
+>  ret:
+>  	va_end(va);
+> @@ -70,10 +62,6 @@ qedi_dbg_notice(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
+>  {
+>  	va_list va;
+>  	struct va_format vaf;
+> -	char nfunc[32];
+> -
+> -	memset(nfunc, 0, sizeof(nfunc));
+> -	memcpy(nfunc, func, sizeof(nfunc) - 1);
+>  
+>  	va_start(va, fmt);
+>  
+> @@ -85,10 +73,10 @@ qedi_dbg_notice(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
+>  
+>  	if (likely(qedi) && likely(qedi->pdev))
+>  		pr_notice("[%s]:[%s:%d]:%d: %pV",
+> -			  dev_name(&qedi->pdev->dev), nfunc, line,
+> +			  dev_name(&qedi->pdev->dev), func, line,
+>  			  qedi->host_no, &vaf);
+>  	else
+> -		pr_notice("[0000:00:00.0]:[%s:%d]: %pV", nfunc, line, &vaf);
+> +		pr_notice("[0000:00:00.0]:[%s:%d]: %pV", func, line, &vaf);
+>  
+>  ret:
+>  	va_end(va);
+> @@ -100,10 +88,6 @@ qedi_dbg_info(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
+>  {
+>  	va_list va;
+>  	struct va_format vaf;
+> -	char nfunc[32];
+> -
+> -	memset(nfunc, 0, sizeof(nfunc));
+> -	memcpy(nfunc, func, sizeof(nfunc) - 1);
+>  
+>  	va_start(va, fmt);
+>  
+> @@ -115,9 +99,9 @@ qedi_dbg_info(struct qedi_dbg_ctx *qedi, const char *func, u32 line,
+>  
+>  	if (likely(qedi) && likely(qedi->pdev))
+>  		pr_info("[%s]:[%s:%d]:%d: %pV", dev_name(&qedi->pdev->dev),
+> -			nfunc, line, qedi->host_no, &vaf);
+> +			func, line, qedi->host_no, &vaf);
+>  	else
+> -		pr_info("[0000:00:00.0]:[%s:%d]: %pV", nfunc, line, &vaf);
+> +		pr_info("[0000:00:00.0]:[%s:%d]: %pV", func, line, &vaf);
+>  
+>  ret:
+>  	va_end(va);
+> 
 
-Thanks,
-
-Bart.
