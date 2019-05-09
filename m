@@ -2,139 +2,141 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D48F18304
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 May 2019 02:59:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD93818638
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 May 2019 09:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbfEIA7E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 May 2019 20:59:04 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:34062 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725778AbfEIA7E (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 May 2019 20:59:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=jF6l3iV1rXe+x0MwS+AXxE/3MQbA5vLmSrDtVx8hKJ0=; b=iDLjyMGHb2MtEiX7sNEsrIOc+
-        r555boyzgroaM/roefjfl/8sPXIlDAXxtafMFPJgts5KIWBA3q3sxMLL9Wjox7NuUoSN+lZsyGDWw
-        1YIQfXQ89Etqt/gh+FhXMlhdhbL9rncYRHCp1u5Ydd7sskuGKJOM6SqnvXr8Ix+x0A1cHoy/Pusmm
-        afAw4Qn3zKr+mSjjshNzlrS6rfxIYZK+kWmsANoEiID2eXPgmAt9+V8rVX6zZpa52fnCPoRfx1GZ/
-        Wu13zOk/d8d44/7sOxIazBgLErLk/FQfGqZzRDcPlEkhHnuFiQz1PmBOXDcuzYl28U3M+xDV4tosD
-        uSeh53laQ==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=midway.dunlab)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hOXOb-0001bQ-J1; Thu, 09 May 2019 00:58:49 +0000
-Subject: Re: [PATCH v2 3/7] lib/hexdump.c: Optionally suppress lines of
- repeated bytes
-To:     Alastair D'Silva <alastair@au1.ibm.com>, alastair@d-silva.org
-Cc:     linux-fbdev@vger.kernel.org,
-        Stanislaw Gruszka <sgruszka@redhat.com>,
-        Petr Mladek <pmladek@suse.com>,
-        David Airlie <airlied@linux.ie>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, devel@driverdev.osuosl.org,
-        linux-scsi@vger.kernel.org, Jassi Brar <jassisinghbrar@gmail.com>,
-        ath10k@lists.infradead.org, intel-gfx@lists.freedesktop.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-fsdevel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Benson Leung <bleung@chromium.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Daniel Vetter <daniel@ffwll.ch>, netdev@vger.kernel.org,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-References: <20190508070148.23130-1-alastair@au1.ibm.com>
- <20190508070148.23130-4-alastair@au1.ibm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <dc093079-43a0-0a45-f5dd-88b20702fd93@infradead.org>
-Date:   Wed, 8 May 2019 17:58:46 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <20190508070148.23130-4-alastair@au1.ibm.com>
-Content-Type: text/plain; charset=utf-8
+        id S1726617AbfEIHbe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 May 2019 03:31:34 -0400
+Received: from mail-eopbgr810052.outbound.protection.outlook.com ([40.107.81.52]:54271
+        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726099AbfEIHbe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 May 2019 03:31:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector1-analog-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L7CFroJe1r+cPipzwnXEfpNcGv+uKNPfMUrW6mwLWYA=;
+ b=g0paTyjpwYXbCRQ+5kHYPbrDhOFXF3zxYX9uMztCP3Ie8YwD+ItlA7wpuen2EK6SUp9I+YAtK2om0JiuvcaOGyHdImfhBBJ4tS/GSV2jCnzro7yjHtO03X/qh+ANxD7e6pevDTyhBzuTk3q1KkF+wmLD/Ti5O/3Vb8aGdN9pzAA=
+Received: from CY4PR03CA0023.namprd03.prod.outlook.com (2603:10b6:903:33::33)
+ by BY2PR03MB553.namprd03.prod.outlook.com (2a01:111:e400:2c38::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1856.11; Thu, 9 May
+ 2019 07:31:30 +0000
+Received: from CY1NAM02FT010.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::202) by CY4PR03CA0023.outlook.office365.com
+ (2603:10b6:903:33::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1878.21 via Frontend
+ Transport; Thu, 9 May 2019 07:31:30 +0000
+Authentication-Results: spf=pass (sender IP is 137.71.25.55)
+ smtp.mailfrom=analog.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=bestguesspass action=none
+ header.from=analog.com;
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
+Received: from nwd2mta1.analog.com (137.71.25.55) by
+ CY1NAM02FT010.mail.protection.outlook.com (10.152.75.50) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1856.11
+ via Frontend Transport; Thu, 9 May 2019 07:31:29 +0000
+Received: from NWD2HUBCAS9.ad.analog.com (nwd2hubcas9.ad.analog.com [10.64.69.109])
+        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x497VSvl024076
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Thu, 9 May 2019 00:31:28 -0700
+Received: from NWD2MBX7.ad.analog.com ([fe80::190e:f9c1:9a22:9663]) by
+ NWD2HUBCAS9.ad.analog.com ([fe80::44a2:871b:49ab:ea47%12]) with mapi id
+ 14.03.0415.000; Thu, 9 May 2019 03:31:28 -0400
+From:   "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
+To:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jic23@kernel.org" <jic23@kernel.org>
+Subject: Re: [PATCH 3/3][V3] iio: Handle enumerated properties with gaps
+Thread-Topic: [PATCH 3/3][V3] iio: Handle enumerated properties with gaps
+Thread-Index: AQHVBY/z/hY+5eHS1kGQU0cKESrq0qZheMuAgAExjgA=
+Date:   Thu, 9 May 2019 07:31:27 +0000
+Message-ID: <780a4bcbf2e8a2d816efe2ed9613ac2b1594282e.camel@analog.com>
+References: <20190508111913.7276-1-alexandru.ardelean@analog.com>
+         <20190508111913.7276-3-alexandru.ardelean@analog.com>
+         <20190508131749.GM9224@smile.fi.intel.com>
+In-Reply-To: <20190508131749.GM9224@smile.fi.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.50.1.244]
+x-adiroutedonprem: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <15E851FD6999254CAA0FC0D7B0F4C8D0@analog.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(39860400002)(396003)(376002)(346002)(136003)(2980300002)(199004)(189003)(478600001)(7696005)(76176011)(2486003)(23676004)(316002)(26005)(246002)(2501003)(186003)(8676002)(2351001)(14454004)(6916009)(336012)(86362001)(436003)(426003)(5660300002)(446003)(11346002)(229853002)(8936002)(2906002)(70206006)(70586007)(476003)(102836004)(2616005)(486006)(126002)(4326008)(356004)(50466002)(118296001)(54906003)(6246003)(36756003)(47776003)(5640700003)(106002)(7736002)(7636002)(3846002)(6116002)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:BY2PR03MB553;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 93c8d5df-645f-4c83-7862-08d6d4505a83
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4709054)(2017052603328)(7193020);SRVR:BY2PR03MB553;
+X-MS-TrafficTypeDiagnostic: BY2PR03MB553:
+X-Microsoft-Antispam-PRVS: <BY2PR03MB55351709CC9E0DAF16B5DDEF9330@BY2PR03MB553.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-Forefront-PRVS: 003245E729
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: TEjhdMAS2/W1Yk9XWi0AG87eDJxsuLhPeGJCOyQyt1Z+FyyRQIqtpf9kptq4BiLSFf5Hin2t7qbimqxhmNhWhSuAAle7oXAdb8UPZZu/spwzAsajU6fHQATfQ3rKCE8pAs3gwRWmkt+mSvnRjczgxEYlKuQYziZMUb8pnFZhtmlNRxR54/bfKsORkbB3wZ76hmnRgK0/JahlTXirP4sn/s3tdw7S1s3N84FWKQTcTZeUK2kU+HAi2n6bAScER2MdkOAwVC7ZrPDAwwYJq/FFixkwq9GVwqS1ARSJjMOYpyHcAmoup3zyAceZt19XcwCEALRd50Iipz7nhq40+JUpPE/MlWFQgTWnoGGCZCbZmbXHf20Sr+ZpGpFYWEcpt8379UjpiS7NSqxT9s+QsrE/H3Ckw2q7B1PzU4n/TJOocCA=
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 May 2019 07:31:29.5097
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93c8d5df-645f-4c83-7862-08d6d4505a83
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY2PR03MB553
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/8/19 12:01 AM, Alastair D'Silva wrote:
-> From: Alastair D'Silva <alastair@d-silva.org>
-> 
-> Some buffers may only be partially filled with useful data, while the rest
-> is padded (typically with 0x00 or 0xff).
-> 
-> This patch introduces a flag to allow the supression of lines of repeated
-> bytes, which are replaced with '** Skipped %u bytes of value 0x%x **'
-> 
-> An inline wrapper function is provided for backwards compatibility with
-> existing code, which maintains the original behaviour.
-> 
-> Signed-off-by: Alastair D'Silva <alastair@d-silva.org>
-> ---
->  include/linux/printk.h | 25 +++++++++---
->  lib/hexdump.c          | 91 ++++++++++++++++++++++++++++++++++++------
->  2 files changed, 99 insertions(+), 17 deletions(-)
-> 
-
-Hi,
-Did you do "make htmldocs" or something similar on this?
-
-> diff --git a/lib/hexdump.c b/lib/hexdump.c
-> index 3943507bc0e9..d61a1e4f19fa 100644
-> --- a/lib/hexdump.c
-> +++ b/lib/hexdump.c
-> @@ -212,8 +212,44 @@ int hex_dump_to_buffer(const void *buf, size_t len, int rowsize, int groupsize,
->  EXPORT_SYMBOL(hex_dump_to_buffer);
->  
->  #ifdef CONFIG_PRINTK
-> +
-> +/**
-> + * Check if a buffer contains only a single byte value
-> + * @buf: pointer to the buffer
-> + * @len: the size of the buffer in bytes
-> + * @val: outputs the value if if the bytes are identical
-
-Does this work without a function name?
-Documentation/doc-guide/kernel-doc.rst says the general format is:
-
-  /**
-   * function_name() - Brief description of function.
-   * @arg1: Describe the first argument.
-   * @arg2: Describe the second argument.
-   *        One can provide multiple line descriptions
-   *        for arguments.
-   *
-
-> + */
-
->  /**
-> - * print_hex_dump - print a text hex dump to syslog for a binary blob of data
-> + * print_hex_dump_ext: dump a binary blob of data to syslog in hexadecimal
-
-Also not in the general documented format.
-
->   * @level: kernel log level (e.g. KERN_DEBUG)
->   * @prefix_str: string to prefix each line with;
->   *  caller supplies trailing spaces for alignment if desired
-
-
--- 
-~Randy
+T24gV2VkLCAyMDE5LTA1LTA4IGF0IDE2OjE3ICswMzAwLCBBbmR5IFNoZXZjaGVua28gd3JvdGU6
+DQo+IFtFeHRlcm5hbF0NCj4gDQo+IA0KPiBPbiBXZWQsIE1heSAwOCwgMjAxOSBhdCAwMjoxOTox
+M1BNICswMzAwLCBBbGV4YW5kcnUgQXJkZWxlYW4gd3JvdGU6DQo+ID4gRnJvbTogTGFycy1QZXRl
+ciBDbGF1c2VuIDxsYXJzQG1ldGFmb28uZGU+DQo+ID4gDQo+ID4gU29tZSBlbnVtcyBtaWdodCBo
+YXZlIGdhcHMgb3IgcmVzZXJ2ZWQgdmFsdWVzIGluIHRoZSBtaWRkbGUgb2YgdGhlaXINCj4gPiB2
+YWx1ZQ0KPiA+IHJhbmdlLiBFLmcuIGNvbnNpZGVyIGEgMi1iaXQgZW51bSB3aGVyZSB0aGUgdmFs
+dWVzIDAsIDEgYW5kIDMgaGF2ZSBhDQo+ID4gbWVhbmluZywgYnV0IDIgaXMgYSByZXNlcnZlZCB2
+YWx1ZSBhbmQgY2FuIG5vdCBiZSB1c2VkLg0KPiA+IA0KPiA+IEFkZCBzdXBwb3J0IGZvciBzdWNo
+IGVudW1zIHRvIHRoZSBJSU8gZW51bSBoZWxwZXIgZnVuY3Rpb25zLiBBIHJlc2VydmVkDQo+ID4g
+dmFsdWVzIGlzIG1hcmtlZCBieSBzZXR0aW5nIGl0cyBlbnRyeSBpbiB0aGUgaXRlbXMgYXJyYXkg
+dG8gTlVMTCByYXRoZXINCj4gPiB0aGFuIHRoZSBub3JtYWwgZGVzY3JpcHRpdmUgc3RyaW5nIHZh
+bHVlLg0KPiA+IA0KPiA+IEFsc28sIGBfX3N5c2ZzX21hdGNoX3N0cmluZygpYCBub3cgc3VwcG9y
+dHMgTlVMTCBnYXBzLCBzbyB0aGF0IGRvZXNuJ3QNCj4gPiByZXF1aXJlIGFueSBjaGFuZ2VzLg0K
+PiA+IC0gICAgIGZvciAoaSA9IDA7IGkgPCBlLT5udW1faXRlbXM7ICsraSkNCj4gPiArICAgICBm
+b3IgKGkgPSAwOyBpIDwgZS0+bnVtX2l0ZW1zOyArK2kpIHsNCj4gPiArICAgICAgICAgICAgIGlm
+ICghZS0+aXRlbXNbaV0pDQo+ID4gKyAgICAgICAgICAgICAgICAgICAgIGNvbnRpbnVlOw0KPiA+
+ICAgICAgICAgICAgICAgbGVuICs9IHNjbnByaW50ZihidWYgKyBsZW4sIFBBR0VfU0laRSAtIGxl
+biwgIiVzICIsIGUtDQo+ID4gPml0ZW1zW2ldKTsNCj4gPiArICAgICB9DQo+IA0KPiBUaGUgcHJv
+YmxlbSBoZXJlIHRoYXQgdGhlIHVzZXIgd2lsbCBoYXZlIG5vIGNsdWUgd2hlcmUgdGhlIGdhcCBp
+cw0KPiBoYXBwZW5lZCwgdG8NCj4gc29sdmUgdGhpcyB3ZSBuZWVkIGVpdGhlciBiaXRtYXAgb2Yg
+YXJyYXksIHdoZXJlIHNldCBiaXRzIHNob3dzIGRlZmluZWQNCj4gaXRlbXMsDQo+IG9yIHVzZSBj
+b21tYS1zZXBhcmF0ZWQgbGlzdCBvZiB2YWx1ZXMuIFRoZSBsYXR0ZXIgd291bGQgbmVlZCBhbm90
+aGVyIG5vZGUNCj4gc2luY2UNCj4gd2UgZG9uJ3QgYnJlYWsgdXNlciBzcGFjZS4NCg0KSG1tbS4N
+CkkgYW0gd29uZGVyaW5nIGlmIHRoZXJlIGFyZSBjYXNlcyB3aGVyZSB1c2Vyc3BhY2Ugd291bGQg
+Y2FyZSBhYm91dCByZXNlcnZlZA0KdmFsdWVzIGFuZC9vciBwb3NpdGlvbnMgb2YgcmVzZXJ2ZWQg
+Yml0LWZpZWxkcy4NCk1heWJlIHlvdSBjb3VsZCBvZmZlciBleGFtcGxlcy91c2UtY2FzZXMgd2hl
+cmUgdGhpcyBpcyBuZWVkZWQuDQoNClRvIHNvbWUgZXh0ZW50IHRoZSBrZXJuZWwgW2RyaXZlcnMg
+JiBmcmFtZXdvcmtzXSBzaG91bGQgcHJvYmFibHkgbm90IG5lZWQNCnRvIGV4cG9zZSB0aGF0ICJz
+dHJpbmctZW51bS1YIiAgPT0gYGJpdGZpZWxkXzJgIG1hdGNoaW5nOyBvdGhlcndpc2UgaXQNCmRv
+ZXNuJ3QgcmVhbGx5IGFkZCBtdWNoIHZhbHVlIDsgdGhlIHdob2xlIHBvaW50IG9mIGZyYW1ld29y
+a3MgW2luIGdlbmVyYWxdDQppcyB0byBvZmZlciBzb21lIGxldmVsIG9mIGFic3RyYWN0aW9uIHRv
+IEhXLg0KDQpUaGUgb25seSBleGFtcGxlIEkgY2FuIHRoaW5rIG9mIFthdG1dLCBpcyB3aGVuIGEg
+cmVzZXJ2ZWQgYml0LWZpZWxkIHdpbGwgYmUNCnVzZWQgaW4gdGhlIGZ1dHVyZS4gQnV0IHRoZW4s
+IHRoZSBkcml2ZXIgc2hvdWxkIGNhcmUgYWJvdXQgdGhpcywgYW5kIG5vdA0KdGhlIGZyYW1ld29y
+ay4gVGhlIGRyaXZlciBzaG91bGQgZGVjaWRlIHRoYXQgImJpdGZpZWxkXzIiIHdpbGwNCmVuYWJs
+ZS9kaXNhYmxlIHNvbWV0aGluZyBbaW4gdGhlIGZ1dHVyZV0sIGFuZCBzaG91bGQgYmUgY29uc2lk
+ZXJlZCBpbiBhDQpzdWNoIGEgd2F5ICh3aGVuIGJlaW5nIHdyaXR0ZW4pLiBJZiB0aGUgZHJpdmVy
+IGNhbid0IG1ha2UgdGhpcyBwcmVkaWN0aW9uIFsNCmFib3V0ICJiaXRmaWVsZF8yIl0gdGhlbiBh
+IG5ldyBkcml2ZXIgbXVzdCBiZSB3cml0dGVuIGFueXdheS4NCg0KQnV0IEkgd2lsbCBhZ3JlZSB0
+aGF0IEkgbWF5IG5vdCBoYXZlIGFsbCBhcmd1bWVudHMgaW4gbWluZCB0byBiZSAxMDAlIHN1cmUN
+Cm9mIGFsbCB0aGlzLg0KDQpUaGFua3MNCkFsZXgNCg0KPiANCj4gLS0NCj4gV2l0aCBCZXN0IFJl
+Z2FyZHMsDQo+IEFuZHkgU2hldmNoZW5rbw0KPiANCj4gDQo=
