@@ -2,140 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A378D18D90
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 May 2019 17:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B60BA191A7
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 May 2019 20:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726783AbfEIP6y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 May 2019 11:58:54 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:46646 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726611AbfEIP6t (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 May 2019 11:58:49 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <colin.king@canonical.com>)
-        id 1hOlRW-0007cT-Qj; Thu, 09 May 2019 15:58:46 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        id S1728450AbfEIS6f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 May 2019 14:58:35 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:48376 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727417AbfEIS6e (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 May 2019 14:58:34 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 728D23084295;
+        Thu,  9 May 2019 18:58:34 +0000 (UTC)
+Received: from emilne (unknown [10.18.25.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 88FD41001E67;
+        Thu,  9 May 2019 18:58:33 +0000 (UTC)
+Message-ID: <aa620cdf3f987107656adab7e4825d3ca583ee09.camel@redhat.com>
+Subject: Re: [PATCH] qla2xxx: always allocate qla_tgt_wq
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.de>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Chaitra P B <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190504164010.24937-1-colin.king@canonical.com>
- <1557027274.2821.2.camel@HansenPartnership.com>
- <de7e3aaf-0155-5007-c228-510f0d0de428@canonical.com>
- <1557325468.3196.2.camel@HansenPartnership.com>
- <9b4c84b5-31eb-6068-57c2-80ededc21b43@suse.de>
- <1557416545.4268.22.camel@HansenPartnership.com>
-From:   Colin Ian King <colin.king@canonical.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
- 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
-Subject: Re: [PATCH] mptsas: fix undefined behaviour of a shift of an int by
- more than 31 places
-Message-ID: <dcc8590c-b665-bcb2-4df6-9f4a37a779e1@canonical.com>
-Date:   Thu, 9 May 2019 16:58:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
-MIME-Version: 1.0
-In-Reply-To: <1557416545.4268.22.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Himanshu Madhani <himanshu.madhani@marvell.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+Date:   Thu, 09 May 2019 14:58:33 -0400
+In-Reply-To: <1df9eb38-8ff9-bf21-4a49-4190eea9f2b4@acm.org>
+References: <20190509131821.87338-1-hare@suse.de>
+         <1df9eb38-8ff9-bf21-4a49-4190eea9f2b4@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Thu, 09 May 2019 18:58:34 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 09/05/2019 16:42, James Bottomley wrote:
-> On Thu, 2019-05-09 at 17:30 +0200, Hannes Reinecke wrote:
->> On 5/8/19 4:24 PM, James Bottomley wrote:
->>> On Wed, 2019-05-08 at 14:07 +0100, Colin Ian King wrote:
->>>> On 05/05/2019 04:34, James Bottomley wrote:
->>>>> On Sat, 2019-05-04 at 17:40 +0100, Colin King wrote:
->>>>>> From: Colin Ian King <colin.king@canonical.com>
->>>>>>
->>>>>> Currently the shift of int value 1 by more than 31 places can
->>>>>> result in undefined behaviour. Fix this by making the 1 a ULL
->>>>>> value before the shift operation.
->>>>>
->>>>> Fusion SAS is pretty ancient.  I thought the largest one ever
->>>>> produced had four phys, so how did you produce the overflow?
->>>>
->>>> This was an issue found by static analysis with Coverity; so I
->>>> guess won't happen in the wild, in which case the patch could be
->>>> ignored.
->>>
->>> The point I was more making is that if we thought this could ever
->>> happen in practice, we'd need more error handling than simply this:
->>> we'd be setting the phy_bitmap to zero which would be every bit as
->>> bad as some random illegal value.
->>>
->>
->> Thing is, mptsas is used as the default emulation in VMWare, and
->> that does allow you to do some pretty weird configurations (I've
->> found myself  fixing a bug with SATA hotplug on mptsas once ...).
->> So I wouldn't discard this issue out of hand.
+On Thu, 2019-05-09 at 07:06 -0700, Bart Van Assche wrote:
+> On 5/9/19 6:18 AM, Hannes Reinecke wrote:
+> > The 'qla_tgt_wq' workqueue is used for generic command aborts,
+> > not just target-related functions. So allocate the workqueue
+> > always to avoid a kernel crash when aborting commands.
 > 
-> I'm not, I'm just saying the proposed fix is no fix at all since it
-> would just produce undefined behaviour in the driver.  I thought the
-> issue might have been coming from VMWare, which is why I asked how the
-> bug was seen.  The proper fix is probably to fail attachment if the phy
-> number goes over a fixed value (16 sounds reasonable) but if it's never
-> a problem in the field, I'm happy doing nothing because we have no real
-> idea what the reasonable value is.
-
-I'm happy with my proposed fix being ignored and (if required) a more
-appropriate fix developed by somebody who is more familiar with this
-code than me.  Sometimes it is hard to determine if these static
-analysis "issues" are fix worthy or not.
-
-Colin
-
+> Hi Hannes,
 > 
-> James
+> Can the abort code be called directly? This means not queueing the abort
+> work? Do you perhaps know why the target workqueue is used for
+> processing aborts? In other words, can the abort functions be modified
+> to use one of the system workqueues instead of always allocating the
+> target workqueue?
 > 
+> Thanks,
+> 
+> Bart.
+
+How exactly is the qla_tgt_wq used for generic command aborts?
+Do you mean initiator mode aborts from the SCSI EH calls?  Those look
+like they issue mailbox commands to the HBA directly.
+Or do we get frames received even if we are not using target mode or something?
+
+-Ewan
 
