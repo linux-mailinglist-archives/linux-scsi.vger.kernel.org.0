@@ -2,82 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F17FC19E9B
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 May 2019 15:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3953E1A477
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 May 2019 23:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727856AbfEJN6N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 May 2019 09:58:13 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:46121 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727715AbfEJN6N (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 May 2019 09:58:13 -0400
-Received: by mail-qt1-f193.google.com with SMTP id i31so6598998qti.13
-        for <linux-scsi@vger.kernel.org>; Fri, 10 May 2019 06:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=TL7e57XM4a6e0P+rIl8g/ShLQM20pQHQtsOCQN648l4=;
-        b=uoDIURS53nGoId5efcsAZAEQHmf6sWd85Q7g3ZNbLbRKzDOAQC8L2eNrsz7HKlue56
-         raomgvG4c6GHIfjyfk+lV3pwfNYet+ehHkgc6OiTEe1kQxpiiJup0TxmG0Zd50Lyuylf
-         BFFRu5pQiaZ4lh8r0W6Zl+lFt6oR+thVcZEX148LPxOgibVVorVtnoS9Yo7rTpK200bE
-         WuYV1I848hd16mASj46Wp58uLsOemZe84K8e9LRriOKf08w5L+/LasvEMtml1Zbr67Yy
-         Zsm9F1R8SfblZi298AwDItsiWxF+JIfVi6v/GH19TKZwmTykF8F9VHdDiIdf3LYPpaiS
-         hD/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=TL7e57XM4a6e0P+rIl8g/ShLQM20pQHQtsOCQN648l4=;
-        b=TMDmEV8yUoDTASLLlbIi26BOhC3vYo5d4JXA0LTgWNSfY9lEMMTeBsnI+awjO9nXP/
-         zNSDLNrHp5sy5wvxN0ewLk4cOr9/47K2IsE+KMSmecO8AEPs7FOEIrvmzgOjY2aLFsCO
-         HWPj4LCfD7CntqImSOXrMDNc41IzVByjDw5Fi4YAoQ1gPxHzuK0dhEfyDEjmBymF6T/G
-         mljsNZEOzGMAI4s3UnezRUubLH6QP3KmQVtiKGTnKVk9xgDbiWt0AjfsGdQul26cCKaz
-         /VxSk9WhA33mlUXBam8UWR/+sGmnSxDrBmnahEh2lkpyxRW6U+pZRy+1/ug0dSyQ38X9
-         abwQ==
-X-Gm-Message-State: APjAAAWvq6oBPNh3snWeiD21yXLwAYBQVYOvnh5TjOm2gFOIVh3lCw6v
-        nEqv1zXHp0OqizAPmvd5P8yc7pO9G9g4u0q3XbE=
-X-Google-Smtp-Source: APXvYqyq70byq+czrAJXOrPnLv5x+0pgsCrGN07/ZMg3uJQ3rmvJuqPv0U2qqYORf4tKCn8BXwGtdDBMbPDToXF86r8=
-X-Received: by 2002:a0c:e583:: with SMTP id t3mr9257237qvm.74.1557496691956;
- Fri, 10 May 2019 06:58:11 -0700 (PDT)
-MIME-Version: 1.0
-Reply-To: zia412@outlook.com
-Received: by 2002:ac8:2e96:0:0:0:0:0 with HTTP; Fri, 10 May 2019 06:58:10
- -0700 (PDT)
-From:   Ahmed Ahmed <zaaama250@gmail.com>
-Date:   Fri, 10 May 2019 15:58:10 +0200
-X-Google-Sender-Auth: Wce8GZrH2gKZmeriNpLREhSjp1w
-Message-ID: <CANcFNsiSxwq5scTrLmJhnXu=dQN6J4zVrus2N8jdkXB1B+aahg@mail.gmail.com>
-Subject: Request
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1727917AbfEJVYC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 May 2019 17:24:02 -0400
+Received: from hosting.gsystem.sk ([212.5.213.30]:57626 "EHLO
+        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727677AbfEJVYC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 May 2019 17:24:02 -0400
+Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id BE6567A0262;
+        Fri, 10 May 2019 23:24:00 +0200 (CEST)
+From:   Ondrej Zary <linux@zary.sk>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] fdomain: Remove BIOS-related code from core
+Date:   Fri, 10 May 2019 23:23:34 +0200
+Message-Id: <20190510212335.14728-1-linux@zary.sk>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+Move all BIOS signature and base handling to (currently not merged) ISA bus
+driver.
 
-I am. Mr Ahmed Zama  Manager Auditing and Accountancy Department,UBA
-Bank  Burkina Faso
+Signed-off-by: Ondrej Zary <linux@zary.sk>
+---
+ drivers/scsi/fdomain.c     | 18 ++----------------
+ drivers/scsi/fdomain.h     | 10 ----------
+ drivers/scsi/fdomain_pci.c |  2 +-
+ 3 files changed, 3 insertions(+), 27 deletions(-)
 
- i am writing to seek for your highly esteemed consent/assistance  in
-a lasting business relationship of mutual benefit involving =E2=82=AC 15
-Million Euros  for investment in your country, under a joint venture
-partnership.
+diff --git a/drivers/scsi/fdomain.c b/drivers/scsi/fdomain.c
+index e43fdd1ab3a8..f0fda2ad1c7d 100644
+--- a/drivers/scsi/fdomain.c
++++ b/drivers/scsi/fdomain.c
+@@ -494,7 +494,6 @@ static struct scsi_host_template fdomain_template = {
+ };
+ 
+ struct Scsi_Host *fdomain_create(int base, int irq, int this_id,
+-				 unsigned long bios_base, struct signature *sig,
+ 				 struct device *dev)
+ {
+ 	struct Scsi_Host *sh;
+@@ -524,9 +523,6 @@ struct Scsi_Host *fdomain_create(int base, int irq, int this_id,
+ 
+ 	if (this_id)
+ 		sh->this_id = this_id & 0x07;
+-	else if (sig && sig->bios_major > 0 &&
+-		(sig->bios_major < 3 || sig->bios_minor < 2))
+-		sh->this_id = 6;
+ 
+ 	sh->irq = irq;
+ 	sh->io_port = base;
+@@ -541,19 +537,9 @@ struct Scsi_Host *fdomain_create(int base, int irq, int this_id,
+ 			  "fdomain", fd))
+ 		goto fail_put;
+ 
+-	if (!sig || (sig->bios_major < 0 && sig->bios_minor < 0))
+-		shost_printk(KERN_INFO, sh, "No BIOS; using SCSI ID %d\n",
+-			     sh->this_id);
+-	else {
+-		char v1 = (sig->bios_major >= 0) ? '0' + sig->bios_major : '?';
+-		char v2 = (sig->bios_minor >= 0) ? '0' + sig->bios_minor : '?';
+-
+-		shost_printk(KERN_INFO, sh, "BIOS version %c.%c at 0x%lx using SCSI ID %d\n",
+-			     v1, v2, bios_base, sh->this_id);
+-	}
+-	shost_printk(KERN_INFO, sh, "%s chip at 0x%x irq %d\n",
++	shost_printk(KERN_INFO, sh, "%s chip at 0x%x irq %d SCSI ID %d\n",
+ 		     dev_is_pci(dev) ? "TMC-36C70 (PCI bus)" : chip_names[chip],
+-		     base, irq);
++		     base, irq, sh->this_id);
+ 
+ 	if (scsi_add_host(sh, dev))
+ 		goto fail_free_irq;
+diff --git a/drivers/scsi/fdomain.h b/drivers/scsi/fdomain.h
+index a124a95764d6..fabb2e49461f 100644
+--- a/drivers/scsi/fdomain.h
++++ b/drivers/scsi/fdomain.h
+@@ -41,15 +41,6 @@ enum out_port_type {
+ 	Write_FIFO	= 12
+ };
+ 
+-struct signature {
+-	const char *signature;
+-	int offset;
+-	int length;
+-	int bios_major;
+-	int bios_minor;
+-	int flag; /* 1 = PCI_bus, 2 = ISA_200S, 3 = ISA_250MG, 4 = ISA_200S */
+-};
+-
+ #ifdef CONFIG_PM_SLEEP
+ static const struct dev_pm_ops fdomain_pm_ops;
+ #define FDOMAIN_PM_OPS	(&fdomain_pm_ops)
+@@ -58,6 +49,5 @@ static const struct dev_pm_ops fdomain_pm_ops;
+ #endif /* CONFIG_PM_SLEEP */
+ 
+ struct Scsi_Host *fdomain_create(int base, int irq, int this_id,
+-				 unsigned long bios_base, struct signature *sig,
+ 				 struct device *dev);
+ int fdomain_destroy(struct Scsi_Host *sh);
+diff --git a/drivers/scsi/fdomain_pci.c b/drivers/scsi/fdomain_pci.c
+index 381a7157c078..3e05ce7b89e5 100644
+--- a/drivers/scsi/fdomain_pci.c
++++ b/drivers/scsi/fdomain_pci.c
+@@ -22,7 +22,7 @@ static int fdomain_pci_probe(struct pci_dev *pdev,
+ 	if (pci_resource_len(pdev, 0) == 0)
+ 		goto release_region;
+ 
+-	sh = fdomain_create(pci_resource_start(pdev, 0), pdev->irq, 7, 0, NULL,
++	sh = fdomain_create(pci_resource_start(pdev, 0), pdev->irq, 7,
+ 			    &pdev->dev);
+ 	if (!sh)
+ 		goto release_region;
+-- 
+Ondrej Zary
 
-Thank you for accommodating my inquiry, as i look forward to hearing
-from you on this business collaboration and  meeting with you soon.
-
-
-(1)Your Full name:..........................
-(2)Your Age.................................
-(3)Occupation:.................................
-(4)Mobile phone number:.....................
-(5)Your Country..........................
-
-Waiting to hear from you.
-
-Regards
-Mr Ahmed Zama
