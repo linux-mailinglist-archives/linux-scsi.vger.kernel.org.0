@@ -2,122 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D461AEF8
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 04:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE29A1B0A7
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 09:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727281AbfEMCk0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 12 May 2019 22:40:26 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:47534 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727132AbfEMCk0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 12 May 2019 22:40:26 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 5AD751B4627CE56F6144;
-        Mon, 13 May 2019 10:40:20 +0800 (CST)
-Received: from [127.0.0.1] (10.74.219.194) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Mon, 13 May 2019
- 10:40:11 +0800
-Subject: Re: Looking for some help understanding error handling
-To:     <Chris.Moore@microchip.com>, <hare@suse.de>,
-        <linux-scsi@vger.kernel.org>
-References: <BY2PR1101MB1174A2F340BA55EE1CF2E810EAE80@BY2PR1101MB1174.namprd11.prod.outlook.com>
- <45b9e96f-d5f9-e8aa-9daf-4d25c192af27@suse.de>
- <BY2PR1101MB117498CE93A1BA8B962F1771EAEB0@BY2PR1101MB1174.namprd11.prod.outlook.com>
-CC:     John Garry <john.garry@huawei.com>
-From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
-Message-ID: <73adc416-f1a7-d381-dd9f-fbc605c587d2@hisilicon.com>
-Date:   Mon, 13 May 2019 10:40:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.2.0
+        id S1727687AbfEMHB2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 May 2019 03:01:28 -0400
+Received: from mail-vs1-f67.google.com ([209.85.217.67]:39924 "EHLO
+        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbfEMHB2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 May 2019 03:01:28 -0400
+Received: by mail-vs1-f67.google.com with SMTP id m1so184649vsr.6;
+        Mon, 13 May 2019 00:01:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KZeUlM9HFwsoPba3BedCeGi13MK+EsvDzCuCOHnSeSU=;
+        b=tglJ4xUOY7AZqgm0J8qMlTgm8HcXbatXI4c0qw4kxx2eIKQaxlfamPWrr06J46KUnC
+         qbOK5/l66Y4TcNMDhVeOHjm/Wb0cQwFSLnKm7F4iARBf4Bppwx4RZm6cCtIlSa34TReW
+         kVIuxnm3ez2Xa/nOtwRbm4IyBdFLCDn9NMl7iT5cDE0vRwKR17KTeaHQSop/azJh+kpa
+         hJ2OwH3DEy01tDeqMRKI6DqnWwFObs1DqMpnaU/5SUkUjjf3P5WeNCaSA/6mlh9IHVT2
+         uS9KpxvpuV5TcbVJSiiawVoOVDTztxxNg9gJZUPFJKPMSu+SwW3FSaAyWaibGXrgMXxs
+         dgpA==
+X-Gm-Message-State: APjAAAXw3ro/WseG2ulbzPbD6Ov146oenYie8FJUch304PR/260M9twJ
+        Mw1YLLu6yPRLU/0021rH+LzC4Yy1cgcwT8jtA48=
+X-Google-Smtp-Source: APXvYqxs4U9cC6qSMiyVDwFNxNbvddkvfAvZ+WOBelGbmcS7WwGSJect4/Alo1+2rHfzk8JgMisDv2BcZmORdVLPpig=
+X-Received: by 2002:a67:770f:: with SMTP id s15mr4419527vsc.11.1557730886319;
+ Mon, 13 May 2019 00:01:26 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <BY2PR1101MB117498CE93A1BA8B962F1771EAEB0@BY2PR1101MB1174.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.74.219.194]
-X-CFilter-Loop: Reflected
+References: <20190508070148.23130-1-alastair@au1.ibm.com> <20190508070148.23130-4-alastair@au1.ibm.com>
+In-Reply-To: <20190508070148.23130-4-alastair@au1.ibm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 13 May 2019 09:01:14 +0200
+Message-ID: <CAMuHMdVefYTgHzGKBc0ebku1z8V3wsM0ydN+6-S2nFKaB8eH_Q@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] lib/hexdump.c: Optionally suppress lines of
+ repeated bytes
+To:     "Alastair D'Silva" <alastair@au1.ibm.com>
+Cc:     alastair@d-silva.org, Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@aculab.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, ath10k@lists.infradead.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi Alastair,
 
+Thanks for your patch!
 
-在 2018/10/5 23:51, Chris.Moore@microchip.com 写道:
-> Thanks Hannes,
+On Wed, May 8, 2019 at 9:04 AM Alastair D'Silva <alastair@au1.ibm.com> wrote:
+> From: Alastair D'Silva <alastair@d-silva.org>
 >
-> After some pointers from Shane Seymour I found that the FC and SRP transport layers
-> have a devloss timer, so that when a device disappears they hold on to the target
-> information for a time waiting to see if it comes back.  The SAS transport layer
-> doesn't have that feature.
+> Some buffers may only be partially filled with useful data, while the rest
+> is padded (typically with 0x00 or 0xff).
 >
-> The options for me then would be to modify scsi_transport_sas.c to implement
-> the devloss timeout, or to put that functionality into my LLDD.
->
-> I'm willing to put the work into the SAS transport and libsas, but I suspect there's
-> not a universal need for it.  And since my LLDD is for internal use at our company and
-> won't be upstreamed, I'll probably just do the work there.  If anyone feels that this
-> is a feature that more people would want then I'll look into doing that.
+> This patch introduces a flag to allow the supression of lines of repeated
+> bytes,
 
+Given print_hex_dump() operates on entities of groupsize (1, 2, 4, or 8)
+bytes, wouldn't it make more sense to consider repeated groups instead
+of repeated bytes?
 
-Hi Chris,
-Do you have any progress on dev loss feature? We also are considering
-about the feature for driver hisi_sas.
+> which are replaced with '** Skipped %u bytes of value 0x%x **'
 
-Thanks,
-Shawn
+Using a custom message instead of just "*", like "hexdump" uses, will
+require preprocessing the output when recovering the original binary
+data by feeding it to e.g. "xxd".
+This may sound worse than it is, though, as I never got "xxd" to work
+without preprocessing anyway ;-)
 
->
-> Thanks,
-> Chris
->
->> -----Original Message-----
->> From: Hannes Reinecke [mailto:hare@suse.de]
->> Sent: Friday, October 5, 2018 8:01 AM
->> To: Chris Moore - C33997 <Chris.Moore@microchip.com>; linux-
->> scsi@vger.kernel.org
->> Subject: Re: Looking for some help understanding error handling
->>
->> On 10/2/18 11:04 PM, Chris.Moore@microchip.com wrote:
->>> I'm working on LLDD for a SAS/SATA host adapter, and trying to understand
->> how the system handles link loss and recovery.
->>> Say I have a device that gets recognized and attached as sd 12:0:4:0, at
->> /dev/sdb.
->>> The drive goes offline temporarily, then comes back online.
->>> When it does, it comes back as sd 12:0:5:0, and maybe /dev/sdb, maybe
->> /dev/sdc.
->>> I'm not sure how the Id gets assigned.  Since this is the same drive,
->>> is there some way my driver can tell libsas and/or SCSI core that it's the
->> same drive coming back?
->>> Or is there no way to control that?
->>>
->> Not really. The target device is getting destroyed once the device
->> disconnects, and when it reconnects a new structure is allocated. But as the
->> target number is a simple counter it gets increased up each allocation.
->>
->>> I looked into /dev/disk/by-id, but that also didn't quite do what I
->>> expected.  If I open /dev/disk/by-id/some_identifier, that's a symlink to,
->> say, /dev/sdb.
->>
->> Yes.
->>
->>>   /dev/sdb goes away, comes back as /dev/sdc, but my process doesn't
->>> know that, it still has /dev/disk/by-id/some_identifier opened and so it will
->> never recover without closing and reopening the file.
->> Simply don't keep hold of the symlink; once you have opened you'll miss any
->> updates to the symlink itself.
->> So better to open the symlink, check the device, do whatever needs to be
->> done, and _close the symlink_ again.
->> Then you can listen for udev events telling you when a device appears or
->> vanishes.
->>
->> Cheers,
->>
->> Hannes
->> --
->> Dr. Hannes Reinecke		   Teamlead Storage & Networking
->> hare@suse.de			               +49 911 74053 688
->> SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
->> GF: F. Imendörffer, J. Smithard, J. Guild, D. Upmanyu, G. Norton HRB 21284
->> (AG Nürnberg)
+    $ cat $(type -p unhexdump)
+    #!/bin/sh
+    sed 's/^[0-9a-f]*//' $1 | xxd -r -p | dd conv=swab
 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
