@@ -2,109 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 193F61BD19
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 20:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818EC1BECC
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 22:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfEMSVg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 May 2019 14:21:36 -0400
-Received: from mail-eopbgr760058.outbound.protection.outlook.com ([40.107.76.58]:6484
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726370AbfEMSVg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 13 May 2019 14:21:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8z+Mn+lb73jmCGFVT1Pk/z//+SLoGgNMe99zjJuR7Q8=;
- b=sK3HLb3cuMqVBE9El25ZGrDXGs/TS4n/FZylNfxPHNz3so9rU8hBeQh33WEzuBnrqp1esAIqYryOK/NnSvupWiMuuZFfXYdzU+ovwScyjPO/sPEhcCjocMx5bNKcrCW38IMpzcrxcYhDN/huxxtQmwrNdn2xKNPN4ul7h88pPjg=
-Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.31.141) by
- BN7PR08MB5537.namprd08.prod.outlook.com (20.176.29.80) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.25; Mon, 13 May 2019 18:21:23 +0000
-Received: from BN7PR08MB5684.namprd08.prod.outlook.com
- ([fe80::8d6c:f350:4859:e532]) by BN7PR08MB5684.namprd08.prod.outlook.com
- ([fe80::8d6c:f350:4859:e532%4]) with mapi id 15.20.1878.024; Mon, 13 May 2019
- 18:21:23 +0000
-From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
-To:     Stanley Chu <stanley.chu@mediatek.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
-CC:     "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
-        "sayalil@codeaurora.org" <sayalil@codeaurora.org>,
-        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
-        "vivek.gautam@codeaurora.org" <vivek.gautam@codeaurora.org>,
-        "evgreen@chromium.org" <evgreen@chromium.org>
-Subject: RE: [EXT] [PATCH v1 2/3] scsi: ufs: add error handling of
- auto-hibern8
-Thread-Topic: [EXT] [PATCH v1 2/3] scsi: ufs: add error handling of
- auto-hibern8
-Thread-Index: AQHVCZlJG8f+B7maOUSAPf/KvWjoI6ZpV6KQ
-Date:   Mon, 13 May 2019 18:21:23 +0000
-Message-ID: <BN7PR08MB568438668FC7C90A1284F53DDB0F0@BN7PR08MB5684.namprd08.prod.outlook.com>
-References: <1557758186-18706-1-git-send-email-stanley.chu@mediatek.com>
- <1557758186-18706-3-git-send-email-stanley.chu@mediatek.com>
-In-Reply-To: <1557758186-18706-3-git-send-email-stanley.chu@mediatek.com>
-Accept-Language: en-150, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=beanhuo@micron.com; 
-x-originating-ip: [165.225.80.131]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5e905364-6b9e-4550-d84d-08d6d7cfce30
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BN7PR08MB5537;
-x-ms-traffictypediagnostic: BN7PR08MB5537:|BN7PR08MB5537:
-x-microsoft-antispam-prvs: <BN7PR08MB553757C2B02303588760BB9EDB0F0@BN7PR08MB5537.namprd08.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-forefront-prvs: 0036736630
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(39860400002)(136003)(376002)(346002)(396003)(199004)(189003)(110136005)(99286004)(54906003)(229853002)(73956011)(9686003)(256004)(74316002)(66556008)(14444005)(66476007)(64756008)(66946007)(66446008)(2201001)(5660300002)(7416002)(4744005)(86362001)(7696005)(6506007)(76176011)(76116006)(4326008)(3846002)(6116002)(53936002)(66066001)(81166006)(81156014)(25786009)(102836004)(316002)(55016002)(8676002)(486006)(71200400001)(6436002)(52536014)(71190400001)(14454004)(55236004)(33656002)(11346002)(476003)(305945005)(2501003)(2906002)(68736007)(186003)(7736002)(446003)(8936002)(26005)(6246003)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB5537;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: micron.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 6A+z/BY7l3S1p8EMS/pDKFxtSp1S5N3L524N7fxBTRSZtpBL8ni0j6/BsDr1sy/RiY2qP5Gvo/2L/qYDvEx/PWg/fYNyQ6TG+/NZHVYeIXTz1GtmmZjGFKlkuLU5MyNpucxPWYgnR8CS2Il3koCZpdKvgrO04zoz07MORhN2C8/W7hLmI31PqqQpoodEhIaVtOt1Gm/0VYvQ2jKscAkeXITG940YgrysBSUNCd1lPa6rYBhWFF/YQBl1VA5G7IfCbUyQr61zJ9nlWXydACmC8vwRWodfpBhyfvkr5OSA7pneMXZxMWJQ8NrWHIsMJPFSeKRRI2+wKMa2r0I3nrvwJUH1r653QyGCIvSTsDbJYL/E/KwwZj3Gh1ir7CsYz7NFCxs5/3bfnyW4xz2NPsr19B63ePQgPDt2rpmzvBzxTlw=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: micron.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e905364-6b9e-4550-d84d-08d6d7cfce30
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2019 18:21:23.5594
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB5537
+        id S1726349AbfEMUpo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 May 2019 16:45:44 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:39140 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726179AbfEMUpo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 May 2019 16:45:44 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 4F0E913A82;
+        Mon, 13 May 2019 20:45:44 +0000 (UTC)
+Received: from emilne (unknown [10.18.25.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 73C08600C6;
+        Mon, 13 May 2019 20:45:43 +0000 (UTC)
+Message-ID: <ca15a1a0ff4d530d991ea310ecbc885f1588b16e.camel@redhat.com>
+Subject: Re: [PATCH] qla2xxx: always allocate qla_tgt_wq
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.de>,
+        Himanshu Madhani <himanshu.madhani@marvell.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+Date:   Mon, 13 May 2019 16:45:42 -0400
+In-Reply-To: <85494ec8-b20a-621e-25f8-cf4a069d7855@acm.org>
+References: <20190509131821.87338-1-hare@suse.de>
+         <1df9eb38-8ff9-bf21-4a49-4190eea9f2b4@acm.org>
+         <aa620cdf3f987107656adab7e4825d3ca583ee09.camel@redhat.com>
+         <85494ec8-b20a-621e-25f8-cf4a069d7855@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Mon, 13 May 2019 20:45:44 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi, Stanley
+On Thu, 2019-05-09 at 15:55 -0700, Bart Van Assche wrote:
+> On 5/9/19 11:58 AM, Ewan D. Milne wrote:
+> > On Thu, 2019-05-09 at 07:06 -0700, Bart Van Assche wrote:
+> > > On 5/9/19 6:18 AM, Hannes Reinecke wrote:
+> > > > The 'qla_tgt_wq' workqueue is used for generic command aborts,
+> > > > not just target-related functions. So allocate the workqueue
+> > > > always to avoid a kernel crash when aborting commands.
+> > > 
+> > > Can the abort code be called directly? This means not queueing the abort
+> > > work? Do you perhaps know why the target workqueue is used for
+> > > processing aborts? In other words, can the abort functions be modified
+> > > to use one of the system workqueues instead of always allocating the
+> > > target workqueue?
+> > 
+> > How exactly is the qla_tgt_wq used for generic command aborts?
+> > Do you mean initiator mode aborts from the SCSI EH calls?  Those look
+> > like they issue mailbox commands to the HBA directly.
+> > Or do we get frames received even if we are not using target mode or something?
+> 
+> Hi Ewan,
+> 
+> To me your questions seem like questions about the original patch. Are
+> your questions perhaps intended for Hannes?
+> 
+> Bart.
 
->+
->+static inline bool ufshcd_is_auto_hibern8_error(struct ufs_hba *hba,
->+						u32 intr_mask)
->+{
->+	return (ufshcd_is_auto_hibern8_supported(hba) &&
->+		!hba->uic_async_done &&
+Yes, you are correct, sorry I responded to the wrong msg in the thread.
 
-Here check if uic_async_done is NULL, no big problem so far, but not safe e=
-nough.
-How about setting a flag in ufshcd_auto_hibern8_enable(),
+-Ewan
 
-I concern about how to compatible with auto_hibern8 disabled condition.
-
-
-//Bean
