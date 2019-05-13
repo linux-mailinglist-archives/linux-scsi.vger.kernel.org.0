@@ -2,60 +2,174 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D311B0D7
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 09:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBC21B140
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 09:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbfEMHJL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 May 2019 03:09:11 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:49830 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725980AbfEMHJL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 May 2019 03:09:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Cy0TUN/UYoKBRHbCakileFYBci2k3WMghvEhPXpB9dE=; b=PZEEb890+3R3o7Tj0hw5OGOqD
-        Nc+9VlVulxufzd2dcGgd7vgI4ABjj/dMAdLF5F/pDXjNu308qqb0U9r9DKVzFvQKBacciIYGwl30d
-        2272ABQ5/N/daZDrjhkalP0fBgmYhRbuMNDhIvHpBXGXoZLBY7ZoGSCn1sbgZRU0ieBeD1sT0gYPo
-        V2R3BqepaQGu6fTdYTsbUBQjJnj4rZPi1akhHk1+duz/vLFWUZ66LBo66DSr7e94rrjlCcwho64II
-        ST9qWVYtMemu9MnCCcvKejU3uTxUZpmYTAsad+h9fWxhkAPbVlI5nM+IqA7XjAyOHIYfgwmX02lOX
-        usiVtYYCw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hQ556-0001pr-TY; Mon, 13 May 2019 07:09:04 +0000
-Date:   Mon, 13 May 2019 00:09:04 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] fdomain: Add ISA bus support
-Message-ID: <20190513070904.GB31342@infradead.org>
-References: <20190510212335.14728-1-linux@zary.sk>
- <20190510212335.14728-2-linux@zary.sk>
+        id S1728029AbfEMHf7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 May 2019 03:35:59 -0400
+Received: from ushosting.nmnhosting.com ([66.55.73.32]:37960 "EHLO
+        ushosting.nmnhosting.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727347AbfEMHf7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 May 2019 03:35:59 -0400
+Received: from mail2.nmnhosting.com (unknown [202.169.106.97])
+        by ushosting.nmnhosting.com (Postfix) with ESMTPS id 231832DC0069;
+        Mon, 13 May 2019 03:35:57 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=d-silva.org;
+        s=201810a; t=1557732958;
+        bh=aa+i95blYOSxhGwoRx9zFnMo5oG4XUfXT748BNmFJIU=;
+        h=From:To:Cc:References:In-Reply-To:Subject:Date:From;
+        b=aSet9rLYykQxcyXFS2GF9u8JjdaPfKwlu1qpX3Ek5B3X+zmGgF+1WtmJH8QDHUKVR
+         POJW18jnNWqKlc9WV/y9wswfLzQAdORTjoBGt6wbLb+XQzz+YSA8YT8exQIamI1hKA
+         NgBZZqdAOIFcj5X4mKMcpOALzVECo4ayuE60g+CPH7CvPt6lSOfmFpWRNnpn+wYPF4
+         P6SqYrz3uRsFocaNWbLb6GRXp8TE8CKtYMYUEeB/QfMAnGJ7U/FZrL/hYqxDE0ryBG
+         /8/mtlXRqGs0pBJCO5WKEQDm1lzWRXt40l8YPyEBjUBm/McmvG1Iafbx2EfRhysC43
+         vKIF2BpJNTxkposUCWaXgJuoNekulC6f7wlHUlNkNooeQHpAKXYuClI/ikmvCrnCff
+         Vy/fK7azMrun4S9M5k0UdX9IUayiM9Y1AVv1iAHjIJrMhP8ELgeNkTypKa35MyJMjx
+         LmIQVy3zVwlAOW1mMnZhrLapo90FKO26dOcJq140LOTx0ZahhIuR6KISKy+FuwYBfp
+         cNemDFNeNEkfGRWxw0VhCsOArzkI9iJJSDwhVYx2DI4O1xJX2kFEObBeq4rx25ClRK
+         PDCjVeuymuPU3aUBQKrJtdTxur1fcbH6SvSnl3OKtvCVGly9Za8zstBXG1KdRUNuvp
+         kOJclMVcOxeDGLfkA1Mcr7AQ=
+Received: from Hawking (ntp.lan [10.0.1.1])
+        (authenticated bits=0)
+        by mail2.nmnhosting.com (8.15.2/8.15.2) with ESMTPSA id x4D7ZjC4057687
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 13 May 2019 17:35:46 +1000 (AEST)
+        (envelope-from alastair@d-silva.org)
+From:   "Alastair D'Silva" <alastair@d-silva.org>
+To:     "'Geert Uytterhoeven'" <geert@linux-m68k.org>,
+        "'Alastair D'Silva'" <alastair@au1.ibm.com>
+Cc:     "'Jani Nikula'" <jani.nikula@linux.intel.com>,
+        "'Joonas Lahtinen'" <joonas.lahtinen@linux.intel.com>,
+        "'Rodrigo Vivi'" <rodrigo.vivi@intel.com>,
+        "'David Airlie'" <airlied@linux.ie>,
+        "'Daniel Vetter'" <daniel@ffwll.ch>,
+        "'Dan Carpenter'" <dan.carpenter@oracle.com>,
+        "'Karsten Keil'" <isdn@linux-pingi.de>,
+        "'Jassi Brar'" <jassisinghbrar@gmail.com>,
+        "'Tom Lendacky'" <thomas.lendacky@amd.com>,
+        "'David S. Miller'" <davem@davemloft.net>,
+        "'Jose Abreu'" <Jose.Abreu@synopsys.com>,
+        "'Kalle Valo'" <kvalo@codeaurora.org>,
+        "'Stanislaw Gruszka'" <sgruszka@redhat.com>,
+        "'Benson Leung'" <bleung@chromium.org>,
+        "'Enric Balletbo i Serra'" <enric.balletbo@collabora.com>,
+        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
+        "'Martin K. Petersen'" <martin.petersen@oracle.com>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        "'Alexander Viro'" <viro@zeniv.linux.org.uk>,
+        "'Petr Mladek'" <pmladek@suse.com>,
+        "'Sergey Senozhatsky'" <sergey.senozhatsky@gmail.com>,
+        "'Steven Rostedt'" <rostedt@goodmis.org>,
+        "'David Laight'" <David.Laight@aculab.com>,
+        "'Andrew Morton'" <akpm@linux-foundation.org>,
+        "'Intel Graphics Development'" <intel-gfx@lists.freedesktop.org>,
+        "'DRI Development'" <dri-devel@lists.freedesktop.org>,
+        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>,
+        "'netdev'" <netdev@vger.kernel.org>, <ath10k@lists.infradead.org>,
+        "'linux-wireless'" <linux-wireless@vger.kernel.org>,
+        "'scsi'" <linux-scsi@vger.kernel.org>,
+        "'Linux Fbdev development list'" <linux-fbdev@vger.kernel.org>,
+        "'driverdevel'" <devel@driverdev.osuosl.org>,
+        "'Linux FS Devel'" <linux-fsdevel@vger.kernel.org>
+References: <20190508070148.23130-1-alastair@au1.ibm.com> <20190508070148.23130-4-alastair@au1.ibm.com> <CAMuHMdVefYTgHzGKBc0ebku1z8V3wsM0ydN+6-S2nFKaB8eH_Q@mail.gmail.com>
+In-Reply-To: <CAMuHMdVefYTgHzGKBc0ebku1z8V3wsM0ydN+6-S2nFKaB8eH_Q@mail.gmail.com>
+Subject: RE: [PATCH v2 3/7] lib/hexdump.c: Optionally suppress lines of repeated bytes
+Date:   Mon, 13 May 2019 17:35:47 +1000
+Message-ID: <04de01d5095e$7f6af730$7e40e590$@d-silva.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190510212335.14728-2-linux@zary.sk>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-au
+Thread-Index: AQGz7QD7bMLLz3XdMyQiMIIzLY+D4AJkmwv+AXBy99KmjDiokA==
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail2.nmnhosting.com [10.0.1.20]); Mon, 13 May 2019 17:35:53 +1000 (AEST)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, May 10, 2019 at 11:23:35PM +0200, Ondrej Zary wrote:
-> Add Future Domain 16xx ISA SCSI support card support.
-> 
-> Tested on IBM 92F0330 card (18C50 chip) with v1.00 BIOS.
+> -----Original Message-----
+> From: Geert Uytterhoeven <geert@linux-m68k.org>
+> Sent: Monday, 13 May 2019 5:01 PM
+> To: Alastair D'Silva <alastair@au1.ibm.com>
+> Cc: alastair@d-silva.org; Jani Nikula <jani.nikula@linux.intel.com>; =
+Joonas
+> Lahtinen <joonas.lahtinen@linux.intel.com>; Rodrigo Vivi
+> <rodrigo.vivi@intel.com>; David Airlie <airlied@linux.ie>; Daniel =
+Vetter
+> <daniel@ffwll.ch>; Dan Carpenter <dan.carpenter@oracle.com>; Karsten
+> Keil <isdn@linux-pingi.de>; Jassi Brar <jassisinghbrar@gmail.com>; Tom
+> Lendacky <thomas.lendacky@amd.com>; David S. Miller
+> <davem@davemloft.net>; Jose Abreu <Jose.Abreu@synopsys.com>; Kalle
+> Valo <kvalo@codeaurora.org>; Stanislaw Gruszka <sgruszka@redhat.com>;
+> Benson Leung <bleung@chromium.org>; Enric Balletbo i Serra
+> <enric.balletbo@collabora.com>; James E.J. Bottomley
+> <jejb@linux.ibm.com>; Martin K. Petersen <martin.petersen@oracle.com>;
+> Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Alexander Viro
+> <viro@zeniv.linux.org.uk>; Petr Mladek <pmladek@suse.com>; Sergey
+> Senozhatsky <sergey.senozhatsky@gmail.com>; Steven Rostedt
+> <rostedt@goodmis.org>; David Laight <David.Laight@aculab.com>; Andrew
+> Morton <akpm@linux-foundation.org>; Intel Graphics Development <intel-
+> gfx@lists.freedesktop.org>; DRI Development <dri-
+> devel@lists.freedesktop.org>; Linux Kernel Mailing List <linux-
+> kernel@vger.kernel.org>; netdev <netdev@vger.kernel.org>;
+> ath10k@lists.infradead.org; linux-wireless =
+<linux-wireless@vger.kernel.org>;
+> scsi <linux-scsi@vger.kernel.org>; Linux Fbdev development list =
+<linux-
+> fbdev@vger.kernel.org>; driverdevel <devel@driverdev.osuosl.org>; =
+Linux
+> FS Devel <linux-fsdevel@vger.kernel.org>
+> Subject: Re: [PATCH v2 3/7] lib/hexdump.c: Optionally suppress lines =
+of
+> repeated bytes
+>=20
+> Hi Alastair,
+>=20
+> Thanks for your patch!
 
-Where did you find that thing? :)
+And thanks for your politeness :)
 
-> 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+>=20
+> On Wed, May 8, 2019 at 9:04 AM Alastair D'Silva <alastair@au1.ibm.com>
+> wrote:
+> > From: Alastair D'Silva <alastair@d-silva.org>
+> >
+> > Some buffers may only be partially filled with useful data, while =
+the
+> > rest is padded (typically with 0x00 or 0xff).
+> >
+> > This patch introduces a flag to allow the supression of lines of
+> > repeated bytes,
+>=20
+> Given print_hex_dump() operates on entities of groupsize (1, 2, 4, or =
+8)
+> bytes, wouldn't it make more sense to consider repeated groups instead =
+of
+> repeated bytes?
 
-The driver looks fine to me:
+Maybe, it would mean that subsequent addresses may not be a multiple of =
+rowsize though, which is useful.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+> > which are replaced with '** Skipped %u bytes of value 0x%x **'
+>=20
+> Using a custom message instead of just "*", like "hexdump" uses, will =
+require
+> preprocessing the output when recovering the original binary data by
+> feeding it to e.g. "xxd".
+> This may sound worse than it is, though, as I never got "xxd" to work =
+without
+> preprocessing anyway ;-)
+
+I think showing the details of the skipped values is useful when reading =
+the output directly. In situations where binary extracts are desired, =
+the feature can always be disabled.
+
+--=20
+Alastair D'Silva           mob: 0423 762 819
+skype: alastair_dsilva     msn: alastair@d-silva.org
+blog: http://alastair.d-silva.org    Twitter: @EvilDeece
+
+
+
