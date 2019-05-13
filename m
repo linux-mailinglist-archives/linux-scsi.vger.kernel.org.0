@@ -2,174 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBC21B140
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 09:36:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 125701B5B7
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 14:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbfEMHf7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 May 2019 03:35:59 -0400
-Received: from ushosting.nmnhosting.com ([66.55.73.32]:37960 "EHLO
-        ushosting.nmnhosting.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727347AbfEMHf7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 May 2019 03:35:59 -0400
-Received: from mail2.nmnhosting.com (unknown [202.169.106.97])
-        by ushosting.nmnhosting.com (Postfix) with ESMTPS id 231832DC0069;
-        Mon, 13 May 2019 03:35:57 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=d-silva.org;
-        s=201810a; t=1557732958;
-        bh=aa+i95blYOSxhGwoRx9zFnMo5oG4XUfXT748BNmFJIU=;
-        h=From:To:Cc:References:In-Reply-To:Subject:Date:From;
-        b=aSet9rLYykQxcyXFS2GF9u8JjdaPfKwlu1qpX3Ek5B3X+zmGgF+1WtmJH8QDHUKVR
-         POJW18jnNWqKlc9WV/y9wswfLzQAdORTjoBGt6wbLb+XQzz+YSA8YT8exQIamI1hKA
-         NgBZZqdAOIFcj5X4mKMcpOALzVECo4ayuE60g+CPH7CvPt6lSOfmFpWRNnpn+wYPF4
-         P6SqYrz3uRsFocaNWbLb6GRXp8TE8CKtYMYUEeB/QfMAnGJ7U/FZrL/hYqxDE0ryBG
-         /8/mtlXRqGs0pBJCO5WKEQDm1lzWRXt40l8YPyEBjUBm/McmvG1Iafbx2EfRhysC43
-         vKIF2BpJNTxkposUCWaXgJuoNekulC6f7wlHUlNkNooeQHpAKXYuClI/ikmvCrnCff
-         Vy/fK7azMrun4S9M5k0UdX9IUayiM9Y1AVv1iAHjIJrMhP8ELgeNkTypKa35MyJMjx
-         LmIQVy3zVwlAOW1mMnZhrLapo90FKO26dOcJq140LOTx0ZahhIuR6KISKy+FuwYBfp
-         cNemDFNeNEkfGRWxw0VhCsOArzkI9iJJSDwhVYx2DI4O1xJX2kFEObBeq4rx25ClRK
-         PDCjVeuymuPU3aUBQKrJtdTxur1fcbH6SvSnl3OKtvCVGly9Za8zstBXG1KdRUNuvp
-         kOJclMVcOxeDGLfkA1Mcr7AQ=
-Received: from Hawking (ntp.lan [10.0.1.1])
-        (authenticated bits=0)
-        by mail2.nmnhosting.com (8.15.2/8.15.2) with ESMTPSA id x4D7ZjC4057687
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 13 May 2019 17:35:46 +1000 (AEST)
-        (envelope-from alastair@d-silva.org)
-From:   "Alastair D'Silva" <alastair@d-silva.org>
-To:     "'Geert Uytterhoeven'" <geert@linux-m68k.org>,
-        "'Alastair D'Silva'" <alastair@au1.ibm.com>
-Cc:     "'Jani Nikula'" <jani.nikula@linux.intel.com>,
-        "'Joonas Lahtinen'" <joonas.lahtinen@linux.intel.com>,
-        "'Rodrigo Vivi'" <rodrigo.vivi@intel.com>,
-        "'David Airlie'" <airlied@linux.ie>,
-        "'Daniel Vetter'" <daniel@ffwll.ch>,
-        "'Dan Carpenter'" <dan.carpenter@oracle.com>,
-        "'Karsten Keil'" <isdn@linux-pingi.de>,
-        "'Jassi Brar'" <jassisinghbrar@gmail.com>,
-        "'Tom Lendacky'" <thomas.lendacky@amd.com>,
-        "'David S. Miller'" <davem@davemloft.net>,
-        "'Jose Abreu'" <Jose.Abreu@synopsys.com>,
-        "'Kalle Valo'" <kvalo@codeaurora.org>,
-        "'Stanislaw Gruszka'" <sgruszka@redhat.com>,
-        "'Benson Leung'" <bleung@chromium.org>,
-        "'Enric Balletbo i Serra'" <enric.balletbo@collabora.com>,
-        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
-        "'Martin K. Petersen'" <martin.petersen@oracle.com>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
-        "'Alexander Viro'" <viro@zeniv.linux.org.uk>,
-        "'Petr Mladek'" <pmladek@suse.com>,
-        "'Sergey Senozhatsky'" <sergey.senozhatsky@gmail.com>,
-        "'Steven Rostedt'" <rostedt@goodmis.org>,
-        "'David Laight'" <David.Laight@aculab.com>,
-        "'Andrew Morton'" <akpm@linux-foundation.org>,
-        "'Intel Graphics Development'" <intel-gfx@lists.freedesktop.org>,
-        "'DRI Development'" <dri-devel@lists.freedesktop.org>,
-        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>,
-        "'netdev'" <netdev@vger.kernel.org>, <ath10k@lists.infradead.org>,
-        "'linux-wireless'" <linux-wireless@vger.kernel.org>,
-        "'scsi'" <linux-scsi@vger.kernel.org>,
-        "'Linux Fbdev development list'" <linux-fbdev@vger.kernel.org>,
-        "'driverdevel'" <devel@driverdev.osuosl.org>,
-        "'Linux FS Devel'" <linux-fsdevel@vger.kernel.org>
-References: <20190508070148.23130-1-alastair@au1.ibm.com> <20190508070148.23130-4-alastair@au1.ibm.com> <CAMuHMdVefYTgHzGKBc0ebku1z8V3wsM0ydN+6-S2nFKaB8eH_Q@mail.gmail.com>
-In-Reply-To: <CAMuHMdVefYTgHzGKBc0ebku1z8V3wsM0ydN+6-S2nFKaB8eH_Q@mail.gmail.com>
-Subject: RE: [PATCH v2 3/7] lib/hexdump.c: Optionally suppress lines of repeated bytes
-Date:   Mon, 13 May 2019 17:35:47 +1000
-Message-ID: <04de01d5095e$7f6af730$7e40e590$@d-silva.org>
+        id S1729810AbfEMMUQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 May 2019 08:20:16 -0400
+Received: from mail-vs1-f54.google.com ([209.85.217.54]:43667 "EHLO
+        mail-vs1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727414AbfEMMUQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 May 2019 08:20:16 -0400
+Received: by mail-vs1-f54.google.com with SMTP id d128so7823331vsc.10
+        for <linux-scsi@vger.kernel.org>; Mon, 13 May 2019 05:20:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=t/fi2HyAjAx3eHLPrOFyeMntv5XS+3pxj6iTsfdNI3o=;
+        b=GPjKUKZdszOcJMgD4jo4zKTA6D7QQLlBQiQnCVkvPIEoRerCUbISG+DyJFFGyMxeqY
+         UtEWbo5MFo7vlQdyo1nPCF00jZnUGhWkgPQ38EyVCsG/RKQUV51lOLPAnwNSIIvDKLgL
+         noVWnkiCeMOOImbcVt4Z07sAh9YYPuZ1wRlysf4T8jwuZX9J45Ic3Cg2JE325mOEhLTe
+         /IzK5TxbFEf2lc2pqCKoMd6WAxmCA1BnMPyRtYa0wEZ73aKU5GTE753RhuWVPTd95x+Q
+         Awbahn1pYgUDwpOgJlt79E8Yhnl4xh00fmLT8dybEUA0kpiRBUgbUYSG1SQDCRbe8HYy
+         I2rA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=t/fi2HyAjAx3eHLPrOFyeMntv5XS+3pxj6iTsfdNI3o=;
+        b=IPG/r92kss8c260m6cUndKGeKlYfLvMuWPWC3WTziwZxjhr/PVGL71qDvfC7tfE96N
+         /QflnZiGecVopkv/Ekb8p/P017cWeF5xn34XTt0b6Dl7sX5IXFprtZpWZxYeF7DNzPk0
+         Bv0Zxh9ncfS0yse6fXYHgz+fSJprLxUHQ8YOb6MG5EnpUrTJOliPO21SwMKWEoHFTju1
+         JDSjXqLKYQTc/AJUCbOaLhe8dgzrE6qSth2fHw8sON2akL4V9ZcyTyBt2IgrVC7rhhdf
+         /oR9WYhjYitItcdW7/reScCPa5zTmdQeBt6z3vJt/owU+z8mn06B66q34FPXposV1ScN
+         UZfA==
+X-Gm-Message-State: APjAAAXBg9mE2yXipi2w5hQZQC8bwGo/WI2XnB5vSJjLDTg8/aKGyc6V
+        ijjwVJ8mF8IFYFEq1XAIc0nAS53a3p9Gnmpzlw==
+X-Google-Smtp-Source: APXvYqy62UtkaZWfHmI7O3u8wSSMXkiUJ4ufu6NcMFA8bboo9nWgmv3TcvYGIM5vMk2K5v5ju3Ru2kZ7EE0JR/sY4qk=
+X-Received: by 2002:a67:eb14:: with SMTP id a20mr5148731vso.151.1557750015147;
+ Mon, 13 May 2019 05:20:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-au
-Thread-Index: AQGz7QD7bMLLz3XdMyQiMIIzLY+D4AJkmwv+AXBy99KmjDiokA==
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail2.nmnhosting.com [10.0.1.20]); Mon, 13 May 2019 17:35:53 +1000 (AEST)
+References: <CAP8WD_be_3=iHDpMYL+fKEFW6BbG8s=0TUPVm4ojiS7orOr0zA@mail.gmail.com>
+ <20190513070218.GA25920@infradead.org>
+In-Reply-To: <20190513070218.GA25920@infradead.org>
+Reply-To: whiteheadm@acm.org
+From:   tedheadster <tedheadster@gmail.com>
+Date:   Mon, 13 May 2019 08:20:03 -0400
+Message-ID: <CAP8WD_ZuOHn2VWjgYr-rLBd7Lm33nTvCvu7WKqW_0gfzqbbCLQ@mail.gmail.com>
+Subject: Re: Poor SWIOTLB Performance with HIGHMEM64G
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Whitehead <whiteheadm@acm.org>, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> -----Original Message-----
-> From: Geert Uytterhoeven <geert@linux-m68k.org>
-> Sent: Monday, 13 May 2019 5:01 PM
-> To: Alastair D'Silva <alastair@au1.ibm.com>
-> Cc: alastair@d-silva.org; Jani Nikula <jani.nikula@linux.intel.com>; =
-Joonas
-> Lahtinen <joonas.lahtinen@linux.intel.com>; Rodrigo Vivi
-> <rodrigo.vivi@intel.com>; David Airlie <airlied@linux.ie>; Daniel =
-Vetter
-> <daniel@ffwll.ch>; Dan Carpenter <dan.carpenter@oracle.com>; Karsten
-> Keil <isdn@linux-pingi.de>; Jassi Brar <jassisinghbrar@gmail.com>; Tom
-> Lendacky <thomas.lendacky@amd.com>; David S. Miller
-> <davem@davemloft.net>; Jose Abreu <Jose.Abreu@synopsys.com>; Kalle
-> Valo <kvalo@codeaurora.org>; Stanislaw Gruszka <sgruszka@redhat.com>;
-> Benson Leung <bleung@chromium.org>; Enric Balletbo i Serra
-> <enric.balletbo@collabora.com>; James E.J. Bottomley
-> <jejb@linux.ibm.com>; Martin K. Petersen <martin.petersen@oracle.com>;
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Alexander Viro
-> <viro@zeniv.linux.org.uk>; Petr Mladek <pmladek@suse.com>; Sergey
-> Senozhatsky <sergey.senozhatsky@gmail.com>; Steven Rostedt
-> <rostedt@goodmis.org>; David Laight <David.Laight@aculab.com>; Andrew
-> Morton <akpm@linux-foundation.org>; Intel Graphics Development <intel-
-> gfx@lists.freedesktop.org>; DRI Development <dri-
-> devel@lists.freedesktop.org>; Linux Kernel Mailing List <linux-
-> kernel@vger.kernel.org>; netdev <netdev@vger.kernel.org>;
-> ath10k@lists.infradead.org; linux-wireless =
-<linux-wireless@vger.kernel.org>;
-> scsi <linux-scsi@vger.kernel.org>; Linux Fbdev development list =
-<linux-
-> fbdev@vger.kernel.org>; driverdevel <devel@driverdev.osuosl.org>; =
-Linux
-> FS Devel <linux-fsdevel@vger.kernel.org>
-> Subject: Re: [PATCH v2 3/7] lib/hexdump.c: Optionally suppress lines =
-of
-> repeated bytes
->=20
-> Hi Alastair,
->=20
-> Thanks for your patch!
-
-And thanks for your politeness :)
-
->=20
-> On Wed, May 8, 2019 at 9:04 AM Alastair D'Silva <alastair@au1.ibm.com>
-> wrote:
-> > From: Alastair D'Silva <alastair@d-silva.org>
+On Mon, May 13, 2019 at 3:02 AM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Sun, May 12, 2019 at 02:55:48PM -0400, tedheadster wrote:
+> > Christoph,
+> >   On the same hardware (reboot with different kernel) I am getting
+> > _horrible_ disk I/O performance on the 5.1.1. kernel compiled on a
+> > 32-bit platform using HIGHMEM64G (PAE) to access 32GiB of physical
+> > memory.
 > >
-> > Some buffers may only be partially filled with useful data, while =
-the
-> > rest is padded (typically with 0x00 or 0xff).
-> >
-> > This patch introduces a flag to allow the supression of lines of
-> > repeated bytes,
->=20
-> Given print_hex_dump() operates on entities of groupsize (1, 2, 4, or =
-8)
-> bytes, wouldn't it make more sense to consider repeated groups instead =
-of
-> repeated bytes?
+> > The numbers are truly terrible to copy a 16GiB file from one disk to a
+> > different one:
+>
+> This sounds like your storage controller only supports 32-bit DMA.
+> In that case any memory above that will be bounce buffered, that
+> is copied from one piece of memory to another, which in addition
+> to the copying will also create memory pressure.
 
-Maybe, it would mean that subsequent addresses may not be a multiple of =
-rowsize though, which is useful.
+I have this SATA controller (using ahci kernel driver):
 
-> > which are replaced with '** Skipped %u bytes of value 0x%x **'
->=20
-> Using a custom message instead of just "*", like "hexdump" uses, will =
-require
-> preprocessing the output when recovering the original binary data by
-> feeding it to e.g. "xxd".
-> This may sound worse than it is, though, as I never got "xxd" to work =
-without
-> preprocessing anyway ;-)
+ SATA controller [0106]: Intel Corporation C610/X99 series chipset
+sSATA Controller [AHCI mode] [8086:8d62] (rev 05)
 
-I think showing the details of the skipped values is useful when reading =
-the output directly. In situations where binary extracts are desired, =
-the feature can always be disabled.
+> What storage controller do you use?  Also if the CPU is 64-bit
+> capable you really should use a 64-bit kernel with 32-bit userspace
+> for a setup like that, as the VM folks do not spend any effort on
+> optimizing large highmem setups.
 
---=20
-Alastair D'Silva           mob: 0423 762 819
-skype: alastair_dsilva     msn: alastair@d-silva.org
-blog: http://alastair.d-silva.org    Twitter: @EvilDeece
+I guess my request is for the VM folks to _indeed_ spend some effort
+optimizing large highmem setups because a 700% slowdown should be
+embarrassing. Who should I ask in that team about this?
 
+I do have 64-bit hardware but I regrettably have to run it in 32-bit
+mode with PAE support to access highmem64g memory.
 
-
+- Matthew
