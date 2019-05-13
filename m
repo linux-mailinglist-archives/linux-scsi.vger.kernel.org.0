@@ -2,75 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 818EC1BECC
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 22:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48181BF7E
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 00:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbfEMUpo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 May 2019 16:45:44 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39140 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726179AbfEMUpo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 13 May 2019 16:45:44 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 4F0E913A82;
-        Mon, 13 May 2019 20:45:44 +0000 (UTC)
-Received: from emilne (unknown [10.18.25.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 73C08600C6;
-        Mon, 13 May 2019 20:45:43 +0000 (UTC)
-Message-ID: <ca15a1a0ff4d530d991ea310ecbc885f1588b16e.camel@redhat.com>
-Subject: Re: [PATCH] qla2xxx: always allocate qla_tgt_wq
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <himanshu.madhani@marvell.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-Date:   Mon, 13 May 2019 16:45:42 -0400
-In-Reply-To: <85494ec8-b20a-621e-25f8-cf4a069d7855@acm.org>
-References: <20190509131821.87338-1-hare@suse.de>
-         <1df9eb38-8ff9-bf21-4a49-4190eea9f2b4@acm.org>
-         <aa620cdf3f987107656adab7e4825d3ca583ee09.camel@redhat.com>
-         <85494ec8-b20a-621e-25f8-cf4a069d7855@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Mon, 13 May 2019 20:45:44 +0000 (UTC)
+        id S1726581AbfEMWbp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 May 2019 18:31:45 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:44628 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726475AbfEMWbp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 May 2019 18:31:45 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4DMSrYO015738;
+        Mon, 13 May 2019 22:31:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=EYCIybkCpMm3pCwu4oudEmfn7i5k7APcg1IEb3ENHxk=;
+ b=AYF6gBPqGPJh4ulnlyD6RkiDTqj5MuHvvFC5Wgh2VYalZ5ub1oYR6Rqrf1cZ46Z+CkKT
+ xWtbuhH2TjDJDFdr7bhwrl6YEaOsFuCs6o3oCuiwCTp3mA6vYiesmcADgbMggqLW+4qS
+ A6NTn0qcLzKriWW/MWgKO8/DX1cRRjVT8eAI662RNYZdxHzTYuqx69CaDDz3HzsCdDsi
+ 7FKl+QnjJvTFWxZ8z4SD09snE6KXkPw5mx/P3Abp1ezo1EtDZQE9YXO+0WQA8epmPWzE
+ TwkYtwu/+alm3IkzLIQdgqOEKwJGOsteMils2+wJf07eJW2+oXzFZ2n1192tAmcT5w2K Kw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 2sdkwdjath-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 May 2019 22:31:34 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4DMVGAq033012;
+        Mon, 13 May 2019 22:31:33 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2sdmear9qg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 May 2019 22:31:33 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4DMVWLd015595;
+        Mon, 13 May 2019 22:31:32 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 13 May 2019 15:31:32 -0700
+To:     Yue Haibing <yuehaibing@huawei.com>
+Cc:     <QLogic-Storage-Upstream@cavium.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <mojha@codeaurora.org>,
+        <skashyap@marvell.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+Subject: Re: [PATCH] scsi: qedi: remove memset/memcpy to nfunc and use func instead
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190412094829.15868-1-colin.king@canonical.com>
+        <20190420040554.41888-1-yuehaibing@huawei.com>
+Date:   Mon, 13 May 2019 18:31:29 -0400
+In-Reply-To: <20190420040554.41888-1-yuehaibing@huawei.com> (Yue Haibing's
+        message of "Sat, 20 Apr 2019 12:05:54 +0800")
+Message-ID: <yq1d0kmgf5q.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9256 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=692
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905130150
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9256 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=744 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905130150
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-05-09 at 15:55 -0700, Bart Van Assche wrote:
-> On 5/9/19 11:58 AM, Ewan D. Milne wrote:
-> > On Thu, 2019-05-09 at 07:06 -0700, Bart Van Assche wrote:
-> > > On 5/9/19 6:18 AM, Hannes Reinecke wrote:
-> > > > The 'qla_tgt_wq' workqueue is used for generic command aborts,
-> > > > not just target-related functions. So allocate the workqueue
-> > > > always to avoid a kernel crash when aborting commands.
-> > > 
-> > > Can the abort code be called directly? This means not queueing the abort
-> > > work? Do you perhaps know why the target workqueue is used for
-> > > processing aborts? In other words, can the abort functions be modified
-> > > to use one of the system workqueues instead of always allocating the
-> > > target workqueue?
-> > 
-> > How exactly is the qla_tgt_wq used for generic command aborts?
-> > Do you mean initiator mode aborts from the SCSI EH calls?  Those look
-> > like they issue mailbox commands to the HBA directly.
-> > Or do we get frames received even if we are not using target mode or something?
-> 
-> Hi Ewan,
-> 
-> To me your questions seem like questions about the original patch. Are
-> your questions perhaps intended for Hannes?
-> 
-> Bart.
 
-Yes, you are correct, sorry I responded to the wrong msg in the thread.
+Yue,
 
--Ewan
+> KASAN report this:
+>
+> BUG: KASAN: global-out-of-bounds in qedi_dbg_err+0xda/0x330 [qedi]
+> Read of size 31 at addr ffffffffc12b0ae0 by task syz-executor.0/2429
 
+Applied to 5.2/scsi-queue. Thanks!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
