@@ -2,203 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5931BD04
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 20:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 193F61BD19
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 May 2019 20:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbfEMSLF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 May 2019 14:11:05 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:35082 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726302AbfEMSLF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 13 May 2019 14:11:05 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4DI7Spo031815;
-        Mon, 13 May 2019 11:10:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=nbrBNlmFtPF9kwO1XWxQySNJRpuKf+iDMzw2OKQ3uNU=;
- b=qeb4Kqn2bqmoaK9WrLUaepV16f5eXneqmuT2besCke98lTjoxMzoIZ1HdfMnz+gdF4hR
- rG9Vs/jfCIvGbsrIBKr0e5fTJqoCgOv8Wf57y6Is2ncOseMobWuNyEHtNhn/m4ILaIQM
- k3W1quZEc68sqjc9WMnV2xfLGetnyK96IUr63290EYKqQkQ5E8GLKGOwd/aKFSnLZYxR
- hs1GXc+DgZQBzL2C3scV72Y4WL7NJDBxBGnMFUWBuhyiCgltJm7tjJlegLj8rS2UOdWK
- NRlM7ipF1DpLlLsndicBjTu3u61j0MqSiPduSjS4Xk1BYqT3orx2RrN4+PQBQ+poiBrL uQ== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2sf8bw9p03-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 13 May 2019 11:10:59 -0700
-Received: from SC-EXCH04.marvell.com (10.93.176.84) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 13 May
- 2019 11:10:58 -0700
-Received: from NAM04-CO1-obe.outbound.protection.outlook.com (104.47.45.53) by
- SC-EXCH04.marvell.com (10.93.176.84) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Mon, 13 May 2019 11:10:58 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector1-marvell-com;
+        id S1726510AbfEMSVg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 May 2019 14:21:36 -0400
+Received: from mail-eopbgr760058.outbound.protection.outlook.com ([40.107.76.58]:6484
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726370AbfEMSVg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 May 2019 14:21:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nbrBNlmFtPF9kwO1XWxQySNJRpuKf+iDMzw2OKQ3uNU=;
- b=KVDysSoxcgzS/3YChC1JcQ06VgTRr7rpnw5GPZcFsWYJMqaGsZgXc7YDNBSkwHlTmtbbf1hRyEYXYUEuuT832kYN2tpuzVEEdZyGOYHE3YAFlheqv1+tASU+qo2SyXqzylTdzbdyjxWJ27X2PK2midYaA7I2h3j6zE/vwLFo43Y=
-Received: from MN2PR18MB2719.namprd18.prod.outlook.com (20.178.255.156) by
- MN2PR18MB3280.namprd18.prod.outlook.com (10.255.237.145) with Microsoft SMTP
+ bh=8z+Mn+lb73jmCGFVT1Pk/z//+SLoGgNMe99zjJuR7Q8=;
+ b=sK3HLb3cuMqVBE9El25ZGrDXGs/TS4n/FZylNfxPHNz3so9rU8hBeQh33WEzuBnrqp1esAIqYryOK/NnSvupWiMuuZFfXYdzU+ovwScyjPO/sPEhcCjocMx5bNKcrCW38IMpzcrxcYhDN/huxxtQmwrNdn2xKNPN4ul7h88pPjg=
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.31.141) by
+ BN7PR08MB5537.namprd08.prod.outlook.com (20.176.29.80) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.22; Mon, 13 May 2019 18:10:53 +0000
-Received: from MN2PR18MB2719.namprd18.prod.outlook.com
- ([fe80::2832:6a5a:6da7:3e2a]) by MN2PR18MB2719.namprd18.prod.outlook.com
- ([fe80::2832:6a5a:6da7:3e2a%2]) with mapi id 15.20.1878.024; Mon, 13 May 2019
- 18:10:53 +0000
-From:   Himanshu Madhani <hmadhani@marvell.com>
-To:     "Ewan D. Milne" <emilne@redhat.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH 1/2] qla2xxx: Fix Crash due to NULL pointer
- access in qla2x00_sysfs_read_optrom()
-Thread-Topic: [EXT] Re: [PATCH 1/2] qla2xxx: Fix Crash due to NULL pointer
- access in qla2x00_sysfs_read_optrom()
-Thread-Index: AQHVBE3Lb21X9Xne0EOx7Hr/zRpnaaZhXxWAgAeRW4A=
-Date:   Mon, 13 May 2019 18:10:52 +0000
-Message-ID: <0061FEEA-7896-46DA-BD4B-A66FF193BF2F@marvell.com>
-References: <20190506205219.7842-1-hmadhani@marvell.com>
- <20190506205219.7842-2-hmadhani@marvell.com>
- <9eccdec2bf0f3662685bd551fa619e0c35f4ee39.camel@redhat.com>
-In-Reply-To: <9eccdec2bf0f3662685bd551fa619e0c35f4ee39.camel@redhat.com>
-Accept-Language: en-US
+ 15.20.1878.25; Mon, 13 May 2019 18:21:23 +0000
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::8d6c:f350:4859:e532]) by BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::8d6c:f350:4859:e532%4]) with mapi id 15.20.1878.024; Mon, 13 May 2019
+ 18:21:23 +0000
+From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
+To:     Stanley Chu <stanley.chu@mediatek.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
+CC:     "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
+        "sayalil@codeaurora.org" <sayalil@codeaurora.org>,
+        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
+        "vivek.gautam@codeaurora.org" <vivek.gautam@codeaurora.org>,
+        "evgreen@chromium.org" <evgreen@chromium.org>
+Subject: RE: [EXT] [PATCH v1 2/3] scsi: ufs: add error handling of
+ auto-hibern8
+Thread-Topic: [EXT] [PATCH v1 2/3] scsi: ufs: add error handling of
+ auto-hibern8
+Thread-Index: AQHVCZlJG8f+B7maOUSAPf/KvWjoI6ZpV6KQ
+Date:   Mon, 13 May 2019 18:21:23 +0000
+Message-ID: <BN7PR08MB568438668FC7C90A1284F53DDB0F0@BN7PR08MB5684.namprd08.prod.outlook.com>
+References: <1557758186-18706-1-git-send-email-stanley.chu@mediatek.com>
+ <1557758186-18706-3-git-send-email-stanley.chu@mediatek.com>
+In-Reply-To: <1557758186-18706-3-git-send-email-stanley.chu@mediatek.com>
+Accept-Language: en-150, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [199.233.58.37]
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=beanhuo@micron.com; 
+x-originating-ip: [165.225.80.131]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0b0a32c6-173e-4d29-2798-08d6d7ce5652
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:MN2PR18MB3280;
-x-ms-traffictypediagnostic: MN2PR18MB3280:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <MN2PR18MB3280C6FA5F6EE94371E22054D60F0@MN2PR18MB3280.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
+x-ms-office365-filtering-correlation-id: 5e905364-6b9e-4550-d84d-08d6d7cfce30
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BN7PR08MB5537;
+x-ms-traffictypediagnostic: BN7PR08MB5537:|BN7PR08MB5537:
+x-microsoft-antispam-prvs: <BN7PR08MB553757C2B02303588760BB9EDB0F0@BN7PR08MB5537.namprd08.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
 x-forefront-prvs: 0036736630
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(346002)(136003)(376002)(366004)(39860400002)(189003)(199004)(478600001)(99286004)(966005)(68736007)(14454004)(5660300002)(486006)(2906002)(11346002)(476003)(446003)(305945005)(2616005)(82746002)(26005)(36756003)(186003)(81156014)(81166006)(8676002)(102836004)(8936002)(6506007)(256004)(71200400001)(71190400001)(83716004)(14444005)(7736002)(2501003)(6116002)(3846002)(76176011)(229853002)(66066001)(45080400002)(316002)(110136005)(6436002)(6486002)(73956011)(66946007)(66476007)(91956017)(76116006)(4326008)(66556008)(6246003)(64756008)(66446008)(25786009)(33656002)(2201001)(86362001)(6306002)(6512007)(53936002);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3280;H:MN2PR18MB2719.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: marvell.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(39860400002)(136003)(376002)(346002)(396003)(199004)(189003)(110136005)(99286004)(54906003)(229853002)(73956011)(9686003)(256004)(74316002)(66556008)(14444005)(66476007)(64756008)(66946007)(66446008)(2201001)(5660300002)(7416002)(4744005)(86362001)(7696005)(6506007)(76176011)(76116006)(4326008)(3846002)(6116002)(53936002)(66066001)(81166006)(81156014)(25786009)(102836004)(316002)(55016002)(8676002)(486006)(71200400001)(6436002)(52536014)(71190400001)(14454004)(55236004)(33656002)(11346002)(476003)(305945005)(2501003)(2906002)(68736007)(186003)(7736002)(446003)(8936002)(26005)(6246003)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB5537;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: micron.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: rXKIoTtU3VEpbyquvlzSgHcBRfoVyFeYPtJ8hKGwY7UtGiaEjO4X92hSaqdD5aF8kAzulvm3LN05X/XtqNvsTgc3VbStHIPLSl5e8T8hmR8mrK3I7xtpKSxe03xXPOVITnCa8ct/6SodVn7C0XULejbG+J8A9UQ+mfLIwmriMw0rxVlqV47WqXXdOnSVnTcuwsMmj5PuSZkv8kh5UAOcLx+IvDb9Zqk9M335B4ma1gPSGmr9+mkzj8W9Z62w8woRjLIOcK5tPvuDGNF351AOvIMJNDXeb/qUcxTCwegvxO3D07Yf+zeHEHAqBYoMumE8Mz9v8xxCCc+PHYll14ye4ToAM1Lhh+b1mMok4xbF5FQibUtuIpGnAdhq2BktbBK369pXpxP5Du8iXPrt9THxjdwQD6A8SUp+MqmhQBSbb0E=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <E336D1CF026644448162A1FF26CD73FA@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-microsoft-antispam-message-info: 6A+z/BY7l3S1p8EMS/pDKFxtSp1S5N3L524N7fxBTRSZtpBL8ni0j6/BsDr1sy/RiY2qP5Gvo/2L/qYDvEx/PWg/fYNyQ6TG+/NZHVYeIXTz1GtmmZjGFKlkuLU5MyNpucxPWYgnR8CS2Il3koCZpdKvgrO04zoz07MORhN2C8/W7hLmI31PqqQpoodEhIaVtOt1Gm/0VYvQ2jKscAkeXITG940YgrysBSUNCd1lPa6rYBhWFF/YQBl1VA5G7IfCbUyQr61zJ9nlWXydACmC8vwRWodfpBhyfvkr5OSA7pneMXZxMWJQ8NrWHIsMJPFSeKRRI2+wKMa2r0I3nrvwJUH1r653QyGCIvSTsDbJYL/E/KwwZj3Gh1ir7CsYz7NFCxs5/3bfnyW4xz2NPsr19B63ePQgPDt2rpmzvBzxTlw=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b0a32c6-173e-4d29-2798-08d6d7ce5652
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2019 18:10:52.9282
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e905364-6b9e-4550-d84d-08d6d7cfce30
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 May 2019 18:21:23.5594
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3280
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-13_10:,,
- signatures=0
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB5537
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgRXdhbiwgDQoNCg0K77u/T24gNS84LzE5LCA4OjM2IEFNLCAiRXdhbiBELiBNaWxuZSIgPGVt
-aWxuZUByZWRoYXQuY29tPiB3cm90ZToNCg0KICAgIEV4dGVybmFsIEVtYWlsDQogICAgDQogICAg
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLQ0KICAgIFNlZSBiZWxvdy4NCiAgICANCiAgICBPbiBNb24sIDIwMTktMDUt
-MDYgYXQgMTM6NTIgLTA3MDAsIEhpbWFuc2h1IE1hZGhhbmkgd3JvdGU6DQogICAgPiBGcm9tOiBR
-dWlubiBUcmFuIDxxdXRyYW5AbWFydmVsbC5jb20+DQogICAgPiANCiAgICA+IGNvbW1pdCBjNzcw
-MmI4YzIyNzEgKCJzY3NpOiBxbGEyeHh4OiBHZXQgbXV0ZXggbG9jayBiZWZvcmUgY2hlY2tpbmcN
-CiAgICA+IG9wdHJvbV9zdGF0ZSIpIGZpeGVkIGNyYXNoIHdoaWxlIHJlYWRpbmcgb3B0cm9tIGRh
-dGEgYnkgYWRkaW5nIG11dGV4DQogICAgPiBsb2NraW5nLiBIb3dldmVyLCB0aGVyZSBjYW4gYmUg
-c3RpbGwgY2FzZSB3aGVyZSBwcmV2aW91cyBXUklURSBmb3INCiAgICA+IG9wdHJvbSBidWZmZXIg
-ZmFpbGVkIGFuZCB0aGVuIHJlYWRfb3B0cm9tKCkgaXMgY2FsbGVkIHdpdGggTlVMTA0KICAgID4g
-b3B0cm9tX2J1ZmZlci4gVGhpcyBwYXRjaCBmaXhlcyBhY2Nlc3MgdG8gcmVhZCBvcHRyb20gZGF0
-YSBpZiB0aGUNCiAgICA+IGJ1ZmZlcnMgYXJlIE5VTEwuDQogICAgPiANCiAgICA+IGZvbGxvd2lu
-ZyBzdGFjayB0cmFjZSBpcyBzZWVuIGluIHRoZSBsb2cgZmlsZQ0KICAgID4gDQogICAgPiBbMzEz
-MDczNC42MzAzNTBdIEJVRzogdW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwgTlVMTCBwb2ludGVyIGRl
-cmVmZXJlbmNlIGF0ICAgICAgICAgICAobnVsbCkNCiAgICA+IFszMTMwNzM0LjYzMDM2Nl0gSVA6
-IFs8ZmZmZmZmZmY4MTI4NzUyNj5dIG1lbWNweSsweDYvMHgxMTANCiAgICA+IFszMTMwNzM0LjYz
-MDM3M10gUEdEIDANCiAgICA+IFszMTMwNzM0LjYzMDM3NF0gT29wczogMDAwMCBbIzFdIFNNUA0K
-ICAgID4gWzMxMzA3MzQuNjMwMzc1XSBNb2R1bGVzIGxpbmtlZCBpbjogaXNjc2lfdGFyZ2V0X21v
-ZCB0YXJnZXRfY29yZV9tb2QgY29uZmlnZnMgaXBfdnMgdGNwX2RpYWcgZGNjcF9kaWFnIGRjY3Ag
-aW5ldF9kaWFnIGZ1c2UgbmZzdjMgbmZzX2FjbCBuZnN2NCBhdXRoX3JwY2dzPg0KICAgID4gWzMx
-MzA3MzQuNjMwNDAxXSAgaHdtb24gZG1fbWlycm9yIGRtX3JlZ2lvbl9oYXNoIGRtX2xvZyBkbV9t
-b2QgaXB2NiBhdXRvZnM0IFtsYXN0IHVubG9hZGVkOiBlbWNwaW9jXQ0KICAgID4gWzMxMzA3MzQu
-NjMwNDA0XSBDUFUgOQ0KICAgID4gWzMxMzA3MzQuNjMwNDA3XSBQaWQ6IDE0NTEzLCBjb21tOiB1
-ZGV2YWRtIFRhaW50ZWQ6IFBGICAgICAgICAgIE8gMy44LjEzLTExOC4xMC4yLmVsN3Vlay54ODZf
-NjQgIzIgT3JhY2xlIENvcnBvcmF0aW9uIFNVTiBTRVJWRVIgWDQtMiAgICAgICAvQVNTWSxNQixY
-NC0yPg0KICAgID4gWzMxMzA3MzQuNjMwNDA5XSBSSVA6IDAwMTA6WzxmZmZmZmZmZjgxMjg3NTI2
-Pl0gIFs8ZmZmZmZmZmY4MTI4NzUyNj5dIG1lbWNweSsweDYvMHgxMTANCiAgICA+IFszMTMwNzM0
-LjYzMDQxMV0gUlNQOiAwMDE4OmZmZmY4ODAzNmM3YTNlNDggIEVGTEFHUzogMDAwMTAyMDYNCiAg
-ICA+IFszMTMwNzM0LjYzMDQxMV0gUkFYOiBmZmZmODgwMTA2YjBmMDAwIFJCWDogMDAwMDAwMDAw
-MDAwMTAwMCBSQ1g6IDAwMDAwMDAwMDAwMDEwMDANCiAgICA+IFszMTMwNzM0LjYzMDQxMl0gUkRY
-OiAwMDAwMDAwMDAwMDAxMDAwIFJTSTogMDAwMDAwMDAwMDAwMDAwMCBSREk6IGZmZmY4ODAxMDZi
-MGYwMDANCiAgICA+IFszMTMwNzM0LjYzMDQxM10gUkJQOiBmZmZmODgwMzZjN2EzZTY4IFIwODog
-MDAwMDAwMDAwMDAwMTAwMCBSMDk6IDAwMDAwMDAwMDAwMDAwMDcNCiAgICA+IFszMTMwNzM0LjYz
-MDQxNF0gUjEwOiAwMDAwMDAwMDAwMDAwMDA0IFIxMTogMDAwMDAwMDAwMDAwMDAwNSBSMTI6IGZm
-ZmY4ODAzNmM3YTNlNzgNCiAgICA+IFszMTMwNzM0LjYzMDQxNF0gUjEzOiAwMDAwMDAwMDAwMDAx
-MDAwIFIxNDogZmZmZjg4MWZjOTY5NDVlMCBSMTU6IGZmZmY4ODFmYzdlOTliYTgNCiAgICA+IFsz
-MTMwNzM0LjYzMDQxNV0gRlM6ICAwMDAwN2Y1ZTI0NTk0OGMwKDAwMDApIEdTOmZmZmY4ODFmZmYz
-MjAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMA0KICAgID4gWzMxMzA3MzQuNjMwNDE2
-XSBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzDQogICAg
-PiBbMzEzMDczNC42MzA0MTddIENSMjogMDAwMDAwMDAwMDAwMDAwMCBDUjM6IDAwMDAwMDAxMDZh
-ODgwMDAgQ1I0OiAwMDAwMDAwMDAwMTQwN2UwDQogICAgPiBbMzEzMDczNC42MzA0MThdIERSMDog
-MDAwMDAwMDAwMDAwMDAwMCBEUjE6IDAwMDAwMDAwMDAwMDAwMDAgRFIyOiAwMDAwMDAwMDAwMDAw
-MDAwDQogICAgPiBbMzEzMDczNC42MzA0MThdIERSMzogMDAwMDAwMDAwMDAwMDAwMCBEUjY6IDAw
-MDAwMDAwZmZmZjBmZjAgRFI3OiAwMDAwMDAwMDAwMDAwNDAwDQogICAgPiBbMzEzMDczNC42MzA0
-MTldIFByb2Nlc3MgdWRldmFkbSAocGlkOiAxNDUxMywgdGhyZWFkaW5mbyBmZmZmODgwMzZjN2Ey
-MDAwLCB0YXNrIGZmZmY4ODBlZTU4MjA1MDApDQogICAgPiBbMzEzMDczNC42MzA0MjBdIFN0YWNr
-Og0KICAgID4gWzMxMzA3MzQuNjMwNDIxXSAgZmZmZmZmZmY4MTFhZDM4YyBmZmZmODgxZmM5Njk0
-MDAwIGZmZmY4ODAxMDZiMGYwMDAgMDAwMDAwMDAwMDAwMTAwMA0KICAgID4gWzMxMzA3MzQuNjMw
-NDI0XSAgZmZmZjg4MDM2YzdhM2VhMCBmZmZmZmZmZmEwMmRlYTVjIDAwMDAwMDAwMDAwMDAwMDAg
-ZmZmZjg4MTAxNGZkOTU0MA0KICAgID4gWzMxMzA3MzQuNjMwNDI3XSAgZmZmZjg4MTAxMDg2M2Rj
-MCBmZmZmODgwMzZjN2EzZjUwIDAwMDAwMDAwMDAwMDEwMDAgZmZmZjg4MDM2YzdhM2YwOA0KICAg
-ID4gWzMxMzA3MzQuNjMwNDI5XSBDYWxsIFRyYWNlOg0KICAgID4gWzMxMzA3MzQuNjMwNDM1XSAg
-WzxmZmZmZmZmZjgxMWFkMzhjPl0gPyBtZW1vcnlfcmVhZF9mcm9tX2J1ZmZlcisweDNjLzB4NjAN
-CiAgICA+IFszMTMwNzM0LjYzMDQ0NV0gIFs8ZmZmZmZmZmZhMDJkZWE1Yz5dIHFsYTJ4MDBfc3lz
-ZnNfcmVhZF9vcHRyb20rMHg5Yy8weGMwIFtxbGEyeHh4XQ0KICAgID4gWzMxMzA3MzQuNjMwNDQ5
-XSAgWzxmZmZmZmZmZjgxMWZlOTZmPl0gcmVhZCsweGRmLzB4MWYwDQogICAgPiBbMzEzMDczNC42
-MzA0NTRdICBbPGZmZmZmZmZmODExODdmZjM+XSB2ZnNfcmVhZCsweGEzLzB4MTgwDQogICAgPiBb
-MzEzMDczNC42MzA0NTVdICBbPGZmZmZmZmZmODExODgyOTk+XSBzeXNfcmVhZCsweDQ5LzB4YTAN
-CiAgICA+IFszMTMwNzM0LjYzMDQ2MV0gIFs8ZmZmZmZmZmY4MTBkZjNiNj5dID8gX19hdWRpdF9z
-eXNjYWxsX2V4aXQrMHgxZjYvMHgyYTANCiAgICA+IFszMTMwNzM0LjYzMDQ2N10gIFs8ZmZmZmZm
-ZmY4MTU4NzRmOT5dIHN5c3RlbV9jYWxsX2Zhc3RwYXRoKzB4MTYvMHgxYg0KICAgID4gWzMxMzA3
-MzQuNjMwNDY3XSBDb2RlOiA0MyA1OCA0OCAyYiA0MyA1MCA4OCA0MyA0ZSA1YiA1ZCBjMyA2NiAw
-ZiAxZiA4NCAwMCAwMCAwMCAwMCAwMCBlOCBmYiBmYiBmZiBmZiBlYiBlMiA5MCA5MCA5MCA5MCA5
-MCA5MCA5MCA5MCA5MCA0OCA4OSBmOCA0OCA4OSBkMSA8Pg0KICAgID4gWzMxMzA3MzQuNjMwNDg1
-XSBSSVAgIFs8ZmZmZmZmZmY4MTI4NzUyNj5dIG1lbWNweSsweDYvMHgxMTANCiAgICA+IFszMTMw
-NzM0LjYzMDQ4Nl0gIFJTUCA8ZmZmZjg4MDM2YzdhM2U0OD4NCiAgICA+IFszMTMwNzM0LjYzMDQ4
-N10gQ1IyOiAwMDAwMDAwMDAwMDAwMDAwDQogICAgPiANCiAgICA+IEZpeGVzOiBjNzcwMmI4YzIy
-NzEgKCJzY3NpOiBxbGEyeHh4OiBHZXQgbXV0ZXggbG9jayBiZWZvcmUgY2hlY2tpbmcgb3B0cm9t
-X3N0YXRlIikNCiAgICA+IENjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnICMgNC4xMA0KICAgID4g
-U2lnbmVkLW9mZi1ieTogUXVpbm4gVHJhbiA8cXV0cmFuQG1hcnZlbGwuY29tPg0KICAgID4gU2ln
-bmVkLW9mZi1ieTogSGltYW5zaHUgTWFkaGFuaSA8aG1hZGhhbmlAbWFydmVsbC5jb20+DQogICAg
-PiAtLS0NCiAgICA+ICBkcml2ZXJzL3Njc2kvcWxhMnh4eC9xbGFfYXR0ci5jIHwgMyArKy0NCiAg
-ICA+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQogICAg
-PiANCiAgICA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvcWxhMnh4eC9xbGFfYXR0ci5jIGIv
-ZHJpdmVycy9zY3NpL3FsYTJ4eHgvcWxhX2F0dHIuYw0KICAgID4gaW5kZXggOGQ1NjBjNTYyZTlj
-Li4wMzQxZjMzNDBlZGIgMTAwNjQ0DQogICAgPiAtLS0gYS9kcml2ZXJzL3Njc2kvcWxhMnh4eC9x
-bGFfYXR0ci5jDQogICAgPiArKysgYi9kcml2ZXJzL3Njc2kvcWxhMnh4eC9xbGFfYXR0ci5jDQog
-ICAgPiBAQCAtMjc1LDcgKzI3NSw4IEBAIHFsYTJ4MDBfc3lzZnNfcmVhZF9vcHRyb20oc3RydWN0
-IGZpbGUgKmZpbHAsIHN0cnVjdCBrb2JqZWN0ICprb2JqLA0KICAgID4gIA0KICAgID4gIAltdXRl
-eF9sb2NrKCZoYS0+b3B0cm9tX211dGV4KTsNCiAgICA+ICANCiAgICA+IC0JaWYgKGhhLT5vcHRy
-b21fc3RhdGUgIT0gUUxBX1NSRUFESU5HKQ0KICAgID4gKwlpZiAoKGhhLT5vcHRyb21fc3RhdGUg
-IT0gUUxBX1NSRUFESU5HKSB8fA0KICAgID4gKwkgICAgIWJ1ZiB8fCAhaGEtPm9wdHJvbV9idWZm
-ZXIpDQogICAgPiAgCQlnb3RvIG91dDsNCiAgICA+ICANCiAgICANCiAgICBJbiB0aGlzIGNhc2Ug
-aXQgYXBwZWFycyBhcyBpZiBubyBlcnJvciBpcyByZXR1cm5lZCwgc2luY2UgcnZhbCBpcyBhbHdh
-eXMgMD8NCiAgICBQcmVzdW1hYmx5IHRoaXMgaXMgdGhlIGludGVudGlvbmFsIGJlaGF2aW9yIGlm
-IGl0J3Mgbm90IGluIHRoZSBTUkVBRElORyBzdGF0ZT8NCiAgICANCiAgICBXaHkgaXMgdGhlIHRl
-c3QgZm9yICFidWYgbmVjZXNzYXJ5LCBzaW5jZSBzdWNoIGEgY2hlY2sgaXMgbW9zdGx5IG5vdCBk
-b25lIGhlcmUNCiAgICBleGNlcHQgZm9yIHFsaW5pX21vZGVfc3RvcmUoKS4gIElzIHRoYXQgdGhl
-IGFjdHVhbCBudWxsIHBvaW50ZXIgZW5jb3VudGVyZWQ/DQogICAgSSBkb24ndCBzZWUgaG93IGhh
-LT5vcHRyb21fYnVmZmVyIHdvdWxkIGV2ZXIgYmUgTlVMTCBpbiB0aGUgUUxBX1NSRUFESU5HIHN0
-YXRlLg0KICAgIEhvdyBkb2VzIGFuIG9wdHJvbSB3cml0ZSBmYWlsdXJlIHJlc3VsdCBpbiB0aGlz
-PyAgDQogICAgDQogICAgLUV3YW4NCg0KV2UgZm91bmQgb3V0IHRoYXQgY3VzdG9tZXJzIGNvZGUg
-YmFzZSB3YXMgbWlzc2luZyBwYXRjaCBieSBNaWxhbiB3aGljaCByZXNvbHZlcw0Kc2FtZSBzdGFj
-ayB0cmFjZSBhbmQgY3Jhc2guIA0KDQpodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGlu
-dXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQvY29tbWl0Lz9pZD1jNzcwMmI4YzIyNzEy
-YTA2MDgwZTEwZjFkMmRlZTFhMTMzZWM4ODA5DQoNCldlIGFza2VkIGN1c3RvbWVyIHRvIHB1bGwg
-dGhhdCBwYXRjaCB0byByZXNvbHZlIHRoZWlyIGNyYXNoLg0KDQpJ4oCZbGwgZHJvcCB0aGlzIHBh
-dGNoIGZyb20gdGhlIHF1ZXVlLiANCg0KVGhhbmtzLA0KSGltYW5zaHUNCiAgICANCiAgICA+ICAJ
-cnZhbCA9IG1lbW9yeV9yZWFkX2Zyb21fYnVmZmVyKGJ1ZiwgY291bnQsICZvZmYsIGhhLT5vcHRy
-b21fYnVmZmVyLA0KICAgIA0KDQo=
+Hi, Stanley
+
+>+
+>+static inline bool ufshcd_is_auto_hibern8_error(struct ufs_hba *hba,
+>+						u32 intr_mask)
+>+{
+>+	return (ufshcd_is_auto_hibern8_supported(hba) &&
+>+		!hba->uic_async_done &&
+
+Here check if uic_async_done is NULL, no big problem so far, but not safe e=
+nough.
+How about setting a flag in ufshcd_auto_hibern8_enable(),
+
+I concern about how to compatible with auto_hibern8 disabled condition.
+
+
+//Bean
