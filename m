@@ -2,123 +2,171 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 270491C782
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 13:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447251C7E0
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 13:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbfENLOo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 May 2019 07:14:44 -0400
-Received: from mail-eopbgr710088.outbound.protection.outlook.com ([40.107.71.88]:38053
-        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
+        id S1726174AbfENLhO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 May 2019 07:37:14 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:36130 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725892AbfENLOo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 May 2019 07:14:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+wWUfG+yAeWpIFHiQEbJVRsPaIxYbgu/1bYUNwfjWNc=;
- b=cW3cWlmR7dgMo+7MY58sWZivCbBf66xJ+LfHXurYYJ2i9nI0RfA3Pj6Kxa+QO3Ax2/R6RIU2NMFAqIwBq+yNRudxo/XKY9jYLrGb88OWPOX3QagNa1AF9C8tPiaV7URldi6O0Luo5HpGuDgTsR7qgcz3wWVIQqKI16THKgGhJzs=
-Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.31.141) by
- BN7PR08MB5684.namprd08.prod.outlook.com (20.176.31.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.25; Tue, 14 May 2019 11:14:40 +0000
-Received: from BN7PR08MB5684.namprd08.prod.outlook.com
- ([fe80::8d6c:f350:4859:e532]) by BN7PR08MB5684.namprd08.prod.outlook.com
- ([fe80::8d6c:f350:4859:e532%4]) with mapi id 15.20.1878.024; Tue, 14 May 2019
- 11:14:40 +0000
-From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
-To:     Stanley Chu <stanley.chu@mediatek.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>,
-        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "evgreen@chromium.org" <evgreen@chromium.org>,
-        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "vivek.gautam@codeaurora.org" <vivek.gautam@codeaurora.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "sayalil@codeaurora.org" <sayalil@codeaurora.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: [EXT] [PATCH v1 2/3] scsi: ufs: add error handling of
- auto-hibern8
-Thread-Topic: [EXT] [PATCH v1 2/3] scsi: ufs: add error handling of
- auto-hibern8
-Thread-Index: AQHVCZlJG8f+B7maOUSAPf/KvWjoI6ZpV6KQgADaAQCAAED50A==
-Date:   Tue, 14 May 2019 11:14:40 +0000
-Message-ID: <BN7PR08MB56840A3CD3BA7C107D0230CADB080@BN7PR08MB5684.namprd08.prod.outlook.com>
-References: <1557758186-18706-1-git-send-email-stanley.chu@mediatek.com>
-         <1557758186-18706-3-git-send-email-stanley.chu@mediatek.com>
-         <BN7PR08MB568438668FC7C90A1284F53DDB0F0@BN7PR08MB5684.namprd08.prod.outlook.com>
- <1557817102.24427.20.camel@mtkswgap22>
-In-Reply-To: <1557817102.24427.20.camel@mtkswgap22>
-Accept-Language: en-150, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=beanhuo@micron.com; 
-x-originating-ip: [165.225.81.36]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 359215b4-ebbf-4aaa-4e38-08d6d85d5c0e
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BN7PR08MB5684;
-x-ms-traffictypediagnostic: BN7PR08MB5684:|BN7PR08MB5684:
-x-microsoft-antispam-prvs: <BN7PR08MB56848A42E54F204CF4384BA1DB080@BN7PR08MB5684.namprd08.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0037FD6480
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(376002)(136003)(346002)(396003)(366004)(199004)(189003)(478600001)(8676002)(52536014)(476003)(446003)(11346002)(8936002)(316002)(81156014)(68736007)(14454004)(6916009)(81166006)(26005)(486006)(55236004)(186003)(33656002)(76116006)(25786009)(256004)(14444005)(6506007)(74316002)(99286004)(229853002)(2906002)(7736002)(5660300002)(305945005)(4326008)(7416002)(54906003)(53936002)(6246003)(6116002)(6436002)(66946007)(7696005)(66066001)(3846002)(71190400001)(86362001)(71200400001)(76176011)(73956011)(66476007)(64756008)(66446008)(66556008)(102836004)(55016002)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB5684;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: micron.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: PzzDM+60VU+0uOwycelaIADFrAmStbNfOQCHLYkHAhxjjHyrlZr6cqNj5mfscUrSFq0K15iKTS5ourXfuN83lkpdVoLs+9uid4COrSolyCPQxMD6ntUqKEG8Qwsd9PMyprL25Zh3BA4vY6w/IGULVSyVKGKYOIJkV4qLCiIvBN/8G34rrxywK4o9rPk1DO5p+w+sPGz5LedxcgGzlfM9NWTL0cActHC6fA8auLIt8bgPGpsjzz7c5qLKh9/bTcGR+iC2td1vN510IiJhK/mszw1XOeO/1tRVG+S8qzTAWsLMNn9IODRZbpFSJiCMZGTzkdSn7gQqu23CEu/t+k3nhVqu9pn8rZq95YynD9N1vjx4JLbKjxvd4P5bJAwQLxjTFgvRh6h0X3FwfSmYsIGQia5Bn6a/MlpYDKRCtMdyL80=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1725893AbfENLhN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 14 May 2019 07:37:13 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id E4434F1908D3720AE325;
+        Tue, 14 May 2019 19:37:10 +0800 (CST)
+Received: from [127.0.0.1] (10.177.96.203) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.439.0; Tue, 14 May 2019
+ 19:37:02 +0800
+Subject: Re: [PATCH 2/2] scsi: libsas: delete sas port if expander discover
+ failed
+To:     John Garry <john.garry@huawei.com>, <martin.petersen@oracle.com>,
+        <jejb@linux.vnet.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <dan.j.williams@intel.com>, <jthumshirn@suse.de>,
+        <hch@lst.de>, <huangdaode@hisilicon.com>,
+        <chenxiang66@hisilicon.com>, <miaoxie@huawei.com>,
+        <zhaohongjiang@huawei.com>, Linuxarm <linuxarm@huawei.com>
+References: <20190514024239.47313-1-yanaijie@huawei.com>
+ <20190514024239.47313-2-yanaijie@huawei.com>
+ <6b831fd1-825e-19a7-0981-bc182cf4685f@huawei.com>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <8af67af8-6fe5-0b5a-5308-8134aec74a1a@huawei.com>
+Date:   Tue, 14 May 2019 19:37:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-X-OriginatorOrg: micron.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 359215b4-ebbf-4aaa-4e38-08d6d85d5c0e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2019 11:14:40.5674
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB5684
+In-Reply-To: <6b831fd1-825e-19a7-0981-bc182cf4685f@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.177.96.203]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGksIFN0YW5sZXkNClRoYW5rcyBmb3IgcmVwbHkuDQoNCj4NCj5PbiBNb24sIDIwMTktMDUtMTMg
-YXQgMTg6MjEgKzAwMDAsIEJlYW4gSHVvIChiZWFuaHVvKSB3cm90ZToNCj4+IEhpLCBTdGFubGV5
-DQo+Pg0KPj4gPisNCj4+ID4rc3RhdGljIGlubGluZSBib29sIHVmc2hjZF9pc19hdXRvX2hpYmVy
-bjhfZXJyb3Ioc3RydWN0IHVmc19oYmEgKmhiYSwNCj4+ID4rCQkJCQkJdTMyIGludHJfbWFzaykN
-Cj4+ID4rew0KPj4gPisJcmV0dXJuICh1ZnNoY2RfaXNfYXV0b19oaWJlcm44X3N1cHBvcnRlZCho
-YmEpICYmDQo+PiA+KwkJIWhiYS0+dWljX2FzeW5jX2RvbmUgJiYNCj4+DQo+PiBIZXJlIGNoZWNr
-IGlmIHVpY19hc3luY19kb25lIGlzIE5VTEwsIG5vIGJpZyBwcm9ibGVtIHNvIGZhciwgYnV0IG5v
-dCBzYWZlDQo+ZW5vdWdoLg0KPj4gSG93IGFib3V0IHNldHRpbmcgYSBmbGFnIGluIHVmc2hjZF9h
-dXRvX2hpYmVybjhfZW5hYmxlKCksDQo+DQo+Pg0KPj4gSSBjb25jZXJuIGFib3V0IGhvdyB0byBj
-b21wYXRpYmxlIHdpdGggYXV0b19oaWJlcm44IGRpc2FibGVkIGNvbmRpdGlvbi4NCj4NCj5DdXJy
-ZW50bHkgYXV0by1oaWJlcm44IGRpc2FibGluZyBtZXRob2QgaXMgbm90IGltcGxlbWVudGVkIGlu
-IG1haW5zdHJlYW0sDQo+c28gYW4gImVuYWJsaW5nIiBmbGFnIG1heSBsb29rcyByZWR1bmRhbnQg
-dW5sZXNzIGRpc2FibGluZyBwYXRoIGlzIHJlYWxseQ0KPmV4aXN0ZWQuDQo+DQpEaWQgeW91IHRy
-eSB0byB1cGRhdGUgQXV0by1IaWJlcm5hdGUgSWRsZSBUaW1lciB3aXRoIDAgdGhyb3VnaCAnL3N5
-cycgIChzY3NpOiB1ZnM6IEFkZCBzdXBwb3J0IGZvciBBdXRvLUhpYmVybmF0ZSBJZGxlIFRpbWVy
-KT8gDQpJIGRvbid0IGtub3cgaWYgdGhpcyB3aWxsIGRpc2FibGUgeW91ciBVRlMgY29udHJvbGxl
-ciBBdXRvLUhpYmVybmF0ZS4NCklmIGhhdmluZyBhIGxvb2sgYXQgVUZTIGhvc3QgU3BlYywgc29m
-dHdhcmUgd3JpdGVzIOKAnDDigJ0gdG8gZGlzYWJsZSBBdXRvLUhpYmVybmF0ZSBJZGxlIFRpbWVy
-Lg0KU29ycnkgSSBjYW5ub3QgdmVyaWZ5IHRoaXMgb24gbXkgcGxhdGZvcm0gc2luY2UgaXQgZG9l
-c24ndCBzdXBwb3J0IGF1dG8taGliZXJuYXRlLg0KDQoNCj5JIGFncmVlIHRoYXQgY2hlY2tpbmcg
-aGJhLT51aWNfYXN5bmNfZG9uZSBoZXJlIGRvZXMgbm90IGxvb2sgc28gaW50dWl0aXZlLg0KPkhv
-d2V2ZXIgZXZlbiBpZiBhdXRvLWhpYmVybjggaXMgZGlzYWJsZWQsIHRoZXNlIGNoZWNrcyBjb3Vs
-ZCBiZSBzYWZlIGVub3VnaA0KPmJlY2F1c2UgYm90aCAiVUlDX0hJQkVSTkFURV9FTlRFUiIgYW5k
-ICJVSUNfSElCRVJOQVRFX0VYSVQiIGFyZQ0KPnJhaXNlZCBvbmx5IGlmICJtYW51YWwtaGliZXJu
-YXRlIiBpcyBwZXJmb3JtZWQsIGFuZCBpbiB0aGlzIGNhc2UgaGJhLQ0KPj51aWNfYXN5bmNfZG9u
-ZSBzaGFsbCBiZSB0cnVlLg0KPg0KWWVzLCBtb3N0IG9mIGNhc2VzICx0aGlzIGlzIG5vIHByb2Js
-ZW0uDQoNCj5Bbnl0aGluZyBlbHNlIG9yIGNvcm5lciBjYXNlIEkgbWlzc2VkPw0KPg0KVGhlIG90
-aGVycyBhcmUgZmluZS4gSSBvbmx5IGNvbmNlcm4gY2hlY2tpbmcgaGJhLT51aWNfYXN5bmNfZG9u
-ZS4NCg0KLy9CZWFuDQo=
+
+
+On 2019/5/14 18:45, John Garry wrote:
+> On 14/05/2019 03:42, Jason Yan wrote:
+>> The sas_port(phy->port) allocated in sas_ex_discover_expander() will not
+>> be deleted when the expander failed to discover. This will cause
+>> resource leak and a further issue of kernel BUG like below:
+>>
+>> [159785.843156]  port-2:17:29: trying to add phy phy-2:17:29 fails: it's
+>> already part of another port
+>> [159785.852144] ------------[ cut here  ]------------
+>> [159785.856833] kernel BUG at drivers/scsi/scsi_transport_sas.c:1086!
+>> [159785.863000] Internal error: Oops - BUG: 0 [#1] SMP
+>> [159785.867866] CPU: 39 PID: 16993 Comm: kworker/u96:2 Tainted: G
+>> W  OE     4.19.25-vhulk1901.1.0.h111.aarch64 #1
+>> [159785.878458] Hardware name: Huawei Technologies Co., Ltd.
+>> Hi1620EVBCS/Hi1620EVBCS, BIOS Hi1620 CS B070 1P TA 03/21/2019
+>> [159785.889231] Workqueue: 0000:74:02.0_disco_q sas_discover_domain
+>> [159785.895224] pstate: 40c00009 (nZcv daif +PAN +UAO)
+>> [159785.900094] pc : sas_port_add_phy+0x188/0x1b8
+>> [159785.904524] lr : sas_port_add_phy+0x188/0x1b8
+>> [159785.908952] sp : ffff0001120e3b80
+>> [159785.912341] x29: ffff0001120e3b80 x28: 0000000000000000
+>> [159785.917727] x27: ffff802ade8f5400 x26: ffff0000681b7560
+>> [159785.923111] x25: ffff802adf11a800 x24: ffff0000680e8000
+>> [159785.928496] x23: ffff802ade8f5728 x22: ffff802ade8f5708
+>> [159785.933880] x21: ffff802adea2db40 x20: ffff802ade8f5400
+>> [159785.939264] x19: ffff802adea2d800 x18: 0000000000000010
+>> [159785.944649] x17: 00000000821bf734 x16: ffff00006714faa0
+>> [159785.950033] x15: ffff0000e8ab4ecf x14: 7261702079646165
+>> [159785.955417] x13: 726c612073277469 x12: ffff00006887b830
+>> [159785.960802] x11: ffff00006773eaa0 x10: 7968702079687020
+>> [159785.966186] x9 : 0000000000002453 x8 : 726f702072656874
+>> [159785.971570] x7 : 6f6e6120666f2074 x6 : ffff802bcfb21290
+>> [159785.976955] x5 : ffff802bcfb21290 x4 : 0000000000000000
+>> [159785.982339] x3 : ffff802bcfb298c8 x2 : 337752b234c2ab00
+>> [159785.987723] x1 : 337752b234c2ab00 x0 : 0000000000000000
+>> [159785.993108] Process kworker/u96:2 (pid: 16993, stack limit =
+>> 0x0000000072dae094)
+>> [159786.000576] Call trace:
+>> [159786.003097]  sas_port_add_phy+0x188/0x1b8
+>> [159786.007179]  sas_ex_get_linkrate.isra.5+0x134/0x140
+>> [159786.012130]  sas_ex_discover_expander+0x128/0x408
+>> [159786.016906]  sas_ex_discover_dev+0x218/0x4c8
+>> [159786.021249]  sas_ex_discover_devices+0x9c/0x1a8
+>> [159786.025852]  sas_discover_root_expander+0x134/0x160
+>> [159786.030802]  sas_discover_domain+0x1b8/0x1e8
+>> [159786.035148]  process_one_work+0x1b4/0x3f8
+>> [159786.039230]  worker_thread+0x54/0x470
+>> [159786.042967]  kthread+0x134/0x138
+>> [159786.046269]  ret_from_fork+0x10/0x18
+>> [159786.049918] Code: 91322300 f0004402 91178042 97fe4c9b (d4210000)
+>> [159786.056083] Modules linked in: hns3_enet_ut(OE) hclge(OE) hnae3(OE)
+>> hisi_sas_test_hw(OE) hisi_sas_test_main(OE) serdes(OE)
+>> [159786.067202] ---[ end trace 03622b9e2d99e196  ]---
+>> [159786.071893] Kernel panic - not syncing: Fatal exception
+>> [159786.077190] SMP: stopping secondary CPUs
+>> [159786.081192] Kernel Offset: disabled
+>> [159786.084753] CPU features: 0x2,a2a00a38
+>>
+>> Fixes: 2908d778ab3e ("[SCSI] aic94xx: new driver")
+>> Reported-by: Jian Luo <luojian5@huawei.com>
+>> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+>> CC: John Garry <john.garry@huawei.com>
+>> ---
+>>  drivers/scsi/libsas/sas_expander.c | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/scsi/libsas/sas_expander.c 
+>> b/drivers/scsi/libsas/sas_expander.c
+>> index 83f2fd70ce76..9f7e2457360e 100644
+>> --- a/drivers/scsi/libsas/sas_expander.c
+>> +++ b/drivers/scsi/libsas/sas_expander.c
+>> @@ -1019,6 +1019,8 @@ static struct domain_device 
+>> *sas_ex_discover_expander(
+>>          list_del(&child->dev_list_node);
+>>          spin_unlock_irq(&parent->port->dev_list_lock);
+>>          sas_put_device(child);
+>> +        sas_port_delete(phy->port);
+>> +        phy->port = NULL;
+> 
+> This looks ok.
+> 
+> However, I wonder if we miss something else, and I see this code earlier 
+> in sas_ex_discover_expander():
+> 
+>      kref_get(&parent->kref);
+>      child->parent = parent;
+>      child->port = port;
+>      child->iproto = phy->attached_iproto;
+>      child->tproto = phy->attached_tproto;
+> 
+> I assume the kref get is for the child referencing the parent. Do we 
+> need the kref put? I couldn't see it.
+> 
+> If yes, maybe it should it go in sas_free_device(), along with kfree() 
+> for expander device phys.
+> 
+
+Yes, the parent's kref will put in sas_free_device(). So the call chain 
+will be:
+
+sas_put_device
+   ->sas_free_device
+     ->sas_put_device(dev->parent);
+       ->kref_put
+
+Thanks,
+Jason
+
+> Thanks,
+> John
+> 
+>>          return NULL;
+>>      }
+>>      list_add_tail(&child->siblings, &parent->ex_dev.children);
+>>
+> 
+> 
+> 
+> 
+> .
+> 
+
