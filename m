@@ -2,183 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 474361C7F7
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 13:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7233A1C91E
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 15:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726265AbfENLqS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 May 2019 07:46:18 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:43424 "EHLO huawei.com"
+        id S1726142AbfENNAu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 May 2019 09:00:50 -0400
+Received: from mail-eopbgr10082.outbound.protection.outlook.com ([40.107.1.82]:7552
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725893AbfENLqR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 May 2019 07:46:17 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 8964B479F0FB55E88D5A;
-        Tue, 14 May 2019 19:46:15 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Tue, 14 May 2019
- 19:46:08 +0800
-Subject: Re: [PATCH 2/2] scsi: libsas: delete sas port if expander discover
- failed
-To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.vnet.ibm.com>
-References: <20190514024239.47313-1-yanaijie@huawei.com>
- <20190514024239.47313-2-yanaijie@huawei.com>
- <6b831fd1-825e-19a7-0981-bc182cf4685f@huawei.com>
- <8af67af8-6fe5-0b5a-5308-8134aec74a1a@huawei.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <dan.j.williams@intel.com>, <jthumshirn@suse.de>,
-        <hch@lst.de>, <huangdaode@hisilicon.com>,
-        <chenxiang66@hisilicon.com>, <miaoxie@huawei.com>,
-        <zhaohongjiang@huawei.com>, Linuxarm <linuxarm@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <0fa94b30-0303-164f-1052-56527ee84402@huawei.com>
-Date:   Tue, 14 May 2019 12:46:01 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
+        id S1725562AbfENNAu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 14 May 2019 09:00:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=itdevltd.onmicrosoft.com; s=selector1-itdevltd-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j8VStLgA89ouOHIIEim0imZKPXUc63UfwSv4OqaC0oA=;
+ b=OSyyyXqEovQAK6aURVSkae1trTte8Ho4GLcc94f0DVplGG/1sf8bnemEBEuu3uUBL7blsD+TpKpI4msb9k1E8HSjgg/fnSwYhq160tK0MiWB6vtit6m6rvgx/K0a8lWADW7yWI9XXyqURvYFGD3PnYo87crhlsu9UY//BhqhIhc=
+Received: from VI1PR08MB3168.eurprd08.prod.outlook.com (52.133.15.143) by
+ VI1PR08MB4349.eurprd08.prod.outlook.com (20.179.27.79) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.16; Tue, 14 May 2019 13:00:45 +0000
+Received: from VI1PR08MB3168.eurprd08.prod.outlook.com
+ ([fe80::8e9:9487:4f0a:fdaf]) by VI1PR08MB3168.eurprd08.prod.outlook.com
+ ([fe80::8e9:9487:4f0a:fdaf%3]) with mapi id 15.20.1878.024; Tue, 14 May 2019
+ 13:00:45 +0000
+From:   Quentin Deslandes <quentin.deslandes@itdev.co.uk>
+To:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+CC:     Quentin Deslandes <quentin.deslandes@itdev.co.uk>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH] scsi: aic7xxx: Remove NULL check before kfree()
+Thread-Topic: [PATCH] scsi: aic7xxx: Remove NULL check before kfree()
+Thread-Index: AQHVClUKYE83rLAf7k+RpVZjvlURaQ==
+Date:   Tue, 14 May 2019 13:00:44 +0000
+Message-ID: <20190514130036.7629-1-quentin.deslandes@itdev.co.uk>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: AM5PR06CA0033.eurprd06.prod.outlook.com
+ (2603:10a6:206:2::46) To VI1PR08MB3168.eurprd08.prod.outlook.com
+ (2603:10a6:803:47::15)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=quentin.deslandes@itdev.co.uk; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.17.1
+x-originating-ip: [89.21.227.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 59f5ffe2-dbe2-417e-aa5e-08d6d86c2d18
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:VI1PR08MB4349;
+x-ms-traffictypediagnostic: VI1PR08MB4349:
+x-microsoft-antispam-prvs: <VI1PR08MB43494E18368657EABCF798D9B3080@VI1PR08MB4349.eurprd08.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1417;
+x-forefront-prvs: 0037FD6480
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(39830400003)(136003)(376002)(346002)(366004)(199004)(189003)(386003)(6506007)(102836004)(305945005)(5640700003)(6436002)(66946007)(26005)(316002)(7736002)(6512007)(66446008)(64756008)(66556008)(3846002)(66476007)(73956011)(2906002)(6486002)(52116002)(476003)(2616005)(2351001)(6916009)(25786009)(4326008)(53936002)(186003)(6116002)(486006)(44832011)(86362001)(71190400001)(71200400001)(74482002)(50226002)(256004)(14444005)(66066001)(2501003)(1076003)(5660300002)(68736007)(8676002)(99286004)(14454004)(36756003)(8936002)(508600001)(81156014)(81166006)(54906003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR08MB4349;H:VI1PR08MB3168.eurprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: itdev.co.uk does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 41xKvH6KafAl+f7CqrPuTBb9oSK7NidnUunvOm5iiVK4opyV5EWTObqi/q/hJ29n0+IW1NhKMdBaMS7wYYZsk9M6dI3Ws+Wfjic6uROwYh7ZHNooBAwSlKzKyca8d64cQ79+36O1YkslF7bDIB3cY1z/85vQOdhW5g8CVD96ywHfYw09Y6fAaeGQ5CcobDCy9qg1G4NVzBRvmznpui//WwUPq8iaEWNi/hmlbkrM7ZcsflmjQoeyAcsNnXWbOCWnjBoFQA+Ypz0EAOHQB9Y7PvNM3cxUJErGoWlmZ6m7xFcoQ45km+GaJl6gbcUWpTDwbQVLRUJ04MuxhoYs/OPM/DUTsdkA4VzGriEGPxdo+w4h2Fd+YCD0xkshNsLr9SuI2AMhs4EkSx4OfhbPeWzQazcvtW2Pc6QuorJnB1n84uc=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <8af67af8-6fe5-0b5a-5308-8134aec74a1a@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+X-OriginatorOrg: itdev.co.uk
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59f5ffe2-dbe2-417e-aa5e-08d6d86c2d18
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 May 2019 13:00:44.8865
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 2d2930c4-2251-45b4-ad79-3582c5f41740
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR08MB4349
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 14/05/2019 12:37, Jason Yan wrote:
->
->
-> On 2019/5/14 18:45, John Garry wrote:
->> On 14/05/2019 03:42, Jason Yan wrote:
->>> The sas_port(phy->port) allocated in sas_ex_discover_expander() will not
->>> be deleted when the expander failed to discover. This will cause
->>> resource leak and a further issue of kernel BUG like below:
->>>
->>> [159785.843156]  port-2:17:29: trying to add phy phy-2:17:29 fails: it's
->>> already part of another port
->>> [159785.852144] ------------[ cut here  ]------------
->>> [159785.856833] kernel BUG at drivers/scsi/scsi_transport_sas.c:1086!
->>> [159785.863000] Internal error: Oops - BUG: 0 [#1] SMP
->>> [159785.867866] CPU: 39 PID: 16993 Comm: kworker/u96:2 Tainted: G
->>> W  OE     4.19.25-vhulk1901.1.0.h111.aarch64 #1
->>> [159785.878458] Hardware name: Huawei Technologies Co., Ltd.
->>> Hi1620EVBCS/Hi1620EVBCS, BIOS Hi1620 CS B070 1P TA 03/21/2019
->>> [159785.889231] Workqueue: 0000:74:02.0_disco_q sas_discover_domain
->>> [159785.895224] pstate: 40c00009 (nZcv daif +PAN +UAO)
->>> [159785.900094] pc : sas_port_add_phy+0x188/0x1b8
->>> [159785.904524] lr : sas_port_add_phy+0x188/0x1b8
->>> [159785.908952] sp : ffff0001120e3b80
->>> [159785.912341] x29: ffff0001120e3b80 x28: 0000000000000000
->>> [159785.917727] x27: ffff802ade8f5400 x26: ffff0000681b7560
->>> [159785.923111] x25: ffff802adf11a800 x24: ffff0000680e8000
->>> [159785.928496] x23: ffff802ade8f5728 x22: ffff802ade8f5708
->>> [159785.933880] x21: ffff802adea2db40 x20: ffff802ade8f5400
->>> [159785.939264] x19: ffff802adea2d800 x18: 0000000000000010
->>> [159785.944649] x17: 00000000821bf734 x16: ffff00006714faa0
->>> [159785.950033] x15: ffff0000e8ab4ecf x14: 7261702079646165
->>> [159785.955417] x13: 726c612073277469 x12: ffff00006887b830
->>> [159785.960802] x11: ffff00006773eaa0 x10: 7968702079687020
->>> [159785.966186] x9 : 0000000000002453 x8 : 726f702072656874
->>> [159785.971570] x7 : 6f6e6120666f2074 x6 : ffff802bcfb21290
->>> [159785.976955] x5 : ffff802bcfb21290 x4 : 0000000000000000
->>> [159785.982339] x3 : ffff802bcfb298c8 x2 : 337752b234c2ab00
->>> [159785.987723] x1 : 337752b234c2ab00 x0 : 0000000000000000
->>> [159785.993108] Process kworker/u96:2 (pid: 16993, stack limit =
->>> 0x0000000072dae094)
->>> [159786.000576] Call trace:
->>> [159786.003097]  sas_port_add_phy+0x188/0x1b8
->>> [159786.007179]  sas_ex_get_linkrate.isra.5+0x134/0x140
->>> [159786.012130]  sas_ex_discover_expander+0x128/0x408
->>> [159786.016906]  sas_ex_discover_dev+0x218/0x4c8
->>> [159786.021249]  sas_ex_discover_devices+0x9c/0x1a8
->>> [159786.025852]  sas_discover_root_expander+0x134/0x160
->>> [159786.030802]  sas_discover_domain+0x1b8/0x1e8
->>> [159786.035148]  process_one_work+0x1b4/0x3f8
->>> [159786.039230]  worker_thread+0x54/0x470
->>> [159786.042967]  kthread+0x134/0x138
->>> [159786.046269]  ret_from_fork+0x10/0x18
->>> [159786.049918] Code: 91322300 f0004402 91178042 97fe4c9b (d4210000)
->>> [159786.056083] Modules linked in: hns3_enet_ut(OE) hclge(OE) hnae3(OE)
->>> hisi_sas_test_hw(OE) hisi_sas_test_main(OE) serdes(OE)
->>> [159786.067202] ---[ end trace 03622b9e2d99e196  ]---
->>> [159786.071893] Kernel panic - not syncing: Fatal exception
->>> [159786.077190] SMP: stopping secondary CPUs
->>> [159786.081192] Kernel Offset: disabled
->>> [159786.084753] CPU features: 0x2,a2a00a38
->>>
->>> Fixes: 2908d778ab3e ("[SCSI] aic94xx: new driver")
-
-Reviewed-by: John Garry <john.garry@huawei.com>
-
->>> Reported-by: Jian Luo <luojian5@huawei.com>
->>> Signed-off-by: Jason Yan <yanaijie@huawei.com>
->>> CC: John Garry <john.garry@huawei.com>
->>> ---
->>>  drivers/scsi/libsas/sas_expander.c | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/drivers/scsi/libsas/sas_expander.c
->>> b/drivers/scsi/libsas/sas_expander.c
->>> index 83f2fd70ce76..9f7e2457360e 100644
->>> --- a/drivers/scsi/libsas/sas_expander.c
->>> +++ b/drivers/scsi/libsas/sas_expander.c
->>> @@ -1019,6 +1019,8 @@ static struct domain_device
->>> *sas_ex_discover_expander(
->>>          list_del(&child->dev_list_node);
->>>          spin_unlock_irq(&parent->port->dev_list_lock);
->>>          sas_put_device(child);
->>> +        sas_port_delete(phy->port);
->>> +        phy->port = NULL;
->>
->> This looks ok.
->>
->> However, I wonder if we miss something else, and I see this code
->> earlier in sas_ex_discover_expander():
->>
->>      kref_get(&parent->kref);
->>      child->parent = parent;
->>      child->port = port;
->>      child->iproto = phy->attached_iproto;
->>      child->tproto = phy->attached_tproto;
->>
->> I assume the kref get is for the child referencing the parent. Do we
->> need the kref put? I couldn't see it.
->>
->> If yes, maybe it should it go in sas_free_device(), along with kfree()
->> for expander device phys.
->>
->
-> Yes, the parent's kref will put in sas_free_device(). So the call chain
-> will be:
->
-> sas_put_device
->   ->sas_free_device
->     ->sas_put_device(dev->parent);
->       ->kref_put
->
-
-Ah, yes.
-
-> Thanks,
-> Jason
->
->> Thanks,
->> John
->>
->>>          return NULL;
->>>      }
->>>      list_add_tail(&child->siblings, &parent->ex_dev.children);
->>>
->>
->>
->>
->>
->> .
->>
->
->
-> .
->
-
-
+Rml4IHRoZSBmb2xsb3dpbmcgY29jY2luZWxsZSB3YXJuaW5nIGJ5IHJlbW92aW5nIE5VTEwgY2hl
+Y2sgYmVmb3JlDQpjYWxsaW5nIGtmcmVlKCk6DQoNCk5VTEwgY2hlY2sgYmVmb3JlIHNvbWUgZnJl
+ZWluZyBmdW5jdGlvbnMgaW4gbm90IG5lZWRlZC4NCg0KU2lnbmVkLW9mZi1ieTogUXVlbnRpbiBE
+ZXNsYW5kZXMgPHF1ZW50aW4uZGVzbGFuZGVzQGl0ZGV2LmNvLnVrPg0KLS0tDQogZHJpdmVycy9z
+Y3NpL2FpYzd4eHgvYWljN3h4eF9jb3JlLmMgfCAxNiArKysrKy0tLS0tLS0tLS0tDQogMSBmaWxl
+IGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgMTEgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQg
+YS9kcml2ZXJzL3Njc2kvYWljN3h4eC9haWM3eHh4X2NvcmUuYyBiL2RyaXZlcnMvc2NzaS9haWM3
+eHh4L2FpYzd4eHhfY29yZS5jDQppbmRleCAzOTkzZjE1ZTdmZjYuLmZhZTQ0MjRkNDQ0MiAxMDA2
+NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS9haWM3eHh4L2FpYzd4eHhfY29yZS5jDQorKysgYi9kcml2
+ZXJzL3Njc2kvYWljN3h4eC9haWM3eHh4X2NvcmUuYw0KQEAgLTIxOTIsOSArMjE5Miw3IEBAIGFo
+Y19mcmVlX3RzdGF0ZShzdHJ1Y3QgYWhjX3NvZnRjICphaGMsIHVfaW50IHNjc2lfaWQsIGNoYXIg
+Y2hhbm5lbCwgaW50IGZvcmNlKQ0KIA0KIAlpZiAoY2hhbm5lbCA9PSAnQicpDQogCQlzY3NpX2lk
+ICs9IDg7DQotCXRzdGF0ZSA9IGFoYy0+ZW5hYmxlZF90YXJnZXRzW3Njc2lfaWRdOw0KLQlpZiAo
+dHN0YXRlICE9IE5VTEwpDQotCQlrZnJlZSh0c3RhdGUpOw0KKwlrZnJlZShhaGMtPmVuYWJsZWRf
+dGFyZ2V0c1tzY3NpX2lkXSk7DQogCWFoYy0+ZW5hYmxlZF90YXJnZXRzW3Njc2lfaWRdID0gTlVM
+TDsNCiB9DQogI2VuZGlmDQpAQCAtNDQ3NCw4ICs0NDcyLDcgQEAgYWhjX3NldF91bml0KHN0cnVj
+dCBhaGNfc29mdGMgKmFoYywgaW50IHVuaXQpDQogdm9pZA0KIGFoY19zZXRfbmFtZShzdHJ1Y3Qg
+YWhjX3NvZnRjICphaGMsIGNoYXIgKm5hbWUpDQogew0KLQlpZiAoYWhjLT5uYW1lICE9IE5VTEwp
+DQotCQlrZnJlZShhaGMtPm5hbWUpOw0KKwlrZnJlZShhaGMtPm5hbWUpOw0KIAlhaGMtPm5hbWUg
+PSBuYW1lOw0KIH0NCiANCkBAIC00NTM2LDEwICs0NTMzLDggQEAgYWhjX2ZyZWUoc3RydWN0IGFo
+Y19zb2Z0YyAqYWhjKQ0KIAkJa2ZyZWUoYWhjLT5ibGFja19ob2xlKTsNCiAJfQ0KICNlbmRpZg0K
+LQlpZiAoYWhjLT5uYW1lICE9IE5VTEwpDQotCQlrZnJlZShhaGMtPm5hbWUpOw0KLQlpZiAoYWhj
+LT5zZWVwX2NvbmZpZyAhPSBOVUxMKQ0KLQkJa2ZyZWUoYWhjLT5zZWVwX2NvbmZpZyk7DQorCWtm
+cmVlKGFoYy0+bmFtZSk7DQorCWtmcmVlKGFoYy0+c2VlcF9jb25maWcpOw0KICNpZm5kZWYgX19G
+cmVlQlNEX18NCiAJa2ZyZWUoYWhjKTsNCiAjZW5kaWYNCkBAIC00OTQ0LDggKzQ5MzksNyBAQCBh
+aGNfZmluaV9zY2JkYXRhKHN0cnVjdCBhaGNfc29mdGMgKmFoYykNCiAJY2FzZSAwOg0KIAkJYnJl
+YWs7DQogCX0NCi0JaWYgKHNjYl9kYXRhLT5zY2JhcnJheSAhPSBOVUxMKQ0KLQkJa2ZyZWUoc2Ni
+X2RhdGEtPnNjYmFycmF5KTsNCisJa2ZyZWUoc2NiX2RhdGEtPnNjYmFycmF5KTsNCiB9DQogDQog
+c3RhdGljIHZvaWQNCi0tIA0KMi4xNy4xDQoNCg==
