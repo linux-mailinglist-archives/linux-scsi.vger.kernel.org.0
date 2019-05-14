@@ -2,88 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 995B41CE17
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 19:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CE41D0DC
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 22:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbfENRh2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 May 2019 13:37:28 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:42240 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726180AbfENRh1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 May 2019 13:37:27 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4EHNwbu149298;
-        Tue, 14 May 2019 17:37:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=hHqEGvBgw/HFtBdP4Hbpaoa+IOhMS3wp3QgyUigg06A=;
- b=nqXYlNZ3UXI9YF9LFb+rZM47ZxFvnqRQRnHnj8dxH6fg5Zvyx98gIp80Id8MtimweCHI
- wmnfK8/4pksEFHIgwS4qnDRZ+fOVUyopaMcH0RwHdKztXbXHSk84GJkFVRyITzgbmMtn
- 3QIDiKaKkO+LjgxQfQTGVEDpyIrEcmHkKj6NFscEYYYl/LZxuvGmejP0K0V8MSCU/iCp
- AjTfzBWUPyd3qwqFYjSlK9yDW2flINBZTHIArckG8LjJflPLxu7CfNY6XbibN1WOLu8p
- HX3h6WP8UOdzHlGkDGSYUnJFdvgILdNkKaBIA+zNyL4unqHi3fRBM6uta2ehBwIFvM4m 1g== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2sdnttqspd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 17:37:21 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4EHbJum049732;
-        Tue, 14 May 2019 17:37:20 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2sdmeb7f43-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 17:37:20 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4EHbIsL021477;
-        Tue, 14 May 2019 17:37:18 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 14 May 2019 10:37:18 -0700
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] fdomain: Resurrect driver
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190514172309.12874-1-linux@zary.sk>
-Date:   Tue, 14 May 2019 13:37:09 -0400
-In-Reply-To: <20190514172309.12874-1-linux@zary.sk> (Ondrej Zary's message of
-        "Tue, 14 May 2019 19:23:06 +0200")
-Message-ID: <yq1r291c4ze.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1726174AbfENUv2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 May 2019 16:51:28 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:35420 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726089AbfENUv1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 May 2019 16:51:27 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id A91E4801FF; Tue, 14 May 2019 22:51:14 +0200 (CEST)
+Date:   Tue, 14 May 2019 22:51:29 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v2 0/2] sd: Rely on the driver core for asynchronous
+ probing
+Message-ID: <20190514205129.GA29109@amd>
+References: <20190430213919.97437-1-bvanassche@acm.org>
+ <yq14l5xdknh.fsf@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9257 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=612
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905140120
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9257 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=663 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905140120
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="fdj2RfSjLxBAspz7"
+Content-Disposition: inline
+In-Reply-To: <yq14l5xdknh.fsf@oracle.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Ondrej,
+--fdj2RfSjLxBAspz7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Resurrect previously removed fdomain driver, in modern style.
-> Initialization is rewritten completely, with support for multiple
-> cards, no more global state variables.  Most of the code from
-> interrupt handler is moved to a workqueue.
->
-> This is a modularized version with core separated from bus-specific
-> drivers (PCI, ISA and PCMCIA). Only PCI and ISA drivers are submitted
-> for now.
+Hi!
 
-Applied to 5.3/scsi-queue. Thanks!
+> > This patch series makes the sd driver rely on the driver core for
+> > asynchronous probing. Although it's probably too late to submit this
+> > patch series to Linus during the v5.2 merge window, I want to make
+> > these patches available for review now.
+>=20
+> Applied to 5.3/scsi-queue (by hand). Thanks!
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Previous versions broke suspend for me on x60... so I guess I should
+test -next tommorow or day after that to see if it works now...?
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--fdj2RfSjLxBAspz7
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAlzbKlEACgkQMOfwapXb+vIZOwCdHXQINGXrIqnmMEnjA9OU9TDV
+HmoAnj4H5TSmM7LmvD8RmV6M/ftP+7RE
+=01KP
+-----END PGP SIGNATURE-----
+
+--fdj2RfSjLxBAspz7--
