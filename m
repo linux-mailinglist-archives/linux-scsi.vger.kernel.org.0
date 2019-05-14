@@ -2,44 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A1CD1C338
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 08:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FF71C38D
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 08:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbfENGZM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 May 2019 02:25:12 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:7396 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725866AbfENGZM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 May 2019 02:25:12 -0400
-X-UUID: 888130a2ae434c868c45adbfc53d91f2-20190514
-X-UUID: 888130a2ae434c868c45adbfc53d91f2-20190514
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
+        id S1726286AbfENG6d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 May 2019 02:58:33 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:36114 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726148AbfENG6c (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 May 2019 02:58:32 -0400
+X-UUID: bd317bcca865465bbee98c4e76ad8607-20190514
+X-UUID: bd317bcca865465bbee98c4e76ad8607-20190514
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1714811144; Tue, 14 May 2019 14:25:02 +0800
+        with ESMTP id 1907136703; Tue, 14 May 2019 14:58:23 +0800
 Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs03n1.mediatek.inc (172.21.101.181) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 14 May 2019 14:25:01 +0800
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 14 May 2019 14:58:22 +0800
 Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 14 May 2019 14:25:01 +0800
-Message-ID: <1557815101.24427.7.camel@mtkswgap22>
-Subject: Re: [PATCH v1 0/3] scsi: ufs: add error handlings of auto-hibern8
+ Transport; Tue, 14 May 2019 14:58:22 +0800
+Message-ID: <1557817102.24427.20.camel@mtkswgap22>
+Subject: RE: [EXT] [PATCH v1 2/3] scsi: ufs: add error handling of
+ auto-hibern8
 From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-CC:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
-        <sayalil@codeaurora.org>, <subhashj@codeaurora.org>,
-        <vivek.gautam@codeaurora.org>, <evgreen@chromium.org>,
-        <beanhuo@micron.com>
-Date:   Tue, 14 May 2019 14:25:01 +0800
-In-Reply-To: <55818bc4-d464-bb35-25bb-9ef87af8224e@free.fr>
+To:     "Bean Huo (beanhuo)" <beanhuo@micron.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>,
+        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "evgreen@chromium.org" <evgreen@chromium.org>,
+        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "vivek.gautam@codeaurora.org" <vivek.gautam@codeaurora.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "sayalil@codeaurora.org" <sayalil@codeaurora.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Tue, 14 May 2019 14:58:22 +0800
+In-Reply-To: <BN7PR08MB568438668FC7C90A1284F53DDB0F0@BN7PR08MB5684.namprd08.prod.outlook.com>
 References: <1557758186-18706-1-git-send-email-stanley.chu@mediatek.com>
-         <55818bc4-d464-bb35-25bb-9ef87af8224e@free.fr>
+         <1557758186-18706-3-git-send-email-stanley.chu@mediatek.com>
+         <BN7PR08MB568438668FC7C90A1284F53DDB0F0@BN7PR08MB5684.namprd08.prod.outlook.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.2.3-0ubuntu6 
 Content-Transfer-Encoding: 7bit
@@ -50,59 +62,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Marc,
+Hi Bean,
 
-Thank you so much for below suggestions. I will fix them all in next
-version.
+Thanks so much for review.
 
-On Mon, 2019-05-13 at 16:51 +0200, Marc Gonzalez wrote:
-> On 13/05/2019 16:36, Stanley Chu wrote:
+On Mon, 2019-05-13 at 18:21 +0000, Bean Huo (beanhuo) wrote:
+> Hi, Stanley
 > 
-> > Currently auto-hibern8 is activated if host supports
-> > auto-hibern8 capability. However no error handlings are existed thus
-> > this feature is kind of risky.
+> >+
+> >+static inline bool ufshcd_is_auto_hibern8_error(struct ufs_hba *hba,
+> >+						u32 intr_mask)
+> >+{
+> >+	return (ufshcd_is_auto_hibern8_supported(hba) &&
+> >+		!hba->uic_async_done &&
 > 
-> This last sentence is not very idiomatic.
-> 
-> I would suggest:
-> "However, error-handling is not implemented, which makes the feature
-> somewhat risky."
-> 
-> > If "Hibernate Enter" or "Hibernate Exit" fail happens
-> 
-> I would suggest:
-> If either "Hibernate Enter" or "Hibernate Exit" fail during ...
-> 
-> > during auto-hibern8 flow, the corresponding interrupt
-> > "UIC_HIBERNATE_ENTER" or "UIC_HIBERNATE_EXIT" shall be raised
-> > according to UFS specification.
-> > 
-> > This patch adds auto-hibern8 error handlings:
-> 
-> error-handling
-> 
-> > - Monitor "Hibernate Enter" and "Hibernate Exit" interrupts after
-> >   auto-hibern8 feature is activated.
-> 
-> I just want to take this opportunity to ask a rhetorical question.
-> 
-> Who in the Great Heavens thought it would be a good idea to call the
-> feature "auto-hibern8" ?
-> 
-> Was it really worth it to save 2 characters by writing "8" instead
-> of "ate" ?
-> 
-> This bugs me so much that I just might send a patch to fix it up.
-
-As far as I know, the term "HIBERN8" is mentioned in all UFS related
-specifications, like UFS, UFSHCI, UniPro and M-PHY. So probably this
-abbreviation has existed for a long time.
+> Here check if uic_async_done is NULL, no big problem so far, but not safe enough.
+> How about setting a flag in ufshcd_auto_hibern8_enable(),
 
 > 
-> Regards.
+> I concern about how to compatible with auto_hibern8 disabled condition.
+
+Currently auto-hibern8 disabling method is not implemented in
+mainstream, so an "enabling" flag may looks redundant unless disabling
+path is really existed.
+
+I agree that checking hba->uic_async_done here does not look so
+intuitive. However even if auto-hibern8 is disabled, these checks could
+be safe enough because both "UIC_HIBERNATE_ENTER" and
+"UIC_HIBERNATE_EXIT" are raised only if "manual-hibernate" is performed,
+and in this case hba->uic_async_done shall be true.
+
+Anything else or corner case I missed?
+
+> 
+> 
+> //Bean
 
 Thanks,
-
 Stanley
+
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
 
 
