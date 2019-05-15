@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 817B71EB07
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 May 2019 11:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E777A1EB06
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 May 2019 11:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726412AbfEOJgp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 May 2019 05:36:45 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:7585 "EHLO
+        id S1726407AbfEOJgm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 May 2019 05:36:42 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:3479 "EHLO
         mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725977AbfEOJgo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 May 2019 05:36:44 -0400
-X-UUID: 8451fe8aa64f45f2b1e3c08b6cd4b511-20190515
-X-UUID: 8451fe8aa64f45f2b1e3c08b6cd4b511-20190515
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        with ESMTP id S1725953AbfEOJgl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 May 2019 05:36:41 -0400
+X-UUID: b3cdf060c2d14c2dac72669e622f954a-20190515
+X-UUID: b3cdf060c2d14c2dac72669e622f954a-20190515
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1377088839; Wed, 15 May 2019 17:36:36 +0800
+        with ESMTP id 750499379; Wed, 15 May 2019 17:36:35 +0800
 Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
  15.0.1395.4; Wed, 15 May 2019 17:36:33 +0800
 Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas09.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
@@ -33,52 +33,42 @@ CC:     <linux-mediatek@lists.infradead.org>,
         <marc.w.gonzalez@free.fr>, <kuohong.wang@mediatek.com>,
         <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 0/3] scsi: ufs: Add error handling of Auto-Hibernate
-Date:   Wed, 15 May 2019 17:36:25 +0800
-Message-ID: <1557912988-26758-1-git-send-email-stanley.chu@mediatek.com>
+Subject: [PATCH v2 1/3] scsi: ufs: Do not overwrite Auto-Hibernate timer
+Date:   Wed, 15 May 2019 17:36:26 +0800
+Message-ID: <1557912988-26758-2-git-send-email-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <1557912988-26758-1-git-send-email-stanley.chu@mediatek.com>
+References: <1557912988-26758-1-git-send-email-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 6FFEA0CCF754E31D9D5A4690B8170BC47254F360FB07BE0B3B5CFDB1B23F76FA2000:8
 X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently auto-hibernate is activated if host supports
-auto-hibern8 capability. However error-handling is not implemented,
-which makes the feature somewhat risky.
+Some vendor-specific initialization flow may set its own
+auto-hibernate timer. In this case, do not overwrite timer value
+as "default value" in ufshcd_init().
 
-If either "Hibernate Enter" or "Hibernate Exit" fail during
-auto-hibernate flow, the corresponding interrupt
-"UIC_HIBERNATE_ENTER" or "UIC_HIBERNATE_EXIT" shall be raised
-according to UFS specification.
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This patch adds auto-hibernate error-handling:
-
-- Monitor "Hibernate Enter" and "Hibernate Exit" interrupts after
-  auto-hibernate feature is activated.
-
-- If fail happens, trigger error-handling just like "manual-hibernate"
-  fail and apply the same recovery flow: schedule UFS error handler in
-  ufshcd_check_errors(), and then do host reset and restore
-  in UFS error handler.
-
-v2:
- - Fix sentences in commit message (Marc Gonzalez)
- - Make "Auto-Hibernate" error detection more precise (Bean Huo)
-
-Stanley Chu (3):
-  scsi: ufs: Do not overwrite Auto-Hibernate timer
-  scsi: ufs: Add error-handling of Auto-Hibernate
-  scsi: ufs: Use re-factored Auto-Hibernate function
-
- drivers/scsi/ufs/ufshcd.c | 33 ++++++++++++++++++++++++++++++++-
- drivers/scsi/ufs/ufshcd.h |  5 +++++
- drivers/scsi/ufs/ufshci.h |  3 +++
- 3 files changed, 40 insertions(+), 1 deletion(-)
-
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index e040f9dd9ff3..1665820c22fd 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -8309,7 +8309,7 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+ 						UIC_LINK_HIBERN8_STATE);
+ 
+ 	/* Set the default auto-hiberate idle timer value to 150 ms */
+-	if (hba->capabilities & MASK_AUTO_HIBERN8_SUPPORT) {
++	if (hba->capabilities & MASK_AUTO_HIBERN8_SUPPORT & !hba->ahit) {
+ 		hba->ahit = FIELD_PREP(UFSHCI_AHIBERN8_TIMER_MASK, 150) |
+ 			    FIELD_PREP(UFSHCI_AHIBERN8_SCALE_MASK, 3);
+ 	}
 -- 
 2.18.0
 
