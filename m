@@ -2,81 +2,163 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE271E422
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 May 2019 23:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9E01E6ED
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 May 2019 04:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbfENVue (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 May 2019 17:50:34 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:52876 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726134AbfENVue (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 May 2019 17:50:34 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4ELhedX183297;
-        Tue, 14 May 2019 21:50:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=mt/YcEfIhP0V34MfF7iEOOjMUhQg6grPeP/C0brtVjA=;
- b=JPcZCVlzjQVpvVfSddNFr1eGaZ5E0OX5atAxn3RyFXDYQyaLJuGej47CX4TfSmyC0hSJ
- 7x95195cjOkbfZswEd4I5TEpfRpunZ38tGJAGrj8E9ZeQA+UfGS/tx0XP8o52tS1l/PZ
- nSmP7/dFM3BSg+uozMoh7eLc9Xa68muxlMZP1MXci6Tlm0vkcHFa5qtEfVhOL5saH1zT
- 1CXY591+Ojwi7cI3BlB9jNF/61wSQrUkSLfxKlv6yhVkMJlkZzKJRcURKdljtkKnWcN/
- /0YZ+Mr6d9HPdzTh4cZ+K7QF2O/vGRDvPBwPHpFiSPy/itjO6TQcLz+V6XuJDCV+hcKh kA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2sdq1qgxr8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 21:50:32 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4ELnkkJ138041;
-        Tue, 14 May 2019 21:50:31 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2sdnqjuaur-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 May 2019 21:50:31 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4ELoUcv025719;
-        Tue, 14 May 2019 21:50:30 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 14 May 2019 14:50:30 -0700
-To:     Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-Cc:     linux-scsi@vger.kernel.org, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, kiran-kumar.kasturi@broadcom.com,
-        sankar.patra@broadcom.com, sasikumar.pc@broadcom.com
-Subject: Re: [PATCH v2 00/21] megaraid_sas: Driver updates
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <1557248750-4099-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
-Date:   Tue, 14 May 2019 17:50:27 -0400
-In-Reply-To: <1557248750-4099-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
-        (Shivasharan S.'s message of "Tue, 7 May 2019 10:05:29 -0700")
-Message-ID: <yq1ef50d7to.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1726296AbfEOCw2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 May 2019 22:52:28 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:20754 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726201AbfEOCw2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 May 2019 22:52:28 -0400
+X-UUID: 5c5ebb44d7f543d5a361d67b06aa44fb-20190515
+X-UUID: 5c5ebb44d7f543d5a361d67b06aa44fb-20190515
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 323553533; Wed, 15 May 2019 10:52:13 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 15 May 2019 10:52:11 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 15 May 2019 10:52:12 +0800
+Message-ID: <1557888732.24427.37.camel@mtkswgap22>
+Subject: RE: [EXT] [PATCH v1 2/3] scsi: ufs: add error handling of
+ auto-hibern8
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     "Bean Huo (beanhuo)" <beanhuo@micron.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>,
+        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "evgreen@chromium.org" <evgreen@chromium.org>,
+        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "vivek.gautam@codeaurora.org" <vivek.gautam@codeaurora.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "sayalil@codeaurora.org" <sayalil@codeaurora.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Wed, 15 May 2019 10:52:12 +0800
+In-Reply-To: <BN7PR08MB56840A3CD3BA7C107D0230CADB080@BN7PR08MB5684.namprd08.prod.outlook.com>
+References: <1557758186-18706-1-git-send-email-stanley.chu@mediatek.com>
+         <1557758186-18706-3-git-send-email-stanley.chu@mediatek.com>
+         <BN7PR08MB568438668FC7C90A1284F53DDB0F0@BN7PR08MB5684.namprd08.prod.outlook.com>
+         <1557817102.24427.20.camel@mtkswgap22>
+         <BN7PR08MB56840A3CD3BA7C107D0230CADB080@BN7PR08MB5684.namprd08.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9257 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=658
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905140143
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9257 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=707 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905140143
+X-TM-SNTS-SMTP: F333B7094BABB211A3915B8D030D67B65CA83E38D06C435B30630073FF8167922000:8
+X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi Bean,
 
-Shivasharan,
+On Tue, 2019-05-14 at 11:14 +0000, Bean Huo (beanhuo) wrote:
+> Hi, Stanley
+> Thanks for reply.
+> 
+> >
+> >On Mon, 2019-05-13 at 18:21 +0000, Bean Huo (beanhuo) wrote:
+> >> Hi, Stanley
+> >>
+> >> >+
+> >> >+static inline bool ufshcd_is_auto_hibern8_error(struct ufs_hba *hba,
+> >> >+						u32 intr_mask)
+> >> >+{
+> >> >+	return (ufshcd_is_auto_hibern8_supported(hba) &&
+> >> >+		!hba->uic_async_done &&
+> >>
+> >> Here check if uic_async_done is NULL, no big problem so far, but not safe
+> >enough.
+> >> How about setting a flag in ufshcd_auto_hibern8_enable(),
+> >
+> >>
+> >> I concern about how to compatible with auto_hibern8 disabled condition.
+> >
+> >Currently auto-hibern8 disabling method is not implemented in mainstream,
+> >so an "enabling" flag may looks redundant unless disabling path is really
+> >existed.
+> >
+> Did you try to update Auto-Hibernate Idle Timer with 0 through '/sys'  (scsi: ufs: Add support for Auto-Hibernate Idle Timer)? 
+> I don't know if this will disable your UFS controller Auto-Hibernate.
+> If having a look at UFS host Spec, software writes “0” to disable Auto-Hibernate Idle Timer.
+> Sorry I cannot verify this on my platform since it doesn't support auto-hibernate.
+> 
 
-> Update megaraid_sas to version 07.708.03.00.
+Sorry I missed this /sys interface for Auto-Hibernate control.
 
-Applied to 5.3/scsi-queue. Thanks!
+Yes, I have tested "Auto-Hibernate disabled" case, in this case,
+UIC_HIBERNATE_ENTER and UIC_HIBERNATE_EXIT interrupts comes only if
+Manual-Hibernate is performed and waiting for completion. Both
+interrupts will not be identified as Auto-Hibernate errors by checking
+hba->uic_async_done.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+As for your concerning, I would like to make "Auto-Hibernate error
+detection" more precise in next version: Use below conditions instead of
+checking hba->uic_async_done:
+
+As-is:
+
+static inline bool ufshcd_is_auto_hibern8_error(struct ufs_hba *hba,
+						u32 intr_mask)
+{
+	return (ufshcd_is_auto_hibern8_supported(hba) &&
+		!hba->uic_async_done &&
+		(intr_mask & UFSHCD_UIC_AH8_ERROR_MASK));
+}
+
+To-be:
+
+static bool ufshcd_is_auto_hibern8_error(struct ufs_hba *hba,
+						u32 intr_mask)
+{
+	if (!ufshcd_is_auto_hibern8_supported(hba))
+		return false;
+
+	if (!(intr_mask & UFSHCD_UIC_AH8_ERROR_MASK))
+		return false;
+
+	if (hba->active_uic_cmd &&
+	    ((hba->active_uic_cmd->command == UIC_CMD_DME_HIBER_ENTER) ||
+	    (hba->active_uic_cmd->command == UIC_CMD_DME_HIBER_EXIT)))
+		return false;
+
+	return true;
+}
+
+What would you think about this change?
+
+> 
+> >I agree that checking hba->uic_async_done here does not look so intuitive.
+> >However even if auto-hibern8 is disabled, these checks could be safe enough
+> >because both "UIC_HIBERNATE_ENTER" and "UIC_HIBERNATE_EXIT" are
+> >raised only if "manual-hibernate" is performed, and in this case hba-
+> >>uic_async_done shall be true.
+> >
+> Yes, most of cases ,this is no problem.
+> 
+> >Anything else or corner case I missed?
+> >
+> The others are fine. I only concern checking hba->uic_async_done.
+> 
+> //Bean
+
+Many thanks,
+Stanley
+
+
+
