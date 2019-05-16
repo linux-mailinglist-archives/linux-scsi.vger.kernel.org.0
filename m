@@ -2,87 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB59E1FC8B
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 May 2019 00:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DD61FFE5
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 May 2019 08:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726190AbfEOWXc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 May 2019 18:23:32 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:36451 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbfEOWXc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 May 2019 18:23:32 -0400
-Received: by mail-vs1-f65.google.com with SMTP id l20so1021374vsp.3
-        for <linux-scsi@vger.kernel.org>; Wed, 15 May 2019 15:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=8ebkEV1+iLoOSqy5D6YfW4cMCgg7deGM4hwcmbSHkmM=;
-        b=sS+lzePbiqPplWZrljYwqLygbv5/GeC4l0/Wb0b2AQQ68Z4HAbbAQQ6fcLU/Q19dIA
-         7fCxTgE3/J60dXz/pdliFfjgJv4mlp/bVoll2WS/GX4c7oif1ryMfkjZ+/btcKeVFVGK
-         KpnyhrpTs8yAjXGxFs+CXzIEc8c8vPA0f5KObq33JA/+YuMBhjzsZdB9axe/eQeiZmMf
-         xHZpqYuNC/kuuKLcdQaufbDUhtbEdorZKlClIGOvPWtyvlLFnaB+309TQyx3XMN+c96T
-         BV03X3Qgeg9nVgH3oLp5Z5j5ioTJ8eUQV4fRzbndj86JuXDcXGBhZyq/zj7bhxUvL9V9
-         AUTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=8ebkEV1+iLoOSqy5D6YfW4cMCgg7deGM4hwcmbSHkmM=;
-        b=RMolwta+OltABWyFbaylGvyHi4y6IzdVWKx/835STS7KKD6mLkXR6wLxBBxi0mobnW
-         W5SKQIKTDCr9aBWTPsdUuTWfc3lGKiWM1ox1pcwHF3zQEizkDlrc9x3C2h4/i/6+pKQC
-         Isolgs2v6xRtGuCUcL1x82BJ80Xy4RB3Klpdy8Y0oAWxeMkBb+rTfVrptqU6oBwdtIEC
-         fUkMOxMg6P3grkpj2C/egHEWAFh18g4U0AyZmrixAOu6C22V+1UNc4AMzJ6XNUyteSpR
-         4sLj/xs71cl91fdt4G1xBXtsrUMAn9VNb0a7sp5xrXIf8K3id4Ti1H4F9GlR9pQqVDwi
-         qFTg==
-X-Gm-Message-State: APjAAAU/vRNvI4Qg5TzJomjoD9sbHlY2lx8piU8xdU2QMkT+on7kMU4J
-        yq1To5LXC7+fQbf//OCwSvLFncE9o13oVGcMhrVsSx0=
-X-Google-Smtp-Source: APXvYqy/Bwzfu1mYQfMkZiDaUf482jigrv3agd13FZNLQnZ95ldaZgxX0cCb9aYzsCdFuofOJ7gkn/LlPqHgG081Dg8=
-X-Received: by 2002:a67:ee4f:: with SMTP id g15mr11823563vsp.38.1557959011499;
- Wed, 15 May 2019 15:23:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAP8WD_be_3=iHDpMYL+fKEFW6BbG8s=0TUPVm4ojiS7orOr0zA@mail.gmail.com>
- <20190513070218.GA25920@infradead.org> <CAP8WD_ZuOHn2VWjgYr-rLBd7Lm33nTvCvu7WKqW_0gfzqbbCLQ@mail.gmail.com>
- <20190513122846.GA15835@infradead.org>
-In-Reply-To: <20190513122846.GA15835@infradead.org>
-Reply-To: whiteheadm@acm.org
-From:   tedheadster <tedheadster@gmail.com>
-Date:   Wed, 15 May 2019 18:23:20 -0400
-Message-ID: <CAP8WD_YTqcduLsYRU-tCsCLC9wvAp4624Ls350Eb98K_fs0+Hw@mail.gmail.com>
-Subject: Re: Poor SWIOTLB Performance with HIGHMEM64G
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Whitehead <whiteheadm@acm.org>, linux-scsi@vger.kernel.org,
+        id S1726573AbfEPG6Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 May 2019 02:58:24 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:58902 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726319AbfEPG6Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 May 2019 02:58:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=cJhtT9u8y+hG+p/Xv3cZ+1L1SMwh5WOTyLBnnr/HCUo=; b=d9C+ZpTUlssoMEN8hGsk8SGjR
+        QMOmWClT65ltzF9EuVXuJvsfT43TD/Gu0xqqcelIT50zQI0xAx96F5DDVMNSMfcbr9h51/xln6a+Q
+        Kn14rkCki4W/BsDZ4thzA4qAdlVl6KatX1rLN5kZNN3+0iKYPyG50rH3aBKAfZJuu+7vUJklwWVC2
+        imycBhk9c9QPzN8IAIw3PJ5LdMI3qftFs8Qf2BUPQCvxqhQO+uiAbroONAztnlIBn+wFJCQVG4fhB
+        ZsAoPIvmHcef3XTYKR4mMgPqQhoG6qUNibwpaaxf8XUOF6L5mmL2aw8+Z3IkuKCyoQzco4C3LCfk3
+        /LzR38p9w==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hRALQ-0004V6-0w; Thu, 16 May 2019 06:58:24 +0000
+Date:   Wed, 15 May 2019 23:58:23 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     whiteheadm@acm.org
+Cc:     Christoph Hellwig <hch@infradead.org>, linux-scsi@vger.kernel.org,
         Hannes Reinecke <hare@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: Poor SWIOTLB Performance with HIGHMEM64G
+Message-ID: <20190516065823.GA17189@infradead.org>
+References: <CAP8WD_be_3=iHDpMYL+fKEFW6BbG8s=0TUPVm4ojiS7orOr0zA@mail.gmail.com>
+ <20190513070218.GA25920@infradead.org>
+ <CAP8WD_ZuOHn2VWjgYr-rLBd7Lm33nTvCvu7WKqW_0gfzqbbCLQ@mail.gmail.com>
+ <20190513122846.GA15835@infradead.org>
+ <CAP8WD_YTqcduLsYRU-tCsCLC9wvAp4624Ls350Eb98K_fs0+Hw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP8WD_YTqcduLsYRU-tCsCLC9wvAp4624Ls350Eb98K_fs0+Hw@mail.gmail.com>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, May 13, 2019 at 8:29 AM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Mon, May 13, 2019 at 08:20:03AM -0400, tedheadster wrote:
-> > On Mon, May 13, 2019 at 3:02 AM Christoph Hellwig <hch@infradead.org> wrote:
-> > >
-> > > On Sun, May 12, 2019 at 02:55:48PM -0400, tedheadster wrote:
-> > > > Christoph,
-> > > >   On the same hardware (reboot with different kernel) I am getting
-> > > > _horrible_ disk I/O performance on the 5.1.1. kernel compiled on a
-> > > > 32-bit platform using HIGHMEM64G (PAE) to access 32GiB of physical
-> > > > memory.
-> > > >
-> > > > The numbers are truly terrible to copy a 16GiB file from one disk to a
-> > > > different one:
-> > >
+On Wed, May 15, 2019 at 06:23:20PM -0400, tedheadster wrote:
+> Christoph,
+>   I believe I found the problem, and it does not relate to anything I
+> considered before. I forgot that I had chosen the SLOB memory
+> allocator for a previous test and it was still enabled. There was a
+> huge amount of locking slowing the system down while SLOB was
+> allocating new memory with its simple algorithm.
+> 
+> Switching to SLUB has improved it immensely. I am sorry I missed this
+> rather important item.
 
-Christoph,
-  I believe I found the problem, and it does not relate to anything I
-considered before. I forgot that I had chosen the SLOB memory
-allocator for a previous test and it was still enabled. There was a
-huge amount of locking slowing the system down while SLOB was
-allocating new memory with its simple algorithm.
-
-Switching to SLUB has improved it immensely. I am sorry I missed this
-rather important item.
-
-- Matthew
+Can you still send me the dmesg output with the AHCI debug patch?
+I'm curious why we can't do 64-bit DMA to your device.
