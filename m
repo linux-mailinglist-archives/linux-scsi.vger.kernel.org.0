@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B6421A2B
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 May 2019 16:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2577421A2C
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 May 2019 16:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729157AbfEQO7c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 May 2019 10:59:32 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37435 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728968AbfEQO7c (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 May 2019 10:59:32 -0400
-Received: by mail-pf1-f196.google.com with SMTP id g3so3819892pfi.4
-        for <linux-scsi@vger.kernel.org>; Fri, 17 May 2019 07:59:32 -0700 (PDT)
+        id S1729159AbfEQO7f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 17 May 2019 10:59:35 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38707 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728968AbfEQO7f (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 17 May 2019 10:59:35 -0400
+Received: by mail-pg1-f194.google.com with SMTP id j26so3430016pgl.5
+        for <linux-scsi@vger.kernel.org>; Fri, 17 May 2019 07:59:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=/YLNZ1FykKOOVcQkvECrf1/wsgB2Eqx9DjUdpN3rVWg=;
-        b=WZ9XipDkgfe9BfFc9xDoLVAm0zsIe5W/cj/ZXfmETDHkaO8qDKiT9FRgvW3iGQSRj1
-         +29I29ncT6knIq7FCcHghAoAKAfYAeqQvAHl4moA2+2n1kplN2FfWNJ+JZpuI9eDq2rt
-         Lq8D/n+g4vM0rCBRFlNZPv7TEK8ZVqlDLnS6c=
+        bh=zSUYxVVxU5p5nyoJhbFAlVm5S0sVOmvq6+zA3Xke3HI=;
+        b=SDa1eX1VKQZgJCotB28eeof110XdtlXgbuONW/ISD7Vg+X1PteMtJKykay8sYZxL9h
+         YufRITlumBKxyzxQJELCUGN85orj8B7PIaByc2rbXb4FmQIHd10810GWSWVUuZ8/osb/
+         cRpGDUF2mfGp9rOpqiU4n+PFULN9H9UGO2IGs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=/YLNZ1FykKOOVcQkvECrf1/wsgB2Eqx9DjUdpN3rVWg=;
-        b=YmuaTv0VHtR4tf5IzBudNlIt5s0Fk08cRFu7QMlU8rEBc5Y0W275TyBBKfBtIfTeWr
-         51p6lnRp9A+pkS6AHp6K+zU7bxgyefFQMNHAUzXffMEv1A3XTILaikj94kjHAuQUWgsl
-         95aiP64vXlk21WUxDkYp6s9SnsznEcnUeTJG4frZGGiBk9lo/U5YiLiAmMGzcgy4FkiV
-         MOOXFneAUlPCPFW9NiYnxSz5ntHP8tBqLhhB7D3FacaprDS5Uy5Tm/Pk/wjHlLF6LdDp
-         oa3LB1lsAWNNxebFtZ5t0DgADJPe8Ds6iDmYKANBynEYr+R/mVg0fGs45UZ6636itZIF
-         AFMQ==
-X-Gm-Message-State: APjAAAVokcYK7A8149vQpHR9hjImFpVZeZmTaqEpzt1mggBRL4bzRTz7
-        bAa4uC3rEpmI+k883RlNfwcx1Ev8CaXX8/w3HZSVdM/SABzla0NQwv1aremdLe3M2gBJ/4yKHxk
-        uSf8DXFsKyLqFg3sNI7pgple/XGDda4ZBI6UZD6YWXPKm4p0QzCB7MZPbXTH7WKYzy7hqbMhaN5
-        lXvyXVJx3K2nD9/CSyUA==
-X-Google-Smtp-Source: APXvYqzh2hgHwYwbVqCkmqh0gctLS67RrvEPX8RGONIAqGYCBOBi7GwpOecwGgqPAQJIK7OXUMOmLQ==
-X-Received: by 2002:a63:dd4a:: with SMTP id g10mr3808345pgj.419.1558105171485;
-        Fri, 17 May 2019 07:59:31 -0700 (PDT)
+        bh=zSUYxVVxU5p5nyoJhbFAlVm5S0sVOmvq6+zA3Xke3HI=;
+        b=pu36bPrw5SmQdTGBoeHk5d9D6PPxtrvw7eBmck8LtPLqfQRRB+auw/xJKxbjH9kfw+
+         IbC5ORAykrFiLNv920lpqgGhjH9q3nMlRwoCc99idQ514x2jmLoULN4TNiCbzzl51awh
+         snq5PLdwFlito3mC2swrt6bhdD+nW83l5cpyOYH7nid75LQy99WTYGJtVrxxDBDrBriE
+         wfdkWi0rNEOQ4QXqKci5ooz3UjXA1mkg+spRqbud1VGTqcriKN5V1/8LIkOuN0eZkiUC
+         316Ezw61J26O7JIQ/zkdBDY6VF4vthgGFSyJElDwEWyrZvD+dxNDzv0djpDwYQzPkOR2
+         m5vQ==
+X-Gm-Message-State: APjAAAWB3CsYeWjBpVneyNGH7XiJX3spTD/87SPONL72RTb2AFerQ1RG
+        z5VXp99IXEpwJCvFo+J4Ruz2edvk3gPXt3kZVEKFvdsaOW9A9LHLqZOIh5i5UtKFtOI3V0I1Tvb
+        Klhn802rqwUjcD9D5UUXUEXhUaerDzWVYgfG63qCUq2lEiSWYesIy0JZ8INHuY/Xw16o1xwE87E
+        tymshf27lxvmuY8cDZ3g==
+X-Google-Smtp-Source: APXvYqw79y06oZ3kRQ4M9uwc5r3dRYMA5jstnwQLFsMweYTBx/5CpPz8Z19SIN019Z679v4jazszWw==
+X-Received: by 2002:a65:644e:: with SMTP id s14mr58145010pgv.290.1558105174276;
+        Fri, 17 May 2019 07:59:34 -0700 (PDT)
 Received: from dhcp-10-123-20-26.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id c189sm20739195pfg.46.2019.05.17.07.59.29
+        by smtp.gmail.com with ESMTPSA id c189sm20739195pfg.46.2019.05.17.07.59.31
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 17 May 2019 07:59:30 -0700 (PDT)
+        Fri, 17 May 2019 07:59:33 -0700 (PDT)
 From:   Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     suganath-prabu.subramani@gmail.com, Sathya.Prakash@broadcom.com,
         sreekanth.reddy@broadcom.com,
         Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-Subject: [PATCH 05/10] mpt3sas: Use highiops queues if more in-flights
-Date:   Fri, 17 May 2019 10:59:00 -0400
-Message-Id: <20190517145905.4765-6-suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH 06/10] mpt3sas: save msix index and use same while posting RD
+Date:   Fri, 17 May 2019 10:59:01 -0400
+Message-Id: <20190517145905.4765-7-suganath-prabu.subramani@broadcom.com>
 X-Mailer: git-send-email 2.18.1
 In-Reply-To: <20190517145905.4765-1-suganath-prabu.subramani@broadcom.com>
 References: <20190517145905.4765-1-suganath-prabu.subramani@broadcom.com>
@@ -58,141 +58,170 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Driver will use round robin method for io submission in batches
-within the high iops queues when in-flight ios on the target device
-is more than 8.
+Code refactor:
+In the IO submission path _base_get_msix_index is called twice,
+one while getting the smid; msix index is saved in msix_io filed
+in scsiio tracker and anther while posting the request descriptor(RD).
 
-If in-flight ios per SCSI device more than 8, driver will use
-high iops queue else driver will use low latency reply queues.
+now code refactor is done to determine msix index only while posting
+the request descriptor and save determined msix index in msix_io
+field.
 
 Signed-off-by: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 36 +++++++++++++++++++++++++++++++++++-
- drivers/scsi/mpt3sas/mpt3sas_base.h | 14 +++++++++++++-
- 2 files changed, 48 insertions(+), 2 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.c  | 42 ++++++++++++++++++++++++++++--------
+ drivers/scsi/mpt3sas/mpt3sas_base.h  |  1 +
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c |  1 +
+ 3 files changed, 35 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 143d193..5af8a88 100644
+index 5af8a88..17bb995 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
 +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -3323,6 +3323,35 @@ _base_get_msix_index(struct MPT3SAS_ADAPTER *ioc,
+@@ -3399,8 +3399,8 @@ mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
+ 
+ 	smid = tag + 1;
+ 	request->cb_idx = cb_idx;
+-	request->msix_io = _base_get_msix_index(ioc, NULL);
+ 	request->smid = smid;
++	request->scmd = scmd;
+ 	INIT_LIST_HEAD(&request->chain_list);
+ 	return smid;
  }
+@@ -3454,6 +3454,7 @@ void mpt3sas_base_clear_st(struct MPT3SAS_ADAPTER *ioc,
+ 		return;
+ 	st->cb_idx = 0xFF;
+ 	st->direct_io = 0;
++	st->scmd = NULL;
+ 	atomic_set(&ioc->chain_lookup[st->smid - 1].chain_offset, 0);
+ 	st->smid = 0;
+ }
+@@ -3554,6 +3555,29 @@ _base_writeq(__u64 b, volatile void __iomem *addr, spinlock_t *writeq_lock)
+ #endif
  
  /**
-+ * _base_get_high_iops_msix_index - get the msix index of
-+ *				high iops queues
++ * _base_set_and_get_msix_index - get the msix index and assign to msix_io
++ *                                variable of scsi tracker
 + * @ioc: per adapter object
-+ * @scmd: scsi_cmnd object
++ * @smid: system request message index
 + *
-+ * Returns: msix index of high iops reply queues.
-+ * i.e. high iops reply queue on which IO request's
-+ * reply should be posted by the HBA firmware.
++ * returns msix index.
 + */
-+static inline u8
-+_base_get_high_iops_msix_index(struct MPT3SAS_ADAPTER *ioc,
-+	struct scsi_cmnd *scmd)
++static u8
++_base_set_and_get_msix_index(struct MPT3SAS_ADAPTER *ioc, u16 smid)
 +{
-+	/**
-+	 * Round robin the IO interrupts among the high iops
-+	 * reply queues in terms of batch count 16 when outstanding
-+	 * IOs on the target device is >=8.
-+	 */
-+	if (atomic_read(&scmd->device->device_busy) >
-+	    MPT3SAS_DEVICE_HIGH_IOPS_DEPTH)
-+		return base_mod64((
-+		    atomic64_add_return(1, &ioc->high_iops_outstanding) /
-+		    MPT3SAS_HIGH_IOPS_BATCH_COUNT),
-+		    MPT3SAS_HIGH_IOPS_REPLY_QUEUES);
++	struct scsiio_tracker *st;
 +
-+	return _base_get_msix_index(ioc, scmd);
++	st = (smid < ioc->hi_priority_smid) ?
++		(_get_st_from_smid(ioc, smid)) : (NULL);
++
++	if (st == NULL)
++		return  _base_get_msix_index(ioc, NULL);
++
++	st->msix_io = ioc->get_msix_index_for_smlio(ioc, st->scmd);
++	return st->msix_io;
 +}
 +
 +/**
-  * mpt3sas_base_get_smid - obtain a free smid from internal queue
+  * _base_put_smid_mpi_ep_scsi_io - send SCSI_IO request to firmware
   * @ioc: per adapter object
-  * @cb_idx: callback index
-@@ -6708,6 +6737,7 @@ mpt3sas_base_attach(struct MPT3SAS_ADAPTER *ioc)
- 		ioc->build_sg_scmd = &_base_build_sg_scmd;
- 		ioc->build_sg = &_base_build_sg;
- 		ioc->build_zero_len_sge = &_base_build_zero_len_sge;
-+		ioc->get_msix_index_for_smlio = &_base_get_msix_index;
- 		break;
- 	case MPI25_VERSION:
- 	case MPI26_VERSION:
-@@ -6722,7 +6752,11 @@ mpt3sas_base_attach(struct MPT3SAS_ADAPTER *ioc)
- 		ioc->build_nvme_prp = &_base_build_nvme_prp;
- 		ioc->build_zero_len_sge = &_base_build_zero_len_sge_ieee;
- 		ioc->sge_size_ieee = sizeof(Mpi2IeeeSgeSimple64_t);
--
-+		if (ioc->high_iops_queues)
-+			ioc->get_msix_index_for_smlio =
-+					&_base_get_high_iops_msix_index;
-+		else
-+			ioc->get_msix_index_for_smlio = &_base_get_msix_index;
- 		break;
+  * @smid: system request message index
+@@ -3574,7 +3598,7 @@ _base_put_smid_mpi_ep_scsi_io(struct MPT3SAS_ADAPTER *ioc,
+ 	_base_clone_mpi_to_sys_mem(mpi_req_iomem, (void *)mfp,
+ 					ioc->request_sz);
+ 	descriptor.SCSIIO.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_SCSI_IO;
+-	descriptor.SCSIIO.MSIxIndex =  _base_get_msix_index(ioc, NULL);
++	descriptor.SCSIIO.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
+ 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
+ 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
+ 	descriptor.SCSIIO.LMID = 0;
+@@ -3596,7 +3620,7 @@ _base_put_smid_scsi_io(struct MPT3SAS_ADAPTER *ioc, u16 smid, u16 handle)
+ 
+ 
+ 	descriptor.SCSIIO.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_SCSI_IO;
+-	descriptor.SCSIIO.MSIxIndex =  _base_get_msix_index(ioc, NULL);
++	descriptor.SCSIIO.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
+ 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
+ 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
+ 	descriptor.SCSIIO.LMID = 0;
+@@ -3619,7 +3643,7 @@ _base_put_smid_fast_path(struct MPT3SAS_ADAPTER *ioc, u16 smid,
+ 
+ 	descriptor.SCSIIO.RequestFlags =
+ 	    MPI25_REQ_DESCRIPT_FLAGS_FAST_PATH_SCSI_IO;
+-	descriptor.SCSIIO.MSIxIndex = _base_get_msix_index(ioc, NULL);
++	descriptor.SCSIIO.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
+ 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
+ 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
+ 	descriptor.SCSIIO.LMID = 0;
+@@ -3683,7 +3707,7 @@ mpt3sas_base_put_smid_nvme_encap(struct MPT3SAS_ADAPTER *ioc, u16 smid)
+ 
+ 	descriptor.Default.RequestFlags =
+ 		MPI26_REQ_DESCRIPT_FLAGS_PCIE_ENCAPSULATED;
+-	descriptor.Default.MSIxIndex =  _base_get_msix_index(ioc, NULL);
++	descriptor.Default.MSIxIndex =  _base_set_and_get_msix_index(ioc, smid);
+ 	descriptor.Default.SMID = cpu_to_le16(smid);
+ 	descriptor.Default.LMID = 0;
+ 	descriptor.Default.DescriptorTypeDependent = 0;
+@@ -3715,7 +3739,7 @@ _base_put_smid_default(struct MPT3SAS_ADAPTER *ioc, u16 smid)
  	}
- 	if (ioc->atomic_desc_capable) {
+ 	request = (u64 *)&descriptor;
+ 	descriptor.Default.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_DEFAULT_TYPE;
+-	descriptor.Default.MSIxIndex =  _base_get_msix_index(ioc, NULL);
++	descriptor.Default.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
+ 	descriptor.Default.SMID = cpu_to_le16(smid);
+ 	descriptor.Default.LMID = 0;
+ 	descriptor.Default.DescriptorTypeDependent = 0;
+@@ -3745,7 +3769,7 @@ _base_put_smid_scsi_io_atomic(struct MPT3SAS_ADAPTER *ioc, u16 smid,
+ 	u32 *request = (u32 *)&descriptor;
+ 
+ 	descriptor.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_SCSI_IO;
+-	descriptor.MSIxIndex = _base_get_msix_index(ioc, NULL);
++	descriptor.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
+ 	descriptor.SMID = cpu_to_le16(smid);
+ 
+ 	writel(cpu_to_le32(*request), &ioc->chip->AtomicRequestDescriptorPost);
+@@ -3767,7 +3791,7 @@ _base_put_smid_fast_path_atomic(struct MPT3SAS_ADAPTER *ioc, u16 smid,
+ 	u32 *request = (u32 *)&descriptor;
+ 
+ 	descriptor.RequestFlags = MPI25_REQ_DESCRIPT_FLAGS_FAST_PATH_SCSI_IO;
+-	descriptor.MSIxIndex = _base_get_msix_index(ioc, NULL);
++	descriptor.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
+ 	descriptor.SMID = cpu_to_le16(smid);
+ 
+ 	writel(cpu_to_le32(*request), &ioc->chip->AtomicRequestDescriptorPost);
+@@ -3811,7 +3835,7 @@ _base_put_smid_default_atomic(struct MPT3SAS_ADAPTER *ioc, u16 smid)
+ 	u32 *request = (u32 *)&descriptor;
+ 
+ 	descriptor.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_DEFAULT_TYPE;
+-	descriptor.MSIxIndex = _base_get_msix_index(ioc, NULL);
++	descriptor.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
+ 	descriptor.SMID = cpu_to_le16(smid);
+ 
+ 	writel(cpu_to_le32(*request), &ioc->chip->AtomicRequestDescriptorPost);
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-index bbbeb88..85db1f2 100644
+index 85db1f2..f3818e3 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_base.h
 +++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-@@ -356,7 +356,9 @@ struct mpt3sas_nvme_cmd {
- #define VIRTUAL_IO_FAILED_RETRY			(0x32010081)
- 
- /* High IOPs definitions */
-+#define MPT3SAS_DEVICE_HIGH_IOPS_DEPTH		8
- #define MPT3SAS_HIGH_IOPS_REPLY_QUEUES		8
-+#define MPT3SAS_HIGH_IOPS_BATCH_COUNT		16
- #define MPT3SAS_GEN35_MAX_MSIX_QUEUES		128
- 
- /* OEM Specific Flags will come from OEM specific header files */
-@@ -928,6 +930,12 @@ typedef void (*PUT_SMID_IO_FP_HIP) (struct MPT3SAS_ADAPTER *ioc, u16 smid,
- 	u16 funcdep);
- typedef void (*PUT_SMID_DEFAULT) (struct MPT3SAS_ADAPTER *ioc, u16 smid);
- typedef u32 (*BASE_READ_REG) (const volatile void __iomem *addr);
-+/*
-+ * To get high iops reply queue's msix index when high iops mode is enabled
-+ * else get the msix index of general reply queues.
-+ */
-+typedef u8 (*GET_MSIX_INDEX) (struct MPT3SAS_ADAPTER *ioc,
-+	struct scsi_cmnd *scmd);
- 
- /* IOC Facts and Port Facts converted from little endian to cpu */
- union mpi3_version_union {
-@@ -1029,6 +1037,8 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct MPT3SAS_ADAPTER *ioc);
-  * @cpu_msix_table: table for mapping cpus to msix index
-  * @cpu_msix_table_sz: table size
-  * @total_io_cnt: Gives total IO count, used to load balance the interrupts
-+ * @high_iops_outstanding: used to load balance the interrupts
-+ *				within high iops reply queues
-  * @msix_load_balance: Enables load balancing of interrupts across
-  * the multiple MSIXs
-  * @schedule_dead_ioc_flush_running_cmds: callback to flush pending commands
-@@ -1152,6 +1162,7 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct MPT3SAS_ADAPTER *ioc);
-  *	crash. To avoid the above race condition we use mutex syncrhonization
-  *	which ensures the syncrhonization between cli/sysfs_show path.
-  * @atomic_desc_capable: Atomic Request Descriptor support.
-+ * @GET_MSIX_INDEX: Get the msix index of high iops queues.
+@@ -830,6 +830,7 @@ struct chain_lookup {
   */
- struct MPT3SAS_ADAPTER {
- 	struct list_head list;
-@@ -1211,6 +1222,7 @@ struct MPT3SAS_ADAPTER {
- 	MPT3SAS_FLUSH_RUNNING_CMDS schedule_dead_ioc_flush_running_cmds;
- 	u32             non_operational_loop;
- 	atomic64_t      total_io_cnt;
-+	atomic64_t	high_iops_outstanding;
- 	bool            msix_load_balance;
- 	u16		thresh_hold;
- 	u8		high_iops_queues;
-@@ -1432,7 +1444,7 @@ struct MPT3SAS_ADAPTER {
- 	PUT_SMID_IO_FP_HIP put_smid_fast_path;
- 	PUT_SMID_IO_FP_HIP put_smid_hi_priority;
- 	PUT_SMID_DEFAULT put_smid_default;
--
-+	GET_MSIX_INDEX get_msix_index_for_smlio;
- };
- 
- typedef u8 (*MPT_CALLBACK)(struct MPT3SAS_ADAPTER *ioc, u16 smid, u8 msix_index,
+ struct scsiio_tracker {
+ 	u16	smid;
++	struct scsi_cmnd *scmd;
+ 	u8	cb_idx;
+ 	u8	direct_io;
+ 	struct pcie_sg_list pcie_sg_list;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index 1008c5e..3e93c4a 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -5210,6 +5210,7 @@ _scsih_io_done(struct MPT3SAS_ADAPTER *ioc, u16 smid, u8 msix_index, u32 reply)
+ 	     ((ioc_status & MPI2_IOCSTATUS_MASK)
+ 	      != MPI2_IOCSTATUS_SCSI_TASK_TERMINATED)) {
+ 		st->direct_io = 0;
++		st->scmd = scmd;
+ 		memcpy(mpi_request->CDB.CDB32, scmd->cmnd, scmd->cmd_len);
+ 		mpi_request->DevHandle =
+ 		    cpu_to_le16(sas_device_priv_data->sas_target->handle);
 -- 
 1.8.3.1
 
