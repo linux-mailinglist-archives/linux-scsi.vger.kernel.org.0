@@ -2,81 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E04E7221FF
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 May 2019 09:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 033F222203
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 May 2019 09:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbfERHQb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 May 2019 03:16:31 -0400
-Received: from mga02.intel.com ([134.134.136.20]:13635 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726056AbfERHQa (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 18 May 2019 03:16:30 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 May 2019 00:16:30 -0700
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 18 May 2019 00:16:29 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1hRta0-00093n-I3; Sat, 18 May 2019 15:16:28 +0800
-Date:   Sat, 18 May 2019 15:15:44 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-Cc:     kbuild-all@01.org, linux-scsi@vger.kernel.org,
-        suganath-prabu.subramani@gmail.com, Sathya.Prakash@broadcom.com,
-        sreekanth.reddy@broadcom.com,
-        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-Subject: [RFC PATCH] mpt3sas: _base_put_smid_fast_path can be static
-Message-ID: <20190518071544.GA20877@lkp-kbuild18>
-References: <20190517145905.4765-2-suganath-prabu.subramani@broadcom.com>
+        id S1726262AbfERHVQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 May 2019 03:21:16 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:53282 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725468AbfERHVQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 May 2019 03:21:16 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4I7JNQR174161;
+        Sat, 18 May 2019 07:21:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=pzUeYhNTyTFhn2BzHGEtd88/1n15zyJy5iw5Ni9edjk=;
+ b=WghLOMh9jtUKlzHlcn0SFvkiFaWUxruNkMjq7QxdYJIhXE90l26aiF1RgnBVYlQJeZVl
+ +IgdAlxpKi7t3fvtCFY+kfr68BHePcpjuSVeEryvNtTX9/q6vqxPk1z4HsZBNcHodC4D
+ ApnL8M8jtS/PKQA3dvWDZY5mewOUoZf7LSz0PxXPFWLmS7naZJXgtfeOmHgX4uEYdMju
+ 17s/OeFzwMt/apJ4Y7KF9LelRxXsx1Gf1O8lyzNs/W0KcQIwboNuPHWOQl3mBWKX84PE
+ wAVYMPU+oqNg+TgmB3w+ayh3iQ5IiPoxb361qWc4DQ26r1Th8cw7b7i3YWS8Soz1bBT5 Vw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2sj9ft0d03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 18 May 2019 07:21:09 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4I7L29h065782;
+        Sat, 18 May 2019 07:21:09 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2sj75sb2vv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 18 May 2019 07:21:09 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4I7L7bA030412;
+        Sat, 18 May 2019 07:21:07 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sat, 18 May 2019 07:21:06 +0000
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] final round of SCSI updates for the 5.1+ merge window
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <1558104285.3050.8.camel@HansenPartnership.com>
+        <CAHk-=wiAdmRv-Piq6LKvgLDgQC+AV-RYK2O-RC09SRRGq3v1cw@mail.gmail.com>
+Date:   Sat, 18 May 2019 03:21:04 -0400
+In-Reply-To: <CAHk-=wiAdmRv-Piq6LKvgLDgQC+AV-RYK2O-RC09SRRGq3v1cw@mail.gmail.com>
+        (Linus Torvalds's message of "Fri, 17 May 2019 14:20:14 -0700")
+Message-ID: <yq1bm009qjj.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190517145905.4765-2-suganath-prabu.subramani@broadcom.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9260 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905180054
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9260 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905180054
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Fixes: 0f30229824bc ("mpt3sas: function pointers of request descriptor")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- mpt3sas_base.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Linus,
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index f8bdb45..ab0392a 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -3535,7 +3535,7 @@ _base_put_smid_scsi_io(struct MPT3SAS_ADAPTER *ioc, u16 smid, u16 handle)
-  * @smid: system request message index
-  * @handle: device handle
-  */
--void
-+static void
- _base_put_smid_fast_path(struct MPT3SAS_ADAPTER *ioc, u16 smid,
- 	u16 handle)
- {
-@@ -3558,7 +3558,7 @@ _base_put_smid_fast_path(struct MPT3SAS_ADAPTER *ioc, u16 smid,
-  * @smid: system request message index
-  * @msix_task: msix_task will be same as msix of IO incase of task abort else 0.
-  */
--void
-+static void
- _base_put_smid_hi_priority(struct MPT3SAS_ADAPTER *ioc, u16 smid,
- 	u16 msix_task)
- {
-@@ -3621,7 +3621,7 @@ mpt3sas_base_put_smid_nvme_encap(struct MPT3SAS_ADAPTER *ioc, u16 smid)
-  * @ioc: per adapter object
-  * @smid: system request message index
-  */
--void
-+static void
- _base_put_smid_default(struct MPT3SAS_ADAPTER *ioc, u16 smid)
- {
- 	Mpi2RequestDescriptorUnion_t descriptor;
+> No. That code is insane. It looks very fishy indeed to me, and I'm not
+> pulling it this late in the game.
+
+Yeah, my mess. Sorry.
+
+A couple of people poked me about this issue last week. I merged the
+patch without much scrutiny since several people had commented and
+tested when it was originally posted a few months back. In looking over
+the changes again, however, I agree with your assertion that it is
+fishy.
+
+> Just revert the oneliner SCSI change that caused the regression.
+
+My patch wasn't exclusively trying to address the regression wrt. drives
+that temporarily come up read-only. Device or fabric events can also
+trigger revalidate and there's a whole can of worms in that department
+thanks to the intersection between device characteristics changing and
+the partition table potentially being updated. This was my feeble
+attempt at fixing several long-standing issues in the read-only device
+handling which we occasionally hit.
+
+I'll drop the offending patch and revert Jeremy's change for now. And
+then revisit the gorge of eternal peril that is revalidate...
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
