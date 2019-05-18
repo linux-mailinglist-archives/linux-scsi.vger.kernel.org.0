@@ -2,103 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 033F222203
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 May 2019 09:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9465222A1
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 May 2019 11:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbfERHVQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 May 2019 03:21:16 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:53282 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725468AbfERHVQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 May 2019 03:21:16 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4I7JNQR174161;
-        Sat, 18 May 2019 07:21:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=pzUeYhNTyTFhn2BzHGEtd88/1n15zyJy5iw5Ni9edjk=;
- b=WghLOMh9jtUKlzHlcn0SFvkiFaWUxruNkMjq7QxdYJIhXE90l26aiF1RgnBVYlQJeZVl
- +IgdAlxpKi7t3fvtCFY+kfr68BHePcpjuSVeEryvNtTX9/q6vqxPk1z4HsZBNcHodC4D
- ApnL8M8jtS/PKQA3dvWDZY5mewOUoZf7LSz0PxXPFWLmS7naZJXgtfeOmHgX4uEYdMju
- 17s/OeFzwMt/apJ4Y7KF9LelRxXsx1Gf1O8lyzNs/W0KcQIwboNuPHWOQl3mBWKX84PE
- wAVYMPU+oqNg+TgmB3w+ayh3iQ5IiPoxb361qWc4DQ26r1Th8cw7b7i3YWS8Soz1bBT5 Vw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2sj9ft0d03-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 May 2019 07:21:09 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4I7L29h065782;
-        Sat, 18 May 2019 07:21:09 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2sj75sb2vv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 18 May 2019 07:21:09 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4I7L7bA030412;
-        Sat, 18 May 2019 07:21:07 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 18 May 2019 07:21:06 +0000
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] final round of SCSI updates for the 5.1+ merge window
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <1558104285.3050.8.camel@HansenPartnership.com>
-        <CAHk-=wiAdmRv-Piq6LKvgLDgQC+AV-RYK2O-RC09SRRGq3v1cw@mail.gmail.com>
-Date:   Sat, 18 May 2019 03:21:04 -0400
-In-Reply-To: <CAHk-=wiAdmRv-Piq6LKvgLDgQC+AV-RYK2O-RC09SRRGq3v1cw@mail.gmail.com>
-        (Linus Torvalds's message of "Fri, 17 May 2019 14:20:14 -0700")
-Message-ID: <yq1bm009qjj.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1729857AbfERJXN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 May 2019 05:23:13 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:36614 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725468AbfERJXN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 18 May 2019 05:23:13 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id F37B33333A3EEF29060B;
+        Sat, 18 May 2019 17:23:09 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.439.0; Sat, 18 May 2019
+ 17:23:00 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <martin.petersen@oracle.com>, <jejb@linux.vnet.ibm.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <dan.j.williams@intel.com>, <jthumshirn@suse.de>,
+        <hch@lst.de>, <huangdaode@hisilicon.com>,
+        <chenxiang66@hisilicon.com>, <miaoxie@huawei.com>,
+        <john.garry@huawei.com>, <zhaohongjiang@huawei.com>,
+        Jason Yan <yanaijie@huawei.com>
+Subject: [PATCH] scsi: libsas: no need to join wide port again in sas_ex_discover_dev()
+Date:   Sat, 18 May 2019 17:40:57 +0800
+Message-ID: <20190518094057.18046-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.17.2
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9260 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905180054
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9260 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905180054
+X-Originating-IP: [10.175.124.28]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Since we are processing events synchronously now, the second call of
+sas_ex_join_wide_port() in sas_ex_discover_dev() is not needed. There
+will be no races with other works in disco workqueue. So remove the
+second sas_ex_join_wide_port().
 
-Linus,
+I did not change the return value of 'res' to error when discover failed
+because we need to continue to discover other phys if one phy discover
+failed. So let's keep that logic as before and just add a debug log to
+detect the failure.
 
-> No. That code is insane. It looks very fishy indeed to me, and I'm not
-> pulling it this late in the game.
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
+---
+ drivers/scsi/libsas/sas_expander.c | 24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
-Yeah, my mess. Sorry.
-
-A couple of people poked me about this issue last week. I merged the
-patch without much scrutiny since several people had commented and
-tested when it was originally posted a few months back. In looking over
-the changes again, however, I agree with your assertion that it is
-fishy.
-
-> Just revert the oneliner SCSI change that caused the regression.
-
-My patch wasn't exclusively trying to address the regression wrt. drives
-that temporarily come up read-only. Device or fabric events can also
-trigger revalidate and there's a whole can of worms in that department
-thanks to the intersection between device characteristics changing and
-the partition table potentially being updated. This was my feeble
-attempt at fixing several long-standing issues in the read-only device
-handling which we occasionally hit.
-
-I'll drop the offending patch and revert Jeremy's change for now. And
-then revisit the gorge of eternal peril that is revalidate...
-
+diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+index 83f2fd70ce76..8f90dd497dfe 100644
+--- a/drivers/scsi/libsas/sas_expander.c
++++ b/drivers/scsi/libsas/sas_expander.c
+@@ -1116,27 +1116,9 @@ static int sas_ex_discover_dev(struct domain_device *dev, int phy_id)
+ 		break;
+ 	}
+ 
+-	if (child) {
+-		int i;
+-
+-		for (i = 0; i < ex->num_phys; i++) {
+-			if (ex->ex_phy[i].phy_state == PHY_VACANT ||
+-			    ex->ex_phy[i].phy_state == PHY_NOT_PRESENT)
+-				continue;
+-			/*
+-			 * Due to races, the phy might not get added to the
+-			 * wide port, so we add the phy to the wide port here.
+-			 */
+-			if (SAS_ADDR(ex->ex_phy[i].attached_sas_addr) ==
+-			    SAS_ADDR(child->sas_addr)) {
+-				ex->ex_phy[i].phy_state= PHY_DEVICE_DISCOVERED;
+-				if (sas_ex_join_wide_port(dev, i))
+-					pr_debug("Attaching ex phy%02d to wide port %016llx\n",
+-						 i, SAS_ADDR(ex->ex_phy[i].attached_sas_addr));
+-			}
+-		}
+-	}
+-
++	if (!child)
++		pr_debug("Ex %016llx phy%02d failed to discover\n",
++			 SAS_ADDR(dev->sas_addr), phy_id);
+ 	return res;
+ }
+ 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.17.2
+
