@@ -2,62 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB12D238C9
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 15:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1B12395C
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 16:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389502AbfETNwS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 May 2019 09:52:18 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7664 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731648AbfETNwS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 20 May 2019 09:52:18 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 1F7CA5F45FA0FA683575;
-        Mon, 20 May 2019 21:52:16 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Mon, 20 May 2019
- 21:52:04 +0800
-Subject: Re: [PATCH v2] scsi: libsas: no need to join wide port again in
- sas_ex_discover_dev()
-To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.vnet.ibm.com>
-References: <20190520140600.22861-1-yanaijie@huawei.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <hare@suse.com>, <dan.j.williams@intel.com>, <jthumshirn@suse.de>,
-        <hch@lst.de>, <huangdaode@hisilicon.com>,
-        <chenxiang66@hisilicon.com>, <miaoxie@huawei.com>,
-        <zhaohongjiang@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <7b7c51db-15f3-d06b-ba58-8b6ef618f7d2@huawei.com>
-Date:   Mon, 20 May 2019 14:51:57 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
-MIME-Version: 1.0
-In-Reply-To: <20190520140600.22861-1-yanaijie@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
+        id S1731111AbfETOFm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 May 2019 10:05:42 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:23132 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730669AbfETOFm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 May 2019 10:05:42 -0400
+X-UUID: 8af66a61be8e4e64acf2807f9c7fe1a0-20190520
+X-UUID: 8af66a61be8e4e64acf2807f9c7fe1a0-20190520
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1397006878; Mon, 20 May 2019 22:05:36 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 20 May 2019 22:05:29 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 20 May 2019 22:05:29 +0800
+Message-ID: <1558361129.660.8.camel@mtkswgap22>
+Subject: RE: [PATCH v3 2/3] scsi: ufs: Add error-handling of Auto-Hibernate
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     Avri Altman <Avri.Altman@wdc.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>,
+        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "evgreen@chromium.org" <evgreen@chromium.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>
+Date:   Mon, 20 May 2019 22:05:29 +0800
+In-Reply-To: <SN6PR04MB4925DE7B66A63ED81EDD9444FC060@SN6PR04MB4925.namprd04.prod.outlook.com>
+References: <1558341138-18043-1-git-send-email-stanley.chu@mediatek.com>
+         <1558341138-18043-3-git-send-email-stanley.chu@mediatek.com>
+         <SN6PR04MB4925DE7B66A63ED81EDD9444FC060@SN6PR04MB4925.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+MIME-Version: 1.0
+X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 20/05/2019 15:06, Jason Yan wrote:
-> Since we are processing events synchronously now, the second call of
-> sas_ex_join_wide_port() in sas_ex_discover_dev() is not needed. There
-> will be no races with other works in disco workqueue. So remove the
-> second sas_ex_join_wide_port().
->
-> I did not change the return value of 'res' to error when discover failed
-> because we need to continue to discover other phys if one phy discover
-> failed. So let's keep that logic as before and just add a debug log to
-> detect the failure. And directly return if second fanout expander
-> attatched to the parent expander because it has nothing to do after the
-> phy is disabled.
->
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
-> ---
+Hi Avri,
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+On Mon, 2019-05-20 at 09:51 +0000, Avri Altman wrote:
+> Aside from some nits - see below, looks fine.
+> 
+> Thanks,
+> Avri
+> 
+> > diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> > index ecfa898b9ccc..994d73d03207 100644
+> > --- a/drivers/scsi/ufs/ufshcd.h
+> > +++ b/drivers/scsi/ufs/ufshcd.h
+> > @@ -740,6 +740,11 @@ return true;
+> >  #endif
+> >  }
+> > 
+> > +static inline bool ufshcd_is_auto_hibern8_supported(struct ufs_hba *hba)
+> > +{
+> > +	return (hba->capabilities & MASK_AUTO_HIBERN8_SUPPORT);
+> > +}
+> Maybe use it elsewhere in the driver, preferable in a preparatory patch,
+> Instead of patch #3.
+> 
+
+OK. I will modify original patch #3 to a preparation patch which just
+re-factors ufshcd_is_auto_hibern8_supported(), and change its order to
+#2.
+> 
+> 
+> > diff --git a/drivers/scsi/ufs/ufshci.h b/drivers/scsi/ufs/ufshci.h
+> > index 6fa889de5ee5..4bcb205f2077 100644
+> > --- a/drivers/scsi/ufs/ufshci.h
+> > +++ b/drivers/scsi/ufs/ufshci.h
+> > @@ -148,6 +148,9 @@ enum {
+> >  				UIC_HIBERNATE_EXIT |\
+> >  				UIC_POWER_MODE)
+> > 
+> > +#define UFSHCD_UIC_AH8_ERROR_MASK	(UIC_HIBERNATE_ENTER |\
+> > +					UIC_HIBERNATE_EXIT)
+> So maybe update UFSHCD_UIC_PWR_MASK above
+
+OK.
+WIll make these definitions more elegant.
+
+> 
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
+
+Thanks,
+Stanley
+
 
