@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D30A92314C
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 12:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C422314D
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 12:26:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731181AbfETK0i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 May 2019 06:26:38 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:33663 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727108AbfETK0i (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 May 2019 06:26:38 -0400
-Received: by mail-pg1-f195.google.com with SMTP id h17so6606126pgv.0
-        for <linux-scsi@vger.kernel.org>; Mon, 20 May 2019 03:26:37 -0700 (PDT)
+        id S1731220AbfETK0k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 May 2019 06:26:40 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:41293 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726490AbfETK0k (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 May 2019 06:26:40 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q17so6998081pfq.8
+        for <linux-scsi@vger.kernel.org>; Mon, 20 May 2019 03:26:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ix+paT5CCN4r4hkS6QQBQqaPodiZcvpgrB/dNlbOBAE=;
-        b=A8Z3hAhaeVmD9XMzNXCifxygro9lIwTBXZ0AC+s47GG6G36H5CeHYOhgDW4HFs7CYN
-         PeEaav0MDDT48ergMDdexVxqltTQvHQpNxR/EBEbdgxsVjHXYEkT9OUX/AbRRhkKcOlw
-         mtZvVOhpEJRKnLDw89cLea8elxOgzN7X1CDFo=
+        bh=cMFS9GBtROsaH5CDZc8e/QHuzEyulv6mByXqaaHqGNc=;
+        b=U2OY1i9thjrg2gqdGM7h9c7yRzSXmPj/Sggl9gbzgWvVfiVN5ygE8op6hb/m/yDxOc
+         kM52BVafaPBRRLmuls01k/0TqW2kzekN1uQfxzUbBupldD2MKJjwSq5izveYJlX8jJQN
+         gHTs9PRzvlMgeNU4p4i98eWjpCqd/Isf94EdA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=ix+paT5CCN4r4hkS6QQBQqaPodiZcvpgrB/dNlbOBAE=;
-        b=UmwtUNNBQfq7QRrYJs/tsE7pe7bWP2sk2+gsJgdEQeBCcMxlTxu18r0/CcCjEIDnHT
-         4r2lKs3gkH44dZ94au9lxu9TbpGzYQv9euRAO8IW6XIqEybM/11BwLEMjJGrhkeevv3X
-         bLhgqDdKg8EWiQ9kT1kSKNO2B+xcLyr1qR/F3gVbEBS0A4Zp+tVWeVNAOGdhF9FKM0UP
-         aog/2D62goPcPFj1d0ZCLkBj57xJgrpPg2RWyDLP7wBo3iOMXgCCpo/aQ/nTTAhq7j46
-         EorhFfRb2EHpXZRR9J3jyldspuEypfsJR6AMh+EYD89yb6yTsRdUHmUAXISgGg1fLNOA
-         KFMA==
-X-Gm-Message-State: APjAAAUxxS9OavWoDbvg915GDhZLHcEazABAAVaM153A6/+5Bvz9Wxct
-        KBzhZQT+19GhPkoTDCQrcGaDGSITD6TNvOK90mctYgxmhAeD+FqGoKr8OHq63rSIsH6JcFDJES/
-        MdiYutuaIBC4DpeEcLTKwmfKXY5iR1/bTOjdO2iVLd/ABysMRP/AyjDuKyKgyyQBNA2zDVTQVKu
-        oD8p6OUNNmR++yqXJo4w==
-X-Google-Smtp-Source: APXvYqyEDDqYNljp1cEYh4LPm0lMZL1Zj0KgHm1iRGXaDaE6jxUjq7YQv4wIclvHab3RRvBVECPq4g==
-X-Received: by 2002:a65:550b:: with SMTP id f11mr73786632pgr.311.1558347997170;
-        Mon, 20 May 2019 03:26:37 -0700 (PDT)
+        bh=cMFS9GBtROsaH5CDZc8e/QHuzEyulv6mByXqaaHqGNc=;
+        b=lUYpKpupxnfsaF8XAeSfTCObII+/Oe1ECl+qL9KPb/tL0r14A09ZcDKLRE4lrVkj8l
+         oJ3U5zkAG3BPgfUztNO2pS8X4eVTqTW8UXhDjuRZLx6ATWHWwI3zIyYpdUGpXkyfVAHr
+         PvNV4lHKIqYNtX3oERNUnry+VSZ7uXBxojrxfPmNdv2ijEyYuiRcuzr5nhKM6vQkm4F4
+         Hgo4jwEN14477A2wmP6dbonKK0GYAOYaQ50Jug7bDEN6KbTabC3IftRXVoQFc14yRbN9
+         ck+shk5VZNG8rlmp7SKQKVZfEy2IyJoz1W0q1+QjFaClwMvPedhZYhx5Gy1VcdYecx/S
+         9pzw==
+X-Gm-Message-State: APjAAAVnbmXM3xPs/i3+YlKN61uU4bxSP9xGrprBvrgK7HyixE8Zv4fw
+        w8Q27hDRVl7P/KOuvlJLNbGqUhop861jOmbTZdWp8T1hfkIM2tCej3w3SOu2gt40zwIlRji9Wes
+        1VHr/sOZ6X1Mm2Ru5PQt9DuUq6dUCYWZzhtLhNCy29sCxLsN8lTvOOwAFDdZeHdy6DVbgf2soyi
+        QsQ7A1WTJE8npbs3Tx+w==
+X-Google-Smtp-Source: APXvYqzHlexFvKyfQYvYppll0xMWyvqrE3D563Bc6Bcj7SMaz5UL4Qm8nX7gjwNO1e308UhPXDciXg==
+X-Received: by 2002:a63:d343:: with SMTP id u3mr74551287pgi.285.1558347999125;
+        Mon, 20 May 2019 03:26:39 -0700 (PDT)
 Received: from dhcp-10-123-20-26.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id j2sm15757309pfb.157.2019.05.20.03.26.35
+        by smtp.gmail.com with ESMTPSA id j2sm15757309pfb.157.2019.05.20.03.26.37
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 May 2019 03:26:36 -0700 (PDT)
+        Mon, 20 May 2019 03:26:38 -0700 (PDT)
 From:   Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     suganath-prabu.subramani@broadcom.com, Sathya.Prakash@broadcom.com,
         sreekanth.reddy@broadcom.com
-Subject: [PATCH v2 07/10] mpt3sas: Affinity high iops queues IRQs to local node
-Date:   Mon, 20 May 2019 06:26:01 -0400
-Message-Id: <20190520102604.3466-8-suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH v2 08/10] mpt3sas: Enable interrupt coalescing on high iops
+Date:   Mon, 20 May 2019 06:26:02 -0400
+Message-Id: <20190520102604.3466-9-suganath-prabu.subramani@broadcom.com>
 X-Mailer: git-send-email 2.18.1
 In-Reply-To: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
 References: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
@@ -59,164 +59,235 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 
-High iops queues are mapped to non-managed irqs.
-Set affinity of non-managed irqs to local numa node.
-Low latency queues are mapped to managed irq.
+Enable interrupt coalescing only on high iops queues when
+high iops queues are enabled.
 
-Driver reserves some reply queues (pci_alloc_irq_vectors_affinity and
-.pre_vectors interface is used to meet the goal) for max iops and rest
-of queues for low latency. Based on io workload in io submission path
-driver will decide which group of reply queues (either high iops queues
-or low latency queues) to be used. High iops queues will be mapped to
-local numa node of controller and low latency queues will be mapped to
-cpus across numa nodes. In general, high iops queue and low latency
-queue together should fit into 128 reply queue (max reply queue
-supported by Aero/Sea).
+In ioc config page 1, offset 0x14 (ProductSpecific field)
+is used to determine interrupt coalescing enabled/disabled on per
+reply descriptor post queue group(8) basis.
+If 31st bit is zero then interrupt coalescing is enabled for
+all reply descriptor post queues. If 31st bit is set to one
+then user can enable/disable interrupt coalescing on per reply
+descriptor post queue group(8) basis. So to enable interrupt
+coalescing only on first reply descriptor post queue group
+(i.e. on high iops queues) set bit 0 and 31.
+
+This configuration should reset during driver unload or shutdown
+to the default settings. For this driver takes copy of default ioc page 1
+and copy backs the default or unmodified ioc page1 during unload and
+shutdown. so that on next driver load (e.g. if older version driver is
+loaded by user), current modified changes on ioc page1 won't take effect.
 
 Signed-off-by: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 73 +++++++++++++++++++++++++++++++------
- 1 file changed, 62 insertions(+), 11 deletions(-)
+ drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h  |  2 +-
+ drivers/scsi/mpt3sas/mpt3sas_base.c   | 16 ++++++++
+ drivers/scsi/mpt3sas/mpt3sas_base.h   |  5 +++
+ drivers/scsi/mpt3sas/mpt3sas_config.c | 71 +++++++++++++++++++++++++++++++++++
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c  | 17 ++++++++-
+ 5 files changed, 109 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h b/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
+index a2f4a55..167d79d 100644
+--- a/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
++++ b/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
+@@ -1398,7 +1398,7 @@ typedef struct _MPI2_CONFIG_PAGE_IOC_1 {
+ 	U8                      PCIBusNum;                  /*0x0E */
+ 	U8                      PCIDomainSegment;           /*0x0F */
+ 	U32                     Reserved1;                  /*0x10 */
+-	U32                     Reserved2;                  /*0x14 */
++	U32                     ProductSpecific;            /* 0x14 */
+ } MPI2_CONFIG_PAGE_IOC_1,
+ 	*PTR_MPI2_CONFIG_PAGE_IOC_1,
+ 	Mpi2IOCPage1_t, *pMpi2IOCPage1_t;
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index a23d257..6620c49 100644
+index 6620c49..abc783f 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
 +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -2793,6 +2793,9 @@ _base_free_irq(struct MPT3SAS_ADAPTER *ioc)
- 
- 	list_for_each_entry_safe(reply_q, next, &ioc->reply_queue_list, list) {
- 		list_del(&reply_q->list);
-+		if (smp_affinity_enable)
-+			irq_set_affinity_hint(pci_irq_vector(ioc->pdev,
-+			    reply_q->msix_index), NULL);
- 		free_irq(pci_irq_vector(ioc->pdev, reply_q->msix_index),
- 			 reply_q);
- 		kfree(reply_q);
-@@ -2857,6 +2860,7 @@ _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
+@@ -4440,6 +4440,7 @@ _base_static_config_pages(struct MPT3SAS_ADAPTER *ioc)
  {
- 	unsigned int cpu, nr_cpus, nr_msix, index = 0;
- 	struct adapter_reply_queue *reply_q;
-+	int local_numa_node;
+ 	Mpi2ConfigReply_t mpi_reply;
+ 	u32 iounit_pg1_flags;
++	Mpi2IOCPage1_t ioc_pg1;
  
- 	if (!_base_is_controller_msix_enabled(ioc))
- 		return;
-@@ -2875,13 +2879,32 @@ _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
- 		return;
- 
- 	if (smp_affinity_enable) {
-+
-+		/*
-+		 * set irq affinity to local numa node for those irqs
-+		 * corresponding to high iops queues.
-+		 */
-+		if (ioc->high_iops_queues) {
-+			local_numa_node = dev_to_node(&ioc->pdev->dev);
-+			for (index = 0; index < ioc->high_iops_queues;
-+			    index++) {
-+				irq_set_affinity_hint(pci_irq_vector(ioc->pdev,
-+				    index), cpumask_of_node(local_numa_node));
-+			}
-+		}
-+
- 		list_for_each_entry(reply_q, &ioc->reply_queue_list, list) {
--			const cpumask_t *mask = pci_irq_get_affinity(ioc->pdev,
--							reply_q->msix_index);
-+			const cpumask_t *mask;
-+
-+			if (reply_q->msix_index < ioc->high_iops_queues)
-+				continue;
-+
-+			mask = pci_irq_get_affinity(ioc->pdev,
-+			    reply_q->msix_index);
- 			if (!mask) {
- 				ioc_warn(ioc, "no affinity for msi %x\n",
- 					 reply_q->msix_index);
--				continue;
-+				goto fall_back;
- 			}
- 
- 			for_each_cpu_and(cpu, mask, cpu_online_mask) {
-@@ -2892,12 +2915,18 @@ _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
- 		}
- 		return;
+ 	ioc->nvme_abort_timeout = 30;
+ 	mpt3sas_config_get_manufacturing_pg0(ioc, &mpi_reply, &ioc->manu_pg0);
+@@ -4472,6 +4473,21 @@ _base_static_config_pages(struct MPT3SAS_ADAPTER *ioc)
+ 		else
+ 			ioc->nvme_abort_timeout = ioc->manu_pg11.NVMeAbortTO;
  	}
-+
-+fall_back:
- 	cpu = cpumask_first(cpu_online_mask);
-+	nr_msix -= ioc->high_iops_queues;
-+	index = 0;
++	if (ioc->high_iops_queues) {
++		mpt3sas_config_get_ioc_pg1(ioc, &mpi_reply, &ioc_pg1);
++		pr_info(
++		"%s Enable interrupt coalescing only for first reply queue group(8)\n",
++		ioc->name);
++		/* If 31st bit is zero then interrupt coalescing is enabled
++		 * for all reply descriptor post queues. If 31st bit is set
++		 * to one then user can enable/disable interrupt coalescing
++		 * on per reply descriptor post queue group(8) basis. So to
++		 * enable interrupt coalescing only on first reply descriptor
++		 * post queue group 31st bit and zero th bit is enabled.
++		 */
++		ioc_pg1.ProductSpecific = cpu_to_le32(0x80000001);
++		mpt3sas_config_set_ioc_pg1(ioc, &mpi_reply, &ioc_pg1);
++	}
  
- 	list_for_each_entry(reply_q, &ioc->reply_queue_list, list) {
--
- 		unsigned int i, group = nr_cpus / nr_msix;
+ 	mpt3sas_config_get_bios_pg2(ioc, &mpi_reply, &ioc->bios_pg2);
+ 	mpt3sas_config_get_bios_pg3(ioc, &mpi_reply, &ioc->bios_pg3);
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index f3818e3..b5a2071 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -1286,6 +1286,7 @@ struct MPT3SAS_ADAPTER {
+ 	Mpi2IOUnitPage0_t iounit_pg0;
+ 	Mpi2IOUnitPage1_t iounit_pg1;
+ 	Mpi2IOUnitPage8_t iounit_pg8;
++	Mpi2IOCPage1_t	ioc_pg1_copy;
  
-+		if (reply_q->msix_index < ioc->high_iops_queues)
-+			continue;
-+
- 		if (cpu >= nr_cpus)
- 			break;
- 
-@@ -2950,11 +2979,38 @@ _base_disable_msix(struct MPT3SAS_ADAPTER *ioc)
- {
- 	if (!ioc->msix_enable)
- 		return;
--	pci_disable_msix(ioc->pdev);
-+	pci_free_irq_vectors(ioc->pdev);
- 	ioc->msix_enable = 0;
+ 	struct _boot_device req_boot_device;
+ 	struct _boot_device req_alt_boot_device;
+@@ -1634,6 +1635,10 @@ int mpt3sas_config_get_sas_iounit_pg1(struct MPT3SAS_ADAPTER *ioc,
+ int mpt3sas_config_set_sas_iounit_pg1(struct MPT3SAS_ADAPTER *ioc,
+ 	Mpi2ConfigReply_t *mpi_reply, Mpi2SasIOUnitPage1_t *config_page,
+ 	u16 sz);
++int mpt3sas_config_get_ioc_pg1(struct MPT3SAS_ADAPTER *ioc, Mpi2ConfigReply_t
++	*mpi_reply, Mpi2IOCPage1_t *config_page);
++int mpt3sas_config_set_ioc_pg1(struct MPT3SAS_ADAPTER *ioc, Mpi2ConfigReply_t
++	*mpi_reply, Mpi2IOCPage1_t *config_page);
+ int mpt3sas_config_get_ioc_pg8(struct MPT3SAS_ADAPTER *ioc, Mpi2ConfigReply_t
+ 	*mpi_reply, Mpi2IOCPage8_t *config_page);
+ int mpt3sas_config_get_expander_pg0(struct MPT3SAS_ADAPTER *ioc,
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_config.c b/drivers/scsi/mpt3sas/mpt3sas_config.c
+index b18cbbc..14a1a27 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_config.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_config.c
+@@ -949,6 +949,77 @@ mpt3sas_config_get_ioc_pg8(struct MPT3SAS_ADAPTER *ioc,
+  out:
+ 	return r;
  }
- 
- /**
-+ * _base_alloc_irq_vectors - allocate msix vectors
++/**
++ * mpt3sas_config_get_ioc_pg1 - obtain ioc page 1
 + * @ioc: per adapter object
++ * @mpi_reply: reply mf payload returned from firmware
++ * @config_page: contents of the config page
++ * Context: sleep.
 + *
++ * Return: 0 for success, non-zero for failure.
 + */
-+static int
-+_base_alloc_irq_vectors(struct MPT3SAS_ADAPTER *ioc)
++int
++mpt3sas_config_get_ioc_pg1(struct MPT3SAS_ADAPTER *ioc,
++	Mpi2ConfigReply_t *mpi_reply, Mpi2IOCPage1_t *config_page)
 +{
-+	int i, irq_flags = PCI_IRQ_MSIX;
-+	struct irq_affinity desc = { .pre_vectors = ioc->high_iops_queues };
-+	struct irq_affinity *descp = &desc;
++	Mpi2ConfigRequest_t mpi_request;
++	int r;
 +
-+	if (smp_affinity_enable)
-+		irq_flags |= PCI_IRQ_AFFINITY;
-+	else
-+		descp = NULL;
++	memset(&mpi_request, 0, sizeof(Mpi2ConfigRequest_t));
++	mpi_request.Function = MPI2_FUNCTION_CONFIG;
++	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_HEADER;
++	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_IOC;
++	mpi_request.Header.PageNumber = 1;
++	mpi_request.Header.PageVersion = MPI2_IOCPAGE8_PAGEVERSION;
++	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
++	r = _config_request(ioc, &mpi_request, mpi_reply,
++	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
++	if (r)
++		goto out;
 +
-+	ioc_info(ioc, " %d %d\n", ioc->high_iops_queues,
-+	    ioc->msix_vector_count);
-+
-+	i = pci_alloc_irq_vectors_affinity(ioc->pdev,
-+	    ioc->high_iops_queues,
-+	    ioc->msix_vector_count, irq_flags, descp);
-+
-+	return i;
++	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_READ_CURRENT;
++	r = _config_request(ioc, &mpi_request, mpi_reply,
++	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, config_page,
++	    sizeof(*config_page));
++ out:
++	return r;
 +}
 +
 +/**
-  * _base_enable_msix - enables msix, failback to io_apic
-  * @ioc: per adapter object
-  *
-@@ -2965,7 +3021,6 @@ _base_enable_msix(struct MPT3SAS_ADAPTER *ioc)
- 	int r;
- 	int i, local_max_msix_vectors;
- 	u8 try_msix = 0;
--	unsigned int irq_flags = PCI_IRQ_MSIX;
++ * mpt3sas_config_set_ioc_pg1 - modify ioc page 1
++ * @ioc: per adapter object
++ * @mpi_reply: reply mf payload returned from firmware
++ * @config_page: contents of the config page
++ * Context: sleep.
++ *
++ * Return: 0 for success, non-zero for failure.
++ */
++int
++mpt3sas_config_set_ioc_pg1(struct MPT3SAS_ADAPTER *ioc,
++	Mpi2ConfigReply_t *mpi_reply, Mpi2IOCPage1_t *config_page)
++{
++	Mpi2ConfigRequest_t mpi_request;
++	int r;
++
++	memset(&mpi_request, 0, sizeof(Mpi2ConfigRequest_t));
++	mpi_request.Function = MPI2_FUNCTION_CONFIG;
++	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_HEADER;
++	mpi_request.Header.PageType = MPI2_CONFIG_PAGETYPE_IOC;
++	mpi_request.Header.PageNumber = 1;
++	mpi_request.Header.PageVersion = MPI2_IOCPAGE8_PAGEVERSION;
++	ioc->build_zero_len_sge_mpi(ioc, &mpi_request.PageBufferSGE);
++	r = _config_request(ioc, &mpi_request, mpi_reply,
++	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, NULL, 0);
++	if (r)
++		goto out;
++
++	mpi_request.Action = MPI2_CONFIG_ACTION_PAGE_WRITE_CURRENT;
++	r = _config_request(ioc, &mpi_request, mpi_reply,
++	    MPT3_CONFIG_PAGE_DEFAULT_TIMEOUT, config_page,
++	    sizeof(*config_page));
++ out:
++	return r;
++}
  
- 	if (msix_disable == -1 || msix_disable == 0)
- 		try_msix = 1;
-@@ -2999,11 +3054,7 @@ _base_enable_msix(struct MPT3SAS_ADAPTER *ioc)
- 	if (ioc->msix_vector_count < ioc->cpu_count)
- 		smp_affinity_enable = 0;
+ /**
+  * mpt3sas_config_get_sas_device_pg0 - obtain sas device page 0
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index 3e93c4a..d957f78 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -9671,6 +9671,7 @@ static void scsih_remove(struct pci_dev *pdev)
+ 	struct _pcie_device *pcie_device, *pcienext;
+ 	struct workqueue_struct	*wq;
+ 	unsigned long flags;
++	Mpi2ConfigReply_t mpi_reply;
  
--	if (smp_affinity_enable)
--		irq_flags |= PCI_IRQ_AFFINITY;
+ 	ioc->remove_host = 1;
+ 
+@@ -9685,7 +9686,13 @@ static void scsih_remove(struct pci_dev *pdev)
+ 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
+ 	if (wq)
+ 		destroy_workqueue(wq);
 -
--	r = pci_alloc_irq_vectors(ioc->pdev, 1, ioc->reply_queue_count,
--				  irq_flags);
-+	r = _base_alloc_irq_vectors(ioc);
- 	if (r < 0) {
- 		dfailprintk(ioc,
- 			    ioc_info(ioc, "pci_alloc_irq_vectors failed (r=%d) !!!\n",
++	/*
++	 * Copy back the unmodified ioc page1. so that on next driver load,
++	 * current modified changes on ioc page1 won't take effect.
++	 */
++	if (ioc->is_aero_ioc)
++		mpt3sas_config_set_ioc_pg1(ioc, &mpi_reply,
++				&ioc->ioc_pg1_copy);
+ 	/* release all the volumes */
+ 	_scsih_ir_shutdown(ioc);
+ 	sas_remove_host(shost);
+@@ -9748,6 +9755,7 @@ scsih_shutdown(struct pci_dev *pdev)
+ 	struct MPT3SAS_ADAPTER *ioc = shost_priv(shost);
+ 	struct workqueue_struct	*wq;
+ 	unsigned long flags;
++	Mpi2ConfigReply_t mpi_reply;
+ 
+ 	ioc->remove_host = 1;
+ 
+@@ -9762,6 +9770,13 @@ scsih_shutdown(struct pci_dev *pdev)
+ 	spin_unlock_irqrestore(&ioc->fw_event_lock, flags);
+ 	if (wq)
+ 		destroy_workqueue(wq);
++	/*
++	 * Copy back the unmodified ioc page1. so that on next driver load,
++	 * current modified changes on ioc page1 won't take effect.
++	 */
++	if (ioc->is_aero_ioc)
++		mpt3sas_config_set_ioc_pg1(ioc, &mpi_reply,
++				&ioc->ioc_pg1_copy);
+ 
+ 	_scsih_ir_shutdown(ioc);
+ 	mpt3sas_base_detach(ioc);
 -- 
 1.8.3.1
 
