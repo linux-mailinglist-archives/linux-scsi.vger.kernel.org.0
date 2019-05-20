@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD572314B
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 12:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30A92314C
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 12:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731102AbfETK0g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 May 2019 06:26:36 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34907 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727108AbfETK0g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 May 2019 06:26:36 -0400
-Received: by mail-pf1-f196.google.com with SMTP id t87so7014571pfa.2
-        for <linux-scsi@vger.kernel.org>; Mon, 20 May 2019 03:26:35 -0700 (PDT)
+        id S1731181AbfETK0i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 May 2019 06:26:38 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33663 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727108AbfETK0i (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 May 2019 06:26:38 -0400
+Received: by mail-pg1-f195.google.com with SMTP id h17so6606126pgv.0
+        for <linux-scsi@vger.kernel.org>; Mon, 20 May 2019 03:26:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=rVwOOFkpme4o7UAKTjExn3Covq7L9x4hJ40AdSK3PE8=;
-        b=ZY1OzTlfAFw6I2CbgrMkgW4uyZ/4fWoMZ7FINb5GkeuRgcEV968P6o33pL0D5xBffn
-         ls7sEsvJxYwCnJNeRA3h+iIvRnDg55/G8+nbthU3oLzwx3/wT4SJujipvvy8itd+ZuIj
-         hujiq2ZRpxTFVeUm3BUbHMnb9xiuAgZG8lwL8=
+        bh=ix+paT5CCN4r4hkS6QQBQqaPodiZcvpgrB/dNlbOBAE=;
+        b=A8Z3hAhaeVmD9XMzNXCifxygro9lIwTBXZ0AC+s47GG6G36H5CeHYOhgDW4HFs7CYN
+         PeEaav0MDDT48ergMDdexVxqltTQvHQpNxR/EBEbdgxsVjHXYEkT9OUX/AbRRhkKcOlw
+         mtZvVOhpEJRKnLDw89cLea8elxOgzN7X1CDFo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=rVwOOFkpme4o7UAKTjExn3Covq7L9x4hJ40AdSK3PE8=;
-        b=EYXXZUACKSgGZix3kk4ZiIsO6x5mIFF+gGyWdh3NHPlOlETg/S8gmikrreohBQJWeU
-         g10qPXTDaT1g5n7oOzvzah//iRYcf9XS7gX8U1KovQ2aHLsEsBEMUR+8U0vlWwLyF8FZ
-         xV7k12MKVmLRaVSSht1wrwGiMc/9cBFEDU4HeLiBDmvjR7rm3xh0PeCr8EwHmo3aGyeg
-         S32N5vQa2lmuMd5FBMrqSQixkkN9LJfDYisrmIRJXBPYlkB3NwEHLvpZaLiWocoE5Uk6
-         kqmR/EFHGs2YA7vjHyUlCKJk3Io5qBfhoPrwtpiabGNX5EjnGgpTt1m7ZnramDhCSq7j
-         yETw==
-X-Gm-Message-State: APjAAAXEj/+9VfwMBoaRM6mhAa72OtbRkMQ/aqzS2olNFvXNTTAyMbOe
-        JwTwTRWDsr4H41Esb5XkU3J4RJ6E61ixdE+lcvNbBzyqmkL/kEe2UB6yGPc7pJMBMotTLRpf+oQ
-        Tkjvi38DlUc4pvjt8esfbtvJkUZdv5q+5gaYXmGqJy43jk/fYAB3BHYxRZUr0s6jZs7YKMUwvhw
-        tdevFfdxiTxV0qbegLSA==
-X-Google-Smtp-Source: APXvYqzhkD93+JGJrGEZ5Y/4m/pD/iJCsYmFrnYfZGTHYeEkxkWrTqQ/dtHbbsOfFKcCS/Id8HzhKQ==
-X-Received: by 2002:a62:4d04:: with SMTP id a4mr7550438pfb.177.1558347995190;
-        Mon, 20 May 2019 03:26:35 -0700 (PDT)
+        bh=ix+paT5CCN4r4hkS6QQBQqaPodiZcvpgrB/dNlbOBAE=;
+        b=UmwtUNNBQfq7QRrYJs/tsE7pe7bWP2sk2+gsJgdEQeBCcMxlTxu18r0/CcCjEIDnHT
+         4r2lKs3gkH44dZ94au9lxu9TbpGzYQv9euRAO8IW6XIqEybM/11BwLEMjJGrhkeevv3X
+         bLhgqDdKg8EWiQ9kT1kSKNO2B+xcLyr1qR/F3gVbEBS0A4Zp+tVWeVNAOGdhF9FKM0UP
+         aog/2D62goPcPFj1d0ZCLkBj57xJgrpPg2RWyDLP7wBo3iOMXgCCpo/aQ/nTTAhq7j46
+         EorhFfRb2EHpXZRR9J3jyldspuEypfsJR6AMh+EYD89yb6yTsRdUHmUAXISgGg1fLNOA
+         KFMA==
+X-Gm-Message-State: APjAAAUxxS9OavWoDbvg915GDhZLHcEazABAAVaM153A6/+5Bvz9Wxct
+        KBzhZQT+19GhPkoTDCQrcGaDGSITD6TNvOK90mctYgxmhAeD+FqGoKr8OHq63rSIsH6JcFDJES/
+        MdiYutuaIBC4DpeEcLTKwmfKXY5iR1/bTOjdO2iVLd/ABysMRP/AyjDuKyKgyyQBNA2zDVTQVKu
+        oD8p6OUNNmR++yqXJo4w==
+X-Google-Smtp-Source: APXvYqyEDDqYNljp1cEYh4LPm0lMZL1Zj0KgHm1iRGXaDaE6jxUjq7YQv4wIclvHab3RRvBVECPq4g==
+X-Received: by 2002:a65:550b:: with SMTP id f11mr73786632pgr.311.1558347997170;
+        Mon, 20 May 2019 03:26:37 -0700 (PDT)
 Received: from dhcp-10-123-20-26.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id j2sm15757309pfb.157.2019.05.20.03.26.33
+        by smtp.gmail.com with ESMTPSA id j2sm15757309pfb.157.2019.05.20.03.26.35
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 May 2019 03:26:34 -0700 (PDT)
+        Mon, 20 May 2019 03:26:36 -0700 (PDT)
 From:   Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     suganath-prabu.subramani@broadcom.com, Sathya.Prakash@broadcom.com,
         sreekanth.reddy@broadcom.com
-Subject: [PATCH v2 06/10] mpt3sas:save msix index and use same while posting RD
-Date:   Mon, 20 May 2019 06:26:00 -0400
-Message-Id: <20190520102604.3466-7-suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH v2 07/10] mpt3sas: Affinity high iops queues IRQs to local node
+Date:   Mon, 20 May 2019 06:26:01 -0400
+Message-Id: <20190520102604.3466-8-suganath-prabu.subramani@broadcom.com>
 X-Mailer: git-send-email 2.18.1
 In-Reply-To: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
 References: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
@@ -59,170 +59,164 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 
-Code refactor:
-In the IO submission path _base_get_msix_index is called twice,
-one while getting the smid; msix index is saved in msix_io filed
-in scsiio tracker and anther while posting the request descriptor(RD).
+High iops queues are mapped to non-managed irqs.
+Set affinity of non-managed irqs to local numa node.
+Low latency queues are mapped to managed irq.
 
-now code refactor is done to determine msix index only while posting
-the request descriptor and save determined msix index in msix_io
-field.
+Driver reserves some reply queues (pci_alloc_irq_vectors_affinity and
+.pre_vectors interface is used to meet the goal) for max iops and rest
+of queues for low latency. Based on io workload in io submission path
+driver will decide which group of reply queues (either high iops queues
+or low latency queues) to be used. High iops queues will be mapped to
+local numa node of controller and low latency queues will be mapped to
+cpus across numa nodes. In general, high iops queue and low latency
+queue together should fit into 128 reply queue (max reply queue
+supported by Aero/Sea).
 
 Signed-off-by: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c  | 42 ++++++++++++++++++++++++++++--------
- drivers/scsi/mpt3sas/mpt3sas_base.h  |  1 +
- drivers/scsi/mpt3sas/mpt3sas_scsih.c |  1 +
- 3 files changed, 35 insertions(+), 9 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 73 +++++++++++++++++++++++++++++++------
+ 1 file changed, 62 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index a06b010..a23d257 100644
+index a23d257..6620c49 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
 +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -3399,8 +3399,8 @@ mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
+@@ -2793,6 +2793,9 @@ _base_free_irq(struct MPT3SAS_ADAPTER *ioc)
  
- 	smid = tag + 1;
- 	request->cb_idx = cb_idx;
--	request->msix_io = _base_get_msix_index(ioc, NULL);
- 	request->smid = smid;
-+	request->scmd = scmd;
- 	INIT_LIST_HEAD(&request->chain_list);
- 	return smid;
- }
-@@ -3454,6 +3454,7 @@ void mpt3sas_base_clear_st(struct MPT3SAS_ADAPTER *ioc,
+ 	list_for_each_entry_safe(reply_q, next, &ioc->reply_queue_list, list) {
+ 		list_del(&reply_q->list);
++		if (smp_affinity_enable)
++			irq_set_affinity_hint(pci_irq_vector(ioc->pdev,
++			    reply_q->msix_index), NULL);
+ 		free_irq(pci_irq_vector(ioc->pdev, reply_q->msix_index),
+ 			 reply_q);
+ 		kfree(reply_q);
+@@ -2857,6 +2860,7 @@ _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
+ {
+ 	unsigned int cpu, nr_cpus, nr_msix, index = 0;
+ 	struct adapter_reply_queue *reply_q;
++	int local_numa_node;
+ 
+ 	if (!_base_is_controller_msix_enabled(ioc))
  		return;
- 	st->cb_idx = 0xFF;
- 	st->direct_io = 0;
-+	st->scmd = NULL;
- 	atomic_set(&ioc->chain_lookup[st->smid - 1].chain_offset, 0);
- 	st->smid = 0;
+@@ -2875,13 +2879,32 @@ _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
+ 		return;
+ 
+ 	if (smp_affinity_enable) {
++
++		/*
++		 * set irq affinity to local numa node for those irqs
++		 * corresponding to high iops queues.
++		 */
++		if (ioc->high_iops_queues) {
++			local_numa_node = dev_to_node(&ioc->pdev->dev);
++			for (index = 0; index < ioc->high_iops_queues;
++			    index++) {
++				irq_set_affinity_hint(pci_irq_vector(ioc->pdev,
++				    index), cpumask_of_node(local_numa_node));
++			}
++		}
++
+ 		list_for_each_entry(reply_q, &ioc->reply_queue_list, list) {
+-			const cpumask_t *mask = pci_irq_get_affinity(ioc->pdev,
+-							reply_q->msix_index);
++			const cpumask_t *mask;
++
++			if (reply_q->msix_index < ioc->high_iops_queues)
++				continue;
++
++			mask = pci_irq_get_affinity(ioc->pdev,
++			    reply_q->msix_index);
+ 			if (!mask) {
+ 				ioc_warn(ioc, "no affinity for msi %x\n",
+ 					 reply_q->msix_index);
+-				continue;
++				goto fall_back;
+ 			}
+ 
+ 			for_each_cpu_and(cpu, mask, cpu_online_mask) {
+@@ -2892,12 +2915,18 @@ _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
+ 		}
+ 		return;
+ 	}
++
++fall_back:
+ 	cpu = cpumask_first(cpu_online_mask);
++	nr_msix -= ioc->high_iops_queues;
++	index = 0;
+ 
+ 	list_for_each_entry(reply_q, &ioc->reply_queue_list, list) {
+-
+ 		unsigned int i, group = nr_cpus / nr_msix;
+ 
++		if (reply_q->msix_index < ioc->high_iops_queues)
++			continue;
++
+ 		if (cpu >= nr_cpus)
+ 			break;
+ 
+@@ -2950,11 +2979,38 @@ _base_disable_msix(struct MPT3SAS_ADAPTER *ioc)
+ {
+ 	if (!ioc->msix_enable)
+ 		return;
+-	pci_disable_msix(ioc->pdev);
++	pci_free_irq_vectors(ioc->pdev);
+ 	ioc->msix_enable = 0;
  }
-@@ -3554,6 +3555,29 @@ _base_writeq(__u64 b, volatile void __iomem *addr, spinlock_t *writeq_lock)
- #endif
  
  /**
-+ * _base_set_and_get_msix_index - get the msix index and assign to msix_io
-+ *                                variable of scsi tracker
++ * _base_alloc_irq_vectors - allocate msix vectors
 + * @ioc: per adapter object
-+ * @smid: system request message index
 + *
-+ * returns msix index.
 + */
-+static u8
-+_base_set_and_get_msix_index(struct MPT3SAS_ADAPTER *ioc, u16 smid)
++static int
++_base_alloc_irq_vectors(struct MPT3SAS_ADAPTER *ioc)
 +{
-+	struct scsiio_tracker *st;
++	int i, irq_flags = PCI_IRQ_MSIX;
++	struct irq_affinity desc = { .pre_vectors = ioc->high_iops_queues };
++	struct irq_affinity *descp = &desc;
 +
-+	st = (smid < ioc->hi_priority_smid) ?
-+		(_get_st_from_smid(ioc, smid)) : (NULL);
++	if (smp_affinity_enable)
++		irq_flags |= PCI_IRQ_AFFINITY;
++	else
++		descp = NULL;
 +
-+	if (st == NULL)
-+		return  _base_get_msix_index(ioc, NULL);
++	ioc_info(ioc, " %d %d\n", ioc->high_iops_queues,
++	    ioc->msix_vector_count);
 +
-+	st->msix_io = ioc->get_msix_index_for_smlio(ioc, st->scmd);
-+	return st->msix_io;
++	i = pci_alloc_irq_vectors_affinity(ioc->pdev,
++	    ioc->high_iops_queues,
++	    ioc->msix_vector_count, irq_flags, descp);
++
++	return i;
 +}
 +
 +/**
-  * _base_put_smid_mpi_ep_scsi_io - send SCSI_IO request to firmware
+  * _base_enable_msix - enables msix, failback to io_apic
   * @ioc: per adapter object
-  * @smid: system request message index
-@@ -3574,7 +3598,7 @@ _base_put_smid_mpi_ep_scsi_io(struct MPT3SAS_ADAPTER *ioc,
- 	_base_clone_mpi_to_sys_mem(mpi_req_iomem, (void *)mfp,
- 					ioc->request_sz);
- 	descriptor.SCSIIO.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_SCSI_IO;
--	descriptor.SCSIIO.MSIxIndex =  _base_get_msix_index(ioc, NULL);
-+	descriptor.SCSIIO.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
- 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
- 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
- 	descriptor.SCSIIO.LMID = 0;
-@@ -3596,7 +3620,7 @@ _base_put_smid_scsi_io(struct MPT3SAS_ADAPTER *ioc, u16 smid, u16 handle)
+  *
+@@ -2965,7 +3021,6 @@ _base_enable_msix(struct MPT3SAS_ADAPTER *ioc)
+ 	int r;
+ 	int i, local_max_msix_vectors;
+ 	u8 try_msix = 0;
+-	unsigned int irq_flags = PCI_IRQ_MSIX;
  
+ 	if (msix_disable == -1 || msix_disable == 0)
+ 		try_msix = 1;
+@@ -2999,11 +3054,7 @@ _base_enable_msix(struct MPT3SAS_ADAPTER *ioc)
+ 	if (ioc->msix_vector_count < ioc->cpu_count)
+ 		smp_affinity_enable = 0;
  
- 	descriptor.SCSIIO.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_SCSI_IO;
--	descriptor.SCSIIO.MSIxIndex =  _base_get_msix_index(ioc, NULL);
-+	descriptor.SCSIIO.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
- 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
- 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
- 	descriptor.SCSIIO.LMID = 0;
-@@ -3619,7 +3643,7 @@ _base_put_smid_fast_path(struct MPT3SAS_ADAPTER *ioc, u16 smid,
- 
- 	descriptor.SCSIIO.RequestFlags =
- 	    MPI25_REQ_DESCRIPT_FLAGS_FAST_PATH_SCSI_IO;
--	descriptor.SCSIIO.MSIxIndex = _base_get_msix_index(ioc, NULL);
-+	descriptor.SCSIIO.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
- 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
- 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
- 	descriptor.SCSIIO.LMID = 0;
-@@ -3683,7 +3707,7 @@ mpt3sas_base_put_smid_nvme_encap(struct MPT3SAS_ADAPTER *ioc, u16 smid)
- 
- 	descriptor.Default.RequestFlags =
- 		MPI26_REQ_DESCRIPT_FLAGS_PCIE_ENCAPSULATED;
--	descriptor.Default.MSIxIndex =  _base_get_msix_index(ioc, NULL);
-+	descriptor.Default.MSIxIndex =  _base_set_and_get_msix_index(ioc, smid);
- 	descriptor.Default.SMID = cpu_to_le16(smid);
- 	descriptor.Default.LMID = 0;
- 	descriptor.Default.DescriptorTypeDependent = 0;
-@@ -3715,7 +3739,7 @@ _base_put_smid_default(struct MPT3SAS_ADAPTER *ioc, u16 smid)
- 	}
- 	request = (u64 *)&descriptor;
- 	descriptor.Default.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_DEFAULT_TYPE;
--	descriptor.Default.MSIxIndex =  _base_get_msix_index(ioc, NULL);
-+	descriptor.Default.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
- 	descriptor.Default.SMID = cpu_to_le16(smid);
- 	descriptor.Default.LMID = 0;
- 	descriptor.Default.DescriptorTypeDependent = 0;
-@@ -3745,7 +3769,7 @@ _base_put_smid_scsi_io_atomic(struct MPT3SAS_ADAPTER *ioc, u16 smid,
- 	u32 *request = (u32 *)&descriptor;
- 
- 	descriptor.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_SCSI_IO;
--	descriptor.MSIxIndex = _base_get_msix_index(ioc, NULL);
-+	descriptor.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
- 	descriptor.SMID = cpu_to_le16(smid);
- 
- 	writel(cpu_to_le32(*request), &ioc->chip->AtomicRequestDescriptorPost);
-@@ -3767,7 +3791,7 @@ _base_put_smid_fast_path_atomic(struct MPT3SAS_ADAPTER *ioc, u16 smid,
- 	u32 *request = (u32 *)&descriptor;
- 
- 	descriptor.RequestFlags = MPI25_REQ_DESCRIPT_FLAGS_FAST_PATH_SCSI_IO;
--	descriptor.MSIxIndex = _base_get_msix_index(ioc, NULL);
-+	descriptor.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
- 	descriptor.SMID = cpu_to_le16(smid);
- 
- 	writel(cpu_to_le32(*request), &ioc->chip->AtomicRequestDescriptorPost);
-@@ -3811,7 +3835,7 @@ _base_put_smid_default_atomic(struct MPT3SAS_ADAPTER *ioc, u16 smid)
- 	u32 *request = (u32 *)&descriptor;
- 
- 	descriptor.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_DEFAULT_TYPE;
--	descriptor.MSIxIndex = _base_get_msix_index(ioc, NULL);
-+	descriptor.MSIxIndex = _base_set_and_get_msix_index(ioc, smid);
- 	descriptor.SMID = cpu_to_le16(smid);
- 
- 	writel(cpu_to_le32(*request), &ioc->chip->AtomicRequestDescriptorPost);
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-index 85db1f2..f3818e3 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.h
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-@@ -830,6 +830,7 @@ struct chain_lookup {
-  */
- struct scsiio_tracker {
- 	u16	smid;
-+	struct scsi_cmnd *scmd;
- 	u8	cb_idx;
- 	u8	direct_io;
- 	struct pcie_sg_list pcie_sg_list;
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index 1008c5e..3e93c4a 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -5210,6 +5210,7 @@ _scsih_io_done(struct MPT3SAS_ADAPTER *ioc, u16 smid, u8 msix_index, u32 reply)
- 	     ((ioc_status & MPI2_IOCSTATUS_MASK)
- 	      != MPI2_IOCSTATUS_SCSI_TASK_TERMINATED)) {
- 		st->direct_io = 0;
-+		st->scmd = scmd;
- 		memcpy(mpi_request->CDB.CDB32, scmd->cmnd, scmd->cmd_len);
- 		mpi_request->DevHandle =
- 		    cpu_to_le16(sas_device_priv_data->sas_target->handle);
+-	if (smp_affinity_enable)
+-		irq_flags |= PCI_IRQ_AFFINITY;
+-
+-	r = pci_alloc_irq_vectors(ioc->pdev, 1, ioc->reply_queue_count,
+-				  irq_flags);
++	r = _base_alloc_irq_vectors(ioc);
+ 	if (r < 0) {
+ 		dfailprintk(ioc,
+ 			    ioc_info(ioc, "pci_alloc_irq_vectors failed (r=%d) !!!\n",
 -- 
 1.8.3.1
 
