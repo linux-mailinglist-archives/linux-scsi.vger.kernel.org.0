@@ -2,86 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A052314F
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 12:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F965231D1
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 12:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731222AbfETK0o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 May 2019 06:26:44 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39214 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726490AbfETK0n (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 May 2019 06:26:43 -0400
-Received: by mail-pl1-f195.google.com with SMTP id g9so6515950plm.6
-        for <linux-scsi@vger.kernel.org>; Mon, 20 May 2019 03:26:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=dPSJ7o4EH/iQOdrp308VXvwuA1J61/k03sdR1fSKMSc=;
-        b=aNAKU6AUk8HnMnEQlM7VjRqsxs3nYjGkiR1hFrq9fnYx3V/HDquovi36/mXiW1EIMc
-         tHr5Q/8D5xjzK66n7lQ+NPk1Fy0d0N2/dm57k0q9rFAUkQliq9SO1w0opK2eULgyawyE
-         NPVxsBz3rhW7JKtmds0mkOHym5qUUDySCsxjI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=dPSJ7o4EH/iQOdrp308VXvwuA1J61/k03sdR1fSKMSc=;
-        b=lplbSGYWaDA+3eCo3oxjUX2qhOeLm4nk+iwk1giWnS3AjtIrrnIRD5HXXfkFfxvZ5K
-         Eozx/2NfIfEVBlxNOGaW48DlXVkZ/9xNwfTJ4cj3yFtnAanrW2H21xJFFx7eT7tHu2NS
-         t+ffOTD8sD5ahP5uhr5PPNPeO6lhcfBnN8HYtZfdcE5FgMZoTOHZU+oJecTm2C2upuGK
-         o1ja1g2A8tR9C14hveZMj2wz9c8gDLWeJKi9Khr4+5BruKYQQJanhDbZBYtnnDzailz2
-         N3He+VY6FbxJNwbEXK498WVtb3AEh/8wrcpp+HLoDd8CgRNWm8bx0g3JBfzpUKWKVP4U
-         lh7A==
-X-Gm-Message-State: APjAAAWWiB5DlBG7z7drO7XDj7jbXQE0d8jjnjQ5CAL5zpSR9Hmk5Xul
-        zQu25V32B7f9sonbwHH2gpNFGggGEnE7O4VXU8c5oXuDFyvgsOoXOQJr57v4AWvDyod5XO4/u0B
-        LYySPcmc9FqxIHDAYi1YCUbpewEWPr1y0g134+cwubqFoGUCd+elEBn7nVd7Nyv9OTGUGdzQspu
-        M9OAHZIQpTfRJhtSu1nA==
-X-Google-Smtp-Source: APXvYqwhn9ZqDwTKoLaZNb9aSftm4KS+33NLxp/wvGg/bEdnNnV6c/kekQiKalemV35LWbv2jIFtyg==
-X-Received: by 2002:a17:902:9693:: with SMTP id n19mr74556985plp.92.1558348003123;
-        Mon, 20 May 2019 03:26:43 -0700 (PDT)
-Received: from dhcp-10-123-20-26.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id j2sm15757309pfb.157.2019.05.20.03.26.41
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 20 May 2019 03:26:42 -0700 (PDT)
-From:   Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     suganath-prabu.subramani@broadcom.com, Sathya.Prakash@broadcom.com,
-        sreekanth.reddy@broadcom.com
-Subject: [PATCH v2 10/10] mpt3sas: Update driver version to 29.100.00.00
-Date:   Mon, 20 May 2019 06:26:04 -0400
-Message-Id: <20190520102604.3466-11-suganath-prabu.subramani@broadcom.com>
-X-Mailer: git-send-email 2.18.1
-In-Reply-To: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
-References: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
+        id S1730640AbfETKzH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 May 2019 06:55:07 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8221 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725601AbfETKzH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 20 May 2019 06:55:07 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 5D0FE464CDEFA0BA2F09;
+        Mon, 20 May 2019 18:55:05 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Mon, 20 May 2019
+ 18:54:59 +0800
+Subject: Re: [PATCH] scsi: libsas: no need to join wide port again in
+ sas_ex_discover_dev()
+To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
+        <jejb@linux.vnet.ibm.com>
+References: <20190518094057.18046-1-yanaijie@huawei.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <hare@suse.com>, <dan.j.williams@intel.com>, <jthumshirn@suse.de>,
+        <hch@lst.de>, <huangdaode@hisilicon.com>,
+        <chenxiang66@hisilicon.com>, <miaoxie@huawei.com>,
+        <zhaohongjiang@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <1860c624-1216-bb84-7091-d41a4d43f244@huawei.com>
+Date:   Mon, 20 May 2019 11:54:51 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
+MIME-Version: 1.0
+In-Reply-To: <20190518094057.18046-1-yanaijie@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
+On 18/05/2019 10:40, Jason Yan wrote:
+> Since we are processing events synchronously now, the second call of
+> sas_ex_join_wide_port() in sas_ex_discover_dev() is not needed. There
+> will be no races with other works in disco workqueue. So remove the
+> second sas_ex_join_wide_port().
+>
+> I did not change the return value of 'res' to error when discover failed
+> because we need to continue to discover other phys if one phy discover
+> failed. So let's keep that logic as before and just add a debug log to
+> detect the failure.
+>
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> ---
+>  drivers/scsi/libsas/sas_expander.c | 24 +++---------------------
+>  1 file changed, 3 insertions(+), 21 deletions(-)
+>
+> diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+> index 83f2fd70ce76..8f90dd497dfe 100644
+> --- a/drivers/scsi/libsas/sas_expander.c
+> +++ b/drivers/scsi/libsas/sas_expander.c
+> @@ -1116,27 +1116,9 @@ static int sas_ex_discover_dev(struct domain_device *dev, int phy_id)
+>  		break;
+>  	}
+>
+> -	if (child) {
+> -		int i;
+> -
+> -		for (i = 0; i < ex->num_phys; i++) {
+> -			if (ex->ex_phy[i].phy_state == PHY_VACANT ||
+> -			    ex->ex_phy[i].phy_state == PHY_NOT_PRESENT)
+> -				continue;
+> -			/*
+> -			 * Due to races, the phy might not get added to the
+> -			 * wide port, so we add the phy to the wide port here.
+> -			 */
+> -			if (SAS_ADDR(ex->ex_phy[i].attached_sas_addr) ==
+> -			    SAS_ADDR(child->sas_addr)) {
+> -				ex->ex_phy[i].phy_state= PHY_DEVICE_DISCOVERED;
+> -				if (sas_ex_join_wide_port(dev, i))
+> -					pr_debug("Attaching ex phy%02d to wide port %016llx\n",
+> -						 i, SAS_ADDR(ex->ex_phy[i].attached_sas_addr));
+> -			}
+> -		}
+> -	}
 
-Update driver version from 28.100.00.00 to 29.100.00.00
-This is equivalent to Phase 10 OOB driver.
+This change looks ok.
 
-Signed-off-by: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
----
- drivers/scsi/mpt3sas/mpt3sas_base.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> -
+> +	if (!child)
+> +		pr_debug("Ex %016llx phy%02d failed to discover\n",
+> +			 SAS_ADDR(dev->sas_addr), phy_id);
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-index b5a2071..44b8a23 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.h
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-@@ -76,8 +76,8 @@
- #define MPT3SAS_DRIVER_NAME		"mpt3sas"
- #define MPT3SAS_AUTHOR "Avago Technologies <MPT-FusionLinux.pdl@avagotech.com>"
- #define MPT3SAS_DESCRIPTION	"LSI MPT Fusion SAS 3.0 Device Driver"
--#define MPT3SAS_DRIVER_VERSION		"28.100.00.00"
--#define MPT3SAS_MAJOR_VERSION		28
-+#define MPT3SAS_DRIVER_VERSION		"29.100.00.00"
-+#define MPT3SAS_MAJOR_VERSION		29
- #define MPT3SAS_MINOR_VERSION		100
- #define MPT3SAS_BUILD_VERSION		0
- #define MPT3SAS_RELEASE_VERSION	00
--- 
-1.8.3.1
+nit:
+/s/Ex/ex/
+
+In case of "second fanout expander...", before this, we don't attempt to 
+discover, and just disable the PHY. In that case, is the log proper?
+
+And, if indeed proper, it would seem to merit a higher log level than 
+debug, maybe notice is better.
+
+
+>  	return res;
+>  }
+>
+>
+
 
