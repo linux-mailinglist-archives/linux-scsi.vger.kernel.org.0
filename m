@@ -2,109 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98C4A23CA0
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 17:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBFE23CDC
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 18:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389021AbfETP4C (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 May 2019 11:56:02 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:25309 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389005AbfETP4C (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 20 May 2019 11:56:02 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 1549785365;
-        Mon, 20 May 2019 15:56:02 +0000 (UTC)
-Received: from llong.remote.csb (dhcp-17-85.bos.redhat.com [10.18.17.85])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9437F27C4B;
-        Mon, 20 May 2019 15:56:01 +0000 (UTC)
-Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in
- ses_enclosure_data_process()
-To:     James Bottomley <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S2388592AbfETQGE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 May 2019 12:06:04 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:44318 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387973AbfETQGE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 May 2019 12:06:04 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4KG3ocl004844;
+        Mon, 20 May 2019 16:05:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=WDlTfhKqJMZ2zyqiSTpLnbD7JXsJmqETioOP6yU6rfE=;
+ b=2HS/eCCLMyxPInXGNYoD/VCOiXGqrZv0qxAcTXwAUMveelOAv3MndRVb61EwOefBqxdF
+ Xrqzut2R4ufoUbuKCC8m3P079QIEYh3AqpejF8y20DzarQZYFVkvlxA1bBrOoiuarNcl
+ F96d8GSBtdQV6p+Q55SHDzVNW3/E+JnmdNKUKbnoiRJQBZhC8moFUpLRURTft/dw761J
+ X47t2e+c34ZAmJpGOWUb3ZdIlZvF9KJX/YRFcFNwrklc8U89bDYkYycW7CVePd7oUHeW
+ UML/I5Wng+0kSZf0/LFJRaQy3LNqsIUfxAjNxvuyrRRdKwJkpXg2b983Lh7hSJqxFwRL 0Q== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 2sj7jdg6sk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 May 2019 16:05:42 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4KG5SFT107894;
+        Mon, 20 May 2019 16:05:42 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2sks1xpasf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 20 May 2019 16:05:42 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4KG5eDj022282;
+        Mon, 20 May 2019 16:05:40 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 20 May 2019 16:05:40 +0000
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Waiman Long <longman@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in ses_enclosure_data_process()
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
 References: <20190501180535.26718-1-longman@redhat.com>
- <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
- <1558363938.3742.1.camel@linux.ibm.com>
- <3385cf54-7b6c-3f28-e037-f0d4037368eb@redhat.com>
- <1558367212.3742.10.camel@linux.ibm.com>
-From:   Waiman Long <longman@redhat.com>
-Organization: Red Hat
-Message-ID: <8080a1ae-027e-ecdb-d8f1-5786a6b8853b@redhat.com>
-Date:   Mon, 20 May 2019 11:56:01 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
+        <1558363938.3742.1.camel@linux.ibm.com>
+        <3385cf54-7b6c-3f28-e037-f0d4037368eb@redhat.com>
+        <1558367212.3742.10.camel@linux.ibm.com>
+Date:   Mon, 20 May 2019 12:05:38 -0400
+In-Reply-To: <1558367212.3742.10.camel@linux.ibm.com> (James Bottomley's
+        message of "Mon, 20 May 2019 08:46:52 -0700")
+Message-ID: <yq1zhnh8625.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <1558367212.3742.10.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Mon, 20 May 2019 15:56:02 +0000 (UTC)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9262 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905200104
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9262 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905200104
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/20/19 11:46 AM, James Bottomley wrote:
-> On Mon, 2019-05-20 at 11:24 -0400, Waiman Long wrote:
->> On 5/20/19 10:52 AM, James Bottomley wrote:
->>> On Mon, 2019-05-20 at 10:41 -0400, Waiman Long wrote:
->>> [...]
->>>>> --- a/drivers/scsi/ses.c
->>>>> +++ b/drivers/scsi/ses.c
->>>>> @@ -605,9 +605,14 @@ static void
->>>>> ses_enclosure_data_process(struct
->>>>> enclosure_device *edev,
->>>>>  			     /* these elements are optional */
->>>>>  			     type_ptr[0] ==
->>>>> ENCLOSURE_COMPONENT_SCSI_TARGET_PORT ||
->>>>>  			     type_ptr[0] ==
->>>>> ENCLOSURE_COMPONENT_SCSI_INITIATOR_PORT ||
->>>>> -			     type_ptr[0] ==
->>>>> ENCLOSURE_COMPONENT_CONTROLLER_ELECTRONICS))
->>>>> +			     type_ptr[0] ==
->>>>> ENCLOSURE_COMPONENT_CONTROLLER_ELECTRONICS)) {
->>>>>  				addl_desc_ptr +=
->>>>> addl_desc_ptr[1]
->>>>> + 2;
->>>>>  
->>>>> +				/* Ensure no out-of-bounds
->>>>> memory
->>>>> access */
->>>>> +				if (addl_desc_ptr >= ses_dev-
->>>>>> page10 +
->>>>> +						     ses_dev-
->>>>>> page10_len)
->>>>> +					addl_desc_ptr = NULL;
->>>>> +			}
->>>>>  		}
->>>>>  	}
->>>>>  	kfree(buf);
->>>> Ping! Any comment on this patch.
->>> The update looks fine to me:
->>>
->>> Reviewed-by: James E.J. Bottomley <jejb@linux.ibm.com>
->>>
->>> It might also be interesting to find out how the proliant is
->>> structuring this descriptor array to precipitate the out of bounds:
->>> Is it just an off by one or something more serious?
->> I didn't look into the detail the enclosure message returned by the
->> hardware, but I believe it may have more description entries (page7)
->> than extended description entries (page10).
->>
->> I can try to reserve the system and find out what exactly is wrong
->> with that system if you really want to find that out.
+
+James,
+
 > Please.  What I'm interested in is whether this is simply a bug in the
-> array firmware, in which case the fix is sufficient, or whether there's
-> some problem with the parser, like mismatched expectations over added
-> trailing nulls or something.
->
-> James
->
-OK, will let you know once I get hold of the system.
+> array firmware, in which case the fix is sufficient, or whether
+> there's some problem with the parser, like mismatched expectations
+> over added trailing nulls or something.
 
-Cheers,
-Longman
+Our support folks have been looking at this for a while. We have seen
+problems with devices from several vendors. To the extent that I gave up
+the idea of blacklisting all of them.
 
+I am collecting "bad" SES pages from these devices. I have added support
+for RECEIVE DIAGNOSTICS to scsi_debug and added a bunch of deliberately
+broken SES pages so we could debug this.
+
+It appears to be very common for devices to return inconsistent or
+invalid data. So pretty much all of the ses.c parsing needs to have
+sanity checking heuristics added to prevent KASAN hiccups.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
