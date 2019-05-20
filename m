@@ -2,98 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBFE23CDC
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 18:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC0F24334
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 23:53:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388592AbfETQGE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 May 2019 12:06:04 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:44318 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387973AbfETQGE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 May 2019 12:06:04 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4KG3ocl004844;
-        Mon, 20 May 2019 16:05:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=WDlTfhKqJMZ2zyqiSTpLnbD7JXsJmqETioOP6yU6rfE=;
- b=2HS/eCCLMyxPInXGNYoD/VCOiXGqrZv0qxAcTXwAUMveelOAv3MndRVb61EwOefBqxdF
- Xrqzut2R4ufoUbuKCC8m3P079QIEYh3AqpejF8y20DzarQZYFVkvlxA1bBrOoiuarNcl
- F96d8GSBtdQV6p+Q55SHDzVNW3/E+JnmdNKUKbnoiRJQBZhC8moFUpLRURTft/dw761J
- X47t2e+c34ZAmJpGOWUb3ZdIlZvF9KJX/YRFcFNwrklc8U89bDYkYycW7CVePd7oUHeW
- UML/I5Wng+0kSZf0/LFJRaQy3LNqsIUfxAjNxvuyrRRdKwJkpXg2b983Lh7hSJqxFwRL 0Q== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 2sj7jdg6sk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 May 2019 16:05:42 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4KG5SFT107894;
-        Mon, 20 May 2019 16:05:42 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2sks1xpasf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 May 2019 16:05:42 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4KG5eDj022282;
-        Mon, 20 May 2019 16:05:40 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 20 May 2019 16:05:40 +0000
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in ses_enclosure_data_process()
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
+        id S1726088AbfETVxS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 May 2019 17:53:18 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:35591 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725776AbfETVxS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 20 May 2019 17:53:18 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 17179204237;
+        Mon, 20 May 2019 23:53:16 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id EHYpAQPNTTZm; Mon, 20 May 2019 23:53:09 +0200 (CEST)
+Received: from [192.168.48.23] (host-45-58-224-183.dyn.295.ca [45.58.224.183])
+        by smtp.infotech.no (Postfix) with ESMTPA id 25B15204145;
+        Mon, 20 May 2019 23:53:08 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in
+ ses_enclosure_data_process()
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <jejb@linux.ibm.com>
+Cc:     Waiman Long <longman@redhat.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20190501180535.26718-1-longman@redhat.com>
-        <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
-        <1558363938.3742.1.camel@linux.ibm.com>
-        <3385cf54-7b6c-3f28-e037-f0d4037368eb@redhat.com>
-        <1558367212.3742.10.camel@linux.ibm.com>
-Date:   Mon, 20 May 2019 12:05:38 -0400
-In-Reply-To: <1558367212.3742.10.camel@linux.ibm.com> (James Bottomley's
-        message of "Mon, 20 May 2019 08:46:52 -0700")
-Message-ID: <yq1zhnh8625.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+ <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
+ <1558363938.3742.1.camel@linux.ibm.com>
+ <3385cf54-7b6c-3f28-e037-f0d4037368eb@redhat.com>
+ <1558367212.3742.10.camel@linux.ibm.com> <yq1zhnh8625.fsf@oracle.com>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <c14d427c-1d17-fc8f-672d-d612851abcc1@interlog.com>
+Date:   Mon, 20 May 2019 17:53:08 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9262 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905200104
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9262 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905200104
+In-Reply-To: <yq1zhnh8625.fsf@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 2019-05-20 12:05 p.m., Martin K. Petersen wrote:
+> 
+> James,
+> 
+>> Please.  What I'm interested in is whether this is simply a bug in the
+>> array firmware, in which case the fix is sufficient, or whether
+>> there's some problem with the parser, like mismatched expectations
+>> over added trailing nulls or something.
+> 
+> Our support folks have been looking at this for a while. We have seen
+> problems with devices from several vendors. To the extent that I gave up
+> the idea of blacklisting all of them.
+> 
+> I am collecting "bad" SES pages from these devices. I have added support
+> for RECEIVE DIAGNOSTICS to scsi_debug and added a bunch of deliberately
+> broken SES pages so we could debug this
 
-James,
+Patches ??
 
-> Please.  What I'm interested in is whether this is simply a bug in the
-> array firmware, in which case the fix is sufficient, or whether
-> there's some problem with the parser, like mismatched expectations
-> over added trailing nulls or something.
+> It appears to be very common for devices to return inconsistent or
+> invalid data. So pretty much all of the ses.c parsing needs to have
+> sanity checking heuristics added to prevent KASAN hiccups.
 
-Our support folks have been looking at this for a while. We have seen
-problems with devices from several vendors. To the extent that I gave up
-the idea of blacklisting all of them.
+And it is not just SES device implementations that were broken. The
+relationship between Additional Element Status diagnostic page (dpage)
+and the Enclosure Status dpage was under-specified in SES-2 and that
+led to the EIIOE field being introduced during the SES-3 revisions.
+And the meaning of EIIOE was tweaked several times *** before SES-3 was
+standardized. Anyone interested in the adventures of EIIOE can see
+the code of sg_ses.c in sg3_utils. The sg_ses utility is many times
+more complex than anything else in the sg3_utils package.
 
-I am collecting "bad" SES pages from these devices. I have added support
-for RECEIVE DIAGNOSTICS to scsi_debug and added a bunch of deliberately
-broken SES pages so we could debug this.
+And that complexity led me to suspect that the Linux SES driver was
+broken. It should be 3 or 4 times larger than it is! It simply doesn't
+do enough checking.
 
-It appears to be very common for devices to return inconsistent or
-invalid data. So pretty much all of the ses.c parsing needs to have
-sanity checking heuristics added to prevent KASAN hiccups.
+So yes Martin, you are on the right track.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Doug Gilbert
+
+
+BTW the NVME Management Interface folks have decided to use SES-3 for
+NVME enclosure management rather than invent their own can of worms :-)
+
+*** For example EIIOE started life as a 1 bit field, but two cases
+     wasn't enough, so it became a 2 bit field and now uses all
+     four possibilities.
+
+
