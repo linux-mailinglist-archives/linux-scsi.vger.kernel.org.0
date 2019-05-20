@@ -2,103 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AEA229AA
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 03:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CC522A62
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 05:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729839AbfETBPq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 May 2019 21:15:46 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:40991 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729642AbfETBPq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 May 2019 21:15:46 -0400
-X-UUID: 2188c294f91343818c3ef48c5a6f9146-20190520
-X-UUID: 2188c294f91343818c3ef48c5a6f9146-20190520
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1675438039; Mon, 20 May 2019 09:15:40 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs03n2.mediatek.inc (172.21.101.182) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 20 May 2019 09:15:38 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 20 May 2019 09:15:38 +0800
-Message-ID: <1558314937.660.2.camel@mtkswgap22>
-Subject: Re: [PATCH v2 0/3] scsi: ufs: Add error handling of Auto-Hibernate
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-CC:     "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "evgreen@chromium.org" <evgreen@chromium.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        Kuohong Wang =?UTF-8?Q?=28=E7=8E=8B=E5=9C=8B=E9=B4=BB=29?= 
-        <kuohong.wang@mediatek.com>,
-        Peter Wang =?UTF-8?Q?=28=E7=8E=8B=E4=BF=A1=E5=8F=8B=29?= 
-        <peter.wang@mediatek.com>,
-        Chun-Hung Wu =?UTF-8?Q?=28=E5=B7=AB=E9=A7=BF=E5=AE=8F=29?= 
-        <Chun-hung.Wu@mediatek.com>,
-        Andy Teng =?UTF-8?Q?=28=E9=84=A7=E5=A6=82=E5=AE=8F=29?= 
-        <Andy.Teng@mediatek.com>
-Date:   Mon, 20 May 2019 09:15:37 +0800
-In-Reply-To: <1557912988-26758-1-git-send-email-stanley.chu@mediatek.com>
-References: <1557912988-26758-1-git-send-email-stanley.chu@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
-MIME-Version: 1.0
-X-TM-SNTS-SMTP: 98DB3DEF6BAFB6C6F7C95ADEF238E8BF6072C530D9204002251DC5A7057FDE232000:8
-X-MTK:  N
+        id S1729692AbfETDYI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 19 May 2019 23:24:08 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:37977 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728932AbfETDYH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 May 2019 23:24:07 -0400
+Received: by mail-pg1-f193.google.com with SMTP id j26so6056905pgl.5;
+        Sun, 19 May 2019 20:24:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=8lynjc9FImYn3DS1nNlFKZK9eba4zI8O5MGLVIpLl4U=;
+        b=PT40jLcY25cxWe9jUc2043282okhendavje06zKTnAmi0FzyAAAre32s7o/Pu5VMNt
+         qlA+PxKsNv8lIq9PmvnJtTkWKzzESHi6HftLWRG6VrIOGSa1Zn0lRpiGuz2Q/gIBDBaE
+         zsriR/4YcsTERCM3L/OBj+96aN12nZruKRSoKaa54mD/6T8wAAtkdnJ3dZHcOrhStsC5
+         r+jw47uL2Y17t5IjJoJ54y7u6HcKzaCV/vMEhI7YDROcTWP3ucOIHSCR4DRL8mFcj4Jd
+         k41X4OGhL+U1kkDaUb0FJcUpIUn+SBY0xDfY37SgVQ3R4tgqA5KfKbZVav45fHodZnHC
+         xcSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=8lynjc9FImYn3DS1nNlFKZK9eba4zI8O5MGLVIpLl4U=;
+        b=Zw+/GQyOdLyl+W9OG1259HMoC31VtVK744EpNx9JmjT0EVEUWH2gLOjmZusotodm5m
+         ELSWSwNIj0yOgoW1tQ5TwOGFmhypZoKMmKFiii0l5+JtmoOXogca20A5+PRt3k5ho3il
+         6t4j6sFoCx29gcyh+t2kokdCRhjeGdZPPCiSfCD6SWM0jus+BhQomTT6s3FRyZ6S6op5
+         JKLcLWKbiv25vfFVjrKLJbuorw75qbx9E1vEPSZ+1FBO2fwcx5yDagW1JavlqvFEsCCx
+         8lYW9R/1JJqVA0CijMH2bq6V984S3b3VbCsOSzpyCGIUys5RBFBm9cf8MDyl0kA7aB+B
+         mwZw==
+X-Gm-Message-State: APjAAAXE1Eb8rn/eN6mxrdiPv80YAWeUt9VdzZoEGd2y/ompbAUPnQE1
+        f+S3A5tj6BCwuRxCQL5VEK0=
+X-Google-Smtp-Source: APXvYqyCZT0pmKBNeTy1hX617tFwAmlnRw184XgWnkTGtOBmuOjMleyAZL2FGjRqQIQyMRsZMUyttw==
+X-Received: by 2002:a62:7608:: with SMTP id r8mr76407314pfc.190.1558322647205;
+        Sun, 19 May 2019 20:24:07 -0700 (PDT)
+Received: from localhost ([43.224.245.181])
+        by smtp.gmail.com with ESMTPSA id i7sm11977259pfo.19.2019.05.19.20.24.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 19 May 2019 20:24:06 -0700 (PDT)
+From:   Weitao Hou <houweitaoo@gmail.com>
+To:     jinpu.wang@profitbricks.com, lindar_liu@usish.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Weitao Hou <houweitaoo@gmail.com>
+Subject: [PATCH] scsi: fix typos in code comments
+Date:   Mon, 20 May 2019 11:24:03 +0800
+Message-Id: <20190520032403.12513-1-houweitaoo@gmail.com>
+X-Mailer: git-send-email 2.18.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Avri, Alim, Pedro,
+fix abord to abort
 
-Gentle ping for this patch.
+Signed-off-by: Weitao Hou <houweitaoo@gmail.com>
+---
+ drivers/scsi/pm8001/pm8001_sas.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Wed, 2019-05-15 at 17:36 +0800, Stanley Chu wrote:
-> Currently auto-hibernate is activated if host supports
-> auto-hibern8 capability. However error-handling is not implemented,
-> which makes the feature somewhat risky.
-> 
-> If either "Hibernate Enter" or "Hibernate Exit" fail during
-> auto-hibernate flow, the corresponding interrupt
-> "UIC_HIBERNATE_ENTER" or "UIC_HIBERNATE_EXIT" shall be raised
-> according to UFS specification.
-> 
-> This patch adds auto-hibernate error-handling:
-> 
-> - Monitor "Hibernate Enter" and "Hibernate Exit" interrupts after
->   auto-hibernate feature is activated.
-> 
-> - If fail happens, trigger error-handling just like "manual-hibernate"
->   fail and apply the same recovery flow: schedule UFS error handler in
->   ufshcd_check_errors(), and then do host reset and restore
->   in UFS error handler.
-> 
-> v2:
->  - Fix sentences in commit message (Marc Gonzalez)
->  - Make "Auto-Hibernate" error detection more precise (Bean Huo)
-> 
-> Stanley Chu (3):
->   scsi: ufs: Do not overwrite Auto-Hibernate timer
->   scsi: ufs: Add error-handling of Auto-Hibernate
->   scsi: ufs: Use re-factored Auto-Hibernate function
-> 
->  drivers/scsi/ufs/ufshcd.c | 33 ++++++++++++++++++++++++++++++++-
->  drivers/scsi/ufs/ufshcd.h |  5 +++++
->  drivers/scsi/ufs/ufshci.h |  3 +++
->  3 files changed, 40 insertions(+), 1 deletion(-)
-> 
-Thanks,
-Stanley
+diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+index 88eef3b18e41..3de57c5a3299 100644
+--- a/drivers/scsi/pm8001/pm8001_sas.c
++++ b/drivers/scsi/pm8001/pm8001_sas.c
+@@ -1181,7 +1181,7 @@ int pm8001_query_task(struct sas_task *task)
+ 	return rc;
+ }
+ 
+-/*  mandatory SAM-3, still need free task/ccb info, abord the specified task */
++/*  mandatory SAM-3, still need free task/ccb info, abort the specified task */
+ int pm8001_abort_task(struct sas_task *task)
+ {
+ 	unsigned long flags;
+-- 
+2.18.0
 
