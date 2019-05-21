@@ -2,167 +2,193 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0EE24A94
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 10:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EDB24E99
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 14:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbfEUIlh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 May 2019 04:41:37 -0400
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:25490 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725790AbfEUIlh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 04:41:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1558428096; x=1589964096;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=yruSyDYojSfEQZ4GoktjasNAJ1225ZeBVdn4GOPPwDg=;
-  b=B9SkPSODsdgpzW8PNmiPlDVFINBtrNW/qArWl0C2o3SrB3z6sMZVZlIx
-   c/oSDqWN6OZcicz+YvHmKSJYB7iM6T3PP72Wr6jLcQ//6TzbLFOOw4WcG
-   Fea3djp0xzj1jRbBJrruV4UjgOr68R2MblNEkVxYhFxMd/RXj1TxpwA37
-   h4pXF67sJ6VXVo5pBzI3Qa5Q3nxMQBadzmBQroDoOlQpQ+BxpmzWOEBXb
-   jvArpTdO7vmUt+Nzei5+LwofTjJ3LqdVwqlWp8Ar8TlyNW0Va9GzyUL+m
-   67qE7WdWbx8/LmwpXy1YKmpEB87ctcv6twiNFGa5gSGGa/h8fW6rt50QI
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.60,494,1549900800"; 
-   d="scan'208";a="110418234"
-Received: from mail-bn3nam01lp2055.outbound.protection.outlook.com (HELO NAM01-BN3-obe.outbound.protection.outlook.com) ([104.47.33.55])
-  by ob1.hgst.iphmx.com with ESMTP; 21 May 2019 16:41:35 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0W7hGmdA5KypAQTtphJVx0R91aCMuv1WoxwM2XnmSBQ=;
- b=uMqr/YuOItmZ1MRjZufSoXT8YQ/ItnMNID1xcKxDWqSi4OebFtM95Iuj1++9BxDLOmt5C7XhqhjuqZIhhbYNQKt0SyCoMnA1L2mwRyUWn5g3IdG82/GzTvUJ1mNl3fbEV7KD7Wp71tOE52PE8EKWNtfVKFIpaijEY3RBiyC9iAY=
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
- SN6PR04MB4255.namprd04.prod.outlook.com (52.135.71.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.18; Tue, 21 May 2019 08:41:32 +0000
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::6d99:14d9:3fa:f530]) by SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::6d99:14d9:3fa:f530%6]) with mapi id 15.20.1900.020; Tue, 21 May 2019
- 08:41:32 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Stanley Chu <stanley.chu@mediatek.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
-CC:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "evgreen@chromium.org" <evgreen@chromium.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>
-Subject: RE: [PATCH v5 0/3] scsi: ufs: Add error handling of Auto-Hibernate
-Thread-Topic: [PATCH v5 0/3] scsi: ufs: Add error handling of Auto-Hibernate
-Thread-Index: AQHVD6DGIM/lpURAaUuuCZWM2A74F6Z1QowA
-Date:   Tue, 21 May 2019 08:41:32 +0000
-Message-ID: <SN6PR04MB4925604BFAF0A66D54F65E3EFC070@SN6PR04MB4925.namprd04.prod.outlook.com>
-References: <1558421094-3182-1-git-send-email-stanley.chu@mediatek.com>
-In-Reply-To: <1558421094-3182-1-git-send-email-stanley.chu@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e9159af8-7cf2-4d17-fb38-08d6ddc82067
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB4255;
-x-ms-traffictypediagnostic: SN6PR04MB4255:
-wdcipoutbound: EOP-TRUE
-x-microsoft-antispam-prvs: <SN6PR04MB42559F240996374849D0D2E9FC070@SN6PR04MB4255.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:2331;
-x-forefront-prvs: 0044C17179
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(366004)(136003)(396003)(346002)(39860400002)(189003)(199004)(71200400001)(102836004)(478600001)(53936002)(25786009)(4326008)(66066001)(2201001)(26005)(14454004)(86362001)(54906003)(76176011)(71190400001)(9686003)(5660300002)(6506007)(52536014)(14444005)(256004)(7416002)(110136005)(6246003)(186003)(7696005)(6436002)(99286004)(72206003)(55016002)(229853002)(476003)(74316002)(3846002)(6116002)(2501003)(316002)(68736007)(2906002)(76116006)(8676002)(73956011)(66946007)(81156014)(81166006)(446003)(8936002)(11346002)(7736002)(66446008)(66556008)(64756008)(66476007)(33656002)(486006)(305945005);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB4255;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: pj486WJFKEwx49OxmokeD5rJSNhrgqiTD0wpOsn8xw5MH9/hUoJWIMRdrqHAli4sQIXORjHFecGkOPaQmwR4FNn/jAerMgfNxJYXWKpqqMQK0VKt+NWsUcuCIxO1WuMoj0xKBF8PbCg3KD20jTTlORnYsslF0RgeorArqIiy1p9/T8NGBuxP72+HOsrq884AYNgK5JD+YS8vMt/6HjWN19zaOw7KbJXZSmF3JrOFiiYlBwEBpQBHkYNmIMrpCu/nJDU+tSiSzglj0xE5q4s+c23/+deuK9JrYQZL1y2uwBgagswM84Y5K5Athkn6s47/WTUo3C3ANJE2b1x5In8f6I7fQ4J6Gf2u6RPVoQFvl0cSzaqsG3lXIrCIBsdOSH1RoUW1xRGi6MPciNr+Y1RKeGJLO6Kage164P/RXoOtRPo=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728183AbfEUMDp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 May 2019 08:03:45 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:45888 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728045AbfEUMDp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 08:03:45 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4LBwx54123998;
+        Tue, 21 May 2019 12:02:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=TZYqrfFAU+1Y5NvFpYrOWNNOjV39r1AmCN+iJWl6phE=;
+ b=5UoPeIhp+Fc2/NcSF86S1fKiYqMWKcw4TMoE9iBwYIjYmhOcvIVsqBYBfXewzTLzEJMo
+ 5COM6F8+KtTzwnB2AcROwv75BgFX7Wnhztfucx3Fr3eTf38kAJ3ucZY7UsGe+f/AuPck
+ I/yN3zfYBVwnv2JqHwXi2FZpIG676cP5cdaeekZJTKTL/laGWsYdRnYtBhmJ/meHmQER
+ FXUIflumM/14L9hMRWtFRFMqLRKa+Y9wkpXrAtoo3tOpNPiTy34sLI21cyihGYH5btlG
+ sdyg81EIRE/bHZzFdm9QPBRADFsbaDU6ptMR/fHRdL5v4kmmmnLc1V4c3A+cFtT37Mye 1g== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2sjapqcpn9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 May 2019 12:02:53 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4LC2109025847;
+        Tue, 21 May 2019 12:02:53 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 2sm046xeyv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 21 May 2019 12:02:53 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4LC2ocm027898;
+        Tue, 21 May 2019 12:02:50 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 21 May 2019 12:02:50 +0000
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Waiman Long <longman@redhat.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in ses_enclosure_data_process()
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190501180535.26718-1-longman@redhat.com>
+        <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
+        <1558363938.3742.1.camel@linux.ibm.com>
+        <3385cf54-7b6c-3f28-e037-f0d4037368eb@redhat.com>
+        <1558367212.3742.10.camel@linux.ibm.com> <yq1zhnh8625.fsf@oracle.com>
+        <c14d427c-1d17-fc8f-672d-d612851abcc1@interlog.com>
+Date:   Tue, 21 May 2019 08:02:48 -0400
+In-Reply-To: <c14d427c-1d17-fc8f-672d-d612851abcc1@interlog.com> (Douglas
+        Gilbert's message of "Mon, 20 May 2019 17:53:08 -0400")
+Message-ID: <yq1h89o6mmv.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9159af8-7cf2-4d17-fb38-08d6ddc82067
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2019 08:41:32.4578
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4255
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9263 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905210075
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9263 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905210075
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This series looks fine to me.
 
-Thanks,
-Avri
+Doug,
 
->=20
-> Currently auto-hibernate is activated if host supports
-> auto-hibern8 capability. However error-handling is not implemented,
-> which makes the feature somewhat risky.
->=20
-> If either "Hibernate Enter" or "Hibernate Exit" fail during
-> auto-hibernate flow, the corresponding interrupt
-> "UIC_HIBERNATE_ENTER" or "UIC_HIBERNATE_EXIT" shall be raised
-> according to UFS specification.
->=20
-> This patch adds auto-hibernate error-handling:
->=20
-> - Monitor "Hibernate Enter" and "Hibernate Exit" interrupts after
->   auto-hibernate feature is activated.
->=20
-> - If fail happens, trigger error-handling just like "manual-hibernate"
->   fail and apply the same recovery flow: schedule UFS error handler in
->   ufshcd_check_errors(), and then do host reset and restore
->   in UFS error handler.
->=20
-> v5:
->  - Also re-factor checking of Auto-Hibernation support in other places, e=
-.g., in
-> ufshcd_auto_hibern8_enable() and in ufs-sysfs (Avri Altman)
->  - Change order of patch "scsi: ufs: Introduce
-> ufshcd_is_auto_hibern8_supported()" to #1 as a preparation patch of whole
-> series
->=20
-> v4:
->  - Replace original patch "[3/3] scsi: ufs: Use re-factored Auto-Hibernat=
-e
-> function" by a new preparation patch "[2/3] scsi: ufs: Introduce
-> ufshcd_is_auto_hibern8_supported()" for re-factoring
-> ufshcd_is_auto_hibern8_supported (Avri Altman)
->  - Refine UIC mask definitions (Avri Altman)
->=20
-> v3:
->  - Fix typo in patch "scsi: ufs: Do not overwrite Auto-Hibernate timer" (=
-Avri
-> Altman)
->  - Rebase to Linux 5.2-rc1
->=20
-> v2:
->  - Fix sentences in commit message (Marc Gonzalez)
->  - Make "Auto-Hibernate" error detection more precise (Bean Huo)
->=20
-> Stanley Chu (3):
->   scsi: ufs: Introduce ufshcd_is_auto_hibern8_supported()
->   scsi: ufs: Do not overwrite Auto-Hibernate timer
->   scsi: ufs: Add error-handling of Auto-Hibernate
->=20
->  drivers/scsi/ufs/ufs-sysfs.c |  6 +++---
->  drivers/scsi/ufs/ufshcd.c    | 35 +++++++++++++++++++++++++++++++++--
->  drivers/scsi/ufs/ufshcd.h    |  5 +++++
->  drivers/scsi/ufs/ufshci.h    |  6 ++++--
->  4 files changed, 45 insertions(+), 7 deletions(-)
->=20
-> --
-> 2.18.0
+>> I am collecting "bad" SES pages from these devices. I have added
+>> support for RECEIVE DIAGNOSTICS to scsi_debug and added a bunch of
+>> deliberately broken SES pages so we could debug this
+>
+> Patches ??
 
+I have included the plumbing below. However, I need to synthesize the
+contents of the pages with problems. I can't share the ones I have
+received from customers so I removed the arrays from the patch.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
+
+From 968dfc5cd498d2ea6e77801cc9b9183a1a28b35d Mon Sep 17 00:00:00 2001
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+Date: Thu, 28 Mar 2019 22:29:13 -0400
+Subject: [PATCH] scsi: scsi_debug: Implement support for Receive Diagnostics
+ command
+
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 2740a90501a0..db8745a7000e 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -356,7 +356,8 @@ enum sdeb_opcode_index {
+ 	SDEB_I_WRITE_SAME = 26,		/* 10, 16 */
+ 	SDEB_I_SYNC_CACHE = 27,		/* 10, 16 */
+ 	SDEB_I_COMP_WRITE = 28,
+-	SDEB_I_LAST_ELEMENT = 29,	/* keep this last (previous + 1) */
++	SDEB_I_RECV_DIAG = 29,
++	SDEB_I_LAST_ELEMENT = 30,	/* keep this last (previous + 1) */
+ };
+ 
+ 
+@@ -367,8 +368,8 @@ static const unsigned char opcode_ind_arr[256] = {
+ 	SDEB_I_READ, 0, SDEB_I_WRITE, 0, 0, 0, 0, 0,
+ 	0, 0, SDEB_I_INQUIRY, 0, 0, SDEB_I_MODE_SELECT, SDEB_I_RESERVE,
+ 	    SDEB_I_RELEASE,
+-	0, 0, SDEB_I_MODE_SENSE, SDEB_I_START_STOP, 0, SDEB_I_SEND_DIAG,
+-	    SDEB_I_ALLOW_REMOVAL, 0,
++	0, 0, SDEB_I_MODE_SENSE, SDEB_I_START_STOP, SDEB_I_RECV_DIAG,
++	SDEB_I_SEND_DIAG, SDEB_I_ALLOW_REMOVAL, 0,
+ /* 0x20; 0x20->0x3f: 10 byte cdbs */
+ 	0, 0, 0, 0, 0, SDEB_I_READ_CAPACITY, 0, 0,
+ 	SDEB_I_READ, 0, SDEB_I_WRITE, 0, 0, 0, 0, SDEB_I_VERIFY,
+@@ -433,6 +434,7 @@ static int resp_write_same_16(struct scsi_cmnd *, struct sdebug_dev_info *);
+ static int resp_comp_write(struct scsi_cmnd *, struct sdebug_dev_info *);
+ static int resp_write_buffer(struct scsi_cmnd *, struct sdebug_dev_info *);
+ static int resp_sync_cache(struct scsi_cmnd *, struct sdebug_dev_info *);
++static int resp_recv_diag(struct scsi_cmnd *, struct sdebug_dev_info *);
+ 
+ /*
+  * The following are overflow arrays for cdbs that "hit" the same index in
+@@ -613,8 +615,9 @@ static const struct opcode_info_t opcode_info_arr[SDEB_I_LAST_ELEMENT + 1] = {
+ 	{0, 0x89, 0, F_D_OUT | FF_MEDIA_IO, resp_comp_write, NULL,
+ 	    {16,  0xf8, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0, 0,
+ 	     0, 0xff, 0x3f, 0xc7} },		/* COMPARE AND WRITE */
+-
+-/* 29 */
++	{0, 0x1c, 0, FF_RESPOND | F_D_IN, resp_recv_diag, NULL, /* RECV DIAG */
++	    {6,  0x1, 0xff, 0xff, 0xff, 0xc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
++/* 30 */
+ 	{0xff, 0, 0, 0, NULL, NULL,		/* terminating element */
+ 	    {0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+ };
+@@ -1516,7 +1519,7 @@ static int resp_inquiry(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	arr[5] = (int)have_dif_prot;	/* PROTECT bit */
+ 	if (sdebug_vpd_use_hostno == 0)
+ 		arr[5] |= 0x10; /* claim: implicit TPGS */
+-	arr[6] = 0x10; /* claim: MultiP */
++	arr[6] = 0x10 | 0x40; /* claim: MultiP */
+ 	/* arr[6] |= 0x40; ... claim: EncServ (enclosure services) */
+ 	arr[7] = 0xa; /* claim: LINKED + CMDQUE */
+ 	memcpy(&arr[8], sdebug_inq_vendor_id, 8);
+@@ -3597,6 +3600,36 @@ static int resp_sync_cache(struct scsi_cmnd *scp,
+ 	return res;
+ }
+ 
++static unsigned char diag0[] = {
++	0x00, 0x00, 0x00, 0x07, 0x00, 0x01, 0x02, 0x06, 0x07, 0x0a, 0xa0, 0x00,
++};
++#define DIAG0_LEN 12
++
++
++static int resp_recv_diag(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
++{
++	unsigned char *cmd = scp->cmnd;
++
++	switch(cmd[2]) {
++	case 0:
++		return fill_from_dev_buffer(scp, diag0, DIAG0_LEN);
++	case 1:
++		return fill_from_dev_buffer(scp, diag1, DIAG1_LEN);
++	case 2:
++		return fill_from_dev_buffer(scp, diag2, DIAG2_LEN);
++	case 6:
++		return fill_from_dev_buffer(scp, diag6, DIAG6_LEN);
++	case 7:
++		return fill_from_dev_buffer(scp, diag7, DIAG7_LEN);
++	case 0xa:
++		return fill_from_dev_buffer(scp, diaga, DIAGA_LEN);
++	case 0xa0:
++		return fill_from_dev_buffer(scp, diaga0, DIAGA0_LEN);
++	}
++
++	return DID_ERROR << 16;
++}
++
+ #define RL_BUCKET_ELEMS 8
+ 
+ /* Even though each pseudo target has a REPORT LUNS "well known logical unit"
