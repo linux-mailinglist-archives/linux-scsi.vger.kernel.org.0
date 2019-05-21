@@ -2,98 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC0F24334
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 May 2019 23:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4CC247EE
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 08:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbfETVxS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 May 2019 17:53:18 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:35591 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbfETVxS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 20 May 2019 17:53:18 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 17179204237;
-        Mon, 20 May 2019 23:53:16 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EHYpAQPNTTZm; Mon, 20 May 2019 23:53:09 +0200 (CEST)
-Received: from [192.168.48.23] (host-45-58-224-183.dyn.295.ca [45.58.224.183])
-        by smtp.infotech.no (Postfix) with ESMTPA id 25B15204145;
-        Mon, 20 May 2019 23:53:08 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in
- ses_enclosure_data_process()
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <jejb@linux.ibm.com>
-Cc:     Waiman Long <longman@redhat.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190501180535.26718-1-longman@redhat.com>
- <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
- <1558363938.3742.1.camel@linux.ibm.com>
- <3385cf54-7b6c-3f28-e037-f0d4037368eb@redhat.com>
- <1558367212.3742.10.camel@linux.ibm.com> <yq1zhnh8625.fsf@oracle.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <c14d427c-1d17-fc8f-672d-d612851abcc1@interlog.com>
-Date:   Mon, 20 May 2019 17:53:08 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727926AbfEUGSQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 May 2019 02:18:16 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:54885 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727895AbfEUGSQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 02:18:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1558419528; x=1589955528;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=tjsXONKa+Pf6UPe0Zzel/r/jyoegrw1lpopf3HtQQyY=;
+  b=WQTZSDXzh18tAYv0aTA+v23C6lYr7F/hNFGLUfMgrSSSOS/sfnx2IXPv
+   YehqYk1JZeq6POtL8FI7y9qB61kuBCTQ0B8ZBNNC2zR8CmSPSuSyx81I8
+   KqqOhYPPq9DH0uSrWD9GTYnr0PQJC1DR5ygvlNkqtln3gXntLFTy9fOmL
+   3XiFUItkVTIJ7AOEjDZFKWneoaVEt9nGDz4FTfnCp2lQHM61OI9kMzuuG
+   82nReUcVtCcUXGspM5iihd08xYt/o4IqW9R8w7pA5Qkco84V0AEH8edwD
+   lQQ3F2zbUOX4BRZq4cFdAMqL4POpiDNgDWY880/PpiFK/EQB7KRfDrMEN
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.60,494,1549900800"; 
+   d="scan'208";a="208184221"
+Received: from mail-sn1nam01lp2059.outbound.protection.outlook.com (HELO NAM01-SN1-obe.outbound.protection.outlook.com) ([104.47.32.59])
+  by ob1.hgst.iphmx.com with ESMTP; 21 May 2019 14:18:46 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tjsXONKa+Pf6UPe0Zzel/r/jyoegrw1lpopf3HtQQyY=;
+ b=BRnRkGiVSFcU7oDMZGaJ5jbv9m7JvBDJs/AuRWp2VSaIsTtsWvftbgvRXNkzTxqw3Qun5aLxPpjeCV4EZOSKW1qcP6X2wHfEtM2zoc1GY+mNrQC77zCaDaWKwSgnvkV9kQIxeqKFwSlAxNUU4OX6tqtO92pivxMS5CdvWJwEjWk=
+Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
+ SN6PR04MB3824.namprd04.prod.outlook.com (52.135.81.33) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1900.18; Tue, 21 May 2019 06:18:11 +0000
+Received: from SN6PR04MB4925.namprd04.prod.outlook.com
+ ([fe80::6d99:14d9:3fa:f530]) by SN6PR04MB4925.namprd04.prod.outlook.com
+ ([fe80::6d99:14d9:3fa:f530%6]) with mapi id 15.20.1900.020; Tue, 21 May 2019
+ 06:18:11 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Stanley Chu <stanley.chu@mediatek.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
+CC:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "evgreen@chromium.org" <evgreen@chromium.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>
+Subject: RE: [PATCH v4 2/3] scsi: ufs: Introduce
+ ufshcd_is_auto_hibern8_supported()
+Thread-Topic: [PATCH v4 2/3] scsi: ufs: Introduce
+ ufshcd_is_auto_hibern8_supported()
+Thread-Index: AQHVDxXZu6oGxF11MU6BMI1MBhbFCaZ1GtHg
+Date:   Tue, 21 May 2019 06:18:11 +0000
+Message-ID: <SN6PR04MB4925EAB455D857AEB055258FFC070@SN6PR04MB4925.namprd04.prod.outlook.com>
+References: <1558361445-30994-1-git-send-email-stanley.chu@mediatek.com>
+ <1558361445-30994-3-git-send-email-stanley.chu@mediatek.com>
+In-Reply-To: <1558361445-30994-3-git-send-email-stanley.chu@mediatek.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Avri.Altman@wdc.com; 
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c20d7dde-6802-49c7-a78d-08d6ddb419ac
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB3824;
+x-ms-traffictypediagnostic: SN6PR04MB3824:
+wdcipoutbound: EOP-TRUE
+x-microsoft-antispam-prvs: <SN6PR04MB3824DF90CC9E6DE59927266CFC070@SN6PR04MB3824.namprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-forefront-prvs: 0044C17179
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(346002)(366004)(376002)(396003)(39860400002)(199004)(189003)(76176011)(33656002)(99286004)(6116002)(6506007)(3846002)(5660300002)(54906003)(110136005)(7696005)(55016002)(558084003)(256004)(4326008)(26005)(11346002)(52536014)(446003)(68736007)(478600001)(2501003)(14454004)(7736002)(6246003)(8936002)(81166006)(53936002)(81156014)(8676002)(186003)(102836004)(66066001)(476003)(86362001)(9686003)(486006)(72206003)(316002)(64756008)(66446008)(66556008)(2906002)(73956011)(76116006)(66946007)(66476007)(2201001)(229853002)(71190400001)(305945005)(7416002)(6436002)(74316002)(25786009)(71200400001);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB3824;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: L0vnxzWxKVRMQWeeCxzzjIw2vMOTm1/9ZedCGdkKv4DvlIRCe8yLw2L5DxvZzzUaRyPqmTCjFlVKL+6axMJjcAkhEu8k03YiX1dbpckZempERgJKOMujmM3aVphTgsKR+MsfI1kWz8Mm+TJFYVxHnBWKBwym/tbwn/iJbVB0poqLLIm+Jm94xgT8TtArrxO5PlnBZ/A2zGuDFQH0/rUOgJg3QeSrBAXxtKWPo+HDN/a4IMWd8hKeD9VYG4ch+lz9mKygnpZayTYvLKDbsd/uaL9SwtzbBPTRlq7DobTi/861sQ4pHWy2zJ5sTN7H+PMLGKtId0bh6s+VYdY0S6XdYgYCNYnU26U+WDmjbQFbq/M9f0mACg3m3XTpdAMgbEZiGd1b75Pdmi6dBSa67jMdSpAjm4acsTo13R9FhZEFiT8=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <yq1zhnh8625.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c20d7dde-6802-49c7-a78d-08d6ddb419ac
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2019 06:18:11.2721
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB3824
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-05-20 12:05 p.m., Martin K. Petersen wrote:
-> 
-> James,
-> 
->> Please.  What I'm interested in is whether this is simply a bug in the
->> array firmware, in which case the fix is sufficient, or whether
->> there's some problem with the parser, like mismatched expectations
->> over added trailing nulls or something.
-> 
-> Our support folks have been looking at this for a while. We have seen
-> problems with devices from several vendors. To the extent that I gave up
-> the idea of blacklisting all of them.
-> 
-> I am collecting "bad" SES pages from these devices. I have added support
-> for RECEIVE DIAGNOSTICS to scsi_debug and added a bunch of deliberately
-> broken SES pages so we could debug this
+>=20
+> ufshcd_is_auto_hibern8_supported() will be used elsewhere
+> in the driver, thus refactor it for preparation.
+You missed a couple of spots, e.g. in ufshcd_auto_hibern8_enable and in ufs=
+-sysfs.
 
-Patches ??
-
-> It appears to be very common for devices to return inconsistent or
-> invalid data. So pretty much all of the ses.c parsing needs to have
-> sanity checking heuristics added to prevent KASAN hiccups.
-
-And it is not just SES device implementations that were broken. The
-relationship between Additional Element Status diagnostic page (dpage)
-and the Enclosure Status dpage was under-specified in SES-2 and that
-led to the EIIOE field being introduced during the SES-3 revisions.
-And the meaning of EIIOE was tweaked several times *** before SES-3 was
-standardized. Anyone interested in the adventures of EIIOE can see
-the code of sg_ses.c in sg3_utils. The sg_ses utility is many times
-more complex than anything else in the sg3_utils package.
-
-And that complexity led me to suspect that the Linux SES driver was
-broken. It should be 3 or 4 times larger than it is! It simply doesn't
-do enough checking.
-
-So yes Martin, you are on the right track.
-
-Doug Gilbert
-
-
-BTW the NVME Management Interface folks have decided to use SES-3 for
-NVME enclosure management rather than invent their own can of worms :-)
-
-*** For example EIIOE started life as a 1 bit field, but two cases
-     wasn't enough, so it became a 2 bit field and now uses all
-     four possibilities.
-
-
+Thanks,
+Avri
