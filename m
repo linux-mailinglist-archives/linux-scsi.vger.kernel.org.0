@@ -2,159 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4790D24849
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 08:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F5824A43
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 10:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726247AbfEUGpM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 May 2019 02:45:12 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37598 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726193AbfEUGpM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 02:45:12 -0400
-X-UUID: 386d9761bcfe4f8eb3c7ddd353908ed0-20190521
-X-UUID: 386d9761bcfe4f8eb3c7ddd353908ed0-20190521
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 440037502; Tue, 21 May 2019 14:45:07 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs03n2.mediatek.inc (172.21.101.182) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Tue, 21 May 2019 14:45:05 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 21 May 2019 14:45:05 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <evgreen@chromium.org>, <beanhuo@micron.com>,
-        <marc.w.gonzalez@free.fr>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v5 3/3] scsi: ufs: Add error-handling of Auto-Hibernate
-Date:   Tue, 21 May 2019 14:44:54 +0800
-Message-ID: <1558421094-3182-4-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1558421094-3182-1-git-send-email-stanley.chu@mediatek.com>
-References: <1558421094-3182-1-git-send-email-stanley.chu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: CC202388F3AF10FB555D675A1FD7A2E45BD37801BC1DE1582DC149E9463583BC2000:8
-X-MTK:  N
+        id S1726466AbfEUIZW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 May 2019 04:25:22 -0400
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:9020 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726391AbfEUIZW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 04:25:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1558427122; x=1589963122;
+  h=from:to:cc:subject:date:message-id;
+  bh=65KZ7sJTsRbX3pS79RSgjwLcSrvi8CtRoaxKAs9egSo=;
+  b=GR3zcVuDLIABF+70CQkTr74sI9tQmK7NBj0vxQu23znknpGISwOwTlhE
+   wFUrBkJpsg629DudQbndHv9rvY2vgnX2itxOodKtPM4FYcSf6jFwo2Ir6
+   Ba3joB9/6tE2+W64dPUIxisMP68mXQZGbDY2hPVUQsjPOeoGwZsADvw1C
+   dhqDtUamUjQdOvpjWIXceALmMIsWwZpIE7q0kNf5JV5fsd/qv1XYgUXPV
+   X5VOR1bds+8gfFZ3FM4VuU71k7SYihNnQ5cMJRMUnvkUpfpZJG59u6k3f
+   BnS+Zl00XOpBbuPuf3uaeX+XeZD3hjo3vBUjMKsY4qbha9+wh9YwTWPlg
+   A==;
+X-IronPort-AV: E=Sophos;i="5.60,494,1549900800"; 
+   d="scan'208";a="109972692"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 21 May 2019 16:25:22 +0800
+IronPort-SDR: i8ZF7zt3gEWlhKEFYDT12J7gGPMZvlpKydiB9xnjZ7rXgiAbZmdegb8gECUMsVgaU8TC23LdkF
+ CXynEHNVP3GBLws9vlQFA/Bki00YPmrSnK/xxbqeUuIcTUED6opb/P4DUC6VSIcQsP92TVm//L
+ nVHCg1b/gph2sm4xEDmJwmsc0ts/rLLxcxNbifra+XJ+EpKIK0IXuw9ooNtoUbmIEghr8PDXT3
+ HKwxVc9WJDfdop4X4BSBqDmO4xsoBtntdzdKZVjFIi9vi4RA/HV4coh9URc5n6OU6Cl0WVxJFb
+ kNTP8uUQZnffQjaw1jJrnFoH
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP; 21 May 2019 01:03:07 -0700
+IronPort-SDR: 2qLVFTksDCcaCyDOkcRgkmxoYUEOCq5YBS+vbIVAhSPzggC3j98bUZKCEKxgbYH3rRaT9XqgbU
+ JOghUtyTbQSL8Iei4OUmTweH3v5m7LW16k8M1mDNFI0HnFog3x+/INI5XsxYNoV8qDP8IzN+4I
+ ItJmf+ZZH/DVqhf9ESr6ZSEUGeo3Lwjm3rq3bmK8FtgQPRtogFMMmV7JA0nHUamq/k+4j2rTJO
+ gRoG9xR0D4+o6PafU+S4CEelvVtJWU0+iPnbfMYjzbbo2s1w47oY0KTinZe0uD78JgIz53QVZP
+ aDg=
+Received: from kfae422988.sdcorp.global.sandisk.com ([10.0.230.227])
+  by uls-op-cesaip02.wdc.com with ESMTP; 21 May 2019 01:25:18 -0700
+From:   Avri Altman <avri.altman@wdc.com>
+To:     "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evan Green <evgreen@chromium.org>,
+        Bean Huo <beanhuo@micron.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     Avi Shchislowski <avi.shchislowski@wdc.com>,
+        Alex Lemberg <alex.lemberg@wdc.com>,
+        Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH] scsi: ufs: Check that space was properly alloced in copy_query_response
+Date:   Tue, 21 May 2019 11:24:22 +0300
+Message-Id: <1558427062-5084-1-git-send-email-avri.altman@wdc.com>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently auto-hibernate is activated if host supports
-auto-hibern8 capability. However error-handling is not implemented,
-which makes the feature somewhat risky.
+struct ufs_dev_cmd is the main container that supports device management
+commands. In the case of a read descriptor request, we assume that the
+proper space was allocated in dev_cmd to hold the returning descriptor.
 
-If either "Hibernate Enter" or "Hibernate Exit" fail during
-auto-hibernate flow, the corresponding interrupt
-"UIC_HIBERNATE_ENTER" or "UIC_HIBERNATE_EXIT" shall be raised
-according to UFS specification.
+This is no longer true, as there are flows that doesn't use dev_cmd
+for device management requests, and was wrong in the first place.
 
-This patch adds auto-hibernate error-handling:
+fixes: d44a5f98bb49 (ufs: query descriptor API)
 
-- Monitor "Hibernate Enter" and "Hibernate Exit" interrupts after
-  auto-hibernate feature is activated.
-
-- If fail happens, trigger error-handling just like "manual-hibernate"
-  fail and apply the same recovery flow: schedule UFS error handler in
-  ufshcd_check_errors(), and then do host reset and restore
-  in UFS error handler.
-
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Signed-off-by: Avri Altman <avri.altman@wdc.com>
 ---
- drivers/scsi/ufs/ufshcd.c | 31 +++++++++++++++++++++++++++++++
- drivers/scsi/ufs/ufshci.h |  6 ++++--
- 2 files changed, 35 insertions(+), 2 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 7cd757558203..a208589426b1 100644
+index 8c1c551..3fe3029 100644
 --- a/drivers/scsi/ufs/ufshcd.c
 +++ b/drivers/scsi/ufs/ufshcd.c
-@@ -5254,6 +5254,7 @@ static void ufshcd_err_handler(struct work_struct *work)
- 			goto skip_err_handling;
- 	}
- 	if ((hba->saved_err & INT_FATAL_ERRORS) ||
-+	    (hba->saved_err & UFSHCD_UIC_HIBERN8_MASK) ||
- 	    ((hba->saved_err & UIC_ERROR) &&
- 	    (hba->saved_uic_err & (UFSHCD_UIC_DL_PA_INIT_ERROR |
- 				   UFSHCD_UIC_DL_NAC_RECEIVED_ERROR |
-@@ -5413,6 +5414,23 @@ static void ufshcd_update_uic_error(struct ufs_hba *hba)
- 			__func__, hba->uic_error);
- }
+@@ -1917,7 +1917,8 @@ int ufshcd_copy_query_response(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 	memcpy(&query_res->upiu_res, &lrbp->ucd_rsp_ptr->qr, QUERY_OSF_SIZE);
  
-+static bool ufshcd_is_auto_hibern8_error(struct ufs_hba *hba,
-+					 u32 intr_mask)
-+{
-+	if (!ufshcd_is_auto_hibern8_supported(hba))
-+		return false;
-+
-+	if (!(intr_mask & UFSHCD_UIC_HIBERN8_MASK))
-+		return false;
-+
-+	if (hba->active_uic_cmd &&
-+	    (hba->active_uic_cmd->command == UIC_CMD_DME_HIBER_ENTER ||
-+	    hba->active_uic_cmd->command == UIC_CMD_DME_HIBER_EXIT))
-+		return false;
-+
-+	return true;
-+}
-+
- /**
-  * ufshcd_check_errors - Check for errors that need s/w attention
-  * @hba: per-adapter instance
-@@ -5431,6 +5449,15 @@ static void ufshcd_check_errors(struct ufs_hba *hba)
- 			queue_eh_work = true;
- 	}
- 
-+	if (hba->errors & UFSHCD_UIC_HIBERN8_MASK) {
-+		dev_err(hba->dev,
-+			"%s: Auto Hibern8 %s failed - status: 0x%08x, upmcrs: 0x%08x\n",
-+			__func__, (hba->errors & UIC_HIBERNATE_ENTER) ?
-+			"Enter" : "Exit",
-+			hba->errors, ufshcd_get_upmcrs(hba));
-+		queue_eh_work = true;
-+	}
-+
- 	if (queue_eh_work) {
- 		/*
- 		 * update the transfer error masks to sticky bits, let's do this
-@@ -5493,6 +5520,10 @@ static void ufshcd_tmc_handler(struct ufs_hba *hba)
- static void ufshcd_sl_intr(struct ufs_hba *hba, u32 intr_status)
- {
- 	hba->errors = UFSHCD_ERROR_MASK & intr_status;
-+
-+	if (ufshcd_is_auto_hibern8_error(hba, intr_status))
-+		hba->errors |= (UFSHCD_UIC_HIBERN8_MASK & intr_status);
-+
- 	if (hba->errors)
- 		ufshcd_check_errors(hba);
- 
-diff --git a/drivers/scsi/ufs/ufshci.h b/drivers/scsi/ufs/ufshci.h
-index 6fa889de5ee5..dbb75cd28dc8 100644
---- a/drivers/scsi/ufs/ufshci.h
-+++ b/drivers/scsi/ufs/ufshci.h
-@@ -144,8 +144,10 @@ enum {
- #define CONTROLLER_FATAL_ERROR			0x10000
- #define SYSTEM_BUS_FATAL_ERROR			0x20000
- 
--#define UFSHCD_UIC_PWR_MASK	(UIC_HIBERNATE_ENTER |\
--				UIC_HIBERNATE_EXIT |\
-+#define UFSHCD_UIC_HIBERN8_MASK	(UIC_HIBERNATE_ENTER |\
-+				UIC_HIBERNATE_EXIT)
-+
-+#define UFSHCD_UIC_PWR_MASK	(UFSHCD_UIC_HIBERN8_MASK |\
- 				UIC_POWER_MODE)
- 
- #define UFSHCD_UIC_MASK		(UIC_COMMAND_COMPL | UFSHCD_UIC_PWR_MASK)
+ 	/* Get the descriptor */
+-	if (lrbp->ucd_rsp_ptr->qr.opcode == UPIU_QUERY_OPCODE_READ_DESC) {
++	if (hba->dev_cmd.query.descriptor &&
++	    lrbp->ucd_rsp_ptr->qr.opcode == UPIU_QUERY_OPCODE_READ_DESC) {
+ 		u8 *descp = (u8 *)lrbp->ucd_rsp_ptr +
+ 				GENERAL_UPIU_REQUEST_SIZE;
+ 		u16 resp_len;
 -- 
-2.18.0
+1.9.1
 
