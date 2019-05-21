@@ -2,193 +2,223 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44EDB24E99
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 14:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D4A25117
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 15:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728183AbfEUMDp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 May 2019 08:03:45 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:45888 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728045AbfEUMDp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 08:03:45 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4LBwx54123998;
-        Tue, 21 May 2019 12:02:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=TZYqrfFAU+1Y5NvFpYrOWNNOjV39r1AmCN+iJWl6phE=;
- b=5UoPeIhp+Fc2/NcSF86S1fKiYqMWKcw4TMoE9iBwYIjYmhOcvIVsqBYBfXewzTLzEJMo
- 5COM6F8+KtTzwnB2AcROwv75BgFX7Wnhztfucx3Fr3eTf38kAJ3ucZY7UsGe+f/AuPck
- I/yN3zfYBVwnv2JqHwXi2FZpIG676cP5cdaeekZJTKTL/laGWsYdRnYtBhmJ/meHmQER
- FXUIflumM/14L9hMRWtFRFMqLRKa+Y9wkpXrAtoo3tOpNPiTy34sLI21cyihGYH5btlG
- sdyg81EIRE/bHZzFdm9QPBRADFsbaDU6ptMR/fHRdL5v4kmmmnLc1V4c3A+cFtT37Mye 1g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2sjapqcpn9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 May 2019 12:02:53 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4LC2109025847;
-        Tue, 21 May 2019 12:02:53 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2sm046xeyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 May 2019 12:02:53 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4LC2ocm027898;
-        Tue, 21 May 2019 12:02:50 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 21 May 2019 12:02:50 +0000
-To:     Douglas Gilbert <dgilbert@interlog.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Waiman Long <longman@redhat.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in ses_enclosure_data_process()
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190501180535.26718-1-longman@redhat.com>
-        <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
-        <1558363938.3742.1.camel@linux.ibm.com>
-        <3385cf54-7b6c-3f28-e037-f0d4037368eb@redhat.com>
-        <1558367212.3742.10.camel@linux.ibm.com> <yq1zhnh8625.fsf@oracle.com>
-        <c14d427c-1d17-fc8f-672d-d612851abcc1@interlog.com>
-Date:   Tue, 21 May 2019 08:02:48 -0400
-In-Reply-To: <c14d427c-1d17-fc8f-672d-d612851abcc1@interlog.com> (Douglas
-        Gilbert's message of "Mon, 20 May 2019 17:53:08 -0400")
-Message-ID: <yq1h89o6mmv.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1728374AbfEUNuU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 May 2019 09:50:20 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:7668 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728142AbfEUNuS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 21 May 2019 09:50:18 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 68B601DAB09CF16C5CFF;
+        Tue, 21 May 2019 21:50:15 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Tue, 21 May 2019
+ 21:50:12 +0800
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH] blk-mq: Wait for for hctx inflight requests on CPU unplug
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
+References: <20190517091424.19751-1-ming.lei@redhat.com>
+CC:     <linux-block@vger.kernel.org>, Christoph Hellwig <hch@lst.de>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Message-ID: <6e1d3b66-aaed-4f6f-da34-92a633ff4b44@huawei.com>
+Date:   Tue, 21 May 2019 14:50:06 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9263 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905210075
-X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9263 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905210075
+In-Reply-To: <20190517091424.19751-1-ming.lei@redhat.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-
-Doug,
-
->> I am collecting "bad" SES pages from these devices. I have added
->> support for RECEIVE DIAGNOSTICS to scsi_debug and added a bunch of
->> deliberately broken SES pages so we could debug this
+On 17/05/2019 10:14, Ming Lei wrote:
+> Managed interrupts can not migrate affinity when their CPUs are offline.
+> If the CPU is allowed to shutdown before they're returned, commands
+> dispatched to managed queues won't be able to complete through their
+> irq handlers.
 >
-> Patches ??
+> Wait in cpu hotplug handler until all inflight requests on the tags
+> are completed or timeout. Wait once for each tags, so we can save time
+> in case of shared tags.
+>
+> Based on the following patch from Keith, and use simple delay-spin
+> instead.
+>
+> https://lore.kernel.org/linux-block/20190405215920.27085-1-keith.busch@intel.com/
+>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Cc: Hannes Reinecke <hare@suse.com>
+> Cc: John Garry <john.garry@huawei.com>
+> Cc: Keith Busch <keith.busch@intel.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>  block/blk-mq-tag.c |  2 +-
+>  block/blk-mq-tag.h |  5 ++++
+>  block/blk-mq.c     | 65 +++++++++++++++++++++++++++++++++++++++++++++-
+>  3 files changed, 70 insertions(+), 2 deletions(-)
+>
+> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
+> index 7513c8eaabee..b24334f99c5d 100644
+> --- a/block/blk-mq-tag.c
+> +++ b/block/blk-mq-tag.c
+> @@ -332,7 +332,7 @@ static void bt_tags_for_each(struct blk_mq_tags *tags, struct sbitmap_queue *bt,
+>   *		true to continue iterating tags, false to stop.
+>   * @priv:	Will be passed as second argument to @fn.
+>   */
+> -static void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
+> +void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
+>  		busy_tag_iter_fn *fn, void *priv)
+>  {
+>  	if (tags->nr_reserved_tags)
+> diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
+> index 61deab0b5a5a..f8de50485b42 100644
+> --- a/block/blk-mq-tag.h
+> +++ b/block/blk-mq-tag.h
+> @@ -19,6 +19,9 @@ struct blk_mq_tags {
+>  	struct request **rqs;
+>  	struct request **static_rqs;
+>  	struct list_head page_list;
+> +
+> +	#define BLK_MQ_TAGS_DRAINED           0
+> +	unsigned long flags;
+>  };
+>
+>
+> @@ -35,6 +38,8 @@ extern int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
+>  extern void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool);
+>  void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
+>  		void *priv);
+> +void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
+> +		busy_tag_iter_fn *fn, void *priv);
+>
+>  static inline struct sbq_wait_state *bt_wait_ptr(struct sbitmap_queue *bt,
+>  						 struct blk_mq_hw_ctx *hctx)
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index 08a6248d8536..d1d1b1a9628f 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -2214,6 +2214,60 @@ int blk_mq_alloc_rqs(struct blk_mq_tag_set *set, struct blk_mq_tags *tags,
+>  	return -ENOMEM;
+>  }
+>
+> +static int blk_mq_hctx_notify_prepare(unsigned int cpu, struct hlist_node *node)
+> +{
+> +	struct blk_mq_hw_ctx	*hctx;
+> +	struct blk_mq_tags	*tags;
+> +
+> +	hctx = hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
+> +	tags = hctx->tags;
+> +
+> +	if (tags)
+> +		clear_bit(BLK_MQ_TAGS_DRAINED, &tags->flags);
+> +
 
-I have included the plumbing below. However, I need to synthesize the
-contents of the pages with problems. I can't share the ones I have
-received from customers so I removed the arrays from the patch.
+Hi Ming,
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Thanks for the effort here.
 
-From 968dfc5cd498d2ea6e77801cc9b9183a1a28b35d Mon Sep 17 00:00:00 2001
-From: "Martin K. Petersen" <martin.petersen@oracle.com>
-Date: Thu, 28 Mar 2019 22:29:13 -0400
-Subject: [PATCH] scsi: scsi_debug: Implement support for Receive Diagnostics
- command
+I would like to make an assertion on a related topic, which I hope you 
+can comment on:
 
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+For this drain mechanism to work, the blk_mq_hw_ctx’s (and related cpu 
+masks) for a request queue are required to match the hw queues used in 
+the LLDD (if using managed interrupts).
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 2740a90501a0..db8745a7000e 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -356,7 +356,8 @@ enum sdeb_opcode_index {
- 	SDEB_I_WRITE_SAME = 26,		/* 10, 16 */
- 	SDEB_I_SYNC_CACHE = 27,		/* 10, 16 */
- 	SDEB_I_COMP_WRITE = 28,
--	SDEB_I_LAST_ELEMENT = 29,	/* keep this last (previous + 1) */
-+	SDEB_I_RECV_DIAG = 29,
-+	SDEB_I_LAST_ELEMENT = 30,	/* keep this last (previous + 1) */
- };
- 
- 
-@@ -367,8 +368,8 @@ static const unsigned char opcode_ind_arr[256] = {
- 	SDEB_I_READ, 0, SDEB_I_WRITE, 0, 0, 0, 0, 0,
- 	0, 0, SDEB_I_INQUIRY, 0, 0, SDEB_I_MODE_SELECT, SDEB_I_RESERVE,
- 	    SDEB_I_RELEASE,
--	0, 0, SDEB_I_MODE_SENSE, SDEB_I_START_STOP, 0, SDEB_I_SEND_DIAG,
--	    SDEB_I_ALLOW_REMOVAL, 0,
-+	0, 0, SDEB_I_MODE_SENSE, SDEB_I_START_STOP, SDEB_I_RECV_DIAG,
-+	SDEB_I_SEND_DIAG, SDEB_I_ALLOW_REMOVAL, 0,
- /* 0x20; 0x20->0x3f: 10 byte cdbs */
- 	0, 0, 0, 0, 0, SDEB_I_READ_CAPACITY, 0, 0,
- 	SDEB_I_READ, 0, SDEB_I_WRITE, 0, 0, 0, 0, SDEB_I_VERIFY,
-@@ -433,6 +434,7 @@ static int resp_write_same_16(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_comp_write(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_write_buffer(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_sync_cache(struct scsi_cmnd *, struct sdebug_dev_info *);
-+static int resp_recv_diag(struct scsi_cmnd *, struct sdebug_dev_info *);
- 
- /*
-  * The following are overflow arrays for cdbs that "hit" the same index in
-@@ -613,8 +615,9 @@ static const struct opcode_info_t opcode_info_arr[SDEB_I_LAST_ELEMENT + 1] = {
- 	{0, 0x89, 0, F_D_OUT | FF_MEDIA_IO, resp_comp_write, NULL,
- 	    {16,  0xf8, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0, 0,
- 	     0, 0xff, 0x3f, 0xc7} },		/* COMPARE AND WRITE */
--
--/* 29 */
-+	{0, 0x1c, 0, FF_RESPOND | F_D_IN, resp_recv_diag, NULL, /* RECV DIAG */
-+	    {6,  0x1, 0xff, 0xff, 0xff, 0xc7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-+/* 30 */
- 	{0xff, 0, 0, 0, NULL, NULL,		/* terminating element */
- 	    {0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
- };
-@@ -1516,7 +1519,7 @@ static int resp_inquiry(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
- 	arr[5] = (int)have_dif_prot;	/* PROTECT bit */
- 	if (sdebug_vpd_use_hostno == 0)
- 		arr[5] |= 0x10; /* claim: implicit TPGS */
--	arr[6] = 0x10; /* claim: MultiP */
-+	arr[6] = 0x10 | 0x40; /* claim: MultiP */
- 	/* arr[6] |= 0x40; ... claim: EncServ (enclosure services) */
- 	arr[7] = 0xa; /* claim: LINKED + CMDQUE */
- 	memcpy(&arr[8], sdebug_inq_vendor_id, 8);
-@@ -3597,6 +3600,36 @@ static int resp_sync_cache(struct scsi_cmnd *scp,
- 	return res;
- }
- 
-+static unsigned char diag0[] = {
-+	0x00, 0x00, 0x00, 0x07, 0x00, 0x01, 0x02, 0x06, 0x07, 0x0a, 0xa0, 0x00,
-+};
-+#define DIAG0_LEN 12
-+
-+
-+static int resp_recv_diag(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
-+{
-+	unsigned char *cmd = scp->cmnd;
-+
-+	switch(cmd[2]) {
-+	case 0:
-+		return fill_from_dev_buffer(scp, diag0, DIAG0_LEN);
-+	case 1:
-+		return fill_from_dev_buffer(scp, diag1, DIAG1_LEN);
-+	case 2:
-+		return fill_from_dev_buffer(scp, diag2, DIAG2_LEN);
-+	case 6:
-+		return fill_from_dev_buffer(scp, diag6, DIAG6_LEN);
-+	case 7:
-+		return fill_from_dev_buffer(scp, diag7, DIAG7_LEN);
-+	case 0xa:
-+		return fill_from_dev_buffer(scp, diaga, DIAGA_LEN);
-+	case 0xa0:
-+		return fill_from_dev_buffer(scp, diaga0, DIAGA0_LEN);
-+	}
-+
-+	return DID_ERROR << 16;
-+}
-+
- #define RL_BUCKET_ELEMS 8
- 
- /* Even though each pseudo target has a REPORT LUNS "well known logical unit"
+In others words, a SCSI LLDD needs to expose all hw queues for this to work.
+
+The reason I say this is because if the LLDD does not expose the hw 
+queues and manages them internally - as some SCSI LLDDs do - yet uses 
+managed interrupts to spread the hw queue MSI vectors across all CPUs, 
+then we still only have a single blk_mq_hw_ctx per rq with a cpumask 
+covering all cpus, which is not what we would want.
+
+Cheers,
+John
+
+> +	return 0;
+> +}
+> +
+> +static bool blk_mq_count_inflight_rq(struct request *rq, void *data,
+> +				     bool reserved)
+> +{
+> +	if (blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT)
+> +		(*(unsigned long *)data)++;
+> +
+> +	return true;
+> +}
+> +
+> +static unsigned blk_mq_tags_inflight_rqs(struct blk_mq_tags *tags)
+> +{
+> +	unsigned long cnt = 0;
+> +
+> +	blk_mq_all_tag_busy_iter(tags, blk_mq_count_inflight_rq, &cnt);
+> +
+> +	return cnt;
+> +}
+> +
+> +static void blk_mq_drain_inflight_rqs(struct blk_mq_tags *tags, int dead_cpu)
+> +{
+> +	unsigned long msecs_left = 1000 * 5;
+> +
+> +	if (!tags)
+> +		return;
+> +
+> +	if (test_and_set_bit(BLK_MQ_TAGS_DRAINED, &tags->flags))
+> +		return;
+> +
+> +	while (msecs_left > 0) {
+> +		if (!blk_mq_tags_inflight_rqs(tags))
+> +			break;
+> +		msleep(5);
+> +		msecs_left -= 5;
+> +	}
+> +
+> +	if (msecs_left > 0)
+> +		printk(KERN_WARNING "requests not completed from dead "
+> +				"CPU %d\n", dead_cpu);
+> +}
+> +
+>  /*
+>   * 'cpu' is going away. splice any existing rq_list entries from this
+>   * software queue to the hw queue dispatch list, and ensure that it
+> @@ -2245,6 +2299,14 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
+>  	spin_unlock(&hctx->lock);
+>
+>  	blk_mq_run_hw_queue(hctx, true);
+> +
+> +	/*
+> +	 * Interrupt for this queue will be shutdown, so wait until all
+> +	 * requests from this hw queue is done or timeout.
+> +	 */
+> +	if (cpumask_first_and(hctx->cpumask, cpu_online_mask) >= nr_cpu_ids)
+> +		blk_mq_drain_inflight_rqs(hctx->tags, cpu);
+> +
+>  	return 0;
+>  }
+>
+> @@ -3540,7 +3602,8 @@ EXPORT_SYMBOL(blk_mq_rq_cpu);
+>
+>  static int __init blk_mq_init(void)
+>  {
+> -	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead", NULL,
+> +	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead",
+> +				blk_mq_hctx_notify_prepare,
+>  				blk_mq_hctx_notify_dead);
+>  	return 0;
+>  }
+>
+
+
