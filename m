@@ -2,223 +2,200 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D4A25117
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 15:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BC925694
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 19:23:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728374AbfEUNuU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 May 2019 09:50:20 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7668 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728142AbfEUNuS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 21 May 2019 09:50:18 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 68B601DAB09CF16C5CFF;
-        Tue, 21 May 2019 21:50:15 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Tue, 21 May 2019
- 21:50:12 +0800
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH] blk-mq: Wait for for hctx inflight requests on CPU unplug
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-References: <20190517091424.19751-1-ming.lei@redhat.com>
-CC:     <linux-block@vger.kernel.org>, Christoph Hellwig <hch@lst.de>,
-        "Bart Van Assche" <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Message-ID: <6e1d3b66-aaed-4f6f-da34-92a633ff4b44@huawei.com>
-Date:   Tue, 21 May 2019 14:50:06 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
+        id S1728667AbfEURXY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 May 2019 13:23:24 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:51792 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728067AbfEURXY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 21 May 2019 13:23:24 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 1466CC05168F;
+        Tue, 21 May 2019 17:23:24 +0000 (UTC)
+Received: from llong.remote.csb (dhcp-17-85.bos.redhat.com [10.18.17.85])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 88F4860C18;
+        Tue, 21 May 2019 17:23:22 +0000 (UTC)
+Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in
+ ses_enclosure_data_process()
+From:   Waiman Long <longman@redhat.com>
+To:     James Bottomley <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190501180535.26718-1-longman@redhat.com>
+ <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
+ <1558363938.3742.1.camel@linux.ibm.com>
+ <3385cf54-7b6c-3f28-e037-f0d4037368eb@redhat.com>
+ <1558367212.3742.10.camel@linux.ibm.com>
+ <8080a1ae-027e-ecdb-d8f1-5786a6b8853b@redhat.com>
+Organization: Red Hat
+Message-ID: <375352c8-8400-35df-4db9-5e72543012fc@redhat.com>
+Date:   Tue, 21 May 2019 13:23:22 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190517091424.19751-1-ming.lei@redhat.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
+In-Reply-To: <8080a1ae-027e-ecdb-d8f1-5786a6b8853b@redhat.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Tue, 21 May 2019 17:23:24 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 17/05/2019 10:14, Ming Lei wrote:
-> Managed interrupts can not migrate affinity when their CPUs are offline.
-> If the CPU is allowed to shutdown before they're returned, commands
-> dispatched to managed queues won't be able to complete through their
-> irq handlers.
->
-> Wait in cpu hotplug handler until all inflight requests on the tags
-> are completed or timeout. Wait once for each tags, so we can save time
-> in case of shared tags.
->
-> Based on the following patch from Keith, and use simple delay-spin
-> instead.
->
-> https://lore.kernel.org/linux-block/20190405215920.27085-1-keith.busch@intel.com/
->
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Cc: Hannes Reinecke <hare@suse.com>
-> Cc: John Garry <john.garry@huawei.com>
-> Cc: Keith Busch <keith.busch@intel.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->  block/blk-mq-tag.c |  2 +-
->  block/blk-mq-tag.h |  5 ++++
->  block/blk-mq.c     | 65 +++++++++++++++++++++++++++++++++++++++++++++-
->  3 files changed, 70 insertions(+), 2 deletions(-)
->
-> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-> index 7513c8eaabee..b24334f99c5d 100644
-> --- a/block/blk-mq-tag.c
-> +++ b/block/blk-mq-tag.c
-> @@ -332,7 +332,7 @@ static void bt_tags_for_each(struct blk_mq_tags *tags, struct sbitmap_queue *bt,
->   *		true to continue iterating tags, false to stop.
->   * @priv:	Will be passed as second argument to @fn.
->   */
-> -static void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
-> +void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
->  		busy_tag_iter_fn *fn, void *priv)
->  {
->  	if (tags->nr_reserved_tags)
-> diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
-> index 61deab0b5a5a..f8de50485b42 100644
-> --- a/block/blk-mq-tag.h
-> +++ b/block/blk-mq-tag.h
-> @@ -19,6 +19,9 @@ struct blk_mq_tags {
->  	struct request **rqs;
->  	struct request **static_rqs;
->  	struct list_head page_list;
-> +
-> +	#define BLK_MQ_TAGS_DRAINED           0
-> +	unsigned long flags;
->  };
->
->
-> @@ -35,6 +38,8 @@ extern int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
->  extern void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool);
->  void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
->  		void *priv);
-> +void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
-> +		busy_tag_iter_fn *fn, void *priv);
->
->  static inline struct sbq_wait_state *bt_wait_ptr(struct sbitmap_queue *bt,
->  						 struct blk_mq_hw_ctx *hctx)
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index 08a6248d8536..d1d1b1a9628f 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -2214,6 +2214,60 @@ int blk_mq_alloc_rqs(struct blk_mq_tag_set *set, struct blk_mq_tags *tags,
->  	return -ENOMEM;
->  }
->
-> +static int blk_mq_hctx_notify_prepare(unsigned int cpu, struct hlist_node *node)
-> +{
-> +	struct blk_mq_hw_ctx	*hctx;
-> +	struct blk_mq_tags	*tags;
-> +
-> +	hctx = hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
-> +	tags = hctx->tags;
-> +
-> +	if (tags)
-> +		clear_bit(BLK_MQ_TAGS_DRAINED, &tags->flags);
-> +
+On 5/20/19 11:56 AM, Waiman Long wrote:
+> On 5/20/19 11:46 AM, James Bottomley wrote:
+>> On Mon, 2019-05-20 at 11:24 -0400, Waiman Long wrote:
+>>> On 5/20/19 10:52 AM, James Bottomley wrote:
+>>>> On Mon, 2019-05-20 at 10:41 -0400, Waiman Long wrote:
+>>>> [...]
+>>>>>> --- a/drivers/scsi/ses.c
+>>>>>> +++ b/drivers/scsi/ses.c
+>>>>>> @@ -605,9 +605,14 @@ static void
+>>>>>> ses_enclosure_data_process(struct
+>>>>>> enclosure_device *edev,
+>>>>>>  			     /* these elements are optional */
+>>>>>>  			     type_ptr[0] ==
+>>>>>> ENCLOSURE_COMPONENT_SCSI_TARGET_PORT ||
+>>>>>>  			     type_ptr[0] ==
+>>>>>> ENCLOSURE_COMPONENT_SCSI_INITIATOR_PORT ||
+>>>>>> -			     type_ptr[0] ==
+>>>>>> ENCLOSURE_COMPONENT_CONTROLLER_ELECTRONICS))
+>>>>>> +			     type_ptr[0] ==
+>>>>>> ENCLOSURE_COMPONENT_CONTROLLER_ELECTRONICS)) {
+>>>>>>  				addl_desc_ptr +=
+>>>>>> addl_desc_ptr[1]
+>>>>>> + 2;
+>>>>>>  
+>>>>>> +				/* Ensure no out-of-bounds
+>>>>>> memory
+>>>>>> access */
+>>>>>> +				if (addl_desc_ptr >= ses_dev-
+>>>>>>> page10 +
+>>>>>> +						     ses_dev-
+>>>>>>> page10_len)
+>>>>>> +					addl_desc_ptr = NULL;
+>>>>>> +			}
+>>>>>>  		}
+>>>>>>  	}
+>>>>>>  	kfree(buf);
+>>>>> Ping! Any comment on this patch.
+>>>> The update looks fine to me:
+>>>>
+>>>> Reviewed-by: James E.J. Bottomley <jejb@linux.ibm.com>
+>>>>
+>>>> It might also be interesting to find out how the proliant is
+>>>> structuring this descriptor array to precipitate the out of bounds:
+>>>> Is it just an off by one or something more serious?
+>>> I didn't look into the detail the enclosure message returned by the
+>>> hardware, but I believe it may have more description entries (page7)
+>>> than extended description entries (page10).
+>>>
+>>> I can try to reserve the system and find out what exactly is wrong
+>>> with that system if you really want to find that out.
+>> Please.  What I'm interested in is whether this is simply a bug in the
+>> array firmware, in which case the fix is sufficient, or whether there's
+>> some problem with the parser, like mismatched expectations over added
+>> trailing nulls or something.
+>>
+>> James
+>>
+> OK, will let you know once I get hold of the system.
 
-Hi Ming,
+I now have access to the xl450 system that can reproduce the error.  12
+enclosure messages are processed during bootup. Of the one that causes
+the KASAN warning, the byte dump of page 1 and 10 are:
 
-Thanks for the effort here.
+[   28.185749] ses page 10 (len = 1200):
+[   28.185762] a-0000: 0a 00 04 ac 00 00 00 00 16 22 00 00 01 01 00 01
+[   28.185768] a-0010: 00 00 00 01 50 01 43 80 33 d4 45 bd 50 01 43 80
+[   28.185774] a-0020: 33 d4 45 80 00 00 00 00 00 00 00 00 16 22 00 01
+[   28.185779] a-0030: 01 01 00 02 00 00 00 01 50 01 43 80 33 d4 45 bd
+[   28.185785] a-0040: 50 01 43 80 33 d4 45 81 00 00 00 00 00 00 00 00
+[   28.185790] a-0050: 96 22 00 02 01 01 00 03 00 00 00 00 00 00 00 00
+[   28.185794] a-0060: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185798] a-0070: 00 00 00 00 96 22 00 03 01 01 00 04 00 00 00 00
+[   28.185801] a-0080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185805] a-0090: 00 00 00 00 00 00 00 00 96 22 00 04 01 01 00 05
+[   28.185808] a-00a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185812] a-00b0: 00 00 00 00 00 00 00 00 00 00 00 00 96 22 00 05
+[   28.185815] a-00c0: 01 01 00 06 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185818] a-00d0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185822] a-00e0: 96 22 00 06 01 01 00 07 00 00 00 00 00 00 00 00
+[   28.185825] a-00f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185829] a-0100: 00 00 00 00 96 22 00 07 01 01 00 08 00 00 00 00
+[   28.185832] a-0110: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185836] a-0120: 00 00 00 00 00 00 00 00 96 22 00 08 01 01 00 09
+[   28.185839] a-0130: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185843] a-0140: 00 00 00 00 00 00 00 00 00 00 00 00 96 22 00 09
+[   28.185846] a-0150: 01 01 00 0a 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185850] a-0160: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185853] a-0170: 96 22 00 0a 01 01 00 0b 00 00 00 00 00 00 00 00
+[   28.185857] a-0180: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185860] a-0190: 00 00 00 00 96 22 00 0b 01 01 00 0c 00 00 00 00
+[   28.185864] a-01a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185867] a-01b0: 00 00 00 00 00 00 00 00 96 22 00 0c 01 01 00 0d
+[   28.185871] a-01c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185874] a-01d0: 00 00 00 00 00 00 00 00 00 00 00 00 96 22 00 0d
+[   28.185877] a-01e0: 01 01 00 0e 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185881] a-01f0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185884] a-0200: 96 22 00 0e 01 01 00 0f 00 00 00 00 00 00 00 00
+[   28.185888] a-0210: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185891] a-0220: 00 00 00 00 96 22 00 0f 01 01 00 10 00 00 00 00
+[   28.185895] a-0230: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185898] a-0240: 00 00 00 00 00 00 00 00 96 22 00 10 01 01 00 11
+[   28.185902] a-0250: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185905] a-0260: 00 00 00 00 00 00 00 00 00 00 00 00 96 22 00 11
+[   28.185909] a-0270: 01 01 00 12 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185912] a-0280: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185916] a-0290: 96 22 00 12 01 01 00 13 00 00 00 00 00 00 00 00
+[   28.185919] a-02a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185923] a-02b0: 00 00 00 00 96 22 00 13 01 01 00 14 00 00 00 00
+[   28.185926] a-02c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185930] a-02d0: 00 00 00 00 00 00 00 00 96 22 00 14 01 01 00 15
+[   28.185933] a-02e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185937] a-02f0: 00 00 00 00 00 00 00 00 00 00 00 00 96 22 00 15
+[   28.185940] a-0300: 01 01 00 16 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185944] a-0310: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185947] a-0320: 96 22 00 16 01 01 00 17 00 00 00 00 00 00 00 00
+[   28.185951] a-0330: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185954] a-0340: 00 00 00 00 96 22 00 17 01 01 00 18 00 00 00 00
+[   28.185958] a-0350: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185961] a-0360: 00 00 00 00 00 00 00 00 96 22 00 18 01 01 00 19
+[   28.185965] a-0370: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185968] a-0380: 00 00 00 00 00 00 00 00 00 00 00 00 96 22 00 19
+[   28.185972] a-0390: 01 01 00 1a 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185975] a-03a0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185979] a-03b0: 96 22 00 1a 01 01 00 1b 00 00 00 00 00 00 00 00
+[   28.185982] a-03c0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185986] a-03d0: 00 00 00 00 96 22 00 1b 01 01 00 1c 00 00 00 00
+[   28.185989] a-03e0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185993] a-03f0: 00 00 00 00 00 00 00 00 96 22 00 1c 01 01 00 1d
+[   28.185996] a-0400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.185999] a-0410: 00 00 00 00 00 00 00 00 00 00 00 00 96 22 00 1d
+[   28.186023] a-0420: 01 01 00 1e 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.186026] a-0430: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+[   28.186030] a-0440: 16 6e 00 47 30 40 00 00 50 01 43 80 33 d4 45 bd
+[   28.186034] a-0450: 49 01 4a 02 4b 03 4c 04 4d 05 4e 06 4f 07 50 08
+[   28.186038] a-0460: 51 09 52 0a 53 0b 54 0c 55 0d 56 0e 57 0f 58 10
+[   28.186041] a-0470: 59 11 5a 12 5b 13 5c 14 5d 15 5e 16 5f 17 60 18
+[   28.186045] a-0480: 61 19 62 1a 63 1b 64 1c 65 1d 66 1e ff ff ff ff
+[   28.186048] a-0490: 68 ff 69 ff 6a ff 6b ff 6c ff 6d ff 6e ff 6f ff
+[   28.186052] a-04a0: 71 ff 72 ff 73 ff 74 ff 75 ff 76 ff 77 ff 78 ff
+[   28.188282] ses page 1 (len = 36):
+[   28.188290] 1-0000: 17 1e 00 0c 04 03 00 14 89 1e 00 18 07 01 00 0c
+[   28.188298] 1-0010: 0e 01 00 10 18 01 00 0c 19 1e 00 14 19 08 00 20
+[   28.188302] 1-0020: 19 08 00 20
 
-I would like to make an assertion on a related topic, which I hope you 
-can comment on:
+Page 7 can't be retrieved for this message.
 
-For this drain mechanism to work, the blk_mq_hw_ctx�s (and related cpu 
-masks) for a request queue are required to match the hw queues used in 
-the LLDD (if using managed interrupts).
-
-In others words, a SCSI LLDD needs to expose all hw queues for this to work.
-
-The reason I say this is because if the LLDD does not expose the hw 
-queues and manages them internally - as some SCSI LLDDs do - yet uses 
-managed interrupts to spread the hw queue MSI vectors across all CPUs, 
-then we still only have a single blk_mq_hw_ctx per rq with a cpumask 
-covering all cpus, which is not what we would want.
+Please let me know what else do you want to have.
 
 Cheers,
-John
-
-> +	return 0;
-> +}
-> +
-> +static bool blk_mq_count_inflight_rq(struct request *rq, void *data,
-> +				     bool reserved)
-> +{
-> +	if (blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT)
-> +		(*(unsigned long *)data)++;
-> +
-> +	return true;
-> +}
-> +
-> +static unsigned blk_mq_tags_inflight_rqs(struct blk_mq_tags *tags)
-> +{
-> +	unsigned long cnt = 0;
-> +
-> +	blk_mq_all_tag_busy_iter(tags, blk_mq_count_inflight_rq, &cnt);
-> +
-> +	return cnt;
-> +}
-> +
-> +static void blk_mq_drain_inflight_rqs(struct blk_mq_tags *tags, int dead_cpu)
-> +{
-> +	unsigned long msecs_left = 1000 * 5;
-> +
-> +	if (!tags)
-> +		return;
-> +
-> +	if (test_and_set_bit(BLK_MQ_TAGS_DRAINED, &tags->flags))
-> +		return;
-> +
-> +	while (msecs_left > 0) {
-> +		if (!blk_mq_tags_inflight_rqs(tags))
-> +			break;
-> +		msleep(5);
-> +		msecs_left -= 5;
-> +	}
-> +
-> +	if (msecs_left > 0)
-> +		printk(KERN_WARNING "requests not completed from dead "
-> +				"CPU %d\n", dead_cpu);
-> +}
-> +
->  /*
->   * 'cpu' is going away. splice any existing rq_list entries from this
->   * software queue to the hw queue dispatch list, and ensure that it
-> @@ -2245,6 +2299,14 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
->  	spin_unlock(&hctx->lock);
->
->  	blk_mq_run_hw_queue(hctx, true);
-> +
-> +	/*
-> +	 * Interrupt for this queue will be shutdown, so wait until all
-> +	 * requests from this hw queue is done or timeout.
-> +	 */
-> +	if (cpumask_first_and(hctx->cpumask, cpu_online_mask) >= nr_cpu_ids)
-> +		blk_mq_drain_inflight_rqs(hctx->tags, cpu);
-> +
->  	return 0;
->  }
->
-> @@ -3540,7 +3602,8 @@ EXPORT_SYMBOL(blk_mq_rq_cpu);
->
->  static int __init blk_mq_init(void)
->  {
-> -	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead", NULL,
-> +	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead",
-> +				blk_mq_hctx_notify_prepare,
->  				blk_mq_hctx_notify_dead);
->  	return 0;
->  }
->
-
+Longman
 
