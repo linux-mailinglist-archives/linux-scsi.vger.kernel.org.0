@@ -2,113 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4CC247EE
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 08:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC12247FC
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 May 2019 08:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727926AbfEUGSQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 May 2019 02:18:16 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:54885 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727895AbfEUGSQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 02:18:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1558419528; x=1589955528;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=tjsXONKa+Pf6UPe0Zzel/r/jyoegrw1lpopf3HtQQyY=;
-  b=WQTZSDXzh18tAYv0aTA+v23C6lYr7F/hNFGLUfMgrSSSOS/sfnx2IXPv
-   YehqYk1JZeq6POtL8FI7y9qB61kuBCTQ0B8ZBNNC2zR8CmSPSuSyx81I8
-   KqqOhYPPq9DH0uSrWD9GTYnr0PQJC1DR5ygvlNkqtln3gXntLFTy9fOmL
-   3XiFUItkVTIJ7AOEjDZFKWneoaVEt9nGDz4FTfnCp2lQHM61OI9kMzuuG
-   82nReUcVtCcUXGspM5iihd08xYt/o4IqW9R8w7pA5Qkco84V0AEH8edwD
-   lQQ3F2zbUOX4BRZq4cFdAMqL4POpiDNgDWY880/PpiFK/EQB7KRfDrMEN
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.60,494,1549900800"; 
-   d="scan'208";a="208184221"
-Received: from mail-sn1nam01lp2059.outbound.protection.outlook.com (HELO NAM01-SN1-obe.outbound.protection.outlook.com) ([104.47.32.59])
-  by ob1.hgst.iphmx.com with ESMTP; 21 May 2019 14:18:46 +0800
+        id S1725835AbfEUGWw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 May 2019 02:22:52 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:32776 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725924AbfEUGWv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 02:22:51 -0400
+Received: by mail-pl1-f194.google.com with SMTP id y3so7940555plp.0
+        for <linux-scsi@vger.kernel.org>; Mon, 20 May 2019 23:22:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tjsXONKa+Pf6UPe0Zzel/r/jyoegrw1lpopf3HtQQyY=;
- b=BRnRkGiVSFcU7oDMZGaJ5jbv9m7JvBDJs/AuRWp2VSaIsTtsWvftbgvRXNkzTxqw3Qun5aLxPpjeCV4EZOSKW1qcP6X2wHfEtM2zoc1GY+mNrQC77zCaDaWKwSgnvkV9kQIxeqKFwSlAxNUU4OX6tqtO92pivxMS5CdvWJwEjWk=
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
- SN6PR04MB3824.namprd04.prod.outlook.com (52.135.81.33) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1900.18; Tue, 21 May 2019 06:18:11 +0000
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::6d99:14d9:3fa:f530]) by SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::6d99:14d9:3fa:f530%6]) with mapi id 15.20.1900.020; Tue, 21 May 2019
- 06:18:11 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Stanley Chu <stanley.chu@mediatek.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
-CC:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "evgreen@chromium.org" <evgreen@chromium.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>
-Subject: RE: [PATCH v4 2/3] scsi: ufs: Introduce
- ufshcd_is_auto_hibern8_supported()
-Thread-Topic: [PATCH v4 2/3] scsi: ufs: Introduce
- ufshcd_is_auto_hibern8_supported()
-Thread-Index: AQHVDxXZu6oGxF11MU6BMI1MBhbFCaZ1GtHg
-Date:   Tue, 21 May 2019 06:18:11 +0000
-Message-ID: <SN6PR04MB4925EAB455D857AEB055258FFC070@SN6PR04MB4925.namprd04.prod.outlook.com>
-References: <1558361445-30994-1-git-send-email-stanley.chu@mediatek.com>
- <1558361445-30994-3-git-send-email-stanley.chu@mediatek.com>
-In-Reply-To: <1558361445-30994-3-git-send-email-stanley.chu@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c20d7dde-6802-49c7-a78d-08d6ddb419ac
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB3824;
-x-ms-traffictypediagnostic: SN6PR04MB3824:
-wdcipoutbound: EOP-TRUE
-x-microsoft-antispam-prvs: <SN6PR04MB3824DF90CC9E6DE59927266CFC070@SN6PR04MB3824.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-forefront-prvs: 0044C17179
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(346002)(366004)(376002)(396003)(39860400002)(199004)(189003)(76176011)(33656002)(99286004)(6116002)(6506007)(3846002)(5660300002)(54906003)(110136005)(7696005)(55016002)(558084003)(256004)(4326008)(26005)(11346002)(52536014)(446003)(68736007)(478600001)(2501003)(14454004)(7736002)(6246003)(8936002)(81166006)(53936002)(81156014)(8676002)(186003)(102836004)(66066001)(476003)(86362001)(9686003)(486006)(72206003)(316002)(64756008)(66446008)(66556008)(2906002)(73956011)(76116006)(66946007)(66476007)(2201001)(229853002)(71190400001)(305945005)(7416002)(6436002)(74316002)(25786009)(71200400001);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB3824;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: L0vnxzWxKVRMQWeeCxzzjIw2vMOTm1/9ZedCGdkKv4DvlIRCe8yLw2L5DxvZzzUaRyPqmTCjFlVKL+6axMJjcAkhEu8k03YiX1dbpckZempERgJKOMujmM3aVphTgsKR+MsfI1kWz8Mm+TJFYVxHnBWKBwym/tbwn/iJbVB0poqLLIm+Jm94xgT8TtArrxO5PlnBZ/A2zGuDFQH0/rUOgJg3QeSrBAXxtKWPo+HDN/a4IMWd8hKeD9VYG4ch+lz9mKygnpZayTYvLKDbsd/uaL9SwtzbBPTRlq7DobTi/861sQ4pHWy2zJ5sTN7H+PMLGKtId0bh6s+VYdY0S6XdYgYCNYnU26U+WDmjbQFbq/M9f0mACg3m3XTpdAMgbEZiGd1b75Pdmi6dBSa67jMdSpAjm4acsTo13R9FhZEFiT8=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=y2m5dpNz16ZybgYk5tQ8GutOzZqz8vAuz2rdBiTBnjw=;
+        b=l9FHorTul2Tyg2dOrb6zBPnqrZNmerYqH7eUWz8QrYYH0IhCHHLfh32l4hP3eIA/X7
+         vAjYlCEuZb1wqfD9LentK6vgUI8A/1mrqJ9S052A1vrO93c315n4VxO7f9kRYZ/dwhpt
+         a2aJmXtu4Ef1cIkwGn8dhSCJPXp5lNBa9khww/rmBXfha/2d2tEcDNaiPXcmM3XDnEaQ
+         mx1DNLV+4klz/BgBK87ZGo3hmiGMX2Wio0auyYuss6yzMBipwqekj/2uRHVRH1p/MxLn
+         /xGx4aZ9zZwmOx4XOBcEUeoMV+xdaLp+hhXsm7XNYpMPkIwBvPkWXUbq5Wi0Owu0YWlS
+         uo5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=y2m5dpNz16ZybgYk5tQ8GutOzZqz8vAuz2rdBiTBnjw=;
+        b=UApZ9C3lMUKINjGTJt+yZH7DlEX5VQolYzPwgTzFiQ+8W8tJNt1KtzSpT7yWQUJz03
+         mUlP5zkQATe2e7Xg82xcnaHJqhZN1FnFeQkV1avKVY3JsQzBCt6zdVE1huAKMobp3jcc
+         A8DwenV/ex8rLwO72pQBatiUMBwqfOwwMjr8nZ7SaNUXpHtzAKrbbEIRoRWqm6aEsZPu
+         VFh+RX8y3U+0sVTe3wqtJxny3GFiTMadXHLKUXXT7MXnqvm6C7R6wryQpoidVtf4uu1k
+         kJxUsgz6Tq4I1Od4kMRrIXFA6+umm1pBbTJbJzJ2nB2WeYs+ciCFn4YruFMJJUBKpzlV
+         HyjA==
+X-Gm-Message-State: APjAAAXdRKPPvNXabe9gBBiUjQSbPwk5ZzQkWhKUvPQRzl98PcqgreMM
+        99O4EX0T9ThBOPwgG9gkJjjc1A==
+X-Google-Smtp-Source: APXvYqz2YMCSRvKN2MJ+jWniKEVRU5sQ/FMpg7ookR4wjHFWBAIZ3T0Rpg+BvD1LhysbsKdoQyBKgQ==
+X-Received: by 2002:a17:902:8d96:: with SMTP id v22mr5073943plo.282.1558419770837;
+        Mon, 20 May 2019 23:22:50 -0700 (PDT)
+Received: from localhost ([122.172.118.99])
+        by smtp.gmail.com with ESMTPSA id n27sm42589245pfb.129.2019.05.20.23.22.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 20 May 2019 23:22:50 -0700 (PDT)
+Date:   Tue, 21 May 2019 11:52:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, swboyd@chromium.org,
+        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org,
+        vincent.guittot@linaro.org
+Subject: Re: [RFC v2 00/11] DVFS in the OPP core
+Message-ID: <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c20d7dde-6802-49c7-a78d-08d6ddb419ac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2019 06:18:11.2721
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB3824
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190320094918.20234-1-rnayak@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->=20
-> ufshcd_is_auto_hibern8_supported() will be used elsewhere
-> in the driver, thus refactor it for preparation.
-You missed a couple of spots, e.g. in ufshcd_auto_hibern8_enable and in ufs=
--sysfs.
+On 20-03-19, 15:19, Rajendra Nayak wrote:
+> This is a v2 of the RFC posted earlier by Stephen Boyd [1]
+> 
+> As part of v2 I still follow the same approach of dev_pm_opp_set_rate()
+> API using clk framework to round the frequency passed and making it
+> accept 0 as a valid frequency indicating the frequency isn't required
+> anymore. It just has a few more drivers converted to use this approach
+> like dsi/dpu and ufs.
+> ufs demonstrates the case of having to handle multiple power domains, one
+> of which is scalable.
+> 
+> The patches are based on 5.1-rc1 and depend on some ufs fixes I posted
+> earlier [2] and a DT patch to include the rpmpd header [3]
+> 
+> [1] https://lkml.org/lkml/2019/1/28/2086
+> [2] https://lkml.org/lkml/2019/3/8/70
+> [3] https://lkml.org/lkml/2019/3/20/120
 
-Thanks,
-Avri
+Hi Rajendra,
+
+I am inclined to apply/push this series for 5.3-rc1, will it be
+possible for you to spend some time on this at priority ?
+
+-- 
+viresh
