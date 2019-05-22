@@ -2,91 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DC826580
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 16:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B6A26618
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 16:41:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728491AbfEVOPh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 10:15:37 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44710 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727975AbfEVOPh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 10:15:37 -0400
-Received: by mail-pf1-f196.google.com with SMTP id g9so1399346pfo.11;
-        Wed, 22 May 2019 07:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=BdjqEMSeAFloAhLZoevUhTsAoKWad+eEnvBrlK9h5Ls=;
-        b=vVyM1m5LGNs32T4OK63/Qsv4WbJQYIAXZUgoj/+U/GJ2opHdUdGbXsp+GHaoAJb24B
-         /itXDGRPV1UW8OlYJciZ94Q4cLUk0wbItQ8yWVxmG0zoKHr3skVzj8WylzY26PPz1/YW
-         PiR/0E2yT3h0lf0sgTGu7Q1c3Zg6yQI980RSrrOoLx1tr3dp9bu9KXDvfgj0NuQlXujx
-         8Rm0VFeIcNre6IUolWfP7ACSjMdnsKzbOkkL8HyVUvvDinXdeVUI9o6Qg3O6nR5GO610
-         6G+AKH068NUki7DIZhbPdAPp/i2Tsffs3u/fkwJt2TFQ1OyMGFeUQCB1h9xcCu6mGomC
-         Ltpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=BdjqEMSeAFloAhLZoevUhTsAoKWad+eEnvBrlK9h5Ls=;
-        b=Bov5v6y9s8QQE69Thto1PytAWEydSoB8cMwgh+l6/OnjcLPgc6Kde++wlX9SnnNZxo
-         T2XyRjNQ+rUVDn6BkaGEHi23vQuYhqOtcImgSX3bAzWItdAc7TJhvv5lnTomQO+ACTfo
-         yykLxKGxdbRQnnkK7MCtXn82eQCYjvEXqLG2JhDJmGhLEUk5ryhHs3F5q/6IC/nETO7C
-         RrcdS0sQlz2Nxi3FgBQm7Du+igYMtcTkWHZ5xtelO2RwHdqN9b8xXAOnCzXoWmUtBLku
-         O8vaTbrkqJzlmOKx8gnQdRAAKLSPvM6h1DgRLCU57x/OGLJr0ly/tkVXSt0YImws9BMm
-         x1bg==
-X-Gm-Message-State: APjAAAXtcBOI64P2izx8gVhCEwIcYGLLza7LOYdXsMw6Xh+etfVLvrL+
-        LO0nchG6KQIrQEeP3Bk6dtc+g9AK7PdLdQ==
-X-Google-Smtp-Source: APXvYqzQhWbS6Pm8haOF3/M3sj53+CbQxFH5NQXoNZVCSq1dFBF67KQkS6xZTIiHvPVbemi0rrHxfQ==
-X-Received: by 2002:aa7:930e:: with SMTP id 14mr38740442pfj.262.1558534536328;
-        Wed, 22 May 2019 07:15:36 -0700 (PDT)
-Received: from zhanggen-UX430UQ ([66.42.35.75])
-        by smtp.gmail.com with ESMTPSA id k13sm21489805pgr.90.2019.05.22.07.15.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 07:15:35 -0700 (PDT)
-Date:   Wed, 22 May 2019 22:15:09 +0800
-From:   Gen Zhang <blackgod016574@gmail.com>
-To:     sathya.prakash@broadcom.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mpt3sas_ctl: Fix a double-fetch bug in
- drivers/scsi/mpt3sas/mpt3sas_ctl.c
-Message-ID: <20190522141509.GA9625@zhanggen-UX430UQ>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1729588AbfEVOlO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 10:41:14 -0400
+Received: from stargate.chelsio.com ([12.32.117.8]:9382 "EHLO
+        stargate.chelsio.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729474AbfEVOlO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 10:41:14 -0400
+Received: from fcoe-test11.asicdesigners.com (fcoe-test11.blr.asicdesigners.com [10.193.185.180])
+        by stargate.chelsio.com (8.13.8/8.13.8) with ESMTP id x4MEf6G5031375;
+        Wed, 22 May 2019 07:41:07 -0700
+From:   Varun Prakash <varun@chelsio.com>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, dt@chelsio.com, indranil@chelsio.com,
+        ganji.aravind@chelsio.com, varun@chelsio.com
+Subject: [PATCH] scsi: libcxgbi: add a check for NULL pointer in cxgbi_check_route()
+Date:   Wed, 22 May 2019 20:10:55 +0530
+Message-Id: <1558536055-5974-1-git-send-email-varun@chelsio.com>
+X-Mailer: git-send-email 2.0.2
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In _ctl_ioctl_main(), 'ioctl_header' is fetched the first time from 
-userspace. 'ioctl_header.ioc_number' is then checked. The legal result 
-is saved to 'ioc'. Then, in condition MPT3COMMAND, the whole struct is
-fetched again from the userspace. Then _ctl_do_mpt_command() is called,
-'ioc' and 'karg' as inputs.
+ip_dev_find() can return NULL so add a check for
+NULL pointer.
 
-However, a malicious user can change the 'ioc_number' between the two 
-fetches, which will cause a potential security issues.  Moreover, a 
-malicious user can provide a valid 'ioc_number' to pass the check in 
-first fetch, and then modify it in the second fetch.
-
-To fix this, we need to recheck the 'ioc_number' in the second fetch.
-
-Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+Signed-off-by: Varun Prakash <varun@chelsio.com>
 ---
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-index b2bb47c..5181c03 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-@@ -2319,6 +2319,10 @@ _ctl_ioctl_main(struct file *file, unsigned int cmd, void __user *arg,
- 			break;
- 		}
+ drivers/scsi/cxgbi/libcxgbi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/scsi/cxgbi/libcxgbi.c b/drivers/scsi/cxgbi/libcxgbi.c
+index 8b915d4..7d43e01 100644
+--- a/drivers/scsi/cxgbi/libcxgbi.c
++++ b/drivers/scsi/cxgbi/libcxgbi.c
+@@ -639,6 +639,10 @@ cxgbi_check_route(struct sockaddr *dst_addr, int ifindex)
  
-+		if (karg.hdr.ioc_number != ioctl_header.ioc_number) {
-+			ret = -EINVAL;
-+			break;
+ 	if (ndev->flags & IFF_LOOPBACK) {
+ 		ndev = ip_dev_find(&init_net, daddr->sin_addr.s_addr);
++		if (!ndev) {
++			err = -ENETUNREACH;
++			goto rel_neigh;
 +		}
- 		if (_IOC_SIZE(cmd) == sizeof(struct mpt3_ioctl_command)) {
- 			uarg = arg;
- 			ret = _ctl_do_mpt_command(ioc, karg, &uarg->mf);
+ 		mtu = ndev->mtu;
+ 		pr_info("rt dev %s, loopback -> %s, mtu %u.\n",
+ 			n->dev->name, ndev->name, mtu);
+-- 
+2.0.2
+
