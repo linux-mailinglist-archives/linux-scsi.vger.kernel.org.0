@@ -2,98 +2,286 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BFDD267A4
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 18:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1E327056
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 22:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729956AbfEVQB5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 12:01:57 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39785 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727975AbfEVQB5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 12:01:57 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w22so1542726pgi.6;
-        Wed, 22 May 2019 09:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=OSzCsKE2z3Is8NMcukDcO8IOidowt/GHhrQxzmMeOJ0=;
-        b=KTkTKKKicgi/nRInuJBQe/T5ZoC7kq7YvttuB1SzAkzLGGLlQ0MYkumhimMc7MNTF4
-         +cPC3wNg/jrKM5Tv9JKCcLUXk1pSDuXApaBaL+UscqU63ScffQLSZ4m03S8a/nriMFGf
-         crBBV5FmI2NFaZh27L1H1s4LIR/+3jKIiPARBOYZmmxtQGh9fdBHf/9C7KgoiQILOM7G
-         4ccLo2Am7JHEmxXnTqBessRfuU6D54Sad4pEaJGKuiDjU6Ruyrf3PYZ2n8lyYdL3Cn5l
-         0iwWY8b+lKk8lxzccRBgcqnYuFA/2ySweqv/zoOxSXxtxV4gp/XsFB11JGjgqgjw9+RG
-         OyDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=OSzCsKE2z3Is8NMcukDcO8IOidowt/GHhrQxzmMeOJ0=;
-        b=iqYfqt/lfpH1vLGnB8dNq4o7afCoQw66gE0Ca9p3QdHDPgQb29dtupVG7Gt8nKhaFu
-         2IKGYYV6ZaboBB2lBkoXKCIPEBv0TTGF0wdXbugcjtmXYPNy9GYXiQQZxn+GXOn0/OE4
-         5ye1MzfVn9St/kS7ug2gQ7A3B9c/qFDvclBcFxlE+EgYMEJ53dgHfW2lVwujLZqKtvzN
-         vLBhVzNvpheBRgsESGw/0MpJirdBBZCEIXClGka45eXMEriMucmWfKHPU4tgiP5ValSv
-         MUP0LOwLGHSf4SWW4x6xvkC2GOMulBzXWwBvUvNtRHoHRqnBHSDXDfKTEAkrFKU4MiYp
-         s3VA==
-X-Gm-Message-State: APjAAAWuXyl660q7YGLWheC55eFvpBpH+2e6+DgTvi5Fzp5JS112cZ7e
-        m1Q8sGwBHjJ3izMhUQJqphbKVBzf
-X-Google-Smtp-Source: APXvYqzwpnESF32HADxlro+0YWttryeVZaxqawf0rnlTTiTjlRy4qyjplI+e6s7ZVPIQKUfsseWfCQ==
-X-Received: by 2002:a63:4754:: with SMTP id w20mr3159632pgk.31.1558540916894;
-        Wed, 22 May 2019 09:01:56 -0700 (PDT)
-Received: from bharath12345-Inspiron-5559 ([103.110.42.33])
-        by smtp.gmail.com with ESMTPSA id s72sm36746482pgc.65.2019.05.22.09.01.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 09:01:56 -0700 (PDT)
-Date:   Wed, 22 May 2019 21:31:49 +0530
-From:   Bharath Vedartham <linux.bhar@gmail.com>
-To:     sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
-        joe@perches.com
-Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] message/fusion/mptbase.c: Use kmemdup instead of memcpy
- and kmalloc
-Message-ID: <20190522160149.GA19160@bharath12345-Inspiron-5559>
+        id S1730061AbfEVTVo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 15:21:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42304 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730039AbfEVTVn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 22 May 2019 15:21:43 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 988E5217D4;
+        Wed, 22 May 2019 19:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1558552901;
+        bh=/x4OjuKTJbdwFJUuUeo6m7mPKGoWuj9Z7ADizqsKEPo=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=u4TtBG08ujhYHR2Vo6K00pfm5FYn7FRyWE+myLGS5U3gcVn8cx61GJMhI93of2zBV
+         x99MyGv1L3Nb5ZRuyUfMpotIoVWCQ1WKCBkad95jCCBnncZM7T0DDbR/RcPtuFJ5WV
+         9+3RYoZGPYVI3DL1wat4ZnWh2IsbxC50di1E+S+c=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        James Smart <james.smart@broadcom.com>,
+        Bart Van Assche <bart.vanassche@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Hannes Reinecke <hare@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>, linux-block@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.1 019/375] blk-mq: split blk_mq_alloc_and_init_hctx into two parts
+Date:   Wed, 22 May 2019 15:15:19 -0400
+Message-Id: <20190522192115.22666-19-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190522192115.22666-1-sashal@kernel.org>
+References: <20190522192115.22666-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Replace kmalloc + memcpy with kmemdup.
+From: Ming Lei <ming.lei@redhat.com>
 
-This was reported by coccinelle.
+[ Upstream commit 7c6c5b7c9186e3fb5b10afb8e5f710ae661144c6 ]
 
-Signed-off-by: Bharath Vedartham <linux.bhar@gmail.com>
+Split blk_mq_alloc_and_init_hctx into two parts, and one is
+blk_mq_alloc_hctx() for allocating all hctx resources, another
+is blk_mq_init_hctx() for initializing hctx, which serves as
+counter-part of blk_mq_exit_hctx().
 
+Cc: Dongli Zhang <dongli.zhang@oracle.com>
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Bart Van Assche <bart.vanassche@wdc.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: Martin K . Petersen <martin.petersen@oracle.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: James E . J . Bottomley <jejb@linux.vnet.ibm.com>
+Reviewed-by: Hannes Reinecke <hare@suse.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Tested-by: James Smart <james.smart@broadcom.com>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-Changes since v2:
-	Removed the cast from pIoc2.
----
- drivers/message/fusion/mptbase.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ block/blk-mq.c | 139 ++++++++++++++++++++++++++-----------------------
+ 1 file changed, 75 insertions(+), 64 deletions(-)
 
-diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-index d8882b0..37876a7 100644
---- a/drivers/message/fusion/mptbase.c
-+++ b/drivers/message/fusion/mptbase.c
-@@ -6001,13 +6001,12 @@ mpt_findImVolumes(MPT_ADAPTER *ioc)
- 	if (mpt_config(ioc, &cfg) != 0)
- 		goto out;
- 
--	mem = kmalloc(iocpage2sz, GFP_KERNEL);
-+	mem = kmemdup(pIoc2, iocpage2sz, GFP_KERNEL);
- 	if (!mem) {
- 		rc = -ENOMEM;
- 		goto out;
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index fc60ed7e940ea..24e3ae3bd710e 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2289,15 +2289,65 @@ static void blk_mq_exit_hw_queues(struct request_queue *q,
  	}
+ }
  
--	memcpy(mem, (u8 *)pIoc2, iocpage2sz);
- 	ioc->raid_data.pIocPg2 = (IOCPage2_t *) mem;
++static int blk_mq_hw_ctx_size(struct blk_mq_tag_set *tag_set)
++{
++	int hw_ctx_size = sizeof(struct blk_mq_hw_ctx);
++
++	BUILD_BUG_ON(ALIGN(offsetof(struct blk_mq_hw_ctx, srcu),
++			   __alignof__(struct blk_mq_hw_ctx)) !=
++		     sizeof(struct blk_mq_hw_ctx));
++
++	if (tag_set->flags & BLK_MQ_F_BLOCKING)
++		hw_ctx_size += sizeof(struct srcu_struct);
++
++	return hw_ctx_size;
++}
++
+ static int blk_mq_init_hctx(struct request_queue *q,
+ 		struct blk_mq_tag_set *set,
+ 		struct blk_mq_hw_ctx *hctx, unsigned hctx_idx)
+ {
+-	int node;
++	hctx->queue_num = hctx_idx;
++
++	cpuhp_state_add_instance_nocalls(CPUHP_BLK_MQ_DEAD, &hctx->cpuhp_dead);
++
++	hctx->tags = set->tags[hctx_idx];
++
++	if (set->ops->init_hctx &&
++	    set->ops->init_hctx(hctx, set->driver_data, hctx_idx))
++		goto unregister_cpu_notifier;
  
- 	mpt_read_ioc_pg_3(ioc);
+-	node = hctx->numa_node;
++	if (blk_mq_init_request(set, hctx->fq->flush_rq, hctx_idx,
++				hctx->numa_node))
++		goto exit_hctx;
++	return 0;
++
++ exit_hctx:
++	if (set->ops->exit_hctx)
++		set->ops->exit_hctx(hctx, hctx_idx);
++ unregister_cpu_notifier:
++	blk_mq_remove_cpuhp(hctx);
++	return -1;
++}
++
++static struct blk_mq_hw_ctx *
++blk_mq_alloc_hctx(struct request_queue *q, struct blk_mq_tag_set *set,
++		int node)
++{
++	struct blk_mq_hw_ctx *hctx;
++	gfp_t gfp = GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY;
++
++	hctx = kzalloc_node(blk_mq_hw_ctx_size(set), gfp, node);
++	if (!hctx)
++		goto fail_alloc_hctx;
++
++	if (!zalloc_cpumask_var_node(&hctx->cpumask, gfp, node))
++		goto free_hctx;
++
++	atomic_set(&hctx->nr_active, 0);
+ 	if (node == NUMA_NO_NODE)
+-		node = hctx->numa_node = set->numa_node;
++		node = set->numa_node;
++	hctx->numa_node = node;
+ 
+ 	INIT_DELAYED_WORK(&hctx->run_work, blk_mq_run_work_fn);
+ 	spin_lock_init(&hctx->lock);
+@@ -2305,58 +2355,45 @@ static int blk_mq_init_hctx(struct request_queue *q,
+ 	hctx->queue = q;
+ 	hctx->flags = set->flags & ~BLK_MQ_F_TAG_SHARED;
+ 
+-	cpuhp_state_add_instance_nocalls(CPUHP_BLK_MQ_DEAD, &hctx->cpuhp_dead);
+-
+-	hctx->tags = set->tags[hctx_idx];
+-
+ 	/*
+ 	 * Allocate space for all possible cpus to avoid allocation at
+ 	 * runtime
+ 	 */
+ 	hctx->ctxs = kmalloc_array_node(nr_cpu_ids, sizeof(void *),
+-			GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY, node);
++			gfp, node);
+ 	if (!hctx->ctxs)
+-		goto unregister_cpu_notifier;
++		goto free_cpumask;
+ 
+ 	if (sbitmap_init_node(&hctx->ctx_map, nr_cpu_ids, ilog2(8),
+-				GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY, node))
++				gfp, node))
+ 		goto free_ctxs;
+-
+ 	hctx->nr_ctx = 0;
+ 
+ 	spin_lock_init(&hctx->dispatch_wait_lock);
+ 	init_waitqueue_func_entry(&hctx->dispatch_wait, blk_mq_dispatch_wake);
+ 	INIT_LIST_HEAD(&hctx->dispatch_wait.entry);
+ 
+-	if (set->ops->init_hctx &&
+-	    set->ops->init_hctx(hctx, set->driver_data, hctx_idx))
+-		goto free_bitmap;
+-
+ 	hctx->fq = blk_alloc_flush_queue(q, hctx->numa_node, set->cmd_size,
+-			GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY);
++			gfp);
+ 	if (!hctx->fq)
+-		goto exit_hctx;
+-
+-	if (blk_mq_init_request(set, hctx->fq->flush_rq, hctx_idx, node))
+-		goto free_fq;
++		goto free_bitmap;
+ 
+ 	if (hctx->flags & BLK_MQ_F_BLOCKING)
+ 		init_srcu_struct(hctx->srcu);
++	blk_mq_hctx_kobj_init(hctx);
+ 
+-	return 0;
++	return hctx;
+ 
+- free_fq:
+-	blk_free_flush_queue(hctx->fq);
+- exit_hctx:
+-	if (set->ops->exit_hctx)
+-		set->ops->exit_hctx(hctx, hctx_idx);
+  free_bitmap:
+ 	sbitmap_free(&hctx->ctx_map);
+  free_ctxs:
+ 	kfree(hctx->ctxs);
+- unregister_cpu_notifier:
+-	blk_mq_remove_cpuhp(hctx);
+-	return -1;
++ free_cpumask:
++	free_cpumask_var(hctx->cpumask);
++ free_hctx:
++	kfree(hctx);
++ fail_alloc_hctx:
++	return NULL;
+ }
+ 
+ static void blk_mq_init_cpu_queues(struct request_queue *q,
+@@ -2700,51 +2737,25 @@ struct request_queue *blk_mq_init_sq_queue(struct blk_mq_tag_set *set,
+ }
+ EXPORT_SYMBOL(blk_mq_init_sq_queue);
+ 
+-static int blk_mq_hw_ctx_size(struct blk_mq_tag_set *tag_set)
+-{
+-	int hw_ctx_size = sizeof(struct blk_mq_hw_ctx);
+-
+-	BUILD_BUG_ON(ALIGN(offsetof(struct blk_mq_hw_ctx, srcu),
+-			   __alignof__(struct blk_mq_hw_ctx)) !=
+-		     sizeof(struct blk_mq_hw_ctx));
+-
+-	if (tag_set->flags & BLK_MQ_F_BLOCKING)
+-		hw_ctx_size += sizeof(struct srcu_struct);
+-
+-	return hw_ctx_size;
+-}
+-
+ static struct blk_mq_hw_ctx *blk_mq_alloc_and_init_hctx(
+ 		struct blk_mq_tag_set *set, struct request_queue *q,
+ 		int hctx_idx, int node)
+ {
+ 	struct blk_mq_hw_ctx *hctx;
+ 
+-	hctx = kzalloc_node(blk_mq_hw_ctx_size(set),
+-			GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY,
+-			node);
++	hctx = blk_mq_alloc_hctx(q, set, node);
+ 	if (!hctx)
+-		return NULL;
+-
+-	if (!zalloc_cpumask_var_node(&hctx->cpumask,
+-				GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY,
+-				node)) {
+-		kfree(hctx);
+-		return NULL;
+-	}
+-
+-	atomic_set(&hctx->nr_active, 0);
+-	hctx->numa_node = node;
+-	hctx->queue_num = hctx_idx;
++		goto fail;
+ 
+-	if (blk_mq_init_hctx(q, set, hctx, hctx_idx)) {
+-		free_cpumask_var(hctx->cpumask);
+-		kfree(hctx);
+-		return NULL;
+-	}
+-	blk_mq_hctx_kobj_init(hctx);
++	if (blk_mq_init_hctx(q, set, hctx, hctx_idx))
++		goto free_hctx;
+ 
+ 	return hctx;
++
++ free_hctx:
++	kobject_put(&hctx->kobj);
++ fail:
++	return NULL;
+ }
+ 
+ static void blk_mq_realloc_hw_ctxs(struct blk_mq_tag_set *set,
 -- 
-2.7.4
+2.20.1
 
