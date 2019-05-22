@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1B825B53
+	by mail.lfdr.de (Postfix) with ESMTP id CFF0C25B54
 	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 02:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728210AbfEVAti (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1728231AbfEVAti (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Tue, 21 May 2019 20:49:38 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:33003 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728184AbfEVAtg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 20:49:36 -0400
-Received: by mail-pg1-f195.google.com with SMTP id h17so388550pgv.0
-        for <linux-scsi@vger.kernel.org>; Tue, 21 May 2019 17:49:36 -0700 (PDT)
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36546 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728227AbfEVAth (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 20:49:37 -0400
+Received: by mail-pl1-f195.google.com with SMTP id d21so180514plr.3
+        for <linux-scsi@vger.kernel.org>; Tue, 21 May 2019 17:49:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=8vlxPfdjqDnpKOFwQDs/sHb8PGm43i0NxnYIMcUCHf8=;
-        b=RFlJJF/TN6uhVaf0zWcpKnuaW2gU6qT/DlBNldofv5kSjQwYO1hQLrJPYM/cXZ3VTu
-         Y5O8QYqJPjEosCN7xL2yujr98ugFn/hnsNBsEn2LQbKElnfEOiYci4ty+jc77+Va9HNT
-         jNVGflG1fPBTbYeizOAb/Uq6ieuVslqU2c5rs5znrx0W7XRK1CNWN6mik+1/t0fTdv35
-         6MtbcXD8stdqVfOT8YxxLktmPyrriG69bM2osSTG+zZ0Ki6ExwCA874vl4rUdr8usI9z
-         YnqZejdFtlC++Xsy300rhlSOvCOH1ICpUOmxucMoJA2ED6hYalgLOYgWWfeVqytH04tq
-         jbLg==
+        bh=xRt4kHIXH2tkalnzLg5rnVq4ZDA5QXvmA0Ae1wNV6O0=;
+        b=mAebVITF0mOD1thE+TkeoCxro9u2Ph4e3kHpQ6CwnuLDY1gpZc8WOyBKX7ztVi3Q6A
+         kWu4n/cM6EJFfL7okkbR2UOugsI7Q/gvpQkISXOp/xilZf1IeQ0KoJCa7Vqxf6AQI7or
+         NvivV3kASvwJyov41Yb+P7QYWFFrEcoN/nNcTcIRR1FoQYLP7dztbJlUaGNIQhb1ZPa5
+         Jqozt+UbthtCFzk5HUAQ98buxctxoM5GbhojLn87z8E+I+TAmgXbi6sRp5TC/rK1Lc2B
+         PUZVWmWM4zGeWURHRlF86pzwQM4wiUvGjYH+LqaeQbwtgsgzx03oQvwbvB9pVhszgvQZ
+         PIgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=8vlxPfdjqDnpKOFwQDs/sHb8PGm43i0NxnYIMcUCHf8=;
-        b=qdvE3Yqc/bVxbwQReNpagyWM1s93Vcl6Wc9vTR0ss5ie0OHN2+HAI5C+/IdaPe1CAK
-         CdSdyxPa9+979mjc7VHYIrhpYOj39ylvc1t2nXMZl55z/vkx61qDxjHdZZofhJKXN56X
-         Qr0waadNqLiey2g99om9mcH5PU3X1a5w3wFmnYWFjpOqXKCNAiyru6nhjSVgg3RWBk61
-         wRJIy2jza/F2sl2cnYIjuQVTYCB1f+VLoK+G7FjXOIjn3K8XHz7nCbnKsBhCTgiuvzXd
-         pDfDHEB+OSaEjNQ8HrcQmTJhhfiC5lJ6L/E/h5l1v0DW8X+rQE8W/yBz1VxDyRDVCDjU
-         vsLQ==
-X-Gm-Message-State: APjAAAWkwIFYPjpl0JGNU1Ory+z8FKT+CT4qpf8N9YnQZhIxTVOmxHQu
-        tAbqnZUzRhuQJ1MrYyu0NDN63mrn
-X-Google-Smtp-Source: APXvYqwrGVfES7gDMUyJ0ZAohIkkuGmuVlCstIWaUWFRG0XYVKT/+oP2XlkBlBWEGdsKAjTtFskX7A==
-X-Received: by 2002:a62:2f87:: with SMTP id v129mr18587238pfv.9.1558486176127;
+        bh=xRt4kHIXH2tkalnzLg5rnVq4ZDA5QXvmA0Ae1wNV6O0=;
+        b=GXLJorGoxZLyTy+z4zpPb72xSNL1fdSTRxcsFP3qpO6w2KS8hP8YibAwnGdkgNntW0
+         7DlZbOHCJDNIF2vOS5NgK9vRv2XEN7u+kHVhjBDA2gzlQvjWQK+7HVc1I3PZihnVZT9n
+         EU8P0rMMjKRk+zW9xZOexKHmFVqgL1g+jPt9OpRE1PwX7zq2oUDPw6sU4pmkMo6f8NdA
+         1hlW17ey1z/1SrJFX8GfqBh25UM9OtB8kovoRqBt3/xsgvz9eDpdpC//jyxOe6y0+J2v
+         8eewvOfSSHRhtwgyA48zZnztzQTHs56as3o2QTHPUDWH9LvUUVZtlOx8ZKIEUVl2bJpf
+         6mpQ==
+X-Gm-Message-State: APjAAAX68UcioIhrFBtaVdBGzeoqzNzBCa/6CJpbO7Dggyg9IA6mfss8
+        b/LgBt0xnmVbkXC4X1H03qhmedkd
+X-Google-Smtp-Source: APXvYqz9i9JJtumbm+fQjXz9inGntyp4QlBKQGaDFBEUbvVZlLw+uytXYf/ROz0MUffpLz/0pZ1hWg==
+X-Received: by 2002:a17:902:8303:: with SMTP id bd3mr38671029plb.240.1558486176934;
         Tue, 21 May 2019 17:49:36 -0700 (PDT)
 Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j184sm22550121pge.83.2019.05.21.17.49.35
+        by smtp.gmail.com with ESMTPSA id j184sm22550121pge.83.2019.05.21.17.49.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 21 May 2019 17:49:35 -0700 (PDT)
+        Tue, 21 May 2019 17:49:36 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 18/21] lpfc: Fix FDMI fc4type for nvme support
-Date:   Tue, 21 May 2019 17:49:08 -0700
-Message-Id: <20190522004911.573-19-jsmart2021@gmail.com>
+Subject: [PATCH 19/21] lpfc: Fix BFS crash with t10-dif enabled.
+Date:   Tue, 21 May 2019 17:49:09 -0700
+Message-Id: <20190522004911.573-20-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20190522004911.573-1-jsmart2021@gmail.com>
 References: <20190522004911.573-1-jsmart2021@gmail.com>
@@ -58,62 +58,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-FDMI protocol support registration was not accurately showing
-nvme support. The fcponly-path clears the parameter object.
+Crashes in scsi_queue_rq or in dma_unmap_direct_sg during BFS when
+lpfc has lpfc_enable_bg=1.
 
-Move the code out of the fcponly code path.
-Fix the FDMI registration data to properly check for nvme support.
-Commonize the manner in which the fdmi routines set protocol
-support.
+lpfc is setting the t10-dif and prot sg after scsi_add_host_with_dma()
+has been called. The scsi_host_set_prot() and scsi_host_set_guard()
+routines need to be called before scsi_add_host_with_dma().
+
+Revise the calling sequence to set the protection/guard data before
+calling scsi_add_host_with_dma().
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_ct.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/scsi/lpfc/lpfc_init.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index 4812bbbf43cc..ec72c39997d2 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -2358,6 +2358,7 @@ static int
- lpfc_fdmi_port_attr_fc4type(struct lpfc_vport *vport,
- 			    struct lpfc_fdmi_attr_def *ad)
- {
-+	struct lpfc_hba   *phba = vport->phba;
- 	struct lpfc_fdmi_attr_entry *ae;
- 	uint32_t size;
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 416f0fb155f5..a2b827dd36ff 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -94,6 +94,7 @@ static void lpfc_sli4_disable_intr(struct lpfc_hba *);
+ static uint32_t lpfc_sli4_enable_intr(struct lpfc_hba *, uint32_t);
+ static void lpfc_sli4_oas_verify(struct lpfc_hba *phba);
+ static uint16_t lpfc_find_cpu_handle(struct lpfc_hba *, uint16_t, int);
++static void lpfc_setup_bg(struct lpfc_hba *, struct Scsi_Host *);
  
-@@ -2366,9 +2367,13 @@ lpfc_fdmi_port_attr_fc4type(struct lpfc_vport *vport,
+ static struct scsi_transport_template *lpfc_transport_template = NULL;
+ static struct scsi_transport_template *lpfc_vport_transport_template = NULL;
+@@ -4348,6 +4349,9 @@ lpfc_create_port(struct lpfc_hba *phba, int instance, struct device *dev)
  
- 	ae->un.AttrTypes[3] = 0x02; /* Type 0x1 - ELS */
- 	ae->un.AttrTypes[2] = 0x01; /* Type 0x8 - FCP */
--	if (vport->nvmei_support || vport->phba->nvmet_support)
--		ae->un.AttrTypes[6] = 0x01; /* Type 0x28 - NVME */
- 	ae->un.AttrTypes[7] = 0x01; /* Type 0x20 - CT */
-+
-+	/* Check to see if Firmware supports NVME and on physical port */
-+	if ((phba->sli_rev == LPFC_SLI_REV4) && (vport == phba->pport) &&
-+	    phba->sli4_hba.pc_sli4_params.nvme)
-+		ae->un.AttrTypes[6] = 0x01; /* Type 0x28 - NVME */
-+
- 	size = FOURBYTES + 32;
- 	ad->AttrLen = cpu_to_be16(size);
- 	ad->AttrType = cpu_to_be16(RPRT_SUPPORTED_FC4_TYPES);
-@@ -2680,9 +2685,12 @@ lpfc_fdmi_port_attr_active_fc4type(struct lpfc_vport *vport,
+ 	timer_setup(&vport->delayed_disc_tmo, lpfc_delayed_disc_tmo, 0);
  
- 	ae->un.AttrTypes[3] = 0x02; /* Type 0x1 - ELS */
- 	ae->un.AttrTypes[2] = 0x01; /* Type 0x8 - FCP */
-+	ae->un.AttrTypes[7] = 0x01; /* Type 0x20 - CT */
++	if (phba->sli3_options & LPFC_SLI3_BG_ENABLED)
++		lpfc_setup_bg(phba, shost);
 +
-+	/* Check to see if NVME is configured or not */
- 	if (vport->phba->cfg_enable_fc4_type & LPFC_ENABLE_NVME)
- 		ae->un.AttrTypes[6] = 0x1; /* Type 0x28 - NVME */
--	ae->un.AttrTypes[7] = 0x01; /* Type 0x20 - CT */
-+
- 	size = FOURBYTES + 32;
- 	ad->AttrLen = cpu_to_be16(size);
- 	ad->AttrType = cpu_to_be16(RPRT_ACTIVE_FC4_TYPES);
+ 	error = scsi_add_host_with_dma(shost, dev, &phba->pcidev->dev);
+ 	if (error)
+ 		goto out_put_shost;
+@@ -7669,8 +7673,6 @@ lpfc_post_init_setup(struct lpfc_hba *phba)
+ 	 */
+ 	shost = pci_get_drvdata(phba->pcidev);
+ 	shost->can_queue = phba->cfg_hba_queue_depth - 10;
+-	if (phba->sli3_options & LPFC_SLI3_BG_ENABLED)
+-		lpfc_setup_bg(phba, shost);
+ 
+ 	lpfc_host_attrib_init(shost);
+ 
 -- 
 2.13.7
 
