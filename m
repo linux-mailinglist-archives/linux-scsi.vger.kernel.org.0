@@ -2,103 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 303E525B41
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD4225B42
 	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 02:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728127AbfEVAtX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1728130AbfEVAtX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Tue, 21 May 2019 20:49:23 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46231 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726083AbfEVAtX (ORCPT
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42954 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728022AbfEVAtX (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 May 2019 20:49:23 -0400
-Received: by mail-pg1-f194.google.com with SMTP id o11so174090pgm.13
-        for <linux-scsi@vger.kernel.org>; Tue, 21 May 2019 17:49:22 -0700 (PDT)
+Received: by mail-pl1-f194.google.com with SMTP id go2so167851plb.9
+        for <linux-scsi@vger.kernel.org>; Tue, 21 May 2019 17:49:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=1OgtekMFLFg97Gk2dH328ewvotz0xhZkFoa654FQFFQ=;
-        b=h36ygJ+A1MpXiw/4MUvJ6vBxpbA1o2o/NblkFF+rxLlYh3nkCIITWpwgQG7a3ep6wA
-         m197qNAMYgxrbqW9H3EWWI7GbzHkvoV9SN+r+sFpiQRtDdN/1iT/4fZvmx6GMHnDGYru
-         v1BqJhXXw3qENwAdMbcdk4GgegelNhpYYGRFi73YKfDoKewebt4x+u0dplCLh47eqGur
-         Fu9QuTuaKmXA1Cq0YEDUPbFLJoY5Ul3feE6F/M8XLtbbR3TUF0JzPuB1qyRLsK0ZRn9z
-         7bV/f22lB3Ml/2y9N3EBhDEkbnG8RUaa3cnj+OB1g6N+fgvPNLw6ibYTcVheTYtnGIkl
-         bGtA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=MIgeez25auR/8LV5piBQP5AWXOBRFasx1/Awg7vqAz4=;
+        b=Yde+4yHVN58KM2l7ZLLM6YAnjePGaB0udRDVsy+H2mWi1ZKVaf27YRWJPS5akTiuuH
+         rznyBWjgKEaa0wvoWXbbxUnSu398L4LgquEwdCNr0KCauKtUI8CwS9ag2Q40fHYYRQam
+         JykhqEcrlkA3P6miZi2NxwIoKIo8YpxSA4Hyqovk+EtpG/1Dv7GBh8DXsvWaqZk9if6t
+         9mIGPb3zdsDozHE/hhfygoT7sh0Ui1xSXXylIE6YONzK42iliaykr9dYPo4mOXqSY0qZ
+         0dBaDTo43rykY9rzV4rxuN3+zRSmWeXKHPVRvcnFTtWSDUBN8X60RqvaoMF4t71BvCrW
+         JQmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=1OgtekMFLFg97Gk2dH328ewvotz0xhZkFoa654FQFFQ=;
-        b=SzE83/D9LU4eNQaQQhSNDFvPoIwg2dy2Uio8AYmZ2jucSihs04YLOHV0SyaSq0f1Ri
-         u4fLuMYcp34nzTMDerKD74FWCW/AZ+74zFCefvTgQOQtXup6SSoEFXfRY/U19UV6t9c4
-         Hc6qwFC8+zVEJyD7gBePT8Xg1tAyG7KMVPd0KOsVxya9L0PSYm/EauUsZBYH/PeE+oBQ
-         Qz3fu1Jlq69dTSMGse7JkMUT85+5ISvcYOkKy2xJsg3Euu/OtxLmiWmDYX62cQ6ITRLE
-         FHQ0HXR/g8vV7JFJ+VrogcVqgvOnBxhahNDs0wuV/26DdTJfOqgMgvWELoJOSRswreHE
-         6l9Q==
-X-Gm-Message-State: APjAAAWISbAjfWEIAXIpG9cpYaYahJs/6sjs6+qc2s2BntaDai1xPyY5
-        9ztuD1P5fPx0YSZZL8Nbu3v8hcz5
-X-Google-Smtp-Source: APXvYqzaR9XKv45O0W8bVFOLgezgiFN48z4BM7qMbEsADtOaS4RAtiZbIyM3V0QQ6csPVVgD/aB/oQ==
-X-Received: by 2002:a63:754b:: with SMTP id f11mr86405687pgn.32.1558486162161;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=MIgeez25auR/8LV5piBQP5AWXOBRFasx1/Awg7vqAz4=;
+        b=EFhxcUnvhOZZrrcJl27jZ7p6o756VSoqh61GBOa+tT23KtbPi0bF7R/aRg5GeHP1ka
+         NVxTSRPHTmovUlsELuqsK1NgjQmHPWlCu3F9KYISetq5mhNdNTVtZwCvVIkc7nzhZ2Sa
+         KHv65fAz3BUHwSNwA5mP4Y2cv9B+l06kF6eiyu1DXeSclISd5WxjlvpuIS32PUXAHZEt
+         2kWGyXuKWrF6oN1UaTyoEnKJH5FgPRdXVAd1rz/ZS5q5enFJELs6uyQ6Xb1iuDd2oCLH
+         KjSI9dpPHJlXHyFPXzCpO09SoghC9mDeWoHX7Pr3cgzwKX3vcACt2YF/bFY+0Sld4OcV
+         gTyw==
+X-Gm-Message-State: APjAAAVts0MG/wMYVnRHtAYWhDyBBoDdeEptxGVCW/zmih16zgQqgRc9
+        db771WpLN3R3pLyhmmagLWK3Iac3
+X-Google-Smtp-Source: APXvYqzhzvyKHpdEd8EcOU+9+b0fzPr2qvKUCwgdD5PqqPgXuG4QXGnc5Y94WjwYEp26A5RL1fBO1w==
+X-Received: by 2002:a17:902:8c82:: with SMTP id t2mr79086138plo.256.1558486162882;
         Tue, 21 May 2019 17:49:22 -0700 (PDT)
 Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j184sm22550121pge.83.2019.05.21.17.49.20
+        by smtp.gmail.com with ESMTPSA id j184sm22550121pge.83.2019.05.21.17.49.22
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 21 May 2019 17:49:21 -0700 (PDT)
+        Tue, 21 May 2019 17:49:22 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>
-Subject: [PATCH 00/21] lpfc: Update lpfc to revision 12.2.0.3
-Date:   Tue, 21 May 2019 17:48:50 -0700
-Message-Id: <20190522004911.573-1-jsmart2021@gmail.com>
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Subject: [PATCH 01/21] lpfc: Fix alloc context on oas lun creations
+Date:   Tue, 21 May 2019 17:48:51 -0700
+Message-Id: <20190522004911.573-2-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
+In-Reply-To: <20190522004911.573-1-jsmart2021@gmail.com>
+References: <20190522004911.573-1-jsmart2021@gmail.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc to revision 12.2.0.3
+Softlockups are seen in low memory situations. They are due to
+doing oas_lun allocation with GFP_KERNEL in atomic contexts.
 
-This patch set contains a bunch of fixes for lpfc.
+Change the calls to oas_lun to indicate atomic context so that
+GFP_ATOMIC is used.
 
-The patches were cut against Martin's 5.3/scsi-queue tree
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_scsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-James Smart (21):
-  lpfc: Fix alloc context on oas lun creations
-  lpfc: Fix nvmet target abort cmd matching
-  lpfc: Correct nvmet buffer free race condition
-  lpfc: Revise message when stuck due to unresponsive adapter
-  lpfc: Separate CQ processing for nvmet_fc upcalls
-  lpfc: Fix nvmet handling of received ABTS for unmapped frames
-  lpfc: Revert message logging on unsupported topology
-  lpfc: Fix PT2PT PLOGI collison stopping discovery
-  lpfc: Prevent 'use after free' memory overwrite in nvmet LS handling.
-  lpfc: Cancel queued work for an IO when processing a received ABTS.
-  lpfc: Fix hardlockup in scsi_cmd_iocb_cmpl
-  lpfc: Rework misleading nvme not supported in firmware message
-  lpfc: Fix memory leak in abnormal exit path from lpfc_eq_create.
-  lpfc: Fix incorrect logical link speed on trunks when links down
-  lpfc: Fix oops when driver is loaded with 1 interrupt vector
-  lpfc: Fix poor use of hardware queues if fewer irq vectors
-  lpfc: Fix fcp_rsp_len checking on lun reset
-  lpfc: Fix FDMI fc4type for nvme support
-  lpfc: Fix BFS crash with t10-dif enabled.
-  lpfc: Fix kernel warnings related to smp_processor_id()
-  lpfc: Update lpfc version to 12.2.0.3
-
- drivers/scsi/lpfc/lpfc_attr.c    |  34 ++-
- drivers/scsi/lpfc/lpfc_bsg.c     |   2 +-
- drivers/scsi/lpfc/lpfc_crtn.h    |   3 +-
- drivers/scsi/lpfc/lpfc_ct.c      |  14 +-
- drivers/scsi/lpfc/lpfc_els.c     |   1 +
- drivers/scsi/lpfc/lpfc_init.c    | 501 ++++++++++++++++++++++++++++++---------
- drivers/scsi/lpfc/lpfc_nvme.c    |  16 +-
- drivers/scsi/lpfc/lpfc_nvmet.c   | 330 +++++++++++++++++++++-----
- drivers/scsi/lpfc/lpfc_nvmet.h   |   1 +
- drivers/scsi/lpfc/lpfc_scsi.c    |  16 +-
- drivers/scsi/lpfc/lpfc_sli.c     |  72 +++---
- drivers/scsi/lpfc/lpfc_sli4.h    |  11 +-
- drivers/scsi/lpfc/lpfc_version.h |   2 +-
- 13 files changed, 786 insertions(+), 217 deletions(-)
-
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index ba996fbde89b..3873d5b97bc6 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -5741,7 +5741,7 @@ lpfc_enable_oas_lun(struct lpfc_hba *phba, struct lpfc_name *vport_wwpn,
+ 
+ 	/* Create an lun info structure and add to list of luns */
+ 	lun_info = lpfc_create_device_data(phba, vport_wwpn, target_wwpn, lun,
+-					   pri, false);
++					   pri, true);
+ 	if (lun_info) {
+ 		lun_info->oas_enabled = true;
+ 		lun_info->priority = pri;
 -- 
 2.13.7
 
