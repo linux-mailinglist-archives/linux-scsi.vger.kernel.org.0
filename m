@@ -2,87 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A704426777
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 17:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFDD267A4
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 18:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729505AbfEVP5F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 11:57:05 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:44097 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728527AbfEVP5F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 11:57:05 -0400
-Received: by mail-pl1-f193.google.com with SMTP id c5so1277779pll.11;
-        Wed, 22 May 2019 08:57:05 -0700 (PDT)
+        id S1729956AbfEVQB5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 12:01:57 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:39785 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727975AbfEVQB5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 12:01:57 -0400
+Received: by mail-pg1-f195.google.com with SMTP id w22so1542726pgi.6;
+        Wed, 22 May 2019 09:01:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=AmNGy/NFq2EOHvqVIGC3ySGjBTZpA5aNPHZwt8OoqlI=;
-        b=PPoE1xQw3nra2WTRsZTaBZCtml6jPMVGPz706uZ+mCYLvT6e/vL+EE3yEKwTetPNlv
-         JVokWZV0PVWmDrQ60rzh0mkexLrDVG+EB4cg1bG0H7sfjvcpRA9AXAta5KV5EFpC87an
-         4JEZ0Emc577+64EdrmvL2uugj1A06eNNhIEC0AVxxZGqxFC3oyTYn2ZyywA4CsI/9uNj
-         BMD8+VnLIMrHQ10JsFYNe11eZ2rd9L4DbTMYIgBxvDGhNDLWEEo6j4jg0VqIZXw2JFCt
-         k2WqgAYlBmUOdqp7AyV12AF11INdzHUGgX7xt6M+q08baRHD59mpCCf2GqR4iYkEM7pm
-         Zj4g==
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=OSzCsKE2z3Is8NMcukDcO8IOidowt/GHhrQxzmMeOJ0=;
+        b=KTkTKKKicgi/nRInuJBQe/T5ZoC7kq7YvttuB1SzAkzLGGLlQ0MYkumhimMc7MNTF4
+         +cPC3wNg/jrKM5Tv9JKCcLUXk1pSDuXApaBaL+UscqU63ScffQLSZ4m03S8a/nriMFGf
+         crBBV5FmI2NFaZh27L1H1s4LIR/+3jKIiPARBOYZmmxtQGh9fdBHf/9C7KgoiQILOM7G
+         4ccLo2Am7JHEmxXnTqBessRfuU6D54Sad4pEaJGKuiDjU6Ruyrf3PYZ2n8lyYdL3Cn5l
+         0iwWY8b+lKk8lxzccRBgcqnYuFA/2ySweqv/zoOxSXxtxV4gp/XsFB11JGjgqgjw9+RG
+         OyDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=AmNGy/NFq2EOHvqVIGC3ySGjBTZpA5aNPHZwt8OoqlI=;
-        b=oth7Bb1boQ27hxqGL+JzjJZXN2fzam5Hh39k7mHdMle/Dg5qKkIWvsgU3HWzi3QZH1
-         5a2MekctzGDArTlRD4SdVkZZ6dK+/1Xw7e8rFpykIr1DvtviweVrU2NujF4SDlqvN7G+
-         Ew1n09Kd9rLgaUOcKyJrrXqf2SOw7dBApzlVwpJpMEv/sHqAGc9sPhzftpVjTItP9oxy
-         iz/qz3NCE/RLS/IsKMBbYh9VMmN5aw3rjR2XM/WaBLTz45jN/CA5mE89CSDZGRKeLEos
-         MPIT99dApZi/NEvgTy0NJzfS36xIDA69j0WkhvayYovMyK7tNmWAJtaglIhjx/08dSaL
-         cQFQ==
-X-Gm-Message-State: APjAAAWZ6xMbb5I93ngPi3sY+VTiA2S3yDjoWjiy5vBnPEvESGmVKFH5
-        Xh8e9330Dodb6ECA72zrmxw=
-X-Google-Smtp-Source: APXvYqwjIBzw5VgJ5UcxwexYB5MRjuc3hXWK1BuvqP2lReBMDIXLKnpXPeFEGo0eWjohrsL3X9FDoA==
-X-Received: by 2002:a17:902:4383:: with SMTP id j3mr91573274pld.320.1558540624927;
-        Wed, 22 May 2019 08:57:04 -0700 (PDT)
-Received: from bharath12345-Inspiron-5559 ([103.110.42.31])
-        by smtp.gmail.com with ESMTPSA id t7sm29962927pfh.156.2019.05.22.08.57.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=OSzCsKE2z3Is8NMcukDcO8IOidowt/GHhrQxzmMeOJ0=;
+        b=iqYfqt/lfpH1vLGnB8dNq4o7afCoQw66gE0Ca9p3QdHDPgQb29dtupVG7Gt8nKhaFu
+         2IKGYYV6ZaboBB2lBkoXKCIPEBv0TTGF0wdXbugcjtmXYPNy9GYXiQQZxn+GXOn0/OE4
+         5ye1MzfVn9St/kS7ug2gQ7A3B9c/qFDvclBcFxlE+EgYMEJ53dgHfW2lVwujLZqKtvzN
+         vLBhVzNvpheBRgsESGw/0MpJirdBBZCEIXClGka45eXMEriMucmWfKHPU4tgiP5ValSv
+         MUP0LOwLGHSf4SWW4x6xvkC2GOMulBzXWwBvUvNtRHoHRqnBHSDXDfKTEAkrFKU4MiYp
+         s3VA==
+X-Gm-Message-State: APjAAAWuXyl660q7YGLWheC55eFvpBpH+2e6+DgTvi5Fzp5JS112cZ7e
+        m1Q8sGwBHjJ3izMhUQJqphbKVBzf
+X-Google-Smtp-Source: APXvYqzwpnESF32HADxlro+0YWttryeVZaxqawf0rnlTTiTjlRy4qyjplI+e6s7ZVPIQKUfsseWfCQ==
+X-Received: by 2002:a63:4754:: with SMTP id w20mr3159632pgk.31.1558540916894;
+        Wed, 22 May 2019 09:01:56 -0700 (PDT)
+Received: from bharath12345-Inspiron-5559 ([103.110.42.33])
+        by smtp.gmail.com with ESMTPSA id s72sm36746482pgc.65.2019.05.22.09.01.52
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 08:57:04 -0700 (PDT)
-Date:   Wed, 22 May 2019 21:26:57 +0530
+        Wed, 22 May 2019 09:01:56 -0700 (PDT)
+Date:   Wed, 22 May 2019 21:31:49 +0530
 From:   Bharath Vedartham <linux.bhar@gmail.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     sathya.prakash@broadcom.com, chaitra.basappa@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+To:     sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
+        joe@perches.com
+Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] message/fusion/mptbase.c: Use kmemdup instead of memcpy
+Subject: [PATCH v2] message/fusion/mptbase.c: Use kmemdup instead of memcpy
  and kmalloc
-Message-ID: <20190522155657.GA12887@bharath12345-Inspiron-5559>
-References: <20190522095335.GA3212@bharath12345-Inspiron-5559>
- <7e2a727333d1d764ae3c0099e050a0521e87d9d8.camel@perches.com>
+Message-ID: <20190522160149.GA19160@bharath12345-Inspiron-5559>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7e2a727333d1d764ae3c0099e050a0521e87d9d8.camel@perches.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 22, 2019 at 04:48:33AM -0700, Joe Perches wrote:
-> On Wed, 2019-05-22 at 15:23 +0530, Bharath Vedartham wrote:
-> > Replace kmalloc + memcpy with kmemdup.
-> > This was reported by coccinelle.
-> []
-> > diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-> []
-> > @@ -6001,13 +6001,12 @@ mpt_findImVolumes(MPT_ADAPTER *ioc)
-> >  	if (mpt_config(ioc, &cfg) != 0)
-> >  		goto out;
-> >  
-> > -	mem = kmalloc(iocpage2sz, GFP_KERNEL);
-> > +	mem = kmemdup((u8 *)pIoc2, iocpage2sz, GFP_KERNEL);
-> 
-> You should remove the unnecessary cast here.
-> 
->
-Yes! I will change this in v2.
+Replace kmalloc + memcpy with kmemdup.
 
-Thanks
-Bharath
+This was reported by coccinelle.
+
+Signed-off-by: Bharath Vedartham <linux.bhar@gmail.com>
+
+---
+Changes since v2:
+	Removed the cast from pIoc2.
+---
+ drivers/message/fusion/mptbase.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
+index d8882b0..37876a7 100644
+--- a/drivers/message/fusion/mptbase.c
++++ b/drivers/message/fusion/mptbase.c
+@@ -6001,13 +6001,12 @@ mpt_findImVolumes(MPT_ADAPTER *ioc)
+ 	if (mpt_config(ioc, &cfg) != 0)
+ 		goto out;
+ 
+-	mem = kmalloc(iocpage2sz, GFP_KERNEL);
++	mem = kmemdup(pIoc2, iocpage2sz, GFP_KERNEL);
+ 	if (!mem) {
+ 		rc = -ENOMEM;
+ 		goto out;
+ 	}
+ 
+-	memcpy(mem, (u8 *)pIoc2, iocpage2sz);
+ 	ioc->raid_data.pIocPg2 = (IOCPage2_t *) mem;
+ 
+ 	mpt_read_ioc_pg_3(ioc);
+-- 
+2.7.4
+
