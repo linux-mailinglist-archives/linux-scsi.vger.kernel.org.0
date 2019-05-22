@@ -2,28 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D981F263B8
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 14:21:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ACA9263E0
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 14:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729271AbfEVMVd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 08:21:33 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:41400 "EHLO huawei.com"
+        id S1729278AbfEVMau (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 08:30:50 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8230 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729018AbfEVMVd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 22 May 2019 08:21:33 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 4025A92D0AA14AA23F07;
-        Wed, 22 May 2019 20:21:30 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Wed, 22 May 2019
- 20:21:22 +0800
+        id S1728744AbfEVMau (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 22 May 2019 08:30:50 -0400
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 436B4B160C86D6305229;
+        Wed, 22 May 2019 20:30:48 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Wed, 22 May 2019
+ 20:30:38 +0800
 Subject: Re: [PATCH] blk-mq: Wait for for hctx inflight requests on CPU unplug
-To:     Ming Lei <ming.lei@redhat.com>
+To:     Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
 References: <20190517091424.19751-1-ming.lei@redhat.com>
  <6e1d3b66-aaed-4f6f-da34-92a633ff4b44@huawei.com>
  <20190522015620.GA11959@ming.t460p>
  <ce014369-4bf2-55fe-3c0f-3a46d3a016dc@huawei.com>
- <20190522100139.GA16877@ming.t460p>
+ <1deeda32-eac2-9056-f17b-3a643e671374@suse.de>
 CC:     Jens Axboe <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
         "Christoph Hellwig" <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
@@ -34,12 +34,12 @@ CC:     Jens Axboe <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
         Kashyap Desai <kashyap.desai@broadcom.com>,
         chenxiang <chenxiang66@hisilicon.com>
 From:   John Garry <john.garry@huawei.com>
-Message-ID: <4baa342b-4933-8b01-406a-6bd8b79f2251@huawei.com>
-Date:   Wed, 22 May 2019 13:21:15 +0100
+Message-ID: <11bb0171-d5a2-1faa-6fd6-6204b5a56cfc@huawei.com>
+Date:   Wed, 22 May 2019 13:30:31 +0100
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
  Thunderbird/45.3.0
 MIME-Version: 1.0
-In-Reply-To: <20190522100139.GA16877@ming.t460p>
+In-Reply-To: <1deeda32-eac2-9056-f17b-3a643e671374@suse.de>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.202.227.238]
@@ -49,7 +49,44 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+>
+> But I still do think we need to handle this case; the HBA might not
+> expose enough MSI-X vectors/hw queues for us to map to all CPUs.
+> In which case we'd be running into the same situation.
+>
+> And I do think we _need_ to drain the associated completion queue as
+> soon as _any_ CPU in that set it plugged; otherwise we can't ensure that
+> any interrupt for pending I/O will _not_ arrive at the dead CPU.
 
+Really? I did not think that it was possible for this to happen.
+
+>
+> And yes, this would amount to quiesce the HBA completely if only one
+> queue is exposed. But there's no way around this; the alternative would
+> be to code a fallback patch in each driver to catch missing completions.
+> Which would actually be an interface change, requiring each vendor /
+> maintainer to change their driver. Not very nice.
+>
+>>> Looks you suggest to expose all completion(reply) queues as 'struct
+>>> blk_mq_hw_ctx',
+>>> which may involve in another more hard problem:  how to split the single
+>>> hostwide tags into each reply queue.
+>>
+>> Yes, and this is what I expecting to hear Re. hostwide tags.
+>>
+> But this case is handled already; things like lpfc and qla2xxx have been
+> converted to this model (exposing all hw queues, and use a host-wide
+> tagmap).
+>
+> So from that side there is not really an issue.
+>
+> I even provided patchset to convert megaraid_sas (cf 'megaraid_sas:
+> enable blk-mq for fusion'); you might want to have a look there to see
+> how it can be done.
+
+ok, I'll have a search.
+
+>
 >> I'd rather not work towards that
 >>> direction because:
 >>>
@@ -58,57 +95,59 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 >>>
 >>> 2) sbitmap is smart/efficient enough for this global allocation
 >>>
->>> 3) no obvious improvement is obtained from the resource partition, according
+>>> 3) no obvious improvement is obtained from the resource partition,
+>>> according
 >>> to previous experiment result done by Kashyap.
 >>
 >> I'd like to also do the test.
 >>
->> However I would need to forward port the patchset, which no longer cleanly
->> applies (I was referring to this https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/).
+>> However I would need to forward port the patchset, which no longer
+>> cleanly applies (I was referring to this
+>> https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/).
 >> Any help with that would be appreciated.
->
-> The queue type change causes patches not applied any more.
->
-> Could you just test the patch against v4.15 and see if there is any
-> improvement?
->
-
-I'd rather test against latest mainline, but if it is too difficult then 
-I can backport LLDD stuff and test against 4.15. It may take a while.
-
-> Even if it may improve performance on hisi_sas, I still suggest to not
-> use that approach to solve the issue for draining in-flight requests when
-> all CPUs of one hw queue becomes offline, since this way might hurt
-> performance on other drivers.
->
 >>
+> If you would post it on the mailing list (or send it to me) I can have a
+> look. Converting SAS is on my list of things to do, anyway.
+>
+
+ok
+
 >>>
 >>> I think we could implement the drain mechanism in the following way:
 >>>
 >>> 1) if 'struct blk_mq_hw_ctx' serves as completion queue, use the
 >>> approach in the patch
 >>
->> Maybe the gain of exposing multiple queues+managed interrupts outweighs the
->> loss in the LLDD of having to generate this unique tag with sbitmap; I know
->
-> The unique tag has zero cost, see blk_mq_unique_tag().
-
-But we want a tag unique in range [0, host tag count), which 
-blk_mq_unique_tag() does not provide.
-
->
->> that we did not use sbitmap ever in the LLDD for generating the tag when
->> testing previously. However I'm still not too hopeful.
+>> Maybe the gain of exposing multiple queues+managed interrupts
+>> outweighs the loss in the LLDD of having to generate this unique tag
+>> with sbitmap; I know that we did not use sbitmap ever in the LLDD for
+>> generating the tag when testing previously. However I'm still not too
+>> hopeful.
 >>
+> Thing is, the tag _is_ already generated by the time the command is
+> passed to the LLDD. So there is no overhead; you just need to establish
+> a 1:1 mapping between SCSI cmds from the midlayer and your internal
+> commands.
+>
+> Which is where the problem starts: if you have to use the same command
+> pool for internal commands you have to set some tags aside to avoid a
+> clash with the tags generated from the block layer.
+> That's easily done, but if you do that quiescing is getting harder, as
+> then the block layer wouldn't know about these internal commands.
+> This is what I'm trying to address with my patchset to use private tags
+> in SCSI, as then the block layer maintains all tags, and is able to
+> figure out if the queue really is quiesced.
+> (And I really need to post my patchset).
+
+Ack
+
+>
 >>>
 >>> 2) otherwise:
 >>> - introduce one callbcack of .prep_queue_dead(hctx, down_cpu) to
 >>> 'struct blk_mq_ops'
 >>
 >> This would not be allowed to block, right?
->
-> It is allowed to block in CPU hotplug handler.
->
 >>
 >>>
 >>> - call .prep_queue_dead from blk_mq_hctx_notify_dead()
@@ -118,34 +157,26 @@ blk_mq_unique_tag() does not provide.
 >>> - if yes, wait for in-flight requests originated from all CPUs mapped to
 >>> this completion queue, and it can be implemented as one block layer API
 >>
->> That could work. However I think that someone may ask why the LLDD just
->> doesn't register for the CPU hotplug event itself (which I would really
->> rather avoid), instead of being relayed the info from the block layer.
+>> That could work. However I think that someone may ask why the LLDD
+>> just doesn't register for the CPU hotplug event itself (which I would
+>> really rather avoid), instead of being relayed the info from the block
+>> layer.
+>>
+> Again; what would you do if not all CPUs from a pool are gone?
+> You still might be getting interrupts for non-associated interrupts, and
+> quite some drivers are unhappy under these circumstances.
+> Hence I guess it'll be better to quiesce the queue as soon as _any_ CPU
+> from the pool is gone.
 >
-> .prep_queue_dead() is run from blk-mq's CPU hotplug handler.
+> Plus we could be doing this from the block layer without any callbacks
+> from the driver...
 >
-> I also think of abstracting completion queue in blk-mq for hpsa,
-> hisi_sas_v3_hw and  mpt3sas, but that can't cover to drain device's internal
-> command, so looks it is inevitable for us to introduce driver callback.
+> Cheers,
 >
-
-On topic of internal commands, I assume that the approach would be to 
-reserve tags in blk_mq_tag_set.reserved_tags (currently not set in 
-scsi_mq_setup_tags()), and the LLDD would use 
-blk_mq_alloc_request(,,BLK_MQ_REQ_RESERVED) to get a tag.
-
-I guess that this may be Hannes' idea also (see "as then the block layer 
-maintains all tags, and is able to figure out if the queue really is 
-quiesced").
+> Hannes
 
 Thanks,
 John
 
->
-> Thanks,
-> Ming
->
-> .
->
 
 
