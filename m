@@ -2,104 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC11C26633
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 16:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A3E2634A
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 13:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728466AbfEVOrC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 10:47:02 -0400
-Received: from 107-174-234-49-host.colocrossing.com ([107.174.234.49]:42200
-        "EHLO venetian.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727975AbfEVOrC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 10:47:02 -0400
-To:     linux-scsi@vger.kernel.org
-Subject: Logo printing
-Message-ID: <5637dc456964e6c76f8e096a5ddd5fa8@walgreens.com>
-Date:   Wed, 22 May 2019 13:40:08 +0200
-From:   "David" <david@usbcustom.site>
-Reply-To: jensanke@aliyun.com
-MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+        id S1728536AbfEVL4p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 07:56:45 -0400
+Received: from smtprelay0014.hostedemail.com ([216.40.44.14]:35199 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727464AbfEVL4p (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 22 May 2019 07:56:45 -0400
+X-Greylist: delayed 487 seconds by postgrey-1.27 at vger.kernel.org; Wed, 22 May 2019 07:56:44 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave03.hostedemail.com (Postfix) with ESMTP id A43C318020012
+        for <linux-scsi@vger.kernel.org>; Wed, 22 May 2019 11:48:37 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 4038A100E86C0;
+        Wed, 22 May 2019 11:48:36 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::,RULES_HIT:41:355:379:599:968:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1538:1567:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3622:3865:3873:4321:5007:7903:8957:10004:10400:10848:11232:11658:11914:12043:12663:12740:12760:12895:13069:13095:13311:13357:13439:14659:14721:21080:21212:21433:21627:30054:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.14.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:35,LUA_SUMMARY:none
+X-HE-Tag: spoon28_6812e54d5f51b
+X-Filterd-Recvd-Size: 1441
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf20.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 22 May 2019 11:48:35 +0000 (UTC)
+Message-ID: <7e2a727333d1d764ae3c0099e050a0521e87d9d8.camel@perches.com>
+Subject: Re: [PATCH] message/fusion/mptbase.c: Use kmemdup instead of memcpy
+ and kmalloc
+From:   Joe Perches <joe@perches.com>
+To:     Bharath Vedartham <linux.bhar@gmail.com>,
+        sathya.prakash@broadcom.com, chaitra.basappa@broadcom.com
+Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 22 May 2019 04:48:33 -0700
+In-Reply-To: <20190522095335.GA3212@bharath12345-Inspiron-5559>
+References: <20190522095335.GA3212@bharath12345-Inspiron-5559>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.1-1build1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+On Wed, 2019-05-22 at 15:23 +0530, Bharath Vedartham wrote:
+> Replace kmalloc + memcpy with kmemdup.
+> This was reported by coccinelle.
+[]
+> diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
+[]
+> @@ -6001,13 +6001,12 @@ mpt_findImVolumes(MPT_ADAPTER *ioc)
+>  	if (mpt_config(ioc, &cfg) != 0)
+>  		goto out;
+>  
+> -	mem = kmalloc(iocpage2sz, GFP_KERNEL);
+> +	mem = kmemdup((u8 *)pIoc2, iocpage2sz, GFP_KERNEL);
 
-Not sure if you received my last email?
+You should remove the unnecessary cast here.
 
-Are you interested in purchasing your LOGO promotional and marketing
-products for your company?
-We produce USB Drives with your Logo Printed or artwork printed to be used
-for gifts or marketing.
-Here is more info from our website:
-
-We can pre-load your media files, images, presentations and files onto the
-drives for you.
-
-Some reasons to get the USB drives from us:
-We make Custom Shaped USB drives in the shape of your logo, product or
-anything you like.
-Our USB drives are Eco-friendly
-We supply USB drives to Fortune 100 companies.
-We have over 150 styles and colors to choose from.
-People will keep the USB drive you give them and show it to others
-increasing your marketing value
-
-Please click
-to see all of our stock models and get a quote.
-
-If you are nonprofit, have further discounts for schools and charities.
-
-Thanks,
-David
-USB Drive Specialist
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-http://walgreens.com/mail/link.php?M=8181282&N=2777&L=65&F=T
 
