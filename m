@@ -2,64 +2,163 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 732CB25FAA
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 10:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC5D2601A
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 11:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728625AbfEVIjJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 04:39:09 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:44529 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728159AbfEVIjJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 04:39:09 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
-        (Exim 4.76)
-        (envelope-from <colin.king@canonical.com>)
-        id 1hTMm8-0000oM-41; Wed, 22 May 2019 08:39:04 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Don Brace <don.brace@microsemi.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] scsi: hpsa: fix an uninitialized read and dereference of pointer dev
-Date:   Wed, 22 May 2019 09:39:03 +0100
-Message-Id: <20190522083903.18849-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.20.1
+        id S1728536AbfEVJGb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 05:06:31 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:8229 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728406AbfEVJGb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 22 May 2019 05:06:31 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id AD56D1C4D3E07277C8FF;
+        Wed, 22 May 2019 17:06:29 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.439.0; Wed, 22 May 2019
+ 17:06:22 +0800
+Subject: Re: [PATCH] blk-mq: Wait for for hctx inflight requests on CPU unplug
+To:     Ming Lei <ming.lei@redhat.com>
+References: <20190517091424.19751-1-ming.lei@redhat.com>
+ <6e1d3b66-aaed-4f6f-da34-92a633ff4b44@huawei.com>
+ <20190522015620.GA11959@ming.t460p>
+CC:     Jens Axboe <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        "Christoph Hellwig" <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        chenxiang <chenxiang66@hisilicon.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <ce014369-4bf2-55fe-3c0f-3a46d3a016dc@huawei.com>
+Date:   Wed, 22 May 2019 10:06:16 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20190522015620.GA11959@ming.t460p>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+>>>
+>>> +static int blk_mq_hctx_notify_prepare(unsigned int cpu, struct hlist_node *node)
+>>> +{
+>>> +	struct blk_mq_hw_ctx	*hctx;
+>>> +	struct blk_mq_tags	*tags;
+>>> +
+>>> +	hctx = hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
+>>> +	tags = hctx->tags;
+>>> +
+>>> +	if (tags)
+>>> +		clear_bit(BLK_MQ_TAGS_DRAINED, &tags->flags);
+>>> +
+>>
+>> Hi Ming,
+>>
+>> Thanks for the effort here.
+>>
+>> I would like to make an assertion on a related topic, which I hope you can
+>> comment on:
+>>
+>> For this drain mechanism to work, the blk_mq_hw_ctx’s (and related cpu
+>> masks) for a request queue are required to match the hw queues used in the
+>> LLDD (if using managed interrupts).
+>>
+>> In others words, a SCSI LLDD needs to expose all hw queues for this to work.
+>>
+>> The reason I say this is because if the LLDD does not expose the hw queues
+>> and manages them internally - as some SCSI LLDDs do - yet uses managed
+>> interrupts to spread the hw queue MSI vectors across all CPUs, then we still
+>> only have a single blk_mq_hw_ctx per rq with a cpumask covering all cpus,
+>> which is not what we would want.
+>
 
-Currently the check for a lockup_detected failure exits via the
-label return_reset_status that reads and dereferences an uninitialized
-pointer dev.  Fix this by ensuring dev is inintialized to null.
+Hi Ming,
 
-Addresses-Coverity: ("Uninitialized pointer read")
-Fixes: 14991a5bade5 ("scsi: hpsa: correct device resets")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/scsi/hpsa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Good catch!
+>
+> This drain mechanism won't address the issue for these SCSI LLDDs in which:
+>
+> 	1) blk_mq_hw_ctx serves as submission hw queue
+>
+> 	2) one private reply queue serves as completion queue, for which one
+> 	MSI vector with cpumask is setup via pci_alloc_irq_vectors_affinity(PCI_IRQ_AFFINITY).
+>
+> What we should only drain is the completion queue if all its mapped
+> CPUs are offline.
+>
+> Looks you suggest to expose all completion(reply) queues as 'struct blk_mq_hw_ctx',
+> which may involve in another more hard problem:  how to split the single
+> hostwide tags into each reply queue.
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index c560a4532733..ac8338b0571b 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -5947,7 +5947,7 @@ static int hpsa_eh_device_reset_handler(struct scsi_cmnd *scsicmd)
- 	int rc = SUCCESS;
- 	int i;
- 	struct ctlr_info *h;
--	struct hpsa_scsi_dev_t *dev;
-+	struct hpsa_scsi_dev_t *dev = NULL;
- 	u8 reset_type;
- 	char msg[48];
- 	unsigned long flags;
--- 
-2.20.1
+Yes, and this is what I expecting to hear Re. hostwide tags.
+
+I'd rather not work towards that
+> direction because:
+>
+> 1) it is very hard to partition global resources into several parts,
+> especially it is hard to make every part happy.
+>
+> 2) sbitmap is smart/efficient enough for this global allocation
+>
+> 3) no obvious improvement is obtained from the resource partition, according
+> to previous experiment result done by Kashyap.
+
+I'd like to also do the test.
+
+However I would need to forward port the patchset, which no longer 
+cleanly applies (I was referring to this 
+https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/). 
+Any help with that would be appreciated.
+
+>
+> I think we could implement the drain mechanism in the following way:
+>
+> 1) if 'struct blk_mq_hw_ctx' serves as completion queue, use the
+> approach in the patch
+
+Maybe the gain of exposing multiple queues+managed interrupts outweighs 
+the loss in the LLDD of having to generate this unique tag with sbitmap; 
+I know that we did not use sbitmap ever in the LLDD for generating the 
+tag when testing previously. However I'm still not too hopeful.
+
+>
+> 2) otherwise:
+> - introduce one callbcack of .prep_queue_dead(hctx, down_cpu) to
+> 'struct blk_mq_ops'
+
+This would not be allowed to block, right?
+
+>
+> - call .prep_queue_dead from blk_mq_hctx_notify_dead()
+>
+> 3) inside .prep_queue_dead():
+> - the driver checks if all mapped CPU on the completion queue is offline
+> - if yes, wait for in-flight requests originated from all CPUs mapped to
+> this completion queue, and it can be implemented as one block layer API
+
+That could work. However I think that someone may ask why the LLDD just 
+doesn't register for the CPU hotplug event itself (which I would really 
+rather avoid), instead of being relayed the info from the block layer.
+
+>
+> Any comments on the above approach?
+>
+> Thanks,
+> Ming
+
+Cheers,
+John
+
+>
+> .
+>
+
 
