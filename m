@@ -2,181 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ACA9263E0
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 14:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DC826580
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 16:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729278AbfEVMau (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 08:30:50 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:8230 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728744AbfEVMau (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 22 May 2019 08:30:50 -0400
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 436B4B160C86D6305229;
-        Wed, 22 May 2019 20:30:48 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.439.0; Wed, 22 May 2019
- 20:30:38 +0800
-Subject: Re: [PATCH] blk-mq: Wait for for hctx inflight requests on CPU unplug
-To:     Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
-References: <20190517091424.19751-1-ming.lei@redhat.com>
- <6e1d3b66-aaed-4f6f-da34-92a633ff4b44@huawei.com>
- <20190522015620.GA11959@ming.t460p>
- <ce014369-4bf2-55fe-3c0f-3a46d3a016dc@huawei.com>
- <1deeda32-eac2-9056-f17b-3a643e671374@suse.de>
-CC:     Jens Axboe <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
-        "Christoph Hellwig" <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        chenxiang <chenxiang66@hisilicon.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <11bb0171-d5a2-1faa-6fd6-6204b5a56cfc@huawei.com>
-Date:   Wed, 22 May 2019 13:30:31 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
+        id S1728491AbfEVOPh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 10:15:37 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44710 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727975AbfEVOPh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 10:15:37 -0400
+Received: by mail-pf1-f196.google.com with SMTP id g9so1399346pfo.11;
+        Wed, 22 May 2019 07:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=BdjqEMSeAFloAhLZoevUhTsAoKWad+eEnvBrlK9h5Ls=;
+        b=vVyM1m5LGNs32T4OK63/Qsv4WbJQYIAXZUgoj/+U/GJ2opHdUdGbXsp+GHaoAJb24B
+         /itXDGRPV1UW8OlYJciZ94Q4cLUk0wbItQ8yWVxmG0zoKHr3skVzj8WylzY26PPz1/YW
+         PiR/0E2yT3h0lf0sgTGu7Q1c3Zg6yQI980RSrrOoLx1tr3dp9bu9KXDvfgj0NuQlXujx
+         8Rm0VFeIcNre6IUolWfP7ACSjMdnsKzbOkkL8HyVUvvDinXdeVUI9o6Qg3O6nR5GO610
+         6G+AKH068NUki7DIZhbPdAPp/i2Tsffs3u/fkwJt2TFQ1OyMGFeUQCB1h9xcCu6mGomC
+         Ltpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=BdjqEMSeAFloAhLZoevUhTsAoKWad+eEnvBrlK9h5Ls=;
+        b=Bov5v6y9s8QQE69Thto1PytAWEydSoB8cMwgh+l6/OnjcLPgc6Kde++wlX9SnnNZxo
+         T2XyRjNQ+rUVDn6BkaGEHi23vQuYhqOtcImgSX3bAzWItdAc7TJhvv5lnTomQO+ACTfo
+         yykLxKGxdbRQnnkK7MCtXn82eQCYjvEXqLG2JhDJmGhLEUk5ryhHs3F5q/6IC/nETO7C
+         RrcdS0sQlz2Nxi3FgBQm7Du+igYMtcTkWHZ5xtelO2RwHdqN9b8xXAOnCzXoWmUtBLku
+         O8vaTbrkqJzlmOKx8gnQdRAAKLSPvM6h1DgRLCU57x/OGLJr0ly/tkVXSt0YImws9BMm
+         x1bg==
+X-Gm-Message-State: APjAAAXtcBOI64P2izx8gVhCEwIcYGLLza7LOYdXsMw6Xh+etfVLvrL+
+        LO0nchG6KQIrQEeP3Bk6dtc+g9AK7PdLdQ==
+X-Google-Smtp-Source: APXvYqzQhWbS6Pm8haOF3/M3sj53+CbQxFH5NQXoNZVCSq1dFBF67KQkS6xZTIiHvPVbemi0rrHxfQ==
+X-Received: by 2002:aa7:930e:: with SMTP id 14mr38740442pfj.262.1558534536328;
+        Wed, 22 May 2019 07:15:36 -0700 (PDT)
+Received: from zhanggen-UX430UQ ([66.42.35.75])
+        by smtp.gmail.com with ESMTPSA id k13sm21489805pgr.90.2019.05.22.07.15.27
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 May 2019 07:15:35 -0700 (PDT)
+Date:   Wed, 22 May 2019 22:15:09 +0800
+From:   Gen Zhang <blackgod016574@gmail.com>
+To:     sathya.prakash@broadcom.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mpt3sas_ctl: Fix a double-fetch bug in
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c
+Message-ID: <20190522141509.GA9625@zhanggen-UX430UQ>
 MIME-Version: 1.0
-In-Reply-To: <1deeda32-eac2-9056-f17b-3a643e671374@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->
-> But I still do think we need to handle this case; the HBA might not
-> expose enough MSI-X vectors/hw queues for us to map to all CPUs.
-> In which case we'd be running into the same situation.
->
-> And I do think we _need_ to drain the associated completion queue as
-> soon as _any_ CPU in that set it plugged; otherwise we can't ensure that
-> any interrupt for pending I/O will _not_ arrive at the dead CPU.
+In _ctl_ioctl_main(), 'ioctl_header' is fetched the first time from 
+userspace. 'ioctl_header.ioc_number' is then checked. The legal result 
+is saved to 'ioc'. Then, in condition MPT3COMMAND, the whole struct is
+fetched again from the userspace. Then _ctl_do_mpt_command() is called,
+'ioc' and 'karg' as inputs.
 
-Really? I did not think that it was possible for this to happen.
+However, a malicious user can change the 'ioc_number' between the two 
+fetches, which will cause a potential security issues.  Moreover, a 
+malicious user can provide a valid 'ioc_number' to pass the check in 
+first fetch, and then modify it in the second fetch.
 
->
-> And yes, this would amount to quiesce the HBA completely if only one
-> queue is exposed. But there's no way around this; the alternative would
-> be to code a fallback patch in each driver to catch missing completions.
-> Which would actually be an interface change, requiring each vendor /
-> maintainer to change their driver. Not very nice.
->
->>> Looks you suggest to expose all completion(reply) queues as 'struct
->>> blk_mq_hw_ctx',
->>> which may involve in another more hard problem:  how to split the single
->>> hostwide tags into each reply queue.
->>
->> Yes, and this is what I expecting to hear Re. hostwide tags.
->>
-> But this case is handled already; things like lpfc and qla2xxx have been
-> converted to this model (exposing all hw queues, and use a host-wide
-> tagmap).
->
-> So from that side there is not really an issue.
->
-> I even provided patchset to convert megaraid_sas (cf 'megaraid_sas:
-> enable blk-mq for fusion'); you might want to have a look there to see
-> how it can be done.
+To fix this, we need to recheck the 'ioc_number' in the second fetch.
 
-ok, I'll have a search.
-
->
->> I'd rather not work towards that
->>> direction because:
->>>
->>> 1) it is very hard to partition global resources into several parts,
->>> especially it is hard to make every part happy.
->>>
->>> 2) sbitmap is smart/efficient enough for this global allocation
->>>
->>> 3) no obvious improvement is obtained from the resource partition,
->>> according
->>> to previous experiment result done by Kashyap.
->>
->> I'd like to also do the test.
->>
->> However I would need to forward port the patchset, which no longer
->> cleanly applies (I was referring to this
->> https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/).
->> Any help with that would be appreciated.
->>
-> If you would post it on the mailing list (or send it to me) I can have a
-> look. Converting SAS is on my list of things to do, anyway.
->
-
-ok
-
->>>
->>> I think we could implement the drain mechanism in the following way:
->>>
->>> 1) if 'struct blk_mq_hw_ctx' serves as completion queue, use the
->>> approach in the patch
->>
->> Maybe the gain of exposing multiple queues+managed interrupts
->> outweighs the loss in the LLDD of having to generate this unique tag
->> with sbitmap; I know that we did not use sbitmap ever in the LLDD for
->> generating the tag when testing previously. However I'm still not too
->> hopeful.
->>
-> Thing is, the tag _is_ already generated by the time the command is
-> passed to the LLDD. So there is no overhead; you just need to establish
-> a 1:1 mapping between SCSI cmds from the midlayer and your internal
-> commands.
->
-> Which is where the problem starts: if you have to use the same command
-> pool for internal commands you have to set some tags aside to avoid a
-> clash with the tags generated from the block layer.
-> That's easily done, but if you do that quiescing is getting harder, as
-> then the block layer wouldn't know about these internal commands.
-> This is what I'm trying to address with my patchset to use private tags
-> in SCSI, as then the block layer maintains all tags, and is able to
-> figure out if the queue really is quiesced.
-> (And I really need to post my patchset).
-
-Ack
-
->
->>>
->>> 2) otherwise:
->>> - introduce one callbcack of .prep_queue_dead(hctx, down_cpu) to
->>> 'struct blk_mq_ops'
->>
->> This would not be allowed to block, right?
->>
->>>
->>> - call .prep_queue_dead from blk_mq_hctx_notify_dead()
->>>
->>> 3) inside .prep_queue_dead():
->>> - the driver checks if all mapped CPU on the completion queue is offline
->>> - if yes, wait for in-flight requests originated from all CPUs mapped to
->>> this completion queue, and it can be implemented as one block layer API
->>
->> That could work. However I think that someone may ask why the LLDD
->> just doesn't register for the CPU hotplug event itself (which I would
->> really rather avoid), instead of being relayed the info from the block
->> layer.
->>
-> Again; what would you do if not all CPUs from a pool are gone?
-> You still might be getting interrupts for non-associated interrupts, and
-> quite some drivers are unhappy under these circumstances.
-> Hence I guess it'll be better to quiesce the queue as soon as _any_ CPU
-> from the pool is gone.
->
-> Plus we could be doing this from the block layer without any callbacks
-> from the driver...
->
-> Cheers,
->
-> Hannes
-
-Thanks,
-John
-
-
-
+Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+---
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+index b2bb47c..5181c03 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -2319,6 +2319,10 @@ _ctl_ioctl_main(struct file *file, unsigned int cmd, void __user *arg,
+ 			break;
+ 		}
+ 
++		if (karg.hdr.ioc_number != ioctl_header.ioc_number) {
++			ret = -EINVAL;
++			break;
++		}
+ 		if (_IOC_SIZE(cmd) == sizeof(struct mpt3_ioctl_command)) {
+ 			uarg = arg;
+ 			ret = _ctl_do_mpt_command(ioc, karg, &uarg->mf);
