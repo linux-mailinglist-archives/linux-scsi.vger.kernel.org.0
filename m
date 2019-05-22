@@ -2,93 +2,178 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F734260C9
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 11:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B442613C
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 12:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728955AbfEVJxl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 05:53:41 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:41367 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728424AbfEVJxl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 05:53:41 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q17so1045157pfq.8;
-        Wed, 22 May 2019 02:53:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=/lhVdO3oJRAv/K0o2rwF57FW6eQgW9otKjhGHSr9m9s=;
-        b=HGtpbo/cP6dUgDCcydXQnFiwYrS51OTEMsvFsT1XCBv4yBvutnd9M6QNOoM3waPWjL
-         /kVPL/dLv2qoDbO1ociUxsb3XfX34573p2PjHt51D+6Nq0bwTP02btwxGhkNk/UBfwKw
-         Tcb75AlmpIVyIiMGWIEPPFXDSdSruFY/VTYraWvUD6HUrl4NqZRFkOaGhEl1Tdm/FFXn
-         nR2Bwa+25sICL8f9GzVk/kLAUJkz4/aicATPP5zoJDV7YX4TRpfoh8eISXHuPhuupYUD
-         Woc4/CX5QzidJMxs8OuO0b5Vhn+Lh6lswO0ufvfMoHvr/mh4QRuyX7ym/9AFDyBqNUij
-         8BbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=/lhVdO3oJRAv/K0o2rwF57FW6eQgW9otKjhGHSr9m9s=;
-        b=p20NowupNTB2pyR4+xbNSPv8rgIyA5FVpoalqLVtfRMizt8vI4eOpePjEvIF0UhfvX
-         +/yb/kYDtaC4x3VcFdV42A4XbgQKPaAO8QyEEa2f6Uz+jSnxERfFXZ3InT/zwf0JjRSq
-         VVTxHyfjKRMGuvAhzXZiE2XIy7yjKxn2LPQrvOzmF5Z6viMAFB+is8WipVwSkmiD8dOf
-         csJolT/6p6O3tls3r/OJic8ppWzU+YvZ5xzR5p7GTywepERCkRai38HzqI0kmH4cg6yz
-         qkq7+BC3+xSWAcsjpv1IfIDl9Va8JV5nYU9Jhmw2+4Uq9bJvLhx7Iklct4qYO8VbHI4Z
-         hW7A==
-X-Gm-Message-State: APjAAAW0o2IoyjJbJQzpAHc9zQhE7yR9xZ2qzObX9nmfkCH02jLNaCjC
-        k6rjbk+HYCjNlLSFNLAiL9E=
-X-Google-Smtp-Source: APXvYqzhQCkUeNiCISHoAM+EpyQpTGOYbl5erl6xd5ClzSZdcKsM3a04IQsg4BpGbH7nF+FYomm23g==
-X-Received: by 2002:a63:534f:: with SMTP id t15mr90409887pgl.445.1558518820862;
-        Wed, 22 May 2019 02:53:40 -0700 (PDT)
-Received: from bharath12345-Inspiron-5559 ([103.110.42.31])
-        by smtp.gmail.com with ESMTPSA id v66sm46749883pfa.38.2019.05.22.02.53.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 22 May 2019 02:53:40 -0700 (PDT)
-Date:   Wed, 22 May 2019 15:23:35 +0530
-From:   Bharath Vedartham <linux.bhar@gmail.com>
-To:     sathya.prakash@broadcom.com, chaitra.basappa@broadcom.com
-Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] message/fusion/mptbase.c: Use kmemdup instead of memcpy and
- kmalloc
-Message-ID: <20190522095335.GA3212@bharath12345-Inspiron-5559>
+        id S1729275AbfEVKCQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 06:02:16 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:44918 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728881AbfEVKCQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 22 May 2019 06:02:16 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id BF29581E1D;
+        Wed, 22 May 2019 10:02:00 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6A10A2CF79;
+        Wed, 22 May 2019 10:01:45 +0000 (UTC)
+Date:   Wed, 22 May 2019 18:01:41 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        chenxiang <chenxiang66@hisilicon.com>
+Subject: Re: [PATCH] blk-mq: Wait for for hctx inflight requests on CPU unplug
+Message-ID: <20190522100139.GA16877@ming.t460p>
+References: <20190517091424.19751-1-ming.lei@redhat.com>
+ <6e1d3b66-aaed-4f6f-da34-92a633ff4b44@huawei.com>
+ <20190522015620.GA11959@ming.t460p>
+ <ce014369-4bf2-55fe-3c0f-3a46d3a016dc@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ce014369-4bf2-55fe-3c0f-3a46d3a016dc@huawei.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Wed, 22 May 2019 10:02:15 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Replace kmalloc + memcpy with kmemdup.
+On Wed, May 22, 2019 at 10:06:16AM +0100, John Garry wrote:
+> > > > 
+> > > > +static int blk_mq_hctx_notify_prepare(unsigned int cpu, struct hlist_node *node)
+> > > > +{
+> > > > +	struct blk_mq_hw_ctx	*hctx;
+> > > > +	struct blk_mq_tags	*tags;
+> > > > +
+> > > > +	hctx = hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
+> > > > +	tags = hctx->tags;
+> > > > +
+> > > > +	if (tags)
+> > > > +		clear_bit(BLK_MQ_TAGS_DRAINED, &tags->flags);
+> > > > +
+> > > 
+> > > Hi Ming,
+> > > 
+> > > Thanks for the effort here.
+> > > 
+> > > I would like to make an assertion on a related topic, which I hope you can
+> > > comment on:
+> > > 
+> > > For this drain mechanism to work, the blk_mq_hw_ctx’s (and related cpu
+> > > masks) for a request queue are required to match the hw queues used in the
+> > > LLDD (if using managed interrupts).
+> > > 
+> > > In others words, a SCSI LLDD needs to expose all hw queues for this to work.
+> > > 
+> > > The reason I say this is because if the LLDD does not expose the hw queues
+> > > and manages them internally - as some SCSI LLDDs do - yet uses managed
+> > > interrupts to spread the hw queue MSI vectors across all CPUs, then we still
+> > > only have a single blk_mq_hw_ctx per rq with a cpumask covering all cpus,
+> > > which is not what we would want.
+> > 
+> 
+> Hi Ming,
+> 
+> > Good catch!
+> > 
+> > This drain mechanism won't address the issue for these SCSI LLDDs in which:
+> > 
+> > 	1) blk_mq_hw_ctx serves as submission hw queue
+> > 
+> > 	2) one private reply queue serves as completion queue, for which one
+> > 	MSI vector with cpumask is setup via pci_alloc_irq_vectors_affinity(PCI_IRQ_AFFINITY).
+> > 
+> > What we should only drain is the completion queue if all its mapped
+> > CPUs are offline.
+> > 
+> > Looks you suggest to expose all completion(reply) queues as 'struct blk_mq_hw_ctx',
+> > which may involve in another more hard problem:  how to split the single
+> > hostwide tags into each reply queue.
+> 
+> Yes, and this is what I expecting to hear Re. hostwide tags.
+> 
+> I'd rather not work towards that
+> > direction because:
+> > 
+> > 1) it is very hard to partition global resources into several parts,
+> > especially it is hard to make every part happy.
+> > 
+> > 2) sbitmap is smart/efficient enough for this global allocation
+> > 
+> > 3) no obvious improvement is obtained from the resource partition, according
+> > to previous experiment result done by Kashyap.
+> 
+> I'd like to also do the test.
+> 
+> However I would need to forward port the patchset, which no longer cleanly
+> applies (I was referring to this https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/).
+> Any help with that would be appreciated.
 
-This was reported by coccinelle.
+The queue type change causes patches not applied any more.
 
-Signed-off-by: Bharath Vedartham <linux.bhar@gmail.com>
----
- drivers/message/fusion/mptbase.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Could you just test the patch against v4.15 and see if there is any
+improvement?
 
-diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-index d8882b0..37876a7 100644
---- a/drivers/message/fusion/mptbase.c
-+++ b/drivers/message/fusion/mptbase.c
-@@ -6001,13 +6001,12 @@ mpt_findImVolumes(MPT_ADAPTER *ioc)
- 	if (mpt_config(ioc, &cfg) != 0)
- 		goto out;
- 
--	mem = kmalloc(iocpage2sz, GFP_KERNEL);
-+	mem = kmemdup((u8 *)pIoc2, iocpage2sz, GFP_KERNEL);
- 	if (!mem) {
- 		rc = -ENOMEM;
- 		goto out;
- 	}
- 
--	memcpy(mem, (u8 *)pIoc2, iocpage2sz);
- 	ioc->raid_data.pIocPg2 = (IOCPage2_t *) mem;
- 
- 	mpt_read_ioc_pg_3(ioc);
--- 
-2.7.4
+Even if it may improve performance on hisi_sas, I still suggest to not
+use that approach to solve the issue for draining in-flight requests when
+all CPUs of one hw queue becomes offline, since this way might hurt
+performance on other drivers.
 
+> 
+> > 
+> > I think we could implement the drain mechanism in the following way:
+> > 
+> > 1) if 'struct blk_mq_hw_ctx' serves as completion queue, use the
+> > approach in the patch
+> 
+> Maybe the gain of exposing multiple queues+managed interrupts outweighs the
+> loss in the LLDD of having to generate this unique tag with sbitmap; I know
+
+The unique tag has zero cost, see blk_mq_unique_tag().
+
+> that we did not use sbitmap ever in the LLDD for generating the tag when
+> testing previously. However I'm still not too hopeful.
+> 
+> > 
+> > 2) otherwise:
+> > - introduce one callbcack of .prep_queue_dead(hctx, down_cpu) to
+> > 'struct blk_mq_ops'
+> 
+> This would not be allowed to block, right?
+
+It is allowed to block in CPU hotplug handler.
+
+> 
+> > 
+> > - call .prep_queue_dead from blk_mq_hctx_notify_dead()
+> > 
+> > 3) inside .prep_queue_dead():
+> > - the driver checks if all mapped CPU on the completion queue is offline
+> > - if yes, wait for in-flight requests originated from all CPUs mapped to
+> > this completion queue, and it can be implemented as one block layer API
+> 
+> That could work. However I think that someone may ask why the LLDD just
+> doesn't register for the CPU hotplug event itself (which I would really
+> rather avoid), instead of being relayed the info from the block layer.
+
+.prep_queue_dead() is run from blk-mq's CPU hotplug handler.
+
+I also think of abstracting completion queue in blk-mq for hpsa,
+hisi_sas_v3_hw and  mpt3sas, but that can't cover to drain device's internal
+command, so looks it is inevitable for us to introduce driver callback.
+
+
+Thanks,
+Ming
