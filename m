@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A062899E
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 21:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F3128886
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 21:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389303AbfEWTU7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 May 2019 15:20:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58028 "EHLO mail.kernel.org"
+        id S2391487AbfEWT1A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 May 2019 15:27:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39050 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388894AbfEWTU6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 23 May 2019 15:20:58 -0400
+        id S2391486AbfEWT1A (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 23 May 2019 15:27:00 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A324F205ED;
-        Thu, 23 May 2019 19:20:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6670320868;
+        Thu, 23 May 2019 19:26:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558639258;
-        bh=q0qp2aKN8Z0wy7iKGAyn+I/WpUO1dMJ9tlUpP9MIXJY=;
+        s=default; t=1558639618;
+        bh=PXnCjs8j+JetXEPaNFWEecv9BivgufsuIGkzGDl9ea8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nZO435cv7ROUR13MKLrkkNaqnHRNm6v90Pp3zq8fA6MBWMWN16PEI0mc9rH+YxlqR
-         y7Wu6C7MmeksfxOUGDMgCTDHc2pAIFsr/l8MstSQxUzIHivj1p0U2srR2tp612kC3a
-         Ve56/zHNKGKZSPHtuhTGrA7I9mxPhRLesXbq4Q3I=
+        b=RX6hb7wSylbUUEeOJclaRlqZ9RBWIK3ruFSD/erM0JsnWs/CoJUQciaX5nGk8gpuQ
+         HZMMCe674JyjBig4+UsTzOSiQh0ItvCQMCOUtst1/AatEEmGsBd0YfS2HLmeCcGUDN
+         UBytcB8WcVZ8Lt19SJo40GZzzNUG6fcX0usZFtlE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -34,12 +34,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jens Axboe <axboe@kernel.dk>, linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Subject: [PATCH 5.0 020/139] blk-mq: free hw queues resource in hctxs release handler
-Date:   Thu, 23 May 2019 21:05:08 +0200
-Message-Id: <20190523181723.307122649@linuxfoundation.org>
+Subject: [PATCH 5.1 024/122] blk-mq: free hw queues resource in hctxs release handler
+Date:   Thu, 23 May 2019 21:05:46 +0200
+Message-Id: <20190523181707.943993176@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190523181720.120897565@linuxfoundation.org>
-References: <20190523181720.120897565@linuxfoundation.org>
+In-Reply-To: <20190523181705.091418060@linuxfoundation.org>
+References: <20190523181705.091418060@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -140,7 +140,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	kfree(hctx);
 --- a/block/blk-mq.c
 +++ b/block/blk-mq.c
-@@ -2270,12 +2270,7 @@ static void blk_mq_exit_hctx(struct requ
+@@ -2267,12 +2267,7 @@ static void blk_mq_exit_hctx(struct requ
  	if (set->ops->exit_hctx)
  		set->ops->exit_hctx(hctx, hctx_idx);
  
@@ -153,7 +153,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  }
  
  static void blk_mq_exit_hw_queues(struct request_queue *q,
-@@ -2904,7 +2899,8 @@ err_exit:
+@@ -2905,7 +2900,8 @@ err_exit:
  }
  EXPORT_SYMBOL(blk_mq_init_allocated_queue);
  
@@ -165,7 +165,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
 --- a/block/blk-mq.h
 +++ b/block/blk-mq.h
-@@ -36,7 +36,7 @@ struct blk_mq_ctx {
+@@ -37,7 +37,7 @@ struct blk_mq_ctx {
  	struct kobject		kobj;
  } ____cacheline_aligned_in_smp;
  
