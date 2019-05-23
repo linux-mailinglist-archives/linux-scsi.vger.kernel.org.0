@@ -2,84 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1592227E03
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 15:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC1027E05
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 15:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730046AbfEWNYD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 May 2019 09:24:03 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:57502 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726310AbfEWNYD (ORCPT
+        id S1730742AbfEWNYR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 May 2019 09:24:17 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:42860 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730369AbfEWNYQ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 23 May 2019 09:24:03 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4ND4KNV122679
-        for <linux-scsi@vger.kernel.org>; Thu, 23 May 2019 09:24:01 -0400
+        Thu, 23 May 2019 09:24:16 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4ND337v129552
+        for <linux-scsi@vger.kernel.org>; Thu, 23 May 2019 09:24:15 -0400
 Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2sntw8cctk-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2snu6e3p8f-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 23 May 2019 09:24:00 -0400
+        for <linux-scsi@vger.kernel.org>; Thu, 23 May 2019 09:24:15 -0400
 Received: from localhost
         by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-scsi@vger.kernel.org> from <maier@linux.ibm.com>;
-        Thu, 23 May 2019 14:23:59 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        Thu, 23 May 2019 14:24:13 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
         by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 23 May 2019 14:23:56 +0100
+        Thu, 23 May 2019 14:24:11 +0100
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4NDNtxP32112804
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4NDO9wm47513724
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 May 2019 13:23:55 GMT
+        Thu, 23 May 2019 13:24:09 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 517E252057;
-        Thu, 23 May 2019 13:23:55 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id BB7B25204F;
+        Thu, 23 May 2019 13:24:09 +0000 (GMT)
 Received: from oc4120165700.ibm.com (unknown [9.152.97.204])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 0820A52050;
-        Thu, 23 May 2019 13:23:55 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 796B852067;
+        Thu, 23 May 2019 13:24:09 +0000 (GMT)
 From:   Steffen Maier <maier@linux.ibm.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
         Benjamin Block <bblock@linux.ibm.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>
-Subject: [PATCH 0/2] zfcp fixes for v5.2-rcX
-Date:   Thu, 23 May 2019 15:23:44 +0200
+        Steffen Maier <maier@linux.ibm.com>, <stable@vger.kernel.org>
+Subject: [PATCH 1/2] zfcp: fix missing zfcp_port reference put on -EBUSY from port_remove
+Date:   Thu, 23 May 2019 15:23:45 +0200
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1558617826-30129-1-git-send-email-maier@linux.ibm.com>
+References: <1558617826-30129-1-git-send-email-maier@linux.ibm.com>
 X-TM-AS-GCONF: 00
-x-cbid: 19052313-0008-0000-0000-000002E9AAEC
+x-cbid: 19052313-0008-0000-0000-000002E9AAF2
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052313-0009-0000-0000-0000225669CA
-Message-Id: <1558617826-30129-1-git-send-email-maier@linux.ibm.com>
+x-cbparentid: 19052313-0009-0000-0000-0000225669CF
+Message-Id: <1558617826-30129-2-git-send-email-maier@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_11:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=759 adultscore=0 classifier=spam adjust=0 reason=mlx
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905230092
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Martin, James,
+With this early return due to zfcp_unit child(ren), we don't use the
+zfcp_port reference from the earlier zfcp_get_port_by_wwpn()any more
+and need to put it.
 
-here are 2 zfcp bugfixes for v5.2-rcX.
-The patches apply to Martin's 5.2/scsi-fixes
-and to James' fixes branch.
+Signed-off-by: Steffen Maier <maier@linux.ibm.com>
+Fixes: d99b601b6338 ("[SCSI] zfcp: restore refcount check on port_remove")
+Cc: <stable@vger.kernel.org> #3.7+
+Reviewed-by: Jens Remus <jremus@linux.ibm.com>
+Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
+---
+ drivers/s390/scsi/zfcp_sysfs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Steffen Maier (2):
-  zfcp: fix missing zfcp_port reference put on -EBUSY from port_remove
-  zfcp: fix to prevent port_remove with pure auto scan LUNs (only sdevs)
-
- drivers/s390/scsi/zfcp_ext.h   |  1 +
- drivers/s390/scsi/zfcp_scsi.c  |  9 ++++++
- drivers/s390/scsi/zfcp_sysfs.c | 55 ++++++++++++++++++++++++++++++----
- drivers/s390/scsi/zfcp_unit.c  |  8 ++++-
- 4 files changed, 66 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/s390/scsi/zfcp_sysfs.c b/drivers/s390/scsi/zfcp_sysfs.c
+index b277be6f7611..2d78732b270b 100644
+--- a/drivers/s390/scsi/zfcp_sysfs.c
++++ b/drivers/s390/scsi/zfcp_sysfs.c
+@@ -261,6 +261,7 @@ static ssize_t zfcp_sysfs_port_remove_store(struct device *dev,
+ 	if (atomic_read(&port->units) > 0) {
+ 		retval = -EBUSY;
+ 		mutex_unlock(&zfcp_sysfs_port_units_mutex);
++		put_device(&port->dev); /* undo zfcp_get_port_by_wwpn() */
+ 		goto out;
+ 	}
+ 	/* port is about to be removed, so no more unit_add */
 -- 
 2.17.1
 
