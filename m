@@ -2,78 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C330275C7
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 07:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DED27D18
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 14:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfEWFw0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 May 2019 01:52:26 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:40346 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725806AbfEWFw0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 23 May 2019 01:52:26 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id D617C31760FD;
-        Thu, 23 May 2019 05:52:25 +0000 (UTC)
-Received: from localhost.localdomain.com (ovpn-12-20.pek2.redhat.com [10.72.12.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DD8731001E80;
-        Thu, 23 May 2019 05:52:16 +0000 (UTC)
-From:   Lianbo Jiang <lijiang@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     don.brace@microsemi.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        esc.storagedev@microsemi.com, Thomas.Lendacky@amd.com,
-        dyoung@redhat.com
-Subject: [PATCH] scsi: smartpqi: properly set both the DMA mask and the coherent DMA mask in pqi_pci_init()
-Date:   Thu, 23 May 2019 13:52:12 +0800
-Message-Id: <20190523055212.23568-1-lijiang@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Thu, 23 May 2019 05:52:26 +0000 (UTC)
+        id S1729966AbfEWMre (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 May 2019 08:47:34 -0400
+Received: from ps440452.dreamhost.com ([205.196.210.232]:39785 "EHLO
+        s11.topes.top" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728309AbfEWMre (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 23 May 2019 08:47:34 -0400
+To:     linux-scsi@vger.kernel.org
+From:   Oliver Klemens <info@s11.topes.top>
+Subject: FW: AW: Kontakt.
+Date:   Thu, 23 May 2019 05:47:34 -0700
+Message-ID: <20190523_124734_061655.info@s11.topes.top>
+X-Mailer: WEBMAIL
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When SME is enabled, the smartpqi driver won't work on the HP DL385
-G10 machine, which causes the failure of kernel boot because it fails
-to allocate pqi error buffer. Please refer to the kernel log:
-....
-[    9.431749] usbcore: registered new interface driver uas
-[    9.441524] Microsemi PQI Driver (v1.1.4-130)
-[    9.442956] i40e 0000:04:00.0: fw 6.70.48768 api 1.7 nvm 10.2.5
-[    9.447237] smartpqi 0000:23:00.0: Microsemi Smart Family Controller found
-         Starting dracut initqueue hook...
-[  OK  ] Started Show Plymouth Boot Scre[    9.471654] Broadcom NetXtreme-C/E driver bnxt_en v1.9.1
-en.
-[  OK  ] Started Forward Password Requests to Plymouth Directory Watch.
-[[0;[    9.487108] smartpqi 0000:23:00.0: failed to allocate PQI error buffer
-....
-[  139.050544] dracut-initqueue[949]: Warning: dracut-initqueue timeout - starting timeout scripts
-[  139.589779] dracut-initqueue[949]: Warning: dracut-initqueue timeout - starting timeout scripts
+Sehr geehrte Damen und Herren,
 
-For correct operation, lets call the dma_set_mask_and_coherent() to
-properly set the mask for both streaming and coherent, in order to
-inform the kernel about the devices DMA addressing capabilities.
+nach unserem Besuch Ihrer Homepage möchten wir Ihnen ein Angebot von Produkten vorstellen, das Ihnen ermöglichen wird, den Verkauf Ihrer Produkte sowie Dienstleistungen deutlich zu erhöhen.
 
-Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
----
- drivers/scsi/smartpqi/smartpqi_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Die Datenbanken der Firmen sind in für Sie interessante und relevante Zielgruppen untergliedert.
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index c26cac819f9e..8b1fde6c7dab 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -7282,7 +7282,7 @@ static int pqi_pci_init(struct pqi_ctrl_info *ctrl_info)
- 	else
- 		mask = DMA_BIT_MASK(32);
- 
--	rc = dma_set_mask(&ctrl_info->pci_dev->dev, mask);
-+	rc = dma_set_mask_and_coherent(&ctrl_info->pci_dev->dev, mask);
- 	if (rc) {
- 		dev_err(&ctrl_info->pci_dev->dev, "failed to set DMA mask\n");
- 		goto disable_device;
--- 
-2.17.1
+Die Firmenangaben beinhalten: Name der Firma, Ansprechpartner, E-mail Adresse, Tel. + Fax-Nr., PLZ, Ort, Straße etc.
+
+1. Gesamtpaket 2019 DE - 1,4 Mio. Firmenadressen ( 1 457 620 ) - 190 € ( bis zum 23.05.2019 )
+2. Gesamtpaket 2019 DE,AT,CH - 1,7 Mio. Firmenadressen ( 1 747 921 ) - 240 € ( bis zum 23.05.2019 )
+3. Schweiz 2019 ( 187 911 ) - 149 € ( bis zum 23.05.2019 )
+4. Österreich 2019 ( 104 000 ) - 149 € ( bis zum 23.05.2019 )
+
+Die Verwendungsmöglichkeiten der Datenbanken sind praktisch unbegrenzt und Sie können durch Verwendung der von uns entwickelten
+Programme des personalisierten Versendens von Angeboten u.ä. mittels E-mailing bzw. Fax effektive und sichere Werbekampagnen damit durchführen.
+
+Bitte informieren Sie sich über die weiteren Details einmal unverbindlich auf unseren Webseiten:
+
+http://www.dbc-kontakt.net/?page=catalog
+
+Mit freundlichen Grüßen
+Oliver Klemens
 
