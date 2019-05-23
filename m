@@ -2,90 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF7026CAB
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 May 2019 21:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8508227413
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 03:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733136AbfEVTge (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 15:36:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54202 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733295AbfEVTao (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 22 May 2019 15:30:44 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 64C7020675;
-        Wed, 22 May 2019 19:30:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558553444;
-        bh=L1mzJk8zTZ9Pm4jx7SrthqP2CFq1+CxozFOR3G6nbUE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=urtqbRIpNykZIxz2CB86MbtZRFkIqXWlVahyAgs8fSpunsE1kaQkYF322qgYvRi6Z
-         ZoSiLk8xfmw4qPxZTrswV+K0TBQNLm6yaxYLJf1TZ22LzQ4s0WXuyvf9LDobDbaYm6
-         t5cIhD75Y4llLug7WRSDPn49OEoCzpiPhexJ21AE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        Giridhar Malavali <gmalavali@marvell.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 015/114] scsi: qla2xxx: Fix a qla24xx_enable_msix() error path
-Date:   Wed, 22 May 2019 15:28:38 -0400
-Message-Id: <20190522193017.26567-15-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522193017.26567-1-sashal@kernel.org>
-References: <20190522193017.26567-1-sashal@kernel.org>
+        id S1728050AbfEWBjZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 May 2019 21:39:25 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:42727 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727691AbfEWBjY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 May 2019 21:39:24 -0400
+Received: by mail-ed1-f68.google.com with SMTP id l25so6616368eda.9;
+        Wed, 22 May 2019 18:39:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NKATGLeNnniTBFpU50i8agrrLlqQcy95+OH3gC4PMT8=;
+        b=u+MViJB9B2kgG2a4MaeIpZL8gjHhUl3RRaTjXuleISXPUcVyDs3nCGV2mrkUU0Gfli
+         qPYh1LjGdRzRwfbeqGoBKFGcQtYAVC6NtwqsaIKwqRyKWSE/kQMp2JS38KM4rLrNCm81
+         ABu9HRv1b0m+D/4QZEovMWQlVwhw20GIKTmCZ1dGLSYcggRXVQQEM4YUjEvdYx42HGXg
+         C16zi8KgabNgzFjbl3h+6ajnbz/pvoD3scaZEXC/tNjYQEhS8+eF1aFMWaUmu+1FHctu
+         MgT5xxVDVlOANgkBuz+3lf0oVOIk/ZneZ1emQyJhCgJtUKRP1iIBtKszftz6YiCUdMeG
+         9ZXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NKATGLeNnniTBFpU50i8agrrLlqQcy95+OH3gC4PMT8=;
+        b=CCMXREslL2uONO32eKv1zZ/khnB/HARNj2bJ3C8DrQ3loyW+pRTmJk22czTVuuF2Tn
+         9/b0EdjLBFeBbiusDb2PTaiRdjDhwj30927rDg1wHsok5RZ2p6blp7mh8vDBBah9big8
+         4lJAtbM7drA2SN5Mr1pADtuMo8L5QAHAbJ+V73TZvdZT5uCHVaF17xpaqtkcG7zPHIkG
+         8WE7rO7REKgQB/9FXXPD88VHFUjCMRq7RKLUxSV3rOOVqqik8sTwHje7z4aPQpKNFhS8
+         5PVEDLZn6gEhHflGqbp3xsZZ+aBJrB5p9Ic8LE10xvXQxf2alhWHZ+zw7kavWYEaxRjb
+         IDCw==
+X-Gm-Message-State: APjAAAWSuok92QiX9iqGPEM4gIpaqxK3hlUFZkjeTvvfd45mgIx1licd
+        wY/NdagCZZauPrt3+nNLv9A=
+X-Google-Smtp-Source: APXvYqzFHrp2yRn2Vtm3VTNZBtFzuYr2Gy7RFeF6eg84Z8+woNf2GoaXkYvzJTM1q8Zzou7UWB4yfw==
+X-Received: by 2002:a50:ce06:: with SMTP id y6mr93652104edi.160.1558575562868;
+        Wed, 22 May 2019 18:39:22 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:4f9:2b:2b15::2])
+        by smtp.gmail.com with ESMTPSA id w5sm7725340edd.19.2019.05.22.18.39.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 22 May 2019 18:39:21 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Don Brace <don.brace@microsemi.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] scsi: hpsa: Avoid using dev uninitialized in hpsa_eh_device_reset_handler
+Date:   Wed, 22 May 2019 18:38:59 -0700
+Message-Id: <20190523013859.14778-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.22.0.rc1
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+X-Patchwork-Bot: notify
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+Clang warns:
 
-[ Upstream commit 24afabdbd0b3553963a2bbf465895492b14d1107 ]
+drivers/scsi/hpsa.c:5964:6: warning: variable 'dev' is used
+uninitialized whenever 'if' condition is true
+[-Wsometimes-uninitialized]
+        if (lockup_detected(h)) {
+            ^~~~~~~~~~~~~~~~~~
+drivers/scsi/hpsa.c:6042:6: note: uninitialized use occurs here
+        if (dev)
+            ^~~
+drivers/scsi/hpsa.c:5964:2: note: remove the 'if' if its condition is
+always false
+        if (lockup_detected(h)) {
+        ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/hpsa.c:5950:29: note: initialize the variable 'dev' to
+silence this warning
+        struct hpsa_scsi_dev_t *dev;
+                                   ^
+                                    = NULL
+1 warning generated.
 
-Make sure that the allocated interrupts are freed if allocating memory for
-the msix_entries array fails.
+dev is potentially used uninitialized in the return_reset_status block
+for a NULL check if the first 'if (lockup_detected(h))' is taken, as
+dev is initialized right after that block. Initialize dev to NULL in
+its declaration so that it can be safely checked within the
+return_reset_status block.
 
-Cc: Himanshu Madhani <hmadhani@marvell.com>
-Cc: Giridhar Malavali <gmalavali@marvell.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Acked-by: Himanshu Madhani <hmadhani@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 14991a5bade5 ("scsi: hpsa: correct device resets")
+Link: https://github.com/ClangBuiltLinux/linux/issues/492
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
- drivers/scsi/qla2xxx/qla_isr.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/scsi/hpsa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 73c99f237b10c..f0fcff032f8ac 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -3089,7 +3089,7 @@ qla24xx_enable_msix(struct qla_hw_data *ha, struct rsp_que *rsp)
- 		ql_log(ql_log_fatal, vha, 0x00c8,
- 		    "Failed to allocate memory for ha->msix_entries.\n");
- 		ret = -ENOMEM;
--		goto msix_out;
-+		goto free_irqs;
- 	}
- 	ha->flags.msix_enabled = 1;
- 
-@@ -3177,6 +3177,10 @@ qla24xx_enable_msix(struct qla_hw_data *ha, struct rsp_que *rsp)
- msix_out:
- 	kfree(entries);
- 	return ret;
-+
-+free_irqs:
-+	pci_free_irq_vectors(ha->pdev);
-+	goto msix_out;
- }
- 
- int
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index c560a4532733..ac8338b0571b 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -5947,7 +5947,7 @@ static int hpsa_eh_device_reset_handler(struct scsi_cmnd *scsicmd)
+ 	int rc = SUCCESS;
+ 	int i;
+ 	struct ctlr_info *h;
+-	struct hpsa_scsi_dev_t *dev;
++	struct hpsa_scsi_dev_t *dev = NULL;
+ 	u8 reset_type;
+ 	char msg[48];
+ 	unsigned long flags;
 -- 
-2.20.1
+2.22.0.rc1
 
