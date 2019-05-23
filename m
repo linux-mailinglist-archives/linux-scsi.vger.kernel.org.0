@@ -2,103 +2,150 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E79CE28159
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 17:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E8C2854B
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 19:51:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731032AbfEWPfx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 May 2019 11:35:53 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:36422 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730866AbfEWPfx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 May 2019 11:35:53 -0400
-Received: by mail-ed1-f66.google.com with SMTP id a8so9851491edx.3;
-        Thu, 23 May 2019 08:35:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=u7LRGUAkc7MmENWtPTnGBlH4AqK0GL/jUqDDtZhAKtY=;
-        b=hkLe4JMmxf0dcgTvJtjxIAYwmwWavbwwRoIPkmLlqnh2eTIKFOcvLi4cgcphOplATt
-         POTcp28T3R8sosv4sem6hFp1nsu86K7mb0NLEno1CtbIYorggPaSWfSHaNvDQ5lcb9h1
-         quewMMnxmno5KjR/Wvrh8IXKXf78dzrUgH//sYNEUImyy+hUgOG+SYx0Z+VVMr1PJxK8
-         3c5badxV6idEMF2w8hx3oomth6R2Pd4UyEz2Hy4Jd3KuqKwcAJeHcZQX3s3+cQOys5tY
-         IH4C0IqpRDifzFLYE3mBWv+K8X14840gPwP9A0YTV2O9Zq4dQ8RBpZv4UmvjCrm+RNh3
-         MPxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=u7LRGUAkc7MmENWtPTnGBlH4AqK0GL/jUqDDtZhAKtY=;
-        b=XNOOvaBOI379vftmpCgM5qT2AXsHQVjP4sJF84tMvYYsSwMXlletG+xmTJif9rC7IV
-         7AMcRsARMq9yeC692X0FKx2uqar6gX/VYWrWh+J/A3/DSorfmxAaq/w/7NSx2jg7VN6T
-         6bQNw2DHe9k/VNgf7wm6WdLEjKNQ/NYqd0kohpRrhWut8bs9pox/XFyiIkHE6zgaNVTq
-         pzlIbrnh73sz5FGo94AaMnEYj+mv09xuZUtAhgwfrQJKDe0+A6/GjIVGKx2OIWBBpR4Q
-         r8aZLbmzHWTQoK502nOtsLQIoZye9JbVQZslQPp2Zoz482TnuOtYy1n30n999SEdzBqj
-         pwgQ==
-X-Gm-Message-State: APjAAAU8aKyILRmHjDxTsDoulYh64P5ztYxvLeMRTlrutB0taMrc+5F3
-        DDsZmfKCMD8tXFIeN5n/a3o=
-X-Google-Smtp-Source: APXvYqx7lm1bbh3OsTk/Fnw+a8KwyrgCSMljf9Y1/4Z8cKrIXySVZ6A9GXIjHJO1dWEdwWOsXX3Hrw==
-X-Received: by 2002:a17:906:265b:: with SMTP id i27mr35933745ejc.147.1558625751135;
-        Thu, 23 May 2019 08:35:51 -0700 (PDT)
-Received: from archlinux-epyc ([2a01:4f9:2b:2b15::2])
-        by smtp.gmail.com with ESMTPSA id z32sm7942897edz.85.2019.05.23.08.35.49
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 23 May 2019 08:35:50 -0700 (PDT)
-Date:   Thu, 23 May 2019 08:35:48 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Don Brace <don.brace@microsemi.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: hpsa: fix an uninitialized read and
- dereference of pointer dev
-Message-ID: <20190523153548.GA112363@archlinux-epyc>
-References: <20190522083903.18849-1-colin.king@canonical.com>
+        id S1731226AbfEWRv0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 May 2019 13:51:26 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:17152 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730928AbfEWRv0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 23 May 2019 13:51:26 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 205B7EC5D3782C17FE42;
+        Fri, 24 May 2019 01:51:24 +0800 (CST)
+Received: from localhost.localdomain (10.67.212.75) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.439.0; Fri, 24 May 2019 01:51:15 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <chenxiang66@hisilicon.com>
+CC:     <linuxarm@huawei.com>, Keith Busch <keith.busch@intel.com>,
+        Don Brace <don.brace@microsemi.com>,
+        <qla2xxx-upstream@qlogic.com>, <linux-scsi@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH RFT plinth/v4.15 11/12] blk-mq: Allow PCI vector offset for mapping queues
+Date:   Fri, 24 May 2019 01:50:21 +0800
+Message-ID: <1558633822-186079-12-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
+In-Reply-To: <1558633822-186079-1-git-send-email-john.garry@huawei.com>
+References: <1558633822-186079-1-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190522083903.18849-1-colin.king@canonical.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: text/plain
+X-Originating-IP: [10.67.212.75]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 22, 2019 at 09:39:03AM +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> Currently the check for a lockup_detected failure exits via the
-> label return_reset_status that reads and dereferences an uninitialized
-> pointer dev.  Fix this by ensuring dev is inintialized to null.
-> 
-> Addresses-Coverity: ("Uninitialized pointer read")
-> Fixes: 14991a5bade5 ("scsi: hpsa: correct device resets")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+From: Keith Busch <keith.busch@intel.com>
 
-Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+The PCI interrupt vectors intended to be associated with a queue may
+not start at 0; a driver may allocate pre_vectors for special use. This
+patch adds an offset parameter so blk-mq may find the intended affinity
+mask and updates all drivers using this API accordingly.
 
-Clang similarly warns about this, hence my identical submission after
-this, sorry for the noise.
+Cc: Don Brace <don.brace@microsemi.com>
+Cc: <qla2xxx-upstream@qlogic.com>
+Cc: <linux-scsi@vger.kernel.org>
+Signed-off-by: Keith Busch <keith.busch@intel.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+---
+ block/blk-mq-pci.c                    | 6 ++++--
+ drivers/nvme/host/pci.c               | 2 +-
+ drivers/scsi/qla2xxx/qla_os.c         | 7 ++++++-
+ drivers/scsi/smartpqi/smartpqi_init.c | 2 +-
+ include/linux/blk-mq-pci.h            | 3 ++-
+ 5 files changed, 14 insertions(+), 6 deletions(-)
 
-> ---
->  drivers/scsi/hpsa.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-> index c560a4532733..ac8338b0571b 100644
-> --- a/drivers/scsi/hpsa.c
-> +++ b/drivers/scsi/hpsa.c
-> @@ -5947,7 +5947,7 @@ static int hpsa_eh_device_reset_handler(struct scsi_cmnd *scsicmd)
->  	int rc = SUCCESS;
->  	int i;
->  	struct ctlr_info *h;
-> -	struct hpsa_scsi_dev_t *dev;
-> +	struct hpsa_scsi_dev_t *dev = NULL;
->  	u8 reset_type;
->  	char msg[48];
->  	unsigned long flags;
-> -- 
-> 2.20.1
-> 
+diff --git a/block/blk-mq-pci.c b/block/blk-mq-pci.c
+index 76944e3271bf..e233996bb76f 100644
+--- a/block/blk-mq-pci.c
++++ b/block/blk-mq-pci.c
+@@ -21,6 +21,7 @@
+  * blk_mq_pci_map_queues - provide a default queue mapping for PCI device
+  * @set:	tagset to provide the mapping for
+  * @pdev:	PCI device associated with @set.
++ * @offset:	Offset to use for the pci irq vector
+  *
+  * This function assumes the PCI device @pdev has at least as many available
+  * interrupt vectors as @set has queues.  It will then query the vector
+@@ -28,13 +29,14 @@
+  * that maps a queue to the CPUs that have irq affinity for the corresponding
+  * vector.
+  */
+-int blk_mq_pci_map_queues(struct blk_mq_tag_set *set, struct pci_dev *pdev)
++int blk_mq_pci_map_queues(struct blk_mq_tag_set *set, struct pci_dev *pdev,
++			    int offset)
+ {
+ 	const struct cpumask *mask;
+ 	unsigned int queue, cpu;
+ 
+ 	for (queue = 0; queue < set->nr_hw_queues; queue++) {
+-		mask = pci_irq_get_affinity(pdev, queue);
++		mask = pci_irq_get_affinity(pdev, queue + offset);
+ 		if (!mask)
+ 			goto fallback;
+ 
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 4276ebfff22b..74de03782b93 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -414,7 +414,7 @@ static int nvme_pci_map_queues(struct blk_mq_tag_set *set)
+ {
+ 	struct nvme_dev *dev = set->driver_data;
+ 
+-	return blk_mq_pci_map_queues(set, to_pci_dev(dev->dev));
++	return blk_mq_pci_map_queues(set, to_pci_dev(dev->dev), 0);
+ }
+ 
+ /**
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 46f2d0cf7c0d..9f01fc56e40a 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -6609,8 +6609,13 @@ qla83xx_disable_laser(scsi_qla_host_t *vha)
+ static int qla2xxx_map_queues(struct Scsi_Host *shost)
+ {
+ 	scsi_qla_host_t *vha = (scsi_qla_host_t *)shost->hostdata;
++	int rc;
+ 
+-	return blk_mq_pci_map_queues(&shost->tag_set, vha->hw->pdev);
++	if (USER_CTRL_IRQ(vha->hw))
++		rc = blk_mq_map_queues(&shost->tag_set);
++	else
++		rc = blk_mq_pci_map_queues(&shost->tag_set, vha->hw->pdev, 0);
++	return rc;
+ }
+ 
+ static const struct pci_error_handlers qla2xxx_err_handler = {
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index b2880c7709e6..10c94011c8a8 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -5348,7 +5348,7 @@ static int pqi_map_queues(struct Scsi_Host *shost)
+ {
+ 	struct pqi_ctrl_info *ctrl_info = shost_to_hba(shost);
+ 
+-	return blk_mq_pci_map_queues(&shost->tag_set, ctrl_info->pci_dev);
++	return blk_mq_pci_map_queues(&shost->tag_set, ctrl_info->pci_dev, 0);
+ }
+ 
+ static int pqi_getpciinfo_ioctl(struct pqi_ctrl_info *ctrl_info,
+diff --git a/include/linux/blk-mq-pci.h b/include/linux/blk-mq-pci.h
+index 6338551e0fb9..9f4c17f0d2d8 100644
+--- a/include/linux/blk-mq-pci.h
++++ b/include/linux/blk-mq-pci.h
+@@ -5,6 +5,7 @@
+ struct blk_mq_tag_set;
+ struct pci_dev;
+ 
+-int blk_mq_pci_map_queues(struct blk_mq_tag_set *set, struct pci_dev *pdev);
++int blk_mq_pci_map_queues(struct blk_mq_tag_set *set, struct pci_dev *pdev,
++			  int offset);
+ 
+ #endif /* _LINUX_BLK_MQ_PCI_H */
+-- 
+2.17.1
+
