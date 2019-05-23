@@ -2,250 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 660D327E08
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 15:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB26F2801A
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 16:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730760AbfEWNYU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 May 2019 09:24:20 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46098 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730751AbfEWNYU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 23 May 2019 09:24:20 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4ND34gk045918
-        for <linux-scsi@vger.kernel.org>; Thu, 23 May 2019 09:24:18 -0400
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2snurdt41f-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 23 May 2019 09:24:18 -0400
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <maier@linux.ibm.com>;
-        Thu, 23 May 2019 14:24:16 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 23 May 2019 14:24:13 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4NDOB2G36372480
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 May 2019 13:24:11 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7061C52051;
-        Thu, 23 May 2019 13:24:11 +0000 (GMT)
-Received: from oc4120165700.ibm.com (unknown [9.152.97.204])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 2B3B952050;
-        Thu, 23 May 2019 13:24:11 +0000 (GMT)
-From:   Steffen Maier <maier@linux.ibm.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Steffen Maier <maier@linux.ibm.com>, <stable@vger.kernel.org>
-Subject: [PATCH 2/2] zfcp: fix to prevent port_remove with pure auto scan LUNs (only sdevs)
-Date:   Thu, 23 May 2019 15:23:46 +0200
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1558617826-30129-1-git-send-email-maier@linux.ibm.com>
-References: <1558617826-30129-1-git-send-email-maier@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 19052313-0012-0000-0000-0000031EB01A
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052313-0013-0000-0000-000021576978
-Message-Id: <1558617826-30129-3-git-send-email-maier@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_11:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905230092
+        id S1730990AbfEWOpQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 May 2019 10:45:16 -0400
+Received: from mail-eopbgr750089.outbound.protection.outlook.com ([40.107.75.89]:41087
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730782AbfEWOpQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 23 May 2019 10:45:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector1-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZpHLKOEdVlPj+NQ3TNHxcauYJcMH2k9HEHQs413Xc08=;
+ b=khYLCWZ7KurjlubHoGudxf9cMusOUUtKftaGen70EUA56bm8Iqs3A2zzmUGs4GxbBmY1i4tVGjH/1urIxlbXzga2G/ADZlyIl/ua5yUcHsQ0xf2j0qfAd3/IDdFhpbE5I6ZL/TzuvgdIIDQtY4FBSUJmb6zCXuN0GvC7z3hJcrM=
+Received: from DM6PR12MB3163.namprd12.prod.outlook.com (20.179.104.150) by
+ DM6PR12MB2809.namprd12.prod.outlook.com (20.176.117.82) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.17; Thu, 23 May 2019 14:45:12 +0000
+Received: from DM6PR12MB3163.namprd12.prod.outlook.com
+ ([fe80::bcaf:86d4:677f:9555]) by DM6PR12MB3163.namprd12.prod.outlook.com
+ ([fe80::bcaf:86d4:677f:9555%6]) with mapi id 15.20.1900.020; Thu, 23 May 2019
+ 14:45:12 +0000
+From:   "Lendacky, Thomas" <Thomas.Lendacky@amd.com>
+To:     Lianbo Jiang <lijiang@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "don.brace@microsemi.com" <don.brace@microsemi.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "esc.storagedev@microsemi.com" <esc.storagedev@microsemi.com>,
+        "dyoung@redhat.com" <dyoung@redhat.com>
+Subject: Re: [PATCH] scsi: smartpqi: properly set both the DMA mask and the
+ coherent DMA mask in pqi_pci_init()
+Thread-Topic: [PATCH] scsi: smartpqi: properly set both the DMA mask and the
+ coherent DMA mask in pqi_pci_init()
+Thread-Index: AQHVESu1VkC12Yqcb0iDmGzQpM2cbaZ4yeYA
+Date:   Thu, 23 May 2019 14:45:12 +0000
+Message-ID: <c5d45523-43f5-d2fd-01ac-85f285146ecd@amd.com>
+References: <20190523055212.23568-1-lijiang@redhat.com>
+In-Reply-To: <20190523055212.23568-1-lijiang@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: SN4PR0501CA0031.namprd05.prod.outlook.com
+ (2603:10b6:803:40::44) To DM6PR12MB3163.namprd12.prod.outlook.com
+ (2603:10b6:5:182::22)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Thomas.Lendacky@amd.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [165.204.77.1]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: adc336ea-c483-48e8-19e7-08d6df8d42cf
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:DM6PR12MB2809;
+x-ms-traffictypediagnostic: DM6PR12MB2809:
+x-microsoft-antispam-prvs: <DM6PR12MB28094DB59D99539657D8AA0BEC010@DM6PR12MB2809.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 00462943DE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(39860400002)(136003)(396003)(376002)(366004)(199004)(189003)(6486002)(305945005)(53546011)(26005)(6246003)(110136005)(478600001)(31686004)(229853002)(102836004)(2906002)(99286004)(76176011)(81156014)(81166006)(2501003)(256004)(52116002)(66066001)(7736002)(72206003)(6116002)(68736007)(71190400001)(6512007)(14444005)(6436002)(14454004)(386003)(6506007)(3846002)(11346002)(446003)(71200400001)(8676002)(53936002)(2616005)(5660300002)(476003)(86362001)(316002)(31696002)(66556008)(64756008)(66446008)(66476007)(486006)(66946007)(73956011)(25786009)(54906003)(186003)(36756003)(4326008)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR12MB2809;H:DM6PR12MB3163.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: awvSOTsTzsOAHCVj58Ua3XZrz3HgVjMLkTjLGK0/lzxrBPoNFe2pGgYkQoTWuoo/xF2GK2tIAsQj2oKR7ugw7/X2N9ukBYNeXYYE5ItPVfeqAshI1xPIlJTF3Lo3A5RyzpsCVcYiScX7oeIfYz1Ss04GG7XWU04OLs/Uar/JJur5IqWEweZ6r2+S1UGu/23xQ/+sOBEJOstWO8GBUvkAKSXd60xHtilCS3cCl7Ks/d7a5EekirBVVfROmHu01lcPHLNSdrK625ejKpxCrrZURBnKndS5G8M2kfc5pfDpY9xnaOM0lgkl5S9ogeammB4rY0LDM7Ubk7MgSSLUWrPxB9KjaLB0V4S5M9rkRfqcuGYTgTb8MysZ/VwzZy8Y9sfOy7Z4E8sbLB2vtMwX/N5UpjjtANFEOIbZ/6mS0EFf08E=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6BA16298E5669743908BA574047E8C3B@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: adc336ea-c483-48e8-19e7-08d6df8d42cf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 14:45:12.7163
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2809
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When the user tries to remove a zfcp port via sysfs, we only rejected it
-if there are zfcp unit children under the port. With purely automatically
-scanned LUNs there are no zfcp units but only SCSI devices. In such cases,
-the port_remove erroneously continued. We close the port and this
-implicitly closes all LUNs under the port. The SCSI devices survive
-with their private zfcp_scsi_dev still holding a reference to the
-"removed" zfcp_port (still allocated but invisible in sysfs)
-[zfcp_get_port_by_wwpn in zfcp_scsi_slave_alloc]. This
-is not a problem as long as the fc_rport stays blocked. Once (auto) port
-scan brings back the removed port, we unblock its fc_rport again by design.
-However, there is no mechanism that would recover (open) the LUNs under the
-port (no "ersfs_3" without zfcp_unit [zfcp_erp_strategy_followup_success]).
-Any pending or new I/O to such LUN leads to repeated:
-  Done: NEEDS_RETRY Result: hostbyte=DID_IMM_RETRY driverbyte=DRIVER_OK
-See also v4.10 commit 6f2ce1c6af37 ("scsi: zfcp: fix rport unblock race
-with LUN recovery"). Even a manual LUN recovery
-(echo 0 > /sys/bus/scsi/devices/H:C:T:L/zfcp_failed)
-does not help, as the LUN links to the old "removed" port which remains
-to lack ZFCP_STATUS_COMMON_RUNNING [zfcp_erp_required_act].
-The only workaround is to first ensure that the fc_rport is blocked
-(e.g. port_remove again in case it was re-discovered by (auto) port scan),
-then delete the SCSI devices, and finally re-discover by (auto) port scan.
-The port scan includes an fc_rport unblock, which in turn triggers
-a new scan on the scsi target to freshly get new pure auto scan LUNs.
-
-Fix this by rejecting port_remove also if there are SCSI devices
-(even without any zfcp_unit) under this port. Re-use mechanics from v3.7
-commit d99b601b6338 ("[SCSI] zfcp: restore refcount check on port_remove").
-However, we have to give up zfcp_sysfs_port_units_mutex earlier in unit_add
-to prevent a deadlock with scsi_host scan taking shost->scan_mutex first
-and then zfcp_sysfs_port_units_mutex now in our zfcp_scsi_slave_alloc().
-
-Signed-off-by: Steffen Maier <maier@linux.ibm.com>
-Fixes: b62a8d9b45b9 ("[SCSI] zfcp: Use SCSI device data zfcp scsi dev instead of zfcp unit")
-Fixes: f8210e34887e ("[SCSI] zfcp: Allow midlayer to scan for LUNs when running in NPIV mode")
-Cc: <stable@vger.kernel.org> #2.6.37+
-Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
----
- drivers/s390/scsi/zfcp_ext.h   |  1 +
- drivers/s390/scsi/zfcp_scsi.c  |  9 ++++++
- drivers/s390/scsi/zfcp_sysfs.c | 54 ++++++++++++++++++++++++++++++----
- drivers/s390/scsi/zfcp_unit.c  |  8 ++++-
- 4 files changed, 65 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/s390/scsi/zfcp_ext.h b/drivers/s390/scsi/zfcp_ext.h
-index c6acca521ffe..31e8a7240fd7 100644
---- a/drivers/s390/scsi/zfcp_ext.h
-+++ b/drivers/s390/scsi/zfcp_ext.h
-@@ -167,6 +167,7 @@ extern const struct attribute_group *zfcp_port_attr_groups[];
- extern struct mutex zfcp_sysfs_port_units_mutex;
- extern struct device_attribute *zfcp_sysfs_sdev_attrs[];
- extern struct device_attribute *zfcp_sysfs_shost_attrs[];
-+bool zfcp_sysfs_port_is_removing(const struct zfcp_port *const port);
- 
- /* zfcp_unit.c */
- extern int zfcp_unit_add(struct zfcp_port *, u64);
-diff --git a/drivers/s390/scsi/zfcp_scsi.c b/drivers/s390/scsi/zfcp_scsi.c
-index 221d0dfb8493..e9ded2befa0d 100644
---- a/drivers/s390/scsi/zfcp_scsi.c
-+++ b/drivers/s390/scsi/zfcp_scsi.c
-@@ -129,6 +129,15 @@ static int zfcp_scsi_slave_alloc(struct scsi_device *sdev)
- 
- 	zfcp_sdev->erp_action.port = port;
- 
-+	mutex_lock(&zfcp_sysfs_port_units_mutex);
-+	if (zfcp_sysfs_port_is_removing(port)) {
-+		/* port is already gone */
-+		mutex_unlock(&zfcp_sysfs_port_units_mutex);
-+		put_device(&port->dev); /* undo zfcp_get_port_by_wwpn() */
-+		return -ENXIO;
-+	}
-+	mutex_unlock(&zfcp_sysfs_port_units_mutex);
-+
- 	unit = zfcp_unit_find(port, zfcp_scsi_dev_lun(sdev));
- 	if (unit)
- 		put_device(&unit->dev);
-diff --git a/drivers/s390/scsi/zfcp_sysfs.c b/drivers/s390/scsi/zfcp_sysfs.c
-index 2d78732b270b..af197e2b3e69 100644
---- a/drivers/s390/scsi/zfcp_sysfs.c
-+++ b/drivers/s390/scsi/zfcp_sysfs.c
-@@ -235,6 +235,53 @@ static ZFCP_DEV_ATTR(adapter, port_rescan, S_IWUSR, NULL,
- 
- DEFINE_MUTEX(zfcp_sysfs_port_units_mutex);
- 
-+static void zfcp_sysfs_port_set_removing(struct zfcp_port *const port)
-+{
-+	lockdep_assert_held(&zfcp_sysfs_port_units_mutex);
-+	atomic_set(&port->units, -1);
-+}
-+
-+bool zfcp_sysfs_port_is_removing(const struct zfcp_port *const port)
-+{
-+	lockdep_assert_held(&zfcp_sysfs_port_units_mutex);
-+	return atomic_read(&port->units) == -1;
-+}
-+
-+static bool zfcp_sysfs_port_in_use(struct zfcp_port *const port)
-+{
-+	struct zfcp_adapter *const adapter = port->adapter;
-+	unsigned long flags;
-+	struct scsi_device *sdev;
-+	bool in_use = true;
-+
-+	mutex_lock(&zfcp_sysfs_port_units_mutex);
-+	if (atomic_read(&port->units) > 0)
-+		goto unlock_port_units_mutex; /* zfcp_unit(s) under port */
-+
-+	spin_lock_irqsave(adapter->scsi_host->host_lock, flags);
-+	__shost_for_each_device(sdev, adapter->scsi_host) {
-+		const struct zfcp_scsi_dev *zsdev = sdev_to_zfcp(sdev);
-+
-+		if (sdev->sdev_state == SDEV_DEL ||
-+		    sdev->sdev_state == SDEV_CANCEL)
-+			continue;
-+		if (zsdev->port != port)
-+			continue;
-+		/* alive scsi_device under port of interest */
-+		goto unlock_host_lock;
-+	}
-+
-+	/* port is about to be removed, so no more unit_add or slave_alloc */
-+	zfcp_sysfs_port_set_removing(port);
-+	in_use = false;
-+
-+unlock_host_lock:
-+	spin_unlock_irqrestore(adapter->scsi_host->host_lock, flags);
-+unlock_port_units_mutex:
-+	mutex_unlock(&zfcp_sysfs_port_units_mutex);
-+	return in_use;
-+}
-+
- static ssize_t zfcp_sysfs_port_remove_store(struct device *dev,
- 					    struct device_attribute *attr,
- 					    const char *buf, size_t count)
-@@ -257,16 +304,11 @@ static ssize_t zfcp_sysfs_port_remove_store(struct device *dev,
- 	else
- 		retval = 0;
- 
--	mutex_lock(&zfcp_sysfs_port_units_mutex);
--	if (atomic_read(&port->units) > 0) {
-+	if (zfcp_sysfs_port_in_use(port)) {
- 		retval = -EBUSY;
--		mutex_unlock(&zfcp_sysfs_port_units_mutex);
- 		put_device(&port->dev); /* undo zfcp_get_port_by_wwpn() */
- 		goto out;
- 	}
--	/* port is about to be removed, so no more unit_add */
--	atomic_set(&port->units, -1);
--	mutex_unlock(&zfcp_sysfs_port_units_mutex);
- 
- 	write_lock_irq(&adapter->port_list_lock);
- 	list_del(&port->list);
-diff --git a/drivers/s390/scsi/zfcp_unit.c b/drivers/s390/scsi/zfcp_unit.c
-index 1bf0a0984a09..e67bf7388cae 100644
---- a/drivers/s390/scsi/zfcp_unit.c
-+++ b/drivers/s390/scsi/zfcp_unit.c
-@@ -124,7 +124,7 @@ int zfcp_unit_add(struct zfcp_port *port, u64 fcp_lun)
- 	int retval = 0;
- 
- 	mutex_lock(&zfcp_sysfs_port_units_mutex);
--	if (atomic_read(&port->units) == -1) {
-+	if (zfcp_sysfs_port_is_removing(port)) {
- 		/* port is already gone */
- 		retval = -ENODEV;
- 		goto out;
-@@ -168,8 +168,14 @@ int zfcp_unit_add(struct zfcp_port *port, u64 fcp_lun)
- 	write_lock_irq(&port->unit_list_lock);
- 	list_add_tail(&unit->list, &port->unit_list);
- 	write_unlock_irq(&port->unit_list_lock);
-+	/*
-+	 * lock order: shost->scan_mutex before zfcp_sysfs_port_units_mutex
-+	 * due to      zfcp_unit_scsi_scan() => zfcp_scsi_slave_alloc()
-+	 */
-+	mutex_unlock(&zfcp_sysfs_port_units_mutex);
- 
- 	zfcp_unit_scsi_scan(unit);
-+	return retval;
- 
- out:
- 	mutex_unlock(&zfcp_sysfs_port_units_mutex);
--- 
-2.17.1
-
+T24gNS8yMy8xOSAxMjo1MiBBTSwgTGlhbmJvIEppYW5nIHdyb3RlOg0KPiBXaGVuIFNNRSBpcyBl
+bmFibGVkLCB0aGUgc21hcnRwcWkgZHJpdmVyIHdvbid0IHdvcmsgb24gdGhlIEhQIERMMzg1DQo+
+IEcxMCBtYWNoaW5lLCB3aGljaCBjYXVzZXMgdGhlIGZhaWx1cmUgb2Yga2VybmVsIGJvb3QgYmVj
+YXVzZSBpdCBmYWlscw0KPiB0byBhbGxvY2F0ZSBwcWkgZXJyb3IgYnVmZmVyLiBQbGVhc2UgcmVm
+ZXIgdG8gdGhlIGtlcm5lbCBsb2c6DQo+IC4uLi4NCj4gWyAgICA5LjQzMTc0OV0gdXNiY29yZTog
+cmVnaXN0ZXJlZCBuZXcgaW50ZXJmYWNlIGRyaXZlciB1YXMNCj4gWyAgICA5LjQ0MTUyNF0gTWlj
+cm9zZW1pIFBRSSBEcml2ZXIgKHYxLjEuNC0xMzApDQo+IFsgICAgOS40NDI5NTZdIGk0MGUgMDAw
+MDowNDowMC4wOiBmdyA2LjcwLjQ4NzY4IGFwaSAxLjcgbnZtIDEwLjIuNQ0KPiBbICAgIDkuNDQ3
+MjM3XSBzbWFydHBxaSAwMDAwOjIzOjAwLjA6IE1pY3Jvc2VtaSBTbWFydCBGYW1pbHkgQ29udHJv
+bGxlciBmb3VuZA0KPiAgICAgICAgICBTdGFydGluZyBkcmFjdXQgaW5pdHF1ZXVlIGhvb2suLi4N
+Cj4gWyAgT0sgIF0gU3RhcnRlZCBTaG93IFBseW1vdXRoIEJvb3QgU2NyZVsgICAgOS40NzE2NTRd
+IEJyb2FkY29tIE5ldFh0cmVtZS1DL0UgZHJpdmVyIGJueHRfZW4gdjEuOS4xDQo+IGVuLg0KPiBb
+ICBPSyAgXSBTdGFydGVkIEZvcndhcmQgUGFzc3dvcmQgUmVxdWVzdHMgdG8gUGx5bW91dGggRGly
+ZWN0b3J5IFdhdGNoLg0KPiBbWzA7WyAgICA5LjQ4NzEwOF0gc21hcnRwcWkgMDAwMDoyMzowMC4w
+OiBmYWlsZWQgdG8gYWxsb2NhdGUgUFFJIGVycm9yIGJ1ZmZlcg0KPiAuLi4uDQo+IFsgIDEzOS4w
+NTA1NDRdIGRyYWN1dC1pbml0cXVldWVbOTQ5XTogV2FybmluZzogZHJhY3V0LWluaXRxdWV1ZSB0
+aW1lb3V0IC0gc3RhcnRpbmcgdGltZW91dCBzY3JpcHRzDQo+IFsgIDEzOS41ODk3NzldIGRyYWN1
+dC1pbml0cXVldWVbOTQ5XTogV2FybmluZzogZHJhY3V0LWluaXRxdWV1ZSB0aW1lb3V0IC0gc3Rh
+cnRpbmcgdGltZW91dCBzY3JpcHRzDQo+IA0KPiBGb3IgY29ycmVjdCBvcGVyYXRpb24sIGxldHMg
+Y2FsbCB0aGUgZG1hX3NldF9tYXNrX2FuZF9jb2hlcmVudCgpIHRvDQo+IHByb3Blcmx5IHNldCB0
+aGUgbWFzayBmb3IgYm90aCBzdHJlYW1pbmcgYW5kIGNvaGVyZW50LCBpbiBvcmRlciB0bw0KPiBp
+bmZvcm0gdGhlIGtlcm5lbCBhYm91dCB0aGUgZGV2aWNlcyBETUEgYWRkcmVzc2luZyBjYXBhYmls
+aXRpZXMuDQoNCllvdSBzaG91bGQgcHJvYmFibHkgZXhwYW5kIG9uIHRoaXMgYSBiaXQuLi4gIEJh
+c2ljYWxseSwgdGhlIGZhY3QgdGhhdA0KdGhlIGNvaGVyZW50IERNQSBtYXNrIHZhbHVlIHdhc24n
+dCBzZXQgY2F1c2VkIHRoZSBkcml2ZXIgdG8gZmFsbCBiYWNrDQp0byBTV0lPVExCIHdoZW4gU01F
+IGlzIGFjdGl2ZS4gSSdtIG5vdCBzdXJlIGlmIHRoZSBmYWlsdXJlIHdhcyBmcm9tDQpydW5uaW5n
+IG91dCBvZiBTV0lPVExCIG9yIGV4Y2VlZGluZyB0aGUgbWF4aW11bSBhbGxvY2F0aW9uIHNpemUg
+Zm9yDQpTV0lPVExCLg0KDQpJIGJlbGlldmUgdGhlIGZpeCBpcyBwcm9wZXIsIGJ1dCBJJ2xsIGxl
+dCB0aGUgZHJpdmVyIG93bmVyIGNvbW1lbnQgb24NCnRoYXQuDQoNClRoYW5rcywNClRvbQ0KDQo+
+IA0KPiBTaWduZWQtb2ZmLWJ5OiBMaWFuYm8gSmlhbmcgPGxpamlhbmdAcmVkaGF0LmNvbT4NCj4g
+LS0tDQo+ICBkcml2ZXJzL3Njc2kvc21hcnRwcWkvc21hcnRwcWlfaW5pdC5jIHwgMiArLQ0KPiAg
+MSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZm
+IC0tZ2l0IGEvZHJpdmVycy9zY3NpL3NtYXJ0cHFpL3NtYXJ0cHFpX2luaXQuYyBiL2RyaXZlcnMv
+c2NzaS9zbWFydHBxaS9zbWFydHBxaV9pbml0LmMNCj4gaW5kZXggYzI2Y2FjODE5ZjllLi44YjFm
+ZGU2YzdkYWIgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvc2NzaS9zbWFydHBxaS9zbWFydHBxaV9p
+bml0LmMNCj4gKysrIGIvZHJpdmVycy9zY3NpL3NtYXJ0cHFpL3NtYXJ0cHFpX2luaXQuYw0KPiBA
+QCAtNzI4Miw3ICs3MjgyLDcgQEAgc3RhdGljIGludCBwcWlfcGNpX2luaXQoc3RydWN0IHBxaV9j
+dHJsX2luZm8gKmN0cmxfaW5mbykNCj4gICAgICAgICBlbHNlDQo+ICAgICAgICAgICAgICAgICBt
+YXNrID0gRE1BX0JJVF9NQVNLKDMyKTsNCj4gDQo+IC0gICAgICAgcmMgPSBkbWFfc2V0X21hc2so
+JmN0cmxfaW5mby0+cGNpX2Rldi0+ZGV2LCBtYXNrKTsNCj4gKyAgICAgICByYyA9IGRtYV9zZXRf
+bWFza19hbmRfY29oZXJlbnQoJmN0cmxfaW5mby0+cGNpX2Rldi0+ZGV2LCBtYXNrKTsNCj4gICAg
+ICAgICBpZiAocmMpIHsNCj4gICAgICAgICAgICAgICAgIGRldl9lcnIoJmN0cmxfaW5mby0+cGNp
+X2Rldi0+ZGV2LCAiZmFpbGVkIHRvIHNldCBETUEgbWFza1xuIik7DQo+ICAgICAgICAgICAgICAg
+ICBnb3RvIGRpc2FibGVfZGV2aWNlOw0KPiAtLQ0KPiAyLjE3LjENCj4gDQo=
