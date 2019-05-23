@@ -2,142 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3C8274B7
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 05:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C330275C7
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 07:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729538AbfEWDQZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 May 2019 23:16:25 -0400
-Received: from mail-eopbgr1310125.outbound.protection.outlook.com ([40.107.131.125]:64512
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728668AbfEWDQY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 22 May 2019 23:16:24 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none;
- b=iiR3i806Gh4gB9N/pN8GyypHUHC5URc0hcLXr/y5dog8jfyuGQ/r6rxhD3Ek8ladvqBGe+7RXPkIThhlUf1VIoLAfBBO2VCTfZ2GoFMHahk0y4ULUY9qhEnB8EOLp1KIWYyDJ9AkYIsKWz9yGSQybY/nc5olmqxEONWfYOw1XtY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=testarcselector01;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OSWRuxlgAMCCgUzW1/7IrGYH7R6n6OqG+xDSH9inxXk=;
- b=CmiYCTs1AidB5QBzFzS55mpcnpvCqMmsWWsZPhi8Q11z3j5JeJOpnvSuLUDHH/8Hz1039mqTuTR4ZBqY9VeKk8B0tALhMo+0ipWuaqGLbXKd2L+Y9nrPpgJRdcLLnyM9iW1mzFVKwwL6wJIsbm4UmrsJAHpEg7RosncOMOHulH8=
-ARC-Authentication-Results: i=1; test.office365.com
- 1;spf=none;dmarc=none;dkim=none;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OSWRuxlgAMCCgUzW1/7IrGYH7R6n6OqG+xDSH9inxXk=;
- b=WVG6VH56u/9HYTCHS0v3sOP5Z2wTFsEvNImzEyPMCqHTO75akvxqCT2yLJXNv6QWznyxSFTTRcB25HVdk4wGTQOWEtlyUDLOQbbmo5lO4Hy95+NKOkVeOxXZVRm5+LXvyHj2iJUS29XwcJydg/zyMkD83JTdKQAMseZ28OjqLXU=
-Received: from KU1P153MB0166.APCP153.PROD.OUTLOOK.COM (10.170.173.13) by
- KU1P153MB0152.APCP153.PROD.OUTLOOK.COM (10.170.173.11) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.3; Thu, 23 May 2019 03:16:17 +0000
-Received: from KU1P153MB0166.APCP153.PROD.OUTLOOK.COM
- ([fe80::8de:bacb:9100:3e25]) by KU1P153MB0166.APCP153.PROD.OUTLOOK.COM
- ([fe80::8de:bacb:9100:3e25%6]) with mapi id 15.20.1943.007; Thu, 23 May 2019
- 03:16:17 +0000
-From:   Dexuan Cui <decui@microsoft.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-CC:     Michael Kelley <mikelley@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        vkuznets <vkuznets@redhat.com>, Olaf Hering <olaf@aepfle.de>,
-        Stephen Hemminger <sthemmin@microsoft.com>
-Subject: SCSI adapter: how to freeze and thaw I/O on hibernation?
-Thread-Topic: SCSI adapter: how to freeze and thaw I/O on hibernation?
-Thread-Index: AdURELHvLfnzwMBzRu65bCFYUUVo1A==
-Date:   Thu, 23 May 2019 03:16:17 +0000
-Message-ID: <KU1P153MB016617EB56A9B6ED55B8CFD0BF010@KU1P153MB0166.APCP153.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=decui@microsoft.com;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2019-05-23T03:16:14.4905998Z;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=fbfed8d4-7b79-4d81-af3d-959c58cd9fac;
- MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=decui@microsoft.com; 
-x-originating-ip: [2001:4898:80e8:f:fcae:4c89:7bbd:a740]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1432d4f8-1b1b-46be-a5b7-08d6df2d0578
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:KU1P153MB0152;
-x-ms-traffictypediagnostic: KU1P153MB0152:
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-microsoft-antispam-prvs: <KU1P153MB0152BD1FE7376CC468C16750BF010@KU1P153MB0152.APCP153.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-forefront-prvs: 00462943DE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(136003)(39860400002)(376002)(396003)(199004)(189003)(86362001)(2501003)(33656002)(14454004)(86612001)(10290500003)(25786009)(486006)(478600001)(476003)(14444005)(9686003)(55016002)(6436002)(256004)(66476007)(66556008)(64756008)(66446008)(66946007)(22452003)(73956011)(76116006)(8990500004)(71190400001)(68736007)(71200400001)(7696005)(316002)(53936002)(305945005)(7736002)(6116002)(46003)(102836004)(5660300002)(10090500001)(74316002)(2906002)(81156014)(6506007)(186003)(8936002)(54906003)(110136005)(81166006)(8676002)(99286004)(107886003)(52536014)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:KU1P153MB0152;H:KU1P153MB0166.APCP153.PROD.OUTLOOK.COM;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microsoft.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: IpcwfCkfq++6jpYjb1Ne3TUhljcQWyATYBoLhjHIdxygfbwiYB5tsdmDR1tze2D0a9XQ2H5oyoQeQ/YO4d+6Hq9gypQ0dXyvZm7hXFvqTsKHj29QUeSSVwXamgDgMFk51zkGWQN1khhddg/WO98AqrwFa0U+cEmifK0MthMNivnkGVBryjwOK44zrIH1mfTFA5lr0xHQCpEMqNykaJnbAtLE2E+HeG0A6g3GuXwFoD2tc2o/F8Hkc0kZuMIcGwJEwl6DXMIFVfJuoa9jebmjtBGYZ0RqFl2qb8GqK9tDmL9fNVNvYXfllCf0ySFvQ3PgXUMy6TsC4dm4Fu/bSfAkqjQs2dVB9cyWZH1M4I8o30jj5fc74JtJK28yEbQCUgLvfFTjBKpsVXNsom0S2n1zQWshXz6LxvWOYM9Nk/8vbNk=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1432d4f8-1b1b-46be-a5b7-08d6df2d0578
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 03:16:17.3671
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: decui@microsoft.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KU1P153MB0152
+        id S1726299AbfEWFw0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 May 2019 01:52:26 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:40346 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725806AbfEWFw0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 23 May 2019 01:52:26 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id D617C31760FD;
+        Thu, 23 May 2019 05:52:25 +0000 (UTC)
+Received: from localhost.localdomain.com (ovpn-12-20.pek2.redhat.com [10.72.12.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DD8731001E80;
+        Thu, 23 May 2019 05:52:16 +0000 (UTC)
+From:   Lianbo Jiang <lijiang@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     don.brace@microsemi.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        esc.storagedev@microsemi.com, Thomas.Lendacky@amd.com,
+        dyoung@redhat.com
+Subject: [PATCH] scsi: smartpqi: properly set both the DMA mask and the coherent DMA mask in pqi_pci_init()
+Date:   Thu, 23 May 2019 13:52:12 +0800
+Message-Id: <20190523055212.23568-1-lijiang@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Thu, 23 May 2019 05:52:26 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
-I'm adding code to enable the hv_storvsc driver (drivers/scsi/storvsc_drv.c=
-)
-for hibernation (ACPI S5). I know how to save/restore the state of the virt=
-ual
-Hyper-V SCSI adapter, but I don't know how to prevent the higher layer SCSI
-driver(s) from submitting new I/O requests to the low level driver hv_storv=
-sc,
-before I disable the Hyper-V SCSI adapter in hv_storvsc.
+When SME is enabled, the smartpqi driver won't work on the HP DL385
+G10 machine, which causes the failure of kernel boot because it fails
+to allocate pqi error buffer. Please refer to the kernel log:
+....
+[    9.431749] usbcore: registered new interface driver uas
+[    9.441524] Microsemi PQI Driver (v1.1.4-130)
+[    9.442956] i40e 0000:04:00.0: fw 6.70.48768 api 1.7 nvm 10.2.5
+[    9.447237] smartpqi 0000:23:00.0: Microsemi Smart Family Controller found
+         Starting dracut initqueue hook...
+[  OK  ] Started Show Plymouth Boot Scre[    9.471654] Broadcom NetXtreme-C/E driver bnxt_en v1.9.1
+en.
+[  OK  ] Started Forward Password Requests to Plymouth Directory Watch.
+[[0;[    9.487108] smartpqi 0000:23:00.0: failed to allocate PQI error buffer
+....
+[  139.050544] dracut-initqueue[949]: Warning: dracut-initqueue timeout - starting timeout scripts
+[  139.589779] dracut-initqueue[949]: Warning: dracut-initqueue timeout - starting timeout scripts
 
-Note: I can not call scsi_remove_host(), because the SCSI host should not
-disappear and re-appear on hibernation.
+For correct operation, lets call the dma_set_mask_and_coherent() to
+properly set the mask for both streaming and coherent, in order to
+inform the kernel about the devices DMA addressing capabilities.
 
-scsi_target_block() calls scsi_internal_device_block() ->
-blk_mq_quiesce_queue(), but it is only used in a few drivers
-(scsi_transport_fc.c, scsi_transport_iscsi.c and scsi_transport_srp.c), so
-I doubt it is suitable to me?
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ drivers/scsi/smartpqi/smartpqi_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-scsi_block_requests() is used in a lot of drivers and hence is more likely
-to be the API I'm looking for, but it only sets a flag
-shost->host_self_blocked -- how can this prevent another CPU from
-submitting I/O requests?
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index c26cac819f9e..8b1fde6c7dab 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -7282,7 +7282,7 @@ static int pqi_pci_init(struct pqi_ctrl_info *ctrl_info)
+ 	else
+ 		mask = DMA_BIT_MASK(32);
+ 
+-	rc = dma_set_mask(&ctrl_info->pci_dev->dev, mask);
++	rc = dma_set_mask_and_coherent(&ctrl_info->pci_dev->dev, mask);
+ 	if (rc) {
+ 		dev_err(&ctrl_info->pci_dev->dev, "failed to set DMA mask\n");
+ 		goto disable_device;
+-- 
+2.17.1
 
-I also checked scsi_bus_pm_ops, but it's only for "sdev": see
-scsi_bus_suspend_common() -> "if (scsi_is_sdev_device(dev))...".
-
-Even for "sdev", it looks the scsi_dev_type_suspend() can't work for me,
-because it looks the sdev's driver is sd, whose sd_pm_ops doesn't
-define the .freeze and .thaw ops, which are needed in hibernation.
-
-sd_pm_ops does define .suspend and .resume, but it looks they are only
-for suspend-to-memory (ACPI S3).
-
-Can you please recommend the standard way to prevent the higher layer
-SCSI driver(s) from submitting new I/O requests?
-
-How do the other low level SCSI adapter drivers support hibernation?
-
-I checked some PCI HBA drivers, and they use scsi_block_requests(), but
-as I described above, I don't know how setting a flag can prevent another
-CPU from submitting I/O requests.
-
-Looking forward to your insights!
-
-Thanks!
---Dexuan
