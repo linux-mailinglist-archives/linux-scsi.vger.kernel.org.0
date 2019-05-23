@@ -2,129 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4917328119
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 17:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79CE28159
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 17:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730853AbfEWPZ6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 May 2019 11:25:58 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:49569 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730741AbfEWPZ6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 May 2019 11:25:58 -0400
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  Don.Brace@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Don.Brace@microchip.com";
-  x-sender="Don.Brace@microchip.com"; x-conformance=spf_only;
-  x-record-type="v=spf1"; x-record-text="v=spf1 mx
-  a:ushub1.microchip.com a:smtpout.microchip.com
-  a:mx1.microchip.iphmx.com a:mx2.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa2.microchip.iphmx.com;
-  envelope-from="Don.Brace@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa2.microchip.iphmx.com; spf=Pass smtp.mailfrom=Don.Brace@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.60,503,1549954800"; 
-   d="scan'208";a="34344722"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 23 May 2019 08:25:57 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.76.107) with Microsoft SMTP Server (TLS) id
- 14.3.352.0; Thu, 23 May 2019 08:25:54 -0700
+        id S1731032AbfEWPfx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 May 2019 11:35:53 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:36422 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730866AbfEWPfx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 May 2019 11:35:53 -0400
+Received: by mail-ed1-f66.google.com with SMTP id a8so9851491edx.3;
+        Thu, 23 May 2019 08:35:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector1-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8puLPXCNYA/+uZgztRV/M5ABTGBQh2fcLQYj44T2bz4=;
- b=rCsmatqBP1TLNtZEdzF6DlgqCGtRNNRuYjyem6BupNQz3oWJB1z+w35mQVCruNI/LeFgh4NXNhzhOehYC/RgO9+ogHV5+7+FWm/W3OkaiykJMdXEUl1fDuHrFZPHQ48L5SxBrEGh5tYGQGeYA2v0Ix0/gJTWPalYMLT3ptvGpoo=
-Received: from SN6PR11MB2767.namprd11.prod.outlook.com (52.135.92.154) by
- SN6PR11MB3119.namprd11.prod.outlook.com (52.135.127.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Thu, 23 May 2019 15:25:48 +0000
-Received: from SN6PR11MB2767.namprd11.prod.outlook.com
- ([fe80::d415:48f:41b6:1ae8]) by SN6PR11MB2767.namprd11.prod.outlook.com
- ([fe80::d415:48f:41b6:1ae8%6]) with mapi id 15.20.1922.018; Thu, 23 May 2019
- 15:25:48 +0000
-From:   <Don.Brace@microchip.com>
-To:     <colin.king@canonical.com>, <don.brace@microsemi.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <esc.storagedev@microsemi.com>, <linux-scsi@vger.kernel.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH][next] scsi: hpsa: fix an uninitialized read and
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=u7LRGUAkc7MmENWtPTnGBlH4AqK0GL/jUqDDtZhAKtY=;
+        b=hkLe4JMmxf0dcgTvJtjxIAYwmwWavbwwRoIPkmLlqnh2eTIKFOcvLi4cgcphOplATt
+         POTcp28T3R8sosv4sem6hFp1nsu86K7mb0NLEno1CtbIYorggPaSWfSHaNvDQ5lcb9h1
+         quewMMnxmno5KjR/Wvrh8IXKXf78dzrUgH//sYNEUImyy+hUgOG+SYx0Z+VVMr1PJxK8
+         3c5badxV6idEMF2w8hx3oomth6R2Pd4UyEz2Hy4Jd3KuqKwcAJeHcZQX3s3+cQOys5tY
+         IH4C0IqpRDifzFLYE3mBWv+K8X14840gPwP9A0YTV2O9Zq4dQ8RBpZv4UmvjCrm+RNh3
+         MPxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=u7LRGUAkc7MmENWtPTnGBlH4AqK0GL/jUqDDtZhAKtY=;
+        b=XNOOvaBOI379vftmpCgM5qT2AXsHQVjP4sJF84tMvYYsSwMXlletG+xmTJif9rC7IV
+         7AMcRsARMq9yeC692X0FKx2uqar6gX/VYWrWh+J/A3/DSorfmxAaq/w/7NSx2jg7VN6T
+         6bQNw2DHe9k/VNgf7wm6WdLEjKNQ/NYqd0kohpRrhWut8bs9pox/XFyiIkHE6zgaNVTq
+         pzlIbrnh73sz5FGo94AaMnEYj+mv09xuZUtAhgwfrQJKDe0+A6/GjIVGKx2OIWBBpR4Q
+         r8aZLbmzHWTQoK502nOtsLQIoZye9JbVQZslQPp2Zoz482TnuOtYy1n30n999SEdzBqj
+         pwgQ==
+X-Gm-Message-State: APjAAAU8aKyILRmHjDxTsDoulYh64P5ztYxvLeMRTlrutB0taMrc+5F3
+        DDsZmfKCMD8tXFIeN5n/a3o=
+X-Google-Smtp-Source: APXvYqx7lm1bbh3OsTk/Fnw+a8KwyrgCSMljf9Y1/4Z8cKrIXySVZ6A9GXIjHJO1dWEdwWOsXX3Hrw==
+X-Received: by 2002:a17:906:265b:: with SMTP id i27mr35933745ejc.147.1558625751135;
+        Thu, 23 May 2019 08:35:51 -0700 (PDT)
+Received: from archlinux-epyc ([2a01:4f9:2b:2b15::2])
+        by smtp.gmail.com with ESMTPSA id z32sm7942897edz.85.2019.05.23.08.35.49
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 23 May 2019 08:35:50 -0700 (PDT)
+Date:   Thu, 23 May 2019 08:35:48 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Don Brace <don.brace@microsemi.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] scsi: hpsa: fix an uninitialized read and
  dereference of pointer dev
-Thread-Topic: [PATCH][next] scsi: hpsa: fix an uninitialized read and
- dereference of pointer dev
-Thread-Index: AQHVEHpBQxBuxxIZgEeWRpYmBxaPFaZ41iow
-Date:   Thu, 23 May 2019 15:25:48 +0000
-Message-ID: <SN6PR11MB27672A7C88FE3EB111B4FF64E1010@SN6PR11MB2767.namprd11.prod.outlook.com>
+Message-ID: <20190523153548.GA112363@archlinux-epyc>
 References: <20190522083903.18849-1-colin.king@canonical.com>
-In-Reply-To: <20190522083903.18849-1-colin.king@canonical.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [216.54.225.58]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d17aa04a-768f-40b1-852f-08d6df92eeac
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:SN6PR11MB3119;
-x-ms-traffictypediagnostic: SN6PR11MB3119:
-x-microsoft-antispam-prvs: <SN6PR11MB311979950020AD8A281AD2BBE1010@SN6PR11MB3119.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3968;
-x-forefront-prvs: 00462943DE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(376002)(39860400002)(346002)(396003)(366004)(13464003)(189003)(199004)(71200400001)(71190400001)(11346002)(66446008)(14444005)(66556008)(64756008)(66476007)(72206003)(4326008)(2906002)(2501003)(478600001)(256004)(7736002)(8676002)(102836004)(81156014)(25786009)(66946007)(186003)(486006)(8936002)(73956011)(2201001)(81166006)(14454004)(68736007)(5660300002)(76116006)(446003)(86362001)(316002)(229853002)(33656002)(74316002)(52536014)(9686003)(26005)(76176011)(3846002)(6116002)(54906003)(305945005)(6436002)(6246003)(53936002)(53546011)(66066001)(55016002)(7696005)(6506007)(110136005)(476003)(99286004);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR11MB3119;H:SN6PR11MB2767.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ZFppXqt3BhmD7HaoL8jsojlY7zKZMBSXMs5WfFvMFTzHoUPLet7BDo3cOjZ0D57vVbxlE1PKHP0krPXB/K76vnXvnVi0pypNeZhmRKqmv5mWhD4zUCiyzPIhvXdEjKuy2NK2opZJvW4a3VCtITR5DUJw0QtPf4ShbKg217Gsgy3/j8HH1rG4LR5Me5P7yJ0FmyY1Ps84UL4Y5xzA8jDq8LrU1FD3PiiSbu0vBKEgv8z14M76+mujvcd7XrYj397ZA32llG035N2s8k5PjMG6kgCTpBfBvE8euCpOlRz+yepTuriGil+3c7ieZK6GubGcLCnF5k2ugJ+TKbqUEg/oOFRAuazKG7xzl2eayutJigek48sW7ajMop5+4q0Fpi83bqiQ9bholLklJ9ODHVupj5rbfpk6aefW+1VGVYmUwrQ=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: d17aa04a-768f-40b1-852f-08d6df92eeac
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 15:25:48.1317
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Don.Brace@microchip.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3119
-X-OriginatorOrg: microchip.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190522083903.18849-1-colin.king@canonical.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-LS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogbGludXgtc2NzaS1vd25lckB2Z2VyLmtl
-cm5lbC5vcmcgW21haWx0bzpsaW51eC1zY3NpLW93bmVyQHZnZXIua2VybmVsLm9yZ10gT24gQmVo
-YWxmIE9mIENvbGluIEtpbmcNClNlbnQ6IFdlZG5lc2RheSwgTWF5IDIyLCAyMDE5IDM6MzkgQU0N
-ClRvOiBEb24gQnJhY2UgPGRvbi5icmFjZUBtaWNyb3NlbWkuY29tPjsgSmFtZXMgRSAuIEogLiBC
-b3R0b21sZXkgPGplamJAbGludXguaWJtLmNvbT47IE1hcnRpbiBLIC4gUGV0ZXJzZW4gPG1hcnRp
-bi5wZXRlcnNlbkBvcmFjbGUuY29tPjsgZXNjLnN0b3JhZ2VkZXZAbWljcm9zZW1pLmNvbTsgbGlu
-dXgtc2NzaUB2Z2VyLmtlcm5lbC5vcmcNCkNjOiBrZXJuZWwtamFuaXRvcnNAdmdlci5rZXJuZWwu
-b3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQpTdWJqZWN0OiBbUEFUQ0hdW25leHRd
-IHNjc2k6IGhwc2E6IGZpeCBhbiB1bmluaXRpYWxpemVkIHJlYWQgYW5kIGRlcmVmZXJlbmNlIG9m
-IHBvaW50ZXIgZGV2DQoNCkZyb206IENvbGluIElhbiBLaW5nIDxjb2xpbi5raW5nQGNhbm9uaWNh
-bC5jb20+DQoNCkN1cnJlbnRseSB0aGUgY2hlY2sgZm9yIGEgbG9ja3VwX2RldGVjdGVkIGZhaWx1
-cmUgZXhpdHMgdmlhIHRoZSBsYWJlbCByZXR1cm5fcmVzZXRfc3RhdHVzIHRoYXQgcmVhZHMgYW5k
-IGRlcmVmZXJlbmNlcyBhbiB1bmluaXRpYWxpemVkIHBvaW50ZXIgZGV2LiAgRml4IHRoaXMgYnkg
-ZW5zdXJpbmcgZGV2IGlzIGluaW50aWFsaXplZCB0byBudWxsLg0KDQpBZGRyZXNzZXMtQ292ZXJp
-dHk6ICgiVW5pbml0aWFsaXplZCBwb2ludGVyIHJlYWQiKQ0KRml4ZXM6IDE0OTkxYTViYWRlNSAo
-InNjc2k6IGhwc2E6IGNvcnJlY3QgZGV2aWNlIHJlc2V0cyIpDQpTaWduZWQtb2ZmLWJ5OiBDb2xp
-biBJYW4gS2luZyA8Y29saW4ua2luZ0BjYW5vbmljYWwuY29tPg0KDQpJIHNlbnQgdXAgYSBzaW1p
-bGFyIHBhdGNoIG9uIDUvMTYsIGJ1dCB0aGlzIGlzIGp1c3QgYXMgZ29vZC4NCkFja2VkLWJ5OiBE
-b24gQnJhY2UgPGRvbi5icmFjZUBtaWNyb3NlbWkuY29tPg0KDQpUaGFua3MgZm9yIHlvdXIgcGF0
-Y2guDQoNCi0tLQ0KIGRyaXZlcnMvc2NzaS9ocHNhLmMgfCAyICstDQogMSBmaWxlIGNoYW5nZWQs
-IDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Nj
-c2kvaHBzYS5jIGIvZHJpdmVycy9zY3NpL2hwc2EuYyBpbmRleCBjNTYwYTQ1MzI3MzMuLmFjODMz
-OGIwNTcxYiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS9ocHNhLmMNCisrKyBiL2RyaXZlcnMv
-c2NzaS9ocHNhLmMNCkBAIC01OTQ3LDcgKzU5NDcsNyBAQCBzdGF0aWMgaW50IGhwc2FfZWhfZGV2
-aWNlX3Jlc2V0X2hhbmRsZXIoc3RydWN0IHNjc2lfY21uZCAqc2NzaWNtZCkNCiAJaW50IHJjID0g
-U1VDQ0VTUzsNCiAJaW50IGk7DQogCXN0cnVjdCBjdGxyX2luZm8gKmg7DQotCXN0cnVjdCBocHNh
-X3Njc2lfZGV2X3QgKmRldjsNCisJc3RydWN0IGhwc2Ffc2NzaV9kZXZfdCAqZGV2ID0gTlVMTDsN
-CiAJdTggcmVzZXRfdHlwZTsNCiAJY2hhciBtc2dbNDhdOw0KIAl1bnNpZ25lZCBsb25nIGZsYWdz
-Ow0KLS0NCjIuMjAuMQ0KDQo=
+On Wed, May 22, 2019 at 09:39:03AM +0100, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> Currently the check for a lockup_detected failure exits via the
+> label return_reset_status that reads and dereferences an uninitialized
+> pointer dev.  Fix this by ensuring dev is inintialized to null.
+> 
+> Addresses-Coverity: ("Uninitialized pointer read")
+> Fixes: 14991a5bade5 ("scsi: hpsa: correct device resets")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+
+Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+
+Clang similarly warns about this, hence my identical submission after
+this, sorry for the noise.
+
+> ---
+>  drivers/scsi/hpsa.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+> index c560a4532733..ac8338b0571b 100644
+> --- a/drivers/scsi/hpsa.c
+> +++ b/drivers/scsi/hpsa.c
+> @@ -5947,7 +5947,7 @@ static int hpsa_eh_device_reset_handler(struct scsi_cmnd *scsicmd)
+>  	int rc = SUCCESS;
+>  	int i;
+>  	struct ctlr_info *h;
+> -	struct hpsa_scsi_dev_t *dev;
+> +	struct hpsa_scsi_dev_t *dev = NULL;
+>  	u8 reset_type;
+>  	char msg[48];
+>  	unsigned long flags;
+> -- 
+> 2.20.1
+> 
