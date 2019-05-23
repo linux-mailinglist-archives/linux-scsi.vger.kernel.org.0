@@ -2,49 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DED27D18
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 14:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B8C5282C3
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 May 2019 18:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729966AbfEWMre (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 May 2019 08:47:34 -0400
-Received: from ps440452.dreamhost.com ([205.196.210.232]:39785 "EHLO
-        s11.topes.top" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728309AbfEWMre (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 23 May 2019 08:47:34 -0400
+        id S1731676AbfEWQTi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 23 May 2019 12:19:38 -0400
+Received: from toryburch.com ([198.23.132.45]:51723 "EHLO timesharemyths.com"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731254AbfEWQTh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 23 May 2019 12:19:37 -0400
 To:     linux-scsi@vger.kernel.org
-From:   Oliver Klemens <info@s11.topes.top>
-Subject: FW: AW: Kontakt.
-Date:   Thu, 23 May 2019 05:47:34 -0700
-Message-ID: <20190523_124734_061655.info@s11.topes.top>
-X-Mailer: WEBMAIL
+Subject: Logo printing on the USB drives
+Message-ID: <6328c557dbd4cb2df429f817c17b8069@lucastirepros.com>
+Date:   Thu, 23 May 2019 15:20:27 +0200
+From:   "Stacy" <ryan@tanschmidit.tech>
+Reply-To: lucas@tanschmidit.tech
+MIME-Version: 1.0
+Content-Type: text/plain; format=flowed; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Mime-Version: 1.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sehr geehrte Damen und Herren,
+Hi,
 
-nach unserem Besuch Ihrer Homepage möchten wir Ihnen ein Angebot von Produkten vorstellen, das Ihnen ermöglichen wird, den Verkauf Ihrer Produkte sowie Dienstleistungen deutlich zu erhöhen.
+I am following up on my previous attempt to contact you.
+We wanted to check to see if you need any LOGO promotional products for
+your business?
 
-Die Datenbanken der Firmen sind in für Sie interessante und relevante Zielgruppen untergliedert.
+Our company manufactures USB Flash Drives that are custom printed with your
+logo.
+They make the perfect marketing tool for your business or organization.
 
-Die Firmenangaben beinhalten: Name der Firma, Ansprechpartner, E-mail Adresse, Tel. + Fax-Nr., PLZ, Ort, Straße etc.
+Looking for other items with your logo?   We can supply anything with your
+logo…
 
-1. Gesamtpaket 2019 DE - 1,4 Mio. Firmenadressen ( 1 457 620 ) - 190 € ( bis zum 23.05.2019 )
-2. Gesamtpaket 2019 DE,AT,CH - 1,7 Mio. Firmenadressen ( 1 747 921 ) - 240 € ( bis zum 23.05.2019 )
-3. Schweiz 2019 ( 187 911 ) - 149 € ( bis zum 23.05.2019 )
-4. Österreich 2019 ( 104 000 ) - 149 € ( bis zum 23.05.2019 )
+Most Popular Items right now:
+- T-shirts, Hoodies
+- Table Covers printed with your brand
+- Pens
+- Water Bottles
+- Banners…
+- You name it we can make it and print on it for you!
 
-Die Verwendungsmöglichkeiten der Datenbanken sind praktisch unbegrenzt und Sie können durch Verwendung der von uns entwickelten
-Programme des personalisierten Versendens von Angeboten u.ä. mittels E-mailing bzw. Fax effektive und sichere Werbekampagnen damit durchführen.
+Our USB Pricing is at an ALL TIME LOW.
+We offer low minimum quantities and all memory sizes.
 
-Bitte informieren Sie sich über die weiteren Details einmal unverbindlich auf unseren Webseiten:
+Over 150 Stock Models as well as 100 % custom shaped USB drives in the
+shape of your Logo or
+product or just about anything else you can imagine!
+Ask about our End of the Year Promotions!
 
-http://www.dbc-kontakt.net/?page=catalog
+We can pre-load your media files, images, presentations and files onto the
+drives for you.
+These are ideal handouts for trade shows, branding, corporate gifts and
+employees.
 
-Mit freundlichen Grüßen
-Oliver Klemens
+* Please reply back and let me know what quantity and memory size you need
+for a Fast Quote!
+
+Are you a school or nonprofit?  Please let us know for even further
+discounts.
+
+Let us send you a quote!   We will EARN your business!
+
+Regards,
+
+Stacy Williams
+Custom Logo Products
+Whatsapp: +8617199402387
 
