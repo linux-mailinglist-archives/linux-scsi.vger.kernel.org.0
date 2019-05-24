@@ -2,158 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7EC328D83
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 May 2019 00:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295AC290B1
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 May 2019 08:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387922AbfEWW4r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 23 May 2019 18:56:47 -0400
-Received: from esa3.microchip.iphmx.com ([68.232.153.233]:23695 "EHLO
-        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387828AbfEWW4q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 23 May 2019 18:56:46 -0400
-Received-SPF: Pass (esa3.microchip.iphmx.com: domain of
-  Don.Brace@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Don.Brace@microchip.com";
-  x-sender="Don.Brace@microchip.com"; x-conformance=spf_only;
-  x-record-type="v=spf1"; x-record-text="v=spf1 mx
-  a:ushub1.microchip.com a:smtpout.microchip.com
-  a:mx1.microchip.iphmx.com a:mx2.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa3.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa3.microchip.iphmx.com;
-  envelope-from="Don.Brace@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa3.microchip.iphmx.com; spf=Pass smtp.mailfrom=Don.Brace@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dkim=pass (signature verified) header.i=@microchiptechnology.onmicrosoft.com; dmarc=pass (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.60,504,1549954800"; 
-   d="scan'208";a="34635170"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/DHE-RSA-AES256-SHA; 23 May 2019 15:56:29 -0700
-Received: from NAM01-SN1-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.76.107) with Microsoft SMTP Server (TLS) id
- 14.3.352.0; Thu, 23 May 2019 15:56:08 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector1-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RI+hsFUvp61K6uSUFrHIQx38YobOJYBePhcgKLA69lk=;
- b=vboiF41By+IylOSWBXRPDYoYinXreark9IdGQWZ+qBKijCtNhox8Eik82fj27bj0wnprApYTih/Ec/l0kjzXJt4hPc5fgge/IzpXGj/q7zF1BOu704lPpslf7gg44xmgAROeiEt2dp5/58t7MUTMPPx03VG+6melUsIVqrTXELE=
-Received: from SN6PR11MB2767.namprd11.prod.outlook.com (52.135.92.154) by
- SN6PR11MB3502.namprd11.prod.outlook.com (52.135.125.15) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Thu, 23 May 2019 22:55:55 +0000
-Received: from SN6PR11MB2767.namprd11.prod.outlook.com
- ([fe80::d415:48f:41b6:1ae8]) by SN6PR11MB2767.namprd11.prod.outlook.com
- ([fe80::d415:48f:41b6:1ae8%6]) with mapi id 15.20.1922.018; Thu, 23 May 2019
- 22:55:55 +0000
-From:   <Don.Brace@microchip.com>
-To:     <Thomas.Lendacky@amd.com>, <lijiang@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     <don.brace@microsemi.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
-        <esc.storagedev@microsemi.com>, <dyoung@redhat.com>
-Subject: RE: [PATCH] scsi: smartpqi: properly set both the DMA mask and the
- coherent DMA mask in pqi_pci_init()
-Thread-Topic: [PATCH] scsi: smartpqi: properly set both the DMA mask and the
- coherent DMA mask in pqi_pci_init()
-Thread-Index: AQHVESv6mWMB+P3X6UO5zLv0IXveVaZ4yegAgACIv3A=
-Date:   Thu, 23 May 2019 22:55:55 +0000
-Message-ID: <SN6PR11MB2767D4410415F0B03BFE900DE1010@SN6PR11MB2767.namprd11.prod.outlook.com>
-References: <20190523055212.23568-1-lijiang@redhat.com>
- <c5d45523-43f5-d2fd-01ac-85f285146ecd@amd.com>
-In-Reply-To: <c5d45523-43f5-d2fd-01ac-85f285146ecd@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [216.54.225.58]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6d660989-534f-43d3-a886-08d6dfd1d057
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:SN6PR11MB3502;
-x-ms-traffictypediagnostic: SN6PR11MB3502:
-x-microsoft-antispam-prvs: <SN6PR11MB35023E8A9C849C6D19527EA3E1010@SN6PR11MB3502.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 00462943DE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(346002)(376002)(366004)(396003)(39860400002)(199004)(189003)(13464003)(256004)(14444005)(229853002)(66066001)(110136005)(316002)(9686003)(33656002)(3846002)(55016002)(6116002)(71200400001)(2906002)(186003)(86362001)(478600001)(52536014)(74316002)(71190400001)(53936002)(25786009)(476003)(8936002)(6246003)(81156014)(66946007)(8676002)(5660300002)(76116006)(4326008)(68736007)(73956011)(72206003)(76176011)(102836004)(486006)(11346002)(14454004)(6436002)(66446008)(446003)(6506007)(2501003)(53546011)(7736002)(305945005)(81166006)(7696005)(99286004)(66476007)(54906003)(64756008)(26005)(66556008);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR11MB3502;H:SN6PR11MB2767.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: microchip.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 5aGfwdz08jlOirF9OLdzzgJECVsFq+yow8yFf4v0qT4bU7fGj8MdVaPjyF3N/itxS664sdDkEaT5iUIyNnrnPiMNmKwr/anqK4hrw85dZsCv25VvYr/neTfspV6WxRK9ff+Ztj3Ay7n+gh6WTMnj7/39fLuEgpYjXUt4LSxDpz+4+Cdo0WbhOPZSNE9tv36DX8ky8rFMhC66FrSVwu/5HcFj3dEdF3nmx/6usIuUpDRjX3vxEkp8ozBRpqddaWjhiQXppIC0WkVFhAwkBZvVClRbO2dHL2i2KBECoMDXMKHgr3x4tkV3vuJzPWpAosdxVDeSvTdswRbuckP7fBzzD5YPDtQy5F7PR5gWqS+w240yZy1goIi6zIxBUiz3mpwpVZlRU+pZ+tbLh7s+qDrjQdDk35uSYLFQIx7CoUnICII=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S2388526AbfEXGEC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 May 2019 02:04:02 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:50270 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388070AbfEXGEC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 May 2019 02:04:02 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 60D4860C8B; Fri, 24 May 2019 06:04:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1558677840;
+        bh=+LXeINwGo6CiisA+JrfBkpcV33DtSDYcwasClLqFltM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=MnQgEBJBFX7Jr6ZKTlpvPMRJlQPlORXWJeNHd18+CdO6x9V93JYSt8nqTFP73lTVe
+         Kc87IbU8eSlsJ0klkz6GlvCLKXc6yFpvAFoopfpj6hJVstNPzdnt9epwSyXMx7viOQ
+         idTFVhIbOwNG/+qmb2jqYeYdR78lpVY7V7ALMvB0=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.131.117.43] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CA5026063A;
+        Fri, 24 May 2019 06:03:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1558677838;
+        bh=+LXeINwGo6CiisA+JrfBkpcV33DtSDYcwasClLqFltM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=WtaCR2+wyWWFjJzU9+IBN0PVFNR69TJTy4vvAyk+MUIWQoA6bLptg7h6mGWmvgSYC
+         ceLZ777Tzuy2Vfg1oiS6jsaRdeMMBSozslhkgH9uA3OjPW/L2iqMfhWCfqhoBEh3TL
+         vBuirdXrib/G+OD5P4nw7QuflaX7JS6fFb70beys=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CA5026063A
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [RFC v2 00/11] DVFS in the OPP core
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, swboyd@chromium.org,
+        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org,
+        vincent.guittot@linaro.org
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
+ <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <85dbc630-f526-c06f-8a8b-9bbc3b794693@codeaurora.org>
+Date:   Fri, 24 May 2019 11:33:52 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d660989-534f-43d3-a886-08d6dfd1d057
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 22:55:55.5268
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Don.Brace@microchip.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3502
-X-OriginatorOrg: microchip.com
+In-Reply-To: <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IGxpbnV4LXNjc2ktb3duZXJAdmdlci5r
-ZXJuZWwub3JnIFttYWlsdG86bGludXgtc2NzaS1vd25lckB2Z2VyLmtlcm5lbC5vcmddIE9uIEJl
-aGFsZiBPZiBMZW5kYWNreSwgVGhvbWFzDQpTZW50OiBUaHVyc2RheSwgTWF5IDIzLCAyMDE5IDk6
-NDUgQU0NClRvOiBMaWFuYm8gSmlhbmcgPGxpamlhbmdAcmVkaGF0LmNvbT47IGxpbnV4LWtlcm5l
-bEB2Z2VyLmtlcm5lbC5vcmcNCkNjOiBkb24uYnJhY2VAbWljcm9zZW1pLmNvbTsgamVqYkBsaW51
-eC5pYm0uY29tOyBtYXJ0aW4ucGV0ZXJzZW5Ab3JhY2xlLmNvbTsgbGludXgtc2NzaUB2Z2VyLmtl
-cm5lbC5vcmc7IGVzYy5zdG9yYWdlZGV2QG1pY3Jvc2VtaS5jb207IGR5b3VuZ0ByZWRoYXQuY29t
-DQpTdWJqZWN0OiBSZTogW1BBVENIXSBzY3NpOiBzbWFydHBxaTogcHJvcGVybHkgc2V0IGJvdGgg
-dGhlIERNQSBtYXNrIGFuZCB0aGUgY29oZXJlbnQgRE1BIG1hc2sgaW4gcHFpX3BjaV9pbml0KCkN
-Cg0KT24gNS8yMy8xOSAxMjo1MiBBTSwgTGlhbmJvIEppYW5nIHdyb3RlOg0KPiBXaGVuIFNNRSBp
-cyBlbmFibGVkLCB0aGUgc21hcnRwcWkgZHJpdmVyIHdvbid0IHdvcmsgb24gdGhlIEhQIERMMzg1
-DQo+IEcxMCBtYWNoaW5lLCB3aGljaCBjYXVzZXMgdGhlIGZhaWx1cmUgb2Yga2VybmVsIGJvb3Qg
-YmVjYXVzZSBpdCBmYWlscyANCj4gdG8gYWxsb2NhdGUgcHFpIGVycm9yIGJ1ZmZlci4gUGxlYXNl
-IHJlZmVyIHRvIHRoZSBrZXJuZWwgbG9nOg0KPiAuLi4uDQo+IFsgICAgOS40MzE3NDldIHVzYmNv
-cmU6IHJlZ2lzdGVyZWQgbmV3IGludGVyZmFjZSBkcml2ZXIgdWFzDQo+IFsgICAgOS40NDE1MjRd
-IE1pY3Jvc2VtaSBQUUkgRHJpdmVyICh2MS4xLjQtMTMwKQ0KPiBbICAgIDkuNDQyOTU2XSBpNDBl
-IDAwMDA6MDQ6MDAuMDogZncgNi43MC40ODc2OCBhcGkgMS43IG52bSAxMC4yLjUNCj4gWyAgICA5
-LjQ0NzIzN10gc21hcnRwcWkgMDAwMDoyMzowMC4wOiBNaWNyb3NlbWkgU21hcnQgRmFtaWx5IENv
-bnRyb2xsZXIgZm91bmQNCj4gICAgICAgICAgU3RhcnRpbmcgZHJhY3V0IGluaXRxdWV1ZSBob29r
-Li4uDQo+IFsgIE9LICBdIFN0YXJ0ZWQgU2hvdyBQbHltb3V0aCBCb290IFNjcmVbICAgIDkuNDcx
-NjU0XSBCcm9hZGNvbSBOZXRYdHJlbWUtQy9FIGRyaXZlciBibnh0X2VuIHYxLjkuMQ0KPiBlbi4N
-Cj4gWyAgT0sgIF0gU3RhcnRlZCBGb3J3YXJkIFBhc3N3b3JkIFJlcXVlc3RzIHRvIFBseW1vdXRo
-IERpcmVjdG9yeSBXYXRjaC4NCj4gW1swO1sgICAgOS40ODcxMDhdIHNtYXJ0cHFpIDAwMDA6MjM6
-MDAuMDogZmFpbGVkIHRvIGFsbG9jYXRlIFBRSSBlcnJvciBidWZmZXINCj4gLi4uLg0KPiBbICAx
-MzkuMDUwNTQ0XSBkcmFjdXQtaW5pdHF1ZXVlWzk0OV06IFdhcm5pbmc6IGRyYWN1dC1pbml0cXVl
-dWUgDQo+IHRpbWVvdXQgLSBzdGFydGluZyB0aW1lb3V0IHNjcmlwdHMgWyAgMTM5LjU4OTc3OV0g
-DQo+IGRyYWN1dC1pbml0cXVldWVbOTQ5XTogV2FybmluZzogZHJhY3V0LWluaXRxdWV1ZSB0aW1l
-b3V0IC0gc3RhcnRpbmcgDQo+IHRpbWVvdXQgc2NyaXB0cw0KPiANCj4gRm9yIGNvcnJlY3Qgb3Bl
-cmF0aW9uLCBsZXRzIGNhbGwgdGhlIGRtYV9zZXRfbWFza19hbmRfY29oZXJlbnQoKSB0byANCj4g
-cHJvcGVybHkgc2V0IHRoZSBtYXNrIGZvciBib3RoIHN0cmVhbWluZyBhbmQgY29oZXJlbnQsIGlu
-IG9yZGVyIHRvIA0KPiBpbmZvcm0gdGhlIGtlcm5lbCBhYm91dCB0aGUgZGV2aWNlcyBETUEgYWRk
-cmVzc2luZyBjYXBhYmlsaXRpZXMuDQoNCllvdSBzaG91bGQgcHJvYmFibHkgZXhwYW5kIG9uIHRo
-aXMgYSBiaXQuLi4gIEJhc2ljYWxseSwgdGhlIGZhY3QgdGhhdCB0aGUgY29oZXJlbnQgRE1BIG1h
-c2sgdmFsdWUgd2Fzbid0IHNldCBjYXVzZWQgdGhlIGRyaXZlciB0byBmYWxsIGJhY2sgdG8gU1dJ
-T1RMQiB3aGVuIFNNRSBpcyBhY3RpdmUuIEknbSBub3Qgc3VyZSBpZiB0aGUgZmFpbHVyZSB3YXMg
-ZnJvbSBydW5uaW5nIG91dCBvZiBTV0lPVExCIG9yIGV4Y2VlZGluZyB0aGUgbWF4aW11bSBhbGxv
-Y2F0aW9uIHNpemUgZm9yIFNXSU9UTEIuDQoNCkkgYmVsaWV2ZSB0aGUgZml4IGlzIHByb3Blciwg
-YnV0IEknbGwgbGV0IHRoZSBkcml2ZXIgb3duZXIgY29tbWVudCBvbiB0aGF0Lg0KDQpUaGFua3Ms
-DQpUb20NCg0KQWNrZWQtYnk6IERvbiBCcmFjZSA8ZG9uLmJyYWNlQG1pY3Jvc2VtaS5jb20+DQpU
-ZXN0ZWQtYnk6IERvbiBCcmFjZSA8ZG9uLmJyYWNlQG1pY3Jvc2VtaS5jb20+DQoNClBsZWFzZSBh
-ZGQgdGhlIGV4dHJhIGRlc2NyaXB0aW9uIHN1Z2dlc3RlZCBieSBUaG9tYXMuDQoNCg0KPiANCj4g
-U2lnbmVkLW9mZi1ieTogTGlhbmJvIEppYW5nIDxsaWppYW5nQHJlZGhhdC5jb20+DQo+IC0tLQ0K
-PiAgZHJpdmVycy9zY3NpL3NtYXJ0cHFpL3NtYXJ0cHFpX2luaXQuYyB8IDIgKy0NCj4gIDEgZmls
-ZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvc2NzaS9zbWFydHBxaS9zbWFydHBxaV9pbml0LmMgDQo+IGIvZHJpdmVycy9z
-Y3NpL3NtYXJ0cHFpL3NtYXJ0cHFpX2luaXQuYw0KPiBpbmRleCBjMjZjYWM4MTlmOWUuLjhiMWZk
-ZTZjN2RhYiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zY3NpL3NtYXJ0cHFpL3NtYXJ0cHFpX2lu
-aXQuYw0KPiArKysgYi9kcml2ZXJzL3Njc2kvc21hcnRwcWkvc21hcnRwcWlfaW5pdC5jDQo+IEBA
-IC03MjgyLDcgKzcyODIsNyBAQCBzdGF0aWMgaW50IHBxaV9wY2lfaW5pdChzdHJ1Y3QgcHFpX2N0
-cmxfaW5mbyAqY3RybF9pbmZvKQ0KPiAgICAgICAgIGVsc2UNCj4gICAgICAgICAgICAgICAgIG1h
-c2sgPSBETUFfQklUX01BU0soMzIpOw0KPiANCj4gLSAgICAgICByYyA9IGRtYV9zZXRfbWFzaygm
-Y3RybF9pbmZvLT5wY2lfZGV2LT5kZXYsIG1hc2spOw0KPiArICAgICAgIHJjID0gZG1hX3NldF9t
-YXNrX2FuZF9jb2hlcmVudCgmY3RybF9pbmZvLT5wY2lfZGV2LT5kZXYsIA0KPiArIG1hc2spOw0K
-PiAgICAgICAgIGlmIChyYykgew0KPiAgICAgICAgICAgICAgICAgZGV2X2VycigmY3RybF9pbmZv
-LT5wY2lfZGV2LT5kZXYsICJmYWlsZWQgdG8gc2V0IERNQSBtYXNrXG4iKTsNCj4gICAgICAgICAg
-ICAgICAgIGdvdG8gZGlzYWJsZV9kZXZpY2U7DQo+IC0tDQo+IDIuMTcuMQ0KPiANCg==
+
+On 5/21/2019 11:52 AM, Viresh Kumar wrote:
+> On 20-03-19, 15:19, Rajendra Nayak wrote:
+>> This is a v2 of the RFC posted earlier by Stephen Boyd [1]
+>>
+>> As part of v2 I still follow the same approach of dev_pm_opp_set_rate()
+>> API using clk framework to round the frequency passed and making it
+>> accept 0 as a valid frequency indicating the frequency isn't required
+>> anymore. It just has a few more drivers converted to use this approach
+>> like dsi/dpu and ufs.
+>> ufs demonstrates the case of having to handle multiple power domains, one
+>> of which is scalable.
+>>
+>> The patches are based on 5.1-rc1 and depend on some ufs fixes I posted
+>> earlier [2] and a DT patch to include the rpmpd header [3]
+>>
+>> [1] https://lkml.org/lkml/2019/1/28/2086
+>> [2] https://lkml.org/lkml/2019/3/8/70
+>> [3] https://lkml.org/lkml/2019/3/20/120
+> 
+> Hi Rajendra,
+> 
+> I am inclined to apply/push this series for 5.3-rc1, will it be
+> possible for you to spend some time on this at priority ?
+
+Hey Viresh, I was on vacation, just got back. I will refresh this series
+and address your previous feedback, I haven't received much feedback for the
+driver changes :/ but we can atleast review and get the OPP layer changes
+finalized. thanks.
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
