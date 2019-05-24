@@ -2,101 +2,126 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 295AC290B1
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 May 2019 08:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4CC296DF
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 May 2019 13:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388526AbfEXGEC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 May 2019 02:04:02 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:50270 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388070AbfEXGEC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 May 2019 02:04:02 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 60D4860C8B; Fri, 24 May 2019 06:04:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1558677840;
-        bh=+LXeINwGo6CiisA+JrfBkpcV33DtSDYcwasClLqFltM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MnQgEBJBFX7Jr6ZKTlpvPMRJlQPlORXWJeNHd18+CdO6x9V93JYSt8nqTFP73lTVe
-         Kc87IbU8eSlsJ0klkz6GlvCLKXc6yFpvAFoopfpj6hJVstNPzdnt9epwSyXMx7viOQ
-         idTFVhIbOwNG/+qmb2jqYeYdR78lpVY7V7ALMvB0=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.131.117.43] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S2390654AbfEXLQe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 May 2019 07:16:34 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:60340 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390410AbfEXLQd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 24 May 2019 07:16:33 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: rnayak@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id CA5026063A;
-        Fri, 24 May 2019 06:03:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1558677838;
-        bh=+LXeINwGo6CiisA+JrfBkpcV33DtSDYcwasClLqFltM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=WtaCR2+wyWWFjJzU9+IBN0PVFNR69TJTy4vvAyk+MUIWQoA6bLptg7h6mGWmvgSYC
-         ceLZ777Tzuy2Vfg1oiS6jsaRdeMMBSozslhkgH9uA3OjPW/L2iqMfhWCfqhoBEh3TL
-         vBuirdXrib/G+OD5P4nw7QuflaX7JS6fFb70beys=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CA5026063A
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
-Subject: Re: [RFC v2 00/11] DVFS in the OPP core
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, swboyd@chromium.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org,
-        vincent.guittot@linaro.org
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
-From:   Rajendra Nayak <rnayak@codeaurora.org>
-Message-ID: <85dbc630-f526-c06f-8a8b-9bbc3b794693@codeaurora.org>
-Date:   Fri, 24 May 2019 11:33:52 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        by mx1.redhat.com (Postfix) with ESMTPS id 7488D309266A;
+        Fri, 24 May 2019 11:16:33 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-12-20.pek2.redhat.com [10.72.12.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B711517243;
+        Fri, 24 May 2019 11:16:23 +0000 (UTC)
+Subject: Re: [PATCH] scsi: smartpqi: properly set both the DMA mask and the
+ coherent DMA mask in pqi_pci_init()
+To:     Don.Brace@microchip.com, Thomas.Lendacky@amd.com,
+        linux-kernel@vger.kernel.org
+Cc:     don.brace@microsemi.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        esc.storagedev@microsemi.com, dyoung@redhat.com
+References: <20190523055212.23568-1-lijiang@redhat.com>
+ <c5d45523-43f5-d2fd-01ac-85f285146ecd@amd.com>
+ <SN6PR11MB2767D4410415F0B03BFE900DE1010@SN6PR11MB2767.namprd11.prod.outlook.com>
+From:   lijiang <lijiang@redhat.com>
+Message-ID: <cea857c8-12db-d10c-124a-fd68cdcdc202@redhat.com>
+Date:   Fri, 24 May 2019 19:16:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <20190521062248.ogjetb2rwtqekflx@vireshk-i7>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <SN6PR11MB2767D4410415F0B03BFE900DE1010@SN6PR11MB2767.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Fri, 24 May 2019 11:16:33 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-
-On 5/21/2019 11:52 AM, Viresh Kumar wrote:
-> On 20-03-19, 15:19, Rajendra Nayak wrote:
->> This is a v2 of the RFC posted earlier by Stephen Boyd [1]
->>
->> As part of v2 I still follow the same approach of dev_pm_opp_set_rate()
->> API using clk framework to round the frequency passed and making it
->> accept 0 as a valid frequency indicating the frequency isn't required
->> anymore. It just has a few more drivers converted to use this approach
->> like dsi/dpu and ufs.
->> ufs demonstrates the case of having to handle multiple power domains, one
->> of which is scalable.
->>
->> The patches are based on 5.1-rc1 and depend on some ufs fixes I posted
->> earlier [2] and a DT patch to include the rpmpd header [3]
->>
->> [1] https://lkml.org/lkml/2019/1/28/2086
->> [2] https://lkml.org/lkml/2019/3/8/70
->> [3] https://lkml.org/lkml/2019/3/20/120
+在 2019年05月24日 06:55, Don.Brace@microchip.com 写道:
+> -----Original Message-----
+> From: linux-scsi-owner@vger.kernel.org [mailto:linux-scsi-owner@vger.kernel.org] On Behalf Of Lendacky, Thomas
+> Sent: Thursday, May 23, 2019 9:45 AM
+> To: Lianbo Jiang <lijiang@redhat.com>; linux-kernel@vger.kernel.org
+> Cc: don.brace@microsemi.com; jejb@linux.ibm.com; martin.petersen@oracle.com; linux-scsi@vger.kernel.org; esc.storagedev@microsemi.com; dyoung@redhat.com
+> Subject: Re: [PATCH] scsi: smartpqi: properly set both the DMA mask and the coherent DMA mask in pqi_pci_init()
 > 
-> Hi Rajendra,
+> On 5/23/19 12:52 AM, Lianbo Jiang wrote:
+>> When SME is enabled, the smartpqi driver won't work on the HP DL385
+>> G10 machine, which causes the failure of kernel boot because it fails 
+>> to allocate pqi error buffer. Please refer to the kernel log:
+>> ....
+>> [    9.431749] usbcore: registered new interface driver uas
+>> [    9.441524] Microsemi PQI Driver (v1.1.4-130)
+>> [    9.442956] i40e 0000:04:00.0: fw 6.70.48768 api 1.7 nvm 10.2.5
+>> [    9.447237] smartpqi 0000:23:00.0: Microsemi Smart Family Controller found
+>>          Starting dracut initqueue hook...
+>> [  OK  ] Started Show Plymouth Boot Scre[    9.471654] Broadcom NetXtreme-C/E driver bnxt_en v1.9.1
+>> en.
+>> [  OK  ] Started Forward Password Requests to Plymouth Directory Watch.
+>> [[0;[    9.487108] smartpqi 0000:23:00.0: failed to allocate PQI error buffer
+>> ....
+>> [  139.050544] dracut-initqueue[949]: Warning: dracut-initqueue 
+>> timeout - starting timeout scripts [  139.589779] 
+>> dracut-initqueue[949]: Warning: dracut-initqueue timeout - starting 
+>> timeout scripts
+>>
+>> For correct operation, lets call the dma_set_mask_and_coherent() to 
+>> properly set the mask for both streaming and coherent, in order to 
+>> inform the kernel about the devices DMA addressing capabilities.
 > 
-> I am inclined to apply/push this series for 5.3-rc1, will it be
-> possible for you to spend some time on this at priority ?
+> You should probably expand on this a bit...  Basically, the fact that the coherent DMA mask value wasn't set caused the driver to fall back to SWIOTLB when SME is active.
 
-Hey Viresh, I was on vacation, just got back. I will refresh this series
-and address your previous feedback, I haven't received much feedback for the
-driver changes :/ but we can atleast review and get the OPP layer changes
-finalized. thanks.
+Thank you, Tom.
 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+> I'm not sure if the failure was from running out of SWIOTLB or exceeding the maximum allocation size for SWIOTLB
+If so, it should print some messages like "swiotlb buffer is full", but i did not get such a log.
+
+> I believe the fix is proper, but I'll let the driver owner comment on that.
+> 
+> Thanks,
+> Tom
+> 
+> Acked-by: Don Brace <don.brace@microsemi.com>
+> Tested-by: Don Brace <don.brace@microsemi.com>
+> 
+> Please add the extra description suggested by Thomas.
+> 
+OK, i will add Tom's description to patch log and post again.
+
+Thank you, Don.
+
+Lianbo
+> 
+>>
+>> Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+>> ---
+>>  drivers/scsi/smartpqi/smartpqi_init.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/smartpqi/smartpqi_init.c 
+>> b/drivers/scsi/smartpqi/smartpqi_init.c
+>> index c26cac819f9e..8b1fde6c7dab 100644
+>> --- a/drivers/scsi/smartpqi/smartpqi_init.c
+>> +++ b/drivers/scsi/smartpqi/smartpqi_init.c
+>> @@ -7282,7 +7282,7 @@ static int pqi_pci_init(struct pqi_ctrl_info *ctrl_info)
+>>         else
+>>                 mask = DMA_BIT_MASK(32);
+>>
+>> -       rc = dma_set_mask(&ctrl_info->pci_dev->dev, mask);
+>> +       rc = dma_set_mask_and_coherent(&ctrl_info->pci_dev->dev, 
+>> + mask);
+>>         if (rc) {
+>>                 dev_err(&ctrl_info->pci_dev->dev, "failed to set DMA mask\n");
+>>                 goto disable_device;
+>> --
+>> 2.17.1
+>>
