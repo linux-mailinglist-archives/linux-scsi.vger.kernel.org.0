@@ -2,90 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F86C29C59
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 May 2019 18:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FBC29E53
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 May 2019 20:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390438AbfEXQco (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 May 2019 12:32:44 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:44672 "EHLO mx1.redhat.com"
+        id S1729377AbfEXSsU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 May 2019 14:48:20 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:56324 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390210AbfEXQco (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 24 May 2019 12:32:44 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 483E230C1209;
-        Fri, 24 May 2019 16:32:39 +0000 (UTC)
-Received: from emilne (unknown [10.18.25.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CF6CB10027BC;
-        Fri, 24 May 2019 16:32:38 +0000 (UTC)
-Message-ID: <d1a5b8e1803c06164847da296e7c1ff712aa213b.camel@redhat.com>
-Subject: Re: [PATCH 19/21] lpfc: Fix BFS crash with t10-dif enabled.
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
-Cc:     Dick Kennedy <dick.kennedy@broadcom.com>
-Date:   Fri, 24 May 2019 12:32:38 -0400
-In-Reply-To: <20190522004911.573-20-jsmart2021@gmail.com>
-References: <20190522004911.573-1-jsmart2021@gmail.com>
-         <20190522004911.573-20-jsmart2021@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Fri, 24 May 2019 16:32:44 +0000 (UTC)
+        id S1728920AbfEXSsU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 24 May 2019 14:48:20 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 050E8204197;
+        Fri, 24 May 2019 20:48:19 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id tvvHX00lY5Yl; Fri, 24 May 2019 20:48:11 +0200 (CEST)
+Received: from xtwo70.bingwo.ca (host-45-58-224-183.dyn.295.ca [45.58.224.183])
+        by smtp.infotech.no (Postfix) with ESMTPA id EBF5F204162;
+        Fri, 24 May 2019 20:48:10 +0200 (CEST)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        bart.vanassche@wdc.com
+Subject: [PATCH 00/19] sg: v4 interface, rq sharing + multiple rqs
+Date:   Fri, 24 May 2019 14:47:50 -0400
+Message-Id: <20190524184809.25121-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2019-05-21 at 17:49 -0700, James Smart wrote:
-> Crashes in scsi_queue_rq or in dma_unmap_direct_sg during BFS when
-> lpfc has lpfc_enable_bg=1.
-> 
-> lpfc is setting the t10-dif and prot sg after scsi_add_host_with_dma()
-> has been called. The scsi_host_set_prot() and scsi_host_set_guard()
-> routines need to be called before scsi_add_host_with_dma().
-> 
-> Revise the calling sequence to set the protection/guard data before
-> calling scsi_add_host_with_dma().
-> 
-> Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-> Signed-off-by: James Smart <jsmart2021@gmail.com>
-> ---
->  drivers/scsi/lpfc/lpfc_init.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-> index 416f0fb155f5..a2b827dd36ff 100644
-> --- a/drivers/scsi/lpfc/lpfc_init.c
-> +++ b/drivers/scsi/lpfc/lpfc_init.c
-> @@ -94,6 +94,7 @@ static void lpfc_sli4_disable_intr(struct lpfc_hba *);
->  static uint32_t lpfc_sli4_enable_intr(struct lpfc_hba *, uint32_t);
->  static void lpfc_sli4_oas_verify(struct lpfc_hba *phba);
->  static uint16_t lpfc_find_cpu_handle(struct lpfc_hba *, uint16_t, int);
-> +static void lpfc_setup_bg(struct lpfc_hba *, struct Scsi_Host *);
->  
->  static struct scsi_transport_template *lpfc_transport_template = NULL;
->  static struct scsi_transport_template *lpfc_vport_transport_template = NULL;
-> @@ -4348,6 +4349,9 @@ lpfc_create_port(struct lpfc_hba *phba, int instance, struct device *dev)
->  
->  	timer_setup(&vport->delayed_disc_tmo, lpfc_delayed_disc_tmo, 0);
->  
-> +	if (phba->sli3_options & LPFC_SLI3_BG_ENABLED)
-> +		lpfc_setup_bg(phba, shost);
-> +
->  	error = scsi_add_host_with_dma(shost, dev, &phba->pcidev->dev);
->  	if (error)
->  		goto out_put_shost;
-> @@ -7669,8 +7673,6 @@ lpfc_post_init_setup(struct lpfc_hba *phba)
->  	 */
->  	shost = pci_get_drvdata(phba->pcidev);
->  	shost->can_queue = phba->cfg_hba_queue_depth - 10;
-> -	if (phba->sli3_options & LPFC_SLI3_BG_ENABLED)
-> -		lpfc_setup_bg(phba, shost);
->  
->  	lpfc_host_attrib_init(shost);
->  
+This patchset extends the SCSI generic (sg) driver found in lk 5.2 .
+The sg driver has a version number which is visible via an ioctl()
+and is bumped from 3.5.36 to 4.0.12 by this patchset.
+The additions and changes are described in some detail on this
+long webpage:
+    http://sg.danny.cz/sg/sg_v40.html
+and references are made in various patches to relevant sections in
+that document.
 
-Reviewed-by: Ewan D. Milne <emilne@redhat.com>
+This patchset restores some functionality that was in the v2 driver
+version and has been broken by some external patch in the interim
+period (20 years). That functionality (NO_DXFER) has found new
+uses in request sharing. Also functionality that has been dropped
+from the bsg driver over the last year is added to this driver in
+this patchset (e.g. async/non-blocking v4 interface usage, and
+multiple request support).
+
+This patchset is big and can be regarded as a driver rewrite. The
+number of lines increases from around 3000 to over 6000. The size
+of the module doubles although that can be reduced by turning off
+SCSI logging.
+
+TODO: during development, this driver had its own version of
+      tracing which has been removed from the final patchset.
+      Curiously that tracing code was never used in anger for
+      its intended purpose, but the revamped SG_LOG macro was
+      used a lot.
+      The intention is to add tracing via the 'standard' kernel
+      code. The addition is somewhat invasive, both to the sg
+      driver (e.g. some otherwise private structures need to
+      be made public) and to the tracing subsystem.
+
+Testing:
+The sg3_utils package has several extensions in sg3_utils-1.45
+beta (revision 824) to support and test the version 4 sg
+driver presented in this patchset.
+The new and revised testing utilities are outlined on the
+same webpage as above in the second half of the section
+titled: "15 Downloads and testing".
+
+This patchset is against Martin Petersen's 5.3/scsi-queue
+branch. It will also apply to lk 5.1 and probably lk 5.0 .
+
+Douglas Gilbert (19):
+  sg: move functions around
+  sg: remove typedefs, type+formatting cleanup
+  sg: sg_log and is_enabled
+  sg: move header to uapi section
+  sg: replace rq array with lists
+  sg: sense buffer cleanup
+  sg: add sg v4 interface support
+  sg: add 8 byte SCSI LUN to sg_scsi_id
+  sg: expand sg_comm_wr_t
+  sg: add sg_ioabort ioctl
+  sg: add sg_iosubmit_v3 and sg_ioreceive_v3 ioctls
+  sg: add sg_set_get_extended ioctl
+  sg: sgat_elem_sz and sum_fd_dlens
+  sg: tag and more_async
+  sg: add fd sharing , change, unshare
+  sg: add shared requests
+  sg: add multiple request support
+  sg: add slave wait capability
+  sg: table of error numbers with meanings
+
+ drivers/scsi/sg.c      | 6790 ++++++++++++++++++++++++++++++----------
+ include/scsi/sg.h      |  268 +-
+ include/uapi/scsi/sg.h |  475 +++
+ 3 files changed, 5682 insertions(+), 1851 deletions(-)
+ create mode 100644 include/uapi/scsi/sg.h
+
+-- 
+2.17.1
 
