@@ -2,126 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4CC296DF
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 May 2019 13:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F86C29C59
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 May 2019 18:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390654AbfEXLQe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 May 2019 07:16:34 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:60340 "EHLO mx1.redhat.com"
+        id S2390438AbfEXQco (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 May 2019 12:32:44 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:44672 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390410AbfEXLQd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 24 May 2019 07:16:33 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        id S2390210AbfEXQco (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 24 May 2019 12:32:44 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 7488D309266A;
-        Fri, 24 May 2019 11:16:33 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-12-20.pek2.redhat.com [10.72.12.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B711517243;
-        Fri, 24 May 2019 11:16:23 +0000 (UTC)
-Subject: Re: [PATCH] scsi: smartpqi: properly set both the DMA mask and the
- coherent DMA mask in pqi_pci_init()
-To:     Don.Brace@microchip.com, Thomas.Lendacky@amd.com,
-        linux-kernel@vger.kernel.org
-Cc:     don.brace@microsemi.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        esc.storagedev@microsemi.com, dyoung@redhat.com
-References: <20190523055212.23568-1-lijiang@redhat.com>
- <c5d45523-43f5-d2fd-01ac-85f285146ecd@amd.com>
- <SN6PR11MB2767D4410415F0B03BFE900DE1010@SN6PR11MB2767.namprd11.prod.outlook.com>
-From:   lijiang <lijiang@redhat.com>
-Message-ID: <cea857c8-12db-d10c-124a-fd68cdcdc202@redhat.com>
-Date:   Fri, 24 May 2019 19:16:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <SN6PR11MB2767D4410415F0B03BFE900DE1010@SN6PR11MB2767.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Fri, 24 May 2019 11:16:33 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 483E230C1209;
+        Fri, 24 May 2019 16:32:39 +0000 (UTC)
+Received: from emilne (unknown [10.18.25.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CF6CB10027BC;
+        Fri, 24 May 2019 16:32:38 +0000 (UTC)
+Message-ID: <d1a5b8e1803c06164847da296e7c1ff712aa213b.camel@redhat.com>
+Subject: Re: [PATCH 19/21] lpfc: Fix BFS crash with t10-dif enabled.
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+Cc:     Dick Kennedy <dick.kennedy@broadcom.com>
+Date:   Fri, 24 May 2019 12:32:38 -0400
+In-Reply-To: <20190522004911.573-20-jsmart2021@gmail.com>
+References: <20190522004911.573-1-jsmart2021@gmail.com>
+         <20190522004911.573-20-jsmart2021@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Fri, 24 May 2019 16:32:44 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-在 2019年05月24日 06:55, Don.Brace@microchip.com 写道:
-> -----Original Message-----
-> From: linux-scsi-owner@vger.kernel.org [mailto:linux-scsi-owner@vger.kernel.org] On Behalf Of Lendacky, Thomas
-> Sent: Thursday, May 23, 2019 9:45 AM
-> To: Lianbo Jiang <lijiang@redhat.com>; linux-kernel@vger.kernel.org
-> Cc: don.brace@microsemi.com; jejb@linux.ibm.com; martin.petersen@oracle.com; linux-scsi@vger.kernel.org; esc.storagedev@microsemi.com; dyoung@redhat.com
-> Subject: Re: [PATCH] scsi: smartpqi: properly set both the DMA mask and the coherent DMA mask in pqi_pci_init()
+On Tue, 2019-05-21 at 17:49 -0700, James Smart wrote:
+> Crashes in scsi_queue_rq or in dma_unmap_direct_sg during BFS when
+> lpfc has lpfc_enable_bg=1.
 > 
-> On 5/23/19 12:52 AM, Lianbo Jiang wrote:
->> When SME is enabled, the smartpqi driver won't work on the HP DL385
->> G10 machine, which causes the failure of kernel boot because it fails 
->> to allocate pqi error buffer. Please refer to the kernel log:
->> ....
->> [    9.431749] usbcore: registered new interface driver uas
->> [    9.441524] Microsemi PQI Driver (v1.1.4-130)
->> [    9.442956] i40e 0000:04:00.0: fw 6.70.48768 api 1.7 nvm 10.2.5
->> [    9.447237] smartpqi 0000:23:00.0: Microsemi Smart Family Controller found
->>          Starting dracut initqueue hook...
->> [  OK  ] Started Show Plymouth Boot Scre[    9.471654] Broadcom NetXtreme-C/E driver bnxt_en v1.9.1
->> en.
->> [  OK  ] Started Forward Password Requests to Plymouth Directory Watch.
->> [[0;[    9.487108] smartpqi 0000:23:00.0: failed to allocate PQI error buffer
->> ....
->> [  139.050544] dracut-initqueue[949]: Warning: dracut-initqueue 
->> timeout - starting timeout scripts [  139.589779] 
->> dracut-initqueue[949]: Warning: dracut-initqueue timeout - starting 
->> timeout scripts
->>
->> For correct operation, lets call the dma_set_mask_and_coherent() to 
->> properly set the mask for both streaming and coherent, in order to 
->> inform the kernel about the devices DMA addressing capabilities.
+> lpfc is setting the t10-dif and prot sg after scsi_add_host_with_dma()
+> has been called. The scsi_host_set_prot() and scsi_host_set_guard()
+> routines need to be called before scsi_add_host_with_dma().
 > 
-> You should probably expand on this a bit...  Basically, the fact that the coherent DMA mask value wasn't set caused the driver to fall back to SWIOTLB when SME is active.
+> Revise the calling sequence to set the protection/guard data before
+> calling scsi_add_host_with_dma().
+> 
+> Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+> Signed-off-by: James Smart <jsmart2021@gmail.com>
+> ---
+>  drivers/scsi/lpfc/lpfc_init.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+> index 416f0fb155f5..a2b827dd36ff 100644
+> --- a/drivers/scsi/lpfc/lpfc_init.c
+> +++ b/drivers/scsi/lpfc/lpfc_init.c
+> @@ -94,6 +94,7 @@ static void lpfc_sli4_disable_intr(struct lpfc_hba *);
+>  static uint32_t lpfc_sli4_enable_intr(struct lpfc_hba *, uint32_t);
+>  static void lpfc_sli4_oas_verify(struct lpfc_hba *phba);
+>  static uint16_t lpfc_find_cpu_handle(struct lpfc_hba *, uint16_t, int);
+> +static void lpfc_setup_bg(struct lpfc_hba *, struct Scsi_Host *);
+>  
+>  static struct scsi_transport_template *lpfc_transport_template = NULL;
+>  static struct scsi_transport_template *lpfc_vport_transport_template = NULL;
+> @@ -4348,6 +4349,9 @@ lpfc_create_port(struct lpfc_hba *phba, int instance, struct device *dev)
+>  
+>  	timer_setup(&vport->delayed_disc_tmo, lpfc_delayed_disc_tmo, 0);
+>  
+> +	if (phba->sli3_options & LPFC_SLI3_BG_ENABLED)
+> +		lpfc_setup_bg(phba, shost);
+> +
+>  	error = scsi_add_host_with_dma(shost, dev, &phba->pcidev->dev);
+>  	if (error)
+>  		goto out_put_shost;
+> @@ -7669,8 +7673,6 @@ lpfc_post_init_setup(struct lpfc_hba *phba)
+>  	 */
+>  	shost = pci_get_drvdata(phba->pcidev);
+>  	shost->can_queue = phba->cfg_hba_queue_depth - 10;
+> -	if (phba->sli3_options & LPFC_SLI3_BG_ENABLED)
+> -		lpfc_setup_bg(phba, shost);
+>  
+>  	lpfc_host_attrib_init(shost);
+>  
 
-Thank you, Tom.
+Reviewed-by: Ewan D. Milne <emilne@redhat.com>
 
-> I'm not sure if the failure was from running out of SWIOTLB or exceeding the maximum allocation size for SWIOTLB
-If so, it should print some messages like "swiotlb buffer is full", but i did not get such a log.
-
-> I believe the fix is proper, but I'll let the driver owner comment on that.
-> 
-> Thanks,
-> Tom
-> 
-> Acked-by: Don Brace <don.brace@microsemi.com>
-> Tested-by: Don Brace <don.brace@microsemi.com>
-> 
-> Please add the extra description suggested by Thomas.
-> 
-OK, i will add Tom's description to patch log and post again.
-
-Thank you, Don.
-
-Lianbo
-> 
->>
->> Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
->> ---
->>  drivers/scsi/smartpqi/smartpqi_init.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/scsi/smartpqi/smartpqi_init.c 
->> b/drivers/scsi/smartpqi/smartpqi_init.c
->> index c26cac819f9e..8b1fde6c7dab 100644
->> --- a/drivers/scsi/smartpqi/smartpqi_init.c
->> +++ b/drivers/scsi/smartpqi/smartpqi_init.c
->> @@ -7282,7 +7282,7 @@ static int pqi_pci_init(struct pqi_ctrl_info *ctrl_info)
->>         else
->>                 mask = DMA_BIT_MASK(32);
->>
->> -       rc = dma_set_mask(&ctrl_info->pci_dev->dev, mask);
->> +       rc = dma_set_mask_and_coherent(&ctrl_info->pci_dev->dev, 
->> + mask);
->>         if (rc) {
->>                 dev_err(&ctrl_info->pci_dev->dev, "failed to set DMA mask\n");
->>                 goto disable_device;
->> --
->> 2.17.1
->>
