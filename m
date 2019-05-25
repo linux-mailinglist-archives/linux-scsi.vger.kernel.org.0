@@ -2,94 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 015662A5E2
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 May 2019 19:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEB42A759
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 01:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbfEYRoW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 25 May 2019 13:44:22 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38058 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbfEYRoV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 25 May 2019 13:44:21 -0400
-Received: by mail-pl1-f193.google.com with SMTP id f97so5433759plb.5;
-        Sat, 25 May 2019 10:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=HBBbVG82QaZnu+ByWQxbSng2FF/splMwlHyR9tDwYd4=;
-        b=Mu55dkKEf3Q0XHw1cx3eLiYIjHMoihyXfRYsyq2xBoW17W5etjNHXjPTO6n/jIS/Cx
-         4keoFkMisEQxIQHTSfqVGCzyD/uLioOCzIQRqIWy85iLttEbdeRdau8pikqSiVZOf0Es
-         6aew72FVU4pRYxhwDVah62vMZdtm8qblWq4Bh2jeRjlH9oz4z0zA4t52c9IlOKB/6Swu
-         Q2XmvmJn+g5m+4Ub8wojUtrnVRHa8m9r8t51BeOIfurEqf4siJV1tettNa6wJ8dWuAdL
-         wo03+vOhZHXn9L1YsqRO93JAYWcyTLXUMG/oAwav15ep2VoJ6xxHuWkfd6zebreIEChc
-         3w1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=HBBbVG82QaZnu+ByWQxbSng2FF/splMwlHyR9tDwYd4=;
-        b=I1JWzcBhyPx+cVUdBZ2UO15fN86Mpc9sINgNZ2SoxBV8me+apurA6Swq0IdZnM5m0A
-         n3JpncdBZS2GCmT9wSYYDq8BlqQSon/9X9LB9pdllqb4Gfsl3SccxEvg3nY9Obn1WGh0
-         Drshm06qUKyF+Q14b/XOLnwzUosKcRFky2cim1b89/Wqvnu264NmxWZV/BYtQgdNdDWL
-         AiyQAWua9n9xTStt7pTtfd236OjUhvR9cqE4xE7co2er0FszRgHkyE2o9WcjoiuPoA2K
-         EQXvLyRsQiYAG20PKlUN0vx8uLXJSK24EuOme6n0NBE4xh72lJuBi2tjLDrch267deHK
-         eA8A==
-X-Gm-Message-State: APjAAAXSpBJryK8B3JqShLpgw0Oitu2w9XYjyDpivohCf1bmrv3RCmKw
-        e032RV/k0XyICVZc+n5ghl0=
-X-Google-Smtp-Source: APXvYqwR/AYBys7vAhckZqKznuWDoJXs7aeyZs2h5ID5Khi81ZvERndEb8ALKTHiMkm0p7kAs87ztw==
-X-Received: by 2002:a17:902:1029:: with SMTP id b38mr73906099pla.72.1558806261207;
-        Sat, 25 May 2019 10:44:21 -0700 (PDT)
-Received: from hari-Inspiron-1545 ([183.83.92.73])
-        by smtp.gmail.com with ESMTPSA id a12sm3624932pgq.0.2019.05.25.10.44.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 25 May 2019 10:44:20 -0700 (PDT)
-Date:   Sat, 25 May 2019 23:14:16 +0530
-From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hariprasad Kelam <hariprasad.kelam@gmail.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] target/iscsi: fix possible condition with no effect (if ==
- else)
-Message-ID: <20190525174416.GA21510@hari-Inspiron-1545>
+        id S1727439AbfEYXPp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 25 May 2019 19:15:45 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:60885 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726151AbfEYXPp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 25 May 2019 19:15:45 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 2D4A4204165;
+        Sun, 26 May 2019 01:15:43 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jndFZ9i7Tlec; Sun, 26 May 2019 01:15:36 +0200 (CEST)
+Received: from [172.20.2.178] (unknown [12.158.45.77])
+        by smtp.infotech.no (Postfix) with ESMTPA id 0589820414F;
+        Sun, 26 May 2019 01:15:34 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH 05/19] sg: replace rq array with lists
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@01.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        bart.vanassche@wdc.com
+References: <20190524184809.25121-6-dgilbert@interlog.com>
+ <201905251706.XN3uQInU%lkp@intel.com>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <2b9a7bc3-28d2-60dc-afdb-721cba0c98f0@interlog.com>
+Date:   Sat, 25 May 2019 19:15:33 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <201905251706.XN3uQInU%lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-fix below warning reported by coccicheck
+On 2019-05-25 5:33 a.m., kbuild test robot wrote:
+> Hi Douglas,
+> 
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on mkp-scsi/for-next]
+> [also build test WARNING on next-20190524]
+> [cannot apply to v5.2-rc1]
+> [if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Douglas-Gilbert/sg-v4-interface-rq-sharing-multiple-rqs/20190525-161346
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+> config: powerpc-allyesconfig (attached as .config)
+> compiler: powerpc64-linux-gcc (GCC) 7.4.0
+> reproduce:
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # save the attached .config to linux build tree
+>          GCC_VERSION=7.4.0 make.cross ARCH=powerpc
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>     drivers/scsi/sg.c: In function 'sg_ioctl':
+>>> drivers/scsi/sg.c:1698:1: warning: the frame size of 5824 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+>      }
+>      ^
 
-drivers/target/iscsi/iscsi_target_nego.c:175:6-8: WARNING: possible
-condition with no effect (if == else)
+Hi Robot,
+That seems a surprisingly large stack size for that architecture. When
+I do:
+   make checkstack drivers/scsi/sg.o
 
-Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
----
- drivers/target/iscsi/iscsi_target_nego.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+there are over 200 other "stack hogs" larger than sg_ioctl() which clocks
+in at 536 bytes ***. The is on x86_64 (i5-7200U) architecture. Even the
+winners on my list are comfortably under 2048 bytes:
 
-diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/iscsi/iscsi_target_nego.c
-index 8a5e8d1..b6fb70a 100644
---- a/drivers/target/iscsi/iscsi_target_nego.c
-+++ b/drivers/target/iscsi/iscsi_target_nego.c
-@@ -168,12 +168,7 @@ static u32 iscsi_handle_authentication(
- 	else if (strstr("CHAP", authtype))
- 		return chap_main_loop(conn, auth, in_buf, out_buf,
- 				&in_length, out_length);
--	else if (strstr("SPKM1", authtype))
--		return 2;
--	else if (strstr("SPKM2", authtype))
--		return 2;
--	else if (strstr("KRB5", authtype))
--		return 2;
-+	/* ret 2 in  SPKM1,SPKM2,KRB5 cases */
- 	else
- 		return 2;
- }
--- 
-2.7.4
+0xffffffff81052c11 sha1_transform_avx2 [vmlinux]:       1376
+0xffffffff81054a83 _end [vmlinux]:                      1376
+0x00000dd1 test_queue [usbtest]:                        1224
+0x00001321 test_queue [usbtest]:                        1224
+0x0000aa79 ipmi_panic_request_and_wait [ipmi_msghandler]:1088
+0xffffffff8121378f do_sys_poll [vmlinux]:               992
+0xffffffff81213ca8 do_sys_poll [vmlinux]:               992
+....
 
+I could trim some more bytes (e.g. the SG_LOG() macro does a stack allocation
+of 160 bytes, probably 100 would be enough) but that won't bring the
+reported 5824 byte stack usage anywhere near the safe range.
+
+Doug Gilbert
+
+*** and sg_ioctl() is the biggest sg driver stack hog on my list, followed
+     by sg_read at 368 bytes.
