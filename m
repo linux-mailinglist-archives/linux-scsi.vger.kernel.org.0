@@ -2,85 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF1FC2A927
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 11:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E0D22A99C
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 14:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727660AbfEZJUh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 26 May 2019 05:20:37 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:45732 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727649AbfEZJUh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 May 2019 05:20:37 -0400
-Received: by mail-oi1-f193.google.com with SMTP id w144so9944545oie.12
-        for <linux-scsi@vger.kernel.org>; Sun, 26 May 2019 02:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=GpNdYRES46RfzpVIgTMPzZ6u6WQI6KIHaSlhSlcg/+c=;
-        b=nbNBbfMWm2mXzZtG+d/KFNhu8a2pvNqwEwkQSY1OD2DBSFt9MjMrAdl3BCWZoqVYH2
-         692qPpZqaxacjmsuPCYxePVaDF+fn/Q9MvIBBypXskuS9A50wvHpQj04gXBI1o2uOxyz
-         BzwhAZsHtiXg7QzOMCc12wVV2TUuMO3QBnuicBYc23yhrbSsbqLkUcGr5rMl629+Q8hI
-         dWYGSF6L2zGVQJC5KVZu4U/Cd+Ayhl75cuonsk9Pl040j5CSEMqKDIAyIQ0HnQz2qnOt
-         1cegoM3UecRmwS15zyE5IyHkTIsrGP1CZdHH5QR4ezASrFvWIFhTRzeHGxnVuK/HlTLn
-         z3dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=GpNdYRES46RfzpVIgTMPzZ6u6WQI6KIHaSlhSlcg/+c=;
-        b=E8DxEXq4Jkf+NxJC14Rj1Rc6c+HTIFRjlMo6cAcsnBbygpqwY2DF8DmIMXXB03r3A2
-         LvC6NIGg3q33SVPQWkHLhRxHPSOvIELG6dzIwq0ZqwAYtl4Z0JQ+6crWoLjXFwO2sizi
-         mPbQnkDgcq3YMXZuYbR4Gk0f4Tuv7jUNIvGCdDdsDprQdUrPe7GMG8zUeUQRJkmjB4WM
-         gLSDU1q7rfn8ztdeM8EKHIuBHx0H8WcNM4CCr+630A4CuistUi5p1uACsycD9IKiSjsT
-         lCgYNBKxHclnrlWQTIRpUXpnJzL3XNJos+SLT4/vnp2O8qZjy/lDzMM7E/wWfQlZiIZn
-         G2ng==
-X-Gm-Message-State: APjAAAWikwde8i62uU1WMeQC15Gfn06E46VdAIf6wSp5luNROGybqV2z
-        zLR6QSbBAyt/WnexrGsooMQX+Tt1yGbqXF/nqtI=
-X-Google-Smtp-Source: APXvYqxslmhwqpcwOXne15bZQahpthtNO/qqT3gC7GlkqbYDfsSpTdc5I/AQGOU7EVImClC5CFYJTOLxzdGbux/ELdE=
-X-Received: by 2002:aca:f189:: with SMTP id p131mr2237842oih.89.1558862436403;
- Sun, 26 May 2019 02:20:36 -0700 (PDT)
+        id S1727767AbfEZMXy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 26 May 2019 08:23:54 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:40518 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727577AbfEZMXy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 26 May 2019 08:23:54 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4QCLchB001282;
+        Sun, 26 May 2019 05:23:48 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0818;
+ bh=HIPHPhbwdNJDlQ0Y1LqTXu0wTZnLIEcsKOh08Mk5LUU=;
+ b=g4myCAvQ1gYUcMjhPBqxjGDYP0s2Tiuct8s/HXOpty5WX3nVtb7hJRifmJFHCKzh4xhE
+ v+EsgKXTqN5/OjBKahURv1dRII5iTEWj8MC7eqnxGQmQwZiDXPueN/pPZ28zjyoaHAZY
+ EgK5QYZwUMaN5gFbOUqPrPudqgXUmK5B+47v4MlR5Bcp0WpfxMD5sNEdKMeC8C5OUfQx
+ VTScLOiSzcdlnfpWfTMYfhZ5teVh9piOCHlfHb4jszDnkBhMSVwIaNQaLW5A+4x5ohHx
+ UvPzlT7agdZ796ACTD1fxuv5OZ7u7zgyp0+Fiy+BUEIz4DHT2QhxZ71qCmtSqfhrackf yw== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2sq57fubsh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Sun, 26 May 2019 05:23:48 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Sun, 26 May
+ 2019 05:23:47 -0700
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Sun, 26 May 2019 05:23:47 -0700
+Received: from lb-tlvb-michal.il.qlogic.org (unknown [10.5.220.215])
+        by maili.marvell.com (Postfix) with ESMTP id 2410B3F703F;
+        Sun, 26 May 2019 05:23:44 -0700 (PDT)
+From:   Michal Kalderon <michal.kalderon@marvell.com>
+To:     <michal.kalderon@marvell.com>, <ariel.elior@marvell.com>,
+        <davem@davemloft.net>
+CC:     <dledford@redhat.com>, <jgg@ziepe.ca>, <leon@kernel.org>,
+        <linux-rdma@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>
+Subject: [PATCH v2 net-next 00/11] qed*: Improve performance on 100G link for offload protocols
+Date:   Sun, 26 May 2019 15:22:19 +0300
+Message-ID: <20190526122230.30039-1-michal.kalderon@marvell.com>
+X-Mailer: git-send-email 2.14.5
 MIME-Version: 1.0
-Received: by 2002:a9d:5b5:0:0:0:0:0 with HTTP; Sun, 26 May 2019 02:20:34 -0700 (PDT)
-Reply-To: kylieelizabethwatson2019@gmail.com
-From:   "Sgt. Kylie Elizabeth Watson" <alasanahmad100@gmail.com>
-Date:   Sun, 26 May 2019 13:50:34 +0430
-Message-ID: <CAHFS=NknG1pe1rgDoX5_Xyp3hE4b4AVLRgRAx6du8e4-DckDiA@mail.gmail.com>
-Subject: Assist Request From You
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-26_08:,,
+ signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+This patch series modifies the current implementation of PF selection.
+The refactoring of the llh code enables setting additional filters
+(mac / protocol) per PF, and improves performance for offload protocols
+(RoCE, iWARP, iSCSI, fcoe) on 100G link (was capped at 90G per single
+PF).
+
+Improved performance on 100G link is achieved by configuring engine
+affinty to each PF.
+The engine affinity is read from the Management FW and hw is configured accordingly.
+A new hw resource called PPFID is exposed and an API is introduced to utilize
+it. This additional resource enables setting the affinity of a PF and providing
+more classification rules per PF.
+qedr,qedi,qedf are also modified as part of the series. Without the
+changes functionality is broken.
+
+v1 --> v2
+---------
+- Remove iWARP module parameter. Instead use devlink param infrastructure
+  for setting the iwarp_cmt mode. Additional patch added to the series for
+  adding the devlink support.
+
+- Fix kbuild test robot warning on qed_llh_filter initialization.
+
+- Remove comments inside function calls
+
+Chad Dupuis (1):
+  qedf: Use hwfns and affin_hwfn_idx to get MSI-X vector index to use
+
+Manish Rangankar (2):
+  Revert "scsi: qedi: Allocate IRQs based on msix_cnt"
+  qedi: Use hwfns and affin_hwfn_idx to get MSI-X vector index
+
+Michal Kalderon (8):
+  qed: Modify api for performing a dmae to another PF
+  qed: Add llh ppfid interface and 100g support for offload protocols
+  qed*: Change hwfn used for sb initialization
+  qed: Modify offload protocols to use the affined engine
+  qedr: Change the MSI-X vectors selection to be based on affined engine
+  qed: Set the doorbell address correctly
+  qed: Add qed devlink parameters table
+  qed*: Add iWARP 100g support
+
+ drivers/infiniband/hw/qedr/main.c              |   25 +-
+ drivers/infiniband/hw/qedr/qedr.h              |    2 +
+ drivers/net/ethernet/qlogic/qed/qed.h          |   24 +-
+ drivers/net/ethernet/qlogic/qed/qed_cxt.c      |    5 +-
+ drivers/net/ethernet/qlogic/qed/qed_debug.c    |    2 +-
+ drivers/net/ethernet/qlogic/qed/qed_dev.c      | 1275 +++++++++++++++++++-----
+ drivers/net/ethernet/qlogic/qed/qed_dev_api.h  |  113 ++-
+ drivers/net/ethernet/qlogic/qed/qed_fcoe.c     |   26 +-
+ drivers/net/ethernet/qlogic/qed/qed_hsi.h      |   16 +-
+ drivers/net/ethernet/qlogic/qed/qed_hw.c       |   44 +-
+ drivers/net/ethernet/qlogic/qed/qed_init_ops.c |    9 +-
+ drivers/net/ethernet/qlogic/qed/qed_int.c      |    8 +-
+ drivers/net/ethernet/qlogic/qed/qed_iscsi.c    |   35 +-
+ drivers/net/ethernet/qlogic/qed/qed_iwarp.c    |   24 +-
+ drivers/net/ethernet/qlogic/qed/qed_iwarp.h    |    4 +-
+ drivers/net/ethernet/qlogic/qed/qed_l2.c       |    4 +-
+ drivers/net/ethernet/qlogic/qed/qed_ll2.c      |  406 +++++---
+ drivers/net/ethernet/qlogic/qed/qed_main.c     |  157 ++-
+ drivers/net/ethernet/qlogic/qed/qed_mcp.c      |   65 ++
+ drivers/net/ethernet/qlogic/qed/qed_mcp.h      |   16 +
+ drivers/net/ethernet/qlogic/qed/qed_rdma.c     |   75 +-
+ drivers/net/ethernet/qlogic/qed/qed_reg_addr.h |    6 +
+ drivers/net/ethernet/qlogic/qed/qed_sriov.c    |    3 +-
+ drivers/net/ethernet/qlogic/qede/qede_main.c   |    3 +-
+ drivers/scsi/qedf/qedf_main.c                  |   39 +-
+ drivers/scsi/qedi/qedi_main.c                  |   34 +-
+ include/linux/qed/qed_if.h                     |   10 +-
+ include/linux/qed/qed_rdma_if.h                |    2 +
+ 28 files changed, 1810 insertions(+), 622 deletions(-)
+
 -- 
-Accept my greetings to you
+2.14.5
 
-Assist Request From You
-
-I am 28 years old single an orphan my parents died when I am five
-years old nobody to help me,I send you my business proposal with tears
-and sorrow,Please let this not be a surprised message to you because I
-decided to contact you on this magnitude and lucrative transaction for
-our present and future survival in life. Moreover, I have laid all the
-solemn trust in you before i decided to disclose this successful and
-confidential transaction to you.
-
-I am  Kylie Elizabeth Watson ,I hope all is well with you? I am female
-soldier working as United Nations peace keeping troop in Afghanistan
-on war against terrorism. I have in my possession the sum of
-$3.5million USD Which I made here in Afghanistan 2014,I deposited this
-money with a Red Cross agent. I want you to stand as my beneficiary
-and receive the fund And keep it safe so that as soon as am through
-with my mission here in Afghanistan.
-
-You will assist me to invest it in a good profitable Venture or you
-keep it for me until I arrive your country, I will give You 40% of the
-total money for your assistance after you have receive The money.
-Please reply back to me if you are willing to work with me so that I
-can send you the information where the money is been deposited, your
-urgent reply is needed in my email address below
-(kylieelizabethwatson2019@gmail.com) so i can send you more details.
-
-Thank Yours
-Sgt,Kylie Elizabeth Watson
