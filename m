@@ -2,151 +2,139 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 923242A9B5
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 14:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E821F2AA71
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 17:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727896AbfEZMYX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 26 May 2019 08:24:23 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:40678 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727883AbfEZMYW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 26 May 2019 08:24:22 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4QCL9dD001198;
-        Sun, 26 May 2019 05:24:17 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=LyPqu8EHKJ51sX8YQ1q+jd1z8LLEAjPdntn9bqYx9hI=;
- b=H4HNCSydALyFJRIJh1beekbz5TS2ClWNF36c1KHuWft8TJjrTPFY9Ozm4UEKq9Lg0INw
- nq7Vv4V5KhEBnwElT25nEJRszYLd0O8lVsMh5U3EVy2grch17KfRy/3HjN9mCbIW4pxO
- vWt+w/hA4C7pPqp1uXtO0GwT7oZ5RV372CBJ3dHDCy7mT32lDnMLT3b7n7pXvFgDcPuM
- 2Vh/OIEUaiYO8g2ko9yCcGEhH/U6S5E2Z3I8f93jAX4EaozjWe26nzVwYVbsC+vCRp/l
- rwQUKXX8imw6ZEhecePtz1oaXw1LFM7+41UPUb4kXYKpPTWl7FBLnyAMuNHRCN8v+s+1 Hw== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2sq57fubu4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Sun, 26 May 2019 05:24:17 -0700
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Sun, 26 May
- 2019 05:24:16 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Sun, 26 May 2019 05:24:16 -0700
-Received: from lb-tlvb-michal.il.qlogic.org (unknown [10.5.220.215])
-        by maili.marvell.com (Postfix) with ESMTP id AFF893F7040;
-        Sun, 26 May 2019 05:24:13 -0700 (PDT)
-From:   Michal Kalderon <michal.kalderon@marvell.com>
-To:     <michal.kalderon@marvell.com>, <ariel.elior@marvell.com>,
-        <davem@davemloft.net>
-CC:     <dledford@redhat.com>, <jgg@ziepe.ca>, <leon@kernel.org>,
-        <linux-rdma@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, Chad Dupuis <cdupuis@marvell.com>,
-        "Saurav Kashyap" <skashyap@marvell.com>
-Subject: [PATCH v2 net-next 11/11] qedf: Use hwfns and affin_hwfn_idx to get MSI-X vector index to use
-Date:   Sun, 26 May 2019 15:22:30 +0300
-Message-ID: <20190526122230.30039-12-michal.kalderon@marvell.com>
-X-Mailer: git-send-email 2.14.5
-In-Reply-To: <20190526122230.30039-1-michal.kalderon@marvell.com>
-References: <20190526122230.30039-1-michal.kalderon@marvell.com>
+        id S1727859AbfEZPhV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 26 May 2019 11:37:21 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46023 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726744AbfEZPhU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 May 2019 11:37:20 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w34so2991225pga.12;
+        Sun, 26 May 2019 08:37:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=URGml5/Z89pUst9mDYx5afNNgEbFqd7kb3vtTLohUmw=;
+        b=En3WiXfP/CRsoLLfHEjTIRqYAnSZiZbZt2dd7wRCdiXQOUD0gI0JQF5qe/UivFYDBb
+         Ds6OfpVH6kNISutLf5pnT2YqtJHVxK0YMIX6coCwI+NV41gvzgj7a2qUTPHsG/EDc3D3
+         TpeKsaDIiY3nhyfbZfumtz56NOh0ditZLsAn/nKEEhsdGZ/dklNmLzPIrIiUISeH5XdX
+         JKDmWsQLIxtmo0BhivCdz1lYyzzxTrByYPcS81fevj+PQJ6CB2BBEqJth6vWFGJjc/Ep
+         oKEHJhoMaQfqko5JTj0zxJEIAUdNCux2hhiEcwbXQQ/2ajaBIbAoAZLkwiYav1Tq8BdK
+         LhWw==
+X-Gm-Message-State: APjAAAUvvcnkQqVqhL76xy3Kjikq/gfbzMHOcffgF1BpV0KD+OIj2Zgq
+        OezbZtKxC1C6W/5iucSwWfW9LfCB
+X-Google-Smtp-Source: APXvYqy9T603n8qQzto83AO2/b0/mhODJYy/zzI98wbVtqIz/FuiU3uXlkpieijJaSOxwvKB1QugvQ==
+X-Received: by 2002:a05:6a00:cc:: with SMTP id e12mr16068634pfj.207.1558885039820;
+        Sun, 26 May 2019 08:37:19 -0700 (PDT)
+Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
+        by smtp.gmail.com with ESMTPSA id t2sm8513249pfh.166.2019.05.26.08.37.17
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Sun, 26 May 2019 08:37:18 -0700 (PDT)
+Subject: Re: [PATCH] drivers/scsi: fix warning PTR_ERR_OR_ZERO can be used
+To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>,
+        qla2xxx-upstream@qlogic.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        Wei Li <liwei213@huawei.com>,
+        Geng Jianfeng <gengjianfeng@hisilicon.com>,
+        Zang Leigang <zangleigang@hisilicon.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Kangjie Lu <kjlu@umn.edu>, Arnd Bergmann <arnd@arndb.de>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190525094205.GA21778@hari-Inspiron-1545>
+From:   Bart Van Assche <bvanassche@acm.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <2f7f51f7-e2a1-6667-3fed-642157437ea2@acm.org>
+Date:   Sun, 26 May 2019 08:37:16 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-26_08:,,
- signatures=0
+In-Reply-To: <20190525094205.GA21778@hari-Inspiron-1545>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Chad Dupuis <cdupuis@marvell.com>
+On 5/25/19 2:42 AM, Hariprasad Kelam wrote:
+> fix below warnig reported by coccicheck
+> 
+> /drivers/scsi/ufs/ufs-hisi.c:459:1-3: WARNING: PTR_ERR_OR_ZERO can be
+> used
+> ./drivers/scsi/qla2xxx/tcm_qla2xxx.c:1477:1-3: WARNING: PTR_ERR_OR_ZERO
+> can be used
+> 
+> Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+> ---
+>  drivers/scsi/qla2xxx/tcm_qla2xxx.c | 4 +---
+>  drivers/scsi/ufs/ufs-hisi.c        | 4 +---
+>  2 files changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> index ec9f199..4357b34 100644
+> --- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> +++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+> @@ -1474,10 +1474,8 @@ static int tcm_qla2xxx_check_initiator_node_acl(
+>  				       sizeof(struct qla_tgt_cmd),
+>  				       TARGET_PROT_ALL, port_name,
+>  				       qlat_sess, tcm_qla2xxx_session_cb);
+> -	if (IS_ERR(se_sess))
+> -		return PTR_ERR(se_sess);
+>  
+> -	return 0;
+> +	return PTR_ERR_OR_ZERO(se_sess);
+>  }
+>  
+>  static void tcm_qla2xxx_update_sess(struct fc_port *sess, port_id_t s_id,
+> diff --git a/drivers/scsi/ufs/ufs-hisi.c b/drivers/scsi/ufs/ufs-hisi.c
+> index 7aed0a1..f506044 100644
+> --- a/drivers/scsi/ufs/ufs-hisi.c
+> +++ b/drivers/scsi/ufs/ufs-hisi.c
+> @@ -456,10 +456,8 @@ static int ufs_hisi_get_resource(struct ufs_hisi_host *host)
+>  	/* get resource of ufs sys ctrl */
+>  	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+>  	host->ufs_sys_ctrl = devm_ioremap_resource(dev, mem_res);
+> -	if (IS_ERR(host->ufs_sys_ctrl))
+> -		return PTR_ERR(host->ufs_sys_ctrl);
+>  
+> -	return 0;
+> +	return PTR_ERR_OR_ZERO(host->ufs_sys_ctrl);
+>  }
 
-MSI-X vector index is determined using qed device information and
-affinity to use.
+Although I'm not sure this patch improves readability of the source code:
 
-Signed-off-by: Chad Dupuis <cdupuis@marvell.com>
-Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
-Signed-off-by: Michal Kalderon <michal.kalderon@marvell.com>
----
- drivers/scsi/qedf/qedf_main.c | 39 ++++++++++++++++++++++++++++-----------
- 1 file changed, 28 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/scsi/qedf/qedf_main.c b/drivers/scsi/qedf/qedf_main.c
-index 9f9431a4cc0e..dc4cad1d5dcc 100644
---- a/drivers/scsi/qedf/qedf_main.c
-+++ b/drivers/scsi/qedf/qedf_main.c
-@@ -2086,16 +2086,21 @@ static void qedf_simd_int_handler(void *cookie)
- static void qedf_sync_free_irqs(struct qedf_ctx *qedf)
- {
- 	int i;
-+	u16 vector_idx = 0;
-+	u32 vector;
- 
- 	if (qedf->int_info.msix_cnt) {
- 		for (i = 0; i < qedf->int_info.used_cnt; i++) {
--			synchronize_irq(qedf->int_info.msix[i].vector);
--			irq_set_affinity_hint(qedf->int_info.msix[i].vector,
--			    NULL);
--			irq_set_affinity_notifier(qedf->int_info.msix[i].vector,
--			    NULL);
--			free_irq(qedf->int_info.msix[i].vector,
--			    &qedf->fp_array[i]);
-+			vector_idx = i * qedf->dev_info.common.num_hwfns +
-+				qed_ops->common->get_affin_hwfn_idx(qedf->cdev);
-+			QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_DISC,
-+				  "Freeing IRQ #%d vector_idx=%d.\n",
-+				  i, vector_idx);
-+			vector = qedf->int_info.msix[vector_idx].vector;
-+			synchronize_irq(vector);
-+			irq_set_affinity_hint(vector, NULL);
-+			irq_set_affinity_notifier(vector, NULL);
-+			free_irq(vector, &qedf->fp_array[i]);
- 		}
- 	} else
- 		qed_ops->common->simd_handler_clean(qedf->cdev,
-@@ -2108,11 +2113,19 @@ static void qedf_sync_free_irqs(struct qedf_ctx *qedf)
- static int qedf_request_msix_irq(struct qedf_ctx *qedf)
- {
- 	int i, rc, cpu;
-+	u16 vector_idx = 0;
-+	u32 vector;
- 
- 	cpu = cpumask_first(cpu_online_mask);
- 	for (i = 0; i < qedf->num_queues; i++) {
--		rc = request_irq(qedf->int_info.msix[i].vector,
--		    qedf_msix_handler, 0, "qedf", &qedf->fp_array[i]);
-+		vector_idx = i * qedf->dev_info.common.num_hwfns +
-+			qed_ops->common->get_affin_hwfn_idx(qedf->cdev);
-+		QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_DISC,
-+			  "Requesting IRQ #%d vector_idx=%d.\n",
-+			  i, vector_idx);
-+		vector = qedf->int_info.msix[vector_idx].vector;
-+		rc = request_irq(vector, qedf_msix_handler, 0, "qedf",
-+				 &qedf->fp_array[i]);
- 
- 		if (rc) {
- 			QEDF_WARN(&(qedf->dbg_ctx), "request_irq failed.\n");
-@@ -2121,8 +2134,7 @@ static int qedf_request_msix_irq(struct qedf_ctx *qedf)
- 		}
- 
- 		qedf->int_info.used_cnt++;
--		rc = irq_set_affinity_hint(qedf->int_info.msix[i].vector,
--		    get_cpu_mask(cpu));
-+		rc = irq_set_affinity_hint(vector, get_cpu_mask(cpu));
- 		cpu = cpumask_next(cpu, cpu_online_mask);
- 	}
- 
-@@ -3068,6 +3080,11 @@ static int __qedf_probe(struct pci_dev *pdev, int mode)
- 		goto err1;
- 	}
- 
-+	QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_DISC,
-+		  "dev_info: num_hwfns=%d affin_hwfn_idx=%d.\n",
-+		  qedf->dev_info.common.num_hwfns,
-+		  qed_ops->common->get_affin_hwfn_idx(qedf->cdev));
-+
- 	/* queue allocation code should come here
- 	 * order should be
- 	 * 	slowpath_start
--- 
-2.14.5
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 
