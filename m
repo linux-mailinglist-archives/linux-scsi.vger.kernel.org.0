@@ -2,44 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C4B82AA82
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 17:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95132AA83
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 17:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbfEZPqL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 26 May 2019 11:46:11 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:42691 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726744AbfEZPqL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 May 2019 11:46:11 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 33so4704000pgv.9
-        for <linux-scsi@vger.kernel.org>; Sun, 26 May 2019 08:46:11 -0700 (PDT)
+        id S1727833AbfEZPsN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 26 May 2019 11:48:13 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:39301 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726744AbfEZPsM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 May 2019 11:48:12 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w22so7668960pgi.6
+        for <linux-scsi@vger.kernel.org>; Sun, 26 May 2019 08:48:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=E0wX7hx7fUHbd1V1s4e0inGVGb2AkZSANRS9TdClbBI=;
-        b=RwYt8mfeZ9VhNcfr69w55+axmGJqN2FFG8hO3N2PTC72HFa9StFhUHxP6+oaHNnynz
-         86Qce5Qu3/4Stn+3WsiYDAp0xon5JfvhxFbu01vYA/86L1t/Ir373PuDaGI1BEFD/EQQ
-         xz2bKHRIWsUn6cOpSObkOy1nqhRC7S+Aty+TzXhDAFe/ouajAMqqgRqJjM6k6ABxN1+e
-         npS/9MUzGVuRVEXknaAe6q5pYGxDCb1O+gtX5xnQ8q6+ZM2IyOIjcHJgE6qHpwuJZeDl
-         TwRil3ldil4me84Q8p4Y+os0ZONzea9IYhhAo4Qt7NX7e+f4dNOjj17tyUDt/2GVM59m
-         prAg==
-X-Gm-Message-State: APjAAAUSDdng+cEwXU6rP24oP9w4GlXKdFVR1SZDDKHAGNKnFvxcl7rm
-        1aDGHh3pmjRzl8/XHzisDPU=
-X-Google-Smtp-Source: APXvYqzkk2z1WKwyBR1z0iQizaNZx9vkrOcJFY9mCouKt70eT6xGyyYPh+XLrabVcL0jegPfgROKKg==
-X-Received: by 2002:aa7:9577:: with SMTP id x23mr128982066pfq.164.1558885570943;
-        Sun, 26 May 2019 08:46:10 -0700 (PDT)
+        bh=P1mc2XZ1/UTWZW/Qy+l2D/nLCrwKXDkpN74RkvSE0YI=;
+        b=ZuqaMtSyOTpimpT3rWZ1gLI/bnTfUIeEhLFChbsDikM6GyPse1Nwe/K0+vOXecrIsV
+         S1f4b0WUGD3Tx7KTRrVYXNpEZbfZA9UsmYVQ1hPuhIywxHmUrBN3OQTDVLtBgbz+/KdO
+         thZNkJN7Ho0cA6XoV4TrT8ww6PC+aMrkHP6XPR6+GTYNouSbPaBm3/AO3cAk1e+UoOQx
+         vfr2R7iDsUXJzqCi5gUJ9TIK4WAQu5oOGphcJl5+WodpMjpSyJHhjN0dG4HN/OUp3ZW+
+         dn2gwq/kDicxnyu6sUcrQDPRrQU3bqpg/5AY2OP6ZF/4iBVWVXAC/wLLh0DtaXCOrTif
+         tKlQ==
+X-Gm-Message-State: APjAAAWVrB0CJIpi1Afa6WGCGHDdiUlnovueOJ2y3+K/Ms+xNiS0h8HW
+        5rlCy2k/k30gMDB23y246zo=
+X-Google-Smtp-Source: APXvYqxuXu7bsZSCla+UBPGago6bnJkfSuXD0hxMHhHFDLnHGAhzI32x2TjgRFHTREXFYe6WWjOEDA==
+X-Received: by 2002:a17:90a:b111:: with SMTP id z17mr25605485pjq.58.1558885692032;
+        Sun, 26 May 2019 08:48:12 -0700 (PDT)
 Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
-        by smtp.gmail.com with ESMTPSA id 1sm8694027pfn.165.2019.05.26.08.46.09
+        by smtp.gmail.com with ESMTPSA id s12sm10292299pfd.152.2019.05.26.08.48.10
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 May 2019 08:46:10 -0700 (PDT)
-Subject: Re: [PATCH 01/19] sg: move functions around
+        Sun, 26 May 2019 08:48:10 -0700 (PDT)
+Subject: Re: [PATCH 06/19] sg: sense buffer cleanup
 To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
         bart.vanassche@wdc.com
 References: <20190524184809.25121-1-dgilbert@interlog.com>
- <20190524184809.25121-2-dgilbert@interlog.com>
+ <20190524184809.25121-7-dgilbert@interlog.com>
 From:   Bart Van Assche <bvanassche@acm.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
@@ -65,12 +65,12 @@ Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
  //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
  mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
  goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <f67f3eef-bb0e-2211-9b3a-6628227e76b0@acm.org>
-Date:   Sun, 26 May 2019 08:46:09 -0700
+Message-ID: <756199f9-6553-bb3b-8288-23f4d8bdfc4b@acm.org>
+Date:   Sun, 26 May 2019 08:48:09 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190524184809.25121-2-dgilbert@interlog.com>
+In-Reply-To: <20190524184809.25121-7-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -80,21 +80,12 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 5/24/19 11:47 AM, Douglas Gilbert wrote:
-> Move code around so it has the basic ordering: open(), close(),
-> write(), read(), ioctl(), other system calls (e.g. mmap()),
-> support code and finally debug code. The change was to put the
-> write() associated code before the read() code. The write()
-> system call is associated with submitting SCSI commands (i.e.
-> writing metadata to the device).  The read() system call is
-> associated with receiving the responses of earlier submitted
-> commands.
-> 
-> Helper functions are often placed above their caller to reduce
-> the number of forward function declarations needed.
+> Only a smaller percentage of SCSI commands should require a sense
+> buffer. Allocate as needed and delete as soon as possible.
 
-Moving helper functions in front of their caller is useful but random
-reordering of functions not. Such a random reordering of code pollutes
-the git history. Please don't do that.
+Most software developers use the word "cleanup" to refer to code changes
+that do not change the behavior of the code. This patch changes the
+behavior of the code. Please choose a better patch title.
 
 Thanks,
 
