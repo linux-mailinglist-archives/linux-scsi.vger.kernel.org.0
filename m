@@ -2,54 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E821F2AA71
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 17:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4B82AA82
+	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 17:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727859AbfEZPhV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 26 May 2019 11:37:21 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46023 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726744AbfEZPhU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 May 2019 11:37:20 -0400
-Received: by mail-pg1-f196.google.com with SMTP id w34so2991225pga.12;
-        Sun, 26 May 2019 08:37:20 -0700 (PDT)
+        id S1726875AbfEZPqL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 26 May 2019 11:46:11 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42691 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726744AbfEZPqL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 May 2019 11:46:11 -0400
+Received: by mail-pg1-f195.google.com with SMTP id 33so4704000pgv.9
+        for <linux-scsi@vger.kernel.org>; Sun, 26 May 2019 08:46:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
          :message-id:date:user-agent:mime-version:in-reply-to
          :content-language:content-transfer-encoding;
-        bh=URGml5/Z89pUst9mDYx5afNNgEbFqd7kb3vtTLohUmw=;
-        b=En3WiXfP/CRsoLLfHEjTIRqYAnSZiZbZt2dd7wRCdiXQOUD0gI0JQF5qe/UivFYDBb
-         Ds6OfpVH6kNISutLf5pnT2YqtJHVxK0YMIX6coCwI+NV41gvzgj7a2qUTPHsG/EDc3D3
-         TpeKsaDIiY3nhyfbZfumtz56NOh0ditZLsAn/nKEEhsdGZ/dklNmLzPIrIiUISeH5XdX
-         JKDmWsQLIxtmo0BhivCdz1lYyzzxTrByYPcS81fevj+PQJ6CB2BBEqJth6vWFGJjc/Ep
-         oKEHJhoMaQfqko5JTj0zxJEIAUdNCux2hhiEcwbXQQ/2ajaBIbAoAZLkwiYav1Tq8BdK
-         LhWw==
-X-Gm-Message-State: APjAAAUvvcnkQqVqhL76xy3Kjikq/gfbzMHOcffgF1BpV0KD+OIj2Zgq
-        OezbZtKxC1C6W/5iucSwWfW9LfCB
-X-Google-Smtp-Source: APXvYqy9T603n8qQzto83AO2/b0/mhODJYy/zzI98wbVtqIz/FuiU3uXlkpieijJaSOxwvKB1QugvQ==
-X-Received: by 2002:a05:6a00:cc:: with SMTP id e12mr16068634pfj.207.1558885039820;
-        Sun, 26 May 2019 08:37:19 -0700 (PDT)
+        bh=E0wX7hx7fUHbd1V1s4e0inGVGb2AkZSANRS9TdClbBI=;
+        b=RwYt8mfeZ9VhNcfr69w55+axmGJqN2FFG8hO3N2PTC72HFa9StFhUHxP6+oaHNnynz
+         86Qce5Qu3/4Stn+3WsiYDAp0xon5JfvhxFbu01vYA/86L1t/Ir373PuDaGI1BEFD/EQQ
+         xz2bKHRIWsUn6cOpSObkOy1nqhRC7S+Aty+TzXhDAFe/ouajAMqqgRqJjM6k6ABxN1+e
+         npS/9MUzGVuRVEXknaAe6q5pYGxDCb1O+gtX5xnQ8q6+ZM2IyOIjcHJgE6qHpwuJZeDl
+         TwRil3ldil4me84Q8p4Y+os0ZONzea9IYhhAo4Qt7NX7e+f4dNOjj17tyUDt/2GVM59m
+         prAg==
+X-Gm-Message-State: APjAAAUSDdng+cEwXU6rP24oP9w4GlXKdFVR1SZDDKHAGNKnFvxcl7rm
+        1aDGHh3pmjRzl8/XHzisDPU=
+X-Google-Smtp-Source: APXvYqzkk2z1WKwyBR1z0iQizaNZx9vkrOcJFY9mCouKt70eT6xGyyYPh+XLrabVcL0jegPfgROKKg==
+X-Received: by 2002:aa7:9577:: with SMTP id x23mr128982066pfq.164.1558885570943;
+        Sun, 26 May 2019 08:46:10 -0700 (PDT)
 Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
-        by smtp.gmail.com with ESMTPSA id t2sm8513249pfh.166.2019.05.26.08.37.17
+        by smtp.gmail.com with ESMTPSA id 1sm8694027pfn.165.2019.05.26.08.46.09
         (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 May 2019 08:37:18 -0700 (PDT)
-Subject: Re: [PATCH] drivers/scsi: fix warning PTR_ERR_OR_ZERO can be used
-To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>,
-        qla2xxx-upstream@qlogic.com,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Wei Li <liwei213@huawei.com>,
-        Geng Jianfeng <gengjianfeng@hisilicon.com>,
-        Zang Leigang <zangleigang@hisilicon.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Kangjie Lu <kjlu@umn.edu>, Arnd Bergmann <arnd@arndb.de>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190525094205.GA21778@hari-Inspiron-1545>
+        Sun, 26 May 2019 08:46:10 -0700 (PDT)
+Subject: Re: [PATCH 01/19] sg: move functions around
+To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        bart.vanassche@wdc.com
+References: <20190524184809.25121-1-dgilbert@interlog.com>
+ <20190524184809.25121-2-dgilbert@interlog.com>
 From:   Bart Van Assche <bvanassche@acm.org>
 Openpgp: preference=signencrypt
 Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
@@ -75,12 +65,12 @@ Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
  //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
  mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
  goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <2f7f51f7-e2a1-6667-3fed-642157437ea2@acm.org>
-Date:   Sun, 26 May 2019 08:37:16 -0700
+Message-ID: <f67f3eef-bb0e-2211-9b3a-6628227e76b0@acm.org>
+Date:   Sun, 26 May 2019 08:46:09 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190525094205.GA21778@hari-Inspiron-1545>
+In-Reply-To: <20190524184809.25121-2-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -89,52 +79,23 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/25/19 2:42 AM, Hariprasad Kelam wrote:
-> fix below warnig reported by coccicheck
+On 5/24/19 11:47 AM, Douglas Gilbert wrote:
+> Move code around so it has the basic ordering: open(), close(),
+> write(), read(), ioctl(), other system calls (e.g. mmap()),
+> support code and finally debug code. The change was to put the
+> write() associated code before the read() code. The write()
+> system call is associated with submitting SCSI commands (i.e.
+> writing metadata to the device).  The read() system call is
+> associated with receiving the responses of earlier submitted
+> commands.
 > 
-> /drivers/scsi/ufs/ufs-hisi.c:459:1-3: WARNING: PTR_ERR_OR_ZERO can be
-> used
-> ./drivers/scsi/qla2xxx/tcm_qla2xxx.c:1477:1-3: WARNING: PTR_ERR_OR_ZERO
-> can be used
-> 
-> Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
-> ---
->  drivers/scsi/qla2xxx/tcm_qla2xxx.c | 4 +---
->  drivers/scsi/ufs/ufs-hisi.c        | 4 +---
->  2 files changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-> index ec9f199..4357b34 100644
-> --- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-> +++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-> @@ -1474,10 +1474,8 @@ static int tcm_qla2xxx_check_initiator_node_acl(
->  				       sizeof(struct qla_tgt_cmd),
->  				       TARGET_PROT_ALL, port_name,
->  				       qlat_sess, tcm_qla2xxx_session_cb);
-> -	if (IS_ERR(se_sess))
-> -		return PTR_ERR(se_sess);
->  
-> -	return 0;
-> +	return PTR_ERR_OR_ZERO(se_sess);
->  }
->  
->  static void tcm_qla2xxx_update_sess(struct fc_port *sess, port_id_t s_id,
-> diff --git a/drivers/scsi/ufs/ufs-hisi.c b/drivers/scsi/ufs/ufs-hisi.c
-> index 7aed0a1..f506044 100644
-> --- a/drivers/scsi/ufs/ufs-hisi.c
-> +++ b/drivers/scsi/ufs/ufs-hisi.c
-> @@ -456,10 +456,8 @@ static int ufs_hisi_get_resource(struct ufs_hisi_host *host)
->  	/* get resource of ufs sys ctrl */
->  	mem_res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
->  	host->ufs_sys_ctrl = devm_ioremap_resource(dev, mem_res);
-> -	if (IS_ERR(host->ufs_sys_ctrl))
-> -		return PTR_ERR(host->ufs_sys_ctrl);
->  
-> -	return 0;
-> +	return PTR_ERR_OR_ZERO(host->ufs_sys_ctrl);
->  }
+> Helper functions are often placed above their caller to reduce
+> the number of forward function declarations needed.
 
-Although I'm not sure this patch improves readability of the source code:
+Moving helper functions in front of their caller is useful but random
+reordering of functions not. Such a random reordering of code pollutes
+the git history. Please don't do that.
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Thanks,
 
+Bart.
