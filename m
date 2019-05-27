@@ -2,68 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A3C2AC01
-	for <lists+linux-scsi@lfdr.de>; Sun, 26 May 2019 22:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47A02ACBD
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 May 2019 02:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725856AbfEZUKc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 26 May 2019 16:10:32 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:45752 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbfEZUKb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 May 2019 16:10:31 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d8])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id DC24013F3270F;
-        Sun, 26 May 2019 13:04:34 -0700 (PDT)
-Date:   Sun, 26 May 2019 13:04:32 -0700 (PDT)
-Message-Id: <20190526.130432.605011257219662109.davem@davemloft.net>
-To:     michal.kalderon@marvell.com
-Cc:     ariel.elior@marvell.com, dledford@redhat.com, jgg@ziepe.ca,
-        leon@kernel.org, linux-rdma@vger.kernel.org,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2 net-next 00/11] qed*: Improve performance on 100G
- link for offload protocols
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190526122230.30039-1-michal.kalderon@marvell.com>
-References: <20190526122230.30039-1-michal.kalderon@marvell.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sun, 26 May 2019 13:04:35 -0700 (PDT)
+        id S1726063AbfE0A5g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 26 May 2019 20:57:36 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42338 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725981AbfE0A5g (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 26 May 2019 20:57:36 -0400
+Received: by mail-pg1-f195.google.com with SMTP id 33so5129415pgv.9;
+        Sun, 26 May 2019 17:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=BdjqEMSeAFloAhLZoevUhTsAoKWad+eEnvBrlK9h5Ls=;
+        b=Z3+uRtfpG79M7BNLIRnXyfJ9sPDoZrhkSCxOgvoFc9SEyNIX2smauSYR+5ZY3OLoe0
+         UZChnQV1zzNhZrbp/xrh9u26hkGf8dUSGIBdoNVwci9UKzRHSrKOaCkru8Lluk2UE4/D
+         bmLzhEnYbWZXEw/3ywuMnG4N9Zxzpkve9Rftj4M6o6ixVFRKcB+7QZnfEnIklbbWAret
+         faFm7mAtkrGKATtivbzexGyhYujoiW//bfBGlZoQuYtCW7odICmr5TLt32KzrW+EOdmg
+         U2VVdTyZ6ymi4MnJ9oUpFBvLouEDvK1yC7tNdLZ02mL9oJ9K+l2LEouEYzD+IwFRYtgn
+         z0NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=BdjqEMSeAFloAhLZoevUhTsAoKWad+eEnvBrlK9h5Ls=;
+        b=lgKJuLSfvo/LvK0JmVwdXgX34K+0+15hukgFztvIqzSraUPshALQbYNBm+9+J45CJe
+         EgO02HaglqWEGzsTaPkHN6Yac+j2i895pFg97aixOAduy7CyKPk1NH/8x+PfCkUUtrJX
+         sZQBPvgbHYYjmIlldRcnMjeVidpjt3wFc81mLwhBklQdWZ1tONKaatBGxDGlIIsqb3K+
+         mapGwGYn4zTWos2bHUJr/r0iTqQ4htSWhUsw0ujqRb955Iwy+qfKFNvu/IG+Pk7NJF3N
+         SgekBT4g7ubifL2H3M6vdkKF9CZFctK4DKsDmOy22PcM/kyB3Y8iQPDlTN3t8Y0PD+jp
+         eI1Q==
+X-Gm-Message-State: APjAAAVmVW6uLZ2sHLEnTX0D54ufVNo7X7y10BL8BT0uogLrmI/t4aEL
+        qqvQ/1XYy24DcJAAKInPnrY=
+X-Google-Smtp-Source: APXvYqzy0BSN74KBEcCSKAmYIkrOIxBJWNt1E4+MRrkVmkqFsW4+GF+XXP/1yV6kW5FKUr5oW2NP2w==
+X-Received: by 2002:aa7:8a11:: with SMTP id m17mr110690092pfa.122.1558918655871;
+        Sun, 26 May 2019 17:57:35 -0700 (PDT)
+Received: from zhanggen-UX430UQ ([66.42.35.75])
+        by smtp.gmail.com with ESMTPSA id e123sm8962355pgc.29.2019.05.26.17.57.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 26 May 2019 17:57:35 -0700 (PDT)
+Date:   Mon, 27 May 2019 08:57:16 +0800
+From:   Gen Zhang <blackgod016574@gmail.com>
+To:     sathya.prakash@broadcom.com, chaitra.basappa@broadcom.com,
+        suganath-prabu.subramani@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mpt3sas_ctl: fix double-fetch bug in _ctl_ioctl_main()
+Message-ID: <20190527005716.GA17015@zhanggen-UX430UQ>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Michal Kalderon <michal.kalderon@marvell.com>
-Date: Sun, 26 May 2019 15:22:19 +0300
+In _ctl_ioctl_main(), 'ioctl_header' is fetched the first time from 
+userspace. 'ioctl_header.ioc_number' is then checked. The legal result 
+is saved to 'ioc'. Then, in condition MPT3COMMAND, the whole struct is
+fetched again from the userspace. Then _ctl_do_mpt_command() is called,
+'ioc' and 'karg' as inputs.
 
-> This patch series modifies the current implementation of PF selection.
-> The refactoring of the llh code enables setting additional filters
-> (mac / protocol) per PF, and improves performance for offload protocols
-> (RoCE, iWARP, iSCSI, fcoe) on 100G link (was capped at 90G per single
-> PF).
-> 
-> Improved performance on 100G link is achieved by configuring engine
-> affinty to each PF.
-> The engine affinity is read from the Management FW and hw is configured accordingly.
-> A new hw resource called PPFID is exposed and an API is introduced to utilize
-> it. This additional resource enables setting the affinity of a PF and providing
-> more classification rules per PF.
-> qedr,qedi,qedf are also modified as part of the series. Without the
-> changes functionality is broken.
-> 
-> v1 --> v2
-> ---------
-> - Remove iWARP module parameter. Instead use devlink param infrastructure
->   for setting the iwarp_cmt mode. Additional patch added to the series for
->   adding the devlink support.
-> 
-> - Fix kbuild test robot warning on qed_llh_filter initialization.
-> 
-> - Remove comments inside function calls
+However, a malicious user can change the 'ioc_number' between the two 
+fetches, which will cause a potential security issues.  Moreover, a 
+malicious user can provide a valid 'ioc_number' to pass the check in 
+first fetch, and then modify it in the second fetch.
 
-Series applied, thanks.
+To fix this, we need to recheck the 'ioc_number' in the second fetch.
+
+Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+---
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+index b2bb47c..5181c03 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -2319,6 +2319,10 @@ _ctl_ioctl_main(struct file *file, unsigned int cmd, void __user *arg,
+ 			break;
+ 		}
+ 
++		if (karg.hdr.ioc_number != ioctl_header.ioc_number) {
++			ret = -EINVAL;
++			break;
++		}
+ 		if (_IOC_SIZE(cmd) == sizeof(struct mpt3_ioctl_command)) {
+ 			uarg = arg;
+ 			ret = _ctl_do_mpt_command(ioc, karg, &uarg->mf);
