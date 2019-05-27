@@ -2,240 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A372B820
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 May 2019 17:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D8A2B829
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 May 2019 17:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726964AbfE0PDN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 May 2019 11:03:13 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:52818 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726704AbfE0PDN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 27 May 2019 11:03:13 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id D2BD53091D67;
-        Mon, 27 May 2019 15:03:12 +0000 (UTC)
-Received: from localhost (ovpn-8-24.pek2.redhat.com [10.72.8.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 173511017E39;
-        Mon, 27 May 2019 15:03:07 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-block@vger.kernel.org,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on CPU unplug
-Date:   Mon, 27 May 2019 23:02:07 +0800
-Message-Id: <20190527150207.11372-6-ming.lei@redhat.com>
-In-Reply-To: <20190527150207.11372-1-ming.lei@redhat.com>
-References: <20190527150207.11372-1-ming.lei@redhat.com>
+        id S1726380AbfE0PIl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 May 2019 11:08:41 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:35320 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726302AbfE0PIk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 May 2019 11:08:40 -0400
+Received: by mail-pf1-f196.google.com with SMTP id d126so7538731pfd.2;
+        Mon, 27 May 2019 08:08:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=N5ugnJVE0UakFyPbz7RPAOQQz30k1byDY4tWG4dOtTw=;
+        b=P3uezW5F212oVNFRbu0xvrHVbp1YFIcBPjqo6Ufx04Wu9MlZL0XmQJEg+sG8+6Eh3A
+         Dn3VsfTEusrrshZjKWZAuUw4leLeKkr9pHZ2lF2P9r8tskPCQYuSHNfmeDxW4FJCqVKd
+         8PKVPuTO2yMNzLAKYrOt/6Ws/OOwci4ly/xoxoe3DsxtDJKxUPP/7P7/nTEmBukFqF0U
+         LgJZ9b1isc1Q6FbNX58rHncT8vWvQsKnbE6lUmWmY/iw+sGfUgH9/cudq8snuDX4+/9z
+         aAB5Ne/JTCk2uew2iDxjNm0sNzu0fjqWay1FlSTBZ+ytKaJrUUIGDTeB5l9HjAUxvIpc
+         REeQ==
+X-Gm-Message-State: APjAAAUGRKZNbUUtmaJx1W3id5es/ZkVfbd4SgTJpl3MQImfBm0sxdyu
+        GEnIuMqK1yKHNs8E5x/NAYBDBx8q
+X-Google-Smtp-Source: APXvYqyon1PsbSfC0O/aacJKaERgNXOiWja/Q1famQ++moq6UMxWutRJG7sL+dZLvV6I6K3logLfDw==
+X-Received: by 2002:a17:90a:a0a:: with SMTP id o10mr31395019pjo.105.1558969719896;
+        Mon, 27 May 2019 08:08:39 -0700 (PDT)
+Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
+        by smtp.gmail.com with ESMTPSA id d10sm3970235pgh.43.2019.05.27.08.08.38
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 May 2019 08:08:38 -0700 (PDT)
+Subject: Re: [PATCH] scsi: scsi_dh_alua: Fix possible null-ptr-deref
+To:     YueHaibing <yuehaibing@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, axboe@kernel.dk, hare@suse.de
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20190527142209.21768-1-yuehaibing@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Openpgp: preference=signencrypt
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <dea3ea6b-66e7-a325-539f-63695cd87e51@acm.org>
+Date:   Mon, 27 May 2019 08:08:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Mon, 27 May 2019 15:03:13 +0000 (UTC)
+In-Reply-To: <20190527142209.21768-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Managed interrupts can not migrate affinity when their CPUs are offline.
-If the CPU is allowed to shutdown before they're returned, commands
-dispatched to managed queues won't be able to complete through their
-irq handlers.
+On 5/27/19 7:22 AM, YueHaibing wrote:
+> If alloc_workqueue fails in alua_init, it should return
+> -ENOMEM, otherwise it will trigger null-ptr-deref while
+> unloading module which calls destroy_workqueue dereference
+> wq->lock like this:
+> 
+> BUG: KASAN: null-ptr-deref in __lock_acquire+0x6b4/0x1ee0
+> Read of size 8 at addr 0000000000000080 by task syz-executor.0/7045
+> 
+> CPU: 0 PID: 7045 Comm: syz-executor.0 Tainted: G         C        5.1.0+ #28
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1
+> Call Trace:
+>  dump_stack+0xa9/0x10e
+>  __kasan_report+0x171/0x18d
+>  ? __lock_acquire+0x6b4/0x1ee0
+>  kasan_report+0xe/0x20
+>  __lock_acquire+0x6b4/0x1ee0
+>  lock_acquire+0xb4/0x1b0
+>  __mutex_lock+0xd8/0xb90
+>  drain_workqueue+0x25/0x290
+>  destroy_workqueue+0x1f/0x3f0
+>  __x64_sys_delete_module+0x244/0x330
+>  do_syscall_64+0x72/0x2a0
+>  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: 03197b61c5ec ("scsi_dh_alua: Use workqueue for RTPG")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/scsi/device_handler/scsi_dh_alua.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
+> index d7ac498ba35a..2a9dcb8973b7 100644
+> --- a/drivers/scsi/device_handler/scsi_dh_alua.c
+> +++ b/drivers/scsi/device_handler/scsi_dh_alua.c
+> @@ -1174,10 +1174,8 @@ static int __init alua_init(void)
+>  	int r;
+>  
+>  	kaluad_wq = alloc_workqueue("kaluad", WQ_MEM_RECLAIM, 0);
+> -	if (!kaluad_wq) {
+> -		/* Temporary failure, bypass */
+> -		return SCSI_DH_DEV_TEMP_BUSY;
+> -	}
+> +	if (!kaluad_wq)
+> +		return -ENOMEM;
+>  
+>  	r = scsi_register_device_handler(&alua_dh);
+>  	if (r != 0) {
+> 
 
-Wait in cpu hotplug handler until all inflight requests on the tags
-are completed or timeout. Wait once for each tags, so we can save time
-in case of shared tags.
-
-Based on the following patch from Keith, and use simple delay-spin
-instead.
-
-https://lore.kernel.org/linux-block/20190405215920.27085-1-keith.busch@intel.com/
-
-Some SCSI devices may have single blk_mq hw queue and multiple private
-completion queues, and wait until all requests on the private completion
-queue are completed.
-
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- block/blk-mq-tag.c |  2 +-
- block/blk-mq-tag.h |  5 +++
- block/blk-mq.c     | 94 ++++++++++++++++++++++++++++++++++++++++++----
- 3 files changed, 93 insertions(+), 8 deletions(-)
-
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index 7513c8eaabee..b24334f99c5d 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -332,7 +332,7 @@ static void bt_tags_for_each(struct blk_mq_tags *tags, struct sbitmap_queue *bt,
-  *		true to continue iterating tags, false to stop.
-  * @priv:	Will be passed as second argument to @fn.
-  */
--static void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
-+void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
- 		busy_tag_iter_fn *fn, void *priv)
- {
- 	if (tags->nr_reserved_tags)
-diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
-index 61deab0b5a5a..9ce7606a87f0 100644
---- a/block/blk-mq-tag.h
-+++ b/block/blk-mq-tag.h
-@@ -19,6 +19,9 @@ struct blk_mq_tags {
- 	struct request **rqs;
- 	struct request **static_rqs;
- 	struct list_head page_list;
-+
-+#define BLK_MQ_TAGS_DRAINED           0
-+	unsigned long flags;
- };
- 
- 
-@@ -35,6 +38,8 @@ extern int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
- extern void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool);
- void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
- 		void *priv);
-+void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
-+		busy_tag_iter_fn *fn, void *priv);
- 
- static inline struct sbq_wait_state *bt_wait_ptr(struct sbitmap_queue *bt,
- 						 struct blk_mq_hw_ctx *hctx)
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 32b8ad3d341b..ab1fbfd48374 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2215,6 +2215,65 @@ int blk_mq_alloc_rqs(struct blk_mq_tag_set *set, struct blk_mq_tags *tags,
- 	return -ENOMEM;
- }
- 
-+static int blk_mq_hctx_notify_prepare(unsigned int cpu, struct hlist_node *node)
-+{
-+	struct blk_mq_hw_ctx	*hctx =
-+		hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
-+
-+	if (hctx->tags)
-+		clear_bit(BLK_MQ_TAGS_DRAINED, &hctx->tags->flags);
-+
-+	return 0;
-+}
-+
-+struct blk_mq_inflight_rq_data {
-+	unsigned cnt;
-+	const struct cpumask *cpumask;
-+};
-+
-+static bool blk_mq_count_inflight_rq(struct request *rq, void *data,
-+				     bool reserved)
-+{
-+	struct blk_mq_inflight_rq_data *count = data;
-+
-+	if ((blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT) &&
-+			cpumask_test_cpu(blk_mq_rq_cpu(rq), count->cpumask))
-+		count->cnt++;
-+
-+	return true;
-+}
-+
-+unsigned blk_mq_tags_inflight_rqs(struct blk_mq_tags *tags,
-+		const struct cpumask *completion_cpus)
-+{
-+	struct blk_mq_inflight_rq_data data = {
-+		.cnt = 0,
-+		.cpumask = completion_cpus,
-+	};
-+
-+	blk_mq_all_tag_busy_iter(tags, blk_mq_count_inflight_rq, &data);
-+
-+	return data.cnt;
-+}
-+
-+static void blk_mq_drain_inflight_rqs(struct blk_mq_tags *tags,
-+		const struct cpumask *completion_cpus)
-+{
-+	if (!tags)
-+		return;
-+
-+	/* Can't apply the optimization in case of private completion queues */
-+	if (completion_cpus == cpu_all_mask &&
-+			test_and_set_bit(BLK_MQ_TAGS_DRAINED, &tags->flags))
-+		return;
-+
-+	while (1) {
-+		if (!blk_mq_tags_inflight_rqs(tags, completion_cpus))
-+			break;
-+		msleep(5);
-+	}
-+}
-+
- /*
-  * 'cpu' is going away. splice any existing rq_list entries from this
-  * software queue to the hw queue dispatch list, and ensure that it
-@@ -2226,6 +2285,8 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
- 	struct blk_mq_ctx *ctx;
- 	LIST_HEAD(tmp);
- 	enum hctx_type type;
-+	struct request_queue *q;
-+	const struct cpumask *cpumask = NULL, *completion_cpus;
- 
- 	hctx = hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
- 	ctx = __blk_mq_get_ctx(hctx->queue, cpu);
-@@ -2238,14 +2299,32 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
- 	}
- 	spin_unlock(&ctx->lock);
- 
--	if (list_empty(&tmp))
--		return 0;
-+	if (!list_empty(&tmp)) {
-+		spin_lock(&hctx->lock);
-+		list_splice_tail_init(&tmp, &hctx->dispatch);
-+		spin_unlock(&hctx->lock);
- 
--	spin_lock(&hctx->lock);
--	list_splice_tail_init(&tmp, &hctx->dispatch);
--	spin_unlock(&hctx->lock);
-+		blk_mq_run_hw_queue(hctx, true);
-+	}
-+
-+	/*
-+	 * Interrupt for the current completion queue will be shutdown, so
-+	 * wait until all requests on this queue are completed.
-+	 */
-+	q = hctx->queue;
-+	if (q->mq_ops->complete_queue_affinity)
-+		cpumask = q->mq_ops->complete_queue_affinity(hctx, cpu);
-+
-+	if (!cpumask) {
-+		cpumask = hctx->cpumask;
-+		completion_cpus = cpu_all_mask;
-+	} else {
-+		completion_cpus = cpumask;
-+	}
-+
-+	if (cpumask_first_and(cpumask, cpu_online_mask) >= nr_cpu_ids)
-+		blk_mq_drain_inflight_rqs(hctx->tags, completion_cpus);
- 
--	blk_mq_run_hw_queue(hctx, true);
- 	return 0;
- }
- 
-@@ -3541,7 +3620,8 @@ EXPORT_SYMBOL(blk_mq_rq_cpu);
- 
- static int __init blk_mq_init(void)
- {
--	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead", NULL,
-+	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead",
-+				blk_mq_hctx_notify_prepare,
- 				blk_mq_hctx_notify_dead);
- 	return 0;
- }
--- 
-2.20.1
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
