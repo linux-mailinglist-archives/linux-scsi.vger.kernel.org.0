@@ -2,88 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D65A22B776
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 May 2019 16:23:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC80F2B815
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 May 2019 17:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726207AbfE0OXX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 May 2019 10:23:23 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:17167 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726115AbfE0OXX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 27 May 2019 10:23:23 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 1E1FFFED7482FF4080F8;
-        Mon, 27 May 2019 22:23:21 +0800 (CST)
-Received: from localhost (10.177.31.96) by DGGEMS401-HUB.china.huawei.com
- (10.3.19.201) with Microsoft SMTP Server id 14.3.439.0; Mon, 27 May 2019
- 22:23:14 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <bvanassche@acm.org>, <axboe@kernel.dk>, <hare@suse.de>
-CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH] scsi: scsi_dh_alua: Fix possible null-ptr-deref
-Date:   Mon, 27 May 2019 22:22:09 +0800
-Message-ID: <20190527142209.21768-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1726291AbfE0PCp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 May 2019 11:02:45 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:56082 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726202AbfE0PCp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 27 May 2019 11:02:45 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id C9EF43082211;
+        Mon, 27 May 2019 15:02:33 +0000 (UTC)
+Received: from localhost (ovpn-8-24.pek2.redhat.com [10.72.8.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6E27D7940B;
+        Mon, 27 May 2019 15:02:27 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-block@vger.kernel.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        John Garry <john.garry@huawei.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>
+Subject: [PATCH V2 0/5] blk-mq:  Wait for for hctx inflight requests on CPU unplug
+Date:   Mon, 27 May 2019 23:02:02 +0800
+Message-Id: <20190527150207.11372-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.177.31.96]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Mon, 27 May 2019 15:02:45 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If alloc_workqueue fails in alua_init, it should return
--ENOMEM, otherwise it will trigger null-ptr-deref while
-unloading module which calls destroy_workqueue dereference
-wq->lock like this:
+Hi,
 
-BUG: KASAN: null-ptr-deref in __lock_acquire+0x6b4/0x1ee0
-Read of size 8 at addr 0000000000000080 by task syz-executor.0/7045
+blk-mq drivers often use managed IRQ, which affinity is setup
+automatically by genirq core.
 
-CPU: 0 PID: 7045 Comm: syz-executor.0 Tainted: G         C        5.1.0+ #28
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1
-Call Trace:
- dump_stack+0xa9/0x10e
- __kasan_report+0x171/0x18d
- ? __lock_acquire+0x6b4/0x1ee0
- kasan_report+0xe/0x20
- __lock_acquire+0x6b4/0x1ee0
- lock_acquire+0xb4/0x1b0
- __mutex_lock+0xd8/0xb90
- drain_workqueue+0x25/0x290
- destroy_workqueue+0x1f/0x3f0
- __x64_sys_delete_module+0x244/0x330
- do_syscall_64+0x72/0x2a0
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
+For managed IRQ, we need to make sure that there isn't in-flight
+requests when the managed IRQ is going to shutdown.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Fixes: 03197b61c5ec ("scsi_dh_alua: Use workqueue for RTPG")
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/scsi/device_handler/scsi_dh_alua.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+This patch waits for inflight requests associated with one
+going-to-shutdown managed IRQ in blk-mq's CPU hotplug handler.
 
-diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-index d7ac498ba35a..2a9dcb8973b7 100644
---- a/drivers/scsi/device_handler/scsi_dh_alua.c
-+++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-@@ -1174,10 +1174,8 @@ static int __init alua_init(void)
- 	int r;
- 
- 	kaluad_wq = alloc_workqueue("kaluad", WQ_MEM_RECLAIM, 0);
--	if (!kaluad_wq) {
--		/* Temporary failure, bypass */
--		return SCSI_DH_DEV_TEMP_BUSY;
--	}
-+	if (!kaluad_wq)
-+		return -ENOMEM;
- 
- 	r = scsi_register_device_handler(&alua_dh);
- 	if (r != 0) {
+One special case is that some SCSI devices have multiple private
+completion(reply) queue even though they only have one blk-mq hw queue,
+and the private completion queue is associated with one managed
+IRQ. Wait for inflight requests for these SCSI device too if last
+CPU of the completion queue is going to shutdown.
+
+SCSI device's internal commands aren't covered in this patchset,
+and they are much less important than requests from blk-mq/scsi
+core.
+
+V2:
+	- cover private multiple completion(reply) queue
+	- remove timeout during waitting, because some driver doesn't
+	implemnt proper .timeout handler.
+
+
+Ming Lei (5):
+  scsi: select reply queue from request's CPU
+  blk-mq: introduce .complete_queue_affinity
+  scsi: core: implement callback of .complete_queue_affinity
+  scsi: implement .complete_queue_affinity
+  blk-mq: Wait for for hctx inflight requests on CPU unplug
+
+ block/blk-mq-tag.c                          |  2 +-
+ block/blk-mq-tag.h                          |  5 ++
+ block/blk-mq.c                              | 94 +++++++++++++++++++--
+ drivers/scsi/hisi_sas/hisi_sas_main.c       |  5 +-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c      | 11 +++
+ drivers/scsi/hpsa.c                         | 14 ++-
+ drivers/scsi/megaraid/megaraid_sas_base.c   | 10 +++
+ drivers/scsi/megaraid/megaraid_sas_fusion.c |  4 +-
+ drivers/scsi/mpt3sas/mpt3sas_base.c         | 16 ++--
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c        | 11 +++
+ drivers/scsi/scsi_lib.c                     | 14 +++
+ include/linux/blk-mq.h                      | 12 ++-
+ include/scsi/scsi_cmnd.h                    | 11 +++
+ include/scsi/scsi_host.h                    | 10 +++
+ 14 files changed, 197 insertions(+), 22 deletions(-)
+
 -- 
-2.17.1
-
+2.20.1
 
