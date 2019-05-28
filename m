@@ -2,89 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DC82C099
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 May 2019 09:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60E82C0F6
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 May 2019 10:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727836AbfE1Hv1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 May 2019 03:51:27 -0400
-Received: from mail-eopbgr710084.outbound.protection.outlook.com ([40.107.71.84]:2923
-        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727803AbfE1Hv0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 28 May 2019 03:51:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=m+ZGXyNlu+DEZIzl3oJPMCulW9rKxU8isikVn4/nLUY=;
- b=mT9JjZ5/wtUuLc2UJDX/US5d/5bTWeE1opnYpSfNLWz9kqUOyF/HjVRqrCEda+PG70hSqiOYnl+fsJyUZzEkUyCpIK8Rbn2T8iT8dyOR9o0r/tE2QNZqmp1QPN7BwWP/923ybSrf45XvCiYTmrJeuVMzCVBl+LAJbPO/GMhjNrw=
-Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.31.141) by
- BN7PR08MB5522.namprd08.prod.outlook.com (20.176.29.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.22; Tue, 28 May 2019 07:51:22 +0000
-Received: from BN7PR08MB5684.namprd08.prod.outlook.com
- ([fe80::8d6c:f350:4859:e532]) by BN7PR08MB5684.namprd08.prod.outlook.com
- ([fe80::8d6c:f350:4859:e532%4]) with mapi id 15.20.1922.021; Tue, 28 May 2019
- 07:51:22 +0000
-From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
-To:     Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-CC:     Avi Shchislowski <avi.shchislowski@wdc.com>,
-        Alex Lemberg <alex.lemberg@wdc.com>
-Subject: RE: [EXT] [PATCH] scsi: ufs: Check that space was properly alloced in
- copy_query_response
-Thread-Topic: [EXT] [PATCH] scsi: ufs: Check that space was properly alloced
- in copy_query_response
-Thread-Index: AQHVD669lSVnBatUYkear3B63M9d+aZ+2CBA
-Date:   Tue, 28 May 2019 07:51:22 +0000
-Message-ID: <BN7PR08MB5684B0A4DB8BC0A00D9D6877DB1E0@BN7PR08MB5684.namprd08.prod.outlook.com>
-References: <1558427062-5084-1-git-send-email-avri.altman@wdc.com>
-In-Reply-To: <1558427062-5084-1-git-send-email-avri.altman@wdc.com>
-Accept-Language: en-150, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=beanhuo@micron.com; 
-x-originating-ip: [195.89.176.137]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 660ec111-b5d8-4f2f-f582-08d6e3414736
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN7PR08MB5522;
-x-ms-traffictypediagnostic: BN7PR08MB5522:|BN7PR08MB5522:
-x-microsoft-antispam-prvs: <BN7PR08MB5522E98CDE2793EB9850D4FDDB1E0@BN7PR08MB5522.namprd08.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:608;
-x-forefront-prvs: 00514A2FE6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(366004)(39860400002)(396003)(136003)(376002)(199004)(189003)(2501003)(110136005)(54906003)(2201001)(86362001)(68736007)(4326008)(316002)(6116002)(3846002)(25786009)(6246003)(2906002)(66446008)(186003)(26005)(558084003)(14454004)(478600001)(476003)(64756008)(446003)(11346002)(486006)(66946007)(76116006)(73956011)(66476007)(66556008)(7696005)(8936002)(8676002)(229853002)(6436002)(81156014)(81166006)(52536014)(5660300002)(7736002)(305945005)(66066001)(99286004)(7416002)(33656002)(71190400001)(71200400001)(53936002)(102836004)(6506007)(76176011)(74316002)(256004)(55016002)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB5522;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: micron.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: oibEA+6PsQrHBjpIaJ6Q/YuPbF9u1Ku8U+IaDE4qaSJ4JgnkFhcaYLu2NGaL+7/qyPYW3g1ldkBY8ULI5nN4rUQzHg8+a3sJlEknXzeFKs0mQWPyKRyfJfMKgjKnN14dtT1v7vIqIg495S1sLH97Lyh4W9TIyowNrxEqiu+6eyR8jbHyKSha3uY+h10XvvEv8It5ahdSHnoB3QeF+3MJRpZPb29a8F01JUMCc30XE256mUPpnoHH6SqUUqd++9eErvlxC922v9qqWjCEx8rqPXknva08PR28wuH4cYpJKw5GzjkeOhpK6AonUpixWS7vnXkBanq0Kg33bBgY1zK4klDJ9l1zUSE0h1XAHmib/i8SQ8qHxI3D8Z9sHIuYGqsUtuDfbmz3PSEF5zUGwSMaSKwgyBuGcoAFLqzIjUDOAVo=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726323AbfE1IM1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 May 2019 04:12:27 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:17881 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726236AbfE1IM1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 May 2019 04:12:27 -0400
+X-UUID: 166f0407fbc0412c9523ce831da75c28-20190528
+X-UUID: 166f0407fbc0412c9523ce831da75c28-20190528
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 160705361; Tue, 28 May 2019 16:12:18 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 28 May 2019 16:12:10 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 28 May 2019 16:12:10 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <pedrom.sousa@synopsys.com>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <evgreen@chromium.org>, <beanhuo@micron.com>,
+        <marc.w.gonzalez@free.fr>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH] scsi: ufs: Use pm_runtime_get_sync in shutdown flow
+Date:   Tue, 28 May 2019 16:12:06 +0800
+Message-ID: <1559031126-6587-1-git-send-email-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-X-OriginatorOrg: micron.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 660ec111-b5d8-4f2f-f582-08d6e3414736
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2019 07:51:22.5907
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: beanhuo@micron.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB5522
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi, Avri
->
->Signed-off-by: Avri Altman <avri.altman@wdc.com>
-Acked-by: Bean Huo <beanhuo@micron.com>
+There might be a racing issue between UFS shutdown and runtime resume
+flow described as below,
 
-Thanks,
-//Bean
+Thread #1: In UFS shutdown flow with ufshcd_shutdown() is running.
+Thread #2: In UFS runtime-resume flow which invokes
+           ufshcd_runtime_resume() because UFS was in runtime-suspended
+           state while an I/O request was issued.
+
+In this scenario, racing may happen and possibly lead to system hang
+if Thread #2 accesses UFS host's register map after host's resource,
+like power or clocks, are disabled by Thread #1.
+
+To avoid this racing, use PM public function pm_runtime_get_sync() in
+shutdown flow instead of internal function ufshcd_runtime_resume() for
+consolidated control of RPM status.
+
+One concern is that pm_runtime_get_sync() may be better paired with
+pm_runtime_put_sync(), however shutdown could be one-way path thus the
+pairing is not required.
+
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Peter Wang <peter.wang@mediatek.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index a208589426b1..cce7303f8653 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -8095,11 +8095,8 @@ int ufshcd_shutdown(struct ufs_hba *hba)
+ 	if (ufshcd_is_ufs_dev_poweroff(hba) && ufshcd_is_link_off(hba))
+ 		goto out;
+ 
+-	if (pm_runtime_suspended(hba->dev)) {
+-		ret = ufshcd_runtime_resume(hba);
+-		if (ret)
+-			goto out;
+-	}
++	if (pm_runtime_get_sync(hba->dev) < 0)
++		goto out;
+ 
+ 	ret = ufshcd_suspend(hba, UFS_SHUTDOWN_PM);
+ out:
+-- 
+2.18.0
+
