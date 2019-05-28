@@ -2,132 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C78A2BFFE
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 May 2019 09:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DC82C099
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 May 2019 09:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727484AbfE1HSi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 May 2019 03:18:38 -0400
-Received: from mail-eopbgr790072.outbound.protection.outlook.com ([40.107.79.72]:56224
-        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
+        id S1727836AbfE1Hv1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 May 2019 03:51:27 -0400
+Received: from mail-eopbgr710084.outbound.protection.outlook.com ([40.107.71.84]:2923
+        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726203AbfE1HSh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 28 May 2019 03:18:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=analog.onmicrosoft.com; s=selector1-analog-onmicrosoft-com;
+        id S1727803AbfE1Hv0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 28 May 2019 03:51:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3AB8b/qCSu2cMr7WoZ85wYjtkuzF3KKNeUprokIhRYw=;
- b=24qdmumjHolRET8Jz1Z4qfbTPgc/xmtmGldAolv2o3+11pKEIRdNvxVYVSiDLwlz88PErVoRSCKLxXyqPNC/VCoS7Tx7IZCUqShEK30m9vii9+YMVkZf97gJfUSEtO/DWQKv92vrsvfEBjbYger/26FMyX4n7GXpZqs5mIjvG34=
-Received: from BN8PR03CA0005.namprd03.prod.outlook.com (2603:10b6:408:94::18)
- by BY2PR03MB555.namprd03.prod.outlook.com (2a01:111:e400:2c37::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.1922.20; Tue, 28 May
- 2019 07:18:33 +0000
-Received: from CY1NAM02FT026.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::205) by BN8PR03CA0005.outlook.office365.com
- (2603:10b6:408:94::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1922.16 via Frontend
- Transport; Tue, 28 May 2019 07:18:33 +0000
-Authentication-Results: spf=pass (sender IP is 137.71.25.55)
- smtp.mailfrom=analog.com; metafoo.de; dkim=none (message not signed)
- header.d=none;metafoo.de; dmarc=bestguesspass action=none
- header.from=analog.com;
-Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
- 137.71.25.55 as permitted sender) receiver=protection.outlook.com;
- client-ip=137.71.25.55; helo=nwd2mta1.analog.com;
-Received: from nwd2mta1.analog.com (137.71.25.55) by
- CY1NAM02FT026.mail.protection.outlook.com (10.152.75.157) with Microsoft SMTP
- Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.1922.16
- via Frontend Transport; Tue, 28 May 2019 07:18:31 +0000
-Received: from NWD2HUBCAS9.ad.analog.com (nwd2hubcas9.ad.analog.com [10.64.69.109])
-        by nwd2mta1.analog.com (8.13.8/8.13.8) with ESMTP id x4S7IU4o017954
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Tue, 28 May 2019 00:18:30 -0700
-Received: from NWD2MBX7.ad.analog.com ([fe80::190e:f9c1:9a22:9663]) by
- NWD2HUBCAS9.ad.analog.com ([fe80::44a2:871b:49ab:ea47%12]) with mapi id
- 14.03.0415.000; Tue, 28 May 2019 03:18:30 -0400
-From:   "Ardelean, Alexandru" <alexandru.Ardelean@analog.com>
-To:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+ bh=m+ZGXyNlu+DEZIzl3oJPMCulW9rKxU8isikVn4/nLUY=;
+ b=mT9JjZ5/wtUuLc2UJDX/US5d/5bTWeE1opnYpSfNLWz9kqUOyF/HjVRqrCEda+PG70hSqiOYnl+fsJyUZzEkUyCpIK8Rbn2T8iT8dyOR9o0r/tE2QNZqmp1QPN7BwWP/923ybSrf45XvCiYTmrJeuVMzCVBl+LAJbPO/GMhjNrw=
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.31.141) by
+ BN7PR08MB5522.namprd08.prod.outlook.com (20.176.29.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.22; Tue, 28 May 2019 07:51:22 +0000
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::8d6c:f350:4859:e532]) by BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::8d6c:f350:4859:e532%4]) with mapi id 15.20.1922.021; Tue, 28 May 2019
+ 07:51:22 +0000
+From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
+To:     Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-CC:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>
-Subject: Re: [PATCH 1/3][V3] lib: fix __sysfs_match_string() helper when n
- != -1
-Thread-Topic: [PATCH 1/3][V3] lib: fix __sysfs_match_string() helper when n
- != -1
-Thread-Index: AQHVBY/wzk7diA7bF0G14nWBti7v/6aAgwaA
-Date:   Tue, 28 May 2019 07:18:29 +0000
-Message-ID: <42488b7ffb951ecd43f9c889eec1664cf2f57a8b.camel@analog.com>
-References: <20190508111913.7276-1-alexandru.ardelean@analog.com>
-In-Reply-To: <20190508111913.7276-1-alexandru.ardelean@analog.com>
-Accept-Language: en-US
+        Evan Green <evgreen@chromium.org>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+CC:     Avi Shchislowski <avi.shchislowski@wdc.com>,
+        Alex Lemberg <alex.lemberg@wdc.com>
+Subject: RE: [EXT] [PATCH] scsi: ufs: Check that space was properly alloced in
+ copy_query_response
+Thread-Topic: [EXT] [PATCH] scsi: ufs: Check that space was properly alloced
+ in copy_query_response
+Thread-Index: AQHVD669lSVnBatUYkear3B63M9d+aZ+2CBA
+Date:   Tue, 28 May 2019 07:51:22 +0000
+Message-ID: <BN7PR08MB5684B0A4DB8BC0A00D9D6877DB1E0@BN7PR08MB5684.namprd08.prod.outlook.com>
+References: <1558427062-5084-1-git-send-email-avri.altman@wdc.com>
+In-Reply-To: <1558427062-5084-1-git-send-email-avri.altman@wdc.com>
+Accept-Language: en-150, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [10.50.1.244]
-x-adiroutedonprem: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <7CDC7867EBCD204A89B22A6F63CBA720@analog.com>
-Content-Transfer-Encoding: base64
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=beanhuo@micron.com; 
+x-originating-ip: [195.89.176.137]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 660ec111-b5d8-4f2f-f582-08d6e3414736
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN7PR08MB5522;
+x-ms-traffictypediagnostic: BN7PR08MB5522:|BN7PR08MB5522:
+x-microsoft-antispam-prvs: <BN7PR08MB5522E98CDE2793EB9850D4FDDB1E0@BN7PR08MB5522.namprd08.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:608;
+x-forefront-prvs: 00514A2FE6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(366004)(39860400002)(396003)(136003)(376002)(199004)(189003)(2501003)(110136005)(54906003)(2201001)(86362001)(68736007)(4326008)(316002)(6116002)(3846002)(25786009)(6246003)(2906002)(66446008)(186003)(26005)(558084003)(14454004)(478600001)(476003)(64756008)(446003)(11346002)(486006)(66946007)(76116006)(73956011)(66476007)(66556008)(7696005)(8936002)(8676002)(229853002)(6436002)(81156014)(81166006)(52536014)(5660300002)(7736002)(305945005)(66066001)(99286004)(7416002)(33656002)(71190400001)(71200400001)(53936002)(102836004)(6506007)(76176011)(74316002)(256004)(55016002)(9686003);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB5522;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: micron.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: oibEA+6PsQrHBjpIaJ6Q/YuPbF9u1Ku8U+IaDE4qaSJ4JgnkFhcaYLu2NGaL+7/qyPYW3g1ldkBY8ULI5nN4rUQzHg8+a3sJlEknXzeFKs0mQWPyKRyfJfMKgjKnN14dtT1v7vIqIg495S1sLH97Lyh4W9TIyowNrxEqiu+6eyR8jbHyKSha3uY+h10XvvEv8It5ahdSHnoB3QeF+3MJRpZPb29a8F01JUMCc30XE256mUPpnoHH6SqUUqd++9eErvlxC922v9qqWjCEx8rqPXknva08PR28wuH4cYpJKw5GzjkeOhpK6AonUpixWS7vnXkBanq0Kg33bBgY1zK4klDJ9l1zUSE0h1XAHmib/i8SQ8qHxI3D8Z9sHIuYGqsUtuDfbmz3PSEF5zUGwSMaSKwgyBuGcoAFLqzIjUDOAVo=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:137.71.25.55;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(376002)(136003)(346002)(396003)(39860400002)(2980300002)(54534003)(189003)(199004)(305945005)(86362001)(2906002)(446003)(47776003)(2616005)(476003)(7636002)(11346002)(356004)(336012)(106002)(478600001)(7736002)(8676002)(14454004)(6116002)(8936002)(118296001)(3846002)(436003)(426003)(70586007)(102836004)(70206006)(14444005)(7696005)(50466002)(76176011)(54906003)(246002)(2486003)(23676004)(229853002)(6246003)(110136005)(36756003)(316002)(4326008)(2501003)(486006)(126002)(2201001)(5660300002)(186003)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:BY2PR03MB555;H:nwd2mta1.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail10.analog.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ab321dbf-34de-4440-9661-08d6e33cb0e6
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(4709054)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:BY2PR03MB555;
-X-MS-TrafficTypeDiagnostic: BY2PR03MB555:
-X-Microsoft-Antispam-PRVS: <BY2PR03MB5553AA8A5799E3A067A74E4F91E0@BY2PR03MB555.namprd03.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-Forefront-PRVS: 00514A2FE6
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: CHnpVGzREMVkFh0+yngaq5SarEbnsHyg8m3PvYsSiGX6lS23VvZYxaLWAzN65oT2JaMHNkSmx6Pa97BnEHeepyp8xu4To85PzFvlxCLnAGiJKtd0FRQ//uq9fHald/TxDu1OO4Wnh8agxxN3ngag2KRIVxySnTQxJlGGTO6zZ9hC1axM+c+/p+/LJNhw4xmP82TjT8hy700vM3jphpkltyGXewQWio5mYtAzOrufPUpPzzHKiUY5Q/eLjHSEQqvu9arrUi5pgkUjuwgvCDbOy3hYbfxMCTSKz0lUuY3Q9kjI/Fx84kNBl1jv4i/HMKN1GHwGa9LjdDAytfqY0LyWfB9xlBwkoAxThz0+UdZwD/q1jlW0X1XSnAvhlWYS6KyxyDy7k+yPSDn7MPN+3ct4hKFbEwd4z6xGoLooG+TZ+Qk=
-X-OriginatorOrg: analog.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 May 2019 07:18:31.9914
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 660ec111-b5d8-4f2f-f582-08d6e3414736
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2019 07:51:22.5907
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab321dbf-34de-4440-9661-08d6e33cb0e6
-X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.55];Helo=[nwd2mta1.analog.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY2PR03MB555
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: beanhuo@micron.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB5522
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-T24gV2VkLCAyMDE5LTA1LTA4IGF0IDE0OjE5ICswMzAwLCBBbGV4YW5kcnUgQXJkZWxlYW4gd3Jv
-dGU6DQo+IFRoZSBkb2N1bWVudGF0aW9uIHRoZSBgX19zeXNmc19tYXRjaF9zdHJpbmcoKWAgaGVs
-cGVyIG1lbnRpb25zIHRoYXQgYG5gDQo+ICh0aGUgc2l6ZSBvZiB0aGUgZ2l2ZW4gYXJyYXkpIHNo
-b3VsZCBiZToNCj4gICogQG46IG51bWJlciBvZiBzdHJpbmdzIGluIHRoZSBhcnJheSBvciAtMSBm
-b3IgTlVMTCB0ZXJtaW5hdGVkIGFycmF5cw0KPiANCj4gVGhlIGJlaGF2aW9yIG9mIHRoZSBmdW5j
-dGlvbiBpcyBkaWZmZXJlbnQsIGluIHRoZSBzZW5zZSB0aGF0IGl0IGV4aXRzIG9uDQo+IHRoZSBm
-aXJzdCBOVUxMIGVsZW1lbnQgaW4gdGhlIGFycmF5Lg0KPiANCj4gVGhpcyBwYXRjaCBjaGFuZ2Vz
-IHRoZSBiZWhhdmlvciwgdG8gZXhpdCB0aGUgbG9vcCB3aGVuIGEgTlVMTCBlbGVtZW50IGlzDQo+
-IGZvdW5kLCBhbmQgdGhlIHNpemUgb2YgdGhlIGFycmF5IGlzIHByb3ZpZGVkIGFzIC0xLg0KPiAN
-Cj4gQWxsIGN1cnJlbnQgdXNlcnMgb2YgX19zeXNmc19tYXRjaF9zdHJpbmcoKSAmIHN5c2ZzX21h
-dGNoX3N0cmluZygpIHByb3ZpZGUNCj4gY29udGlndW91cyBhcnJheXMgb2Ygc3RyaW5ncywgc28g
-dGhpcyBiZWhhdmlvciBjaGFuZ2UgZG9lc24ndCBpbmZsdWVuY2UNCj4gYW55dGhpbmcgKGF0IHRo
-aXMgcG9pbnQgaW4gdGltZSkuDQo+IA0KPiBUaGlzIGJlaGF2aW9yIGNoYW5nZSBhbGxvd3MgZm9y
-IGFuIGFycmF5IG9mIHN0cmluZ3MgdG8gaGF2ZSBOVUxMIGVsZW1lbnRzDQo+IHdpdGhpbiB0aGUg
-YXJyYXksIHdoaWNoIHdpbGwgYmUgaWdub3JlZC4gVGhpcyBpcyBwYXJ0aWN1bGFybHkgdXNlZnVs
-IHdoZW4NCj4gY3JlYXRpbmcgbWFwcGluZyBvZiBzdHJpbmdzIGFuZCBpbnRlZ2VycyAoYXMgYml0
-ZmllbGRzIG9yIG90aGVyIEhXDQo+IGRlc2NyaXB0aW9uKS4NCj4gDQoNCkhleSwNCg0KSSBkaWQg
-bm90IHNlZSBhbnkgcmVhY3Rpb24gb24gdGhpcy4NCkRvIEkgbmVlZCB0byBkbyBzb21ldGhpbmcg
-b24gdGhpcyAocmUtc3BpbiwgYWRkIG90aGVyIHBlb3BsZSwgcmUtc2VuZCBhcyBzdGFuZGFsb25l
-IHBhdGNoLCBldGMpID8NCg0KVGhhbmtzDQpBbGV4DQoNCg0KPiBTaWduZWQtb2ZmLWJ5OiBBbGV4
-YW5kcnUgQXJkZWxlYW4gPGFsZXhhbmRydS5hcmRlbGVhbkBhbmFsb2cuY29tPg0KPiAtLS0NCj4g
-DQo+IENoYW5nZWxvZyB2MiAtPiB2MzoNCj4gKiBmaXggX19zeXNmc19tYXRjaF9zdHJpbmcoKSB2
-cyBhZGRpbmcgYSBuZXcNCj4gICBfX3N5c2ZzX21hdGNoX3N0cmluZ193aXRoX2dhcHMoKSBoZWxw
-ZXINCj4gDQo+ICBsaWIvc3RyaW5nLmMgfCA1ICsrKystDQo+ICAxIGZpbGUgY2hhbmdlZCwgNCBp
-bnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvbGliL3N0cmlu
-Zy5jIGIvbGliL3N0cmluZy5jDQo+IGluZGV4IDNhYjg2MWMxYTg1Ny4uNWJlYTNmOTg0NzhhIDEw
-MDY0NA0KPiAtLS0gYS9saWIvc3RyaW5nLmMNCj4gKysrIGIvbGliL3N0cmluZy5jDQo+IEBAIC02
-NzQsOCArNjc0LDExIEBAIGludCBfX3N5c2ZzX21hdGNoX3N0cmluZyhjb25zdCBjaGFyICogY29u
-c3QgKmFycmF5LCBzaXplX3QgbiwgY29uc3QgY2hhciAqc3RyKQ0KPiAgDQo+ICAJZm9yIChpbmRl
-eCA9IDA7IGluZGV4IDwgbjsgaW5kZXgrKykgew0KPiAgCQlpdGVtID0gYXJyYXlbaW5kZXhdOw0K
-PiAtCQlpZiAoIWl0ZW0pDQo+ICsJCWlmICghaXRlbSkgew0KPiArCQkJaWYgKG4gIT0gKHNpemVf
-dCktMSkNCj4gKwkJCQljb250aW51ZTsNCj4gIAkJCWJyZWFrOw0KPiArCQl9DQo+ICAJCWlmIChz
-eXNmc19zdHJlcShpdGVtLCBzdHIpKQ0KPiAgCQkJcmV0dXJuIGluZGV4Ow0KPiAgCX0NCg==
+Hi, Avri
+>
+>Signed-off-by: Avri Altman <avri.altman@wdc.com>
+Acked-by: Bean Huo <beanhuo@micron.com>
+
+Thanks,
+//Bean
