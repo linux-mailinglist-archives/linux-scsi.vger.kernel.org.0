@@ -2,68 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB9C2D576
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 08:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5B4E2D56F
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 08:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbfE2GYY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 02:24:24 -0400
-Received: from mail-m975.mail.163.com ([123.126.97.5]:59992 "EHLO
-        mail-m975.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725887AbfE2GYX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 02:24:23 -0400
-X-Greylist: delayed 906 seconds by postgrey-1.27 at vger.kernel.org; Wed, 29 May 2019 02:24:22 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id; bh=ZdPphefzlMESscBLlx
-        sYKjtJRw7OPChqniARbyt54IE=; b=pWuUDd9HnWKG6/VDfV1I7jIR1j8INfRD9l
-        YIe/arGo5g4RsptJOPT0KjMU0nOWyfVX5pG6Mr+hAk1pX3vooE2k59YlKxI3Nqw3
-        YANXb+oyLSV8YCKjjlN+kQuDfGwjfHczaspMw+OGP5VRDzW1uHfuuX3sMTtebZEO
-        2ueK34pF4=
-Received: from localhost.localdomain (unknown [218.106.182.173])
-        by smtp19 (Coremail) with SMTP id HdxpCgCH9Yv_Ie5cxgcSAA--.153S3;
-        Wed, 29 May 2019 14:09:07 +0800 (CST)
-From:   Xidong Wang <wangxidong_97@163.com>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Xidong Wang <wangxidong_97@163.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] scsi: esas2r: esas2r_init: check return value
-Date:   Wed, 29 May 2019 14:09:00 +0800
-Message-Id: <1559110140-3544-1-git-send-email-wangxidong_97@163.com>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID: HdxpCgCH9Yv_Ie5cxgcSAA--.153S3
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JF1ruFW5CFWkJFW3GF17ZFb_yoWxKFg_Wr
-        ZrAr1xZr47CF1xtryftFy3ArZ09r48ZFsYgr1rtayfZ34xWr1DWr4UXr17Zws7W3y8uFyU
-        Aa90vryFyr1jyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRRlAp3UUUUU==
-X-Originating-IP: [218.106.182.173]
-X-CM-SenderInfo: pzdqw5xlgr0wrbzxqiywtou0bp/1tbivgPD81ZcV9Zx0AAAsn
+        id S1725911AbfE2GXS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 02:23:18 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:60070 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725880AbfE2GXS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 02:23:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ko7R6sT1UehlRj0bJMyAyDrGSCFCxS6Q1zpbk2bJ/wE=; b=DcfuD/wN8e5mcz/Sn+EpWmYG5
+        z9K66604+5wt+LouVxM2rv961k9WueEHjC5f4maVynNbDexm1szGZ8BGzBDvmk4XHoDBpJfshUKbQ
+        UgggUKK4xeT7H6nJ3Th+dVyPBmPiUUvR14BDecfxJtsWxl3u7fYlWilSYA1Wi2MHmHmYZ7XlM0Aia
+        CWHmqtJRJIJ9q50EBFIRpGsCNcflCM6AqCMmOHHhf+4keoBsc/X3qylbUycDnkslot57ubwLzv8vW
+        4M2wRqfI7bUePoJ0EjZej+i+Ws8yNyeW/yMOMGw8R4sUzv06BZTMZ+YJqiP/a7Ry6Pdae1X/lgLzJ
+        T5MTxm/Jw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hVrzY-0001DT-G9; Wed, 29 May 2019 06:23:16 +0000
+Date:   Tue, 28 May 2019 23:23:16 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] wd719x: pass GFP_ATOMIC instead of GFP_KERNEL
+Message-ID: <20190529062316.GA3997@infradead.org>
+References: <20190529013540.GA20273@hari-Inspiron-1545>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190529013540.GA20273@hari-Inspiron-1545>
+User-Agent: Mutt/1.9.2 (2017-12-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In esas2r_resume(), the return value of pci_enable_device() is not
-checked before pdev is used.
+On Wed, May 29, 2019 at 07:05:40AM +0530, Hariprasad Kelam wrote:
+> wd719x_chip_init is getting called in interrupt disabled
+> mode(spin_lock_irqsave) , so we need to GFP_ATOMIC instead
+> of GFP_KERNEL.
+> 
+> Issue identified by coccicheck
 
-Signed-off-by: Xidong Wang <wangxidong_97@163.com>
----
- drivers/scsi/esas2r/esas2r_init.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/scsi/esas2r/esas2r_init.c b/drivers/scsi/esas2r/esas2r_init.c
-index 950cd92..883d35f 100644
---- a/drivers/scsi/esas2r/esas2r_init.c
-+++ b/drivers/scsi/esas2r/esas2r_init.c
-@@ -686,6 +686,9 @@ int esas2r_resume(struct pci_dev *pdev)
- 	esas2r_log_dev(ESAS2R_LOG_INFO, &(pdev->dev),
- 		       "pci_enable_device() called");
- 	rez = pci_enable_device(pdev);
-+	if (rez < 0) {
-+		goto error_exit;
-+	}
- 	pci_set_master(pdev);
- 
- 	if (!a) {
--- 
-2.7.4
-
+I don't think request_firmware is any more happy being called under
+a spinlock.  The right fix is to not hold a spinlock over the board
+initialization.
