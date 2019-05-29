@@ -2,70 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC3A2E366
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 19:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4002E3F5
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 19:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726033AbfE2RiQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 13:38:16 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53944 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725956AbfE2RiQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 May 2019 13:38:16 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0F97FAD02;
-        Wed, 29 May 2019 17:38:15 +0000 (UTC)
-Subject: Re: [PATCH 11/24] scsi: add scsi_host_get_reserved_cmd()
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-References: <20190529132901.27645-1-hare@suse.de>
- <20190529132901.27645-12-hare@suse.de>
- <25a5a8f5-324b-6b7c-71eb-6cb9f9a60ba8@acm.org>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <0af75234-7470-acb8-c7ac-10ebaa1e3321@suse.de>
-Date:   Wed, 29 May 2019 19:38:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726018AbfE2R66 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 13:58:58 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:45008 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725917AbfE2R65 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 13:58:57 -0400
+Received: by mail-pg1-f193.google.com with SMTP id n2so325957pgp.11;
+        Wed, 29 May 2019 10:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=BxwrAqO9UAXV6UenFSJjDbgaMZFeylmamm3RqPV+N2k=;
+        b=tZ59KD1wTs2TjPkbXAhQzJkB5G/NBo1yGQ1cYu4X+m4W4fIUbT2O4NgcHvqQwUE/h1
+         ro0tS9OZi7F/oKAmx2a3DDICMaCM6X3+19xizHqFbXsM4RNtrXCcZv8FzDadAQHWAPhX
+         wGFT8p4BvITfHOdjr2jIfyuOvLBtsdsU9FZQuNngBPq+oCLIG+YEwq4HjCsEMP7pIr/3
+         TYWbQJuqbtih6HAdGmswWyWn36aK9CgrbrEOXmKRDRUM3kxCGoh9ZhOgSnCyTX9HD6zk
+         XSBj2wRzYTCV4tHRIOQRRMq7MZla8qhN2JrpSgbIEuPIltRArLNriYMX0EQac+kmvVEM
+         oZMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=BxwrAqO9UAXV6UenFSJjDbgaMZFeylmamm3RqPV+N2k=;
+        b=MnZSxpJ0R2vEHVH6MkAQg2yv74NHThLbbyTWIIGIQbn0XpDrs8RDLsLWNprmJO33qo
+         /KY2Xo2H5edAlul6S0Zr6Mw2sw3bCYVPpDvtdUCkIoWQJniTSl2UJMlz4z5v0B4LPH9m
+         h39ukSrEeyaEw7TS16QOQVvQp6wxCbfQgrDRf3lPl52in3Hl6+mTuUPMVb4Coz/Cw8Ju
+         vGhzUl98IgnxwpybXC1YzTSkDMtTirICn/RWgytMMJuosZI67UiYNPfC6GrE73KPCHfZ
+         xOEUPCAjuPMR6DQyxXSErmxb8syPoAiTSj9xfMCd5Lqwe+pCBYE1KDnDpC+p7ThaYIXf
+         98yw==
+X-Gm-Message-State: APjAAAXgaMo9mUUza8TXyL2BN7S3durYz7aD+4nI4G2rJ7vQqxsnOXyN
+        6yvwVV8ywkgU+J8AKhwuey8=
+X-Google-Smtp-Source: APXvYqxnHXl1GtRPFmBDheP9IOj8tKjdq/3R7VfecrJbmSjAECrjur1LnsM86N//7eZ+M1MWrihhOw==
+X-Received: by 2002:aa7:8acb:: with SMTP id b11mr150551391pfd.115.1559152737270;
+        Wed, 29 May 2019 10:58:57 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.89.153])
+        by smtp.gmail.com with ESMTPSA id l38sm182909pje.12.2019.05.29.10.58.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 May 2019 10:58:56 -0700 (PDT)
+Date:   Wed, 29 May 2019 23:28:51 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [Patch v2] wd719x: pass GFP_ATOMIC instead of GFP_KERNEL
+Message-ID: <20190529175851.GA10760@hari-Inspiron-1545>
 MIME-Version: 1.0
-In-Reply-To: <25a5a8f5-324b-6b7c-71eb-6cb9f9a60ba8@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/29/19 5:19 PM, Bart Van Assche wrote:
-> On 5/29/19 6:28 AM, Hannes Reinecke wrote:
->> +    rq = blk_mq_alloc_request(shost->reserved_cmd_q,
->> +                  REQ_OP_DRV_OUT | REQ_NOWAIT,
->> +                  BLK_MQ_REQ_RESERVED);
-> 
-> Is your purpose to avoid that blk_mq_alloc_request() waits? If so, why 
-> do you want to avoid that?
-> 
-Typically these commands are intended for internal purposes, so there 
-should always be enough commands free to allow direct allocation.
-If not we're in an error condition, and we need to return so as not to 
-lock up the driver (as it might rely on this command to make forward 
-progress).
+dont acquire lock before calling wd719x_chip_init.
 
-> The same comment as for patch 02/24 applies here: if you want to avoid 
-> that blk_mq_alloc_request() I think you need BLK_MQ_REQ_NOWAIT instead 
-> of REQ_NOWAIT.
-> 
-Sure.
+Issue identified by coccicheck
 
-Cheers,
+Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+-----
+changes in v1: Replace GFP_KERNEL with GFP_ATOMIC.
+changes in v2: Call wd719x_chip_init  without lock as suggested
+		in review
+----
+---
+ drivers/scsi/wd719x.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Hannes
+diff --git a/drivers/scsi/wd719x.c b/drivers/scsi/wd719x.c
+index c2f4006..340ec92 100644
+--- a/drivers/scsi/wd719x.c
++++ b/drivers/scsi/wd719x.c
+@@ -505,11 +505,9 @@ static int wd719x_host_reset(struct scsi_cmnd *cmd)
+ {
+ 	struct wd719x *wd = shost_priv(cmd->device->host);
+ 	struct wd719x_scb *scb, *tmp;
+-	unsigned long flags;
+ 	int result;
+ 
+ 	dev_info(&wd->pdev->dev, "host reset requested\n");
+-	spin_lock_irqsave(wd->sh->host_lock, flags);
+ 	/* Try to reinit the RISC */
+ 	if (wd719x_chip_init(wd) == 0)
+ 		result = SUCCESS;
+@@ -519,7 +517,6 @@ static int wd719x_host_reset(struct scsi_cmnd *cmd)
+ 	/* flush all SCBs */
+ 	list_for_each_entry_safe(scb, tmp, &wd->active_scbs, list)
+ 		wd719x_finish_cmd(scb, result);
+-	spin_unlock_irqrestore(wd->sh->host_lock, flags);
+ 
+ 	return result;
+ }
 -- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                              +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+2.7.4
+
