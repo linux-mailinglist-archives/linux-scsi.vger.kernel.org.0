@@ -2,56 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5B4E2D56F
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 08:23:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C7F42D947
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 11:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725911AbfE2GXS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 02:23:18 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:60070 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725880AbfE2GXS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 02:23:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=ko7R6sT1UehlRj0bJMyAyDrGSCFCxS6Q1zpbk2bJ/wE=; b=DcfuD/wN8e5mcz/Sn+EpWmYG5
-        z9K66604+5wt+LouVxM2rv961k9WueEHjC5f4maVynNbDexm1szGZ8BGzBDvmk4XHoDBpJfshUKbQ
-        UgggUKK4xeT7H6nJ3Th+dVyPBmPiUUvR14BDecfxJtsWxl3u7fYlWilSYA1Wi2MHmHmYZ7XlM0Aia
-        CWHmqtJRJIJ9q50EBFIRpGsCNcflCM6AqCMmOHHhf+4keoBsc/X3qylbUycDnkslot57ubwLzv8vW
-        4M2wRqfI7bUePoJ0EjZej+i+Ws8yNyeW/yMOMGw8R4sUzv06BZTMZ+YJqiP/a7Ry6Pdae1X/lgLzJ
-        T5MTxm/Jw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hVrzY-0001DT-G9; Wed, 29 May 2019 06:23:16 +0000
-Date:   Tue, 28 May 2019 23:23:16 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] wd719x: pass GFP_ATOMIC instead of GFP_KERNEL
-Message-ID: <20190529062316.GA3997@infradead.org>
-References: <20190529013540.GA20273@hari-Inspiron-1545>
+        id S1726628AbfE2JmM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 05:42:12 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:39698 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725956AbfE2JmM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 May 2019 05:42:12 -0400
+Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 4D7B3487BFBF343E4681;
+        Wed, 29 May 2019 17:42:10 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS414-HUB.china.huawei.com
+ (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Wed, 29 May 2019
+ 17:42:08 +0800
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on CPU
+ unplug
+To:     Ming Lei <ming.lei@redhat.com>
+References: <20190527150207.11372-1-ming.lei@redhat.com>
+ <20190527150207.11372-6-ming.lei@redhat.com>
+ <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com>
+ <20190529022852.GA21398@ming.t460p> <20190529024200.GC21398@ming.t460p>
+CC:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <linux-block@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        <linux-scsi@vger.kernel.org>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        "Sathya Prakash" <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+Message-ID: <5bc07fd5-9d2b-bf9c-eb77-b8cebadb9150@huawei.com>
+Date:   Wed, 29 May 2019 10:42:00 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190529013540.GA20273@hari-Inspiron-1545>
-User-Agent: Mutt/1.9.2 (2017-12-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20190529024200.GC21398@ming.t460p>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 29, 2019 at 07:05:40AM +0530, Hariprasad Kelam wrote:
-> wd719x_chip_init is getting called in interrupt disabled
-> mode(spin_lock_irqsave) , so we need to GFP_ATOMIC instead
-> of GFP_KERNEL.
-> 
-> Issue identified by coccicheck
+On 29/05/2019 03:42, Ming Lei wrote:
+> On Wed, May 29, 2019 at 10:28:52AM +0800, Ming Lei wrote:
+>> On Tue, May 28, 2019 at 05:50:40PM +0100, John Garry wrote:
+>>> On 27/05/2019 16:02, Ming Lei wrote:
+>>>> Managed interrupts can not migrate affinity when their CPUs are offline.
+>>>> If the CPU is allowed to shutdown before they're returned, commands
+>>>> dispatched to managed queues won't be able to complete through their
+>>>> irq handlers.
+>>>>
+>>>> Wait in cpu hotplug handler until all inflight requests on the tags
+>>>> are completed or timeout. Wait once for each tags, so we can save time
+>>>> in case of shared tags.
+>>>>
+>>>> Based on the following patch from Keith, and use simple delay-spin
+>>>> instead.
+>>>>
+>>>> https://lore.kernel.org/linux-block/20190405215920.27085-1-keith.busch@intel.com/
+>>>>
+>>>> Some SCSI devices may have single blk_mq hw queue and multiple private
+>>>> completion queues, and wait until all requests on the private completion
+>>>> queue are completed.
+>>>
+>>> Hi Ming,
+>>>
+>>> I'm a bit concerned that this approach won't work due to ordering: it seems
+>>> that the IRQ would be shutdown prior to the CPU dead notification for the
+>>
+>> Managed IRQ shutdown is run in irq_migrate_all_off_this_cpu(), which is
+>> called in the callback of takedown_cpu(). And the CPU dead notification
+>> is always sent after that CPU becomes offline, see cpuhp_invoke_callback().
+>
+> Hammm, looks we both say same thing.
+>
+> Yeah, it is too late to drain requests in the cpu hotplug DEAD handler,
+> maybe we can try to move managed IRQ shutdown after sending the dead
+> notification.
+>
 
-I don't think request_firmware is any more happy being called under
-a spinlock.  The right fix is to not hold a spinlock over the board
-initialization.
+Even if the IRQ is shutdown later, all CPUs would still be dead, so none 
+available to receive the interrupt or do the work for draining the queue.
+
+> I need to think of it further.
+
+It would seem that we just need to be informed of CPU offlining earlier, 
+and plug the drain in there.
+
+>
+
+Cheers,
+John
+
+> Thanks,
+> Ming
+>
+> .
+>
+
+
