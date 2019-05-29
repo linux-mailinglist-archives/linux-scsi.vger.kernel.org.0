@@ -2,257 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A99B2CCA3
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 May 2019 18:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC2D82D362
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 03:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbfE1Quw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 May 2019 12:50:52 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:17601 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726786AbfE1Quw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 28 May 2019 12:50:52 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 49A082697EB331E0739F;
-        Wed, 29 May 2019 00:50:49 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Wed, 29 May 2019
- 00:50:48 +0800
-From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on CPU
- unplug
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-References: <20190527150207.11372-1-ming.lei@redhat.com>
- <20190527150207.11372-6-ming.lei@redhat.com>
-CC:     <linux-block@vger.kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        <linux-scsi@vger.kernel.org>,
-        "Bart Van Assche" <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-Message-ID: <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com>
-Date:   Tue, 28 May 2019 17:50:40 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
+        id S1726120AbfE2Bfs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 May 2019 21:35:48 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33583 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725816AbfE2Bfr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 May 2019 21:35:47 -0400
+Received: by mail-pg1-f194.google.com with SMTP id h17so323920pgv.0;
+        Tue, 28 May 2019 18:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=f+EkUBeXFScCCzheqKBe16U/rvHBs3nQTNc8yUaeiYo=;
+        b=XJgtbmuk3AHBSVrUw4iIzFk0SaH0ontf6JTdQ7ho6kElQc0w1WH4Im58Lp0MAqik+5
+         AlmEXhFpXWBw3i8YGyzu3qOwvv/hWUIVejWeJgIHWYDNI9jC+iTtbCbv2jx+WeWs0Z9k
+         vy1NDK6E2jADnVDwZcqqIGz4A+OP33fKqun3FgJ8i6VhT1Dwyho5kb7F6eYvyl3+NAeu
+         FrNq2Zx8+os678dRHXIuulalcgJ6tm6r3gr0Sz6W7k9jSq32FhbBctrzK7faocoxrS9U
+         nSngKH7U1Q72E5gx+07wmdZD6m5DL1jXGnjttbyLWrY8JOClZDYaNRZYk/wxXM6S+WMh
+         QtRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=f+EkUBeXFScCCzheqKBe16U/rvHBs3nQTNc8yUaeiYo=;
+        b=I0hsUKnSNyKIojl/EjztLcN35Frz+3EfcVTibBlU/iFLAfGljMuRJljf5L+dC0PaGA
+         ow4DJsIRet8wRmpr1G1AkpEcK6YspRr7gqX9cjLOSa/K9GTg4CwNQI8RGAykEwqzEmTl
+         Wt+y2Wy7wAq7i2UQgMPQs6mWhDz0vEkwh8hRFgWN7KcUZ8Rf+ky+V3AxKROy/NABXYtD
+         ZyGzh385wftgS7ZHuy2Dxa/rVXkX9AlOxL2OBwvRtE/hopwylakI9QCVym6xXgYwkJpG
+         SjlVCK/btWVIpd6auLylWkjtcU2Dxv9VSKBdtTvIy5fMzVYUVoNZgh4hQngnXBoIQMf8
+         AT0Q==
+X-Gm-Message-State: APjAAAVtF2yLTg9ssdU81BnTwEPfYpgT3F3fvXGfKAjMsbkdi/IM9+ia
+        ZrsO83w1ZpJCasxrDUqrptA=
+X-Google-Smtp-Source: APXvYqzmh1oRFAdToWQ6eeHDf18fD866btuuSBlG3ktn4tFmKAJyxWUa2m5Vwut0We8lUkfhriMwpA==
+X-Received: by 2002:a17:90a:cb8a:: with SMTP id a10mr9280349pju.87.1559093747211;
+        Tue, 28 May 2019 18:35:47 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.89.153])
+        by smtp.gmail.com with ESMTPSA id l12sm4886538pgq.26.2019.05.28.18.35.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 May 2019 18:35:46 -0700 (PDT)
+Date:   Wed, 29 May 2019 07:05:40 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] wd719x: pass GFP_ATOMIC instead of GFP_KERNEL
+Message-ID: <20190529013540.GA20273@hari-Inspiron-1545>
 MIME-Version: 1.0
-In-Reply-To: <20190527150207.11372-6-ming.lei@redhat.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 27/05/2019 16:02, Ming Lei wrote:
-> Managed interrupts can not migrate affinity when their CPUs are offline.
-> If the CPU is allowed to shutdown before they're returned, commands
-> dispatched to managed queues won't be able to complete through their
-> irq handlers.
->
-> Wait in cpu hotplug handler until all inflight requests on the tags
-> are completed or timeout. Wait once for each tags, so we can save time
-> in case of shared tags.
->
-> Based on the following patch from Keith, and use simple delay-spin
-> instead.
->
-> https://lore.kernel.org/linux-block/20190405215920.27085-1-keith.busch@intel.com/
->
-> Some SCSI devices may have single blk_mq hw queue and multiple private
-> completion queues, and wait until all requests on the private completion
-> queue are completed.
+wd719x_chip_init is getting called in interrupt disabled
+mode(spin_lock_irqsave) , so we need to GFP_ATOMIC instead
+of GFP_KERNEL.
 
-Hi Ming,
+Issue identified by coccicheck
 
-I'm a bit concerned that this approach won't work due to ordering: it 
-seems that the IRQ would be shutdown prior to the CPU dead notification 
-for the last CPU in the mask (where we attempt to drain the queue 
-associated with the IRQ, which would require the IRQ to be still enabled).
+Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+---
+ drivers/scsi/wd719x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I hope that you can tell me that I'm wrong...
-
-Thanks,
-John
-
->
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->  block/blk-mq-tag.c |  2 +-
->  block/blk-mq-tag.h |  5 +++
->  block/blk-mq.c     | 94 ++++++++++++++++++++++++++++++++++++++++++----
->  3 files changed, 93 insertions(+), 8 deletions(-)
->
-> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-> index 7513c8eaabee..b24334f99c5d 100644
-> --- a/block/blk-mq-tag.c
-> +++ b/block/blk-mq-tag.c
-> @@ -332,7 +332,7 @@ static void bt_tags_for_each(struct blk_mq_tags *tags, struct sbitmap_queue *bt,
->   *		true to continue iterating tags, false to stop.
->   * @priv:	Will be passed as second argument to @fn.
->   */
-> -static void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
-> +void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
->  		busy_tag_iter_fn *fn, void *priv)
->  {
->  	if (tags->nr_reserved_tags)
-> diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
-> index 61deab0b5a5a..9ce7606a87f0 100644
-> --- a/block/blk-mq-tag.h
-> +++ b/block/blk-mq-tag.h
-> @@ -19,6 +19,9 @@ struct blk_mq_tags {
->  	struct request **rqs;
->  	struct request **static_rqs;
->  	struct list_head page_list;
-> +
-> +#define BLK_MQ_TAGS_DRAINED           0
-> +	unsigned long flags;
->  };
->
->
-> @@ -35,6 +38,8 @@ extern int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
->  extern void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool);
->  void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
->  		void *priv);
-> +void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
-> +		busy_tag_iter_fn *fn, void *priv);
->
->  static inline struct sbq_wait_state *bt_wait_ptr(struct sbitmap_queue *bt,
->  						 struct blk_mq_hw_ctx *hctx)
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index 32b8ad3d341b..ab1fbfd48374 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -2215,6 +2215,65 @@ int blk_mq_alloc_rqs(struct blk_mq_tag_set *set, struct blk_mq_tags *tags,
->  	return -ENOMEM;
->  }
->
-> +static int blk_mq_hctx_notify_prepare(unsigned int cpu, struct hlist_node *node)
-> +{
-> +	struct blk_mq_hw_ctx	*hctx =
-> +		hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
-> +
-> +	if (hctx->tags)
-> +		clear_bit(BLK_MQ_TAGS_DRAINED, &hctx->tags->flags);
-> +
-> +	return 0;
-> +}
-> +
-> +struct blk_mq_inflight_rq_data {
-> +	unsigned cnt;
-> +	const struct cpumask *cpumask;
-> +};
-> +
-> +static bool blk_mq_count_inflight_rq(struct request *rq, void *data,
-> +				     bool reserved)
-> +{
-> +	struct blk_mq_inflight_rq_data *count = data;
-> +
-> +	if ((blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT) &&
-> +			cpumask_test_cpu(blk_mq_rq_cpu(rq), count->cpumask))
-> +		count->cnt++;
-> +
-> +	return true;
-> +}
-> +
-> +unsigned blk_mq_tags_inflight_rqs(struct blk_mq_tags *tags,
-> +		const struct cpumask *completion_cpus)
-> +{
-> +	struct blk_mq_inflight_rq_data data = {
-> +		.cnt = 0,
-> +		.cpumask = completion_cpus,
-> +	};
-> +
-> +	blk_mq_all_tag_busy_iter(tags, blk_mq_count_inflight_rq, &data);
-> +
-> +	return data.cnt;
-> +}
-> +
-> +static void blk_mq_drain_inflight_rqs(struct blk_mq_tags *tags,
-> +		const struct cpumask *completion_cpus)
-> +{
-> +	if (!tags)
-> +		return;
-> +
-> +	/* Can't apply the optimization in case of private completion queues */
-> +	if (completion_cpus == cpu_all_mask &&
-> +			test_and_set_bit(BLK_MQ_TAGS_DRAINED, &tags->flags))
-> +		return;
-> +
-> +	while (1) {
-> +		if (!blk_mq_tags_inflight_rqs(tags, completion_cpus))
-> +			break;
-> +		msleep(5);
-> +	}
-> +}
-> +
->  /*
->   * 'cpu' is going away. splice any existing rq_list entries from this
->   * software queue to the hw queue dispatch list, and ensure that it
-> @@ -2226,6 +2285,8 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
->  	struct blk_mq_ctx *ctx;
->  	LIST_HEAD(tmp);
->  	enum hctx_type type;
-> +	struct request_queue *q;
-> +	const struct cpumask *cpumask = NULL, *completion_cpus;
->
->  	hctx = hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
->  	ctx = __blk_mq_get_ctx(hctx->queue, cpu);
-> @@ -2238,14 +2299,32 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
->  	}
->  	spin_unlock(&ctx->lock);
->
-> -	if (list_empty(&tmp))
-> -		return 0;
-> +	if (!list_empty(&tmp)) {
-> +		spin_lock(&hctx->lock);
-> +		list_splice_tail_init(&tmp, &hctx->dispatch);
-> +		spin_unlock(&hctx->lock);
->
-> -	spin_lock(&hctx->lock);
-> -	list_splice_tail_init(&tmp, &hctx->dispatch);
-> -	spin_unlock(&hctx->lock);
-> +		blk_mq_run_hw_queue(hctx, true);
-> +	}
-> +
-> +	/*
-> +	 * Interrupt for the current completion queue will be shutdown, so
-> +	 * wait until all requests on this queue are completed.
-> +	 */
-> +	q = hctx->queue;
-> +	if (q->mq_ops->complete_queue_affinity)
-> +		cpumask = q->mq_ops->complete_queue_affinity(hctx, cpu);
-> +
-> +	if (!cpumask) {
-> +		cpumask = hctx->cpumask;
-> +		completion_cpus = cpu_all_mask;
-> +	} else {
-> +		completion_cpus = cpumask;
-> +	}
-> +
-> +	if (cpumask_first_and(cpumask, cpu_online_mask) >= nr_cpu_ids)
-> +		blk_mq_drain_inflight_rqs(hctx->tags, completion_cpus);
->
-> -	blk_mq_run_hw_queue(hctx, true);
->  	return 0;
->  }
->
-> @@ -3541,7 +3620,8 @@ EXPORT_SYMBOL(blk_mq_rq_cpu);
->
->  static int __init blk_mq_init(void)
->  {
-> -	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead", NULL,
-> +	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead",
-> +				blk_mq_hctx_notify_prepare,
->  				blk_mq_hctx_notify_dead);
->  	return 0;
->  }
->
-
+diff --git a/drivers/scsi/wd719x.c b/drivers/scsi/wd719x.c
+index c2f4006..f300fd7 100644
+--- a/drivers/scsi/wd719x.c
++++ b/drivers/scsi/wd719x.c
+@@ -319,7 +319,7 @@ static int wd719x_chip_init(struct wd719x *wd)
+ 
+ 	if (!wd->fw_virt)
+ 		wd->fw_virt = dma_alloc_coherent(&wd->pdev->dev, wd->fw_size,
+-						 &wd->fw_phys, GFP_KERNEL);
++						 &wd->fw_phys, GFP_ATOMIC);
+ 	if (!wd->fw_virt) {
+ 		ret = -ENOMEM;
+ 		goto wd719x_init_end;
+-- 
+2.7.4
 
