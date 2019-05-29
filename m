@@ -2,100 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B77B62DB68
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 13:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C840C2DE20
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 15:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbfE2LIn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 07:08:43 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:33356 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725894AbfE2LIn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 07:08:43 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4TB3u1f041113;
-        Wed, 29 May 2019 11:07:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
- bh=SWNzYFiKiE6Pt7T3JaXzuazlVBDk3k2nj2QK6CCz5+E=;
- b=kBIT6fdhGWUO50Ui/PvL3Bdiunry9hV7ESBY5HLVG9Eb/GBOsbPxX3qvMfaQfvuab/ex
- axzlNe8QVjEV7EjTgcPRNJu6NAmO86RWYt2wvsLxlXY9Ru+N4w5kpmkD8Y+eBaPBL0VL
- bbnwuyLMwbCNb5fIgcKnFCneBdjXzyIng2rQhUJ/0NLDR6lsUavU03LpX8scwhWxm89C
- i90D2Lh/tYwNQwNJYNsfWt+HzA7qYI4y1Id7pb6qIi00LNWxOoJBcqRT/fGVckg0XujR
- uuhXYVjlIOciY9HEcXeUSJ34HNf0D6abFk2tp90mKoipWDmd/Mx43zU9o3qiABBulJqF gg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2spxbq8u67-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 May 2019 11:07:50 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4TB7Lfx142057;
-        Wed, 29 May 2019 11:07:50 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2ss1fnd517-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 May 2019 11:07:50 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4TB7n1S013119;
-        Wed, 29 May 2019 11:07:49 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 29 May 2019 04:07:48 -0700
-Date:   Wed, 29 May 2019 14:07:39 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Don Brace <don.brace@microsemi.com>,
-        Kevin Barnett <kevin.barnett@microsemi.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] scsi: smartpqi: unlock on error in
- pqi_submit_raid_request_synchronous()
-Message-ID: <20190529110739.GD19119@mwanda>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9271 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905290074
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9271 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905290075
+        id S1727075AbfE2N3L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 09:29:11 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45508 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726702AbfE2N3K (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 May 2019 09:29:10 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 18BCBAF26;
+        Wed, 29 May 2019 13:29:09 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH RFC 00/24] scsi: enable reserved commands for LLDDs
+Date:   Wed, 29 May 2019 15:28:37 +0200
+Message-Id: <20190529132901.27645-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We need to drop the "ctrl_info->sync_request_sem" lock before returning.
+Hi all,
 
-Fixes: 6c223761eb54 ("smartpqi: initial commit of Microsemi smartpqi driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/scsi/smartpqi/smartpqi_init.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+quite some drivers use internal commands for various purposes, most
+commonly sending TMFs or querying the HBA status.
+While these commands use the same submission mechanism than normal
+I/O commands, they will not be counted as outstanding commands,
+requiring those drivers to implement their own mechanism to figure
+out outstanding commands.
+This patchset enables the use of reserved tags for the SCSI midlayer,
+enabling LLDDs to rely on the block layer for tracking outstanding
+commands.
+More importantly, it allows LLDD to request a valid tag from the block
+layer without having to implement some tracking mechanism within the
+driver. This removes quite some hacks which were required for some
+drivers (eg. fnic or snic).
 
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index b17761eafca9..e57f3f3836ba 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -4046,8 +4046,10 @@ static int pqi_submit_raid_request_synchronous(struct pqi_ctrl_info *ctrl_info,
- 				return -ETIMEDOUT;
- 			msecs_blocked =
- 				jiffies_to_msecs(jiffies - start_jiffies);
--			if (msecs_blocked >= timeout_msecs)
--				return -ETIMEDOUT;
-+			if (msecs_blocked >= timeout_msecs) {
-+				rc = -ETIMEDOUT;
-+				goto out;
-+			}
- 			timeout_msecs -= msecs_blocked;
- 		}
- 	}
+As usual, comments and reviews are welcome.
+
+Hannes Reinecke (24):
+  block: disable elevator for reserved tags
+  scsi: add scsi_{get,put}_reserved_cmd()
+  scsi: add 'nr_reserved_cmds' field to the SCSI host template
+  csiostor: use reserved command for LUN reset
+  scsi: add scsi_cmd_from_priv()
+  virtio_scsi: use reserved commands for TMF
+  scsi: add host tagset busy iterator
+  fnic: use reserved commands
+  fnic: use scsi_host_tagset_busy_iter() to traverse commands
+  scsi: allocate separate queue for reserved commands
+  scsi: add scsi_host_get_reserved_cmd()
+  hpsa: move hpsa_hba_inquiry after scsi_add_host()
+  hpsa: use reserved commands
+  hpsa: use blk_mq_tagset_busy_iter() to traverse outstanding commands
+  hpsa: drop refcount field from CommandList
+  snic: use reserved commands
+  snic: use tagset iter for traversing commands
+  scsi: Implement scsi_is_reserved_cmd()
+  aacraid: move scsi_add_host()
+  aacraid: use private commands
+  aacraid: replace cmd_list with scsi_host_tagset_busy_iter()
+  aacraid: use scsi_host_tagset_busy_iter() to traverse outstanding
+    commands
+  dpt_i2o: drop cmd_list usage
+  scsi: drop scsi command list
+
+ block/blk-mq.c                    |  22 +-
+ drivers/scsi/aacraid/aachba.c     | 125 +++---
+ drivers/scsi/aacraid/aacraid.h    |   6 +-
+ drivers/scsi/aacraid/comminit.c   |  28 +-
+ drivers/scsi/aacraid/commsup.c    | 134 +++---
+ drivers/scsi/aacraid/linit.c      | 302 +++++++------
+ drivers/scsi/csiostor/csio_init.c |   3 +-
+ drivers/scsi/csiostor/csio_scsi.c |  48 +-
+ drivers/scsi/dpt_i2o.c            |  23 +-
+ drivers/scsi/fnic/fnic_scsi.c     | 916 ++++++++++++++++----------------------
+ drivers/scsi/hosts.c              |  27 ++
+ drivers/scsi/hpsa.c               | 310 ++++++-------
+ drivers/scsi/hpsa.h               |   1 -
+ drivers/scsi/hpsa_cmd.h           |   1 -
+ drivers/scsi/scsi.c               |   1 -
+ drivers/scsi/scsi_lib.c           |  69 +--
+ drivers/scsi/scsi_scan.c          |   1 -
+ drivers/scsi/snic/snic.h          |   2 +-
+ drivers/scsi/snic/snic_main.c     |   3 +
+ drivers/scsi/snic/snic_scsi.c     | 502 ++++++++++-----------
+ drivers/scsi/virtio_scsi.c        | 100 ++---
+ include/linux/blk-mq.h            |   2 +
+ include/scsi/scsi_cmnd.h          |  12 +-
+ include/scsi/scsi_device.h        |   1 -
+ include/scsi/scsi_host.h          |  17 +-
+ include/scsi/scsi_tcq.h           |  30 ++
+ 26 files changed, 1311 insertions(+), 1375 deletions(-)
+
 -- 
-2.20.1
+2.16.4
 
