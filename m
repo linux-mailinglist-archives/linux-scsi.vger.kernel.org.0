@@ -2,172 +2,120 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 550732E1CB
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 18:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6512E20A
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 18:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbfE2QAv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 12:00:51 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50844 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726062AbfE2QAu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 May 2019 12:00:50 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 5680930C0DF9;
-        Wed, 29 May 2019 16:00:50 +0000 (UTC)
-Received: from localhost.localdomain.com (unknown [10.43.2.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 806204A2;
-        Wed, 29 May 2019 16:00:48 +0000 (UTC)
-From:   Tomas Henzl <thenzl@redhat.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com
-Subject: [PATCH 3/3] megaraid_sas: use DEVICE_ATTR_{RO, RW}
-Date:   Wed, 29 May 2019 18:00:41 +0200
-Message-Id: <20190529160041.7242-4-thenzl@redhat.com>
-In-Reply-To: <20190529160041.7242-1-thenzl@redhat.com>
-References: <20190529160041.7242-1-thenzl@redhat.com>
+        id S1727161AbfE2QK6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 12:10:58 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:17625 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726062AbfE2QK6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 May 2019 12:10:58 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 67780B8DF9748E704AEA;
+        Thu, 30 May 2019 00:10:53 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.439.0; Thu, 30 May 2019
+ 00:10:48 +0800
+Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on CPU
+ unplug
+To:     Ming Lei <tom.leiming@gmail.com>, Ming Lei <ming.lei@redhat.com>
+References: <20190527150207.11372-1-ming.lei@redhat.com>
+ <20190527150207.11372-6-ming.lei@redhat.com>
+ <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com>
+ <20190529022852.GA21398@ming.t460p> <20190529024200.GC21398@ming.t460p>
+ <5bc07fd5-9d2b-bf9c-eb77-b8cebadb9150@huawei.com>
+ <20190529101028.GA15496@ming.t460p>
+ <CACVXFVODeFDPHxWkdnY5CZoOJ0did4mi_ap-aXk0oo+Cp05aUQ@mail.gmail.com>
+CC:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Hannes Reinecke" <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        Don Brace <don.brace@microsemi.com>,
+        "Kashyap Desai" <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <94964048-b867-8610-71ea-0275651f8b77@huawei.com>
+Date:   Wed, 29 May 2019 17:10:38 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Wed, 29 May 2019 16:00:50 +0000 (UTC)
+In-Reply-To: <CACVXFVODeFDPHxWkdnY5CZoOJ0did4mi_ap-aXk0oo+Cp05aUQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use existing macros.
-No functional change.
 
-Signed-off-by: Tomas Henzl <thenzl@redhat.com>
----
- drivers/scsi/megaraid/megaraid_sas_base.c | 44 ++++++++++-------------
- 1 file changed, 18 insertions(+), 26 deletions(-)
+>>
+>> And we should be careful to handle the multiple reply queue case, given the queue
+>> shouldn't be stopped or quieseced because other reply queues are still active.
+>>
+>> The new CPUHP state for blk-mq should be invoked after the to-be-offline
+>> CPU is quiesced and before it becomes offline.
+>
+> Hi John,
+>
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 0522821a5..aa6a5d86d 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3121,7 +3121,7 @@ megasas_service_aen(struct megasas_instance *instance, struct megasas_cmd *cmd)
- }
- 
- static ssize_t
--megasas_fw_crash_buffer_store(struct device *cdev,
-+fw_crash_buffer_store(struct device *cdev,
- 	struct device_attribute *attr, const char *buf, size_t count)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3140,7 +3140,7 @@ megasas_fw_crash_buffer_store(struct device *cdev,
- }
- 
- static ssize_t
--megasas_fw_crash_buffer_show(struct device *cdev,
-+fw_crash_buffer_show(struct device *cdev,
- 	struct device_attribute *attr, char *buf)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3185,7 +3185,7 @@ megasas_fw_crash_buffer_show(struct device *cdev,
- }
- 
- static ssize_t
--megasas_fw_crash_buffer_size_show(struct device *cdev,
-+fw_crash_buffer_size_show(struct device *cdev,
- 	struct device_attribute *attr, char *buf)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3197,7 +3197,7 @@ megasas_fw_crash_buffer_size_show(struct device *cdev,
- }
- 
- static ssize_t
--megasas_fw_crash_state_store(struct device *cdev,
-+fw_crash_state_store(struct device *cdev,
- 	struct device_attribute *attr, const char *buf, size_t count)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3232,7 +3232,7 @@ megasas_fw_crash_state_store(struct device *cdev,
- }
- 
- static ssize_t
--megasas_fw_crash_state_show(struct device *cdev,
-+fw_crash_state_show(struct device *cdev,
- 	struct device_attribute *attr, char *buf)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3243,14 +3243,14 @@ megasas_fw_crash_state_show(struct device *cdev,
- }
- 
- static ssize_t
--megasas_page_size_show(struct device *cdev,
-+page_size_show(struct device *cdev,
- 	struct device_attribute *attr, char *buf)
- {
- 	return snprintf(buf, PAGE_SIZE, "%ld\n", (unsigned long)PAGE_SIZE - 1);
- }
- 
- static ssize_t
--megasas_ldio_outstanding_show(struct device *cdev, struct device_attribute *attr,
-+ldio_outstanding_show(struct device *cdev, struct device_attribute *attr,
- 	char *buf)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3260,7 +3260,7 @@ megasas_ldio_outstanding_show(struct device *cdev, struct device_attribute *attr
- }
- 
- static ssize_t
--megasas_fw_cmds_outstanding_show(struct device *cdev,
-+fw_cmds_outstanding_show(struct device *cdev,
- 				 struct device_attribute *attr, char *buf)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3270,7 +3270,7 @@ megasas_fw_cmds_outstanding_show(struct device *cdev,
- }
- 
- static ssize_t
--megasas_dump_system_regs_show(struct device *cdev,
-+dump_system_regs_show(struct device *cdev,
- 			       struct device_attribute *attr, char *buf)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3281,7 +3281,7 @@ megasas_dump_system_regs_show(struct device *cdev,
- }
- 
- static ssize_t
--megasas_raid_map_id_show(struct device *cdev, struct device_attribute *attr,
-+raid_map_id_show(struct device *cdev, struct device_attribute *attr,
- 			  char *buf)
- {
- 	struct Scsi_Host *shost = class_to_shost(cdev);
-@@ -3292,22 +3292,14 @@ megasas_raid_map_id_show(struct device *cdev, struct device_attribute *attr,
- 			(unsigned long)instance->map_id);
- }
- 
--static DEVICE_ATTR(fw_crash_buffer, S_IRUGO | S_IWUSR,
--	megasas_fw_crash_buffer_show, megasas_fw_crash_buffer_store);
--static DEVICE_ATTR(fw_crash_buffer_size, S_IRUGO,
--	megasas_fw_crash_buffer_size_show, NULL);
--static DEVICE_ATTR(fw_crash_state, S_IRUGO | S_IWUSR,
--	megasas_fw_crash_state_show, megasas_fw_crash_state_store);
--static DEVICE_ATTR(page_size, S_IRUGO,
--	megasas_page_size_show, NULL);
--static DEVICE_ATTR(ldio_outstanding, S_IRUGO,
--	megasas_ldio_outstanding_show, NULL);
--static DEVICE_ATTR(fw_cmds_outstanding, S_IRUGO,
--	megasas_fw_cmds_outstanding_show, NULL);
--static DEVICE_ATTR(dump_system_regs, S_IRUGO,
--	megasas_dump_system_regs_show, NULL);
--static DEVICE_ATTR(raid_map_id, S_IRUGO,
--	megasas_raid_map_id_show, NULL);
-+static DEVICE_ATTR_RW(fw_crash_buffer);
-+static DEVICE_ATTR_RO(fw_crash_buffer_size);
-+static DEVICE_ATTR_RW(fw_crash_state);
-+static DEVICE_ATTR_RO(page_size);
-+static DEVICE_ATTR_RO(ldio_outstanding);
-+static DEVICE_ATTR_RO(fw_cmds_outstanding);
-+static DEVICE_ATTR_RO(dump_system_regs);
-+static DEVICE_ATTR_RO(raid_map_id);
- 
- struct device_attribute *megaraid_host_attrs[] = {
- 	&dev_attr_fw_crash_buffer_size,
--- 
-2.20.1
+Hi Ming,
+
+> Thinking of this issue further, so far, one doable solution is to
+> expose reply queues
+> as blk-mq hw queues, as done by the following patchset:
+>
+> https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/
+
+I thought that this patchset had fundamental issues, in terms of working 
+for all types of hosts. FYI, I did the backport of latest hisi_sas_v3 to 
+v4.15 with this patchset (as you may have noticed in my git send 
+mistake), but we have not got to test it yet.
+
+On a related topic, we did test exposing reply queues as blk-mq hw 
+queues and generating the host-wide tag internally in the LLDD with 
+sbitmap, and unfortunately we were experiencing a significant 
+performance hit, like 2300K -> 1800K IOPs for 4K read.
+
+We need to test this further. I don't understand why we get such a big hit.
+
+>
+> In which global host-wide tags are shared for all blk-mq hw queues.
+>
+> Also we can remove all the reply_map stuff in drivers, then solve the problem of
+> draining in-flight requests during unplugging CPU in a generic approach.
+
+So you're saying that removing this reply queue stuff can make the 
+solution to the problem more generic, but do you have an idea of the 
+overall solution?
+
+>
+> Last time, it was reported that the patchset causes performance regression,
+> which is actually caused by duplicated io accounting in
+> blk_mq_queue_tag_busy_iter(),
+> which should be fixed easily.
+>
+> What do you think of this approach?
+
+It would still be good to have a forward port of this patchset for 
+testing, if we're serious about it. Or at least this bug you mention fixed.
+
+thanks again,
+John
+
+>
+> Thanks,
+> Ming Lei
+>
+> .
+>
+
 
