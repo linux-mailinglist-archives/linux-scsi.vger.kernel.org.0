@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 950412E61C
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 22:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B44602E617
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 22:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbfE2U2s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 16:28:48 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:35020 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726576AbfE2U2s (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 16:28:48 -0400
-Received: by mail-pl1-f195.google.com with SMTP id p1so1539109plo.2
-        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 13:28:48 -0700 (PDT)
+        id S1726476AbfE2U2o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 16:28:44 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33748 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725990AbfE2U2o (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 16:28:44 -0400
+Received: by mail-pf1-f193.google.com with SMTP id z28so2383309pfk.0
+        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 13:28:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KqGJR1lM/7fFMRGux/IJsJn9HnbRzo35ENptHSbQzyc=;
-        b=IhUFDT3rkwAXX7nyUFWHz8UpXq/P2i+kuHjU7Kad1pcQql9CbtRb2UXMNHQ3iqOa4E
-         6TNq35hqe+tthYeHM28X2ceKyFtjZStkcxiOhxPxWVQEZxnAHGpGcwZ4GRgGJseR3ffr
-         wsPKT9DXc5hx0nFKS7q/zLNDI8JVlKCz550rBD6ha7OZ155kTh6tpshTg7XSJUMjcGZK
-         b2nmVF+GmNrLKkmtqwKtPRdhhkKSecggEVsHv7AfM2frf5DW0wus0o+qb7FJjbYQmvHb
-         dQP464aiDL4CaogPIfg1WANvJiwEbkCCMM4aajv0TpNWtkS1ltXpruHa/5DdSIMx+VLF
-         mLzg==
-X-Gm-Message-State: APjAAAWcyly29/C8fjkBHtaGP7QosSWSTH3PwUNNV6q/4prOh4k7Gcfo
-        rShAxPRInIna8xMX9noOFdM=
-X-Google-Smtp-Source: APXvYqxRKmX9w4y+CMdnFHz2UBzh1KwH/T9j1YrRwoOeju0C8ubUEmsm8I4lQOLQO8FTx6H8z2YAaA==
-X-Received: by 2002:a17:902:b18c:: with SMTP id s12mr122757226plr.181.1559161722898;
-        Wed, 29 May 2019 13:28:42 -0700 (PDT)
+        bh=MXqTQ3QTWQR8pjqK36/gUmlkVy3JfdatamcmTzmc6WQ=;
+        b=VkpUPT90Q2aYyRMACOOl1+6zWndxx+t5M3s7NvM6USipVa9k7qM78f8+L3hEsFmp67
+         r0h6bwCn3Uj8js5N3PDA8bjW2VnhNFDN45fcGZuGjgO9p2MHU4NOo140lpTOmWUM0m7D
+         RUduduTVnSR9lAbzMXSpQ8MZJirMbdllE/19IR81YFfh0fW8nzQypeXBnZPpPwwlQSAX
+         c+WPYmS7TS4QGMWKmkFqlkTmzHfYexdE99EqrKDn+/0EXVGD62PESkAxFAAvFNjwB1mU
+         Mhu7BTQNEKS3OJia9kCtO9R7Oq5uj8hAtn2iI4gyGRoxk9gNgabNPUxjWvMUuNeD5WF/
+         RNdw==
+X-Gm-Message-State: APjAAAVRqt+0uLMonOcVACueAdRBNa9sa0T/RJ0+O2GmihbkNvt/XyXc
+        t8i1s6ZnHFVLuFbeT7hnRLk=
+X-Google-Smtp-Source: APXvYqz+k1X2yx8Tutbn60+1wIPP7K+rSOiOi36XPUAMUFuDzZyRW9pJgC5wkrx+pys+xhUiKxu1Zw==
+X-Received: by 2002:a63:1854:: with SMTP id 20mr137765496pgy.366.1559161724022;
+        Wed, 29 May 2019 13:28:44 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id y12sm239229pgi.10.2019.05.29.13.28.41
+        by smtp.gmail.com with ESMTPSA id y12sm239229pgi.10.2019.05.29.13.28.42
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 13:28:42 -0700 (PDT)
+        Wed, 29 May 2019 13:28:43 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -42,9 +42,9 @@ Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
         Himanshu Madhani <hmadhani@marvell.com>,
         Giridhar Malavali <gmalavali@marvell.com>
-Subject: [PATCH 04/20] qla2xxx: Remove a forward declaration
-Date:   Wed, 29 May 2019 13:28:10 -0700
-Message-Id: <20190529202826.204499-5-bvanassche@acm.org>
+Subject: [PATCH 05/20] qla2xxx: Declare the fourth ql_dump_buffer() argument const
+Date:   Wed, 29 May 2019 13:28:11 -0700
+Message-Id: <20190529202826.204499-6-bvanassche@acm.org>
 X-Mailer: git-send-email 2.20.GIT
 In-Reply-To: <20190529202826.204499-1-bvanassche@acm.org>
 References: <20190529202826.204499-1-bvanassche@acm.org>
@@ -55,28 +55,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Since qlt_make_local_sess() is defined before it is called, remove the
-forward declaration of that function.
+This patch makes it clear to humans and also to the compiler that
+ql_dump_buffer() does not modify the memory the @buf argument points at.
 
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Cc: Giridhar Malavali <gmalavali@marvell.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_dbg.c | 3 ++-
+ drivers/scsi/qla2xxx/qla_gbl.h | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 3eeae72793bc..d3457cea61e3 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -4116,8 +4116,6 @@ static inline int qlt_get_fcp_task_attr(struct scsi_qla_host *vha,
- 	return fcp_task_attr;
- }
+diff --git a/drivers/scsi/qla2xxx/qla_dbg.c b/drivers/scsi/qla2xxx/qla_dbg.c
+index 9e80646722e2..30afc59c1870 100644
+--- a/drivers/scsi/qla2xxx/qla_dbg.c
++++ b/drivers/scsi/qla2xxx/qla_dbg.c
+@@ -2743,7 +2743,8 @@ ql_dump_regs(uint level, scsi_qla_host_t *vha, uint id)
  
--static struct fc_port *qlt_make_local_sess(struct scsi_qla_host *,
--					uint8_t *);
+ 
+ void
+-ql_dump_buffer(uint level, scsi_qla_host_t *vha, uint id, void *buf, uint size)
++ql_dump_buffer(uint level, scsi_qla_host_t *vha, uint id, const void *buf,
++	       uint size)
+ {
+ 	uint cnt;
+ 
+diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
+index bbe69ab5cf3f..a16c00b4773c 100644
+--- a/drivers/scsi/qla2xxx/qla_gbl.h
++++ b/drivers/scsi/qla2xxx/qla_gbl.h
+@@ -630,7 +630,7 @@ extern ulong qla27xx_fwdt_template_size(void *);
+ 
+ extern void qla2xxx_dump_post_process(scsi_qla_host_t *, int);
+ extern void ql_dump_regs(uint, scsi_qla_host_t *, uint);
+-extern void ql_dump_buffer(uint, scsi_qla_host_t *, uint, void *, uint);
++extern void ql_dump_buffer(uint, scsi_qla_host_t *, uint, const void *, uint);
  /*
-  * Process context for I/O path into tcm_qla2xxx code
+  * Global Function Prototypes in qla_gs.c source file.
   */
 -- 
 2.22.0.rc1
