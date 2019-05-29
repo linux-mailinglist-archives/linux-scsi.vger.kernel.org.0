@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E8D2DE35
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 15:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51362DE23
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 15:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726901AbfE2N3V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 09:29:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45538 "EHLO mx1.suse.de"
+        id S1727193AbfE2N3N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 09:29:13 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45556 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727053AbfE2N3L (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 May 2019 09:29:11 -0400
+        id S1727097AbfE2N3M (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 May 2019 09:29:12 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5FFD0AFE2;
+        by mx1.suse.de (Postfix) with ESMTP id 6D2B9AFE8;
         Wed, 29 May 2019 13:29:09 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 11/24] scsi: add scsi_host_get_reserved_cmd()
-Date:   Wed, 29 May 2019 15:28:48 +0200
-Message-Id: <20190529132901.27645-12-hare@suse.de>
+Subject: [PATCH 12/24] hpsa: move hpsa_hba_inquiry after scsi_add_host()
+Date:   Wed, 29 May 2019 15:28:49 +0200
+Message-Id: <20190529132901.27645-13-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20190529132901.27645-1-hare@suse.de>
 References: <20190529132901.27645-1-hare@suse.de>
@@ -32,59 +32,83 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Implement a function to allocate a SCSI command from the reserved
-tag pool using the host-wide reserved command queue.
+Move hpsa_hba_inquiry to after scsi_add_host() so that the host
+is fully initialized.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/scsi_lib.c  | 21 +++++++++++++++++++++
- include/scsi/scsi_cmnd.h |  1 +
- 2 files changed, 22 insertions(+)
+ drivers/scsi/hpsa.c | 37 +++++++++++++++++++------------------
+ 1 file changed, 19 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 076459853622..da850bf28065 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1871,6 +1871,27 @@ void scsi_mq_destroy_tags(struct Scsi_Host *shost)
- 	blk_mq_free_tag_set(&shost->tag_set);
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index c560a4532733..c7d3463da4be 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -5796,6 +5796,22 @@ static int hpsa_scsi_host_alloc(struct ctlr_info *h)
+ 	return 0;
  }
  
-+struct scsi_cmnd *scsi_host_get_reserved_cmd(struct Scsi_Host *shost)
++static void hpsa_hba_inquiry(struct ctlr_info *h)
 +{
-+	struct request *rq;
-+	struct scsi_cmnd *scmd;
++	int rc;
 +
-+	if (WARN_ON(!shost->reserved_cmd_q))
-+		return NULL;
-+
-+	rq = blk_mq_alloc_request(shost->reserved_cmd_q,
-+				  REQ_OP_DRV_OUT | REQ_NOWAIT,
-+				  BLK_MQ_REQ_RESERVED);
-+	if (IS_ERR(rq))
-+		return NULL;
-+	WARN_ON(rq->tag == -1);
-+	scmd = blk_mq_rq_to_pdu(rq);
-+	scmd->request = rq;
-+
-+	return scmd;
++#define HBA_INQUIRY_BYTE_COUNT 64
++	h->hba_inquiry_data = kmalloc(HBA_INQUIRY_BYTE_COUNT, GFP_KERNEL);
++	if (!h->hba_inquiry_data)
++		return;
++	rc = hpsa_scsi_do_inquiry(h, RAID_CTLR_LUNID, 0,
++		h->hba_inquiry_data, HBA_INQUIRY_BYTE_COUNT);
++	if (rc != 0) {
++		kfree(h->hba_inquiry_data);
++		h->hba_inquiry_data = NULL;
++	}
 +}
-+EXPORT_SYMBOL_GPL(scsi_host_get_reserved_cmd);
 +
- /**
-  * scsi_device_from_queue - return sdev associated with a request_queue
-  * @q: The request queue to return the sdev from
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index 318f1e729318..4a45704b28fe 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -167,6 +167,7 @@ static inline struct scsi_driver *scsi_cmd_to_driver(struct scsi_cmnd *cmd)
- 	return *(struct scsi_driver **)cmd->request->rq_disk->private_data;
+ static int hpsa_scsi_add_host(struct ctlr_info *h)
+ {
+ 	int rv;
+@@ -5805,6 +5821,9 @@ static int hpsa_scsi_add_host(struct ctlr_info *h)
+ 		dev_err(&h->pdev->dev, "scsi_add_host failed\n");
+ 		return rv;
+ 	}
++
++	hpsa_hba_inquiry(h);
++
+ 	scsi_scan_host(h->scsi_host);
+ 	return 0;
+ }
+@@ -7883,22 +7902,6 @@ static int hpsa_pci_init(struct ctlr_info *h)
+ 	return err;
  }
  
-+struct scsi_cmnd *scsi_host_get_reserved_cmd(struct Scsi_Host *shost);
- extern void scsi_put_command(struct scsi_cmnd *);
- extern void scsi_finish_command(struct scsi_cmnd *cmd);
+-static void hpsa_hba_inquiry(struct ctlr_info *h)
+-{
+-	int rc;
+-
+-#define HBA_INQUIRY_BYTE_COUNT 64
+-	h->hba_inquiry_data = kmalloc(HBA_INQUIRY_BYTE_COUNT, GFP_KERNEL);
+-	if (!h->hba_inquiry_data)
+-		return;
+-	rc = hpsa_scsi_do_inquiry(h, RAID_CTLR_LUNID, 0,
+-		h->hba_inquiry_data, HBA_INQUIRY_BYTE_COUNT);
+-	if (rc != 0) {
+-		kfree(h->hba_inquiry_data);
+-		h->hba_inquiry_data = NULL;
+-	}
+-}
+-
+ static int hpsa_init_reset_devices(struct pci_dev *pdev, u32 board_id)
+ {
+ 	int rc, i;
+@@ -8794,8 +8797,6 @@ static int hpsa_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	/* Turn the interrupts on so we can service requests */
+ 	h->access.set_intr_mask(h, HPSA_INTR_ON);
  
+-	hpsa_hba_inquiry(h);
+-
+ 	h->lastlogicals = kzalloc(sizeof(*(h->lastlogicals)), GFP_KERNEL);
+ 	if (!h->lastlogicals)
+ 		dev_info(&h->pdev->dev,
 -- 
 2.16.4
 
