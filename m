@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68E5B2E618
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 22:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746602E61A
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 22:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726538AbfE2U2q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 16:28:46 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:46846 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726508AbfE2U2p (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 16:28:45 -0400
-Received: by mail-pg1-f193.google.com with SMTP id v9so534220pgr.13
-        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 13:28:45 -0700 (PDT)
+        id S1726568AbfE2U2r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 16:28:47 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40650 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725990AbfE2U2r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 16:28:47 -0400
+Received: by mail-pf1-f196.google.com with SMTP id u17so2365365pfn.7
+        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 13:28:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=THmc9S4oPc7AqqA25hdDdotVU4mBb/CtHEqUmGWWi0w=;
-        b=WOeVLQ46MNtvQK6h2Kr9gXcTvEzW22kNTmaYRxxhOAw4kKp00xYqoXXjz/Bp+rauGG
-         dRP2mWp35dPxkCrmTUq13PqsoTMcqzhm83lRU4OU/yn5P/xElKAC0VUOKJRY/28Sz6jr
-         +mCWgZFbQlH34A9+28xs95m6gjXADFJc9usP1AnzUt27z0tIcC22X7YrfbnXXIVGC1qx
-         mTvxVV+wsgQkMJuhTSgVXVAtjRreqghXEg4Xxi+U0WOP/AOvZHKkC863c2ic5smQZgiy
-         wqmHwEO+jVql4fhbx0/uxgXn8yroDQoISBJPx4+QjI1sijp6CghnGsCCjOBf9OR00db4
-         iYag==
-X-Gm-Message-State: APjAAAXaZwwMuobeIzv8ZCTGLMHGlnqxBYmjbPGCfI+59B5Ahr0Qyxq7
-        xW5Wz9ke2YCNM5+ATRdI4pc=
-X-Google-Smtp-Source: APXvYqz5ftGcEpyHepxmukhDGDw29MF/7Bi+8UFTdK9TnWaJHDsIVbLZtCku93bBculODeO77uw+oA==
-X-Received: by 2002:a63:2c50:: with SMTP id s77mr53168461pgs.175.1559161725228;
-        Wed, 29 May 2019 13:28:45 -0700 (PDT)
+        bh=sUq8gTCtfLT2oHjwyiYmYOiBq7PBKS03hFgmMJwiQ/g=;
+        b=a+xt/N437zAjdiPQILJ6rhWXUwmkHhOsHrOWI/HcCn7DoCxagRaYH8mCC9PhvehYpl
+         eV7A3pshIQBcLCTolAKyuEfV4kcnmdsWfPSMNDw9EyTYBndGDJLQPkjZXoL86TNXPg5Q
+         2QOK0JY75/Ve8+pRIolmi2VHwFkSkKHaNL2xzIrX33Q67cI9nfZcmUwpRBavnXGJ7R0s
+         8vXW1TFlJoS+umeQmqby36FSuR10PO9VAkwVYlHRLcmWMvVoniuWtRpafoTQ5w5RTk86
+         9EsBah2CX2Pb0QX4qRzdt7ouenslHkdFJero4F2Go3g/Z2+vWjSLmATJQ3c7YNRz2enn
+         dlCg==
+X-Gm-Message-State: APjAAAU3ysIAV+3b/uyBcUa/ximTcUhARkWGoAYAUJkmCjoG9w5qxNp2
+        z6a4Y4Nw+kfVHkVJ8wxo6V4=
+X-Google-Smtp-Source: APXvYqxKZqdC/oxLxjsYD7+FxPSF/Pgazwv9RL7NeZRr85SHm/U1+IGkkBZAWMwETbCiyY8Fx5gPkQ==
+X-Received: by 2002:a62:2706:: with SMTP id n6mr71762461pfn.150.1559161726331;
+        Wed, 29 May 2019 13:28:46 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id y12sm239229pgi.10.2019.05.29.13.28.44
+        by smtp.gmail.com with ESMTPSA id y12sm239229pgi.10.2019.05.29.13.28.45
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 13:28:44 -0700 (PDT)
+        Wed, 29 May 2019 13:28:45 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -42,9 +42,9 @@ Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Bart Van Assche <bvanassche@acm.org>,
         Himanshu Madhani <hmadhani@marvell.com>,
         Giridhar Malavali <gmalavali@marvell.com>
-Subject: [PATCH 06/20] qla2xxx: Change the return type of qla2x00_update_ms_fdmi_iocb() into void
-Date:   Wed, 29 May 2019 13:28:12 -0700
-Message-Id: <20190529202826.204499-7-bvanassche@acm.org>
+Subject: [PATCH 07/20] qla2xxx: Reduce the scope of three local variables in qla2xxx_queuecommand()
+Date:   Wed, 29 May 2019 13:28:13 -0700
+Message-Id: <20190529202826.204499-8-bvanassche@acm.org>
 X-Mailer: git-send-email 2.20.GIT
 In-Reply-To: <20190529202826.204499-1-bvanassche@acm.org>
 References: <20190529202826.204499-1-bvanassche@acm.org>
@@ -55,38 +55,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make this change because the value returned by this function is not
-used.
+This patch makes it clear that the tag, hwq and qpair variables are
+only needed for the mq path.
 
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Cc: Giridhar Malavali <gmalavali@marvell.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_gs.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index 9f58e591666d..f0dbd2169a4e 100644
---- a/drivers/scsi/qla2xxx/qla_gs.c
-+++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -1479,7 +1479,7 @@ qla24xx_prep_ms_fdmi_iocb(scsi_qla_host_t *vha, uint32_t req_size,
- 	return ct_pkt;
- }
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 415e12f7f9e7..0b4673eb1e43 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -845,9 +845,6 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+ 	struct scsi_qla_host *base_vha = pci_get_drvdata(ha->pdev);
+ 	srb_t *sp;
+ 	int rval;
+-	struct qla_qpair *qpair = NULL;
+-	uint32_t tag;
+-	uint16_t hwq;
  
--static inline ms_iocb_entry_t *
-+static void
- qla2x00_update_ms_fdmi_iocb(scsi_qla_host_t *vha, uint32_t req_size)
- {
- 	struct qla_hw_data *ha = vha->hw;
-@@ -1493,8 +1493,6 @@ qla2x00_update_ms_fdmi_iocb(scsi_qla_host_t *vha, uint32_t req_size)
- 		ms_pkt->req_bytecount = cpu_to_le32(req_size);
- 		ms_pkt->req_dsd.length = ms_pkt->req_bytecount;
+ 	if (unlikely(test_bit(UNLOADING, &base_vha->dpc_flags)) ||
+ 	    WARN_ON_ONCE(!rport)) {
+@@ -856,6 +853,10 @@ qla2xxx_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
  	}
--
--	return ms_pkt;
- }
  
- /**
+ 	if (ha->mqenable) {
++		uint32_t tag;
++		uint16_t hwq;
++		struct qla_qpair *qpair = NULL;
++
+ 		tag = blk_mq_unique_tag(cmd->request);
+ 		hwq = blk_mq_unique_tag_to_hwq(tag);
+ 		qpair = ha->queue_pair_map[hwq];
 -- 
 2.22.0.rc1
 
