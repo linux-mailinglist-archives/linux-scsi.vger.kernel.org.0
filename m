@@ -2,88 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2D82D362
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 03:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9722D3D2
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 04:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726120AbfE2Bfs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 28 May 2019 21:35:48 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33583 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725816AbfE2Bfr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 May 2019 21:35:47 -0400
-Received: by mail-pg1-f194.google.com with SMTP id h17so323920pgv.0;
-        Tue, 28 May 2019 18:35:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=f+EkUBeXFScCCzheqKBe16U/rvHBs3nQTNc8yUaeiYo=;
-        b=XJgtbmuk3AHBSVrUw4iIzFk0SaH0ontf6JTdQ7ho6kElQc0w1WH4Im58Lp0MAqik+5
-         AlmEXhFpXWBw3i8YGyzu3qOwvv/hWUIVejWeJgIHWYDNI9jC+iTtbCbv2jx+WeWs0Z9k
-         vy1NDK6E2jADnVDwZcqqIGz4A+OP33fKqun3FgJ8i6VhT1Dwyho5kb7F6eYvyl3+NAeu
-         FrNq2Zx8+os678dRHXIuulalcgJ6tm6r3gr0Sz6W7k9jSq32FhbBctrzK7faocoxrS9U
-         nSngKH7U1Q72E5gx+07wmdZD6m5DL1jXGnjttbyLWrY8JOClZDYaNRZYk/wxXM6S+WMh
-         QtRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=f+EkUBeXFScCCzheqKBe16U/rvHBs3nQTNc8yUaeiYo=;
-        b=I0hsUKnSNyKIojl/EjztLcN35Frz+3EfcVTibBlU/iFLAfGljMuRJljf5L+dC0PaGA
-         ow4DJsIRet8wRmpr1G1AkpEcK6YspRr7gqX9cjLOSa/K9GTg4CwNQI8RGAykEwqzEmTl
-         Wt+y2Wy7wAq7i2UQgMPQs6mWhDz0vEkwh8hRFgWN7KcUZ8Rf+ky+V3AxKROy/NABXYtD
-         ZyGzh385wftgS7ZHuy2Dxa/rVXkX9AlOxL2OBwvRtE/hopwylakI9QCVym6xXgYwkJpG
-         SjlVCK/btWVIpd6auLylWkjtcU2Dxv9VSKBdtTvIy5fMzVYUVoNZgh4hQngnXBoIQMf8
-         AT0Q==
-X-Gm-Message-State: APjAAAVtF2yLTg9ssdU81BnTwEPfYpgT3F3fvXGfKAjMsbkdi/IM9+ia
-        ZrsO83w1ZpJCasxrDUqrptA=
-X-Google-Smtp-Source: APXvYqzmh1oRFAdToWQ6eeHDf18fD866btuuSBlG3ktn4tFmKAJyxWUa2m5Vwut0We8lUkfhriMwpA==
-X-Received: by 2002:a17:90a:cb8a:: with SMTP id a10mr9280349pju.87.1559093747211;
-        Tue, 28 May 2019 18:35:47 -0700 (PDT)
-Received: from hari-Inspiron-1545 ([183.83.89.153])
-        by smtp.gmail.com with ESMTPSA id l12sm4886538pgq.26.2019.05.28.18.35.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 18:35:46 -0700 (PDT)
-Date:   Wed, 29 May 2019 07:05:40 +0530
-From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] wd719x: pass GFP_ATOMIC instead of GFP_KERNEL
-Message-ID: <20190529013540.GA20273@hari-Inspiron-1545>
+        id S1726462AbfE2C3M (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 28 May 2019 22:29:12 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:60196 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725830AbfE2C3M (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 28 May 2019 22:29:12 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id DCCB781F12;
+        Wed, 29 May 2019 02:29:09 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DC46B1972A;
+        Wed, 29 May 2019 02:28:59 +0000 (UTC)
+Date:   Wed, 29 May 2019 10:28:53 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on
+ CPU unplug
+Message-ID: <20190529022852.GA21398@ming.t460p>
+References: <20190527150207.11372-1-ming.lei@redhat.com>
+ <20190527150207.11372-6-ming.lei@redhat.com>
+ <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Wed, 29 May 2019 02:29:12 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-wd719x_chip_init is getting called in interrupt disabled
-mode(spin_lock_irqsave) , so we need to GFP_ATOMIC instead
-of GFP_KERNEL.
+On Tue, May 28, 2019 at 05:50:40PM +0100, John Garry wrote:
+> On 27/05/2019 16:02, Ming Lei wrote:
+> > Managed interrupts can not migrate affinity when their CPUs are offline.
+> > If the CPU is allowed to shutdown before they're returned, commands
+> > dispatched to managed queues won't be able to complete through their
+> > irq handlers.
+> > 
+> > Wait in cpu hotplug handler until all inflight requests on the tags
+> > are completed or timeout. Wait once for each tags, so we can save time
+> > in case of shared tags.
+> > 
+> > Based on the following patch from Keith, and use simple delay-spin
+> > instead.
+> > 
+> > https://lore.kernel.org/linux-block/20190405215920.27085-1-keith.busch@intel.com/
+> > 
+> > Some SCSI devices may have single blk_mq hw queue and multiple private
+> > completion queues, and wait until all requests on the private completion
+> > queue are completed.
+> 
+> Hi Ming,
+> 
+> I'm a bit concerned that this approach won't work due to ordering: it seems
+> that the IRQ would be shutdown prior to the CPU dead notification for the
 
-Issue identified by coccicheck
+Managed IRQ shutdown is run in irq_migrate_all_off_this_cpu(), which is
+called in the callback of takedown_cpu(). And the CPU dead notification
+is always sent after that CPU becomes offline, see cpuhp_invoke_callback().
 
-Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
----
- drivers/scsi/wd719x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> last CPU in the mask (where we attempt to drain the queue associated with
+> the IRQ, which would require the IRQ to be still enabled).
+> 
+> I hope that you can tell me that I'm wrong...
 
-diff --git a/drivers/scsi/wd719x.c b/drivers/scsi/wd719x.c
-index c2f4006..f300fd7 100644
---- a/drivers/scsi/wd719x.c
-+++ b/drivers/scsi/wd719x.c
-@@ -319,7 +319,7 @@ static int wd719x_chip_init(struct wd719x *wd)
- 
- 	if (!wd->fw_virt)
- 		wd->fw_virt = dma_alloc_coherent(&wd->pdev->dev, wd->fw_size,
--						 &wd->fw_phys, GFP_KERNEL);
-+						 &wd->fw_phys, GFP_ATOMIC);
- 	if (!wd->fw_virt) {
- 		ret = -ENOMEM;
- 		goto wd719x_init_end;
--- 
-2.7.4
+Or you add one line printk in both irq_migrate_all_off_this_cpu() and
+blk_mq_hctx_notify_dead(), you will see if you are wrong.
 
+
+Thanks, 
+Ming
