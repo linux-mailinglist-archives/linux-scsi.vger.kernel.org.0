@@ -2,167 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 310792DE27
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 15:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A07E2E0B4
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 17:12:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727220AbfE2N3Q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 09:29:16 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45598 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727180AbfE2N3O (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 May 2019 09:29:14 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B9037B01C;
-        Wed, 29 May 2019 13:29:09 +0000 (UTC)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+        id S1726774AbfE2PMk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 11:12:40 -0400
+Received: from mail-pl1-f181.google.com ([209.85.214.181]:42449 "EHLO
+        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbfE2PMk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 11:12:40 -0400
+Received: by mail-pl1-f181.google.com with SMTP id go2so1182038plb.9
+        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 08:12:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FTZkP4NPFb+rNPjXmLJzKGd+kvdmjBRThG14xlVA8ng=;
+        b=rRF9qXZShSJ7hRN7sZ+brbJcWCqkzJY2WGt1ymRMRO2+5G1PLY8dsNbpW3ZmmwyYPU
+         m1b1YFhy9gGl2274cI1Z7dWAU963f0l6LyXbExSZ2vs9rCibx/OuBurrz9lYlEMCm+A3
+         A7qDF+aQRYd/PWJK72nEqe4L5xacfS9yiaTff2/E6BxZ0L/cce+M0GFFPoBSeKHWzLLW
+         20aNW1qm9HQJH55MZ//lfDg4dlWqzh/kzNUgH3FJwhUhsVTr/F8aSCKufNeB7BEgPTz6
+         aAN6i9UxG7eItLB89uwEfI9498D7p/R2kOerh7PVrfOXidnMYtXX0e8WeWb2MLgOVj+N
+         SOtA==
+X-Gm-Message-State: APjAAAXdbb9R/qFeY+01cTlGOkzs1LPghw+es/OsVZNHCcgus6x9aN33
+        2RkHWSXpjCYNxM/l6b95Omo=
+X-Google-Smtp-Source: APXvYqxHZzPCzEFBdfaxifS/d0xuMqMruoRH8WhYzedYRqj1568SJLnCPbIxzrIIRAT+V4aF8Xt21w==
+X-Received: by 2002:a17:902:a60e:: with SMTP id u14mr135728747plq.94.1559142759807;
+        Wed, 29 May 2019 08:12:39 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id f10sm16231907pgo.14.2019.05.29.08.12.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 May 2019 08:12:38 -0700 (PDT)
+Subject: Re: [PATCH 02/24] scsi: add scsi_{get,put}_reserved_cmd()
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 24/24] scsi: drop scsi command list
-Date:   Wed, 29 May 2019 15:29:01 +0200
-Message-Id: <20190529132901.27645-25-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20190529132901.27645-1-hare@suse.de>
 References: <20190529132901.27645-1-hare@suse.de>
+ <20190529132901.27645-3-hare@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <09f930f8-f152-095d-a428-8dba3722f7de@acm.org>
+Date:   Wed, 29 May 2019 08:12:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190529132901.27645-3-hare@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.com>
+On 5/29/19 6:28 AM, Hannes Reinecke wrote:
+> +	rq = blk_mq_alloc_request(sdev->request_queue,
+> +				  REQ_OP_SCSI_OUT | REQ_NOWAIT,
+> +				  BLK_MQ_REQ_RESERVED);
 
-No users left, kill it.
+This looks wrong to me. To avoid that blk_mq_alloc_request() waits I 
+think it should be called as follows:
 
-Signed-off-by: Hannes Reinecke <hare@suse.com>
----
- drivers/scsi/scsi.c        |  1 -
- drivers/scsi/scsi_lib.c    | 32 --------------------------------
- drivers/scsi/scsi_scan.c   |  1 -
- include/scsi/scsi_cmnd.h   |  1 -
- include/scsi/scsi_device.h |  1 -
- include/scsi/scsi_host.h   |  2 --
- 6 files changed, 38 deletions(-)
+	rq = blk_mq_alloc_request(sdev->request_queue,
+			REQ_OP_SCSI_OUT,
+			BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT);
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index 8128165a46fa..8db1cba81363 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -104,7 +104,6 @@ EXPORT_SYMBOL(scsi_sd_pm_domain);
-  */
- void scsi_put_command(struct scsi_cmnd *cmd)
- {
--	scsi_del_cmd_from_list(cmd);
- 	BUG_ON(delayed_work_pending(&cmd->abort_work));
- }
- 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index da850bf28065..761fbfcfae1f 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -561,7 +561,6 @@ static void scsi_mq_uninit_cmd(struct scsi_cmnd *cmd)
- {
- 	scsi_mq_free_sgtables(cmd);
- 	scsi_uninit_cmd(cmd);
--	scsi_del_cmd_from_list(cmd);
- }
- 
- /* Returns false when no more bytes to process, true if there are more */
-@@ -1085,35 +1084,6 @@ static void scsi_initialize_rq(struct request *rq)
- 	cmd->retries = 0;
- }
- 
--/* Add a command to the list used by the aacraid and dpt_i2o drivers */
--void scsi_add_cmd_to_list(struct scsi_cmnd *cmd)
--{
--	struct scsi_device *sdev = cmd->device;
--	struct Scsi_Host *shost = sdev->host;
--	unsigned long flags;
--
--	if (shost->use_cmd_list) {
--		spin_lock_irqsave(&sdev->list_lock, flags);
--		list_add_tail(&cmd->list, &sdev->cmd_list);
--		spin_unlock_irqrestore(&sdev->list_lock, flags);
--	}
--}
--
--/* Remove a command from the list used by the aacraid and dpt_i2o drivers */
--void scsi_del_cmd_from_list(struct scsi_cmnd *cmd)
--{
--	struct scsi_device *sdev = cmd->device;
--	struct Scsi_Host *shost = sdev->host;
--	unsigned long flags;
--
--	if (shost->use_cmd_list) {
--		spin_lock_irqsave(&sdev->list_lock, flags);
--		BUG_ON(list_empty(&cmd->list));
--		list_del_init(&cmd->list);
--		spin_unlock_irqrestore(&sdev->list_lock, flags);
--	}
--}
--
- /* Called after a request has been started. */
- void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd)
- {
-@@ -1142,8 +1112,6 @@ void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd)
- 	INIT_DELAYED_WORK(&cmd->abort_work, scmd_eh_abort_handler);
- 	cmd->jiffies_at_alloc = jiffies_at_alloc;
- 	cmd->retries = retries;
--
--	scsi_add_cmd_to_list(cmd);
- }
- 
- static blk_status_t scsi_setup_scsi_cmnd(struct scsi_device *sdev,
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 058079f915f1..f2437a7570ce 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -236,7 +236,6 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
- 	sdev->sdev_state = SDEV_CREATED;
- 	INIT_LIST_HEAD(&sdev->siblings);
- 	INIT_LIST_HEAD(&sdev->same_target_siblings);
--	INIT_LIST_HEAD(&sdev->cmd_list);
- 	INIT_LIST_HEAD(&sdev->starved_entry);
- 	INIT_LIST_HEAD(&sdev->event_list);
- 	spin_lock_init(&sdev->list_lock);
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index 4a45704b28fe..dab164c908d6 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -66,7 +66,6 @@ struct scsi_pointer {
- struct scsi_cmnd {
- 	struct scsi_request req;
- 	struct scsi_device *device;
--	struct list_head list;  /* scsi_cmnd participates in queue lists */
- 	struct list_head eh_entry; /* entry for the host eh_cmd_q */
- 	struct delayed_work abort_work;
- 
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 202f4d6a4342..9ef440c34c40 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -110,7 +110,6 @@ struct scsi_device {
- 	atomic_t device_blocked;	/* Device returned QUEUE_FULL. */
- 
- 	spinlock_t list_lock;
--	struct list_head cmd_list;	/* queue of in use SCSI Command structures */
- 	struct list_head starved_entry;
- 	unsigned short queue_depth;	/* How deep of a queue we want */
- 	unsigned short max_queue_depth;	/* max queue depth */
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index a2bab5f07eff..9e8f9ccaf493 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -630,8 +630,6 @@ struct Scsi_Host {
- 	/* The controller does not support WRITE SAME */
- 	unsigned no_write_same:1;
- 
--	unsigned use_cmd_list:1;
--
- 	/* Host responded with short (<36 bytes) INQUIRY result */
- 	unsigned short_inquiry:1;
- 
--- 
-2.16.4
-
+Bart.
