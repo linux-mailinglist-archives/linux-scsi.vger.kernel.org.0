@@ -2,112 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7F42D947
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 11:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0D82D9E1
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 12:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbfE2JmM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 05:42:12 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:39698 "EHLO huawei.com"
+        id S1726085AbfE2KAV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 06:00:21 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:57490 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725956AbfE2JmM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 May 2019 05:42:12 -0400
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 4D7B3487BFBF343E4681;
-        Wed, 29 May 2019 17:42:10 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Wed, 29 May 2019
- 17:42:08 +0800
+        id S1725990AbfE2KAU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 May 2019 06:00:20 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 8C6B763B3647AD9D5A2D;
+        Wed, 29 May 2019 18:00:18 +0800 (CST)
+Received: from localhost.localdomain (10.67.212.75) by
+ DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
+ 14.3.439.0; Wed, 29 May 2019 18:00:10 +0800
 From:   John Garry <john.garry@huawei.com>
-Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on CPU
- unplug
-To:     Ming Lei <ming.lei@redhat.com>
-References: <20190527150207.11372-1-ming.lei@redhat.com>
- <20190527150207.11372-6-ming.lei@redhat.com>
- <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com>
- <20190529022852.GA21398@ming.t460p> <20190529024200.GC21398@ming.t460p>
-CC:     Jens Axboe <axboe@kernel.dk>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-block@vger.kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        <linux-scsi@vger.kernel.org>,
-        "Bart Van Assche" <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-Message-ID: <5bc07fd5-9d2b-bf9c-eb77-b8cebadb9150@huawei.com>
-Date:   Wed, 29 May 2019 10:42:00 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
+To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/6] hisi_sas: Some misc patches
+Date:   Wed, 29 May 2019 17:58:41 +0800
+Message-ID: <1559123927-160502-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-In-Reply-To: <20190529024200.GC21398@ming.t460p>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
+Content-Type: text/plain
+X-Originating-IP: [10.67.212.75]
 X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 29/05/2019 03:42, Ming Lei wrote:
-> On Wed, May 29, 2019 at 10:28:52AM +0800, Ming Lei wrote:
->> On Tue, May 28, 2019 at 05:50:40PM +0100, John Garry wrote:
->>> On 27/05/2019 16:02, Ming Lei wrote:
->>>> Managed interrupts can not migrate affinity when their CPUs are offline.
->>>> If the CPU is allowed to shutdown before they're returned, commands
->>>> dispatched to managed queues won't be able to complete through their
->>>> irq handlers.
->>>>
->>>> Wait in cpu hotplug handler until all inflight requests on the tags
->>>> are completed or timeout. Wait once for each tags, so we can save time
->>>> in case of shared tags.
->>>>
->>>> Based on the following patch from Keith, and use simple delay-spin
->>>> instead.
->>>>
->>>> https://lore.kernel.org/linux-block/20190405215920.27085-1-keith.busch@intel.com/
->>>>
->>>> Some SCSI devices may have single blk_mq hw queue and multiple private
->>>> completion queues, and wait until all requests on the private completion
->>>> queue are completed.
->>>
->>> Hi Ming,
->>>
->>> I'm a bit concerned that this approach won't work due to ordering: it seems
->>> that the IRQ would be shutdown prior to the CPU dead notification for the
->>
->> Managed IRQ shutdown is run in irq_migrate_all_off_this_cpu(), which is
->> called in the callback of takedown_cpu(). And the CPU dead notification
->> is always sent after that CPU becomes offline, see cpuhp_invoke_callback().
->
-> Hammm, looks we both say same thing.
->
-> Yeah, it is too late to drain requests in the cpu hotplug DEAD handler,
-> maybe we can try to move managed IRQ shutdown after sending the dead
-> notification.
->
+This patchset introduces some misc patches for the driver. Nothing
+particularly stands out, maybe apart from a patch to delete a PHY's
+timer when necessary.
 
-Even if the IRQ is shutdown later, all CPUs would still be dead, so none 
-available to receive the interrupt or do the work for draining the queue.
+John Garry (1):
+  scsi: hisi_sas: Reduce HISI_SAS_SGE_PAGE_CNT in size
 
-> I need to think of it further.
+Luo Jiaxing (1):
+  scsi: hisi_sas: Ignore the error code between phy down to phy up
 
-It would seem that we just need to be informed of CPU offlining earlier, 
-and plug the drain in there.
+Xiang Chen (3):
+  scsi: hisi_sas: Delete PHYs' timer when rmmod or probe failed
+  scsi: hisi_sas: Change the type of some numbers to unsigned
+  scsi: hisi_sas: Disable stash for v3 hw
 
->
+Xiaofei Tan (1):
+  scsi: hisi_sas: Fix the issue of argument mismatch of printing ecc
+    errors
 
-Cheers,
-John
+ drivers/scsi/hisi_sas/hisi_sas.h       |  4 +--
+ drivers/scsi/hisi_sas/hisi_sas_main.c  |  8 +++++
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 46 ++++++++++++++------------
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 46 ++++++++++++++++++--------
+ 4 files changed, 66 insertions(+), 38 deletions(-)
 
-> Thanks,
-> Ming
->
-> .
->
-
+-- 
+2.17.1
 
