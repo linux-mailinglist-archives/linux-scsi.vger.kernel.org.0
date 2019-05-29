@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B482DE26
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 15:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 930352DE24
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 15:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727209AbfE2N3O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1727199AbfE2N3O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Wed, 29 May 2019 09:29:14 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45546 "EHLO mx1.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:45538 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727164AbfE2N3N (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1727143AbfE2N3N (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Wed, 29 May 2019 09:29:13 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 9E105B00B;
+        by mx1.suse.de (Postfix) with ESMTP id 933FBB008;
         Wed, 29 May 2019 13:29:09 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 18/24] scsi: Implement scsi_is_reserved_cmd()
-Date:   Wed, 29 May 2019 15:28:55 +0200
-Message-Id: <20190529132901.27645-19-hare@suse.de>
+Subject: [PATCH 19/24] aacraid: move scsi_add_host()
+Date:   Wed, 29 May 2019 15:28:56 +0200
+Message-Id: <20190529132901.27645-20-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20190529132901.27645-1-hare@suse.de>
 References: <20190529132901.27645-1-hare@suse.de>
@@ -32,74 +32,58 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add function to check if a SCSI command originates from the reserved
-command pool.
+Move the call to scsi_add_host() so that the Scsi_Host structure
+is initialized before any I/O is sent.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- block/blk-mq.c          | 13 +++++++++++++
- include/linux/blk-mq.h  |  2 ++
- include/scsi/scsi_tcq.h | 10 +++++++++-
- 3 files changed, 24 insertions(+), 1 deletion(-)
+ drivers/scsi/aacraid/linit.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index f6711a61ba3b..a2212c117782 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -289,6 +289,19 @@ static inline bool blk_mq_need_time_stamp(struct request *rq)
- 	return (rq->rq_flags & RQF_IO_STAT) || rq->q->elevator;
- }
+diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
+index 8e28a505f7e8..71d97881fc26 100644
+--- a/drivers/scsi/aacraid/linit.c
++++ b/drivers/scsi/aacraid/linit.c
+@@ -1669,6 +1669,9 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	shost->unique_id = unique_id;
+ 	shost->max_cmd_len = 16;
+ 	shost->use_cmd_list = 1;
++	shost->max_id = MAXIMUM_NUM_CONTAINERS;
++	shost->max_lun = AAC_MAX_LUN;
++	shost->sg_tablesize = HBA_MAX_SG_SEPARATE;
  
-+/**
-+ * blk_mq_rq_is_reserved - Check if a request has a reserved tag
-+ *
-+ * @rq: Request to check
-+ */
-+bool blk_mq_rq_is_reserved(struct request *rq)
-+{
-+	struct blk_mq_hw_ctx *hctx = rq->mq_hctx;
-+
-+	return blk_mq_tag_is_reserved(hctx->tags, rq->tag);
-+}
-+EXPORT_SYMBOL_GPL(blk_mq_rq_is_reserved);
-+
- static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
- 		unsigned int tag, unsigned int op)
- {
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index 15d1aa53d96c..e0e49f1c6f3c 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -348,6 +348,8 @@ static inline void *blk_mq_rq_to_pdu(struct request *rq)
- 	return rq + 1;
- }
+ 	if (aac_cfg_major == AAC_CHARDEV_NEEDS_REINIT)
+ 		aac_init_char();
+@@ -1731,6 +1734,10 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 		goto out_deinit;
+ 	}
  
-+bool blk_mq_rq_is_reserved(struct request *rq);
++	error = scsi_add_host(shost, &pdev->dev);
++	if (error)
++		goto out_deinit;
 +
- #define queue_for_each_hw_ctx(q, hctx, i)				\
- 	for ((i) = 0; (i) < (q)->nr_hw_queues &&			\
- 	     ({ hctx = (q)->queue_hw_ctx[i]; 1; }); (i)++)
-diff --git a/include/scsi/scsi_tcq.h b/include/scsi/scsi_tcq.h
-index 227f3bd4e974..0c11e8fbe6d2 100644
---- a/include/scsi/scsi_tcq.h
-+++ b/include/scsi/scsi_tcq.h
-@@ -58,7 +58,15 @@ static inline void scsi_put_reserved_cmd(struct scsi_cmnd *scmd)
- {
- 	struct request *rq = blk_mq_rq_from_pdu(scmd);
+ 	aac->maximum_num_channels = aac_drivers[index].channels;
+ 	error = aac_get_adapter_info(aac);
+ 	if (error < 0)
+@@ -1789,18 +1796,8 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (!aac->sa_firmware && aac_drivers[index].quirks & AAC_QUIRK_SRC)
+ 		aac_intr_normal(aac, 0, 2, 0, NULL);
  
--	blk_mq_free_request(rq);
-+	if (blk_mq_rq_is_reserved(rq))
-+		blk_mq_free_request(rq);
-+}
-+
-+static inline bool scsi_is_reserved_cmd(struct scsi_cmnd *scmd)
-+{
-+	struct request *rq = blk_mq_rq_from_pdu(scmd);
-+
-+	return blk_mq_rq_is_reserved(rq);
- }
+-	/*
+-	 * dmb - we may need to move the setting of these parms somewhere else once
+-	 * we get a fib that can report the actual numbers
+-	 */
+-	shost->max_lun = AAC_MAX_LUN;
+-
+ 	pci_set_drvdata(pdev, shost);
  
- #endif /* CONFIG_BLOCK */
+-	error = scsi_add_host(shost, &pdev->dev);
+-	if (error)
+-		goto out_deinit;
+-
+ 	aac_scan_host(aac);
+ 
+ 	pci_enable_pcie_error_reporting(pdev);
 -- 
 2.16.4
 
