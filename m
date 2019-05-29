@@ -2,74 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E062D9DA
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 12:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E472DA10
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 12:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbfE2KAi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 06:00:38 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:35662 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726670AbfE2KAY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 May 2019 06:00:24 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 98DF4438F3D9E84A517B;
-        Wed, 29 May 2019 18:00:22 +0800 (CST)
-Received: from localhost.localdomain (10.67.212.75) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.439.0; Wed, 29 May 2019 18:00:12 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>,
-        Xiang Chen <chenxiang66@hisilicon.com>,
-        "John Garry" <john.garry@huawei.com>
-Subject: [PATCH 6/6] scsi: hisi_sas: Disable stash for v3 hw
-Date:   Wed, 29 May 2019 17:58:47 +0800
-Message-ID: <1559123927-160502-7-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1559123927-160502-1-git-send-email-john.garry@huawei.com>
-References: <1559123927-160502-1-git-send-email-john.garry@huawei.com>
+        id S1726101AbfE2KKw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 06:10:52 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:49708 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725874AbfE2KKw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 May 2019 06:10:52 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 1B6B4C074EF2;
+        Wed, 29 May 2019 10:10:47 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5B5066A96F;
+        Wed, 29 May 2019 10:10:33 +0000 (UTC)
+Date:   Wed, 29 May 2019 18:10:29 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on
+ CPU unplug
+Message-ID: <20190529101028.GA15496@ming.t460p>
+References: <20190527150207.11372-1-ming.lei@redhat.com>
+ <20190527150207.11372-6-ming.lei@redhat.com>
+ <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com>
+ <20190529022852.GA21398@ming.t460p>
+ <20190529024200.GC21398@ming.t460p>
+ <5bc07fd5-9d2b-bf9c-eb77-b8cebadb9150@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.212.75]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5bc07fd5-9d2b-bf9c-eb77-b8cebadb9150@huawei.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Wed, 29 May 2019 10:10:52 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Xiang Chen <chenxiang66@hisilicon.com>
+On Wed, May 29, 2019 at 10:42:00AM +0100, John Garry wrote:
+> On 29/05/2019 03:42, Ming Lei wrote:
+> > On Wed, May 29, 2019 at 10:28:52AM +0800, Ming Lei wrote:
+> > > On Tue, May 28, 2019 at 05:50:40PM +0100, John Garry wrote:
+> > > > On 27/05/2019 16:02, Ming Lei wrote:
+> > > > > Managed interrupts can not migrate affinity when their CPUs are offline.
+> > > > > If the CPU is allowed to shutdown before they're returned, commands
+> > > > > dispatched to managed queues won't be able to complete through their
+> > > > > irq handlers.
+> > > > > 
+> > > > > Wait in cpu hotplug handler until all inflight requests on the tags
+> > > > > are completed or timeout. Wait once for each tags, so we can save time
+> > > > > in case of shared tags.
+> > > > > 
+> > > > > Based on the following patch from Keith, and use simple delay-spin
+> > > > > instead.
+> > > > > 
+> > > > > https://lore.kernel.org/linux-block/20190405215920.27085-1-keith.busch@intel.com/
+> > > > > 
+> > > > > Some SCSI devices may have single blk_mq hw queue and multiple private
+> > > > > completion queues, and wait until all requests on the private completion
+> > > > > queue are completed.
+> > > > 
+> > > > Hi Ming,
+> > > > 
+> > > > I'm a bit concerned that this approach won't work due to ordering: it seems
+> > > > that the IRQ would be shutdown prior to the CPU dead notification for the
+> > > 
+> > > Managed IRQ shutdown is run in irq_migrate_all_off_this_cpu(), which is
+> > > called in the callback of takedown_cpu(). And the CPU dead notification
+> > > is always sent after that CPU becomes offline, see cpuhp_invoke_callback().
+> > 
+> > Hammm, looks we both say same thing.
+> > 
+> > Yeah, it is too late to drain requests in the cpu hotplug DEAD handler,
+> > maybe we can try to move managed IRQ shutdown after sending the dead
+> > notification.
+> > 
+> 
+> Even if the IRQ is shutdown later, all CPUs would still be dead, so none
+> available to receive the interrupt or do the work for draining the queue.
+> 
+> > I need to think of it further.
+> 
+> It would seem that we just need to be informed of CPU offlining earlier, and
+> plug the drain in there.
 
-For v3 hw, stash is enabled to promote performance, but it does little
-help for promoting performance according to current test. What's more, it
-causes exception for some situations, so disable it.
+Yes, looks blk-mq has to be notified before unplugging CPU for this
+issue.
 
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 2 ++
- 1 file changed, 2 insertions(+)
+And we should be careful to handle the multiple reply queue case, given the queue
+shouldn't be stopped or quieseced because other reply queues are still active.
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index fbf0a1e9c8c2..b92aa6b37e1d 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -28,6 +28,7 @@
- #define ITCT_CLR_EN_MSK			(0x1 << ITCT_CLR_EN_OFF)
- #define ITCT_DEV_OFF			0
- #define ITCT_DEV_MSK			(0x7ff << ITCT_DEV_OFF)
-+#define SAS_AXI_USER3			0x50
- #define IO_SATA_BROKEN_MSG_ADDR_LO	0x58
- #define IO_SATA_BROKEN_MSG_ADDR_HI	0x5c
- #define SATA_INITI_D2H_STORE_ADDR_LO	0x60
-@@ -554,6 +555,7 @@ static void init_reg_v3_hw(struct hisi_hba *hisi_hba)
- 	/* Global registers init */
- 	hisi_sas_write32(hisi_hba, DLVRY_QUEUE_ENABLE,
- 			 (u32)((1ULL << hisi_hba->queue_count) - 1));
-+	hisi_sas_write32(hisi_hba, SAS_AXI_USER3, 0);
- 	hisi_sas_write32(hisi_hba, CFG_MAX_TAG, 0xfff0400);
- 	hisi_sas_write32(hisi_hba, HGC_SAS_TXFAIL_RETRY_CTRL, 0x108);
- 	hisi_sas_write32(hisi_hba, CFG_AGING_TIME, 0x1);
--- 
-2.17.1
+The new CPUHP state for blk-mq should be invoked after the to-be-offline
+CPU is quiesced and before it becomes offline.
 
+Thanks,
+Ming
