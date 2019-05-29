@@ -2,102 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4002E3F5
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 19:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A912E57B
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 May 2019 21:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726018AbfE2R66 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 13:58:58 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45008 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbfE2R65 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 13:58:57 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n2so325957pgp.11;
-        Wed, 29 May 2019 10:58:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=BxwrAqO9UAXV6UenFSJjDbgaMZFeylmamm3RqPV+N2k=;
-        b=tZ59KD1wTs2TjPkbXAhQzJkB5G/NBo1yGQ1cYu4X+m4W4fIUbT2O4NgcHvqQwUE/h1
-         ro0tS9OZi7F/oKAmx2a3DDICMaCM6X3+19xizHqFbXsM4RNtrXCcZv8FzDadAQHWAPhX
-         wGFT8p4BvITfHOdjr2jIfyuOvLBtsdsU9FZQuNngBPq+oCLIG+YEwq4HjCsEMP7pIr/3
-         TYWbQJuqbtih6HAdGmswWyWn36aK9CgrbrEOXmKRDRUM3kxCGoh9ZhOgSnCyTX9HD6zk
-         XSBj2wRzYTCV4tHRIOQRRMq7MZla8qhN2JrpSgbIEuPIltRArLNriYMX0EQac+kmvVEM
-         oZMw==
+        id S1726245AbfE2Tgd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 15:36:33 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39860 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725956AbfE2Tgd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 15:36:33 -0400
+Received: by mail-pf1-f194.google.com with SMTP id j2so2284277pfe.6
+        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 12:36:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=BxwrAqO9UAXV6UenFSJjDbgaMZFeylmamm3RqPV+N2k=;
-        b=MnZSxpJ0R2vEHVH6MkAQg2yv74NHThLbbyTWIIGIQbn0XpDrs8RDLsLWNprmJO33qo
-         /KY2Xo2H5edAlul6S0Zr6Mw2sw3bCYVPpDvtdUCkIoWQJniTSl2UJMlz4z5v0B4LPH9m
-         h39ukSrEeyaEw7TS16QOQVvQp6wxCbfQgrDRf3lPl52in3Hl6+mTuUPMVb4Coz/Cw8Ju
-         vGhzUl98IgnxwpybXC1YzTSkDMtTirICn/RWgytMMJuosZI67UiYNPfC6GrE73KPCHfZ
-         xOEUPCAjuPMR6DQyxXSErmxb8syPoAiTSj9xfMCd5Lqwe+pCBYE1KDnDpC+p7ThaYIXf
-         98yw==
-X-Gm-Message-State: APjAAAXgaMo9mUUza8TXyL2BN7S3durYz7aD+4nI4G2rJ7vQqxsnOXyN
-        6yvwVV8ywkgU+J8AKhwuey8=
-X-Google-Smtp-Source: APXvYqxnHXl1GtRPFmBDheP9IOj8tKjdq/3R7VfecrJbmSjAECrjur1LnsM86N//7eZ+M1MWrihhOw==
-X-Received: by 2002:aa7:8acb:: with SMTP id b11mr150551391pfd.115.1559152737270;
-        Wed, 29 May 2019 10:58:57 -0700 (PDT)
-Received: from hari-Inspiron-1545 ([183.83.89.153])
-        by smtp.gmail.com with ESMTPSA id l38sm182909pje.12.2019.05.29.10.58.54
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CPPvwfx6v/W8TdfzG5VLVfW5R4GsuBAt3auJKn9Dc30=;
+        b=nkQSuhUuBQQq+49Ohd7h+BcLfW49k8JunWpRc7+yXBBrqKYWKR4Ke4x52xWH1Vz9td
+         uipVSNO00Z6l1w0cCc4p0dMNKDz5lihlaHy5IJi3ADImWRkZ4g0uv4rtHA2Ft3Dt/GUJ
+         3DQY8aYUdgRRFbrzuufRZ5TZWHGvFQN4WUlYNwmwSTTKov3IbYyx/3qPBLPEcMZ0GLJT
+         DFRrVzZVX+rxASuqmqkxS4HZvTZoTyp8FQ54e6PduGCTwPFaDbQuFtzdRaf432eT6fgW
+         cMHKqDucWydRN18sMSJxGBv2GMmbqefq9GuwoCPZBc7NtLptmA7fgvkNhH3oSYcF3N+F
+         SsQA==
+X-Gm-Message-State: APjAAAVrXwO7xRlyD4iUOGHcrxNN9p3np8KLWOu/Tjjjynds1Xm1VwXu
+        tDnJf5Htdx2J/nHjjoznwlo=
+X-Google-Smtp-Source: APXvYqzH7FkC6Trtv4sSCaYVsVhJtjrLkVKYPD5tpDPCQLfpOVhfADpyA3qqvhZnLY0XLzxQ3GZtZw==
+X-Received: by 2002:a65:44cb:: with SMTP id g11mr138949651pgs.193.1559158592171;
+        Wed, 29 May 2019 12:36:32 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id t11sm204915pgp.1.2019.05.29.12.36.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 10:58:56 -0700 (PDT)
-Date:   Wed, 29 May 2019 23:28:51 +0530
-From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [Patch v2] wd719x: pass GFP_ATOMIC instead of GFP_KERNEL
-Message-ID: <20190529175851.GA10760@hari-Inspiron-1545>
+        Wed, 29 May 2019 12:36:30 -0700 (PDT)
+Subject: Re: [PATCH 11/24] scsi: add scsi_host_get_reserved_cmd()
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+References: <20190529132901.27645-1-hare@suse.de>
+ <20190529132901.27645-12-hare@suse.de>
+ <25a5a8f5-324b-6b7c-71eb-6cb9f9a60ba8@acm.org>
+ <0af75234-7470-acb8-c7ac-10ebaa1e3321@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <0dcf29df-c4c9-0d1c-cd88-972888cd644d@acm.org>
+Date:   Wed, 29 May 2019 12:36:29 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <0af75234-7470-acb8-c7ac-10ebaa1e3321@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-dont acquire lock before calling wd719x_chip_init.
+On 5/29/19 10:38 AM, Hannes Reinecke wrote:
+> On 5/29/19 5:19 PM, Bart Van Assche wrote:
+>> On 5/29/19 6:28 AM, Hannes Reinecke wrote:
+>>> +    rq = blk_mq_alloc_request(shost->reserved_cmd_q,
+>>> +                  REQ_OP_DRV_OUT | REQ_NOWAIT,
+>>> +                  BLK_MQ_REQ_RESERVED);
+>>
+>> Is your purpose to avoid that blk_mq_alloc_request() waits? If so, why 
+>> do you want to avoid that?
+>>
+> Typically these commands are intended for internal purposes, so there 
+> should always be enough commands free to allow direct allocation.
+> If not we're in an error condition, and we need to return so as not to 
+> lock up the driver (as it might rely on this command to make forward 
+> progress).
 
-Issue identified by coccicheck
+That sounds like a risky strategy to me. blk_mq_alloc_request() can 
+block for a number of reasons, e.g. because a request queue due to e.g. 
+CPU hotplugging. I don't think that you want 
+scsi_host_get_reserved_cmd() or scsi_get_reserved_cmd() to fail if a 
+request queue is frozen.
 
-Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
------
-changes in v1: Replace GFP_KERNEL with GFP_ATOMIC.
-changes in v2: Call wd719x_chip_init  without lock as suggested
-		in review
-----
----
- drivers/scsi/wd719x.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/scsi/wd719x.c b/drivers/scsi/wd719x.c
-index c2f4006..340ec92 100644
---- a/drivers/scsi/wd719x.c
-+++ b/drivers/scsi/wd719x.c
-@@ -505,11 +505,9 @@ static int wd719x_host_reset(struct scsi_cmnd *cmd)
- {
- 	struct wd719x *wd = shost_priv(cmd->device->host);
- 	struct wd719x_scb *scb, *tmp;
--	unsigned long flags;
- 	int result;
- 
- 	dev_info(&wd->pdev->dev, "host reset requested\n");
--	spin_lock_irqsave(wd->sh->host_lock, flags);
- 	/* Try to reinit the RISC */
- 	if (wd719x_chip_init(wd) == 0)
- 		result = SUCCESS;
-@@ -519,7 +517,6 @@ static int wd719x_host_reset(struct scsi_cmnd *cmd)
- 	/* flush all SCBs */
- 	list_for_each_entry_safe(scb, tmp, &wd->active_scbs, list)
- 		wd719x_finish_cmd(scb, result);
--	spin_unlock_irqrestore(wd->sh->host_lock, flags);
- 
- 	return result;
- }
--- 
-2.7.4
+Bart.
 
