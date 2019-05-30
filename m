@@ -2,186 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BC82F13D
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 06:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1952F567
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 06:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbfE3ELf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 00:11:35 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:36824 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726945AbfE3ELa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 00:11:30 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n4so100954wrs.3;
-        Wed, 29 May 2019 21:11:29 -0700 (PDT)
+        id S2388864AbfE3ErD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 00:47:03 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:38724 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729057AbfE3ErC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 May 2019 00:47:02 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4U4itYT029757;
+        Wed, 29 May 2019 21:46:57 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfpt0818;
+ bh=j/wfGcA9I2hFZAh/3Zm7kJaFbpgaCJwGJO/IjOQCRLo=;
+ b=lr6WYOlDN+FJKDj1BTGO+Cmbu9K+LDE3BjIkoF+dkWq2gVsDHFcSBqvKcbq1v+g8Ecz7
+ hQ2LY6KYFHOpucqxOL7oxdKmnkkhAfCpiikBggUAUa9XkIo9QA7mF1RIWR/n2WpT7QgW
+ em4kvO4pNqHK6GNATBHVfvPhh8p55vaP5Gp0A7OgXOyqarA54OK083XpmznW4Emm83tL
+ Pinjwse9xR8B1bqo1djleplDU52zMlVcqFicT0XnqwZ5PI8cpKhWRVOqEbF4SPZ5HXKR
+ SQCIwHJHI4xnQGY/9369zkXlOWLKbfkVN8zEbyi1Ns2XHfP2wvYodbqzb8pWRHdhqOrg LA== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2st4488yg6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 29 May 2019 21:46:57 -0700
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Wed, 29 May
+ 2019 21:46:55 -0700
+Received: from NAM05-DM3-obe.outbound.protection.outlook.com (104.47.49.50) by
+ SC-EXCH03.marvell.com (10.93.176.83) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Wed, 29 May 2019 21:46:55 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h0T/MeUzCgmPrR3gk4K6fixpQQCnUhC4n3eE1p0lqFk=;
-        b=hgCnqefDl/JBYEu4+rVNRoDQ7aPZCmlANqR5qlyPz6/nnL28KsHj+EQ+oreogGLjsr
-         49zHHIs20aSdki49ikhvYEphqoaOKPHLxpS9QT0x0sDy0AvEZtAvUljqKxeG3GfnCQJO
-         F0L0iaJYn6wWdW0OO7FgacQQZqgyTbfa5CRutqF0vO71aLqR2nvafmfuSLco9oiO7lLa
-         xbdQhurZPhGnsa8IHWRD/fta8zBPRQfx6bHq9Nxs2/E2qmEf36Mtab55petXEO/xJsle
-         QUp/GiiZ8KyeuZFDLjw7eEjCFRXgNrDOKf6bAS7eMAY5GLtOdkGssTqQZVUlotsPCTfQ
-         axQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h0T/MeUzCgmPrR3gk4K6fixpQQCnUhC4n3eE1p0lqFk=;
-        b=feiRG1ykqG5Ity79nFKQI7VVAlIw+NVUeAoSFlTwz89YVFDFyPzVjNU5atcHaR9RSO
-         OvKqy7bV/G4fXfh0KzKMy65Hacp0hIkkXii/ZLdMYTmPm7KBc2u2//oU8idXycQ8ZMwa
-         1FRjCc7u06+EA8WZCqjfmdHeA+7/5xHeHYrcXYJhP2AljobUZlAC0XUgImGCO2t86ZER
-         LaHbY4lITCBGM5Xz6MV4S5pPgLZb9Aa2nwkeTEI3c+3CKm5ySBLi+9NtgmQm4p5K6aNb
-         iKBS/j8JPBH4Hn7CKP+PHfds8o5E1AGcVqzfvPUBnjmShHsrj+c3pM0v4pjqorAQg2PU
-         mEKA==
-X-Gm-Message-State: APjAAAVvBs9or7N9T8tcpksD907OSPdmbKkpcpTq4ykQbfaG8dBSSbJx
-        YdGWANzPE/z2MoVwYz1Nq5zt2WbONNk9g0dd3AI=
-X-Google-Smtp-Source: APXvYqygV+uOyMtAemWnhhiWiShh7/TIAUUBWaiU/a5IN+a5xO/PuxK6M2Z/CWDO1fezb5B4lXERYXzMhvkF61hJhQ8=
-X-Received: by 2002:adf:fbc2:: with SMTP id d2mr947614wrs.334.1559189488864;
- Wed, 29 May 2019 21:11:28 -0700 (PDT)
+ d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=j/wfGcA9I2hFZAh/3Zm7kJaFbpgaCJwGJO/IjOQCRLo=;
+ b=KAbHzrGxqzk1xdt/gvSg/qpUpFTAhpuz91zC/7nWI9CD9OeCV/lgS1Y6zeKDaX5prsh6h/KVWkV4J66Sw7A2AglG/3exq/P0BMCIXfgKtr1RTkt8HizQGuh8Ja8MWisXX68y6RynOr5LMLMj6iw4dxP/8fPfWD2yBl5DuwPHgD8=
+Received: from MN2PR18MB2719.namprd18.prod.outlook.com (20.178.255.156) by
+ MN2PR18MB3325.namprd18.prod.outlook.com (10.255.238.14) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1922.17; Thu, 30 May 2019 04:46:53 +0000
+Received: from MN2PR18MB2719.namprd18.prod.outlook.com
+ ([fe80::7150:ff4e:d634:ac16]) by MN2PR18MB2719.namprd18.prod.outlook.com
+ ([fe80::7150:ff4e:d634:ac16%4]) with mapi id 15.20.1922.024; Thu, 30 May 2019
+ 04:46:53 +0000
+From:   Himanshu Madhani <hmadhani@marvell.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Enzo Matsumiya <ematsumiya@suse.de>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH] qla2xxx: remove double assignment in
+ qla2x00_update_fcport
+Thread-Topic: [EXT] Re: [PATCH] qla2xxx: remove double assignment in
+ qla2x00_update_fcport
+Thread-Index: AQHVBOsJTjXawkuw70Ove8nSpNu5G6aDFMWo//+xboA=
+Date:   Thu, 30 May 2019 04:46:52 +0000
+Message-ID: <90C8089C-F5F2-4E33-8DEB-A0B05500A072@marvell.com>
+References: <e5419ee1-0ae8-2d55-666e-741efece90e6@suse.de>
+ <yq11s0gy8v3.fsf@oracle.com>
+In-Reply-To: <yq11s0gy8v3.fsf@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [199.233.58.37]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1ae4443c-d4cb-4cb6-9aca-08d6e4b9d636
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:MN2PR18MB3325;
+x-ms-traffictypediagnostic: MN2PR18MB3325:
+x-microsoft-antispam-prvs: <MN2PR18MB332595A65C7A3D1D34242A2CD6180@MN2PR18MB3325.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1227;
+x-forefront-prvs: 00531FAC2C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(376002)(396003)(39860400002)(366004)(136003)(199004)(189003)(478600001)(256004)(14444005)(316002)(76176011)(66446008)(6512007)(3846002)(6116002)(6506007)(6246003)(86362001)(99286004)(4326008)(53936002)(82746002)(66066001)(476003)(54906003)(6486002)(36756003)(486006)(8936002)(2906002)(33656002)(25786009)(68736007)(5660300002)(2616005)(81156014)(186003)(76116006)(66946007)(102836004)(8676002)(66476007)(66556008)(64756008)(81166006)(14454004)(83716004)(71200400001)(446003)(4744005)(11346002)(7736002)(229853002)(6916009)(73956011)(26005)(71190400001)(6436002)(91956017)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3325;H:MN2PR18MB2719.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: marvell.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: sWCBOPTD+5xVrbzgBTaZFDA9yKVIjDGAhCdLBHEHMlQW8a41tuDSOrjY6Z/TdYeFbRoi2GP2nED7Tow6kZ9gLXI7ubjjclr1tNMN12Lt7m8+pMFPyv2rB3aDfRInMrYcrP7SiREAFJK2lagpC9Psp6ywP5oMkokxWTOjxgGASpXAUz3bahFgGaHg8Ci0rOzZmcnoyHoBKt77tBl5nKtOe0Aym/q8BX3Luu8ATDcHYMYFiIUgQX2YGPoObgH9BPD/EQ3EAy0FWsXnbCLLgbEfIOMR1Bfef1pzHAojWzF26ZpiHXfKUCmD4jDlR963IAw41W0f9fJWKUq9T9NB6MMk9unOz9iMFwNoexpUB4hRK5UXlw37JLZb7ljiDESntc+WfYIpIAXeCuTudN+DRw5vkyj7vbFMTNnzDx3ZpYlRiC4=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <03D61DC056AB4E4BA6CEE58C00BF9974@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20190527150207.11372-1-ming.lei@redhat.com> <20190527150207.11372-6-ming.lei@redhat.com>
- <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com> <20190529022852.GA21398@ming.t460p>
- <20190529024200.GC21398@ming.t460p> <5bc07fd5-9d2b-bf9c-eb77-b8cebadb9150@huawei.com>
- <20190529101028.GA15496@ming.t460p> <CACVXFVODeFDPHxWkdnY5CZoOJ0did4mi_ap-aXk0oo+Cp05aUQ@mail.gmail.com>
- <94964048-b867-8610-71ea-0275651f8b77@huawei.com> <20190530022810.GA16730@ming.t460p>
-In-Reply-To: <20190530022810.GA16730@ming.t460p>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Thu, 30 May 2019 12:11:17 +0800
-Message-ID: <CACVXFVN729SgFQGUgmu1iN7P6Mv5+puE78STz8hj9J5bS828Ng@mail.gmail.com>
-Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on CPU unplug
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     John Garry <john.garry@huawei.com>, Jens Axboe <axboe@kernel.dk>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block <linux-block@vger.kernel.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ae4443c-d4cb-4cb6-9aca-08d6e4b9d636
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 May 2019 04:46:52.6603
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: hmadhani@marvell.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3325
+X-OriginatorOrg: marvell.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-30_03:,,
+ signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, May 30, 2019 at 10:28 AM Ming Lei <ming.lei@redhat.com> wrote:
->
-> On Wed, May 29, 2019 at 05:10:38PM +0100, John Garry wrote:
-> >
-> > > >
-> > > > And we should be careful to handle the multiple reply queue case, given the queue
-> > > > shouldn't be stopped or quieseced because other reply queues are still active.
-> > > >
-> > > > The new CPUHP state for blk-mq should be invoked after the to-be-offline
-> > > > CPU is quiesced and before it becomes offline.
-> > >
-> > > Hi John,
-> > >
-> >
-> > Hi Ming,
-> >
-> > > Thinking of this issue further, so far, one doable solution is to
-> > > expose reply queues
-> > > as blk-mq hw queues, as done by the following patchset:
-> > >
-> > > https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/
-> >
-> > I thought that this patchset had fundamental issues, in terms of working for
-> > all types of hosts. FYI, I did the backport of latest hisi_sas_v3 to v4.15
->
-> Could you explain it a bit about the fundamental issues for all types of
-> host?
->
-> It is just for hosts with multiple reply queues, such as hisi_sas v3,
-> megaraid_sas, mpt3sas and hpsa.
->
-> > with this patchset (as you may have noticed in my git send mistake), but we
-> > have not got to test it yet.
-> >
-> > On a related topic, we did test exposing reply queues as blk-mq hw queues
-> > and generating the host-wide tag internally in the LLDD with sbitmap, and
-> > unfortunately we were experiencing a significant performance hit, like 2300K
-> > -> 1800K IOPs for 4K read.
-> >
-> > We need to test this further. I don't understand why we get such a big hit.
->
-> The performance regression shouldn't have been introduced in theory, and it is
-> because blk_mq_queue_tag_busy_iter() iterates over the same duplicated tags multiple
-> times, which can be fixed easily.
->
-> >
-> > >
-> > > In which global host-wide tags are shared for all blk-mq hw queues.
-> > >
-> > > Also we can remove all the reply_map stuff in drivers, then solve the problem of
-> > > draining in-flight requests during unplugging CPU in a generic approach.
-> >
-> > So you're saying that removing this reply queue stuff can make the solution
-> > to the problem more generic, but do you have an idea of the overall
-> > solution?
->
-> 1) convert reply queue into blk-mq hw queue first
->
-> 2) then all drivers are in same position wrt. handling requests vs.
-> unplugging CPU (shutdown managed IRQ)
->
-> The current handling in blk_mq_hctx_notify_dead() is actually wrong,
-> at that time, all CPUs on the hctx are dead, blk_mq_run_hw_queue()
-> still dispatches requests on driver's hw queue, and driver is invisible
-> to DEAD CPUs mapped to this hctx, and finally interrupt for these
-> requests on the hctx are lost.
->
-> Frankly speaking, the above 2nd problem is still hard to solve.
->
-> 1) take_cpu_down() shutdown managed IRQ first, then run teardown callback
-> for states in [CPUHP_AP_ONLINE, CPUHP_AP_OFFLINE) on the to-be-offline
-> CPU
->
-> 2) However, all runnable tasks are removed from the CPU in the teardown
-> callback for CPUHP_AP_SCHED_STARTING, which is run after managed IRQs
-> are shutdown. That said it is hard to avoid new request queued to
-> the hctx with all DEAD CPUs.
->
-> 3) we don't support to freeze queue for specific hctx yet, or that way
-> may not be accepted because of extra cost in fast path
->
-> 4) once request is allocated, it should be submitted to driver no matter
-> if CPU hotplug happens or not. Or free it and re-allocate new request
-> on proper sw/hw queue?
-
-That looks doable, we may steal bios from the old in-queue request, then
-re-submit them via generic_make_request(), and finally free the old request,
-but RQF_DONTPREP has to be addressed via one new callback.
-
-So follows the overall solution for waiting request vs. CPU hotplug,
-which is done
-in two stages:
-
-1) in the teardown callback of new  CPUHP state of CPUHP_BLK_MQ_PREP,
-which is run before CPUHP_AP_ONLINE_IDLE,  at that time the CPU & managed
-IRQ is still alive:
-
-- stopped the hctx
-- wait in-flight requests from this hctx until all are completed
-
-2) in the teardown callback of CPUHP_BLK_MQ_DEAD, which is run
-after the CPU is dead
-
-- dequeue request queued in sw queue or scheduler queue from this hctx
-- steal bios from the dequeued request, and re-submit them via
-generic_make_request()
-- free the dequeued request, and need to free driver resource via new
-callback for
-RQF_DONTPREP, looks only SCSI needs it.
-- restart this hctx
-
-
-Thanks,
-Ming Lei
+DQoNCu+7v09uIDUvMjkvMTksIDc6MjggUE0sICJNYXJ0aW4gSy4gUGV0ZXJzZW4iIDxtYXJ0aW4u
+cGV0ZXJzZW5Ab3JhY2xlLmNvbT4gd3JvdGU6DQoNCiAgICBFeHRlcm5hbCBFbWFpbA0KICAgIA0K
+ICAgIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0NCiAgICANCiAgICBIaW1hbnNodT8NCiAgICANCiAgICA+IFJlbW92
+ZSBkb3VibGUgYXNzaWdubWVudCBpbiBxbGEyeDAwX3VwZGF0ZV9mY3BvcnQoKS4NCiAgICA+DQog
+ICAgPiBTaWduZWQtb2ZmLWJ5OiBFbnpvIE1hdHN1bWl5YSA8ZW1hdHN1bWl5YUBzdXNlLmRlPg0K
+ICAgID4gLS0tDQogICAgPiAgZHJpdmVycy9zY3NpL3FsYTJ4eHgvcWxhX2luaXQuYyB8IDEgLQ0K
+ICAgID4gIDEgZmlsZSBjaGFuZ2VkLCAxIGRlbGV0aW9uKC0pDQogICAgPg0KICAgID4gZGlmZiAt
+LWdpdCBhL2RyaXZlcnMvc2NzaS9xbGEyeHh4L3FsYV9pbml0LmMNCiAgICA+IGIvZHJpdmVycy9z
+Y3NpL3FsYTJ4eHgvcWxhX2luaXQuYw0KICAgID4gaW5kZXggMGM3MDBiMTQwY2U3Li4xODA3OGUy
+MTU0NjYgMTAwNjQ0DQogICAgPiAtLS0gYS9kcml2ZXJzL3Njc2kvcWxhMnh4eC9xbGFfaW5pdC5j
+DQogICAgPiArKysgYi9kcml2ZXJzL3Njc2kvcWxhMnh4eC9xbGFfaW5pdC5jDQogICAgPiBAQCAt
+NTIzNyw3ICs1MjM3LDYgQEAgcWxhMngwMF91cGRhdGVfZmNwb3J0KHNjc2lfcWxhX2hvc3RfdCAq
+dmhhLA0KICAgID4gZmNfcG9ydF90ICpmY3BvcnQpDQogICAgPiAgICAgICAgIGZjcG9ydC0+Zmxh
+Z3MgJj0gfihGQ0ZfTE9HSU5fTkVFREVEIHwgRkNGX0FTWU5DX1NFTlQpOw0KICAgID4gICAgICAg
+ICBmY3BvcnQtPmRlbGV0ZWQgPSAwOw0KICAgID4gICAgICAgICBmY3BvcnQtPmxvZ291dF9vbl9k
+ZWxldGUgPSAxOw0KICAgID4gLSAgICAgICBmY3BvcnQtPmxvZ2luX3JldHJ5ID0gdmhhLT5ody0+
+bG9naW5fcmV0cnlfY291bnQ7DQogICAgPiAgICAgICAgIGZjcG9ydC0+bjJuX2NoaXBfcmVzZXQg
+PSBmY3BvcnQtPm4ybl9saW5rX3Jlc2V0X2NudCA9IDA7DQogICAgPg0KICAgID4gICAgICAgICBz
+d2l0Y2ggKHZoYS0+aHctPmN1cnJlbnRfdG9wb2xvZ3kpIHsNCiAgICA+IC0tDQogICAgPiAyLjEy
+LjMNCiAgICA+DQogICAgPg0KICAgIA0KICAgIC0tIA0KICAgIE1hcnRpbiBLLiBQZXRlcnNlbglP
+cmFjbGUgTGludXggRW5naW5lZXJpbmcNCiAgICANCg0KU29ycnkgZm9yIGRlbGF5LiAgIExvb2tz
+IGdvb2QuIA0KDQpBY2tlZC1ieTogSGltYW5zaHUgTWFkaGFuaSA8aG1hZGhhbmlAbWFydmVsbC5j
+b20+DQoNCg0K
