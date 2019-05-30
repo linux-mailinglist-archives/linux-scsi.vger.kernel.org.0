@@ -2,123 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D73430151
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 19:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA8130188
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 20:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbfE3RyQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 30 May 2019 13:54:16 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:40458 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726708AbfE3RyQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 13:54:16 -0400
-Received: by mail-pl1-f193.google.com with SMTP id g69so2861542plb.7;
-        Thu, 30 May 2019 10:54:15 -0700 (PDT)
+        id S1726330AbfE3SKt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 14:10:49 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33442 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbfE3SKt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 14:10:49 -0400
+Received: by mail-pf1-f193.google.com with SMTP id z28so4471772pfk.0
+        for <linux-scsi@vger.kernel.org>; Thu, 30 May 2019 11:10:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=eFDoXlDCJDgbvfdMRvzrwYPX6AkCgGx+3FXH/pp4WCI=;
+        b=Hj/aSVL+KSKG4ax96YtN3uuLrMs/z61UawRKkpiWTTpOLKBxyl5Zci3eWxEirvaMl0
+         n/iXpp/PjU9KkS58jSdzc9vlX2qoO7/rbhV8HMrT8SuVMRoFVOQGo+43nkqgRhkaU9em
+         DBX7sL21M4QgZA0azaB7DGgdaFIZK6oWIZOCVPOG1RYOVOgZbg4c9mmopuvBUkqmRMtO
+         C6up8kzTV14NvS5SCm/s92rOEbiA5GzqSNLP/VAlXcCkk1QAIGA2WaEX8B/1Xv7ctXTe
+         nn4AQ9cDcVJESh0JFsrwYJ+rQapPh/SehRvssegaGiUYtknyRxIsXpnbBXEyZOH4aOXT
+         PhnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=DT3jejRxZC9WvUsnuDGX0vv5ag+rjxjKs+Fh8jcJz98=;
-        b=lXHTiDB4IamxOOqph0rtarOe1KzFqq/PUdL1MHexSTz6yS7z0oEnsxZMmBbs1eOEnq
-         lvKsWc56i+MaoNzWWmEDNwEOYmLchw+0dQ+VuOfOLbCU9geeFtrisyeXt6CEPvfxYKd1
-         czot+O7WuIRHJSQswrrSiKeZH3OVS1C/dQnB6vMzpG0/0Zz664CqmbTIO7svnzckuxPi
-         YFzyHUaE85sjSCmsDr4hK0azuaQesAmbZeEO06IXEflShhW0e7kV0CAY7kV1LIzh9lpk
-         3rZkQs9cxzYKSS633TBreRHV1r1lvcUfRSApvw1ikzVXSwcphFfmPA1ffygk8kpWr2KZ
-         qTmg==
-X-Gm-Message-State: APjAAAWEsyLEaH7G+49w0t33Htip5Hx72U2EpppojVUKuzWv0nh9SLoj
-        0Gommx0qINkXnLbANsXDvZQ=
-X-Google-Smtp-Source: APXvYqzK6sgyXCnG5Uz/GrSVTUHD9LMf41xalET7RK+9Ru/R2DFNR9BmKxeezRH+MLP1gT8ibpfuCg==
-X-Received: by 2002:a17:902:9a4c:: with SMTP id x12mr4520833plv.298.1559238855334;
-        Thu, 30 May 2019 10:54:15 -0700 (PDT)
-Received: from ?IPv6:2620:15c:2c1:200:fb9c:664d:d2ad:c9b5? ([2620:15c:2c1:200:fb9c:664d:d2ad:c9b5])
-        by smtp.gmail.com with ESMTPSA id n70sm3009774pjb.4.2019.05.30.10.54.12
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=eFDoXlDCJDgbvfdMRvzrwYPX6AkCgGx+3FXH/pp4WCI=;
+        b=nmvkKLHJnLOR+kbK3Vntyehv7sfL0pyZ5VDQRD/ep6Ew4MFw34Uu/ZdvXjjLIbV1dD
+         FfcfKZ29lPWdN1RIJYiFM4o6WEp1eMA2PI/fp0VTbmlinSmLS/hAP4PE3R3lD83QhQwO
+         2cVg9iPcxQ86CW1jg3o9XkIhVXslwR8gmfJknQMhcL2vpq/Le9DNttgNyD4Xb5nSho/5
+         UoOkaRRKsToL4g59IWbCzpgCY3nFcudUUSlHwaIrsNAnPzmZPzIbAXGu+1O+7fThmLJJ
+         CIorVsunMH7GLQU7IKtw4wRYw92sliTj1mCboyAdXht25lC2f1XrfXAbB4pT+Q81I4bS
+         SU6A==
+X-Gm-Message-State: APjAAAXLQ74aFG9wEVdJssFz7VNgPqMBfk5wRlnh6TVI4NY+n4eUXHjh
+        c8+B8/A8g8E8JGnQlHXqmT4=
+X-Google-Smtp-Source: APXvYqy25k458K4oZkTOIieR2GrjK2wejfjtDOj7MNpjM1chodzlOxWAHKvgbLcVbshytozoKvoSGw==
+X-Received: by 2002:a17:90a:77c4:: with SMTP id e4mr5004113pjs.86.1559239848541;
+        Thu, 30 May 2019 11:10:48 -0700 (PDT)
+Received: from hari-Inspiron-1545 ([183.83.89.153])
+        by smtp.gmail.com with ESMTPSA id g15sm3451782pfm.119.2019.05.30.11.10.46
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 May 2019 10:54:13 -0700 (PDT)
-Subject: Re: [PATCH 1/2] scsi_host: add support for request batching
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, stefanha@redhat.com
-References: <20190530112811.3066-1-pbonzini@redhat.com>
- <20190530112811.3066-2-pbonzini@redhat.com>
- <ad0578b0-ce73-85ed-b67d-70c5d8176a23@acm.org>
- <461fe0cd-c5bc-a612-6013-7c002b92dcdc@redhat.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <740d2f33-004e-7a37-1f6e-cf29480439b1@acm.org>
-Date:   Thu, 30 May 2019 10:54:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Thu, 30 May 2019 11:10:47 -0700 (PDT)
+Date:   Thu, 30 May 2019 23:40:44 +0530
+From:   Hariprasad Kelam <hariprasad.kelam@gmail.com>
+To:     David Rientjes <rientjes@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [Patch v2] wd719x: pass GFP_ATOMIC instead of GFP_KERNEL
+        linux-kernel@vger.kernel.org
+Message-ID: <20190530181044.GA7760@hari-Inspiron-1545>
+References: <20190529175851.GA10760@hari-Inspiron-1545>
+ <alpine.DEB.2.21.1905291412360.242480@chino.kir.corp.google.com>
 MIME-Version: 1.0
-In-Reply-To: <461fe0cd-c5bc-a612-6013-7c002b92dcdc@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1905291412360.242480@chino.kir.corp.google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/30/19 8:54 AM, Paolo Bonzini wrote:
-> On 30/05/19 17:36, Bart Van Assche wrote:
->> On 5/30/19 4:28 AM, Paolo Bonzini wrote:
->>> +static const struct blk_mq_ops scsi_mq_ops_no_commit = {
->>> +    .get_budget    = scsi_mq_get_budget,
->>> +    .put_budget    = scsi_mq_put_budget,
->>> +    .queue_rq    = scsi_queue_rq,
->>> +    .complete    = scsi_softirq_done,
->>> +    .timeout    = scsi_timeout,
->>> +#ifdef CONFIG_BLK_DEBUG_FS
->>> +    .show_rq    = scsi_show_rq,
->>> +#endif
->>> +    .init_request    = scsi_mq_init_request,
->>> +    .exit_request    = scsi_mq_exit_request,
->>> +    .initialize_rq_fn = scsi_initialize_rq,
->>> +    .busy        = scsi_mq_lld_busy,
->>> +    .map_queues    = scsi_map_queues,
->>> +};
->>> +
->>> +static void scsi_commit_rqs(struct blk_mq_hw_ctx *hctx)
->>> +{
->>> +    struct request_queue *q = hctx->queue;
->>> +    struct scsi_device *sdev = q->queuedata;
->>> +    struct Scsi_Host *shost = sdev->host;
->>> +
->>> +    shost->hostt->commit_rqs(shost, hctx->queue_num);
->>> +}
->>> +
->>>   static const struct blk_mq_ops scsi_mq_ops = {
->>>       .get_budget    = scsi_mq_get_budget,
->>>       .put_budget    = scsi_mq_put_budget,
->>>       .queue_rq    = scsi_queue_rq,
->>> +    .commit_rqs    = scsi_commit_rqs,
->>>       .complete    = scsi_softirq_done,
->>>       .timeout    = scsi_timeout,
->>>   #ifdef CONFIG_BLK_DEBUG_FS
->>
->> Hi Paolo,
->>
->> Have you considered to modify the block layer such that a single
->> scsi_mq_ops structure can be used for all SCSI LLD types?
+On Wed, May 29, 2019 at 02:13:18PM -0700, David Rientjes wrote:
+> On Wed, 29 May 2019, Hariprasad Kelam wrote:
 > 
-> Yes, but I don't think it's possible to do it in a nice way.
-> Any adjustment we make to the block layer to fit the SCSI subsystem's
-> desires would make all other block drivers uglier, so I chose to confine
-> the ugliness here.
+> > dont acquire lock before calling wd719x_chip_init.
+> > 
+> > Issue identified by coccicheck
+> > 
+> > Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+> > -----
+> > changes in v1: Replace GFP_KERNEL with GFP_ATOMIC.
+> > changes in v2: Call wd719x_chip_init  without lock as suggested
+> > 		in review
 > 
-> The root issue is that the SCSI subsystem is unique in how it sits on
-> top of the block layer; this is the famous "adapter" (or "midlayer",
-> though that is confusing when talking about SCSI) design that Linux
-> usually tries to avoid.
+> Why was host_lock taken here initially?  I assume it's to protect some 
+> race in init that leads to an undefined state.
 
-As far as I can see the only impact of defining an empty commit_rqs
-callback on the queueing behavior is that blk_mq_make_request() will
-queue requests for multiple hwqs on the plug list instead of requests
-for a single hwq. The plug list is sorted by hwq before it is submitted
-to a block driver. If that helps NVMe performance it should also help
-SCSI performance. How about always setting commit_rqs = scsi_commit_rqs
-in scsi_mq_ops?
+wd719x_chip_init is getting called from wd719x_host_reset
+and wd719x_board_found.
 
-Thanks,
+In wd719x_board_found case its not acquiring any lock.
+In wd719x_host_reset it is called under spin_lock.
 
-Bart.
+Acquiring spin_lock in wd719x_host_reset is there from initial commit
+so its better we wont remove this lock.
+
+I think we Patch v1 is  correct fix(pass GFP_ATOMIC instead of GPF_KERNEL )
 
