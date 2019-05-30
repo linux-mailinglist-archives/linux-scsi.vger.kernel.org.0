@@ -2,123 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5303C300C5
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 19:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B83430113
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 19:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbfE3ROS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 13:14:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:38182 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726280AbfE3ROS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 May 2019 13:14:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 6417BACD4;
-        Thu, 30 May 2019 17:14:16 +0000 (UTC)
-Subject: Re: [PATCH 10/24] scsi: allocate separate queue for reserved commands
-To:     John Garry <john.garry@huawei.com>, Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org
-References: <20190529132901.27645-1-hare@suse.de>
- <20190529132901.27645-11-hare@suse.de>
- <5537cf59-0138-3553-0896-21b1aaf2fe51@huawei.com>
-From:   Hannes Reinecke <hare@suse.com>
-Message-ID: <323be693-8280-78ea-8050-8c8d7befdfb9@suse.com>
-Date:   Thu, 30 May 2019 19:14:14 +0200
+        id S1726563AbfE3R2g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 13:28:36 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44276 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726423AbfE3R2f (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 13:28:35 -0400
+Received: by mail-pg1-f193.google.com with SMTP id n2so2387988pgp.11;
+        Thu, 30 May 2019 10:28:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BflUr6rKdpr90b/xnrg7SuYvVoPW3SrHX1BWPnESWU4=;
+        b=dVIQnWhekN3xb7mGXiHWYSLwp6AEBqjSOXmHi79/5hf8vjisVnhUwH1xh8s7/KPgNu
+         by19n277vaZJWrPPuDBZ7S0RE6YkdLC8ydooKu3CZtSBGGAlEQa6Ltumqa1DbXyDw58Z
+         u989d75UlWYPFd5+RssnO4AMcynn5g4WPZn+lhvH9GndfznsZEE8eJvJ1pt1DPenXpJg
+         2omyZTwE2KkQjQ5U8XJSr8Lfrdu3sdQtXsAIz+6VmA8lf3UhL7MispcVFbIQLkCRPQ0K
+         DlxFERvVy2/ebtI7D3FFehWC1X5MQ0Sd68aQgc8NkcNU37GkOKA+sVYUbQG0N68i7bd6
+         2zOw==
+X-Gm-Message-State: APjAAAXqum33M9oExcJUzIN15iXiPa3kLFDvlrztMi6vTD85zk4q/Kpy
+        vH0Ws6zc9+EGuNFrYT/+fkQ=
+X-Google-Smtp-Source: APXvYqxYwulWOdqze7jLG0lDh0QFnMWrHijpHoWBnnsxuObzIyHqBOgmKbOybUmS8t7zEPvLNx5Fqg==
+X-Received: by 2002:a63:e708:: with SMTP id b8mr4809033pgi.168.1559237314488;
+        Thu, 30 May 2019 10:28:34 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id q7sm3405191pjb.0.2019.05.30.10.28.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 30 May 2019 10:28:33 -0700 (PDT)
+Subject: Re: [PATCH 2/2] virtio_scsi: implement request batching
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, stefanha@redhat.com
+References: <20190530112811.3066-1-pbonzini@redhat.com>
+ <20190530112811.3066-3-pbonzini@redhat.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <79490df1-0145-5b40-027a-7e8fb96854d4@acm.org>
+Date:   Thu, 30 May 2019 10:28:32 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <5537cf59-0138-3553-0896-21b1aaf2fe51@huawei.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+In-Reply-To: <20190530112811.3066-3-pbonzini@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/30/19 5:28 PM, John Garry wrote:
-> On 29/05/2019 14:28, Hannes Reinecke wrote:
->> From: Hannes Reinecke <hare@suse.com>
->>
->> Allocate a separate 'reserved_cmd_q' for sending reserved commands.
->>
->> Signed-off-by: Hannes Reinecke <hare@suse.com>
->> ---
->>  drivers/scsi/scsi_lib.c  | 15 ++++++++++++++-
->>  include/scsi/scsi_host.h |  4 ++++
->>  2 files changed, 18 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
->> index e17153a9ce7c..076459853622 100644
->> --- a/drivers/scsi/scsi_lib.c
->> +++ b/drivers/scsi/scsi_lib.c
->> @@ -1831,6 +1831,7 @@ struct request_queue *scsi_mq_alloc_queue(struct 
->> scsi_device *sdev)
->>  int scsi_mq_setup_tags(struct Scsi_Host *shost)
->>  {
->>      unsigned int cmd_size, sgl_size;
->> +    int ret;
->>
->>      sgl_size = scsi_mq_inline_sgl_size(shost);
->>      cmd_size = sizeof(struct scsi_cmnd) + shost->hostt->cmd_size + 
->> sgl_size;
->> @@ -1850,11 +1851,23 @@ int scsi_mq_setup_tags(struct Scsi_Host *shost)
->>          BLK_ALLOC_POLICY_TO_MQ_FLAG(shost->hostt->tag_alloc_policy);
->>      shost->tag_set.driver_data = shost;
->>
->> -    return blk_mq_alloc_tag_set(&shost->tag_set);
->> +    ret = blk_mq_alloc_tag_set(&shost->tag_set);
->> +    if (ret)
->> +        return ret;
->> +
->> +    if (shost->nr_reserved_cmds && shost->use_reserved_cmd_q) {
->> +        shost->reserved_cmd_q = blk_mq_init_queue(&shost->tag_set);
->> +        if (IS_ERR(shost->reserved_cmd_q)) {
->> +            blk_mq_free_tag_set(&shost->tag_set);
->> +            ret = PTR_ERR(shost->reserved_cmd_q);
->> +        }
->> +    }
->> +    return ret;
->>  }
->>
->>  void scsi_mq_destroy_tags(struct Scsi_Host *shost)
->>  {
->> +    blk_cleanup_queue(shost->reserved_cmd_q);
->>      blk_mq_free_tag_set(&shost->tag_set);
->>  }
->>
->> diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
->> index 89998b6bee04..a2bab5f07eff 100644
->> --- a/include/scsi/scsi_host.h
->> +++ b/include/scsi/scsi_host.h
->> @@ -600,6 +600,7 @@ struct Scsi_Host {
->>       * Number of reserved commands, if any.
->>       */
->>      unsigned nr_reserved_cmds;
->> +    struct request_queue *reserved_cmd_q;
->>
->>      unsigned active_mode:2;
->>      unsigned unchecked_isa_dma:1;
->> @@ -637,6 +638,9 @@ struct Scsi_Host {
->>      /* The transport requires the LUN bits NOT to be stored in CDB[1] */
->>      unsigned no_scsi2_lun_in_cdb:1;
->>
->> +    /* Host requires a separate reserved_cmd_q */
->> +    unsigned use_reserved_cmd_q:1;
-> 
-> Is this really required? I would think that a non-zero value for 
-> shost->nr_reserved_cmds means the same thing in practice.
-> ;
-My implementation actually allows for per-device reserved tags (eg for 
-virtio). But some drivers require to use internal commands prior to any 
-device setup, so they have to use a separate reserved command queue just 
-to be able to allocate tags.
+On 5/30/19 4:28 AM, Paolo Bonzini wrote:
+> @@ -531,7 +547,8 @@ static int virtscsi_queuecommand(struct Scsi_Host *shost,
+>   		req_size = sizeof(cmd->req.cmd);
+>   	}
+>   
+> -	ret = virtscsi_kick_cmd(req_vq, cmd, req_size, sizeof(cmd->resp.cmd));
+> +	kick = (sc->flags & SCMD_LAST) != 0;
+> +	ret = virtscsi_add_cmd(req_vq, cmd, req_size, sizeof(cmd->resp.cmd), kick);
 
-So yes, they are required.
+Have you considered to have the SCSI core call commit_rqs() if bd->last 
+is true? I think that would avoid that we need to introduce the 
+SCMD_LAST flag and that would also avoid that every SCSI LLD that 
+supports a commit_rqs callback has to introduce code to test the 
+SCMD_LAST flag.
 
-Cheers,
+Thanks,
 
-Hannes
+Bart.
