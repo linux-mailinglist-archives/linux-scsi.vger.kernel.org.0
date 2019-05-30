@@ -2,86 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A54892F77D
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 08:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C9C2FB1C
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 13:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727297AbfE3GlO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 02:41:14 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39502 "EHLO mx1.redhat.com"
+        id S1726849AbfE3Los (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 07:44:48 -0400
+Received: from post.yaguo.ru ([80.73.72.66]:62409 "EHLO post.yaguo.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725961AbfE3GlO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 May 2019 02:41:14 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 9B79A307D84B;
-        Thu, 30 May 2019 06:41:13 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-26.pek2.redhat.com [10.72.8.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EB8AA5D721;
-        Thu, 30 May 2019 06:41:07 +0000 (UTC)
-Date:   Thu, 30 May 2019 14:41:03 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-Subject: Re: [PATCH 02/24] scsi: add scsi_{get,put}_reserved_cmd()
-Message-ID: <20190530064101.GA22773@ming.t460p>
-References: <20190529132901.27645-1-hare@suse.de>
- <20190529132901.27645-3-hare@suse.de>
+        id S1726798AbfE3Los (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 May 2019 07:44:48 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by post.yaguo.ru (Postfix) with ESMTP id 408F937C06B2;
+        Thu, 30 May 2019 16:36:14 +0900 (+09)
+Received: from post.yaguo.ru ([127.0.0.1])
+        by localhost (post.yaguo.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 2f7SItsFGhwM; Thu, 30 May 2019 16:36:14 +0900 (+09)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by post.yaguo.ru (Postfix) with ESMTP id A5DD337C23D5;
+        Thu, 30 May 2019 16:36:13 +0900 (+09)
+DKIM-Filter: OpenDKIM Filter v2.10.3 post.yaguo.ru A5DD337C23D5
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yaguo.ru;
+        s=7795492A-FBFE-11E7-868D-EE317768108C; t=1559201773;
+        bh=lnYKzzs9BQ9FpHiVjGSDQl5Hwc3UY52DKqf8JJHd6t4=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=tfqaTFWPDOLiphIFplWgI6amDde8XTE3T/j7NszUIMnB2k/SOhisHlIU4A8LBjCh6
+         XITXY2Rx7LY9sMbW2zSfFf8zse1HiAKp79vZli8+Lwbjf86hOBK8oJi/PKvzc0/1fw
+         jd9PTytMth/XQjlW4NAz9F9Xquy7JnWDcZ+/N5G4=
+X-Virus-Scanned: amavisd-new at post.yaguo.ru
+Received: from post.yaguo.ru ([127.0.0.1])
+        by localhost (post.yaguo.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id XfjHlVtL2-Zg; Thu, 30 May 2019 16:36:13 +0900 (+09)
+Received: from [192.168.43.46] (unknown [129.205.112.156])
+        by post.yaguo.ru (Postfix) with ESMTPA id CA2FA37C2566;
+        Thu, 30 May 2019 16:35:54 +0900 (+09)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190529132901.27645-3-hare@suse.de>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.48]); Thu, 30 May 2019 06:41:13 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: RE
+To:     Oleg <detsad103@yaguo.ru>
+From:   detsad103@yaguo.ru
+Date:   Thu, 30 May 2019 00:35:40 -0700
+Reply-To: annaryan2215@hotmail.com
+Message-Id: <20190530073554.CA2FA37C2566@post.yaguo.ru>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 29, 2019 at 03:28:39PM +0200, Hannes Reinecke wrote:
-> Add helper functions to retrieve SCSI commands from the reserved
-> tag pool.
-> 
-> Signed-off-by: Hannes Reinecke <hare@suse.com>
-> ---
->  include/scsi/scsi_tcq.h | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/include/scsi/scsi_tcq.h b/include/scsi/scsi_tcq.h
-> index 6053d46e794e..227f3bd4e974 100644
-> --- a/include/scsi/scsi_tcq.h
-> +++ b/include/scsi/scsi_tcq.h
-> @@ -39,5 +39,27 @@ static inline struct scsi_cmnd *scsi_host_find_tag(struct Scsi_Host *shost,
->  	return blk_mq_rq_to_pdu(req);
->  }
->  
-> +static inline struct scsi_cmnd *scsi_get_reserved_cmd(struct scsi_device *sdev)
-> +{
-> +	struct request *rq;
-> +	struct scsi_cmnd *scmd;
-> +
-> +	rq = blk_mq_alloc_request(sdev->request_queue,
-> +				  REQ_OP_SCSI_OUT | REQ_NOWAIT,
-> +				  BLK_MQ_REQ_RESERVED);
-> +	if (IS_ERR(rq))
-> +		return NULL;
-> +	scmd = blk_mq_rq_to_pdu(rq);
-> +	scmd->request = rq;
-> +	return scmd;
-> +}
+Sehr geehrter Beg=FCnstigter.
 
-Now all these internal commands won't share tags with IO requests,
-however, your patch switches to reserve slots for internal
-commands.
+Sie wurden ausgew=E4hlt, um Euro zu erhalten, 950.000,00 EURO, als Wohlt=E4=
+tigkeitsorganisation Spenden / Hilfe von den Vereinten Nationen.
 
-This way may have performance effect on IO workloads given the
-reserved tags can't be used by IO at all.
+Antwort f=FCr mehr Informationen und Anspr=FCche.
 
-Just wondering why not use an new tagset for internal commands?
-
-Thanks,
-Ming
+Wir gratulieren Ihnen im Namen der Stiftung.
+Freundliche Gr=FC=DFe,
+Anna Ryan
