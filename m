@@ -2,113 +2,287 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B7D2EAE2
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 04:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2466B2F6A2
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 06:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727521AbfE3C5T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 22:57:19 -0400
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:55081 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726376AbfE3C5S (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 22:57:18 -0400
-Received: by mail-wm1-f50.google.com with SMTP id i3so2900912wml.4
-        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 19:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AA5L7tfhLlsKfjGe42dTc5zf0iEd+7+TtHmShr+XIPs=;
-        b=NEcEeTpzLTtVHgI3RCF6pmQ5Gnd3bR5Mmkq+gpf/3jViIj1SWCRCslERop8XNNpb8S
-         lF6a3CGUd5Xh3LzLS/LsIuS/Rw3IQHsptp+4w7DHYi+91th5SwpU9lVKV96o+L7sXRXA
-         1HyIrmMK0qhzO64LavYemUgTTv5aVjYG0OnYCN7fwP4Y9LHTxoXyajfLz+ji3zoxPOU8
-         BzYL/cnMceW3x3hbxdhblMTIF1bXdOAGGe0zfYO4q4ESil2AL73P3i+9hmHCXYx0+LbV
-         Q5dJ98n1NbN/EgynYDILKpZ/aJKLNPoMqqJfvqqpAqRUTA1Yejx9QgKYsXbRmsu3Jg1A
-         0JEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AA5L7tfhLlsKfjGe42dTc5zf0iEd+7+TtHmShr+XIPs=;
-        b=eICxSiB93npKKVOoMZzJ1ho2gAPRy7ZZp3mq2z5nYXaW/B5SPTmZcLKCWdazOOzqAJ
-         Omrq1R1Jhlvv4PKWDEjLZLfQRHZOr7ZSMsjMApZD6x98pV10oKjO+M1D2tGbg/o83YDM
-         UQcaHfZuq2FofteP6ll4eO0kG1cddcximbobZhhS2ZDu6Iaai7xfvLdHDNcyafU/MGY7
-         4V9uvJcG2jcWfsHJ88Me4i4bVp+8z6n8tvxvO1OwAjGYclqIYOkYQWv026u29WQM8iqR
-         UW451SfYYmXYF43Cd7MH2khWYCN2Iv7JEXr588q9lvJiBG6Fg0DQZr8NS8ImV9VaZsfa
-         RmeA==
-X-Gm-Message-State: APjAAAXnImvgRbhhXhV6Ku0Io4MpUSxIRGmrPBKBIs3T+qglTUy0A42P
-        9Inw+CbtK/AsA0vHTDft/uz1llr7ekZ4i55BRvg=
-X-Google-Smtp-Source: APXvYqxnyQWQO0sotY7Bc4dPYoWpKpisVJQ8Zv5SbkDX6V/jBzwLXo5XtFGPaWag/lAgQUlNNkhqv50bXjjiwVNeR3Q=
-X-Received: by 2002:a1c:a7c6:: with SMTP id q189mr641945wme.146.1559185036654;
- Wed, 29 May 2019 19:57:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <KU1P153MB016617EB56A9B6ED55B8CFD0BF010@KU1P153MB0166.APCP153.PROD.OUTLOOK.COM>
-In-Reply-To: <KU1P153MB016617EB56A9B6ED55B8CFD0BF010@KU1P153MB0166.APCP153.PROD.OUTLOOK.COM>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Thu, 30 May 2019 10:57:02 +0800
-Message-ID: <CACVXFVOmgZthx433vSAtpJKkbpmU-9EGTuJEcmcmQt2PCwTLhg@mail.gmail.com>
-Subject: Re: SCSI adapter: how to freeze and thaw I/O on hibernation?
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        id S1727828AbfE3DJv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 23:09:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45484 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727815AbfE3DJv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 May 2019 23:09:51 -0400
+Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3DC382446F;
+        Thu, 30 May 2019 03:09:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559185790;
+        bh=aEHkIAT4SvhZrfz4NOR4ZJzVuz4032hA/XKpYXwF+0o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=xOaKSsJrhwMvgDB5k1q6MOTbXDn51VMGOxVgtW2m75sZdhFFdVdlO3TYkwGkB4qxz
+         0b2oZA30VDJJrcQTqNwcA5CUU448OA5zog9f0MG3liIBm1ZMSCUCITWcXu7TZ2/HhT
+         Yt+g2bPjP+v67UIgpOftp56viiM2j0rt/hZ0JbF4=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Dongli Zhang <dongli.zhang@oracle.com>,
+        James Smart <james.smart@broadcom.com>,
+        Bart Van Assche <bart.vanassche@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
         Christoph Hellwig <hch@lst.de>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        vkuznets <vkuznets@redhat.com>, Olaf Hering <olaf@aepfle.de>,
-        Stephen Hemminger <sthemmin@microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.1 061/405] blk-mq: split blk_mq_alloc_and_init_hctx into two parts
+Date:   Wed, 29 May 2019 20:00:59 -0700
+Message-Id: <20190530030544.028497142@linuxfoundation.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190530030540.291644921@linuxfoundation.org>
+References: <20190530030540.291644921@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, May 23, 2019 at 11:18 AM Dexuan Cui <decui@microsoft.com> wrote:
->
-> Hi,
-> I'm adding code to enable the hv_storvsc driver (drivers/scsi/storvsc_drv.c)
-> for hibernation (ACPI S5). I know how to save/restore the state of the virtual
-> Hyper-V SCSI adapter, but I don't know how to prevent the higher layer SCSI
-> driver(s) from submitting new I/O requests to the low level driver hv_storvsc,
-> before I disable the Hyper-V SCSI adapter in hv_storvsc.
->
-> Note: I can not call scsi_remove_host(), because the SCSI host should not
-> disappear and re-appear on hibernation.
->
-> scsi_target_block() calls scsi_internal_device_block() ->
-> blk_mq_quiesce_queue(), but it is only used in a few drivers
-> (scsi_transport_fc.c, scsi_transport_iscsi.c and scsi_transport_srp.c), so
-> I doubt it is suitable to me?
->
-> scsi_block_requests() is used in a lot of drivers and hence is more likely
-> to be the API I'm looking for, but it only sets a flag
-> shost->host_self_blocked -- how can this prevent another CPU from
-> submitting I/O requests?
->
-> I also checked scsi_bus_pm_ops, but it's only for "sdev": see
-> scsi_bus_suspend_common() -> "if (scsi_is_sdev_device(dev))...".
->
-> Even for "sdev", it looks the scsi_dev_type_suspend() can't work for me,
-> because it looks the sdev's driver is sd, whose sd_pm_ops doesn't
-> define the .freeze and .thaw ops, which are needed in hibernation.
->
-> sd_pm_ops does define .suspend and .resume, but it looks they are only
-> for suspend-to-memory (ACPI S3).
->
-> Can you please recommend the standard way to prevent the higher layer
-> SCSI driver(s) from submitting new I/O requests?
->
-> How do the other low level SCSI adapter drivers support hibernation?
->
-> I checked some PCI HBA drivers, and they use scsi_block_requests(), but
-> as I described above, I don't know how setting a flag can prevent another
-> CPU from submitting I/O requests.
->
-> Looking forward to your insights!
+[ Upstream commit 7c6c5b7c9186e3fb5b10afb8e5f710ae661144c6 ]
 
-scsi_device_quiesce() has been called by scsi_dev_type_suspend() to prevent
-any non-pm request from entering queue.
+Split blk_mq_alloc_and_init_hctx into two parts, and one is
+blk_mq_alloc_hctx() for allocating all hctx resources, another
+is blk_mq_init_hctx() for initializing hctx, which serves as
+counter-part of blk_mq_exit_hctx().
 
-Or do you still see IO requests coming during hibernation?
+Cc: Dongli Zhang <dongli.zhang@oracle.com>
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Bart Van Assche <bart.vanassche@wdc.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: Martin K . Petersen <martin.petersen@oracle.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: James E . J . Bottomley <jejb@linux.vnet.ibm.com>
+Reviewed-by: Hannes Reinecke <hare@suse.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Tested-by: James Smart <james.smart@broadcom.com>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ block/blk-mq.c | 139 ++++++++++++++++++++++++++-----------------------
+ 1 file changed, 75 insertions(+), 64 deletions(-)
 
-Thanks,
-Ming Lei
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index b0e5e67e20a28..8a41cc5974fe1 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2284,15 +2284,65 @@ static void blk_mq_exit_hw_queues(struct request_queue *q,
+ 	}
+ }
+ 
++static int blk_mq_hw_ctx_size(struct blk_mq_tag_set *tag_set)
++{
++	int hw_ctx_size = sizeof(struct blk_mq_hw_ctx);
++
++	BUILD_BUG_ON(ALIGN(offsetof(struct blk_mq_hw_ctx, srcu),
++			   __alignof__(struct blk_mq_hw_ctx)) !=
++		     sizeof(struct blk_mq_hw_ctx));
++
++	if (tag_set->flags & BLK_MQ_F_BLOCKING)
++		hw_ctx_size += sizeof(struct srcu_struct);
++
++	return hw_ctx_size;
++}
++
+ static int blk_mq_init_hctx(struct request_queue *q,
+ 		struct blk_mq_tag_set *set,
+ 		struct blk_mq_hw_ctx *hctx, unsigned hctx_idx)
+ {
+-	int node;
++	hctx->queue_num = hctx_idx;
++
++	cpuhp_state_add_instance_nocalls(CPUHP_BLK_MQ_DEAD, &hctx->cpuhp_dead);
++
++	hctx->tags = set->tags[hctx_idx];
++
++	if (set->ops->init_hctx &&
++	    set->ops->init_hctx(hctx, set->driver_data, hctx_idx))
++		goto unregister_cpu_notifier;
+ 
+-	node = hctx->numa_node;
++	if (blk_mq_init_request(set, hctx->fq->flush_rq, hctx_idx,
++				hctx->numa_node))
++		goto exit_hctx;
++	return 0;
++
++ exit_hctx:
++	if (set->ops->exit_hctx)
++		set->ops->exit_hctx(hctx, hctx_idx);
++ unregister_cpu_notifier:
++	blk_mq_remove_cpuhp(hctx);
++	return -1;
++}
++
++static struct blk_mq_hw_ctx *
++blk_mq_alloc_hctx(struct request_queue *q, struct blk_mq_tag_set *set,
++		int node)
++{
++	struct blk_mq_hw_ctx *hctx;
++	gfp_t gfp = GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY;
++
++	hctx = kzalloc_node(blk_mq_hw_ctx_size(set), gfp, node);
++	if (!hctx)
++		goto fail_alloc_hctx;
++
++	if (!zalloc_cpumask_var_node(&hctx->cpumask, gfp, node))
++		goto free_hctx;
++
++	atomic_set(&hctx->nr_active, 0);
+ 	if (node == NUMA_NO_NODE)
+-		node = hctx->numa_node = set->numa_node;
++		node = set->numa_node;
++	hctx->numa_node = node;
+ 
+ 	INIT_DELAYED_WORK(&hctx->run_work, blk_mq_run_work_fn);
+ 	spin_lock_init(&hctx->lock);
+@@ -2300,58 +2350,45 @@ static int blk_mq_init_hctx(struct request_queue *q,
+ 	hctx->queue = q;
+ 	hctx->flags = set->flags & ~BLK_MQ_F_TAG_SHARED;
+ 
+-	cpuhp_state_add_instance_nocalls(CPUHP_BLK_MQ_DEAD, &hctx->cpuhp_dead);
+-
+-	hctx->tags = set->tags[hctx_idx];
+-
+ 	/*
+ 	 * Allocate space for all possible cpus to avoid allocation at
+ 	 * runtime
+ 	 */
+ 	hctx->ctxs = kmalloc_array_node(nr_cpu_ids, sizeof(void *),
+-			GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY, node);
++			gfp, node);
+ 	if (!hctx->ctxs)
+-		goto unregister_cpu_notifier;
++		goto free_cpumask;
+ 
+ 	if (sbitmap_init_node(&hctx->ctx_map, nr_cpu_ids, ilog2(8),
+-				GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY, node))
++				gfp, node))
+ 		goto free_ctxs;
+-
+ 	hctx->nr_ctx = 0;
+ 
+ 	spin_lock_init(&hctx->dispatch_wait_lock);
+ 	init_waitqueue_func_entry(&hctx->dispatch_wait, blk_mq_dispatch_wake);
+ 	INIT_LIST_HEAD(&hctx->dispatch_wait.entry);
+ 
+-	if (set->ops->init_hctx &&
+-	    set->ops->init_hctx(hctx, set->driver_data, hctx_idx))
+-		goto free_bitmap;
+-
+ 	hctx->fq = blk_alloc_flush_queue(q, hctx->numa_node, set->cmd_size,
+-			GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY);
++			gfp);
+ 	if (!hctx->fq)
+-		goto exit_hctx;
+-
+-	if (blk_mq_init_request(set, hctx->fq->flush_rq, hctx_idx, node))
+-		goto free_fq;
++		goto free_bitmap;
+ 
+ 	if (hctx->flags & BLK_MQ_F_BLOCKING)
+ 		init_srcu_struct(hctx->srcu);
++	blk_mq_hctx_kobj_init(hctx);
+ 
+-	return 0;
++	return hctx;
+ 
+- free_fq:
+-	blk_free_flush_queue(hctx->fq);
+- exit_hctx:
+-	if (set->ops->exit_hctx)
+-		set->ops->exit_hctx(hctx, hctx_idx);
+  free_bitmap:
+ 	sbitmap_free(&hctx->ctx_map);
+  free_ctxs:
+ 	kfree(hctx->ctxs);
+- unregister_cpu_notifier:
+-	blk_mq_remove_cpuhp(hctx);
+-	return -1;
++ free_cpumask:
++	free_cpumask_var(hctx->cpumask);
++ free_hctx:
++	kfree(hctx);
++ fail_alloc_hctx:
++	return NULL;
+ }
+ 
+ static void blk_mq_init_cpu_queues(struct request_queue *q,
+@@ -2695,51 +2732,25 @@ struct request_queue *blk_mq_init_sq_queue(struct blk_mq_tag_set *set,
+ }
+ EXPORT_SYMBOL(blk_mq_init_sq_queue);
+ 
+-static int blk_mq_hw_ctx_size(struct blk_mq_tag_set *tag_set)
+-{
+-	int hw_ctx_size = sizeof(struct blk_mq_hw_ctx);
+-
+-	BUILD_BUG_ON(ALIGN(offsetof(struct blk_mq_hw_ctx, srcu),
+-			   __alignof__(struct blk_mq_hw_ctx)) !=
+-		     sizeof(struct blk_mq_hw_ctx));
+-
+-	if (tag_set->flags & BLK_MQ_F_BLOCKING)
+-		hw_ctx_size += sizeof(struct srcu_struct);
+-
+-	return hw_ctx_size;
+-}
+-
+ static struct blk_mq_hw_ctx *blk_mq_alloc_and_init_hctx(
+ 		struct blk_mq_tag_set *set, struct request_queue *q,
+ 		int hctx_idx, int node)
+ {
+ 	struct blk_mq_hw_ctx *hctx;
+ 
+-	hctx = kzalloc_node(blk_mq_hw_ctx_size(set),
+-			GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY,
+-			node);
++	hctx = blk_mq_alloc_hctx(q, set, node);
+ 	if (!hctx)
+-		return NULL;
+-
+-	if (!zalloc_cpumask_var_node(&hctx->cpumask,
+-				GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY,
+-				node)) {
+-		kfree(hctx);
+-		return NULL;
+-	}
+-
+-	atomic_set(&hctx->nr_active, 0);
+-	hctx->numa_node = node;
+-	hctx->queue_num = hctx_idx;
++		goto fail;
+ 
+-	if (blk_mq_init_hctx(q, set, hctx, hctx_idx)) {
+-		free_cpumask_var(hctx->cpumask);
+-		kfree(hctx);
+-		return NULL;
+-	}
+-	blk_mq_hctx_kobj_init(hctx);
++	if (blk_mq_init_hctx(q, set, hctx, hctx_idx))
++		goto free_hctx;
+ 
+ 	return hctx;
++
++ free_hctx:
++	kobject_put(&hctx->kobj);
++ fail:
++	return NULL;
+ }
+ 
+ static void blk_mq_realloc_hw_ctxs(struct blk_mq_tag_set *set,
+-- 
+2.20.1
+
+
+
