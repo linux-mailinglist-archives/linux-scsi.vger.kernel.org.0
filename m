@@ -2,61 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 086602EA9F
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 04:22:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EE02EAA8
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 04:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727346AbfE3CWa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 22:22:30 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:38184 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726498AbfE3CWa (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 May 2019 22:22:30 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6A169309264C;
-        Thu, 30 May 2019 02:22:30 +0000 (UTC)
-Received: from localhost.localdomain (ovpn-12-72.pek2.redhat.com [10.72.12.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3B63B60603;
-        Thu, 30 May 2019 02:22:21 +0000 (UTC)
-Subject: Re: [PATCH v2] scsi: smartpqi: properly set both the DMA mask and the
- coherent DMA mask in pqi_pci_init()
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, don.brace@microsemi.com,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        esc.storagedev@microsemi.com, Thomas.Lendacky@amd.com,
-        dyoung@redhat.com
-References: <20190527005934.1493-1-lijiang@redhat.com>
- <yq14l5czopg.fsf@oracle.com>
-From:   lijiang <lijiang@redhat.com>
-Message-ID: <63f06e98-df6f-35dc-da41-dc039f04511d@redhat.com>
-Date:   Thu, 30 May 2019 10:22:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726903AbfE3CYp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 22:24:45 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:57866 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbfE3CYp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 22:24:45 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U2J2n8189689;
+        Thu, 30 May 2019 02:24:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=ltlJWbWq1yZAkcVh+VmX07QxzEGmHnOwwphE6ieZ6jI=;
+ b=gPGFA504uRaVHE0dNzjFOoSolFbg5cuV/ZI98vS9IGAopaRK5bzkn4XhBEPG4p+6zHEn
+ lXHfwD8f9jcDu97WYnc72f6xf/EDEnYbmy6Ki2LMz98faaOgDcgYX2NuREa7zWTMM7cZ
+ Euw+/2k5U+ZeVF4BlZbquBD0qBwIfHhCm7c7xDKrBSXalB1U7J0KqVEAmL7MXQcnCSYc
+ gjEutJrmOLIrZuadILjo1Rzh2XKcvXiDrIyP3ltCuDIkhkE4S454Grtgm1C9sZzF8NrM
+ 0DNxM9IyFHO/tcwB3kP4FDbMAYlpmfuHyBjoah7zDNVXRZx1g5VtN65L7NOcvGIj7aFj iA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2spw4tnd4h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 May 2019 02:24:36 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U2NNcY159976;
+        Thu, 30 May 2019 02:24:36 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2ss1fnt61u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 May 2019 02:24:36 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4U2OZef009158;
+        Thu, 30 May 2019 02:24:35 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 29 May 2019 19:24:34 -0700
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
+        <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <megaraidlinux.pdl@broadcom.com>
+Subject: Re: [PATCH -next] scsi: megaraid_sas: remove set but not used variable 'cur_state'
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190525123821.16528-1-yuehaibing@huawei.com>
+Date:   Wed, 29 May 2019 22:24:32 -0400
+In-Reply-To: <20190525123821.16528-1-yuehaibing@huawei.com>
+        (yuehaibing@huawei.com's message of "Sat, 25 May 2019 20:38:21 +0800")
+Message-ID: <yq1a7f4y90f.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <yq14l5czopg.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Thu, 30 May 2019 02:22:30 +0000 (UTC)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=921
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905300016
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=963 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905300016
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-在 2019年05月30日 10:00, Martin K. Petersen 写道:
-> 
-> Lianbo,
-> 
->> When SME is enabled, the smartpqi driver won't work on the HP DL385
->> G10 machine, which causes the failure of kernel boot because it fails
->> to allocate pqi error buffer. Please refer to the kernel log:
-> 
-> Applied to 5.2/scsi-fixes, thanks!
-> 
-OK, thank you, Martin K.
 
-And also thanks to Tom and Don for helping review this patch.
+YueHaibing,
 
-Lianbo
+> Fixes gcc '-Wunused-but-set-variable' warning:
+>
+> drivers/scsi/megaraid/megaraid_sas_base.c: In function megasas_transition_to_ready:
+> drivers/scsi/megaraid/megaraid_sas_base.c:3900:6: warning: variable cur_state set but not used [-Wunused-but-set-variable]
+
+Applied to 5.3/scsi-queue. Thanks.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
