@@ -2,86 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BDC2EA12
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 03:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0BE2EA1B
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 03:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbfE3BGE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 21:06:04 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:44034 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726862AbfE3BGE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 21:06:04 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U0wnl5155209;
-        Thu, 30 May 2019 01:06:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=NTAveDZ9fMDtdsyCRXbRE5K1ChRMvJsN1HL9prKmrAY=;
- b=M2RaxuT4iis2asiwctDqGUwMhwX7xA/S4beVJ0+AXXNiM1LZGj+MToQ7T8sMoavRtmaB
- r+8Ybq09IERdZqObEkeq40gazYgOo61pQPc93wWrLw5Z9NcBI4lECPTWa/rplQmljqBc
- 3QZ7wCeVtQAySYwk3F6q1ymHgt6DZlrK8tlZhYImFPTPHrAeIcx6hMx9f21JuaAkoY79
- eS2YWc2dTHoDhGR1zf3xk/+EQWmjO4X9gNkl9bK/EjlRKPeP1iT4ekVLwWYvNnV8UcdX
- 0efsDBEYqmdum9EVyZxonUuoDxlZVXpq73diSKiUF/xZLu8jJoOKrhGE4iIwSVB36BY/ 1w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2130.oracle.com with ESMTP id 2spu7dndhq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 May 2019 01:06:01 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U14OxE088845;
-        Thu, 30 May 2019 01:06:01 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2sqh741a5n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 May 2019 01:06:01 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4U160Zq032235;
-        Thu, 30 May 2019 01:06:00 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 29 May 2019 18:06:00 -0700
-To:     Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-Cc:     linux-scsi@vger.kernel.org, Sathya.Prakash@broadcom.com,
-        sreekanth.reddy@broadcom.com
-Subject: Re: [PATCH v2 08/10] mpt3sas: Enable interrupt coalescing on high iops
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
-        <20190520102604.3466-9-suganath-prabu.subramani@broadcom.com>
-Date:   Wed, 29 May 2019 21:05:58 -0400
-In-Reply-To: <20190520102604.3466-9-suganath-prabu.subramani@broadcom.com>
-        (Suganath Prabu S.'s message of "Mon, 20 May 2019 06:26:02 -0400")
-Message-ID: <yq1ftow21l5.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1727263AbfE3BKz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 21:10:55 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:43482 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726527AbfE3BKz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 21:10:55 -0400
+Received: by mail-pg1-f193.google.com with SMTP id f25so922419pgv.10;
+        Wed, 29 May 2019 18:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=9q3n6/Atan/BZx1c7DELwhCkfQhZCdsRzVyU+FH+w8E=;
+        b=kUVyJwmSi9HfWvdvfbVdt5vH1mMxcA8Sio6yz3d2YqSTPgJCoxRQVYWakSZsk8/bnx
+         klALrwxz3k9VRfeqFpqkdInMF3aI7iS4DATYpm3v1Aw0q1JQuw1jBcWfPXavpDDhVx7a
+         GNq45ww6ueUZbKHuA071AMYqZsDCZ9XN7pttbpnTvOoiCQbKVME/DuOeCw9xqQPjLKpw
+         rKtOICQFiygbSrO4z2qPaTwZH1bCIXpDjM0CyDo7qs9v3wqNODnQVjTRzTr+EqRZmAmZ
+         UccWq2bDhqHydbAQrJ2b9RvTDuUQT3/z9F6xHMlj6gcKQUf0RYPxmQwhisf7xTMv4mEn
+         fGwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=9q3n6/Atan/BZx1c7DELwhCkfQhZCdsRzVyU+FH+w8E=;
+        b=cnH+WXRO+z1OIdKkwYTL1NHderVm92lfZMuoEJyevjyGSPwcUcxAZ0Hu1frzDI4Gre
+         9c8Yn4xJfRna0uk8zCuXcwTYt4pBrmgm0xCI6smlTAe56WcDsby5SL/2HSToiEy382Cz
+         x2yuk+lEc1xLKnheb3aNrkkOcMxcL4C+Rw1V2g/sR0HUeiuvMEnPiAyB1ks9N0mh7FIf
+         Q5I6wJi4iQc1PdnAPhq6iXoAeXqBHeBQvnq4GNj9+GkrNxdrQDsRF+ck4UdD0ttiUSza
+         DwVxO2NSuT+7Lg+z4mJswrYKWcPmKLm93va6lz/bRXge2p6reHbjwgNU1PSmqqlaVO4X
+         ayWw==
+X-Gm-Message-State: APjAAAX8BSHRJCPT9TYBwJvRyloFxnDQoLJbyVcio/88Kap90z7i/gVv
+        wgo1zwyPkbnwtvujDUC5s1Q=
+X-Google-Smtp-Source: APXvYqxt86dxGzN3ZWm9yu9CjEHxpW6lyXo6EdYMJskIILsFaDt25aud9T1smPRolla3NA18/q5zhw==
+X-Received: by 2002:a65:6382:: with SMTP id h2mr990283pgv.355.1559178654745;
+        Wed, 29 May 2019 18:10:54 -0700 (PDT)
+Received: from zhanggen-UX430UQ ([66.42.35.75])
+        by smtp.gmail.com with ESMTPSA id l8sm510250pgb.76.2019.05.29.18.10.42
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 May 2019 18:10:53 -0700 (PDT)
+Date:   Thu, 30 May 2019 09:10:30 +0800
+From:   Gen Zhang <blackgod016574@gmail.com>
+To:     sathya.prakash@broadcom.com, chaitra.basappa@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     suganath-prabu.subramani@broadcom.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mpt3sas_ctl: fix double-fetch bug in _ctl_ioctl_main()
+Message-ID: <20190530011030.GA6314@zhanggen-UX430UQ>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=907
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905300006
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=950 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905300006
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+In _ctl_ioctl_main(), 'ioctl_header' is fetched the first time from 
+userspace. 'ioctl_header.ioc_number' is then checked. The legal result 
+is saved to 'ioc'. Then, in condition MPT3COMMAND, the whole struct is
+fetched again from the userspace. Then _ctl_do_mpt_command() is called,
+'ioc' and 'karg' as inputs.
 
-Suganath,
+However, a malicious user can change the 'ioc_number' between the two 
+fetches, which will cause a potential security issues.  Moreover, a 
+malicious user can provide a valid 'ioc_number' to pass the check in 
+first fetch, and then modify it in the second fetch.
 
-> This configuration should reset during driver unload or shutdown to
-> the default settings. For this driver takes copy of default ioc page 1
-> and copy backs the default or unmodified ioc page1 during unload and
-> shutdown. so that on next driver load (e.g. if older version driver is
-> loaded by user), current modified changes on ioc page1 won't take
-> effect.
+To fix this, we need to recheck the 'ioc_number' in the second fetch.
 
-What happens if the system crashes before the old page is put back?
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+Ack-by: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+---
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+index b2bb47c..5181c03 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -2319,6 +2319,10 @@ _ctl_ioctl_main(struct file *file, unsigned int cmd, void __user *arg,
+ 			break;
+ 		}
+ 
++		if (karg.hdr.ioc_number != ioctl_header.ioc_number) {
++			ret = -EINVAL;
++			break;
++		}
+ 		if (_IOC_SIZE(cmd) == sizeof(struct mpt3_ioctl_command)) {
+ 			uarg = arg;
+ 			ret = _ctl_do_mpt_command(ioc, karg, &uarg->mf);
