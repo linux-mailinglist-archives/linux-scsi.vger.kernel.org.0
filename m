@@ -2,89 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E532FBFB
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 15:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8002FE5F
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 16:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbfE3NJG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 09:09:06 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:46938 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726079AbfE3NJG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 09:09:06 -0400
-Received: by mail-pf1-f194.google.com with SMTP id y11so3913454pfm.13
-        for <linux-scsi@vger.kernel.org>; Thu, 30 May 2019 06:09:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pKVy6+bOkoWZvH8HSwjy5Gzy0e/rDTP85W29F2K7oMQ=;
-        b=UQCf1Ml14nWpznUDcpVjxnZyRB5iCTwUcDJtowgIKxuuH731SQ1qkJ92eZ9Pq3Oqg8
-         QBQ8t6v7+uBcnfWuJSFwTptD08bGRtH8G0PjgV9rQXdCigrPATDPbOgk2IMAWe041LPs
-         2CB/gnq4yqqmfYCXvPVYJikhewzwM9Z02F2fM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pKVy6+bOkoWZvH8HSwjy5Gzy0e/rDTP85W29F2K7oMQ=;
-        b=bU5ZFj7b4bYslFIUksGpsC67CW4KOgLpAKbyxWHWU+Lg8opTsbqGZn6Yk4ML/hZC5I
-         VsW3BPW18HQ2jc6/gTOss4R5NYXMqurgsm2DgiU5O/aOGzuOMVS6mvoZDdcOA5oTs4zG
-         OF598tl4epWe/n4IJ3V8WhoKJEmptlZ3m/UUBaRJumefS7yzOasunp8uKjsfVAaQbrnZ
-         ey9vzWMFqOYvLMvt/bUCngh8PJI22gBaZKvP3PC6KLs7ScojuC8IFEMQBjia1LLDRhAB
-         qzR46NwV04Fg5dXSoJ3SCExs160+RVJyI2kHw0MgMiyKtWVdtecmoqOifuBO8WGYn+rE
-         pT2Q==
-X-Gm-Message-State: APjAAAVZbnc5te9u1Mrr1oShoL1xpd3YZlntk7cMxLgYM2z/GncC/Ogd
-        c7VWpDtnU/loTrbt1Z+q9LIbqmfAgEs/WM1hDgJ9PQ==
-X-Google-Smtp-Source: APXvYqx619odIILRP7LgRc8KQdn/tpJiJ53PszwSNZQOUPU1PcFbFvZrsBFJ72xOGbmJzazuPThKDfvCN1giHO/tDLk=
-X-Received: by 2002:a63:f64e:: with SMTP id u14mr1188704pgj.107.1559221745822;
- Thu, 30 May 2019 06:09:05 -0700 (PDT)
+        id S1726065AbfE3Or4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 10:47:56 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47838 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725897AbfE3Or4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 May 2019 10:47:56 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 30A53AFB2;
+        Thu, 30 May 2019 14:47:54 +0000 (UTC)
+Subject: Re: [PATCH 11/24] scsi: add scsi_host_get_reserved_cmd()
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+References: <20190529132901.27645-1-hare@suse.de>
+ <20190529132901.27645-12-hare@suse.de>
+ <25a5a8f5-324b-6b7c-71eb-6cb9f9a60ba8@acm.org>
+ <0af75234-7470-acb8-c7ac-10ebaa1e3321@suse.de>
+ <0dcf29df-c4c9-0d1c-cd88-972888cd644d@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <381a9e4a-7cee-86d3-6225-5bbab72aae2e@suse.de>
+Date:   Thu, 30 May 2019 16:47:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
- <20190520102604.3466-7-suganath-prabu.subramani@broadcom.com> <yq1k1e821n3.fsf@oracle.com>
-In-Reply-To: <yq1k1e821n3.fsf@oracle.com>
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Date:   Thu, 30 May 2019 18:38:54 +0530
-Message-ID: <CAK=zhgo_-toSCcqs4SYJZAuQ4TC99FaO66dbeF3FvbB2L12kmw@mail.gmail.com>
-Subject: Re: [PATCH v2 06/10] mpt3sas:save msix index and use same while
- posting RD
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Suganath Prabu S <suganath-prabu.subramani@broadcom.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Sathya Prakash <Sathya.Prakash@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <0dcf29df-c4c9-0d1c-cd88-972888cd644d@acm.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, May 30, 2019 at 6:34 AM Martin K. Petersen
-<martin.petersen@oracle.com> wrote:
->
->
-> Suganath,
->
-> > +static u8
-> > +_base_set_and_get_msix_index(struct MPT3SAS_ADAPTER *ioc, u16 smid)
-> > +{
-> > +     struct scsiio_tracker *st;
-> > +
-> > +     st = (smid < ioc->hi_priority_smid) ?
-> > +             (_get_st_from_smid(ioc, smid)) : (NULL);
->
-> Please make this an if statement for clarity.
+On 5/29/19 9:36 PM, Bart Van Assche wrote:
+> On 5/29/19 10:38 AM, Hannes Reinecke wrote:
+>> On 5/29/19 5:19 PM, Bart Van Assche wrote:
+>>> On 5/29/19 6:28 AM, Hannes Reinecke wrote:
+>>>> +    rq = blk_mq_alloc_request(shost->reserved_cmd_q,
+>>>> +                  REQ_OP_DRV_OUT | REQ_NOWAIT,
+>>>> +                  BLK_MQ_REQ_RESERVED);
+>>>
+>>> Is your purpose to avoid that blk_mq_alloc_request() waits? If so, 
+>>> why do you want to avoid that?
+>>>
+>> Typically these commands are intended for internal purposes, so there 
+>> should always be enough commands free to allow direct allocation.
+>> If not we're in an error condition, and we need to return so as not to 
+>> lock up the driver (as it might rely on this command to make forward 
+>> progress).
+> 
+> That sounds like a risky strategy to me. blk_mq_alloc_request() can 
+> block for a number of reasons, e.g. because a request queue due to e.g. 
+> CPU hotplugging. I don't think that you want 
+> scsi_host_get_reserved_cmd() or scsi_get_reserved_cmd() to fail if a 
+> request queue is frozen.
+> 
+Au contraire.
+These commands are intended for driver internals (like sending TMFs 
+etc). Drivers can handle a failure here pretty well, as then the driver 
+will just escalate things internally. A stall, OTOH, would lock up the 
+entire driver.
+Think of Task Abort TMF: it's okay (and actually expected) for the TMF 
+to fail; the driver will just escalate things internally.
+It is, however, _not_ okay to stall for that command to become available 
+(eg if all tags are used up, and we now have to start aborting 
+commands), as this will stall or even live-lock the entire driver.
 
-Agreed. We will post patches again with this change.
+Cheers,
 
-Thanks,
-Sreekanth
-
->
-> > +
-> > +     if (st == NULL)
-> > +             return  _base_get_msix_index(ioc, NULL);
-> > +
-> > +     st->msix_io = ioc->get_msix_index_for_smlio(ioc, st->scmd);
-> > +     return st->msix_io;
-> > +}
->
-> --
-> Martin K. Petersen      Oracle Linux Engineering
+Hannes
+-- 
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                              +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
