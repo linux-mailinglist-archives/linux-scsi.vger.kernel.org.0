@@ -2,138 +2,186 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBD72EB7B
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 05:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BC82F13D
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 06:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729441AbfE3DNZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 23:13:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58448 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729426AbfE3DNY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 29 May 2019 23:13:24 -0400
-Received: from localhost (ip67-88-213-2.z213-88-67.customer.algx.net [67.88.213.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 306E623D14;
-        Thu, 30 May 2019 03:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559186003;
-        bh=/27MC/24vy0pzlQ1bxrg2WEVvYdYFBSyYBq0wfcmfUc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dy2mbto3EfvGjw8SNcvX6OkaAf3S63Q4DKdbzKEJVIBq88Ykz1uGJpuFmNLhNXQIE
-         VL/OBed8ujaSBxiFIOMF7oERee+GAT9ckERP0T6AeD3k+NQBwzkMsLPnXBGLMY5p7n
-         YUtEFD5w8xSflD47fpAlvtK4lDSrEIPOOkz0VjFg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongli Zhang <dongli.zhang@oracle.com>,
-        James Smart <james.smart@broadcom.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Subject: [PATCH 5.0 055/346] blk-mq: grab .q_usage_counter when queuing request from plug code path
-Date:   Wed, 29 May 2019 20:02:08 -0700
-Message-Id: <20190530030543.736817542@linuxfoundation.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190530030540.363386121@linuxfoundation.org>
-References: <20190530030540.363386121@linuxfoundation.org>
-User-Agent: quilt/0.66
+        id S1726969AbfE3ELf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 00:11:35 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36824 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726945AbfE3ELa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 00:11:30 -0400
+Received: by mail-wr1-f66.google.com with SMTP id n4so100954wrs.3;
+        Wed, 29 May 2019 21:11:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=h0T/MeUzCgmPrR3gk4K6fixpQQCnUhC4n3eE1p0lqFk=;
+        b=hgCnqefDl/JBYEu4+rVNRoDQ7aPZCmlANqR5qlyPz6/nnL28KsHj+EQ+oreogGLjsr
+         49zHHIs20aSdki49ikhvYEphqoaOKPHLxpS9QT0x0sDy0AvEZtAvUljqKxeG3GfnCQJO
+         F0L0iaJYn6wWdW0OO7FgacQQZqgyTbfa5CRutqF0vO71aLqR2nvafmfuSLco9oiO7lLa
+         xbdQhurZPhGnsa8IHWRD/fta8zBPRQfx6bHq9Nxs2/E2qmEf36Mtab55petXEO/xJsle
+         QUp/GiiZ8KyeuZFDLjw7eEjCFRXgNrDOKf6bAS7eMAY5GLtOdkGssTqQZVUlotsPCTfQ
+         axQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=h0T/MeUzCgmPrR3gk4K6fixpQQCnUhC4n3eE1p0lqFk=;
+        b=feiRG1ykqG5Ity79nFKQI7VVAlIw+NVUeAoSFlTwz89YVFDFyPzVjNU5atcHaR9RSO
+         OvKqy7bV/G4fXfh0KzKMy65Hacp0hIkkXii/ZLdMYTmPm7KBc2u2//oU8idXycQ8ZMwa
+         1FRjCc7u06+EA8WZCqjfmdHeA+7/5xHeHYrcXYJhP2AljobUZlAC0XUgImGCO2t86ZER
+         LaHbY4lITCBGM5Xz6MV4S5pPgLZb9Aa2nwkeTEI3c+3CKm5ySBLi+9NtgmQm4p5K6aNb
+         iKBS/j8JPBH4Hn7CKP+PHfds8o5E1AGcVqzfvPUBnjmShHsrj+c3pM0v4pjqorAQg2PU
+         mEKA==
+X-Gm-Message-State: APjAAAVvBs9or7N9T8tcpksD907OSPdmbKkpcpTq4ykQbfaG8dBSSbJx
+        YdGWANzPE/z2MoVwYz1Nq5zt2WbONNk9g0dd3AI=
+X-Google-Smtp-Source: APXvYqygV+uOyMtAemWnhhiWiShh7/TIAUUBWaiU/a5IN+a5xO/PuxK6M2Z/CWDO1fezb5B4lXERYXzMhvkF61hJhQ8=
+X-Received: by 2002:adf:fbc2:: with SMTP id d2mr947614wrs.334.1559189488864;
+ Wed, 29 May 2019 21:11:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20190527150207.11372-1-ming.lei@redhat.com> <20190527150207.11372-6-ming.lei@redhat.com>
+ <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com> <20190529022852.GA21398@ming.t460p>
+ <20190529024200.GC21398@ming.t460p> <5bc07fd5-9d2b-bf9c-eb77-b8cebadb9150@huawei.com>
+ <20190529101028.GA15496@ming.t460p> <CACVXFVODeFDPHxWkdnY5CZoOJ0did4mi_ap-aXk0oo+Cp05aUQ@mail.gmail.com>
+ <94964048-b867-8610-71ea-0275651f8b77@huawei.com> <20190530022810.GA16730@ming.t460p>
+In-Reply-To: <20190530022810.GA16730@ming.t460p>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Thu, 30 May 2019 12:11:17 +0800
+Message-ID: <CACVXFVN729SgFQGUgmu1iN7P6Mv5+puE78STz8hj9J5bS828Ng@mail.gmail.com>
+Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on CPU unplug
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     John Garry <john.garry@huawei.com>, Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-[ Upstream commit e87eb301bee183d82bb3d04bd71b6660889a2588 ]
+On Thu, May 30, 2019 at 10:28 AM Ming Lei <ming.lei@redhat.com> wrote:
+>
+> On Wed, May 29, 2019 at 05:10:38PM +0100, John Garry wrote:
+> >
+> > > >
+> > > > And we should be careful to handle the multiple reply queue case, given the queue
+> > > > shouldn't be stopped or quieseced because other reply queues are still active.
+> > > >
+> > > > The new CPUHP state for blk-mq should be invoked after the to-be-offline
+> > > > CPU is quiesced and before it becomes offline.
+> > >
+> > > Hi John,
+> > >
+> >
+> > Hi Ming,
+> >
+> > > Thinking of this issue further, so far, one doable solution is to
+> > > expose reply queues
+> > > as blk-mq hw queues, as done by the following patchset:
+> > >
+> > > https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/
+> >
+> > I thought that this patchset had fundamental issues, in terms of working for
+> > all types of hosts. FYI, I did the backport of latest hisi_sas_v3 to v4.15
+>
+> Could you explain it a bit about the fundamental issues for all types of
+> host?
+>
+> It is just for hosts with multiple reply queues, such as hisi_sas v3,
+> megaraid_sas, mpt3sas and hpsa.
+>
+> > with this patchset (as you may have noticed in my git send mistake), but we
+> > have not got to test it yet.
+> >
+> > On a related topic, we did test exposing reply queues as blk-mq hw queues
+> > and generating the host-wide tag internally in the LLDD with sbitmap, and
+> > unfortunately we were experiencing a significant performance hit, like 2300K
+> > -> 1800K IOPs for 4K read.
+> >
+> > We need to test this further. I don't understand why we get such a big hit.
+>
+> The performance regression shouldn't have been introduced in theory, and it is
+> because blk_mq_queue_tag_busy_iter() iterates over the same duplicated tags multiple
+> times, which can be fixed easily.
+>
+> >
+> > >
+> > > In which global host-wide tags are shared for all blk-mq hw queues.
+> > >
+> > > Also we can remove all the reply_map stuff in drivers, then solve the problem of
+> > > draining in-flight requests during unplugging CPU in a generic approach.
+> >
+> > So you're saying that removing this reply queue stuff can make the solution
+> > to the problem more generic, but do you have an idea of the overall
+> > solution?
+>
+> 1) convert reply queue into blk-mq hw queue first
+>
+> 2) then all drivers are in same position wrt. handling requests vs.
+> unplugging CPU (shutdown managed IRQ)
+>
+> The current handling in blk_mq_hctx_notify_dead() is actually wrong,
+> at that time, all CPUs on the hctx are dead, blk_mq_run_hw_queue()
+> still dispatches requests on driver's hw queue, and driver is invisible
+> to DEAD CPUs mapped to this hctx, and finally interrupt for these
+> requests on the hctx are lost.
+>
+> Frankly speaking, the above 2nd problem is still hard to solve.
+>
+> 1) take_cpu_down() shutdown managed IRQ first, then run teardown callback
+> for states in [CPUHP_AP_ONLINE, CPUHP_AP_OFFLINE) on the to-be-offline
+> CPU
+>
+> 2) However, all runnable tasks are removed from the CPU in the teardown
+> callback for CPUHP_AP_SCHED_STARTING, which is run after managed IRQs
+> are shutdown. That said it is hard to avoid new request queued to
+> the hctx with all DEAD CPUs.
+>
+> 3) we don't support to freeze queue for specific hctx yet, or that way
+> may not be accepted because of extra cost in fast path
+>
+> 4) once request is allocated, it should be submitted to driver no matter
+> if CPU hotplug happens or not. Or free it and re-allocate new request
+> on proper sw/hw queue?
 
-Just like aio/io_uring, we need to grab 2 refcount for queuing one
-request, one is for submission, another is for completion.
+That looks doable, we may steal bios from the old in-queue request, then
+re-submit them via generic_make_request(), and finally free the old request,
+but RQF_DONTPREP has to be addressed via one new callback.
 
-If the request isn't queued from plug code path, the refcount grabbed
-in generic_make_request() serves for submission. In theroy, this
-refcount should have been released after the sumission(async run queue)
-is done. blk_freeze_queue() works with blk_sync_queue() together
-for avoiding race between cleanup queue and IO submission, given async
-run queue activities are canceled because hctx->run_work is scheduled with
-the refcount held, so it is fine to not hold the refcount when
-running the run queue work function for dispatch IO.
+So follows the overall solution for waiting request vs. CPU hotplug,
+which is done
+in two stages:
 
-However, if request is staggered into plug list, and finally queued
-from plug code path, the refcount in submission side is actually missed.
-And we may start to run queue after queue is removed because the queue's
-kobject refcount isn't guaranteed to be grabbed in flushing plug list
-context, then kernel oops is triggered, see the following race:
+1) in the teardown callback of new  CPUHP state of CPUHP_BLK_MQ_PREP,
+which is run before CPUHP_AP_ONLINE_IDLE,  at that time the CPU & managed
+IRQ is still alive:
 
-blk_mq_flush_plug_list():
-        blk_mq_sched_insert_requests()
-                insert requests to sw queue or scheduler queue
-                blk_mq_run_hw_queue
+- stopped the hctx
+- wait in-flight requests from this hctx until all are completed
 
-Because of concurrent run queue, all requests inserted above may be
-completed before calling the above blk_mq_run_hw_queue. Then queue can
-be freed during the above blk_mq_run_hw_queue().
+2) in the teardown callback of CPUHP_BLK_MQ_DEAD, which is run
+after the CPU is dead
 
-Fixes the issue by grab .q_usage_counter before calling
-blk_mq_sched_insert_requests() in blk_mq_flush_plug_list(). This way is
-safe because the queue is absolutely alive before inserting request.
-
-Cc: Dongli Zhang <dongli.zhang@oracle.com>
-Cc: James Smart <james.smart@broadcom.com>
-Cc: linux-scsi@vger.kernel.org,
-Cc: Martin K . Petersen <martin.petersen@oracle.com>,
-Cc: Christoph Hellwig <hch@lst.de>,
-Cc: James E . J . Bottomley <jejb@linux.vnet.ibm.com>,
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Tested-by: James Smart <james.smart@broadcom.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- block/blk-mq-sched.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/block/blk-mq-sched.c b/block/blk-mq-sched.c
-index 0c98b6c1ca49c..1213556a20dad 100644
---- a/block/blk-mq-sched.c
-+++ b/block/blk-mq-sched.c
-@@ -413,6 +413,14 @@ void blk_mq_sched_insert_requests(struct blk_mq_hw_ctx *hctx,
- 				  struct list_head *list, bool run_queue_async)
- {
- 	struct elevator_queue *e;
-+	struct request_queue *q = hctx->queue;
-+
-+	/*
-+	 * blk_mq_sched_insert_requests() is called from flush plug
-+	 * context only, and hold one usage counter to prevent queue
-+	 * from being released.
-+	 */
-+	percpu_ref_get(&q->q_usage_counter);
- 
- 	e = hctx->queue->elevator;
- 	if (e && e->type->ops.insert_requests)
-@@ -426,12 +434,14 @@ void blk_mq_sched_insert_requests(struct blk_mq_hw_ctx *hctx,
- 		if (!hctx->dispatch_busy && !e && !run_queue_async) {
- 			blk_mq_try_issue_list_directly(hctx, list);
- 			if (list_empty(list))
--				return;
-+				goto out;
- 		}
- 		blk_mq_insert_requests(hctx, ctx, list);
- 	}
- 
- 	blk_mq_run_hw_queue(hctx, run_queue_async);
-+ out:
-+	percpu_ref_put(&q->q_usage_counter);
- }
- 
- static void blk_mq_sched_free_tags(struct blk_mq_tag_set *set,
--- 
-2.20.1
+- dequeue request queued in sw queue or scheduler queue from this hctx
+- steal bios from the dequeued request, and re-submit them via
+generic_make_request()
+- free the dequeued request, and need to free driver resource via new
+callback for
+RQF_DONTPREP, looks only SCSI needs it.
+- restart this hctx
 
 
-
+Thanks,
+Ming Lei
