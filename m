@@ -2,110 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C76730096
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 19:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5303C300C5
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 19:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbfE3RLy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 13:11:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:37914 "EHLO mx1.suse.de"
+        id S1726697AbfE3ROS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 13:14:18 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38182 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726280AbfE3RLy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 May 2019 13:11:54 -0400
+        id S1726280AbfE3ROS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 May 2019 13:14:18 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D4A7EB014;
-        Thu, 30 May 2019 17:11:52 +0000 (UTC)
-Subject: Re: [PATCH 02/24] scsi: add scsi_{get,put}_reserved_cmd()
-To:     Ming Lei <tom.leiming@gmail.com>, Hannes Reinecke <hare@suse.de>
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
+        by mx1.suse.de (Postfix) with ESMTP id 6417BACD4;
+        Thu, 30 May 2019 17:14:16 +0000 (UTC)
+Subject: Re: [PATCH 10/24] scsi: allocate separate queue for reserved commands
+To:     John Garry <john.garry@huawei.com>, Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>
+        linux-scsi@vger.kernel.org
 References: <20190529132901.27645-1-hare@suse.de>
- <20190529132901.27645-3-hare@suse.de> <20190530064101.GA22773@ming.t460p>
- <0e8c345e-1fa4-5420-2dc1-26f449b027ca@suse.de>
- <CACVXFVM9igoO+NMY=JHLDWxE3aX=yiCcAjMs=YwtciANLdh-ow@mail.gmail.com>
+ <20190529132901.27645-11-hare@suse.de>
+ <5537cf59-0138-3553-0896-21b1aaf2fe51@huawei.com>
 From:   Hannes Reinecke <hare@suse.com>
-Message-ID: <d0a45cba-ea79-208c-f228-6784917e64d5@suse.com>
-Date:   Thu, 30 May 2019 19:11:49 +0200
+Message-ID: <323be693-8280-78ea-8050-8c8d7befdfb9@suse.com>
+Date:   Thu, 30 May 2019 19:14:14 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <CACVXFVM9igoO+NMY=JHLDWxE3aX=yiCcAjMs=YwtciANLdh-ow@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <5537cf59-0138-3553-0896-21b1aaf2fe51@huawei.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/30/19 5:48 PM, Ming Lei wrote:
-> On Thu, May 30, 2019 at 10:57 PM Hannes Reinecke <hare@suse.de> wrote:
+On 5/30/19 5:28 PM, John Garry wrote:
+> On 29/05/2019 14:28, Hannes Reinecke wrote:
+>> From: Hannes Reinecke <hare@suse.com>
 >>
->> On 5/30/19 8:41 AM, Ming Lei wrote:
->>> On Wed, May 29, 2019 at 03:28:39PM +0200, Hannes Reinecke wrote:
->>>> Add helper functions to retrieve SCSI commands from the reserved
->>>> tag pool.
->>>>
->>>> Signed-off-by: Hannes Reinecke <hare@suse.com>
->>>> ---
->>>>    include/scsi/scsi_tcq.h | 22 ++++++++++++++++++++++
->>>>    1 file changed, 22 insertions(+)
->>>>
->>>> diff --git a/include/scsi/scsi_tcq.h b/include/scsi/scsi_tcq.h
->>>> index 6053d46e794e..227f3bd4e974 100644
->>>> --- a/include/scsi/scsi_tcq.h
->>>> +++ b/include/scsi/scsi_tcq.h
->>>> @@ -39,5 +39,27 @@ static inline struct scsi_cmnd *scsi_host_find_tag(struct Scsi_Host *shost,
->>>>       return blk_mq_rq_to_pdu(req);
->>>>    }
->>>>
->>>> +static inline struct scsi_cmnd *scsi_get_reserved_cmd(struct scsi_device *sdev)
->>>> +{
->>>> +    struct request *rq;
->>>> +    struct scsi_cmnd *scmd;
->>>> +
->>>> +    rq = blk_mq_alloc_request(sdev->request_queue,
->>>> +                              REQ_OP_SCSI_OUT | REQ_NOWAIT,
->>>> +                              BLK_MQ_REQ_RESERVED);
->>>> +    if (IS_ERR(rq))
->>>> +            return NULL;
->>>> +    scmd = blk_mq_rq_to_pdu(rq);
->>>> +    scmd->request = rq;
->>>> +    return scmd;
->>>> +}
->>>
->>> Now all these internal commands won't share tags with IO requests,
->>> however, your patch switches to reserve slots for internal
->>> commands.
->>>
->> Yes.
+>> Allocate a separate 'reserved_cmd_q' for sending reserved commands.
 >>
->>> This way may have performance effect on IO workloads given the
->>> reserved tags can't be used by IO at all.
->>>
->> Not really. Basically all drivers which have to use tags to send
->> internal commands already set some tags aside to handle internal
->> commands. So all this patchset does is to formalize this behaviour by
->> using private tags.
->> Some drivers (like fnic or snic) does _not_ do this currently; for those
->> I've set one command aside to handle command abort etc.
+>> Signed-off-by: Hannes Reinecke <hare@suse.com>
+>> ---
+>>  drivers/scsi/scsi_lib.c  | 15 ++++++++++++++-
+>>  include/scsi/scsi_host.h |  4 ++++
+>>  2 files changed, 18 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+>> index e17153a9ce7c..076459853622 100644
+>> --- a/drivers/scsi/scsi_lib.c
+>> +++ b/drivers/scsi/scsi_lib.c
+>> @@ -1831,6 +1831,7 @@ struct request_queue *scsi_mq_alloc_queue(struct 
+>> scsi_device *sdev)
+>>  int scsi_mq_setup_tags(struct Scsi_Host *shost)
+>>  {
+>>      unsigned int cmd_size, sgl_size;
+>> +    int ret;
+>>
+>>      sgl_size = scsi_mq_inline_sgl_size(shost);
+>>      cmd_size = sizeof(struct scsi_cmnd) + shost->hostt->cmd_size + 
+>> sgl_size;
+>> @@ -1850,11 +1851,23 @@ int scsi_mq_setup_tags(struct Scsi_Host *shost)
+>>          BLK_ALLOC_POLICY_TO_MQ_FLAG(shost->hostt->tag_alloc_policy);
+>>      shost->tag_set.driver_data = shost;
+>>
+>> -    return blk_mq_alloc_tag_set(&shost->tag_set);
+>> +    ret = blk_mq_alloc_tag_set(&shost->tag_set);
+>> +    if (ret)
+>> +        return ret;
+>> +
+>> +    if (shost->nr_reserved_cmds && shost->use_reserved_cmd_q) {
+>> +        shost->reserved_cmd_q = blk_mq_init_queue(&shost->tag_set);
+>> +        if (IS_ERR(shost->reserved_cmd_q)) {
+>> +            blk_mq_free_tag_set(&shost->tag_set);
+>> +            ret = PTR_ERR(shost->reserved_cmd_q);
+>> +        }
+>> +    }
+>> +    return ret;
+>>  }
+>>
+>>  void scsi_mq_destroy_tags(struct Scsi_Host *shost)
+>>  {
+>> +    blk_cleanup_queue(shost->reserved_cmd_q);
+>>      blk_mq_free_tag_set(&shost->tag_set);
+>>  }
+>>
+>> diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
+>> index 89998b6bee04..a2bab5f07eff 100644
+>> --- a/include/scsi/scsi_host.h
+>> +++ b/include/scsi/scsi_host.h
+>> @@ -600,6 +600,7 @@ struct Scsi_Host {
+>>       * Number of reserved commands, if any.
+>>       */
+>>      unsigned nr_reserved_cmds;
+>> +    struct request_queue *reserved_cmd_q;
+>>
+>>      unsigned active_mode:2;
+>>      unsigned unchecked_isa_dma:1;
+>> @@ -637,6 +638,9 @@ struct Scsi_Host {
+>>      /* The transport requires the LUN bits NOT to be stored in CDB[1] */
+>>      unsigned no_scsi2_lun_in_cdb:1;
+>>
+>> +    /* Host requires a separate reserved_cmd_q */
+>> +    unsigned use_reserved_cmd_q:1;
 > 
->  From hardware view, you might be right, however, the implementation
-> isn't correct:
-> 
-> set->queue_depth means number of the total tags, set->reserved_tags is just
-> part of the total tags, see blk_mq_init_bitmap_tags().
-> 
-> So any driver sets .reserved_tags > 0, tags available for IO is reduced by
-> same amount, isn't it?  Cause .can_queue isn't increased.
-> 
-Hmm. I was under the impression that the number of total tags is 
-set->queue_depth + set-?reserved_tags.
-But reading through blk-mq-tag.c it seems you are right.
-Okay, will be updating the patchset.
+> Is this really required? I would think that a non-zero value for 
+> shost->nr_reserved_cmds means the same thing in practice.
+> ;
+My implementation actually allows for per-device reserved tags (eg for 
+virtio). But some drivers require to use internal commands prior to any 
+device setup, so they have to use a separate reserved command queue just 
+to be able to allocate tags.
+
+So yes, they are required.
 
 Cheers,
 
