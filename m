@@ -2,73 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E37E301FF
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 20:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A056530362
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 22:41:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfE3SfA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 14:35:00 -0400
-Received: from sonic315-13.consmr.mail.bf2.yahoo.com ([74.6.134.123]:43207
-        "EHLO sonic315-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726240AbfE3Se5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 May 2019 14:34:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1559241295; bh=FCjWGTqDRXQUUN8ivg02MDhbiDKrvltOcpc7W52q/3U=; h=Date:From:Reply-To:Subject:References:From:Subject; b=mUyi3clUg3Xnomaf+YhTA9gRwVLNbbs3R3A3WW8HW5dpOGLDVhsxU5uxPhXQFHoQ8C3rANLoO0MfBxeJ6c9FKq4Vd4o0pC3hk/c/jbq9v9Pf9A20gqXDfMPQY5ej3pl5kgKnEm+2TqnZb/0SnHJSekMO8qr4N9bDD/tZx+jd8i39lWWOq/PzkrAEDDu6yzNgB7DWAciNICY2NGlAyEt4U9KJ6UcF9wTBlYevjBjzHK6I4fbAtnUs0u4RUN/6TTIxd1IxcR8MKomOE42w5rqVFEXsnqpfwK5J81GcssJ2eKiWL7Ii/TcrjydB/EQrWbHKsNXMfA5zO5QH0xXHjpDx2A==
-X-YMail-OSG: .mvfc9cVM1kGhp.9789tMdQGm_j7aTPmHvrhLWnjTdWn1rvD4KFPJCClrervGDs
- cMuZkgfy8JN4fj6zGaJR4KKHCtUv7XUD2QCaIuA1d3j3gFSJokCZxvqKN4.uu9vFE8RcEBQqNMt_
- OYm1veoC7f2901RGyg7fYeawUMyhQXON_a34joVgayDT_LiJA8.VpRGc4.VDbLRtQJlEmOUx8dX5
- KWjVXpahq9K0_lptw2pTY3LeAnxpy4jcuxDaOivRfjIrmV5udj_KVO2nRLd0GdpU2C3O.jC4im_o
- FH2KeecWN8xynLcU4BluTz8wqgRsnHjCCgOrgtTLk6pPL9nmsIKVBObgIa4nUiDIf.aLLre_X3vU
- Hn.v_kMVMo6r1NYjB5ns0SZERYIpz4arozVa4hdsyynEXoabr2qo8RksWxSgT4tSrWMTQUTqWNZ6
- uSVJ227_oXJ3bZICS0keUw._y_GkE6cxucTLMPpV7YUGbBxDijPTijNdkkWXy1ryXns8b48Qppir
- PVZOEGRdFFU8Chgb5rt02xD1TG0RPWETcLkXaRjJi2gjQeAt3hJm8eD9JHFZa1wVl26_7JQXVIgS
- w_5lZwad30GQpOPUl58RYtIF9I35xFY6nQdjOrRGKBhbjYCPZuE1BmjJ.FhCT0Y4rZeZv_.MNcev
- PTanVw7143OTH_6nLLric_eTvSdxRa8SHblCSkiGWAsVDpa6oiFqizPFOvdWFwVFVF_7NeAbuaWo
- MdmmbZTeb4zCX.CJFlCvPJ7CraHjryxHB3Da22aB9AvFSLqAh4m2FZNzqH8uRlGRE6c8GUGI_Jp.
- xS8I5ERTLjGRtqGmsE430ZErOvMHXIzOHZBjNA9fh1D2Aza9iyqoU_00_q778b99gTQsnwixpt1R
- RV1TGWCaIFW771kyLWoexwCDHGd244swxubdP9cQ.AtpHpPmnyDO6bU72Fr2egr1IxqMwAo0lhpR
- 8qd.Wrkihdm0YlYhR3leoa5i6RIEtqFMXeUwv5zOtSBPl0jmZdb5Ocyf2DA0qFk262PFNO2Zazx5
- L2XjSiPkVAx2nX3kSDr2KkNatQBOHxNCZB2bD8wXz5dP6.gXSbQws7pZoOnAuDi_Ils5BcHVpIHo
- 616FmVnuHIQ0X3NoPr.CuWgrDGiJGoPTzHwb_z72lTOyP0iyxvlhH4c_bGmHdk84fbbGkxkki9ut
- WwvZs9w2VisAjsnYWi6XQq7BVnb_MdshtMQLA4EdIEp7WpRmGjYzAY9HZ
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.bf2.yahoo.com with HTTP; Thu, 30 May 2019 18:34:55 +0000
-Date:   Thu, 30 May 2019 18:34:51 +0000 (UTC)
-From:   Ms Lisa Hugh <lisa.hugh101@gmail.com>
-Reply-To: Ms Lisa Hugh <ms.lisahugh000@gmail.com>
-Message-ID: <305145471.6881930.1559241291101@mail.yahoo.com>
-Subject: URGENT REPLY FOR THIS BUSINESS...
+        id S1726225AbfE3UlW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 16:41:22 -0400
+Received: from hosting.gsystem.sk ([212.5.213.30]:44920 "EHLO
+        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725961AbfE3UlW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 16:41:22 -0400
+Received: from [192.168.0.2] (188-167-68-178.dynamic.chello.sk [188.167.68.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id EE59D7A01F5;
+        Thu, 30 May 2019 22:41:19 +0200 (CEST)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
+Subject: Re: [Patch v2] wd719x: pass GFP_ATOMIC instead of GFP_KERNEL linux-kernel@vger.kernel.org
+Date:   Thu, 30 May 2019 22:41:15 +0200
+User-Agent: KMail/1.9.10
+Cc:     David Rientjes <rientjes@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+References: <20190529175851.GA10760@hari-Inspiron-1545> <alpine.DEB.2.21.1905291412360.242480@chino.kir.corp.google.com> <20190530181044.GA7760@hari-Inspiron-1545>
+In-Reply-To: <20190530181044.GA7760@hari-Inspiron-1545>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: Text/Plain;
+  charset="ansi_x3.4-1968"
 Content-Transfer-Encoding: 7bit
-References: <305145471.6881930.1559241291101.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.13634 YahooMailBasic Mozilla/5.0 (Windows NT 6.2; Win64; x64; rv:67.0) Gecko/20100101 Firefox/67.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Disposition: inline
+Message-Id: <201905302241.16233.linux@zary.sk>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Thursday 30 May 2019 20:10:44 Hariprasad Kelam wrote:
+> On Wed, May 29, 2019 at 02:13:18PM -0700, David Rientjes wrote:
+> > On Wed, 29 May 2019, Hariprasad Kelam wrote:
+> > 
+> > > dont acquire lock before calling wd719x_chip_init.
+> > > 
+> > > Issue identified by coccicheck
+> > > 
+> > > Signed-off-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+> > > -----
+> > > changes in v1: Replace GFP_KERNEL with GFP_ATOMIC.
+> > > changes in v2: Call wd719x_chip_init  without lock as suggested
+> > > 		in review
+> > 
+> > Why was host_lock taken here initially?  I assume it's to protect some 
+> > race in init that leads to an undefined state.
+> 
+> wd719x_chip_init is getting called from wd719x_host_reset
+> and wd719x_board_found.
+> 
+> In wd719x_board_found case its not acquiring any lock.
+> In wd719x_host_reset it is called under spin_lock.
+> 
+> Acquiring spin_lock in wd719x_host_reset is there from initial commit
+> so its better we wont remove this lock.
+
+Looks like I haven't tested it properly before. Host reset is broken - sg_reset -N -H /dev/sdX will oops:
+
+wd719x 0000:02:01.0: host reset requested
+------------[ cut here ]------------
+kernel BUG at fs/buffer.c:1218!
+invalid opcode: 0000 [#1] SMP
+CPU: 0 PID: 1913 Comm: sg_reset Not tainted 5.1.0+ #323
+Hardware name:  /848P-ICH5, BIOS 6.00 PG 02/03/2005
+EIP: check_irqs_on+0xb/0xf
+...
+
+That's because of request_firmware called under the spin lock, as Christoph pointed out.
+Patch v2 is also wrong - wd719x_finish_cmd must be called under lock.
+
+I'm currently testing a proper fix (disable chip and flush SCBs under lock, then initialize chip without lock). It works mostly but I can crash it easily by doing a device reset under load (e.g. dd from a SCSI drive) and then doing a host reset - NULL pointer dereference in list_del.
+
+> I think we Patch v1 is  correct fix(pass GFP_ATOMIC instead of GPF_KERNEL )
+> 
+> 
 
 
-Dear Friend,
-
-I am  Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank,
-
-There is this fund that was keep in my custody years ago,please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment and the amount is  (US$4.5M DOLLARS).
-
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
-
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
-
-Below information is what i need from you so will can be reaching each other .
-
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
-
-
-Thanks.
-
-
-Ms Lisa Hugh
+-- 
+Ondrej Zary
