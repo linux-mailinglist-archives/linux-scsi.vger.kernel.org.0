@@ -2,101 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD5532EAAC
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 04:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19F0B2EAAE
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 04:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726581AbfE3C2B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 22:28:01 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:49104 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726498AbfE3C2B (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 22:28:01 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U2J18r011927;
-        Thu, 30 May 2019 02:27:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=IlsDG4hHPmeKifqFB08mJ/RL76to7tRBSNqZcVgHeUo=;
- b=qVIqf5GLFIiHBZMHkCb4Xe0RUCu8zUUfW4QVflty7sDFKhKL0D/MXHxnhkKj9MHXDUCp
- Pfg87yb6zuu9OTDXv3cwdLPqC+X/vK0z0PbMuYtjaqoLiF0o9bCx0zu7GPnQFrdBsXxg
- fwRAc76PJ9IW3WsQ6h/zqtxC3JXOZsyafpoBQURCJaRzRpMCxHZsZ7wGaGLsDPiVUJWq
- RGHXDtggJlIPk7BJjLBnIdS6TqCmNomreFHNT0eNrhYRql0NQUhI3IGyb1jNh+uPtXSE
- WT7K/WuQXyEi32CEYGPlYk5Fbl3aainS7qV7L8kokUgsDndZsgjwGh9vPFCUhJMlk1mn ug== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 2spu7dnkvp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 May 2019 02:27:54 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U2RrY4016793;
-        Thu, 30 May 2019 02:27:53 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2srbdxqw9c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 May 2019 02:27:53 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4U2RlS1010612;
-        Thu, 30 May 2019 02:27:47 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 29 May 2019 19:27:46 -0700
-To:     Himanshu Madhani <hmadhani@marvell.com>
-Cc:     Enzo Matsumiya <ematsumiya@suse.de>, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] qla2xxx: remove double assignment in qla2x00_update_fcport
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <e5419ee1-0ae8-2d55-666e-741efece90e6@suse.de>
-Date:   Wed, 29 May 2019 22:27:44 -0400
-In-Reply-To: <e5419ee1-0ae8-2d55-666e-741efece90e6@suse.de> (Enzo Matsumiya's
-        message of "Tue, 7 May 2019 12:39:05 -0300")
-Message-ID: <yq11s0gy8v3.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1726935AbfE3C21 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 22:28:27 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:53222 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726483AbfE3C21 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 May 2019 22:28:27 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 6A8D283F4C;
+        Thu, 30 May 2019 02:28:26 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-16.pek2.redhat.com [10.72.8.16])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 305FE5D704;
+        Thu, 30 May 2019 02:28:15 +0000 (UTC)
+Date:   Thu, 30 May 2019 10:28:11 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Ming Lei <tom.leiming@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH V2 5/5] blk-mq: Wait for for hctx inflight requests on
+ CPU unplug
+Message-ID: <20190530022810.GA16730@ming.t460p>
+References: <20190527150207.11372-1-ming.lei@redhat.com>
+ <20190527150207.11372-6-ming.lei@redhat.com>
+ <45daceb4-fb88-a835-8cc6-cd4c4d7cf42d@huawei.com>
+ <20190529022852.GA21398@ming.t460p>
+ <20190529024200.GC21398@ming.t460p>
+ <5bc07fd5-9d2b-bf9c-eb77-b8cebadb9150@huawei.com>
+ <20190529101028.GA15496@ming.t460p>
+ <CACVXFVODeFDPHxWkdnY5CZoOJ0did4mi_ap-aXk0oo+Cp05aUQ@mail.gmail.com>
+ <94964048-b867-8610-71ea-0275651f8b77@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905300017
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905300016
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <94964048-b867-8610-71ea-0275651f8b77@huawei.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.27]); Thu, 30 May 2019 02:28:26 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Wed, May 29, 2019 at 05:10:38PM +0100, John Garry wrote:
+> 
+> > > 
+> > > And we should be careful to handle the multiple reply queue case, given the queue
+> > > shouldn't be stopped or quieseced because other reply queues are still active.
+> > > 
+> > > The new CPUHP state for blk-mq should be invoked after the to-be-offline
+> > > CPU is quiesced and before it becomes offline.
+> > 
+> > Hi John,
+> > 
+> 
+> Hi Ming,
+> 
+> > Thinking of this issue further, so far, one doable solution is to
+> > expose reply queues
+> > as blk-mq hw queues, as done by the following patchset:
+> > 
+> > https://lore.kernel.org/linux-block/20180205152035.15016-1-ming.lei@redhat.com/
+> 
+> I thought that this patchset had fundamental issues, in terms of working for
+> all types of hosts. FYI, I did the backport of latest hisi_sas_v3 to v4.15
 
-Himanshu?
+Could you explain it a bit about the fundamental issues for all types of
+host?
 
-> Remove double assignment in qla2x00_update_fcport().
->
-> Signed-off-by: Enzo Matsumiya <ematsumiya@suse.de>
-> ---
->  drivers/scsi/qla2xxx/qla_init.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/scsi/qla2xxx/qla_init.c
-> b/drivers/scsi/qla2xxx/qla_init.c
-> index 0c700b140ce7..18078e215466 100644
-> --- a/drivers/scsi/qla2xxx/qla_init.c
-> +++ b/drivers/scsi/qla2xxx/qla_init.c
-> @@ -5237,7 +5237,6 @@ qla2x00_update_fcport(scsi_qla_host_t *vha,
-> fc_port_t *fcport)
->         fcport->flags &= ~(FCF_LOGIN_NEEDED | FCF_ASYNC_SENT);
->         fcport->deleted = 0;
->         fcport->logout_on_delete = 1;
-> -       fcport->login_retry = vha->hw->login_retry_count;
->         fcport->n2n_chip_reset = fcport->n2n_link_reset_cnt = 0;
->
->         switch (vha->hw->current_topology) {
-> --
-> 2.12.3
->
->
+It is just for hosts with multiple reply queues, such as hisi_sas v3,
+megaraid_sas, mpt3sas and hpsa.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+> with this patchset (as you may have noticed in my git send mistake), but we
+> have not got to test it yet.
+> 
+> On a related topic, we did test exposing reply queues as blk-mq hw queues
+> and generating the host-wide tag internally in the LLDD with sbitmap, and
+> unfortunately we were experiencing a significant performance hit, like 2300K
+> -> 1800K IOPs for 4K read.
+> 
+> We need to test this further. I don't understand why we get such a big hit.
+
+The performance regression shouldn't have been introduced in theory, and it is
+because blk_mq_queue_tag_busy_iter() iterates over the same duplicated tags multiple
+times, which can be fixed easily.  
+
+> 
+> > 
+> > In which global host-wide tags are shared for all blk-mq hw queues.
+> > 
+> > Also we can remove all the reply_map stuff in drivers, then solve the problem of
+> > draining in-flight requests during unplugging CPU in a generic approach.
+> 
+> So you're saying that removing this reply queue stuff can make the solution
+> to the problem more generic, but do you have an idea of the overall
+> solution?
+
+1) convert reply queue into blk-mq hw queue first
+
+2) then all drivers are in same position wrt. handling requests vs.
+unplugging CPU (shutdown managed IRQ)
+
+The current handling in blk_mq_hctx_notify_dead() is actually wrong,
+at that time, all CPUs on the hctx are dead, blk_mq_run_hw_queue()
+still dispatches requests on driver's hw queue, and driver is invisible
+to DEAD CPUs mapped to this hctx, and finally interrupt for these
+requests on the hctx are lost.
+
+Frankly speaking, the above 2nd problem is still hard to solve.
+
+1) take_cpu_down() shutdown managed IRQ first, then run teardown callback
+for states in [CPUHP_AP_ONLINE, CPUHP_AP_OFFLINE) on the to-be-offline
+CPU
+
+2) However, all runnable tasks are removed from the CPU in the teardown
+callback for CPUHP_AP_SCHED_STARTING, which is run after managed IRQs
+are shutdown. That said it is hard to avoid new request queued to
+the hctx with all DEAD CPUs.
+
+3) we don't support to freeze queue for specific hctx yet, or that way
+may not be accepted because of extra cost in fast path
+
+4) once request is allocated, it should be submitted to driver no matter
+if CPU hotplug happens or not. Or free it and re-allocate new request
+on proper sw/hw queue?
+
+> 
+> > 
+> > Last time, it was reported that the patchset causes performance regression,
+> > which is actually caused by duplicated io accounting in
+> > blk_mq_queue_tag_busy_iter(),
+> > which should be fixed easily.
+> > 
+> > What do you think of this approach?
+> 
+> It would still be good to have a forward port of this patchset for testing,
+> if we're serious about it. Or at least this bug you mention fixed.
+
+I plan to make this patchset workable on 5.2-rc for your test first.
+
+
+Thanks,
+Ming
