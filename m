@@ -2,81 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CC12EAB9
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 04:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B7D2EAE2
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 04:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726515AbfE3Cdq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 22:33:46 -0400
-Received: from aserp2130.oracle.com ([141.146.126.79]:53446 "EHLO
-        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726483AbfE3Cdq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 22:33:46 -0400
-Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
-        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U2StPf018593;
-        Thu, 30 May 2019 02:33:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=dGCIafp7VDqohybWxtkIDVZ9hz1ctA/NYycXfmXMbg0=;
- b=WjcNOIJIaxMn+aujvfKz3xjZIAjdX3GDKmXpkVIjpjsmWwqHL7snqmM+4SZGTrgjNaEn
- 41cwt5yo3XLsLiQAw44JDykMlvNYiqQXmU7ZpsKMk0XMX8an9u5OJpPU2F3We/uJLs3d
- 3Cdwa2EU6A3kNTZ5TOOaWRMKo5wqyPmy5yRlhdAca3GbRvvxiPrTHkLPNi2OwaLi7MrB
- Ix8tgXWDGLbLX1sp690LxjbuXRpse/7iRff1VYFl/HTiVBoyCOCY1Ybjdm/2QMhHDfeb
- wo4o6ZTXk7/dWNrUJsHVgRMvm/K1YocntfG2WWEY4591njJLPKZ7IH2VfeYSM1aAuwDB 9A== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2130.oracle.com with ESMTP id 2spu7dnmah-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 May 2019 02:33:40 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U2XWqO026510;
-        Thu, 30 May 2019 02:33:40 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2srbdxqxys-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 May 2019 02:33:40 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4U2Xdfp002077;
-        Thu, 30 May 2019 02:33:39 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 29 May 2019 19:33:39 -0700
-To:     Bharath Vedartham <linux.bhar@gmail.com>
-Cc:     sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
-        joe@perches.com, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] message/fusion/mptbase.c: Use kmemdup instead of memcpy and kmalloc
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190522160149.GA19160@bharath12345-Inspiron-5559>
-Date:   Wed, 29 May 2019 22:33:36 -0400
-In-Reply-To: <20190522160149.GA19160@bharath12345-Inspiron-5559> (Bharath
-        Vedartham's message of "Wed, 22 May 2019 21:31:49 +0530")
-Message-ID: <yq1tvdcwu0v.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1727521AbfE3C5T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 22:57:19 -0400
+Received: from mail-wm1-f50.google.com ([209.85.128.50]:55081 "EHLO
+        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726376AbfE3C5S (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 22:57:18 -0400
+Received: by mail-wm1-f50.google.com with SMTP id i3so2900912wml.4
+        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 19:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AA5L7tfhLlsKfjGe42dTc5zf0iEd+7+TtHmShr+XIPs=;
+        b=NEcEeTpzLTtVHgI3RCF6pmQ5Gnd3bR5Mmkq+gpf/3jViIj1SWCRCslERop8XNNpb8S
+         lF6a3CGUd5Xh3LzLS/LsIuS/Rw3IQHsptp+4w7DHYi+91th5SwpU9lVKV96o+L7sXRXA
+         1HyIrmMK0qhzO64LavYemUgTTv5aVjYG0OnYCN7fwP4Y9LHTxoXyajfLz+ji3zoxPOU8
+         BzYL/cnMceW3x3hbxdhblMTIF1bXdOAGGe0zfYO4q4ESil2AL73P3i+9hmHCXYx0+LbV
+         Q5dJ98n1NbN/EgynYDILKpZ/aJKLNPoMqqJfvqqpAqRUTA1Yejx9QgKYsXbRmsu3Jg1A
+         0JEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AA5L7tfhLlsKfjGe42dTc5zf0iEd+7+TtHmShr+XIPs=;
+        b=eICxSiB93npKKVOoMZzJ1ho2gAPRy7ZZp3mq2z5nYXaW/B5SPTmZcLKCWdazOOzqAJ
+         Omrq1R1Jhlvv4PKWDEjLZLfQRHZOr7ZSMsjMApZD6x98pV10oKjO+M1D2tGbg/o83YDM
+         UQcaHfZuq2FofteP6ll4eO0kG1cddcximbobZhhS2ZDu6Iaai7xfvLdHDNcyafU/MGY7
+         4V9uvJcG2jcWfsHJ88Me4i4bVp+8z6n8tvxvO1OwAjGYclqIYOkYQWv026u29WQM8iqR
+         UW451SfYYmXYF43Cd7MH2khWYCN2Iv7JEXr588q9lvJiBG6Fg0DQZr8NS8ImV9VaZsfa
+         RmeA==
+X-Gm-Message-State: APjAAAXnImvgRbhhXhV6Ku0Io4MpUSxIRGmrPBKBIs3T+qglTUy0A42P
+        9Inw+CbtK/AsA0vHTDft/uz1llr7ekZ4i55BRvg=
+X-Google-Smtp-Source: APXvYqxnyQWQO0sotY7Bc4dPYoWpKpisVJQ8Zv5SbkDX6V/jBzwLXo5XtFGPaWag/lAgQUlNNkhqv50bXjjiwVNeR3Q=
+X-Received: by 2002:a1c:a7c6:: with SMTP id q189mr641945wme.146.1559185036654;
+ Wed, 29 May 2019 19:57:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=725
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1905300018
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=779 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1905300017
+References: <KU1P153MB016617EB56A9B6ED55B8CFD0BF010@KU1P153MB0166.APCP153.PROD.OUTLOOK.COM>
+In-Reply-To: <KU1P153MB016617EB56A9B6ED55B8CFD0BF010@KU1P153MB0166.APCP153.PROD.OUTLOOK.COM>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Thu, 30 May 2019 10:57:02 +0800
+Message-ID: <CACVXFVOmgZthx433vSAtpJKkbpmU-9EGTuJEcmcmQt2PCwTLhg@mail.gmail.com>
+Subject: Re: SCSI adapter: how to freeze and thaw I/O on hibernation?
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        vkuznets <vkuznets@redhat.com>, Olaf Hering <olaf@aepfle.de>,
+        Stephen Hemminger <sthemmin@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Thu, May 23, 2019 at 11:18 AM Dexuan Cui <decui@microsoft.com> wrote:
+>
+> Hi,
+> I'm adding code to enable the hv_storvsc driver (drivers/scsi/storvsc_drv.c)
+> for hibernation (ACPI S5). I know how to save/restore the state of the virtual
+> Hyper-V SCSI adapter, but I don't know how to prevent the higher layer SCSI
+> driver(s) from submitting new I/O requests to the low level driver hv_storvsc,
+> before I disable the Hyper-V SCSI adapter in hv_storvsc.
+>
+> Note: I can not call scsi_remove_host(), because the SCSI host should not
+> disappear and re-appear on hibernation.
+>
+> scsi_target_block() calls scsi_internal_device_block() ->
+> blk_mq_quiesce_queue(), but it is only used in a few drivers
+> (scsi_transport_fc.c, scsi_transport_iscsi.c and scsi_transport_srp.c), so
+> I doubt it is suitable to me?
+>
+> scsi_block_requests() is used in a lot of drivers and hence is more likely
+> to be the API I'm looking for, but it only sets a flag
+> shost->host_self_blocked -- how can this prevent another CPU from
+> submitting I/O requests?
+>
+> I also checked scsi_bus_pm_ops, but it's only for "sdev": see
+> scsi_bus_suspend_common() -> "if (scsi_is_sdev_device(dev))...".
+>
+> Even for "sdev", it looks the scsi_dev_type_suspend() can't work for me,
+> because it looks the sdev's driver is sd, whose sd_pm_ops doesn't
+> define the .freeze and .thaw ops, which are needed in hibernation.
+>
+> sd_pm_ops does define .suspend and .resume, but it looks they are only
+> for suspend-to-memory (ACPI S3).
+>
+> Can you please recommend the standard way to prevent the higher layer
+> SCSI driver(s) from submitting new I/O requests?
+>
+> How do the other low level SCSI adapter drivers support hibernation?
+>
+> I checked some PCI HBA drivers, and they use scsi_block_requests(), but
+> as I described above, I don't know how setting a flag can prevent another
+> CPU from submitting I/O requests.
+>
+> Looking forward to your insights!
 
-Bharath,
+scsi_device_quiesce() has been called by scsi_dev_type_suspend() to prevent
+any non-pm request from entering queue.
 
-> Replace kmalloc + memcpy with kmemdup.
+Or do you still see IO requests coming during hibernation?
 
-Applied to 5.3/scsi-queue. Thanks.
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Thanks,
+Ming Lei
