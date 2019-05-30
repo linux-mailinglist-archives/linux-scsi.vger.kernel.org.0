@@ -2,80 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 166B92E9B1
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 02:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A4F2EA05
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 03:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726724AbfE3AXn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 May 2019 20:23:43 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34908 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726395AbfE3AXn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 20:23:43 -0400
-Received: by mail-pf1-f193.google.com with SMTP id d126so2740698pfd.2
-        for <linux-scsi@vger.kernel.org>; Wed, 29 May 2019 17:23:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-transfer-encoding:content-language;
-        bh=dpN4wiii1TvSZMayJZekGyxBaLr+eeeO3Ruou2wN6wk=;
-        b=Wm4oED+RlotHfcviCowYRWH7jw0M8K4gnkX4OOx30A/3cC7nN95j3QJ7f+r9ZfTpXw
-         kAMMNMiHvTNlnDkGgIzqV2xzK2+MU8cGoVB+wibhXtWmVAFOG32U2AsRjEZZ+ao5hTSS
-         Dfnb5mlnq1dVaAm037orKao9kDirTMAYVztlM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=dpN4wiii1TvSZMayJZekGyxBaLr+eeeO3Ruou2wN6wk=;
-        b=h/T3fnbQC5stR0LHWugyc/CSalQJK4JixS9lLjSUdV7WAugoeQckglGzwi1PXVN+ZJ
-         YOS2G4s1eJxrjjCUVR8xsCOpIFRPPQtNKNJFhzkxXnIx0D2LDn7K2vQv1zdydmnRWfD7
-         FI7DcLFA2sXEBallJJPnDo5z/GuA/JN5VJLT2TWEdNvQhOCYcFsui0BUtbEGC/GbxN6o
-         7rSaF4K7NjmYrFRgF7Ys9VBUjLQ0GjOpYWFGoixRpvirG0u1bMrQl2EHXLRWQs3p5tgq
-         5zhb9oEVU+g8HzReDJ40KhzwgkJ5Sdyvle8LAZGJCbOKA2T38JQp13No10i8eJO9InvR
-         c8lQ==
-X-Gm-Message-State: APjAAAWwH7egum2RjRDRTLFDQ22nn+bgG9PgI/7A/TKhrCemOm0vJYBD
-        at3h98wKLDbpdRPaDxpoWUJ+oRFYUMs=
-X-Google-Smtp-Source: APXvYqxb78UBEIoNeOotRBjD6CKuJJD04hvvXvpNzIsDfEycRQp9UICYuvcNF1lZu+YtPu0dCCG3uw==
-X-Received: by 2002:a17:90a:be0b:: with SMTP id a11mr762957pjs.88.1559175822636;
-        Wed, 29 May 2019 17:23:42 -0700 (PDT)
-Received: from [10.69.37.149] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id s28sm446391pgl.88.2019.05.29.17.23.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 17:23:42 -0700 (PDT)
-Subject: Re: [PATCH] scsi: lpfc: Use *_pool_zalloc rather than *_pool_alloc
-To:     Thomas Meyer <thomas@m3y3r.de>, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1559161113889-196429735-0-diffsplit-thomas@m3y3r.de>
- <1559161113901-1017843021-1-diffsplit-thomas@m3y3r.de>
-From:   James Smart <james.smart@broadcom.com>
-Message-ID: <8e9198f2-1247-f7bc-7856-721664b64316@broadcom.com>
-Date:   Wed, 29 May 2019 17:23:40 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727351AbfE3BEy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 May 2019 21:04:54 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:34372 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727207AbfE3BEy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 May 2019 21:04:54 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U0xNZu144962;
+        Thu, 30 May 2019 01:04:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=q9y3OJ7f5W1IqKJkvZlHc7EPJAT1QTPpfyKKp+FUUyw=;
+ b=LgwsQqC02Jfyokvj5LFQTtjSgMVtUZWzp1zdBhHoK5WocAziKLV16Bq7u4mj5lILCExx
+ cMO+aN5fmSCYiMTnmCOBEZazCprh5kTadRxf++jav2NGWsCb3sfKjo5HjyovrR/RcKLc
+ Eqrl9YyW1LocFsFhAYWRcGqVis3a+tir2/DfqDXNBEwy3WstsDD+nz5Ggn6cK7HXobAk
+ +xUDzQq+79pbc4JlGQB8xPfatxZt2xfYo6r/oFE4KLS9kM1TB4qm1+2kROJ0O6aTBJr2
+ dGULb/hLnZWdhW33ZWDEXQGy+naoLFPmCJwIO8MQPSO3uyQS5nfv4UD2K1OgVK5VAvO4 1w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2spxbqd2er-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 May 2019 01:04:51 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4U13NA5012757;
+        Thu, 30 May 2019 01:04:51 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2ss1fnsddd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 May 2019 01:04:51 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x4U14oxU030998;
+        Thu, 30 May 2019 01:04:50 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 29 May 2019 18:04:50 -0700
+To:     Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+Cc:     linux-scsi@vger.kernel.org, Sathya.Prakash@broadcom.com,
+        sreekanth.reddy@broadcom.com
+Subject: Re: [PATCH v2 06/10] mpt3sas:save msix index and use same while posting RD
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190520102604.3466-1-suganath-prabu.subramani@broadcom.com>
+        <20190520102604.3466-7-suganath-prabu.subramani@broadcom.com>
+Date:   Wed, 29 May 2019 21:04:48 -0400
+In-Reply-To: <20190520102604.3466-7-suganath-prabu.subramani@broadcom.com>
+        (Suganath Prabu S.'s message of "Mon, 20 May 2019 06:26:00 -0400")
+Message-ID: <yq1k1e821n3.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <1559161113901-1017843021-1-diffsplit-thomas@m3y3r.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=716
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905300006
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9272 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=758 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905300006
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
+Suganath,
 
-On 5/29/2019 1:21 PM, Thomas Meyer wrote:
-> Use *_pool_zalloc rather than *_pool_alloc followed by memset with 0.
->
-> Signed-off-by: Thomas Meyer <thomas@m3y3r.de>
-> ---
->
->
+> +static u8
+> +_base_set_and_get_msix_index(struct MPT3SAS_ADAPTER *ioc, u16 smid)
+> +{
+> +	struct scsiio_tracker *st;
+> +
+> +	st = (smid < ioc->hi_priority_smid) ?
+> +		(_get_st_from_smid(ioc, smid)) : (NULL);
 
-looks good
+Please make this an if statement for clarity.
 
-Reviewed-by: James Smart <james.smart@broadcom.com>
+> +
+> +	if (st == NULL)
+> +		return  _base_get_msix_index(ioc, NULL);
+> +
+> +	st->msix_io = ioc->get_msix_index_for_smlio(ioc, st->scmd);
+> +	return st->msix_io;
+> +}
 
--- james
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
