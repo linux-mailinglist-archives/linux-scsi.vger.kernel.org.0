@@ -2,110 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7BF2FFAC
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 17:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C76730096
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 19:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbfE3Pyy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 11:54:54 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:38653 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725961AbfE3Pyy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 11:54:54 -0400
-Received: by mail-wr1-f66.google.com with SMTP id d18so4553417wrs.5
-        for <linux-scsi@vger.kernel.org>; Thu, 30 May 2019 08:54:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FrmgiCjXWDWy++epoHTkiT3v6JKrDBvnzKAZJKqqz0M=;
-        b=BbCBWycDp9w9cgk+rXpch/iMzXAXXMUEGrkvU8NKH3pmbQzyVmpz3HlAJKRoN7EFYE
-         VdDNPoIuGNJ3zI+qgvUd/GQ3qTPoNNxcBlvlhvys6W5D4Qvx7yZ+8SL8ttkWyRy54elk
-         Q5zP/8J3fU/gZUr8RlV8CWWQM4BhkJ92UzVyLuctz0ci3vq3xRgVgCTkettzNHYKMEQF
-         dpWDOI7ZTqzJta2FtZ5OHedXdyMwASq2EJUf4u2oNQxdzc1ual9bZcaTXync3vFZ2ZWN
-         jw4mJUR+QvEBgwvWQdk1gfsvR+BPpBFRBXGcHmWvhdEPyuIOoWqNInz0NHIExbi62N7Y
-         klmg==
-X-Gm-Message-State: APjAAAXmOECJXZk4dVPJxTb36P7R7uiXicRYsrPOZ06tEdgxnQbv4cFr
-        NSuEU+kU7HwBqy0W03eYro+Baw==
-X-Google-Smtp-Source: APXvYqyvEkuJhdx/IT3Pf2U65bAq0aKoTztvb4ptIHe0hPnvOP7247GIoHIWjpThdmeJ8kkW6LU8jw==
-X-Received: by 2002:adf:e311:: with SMTP id b17mr3123302wrj.11.1559231692169;
-        Thu, 30 May 2019 08:54:52 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:f91e:ffe0:9205:3b26? ([2001:b07:6468:f312:f91e:ffe0:9205:3b26])
-        by smtp.gmail.com with ESMTPSA id a62sm3594397wmf.19.2019.05.30.08.54.50
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 30 May 2019 08:54:51 -0700 (PDT)
-Subject: Re: [PATCH 1/2] scsi_host: add support for request batching
-To:     Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, stefanha@redhat.com
-References: <20190530112811.3066-1-pbonzini@redhat.com>
- <20190530112811.3066-2-pbonzini@redhat.com>
- <ad0578b0-ce73-85ed-b67d-70c5d8176a23@acm.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <461fe0cd-c5bc-a612-6013-7c002b92dcdc@redhat.com>
-Date:   Thu, 30 May 2019 17:54:49 +0200
+        id S1726546AbfE3RLy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 13:11:54 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37914 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726280AbfE3RLy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 May 2019 13:11:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id D4A7EB014;
+        Thu, 30 May 2019 17:11:52 +0000 (UTC)
+Subject: Re: [PATCH 02/24] scsi: add scsi_{get,put}_reserved_cmd()
+To:     Ming Lei <tom.leiming@gmail.com>, Hannes Reinecke <hare@suse.de>
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>
+References: <20190529132901.27645-1-hare@suse.de>
+ <20190529132901.27645-3-hare@suse.de> <20190530064101.GA22773@ming.t460p>
+ <0e8c345e-1fa4-5420-2dc1-26f449b027ca@suse.de>
+ <CACVXFVM9igoO+NMY=JHLDWxE3aX=yiCcAjMs=YwtciANLdh-ow@mail.gmail.com>
+From:   Hannes Reinecke <hare@suse.com>
+Message-ID: <d0a45cba-ea79-208c-f228-6784917e64d5@suse.com>
+Date:   Thu, 30 May 2019 19:11:49 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <ad0578b0-ce73-85ed-b67d-70c5d8176a23@acm.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <CACVXFVM9igoO+NMY=JHLDWxE3aX=yiCcAjMs=YwtciANLdh-ow@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 30/05/19 17:36, Bart Van Assche wrote:
-> On 5/30/19 4:28 AM, Paolo Bonzini wrote:
->> +static const struct blk_mq_ops scsi_mq_ops_no_commit = {
->> +    .get_budget    = scsi_mq_get_budget,
->> +    .put_budget    = scsi_mq_put_budget,
->> +    .queue_rq    = scsi_queue_rq,
->> +    .complete    = scsi_softirq_done,
->> +    .timeout    = scsi_timeout,
->> +#ifdef CONFIG_BLK_DEBUG_FS
->> +    .show_rq    = scsi_show_rq,
->> +#endif
->> +    .init_request    = scsi_mq_init_request,
->> +    .exit_request    = scsi_mq_exit_request,
->> +    .initialize_rq_fn = scsi_initialize_rq,
->> +    .busy        = scsi_mq_lld_busy,
->> +    .map_queues    = scsi_map_queues,
->> +};
->> +
->> +static void scsi_commit_rqs(struct blk_mq_hw_ctx *hctx)
->> +{
->> +    struct request_queue *q = hctx->queue;
->> +    struct scsi_device *sdev = q->queuedata;
->> +    struct Scsi_Host *shost = sdev->host;
->> +
->> +    shost->hostt->commit_rqs(shost, hctx->queue_num);
->> +}
->> +
->>   static const struct blk_mq_ops scsi_mq_ops = {
->>       .get_budget    = scsi_mq_get_budget,
->>       .put_budget    = scsi_mq_put_budget,
->>       .queue_rq    = scsi_queue_rq,
->> +    .commit_rqs    = scsi_commit_rqs,
->>       .complete    = scsi_softirq_done,
->>       .timeout    = scsi_timeout,
->>   #ifdef CONFIG_BLK_DEBUG_FS
+On 5/30/19 5:48 PM, Ming Lei wrote:
+> On Thu, May 30, 2019 at 10:57 PM Hannes Reinecke <hare@suse.de> wrote:
+>>
+>> On 5/30/19 8:41 AM, Ming Lei wrote:
+>>> On Wed, May 29, 2019 at 03:28:39PM +0200, Hannes Reinecke wrote:
+>>>> Add helper functions to retrieve SCSI commands from the reserved
+>>>> tag pool.
+>>>>
+>>>> Signed-off-by: Hannes Reinecke <hare@suse.com>
+>>>> ---
+>>>>    include/scsi/scsi_tcq.h | 22 ++++++++++++++++++++++
+>>>>    1 file changed, 22 insertions(+)
+>>>>
+>>>> diff --git a/include/scsi/scsi_tcq.h b/include/scsi/scsi_tcq.h
+>>>> index 6053d46e794e..227f3bd4e974 100644
+>>>> --- a/include/scsi/scsi_tcq.h
+>>>> +++ b/include/scsi/scsi_tcq.h
+>>>> @@ -39,5 +39,27 @@ static inline struct scsi_cmnd *scsi_host_find_tag(struct Scsi_Host *shost,
+>>>>       return blk_mq_rq_to_pdu(req);
+>>>>    }
+>>>>
+>>>> +static inline struct scsi_cmnd *scsi_get_reserved_cmd(struct scsi_device *sdev)
+>>>> +{
+>>>> +    struct request *rq;
+>>>> +    struct scsi_cmnd *scmd;
+>>>> +
+>>>> +    rq = blk_mq_alloc_request(sdev->request_queue,
+>>>> +                              REQ_OP_SCSI_OUT | REQ_NOWAIT,
+>>>> +                              BLK_MQ_REQ_RESERVED);
+>>>> +    if (IS_ERR(rq))
+>>>> +            return NULL;
+>>>> +    scmd = blk_mq_rq_to_pdu(rq);
+>>>> +    scmd->request = rq;
+>>>> +    return scmd;
+>>>> +}
+>>>
+>>> Now all these internal commands won't share tags with IO requests,
+>>> however, your patch switches to reserve slots for internal
+>>> commands.
+>>>
+>> Yes.
+>>
+>>> This way may have performance effect on IO workloads given the
+>>> reserved tags can't be used by IO at all.
+>>>
+>> Not really. Basically all drivers which have to use tags to send
+>> internal commands already set some tags aside to handle internal
+>> commands. So all this patchset does is to formalize this behaviour by
+>> using private tags.
+>> Some drivers (like fnic or snic) does _not_ do this currently; for those
+>> I've set one command aside to handle command abort etc.
 > 
-> Hi Paolo,
+>  From hardware view, you might be right, however, the implementation
+> isn't correct:
 > 
-> Have you considered to modify the block layer such that a single
-> scsi_mq_ops structure can be used for all SCSI LLD types?
+> set->queue_depth means number of the total tags, set->reserved_tags is just
+> part of the total tags, see blk_mq_init_bitmap_tags().
+> 
+> So any driver sets .reserved_tags > 0, tags available for IO is reduced by
+> same amount, isn't it?  Cause .can_queue isn't increased.
+> 
+Hmm. I was under the impression that the number of total tags is 
+set->queue_depth + set-?reserved_tags.
+But reading through blk-mq-tag.c it seems you are right.
+Okay, will be updating the patchset.
 
-Yes, but I don't think it's possible to do it in a nice way.
-Any adjustment we make to the block layer to fit the SCSI subsystem's
-desires would make all other block drivers uglier, so I chose to confine
-the ugliness here.
+Cheers,
 
-The root issue is that the SCSI subsystem is unique in how it sits on
-top of the block layer; this is the famous "adapter" (or "midlayer",
-though that is confusing when talking about SCSI) design that Linux
-usually tries to avoid.
-
-Paolo
+Hannes
