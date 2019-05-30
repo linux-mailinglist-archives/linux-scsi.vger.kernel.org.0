@@ -2,37 +2,34 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8002FE5F
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 16:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483D02FEAA
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 May 2019 16:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726065AbfE3Or4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 10:47:56 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47838 "EHLO mx1.suse.de"
+        id S1727532AbfE3O4B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 10:56:01 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49136 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725897AbfE3Or4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 May 2019 10:47:56 -0400
+        id S1726512AbfE3O4A (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 May 2019 10:56:00 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 30A53AFB2;
-        Thu, 30 May 2019 14:47:54 +0000 (UTC)
-Subject: Re: [PATCH 11/24] scsi: add scsi_host_get_reserved_cmd()
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
+        by mx1.suse.de (Postfix) with ESMTP id 7DDE5AEDB;
+        Thu, 30 May 2019 14:55:59 +0000 (UTC)
+Subject: Re: [PATCH 02/24] scsi: add scsi_{get,put}_reserved_cmd()
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
 References: <20190529132901.27645-1-hare@suse.de>
- <20190529132901.27645-12-hare@suse.de>
- <25a5a8f5-324b-6b7c-71eb-6cb9f9a60ba8@acm.org>
- <0af75234-7470-acb8-c7ac-10ebaa1e3321@suse.de>
- <0dcf29df-c4c9-0d1c-cd88-972888cd644d@acm.org>
+ <20190529132901.27645-3-hare@suse.de> <20190530064101.GA22773@ming.t460p>
 From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <381a9e4a-7cee-86d3-6225-5bbab72aae2e@suse.de>
-Date:   Thu, 30 May 2019 16:47:52 +0200
+Message-ID: <0e8c345e-1fa4-5420-2dc1-26f449b027ca@suse.de>
+Date:   Thu, 30 May 2019 16:55:56 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <0dcf29df-c4c9-0d1c-cd88-972888cd644d@acm.org>
+In-Reply-To: <20190530064101.GA22773@ming.t460p>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -41,39 +38,62 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/29/19 9:36 PM, Bart Van Assche wrote:
-> On 5/29/19 10:38 AM, Hannes Reinecke wrote:
->> On 5/29/19 5:19 PM, Bart Van Assche wrote:
->>> On 5/29/19 6:28 AM, Hannes Reinecke wrote:
->>>> +    rq = blk_mq_alloc_request(shost->reserved_cmd_q,
->>>> +                  REQ_OP_DRV_OUT | REQ_NOWAIT,
->>>> +                  BLK_MQ_REQ_RESERVED);
->>>
->>> Is your purpose to avoid that blk_mq_alloc_request() waits? If so, 
->>> why do you want to avoid that?
->>>
->> Typically these commands are intended for internal purposes, so there 
->> should always be enough commands free to allow direct allocation.
->> If not we're in an error condition, and we need to return so as not to 
->> lock up the driver (as it might rely on this command to make forward 
->> progress).
+On 5/30/19 8:41 AM, Ming Lei wrote:
+> On Wed, May 29, 2019 at 03:28:39PM +0200, Hannes Reinecke wrote:
+>> Add helper functions to retrieve SCSI commands from the reserved
+>> tag pool.
+>>
+>> Signed-off-by: Hannes Reinecke <hare@suse.com>
+>> ---
+>>   include/scsi/scsi_tcq.h | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/include/scsi/scsi_tcq.h b/include/scsi/scsi_tcq.h
+>> index 6053d46e794e..227f3bd4e974 100644
+>> --- a/include/scsi/scsi_tcq.h
+>> +++ b/include/scsi/scsi_tcq.h
+>> @@ -39,5 +39,27 @@ static inline struct scsi_cmnd *scsi_host_find_tag(struct Scsi_Host *shost,
+>>   	return blk_mq_rq_to_pdu(req);
+>>   }
+>>   
+>> +static inline struct scsi_cmnd *scsi_get_reserved_cmd(struct scsi_device *sdev)
+>> +{
+>> +	struct request *rq;
+>> +	struct scsi_cmnd *scmd;
+>> +
+>> +	rq = blk_mq_alloc_request(sdev->request_queue,
+>> +				  REQ_OP_SCSI_OUT | REQ_NOWAIT,
+>> +				  BLK_MQ_REQ_RESERVED);
+>> +	if (IS_ERR(rq))
+>> +		return NULL;
+>> +	scmd = blk_mq_rq_to_pdu(rq);
+>> +	scmd->request = rq;
+>> +	return scmd;
+>> +}
 > 
-> That sounds like a risky strategy to me. blk_mq_alloc_request() can 
-> block for a number of reasons, e.g. because a request queue due to e.g. 
-> CPU hotplugging. I don't think that you want 
-> scsi_host_get_reserved_cmd() or scsi_get_reserved_cmd() to fail if a 
-> request queue is frozen.
+> Now all these internal commands won't share tags with IO requests,
+> however, your patch switches to reserve slots for internal
+> commands.
 > 
-Au contraire.
-These commands are intended for driver internals (like sending TMFs 
-etc). Drivers can handle a failure here pretty well, as then the driver 
-will just escalate things internally. A stall, OTOH, would lock up the 
-entire driver.
-Think of Task Abort TMF: it's okay (and actually expected) for the TMF 
-to fail; the driver will just escalate things internally.
-It is, however, _not_ okay to stall for that command to become available 
-(eg if all tags are used up, and we now have to start aborting 
-commands), as this will stall or even live-lock the entire driver.
+Yes.
+
+> This way may have performance effect on IO workloads given the
+> reserved tags can't be used by IO at all.
+> 
+Not really. Basically all drivers which have to use tags to send 
+internal commands already set some tags aside to handle internal 
+commands. So all this patchset does is to formalize this behaviour by 
+using private tags.
+Some drivers (like fnic or snic) does _not_ do this currently; for those 
+I've set one command aside to handle command abort etc.
+
+> Just wondering why not use an new tagset for internal commands?
+> 
+Because it doesn't help.
+All of these drivers have a common tag pool internally, which every 
+single command is required to use. So using a new tagset doesn't help 
+here; you just would need to split the (hardware) tag pool with no real 
+gain.
 
 Cheers,
 
