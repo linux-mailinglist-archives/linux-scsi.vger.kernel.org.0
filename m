@@ -2,75 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E5831175
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 17:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9A7314F8
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 20:53:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726652AbfEaPjH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 May 2019 11:39:07 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:32982 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfEaPjH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 May 2019 11:39:07 -0400
-Received: by mail-pf1-f193.google.com with SMTP id x10so1320727pfi.0;
-        Fri, 31 May 2019 08:39:06 -0700 (PDT)
+        id S1727053AbfEaSxW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 May 2019 14:53:22 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35937 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726640AbfEaSxW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 May 2019 14:53:22 -0400
+Received: by mail-ed1-f68.google.com with SMTP id a8so15992193edx.3;
+        Fri, 31 May 2019 11:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=piCJ6jEF6MBc4EJPMFsudzP7NRZDnr1GSlVWfPmBoUQ=;
+        b=pGTETKfe1tTLLxY/NozLw5pRvA556SpSsWvFQ/zFFBI68rKKDwsQl2SCdYv+30I17T
+         4d1GZKf5SUaDUAi+D48E3fBGZjv5XACgWmfCtfq3iZF50PJoGmkaxwxqy6YTeOy4wmLw
+         roa21TEQ12TNacClYrWZtAS+15Qi5OYX+pPK8yMm6XDZCo68CfbQCrs49GVjQ8O9ufdX
+         EPFJbArhE81aIUqwAuj0ZyOBWgO3ClwISo7P77bGK3R+blXcZuxdIWp//mPioP7SQ8rP
+         0qKOpTzJnIQZPrtZOyW9haCplftEH1/a7vRbz9Lmad3fOP8PFP4zBgF19XpG8tVxF3IH
+         kzAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=5VnAUUPUalBhUQBrM3Ijw7i3z8NfWgtlPpnzszZ306M=;
-        b=SuQBf9O/Kbum1hQLYQk91YqZ5ZZWCADQfJWE1C2grrRSLX4Frs7Y7qOWp8Fxq5rImz
-         dRHExapKxircHMevHFwCFU5kO95Qj9IZHjVUaqTmJwD96Y0xgeTEo7icK6dtr/KJA8fX
-         /7WWJK9N3e7+MPd6rHidRBLut28Vj/HxlSn6kVvSnVKU9NU2SjWNNy0P32G51mpLj2g7
-         zqDW4wcpWHypdtwtQMpkV77TSbs8ULUVSHxhr3o/mvMoaA0PKTeVfrpa11RDPV+WHfWX
-         LlS/XRtyRry2rmH/rtsWSlXsgn04NjhMtDxG1BHTeAMjCmXNQykvH8qQeY6fH2V304jg
-         5vUQ==
-X-Gm-Message-State: APjAAAXOKQg+DM3KYRwgtWRJlCILzlwuwqEL205RjtApZavrJplfnz1r
-        9zdyuANBHXaFIQTNpijvapA=
-X-Google-Smtp-Source: APXvYqwXbYkYip+L0uYbgpELTGTTBrVT3I1WRN5Q6UdyuSZUEeaQr9+4n2t0JgOtZ7bHebh9+LYQ4w==
-X-Received: by 2002:a63:480f:: with SMTP id v15mr9908807pga.373.1559317146401;
-        Fri, 31 May 2019 08:39:06 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id 2sm1919710pfo.41.2019.05.31.08.39.05
+        bh=piCJ6jEF6MBc4EJPMFsudzP7NRZDnr1GSlVWfPmBoUQ=;
+        b=oNwO0cwP/sDdjTRB5i1I1aJNDniVWatc13zs3BF4hfY2ZTwUekY5/7RVd2KDm22J4I
+         C8C9/QKoAsdiplYOii09mDqMrOU4isxbAHZ7/izCFXjrAgbA/4FpJQecJWtQZZKmahW1
+         /nDlfPyHe7ahbTmuzCrGTDEnbU3Gx4m6/iFt3pXmI3JP1x9dRLBo1v4rKg1uYu59q/ee
+         PfIhWk3fZspqfbqSe0pXBGXmtrPya2AVjKc0PH0ZSAoy2bY+Aa7QOF3H7G4v7xvXMBdU
+         NHmJsha+f+1+Nlb3WKBrleRTE/c/u8XlLl+iIBClZVlem0YlJI/s3tNzlvgptInQoP8M
+         uqHA==
+X-Gm-Message-State: APjAAAUnP2p6r6hCEGoh4QTcFLOxq+cNeU8/dDzpHXZyMiYfkZv+8oc6
+        6IOrgq1wneHtpXwpuU++2sY=
+X-Google-Smtp-Source: APXvYqx535alRqStLg3CPU1+Fg/qXZIQbrvAUQDh4QWyvu8dpjY3mMQzRz94s9OTk3JQBudJj9leNQ==
+X-Received: by 2002:a05:6402:1819:: with SMTP id g25mr3576488edy.56.1559328799792;
+        Fri, 31 May 2019 11:53:19 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:4f9:2b:2b15::2])
+        by smtp.gmail.com with ESMTPSA id j3sm1789080edh.82.2019.05.31.11.53.18
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 31 May 2019 08:39:05 -0700 (PDT)
-Subject: Re: [PATCH 2/9] block: null_blk: introduce module parameter of
- 'g_host_tags'
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Hannes Reinecke <hare@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20190531022801.10003-1-ming.lei@redhat.com>
- <20190531022801.10003-3-ming.lei@redhat.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <2f592878-4381-b6bb-2023-200a7df7093c@acm.org>
-Date:   Fri, 31 May 2019 08:39:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Fri, 31 May 2019 11:53:19 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Tyrel Datwyler <tyreld@linux.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] scsi: ibmvscsi: Don't use rc uninitialized in ibmvscsi_do_work
+Date:   Fri, 31 May 2019 11:53:06 -0700
+Message-Id: <20190531185306.41290-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.22.0.rc2
 MIME-Version: 1.0
-In-Reply-To: <20190531022801.10003-3-ming.lei@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/30/19 7:27 PM, Ming Lei wrote:
-> +static int g_host_tags = 0;
+clang warns:
 
-Static variables should not be explicitly initialized to zero.
+drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
+uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+        case IBMVSCSI_HOST_ACTION_NONE:
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/ibmvscsi/ibmvscsi.c:2151:6: note: uninitialized use occurs
+here
+        if (rc) {
+            ^~
 
-> +module_param_named(host_tags, g_host_tags, int, S_IRUGO);
-> +MODULE_PARM_DESC(host_tags, "All submission queues share one tags");
-                                                             ^^^^^^^^
-Did you perhaps mean "one tagset"?
+Initialize rc to zero so that the atomic_set and dev_err statement don't
+trigger for the cases that just break.
 
-Bart.
+Fixes: 035a3c4046b5 ("scsi: ibmvscsi: redo driver work thread to use enum action states")
+Link: https://github.com/ClangBuiltLinux/linux/issues/502
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+ drivers/scsi/ibmvscsi/ibmvscsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+index 727c31dc11a0..6714d8043e62 100644
+--- a/drivers/scsi/ibmvscsi/ibmvscsi.c
++++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+@@ -2118,7 +2118,7 @@ static unsigned long ibmvscsi_get_desired_dma(struct vio_dev *vdev)
+ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+ {
+ 	unsigned long flags;
+-	int rc;
++	int rc = 0;
+ 	char *action = "reset";
+ 
+ 	spin_lock_irqsave(hostdata->host->host_lock, flags);
+-- 
+2.22.0.rc2
+
