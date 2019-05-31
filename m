@@ -2,99 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DE730AAA
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 10:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DC930B01
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 11:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726693AbfEaIwd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 May 2019 04:52:33 -0400
-Received: from mail-ed1-f44.google.com ([209.85.208.44]:43755 "EHLO
-        mail-ed1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbfEaIwd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 May 2019 04:52:33 -0400
-Received: by mail-ed1-f44.google.com with SMTP id w33so13407842edb.10
-        for <linux-scsi@vger.kernel.org>; Fri, 31 May 2019 01:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmd.nu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=woBzKbNns4vsAtLqUGxB28zM9TLa0UZboHvo2BIrQE8=;
-        b=Jce5D+deQf6jxKOL0kYBWKPMASmiyWfbK0CkmWhfdr74nZaVBFwlGzzLFmZ9qoR49a
-         ZmQTAB2sbFJUgVWnUjcaiA07Ji43SFpp2ljMY1hCFsTGr0AyJvfo7ANFX951EtDT+WTC
-         f+fc39ujJHE5lIpN8BUOdjglYWGiSdvztE5Yc=
+        id S1727130AbfEaJDU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 May 2019 05:03:20 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:36969 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726853AbfEaJDT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 May 2019 05:03:19 -0400
+Received: by mail-wr1-f65.google.com with SMTP id h1so5975086wro.4
+        for <linux-scsi@vger.kernel.org>; Fri, 31 May 2019 02:03:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=woBzKbNns4vsAtLqUGxB28zM9TLa0UZboHvo2BIrQE8=;
-        b=AXMsJ5cmFS9UZJ+7F6dC7z4XVWGU2sYjxPLD3Wo8C1eqoJIB4vrqpsgJeWVxd0+bmE
-         kdiAvLgXCiiMoOdnE+2dWkZYhgzV1JyCDCza6vyY0luJIAHRJlUw5Z1Q+y1QwnnQOB1g
-         92YRuciNZZiKkuY83stEaHeHZXwoxqgq7bM+ol/Bj5Kxp2jgtsUTYw0HwRJvV4LFu6d+
-         vUWJuzJib+W6DvSu0v0Cid4LcvvmlzlIggYAi11nN1nBoNcz7MwvYYqXMIPx4+dIcXl4
-         Ro1WVofKLA3mbwFgtlhim33H5US8VmVuO0r95i36SykKDVSOOpnFl6Iw7NgzkgQBMLgk
-         8Fyw==
-X-Gm-Message-State: APjAAAUDaeE9IiR2pqlofRk9ulDj0cSvZ/qlKRF9bbpf49IVFSKHc9EP
-        JwCFtons9TTHw4JRYi/ay8Q2/2rDiLMcmCKlHK+PVg==
-X-Google-Smtp-Source: APXvYqw6pd4yjfdwQRggompEMocfN8boHx/r12rCFwETnJWYtleJkvd+lh0eWE5bG9zHsQ8X/ScjzEo9GOm21DSkoKY=
-X-Received: by 2002:a17:906:ecf0:: with SMTP id qt16mr8064275ejb.166.1559292751688;
- Fri, 31 May 2019 01:52:31 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HRebP66JW4IyuOF0hDBqAwbwyYWxhmEAnf33J7IdOA0=;
+        b=sR/obr1wcZIvvwLGMampUxTpA6kgzBi1h0w8Qn6CSQTX8JxqmRJYs/CYNMYSMZgGcA
+         lEx28PyVlFAVV3znjBVnUTBS2rNxyGbYuyj0OoUjbDGpRlgZaW7pPR+JV37ay6SOwHdi
+         4lTCdp2p5T1TtlmPnXyUq/tQrIBnVsvyGdxqvWCl47gPZu7ZXMCwZyWpo5zpTnZwxTVp
+         R8UrnzCXVx9h7pok7idXRagyJ1Hb2sKnc7bQeyCTClnfhxv029fPsBvnRKojqpiiwfme
+         Nn8+E/TVic3cXuXV7yoqEEvFaX7kGfJ0Ht2wo3QfC/uTZteH8A4Sxa0dv27OLR/K0tUB
+         j2lg==
+X-Gm-Message-State: APjAAAU8nsszdBfBKNhMJGP2sbjxEtTXByoVbPJSMGKJmoz3Q2ilX5i/
+        YQeZhvkmg+4ebiU0mK6ujbDLrW92Hbs=
+X-Google-Smtp-Source: APXvYqzCgpfqPthhHvp9vkwXGYSCWJ2vPHCJQrPIU+1WZAFnucXSFqdMv5/v5gsJZPaCNRs1GMAPqg==
+X-Received: by 2002:adf:f909:: with SMTP id b9mr5874103wrr.119.1559293398234;
+        Fri, 31 May 2019 02:03:18 -0700 (PDT)
+Received: from [192.168.10.150] ([93.56.166.5])
+        by smtp.gmail.com with ESMTPSA id t6sm10141754wmt.34.2019.05.31.02.03.17
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 31 May 2019 02:03:17 -0700 (PDT)
+Subject: Re: [PATCH 2/2] virtio_scsi: implement request batching
+To:     Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, stefanha@redhat.com
+References: <20190530112811.3066-1-pbonzini@redhat.com>
+ <20190530112811.3066-3-pbonzini@redhat.com>
+ <79490df1-0145-5b40-027a-7e8fb96854d4@acm.org>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <ff7aaa01-022b-f55a-4bb2-c293cfd86bdd@redhat.com>
+Date:   Fri, 31 May 2019 11:03:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <CADiuDASOCJbnwLs-LEp0aCX+T4dMvFfKQv_zsypHW-iSF8wW=Q@mail.gmail.com>
- <5c5609d8-e4b4-3561-ece9-93746fd46206@acm.org> <69308786-81d8-a9df-2d7b-df37c3f93026@suse.de>
- <CADiuDATRN_85Tu3uw1WBtY=m8KrqKV5zpYrsggYdAOH23dwU=Q@mail.gmail.com> <9612602b-29c0-04d7-b76e-5593d0936eba@suse.de>
-In-Reply-To: <9612602b-29c0-04d7-b76e-5593d0936eba@suse.de>
-From:   Christian Svensson <christian@cmd.nu>
-Date:   Fri, 31 May 2019 10:52:17 +0200
-Message-ID: <CADiuDARPit+kKtQe-UGktUuxEXRMvoq7PGVPKo9DrLRkSTwNAA@mail.gmail.com>
-Subject: Re: [Open-FCoE] FICON target support
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org,
-        fcoe-devel@open-fcoe.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <79490df1-0145-5b40-027a-7e8fb96854d4@acm.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+On 30/05/19 19:28, Bart Van Assche wrote:
+> On 5/30/19 4:28 AM, Paolo Bonzini wrote:
+>> @@ -531,7 +547,8 @@ static int virtscsi_queuecommand(struct Scsi_Host
+>> *shost,
+>>           req_size = sizeof(cmd->req.cmd);
+>>       }
+>>   -    ret = virtscsi_kick_cmd(req_vq, cmd, req_size,
+>> sizeof(cmd->resp.cmd));
+>> +    kick = (sc->flags & SCMD_LAST) != 0;
+>> +    ret = virtscsi_add_cmd(req_vq, cmd, req_size,
+>> sizeof(cmd->resp.cmd), kick);
+> 
+> Have you considered to have the SCSI core call commit_rqs() if bd->last
+> is true? I think that would avoid that we need to introduce the
+> SCMD_LAST flag and that would also avoid that every SCSI LLD that
+> supports a commit_rqs callback has to introduce code to test the
+> SCMD_LAST flag.
 
-On Fri, May 31, 2019 at 10:08 AM Hannes Reinecke <hare@suse.de> wrote:
-> There are easier ways for this ... I'd start with virtio-ccw and
-> implement a virtual PUNCHER there ...
+That is slightly worse for performance, as it unlocks and re-locks the
+spinlock.
 
-The larger project scope is making FICON accessories more available
-for people as crazy as I, that is wanting to run a mainframe as a
-hobbyist, but maybe not want to buy a metric ton worth of disks or
-tape robots (a 700 kg mainframe is hard enough by itself to house).
+Paolo
 
-I will take a look, but from the name of it it sounds like it will not
-help me much getting FICON targets supported.
-Maybe it will help if I ever want FICON initiator.
-
-> Still, an uphill struggle; IBM is notorious for not giving out details
-> about the internals, and simulating a puncher is one of these things.
-> (And slightly pointless, but who am I to judge ...)
-
-It's a low-speed peripheral that has been emulated successfully in
-Hercules, and there
-are some petty detailed documents around the CCWs for 3505 around. I
-figured it would
-be a good start getting a FICON user-space thing implemented, before I
-try to tackle e.g. ECKDs or tapes.
-
-> However, I do wonder how you came by an FC analyser ... any chance of me
-> borrowing it occasionally?
-
-If you search for Cisco DS-PAA-2 you will find an old accessory used to debug
-Cisco SAN switches for FC. It only supports 1 and 2 Gigabit, but the
-nice thing is
-that it encapsulates the packets as Ethernet frames so you can use
-e.g. Wireshark
-to debug what is going on. They cost around $50 on eBay. I have an
-extra that I probably
-will not use if you want it. It arrived yesterday so I have not had
-time to verify the function
-yet but it should be dead simple that it should work for anything
-using FC-1 coding I guess.
-
-Regards,
-Chris
