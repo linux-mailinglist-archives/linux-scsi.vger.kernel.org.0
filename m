@@ -2,26 +2,33 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8B630843
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 08:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD51B30848
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 08:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbfEaGGc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 May 2019 02:06:32 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56788 "EHLO mx1.suse.de"
+        id S1726634AbfEaGHx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 May 2019 02:07:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56844 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725955AbfEaGGc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 31 May 2019 02:06:32 -0400
+        id S1726275AbfEaGHx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 31 May 2019 02:07:53 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5E226AF51;
-        Fri, 31 May 2019 06:06:30 +0000 (UTC)
-Subject: Re: [Open-FCoE] FICON target support
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Christian Svensson <christian@cmd.nu>,
-        linux-scsi@vger.kernel.org
-Cc:     fcoe-devel@open-fcoe.org
-References: <CADiuDASOCJbnwLs-LEp0aCX+T4dMvFfKQv_zsypHW-iSF8wW=Q@mail.gmail.com>
- <5c5609d8-e4b4-3561-ece9-93746fd46206@acm.org>
+        by mx1.suse.de (Postfix) with ESMTP id E6A04AF51;
+        Fri, 31 May 2019 06:07:50 +0000 (UTC)
+Subject: Re: [PATCH 1/9] blk-mq: allow hw queues to share hostwide tags
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        John Garry <john.garry@huawei.com>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20190531022801.10003-1-ming.lei@redhat.com>
+ <20190531022801.10003-2-ming.lei@redhat.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -67,12 +74,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <69308786-81d8-a9df-2d7b-df37c3f93026@suse.de>
-Date:   Fri, 31 May 2019 08:06:29 +0200
+Message-ID: <27661b1e-4046-9aae-fa2c-230cdf59fa94@suse.de>
+Date:   Fri, 31 May 2019 08:07:49 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <5c5609d8-e4b4-3561-ece9-93746fd46206@acm.org>
+In-Reply-To: <20190531022801.10003-2-ming.lei@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -81,62 +88,44 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/31/19 1:10 AM, Bart Van Assche wrote:
-> On 5/26/19 8:51 AM, Christian Svensson wrote:
->> I am doing some preliminary scouting of how one could add support for
->> FICON (FC-SB-3 specifically). I am mostly interested in Linux being
->> able to act as a FICON target for now.
->>
->> The TL;DR summary for FICON is that it uses Fibre Channel just like
->> FCP/SCSI
->> up to but not including the FC-4 (FCP) layer. At that point it uses
->> its own SBCCS layer.
->>
->> FICON is used by IBM mainframes to interface peripherals like tape, disk,
->> printers, card punchers/readers, etc. It is more like a mainframe
->> USB/Firewire than SCSI in that regard.
->>
->> I would prefer to implement my peripherals in user-space, I don't see any
->> convincing case for having e.g. a virtual tape drive running in kernel
->> space.
->> The I/O heavy disks would probably benefit from being in kernel space,
->> but I am OK limiting the initial scope.
->>
->> I am 100% new to the SCSI and Fibre Channel subsystem in Linux, and I
->> do not even know if the current HBAs support sending frames without FCP
->> but after scouting the code it does seem that it might work out - FCP
->> seems decoupled enough.
->>
->> If you want to learn more the standard document Wireshark has an
->> implementation of the protocol (packet-fcsb3.c/h). If you want all the
->> details
->> you will sadly have to pay $60 and buy it from INCITS at
->> https://webstore.ansi.org/Standards/INCITS/INCITS3742003S2013.
->> Fwiw, FICON uses FC type 0x1B and 0x1C.
->>
->> Any thoughts or ideas where you would start? Do you see any future for
->> this addition to the kernel?
+On 5/31/19 4:27 AM, Ming Lei wrote:
+> Some SCSI HBAs(such as HPSA, megaraid, mpt3sas, hisi_sas_v3 ..) support
+> multiple reply queues with single hostwide tags, and the reply queue
+> is used for delievery & complete request, and one MSI-X vector is
+> assigned to each reply queue.
 > 
-> Hi Chris,
+> Now drivers have switched to use pci_alloc_irq_vectors(PCI_IRQ_AFFINITY)
+> for automatic affinity assignment. Given there is only single blk-mq hw
+> queue, these drivers have to setup private reply queue mapping for
+> figuring out which reply queue is selected for delivery request, and
+> the queue mapping is based on managed IRQ affinity, and it is generic,
+> should have been done inside blk-mq.
 > 
-> I'm not sure what the best approach is for the initiator functionality.
-> For the target functionality you may want to have a look at tcmu
-> (Documentation/target/tcmu-design.txt and
-> drivers/target/target_core_user.c). An existing FC target driver is
-> available in drivers/scsi/qla2xxx/tcm_qla2xxx.c. A diagram that shows
-> the different functional blocks in TCM is available at
-> https://en.wikipedia.org/wiki/LIO_(SCSI_target) (LIO is another name for
-> TCM).
+> Based on the following Hannes's patch, introduce BLK_MQ_F_HOST_TAGS for
+> converting reply queue into blk-mq hw queue.
 > 
-Hmm. I wonder: do you _know_ what you are asking?
-Have you ever worked with a mainframe?
-Thing is, from an initiator side you don't even _see_ the FICON frames;
-everything is abstracted away to some higher level.
-IE you have no idea how the initiator formats frames and what it expects
-in return. Which makes debugging pretty much impossible unless you're
-having access to a fibrechannel analyser hooked up to a mainframe.
-
-Hmm?
+> 	https://marc.info/?l=linux-block&m=149132580511346&w=2
+> 
+> Once driver sets BLK_MQ_F_HOST_TAGS, the hostwide tags & request pool is
+> shared among all blk-mq hw queues.
+> 
+> The following patches will map driver's reply queue into blk-mq hw queue
+> by applying BLK_MQ_F_HOST_TAGS.
+> 
+> Compared with the current implementation by single hw queue, performance
+> shouldn't be affected by this patch in theory.
+> 
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>  block/blk-mq-debugfs.c |  1 +
+>  block/blk-mq-sched.c   |  8 ++++++++
+>  block/blk-mq-tag.c     |  6 ++++++
+>  block/blk-mq.c         | 14 ++++++++++++++
+>  block/elevator.c       |  5 +++--
+>  include/linux/blk-mq.h |  1 +
+>  6 files changed, 33 insertions(+), 2 deletions(-)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.com>
 
 Cheers,
 
