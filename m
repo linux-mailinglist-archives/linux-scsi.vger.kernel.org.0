@@ -2,29 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C7B30C75
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 12:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 413C230C86
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 12:27:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726403AbfEaKRv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 May 2019 06:17:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41862 "EHLO mx1.suse.de"
+        id S1727034AbfEaK1B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 May 2019 06:27:01 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43182 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726002AbfEaKRv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 31 May 2019 06:17:51 -0400
+        id S1726240AbfEaK1A (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 31 May 2019 06:27:00 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 9A46AAD3E;
-        Fri, 31 May 2019 10:17:49 +0000 (UTC)
-Subject: Re: [Open-FCoE] FICON target support
-To:     Christian Svensson <christian@cmd.nu>
-Cc:     Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org,
-        fcoe-devel@open-fcoe.org
-References: <CADiuDASOCJbnwLs-LEp0aCX+T4dMvFfKQv_zsypHW-iSF8wW=Q@mail.gmail.com>
- <5c5609d8-e4b4-3561-ece9-93746fd46206@acm.org>
- <69308786-81d8-a9df-2d7b-df37c3f93026@suse.de>
- <CADiuDATRN_85Tu3uw1WBtY=m8KrqKV5zpYrsggYdAOH23dwU=Q@mail.gmail.com>
- <9612602b-29c0-04d7-b76e-5593d0936eba@suse.de>
- <CADiuDARPit+kKtQe-UGktUuxEXRMvoq7PGVPKo9DrLRkSTwNAA@mail.gmail.com>
+        by mx1.suse.de (Postfix) with ESMTP id A4F06AF18;
+        Fri, 31 May 2019 10:26:57 +0000 (UTC)
+Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Ming Lei <tom.leiming@gmail.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.com>
+References: <20190531074158.76923-1-hare@suse.de>
+ <20190531082116.GA12106@ming.t460p>
+ <e81ca95e-95af-1078-c523-701120dd4ca7@suse.de>
+ <20190531084600.GB12106@ming.t460p>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -70,12 +72,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <17f0639d-bd44-c193-af29-df539be722fe@suse.de>
-Date:   Fri, 31 May 2019 12:17:47 +0200
+Message-ID: <f7e184d4-3d90-2c36-84b8-702105dccafb@suse.de>
+Date:   Fri, 31 May 2019 12:26:56 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <CADiuDARPit+kKtQe-UGktUuxEXRMvoq7PGVPKo9DrLRkSTwNAA@mail.gmail.com>
+In-Reply-To: <20190531084600.GB12106@ming.t460p>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -84,49 +86,129 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/31/19 10:52 AM, Christian Svensson wrote:
-> Hi,
+On 5/31/19 10:46 AM, Ming Lei wrote:
+> On Fri, May 31, 2019 at 10:32:04AM +0200, Hannes Reinecke wrote:
+>> On 5/31/19 10:21 AM, Ming Lei wrote:
+>>> On Fri, May 31, 2019 at 09:41:58AM +0200, Hannes Reinecke wrote:
+>>>> (Resending due to missing mailing list submission)
+>>>>
+>>>> Update v3 to support SCSI multiqueue.
+>>>>
+>>>> Signed-off-by: Hannes Reinecke <hare@suse.com>
+>>>> ---
+>>>>  drivers/scsi/hisi_sas/hisi_sas.h       |  1 -
+>>>>  drivers/scsi/hisi_sas/hisi_sas_main.c  | 45 +++++++++++++++++-----------------
+>>>>  drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 44 +++++++++++----------------------
+>>>>  3 files changed, 36 insertions(+), 54 deletions(-)
+>>>>
+>>>> diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
+>>>> index fc87994b5d73..4b6f32f60689 100644
+>>>> --- a/drivers/scsi/hisi_sas/hisi_sas.h
+>>>> +++ b/drivers/scsi/hisi_sas/hisi_sas.h
+>>>> @@ -378,7 +378,6 @@ struct hisi_hba {
+>>>>  	u32 intr_coal_count;	/* Interrupt count to coalesce */
+>>>>  
+>>>>  	int cq_nvecs;
+>>>> -	unsigned int *reply_map;
+>>>>  
+>>>>  	/* debugfs memories */
+>>>>  	u32 *debugfs_global_reg;
+>>>> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>>>> index 8a7feb8ed8d6..f4237c4754a4 100644
+>>>> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+>>>> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>>>> @@ -200,16 +200,12 @@ static void hisi_sas_slot_index_set(struct hisi_hba *hisi_hba, int slot_idx)
+>>>>  	set_bit(slot_idx, bitmap);
+>>>>  }
+>>>>  
+>>>> -static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
+>>>> -				     struct scsi_cmnd *scsi_cmnd)
+>>>> +static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba)
+>>>>  {
+>>>>  	int index;
+>>>>  	void *bitmap = hisi_hba->slot_index_tags;
+>>>>  	unsigned long flags;
+>>>>  
+>>>> -	if (scsi_cmnd)
+>>>> -		return scsi_cmnd->request->tag;
+>>>> -
+>>>>  	spin_lock_irqsave(&hisi_hba->lock, flags);
+>>>>  	index = find_next_zero_bit(bitmap, hisi_hba->slot_index_count,
+>>>>  				   hisi_hba->last_slot_index + 1);
+>>>
+>>> Then you switch to hisi_sas_slot_index_alloc() for allocating the unique
+>>> tag via spin_lock & find_next_zero_bit(). Do you think this way is more
+>>> efficient than blk-mq's sbitmap?
+>>>
+>> slot_index_alloc() is only used for commands which do _not_ have a tag
+>> (eg internal commands), or for v2 hardware which has weird allocation rules.
 > 
-> On Fri, May 31, 2019 at 10:08 AM Hannes Reinecke <hare@suse.de> wrote:
->> There are easier ways for this ... I'd start with virtio-ccw and
->> implement a virtual PUNCHER there ...
+> But this patch has switched to this allocation unconditionally for all commands:
 > 
-> The larger project scope is making FICON accessories more available
-> for people as crazy as I, that is wanting to run a mainframe as a
-> hobbyist, but maybe not want to buy a metric ton worth of disks or
-> tape robots (a 700 kg mainframe is hard enough by itself to house).
-> 
-> I will take a look, but from the name of it it sounds like it will not
-> help me much getting FICON targets supported.
-> Maybe it will help if I ever want FICON initiator.
-> 
-Right.
+No:
 
->> Still, an uphill struggle; IBM is notorious for not giving out details
->> about the internals, and simulating a puncher is one of these things.
->> (And slightly pointless, but who am I to judge ...)
-> 
-> It's a low-speed peripheral that has been emulated successfully in
-> Hercules, and there are some petty detailed documents around the CCWs
-> for 3505 around. I figured it would
-> be a good start getting a FICON user-space thing implemented, before I
-> try to tackle e.g. ECKDs or tapes.
-> 
-Oh. Sure. You might want to ask on the s390 mailing lists, too; they
-typically have a quite good idea on what's going on.
-The biggest problem, however, will be to get the documentation from the
-HBAs themselves.
-All FC HBAs will present you with some version of cooked frames, and not
-allow you to access the frames themselves. So in the end you'd have to
-see to get hold of the HBA documentation itself, as you need to figure
-out how to pass FICON frames into the HBA.
+@@ -503,21 +513,10 @@ static int hisi_sas_task_prep(struct sas_task *task,
 
-It might be easier when you'd be working with FCoE cards, as there you
-_do_ have access to the full frame, and do whatever you like with thems.
-Sadly you'd need an FCoE bridge then to hook up the mainframe.
+        if (hisi_hba->hw->slot_index_alloc)
+                rc = hisi_hba->hw->slot_index_alloc(hisi_hba, device);
+-       else {
+-               struct scsi_cmnd *scsi_cmnd = NULL;
+-
+-               if (task->uldd_task) {
+-                       struct ata_queued_cmd *qc;
+-
+-                       if (dev_is_sata(device)) {
+-                               qc = task->uldd_task;
+-                               scsi_cmnd = qc->scsicmd;
+-                       } else {
+-                               scsi_cmnd = task->uldd_task;
+-                       }
+-               }
+-               rc  = hisi_sas_slot_index_alloc(hisi_hba, scsi_cmnd);
+-       }
++       else if (blk_tag != (u32)-1)
++               rc = blk_mq_unique_tag_to_tag(blk_tag);
++       else
++               rc  = hisi_sas_slot_index_alloc(hisi_hba);
+        if (rc < 0)
+                goto err_out_dif_dma_unmap;
 
-But as you have gotten hold of an FC analyser, getting an FCoE bridge
-shouldn't be too hard, too :-)
+
+First we check for the 'slot_index_alloc()' callback to handle weird v2
+allocation rules, _then_ we look for a tag, and only if we do _not_ have
+a tag we're using the bitmap.
+And the bitmap is already correctly sized, as otherwise we'd have a
+clash between internal and tagged I/O commands even now.
+
+>> -       if (scsi_cmnd)
+>> -               return scsi_cmnd->request->tag;
+>> -
+> 
+> Otherwise duplicated slot can be used from different blk-mq hw queue.
+> 
+>>
+>>> The worsen thing is that V3's actual max queue depth is (4096 - 96), but
+>>> this patch claims that the device can support (4096 - 96) * 32 command
+>>> slots, finally hisi_sas_slot_index_alloc() is used to respect the actual
+>>> max queue depth(4000).
+>>>
+>> Well, this patch is an RFC to demonstrate my idea. Of course the queue
+>> depth should be identical before and after the conversion.
+> 
+> That is why I call it is hard to partition the hostwide tags to MQ.
+> 
+It's not. The driver already sets aside a portion of tags for internal
+commands (check HISI_SAS_RESERVED_IPTT_CNT), so it is already
+effectively partitioned.
+
+>>
+>>> Big contention is caused on hisi_sas_slot_index_alloc(), meantime huge> memory is wasted for request pool.
+>>>
+>> See above. That allocation is only used if no blk tag is available.
+> 
+> This patch switches the allocation for all commands.
+> 
+See above. No.
 
 Cheers,
 
