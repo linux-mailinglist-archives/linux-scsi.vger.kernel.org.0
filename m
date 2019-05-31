@@ -2,454 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A19430D69
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 13:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E7D30D87
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 13:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbfEaLi2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 May 2019 07:38:28 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:17636 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726158AbfEaLi1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 31 May 2019 07:38:27 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id B126A814EBEEACD0F244;
-        Fri, 31 May 2019 19:38:24 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Fri, 31 May 2019
- 19:38:19 +0800
-Subject: Re: [PATCH 7/9] scsi: hisi_sas_v3: convert private reply queue to
- blk-mq hw queue
-To:     Ming Lei <tom.leiming@gmail.com>, Hannes Reinecke <hare@suse.de>
-References: <20190531022801.10003-1-ming.lei@redhat.com>
- <20190531022801.10003-8-ming.lei@redhat.com>
- <1afb4353-6703-a3f0-ca6c-d0b2bd754a56@suse.de>
- <CACVXFVMG8gkw8E0pmWBJC0tBH9D-WVjY2FnL2gsxDja3ryfbng@mail.gmail.com>
-CC:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <c11faee4-fc38-9636-59b4-bc5c0d94ffbf@huawei.com>
-Date:   Fri, 31 May 2019 12:38:10 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
+        id S1726415AbfEaLvS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 May 2019 07:51:18 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:40193 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726275AbfEaLvS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 May 2019 07:51:18 -0400
+Received: by mail-ed1-f67.google.com with SMTP id r18so13123108edo.7
+        for <linux-scsi@vger.kernel.org>; Fri, 31 May 2019 04:51:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmd.nu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iyUDlW1msJP/y+WHBRv5Y/F3Etkkr40xnDUAAmLBbZM=;
+        b=Io07Tkbz1INSOPmRg84brJZtNQ+uSPx0luWCmyg+OKOzuRkYG9ZTwX3nB1DPdpxkmZ
+         9OB3nqXT7AS7gIFkZzFANcFOwe0PsE0GmenQezdWRBBXKU6162mo2FWgr3/uxRsmKPm2
+         2l4C9PGtGsYCLD94B12W9io/9SwUe1poAyg5A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iyUDlW1msJP/y+WHBRv5Y/F3Etkkr40xnDUAAmLBbZM=;
+        b=Hr/Lhjqomf8V8vFuUUiR2dTFRFba5Qat4qqryKA2D/lfC0aCcGrkpkpHIvUAXgnY+P
+         vZZ1Yfe9P1645tZpBDBkYfO496cadsIf13Pz0IlbVyJmhJQL+9UQl1RpZ4EoC8OAR70+
+         6cKALU7mRQewq8vBmu9rhjihUmTOy+qC2QaUnqaOPIquhNSmWeNvKxsg9ErGTwxLbAyW
+         TB3zGU8l7lLQlTkLZYdpTs4CMAaoNV1ddFXQ/ovm6vC4hLbs5hwx0qOoMBtMK+7gx/62
+         TTZ61nc+y76O+09TW1286vAvIWIMwV23itsyTPm9516s+FkQeRDEIRhZzgqQUkY+oFSY
+         ErSw==
+X-Gm-Message-State: APjAAAVYBqPf7ePMWqOiwhKKX/inW+zto7OPatqbzIqYU0NdErsNrl4m
+        jK/ttzS4F+CVrVKahpBb2eZs2Hh3WeWCeLQN3N820g==
+X-Google-Smtp-Source: APXvYqwJ+XjhTrxDqg2n8Gzqp2JjbmTeZjnINuoat8K5ZbgK/l83YUl/ih7uyUpWyBrLJdWBCUl2y7l02RfLDAPqsv0=
+X-Received: by 2002:a17:906:d185:: with SMTP id c5mr8561779ejz.243.1559303476669;
+ Fri, 31 May 2019 04:51:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CACVXFVMG8gkw8E0pmWBJC0tBH9D-WVjY2FnL2gsxDja3ryfbng@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+References: <CADiuDASOCJbnwLs-LEp0aCX+T4dMvFfKQv_zsypHW-iSF8wW=Q@mail.gmail.com>
+ <5c5609d8-e4b4-3561-ece9-93746fd46206@acm.org> <69308786-81d8-a9df-2d7b-df37c3f93026@suse.de>
+ <CADiuDATRN_85Tu3uw1WBtY=m8KrqKV5zpYrsggYdAOH23dwU=Q@mail.gmail.com>
+ <9612602b-29c0-04d7-b76e-5593d0936eba@suse.de> <CADiuDARPit+kKtQe-UGktUuxEXRMvoq7PGVPKo9DrLRkSTwNAA@mail.gmail.com>
+ <17f0639d-bd44-c193-af29-df539be722fe@suse.de>
+In-Reply-To: <17f0639d-bd44-c193-af29-df539be722fe@suse.de>
+From:   Christian Svensson <christian@cmd.nu>
+Date:   Fri, 31 May 2019 13:51:05 +0200
+Message-ID: <CADiuDASfjq=xyuTEF2VZtb+dV78_VdMRkfFrr4ujs0zPXjv7Ew@mail.gmail.com>
+Subject: Re: [Open-FCoE] FICON target support
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org,
+        fcoe-devel@open-fcoe.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Fri, May 31, 2019 at 12:17 PM Hannes Reinecke <hare@suse.de> wrote:
+> The biggest problem, however, will be to get the documentation from the
+> HBAs themselves.
+> All FC HBAs will present you with some version of cooked frames, and not
+> allow you to access the frames themselves. So in the end you'd have to
+> see to get hold of the HBA documentation itself, as you need to figure
+> out how to pass FICON frames into the HBA.
 
->>> -fallback:
->>> -     for_each_possible_cpu(cpu)
->>> -             hisi_hba->reply_map[cpu] = cpu % hisi_hba->queue_count;
->>> -     /* Don't clean all CQ masks */
->>> -}
->>> -
->>>  static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
->>>  {
->>>       struct device *dev = hisi_hba->dev;
->>> @@ -2383,11 +2359,6 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
->>>
->>>               min_msi = MIN_AFFINE_VECTORS_V3_HW;
->>>
->>> -             hisi_hba->reply_map = devm_kcalloc(dev, nr_cpu_ids,
->>> -                                                sizeof(unsigned int),
->>> -                                                GFP_KERNEL);
->>> -             if (!hisi_hba->reply_map)
->>> -                     return -ENOMEM;
->>>               vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
->>>                                                        min_msi, max_msi,
->>>                                                        PCI_IRQ_MSI |
->>> @@ -2395,7 +2366,6 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
->>>                                                        &desc);
->>>               if (vectors < 0)
->>>                       return -ENOENT;
->>> -             setup_reply_map_v3_hw(hisi_hba, vectors - BASE_VECTORS_V3_HW);
->>>       } else {
->>>               min_msi = max_msi;
->>>               vectors = pci_alloc_irq_vectors(hisi_hba->pci_dev, min_msi,
->>> @@ -2896,6 +2866,18 @@ static void debugfs_snapshot_restore_v3_hw(struct hisi_hba *hisi_hba)
->>>       clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
->>>  }
->>>
->>> +static int hisi_sas_map_queues(struct Scsi_Host *shost)
->>> +{
->>> +     struct hisi_hba *hisi_hba = shost_priv(shost);
->>> +     struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
->>> +
->>> +     if (auto_affine_msi_experimental)
->>> +             return blk_mq_pci_map_queues(qmap, hisi_hba->pci_dev,
->>> +                             BASE_VECTORS_V3_HW);
->>> +     else
->>> +             return blk_mq_map_queues(qmap);
+Ah, I was hoping that it would cook the frames up to but not including
+the FC-4 layer. If you have data or experience to share about that not
+being the case I would love to hear about it. If it is just a hunch
+there is some value of me going down that path to confirm it is the
+case, but if you know for sure I'd prefer to not waste the time and
+maybe go the FCoE route instead.
 
-I don't think that the mapping which blk_mq_map_queues() creates are not 
-want we want. I'm guessing that we still would like a mapping similar to 
-what blk_mq_pci_map_queues() produces, which is an even spread, putting 
-adjacent CPUs on the same queue.
+I also have some old FICON HBA cards I have gotten my hands on from
+virtual tape servers which I know speaks FICON, but getting some
+standard FC HBA to talk an acceptable level of FICON would be the
+absolute best if at all possible. The QLogic HBA *controller* says
+that it supports FC-SB-3 on the datasheet, although the card does
+*not* explicitly say so, but that could be a marketing thing as well I
+am thinking.
 
-For my system with 96 cpus and 16 queues, blk_mq_map_queues() would map 
-queue 0 to cpu 0, 16, 32, 48 ..., queue 1 to cpu 1, 17, 33 and so on.
+> Sadly you'd need an FCoE bridge then to hook up the mainframe.
+> But as you have gotten hold of an FC analyser, getting an FCoE bridge
+> shouldn't be too hard, too :-)
 
->>> +}
->>> +
->>>  static struct scsi_host_template sht_v3_hw = {
->>>       .name                   = DRV_NAME,
->>>       .module                 = THIS_MODULE,
->>
->> As mentioned, we should be using a common function here.
->>
->>> @@ -2906,6 +2888,8 @@ static struct scsi_host_template sht_v3_hw = {
->>>       .scan_start             = hisi_sas_scan_start,
->>>       .change_queue_depth     = sas_change_queue_depth,
->>>       .bios_param             = sas_bios_param,
->>> +     .map_queues             = hisi_sas_map_queues,
->>> +     .host_tagset            = 1,
->>>       .this_id                = -1,
->>>       .sg_tablesize           = HISI_SAS_SGE_PAGE_CNT,
->>>       .sg_prot_tablesize      = HISI_SAS_SGE_PAGE_CNT,
->>> @@ -3092,6 +3076,8 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>>       if (hisi_sas_debugfs_enable)
->>>               hisi_sas_debugfs_init(hisi_hba);
->>>
->>> +     shost->nr_hw_queues = hisi_hba->cq_nvecs;
+Indeed it would not be a big issue to source an FCoE -> FC SAN switch,
+but it would make the whole solution more elaborate that I would
+ideally like. However, it is an interesting model for the first
+version.
 
-There's an ordering issue here, which can be fixed without too much trouble.
-
-Value hisi_hba->cq_nvecs is not set until after this point, in 
-hisi_sas_v3_probe()->hw->hw_init->hisi_sas_v3_init()->interrupt_init_v3_hw() 
-
-
-Please see revised patch, below.
-
-
->>> +
->>>       rc = scsi_add_host(shost, dev);
->>>       if (rc)
->>>               goto err_out_ha;
->>>
->> Well, I'd rather see the v3 hardware converted to 'real' blk-mq first;
->> the hardware itself is pretty much multiqueue already, so we should be
->> better off converting it to blk-mq.
->
->>From John Garry's input, the tags is still hostwide, then not sure how to
-> partition the hostwide tags into each hw queue's tags. That can be quite
-> hard to do if the queue depth isn't big enough.
-
-JFYI, There is no limition on which command tags can be used on which queue.
-
-And, as I mentioned in response to "hisi_sas_v3: multiqueue support", 
-the hw queue depth is configurable, and we make it same value as max 
-commands tags, that being 4096.
-
->
-> Thanks,
-> Ming Lei
->
-> .
->
-
-Thanks,
-John
-
- From b3c4ded715e1a7282f59fbd216bd2f0e852986aa Mon Sep 17 00:00:00 2001
-From: Ming Lei <ming.lei@redhat.com>
-Date: Fri, 31 May 2019 10:27:59 +0800
-Subject: [PATCH] scsi: hisi_sas_v3: convert private reply queue to blk-mq hw
-  queue
-
-SCSI's reply qeueue is very similar with blk-mq's hw queue, both
-assigned by IRQ vector, so map te private reply queue into blk-mq's hw
-queue via .host_tagset.
-
-Then the private reply mapping can be removed.
-
-Another benefit is that the request/irq lost issue may be solved in
-generic approach because managed IRQ may be shutdown during CPU
-hotplug.
-
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h 
-b/drivers/scsi/hisi_sas/hisi_sas.h
-index fc87994b5d73..3d48848dbde7 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -26,6 +26,7 @@
-  #include <linux/platform_device.h>
-  #include <linux/property.h>
-  #include <linux/regmap.h>
-+#include <linux/blk-mq-pci.h>
-  #include <scsi/sas_ata.h>
-  #include <scsi/libsas.h>
-
-@@ -378,7 +379,6 @@ struct hisi_hba {
-  	u32 intr_coal_count;	/* Interrupt count to coalesce */
-
-  	int cq_nvecs;
--	unsigned int *reply_map;
-
-  	/* debugfs memories */
-  	u32 *debugfs_global_reg;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c 
-b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 8a7feb8ed8d6..a1c1f30b9fdb 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -441,6 +441,19 @@ static int hisi_sas_dif_dma_map(struct hisi_hba 
-*hisi_hba,
-  	return rc;
-  }
-
-+static struct scsi_cmnd *sas_task_to_scsi_cmd(struct sas_task *task)
-+{
-+	if (!task->uldd_task)
-+		return NULL;
-+
-+	if (dev_is_sata(task->dev)) {
-+		struct ata_queued_cmd *qc = task->uldd_task;
-+		return qc->scsicmd;
-+	} else {
-+		return task->uldd_task;
-+	}
-+}
-+
-  static int hisi_sas_task_prep(struct sas_task *task,
-  			      struct hisi_sas_dq **dq_pointer,
-  			      bool is_tmf, struct hisi_sas_tmf_task *tmf,
-@@ -459,6 +472,7 @@ static int hisi_sas_task_prep(struct sas_task *task,
-  	struct hisi_sas_dq *dq;
-  	unsigned long flags;
-  	int wr_q_index;
-+	struct scsi_cmnd *scsi_cmnd;
-
-  	if (DEV_IS_GONE(sas_dev)) {
-  		if (sas_dev)
-@@ -471,9 +485,10 @@ static int hisi_sas_task_prep(struct sas_task *task,
-  		return -ECOMM;
-  	}
-
--	if (hisi_hba->reply_map) {
--		int cpu = raw_smp_processor_id();
--		unsigned int dq_index = hisi_hba->reply_map[cpu];
-+	scsi_cmnd = sas_task_to_scsi_cmd(task);
-+	if (hisi_hba->shost->hostt->host_tagset) {
-+		unsigned int dq_index = scsi_cmnd_hctx_index(
-+				hisi_hba->shost, scsi_cmnd);
-
-  		*dq_pointer = dq = &hisi_hba->dq[dq_index];
-  	} else {
-@@ -503,21 +518,8 @@ static int hisi_sas_task_prep(struct sas_task *task,
-
-  	if (hisi_hba->hw->slot_index_alloc)
-  		rc = hisi_hba->hw->slot_index_alloc(hisi_hba, device);
--	else {
--		struct scsi_cmnd *scsi_cmnd = NULL;
--
--		if (task->uldd_task) {
--			struct ata_queued_cmd *qc;
--
--			if (dev_is_sata(device)) {
--				qc = task->uldd_task;
--				scsi_cmnd = qc->scsicmd;
--			} else {
--				scsi_cmnd = task->uldd_task;
--			}
--		}
-+	else
-  		rc  = hisi_sas_slot_index_alloc(hisi_hba, scsi_cmnd);
--	}
-  	if (rc < 0)
-  		goto err_out_dif_dma_unmap;
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c 
-b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 49620c2411df..0aa750cbefb3 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2344,36 +2344,9 @@ static irqreturn_t cq_interrupt_v3_hw(int irq_no, 
-void *p)
-  	return IRQ_HANDLED;
-  }
-
--static void setup_reply_map_v3_hw(struct hisi_hba *hisi_hba, int nvecs)
-+static int interrupt_pre_init_v3_hw(struct hisi_hba *hisi_hba)
-  {
--	const struct cpumask *mask;
--	int queue, cpu;
--
--	for (queue = 0; queue < nvecs; queue++) {
--		struct hisi_sas_cq *cq = &hisi_hba->cq[queue];
--
--		mask = pci_irq_get_affinity(hisi_hba->pci_dev, queue +
--					    BASE_VECTORS_V3_HW);
--		if (!mask)
--			goto fallback;
--		cq->pci_irq_mask = mask;
--		for_each_cpu(cpu, mask)
--			hisi_hba->reply_map[cpu] = queue;
--	}
--	return;
--
--fallback:
--	for_each_possible_cpu(cpu)
--		hisi_hba->reply_map[cpu] = cpu % hisi_hba->queue_count;
--	/* Don't clean all CQ masks */
--}
--
--static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
--{
--	struct device *dev = hisi_hba->dev;
--	struct pci_dev *pdev = hisi_hba->pci_dev;
--	int vectors, rc;
--	int i, k;
-+	int vectors;
-  	int max_msi = HISI_SAS_MSI_COUNT_V3_HW, min_msi;
-
-  	if (auto_affine_msi_experimental) {
-@@ -2383,11 +2356,6 @@ static int interrupt_init_v3_hw(struct hisi_hba 
-*hisi_hba)
-
-  		min_msi = MIN_AFFINE_VECTORS_V3_HW;
-
--		hisi_hba->reply_map = devm_kcalloc(dev, nr_cpu_ids,
--						   sizeof(unsigned int),
--						   GFP_KERNEL);
--		if (!hisi_hba->reply_map)
--			return -ENOMEM;
-  		vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
-  							 min_msi, max_msi,
-  							 PCI_IRQ_MSI |
-@@ -2395,7 +2363,6 @@ static int interrupt_init_v3_hw(struct hisi_hba 
-*hisi_hba)
-  							 &desc);
-  		if (vectors < 0)
-  			return -ENOENT;
--		setup_reply_map_v3_hw(hisi_hba, vectors - BASE_VECTORS_V3_HW);
-  	} else {
-  		min_msi = max_msi;
-  		vectors = pci_alloc_irq_vectors(hisi_hba->pci_dev, min_msi,
-@@ -2403,16 +2370,25 @@ static int interrupt_init_v3_hw(struct hisi_hba 
-*hisi_hba)
-  		if (vectors < 0)
-  			return vectors;
-  	}
--
-  	hisi_hba->cq_nvecs = vectors - BASE_VECTORS_V3_HW;
-
-+	return 0;
-+}
-+
-+static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
-+{
-+	struct device *dev = hisi_hba->dev;
-+	struct pci_dev *pdev = hisi_hba->pci_dev;
-+	int rc, i, k;
-+
-+	dev_err(dev,  "%s hisi_hba->cq_nvecs=%d\n", __func__, hisi_hba->cq_nvecs);
-+
-  	rc = devm_request_irq(dev, pci_irq_vector(pdev, 1),
-  			      int_phy_up_down_bcast_v3_hw, 0,
-  			      DRV_NAME " phy", hisi_hba);
-  	if (rc) {
-  		dev_err(dev, "could not request phy interrupt, rc=%d\n", rc);
--		rc = -ENOENT;
--		goto free_irq_vectors;
-+		return -ENOENT;
-  	}
-
-  	rc = devm_request_irq(dev, pci_irq_vector(pdev, 2),
-@@ -2467,8 +2443,6 @@ static int interrupt_init_v3_hw(struct hisi_hba 
-*hisi_hba)
-  	free_irq(pci_irq_vector(pdev, 2), hisi_hba);
-  free_phy_irq:
-  	free_irq(pci_irq_vector(pdev, 1), hisi_hba);
--free_irq_vectors:
--	pci_free_irq_vectors(pdev);
-  	return rc;
-  }
-
-@@ -2896,6 +2870,18 @@ static void debugfs_snapshot_restore_v3_hw(struct 
-hisi_hba *hisi_hba)
-  	clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
-  }
-
-+static int hisi_sas_map_queues(struct Scsi_Host *shost)
-+{
-+	struct hisi_hba *hisi_hba = shost_priv(shost);
-+	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-+
-+	if (auto_affine_msi_experimental)
-+		return blk_mq_pci_map_queues(qmap, hisi_hba->pci_dev,
-+				BASE_VECTORS_V3_HW);
-+	else
-+		return blk_mq_map_queues(qmap);
-+}
-+
-  static struct scsi_host_template sht_v3_hw = {
-  	.name			= DRV_NAME,
-  	.module			= THIS_MODULE,
-@@ -2906,6 +2892,8 @@ static struct scsi_host_template sht_v3_hw = {
-  	.scan_start		= hisi_sas_scan_start,
-  	.change_queue_depth	= sas_change_queue_depth,
-  	.bios_param		= sas_bios_param,
-+	.map_queues		= hisi_sas_map_queues,
-+	.host_tagset		= 1,
-  	.this_id		= -1,
-  	.sg_tablesize		= HISI_SAS_SGE_PAGE_CNT,
-  	.sg_prot_tablesize	= HISI_SAS_SGE_PAGE_CNT,
-@@ -3092,15 +3080,21 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const 
-struct pci_device_id *id)
-  	if (hisi_sas_debugfs_enable)
-  		hisi_sas_debugfs_init(hisi_hba);
-
-+
-+	rc = interrupt_pre_init_v3_hw(hisi_hba);
-+	if (rc < 0)
-+		goto err_out_interrupts;
-+	shost->nr_hw_queues = hisi_hba->cq_nvecs;
-+
-  	rc = scsi_add_host(shost, dev);
-  	if (rc)
--		goto err_out_ha;
-+		goto err_out_interrupts;
-
-  	rc = sas_register_ha(sha);
-  	if (rc)
-  		goto err_out_register_ha;
-
--	rc = hisi_hba->hw->hw_init(hisi_hba);
-+	rc = hisi_sas_v3_init(hisi_hba);
-  	if (rc)
-  		goto err_out_register_ha;
-
-@@ -3110,6 +3104,8 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const 
-struct pci_device_id *id)
-
-  err_out_register_ha:
-  	scsi_remove_host(shost);
-+err_out_interrupts:
-+	pci_free_irq_vectors(pdev);
-  err_out_ha:
-  	scsi_host_put(shost);
-  err_out_regions:
--- 
-2.17.1
-
-
-
-
-
+Thanks for all the ideas,
+Chris
