@@ -2,114 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EE8C31152
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 17:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B478D3116F
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 17:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbfEaP33 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 May 2019 11:29:29 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:17640 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726421AbfEaP33 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 31 May 2019 11:29:29 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 7764E844F282E0077772;
-        Fri, 31 May 2019 23:29:26 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Fri, 31 May 2019
- 23:29:20 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <james.smart@broadcom.com>, <dick.kennedy@broadcom.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jsmart2021@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] scsi: lpfc: Make some symbols static
-Date:   Fri, 31 May 2019 23:28:41 +0800
-Message-ID: <20190531152841.13684-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1726576AbfEaPhm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 May 2019 11:37:42 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:38713 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726037AbfEaPhm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 May 2019 11:37:42 -0400
+Received: by mail-pg1-f195.google.com with SMTP id v11so4249028pgl.5;
+        Fri, 31 May 2019 08:37:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GYc1gNT1Xe9N3fTCA8MDQH9AU47pfIUOquAhYDNc18I=;
+        b=mpL0KmP7NG4T4j/WafbPOfo0Q+k3KwqACmzmhcs+hsC7Uv/k6u0vkZ2ZRiohLAyLod
+         xO/tcUMlWei5pQ4TQdUFuujFYUL9xzVbBRnLr2bpb5Q3DSMO4xrovFKaknycPzVo1TqJ
+         Hx+jotoVVVH4hxNwS4Ways7iDaeTMp6FTsgbFb7+uqLWe5wi0AABzbrrVO0thhdaffEM
+         yzKYzLrQQRizT5eMbkGUMckhyyY79uW1mrgp1zUBYS/wt1frWw2SAeWlmROZTiRIFKeg
+         KqqAL8ClO84ThnDcxIFyb++rn2aoLekliXmxH5Hwg/KgJa0DAc1Wsd1QnmWp+Qm5X+A5
+         cH4g==
+X-Gm-Message-State: APjAAAW1VoPUxkgwqok9vwQumla/DMxWw5fPoyDjc+ZCSLut4UvceOzF
+        LxBKvrhHd38rSkxE26QLYMM=
+X-Google-Smtp-Source: APXvYqzLZfkFMT5ikwvb/uIBEwiRnxzcn5Mx3p6yryK4GXrt7HIRr5nAzFlxut2dsZAuGFeOotaUOw==
+X-Received: by 2002:a17:90a:fa09:: with SMTP id cm9mr10066010pjb.137.1559317061195;
+        Fri, 31 May 2019 08:37:41 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id u1sm6509024pfh.85.2019.05.31.08.37.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 31 May 2019 08:37:40 -0700 (PDT)
+Subject: Re: [PATCH 1/9] blk-mq: allow hw queues to share hostwide tags
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Hannes Reinecke <hare@suse.com>,
+        John Garry <john.garry@huawei.com>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20190531022801.10003-1-ming.lei@redhat.com>
+ <20190531022801.10003-2-ming.lei@redhat.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <90d85b99-3bc0-fb3b-8537-aeac03414eae@acm.org>
+Date:   Fri, 31 May 2019 08:37:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20190531022801.10003-2-ming.lei@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix sparse warnings:
+On 5/30/19 7:27 PM, Ming Lei wrote:
+> diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
+> index 6aea0ebc3a73..3d6780504dcb 100644
+> --- a/block/blk-mq-debugfs.c
+> +++ b/block/blk-mq-debugfs.c
+> @@ -237,6 +237,7 @@ static const char *const alloc_policy_name[] = {
+>   static const char *const hctx_flag_name[] = {
+>   	HCTX_FLAG_NAME(SHOULD_MERGE),
+>   	HCTX_FLAG_NAME(TAG_SHARED),
+> +	HCTX_FLAG_NAME(HOST_TAGS),
+>   	HCTX_FLAG_NAME(BLOCKING),
+>   	HCTX_FLAG_NAME(NO_SCHED),
+>   };
 
-drivers/scsi/lpfc/lpfc_sli.c:115:1: warning: symbol 'lpfc_sli4_pcimem_bcopy' was not declared. Should it be static?
-drivers/scsi/lpfc/lpfc_sli.c:7854:1: warning: symbol 'lpfc_sli4_process_missed_mbox_completions' was not declared. Should it be static?
-drivers/scsi/lpfc/lpfc_nvmet.c:223:27: warning: symbol 'lpfc_nvmet_get_ctx_for_xri' was not declared. Should it be static?
-drivers/scsi/lpfc/lpfc_nvmet.c:245:27: warning: symbol 'lpfc_nvmet_get_ctx_for_oxid' was not declared. Should it be static?
-drivers/scsi/lpfc/lpfc_init.c:75:10: warning: symbol 'lpfc_present_cpu' was not declared. Should it be static?
+The name BLK_MQ_F_HOST_TAGS suggests that tags are shared across a SCSI 
+host. That is misleading since this flag means that tags are shared 
+across hardware queues. Additionally, the "host" term is a term that 
+comes from the SCSI world and this patch is a block layer patch. That 
+makes me wonder whether another name should be used to reflect that all 
+hardware queues share the same tag set? How about renaming 
+BLK_MQ_F_TAG_SHARED into BLK_MQ_F_TAG_QUEUE_SHARED and renaming 
+BLK_MQ_F_HOST_TAGS into BLK_MQ_F_TAG_HCTX_SHARED?
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/scsi/lpfc/lpfc_init.c  | 2 +-
- drivers/scsi/lpfc/lpfc_nvmet.c | 4 ++--
- drivers/scsi/lpfc/lpfc_sli.c   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index cd8e47544d07..faf43b1d3dbe 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -72,7 +72,7 @@ unsigned long _dump_buf_dif_order;
- spinlock_t _dump_buf_lock;
- 
- /* Used when mapping IRQ vectors in a driver centric manner */
--uint32_t lpfc_present_cpu;
-+static uint32_t lpfc_present_cpu;
- 
- static void lpfc_get_hba_model_desc(struct lpfc_hba *, uint8_t *, uint8_t *);
- static int lpfc_post_rcv_buf(struct lpfc_hba *);
-diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
-index eb93189f4544..e471bbcca838 100644
---- a/drivers/scsi/lpfc/lpfc_nvmet.c
-+++ b/drivers/scsi/lpfc/lpfc_nvmet.c
-@@ -220,7 +220,7 @@ lpfc_nvmet_cmd_template(void)
- 	/* Word 12, 13, 14, 15 - is zero */
- }
- 
--struct lpfc_nvmet_rcv_ctx *
-+static struct lpfc_nvmet_rcv_ctx *
- lpfc_nvmet_get_ctx_for_xri(struct lpfc_hba *phba, u16 xri)
- {
- 	struct lpfc_nvmet_rcv_ctx *ctxp;
-@@ -242,7 +242,7 @@ lpfc_nvmet_get_ctx_for_xri(struct lpfc_hba *phba, u16 xri)
- 	return NULL;
- }
- 
--struct lpfc_nvmet_rcv_ctx *
-+static struct lpfc_nvmet_rcv_ctx *
- lpfc_nvmet_get_ctx_for_oxid(struct lpfc_hba *phba, u16 oxid, u32 sid)
- {
- 	struct lpfc_nvmet_rcv_ctx *ctxp;
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 081c4357958e..dea8b9df27c0 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -108,7 +108,7 @@ lpfc_get_iocb_from_iocbq(struct lpfc_iocbq *iocbq)
-  * endianness. This function can be called with or without
-  * lock.
-  **/
--void
-+static void
- lpfc_sli4_pcimem_bcopy(void *srcp, void *destp, uint32_t cnt)
- {
- 	uint64_t *src = srcp;
-@@ -7882,7 +7882,7 @@ lpfc_sli4_mbox_completions_pending(struct lpfc_hba *phba)
-  * and will process all the completions associated with the eq for the
-  * mailbox completion queue.
-  **/
--bool
-+static bool
- lpfc_sli4_process_missed_mbox_completions(struct lpfc_hba *phba)
- {
- 	struct lpfc_sli4_hba *sli4_hba = &phba->sli4_hba;
--- 
-2.17.1
-
-
+Bart.
