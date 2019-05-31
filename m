@@ -2,89 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8741830B29
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 11:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D410130BDA
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 11:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbfEaJMZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 May 2019 05:12:25 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:33142 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbfEaJMY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 May 2019 05:12:24 -0400
-Received: by mail-wm1-f67.google.com with SMTP id v19so7221832wmh.0
-        for <linux-scsi@vger.kernel.org>; Fri, 31 May 2019 02:12:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0AxDHUUpSLBZZ6pZG7HK+8YHC3CP8Xm9yOJRwOpXCuQ=;
-        b=hNWMdvgXaRbf3CLG8qKk2vXH/0QyxK8rX7jmsuwwHayYmi7BX9qmbtWN36OL8uAbPm
-         8BLbXtd3arTVAXDcQufoHRD97cAvbaN/rIL1//6FPDcVZs/FC3KLHL6ldGcDqQwOpZ1k
-         PkwUVQ5fnzIkk6xtZkIsJMKPcPX1hRklSYdTsBQjozlnqO26imrGUo4sLvl6W+gyLt/R
-         8iasRWlWdyCDTmY/+PWmYVVeWqX40nvPpilUpCrRelvfSdOjBUYHgnOFbwGD60TCZBYb
-         0l2+TlwgugpB9iHZ6F66LVqqZ/BalOz84HxCky4dZCgTBATaCmnIKt9Cz9tEYEtp9zei
-         /AvA==
-X-Gm-Message-State: APjAAAVR2SA7mJzhyHc/X/vvYZm/3248DyFSsOlHvVJ02QrBE9eIIAGZ
-        sqqdMJISWj7NFJJX8sJiq5dbIA==
-X-Google-Smtp-Source: APXvYqyw1+UhzpIse+RJ2T972JNibsmHBYB+uO8y2y3HMDCATkvY2o+jjLDciy4QUoh9kx388sVp1Q==
-X-Received: by 2002:a1c:808b:: with SMTP id b133mr4754979wmd.160.1559293942789;
-        Fri, 31 May 2019 02:12:22 -0700 (PDT)
-Received: from [192.168.10.150] ([93.56.166.5])
-        by smtp.gmail.com with ESMTPSA id t6sm10181349wmt.34.2019.05.31.02.12.21
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 31 May 2019 02:12:21 -0700 (PDT)
-Subject: Re: [PATCH 1/2] scsi_host: add support for request batching
-To:     Bart Van Assche <bvanassche@acm.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, stefanha@redhat.com
-References: <20190530112811.3066-1-pbonzini@redhat.com>
- <20190530112811.3066-2-pbonzini@redhat.com>
- <ad0578b0-ce73-85ed-b67d-70c5d8176a23@acm.org>
- <461fe0cd-c5bc-a612-6013-7c002b92dcdc@redhat.com>
- <740d2f33-004e-7a37-1f6e-cf29480439b1@acm.org>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <dd00ef94-1d28-1401-2375-7603e9543e2d@redhat.com>
-Date:   Fri, 31 May 2019 11:12:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726520AbfEaJmb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 May 2019 05:42:31 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:33832 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726233AbfEaJmb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 31 May 2019 05:42:31 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id E0B119A64511E1726FD8;
+        Fri, 31 May 2019 17:42:27 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Fri, 31 May 2019
+ 17:42:18 +0800
+Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
+To:     Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>
+References: <20190531074158.76923-1-hare@suse.de>
+ <20190531082116.GA12106@ming.t460p>
+ <e81ca95e-95af-1078-c523-701120dd4ca7@suse.de>
+ <20190531084600.GB12106@ming.t460p>
+CC:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        "Ming Lei" <tom.leiming@gmail.com>, <linux-scsi@vger.kernel.org>,
+        Hannes Reinecke <hare@suse.com>,
+        chenxiang <chenxiang66@hisilicon.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <57d87edb-e748-6223-bfb4-a67ead9a8bdd@huawei.com>
+Date:   Fri, 31 May 2019 10:42:12 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-In-Reply-To: <740d2f33-004e-7a37-1f6e-cf29480439b1@acm.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+In-Reply-To: <20190531084600.GB12106@ming.t460p>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 30/05/19 19:54, Bart Van Assche wrote:
-> As far as I can see the only impact of defining an empty commit_rqs
-> callback on the queueing behavior is that blk_mq_make_request() will
-> queue requests for multiple hwqs on the plug list instead of requests
-> for a single hwq. The plug list is sorted by hwq before it is submitted
-> to a block driver. If that helps NVMe performance it should also help
-> SCSI performance.
+>>>>
+>>>> -static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba,
+>>>> -				     struct scsi_cmnd *scsi_cmnd)
+>>>> +static int hisi_sas_slot_index_alloc(struct hisi_hba *hisi_hba)
+>>>>  {
+>>>>  	int index;
+>>>>  	void *bitmap = hisi_hba->slot_index_tags;
+>>>>  	unsigned long flags;
+>>>>
+>>>> -	if (scsi_cmnd)
+>>>> -		return scsi_cmnd->request->tag;
+>>>> -
+>>>>  	spin_lock_irqsave(&hisi_hba->lock, flags);
+>>>>  	index = find_next_zero_bit(bitmap, hisi_hba->slot_index_count,
+>>>>  				   hisi_hba->last_slot_index + 1);
+>>>
+>>> Then you switch to hisi_sas_slot_index_alloc() for allocating the unique
+>>> tag via spin_lock & find_next_zero_bit(). Do you think this way is more
+>>> efficient than blk-mq's sbitmap?
 
-See the comment in blk_mq_make_request(): sorting by hwq helps NVMe
-because it uses bd->last, and blk_mq_make_request() uses the presence of
-the ->commit_rqs() as a sign that the driver uses bd->last.  The
-heuristic basically trades latency (with plugging, the driver rings the
-doorbell a bit later) for throughput (ringing the doorbell is slow, so
-we want to do it less).  If the driver doesn't use bd->last and the
-doorbell is always rung, plugging adds to the latency without the
-throughput benefit.
+These are not fast path, as used only for TMF, internal IO, etc.
 
-All that the duplicate blk_mq_ops do is letting blk_mq_make_request()
-use the same heuristic for SCSI.  This should be beneficial exactly for
-the reason that you mention: if the heuristic helps non-SCSI block
-driver performance, it should also help performance of SCSI drivers that
-have nr_hw_queues > 1 but no commit_rqs (lpfc, qedi, qla2xxx, smartpqi,
-storvsc).
+Having said that, hopefully we can move to scsi_{get,put}_reserved_cmd() 
+when available, so that the LLDD has to stop managing them.
 
-Paolo
+>>>
+>> slot_index_alloc() is only used for commands which do _not_ have a tag
+>> (eg internal commands), or for v2 hardware which has weird allocation rules.
+>
+> But this patch has switched to this allocation unconditionally for all commands:
+>
 
-> How about always setting commit_rqs = scsi_commit_rqs
-> in scsi_mq_ops?
+As Hannes said, v2 had a few bugs which meant that we had to make a 
+specific version of this function for that hw revision, cf. 
+slot_index_alloc_quirk_v2_hw(), and it cannot use request queue tag.
+
+But, indeed, we could consider sbitmap for v2 hw. I'm not sure if it 
+would help, considering the weird rules.
+
+>> -       if (scsi_cmnd)
+>> -               return scsi_cmnd->request->tag;
+>> -
+>
+> Otherwise duplicated slot can be used from different blk-mq hw queue.
+>
+>>
+>>> The worsen thing is that V3's actual max queue depth is (4096 - 96), but
+>>> this patch claims that the device can support (4096 - 96) * 32 command
+>>> slots
+
+To be clear about the hw, the hw supports max 4096 command tags and has 
+16 hw queues. The hw queue depth is configurable by software, and we 
+configure it at 4096 per queue - same as max command tags - this is to 
+support possibility of all commands using the same queue simultaneously.
+
+, finally hisi_sas_slot_index_alloc() is used to respect the actual
+>>> max queue depth(4000).
+>>>
+>> Well, this patch is an RFC to demonstrate my idea. Of course the queue
+>> depth should be identical before and after the conversion.
+>
+> That is why I call it is hard to partition the hostwide tags to MQ.
+>
+>>
+>>> Big contention is caused on hisi_sas_slot_index_alloc(), meantime huge> memory is wasted for request pool.
+>>>
+>> See above. That allocation is only used if no blk tag is available.
+>
+> This patch switches the allocation for all commands.
+>
+>>
+>> Or, at least, that was the idea :-)
+>
+> Agree, :-)
+>
+>
+> thanks,
+> Ming
+>
+> .
+>
+
 
