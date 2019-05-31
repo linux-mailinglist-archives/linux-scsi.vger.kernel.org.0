@@ -2,341 +2,153 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9542B306AB
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 04:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53875306F9
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 05:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbfEaC3G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 May 2019 22:29:06 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:48960 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726372AbfEaC3G (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 May 2019 22:29:06 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6F2B53082B6B;
-        Fri, 31 May 2019 02:29:05 +0000 (UTC)
-Received: from localhost (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6C550600C1;
-        Fri, 31 May 2019 02:29:02 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 9/9] scsi: mp3sas: convert private reply queue to blk-mq hw queue
-Date:   Fri, 31 May 2019 10:28:01 +0800
-Message-Id: <20190531022801.10003-10-ming.lei@redhat.com>
-In-Reply-To: <20190531022801.10003-1-ming.lei@redhat.com>
-References: <20190531022801.10003-1-ming.lei@redhat.com>
+        id S1726658AbfEaD2I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 May 2019 23:28:08 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:46841 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726418AbfEaD2I (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 May 2019 23:28:08 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n4so226082wrw.13;
+        Thu, 30 May 2019 20:28:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cdoYxYQXllz6fT2zV23F9oA4lywNBkDt8+j3yf5Nll4=;
+        b=GrvkN6pr6W34zjzkdaAI+fJ7LQwQIYEEkeIxXRy9sk+35SIx9ySeflmUxcvIt3lZT1
+         Gr52S1zdOY5KvgANjNLmCCDjrFrzMBJTt2p8y4sYgjxSvf6AQPaU8815u61Sso/+gh93
+         uI6hyLDYjN2fyZ9N+aEy+KjILLPrKc8WPFGLfy7lPfvo4n7RmjIIYeGkO0NZ+S8zZp9G
+         /uN2mOC3T1ur1EJUqg7s3HhQ7Vhg0BA4vq1ozRDdt3ZxbADy6oP5UkLuM1B/i3E8/cN5
+         cs69ZEeaDbozCcDo+ZbKBDJRMQC0b2l5dzqBKnEMI4XGHoamuiDfw2V1oHnIY18qw93a
+         3oxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cdoYxYQXllz6fT2zV23F9oA4lywNBkDt8+j3yf5Nll4=;
+        b=jOGkBuHwsydRrwsNlbmofwQDH5povdecuqozIoU3tTqTmSB4+E1dpcmFmCFmkbfeG3
+         aOM6lAElQFQBpqPRgb+mD9+9dPbBZKlrVZqqTPqV0xQt7agJ0pBhYlJR9AYFjU6wRO+Q
+         LlN+DjQvg+NZwhpO7vkO3z9lpA+8y5nyN8WbmGbFuaO7dPOSnFRjohj0D8GMmZB1iaT3
+         yZyIe2iLhpfNxcUV8jlLw1LxnT2AV88ukdHZrGg0pLsFH+xd1/5wWiznEt4IwiGqwqiS
+         QX/tQINuWofIsuKE6VoCkaMuC1EWlQgISjb4aQS14SZy7yqerI9oB03x7OJ69aOiitHS
+         Sy/Q==
+X-Gm-Message-State: APjAAAWEfBMtpMg8DZWGNFmUuqAXiXXdMAwY95vRLvJschNpYMtkO2Ps
+        sJks5+g5PERTJUmrpH666Vdoh7k6lsxpJYMY8aI=
+X-Google-Smtp-Source: APXvYqzL5LExQSerZyFlXgXDv4tTzhO6UGwA+xmIbrT/jan5FG8C7J7iIe1JE7NeuDx/5WlgPUTRDBjq9AvQqqFjj7o=
+X-Received: by 2002:a5d:68cd:: with SMTP id p13mr4703190wrw.0.1559273286083;
+ Thu, 30 May 2019 20:28:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Fri, 31 May 2019 02:29:05 +0000 (UTC)
+References: <20190530112811.3066-1-pbonzini@redhat.com> <20190530112811.3066-2-pbonzini@redhat.com>
+In-Reply-To: <20190530112811.3066-2-pbonzini@redhat.com>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Fri, 31 May 2019 11:27:54 +0800
+Message-ID: <CACVXFVP-B7uKUGn75rZdu0e4QxUOsSqv8FL0vY2ubmuucvxqjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] scsi_host: add support for request batching
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM General <kvm@vger.kernel.org>, jejb@linux.ibm.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SCSI's reply qeueue is very similar with blk-mq's hw queue, both
-assigned by IRQ vector, so map te private reply queue into blk-mq's hw
-queue via .host_tagset.
+On Thu, May 30, 2019 at 7:28 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> This allows a list of requests to be issued, with the LLD only writing
+> the hardware doorbell when necessary, after the last request was prepared.
+> This is more efficient if we have lists of requests to issue, particularly
+> on virtualized hardware, where writing the doorbell is more expensive than
+> on real hardware.
+>
+> The use case for this is plugged IO, where blk-mq flushes a batch of
+> requests all at once.
+>
+> The API is the same as for blk-mq, just with blk-mq concepts tweaked to
+> fit the SCSI subsystem API: the "last" flag in blk_mq_queue_data becomes
+> a flag in scsi_cmnd, while the queue_num in the commit_rqs callback is
+> extracted from the hctx and passed as a parameter.
+>
+> The only complication is that blk-mq uses different plugging heuristics
+> depending on whether commit_rqs is present or not.  So we have two
+> different sets of blk_mq_ops and pick one depending on whether the
+> scsi_host template uses commit_rqs or not.
+>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  drivers/scsi/scsi_lib.c  | 37 ++++++++++++++++++++++++++++++++++---
+>  include/scsi/scsi_cmnd.h |  1 +
+>  include/scsi/scsi_host.h | 16 ++++++++++++++--
+>  3 files changed, 49 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index 601b9f1de267..eb4e67d02bfe 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -1673,10 +1673,11 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
+>                 blk_mq_start_request(req);
+>         }
+>
+> +       cmd->flags &= SCMD_PRESERVED_FLAGS;
+>         if (sdev->simple_tags)
+>                 cmd->flags |= SCMD_TAGGED;
+> -       else
+> -               cmd->flags &= ~SCMD_TAGGED;
+> +       if (bd->last)
+> +               cmd->flags |= SCMD_LAST;
+>
+>         scsi_init_cmd_errh(cmd);
+>         cmd->scsi_done = scsi_mq_done;
+> @@ -1807,10 +1808,37 @@ void __scsi_init_queue(struct Scsi_Host *shost, struct request_queue *q)
+>  }
+>  EXPORT_SYMBOL_GPL(__scsi_init_queue);
+>
+> +static const struct blk_mq_ops scsi_mq_ops_no_commit = {
+> +       .get_budget     = scsi_mq_get_budget,
+> +       .put_budget     = scsi_mq_put_budget,
+> +       .queue_rq       = scsi_queue_rq,
+> +       .complete       = scsi_softirq_done,
+> +       .timeout        = scsi_timeout,
+> +#ifdef CONFIG_BLK_DEBUG_FS
+> +       .show_rq        = scsi_show_rq,
+> +#endif
+> +       .init_request   = scsi_mq_init_request,
+> +       .exit_request   = scsi_mq_exit_request,
+> +       .initialize_rq_fn = scsi_initialize_rq,
+> +       .busy           = scsi_mq_lld_busy,
+> +       .map_queues     = scsi_map_queues,
+> +};
+> +
+> +
+> +static void scsi_commit_rqs(struct blk_mq_hw_ctx *hctx)
+> +{
+> +       struct request_queue *q = hctx->queue;
+> +       struct scsi_device *sdev = q->queuedata;
+> +       struct Scsi_Host *shost = sdev->host;
+> +
+> +       shost->hostt->commit_rqs(shost, hctx->queue_num);
+> +}
 
-Then the private reply mapping can be removed.
+It should be fine to implement scsi_commit_rqs() as:
 
-Another benefit is that the request/irq lost issue may be solved in
-generic approach because managed IRQ may be shutdown during CPU
-hotplug.
+ if (shost->hostt->commit_rqs)
+       shost->hostt->commit_rqs(shost, hctx->queue_num);
 
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- drivers/scsi/mpt3sas/mpt3sas_base.c  | 74 +++++-----------------------
- drivers/scsi/mpt3sas/mpt3sas_base.h  |  3 +-
- drivers/scsi/mpt3sas/mpt3sas_scsih.c | 17 +++++++
- 3 files changed, 31 insertions(+), 63 deletions(-)
+then scsi_mq_ops_no_commit can be saved.
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 8aacbd1e7db2..2b207d2925b4 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -2855,8 +2855,7 @@ _base_request_irq(struct MPT3SAS_ADAPTER *ioc, u8 index)
- static void
- _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
- {
--	unsigned int cpu, nr_cpus, nr_msix, index = 0;
--	struct adapter_reply_queue *reply_q;
-+	unsigned int nr_cpus, nr_msix;
- 
- 	if (!_base_is_controller_msix_enabled(ioc))
- 		return;
-@@ -2866,50 +2865,9 @@ _base_assign_reply_queues(struct MPT3SAS_ADAPTER *ioc)
- 		return;
- 	}
- 
--	memset(ioc->cpu_msix_table, 0, ioc->cpu_msix_table_sz);
--
- 	nr_cpus = num_online_cpus();
- 	nr_msix = ioc->reply_queue_count = min(ioc->reply_queue_count,
- 					       ioc->facts.MaxMSIxVectors);
--	if (!nr_msix)
--		return;
--
--	if (smp_affinity_enable) {
--		list_for_each_entry(reply_q, &ioc->reply_queue_list, list) {
--			const cpumask_t *mask = pci_irq_get_affinity(ioc->pdev,
--							reply_q->msix_index);
--			if (!mask) {
--				ioc_warn(ioc, "no affinity for msi %x\n",
--					 reply_q->msix_index);
--				continue;
--			}
--
--			for_each_cpu_and(cpu, mask, cpu_online_mask) {
--				if (cpu >= ioc->cpu_msix_table_sz)
--					break;
--				ioc->cpu_msix_table[cpu] = reply_q->msix_index;
--			}
--		}
--		return;
--	}
--	cpu = cpumask_first(cpu_online_mask);
--
--	list_for_each_entry(reply_q, &ioc->reply_queue_list, list) {
--
--		unsigned int i, group = nr_cpus / nr_msix;
--
--		if (cpu >= nr_cpus)
--			break;
--
--		if (index < nr_cpus % nr_msix)
--			group++;
--
--		for (i = 0 ; i < group ; i++) {
--			ioc->cpu_msix_table[cpu] = reply_q->msix_index;
--			cpu = cpumask_next(cpu, cpu_online_mask);
--		}
--		index++;
--	}
- }
- 
- /**
-@@ -2924,6 +2882,7 @@ _base_disable_msix(struct MPT3SAS_ADAPTER *ioc)
- 		return;
- 	pci_disable_msix(ioc->pdev);
- 	ioc->msix_enable = 0;
-+	ioc->smp_affinity_enable = 0;
- }
- 
- /**
-@@ -2980,6 +2939,9 @@ _base_enable_msix(struct MPT3SAS_ADAPTER *ioc)
- 		goto try_ioapic;
- 	}
- 
-+	if (irq_flags & PCI_IRQ_AFFINITY)
-+		ioc->smp_affinity_enable = 1;
-+
- 	ioc->msix_enable = 1;
- 	ioc->reply_queue_count = r;
- 	for (i = 0; i < ioc->reply_queue_count; i++) {
-@@ -3266,7 +3228,7 @@ mpt3sas_base_get_reply_virt_addr(struct MPT3SAS_ADAPTER *ioc, u32 phys_addr)
- }
- 
- static inline u8
--_base_get_msix_index(struct MPT3SAS_ADAPTER *ioc)
-+_base_get_msix_index(struct MPT3SAS_ADAPTER *ioc, struct scsi_cmnd *scmd)
- {
- 	/* Enables reply_queue load balancing */
- 	if (ioc->msix_load_balance)
-@@ -3274,7 +3236,7 @@ _base_get_msix_index(struct MPT3SAS_ADAPTER *ioc)
- 		    base_mod64(atomic64_add_return(1,
- 		    &ioc->total_io_cnt), ioc->reply_queue_count) : 0;
- 
--	return ioc->cpu_msix_table[raw_smp_processor_id()];
-+	return scsi_cmnd_hctx_index(ioc->shost, scmd);
- }
- 
- /**
-@@ -3325,7 +3287,7 @@ mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
- 
- 	smid = tag + 1;
- 	request->cb_idx = cb_idx;
--	request->msix_io = _base_get_msix_index(ioc);
-+	request->msix_io = _base_get_msix_index(ioc, scmd);
- 	request->smid = smid;
- 	INIT_LIST_HEAD(&request->chain_list);
- 	return smid;
-@@ -3498,7 +3460,7 @@ _base_put_smid_mpi_ep_scsi_io(struct MPT3SAS_ADAPTER *ioc, u16 smid, u16 handle)
- 	_base_clone_mpi_to_sys_mem(mpi_req_iomem, (void *)mfp,
- 					ioc->request_sz);
- 	descriptor.SCSIIO.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_SCSI_IO;
--	descriptor.SCSIIO.MSIxIndex =  _base_get_msix_index(ioc);
-+	descriptor.SCSIIO.MSIxIndex =  _base_get_msix_index(ioc, NULL);
- 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
- 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
- 	descriptor.SCSIIO.LMID = 0;
-@@ -3520,7 +3482,7 @@ _base_put_smid_scsi_io(struct MPT3SAS_ADAPTER *ioc, u16 smid, u16 handle)
- 
- 
- 	descriptor.SCSIIO.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_SCSI_IO;
--	descriptor.SCSIIO.MSIxIndex =  _base_get_msix_index(ioc);
-+	descriptor.SCSIIO.MSIxIndex =  _base_get_msix_index(ioc, NULL);
- 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
- 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
- 	descriptor.SCSIIO.LMID = 0;
-@@ -3543,7 +3505,7 @@ mpt3sas_base_put_smid_fast_path(struct MPT3SAS_ADAPTER *ioc, u16 smid,
- 
- 	descriptor.SCSIIO.RequestFlags =
- 	    MPI25_REQ_DESCRIPT_FLAGS_FAST_PATH_SCSI_IO;
--	descriptor.SCSIIO.MSIxIndex = _base_get_msix_index(ioc);
-+	descriptor.SCSIIO.MSIxIndex = _base_get_msix_index(ioc, NULL);
- 	descriptor.SCSIIO.SMID = cpu_to_le16(smid);
- 	descriptor.SCSIIO.DevHandle = cpu_to_le16(handle);
- 	descriptor.SCSIIO.LMID = 0;
-@@ -3607,7 +3569,7 @@ mpt3sas_base_put_smid_nvme_encap(struct MPT3SAS_ADAPTER *ioc, u16 smid)
- 
- 	descriptor.Default.RequestFlags =
- 		MPI26_REQ_DESCRIPT_FLAGS_PCIE_ENCAPSULATED;
--	descriptor.Default.MSIxIndex =  _base_get_msix_index(ioc);
-+	descriptor.Default.MSIxIndex =  _base_get_msix_index(ioc, NULL);
- 	descriptor.Default.SMID = cpu_to_le16(smid);
- 	descriptor.Default.LMID = 0;
- 	descriptor.Default.DescriptorTypeDependent = 0;
-@@ -3639,7 +3601,7 @@ mpt3sas_base_put_smid_default(struct MPT3SAS_ADAPTER *ioc, u16 smid)
- 	}
- 	request = (u64 *)&descriptor;
- 	descriptor.Default.RequestFlags = MPI2_REQ_DESCRIPT_FLAGS_DEFAULT_TYPE;
--	descriptor.Default.MSIxIndex =  _base_get_msix_index(ioc);
-+	descriptor.Default.MSIxIndex =  _base_get_msix_index(ioc, NULL);
- 	descriptor.Default.SMID = cpu_to_le16(smid);
- 	descriptor.Default.LMID = 0;
- 	descriptor.Default.DescriptorTypeDependent = 0;
-@@ -6524,19 +6486,11 @@ mpt3sas_base_attach(struct MPT3SAS_ADAPTER *ioc)
- 
- 	dinitprintk(ioc, ioc_info(ioc, "%s\n", __func__));
- 
--	/* setup cpu_msix_table */
- 	ioc->cpu_count = num_online_cpus();
- 	for_each_online_cpu(cpu_id)
- 		last_cpu_id = cpu_id;
- 	ioc->cpu_msix_table_sz = last_cpu_id + 1;
--	ioc->cpu_msix_table = kzalloc(ioc->cpu_msix_table_sz, GFP_KERNEL);
- 	ioc->reply_queue_count = 1;
--	if (!ioc->cpu_msix_table) {
--		dfailprintk(ioc,
--			    ioc_info(ioc, "allocation for cpu_msix_table failed!!!\n"));
--		r = -ENOMEM;
--		goto out_free_resources;
--	}
- 
- 	if (ioc->is_warpdrive) {
- 		ioc->reply_post_host_index = kcalloc(ioc->cpu_msix_table_sz,
-@@ -6748,7 +6702,6 @@ mpt3sas_base_attach(struct MPT3SAS_ADAPTER *ioc)
- 	mpt3sas_base_free_resources(ioc);
- 	_base_release_memory_pools(ioc);
- 	pci_set_drvdata(ioc->pdev, NULL);
--	kfree(ioc->cpu_msix_table);
- 	if (ioc->is_warpdrive)
- 		kfree(ioc->reply_post_host_index);
- 	kfree(ioc->pd_handles);
-@@ -6789,7 +6742,6 @@ mpt3sas_base_detach(struct MPT3SAS_ADAPTER *ioc)
- 	_base_release_memory_pools(ioc);
- 	mpt3sas_free_enclosure_list(ioc);
- 	pci_set_drvdata(ioc->pdev, NULL);
--	kfree(ioc->cpu_msix_table);
- 	if (ioc->is_warpdrive)
- 		kfree(ioc->reply_post_host_index);
- 	kfree(ioc->pd_handles);
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-index 480219f0efc5..4d441e031025 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.h
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-@@ -1022,7 +1022,6 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct MPT3SAS_ADAPTER *ioc);
-  * @start_scan_failed: means port enable failed, return's the ioc_status
-  * @msix_enable: flag indicating msix is enabled
-  * @msix_vector_count: number msix vectors
-- * @cpu_msix_table: table for mapping cpus to msix index
-  * @cpu_msix_table_sz: table size
-  * @total_io_cnt: Gives total IO count, used to load balance the interrupts
-  * @msix_load_balance: Enables load balancing of interrupts across
-@@ -1183,6 +1182,7 @@ struct MPT3SAS_ADAPTER {
- 	u16		broadcast_aen_pending;
- 	u8		shost_recovery;
- 	u8		got_task_abort_from_ioctl;
-+	u8		smp_affinity_enable;
- 
- 	struct mutex	reset_in_progress_mutex;
- 	spinlock_t	ioc_reset_in_progress_lock;
-@@ -1199,7 +1199,6 @@ struct MPT3SAS_ADAPTER {
- 
- 	u8		msix_enable;
- 	u16		msix_vector_count;
--	u8		*cpu_msix_table;
- 	u16		cpu_msix_table_sz;
- 	resource_size_t __iomem **reply_post_host_index;
- 	u32		ioc_reset_count;
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index 1ccfbc7eebe0..59c1f9e694a0 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -55,6 +55,7 @@
- #include <linux/interrupt.h>
- #include <linux/aer.h>
- #include <linux/raid_class.h>
-+#include <linux/blk-mq-pci.h>
- #include <asm/unaligned.h>
- 
- #include "mpt3sas_base.h"
-@@ -10161,6 +10162,17 @@ scsih_scan_finished(struct Scsi_Host *shost, unsigned long time)
- 	return 1;
- }
- 
-+static int mpt3sas_map_queues(struct Scsi_Host *shost)
-+{
-+	struct MPT3SAS_ADAPTER *ioc = shost_priv(shost);
-+	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-+
-+	if (ioc->smp_affinity_enable)
-+		return blk_mq_pci_map_queues(qmap, ioc->pdev, 0);
-+	else
-+		return blk_mq_map_queues(qmap);
-+}
-+
- /* shost template for SAS 2.0 HBA devices */
- static struct scsi_host_template mpt2sas_driver_template = {
- 	.module				= THIS_MODULE,
-@@ -10189,6 +10201,8 @@ static struct scsi_host_template mpt2sas_driver_template = {
- 	.sdev_attrs			= mpt3sas_dev_attrs,
- 	.track_queue_depth		= 1,
- 	.cmd_size			= sizeof(struct scsiio_tracker),
-+	.host_tagset			= 1,
-+	.map_queues			= mpt3sas_map_queues,
- };
- 
- /* raid transport support for SAS 2.0 HBA devices */
-@@ -10227,6 +10241,8 @@ static struct scsi_host_template mpt3sas_driver_template = {
- 	.sdev_attrs			= mpt3sas_dev_attrs,
- 	.track_queue_depth		= 1,
- 	.cmd_size			= sizeof(struct scsiio_tracker),
-+	.host_tagset			= 1,
-+	.map_queues			= mpt3sas_map_queues,
- };
- 
- /* raid transport support for SAS 3.0 HBA devices */
-@@ -10538,6 +10554,7 @@ _scsih_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	} else
- 		ioc->hide_drives = 0;
- 
-+	shost->nr_hw_queues = ioc->reply_queue_count;
- 	rv = scsi_add_host(shost, &pdev->dev);
- 	if (rv) {
- 		ioc_err(ioc, "failure at %s:%d/%s()!\n",
--- 
-2.20.1
+Because .commit_rqs() is only called when BLK_STS_*_RESOURCE is
+returned from scsi_queue_rq(), at that time shost->hostt->commit_rqs should
+have been hit from cache given .queuecommand is called via
+host->hostt->queuecommand.
 
+Not mention BLK_STS_*_RESOURCE is just often returned for small queue depth
+device.
+
+Thanks,
+Ming Lei
