@@ -2,93 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 112873110D
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 17:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAEC31148
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 May 2019 17:28:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726711AbfEaPPu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 May 2019 11:15:50 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35682 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726518AbfEaPPu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 31 May 2019 11:15:50 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4VFDVKV134486
-        for <linux-scsi@vger.kernel.org>; Fri, 31 May 2019 11:15:49 -0400
-Received: from e33.co.us.ibm.com (e33.co.us.ibm.com [32.97.110.151])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2su3r7ftw3-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Fri, 31 May 2019 11:15:47 -0400
-Received: from localhost
-        by e33.co.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <jejb@linux.ibm.com>;
-        Fri, 31 May 2019 16:15:36 +0100
-Received: from b03cxnp07029.gho.boulder.ibm.com (9.17.130.16)
-        by e33.co.us.ibm.com (192.168.1.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 31 May 2019 16:15:31 +0100
-Received: from b03ledav003.gho.boulder.ibm.com (b03ledav003.gho.boulder.ibm.com [9.17.130.234])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4VFFUN811665728
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 31 May 2019 15:15:30 GMT
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A89616A047;
-        Fri, 31 May 2019 15:15:30 +0000 (GMT)
-Received: from b03ledav003.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F36C56A051;
-        Fri, 31 May 2019 15:15:25 +0000 (GMT)
-Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.204.144])
-        by b03ledav003.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 31 May 2019 15:15:25 +0000 (GMT)
-Subject: Re: clean some unneeded #ifdef MODULE
-From:   James Bottomley <jejb@linux.ibm.com>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
-        linux@roeck-us.net, khalid@gonehiking.org,
-        martin.petersen@oracle.com, aacraid@microsemi.com,
-        linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Date:   Fri, 31 May 2019 18:15:24 +0300
-In-Reply-To: <1559315344-10384-1-git-send-email-info@metux.net>
-References: <1559315344-10384-1-git-send-email-info@metux.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19053115-0036-0000-0000-00000AC5467E
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011191; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01211268; UDB=6.00636449; IPR=6.00992305;
- MB=3.00027133; MTD=3.00000008; XFM=3.00000015; UTC=2019-05-31 15:15:34
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19053115-0037-0000-0000-00004C032C0B
-Message-Id: <1559315724.2878.7.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-31_09:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=949 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905310095
+        id S1726589AbfEaP2C (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 May 2019 11:28:02 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:18066 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726418AbfEaP2C (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 31 May 2019 11:28:02 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id CF5FD3F2C15E38F35514;
+        Fri, 31 May 2019 23:27:57 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Fri, 31 May 2019
+ 23:27:48 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <james.smart@broadcom.com>, <dick.kennedy@broadcom.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jsmart2021@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] scsi: lpfc: Remove set but not used variables 'qp'
+Date:   Fri, 31 May 2019 23:27:45 +0800
+Message-ID: <20190531152745.7928-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 2019-05-31 at 17:09 +0200, Enrico Weigelt, metux IT consult
-wrote:
-> Hi folks,
-> 
-> here're some patches that clean up uncessary cases of #ifdef MODULE.
-> These ifdef's just exlude MODULE_DEVICE_TABLE's when the kernel is
-> built w/o module support. As MODULE_DEVICE_TABLE() macro already
-> checks for that, these extra #ifdef's shouldn't be necessary.
+Fixes gcc '-Wunused-but-set-variable' warnings:
 
-Isn't the problem the #ifdefs are trying to solve a complaint about an
-unused variable in the non-module case? if so, is that fixed some other
-way?
+drivers/scsi/lpfc/lpfc_init.c: In function lpfc_setup_cq_lookup:
+drivers/scsi/lpfc/lpfc_init.c:9359:30: warning: variable qp set but not used [-Wunused-but-set-variable]
 
-James
+It's not used since commit e70596a60f88 ("scsi: lpfc: Fix
+poor use of hardware queues if fewer irq vectors")
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/scsi/lpfc/lpfc_init.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 24965a06f55d..cd8e47544d07 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -9356,10 +9356,8 @@ static void
+ lpfc_setup_cq_lookup(struct lpfc_hba *phba)
+ {
+ 	struct lpfc_queue *eq, *childq;
+-	struct lpfc_sli4_hdw_queue *qp;
+ 	int qidx;
+ 
+-	qp = phba->sli4_hba.hdwq;
+ 	memset(phba->sli4_hba.cq_lookup, 0,
+ 	       (sizeof(struct lpfc_queue *) * (phba->sli4_hba.cq_max + 1)));
+ 	/* Loop thru all IRQ vectors */
+-- 
+2.17.1
+
 
