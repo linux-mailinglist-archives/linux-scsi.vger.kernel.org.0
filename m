@@ -2,104 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 909BE32116
-	for <lists+linux-scsi@lfdr.de>; Sun,  2 Jun 2019 00:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043B232184
+	for <lists+linux-scsi@lfdr.de>; Sun,  2 Jun 2019 03:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbfFAWtu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 1 Jun 2019 18:49:50 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44790 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbfFAWtu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 1 Jun 2019 18:49:50 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n2so6051597pgp.11;
-        Sat, 01 Jun 2019 15:49:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=xis5TiMLMAKb33SokWGqbl3qrulKPU+v11atfD6BrqY=;
-        b=ivDjuOJHvAn0ZriuGcEETC9HHWLEi7uiSGIvivgAU70XxP+NRDkNuBdXxAKilNZ8j7
-         64BhowJvenQiilS3KqlEr1NJ053/R9ouG7HgI3j983kj084VmknxI6r9HnlXdWJDADhH
-         K4k6VYpNvMWyIh3vuvWppuRoNlSYNVf6aBaft3wRC5gxhQwUMV/Wy8XoyQFjPL69qWEV
-         Jtee/ZVWcNmDJhisplv1FIGi8x5KhhYXeXhseLNOG/OX4RZ0qm8YsPUQ+2VQkrbGqP4Q
-         darLUwLY51mKITWlyORCPcX+WWYH5KQ6Fgy4ajeCXkpzLN1Mp3mVRNZpGRnhRJkuY5Vs
-         Ivzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=xis5TiMLMAKb33SokWGqbl3qrulKPU+v11atfD6BrqY=;
-        b=Fs28vjx3FLBM4I/y6J/asP0qcYY5sgciSa2ys0Y9g2ZvJ3HKbnOc3aWjCa31kPXgPP
-         nNRlO8dDwGlQLTsdZL4CR4Wn7A0BrZ4Gn9X/zClSY0po00O8j6FUrhUpCnhePgAjflAp
-         UogmxTHK2vXiY9Z+abnEgepQvOrlqjzltZkCvk1Vsh6xWt9e4Zb6vOxn+8eYUhRZRK7l
-         0KSX4oZK0F/jM7l7+TR17kH9PWG3qpRWjgjW+kqoVtlt2tN0MW2n1vgPypqJObethmA2
-         JlcOaFicOukIbVSve+0tSFXiOFPikMVclzILSVs6RW7B3wx15G2qmgOj/wu8uIOlX/r+
-         wCig==
-X-Gm-Message-State: APjAAAVW92VcvRQMzhZgf90CQitvd/hrcTcR/0Wch5AoOX4uynwiWbps
-        3MHbdWB9Mm+nQhmdsHGxNaQ=
-X-Google-Smtp-Source: APXvYqxAfL0aWcYl4VMLoCO6v+7T4NRxdJHLlriazYObbehWBr8Fv9rr7JMxAziTNKr+TiFtGRQXIg==
-X-Received: by 2002:a63:f410:: with SMTP id g16mr8331650pgi.428.1559429389193;
-        Sat, 01 Jun 2019 15:49:49 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 4sm11860407pfj.111.2019.06.01.15.49.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 01 Jun 2019 15:49:48 -0700 (PDT)
-Date:   Sat, 1 Jun 2019 15:49:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, jdelvare@suse.com, khalid@gonehiking.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        aacraid@microsemi.com, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 3/3] drivers: hwmon: i5k_amb: remove unnecessary #ifdef
- MODULE
-Message-ID: <20190601224946.GA6483@roeck-us.net>
-References: <1559397700-15585-1-git-send-email-info@metux.net>
- <1559397700-15585-4-git-send-email-info@metux.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1559397700-15585-4-git-send-email-info@metux.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1726949AbfFBB3X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 1 Jun 2019 21:29:23 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:34610 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726343AbfFBB3K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 1 Jun 2019 21:29:10 -0400
+Received: by kvm5.telegraphics.com.au (Postfix, from userid 502)
+        id D7B4F27E4D; Sat,  1 Jun 2019 21:29:06 -0400 (EDT)
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     "Michael Schmitz" <schmitzmic@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Message-Id: <16486d63c31a51aa08ca79490e423569c7deaa57.1559438652.git.fthain@telegraphics.com.au>
+In-Reply-To: <cover.1559438652.git.fthain@telegraphics.com.au>
+References: <cover.1559438652.git.fthain@telegraphics.com.au>
+From:   Finn Thain <fthain@telegraphics.com.au>
+Subject: [PATCH 2/7] scsi: NCR5380: Always re-enable reselection interrupt
+Date:   Sun, 02 Jun 2019 11:24:12 +1000
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, Jun 01, 2019 at 04:01:40PM +0200, Enrico Weigelt, metux IT consult wrote:
-> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
-> so the extra check here is not necessary.
-> 
-> Signed-off-by: Enrico Weigelt <info@metux.net>
-> ---
->  drivers/hwmon/i5k_amb.c | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
-> index b09c39a..b674c2f 100644
-> --- a/drivers/hwmon/i5k_amb.c
-> +++ b/drivers/hwmon/i5k_amb.c
-> @@ -482,14 +482,12 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
->  	{ 0, 0 }
->  };
->  
-> -#ifdef MODULE
->  static const struct pci_device_id i5k_amb_ids[] = {
->  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
->  	{ 0, }
->  };
->  MODULE_DEVICE_TABLE(pci, i5k_amb_ids);
-> -#endif
->  
+The reselection interrupt gets disabled during selection and must be
+re-enabled when hostdata->connected becomes NULL. If it isn't re-enabled
+a disconnected command may time-out or the target may wedge the bus while
+trying to reselect the host. This can happen after a command is aborted.
 
-I'd rather know what this table is used for in the first place.
+Fix this by enabling the reselection interrupt in NCR5380_main() after
+calls to NCR5380_select() and NCR5380_information_transfer() return.
 
-Guenter
+Cc: Michael Schmitz <schmitzmic@gmail.com>
+Cc: stable@vger.kernel.org # v4.9+
+Fixes: 8b00c3d5d40d ("ncr5380: Implement new eh_abort_handler")
+Tested-by: Stan Johnson <userm57@yahoo.com>
+Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+---
+ drivers/scsi/NCR5380.c | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
->  static int i5k_amb_probe(struct platform_device *pdev)
->  {
-> -- 
-> 1.9.1
-> 
+diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+index fe0535affc14..08e3ea8159b3 100644
+--- a/drivers/scsi/NCR5380.c
++++ b/drivers/scsi/NCR5380.c
+@@ -709,6 +709,8 @@ static void NCR5380_main(struct work_struct *work)
+ 			NCR5380_information_transfer(instance);
+ 			done = 0;
+ 		}
++		if (!hostdata->connected)
++			NCR5380_write(SELECT_ENABLE_REG, hostdata->id_mask);
+ 		spin_unlock_irq(&hostdata->lock);
+ 		if (!done)
+ 			cond_resched();
+@@ -1110,8 +1112,6 @@ static bool NCR5380_select(struct Scsi_Host *instance, struct scsi_cmnd *cmd)
+ 		spin_lock_irq(&hostdata->lock);
+ 		NCR5380_write(INITIATOR_COMMAND_REG, ICR_BASE);
+ 		NCR5380_reselect(instance);
+-		if (!hostdata->connected)
+-			NCR5380_write(SELECT_ENABLE_REG, hostdata->id_mask);
+ 		shost_printk(KERN_ERR, instance, "reselection after won arbitration?\n");
+ 		goto out;
+ 	}
+@@ -1119,7 +1119,6 @@ static bool NCR5380_select(struct Scsi_Host *instance, struct scsi_cmnd *cmd)
+ 	if (err < 0) {
+ 		spin_lock_irq(&hostdata->lock);
+ 		NCR5380_write(INITIATOR_COMMAND_REG, ICR_BASE);
+-		NCR5380_write(SELECT_ENABLE_REG, hostdata->id_mask);
+ 
+ 		/* Can't touch cmd if it has been reclaimed by the scsi ML */
+ 		if (!hostdata->selecting)
+@@ -1157,7 +1156,6 @@ static bool NCR5380_select(struct Scsi_Host *instance, struct scsi_cmnd *cmd)
+ 	if (err < 0) {
+ 		shost_printk(KERN_ERR, instance, "select: REQ timeout\n");
+ 		NCR5380_write(INITIATOR_COMMAND_REG, ICR_BASE);
+-		NCR5380_write(SELECT_ENABLE_REG, hostdata->id_mask);
+ 		goto out;
+ 	}
+ 	if (!hostdata->selecting) {
+@@ -1826,9 +1824,6 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
+ 					 */
+ 					NCR5380_write(TARGET_COMMAND_REG, 0);
+ 
+-					/* Enable reselect interrupts */
+-					NCR5380_write(SELECT_ENABLE_REG, hostdata->id_mask);
+-
+ 					maybe_release_dma_irq(instance);
+ 					return;
+ 				case MESSAGE_REJECT:
+@@ -1860,8 +1855,6 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
+ 					 */
+ 					NCR5380_write(TARGET_COMMAND_REG, 0);
+ 
+-					/* Enable reselect interrupts */
+-					NCR5380_write(SELECT_ENABLE_REG, hostdata->id_mask);
+ #ifdef SUN3_SCSI_VME
+ 					dregs->csr |= CSR_DMA_ENABLE;
+ #endif
+@@ -1964,7 +1957,6 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
+ 					cmd->result = DID_ERROR << 16;
+ 					complete_cmd(instance, cmd);
+ 					maybe_release_dma_irq(instance);
+-					NCR5380_write(SELECT_ENABLE_REG, hostdata->id_mask);
+ 					return;
+ 				}
+ 				msgout = NOP;
+-- 
+2.21.0
+
