@@ -2,135 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E27E32284
-	for <lists+linux-scsi@lfdr.de>; Sun,  2 Jun 2019 09:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8F5322C3
+	for <lists+linux-scsi@lfdr.de>; Sun,  2 Jun 2019 11:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725953AbfFBHs0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 2 Jun 2019 03:48:26 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:55562 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725875AbfFBHs0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 2 Jun 2019 03:48:26 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 8C1D05AFF8;
-        Sun,  2 Jun 2019 07:48:25 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3A4EC196F6;
-        Sun,  2 Jun 2019 07:48:08 +0000 (UTC)
-Date:   Sun, 2 Jun 2019 15:48:00 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Kashyap Desai <kashyap.desai@broadcom.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        Don Brace <don.brace@microsemi.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 8/9] scsi: megaraid: convert private reply queue to
- blk-mq hw queue
-Message-ID: <20190602074757.GA31572@ming.t460p>
-References: <20190531022801.10003-1-ming.lei@redhat.com>
- <20190531022801.10003-9-ming.lei@redhat.com>
- <7819e1a523b9e8227e3a9d188ee1e083@mail.gmail.com>
- <20190602064202.GA2731@ming.t460p>
+        id S1726212AbfFBJEg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 2 Jun 2019 05:04:36 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:45154 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726159AbfFBJEg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Jun 2019 05:04:36 -0400
+Received: by mail-lf1-f66.google.com with SMTP id u10so4184263lfm.12;
+        Sun, 02 Jun 2019 02:04:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZRCW1o4GdnDTTwiENrsOUXxx3rdgPikwY37hABnif3E=;
+        b=etaQJjuax+yPTkcvPdWmpeLaxdfEGAXPfyIrRXDglyEQIyVnA5zQan50KeLm8F0wHM
+         qiORht5DbSb1+cGSwDGvsnFn2udmzuxBadiZexAvU4f7W+4Jwngv0wowr2I+g++D9rdo
+         K7KwuwBDk6Z9CGpLD+RhSCEOMeRdwz84rf1XQQ+oF8r8bPWfuIr+ItEtV5+A2L2Neiir
+         8CgPrK5hzLLgHPqjr+SkNMJaocpT7TmV8mZbV3KmcuJjZ11lIqI1ISy8+47ZBJmf6vyN
+         ndnZQrpyyd8OBW7IqXGxn08HQAeBqnFxQ4mChQiry1xZcC9w8NFDvOi5ksOSrXHWfXcD
+         QhqQ==
+X-Gm-Message-State: APjAAAUKmgJ3V9iWHoBJ53dmZ98hNsOZ9jD+MNwgNy8vfK1CU+kPvrcy
+        H++AiM5iNHa2wV7o0qMZexJEO11tyFG2wSUweas=
+X-Google-Smtp-Source: APXvYqx4R3CkZ66/i5qLA/4ODaVt1vONSi/4rrdmsiYdDOOlB/HAeTuNDypKunxR3+HarPEimeyV0wVERXodVvNSMGk=
+X-Received: by 2002:ac2:44b1:: with SMTP id c17mr10710134lfm.87.1559466274493;
+ Sun, 02 Jun 2019 02:04:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190602064202.GA2731@ming.t460p>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Sun, 02 Jun 2019 07:48:26 +0000 (UTC)
+References: <cover.1559438652.git.fthain@telegraphics.com.au> <a69c9e248f46f02a2cdef95e2ff3d3b08531c6fa.1559438652.git.fthain@telegraphics.com.au>
+In-Reply-To: <a69c9e248f46f02a2cdef95e2ff3d3b08531c6fa.1559438652.git.fthain@telegraphics.com.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Sun, 2 Jun 2019 11:04:22 +0200
+Message-ID: <CAMuHMdXbJ5kuPxLKOR6v=-98vzJxoiduVkYfK0EeWze7tm5uVw@mail.gmail.com>
+Subject: Re: [PATCH 6/7] scsi: mac_scsi: Enable PDMA on Mac IIfx
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, Jun 02, 2019 at 02:42:02PM +0800, Ming Lei wrote:
-> Hi Kashyap,
-> 
-> Thanks for your test.
-> 
-> On Sun, Jun 02, 2019 at 03:11:26AM +0530, Kashyap Desai wrote:
-> > > SCSI's reply qeueue is very similar with blk-mq's hw queue, both
-> > assigned by
-> > > IRQ vector, so map te private reply queue into blk-mq's hw queue via
-> > > .host_tagset.
-> > >
-> > > Then the private reply mapping can be removed.
-> > >
-> > > Another benefit is that the request/irq lost issue may be solved in
-> > generic
-> > > approach because managed IRQ may be shutdown during CPU hotplug.
-> > 
-> > Ming,
-> > 
-> > I quickly tested this patch series on MegaRaid Aero controller. Without
-> > this patch I can get 3.0M IOPS, but once I apply this patch I see only
-> > 1.2M IOPS (40% Performance drop)
-> > HBA supports 5089 can_queue.
-> > 
-> > <perf top> output without  patch -
-> > 
-> >     3.39%  [megaraid_sas]  [k] complete_cmd_fusion
-> >      3.36%  [kernel]        [k] scsi_queue_rq
-> >      3.26%  [kernel]        [k] entry_SYSCALL_64
-> >      2.57%  [kernel]        [k] syscall_return_via_sysret
-> >      1.95%  [megaraid_sas]  [k] megasas_build_and_issue_cmd_fusion
-> >      1.88%  [kernel]        [k] _raw_spin_lock_irqsave
-> >      1.79%  [kernel]        [k] gup_pmd_range
-> >      1.73%  [kernel]        [k] _raw_spin_lock
-> >      1.68%  [kernel]        [k] __sched_text_start
-> >      1.19%  [kernel]        [k] irq_entries_start
-> >      1.13%  [kernel]        [k] scsi_dec_host_busy
-> >      1.08%  [kernel]        [k] aio_complete
-> >      1.07%  [kernel]        [k] read_tsc
-> >      1.01%  [kernel]        [k] blk_mq_get_request
-> >      0.93%  [kernel]        [k] __update_load_avg_cfs_rq
-> >      0.92%  [kernel]        [k] aio_read_events
-> >      0.91%  [kernel]        [k] lookup_ioctx
-> >      0.91%  fio             [.] fio_gettime
-> >      0.87%  [kernel]        [k] set_next_entity
-> >      0.87%  [megaraid_sas]  [k] megasas_build_ldio_fusion
-> > 
-> > <perf top> output with  patch -
-> > 
-> >     11.30%  [kernel]       [k] native_queued_spin_lock_slowpath
-> 
-> I guess there must be one global lock required in megaraid submission path,
-> could you run 'perf record -g -a' to see which lock is and what the stack
-> trace is?
+Hi Finn,
 
-Meantime please try the following patch and see if difference can be made.
+On Sun, Jun 2, 2019 at 3:29 AM Finn Thain <fthain@telegraphics.com.au> wrote:
+> Add support for Apple's custom "SCSI DMA" chip. This patch doesn't make
+> use of its DMA capability. Just the PDMA capability is sufficient to
+> improve sequential read throughput by a factor of 5.
+>
+> Cc: Michael Schmitz <schmitzmic@gmail.com>
+> Cc: Joshua Thompson <funaho@jurai.org>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Tested-by: Stan Johnson <userm57@yahoo.com>
+> Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 49d73d979cb3..d2abec3b0f60 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -589,7 +589,7 @@ static void __blk_mq_complete_request(struct request *rq)
- 	 * So complete IO reqeust in softirq context in case of single queue
- 	 * for not degrading IO performance by irqsoff latency.
- 	 */
--	if (q->nr_hw_queues == 1) {
-+	if (q->nr_hw_queues == 1 || (rq->mq_hctx->flags & BLK_MQ_F_HOST_TAGS)) {
- 		__blk_complete_request(rq);
- 		return;
- 	}
-@@ -1977,7 +1977,8 @@ static blk_qc_t blk_mq_make_request(struct request_queue *q, struct bio *bio)
- 		/* bypass scheduler for flush rq */
- 		blk_insert_flush(rq);
- 		blk_mq_run_hw_queue(data.hctx, true);
--	} else if (plug && (q->nr_hw_queues == 1 || q->mq_ops->commit_rqs)) {
-+	} else if (plug && (q->nr_hw_queues == 1 || q->mq_ops->commit_rqs ||
-+				(data.hctx->flags & BLK_MQ_F_HOST_TAGS))) {
- 		/*
- 		 * Use plugging if we have a ->commit_rqs() hook as well, as
- 		 * we know the driver uses bd->last in a smart fashion.
+Thanks for your patch!
 
-thanks,
-Ming
+> ---
+>  arch/m68k/mac/config.c  | 10 +++++++--
+
+For the  m68k change to go in through the SCSI tree:
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
