@@ -2,69 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C4D324C0
-	for <lists+linux-scsi@lfdr.de>; Sun,  2 Jun 2019 22:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30818325A6
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 01:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726799AbfFBUYL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 2 Jun 2019 16:24:11 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:42543 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726485AbfFBUYK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 2 Jun 2019 16:24:10 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 0475F2041CF;
-        Sun,  2 Jun 2019 22:24:09 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Biqa+OrVis1d; Sun,  2 Jun 2019 22:24:03 +0200 (CEST)
-Received: from [172.20.1.42] (96-80-82-153-static.hfc.comcastbusiness.net [96.80.82.153])
-        by smtp.infotech.no (Postfix) with ESMTPA id 8313C204155;
-        Sun,  2 Jun 2019 22:24:00 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH 00/19] sg: v4 interface, rq sharing + multiple rqs
-To:     Bart Van Assche <bvanassche@acm.org>, linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        bart.vanassche@wdc.com
-References: <20190524184809.25121-1-dgilbert@interlog.com>
- <a1096ff2-71f5-f398-6173-c8832ac7e26c@acm.org>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <1c706e3c-6195-a84b-ac70-f15e5e55e9a7@interlog.com>
-Date:   Sun, 2 Jun 2019 16:23:59 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726734AbfFBXcl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 2 Jun 2019 19:32:41 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:48238 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726305AbfFBXcl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Jun 2019 19:32:41 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id C7BA3283AD;
+        Sun,  2 Jun 2019 19:32:35 -0400 (EDT)
+Date:   Mon, 3 Jun 2019 09:32:36 +1000 (AEST)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+Subject: Re: [PATCH 5/7] scsi: mac_scsi: Fix pseudo DMA implementation, take
+ 2
+In-Reply-To: <CAMuHMdWxRtJU2aRQQjXzR2mvpfpDezCVu42Eo1eXDsQaPb+j6Q@mail.gmail.com>
+Message-ID: <alpine.LNX.2.21.1906030903510.20@nippy.intranet>
+References: <cover.1559438652.git.fthain@telegraphics.com.au> <c56deeb735545c7942607a93f017bb536f581ae5.1559438652.git.fthain@telegraphics.com.au> <CAMuHMdWxRtJU2aRQQjXzR2mvpfpDezCVu42Eo1eXDsQaPb+j6Q@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <a1096ff2-71f5-f398-6173-c8832ac7e26c@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-05-26 11:49 a.m., Bart Van Assche wrote:
-> On 5/24/19 11:47 AM, Douglas Gilbert wrote:
->> This patchset restores some functionality that was in the v2 driver
->> version and has been broken by some external patch in the interim
->> period (20 years).
+On Sun, 2 Jun 2019, Geert Uytterhoeven wrote:
+
+> Hi Finn,
 > 
-> What is an "external patch"?
+> On Sun, Jun 2, 2019 at 3:29 AM Finn Thain <fthain@telegraphics.com.au> 
+> wrote:
+> > A system bus error during a PDMA transfer can mess up the calculation 
+> > of the transfer residual (the PDMA handshaking hardware lacks a byte 
+> > counter). This results in data corruption.
+> >
+> > The algorithm in this patch anticipates a bus error by starting each 
+> > transfer with a MOVE.B instruction. If a bus error is caught the 
+> > transfer will be retried. If a bus error is caught later in the 
+> > transfer (for a MOVE.W instruction) the transfer gets failed and 
+> > subsequent requests for that target will use PIO instead of PDMA.
+> >
+> > This avoids the "!REQ and !ACK" error so the severity level of that 
+> > message is reduced to KERN_DEBUG.
+> >
+> > Cc: Michael Schmitz <schmitzmic@gmail.com>
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Cc: stable@vger.kernel.org # v4.14+
+> > Fixes: 3a0f64bfa907 ("mac_scsi: Fix pseudo DMA implementation")
+> > Reported-by: Chris Jones <chris@martin-jones.com>
+> > Tested-by: Stan Johnson <userm57@yahoo.com>
+> > Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+> 
+> Thanks for your patch!
+> 
+> > ---
+> >  arch/m68k/include/asm/mac_pdma.h | 179 +++++++++++++++++++++++++++
+> >  drivers/scsi/mac_scsi.c          | 201 ++++++++-----------------------
+> 
+> Why have you moved the PDMA implementation to a header file under 
+> arch/m68k/? Do you intend to reuse it by other drivers?
+> 
 
-It's a patch made by someone with a first name like Christoph, Jens or
-James (picking some names at random) that is applied whether or not
-the maintainer of said driver approves ("ack's) or not.
+There are a couple of reasons: the mac_esp driver also uses PDMA and the 
+NuBus PowerMac port also uses mac_scsi.c. OTOH, the NuBus PowerMac port is 
+still out-of-tree, and it is unclear whether the mac_esp driver will ever 
+benefit from this code.
 
-IMO The maintainer should be able to restore features removed in this
-fashion (I'm talking specifically about the neutering of
-SG_FLAG_NO_DXFER) without review as it is in the documented interface.
-Plus I know of at least one power user who was peeved to find out that
-it was quietly broken.
+> If not, please keep it in the driver, so (a) you don't need an ack from 
+> me ;-), and (b) your change may be easier to review.
+> 
 
-Doug Gilbert
+I take your wink to mean that you don't want to ask the SCSI maintainers 
+to review m68k asm. Putting aside the code review process for a moment, do 
+you have an opinion on the most logical way to organise this sort of code, 
+from the point-of-view of maintainability, re-usability, readability etc.?
 
+Thanks.
 
-P.S the use case is mirrored disks: reading one disk for the actual data,
-and the other disk to check if there is an IO error. So the second disk
-doesn't need its data transferred to the user space (thus saving time).
+-- 
 
+> Thanks!
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> 
