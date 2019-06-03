@@ -2,174 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6802533067
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 15:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2BB3307F
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 15:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727835AbfFCNAk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 09:00:40 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:18073 "EHLO huawei.com"
+        id S1727623AbfFCNEH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 09:04:07 -0400
+Received: from fglinks.com.br ([187.191.113.207]:42597 "EHLO topdialog.top"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726336AbfFCNAk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 3 Jun 2019 09:00:40 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 2AD577D0576AE24DE89D;
-        Mon,  3 Jun 2019 21:00:35 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Mon, 3 Jun 2019
- 21:00:29 +0800
-Subject: Re: [PATCH 7/9] scsi: hisi_sas_v3: convert private reply queue to
- blk-mq hw queue
-To:     Ming Lei <ming.lei@redhat.com>
-References: <20190531022801.10003-1-ming.lei@redhat.com>
- <20190531022801.10003-8-ming.lei@redhat.com>
- <1afb4353-6703-a3f0-ca6c-d0b2bd754a56@suse.de>
- <CACVXFVMG8gkw8E0pmWBJC0tBH9D-WVjY2FnL2gsxDja3ryfbng@mail.gmail.com>
- <c11faee4-fc38-9636-59b4-bc5c0d94ffbf@huawei.com>
- <20190603110054.GG11812@ming.t460p>
-CC:     Ming Lei <tom.leiming@gmail.com>, Hannes Reinecke <hare@suse.de>,
-        "Jens Axboe" <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        "Linux SCSI List" <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <f1a66b3a-5549-b69d-79fa-7d89b5627a15@huawei.com>
-Date:   Mon, 3 Jun 2019 14:00:19 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
-MIME-Version: 1.0
-In-Reply-To: <20190603110054.GG11812@ming.t460p>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+        id S1726379AbfFCNEH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 09:04:07 -0400
+X-Greylist: delayed 11469 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jun 2019 09:04:06 EDT
+To:     linux-scsi@vger.kernel.org
+From:   Martin Winkler <info@topdialog.top>
+Subject: Nachricht
+Date:   Mon, 3 Jun 2019 13:02:59 +0000
+Message-ID: <20190603_130259_041568.info@topdialog.top>
+X-Mailer: WEBMAIL
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 03/06/2019 12:00, Ming Lei wrote:
-> On Fri, May 31, 2019 at 12:38:10PM +0100, John Garry wrote:
->>
->>>>> -fallback:
->>>>> -     for_each_possible_cpu(cpu)
->>>>> -             hisi_hba->reply_map[cpu] = cpu % hisi_hba->queue_count;
->>>>> -     /* Don't clean all CQ masks */
->>>>> -}
->>>>> -
->>>>>  static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
->>>>>  {
->>>>>       struct device *dev = hisi_hba->dev;
->>>>> @@ -2383,11 +2359,6 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
->>>>>
->>>>>               min_msi = MIN_AFFINE_VECTORS_V3_HW;
->>>>>
->>>>> -             hisi_hba->reply_map = devm_kcalloc(dev, nr_cpu_ids,
->>>>> -                                                sizeof(unsigned int),
->>>>> -                                                GFP_KERNEL);
->>>>> -             if (!hisi_hba->reply_map)
->>>>> -                     return -ENOMEM;
->>>>>               vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
->>>>>                                                        min_msi, max_msi,
->>>>>                                                        PCI_IRQ_MSI |
->>>>> @@ -2395,7 +2366,6 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
->>>>>                                                        &desc);
->>>>>               if (vectors < 0)
->>>>>                       return -ENOENT;
->>>>> -             setup_reply_map_v3_hw(hisi_hba, vectors - BASE_VECTORS_V3_HW);
->>>>>       } else {
->>>>>               min_msi = max_msi;
->>>>>               vectors = pci_alloc_irq_vectors(hisi_hba->pci_dev, min_msi,
->>>>> @@ -2896,6 +2866,18 @@ static void debugfs_snapshot_restore_v3_hw(struct hisi_hba *hisi_hba)
->>>>>       clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
->>>>>  }
->>>>>
->>>>> +static int hisi_sas_map_queues(struct Scsi_Host *shost)
->>>>> +{
->>>>> +     struct hisi_hba *hisi_hba = shost_priv(shost);
->>>>> +     struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
->>>>> +
->>>>> +     if (auto_affine_msi_experimental)
->>>>> +             return blk_mq_pci_map_queues(qmap, hisi_hba->pci_dev,
->>>>> +                             BASE_VECTORS_V3_HW);
->>>>> +     else
->>>>> +             return blk_mq_map_queues(qmap);
->>
->> I don't think that the mapping which blk_mq_map_queues() creates are not
->> want we want. I'm guessing that we still would like a mapping similar to
->> what blk_mq_pci_map_queues() produces, which is an even spread, putting
->> adjacent CPUs on the same queue.
->>
->> For my system with 96 cpus and 16 queues, blk_mq_map_queues() would map
->> queue 0 to cpu 0, 16, 32, 48 ..., queue 1 to cpu 1, 17, 33 and so on.
->
+Sehr geehrte Damen und Herren,
 
-Hi Ming,
+nach unserem Besuch Ihrer Homepage möchten wir Ihnen ein Angebot von Produkten vorstellen, das Ihnen ermöglichen wird, den Verkauf Ihrer Produkte sowie Dienstleistungen deutlich zu erhöhen.
 
-> blk_mq_map_queues() is the default or fallback mapping in case that managed
-> irq isn't used. If the mapping isn't good enough, we still can improve it
-> in future, then any driver applying it can got improved.
->
+Die Datenbanken der Firmen sind in für Sie interessante und relevante Zielgruppen untergliedert.
 
-That's the right attitude. However, as I see, we can only know the 
-mapping when we know the interrupt affinity or some other mapping 
-restriction or rule etc, which we don't know in this case.
+Die Firmenangaben beinhalten: Name der Firma, Ansprechpartner, E-mail Adresse, Tel. + Fax-Nr., PLZ, Ort, Straße etc.
 
-For now, personally I would rather if we only expose multiple queues for 
-when auto_affine_msi_experimental is set. I fear that we may make a 
-performance regression for !auto_affine_msi_experimental with this 
-patch. We would need to test.
+--
+1. Gesamtpaket 2019 DE 1 Mio. Firmenadressen ( 1 457 620 ) - 190 EUR ( bis zum 03.06.2019 )
+2. Gesamtpaket 2019 DE,AT,CH ( 1 747 921 ) - 240 EUR ( bis zum 03.06.2019 )
+--
 
-Hopefully we can drop !auto_affine_msi_experimental support when CPU 
-hotplug issue is resolved.
+Die Verwendungsmöglichkeiten der Datenbanken sind praktisch unbegrenzt und Sie können durch Verwendung der von uns entwickelten
+Programme des personalisierten Versendens von Angeboten u.ä. mittels E-mailing bzw. Fax effektive und sichere Werbekampagnen damit durchführen.
 
->>
->>>>> +}
->>>>> +
->>>>>  static struct scsi_host_template sht_v3_hw = {
->>>>>       .name                   = DRV_NAME,
->>>>>       .module                 = THIS_MODULE,
->>>>
->>>> As mentioned, we should be using a common function here.
->>>>
->>>>> @@ -2906,6 +2888,8 @@ static struct scsi_host_template sht_v3_hw = {
->>>>>       .scan_start             = hisi_sas_scan_start,
->>>>>       .change_queue_depth     = sas_change_queue_depth,
->>>>>       .bios_param             = sas_bios_param,
->>>>> +     .map_queues             = hisi_sas_map_queues,
->>>>> +     .host_tagset            = 1,
->>>>>       .this_id                = -1,
->>>>>       .sg_tablesize           = HISI_SAS_SGE_PAGE_CNT,
->>>>>       .sg_prot_tablesize      = HISI_SAS_SGE_PAGE_CNT,
->>>>> @@ -3092,6 +3076,8 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>>>>       if (hisi_sas_debugfs_enable)
->>>>>               hisi_sas_debugfs_init(hisi_hba);
->>>>>
->>>>> +     shost->nr_hw_queues = hisi_hba->cq_nvecs;
->>
->> There's an ordering issue here, which can be fixed without too much trouble.
->>
->> Value hisi_hba->cq_nvecs is not set until after this point, in
->> hisi_sas_v3_probe()->hw->hw_init->hisi_sas_v3_init()->interrupt_init_v3_hw()
->>
->>
->> Please see revised patch, below.
->
-> Good catch, will integrate it in V2.
->
+Bitte informieren Sie sich über die weiteren Details einmal unverbindlich auf unseren Webseiten:
 
-Thanks!
+http://www.topdialog.net/?p=1
 
-> Thanks,
-> Ming
->
-> .
->
-
+Mit freundlichen Grüßen
+Martin Winkler
 
