@@ -2,174 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1651B33A04
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 23:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B88F733A54
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 23:54:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726076AbfFCVo3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 17:44:29 -0400
-Received: from mail-lj1-f177.google.com ([209.85.208.177]:36764 "EHLO
-        mail-lj1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726101AbfFCVo2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 17:44:28 -0400
-Received: by mail-lj1-f177.google.com with SMTP id i21so3140095ljj.3
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Jun 2019 14:44:27 -0700 (PDT)
+        id S1726303AbfFCVyq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 17:54:46 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40837 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726057AbfFCVyq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 17:54:46 -0400
+Received: by mail-pf1-f196.google.com with SMTP id u17so11367992pfn.7;
+        Mon, 03 Jun 2019 14:54:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=qxSXqqQE6XDV0pJn4ln6Tb/GK9vrKUXeNjK3sXRhBAI=;
-        b=S5HcXZ7NEL9l7rq4PA6lYi1ipF1obsb7+YCau1uKxPzM2TyAFJMPtTvoKBjFPSnDPj
-         EJCEZO2QA6HgwX4dvcFoSU0lr2l5SJyZToHHYjPkvggieMSNL2g+36vQXPt1OKj3mzI5
-         LkF57ZXsijVVmVORxkq7X/w8R1aNigZE6K7aM=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=oPgJE3SSPiX3rwzOACtwORs8x/gWd6/IDJ++GUP51Jg=;
+        b=bfXkOXSfNVYnnh16yF2REmi7yZJCVii7QO2C8GoEfLF165QIfQP5OGhUup1x8cHoUQ
+         Z3U/55H+nLoLRJuozE4ILyDjvOzbYQHgzbrpAVopIc7+buaraZZ21Z28FsHlExFQlfkN
+         XgpCGT5Ox6f7MpKZe9/h7cZ3NzHXfyoR6DF0pr8vX8ft8Tj//aOFG7kdQp2WvWn3fnEn
+         g9tfN2xrfjyABTyJyR5oWGumZvvAEklIf8BSUyahMMAA4izG5/ivi1excyBsqCDjA4VO
+         k+Bkk7//oHXdv2bVq2VQVtjEvtB/QByvDZPDwvTJbu3NJUpZkMS+NpO2yW7VqVFemfXk
+         kPFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=qxSXqqQE6XDV0pJn4ln6Tb/GK9vrKUXeNjK3sXRhBAI=;
-        b=Af5+i8fdrgURc4fWfhSEYFgJabRADsgl6hgTeG5TOUWBfL63e01R8CtzhuMyd2B0uY
-         RkVgj/iRpEVQcrLRCIGDhuIRr78K6sJMZ2QThC5MKzfLcGvQATsd88pIsZQ1vYqrb7EQ
-         jF2aJy9QPutF9kfu2C4tZ/GlYU3a0V+hjNoEBlZdqW19dRazonVkv9aBYxd0CKgxDGlB
-         151BZpZ5i9NyeJB9wFZURdhT34VtOqn2eAm8ghgoluwvYqVImVpk79Vx/8qZSYqPSYfd
-         yO4cBm2C1IfflMiX4k7n6SHFGG03teUfrVE99yStCi7hL7AIjRungqgyIktmArsMz35s
-         yZiA==
-X-Gm-Message-State: APjAAAUFhO8YCrVTJjkPG2fwFJwFe2tI1mgZsZ2w3nzcJgUsNWysaRdw
-        O+78bMyezKthAOLsVuAYP5vZ76eFlx8=
-X-Google-Smtp-Source: APXvYqzWsi+vDRTqkk6+4gwMflanC5lj64xbatSEEQEKgVB20i7yopJSzLWvvGScuZ3r27GEtiJ1TA==
-X-Received: by 2002:a2e:9a89:: with SMTP id p9mr387353lji.113.1559596860121;
-        Mon, 03 Jun 2019 14:21:00 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id 80sm3378273lfz.56.2019.06.03.14.20.58
-        for <linux-scsi@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=oPgJE3SSPiX3rwzOACtwORs8x/gWd6/IDJ++GUP51Jg=;
+        b=mtDIxp3Tr8ls/e0Ca1E8H9B7cqY9rpRv7rUFxjKe8h3gsrDh0jOlpqAqCIudgAuvfC
+         qTef7HC2mBS+VUfijE+mXUmbUl9EyUZ+ft6Ky6lkN4jsHHnTHPEmTLpmT4LfrG8UOtWc
+         YO9+K/7nm74QohKcg/22CCxj37rs3aNUuHYBxMeUHTYhnGEI2ETg2ekr5bIWoFQLp1dH
+         iLhtOYLrLwPEZY0fglk3pz0t0+Q4zV40U7JaSFNP/uq24riDzDUdtOFqHELG5VVYOShN
+         CVvYPMooQeiEE8lDWHtNDWkhdGd4IsTU9sHpV+4007TpJqXtFq2mKXBGIFljgev+JnDa
+         Zl0w==
+X-Gm-Message-State: APjAAAXqtGwyY2t25KwGxHCuCcWi7/Xw012GDGycV+fl3o6wOx100l3W
+        bmVBk9j4qw6xu1CZyNThnuU=
+X-Google-Smtp-Source: APXvYqyeipUplPNCoCJXUVB7Wx50wgvCiYlk9Y54A9DE4CDmrWG2qKZIezaeu1pnxMHa/u7BIZ+HvA==
+X-Received: by 2002:a17:90a:204a:: with SMTP id n68mr32638862pjc.21.1559597157690;
+        Mon, 03 Jun 2019 14:25:57 -0700 (PDT)
+Received: from ?IPv6:2001:df0:0:200c:802d:b772:7767:bf29? ([2001:df0:0:200c:802d:b772:7767:bf29])
+        by smtp.gmail.com with ESMTPSA id j186sm13739673pfg.66.2019.06.03.14.25.51
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 03 Jun 2019 14:20:59 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id o13so17645457lji.5
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Jun 2019 14:20:58 -0700 (PDT)
-X-Received: by 2002:a2e:85d1:: with SMTP id h17mr14869316ljj.1.1559596858655;
- Mon, 03 Jun 2019 14:20:58 -0700 (PDT)
+        Mon, 03 Jun 2019 14:25:56 -0700 (PDT)
+Subject: Re: [PATCH 5/7] scsi: mac_scsi: Fix pseudo DMA implementation, take 2
+To:     Finn Thain <fthain@telegraphics.com.au>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>
+References: <cover.1559438652.git.fthain@telegraphics.com.au>
+ <c56deeb735545c7942607a93f017bb536f581ae5.1559438652.git.fthain@telegraphics.com.au>
+ <CAMuHMdWxRtJU2aRQQjXzR2mvpfpDezCVu42Eo1eXDsQaPb+j6Q@mail.gmail.com>
+ <alpine.LNX.2.21.1906030903510.20@nippy.intranet>
+ <CAMuHMdUFxQnmJmkr2qm4waTfFA5yfCHAFngyD37cFH6gbbD-Pg@mail.gmail.com>
+ <alpine.LNX.2.21.1906031702220.37@nippy.intranet>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <247ed79a-75c7-41fd-0932-0b7701ee5d4e@gmail.com>
+Date:   Tue, 4 Jun 2019 09:25:49 +1200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 3 Jun 2019 14:20:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
-Message-ID: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
-Subject: Compiler warnings in FCoE code
-To:     Hannes Reinecke <hare@suse.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Johannes Thumshirn <jthumshirn@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <alpine.LNX.2.21.1906031702220.37@nippy.intranet>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-So gcc-9 has a new warning about doing memset() across pointer boundaries.
+Hi Finn,
 
-We didn't have a lot of these things, and most of them got fixed
-pretty quickly. The main remaining ones are oin FCoE, and look like
-this:
+On 3/06/19 7:40 PM, Finn Thain wrote:
+>
+>> There are several other drivers that contain pieces of assembler code.
+>>
+> Does any driver contain assembler code for multiple architectures? I was
+> trying to avoid that -- though admittedly I don't yet have actual code for
+> the PDMA implementation for mac_scsi for Nubus PowerMacs.
+>
+I've seen that once, for one of the ESP drivers that were supported on 
+both m68k and ppc (APUS, PPC upgrade to Amiga computers). But that 
+driver was removed long ago (after 2.6?).
 
-In function =E2=80=98memset=E2=80=99,
-    inlined from =E2=80=98fcoe_ctlr_vlan_parse=E2=80=99 at drivers/scsi/fco=
-e/fcoe_ctlr.c:2830:2,
-    inlined from =E2=80=98fcoe_ctlr_vlan_recv=E2=80=99 at drivers/scsi/fcoe=
-/fcoe_ctlr.c:3005:7:
-./include/linux/string.h:344:9: warning: =E2=80=98__builtin_memset=E2=80=99=
- offset
-[569, 600] from the object at =E2=80=98buf=E2=80=99 is out of the bounds of=
- referenced
-subobject =E2=80=98rdata=E2=80=99 with type =E2=80=98struct fc_rport_priv=
-=E2=80=99 at offset 0
-[-Warray-bounds]
-  344 |  return __builtin_memset(p, c, size);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In function =E2=80=98memset=E2=80=99,
-    inlined from =E2=80=98fcoe_ctlr_vn_parse=E2=80=99 at drivers/scsi/fcoe/=
-fcoe_ctlr.c:2299:2,
-    inlined from =E2=80=98fcoe_ctlr_vn_recv=E2=80=99 at drivers/scsi/fcoe/f=
-coe_ctlr.c:2772:7:
-./include/linux/string.h:344:9: warning: =E2=80=98__builtin_memset=E2=80=99=
- offset
-[569, 600] from the object at =E2=80=98buf=E2=80=99 is out of the bounds of=
- referenced
-subobject =E2=80=98rdata=E2=80=99 with type =E2=80=98struct fc_rport_priv=
-=E2=80=99 at offset 0
-[-Warray-bounds]
-  344 |  return __builtin_memset(p, c, size);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In that case, the assembly file did reside in drivers/scsi/. That still 
+appears to be current practice (see drivers/scsi/arm/acornscsi-io.S).
 
-and honestly, when I look at the code, I cannot help but agree with
-the new warning in this case (we had a few other cases where the
-warning was understandable but annoying, but in the FCoE case it's
-really "yeah, that code is wrong").
+Cheers,
 
-In particular, in fcoe_ctlr_vlan_parse(), the function is passed a
-"struct fc_rport_priv *rdata" pointer, and then it does
+     Michael
 
-        memset(rdata, 0, sizeof(*rdata) + sizeof(*frport));
 
-and honestly, that should make people go "WTF?". You got passed a
-pointer to one type, and then you clear not just that type, but
-another entirely unrelated type after it. That's just completely bogus
-and wrong.
-
-In fact, what people *are* passing that thing is this:
-
-        struct {
-                struct fc_rport_priv rdata;
-                struct fcoe_rport frport;
-        } buf;
-
-but that doesn't actually make that "memset()" any more correct. It's
-still entirely wrong, because it's possible that "struct fcoe_rport"
-could have different alignment requirements etc, so maybe there's a
-gap between the two structures, and the memset() with just adding the
-sizes may be entirely bogus.
-
-Now, in practice I think the code works, but I have to say that in
-this case the compiler warning is really quite correct. The code is
-wrong, even if it might happen to work.
-
-That "combined struct of two types" needs to be made into a type of
-its own, and people need to use that.
-
-I started doing that, but it turns out this mis-feature is deeply
-embedded in that file, and also exposed indirectly in the whole
-"struct fc_rport_operations", which uses a "event_callback" function
-pointer that has the bogus type.
-
-End result: I don't know how to fix it, but the compiler is right.
-This code is wrong, and it needs to be fixed. Maybe "struct
-fc_rport_priv" could just be made to include that "struct fcoe_rport"
-as part of it? Maybe the event_callback() can be typed differently.
-But passing around a "struct fc_rport_priv" pointer that is actually
-*not* a pointer to just that thing, but must be a pointer to the
-combined data, is wrong. Something like
-
- struct fc_rport_combined_data {
-        struct fc_rport_priv rdata;
-        struct fcoe_rport frport;
- };
-
-may be needed, and then you pass a pointer to that. But it expands
-quite quickly because this seems to be common.
-
-Related to this thing, the whole
-
-   static inline struct fcoe_rport *fcoe_ctlr_rport(struct fc_rport_priv *r=
-data)
-
-is part of the disease, and needs to go away. Passing the right
-"combined data" pointer around would have made that thing useless to
-begin with (ie "fcoe_ctlr_rport(rdata)" should become just
-"&buf->frport" instead if the types were done correctly).
-
-Hmm? Please can some FCoE person look at this, because right now it
-causes tens of lines of warnings that make me go "yeah, the compiler
-is right".
-
-                 Linus
