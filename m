@@ -2,146 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0F133C01
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 01:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D7933C0C
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 01:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726136AbfFCXf7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 19:35:59 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43604 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726216AbfFCXf7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 19:35:59 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x53NWYkh022896
-        for <linux-scsi@vger.kernel.org>; Mon, 3 Jun 2019 19:35:58 -0400
-Received: from e17.ny.us.ibm.com (e17.ny.us.ibm.com [129.33.205.207])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2swc0b3198-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Jun 2019 19:35:58 -0400
-Received: from localhost
-        by e17.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <tyreld@linux.vnet.ibm.com>;
-        Tue, 4 Jun 2019 00:35:57 +0100
-Received: from b01cxnp23033.gho.pok.ibm.com (9.57.198.28)
-        by e17.ny.us.ibm.com (146.89.104.204) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 4 Jun 2019 00:35:54 +0100
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x53NZrHf25756138
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Jun 2019 23:35:53 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AC28AAC059;
-        Mon,  3 Jun 2019 23:35:53 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8AB16AC062;
-        Mon,  3 Jun 2019 23:35:52 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.85.191.102])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Jun 2019 23:35:52 +0000 (GMT)
-Subject: Re: [PATCH v2] scsi: ibmvscsi: Don't use rc uninitialized in
- ibmvscsi_do_work
-From:   Tyrel Datwyler <tyreld@linux.vnet.ibm.com>
-To:     Nathan Chancellor <natechancellor@gmail.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        id S1726179AbfFCXom (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 19:44:42 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:32929 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726101AbfFCXol (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 19:44:41 -0400
+Received: by mail-ed1-f67.google.com with SMTP id y17so11185404edr.0;
+        Mon, 03 Jun 2019 16:44:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=iUy17fN7770FCrI/QNupqS+ou4at1wV04TcSjndKp2g=;
+        b=oD9NwKTJf5z2zrDzsi8009pHmlRtw9kWEpI1bZ5z1Tj9w5XKm++lvrwDcBtM2GoOYR
+         tAfx0fsmedFy5tadWiGYRb+d5oK+l1T6ue/4JMyzKO+l59ihgiA9Bi4FRsgYNRR4YqZA
+         MGhldpQR2s0y1ahkROxL4LPO6pNwrsQ5zSyjLY8jLjrpIE/h2xoXaCSF1uK058Fdby+1
+         cRTVrlbB5Fxc+5SssC/A/x5r/XJFzpWYMsIuH6tsPgr1g7ISxP7Z0fUkSukxwE4PyQvJ
+         vYrPtbAGZ8kbyQAvWXlVsUUnqcUfOBEQSIyb4k9yc2Q6xV8Yqs0I3G88yxl5jgPWucbK
+         iXNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=iUy17fN7770FCrI/QNupqS+ou4at1wV04TcSjndKp2g=;
+        b=qwNWzBF5ovdmAtTLPzuhFPbi83ZvdC0PmnQK0JaEaic5QNSLmh+4y+AtWLFarhy6WU
+         9Gvz9l2nfj/SsnVUun43b3X3Ow3sjoF3Wu1Z01GRz8UncWfovToIM2cxCmDQhdevxsZM
+         nuQb8Qq3AEMJHdA2+xnG7CufcT4JVNupQN5+Gb6fR0AyRxqFpoPEh2X06ebVCkDV5ON6
+         +tlzZ0aJbvXea8t+BZd4ynvZF3F5WJBc+aYYiGxKGkntS5y/yxVLI/Jo0VPuNqIaC8Hd
+         foj3Di4Ggn8XwxoxZ2vq64+0OEZEKr8UKoaMVIO7pstcb4/YyGOcf++Te1oNGW3C4P79
+         Pcfw==
+X-Gm-Message-State: APjAAAUzM35+xX0JXO1grgzvpJ+xygBGifIbx2oN8kG1DzTgUUoV1f0z
+        C0LQJhN2+ZibYLFHc448MDE=
+X-Google-Smtp-Source: APXvYqweCDTicOF+93cu952noxE9ZtNmcV/VMB+JSgKYoYKuLBG2FVMsTqn3lsN1cj2084kluUPO1w==
+X-Received: by 2002:a50:9413:: with SMTP id p19mr9742843eda.224.1559605480020;
+        Mon, 03 Jun 2019 16:44:40 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:4f9:2b:2b15::2])
+        by smtp.gmail.com with ESMTPSA id gu4sm137011ejb.52.2019.06.03.16.44.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 16:44:39 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Tyrel Datwyler <tyreld@linux.ibm.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>,
         Michael Ellerman <mpe@ellerman.id.au>
-References: <20190531185306.41290-1-natechancellor@gmail.com>
- <20190603221941.65432-1-natechancellor@gmail.com>
- <6fa1dd2e-676f-b12a-5bb6-e86f5c5628fa@linux.vnet.ibm.com>
- <8598d642-82e3-daad-a487-693208e13c90@linux.vnet.ibm.com>
-Date:   Mon, 3 Jun 2019 16:35:52 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+Subject: [PATCH v3] scsi: ibmvscsi: Don't use rc uninitialized in ibmvscsi_do_work
+Date:   Mon,  3 Jun 2019 16:44:06 -0700
+Message-Id: <20190603234405.29600-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.22.0.rc3
+In-Reply-To: <20190603221941.65432-1-natechancellor@gmail.com>
+References: <20190603221941.65432-1-natechancellor@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <8598d642-82e3-daad-a487-693208e13c90@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19060323-0040-0000-0000-000004F82A9E
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011210; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01212851; UDB=6.00637412; IPR=6.00993912;
- MB=3.00027171; MTD=3.00000008; XFM=3.00000015; UTC=2019-06-03 23:35:56
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19060323-0041-0000-0000-00000904484E
-Message-Id: <3416c496-9f5d-ea3c-8df5-85227007d29d@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-03_19:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906030158
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 06/03/2019 04:34 PM, Tyrel Datwyler wrote:
-> On 06/03/2019 04:25 PM, Tyrel Datwyler wrote:
->> On 06/03/2019 03:19 PM, Nathan Chancellor wrote:
->>> clang warns:
->>>
->>> drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
->>> uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->>>         case IBMVSCSI_HOST_ACTION_NONE:
->>>              ^~~~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/scsi/ibmvscsi/ibmvscsi.c:2151:6: note: uninitialized use occurs
->>> here
->>>         if (rc) {
->>>             ^~
->>>
->>> Initialize rc to zero in the case statements that clang mentions so that
->>> the atomic_set and dev_err statement don't trigger for them.
->>>
->>> Fixes: 035a3c4046b5 ("scsi: ibmvscsi: redo driver work thread to use enum action states")
->>> Link: https://github.com/ClangBuiltLinux/linux/issues/502
->>> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
->>> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
->>
->> Acked-by: Tyrel Datwyler <tyreld@linux.ibm.com>
->>
-> 
-> On second thought NACK. See my response to Michael earlier in the thread.
-> 
-> I think this is the better solution:
-> 
-> diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
-> index 727c31dc11a0..c3cf05dd8733 100644
-> --- a/drivers/scsi/ibmvscsi/ibmvscsi.c
-> +++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
-> @@ -2123,8 +2123,8 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data
-> *hostdata)
-> 
->         spin_lock_irqsave(hostdata->host->host_lock, flags);
->         switch (hostdata->action) {
-> -       case IBMVSCSI_HOST_ACTION_NONE:
->         case IBMVSCSI_HOST_ACTION_UNBLOCK:
-> +               rc = 0;
->                 break;
->         case IBMVSCSI_HOST_ACTION_RESET:
->                 spin_unlock_irqrestore(hostdata->host->host_lock, flags);
-> @@ -2142,8 +2142,9 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data
-> *hostdata)
->                 if (!rc)
->                         rc = ibmvscsi_send_crq(hostdata, 0xC001000000000000LL, 0);
->                 break;
-> +       case IBMVSCSI_HOST_ACTION_NONE:
->         default:
-> -               break;
+clang warns:
 
-Need a spin_unlock_irqrestore() here before the return.
+drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
+uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+        case IBMVSCSI_HOST_ACTION_NONE:
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/ibmvscsi/ibmvscsi.c:2151:6: note: uninitialized use occurs
+here
+        if (rc) {
+            ^~
 
--Tyrel
+Initialize rc in the IBMVSCSI_HOST_ACTION_UNBLOCK case statement then
+shuffle IBMVSCSI_HOST_ACTION_NONE down to the default case statement and
+make it return early so that rc is never used uninitialized in this
+function.
 
-> +               return;
->         }
-> 
->         hostdata->action = IBMVSCSI_HOST_ACTION_NONE;
-> 
+Fixes: 035a3c4046b5 ("scsi: ibmvscsi: redo driver work thread to use enum action states")
+Link: https://github.com/ClangBuiltLinux/linux/issues/502
+Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+Suggested-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+---
+
+v1 -> v2:
+
+* Initialize rc in the case statements, rather than at the top of the
+  function, as suggested by Michael.
+  
+v2 -> v3:
+
+* default and IBMVSCSI_HOST_ACTION_NONE now return early from the
+  function, as requested by Tyrel.
+
+ drivers/scsi/ibmvscsi/ibmvscsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+index 65053daef5f7..7f66a7783209 100644
+--- a/drivers/scsi/ibmvscsi/ibmvscsi.c
++++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+@@ -2109,8 +2109,8 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+ 
+ 	spin_lock_irqsave(hostdata->host->host_lock, flags);
+ 	switch (hostdata->action) {
+-	case IBMVSCSI_HOST_ACTION_NONE:
+ 	case IBMVSCSI_HOST_ACTION_UNBLOCK:
++		rc = 0;
+ 		break;
+ 	case IBMVSCSI_HOST_ACTION_RESET:
+ 		spin_unlock_irqrestore(hostdata->host->host_lock, flags);
+@@ -2128,8 +2128,10 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+ 		if (!rc)
+ 			rc = ibmvscsi_send_crq(hostdata, 0xC001000000000000LL, 0);
+ 		break;
++	case IBMVSCSI_HOST_ACTION_NONE:
+ 	default:
+-		break;
++		spin_unlock_irqrestore(hostdata->host->host_lock, flags);
++		return;
+ 	}
+ 
+ 	hostdata->action = IBMVSCSI_HOST_ACTION_NONE;
+-- 
+2.22.0.rc3
 
