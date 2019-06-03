@@ -2,117 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4589532DA0
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 12:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB3B32E21
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 13:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727837AbfFCKPr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 06:15:47 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:35506 "EHLO mx1.redhat.com"
+        id S1727409AbfFCLBX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 07:01:23 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:56310 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727576AbfFCKPr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 3 Jun 2019 06:15:47 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        id S1727376AbfFCLBW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 07:01:22 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id D800A85546;
-        Mon,  3 Jun 2019 10:15:46 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id B10E83091753;
+        Mon,  3 Jun 2019 11:01:21 +0000 (UTC)
 Received: from ming.t460p (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C709D5D71A;
-        Mon,  3 Jun 2019 10:15:34 +0000 (UTC)
-Date:   Mon, 3 Jun 2019 18:15:27 +0800
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 49C4C60FFE;
+        Mon,  3 Jun 2019 11:01:01 +0000 (UTC)
+Date:   Mon, 3 Jun 2019 19:00:56 +0800
 From:   Ming Lei <ming.lei@redhat.com>
 To:     John Garry <john.garry@huawei.com>
-Cc:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Ming Lei <tom.leiming@gmail.com>, linux-scsi@vger.kernel.org,
+Cc:     Ming Lei <tom.leiming@gmail.com>, Hannes Reinecke <hare@suse.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.com>,
-        chenxiang <chenxiang66@hisilicon.com>
-Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
-Message-ID: <20190603101526.GF11812@ming.t460p>
-References: <20190531074158.76923-1-hare@suse.de>
- <20190531082116.GA12106@ming.t460p>
- <e81ca95e-95af-1078-c523-701120dd4ca7@suse.de>
- <20190531084600.GB12106@ming.t460p>
- <57d87edb-e748-6223-bfb4-a67ead9a8bdd@huawei.com>
- <20190531225338.GA16190@ming.t460p>
- <ab62907f-0d91-607e-daac-d069efb97355@huawei.com>
- <20190603095413.GE11812@ming.t460p>
- <cf44701e-a5e1-f94e-bb1b-2d0a51d2571c@huawei.com>
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 7/9] scsi: hisi_sas_v3: convert private reply queue to
+ blk-mq hw queue
+Message-ID: <20190603110054.GG11812@ming.t460p>
+References: <20190531022801.10003-1-ming.lei@redhat.com>
+ <20190531022801.10003-8-ming.lei@redhat.com>
+ <1afb4353-6703-a3f0-ca6c-d0b2bd754a56@suse.de>
+ <CACVXFVMG8gkw8E0pmWBJC0tBH9D-WVjY2FnL2gsxDja3ryfbng@mail.gmail.com>
+ <c11faee4-fc38-9636-59b4-bc5c0d94ffbf@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cf44701e-a5e1-f94e-bb1b-2d0a51d2571c@huawei.com>
+In-Reply-To: <c11faee4-fc38-9636-59b4-bc5c0d94ffbf@huawei.com>
 User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Mon, 03 Jun 2019 10:15:47 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Mon, 03 Jun 2019 11:01:22 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 11:07:11AM +0100, John Garry wrote:
-> On 03/06/2019 10:54, Ming Lei wrote:
-> > On Mon, Jun 03, 2019 at 09:57:26AM +0100, John Garry wrote:
-> > > > > > Otherwise duplicated slot can be used from different blk-mq hw queue.
-> > > > > > 
-> > > > > > > 
-> > > > > > > > The worsen thing is that V3's actual max queue depth is (4096 - 96), but
-> > > > > > > > this patch claims that the device can support (4096 - 96) * 32 command
-> > > > > > > > slots
-> > > > > 
-> > > > > To be clear about the hw, the hw supports max 4096 command tags and has 16
+On Fri, May 31, 2019 at 12:38:10PM +0100, John Garry wrote:
+> 
+> > > > -fallback:
+> > > > -     for_each_possible_cpu(cpu)
+> > > > -             hisi_hba->reply_map[cpu] = cpu % hisi_hba->queue_count;
+> > > > -     /* Don't clean all CQ masks */
+> > > > -}
+> > > > -
+> > > >  static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
+> > > >  {
+> > > >       struct device *dev = hisi_hba->dev;
+> > > > @@ -2383,11 +2359,6 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
 > > > > 
-> > > > Is 4096 the max allowed host-wide command tags? Or per-queue's max commands
-> > > > tags?
+> > > >               min_msi = MIN_AFFINE_VECTORS_V3_HW;
+> > > > 
+> > > > -             hisi_hba->reply_map = devm_kcalloc(dev, nr_cpu_ids,
+> > > > -                                                sizeof(unsigned int),
+> > > > -                                                GFP_KERNEL);
+> > > > -             if (!hisi_hba->reply_map)
+> > > > -                     return -ENOMEM;
+> > > >               vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
+> > > >                                                        min_msi, max_msi,
+> > > >                                                        PCI_IRQ_MSI |
+> > > > @@ -2395,7 +2366,6 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
+> > > >                                                        &desc);
+> > > >               if (vectors < 0)
+> > > >                       return -ENOENT;
+> > > > -             setup_reply_map_v3_hw(hisi_hba, vectors - BASE_VECTORS_V3_HW);
+> > > >       } else {
+> > > >               min_msi = max_msi;
+> > > >               vectors = pci_alloc_irq_vectors(hisi_hba->pci_dev, min_msi,
+> > > > @@ -2896,6 +2866,18 @@ static void debugfs_snapshot_restore_v3_hw(struct hisi_hba *hisi_hba)
+> > > >       clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
+> > > >  }
+> > > > 
+> > > > +static int hisi_sas_map_queues(struct Scsi_Host *shost)
+> > > > +{
+> > > > +     struct hisi_hba *hisi_hba = shost_priv(shost);
+> > > > +     struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
+> > > > +
+> > > > +     if (auto_affine_msi_experimental)
+> > > > +             return blk_mq_pci_map_queues(qmap, hisi_hba->pci_dev,
+> > > > +                             BASE_VECTORS_V3_HW);
+> > > > +     else
+> > > > +             return blk_mq_map_queues(qmap);
+> 
+> I don't think that the mapping which blk_mq_map_queues() creates are not
+> want we want. I'm guessing that we still would like a mapping similar to
+> what blk_mq_pci_map_queues() produces, which is an even spread, putting
+> adjacent CPUs on the same queue.
+> 
+> For my system with 96 cpus and 16 queues, blk_mq_map_queues() would map
+> queue 0 to cpu 0, 16, 32, 48 ..., queue 1 to cpu 1, 17, 33 and so on.
+
+blk_mq_map_queues() is the default or fallback mapping in case that managed
+irq isn't used. If the mapping isn't good enough, we still can improve it
+in future, then any driver applying it can got improved.
+
+> 
+> > > > +}
+> > > > +
+> > > >  static struct scsi_host_template sht_v3_hw = {
+> > > >       .name                   = DRV_NAME,
+> > > >       .module                 = THIS_MODULE,
 > > > 
-> > > 4096 is max allowed host wide, in range [0, 4096), and tags are not per
-> > > queue. HW delivery queues can be configured to be as large as desired.
-> > 
-> > Then all delivery(and complete) queues share the 4096 command slots, we can't
-> > convert hisi_sas V3 into typical blk-mq MQ model simply as done by Hannes's patch.
-> > 
-> > Or you may partition the 4096 tags into 16 queues, then each queue's
-> > depth is ~256. Depends on if performance is good for workloads.
-> > You still can build a unique tag easily in [0, 4096), such as
-> > (req->tag * hw_queue_index).
-> > 
-> > blk-mq's hw queue has independent tags, which is from NVMe's submission/completion
-> > queue.
-> 
-> ehhhh, and this is what I thought you were addressing in "[PATCH 1/9]
-> blk-mq: allow hw queues to share hostwide tags", right?
-
-That patch allows drivers, such as hisi_sas v3, to share the same single
-tags among all hw queues, then the private hw queue(reply queue, or
-delivery/complete queue) can be converted to blk-mq hw queue.
-
-> 
-> > 
+> > > As mentioned, we should be using a common function here.
 > > > 
-> > > And on another point I saw mentioned, the device supports multiple
-> > > submission and multiple completion queues. They are symmetrical, and any
-> > > command will always complete on the same queue index which it was submitted.
-> > 
-> > DQ & CQ did confuse me a bit, :-)
+> > > > @@ -2906,6 +2888,8 @@ static struct scsi_host_template sht_v3_hw = {
+> > > >       .scan_start             = hisi_sas_scan_start,
+> > > >       .change_queue_depth     = sas_change_queue_depth,
+> > > >       .bios_param             = sas_bios_param,
+> > > > +     .map_queues             = hisi_sas_map_queues,
+> > > > +     .host_tagset            = 1,
+> > > >       .this_id                = -1,
+> > > >       .sg_tablesize           = HISI_SAS_SGE_PAGE_CNT,
+> > > >       .sg_prot_tablesize      = HISI_SAS_SGE_PAGE_CNT,
+> > > > @@ -3092,6 +3076,8 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+> > > >       if (hisi_sas_debugfs_enable)
+> > > >               hisi_sas_debugfs_init(hisi_hba);
+> > > > 
+> > > > +     shost->nr_hw_queues = hisi_hba->cq_nvecs;
 > 
-> DQ is "delivery" queue. Interna; terminolgy.
+> There's an ordering issue here, which can be fixed without too much trouble.
 > 
-> In response to earlier "It depends on if hisi_sas V3 hardware supports
-> independent tags for each queue. "
+> Value hisi_hba->cq_nvecs is not set until after this point, in
+> hisi_sas_v3_probe()->hw->hw_init->hisi_sas_v3_init()->interrupt_init_v3_hw()
 > 
-> As you now know, it doesn't.
 > 
-> TBH, I would be slightly surprised if any SCSI host supported independent
-> tags per HW queue (ignoring these tri-mode types). The reason is that
-> hisi_sas uses this tag as SAS SSP frame tag, and later used for TMF tag. If
-> we sent different commands to a SCSI end device from different queues, then
-> possibly non-unique tags and this would break the model. But maybe other
-> SCSI host work differently.
+> Please see revised patch, below.
 
-When I tested some SCSI FC at MQ mode years ago, I did suspect if their tags
-is hw queue wide, but result is really true.
+Good catch, will integrate it in V2.
 
 Thanks,
 Ming
