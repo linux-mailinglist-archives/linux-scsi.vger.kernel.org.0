@@ -2,72 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DCC33BE4
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 01:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5A433BF2
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 01:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726566AbfFCXZV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 19:25:21 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:58950 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726245AbfFCXZU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 19:25:20 -0400
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x53NM8cN035760
-        for <linux-scsi@vger.kernel.org>; Mon, 3 Jun 2019 19:25:19 -0400
-Received: from e16.ny.us.ibm.com (e16.ny.us.ibm.com [129.33.205.206])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2swa1177kt-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Jun 2019 19:25:19 -0400
-Received: from localhost
-        by e16.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <tyreld@linux.vnet.ibm.com>;
-        Tue, 4 Jun 2019 00:25:18 +0100
-Received: from b01cxnp23032.gho.pok.ibm.com (9.57.198.27)
-        by e16.ny.us.ibm.com (146.89.104.203) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 4 Jun 2019 00:25:16 +0100
+        id S1726399AbfFCXbx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 19:31:53 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:43624 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726101AbfFCXbx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 19:31:53 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x53NM6vv089988;
+        Mon, 3 Jun 2019 19:31:45 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2swcx4gp2v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jun 2019 19:31:44 -0400
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x53NMfpX090962;
+        Mon, 3 Jun 2019 19:31:44 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2swcx4gp2f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jun 2019 19:31:44 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x53HYdGb030561;
+        Mon, 3 Jun 2019 17:36:45 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma01dal.us.ibm.com with ESMTP id 2suh093trb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 03 Jun 2019 17:36:45 +0000
 Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x53NPF7337290314
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x53NUR7H36110428
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 3 Jun 2019 23:25:15 GMT
+        Mon, 3 Jun 2019 23:30:27 GMT
 Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1BD7BAC059;
-        Mon,  3 Jun 2019 23:25:15 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 6EF4DAC060;
+        Mon,  3 Jun 2019 23:30:27 +0000 (GMT)
 Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B2C6FAC060;
-        Mon,  3 Jun 2019 23:25:13 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 1C153AC05F;
+        Mon,  3 Jun 2019 23:30:26 +0000 (GMT)
 Received: from oc6857751186.ibm.com (unknown [9.85.191.102])
         by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon,  3 Jun 2019 23:25:13 +0000 (GMT)
-Subject: Re: [PATCH v2] scsi: ibmvscsi: Don't use rc uninitialized in
+        Mon,  3 Jun 2019 23:30:25 +0000 (GMT)
+Subject: Re: [PATCH] scsi: ibmvscsi: Don't use rc uninitialized in
  ibmvscsi_do_work
-To:     Nathan Chancellor <natechancellor@gmail.com>,
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nathan Chancellor <natechancellor@gmail.com>,
         Tyrel Datwyler <tyreld@linux.ibm.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     clang-built-linux@googlegroups.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
 References: <20190531185306.41290-1-natechancellor@gmail.com>
- <20190603221941.65432-1-natechancellor@gmail.com>
+ <87blzgnvhx.fsf@concordia.ellerman.id.au>
 From:   Tyrel Datwyler <tyreld@linux.vnet.ibm.com>
-Date:   Mon, 3 Jun 2019 16:25:13 -0700
+Message-ID: <031eaca1-bb6d-a14f-bb66-a520219549e4@linux.vnet.ibm.com>
+Date:   Mon, 3 Jun 2019 16:30:25 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
  Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <20190603221941.65432-1-natechancellor@gmail.com>
+In-Reply-To: <87blzgnvhx.fsf@concordia.ellerman.id.au>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-x-cbid: 19060323-0072-0000-0000-00000436FB66
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011210; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01212848; UDB=6.00637410; IPR=6.00993908;
- MB=3.00027171; MTD=3.00000008; XFM=3.00000015; UTC=2019-06-03 23:25:17
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19060323-0073-0000-0000-00004C79B992
-Message-Id: <6fa1dd2e-676f-b12a-5bb6-e86f5c5628fa@linux.vnet.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-03_18:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
@@ -80,25 +79,91 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 06/03/2019 03:19 PM, Nathan Chancellor wrote:
-> clang warns:
+On 06/02/2019 03:15 AM, Michael Ellerman wrote:
+> Hi Nathan,
 > 
-> drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
-> uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->         case IBMVSCSI_HOST_ACTION_NONE:
->              ^~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/ibmvscsi/ibmvscsi.c:2151:6: note: uninitialized use occurs
-> here
->         if (rc) {
->             ^~
+> Nathan Chancellor <natechancellor@gmail.com> writes:
+>> clang warns:
+>>
+>> drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
+>> uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+>>         case IBMVSCSI_HOST_ACTION_NONE:
+>>              ^~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/scsi/ibmvscsi/ibmvscsi.c:2151:6: note: uninitialized use occurs
+>> here
+>>         if (rc) {
+>>             ^~
+>>
+>> Initialize rc to zero so that the atomic_set and dev_err statement don't
+>> trigger for the cases that just break.
+>>
+>> Fixes: 035a3c4046b5 ("scsi: ibmvscsi: redo driver work thread to use enum action states")
+>> Link: https://github.com/ClangBuiltLinux/linux/issues/502
+>> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+>> ---
+>>  drivers/scsi/ibmvscsi/ibmvscsi.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+>> index 727c31dc11a0..6714d8043e62 100644
+>> --- a/drivers/scsi/ibmvscsi/ibmvscsi.c
+>> +++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+>> @@ -2118,7 +2118,7 @@ static unsigned long ibmvscsi_get_desired_dma(struct vio_dev *vdev)
+>>  static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+>>  {
+>>  	unsigned long flags;
+>> -	int rc;
+>> +	int rc = 0;
+>>  	char *action = "reset";
+>>  
+>>  	spin_lock_irqsave(hostdata->host->host_lock, flags);
 > 
-> Initialize rc to zero in the case statements that clang mentions so that
-> the atomic_set and dev_err statement don't trigger for them.
+> It's always preferable IMHO to keep any initialisation as localised as
+> possible, so that the compiler can continue to warn about uninitialised
+> usages elsewhere. In this case that would mean doing the rc = 0 in the
+> switch, something like:
 > 
-> Fixes: 035a3c4046b5 ("scsi: ibmvscsi: redo driver work thread to use enum action states")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/502
-> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+> index 727c31dc11a0..7ee5755cf636 100644
+> --- a/drivers/scsi/ibmvscsi/ibmvscsi.c
+> +++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+> @@ -2123,9 +2123,6 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+>  
+>         spin_lock_irqsave(hostdata->host->host_lock, flags);
+>         switch (hostdata->action) {
+> -       case IBMVSCSI_HOST_ACTION_NONE:
+> -       case IBMVSCSI_HOST_ACTION_UNBLOCK:
+> -               break;
+>         case IBMVSCSI_HOST_ACTION_RESET:
+>                 spin_unlock_irqrestore(hostdata->host->host_lock, flags);
+>                 rc = ibmvscsi_reset_crq_queue(&hostdata->queue, hostdata);
+> @@ -2142,7 +2139,10 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+>                 if (!rc)
+>                         rc = ibmvscsi_send_crq(hostdata, 0xC001000000000000LL, 0);
+>                 break;
+> +       case IBMVSCSI_HOST_ACTION_NONE:
+> +       case IBMVSCSI_HOST_ACTION_UNBLOCK:
+>         default:
+> +               rc = 0;
+>                 break;
+>         }
+> 
+> 
+> But then that makes me wonder if that's actually correct?
+> 
+> If we get an action that we don't recognise should we just throw it away
+> like that? (by doing hostdata->action = IBMVSCSI_HOST_ACTION_NONE). Tyrel?
 
-Acked-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+On initial pass I was ok with this, but after thinking on it I think it is more
+subtle.
+
+The right approach is to set rc = 0 for HOST_ACTION_UNBLOCK as we want to fall
+through. For HOST_ACTION_NONE and default we need to return directly from the
+function.
+
+-Tyrel
+
+> 
+> cheers
+> 
 
