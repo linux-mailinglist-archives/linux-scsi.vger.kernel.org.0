@@ -2,99 +2,119 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30818325A6
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 01:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F83326E0
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 05:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbfFBXcl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 2 Jun 2019 19:32:41 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:48238 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFBXcl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Jun 2019 19:32:41 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id C7BA3283AD;
-        Sun,  2 Jun 2019 19:32:35 -0400 (EDT)
-Date:   Mon, 3 Jun 2019 09:32:36 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        id S1726735AbfFCDXt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 2 Jun 2019 23:23:49 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:42249 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725872AbfFCDXt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Jun 2019 23:23:49 -0400
+Received: by mail-ed1-f65.google.com with SMTP id g24so15145475eds.9;
+        Sun, 02 Jun 2019 20:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pSfpsds9EQbM9WscG0cMmvHxHZNBbzbAhxUSUQzMxEw=;
+        b=p6EmQsSt3vDqhOEAwdmtI53kfWo8NyOM/SYeUgm4HfVyXUGbblyzBEvJnA5bHfpVPG
+         xCFLdPnD1URb6fyiDAuy641+yfjX2pTPOqINI1Dkw1w4MRtvrUi9PJVzd1YW+ybRtJrs
+         cmbdXsMHjSI2Q439j1d2MingD2Mi6Acj+RLRpUWwWtNpOQAtNnAmPyk0uvbecGTv3Ezo
+         mJM+RwmKVo0EuneEkAfSZU0AxwmE3ndyzF48eI+0G9be6V1wrOTHhoG6Y8kuIGO6gR4D
+         p8AkgiTx7mTFmxTMG0l1mTJD2k46Cxs8BeBLR9E+q43EhepsyS872Lui4rFkACUg7P4I
+         DgxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pSfpsds9EQbM9WscG0cMmvHxHZNBbzbAhxUSUQzMxEw=;
+        b=OVoZ7D7URsGO+Nt8a7l7cp//SsNi8uKLBqfKqEYLLg05RjgDSFIf0p3SiLCw2FOlUF
+         q8KEyBdt/My6/r9q8FM5I93AFV56PmfZ43fhYIcthFgqSSz5iS/yhsKGGB37KynszlB4
+         TeKPsPP7NbcVbs5+tuzxeXDvMLg4yLsIGPyCLQ73FsgLYnySkAPXJCNgAoI/p4GRUoid
+         cmLvgY1YLFKG+2U2mqlB88hAS9D9uWTl5hG5xhl6M7j6s6XTg9R3DMrlqHP4q3UrIw35
+         TVMeb+DJQSHSVyFHmrOXdCnf+Q90+cZaG0KhKHgPEoeYih+Hm4uQyqDxhI4B7t9DdDi3
+         OpGg==
+X-Gm-Message-State: APjAAAUBOheGDipDpITXb8ADYbjg54Mvv1ymkaFjigscy/GblhltQ8ch
+        39rJZh+z6vetVP3A9qAX8qU=
+X-Google-Smtp-Source: APXvYqy4Hsm/zoTmC0MBbcJlJ9Z2m/nmDD28JaXgZZmuAomhkyMRxC1lnzngw7n2bVbjhVi1S66Pww==
+X-Received: by 2002:a50:f286:: with SMTP id f6mr23354274edm.44.1559532227215;
+        Sun, 02 Jun 2019 20:23:47 -0700 (PDT)
+Received: from archlinux-epyc ([2a01:4f9:2b:2b15::2])
+        by smtp.gmail.com with ESMTPSA id a40sm3735370edd.1.2019.06.02.20.23.46
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 02 Jun 2019 20:23:46 -0700 (PDT)
+Date:   Sun, 2 Jun 2019 20:23:44 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Subject: Re: [PATCH 5/7] scsi: mac_scsi: Fix pseudo DMA implementation, take
- 2
-In-Reply-To: <CAMuHMdWxRtJU2aRQQjXzR2mvpfpDezCVu42Eo1eXDsQaPb+j6Q@mail.gmail.com>
-Message-ID: <alpine.LNX.2.21.1906030903510.20@nippy.intranet>
-References: <cover.1559438652.git.fthain@telegraphics.com.au> <c56deeb735545c7942607a93f017bb536f581ae5.1559438652.git.fthain@telegraphics.com.au> <CAMuHMdWxRtJU2aRQQjXzR2mvpfpDezCVu42Eo1eXDsQaPb+j6Q@mail.gmail.com>
+        clang-built-linux@googlegroups.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: ibmvscsi: Don't use rc uninitialized in
+ ibmvscsi_do_work
+Message-ID: <20190603032344.GA26021@archlinux-epyc>
+References: <20190531185306.41290-1-natechancellor@gmail.com>
+ <87blzgnvhx.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87blzgnvhx.fsf@concordia.ellerman.id.au>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 2 Jun 2019, Geert Uytterhoeven wrote:
+Hi Michael,
 
-> Hi Finn,
+On Sun, Jun 02, 2019 at 08:15:38PM +1000, Michael Ellerman wrote:
+> Hi Nathan,
 > 
-> On Sun, Jun 2, 2019 at 3:29 AM Finn Thain <fthain@telegraphics.com.au> 
-> wrote:
-> > A system bus error during a PDMA transfer can mess up the calculation 
-> > of the transfer residual (the PDMA handshaking hardware lacks a byte 
-> > counter). This results in data corruption.
-> >
-> > The algorithm in this patch anticipates a bus error by starting each 
-> > transfer with a MOVE.B instruction. If a bus error is caught the 
-> > transfer will be retried. If a bus error is caught later in the 
-> > transfer (for a MOVE.W instruction) the transfer gets failed and 
-> > subsequent requests for that target will use PIO instead of PDMA.
-> >
-> > This avoids the "!REQ and !ACK" error so the severity level of that 
-> > message is reduced to KERN_DEBUG.
-> >
-> > Cc: Michael Schmitz <schmitzmic@gmail.com>
-> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Cc: stable@vger.kernel.org # v4.14+
-> > Fixes: 3a0f64bfa907 ("mac_scsi: Fix pseudo DMA implementation")
-> > Reported-by: Chris Jones <chris@martin-jones.com>
-> > Tested-by: Stan Johnson <userm57@yahoo.com>
-> > Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
-> 
-> Thanks for your patch!
-> 
-> > ---
-> >  arch/m68k/include/asm/mac_pdma.h | 179 +++++++++++++++++++++++++++
-> >  drivers/scsi/mac_scsi.c          | 201 ++++++++-----------------------
-> 
-> Why have you moved the PDMA implementation to a header file under 
-> arch/m68k/? Do you intend to reuse it by other drivers?
-> 
+> It's always preferable IMHO to keep any initialisation as localised as
+> possible, so that the compiler can continue to warn about uninitialised
+> usages elsewhere. In this case that would mean doing the rc = 0 in the
+> switch, something like:
 
-There are a couple of reasons: the mac_esp driver also uses PDMA and the 
-NuBus PowerMac port also uses mac_scsi.c. OTOH, the NuBus PowerMac port is 
-still out-of-tree, and it is unclear whether the mac_esp driver will ever 
-benefit from this code.
+I am certainly okay with implementing this in a v2. I mulled over which
+would be preferred, I suppose I guessed wrong :) Thank you for the
+review and input.
 
-> If not, please keep it in the driver, so (a) you don't need an ack from 
-> me ;-), and (b) your change may be easier to review.
 > 
+> diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+> index 727c31dc11a0..7ee5755cf636 100644
+> --- a/drivers/scsi/ibmvscsi/ibmvscsi.c
+> +++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+> @@ -2123,9 +2123,6 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+>  
+>         spin_lock_irqsave(hostdata->host->host_lock, flags);
+>         switch (hostdata->action) {
+> -       case IBMVSCSI_HOST_ACTION_NONE:
+> -       case IBMVSCSI_HOST_ACTION_UNBLOCK:
+> -               break;
+>         case IBMVSCSI_HOST_ACTION_RESET:
+>                 spin_unlock_irqrestore(hostdata->host->host_lock, flags);
+>                 rc = ibmvscsi_reset_crq_queue(&hostdata->queue, hostdata);
+> @@ -2142,7 +2139,10 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+>                 if (!rc)
+>                         rc = ibmvscsi_send_crq(hostdata, 0xC001000000000000LL, 0);
+>                 break;
+> +       case IBMVSCSI_HOST_ACTION_NONE:
+> +       case IBMVSCSI_HOST_ACTION_UNBLOCK:
+>         default:
+> +               rc = 0;
+>                 break;
+>         }
+> 
+> 
+> But then that makes me wonder if that's actually correct?
+> 
+> If we get an action that we don't recognise should we just throw it away
+> like that? (by doing hostdata->action = IBMVSCSI_HOST_ACTION_NONE). Tyrel?
 
-I take your wink to mean that you don't want to ask the SCSI maintainers 
-to review m68k asm. Putting aside the code review process for a moment, do 
-you have an opinion on the most logical way to organise this sort of code, 
-from the point-of-view of maintainability, re-usability, readability etc.?
+However, because of this, I will hold off on v2 until Tyrel can give
+some feedback.
 
-Thanks.
-
--- 
-
-> Thanks!
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> 
+Thanks,
+Nathan
