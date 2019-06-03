@@ -2,130 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BFD329CC
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 09:40:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80AED329FD
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 09:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbfFCHkO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 03:40:14 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:55556 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726538AbfFCHkO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 03:40:14 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 08DAC27E6E;
-        Mon,  3 Jun 2019 03:40:11 -0400 (EDT)
-Date:   Mon, 3 Jun 2019 17:40:21 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Subject: Re: [PATCH 5/7] scsi: mac_scsi: Fix pseudo DMA implementation, take
- 2
-In-Reply-To: <CAMuHMdUFxQnmJmkr2qm4waTfFA5yfCHAFngyD37cFH6gbbD-Pg@mail.gmail.com>
-Message-ID: <alpine.LNX.2.21.1906031702220.37@nippy.intranet>
-References: <cover.1559438652.git.fthain@telegraphics.com.au> <c56deeb735545c7942607a93f017bb536f581ae5.1559438652.git.fthain@telegraphics.com.au> <CAMuHMdWxRtJU2aRQQjXzR2mvpfpDezCVu42Eo1eXDsQaPb+j6Q@mail.gmail.com> <alpine.LNX.2.21.1906030903510.20@nippy.intranet>
- <CAMuHMdUFxQnmJmkr2qm4waTfFA5yfCHAFngyD37cFH6gbbD-Pg@mail.gmail.com>
+        id S1726693AbfFCHql (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 03:46:41 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48626 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726565AbfFCHql (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 03:46:41 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id EC871AD78;
+        Mon,  3 Jun 2019 07:46:39 +0000 (UTC)
+Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Ming Lei <tom.leiming@gmail.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.com>
+References: <20190531074158.76923-1-hare@suse.de>
+ <20190531082116.GA12106@ming.t460p>
+ <e81ca95e-95af-1078-c523-701120dd4ca7@suse.de>
+ <20190531084600.GB12106@ming.t460p>
+ <f7e184d4-3d90-2c36-84b8-702105dccafb@suse.de>
+ <20190531230620.GB16190@ming.t460p>
+ <fc049d0a-a7e3-894a-0680-574d86603ea5@suse.de>
+ <20190603073733.GA11812@ming.t460p>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <f0901773-0faf-7a4e-bb17-3e584de00c4f@suse.de>
+Date:   Mon, 3 Jun 2019 09:46:39 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20190603073733.GA11812@ming.t460p>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 3 Jun 2019, Geert Uytterhoeven wrote:
-
-> Hi Finn,
+On 6/3/19 9:37 AM, Ming Lei wrote:
+> On Mon, Jun 03, 2019 at 08:08:18AM +0200, Hannes Reinecke wrote:
+>> On 6/1/19 1:06 AM, Ming Lei wrote:
+>>> On Fri, May 31, 2019 at 12:26:56PM +0200, Hannes Reinecke wrote:
+>>>> On 5/31/19 10:46 AM, Ming Lei wrote:
+>> [ .. ]
+>>>> First we check for the 'slot_index_alloc()' callback to handle weird v2
+>>>> allocation rules, _then_ we look for a tag, and only if we do _not_ have
+>>>> a tag we're using the bitmap.
+>>>
+>>> OK, looks I miss the above change.
+>>>
+>>>> And the bitmap is already correctly sized, as otherwise we'd have a
+>>>> clash between internal and tagged I/O commands even now.
+>>>
+>>> But now the big problem is in the following two line code:
+>>>
+>>> +       else if (blk_tag != (u32)-1)
+>>> +               rc = blk_mq_unique_tag_to_tag(blk_tag);
+>>>
+>>> Request from different blk-mq hw queue has same tag returned from
+>>> blk_mq_unique_tag_to_tag().
+>>>
+>> Yes, but the sbitmap allocator will ensure that each command will get a
+>> unique tag.
 > 
-> On Mon, Jun 3, 2019 at 1:32 AM Finn Thain <fthain@telegraphics.com.au> wrote:
-> > On Sun, 2 Jun 2019, Geert Uytterhoeven wrote:
-> > > On Sun, Jun 2, 2019 at 3:29 AM Finn Thain <fthain@telegraphics.com.au>
-> > > wrote:
-> > > > A system bus error during a PDMA transfer can mess up the calculation
-> > > > of the transfer residual (the PDMA handshaking hardware lacks a byte
-> > > > counter). This results in data corruption.
-> > > >
-> > > > The algorithm in this patch anticipates a bus error by starting each
-> > > > transfer with a MOVE.B instruction. If a bus error is caught the
-> > > > transfer will be retried. If a bus error is caught later in the
-> > > > transfer (for a MOVE.W instruction) the transfer gets failed and
-> > > > subsequent requests for that target will use PIO instead of PDMA.
-> > > >
-> > > > This avoids the "!REQ and !ACK" error so the severity level of that
-> > > > message is reduced to KERN_DEBUG.
-> > > >
-> > > > Cc: Michael Schmitz <schmitzmic@gmail.com>
-> > > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > Cc: stable@vger.kernel.org # v4.14+
-> > > > Fixes: 3a0f64bfa907 ("mac_scsi: Fix pseudo DMA implementation")
-> > > > Reported-by: Chris Jones <chris@martin-jones.com>
-> > > > Tested-by: Stan Johnson <userm57@yahoo.com>
-> > > > Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
-> > >
-> > > Thanks for your patch!
-> > >
-> > > > ---
-> > > >  arch/m68k/include/asm/mac_pdma.h | 179 +++++++++++++++++++++++++++
-> > > >  drivers/scsi/mac_scsi.c          | 201 ++++++++-----------------------
-> > >
-> > > Why have you moved the PDMA implementation to a header file under
-> > > arch/m68k/? Do you intend to reuse it by other drivers?
-> > >
-> >
-> > There are a couple of reasons: the mac_esp driver also uses PDMA and the
-> > NuBus PowerMac port also uses mac_scsi.c. OTOH, the NuBus PowerMac port is
-> > still out-of-tree, and it is unclear whether the mac_esp driver will ever
-> > benefit from this code.
+> Each hw queue has independent sbitmap allocator, so commands with same
+> tag can come from different hw queue.
 > 
-> So you do have future sharing in mind...
+It does not for SCSI.
+See below.
+
+> So you meant this RFC patch depends on the host-wide tags patchset I
+> posted?
 > 
-> > > If not, please keep it in the driver, so (a) you don't need an ack from
-> > > me ;-), and (b) your change may be easier to review.
-> >
-> > I take your wink to mean that you don't want to ask the SCSI maintainers
-> > to review m68k asm. Putting aside the code review process for a moment, do
+>>
+>>> Now the biggest question is that if V3 hw supports per-queue tags,
+>>> If yes, it should be real MQ hardware, otherwise I guess commands with
+>>> same tag at the same time may not work for host-wide tags.
+>>>
+>>
+>> Of course you can't have different commands with the same tag. But the
+>> sbitmap allocator prevents this from happening, as for host-wide tags
+>> the tagset is _shared_ between all devices, so the sbitmap allocator
+>> will only ever run on _one_ tagset for all commands.
 > 
-> I meant that apart from the code containing m68k assembler source, it is 
-> not related to arch/m68k/, and thus belongs to the driver.
-
-That criterion seems insufficient. It could describe most of arch/m68k/mac 
-(which has headers in arch/m68k/include).
-
-> There are several other drivers that contain pieces of assembler code.
+> But blk-mq doesn't support host-wide tags yet, so how can this single
+> patch work?
 > 
+Wrong. It does:
 
-Does any driver contain assembler code for multiple architectures? I was 
-trying to avoid that -- though admittedly I don't yet have actual code for 
-the PDMA implementation for mac_scsi for Nubus PowerMacs.
+struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev)
+{
+	sdev->request_queue = blk_mq_init_queue(&sdev->host->tag_set);
+	if (IS_ERR(sdev->request_queue))
+		return NULL;
 
-However, the existence of that out-of-tree port suggests to me that 
-arch/powerpc/include/mac_scsi.h and arch/m68k/include/mac_scsi.h would be 
-an appropriate layout.
+	sdev->request_queue->queuedata = sdev;
+	__scsi_init_queue(sdev->host, sdev->request_queue);
+	blk_queue_flag_set(QUEUE_FLAG_SCSI_PASSTHROUGH, sdev->request_queue);
+	return sdev->request_queue;
+}
 
-But if there's no clear policy then perhaps we should ignore the whole 
-question until the driver code actually becomes shared code. I don't mind 
-re-working the patch to combine the two files.
 
+IE every scsi device is using the tagset from the host.
+
+Cheers,
+
+Hannes
 -- 
-
-> > you have an opinion on the most logical way to organise this sort of 
-> > code, from the point-of-view of maintainability, re-usability, 
-> > readability etc.?
-> 
-> If the code is used by multiple SCSI drivers, you can move it to a header
-> file under drivers/scsi/.
-> If the code is shared by drivers belonging to multiple subsystems, you can
-> move it to a header file under include/linux/.
-> 
-> Anyone who has a better solution?
-> Thanks!
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> 
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
