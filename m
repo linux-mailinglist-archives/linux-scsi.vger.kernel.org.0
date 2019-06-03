@@ -2,118 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D16933A01
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 23:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEA733B10
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 00:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726490AbfFCVnc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 17:43:32 -0400
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:20939 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726055AbfFCVnc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 17:43:32 -0400
-Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=don.brace@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com
-Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
-  don.brace@microsemi.com designates 208.19.99.222 as permitted
-  sender) identity=mailfrom; client-ip=208.19.99.222;
-  receiver=esa6.microchip.iphmx.com;
-  envelope-from="don.brace@microsemi.com";
-  x-sender="don.brace@microsemi.com"; x-conformance=spf_only;
-  x-record-type="v=spf1"; x-record-text="v=spf1
-  ip4:208.19.100.20 ip4:208.19.100.21 ip4:208.19.100.22
-  ip4:208.19.100.23 ip4:208.19.99.221 ip4:208.19.99.222
-  ip4:208.19.99.223 ip4:208.19.99.225 -all"
-Received-SPF: None (esa6.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@smtp.microsemi.com) identity=helo;
-  client-ip=208.19.99.222; receiver=esa6.microchip.iphmx.com;
-  envelope-from="don.brace@microsemi.com";
-  x-sender="postmaster@smtp.microsemi.com";
-  x-conformance=spf_only
-X-Ironport-Dmarc-Check-Result: validskip
-X-IronPort-AV: E=Sophos;i="5.60,548,1549954800"; 
-   d="scan'208";a="32965205"
-Received: from unknown (HELO smtp.microsemi.com) ([208.19.99.222])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 03 Jun 2019 14:43:31 -0700
-Received: from AUSMBX1.microsemi.net (10.201.34.31) by AUSMBX2.microsemi.net
- (10.201.34.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 3 Jun 2019
- 16:43:30 -0500
-Received: from AUSMBX3.microsemi.net (10.201.34.33) by AUSMBX1.microsemi.net
- (10.201.34.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 3 Jun 2019
- 16:43:29 -0500
-Received: from [127.0.1.1] (10.238.32.34) by ausmbx3.microsemi.net
- (10.201.34.33) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
- Transport; Mon, 3 Jun 2019 16:43:29 -0500
-Subject: [PATCH] hpsa: correct ioaccel2 chaining
-From:   Don Brace <don.brace@microsemi.com>
-To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
-        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
-        <bader.alisaleh@microchip.com>, <gerry.morong@microchip.com>,
-        <mahesh.rajashekhara@microchip.com>, <hch@infradead.org>,
-        <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
-        <POSWALD@suse.com>, <shunyong.yang@hxt-semitech.com>
-CC:     <linux-scsi@vger.kernel.org>
-Date:   Mon, 3 Jun 2019 16:43:29 -0500
-Message-ID: <155959820906.12441.16284446831021860511.stgit@brunhilda>
-User-Agent: StGit/0.19
+        id S1726566AbfFCWU7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 18:20:59 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:42556 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726102AbfFCWU7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 18:20:59 -0400
+Received: by mail-ed1-f68.google.com with SMTP id z25so2965139edq.9;
+        Mon, 03 Jun 2019 15:20:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6SwsUdnmJqsKjqmMv1ig0nFgLQISlIZ4mL0Bgh3d+ww=;
+        b=rHbA+7ojNx2L8Y/O1X17tjfQ/ccJkMcflnR9LyPSByMs/+CaDM7588Ir9t9RCF6Tin
+         lNZZwQ9Gf0eaxcIBJmjzcKt2W/7xPDdtLNk3lqUkdPFDIqLQfWYVNK1FRCS6m8izMj8o
+         CR8zKd+dzcYJmoPDewqMUtr0ZbSeKyM9zcbLqCVtcX+d99RD0IWoF/R+GdWe40Jb+ghp
+         5EOciicMprv68Ht7k4mZyACACMbu85DqHslBZ5G3Oo68aNWaOSqAEOq69+ZZj5//eY+r
+         LpdPgsxdma7p37jEdVF6X/XXb3au94zh2bUhNBDUHRdrMUmk0e4c3GsyikXDu4Bjt3eQ
+         PDww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6SwsUdnmJqsKjqmMv1ig0nFgLQISlIZ4mL0Bgh3d+ww=;
+        b=j3eIMRCrgDkGoAWQ8zUldsnwj55+6HcRqmJO5zs5ipr8avXK5OFFMd7uqodoooVE/Y
+         Sq7ik0zpx+XuWAdAEDxvp+AdA46jaL0GBXvjqDxCKVtfrrV/FfcxYETnO/CHFN1qCwKC
+         U394R4M5AGMo2iqtQYiwL2p2uaiJ1yAOVPqpqwS548+s5djDGELvGA3H1BdPWNBj72HD
+         Wh76v71yG6O+vutQvTIECvFZkZVKgAivtVG0xNU1bh/dLJlPz/gxQjHZnWUM69rWpSJg
+         fbfFhQMkKj3I4u5VPCACFPoaNnBFpkpEmL3OiCC6EGlDDiehmYY8QBMKNAuQHeZSuqWm
+         /N2g==
+X-Gm-Message-State: APjAAAWM00YO1Y0WYy6B/WocBB35GiJRjYtkYFhsgwrmo/ZhSTlyrPVS
+        pyTmr2HZ74nAnCQwSG83lLg=
+X-Google-Smtp-Source: APXvYqzntAHVC76B3HN+FQleN5MXwP0M+Bge4licIbThASXbaFHS9A4UtGAue+zV3RciZP5zzKQGDw==
+X-Received: by 2002:a50:a4f7:: with SMTP id x52mr31464852edb.86.1559600457550;
+        Mon, 03 Jun 2019 15:20:57 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:4f9:2b:2b15::2])
+        by smtp.gmail.com with ESMTPSA id j9sm1515579ejm.68.2019.06.03.15.20.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 15:20:56 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Tyrel Datwyler <tyreld@linux.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH v2] scsi: ibmvscsi: Don't use rc uninitialized in ibmvscsi_do_work
+Date:   Mon,  3 Jun 2019 15:19:42 -0700
+Message-Id: <20190603221941.65432-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.22.0.rc3
+In-Reply-To: <20190531185306.41290-1-natechancellor@gmail.com>
+References: <20190531185306.41290-1-natechancellor@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-- set ioaccel2_sg_element member 'chain_indicator'
-  to IOACCEL2_LAST_SG for the last s/g element.
-- set ioaccel2_sg_element member 'chain_indicator'
-  to IOACCEL2_CHAIN when chaining.
+clang warns:
 
-Reviewed-by: Bader Ali - Saleh <bader.alisaleh@microsemi.com>
-Reviewed-by: Scott Teel <scott.teel@microsemi.com>
-Reviewed-by: Matt Perricone < matt.perricone@microsemi.com>
-Signed-off-by: Don Brace <don.brace@microsemi.com>
+drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
+uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+        case IBMVSCSI_HOST_ACTION_NONE:
+             ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/ibmvscsi/ibmvscsi.c:2151:6: note: uninitialized use occurs
+here
+        if (rc) {
+            ^~
+
+Initialize rc to zero in the case statements that clang mentions so that
+the atomic_set and dev_err statement don't trigger for them.
+
+Fixes: 035a3c4046b5 ("scsi: ibmvscsi: redo driver work thread to use enum action states")
+Link: https://github.com/ClangBuiltLinux/linux/issues/502
+Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
- drivers/scsi/hpsa.c     |    7 ++++++-
- drivers/scsi/hpsa_cmd.h |    1 +
- 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 1bef1da273c2..8068520cf89e 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -4940,7 +4940,7 @@ static int hpsa_scsi_ioaccel2_queue_command(struct ctlr_info *h,
- 			curr_sg->reserved[0] = 0;
- 			curr_sg->reserved[1] = 0;
- 			curr_sg->reserved[2] = 0;
--			curr_sg->chain_indicator = 0x80;
-+			curr_sg->chain_indicator = IOACCEL2_CHAIN;
+v1 -> v2:
+
+* Initialize rc in the case statements, rather than at the top of the
+  function, as suggested by Michael.
+
+ drivers/scsi/ibmvscsi/ibmvscsi.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+index 65053daef5f7..3b5647d622d9 100644
+--- a/drivers/scsi/ibmvscsi/ibmvscsi.c
++++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+@@ -2109,9 +2109,6 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
  
- 			curr_sg = h->ioaccel2_cmd_sg_list[c->cmdindex];
- 		}
-@@ -4957,6 +4957,11 @@ static int hpsa_scsi_ioaccel2_queue_command(struct ctlr_info *h,
- 			curr_sg++;
- 		}
+ 	spin_lock_irqsave(hostdata->host->host_lock, flags);
+ 	switch (hostdata->action) {
+-	case IBMVSCSI_HOST_ACTION_NONE:
+-	case IBMVSCSI_HOST_ACTION_UNBLOCK:
+-		break;
+ 	case IBMVSCSI_HOST_ACTION_RESET:
+ 		spin_unlock_irqrestore(hostdata->host->host_lock, flags);
+ 		rc = ibmvscsi_reset_crq_queue(&hostdata->queue, hostdata);
+@@ -2128,7 +2125,10 @@ static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+ 		if (!rc)
+ 			rc = ibmvscsi_send_crq(hostdata, 0xC001000000000000LL, 0);
+ 		break;
++	case IBMVSCSI_HOST_ACTION_NONE:
++	case IBMVSCSI_HOST_ACTION_UNBLOCK:
+ 	default:
++		rc = 0;
+ 		break;
+ 	}
  
-+		/*
-+		 * Set the last s/g element bit
-+		 */
-+		(curr_sg - 1)->chain_indicator = IOACCEL2_LAST_SG;
-+
- 		switch (cmd->sc_data_direction) {
- 		case DMA_TO_DEVICE:
- 			cp->direction &= ~IOACCEL2_DIRECTION_MASK;
-diff --git a/drivers/scsi/hpsa_cmd.h b/drivers/scsi/hpsa_cmd.h
-index 21a726e2eec6..f6afca4b2319 100644
---- a/drivers/scsi/hpsa_cmd.h
-+++ b/drivers/scsi/hpsa_cmd.h
-@@ -517,6 +517,7 @@ struct ioaccel2_sg_element {
- 	u8 reserved[3];
- 	u8 chain_indicator;
- #define IOACCEL2_CHAIN 0x80
-+#define IOACCEL2_LAST_SG 0x40
- };
- 
- /*
+-- 
+2.22.0.rc3
 
