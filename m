@@ -2,134 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA72432CF4
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 11:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5ACA32D3D
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 11:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727318AbfFCJff (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 05:35:35 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:46784 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726555AbfFCJfe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 3 Jun 2019 05:35:34 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 9A055BA082E025D7F658;
-        Mon,  3 Jun 2019 17:35:31 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS413-HUB.china.huawei.com
- (10.3.19.213) with Microsoft SMTP Server id 14.3.439.0; Mon, 3 Jun 2019
- 17:35:27 +0800
+        id S1726822AbfFCJy5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 05:54:57 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:40762 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726369AbfFCJy5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 05:54:57 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id AFA2C30821F4;
+        Mon,  3 Jun 2019 09:54:56 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DC9EE61B6A;
+        Mon,  3 Jun 2019 09:54:48 +0000 (UTC)
+Date:   Mon, 3 Jun 2019 17:54:43 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     John Garry <john.garry@huawei.com>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Ming Lei <tom.leiming@gmail.com>, linux-scsi@vger.kernel.org,
+        Hannes Reinecke <hare@suse.com>,
+        chenxiang <chenxiang66@hisilicon.com>
 Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
-To:     Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
+Message-ID: <20190603095413.GE11812@ming.t460p>
 References: <20190531074158.76923-1-hare@suse.de>
  <20190531082116.GA12106@ming.t460p>
  <e81ca95e-95af-1078-c523-701120dd4ca7@suse.de>
  <20190531084600.GB12106@ming.t460p>
- <f7e184d4-3d90-2c36-84b8-702105dccafb@suse.de>
- <20190531230620.GB16190@ming.t460p>
- <fc049d0a-a7e3-894a-0680-574d86603ea5@suse.de>
- <20190603073733.GA11812@ming.t460p>
- <f0901773-0faf-7a4e-bb17-3e584de00c4f@suse.de>
-CC:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        "Ming Lei" <tom.leiming@gmail.com>, <linux-scsi@vger.kernel.org>,
-        Hannes Reinecke <hare@suse.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <4bad5fa4-4b7f-60af-ef75-5d13b422aaac@huawei.com>
-Date:   Mon, 3 Jun 2019 10:35:19 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
+ <57d87edb-e748-6223-bfb4-a67ead9a8bdd@huawei.com>
+ <20190531225338.GA16190@ming.t460p>
+ <ab62907f-0d91-607e-daac-d069efb97355@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <f0901773-0faf-7a4e-bb17-3e584de00c4f@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab62907f-0d91-607e-daac-d069efb97355@huawei.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Mon, 03 Jun 2019 09:54:56 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 03/06/2019 08:46, Hannes Reinecke wrote:
-> On 6/3/19 9:37 AM, Ming Lei wrote:
->> On Mon, Jun 03, 2019 at 08:08:18AM +0200, Hannes Reinecke wrote:
->>> On 6/1/19 1:06 AM, Ming Lei wrote:
->>>> On Fri, May 31, 2019 at 12:26:56PM +0200, Hannes Reinecke wrote:
->>>>> On 5/31/19 10:46 AM, Ming Lei wrote:
->>> [ .. ]
->>>>> First we check for the 'slot_index_alloc()' callback to handle weird v2
->>>>> allocation rules, _then_ we look for a tag, and only if we do _not_ have
->>>>> a tag we're using the bitmap.
->>>>
->>>> OK, looks I miss the above change.
->>>>
->>>>> And the bitmap is already correctly sized, as otherwise we'd have a
->>>>> clash between internal and tagged I/O commands even now.
->>>>
->>>> But now the big problem is in the following two line code:
->>>>
->>>> +       else if (blk_tag != (u32)-1)
->>>> +               rc = blk_mq_unique_tag_to_tag(blk_tag);
->>>>
->>>> Request from different blk-mq hw queue has same tag returned from
->>>> blk_mq_unique_tag_to_tag().
->>>>
->>> Yes, but the sbitmap allocator will ensure that each command will get a
->>> unique tag.
->>
->> Each hw queue has independent sbitmap allocator, so commands with same
->> tag can come from different hw queue.
->>
-> It does not for SCSI.
-> See below.
->
->> So you meant this RFC patch depends on the host-wide tags patchset I
->> posted?
->>
->>>
->>>> Now the biggest question is that if V3 hw supports per-queue tags,
->>>> If yes, it should be real MQ hardware, otherwise I guess commands with
->>>> same tag at the same time may not work for host-wide tags.
->>>>
->>>
->>> Of course you can't have different commands with the same tag. But the
->>> sbitmap allocator prevents this from happening, as for host-wide tags
->>> the tagset is _shared_ between all devices, so the sbitmap allocator
->>> will only ever run on _one_ tagset for all commands.
->>
->> But blk-mq doesn't support host-wide tags yet, so how can this single
->> patch work?
->>
-> Wrong. It does:
->
-> struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev)
-> {
-> 	sdev->request_queue = blk_mq_init_queue(&sdev->host->tag_set);
-> 	if (IS_ERR(sdev->request_queue))
-> 		return NULL;
->
-> 	sdev->request_queue->queuedata = sdev;
-> 	__scsi_init_queue(sdev->host, sdev->request_queue);
-> 	blk_queue_flag_set(QUEUE_FLAG_SCSI_PASSTHROUGH, sdev->request_queue);
-> 	return sdev->request_queue;
-> }
->
->
-> IE every scsi device is using the tagset from the host.
->
+On Mon, Jun 03, 2019 at 09:57:26AM +0100, John Garry wrote:
+> > > > Otherwise duplicated slot can be used from different blk-mq hw queue.
+> > > > 
+> > > > > 
+> > > > > > The worsen thing is that V3's actual max queue depth is (4096 - 96), but
+> > > > > > this patch claims that the device can support (4096 - 96) * 32 command
+> > > > > > slots
+> > > 
+> > > To be clear about the hw, the hw supports max 4096 command tags and has 16
+> > 
+> > Is 4096 the max allowed host-wide command tags? Or per-queue's max commands
+> > tags?
+> 
+> 4096 is max allowed host wide, in range [0, 4096), and tags are not per
+> queue. HW delivery queues can be configured to be as large as desired.
 
-Hi Hannes,
+Then all delivery(and complete) queues share the 4096 command slots, we can't
+convert hisi_sas V3 into typical blk-mq MQ model simply as done by Hannes's patch.
 
-Do you think that we have a problem for the bsg devices we create in 
-SCSI transport SAS, in that they don't seem to use the same host tagset?
+Or you may partition the 4096 tags into 16 queues, then each queue's
+depth is ~256. Depends on if performance is good for workloads.
+You still can build a unique tag easily in [0, 4096), such as
+(req->tag * hw_queue_index).
 
-I'm looking at scsi_transport_sas.c::sas_bsg_initialise()->bsg_setup_queue()
+blk-mq's hw queue has independent tags, which is from NVMe's submission/completion
+queue.
+
+> 
+> And on another point I saw mentioned, the device supports multiple
+> submission and multiple completion queues. They are symmetrical, and any
+> command will always complete on the same queue index which it was submitted.
+
+DQ & CQ did confuse me a bit, :-)
 
 Thanks,
-John
-
-> Cheers,
->
-> Hannes
->
-
-
+Ming
