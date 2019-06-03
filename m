@@ -2,218 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B33DF32EC7
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 13:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99DBE32FE2
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 14:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728437AbfFCLi5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 07:38:57 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47050 "EHLO mx1.suse.de"
+        id S1726713AbfFCMmF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 08:42:05 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:44244 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728148AbfFCLi5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 3 Jun 2019 07:38:57 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 6B5DEAF81;
-        Mon,  3 Jun 2019 11:38:54 +0000 (UTC)
-Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
-To:     Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Ming Lei <tom.leiming@gmail.com>,
-        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org
-References: <20190531082116.GA12106@ming.t460p>
+        id S1726360AbfFCMmF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 08:42:05 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id A7A778C3BE3C2FF0BF28;
+        Mon,  3 Jun 2019 20:41:59 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.439.0; Mon, 3 Jun 2019
+ 20:41:51 +0800
+Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support (v2 hw divergence)
+To:     Hannes Reinecke <hare@suse.de>, Ming Lei <ming.lei@redhat.com>
+References: <20190531074158.76923-1-hare@suse.de>
+ <20190531082116.GA12106@ming.t460p>
  <e81ca95e-95af-1078-c523-701120dd4ca7@suse.de>
  <20190531084600.GB12106@ming.t460p>
- <f7e184d4-3d90-2c36-84b8-702105dccafb@suse.de>
- <20190531230620.GB16190@ming.t460p>
- <fc049d0a-a7e3-894a-0680-574d86603ea5@suse.de>
- <20190603073733.GA11812@ming.t460p>
- <f0901773-0faf-7a4e-bb17-3e584de00c4f@suse.de>
- <20190603081621.GC11812@ming.t460p>
- <cd22b399-789d-c0fd-5748-5feeea90c0ee@suse.com>
- <20190603093128.GD11812@ming.t460p>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <0ba81c9b-18f5-f846-5a70-3f63096b8c19@suse.de>
-Date:   Mon, 3 Jun 2019 13:38:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+ <57d87edb-e748-6223-bfb4-a67ead9a8bdd@huawei.com>
+ <15480880-496f-9603-ece8-4da2a204ed51@suse.de>
+ <2994ee9f-85a0-c3dc-ab5c-cb8c6ee1ec92@huawei.com>
+ <86347b6f-7b23-9f0f-4306-a7c22b50dd8c@suse.de>
+CC:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        "Ming Lei" <tom.leiming@gmail.com>, <linux-scsi@vger.kernel.org>,
+        Hannes Reinecke <hare@suse.com>,
+        chenxiang <chenxiang66@hisilicon.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <525e2437-0484-8b2e-57df-2d1e1b09a03b@huawei.com>
+Date:   Mon, 3 Jun 2019 13:41:43 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-In-Reply-To: <20190603093128.GD11812@ming.t460p>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <86347b6f-7b23-9f0f-4306-a7c22b50dd8c@suse.de>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/3/19 11:31 AM, Ming Lei wrote:
-> On Mon, Jun 03, 2019 at 10:47:24AM +0200, Hannes Reinecke wrote:
->> On 6/3/19 10:16 AM, Ming Lei wrote:
->>> On Mon, Jun 03, 2019 at 09:46:39AM +0200, Hannes Reinecke wrote:
->>>> On 6/3/19 9:37 AM, Ming Lei wrote:
->>>>> On Mon, Jun 03, 2019 at 08:08:18AM +0200, Hannes Reinecke wrote:
->>>>>> On 6/1/19 1:06 AM, Ming Lei wrote:
->>>>>>> On Fri, May 31, 2019 at 12:26:56PM +0200, Hannes Reinecke wrote:
->>>>>>>> On 5/31/19 10:46 AM, Ming Lei wrote:
->>>>>> [ .. ]
->>>>>>>> First we check for the 'slot_index_alloc()' callback to handle weird v2
->>>>>>>> allocation rules, _then_ we look for a tag, and only if we do _not_ have
->>>>>>>> a tag we're using the bitmap.
->>>>>>>
->>>>>>> OK, looks I miss the above change.
->>>>>>>
->>>>>>>> And the bitmap is already correctly sized, as otherwise we'd have a
->>>>>>>> clash between internal and tagged I/O commands even now.
->>>>>>>
->>>>>>> But now the big problem is in the following two line code:
->>>>>>>
->>>>>>> +       else if (blk_tag != (u32)-1)
->>>>>>> +               rc = blk_mq_unique_tag_to_tag(blk_tag);
->>>>>>>
->>>>>>> Request from different blk-mq hw queue has same tag returned from
->>>>>>> blk_mq_unique_tag_to_tag().
->>>>>>>
->>>>>> Yes, but the sbitmap allocator will ensure that each command will get a
->>>>>> unique tag.
->>>>>
->>>>> Each hw queue has independent sbitmap allocator, so commands with same
->>>>> tag can come from different hw queue.
->>>>>
->>>> It does not for SCSI.
->>>> See below.
->>>>
->>>>> So you meant this RFC patch depends on the host-wide tags patchset I
->>>>> posted?
->>>>>
->>>>>>
->>>>>>> Now the biggest question is that if V3 hw supports per-queue tags,
->>>>>>> If yes, it should be real MQ hardware, otherwise I guess commands with
->>>>>>> same tag at the same time may not work for host-wide tags.
->>>>>>>
->>>>>>
->>>>>> Of course you can't have different commands with the same tag. But the
->>>>>> sbitmap allocator prevents this from happening, as for host-wide tags
->>>>>> the tagset is _shared_ between all devices, so the sbitmap allocator
->>>>>> will only ever run on _one_ tagset for all commands.
->>>>>
->>>>> But blk-mq doesn't support host-wide tags yet, so how can this single
->>>>> patch work?
->>>>>
->>>> Wrong. It does:
->>>>
->>>> struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev)
->>>> {
->>>> 	sdev->request_queue = blk_mq_init_queue(&sdev->host->tag_set);
->>>> 	if (IS_ERR(sdev->request_queue))
->>>> 		return NULL;
->>>>
->>>> 	sdev->request_queue->queuedata = sdev;
->>>> 	__scsi_init_queue(sdev->host, sdev->request_queue);
->>>> 	blk_queue_flag_set(QUEUE_FLAG_SCSI_PASSTHROUGH, sdev->request_queue);
->>>> 	return sdev->request_queue;
->>>> }
->>>>
->>>>
->>>> IE every scsi device is using the tagset from the host.
->>>
->>> Looks we are not in the same page, and you misunderstood two concepts:
->>> scsi's host-wide tagset, and the new host-tags of BLK_MQ_F_HOST_TAGS.
->>>
->>> I admit that the new flag of BLK_MQ_F_HOST_TAGS is misleading.
->>>
->>> Now let me clarify it a bit:
->>>
->>> 1) the current SCSI hostwide tags means all LUNs share the host tagset,
->>> but the tagset may include multiple hw queues, and each hw queue still
->>> has independent tags, that is why blk-mq provides blk_mq_unique_tag().
->>> In short, each LUN's hw queue has independent tags.
->>>
->> Which is where I fundamentally disagree.
->> Each hw queue does _not_ have independent tags.
->> Each hw queue will use tags from the same (host-wide) tagset; the tags
->> themselves will be allocated for each queue on an ad-hoc base, ie there
->> is no fixed mapping between tag values and hardware queues.
-> 
-> Tagset is set of tags, and one tags is for serving one hw queue.
-> 
-> Each hw queue has its own tags, please see __blk_mq_alloc_rq_map()
-> in which standalone sbitmap allocator and rq pool is allocated to
-> each hw queue represented by 'hctx_idx'.
-> 
-Yes, but ...
+>>
+>> The crazy (escalating from weird) rules to workaround the HW bug(s) mean
+>> that we need to chop up the command tag range into blocks of 32 even tag
+>> indexes per SATA device; this means that SATA device #0 can use 64, 66,
+>> 68, 70...126. device #1 can use 128, 130, 132,..., device #2 can use
+>> 192, 194,...
+>>
+>> I don't know how you can take a rq tag and generate a command tag
+>> suitable for a SATA device.
+>> Actually, you can.
+> We can setup a _distinct_ tagset per SATA device.
+> Eg we can setup a shared tagset for SAS (which is half the size of the
+> original tagset), and shift the tags by one to get a valid SAS tag.
+> For SATA we can setup a _distinct_ tagset per device, containing 32
+> tags. The we can invoke some calculation to transform the tag (which is
+> not guaranteed to be in the range of 0-31) into a valid hardware tag.
+>
+> Should actually work.
 
-> And for each hw queue, the allocated tag value for request is in
-> the range of 0 ~ queue_depth - 1, that is why I say requests from
-> different hw queue may have same tag.
-> 
+ok, fine. I suppose that each SATA device having its own tagset could be 
+more efficient, as in reality the tags are separate.
 
-But this is not what I have been observing working with lpfc and qla2xxx.
-Both drivers have been converted to using scsi-mq with nr_hw_queues > 1
-some years ago, and do work just fine.
-And none of those drivers allow for re-using an in-flight tag on
-different hardware queues.
-If your reasoning is correct none of these drivers would work.
+>
+> Problem is that we'd need to set aside some tags for TMF,
 
-> Your RFC patch changes to allow requests with same tag submitted to driver
-> & hardware at the same time, so we should double-check if hisi_v3 hardware
-> is happy with this change.
-> 
-> John, is hisi_sas v3 fine with this way?
-> 
-As mentioned above, I don't think this can happen.
+It not just TMF to consider, but the HW also supports "internal abort", 
+which also requires a unique tag. And in some scenarios we send ATA 
+softreset, as is the abort flow design for this host.
 
-Cheers,
+  but I really
+> don't think that we can or should do command aborts on SATA; while there
+> is the 'abort NCQ' command, it'll work only for NCQ commands, and won't
+> help us for 'normal' commands.
+> And seeing that on error all NCQ commands will be aborted anyway, plus
+> the standard ATA error handler will be resulting into a device reset, I
+> guess we should skip command abort on SATA and escalate to device reset
+> straightaway. That would also have the nice benefit that we need only to
+> set _one_ tag aside for TMF, as we will only send one TMF at a time.
+>
 
-Hannes
--- 
-Dr. Hannes Reinecke		   Teamlead Storage & Networking
-hare@suse.de			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+Yeah, I think that it should be ok. All error handlng is sequential.
+
+Thanks very much,
+John
+
+> Cheers,
+>
+> Hannes
+>
+
+
