@@ -2,149 +2,218 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB3B32E21
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 13:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33DF32EC7
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 13:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727409AbfFCLBX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 07:01:23 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:56310 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727376AbfFCLBW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 3 Jun 2019 07:01:22 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id B10E83091753;
-        Mon,  3 Jun 2019 11:01:21 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 49C4C60FFE;
-        Mon,  3 Jun 2019 11:01:01 +0000 (UTC)
-Date:   Mon, 3 Jun 2019 19:00:56 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     John Garry <john.garry@huawei.com>
-Cc:     Ming Lei <tom.leiming@gmail.com>, Hannes Reinecke <hare@suse.de>,
-        Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Don Brace <don.brace@microsemi.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 7/9] scsi: hisi_sas_v3: convert private reply queue to
- blk-mq hw queue
-Message-ID: <20190603110054.GG11812@ming.t460p>
-References: <20190531022801.10003-1-ming.lei@redhat.com>
- <20190531022801.10003-8-ming.lei@redhat.com>
- <1afb4353-6703-a3f0-ca6c-d0b2bd754a56@suse.de>
- <CACVXFVMG8gkw8E0pmWBJC0tBH9D-WVjY2FnL2gsxDja3ryfbng@mail.gmail.com>
- <c11faee4-fc38-9636-59b4-bc5c0d94ffbf@huawei.com>
+        id S1728437AbfFCLi5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 07:38:57 -0400
+Received: from mx2.suse.de ([195.135.220.15]:47050 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728148AbfFCLi5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 07:38:57 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 6B5DEAF81;
+        Mon,  3 Jun 2019 11:38:54 +0000 (UTC)
+Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
+To:     Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Ming Lei <tom.leiming@gmail.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org
+References: <20190531082116.GA12106@ming.t460p>
+ <e81ca95e-95af-1078-c523-701120dd4ca7@suse.de>
+ <20190531084600.GB12106@ming.t460p>
+ <f7e184d4-3d90-2c36-84b8-702105dccafb@suse.de>
+ <20190531230620.GB16190@ming.t460p>
+ <fc049d0a-a7e3-894a-0680-574d86603ea5@suse.de>
+ <20190603073733.GA11812@ming.t460p>
+ <f0901773-0faf-7a4e-bb17-3e584de00c4f@suse.de>
+ <20190603081621.GC11812@ming.t460p>
+ <cd22b399-789d-c0fd-5748-5feeea90c0ee@suse.com>
+ <20190603093128.GD11812@ming.t460p>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <0ba81c9b-18f5-f846-5a70-3f63096b8c19@suse.de>
+Date:   Mon, 3 Jun 2019 13:38:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c11faee4-fc38-9636-59b4-bc5c0d94ffbf@huawei.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Mon, 03 Jun 2019 11:01:22 +0000 (UTC)
+In-Reply-To: <20190603093128.GD11812@ming.t460p>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, May 31, 2019 at 12:38:10PM +0100, John Garry wrote:
+On 6/3/19 11:31 AM, Ming Lei wrote:
+> On Mon, Jun 03, 2019 at 10:47:24AM +0200, Hannes Reinecke wrote:
+>> On 6/3/19 10:16 AM, Ming Lei wrote:
+>>> On Mon, Jun 03, 2019 at 09:46:39AM +0200, Hannes Reinecke wrote:
+>>>> On 6/3/19 9:37 AM, Ming Lei wrote:
+>>>>> On Mon, Jun 03, 2019 at 08:08:18AM +0200, Hannes Reinecke wrote:
+>>>>>> On 6/1/19 1:06 AM, Ming Lei wrote:
+>>>>>>> On Fri, May 31, 2019 at 12:26:56PM +0200, Hannes Reinecke wrote:
+>>>>>>>> On 5/31/19 10:46 AM, Ming Lei wrote:
+>>>>>> [ .. ]
+>>>>>>>> First we check for the 'slot_index_alloc()' callback to handle weird v2
+>>>>>>>> allocation rules, _then_ we look for a tag, and only if we do _not_ have
+>>>>>>>> a tag we're using the bitmap.
+>>>>>>>
+>>>>>>> OK, looks I miss the above change.
+>>>>>>>
+>>>>>>>> And the bitmap is already correctly sized, as otherwise we'd have a
+>>>>>>>> clash between internal and tagged I/O commands even now.
+>>>>>>>
+>>>>>>> But now the big problem is in the following two line code:
+>>>>>>>
+>>>>>>> +       else if (blk_tag != (u32)-1)
+>>>>>>> +               rc = blk_mq_unique_tag_to_tag(blk_tag);
+>>>>>>>
+>>>>>>> Request from different blk-mq hw queue has same tag returned from
+>>>>>>> blk_mq_unique_tag_to_tag().
+>>>>>>>
+>>>>>> Yes, but the sbitmap allocator will ensure that each command will get a
+>>>>>> unique tag.
+>>>>>
+>>>>> Each hw queue has independent sbitmap allocator, so commands with same
+>>>>> tag can come from different hw queue.
+>>>>>
+>>>> It does not for SCSI.
+>>>> See below.
+>>>>
+>>>>> So you meant this RFC patch depends on the host-wide tags patchset I
+>>>>> posted?
+>>>>>
+>>>>>>
+>>>>>>> Now the biggest question is that if V3 hw supports per-queue tags,
+>>>>>>> If yes, it should be real MQ hardware, otherwise I guess commands with
+>>>>>>> same tag at the same time may not work for host-wide tags.
+>>>>>>>
+>>>>>>
+>>>>>> Of course you can't have different commands with the same tag. But the
+>>>>>> sbitmap allocator prevents this from happening, as for host-wide tags
+>>>>>> the tagset is _shared_ between all devices, so the sbitmap allocator
+>>>>>> will only ever run on _one_ tagset for all commands.
+>>>>>
+>>>>> But blk-mq doesn't support host-wide tags yet, so how can this single
+>>>>> patch work?
+>>>>>
+>>>> Wrong. It does:
+>>>>
+>>>> struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev)
+>>>> {
+>>>> 	sdev->request_queue = blk_mq_init_queue(&sdev->host->tag_set);
+>>>> 	if (IS_ERR(sdev->request_queue))
+>>>> 		return NULL;
+>>>>
+>>>> 	sdev->request_queue->queuedata = sdev;
+>>>> 	__scsi_init_queue(sdev->host, sdev->request_queue);
+>>>> 	blk_queue_flag_set(QUEUE_FLAG_SCSI_PASSTHROUGH, sdev->request_queue);
+>>>> 	return sdev->request_queue;
+>>>> }
+>>>>
+>>>>
+>>>> IE every scsi device is using the tagset from the host.
+>>>
+>>> Looks we are not in the same page, and you misunderstood two concepts:
+>>> scsi's host-wide tagset, and the new host-tags of BLK_MQ_F_HOST_TAGS.
+>>>
+>>> I admit that the new flag of BLK_MQ_F_HOST_TAGS is misleading.
+>>>
+>>> Now let me clarify it a bit:
+>>>
+>>> 1) the current SCSI hostwide tags means all LUNs share the host tagset,
+>>> but the tagset may include multiple hw queues, and each hw queue still
+>>> has independent tags, that is why blk-mq provides blk_mq_unique_tag().
+>>> In short, each LUN's hw queue has independent tags.
+>>>
+>> Which is where I fundamentally disagree.
+>> Each hw queue does _not_ have independent tags.
+>> Each hw queue will use tags from the same (host-wide) tagset; the tags
+>> themselves will be allocated for each queue on an ad-hoc base, ie there
+>> is no fixed mapping between tag values and hardware queues.
 > 
-> > > > -fallback:
-> > > > -     for_each_possible_cpu(cpu)
-> > > > -             hisi_hba->reply_map[cpu] = cpu % hisi_hba->queue_count;
-> > > > -     /* Don't clean all CQ masks */
-> > > > -}
-> > > > -
-> > > >  static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
-> > > >  {
-> > > >       struct device *dev = hisi_hba->dev;
-> > > > @@ -2383,11 +2359,6 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
-> > > > 
-> > > >               min_msi = MIN_AFFINE_VECTORS_V3_HW;
-> > > > 
-> > > > -             hisi_hba->reply_map = devm_kcalloc(dev, nr_cpu_ids,
-> > > > -                                                sizeof(unsigned int),
-> > > > -                                                GFP_KERNEL);
-> > > > -             if (!hisi_hba->reply_map)
-> > > > -                     return -ENOMEM;
-> > > >               vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
-> > > >                                                        min_msi, max_msi,
-> > > >                                                        PCI_IRQ_MSI |
-> > > > @@ -2395,7 +2366,6 @@ static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
-> > > >                                                        &desc);
-> > > >               if (vectors < 0)
-> > > >                       return -ENOENT;
-> > > > -             setup_reply_map_v3_hw(hisi_hba, vectors - BASE_VECTORS_V3_HW);
-> > > >       } else {
-> > > >               min_msi = max_msi;
-> > > >               vectors = pci_alloc_irq_vectors(hisi_hba->pci_dev, min_msi,
-> > > > @@ -2896,6 +2866,18 @@ static void debugfs_snapshot_restore_v3_hw(struct hisi_hba *hisi_hba)
-> > > >       clear_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags);
-> > > >  }
-> > > > 
-> > > > +static int hisi_sas_map_queues(struct Scsi_Host *shost)
-> > > > +{
-> > > > +     struct hisi_hba *hisi_hba = shost_priv(shost);
-> > > > +     struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-> > > > +
-> > > > +     if (auto_affine_msi_experimental)
-> > > > +             return blk_mq_pci_map_queues(qmap, hisi_hba->pci_dev,
-> > > > +                             BASE_VECTORS_V3_HW);
-> > > > +     else
-> > > > +             return blk_mq_map_queues(qmap);
+> Tagset is set of tags, and one tags is for serving one hw queue.
 > 
-> I don't think that the mapping which blk_mq_map_queues() creates are not
-> want we want. I'm guessing that we still would like a mapping similar to
-> what blk_mq_pci_map_queues() produces, which is an even spread, putting
-> adjacent CPUs on the same queue.
+> Each hw queue has its own tags, please see __blk_mq_alloc_rq_map()
+> in which standalone sbitmap allocator and rq pool is allocated to
+> each hw queue represented by 'hctx_idx'.
 > 
-> For my system with 96 cpus and 16 queues, blk_mq_map_queues() would map
-> queue 0 to cpu 0, 16, 32, 48 ..., queue 1 to cpu 1, 17, 33 and so on.
+Yes, but ...
 
-blk_mq_map_queues() is the default or fallback mapping in case that managed
-irq isn't used. If the mapping isn't good enough, we still can improve it
-in future, then any driver applying it can got improved.
+> And for each hw queue, the allocated tag value for request is in
+> the range of 0 ~ queue_depth - 1, that is why I say requests from
+> different hw queue may have same tag.
+> 
 
-> 
-> > > > +}
-> > > > +
-> > > >  static struct scsi_host_template sht_v3_hw = {
-> > > >       .name                   = DRV_NAME,
-> > > >       .module                 = THIS_MODULE,
-> > > 
-> > > As mentioned, we should be using a common function here.
-> > > 
-> > > > @@ -2906,6 +2888,8 @@ static struct scsi_host_template sht_v3_hw = {
-> > > >       .scan_start             = hisi_sas_scan_start,
-> > > >       .change_queue_depth     = sas_change_queue_depth,
-> > > >       .bios_param             = sas_bios_param,
-> > > > +     .map_queues             = hisi_sas_map_queues,
-> > > > +     .host_tagset            = 1,
-> > > >       .this_id                = -1,
-> > > >       .sg_tablesize           = HISI_SAS_SGE_PAGE_CNT,
-> > > >       .sg_prot_tablesize      = HISI_SAS_SGE_PAGE_CNT,
-> > > > @@ -3092,6 +3076,8 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
-> > > >       if (hisi_sas_debugfs_enable)
-> > > >               hisi_sas_debugfs_init(hisi_hba);
-> > > > 
-> > > > +     shost->nr_hw_queues = hisi_hba->cq_nvecs;
-> 
-> There's an ordering issue here, which can be fixed without too much trouble.
-> 
-> Value hisi_hba->cq_nvecs is not set until after this point, in
-> hisi_sas_v3_probe()->hw->hw_init->hisi_sas_v3_init()->interrupt_init_v3_hw()
-> 
-> 
-> Please see revised patch, below.
+But this is not what I have been observing working with lpfc and qla2xxx.
+Both drivers have been converted to using scsi-mq with nr_hw_queues > 1
+some years ago, and do work just fine.
+And none of those drivers allow for re-using an in-flight tag on
+different hardware queues.
+If your reasoning is correct none of these drivers would work.
 
-Good catch, will integrate it in V2.
+> Your RFC patch changes to allow requests with same tag submitted to driver
+> & hardware at the same time, so we should double-check if hisi_v3 hardware
+> is happy with this change.
+> 
+> John, is hisi_sas v3 fine with this way?
+> 
+As mentioned above, I don't think this can happen.
 
-Thanks,
-Ming
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
