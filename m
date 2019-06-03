@@ -2,116 +2,188 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 650EB32B0B
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 10:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE53332B13
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 10:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727748AbfFCIp0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 04:45:26 -0400
-Received: from pegase1.c-s.fr ([93.17.236.30]:56791 "EHLO pegase1.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726653AbfFCIp0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 3 Jun 2019 04:45:26 -0400
-Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 45HTCL5n0hz9v0D9;
-        Mon,  3 Jun 2019 10:45:18 +0200 (CEST)
-Authentication-Results: localhost; dkim=pass
-        reason="1024-bit key; insecure key"
-        header.d=c-s.fr header.i=@c-s.fr header.b=WPHhyKe+; dkim-adsp=pass;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id EQ8AzAKtaaNi; Mon,  3 Jun 2019 10:45:18 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 45HTCL4d8Zz9v0D6;
-        Mon,  3 Jun 2019 10:45:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
-        t=1559551518; bh=EIz0NOWAX/uobIhHG6/is2QasF1BW3QEbpzGLpjwL20=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=WPHhyKe+I1HWbWe98+E4FhOSpt26176vUn6v3/2lkFHz1L1LOr2Xmj8wZWUmsR+eC
-         3tVRjZfv5eBf/GrTrixBbDrhI47OrRfp2EBRUMapPoOGlfOTohOZeXLD8bvmkraJO3
-         3pl2dBzGIRRSLmUhQvogdilTN1N6QHLR58kQqz/8=
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 555348B7B1;
-        Mon,  3 Jun 2019 10:45:23 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id oJf0fEAn0lyt; Mon,  3 Jun 2019 10:45:23 +0200 (CEST)
-Received: from PO15451 (po15451.idsi0.si.c-s.fr [172.25.231.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id ECC778B7B8;
-        Mon,  3 Jun 2019 10:45:22 +0200 (CEST)
-Subject: Re: [PATCH] scsi: ibmvscsi: Don't use rc uninitialized in
- ibmvscsi_do_work
-To:     Nathan Chancellor <natechancellor@gmail.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     clang-built-linux@googlegroups.com, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20190531185306.41290-1-natechancellor@gmail.com>
-From:   Christophe Leroy <christophe.leroy@c-s.fr>
-Message-ID: <d932b755-606e-6847-a460-da463411c562@c-s.fr>
-Date:   Mon, 3 Jun 2019 10:45:24 +0200
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727688AbfFCIr2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 04:47:28 -0400
+Received: from smtp.nue.novell.com ([195.135.221.5]:33189 "EHLO
+        smtp.nue.novell.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbfFCIr1 (ORCPT
+        <rfc822;groupwise-linux-scsi@vger.kernel.org:0:0>);
+        Mon, 3 Jun 2019 04:47:27 -0400
+Received: from [10.160.4.48] (charybdis.suse.de [149.44.162.66])
+        by smtp.nue.novell.com with ESMTP (TLS encrypted); Mon, 03 Jun 2019 10:47:25 +0200
+Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
+To:     Ming Lei <ming.lei@redhat.com>, Hannes Reinecke <hare@suse.de>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Ming Lei <tom.leiming@gmail.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org
+References: <20190531074158.76923-1-hare@suse.de>
+ <20190531082116.GA12106@ming.t460p>
+ <e81ca95e-95af-1078-c523-701120dd4ca7@suse.de>
+ <20190531084600.GB12106@ming.t460p>
+ <f7e184d4-3d90-2c36-84b8-702105dccafb@suse.de>
+ <20190531230620.GB16190@ming.t460p>
+ <fc049d0a-a7e3-894a-0680-574d86603ea5@suse.de>
+ <20190603073733.GA11812@ming.t460p>
+ <f0901773-0faf-7a4e-bb17-3e584de00c4f@suse.de>
+ <20190603081621.GC11812@ming.t460p>
+From:   Hannes Reinecke <hare@suse.com>
+Message-ID: <cd22b399-789d-c0fd-5748-5feeea90c0ee@suse.com>
+Date:   Mon, 3 Jun 2019 10:47:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190531185306.41290-1-natechancellor@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: fr
+In-Reply-To: <20190603081621.GC11812@ming.t460p>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-
-
-Le 31/05/2019 à 20:53, Nathan Chancellor a écrit :
-> clang warns:
+On 6/3/19 10:16 AM, Ming Lei wrote:
+> On Mon, Jun 03, 2019 at 09:46:39AM +0200, Hannes Reinecke wrote:
+>> On 6/3/19 9:37 AM, Ming Lei wrote:
+>>> On Mon, Jun 03, 2019 at 08:08:18AM +0200, Hannes Reinecke wrote:
+>>>> On 6/1/19 1:06 AM, Ming Lei wrote:
+>>>>> On Fri, May 31, 2019 at 12:26:56PM +0200, Hannes Reinecke wrote:
+>>>>>> On 5/31/19 10:46 AM, Ming Lei wrote:
+>>>> [ .. ]
+>>>>>> First we check for the 'slot_index_alloc()' callback to handle weird v2
+>>>>>> allocation rules, _then_ we look for a tag, and only if we do _not_ have
+>>>>>> a tag we're using the bitmap.
+>>>>>
+>>>>> OK, looks I miss the above change.
+>>>>>
+>>>>>> And the bitmap is already correctly sized, as otherwise we'd have a
+>>>>>> clash between internal and tagged I/O commands even now.
+>>>>>
+>>>>> But now the big problem is in the following two line code:
+>>>>>
+>>>>> +       else if (blk_tag != (u32)-1)
+>>>>> +               rc = blk_mq_unique_tag_to_tag(blk_tag);
+>>>>>
+>>>>> Request from different blk-mq hw queue has same tag returned from
+>>>>> blk_mq_unique_tag_to_tag().
+>>>>>
+>>>> Yes, but the sbitmap allocator will ensure that each command will get a
+>>>> unique tag.
+>>>
+>>> Each hw queue has independent sbitmap allocator, so commands with same
+>>> tag can come from different hw queue.
+>>>
+>> It does not for SCSI.
+>> See below.
+>>
+>>> So you meant this RFC patch depends on the host-wide tags patchset I
+>>> posted?
+>>>
+>>>>
+>>>>> Now the biggest question is that if V3 hw supports per-queue tags,
+>>>>> If yes, it should be real MQ hardware, otherwise I guess commands with
+>>>>> same tag at the same time may not work for host-wide tags.
+>>>>>
+>>>>
+>>>> Of course you can't have different commands with the same tag. But the
+>>>> sbitmap allocator prevents this from happening, as for host-wide tags
+>>>> the tagset is _shared_ between all devices, so the sbitmap allocator
+>>>> will only ever run on _one_ tagset for all commands.
+>>>
+>>> But blk-mq doesn't support host-wide tags yet, so how can this single
+>>> patch work?
+>>>
+>> Wrong. It does:
+>>
+>> struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev)
+>> {
+>> 	sdev->request_queue = blk_mq_init_queue(&sdev->host->tag_set);
+>> 	if (IS_ERR(sdev->request_queue))
+>> 		return NULL;
+>>
+>> 	sdev->request_queue->queuedata = sdev;
+>> 	__scsi_init_queue(sdev->host, sdev->request_queue);
+>> 	blk_queue_flag_set(QUEUE_FLAG_SCSI_PASSTHROUGH, sdev->request_queue);
+>> 	return sdev->request_queue;
+>> }
+>>
+>>
+>> IE every scsi device is using the tagset from the host.
 > 
-> drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
-> uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->          case IBMVSCSI_HOST_ACTION_NONE:
->               ^~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/ibmvscsi/ibmvscsi.c:2151:6: note: uninitialized use occurs
-> here
->          if (rc) {
->              ^~
+> Looks we are not in the same page, and you misunderstood two concepts:
+> scsi's host-wide tagset, and the new host-tags of BLK_MQ_F_HOST_TAGS.
 > 
-> Initialize rc to zero so that the atomic_set and dev_err statement don't
-> trigger for the cases that just break.
+> I admit that the new flag of BLK_MQ_F_HOST_TAGS is misleading.
 > 
-> Fixes: 035a3c4046b5 ("scsi: ibmvscsi: redo driver work thread to use enum action states")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/502
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-> ---
->   drivers/scsi/ibmvscsi/ibmvscsi.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> Now let me clarify it a bit:
 > 
-> diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
-> index 727c31dc11a0..6714d8043e62 100644
-> --- a/drivers/scsi/ibmvscsi/ibmvscsi.c
-> +++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
-> @@ -2118,7 +2118,7 @@ static unsigned long ibmvscsi_get_desired_dma(struct vio_dev *vdev)
->   static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
->   {
->   	unsigned long flags;
-> -	int rc;
-> +	int rc = 0;
-
-I don't think the above is the best solution, as it hides the warning 
-instead of really fixing it.
-
-Your problem is that some legs of the switch are missing setting the 
-value of rc, it would therefore be better to fix the legs instead of 
-setting a default value which may not be correct for every case, 
-allthough it may be at the time being.
-
-Christophe
-
-
->   	char *action = "reset";
->   
->   	spin_lock_irqsave(hostdata->host->host_lock, flags);
+> 1) the current SCSI hostwide tags means all LUNs share the host tagset,
+> but the tagset may include multiple hw queues, and each hw queue still
+> has independent tags, that is why blk-mq provides blk_mq_unique_tag().
+> In short, each LUN's hw queue has independent tags.
 > 
+Which is where I fundamentally disagree.
+Each hw queue does _not_ have independent tags.
+Each hw queue will use tags from the same (host-wide) tagset; the tags
+themselves will be allocated for each queue on an ad-hoc base, ie there
+is no fixed mapping between tag values and hardware queues.
+Which is why there is blk_mq_unique_tag(); this precisely returns a tag
+which is unique across all devices from this host by shifting the queue
+number on top of the actual tag number:
+
+u32 blk_mq_unique_tag(struct request *rq)
+{
+	return (rq->mq_hctx->queue_num << BLK_MQ_UNIQUE_TAG_BITS) |
+		(rq->tag & BLK_MQ_UNIQUE_TAG_MASK);
+}
+
+So the tagset itself is not split across devices, and all devices can
+(potentially) use all tags from the tagset.
+
+> 
+> 2) some drivers(hisi_v3 hw, hpsa, megraid_sas, mpt3sas) only support
+> single hw queue, but has multiple reply queue which can avoid CPU
+> lockup, so we are working towards converting the private reply queue
+> into blk-mq hw queue. That is what BLK_MQ_F_HOST_TAGS covers.
+> 
+I am aware.
+
+> Now you think 1) is enough for converting the private reply queue into
+> blk-mq hw queue, that is definitely not correct since blk-mq MQ doesn't
+> support shared tags among hw queues.
+> 
+Currently blk-mq assumes a symmetric submission/completion model, ie it
+is assumed that a multiqueue device will have the same number of
+submissions and completion queues.
+
+For the HBAs listed above the submission works by writing an address
+into a single dedicated PCI register, whereas there are completion
+queues per interrupt. So we really have a 1:n mapping between submission
+and completion queues.
+
+Which is what your patchset is trying to address, and I'm perfectly fine
+with this.
+
+All I'm arguing is that hisi_sas v3 really maps onto the original model,
+seeing that is has per-queue submission paths, and as such maps more
+closely on the original model for blk-mq.
+Hence I do think that hisi_sas v3 should benefit more from moving to
+that 'full' blk-mq model, and not the simplified 1:n model you are
+proposing.
+
+We still should be going ahead with your patchset for the actual RAID
+HBAs like megaraid_sas etc.
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		               zSeries & Storage
+hare@suse.com			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: F. Imendörffer, J. Smithard, D. Upmanyu, G. Norton
+HRB 21284 (AG Nürnberg)
