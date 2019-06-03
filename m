@@ -2,122 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB1632AF2
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 10:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 650EB32B0B
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 10:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727720AbfFCIhp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 04:37:45 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:33412 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725856AbfFCIhp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 04:37:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1559551065; x=1591087065;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=G3EqpvrsZnf71aKcQlZmFfnzV9YwKkAvrY7Gko34YAU=;
-  b=o/MqGP32UcjYTTjRaRlzO0ZAE1lRRKDQPwZEGlBhs5Rg8uqDL0Gpv5Ec
-   h4zB5KTDe6tp6CLOpSUjYQ1HjZ8u+4zrtzJ5IR5TRMhwuVOxFPTLo9IoW
-   Nchmoj3uOoIKytMdSEAnJ6RAmeGGjOSqxk3n8AHIKIP6ENTmAYqRfFfLK
-   Ex5kRRCcR7SkzCpdZqzgOJL3+/OkVQvtrnBt/OJrqEMfhbOTBiQ7rPOfq
-   h/pldwQtt56Dj+QYrBoJvjWPPCqKSzeA70CuGyJrDNShRY8+APceBKTd9
-   KJ5ymYqP6ifoM0i+SRdHyRvdzmYzEXHOct+uQ/clilhGsMyr/CgbWxXbT
-   A==;
-X-IronPort-AV: E=Sophos;i="5.60,546,1549900800"; 
-   d="scan'208";a="215918448"
-Received: from mail-by2nam01lp2059.outbound.protection.outlook.com (HELO NAM01-BY2-obe.outbound.protection.outlook.com) ([104.47.34.59])
-  by ob1.hgst.iphmx.com with ESMTP; 03 Jun 2019 16:37:44 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G3EqpvrsZnf71aKcQlZmFfnzV9YwKkAvrY7Gko34YAU=;
- b=z78VKoHRANESauTXOTdRGCUQ4f/ERIpLbuBurbasAtSK0abf3PvkCzGTvvhr13K6DAfEA7fQLV7DNKMYft9X0T5pYaXTnEAqNHuSd3hXfwB3gRkSlSEdbP+4LnmgCRYDox90iG4q2dYeOxYFImDDpnFVVp3VJpIx3H7/KY1m3FU=
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
- SN6PR04MB4845.namprd04.prod.outlook.com (52.135.122.207) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1943.21; Mon, 3 Jun 2019 08:37:42 +0000
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::6d99:14d9:3fa:f530]) by SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::6d99:14d9:3fa:f530%6]) with mapi id 15.20.1922.025; Mon, 3 Jun 2019
- 08:37:42 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        Bean Huo <beanhuo@micron.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>
-CC:     Avi Shchislowski <Avi.Shchislowski@wdc.com>,
-        Alex Lemberg <Alex.Lemberg@wdc.com>
-Subject: RE: [PATCH] scsi: ufs: Check that space was properly alloced in
- copy_query_response
-Thread-Topic: [PATCH] scsi: ufs: Check that space was properly alloced in
- copy_query_response
-Thread-Index: AQHVD66+VoVF/V50TUe/Iwn1Wgv+/6Z/9mgAgAm2n5A=
-Date:   Mon, 3 Jun 2019 08:37:42 +0000
-Message-ID: <SN6PR04MB492583D987B1F25A0541EBAFFC140@SN6PR04MB4925.namprd04.prod.outlook.com>
-References: <CGME20190521082527epcas1p44fe0c4659549ae265c9d59ef7844e57e@epcas1p4.samsung.com>
-        <1558427062-5084-1-git-send-email-avri.altman@wdc.com>
- <cd9f0d7b-8ce6-e432-e1df-c4316b191156@samsung.com>
-In-Reply-To: <cd9f0d7b-8ce6-e432-e1df-c4316b191156@samsung.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: be856d8c-1e0e-4fac-8f88-08d6e7febe92
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:SN6PR04MB4845;
-x-ms-traffictypediagnostic: SN6PR04MB4845:
-wdcipoutbound: EOP-TRUE
-x-microsoft-antispam-prvs: <SN6PR04MB48459AA86B40C2E69BCCF369FC140@SN6PR04MB4845.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0057EE387C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(346002)(366004)(136003)(39860400002)(376002)(199004)(189003)(14444005)(256004)(86362001)(110136005)(66446008)(64756008)(73956011)(66946007)(66476007)(66556008)(102836004)(2201001)(76116006)(6116002)(3846002)(54906003)(11346002)(2906002)(446003)(26005)(6246003)(66066001)(81166006)(81156014)(8676002)(25786009)(476003)(68736007)(305945005)(7736002)(186003)(53936002)(33656002)(4326008)(71190400001)(2501003)(8936002)(71200400001)(9686003)(229853002)(7696005)(486006)(55016002)(316002)(76176011)(14454004)(6436002)(74316002)(72206003)(53546011)(99286004)(6506007)(478600001)(52536014)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB4845;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: z5jfNpOuGjd7idCT6bh2/wrIZMtfmWjbg+Jo/4vpdZQhFhMFMnYzHFdDoexPoqXWFFPQh3h7DQTu7ZgB81DMWYi48ceR7iBBYTiMYWTNquhNfP5zDgXXppC8B0svqxre9Xep//6ZHo3AcWXil3I1DhvJpBfXDyHUpH0bN88W7oQAqBnUlYOjLDkoVq4sIVqSyO3Hr/s7L1bINjyReOssqxOpbNQCiFjzj+/MJY0hBE0i1YLQ1r5UjBd7gStrn3+C/BAbWUHlL/BImyNJnAlxROIKLywpMvJLIYdZ9Pqjgq5utVbblN0J8Cht0868cAp6qQw1xOJj9HgbXMsQccQwU8CvfZm0n0AFZZj0mvsigyHotKRkoufH1533hJGyyQ7J+DEAMv5MdaxN9aOa6q0IqCAMdItQzb/YiittrU9gnjE=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1727748AbfFCIp0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 04:45:26 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:56791 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726653AbfFCIp0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 04:45:26 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 45HTCL5n0hz9v0D9;
+        Mon,  3 Jun 2019 10:45:18 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=WPHhyKe+; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id EQ8AzAKtaaNi; Mon,  3 Jun 2019 10:45:18 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 45HTCL4d8Zz9v0D6;
+        Mon,  3 Jun 2019 10:45:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1559551518; bh=EIz0NOWAX/uobIhHG6/is2QasF1BW3QEbpzGLpjwL20=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=WPHhyKe+I1HWbWe98+E4FhOSpt26176vUn6v3/2lkFHz1L1LOr2Xmj8wZWUmsR+eC
+         3tVRjZfv5eBf/GrTrixBbDrhI47OrRfp2EBRUMapPoOGlfOTohOZeXLD8bvmkraJO3
+         3pl2dBzGIRRSLmUhQvogdilTN1N6QHLR58kQqz/8=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 555348B7B1;
+        Mon,  3 Jun 2019 10:45:23 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id oJf0fEAn0lyt; Mon,  3 Jun 2019 10:45:23 +0200 (CEST)
+Received: from PO15451 (po15451.idsi0.si.c-s.fr [172.25.231.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id ECC778B7B8;
+        Mon,  3 Jun 2019 10:45:22 +0200 (CEST)
+Subject: Re: [PATCH] scsi: ibmvscsi: Don't use rc uninitialized in
+ ibmvscsi_do_work
+To:     Nathan Chancellor <natechancellor@gmail.com>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     clang-built-linux@googlegroups.com, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20190531185306.41290-1-natechancellor@gmail.com>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <d932b755-606e-6847-a460-da463411c562@c-s.fr>
+Date:   Mon, 3 Jun 2019 10:45:24 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be856d8c-1e0e-4fac-8f88-08d6e7febe92
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jun 2019 08:37:42.2800
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4845
+In-Reply-To: <20190531185306.41290-1-natechancellor@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgQWxpbSwNClRoYW5rIHlvdSBmb3IgeW91ciByZXZpZXcuDQpTb3JyeSBmb3IgdGhlIGxhdGUg
-cmVzcG9uc2UgLSBJIHdhcyBhd2F5IGZvciBhIGNvdXBsZSBvZiB3ZWVrcy4NCg0KVGhhbmtzLA0K
-QXZyaQ0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIHNjc2k6IHVmczogQ2hlY2sgdGhhdCBzcGFj
-ZSB3YXMgcHJvcGVybHkgYWxsb2NlZCBpbg0KPiBjb3B5X3F1ZXJ5X3Jlc3BvbnNlDQo+IA0KPiBI
-aSBBdnJpDQo+IA0KPiBPbiA1LzIxLzE5IDE6NTQgUE0sIEF2cmkgQWx0bWFuIHdyb3RlOg0KPiA+
-IHN0cnVjdCB1ZnNfZGV2X2NtZCBpcyB0aGUgbWFpbiBjb250YWluZXIgdGhhdCBzdXBwb3J0cyBk
-ZXZpY2UgbWFuYWdlbWVudA0KPiA+IGNvbW1hbmRzLiBJbiB0aGUgY2FzZSBvZiBhIHJlYWQgZGVz
-Y3JpcHRvciByZXF1ZXN0LCB3ZSBhc3N1bWUgdGhhdCB0aGUNCj4gPiBwcm9wZXIgc3BhY2Ugd2Fz
-IGFsbG9jYXRlZCBpbiBkZXZfY21kIHRvIGhvbGQgdGhlIHJldHVybmluZyBkZXNjcmlwdG9yLg0K
-PiA+DQo+ID4gVGhpcyBpcyBubyBsb25nZXIgdHJ1ZSwgYXMgdGhlcmUgYXJlIGZsb3dzIHRoYXQg
-ZG9lc24ndCB1c2UgZGV2X2NtZA0KPiA+IGZvciBkZXZpY2UgbWFuYWdlbWVudCByZXF1ZXN0cywg
-YW5kIHdhcyB3cm9uZyBpbiB0aGUgZmlyc3QgcGxhY2UuDQo+ID4NCj4gQ2FuIHlvdSBwbGVhc2Ug
-cHV0IHNvbWUgbGlnaHQgb24gdGhvc2UgZmxvd3M/IEFyZSB0aG9zZSBwbGF0Zm9ybQ0KPiBzcGVj
-aWZpYz8gSnVzdCBjdXJpb3VzLg0KTm8sIGFjdHVhbGx5IGl0cyBxdWl0ZSBzaW1wbGlzdGljLg0K
-X191ZnNoY2RfcXVlcnlfZGVzY3JpcHRvciBzZXQgZGV2X2NtZC5xdWVyeS5kZXNjcmlwdG9yIA0K
-dG8gcG9pbnQgdG8gaXRzIGRlc2lnbmF0ZWQgc3BhY2UgYmVmb3JlIHNlbmRpbmcgdGhlIHJlYWQg
-ZGVzY3JpcHRvciBxdWVyeSwNCmFuZCB0byBudWxsIG9uY2UgaXQncyBkb25lLg0KQnV0IGl0IGRv
-ZXNuJ3QgY2hlY2sgaXQgaW4gdWZzaGNkX2NvcHlfcXVlcnlfcmVzcG9uc2Ugd2hlbiB0aGUgcXVl
-cnkNCnJldHVybnMgZnJvbSB0aGUgZGV2aWNlLCB3aGljaCBpdCBzaG91bGQsIGFzIEkgaW5kaWNh
-dGVkIGluIHRoZSBjb21taXQgbG9nLg0KDQoNCj4gVGhpcyBjaGFuZ2UgbG9va3Mgb2sgdG8gbWUu
-IEkgaG9wZSB5b3UgaGF2ZSB0ZXN0ZWQgdGhpcyBwYXRjaC4NClllcyBJIGRpZC4NCg0KPiBSZXZp
-ZXdlZC1ieTogQWxpbSBBa2h0YXIgPGFsaW0uYWtodGFyQHNhbXN1bmcuY29tPg0KDQo=
+
+
+Le 31/05/2019 à 20:53, Nathan Chancellor a écrit :
+> clang warns:
+> 
+> drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
+> uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
+>          case IBMVSCSI_HOST_ACTION_NONE:
+>               ^~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/ibmvscsi/ibmvscsi.c:2151:6: note: uninitialized use occurs
+> here
+>          if (rc) {
+>              ^~
+> 
+> Initialize rc to zero so that the atomic_set and dev_err statement don't
+> trigger for the cases that just break.
+> 
+> Fixes: 035a3c4046b5 ("scsi: ibmvscsi: redo driver work thread to use enum action states")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/502
+> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> ---
+>   drivers/scsi/ibmvscsi/ibmvscsi.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
+> index 727c31dc11a0..6714d8043e62 100644
+> --- a/drivers/scsi/ibmvscsi/ibmvscsi.c
+> +++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
+> @@ -2118,7 +2118,7 @@ static unsigned long ibmvscsi_get_desired_dma(struct vio_dev *vdev)
+>   static void ibmvscsi_do_work(struct ibmvscsi_host_data *hostdata)
+>   {
+>   	unsigned long flags;
+> -	int rc;
+> +	int rc = 0;
+
+I don't think the above is the best solution, as it hides the warning 
+instead of really fixing it.
+
+Your problem is that some legs of the switch are missing setting the 
+value of rc, it would therefore be better to fix the legs instead of 
+setting a default value which may not be correct for every case, 
+allthough it may be at the time being.
+
+Christophe
+
+
+>   	char *action = "reset";
+>   
+>   	spin_lock_irqsave(hostdata->host->host_lock, flags);
+> 
