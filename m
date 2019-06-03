@@ -2,270 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED2A632718
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 05:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8972932736
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 06:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726719AbfFCD40 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 2 Jun 2019 23:56:26 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39828 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726636AbfFCD40 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 2 Jun 2019 23:56:26 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 7FF0930842CE;
-        Mon,  3 Jun 2019 03:56:24 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5252110027CA;
-        Mon,  3 Jun 2019 03:56:11 +0000 (UTC)
-Date:   Mon, 3 Jun 2019 11:56:07 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Kashyap Desai <kashyap.desai@broadcom.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        Don Brace <don.brace@microsemi.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 8/9] scsi: megaraid: convert private reply queue to
- blk-mq hw queue
-Message-ID: <20190603035605.GB13684@ming.t460p>
-References: <20190531022801.10003-1-ming.lei@redhat.com>
- <20190531022801.10003-9-ming.lei@redhat.com>
- <7819e1a523b9e8227e3a9d188ee1e083@mail.gmail.com>
- <20190602064202.GA2731@ming.t460p>
- <20190602074757.GA31572@ming.t460p>
- <020a7707a31803d65dd94cc0928a425a@mail.gmail.com>
+        id S1726277AbfFCEYx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 00:24:53 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:40993 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726221AbfFCEYx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 00:24:53 -0400
+Received: by mail-pg1-f193.google.com with SMTP id 83so683360pgg.8
+        for <linux-scsi@vger.kernel.org>; Sun, 02 Jun 2019 21:24:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WqdNmgMM8IjeNY8AGLuBTWKC+Ee4xrFdSZ6RGrKuQ0g=;
+        b=kkHqx7azKwlOJw9oh92IYJNpIiY1gZu1GAlbKBw3/Nqg6TDjZrE2z55S20qv4zuKy3
+         rgIdx4t1aNEIiB0k8sYX9JL4PR1KPbbT35BdupQL3s50of8EnLEY+aR3Xy/7WSJp7vHh
+         m0tL6ofytq+TC5muEtaIOsF9mvISBHS5nIG1jwOKc/uoBylyE6rjRBUU6ZE7YAVlJdeR
+         AaPrqTYwOYbfoTL4xtMNdFp2cxwywDP3ZcVrrkV0thFfW1K5i/4zD/BPP8Wu3kDVyCzu
+         O6jwmLc2ngJEWskPkUTKuRmIoh7ldJl5ViLROFg04V7uytdepI21lGJbpEL6Idz7KzEU
+         vbzg==
+X-Gm-Message-State: APjAAAVQ/XFYQ/SKzhNCj+/9BxCpn5PGdvQFWtAAHtFb4cMY2Y6bdwwy
+        /xf/yQ0v4nTGb1wJKb1QXDg=
+X-Google-Smtp-Source: APXvYqyXrolW+hOVeRr6lCGshdwUUhd7LFCWBwJVcRXyxVSFr9e2BMpvZGcn2zzpNfSAdrSO46Z3ug==
+X-Received: by 2002:a65:6089:: with SMTP id t9mr5459621pgu.170.1559535892799;
+        Sun, 02 Jun 2019 21:24:52 -0700 (PDT)
+Received: from asus.site ([2601:647:4000:5dd1:a41e:80b4:deb3:fb66])
+        by smtp.gmail.com with ESMTPSA id d2sm11438778pfh.115.2019.06.02.21.24.51
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Sun, 02 Jun 2019 21:24:52 -0700 (PDT)
+Subject: Re: [PATCH 00/19] sg: v4 interface, rq sharing + multiple rqs
+To:     dgilbert@interlog.com, linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        bart.vanassche@wdc.com
+References: <20190524184809.25121-1-dgilbert@interlog.com>
+ <a1096ff2-71f5-f398-6173-c8832ac7e26c@acm.org>
+ <1c706e3c-6195-a84b-ac70-f15e5e55e9a7@interlog.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <fa00fd13-e5aa-ea49-d792-351e53bb74b0@acm.org>
+Date:   Sun, 2 Jun 2019 21:24:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <020a7707a31803d65dd94cc0928a425a@mail.gmail.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Mon, 03 Jun 2019 03:56:25 +0000 (UTC)
+In-Reply-To: <1c706e3c-6195-a84b-ac70-f15e5e55e9a7@interlog.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Kashyap,
+On 6/2/19 1:23 PM, Douglas Gilbert wrote:
+> On 2019-05-26 11:49 a.m., Bart Van Assche wrote:
+>> On 5/24/19 11:47 AM, Douglas Gilbert wrote:
+>>> This patchset restores some functionality that was in the v2 driver
+>>> version and has been broken by some external patch in the interim
+>>> period (20 years).
+>>
+>> What is an "external patch"?
+> 
+> It's a patch made by someone with a first name like Christoph, Jens or
+> James (picking some names at random) that is applied whether or not
+> the maintainer of said driver approves ("ack's) or not.
+> 
+> IMO The maintainer should be able to restore features removed in this
+> fashion (I'm talking specifically about the neutering of
+> SG_FLAG_NO_DXFER) without review as it is in the documented interface.
+> Plus I know of at least one power user who was peeved to find out that
+> it was quietly broken.
 
-Thanks for collecting the log.
+That's unfortunate that that regression happened. As you probably know 
+the traditional approach to address a regression is to post a fix that 
+has the "Fixes:" and "Cc: stable" tags.
 
-On Sun, Jun 02, 2019 at 10:04:01PM +0530, Kashyap Desai wrote:
-> > Meantime please try the following patch and see if difference can be
-> made.
-> >
-> > diff --git a/block/blk-mq.c b/block/blk-mq.c index
-> > 49d73d979cb3..d2abec3b0f60 100644
-> > --- a/block/blk-mq.c
-> > +++ b/block/blk-mq.c
-> > @@ -589,7 +589,7 @@ static void __blk_mq_complete_request(struct
-> > request *rq)
-> >  	 * So complete IO reqeust in softirq context in case of single
-> queue
-> >  	 * for not degrading IO performance by irqsoff latency.
-> >  	 */
-> > -	if (q->nr_hw_queues == 1) {
-> > +	if (q->nr_hw_queues == 1 || (rq->mq_hctx->flags &
-> > BLK_MQ_F_HOST_TAGS))
-> > +{
-> >  		__blk_complete_request(rq);
-> >  		return;
-> >  	}
-> > @@ -1977,7 +1977,8 @@ static blk_qc_t blk_mq_make_request(struct
-> > request_queue *q, struct bio *bio)
-> >  		/* bypass scheduler for flush rq */
-> >  		blk_insert_flush(rq);
-> >  		blk_mq_run_hw_queue(data.hctx, true);
-> > -	} else if (plug && (q->nr_hw_queues == 1 || q->mq_ops-
-> > >commit_rqs)) {
-> > +	} else if (plug && (q->nr_hw_queues == 1 || q->mq_ops->commit_rqs
-> > ||
-> > +				(data.hctx->flags & BLK_MQ_F_HOST_TAGS)))
-> > {
-> >  		/*
-> >  		 * Use plugging if we have a ->commit_rqs() hook as well,
-> as
-> >  		 * we know the driver uses bd->last in a smart fashion.
-> 
-> Ming -
-> 
-> I tried above patch and no improvement in performance.
-> 
-> Below is perf record data - lock contention is while getting the tag
-> (blk_mq_get_tag )
-> 
-> 6.67%     6.67%  fio              [kernel.vmlinux]  [k]
-> native_queued_spin_lock_slowpath
->    - 6.66% io_submit
->       - 6.66% entry_SYSCALL_64
->          - do_syscall_64
->             - 6.66% __x64_sys_io_submit
->                - 6.66% io_submit_one
->                   - 6.66% aio_read
->                      - 6.66% generic_file_read_iter
->                         - 6.66% blkdev_direct_IO
->                            - 6.65% submit_bio
->                               - generic_make_request
->                                  - 6.65% blk_mq_make_request
->                                     - 6.65% blk_mq_get_request
->                                        - 6.65% blk_mq_get_tag
->                                           - 6.58%
-> prepare_to_wait_exclusive
->                                              - 6.57%
-> _raw_spin_lock_irqsave
-> 
-> queued_spin_lock_slowpath
-
-Please drop the patch in my last email, and apply the following patch
-and see if we can make a difference:
-
-diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
-index 3d6780504dcb..69d6bffcc8ff 100644
---- a/block/blk-mq-debugfs.c
-+++ b/block/blk-mq-debugfs.c
-@@ -627,6 +627,9 @@ static int hctx_active_show(void *data, struct seq_file *m)
- {
- 	struct blk_mq_hw_ctx *hctx = data;
- 
-+	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-+		hctx = blk_mq_master_hctx(hctx);
-+
- 	seq_printf(m, "%d\n", atomic_read(&hctx->nr_active));
- 	return 0;
- }
-diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-index 309ec5079f3f..58ef83a34fda 100644
---- a/block/blk-mq-tag.c
-+++ b/block/blk-mq-tag.c
-@@ -30,6 +30,9 @@ bool blk_mq_has_free_tags(struct blk_mq_tags *tags)
-  */
- bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)
- {
-+	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-+		hctx = blk_mq_master_hctx(hctx);
-+
- 	if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) &&
- 	    !test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
- 		atomic_inc(&hctx->tags->active_queues);
-@@ -55,6 +58,9 @@ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
- {
- 	struct blk_mq_tags *tags = hctx->tags;
- 
-+	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-+		hctx = blk_mq_master_hctx(hctx);
-+
- 	if (!test_and_clear_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
- 		return;
- 
-@@ -74,6 +80,10 @@ static inline bool hctx_may_queue(struct blk_mq_hw_ctx *hctx,
- 
- 	if (!hctx || !(hctx->flags & BLK_MQ_F_TAG_SHARED))
- 		return true;
-+
-+	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-+		hctx = blk_mq_master_hctx(hctx);
-+
- 	if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
- 		return true;
- 
-diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
-index 61deab0b5a5a..84e9b46ffc78 100644
---- a/block/blk-mq-tag.h
-+++ b/block/blk-mq-tag.h
-@@ -36,11 +36,22 @@ extern void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool);
- void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
- 		void *priv);
- 
-+static inline struct blk_mq_hw_ctx *blk_mq_master_hctx(
-+		struct blk_mq_hw_ctx *hctx)
-+{
-+	return hctx->queue->queue_hw_ctx[0];
-+}
-+
-+
- static inline struct sbq_wait_state *bt_wait_ptr(struct sbitmap_queue *bt,
- 						 struct blk_mq_hw_ctx *hctx)
- {
- 	if (!hctx)
- 		return &bt->ws[0];
-+
-+	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-+		hctx = blk_mq_master_hctx(hctx);
-+
- 	return sbq_wait_ptr(bt, &hctx->wait_index);
- }
- 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 49d73d979cb3..4196ed3b0085 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -303,7 +303,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
- 	} else {
- 		if (data->hctx->flags & BLK_MQ_F_TAG_SHARED) {
- 			rq_flags = RQF_MQ_INFLIGHT;
--			atomic_inc(&data->hctx->nr_active);
-+			blk_mq_inc_nr_active(data->hctx);
- 		}
- 		rq->tag = tag;
- 		rq->internal_tag = -1;
-@@ -517,7 +517,7 @@ void blk_mq_free_request(struct request *rq)
- 
- 	ctx->rq_completed[rq_is_sync(rq)]++;
- 	if (rq->rq_flags & RQF_MQ_INFLIGHT)
--		atomic_dec(&hctx->nr_active);
-+		blk_mq_dec_nr_active(hctx);
- 
- 	if (unlikely(laptop_mode && !blk_rq_is_passthrough(rq)))
- 		laptop_io_completion(q->backing_dev_info);
-@@ -1064,7 +1064,7 @@ bool blk_mq_get_driver_tag(struct request *rq)
- 	if (rq->tag >= 0) {
- 		if (shared) {
- 			rq->rq_flags |= RQF_MQ_INFLIGHT;
--			atomic_inc(&data.hctx->nr_active);
-+			blk_mq_inc_nr_active(data.hctx);
- 		}
- 		data.hctx->tags->rqs[rq->tag] = rq;
- 	}
-diff --git a/block/blk-mq.h b/block/blk-mq.h
-index 633a5a77ee8b..f1279b8c2289 100644
---- a/block/blk-mq.h
-+++ b/block/blk-mq.h
-@@ -193,6 +193,20 @@ unsigned int blk_mq_in_flight(struct request_queue *q, struct hd_struct *part);
- void blk_mq_in_flight_rw(struct request_queue *q, struct hd_struct *part,
- 			 unsigned int inflight[2]);
- 
-+static inline void blk_mq_inc_nr_active(struct blk_mq_hw_ctx *hctx)
-+{
-+	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-+		hctx = blk_mq_master_hctx(hctx);
-+	atomic_inc(&hctx->nr_active);
-+}
-+
-+static inline void blk_mq_dec_nr_active(struct blk_mq_hw_ctx *hctx)
-+{
-+	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-+		hctx = blk_mq_master_hctx(hctx);
-+	atomic_dec(&hctx->nr_active);
-+}
-+
- static inline void blk_mq_put_dispatch_budget(struct blk_mq_hw_ctx *hctx)
- {
- 	struct request_queue *q = hctx->queue;
-@@ -218,7 +232,7 @@ static inline void __blk_mq_put_driver_tag(struct blk_mq_hw_ctx *hctx,
- 
- 	if (rq->rq_flags & RQF_MQ_INFLIGHT) {
- 		rq->rq_flags &= ~RQF_MQ_INFLIGHT;
--		atomic_dec(&hctx->nr_active);
-+		blk_mq_dec_nr_active(hctx);
- 	}
- }
- 
-Thanks,
-Ming
+Bart.
