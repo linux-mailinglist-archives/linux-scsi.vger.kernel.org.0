@@ -2,147 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B9833545
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 18:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CD333A03
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Jun 2019 23:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727528AbfFCQxB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 12:53:01 -0400
-Received: from mailout.easymail.ca ([64.68.200.34]:49798 "EHLO
-        mailout.easymail.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726690AbfFCQxB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 12:53:01 -0400
-X-Greylist: delayed 346 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jun 2019 12:52:59 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mailout.easymail.ca (Postfix) with ESMTP id EF47524BF4;
-        Mon,  3 Jun 2019 16:47:12 +0000 (UTC)
-Received: from mailout.easymail.ca ([127.0.0.1])
-        by localhost (emo06-pco.easydns.vpn [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IRw2Rh0RPLAH; Mon,  3 Jun 2019 16:47:12 +0000 (UTC)
-Received: from mail.gonehiking.org (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        by mailout.easymail.ca (Postfix) with ESMTPA id C5989241ED;
-        Mon,  3 Jun 2019 16:46:57 +0000 (UTC)
-Received: from [192.168.1.4] (rhapsody.internal [192.168.1.4])
-        by mail.gonehiking.org (Postfix) with ESMTP id DF56C9F2FA;
-        Mon,  3 Jun 2019 10:46:56 -0600 (MDT)
-Subject: Re: [PATCH 2/3] drivers: scsi: remove unnecessary #ifdef MODULE
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org
-Cc:     rjw@rjwysocki.net, viresh.kumar@linaro.org, jdelvare@suse.com,
-        linux@roeck-us.net, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        aacraid@microsemi.com, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <1559397700-15585-1-git-send-email-info@metux.net>
- <1559397700-15585-3-git-send-email-info@metux.net>
-From:   Khalid Aziz <khalid@gonehiking.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=khalid@gonehiking.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <ae7d15b0-f513-ab1f-6101-201099df7eef@gonehiking.org>
-Date:   Mon, 3 Jun 2019 10:46:56 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726603AbfFCVnq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 17:43:46 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37716 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbfFCVnq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 17:43:46 -0400
+Received: by mail-pf1-f193.google.com with SMTP id a23so11368376pff.4;
+        Mon, 03 Jun 2019 14:43:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=YQ9KOEQkrUrE3BH10zdSnyauWIlgxvI2MCvsKO92OqM=;
+        b=QxTvQ5J6FQS96wGuPSX0j5luE25HmxVJsQtcbv4b2I8gAMurDCfy3uGgLVxe+iLNwO
+         48Z4uXHPz+TdTDxjdUPuxDIkPSB1sC0Aux/g5/ARDUx13CrswG31y+Drwik4csFLuQCf
+         KYtNjxR/13Sm9u2QRbVUl09oC5iryUJQMXew7KGAVDVbgXEQ2wayqky88Z2YvMfUDDlE
+         M04F0B92b5mEjrg5cwLqzVE5zIKSHy+cQI/7ZjcAj0a0G8yA93ego6yM3P/Z8/Jp8g/S
+         PqIeLesmFCbCfNoLShgO7pksrOB+9JrLlXGAKxuYj39c7a6Ozsv4wjiJmdsP2T9rsq+3
+         He+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YQ9KOEQkrUrE3BH10zdSnyauWIlgxvI2MCvsKO92OqM=;
+        b=rXl14edp87/Dq2cVxnHJbThVvHmOQgMlPoquuGeifgU8H8b6yk391LReN86O6chMkd
+         9mcrqCx0RtKzpF9FQD6YXXZAFXmcDY48GF3gjQliI7zY+8o0tlBih+MFzAumvwd5BSod
+         KmoVijNLuNJOAe+grFGejtje8sOSt0oH6m58ifbSfDIj/s8LSN7HhnzDb9VJ24YlOGo1
+         32ZuxeHFVmpX3uZ8HVQ1WsuJ71T6Yte4tUZ3tuSm9pp5qa/OOQUfsb6ToHYxzHRHLXOK
+         N0Bzd5UzQxeKWyP9M3PoiGmhgE0j4cYTqyO03HZ0mr7FjGwogbbGTd7sRE+RQcL9mRy8
+         cnlg==
+X-Gm-Message-State: APjAAAUzmtgyL7Wu4FOz4GMHJpZpNoHvU2eZhQkIUF/UA5zOo1PsEIhh
+        nkF/VUleAjxk3+fNEME5EOtnPJUc
+X-Google-Smtp-Source: APXvYqyJ9A9knaCRAQg0tTXkPDokVjBHleDqoD0QQ8nkArGFOrUrEd3i93/pb7zdr6VuPwNBWQt2NQ==
+X-Received: by 2002:a63:591d:: with SMTP id n29mr30397960pgb.75.1559594665229;
+        Mon, 03 Jun 2019 13:44:25 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z18sm15738390pfa.101.2019.06.03.13.44.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 03 Jun 2019 13:44:23 -0700 (PDT)
+Date:   Mon, 3 Jun 2019 13:44:22 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.com>
+Subject: Re: [PATCH V4 3/3] scsi: core: avoid to pre-allocate big chunk for
+ sg list
+Message-ID: <20190603204422.GA7240@roeck-us.net>
+References: <20190428073932.9898-1-ming.lei@redhat.com>
+ <20190428073932.9898-4-ming.lei@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <1559397700-15585-3-git-send-email-info@metux.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190428073932.9898-4-ming.lei@redhat.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/1/19 8:01 AM, Enrico Weigelt, metux IT consult wrote:
-> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
-> so the extra check here is not necessary.
+On Sun, Apr 28, 2019 at 03:39:32PM +0800, Ming Lei wrote:
+> Now scsi_mq_setup_tags() pre-allocates a big buffer for IO sg list,
+> and the buffer size is scsi_mq_sgl_size() which depends on smaller
+> value between shost->sg_tablesize and SG_CHUNK_SIZE.
 > 
-> Signed-off-by: Enrico Weigelt <info@metux.net>
-> ---
->  drivers/scsi/BusLogic.c | 2 --
->  drivers/scsi/dpt_i2o.c  | 3 ---
->  2 files changed, 5 deletions(-)
+> Modern HBA's DMA is often capable of deadling with very big segment
+> number, so scsi_mq_sgl_size() is often big. Suppose the max sg number
+> of SG_CHUNK_SIZE is taken, scsi_mq_sgl_size() will be 4KB.
 > 
-> diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-> index e41e51f..68cc68b 100644
-> --- a/drivers/scsi/BusLogic.c
-> +++ b/drivers/scsi/BusLogic.c
-> @@ -3893,7 +3893,6 @@ static void __exit blogic_exit(void)
->  
->  __setup("BusLogic=", blogic_setup);
->  
-> -#ifdef MODULE
->  /*static struct pci_device_id blogic_pci_tbl[] = {
->  	{ PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_MULTIMASTER,
->  	  PCI_ANY_ID, PCI_ANY_ID, 0, 0, 0},
-> @@ -3909,7 +3908,6 @@ static void __exit blogic_exit(void)
->  	{PCI_DEVICE(PCI_VENDOR_ID_BUSLOGIC, PCI_DEVICE_ID_BUSLOGIC_FLASHPOINT)},
->  	{0, },
->  };
-> -#endif
->  MODULE_DEVICE_TABLE(pci, blogic_pci_tbl);
->  
->  module_init(blogic_init);> diff --git a/drivers/scsi/dpt_i2o.c b/drivers/scsi/dpt_i2o.c
-> index abc74fd..9b28f9f 100644
-> --- a/drivers/scsi/dpt_i2o.c
-> +++ b/drivers/scsi/dpt_i2o.c
-> @@ -177,14 +177,11 @@ static u8 adpt_read_blink_led(adpt_hba* host)
->   *============================================================================
->   */
->  
-> -#ifdef MODULE
->  static struct pci_device_id dptids[] = {
->  	{ PCI_DPT_VENDOR_ID, PCI_DPT_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
->  	{ PCI_DPT_VENDOR_ID, PCI_DPT_RAPTOR_DEVICE_ID, PCI_ANY_ID, PCI_ANY_ID,},
->  	{ 0, }
->  };
-> -#endif
-> -
->  MODULE_DEVICE_TABLE(pci,dptids);
->  
->  static int adpt_detect(struct scsi_host_template* sht)
+> Then if one HBA has lots of queues, and each hw queue's depth is
+> high, pre-allocation for sg list can consume huge memory.
+> For example of lpfc, nr_hw_queues can be 70, each queue's depth
+> can be 3781, so the pre-allocation for data sg list is 70*3781*2k
+> =517MB for single HBA.
+> 
+> There is Red Hat internal report that scsi_debug based tests can't
+> be run any more since legacy io path is killed because too big
+> pre-allocation.
+> 
+> So switch to runtime allocation for sg list, meantime pre-allocate 2
+> inline sg entries. This way has been applied to NVMe PCI for a while,
+> so it should be fine for SCSI too. Also runtime sg entries allocation
+> has verified and run always in the original legacy io path.
+> 
+> Not see performance effect in my big BS test on scsi_debug.
 > 
 
-As James pointed out, this will result in warning from compiler about
-unused variable. Please address that first.
+This patch causes a variety of boot failures in -next. Typical failure
+pattern is scsi hangs or failure to find a root file system. For example,
+on alpha, trying to boot from usb:
 
---
-Khalid
+scsi 0:0:0:0: Direct-Access     QEMU     QEMU HARDDISK    2.5+ PQ: 0 ANSI: 5
+sd 0:0:0:0: Power-on or device reset occurred
+sd 0:0:0:0: [sda] 20480 512-byte logical blocks: (10.5 MB/10.0 MiB)
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+sd 0:0:0:0: [sda] Attached SCSI disk
+usb 1-1: reset full-speed USB device number 2 using ohci-pci
+sd 0:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x07 driverbyte=0x00
+sd 0:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 00 58 00 00 42 00
+print_req_error: I/O error, dev sda, sector 88 flags 80000
+EXT4-fs error (device sda): __ext4_get_inode_loc:4703: inode #2: block 44: comm
+swapper: unable to read itable block
+EXT4-fs (sda): get root inode failed
+EXT4-fs (sda): mount failed
+VFS: Cannot open root device "sda" or unknown-block(8,0): error -5
+
+Similar problems are seen with other architectures.
+Reverting the patch fixes the problem. Bisect log attached.
+
+Guenter
+
+---
+# bad: [ae3cad8f39ccf8d31775d9737488bccf0e44d370] Add linux-next specific files for 20190603
+# good: [f2c7c76c5d0a443053e94adb9f0918fa2fb85c3a] Linux 5.2-rc3
+git bisect start 'HEAD' 'v5.2-rc3'
+# good: [8ff6f4c6e067a9d3f3bbacf02c4ea5eb81fe2c6a] Merge remote-tracking branch 'crypto/master'
+git bisect good 8ff6f4c6e067a9d3f3bbacf02c4ea5eb81fe2c6a
+# good: [6c93755861ce6a6dd904df9cdae9f08671132dbe] Merge remote-tracking branch 'iommu/next'
+git bisect good 6c93755861ce6a6dd904df9cdae9f08671132dbe
+# good: [1a567956cb3be5754d94ce9380a2151e57e204a7] Merge remote-tracking branch 'cgroup/for-next'
+git bisect good 1a567956cb3be5754d94ce9380a2151e57e204a7
+# bad: [a6878ca73cf30b83efbdfb1ecc443d7cfb2d8193] Merge remote-tracking branch 'rtc/rtc-next'
+git bisect bad a6878ca73cf30b83efbdfb1ecc443d7cfb2d8193
+# bad: [25e7f57cf9f86076704b543628a0f02d3d733726] Merge remote-tracking branch 'gpio/for-next'
+git bisect bad 25e7f57cf9f86076704b543628a0f02d3d733726
+# bad: [28e85db94534c92fa00d787264e3ea1843d1dc42] scsi: lpfc: Fix nvmet handling of received ABTS for unmapped frames
+git bisect bad 28e85db94534c92fa00d787264e3ea1843d1dc42
+# bad: [cf9eddf616bb03387e597629142b0be34111e8d0] scsi: hpsa: check for tag collision
+git bisect bad cf9eddf616bb03387e597629142b0be34111e8d0
+# good: [4e74166c52a836f05d4bd8270835703908b34d3e] scsi: libsas: switch sas_ata.[ch] to SPDX tags
+git bisect good 4e74166c52a836f05d4bd8270835703908b34d3e
+# good: [f186090846c29fd9760917fb3d01f095c39262e0] scsi: lib/sg_pool.c: improve APIs for allocating sg pool
+git bisect good f186090846c29fd9760917fb3d01f095c39262e0
+# bad: [12b6b55806928690359bb21de3a19199412289fd] scsi: sd: Inline sd_probe_part2()
+git bisect bad 12b6b55806928690359bb21de3a19199412289fd
+# bad: [c3288dd8c2328a74cb2157dff18d13f6a75cedd2] scsi: core: avoid pre-allocating big SGL for data
+git bisect bad c3288dd8c2328a74cb2157dff18d13f6a75cedd2
+# good: [0f0e744eae6c8af361d227d3a2286973351e5a2a] scsi: core: avoid pre-allocating big SGL for protection information
+git bisect good 0f0e744eae6c8af361d227d3a2286973351e5a2a
+# first bad commit: [c3288dd8c2328a74cb2157dff18d13f6a75cedd2] scsi: core: avoid pre-allocating big SGL for data
