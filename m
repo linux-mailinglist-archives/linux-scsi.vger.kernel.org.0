@@ -2,37 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B9B353D5
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 01:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4494353C8
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 01:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727220AbfFDX2e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jun 2019 19:28:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35860 "EHLO mail.kernel.org"
+        id S1727215AbfFDX2H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jun 2019 19:28:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36046 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727702AbfFDXYn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 4 Jun 2019 19:24:43 -0400
+        id S1727755AbfFDXYu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 4 Jun 2019 19:24:50 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5E642085A;
-        Tue,  4 Jun 2019 23:24:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9203420863;
+        Tue,  4 Jun 2019 23:24:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559690682;
-        bh=tdSrWIy4DC2t2x/iLG/sP6Hhwa0Bj24s0xyzUozoz9s=;
+        s=default; t=1559690689;
+        bh=WD7CeP7TiCE8NGInyjLsStCl6Wt7ZpMgOuSgMp6hLtQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ng52HnKGUdDYpqQSk3BOmxWXwRH/+qGiku2ofuFVbMSwZJMx7YeuZ4f8Izl6+0+8Y
-         fee6SPik+PZATmCggPcTWSWSnxmrWBWpvWP4bRcV5PN1ydUJy4atpbL1Dvl4l/dexl
-         hC6LcDdFA4TsYzLw+49AvMNpLtSwFhrTBp6qpJgU=
+        b=CtdsZYJUznYoai9DrmlUTD1weHXY/fDWPEa0dS2rmRFuVUr1WLOcg3cxEfhH+VTyY
+         wW/233pCJFb/g67O7B5Zb829BTTv2qaxErHojgdVrBahh4MKBFPBRluhcQZLoZ9322
+         n8LBX9oz/LZF9QqCh4QyvqfI3hi4XLXHL0KNxWn0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        Bart Van Assche <bvanassche@acm.org>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 13/24] scsi: lpfc: add check for loss of ndlp when sending RRQ
-Date:   Tue,  4 Jun 2019 19:24:04 -0400
-Message-Id: <20190604232416.7479-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 18/24] scsi: bnx2fc: fix incorrect cast to u64 on shift operation
+Date:   Tue,  4 Jun 2019 19:24:09 -0400
+Message-Id: <20190604232416.7479-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190604232416.7479-1-sashal@kernel.org>
 References: <20190604232416.7479-1-sashal@kernel.org>
@@ -45,38 +44,37 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit c8cb261a072c88ca1aff0e804a30db4c7606521b ]
+[ Upstream commit d0c0d902339249c75da85fd9257a86cbb98dfaa5 ]
 
-There was a missing qualification of a valid ndlp structure when calling to
-send an RRQ for an abort.  Add the check.
+Currently an int is being shifted and the result is being cast to a u64
+which leads to undefined behaviour if the shift is more than 31 bits. Fix
+this by casting the integer value 1 to u64 before the shift operation.
 
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Tested-by: Bart Van Assche <bvanassche@acm.org>
+Addresses-Coverity: ("Bad shift operation")
+Fixes: 7b594769120b ("[SCSI] bnx2fc: Handle REC_TOV error code from firmware")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Acked-by: Saurav Kashyap <skashyap@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/scsi/bnx2fc/bnx2fc_hwi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 57cddbc4a977..ddd29752d96d 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -7065,7 +7065,10 @@ int
- lpfc_send_rrq(struct lpfc_hba *phba, struct lpfc_node_rrq *rrq)
- {
- 	struct lpfc_nodelist *ndlp = lpfc_findnode_did(rrq->vport,
--							rrq->nlp_DID);
-+						       rrq->nlp_DID);
-+	if (!ndlp)
-+		return 1;
-+
- 	if (lpfc_test_rrq_active(phba, ndlp, rrq->xritag))
- 		return lpfc_issue_els_rrq(rrq->vport, ndlp,
- 					 rrq->nlp_DID, rrq);
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_hwi.c b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+index 26de61d65a4d..1bdff75ae903 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+@@ -830,7 +830,7 @@ static void bnx2fc_process_unsol_compl(struct bnx2fc_rport *tgt, u16 wqe)
+ 			((u64)err_entry->data.err_warn_bitmap_hi << 32) |
+ 			(u64)err_entry->data.err_warn_bitmap_lo;
+ 		for (i = 0; i < BNX2FC_NUM_ERR_BITS; i++) {
+-			if (err_warn_bit_map & (u64) (1 << i)) {
++			if (err_warn_bit_map & ((u64)1 << i)) {
+ 				err_warn = i;
+ 				break;
+ 			}
 -- 
 2.20.1
 
