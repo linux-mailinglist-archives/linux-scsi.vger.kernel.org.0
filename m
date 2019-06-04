@@ -2,131 +2,193 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC0333DB6
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 06:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17FBC33E8F
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 07:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726295AbfFDEKe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jun 2019 00:10:34 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50728 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725267AbfFDEKe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 4 Jun 2019 00:10:34 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id C71DE307D914;
-        Tue,  4 Jun 2019 04:10:33 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8BB716014C;
-        Tue,  4 Jun 2019 04:10:09 +0000 (UTC)
-Date:   Tue, 4 Jun 2019 12:10:00 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.com>
-Subject: Re: [PATCH V4 3/3] scsi: core: avoid to pre-allocate big chunk for
- sg list
-Message-ID: <20190604040946.GA27224@ming.t460p>
-References: <20190428073932.9898-1-ming.lei@redhat.com>
- <20190428073932.9898-4-ming.lei@redhat.com>
- <20190603204422.GA7240@roeck-us.net>
- <20190604010002.GA24432@ming.t460p>
- <cdf94e43-79a7-078e-676d-dfc736eec286@roeck-us.net>
+        id S1726488AbfFDFs2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jun 2019 01:48:28 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37186 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726606AbfFDFs2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 4 Jun 2019 01:48:28 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 5E71AAF6A;
+        Tue,  4 Jun 2019 05:48:25 +0000 (UTC)
+Subject: Re: Compiler warnings in FCoE code
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Johannes Thumshirn <jthumshirn@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+References: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ mQINBE6KyREBEACwRN6XKClPtxPiABx5GW+Yr1snfhjzExxkTYaINHsWHlsLg13kiemsS6o7
+ qrc+XP8FmhcnCOts9e2jxZxtmpB652lxRB9jZE40mcSLvYLM7S6aH0WXKn8bOqpqOGJiY2bc
+ 6qz6rJuqkOx3YNuUgiAxjuoYauEl8dg4bzex3KGkGRuxzRlC8APjHlwmsr+ETxOLBfUoRNuE
+ b4nUtaseMPkNDwM4L9+n9cxpGbdwX0XwKFhlQMbG3rWA3YqQYWj1erKIPpgpfM64hwsdk9zZ
+ QO1krgfULH4poPQFpl2+yVeEMXtsSou915jn/51rBelXeLq+cjuK5+B/JZUXPnNDoxOG3j3V
+ VSZxkxLJ8RO1YamqZZbVP6jhDQ/bLcAI3EfjVbxhw9KWrh8MxTcmyJPn3QMMEp3wpVX9nSOQ
+ tzG72Up/Py67VQe0x8fqmu7R4MmddSbyqgHrab/Nu+ak6g2RRn3QHXAQ7PQUq55BDtj85hd9
+ W2iBiROhkZ/R+Q14cJkWhzaThN1sZ1zsfBNW0Im8OVn/J8bQUaS0a/NhpXJWv6J1ttkX3S0c
+ QUratRfX4D1viAwNgoS0Joq7xIQD+CfJTax7pPn9rT////hSqJYUoMXkEz5IcO+hptCH1HF3
+ qz77aA5njEBQrDRlslUBkCZ5P+QvZgJDy0C3xRGdg6ZVXEXJOQARAQABtCpIYW5uZXMgUmVp
+ bmVja2UgKFN1U0UgTGFicykgPGhhcmVAc3VzZS5kZT6JAkEEEwECACsCGwMFCRLMAwAGCwkI
+ BwMCBhUIAgkKCwQWAgMBAh4BAheABQJOisquAhkBAAoJEGz4yi9OyKjPOHoQAJLeLvr6JNHx
+ GPcHXaJLHQiinz2QP0/wtsT8+hE26dLzxb7hgxLafj9XlAXOG3FhGd+ySlQ5wSbbjdxNjgsq
+ FIjqQ88/Lk1NfnqG5aUTPmhEF+PzkPogEV7Pm5Q17ap22VK623MPaltEba+ly6/pGOODbKBH
+ ak3gqa7Gro5YCQzNU0QVtMpWyeGF7xQK76DY/atvAtuVPBJHER+RPIF7iv5J3/GFIfdrM+wS
+ BubFVDOibgM7UBnpa7aohZ9RgPkzJpzECsbmbttxYaiv8+EOwark4VjvOne8dRaj50qeyJH6
+ HLpBXZDJH5ZcYJPMgunghSqghgfuUsd5fHmjFr3hDb5EoqAfgiRMSDom7wLZ9TGtT6viDldv
+ hfWaIOD5UhpNYxfNgH6Y102gtMmN4o2P6g3UbZK1diH13s9DA5vI2mO2krGz2c5BOBmcctE5
+ iS+JWiCizOqia5Op+B/tUNye/YIXSC4oMR++Fgt30OEafB8twxydMAE3HmY+foawCpGq06yM
+ vAguLzvm7f6wAPesDAO9vxRNC5y7JeN4Kytl561ciTICmBR80Pdgs/Obj2DwM6dvHquQbQrU
+ Op4XtD3eGUW4qgD99DrMXqCcSXX/uay9kOG+fQBfK39jkPKZEuEV2QdpE4Pry36SUGfohSNq
+ xXW+bMc6P+irTT39VWFUJMcSuQINBE6KyREBEACvEJggkGC42huFAqJcOcLqnjK83t4TVwEn
+ JRisbY/VdeZIHTGtcGLqsALDzk+bEAcZapguzfp7cySzvuR6Hyq7hKEjEHAZmI/3IDc9nbdh
+ EgdCiFatah0XZ/p4vp7KAelYqbv8YF/ORLylAdLh9rzLR6yHFqVaR4WL4pl4kEWwFhNSHLxe
+ 55G56/dxBuoj4RrFoX3ynerXfbp4dH2KArPc0NfoamqebuGNfEQmDbtnCGE5zKcR0zvmXsRp
+ qU7+caufueZyLwjTU+y5p34U4PlOO2Q7/bdaPEdXfpgvSpWk1o3H36LvkPV/PGGDCLzaNn04
+ BdiiiPEHwoIjCXOAcR+4+eqM4TSwVpTn6SNgbHLjAhCwCDyggK+3qEGJph+WNtNU7uFfscSP
+ k4jqlxc8P+hn9IqaMWaeX9nBEaiKffR7OKjMdtFFnBRSXiW/kOKuuRdeDjL5gWJjY+IpdafP
+ KhjvUFtfSwGdrDUh3SvB5knSixE3qbxbhbNxmqDVzyzMwunFANujyyVizS31DnWC6tKzANkC
+ k15CyeFC6sFFu+WpRxvC6fzQTLI5CRGAB6FAxz8Hu5rpNNZHsbYs9Vfr/BJuSUfRI/12eOCL
+ IvxRPpmMOlcI4WDW3EDkzqNAXn5Onx/b0rFGFpM4GmSPriEJdBb4M4pSD6fN6Y/Jrng/Bdwk
+ SQARAQABiQIlBBgBAgAPBQJOiskRAhsMBQkSzAMAAAoJEGz4yi9OyKjPgEwQAIP/gy/Xqc1q
+ OpzfFScswk3CEoZWSqHxn/fZasa4IzkwhTUmukuIvRew+BzwvrTxhHcz9qQ8hX7iDPTZBcUt
+ ovWPxz+3XfbGqE+q0JunlIsP4N+K/I10nyoGdoFpMFMfDnAiMUiUatHRf9Wsif/nT6oRiPNJ
+ T0EbbeSyIYe+ZOMFfZBVGPqBCbe8YMI+JiZeez8L9JtegxQ6O3EMQ//1eoPJ5mv5lWXLFQfx
+ f4rAcKseM8DE6xs1+1AIsSIG6H+EE3tVm+GdCkBaVAZo2VMVapx9k8RMSlW7vlGEQsHtI0FT
+ c1XNOCGjaP4ITYUiOpfkh+N0nUZVRTxWnJqVPGZ2Nt7xCk7eoJWTSMWmodFlsKSgfblXVfdM
+ 9qoNScM3u0b9iYYuw/ijZ7VtYXFuQdh0XMM/V6zFrLnnhNmg0pnK6hO1LUgZlrxHwLZk5X8F
+ uD/0MCbPmsYUMHPuJd5dSLUFTlejVXIbKTSAMd0tDSP5Ms8Ds84z5eHreiy1ijatqRFWFJRp
+ ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
+ PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <fff16805-6ad6-677c-8b45-b4a6ed67da58@suse.de>
+Date:   Tue, 4 Jun 2019 07:48:24 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cdf94e43-79a7-078e-676d-dfc736eec286@roeck-us.net>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.48]); Tue, 04 Jun 2019 04:10:33 +0000 (UTC)
+In-Reply-To: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 08:49:10PM -0700, Guenter Roeck wrote:
-> On 6/3/19 6:00 PM, Ming Lei wrote:
-> > On Mon, Jun 03, 2019 at 01:44:22PM -0700, Guenter Roeck wrote:
-> > > On Sun, Apr 28, 2019 at 03:39:32PM +0800, Ming Lei wrote:
-> > > > Now scsi_mq_setup_tags() pre-allocates a big buffer for IO sg list,
-> > > > and the buffer size is scsi_mq_sgl_size() which depends on smaller
-> > > > value between shost->sg_tablesize and SG_CHUNK_SIZE.
-> > > > 
-> > > > Modern HBA's DMA is often capable of deadling with very big segment
-> > > > number, so scsi_mq_sgl_size() is often big. Suppose the max sg number
-> > > > of SG_CHUNK_SIZE is taken, scsi_mq_sgl_size() will be 4KB.
-> > > > 
-> > > > Then if one HBA has lots of queues, and each hw queue's depth is
-> > > > high, pre-allocation for sg list can consume huge memory.
-> > > > For example of lpfc, nr_hw_queues can be 70, each queue's depth
-> > > > can be 3781, so the pre-allocation for data sg list is 70*3781*2k
-> > > > =517MB for single HBA.
-> > > > 
-> > > > There is Red Hat internal report that scsi_debug based tests can't
-> > > > be run any more since legacy io path is killed because too big
-> > > > pre-allocation.
-> > > > 
-> > > > So switch to runtime allocation for sg list, meantime pre-allocate 2
-> > > > inline sg entries. This way has been applied to NVMe PCI for a while,
-> > > > so it should be fine for SCSI too. Also runtime sg entries allocation
-> > > > has verified and run always in the original legacy io path.
-> > > > 
-> > > > Not see performance effect in my big BS test on scsi_debug.
-> > > > 
-> > > 
-> > > This patch causes a variety of boot failures in -next. Typical failure
-> > > pattern is scsi hangs or failure to find a root file system. For example,
-> > > on alpha, trying to boot from usb:
-> > 
-> > I guess it is because alpha doesn't support sg chaining, and
-> > CONFIG_ARCH_NO_SG_CHAIN is enabled. ARCHs not supporting sg chaining
-> > can only be arm, alpha and parisc.
-> > 
+On 6/3/19 11:20 PM, Linus Torvalds wrote:
+> So gcc-9 has a new warning about doing memset() across pointer boundaries.
 > 
-> I don't think it is that simple. I do see the problem on x86 (32 and 64 bit)
-> sparc, ppc, and m68k as well, and possibly others (I didn't check all because
-> -next is in terrible shape right now). Error log is always a bit different
-> but similar.
+> We didn't have a lot of these things, and most of them got fixed
+> pretty quickly. The main remaining ones are oin FCoE, and look like
+> this:
 > 
-> On sparc:
+> In function ‘memset’,
+>     inlined from ‘fcoe_ctlr_vlan_parse’ at drivers/scsi/fcoe/fcoe_ctlr.c:2830:2,
+>     inlined from ‘fcoe_ctlr_vlan_recv’ at drivers/scsi/fcoe/fcoe_ctlr.c:3005:7:
+> ./include/linux/string.h:344:9: warning: ‘__builtin_memset’ offset
+> [569, 600] from the object at ‘buf’ is out of the bounds of referenced
+> subobject ‘rdata’ with type ‘struct fc_rport_priv’ at offset 0
+> [-Warray-bounds]
+>   344 |  return __builtin_memset(p, c, size);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In function ‘memset’,
+>     inlined from ‘fcoe_ctlr_vn_parse’ at drivers/scsi/fcoe/fcoe_ctlr.c:2299:2,
+>     inlined from ‘fcoe_ctlr_vn_recv’ at drivers/scsi/fcoe/fcoe_ctlr.c:2772:7:
+> ./include/linux/string.h:344:9: warning: ‘__builtin_memset’ offset
+> [569, 600] from the object at ‘buf’ is out of the bounds of referenced
+> subobject ‘rdata’ with type ‘struct fc_rport_priv’ at offset 0
+> [-Warray-bounds]
+>   344 |  return __builtin_memset(p, c, size);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> scsi host0: Data transfer overflow.
-> scsi host0: cur_residue[0] tot_residue[-181604017] len[8192]
-> scsi host0: DMA length is zero!
-> scsi host0: cur adr[f000f000] len[00000000]
-> scsi host0: Data transfer overflow.
-> scsi host0: cur_residue[0] tot_residue[-181604017] len[8192]
-> scsi host0: DMA length is zero!
+> and honestly, when I look at the code, I cannot help but agree with
+> the new warning in this case (we had a few other cases where the
+> warning was understandable but annoying, but in the FCoE case it's
+> really "yeah, that code is wrong").
 > 
-> On ppc:
+> In particular, in fcoe_ctlr_vlan_parse(), the function is passed a
+> "struct fc_rport_priv *rdata" pointer, and then it does
 > 
-> scsi host0: DMA length is zero!
-> scsi host0: cur adr[0fd21000] len[00000000]
-> scsi host0: Aborting command [(ptrval):28]
-> scsi host0: Current command [(ptrval):28]
-> scsi host0:  Active command [(ptrval):28]
+>         memset(rdata, 0, sizeof(*rdata) + sizeof(*frport));
 > 
-> On x86, x86_64 (after reverting a different crash-causing patch):
+> and honestly, that should make people go "WTF?". You got passed a
+> pointer to one type, and then you clear not just that type, but
+> another entirely unrelated type after it. That's just completely bogus
+> and wrong.
 > 
-> [   20.226809] scsi host0: DMA length is zero!
-> [   20.227459] scsi host0: cur adr[00000000] len[00000000]
-> [   50.588814] scsi host0: Aborting command [(____ptrval____):28]
-> [   50.589210] scsi host0: Current command [(____ptrval____):28]
-> [   50.589447] scsi host0:  Active command [(____ptrval____):28]
-> [   50.589674] scsi host0: Dumping command log
+> In fact, what people *are* passing that thing is this:
+> 
+>         struct {
+>                 struct fc_rport_priv rdata;
+>                 struct fcoe_rport frport;
+>         } buf;
+> 
+> but that doesn't actually make that "memset()" any more correct. It's
+> still entirely wrong, because it's possible that "struct fcoe_rport"
+> could have different alignment requirements etc, so maybe there's a
+> gap between the two structures, and the memset() with just adding the
+> sizes may be entirely bogus.
+> 
+> Now, in practice I think the code works, but I have to say that in
+> this case the compiler warning is really quite correct. The code is
+> wrong, even if it might happen to work.
+> 
+> That "combined struct of two types" needs to be made into a type of
+> its own, and people need to use that.
+> 
+> I started doing that, but it turns out this mis-feature is deeply
+> embedded in that file, and also exposed indirectly in the whole
+> "struct fc_rport_operations", which uses a "event_callback" function
+> pointer that has the bogus type.
+> 
+> End result: I don't know how to fix it, but the compiler is right.
+> This code is wrong, and it needs to be fixed. Maybe "struct
+> fc_rport_priv" could just be made to include that "struct fcoe_rport"
+> as part of it? Maybe the event_callback() can be typed differently.
+> But passing around a "struct fc_rport_priv" pointer that is actually
+> *not* a pointer to just that thing, but must be a pointer to the
+> combined data, is wrong. Something like
+> 
+>  struct fc_rport_combined_data {
+>         struct fc_rport_priv rdata;
+>         struct fcoe_rport frport;
+>  };
+> 
+> may be needed, and then you pass a pointer to that. But it expands
+> quite quickly because this seems to be common.
+> 
+> Related to this thing, the whole
+> 
+>    static inline struct fcoe_rport *fcoe_ctlr_rport(struct fc_rport_priv *rdata)
+> 
+> is part of the disease, and needs to go away. Passing the right
+> "combined data" pointer around would have made that thing useless to
+> begin with (ie "fcoe_ctlr_rport(rdata)" should become just
+> "&buf->frport" instead if the types were done correctly).
+> 
+> Hmm? Please can some FCoE person look at this, because right now it
+> causes tens of lines of warnings that make me go "yeah, the compiler
+> is right".
+> 
+To hear is to obey :-)
 
-OK, I did see one boot crash issue on x86_64 with -next, so could
-you share us that patch which needs to be reverted? Meantime, please
-provide me your steps for reproducing this issue? (rootfs image, kernel
-config, qemu command)
+I'll have a look.
 
-BTW, the patch has been tested in RH QE lab, so far not see such reports
-yet.
+Cheers,
 
-Thanks,
-Ming
+Hannes
+-- 
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
