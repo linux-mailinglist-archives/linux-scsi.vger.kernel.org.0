@@ -2,122 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8721234D21
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 18:22:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DCE134E8C
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 19:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728281AbfFDQWo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jun 2019 12:22:44 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:46314 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728284AbfFDQWo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 12:22:44 -0400
-Received: by mail-pl1-f196.google.com with SMTP id e5so6803838pls.13
-        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 09:22:43 -0700 (PDT)
+        id S1726286AbfFDRQy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jun 2019 13:16:54 -0400
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:37431 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726245AbfFDRQy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 13:16:54 -0400
+Received: by mail-lj1-f178.google.com with SMTP id 131so7919191ljf.4
+        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 10:16:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:to:from:subject:user-agent:date;
-        bh=Xpjq9bw6slADT5XCKmt0erTi9PTdSuDRNC9m5h9fUkk=;
-        b=YUJDujuiWHJHMvNYD3L1Gz6F8jaVKgQZQqlqTNcqZmoo8heqS9GzRSWuBdYHy0ZsTN
-         RnIINRo7NVy7VfZknlFtNXSB1vyXygQ/TKOEXtM9LiTUugYZEWgXyB0p1auiKrhr6JPj
-         ZBUNdP9/fO5M96Cc/ttzxbSmKv8jS91EuMLqQ=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rL6ZOYcMvMPfXIJ4SmvftWqyOl57W9mSlapXsmnIpYs=;
+        b=UcbsFVFvZb3Hv6/z6Rggy3vbTx4s8dZSofaInKLYfJp/pgSD0K+/+taUrsmzoy81Zh
+         MydAJEMMMQ4I7RCX1M4mp/AqY2kEOonBQEFoRYX9A+4UHa2bD8+slLTWKoJrdp/IKyYg
+         2mCRDOa2hLBW+2LzPkikz1BYL4DGy0fU6c+Ew=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:to:from:subject
-         :user-agent:date;
-        bh=Xpjq9bw6slADT5XCKmt0erTi9PTdSuDRNC9m5h9fUkk=;
-        b=jI132BAWKXKXQMm3Ljac6jdcGWI7oenviFwhduyg53cAYSiGEaFCpaPRtgzg9RjXBl
-         t3/J7ovW5tJRcJe+zlWFlNdfT5+CUXK0bwfaRC3wO/OIbvgbatdg58ezcLXBUUeZsH21
-         QQ8M6TRYd8wtr3oWvgsovaQM+kefDAtTth/+XKcLfAPFUfCFpNan47FnbPSyoGFg43ba
-         FMk/Oa2uj2NY03wPzoL+PkpDAhiJ2ld04eB9JSZz0iApMtsP2IykXN6YYApuV9yVdt+R
-         CVMQ9joUM12SqNlHDmwx2YC8b3vQr8N0LktzY4UXD4TeAp7+nz+/trwfMXiMTdgsOUNj
-         gvnw==
-X-Gm-Message-State: APjAAAUgYfwgOtpzdy1cVAjpZzbkL1pbNcRwziDubIcQJ2peRqYs63AN
-        5FvZkrqQOskzazup7P+5EaxFGQ==
-X-Google-Smtp-Source: APXvYqyVXG8EIds+qzy7r1wtzTPqaJAQxUcsAxNH581QY9KBnrRJOGctYgOl+qzV8OAs14fzo3+vng==
-X-Received: by 2002:a17:902:bc8a:: with SMTP id bb10mr38409335plb.310.1559665363394;
-        Tue, 04 Jun 2019 09:22:43 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id k8sm6855524pfk.177.2019.06.04.09.22.42
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Jun 2019 09:22:42 -0700 (PDT)
-Message-ID: <5cf69ad2.1c69fb81.216a9.30f8@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rL6ZOYcMvMPfXIJ4SmvftWqyOl57W9mSlapXsmnIpYs=;
+        b=sd9KUpy9rUzdTA0K7KczuSYjrHCRixHaGLuR8jU+WftuKG/m8esS32Ns0WKsVOHxa+
+         dUUW5T96GL/u1EjNyDAgVb1YxcDvcT3VlAbfMBe3jVoYjPgRCRuaqsky6ImpLGK3F0fm
+         u8eb/SwRUcj94LUW9d9/z8haHieqd0bt6SXPkn+AUOrtoSvarq6hVrcn1lFFc4rkS5II
+         xLql8Wk88DmKQBGIU+/9yGgZD2/T+LynON6dg5nnN1cthGjK/47XyDbW17d9tuYGRNT+
+         ga8JL9Z4bXCBYt9Akk8PF43hPtgnWbzD/iW05g83Y1EbmoYg6BTOA74GavNk1v/uCInq
+         6vBA==
+X-Gm-Message-State: APjAAAW6XagKO05NZ1BkZc3axcaongFj/ar/+vdFPv6TrBrZy7/hy3DY
+        rPDmGRZ86QHFbMgul+vufEj5oXuyo74=
+X-Google-Smtp-Source: APXvYqxWrGOad0uwlE8F58eDhiq9yiNaf4imIxrLlClslpnnODOiCg+MuNdW8+0f4UvxWorT39wb9A==
+X-Received: by 2002:a2e:b0d5:: with SMTP id g21mr563164ljl.152.1559668611507;
+        Tue, 04 Jun 2019 10:16:51 -0700 (PDT)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id q13sm3791254lfk.65.2019.06.04.10.16.50
+        for <linux-scsi@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 04 Jun 2019 10:16:50 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id p24so10567985lfo.6
+        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 10:16:50 -0700 (PDT)
+X-Received: by 2002:ac2:59c9:: with SMTP id x9mr17104890lfn.52.1559668609778;
+ Tue, 04 Jun 2019 10:16:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190604072001.9288-4-bjorn.andersson@linaro.org>
-References: <20190604072001.9288-1-bjorn.andersson@linaro.org> <20190604072001.9288-4-bjorn.andersson@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Evan Green <evgreen@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sdm845-mtp: Specify UFS device-reset GPIO
-User-Agent: alot/0.8.1
-Date:   Tue, 04 Jun 2019 09:22:42 -0700
+References: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
+In-Reply-To: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 4 Jun 2019 10:16:33 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjYb1ThJUK76sthxmqfGU_w+_ux5j1Z+ePz1gGWwceNiA@mail.gmail.com>
+Message-ID: <CAHk-=wjYb1ThJUK76sthxmqfGU_w+_ux5j1Z+ePz1gGWwceNiA@mail.gmail.com>
+Subject: Re: Compiler warnings in FCoE code
+To:     Hannes Reinecke <hare@suse.de>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Johannes Thumshirn <jthumshirn@suse.de>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Quoting Bjorn Andersson (2019-06-04 00:20:01)
-> Specify the UFS device-reset gpio, so that the controller will issue a
-> reset of the UFS device.
->=20
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dt=
-s/qcom/sdm845-mtp.dts
-> index 2e78638eb73b..d116a0956a9c 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> @@ -388,6 +388,8 @@
->  &ufs_mem_hc {
->         status =3D "okay";
-> =20
-> +       device-reset-gpios =3D <&tlmm 150 GPIO_ACTIVE_LOW>;
-> +
+On Mon, Jun 3, 2019 at 2:20 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> In fact, what people *are* passing that thing is this:
+>
+>         struct {
+>                 struct fc_rport_priv rdata;
+>                 struct fcoe_rport frport;
+>         } buf;
 
-We had to do something similar on one particular brand of UFS that we had. I
-think it was an SK Hynix part that had trouble and wouldn't provision prope=
-rly.
-Either way, we did this with a pinctrl toggle in the DTS where the "init" s=
-tate
-has the UFS_RESET pin asserted and then "default" state has the pin deasser=
-ted.
-That was good enough to make this work.
+It is in fact worse than that.
 
-	&ufs_mem_hc {
-		pinctrl-names =3D "init", "default";
-		pinctrl-0 =3D <&ufs_dev_reset_assert>;
-		pinctrl-1 =3D <&ufs_dev_reset_deassert>;
-	};
+Yes, _some_ people pass that combined struct.
 
-        ufs_dev_reset_assert: ufs_dev_reset_assert {
-                config {
-                        pins =3D "ufs_reset";
-                        bias-pull-down;         /* default: pull down */
-                        drive-strength =3D <8>;   /* default: 3.1 mA */
-                        output-low; /* active low reset */
-                };
-        };
+But a lot of people pass around a fc_rport_priv that has just been
+allocated with
 
-        ufs_dev_reset_deassert: ufs_dev_reset_deassert {
-                config {
-                        pins =3D "ufs_reset";
-                        bias-pull-down;         /* default: pull down */
-                        drive-strength =3D <8>;
-                        output-high; /* active low reset */
-                };
-        };
+        rdata = kzalloc(sizeof(*rdata) + lport->rport_priv_size, GFP_KERNEL);
+
+in fc_rport_create().
+
+They end up being somewhat equivalent as long as the alignments of
+those sub-structures match, but it does mean that the type is really a
+bit fluid, and it ends up leaking outside of that fcoe_ctlr.c file
+into various other helper functions like that allocation function.
+
+It really looks fairly nasty to change/fix. The code really is passing
+around a 'struct fc_rport_priv' pointer, but that that 'fc_rport_priv'
+type is then associated with the added 'struct fcoe_rport' at the end,
+in a way that is *not* visible to the type system.
+
+So no, it doesn't work to create a new type like
+
+ struct fc_rport_combined_data {
+
+because it ends up affecting almost *everything* that works with that
+'rdata' thing.
+
+I get the feeling that 'struct fc_rport_priv' should just be extended
+to have 'struct fcoe_rport' at the end, but maybe that's not always
+true? It looks like that is only used for FIP_MODE_VN2VN, adn then we
+have some other mode that doesn't have that allocation at all?
+
+So the code seems to be a mix of dynamic typing ("no fcoe_rport at the
+end") and static typing that just assumes that the allocation always
+has the fcoe_rport afterwards.
+
+Would it be ok to make 'struct fc_rport_priv' just always contain that
+fcoe_rport? Getting rid of the "lport->rport_priv_size" thing
+entirely, and just have the type set to the bigger case
+unconditionally?
+
+                  Linus
