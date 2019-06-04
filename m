@@ -2,72 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5988B33C53
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 02:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B1133CA9
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 03:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726294AbfFDAFg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 20:05:36 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:42236 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbfFDAFg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 20:05:36 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 885D327E27;
-        Mon,  3 Jun 2019 20:05:33 -0400 (EDT)
-Date:   Tue, 4 Jun 2019 10:05:44 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Michael Schmitz <schmitzmic@gmail.com>
-cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>
-Subject: Re: [PATCH 5/7] scsi: mac_scsi: Fix pseudo DMA implementation, take
- 2
-In-Reply-To: <247ed79a-75c7-41fd-0932-0b7701ee5d4e@gmail.com>
-Message-ID: <alpine.LNX.2.21.1906040954330.40@nippy.intranet>
-References: <cover.1559438652.git.fthain@telegraphics.com.au> <c56deeb735545c7942607a93f017bb536f581ae5.1559438652.git.fthain@telegraphics.com.au> <CAMuHMdWxRtJU2aRQQjXzR2mvpfpDezCVu42Eo1eXDsQaPb+j6Q@mail.gmail.com> <alpine.LNX.2.21.1906030903510.20@nippy.intranet>
- <CAMuHMdUFxQnmJmkr2qm4waTfFA5yfCHAFngyD37cFH6gbbD-Pg@mail.gmail.com> <alpine.LNX.2.21.1906031702220.37@nippy.intranet> <247ed79a-75c7-41fd-0932-0b7701ee5d4e@gmail.com>
+        id S1726223AbfFDBAS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 21:00:18 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:48564 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726102AbfFDBAS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 21:00:18 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id AE0398666C;
+        Tue,  4 Jun 2019 01:00:17 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5708067C8B;
+        Tue,  4 Jun 2019 01:00:08 +0000 (UTC)
+Date:   Tue, 4 Jun 2019 09:00:03 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.com>
+Subject: Re: [PATCH V4 3/3] scsi: core: avoid to pre-allocate big chunk for
+ sg list
+Message-ID: <20190604010002.GA24432@ming.t460p>
+References: <20190428073932.9898-1-ming.lei@redhat.com>
+ <20190428073932.9898-4-ming.lei@redhat.com>
+ <20190603204422.GA7240@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190603204422.GA7240@roeck-us.net>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Tue, 04 Jun 2019 01:00:17 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 4 Jun 2019, Michael Schmitz wrote:
-
-> Hi Finn,
-> 
-> On 3/06/19 7:40 PM, Finn Thain wrote:
+On Mon, Jun 03, 2019 at 01:44:22PM -0700, Guenter Roeck wrote:
+> On Sun, Apr 28, 2019 at 03:39:32PM +0800, Ming Lei wrote:
+> > Now scsi_mq_setup_tags() pre-allocates a big buffer for IO sg list,
+> > and the buffer size is scsi_mq_sgl_size() which depends on smaller
+> > value between shost->sg_tablesize and SG_CHUNK_SIZE.
 > > 
-> > > There are several other drivers that contain pieces of assembler code.
-> > > 
-> > Does any driver contain assembler code for multiple architectures? I was
-> > trying to avoid that -- though admittedly I don't yet have actual code for
-> > the PDMA implementation for mac_scsi for Nubus PowerMacs.
+> > Modern HBA's DMA is often capable of deadling with very big segment
+> > number, so scsi_mq_sgl_size() is often big. Suppose the max sg number
+> > of SG_CHUNK_SIZE is taken, scsi_mq_sgl_size() will be 4KB.
 > > 
-> I've seen that once, for one of the ESP drivers that were supported on both
-> m68k and ppc (APUS, PPC upgrade to Amiga computers). But that driver was
-> removed long ago (after 2.6?).
+> > Then if one HBA has lots of queues, and each hw queue's depth is
+> > high, pre-allocation for sg list can consume huge memory.
+> > For example of lpfc, nr_hw_queues can be 70, each queue's depth
+> > can be 3781, so the pre-allocation for data sg list is 70*3781*2k
+> > =517MB for single HBA.
+> > 
+> > There is Red Hat internal report that scsi_debug based tests can't
+> > be run any more since legacy io path is killed because too big
+> > pre-allocation.
+> > 
+> > So switch to runtime allocation for sg list, meantime pre-allocate 2
+> > inline sg entries. This way has been applied to NVMe PCI for a while,
+> > so it should be fine for SCSI too. Also runtime sg entries allocation
+> > has verified and run always in the original legacy io path.
+> > 
+> > Not see performance effect in my big BS test on scsi_debug.
+> > 
 > 
-> In that case, the assembly file did reside in drivers/scsi/. That still
-> appears to be current practice (see drivers/scsi/arm/acornscsi-io.S).
-> 
+> This patch causes a variety of boot failures in -next. Typical failure
+> pattern is scsi hangs or failure to find a root file system. For example,
+> on alpha, trying to boot from usb:
 
-The presence of that file would be an argument for adding 
-drivers/scsi/m68k/. This seems to be begging the question.
+I guess it is because alpha doesn't support sg chaining, and
+CONFIG_ARCH_NO_SG_CHAIN is enabled. ARCHs not supporting sg chaining
+can only be arm, alpha and parisc.
 
-Since there's no clear policy, I'll combine the two files and avoid the 
-question for now.
+Please test the following patch and see if it makes a difference:
 
--- 
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 6e81258471fa..9ef632963740 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -44,9 +44,13 @@
+  * Size of integrity metadata is usually small, 1 inline sg should
+  * cover normal cases.
+  */
++#ifndef CONFIG_ARCH_NO_SG_CHAIN
+ #define  SCSI_INLINE_PROT_SG_CNT  1
+-
+ #define  SCSI_INLINE_SG_CNT  2
++#else
++#define  SCSI_INLINE_PROT_SG_CNT  0
++#define  SCSI_INLINE_SG_CNT  0
++#endif
+ 
+ static struct kmem_cache *scsi_sdb_cache;
+ static struct kmem_cache *scsi_sense_cache;
 
-> Cheers,
-> 
-> ??? Michael
-> 
-> 
-> 
+
+Thanks,
+Ming
