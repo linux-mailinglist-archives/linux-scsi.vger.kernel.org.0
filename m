@@ -2,109 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B1133CA9
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 03:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53BC633D19
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 04:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726223AbfFDBAS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 21:00:18 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:48564 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726102AbfFDBAS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 3 Jun 2019 21:00:18 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id AE0398666C;
-        Tue,  4 Jun 2019 01:00:17 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5708067C8B;
-        Tue,  4 Jun 2019 01:00:08 +0000 (UTC)
-Date:   Tue, 4 Jun 2019 09:00:03 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.com>
-Subject: Re: [PATCH V4 3/3] scsi: core: avoid to pre-allocate big chunk for
- sg list
-Message-ID: <20190604010002.GA24432@ming.t460p>
-References: <20190428073932.9898-1-ming.lei@redhat.com>
- <20190428073932.9898-4-ming.lei@redhat.com>
- <20190603204422.GA7240@roeck-us.net>
+        id S1726464AbfFDCYE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 22:24:04 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40392 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726076AbfFDCYD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 22:24:03 -0400
+Received: by mail-oi1-f195.google.com with SMTP id w196so4920750oie.7
+        for <linux-scsi@vger.kernel.org>; Mon, 03 Jun 2019 19:24:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=sBuZQgLGgSQ7kvRAL03aIr/Wcvjnnb3lyTs/Aaqfbwk=;
+        b=uXxcaXLwANyRa3+NmViVADczyp+SQWIRrz4yHcKYqPorLi6YwOdY8iIZ9ZeOzNsByH
+         uSKqOXNkrAGVc2uaUPT2Pq1rTY5R0T8nCJ1qz8TlDpZuBhYhCUwlqVYPfhdH/XHq4Vqe
+         TKm/Q48MGRe4lutSLUGeeIWvZJPabCG7pcTnCFNUo3y6sAwiSOHkl0NzAG3BrDCVhbnL
+         iFVLbyk897P+wM6kWFFvHguyVDulSsyFhemJ3l3nLhoN36baybFzgNuQCsPs/mDm9H/k
+         F76p3dKGxFkL2LMWByAZHtm7SltVMkuvkzvsIlKkxwO4xV1twh93IQFsle1zWkwb2FLE
+         tuKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=sBuZQgLGgSQ7kvRAL03aIr/Wcvjnnb3lyTs/Aaqfbwk=;
+        b=Mjbtd6eGOMrEhQE87dhCY83NRiKBYMtkjJg1/KRJS7k0dflp3yCPfxYXWhmATB09bF
+         +ubB74XOyeL5o+LHLm8JI/aZ+npQnubgtzNREg9q3b5gBGSGwb+xOoyzzHltXHdn2gop
+         hbT/bZT9/h77pvVEgwqEppG5BPEhsAGc7IqyCrCLhhnjGnrr/hGu7cwBqbhj58ignQk2
+         2V9a3ESDOMX9vf2wIq8gA7Q1pjHurOAsXT0Ec/Ur8OnLHTk+IskkYd1YlWbZREOZzENs
+         cdDkYenKocXC+79MoWnXEV7htI9kPeq8SiREzyJiiRfCxORZNyEwr5XbPiqf6ClcYeQB
+         inOA==
+X-Gm-Message-State: APjAAAVebXYUoTrZtbdun5OqlS9EZokLVwZe8GSy01Aa8PqY4HuUfWCU
+        9J1gEQxhZ7yj1SzGlk5vYYnFuWDnyNc9eA8w6ec=
+X-Google-Smtp-Source: APXvYqw8jQ23yIAIP/ibRuqFL1purvdmWMRxLGuNqw3GaUnIhJ/DwQ0i+JQBtbdCTF6YlsnIUUgb7XQDZ0shWMuWKFQ=
+X-Received: by 2002:aca:3545:: with SMTP id c66mr2444017oia.129.1559615042928;
+ Mon, 03 Jun 2019 19:24:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190603204422.GA7240@roeck-us.net>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Tue, 04 Jun 2019 01:00:17 +0000 (UTC)
+Received: by 2002:a4a:97e3:0:0:0:0:0 with HTTP; Mon, 3 Jun 2019 19:24:02 -0700 (PDT)
+Reply-To: officeinfo1089@gmail.com
+From:   "Mr.Adams Bello" <monicabentley645@gmail.com>
+Date:   Tue, 4 Jun 2019 03:24:02 +0100
+Message-ID: <CAEB4qVbgxyVe3vMODZzObUezvJKriw-Td0OA7V78mUdYVu2GVw@mail.gmail.com>
+Subject: ATTENTION
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 01:44:22PM -0700, Guenter Roeck wrote:
-> On Sun, Apr 28, 2019 at 03:39:32PM +0800, Ming Lei wrote:
-> > Now scsi_mq_setup_tags() pre-allocates a big buffer for IO sg list,
-> > and the buffer size is scsi_mq_sgl_size() which depends on smaller
-> > value between shost->sg_tablesize and SG_CHUNK_SIZE.
-> > 
-> > Modern HBA's DMA is often capable of deadling with very big segment
-> > number, so scsi_mq_sgl_size() is often big. Suppose the max sg number
-> > of SG_CHUNK_SIZE is taken, scsi_mq_sgl_size() will be 4KB.
-> > 
-> > Then if one HBA has lots of queues, and each hw queue's depth is
-> > high, pre-allocation for sg list can consume huge memory.
-> > For example of lpfc, nr_hw_queues can be 70, each queue's depth
-> > can be 3781, so the pre-allocation for data sg list is 70*3781*2k
-> > =517MB for single HBA.
-> > 
-> > There is Red Hat internal report that scsi_debug based tests can't
-> > be run any more since legacy io path is killed because too big
-> > pre-allocation.
-> > 
-> > So switch to runtime allocation for sg list, meantime pre-allocate 2
-> > inline sg entries. This way has been applied to NVMe PCI for a while,
-> > so it should be fine for SCSI too. Also runtime sg entries allocation
-> > has verified and run always in the original legacy io path.
-> > 
-> > Not see performance effect in my big BS test on scsi_debug.
-> > 
-> 
-> This patch causes a variety of boot failures in -next. Typical failure
-> pattern is scsi hangs or failure to find a root file system. For example,
-> on alpha, trying to boot from usb:
+-- 
+Dear Beneficiary,
 
-I guess it is because alpha doesn't support sg chaining, and
-CONFIG_ARCH_NO_SG_CHAIN is enabled. ARCHs not supporting sg chaining
-can only be arm, alpha and parisc.
+The is to bring to your notice that the Department of Treasury Office
+in Nigeria in affiliation with the Federal Government of Nigeria,and
+the Office of Foreign Assets Control here in Nigeria has been
+authorized in their sanction programs to compensate 1,000 scam victims
+who has being a victim of internet scam. The Federal Government of
+Nigeria in collaboration with the Department of the Treasury Office
+has decided to pay $1,000.000.00 USD(One Million United States
+Dollars) each in order to restore the global economy to the enviable
+standard of respectable persons that was scammed. Your names and
+particulars was mentioned by one of the syndicates who was arrested as
+one of the victims of their operations. Although to issue payments to
+the right persons we need you to reconfirm your information's to
+compare with what was given to us. Most importantly you are hereby
+warned not to communicate or duplicate this message to anyone or
+whatsoever as investigations are still ongoing in trace of the other
+criminals so therefore this information's should remain confidential
+to you alone and the agencies involved in the exercise.
 
-Please test the following patch and see if it makes a difference:
+Finally all payments are done by AUTOMATED TELLER MACHINE(ATM), loaded
+with $1,000.000.00 with your names on the ATM CARD waiting to be sent
+to you reconfirmation of your information's on our desk.
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 6e81258471fa..9ef632963740 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -44,9 +44,13 @@
-  * Size of integrity metadata is usually small, 1 inline sg should
-  * cover normal cases.
-  */
-+#ifndef CONFIG_ARCH_NO_SG_CHAIN
- #define  SCSI_INLINE_PROT_SG_CNT  1
--
- #define  SCSI_INLINE_SG_CNT  2
-+#else
-+#define  SCSI_INLINE_PROT_SG_CNT  0
-+#define  SCSI_INLINE_SG_CNT  0
-+#endif
- 
- static struct kmem_cache *scsi_sdb_cache;
- static struct kmem_cache *scsi_sense_cache;
-
-
-Thanks,
-Ming
+Best Regards
+Mr. Adams Bello
+Secretary's Desk
+E-mail: officeinfo1089@gmail.com
