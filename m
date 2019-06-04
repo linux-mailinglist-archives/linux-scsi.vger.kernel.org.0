@@ -2,122 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCE134E8C
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 19:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57EED34EFD
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 19:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726286AbfFDRQy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jun 2019 13:16:54 -0400
-Received: from mail-lj1-f178.google.com ([209.85.208.178]:37431 "EHLO
-        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726245AbfFDRQy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 13:16:54 -0400
-Received: by mail-lj1-f178.google.com with SMTP id 131so7919191ljf.4
-        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 10:16:53 -0700 (PDT)
+        id S1726691AbfFDRek (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jun 2019 13:34:40 -0400
+Received: from mail-pg1-f179.google.com ([209.85.215.179]:34308 "EHLO
+        mail-pg1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726674AbfFDRek (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 13:34:40 -0400
+Received: by mail-pg1-f179.google.com with SMTP id h2so7519155pgg.1
+        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 10:34:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rL6ZOYcMvMPfXIJ4SmvftWqyOl57W9mSlapXsmnIpYs=;
-        b=UcbsFVFvZb3Hv6/z6Rggy3vbTx4s8dZSofaInKLYfJp/pgSD0K+/+taUrsmzoy81Zh
-         MydAJEMMMQ4I7RCX1M4mp/AqY2kEOonBQEFoRYX9A+4UHa2bD8+slLTWKoJrdp/IKyYg
-         2mCRDOa2hLBW+2LzPkikz1BYL4DGy0fU6c+Ew=
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=4WbrwLtDUXe8HTAdFzSzCI6MmrDej8XdLtQH+1WkJxA=;
+        b=hFHICOXg5ScO/YJHqqF2FT4bBiGpihOGIKHl5ID+Fs7tuhHLCoUimQ0j0R13OTcCQ2
+         oGYLIiOMyPJnydwnG4SKSpMpOoOWyqjSupIMzF3lQonYeamho4X6Ke/doYsodwYO9Xhj
+         PBZs1IPvalwX9HhiwmW3el7cCkMlcpYAta4yM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rL6ZOYcMvMPfXIJ4SmvftWqyOl57W9mSlapXsmnIpYs=;
-        b=sd9KUpy9rUzdTA0K7KczuSYjrHCRixHaGLuR8jU+WftuKG/m8esS32Ns0WKsVOHxa+
-         dUUW5T96GL/u1EjNyDAgVb1YxcDvcT3VlAbfMBe3jVoYjPgRCRuaqsky6ImpLGK3F0fm
-         u8eb/SwRUcj94LUW9d9/z8haHieqd0bt6SXPkn+AUOrtoSvarq6hVrcn1lFFc4rkS5II
-         xLql8Wk88DmKQBGIU+/9yGgZD2/T+LynON6dg5nnN1cthGjK/47XyDbW17d9tuYGRNT+
-         ga8JL9Z4bXCBYt9Akk8PF43hPtgnWbzD/iW05g83Y1EbmoYg6BTOA74GavNk1v/uCInq
-         6vBA==
-X-Gm-Message-State: APjAAAW6XagKO05NZ1BkZc3axcaongFj/ar/+vdFPv6TrBrZy7/hy3DY
-        rPDmGRZ86QHFbMgul+vufEj5oXuyo74=
-X-Google-Smtp-Source: APXvYqxWrGOad0uwlE8F58eDhiq9yiNaf4imIxrLlClslpnnODOiCg+MuNdW8+0f4UvxWorT39wb9A==
-X-Received: by 2002:a2e:b0d5:: with SMTP id g21mr563164ljl.152.1559668611507;
-        Tue, 04 Jun 2019 10:16:51 -0700 (PDT)
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
-        by smtp.gmail.com with ESMTPSA id q13sm3791254lfk.65.2019.06.04.10.16.50
-        for <linux-scsi@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=4WbrwLtDUXe8HTAdFzSzCI6MmrDej8XdLtQH+1WkJxA=;
+        b=pYTwyV4O4m4esmuSxiEJYW8yb569jJCxtmB3Tvu8Oo1+GA7QOgcUClAEUgD+GuSax3
+         ByqPYbjmapWXyV0jStkppG9TC36eVNXw2w07dV+bCPwwa8pTjSEORpigDDH5Fy6HtCoQ
+         WeJQdRUS5lzGeZfqrI0q3mEun4LIoHUXaw4+b9AcGExn72yijGF5fR/SEKqx+lG91VGi
+         Om1OK+JJpksj9wz/CLgKuZTQUuU1WhcjvoSeHIdoIuxDCh9sl1u1EZFqkCT//HejxjTi
+         +CP1FfvqUDV1Z45s3R+AEig8JMBFfSIfaPFQRbXmJGeOzSNs464ySV5TWLGifCSOocGs
+         vxAQ==
+X-Gm-Message-State: APjAAAUApf6DE0hnbT55uftaksE7cOyTzSL0g915HKh21UIorkDI2wL+
+        Eq8tp+blPRSFKOAkNx77FerjaCjuvtbsthHxn4qgONtDdgGr34cjRGYjXHI2skUfmS4Bj0Y45q6
+        H2X0FXdSThw61EZ9a8dRewLmiyfoxZFis+Pg46H6/aAZZpMtv5LXxX7VOtoyNbSUFCJnn/XdcRO
+        P8
+X-Google-Smtp-Source: APXvYqwHenvbeywYajmzkPeaxvyRPC5N7HRT3eOsx4Ooigcvtbetz+9AEtW/a6j/0W3/q8+gKqmgiA==
+X-Received: by 2002:a17:90a:23ce:: with SMTP id g72mr32288861pje.77.1559669679303;
+        Tue, 04 Jun 2019 10:34:39 -0700 (PDT)
+Received: from [10.230.29.90] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id n184sm19870059pfn.21.2019.06.04.10.34.38
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 04 Jun 2019 10:16:50 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id p24so10567985lfo.6
-        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 10:16:50 -0700 (PDT)
-X-Received: by 2002:ac2:59c9:: with SMTP id x9mr17104890lfn.52.1559668609778;
- Tue, 04 Jun 2019 10:16:49 -0700 (PDT)
+        Tue, 04 Jun 2019 10:34:38 -0700 (PDT)
+Subject: Re: [PATCH -next] scsi: lpfc: Remove set but not used variables 'qp'
+To:     YueHaibing <yuehaibing@huawei.com>, dick.kennedy@broadcom.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        jsmart2021@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <20190531152745.7928-1-yuehaibing@huawei.com>
+From:   James Smart <james.smart@broadcom.com>
+Message-ID: <a9496faa-6dd3-47dc-b5ba-7716c2b21940@broadcom.com>
+Date:   Tue, 4 Jun 2019 10:34:37 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
-In-Reply-To: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 4 Jun 2019 10:16:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjYb1ThJUK76sthxmqfGU_w+_ux5j1Z+ePz1gGWwceNiA@mail.gmail.com>
-Message-ID: <CAHk-=wjYb1ThJUK76sthxmqfGU_w+_ux5j1Z+ePz1gGWwceNiA@mail.gmail.com>
-Subject: Re: Compiler warnings in FCoE code
-To:     Hannes Reinecke <hare@suse.de>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Johannes Thumshirn <jthumshirn@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190531152745.7928-1-yuehaibing@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 3, 2019 at 2:20 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+
+
+On 5/31/2019 8:27 AM, YueHaibing wrote:
+> Fixes gcc '-Wunused-but-set-variable' warnings:
 >
-> In fact, what people *are* passing that thing is this:
+> drivers/scsi/lpfc/lpfc_init.c: In function lpfc_setup_cq_lookup:
+> drivers/scsi/lpfc/lpfc_init.c:9359:30: warning: variable qp set but not used [-Wunused-but-set-variable]
 >
->         struct {
->                 struct fc_rport_priv rdata;
->                 struct fcoe_rport frport;
->         } buf;
+> It's not used since commit e70596a60f88 ("scsi: lpfc: Fix
+> poor use of hardware queues if fewer irq vectors")
+>
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>
 
-It is in fact worse than that.
+Looks good - thank You
 
-Yes, _some_ people pass that combined struct.
+Reviewed-by: James Smart  <james.smart@broadcom.com>
 
-But a lot of people pass around a fc_rport_priv that has just been
-allocated with
-
-        rdata = kzalloc(sizeof(*rdata) + lport->rport_priv_size, GFP_KERNEL);
-
-in fc_rport_create().
-
-They end up being somewhat equivalent as long as the alignments of
-those sub-structures match, but it does mean that the type is really a
-bit fluid, and it ends up leaking outside of that fcoe_ctlr.c file
-into various other helper functions like that allocation function.
-
-It really looks fairly nasty to change/fix. The code really is passing
-around a 'struct fc_rport_priv' pointer, but that that 'fc_rport_priv'
-type is then associated with the added 'struct fcoe_rport' at the end,
-in a way that is *not* visible to the type system.
-
-So no, it doesn't work to create a new type like
-
- struct fc_rport_combined_data {
-
-because it ends up affecting almost *everything* that works with that
-'rdata' thing.
-
-I get the feeling that 'struct fc_rport_priv' should just be extended
-to have 'struct fcoe_rport' at the end, but maybe that's not always
-true? It looks like that is only used for FIP_MODE_VN2VN, adn then we
-have some other mode that doesn't have that allocation at all?
-
-So the code seems to be a mix of dynamic typing ("no fcoe_rport at the
-end") and static typing that just assumes that the allocation always
-has the fcoe_rport afterwards.
-
-Would it be ok to make 'struct fc_rport_priv' just always contain that
-fcoe_rport? Getting rid of the "lport->rport_priv_size" thing
-entirely, and just have the type set to the bigger case
-unconditionally?
-
-                  Linus
