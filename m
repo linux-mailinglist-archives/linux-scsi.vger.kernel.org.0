@@ -2,141 +2,233 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1A33528F
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 00:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F11713529E
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 00:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726474AbfFDWJO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jun 2019 18:09:14 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38012 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726373AbfFDWJN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 18:09:13 -0400
-Received: by mail-pg1-f196.google.com with SMTP id v11so11148573pgl.5
-        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 15:09:13 -0700 (PDT)
+        id S1726454AbfFDWOc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jun 2019 18:14:32 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:37224 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726269AbfFDWOb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 18:14:31 -0400
+Received: by mail-pf1-f196.google.com with SMTP id a23so13546981pff.4
+        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 15:14:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=NGFWos9reZ21x+VPBWgjaST/llqX50Psvr0VLnDsejc=;
-        b=LE3OjEH9gGdSD8HL7lZl/oU8JB8AiXuo0O9VefLwxFSrPzWA63vjBLqujXKByi2zHo
-         EW8hrmDGrAVo+1FFiSO6D5l8GqZo+xaiPL1i23DAlGDzelL9ldMHJRRlsPlN26HhXZMV
-         marf4yM/9clcphCztYfcrrJf4Y24XL4i4DvoBEx8Ibsvm+H7Bx90Gabs8cniguI8L5GN
-         fKo/ejDhrSjivqMZcnaALrq0d8EiuYc5zsOdh+OE+P/9NWv9URNwckpzMLR0lmlAkZc+
-         Qa5arISvb2yhpPXSTDY1s81jbncFzBIsZHb7kBrmj23EXebMO+H86+TiLegdgtF7xF3A
-         iHOQ==
+        bh=imo21nhts77lO2m4lpNC7PMK1HSd6fIp3/94OeVuXHA=;
+        b=snsFuNpZRFrD3eIbZEi+Uv7FiKiKfT6WkpSwYehnrSgEjWYPSx+qTKRg6iyAVtGbtp
+         d5jZnk9c7k0xIx3CMRd12V9HXWXgTgeNm+0StikL5+3AvqKbj8vhSyBLN+BpZXy3+vFk
+         7szwMQpG2WOpSe5fPELJ1fV6was4rmxH1QFFuWmy1HhVGT75O8CQhWJ7zgtiUifKIFxI
+         B2bxWSw8NS2vnfAgnktFqm01caSqDxLRJWx9gFxG9v6N0gEzcKVL+CphkV1NSiLrQnGj
+         Rg67eFCwjdrcNbat6jI96+d0EiWRtYhcy2UsQec5Rs0BgnIoBtoHRpxNh/UBExEk/tIC
+         AZ+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NGFWos9reZ21x+VPBWgjaST/llqX50Psvr0VLnDsejc=;
-        b=eJHiPg5TDp5YOAzhpUNWbq5W9Ip0C/U0+++W0UZKkq1uEqf+7HXVovLQ62NvzOPRWJ
-         pMdB0ktHpA1zMrJTpxrAKqnlSLLnwrW2cqi/7Zfh4pEg8qLWM/vXa8qn462uz5gxke8x
-         +QYkBY9rfE83deRZNS7CucOUWMyHJg+IRMbIknJAId0kNWQdFx0jlz3beICS3PuZr48F
-         nzDAWSGCo9Gji1dpcsI8YY2J50iaYKDBkrUI9B41cNir/ooQls/OltqE7pxTPSq2LiEN
-         sIvWEe7nKibs+SnAXLSFv8rC2JQzLATHQbOTEHdCSB6ryb00UdE706W+bbZRnuSNtTL9
-         OB4A==
-X-Gm-Message-State: APjAAAVMhQblIZ+R8MIvfHRXTIGwMC64xz4MH4A0cngoAFCyRh/lD4Bo
-        4JyU2kBYxGXeDCF6cLdPm06sxQ==
-X-Google-Smtp-Source: APXvYqz0k3aXvYp9vPgvRV/jmmcqPdGm62iQvQ+8caZbKxT6w3UTp/yE1RNEnvkaFlsMacIaHCfcaQ==
-X-Received: by 2002:a62:2bc7:: with SMTP id r190mr5307624pfr.40.1559686153100;
-        Tue, 04 Jun 2019 15:09:13 -0700 (PDT)
+        bh=imo21nhts77lO2m4lpNC7PMK1HSd6fIp3/94OeVuXHA=;
+        b=T2RzfLXmfzfFcGJSL/fO8tW8RxeenixnB1O9cG63jLSFFIj3fDLXkdKqHuNF5jOv5b
+         a1wyx71hLNsTw+4zlCJ7UKt6VEiIEDxk1RZ9AflPY1vGKQiCl11IJV590Y75Hp/KFPxn
+         CEMCj43HqmEVQ/ws80K5V+hLxmoCG9Q1UsEdsMWXPmMDQVvYopvvpVlJNXUwfwzIAsDV
+         WdV8Cd6xCJa5CifMCSZN1D9DGQ4m6D2Lru4r9rwXQ+lj5wrBxGbrxjam+2RASGqynbtY
+         1rQQmhQkG5C7uVzx4r7+1hWrXCYvbADuoY/g02zQ2ychsbeCisCg7JPiXJzmiW/ZKp/e
+         mLJw==
+X-Gm-Message-State: APjAAAWKW/Uqko+C5cRve+x0hGwnMNrXOLc0PTI6zsRUEF8xal2sVvmy
+        fQDJoLssytZXWDeGtm2bWXFzjw==
+X-Google-Smtp-Source: APXvYqzcHrktGGMQGEBY+QSIQ1X5KbH9BqqAwchtpV1cHiMUEaisv0P98YQ9idtlfo5pFOMEQKCrgA==
+X-Received: by 2002:a63:b1d:: with SMTP id 29mr120470pgl.103.1559686470516;
+        Tue, 04 Jun 2019 15:14:30 -0700 (PDT)
 Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id j20sm15469801pff.183.2019.06.04.15.09.11
+        by smtp.gmail.com with ESMTPSA id l3sm17079337pgl.3.2019.06.04.15.14.29
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 04 Jun 2019 15:09:12 -0700 (PDT)
-Date:   Tue, 4 Jun 2019 15:09:10 -0700
+        Tue, 04 Jun 2019 15:14:29 -0700 (PDT)
+Date:   Tue, 4 Jun 2019 15:14:28 -0700
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Evan Green <evgreen@chromium.org>
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sdm845-mtp: Specify UFS
- device-reset GPIO
-Message-ID: <20190604220910.GA4814@minitux>
+To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        SCSI <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 2/3] scsi: ufs: Allow resetting the UFS device
+Message-ID: <20190604221428.GB4814@minitux>
 References: <20190604072001.9288-1-bjorn.andersson@linaro.org>
- <20190604072001.9288-4-bjorn.andersson@linaro.org>
- <5cf69ad2.1c69fb81.216a9.30f8@mx.google.com>
+ <20190604072001.9288-3-bjorn.andersson@linaro.org>
+ <53775224-5418-1235-20a2-c46d76ef56da@free.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5cf69ad2.1c69fb81.216a9.30f8@mx.google.com>
+In-Reply-To: <53775224-5418-1235-20a2-c46d76ef56da@free.fr>
 User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue 04 Jun 09:22 PDT 2019, Stephen Boyd wrote:
+On Tue 04 Jun 00:53 PDT 2019, Marc Gonzalez wrote:
 
-> Quoting Bjorn Andersson (2019-06-04 00:20:01)
-> > Specify the UFS device-reset gpio, so that the controller will issue a
-> > reset of the UFS device.
+> [ Shuffling the recipients list ]
+> 
+> On 04/06/2019 09:20, Bjorn Andersson wrote:
+> 
+> > Acquire the device-reset GPIO and toggle this to reset the UFS device
+> > during initialization and host reset.
 > > 
 > > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > > ---
-> >  arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 2 ++
-> >  1 file changed, 2 insertions(+)
+> >  drivers/scsi/ufs/ufshcd.c | 44 +++++++++++++++++++++++++++++++++++++++
+> >  drivers/scsi/ufs/ufshcd.h |  4 ++++
+> >  2 files changed, 48 insertions(+)
 > > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> > index 2e78638eb73b..d116a0956a9c 100644
-> > --- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-> > @@ -388,6 +388,8 @@
-> >  &ufs_mem_hc {
-> >         status = "okay";
+> > diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> > index 8c1c551f2b42..951a0efee536 100644
+> > --- a/drivers/scsi/ufs/ufshcd.c
+> > +++ b/drivers/scsi/ufs/ufshcd.c
+> > @@ -42,6 +42,7 @@
+> >  #include <linux/nls.h>
+> >  #include <linux/of.h>
+> >  #include <linux/bitfield.h>
+> > +#include <linux/gpio/consumer.h>
+> >  #include "ufshcd.h"
+> >  #include "ufs_quirks.h"
+> >  #include "unipro.h"
+> > @@ -6104,6 +6105,25 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
+> >  	return err;
+> >  }
 > >  
-> > +       device-reset-gpios = <&tlmm 150 GPIO_ACTIVE_LOW>;
+> > +/**
+> > + ufshcd_device_reset() - toggle the (optional) device reset line
+> > + * @hba: per-adapter instance
+> > + *
+> > + * Toggles the (optional) reset line to reset the attached device.
+> > + */
+> > +static void ufshcd_device_reset(struct ufs_hba *hba)
+> > +{
+> > +	/*
+> > +	 * The USB device shall detect reset pulses of 1us, sleep for 10us to
+> > +	 * be on the safe side.
+> > +	 */
+> > +	gpiod_set_value_cansleep(hba->device_reset, 1);
+> > +	usleep_range(10, 15);
 > > +
+> > +	gpiod_set_value_cansleep(hba->device_reset, 0);
+> > +	usleep_range(10, 15);
+> > +}
+> > +
+> >  /**
+> >   * ufshcd_host_reset_and_restore - reset and restore host controller
+> >   * @hba: per-adapter instance
+> > @@ -6159,6 +6179,9 @@ static int ufshcd_reset_and_restore(struct ufs_hba *hba)
+> >  	int retries = MAX_HOST_RESET_RETRIES;
+> >  
+> >  	do {
+> > +		/* Reset the attached device */
+> > +		ufshcd_device_reset(hba);
+> > +
+> >  		err = ufshcd_host_reset_and_restore(hba);
+> >  	} while (err && --retries);
+> >  
+> > @@ -7355,6 +7378,18 @@ static void ufshcd_variant_hba_exit(struct ufs_hba *hba)
+> >  	ufshcd_vops_exit(hba);
+> >  }
+> >  
+> > +static int ufshcd_init_device_reset(struct ufs_hba *hba)
+> > +{
+> > +	hba->device_reset = devm_gpiod_get_optional(hba->dev, "device-reset",
+> > +						    GPIOD_OUT_HIGH);
+> > +	if (IS_ERR(hba->device_reset)) {
+> > +		dev_err(hba->dev, "failed to acquire reset gpio: %ld\n",
+> > +			PTR_ERR(hba->device_reset));
+> > +	}
+> > +
+> > +	return PTR_ERR_OR_ZERO(hba->device_reset);
+> > +}
+> > +
+> >  static int ufshcd_hba_init(struct ufs_hba *hba)
+> >  {
+> >  	int err;
+> > @@ -7394,9 +7429,15 @@ static int ufshcd_hba_init(struct ufs_hba *hba)
+> >  	if (err)
+> >  		goto out_disable_vreg;
+> >  
+> > +	err = ufshcd_init_device_reset(hba);
+> > +	if (err)
+> > +		goto out_disable_variant;
+> > +
+> >  	hba->is_powered = true;
+> >  	goto out;
+> >  
+> > +out_disable_variant:
+> > +	ufshcd_vops_setup_regulators(hba, false);
+> >  out_disable_vreg:
+> >  	ufshcd_setup_vreg(hba, false);
+> >  out_disable_clks:
+> > @@ -8290,6 +8331,9 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+> >  		goto exit_gating;
+> >  	}
+> >  
+> > +	/* Reset the attached device */
+> > +	ufshcd_device_reset(hba);
+> > +
+> >  	/* Host controller enable */
+> >  	err = ufshcd_hba_enable(hba);
+> >  	if (err) {
+> > diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> > index ecfa898b9ccc..d8be67742168 100644
+> > --- a/drivers/scsi/ufs/ufshcd.h
+> > +++ b/drivers/scsi/ufs/ufshcd.h
+> > @@ -72,6 +72,8 @@
+> >  #define UFSHCD "ufshcd"
+> >  #define UFSHCD_DRIVER_VERSION "0.2"
+> >  
+> > +struct gpio_desc;
+> > +
+> >  struct ufs_hba;
+> >  
+> >  enum dev_cmd_type {
+> > @@ -706,6 +708,8 @@ struct ufs_hba {
+> >  
+> >  	struct device		bsg_dev;
+> >  	struct request_queue	*bsg_queue;
+> > +
+> > +	struct gpio_desc *device_reset;
+> >  };
+> >  
+> >  /* Returns true if clocks can be gated. Otherwise false */
+> > 
 > 
-> We had to do something similar on one particular brand of UFS that we had. I
-> think it was an SK Hynix part that had trouble and wouldn't provision properly.
-> Either way, we did this with a pinctrl toggle in the DTS where the "init" state
-> has the UFS_RESET pin asserted and then "default" state has the pin deasserted.
-> That was good enough to make this work.
+> Why is this needed on 845 and not on 8998?
 > 
 
-Thanks for pointing this out, I forgot to attribute these downstream
-changes. I can see how this works, but I must say I find it quite
-hackish.
+It's needed with certain UFS chips and TLMM in both msm8996 and msm8998
+seems to provide an identical mechanism - so patch 1 would have to be
+duplicated for those.
 
-The downstream solution seems to have evolved this into naming these
-states and jumping between them (with the appropriate sleeps) during a
-host reset as well.
+> On 8998 we already have:
+> 
+> 			resets = <&gcc GCC_UFS_BCR>;
+> 			reset-names = "rst";
+> 
 
+This is the SoC-internal reset signal for the UFS host controller block.
 
-But thanks for the confirmation that there's more than John's memory
-that needs this.
+> The above reset line gets wiggled/frobbed when appropriate.
+> 
+> (What's the difference between gpio and pinctrl? vs a reset "clock" as above)
+> 
 
-Regards,
+The TLMM block is the piece responsible for this and it implements GPIO,
+pinmux and pinconf functionality. So patch 1 extends the SDM845 pinctrl
+driver to expose the UFS reset pin as a GPIO.
+
+> ufshcd_device_reset_ctrl() vs ufshcd_init_device_reset()
+> 
+> Sounds like the nomenclature could be unified or clarified.
+> 
+
+Agreed, some consistency there would look better.
+
+Thanks,
 Bjorn
-
-> 	&ufs_mem_hc {
-> 		pinctrl-names = "init", "default";
-> 		pinctrl-0 = <&ufs_dev_reset_assert>;
-> 		pinctrl-1 = <&ufs_dev_reset_deassert>;
-> 	};
-> 
->         ufs_dev_reset_assert: ufs_dev_reset_assert {
->                 config {
->                         pins = "ufs_reset";
->                         bias-pull-down;         /* default: pull down */
->                         drive-strength = <8>;   /* default: 3.1 mA */
->                         output-low; /* active low reset */
->                 };
->         };
-> 
->         ufs_dev_reset_deassert: ufs_dev_reset_deassert {
->                 config {
->                         pins = "ufs_reset";
->                         bias-pull-down;         /* default: pull down */
->                         drive-strength = <8>;
->                         output-high; /* active low reset */
->                 };
->         };
