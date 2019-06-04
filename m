@@ -2,156 +2,179 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F1C34322
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 11:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6DC34330
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 11:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726937AbfFDJ15 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jun 2019 05:27:57 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:40068 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726877AbfFDJ15 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 05:27:57 -0400
-Received: by mail-wm1-f68.google.com with SMTP id u16so8685531wmc.5
-        for <linux-scsi@vger.kernel.org>; Tue, 04 Jun 2019 02:27:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bP3uT0xOsWpWeV8GPMi16XlVF6iH0G03fH2BH66LHAk=;
-        b=HqpU5re/rYyimOBoYdgRSjLO+2DTvSVLGlL/2bfqAdaDMwFjR4F59EMB6saBNprYHG
-         I2cCFVnQN6aipBJVZY3RLsXY8Nu8Wc8An4Sl3s/W/RK28Me9Xs8XzcmYOiUWvEWM4J5z
-         CL/hvVCDJvc/gw90JvfsatHWWvKNBcnYf7oOCE/wSyJ8NhRIppLX9dbND2Fsd9gcqPR1
-         WYXDuShTlypChQhHkQaBsNqkFTX7/z1IuA6hkpdjStzvz+z6e/v+Khex23tnYIRvQLVi
-         kJWufcRY1iUHgtfC9oHMMZo7v8EXG2To6vc6O+QCSGuVjaPr2XcltR9ll9V1PHopNXBN
-         ia4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bP3uT0xOsWpWeV8GPMi16XlVF6iH0G03fH2BH66LHAk=;
-        b=e3AHMRH4vDg9+OS6MdQdnp8B6zyDwi4uv1+OfMvQpFyRmuv2ek+DJ9d+lBldZHdRoW
-         Oj1+PYrnILrBTbxE5/in5cM0MpxEgW4ffxmdkEgbvIhGqFC4MdeO+h6dROtk7OAM6XvT
-         Gomb1HTMgd3X/J+0GO41InNr/aI3zuNgaX+LJkyd0BYNq4SuP9GPEscb6woocCA1cSD5
-         IPZCsk8e2UHTVaaNue7WV82XQOZySljibtzLGoa0KOEJ7kvdjdUjHotwIbQ8Q16gjQAC
-         BU4o7SwWWEpDRVWCCeV5aBYOpImriLo/zsfPDaseFHWM1uGGodG4DUtl/5E1rH3JAyFa
-         mAyw==
-X-Gm-Message-State: APjAAAV182gkniqStUdYr8Hbu7nLv9TMb8wvm8Yw5sMJHofRJZtkLsIb
-        fe5fm0WNY2+CAm1Lacxe0t9cyf5rfGlvdD/UCVU=
-X-Google-Smtp-Source: APXvYqzkrrWt5HxO5snhgWjKuk/tercDOe7/owADgO6PSCL7cCWXh3RRmzTyJ3pHMKyCQFe7Va8+vkc2d2VbxetLnAE=
-X-Received: by 2002:a1c:8049:: with SMTP id b70mr16942408wmd.33.1559640474991;
- Tue, 04 Jun 2019 02:27:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190604082308.5575-1-ming.lei@redhat.com> <20190604082308.5575-3-ming.lei@redhat.com>
- <alpine.LNX.2.21.1906041921050.66@nippy.intranet>
-In-Reply-To: <alpine.LNX.2.21.1906041921050.66@nippy.intranet>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Tue, 4 Jun 2019 17:27:43 +0800
-Message-ID: <CACVXFVMiZApFK5t3j3HEt7nETRnOMxNW6eJeFeMmKRyM2w_diw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] scsi: esp: make it working on SG_CHAIN
-To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        id S1727064AbfFDJan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jun 2019 05:30:43 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35736 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726992AbfFDJan (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 4 Jun 2019 05:30:43 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 88CDBAE51;
+        Tue,  4 Jun 2019 09:30:41 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Hannes Reinecke <hare@suse.com>
+Subject: [PATCH] fcoe: avoid memset across pointer boundaries
+Date:   Tue,  4 Jun 2019 11:30:28 +0200
+Message-Id: <20190604093028.79673-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jun 4, 2019 at 5:22 PM Finn Thain <fthain@telegraphics.com.au> wrote:
->
-> On Tue, 4 Jun 2019, Ming Lei wrote:
->
-> > The driver supporses that there isn't sg chain, and itereate the
-> > list one by one. This way is obviously wrong.
-> >
-> > Fixes it by sgl helper.
-> >
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: Bart Van Assche <bvanassche@acm.org>
-> > Cc: Ewan D. Milne <emilne@redhat.com>
-> > Cc: Hannes Reinecke <hare@suse.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Reported-by: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> > ---
-> >  drivers/scsi/esp_scsi.c | 32 +++++++++++++++++++++++++-------
-> >  1 file changed, 25 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/scsi/esp_scsi.c b/drivers/scsi/esp_scsi.c
-> > index 76e7ca864d6a..58b4e059dcfb 100644
-> > --- a/drivers/scsi/esp_scsi.c
-> > +++ b/drivers/scsi/esp_scsi.c
-> > @@ -371,6 +371,7 @@ static void esp_map_dma(struct esp *esp, struct scsi_cmnd *cmd)
-> >       struct esp_cmd_priv *spriv = ESP_CMD_PRIV(cmd);
-> >       struct scatterlist *sg = scsi_sglist(cmd);
-> >       int total = 0, i;
-> > +     struct scatterlist *sgt;
-> >
-> >       if (cmd->sc_data_direction == DMA_NONE)
-> >               return;
-> > @@ -381,14 +382,15 @@ static void esp_map_dma(struct esp *esp, struct scsi_cmnd *cmd)
-> >                * a dma address, so perform an identity mapping.
-> >                */
-> >               spriv->num_sg = scsi_sg_count(cmd);
-> > -             for (i = 0; i < spriv->num_sg; i++) {
-> > -                     sg[i].dma_address = (uintptr_t)sg_virt(&sg[i]);
-> > -                     total += sg_dma_len(&sg[i]);
-> > +
-> > +             scsi_for_each_sg(cmd, sgt, spriv->num_sg, i) {
-> > +                     sgt->dma_address = (uintptr_t)sg_virt(sgt);
-> > +                     total += sg_dma_len(sgt);
-> >               }
-> >       } else {
-> >               spriv->num_sg = scsi_dma_map(cmd);
-> > -             for (i = 0; i < spriv->num_sg; i++)
-> > -                     total += sg_dma_len(&sg[i]);
-> > +             scsi_for_each_sg(cmd, sgt, spriv->num_sg, i)
-> > +                     total += sg_dma_len(sgt);
-> >       }
-> >       spriv->cur_residue = sg_dma_len(sg);
-> >       spriv->cur_sg = sg;
-> > @@ -444,7 +446,7 @@ static void esp_advance_dma(struct esp *esp, struct esp_cmd_entry *ent,
-> >               p->tot_residue = 0;
-> >       }
-> >       if (!p->cur_residue && p->tot_residue) {
-> > -             p->cur_sg++;
-> > +             p->cur_sg = sg_next(p->cur_sg);
-> >               p->cur_residue = sg_dma_len(p->cur_sg);
-> >       }
-> >  }
-> > @@ -1610,6 +1612,22 @@ static void esp_msgin_extended(struct esp *esp)
-> >       scsi_esp_cmd(esp, ESP_CMD_SATN);
-> >  }
-> >
-> > +static struct scatterlist *esp_sg_prev(struct scsi_cmnd *cmd,
-> > +             struct scatterlist *sg)
-> > +{
-> > +     int i;
-> > +     struct scatterlist *tmp;
-> > +     struct scatterlist *prev = NULL;
-> > +
-> > +     scsi_for_each_sg(cmd, tmp, scsi_sg_count(cmd), i) {
-> > +             if (tmp == sg)
-> > +                     break;
-> > +             prev = tmp;
-> > +     }
-> > +
-> > +     return prev;
-> > +}
-> > +
->
-> Did you consider recording the previous scatterlist pointer using an
-> additional member in struct esp_cmd_priv, to be assigned in
-> esp_advance_dma()? I think it would execute faster and require less code.
+Gcc-9 complains for a memset across pointer boundaries, which happens
+as the code tries to allocate a flexible array on the stack.
+Turns out we cannot do this without relying on gcc-isms, so
+this patch converts the stack allocation in proper kzalloc() calls.
 
-Good point, will do it in V2.
+Signed-off-by: Hannes Reinecke <hare@suse.com>
+---
+ drivers/scsi/fcoe/fcoe_ctlr.c | 50 +++++++++++++++++++++++++------------------
+ include/scsi/libfc.h          |  1 +
+ 2 files changed, 30 insertions(+), 21 deletions(-)
 
-Thanks,
-Ming Lei
+diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
+index 0d7770d07405..3b9db5093c3e 100644
+--- a/drivers/scsi/fcoe/fcoe_ctlr.c
++++ b/drivers/scsi/fcoe/fcoe_ctlr.c
+@@ -2005,7 +2005,7 @@ EXPORT_SYMBOL_GPL(fcoe_wwn_from_mac);
+  */
+ static inline struct fcoe_rport *fcoe_ctlr_rport(struct fc_rport_priv *rdata)
+ {
+-	return (struct fcoe_rport *)(rdata + 1);
++	return (struct fcoe_rport *)(&rdata->rpriv);
+ }
+ 
+ /**
+@@ -2284,7 +2284,6 @@ static int fcoe_ctlr_vn_parse(struct fcoe_ctlr *fip,
+ 	u32 dtype;
+ 	u8 sub;
+ 
+-	memset(rdata, 0, sizeof(*rdata) + sizeof(*frport));
+ 	frport = fcoe_ctlr_rport(rdata);
+ 
+ 	fiph = (struct fip_header *)skb->data;
+@@ -2738,10 +2737,7 @@ static int fcoe_ctlr_vn_recv(struct fcoe_ctlr *fip, struct sk_buff *skb)
+ {
+ 	struct fip_header *fiph;
+ 	enum fip_vn2vn_subcode sub;
+-	struct {
+-		struct fc_rport_priv rdata;
+-		struct fcoe_rport frport;
+-	} buf;
++	struct fc_rport_priv *rdata;
+ 	int rc, vlan_id = 0;
+ 
+ 	fiph = (struct fip_header *)skb->data;
+@@ -2757,28 +2753,35 @@ static int fcoe_ctlr_vn_recv(struct fcoe_ctlr *fip, struct sk_buff *skb)
+ 		goto drop;
+ 	}
+ 
+-	rc = fcoe_ctlr_vn_parse(fip, skb, &buf.rdata);
++	rdata = kzalloc(sizeof(*rdata) + sizeof(struct fcoe_rport), GFP_KERNEL);
++	if (!rdata) {
++		LIBFCOE_FIP_DBG(fip, "vn_recv rdata alloc error\n");
++		rc = -EAGAIN;
++		goto drop;
++	}
++
++	rc = fcoe_ctlr_vn_parse(fip, skb, rdata);
+ 	if (rc) {
+ 		LIBFCOE_FIP_DBG(fip, "vn_recv vn_parse error %d\n", rc);
+-		goto drop;
++		goto free;
+ 	}
+ 
+ 	mutex_lock(&fip->ctlr_mutex);
+ 	switch (sub) {
+ 	case FIP_SC_VN_PROBE_REQ:
+-		fcoe_ctlr_vn_probe_req(fip, &buf.rdata);
++		fcoe_ctlr_vn_probe_req(fip, rdata);
+ 		break;
+ 	case FIP_SC_VN_PROBE_REP:
+-		fcoe_ctlr_vn_probe_reply(fip, &buf.rdata);
++		fcoe_ctlr_vn_probe_reply(fip, rdata);
+ 		break;
+ 	case FIP_SC_VN_CLAIM_NOTIFY:
+-		fcoe_ctlr_vn_claim_notify(fip, &buf.rdata);
++		fcoe_ctlr_vn_claim_notify(fip, rdata);
+ 		break;
+ 	case FIP_SC_VN_CLAIM_REP:
+-		fcoe_ctlr_vn_claim_resp(fip, &buf.rdata);
++		fcoe_ctlr_vn_claim_resp(fip, rdata);
+ 		break;
+ 	case FIP_SC_VN_BEACON:
+-		fcoe_ctlr_vn_beacon(fip, &buf.rdata);
++		fcoe_ctlr_vn_beacon(fip, rdata);
+ 		break;
+ 	default:
+ 		LIBFCOE_FIP_DBG(fip, "vn_recv unknown subcode %d\n", sub);
+@@ -2786,6 +2789,8 @@ static int fcoe_ctlr_vn_recv(struct fcoe_ctlr *fip, struct sk_buff *skb)
+ 		break;
+ 	}
+ 	mutex_unlock(&fip->ctlr_mutex);
++free:
++	kfree(rdata);
+ drop:
+ 	kfree_skb(skb);
+ 	return rc;
+@@ -2982,24 +2987,27 @@ static int fcoe_ctlr_vlan_recv(struct fcoe_ctlr *fip, struct sk_buff *skb)
+ {
+ 	struct fip_header *fiph;
+ 	enum fip_vlan_subcode sub;
+-	struct {
+-		struct fc_rport_priv rdata;
+-		struct fcoe_rport frport;
+-	} buf;
++	struct fc_rport_priv *rdata;
+ 	int rc;
+ 
++	rdata = kzalloc(sizeof(*rdata) + sizeof(struct fcoe_rport), GFP_KERNEL);
++	if (!rdata) {
++		LIBFCOE_FIP_DBG(fip, "vlan_recv rdata alloc error\n");
++		goto drop;
++	}
+ 	fiph = (struct fip_header *)skb->data;
+ 	sub = fiph->fip_subcode;
+-	rc = fcoe_ctlr_vlan_parse(fip, skb, &buf.rdata);
++	rc = fcoe_ctlr_vlan_parse(fip, skb, rdata);
+ 	if (rc) {
+ 		LIBFCOE_FIP_DBG(fip, "vlan_recv vlan_parse error %d\n", rc);
+-		goto drop;
++		goto free;
+ 	}
+ 	mutex_lock(&fip->ctlr_mutex);
+ 	if (sub == FIP_SC_VL_REQ)
+-		fcoe_ctlr_vlan_disc_reply(fip, &buf.rdata);
++		fcoe_ctlr_vlan_disc_reply(fip, rdata);
+ 	mutex_unlock(&fip->ctlr_mutex);
+-
++free:
++	kfree(rdata);
+ drop:
+ 	kfree_skb(skb);
+ 	return rc;
+diff --git a/include/scsi/libfc.h b/include/scsi/libfc.h
+index 13dd2eebc20e..8c9db4f531ce 100644
+--- a/include/scsi/libfc.h
++++ b/include/scsi/libfc.h
+@@ -212,6 +212,7 @@ struct fc_rport_priv {
+ 	struct rcu_head		    rcu;
+ 	u16			    sp_features;
+ 	u8			    spp_type;
++	char			    rpriv[];
+ };
+ 
+ /**
+-- 
+2.16.4
+
