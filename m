@@ -2,83 +2,290 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BC633D19
-	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 04:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A986C33D47
+	for <lists+linux-scsi@lfdr.de>; Tue,  4 Jun 2019 04:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbfFDCYE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Jun 2019 22:24:04 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:40392 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbfFDCYD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Jun 2019 22:24:03 -0400
-Received: by mail-oi1-f195.google.com with SMTP id w196so4920750oie.7
-        for <linux-scsi@vger.kernel.org>; Mon, 03 Jun 2019 19:24:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=sBuZQgLGgSQ7kvRAL03aIr/Wcvjnnb3lyTs/Aaqfbwk=;
-        b=uXxcaXLwANyRa3+NmViVADczyp+SQWIRrz4yHcKYqPorLi6YwOdY8iIZ9ZeOzNsByH
-         uSKqOXNkrAGVc2uaUPT2Pq1rTY5R0T8nCJ1qz8TlDpZuBhYhCUwlqVYPfhdH/XHq4Vqe
-         TKm/Q48MGRe4lutSLUGeeIWvZJPabCG7pcTnCFNUo3y6sAwiSOHkl0NzAG3BrDCVhbnL
-         iFVLbyk897P+wM6kWFFvHguyVDulSsyFhemJ3l3nLhoN36baybFzgNuQCsPs/mDm9H/k
-         F76p3dKGxFkL2LMWByAZHtm7SltVMkuvkzvsIlKkxwO4xV1twh93IQFsle1zWkwb2FLE
-         tuKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=sBuZQgLGgSQ7kvRAL03aIr/Wcvjnnb3lyTs/Aaqfbwk=;
-        b=Mjbtd6eGOMrEhQE87dhCY83NRiKBYMtkjJg1/KRJS7k0dflp3yCPfxYXWhmATB09bF
-         +ubB74XOyeL5o+LHLm8JI/aZ+npQnubgtzNREg9q3b5gBGSGwb+xOoyzzHltXHdn2gop
-         hbT/bZT9/h77pvVEgwqEppG5BPEhsAGc7IqyCrCLhhnjGnrr/hGu7cwBqbhj58ignQk2
-         2V9a3ESDOMX9vf2wIq8gA7Q1pjHurOAsXT0Ec/Ur8OnLHTk+IskkYd1YlWbZREOZzENs
-         cdDkYenKocXC+79MoWnXEV7htI9kPeq8SiREzyJiiRfCxORZNyEwr5XbPiqf6ClcYeQB
-         inOA==
-X-Gm-Message-State: APjAAAVebXYUoTrZtbdun5OqlS9EZokLVwZe8GSy01Aa8PqY4HuUfWCU
-        9J1gEQxhZ7yj1SzGlk5vYYnFuWDnyNc9eA8w6ec=
-X-Google-Smtp-Source: APXvYqw8jQ23yIAIP/ibRuqFL1purvdmWMRxLGuNqw3GaUnIhJ/DwQ0i+JQBtbdCTF6YlsnIUUgb7XQDZ0shWMuWKFQ=
-X-Received: by 2002:aca:3545:: with SMTP id c66mr2444017oia.129.1559615042928;
- Mon, 03 Jun 2019 19:24:02 -0700 (PDT)
+        id S1726301AbfFDCqI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Jun 2019 22:46:08 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:49124 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726179AbfFDCqI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 3 Jun 2019 22:46:08 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 4A725300159E;
+        Tue,  4 Jun 2019 02:46:07 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 584FA60C91;
+        Tue,  4 Jun 2019 02:45:58 +0000 (UTC)
+Date:   Tue, 4 Jun 2019 10:45:54 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Hannes Reinecke <hare@suse.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Ming Lei <tom.leiming@gmail.com>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH RFC] hisi_sas_v3: multiqueue support
+Message-ID: <20190604024553.GA7208@ming.t460p>
+References: <20190531084600.GB12106@ming.t460p>
+ <f7e184d4-3d90-2c36-84b8-702105dccafb@suse.de>
+ <20190531230620.GB16190@ming.t460p>
+ <fc049d0a-a7e3-894a-0680-574d86603ea5@suse.de>
+ <20190603073733.GA11812@ming.t460p>
+ <f0901773-0faf-7a4e-bb17-3e584de00c4f@suse.de>
+ <20190603081621.GC11812@ming.t460p>
+ <cd22b399-789d-c0fd-5748-5feeea90c0ee@suse.com>
+ <20190603093128.GD11812@ming.t460p>
+ <0ba81c9b-18f5-f846-5a70-3f63096b8c19@suse.de>
 MIME-Version: 1.0
-Received: by 2002:a4a:97e3:0:0:0:0:0 with HTTP; Mon, 3 Jun 2019 19:24:02 -0700 (PDT)
-Reply-To: officeinfo1089@gmail.com
-From:   "Mr.Adams Bello" <monicabentley645@gmail.com>
-Date:   Tue, 4 Jun 2019 03:24:02 +0100
-Message-ID: <CAEB4qVbgxyVe3vMODZzObUezvJKriw-Td0OA7V78mUdYVu2GVw@mail.gmail.com>
-Subject: ATTENTION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; boundary="mP3DRpeJDSE+ciuQ"
+Content-Disposition: inline
+In-Reply-To: <0ba81c9b-18f5-f846-5a70-3f63096b8c19@suse.de>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Tue, 04 Jun 2019 02:46:07 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Dear Beneficiary,
 
-The is to bring to your notice that the Department of Treasury Office
-in Nigeria in affiliation with the Federal Government of Nigeria,and
-the Office of Foreign Assets Control here in Nigeria has been
-authorized in their sanction programs to compensate 1,000 scam victims
-who has being a victim of internet scam. The Federal Government of
-Nigeria in collaboration with the Department of the Treasury Office
-has decided to pay $1,000.000.00 USD(One Million United States
-Dollars) each in order to restore the global economy to the enviable
-standard of respectable persons that was scammed. Your names and
-particulars was mentioned by one of the syndicates who was arrested as
-one of the victims of their operations. Although to issue payments to
-the right persons we need you to reconfirm your information's to
-compare with what was given to us. Most importantly you are hereby
-warned not to communicate or duplicate this message to anyone or
-whatsoever as investigations are still ongoing in trace of the other
-criminals so therefore this information's should remain confidential
-to you alone and the agencies involved in the exercise.
+--mP3DRpeJDSE+ciuQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Finally all payments are done by AUTOMATED TELLER MACHINE(ATM), loaded
-with $1,000.000.00 with your names on the ATM CARD waiting to be sent
-to you reconfirmation of your information's on our desk.
+On Mon, Jun 03, 2019 at 01:38:53PM +0200, Hannes Reinecke wrote:
+> On 6/3/19 11:31 AM, Ming Lei wrote:
+> > On Mon, Jun 03, 2019 at 10:47:24AM +0200, Hannes Reinecke wrote:
+> >> On 6/3/19 10:16 AM, Ming Lei wrote:
+> >>> On Mon, Jun 03, 2019 at 09:46:39AM +0200, Hannes Reinecke wrote:
+> >>>> On 6/3/19 9:37 AM, Ming Lei wrote:
+> >>>>> On Mon, Jun 03, 2019 at 08:08:18AM +0200, Hannes Reinecke wrote:
+> >>>>>> On 6/1/19 1:06 AM, Ming Lei wrote:
+> >>>>>>> On Fri, May 31, 2019 at 12:26:56PM +0200, Hannes Reinecke wrote:
+> >>>>>>>> On 5/31/19 10:46 AM, Ming Lei wrote:
+> >>>>>> [ .. ]
+> >>>>>>>> First we check for the 'slot_index_alloc()' callback to handle weird v2
+> >>>>>>>> allocation rules, _then_ we look for a tag, and only if we do _not_ have
+> >>>>>>>> a tag we're using the bitmap.
+> >>>>>>>
+> >>>>>>> OK, looks I miss the above change.
+> >>>>>>>
+> >>>>>>>> And the bitmap is already correctly sized, as otherwise we'd have a
+> >>>>>>>> clash between internal and tagged I/O commands even now.
+> >>>>>>>
+> >>>>>>> But now the big problem is in the following two line code:
+> >>>>>>>
+> >>>>>>> +       else if (blk_tag != (u32)-1)
+> >>>>>>> +               rc = blk_mq_unique_tag_to_tag(blk_tag);
+> >>>>>>>
+> >>>>>>> Request from different blk-mq hw queue has same tag returned from
+> >>>>>>> blk_mq_unique_tag_to_tag().
+> >>>>>>>
+> >>>>>> Yes, but the sbitmap allocator will ensure that each command will get a
+> >>>>>> unique tag.
+> >>>>>
+> >>>>> Each hw queue has independent sbitmap allocator, so commands with same
+> >>>>> tag can come from different hw queue.
+> >>>>>
+> >>>> It does not for SCSI.
+> >>>> See below.
+> >>>>
+> >>>>> So you meant this RFC patch depends on the host-wide tags patchset I
+> >>>>> posted?
+> >>>>>
+> >>>>>>
+> >>>>>>> Now the biggest question is that if V3 hw supports per-queue tags,
+> >>>>>>> If yes, it should be real MQ hardware, otherwise I guess commands with
+> >>>>>>> same tag at the same time may not work for host-wide tags.
+> >>>>>>>
+> >>>>>>
+> >>>>>> Of course you can't have different commands with the same tag. But the
+> >>>>>> sbitmap allocator prevents this from happening, as for host-wide tags
+> >>>>>> the tagset is _shared_ between all devices, so the sbitmap allocator
+> >>>>>> will only ever run on _one_ tagset for all commands.
+> >>>>>
+> >>>>> But blk-mq doesn't support host-wide tags yet, so how can this single
+> >>>>> patch work?
+> >>>>>
+> >>>> Wrong. It does:
+> >>>>
+> >>>> struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev)
+> >>>> {
+> >>>> 	sdev->request_queue = blk_mq_init_queue(&sdev->host->tag_set);
+> >>>> 	if (IS_ERR(sdev->request_queue))
+> >>>> 		return NULL;
+> >>>>
+> >>>> 	sdev->request_queue->queuedata = sdev;
+> >>>> 	__scsi_init_queue(sdev->host, sdev->request_queue);
+> >>>> 	blk_queue_flag_set(QUEUE_FLAG_SCSI_PASSTHROUGH, sdev->request_queue);
+> >>>> 	return sdev->request_queue;
+> >>>> }
+> >>>>
+> >>>>
+> >>>> IE every scsi device is using the tagset from the host.
+> >>>
+> >>> Looks we are not in the same page, and you misunderstood two concepts:
+> >>> scsi's host-wide tagset, and the new host-tags of BLK_MQ_F_HOST_TAGS.
+> >>>
+> >>> I admit that the new flag of BLK_MQ_F_HOST_TAGS is misleading.
+> >>>
+> >>> Now let me clarify it a bit:
+> >>>
+> >>> 1) the current SCSI hostwide tags means all LUNs share the host tagset,
+> >>> but the tagset may include multiple hw queues, and each hw queue still
+> >>> has independent tags, that is why blk-mq provides blk_mq_unique_tag().
+> >>> In short, each LUN's hw queue has independent tags.
+> >>>
+> >> Which is where I fundamentally disagree.
+> >> Each hw queue does _not_ have independent tags.
+> >> Each hw queue will use tags from the same (host-wide) tagset; the tags
+> >> themselves will be allocated for each queue on an ad-hoc base, ie there
+> >> is no fixed mapping between tag values and hardware queues.
+> > 
+> > Tagset is set of tags, and one tags is for serving one hw queue.
+> > 
+> > Each hw queue has its own tags, please see __blk_mq_alloc_rq_map()
+> > in which standalone sbitmap allocator and rq pool is allocated to
+> > each hw queue represented by 'hctx_idx'.
+> > 
+> Yes, but ...
 
-Best Regards
-Mr. Adams Bello
-Secretary's Desk
-E-mail: officeinfo1089@gmail.com
+So you agree the theory.
+
+> 
+> > And for each hw queue, the allocated tag value for request is in
+> > the range of 0 ~ queue_depth - 1, that is why I say requests from
+> > different hw queue may have same tag.
+> > 
+> 
+> But this is not what I have been observing working with lpfc and qla2xxx.
+> Both drivers have been converted to using scsi-mq with nr_hw_queues > 1
+> some years ago, and do work just fine.
+> And none of those drivers allow for re-using an in-flight tag on
+> different hardware queues.
+
+Really?
+
+Just run quick grep on the two drivers, looks both don't use cmnd->tag or
+rq->tag.
+
+> If your reasoning is correct none of these drivers would work.
+> 
+> > Your RFC patch changes to allow requests with same tag submitted to driver
+> > & hardware at the same time, so we should double-check if hisi_v3 hardware
+> > is happy with this change.
+> > 
+> > John, is hisi_sas v3 fine with this way?
+> > 
+> As mentioned above, I don't think this can happen.
+
+Then prove where I am wrong.
+
+Just attach a little bcc script, which should have been done by
+bpftrace easily, just not found how to pass multiple variable as key.
+
+1) run the attached bcc script in another terminal
+
+2) load null_blk via:
+
+rmmod null_blk;modprobe null_blk queue_mode=2 irqmode=2 completion_nsec=1000000 submit_queues=2 hw_queue_depth=4
+
+3) run the following fio:
+fio --bs=4k --size=128G  --rw=randread --direct=1 --ioengine=libaio --iodepth=16 --runtime=10 --name=fiotest --filename=/dev/nullb0 --numjobs=8
+
+Then ctrl+C on the bcc script, and you will see how many requests with
+same tag from different queues are handled concurrently.
+
+BTW, this test is run on dual core VM/Fedora 30, and bcc package is
+required.
+
+Thanks,
+Ming
+
+--mP3DRpeJDSE+ciuQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="io_tag.py"
+
+#!/usr/bin/python3
+
+from __future__ import print_function
+from bcc import BPF
+from time import sleep
+
+bpf_text="""
+#include <uapi/linux/ptrace.h>
+#include <linux/blkdev.h>
+#include <linux/blk-mq.h>
+
+struct key_t {
+    /*
+      'q' should have been tagset, so we can observe IOs from multi devices,
+      however, it is enought to show same tag requests are inflight from
+      different hw queue.
+    */
+    void *q; 
+    u64 tag;
+};
+
+BPF_HASH(inflight, struct key_t);
+
+/*
+ dist is the histogram indexed by rq->tag, the count records that
+ how many same tag request is in-flight at the same time.
+*/
+BPF_HISTOGRAM(dist);
+
+int kprobe__null_queue_rq(struct pt_regs *ctx, struct blk_mq_hw_ctx *hctx,
+                         const struct blk_mq_queue_data *bd)
+{
+    struct request *rq = bd->rq;
+    int tag = rq->tag;
+    void *q = rq->q;
+    struct key_t key = {
+        .q = q,
+        .tag = tag,
+    };
+    u64 zero = 0;
+
+    if (inflight.lookup(&key)) 
+	dist.increment(tag);
+    else
+        inflight.update(&key, &zero);
+
+    return 0;
+}
+
+int kprobe__null_complete_rq(struct pt_regs *ctx, struct request *rq)
+{
+    int tag = rq->tag;
+    void *q = rq->q;
+    struct key_t key = {
+        .q = q,
+        .tag = tag,
+    };
+
+    inflight.delete(&key);
+    return 0;
+}
+"""
+
+# load BPF program
+b = BPF(text=bpf_text)
+
+# header
+print("Tracing... Hit Ctrl-C to end.")
+
+# trace until Ctrl-C
+try:
+	sleep(99999999)
+except KeyboardInterrupt:
+	print()
+
+# output
+b["dist"].print_linear_hist("inflight rqs with same tags")
+
+--mP3DRpeJDSE+ciuQ--
