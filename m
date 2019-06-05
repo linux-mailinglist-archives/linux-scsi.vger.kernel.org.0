@@ -2,147 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E02A3612C
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 18:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49A8A361E9
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 18:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728534AbfFEQZk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 12:25:40 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33899 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726670AbfFEQZk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 12:25:40 -0400
-Received: by mail-pg1-f196.google.com with SMTP id h2so9427061pgg.1
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 09:25:40 -0700 (PDT)
+        id S1729021AbfFEQz3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 12:55:29 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:41320 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728835AbfFEQz2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 12:55:28 -0400
+Received: by mail-lf1-f67.google.com with SMTP id 136so8085289lfa.8
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 09:55:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2I33XKmaQqwFezXo9p3qtqWleV96bD7nXAO9VM8y09I=;
-        b=n9tRDmy0k7J42b2PhFQJzQiKCEU0pgOCVRs5k0LCPeKJ5Wa0+Ogs875FLKzF1qlXBF
-         z0Blm8zsSXPo/lmjGf5DktePxtLG8L3yn7O8yCeVUDYwVRLgkV+7g4lNdMPsPe4gXHaa
-         kx+KvJV5xJ5McyQ7jtIZhJwzClCHmRj2DsibXpwyfcGV0wyNUZQW9ckJDOLCDeMNJmKw
-         IzGZCmsar3Ces28KmvrNSNLJL1dgaDQ7VrbzPtHQsNYeZY4LlZCqwLepCyDYx7Zfm3Dm
-         OgcjbYZ/A78/Bio3/nPuGpykk93/bZCmJPKbBwGSrtxynHCz9TKRj0hk0Xy3Ofw4Oh0e
-         bXYQ==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qOaRAXWCo/zxxZcR9hTtXYLfdhb6PKzipbU8a8AazNY=;
+        b=AUA4Ho5wlSp1uIC/vY4e9boyj+61/ziB5vmf6E/WiCfkiKukaQvSKgMZWvbRmhl7/w
+         6n8fg0U7McgUgT2ExFNu3dcY+0JN7qMsj8NzLh7MW/ZS1DKe3+F/Is9CZ4zQxBa8maJR
+         YwBCpuIya8ODBqKTf9a8U1KyhbPtMzbIMKYw4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2I33XKmaQqwFezXo9p3qtqWleV96bD7nXAO9VM8y09I=;
-        b=TIeuUclBqP8wq9zNEMAfcpQwIG6r4PGGnq+r64pGrz8oJz0aLSV1QGlxOjxM+kLumY
-         lPOzPzAf0tG1v2fDCbS7BIeEZ7hae1pYtvf6F1PxwuQf+Svs7IgHmWIBK/AMr2N3/u1J
-         e567rOVuEeYHQQnlGVpEhs/21GYwiewNmnDnVJN3G4iSj68xesmCnnDbPcFT0wr6kHj7
-         jDY/W8jMkwXZItTDg7ejFbKnrYtz6U19qUyDWxTaYYRlL9vgbrJjjeC3pEkQQed6uOMv
-         2131Wu009jglPSSK+sQqB7T5sr5f+rOiCzRmdUwqn0HdOoPnUkwk8DLXrI8EY9xnG36O
-         tRsA==
-X-Gm-Message-State: APjAAAWKyo7sxcdjSGmTHFw56x3BfjmB1l2M3iLLkr3t1AJgWjiwW0uv
-        iAhj7j10yMiFvMuJI5CPvwA=
-X-Google-Smtp-Source: APXvYqxkzxKM1ZDEEp6bZco5yt/Img63RfAP+IPt/ZJMJKtZjGEoPiH+vNyMPEYdqnSYoFenpbUBAw==
-X-Received: by 2002:a17:90a:8c82:: with SMTP id b2mr44597807pjo.97.1559751939663;
-        Wed, 05 Jun 2019 09:25:39 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z125sm25468454pfb.75.2019.06.05.09.25.37
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qOaRAXWCo/zxxZcR9hTtXYLfdhb6PKzipbU8a8AazNY=;
+        b=RcM9AAS6WD5s9ZaCCTdZtZyMs1Gl/ioJuqyndov93MhAOOBUVOEcBk5QfaMQlwEYMb
+         9ew1+BFSkr699bB3U8UlW4qS/6bsFg7xPuU7QIzfP3m0VBPvCt69rifVA7rswn8CqJXg
+         oIx4+afsFyVmjAOSTzXohbjrdd/BWYHqb32v1oYogeRda10TXjyz//cn36gXpzUekAlF
+         aE9Mhy1EmnLS9+GAaT9bvY6e8cv9KHDjWZ2x8vlhZf4gkVTbko5TwjhGg1yJmtehbWIm
+         MV8NgN0T35DATXPuJTL2g5fUbHkRuQ5BKOhQPzYIqp3Xei3Ss+NHoX6Yf7LXhTbUqvoH
+         1lxg==
+X-Gm-Message-State: APjAAAUqSS+X5p//0nHl9ZUEC14tzKa3k7XEp1BPePr04WjGjOveT4Ux
+        I7Qmjt76j4b/kCbUhYjPyjHgrQ/Bads=
+X-Google-Smtp-Source: APXvYqxQTu9WUSy9GFX7d8Gb6opfsR5Yd3tzQK7Qfl4gDBS/iDm5RFgsH+DqyGnri/9AP2Gk0m9+FA==
+X-Received: by 2002:ac2:5285:: with SMTP id q5mr20581089lfm.146.1559753725828;
+        Wed, 05 Jun 2019 09:55:25 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id d2sm4279199lfh.1.2019.06.05.09.55.25
+        for <linux-scsi@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 09:25:38 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 09:25:37 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Finn Thain <fthain@telegraphics.com.au>
-Subject: Re: [PATCH V2 0/3] scsi: three SG_CHAIN related fixes
-Message-ID: <20190605162537.GA32657@roeck-us.net>
-References: <20190605010623.12325-1-ming.lei@redhat.com>
+        Wed, 05 Jun 2019 09:55:25 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id m15so19624074lfh.4
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 09:55:25 -0700 (PDT)
+X-Received: by 2002:ac2:4565:: with SMTP id k5mr17446359lfm.170.1559753724121;
+ Wed, 05 Jun 2019 09:55:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190605010623.12325-1-ming.lei@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+References: <20190605073942.125577-1-hare@suse.de>
+In-Reply-To: <20190605073942.125577-1-hare@suse.de>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 5 Jun 2019 09:55:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi3KGOrKANYbFr4+=pH3zED=xL0rnrLnOnSN+F90JJr7g@mail.gmail.com>
+Message-ID: <CAHk-=wi3KGOrKANYbFr4+=pH3zED=xL0rnrLnOnSN+F90JJr7g@mail.gmail.com>
+Subject: Re: [PATCH 0/4] libfc,fcoe: cleanup fc_rport_priv usage
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 09:06:20AM +0800, Ming Lei wrote:
-> Hi,
-> 
-> Guenter reported scsi boot issue caused by commit c3288dd8c232
-> ("scsi: core: avoid pre-allocating big SGL for data").
-> 
-> Turns out there are at least three issues.
-> 
-> The 1st patch fixes sg_alloc_table_chained() which may try to use
-> the pre-allocation SGL even though user passes zero to 'nents_first_chunk'.
-> 
-> The 2nd patch fixes issue in case that NO_SG_CHAIN on some ARCHs,
-> such as alpha, arm and parisc.
-> 
-> The 3rd patch makes esp scsi working with SG_CHAIN.
-> 
-> V2:
-> 	- add the patch1, which is verified by Guenter
-> 	- add .prv_sg to store the previous sg for esp_scsi
-> 
-> Ming Lei (3):
->   scsi: lib/sg_pool.c: clear 'first_chunk' in case of no pre-allocation
->   scsi: core: don't pre-allocate small SGL in case of NO_SG_CHAIN
->   scsi: esp: make it working on SG_CHAIN
-> 
+On Wed, Jun 5, 2019 at 12:39 AM Hannes Reinecke <hare@suse.de> wrote:
+>
+> the fcoe vn2vn code is using the 'fc_rport_priv' structure as argument to its
+> internal function, but is really expecting a struct fcoe_rport to immediately
+> follow this one. This is not only confusing but also an error for new compilers.
+> So clean up the usage by embedding fc_rport_priv into fcoe_rport, and use the
+> fcoe_rport structure wherever possible.
 
-Running my tests on next-20190605, I get:
+Thanks, this looks much better than what I tried to do mechanically
+that turned into a complete mess.
 
-Qemu test results:
-	total: 349 pass: 296 fail: 53
+But that's just from scanning the patches, obviously no deep review
+(much less testing).
 
-The same tests on next-20190605 plus this series results in:
-
-Qemu test results:
-	total: 349 pass: 347 fail: 2
-Failed tests: 
-	sh:rts7751r2dplus_defconfig:usb:rootfs
-	sh:rts7751r2dplus_defconfig:usb-hub:rootfs
-
-The remaining failures are consistent across re-runs. The failure is only
-seen when booting from usb using the sm501-usb controller (see below).
-
-usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 08 7c 00 00 f0 00
-print_req_error: I/O error, dev sda, sector 2172 flags 80700
-usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 01 da 00 00 f0 00
-print_req_error: I/O error, dev sda, sector 474 flags 84700
-usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 02 da 00 00 f0 00
-print_req_error: I/O error, dev sda, sector 730 flags 84700
-usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 0b 50 00 00 f0 00
-print_req_error: I/O error, dev sda, sector 2896 flags 84700
-
-Presumably that means that either the sm501-usb emulation has a subtle bug
-associated with SG, or something is wrong with the sm501-usb driver.
-
-The qemu command line in the failure case is:
-
-qemu-system-sh4 -M r2d \
-	-kernel ./arch/sh/boot/zImage \
-	-snapshot \
-	-usb -device usb-storage,drive=d0 \
-	-drive file=rootfs.ext2,if=none,id=d0,format=raw \
-	-append 'panic=-1 slub_debug=FZPUA root=/dev/sda rootwait console=ttySC1,115200 earlycon=scif,mmio16,0xffe80000 noiotrap' \
-	-serial null -serial stdio \
-	-net nic,model=rtl8139 -net user -nographic -monitor null
-
-I'll be happy to provide kernel configuration and a pointer to the root file
-system if needed.
-
-Thanks,
-Guenter
+                        Linus
