@@ -2,161 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01767366C0
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 23:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EB9A367D6
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 01:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfFEVWq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 17:22:46 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35122 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfFEVWq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 17:22:46 -0400
-Received: by mail-pf1-f194.google.com with SMTP id d126so98644pfd.2
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 14:22:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+pBD1nzAei0AOxcZ7Ad2nlIElXKEjyzkqCcfuUKmJCE=;
-        b=WCRvqvaUuc4FP3VLeuxXeAUG7kwfIdiwh8unOhudfCGXXfx6qZ2otEtKmEu0RCQoBo
-         0E9719JeJhLUhqCxK4ZYGx/EQRgoEkelKWukWCdLVf6BBOGuYPtpX6c7pOhVxZ3N+O/R
-         eKZSDyjqXjAnpjCdw2/yIR6e7e7CPnBYds5KSE+s9tQCWvf+jGj2MG3aYtdKDf//bZgk
-         7mnG7d9IlVF03NI1owVixJQtiTEybXuV5wFbAysqzpqUx2v+MGAd3p7WC4ysNfqfbjU6
-         39DIw0VCDR5fSM3abfsabBIUolBImjovQjkLqz7aNT/U0LiWyhW5t/rfssB78ow9EMfi
-         1Icg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+pBD1nzAei0AOxcZ7Ad2nlIElXKEjyzkqCcfuUKmJCE=;
-        b=PZn+NSglislunSbRAl2Oqv9adL/iSmlZ5WFbSvRTadiF/GanDHJpWE7exi+hZceGow
-         GK5gLy6j4kjQDXKxIjuNrj72IWE/NEJb747fgmdUsEM0kPFByHyO60tWng4ik7WBLCEA
-         9Hu4rNG6SC8QWT6p2RTyZp3a/eZwDwodbh2jlGxjlcMg72Q5tGLewy7RGC3Z9Y47nLOp
-         qD+fMMYrlm2jfTyBmINSfF4YtjzdUJYpu0+en46pki80aQ6VB0WQq008jxljGfVPzGCC
-         yR0TVfDox7SKFRg+Wi0EvdsMow3qAAet+f6+ZX4Gzhkhk9ePlBgCn3MKZXCzNaE2iIBi
-         Dd6A==
-X-Gm-Message-State: APjAAAXoXpcpWbXES4mzFAcnfruEInFXYxZew9PgHrxJxKl9ssxAkm8a
-        g4f+tKixrCb7IoE5smlJFz8=
-X-Google-Smtp-Source: APXvYqyH7l4KeZU7zA61/i0O23mKd0Kt7BAnvwy3GPjOipP2kh9ydJDTLrZ0SV817sziWoRb50QHFw==
-X-Received: by 2002:a65:64d9:: with SMTP id t25mr1129974pgv.130.1559769765026;
-        Wed, 05 Jun 2019 14:22:45 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k22sm12314446pfa.87.2019.06.05.14.22.43
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 14:22:44 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 14:22:43 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Finn Thain <fthain@telegraphics.com.au>
-Subject: Re: [PATCH V2 0/3] scsi: three SG_CHAIN related fixes
-Message-ID: <20190605212243.GA28525@roeck-us.net>
-References: <20190605010623.12325-1-ming.lei@redhat.com>
- <20190605162537.GA32657@roeck-us.net>
+        id S1726581AbfFEXX0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 19:23:26 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:52567 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726510AbfFEXXZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 19:23:25 -0400
+Received: from [192.168.1.110] ([77.2.1.21]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MnaTt-1gsD5h2gbN-00jYtF; Thu, 06 Jun 2019 01:22:40 +0200
+Subject: Re: [PATCH 2/3] drivers: scsi: remove unnecessary #ifdef MODULE
+To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "khalid@gonehiking.org" <khalid@gonehiking.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "aacraid@microsemi.com" <aacraid@microsemi.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+References: <1559397700-15585-1-git-send-email-info@metux.net>
+ <1559397700-15585-3-git-send-email-info@metux.net>
+ <AT5PR8401MB1169E817136F8B8587C7A716AB1A0@AT5PR8401MB1169.NAMPRD84.PROD.OUTLOOK.COM>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Organization: metux IT consult
+Message-ID: <d377a82b-4269-e25d-2329-573db355877c@metux.net>
+Date:   Wed, 5 Jun 2019 23:22:34 +0000
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190605162537.GA32657@roeck-us.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <AT5PR8401MB1169E817136F8B8587C7A716AB1A0@AT5PR8401MB1169.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:jaekdmyV0q8OXz6r78GsYt8MpdcLc2b7djaJTQADjW9KcsKTnTr
+ 7wzYYHu/4yX6GYfdyY9cMfgupQEDbjo5H3ALS3nquim0kfTf+14HZ7nwJAGJ9CZgCbeXBxT
+ LD/q1AJlxJLEn8noXHg2doZ+YoMtmGD4PHOu+E9ONVyw+ldThp50wbmHoHx8M9awmGecgj8
+ hxGR04XtnMvP4o9EJ9qow==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vWKltpJs204=:0nJ0fYNT/FkUdt8WwReLvN
+ m59Xkghuq3N+fsmaJgJ1/c246RmrR9XAB3PkwvqlcLlFtteQh1S2yu1ZnFfTi+OCj4mRuHq8u
+ fBk+ZpyqlLWQU3YVtOsbjRuoB+ExRwniu8suLAp64O0VLlZabKxMsETDROGAAoLoew1tf+TwP
+ RX4m+yMn5JfVf4Z4B/fUBIRRo6KRR/NriUxfac5FIv265NxnZmBre2o4MqAEb191cElXyg4WE
+ RNux37jM2IuB2oiVDi1q6siKFGoFegE4e9U0k2fp0eb6rXkg0epM3QYYwqsEwXpaiKzCuv2Qx
+ QyjPNaTIzvTwf2yi6Pz/TwLtXuXhwp66YgmAMIwh0z+T7FtkRrGIHkco3yCJI3wH0YYkjb7qY
+ YqNEdFcwgTpvXVnUyptIZ5HflNwgjb6rKeIOR7uPw20k8VqrzI/YCAThV0evAwNF9QEnR16UA
+ f2D4duZHmBHClZpY0Wz4qzpAGCLje01jFy0560+bUwDP4mUV6bytsT7VmHr3FQ/g+umR/RFrM
+ RuokkZnPuoxbx1V1+qofubE9Goi4bEdxljXM7c1kKF/zzbKdNZi1/X/SjzeUWfb+/wGS5Z2bs
+ 2oEV2jvaLT/3UEGkoEohLVRnF3tuSVAQnlqhbVTdHK/wbsTozAB3xPMKFNFsx0JQDDYcPjXIY
+ aSIcTrC6OlimGIq8qsqCWxz8Z1WtucZFx51fEzX74N+/6mA7ue31Qyqw/eEGDv2Rvaiu4Eaj+
+ eiLTKMEUkT/iRM1IBfjiiKt7LYZcgEjw/81+IOjNNVjbn0+rS8J6elS6UDs=
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 09:25:37AM -0700, Guenter Roeck wrote:
-> On Wed, Jun 05, 2019 at 09:06:20AM +0800, Ming Lei wrote:
-> > Hi,
-> > 
-> > Guenter reported scsi boot issue caused by commit c3288dd8c232
-> > ("scsi: core: avoid pre-allocating big SGL for data").
-> > 
-> > Turns out there are at least three issues.
-> > 
-> > The 1st patch fixes sg_alloc_table_chained() which may try to use
-> > the pre-allocation SGL even though user passes zero to 'nents_first_chunk'.
-> > 
-> > The 2nd patch fixes issue in case that NO_SG_CHAIN on some ARCHs,
-> > such as alpha, arm and parisc.
-> > 
-> > The 3rd patch makes esp scsi working with SG_CHAIN.
-> > 
-> > V2:
-> > 	- add the patch1, which is verified by Guenter
-> > 	- add .prv_sg to store the previous sg for esp_scsi
-> > 
-> > Ming Lei (3):
-> >   scsi: lib/sg_pool.c: clear 'first_chunk' in case of no pre-allocation
-> >   scsi: core: don't pre-allocate small SGL in case of NO_SG_CHAIN
-> >   scsi: esp: make it working on SG_CHAIN
-> > 
-> 
-> Running my tests on next-20190605, I get:
-> 
-> Qemu test results:
-> 	total: 349 pass: 296 fail: 53
-> 
-> The same tests on next-20190605 plus this series results in:
-> 
-> Qemu test results:
-> 	total: 349 pass: 347 fail: 2
-> Failed tests: 
-> 	sh:rts7751r2dplus_defconfig:usb:rootfs
-> 	sh:rts7751r2dplus_defconfig:usb-hub:rootfs
-> 
-> The remaining failures are consistent across re-runs. The failure is only
-> seen when booting from usb using the sm501-usb controller (see below).
-> 
-> usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 08 7c 00 00 f0 00
-> print_req_error: I/O error, dev sda, sector 2172 flags 80700
-> usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 01 da 00 00 f0 00
-> print_req_error: I/O error, dev sda, sector 474 flags 84700
-> usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 02 da 00 00 f0 00
-> print_req_error: I/O error, dev sda, sector 730 flags 84700
-> usb 1-2.1: reset full-speed USB device number 4 using sm501-usb
-> sd 1:0:0:0: [sda] tag#0 UNKNOWN(0x2003) Result: hostbyte=0x03 driverbyte=0x00
-> sd 1:0:0:0: [sda] tag#0 CDB: opcode=0x28 28 00 00 00 0b 50 00 00 f0 00
-> print_req_error: I/O error, dev sda, sector 2896 flags 84700
-> 
-> Presumably that means that either the sm501-usb emulation has a subtle bug
-> associated with SG, or something is wrong with the sm501-usb driver.
-> 
+On 01.06.19 15:40, Elliott, Robert (Servers) wrote:
 
-Turns out the above is caused by other (unrelated) patches in the sm501
-USB driver. After reverting those, everything is fine. Sorry for the noise.
-Please feel free to add
+<snip>
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+> I don't see any reply to James' comment that these changes result in
 
-to all three patches.
+I've missed that mail :(
 
-Thanks,
-Guenter
+> static struct definitions that are unused, which should result in
+> complaints by the compiler like:
+>      warning: 'dptids' defined by not used [-Wunused-variable]
 
-> The qemu command line in the failure case is:
-> 
-> qemu-system-sh4 -M r2d \
-> 	-kernel ./arch/sh/boot/zImage \
-> 	-snapshot \
-> 	-usb -device usb-storage,drive=d0 \
-> 	-drive file=rootfs.ext2,if=none,id=d0,format=raw \
-> 	-append 'panic=-1 slub_debug=FZPUA root=/dev/sda rootwait console=ttySC1,115200 earlycon=scif,mmio16,0xffe80000 noiotrap' \
-> 	-serial null -serial stdio \
-> 	-net nic,model=rtl8139 -net user -nographic -monitor null
-> 
-> I'll be happy to provide kernel configuration and a pointer to the root file
-> system if needed.
-> 
-> Thanks,
-> Guenter
+hmm, seems that const is missing on dptids ... I'll test that and
+repost fixed vrsion.
+
+--mtx
+
+-- 
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
