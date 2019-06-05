@@ -2,81 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A8A361E9
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 18:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A684836215
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 19:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729021AbfFEQz3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 12:55:29 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:41320 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728835AbfFEQz2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 12:55:28 -0400
-Received: by mail-lf1-f67.google.com with SMTP id 136so8085289lfa.8
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 09:55:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qOaRAXWCo/zxxZcR9hTtXYLfdhb6PKzipbU8a8AazNY=;
-        b=AUA4Ho5wlSp1uIC/vY4e9boyj+61/ziB5vmf6E/WiCfkiKukaQvSKgMZWvbRmhl7/w
-         6n8fg0U7McgUgT2ExFNu3dcY+0JN7qMsj8NzLh7MW/ZS1DKe3+F/Is9CZ4zQxBa8maJR
-         YwBCpuIya8ODBqKTf9a8U1KyhbPtMzbIMKYw4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qOaRAXWCo/zxxZcR9hTtXYLfdhb6PKzipbU8a8AazNY=;
-        b=RcM9AAS6WD5s9ZaCCTdZtZyMs1Gl/ioJuqyndov93MhAOOBUVOEcBk5QfaMQlwEYMb
-         9ew1+BFSkr699bB3U8UlW4qS/6bsFg7xPuU7QIzfP3m0VBPvCt69rifVA7rswn8CqJXg
-         oIx4+afsFyVmjAOSTzXohbjrdd/BWYHqb32v1oYogeRda10TXjyz//cn36gXpzUekAlF
-         aE9Mhy1EmnLS9+GAaT9bvY6e8cv9KHDjWZ2x8vlhZf4gkVTbko5TwjhGg1yJmtehbWIm
-         MV8NgN0T35DATXPuJTL2g5fUbHkRuQ5BKOhQPzYIqp3Xei3Ss+NHoX6Yf7LXhTbUqvoH
-         1lxg==
-X-Gm-Message-State: APjAAAUqSS+X5p//0nHl9ZUEC14tzKa3k7XEp1BPePr04WjGjOveT4Ux
-        I7Qmjt76j4b/kCbUhYjPyjHgrQ/Bads=
-X-Google-Smtp-Source: APXvYqxQTu9WUSy9GFX7d8Gb6opfsR5Yd3tzQK7Qfl4gDBS/iDm5RFgsH+DqyGnri/9AP2Gk0m9+FA==
-X-Received: by 2002:ac2:5285:: with SMTP id q5mr20581089lfm.146.1559753725828;
-        Wed, 05 Jun 2019 09:55:25 -0700 (PDT)
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
-        by smtp.gmail.com with ESMTPSA id d2sm4279199lfh.1.2019.06.05.09.55.25
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 09:55:25 -0700 (PDT)
-Received: by mail-lf1-f54.google.com with SMTP id m15so19624074lfh.4
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 09:55:25 -0700 (PDT)
-X-Received: by 2002:ac2:4565:: with SMTP id k5mr17446359lfm.170.1559753724121;
- Wed, 05 Jun 2019 09:55:24 -0700 (PDT)
+        id S1728795AbfFERHg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 13:07:36 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:33126 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728789AbfFERHg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 5 Jun 2019 13:07:36 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id EB4B8204191;
+        Wed,  5 Jun 2019 19:07:33 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GQkvM02M94+7; Wed,  5 Jun 2019 19:07:27 +0200 (CEST)
+Received: from [192.168.48.23] (host-45-58-224-183.dyn.295.ca [45.58.224.183])
+        by smtp.infotech.no (Postfix) with ESMTPA id 47457204162;
+        Wed,  5 Jun 2019 19:07:25 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH] sg: Fix a double-fetch bug in drivers/scsi/sg.c
+To:     Jiri Slaby <jslaby@suse.cz>, Gen Zhang <blackgod016574@gmail.com>,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190523023855.GA17852@zhanggen-UX430UQ>
+ <d7cb94f3-f136-62ff-3067-b3e5f6ac63ce@suse.cz>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <da6f10b8-3b9a-f8d6-33c4-0d8f5711bb23@interlog.com>
+Date:   Wed, 5 Jun 2019 13:07:25 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20190605073942.125577-1-hare@suse.de>
-In-Reply-To: <20190605073942.125577-1-hare@suse.de>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 5 Jun 2019 09:55:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi3KGOrKANYbFr4+=pH3zED=xL0rnrLnOnSN+F90JJr7g@mail.gmail.com>
-Message-ID: <CAHk-=wi3KGOrKANYbFr4+=pH3zED=xL0rnrLnOnSN+F90JJr7g@mail.gmail.com>
-Subject: Re: [PATCH 0/4] libfc,fcoe: cleanup fc_rport_priv usage
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <d7cb94f3-f136-62ff-3067-b3e5f6ac63ce@suse.cz>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jun 5, 2019 at 12:39 AM Hannes Reinecke <hare@suse.de> wrote:
->
-> the fcoe vn2vn code is using the 'fc_rport_priv' structure as argument to its
-> internal function, but is really expecting a struct fcoe_rport to immediately
-> follow this one. This is not only confusing but also an error for new compilers.
-> So clean up the usage by embedding fc_rport_priv into fcoe_rport, and use the
-> fcoe_rport structure wherever possible.
+On 2019-06-05 2:00 a.m., Jiri Slaby wrote:
+> On 23. 05. 19, 4:38, Gen Zhang wrote:
+>> In sg_write(), the opcode of the command is fetched the first time from
+>> the userspace by __get_user(). Then the whole command, the opcode
+>> included, is fetched again from userspace by __copy_from_user().
+>> However, a malicious user can change the opcode between the two fetches.
+>> This can cause inconsistent data and potential errors as cmnd is used in
+>> the following codes.
+>>
+>> Thus we should check opcode between the two fetches to prevent this.
+>>
+>> Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+>> ---
+>> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+>> index d3f1531..a2971b8 100644
+>> --- a/drivers/scsi/sg.c
+>> +++ b/drivers/scsi/sg.c
+>> @@ -694,6 +694,8 @@ sg_write(struct file *filp, const char __user *buf, size_t count, loff_t * ppos)
+>>   	hp->flags = input_size;	/* structure abuse ... */
+>>   	hp->pack_id = old_hdr.pack_id;
+>>   	hp->usr_ptr = NULL;
+>> +	if (opcode != cmnd[0])
+>> +		return -EINVAL;
+> 
+> Isn't it too early to check cmnd which is copied only here:
+> 
+>>   	if (__copy_from_user(cmnd, buf, cmd_size))
+>>   		return -EFAULT;
+>>   	/*
+>> ---
+>>
 
-Thanks, this looks much better than what I tried to do mechanically
-that turned into a complete mess.
+Hi,
+Yes, it is too early. It needs to be after that __copy_from_user(cmnd,
+buf, cmd_size) call.
 
-But that's just from scanning the patches, obviously no deep review
-(much less testing).
+To put this in context, this is a very old interface; dating from 1992
+and deprecated for almost 20 years. The fact that the first byte of
+the SCSI cdb needs to be read first to work out that size of the
+following SCSI command and optionally the offset of a data-out
+buffer that may follow the command; is one reason why that interface
+was replaced. Also the implementation did not handle SCSI variable
+length cdb_s.
 
-                        Linus
+Then there is the question of whether this double-fetch is exploitable?
+I cannot think of an example, but there might be (e.g. turning a READ
+command into a WRITE). But the "double-fetch" issue may be more wide
+spread. The replacement interface passes the command and data-in/-out as
+pointers while their corresponding lengths are placed in the newer
+interface structure. This assumes that the cdb and data-out won't
+change in the user space between when the write(2) is called and
+before or while the driver, using those pointers, reads the data.
+All drivers that use pointers to pass data have this "feature".
+
+Also I'm looking at this particular double-fetch from the point of view
+of the driver rewrite I have done and is currently in the early stages
+of review [linux-scsi list: "[PATCH 00/19] sg: v4 interface, rq sharing
++ multiple rqs"] and this problem is more difficult to fix since the
+full cdb read is delayed to a common point further along the submit
+processing path. To detect a change in cbd[0] my current code would
+need to be altered to carry cdb[0] through to that common point. So
+is it worth it for such an old, deprecated and replaced interface??
+What cdb/user_permissions checking that is done, is done _after_
+the full cdb is read. So trying to get around a user exclusion of
+say WRITE(10) by first using the first byte of READ(10), won't succeed.
+
+Doug Gilbert
+
