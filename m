@@ -2,329 +2,146 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F4A357FA
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 09:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6217359B5
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 11:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726656AbfFEHjx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 03:39:53 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43038 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726638AbfFEHjw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 5 Jun 2019 03:39:52 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id EB10AAF7D;
-        Wed,  5 Jun 2019 07:39:50 +0000 (UTC)
-From:   Hannes Reinecke <hare@suse.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 4/4] fcoe: pass in fcoe_rport structure instead of fc_rport_priv
-Date:   Wed,  5 Jun 2019 09:39:42 +0200
-Message-Id: <20190605073942.125577-5-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20190605073942.125577-1-hare@suse.de>
-References: <20190605073942.125577-1-hare@suse.de>
+        id S1727064AbfFEJch (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 05:32:37 -0400
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:42221 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726690AbfFEJcg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 05:32:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1559727155; x=1591263155;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=S49ZGvfsCAGzg2w+MHzrtpp8i/bDvCsOhxlrQNWnA/I=;
+  b=EDEDrpkjHtJFixb21VPMv2InI2x3CRn31D9Lv+SFj84/uWaGTgO+R3yt
+   u4x8RwzWlZcRy/BXsfW//KS8R7icL8ALrRBp7Ab50aQaUil9ULWbTI7S2
+   5k3jF4SKVjyAE9NmXH1XkqODTNOYBXDMuBt3avTUdXNNKsH+B1oh58t2A
+   FNA3e4maIv+oMaoeSn3U03IqyLs/O0Vm/CIbTogaZ1G57GqATw7e1TSS6
+   VvhgcrNNCNRMBCwUFQeGu1J9OnbBK606hJIcGMOOQAVVjP4nGwRoxisfn
+   qFOtFGekQZucZPU8kDRMg8eS89NaTszoVA+U70CFNoBNKoXhKtoETSo/L
+   w==;
+X-IronPort-AV: E=Sophos;i="5.60,550,1549900800"; 
+   d="scan'208";a="216132224"
+Received: from mail-sn1nam01lp2054.outbound.protection.outlook.com (HELO NAM01-SN1-obe.outbound.protection.outlook.com) ([104.47.32.54])
+  by ob1.hgst.iphmx.com with ESMTP; 05 Jun 2019 17:32:34 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WEUrWHG8922XedlBsx6DMByA3HjDnspJK8W4joX3FxY=;
+ b=mn+uNOg1BWvWoUziHR2uf9Al8auprUPi+CAHCMvLzHGxH5ywH0/mVbs6lRq35fKf/i9HC6qnhPpSCKDTIjjXxnSlf+SjsNQMSF3msyHxp6J7FHAoiIMnszaG2hxkim9WWc0ZjIusIaPAOD64C0cxK2oAgvepBN7ZrvaMt+orRXc=
+Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
+ SN6PR04MB4207.namprd04.prod.outlook.com (52.135.71.145) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1943.22; Wed, 5 Jun 2019 09:32:32 +0000
+Received: from SN6PR04MB4925.namprd04.prod.outlook.com
+ ([fe80::6d99:14d9:3fa:f530]) by SN6PR04MB4925.namprd04.prod.outlook.com
+ ([fe80::6d99:14d9:3fa:f530%6]) with mapi id 15.20.1943.018; Wed, 5 Jun 2019
+ 09:32:32 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     John Stultz <john.stultz@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: RE: [PATCH 0/3] (Qualcomm) UFS device reset support
+Thread-Topic: [PATCH 0/3] (Qualcomm) UFS device reset support
+Thread-Index: AQHVGqYAlQFsNx0blUeatbYnjFKLiqaMDImAgACCvoCAAAPGAIAAOZng
+Date:   Wed, 5 Jun 2019 09:32:32 +0000
+Message-ID: <SN6PR04MB492521B7D2DB6F3462EDB7D9FC160@SN6PR04MB4925.namprd04.prod.outlook.com>
+References: <20190604072001.9288-1-bjorn.andersson@linaro.org>
+ <CANcMJZBmgWMZu7Y53Lnx_x3L2UpCmEbFRHVW0SFCXfW=Yw9uYg@mail.gmail.com>
+ <SN6PR04MB4925530F216E86F6404FE14CFC160@SN6PR04MB4925.namprd04.prod.outlook.com>
+ <20190605060154.GJ22737@tuxbook-pro>
+In-Reply-To: <20190605060154.GJ22737@tuxbook-pro>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Avri.Altman@wdc.com; 
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7aafd65c-ff12-49ab-493c-08d6e998bc83
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB4207;
+x-ms-traffictypediagnostic: SN6PR04MB4207:
+wdcipoutbound: EOP-TRUE
+x-microsoft-antispam-prvs: <SN6PR04MB4207B2ACBAB61DAF6543CCEBFC160@SN6PR04MB4207.namprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 00594E8DBA
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(136003)(396003)(366004)(346002)(39860400002)(189003)(199004)(11346002)(446003)(71200400001)(7416002)(71190400001)(305945005)(66476007)(73956011)(66446008)(64756008)(476003)(66556008)(9686003)(66946007)(76116006)(25786009)(6436002)(486006)(33656002)(186003)(256004)(74316002)(6246003)(81156014)(2906002)(8936002)(26005)(14454004)(81166006)(7736002)(8676002)(54906003)(52536014)(14444005)(86362001)(53936002)(7696005)(6506007)(76176011)(5660300002)(53546011)(66066001)(55016002)(68736007)(4326008)(229853002)(72206003)(478600001)(316002)(3846002)(6116002)(102836004)(6916009)(99286004);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB4207;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: h8LDwK5Ny093YImRAW46u2TjaG5YvBWArvn0zDMyBGu0y6hSobMv44WdK5MZeFdW519pCCIPkmj0+aXtV1PPRCZQwTGjXLpjUTzDbdcfFVl2uC35nrsxHSoqgS8kEeQ9pZ6KJZS+9NxK+bV1lbKq2gAu/L755vRIx81pedn1CLI7TLJYTPU5lY9U40GT/Gfb0hwrBnCcevp8O0ggV04OYzRHfYG8U9n2Muvpad6gKrO7BB+4TSZijzS8LfCvjSLTrnrjpwOwew8nHioQoeSO628scn3Z9sMWmEISQbJa5DEVrS+Wd9ygXqbQ6Sm4qJyOgsnVIkHHxpjRZAzXmNKXW7UV2X+gFWJf3nTFsJj5clGhoacdxSi9wxZ2ts8sUX9y1Cxet8cPjsmOrPaaFhtUTVRTQ9WsTwu4s9fyEMy1Xi4=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7aafd65c-ff12-49ab-493c-08d6e998bc83
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jun 2019 09:32:32.5156
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4207
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of using the generic 'fc_rport_priv' structure as argument
-and then having to painstakingly outcast this to fcoe_rport we should
-be passing the fcoe_rport structure itself and reduce complexity.
+>=20
+> On Tue 04 Jun 22:50 PDT 2019, Avri Altman wrote:
+>=20
+> > Hi,
+> >
+> > >
+> > > On Tue, Jun 4, 2019 at 12:22 AM Bjorn Andersson
+> > > <bjorn.andersson@linaro.org> wrote:
+> > > >
+> > > > This series exposes the ufs_reset line as a gpio, adds support for =
+ufshcd to
+> > > > acquire and toggle this and then adds this to SDM845 MTP.
+> > > >
+> > > > Bjorn Andersson (3):
+> > > >   pinctrl: qcom: sdm845: Expose ufs_reset as gpio
+> > > >   scsi: ufs: Allow resetting the UFS device
+> > > >   arm64: dts: qcom: sdm845-mtp: Specify UFS device-reset GPIO
+> > >
+> > > Adding similar change as in sdm845-mtp to the not yet upstream
+> > > blueline dts, I validated this allows my micron UFS pixel3 to boot.
+> > >
+> > > Tested-by: John Stultz <john.stultz@linaro.org>
+> > Maybe ufs_hba_variant_ops would be the proper place to add this?
+> >
+>=20
+> Are you saying that these memories only need a reset when they are
+> paired with the Qualcomm host controller?
+ufs_hba_variant_ops is for vendors to implement their own vops,
+and as you can see, many of them do.
+Adding hw_reset to that template seems like the proper way
+to do what you are doing.
 
-Signed-off-by: Hannes Reinecke <hare@suse.com>
----
- drivers/scsi/fcoe/fcoe_ctlr.c | 99 ++++++++++++++++++++++---------------------
- 1 file changed, 51 insertions(+), 48 deletions(-)
-
-diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
-index 728ff37111ed..428bde1c8dd4 100644
---- a/drivers/scsi/fcoe/fcoe_ctlr.c
-+++ b/drivers/scsi/fcoe/fcoe_ctlr.c
-@@ -2401,16 +2401,14 @@ static void fcoe_ctlr_vn_send_claim(struct fcoe_ctlr *fip)
- /**
-  * fcoe_ctlr_vn_probe_req() - handle incoming VN2VN probe request.
-  * @fip: The FCoE controller
-- * @rdata: parsed remote port with frport from the probe request
-+ * @frport: parsed FCoE rport from the probe request
-  *
-  * Called with ctlr_mutex held.
-  */
- static void fcoe_ctlr_vn_probe_req(struct fcoe_ctlr *fip,
--				   struct fc_rport_priv *rdata)
-+				   struct fcoe_rport *frport)
- {
--	struct fcoe_rport *frport = fcoe_ctlr_rport(rdata);
--
--	if (rdata->ids.port_id != fip->port_id)
-+	if (frport->rdata.ids.port_id != fip->port_id)
- 		return;
- 
- 	switch (fip->state) {
-@@ -2430,7 +2428,7 @@ static void fcoe_ctlr_vn_probe_req(struct fcoe_ctlr *fip,
- 		 * Probe's REC bit is not set.
- 		 * If we don't reply, we will change our address.
- 		 */
--		if (fip->lp->wwpn > rdata->ids.port_name &&
-+		if (fip->lp->wwpn > frport->rdata.ids.port_name &&
- 		    !(frport->flags & FIP_FL_REC_OR_P2P)) {
- 			LIBFCOE_FIP_DBG(fip, "vn_probe_req: "
- 					"port_id collision\n");
-@@ -2454,14 +2452,14 @@ static void fcoe_ctlr_vn_probe_req(struct fcoe_ctlr *fip,
- /**
-  * fcoe_ctlr_vn_probe_reply() - handle incoming VN2VN probe reply.
-  * @fip: The FCoE controller
-- * @rdata: parsed remote port with frport from the probe request
-+ * @frport: parsed FCoE rport from the probe request
-  *
-  * Called with ctlr_mutex held.
-  */
- static void fcoe_ctlr_vn_probe_reply(struct fcoe_ctlr *fip,
--				   struct fc_rport_priv *rdata)
-+				     struct fcoe_rport *frport)
- {
--	if (rdata->ids.port_id != fip->port_id)
-+	if (frport->rdata.ids.port_id != fip->port_id)
- 		return;
- 	switch (fip->state) {
- 	case FIP_ST_VNMP_START:
-@@ -2484,11 +2482,11 @@ static void fcoe_ctlr_vn_probe_reply(struct fcoe_ctlr *fip,
- /**
-  * fcoe_ctlr_vn_add() - Add a VN2VN entry to the list, based on a claim reply.
-  * @fip: The FCoE controller
-- * @new: newly-parsed remote port with frport as a template for new rdata
-+ * @new: newly-parsed FCoE rport as a template for new rdata
-  *
-  * Called with ctlr_mutex held.
-  */
--static void fcoe_ctlr_vn_add(struct fcoe_ctlr *fip, struct fc_rport_priv *new)
-+static void fcoe_ctlr_vn_add(struct fcoe_ctlr *fip, struct fcoe_rport *new)
- {
- 	struct fc_lport *lport = fip->lp;
- 	struct fc_rport_priv *rdata;
-@@ -2496,7 +2494,7 @@ static void fcoe_ctlr_vn_add(struct fcoe_ctlr *fip, struct fc_rport_priv *new)
- 	struct fcoe_rport *frport;
- 	u32 port_id;
- 
--	port_id = new->ids.port_id;
-+	port_id = new->rdata.ids.port_id;
- 	if (port_id == fip->port_id)
- 		return;
- 
-@@ -2513,22 +2511,28 @@ static void fcoe_ctlr_vn_add(struct fcoe_ctlr *fip, struct fc_rport_priv *new)
- 	rdata->disc_id = lport->disc.disc_id;
- 
- 	ids = &rdata->ids;
--	if ((ids->port_name != -1 && ids->port_name != new->ids.port_name) ||
--	    (ids->node_name != -1 && ids->node_name != new->ids.node_name)) {
-+	if ((ids->port_name != -1 &&
-+	     ids->port_name != new->rdata.ids.port_name) ||
-+	    (ids->node_name != -1 &&
-+	     ids->node_name != new->rdata.ids.node_name)) {
- 		mutex_unlock(&rdata->rp_mutex);
- 		LIBFCOE_FIP_DBG(fip, "vn_add rport logoff %6.6x\n", port_id);
- 		fc_rport_logoff(rdata);
- 		mutex_lock(&rdata->rp_mutex);
- 	}
--	ids->port_name = new->ids.port_name;
--	ids->node_name = new->ids.node_name;
-+	ids->port_name = new->rdata.ids.port_name;
-+	ids->node_name = new->rdata.ids.node_name;
- 	mutex_unlock(&rdata->rp_mutex);
- 
- 	frport = fcoe_ctlr_rport(rdata);
- 	LIBFCOE_FIP_DBG(fip, "vn_add rport %6.6x %s state %d\n",
- 			port_id, frport->fcoe_len ? "old" : "new",
- 			rdata->rp_state);
--	*frport = *fcoe_ctlr_rport(new);
-+	frport->fcoe_len = new->fcoe_len;
-+	frport->flags = new->flags;
-+	frport->login_count = new->login_count;
-+	memcpy(frport->enode_mac, new->enode_mac, ETH_ALEN);
-+	memcpy(frport->vn_mac, new->vn_mac, ETH_ALEN);
- 	frport->time = 0;
- }
- 
-@@ -2560,16 +2564,14 @@ static int fcoe_ctlr_vn_lookup(struct fcoe_ctlr *fip, u32 port_id, u8 *mac)
- /**
-  * fcoe_ctlr_vn_claim_notify() - handle received FIP VN2VN Claim Notification
-  * @fip: The FCoE controller
-- * @new: newly-parsed remote port with frport as a template for new rdata
-+ * @new: newly-parsed FCoE rport as a template for new rdata
-  *
-  * Called with ctlr_mutex held.
-  */
- static void fcoe_ctlr_vn_claim_notify(struct fcoe_ctlr *fip,
--				      struct fc_rport_priv *new)
-+				      struct fcoe_rport *new)
- {
--	struct fcoe_rport *frport = fcoe_ctlr_rport(new);
--
--	if (frport->flags & FIP_FL_REC_OR_P2P) {
-+	if (new->flags & FIP_FL_REC_OR_P2P) {
- 		LIBFCOE_FIP_DBG(fip, "send probe req for P2P/REC\n");
- 		fcoe_ctlr_vn_send(fip, FIP_SC_VN_PROBE_REQ, fcoe_all_vn2vn, 0);
- 		return;
-@@ -2578,7 +2580,7 @@ static void fcoe_ctlr_vn_claim_notify(struct fcoe_ctlr *fip,
- 	case FIP_ST_VNMP_START:
- 	case FIP_ST_VNMP_PROBE1:
- 	case FIP_ST_VNMP_PROBE2:
--		if (new->ids.port_id == fip->port_id) {
-+		if (new->rdata.ids.port_id == fip->port_id) {
- 			LIBFCOE_FIP_DBG(fip, "vn_claim_notify: "
- 					"restart, state %d\n",
- 					fip->state);
-@@ -2587,8 +2589,8 @@ static void fcoe_ctlr_vn_claim_notify(struct fcoe_ctlr *fip,
- 		break;
- 	case FIP_ST_VNMP_CLAIM:
- 	case FIP_ST_VNMP_UP:
--		if (new->ids.port_id == fip->port_id) {
--			if (new->ids.port_name > fip->lp->wwpn) {
-+		if (new->rdata.ids.port_id == fip->port_id) {
-+			if (new->rdata.ids.port_name > fip->lp->wwpn) {
- 				LIBFCOE_FIP_DBG(fip, "vn_claim_notify: "
- 						"restart, port_id collision\n");
- 				fcoe_ctlr_vn_restart(fip);
-@@ -2600,15 +2602,16 @@ static void fcoe_ctlr_vn_claim_notify(struct fcoe_ctlr *fip,
- 			break;
- 		}
- 		LIBFCOE_FIP_DBG(fip, "vn_claim_notify: send reply to %x\n",
--				new->ids.port_id);
--		fcoe_ctlr_vn_send(fip, FIP_SC_VN_CLAIM_REP, frport->enode_mac,
--				  min((u32)frport->fcoe_len,
-+				new->rdata.ids.port_id);
-+		fcoe_ctlr_vn_send(fip, FIP_SC_VN_CLAIM_REP, new->enode_mac,
-+				  min((u32)new->fcoe_len,
- 				      fcoe_ctlr_fcoe_size(fip)));
- 		fcoe_ctlr_vn_add(fip, new);
- 		break;
- 	default:
- 		LIBFCOE_FIP_DBG(fip, "vn_claim_notify: "
--				"ignoring claim from %x\n", new->ids.port_id);
-+				"ignoring claim from %x\n",
-+				new->rdata.ids.port_id);
- 		break;
- 	}
- }
-@@ -2616,15 +2619,15 @@ static void fcoe_ctlr_vn_claim_notify(struct fcoe_ctlr *fip,
- /**
-  * fcoe_ctlr_vn_claim_resp() - handle received Claim Response
-  * @fip: The FCoE controller that received the frame
-- * @new: newly-parsed remote port with frport from the Claim Response
-+ * @new: newly-parsed FCoE rport from the Claim Response
-  *
-  * Called with ctlr_mutex held.
-  */
- static void fcoe_ctlr_vn_claim_resp(struct fcoe_ctlr *fip,
--				    struct fc_rport_priv *new)
-+				    struct fcoe_rport *new)
- {
- 	LIBFCOE_FIP_DBG(fip, "claim resp from from rport %x - state %s\n",
--			new->ids.port_id, fcoe_ctlr_state(fip->state));
-+			new->rdata.ids.port_id, fcoe_ctlr_state(fip->state));
- 	if (fip->state == FIP_ST_VNMP_UP || fip->state == FIP_ST_VNMP_CLAIM)
- 		fcoe_ctlr_vn_add(fip, new);
- }
-@@ -2632,28 +2635,28 @@ static void fcoe_ctlr_vn_claim_resp(struct fcoe_ctlr *fip,
- /**
-  * fcoe_ctlr_vn_beacon() - handle received beacon.
-  * @fip: The FCoE controller that received the frame
-- * @new: newly-parsed remote port with frport from the Beacon
-+ * @new: newly-parsed FCoE rport from the Beacon
-  *
-  * Called with ctlr_mutex held.
-  */
- static void fcoe_ctlr_vn_beacon(struct fcoe_ctlr *fip,
--				struct fc_rport_priv *new)
-+				struct fcoe_rport *new)
- {
- 	struct fc_lport *lport = fip->lp;
- 	struct fc_rport_priv *rdata;
- 	struct fcoe_rport *frport;
- 
--	frport = fcoe_ctlr_rport(new);
--	if (frport->flags & FIP_FL_REC_OR_P2P) {
-+	if (new->flags & FIP_FL_REC_OR_P2P) {
- 		LIBFCOE_FIP_DBG(fip, "p2p beacon while in vn2vn mode\n");
- 		fcoe_ctlr_vn_send(fip, FIP_SC_VN_PROBE_REQ, fcoe_all_vn2vn, 0);
- 		return;
- 	}
--	rdata = fc_rport_lookup(lport, new->ids.port_id);
-+	rdata = fc_rport_lookup(lport, new->rdata.ids.port_id);
- 	if (rdata) {
--		if (rdata->ids.node_name == new->ids.node_name &&
--		    rdata->ids.port_name == new->ids.port_name) {
-+		if (rdata->ids.node_name == new->rdata.ids.node_name &&
-+		    rdata->ids.port_name == new->rdata.ids.port_name) {
- 			frport = fcoe_ctlr_rport(rdata);
-+
- 			LIBFCOE_FIP_DBG(fip, "beacon from rport %x\n",
- 					rdata->ids.port_id);
- 			if (!frport->time && fip->state == FIP_ST_VNMP_UP) {
-@@ -2676,7 +2679,7 @@ static void fcoe_ctlr_vn_beacon(struct fcoe_ctlr *fip,
- 	 * Don't add the neighbor yet.
- 	 */
- 	LIBFCOE_FIP_DBG(fip, "beacon from new rport %x. sending claim notify\n",
--			new->ids.port_id);
-+			new->rdata.ids.port_id);
- 	if (time_after(jiffies,
- 		       fip->sol_time + msecs_to_jiffies(FIP_VN_ANN_WAIT)))
- 		fcoe_ctlr_vn_send_claim(fip);
-@@ -2762,19 +2765,19 @@ static int fcoe_ctlr_vn_recv(struct fcoe_ctlr *fip, struct sk_buff *skb)
- 	mutex_lock(&fip->ctlr_mutex);
- 	switch (sub) {
- 	case FIP_SC_VN_PROBE_REQ:
--		fcoe_ctlr_vn_probe_req(fip, &buf.rdata);
-+		fcoe_ctlr_vn_probe_req(fip, &buf);
- 		break;
- 	case FIP_SC_VN_PROBE_REP:
--		fcoe_ctlr_vn_probe_reply(fip, &buf.rdata);
-+		fcoe_ctlr_vn_probe_reply(fip, &buf);
- 		break;
- 	case FIP_SC_VN_CLAIM_NOTIFY:
--		fcoe_ctlr_vn_claim_notify(fip, &buf.rdata);
-+		fcoe_ctlr_vn_claim_notify(fip, &buf);
- 		break;
- 	case FIP_SC_VN_CLAIM_REP:
--		fcoe_ctlr_vn_claim_resp(fip, &buf.rdata);
-+		fcoe_ctlr_vn_claim_resp(fip, &buf);
- 		break;
- 	case FIP_SC_VN_BEACON:
--		fcoe_ctlr_vn_beacon(fip, &buf.rdata);
-+		fcoe_ctlr_vn_beacon(fip, &buf);
- 		break;
- 	default:
- 		LIBFCOE_FIP_DBG(fip, "vn_recv unknown subcode %d\n", sub);
-@@ -2950,13 +2953,13 @@ static void fcoe_ctlr_vlan_send(struct fcoe_ctlr *fip,
- /**
-  * fcoe_ctlr_vlan_disk_reply() - send FIP VLAN Discovery Notification.
-  * @fip: The FCoE controller
-+ * @frport: The newly-parsed FCoE rport from the Discovery Request
-  *
-  * Called with ctlr_mutex held.
-  */
- static void fcoe_ctlr_vlan_disc_reply(struct fcoe_ctlr *fip,
--				      struct fc_rport_priv *rdata)
-+				      struct fcoe_rport *frport)
- {
--	struct fcoe_rport *frport = fcoe_ctlr_rport(rdata);
- 	enum fip_vlan_subcode sub = FIP_SC_VL_NOTE;
- 
- 	if (fip->mode == FIP_MODE_VN2VN)
-@@ -2988,7 +2991,7 @@ static int fcoe_ctlr_vlan_recv(struct fcoe_ctlr *fip, struct sk_buff *skb)
- 	}
- 	mutex_lock(&fip->ctlr_mutex);
- 	if (sub == FIP_SC_VL_REQ)
--		fcoe_ctlr_vlan_disc_reply(fip, &buf.rdata);
-+		fcoe_ctlr_vlan_disc_reply(fip, &buf);
- 	mutex_unlock(&fip->ctlr_mutex);
- 
- drop:
--- 
-2.16.4
-
+Thanks,
+Avri
+>=20
+> The way it's implemented it here is that the device-reset GPIO is
+> optional and only if you specify it we'll toggle the reset. So if your
+> board design has a UFS memory that requires a reset pulse during
+> initialization you specify this, regardless of which vendor your SoC
+> comes from.
+>=20
+> Regards,
+> Bjorn
