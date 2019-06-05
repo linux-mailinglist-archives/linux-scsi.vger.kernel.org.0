@@ -2,113 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BDE36060
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 17:35:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089C436080
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 17:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728319AbfFEPfm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 11:35:42 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:42503 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726829AbfFEPfm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 11:35:42 -0400
-Received: by mail-wr1-f66.google.com with SMTP id x17so1900764wrl.9;
-        Wed, 05 Jun 2019 08:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4qxaThqFMW3T47fPge2zEn/JNJ6QZB5xTLy596ejaYE=;
-        b=sBppyJOLLnidkgAo1ilStRVEvw9MCYjjXfDV/juuX7NWYcycYlBujY+Xs1/0kJ6cak
-         Z0fxNUk6r4DUIX4LL1Grma5xAEBmtSi+AZfagFu6jAZFcTgsPkHyuKIXvwAFBmDzjkeM
-         wX6GMK0e9LmdvdRBbD+7Z9KyHrQDPusXiyy4etXFSIZmeoyU0qoHIi47n3NNfdktlT1R
-         bkAqOBGaVbUD0Mnm/mFYqatvuf/LIKpNaU8FQ+h0vX6e75ykJ+TlwWVVI6f8nr5BNTo9
-         M88i2oMaEk8pVWhSTlVfZWJYWgkizjCKfXJF7rOMcLeTv7zXB8KU3B63u8wULImyjItH
-         dWow==
+        id S1728200AbfFEPqB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 11:46:01 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40026 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726421AbfFEPqB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 11:46:01 -0400
+Received: by mail-pg1-f195.google.com with SMTP id d30so12598948pgm.7
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 08:46:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4qxaThqFMW3T47fPge2zEn/JNJ6QZB5xTLy596ejaYE=;
-        b=nV7wV5ed9rIDgJ95fk4TQxmZRrxDF6UoorAnG5SP6u6OSumTeXkABRYYwKUhVJTQEj
-         1brOykayix+1/4KKFO8hzi7uLC1XA9i5yYoax/8AvauNMdlQh7cPsC+I1Ex+nX4sC2yZ
-         OC8o+q1XMnwhLFEnpTkeoM0L6Li8rtn4XQMZmVpWsXo0C/JQK+YeuL2j9Jzt/clRtQ9Q
-         UQKAJwDPgj4WTBAQrUPrf++7svV6Cc7d7CioXFh+EfupuOV7u++JbfSO+t1ElrBKrbUy
-         lHRsEzlsVuNfXt/hSJacTbAvll8lfDBQUc9ucaQAqzpHU5ZGCXTSw7rgOU0sieM7CF7s
-         uhiQ==
-X-Gm-Message-State: APjAAAVMvN24/Mki6VxzXpx7C9xgf9vgyY9e4XiGjeBCG/uykrfzt0hQ
-        QO9at9yFSeGLoucE8cSyIsY=
-X-Google-Smtp-Source: APXvYqws+28UOXzH6NniVSdnPkLlgX2SkS0XQ+8Sgui2RNxpaTt4rhI242grVGvwEUNmyr0CvYEjwA==
-X-Received: by 2002:adf:e4d2:: with SMTP id v18mr11040759wrm.189.1559748940377;
-        Wed, 05 Jun 2019 08:35:40 -0700 (PDT)
-Received: from zhanggen-UX430UQ ([108.61.173.19])
-        by smtp.gmail.com with ESMTPSA id l8sm15977196wrw.56.2019.06.05.08.35.36
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OOkyg0plL38d7//C23OXvGetIepg8EzN+3Ep0xpklcI=;
+        b=oBeZXYSaZaLQouYBkoVm2jLLGLnXcEHe9DVrnpN8AcfEz3N6LLxo5Fxu0SkPEw9iXP
+         q+HswKdy0AUXZahHPvR2ARGQi+NbmM6YgASCa4qMOv2Y0mQcqbC7wtBBUn88psFYtC5i
+         vK/CkkKxttx745kb/tM352UWHXUwmw2cL4kIFIkkYKsHryQGkY6LxFXjU3TNqdTbehPl
+         YKJ8rp4OJNi/ET4ZV7IdYnKM5UyVCJ6o15t/bkOstdk2RGT5u+YCSYxoE+D1GzhzqmF/
+         cN+ZqsvIMfYI3DXZ68ZigO38lbaFqlZzbYsTiJLTvdnqSS65+whH5tHgRIKYuojQRMcB
+         Bbfg==
+X-Gm-Message-State: APjAAAXqC4UtH+KydGjv0Gk0beQ3mXeLfVXNBu6VO/0rsqEZqx5AzBaK
+        x5rmsf7mHGQy5CEiPqd3dyM=
+X-Google-Smtp-Source: APXvYqzZi4cV8Nzjm+AZO4TqucsjXwvZzrAoXBLu4Z14Nk/JLb3tjq0wAcbwoHKMYok18N2dgSRQcg==
+X-Received: by 2002:a17:90a:1706:: with SMTP id z6mr24082432pjd.108.1559749560110;
+        Wed, 05 Jun 2019 08:46:00 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id 63sm12206764pfv.149.2019.06.05.08.45.59
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 08:35:39 -0700 (PDT)
-Date:   Wed, 5 Jun 2019 23:35:32 +0800
-From:   Gen Zhang <blackgod016574@gmail.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     dgilbert@interlog.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sg: fix a double-fetch bug in sg_write()
-Message-ID: <20190605153532.GA4051@zhanggen-UX430UQ>
-References: <20190531012704.GA4541@zhanggen-UX430UQ>
- <38bbd54f-d85b-e529-36ad-5c1809bb435f@suse.cz>
+        Wed, 05 Jun 2019 08:45:59 -0700 (PDT)
+Subject: Re: [PATCH V2 1/3] scsi: lib/sg_pool.c: clear 'first_chunk' in case
+ of no pre-allocation
+To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+References: <20190605010623.12325-1-ming.lei@redhat.com>
+ <20190605010623.12325-2-ming.lei@redhat.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <f099b22a-23e8-abe6-1526-6ceed2a4ebde@acm.org>
+Date:   Wed, 5 Jun 2019 08:45:58 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <38bbd54f-d85b-e529-36ad-5c1809bb435f@suse.cz>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190605010623.12325-2-ming.lei@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 08:41:11AM +0200, Jiri Slaby wrote:
-> On 31. 05. 19, 3:27, Gen Zhang wrote:
-> > In sg_write(), the opcode of the command is fetched the first time from 
-> > the userspace by __get_user(). Then the whole command, the opcode 
-> > included, is fetched again from userspace by __copy_from_user(). 
-> > However, a malicious user can change the opcode between the two fetches.
-> > This can cause inconsistent data and potential errors as cmnd is used in
-> > the following codes.
-> > 
-> > Thus we should check opcode between the two fetches to prevent this.
-> > 
-> > Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
-> > ---
-> > diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-> > index d3f1531..a2971b8 100644
-> > --- a/drivers/scsi/sg.c
-> > +++ b/drivers/scsi/sg.c
-> > @@ -694,6 +694,8 @@ sg_write(struct file *filp, const char __user *buf, size_t count, loff_t * ppos)
-> >  	hp->flags = input_size;	/* structure abuse ... */
-> >  	hp->pack_id = old_hdr.pack_id;
-> >  	hp->usr_ptr = NULL;
-> > +	if (opcode != cmnd[0])
-> > +		return -EINVAL;
-> >  	if (__copy_from_user(cmnd, buf, cmd_size))
-> >  		return -EFAULT;
+On 6/4/19 6:06 PM, Ming Lei wrote:
+> If user doesn't ask to pre-allocate by passing zero 'nents_first_chunk' to
+> sg_alloc_table_chained, we need to make sure that 'first_chunk' is cleared.
+> Otherwise, __sg_alloc_table() still may think that the 1st SGL should
+> be from the pre-allocation.
 > 
-> You are sending the same patches like a broken machine. Please STOP this
-> and give people some time to actually review your patches! (Don't expect
-> replies in days.)
+> Fixes the issue by clearing 'first_chunk' in sg_alloc_table_chained() if
+> 'nents_first_chunk' is zero.
 > 
-Thanks for your reply. I resubmitted this one after 8-day-no-reply. I 
-don't judge whether this is a short time period or not. I politely hope
-that you can reply more kindly.
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Cc: Ewan D. Milne <emilne@redhat.com>
+> Cc: Hannes Reinecke <hare@suse.com>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Fixes: c3288dd8c232 ("scsi: core: avoid pre-allocating big SGL for data")
 
-I am just a PhD candidate. All I did is submitting patches, discussing 
-with maintainers in accordance with linux community rules for academic papers.
+Shouldn't the "Fixes:" tag be left out from this patch? I don't think 
+that this patch by itself fixes anything. Isn't this patch something 
+that is necessary to make patch 2/3 in this series work? How about 
+indicating that by mentioning it in the commit message?
 
-I guess that you might be busy person and hope that submitting patches 
-didn't bother you.
-
-Thanks
-Gen
-> I already commented on this apparently broken one earlier...
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>   lib/sg_pool.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> thanks,
-> -- 
-> js
-> suse labs
+> diff --git a/lib/sg_pool.c b/lib/sg_pool.c
+> index 47eecbe094d8..e042a1722615 100644
+> --- a/lib/sg_pool.c
+> +++ b/lib/sg_pool.c
+> @@ -122,7 +122,7 @@ int sg_alloc_table_chained(struct sg_table *table, int nents,
+>   	}
+>   
+>   	/* User supposes that the 1st SGL includes real entry */
+> -	if (nents_first_chunk == 1) {
+> +	if (nents_first_chunk <= 1) {
+>   		first_chunk = NULL;
+>   		nents_first_chunk = 0;
+>   	}
+
+How about also updating the kernel-doc header above 
+sg_alloc_table_chained() such that it is made clear that @first_chunk is 
+ignored if nents_first_chunk <= 1 ? Otherwise this patch looks fine to me.
+
+Bart.
+
