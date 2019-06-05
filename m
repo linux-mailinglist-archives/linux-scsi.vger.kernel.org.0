@@ -2,161 +2,165 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFF135650
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 07:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A15673565C
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 07:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726427AbfFEFrL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 01:47:11 -0400
-Received: from mx2.suse.de ([195.135.220.15]:55454 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725268AbfFEFrL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 5 Jun 2019 01:47:11 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E83B6AE16;
-        Wed,  5 Jun 2019 05:47:09 +0000 (UTC)
-Subject: Re: Compiler warnings in FCoE code
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Johannes Thumshirn <jthumshirn@suse.de>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-References: <CAHk-=whpO2zRWsoYMOQregiqnNGq11Ntog+oygcoU46cXb+mbQ@mail.gmail.com>
- <CAHk-=wjYb1ThJUK76sthxmqfGU_w+_ux5j1Z+ePz1gGWwceNiA@mail.gmail.com>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <a2167346-27e7-a246-b217-510cbb975a65@suse.de>
-Date:   Wed, 5 Jun 2019 07:47:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726538AbfFEFtJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 01:49:09 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:35462 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbfFEFtJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 01:49:09 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 190A227FE0;
+        Wed,  5 Jun 2019 01:49:05 -0400 (EDT)
+Date:   Wed, 5 Jun 2019 15:49:01 +1000 (AEST)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Ming Lei <ming.lei@redhat.com>
+cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH V2 3/3] scsi: esp: make it working on SG_CHAIN
+In-Reply-To: <20190605010623.12325-4-ming.lei@redhat.com>
+Message-ID: <alpine.LNX.2.21.1906051544580.9@nippy.intranet>
+References: <20190605010623.12325-1-ming.lei@redhat.com> <20190605010623.12325-4-ming.lei@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAHk-=wjYb1ThJUK76sthxmqfGU_w+_ux5j1Z+ePz1gGWwceNiA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/4/19 7:16 PM, Linus Torvalds wrote:
-> On Mon, Jun 3, 2019 at 2:20 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> In fact, what people *are* passing that thing is this:
->>
->>         struct {
->>                 struct fc_rport_priv rdata;
->>                 struct fcoe_rport frport;
->>         } buf;
-> 
-> It is in fact worse than that.
-> 
-> Yes, _some_ people pass that combined struct.
-> 
-> But a lot of people pass around a fc_rport_priv that has just been
-> allocated with
-> 
->         rdata = kzalloc(sizeof(*rdata) + lport->rport_priv_size, GFP_KERNEL);
-> 
-> in fc_rport_create().
-> 
-> They end up being somewhat equivalent as long as the alignments of
-> those sub-structures match, but it does mean that the type is really a
-> bit fluid, and it ends up leaking outside of that fcoe_ctlr.c file
-> into various other helper functions like that allocation function.
-> 
-> It really looks fairly nasty to change/fix. The code really is passing
-> around a 'struct fc_rport_priv' pointer, but that that 'fc_rport_priv'
-> type is then associated with the added 'struct fcoe_rport' at the end,
-> in a way that is *not* visible to the type system.
-> 
-> So no, it doesn't work to create a new type like
-> 
->  struct fc_rport_combined_data {
-> 
-> because it ends up affecting almost *everything* that works with that
-> 'rdata' thing.
-> 
-> I get the feeling that 'struct fc_rport_priv' should just be extended
-> to have 'struct fcoe_rport' at the end, but maybe that's not always
-> true? It looks like that is only used for FIP_MODE_VN2VN, adn then we
-> have some other mode that doesn't have that allocation at all?
-> 
-> So the code seems to be a mix of dynamic typing ("no fcoe_rport at the
-> end") and static typing that just assumes that the allocation always
-> has the fcoe_rport afterwards.
-> 
-> Would it be ok to make 'struct fc_rport_priv' just always contain that
-> fcoe_rport? Getting rid of the "lport->rport_priv_size" thing
-> entirely, and just have the type set to the bigger case
-> unconditionally?
-> 
-(Not sure if you've seen my patch, but:)
+On Wed, 5 Jun 2019, Ming Lei wrote:
 
-Using that approach would break the attempted layering (fcoe is meant to
-be a sub-class of libfc, and as such non of the fcoe structures should
-be visible in libfc).
-However, I had been thinking of reverting the model with the combined
-structures into the 'normal' embedded usage, ie embed fc_rport_priv as
-the first element in fcoe_rport. That way we can safely reference switch
-back and forth between both types with an outcast, and we should be
-alignment safe.
+> The driver expects that SCSI SGL is a simply array of SG, and itereate
+> the SGL via integer index. This way is obviously wrong, because of
+> SG_CHAIN.
+> 
+> Fixes it by using sgl helper.
+> 
+> V2:
+> 	- as suggested by Finn Thain, introduce .prv_sg for getting previous
+> 	scatterlist pointer
+> 
 
-Will be drafting up a patch.
+Thanks. I'd forgotten about the consequences for SAVE/RESTORE POINTERS 
+until I saw your patch.
 
-Cheers,
+I can't test the change to the IGNORE WIDE RESIDUE message handling but I 
+did confirm that the patch series works in QEMU/m68k.
 
-Hannes
+Reviewed-by: Finn Thain <fthain@telegraphics.com.au>
+
 -- 
-Dr. Hannes Reinecke		   Teamlead Storage & Networking
-hare@suse.de			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Cc: Ewan D. Milne <emilne@redhat.com>
+> Cc: Hannes Reinecke <hare@suse.com>
+> Cc: Finn Thain <fthain@telegraphics.com.au>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>  drivers/scsi/esp_scsi.c | 20 +++++++++++++-------
+>  drivers/scsi/esp_scsi.h |  2 ++
+>  2 files changed, 15 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/scsi/esp_scsi.c b/drivers/scsi/esp_scsi.c
+> index 76e7ca864d6a..bb88995a12c7 100644
+> --- a/drivers/scsi/esp_scsi.c
+> +++ b/drivers/scsi/esp_scsi.c
+> @@ -371,6 +371,7 @@ static void esp_map_dma(struct esp *esp, struct scsi_cmnd *cmd)
+>  	struct esp_cmd_priv *spriv = ESP_CMD_PRIV(cmd);
+>  	struct scatterlist *sg = scsi_sglist(cmd);
+>  	int total = 0, i;
+> +	struct scatterlist *s;
+>  
+>  	if (cmd->sc_data_direction == DMA_NONE)
+>  		return;
+> @@ -381,16 +382,18 @@ static void esp_map_dma(struct esp *esp, struct scsi_cmnd *cmd)
+>  		 * a dma address, so perform an identity mapping.
+>  		 */
+>  		spriv->num_sg = scsi_sg_count(cmd);
+> -		for (i = 0; i < spriv->num_sg; i++) {
+> -			sg[i].dma_address = (uintptr_t)sg_virt(&sg[i]);
+> -			total += sg_dma_len(&sg[i]);
+> +
+> +		scsi_for_each_sg(cmd, s, spriv->num_sg, i) {
+> +			s->dma_address = (uintptr_t)sg_virt(s);
+> +			total += sg_dma_len(s);
+>  		}
+>  	} else {
+>  		spriv->num_sg = scsi_dma_map(cmd);
+> -		for (i = 0; i < spriv->num_sg; i++)
+> -			total += sg_dma_len(&sg[i]);
+> +		scsi_for_each_sg(cmd, s, spriv->num_sg, i)
+> +			total += sg_dma_len(s);
+>  	}
+>  	spriv->cur_residue = sg_dma_len(sg);
+> +	spriv->prv_sg = NULL;
+>  	spriv->cur_sg = sg;
+>  	spriv->tot_residue = total;
+>  }
+> @@ -444,7 +447,8 @@ static void esp_advance_dma(struct esp *esp, struct esp_cmd_entry *ent,
+>  		p->tot_residue = 0;
+>  	}
+>  	if (!p->cur_residue && p->tot_residue) {
+> -		p->cur_sg++;
+> +		p->prv_sg = p->cur_sg;
+> +		p->cur_sg = sg_next(p->cur_sg);
+>  		p->cur_residue = sg_dma_len(p->cur_sg);
+>  	}
+>  }
+> @@ -465,6 +469,7 @@ static void esp_save_pointers(struct esp *esp, struct esp_cmd_entry *ent)
+>  		return;
+>  	}
+>  	ent->saved_cur_residue = spriv->cur_residue;
+> +	ent->saved_prv_sg = spriv->prv_sg;
+>  	ent->saved_cur_sg = spriv->cur_sg;
+>  	ent->saved_tot_residue = spriv->tot_residue;
+>  }
+> @@ -479,6 +484,7 @@ static void esp_restore_pointers(struct esp *esp, struct esp_cmd_entry *ent)
+>  		return;
+>  	}
+>  	spriv->cur_residue = ent->saved_cur_residue;
+> +	spriv->prv_sg = ent->saved_prv_sg;
+>  	spriv->cur_sg = ent->saved_cur_sg;
+>  	spriv->tot_residue = ent->saved_tot_residue;
+>  }
+> @@ -1647,7 +1653,7 @@ static int esp_msgin_process(struct esp *esp)
+>  		spriv = ESP_CMD_PRIV(ent->cmd);
+>  
+>  		if (spriv->cur_residue == sg_dma_len(spriv->cur_sg)) {
+> -			spriv->cur_sg--;
+> +			spriv->cur_sg = spriv->prv_sg;
+>  			spriv->cur_residue = 1;
+>  		} else
+>  			spriv->cur_residue++;
+> diff --git a/drivers/scsi/esp_scsi.h b/drivers/scsi/esp_scsi.h
+> index aa87a6b72dcc..91b32f2a1a1b 100644
+> --- a/drivers/scsi/esp_scsi.h
+> +++ b/drivers/scsi/esp_scsi.h
+> @@ -251,6 +251,7 @@
+>  struct esp_cmd_priv {
+>  	int			num_sg;
+>  	int			cur_residue;
+> +	struct scatterlist	*prv_sg;
+>  	struct scatterlist	*cur_sg;
+>  	int			tot_residue;
+>  };
+> @@ -273,6 +274,7 @@ struct esp_cmd_entry {
+>  	struct scsi_cmnd	*cmd;
+>  
+>  	unsigned int		saved_cur_residue;
+> +	struct scatterlist	*saved_prv_sg;
+>  	struct scatterlist	*saved_cur_sg;
+>  	unsigned int		saved_tot_residue;
+>  
+> 
