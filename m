@@ -2,131 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF6036046
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 17:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BDE36060
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 17:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728217AbfFEP1S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 11:27:18 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39147 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728157AbfFEP1R (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 11:27:17 -0400
-Received: by mail-pf1-f194.google.com with SMTP id j2so15032728pfe.6
-        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 08:27:17 -0700 (PDT)
+        id S1728319AbfFEPfm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 11:35:42 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:42503 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbfFEPfm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 11:35:42 -0400
+Received: by mail-wr1-f66.google.com with SMTP id x17so1900764wrl.9;
+        Wed, 05 Jun 2019 08:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4qxaThqFMW3T47fPge2zEn/JNJ6QZB5xTLy596ejaYE=;
+        b=sBppyJOLLnidkgAo1ilStRVEvw9MCYjjXfDV/juuX7NWYcycYlBujY+Xs1/0kJ6cak
+         Z0fxNUk6r4DUIX4LL1Grma5xAEBmtSi+AZfagFu6jAZFcTgsPkHyuKIXvwAFBmDzjkeM
+         wX6GMK0e9LmdvdRBbD+7Z9KyHrQDPusXiyy4etXFSIZmeoyU0qoHIi47n3NNfdktlT1R
+         bkAqOBGaVbUD0Mnm/mFYqatvuf/LIKpNaU8FQ+h0vX6e75ykJ+TlwWVVI6f8nr5BNTo9
+         M88i2oMaEk8pVWhSTlVfZWJYWgkizjCKfXJF7rOMcLeTv7zXB8KU3B63u8wULImyjItH
+         dWow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zir2taRi1fNzW6S3iQbJK7wWtLDWBptDJMni0oEtP/M=;
-        b=ch6kn9QXVAKi9kW2jPh1ijEEHUe//b2VsYINe1AzGlRz+rNYCqmRvR+EAteN3/gl1f
-         IFVblEknarxMVP+xZxyOUbsxmui8h8v0/YoN5Ut8yS9f2UM9Hgusr4z4kP179IwVaWGR
-         JN7l0OP8gbYPaPyMnAO250IRhiTAQTfOI686AguSWGbjkzVXPjNbrQ3oHs1PrvZa7+v+
-         NOvSvcRV10DYPaokSSJPmcM7MuBm18pCtMnY8XsheNQSLDQAoSKnBryb8FTWj8fpHTIW
-         dGO+QLw3JDOyoQ7Uv7RwejZ4FjEzqNd2iEBY9FmQEZDMq3sM/5obNWPvEgxbnMLVVBC4
-         EyPw==
-X-Gm-Message-State: APjAAAX35PGRkO6S4z/5rTvAodugpYIFtm49XRNb5RrhIpf3mYsTsw5d
-        mhiuMIhV9sfk48mCs81r0g0YVUCw
-X-Google-Smtp-Source: APXvYqz6AXMv6by8snqJLu4dyusylJM1w/QbWBp6XByOaFVHolyXu/PpDOnu6X7t0IdevZslFLrjBw==
-X-Received: by 2002:a63:4c54:: with SMTP id m20mr5209567pgl.316.1559748437063;
-        Wed, 05 Jun 2019 08:27:17 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id h2sm10673948pgs.17.2019.06.05.08.27.16
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4qxaThqFMW3T47fPge2zEn/JNJ6QZB5xTLy596ejaYE=;
+        b=nV7wV5ed9rIDgJ95fk4TQxmZRrxDF6UoorAnG5SP6u6OSumTeXkABRYYwKUhVJTQEj
+         1brOykayix+1/4KKFO8hzi7uLC1XA9i5yYoax/8AvauNMdlQh7cPsC+I1Ex+nX4sC2yZ
+         OC8o+q1XMnwhLFEnpTkeoM0L6Li8rtn4XQMZmVpWsXo0C/JQK+YeuL2j9Jzt/clRtQ9Q
+         UQKAJwDPgj4WTBAQrUPrf++7svV6Cc7d7CioXFh+EfupuOV7u++JbfSO+t1ElrBKrbUy
+         lHRsEzlsVuNfXt/hSJacTbAvll8lfDBQUc9ucaQAqzpHU5ZGCXTSw7rgOU0sieM7CF7s
+         uhiQ==
+X-Gm-Message-State: APjAAAVMvN24/Mki6VxzXpx7C9xgf9vgyY9e4XiGjeBCG/uykrfzt0hQ
+        QO9at9yFSeGLoucE8cSyIsY=
+X-Google-Smtp-Source: APXvYqws+28UOXzH6NniVSdnPkLlgX2SkS0XQ+8Sgui2RNxpaTt4rhI242grVGvwEUNmyr0CvYEjwA==
+X-Received: by 2002:adf:e4d2:: with SMTP id v18mr11040759wrm.189.1559748940377;
+        Wed, 05 Jun 2019 08:35:40 -0700 (PDT)
+Received: from zhanggen-UX430UQ ([108.61.173.19])
+        by smtp.gmail.com with ESMTPSA id l8sm15977196wrw.56.2019.06.05.08.35.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 08:27:16 -0700 (PDT)
-Subject: Re: [PATCH 1/4] libfc: kill lld_event_callback
-To:     Hannes Reinecke <hare@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-References: <20190605073942.125577-1-hare@suse.de>
- <20190605073942.125577-2-hare@suse.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <7d43e9fc-fcde-4a8f-96b8-ed1a81c9c28a@acm.org>
-Date:   Wed, 5 Jun 2019 08:27:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Wed, 05 Jun 2019 08:35:39 -0700 (PDT)
+Date:   Wed, 5 Jun 2019 23:35:32 +0800
+From:   Gen Zhang <blackgod016574@gmail.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sg: fix a double-fetch bug in sg_write()
+Message-ID: <20190605153532.GA4051@zhanggen-UX430UQ>
+References: <20190531012704.GA4541@zhanggen-UX430UQ>
+ <38bbd54f-d85b-e529-36ad-5c1809bb435f@suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <20190605073942.125577-2-hare@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38bbd54f-d85b-e529-36ad-5c1809bb435f@suse.cz>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/5/19 12:39 AM, Hannes Reinecke wrote:
-> It will only ever be set so another callback, and the pointer to
-> this callback is available on all locations. So kill it.
+On Wed, Jun 05, 2019 at 08:41:11AM +0200, Jiri Slaby wrote:
+> On 31. 05. 19, 3:27, Gen Zhang wrote:
+> > In sg_write(), the opcode of the command is fetched the first time from 
+> > the userspace by __get_user(). Then the whole command, the opcode 
+> > included, is fetched again from userspace by __copy_from_user(). 
+> > However, a malicious user can change the opcode between the two fetches.
+> > This can cause inconsistent data and potential errors as cmnd is used in
+> > the following codes.
+> > 
+> > Thus we should check opcode between the two fetches to prevent this.
+> > 
+> > Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+> > ---
+> > diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+> > index d3f1531..a2971b8 100644
+> > --- a/drivers/scsi/sg.c
+> > +++ b/drivers/scsi/sg.c
+> > @@ -694,6 +694,8 @@ sg_write(struct file *filp, const char __user *buf, size_t count, loff_t * ppos)
+> >  	hp->flags = input_size;	/* structure abuse ... */
+> >  	hp->pack_id = old_hdr.pack_id;
+> >  	hp->usr_ptr = NULL;
+> > +	if (opcode != cmnd[0])
+> > +		return -EINVAL;
+> >  	if (__copy_from_user(cmnd, buf, cmd_size))
+> >  		return -EFAULT;
 > 
-> Signed-off-by: Hannes Reinecke <hare@suse.com>
-> ---
->   drivers/scsi/libfc/fc_rport.c | 13 ++++++-------
->   include/scsi/libfc.h          |  3 ---
->   2 files changed, 6 insertions(+), 10 deletions(-)
+> You are sending the same patches like a broken machine. Please STOP this
+> and give people some time to actually review your patches! (Don't expect
+> replies in days.)
 > 
-> diff --git a/drivers/scsi/libfc/fc_rport.c b/drivers/scsi/libfc/fc_rport.c
-> index 0da34c7a6866..255e6568be66 100644
-> --- a/drivers/scsi/libfc/fc_rport.c
-> +++ b/drivers/scsi/libfc/fc_rport.c
-> @@ -155,10 +155,9 @@ struct fc_rport_priv *fc_rport_create(struct fc_lport *lport, u32 port_id)
->   	rdata->maxframe_size = FC_MIN_MAX_PAYLOAD;
->   	INIT_DELAYED_WORK(&rdata->retry_work, fc_rport_timeout);
->   	INIT_WORK(&rdata->event_work, fc_rport_work);
-> -	if (port_id != FC_FID_DIR_SERV) {
-> -		rdata->lld_event_callback = lport->tt.rport_event_callback;
-> +	if (port_id != FC_FID_DIR_SERV)
->   		list_add_rcu(&rdata->peers, &lport->disc.rports);
-> -	}
-> +
->   	return rdata;
->   }
->   EXPORT_SYMBOL(fc_rport_create);
-> @@ -308,9 +307,9 @@ static void fc_rport_work(struct work_struct *work)
->   			FC_RPORT_DBG(rdata, "callback ev %d\n", event);
->   			rport_ops->event_callback(lport, rdata, event);
->   		}
-> -		if (rdata->lld_event_callback) {
-> +		if (lport->tt.rport_event_callback) {
->   			FC_RPORT_DBG(rdata, "lld callback ev %d\n", event);
-> -			rdata->lld_event_callback(lport, rdata, event);
-> +			lport->tt.rport_event_callback(lport, rdata, event);
->   		}
->   		kref_put(&rdata->kref, fc_rport_destroy);
->   		break;
-> @@ -334,9 +333,9 @@ static void fc_rport_work(struct work_struct *work)
->   			FC_RPORT_DBG(rdata, "callback ev %d\n", event);
->   			rport_ops->event_callback(lport, rdata, event);
->   		}
-> -		if (rdata->lld_event_callback) {
-> +		if (lport->tt.rport_event_callback) {
->   			FC_RPORT_DBG(rdata, "lld callback ev %d\n", event);
-> -			rdata->lld_event_callback(lport, rdata, event);
-> +			lport->tt.rport_event_callback(lport, rdata, event);
->   		}
->   		if (cancel_delayed_work_sync(&rdata->retry_work))
->   			kref_put(&rdata->kref, fc_rport_destroy);
-> diff --git a/include/scsi/libfc.h b/include/scsi/libfc.h
-> index 76cb9192319a..2c3c5b9e7cc6 100644
-> --- a/include/scsi/libfc.h
-> +++ b/include/scsi/libfc.h
-> @@ -212,9 +212,6 @@ struct fc_rport_priv {
->   	struct rcu_head		    rcu;
->   	u16			    sp_features;
->   	u8			    spp_type;
-> -	void			    (*lld_event_callback)(struct fc_lport *,
-> -						      struct fc_rport_priv *,
-> -						      enum fc_rport_event);
->   };
+Thanks for your reply. I resubmitted this one after 8-day-no-reply. I 
+don't judge whether this is a short time period or not. I politely hope
+that you can reply more kindly.
 
-Before this patch lport->tt.rport_event_callback was not called for 
-ports of type FC_FID_DIR_SERV. This patch causes that callback function 
-also to be called for ports of type FC_FID_DIR_SERV. Is that change 
-acceptable? If so, please mention this in the commit message.
+I am just a PhD candidate. All I did is submitting patches, discussing 
+with maintainers in accordance with linux community rules for academic papers.
 
-Thanks,
+I guess that you might be busy person and hope that submitting patches 
+didn't bother you.
 
-Bart.
+Thanks
+Gen
+> I already commented on this apparently broken one earlier...
+> 
+> thanks,
+> -- 
+> js
+> suse labs
