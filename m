@@ -2,57 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0191A35E56
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 15:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7B735EC6
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 16:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728182AbfFENuX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 09:50:23 -0400
-Received: from 313717.com ([176.126.78.19]:46069 "EHLO treehousetv.com"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728052AbfFENuX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 5 Jun 2019 09:50:23 -0400
-X-Greylist: delayed 3192 seconds by postgrey-1.27 at vger.kernel.org; Wed, 05 Jun 2019 09:50:17 EDT
-To:     linux-scsi@vger.kernel.org
-Subject: custom printed logo
-Message-ID: <81c01e3f0711cac97b0644aa9f3084b6@vecteezy.com>
-Date:   Wed, 05 Jun 2019 14:29:40 +0200
-From:   "Stacy" <schssereutz@aol.jp>
-Reply-To: halsyid@sina.com
+        id S1728393AbfFEOLJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 10:11:09 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:57394 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726442AbfFEOLJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 5 Jun 2019 10:11:09 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 8401B7DB968CE8490F8F;
+        Wed,  5 Jun 2019 22:11:04 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Wed, 5 Jun 2019
+ 22:10:58 +0800
+Subject: Re: [PATCH 1/9] blk-mq: allow hw queues to share hostwide tags
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+References: <20190531022801.10003-1-ming.lei@redhat.com>
+ <20190531022801.10003-2-ming.lei@redhat.com>
+CC:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        "Sathya Prakash" <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <0f1773af-170a-a6b5-54ce-274dacb2b63a@huawei.com>
+Date:   Wed, 5 Jun 2019 15:10:51 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190531022801.10003-2-ming.lei@redhat.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+On 31/05/2019 03:27, Ming Lei wrote:
+> index 32b8ad3d341b..49d73d979cb3 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -2433,6 +2433,11 @@ static bool __blk_mq_alloc_rq_map(struct blk_mq_tag_set *set, int hctx_idx)
+>  {
+>  	int ret = 0;
+>
 
-I wanted to follow up from last week. Did you receive the email I sent you?
+Hi Ming,
 
-Our company manufactures USB Flash Drives, printed with your logo.  They
-make the perfect marketing tool for your business or organization.
+> +	if ((set->flags & BLK_MQ_F_HOST_TAGS) && hctx_idx) {
+> +		set->tags[hctx_idx] = set->tags[0];
 
-We offer low minimum quantities, and all memory sizes. Over 150 Stock
-Models as well as 100 % custom shaped USB drives.  Memory sizes include up
-to 128GB !
+Here we set all tags same as that of hctx index 0.
 
-We can pre-load your media files, images, presentations and files onto the
-drives for you.  These are ideal handouts for trade shows, branding,
-corporate gifts and employees.
-Our USB Pricing is at an ALL TIME LOW - now is the time to get your USB
-drives.
+> +		return true;
 
-Let us send you a quote!   We will EARN your business!
-* Please reply back and let me know what quantity and memory size
-you need for a Fast Quote! *
 
-Are you a school or nonprofit?  Please let us know for even further
-discounts.
+As such, I think that the error handling in __blk_mq_alloc_rq_maps() is 
+made a little fragile:
 
-Thanks!
+__blk_mq_alloc_rq_maps(struct blk_mq_tag_set *set)
+{
+	int i;
 
-Stacy King
-National Account Rep
-Promo / Branded Flash Drives
+	for (i = 0; i < set->nr_hw_queues; i++)
+		if (!__blk_mq_alloc_rq_map(set, i))
+			goto out_unwind;
+
+	return 0;
+
+out_unwind:
+	while (--i >= 0)
+		blk_mq_free_rq_map(set->tags[i]);
+
+	return -ENOMEM;
+}
+
+If __blk_mq_alloc_rq_map(, i > 1) fails for when BLK_MQ_F_HOST_TAGS FLAG 
+is set (even though today it can't), then we would try to free 
+set->tags[0] multiple times.
+
+> +	}
+> +
+>  	set->tags[hctx_idx] = blk_mq_alloc_rq_map(set, hctx_idx,
+>  					set->queue_depth, set->reserved_tags);
+
+Thanks,
+John
+
+>  	if (!set->tags[hctx_idx])
+> @@ -2451,6 +2456,9 @@ static bool __blk_mq_alloc_rq_map(struct blk_mq_tag_set *set, int hctx_idx)
+>  static void blk_mq_free_map_and_requests(struct blk_mq_tag_set *set,
+>  					
+
 
