@@ -2,74 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2211735522
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 04:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A2035534
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 04:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbfFECOL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jun 2019 22:14:11 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:50106 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbfFECOK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 22:14:10 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x552DpVl036365;
-        Wed, 5 Jun 2019 02:13:59 GMT
+        id S1726490AbfFECYJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jun 2019 22:24:09 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:55768 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726354AbfFECYI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 22:24:08 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x552DpeE048287;
+        Wed, 5 Jun 2019 02:21:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2018-07-02;
- bh=vGYATL7lKerrKTUV1eWjFKUy4cU2Egt2DpNjUAywJhM=;
- b=QwBBcWdP74ksA8zuUHuA1MuDeYbxUm8bsHvsyQj8wdYmWRIP31h22KysOCYs4n+xGLi/
- CCA8LovIh3M282IQQO1ctKKVJNYbVHDDx3KECIwBzMUJHnhDiDMDsCOLrZxTmIz40Zz6
- uGUA9zJfEnLaeC4Wrnzgsd+Fy6nWV9VGSUT/bHbnQyikHhEYPVwuNo2XpDVJ/XEurYTT
- KBAQyTY9E7+dBuQ4VjMeQ/4o2fMk+sld1pFLTlRQGOuRMgIW/6Bn7gFqtbAdw8/xD3dL
- ynW83VgyT1MdhS5iPSW/f2ikVu3oOcxs1/S4snzaMEDGB+8g5jY97+XgBNPxMPjFL1Wm SQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2suj0qg7gs-1
+ bh=7u0fqKpO3Y/6UfFmgymXRbjPTDuNK68XzOqEUVtqxRY=;
+ b=B+vfXSTUbVuGJ8aREp/JPBa5s9UsLB1ltByTR8TzKVfhUtWWCWCZXJYkjEOIvyB1/KlN
+ o/ELxy8YMcvnMtT16octI+gbW4HxicWdeoY8taSsznQDf8srO1qWLVK9T4J1VrWjBhpm
+ Z7WoUYZ3Oxhni72ZbkQxgWwWWQiTyls94zzBciLHt3sMB25pTUax+jRJJqBoI9fXXe/j
+ j/TdIxpn1y4h4yCkNjJ5ozTXeGpzJUJC4Q2cUKYZuwAKHTFnGQdJH6KSCS4AdK1GJSHA
+ lSQ8UAmy+fyTNnZPEGsFzYhOMRuV6EoAAm5RKM3LrwfkAWnWoi+tF4iMus55ofzWIXVV lA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2130.oracle.com with ESMTP id 2suevdghw9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Jun 2019 02:13:59 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x552AwW9035898;
-        Wed, 5 Jun 2019 02:11:59 GMT
+        Wed, 05 Jun 2019 02:21:53 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x552KVx5117073;
+        Wed, 5 Jun 2019 02:21:52 GMT
 Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 2swngknt4g-1
+        by userp3020.oracle.com with ESMTP id 2swnh9wt7k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Jun 2019 02:11:59 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x552Bv6e013090;
-        Wed, 5 Jun 2019 02:11:57 GMT
+        Wed, 05 Jun 2019 02:21:52 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x552LocA018967;
+        Wed, 5 Jun 2019 02:21:50 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 04 Jun 2019 19:11:57 -0700
-To:     Avri Altman <avri.altman@wdc.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evan Green <evgreen@chromium.org>,
-        Bean Huo <beanhuo@micron.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avi Shchislowski <avi.shchislowski@wdc.com>,
-        Alex Lemberg <alex.lemberg@wdc.com>
-Subject: Re: [PATCH] scsi: ufs: Check that space was properly alloced in copy_query_response
+        with ESMTP ; Tue, 04 Jun 2019 19:21:50 -0700
+To:     John Garry <john.garry@huawei.com>
+Cc:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>,
+        <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 0/6] hisi_sas: Some misc patches
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <1558427062-5084-1-git-send-email-avri.altman@wdc.com>
-Date:   Tue, 04 Jun 2019 22:11:54 -0400
-In-Reply-To: <1558427062-5084-1-git-send-email-avri.altman@wdc.com> (Avri
-        Altman's message of "Tue, 21 May 2019 11:24:22 +0300")
-Message-ID: <yq14l54srv9.fsf@oracle.com>
+References: <1559123927-160502-1-git-send-email-john.garry@huawei.com>
+Date:   Tue, 04 Jun 2019 22:21:48 -0400
+In-Reply-To: <1559123927-160502-1-git-send-email-john.garry@huawei.com> (John
+        Garry's message of "Wed, 29 May 2019 17:58:41 +0800")
+Message-ID: <yq1zhmwrcub.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9278 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=827
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906050011
+ engine=8.0.1-1810050000 definitions=main-1906050012
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9278 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
  suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=879 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
  definitions=main-1906050012
 Sender: linux-scsi-owner@vger.kernel.org
@@ -78,16 +72,13 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Avri,
+John,
 
-> struct ufs_dev_cmd is the main container that supports device management
-> commands. In the case of a read descriptor request, we assume that the
-> proper space was allocated in dev_cmd to hold the returning descriptor.
->
-> This is no longer true, as there are flows that doesn't use dev_cmd
-> for device management requests, and was wrong in the first place.
+> This patchset introduces some misc patches for the driver. Nothing
+> particularly stands out, maybe apart from a patch to delete a PHY's
+> timer when necessary.
 
-Applied to 5.2/scsi-fixes, thanks!
+Applied to 5.3/scsi-queue, thanks.
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
