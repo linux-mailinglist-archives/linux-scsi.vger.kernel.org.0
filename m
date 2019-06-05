@@ -2,90 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DC935558
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 04:39:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB0A3559B
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 05:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726474AbfFECjq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 4 Jun 2019 22:39:46 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:41448 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbfFECjq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 22:39:46 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x552XZTP048759;
-        Wed, 5 Jun 2019 02:39:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=z/la0Iaw8QvvEtAdeZ/2XourCSKmrS+ERTV018zk7cI=;
- b=l/5PCHpNUqUOkOl1KntQONU3PjFaETgfVfGLnBhy2cbt8wcY4T7Kl0nXn3uAorPiiSUO
- E0vga1hS/A1bmyi7LS3gePe/QahKsvyCnZAKp6BZbWejVqyiRm5hkCS2//YGNsBAvD3/
- LeRw+su+tsvRP+FnYyVwIBsYdktkBT/cG06q+wW0bO8lU8y+AHmmW4EdLbBeN5xdgryM
- LBxOUYSOP2yguCUAW/wkOPYY/4/xJqC+UzBMBaIi7pqAkWCTJsI1SzDV6Pxv1RMuK200
- QrSZ+5X2oAh7LoBWGy6lsKmtv23yvQeezAZTiyvwWum8eeTbms7/OpT0kHjx1ymEGgmK eQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2suj0qg94t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Jun 2019 02:39:26 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x552c2SX145348;
-        Wed, 5 Jun 2019 02:39:25 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 2swnghp1kn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Jun 2019 02:39:25 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x552dM0N020688;
-        Wed, 5 Jun 2019 02:39:22 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 04 Jun 2019 19:39:22 -0700
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v3] scsi: ibmvscsi: Don't use rc uninitialized in ibmvscsi_do_work
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190603221941.65432-1-natechancellor@gmail.com>
-        <20190603234405.29600-1-natechancellor@gmail.com>
-Date:   Tue, 04 Jun 2019 22:39:19 -0400
-In-Reply-To: <20190603234405.29600-1-natechancellor@gmail.com> (Nathan
-        Chancellor's message of "Mon, 3 Jun 2019 16:44:06 -0700")
-Message-ID: <yq1ef48rc14.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9278 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=773
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906050014
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9278 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=814 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906050014
+        id S1726645AbfFEDRm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 4 Jun 2019 23:17:42 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:56454 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726354AbfFEDRm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 4 Jun 2019 23:17:42 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id D56BB15047810;
+        Tue,  4 Jun 2019 20:17:41 -0700 (PDT)
+Date:   Tue, 04 Jun 2019 20:17:41 -0700 (PDT)
+Message-Id: <20190604.201741.2198584533127418560.davem@davemloft.net>
+To:     varun@chelsio.com
+Cc:     netdev@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, dt@chelsio.com, indranil@chelsio.com,
+        ganji.aravind@chelsio.com
+Subject: Re: [PATCH v2 net-next] cxgb4/libcxgb/cxgb4i/cxgbit: enable eDRAM
+ page pods for iSCSI
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <1559643109-3397-1-git-send-email-varun@chelsio.com>
+References: <1559643109-3397-1-git-send-email-varun@chelsio.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 04 Jun 2019 20:17:42 -0700 (PDT)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+From: Varun Prakash <varun@chelsio.com>
+Date: Tue,  4 Jun 2019 15:41:49 +0530
 
-Nathan,
+> +static int setup_ppod_edram(struct adapter *adap)
+> +{
+> +	int ret;
+> +	unsigned int param, val;
 
-> clang warns:
->
-> drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
-> uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->         case IBMVSCSI_HOST_ACTION_NONE:
->              ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-Applied to 5.3/scsi-queue, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Reverse christmas tree please.
