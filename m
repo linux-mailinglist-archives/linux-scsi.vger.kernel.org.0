@@ -2,87 +2,189 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EB9A367D6
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 01:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3CE367F8
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 01:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726581AbfFEXX0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 19:23:26 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:52567 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbfFEXXZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 19:23:25 -0400
-Received: from [192.168.1.110] ([77.2.1.21]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MnaTt-1gsD5h2gbN-00jYtF; Thu, 06 Jun 2019 01:22:40 +0200
-Subject: Re: [PATCH 2/3] drivers: scsi: remove unnecessary #ifdef MODULE
-To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "khalid@gonehiking.org" <khalid@gonehiking.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "aacraid@microsemi.com" <aacraid@microsemi.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-References: <1559397700-15585-1-git-send-email-info@metux.net>
- <1559397700-15585-3-git-send-email-info@metux.net>
- <AT5PR8401MB1169E817136F8B8587C7A716AB1A0@AT5PR8401MB1169.NAMPRD84.PROD.OUTLOOK.COM>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <d377a82b-4269-e25d-2329-573db355877c@metux.net>
-Date:   Wed, 5 Jun 2019 23:22:34 +0000
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
-MIME-Version: 1.0
-In-Reply-To: <AT5PR8401MB1169E817136F8B8587C7A716AB1A0@AT5PR8401MB1169.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:jaekdmyV0q8OXz6r78GsYt8MpdcLc2b7djaJTQADjW9KcsKTnTr
- 7wzYYHu/4yX6GYfdyY9cMfgupQEDbjo5H3ALS3nquim0kfTf+14HZ7nwJAGJ9CZgCbeXBxT
- LD/q1AJlxJLEn8noXHg2doZ+YoMtmGD4PHOu+E9ONVyw+ldThp50wbmHoHx8M9awmGecgj8
- hxGR04XtnMvP4o9EJ9qow==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:vWKltpJs204=:0nJ0fYNT/FkUdt8WwReLvN
- m59Xkghuq3N+fsmaJgJ1/c246RmrR9XAB3PkwvqlcLlFtteQh1S2yu1ZnFfTi+OCj4mRuHq8u
- fBk+ZpyqlLWQU3YVtOsbjRuoB+ExRwniu8suLAp64O0VLlZabKxMsETDROGAAoLoew1tf+TwP
- RX4m+yMn5JfVf4Z4B/fUBIRRo6KRR/NriUxfac5FIv265NxnZmBre2o4MqAEb191cElXyg4WE
- RNux37jM2IuB2oiVDi1q6siKFGoFegE4e9U0k2fp0eb6rXkg0epM3QYYwqsEwXpaiKzCuv2Qx
- QyjPNaTIzvTwf2yi6Pz/TwLtXuXhwp66YgmAMIwh0z+T7FtkRrGIHkco3yCJI3wH0YYkjb7qY
- YqNEdFcwgTpvXVnUyptIZ5HflNwgjb6rKeIOR7uPw20k8VqrzI/YCAThV0evAwNF9QEnR16UA
- f2D4duZHmBHClZpY0Wz4qzpAGCLje01jFy0560+bUwDP4mUV6bytsT7VmHr3FQ/g+umR/RFrM
- RuokkZnPuoxbx1V1+qofubE9Goi4bEdxljXM7c1kKF/zzbKdNZi1/X/SjzeUWfb+/wGS5Z2bs
- 2oEV2jvaLT/3UEGkoEohLVRnF3tuSVAQnlqhbVTdHK/wbsTozAB3xPMKFNFsx0JQDDYcPjXIY
- aSIcTrC6OlimGIq8qsqCWxz8Z1WtucZFx51fEzX74N+/6mA7ue31Qyqw/eEGDv2Rvaiu4Eaj+
- eiLTKMEUkT/iRM1IBfjiiKt7LYZcgEjw/81+IOjNNVjbn0+rS8J6elS6UDs=
+        id S1726600AbfFEX2l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 19:28:41 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:49062 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726510AbfFEX2l (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 19:28:41 -0400
+Received: by mail-pg1-f202.google.com with SMTP id z10so227621pgf.15
+        for <linux-scsi@vger.kernel.org>; Wed, 05 Jun 2019 16:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=gRO0aIkjYMBsNBc7+DIoU7JX9NOgY+kGQd5/xewYXlk=;
+        b=UjUsYqhMfjCSgtwICU9RcqL+xxeWNLvzgYi4TAJ5I4+IMVG8sbSlWkpZQSp+j4nuQq
+         97fA9gvCpbvVs5BjpH/06h+5CHQfsMA0GeR3A9KlwdxUpYZFJVu6I3oKcNzlXEuRPpwh
+         HQYx91WCnQG84EuhE0DYB9w5B3XQlJ1mN4lKjtPqmOF1IXGgoq06Z6vYhwctzUT6GNcz
+         NL71raZfKYlyZ/oTRi6rtLIOLmWxdVntpcjynPpC8JZRh0QJ+MQpzecIaSF8TamuwwJX
+         Ss8ZvCG8BLDIfrxxjZ8LYkSt5b90qIAHMKhVUYm5Nlyo1YBeMiXm1L3zPtKfBJMUwuk6
+         sNNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=gRO0aIkjYMBsNBc7+DIoU7JX9NOgY+kGQd5/xewYXlk=;
+        b=ZO4UNnC2bu3a06l3ZqMarOzRcd99UeJ347bCy5Y3Tbu3mwrmXWjcw1IdFpVotpuY17
+         j+c6R2MSF3sOVxx0m5cvR/muGXk7Lf2rsAUUaomTv389kQWneRSY+Q5dDlY+dujTUZaG
+         4pcfLoQWj/lznHXhbjzoZ4u5Fblk+D2ip2vEodsTDwR7iNPJCVd1YZRftz0IVbmjSyzX
+         X0e1WWaZXrRNRXgLw+RXD2VSKlqzKZvuk/CEvJmyLfjs/DyJSgn4y/6C61I1+Z0AIMrg
+         yntXUq+NMqccmqKBzMmIAWK5u7a7DtxfnK1U27bizMcDDV2P36xMkW6ukPHu5AKgWW8C
+         muOA==
+X-Gm-Message-State: APjAAAXiYFNJfkEtu8wEtJI6SKdQ/KzVP22thn95RbA/PY0r+54amAkY
+        lStSwyKIkJO8mcICDXhsNoUQZ8uEtqM=
+X-Google-Smtp-Source: APXvYqzXuluP1xJXv83KQJmBTl6O5tQhTtSaDuikoPQNfY1VHAjaLmhSxTETZknHp6ujJjRDlasl8HLD5Ew=
+X-Received: by 2002:a63:1663:: with SMTP id 35mr363300pgw.253.1559777320468;
+ Wed, 05 Jun 2019 16:28:40 -0700 (PDT)
+Date:   Wed,  5 Jun 2019 16:28:29 -0700
+Message-Id: <20190605232837.31545-1-satyat@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
+Subject: [RFC PATCH v2 0/8] Inline Encryption Support
+From:   Satya Tangirala <satyat@google.com>
+To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Parshuram Raju Thombare <pthombar@cadence.com>,
+        Ladvine D Almeida <ladvine.dalmeida@synopsys.com>,
+        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
+        Kuohong Wang <kuohong.wang@mediatek.com>,
+        Satya Tangirala <satyat@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 01.06.19 15:40, Elliott, Robert (Servers) wrote:
+This patch series adds support for Inline Encryption to the block layer,
+UFS, fscrypt and f2fs.
 
-<snip>
+Inline Encryption hardware allows software to specify an encryption context
+(an encryption key, crypto algorithm, data unit num, data unit size, etc.)
+along with a data transfer request to a storage device, and the inline
+encryption hardware will use that context to en/decrypt the data. The
+inline encryption hardware is part of the storage device, and it
+conceptually sits on the data path between system memory and the storage
+device. Inline Encryption hardware has become increasingly common, and we
+want to support it in the kernel.
 
-> I don't see any reply to James' comment that these changes result in
+Inline Encryption hardware implementations often function around the
+concept of a limited number of "keyslots", which can hold an encryption
+context each. The storage device can be directed to en/decrypt any
+particular request with the encryption context stored in any particular
+keyslot.
 
-I've missed that mail :(
+Patch 1 introduces a Keyslot Manager to efficiently manage keyslots.
+The keyslot manager also functions as the interface that blk-crypto
+(introduced in Path 3), will use to program keys into inline encryption
+hardware. For more information on the Keyslot Manager, refer to
+documentation found in block/keyslot-manager.c and linux/keyslot-manager.h.
 
-> static struct definitions that are unused, which should result in
-> complaints by the compiler like:
->      warning: 'dptids' defined by not used [-Wunused-variable]
+Patch 2 introduces struct bio_crypt_ctx, and a ptr to one in struct bio,
+which allows struct bio to represent an encryption context that can be
+passed down the storage stack from the filesystem layer to the storage
+driver.
 
-hmm, seems that const is missing on dptids ... I'll test that and
-repost fixed vrsion.
+Patch 3 introduces blk-crypto. Blk-crypto delegates crypto operations to
+inline encryption hardware when available, and also contains a software
+fallback to the kernel crypto API. Blk-crypto also makes it possible for
+layered devices like device mapper to make use of inline encryption
+hardware. Given that blk-crypto works as a software fallback, we are
+considering removing file content en/decryption from fscrypt and simply
+using blk-crypto in a future patch. For more details on blk-crypto, refer
+to Documentation/block/blk-crypto.txt.
 
---mtx
+Patches 4-6 add support for inline encryption into the UFS driver according
+to the JEDEC UFS HCI v2.1 specification. Inline encryption support for
+other drivers (like eMMC) may be added in the same way - the device driver
+should set up a Keyslot Manager in the device's request_queue (refer to
+the UFS crypto additions in ufshcd-crypto.c and ufshcd.c for an example).
+
+Patches 7 and 8 add support to fscrypt and f2fs, so that we have
+a complete stack that can make use of inline encryption.
+
+There have been a few patch sets addressing Inline Encryption Support in
+the past. Briefly, this patch set differs from those as follows:
+
+1) "crypto: qce: ice: Add support for Inline Crypto Engine"
+is specific to certain hardware, while our patch set's Inline
+Encryption support for UFS is implemented according to the JEDEC UFS
+specification.
+
+2) "scsi: ufs: UFS Host Controller crypto changes" registers inline
+encryption support as a kernel crypto algorithm. Our patch views inline
+encryption as being fundamentally different from a generic crypto
+provider (in that inline encryption is tied to a device), and so does
+not use the kernel crypto API to represent inline encryption hardware.
+
+3) "scsi: ufs: add real time/inline crypto support to UFS HCD" requires
+the device mapper to work - our patch does not.
+
+Changes v1 => v2:
+ - Block layer and UFS changes are split into 3 patches each.
+ - We now only have a ptr to a struct bio_crypt_ctx in struct bio, instead
+   of the struct itself.
+ - struct bio_crypt_ctx no longer has flags.
+ - blk-crypto now correctly handles the case when it fails to init
+   (because of insufficient memory), but kernel continues to boot.
+ - ufshcd-crypto now works on big endian cpus.
+ - Many cleanups.
+
+Satya Tangirala (8):
+  block: Keyslot Manager for Inline Encryption
+  block: Add encryption context to struct bio
+  block: blk-crypto for Inline Encryption
+  scsi: ufs: UFS driver v2.1 spec crypto additions
+  scsi: ufs: UFS crypto API
+  scsi: ufs: Add inline encryption support to UFS
+  fscrypt: wire up fscrypt to use blk-crypto
+  f2fs: Wire up f2fs to use inline encryption via fscrypt
+
+ Documentation/block/blk-crypto.txt | 185 ++++++++++
+ block/Kconfig                      |   8 +
+ block/Makefile                     |   2 +
+ block/bio.c                        |  17 +-
+ block/blk-core.c                   |  11 +-
+ block/blk-crypt-ctx.c              |  90 +++++
+ block/blk-crypto.c                 | 557 +++++++++++++++++++++++++++++
+ block/blk-merge.c                  |  34 +-
+ block/bounce.c                     |   9 +-
+ block/keyslot-manager.c            | 315 ++++++++++++++++
+ drivers/md/dm.c                    |  15 +-
+ drivers/scsi/ufs/Kconfig           |  10 +
+ drivers/scsi/ufs/Makefile          |   1 +
+ drivers/scsi/ufs/ufshcd-crypto.c   | 438 +++++++++++++++++++++++
+ drivers/scsi/ufs/ufshcd-crypto.h   |  69 ++++
+ drivers/scsi/ufs/ufshcd.c          |  84 ++++-
+ drivers/scsi/ufs/ufshcd.h          |  23 ++
+ drivers/scsi/ufs/ufshci.h          |  67 +++-
+ fs/crypto/Kconfig                  |   7 +
+ fs/crypto/bio.c                    | 159 ++++++--
+ fs/crypto/crypto.c                 |   9 +
+ fs/crypto/fscrypt_private.h        |  10 +
+ fs/crypto/keyinfo.c                |  69 ++--
+ fs/crypto/policy.c                 |  10 +
+ fs/f2fs/data.c                     |  77 +++-
+ fs/f2fs/super.c                    |   1 +
+ include/linux/bio.h                | 180 ++++++++++
+ include/linux/blk-crypto.h         |  40 +++
+ include/linux/blk_types.h          |  39 ++
+ include/linux/blkdev.h             |   9 +
+ include/linux/fscrypt.h            |  64 ++++
+ include/linux/keyslot-manager.h    | 116 ++++++
+ include/uapi/linux/fs.h            |  12 +-
+ 33 files changed, 2668 insertions(+), 69 deletions(-)
+ create mode 100644 Documentation/block/blk-crypto.txt
+ create mode 100644 block/blk-crypt-ctx.c
+ create mode 100644 block/blk-crypto.c
+ create mode 100644 block/keyslot-manager.c
+ create mode 100644 drivers/scsi/ufs/ufshcd-crypto.c
+ create mode 100644 drivers/scsi/ufs/ufshcd-crypto.h
+ create mode 100644 include/linux/blk-crypto.h
+ create mode 100644 include/linux/keyslot-manager.h
 
 -- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+2.22.0.rc1.311.g5d7573a151-goog
+
