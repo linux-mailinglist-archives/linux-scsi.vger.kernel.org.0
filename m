@@ -2,53 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB13E35AE0
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 13:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5855635E77
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Jun 2019 15:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727269AbfFELIS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 07:08:18 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:49695 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727154AbfFELIS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 5 Jun 2019 07:08:18 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 45JmHM6thCz9sBb;
-        Wed,  5 Jun 2019 21:08:15 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: Re: [PATCH v3] scsi: ibmvscsi: Don't use rc uninitialized in ibmvscsi_do_work
-In-Reply-To: <yq1ef48rc14.fsf@oracle.com>
-References: <20190603221941.65432-1-natechancellor@gmail.com> <20190603234405.29600-1-natechancellor@gmail.com> <yq1ef48rc14.fsf@oracle.com>
-Date:   Wed, 05 Jun 2019 21:08:14 +1000
-Message-ID: <87woi0mgrl.fsf@concordia.ellerman.id.au>
+        id S1728206AbfFEN5S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 09:57:18 -0400
+Received: from 313717.com ([176.126.78.19]:35538 "EHLO treehousetv.com"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728088AbfFEN5S (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 5 Jun 2019 09:57:18 -0400
+To:     linux-scsi@vger.kernel.org
+Subject: USB drives with logos
+Message-ID: <9cae5861f51dc8f6c7537936d27a7080@vecteezy.com>
+Date:   Wed, 05 Jun 2019 14:21:36 +0200
+From:   "Stacy" <schssereutz@aol.jp>
+Reply-To: halsyid@sina.com
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-"Martin K. Petersen" <martin.petersen@oracle.com> writes:
-> Nathan,
->
->> clang warns:
->>
->> drivers/scsi/ibmvscsi/ibmvscsi.c:2126:7: warning: variable 'rc' is used
->> uninitialized whenever switch case is taken [-Wsometimes-uninitialized]
->>         case IBMVSCSI_HOST_ACTION_NONE:
->>              ^~~~~~~~~~~~~~~~~~~~~~~~~
->
-> Applied to 5.3/scsi-queue, thanks!
+Hi,
 
-Thanks all.
+I wanted to follow up from last week. Did you receive the email I sent you?
 
-cheers
+Our company manufactures USB Flash Drives, printed with your logo.  They
+make the perfect marketing tool for your business or organization.
+
+We offer low minimum quantities, and all memory sizes. Over 150 Stock
+Models as well as 100 % custom shaped USB drives.  Memory sizes include up
+to 128GB !
+
+We can pre-load your media files, images, presentations and files onto the
+drives for you.  These are ideal handouts for trade shows, branding,
+corporate gifts and employees.
+Our USB Pricing is at an ALL TIME LOW - now is the time to get your USB
+drives.
+
+Let us send you a quote!   We will EARN your business!
+* Please reply back and let me know what quantity and memory size
+you need for a Fast Quote! *
+
+Are you a school or nonprofit?  Please let us know for even further
+discounts.
+
+Thanks!
+
+Stacy King
+National Account Rep
+Promo / Branded Flash Drives
+
