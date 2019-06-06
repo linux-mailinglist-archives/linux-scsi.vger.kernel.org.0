@@ -2,106 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD7536888
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 02:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC303688E
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 02:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726606AbfFFAAc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 20:00:32 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:44281 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbfFFAAb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 20:00:31 -0400
-Received: from [192.168.1.110] ([77.2.1.21]) by mrelayeu.kundenserver.de
- (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MKsaz-1hGBSH24Q1-00LEBz; Thu, 06 Jun 2019 01:59:20 +0200
-Subject: Re: [PATCH 3/3] drivers: hwmon: i5k_amb: remove unnecessary #ifdef
- MODULE
-To:     Guenter Roeck <linux@roeck-us.net>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, jdelvare@suse.com, khalid@gonehiking.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        aacraid@microsemi.com, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <1559397700-15585-1-git-send-email-info@metux.net>
- <1559397700-15585-4-git-send-email-info@metux.net>
- <20190601224946.GA6483@roeck-us.net>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <e91fabd4-a7a4-3afa-9f3a-95a6d90e8c7b@metux.net>
-Date:   Wed, 5 Jun 2019 23:59:09 +0000
-User-Agent: Mozilla/5.0 (X11; Linux i686; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
-MIME-Version: 1.0
-In-Reply-To: <20190601224946.GA6483@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:x2JZ14/Ltf9P+H+gFTGOzpgzjvpnZO2Dx45nnYtkU8/Jf77rGF5
- O3+Evml9+YC7+rE8EkhBKebhEATL6ngqsMnh1Sp0TOjWfM/22qOo3Wpzp0pji7YNXrtiG8d
- F050pOBi1wpgxtpCw1OAOz7kwg/vQAaB0Ze5Io53TRh2CiA26PIRufOmn/FXxPFgukkQfwB
- wkIzmo+GjH1u0aacbTSKA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pTo8rphLc3E=:o5o9pSJ22RJDRX25qdJR9X
- QqIFaMylNMFdKHq1uOuPqDCleLZU+ekezImac9fowU/ipSKyqoKteG1DOQfSPM04IT+ieT+tm
- Oyx3a9zNHSeZmiwLxKVT7P3CfQjYJwiS+ADHAqREXQR90mBEHb4lawnx4XKrk5fhQoNL7fd0D
- D+iTCEKoHr7G2sftpCweEZGrBkw2aEZpopAg0b55VWuwTju8Y5bRzUxk2rLoYbnG+rVNabimQ
- TOgMqCsBuv0t/CwozsNIEhzvpcIPiOZZklBERj1ChMueBjlmisKn9LCDSqMxUN9LXUGgNoTrB
- Sw900UxWU6fswrLGAzWErlyiZCsJ/HFnx37a3CDCDxrN0IHUk2ko61VYvPTRX3hwwH+FHMVox
- uIpIKn/rUoQkC3eW2BMZpjQZJ7jRtHOX/gc65Dh6cokyeJusPESVhuz7vZCo33gsJ1m1Qlrg6
- /OfxoN34bwxYq4Wl4yLR679V6mR/RQAw/MD2q74kkAWOb2mzQuijKoFN1b0qe9Yvci+R1ts6T
- EuVfyjkHPRYwTKalbjYe5nMjUXY9usesuF6cGCpLbnnUdhZx/T1K6JzDjb+dDJrHegydxueR1
- bbf+FbGSH6RqGIWSwBfD2i9ZjfH4iW74/BOPhOqQBux+zf9B6YzsIwMnH+hvz6pyMS0QADVnk
- d6s1uYwVIYchlhKkiIB4RJOcxw+gpEY9f1Xwvij/CCnK/TKjppCJCvRysmz5D1DyJtWyyIh7k
- 6g1iMq6jd3n2+pIm3BdwY/zlgFOLwdauF0XHVwuvZIEWsqhzmNC6Q13lYpo=
+        id S1726608AbfFFACM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 20:02:12 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:47000 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726532AbfFFACL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 20:02:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Message-Id:Date:Subject:Cc:To:From:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=KtOdE5W3k8irgjJmxe4ijQ18pv8Z3Oex89AgrEYcHNw=; b=gcqpsYBtsgDMG6m0ykFodd0rS
+        O65c+iGFY3AG12PYWNUdcV4NHgr7u2kMQut16jf0S5aKVz/JDE4bv2+M11pLVnZfjTF/hzCtVe8LS
+        upJhCW4SHVfkW/m7dYQ5bv8cavuTfO3G58cJpQ9rRp2DePdfNLTLN3OfcvuBP6PH7R4j13TOGEIrM
+        lHoZduhHNFQbjyoFkF90eT9yekGKYR8rutwPpTU2b4byzmO0OTDCEFuIUjUf+yjnuSmq7wZ/d7BuR
+        1kO3yDDEsSfVivK2mdP6aZeGUqrySaEnDTGu6X/SnH2VC14VuQvRjEzxg3nQBbBsSveJhNVCcFRAy
+        KGo8nnA1w==;
+Received: from [2600:1700:65a0:78e0:514:7862:1503:8e4d] (helo=sagi-Latitude-E7470.lbits)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hYfr9-0001n2-BH; Thu, 06 Jun 2019 00:02:11 +0000
+From:   Sagi Grimberg <sagi@grimberg.me>
+To:     linux-rdma@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH] IB/iser: explicitly set shost max_segment_size
+Date:   Wed,  5 Jun 2019 17:02:09 -0700
+Message-Id: <20190606000209.26086-1-sagi@grimberg.me>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 01.06.19 22:49, Guenter Roeck wrote:
-> On Sat, Jun 01, 2019 at 04:01:40PM +0200, Enrico Weigelt, metux IT consult wrote:
->> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
->> so the extra check here is not necessary.
->>
->> Signed-off-by: Enrico Weigelt <info@metux.net>
->> ---
->>   drivers/hwmon/i5k_amb.c | 2 --
->>   1 file changed, 2 deletions(-)
->>
->> diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
->> index b09c39a..b674c2f 100644
->> --- a/drivers/hwmon/i5k_amb.c
->> +++ b/drivers/hwmon/i5k_amb.c
->> @@ -482,14 +482,12 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
->>   	{ 0, 0 }
->>   };
->>   
->> -#ifdef MODULE
->>   static const struct pci_device_id i5k_amb_ids[] = {
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
->>   	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
->>   	{ 0, }
->>   };
->>   MODULE_DEVICE_TABLE(pci, i5k_amb_ids);
->> -#endif
->>   
-> 
-> I'd rather know what this table is used for in the first place.
+if the lld does not explicitly sets this, scsi takes BLK_MAX_SEGMENT_SIZE
+and sets it using dma_set_max_seg_size(). In our case, this will affect
+all the rdma device consumers.
 
-Seems it's really just used for the module loader, while actual probing
-is using a different table. IMHO, the worst thing my patch could do is
-introducing a warning on unused variable (IMHO shouldn't happen when
-it's static const).
+Fix it by setting shost max_segment_size according to the device
+capability.
 
-I've just rewritten it to move everything into i5k_amb_ids ... just need
-to run build tests on it (unfortunately can't run-test, as I don't have
-that device).
+Reported-by: Jason Gunthorpe <jgg@ziepe.ca>
+Signed-off-by: Sagi Grimberg <sagi@grimberg.me>
+---
+This goes on top of hch patchset:
+"properly communicate queue limits to the DMA layer"
 
+Normally this should go through the rdma tree, so we can
+either get it through jens with hch patchset. Alternatively
+this is a fix that should go to rc anyways?
 
---mtx
+ drivers/infiniband/ulp/iser/iscsi_iser.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/infiniband/ulp/iser/iscsi_iser.c b/drivers/infiniband/ulp/iser/iscsi_iser.c
+index 56848232eb81..2984a366dd7d 100644
+--- a/drivers/infiniband/ulp/iser/iscsi_iser.c
++++ b/drivers/infiniband/ulp/iser/iscsi_iser.c
+@@ -653,6 +653,7 @@ iscsi_iser_session_create(struct iscsi_endpoint *ep,
+ 						   SHOST_DIX_GUARD_CRC);
+ 		}
+ 
++		shost->max_segment_size = ib_dma_max_seg_size(ib_dev);
+ 		if (!(ib_dev->attrs.device_cap_flags & IB_DEVICE_SG_GAPS_REG))
+ 			shost->virt_boundary_mask = ~MASK_4K;
+ 
 -- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+2.17.1
+
