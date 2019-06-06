@@ -2,111 +2,135 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD9936D2B
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 09:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C67136D8D
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 09:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726324AbfFFHRn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Jun 2019 03:17:43 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34729 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbfFFHRn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 03:17:43 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c85so952127pfc.1
-        for <linux-scsi@vger.kernel.org>; Thu, 06 Jun 2019 00:17:43 -0700 (PDT)
+        id S1726722AbfFFHnn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Jun 2019 03:43:43 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46421 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725267AbfFFHnn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 03:43:43 -0400
+Received: by mail-wr1-f66.google.com with SMTP id n4so1246680wrw.13;
+        Thu, 06 Jun 2019 00:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=hcWZk37MluweMWQW5kURRUWLOOrFjT2oPnVPPLPHyMo=;
-        b=O3e+gR3QjxlY+TukOifhxUhwrU3NQR9N60NyUoUy2uHUzeQ5KzKmm22cgKDvq9AaJa
-         HBGqpO0VEYMp0+DsxlKagVVxBG5mngX5vhbyuBCbFEc64bWcpGSZDbONnglt4HCdyMTT
-         gAHr9JUL56oourAFBSHRUZ9hJubAKsm7DjmHYvMrHhbisgdNMH1KQPc6GjAxwEudVouO
-         pIGF8m/RYSGkUtvnQN1fVj/L+5Vo8t7aUAykze+iK61/eKcNXTCaWI9ACCLz8IPMvXGu
-         RYrFpq+7LQ5/u4AA76LNdgSRPpHxDsxfDMtgnN3FfsGb5M9viJKACY2o0B8cEH2hfUAa
-         rbWQ==
+        bh=hMKmVMGvuYghM2RFGeSJw2TVBQZRwZNWp/oZeq+70J8=;
+        b=ZEVBYQ/jzqpS6ukiE7bRSgDO82tLgsQV02m3WFjdt/MLOQEmp+qt1SFqiuW+RaTHTt
+         nzh3W01MCjlfAHeEDBmmB0/vQU5Z/9Ce+L32CgRBMijRobxpmX2/8VG/cT1NY8FWklUf
+         dplk6FE5NMxLAHF7aJoZ5LC15XN+4kCNBluSM11tIp4t9a90dg0IEx0b9rrqppfFS9X1
+         6Kk2E9Oi9OcYEldLyRxAVKb6DyKEgZBuhMIE8Qn4duffT0Epedy/vjw+FWCirRsm7Viq
+         B505bt/FV5fCT6jyKRm3q3IfK5MOAJVBkFdGmKpgDOowZ1DYXUOnwLYBIaeITcToAefk
+         dlag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hcWZk37MluweMWQW5kURRUWLOOrFjT2oPnVPPLPHyMo=;
-        b=QTxM1vJhI5bLCjaEqh05R4XScqu5uV8Oeb13DOvvUQO6q5zXaDsGfDqQJdq1ZUZNST
-         NQ4F3XWj6VW0lNX5f1ZSc+WNyYvtKz4RDJ0rF0sYkadTq1swaMrvGjNbwup6uCDDgUh1
-         aawwqYFKzG8ZOG1uFWCfd1SXl7fDfxG+4sTq2F8AhSqXVUyL4B/d7hIrnGIqOo/c1tu+
-         ioBOQ02FLGdAIbq6ZQCjsxpvjgRkE4Ma2M6pzrnJNFT/mdp/HLXiMHebz5A7kHh6RzOO
-         MXdRBWKVKr3J0ESTIqz9HfupQD8wWOX85swS0ED6Jg9rtfxqtcC3XsHVp/RaqX3HVqoJ
-         b/vg==
-X-Gm-Message-State: APjAAAXAcmF1dio/KKL3i8UHip1NMFy7sS3H9xoeg14YyhiHXigS90XY
-        AfDQoMteCxLjovbAHrMWWDrqCw==
-X-Google-Smtp-Source: APXvYqwJj7EcN4AJ9SENmqHf4hWfVQH6OLhC5JBuOCIoK19YSarjdumJo7ny/lpvNb23GM0WxHXIZg==
-X-Received: by 2002:a17:90a:3ae8:: with SMTP id b95mr13710133pjc.68.1559805462753;
-        Thu, 06 Jun 2019 00:17:42 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id b4sm1058689pfd.120.2019.06.06.00.17.41
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 06 Jun 2019 00:17:42 -0700 (PDT)
-Date:   Thu, 6 Jun 2019 00:18:28 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Avri Altman <Avri.Altman@wdc.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Evan Green <evgreen@chromium.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] scsi: ufs: Allow resetting the UFS device
-Message-ID: <20190606071828.GS22737@tuxbook-pro>
-References: <20190606010249.3538-1-bjorn.andersson@linaro.org>
- <20190606010249.3538-3-bjorn.andersson@linaro.org>
- <SN6PR04MB4925FC3F1001326AA218DF21FC170@SN6PR04MB4925.namprd04.prod.outlook.com>
+        bh=hMKmVMGvuYghM2RFGeSJw2TVBQZRwZNWp/oZeq+70J8=;
+        b=PJ65+6lHvVkAaHPEMwm2Zqo/HfViEcYK/ay/AeOuVTz5KUKg3gOiNUmADe1Nya5ROB
+         hXAmlYpqAS5vmGQjZJLiyXTpMYer/pM/d8zAwJPgOPeTnlr/DVDa8T5jIMzUUMxDg58+
+         eAMF3h5xcZh4ufTkd4P+vcr07rMxl48ZYVW7fZOiRZrvq2yizJWNbsulYQln43s+ngRV
+         CBrRxUG7998yDbvoobH36K/wNlPhfjhoMloX+9qKCEkx8LvTfVjWXb60x9MaKnICOsPz
+         C4OfazO9Q+FKuPz9jLsaqr6x09ASRh/lKanK9FF4viYFyloNak3EeD1PILGpfQS1ExKw
+         xrFw==
+X-Gm-Message-State: APjAAAUE5v1w/+JZGbXoG79nsrSII8DIMqJ2eiknlnIxFh5qTHY2u9PS
+        0G1Tq3UQBrxeToJx/LBtJesSYmcl
+X-Google-Smtp-Source: APXvYqyl60FHgPIDeBya3Spzwu8TBxapowa2m12QndF+5rNT+N5MQCJhdyssMJmG6DrWouswtBHSxg==
+X-Received: by 2002:adf:ce03:: with SMTP id p3mr30759497wrn.94.1559807021232;
+        Thu, 06 Jun 2019 00:43:41 -0700 (PDT)
+Received: from zhanggen-UX430UQ ([108.61.173.19])
+        by smtp.gmail.com with ESMTPSA id t140sm1002151wmt.0.2019.06.06.00.43.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jun 2019 00:43:40 -0700 (PDT)
+Date:   Thu, 6 Jun 2019 15:43:33 +0800
+From:   Gen Zhang <blackgod016574@gmail.com>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sg: fix a double-fetch bug in sg_write()
+Message-ID: <20190606074333.GA7078@zhanggen-UX430UQ>
+References: <20190531012704.GA4541@zhanggen-UX430UQ>
+ <38bbd54f-d85b-e529-36ad-5c1809bb435f@suse.cz>
+ <20190605153532.GA4051@zhanggen-UX430UQ>
+ <2d322852-4861-929a-28ed-c4b41bea5ba6@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SN6PR04MB4925FC3F1001326AA218DF21FC170@SN6PR04MB4925.namprd04.prod.outlook.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <2d322852-4861-929a-28ed-c4b41bea5ba6@suse.cz>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed 05 Jun 23:36 PDT 2019, Avri Altman wrote:
-
+On Thu, Jun 06, 2019 at 07:01:26AM +0200, Jiri Slaby wrote:
+> On 05. 06. 19, 17:35, Gen Zhang wrote:
+> > On Wed, Jun 05, 2019 at 08:41:11AM +0200, Jiri Slaby wrote:
+> >> On 31. 05. 19, 3:27, Gen Zhang wrote:
+> >>> In sg_write(), the opcode of the command is fetched the first time from 
+> >>> the userspace by __get_user(). Then the whole command, the opcode 
+> >>> included, is fetched again from userspace by __copy_from_user(). 
+> >>> However, a malicious user can change the opcode between the two fetches.
+> >>> This can cause inconsistent data and potential errors as cmnd is used in
+> >>> the following codes.
+> >>>
+> >>> Thus we should check opcode between the two fetches to prevent this.
+> >>>
+> >>> Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+> >>> ---
+> >>> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+> >>> index d3f1531..a2971b8 100644
+> >>> --- a/drivers/scsi/sg.c
+> >>> +++ b/drivers/scsi/sg.c
+> >>> @@ -694,6 +694,8 @@ sg_write(struct file *filp, const char __user *buf, size_t count, loff_t * ppos)
+> >>>  	hp->flags = input_size;	/* structure abuse ... */
+> >>>  	hp->pack_id = old_hdr.pack_id;
+> >>>  	hp->usr_ptr = NULL;
+> >>> +	if (opcode != cmnd[0])
+> >>> +		return -EINVAL;
+> >>>  	if (__copy_from_user(cmnd, buf, cmd_size))
+> >>>  		return -EFAULT;
+> >>
+> >> You are sending the same patches like a broken machine. Please STOP this
+> >> and give people some time to actually review your patches! (Don't expect
+> >> replies in days.)
+> >>
+> > Thanks for your reply. I resubmitted this one after 8-day-no-reply. I 
+> > don't judge whether this is a short time period or not. I politely hope
+> > that you can reply more kindly.
 > 
-> >  static int ufshcd_hba_init(struct ufs_hba *hba)
-> >  {
-> >  	int err;
-> > @@ -7425,9 +7460,15 @@ static int ufshcd_hba_init(struct ufs_hba *hba)
-> >  	if (err)
-> >  		goto out_disable_vreg;
-> > 
-> > +	err = ufshcd_init_device_reset(hba);
-> > +	if (err)
-> > +		goto out_disable_variant;
-> > +
-> >  	hba->is_powered = true;
-> >  	goto out;
-> > 
-> > +out_disable_variant:
-> > +	ufshcd_vops_setup_regulators(hba, false);
-> Is this necessary?
-> ufshcd_vops_setup_regulators() was just called as part of ufshcd_variant_hba_init
+> There is no reason to be offended. I am just asking you to wait a bit
+> more before reposting. 8 days is too few. My personal experience says to
+> give patches like these something close to a month, esp. during the
+> merge window. The issues are present for a long time, nobody hit them
+> during that timeframe, so there is no reason to haste.
+Thanks for your reply, and I will keep this in mind.
 > 
+> > I am just a PhD candidate. All I did is submitting patches, discussing 
+> > with maintainers in accordance with linux community rules for academic papers.
+> 
+> Yes, despite I have no idea what "linux community rules for academic
+> papers" are.
 
-Yes, so my attempt here is to reverse the enablement of the vops
-regulators (hence passing false). But looking at it again I see that we
-should also do ufshcd_vops_exit(), so the right thing to call here is
-ufshcd_variant_hba_exit().
+I mean, these patches come from a research project prototype. Submitting
+patches, and getting it applied can be demonstrated in the experiment 
+part of research paper.
 
-PS. This initialization sequence should really be rewritten to first
-acquire all resources and then turn them on. This mixes init/setup
-sequence is really hard to reason about.
-
-Regards,
-Bjorn
+Thanks
+Gen
+> 
+> > I guess that you might be busy person and hope that submitting patches 
+> > didn't bother you.
+> 
+> It does not bother me at all. Patches are welcome, but newcomers tend to
+> send new versions of patches (or reposts) too quickly. It then leads to
+> wasting time of people where one person comments on one version and the
+> others don't see it and reply to some other.
+> 
+> thanks,
+> -- 
+> js
+> suse labs
