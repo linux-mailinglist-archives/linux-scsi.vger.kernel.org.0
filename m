@@ -2,93 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8425937A8D
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 19:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A9737B02
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 19:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729909AbfFFRII (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Jun 2019 13:08:08 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41553 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728081AbfFFRII (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 13:08:08 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q17so1886875pfq.8
-        for <linux-scsi@vger.kernel.org>; Thu, 06 Jun 2019 10:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=DfWGqMsNhu0Wn9UXa5rpUQbIrk9rtIgPo7mJo0K3Iy0=;
-        b=edOUZg3GANEHsuow5KsriAJk8/6SQssHjNCT4tBBHkNEMs7cc7BSBL3Y5TX+twtruP
-         6TSMfZEm92SNNInMq87/gyoNQ336XCRS8pIlKvho5y7eSZB2ZIoGpjkMaChwJVN6lykR
-         N+iefC9iJuKoXcUKxrzKy8O/cExO4RJci97F4=
+        id S1730132AbfFFR0K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Jun 2019 13:26:10 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37847 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726092AbfFFR0K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 13:26:10 -0400
+Received: by mail-pf1-f193.google.com with SMTP id a23so1925831pff.4
+        for <linux-scsi@vger.kernel.org>; Thu, 06 Jun 2019 10:26:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=DfWGqMsNhu0Wn9UXa5rpUQbIrk9rtIgPo7mJo0K3Iy0=;
-        b=o27WgXHBXKdbHCkizZKJtFkqYK6zhkJKIoD1EZjsfc7YIHLl2qtsVCRThBE14RevE7
-         mZ8QVN/iMOF6YOtjyS42s7ogHe8/x1/wh0HPwo3UPMppINm/NzwLF3riCI1yNDpJF0Ke
-         SfXT4hsuyYwN9LW7id8sYDLS13C+Fw5+Ych7LRvpIQvvFucdz37FrVCrY8NoFnvMGc8J
-         Z1pIddEp6avORb7AMxWH7fvTQdU3HarY6FrD37o6XR7Kb5Y6OpIA/ptzLgVzVI9AIYqd
-         aJJDaxFMSGKg0zLGrpxpFwsa3bGo81unPIZ/GPURPUWKuP0NZdQsRfUIjT1P4pAYwWUr
-         Z1WA==
-X-Gm-Message-State: APjAAAUiWUaGJhMGzCu8LPoqLA/Lyi2RWQ/rNKGO8XL++sJFUVIGi9y6
-        SxOA2C1z1wKMkIu1HyzsMVYPvA==
-X-Google-Smtp-Source: APXvYqx1MzvkxzqJ8jjRho8uRYT9sXVTCtAk6vNSNa5xM12hkcJ+i72lyJF9dDCi4kO+O6iXQnbySw==
-X-Received: by 2002:aa7:942f:: with SMTP id y15mr55190799pfo.121.1559840887916;
-        Thu, 06 Jun 2019 10:08:07 -0700 (PDT)
-Received: from [10.69.37.149] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x25sm2648197pfm.48.2019.06.06.10.08.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jun 2019 10:08:07 -0700 (PDT)
-Subject: Re: [PATCH] scsi: lpfc: Avoid unused function warnings
-To:     Nathan Chancellor <natechancellor@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        YueHaibing <yuehaibing@huawei.com>
-References: <20190606052421.103469-1-natechancellor@gmail.com>
-From:   James Smart <james.smart@broadcom.com>
-Message-ID: <27ccc327-3a4b-f489-2b21-b68479e45519@broadcom.com>
-Date:   Thu, 6 Jun 2019 10:08:03 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UUVcFWj7KF4GALBEqZdM1SoUMtmtgUHPWghhh+l71SQ=;
+        b=LhwxnVCR1zWVKIbOks5ly+dQgXwZFEyk/0PLdHBDL5mIKk/zr3oWz6lN/w+CBq1k+K
+         RTQ6fMcArT34/+LF1reelFKkgC+AnQt5URbtrQbMawzS5K0oji++EltGOAJ6Bw4shpIJ
+         O4cjjHNdDssvEyRsYOrfhigOt2mGP/SPqkTe4v2Uv3o5xJGkuZKB9SPCIZlv5JEGioW+
+         P0npXO7t54IQh1uUFw20SXeqdFoS8j0fUW8PRwVYFZrZvefw5dvOYvKw7CKN3Ob5dvW7
+         rr6kAFK0nVKoh4DJrRXfY4IuhNsnNZkCWXd5lnucy1Wm6ER0/sUjkZrpYeyGgY9YXbio
+         IjMg==
+X-Gm-Message-State: APjAAAUeePc7yvYgnh64Wz14yTO+rANKvq2z1FeYRiCM7Y5qRRTFWVAH
+        92/OQA6SPJQI7ZAL1JaSVIU=
+X-Google-Smtp-Source: APXvYqywKzH2Ly1M9Avtz4KPMilRAXaunIKlpa9KV4yXLNtMLBKkhkxgw5fgy/nOGD4z6BiwkeUsEA==
+X-Received: by 2002:a63:e408:: with SMTP id a8mr1825800pgi.146.1559841969498;
+        Thu, 06 Jun 2019 10:26:09 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id x8sm2996806pfa.46.2019.06.06.10.26.04
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jun 2019 10:26:05 -0700 (PDT)
+Subject: Re: [PATCH 1/3] scsi: Do not allow user space to change the SCSI
+ device state into SDEV_BLOCK
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        James Smart <james.smart@broadcom.com>
+References: <20190605201435.233701-1-bvanassche@acm.org>
+ <20190605201435.233701-2-bvanassche@acm.org>
+ <cec3e805-c834-a389-9666-bb79ed86057d@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <22ce1f30-a3c5-fc7d-0f1e-e2ca589682bb@acm.org>
+Date:   Thu, 6 Jun 2019 10:26:03 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190606052421.103469-1-natechancellor@gmail.com>
+In-Reply-To: <cec3e805-c834-a389-9666-bb79ed86057d@suse.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 6/5/19 10:46 PM, Hannes Reinecke wrote:
+> Why not simply '-EPERM' ?
+ > Translating a state into something else seems counterproductive.
 
+Personally I'm OK with returning -EPERM for attempts from user space to 
+change the device state into SDEV_BLOCK. The state translation is 
+something that was proposed about two months ago (see also 
+https://www.mail-archive.com/linux-scsi@vger.kernel.org/msg82610.html).
 
-On 6/5/2019 10:24 PM, Nathan Chancellor wrote:
-> When building powerpc pseries_defconfig or powernv_defconfig:
->
-> drivers/scsi/lpfc/lpfc_nvmet.c:224:1: error: unused function
-> 'lpfc_nvmet_get_ctx_for_xri' [-Werror,-Wunused-function]
-> drivers/scsi/lpfc/lpfc_nvmet.c:246:1: error: unused function
-> 'lpfc_nvmet_get_ctx_for_oxid' [-Werror,-Wunused-function]
->
-> These functions are only compiled when CONFIG_NVME_TARGET_FC is enabled.
-> Use that same condition so there is no more warning. While the fixes
-> commit did not introduce these functions, it caused these warnings.
->
-> Fixes: 4064b27417a7 ("scsi: lpfc: Make some symbols static")
-> Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-> ---
->   drivers/scsi/lpfc/lpfc_nvmet.c | 2 ++
->   1 file changed, 2 insertions(+)
->
->
+> And, while we're at it:
+> The only meaningful states to be set from userspace are 'RUNNING',
+> 'OFFLINE', and 'BLOCK'.
+> Everything else relates to the internal state machine and really
+> shouldn't be touched from userspace at all.
+> So I'd rather filter out everything _but_ the three states, avoid
+> similar issue in the future.
 
-Looks fine.
+Can you please clarify why you think it is useful to change the SCSI 
+device state from user space into SDEV_BLOCK? As one can see in 
+scsi_device_set_state() transitions from SDEV_BLOCK into the following 
+states are allowed: SDEV_RUNNING, SDEV_OFFLINE, SDEV_TRANSPORT_OFFLINE 
+and SDEV_DEL. The mpt3sas driver and also the FC, iSCSI and SRP 
+transport drivers all can call scsi_internal_device_unblock_nowait() or 
+scsi_target_unblock(). So at least for this LLD and these transport 
+drivers if the device state is set to SDEV_BLOCK from user space that 
+change can be overridden any time by kernel code. So I'm not sure it is 
+useful to change the device state into SDEV_BLOCK from user space.
 
-Reviewed-by:  James Smart  <james.smart@broadcom.com>
-
-
+Bart.
