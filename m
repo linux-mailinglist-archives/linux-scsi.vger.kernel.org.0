@@ -2,87 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 363F7369C2
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 04:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3095A36B49
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 07:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726604AbfFFCFq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 22:05:46 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:55102 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbfFFCFq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 22:05:46 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5625Dss124563;
-        Thu, 6 Jun 2019 02:05:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=NX5cH1V3dLXcMi9Tv/iqE0k/Mhdpf9u0wFy0hYpkKAk=;
- b=Bi0L9DGlMlfnFYxMZotIRopZVf6FqtOE+yiVLGuq7LnW61y+HC2qn32u55cSVWt8qAjz
- i2O8/srKy+bwlx0CxXkXf5Kbm90yYqsKy3xh5wapXN2U3T10Ln6F6DWHQbNmXihOQxkA
- B3vBcjj9dZ1Ea4mxKyeehOcVXrYHirVwke65MBXR+edLNqGmo6Qmm/vUqwyKvpvVX580
- t+EWVh1CP4qte3+Lkr/UMUzKMSpXfdpbhOZ/tG4WekDJfHWf9lAon8ZAW67uAy7ZGLMc
- EfAt5sc4YYi3BrJFLmz3sNA+kjC8R+1E5zTKERismDId3UkQVPIHXI+0om33XLl2kohL XQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2suj0qnnn5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Jun 2019 02:05:31 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5623t6L125294;
-        Thu, 6 Jun 2019 02:05:30 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2swngj6dwq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Jun 2019 02:05:30 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5625O2c021565;
-        Thu, 6 Jun 2019 02:05:24 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 05 Jun 2019 19:05:24 -0700
-To:     Himanshu Madhani <hmadhani@marvell.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "linux-scsi\@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>
-Subject: Re: [PATCH 00/20] qla2xxx Patches
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190529202826.204499-1-bvanassche@acm.org>
-        <794547A0-2D81-42DD-8777-27B9BE607E21@marvell.com>
-Date:   Wed, 05 Jun 2019 22:05:22 -0400
-In-Reply-To: <794547A0-2D81-42DD-8777-27B9BE607E21@marvell.com> (Himanshu
-        Madhani's message of "Wed, 29 May 2019 21:44:29 +0000")
-Message-ID: <yq1y32fo4d9.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1726014AbfFFFBb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Jun 2019 01:01:31 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45698 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725267AbfFFFBb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 01:01:31 -0400
+Received: by mail-wr1-f65.google.com with SMTP id f9so871626wre.12;
+        Wed, 05 Jun 2019 22:01:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=qII4l1ay21U8AMSnohaH7DDZbDle6XdOP4etJ4lhkQA=;
+        b=N1yS4LkbDCNdXjdBPnFUT9OsWaE6ZlxV/efl9VPdKc51VWwQeyq0xQX93DPBYYrFjD
+         a7MljygWf/qDILAvWy/H5SBQcroEJ7euW5siUUNgmUtBDqjaxOq9qvEeFVeNTxEqvK0+
+         zn9fZnWQbj6MfBztSkf9k6iytDKlLnCQJlxS2jynmMw+cA+vjKo3BHp8ked6AcA2xie6
+         77wZo9hADMjjNuh/6sPDTBlEvWfsQ4stE6M/fwFkgTrGPcj04YDjgqY7CFdByWv+aAQo
+         DRT8LJU5bOhtcaFfxdTegW7rcz9O/5SDgQOK6DCQtUxaq8V8vLBzdPKSMHv3Isav/xCt
+         NL5w==
+X-Gm-Message-State: APjAAAWAYANfztnCIBxwYux0gATTdg5zIZMYC3AVrndLWqwtARYO4hc+
+        z4B0w6J3XeKr+5cS1Pd5/uXEm2BDtw8=
+X-Google-Smtp-Source: APXvYqxvPA13AzjnkXV1Nz4kkbyXtvE+md5ZhHoC1Woei/rff+9Od+V/NFw88lkqQvyHw4m84WRE7A==
+X-Received: by 2002:adf:e585:: with SMTP id l5mr6666654wrm.214.1559797288366;
+        Wed, 05 Jun 2019 22:01:28 -0700 (PDT)
+Received: from ?IPv6:2a0b:e7c0:0:107::49? ([2a0b:e7c0:0:107::49])
+        by smtp.gmail.com with ESMTPSA id a124sm619749wmh.3.2019.06.05.22.01.26
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Wed, 05 Jun 2019 22:01:27 -0700 (PDT)
+Subject: Re: [PATCH] sg: fix a double-fetch bug in sg_write()
+To:     Gen Zhang <blackgod016574@gmail.com>
+Cc:     dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190531012704.GA4541@zhanggen-UX430UQ>
+ <38bbd54f-d85b-e529-36ad-5c1809bb435f@suse.cz>
+ <20190605153532.GA4051@zhanggen-UX430UQ>
+From:   Jiri Slaby <jslaby@suse.cz>
+Openpgp: preference=signencrypt
+Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
+ 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
+Message-ID: <2d322852-4861-929a-28ed-c4b41bea5ba6@suse.cz>
+Date:   Thu, 6 Jun 2019 07:01:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9279 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=784
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906060014
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9279 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=839 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906060014
+In-Reply-To: <20190605153532.GA4051@zhanggen-UX430UQ>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 05. 06. 19, 17:35, Gen Zhang wrote:
+> On Wed, Jun 05, 2019 at 08:41:11AM +0200, Jiri Slaby wrote:
+>> On 31. 05. 19, 3:27, Gen Zhang wrote:
+>>> In sg_write(), the opcode of the command is fetched the first time from 
+>>> the userspace by __get_user(). Then the whole command, the opcode 
+>>> included, is fetched again from userspace by __copy_from_user(). 
+>>> However, a malicious user can change the opcode between the two fetches.
+>>> This can cause inconsistent data and potential errors as cmnd is used in
+>>> the following codes.
+>>>
+>>> Thus we should check opcode between the two fetches to prevent this.
+>>>
+>>> Signed-off-by: Gen Zhang <blackgod016574@gmail.com>
+>>> ---
+>>> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+>>> index d3f1531..a2971b8 100644
+>>> --- a/drivers/scsi/sg.c
+>>> +++ b/drivers/scsi/sg.c
+>>> @@ -694,6 +694,8 @@ sg_write(struct file *filp, const char __user *buf, size_t count, loff_t * ppos)
+>>>  	hp->flags = input_size;	/* structure abuse ... */
+>>>  	hp->pack_id = old_hdr.pack_id;
+>>>  	hp->usr_ptr = NULL;
+>>> +	if (opcode != cmnd[0])
+>>> +		return -EINVAL;
+>>>  	if (__copy_from_user(cmnd, buf, cmd_size))
+>>>  		return -EFAULT;
+>>
+>> You are sending the same patches like a broken machine. Please STOP this
+>> and give people some time to actually review your patches! (Don't expect
+>> replies in days.)
+>>
+> Thanks for your reply. I resubmitted this one after 8-day-no-reply. I 
+> don't judge whether this is a short time period or not. I politely hope
+> that you can reply more kindly.
 
-Himanshu,
+There is no reason to be offended. I am just asking you to wait a bit
+more before reposting. 8 days is too few. My personal experience says to
+give patches like these something close to a month, esp. during the
+merge window. The issues are present for a long time, nobody hit them
+during that timeframe, so there is no reason to haste.
 
-> Thanks for the series. We will provide ACK after these patches have
-> gone through our internal testing.
+> I am just a PhD candidate. All I did is submitting patches, discussing 
+> with maintainers in accordance with linux community rules for academic papers.
 
-Ping on this series. Thanks!
+Yes, despite I have no idea what "linux community rules for academic
+papers" are.
 
+> I guess that you might be busy person and hope that submitting patches 
+> didn't bother you.
+
+It does not bother me at all. Patches are welcome, but newcomers tend to
+send new versions of patches (or reposts) too quickly. It then leads to
+wasting time of people where one person comments on one version and the
+others don't see it and reply to some other.
+
+thanks,
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+js
+suse labs
