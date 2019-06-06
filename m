@@ -2,31 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD6736BD6
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 07:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9466D36BDC
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 07:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725947AbfFFFqP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Jun 2019 01:46:15 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35154 "EHLO mx1.suse.de"
+        id S1725784AbfFFFug (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Jun 2019 01:50:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35568 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725766AbfFFFqP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 6 Jun 2019 01:46:15 -0400
+        id S1725766AbfFFFuf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 6 Jun 2019 01:50:35 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B4931AF3F;
-        Thu,  6 Jun 2019 05:46:13 +0000 (UTC)
-Subject: Re: [PATCH 1/3] scsi: Do not allow user space to change the SCSI
- device state into SDEV_BLOCK
+        by mx1.suse.de (Postfix) with ESMTP id A78F1AF3F;
+        Thu,  6 Jun 2019 05:50:34 +0000 (UTC)
+Subject: Re: [PATCH 2/3] scsi: Avoid that .queuecommand() gets called for a
+ quiesced SCSI device
 To:     Bart Van Assche <bvanassche@acm.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Ming Lei <ming.lei@redhat.com>,
         Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        James Smart <james.smart@broadcom.com>
+        Johannes Thumshirn <jthumshirn@suse.de>
 References: <20190605201435.233701-1-bvanassche@acm.org>
- <20190605201435.233701-2-bvanassche@acm.org>
+ <20190605201435.233701-3-bvanassche@acm.org>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -72,12 +71,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <cec3e805-c834-a389-9666-bb79ed86057d@suse.de>
-Date:   Thu, 6 Jun 2019 07:46:12 +0200
+Message-ID: <c58b16b0-84ae-f82c-9beb-5afb8dbfb663@suse.de>
+Date:   Thu, 6 Jun 2019 07:50:34 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190605201435.233701-2-bvanassche@acm.org>
+In-Reply-To: <20190605201435.233701-3-bvanassche@acm.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -87,79 +86,28 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 6/5/19 10:14 PM, Bart Van Assche wrote:
-> The ability to modify the SCSI device state was introduced by commit
-> 638127e579a4 ("[PATCH] Fix error handler offline behaviour"; v2.6.12). That
-> same commit introduced the following device states:
+> Several SCSI transport and LLD drivers surround code that does not
+> tolerate concurrent calls of .queuecommand() with scsi_target_block() /
+> scsi_target_unblock(). These last two functions use
+> blk_mq_quiesce_queue() / blk_mq_unquiesce_queue() for scsi-mq request
+> queues to prevent concurrent .queuecommand() calls. However, that is
+> not sufficient to prevent .queuecommand() calls from scsi_send_eh_cmnd().
+> Hence surround the .queuecommand() call from the SCSI error handler with
+> code that avoids that .queuecommand() gets called in the quiesced state.
 > 
->        { SDEV_CREATED, "created" },
->        { SDEV_RUNNING, "running" },
->        { SDEV_CANCEL,  "cancel"  },
->        { SDEV_DEL,     "deleted" },
->        { SDEV_QUIESCE, "quiesce" },
->        { SDEV_OFFLINE, "offline" },
+> Note: converting the .queuecommand() call in scsi_send_eh_cmnd() into
+> code that calls blk_get_request() + blk_execute_rq() is not an option
+> since scsi_send_eh_cmnd() must be able to make forward progress even
+> if all requests have been allocated.
 > 
-> The SDEV_BLOCK state was introduced later to avoid that an FC cable pull
-> would immediately result in an I/O error (commit 1094e682310e; "[PATCH]
-> suspending I/Os to a device"; v2.6.12). That same patch introduced the
-> ability to set the SDEV_BLOCK state from user space. I'm not sure whether
-> that ability was introduced on purpose or accidentally.
-> 
-> This patch makes sure that SDEV_BLOCK is only used for its original
-> purpose, namely to allow transport drivers and LLDs to block further
-> .queuecommand() calls while transport layer or adapter recovery is in
-> progress.
-> 
-> Notes:
-> - While SDEV_BLOCK blocks all SCSI commands, in the SDEV_QUIESCE
->   state only those block layer requests are blocked for which RQF_PREEMPT
->   has not been set. RQF_PREEMPT is not set for I/O requests submitted by
->   e.g. a filesystem but is set for all requests pass-through requests.
->   See also __scsi_execute().
-> - By doing a web search for ("blocked" OR "quiesce") AND
->   "/sys/class/scsi_device" AND "device/state" I found several storage
->   configuration guides. The instructions I found in these guides
->   tell users to write the value "running" or "offline" in the SCSI
->   device state sysfs attribute and no other values.
-> 
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Ming Lei <ming.lei@redhat.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: Johannes Thumshirn <jthumshirn@suse.de>
-> Cc: James Smart <james.smart@broadcom.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/scsi_sysfs.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-> index ff0aea7ac87f..a49ee113b3c4 100644
-> --- a/drivers/scsi/scsi_sysfs.c
-> +++ b/drivers/scsi/scsi_sysfs.c
-> @@ -769,6 +769,13 @@ store_state_field(struct device *dev, struct device_attribute *attr,
->  	}
->  	if (!state)
->  		return -EINVAL;
-> +	/*
-> +	 * The state SDEV_BLOCK should not be set from userspace. Translate
-> +	 * SDEV_BLOCK into SDEV_QUIESCE in case the SDEV_BLOCK state transition
-> +	 * is requested from user space.
-> +	 */
-> +	if (state == SDEV_BLOCK)
-> +		state = SDEV_QUIESCE;
->  
->  	mutex_lock(&sdev->state_mutex);
->  	ret = scsi_device_set_state(sdev, state);
-> 
-Why not simply '-EPERM' ?
-Translating a state into something else seems counterproductive.
-
-And, while we're at it:
-The only meaningful states to be set from userspace are 'RUNNING',
-'OFFLINE', and 'BLOCK'.
-Everything else relates to the internal state machine and really
-shouldn't be touched from userspace at all.
-So I'd rather filter out everything _but_ the three states, avoid
-similar issue in the future.
+Hmm. Have you actually observed this?
+Typically, scsi_target_block()/scsi_target_unblock() is called prior to
+invoking EH, to allow the system to settle and to guarantee that it's
+fully quiesced. Only then EH is started.
+Consequently, scsi_target_block()/scsi_target_unblock() really shouldn't
+be called during EH; we're essentially single-threaded at this point, so
+nothing else will be submitting command.
+Can you explain why you need this?
 
 Cheers,
 
