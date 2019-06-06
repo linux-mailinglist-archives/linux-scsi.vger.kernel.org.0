@@ -2,108 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 234B837ED3
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 22:29:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 166FA37EEA
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 22:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727297AbfFFU3s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Jun 2019 16:29:48 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:34201 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725784AbfFFU3s (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 16:29:48 -0400
-Received: by mail-qk1-f193.google.com with SMTP id t64so2357602qkh.1
-        for <linux-scsi@vger.kernel.org>; Thu, 06 Jun 2019 13:29:47 -0700 (PDT)
+        id S1726725AbfFFUkr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Jun 2019 16:40:47 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:40561 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726305AbfFFUkr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 16:40:47 -0400
+Received: by mail-pl1-f195.google.com with SMTP id a93so1378352pla.7
+        for <linux-scsi@vger.kernel.org>; Thu, 06 Jun 2019 13:40:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9F45VgGmU48BBEWkXpPf31Uw+s4wow3HKCBdXwfc5eU=;
-        b=nu0FTfVYwMtUHUI4HWvoyU+g8tr5br9wkXzjQ8VmWDtlh5gcHpD/IHp/HDeGoaI0Le
-         56AzHacZwV4TUCaaWTLb/sJCYPRjtW2YXqK66lGGgdR31k8OMmZrl6HqsCOeIzRAgmq/
-         rSAYXV91oFgAEaAdm0Fj/Ocp5b/tb7L3ef/QfgA3MCygQLBBnwat+WOpstAM7MwrdNsk
-         PMhamaChRWi5nmgUZ0FCxFPXvxQi+d1Und+wjrbgKDD7P6Rch+KV3r8OIsK8Y8RVwC4S
-         /D2awNAgdXp9JADkdyyjH6cWrWqVgaJAOt2jL5kvszCeXC/qtRHr0VEYZxLEsDJdKVYv
-         hEZA==
-X-Gm-Message-State: APjAAAUb2dmRmtiKOYuzFl8aTCmJbEiIH7R3kGGsBKJ2wIoba+2jA1Fb
-        kDyuU7Jh8oI9829xqKP8D0Grig==
-X-Google-Smtp-Source: APXvYqyRie7Xki/OWLHOhZJTu+janaNr69tparuJvhmcP1ZD3BLx+GUdwXliNQpKYAkYVofKEW9y3A==
-X-Received: by 2002:ae9:f00a:: with SMTP id l10mr41219378qkg.349.1559852987173;
-        Thu, 06 Jun 2019 13:29:47 -0700 (PDT)
-Received: from 2600-6c64-4e80-00f1-aa45-cafe-5682-368f.dhcp6.chtrptr.net (2600-6c64-4e80-00f1-aa45-cafe-5682-368f.dhcp6.chtrptr.net. [2600:6c64:4e80:f1:aa45:cafe:5682:368f])
-        by smtp.gmail.com with ESMTPSA id v195sm1455800qka.28.2019.06.06.13.29.46
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 06 Jun 2019 13:29:46 -0700 (PDT)
-Message-ID: <3d7b95c12860b8445a3768bc7819d17ea91c7758.camel@redhat.com>
-Subject: Re: [PATCH 1/3] scsi: Do not allow user space to change the SCSI
- device state into SDEV_BLOCK
-From:   Laurence Oberman <loberman@redhat.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GGcsaXwPpfBaw7F/tRMr/qeRuWI/bjpwIrse5ZxiGjU=;
+        b=d4Pd+1P/VsWU6Bt7B0C71Nou4Mlluy3Ehy0JxDtdb+63uZNYLM1p5uvniuLTPE6ZIX
+         lXg+csMcdtUUbr7HkjbbOUQaEpbFvH8cZUxx58aDjcFwracV6VKV5flTGuwuBciI+6VP
+         udaf7pGZBf2hBKdxB2Cqi7qVVDhrZ/1/AREbtU6320d6iqFor381cd3nHMYrwbLawMm3
+         XnmA3LHQvxg1hFZZfNtpOvgxK/b8KYLPMigCXZNvFdqWOsA7W+KG6gwB6F4upALmo8I/
+         lSTDxnvoSFUotZlBgpj+aXFaNvqeepEFnQFXeONERg2ETSM3eP7c9BZow7rs6jVSBIwz
+         5Ruw==
+X-Gm-Message-State: APjAAAV6LQaUCwKn3RLkzw6osyHHuZloPbMfYXfocgsa/HP+6tgJGPtC
+        tdtSnNnlTXmur/crUKiyavo=
+X-Google-Smtp-Source: APXvYqxswPGMjYIWnCJzGaO59h+aNMALkiv+v4fwVQ+RWTyhK+0/P3OudHxbOCrb8BHV184+al1RcA==
+X-Received: by 2002:a17:902:2926:: with SMTP id g35mr6477757plb.269.1559853646607;
+        Thu, 06 Jun 2019 13:40:46 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id n70sm2498145pjb.4.2019.06.06.13.40.44
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Thu, 06 Jun 2019 13:40:45 -0700 (PDT)
+Subject: Re: [PATCH 2/3] scsi: Avoid that .queuecommand() gets called for a
+ quiesced SCSI device
+To:     Hannes Reinecke <hare@suse.de>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Ming Lei <ming.lei@redhat.com>,
         Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        James Smart <james.smart@broadcom.com>
-Date:   Thu, 06 Jun 2019 16:29:45 -0400
-In-Reply-To: <22ce1f30-a3c5-fc7d-0f1e-e2ca589682bb@acm.org>
+        Johannes Thumshirn <jthumshirn@suse.de>
 References: <20190605201435.233701-1-bvanassche@acm.org>
-         <20190605201435.233701-2-bvanassche@acm.org>
-         <cec3e805-c834-a389-9666-bb79ed86057d@suse.de>
-         <22ce1f30-a3c5-fc7d-0f1e-e2ca589682bb@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-2.el7) 
-Mime-Version: 1.0
+ <20190605201435.233701-3-bvanassche@acm.org>
+ <c58b16b0-84ae-f82c-9beb-5afb8dbfb663@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <92eed484-bdd7-401a-5bf4-640984ae960a@acm.org>
+Date:   Thu, 6 Jun 2019 13:40:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <c58b16b0-84ae-f82c-9beb-5afb8dbfb663@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-06-06 at 10:26 -0700, Bart Van Assche wrote:
-> On 6/5/19 10:46 PM, Hannes Reinecke wrote:
-> > Why not simply '-EPERM' ?
-> 
->  > Translating a state into something else seems counterproductive.
-> 
-> Personally I'm OK with returning -EPERM for attempts from user space
-> to 
-> change the device state into SDEV_BLOCK. The state translation is 
-> something that was proposed about two months ago (see also 
-> https://www.mail-archive.com/linux-scsi@vger.kernel.org/msg82610.html
-> ).
-> 
-> > And, while we're at it:
-> > The only meaningful states to be set from userspace are 'RUNNING',
-> > 'OFFLINE', and 'BLOCK'.
-> > Everything else relates to the internal state machine and really
-> > shouldn't be touched from userspace at all.
-> > So I'd rather filter out everything _but_ the three states, avoid
-> > similar issue in the future.
-> 
-> Can you please clarify why you think it is useful to change the SCSI 
-> device state from user space into SDEV_BLOCK? As one can see in 
-> scsi_device_set_state() transitions from SDEV_BLOCK into the
-> following 
-> states are allowed: SDEV_RUNNING, SDEV_OFFLINE,
-> SDEV_TRANSPORT_OFFLINE 
-> and SDEV_DEL. The mpt3sas driver and also the FC, iSCSI and SRP 
-> transport drivers all can call scsi_internal_device_unblock_nowait()
-> or 
-> scsi_target_unblock(). So at least for this LLD and these transport 
-> drivers if the device state is set to SDEV_BLOCK from user space
-> that 
-> change can be overridden any time by kernel code. So I'm not sure it
-> is 
-> useful to change the device state into SDEV_BLOCK from user space.
-> 
-> Bart.
+On 6/5/19 10:50 PM, Hannes Reinecke wrote:
+> On 6/5/19 10:14 PM, Bart Van Assche wrote:
+>> Several SCSI transport and LLD drivers surround code that does not
+>> tolerate concurrent calls of .queuecommand() with scsi_target_block() /
+>> scsi_target_unblock(). These last two functions use
+>> blk_mq_quiesce_queue() / blk_mq_unquiesce_queue() for scsi-mq request
+>> queues to prevent concurrent .queuecommand() calls. However, that is
+>> not sufficient to prevent .queuecommand() calls from scsi_send_eh_cmnd().
+>> Hence surround the .queuecommand() call from the SCSI error handler with
+>> code that avoids that .queuecommand() gets called in the quiesced state.
+>>
+>> Note: converting the .queuecommand() call in scsi_send_eh_cmnd() into
+>> code that calls blk_get_request() + blk_execute_rq() is not an option
+>> since scsi_send_eh_cmnd() must be able to make forward progress even
+>> if all requests have been allocated.
+>>
+> Hmm. Have you actually observed this?
+> Typically, scsi_target_block()/scsi_target_unblock() is called prior to
+> invoking EH, to allow the system to settle and to guarantee that it's
+> fully quiesced. Only then EH is started.
+> Consequently, scsi_target_block()/scsi_target_unblock() really shouldn't
+> be called during EH; we're essentially single-threaded at this point, so
+> nothing else will be submitting command.
+> Can you explain why you need this?
 
-I have never used block (SDEV_BLOCK) from userspace, only ever running
-and offline
-I did not even know that was a possibility.
-What would that be possibly used for.
-Regards Laurence
+Hi Hannes,
 
+As one can see in the commit message of patch 3/3, I have observed a 
+.queuecommand() call by the SCSI EH causing a crash.
 
+The SCSI EH and blocking of SCSI devices have different triggers:
+- As one can see in scsi_times_out(), if a SCSI command times out and an 
+abort has already been scheduled for that command then that command is 
+handed over to the SCSI error handler. After all commands that are in 
+progress have failed the error handler thread is woken up.
+- The iSCSI and SRP transport drivers call scsi_target_block() if a 
+transport layer error has been observed. This can happen from another 
+thread than the SCSI error handler thread and these functions can be 
+called either before or after the SCSI error handler thread has been 
+woken up.
+
+Bart.
