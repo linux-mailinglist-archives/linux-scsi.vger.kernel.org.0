@@ -2,122 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FC336951
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 03:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 363F7369C2
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 04:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbfFFBfc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Jun 2019 21:35:32 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42455 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726573AbfFFBfc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 21:35:32 -0400
-Received: by mail-pg1-f196.google.com with SMTP id e6so342990pgd.9;
-        Wed, 05 Jun 2019 18:35:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/QxdqYoMgOzIx2YVy8fAWt2ho9RD+sHh6bkx2lXobUc=;
-        b=scdo9fwoyDWgCiLeWlCocSXX8chUMiPIhNZpPAKowgNRzG1R8Dy3x9SE1CgkbzhNZg
-         fmn2MgtKtuOpBhYiXDg9XQWSwYYUN3IKiZFis/6tPpYO5ZDsQRzwAgZSk5YZEGRgN/Q4
-         RIFqN8t5eeVdCbwTLNoq+Eo67lyVOaGWdGmjTtSsDNfg0do+c9V2dmJhKLAyj1+e068c
-         joRs4TFnzFp7+xJt8KNcjMKcJNWwonPRqapKoAUDJaxpD96pKaPCnDxhpuuASdDLIPLm
-         mbFyvZ1iABUiT+x15uEyJ8nFulDQwix1CtIo0CtzkHZ03rI7YKG9jQc5sw9WQfsqHmqw
-         NdhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/QxdqYoMgOzIx2YVy8fAWt2ho9RD+sHh6bkx2lXobUc=;
-        b=nGi7gvRP16LUBTrqB2KyAsJlreLHFXBYWdZ5SbUOhCOl/u9xH6zmYrSoa8ocOyPGrC
-         Sy198jvimRgLVpwuhr4loSmuS5E80ga3BmKtYwFQWf+VrmDrz908FuJlf50B/C4CZvqW
-         XWLMb1LppDVJ+56kLu00OAFIijWzkjefZ9SdOQDoeGunCnNul6A/8yrkOzWxNskYUztO
-         i1hBYNByz1O5iQNJqqwUd0bl8hZ3klBIdcHXL9bBMy5lM2kTdVkpV45HFyM21Qm5zNBq
-         peYuVPrcnTC6P4G/6QlUmKY9Hj8B5A+jcybVmtxM9rOk/VX2Ilnw36Cop43XmEcs9MCN
-         OP8A==
-X-Gm-Message-State: APjAAAVlcZPuD/9/LkxBct7tVnWCv4oGbkVSTtqEPBRyp4jMG5zuIsPZ
-        xBK7Lzjthp/fYbwchMoFqKFrBdjK
-X-Google-Smtp-Source: APXvYqzdoP302oG1MIvKL5EugKA3mai1ZTWLgs0PUz/RmS2qaC9g2Xw2XdozsJg1A7y5V6ZBxA3hVQ==
-X-Received: by 2002:a62:3287:: with SMTP id y129mr44663628pfy.101.1559784931144;
-        Wed, 05 Jun 2019 18:35:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a22sm188409pfn.173.2019.06.05.18.35.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 05 Jun 2019 18:35:29 -0700 (PDT)
-Subject: Re: [PATCH 3/3] drivers: hwmon: i5k_amb: remove unnecessary #ifdef
- MODULE
-To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>
-Cc:     linux-kernel@vger.kernel.org, rjw@rjwysocki.net,
-        viresh.kumar@linaro.org, jdelvare@suse.com, khalid@gonehiking.org,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        aacraid@microsemi.com, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <1559397700-15585-1-git-send-email-info@metux.net>
- <1559397700-15585-4-git-send-email-info@metux.net>
- <20190601224946.GA6483@roeck-us.net>
- <e91fabd4-a7a4-3afa-9f3a-95a6d90e8c7b@metux.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <b830e977-88a6-7780-a048-08d8847fc325@roeck-us.net>
-Date:   Wed, 5 Jun 2019 18:35:28 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726604AbfFFCFq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Jun 2019 22:05:46 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:55102 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726589AbfFFCFq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Jun 2019 22:05:46 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5625Dss124563;
+        Thu, 6 Jun 2019 02:05:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=NX5cH1V3dLXcMi9Tv/iqE0k/Mhdpf9u0wFy0hYpkKAk=;
+ b=Bi0L9DGlMlfnFYxMZotIRopZVf6FqtOE+yiVLGuq7LnW61y+HC2qn32u55cSVWt8qAjz
+ i2O8/srKy+bwlx0CxXkXf5Kbm90yYqsKy3xh5wapXN2U3T10Ln6F6DWHQbNmXihOQxkA
+ B3vBcjj9dZ1Ea4mxKyeehOcVXrYHirVwke65MBXR+edLNqGmo6Qmm/vUqwyKvpvVX580
+ t+EWVh1CP4qte3+Lkr/UMUzKMSpXfdpbhOZ/tG4WekDJfHWf9lAon8ZAW67uAy7ZGLMc
+ EfAt5sc4YYi3BrJFLmz3sNA+kjC8R+1E5zTKERismDId3UkQVPIHXI+0om33XLl2kohL XQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2suj0qnnn5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Jun 2019 02:05:31 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5623t6L125294;
+        Thu, 6 Jun 2019 02:05:30 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 2swngj6dwq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 Jun 2019 02:05:30 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5625O2c021565;
+        Thu, 6 Jun 2019 02:05:24 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 05 Jun 2019 19:05:24 -0700
+To:     Himanshu Madhani <hmadhani@marvell.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "linux-scsi\@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>
+Subject: Re: [PATCH 00/20] qla2xxx Patches
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190529202826.204499-1-bvanassche@acm.org>
+        <794547A0-2D81-42DD-8777-27B9BE607E21@marvell.com>
+Date:   Wed, 05 Jun 2019 22:05:22 -0400
+In-Reply-To: <794547A0-2D81-42DD-8777-27B9BE607E21@marvell.com> (Himanshu
+        Madhani's message of "Wed, 29 May 2019 21:44:29 +0000")
+Message-ID: <yq1y32fo4d9.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <e91fabd4-a7a4-3afa-9f3a-95a6d90e8c7b@metux.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9279 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=784
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906060014
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9279 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=839 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906060014
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/5/19 4:59 PM, Enrico Weigelt, metux IT consult wrote:
-> On 01.06.19 22:49, Guenter Roeck wrote:
->> On Sat, Jun 01, 2019 at 04:01:40PM +0200, Enrico Weigelt, metux IT consult wrote:
->>> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
->>> so the extra check here is not necessary.
->>>
->>> Signed-off-by: Enrico Weigelt <info@metux.net>
->>> ---
->>>   drivers/hwmon/i5k_amb.c | 2 --
->>>   1 file changed, 2 deletions(-)
->>>
->>> diff --git a/drivers/hwmon/i5k_amb.c b/drivers/hwmon/i5k_amb.c
->>> index b09c39a..b674c2f 100644
->>> --- a/drivers/hwmon/i5k_amb.c
->>> +++ b/drivers/hwmon/i5k_amb.c
->>> @@ -482,14 +482,12 @@ static int i5k_channel_probe(u16 *amb_present, unsigned long dev_id)
->>>       { 0, 0 }
->>>   };
->>> -#ifdef MODULE
->>>   static const struct pci_device_id i5k_amb_ids[] = {
->>>       { PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5000_ERR) },
->>>       { PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_5400_ERR) },
->>>       { 0, }
->>>   };
->>>   MODULE_DEVICE_TABLE(pci, i5k_amb_ids);
->>> -#endif
->>
->> I'd rather know what this table is used for in the first place.
-> 
-> Seems it's really just used for the module loader, while actual probing
-> is using a different table. IMHO, the worst thing my patch could do is
-> introducing a warning on unused variable (IMHO shouldn't happen when
-> it's static const).
-> 
 
-You are wrong. You'll need __maybe_unused qualifiers for those variables
-to avoid the warning.
+Himanshu,
 
-Guenter
+> Thanks for the series. We will provide ACK after these patches have
+> gone through our internal testing.
 
-> I've just rewritten it to move everything into i5k_amb_ids ... just need
-> to run build tests on it (unfortunately can't run-test, as I don't have
-> that device).
-> 
-> 
-> --mtx
-> 
+Ping on this series. Thanks!
 
+-- 
+Martin K. Petersen	Oracle Linux Engineering
