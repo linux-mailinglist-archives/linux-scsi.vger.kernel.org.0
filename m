@@ -2,107 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A937D36E0B
-	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 10:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2408D36EC1
+	for <lists+linux-scsi@lfdr.de>; Thu,  6 Jun 2019 10:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726943AbfFFIDQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Jun 2019 04:03:16 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50058 "EHLO mx1.redhat.com"
+        id S1727258AbfFFIea (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Jun 2019 04:34:30 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:33962 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725769AbfFFIDQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 6 Jun 2019 04:03:16 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        id S1726952AbfFFIe3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 6 Jun 2019 04:34:29 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 1821EB2DD3;
-        Thu,  6 Jun 2019 08:03:03 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-26.pek2.redhat.com [10.72.8.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DB5425DF4C;
-        Thu,  6 Jun 2019 08:02:54 +0000 (UTC)
-Date:   Thu, 6 Jun 2019 16:02:50 +0800
+        by mx1.redhat.com (Postfix) with ESMTPS id 61AAB6147C;
+        Thu,  6 Jun 2019 08:34:21 +0000 (UTC)
+Received: from localhost (ovpn-8-26.pek2.redhat.com [10.72.8.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2A406101E69F;
+        Thu,  6 Jun 2019 08:34:15 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Christoph Hellwig <hch@lst.de>,
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>,
         "Ewan D . Milne" <emilne@redhat.com>,
         Hannes Reinecke <hare@suse.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
         Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH V2 1/3] scsi: lib/sg_pool.c: clear 'first_chunk' in case
- of no pre-allocation
-Message-ID: <20190606080249.GC28677@ming.t460p>
-References: <20190605010623.12325-1-ming.lei@redhat.com>
- <20190605010623.12325-2-ming.lei@redhat.com>
- <f099b22a-23e8-abe6-1526-6ceed2a4ebde@acm.org>
+Subject: [PATCH V3 0/3] scsi: three SG_CHAIN related fixes
+Date:   Thu,  6 Jun 2019 16:34:07 +0800
+Message-Id: <20190606083410.32243-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f099b22a-23e8-abe6-1526-6ceed2a4ebde@acm.org>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Thu, 06 Jun 2019 08:03:15 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Thu, 06 Jun 2019 08:34:29 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 08:45:58AM -0700, Bart Van Assche wrote:
-> On 6/4/19 6:06 PM, Ming Lei wrote:
-> > If user doesn't ask to pre-allocate by passing zero 'nents_first_chunk' to
-> > sg_alloc_table_chained, we need to make sure that 'first_chunk' is cleared.
-> > Otherwise, __sg_alloc_table() still may think that the 1st SGL should
-> > be from the pre-allocation.
-> > 
-> > Fixes the issue by clearing 'first_chunk' in sg_alloc_table_chained() if
-> > 'nents_first_chunk' is zero.
-> > 
-> > Cc: Christoph Hellwig <hch@lst.de>
-> > Cc: Bart Van Assche <bvanassche@acm.org>
-> > Cc: Ewan D. Milne <emilne@redhat.com>
-> > Cc: Hannes Reinecke <hare@suse.com>
-> > Cc: Guenter Roeck <linux@roeck-us.net>
-> > Fixes: c3288dd8c232 ("scsi: core: avoid pre-allocating big SGL for data")
-> 
-> Shouldn't the "Fixes:" tag be left out from this patch? I don't think that
+Hi,
 
-Here the 'Fixes' means it is a fix on the code(sg_alloc_table_chained) itself.
+Guenter reported scsi boot issue caused by commit c3288dd8c232
+("scsi: core: avoid pre-allocating big SGL for data").
 
-> this patch by itself fixes anything. Isn't this patch something that is
-> necessary to make patch 2/3 in this series work?
+Turns out there are at least three issues.
 
-Yeah, it is needed for patch 2/3.
+The 1st patch fixes sg_alloc_table_chained() which may try to use
+the pre-allocation SGL even though user passes zero to 'nents_first_chunk'.
 
-> How about indicating that by mentioning it in the commit message?
+The 2nd patch fixes issue in case that NO_SG_CHAIN on some ARCHs,
+such as alpha, arm and parisc.
 
-OK.
+The 3rd patch makes esp scsi working with SG_CHAIN.
 
-> 
-> > Reported-by: Guenter Roeck <linux@roeck-us.net>
-> > Tested-by: Guenter Roeck <linux@roeck-us.net>
-> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> > ---
-> >   lib/sg_pool.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/lib/sg_pool.c b/lib/sg_pool.c
-> > index 47eecbe094d8..e042a1722615 100644
-> > --- a/lib/sg_pool.c
-> > +++ b/lib/sg_pool.c
-> > @@ -122,7 +122,7 @@ int sg_alloc_table_chained(struct sg_table *table, int nents,
-> >   	}
-> >   	/* User supposes that the 1st SGL includes real entry */
-> > -	if (nents_first_chunk == 1) {
-> > +	if (nents_first_chunk <= 1) {
-> >   		first_chunk = NULL;
-> >   		nents_first_chunk = 0;
-> >   	}
-> 
-> How about also updating the kernel-doc header above sg_alloc_table_chained()
-> such that it is made clear that @first_chunk is ignored if nents_first_chunk
-> <= 1 ? Otherwise this patch looks fine to me.
+V3:
+	- add reviewed-by & tested-by tag
+	- update 1st patch's commit log & kernel doc
 
-OK.
+V2:
+	- add the patch1, which is verified by Guenter
+	- add .prv_sg to store the previous sg for esp_scsi
 
-Thanks,
-Ming
+
+Ming Lei (3):
+  scsi: lib/sg_pool.c: clear 'first_chunk' in case of no pre-allocation
+  scsi: core: don't pre-allocate small SGL in case of NO_SG_CHAIN
+  scsi: esp: make it working on SG_CHAIN
+
+ drivers/scsi/esp_scsi.c | 20 +++++++++++++-------
+ drivers/scsi/esp_scsi.h |  2 ++
+ drivers/scsi/scsi_lib.c |  6 +++++-
+ lib/sg_pool.c           |  6 ++++--
+ 4 files changed, 24 insertions(+), 10 deletions(-)
+
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Ewan D. Milne <emilne@redhat.com>
+Cc: Hannes Reinecke <hare@suse.com>
+Cc: Finn Thain <fthain@telegraphics.com.au>
+Cc: Guenter Roeck <linux@roeck-us.net>
+-- 
+2.20.1
+
