@@ -2,87 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB11E39813
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 23:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246C83987B
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Jun 2019 00:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730162AbfFGVvO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Jun 2019 17:51:14 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:49505 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729810AbfFGVvO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 17:51:14 -0400
-Received: from [192.168.1.110] ([77.4.3.118]) by mrelayeu.kundenserver.de
- (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MXoxG-1h3P5h2siC-00Y9qf; Fri, 07 Jun 2019 23:50:57 +0200
-Subject: Re: [PATCH v2] drivers: scsi: remove unnecessary #ifdef MODULE
-To:     James Bottomley <jejb@linux.ibm.com>,
-        "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org
-Cc:     khalid@gonehiking.org, martin.petersen@oracle.com,
-        aacraid@microsemi.com, linux-scsi@vger.kernel.org
-References: <1559833471-30534-1-git-send-email-info@metux.net>
- <1559868089.3233.1.camel@linux.ibm.com>
-From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Organization: metux IT consult
-Message-ID: <da4cea67-7651-7284-51e6-5313b1241a8a@metux.net>
-Date:   Fri, 7 Jun 2019 23:50:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S1731346AbfFGWU0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Jun 2019 18:20:26 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:36711 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731132AbfFGWUW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 18:20:22 -0400
+Received: by mail-lj1-f193.google.com with SMTP id i21so3033972ljj.3
+        for <linux-scsi@vger.kernel.org>; Fri, 07 Jun 2019 15:20:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UQG5fZ3EhYRq8CYdObUVFyj6seF2R8nq3JkVzFb/lxA=;
+        b=J8oCCPGNMQU5rDGmeyVTZPHkWL9+Vc3T20HBnIQsBN/psbfksQVafp9kuniapFnd9p
+         ACZqYf29QTVDX3vNf/GeJ+C6SzG9RRzuaNdi7Odo6sI+fOHmjBlRCd8oN2ZfmoLK+yVW
+         Z4ijFNknrQ679mE38Nn9tFfqwmhPjVcPgN3CEI1ODVHLd67dZWr89t/5PRBA/eaDKeNz
+         imVCpLxet79CIeJKx/Lh38ZyzAatFK0W0vjcsPjXkCGoUOYqKW4hNg+KHhIE7ODa2w80
+         vFgRB3icM0W8MLppUf36C40m++FpW5cdTrEZKh9qGz3T7b6fCuVUnjuxS/9bejthZ/14
+         6Guw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UQG5fZ3EhYRq8CYdObUVFyj6seF2R8nq3JkVzFb/lxA=;
+        b=jW1ghhf9SG1m5pwZba0bKgKO38rru5RtNUIoYtethEbFyBjLCQZFzPtg1jzZFgCEgT
+         t5enf/LX57qoCXyUCs+zvxJOzfmXqDy+xVhgTHU4gcXjXPdTNQCxy4BYqwhEs88CstM9
+         OslZEgNt9bUCgdVqdhSdS/8L2/YjB1op9f+8u2P1YNZ97+Tly0tNxXWRc5wGB7J9pZPR
+         0G03HaqAVbdweItlG3peGa+xwu8EAWxTXlnkTTClwrsXlCzyENpq98OOEJ7cj6PldlsF
+         c3vUZihG9ZdpLkuGbEeL0NdNZuhm1yVZnmPsRGPrRVp58GQDlt0pw+pqKuBzEBew+pbS
+         bAUg==
+X-Gm-Message-State: APjAAAVDUPqYJyd++d/hj1xgjW92FrF2o2fI4df9uQjDsPDsXhb94CNW
+        1TUvDojBmdEuaO2PzQ1oD5ZltlnDFM0op2Vev49eSw==
+X-Google-Smtp-Source: APXvYqwtFn9ujhL1bNosuQYXIjXabGQeb/hX4swI0JpPVUh1sm9eQAptKaHUcU43LzWRCdPzHPmmw6b84I+/1LdT4jQ=
+X-Received: by 2002:a2e:9753:: with SMTP id f19mr5402543ljj.113.1559946020389;
+ Fri, 07 Jun 2019 15:20:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <1559868089.3233.1.camel@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:/bCMse1WqZ7oNEY4vFZvKN9LFM1f/TRTC3pQ7DcAleqpq7Xo8ai
- zwnPKyQyBXrJLyQV61/TX4O1dsgwz1U2SIMIzt+Y6AfKcZJNqczaN/zdpovIZlJa81u8sg3
- kUObtDK4rfzkv6kqXrDbagbt3q+Pmr+XfNZtAS2t3JnuXHoCJtQw6V5xCTE5pznqT6OsL/o
- AsfppQd8TmDEj26Hk45Gw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:8zu0GrELbRA=:HVFy5tvIU4G51zzd+cWHIp
- 7hcYMkW9nWPaYJNMctjHusm5bOAFnMxSzpCRH++x5VfzjyNw7yHQgMIDLQtKWFnd3fg6CAMKk
- //Vjzb9oU4E/2ECPs6jsQtUQCrIH+kQvQHnjfCW6Wu/TT6CZ3xjA005ykTGsu+zKaW3Kjxf/x
- CHBpWvoAGMruvpIBNtfObaPQu2A6KbbRN6gR6PBo7NwncStrGP0pGMNKYyw1TObkaQFUfSIAP
- 9D9g0ctggb5dnlCapoLUjif3gVJzfO4RM7xpimAWA/aP1txmXyjGMJ7jLRqXRVMaOZmb95FTb
- 3Uipcl4dDEyGCibOVqsjhnu/nv+PTvqtmaDUyz5konmFvWux3B/Q8nPMtriWxhtHZp0ZREB1R
- CQED9B6cmcW4mEuseBKUHJCMUZvCj3zrxHT83qyWmiOaVLg67OQ+EowQJ0q0sZfivYXBardYb
- kBLO7rqVv1av9kgX3SbwtWFRAn76ceWt9Vsopy3aPNHbDeQGUHOiL0GkgTUENd50etvYVdO77
- ZYYw0iaSQhahup86ZGgKk6B7HUqPV6Qlw/LOmBrCDkokD4q+XgovCxZvL4u4kzx8cKysDZqwi
- U4yU0N5J8vshhfN+jJnSt2r/RaUhaGMH0NYV+prKt0a7cPSp/z+L+jKnbauAUFA92SxconfO3
- aKnJRzys9q9N3jjraqMkBoLKLLZr8ywzzw+4lDu5IcsUHtGTskXhGLjkdF8+jnyolvDj+kGcc
- aKSnxdiEBO/6GfObCF6dtSy632O3zJqhKtg4Bn9XRTHKNkMJ7JxA4rhLtng=
+References: <20190604072001.9288-1-bjorn.andersson@linaro.org> <20190604072001.9288-4-bjorn.andersson@linaro.org>
+In-Reply-To: <20190604072001.9288-4-bjorn.andersson@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Sat, 8 Jun 2019 00:20:12 +0200
+Message-ID: <CACRpkdZETzjw2hOz7y15sUFa+s2Ki3UaMh-Qcor4cEopZrf03Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: sdm845-mtp: Specify UFS
+ device-reset GPIO
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 07.06.19 02:41, James Bottomley wrote:
-> On Thu, 2019-06-06 at 17:04 +0200, Enrico Weigelt, metux IT consult
-> wrote:
->> From: Enrico Weigelt <info@metux.net>
->>
->> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
->> so the extra check here is not necessary.
->>
->> Changes v2:
->>     * make dptids const to fix warning on unused variable
-> 
-> I don't think this works; in my version of gcc, const does not defeat
-> the unused variable warning if I try with a test programme:
-> 
-> jejb@jarvis:~> gcc -Wunused-variable -c test1.c
-> test1.c:3:18: warning: ‘i’ defined but not used [-Wunused-cons
-> t-variable=]
->  static const int i[] = { 1, 2, 3};
+On Tue, Jun 4, 2019 at 9:20 AM Bjorn Andersson
+<bjorn.andersson@linaro.org> wrote:
 
-Which gcc version are you using ?
-Could you please have a try w/ the kernel (plus my patch) ?
+> Specify the UFS device-reset gpio, so that the controller will issue a
+> reset of the UFS device.
+>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Tested w/ 6.3.0-18+deb9u1 (stretch-amd64), got no warnings.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-
---mtx
-
--- 
-Enrico Weigelt, metux IT consult
-Free software and Linux embedded engineering
-info@metux.net -- +49-151-27565287
+Yours,
+Linus Walleij
