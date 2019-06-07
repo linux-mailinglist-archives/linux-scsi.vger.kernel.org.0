@@ -2,116 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9DB3953B
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 21:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E16394C7
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 20:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730186AbfFGTDp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Jun 2019 15:03:45 -0400
-Received: from gateway30.websitewelcome.com ([192.185.194.16]:18088 "EHLO
-        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729841AbfFGTDo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 15:03:44 -0400
-X-Greylist: delayed 1367 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jun 2019 15:03:44 EDT
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway30.websitewelcome.com (Postfix) with ESMTP id 6E4D6427A
-        for <linux-scsi@vger.kernel.org>; Fri,  7 Jun 2019 13:40:56 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id ZJnMhaiMP90onZJnMhc2GP; Fri, 07 Jun 2019 13:40:56 -0500
-X-Authority-Reason: nr=8
-Received: from [189.250.134.24] (port=46982 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hZJnL-002Ree-1F; Fri, 07 Jun 2019 13:40:55 -0500
-Date:   Fri, 7 Jun 2019 13:40:53 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        id S1732148AbfFGSym (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Jun 2019 14:54:42 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:42418 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732138AbfFGSym (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 14:54:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:
+        To:From:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=a08/7CnmoGCvdW3fg/j064hE6wBqrv1dsgLNs5Wzg9M=; b=g77KJxiYIq13fiIKP/xmovj1mc
+        JT2c8zGqMbdABpI0A3hLILbYAVz+2X/PXxEtlv9XKERhElZwyFcxEx05Ph1GEByYy10mr0xg1HtmB
+        YX/f4IFpn75jIyGlC+J7TAtlhqeK5Sl25dU5Z2ocCI6JFx8k5Nu4dOZErYtTUzJ5QkOSZfM69kktY
+        /qEeGeavT4+ij55UZR5aSM3FJW6/o+ogRzkMzlFchNt4U73T+czaVcxlpYEpwjSmMBK9bhcqX0iL5
+        YOOYzjBmHd0eIooZF9eVHYkXv4PwG/+t55sznxE5/hcLV2Wx2aj+66K6o+9LgF3+ocDltkCmoNk0b
+        f4mdUxSA==;
+Received: from [179.181.119.115] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hZK0d-0005sp-QE; Fri, 07 Jun 2019 18:54:39 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hZK0b-0007Fp-NV; Fri, 07 Jun 2019 15:54:37 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Don Brace <don.brace@microsemi.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] scsi: megaraid_sas: Use struct_size() helper
-Message-ID: <20190607184053.GA11513@embeddedor>
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-arch@vger.kernel.org, esc.storagedev@microsemi.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH v3 20/20] docs: pci: fix broken links due to conversion from pci.txt to pci.rst
+Date:   Fri,  7 Jun 2019 15:54:36 -0300
+Message-Id: <780cb6c2dfe860873394675df6580765ea5a2680.1559933665.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
+References: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.250.134.24
-X-Source-L: No
-X-Exim-ID: 1hZJnL-002Ree-1F
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [189.250.134.24]:46982
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 7
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-One of the more common cases of allocation size calculations is finding
-the size of a structure that has a zero-sized array at the end, along
-with memory for some number of elements for that array. For example:
+Some documentation files were still pointing to the old place.
 
-struct MR_PD_CFG_SEQ_NUM_SYNC {
-	...
-        struct MR_PD_CFG_SEQ seq[1];
-} __packed;
-
-Make use of the struct_size() helper instead of an open-coded version
-in order to avoid any potential type mistakes.
-
-So, replace the following form:
-
-sizeof(struct MR_PD_CFG_SEQ_NUM_SYNC) + (sizeof(struct MR_PD_CFG_SEQ) * (MAX_PHYSICAL_DEVICES - 1))
-
-with:
-
-struct_size(pd_sync, seq, MAX_PHYSICAL_DEVICES - 1)
-
-This code was detected with the help of Coccinelle.
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Fixes: 229b4e0728e0 ("Documentation: PCI: convert pci.txt to reST")
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 ---
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ Documentation/memory-barriers.txt                    | 2 +-
+ Documentation/translations/ko_KR/memory-barriers.txt | 2 +-
+ drivers/scsi/hpsa.c                                  | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index a25b6b4b6548..56bd524dddbf 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -1191,7 +1191,7 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
- int
- megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend) {
- 	int ret = 0;
--	u32 pd_seq_map_sz;
-+	size_t pd_seq_map_sz;
- 	struct megasas_cmd *cmd;
- 	struct megasas_dcmd_frame *dcmd;
- 	struct fusion_context *fusion = instance->ctrl_context;
-@@ -1200,9 +1200,7 @@ megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend) {
+diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
+index f70ebcdfe592..f4170aae1d75 100644
+--- a/Documentation/memory-barriers.txt
++++ b/Documentation/memory-barriers.txt
+@@ -548,7 +548,7 @@ There are certain things that the Linux kernel memory barriers do not guarantee:
  
- 	pd_sync = (void *)fusion->pd_seq_sync[(instance->pd_seq_map_id & 1)];
- 	pd_seq_h = fusion->pd_seq_phys[(instance->pd_seq_map_id & 1)];
--	pd_seq_map_sz = sizeof(struct MR_PD_CFG_SEQ_NUM_SYNC) +
--			(sizeof(struct MR_PD_CFG_SEQ) *
--			(MAX_PHYSICAL_DEVICES - 1));
-+	pd_seq_map_sz = struct_size(pd_sync, seq, MAX_PHYSICAL_DEVICES - 1);
+ 	[*] For information on bus mastering DMA and coherency please read:
  
- 	cmd = megasas_get_cmd(instance);
- 	if (!cmd) {
+-	    Documentation/PCI/pci.txt
++	    Documentation/PCI/pci.rst
+ 	    Documentation/DMA-API-HOWTO.txt
+ 	    Documentation/DMA-API.txt
+ 
+diff --git a/Documentation/translations/ko_KR/memory-barriers.txt b/Documentation/translations/ko_KR/memory-barriers.txt
+index db0b9d8619f1..07725b1df002 100644
+--- a/Documentation/translations/ko_KR/memory-barriers.txt
++++ b/Documentation/translations/ko_KR/memory-barriers.txt
+@@ -569,7 +569,7 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
+ 
+ 	[*] 버스 마스터링 DMA 와 일관성에 대해서는 다음을 참고하시기 바랍니다:
+ 
+-	    Documentation/PCI/pci.txt
++	    Documentation/PCI/pci.rst
+ 	    Documentation/DMA-API-HOWTO.txt
+ 	    Documentation/DMA-API.txt
+ 
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index 1bef1da273c2..53df6f7dd3f9 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -7760,7 +7760,7 @@ static void hpsa_free_pci_init(struct ctlr_info *h)
+ 	hpsa_disable_interrupt_mode(h);		/* pci_init 2 */
+ 	/*
+ 	 * call pci_disable_device before pci_release_regions per
+-	 * Documentation/PCI/pci.txt
++	 * Documentation/PCI/pci.rst
+ 	 */
+ 	pci_disable_device(h->pdev);		/* pci_init 1 */
+ 	pci_release_regions(h->pdev);		/* pci_init 2 */
+@@ -7843,7 +7843,7 @@ static int hpsa_pci_init(struct ctlr_info *h)
+ clean1:
+ 	/*
+ 	 * call pci_disable_device before pci_release_regions per
+-	 * Documentation/PCI/pci.txt
++	 * Documentation/PCI/pci.rst
+ 	 */
+ 	pci_disable_device(h->pdev);
+ 	pci_release_regions(h->pdev);
 -- 
 2.21.0
 
