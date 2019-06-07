@@ -2,81 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E5F397B8
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 23:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB11E39813
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 23:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729787AbfFGV0z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Jun 2019 17:26:55 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40294 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729783AbfFGV0z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 17:26:55 -0400
-Received: by mail-lj1-f193.google.com with SMTP id a21so2938403ljh.7
-        for <linux-scsi@vger.kernel.org>; Fri, 07 Jun 2019 14:26:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q6sGj4udjdudlOgOeP/H6pDDZcmuzFdAkSUlLYTz7Hc=;
-        b=z23mfVUe0uLJ/lnbrCPAfFLlJoZeq+fXYSy3t319XR2mXsJF2HJBlsHc72bDowYPbr
-         BKlcfggdOUpnzKEOcmo/gWDJBafNeMAp2aw7/FOy/CEMhLhZAkJiqltxY9gqYHhdPADe
-         LWRluJiEIcw2pJBdRmdTdrAVM13WBgOAg9klKPj6zLBbvJjcvG0SF3UGpq5K05+1nydQ
-         YVvrkZaXl+tnN/7TgP1T8xCinH9HAqs6lCo00edbK7wHMvW8WMzCuFvKYkfX8GduJi99
-         j0wanfih+iwQg+9v0kDSq7XaxRBoHZrhq0vIpY4sKoaShnKX2Gdts7XNyc78ZgcYCS/j
-         ih7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q6sGj4udjdudlOgOeP/H6pDDZcmuzFdAkSUlLYTz7Hc=;
-        b=ZHbtHGKfGew6QBHYWRSmExVC19ChpiTV2ykL6WMWDG06ifwKs2AbR1C7TXb4lBK2d3
-         apfsVHwum59ZGfrY4OCBSRg2pFdbOhh2BcuW9IeIfHhnhe/kj3lRXCgs9SjJlpvyELey
-         X8nJh69ob5x0rwDA/z+GtJhOnga/YxmUdx501+8wVfXXxSkl7evCZ2mw2eqGaMajsF2h
-         qFkqphQXUYdc6I22ophpw/uF/fNNic/vj/+G/RA6V67Lt+AjV/gyfr/yEuqhBbk517i6
-         IjcJzeO6zA4X/viInwI3uGS8A8ezOvTRYuol+Nc1HXznFj4HMEA07Z4suT/BA7Ctn3zO
-         0fWA==
-X-Gm-Message-State: APjAAAUkour2zY/RSd7CmGS6WwhhuNxtecNfET1we6DQb279EvhsZq0s
-        osS97fgKVe/w8KpmTORISs4mi7161R+yWDGPZ2tUrA==
-X-Google-Smtp-Source: APXvYqwIajTpMSgCMZav18YPN+TlLmExrYklafV6rIWWxNFhS1pNAPS/UUbCntmRCn13SfjJkYCmG7CoaruMAno9FuY=
-X-Received: by 2002:a2e:7508:: with SMTP id q8mr13158846ljc.165.1559942813429;
- Fri, 07 Jun 2019 14:26:53 -0700 (PDT)
+        id S1730162AbfFGVvO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Jun 2019 17:51:14 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:49505 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729810AbfFGVvO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 17:51:14 -0400
+Received: from [192.168.1.110] ([77.4.3.118]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MXoxG-1h3P5h2siC-00Y9qf; Fri, 07 Jun 2019 23:50:57 +0200
+Subject: Re: [PATCH v2] drivers: scsi: remove unnecessary #ifdef MODULE
+To:     James Bottomley <jejb@linux.ibm.com>,
+        "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        linux-kernel@vger.kernel.org
+Cc:     khalid@gonehiking.org, martin.petersen@oracle.com,
+        aacraid@microsemi.com, linux-scsi@vger.kernel.org
+References: <1559833471-30534-1-git-send-email-info@metux.net>
+ <1559868089.3233.1.camel@linux.ibm.com>
+From:   "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Organization: metux IT consult
+Message-ID: <da4cea67-7651-7284-51e6-5313b1241a8a@metux.net>
+Date:   Fri, 7 Jun 2019 23:50:55 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686 on x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-References: <20190604072001.9288-1-bjorn.andersson@linaro.org> <20190604072001.9288-2-bjorn.andersson@linaro.org>
-In-Reply-To: <20190604072001.9288-2-bjorn.andersson@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 7 Jun 2019 23:26:46 +0200
-Message-ID: <CACRpkdazzRV5XydKHmXRQiU2Mx+=HyRgNCEpNqsOsCdycXmMOg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] pinctrl: qcom: sdm845: Expose ufs_reset as gpio
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-scsi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1559868089.3233.1.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:/bCMse1WqZ7oNEY4vFZvKN9LFM1f/TRTC3pQ7DcAleqpq7Xo8ai
+ zwnPKyQyBXrJLyQV61/TX4O1dsgwz1U2SIMIzt+Y6AfKcZJNqczaN/zdpovIZlJa81u8sg3
+ kUObtDK4rfzkv6kqXrDbagbt3q+Pmr+XfNZtAS2t3JnuXHoCJtQw6V5xCTE5pznqT6OsL/o
+ AsfppQd8TmDEj26Hk45Gw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:8zu0GrELbRA=:HVFy5tvIU4G51zzd+cWHIp
+ 7hcYMkW9nWPaYJNMctjHusm5bOAFnMxSzpCRH++x5VfzjyNw7yHQgMIDLQtKWFnd3fg6CAMKk
+ //Vjzb9oU4E/2ECPs6jsQtUQCrIH+kQvQHnjfCW6Wu/TT6CZ3xjA005ykTGsu+zKaW3Kjxf/x
+ CHBpWvoAGMruvpIBNtfObaPQu2A6KbbRN6gR6PBo7NwncStrGP0pGMNKYyw1TObkaQFUfSIAP
+ 9D9g0ctggb5dnlCapoLUjif3gVJzfO4RM7xpimAWA/aP1txmXyjGMJ7jLRqXRVMaOZmb95FTb
+ 3Uipcl4dDEyGCibOVqsjhnu/nv+PTvqtmaDUyz5konmFvWux3B/Q8nPMtriWxhtHZp0ZREB1R
+ CQED9B6cmcW4mEuseBKUHJCMUZvCj3zrxHT83qyWmiOaVLg67OQ+EowQJ0q0sZfivYXBardYb
+ kBLO7rqVv1av9kgX3SbwtWFRAn76ceWt9Vsopy3aPNHbDeQGUHOiL0GkgTUENd50etvYVdO77
+ ZYYw0iaSQhahup86ZGgKk6B7HUqPV6Qlw/LOmBrCDkokD4q+XgovCxZvL4u4kzx8cKysDZqwi
+ U4yU0N5J8vshhfN+jJnSt2r/RaUhaGMH0NYV+prKt0a7cPSp/z+L+jKnbauAUFA92SxconfO3
+ aKnJRzys9q9N3jjraqMkBoLKLLZr8ywzzw+4lDu5IcsUHtGTskXhGLjkdF8+jnyolvDj+kGcc
+ aKSnxdiEBO/6GfObCF6dtSy632O3zJqhKtg4Bn9XRTHKNkMJ7JxA4rhLtng=
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jun 4, 2019 at 9:20 AM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
+On 07.06.19 02:41, James Bottomley wrote:
+> On Thu, 2019-06-06 at 17:04 +0200, Enrico Weigelt, metux IT consult
+> wrote:
+>> From: Enrico Weigelt <info@metux.net>
+>>
+>> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
+>> so the extra check here is not necessary.
+>>
+>> Changes v2:
+>>     * make dptids const to fix warning on unused variable
+> 
+> I don't think this works; in my version of gcc, const does not defeat
+> the unused variable warning if I try with a test programme:
+> 
+> jejb@jarvis:~> gcc -Wunused-variable -c test1.c
+> test1.c:3:18: warning: ‘i’ defined but not used [-Wunused-cons
+> t-variable=]
+>  static const int i[] = { 1, 2, 3};
 
-> The ufs_reset pin is expected to be wired to the reset pin of the
-> primary UFS memory but is pretty much just a general purpose output pinr
->
-> Reorder the pins and expose it as gpio 150, so that the UFS driver can
-> toggle it.
->
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Which gcc version are you using ?
+Could you please have a try w/ the kernel (plus my patch) ?
 
-Patch applied.
+Tested w/ 6.3.0-18+deb9u1 (stretch-amd64), got no warnings.
 
-Yours,
-Linus Walleij
+
+--mtx
+
+-- 
+Enrico Weigelt, metux IT consult
+Free software and Linux embedded engineering
+info@metux.net -- +49-151-27565287
