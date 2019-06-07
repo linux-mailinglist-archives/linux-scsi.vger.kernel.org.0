@@ -2,223 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62BF53944F
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 20:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9DB3953B
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 21:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730511AbfFGS14 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Jun 2019 14:27:56 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38042 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729864AbfFGS1z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 14:27:55 -0400
-Received: by mail-pf1-f195.google.com with SMTP id a186so1652348pfa.5
-        for <linux-scsi@vger.kernel.org>; Fri, 07 Jun 2019 11:27:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oIjp0laGeaMLz3DpfA7bZ3JYDaFx6ya3dcNI7Njhg8A=;
-        b=ESkpHft1KvNCIjHH3O/JUW/TyJfp8u5I0y/5PBA0Kc3OLYfdGygNcQ3HrL6mlWClj7
-         bpPx05wKv7MF2xAYgnxO6JCCJ2cIO62/8SRg3N5N7U9wPn80JwsKcfvk8CeTjbA0U4f9
-         iVyZZEVy+xGP3u6Aoq8A+IXLbf28YRQfrCs+a3ovoMF4t17OeqK/B5HSIwzwIGpHAKaj
-         Mbd5iK+qvuTCS0O8YKKWAm5rhOdvRI3zYHUUURf08xwu8gAWNRBNUnGTXeyJ5RK+rEry
-         8xddYxkOrBjmpqUD8ftZyfQBuIp3R+2fMQNaKLXXUmzot5YaCPjuBWAledWLDCr1SUiH
-         /fIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oIjp0laGeaMLz3DpfA7bZ3JYDaFx6ya3dcNI7Njhg8A=;
-        b=At0yc7HGe3Z6ubsbKyZVx4mm/u7auUnCi/KYxH9OoQoBIpfhkvawpWfcRnKlTOZT3P
-         EixVgCEMcqeUzu49STIpfxe44h7JRex1RQLo588QiKiIom9XYCdu5kCBcTnBPGW3ZS+1
-         4VRwM37SRjSPO8EWj+ArQq9Slpoukp79xH4LPqOfqRGOZuTdRgUoHGzGaSmo/yPtwR1K
-         v7QQNszU3ZdTQN8Kz4a1Sj0EzVW+jnDT7hYGP6A4NwC7rcp+2COUG04JugbPoR9AVz0O
-         WjVjj7pfJ5uohxXVVwDLkPhzeyM5qafrQyXNlvGsCv84nPv35YZwxv1k+kH0DM+g80jM
-         U6cA==
-X-Gm-Message-State: APjAAAXb2zTvI6GdlSCTDYEWNxXau3ntNwM5ko5uKdXf8voM9HMnlKUG
-        pkMkmQZwWhde4cMEifm3No8kVw==
-X-Google-Smtp-Source: APXvYqyrJmrV7+okkrFesHkpTxqrJm8TWaLeMfZ3XymVF9KmZh5tefwAwOWAl5r4VG5HGHrfuPm0/A==
-X-Received: by 2002:aa7:8ac7:: with SMTP id b7mr46483017pfd.100.1559932075002;
-        Fri, 07 Jun 2019 11:27:55 -0700 (PDT)
-Received: from minitux (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id d24sm2610692pjv.24.2019.06.07.11.27.54
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 07 Jun 2019 11:27:54 -0700 (PDT)
-Date:   Fri, 7 Jun 2019 11:27:52 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        MSM <linux-arm-msm@vger.kernel.org>,
-        SCSI <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH 2/3] scsi: ufs: Allow resetting the UFS device
-Message-ID: <20190607182752.GN4814@minitux>
-References: <20190604072001.9288-1-bjorn.andersson@linaro.org>
- <20190604072001.9288-3-bjorn.andersson@linaro.org>
- <CGME20190604075345epcas2p4078376e31e760396490431a6b631f9dd@epcas2p4.samsung.com>
- <53775224-5418-1235-20a2-c46d76ef56da@free.fr>
- <875adde9-1a4b-6bb6-1990-9bb78610546c@samsung.com>
+        id S1730186AbfFGTDp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Jun 2019 15:03:45 -0400
+Received: from gateway30.websitewelcome.com ([192.185.194.16]:18088 "EHLO
+        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729841AbfFGTDo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 15:03:44 -0400
+X-Greylist: delayed 1367 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 Jun 2019 15:03:44 EDT
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway30.websitewelcome.com (Postfix) with ESMTP id 6E4D6427A
+        for <linux-scsi@vger.kernel.org>; Fri,  7 Jun 2019 13:40:56 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id ZJnMhaiMP90onZJnMhc2GP; Fri, 07 Jun 2019 13:40:56 -0500
+X-Authority-Reason: nr=8
+Received: from [189.250.134.24] (port=46982 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hZJnL-002Ree-1F; Fri, 07 Jun 2019 13:40:55 -0500
+Date:   Fri, 7 Jun 2019 13:40:53 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] scsi: megaraid_sas: Use struct_size() helper
+Message-ID: <20190607184053.GA11513@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <875adde9-1a4b-6bb6-1990-9bb78610546c@samsung.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 189.250.134.24
+X-Source-L: No
+X-Exim-ID: 1hZJnL-002Ree-1F
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [189.250.134.24]:46982
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 7
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri 07 Jun 03:41 PDT 2019, Alim Akhtar wrote:
+One of the more common cases of allocation size calculations is finding
+the size of a structure that has a zero-sized array at the end, along
+with memory for some number of elements for that array. For example:
 
-> Hi Marc
-> Thanks for coping me.
-> 
-> On 6/4/19 1:23 PM, Marc Gonzalez wrote:
-> > [ Shuffling the recipients list ]
-> > 
-> > On 04/06/2019 09:20, Bjorn Andersson wrote:
-> > 
-> >> Acquire the device-reset GPIO and toggle this to reset the UFS device
-> >> during initialization and host reset.
-> >>
-> >> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> >> ---
-> >>   drivers/scsi/ufs/ufshcd.c | 44 +++++++++++++++++++++++++++++++++++++++
-> >>   drivers/scsi/ufs/ufshcd.h |  4 ++++
-> >>   2 files changed, 48 insertions(+)
-> >>
-> >> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> >> index 8c1c551f2b42..951a0efee536 100644
-> >> --- a/drivers/scsi/ufs/ufshcd.c
-> >> +++ b/drivers/scsi/ufs/ufshcd.c
-> >> @@ -42,6 +42,7 @@
-> >>   #include <linux/nls.h>
-> >>   #include <linux/of.h>
-> >>   #include <linux/bitfield.h>
-> >> +#include <linux/gpio/consumer.h>
-> >>   #include "ufshcd.h"
-> >>   #include "ufs_quirks.h"
-> >>   #include "unipro.h"
-> >> @@ -6104,6 +6105,25 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
-> >>   	return err;
-> >>   }
-> >>   
-> >> +/**
-> >> + ufshcd_device_reset() - toggle the (optional) device reset line
-> >> + * @hba: per-adapter instance
-> >> + *
-> >> + * Toggles the (optional) reset line to reset the attached device.
-> >> + */
-> >> +static void ufshcd_device_reset(struct ufs_hba *hba)
-> >> +{
-> >> +	/*
-> >> +	 * The USB device shall detect reset pulses of 1us, sleep for 10us to
-> >> +	 * be on the safe side.
-> >> +	 */
-> >> +	gpiod_set_value_cansleep(hba->device_reset, 1);
-> >> +	usleep_range(10, 15);
-> >> +
-> >> +	gpiod_set_value_cansleep(hba->device_reset, 0);
-> >> +	usleep_range(10, 15);
-> >> +}
-> >> +
-> >>   /**
-> >>    * ufshcd_host_reset_and_restore - reset and restore host controller
-> >>    * @hba: per-adapter instance
-> >> @@ -6159,6 +6179,9 @@ static int ufshcd_reset_and_restore(struct ufs_hba *hba)
-> >>   	int retries = MAX_HOST_RESET_RETRIES;
-> >>   
-> >>   	do {
-> >> +		/* Reset the attached device */
-> >> +		ufshcd_device_reset(hba);
-> >> +
-> >>   		err = ufshcd_host_reset_and_restore(hba);
-> >>   	} while (err && --retries);
-> >>   
-> >> @@ -7355,6 +7378,18 @@ static void ufshcd_variant_hba_exit(struct ufs_hba *hba)
-> >>   	ufshcd_vops_exit(hba);
-> >>   }
-> >>   
-> >> +static int ufshcd_init_device_reset(struct ufs_hba *hba)
-> >> +{
-> >> +	hba->device_reset = devm_gpiod_get_optional(hba->dev, "device-reset",
-> >> +						    GPIOD_OUT_HIGH);
-> >> +	if (IS_ERR(hba->device_reset)) {
-> >> +		dev_err(hba->dev, "failed to acquire reset gpio: %ld\n",
-> >> +			PTR_ERR(hba->device_reset));
-> >> +	}
-> >> +
-> >> +	return PTR_ERR_OR_ZERO(hba->device_reset);
-> >> +}
-> >> +
-> >>   static int ufshcd_hba_init(struct ufs_hba *hba)
-> >>   {
-> >>   	int err;
-> >> @@ -7394,9 +7429,15 @@ static int ufshcd_hba_init(struct ufs_hba *hba)
-> >>   	if (err)
-> >>   		goto out_disable_vreg;
-> >>   
-> >> +	err = ufshcd_init_device_reset(hba);
-> >> +	if (err)
-> >> +		goto out_disable_variant;
-> >> +
-> >>   	hba->is_powered = true;
-> >>   	goto out;
-> >>   
-> >> +out_disable_variant:
-> >> +	ufshcd_vops_setup_regulators(hba, false);
-> >>   out_disable_vreg:
-> >>   	ufshcd_setup_vreg(hba, false);
-> >>   out_disable_clks:
-> >> @@ -8290,6 +8331,9 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
-> >>   		goto exit_gating;
-> >>   	}
-> >>   
-> >> +	/* Reset the attached device */
-> >> +	ufshcd_device_reset(hba);
-> >> +
-> >>   	/* Host controller enable */
-> >>   	err = ufshcd_hba_enable(hba);
-> >>   	if (err) {
-> >> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> >> index ecfa898b9ccc..d8be67742168 100644
-> >> --- a/drivers/scsi/ufs/ufshcd.h
-> >> +++ b/drivers/scsi/ufs/ufshcd.h
-> >> @@ -72,6 +72,8 @@
-> >>   #define UFSHCD "ufshcd"
-> >>   #define UFSHCD_DRIVER_VERSION "0.2"
-> >>   
-> >> +struct gpio_desc;
-> >> +
-> >>   struct ufs_hba;
-> >>   
-> >>   enum dev_cmd_type {
-> >> @@ -706,6 +708,8 @@ struct ufs_hba {
-> >>   
-> >>   	struct device		bsg_dev;
-> >>   	struct request_queue	*bsg_queue;
-> >> +
-> >> +	struct gpio_desc *device_reset;
-> >>   };
-> >>   
-> >>   /* Returns true if clocks can be gated. Otherwise false */
-> >>
-> > 
-> > Why is this needed on 845 and not on 8998?
-> > 
-> Not sure about MSM, but this is high implementation dependent, different 
-> SoC vendors implement device reset in different way, like one mentioned 
-> above in this patch, and in case of Samsung/exynos, HCI register control 
-> device reset. AFA ufs spec is concerns, it just mandate about connecting 
-> a active low signal to RST_n pin of the ufs device.
+struct MR_PD_CFG_SEQ_NUM_SYNC {
+	...
+        struct MR_PD_CFG_SEQ seq[1];
+} __packed;
 
-I didn't consider the case where the host controller is the GPIO
-controller, in which case it makes sense to move this to the platform
-driver so that we don't have to implement a gpio-controller in the
-exynos platform driver, to be consumed by the ufshcd.
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
 
-I'll rework this.
+So, replace the following form:
 
-Thanks,
-Bjorn
+sizeof(struct MR_PD_CFG_SEQ_NUM_SYNC) + (sizeof(struct MR_PD_CFG_SEQ) * (MAX_PHYSICAL_DEVICES - 1))
+
+with:
+
+struct_size(pd_sync, seq, MAX_PHYSICAL_DEVICES - 1)
+
+This code was detected with the help of Coccinelle.
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index a25b6b4b6548..56bd524dddbf 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -1191,7 +1191,7 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
+ int
+ megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend) {
+ 	int ret = 0;
+-	u32 pd_seq_map_sz;
++	size_t pd_seq_map_sz;
+ 	struct megasas_cmd *cmd;
+ 	struct megasas_dcmd_frame *dcmd;
+ 	struct fusion_context *fusion = instance->ctrl_context;
+@@ -1200,9 +1200,7 @@ megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend) {
+ 
+ 	pd_sync = (void *)fusion->pd_seq_sync[(instance->pd_seq_map_id & 1)];
+ 	pd_seq_h = fusion->pd_seq_phys[(instance->pd_seq_map_id & 1)];
+-	pd_seq_map_sz = sizeof(struct MR_PD_CFG_SEQ_NUM_SYNC) +
+-			(sizeof(struct MR_PD_CFG_SEQ) *
+-			(MAX_PHYSICAL_DEVICES - 1));
++	pd_seq_map_sz = struct_size(pd_sync, seq, MAX_PHYSICAL_DEVICES - 1);
+ 
+ 	cmd = megasas_get_cmd(instance);
+ 	if (!cmd) {
+-- 
+2.21.0
+
