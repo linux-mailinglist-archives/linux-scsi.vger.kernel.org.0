@@ -2,94 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 133813823F
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 02:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4361938259
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 03:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728396AbfFGAlk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 6 Jun 2019 20:41:40 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38416 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726671AbfFGAlj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 20:41:39 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x570W8Gn001843
-        for <linux-scsi@vger.kernel.org>; Thu, 6 Jun 2019 20:41:38 -0400
-Received: from e17.ny.us.ibm.com (e17.ny.us.ibm.com [129.33.205.207])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2sy97fjjsb-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 06 Jun 2019 20:41:38 -0400
-Received: from localhost
-        by e17.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <jejb@linux.ibm.com>;
-        Fri, 7 Jun 2019 01:41:37 +0100
-Received: from b01cxnp22034.gho.pok.ibm.com (9.57.198.24)
-        by e17.ny.us.ibm.com (146.89.104.204) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 7 Jun 2019 01:41:34 +0100
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x570fX4S22872512
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 7 Jun 2019 00:41:33 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 48B69B205F;
-        Fri,  7 Jun 2019 00:41:33 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 097E2B2065;
-        Fri,  7 Jun 2019 00:41:31 +0000 (GMT)
-Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.204.144])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri,  7 Jun 2019 00:41:30 +0000 (GMT)
-Subject: Re: [PATCH v2] drivers: scsi: remove unnecessary #ifdef MODULE
-From:   James Bottomley <jejb@linux.ibm.com>
-To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
-        linux-kernel@vger.kernel.org
-Cc:     khalid@gonehiking.org, martin.petersen@oracle.com,
-        aacraid@microsemi.com, linux-scsi@vger.kernel.org
-Date:   Fri, 07 Jun 2019 03:41:29 +0300
-In-Reply-To: <1559833471-30534-1-git-send-email-info@metux.net>
-References: <1559833471-30534-1-git-send-email-info@metux.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19060700-0040-0000-0000-000004F9D52A
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011225; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01214291; UDB=6.00638289; IPR=6.00995371;
- MB=3.00027213; MTD=3.00000008; XFM=3.00000015; UTC=2019-06-07 00:41:36
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19060700-0041-0000-0000-00000905F536
-Message-Id: <1559868089.3233.1.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-06_16:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906070002
+        id S1727291AbfFGBCl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 6 Jun 2019 21:02:41 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:59668 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725784AbfFGBCl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 6 Jun 2019 21:02:41 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 28B4229D1D;
+        Thu,  6 Jun 2019 21:02:37 -0400 (EDT)
+Date:   Fri, 7 Jun 2019 11:02:36 +1000 (AEST)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Ming Lei <ming.lei@redhat.com>, Christoph Hellwig <hch@lst.de>
+cc:     linux-scsi@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Ondrej Zary <linux@zary.sk>,
+        Michael Schmitz <schmitzmic@gmail.com>
+Subject: Re: [PATCH V3 0/3] scsi: three SG_CHAIN related fixes
+In-Reply-To: <yq1ftommk66.fsf@oracle.com>
+Message-ID: <alpine.LNX.2.21.1906070956580.26@nippy.intranet>
+References: <20190606083410.32243-1-ming.lei@redhat.com> <yq1ftommk66.fsf@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-06-06 at 17:04 +0200, Enrico Weigelt, metux IT consult
-wrote:
-> From: Enrico Weigelt <info@metux.net>
+On Thu, 6 Jun 2019, Martin K. Petersen wrote:
+
 > 
-> The MODULE_DEVICE_TABLE() macro already checks for MODULE defined,
-> so the extra check here is not necessary.
+> Ming,
 > 
-> Changes v2:
->     * make dptids const to fix warning on unused variable
+> > Guenter reported scsi boot issue caused by commit c3288dd8c232 ("scsi:
+> > core: avoid pre-allocating big SGL for data").
+> 
+> Applied to 5.3/scsi-queue, thank you!
+> 
 
-I don't think this works; in my version of gcc, const does not defeat
-the unused variable warning if I try with a test programme:
+Thanks, that seems to fix the esp_scsi regression.
 
-jejb@jarvis:~> gcc -Wunused-variable -c test1.c
-test1.c:3:18: warning: ‘i’ defined but not used [-Wunused-cons
-t-variable=]
- static const int i[] = { 1, 2, 3};
+Am I right in thinking that commit c3288dd8c232 ("scsi: core: avoid 
+pre-allocating big SGL for data") has the effect that any scsi host with 
+sg_tablesize > 2 must now support chained sg lists?
 
-James
+In commit 4af14d113bcf ("[PATCH] scsi: remove the use_clustering flag"), I 
+read that "setting the dma_boundary to PAGE_SIZE - 1 and the 
+max_segment_size to PAGE_SIZE" is sufficient to inhibit clustering. Is 
+that sufficient to inhibit chained sg lists for LLDs?
 
+Does it follow that #define SCSI_INLINE_SG_CNT 2 is now the upper bound 
+for sg list entries (clamping sg_tablesize) for those LLDs (regardless 
+support for chained sg lists)?
+
+Does commit c3288dd8c232 have similar implications for any LLD running on 
+an architecture with CONFIG_ARCH_NO_SG_CHAIN=y?
+
+I can't find answers to these questions in Documentation/block/biodoc.txt 
+etc. Any clarification or insight you can offer would be appreciated.
+
+Thanks.
+
+-- 
