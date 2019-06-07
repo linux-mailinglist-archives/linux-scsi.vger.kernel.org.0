@@ -2,364 +2,259 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 191743874D
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 11:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4B43885E
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 13:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727415AbfFGJpI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Jun 2019 05:45:08 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:44825 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727121AbfFGJpI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 05:45:08 -0400
-Received: by mail-io1-f66.google.com with SMTP id s7so908501iob.11
-        for <linux-scsi@vger.kernel.org>; Fri, 07 Jun 2019 02:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:references:in-reply-to:mime-version:thread-index:date
-         :message-id:subject:to:cc;
-        bh=g83v8094D4mWODrUsadU7i1rBHO1zAwqVkxt10+UJWs=;
-        b=cZ+tnvrCCvhDViv8MaNtI6RhwVKZNuUz1P0VxPFHCv5cI/djeQtkfdwtTYPZ9y3cb0
-         glnMJ5xglNqEPXlop71+7g4rq1TGhCdz77XUd1K6oaCz191YzGIbC++RKfmyBN4laDub
-         sGi32iK6TL0LYTmWb/x83mZwO7sNvGYjElVe0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:references:in-reply-to:mime-version
-         :thread-index:date:message-id:subject:to:cc;
-        bh=g83v8094D4mWODrUsadU7i1rBHO1zAwqVkxt10+UJWs=;
-        b=MMD+NQLI0kDazQcEhDTBftzxUSKriiP4jWniCFJDdhc7EnTL4otZgD6p49kTPk7FVK
-         1qwYmfWeppi0mnpzycxm4mSNkmOI1mBqrV50TKQ33z1MtYHvk9Iv2ULJIki4be5tdZtX
-         FJ3oi+6WOpaOc/ZzTtnv4qslERyuXYVEXC94A8dc5lfjrmWt1qS7eA14u3JTW2CXkBLm
-         uCQXMW+BDyrcrYyy8Lmarr5WBmlEE+Q19Cr96/BHT65VMs744qEoF0J+liZyM5g7bE+q
-         onuQZvHhw3Ci3zZJzH5vQNaQ7txivk3gq4pR/PS1sMwheGkgsM3xAx8cBOVnuarMcFAb
-         u0AA==
-X-Gm-Message-State: APjAAAWgurYyomoAieHNJtxLE+PJrwnPIv/btZiMAOOhCR+t19gnViCu
-        3QE4acGD/G7ZBqV/0mMeRUs9BMSqaW7Anfk9iO1bTg==
-X-Google-Smtp-Source: APXvYqy/ZoC4j2RDDElcc5eVOlGiF41xNchXI0MTqIyaBC1DnAhTbnpN2o4x0Gy7CWr4zx2wpbseZbVJ8yuU960Fbms=
-X-Received: by 2002:a6b:691d:: with SMTP id e29mr29149534ioc.96.1559900706576;
- Fri, 07 Jun 2019 02:45:06 -0700 (PDT)
-From:   Kashyap Desai <kashyap.desai@broadcom.com>
-References: <20190531022801.10003-1-ming.lei@redhat.com> <20190531022801.10003-9-ming.lei@redhat.com>
- <7819e1a523b9e8227e3a9d188ee1e083@mail.gmail.com> <20190602064202.GA2731@ming.t460p>
- <20190602074757.GA31572@ming.t460p> <020a7707a31803d65dd94cc0928a425a@mail.gmail.com>
- <20190603035605.GB13684@ming.t460p> f24109eb867deae8cb262466ecc70b09@mail.gmail.com
-In-Reply-To: f24109eb867deae8cb262466ecc70b09@mail.gmail.com
+        id S1728229AbfFGLB5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Jun 2019 07:01:57 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:41364 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728115AbfFGLB4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 07:01:56 -0400
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20190607110154epoutp03a27de867768c7aeb5b9ca5ec6a0c0870~l5Z5M-10a3079630796epoutp03J
+        for <linux-scsi@vger.kernel.org>; Fri,  7 Jun 2019 11:01:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20190607110154epoutp03a27de867768c7aeb5b9ca5ec6a0c0870~l5Z5M-10a3079630796epoutp03J
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1559905314;
+        bh=TpCZHwLTpQpBOqJc8oRDcdUSNF6IdZi5tI2MMNRe19M=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=XN92KWsSw6yCbmYx6IYXH3lmrIKRLuAbugb8+BDSRV3bhCAcysQmP2sXV3QLMINw5
+         DQspYp69/GIXe3ZpRDsW8NKjUYQe2KjRbmV29F72wep0mIA735VrByvMrFdzt1L3Od
+         YMhWYb0VZjuI3ptpSvNz5qe9g51DvQXJHnUZt0xg=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20190607110153epcas5p4d9c8cb414dcf5bceafa18507e35a5024~l5Z4pwXFq3268332683epcas5p4z;
+        Fri,  7 Jun 2019 11:01:53 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        87.44.04067.1244AFC5; Fri,  7 Jun 2019 20:01:53 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+        20190607110152epcas5p47c678360fd94b918e09f91c082355a59~l5Z35v6B83268332683epcas5p4y;
+        Fri,  7 Jun 2019 11:01:52 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20190607110152epsmtrp160bf9a0f515134c1025b34b287d5a0b6~l5Z35CELL2419924199epsmtrp1w;
+        Fri,  7 Jun 2019 11:01:52 +0000 (GMT)
+X-AuditID: b6c32a4b-7a3ff70000000fe3-6b-5cfa4421db44
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3F.8B.03692.0244AFC5; Fri,  7 Jun 2019 20:01:52 +0900 (KST)
+Received: from [107.108.73.28] (unknown [107.108.73.28]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20190607110151epsmtip1de3ed8d692f2b7d21ad3580e4eb4de81~l5Z21vzQ22568925689epsmtip1U;
+        Fri,  7 Jun 2019 11:01:51 +0000 (GMT)
+Subject: Re: [PATCH 2/3] scsi: ufs: Allow resetting the UFS device
+To:     Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Avri Altman <avri.altman@wdc.com>,
+        MSM <linux-arm-msm@vger.kernel.org>,
+        SCSI <linux-scsi@vger.kernel.org>
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+Message-ID: <875adde9-1a4b-6bb6-1990-9bb78610546c@samsung.com>
+Date:   Fri, 7 Jun 2019 16:11:17 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.6.1
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQISV99IJucrELCJ7/TtkhttwnBgjgOGFSeuAhzMczwA7yMTbgJjyv4mAu5i69MBzxVPCaWhc+pggAZsHKA=
-Date:   Fri, 7 Jun 2019 15:15:04 +0530
-Message-ID: <287b092778c749c8b101641f9d48ab44@mail.gmail.com>
-Subject: RE: [PATCH 8/9] scsi: megaraid: convert private reply queue to blk-mq
- hw queue
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        John Garry <john.garry@huawei.com>,
-        Don Brace <don.brace@microsemi.com>,
-        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
-        Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <53775224-5418-1235-20a2-c46d76ef56da@free.fr>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsWy7bCmhq6iy68Yg2OfRC1e/rzKZnF6/zsW
+        iyl/ljNZTNx/lt2i+/oONottn88yO7B59K/7zOpx59oeNo/Pm+Q82g90MwWwRHHZpKTmZJal
+        FunbJXBlfD7+lKngvWrFh5uLGRsYv8l2MXJySAiYSCy9PI+xi5GLQ0hgN6PEwWWf2SGcT4wS
+        h9rWMUE43xgl9l/4ygLTcrrpFgtEYi+jxMmzE9lBEkICbxklZl1V7mLk4BAWcJJYu9cKpEZE
+        oJVRYsaqm6wgNcwC+RInlh0Eq2cT0Ja4O30LE4jNK2AncXxiA9gCFgEViUnfboHViwpESNw/
+        toEVokZQ4uTMJ2A1nALWEttbpjJBzBSXuPVkPpQtL7H97RxmkMUSApfZJJ6/2csGcbWLRMOZ
+        W+wQtrDEq+NboGwpiZf9bewgR0sIZEv07DKGCNdILJ13DOphe4kDV+awgJQwC2hKrN+lD7GK
+        T6L39xMmiE5eiY42IYhqVYnmd1ehOqUlJnZ3s0LYHhL3vqxhhgTbD0aJ/5cfsk9gVJiF5LNZ
+        SL6ZheSbWQibFzCyrGKUTC0ozk1PLTYtMM5LLdcrTswtLs1L10vOz93ECE45Wt47GDed8znE
+        KMDBqMTDO4PpZ4wQa2JZcWXuIUYJDmYlEd6yCz9ihHhTEiurUovy44tKc1KLDzFKc7AoifNO
+        Yr0aIySQnliSmp2aWpBaBJNl4uCUamAUWdXbopi+47XIzvNCGQolJUa5C6uuWHc1+hnmH9OW
+        rnmTKrBgyq01hz5WdtlusZ76zY/z6ZtN7flX95yfk9Kbvsvq+YWsil2R1WbTv/q+PMyYfirV
+        xe3LhF2/Hl6qvnN9xyxFN8llAcuY47PldBaIVohemp58givv8ucZ3Qczqp/Y32qwsr6txFKc
+        kWioxVxUnAgA89HGOjUDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrJLMWRmVeSWpSXmKPExsWy7bCSnK6Cy68Yg49vZSxe/rzKZnF6/zsW
+        iyl/ljNZTNx/lt2i+/oONottn88yO7B59K/7zOpx59oeNo/Pm+Q82g90MwWwRHHZpKTmZJal
+        FunbJXBlfD7+lKngvWrFh5uLGRsYv8l2MXJySAiYSJxuusXSxcjFISSwm1Hi2qRHTBAJaYnr
+        GyewQ9jCEiv/PQezhQReM0p8vu3YxcjBISzgJLF2rxVIWESgnVFizXJNEJtZIF9iydXzbBAz
+        fzBKnP62iRkkwSagLXF3+haw+bwCdhLHJzawgNgsAioSk77dYgWxRQUiJM68X8ECUSMocXLm
+        EzCbU8BaYnvLVCaIBWYS8zY/ZIawxSVuPZkPFZeX2P52DvMERqFZSNpnIWmZhaRlFpKWBYws
+        qxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLzczcxgiNES3MH4+Ul8YcYBTgYlXh4ZzD9jBFi
+        TSwrrsw9xCjBwawkwlt24UeMEG9KYmVValF+fFFpTmrxIUZpDhYlcd6neccihQTSE0tSs1NT
+        C1KLYLJMHJxSDYyONwqLjl9UW7HJe/+6zZdvltmcEJefcubmeQ0WG+m7FatnbJHT1bS09tj3
+        97J9VOq2vvyGp+lHdSVL+mtWtJ4U3ib3Jyj6scsF/ZNT4k1Pp/X6xiq3n2X/bjtvS+nEGnbG
+        nWHJp80yPxqza4QkJfSYu3o57d7crvtts2uYi4dO2s5/ppvDu5VYijMSDbWYi4oTAZ8VO4qM
+        AgAA
+X-CMS-MailID: 20190607110152epcas5p47c678360fd94b918e09f91c082355a59
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20190604075345epcas2p4078376e31e760396490431a6b631f9dd
+References: <20190604072001.9288-1-bjorn.andersson@linaro.org>
+        <20190604072001.9288-3-bjorn.andersson@linaro.org>
+        <CGME20190604075345epcas2p4078376e31e760396490431a6b631f9dd@epcas2p4.samsung.com>
+        <53775224-5418-1235-20a2-c46d76ef56da@free.fr>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->
-> >
-> > Please drop the patch in my last email, and apply the following patch
-> > and see if we can make a difference:
->
-> Ming,
->
-> I dropped early patch and applied the below patched.  Now, I am getting
-> expected performance (3.0M IOPS).
-> Below patch fix the performance issue.  See perf report after applying
-the
-> same -
->
->      8.52%  [kernel]        [k] sbitmap_any_bit_set
->      4.19%  [kernel]        [k] blk_mq_run_hw_queue
->      3.76%  [megaraid_sas]  [k] complete_cmd_fusion
->      3.24%  [kernel]        [k] scsi_queue_rq
->      2.53%  [megaraid_sas]  [k] megasas_build_ldio_fusion
->      2.34%  [megaraid_sas]  [k] megasas_build_and_issue_cmd_fusion
->      2.18%  [kernel]        [k] entry_SYSCALL_64
->      1.85%  [kernel]        [k] syscall_return_via_sysret
->      1.78%  [kernel]        [k] blk_mq_run_hw_queues
->      1.59%  [kernel]        [k] gup_pmd_range
->      1.49%  [kernel]        [k] _raw_spin_lock_irqsave
->      1.24%  [kernel]        [k] scsi_dec_host_busy
->      1.23%  [kernel]        [k] blk_mq_free_request
->      1.23%  [kernel]        [k] blk_mq_get_request
->      0.96%  [kernel]        [k] __slab_free
->      0.91%  [kernel]        [k] aio_complete
->      0.90%  [kernel]        [k] __sched_text_start
->      0.89%  [megaraid_sas]  [k] megasas_queue_command
->      0.85%  [kernel]        [k] __fget
->      0.84%  [kernel]        [k] scsi_mq_get_budget
->
-> I will do some more testing and update the results.
+Hi Marc
+Thanks for coping me.
 
-Ming, I did testing on AMD Dual Socket server (AMD EPYC 7601 32-Core
-Processor). System has total 128 logical cores.
-
-Without patch, performance can go upto 2.8M IOPS. See below perf top
-output.
-
-   7.37%  [megaraid_sas]      [k] complete_cmd_fusion
-   2.51%  [kernel]            [k] copy_user_generic_string
-   2.48%  [kernel]            [k] read_tsc
-   2.10%  fio                 [.] thread_main
-   2.06%  [kernel]            [k] gup_pgd_range
-   1.98%  [kernel]            [k] __get_user_4
-   1.92%  [kernel]            [k] entry_SYSCALL_64
-   1.58%  [kernel]            [k] scsi_queue_rq
-   1.55%  [megaraid_sas]      [k] megasas_queue_command
-   1.52%  [kernel]            [k] irq_entries_start
-   1.43%  fio                 [.] get_io_u
-   1.39%  [kernel]            [k] blkdev_direct_IO
-   1.34%  [kernel]            [k] __audit_syscall_exit
-   1.31%  [megaraid_sas]      [k] megasas_build_and_issue_cmd_fusion
-   1.27%  [kernel]            [k] syscall_slow_exit_work
-   1.23%  [kernel]            [k] io_submit_one
-   1.20%  [kernel]            [k] do_syscall_64
-   1.17%  fio                 [.] td_io_queue
-   1.16%  [kernel]            [k] lookup_ioctx
-   1.14%  [kernel]            [k] kmem_cache_alloc
-   1.10%  [megaraid_sas]      [k] megasas_build_ldio_fusion
-   1.07%  [kernel]            [k] __memset
-   1.06%  [kernel]            [k] __virt_addr_valid
-   0.98%  [kernel]            [k] blk_mq_get_request
-   0.94%  [kernel]            [k] note_interrupt
-   0.91%  [kernel]            [k] __get_user_8
-   0.91%  [kernel]            [k] aio_read_events
-   0.85%  [kernel]            [k] __put_user_4
-   0.78%  fio                 [.] fio_libaio_commit
-   0.74%  [megaraid_sas]      [k] MR_BuildRaidContext
-   0.70%  [kernel]            [k] __x64_sys_io_submit
-   0.69%  fio                 [.] utime_since_now
-
-
-With your patch - Performance can go upto 1.7M IOPS. See below perf top
-output.
-
- 23.01%  [kernel]              [k] sbitmap_any_bit_set
-   6.42%  [kernel]              [k] blk_mq_run_hw_queue
-   4.44%  [megaraid_sas]        [k] complete_cmd_fusion
-   4.23%  [kernel]              [k] blk_mq_run_hw_queues
-   1.80%  [kernel]              [k] read_tsc
-   1.60%  [kernel]              [k] copy_user_generic_string
-   1.33%  fio                   [.] thread_main
-   1.27%  [kernel]              [k] irq_entries_start
-   1.22%  [kernel]              [k] gup_pgd_range
-   1.20%  [kernel]              [k] __get_user_4
-   1.20%  [kernel]              [k] entry_SYSCALL_64
-   1.07%  [kernel]              [k] scsi_queue_rq
-   0.88%  fio                   [.] get_io_u
-   0.87%  [megaraid_sas]        [k] megasas_queue_command
-   0.86%  [kernel]              [k] blkdev_direct_IO
-   0.85%  fio                   [.] td_io_queue
-   0.80%  [kernel]              [k] note_interrupt
-   0.76%  [kernel]              [k] lookup_ioctx
-   0.76%  [kernel]              [k] do_syscall_64
-   0.75%  [megaraid_sas]        [k] megasas_build_and_issue_cmd_fusion
-   0.74%  [megaraid_sas]        [k] megasas_build_ldio_fusion
-   0.72%  [kernel]              [k] kmem_cache_alloc
-   0.71%  [kernel]              [k] __audit_syscall_exit
-   0.67%  [kernel]              [k] __virt_addr_valid
-   0.65%  [kernel]              [k] blk_mq_get_request
-   0.64%  [kernel]              [k] __memset
-   0.62%  [kernel]              [k] syscall_slow_exit_work
-   0.60%  [kernel]              [k] io_submit_one
-   0.59%  [kernel]              [k] ktime_get
-   0.58%  fio                   [.] fio_libaio_commit
-   0.57%  [kernel]              [k] aio_read_events
-   0.54%  [kernel]              [k] __get_user_8
-   0.53%  [kernel]              [k] aio_complete_rw
-   0.51%  [kernel]              [k] kmem_cache_free
-
-With your patch + reducing logical cpu core to 64 (CPU hotplugged),
-performance can go upto 2.2M IOPS. See below perf top output.
-
-   9.56%  [kernel]            [k] sbitmap_any_bit_set
-   4.62%  [megaraid_sas]      [k] complete_cmd_fusion
-   3.02%  [kernel]            [k] blk_mq_run_hw_queue
-   2.15%  [kernel]            [k] copy_user_generic_string
-   2.13%  [kernel]            [k] blk_mq_run_hw_queues
-   2.09%  [kernel]            [k] read_tsc
-   1.66%  [kernel]            [k] __get_user_4
-   1.59%  [kernel]            [k] entry_SYSCALL_64
-   1.57%  [kernel]            [k] gup_pgd_range
-   1.55%  fio                 [.] thread_main
-   1.51%  [kernel]            [k] scsi_queue_rq
-   1.31%  [kernel]            [k] __memset
-   1.21%  [megaraid_sas]      [k] megasas_build_and_issue_cmd_fusion
-   1.16%  [megaraid_sas]      [k] megasas_queue_command
-   1.13%  fio                 [.] get_io_u
-   1.12%  [kernel]            [k] blk_mq_get_request
-   1.07%  [kernel]            [k] blkdev_direct_IO
-   1.06%  [kernel]            [k] __put_user_4
-   1.05%  fio                 [.] td_io_queue
-   1.02%  [kernel]            [k] syscall_slow_exit_work
-   1.00%  [megaraid_sas]      [k] megasas_build_ldio_fusion
-
-
-In summary, Part of the performance drop may be correlated with number of
-hctx created in block layer. I can provide more details and can test
-follow up patch.
-
-Kashyap
-
-
->
-> Kashyap
->
-> >
-> > diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c index
-> > 3d6780504dcb..69d6bffcc8ff 100644
-> > --- a/block/blk-mq-debugfs.c
-> > +++ b/block/blk-mq-debugfs.c
-> > @@ -627,6 +627,9 @@ static int hctx_active_show(void *data, struct
-> > seq_file
-> > *m)  {
-> >  	struct blk_mq_hw_ctx *hctx = data;
-> >
-> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-> > +		hctx = blk_mq_master_hctx(hctx);
-> > +
-> >  	seq_printf(m, "%d\n", atomic_read(&hctx->nr_active));
-> >  	return 0;
-> >  }
-> > diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c index
-> > 309ec5079f3f..58ef83a34fda 100644
-> > --- a/block/blk-mq-tag.c
-> > +++ b/block/blk-mq-tag.c
-> > @@ -30,6 +30,9 @@ bool blk_mq_has_free_tags(struct blk_mq_tags *tags)
-> >   */
-> >  bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)  {
-> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-> > +		hctx = blk_mq_master_hctx(hctx);
-> > +
-> >  	if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) &&
-> >  	    !test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
-> >  		atomic_inc(&hctx->tags->active_queues);
-> > @@ -55,6 +58,9 @@ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
-> {
-> >  	struct blk_mq_tags *tags = hctx->tags;
-> >
-> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-> > +		hctx = blk_mq_master_hctx(hctx);
-> > +
-> >  	if (!test_and_clear_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
-> >  		return;
-> >
-> > @@ -74,6 +80,10 @@ static inline bool hctx_may_queue(struct
-> > blk_mq_hw_ctx *hctx,
-> >
-> >  	if (!hctx || !(hctx->flags & BLK_MQ_F_TAG_SHARED))
-> >  		return true;
-> > +
-> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-> > +		hctx = blk_mq_master_hctx(hctx);
-> > +
-> >  	if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
-> >  		return true;
-> >
-> > diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h index
-> > 61deab0b5a5a..84e9b46ffc78 100644
-> > --- a/block/blk-mq-tag.h
-> > +++ b/block/blk-mq-tag.h
-> > @@ -36,11 +36,22 @@ extern void blk_mq_tag_wakeup_all(struct
-> > blk_mq_tags *tags, bool);  void blk_mq_queue_tag_busy_iter(struct
-> > request_queue *q, busy_iter_fn *fn,
-> >  		void *priv);
-> >
-> > +static inline struct blk_mq_hw_ctx *blk_mq_master_hctx(
-> > +		struct blk_mq_hw_ctx *hctx)
-> > +{
-> > +	return hctx->queue->queue_hw_ctx[0]; }
-> > +
-> > +
-> >  static inline struct sbq_wait_state *bt_wait_ptr(struct sbitmap_queue
-*bt,
-> >  						 struct blk_mq_hw_ctx
-*hctx)
-> >  {
-> >  	if (!hctx)
-> >  		return &bt->ws[0];
-> > +
-> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-> > +		hctx = blk_mq_master_hctx(hctx);
-> > +
-> >  	return sbq_wait_ptr(bt, &hctx->wait_index);  }
-> >
-> > diff --git a/block/blk-mq.c b/block/blk-mq.c index
-> > 49d73d979cb3..4196ed3b0085 100644
-> > --- a/block/blk-mq.c
-> > +++ b/block/blk-mq.c
-> > @@ -303,7 +303,7 @@ static struct request *blk_mq_rq_ctx_init(struct
-> > blk_mq_alloc_data *data,
-> >  	} else {
-> >  		if (data->hctx->flags & BLK_MQ_F_TAG_SHARED) {
-> >  			rq_flags = RQF_MQ_INFLIGHT;
-> > -			atomic_inc(&data->hctx->nr_active);
-> > +			blk_mq_inc_nr_active(data->hctx);
-> >  		}
-> >  		rq->tag = tag;
-> >  		rq->internal_tag = -1;
-> > @@ -517,7 +517,7 @@ void blk_mq_free_request(struct request *rq)
-> >
-> >  	ctx->rq_completed[rq_is_sync(rq)]++;
-> >  	if (rq->rq_flags & RQF_MQ_INFLIGHT)
-> > -		atomic_dec(&hctx->nr_active);
-> > +		blk_mq_dec_nr_active(hctx);
-> >
-> >  	if (unlikely(laptop_mode && !blk_rq_is_passthrough(rq)))
-> >  		laptop_io_completion(q->backing_dev_info);
-> > @@ -1064,7 +1064,7 @@ bool blk_mq_get_driver_tag(struct request *rq)
-> >  	if (rq->tag >= 0) {
-> >  		if (shared) {
-> >  			rq->rq_flags |= RQF_MQ_INFLIGHT;
-> > -			atomic_inc(&data.hctx->nr_active);
-> > +			blk_mq_inc_nr_active(data.hctx);
-> >  		}
-> >  		data.hctx->tags->rqs[rq->tag] = rq;
-> >  	}
-> > diff --git a/block/blk-mq.h b/block/blk-mq.h index
-> > 633a5a77ee8b..f1279b8c2289 100644
-> > --- a/block/blk-mq.h
-> > +++ b/block/blk-mq.h
-> > @@ -193,6 +193,20 @@ unsigned int blk_mq_in_flight(struct
-> > request_queue *q, struct hd_struct *part);  void
-> > blk_mq_in_flight_rw(struct request_queue *q, struct hd_struct *part,
-> >  			 unsigned int inflight[2]);
-> >
-> > +static inline void blk_mq_inc_nr_active(struct blk_mq_hw_ctx *hctx) {
-> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-> > +		hctx = blk_mq_master_hctx(hctx);
-> > +	atomic_inc(&hctx->nr_active);
-> > +}
-> > +
-> > +static inline void blk_mq_dec_nr_active(struct blk_mq_hw_ctx *hctx) {
-> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
-> > +		hctx = blk_mq_master_hctx(hctx);
-> > +	atomic_dec(&hctx->nr_active);
-> > +}
-> > +
-> >  static inline void blk_mq_put_dispatch_budget(struct blk_mq_hw_ctx
-> > *hctx) {
-> >  	struct request_queue *q = hctx->queue; @@ -218,7 +232,7 @@ static
-> > inline void __blk_mq_put_driver_tag(struct blk_mq_hw_ctx *hctx,
-> >
-> >  	if (rq->rq_flags & RQF_MQ_INFLIGHT) {
-> >  		rq->rq_flags &= ~RQF_MQ_INFLIGHT;
-> > -		atomic_dec(&hctx->nr_active);
-> > +		blk_mq_dec_nr_active(hctx);
-> >  	}
-> >  }
-> >
-> > Thanks,
-> > Ming
+On 6/4/19 1:23 PM, Marc Gonzalez wrote:
+> [ Shuffling the recipients list ]
+> 
+> On 04/06/2019 09:20, Bjorn Andersson wrote:
+> 
+>> Acquire the device-reset GPIO and toggle this to reset the UFS device
+>> during initialization and host reset.
+>>
+>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> ---
+>>   drivers/scsi/ufs/ufshcd.c | 44 +++++++++++++++++++++++++++++++++++++++
+>>   drivers/scsi/ufs/ufshcd.h |  4 ++++
+>>   2 files changed, 48 insertions(+)
+>>
+>> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+>> index 8c1c551f2b42..951a0efee536 100644
+>> --- a/drivers/scsi/ufs/ufshcd.c
+>> +++ b/drivers/scsi/ufs/ufshcd.c
+>> @@ -42,6 +42,7 @@
+>>   #include <linux/nls.h>
+>>   #include <linux/of.h>
+>>   #include <linux/bitfield.h>
+>> +#include <linux/gpio/consumer.h>
+>>   #include "ufshcd.h"
+>>   #include "ufs_quirks.h"
+>>   #include "unipro.h"
+>> @@ -6104,6 +6105,25 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
+>>   	return err;
+>>   }
+>>   
+>> +/**
+>> + ufshcd_device_reset() - toggle the (optional) device reset line
+>> + * @hba: per-adapter instance
+>> + *
+>> + * Toggles the (optional) reset line to reset the attached device.
+>> + */
+>> +static void ufshcd_device_reset(struct ufs_hba *hba)
+>> +{
+>> +	/*
+>> +	 * The USB device shall detect reset pulses of 1us, sleep for 10us to
+>> +	 * be on the safe side.
+>> +	 */
+>> +	gpiod_set_value_cansleep(hba->device_reset, 1);
+>> +	usleep_range(10, 15);
+>> +
+>> +	gpiod_set_value_cansleep(hba->device_reset, 0);
+>> +	usleep_range(10, 15);
+>> +}
+>> +
+>>   /**
+>>    * ufshcd_host_reset_and_restore - reset and restore host controller
+>>    * @hba: per-adapter instance
+>> @@ -6159,6 +6179,9 @@ static int ufshcd_reset_and_restore(struct ufs_hba *hba)
+>>   	int retries = MAX_HOST_RESET_RETRIES;
+>>   
+>>   	do {
+>> +		/* Reset the attached device */
+>> +		ufshcd_device_reset(hba);
+>> +
+>>   		err = ufshcd_host_reset_and_restore(hba);
+>>   	} while (err && --retries);
+>>   
+>> @@ -7355,6 +7378,18 @@ static void ufshcd_variant_hba_exit(struct ufs_hba *hba)
+>>   	ufshcd_vops_exit(hba);
+>>   }
+>>   
+>> +static int ufshcd_init_device_reset(struct ufs_hba *hba)
+>> +{
+>> +	hba->device_reset = devm_gpiod_get_optional(hba->dev, "device-reset",
+>> +						    GPIOD_OUT_HIGH);
+>> +	if (IS_ERR(hba->device_reset)) {
+>> +		dev_err(hba->dev, "failed to acquire reset gpio: %ld\n",
+>> +			PTR_ERR(hba->device_reset));
+>> +	}
+>> +
+>> +	return PTR_ERR_OR_ZERO(hba->device_reset);
+>> +}
+>> +
+>>   static int ufshcd_hba_init(struct ufs_hba *hba)
+>>   {
+>>   	int err;
+>> @@ -7394,9 +7429,15 @@ static int ufshcd_hba_init(struct ufs_hba *hba)
+>>   	if (err)
+>>   		goto out_disable_vreg;
+>>   
+>> +	err = ufshcd_init_device_reset(hba);
+>> +	if (err)
+>> +		goto out_disable_variant;
+>> +
+>>   	hba->is_powered = true;
+>>   	goto out;
+>>   
+>> +out_disable_variant:
+>> +	ufshcd_vops_setup_regulators(hba, false);
+>>   out_disable_vreg:
+>>   	ufshcd_setup_vreg(hba, false);
+>>   out_disable_clks:
+>> @@ -8290,6 +8331,9 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+>>   		goto exit_gating;
+>>   	}
+>>   
+>> +	/* Reset the attached device */
+>> +	ufshcd_device_reset(hba);
+>> +
+>>   	/* Host controller enable */
+>>   	err = ufshcd_hba_enable(hba);
+>>   	if (err) {
+>> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+>> index ecfa898b9ccc..d8be67742168 100644
+>> --- a/drivers/scsi/ufs/ufshcd.h
+>> +++ b/drivers/scsi/ufs/ufshcd.h
+>> @@ -72,6 +72,8 @@
+>>   #define UFSHCD "ufshcd"
+>>   #define UFSHCD_DRIVER_VERSION "0.2"
+>>   
+>> +struct gpio_desc;
+>> +
+>>   struct ufs_hba;
+>>   
+>>   enum dev_cmd_type {
+>> @@ -706,6 +708,8 @@ struct ufs_hba {
+>>   
+>>   	struct device		bsg_dev;
+>>   	struct request_queue	*bsg_queue;
+>> +
+>> +	struct gpio_desc *device_reset;
+>>   };
+>>   
+>>   /* Returns true if clocks can be gated. Otherwise false */
+>>
+> 
+> Why is this needed on 845 and not on 8998?
+> 
+Not sure about MSM, but this is high implementation dependent, different 
+SoC vendors implement device reset in different way, like one mentioned 
+above in this patch, and in case of Samsung/exynos, HCI register control 
+device reset. AFA ufs spec is concerns, it just mandate about connecting 
+a active low signal to RST_n pin of the ufs device.
+> On 8998 we already have:
+> 
+> 			resets = <&gcc GCC_UFS_BCR>;
+> 			reset-names = "rst";
+> 
+> The above reset line gets wiggled/frobbed when appropriate.
+> 
+> (What's the difference between gpio and pinctrl? vs a reset "clock" as above)
+> 
+> ufshcd_device_reset_ctrl() vs ufshcd_init_device_reset()
+> 
+> Sounds like the nomenclature could be unified or clarified.
+> 
+> Regards.
+> 
+> 
