@@ -2,194 +2,364 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF7A384C9
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 09:15:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 191743874D
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Jun 2019 11:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbfFGHPO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Jun 2019 03:15:14 -0400
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:39663 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726671AbfFGHPO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 03:15:14 -0400
-Received: by mail-ua1-f65.google.com with SMTP id j8so286723uan.6
-        for <linux-scsi@vger.kernel.org>; Fri, 07 Jun 2019 00:15:13 -0700 (PDT)
+        id S1727415AbfFGJpI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Jun 2019 05:45:08 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:44825 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727121AbfFGJpI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Jun 2019 05:45:08 -0400
+Received: by mail-io1-f66.google.com with SMTP id s7so908501iob.11
+        for <linux-scsi@vger.kernel.org>; Fri, 07 Jun 2019 02:45:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r5ctLUVxwpypsDBx5BI/a6Ozji4Kgc6Uzny5C6uw6cY=;
-        b=D62ouOeR9K0jc1AwhE77+4cdg3dCE3RBDuSESG4UatFFrN05MSxOpobnNoKwPieC2m
-         SVWN78825KEwEA22fVc+AxdQrwx3GkztT8PPCPLkxthwro9K+cpV8zkOtpqFM1ZZ7NcJ
-         Bh4SfIGNYeuYecWoAqQ/DlJrX+NzUlgnrI33I=
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=g83v8094D4mWODrUsadU7i1rBHO1zAwqVkxt10+UJWs=;
+        b=cZ+tnvrCCvhDViv8MaNtI6RhwVKZNuUz1P0VxPFHCv5cI/djeQtkfdwtTYPZ9y3cb0
+         glnMJ5xglNqEPXlop71+7g4rq1TGhCdz77XUd1K6oaCz191YzGIbC++RKfmyBN4laDub
+         sGi32iK6TL0LYTmWb/x83mZwO7sNvGYjElVe0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r5ctLUVxwpypsDBx5BI/a6Ozji4Kgc6Uzny5C6uw6cY=;
-        b=fI+xyUDrSZKRKaeVCg+N6ue767iFnJ/2IHglFncCnEoG8LItk/nhy0QTAYRwJsp+3p
-         s81kdn/2UtnQ2Q5Ymkr1qDWmWsLDSASLom7YzxcCPUpqXKMvzOaR9UwPRdM4mx/+VxVF
-         0elntMYuDmLRwtIpCPO7RU2dMxQ07nv3ccbFx9jvxjd/He8Lq0N6wCrLCV74YWbaivEr
-         bBttaldhftyzbbHFEQs4Adc5Y+J4kVKhO/b0KBu4gURoW4GfEK50QEKmPAUTFe/vf/Vl
-         jJ7aNHZm6td+taDnKZ4yoKBLTLeMwzO3G4beRBFH+JOxtQWQvEawX99EOjOmMPAMKO4e
-         EL5w==
-X-Gm-Message-State: APjAAAWpL9NDfm+xIiiFeNZCN3aCPpiSrFM0o62A8Ip2zUQtsSX61CDI
-        XsImnLy6YnR4PeJQP+fzjgHf5iR/rPUsx5FKos5cXw==
-X-Google-Smtp-Source: APXvYqxyDnDsPRy088RYb0eN2n6jBhCX4JO3lHN2+zxkBwevC0kUCo71JkYCbjawXt30zBR94d9ynLL/+VaxhV1V56I=
-X-Received: by 2002:ab0:5499:: with SMTP id p25mr19421555uaa.2.1559891713390;
- Fri, 07 Jun 2019 00:15:13 -0700 (PDT)
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=g83v8094D4mWODrUsadU7i1rBHO1zAwqVkxt10+UJWs=;
+        b=MMD+NQLI0kDazQcEhDTBftzxUSKriiP4jWniCFJDdhc7EnTL4otZgD6p49kTPk7FVK
+         1qwYmfWeppi0mnpzycxm4mSNkmOI1mBqrV50TKQ33z1MtYHvk9Iv2ULJIki4be5tdZtX
+         FJ3oi+6WOpaOc/ZzTtnv4qslERyuXYVEXC94A8dc5lfjrmWt1qS7eA14u3JTW2CXkBLm
+         uCQXMW+BDyrcrYyy8Lmarr5WBmlEE+Q19Cr96/BHT65VMs744qEoF0J+liZyM5g7bE+q
+         onuQZvHhw3Ci3zZJzH5vQNaQ7txivk3gq4pR/PS1sMwheGkgsM3xAx8cBOVnuarMcFAb
+         u0AA==
+X-Gm-Message-State: APjAAAWgurYyomoAieHNJtxLE+PJrwnPIv/btZiMAOOhCR+t19gnViCu
+        3QE4acGD/G7ZBqV/0mMeRUs9BMSqaW7Anfk9iO1bTg==
+X-Google-Smtp-Source: APXvYqy/ZoC4j2RDDElcc5eVOlGiF41xNchXI0MTqIyaBC1DnAhTbnpN2o4x0Gy7CWr4zx2wpbseZbVJ8yuU960Fbms=
+X-Received: by 2002:a6b:691d:: with SMTP id e29mr29149534ioc.96.1559900706576;
+ Fri, 07 Jun 2019 02:45:06 -0700 (PDT)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+References: <20190531022801.10003-1-ming.lei@redhat.com> <20190531022801.10003-9-ming.lei@redhat.com>
+ <7819e1a523b9e8227e3a9d188ee1e083@mail.gmail.com> <20190602064202.GA2731@ming.t460p>
+ <20190602074757.GA31572@ming.t460p> <020a7707a31803d65dd94cc0928a425a@mail.gmail.com>
+ <20190603035605.GB13684@ming.t460p> f24109eb867deae8cb262466ecc70b09@mail.gmail.com
+In-Reply-To: f24109eb867deae8cb262466ecc70b09@mail.gmail.com
 MIME-Version: 1.0
-References: <20190529160041.7242-1-thenzl@redhat.com> <20190529160041.7242-4-thenzl@redhat.com>
-In-Reply-To: <20190529160041.7242-4-thenzl@redhat.com>
-From:   Sumit Saxena <sumit.saxena@broadcom.com>
-Date:   Fri, 7 Jun 2019 12:45:01 +0530
-Message-ID: <CAL2rwxr4tK0kK1OKr4q=+V8YrUrDkTivKHQPT8fGmpm00zDc7g@mail.gmail.com>
-Subject: Re: [PATCH 3/3] megaraid_sas: use DEVICE_ATTR_{RO, RW}
-To:     Tomas Henzl <thenzl@redhat.com>
-Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Shivasharan Srikanteshwara 
-        <shivasharan.srikanteshwara@broadcom.com>
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQISV99IJucrELCJ7/TtkhttwnBgjgOGFSeuAhzMczwA7yMTbgJjyv4mAu5i69MBzxVPCaWhc+pggAZsHKA=
+Date:   Fri, 7 Jun 2019 15:15:04 +0530
+Message-ID: <287b092778c749c8b101641f9d48ab44@mail.gmail.com>
+Subject: RE: [PATCH 8/9] scsi: megaraid: convert private reply queue to blk-mq
+ hw queue
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        John Garry <john.garry@huawei.com>,
+        Don Brace <don.brace@microsemi.com>,
+        Sathya Prakash Veerichetty <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 29, 2019 at 9:30 PM Tomas Henzl <thenzl@redhat.com> wrote:
 >
-> Use existing macros.
-> No functional change.
+> >
+> > Please drop the patch in my last email, and apply the following patch
+> > and see if we can make a difference:
 >
-> Signed-off-by: Tomas Henzl <thenzl@redhat.com>
-Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
+> Ming,
+>
+> I dropped early patch and applied the below patched.  Now, I am getting
+> expected performance (3.0M IOPS).
+> Below patch fix the performance issue.  See perf report after applying
+the
+> same -
+>
+>      8.52%  [kernel]        [k] sbitmap_any_bit_set
+>      4.19%  [kernel]        [k] blk_mq_run_hw_queue
+>      3.76%  [megaraid_sas]  [k] complete_cmd_fusion
+>      3.24%  [kernel]        [k] scsi_queue_rq
+>      2.53%  [megaraid_sas]  [k] megasas_build_ldio_fusion
+>      2.34%  [megaraid_sas]  [k] megasas_build_and_issue_cmd_fusion
+>      2.18%  [kernel]        [k] entry_SYSCALL_64
+>      1.85%  [kernel]        [k] syscall_return_via_sysret
+>      1.78%  [kernel]        [k] blk_mq_run_hw_queues
+>      1.59%  [kernel]        [k] gup_pmd_range
+>      1.49%  [kernel]        [k] _raw_spin_lock_irqsave
+>      1.24%  [kernel]        [k] scsi_dec_host_busy
+>      1.23%  [kernel]        [k] blk_mq_free_request
+>      1.23%  [kernel]        [k] blk_mq_get_request
+>      0.96%  [kernel]        [k] __slab_free
+>      0.91%  [kernel]        [k] aio_complete
+>      0.90%  [kernel]        [k] __sched_text_start
+>      0.89%  [megaraid_sas]  [k] megasas_queue_command
+>      0.85%  [kernel]        [k] __fget
+>      0.84%  [kernel]        [k] scsi_mq_get_budget
+>
+> I will do some more testing and update the results.
 
-> ---
->  drivers/scsi/megaraid/megaraid_sas_base.c | 44 ++++++++++-------------
->  1 file changed, 18 insertions(+), 26 deletions(-)
+Ming, I did testing on AMD Dual Socket server (AMD EPYC 7601 32-Core
+Processor). System has total 128 logical cores.
+
+Without patch, performance can go upto 2.8M IOPS. See below perf top
+output.
+
+   7.37%  [megaraid_sas]      [k] complete_cmd_fusion
+   2.51%  [kernel]            [k] copy_user_generic_string
+   2.48%  [kernel]            [k] read_tsc
+   2.10%  fio                 [.] thread_main
+   2.06%  [kernel]            [k] gup_pgd_range
+   1.98%  [kernel]            [k] __get_user_4
+   1.92%  [kernel]            [k] entry_SYSCALL_64
+   1.58%  [kernel]            [k] scsi_queue_rq
+   1.55%  [megaraid_sas]      [k] megasas_queue_command
+   1.52%  [kernel]            [k] irq_entries_start
+   1.43%  fio                 [.] get_io_u
+   1.39%  [kernel]            [k] blkdev_direct_IO
+   1.34%  [kernel]            [k] __audit_syscall_exit
+   1.31%  [megaraid_sas]      [k] megasas_build_and_issue_cmd_fusion
+   1.27%  [kernel]            [k] syscall_slow_exit_work
+   1.23%  [kernel]            [k] io_submit_one
+   1.20%  [kernel]            [k] do_syscall_64
+   1.17%  fio                 [.] td_io_queue
+   1.16%  [kernel]            [k] lookup_ioctx
+   1.14%  [kernel]            [k] kmem_cache_alloc
+   1.10%  [megaraid_sas]      [k] megasas_build_ldio_fusion
+   1.07%  [kernel]            [k] __memset
+   1.06%  [kernel]            [k] __virt_addr_valid
+   0.98%  [kernel]            [k] blk_mq_get_request
+   0.94%  [kernel]            [k] note_interrupt
+   0.91%  [kernel]            [k] __get_user_8
+   0.91%  [kernel]            [k] aio_read_events
+   0.85%  [kernel]            [k] __put_user_4
+   0.78%  fio                 [.] fio_libaio_commit
+   0.74%  [megaraid_sas]      [k] MR_BuildRaidContext
+   0.70%  [kernel]            [k] __x64_sys_io_submit
+   0.69%  fio                 [.] utime_since_now
+
+
+With your patch - Performance can go upto 1.7M IOPS. See below perf top
+output.
+
+ 23.01%  [kernel]              [k] sbitmap_any_bit_set
+   6.42%  [kernel]              [k] blk_mq_run_hw_queue
+   4.44%  [megaraid_sas]        [k] complete_cmd_fusion
+   4.23%  [kernel]              [k] blk_mq_run_hw_queues
+   1.80%  [kernel]              [k] read_tsc
+   1.60%  [kernel]              [k] copy_user_generic_string
+   1.33%  fio                   [.] thread_main
+   1.27%  [kernel]              [k] irq_entries_start
+   1.22%  [kernel]              [k] gup_pgd_range
+   1.20%  [kernel]              [k] __get_user_4
+   1.20%  [kernel]              [k] entry_SYSCALL_64
+   1.07%  [kernel]              [k] scsi_queue_rq
+   0.88%  fio                   [.] get_io_u
+   0.87%  [megaraid_sas]        [k] megasas_queue_command
+   0.86%  [kernel]              [k] blkdev_direct_IO
+   0.85%  fio                   [.] td_io_queue
+   0.80%  [kernel]              [k] note_interrupt
+   0.76%  [kernel]              [k] lookup_ioctx
+   0.76%  [kernel]              [k] do_syscall_64
+   0.75%  [megaraid_sas]        [k] megasas_build_and_issue_cmd_fusion
+   0.74%  [megaraid_sas]        [k] megasas_build_ldio_fusion
+   0.72%  [kernel]              [k] kmem_cache_alloc
+   0.71%  [kernel]              [k] __audit_syscall_exit
+   0.67%  [kernel]              [k] __virt_addr_valid
+   0.65%  [kernel]              [k] blk_mq_get_request
+   0.64%  [kernel]              [k] __memset
+   0.62%  [kernel]              [k] syscall_slow_exit_work
+   0.60%  [kernel]              [k] io_submit_one
+   0.59%  [kernel]              [k] ktime_get
+   0.58%  fio                   [.] fio_libaio_commit
+   0.57%  [kernel]              [k] aio_read_events
+   0.54%  [kernel]              [k] __get_user_8
+   0.53%  [kernel]              [k] aio_complete_rw
+   0.51%  [kernel]              [k] kmem_cache_free
+
+With your patch + reducing logical cpu core to 64 (CPU hotplugged),
+performance can go upto 2.2M IOPS. See below perf top output.
+
+   9.56%  [kernel]            [k] sbitmap_any_bit_set
+   4.62%  [megaraid_sas]      [k] complete_cmd_fusion
+   3.02%  [kernel]            [k] blk_mq_run_hw_queue
+   2.15%  [kernel]            [k] copy_user_generic_string
+   2.13%  [kernel]            [k] blk_mq_run_hw_queues
+   2.09%  [kernel]            [k] read_tsc
+   1.66%  [kernel]            [k] __get_user_4
+   1.59%  [kernel]            [k] entry_SYSCALL_64
+   1.57%  [kernel]            [k] gup_pgd_range
+   1.55%  fio                 [.] thread_main
+   1.51%  [kernel]            [k] scsi_queue_rq
+   1.31%  [kernel]            [k] __memset
+   1.21%  [megaraid_sas]      [k] megasas_build_and_issue_cmd_fusion
+   1.16%  [megaraid_sas]      [k] megasas_queue_command
+   1.13%  fio                 [.] get_io_u
+   1.12%  [kernel]            [k] blk_mq_get_request
+   1.07%  [kernel]            [k] blkdev_direct_IO
+   1.06%  [kernel]            [k] __put_user_4
+   1.05%  fio                 [.] td_io_queue
+   1.02%  [kernel]            [k] syscall_slow_exit_work
+   1.00%  [megaraid_sas]      [k] megasas_build_ldio_fusion
+
+
+In summary, Part of the performance drop may be correlated with number of
+hctx created in block layer. I can provide more details and can test
+follow up patch.
+
+Kashyap
+
+
 >
-> diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-> index 0522821a5..aa6a5d86d 100644
-> --- a/drivers/scsi/megaraid/megaraid_sas_base.c
-> +++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-> @@ -3121,7 +3121,7 @@ megasas_service_aen(struct megasas_instance *instance, struct megasas_cmd *cmd)
->  }
+> Kashyap
 >
->  static ssize_t
-> -megasas_fw_crash_buffer_store(struct device *cdev,
-> +fw_crash_buffer_store(struct device *cdev,
->         struct device_attribute *attr, const char *buf, size_t count)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3140,7 +3140,7 @@ megasas_fw_crash_buffer_store(struct device *cdev,
->  }
->
->  static ssize_t
-> -megasas_fw_crash_buffer_show(struct device *cdev,
-> +fw_crash_buffer_show(struct device *cdev,
->         struct device_attribute *attr, char *buf)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3185,7 +3185,7 @@ megasas_fw_crash_buffer_show(struct device *cdev,
->  }
->
->  static ssize_t
-> -megasas_fw_crash_buffer_size_show(struct device *cdev,
-> +fw_crash_buffer_size_show(struct device *cdev,
->         struct device_attribute *attr, char *buf)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3197,7 +3197,7 @@ megasas_fw_crash_buffer_size_show(struct device *cdev,
->  }
->
->  static ssize_t
-> -megasas_fw_crash_state_store(struct device *cdev,
-> +fw_crash_state_store(struct device *cdev,
->         struct device_attribute *attr, const char *buf, size_t count)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3232,7 +3232,7 @@ megasas_fw_crash_state_store(struct device *cdev,
->  }
->
->  static ssize_t
-> -megasas_fw_crash_state_show(struct device *cdev,
-> +fw_crash_state_show(struct device *cdev,
->         struct device_attribute *attr, char *buf)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3243,14 +3243,14 @@ megasas_fw_crash_state_show(struct device *cdev,
->  }
->
->  static ssize_t
-> -megasas_page_size_show(struct device *cdev,
-> +page_size_show(struct device *cdev,
->         struct device_attribute *attr, char *buf)
->  {
->         return snprintf(buf, PAGE_SIZE, "%ld\n", (unsigned long)PAGE_SIZE - 1);
->  }
->
->  static ssize_t
-> -megasas_ldio_outstanding_show(struct device *cdev, struct device_attribute *attr,
-> +ldio_outstanding_show(struct device *cdev, struct device_attribute *attr,
->         char *buf)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3260,7 +3260,7 @@ megasas_ldio_outstanding_show(struct device *cdev, struct device_attribute *attr
->  }
->
->  static ssize_t
-> -megasas_fw_cmds_outstanding_show(struct device *cdev,
-> +fw_cmds_outstanding_show(struct device *cdev,
->                                  struct device_attribute *attr, char *buf)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3270,7 +3270,7 @@ megasas_fw_cmds_outstanding_show(struct device *cdev,
->  }
->
->  static ssize_t
-> -megasas_dump_system_regs_show(struct device *cdev,
-> +dump_system_regs_show(struct device *cdev,
->                                struct device_attribute *attr, char *buf)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3281,7 +3281,7 @@ megasas_dump_system_regs_show(struct device *cdev,
->  }
->
->  static ssize_t
-> -megasas_raid_map_id_show(struct device *cdev, struct device_attribute *attr,
-> +raid_map_id_show(struct device *cdev, struct device_attribute *attr,
->                           char *buf)
->  {
->         struct Scsi_Host *shost = class_to_shost(cdev);
-> @@ -3292,22 +3292,14 @@ megasas_raid_map_id_show(struct device *cdev, struct device_attribute *attr,
->                         (unsigned long)instance->map_id);
->  }
->
-> -static DEVICE_ATTR(fw_crash_buffer, S_IRUGO | S_IWUSR,
-> -       megasas_fw_crash_buffer_show, megasas_fw_crash_buffer_store);
-> -static DEVICE_ATTR(fw_crash_buffer_size, S_IRUGO,
-> -       megasas_fw_crash_buffer_size_show, NULL);
-> -static DEVICE_ATTR(fw_crash_state, S_IRUGO | S_IWUSR,
-> -       megasas_fw_crash_state_show, megasas_fw_crash_state_store);
-> -static DEVICE_ATTR(page_size, S_IRUGO,
-> -       megasas_page_size_show, NULL);
-> -static DEVICE_ATTR(ldio_outstanding, S_IRUGO,
-> -       megasas_ldio_outstanding_show, NULL);
-> -static DEVICE_ATTR(fw_cmds_outstanding, S_IRUGO,
-> -       megasas_fw_cmds_outstanding_show, NULL);
-> -static DEVICE_ATTR(dump_system_regs, S_IRUGO,
-> -       megasas_dump_system_regs_show, NULL);
-> -static DEVICE_ATTR(raid_map_id, S_IRUGO,
-> -       megasas_raid_map_id_show, NULL);
-> +static DEVICE_ATTR_RW(fw_crash_buffer);
-> +static DEVICE_ATTR_RO(fw_crash_buffer_size);
-> +static DEVICE_ATTR_RW(fw_crash_state);
-> +static DEVICE_ATTR_RO(page_size);
-> +static DEVICE_ATTR_RO(ldio_outstanding);
-> +static DEVICE_ATTR_RO(fw_cmds_outstanding);
-> +static DEVICE_ATTR_RO(dump_system_regs);
-> +static DEVICE_ATTR_RO(raid_map_id);
->
->  struct device_attribute *megaraid_host_attrs[] = {
->         &dev_attr_fw_crash_buffer_size,
-> --
-> 2.20.1
->
+> >
+> > diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c index
+> > 3d6780504dcb..69d6bffcc8ff 100644
+> > --- a/block/blk-mq-debugfs.c
+> > +++ b/block/blk-mq-debugfs.c
+> > @@ -627,6 +627,9 @@ static int hctx_active_show(void *data, struct
+> > seq_file
+> > *m)  {
+> >  	struct blk_mq_hw_ctx *hctx = data;
+> >
+> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
+> > +		hctx = blk_mq_master_hctx(hctx);
+> > +
+> >  	seq_printf(m, "%d\n", atomic_read(&hctx->nr_active));
+> >  	return 0;
+> >  }
+> > diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c index
+> > 309ec5079f3f..58ef83a34fda 100644
+> > --- a/block/blk-mq-tag.c
+> > +++ b/block/blk-mq-tag.c
+> > @@ -30,6 +30,9 @@ bool blk_mq_has_free_tags(struct blk_mq_tags *tags)
+> >   */
+> >  bool __blk_mq_tag_busy(struct blk_mq_hw_ctx *hctx)  {
+> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
+> > +		hctx = blk_mq_master_hctx(hctx);
+> > +
+> >  	if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state) &&
+> >  	    !test_and_set_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
+> >  		atomic_inc(&hctx->tags->active_queues);
+> > @@ -55,6 +58,9 @@ void __blk_mq_tag_idle(struct blk_mq_hw_ctx *hctx)
+> {
+> >  	struct blk_mq_tags *tags = hctx->tags;
+> >
+> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
+> > +		hctx = blk_mq_master_hctx(hctx);
+> > +
+> >  	if (!test_and_clear_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
+> >  		return;
+> >
+> > @@ -74,6 +80,10 @@ static inline bool hctx_may_queue(struct
+> > blk_mq_hw_ctx *hctx,
+> >
+> >  	if (!hctx || !(hctx->flags & BLK_MQ_F_TAG_SHARED))
+> >  		return true;
+> > +
+> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
+> > +		hctx = blk_mq_master_hctx(hctx);
+> > +
+> >  	if (!test_bit(BLK_MQ_S_TAG_ACTIVE, &hctx->state))
+> >  		return true;
+> >
+> > diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h index
+> > 61deab0b5a5a..84e9b46ffc78 100644
+> > --- a/block/blk-mq-tag.h
+> > +++ b/block/blk-mq-tag.h
+> > @@ -36,11 +36,22 @@ extern void blk_mq_tag_wakeup_all(struct
+> > blk_mq_tags *tags, bool);  void blk_mq_queue_tag_busy_iter(struct
+> > request_queue *q, busy_iter_fn *fn,
+> >  		void *priv);
+> >
+> > +static inline struct blk_mq_hw_ctx *blk_mq_master_hctx(
+> > +		struct blk_mq_hw_ctx *hctx)
+> > +{
+> > +	return hctx->queue->queue_hw_ctx[0]; }
+> > +
+> > +
+> >  static inline struct sbq_wait_state *bt_wait_ptr(struct sbitmap_queue
+*bt,
+> >  						 struct blk_mq_hw_ctx
+*hctx)
+> >  {
+> >  	if (!hctx)
+> >  		return &bt->ws[0];
+> > +
+> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
+> > +		hctx = blk_mq_master_hctx(hctx);
+> > +
+> >  	return sbq_wait_ptr(bt, &hctx->wait_index);  }
+> >
+> > diff --git a/block/blk-mq.c b/block/blk-mq.c index
+> > 49d73d979cb3..4196ed3b0085 100644
+> > --- a/block/blk-mq.c
+> > +++ b/block/blk-mq.c
+> > @@ -303,7 +303,7 @@ static struct request *blk_mq_rq_ctx_init(struct
+> > blk_mq_alloc_data *data,
+> >  	} else {
+> >  		if (data->hctx->flags & BLK_MQ_F_TAG_SHARED) {
+> >  			rq_flags = RQF_MQ_INFLIGHT;
+> > -			atomic_inc(&data->hctx->nr_active);
+> > +			blk_mq_inc_nr_active(data->hctx);
+> >  		}
+> >  		rq->tag = tag;
+> >  		rq->internal_tag = -1;
+> > @@ -517,7 +517,7 @@ void blk_mq_free_request(struct request *rq)
+> >
+> >  	ctx->rq_completed[rq_is_sync(rq)]++;
+> >  	if (rq->rq_flags & RQF_MQ_INFLIGHT)
+> > -		atomic_dec(&hctx->nr_active);
+> > +		blk_mq_dec_nr_active(hctx);
+> >
+> >  	if (unlikely(laptop_mode && !blk_rq_is_passthrough(rq)))
+> >  		laptop_io_completion(q->backing_dev_info);
+> > @@ -1064,7 +1064,7 @@ bool blk_mq_get_driver_tag(struct request *rq)
+> >  	if (rq->tag >= 0) {
+> >  		if (shared) {
+> >  			rq->rq_flags |= RQF_MQ_INFLIGHT;
+> > -			atomic_inc(&data.hctx->nr_active);
+> > +			blk_mq_inc_nr_active(data.hctx);
+> >  		}
+> >  		data.hctx->tags->rqs[rq->tag] = rq;
+> >  	}
+> > diff --git a/block/blk-mq.h b/block/blk-mq.h index
+> > 633a5a77ee8b..f1279b8c2289 100644
+> > --- a/block/blk-mq.h
+> > +++ b/block/blk-mq.h
+> > @@ -193,6 +193,20 @@ unsigned int blk_mq_in_flight(struct
+> > request_queue *q, struct hd_struct *part);  void
+> > blk_mq_in_flight_rw(struct request_queue *q, struct hd_struct *part,
+> >  			 unsigned int inflight[2]);
+> >
+> > +static inline void blk_mq_inc_nr_active(struct blk_mq_hw_ctx *hctx) {
+> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
+> > +		hctx = blk_mq_master_hctx(hctx);
+> > +	atomic_inc(&hctx->nr_active);
+> > +}
+> > +
+> > +static inline void blk_mq_dec_nr_active(struct blk_mq_hw_ctx *hctx) {
+> > +	if (hctx->flags & BLK_MQ_F_HOST_TAGS)
+> > +		hctx = blk_mq_master_hctx(hctx);
+> > +	atomic_dec(&hctx->nr_active);
+> > +}
+> > +
+> >  static inline void blk_mq_put_dispatch_budget(struct blk_mq_hw_ctx
+> > *hctx) {
+> >  	struct request_queue *q = hctx->queue; @@ -218,7 +232,7 @@ static
+> > inline void __blk_mq_put_driver_tag(struct blk_mq_hw_ctx *hctx,
+> >
+> >  	if (rq->rq_flags & RQF_MQ_INFLIGHT) {
+> >  		rq->rq_flags &= ~RQF_MQ_INFLIGHT;
+> > -		atomic_dec(&hctx->nr_active);
+> > +		blk_mq_dec_nr_active(hctx);
+> >  	}
+> >  }
+> >
+> > Thanks,
+> > Ming
