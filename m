@@ -2,115 +2,42 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 804B839B5B
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Jun 2019 08:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D109239B98
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Jun 2019 09:56:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730381AbfFHGFb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 8 Jun 2019 02:05:31 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:48882 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726083AbfFHGFa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Jun 2019 02:05:30 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 79BC98EE1D3;
-        Fri,  7 Jun 2019 23:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1559973928;
-        bh=nmFZNz2iwxicEerEssWBw2rYb/T5nbp1tsHl2DZlBdM=;
-        h=Subject:From:To:Cc:Date:From;
-        b=MjpFofPR70nAqkXjae/sueoarbReb64g/8UbVRMOKrTZ0BiHdr7YPkq4iY7yoF0Ma
-         w0Rx8kSnYpXE3pqYCszlqH1VENHdvVsZDRnEW3sygf+Zbwf9KsImZszl72CKHNQVTy
-         HZKkviwjSSzJKCuFSErgWPg+2jYmcNPrfztmG6Mg=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IHYPgG0iQoQO; Fri,  7 Jun 2019 23:05:28 -0700 (PDT)
-Received: from jarvis.lan (unknown [50.35.68.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id D188E8EE0EF;
-        Fri,  7 Jun 2019 23:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1559973928;
-        bh=nmFZNz2iwxicEerEssWBw2rYb/T5nbp1tsHl2DZlBdM=;
-        h=Subject:From:To:Cc:Date:From;
-        b=MjpFofPR70nAqkXjae/sueoarbReb64g/8UbVRMOKrTZ0BiHdr7YPkq4iY7yoF0Ma
-         w0Rx8kSnYpXE3pqYCszlqH1VENHdvVsZDRnEW3sygf+Zbwf9KsImZszl72CKHNQVTy
-         HZKkviwjSSzJKCuFSErgWPg+2jYmcNPrfztmG6Mg=
-Message-ID: <1559973926.2787.5.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.2-rc3
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 07 Jun 2019 23:05:26 -0700
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727244AbfFHH4R (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 8 Jun 2019 03:56:17 -0400
+Received: from verein.lst.de ([213.95.11.211]:60510 "EHLO newverein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726926AbfFHH4Q (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 8 Jun 2019 03:56:16 -0400
+Received: by newverein.lst.de (Postfix, from userid 2407)
+        id 07A5B68B02; Sat,  8 Jun 2019 09:55:49 +0200 (CEST)
+Date:   Sat, 8 Jun 2019 09:55:48 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH V3 1/3] scsi: lib/sg_pool.c: clear 'first_chunk' in
+ case of no pre-allocation
+Message-ID: <20190608075548.GC19075@lst.de>
+References: <20190606083410.32243-1-ming.lei@redhat.com> <20190606083410.32243-2-ming.lei@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190606083410.32243-2-ming.lei@redhat.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Two bug fixes, both for fairly serious problems; the UFS one looks like
-it could be used to exfiltrate data from the kernel, although probably
-only a privileged user has access to the command management interface
-and the missing unlock in smartpqi is long standing and probably a
-little used error path.
+Looks good,
 
-The patch is available here:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-
-The short changelog is:
-
-Avri Altman (1):
-      scsi: ufs: Check that space was properly alloced in copy_query_response
-
-Dan Carpenter (1):
-      scsi: smartpqi: unlock on error in pqi_submit_raid_request_synchronous()
-
-And the diffstat:
-
- drivers/scsi/smartpqi/smartpqi_init.c | 6 ++++--
- drivers/scsi/ufs/ufshcd.c             | 3 ++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index d6be4e8f4a8f..8fd5ffc55792 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -4046,8 +4046,10 @@ static int pqi_submit_raid_request_synchronous(struct pqi_ctrl_info *ctrl_info,
- 				return -ETIMEDOUT;
- 			msecs_blocked =
- 				jiffies_to_msecs(jiffies - start_jiffies);
--			if (msecs_blocked >= timeout_msecs)
--				return -ETIMEDOUT;
-+			if (msecs_blocked >= timeout_msecs) {
-+				rc = -ETIMEDOUT;
-+				goto out;
-+			}
- 			timeout_msecs -= msecs_blocked;
- 		}
- 	}
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 8c1c551f2b42..3fe3029617a8 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -1917,7 +1917,8 @@ int ufshcd_copy_query_response(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
- 	memcpy(&query_res->upiu_res, &lrbp->ucd_rsp_ptr->qr, QUERY_OSF_SIZE);
- 
- 	/* Get the descriptor */
--	if (lrbp->ucd_rsp_ptr->qr.opcode == UPIU_QUERY_OPCODE_READ_DESC) {
-+	if (hba->dev_cmd.query.descriptor &&
-+	    lrbp->ucd_rsp_ptr->qr.opcode == UPIU_QUERY_OPCODE_READ_DESC) {
- 		u8 *descp = (u8 *)lrbp->ucd_rsp_ptr +
- 				GENERAL_UPIU_REQUEST_SIZE;
- 		u16 resp_len;
+Reviewed-by: Christoph Hellwig <hch@lst.de>
