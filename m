@@ -2,54 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8C93A17E
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Jun 2019 21:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 760123A1E8
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Jun 2019 22:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727505AbfFHTaK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 8 Jun 2019 15:30:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39218 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727323AbfFHTaK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 8 Jun 2019 15:30:10 -0400
-Subject: Re: [GIT PULL] SCSI fixes for 5.2-rc3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560022209;
-        bh=6ARa66tKQ+fGJeogV72BkWlpIYpf71/phJWjxlcJuSA=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=K0Dc08ePxaEcm0Wz1sFxFlQwrpsbA3KTXj/1+oto2XzR29NXeAlZwKwBChkqWj8rk
-         KC0yFI6TCDK0KXmaWR7+K0Gy0F2yeCHvqxcPz9WxxUlLsNZxSadiv83P9PD03RY4ag
-         pvNrlCz55HAwWyqJGejftKjHfUK9SIja86lMjmT8=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1559973926.2787.5.camel@HansenPartnership.com>
-References: <1559973926.2787.5.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1559973926.2787.5.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: cc8f52609bb4177febade24d11713e20c0893b0a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 1b02caa319cf73ae89aced8714066a3a5bbe648b
-Message-Id: <156002220983.30045.16302787382855794612.pr-tracker-bot@kernel.org>
-Date:   Sat, 08 Jun 2019 19:30:09 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1727573AbfFHUTM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 8 Jun 2019 16:19:12 -0400
+Received: from mail-it1-f193.google.com ([209.85.166.193]:54774 "EHLO
+        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727528AbfFHUTM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Jun 2019 16:19:12 -0400
+Received: by mail-it1-f193.google.com with SMTP id m138so6197134ita.4
+        for <linux-scsi@vger.kernel.org>; Sat, 08 Jun 2019 13:19:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Oibz9MnDmwNMmGUKMKiPf6+1t2ZWez65UHGa4Eunn0E=;
+        b=bNe0kgIRbmZfooq/JigqzAXl39KKFNd4zTEtJzEJFOFaxfrvihmLG1JthBvvi8bmMb
+         YE/ZfJ95cKLxSI79FH2BJ1nbMSPMbVDbiZ3esxC3Cmi5eXS0WKcQQSozdNb962q2hpv5
+         CDRaRhwMS6XHog7JhutF2eAtWwZpH3phEDwznlAupNVifv1bfiVLc37aPMjnHYTILqph
+         rn8hJJaOTTCxiBLin4Q693Pi65Xr9Kd5fKRaEHCXJWsJKpHbNfn3QXxY+27UfUMq8LWt
+         o8qBbthHcIYTEu6FJVfA2lsW4z3h6EBAscQO9BNbzdS+TwJSUjEg51VOhQVPn0IEIi4Y
+         oIJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=Oibz9MnDmwNMmGUKMKiPf6+1t2ZWez65UHGa4Eunn0E=;
+        b=iVwxEEueopbyrNuM0SbYqQJPVaSEpinpP61NIbcfFaunHPMIC53HW0RC7+y9cYV7fk
+         P5pEos7gjopUv31ozKKTibVvdpyXBgtKBQLJv6iLf64SAUOEjxvqZp3pZ/TaGH3WtWhc
+         SucgOBFOnw2CT54W/O0jvT9+61DUIG/miixnvAr6nupV6Z2695rexKns89Kd3MT0ZEmL
+         F0EVjE9a9kHY2cdHysUd7SbNMNj9ncSD568sXZaRzegwB+XbktV/QnUmuyCNHFXmVckc
+         cFikvI8Ib/JF8CjH+JzesgaCz/5cY+3F5ofn6XSIQGGwMtleuF0ar48rhWYFu/06cM+o
+         re1g==
+X-Gm-Message-State: APjAAAVNaKqKWDKg/IbogrImCYFk/b1EJs3gnDB62JeT8rV/BiHL+UZz
+        bxIxsJixXIqLbSnaTs/gFX7xb1DDLjit1YZVi4c=
+X-Google-Smtp-Source: APXvYqy3ctbmTwSIU2s3QLDVhwTo0ZhaNurwuOVwknJZrCW03OtJH6BebLGghrfFwyD6PDjfIzMtFN4MNr9/WOg2Ac8=
+X-Received: by 2002:a24:3a42:: with SMTP id m63mr9450639itm.29.1560025151667;
+ Sat, 08 Jun 2019 13:19:11 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a6b:410f:0:0:0:0:0 with HTTP; Sat, 8 Jun 2019 13:19:11 -0700 (PDT)
+From:   Ayesha Al-Gaddafi <aishagaddafimd@gmail.com>
+Date:   Sat, 8 Jun 2019 20:19:11 +0000
+X-Google-Sender-Auth: xLfim6oFDS6scCbvxXaBoD3b0jA
+Message-ID: <CAFyj9jxf=-R1-wCXY97xvOYhPCAyZke5JcLUcaNCx=hVjTgr_Q@mail.gmail.com>
+Subject: From Mrs. Ayesha Al-Qaddafi,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Fri, 07 Jun 2019 23:05:26 -0700:
+Peace be upon you Dear Friend,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+ It=E2=80=99s my pleasure to contact you through this media as i am in need=
+ of
+your urgent assistance. My names are Mrs. Ayesha Al-Qaddafi a single
+Mother and a Widow with three Children. I am the only biological
+Daughter of late Libyan President (Late Colonel Muammar Al-Qaddafi).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/1b02caa319cf73ae89aced8714066a3a5bbe648b
+I have an investment funds worth Twenty Eight Million Four Hundred
+Thousand United State Dollars ($28.400.000.00) and i need an
+investment Manager/Partner and because of the asylum status i will
+authorize you the ownership of the funds, however, I am interested in
+you for the investment project assistance in your country, may be from
+there, we can build a business relationship in the nearest future.
 
-Thank you!
+I am willing to negotiate investment/business profit sharing ratio
+with you base on the future investment earning profits. If you are
+willing to handle this project kindly reply urgent if only you are
+interested in this transaction to enable me provide you more
+information about the investment funds. Your Urgent Reply Will Be
+Appreciated.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Kind Regards.
+Mrs. Ayesha Al-Qaddafi.
