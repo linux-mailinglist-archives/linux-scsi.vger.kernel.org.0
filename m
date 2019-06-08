@@ -2,54 +2,43 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A5A39BB8
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Jun 2019 10:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8143F39C30
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Jun 2019 11:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726138AbfFHIO3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 8 Jun 2019 04:14:29 -0400
-Received: from verein.lst.de ([213.95.11.211]:60567 "EHLO newverein.lst.de"
+        id S1726700AbfFHJgT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 8 Jun 2019 05:36:19 -0400
+Received: from verein.lst.de ([213.95.11.211]:60839 "EHLO newverein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725809AbfFHIO3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 8 Jun 2019 04:14:29 -0400
+        id S1726590AbfFHJgS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 8 Jun 2019 05:36:18 -0400
 Received: by newverein.lst.de (Postfix, from userid 2407)
-        id B4A7168C7B; Sat,  8 Jun 2019 10:14:00 +0200 (CEST)
-Date:   Sat, 8 Jun 2019 10:14:00 +0200
+        id 4DA45227A82; Sat,  8 Jun 2019 11:35:49 +0200 (CEST)
+Date:   Sat, 8 Jun 2019 11:35:48 +0200
 From:   Christoph Hellwig <hch@lst.de>
-To:     Kashyap Desai <kashyap.desai@broadcom.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Sebastian Ott <sebott@linux.ibm.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
-        PDL-MPT-FUSIONLINUX <mpt-fusionlinux.pdl@broadcom.com>,
-        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/13] megaraid_sas: set virt_boundary_mask in the scsi
- host
-Message-ID: <20190608081400.GA19573@lst.de>
-References: <20190605190836.32354-1-hch@lst.de> <20190605190836.32354-11-hch@lst.de> <cd713506efb9579d1f69a719d831c28d@mail.gmail.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Hannes Reinecke <hare@suse.de>,
+        James Smart <james.smart@broadcom.com>
+Subject: Re: [PATCH 1/3] scsi: Do not allow user space to change the SCSI
+ device state into SDEV_BLOCK
+Message-ID: <20190608093548.GA20610@lst.de>
+References: <20190605201435.233701-1-bvanassche@acm.org> <20190605201435.233701-2-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cd713506efb9579d1f69a719d831c28d@mail.gmail.com>
+In-Reply-To: <20190605201435.233701-2-bvanassche@acm.org>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jun 06, 2019 at 09:07:27PM +0530, Kashyap Desai wrote:
-> Hi Christoph, Changes for <megaraid_sas> and <mpt3sas> looks good. We want
-> to confirm few sanity before ACK. BTW, what benefit we will see moving
-> virt_boundry setting to SCSI mid layer ? Is it just modular approach OR any
-> functional fix ?
+Thanks.  As discusssed before there really shouldn't be any reason
+for users to inject a blocked state:
 
-The big difference is that virt_boundary now also changes the
-max_segment_size, and this ensures that this limit is also communicated
-to the DMA mapping layer.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
