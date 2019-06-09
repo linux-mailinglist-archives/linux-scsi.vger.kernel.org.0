@@ -2,80 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 760123A1E8
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Jun 2019 22:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3083A2C2
+	for <lists+linux-scsi@lfdr.de>; Sun,  9 Jun 2019 03:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727573AbfFHUTM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 8 Jun 2019 16:19:12 -0400
-Received: from mail-it1-f193.google.com ([209.85.166.193]:54774 "EHLO
-        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727528AbfFHUTM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Jun 2019 16:19:12 -0400
-Received: by mail-it1-f193.google.com with SMTP id m138so6197134ita.4
-        for <linux-scsi@vger.kernel.org>; Sat, 08 Jun 2019 13:19:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Oibz9MnDmwNMmGUKMKiPf6+1t2ZWez65UHGa4Eunn0E=;
-        b=bNe0kgIRbmZfooq/JigqzAXl39KKFNd4zTEtJzEJFOFaxfrvihmLG1JthBvvi8bmMb
-         YE/ZfJ95cKLxSI79FH2BJ1nbMSPMbVDbiZ3esxC3Cmi5eXS0WKcQQSozdNb962q2hpv5
-         CDRaRhwMS6XHog7JhutF2eAtWwZpH3phEDwznlAupNVifv1bfiVLc37aPMjnHYTILqph
-         rn8hJJaOTTCxiBLin4Q693Pi65Xr9Kd5fKRaEHCXJWsJKpHbNfn3QXxY+27UfUMq8LWt
-         o8qBbthHcIYTEu6FJVfA2lsW4z3h6EBAscQO9BNbzdS+TwJSUjEg51VOhQVPn0IEIi4Y
-         oIJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=Oibz9MnDmwNMmGUKMKiPf6+1t2ZWez65UHGa4Eunn0E=;
-        b=iVwxEEueopbyrNuM0SbYqQJPVaSEpinpP61NIbcfFaunHPMIC53HW0RC7+y9cYV7fk
-         P5pEos7gjopUv31ozKKTibVvdpyXBgtKBQLJv6iLf64SAUOEjxvqZp3pZ/TaGH3WtWhc
-         SucgOBFOnw2CT54W/O0jvT9+61DUIG/miixnvAr6nupV6Z2695rexKns89Kd3MT0ZEmL
-         F0EVjE9a9kHY2cdHysUd7SbNMNj9ncSD568sXZaRzegwB+XbktV/QnUmuyCNHFXmVckc
-         cFikvI8Ib/JF8CjH+JzesgaCz/5cY+3F5ofn6XSIQGGwMtleuF0ar48rhWYFu/06cM+o
-         re1g==
-X-Gm-Message-State: APjAAAVNaKqKWDKg/IbogrImCYFk/b1EJs3gnDB62JeT8rV/BiHL+UZz
-        bxIxsJixXIqLbSnaTs/gFX7xb1DDLjit1YZVi4c=
-X-Google-Smtp-Source: APXvYqy3ctbmTwSIU2s3QLDVhwTo0ZhaNurwuOVwknJZrCW03OtJH6BebLGghrfFwyD6PDjfIzMtFN4MNr9/WOg2Ac8=
-X-Received: by 2002:a24:3a42:: with SMTP id m63mr9450639itm.29.1560025151667;
- Sat, 08 Jun 2019 13:19:11 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a6b:410f:0:0:0:0:0 with HTTP; Sat, 8 Jun 2019 13:19:11 -0700 (PDT)
-From:   Ayesha Al-Gaddafi <aishagaddafimd@gmail.com>
-Date:   Sat, 8 Jun 2019 20:19:11 +0000
-X-Google-Sender-Auth: xLfim6oFDS6scCbvxXaBoD3b0jA
-Message-ID: <CAFyj9jxf=-R1-wCXY97xvOYhPCAyZke5JcLUcaNCx=hVjTgr_Q@mail.gmail.com>
-Subject: From Mrs. Ayesha Al-Qaddafi,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1727889AbfFIB0o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 8 Jun 2019 21:26:44 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:59968 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727703AbfFIB0o (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Jun 2019 21:26:44 -0400
+Received: by kvm5.telegraphics.com.au (Postfix, from userid 502)
+        id D3B5327AF4; Sat,  8 Jun 2019 21:26:42 -0400 (EDT)
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     "Michael Schmitz" <schmitzmic@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Message-Id: <4f1de194d0d8fdca36f0f7e90ced7bc5fe1f78f6.1560043151.git.fthain@telegraphics.com.au>
+In-Reply-To: <cover.1560043151.git.fthain@telegraphics.com.au>
+References: <cover.1560043151.git.fthain@telegraphics.com.au>
+From:   Finn Thain <fthain@telegraphics.com.au>
+Subject: [PATCH v2 4/7] scsi: mac_scsi: Increase PIO/PDMA transfer length
+ threshold
+Date:   Sun, 09 Jun 2019 11:19:11 +1000
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Peace be upon you Dear Friend,
+Some targets introduce delays when handshaking the response to certain
+commands. For example, a disk may send a 96-byte response to an INQUIRY
+command (or a 24-byte response to a MODE SENSE command) too slowly.
 
- It=E2=80=99s my pleasure to contact you through this media as i am in need=
- of
-your urgent assistance. My names are Mrs. Ayesha Al-Qaddafi a single
-Mother and a Widow with three Children. I am the only biological
-Daughter of late Libyan President (Late Colonel Muammar Al-Qaddafi).
+Apparently the first 12 or 14 bytes are handshaked okay but then the
+system bus error timeout is reached while transferring the next word.
 
-I have an investment funds worth Twenty Eight Million Four Hundred
-Thousand United State Dollars ($28.400.000.00) and i need an
-investment Manager/Partner and because of the asylum status i will
-authorize you the ownership of the funds, however, I am interested in
-you for the investment project assistance in your country, may be from
-there, we can build a business relationship in the nearest future.
+Since the scsi bus phase hasn't changed, the driver then sets the target
+borken flag to prevent further PDMA transfers. The driver also logs the
+warning, "switching to slow handshake".
 
-I am willing to negotiate investment/business profit sharing ratio
-with you base on the future investment earning profits. If you are
-willing to handle this project kindly reply urgent if only you are
-interested in this transaction to enable me provide you more
-information about the investment funds. Your Urgent Reply Will Be
-Appreciated.
+Raise the PDMA threshold to 512 bytes so that PIO transfers will be used
+for these commands. This default is sufficiently low that PDMA will still
+be used for READ and WRITE commands.
 
-Kind Regards.
-Mrs. Ayesha Al-Qaddafi.
+The existing threshold (16 bytes) was chosen more or less at random.
+However, best performance requires the threshold to be as low as possible.
+Those systems that don't need the PIO workaround at all may benefit from
+mac_scsi.setup_use_pdma=1
+
+Cc: Michael Schmitz <schmitzmic@gmail.com>
+Cc: stable@vger.kernel.org # v4.14+
+Fixes: 3a0f64bfa907 ("mac_scsi: Fix pseudo DMA implementation")
+Tested-by: Stan Johnson <userm57@yahoo.com>
+Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+---
+ drivers/scsi/mac_scsi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/mac_scsi.c b/drivers/scsi/mac_scsi.c
+index 8b4b5b1a13d7..ba1afcaadae8 100644
+--- a/drivers/scsi/mac_scsi.c
++++ b/drivers/scsi/mac_scsi.c
+@@ -52,7 +52,7 @@ static int setup_cmd_per_lun = -1;
+ module_param(setup_cmd_per_lun, int, 0);
+ static int setup_sg_tablesize = -1;
+ module_param(setup_sg_tablesize, int, 0);
+-static int setup_use_pdma = -1;
++static int setup_use_pdma = 512;
+ module_param(setup_use_pdma, int, 0);
+ static int setup_hostid = -1;
+ module_param(setup_hostid, int, 0);
+@@ -305,7 +305,7 @@ static int macscsi_dma_xfer_len(struct NCR5380_hostdata *hostdata,
+                                 struct scsi_cmnd *cmd)
+ {
+ 	if (hostdata->flags & FLAG_NO_PSEUDO_DMA ||
+-	    cmd->SCp.this_residual < 16)
++	    cmd->SCp.this_residual < setup_use_pdma)
+ 		return 0;
+ 
+ 	return cmd->SCp.this_residual;
+-- 
+2.21.0
+
