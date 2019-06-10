@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE3B3B7F6
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jun 2019 17:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEAA3B7F5
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jun 2019 17:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389770AbfFJPEA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 Jun 2019 11:04:00 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:58084 "EHLO mx1.redhat.com"
+        id S2389693AbfFJPDz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 10 Jun 2019 11:03:55 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:41124 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389345AbfFJPEA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 10 Jun 2019 11:04:00 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        id S2389345AbfFJPDz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 10 Jun 2019 11:03:55 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 0A4A73079B8F;
-        Mon, 10 Jun 2019 15:03:51 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 248CC2F8BE8;
+        Mon, 10 Jun 2019 15:03:55 +0000 (UTC)
 Received: from localhost (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 94E1C60BF1;
-        Mon, 10 Jun 2019 15:03:43 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6896519C59;
+        Mon, 10 Jun 2019 15:03:53 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>
@@ -31,41 +31,54 @@ Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Brian King <brking@us.ibm.com>,
         James Smart <james.smart@broadcom.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 2/5] scsi: advansys: use sg helper to operate sgl
-Date:   Mon, 10 Jun 2019 23:03:14 +0800
-Message-Id: <20190610150317.29546-3-ming.lei@redhat.com>
+Subject: [PATCH 3/5] scsi: ipr: use sg helper to operate sgl
+Date:   Mon, 10 Jun 2019 23:03:15 +0800
+Message-Id: <20190610150317.29546-4-ming.lei@redhat.com>
 In-Reply-To: <20190610150317.29546-1-ming.lei@redhat.com>
 References: <20190610150317.29546-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Mon, 10 Jun 2019 15:03:54 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Mon, 10 Jun 2019 15:03:55 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The current way isn't safe for chained sgl, so use sgl helper to
+The current way isn't safe for chained sgl, so use sg helper to
 operate sgl.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/scsi/advansys.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/ipr.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
-index 926311c792d5..a242a62caaa1 100644
---- a/drivers/scsi/advansys.c
-+++ b/drivers/scsi/advansys.c
-@@ -7710,7 +7710,7 @@ adv_get_sglist(struct asc_board *boardp, adv_req_t *reqp,
- 				sg_block->sg_ptr = 0L; /* Last ADV_SG_BLOCK in list. */
- 				return ADV_SUCCESS;
- 			}
--			slp++;
-+			slp = sg_next(slp);
- 		}
- 		sg_block->sg_cnt = NO_OF_SG_PER_BLOCK;
- 		prev_sg_block = sg_block;
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index d06bc1a817a1..028db6bd0280 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -3952,6 +3952,7 @@ static void ipr_build_ucode_ioadl64(struct ipr_cmnd *ipr_cmd,
+ 	struct ipr_ioarcb *ioarcb = &ipr_cmd->ioarcb;
+ 	struct ipr_ioadl64_desc *ioadl64 = ipr_cmd->i.ioadl64;
+ 	struct scatterlist *scatterlist = sglist->scatterlist;
++	struct scatterlist *sg;
+ 	int i;
+ 
+ 	ipr_cmd->dma_use_sg = sglist->num_dma_sg;
+@@ -3960,10 +3961,10 @@ static void ipr_build_ucode_ioadl64(struct ipr_cmnd *ipr_cmd,
+ 
+ 	ioarcb->ioadl_len =
+ 		cpu_to_be32(sizeof(struct ipr_ioadl64_desc) * ipr_cmd->dma_use_sg);
+-	for (i = 0; i < ipr_cmd->dma_use_sg; i++) {
++	for_each_sg(scatterlist, sg, ipr_cmd->dma_use_sg, i) {
+ 		ioadl64[i].flags = cpu_to_be32(IPR_IOADL_FLAGS_WRITE);
+-		ioadl64[i].data_len = cpu_to_be32(sg_dma_len(&scatterlist[i]));
+-		ioadl64[i].address = cpu_to_be64(sg_dma_address(&scatterlist[i]));
++		ioadl64[i].data_len = cpu_to_be32(sg_dma_len(sg));
++		ioadl64[i].address = cpu_to_be64(sg_dma_address(sg));
+ 	}
+ 
+ 	ioadl64[i-1].flags |= cpu_to_be32(IPR_IOADL_FLAGS_LAST);
 -- 
 2.20.1
 
