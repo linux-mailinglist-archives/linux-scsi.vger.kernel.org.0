@@ -2,87 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9483B7F8
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jun 2019 17:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 154F83B946
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Jun 2019 18:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390118AbfFJPEJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 Jun 2019 11:04:09 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:36982 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389732AbfFJPEJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 10 Jun 2019 11:04:09 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id E3531C1EB1E0;
-        Mon, 10 Jun 2019 15:04:08 +0000 (UTC)
-Received: from localhost (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EFC2360BF3;
-        Mon, 10 Jun 2019 15:04:03 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 5/5] scsi: mvumi: use sg helper to operate sgl
-Date:   Mon, 10 Jun 2019 23:03:17 +0800
-Message-Id: <20190610150317.29546-6-ming.lei@redhat.com>
-In-Reply-To: <20190610150317.29546-1-ming.lei@redhat.com>
-References: <20190610150317.29546-1-ming.lei@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Mon, 10 Jun 2019 15:04:09 +0000 (UTC)
+        id S2391093AbfFJQVd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 10 Jun 2019 12:21:33 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:57936 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388996AbfFJQVd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 Jun 2019 12:21:33 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 40C4F15051BBC;
+        Mon, 10 Jun 2019 09:21:32 -0700 (PDT)
+Date:   Mon, 10 Jun 2019 09:21:31 -0700 (PDT)
+Message-Id: <20190610.092131.2236695647399216988.davem@davemloft.net>
+To:     varun@chelsio.com
+Cc:     netdev@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, dt@chelsio.com, indranil@chelsio.com,
+        ganji.aravind@chelsio.com
+Subject: Re: [PATCH v3 net-next] cxgb4/libcxgb/cxgb4i/cxgbit: enable eDRAM
+ page pods for iSCSI
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <1560171994-9505-1-git-send-email-varun@chelsio.com>
+References: <1560171994-9505-1-git-send-email-varun@chelsio.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 10 Jun 2019 09:21:32 -0700 (PDT)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The current way isn't safe for chained sgl, so use sgl helper to
-operate sgl.
+From: Varun Prakash <varun@chelsio.com>
+Date: Mon, 10 Jun 2019 18:36:34 +0530
 
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- drivers/scsi/mvumi.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+> Page pods are used for direct data placement, this patch
+> enables eDRAM page pods if firmware supports this feature.
+> 
+> Signed-off-by: Varun Prakash <varun@chelsio.com>
+> ---
+>  v3: reordered local variable declarations in reverse christmas tree format
+>  v2: fixed incorrect spelling of "contiguous"
 
-diff --git a/drivers/scsi/mvumi.c b/drivers/scsi/mvumi.c
-index 1fb6f6ca627e..3881aa6bf4c4 100644
---- a/drivers/scsi/mvumi.c
-+++ b/drivers/scsi/mvumi.c
-@@ -195,8 +195,7 @@ static int mvumi_make_sgl(struct mvumi_hba *mhba, struct scsi_cmnd *scmd,
- 	unsigned int sgnum = scsi_sg_count(scmd);
- 	dma_addr_t busaddr;
- 
--	sg = scsi_sglist(scmd);
--	*sg_count = dma_map_sg(&mhba->pdev->dev, sg, sgnum,
-+	*sg_count = dma_map_sg(&mhba->pdev->dev, scsi_sglist(scmd), sgnum,
- 			       scmd->sc_data_direction);
- 	if (*sg_count > mhba->max_sge) {
- 		dev_err(&mhba->pdev->dev,
-@@ -206,12 +205,12 @@ static int mvumi_make_sgl(struct mvumi_hba *mhba, struct scsi_cmnd *scmd,
- 			     scmd->sc_data_direction);
- 		return -1;
- 	}
--	for (i = 0; i < *sg_count; i++) {
--		busaddr = sg_dma_address(&sg[i]);
-+	scsi_for_each_sg(scmd, sg, *sg_count, i) {
-+		busaddr = sg_dma_address(sg);
- 		m_sg->baseaddr_l = cpu_to_le32(lower_32_bits(busaddr));
- 		m_sg->baseaddr_h = cpu_to_le32(upper_32_bits(busaddr));
- 		m_sg->flags = 0;
--		sgd_setsz(mhba, m_sg, cpu_to_le32(sg_dma_len(&sg[i])));
-+		sgd_setsz(mhba, m_sg, cpu_to_le32(sg_dma_len(sg)));
- 		if ((i + 1) == *sg_count)
- 			m_sg->flags |= 1U << mhba->eot_flag;
- 
--- 
-2.20.1
-
+Applied.
