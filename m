@@ -2,50 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 630B73C3E5
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2019 08:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371F43C71B
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2019 11:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391120AbfFKG0a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Jun 2019 02:26:30 -0400
-Received: from ps440452.dreamhost.com ([205.196.210.232]:35753 "EHLO
-        dbcdata.top" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390485AbfFKG0a (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 11 Jun 2019 02:26:30 -0400
-To:     linux-scsi@vger.kernel.org
-From:   Martin Winkler <info@dbcdata.top>
-Subject: AW: Antwort
-Date:   Mon, 10 Jun 2019 23:26:30 -0700
-Message-ID: <20190611_062630_097549.info@dbcdata.top>
-X-Mailer: WEBMAIL
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Mime-Version: 1.0
+        id S2404660AbfFKJTe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Jun 2019 05:19:34 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:35556 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404428AbfFKJTe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jun 2019 05:19:34 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 263822952E;
+        Tue, 11 Jun 2019 05:19:30 -0400 (EDT)
+Date:   Tue, 11 Jun 2019 19:19:10 +1000 (AEST)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Michael Schmitz <schmitzmic@gmail.com>
+cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] NCR5380: Support chained sg lists
+In-Reply-To: <a1fe2d99-fc2f-c12d-41fe-025ee1f66c0b@gmail.com>
+Message-ID: <alpine.LNX.2.21.1906111910220.25@nippy.intranet>
+References: <739c214bafcb9af3f6d5037cc03f57f692966675.1560223509.git.fthain@telegraphics.com.au> <a1fe2d99-fc2f-c12d-41fe-025ee1f66c0b@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sehr geehrte Damen und Herren,
 
-nach unserem Besuch Ihrer Homepage möchten wir Ihnen ein Angebot von Produkten vorstellen, das Ihnen ermöglichen wird, den Verkauf Ihrer Produkte sowie 
-Dienstleistungen deutlich zu erhöhen. 
+On Tue, 11 Jun 2019, Michael Schmitz wrote:
 
-Die Datenbanken der Firmen sind in für Sie interessante und relevante Zielgruppen untergliedert. 
+> Hi Finn,
+> 
+> Thanks - can't test this on my hardware but looks good to me.
+> 
 
-Die Firmenangaben beinhalten: Name der Firma, Ansprechpartner, E-mail Adresse, Tel. + Fax-Nr., PLZ, Ort, Straße etc. 
+Thanks for looking it over.
 
---
-1. Gesamtpaket 2019 DE 1 Mio. Firmenadressen ( 1 457 620 ) - 190 EUR ( bis zum 11.06.2019 ) 
-2. Gesamtpaket 2019 DE,AT,CH ( 1 747 921 ) - 240 EUR ( bis zum 11.06.2019 ) 
---
+Would you be willing to send a "reviewed-by" tag?
 
-Die Verwendungsmöglichkeiten der Datenbanken sind praktisch unbegrenzt und Sie können durch Verwendung der von uns entwickelten 
-Programme des personalisierten Versendens von Angeboten u.ä. mittels E-mailing bzw. Fax effektive und sichere Werbekampagnen damit durchführen. 
+I tested this successfully on my PowerBook 180 using the parameters 
+mac_scsi.setup_sg_tablesize=128 mac_scsi.setup_use_pdma=0
 
-Bitte informieren Sie sich über die weiteren Details einmal unverbindlich auf unseren Webseiten: 
+(Only because PDMA doesn't work with sg_tablesize > 1 with this particular 
+drive.)
 
-http://www.acdbmarketing.net/?p=1
+-- 
 
-Mit freundlichen Grüßen
-Martin Winkler
-
+> Cheers,
+> 
+> 	Michael
+> 
+> Am 11.06.2019 um 15:25 schrieb Finn Thain:
+> > My understanding is that support for chained scatterlists is to
+> > become mandatory for LLDs.
+> > 
+> > Cc: Michael Schmitz <schmitzmic@gmail.com>
+> > Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+> > ---
+> >  drivers/scsi/NCR5380.c | 41 ++++++++++++++++++-----------------------
+> >  1 file changed, 18 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+> > index d9fa9cf2fd8b..536426f25e86 100644
+> > --- a/drivers/scsi/NCR5380.c
+> > +++ b/drivers/scsi/NCR5380.c
+> > @@ -149,12 +149,10 @@ static inline void initialize_SCp(struct scsi_cmnd
+> > *cmd)
+> > 
+> >  	if (scsi_bufflen(cmd)) {
+> >  		cmd->SCp.buffer = scsi_sglist(cmd);
+> > -		cmd->SCp.buffers_residual = scsi_sg_count(cmd) - 1;
+> >  		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
+> >  		cmd->SCp.this_residual = cmd->SCp.buffer->length;
+> >  	} else {
+> >  		cmd->SCp.buffer = NULL;
+> > -		cmd->SCp.buffers_residual = 0;
+> >  		cmd->SCp.ptr = NULL;
+> >  		cmd->SCp.this_residual = 0;
+> >  	}
+> > @@ -163,6 +161,17 @@ static inline void initialize_SCp(struct scsi_cmnd
+> > *cmd)
+> >  	cmd->SCp.Message = 0;
+> >  }
+> > 
+> > +static inline void advance_sg_buffer(struct scsi_cmnd *cmd)
+> > +{
+> > +	struct scatterlist *s = cmd->SCp.buffer;
+> > +
+> > +	if (!cmd->SCp.this_residual && s && !sg_is_last(s)) {
+> > +		cmd->SCp.buffer = sg_next(s);
+> > +		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
+> > +		cmd->SCp.this_residual = cmd->SCp.buffer->length;
+> > +	}
+> > +}
+> > +
+> >  /**
+> >   * NCR5380_poll_politely2 - wait for two chip register values
+> >   * @hostdata: host private data
+> > @@ -1670,12 +1679,7 @@ static void NCR5380_information_transfer(struct
+> > Scsi_Host *instance)
+> >  			    sun3_dma_setup_done != cmd) {
+> >  				int count;
+> > 
+> > -				if (!cmd->SCp.this_residual &&
+> > cmd->SCp.buffers_residual) {
+> > -					++cmd->SCp.buffer;
+> > -					--cmd->SCp.buffers_residual;
+> > -					cmd->SCp.this_residual =
+> > cmd->SCp.buffer->length;
+> > -					cmd->SCp.ptr =
+> > sg_virt(cmd->SCp.buffer);
+> > -				}
+> > +				advance_sg_buffer(cmd);
+> > 
+> >  				count = sun3scsi_dma_xfer_len(hostdata, cmd);
+> > 
+> > @@ -1725,15 +1729,11 @@ static void NCR5380_information_transfer(struct
+> > Scsi_Host *instance)
+> >  				 * scatter-gather list, move onto the next
+> > one.
+> >  				 */
+> > 
+> > -				if (!cmd->SCp.this_residual &&
+> > cmd->SCp.buffers_residual) {
+> > -					++cmd->SCp.buffer;
+> > -					--cmd->SCp.buffers_residual;
+> > -					cmd->SCp.this_residual =
+> > cmd->SCp.buffer->length;
+> > -					cmd->SCp.ptr =
+> > sg_virt(cmd->SCp.buffer);
+> > -					dsprintk(NDEBUG_INFORMATION, instance,
+> > "%d bytes and %d buffers left\n",
+> > -					         cmd->SCp.this_residual,
+> > -					         cmd->SCp.buffers_residual);
+> > -				}
+> > +				advance_sg_buffer(cmd);
+> > +				dsprintk(NDEBUG_INFORMATION, instance,
+> > +					"this residual %d, sg ents %d\n",
+> > +					cmd->SCp.this_residual,
+> > +					sg_nents(cmd->SCp.buffer));
+> > 
+> >  				/*
+> >  				 * The preferred transfer method is going to
+> > be
+> > @@ -2126,12 +2126,7 @@ static void NCR5380_reselect(struct Scsi_Host
+> > *instance)
+> >  	if (sun3_dma_setup_done != tmp) {
+> >  		int count;
+> > 
+> > -		if (!tmp->SCp.this_residual && tmp->SCp.buffers_residual) {
+> > -			++tmp->SCp.buffer;
+> > -			--tmp->SCp.buffers_residual;
+> > -			tmp->SCp.this_residual = tmp->SCp.buffer->length;
+> > -			tmp->SCp.ptr = sg_virt(tmp->SCp.buffer);
+> > -		}
+> > +		advance_sg_buffer(tmp);
+> > 
+> >  		count = sun3scsi_dma_xfer_len(hostdata, tmp);
+> > 
+> > 
+> 
