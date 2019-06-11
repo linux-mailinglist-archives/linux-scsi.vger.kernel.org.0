@@ -2,115 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AAD3D5EC
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2019 20:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82F53D6C9
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2019 21:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403831AbfFKSzO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Jun 2019 14:55:14 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43306 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389470AbfFKSzO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jun 2019 14:55:14 -0400
-Received: by mail-pf1-f196.google.com with SMTP id i189so7990479pfg.10
-        for <linux-scsi@vger.kernel.org>; Tue, 11 Jun 2019 11:55:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=f3Fru+mwaeeiACG0X3g8c6CHiLSWKaplSTQC87ROeuQ=;
-        b=c6xH5/Qvawf6qJjZ/xM+E56es8JaiVT0/DwVftgp6f87+AJuA/RU/4CQiSYxjtTfmG
-         PSGytVbNJaOJtBjFzeOwwwcZDYYtXTZmoKwnT7IqB4KcdYfiPUlVDqNFeWYP6/AJw9uO
-         rrLzkJOifPfW/e9lmiCnGCeMRGrhln8IV1Ne8=
+        id S2404276AbfFKT1J convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 11 Jun 2019 15:27:09 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39925 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387563AbfFKT1J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jun 2019 15:27:09 -0400
+Received: by mail-pl1-f193.google.com with SMTP id b7so489784pls.6
+        for <linux-scsi@vger.kernel.org>; Tue, 11 Jun 2019 12:27:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=f3Fru+mwaeeiACG0X3g8c6CHiLSWKaplSTQC87ROeuQ=;
-        b=mKYXqWmxQ3gw67hwL4TAk9em9TRn18GxP8Es8AGIliduMWQl6n7Pfms6nTalGMEfUQ
-         ebgenaiqXwr+3GkXqENYWIlY9Bb2KhnSuc67NjWCZ/igm7wKLsIUsAKegRQAFpALqRnM
-         ClTr/D1MwlTxckK5FkXBfeBcYLsPVoj7/5Co1UHz6sJ80WogpU+ThrwnHqMNAnirHTBK
-         UFF30Yeupqw1yrHA4tzfWYPSqqubRgG5+tCNou0Ny8meUTWSJdPBD7f7bf4uIECKDjM2
-         VcOUj65djBUS8lOsveXgrPuoz475x+SKALGjy8rqQntg6GkNn6l8WZl46RRUS1rX86um
-         ucWg==
-X-Gm-Message-State: APjAAAVAuew2QDiy/doPp5PqoE44qeF4fa2xfg/V4yh2wZDBeYkD6s5W
-        u+5fEiQQnG+I1Ql5NVAtMTQivg==
-X-Google-Smtp-Source: APXvYqykLtoCMjK8ld6JD/RyOsTdfyoOM9u/UwTo1BXGOV4lbmZpi4MRGTiLpIKmeU10fMKb1YddfA==
-X-Received: by 2002:a62:4dc5:: with SMTP id a188mr82792699pfb.8.1560279313566;
-        Tue, 11 Jun 2019 11:55:13 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a186sm17123614pfa.188.2019.06.11.11.55.12
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 11 Jun 2019 11:55:12 -0700 (PDT)
-Date:   Tue, 11 Jun 2019 11:55:11 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Chaitra P B <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: mpt3sas: Mark expected switch fall-through
-Message-ID: <201906111153.4413672DE8@keescook>
-References: <20190611150219.GA19152@embeddedor>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qzW/WZev8ewao6A5QTrbl0+YO8e3SA4eQ83GmkeIJ9M=;
+        b=WnU8XdX4BeQ1xPcIL+W5fFm7UzAdYikUQZct4uAsEU47e94GdmKZ9kOL8a4h22zARC
+         0L1ZpLxu1TDoHxEFL8HUJ7n2hmnf2IKOeoD0FOPoiOgrV7eFqTNazHSoGg5GNXJrAyZ0
+         YiLNlR3xxpmP+jhe5V4eOGdeX4KzmbgF/Qs7w3MoRzj04Wfnr7yI+7H6pOm47FQ+kJAD
+         MENp9mtAVTb/y7+eVJKg4KdxSArVAgdAuP4mHKbLbVAySy2BzPEs+vXurQ9U6SahEZ1M
+         s+QtSxage+G8xrUhUp/6YO4h7nf5nUdnkM64yfwGVHvkOxnwFEySgZzUU8O/+RiJHAwG
+         2V6Q==
+X-Gm-Message-State: APjAAAWSW8vVnpQ0bhxDI3dv6dqtW/WeafzDQ5Xe7DSJcvb0KutgqgEP
+        NBht4z72Ubwr7Jq2WEVj5O8=
+X-Google-Smtp-Source: APXvYqyGS/6GcQCoc/rx7QCM8HpA182ZZ+yeopLM7+uKE+VPPu4CT4YDOz5sAZMXc1HzNk42p2I/YQ==
+X-Received: by 2002:a17:902:b43:: with SMTP id 61mr79361877plq.322.1560281228449;
+        Tue, 11 Jun 2019 12:27:08 -0700 (PDT)
+Received: from ?IPv6:2620:0:1008:1:f2c3:4898:1184:cd77? ([2620:0:1008:1:f2c3:4898:1184:cd77])
+        by smtp.gmail.com with ESMTPSA id h6sm47619pjs.2.2019.06.11.12.27.07
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Jun 2019 12:27:07 -0700 (PDT)
+Subject: Re: [EXT] [PATCH 00/20] qla2xxx Patches
+To:     Himanshu Madhani <hmadhani@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>
+References: <20190529202826.204499-1-bvanassche@acm.org>
+ <794547A0-2D81-42DD-8777-27B9BE607E21@marvell.com>
+ <yq1y32fo4d9.fsf@oracle.com>
+ <838DE773-DCD5-40CA-933C-1FF88399AF6C@marvell.com>
+ <yq1o93aml62.fsf@oracle.com>
+ <BF5C02E6-89E5-493E-953A-A34B196BBD30@marvell.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <c981ce78-e9d6-0d9f-ef17-385de6eb37f6@acm.org>
+Date:   Tue, 11 Jun 2019 12:27:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <BF5C02E6-89E5-493E-953A-A34B196BBD30@marvell.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190611150219.GA19152@embeddedor>
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 10:02:19AM -0500, Gustavo A. R. Silva wrote:
-> In preparation to enabling -Wimplicit-fallthrough, mark switch cases
-> where we are expecting to fall through.
+On 6/11/19 11:12 AM, Himanshu Madhani wrote:
+> I am running into issue with this series applied on my tree while executing abort path. 
 > 
-> This patch fixes the following warning:
+> Investigating if the issue is introduced by this series or not.
 > 
-> drivers/scsi/mpt3sas/mpt3sas_base.c: In function ‘_base_update_ioc_page1_inlinewith_perf_mode’:
-> drivers/scsi/mpt3sas/mpt3sas_base.c:4510:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    if (ioc->high_iops_queues) {
->       ^
-> drivers/scsi/mpt3sas/mpt3sas_base.c:4530:2: note: here
->   case MPT_PERF_MODE_LATENCY:
->   ^~~~
-> 
-> Warning level 3 was used: -Wimplicit-fallthrough=3
-> 
-> This patch is part of the ongoing efforts to enable
-> -Wimplicit-fallthrough.
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> stack trace does not have qla2xxx signature but since this series has changes for abort path I am holding off on providing 
+> ACK on this series until we fully understand what is triggering issue.
 
-Fixes: 30cb97023f38 ("scsi: mpt3sas: Introduce perf_mode module parameter")
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Hi Himanshu,
 
--Kees
+Can you share that stack trace such that I can help analyzing it?
 
-> ---
->  drivers/scsi/mpt3sas/mpt3sas_base.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-> index e6377ec07f6c..9fefcd1e9c97 100644
-> --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-> @@ -4527,6 +4527,7 @@ _base_update_ioc_page1_inlinewith_perf_mode(struct MPT3SAS_ADAPTER *ioc)
->  			ioc_info(ioc, "performance mode: balanced\n");
->  			return;
->  		}
-> +		/* Fall through */
->  	case MPT_PERF_MODE_LATENCY:
->  		/*
->  		 * Enable interrupt coalescing on all reply queues
-> -- 
-> 2.21.0
-> 
+You may want to know that I have another patch series ready with bug
+fixes that I have not yet posted because I was waiting for feedback on
+this patch series.
 
--- 
-Kees Cook
+Thanks,
+
+Bart.
+
