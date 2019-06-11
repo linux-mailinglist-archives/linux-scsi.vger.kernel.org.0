@@ -2,84 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A82F53D6C9
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2019 21:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9FE741920
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 01:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404276AbfFKT1J convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 11 Jun 2019 15:27:09 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39925 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387563AbfFKT1J (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jun 2019 15:27:09 -0400
-Received: by mail-pl1-f193.google.com with SMTP id b7so489784pls.6
-        for <linux-scsi@vger.kernel.org>; Tue, 11 Jun 2019 12:27:09 -0700 (PDT)
+        id S2391754AbfFKXrL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Jun 2019 19:47:11 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39406 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387864AbfFKXrK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jun 2019 19:47:10 -0400
+Received: by mail-pf1-f196.google.com with SMTP id j2so8427359pfe.6;
+        Tue, 11 Jun 2019 16:47:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=0w5PyTbJcE+7PtxzV1JAmmnhaz4mbqsIEXxhrO8y/nc=;
+        b=awiuQUI9gAtnyBWDyPM2oiviNP96T4I/xvCOoYN8SvRkrI3hkL7yO40eUmXFWK9NXe
+         n25uEimbmgQMRIUwQDsK7uB9FzGqunzfIyhc9Jpja6faHqQNVtUUILNUmMz4VmvWRbcU
+         88M/QCEJG6n31wDtCi6remU5Gm015Z5iHY4lep5y2jXRhNQ2tHjYYf2RrT1Izv7cW7lD
+         zCjccDTXUo6rX3ThwVJzKbu5GhA9LE0PSUSLx7oW5AjqKRJTWrE3hXGOFuRkD/Sxa8Yy
+         a/sgSvbiRJU6W7/jOIq9kmxRuHZKgbQvDGHDqPeGBnYxPp1FDtXz8gSEjgLvy1OQygxU
+         7K9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qzW/WZev8ewao6A5QTrbl0+YO8e3SA4eQ83GmkeIJ9M=;
-        b=WnU8XdX4BeQ1xPcIL+W5fFm7UzAdYikUQZct4uAsEU47e94GdmKZ9kOL8a4h22zARC
-         0L1ZpLxu1TDoHxEFL8HUJ7n2hmnf2IKOeoD0FOPoiOgrV7eFqTNazHSoGg5GNXJrAyZ0
-         YiLNlR3xxpmP+jhe5V4eOGdeX4KzmbgF/Qs7w3MoRzj04Wfnr7yI+7H6pOm47FQ+kJAD
-         MENp9mtAVTb/y7+eVJKg4KdxSArVAgdAuP4mHKbLbVAySy2BzPEs+vXurQ9U6SahEZ1M
-         s+QtSxage+G8xrUhUp/6YO4h7nf5nUdnkM64yfwGVHvkOxnwFEySgZzUU8O/+RiJHAwG
-         2V6Q==
-X-Gm-Message-State: APjAAAWSW8vVnpQ0bhxDI3dv6dqtW/WeafzDQ5Xe7DSJcvb0KutgqgEP
-        NBht4z72Ubwr7Jq2WEVj5O8=
-X-Google-Smtp-Source: APXvYqyGS/6GcQCoc/rx7QCM8HpA182ZZ+yeopLM7+uKE+VPPu4CT4YDOz5sAZMXc1HzNk42p2I/YQ==
-X-Received: by 2002:a17:902:b43:: with SMTP id 61mr79361877plq.322.1560281228449;
-        Tue, 11 Jun 2019 12:27:08 -0700 (PDT)
-Received: from ?IPv6:2620:0:1008:1:f2c3:4898:1184:cd77? ([2620:0:1008:1:f2c3:4898:1184:cd77])
-        by smtp.gmail.com with ESMTPSA id h6sm47619pjs.2.2019.06.11.12.27.07
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 12:27:07 -0700 (PDT)
-Subject: Re: [EXT] [PATCH 00/20] qla2xxx Patches
-To:     Himanshu Madhani <hmadhani@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>
-References: <20190529202826.204499-1-bvanassche@acm.org>
- <794547A0-2D81-42DD-8777-27B9BE607E21@marvell.com>
- <yq1y32fo4d9.fsf@oracle.com>
- <838DE773-DCD5-40CA-933C-1FF88399AF6C@marvell.com>
- <yq1o93aml62.fsf@oracle.com>
- <BF5C02E6-89E5-493E-953A-A34B196BBD30@marvell.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <c981ce78-e9d6-0d9f-ef17-385de6eb37f6@acm.org>
-Date:   Tue, 11 Jun 2019 12:27:06 -0700
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=0w5PyTbJcE+7PtxzV1JAmmnhaz4mbqsIEXxhrO8y/nc=;
+        b=ojhq0ImAOWHYNHMvv2yf4vIPSM3yGybHm25YLgg5PEDqV3HWW5t92V7kqInaM9AFPU
+         IFseO40qHFu1PfAsOBpZq1cTis8vZaEsHPdcmCl2yxPQ/gQsFBHVcLGCr/Z6A0OCX2o+
+         PrydeHt1QmwPxLxRiEO0LRyhIFENo54ZEoItKRFtPbp+/WpoEpuGuG9D9P4iWxDi6CfW
+         FlmVV5jIO7oVldSc9RvRg/eaxM/X9KnFG/Z1cuLV+lsBe2KfDX7waq+yi2vqEbbHL1mM
+         mwLPWmKNPcDlgbDu7OFBBeAUZJZ+0oBgTXAF6Fd45m+VTwZ36evFxBWThLa+Q79hk+SE
+         GQ4Q==
+X-Gm-Message-State: APjAAAVHGqmsT5bcbtbjUdEY96D3jXhzzoyIrc7JXYwtGigaIGDPCkYH
+        1QsmuB/ULpzu75l6YDpFH78AD4Ds
+X-Google-Smtp-Source: APXvYqzeIvJOr5WW9SHcd0aMEUsnXezqVeQDxfD8PoMhsBB0v0thKDyGBWGxNbX7Bc3gVOUf0GtrAg==
+X-Received: by 2002:a62:2e46:: with SMTP id u67mr82884329pfu.206.1560296830006;
+        Tue, 11 Jun 2019 16:47:10 -0700 (PDT)
+Received: from ?IPv6:2001:df0:0:200c:cd5b:7c57:228c:7f0a? ([2001:df0:0:200c:cd5b:7c57:228c:7f0a])
+        by smtp.gmail.com with ESMTPSA id e4sm21818015pgi.80.2019.06.11.16.47.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Jun 2019 16:47:08 -0700 (PDT)
+Subject: Re: [PATCH v2 2/7] scsi: NCR5380: Always re-enable reselection
+ interrupt
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <cover.1560043151.git.fthain@telegraphics.com.au>
+ <61f0c0f6aaf8fa96bf3dade5475615b2cfbc8846.1560043151.git.fthain@telegraphics.com.au>
+ <58081aba-4e77-3c8e-847e-0698cf80e426@gmail.com>
+ <alpine.LNX.2.21.1906111926330.25@nippy.intranet>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <9c61076b-81f7-dc7b-0103-1e2e56072453@gmail.com>
+Date:   Wed, 12 Jun 2019 11:46:59 +1200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <BF5C02E6-89E5-493E-953A-A34B196BBD30@marvell.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <alpine.LNX.2.21.1906111926330.25@nippy.intranet>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/11/19 11:12 AM, Himanshu Madhani wrote:
-> I am running into issue with this series applied on my tree while executing abort path. 
-> 
-> Investigating if the issue is introduced by this series or not.
-> 
-> stack trace does not have qla2xxx signature but since this series has changes for abort path I am holding off on providing 
-> ACK on this series until we fully understand what is triggering issue.
+Hi Finn,
 
-Hi Himanshu,
+On 11/06/19 9:33 PM, Finn Thain wrote:
+> On Tue, 11 Jun 2019, Michael Schmitz wrote:
+>
+>> Hi Finn,
+>>
+>> IIRC I'd tested that change as well - didn't change broken target
+>> behaviour but no regressions in other respects. Add my tested-by if
+>> needed.
+>>
+> Unfortunately I can't confirm that this is the same patch as the one you
+> tested as I no longer have that commit. But Stan did test a wide variety
+> of targets and I'm confident that the reselection code path was covered.
+>
+No matter - patch applied cleanly to what I'm running on my Falcon, and 
+works just fine for now (stresstest will take a few hours to complete). 
+And that'll thoroughly exercise the reselection code path, from what 
+we've seen before.
 
-Can you share that stack trace such that I can help analyzing it?
+Cheers,
 
-You may want to know that I have another patch series ready with bug
-fixes that I have not yet posted because I was waiting for feedback on
-this patch series.
+     Michael
 
-Thanks,
-
-Bart.
 
