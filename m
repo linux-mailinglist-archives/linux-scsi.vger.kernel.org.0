@@ -2,231 +2,134 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 444183D1C5
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2019 18:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58493D547
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Jun 2019 20:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391661AbfFKQIq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Jun 2019 12:08:46 -0400
-Received: from mail-eopbgr790045.outbound.protection.outlook.com ([40.107.79.45]:57165
-        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2391474AbfFKQIp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 11 Jun 2019 12:08:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
- s=selector2;
+        id S2406864AbfFKSMY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Jun 2019 14:12:24 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:44066 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2406685AbfFKSMX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 11 Jun 2019 14:12:23 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5BHxx5F023610;
+        Tue, 11 Jun 2019 11:12:09 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfpt0818;
+ bh=QlqBl3MjvW4i8lQGA7IU7LqIkAhT6W9YG/5heNC5ceA=;
+ b=olEiXiGWw1TWzE27jEZsG0d0Mq+m7fzSxceDCiWgHQoHzfxP4pm7DCmHRpnjSGSEHOdK
+ gW6tBKKIlVpR1fMlWM+PlcMZO8DOZaErax4ZV6zAO6FYe+q3HNXkA2Up+6sBbI3aVLUR
+ 4NIJYWkYE1+YQhK0qcNTbFSO7AZtMCFl6tasTrTW1fWyihF0tnCnzVkqZwkzJkWHGWEY
+ hnIWrTPHsRzSAUdkyGd1iZolOldYsQJKG9U18SgFxTcLUgcGaIUdMN6Mz2Uxlymq1W2i
+ 5Xb05k7t+cp2ARMFGPwvGhASQxCI3Z69G+J7hvnXjx+VgR2Cr+Qtsv1xQaUW5OvqWdvN Qg== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2t29sca5x1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 11 Jun 2019 11:12:09 -0700
+Received: from SC-EXCH02.marvell.com (10.93.176.82) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 11 Jun
+ 2019 11:12:09 -0700
+Received: from NAM03-DM3-obe.outbound.protection.outlook.com (104.47.41.51) by
+ SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Tue, 11 Jun 2019 11:12:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a+jgxQFFBIc7gNBrsosdoX6A+SVQRPB0FawYEKAddtA=;
- b=b1/AIrMiXtCvyI5wzaCEPYZvxHiPrpxR2IsQ8HJcw5j1XCkNmIUNA0jqq+AnJbYCwtJ79fru4Q4icOM3qlln98NRQKE4BKnOtNLSMKHpXNpT1mQdPADlod25nMGt/BuAr77EfKxGgYZOIJRr2GyoEx1B/mBJmvOEqur7NCAwyZk=
-Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.31.141) by
- BN7PR08MB4817.namprd08.prod.outlook.com (20.176.27.202) with Microsoft SMTP
+ bh=QlqBl3MjvW4i8lQGA7IU7LqIkAhT6W9YG/5heNC5ceA=;
+ b=mJXwr5O4I+on/bkOekVqrl6WZj7p8XrDf8ptCyvl50+d7h6tnUZe3H/XiHikDwdbSnahtb/aU0gm9Mvn3bNo7WYpz6iDVK5j2ENsPrx2yOUYCgQwcUE4Cf6TR2Hw8P6N9/5DC2DS1zXBoL+LwwEzClkh5Rw5XZ6VSdZa0S7mYpc=
+Received: from MN2PR18MB2719.namprd18.prod.outlook.com (20.178.255.156) by
+ MN2PR18MB2718.namprd18.prod.outlook.com (20.179.21.221) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.10; Tue, 11 Jun 2019 16:08:41 +0000
-Received: from BN7PR08MB5684.namprd08.prod.outlook.com
- ([fe80::499a:3dda:4c08:f586]) by BN7PR08MB5684.namprd08.prod.outlook.com
- ([fe80::499a:3dda:4c08:f586%5]) with mapi id 15.20.1965.017; Tue, 11 Jun 2019
- 16:08:41 +0000
-From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     Andy Gross <agross@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: RE: [EXT] [PATCH v3 2/3] scsi: ufs-qcom: Implement device_reset vops
-Thread-Topic: [EXT] [PATCH v3 2/3] scsi: ufs-qcom: Implement device_reset vops
-Thread-Index: AQHVHbe9gqV+6xhol06/1xHsxtXml6aWopCw
-Date:   Tue, 11 Jun 2019 16:08:41 +0000
-Message-ID: <BN7PR08MB56848AB3CC413CBEC211130EDBED0@BN7PR08MB5684.namprd08.prod.outlook.com>
-References: <20190608050450.12056-1-bjorn.andersson@linaro.org>
- <20190608050450.12056-3-bjorn.andersson@linaro.org>
-In-Reply-To: <20190608050450.12056-3-bjorn.andersson@linaro.org>
-Accept-Language: en-150, en-US
+ 15.20.1965.12; Tue, 11 Jun 2019 18:12:03 +0000
+Received: from MN2PR18MB2719.namprd18.prod.outlook.com
+ ([fe80::7150:ff4e:d634:ac16]) by MN2PR18MB2719.namprd18.prod.outlook.com
+ ([fe80::7150:ff4e:d634:ac16%4]) with mapi id 15.20.1965.017; Tue, 11 Jun 2019
+ 18:12:03 +0000
+From:   Himanshu Madhani <hmadhani@marvell.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Bart Van Assche <bvanassche@acm.org>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>
+Subject: Re: [EXT] [PATCH 00/20] qla2xxx Patches
+Thread-Topic: [EXT] [PATCH 00/20] qla2xxx Patches
+Thread-Index: AQHVHIAi6DovyqkmX0G6hNswo3cLP6aPLNtogAecegA=
+Date:   Tue, 11 Jun 2019 18:12:03 +0000
+Message-ID: <BF5C02E6-89E5-493E-953A-A34B196BBD30@marvell.com>
+References: <20190529202826.204499-1-bvanassche@acm.org>
+ <794547A0-2D81-42DD-8777-27B9BE607E21@marvell.com>
+ <yq1y32fo4d9.fsf@oracle.com>
+ <838DE773-DCD5-40CA-933C-1FF88399AF6C@marvell.com>
+ <yq1o93aml62.fsf@oracle.com>
+In-Reply-To: <yq1o93aml62.fsf@oracle.com>
+Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=beanhuo@micron.com; 
-x-originating-ip: [165.225.80.131]
+x-mailer: Apple Mail (2.3445.104.11)
+x-originating-ip: [199.233.58.37]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cc887df5-1339-4115-8f2d-08d6ee871243
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN7PR08MB4817;
-x-ms-traffictypediagnostic: BN7PR08MB4817:|BN7PR08MB4817:
-x-microsoft-antispam-prvs: <BN7PR08MB481710C9622C93EC81FA8324DBED0@BN7PR08MB4817.namprd08.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-office365-filtering-correlation-id: e44a4519-c74f-4c17-4dbf-08d6ee984e50
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MN2PR18MB2718;
+x-ms-traffictypediagnostic: MN2PR18MB2718:
+x-microsoft-antispam-prvs: <MN2PR18MB2718D1D00523177811336190D6ED0@MN2PR18MB2718.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
 x-forefront-prvs: 006546F32A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(396003)(136003)(376002)(39860400002)(366004)(346002)(13464003)(199004)(189003)(8936002)(229853002)(99286004)(6506007)(55236004)(102836004)(66556008)(66476007)(64756008)(66946007)(66446008)(73956011)(76176011)(71190400001)(3846002)(6436002)(54906003)(110136005)(68736007)(7696005)(76116006)(74316002)(7416002)(14454004)(6116002)(33656002)(71200400001)(256004)(14444005)(5024004)(478600001)(26005)(186003)(2906002)(476003)(486006)(446003)(11346002)(316002)(4326008)(55016002)(5660300002)(7736002)(305945005)(25786009)(6246003)(81166006)(53936002)(8676002)(66066001)(81156014)(52536014)(9686003)(86362001);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB4817;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: micron.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(366004)(346002)(376002)(39860400002)(396003)(189003)(199004)(8936002)(305945005)(7736002)(71200400001)(71190400001)(33656002)(50226002)(6486002)(99286004)(82746002)(68736007)(66066001)(6512007)(2906002)(83716004)(229853002)(36756003)(76176011)(53936002)(6916009)(6436002)(476003)(2616005)(54906003)(11346002)(6246003)(256004)(6506007)(14454004)(478600001)(73956011)(102836004)(66476007)(53546011)(57306001)(81156014)(66446008)(66946007)(66556008)(76116006)(186003)(4744005)(3846002)(64756008)(4326008)(486006)(81166006)(91956017)(446003)(6116002)(8676002)(316002)(26005)(86362001)(25786009)(5660300002);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB2718;H:MN2PR18MB2719.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: marvell.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: iIg7KALhJLdm2TeFYjDDOodD5A3OJ93m5bpp0vrfILUy3C8yfWzehQuQnvETCxUCPW+Uk4WQsbwBszLoAX150IfA32anCo3x89+6tyTEyUjuyNnWJRk+lqxv/6gl5ZhEixjFn4nYT2lJiq9/ELC20n1ZHUir4XEJO/mpCZT4DFyA3Ax9YEwib96AfgkNu7YFIxDsOAqLKAwwMga6EiWNb1nYRhFTemMhy144nRl1YHF+QgABg6ub/XEYNQ+vnNRxnAJszDjlcafLfVgVyYDH3FNwWsDW8vWIuRZAFDQ8rLsPmY0tMO2OsE6FUUGpUJ4ip6yHmALzprPP0yKCOjyC07wz9hBBsnAwqQtDrW8tE0HiMrkeX2sORpQO2iywgET0buOq4qaHzj0+pAMD1efhTmPdKYYseAGoxrlEouJVD6s=
+x-microsoft-antispam-message-info: v356WTb7iq23Vg8g4QbCr062tUMeHzq9x92+HXwCFw7ErSr9XbDxHwdo+eRwOvkLgP7Azzz30G+/SNuFqoT4XlmOJ6GpjjD1BKXra73vTYCwsRDOeNrCUfiQiGq1kAU/mlh3B2k4Qxnv5tdnO8Nk1gEBJlpno1krliXWT8GN2J8ooVRsvd91ceswd6pydkZWXHhq0mcUbDcYXq5EYTjpk7e036/Q9DX5/tMRVc8WFAxs5FAgZugQ/r4/1DUAhC41qTDKZKVJB6PT0F7FAc2/kcdL8UcuOHc4N9j5sMrFWKl7dlEx2aWuqR/cseil5X26Nzjxw1jrSvG7ZHgsFeXFAkueGtx0UG1XuV/lyqjbesZtzM80RdnSvTGQC7d1v1dgxCthaYANlKvTD6AGMD9/zpw4jo9eFOPURsSbsGTNbPo=
 Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2E77E5131E8DED4388CE94AC56190D0B@namprd18.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: micron.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc887df5-1339-4115-8f2d-08d6ee871243
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 16:08:41.1888
+X-MS-Exchange-CrossTenant-Network-Message-Id: e44a4519-c74f-4c17-4dbf-08d6ee984e50
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2019 18:12:03.4250
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: beanhuo@micron.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB4817
+X-MS-Exchange-CrossTenant-userprincipalname: hmadhani@marvell.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB2718
+X-OriginatorOrg: marvell.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-11_08:,,
+ signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi, Bjorn
-This HW reset is dedicated to QUALCOMM based platform case.
-how about adding a SW reset as to be default reset routine if platform does=
-n't support HW reset?
+Hi Martin,=20
 
->-----Original Message-----
->From: linux-scsi-owner@vger.kernel.org <linux-scsi-owner@vger.kernel.org>
->On Behalf Of Bjorn Andersson
->Sent: Saturday, June 8, 2019 7:05 AM
->To: Rob Herring <robh+dt@kernel.org>; Mark Rutland
-><mark.rutland@arm.com>; Alim Akhtar <alim.akhtar@samsung.com>; Avri
->Altman <avri.altman@wdc.com>; Pedro Sousa
-><pedrom.sousa@synopsys.com>; James E.J. Bottomley <jejb@linux.ibm.com>;
->Martin K. Petersen <martin.petersen@oracle.com>
->Cc: Andy Gross <agross@kernel.org>; devicetree@vger.kernel.org; linux-
->kernel@vger.kernel.org; linux-arm-msm@vger.kernel.org; linux-
->scsi@vger.kernel.org
->Subject: [EXT] [PATCH v3 2/3] scsi: ufs-qcom: Implement device_reset vops
->
->The UFS_RESET pin on Qualcomm SoCs are controlled by TLMM and exposed
->through the GPIO framework. Acquire the device-reset GPIO and use this to
->implement the device_reset vops, to allow resetting the attached memory.
->
->Based on downstream support implemented by Subhash Jadavani
-><subhashj@codeaurora.org>.
->
->Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->---
->
->Changes since v2:
->- Moved implementation to Qualcomm driver
->
-> .../devicetree/bindings/ufs/ufshcd-pltfrm.txt |  2 ++
-> drivers/scsi/ufs/ufs-qcom.c                   | 32 +++++++++++++++++++
-> drivers/scsi/ufs/ufs-qcom.h                   |  4 +++
-> 3 files changed, 38 insertions(+)
->
->diff --git a/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
->b/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
->index a74720486ee2..d562d8b4919c 100644
->--- a/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
->+++ b/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
->@@ -54,6 +54,8 @@ Optional properties:
-> 			  PHY reset from the UFS controller.
-> - resets            : reset node register
-> - reset-names       : describe reset node register, the "rst" corresponds=
- to
->reset the whole UFS IP.
->+- device-reset-gpios	: A phandle and gpio specifier denoting the GPIO
->connected
->+			  to the RESET pin of the UFS memory device.
->
-> Note: If above properties are not defined it can be assumed that the supp=
-ly
->regulators or clocks are always on.
->diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c ind=
-ex
->ea7219407309..efaf57ba618a 100644
->--- a/drivers/scsi/ufs/ufs-qcom.c
->+++ b/drivers/scsi/ufs/ufs-qcom.c
->@@ -16,6 +16,7 @@
-> #include <linux/of.h>
-> #include <linux/platform_device.h>
-> #include <linux/phy/phy.h>
->+#include <linux/gpio/consumer.h>
-> #include <linux/reset-controller.h>
->
-> #include "ufshcd.h"
->@@ -1141,6 +1142,15 @@ static int ufs_qcom_init(struct ufs_hba *hba)
-> 		goto out_variant_clear;
-> 	}
->
->+	host->device_reset =3D devm_gpiod_get_optional(dev, "device-reset",
->+						     GPIOD_OUT_HIGH);
->+	if (IS_ERR(host->device_reset)) {
->+		err =3D PTR_ERR(host->device_reset);
->+		if (err !=3D -EPROBE_DEFER)
->+			dev_err(dev, "failed to acquire reset gpio: %d\n", err);
->+		goto out_variant_clear;
->+	}
->+
-> 	err =3D ufs_qcom_bus_register(host);
-> 	if (err)
-> 		goto out_variant_clear;
->@@ -1546,6 +1556,27 @@ static void ufs_qcom_dump_dbg_regs(struct
->ufs_hba *hba)
-> 	usleep_range(1000, 1100);
-> }
->
->+/**
->+ * ufs_qcom_device_reset() - toggle the (optional) device reset line
->+ * @hba: per-adapter instance
->+ *
->+ * Toggles the (optional) reset line to reset the attached device.
->+ */
->+static void ufs_qcom_device_reset(struct ufs_hba *hba) {
->+	struct ufs_qcom_host *host =3D ufshcd_get_variant(hba);
->+
->+	/*
->+	 * The UFS device shall detect reset pulses of 1us, sleep for 10us to
->+	 * be on the safe side.
->+	 */
->+	gpiod_set_value_cansleep(host->device_reset, 1);
->+	usleep_range(10, 15);
->+
->+	gpiod_set_value_cansleep(host->device_reset, 0);
->+	usleep_range(10, 15);
->+}
->+
-> /**
->  * struct ufs_hba_qcom_vops - UFS QCOM specific variant operations
->  *
->@@ -1566,6 +1597,7 @@ static struct ufs_hba_variant_ops
->ufs_hba_qcom_vops =3D {
-> 	.suspend		=3D ufs_qcom_suspend,
-> 	.resume			=3D ufs_qcom_resume,
-> 	.dbg_register_dump	=3D ufs_qcom_dump_dbg_regs,
->+	.device_reset		=3D ufs_qcom_device_reset,
-> };
->
-> /**
->diff --git a/drivers/scsi/ufs/ufs-qcom.h b/drivers/scsi/ufs/ufs-qcom.h ind=
-ex
->68a880185752..b96ffb6804e4 100644
->--- a/drivers/scsi/ufs/ufs-qcom.h
->+++ b/drivers/scsi/ufs/ufs-qcom.h
->@@ -204,6 +204,8 @@ struct ufs_qcom_testbus {
-> 	u8 select_minor;
-> };
->
->+struct gpio_desc;
->+
-> struct ufs_qcom_host {
-> 	/*
-> 	 * Set this capability if host controller supports the QUniPro mode
->@@ -241,6 +243,8 @@ struct ufs_qcom_host {
-> 	struct ufs_qcom_testbus testbus;
->
-> 	struct reset_controller_dev rcdev;
->+
->+	struct gpio_desc *device_reset;
-> };
->
-> static inline u32
->--
->2.18.0
+> On Jun 6, 2019, at 2:57 PM, Martin K. Petersen <martin.petersen@oracle.co=
+m> wrote:
+>=20
+>=20
+> Himanshu,
+>=20
+>> Sorry for delay. I need bit more time. I will let my automation work
+>> thru weekend and will respond in early next week
+>=20
+> OK, thanks!
+>=20
+
+I am running into issue with this series applied on my tree while executing=
+ abort path.=20
+
+Investigating if the issue is introduced by this series or not.
+
+stack trace does not have qla2xxx signature but since this series has chang=
+es for abort path I am holding off on providing=20
+ACK on this series until we fully understand what is triggering issue.
+
+> --=20
+> Martin K. Petersen	Oracle Linux Engineering
+
+Thanks,
+Himanshu
 
