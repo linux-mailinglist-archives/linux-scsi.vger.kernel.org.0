@@ -2,163 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 766E041925
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 01:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8697B41927
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 01:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405753AbfFKXsH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Jun 2019 19:48:07 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:32826 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387864AbfFKXsG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jun 2019 19:48:06 -0400
-Received: by mail-pg1-f194.google.com with SMTP id k187so7338312pga.0;
-        Tue, 11 Jun 2019 16:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=rQZeUVQ6RxiqAEW7WsFNWPKzRIxBC2e622V0NwiVfj8=;
-        b=JhOuZSIwFe0oFF53PYSrxKAUzLnKxYXF3enN5K3WkjEWNf5o+aXe08SIYrulbIEm6p
-         2LnH4OE/iXxG8SSqIT3JTjm8mUhsly1+F2TM+80en7Tu27EufyPEku/INQgwkNsGLAS8
-         L52ox5SXXIWN35Cnv41YbI/v0AKFWXmBzgJIu9D4bvdd4jOc7fw0OAhj4maK9UhmXi6G
-         xpbKcP4jF7f6eWuzyD4kbeoOPEOd/dMrgEryHTDwFtMrDGUhdPOCTIqzG239oezkIpPO
-         +RS5ERit+Kc+g5b26QU+lM8DKzSFvWKdiW72LNu1ii7xoBHTrKVkJHTIq71j93XyHAEZ
-         hV5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=rQZeUVQ6RxiqAEW7WsFNWPKzRIxBC2e622V0NwiVfj8=;
-        b=KPMH2cBNrXPhr/gSnNq3CZ09wWA/LrAjOoXV2hbYb6uehGWvFugJaMYMILRUXOC9aj
-         o+gkDEKE9d83ecXIwvA2ZO9/QHBhLpMPc30CpX4TZa94IOgQZnis/4noMpCK8TssT0oI
-         Fv/cGYFWjOC8sOHVou76/tWK+joxJgEbau96Q9AB8hyWqfsZK1KxRKxIq5IS6SAaTs3o
-         PEyr1UoCdlx71+B/cfxZCayDy8ckNuLCyZrDgirbBUNgtpnTfS5TjNyOCjohT+XqnujI
-         haCVtSsFsZGN4nVK21R/LquLdYYe2YCNeyTcCC72F8AOB5LYyXX86FCkvFXGtZHe6TOn
-         eyhw==
-X-Gm-Message-State: APjAAAWp7CYKtBucQBMLP6q9HM7nZfkzvIJJUDDdNC+Ffq0WHRLCM+ut
-        FueOdU0uLlSI/oU7vew3HnNrDbjq
-X-Google-Smtp-Source: APXvYqxUx2Sy7+lan8lwCnaRlwtZHr6H574ZyeXVeqnyPritVWqcquM6Z4UosS7MBUDXGzLtdeF/2Q==
-X-Received: by 2002:a63:e250:: with SMTP id y16mr21858926pgj.392.1560296886103;
-        Tue, 11 Jun 2019 16:48:06 -0700 (PDT)
-Received: from ?IPv6:2001:df0:0:200c:cd5b:7c57:228c:7f0a? ([2001:df0:0:200c:cd5b:7c57:228c:7f0a])
-        by smtp.gmail.com with ESMTPSA id i3sm15448121pfa.175.2019.06.11.16.47.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 11 Jun 2019 16:48:05 -0700 (PDT)
-Subject: Re: [PATCH] NCR5380: Support chained sg lists
-To:     Finn Thain <fthain@telegraphics.com.au>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <739c214bafcb9af3f6d5037cc03f57f692966675.1560223509.git.fthain@telegraphics.com.au>
-From:   Michael Schmitz <schmitzmic@gmail.com>
-Message-ID: <a79e01ba-e47c-6b29-3625-29bfb7122ad8@gmail.com>
-Date:   Wed, 12 Jun 2019 11:47:56 +1200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2407377AbfFKXvP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Jun 2019 19:51:15 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:47630 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405024AbfFKXvP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jun 2019 19:51:15 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5BNoB7b155144;
+        Tue, 11 Jun 2019 23:50:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=/meZgtaPTa5PFf7KQ1Bcw9Apchd1MakO0hY9FkfTGbs=;
+ b=LEUOHamgupIZLeW7GlIEm8f5Y31uFe7+WBAmnfXdyYTMyvAofQpvv1sQWZ4bGOwkYNcy
+ r1JRq6ZgQjVp5JlCg7yUXR/HWmcj95F8bOQRrLTJ3iGE0eka1H920SDNK3XXDh+S3LQZ
+ Xa7Wz02xJyrMK+Z58eIpAv545PC/iRblJNNtVYF95RgBKW4ClMUkxWPBFlsBBSs92s5R
+ oS8IT8EqzaKKFnv88N4LDnY5XJTe8G4Bo37tIlxqC6G+xDihaHJBKdpZ1DtKc6Z/ax2i
+ q9GiAnyBsaHQf8qmpkXu+SenjJnJueall8Y3mJumNhDpK86O1V35mKEZhxJEI9+qcEUK PA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2t05nqr42y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jun 2019 23:50:11 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5BNoBMo080763;
+        Tue, 11 Jun 2019 23:50:11 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 2t0p9rjry5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 11 Jun 2019 23:50:10 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5BNo4pt026972;
+        Tue, 11 Jun 2019 23:50:06 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 11 Jun 2019 16:50:04 -0700
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        "Ewan D. Milne" <emilne@redhat.com>, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>
+Subject: Re: [PATCH 2/5] scsi: advansys: use sg helper to operate sgl
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190610150317.29546-1-ming.lei@redhat.com>
+        <20190610150317.29546-3-ming.lei@redhat.com>
+        <1560191829.3698.8.camel@HansenPartnership.com>
+        <ff5eba7c1ec7f5c6418c812ff24ac376d915188d.camel@redhat.com>
+        <1560207747.3698.30.camel@HansenPartnership.com>
+        <20190611002856.GA32621@ming.t460p>
+Date:   Tue, 11 Jun 2019 19:50:01 -0400
+In-Reply-To: <20190611002856.GA32621@ming.t460p> (Ming Lei's message of "Tue,
+        11 Jun 2019 08:28:57 +0800")
+Message-ID: <yq1k1drfzrq.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <739c214bafcb9af3f6d5037cc03f57f692966675.1560223509.git.fthain@telegraphics.com.au>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9285 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906110155
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9285 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906110155
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/06/19 3:25 PM, Finn Thain wrote:
 
-> My understanding is that support for chained scatterlists is to
-> become mandatory for LLDs.
+Ming,
+
+> 1) revert the 3 first, then re-organize the whole patchset in correct
+> order(convert drivers first, then the 3 above drivers)
 >
-> Cc: Michael Schmitz <schmitzmic@gmail.com>
-> Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
-Reviewed-by: Michael Schmitz <schmitzmic@gmail.com>
-> ---
->   drivers/scsi/NCR5380.c | 41 ++++++++++++++++++-----------------------
->   1 file changed, 18 insertions(+), 23 deletions(-)
+> 2) simply apply the 5 patches now
 >
-> diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
-> index d9fa9cf2fd8b..536426f25e86 100644
-> --- a/drivers/scsi/NCR5380.c
-> +++ b/drivers/scsi/NCR5380.c
-> @@ -149,12 +149,10 @@ static inline void initialize_SCp(struct scsi_cmnd *cmd)
->   
->   	if (scsi_bufflen(cmd)) {
->   		cmd->SCp.buffer = scsi_sglist(cmd);
-> -		cmd->SCp.buffers_residual = scsi_sg_count(cmd) - 1;
->   		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
->   		cmd->SCp.this_residual = cmd->SCp.buffer->length;
->   	} else {
->   		cmd->SCp.buffer = NULL;
-> -		cmd->SCp.buffers_residual = 0;
->   		cmd->SCp.ptr = NULL;
->   		cmd->SCp.this_residual = 0;
->   	}
-> @@ -163,6 +161,17 @@ static inline void initialize_SCp(struct scsi_cmnd *cmd)
->   	cmd->SCp.Message = 0;
->   }
->   
-> +static inline void advance_sg_buffer(struct scsi_cmnd *cmd)
-> +{
-> +	struct scatterlist *s = cmd->SCp.buffer;
-> +
-> +	if (!cmd->SCp.this_residual && s && !sg_is_last(s)) {
-> +		cmd->SCp.buffer = sg_next(s);
-> +		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
-> +		cmd->SCp.this_residual = cmd->SCp.buffer->length;
-> +	}
-> +}
-> +
->   /**
->    * NCR5380_poll_politely2 - wait for two chip register values
->    * @hostdata: host private data
-> @@ -1670,12 +1679,7 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
->   			    sun3_dma_setup_done != cmd) {
->   				int count;
->   
-> -				if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
-> -					++cmd->SCp.buffer;
-> -					--cmd->SCp.buffers_residual;
-> -					cmd->SCp.this_residual = cmd->SCp.buffer->length;
-> -					cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
-> -				}
-> +				advance_sg_buffer(cmd);
->   
->   				count = sun3scsi_dma_xfer_len(hostdata, cmd);
->   
-> @@ -1725,15 +1729,11 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
->   				 * scatter-gather list, move onto the next one.
->   				 */
->   
-> -				if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
-> -					++cmd->SCp.buffer;
-> -					--cmd->SCp.buffers_residual;
-> -					cmd->SCp.this_residual = cmd->SCp.buffer->length;
-> -					cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
-> -					dsprintk(NDEBUG_INFORMATION, instance, "%d bytes and %d buffers left\n",
-> -					         cmd->SCp.this_residual,
-> -					         cmd->SCp.buffers_residual);
-> -				}
-> +				advance_sg_buffer(cmd);
-> +				dsprintk(NDEBUG_INFORMATION, instance,
-> +					"this residual %d, sg ents %d\n",
-> +					cmd->SCp.this_residual,
-> +					sg_nents(cmd->SCp.buffer));
->   
->   				/*
->   				 * The preferred transfer method is going to be
-> @@ -2126,12 +2126,7 @@ static void NCR5380_reselect(struct Scsi_Host *instance)
->   	if (sun3_dma_setup_done != tmp) {
->   		int count;
->   
-> -		if (!tmp->SCp.this_residual && tmp->SCp.buffers_residual) {
-> -			++tmp->SCp.buffer;
-> -			--tmp->SCp.buffers_residual;
-> -			tmp->SCp.this_residual = tmp->SCp.buffer->length;
-> -			tmp->SCp.ptr = sg_virt(tmp->SCp.buffer);
-> -		}
-> +		advance_sg_buffer(tmp);
->   
->   		count = sun3scsi_dma_xfer_len(hostdata, tmp);
->   
+> Any comments?
+
+I'm on the fence about this. Your patches were some of the first ones
+that went into the 5.3 tree. So I'd have to rebase pretty much the whole
+5.3 queue.
+
+Whereas merging your updates leaves a sequence of 100+ commits that
+could lead to bisection problems in the future. I'm particularly worried
+about ipr and lpfc but all these drivers are actively used.
+
+As much as I like to see all drivers, without exception, use the sg
+iterators, it would have been nice to have a smoother transition.
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
