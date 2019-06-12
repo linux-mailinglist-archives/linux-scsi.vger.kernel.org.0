@@ -2,87 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28883427AF
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 15:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3142342840
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 15:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728861AbfFLNfC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Jun 2019 09:35:02 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:40779 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726747AbfFLNfC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jun 2019 09:35:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1560346506; x=1591882506;
-  h=from:to:cc:subject:date:message-id;
-  bh=g/hnuUwnFuH6qtFig5Ggh85b17S9rmWi19B6ciJrMz8=;
-  b=dap6GC6qTrQvVW+oSucu+vn5O07cwPFFzsYwSIW0cDivfkSvysetmTfy
-   w7PuZ6zJp53otha6XUyB7VBzx0zuzQRhGXIc9h7/1RvZ+EHJBlT1JtYGh
-   rzp+YwjoCL3CtPjgblNbcIEyx+VCd7S1R8nHYJBrmpvB+FNzmOWZDNI4s
-   np0JyC5Rh22uCzc2ukSCf/brO0+2QIW6ztidC6eAkZcdefj3ZsbHuuozF
-   OFppwEwXR7Y//B7X6m0ErQMRl8VPDCNLaBy2wHJ37vtRq4ahddH/ExZr1
-   ZvxL7jpwnUuvrxVp9jJtXC4G1NvGsu7GEB006amirSzwQCUggo68Jy1Jm
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.63,366,1557158400"; 
-   d="scan'208";a="210060896"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 12 Jun 2019 21:35:06 +0800
-IronPort-SDR: EVZKtWSQo/bbnntur7E6ae6oeM8HDbrGUJhskdN0PV+E8BiZtBREtkwa5cCFPyAWvfP4j8yAx9
- elaQpxtX+y8bP98tI6soCNcVxFMx+yLzhMElaeXtgzhD3BxIokx7A+yPeyPxfTDaAsnqYXDy1m
- yd30G9i6oUIJjXsxYG29DpBcgVV1wbNX/PeurBcVYwOkNooL7jmWSPlGDuu0UTbm27ruvY4HN+
- kc2fGEkXIbZLDMKCEZ8VCbNs2ixs2qNqavJ0CIrkU/0FXuCesA5V6XLbuFrQbDdtuE5BO5eZvQ
- NV99Wb2a+vk9ZirJ8Xsbwggo
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP; 12 Jun 2019 06:34:51 -0700
-IronPort-SDR: Btbm0nQU2UKlfJilRuPCjxkY/ldwKK5VBFW+MKBZ4OP22bI9MnGfdNQYYI2yPDqIV1SshWqQwA
- /cH9cGxrywvO7joo7lFNO90j7g4xwf2/89fmAa/BJon7ww5TMJVBov6p7bsayXvK+SIZHTb7sc
- gTy6O9iTrjhoAnMAvNTO4p8oaMGrZHAg9PmHZkG3dleN5Bwc6+6Z+v8/qnBvzrpbxQ4Cz22qKm
- uKMm3CdldXblU3VH/t2Y5GjfaiasCu60z95EQiC59Wtrg66miaRdwxHaXjf/S8U6fdKzU9XeAT
- dc8=
-Received: from kfae422988.sdcorp.global.sandisk.com ([10.0.230.227])
-  by uls-op-cesaip02.wdc.com with ESMTP; 12 Jun 2019 06:35:00 -0700
-From:   Avri Altman <avri.altman@wdc.com>
-To:     "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     Avi Shchislowski <avi.shchislowski@wdc.com>,
-        Alex Lemberg <alex.lemberg@wdc.com>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH] scsi: uapi: ufs: Fix SPDX license identifier
-Date:   Wed, 12 Jun 2019 16:34:37 +0300
-Message-Id: <1560346477-13944-1-git-send-email-avri.altman@wdc.com>
-X-Mailer: git-send-email 1.9.1
+        id S2439517AbfFLN7H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Jun 2019 09:59:07 -0400
+Received: from ns.iliad.fr ([212.27.33.1]:53546 "EHLO ns.iliad.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2437126AbfFLN7H (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 12 Jun 2019 09:59:07 -0400
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 7CF0420E10;
+        Wed, 12 Jun 2019 15:59:05 +0200 (CEST)
+Received: from [192.168.108.49] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id 6512720514;
+        Wed, 12 Jun 2019 15:59:05 +0200 (CEST)
+To:     James Bottomley <jejb@linux.ibm.com>,
+        Martin Petersen <martin.petersen@oracle.com>
+Cc:     SCSI <linux-scsi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Subject: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
+Message-ID: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
+Date:   Wed, 12 Jun 2019 15:59:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Wed Jun 12 15:59:05 2019 +0200 (CEST)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-added 'WITH Linux-syscall-note' exception, which is the officially
-assigned exception identifier for the kernel syscall exception.
-This exception makes it possible to include GPL headers into non GPL
-code, without confusing license compliance tools.
+According to the option's help message, SCSI_PROC_FS has been
+superseded for ~15 years. Don't select it by default anymore.
 
-fixes: a851b2bd3632 (scsi: uapi: ufs: Make utp_upiu_req visible to user
-		     space)
-
-Signed-off-by: Avri Altman <avri.altman@wdc.com>
+Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
 ---
- include/uapi/scsi/scsi_bsg_ufs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/Kconfig | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/include/uapi/scsi/scsi_bsg_ufs.h b/include/uapi/scsi/scsi_bsg_ufs.h
-index 17c7abd..9988db6 100644
---- a/include/uapi/scsi/scsi_bsg_ufs.h
-+++ b/include/uapi/scsi/scsi_bsg_ufs.h
-@@ -1,4 +1,4 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
- /*
-  * UFS Transport SGIO v4 BSG Message Support
-  *
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index 73bce9b6d037..8c95e9ad6470 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -54,14 +54,11 @@ config SCSI_NETLINK
+ config SCSI_PROC_FS
+ 	bool "legacy /proc/scsi/ support"
+ 	depends on SCSI && PROC_FS
+-	default y
+ 	---help---
+ 	  This option enables support for the various files in
+ 	  /proc/scsi.  In Linux 2.6 this has been superseded by
+ 	  files in sysfs but many legacy applications rely on this.
+ 
+-	  If unsure say Y.
+-
+ comment "SCSI support type (disk, tape, CD-ROM)"
+ 	depends on SCSI
+ 
 -- 
-1.9.1
-
+2.17.1
