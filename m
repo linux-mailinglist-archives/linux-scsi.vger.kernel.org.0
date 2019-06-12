@@ -2,89 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77392419FF
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 03:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E6C41A41
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 04:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407442AbfFLBj5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 11 Jun 2019 21:39:57 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:40918 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405937AbfFLBj5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 11 Jun 2019 21:39:57 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 322DE3084242;
-        Wed, 12 Jun 2019 01:39:49 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 51C2019C70;
-        Wed, 12 Jun 2019 01:39:35 +0000 (UTC)
-Date:   Wed, 12 Jun 2019 09:39:31 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "Ewan D. Milne" <emilne@redhat.com>, linux-scsi@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>
-Subject: Re: [PATCH 2/5] scsi: advansys: use sg helper to operate sgl
-Message-ID: <20190612013930.GC17522@ming.t460p>
-References: <20190610150317.29546-1-ming.lei@redhat.com>
- <20190610150317.29546-3-ming.lei@redhat.com>
- <1560191829.3698.8.camel@HansenPartnership.com>
- <ff5eba7c1ec7f5c6418c812ff24ac376d915188d.camel@redhat.com>
- <1560207747.3698.30.camel@HansenPartnership.com>
- <20190611002856.GA32621@ming.t460p>
- <yq1k1drfzrq.fsf@oracle.com>
+        id S2408343AbfFLCI0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Jun 2019 22:08:26 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:40059 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406597AbfFLCIZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Jun 2019 22:08:25 -0400
+Received: by mail-qk1-f196.google.com with SMTP id c70so9003372qkg.7;
+        Tue, 11 Jun 2019 19:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J1Es5Api2DcjMjvwsXPpKHwLUKPhoxaSmvaXu8HsUCg=;
+        b=Z6aLRINzBF+QeVOxTh02DZf8c9SQ7413TJl1G8EQclmzHHQD6TCTPPGl7eZGBlkG7y
+         t4EBRpwd5kgJPHi87XvnxYETfntTWo8sAblq16brAAu5XtNxs1Gy1sFkWEAWPeqtlMFW
+         PW+cwMA6FjmdtasKdEfogU7PgTxsZ9d+6f8b+/74rMQt390boDlbmjXhVjOMiRKJyroM
+         3DnnToLVqaeJJ5VWlvXwykv161ju3z5HLvTGVZXvvuQ8L1NHKbuy+qxuQCfDVOCQBnyU
+         ENu2Gdaoc4O/e9T8oot5FiwBVFBguvZP1V9DdSk5VPLZNuhadF3j9rv03mUty0/kmYq5
+         DeYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J1Es5Api2DcjMjvwsXPpKHwLUKPhoxaSmvaXu8HsUCg=;
+        b=jUtcf14Qz1O06Ag1gNACX+tEk6CggJJ5dyLZfnKfaq1uzxEIgNpJzLDrvx2pYZLxQm
+         LoEQR7DBdogCjXSb9KckUnvHGhIYNQtXgbhxXKrn3EwAgP1YtalMZzov91BoVZtalvIN
+         EzeZJ6cGsDmD4EAcAjjl9lZvvqo8mm73/8YrVc/QiFUrVyY6pdFQfpp2ft99Wuo1SN9s
+         hkhivGTSvOOUxNrMogV9hIAHXtd+MsNRSGsawM4wC80g5wpdftjW35FVp8HiBpJhZUVs
+         5h7UGSbSlrUIYRKIuEuxsanczBAOCfdsKlszBPCRArhb8zZYkgultuAORMFZp0iJW9XZ
+         OQzg==
+X-Gm-Message-State: APjAAAUzWtfXXwcgo9i/jJN8RPwHjB/SM1m9u/9Wco+Dqk+l/DYQpBMr
+        z93DtrYA8BiLXgMOmWf4y3jAK0ia
+X-Google-Smtp-Source: APXvYqz8lsuKQKseN3hGn/Iwm5FNUEFDU4zHL/zuBoQgHfO/e64RsEFDEMoH31yd+Q1p+l3zjHShwA==
+X-Received: by 2002:ae9:c108:: with SMTP id z8mr2277618qki.57.1560305304304;
+        Tue, 11 Jun 2019 19:08:24 -0700 (PDT)
+Received: from localhost.localdomain ([191.35.236.118])
+        by smtp.gmail.com with ESMTPSA id k40sm9870379qta.50.2019.06.11.19.08.21
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 19:08:23 -0700 (PDT)
+From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Marcos Paulo de Souza <marcos.souza.org@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM)
+Subject: [PATCH] scsi: scsi_sysfs.c: Hide wwid sdev attr if VPD is not supported
+Date:   Tue, 11 Jun 2019 23:08:28 -0300
+Message-Id: <20190612020828.8140-1-marcos.souza.org@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yq1k1drfzrq.fsf@oracle.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Wed, 12 Jun 2019 01:39:57 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin,
+WWID composed from VPD data from device, specifically page 0x83. So,
+when a device does not have VPD support, for example USB storage devices
+where VPD is specifically disabled, a read into <blk device>/device/wwid
+file will always return ENXIO. To avoid this, change the
+scsi_sdev_attr_is_visible function to hide wwid sysfs file when the
+devices does not support VPD.
 
-On Tue, Jun 11, 2019 at 07:50:01PM -0400, Martin K. Petersen wrote:
-> 
-> Ming,
-> 
-> > 1) revert the 3 first, then re-organize the whole patchset in correct
-> > order(convert drivers first, then the 3 above drivers)
-> >
-> > 2) simply apply the 5 patches now
-> >
-> > Any comments?
-> 
-> I'm on the fence about this. Your patches were some of the first ones
-> that went into the 5.3 tree. So I'd have to rebase pretty much the whole
-> 5.3 queue.
-> 
-> Whereas merging your updates leaves a sequence of 100+ commits that
-> could lead to bisection problems in the future. I'm particularly worried
-> about ipr and lpfc but all these drivers are actively used.
+Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+---
+ drivers/scsi/scsi_sysfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-The issue has been introduced, and people has complained, so I think we
-have to do something.
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index dbb206c90ecf..bfd890fa0c69 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -1159,6 +1159,9 @@ static umode_t scsi_sdev_attr_is_visible(struct kobject *kobj,
+ 	struct device *dev = container_of(kobj, struct device, kobj);
+ 	struct scsi_device *sdev = to_scsi_device(dev);
+ 
++	/* do not present wwid if the device does not support VPD */
++	if (attr == &dev_attr_wwid.attr && sdev->skip_vpd_pages)
++		return 0;
+ 
+ 	if (attr == &dev_attr_queue_depth.attr &&
+ 	    !sdev->host->hostt->change_queue_depth)
+-- 
+2.21.0
 
-> 
-> As much as I like to see all drivers, without exception, use the sg
-> iterators, it would have been nice to have a smoother transition.
-
-All the 5 drivers are found via static code analysis by eyes, and not see
-other ways for looking at this issue. That said it is quite hard to prove
-'all drivers, without exception, use the sg iterators'.
-
-Even though some of them is missed, it should have been triggered
-easily if drivers are actively used, then it can be fixed easily too.
-
-Thanks,
-Ming
