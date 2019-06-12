@@ -2,110 +2,144 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B357A41E04
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 09:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D44E41E0A
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 09:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407376AbfFLHmY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Jun 2019 03:42:24 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:43758 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2406732AbfFLHmX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jun 2019 03:42:23 -0400
-X-UUID: 9ad63d1d10c1468088449ade61a64919-20190612
-X-UUID: 9ad63d1d10c1468088449ade61a64919-20190612
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 566421322; Wed, 12 Jun 2019 15:42:09 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 12 Jun 2019 15:42:08 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 12 Jun 2019 15:42:08 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <evgreen@chromium.org>, <beanhuo@micron.com>,
-        <marc.w.gonzalez@free.fr>, <ygardi@codeaurora.org>,
-        <subhashj@codeaurora.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v1] scsi: ufs: Avoid runtime suspend possibly being blocked forever
-Date:   Wed, 12 Jun 2019 15:42:06 +0800
-Message-ID: <1560325326-1598-1-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
+        id S2407535AbfFLHnC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Jun 2019 03:43:02 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:40284 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406728AbfFLHnB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jun 2019 03:43:01 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id AB99660F3A; Wed, 12 Jun 2019 07:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1560325378;
+        bh=akNFareB34O+WoELW9a+vXLpK/S7e9w6RCo5AwPjb2A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=b6L0hfL3FpRwBcfm7DqTiSOJXV1qO+cKG6vdFUKA92yPW42Gg4GSTg7oWylS6l0CP
+         NT1Qa14L+91OHy3VP0yw1NC7oTgFa8WU/nEZ+rwAXpxqniua5APd1uwAV5WysKbNeq
+         U4zu3+X2m030hPWSus3HgHdDx30BlqWfec1xEzII=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.131.117.43] (blr-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F04D960CF1;
+        Wed, 12 Jun 2019 07:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1560325377;
+        bh=akNFareB34O+WoELW9a+vXLpK/S7e9w6RCo5AwPjb2A=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=U/s1AWqwx7q0I8Ng/jLB1n8gUT0Mk/9P2K9ccSQ7OCjYnbfmz3j/qMd/2j7W+KCy8
+         E34Zus5a4XaR6M5L9kZwN0qpKgm6ECocxs25r9Fw3cev2eJHHhQZJNVk4z+w5ABMnd
+         ThX+4IziXS3BDPUulhM0GRvNTDLUqxX6Tbi1AUG4=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F04D960CF1
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
+To:     Viresh Kumar <viresh.kumar@linaro.org>, swboyd@chromium.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
+        dianders@chromium.org, rafael@kernel.org
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
+ <20190320094918.20234-2-rnayak@codeaurora.org>
+ <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+Message-ID: <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
+Date:   Wed, 12 Jun 2019 13:12:51 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-UFS runtime suspend can be triggered after pm_runtime_enable()
-is invoked in ufshcd_pltfrm_init(). However if the first runtime
-suspend is triggered before binding ufs_hba structure to ufs
-device structure via platform_set_drvdata(), then UFS runtime
-suspend will be no longer triggered in the future because its
-dev->power.runtime_error was set in the first triggering and does
-not have any chance to be cleared.
 
-To be more clear, dev->power.runtime_error is set if hba is NULL
-in ufshcd_runtime_suspend() which returns -EINVAL to rpm_callback()
-where dev->power.runtime_error is set as -EINVAL. In this case, any
-future rpm_suspend() for UFS device fails because
-rpm_check_suspend_allowed() fails due to non-zero
-dev->power.runtime_error.
+On 6/11/2019 4:24 PM, Viresh Kumar wrote:
+> On 20-03-19, 15:19, Rajendra Nayak wrote:
+>> From: Stephen Boyd <swboyd@chromium.org>
+>>
+>> Doing this allows us to call this API with any rate requested and have
+>> it not need to match in the OPP table. Instead, we'll round the rate up
+>> to the nearest OPP that we see so that we can get the voltage or level
+>> that's required for that OPP. This supports users of OPP that want to
+>> specify the 'fmax' tables of a device instead of every single frequency
+>> that they need. And for devices that required the exact frequency, we
+>> can rely on the clk framework to round the rate to the nearest supported
+>> frequency instead of the OPP framework to do so.
+>>
+>> Note that this may affect drivers that don't want the clk framework to
+>> do rounding, but instead want the OPP table to do the rounding for them.
+>> Do we have that case? Should we add some flag to the OPP table to
+>> indicate this and then not have that flag set when there isn't an OPP
+>> table for the device and also introduce a property like 'opp-use-clk' to
+>> tell the table that it should use the clk APIs to round rates instead of
+>> OPP?
+>>
+>> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+>> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+>> ---
 
-To resolve this issue, make sure the first UFS runtime suspend
-get valid "hba" in ufshcd_runtime_suspend(): Enable UFS runtime PM
-only after hba is successfully bound to UFS device structure.
+[]...
 
-Fixes: e3ce73d (scsi: ufs: fix bugs related to null pointer access and array size)
-Cc: stable@vger.kernel.org
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufshcd-pltfrm.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> I see a logical problem with this patch.
+> 
+> Suppose the clock driver supports following frequencies: 500M, 800M,
+> 1G, 1.2G and the OPP table contains following list: 500M, 1G, 1.2G
+> (i.e. missing 800M).
+> 
+> Now 800M should never get programmed as it isn't part of the OPP
+> table. But if you pass 600M to opp-set-rate, then it will end up
+> selecting 800M as clock driver will round up to the closest value.
 
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index 8a74ec30c3d2..d7d521b394c3 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -430,24 +430,21 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 		goto dealloc_host;
- 	}
- 
--	pm_runtime_set_active(&pdev->dev);
--	pm_runtime_enable(&pdev->dev);
--
- 	ufshcd_init_lanes_per_dir(hba);
- 
- 	err = ufshcd_init(hba, mmio_base, irq);
- 	if (err) {
- 		dev_err(dev, "Initialization failed\n");
--		goto out_disable_rpm;
-+		goto dealloc_host;
- 	}
- 
- 	platform_set_drvdata(pdev, hba);
- 
-+	pm_runtime_set_active(&pdev->dev);
-+	pm_runtime_enable(&pdev->dev);
-+
- 	return 0;
- 
--out_disable_rpm:
--	pm_runtime_disable(&pdev->dev);
--	pm_runtime_set_suspended(&pdev->dev);
- dealloc_host:
- 	ufshcd_dealloc_host(hba);
- out:
+correct
+
+> 
+> Even if no one is doing this right now, it is a sensible usecase,
+> specially during testing of patches and I don't think we should avoid
+> it.
+> 
+> What exactly is the use case for which we need this patch ? 
+Like the changelog says 'This supports users of OPP that want to
+specify the 'fmax' tables of a device instead of every single frequency
+that they need'
+
+so the 'fmax' tables basically say what the max frequency the device can
+operate at for a given performance state/voltage level.
+
+so in your example it would be for instance
+
+500M, Perf state = 2
+1G, Perf state = 3
+1.2G, Perf state = 4
+
+Now when the device wants to operate at say 800Mhz, you need to set the
+Perf state to 3, so this patch basically avoids you having to put those additional
+OPPs in the table which would otherwise look something like this
+
+500M, Perf state = 2
+800M, Perf state = 3 <-- redundant OPP
+1G, Perf state = 3
+1.2G, Perf state = 4
+
+Your example had just 1 missing entry in the 'fmax' tables in reality its a lot more,
+atleast on all qualcomm platforms.
+
+
 -- 
-2.18.0
-
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
