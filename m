@@ -2,154 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A0A42EA8
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 20:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFEA043124
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 22:54:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfFLS0r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Jun 2019 14:26:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49174 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726116AbfFLS0r (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 12 Jun 2019 14:26:47 -0400
-Received: from gmail.com (unknown [104.132.1.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5852020B7C;
-        Wed, 12 Jun 2019 18:26:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560364006;
-        bh=8Xu/4/Hr77YJPOZLyjCSny/gZK/+Yxj5+W0FLM3fw9E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l7jI7F37dU7e+wWSQlP3Hr6YH0EpM0maaHmJ6ps96WG1LHHakgejJshKzKB1rBP5T
-         kbLnI7ecNThT0nvN0VMlHB+D8xM89bFHbICIFgIcyRMPBrcs8pvUmbcnqFRFQc0q+i
-         4yQ9AckVz9WZBTSVpQimMv/tMS5ljsEZ53OPYHjs=
-Date:   Wed, 12 Jun 2019 11:26:44 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Satya Tangirala <satyat@google.com>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Parshuram Raju Thombare <pthombar@cadence.com>,
-        Ladvine D Almeida <ladvine.dalmeida@synopsys.com>,
-        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>
-Subject: Re: [RFC PATCH v2 1/8] block: Keyslot Manager for Inline Encryption
-Message-ID: <20190612182642.GB18795@gmail.com>
-References: <20190605232837.31545-1-satyat@google.com>
- <20190605232837.31545-2-satyat@google.com>
+        id S1728137AbfFLUyF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Jun 2019 16:54:05 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42058 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727321AbfFLUyF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Jun 2019 16:54:05 -0400
+Received: by mail-pg1-f195.google.com with SMTP id l19so6979403pgh.9
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Jun 2019 13:54:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2eBjoCi7NUq9NvThzVSsvJcW4d8XjFx87Eu+oB31v8w=;
+        b=SUP2G0vfCnZ1Jjicvbpgf1x/1UEb1ILtW8dn8tqdjtJ/lOJCGH0m5ta4tbXiAc9qq6
+         8SvpT2DSyLqhp2J1xwHCfjn5i4ypr1dwckHbkGeuHIAflVmOQCMgah43yWuuusXSR+9a
+         zQPyEYihknGS5wHuhHSjq5exJcaAAs9A/6MupmYb17D0DVNZleIo2GWJ3tv/ipAylppA
+         bOIikOQM/S0wVfaOKoMXpPWvq+aOwscbCj1QnZM32iQM7VvQWDH/8hfmCWP01sfXVnIo
+         Y6w+jgPluQpOh61ZOJARwiQABgCxmFHY+WXOQsamwV0Tesp4+AfOm6jx79sX3CO+Tc1p
+         fGnw==
+X-Gm-Message-State: APjAAAXN8cPXC8yBTSgNy9Tp7O1Ox7/a2oc/qM2y4d2lejeJYKFxWe2c
+        jxR+X9QB7GwUDm8tGhfGZLo=
+X-Google-Smtp-Source: APXvYqx5R9D+1ErFewj56+Cp51YMvZ0F3B4muyCdmfvNh5rZZ4YDWqb6Hjj0oridoWAu9InzswtHLw==
+X-Received: by 2002:a17:90a:c504:: with SMTP id k4mr1119610pjt.104.1560372844926;
+        Wed, 12 Jun 2019 13:54:04 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id o2sm122237pgp.74.2019.06.12.13.54.03
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Wed, 12 Jun 2019 13:54:04 -0700 (PDT)
+Subject: Re: [EXT] [PATCH 00/20] qla2xxx Patches
+To:     Himanshu Madhani <hmadhani@marvell.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>
+References: <20190529202826.204499-1-bvanassche@acm.org>
+ <794547A0-2D81-42DD-8777-27B9BE607E21@marvell.com>
+ <yq1y32fo4d9.fsf@oracle.com>
+ <838DE773-DCD5-40CA-933C-1FF88399AF6C@marvell.com>
+ <yq1o93aml62.fsf@oracle.com>
+ <BF5C02E6-89E5-493E-953A-A34B196BBD30@marvell.com>
+ <c981ce78-e9d6-0d9f-ef17-385de6eb37f6@acm.org>
+ <376D0AB1-1849-4211-9ABF-8EDFE632F097@marvell.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <b98e594a-8e34-5f6d-0e7c-c353add2945d@acm.org>
+Date:   Wed, 12 Jun 2019 13:54:02 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190605232837.31545-2-satyat@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <376D0AB1-1849-4211-9ABF-8EDFE632F097@marvell.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jun 05, 2019 at 04:28:30PM -0700, Satya Tangirala wrote:
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 592669bcc536..f76d5dff27fe 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -385,6 +385,10 @@ static inline int blkdev_reset_zones_ioctl(struct block_device *bdev,
->  
->  #endif /* CONFIG_BLK_DEV_ZONED */
->  
-> +#ifdef CONFIG_BLK_INLINE_ENCRYPTION
-> +struct keyslot_manager;
-> +#endif
-> +
+On 6/11/19 11:14 PM, Himanshu Madhani wrote:
+> Here’s command that I am running in my script
+> 
+> # sg_reset -b /dev/mapper/mpathb
+> sg_reset: SG_SCSI_RESET failed: Resource temporarily unavailable
+> 
+> # sg_reset -H /dev/mapper/mpathb
+> sg_reset: SG_SCSI_RESET failed: Resource temporarily unavailable
+> 
+> # sg_reset -b /dev/mapper/mpathb
+> sg_reset: SG_SCSI_RESET failed: Resource temporarily unavailable
+> 
+> Here’s stack trace after applying your patch series
+> [ ... ]
 
-This should be placed with the other forward declarations at the beginning of
-the file.  It also doesn't need to be behind an #ifdef.  See e.g. struct
-blkcg_gq which is another conditional field in struct request_queue.
+Hi Himanshu,
 
-> diff --git a/include/linux/keyslot-manager.h b/include/linux/keyslot-manager.h
-> new file mode 100644
-> index 000000000000..76a9c255cb7e
-> --- /dev/null
-> +++ b/include/linux/keyslot-manager.h
-[...]
-> +#ifdef CONFIG_BLK_INLINE_ENCRYPTION
-> +struct keyslot_manager;
-> +
-> +extern struct keyslot_manager *keyslot_manager_create(unsigned int num_slots,
-> +				const struct keyslot_mgmt_ll_ops *ksm_ops,
-> +				void *ll_priv_data);
-> +
-> +extern int
-> +keyslot_manager_get_slot_for_key(struct keyslot_manager *ksm,
-> +				 const u8 *key,
-> +				 enum blk_crypt_mode_num crypt_mode,
-> +				 unsigned int data_unit_size);
-> +
-> +extern void keyslot_manager_get_slot(struct keyslot_manager *ksm,
-> +				     unsigned int slot);
-> +
-> +extern void keyslot_manager_put_slot(struct keyslot_manager *ksm,
-> +				     unsigned int slot);
-> +
-> +extern int keyslot_manager_evict_key(struct keyslot_manager *ksm,
-> +				     const u8 *key,
-> +				     enum blk_crypt_mode_num crypt_mode,
-> +				     unsigned int data_unit_size);
-> +
-> +extern void keyslot_manager_destroy(struct keyslot_manager *ksm);
-> +
-> +#else /* CONFIG_BLK_INLINE_ENCRYPTION */
-> +struct keyslot_manager {};
+Thank you for having shared your test case and also for having shared 
+the call trace. While reviewing my own patches I noticed that patch 
+20/20 needs further work. I will retest without that patch and get back 
+to you.
 
-This is actually a struct definition, not a declaration.  This doesn't make
-sense, since the CONFIG_BLK_INLINE_ENCRYPTION case only needs a forward
-declaration here.  Both cases should just use a forward declaration.
-
-> +
-> +static inline struct keyslot_manager *
-> +keyslot_manager_create(unsigned int num_slots,
-> +		       const struct keyslot_mgmt_ll_ops *ksm_ops,
-> +		       void *ll_priv_data)
-> +{
-> +	return NULL;
-> +}
-> +
-> +static inline int
-> +keyslot_manager_get_slot_for_key(struct keyslot_manager *ksm,
-> +				 const u8 *key,
-> +				 enum blk_crypt_mode_num crypt_mode,
-> +				 unsigned int data_unit_size)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline void keyslot_manager_get_slot(struct keyslot_manager *ksm,
-> +					    unsigned int slot) { }
-> +
-> +static inline int keyslot_manager_put_slot(struct keyslot_manager *ksm,
-> +					   unsigned int slot)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline int keyslot_manager_evict_key(struct keyslot_manager *ksm,
-> +				     const u8 *key,
-> +				     enum blk_crypt_mode_num crypt_mode,
-> +				     unsigned int data_unit_size)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline void keyslot_manager_destroy(struct keyslot_manager *ksm)
-> +{ }
-> +
-> +#endif /* CONFIG_BLK_INLINE_ENCRYPTION */
-
-However, it seems we don't actually need these stub functions, since the
-keyslot_manager_ functions are only called from .c files that are only compiled
-when CONFIG_BLK_INLINE_ENCRYPTION, except for the call to
-keyslot_manager_evict_key() in fscrypt_evict_crypt_key().  But it would make
-more sense to stub out fscrypt_evict_crypt_key() instead.
-
-So I suggest removing the keyslot_manager_* stubs for now.
-
-- Eric
+Bart.
