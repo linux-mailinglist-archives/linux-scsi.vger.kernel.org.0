@@ -2,26 +2,25 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 936D442986
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 16:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E76942987
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Jun 2019 16:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408764AbfFLOil (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Jun 2019 10:38:41 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46414 "EHLO mx1.suse.de"
+        id S2392069AbfFLOjg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Jun 2019 10:39:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46716 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2392115AbfFLOil (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 12 Jun 2019 10:38:41 -0400
+        id S1727626AbfFLOjg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 12 Jun 2019 10:39:36 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 49E31AD36;
-        Wed, 12 Jun 2019 14:38:39 +0000 (UTC)
-Subject: Re: [PATCH 1/2] qedi: Check targetname while finding boot target
- information
+        by mx1.suse.de (Postfix) with ESMTP id 3EFA4ADD4;
+        Wed, 12 Jun 2019 14:39:34 +0000 (UTC)
+Subject: Re: [PATCH 2/2] qedi: update driver version to 8.37.0.20
 To:     Nilesh Javali <njavali@marvell.com>, martin.petersen@oracle.com,
         cleech@redhat.com
 Cc:     linux-scsi@vger.kernel.org, QLogic-Storage-Upstream@cavium.com
 References: <20190612080542.17272-1-njavali@marvell.com>
- <20190612080542.17272-2-njavali@marvell.com>
+ <20190612080542.17272-3-njavali@marvell.com>
 From:   Lee Duncan <lduncan@suse.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=lduncan@suse.com; prefer-encrypt=mutual; keydata=
@@ -78,12 +77,12 @@ Autocrypt: addr=lduncan@suse.com; prefer-encrypt=mutual; keydata=
  PizYNICngbeWhSxO6Pi7EaAOV+ErXF0mEG8p07yiYb4DvcNntorEs9pd3yn4H6CJpPxrVvmF
  a7PzlXQ=
 Organization: SUSE
-Message-ID: <092b2efb-618b-6aba-e3b2-6f9ded18c662@suse.com>
-Date:   Wed, 12 Jun 2019 10:38:34 -0400
+Message-ID: <d4607edb-ad6f-be4c-d85e-d2d912d67cef@suse.com>
+Date:   Wed, 12 Jun 2019 10:39:30 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190612080542.17272-2-njavali@marvell.com>
+In-Reply-To: <20190612080542.17272-3-njavali@marvell.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -93,62 +92,29 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 6/12/19 4:05 AM, Nilesh Javali wrote:
-> The kernel panic was observed during iSCSI discovery via offload
-> with below call trace,
-> 
-> [ 2115.646901] BUG: unable to handle kernel NULL pointer dereference at (null)
-> [ 2115.646909] IP: [<ffffffffacf7f0cc>] strncmp+0xc/0x60
-> [ 2115.646927] PGD 0
-> [ 2115.646932] Oops: 0000 [#1] SMP
-> [ 2115.647107] CPU: 24 PID: 264 Comm: kworker/24:1 Kdump: loaded Tainted: G
->                OE  ------------   3.10.0-957.el7.x86_64 #1
-> [ 2115.647133] Workqueue: slowpath-13:00. qed_slowpath_task [qed]
-> [ 2115.647135] task: ffff8d66af80b0c0 ti: ffff8d66afb80000 task.ti: ffff8d66afb80000
-> [ 2115.647136] RIP: 0010:[<ffffffffacf7f0cc>]  [<ffffffffacf7f0cc>] strncmp+0xc/0x60
-> [ 2115.647141] RSP: 0018:ffff8d66afb83c68  EFLAGS: 00010206
-> [ 2115.647143] RAX: 0000000000000001 RBX: 0000000000000007 RCX: 000000000000000a
-> [ 2115.647144] RDX: 0000000000000100 RSI: 0000000000000000 RDI: ffff8d632b3ba040
-> [ 2115.647145] RBP: ffff8d66afb83c68 R08: 0000000000000000 R09: 000000000000ffff
-> [ 2115.647147] R10: 0000000000000007 R11: 0000000000000800 R12: ffff8d66a30007a0
-> [ 2115.647148] R13: ffff8d66747a3c10 R14: ffff8d632b3ba000 R15: ffff8d66747a32f8
-> [ 2115.647149] FS:  0000000000000000(0000) GS:ffff8d66aff00000(0000) knlGS:0000000000000000
-> [ 2115.647151] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [ 2115.647152] CR2: 0000000000000000 CR3: 0000000509610000 CR4: 00000000007607e0
-> [ 2115.647153] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [ 2115.647154] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [ 2115.647155] PKRU: 00000000
-> [ 2115.647157] Call Trace:
-> [ 2115.647165]  [<ffffffffc0634cc5>] qedi_get_protocol_tlv_data+0x2c5/0x510 [qedi]
-> [ 2115.647184]  [<ffffffffc05968f5>] ? qed_mfw_process_tlv_req+0x245/0xbe0 [qed]
-> [ 2115.647195]  [<ffffffffc05496cb>] qed_mfw_fill_tlv_data+0x4b/0xb0 [qed]
-> [ 2115.647206]  [<ffffffffc0596911>] qed_mfw_process_tlv_req+0x261/0xbe0 [qed]
-> [ 2115.647215]  [<ffffffffacce0e8e>] ? dequeue_task_fair+0x41e/0x660
-> [ 2115.647221]  [<ffffffffacc2a59e>] ? __switch_to+0xce/0x580
-> [ 2115.647230]  [<ffffffffc0546013>] qed_slowpath_task+0xa3/0x160 [qed]
-> [ 2115.647278] RIP  [<ffffffffacf7f0cc>] strncmp+0xc/0x60
-> 
-> Fix kernel panic by validating the session targetname before providing
-> TLV data and confirming the presence of boot targets.
+> Update qedi driver version to 8.37.0.20
 > 
 > Signed-off-by: Nilesh Javali <njavali@marvell.com>
 > ---
->  drivers/scsi/qedi/qedi_main.c | 3 +++
->  1 file changed, 3 insertions(+)
+>  drivers/scsi/qedi/qedi_version.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
-> index 8814bfc..f210a3e 100644
-> --- a/drivers/scsi/qedi/qedi_main.c
-> +++ b/drivers/scsi/qedi/qedi_main.c
-> @@ -987,6 +987,9 @@ static int qedi_find_boot_info(struct qedi_ctx *qedi,
->  		if (!iscsi_is_session_online(cls_sess))
->  			continue;
+> diff --git a/drivers/scsi/qedi/qedi_version.h b/drivers/scsi/qedi/qedi_version.h
+> index f56f0ba..0ac1055 100644
+> --- a/drivers/scsi/qedi/qedi_version.h
+> +++ b/drivers/scsi/qedi/qedi_version.h
+> @@ -4,8 +4,8 @@
+>   * Copyright (c) 2016 Cavium Inc.
+>   */
 >  
-> +		if (!sess->targetname)
-> +			continue;
-> +
->  		if (pri_ctrl_flags) {
->  			if (!strcmp(pri_tgt->iscsi_name, sess->targetname) &&
->  			    !strcmp(pri_tgt->ip_addr, ep_ip_addr)) {
+> -#define QEDI_MODULE_VERSION	"8.33.0.21"
+> +#define QEDI_MODULE_VERSION	"8.37.0.20"
+>  #define QEDI_DRIVER_MAJOR_VER		8
+> -#define QEDI_DRIVER_MINOR_VER		33
+> +#define QEDI_DRIVER_MINOR_VER		37
+>  #define QEDI_DRIVER_REV_VER		0
+> -#define QEDI_DRIVER_ENG_VER		21
+> +#define QEDI_DRIVER_ENG_VER		20
 > 
 
 Reviewed-by: Lee Duncan <lduncan@suse.com>
