@@ -2,108 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA02943E5A
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 17:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01AD743D4E
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 17:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389120AbfFMPsw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 11:48:52 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:40922 "EHLO mx1.redhat.com"
+        id S1726937AbfFMPlF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 11:41:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55560 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731712AbfFMJQG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 05:16:06 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1731895AbfFMJwR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 05:52:17 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 0C45F2E95B1;
-        Thu, 13 Jun 2019 09:16:05 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-24.pek2.redhat.com [10.72.8.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CB78B452D;
-        Thu, 13 Jun 2019 09:15:49 +0000 (UTC)
-Date:   Thu, 13 Jun 2019 17:15:44 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Benjamin Block <bblock@linux.ibm.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id 2615B2133D;
+        Thu, 13 Jun 2019 09:52:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560419536;
+        bh=NuI8i4adYDh0Jy3cQk1iNP0nNKi6iHhJS0H1Y1Mhwyg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I7FZy4ULhBHZSlYkiKv2SSHoawGcSR6tCeq3lVoNKMuqo+6FE5tLQgwbHu/rYxc3B
+         WWx0PU3+5qR2Sm2WvpG8C2aRtI4M2CWttMQIGfPvjGC+DQm1cYmaswMRxrhgxi0Th0
+         a6o1c3mqaYmxc59EShQXVtxLdOjS4ASn2lbtjfSw=
+Date:   Thu, 13 Jun 2019 11:52:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ming Lei <ming.lei@redhat.com>
 Cc:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
         Michael Schmitz <schmitzmic@gmail.com>,
+        devel@driverdev.osuosl.org, Hannes Reinecke <hare@suse.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        James Smart <james.smart@broadcom.com>,
+        "Ewan D . Milne" <emilne@redhat.com>, Jim Gill <jgill@vmware.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Brian King <brking@us.ibm.com>,
         Finn Thain <fthain@telegraphics.com.au>,
-        Steffen Maier <maier@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH V2 09/15] s390: zfcp_fc: use sg helper to operate sgl
-Message-ID: <20190613091543.GA8357@ming.t460p>
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH V2 08/15] staging: unisys: visorhba: use sg helper to
+ operate sgl
+Message-ID: <20190613095214.GA18796@kroah.com>
 References: <20190613071335.5679-1-ming.lei@redhat.com>
- <20190613071335.5679-10-ming.lei@redhat.com>
- <20190613084135.GA18038@t480-pf1aa2c2>
+ <20190613071335.5679-9-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190613084135.GA18038@t480-pf1aa2c2>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Thu, 13 Jun 2019 09:16:05 +0000 (UTC)
+In-Reply-To: <20190613071335.5679-9-ming.lei@redhat.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 10:41:35AM +0200, Benjamin Block wrote:
-> On Thu, Jun 13, 2019 at 03:13:29PM +0800, Ming Lei wrote:
-> > The current way isn't safe for chained sgl, so use sg helper to
-> > operate sgl.
-> > 
-> > Cc: Steffen Maier <maier@linux.ibm.com>
-> > Cc: Benjamin Block <bblock@linux.ibm.com>
-> > Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
-> > Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
-> > Cc: linux-s390@vger.kernel.org
-> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> > ---
-> >  drivers/s390/scsi/zfcp_fc.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
-> > index 33eddb02ee30..b018b61bd168 100644
-> > --- a/drivers/s390/scsi/zfcp_fc.c
-> > +++ b/drivers/s390/scsi/zfcp_fc.c
-> > @@ -620,7 +620,7 @@ static void zfcp_fc_sg_free_table(struct scatterlist *sg, int count)
-> >  {
-> >  	int i;
-> >  
-> > -	for (i = 0; i < count; i++, sg++)
-> > +	for (i = 0; i < count; i++, sg = sg_next(sg))
-> >  		if (sg)
-> >  			free_page((unsigned long) sg_virt(sg));
-> >  		else
-> > @@ -641,7 +641,7 @@ static int zfcp_fc_sg_setup_table(struct scatterlist *sg, int count)
-> >  	int i;
-> >  
-> >  	sg_init_table(sg, count);
-> > -	for (i = 0; i < count; i++, sg++) {
-> > +	for (i = 0; i < count; i++, sg = sg_next(sg)) {
-> >  		addr = (void *) get_zeroed_page(GFP_KERNEL);
-> >  		if (!addr) {
-> >  			zfcp_fc_sg_free_table(sg, i);
-> 
-> Color more confused. Where did the rest of this patch-set go? I don't
-> see any other patches from this series of 15 on linux-scsi? Neither on
-> my mail-account, nor on the archive https://marc.info/?l=linux-scsi
-> 
-> I was looking for a bit more context.
+On Thu, Jun 13, 2019 at 03:13:28PM +0800, Ming Lei wrote:
+> The current way isn't safe for chained sgl, so use sg helper to
+> operate sgl.
 
-Yeah, I also can't find them on the archive, maybe there is issue
-related with my email box.
+I can not make any sense out of this changelog.
 
-I need to check it now.
+What "isn't safe"?  What is a "sgl"?
 
-Thanks,
-Ming
+Can this be applied "out of order"?
+
+confused,
+
+greg k-h
