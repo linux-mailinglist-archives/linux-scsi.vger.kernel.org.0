@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B016344476
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27AB744477
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732503AbfFMQhX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1730727AbfFMQhX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Thu, 13 Jun 2019 12:37:23 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39616 "EHLO mx1.redhat.com"
+Received: from mx1.redhat.com ([209.132.183.28]:50082 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730656AbfFMHOy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 03:14:54 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        id S1730657AbfFMHO7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 03:14:59 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 074DD308213C;
-        Thu, 13 Jun 2019 07:14:54 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 6CE9530C1320;
+        Thu, 13 Jun 2019 07:14:59 +0000 (UTC)
 Received: from localhost (ovpn-8-24.pek2.redhat.com [10.72.8.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 057CC39BF;
-        Thu, 13 Jun 2019 07:14:50 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6CFF11001B3C;
+        Thu, 13 Jun 2019 07:14:56 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>
@@ -34,15 +34,15 @@ Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Michael Schmitz <schmitzmic@gmail.com>,
         Finn Thain <fthain@telegraphics.com.au>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V2 11/15] scsi: imm: use sg helper to operate sgl
-Date:   Thu, 13 Jun 2019 15:13:31 +0800
-Message-Id: <20190613071335.5679-12-ming.lei@redhat.com>
+Subject: [PATCH V2 12/15] scsi: pcmcia: nsp_cs: use sg helper to operate sgl
+Date:   Thu, 13 Jun 2019 15:13:32 +0800
+Message-Id: <20190613071335.5679-13-ming.lei@redhat.com>
 In-Reply-To: <20190613071335.5679-1-ming.lei@redhat.com>
 References: <20190613071335.5679-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Thu, 13 Jun 2019 07:14:54 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Thu, 13 Jun 2019 07:14:59 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -53,22 +53,31 @@ operate sgl.
 
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/scsi/imm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/pcmcia/nsp_cs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/imm.c b/drivers/scsi/imm.c
-index 64ae418d29f3..56d29f157749 100644
---- a/drivers/scsi/imm.c
-+++ b/drivers/scsi/imm.c
-@@ -686,7 +686,7 @@ static int imm_completion(struct scsi_cmnd *cmd)
- 		if (cmd->SCp.buffer && !cmd->SCp.this_residual) {
- 			/* if scatter/gather, advance to the next segment */
- 			if (cmd->SCp.buffers_residual--) {
--				cmd->SCp.buffer++;
-+				cmd->SCp.buffer = sg_next(cmd->SCp.buffer);
- 				cmd->SCp.this_residual =
- 				    cmd->SCp.buffer->length;
- 				cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
+diff --git a/drivers/scsi/pcmcia/nsp_cs.c b/drivers/scsi/pcmcia/nsp_cs.c
+index a81748e6e8fb..97416e1dcc5b 100644
+--- a/drivers/scsi/pcmcia/nsp_cs.c
++++ b/drivers/scsi/pcmcia/nsp_cs.c
+@@ -789,7 +789,7 @@ static void nsp_pio_read(struct scsi_cmnd *SCpnt)
+ 		    SCpnt->SCp.buffers_residual != 0 ) {
+ 			//nsp_dbg(NSP_DEBUG_DATA_IO, "scatterlist next timeout=%d", time_out);
+ 			SCpnt->SCp.buffers_residual--;
+-			SCpnt->SCp.buffer++;
++			SCpnt->SCp.buffer = sg_next(SCpnt->SCp.buffer);
+ 			SCpnt->SCp.ptr		 = BUFFER_ADDR;
+ 			SCpnt->SCp.this_residual = SCpnt->SCp.buffer->length;
+ 			time_out = 1000;
+@@ -887,7 +887,7 @@ static void nsp_pio_write(struct scsi_cmnd *SCpnt)
+ 		    SCpnt->SCp.buffers_residual != 0 ) {
+ 			//nsp_dbg(NSP_DEBUG_DATA_IO, "scatterlist next");
+ 			SCpnt->SCp.buffers_residual--;
+-			SCpnt->SCp.buffer++;
++			SCpnt->SCp.buffer = sg_next(SCpnt->SCp.buffer);
+ 			SCpnt->SCp.ptr		 = BUFFER_ADDR;
+ 			SCpnt->SCp.this_residual = SCpnt->SCp.buffer->length;
+ 			time_out = 1000;
 -- 
 2.20.1
 
