@@ -2,135 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57795443E5
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD4643FF1
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392353AbfFMQdT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 12:33:19 -0400
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:19040 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730834AbfFMIKK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 04:10:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1560413410; x=1591949410;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=VIjybpwTwwxGIpY0i4jZ5bVde77SyFvl/oTa+5JMkd4=;
-  b=ceNhRF+x8LZ8sp+NGPGEiuWuBcVa8w1qkWNQvzFmAcyQn+qlKwKQVyLa
-   i6YmHyaKizM+GjEOSKHHI5D9P3f/Wsips0mG5AWKNvsjVJn9BGGM/i13K
-   IAi5Ibxi0Anx07QqMsJMBKcR7su8bZq8o4a0MagN5n/0+L8kKmVsUCFxW
-   b4vMDFwiCeneFCEuLiLJbcu20JeHkkNaHymGX7VYZ3IJTMcLjN49P5iMF
-   szrgrjPiFPrERLSqEaR5D6K09V6ackj46COXJR0UrK7xDdGCGw61n9iQC
-   RtWslBK4SQz3rLXToUZp4HUzvVsfICf0fdFtoc+DTeE4/uTImpxyHlWAx
-   A==;
-X-IronPort-AV: E=Sophos;i="5.63,369,1557158400"; 
-   d="scan'208";a="110448294"
-Received: from mail-dm3nam05lp2052.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) ([104.47.49.52])
-  by ob1.hgst.iphmx.com with ESMTP; 13 Jun 2019 16:10:07 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VIjybpwTwwxGIpY0i4jZ5bVde77SyFvl/oTa+5JMkd4=;
- b=AhLGu8jqjdu+CrR5US0h4RMXY96VM/QsaT3IQQgeOr3a+crDtQy8dpRcj5uXeUwqZv/8PKrtAm9A07+kAHP8pnPYKO0LxE55mAhvtY2PVNWquxIkNhMtWapD27FCWAyJhALmjnWiXjJwGispmWfBYsELdQ69VB/DQDMJ7rqn3Yk=
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
- SN6PR04MB4320.namprd04.prod.outlook.com (52.135.72.28) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1987.10; Thu, 13 Jun 2019 08:09:45 +0000
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::6d99:14d9:3fa:f530]) by SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::6d99:14d9:3fa:f530%6]) with mapi id 15.20.1965.017; Thu, 13 Jun 2019
- 08:09:45 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Stanley Chu <stanley.chu@mediatek.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
-CC:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "evgreen@chromium.org" <evgreen@chromium.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        "ygardi@codeaurora.org" <ygardi@codeaurora.org>,
-        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
-        "sthumma@codeaurora.org" <sthumma@codeaurora.org>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v2] scsi: ufs: Avoid runtime suspend possibly being
- blocked forever
-Thread-Topic: [PATCH v2] scsi: ufs: Avoid runtime suspend possibly being
- blocked forever
-Thread-Index: AQHVITI9+7JKUiS0g0SPWsgtdJ5ukKaZPAkQ
-Date:   Thu, 13 Jun 2019 08:09:45 +0000
-Message-ID: <SN6PR04MB49255AE8236AAA9E41A046BFFCEF0@SN6PR04MB4925.namprd04.prod.outlook.com>
-References: <1560352745-24681-1-git-send-email-stanley.chu@mediatek.com>
-In-Reply-To: <1560352745-24681-1-git-send-email-stanley.chu@mediatek.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c09de684-0f7c-4174-71a1-08d6efd67f22
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB4320;
-x-ms-traffictypediagnostic: SN6PR04MB4320:
-wdcipoutbound: EOP-TRUE
-x-microsoft-antispam-prvs: <SN6PR04MB4320D6A16E45D661959D22F2FCEF0@SN6PR04MB4320.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0067A8BA2A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(366004)(39860400002)(136003)(396003)(189003)(199004)(66066001)(14454004)(55016002)(4326008)(72206003)(478600001)(9686003)(6436002)(5660300002)(71190400001)(71200400001)(76116006)(52536014)(25786009)(68736007)(74316002)(26005)(486006)(3846002)(305945005)(6116002)(6246003)(11346002)(186003)(7736002)(446003)(53936002)(476003)(15650500001)(99286004)(14444005)(316002)(8936002)(2501003)(102836004)(8676002)(73956011)(2906002)(229853002)(6506007)(81166006)(81156014)(76176011)(64756008)(66476007)(66556008)(66946007)(7696005)(256004)(110136005)(33656002)(86362001)(7416002)(54906003)(66446008)(2201001);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB4320;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 8khyZlb7HHirjOHU3H/WaA2lDtHHxAJ+L5bgQb4/6fhVP2wtCiYfXWKxjx0Fpge4hKA5ioJyY4f+sVotn8ZBQfqi8h+czPe+0hsgzpnWw06Bmzk9raQ2YfjuwvRddI/LkRnJ2E6beiZoNKUpAEB6t7OEwBJD0nHLFXTY2EV4agTrc/5Xc/7O3aufmitI8o5JZBF3lzc8ySfsqjBMUt7h0cCSuwtjNHtvHgcxuILPkVSGp3b5LSaa7CRIEm+wxaH52wGgGxtsdSlgHoa2Lh4xKTFNDWKOxVF/wWkClxfpXN0mSX0F9Xpzr7n14awuJdlNZDzFQPR6deFIaoCCISh8vYQJKvXkck80qNNVSb9hlaqoqkErSeuht0ByuwBbzn0xEE72A87hhbyyKGQoBraxrqoY5GGFHAun5c5g49+1sYI=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2390701AbfFMQBg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 12:01:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36280 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731421AbfFMIsU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 04:48:20 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9E027206BA;
+        Thu, 13 Jun 2019 08:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560415700;
+        bh=E5UbYvVCXRmNxOfHlKZINw1XeuPFmN2QSPmi70zTzmc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=toP3uT9MGiNwnGprHTwFBW5ZS0HC9svQG7e3TfAAHH4D8nhnGvSHIxWmoGuKk0rZd
+         WVsWJnEUuIGtTlZll3LhX0TGy4Ie3BzfQEh4I4t0z7MQ+LrsqlwUsQ6Eol/NZVtYvh
+         DlkuTY15mb+CdsBDkjS+hdJNp4rQvIPKjUBZGGBM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Dongli Zhang <dongli.zhang@oracle.com>,
+        James Smart <james.smart@broadcom.com>,
+        Bart Van Assche <bart.vanassche@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Subject: [PATCH 5.1 070/155] blk-mq: move cancel of requeue_work into blk_mq_release
+Date:   Thu, 13 Jun 2019 10:33:02 +0200
+Message-Id: <20190613075656.897201625@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190613075652.691765927@linuxfoundation.org>
+References: <20190613075652.691765927@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c09de684-0f7c-4174-71a1-08d6efd67f22
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2019 08:09:45.3577
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4320
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->=20
-> UFS runtime suspend can be triggered after pm_runtime_enable()
-> is invoked in ufshcd_pltfrm_init(). However if the first runtime
-> suspend is triggered before binding ufs_hba structure to ufs
-> device structure via platform_set_drvdata(), then UFS runtime
-> suspend will be no longer triggered in the future because its
-> dev->power.runtime_error was set in the first triggering and does
-> not have any chance to be cleared.
->=20
-> To be more clear, dev->power.runtime_error is set if hba is NULL
-> in ufshcd_runtime_suspend() which returns -EINVAL to rpm_callback()
-> where dev->power.runtime_error is set as -EINVAL. In this case, any
-> future rpm_suspend() for UFS device fails because
-> rpm_check_suspend_allowed() fails due to non-zero
-> dev->power.runtime_error.
->=20
-> To resolve this issue, make sure the first UFS runtime suspend
-> get valid "hba" in ufshcd_runtime_suspend(): Enable UFS runtime PM
-> only after hba is successfully bound to UFS device structure.
->=20
-> Fixes: 62694735ca95 ([SCSI] ufs: Add runtime PM support for UFS host
-> controller driver)
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
+[ Upstream commit fbc2a15e3433058582e5635aabe48a3011a644a8 ]
+
+With holding queue's kobject refcount, it is safe for driver
+to schedule requeue. However, blk_mq_kick_requeue_list() may
+be called after blk_sync_queue() is done because of concurrent
+requeue activities, then requeue work may not be completed when
+freeing queue, and kernel oops is triggered.
+
+So moving the cancel of requeue_work into blk_mq_release() for
+avoiding race between requeue and freeing queue.
+
+Cc: Dongli Zhang <dongli.zhang@oracle.com>
+Cc: James Smart <james.smart@broadcom.com>
+Cc: Bart Van Assche <bart.vanassche@wdc.com>
+Cc: linux-scsi@vger.kernel.org,
+Cc: Martin K . Petersen <martin.petersen@oracle.com>,
+Cc: Christoph Hellwig <hch@lst.de>,
+Cc: James E . J . Bottomley <jejb@linux.vnet.ibm.com>,
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Johannes Thumshirn <jthumshirn@suse.de>
+Reviewed-by: Hannes Reinecke <hare@suse.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Tested-by: James Smart <james.smart@broadcom.com>
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ block/blk-core.c | 1 -
+ block/blk-mq.c   | 2 ++
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/block/blk-core.c b/block/blk-core.c
+index b375cfea024c..2dd94b3e9ece 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -237,7 +237,6 @@ void blk_sync_queue(struct request_queue *q)
+ 		struct blk_mq_hw_ctx *hctx;
+ 		int i;
+ 
+-		cancel_delayed_work_sync(&q->requeue_work);
+ 		queue_for_each_hw_ctx(q, hctx, i)
+ 			cancel_delayed_work_sync(&hctx->run_work);
+ 	}
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 8a41cc5974fe..11efca3534ad 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -2666,6 +2666,8 @@ void blk_mq_release(struct request_queue *q)
+ 	struct blk_mq_hw_ctx *hctx;
+ 	unsigned int i;
+ 
++	cancel_delayed_work_sync(&q->requeue_work);
++
+ 	/* hctx kobj stays in hctx */
+ 	queue_for_each_hw_ctx(q, hctx, i) {
+ 		if (!hctx)
+-- 
+2.20.1
+
+
 
