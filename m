@@ -2,102 +2,227 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 815FB44538
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B85A448CE
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 19:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392704AbfFMQmz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 12:42:55 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:41936 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392534AbfFMQmz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:42:55 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 30D738EE147;
-        Thu, 13 Jun 2019 09:42:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1560444174;
-        bh=5rFAkz1X1kpOdC2+E0ZK/h2h2P0mzwfVwxvWB0KgCOY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=O/UxWPf0c4lf0EGhwyA5/D8kCk7FBAVgtF9mUo524HGFz+ysv6UIJcjZNviXO6b0O
-         HrO+EMQXeW1EuczwRgun62bOJjbXy74xJ9QP7/C9KSBg4/LYE5NV+vYCrWhNkq2WJZ
-         yCH0HsHsooUEXnpirJliNGZwGE2loKEz03SKRJ2A=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id CfJdZmgLTm_n; Thu, 13 Jun 2019 09:42:54 -0700 (PDT)
-Received: from jarvis.lan (unknown [50.35.68.20])
+        id S1729353AbfFMRLV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 13:11:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54244 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729166AbfFMRLR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 13:11:17 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6D5A98EE0C7;
-        Thu, 13 Jun 2019 09:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1560444173;
-        bh=5rFAkz1X1kpOdC2+E0ZK/h2h2P0mzwfVwxvWB0KgCOY=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=alzPDvrXP5wAuPbot1wVZp3gWPa+Xy/mi0kStVfn4EtTn/XtI5O9KUqo9XaiAWVFh
-         PYYul5LCPO8A31h336ZSvea8vH0BUAxqDeiL2x5SZtMXiebHM8hgtQ3FgZqZj1m0f9
-         8ZgQTeST8sHwWVLkCo26aK4qt0brJlc8BH9qw2iI=
-Message-ID: <1560444171.3329.46.camel@HansenPartnership.com>
-Subject: Re: [PATCH V2 00/15] scsi: use sg helper to operate sgl
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>
-Date:   Thu, 13 Jun 2019 09:42:51 -0700
-In-Reply-To: <20190613071335.5679-1-ming.lei@redhat.com>
-References: <20190613071335.5679-1-ming.lei@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        by mail.kernel.org (Postfix) with ESMTPSA id 4CF022063F;
+        Thu, 13 Jun 2019 17:11:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560445875;
+        bh=FBWMxYgWxiNu6570dn7YwBKk4jtYzSoOQbyjngxdWio=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=onyQ0TF6UDHFdLqBxVbYoaq8Vmetqt3XjxdkKH0dS0Gl8rOx6CanWFVNqTD5fhlPW
+         CmhHjh0De9XgMRHLmahJfqiLW0NbrhZWZXtRyjPTdqDxYTvTI0JiEhV0DUFGfC4ypv
+         Ebrd89F9zTt1JacElWfJJLosLuVPvJO62FCNDpVc=
+Date:   Thu, 13 Jun 2019 10:11:13 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Satya Tangirala <satyat@google.com>
+Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Parshuram Raju Thombare <pthombar@cadence.com>,
+        Ladvine D Almeida <ladvine.dalmeida@synopsys.com>,
+        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
+        Kuohong Wang <kuohong.wang@mediatek.com>
+Subject: Re: [RFC PATCH v2 5/8] scsi: ufs: UFS crypto API
+Message-ID: <20190613171113.GB686@sol.localdomain>
+References: <20190605232837.31545-1-satyat@google.com>
+ <20190605232837.31545-6-satyat@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190605232837.31545-6-satyat@google.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-06-13 at 15:13 +0800, Ming Lei wrote:
-> Hi,
+Hi Satya,
+
+On Wed, Jun 05, 2019 at 04:28:34PM -0700, Satya Tangirala wrote:
+> Introduce functions to manipulate UFS inline encryption hardware
+> in line with the JEDEC UFSHCI v2.1 specification and to work with the
+> block keyslot manager.
 > 
-> Most of drivers use sg helpers to operate sgl, however there is
-> still a few drivers which operate sgl directly, this way can't
-> work in case of chained sgl.
+> Signed-off-by: Satya Tangirala <satyat@google.com>
+> ---
+>  drivers/scsi/ufs/Kconfig         |  10 +
+>  drivers/scsi/ufs/Makefile        |   1 +
+>  drivers/scsi/ufs/ufshcd-crypto.c | 438 +++++++++++++++++++++++++++++++
+>  drivers/scsi/ufs/ufshcd-crypto.h |  69 +++++
+>  4 files changed, 518 insertions(+)
+>  create mode 100644 drivers/scsi/ufs/ufshcd-crypto.c
+>  create mode 100644 drivers/scsi/ufs/ufshcd-crypto.h
+> 
 
-This isn't a useful explanation of the issue you make it sound like a
-bug, which it isn't: it's a change of behaviour we'd like to introduce
-in SCSI.  Please reword the explanation more along the lines of
+There is a build error after this patch because it adds code that uses the
+crypto fields in struct ufs_hba, but those aren't added until the next patch.
 
----
-Scsi MQ makes a large static allocation for the first scatter gather
-list chunk for the driver to use.  This is a performance headache we'd
-like to fix by reducing the size of the allocation to a 2 element
-array.  Doing this will break the current guarantee that any driver
-using SG_ALL doesn't need to use the scatterlist iterators and can get
-away with directly dereferencing the array.  Thus we need to update all
-drivers to use the scatterlist iterators and remove direct indexing of
-the scatterlist array before reducing the initial scatterlist
-allocation size in SCSI.
----
+It needs to be possible to compile a working kernel after each patch.
+Otherwise it breaks bisection.
 
-Which explains what we're trying to do and why.
+So, perhaps add the fields in this patch instead.
 
-In particular changelogs like this
+> +++ b/drivers/scsi/ufs/ufshcd-crypto.c
+> @@ -0,0 +1,438 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2019 Google LLC
+> + */
+> +
+> +#include <crypto/algapi.h>
+> +
+> +#include "ufshcd.h"
+> +#include "ufshcd-crypto.h"
+> +
+> +bool ufshcd_hba_is_crypto_supported(struct ufs_hba *hba)
+> +{
+> +	return hba->crypto_capabilities.reg_val != 0;
+> +}
+> +
+> +bool ufshcd_is_crypto_enabled(struct ufs_hba *hba)
+> +{
+> +	return hba->caps & UFSHCD_CAP_CRYPTO;
+> +}
+> +
+> +static bool ufshcd_cap_idx_valid(struct ufs_hba *hba, unsigned int cap_idx)
+> +{
+> +	return cap_idx < hba->crypto_capabilities.num_crypto_cap;
+> +}
+> +
+> +#define NUM_KEYSLOTS(hba) (hba->crypto_capabilities.config_count + 1)
+> +
+> +bool ufshcd_keyslot_valid(struct ufs_hba *hba, unsigned int slot)
+> +{
+> +	/*
+> +	 * The actual number of configurations supported is (CFGC+1), so slot
+> +	 * numbers range from 0 to config_count inclusive.
+> +	 */
+> +	return slot < NUM_KEYSLOTS(hba);
+> +}
 
-> The current way isn't safe for chained sgl, so use sgl helper to
-> operate sgl.
+Since ufshcd_hba_is_crypto_supported(), ufshcd_is_crypto_enabled(), and
+ufshcd_keyslot_valid() are one-liners, don't access any private structures, and
+are used outside this file including on the command submission path, how about
+making them inline functions in ufshcd-crypto.h?
 
-Are just plain wrong:  They were perfectly safe until you altered the
-conditions for using non-chained sgls.  Please use the above
-explanation in the patches, abbreviated if you like, so all recipients
-know why this needs doing and that it isn't an existing bug.
+> +
+> +static int ufshcd_crypto_alg_find(void *hba_p,
+> +			   enum blk_crypt_mode_num crypt_mode,
+> +			   unsigned int data_unit_size)
+> +{
 
-James
+Now that the concept of "crypto alg IDs" is gone, rename this to
+ufshcd_crypto_cap_find() and rename the crypto_alg_id variables to cap_idx.
 
+This would make it consistent with using cap_idx elsewhere in the code and avoid
+confusion with ufs_crypto_cap_entry::algorithm_id.
+
+> +
+> +static int ufshcd_crypto_keyslot_program(void *hba_p, const u8 *key,
+> +					 enum blk_crypt_mode_num crypt_mode,
+> +					 unsigned int data_unit_size,
+> +					 unsigned int slot)
+> +{
+> +	struct ufs_hba *hba = hba_p;
+> +	int err = 0;
+> +	u8 data_unit_mask;
+> +	union ufs_crypto_cfg_entry cfg;
+> +	union ufs_crypto_cfg_entry *cfg_arr = hba->crypto_cfgs;
+> +	int crypto_alg_id;
+> +
+> +	crypto_alg_id = ufshcd_crypto_alg_find(hba_p, crypt_mode,
+> +					       data_unit_size);
+> +
+> +	if (!ufshcd_is_crypto_enabled(hba) ||
+> +	    !ufshcd_keyslot_valid(hba, slot) ||
+> +	    !ufshcd_cap_idx_valid(hba, crypto_alg_id))
+> +		return -EINVAL;
+> +
+> +	data_unit_mask = get_data_unit_size_mask(data_unit_size);
+> +
+> +	if (!(data_unit_mask &
+> +	      hba->crypto_cap_array[crypto_alg_id].sdus_mask))
+> +		return -EINVAL;
+
+Nit: the 'if' expression with data_unit_mask fits on one line.
+
+> +static int ufshcd_crypto_keyslot_find(void *hba_p,
+> +				      const u8 *key,
+> +				      enum blk_crypt_mode_num crypt_mode,
+> +				      unsigned int data_unit_size)
+> +{
+> +	struct ufs_hba *hba = hba_p;
+> +	int err = 0;
+> +	int slot;
+> +	u8 data_unit_mask;
+> +	union ufs_crypto_cfg_entry cfg;
+> +	union ufs_crypto_cfg_entry *cfg_arr = hba->crypto_cfgs;
+> +	int crypto_alg_id;
+> +
+> +	crypto_alg_id = ufshcd_crypto_alg_find(hba_p, crypt_mode,
+> +					       data_unit_size);
+> +
+> +	if (!ufshcd_is_crypto_enabled(hba) ||
+> +	    !ufshcd_cap_idx_valid(hba, crypto_alg_id))
+> +		return -EINVAL;
+> +
+> +	data_unit_mask = get_data_unit_size_mask(data_unit_size);
+> +
+> +	if (!(data_unit_mask &
+> +	      hba->crypto_cap_array[crypto_alg_id].sdus_mask))
+> +		return -EINVAL;
+
+Same here.
+
+> +	for (slot = 0; slot < NUM_KEYSLOTS(hba); slot++) {
+> +		if ((cfg_arr[slot].config_enable &
+> +		     UFS_CRYPTO_CONFIGURATION_ENABLE) &&
+> +		    data_unit_mask == cfg_arr[slot].data_unit_size &&
+> +		    crypto_alg_id == cfg_arr[slot].crypto_cap_idx &&
+> +		    crypto_memneq(&cfg.crypto_key, cfg_arr[slot].crypto_key,
+> +				  UFS_CRYPTO_KEY_MAX_SIZE) == 0) {
+> +			memzero_explicit(&cfg, sizeof(cfg));
+> +			return slot;
+> +		}
+> +	}
+
+Nit: as I've mentioned before, I think !crypto_memneq() is easier to read than
+'crypto_memneq() == 0'.
+
+> +	hba->crypto_cap_array =
+> +		devm_kcalloc(hba->dev,
+> +			     hba->crypto_capabilities.num_crypto_cap,
+> +			     sizeof(hba->crypto_cap_array[0]),
+> +			     GFP_KERNEL);
+> +	if (!hba->crypto_cap_array) {
+> +		err = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	hba->crypto_cfgs =
+> +		devm_kcalloc(hba->dev,
+> +			     hba->crypto_capabilities.config_count + 1,
+> +			     sizeof(union ufs_crypto_cfg_entry),
+> +			     GFP_KERNEL);
+> +	if (!hba->crypto_cfgs) {
+> +		err = -ENOMEM;
+> +		goto out_cfg_mem;
+> +	}
+
+Nit: use 'sizeof(hba->crypto_cfgs[0])' rather than 'sizeof(union
+ufs_crypto_cfg_entry)', for consistency with the other array allocation.
+
+Thanks,
+
+- Eric
