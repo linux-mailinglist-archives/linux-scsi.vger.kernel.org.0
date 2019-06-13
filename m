@@ -2,131 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEEC44C1F
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 21:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F18B44CBD
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 21:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727895AbfFMT0y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 15:26:54 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:47232 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725809AbfFMT0y (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 15:26:54 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 934972041CF;
-        Thu, 13 Jun 2019 21:26:51 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dp4pDemIbplL; Thu, 13 Jun 2019 21:26:49 +0200 (CEST)
-Received: from [192.168.48.23] (host-45-58-224-183.dyn.295.ca [45.58.224.183])
-        by smtp.infotech.no (Postfix) with ESMTPA id E9B9C20415B;
-        Thu, 13 Jun 2019 21:26:47 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH 1/8] block: add a helper function to read nr_setcs
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        linux-block@vger.kernel.org
-Cc:     colyli@suse.de, linux-bcache@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-btrace@vger.kernel.org,
-        kent.overstreet@gmail.com, jaegeuk@kernel.org,
-        damien.lemoal@wdc.com
-References: <20190613145955.4813-1-chaitanya.kulkarni@wdc.com>
- <20190613145955.4813-2-chaitanya.kulkarni@wdc.com>
- <9abfc2b8-4496-db7a-fcbb-b52102a67f8e@acm.org>
- <f8ab9587-309b-79a0-e6fc-f6683176f498@interlog.com>
- <1560443321.3329.42.camel@HansenPartnership.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <9b7f2892-d8bf-8b95-c782-51b775d175ed@interlog.com>
-Date:   Thu, 13 Jun 2019 15:26:44 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1729570AbfFMT6u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 15:58:50 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:35795 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729592AbfFMT6u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 15:58:50 -0400
+Received: by mail-io1-f65.google.com with SMTP id m24so715131ioo.2
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 12:58:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=0g3LShZij9OvLky32ww/mm8nsliTsm7gD3njRd6NCQk=;
+        b=VvRUdVRnyB4TuhZ+9+/oPM6pb8vxTclPrmvRFZ9PzavJCtkYfSYgjGNiCUQTux1nUl
+         9VjOQatdu+aPOowyvOuIY8hKioFj1wntgGyBXavSkEATXrC/5DcyjhYCe5Ag1uW/q8zp
+         fQGdKjxC19RzzJyIAL/Mw4avblUSP65mKGcmY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=0g3LShZij9OvLky32ww/mm8nsliTsm7gD3njRd6NCQk=;
+        b=DRv71RUFqJj73G7z7wKuYls1Uc52YH23KWkZ4w8/mUYXrY3JQ1QICh3A2jTq43cvLA
+         WMNEUfWgx15aoVfnzbKBzDSfIOvmluWOMnxAaoWoaszMSmFGzrkzadwwGhnv81zVogMs
+         3Zx0M2wUpGL80yl7o8zycqzDneC0jUC1dE86NpKxE+JjCOYVRlf2iNZaDvZe8XfE2NmJ
+         50B8TbMyrmbKkSUGT2twkqVypRRpGqjStx5scHjJBZPY/oeD/GLx42hKDg+22FwXcdu1
+         zukowhvTES4f8eG+tBBk9JpmeRn1umyLooJaFxLPrpG68h/3ZSPff61EAvw/8aj0kQRD
+         EJGA==
+X-Gm-Message-State: APjAAAWCOHGK/nCXeXVZouqHl0dUQ3EYrEX9OsC2zy/+UjPPzW/D7ecP
+        9z/eTEJV1TwYj4ijIO9iFqkuYD36Yk+TDHIk9KkBBw==
+X-Google-Smtp-Source: APXvYqxdGc8NyPROiaW5qZ3CjU9Mi5BWb0Y5+Ghq0hcByTKiBd2ar5O9a3Vi002QTGCiPnE/Sx2A/4naPXD8YwkquS4=
+X-Received: by 2002:a6b:f910:: with SMTP id j16mr7292522iog.256.1560455929090;
+ Thu, 13 Jun 2019 12:58:49 -0700 (PDT)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+References: <20190605190836.32354-1-hch@lst.de> <20190605190836.32354-11-hch@lst.de>
+ <cd713506efb9579d1f69a719d831c28d@mail.gmail.com> <20190608081400.GA19573@lst.de>
+In-Reply-To: <20190608081400.GA19573@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <1560443321.3329.42.camel@HansenPartnership.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQNLjZIO2zMn7N+9xPobnDbFSu4o5gI2RJdJAgF+bYgBfxw4kaN/cE8Q
+Date:   Fri, 14 Jun 2019 01:28:47 +0530
+Message-ID: <98f6557ae91a7cdfe8069fcf7d788c88@mail.gmail.com>
+Subject: RE: [PATCH 10/13] megaraid_sas: set virt_boundary_mask in the scsi host
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>, Sebastian Ott <sebott@linux.ibm.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
+        PDL-MPT-FUSIONLINUX <mpt-fusionlinux.pdl@broadcom.com>,
+        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-06-13 12:28 p.m., James Bottomley wrote:
-> On Thu, 2019-06-13 at 12:07 -0400, Douglas Gilbert wrote:
->> On 2019-06-13 11:31 a.m., Bart Van Assche wrote:
-> [...]
->>> Please explain what makes you think that part_nr_sects_read() must
->>> be protected
->>> by an RCU read lock.
->>
->> Dear reviewer,
->> Please rephrase the above sentence without the accusative tone.
->> Specifically, please do not use the phrase "what makes you think"
->> in this or any other code review. For example: "I believe that..."
->> is more accurate and less provocative.
-> 
-> Imputing "tone" to email is something we try to avoid because it never
-> ends well, particularly for non-native speakers. Some languages
-> (Russian) have no articles and if you take any English phrase and strip
-> out all the articles it sounds a lot more aggressive.
+>
+> On Thu, Jun 06, 2019 at 09:07:27PM +0530, Kashyap Desai wrote:
+> > Hi Christoph, Changes for <megaraid_sas> and <mpt3sas> looks good. We
+> > want to confirm few sanity before ACK. BTW, what benefit we will see
+> > moving virt_boundry setting to SCSI mid layer ? Is it just modular
+> > approach OR any functional fix ?
+>
+> The big difference is that virt_boundary now also changes the
+> max_segment_size, and this ensures that this limit is also communicated
+to
+> the DMA mapping layer.
+Is there any changes in API  blk_queue_virt_boundary? I could not find
+relevant code which account for this. Can you help ?
+Which git repo shall I use for testing ? That way I can confirm, I didn't
+miss relevant changes.
 
-Like you, I am not a native North American English speaker but I
-have lived here long enough to realize that "what makes you think ..."
-is not a pleasantry and it may be fishing for an emotive
-reaction. It is not the type of expression that professionals would
-use to make a point in a public forum.
+From your above explanation, it means (after this patch) max segment size
+of the MR controller will be set to 4K.
+Earlier it is possible to receive single SGE of 64K datalength (Since max
+seg size was 64K), but now the same buffer will reach the driver having 16
+SGEs (Each SGE will contain 4K length).
+Right ?
 
-I'm not talking about articles (e.g. "a" and "the"), I'm talking
-about pronouns like "you" and "I". I'm not aware of any languages
-without pronouns. IMO Bart uses expressions with "you" in them too
-often when he is expressing _his_ opinion to the contrary.
-
->> Observation: as a Canadian citizen when crossing the US border I
->> believe contradicting a US border official with the phrase "what
->> makes you think ..." could lead to a rather bad outcome :-)
->> Please make review comments with that in mind.
-> 
-> Different situation: we aren't profiling reviewers ...
-
-Would you have used that expression when addressing a teacher at
-high school or university? I'm looking for a yardstick of where
-a reviewer should "pitch" their responses. The way you address
-someone who has the ability to make your life uncomfortable (e.g.
-by refusing you entry into their country) may just be such a
-yardstick.
-
->> P.S. Do we have any Linux code-of-conduct for reviewers?
-> 
-> It's the same one for all interactions:
-> 
-> Documentation/process/code-of-conduct-interpretation.rst
-> 
-> But I would remind everyone that diversity isn't just a
-> gender/race/LGBT issue it also means being understanding of the
-> potential difficulties non-native speakers have with email in English.
-
-To quote
-   https://www.contributor-covenant.org/version/1/4/code-of-conduct.html
-to which your above reference indirectly refers:
-
-    It calls for a "harassment-free experience for everyone,
-    regardless of ... expression ..."
-
-So informing someone (not for the first time) that readers of the
-language in which they are writing, may take offence at their
-expression is: not showing an "understanding of the potential
-difficulties non-native speakers have" and thus is harassment?
-Balance that with the angle of a reviewer trying to intimidate
-the person presenting the code. Could that also be harassment?
-In this case I see little evidence of the "potential difficulties"
-to which you refer.
-
-
-More generally:
-IMO those who have power speak in a condescending fashion and act
-unilaterally in the matter of reviewing and applying patches. A
-select few are allowed to apply patches seemingly without any
-review and ignore error reports or attempts at public review.
-It certainly does not look like a system based on merit.
-
-Doug Gilbert
+Kashyap
