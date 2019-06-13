@@ -2,91 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6628B43C8F
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 17:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5BF43DE6
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 17:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733111AbfFMPg3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 11:36:29 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39166 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727143AbfFMPg1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 11:36:27 -0400
-Received: by mail-pf1-f193.google.com with SMTP id j2so12080189pfe.6;
-        Thu, 13 Jun 2019 08:36:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1qNETIPzuNaaWbEXZO+YzL0sjuyPrebTHaHLkZ6VN3U=;
-        b=p1lT+8zeVo0OGqWaUKgkt/u+5oS8dSS+kNDE4jya4RbiyWElZ/PA1n7ms1XgJCQjN3
-         S+/LAF6LCC0BNSndpA//ynr3lbdSpGfF6MsxQmIOMxIyP05+UlWFqKkoH/463bzrQvhw
-         xIG4oOgqGicKfsDH6gkNad77MsEQBinEOWh1l10MA7nR8Y0paTK0mG+lE+QaPC+sOenR
-         QPsAds2tFkg7fu02Vz2JeYrW7TTLyGn7I3KTt9GayFIQtdRc9E2m146L3vaa2DNchUE3
-         9GWt6q7eiYCgGjkuFDbwSkvtj3NO4yc9iQqC/kAETTH97KSiqMehKOFiAV4ziPxxck/K
-         hFhw==
-X-Gm-Message-State: APjAAAXz2ZgXI8wfQGkuasOMqIuqpK7FUZMOv/aIhzVU/A7wYdZ8/kgC
-        kzdBkGQQgSKg9ITZbTIsqQnNy8vT8E0=
-X-Google-Smtp-Source: APXvYqxB+FeDDa+u2Me5UdsbXLEVBYw9OT1YMcOtX99zGgs5lfiFPcmi/0tOv017zyhlQ98BTWKWgg==
-X-Received: by 2002:a62:e119:: with SMTP id q25mr57599498pfh.148.1560440186481;
-        Thu, 13 Jun 2019 08:36:26 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id p6sm168870pgs.77.2019.06.13.08.36.24
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 08:36:25 -0700 (PDT)
-Subject: Re: [COMPILE TESTED PATCH 6/8] target/pscsi: use helper in
- pscsi_get_blocks()
-To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        linux-block@vger.kernel.org
-Cc:     colyli@suse.de, linux-bcache@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-btrace@vger.kernel.org,
-        kent.overstreet@gmail.com, jaegeuk@kernel.org,
-        damien.lemoal@wdc.com
-References: <20190613145955.4813-1-chaitanya.kulkarni@wdc.com>
- <20190613145955.4813-7-chaitanya.kulkarni@wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <ca5092fa-bc1b-08d5-888a-1ed6f909dfef@acm.org>
-Date:   Thu, 13 Jun 2019 08:36:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20190613145955.4813-7-chaitanya.kulkarni@wdc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        id S1728363AbfFMPqP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 11:46:15 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:39970 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727131AbfFMPqO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:46:14 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2438C8EE0C7;
+        Thu, 13 Jun 2019 08:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1560440773;
+        bh=gMwntk/IzwI086ahC3l12emrfcHO6JQMxmh3VkSjshE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=mIPNn1GoVw9YK9vvc5PGLtMEryM+8RTsdlT68HIfW9ha65vB5qtZLGouYz9JntDVS
+         3h2KG8HuVYnYBcOO5xxs6fYayxJKsNb3Yhg/kwdjmS22LkUTZR9kXgcZkHukM+fs2J
+         NcA4++VNcrugYnf+J3NNdGuMHbhwNDAtkubEdxsk=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 98QEIRZ8iKoF; Thu, 13 Jun 2019 08:46:12 -0700 (PDT)
+Received: from jarvis.lan (unknown [50.35.68.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 4DF778EE147;
+        Thu, 13 Jun 2019 08:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1560440772;
+        bh=gMwntk/IzwI086ahC3l12emrfcHO6JQMxmh3VkSjshE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=WrEHxmx+NcCR4U45jwluUA05nbpOLZUWOfZeYramAtpt8Z5fK6D3T/hi00P5XyQQC
+         sV6f/Z4KLX4DGguHABjCcep72L4ch8xyq8Z6+Fbtm1Gi95FdHaq8RXy99PkZzyOL/K
+         jxx0qKEmdu+MEsE3lTXyXzWo/Fc4DBoPl3fbTBrM=
+Message-ID: <1560440768.3329.30.camel@HansenPartnership.com>
+Subject: Re: [PATCH V2 08/15] staging: unisys: visorhba: use sg helper to
+ operate sgl
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     Michael Schmitz <schmitzmic@gmail.com>, devel@driverdev.osuosl.org,
+        Hannes Reinecke <hare@suse.com>, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Ewan D . Milne" <emilne@redhat.com>, Jim Gill <jgill@vmware.com>,
+        Brian King <brking@us.ibm.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>
+Date:   Thu, 13 Jun 2019 08:46:08 -0700
+In-Reply-To: <20190613101656.GA28256@kroah.com>
+References: <20190613071335.5679-1-ming.lei@redhat.com>
+         <20190613071335.5679-9-ming.lei@redhat.com>
+         <20190613095214.GA18796@kroah.com> <20190613100410.GA10829@ming.t460p>
+         <20190613101656.GA28256@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/13/19 7:59 AM, Chaitanya Kulkarni wrote:
-> This patch updates the pscsi_get_blocks() with newly introduced helper
-> function to read the nr_sects from block device's hd_parts with the
-> help if part_nr_sects_read() protected by appropriate locking.
+On Thu, 2019-06-13 at 12:16 +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jun 13, 2019 at 06:04:11PM +0800, Ming Lei wrote:
+> > On Thu, Jun 13, 2019 at 11:52:14AM +0200, Greg Kroah-Hartman wrote:
+> > > On Thu, Jun 13, 2019 at 03:13:28PM +0800, Ming Lei wrote:
+> > > > The current way isn't safe for chained sgl, so use sg helper to
+> > > > operate sgl.
+> > > 
+> > > I can not make any sense out of this changelog.
+> > > 
+> > > What "isn't safe"?  What is a "sgl"?
+> > 
+> > sgl is 'scatterlist' in kernel, and several linear sgl can be
+> > chained together, so accessing the sgl in linear way may see a
+> > chained sg, which is like a link pointer, then may cause trouble
+> > for driver.
 > 
-> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-> ---
->   drivers/target/target_core_pscsi.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/target/target_core_pscsi.c b/drivers/target/target_core_pscsi.c
-> index c9d92b3e777d..da481edab2de 100644
-> --- a/drivers/target/target_core_pscsi.c
-> +++ b/drivers/target/target_core_pscsi.c
-> @@ -1030,7 +1030,7 @@ static sector_t pscsi_get_blocks(struct se_device *dev)
->   	struct pscsi_dev_virt *pdv = PSCSI_DEV(dev);
->   
->   	if (pdv->pdv_bd && pdv->pdv_bd->bd_part)
-> -		return pdv->pdv_bd->bd_part->nr_sects;
-> +		return bdev_nr_sects(pdv->pdv_bd);
->   
->   	return 0;
->   }
+> What kind of "trouble"?  Is this a bug fix that needs to be
+> backported to stable kernels?  How can this be triggered?
 
-As far as I can see bd_part does not change between blkdev_get() and 
-blkdev_put(). Since the pscsi code guarantees that blkdev_put() is not 
-called concurrently with pscsi_get_blocks() this patch is not necessary.
+OK, stop.  I haven't seen the commit log since the original hasn't
+appeared on the list yet, but the changelog needs to say something like
+this to prevent questions like the above, as I asked in the last
+review.  Please make it something like this:
 
-Bart.
+---
+Scsi MQ makes a large static allocation for the first scatter gather
+list chunk for the driver to use.  This is a performance headache we'd
+like to fix by reducing the size of the allocation to a 2 element
+array.  Doing this will break the current guarantee that any driver
+using SG_ALL doesn't need to use the scatterlist iterators and can get
+away with directly dereferencing the array.  Thus we need to update all
+drivers to use the scatterlist iterators and remove direct indexing of
+the scatterlist array before reducing the initial scatterlist
+allocation size in SCSI.
+---
 
+James
 
