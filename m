@@ -2,114 +2,139 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC392442D5
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919C64419E
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731860AbfFMQZq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 12:25:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53956 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730967AbfFMIg0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:36:26 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8932A2147A;
-        Thu, 13 Jun 2019 08:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560414986;
-        bh=9INB2P2iUkV83KaFw/Gx+3oZz2B6MAhwPwEHjvtXxvk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v2wVDZxat0S7CrJxZmRmRoYVWT7tDak3LRuZ1E5gxUVtFomndnwwKBDVxqd3BoCB8
-         xacgMxwQXflitx/SS0exiIjBXPAaEuhyp2eTBSHnfM/Q7z+Ja7uQ/owpy0gYMT/fz4
-         uC0quXkyVpPgfK05sURNS5JRZ98p4JXldudBxNww=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongli Zhang <dongli.zhang@oracle.com>,
-        James Smart <james.smart@broadcom.com>,
-        Bart Van Assche <bart.vanassche@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Ming Lei <ming.lei@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        linux-scsi@vger.kernel.org,
+        id S2389105AbfFMQPd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 12:15:33 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54822 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731169AbfFMIlp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 04:41:45 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5D8aaMH142514
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 04:41:44 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2t3j5ak10u-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 04:41:43 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <bblock@linux.ibm.com>;
+        Thu, 13 Jun 2019 09:41:42 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 13 Jun 2019 09:41:38 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5D8faYb44892378
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 13 Jun 2019 08:41:36 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BED26A4057;
+        Thu, 13 Jun 2019 08:41:36 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A862AA4053;
+        Thu, 13 Jun 2019 08:41:36 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.145.29.205])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Thu, 13 Jun 2019 08:41:36 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1hbLId-00053d-JA; Thu, 13 Jun 2019 10:41:35 +0200
+Date:   Thu, 13 Jun 2019 10:41:35 +0200
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Subject: [PATCH 4.14 37/81] blk-mq: move cancel of requeue_work into blk_mq_release
-Date:   Thu, 13 Jun 2019 10:33:20 +0200
-Message-Id: <20190613075652.080492893@linuxfoundation.org>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190613075649.074682929@linuxfoundation.org>
-References: <20190613075649.074682929@linuxfoundation.org>
-User-Agent: quilt/0.66
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH V2 09/15] s390: zfcp_fc: use sg helper to operate sgl
+References: <20190613071335.5679-1-ming.lei@redhat.com>
+ <20190613071335.5679-10-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190613071335.5679-10-ming.lei@redhat.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-TM-AS-GCONF: 00
+x-cbid: 19061308-4275-0000-0000-00000341EEE7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19061308-4276-0000-0000-0000385207C3
+Message-Id: <20190613084135.GA18038@t480-pf1aa2c2>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-13_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906130069
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-[ Upstream commit fbc2a15e3433058582e5635aabe48a3011a644a8 ]
+On Thu, Jun 13, 2019 at 03:13:29PM +0800, Ming Lei wrote:
+> The current way isn't safe for chained sgl, so use sg helper to
+> operate sgl.
+> 
+> Cc: Steffen Maier <maier@linux.ibm.com>
+> Cc: Benjamin Block <bblock@linux.ibm.com>
+> Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>  drivers/s390/scsi/zfcp_fc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
+> index 33eddb02ee30..b018b61bd168 100644
+> --- a/drivers/s390/scsi/zfcp_fc.c
+> +++ b/drivers/s390/scsi/zfcp_fc.c
+> @@ -620,7 +620,7 @@ static void zfcp_fc_sg_free_table(struct scatterlist *sg, int count)
+>  {
+>  	int i;
+>  
+> -	for (i = 0; i < count; i++, sg++)
+> +	for (i = 0; i < count; i++, sg = sg_next(sg))
+>  		if (sg)
+>  			free_page((unsigned long) sg_virt(sg));
+>  		else
+> @@ -641,7 +641,7 @@ static int zfcp_fc_sg_setup_table(struct scatterlist *sg, int count)
+>  	int i;
+>  
+>  	sg_init_table(sg, count);
+> -	for (i = 0; i < count; i++, sg++) {
+> +	for (i = 0; i < count; i++, sg = sg_next(sg)) {
+>  		addr = (void *) get_zeroed_page(GFP_KERNEL);
+>  		if (!addr) {
+>  			zfcp_fc_sg_free_table(sg, i);
 
-With holding queue's kobject refcount, it is safe for driver
-to schedule requeue. However, blk_mq_kick_requeue_list() may
-be called after blk_sync_queue() is done because of concurrent
-requeue activities, then requeue work may not be completed when
-freeing queue, and kernel oops is triggered.
+Color more confused. Where did the rest of this patch-set go? I don't
+see any other patches from this series of 15 on linux-scsi? Neither on
+my mail-account, nor on the archive https://marc.info/?l=linux-scsi
 
-So moving the cancel of requeue_work into blk_mq_release() for
-avoiding race between requeue and freeing queue.
+I was looking for a bit more context.
 
-Cc: Dongli Zhang <dongli.zhang@oracle.com>
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Bart Van Assche <bart.vanassche@wdc.com>
-Cc: linux-scsi@vger.kernel.org,
-Cc: Martin K . Petersen <martin.petersen@oracle.com>,
-Cc: Christoph Hellwig <hch@lst.de>,
-Cc: James E . J . Bottomley <jejb@linux.vnet.ibm.com>,
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Johannes Thumshirn <jthumshirn@suse.de>
-Reviewed-by: Hannes Reinecke <hare@suse.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Tested-by: James Smart <james.smart@broadcom.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- block/blk-core.c | 1 -
- block/blk-mq.c   | 2 ++
- 2 files changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 0b14aebfd1a8..4e04c79aa2c2 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -339,7 +339,6 @@ void blk_sync_queue(struct request_queue *q)
- 		struct blk_mq_hw_ctx *hctx;
- 		int i;
- 
--		cancel_delayed_work_sync(&q->requeue_work);
- 		queue_for_each_hw_ctx(q, hctx, i)
- 			cancel_delayed_work_sync(&hctx->run_work);
- 	} else {
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index eac444804736..55139d2fca3e 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2294,6 +2294,8 @@ void blk_mq_release(struct request_queue *q)
- 	struct blk_mq_hw_ctx *hctx;
- 	unsigned int i;
- 
-+	cancel_delayed_work_sync(&q->requeue_work);
-+
- 	/* hctx kobj stays in hctx */
- 	queue_for_each_hw_ctx(q, hctx, i) {
- 		if (!hctx)
 -- 
-2.20.1
-
-
+With Best Regards, Benjamin Block      /      Linux on IBM Z Kernel Development
+IBM Systems & Technology Group   /  IBM Deutschland Research & Development GmbH
+Vorsitz. AufsR.: Matthias Hartmann       /      Geschäftsführung: Dirk Wittkopp
+Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
 
