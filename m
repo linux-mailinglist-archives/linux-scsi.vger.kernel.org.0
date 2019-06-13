@@ -2,147 +2,144 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63ADF44473
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9330D44424
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730822AbfFMQhW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 12:37:22 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:50214 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730663AbfFMHPM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 03:15:12 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 5801B30C0DFE;
-        Thu, 13 Jun 2019 07:15:12 +0000 (UTC)
-Received: from localhost (ovpn-8-24.pek2.redhat.com [10.72.8.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 94B8C1001E60;
-        Thu, 13 Jun 2019 07:15:11 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>
-Subject: [PATCH V2 15/15] NCR5380: Support chained sg lists
-Date:   Thu, 13 Jun 2019 15:13:35 +0800
-Message-Id: <20190613071335.5679-16-ming.lei@redhat.com>
-In-Reply-To: <20190613071335.5679-1-ming.lei@redhat.com>
-References: <20190613071335.5679-1-ming.lei@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Thu, 13 Jun 2019 07:15:12 +0000 (UTC)
+        id S1730912AbfFMQfE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 12:35:04 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:55908 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730733AbfFMHpS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 03:45:18 -0400
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190613074515epoutp02a316765d8286746a68c90901bb168f0f~nsl6hOxwd2491124911epoutp027
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 07:45:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190613074515epoutp02a316765d8286746a68c90901bb168f0f~nsl6hOxwd2491124911epoutp027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1560411915;
+        bh=wzSwN4u5LkJkQagGovrAV/IuOaYbJLihVMExvb/oMPM=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=jEBSalUQJ1oRRkn4CwhvyZVi+JaoIF0/J27tJR8dkAwYuBkdOUA5fd+Hka+b9eGRM
+         r53Gmtvjzam3N+O5ZhLb5e8nzOSeHEn7uO8b/YOvMol0hEPKnt04W/6imjAepVnPZ1
+         thHMwQDf8ydNYJH/uAR04VEuaaqdFslPwvTOjq40=
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.189]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20190613074512epcas2p10a951359c2519e822ad7704992aa6188~nsl31cA0g2450724507epcas2p1T;
+        Thu, 13 Jun 2019 07:45:12 +0000 (GMT)
+X-AuditID: b6c32a45-d47ff70000001063-53-5d01ff078130
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        8C.AF.04195.70FF10D5; Thu, 13 Jun 2019 16:45:11 +0900 (KST)
+Mime-Version: 1.0
+Subject: [RFC PATCH] mpt3sas: support target smid for [abort|query] task
+Reply-To: minwoo.im@samsung.com
+From:   Minwoo Im <minwoo.im@samsung.com>
+To:     "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Minwoo Im <minwoo.im@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
+        "chaitra.basappa@broadcom.com" <chaitra.basappa@broadcom.com>,
+        "suganath-prabu.subramani@broadcom.com" 
+        <suganath-prabu.subramani@broadcom.com>,
+        Sarah Cho <sohyeon.jo@samsung.com>,
+        Gyeongmin Nam <gm.nam@samsung.com>,
+        Sanggwan Lee <sanggwan.lee@samsung.com>,
+        Sungjun Park <sj1228.park@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20190613074511epcms2p4cfd590711eefbd66414400f46d87354a@epcms2p4>
+Date:   Thu, 13 Jun 2019 16:45:11 +0900
+X-CMS-MailID: 20190613074511epcms2p4cfd590711eefbd66414400f46d87354a
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUhTURjHO7vX6828dZwvnTRKb5QlqLujrVOkFWWsF0GrDxHZurnbFPfG
+        7pT0S7MXrIRYRGSjMg2caGml1kgCXalJFvSuRmYvGvmKRVKU2bY7qW+/c3ie///5P+fQhPwK
+        FU3nmmyC1cQbWCqEvH1/hSoxeBpkKT70q/HoaIMMvx/biCu7b8vw87sXKVz62k1hV8cfGR58
+        1ELgS8N2Ga5sGg/CNy73kri0U4PrPQ4KD3btXc9onO8eUxpHZQvQTAz0kprTjTVA8+3Wooyg
+        PYa1OQKvE6yxginbrMs16VPYbTu1G7UqtYJL5FbjVWysiTcKKeym7RmJm3MN3gnZ2ALekO+9
+        yuBFkU1OXWs159uE2ByzaEthBYvOYOE4S5LIG8V8kz4p22xcwykUSpW3cr8h50JdK7A0w0PV
+        007SDsqYU2A2jeBK1PC0lvSxHLoBmroedQrQNAPD0JQ73IfhUIO+1/tRDhejH0MKX3E4XIHG
+        mruCfEzBeGQ/N+QVCaEjYAdAPVXVMt+BgNMEspffoyQrBpWVDJASx6A7riYgcSTqqR0NnuHx
+        9vLAfQQ63veYkDgM9f9sBr4hEESobyxVwsOosRr7rBA8BlD3yPVAazIq/jzht2JgOnLcdPiZ
+        hEtRc/eJgOQm1PbhtN+W8Oa6M3qR8GkS3mD1d5Ml+SXoQS8pVcxFJ+5PBc8EcV/+JJN4CZrw
+        eAKKC5Dr2XAgrAZVXCuWSXvNREeel1MOsNj5b7XO/3yd/3yvAKIGRAkW0agXRKWF+/8xbwH/
+        70xIc4OyJ9s9ANKADWVgCMiSB/EFYqHRAxBNsBGMMm9WlpzR8YVFgtWsteYbBNEDVN74Z4jo
+        yGyz96+bbFpOpVSrFatVWKVWYnY+0zCnZ68c6nmbkCcIFsE60yejZ0fbwcL4l67irRv0RfqK
+        qq+NW7SdYQ03Y0qp4cm2wjhr22BN+qoS9+RH1pWa1pWrT8tMPnBIrJ5+kd70KPTqgiLq5L6o
+        vAt1fY7GVw9/11+rm8e92T/++eRZYd2ag3Hnd3T8XG6W7/qybKhlpF0V4inf3TqgK3X9qmrf
+        dbTf9dZUEJcZ086SYg7PJRBWkf8LXzkEYLMDAAA=
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190613074511epcms2p4cfd590711eefbd66414400f46d87354a
+References: <CGME20190613074511epcms2p4cfd590711eefbd66414400f46d87354a@epcms2p4>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Finn Thain <fthain@telegraphics.com.au>
+We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
+to /dev/mpt3ctl.  If the given task_type is either abort task or query
+task, it may need a field named "Initiator Port Transfer Tag to Manage"
+in the IU.
 
-My understanding is that support for chained scatterlists is to
-become mandatory for LLDs.
+Current code does not support to check target IPTT tag from the
+tm_request.  This patch introduces to check TaskMID given from the
+userspace as a target tag.  We have a rule of relationship between
+(struct request *req->tag) and smid in mpt3sas_base.c:
 
-Cc: Michael Schmitz <schmitzmic@gmail.com>
-Reviewed-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+3318 u16
+3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
+3320         struct scsi_cmnd *scmd)
+3321 {
+3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
+3323         unsigned int tag = scmd->request->tag;
+3324         u16 smid;
+3325
+3326         smid = tag + 1;
+
+So if we want to abort a request tagged #X, then we can pass (X + 1) to
+this IOCTL handler.
+
+Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
 ---
- drivers/scsi/NCR5380.c | 41 ++++++++++++++++++-----------------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
-index fe0535affc14..4ef44fafe6ca 100644
---- a/drivers/scsi/NCR5380.c
-+++ b/drivers/scsi/NCR5380.c
-@@ -149,12 +149,10 @@ static inline void initialize_SCp(struct scsi_cmnd *cmd)
- 
- 	if (scsi_bufflen(cmd)) {
- 		cmd->SCp.buffer = scsi_sglist(cmd);
--		cmd->SCp.buffers_residual = scsi_sg_count(cmd) - 1;
- 		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
- 		cmd->SCp.this_residual = cmd->SCp.buffer->length;
- 	} else {
- 		cmd->SCp.buffer = NULL;
--		cmd->SCp.buffers_residual = 0;
- 		cmd->SCp.ptr = NULL;
- 		cmd->SCp.this_residual = 0;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+index b2bb47c14d35..5c7539dae713 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -596,15 +596,17 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command *karg,
+ 		if (priv_data->sas_target->handle != handle)
+ 			continue;
+ 		st = scsi_cmd_priv(scmd);
+-		tm_request->TaskMID = cpu_to_le16(st->smid);
+-		found = 1;
++		if (tm_request->TaskMID == st->smid) {
++			tm_request->TaskMID = cpu_to_le16(st->smid);
++			found = 1;
++		}
  	}
-@@ -163,6 +161,17 @@ static inline void initialize_SCp(struct scsi_cmnd *cmd)
- 	cmd->SCp.Message = 0;
- }
  
-+static inline void advance_sg_buffer(struct scsi_cmnd *cmd)
-+{
-+	struct scatterlist *s = cmd->SCp.buffer;
-+
-+	if (!cmd->SCp.this_residual && s && !sg_is_last(s)) {
-+		cmd->SCp.buffer = sg_next(s);
-+		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
-+		cmd->SCp.this_residual = cmd->SCp.buffer->length;
-+	}
-+}
-+
- /**
-  * NCR5380_poll_politely2 - wait for two chip register values
-  * @hostdata: host private data
-@@ -1672,12 +1681,7 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
- 			    sun3_dma_setup_done != cmd) {
- 				int count;
- 
--				if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
--					++cmd->SCp.buffer;
--					--cmd->SCp.buffers_residual;
--					cmd->SCp.this_residual = cmd->SCp.buffer->length;
--					cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
--				}
-+				advance_sg_buffer(cmd);
- 
- 				count = sun3scsi_dma_xfer_len(hostdata, cmd);
- 
-@@ -1727,15 +1731,11 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
- 				 * scatter-gather list, move onto the next one.
- 				 */
- 
--				if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
--					++cmd->SCp.buffer;
--					--cmd->SCp.buffers_residual;
--					cmd->SCp.this_residual = cmd->SCp.buffer->length;
--					cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
--					dsprintk(NDEBUG_INFORMATION, instance, "%d bytes and %d buffers left\n",
--					         cmd->SCp.this_residual,
--					         cmd->SCp.buffers_residual);
--				}
-+				advance_sg_buffer(cmd);
-+				dsprintk(NDEBUG_INFORMATION, instance,
-+					"this residual %d, sg ents %d\n",
-+					cmd->SCp.this_residual,
-+					sg_nents(cmd->SCp.buffer));
- 
- 				/*
- 				 * The preferred transfer method is going to be
-@@ -2136,12 +2136,7 @@ static void NCR5380_reselect(struct Scsi_Host *instance)
- 	if (sun3_dma_setup_done != tmp) {
- 		int count;
- 
--		if (!tmp->SCp.this_residual && tmp->SCp.buffers_residual) {
--			++tmp->SCp.buffer;
--			--tmp->SCp.buffers_residual;
--			tmp->SCp.this_residual = tmp->SCp.buffer->length;
--			tmp->SCp.ptr = sg_virt(tmp->SCp.buffer);
--		}
-+		advance_sg_buffer(tmp);
- 
- 		count = sun3scsi_dma_xfer_len(hostdata, tmp);
- 
+ 	if (!found) {
+ 		dctlprintk(ioc,
+-			   ioc_info(ioc, "%s: handle(0x%04x), lun(%d), no active mid!!\n",
++			   ioc_info(ioc, "%s: handle(0x%04x), lun(%d), no matched mid(%d)!!\n",
+ 				    desc, le16_to_cpu(tm_request->DevHandle),
+-				    lun));
++				    lun, tm_request->TaskMID));
+ 		tm_reply = ioc->ctl_cmds.reply;
+ 		tm_reply->DevHandle = tm_request->DevHandle;
+ 		tm_reply->Function = MPI2_FUNCTION_SCSI_TASK_MGMT;
 -- 
-2.20.1
+2.16.1
 
