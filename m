@@ -2,144 +2,135 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3558D443F1
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57795443E5
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730861AbfFMQdn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 12:33:43 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:63888 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730799AbfFMH62 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 03:58:28 -0400
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190613075825epoutp02f76e8b11293000356d62ef333d6f27bc~nsxaFPegl0562505625epoutp026
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 07:58:25 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190613075825epoutp02f76e8b11293000356d62ef333d6f27bc~nsxaFPegl0562505625epoutp026
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1560412705;
-        bh=wzSwN4u5LkJkQagGovrAV/IuOaYbJLihVMExvb/oMPM=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=frSsZbuOIypJDjtPa0mKc/aTRFP3zfdjKJn57yeKvUfsiF0W0YrFST+seReIJcU/R
-         lLrExlS2LQ2h+/hXtLUP7Stz8bxNzAc8KwQbSCEJCtmqYFg7dtwuW3zFc58E8tx6HC
-         d3r+HYycPVb/EstYLhNBaYGEhKUNMArigQfknvA0=
-Received: from epsmges2p1.samsung.com (unknown [182.195.40.182]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
-        20190613075822epcas2p4a781773dcd037e62ffe4ff785bab8950~nsxXiIKVN2815028150epcas2p4L;
-        Thu, 13 Jun 2019 07:58:22 +0000 (GMT)
-X-AuditID: b6c32a45-d47ff70000001063-fe-5d02021e9ee6
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        D9.E6.04195.E12020D5; Thu, 13 Jun 2019 16:58:22 +0900 (KST)
-Mime-Version: 1.0
-Subject: [RFC PATCH] mpt3sas: support target smid for [abort|query] task
-Reply-To: minwoo.im@samsung.com
-From:   Minwoo Im <minwoo.im@samsung.com>
-To:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>
-CC:     Minwoo Im <minwoo.im@samsung.com>,
-        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
-        "suganath-prabu.subramani@broadcom.com" 
-        <suganath-prabu.subramani@broadcom.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        id S2392353AbfFMQdT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 12:33:19 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:19040 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730834AbfFMIKK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 04:10:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1560413410; x=1591949410;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=VIjybpwTwwxGIpY0i4jZ5bVde77SyFvl/oTa+5JMkd4=;
+  b=ceNhRF+x8LZ8sp+NGPGEiuWuBcVa8w1qkWNQvzFmAcyQn+qlKwKQVyLa
+   i6YmHyaKizM+GjEOSKHHI5D9P3f/Wsips0mG5AWKNvsjVJn9BGGM/i13K
+   IAi5Ibxi0Anx07QqMsJMBKcR7su8bZq8o4a0MagN5n/0+L8kKmVsUCFxW
+   b4vMDFwiCeneFCEuLiLJbcu20JeHkkNaHymGX7VYZ3IJTMcLjN49P5iMF
+   szrgrjPiFPrERLSqEaR5D6K09V6ackj46COXJR0UrK7xDdGCGw61n9iQC
+   RtWslBK4SQz3rLXToUZp4HUzvVsfICf0fdFtoc+DTeE4/uTImpxyHlWAx
+   A==;
+X-IronPort-AV: E=Sophos;i="5.63,369,1557158400"; 
+   d="scan'208";a="110448294"
+Received: from mail-dm3nam05lp2052.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) ([104.47.49.52])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Jun 2019 16:10:07 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VIjybpwTwwxGIpY0i4jZ5bVde77SyFvl/oTa+5JMkd4=;
+ b=AhLGu8jqjdu+CrR5US0h4RMXY96VM/QsaT3IQQgeOr3a+crDtQy8dpRcj5uXeUwqZv/8PKrtAm9A07+kAHP8pnPYKO0LxE55mAhvtY2PVNWquxIkNhMtWapD27FCWAyJhALmjnWiXjJwGispmWfBYsELdQ69VB/DQDMJ7rqn3Yk=
+Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
+ SN6PR04MB4320.namprd04.prod.outlook.com (52.135.72.28) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1987.10; Thu, 13 Jun 2019 08:09:45 +0000
+Received: from SN6PR04MB4925.namprd04.prod.outlook.com
+ ([fe80::6d99:14d9:3fa:f530]) by SN6PR04MB4925.namprd04.prod.outlook.com
+ ([fe80::6d99:14d9:3fa:f530%6]) with mapi id 15.20.1965.017; Thu, 13 Jun 2019
+ 08:09:45 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Stanley Chu <stanley.chu@mediatek.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        Sarah Cho <sohyeon.jo@samsung.com>,
-        Sungjun Park <sj1228.park@samsung.com>,
-        Gyeongmin Nam <gm.nam@samsung.com>,
-        Sanggwan Lee <sanggwan.lee@samsung.com>,
-        "minwoo.im.dev@gmail.com" <minwoo.im.dev@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20190613075822epcms2p4ebf7116e0a10a1c80d746d9a17686a2d@epcms2p4>
-Date:   Thu, 13 Jun 2019 16:58:22 +0900
-X-CMS-MailID: 20190613075822epcms2p4ebf7116e0a10a1c80d746d9a17686a2d
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf0hTURTHu3vP59N6cZ0/uhnUemap4dyTZrdwEZTxICutfyoc66EPJ+4X
-        ezMsohYklUFZUNj6JRYp/dDyVzMJaqYrssiCUilTSCWzmZRlkdW2N6n/Pvdwzvl+z7mHJpRX
-        qHi6yOIQ7RbBxFKRZEt78srUhQqFXnPLG4cHfetwdU+LAr+8e57Cx167KVzj/a3AP4/OxsNP
-        7hP4wkenAlc3j4fhWxf7SHzsMY/rPRUUHu7KW8vwrndPKb7V9Tacr6i+D/iJoT6SP950DfBf
-        GhbmUDtNmUZRKBDtKtGSby0oshTq2I3bDOsM2gwNl8qtwitZlUUwizp2fXZO6oYik98lq9ot
-        mEr8oRxBkti0NZl2a4lDVBmtkkPHirYCk43jbGpJMEsllkJ1vtW8mtNo0rX+zF0m49m6B8DW
-        Bktr/7hIJ6hkykEEjeAK1HP6A1kOImkldAP09cYwKAc0zcAoNO2ODmA05NFkfRCVcBGaGtUE
-        KqNhMvK1dYUFmILLkPP0aLBLDPQCNNLkA4EHAScJ1N1YBWQtBlUeHiJlXoDu1DSH4rGo9/qn
-        8Bke77wUisegsv6nhMxRaOBHW9Aaggj1+9bIeAA11eKAFIKHAOoZuxkqTUMHRyaCUgzchM41
-        jAbbkDARHT/0KGRhPbo9UBeME/657nw6TwR6Ev7B6u+mye0T0MM+Us6Yi460T4fPDOK++F4h
-        cwKa8HhCJuejmhcfKZl55D3oo+St5aK6uu0VYJHr32Zd/8m6/slWAeIaiBNtkrlQlNJt3P+f
-        2QCCF5qS5QaVz7I9ANKAncPASKBXhgm7pT1mD0A0wcYwU7MUeiVTIOzZK9qtBnuJSZQ8QOuf
-        /iQRH5tv9d+7xWHgtOkZGZpVWqzNSMfsPKZxdm+eEhYKDrFYFG2ifaZOQUfEO0FX3Cuh3JzE
-        MSlrxz7wpaml35sTqt7EXjnhHJ9+0NGe5VUrf7/8rJ5K6m9dZhy0iUDv6qWWbO72XI3aobKS
-        yW718+q9i+dvT9pCFCXUbs28PCdxUvfk3jdPVl7m0URDWbfDMdbaKe3vKFvyC/eeWn448pku
-        d0UV3Kc/UtzydekZlpSMApdC2CXhL/Wdp8S3AwAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190613075822epcms2p4ebf7116e0a10a1c80d746d9a17686a2d
-References: <CGME20190613075822epcms2p4ebf7116e0a10a1c80d746d9a17686a2d@epcms2p4>
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
+CC:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "evgreen@chromium.org" <evgreen@chromium.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "ygardi@codeaurora.org" <ygardi@codeaurora.org>,
+        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
+        "sthumma@codeaurora.org" <sthumma@codeaurora.org>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v2] scsi: ufs: Avoid runtime suspend possibly being
+ blocked forever
+Thread-Topic: [PATCH v2] scsi: ufs: Avoid runtime suspend possibly being
+ blocked forever
+Thread-Index: AQHVITI9+7JKUiS0g0SPWsgtdJ5ukKaZPAkQ
+Date:   Thu, 13 Jun 2019 08:09:45 +0000
+Message-ID: <SN6PR04MB49255AE8236AAA9E41A046BFFCEF0@SN6PR04MB4925.namprd04.prod.outlook.com>
+References: <1560352745-24681-1-git-send-email-stanley.chu@mediatek.com>
+In-Reply-To: <1560352745-24681-1-git-send-email-stanley.chu@mediatek.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Avri.Altman@wdc.com; 
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c09de684-0f7c-4174-71a1-08d6efd67f22
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB4320;
+x-ms-traffictypediagnostic: SN6PR04MB4320:
+wdcipoutbound: EOP-TRUE
+x-microsoft-antispam-prvs: <SN6PR04MB4320D6A16E45D661959D22F2FCEF0@SN6PR04MB4320.namprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 0067A8BA2A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(366004)(39860400002)(136003)(396003)(189003)(199004)(66066001)(14454004)(55016002)(4326008)(72206003)(478600001)(9686003)(6436002)(5660300002)(71190400001)(71200400001)(76116006)(52536014)(25786009)(68736007)(74316002)(26005)(486006)(3846002)(305945005)(6116002)(6246003)(11346002)(186003)(7736002)(446003)(53936002)(476003)(15650500001)(99286004)(14444005)(316002)(8936002)(2501003)(102836004)(8676002)(73956011)(2906002)(229853002)(6506007)(81166006)(81156014)(76176011)(64756008)(66476007)(66556008)(66946007)(7696005)(256004)(110136005)(33656002)(86362001)(7416002)(54906003)(66446008)(2201001);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB4320;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 8khyZlb7HHirjOHU3H/WaA2lDtHHxAJ+L5bgQb4/6fhVP2wtCiYfXWKxjx0Fpge4hKA5ioJyY4f+sVotn8ZBQfqi8h+czPe+0hsgzpnWw06Bmzk9raQ2YfjuwvRddI/LkRnJ2E6beiZoNKUpAEB6t7OEwBJD0nHLFXTY2EV4agTrc/5Xc/7O3aufmitI8o5JZBF3lzc8ySfsqjBMUt7h0cCSuwtjNHtvHgcxuILPkVSGp3b5LSaa7CRIEm+wxaH52wGgGxtsdSlgHoa2Lh4xKTFNDWKOxVF/wWkClxfpXN0mSX0F9Xpzr7n14awuJdlNZDzFQPR6deFIaoCCISh8vYQJKvXkck80qNNVSb9hlaqoqkErSeuht0ByuwBbzn0xEE72A87hhbyyKGQoBraxrqoY5GGFHAun5c5g49+1sYI=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c09de684-0f7c-4174-71a1-08d6efd67f22
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2019 08:09:45.3577
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4320
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
-to /dev/mpt3ctl.  If the given task_type is either abort task or query
-task, it may need a field named "Initiator Port Transfer Tag to Manage"
-in the IU.
-
-Current code does not support to check target IPTT tag from the
-tm_request.  This patch introduces to check TaskMID given from the
-userspace as a target tag.  We have a rule of relationship between
-(struct request *req->tag) and smid in mpt3sas_base.c:
-
-3318 u16
-3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
-3320         struct scsi_cmnd *scmd)
-3321 {
-3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
-3323         unsigned int tag = scmd->request->tag;
-3324         u16 smid;
-3325
-3326         smid = tag + 1;
-
-So if we want to abort a request tagged #X, then we can pass (X + 1) to
-this IOCTL handler.
-
-Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
----
- drivers/scsi/mpt3sas/mpt3sas_ctl.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-index b2bb47c14d35..5c7539dae713 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-@@ -596,15 +596,17 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command *karg,
- 		if (priv_data->sas_target->handle != handle)
- 			continue;
- 		st = scsi_cmd_priv(scmd);
--		tm_request->TaskMID = cpu_to_le16(st->smid);
--		found = 1;
-+		if (tm_request->TaskMID == st->smid) {
-+			tm_request->TaskMID = cpu_to_le16(st->smid);
-+			found = 1;
-+		}
- 	}
- 
- 	if (!found) {
- 		dctlprintk(ioc,
--			   ioc_info(ioc, "%s: handle(0x%04x), lun(%d), no active mid!!\n",
-+			   ioc_info(ioc, "%s: handle(0x%04x), lun(%d), no matched mid(%d)!!\n",
- 				    desc, le16_to_cpu(tm_request->DevHandle),
--				    lun));
-+				    lun, tm_request->TaskMID));
- 		tm_reply = ioc->ctl_cmds.reply;
- 		tm_reply->DevHandle = tm_request->DevHandle;
- 		tm_reply->Function = MPI2_FUNCTION_SCSI_TASK_MGMT;
--- 
-2.16.1
+>=20
+> UFS runtime suspend can be triggered after pm_runtime_enable()
+> is invoked in ufshcd_pltfrm_init(). However if the first runtime
+> suspend is triggered before binding ufs_hba structure to ufs
+> device structure via platform_set_drvdata(), then UFS runtime
+> suspend will be no longer triggered in the future because its
+> dev->power.runtime_error was set in the first triggering and does
+> not have any chance to be cleared.
+>=20
+> To be more clear, dev->power.runtime_error is set if hba is NULL
+> in ufshcd_runtime_suspend() which returns -EINVAL to rpm_callback()
+> where dev->power.runtime_error is set as -EINVAL. In this case, any
+> future rpm_suspend() for UFS device fails because
+> rpm_check_suspend_allowed() fails due to non-zero
+> dev->power.runtime_error.
+>=20
+> To resolve this issue, make sure the first UFS runtime suspend
+> get valid "hba" in ufshcd_runtime_suspend(): Enable UFS runtime PM
+> only after hba is successfully bound to UFS device structure.
+>=20
+> Fixes: 62694735ca95 ([SCSI] ufs: Add runtime PM support for UFS host
+> controller driver)
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
 
