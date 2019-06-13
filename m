@@ -2,169 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBE244D72
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 22:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 906C044E15
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 23:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729764AbfFMU3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 16:29:36 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:47342 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726289AbfFMU3g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 16:29:36 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 2BE828EE147;
-        Thu, 13 Jun 2019 13:29:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1560457775;
-        bh=PtvfUn6JoY87TTiM3T3Oxwmuj7dVRXSDuVgjQPtgM5E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=p3LNuEr3AFUKnnir7+pX5dXWdcOSMeSIY2H6nmfZPBy44hrwE43oQ8Mxm1lfoaDRx
-         28xxlhc5Wra3b+Ed445H7U3XzYryswAPdlK8Zh5vPjDFLkmzi/WHLDj8hOc3Xitrtl
-         ztv/zL9ArG89jzlGIoNVU7k09Yy/P+Kbv2EtD2YU=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id krxMWJF8F_q3; Thu, 13 Jun 2019 13:29:34 -0700 (PDT)
-Received: from jarvis.lan (unknown [50.35.68.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6D7568EE0C7;
-        Thu, 13 Jun 2019 13:29:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1560457774;
-        bh=PtvfUn6JoY87TTiM3T3Oxwmuj7dVRXSDuVgjQPtgM5E=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=j2TK0V3FCtE/JlvHTcmpDOTZC+rc+DvnhXb/KTuJmB8hl6m4UXmD1eHXngOgsZnqT
-         I2f/00ccyx4am+RrZ/vnadujZzt1DGDoPrfzs09c1Gl6nSuDtH9vEZEv6I1VaD04Pf
-         BqURcrMilg/hdGPH8k3i9WQm1WUF+jPEg+CvFPNk=
-Message-ID: <1560457772.3329.81.camel@HansenPartnership.com>
-Subject: Re: [PATCH 1/8] block: add a helper function to read nr_setcs
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     dgilbert@interlog.com, Bart Van Assche <bvanassche@acm.org>,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        linux-block@vger.kernel.org
-Cc:     colyli@suse.de, linux-bcache@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-btrace@vger.kernel.org,
-        kent.overstreet@gmail.com, jaegeuk@kernel.org,
-        damien.lemoal@wdc.com
-Date:   Thu, 13 Jun 2019 13:29:32 -0700
-In-Reply-To: <9b7f2892-d8bf-8b95-c782-51b775d175ed@interlog.com>
-References: <20190613145955.4813-1-chaitanya.kulkarni@wdc.com>
-         <20190613145955.4813-2-chaitanya.kulkarni@wdc.com>
-         <9abfc2b8-4496-db7a-fcbb-b52102a67f8e@acm.org>
-         <f8ab9587-309b-79a0-e6fc-f6683176f498@interlog.com>
-         <1560443321.3329.42.camel@HansenPartnership.com>
-         <9b7f2892-d8bf-8b95-c782-51b775d175ed@interlog.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1729948AbfFMVFh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 17:05:37 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36941 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727274AbfFMVFh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 17:05:37 -0400
+Received: by mail-pf1-f196.google.com with SMTP id 19so32844pfa.4;
+        Thu, 13 Jun 2019 14:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nGIzlfyMtWXfYkMWkeMnt3GQvr8tI9iFdtflB9NEcR0=;
+        b=o6awC/yqgP89v7ZNzJm+Vx0n0TInFJFUyczt/ABMUyhorQQGQDKQvbAfmBt2ATTh0Z
+         0ovpyLfusP6v4zOcfT+7TnPp3cgeBSCryK0nGaorfLAQ8+ynXkvwYFD5B6ljHYyOrwR8
+         H2qTa3TrFVLw6PRdQYwfY8Ag08UlwPS/JNvdoxxLdh1ObEOImmVHFQ1hWMRksGToCnBh
+         zkn59dDEATw5M9p8RFqM1o4WldRjDnie09yFqcfYvFR7C3Dy06qqAIT6/3f5HbJgH9lY
+         BV2JUyjZdCBNTwwhjS6E4V2anyayn1sJAM995XwS40QlwNC02tkCl6cfNDB7VyEZQq1J
+         hcEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nGIzlfyMtWXfYkMWkeMnt3GQvr8tI9iFdtflB9NEcR0=;
+        b=tlZf4S0cg/4+ApvZj4+y4SERg2trr1M1Cjv99I62+Vvofusf/Tr6uYfHD9nwtCardo
+         bhmZepz6wSni0W/zZdBhvI8nrP9RyQlZhKprQOnV0b97TS4N2LjSUDsQozjk4rfmzSbk
+         EF8W/6xwZWtZIOXieacDq9UeSRvCK13NCWD6pZNG28gkTvMUZDx0v8JDiFXo+z/F25UC
+         N05zqUKUwxJrYX7onkkO9Cv8M9DulyWpctMX7riBkE7q5Gm7yc6ZjBrvAyWsb1jVInAp
+         jWxVV9wcGcuUUHKjg89D78Ffd64IEN3zX48sIaXIa+ipCT7LXWcEilgyItfVk4Ep3AUc
+         buag==
+X-Gm-Message-State: APjAAAVLo0X5b7x1KiPzS0ULVuPZekfwMHUG5w8oTUFIgZ0jNg+a3kL0
+        ZlbdDledlGDVcwj+e8scpB0=
+X-Google-Smtp-Source: APXvYqwAEyjLJQfMr+GN6f4kQuA5+N8IXcoBqBcGgZCHosfwOJRCA+Nsr6KriKTTOtkhDtsF/Y4bMA==
+X-Received: by 2002:a62:3543:: with SMTP id c64mr12639125pfa.242.1560459936281;
+        Thu, 13 Jun 2019 14:05:36 -0700 (PDT)
+Received: from localhost ([123.213.206.190])
+        by smtp.gmail.com with ESMTPSA id 128sm599697pff.16.2019.06.13.14.05.35
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 13 Jun 2019 14:05:35 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 06:05:33 +0900
+From:   Minwoo Im <minwoo.im.dev@gmail.com>
+To:     Minwoo Im <minwoo.im@samsung.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
+        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
+        "chaitra.basappa@broadcom.com" <chaitra.basappa@broadcom.com>,
+        "suganath-prabu.subramani@broadcom.com" 
+        <suganath-prabu.subramani@broadcom.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        Sarah Cho <sohyeon.jo@samsung.com>,
+        Sungjun Park <sj1228.park@samsung.com>,
+        Gyeongmin Nam <gm.nam@samsung.com>,
+        Sanggwan Lee <sanggwan.lee@samsung.com>
+Subject: Re: [RFC PATCH] mpt3sas: support target smid for [abort|query] task
+Message-ID: <20190613210533.GA25375@minwooim-desktop>
+References: <CGME20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36@epcms2p7>
+ <20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36@epcms2p7>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36@epcms2p7>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-06-13 at 15:26 -0400, Douglas Gilbert wrote:
-> On 2019-06-13 12:28 p.m., James Bottomley wrote:
-> > On Thu, 2019-06-13 at 12:07 -0400, Douglas Gilbert wrote:
-> > > On 2019-06-13 11:31 a.m., Bart Van Assche wrote:
-> > 
-> > [...]
-> > > > Please explain what makes you think that part_nr_sects_read()
-> > > > must
-> > > > be protected
-> > > > by an RCU read lock.
-> > > 
-> > > Dear reviewer,
-> > > Please rephrase the above sentence without the accusative tone.
-> > > Specifically, please do not use the phrase "what makes you think"
-> > > in this or any other code review. For example: "I believe
-> > > that..." is more accurate and less provocative.
-> > 
-> > Imputing "tone" to email is something we try to avoid because it
-> > never ends well, particularly for non-native speakers. Some
-> > languages (Russian) have no articles and if you take any English
-> > phrase and strip out all the articles it sounds a lot more
-> > aggressive.
+On 19-06-13 16:54:02, Minwoo Im wrote:
+> We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
+> to /dev/mpt3ctl.  If the given task_type is either abort task or query
+> task, it may need a field named "Initiator Port Transfer Tag to Manage"
+> in the IU.
 > 
-> Like you, I am not a native North American English speaker but I
-> have lived here long enough to realize that "what makes you think
-> ..." is not a pleasantry and it may be fishing for an emotive
-> reaction. It is not the type of expression that professionals would
-> use to make a point in a public forum.
-
-I'm not so sure of that, for instance what makes you think I don't do
-it in my own reviews?
-
-> I'm not talking about articles (e.g. "a" and "the"), I'm talking
-> about pronouns like "you" and "I". I'm not aware of any languages
-> without pronouns. IMO Bart uses expressions with "you" in them too
-> often when he is expressing _his_ opinion to the contrary.
-
-It's a grammatical tick not an insult and seeing it as such would help
-defuse the situation.  I know this is difficult; my own pet grammatical
-foible is having to contain it when I see "avoid that" in a patch
-subject, but I've managed (so far).
-
-> > > Observation: as a Canadian citizen when crossing the US border I
-> > > believe contradicting a US border official with the phrase "what
-> > > makes you think ..." could lead to a rather bad outcome :-)
-> > > Please make review comments with that in mind.
-> > 
-> > Different situation: we aren't profiling reviewers ...
+> Current code does not support to check target IPTT tag from the
+> tm_request.  This patch introduces to check TaskMID given from the
+> userspace as a target tag.  We have a rule of relationship between
+> (struct request *req->tag) and smid in mpt3sas_base.c:
 > 
-> Would you have used that expression when addressing a teacher at
-> high school or university? I'm looking for a yardstick of where
-> a reviewer should "pitch" their responses. The way you address
-> someone who has the ability to make your life uncomfortable (e.g.
-> by refusing you entry into their country) may just be such a
-> yardstick.
+> 3318 u16
+> 3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
+> 3320         struct scsi_cmnd *scmd)
+> 3321 {
+> 3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
+> 3323         unsigned int tag = scmd->request->tag;
+> 3324         u16 smid;
+> 3325
+> 3326         smid = tag + 1;
 > 
-> > > P.S. Do we have any Linux code-of-conduct for reviewers?
-> > 
-> > It's the same one for all interactions:
-> > 
-> > Documentation/process/code-of-conduct-interpretation.rst
-> > 
-> > But I would remind everyone that diversity isn't just a
-> > gender/race/LGBT issue it also means being understanding of the
-> > potential difficulties non-native speakers have with email in
-> > English.
+> So if we want to abort a request tagged #X, then we can pass (X + 1) to
+> this IOCTL handler.
 > 
-> To quote
->    https://www.contributor-covenant.org/version/1/4/code-of-conduct.h
-> tml
-> to which your above reference indirectly refers:
-> 
->     It calls for a "harassment-free experience for everyone,
->     regardless of ... expression ..."
+> Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
+> ---
 
-OK, we picked a code of conduct which is Anglo biased and doesn't take
-into account the linguistic diversity of the community; the various
-problems with the current code of conduct are why we have to have the
-interpretation document.
+Sorry for the duplicated patches on the same mailing list.  Please ignore
+the first two of it.
 
-> So informing someone (not for the first time) that readers of the
-> language in which they are writing, may take offence at their
-> expression is: not showing an "understanding of the potential
-> difficulties non-native speakers have" and thus is harassment?
-> Balance that with the angle of a reviewer trying to intimidate
-> the person presenting the code. Could that also be harassment?
-> In this case I see little evidence of the "potential difficulties"
-> to which you refer.
-
-The problem, as I see it, is that you're assuming malice where I
-wouldn't, even if linguistic issues weren't a potential issue.
-
-> More generally:
-> IMO those who have power speak in a condescending fashion and act
-> unilaterally in the matter of reviewing and applying patches. A
-> select few are allowed to apply patches seemingly without any
-> review and ignore error reports or attempts at public review.
-> It certainly does not look like a system based on merit.
-
-Is there, perhaps, some other deeper underlying issue for which this is
-serving as a proxy?
-
-James
-
+Thanks,
