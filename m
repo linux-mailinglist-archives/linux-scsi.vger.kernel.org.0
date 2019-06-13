@@ -2,85 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9330D44424
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F44443FA
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730912AbfFMQfE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 12:35:04 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:55908 "EHLO
+        id S1726473AbfFMQeD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 12:34:03 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:61124 "EHLO
         mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730733AbfFMHpS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 03:45:18 -0400
+        with ESMTP id S1730787AbfFMHyJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 03:54:09 -0400
 Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190613074515epoutp02a316765d8286746a68c90901bb168f0f~nsl6hOxwd2491124911epoutp027
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 07:45:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190613074515epoutp02a316765d8286746a68c90901bb168f0f~nsl6hOxwd2491124911epoutp027
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190613075406epoutp02d9ed3dd6281194f3e1a69cea0e20b8ea~nsto0RkN50187901879epoutp02Z
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 07:54:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190613075406epoutp02d9ed3dd6281194f3e1a69cea0e20b8ea~nsto0RkN50187901879epoutp02Z
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1560411915;
+        s=mail20170921; t=1560412446;
         bh=wzSwN4u5LkJkQagGovrAV/IuOaYbJLihVMExvb/oMPM=;
         h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=jEBSalUQJ1oRRkn4CwhvyZVi+JaoIF0/J27tJR8dkAwYuBkdOUA5fd+Hka+b9eGRM
-         r53Gmtvjzam3N+O5ZhLb5e8nzOSeHEn7uO8b/YOvMol0hEPKnt04W/6imjAepVnPZ1
-         thHMwQDf8ydNYJH/uAR04VEuaaqdFslPwvTOjq40=
-Received: from epsmges2p1.samsung.com (unknown [182.195.40.189]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20190613074512epcas2p10a951359c2519e822ad7704992aa6188~nsl31cA0g2450724507epcas2p1T;
-        Thu, 13 Jun 2019 07:45:12 +0000 (GMT)
-X-AuditID: b6c32a45-d47ff70000001063-53-5d01ff078130
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        8C.AF.04195.70FF10D5; Thu, 13 Jun 2019 16:45:11 +0900 (KST)
+        b=hBHQOEPIsoO+aFxvTpZVyEDoiRfWPbcqbS76HzOopffB651/CNE+UmP2jXBCZOPEY
+         +stdDLx4EHVyIRqh/YirI3DBLQ/Ux5DsntttvV6ch02rbaPhGnscRKchRQrOeBsY0q
+         AQgkLTcbswCN1InDhnDFwBoK0xBT8ipWoXVrnze8=
+Received: from epsmges2p3.samsung.com (unknown [182.195.40.182]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20190613075403epcas2p3b01bba2d3999339258a2b3a6897295fd~nstmLD5ZS3243632436epcas2p3L;
+        Thu, 13 Jun 2019 07:54:03 +0000 (GMT)
+X-AuditID: b6c32a47-5a93e9c00000106e-dc-5d02011aba0c
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
+        91.BE.04206.A11020D5; Thu, 13 Jun 2019 16:54:02 +0900 (KST)
 Mime-Version: 1.0
 Subject: [RFC PATCH] mpt3sas: support target smid for [abort|query] task
 Reply-To: minwoo.im@samsung.com
 From:   Minwoo Im <minwoo.im@samsung.com>
-To:     "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+To:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>
 CC:     Minwoo Im <minwoo.im@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
         "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
         "chaitra.basappa@broadcom.com" <chaitra.basappa@broadcom.com>,
         "suganath-prabu.subramani@broadcom.com" 
         <suganath-prabu.subramani@broadcom.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
         Sarah Cho <sohyeon.jo@samsung.com>,
+        Sungjun Park <sj1228.park@samsung.com>,
         Gyeongmin Nam <gm.nam@samsung.com>,
-        Sanggwan Lee <sanggwan.lee@samsung.com>,
-        Sungjun Park <sj1228.park@samsung.com>
+        Sanggwan Lee <sanggwan.lee@samsung.com>
 X-Priority: 3
 X-Content-Kind-Code: NORMAL
 X-Drm-Type: N,general
 X-Msg-Generator: Mail
 X-Msg-Type: PERSONAL
 X-Reply-Demand: N
-Message-ID: <20190613074511epcms2p4cfd590711eefbd66414400f46d87354a@epcms2p4>
-Date:   Thu, 13 Jun 2019 16:45:11 +0900
-X-CMS-MailID: 20190613074511epcms2p4cfd590711eefbd66414400f46d87354a
+Message-ID: <20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36@epcms2p7>
+Date:   Thu, 13 Jun 2019 16:54:02 +0900
+X-CMS-MailID: 20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="utf-8"
 X-Sendblock-Type: AUTO_CONFIDENTIAL
 CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUhTURjHO7vX6828dZwvnTRKb5QlqLujrVOkFWWsF0GrDxHZurnbFPfG
-        7pT0S7MXrIRYRGSjMg2caGml1kgCXalJFvSuRmYvGvmKRVKU2bY7qW+/c3ie///5P+fQhPwK
-        FU3nmmyC1cQbWCqEvH1/hSoxeBpkKT70q/HoaIMMvx/biCu7b8vw87sXKVz62k1hV8cfGR58
-        1ELgS8N2Ga5sGg/CNy73kri0U4PrPQ4KD3btXc9onO8eUxpHZQvQTAz0kprTjTVA8+3Wooyg
-        PYa1OQKvE6yxginbrMs16VPYbTu1G7UqtYJL5FbjVWysiTcKKeym7RmJm3MN3gnZ2ALekO+9
-        yuBFkU1OXWs159uE2ByzaEthBYvOYOE4S5LIG8V8kz4p22xcwykUSpW3cr8h50JdK7A0w0PV
-        007SDsqYU2A2jeBK1PC0lvSxHLoBmroedQrQNAPD0JQ73IfhUIO+1/tRDhejH0MKX3E4XIHG
-        mruCfEzBeGQ/N+QVCaEjYAdAPVXVMt+BgNMEspffoyQrBpWVDJASx6A7riYgcSTqqR0NnuHx
-        9vLAfQQ63veYkDgM9f9sBr4hEESobyxVwsOosRr7rBA8BlD3yPVAazIq/jzht2JgOnLcdPiZ
-        hEtRc/eJgOQm1PbhtN+W8Oa6M3qR8GkS3mD1d5Ml+SXoQS8pVcxFJ+5PBc8EcV/+JJN4CZrw
-        eAKKC5Dr2XAgrAZVXCuWSXvNREeel1MOsNj5b7XO/3yd/3yvAKIGRAkW0agXRKWF+/8xbwH/
-        70xIc4OyJ9s9ANKADWVgCMiSB/EFYqHRAxBNsBGMMm9WlpzR8YVFgtWsteYbBNEDVN74Z4jo
-        yGyz96+bbFpOpVSrFatVWKVWYnY+0zCnZ68c6nmbkCcIFsE60yejZ0fbwcL4l67irRv0RfqK
-        qq+NW7SdYQ03Y0qp4cm2wjhr22BN+qoS9+RH1pWa1pWrT8tMPnBIrJ5+kd70KPTqgiLq5L6o
-        vAt1fY7GVw9/11+rm8e92T/++eRZYd2ag3Hnd3T8XG6W7/qybKhlpF0V4inf3TqgK3X9qmrf
-        dbTf9dZUEJcZ086SYg7PJRBWkf8LXzkEYLMDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Se0hTURzu3Hu9TfPGaVn9WtDsRkiSua1mx9CIlFqkYfRfKOviLiru1e60
+        7IGL3iplSVDLzIyyjLLMx2pBNXvQE8perugBaS83Gz3ogdVeUv995+P7fb/vO+fIaHkjq5CV
+        mO2izSwYeTaO6eyeTlIUiCpQPX+sJD7fOYq89meRpqedFOm5UM+S6iculjTf+E2R/tuXaXLw
+        o4MiTR2DMeRMg5ch1Td1pNVTy5L+O/nzOZ3z5V1WV9t0GekCfV5Gt7O9Bek+t03Oi1lhzCgW
+        BYNoSxTNhRZDibkok1+yXJ+l16ap1CnqdDKHTzQLJjGTz87JS1lYYgwm5BPLBWNZkMoTJIlP
+        nZdhs5TZxcRii2TP5EWrwWhVq60zJcEklZmLZhZaTHPVKpVGG1SuNBbvP30FWd14zfE/TsaB
+        9nFVSCYDPBtO+xVVKE4mxy4EHcd2MSGew2NgyDU2BMdiHXxtDUM5VsL3D6oqFBtkp4PffScm
+        hFmcBI69H5iQSwK+geBtux+FDjT+Q0Nz7SMqpALMwb5tfUwET4Ku5g4UweOg96Rv5DAevH4o
+        yifAlhd36QgeA69+uFEkMsAL/7wIrIT24yS0CvBmBE8HTkVHU2Hj20B4FYdz4Yv7fTgog6fB
+        bc91NqLJhvsnnoV5Otiry1dPhzzpYLHWC6kR+6lw1ctEFKNhe/fQyOEiroY30VJTIeDxRENO
+        hOYHH6PuOni0pyY8K8fLwPn4JlWLlM5/V+v8b6/z395GRLeg8aJVMhWJksY66//HbEPh35m8
+        yIU67+V4EJYhPp7DcahAHiOUSxUmDwIZzSdwmtIRBXLOIFSsFW0Wva3MKEoepA3W300rxhVa
+        gn/dbNertZq0NFW6lmjTNISfwLWN6s2X4yLBLpaKolW0Dc9RsliFA+l/vPl1WPmpsid/aMae
+        pT1JjiTXlOQa5cbU+g3dPd2tvsZATbu3RnOk92fCemHa3IfXOuqULecG6P2LK39XZKyBbMOl
+        B5tWWrya+LZtA+UldWxA8SRPVAxOiVdvfbeqtPDit6GsWyO4uvPVa4+uXuDKXRdLYt3pvGlH
+        F5V+Vn5gMc9IxYI6mbZJwl8JXOrOswMAAA==
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190613074511epcms2p4cfd590711eefbd66414400f46d87354a
-References: <CGME20190613074511epcms2p4cfd590711eefbd66414400f46d87354a@epcms2p4>
+X-CMS-RootMailID: 20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36
+References: <CGME20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36@epcms2p7>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
