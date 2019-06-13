@@ -2,57 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF75B44353
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 815FB44538
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 18:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388147AbfFMQ2o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 12:28:44 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:41330 "EHLO
+        id S2392704AbfFMQmz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 12:42:55 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:41936 "EHLO
         bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730945AbfFMQ2n (ORCPT
+        by vger.kernel.org with ESMTP id S2392534AbfFMQmz (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:28:43 -0400
+        Thu, 13 Jun 2019 12:42:55 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0D5E68EE147;
-        Thu, 13 Jun 2019 09:28:43 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 30D738EE147;
+        Thu, 13 Jun 2019 09:42:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1560443323;
-        bh=bnTJZINKg659sWer2QpR3c5NeLkXTlt8sZRt1buXvPk=;
+        s=20151216; t=1560444174;
+        bh=5rFAkz1X1kpOdC2+E0ZK/h2h2P0mzwfVwxvWB0KgCOY=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=ECkUStv+npI9x1oyvMYlUKctnPIORbAWAMPFhOP6is+V2N0dN63FeLtDHVGFmXEN9
-         olnXF7NIMaBfyC0lR9pZ5uuKe7/fVu8GYIhaFH5IxI0V4C0qH0rsNexLnTz8aR6g7L
-         bXanZK2NoD9Z5mhlTLsmHbmWOatkkzO48mkWks9U=
+        b=O/UxWPf0c4lf0EGhwyA5/D8kCk7FBAVgtF9mUo524HGFz+ysv6UIJcjZNviXO6b0O
+         HrO+EMQXeW1EuczwRgun62bOJjbXy74xJ9QP7/C9KSBg4/LYE5NV+vYCrWhNkq2WJZ
+         yCH0HsHsooUEXnpirJliNGZwGE2loKEz03SKRJ2A=
 Received: from bedivere.hansenpartnership.com ([127.0.0.1])
         by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id DWyDetGG-Y6c; Thu, 13 Jun 2019 09:28:42 -0700 (PDT)
+        with ESMTP id CfJdZmgLTm_n; Thu, 13 Jun 2019 09:42:54 -0700 (PDT)
 Received: from jarvis.lan (unknown [50.35.68.20])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 5F8EA8EE0C7;
-        Thu, 13 Jun 2019 09:28:42 -0700 (PDT)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6D5A98EE0C7;
+        Thu, 13 Jun 2019 09:42:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1560443322;
-        bh=bnTJZINKg659sWer2QpR3c5NeLkXTlt8sZRt1buXvPk=;
+        s=20151216; t=1560444173;
+        bh=5rFAkz1X1kpOdC2+E0ZK/h2h2P0mzwfVwxvWB0KgCOY=;
         h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=c7M+KVMKOhi/zNVgKex9T2JCLcgRkBWN6q8nLxckxA3LLq79BjndZCUnWrz9y/WQk
-         vti4sGZfC6NwRYlQWLwH3hj03jxQ8rT5v0Hj0sypVWw6RcOQQRZXSG8upMqmBtKosz
-         U0d3IvxaxlsMbUzAJQgIT8K/Kt0g4EjcaLtBfHUs=
-Message-ID: <1560443321.3329.42.camel@HansenPartnership.com>
-Subject: Re: [PATCH 1/8] block: add a helper function to read nr_setcs
+        b=alzPDvrXP5wAuPbot1wVZp3gWPa+Xy/mi0kStVfn4EtTn/XtI5O9KUqo9XaiAWVFh
+         PYYul5LCPO8A31h336ZSvea8vH0BUAxqDeiL2x5SZtMXiebHM8hgtQ3FgZqZj1m0f9
+         8ZgQTeST8sHwWVLkCo26aK4qt0brJlc8BH9qw2iI=
+Message-ID: <1560444171.3329.46.camel@HansenPartnership.com>
+Subject: Re: [PATCH V2 00/15] scsi: use sg helper to operate sgl
 From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     dgilbert@interlog.com, Bart Van Assche <bvanassche@acm.org>,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        linux-block@vger.kernel.org
-Cc:     colyli@suse.de, linux-bcache@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-btrace@vger.kernel.org,
-        kent.overstreet@gmail.com, jaegeuk@kernel.org,
-        damien.lemoal@wdc.com
-Date:   Thu, 13 Jun 2019 09:28:41 -0700
-In-Reply-To: <f8ab9587-309b-79a0-e6fc-f6683176f498@interlog.com>
-References: <20190613145955.4813-1-chaitanya.kulkarni@wdc.com>
-         <20190613145955.4813-2-chaitanya.kulkarni@wdc.com>
-         <9abfc2b8-4496-db7a-fcbb-b52102a67f8e@acm.org>
-         <f8ab9587-309b-79a0-e6fc-f6683176f498@interlog.com>
+To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>
+Date:   Thu, 13 Jun 2019 09:42:51 -0700
+In-Reply-To: <20190613071335.5679-1-ming.lei@redhat.com>
+References: <20190613071335.5679-1-ming.lei@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
@@ -62,44 +64,40 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-06-13 at 12:07 -0400, Douglas Gilbert wrote:
-> On 2019-06-13 11:31 a.m., Bart Van Assche wrote:
-[...]
-> > Please explain what makes you think that part_nr_sects_read() must
-> > be protected 
-> > by an RCU read lock.
+On Thu, 2019-06-13 at 15:13 +0800, Ming Lei wrote:
+> Hi,
 > 
-> Dear reviewer,
-> Please rephrase the above sentence without the accusative tone.
-> Specifically, please do not use the phrase "what makes you think"
-> in this or any other code review. For example: "I believe that..."
-> is more accurate and less provocative.
+> Most of drivers use sg helpers to operate sgl, however there is
+> still a few drivers which operate sgl directly, this way can't
+> work in case of chained sgl.
 
-Imputing "tone" to email is something we try to avoid because it never
-ends well, particularly for non-native speakers. Some languages
-(Russian) have no articles and if you take any English phrase and strip
-out all the articles it sounds a lot more aggressive.
+This isn't a useful explanation of the issue you make it sound like a
+bug, which it isn't: it's a change of behaviour we'd like to introduce
+in SCSI.  Please reword the explanation more along the lines of
 
-> Observation: as a Canadian citizen when crossing the US border I
-> believe contradicting a US border official with the phrase "what
-> makes you think ..." could lead to a rather bad outcome :-)
-> Please make review comments with that in mind.
+---
+Scsi MQ makes a large static allocation for the first scatter gather
+list chunk for the driver to use.  This is a performance headache we'd
+like to fix by reducing the size of the allocation to a 2 element
+array.  Doing this will break the current guarantee that any driver
+using SG_ALL doesn't need to use the scatterlist iterators and can get
+away with directly dereferencing the array.  Thus we need to update all
+drivers to use the scatterlist iterators and remove direct indexing of
+the scatterlist array before reducing the initial scatterlist
+allocation size in SCSI.
+---
 
-Different situation: we aren't profiling reviewers ...
+Which explains what we're trying to do and why.
 
-> Thanks.
-> 
-> Doug Gilbert
-> 
-> P.S. Do we have any Linux code-of-conduct for reviewers?
+In particular changelogs like this
 
-It's the same one for all interactions:
+> The current way isn't safe for chained sgl, so use sgl helper to
+> operate sgl.
 
-Documentation/process/code-of-conduct-interpretation.rst
-
-But I would remind everyone that diversity isn't just a
-gender/race/LGBT issue it also means being understanding of the
-potential difficulties non-native speakers have with email in English.
+Are just plain wrong:  They were perfectly safe until you altered the
+conditions for using non-chained sgls.  Please use the above
+explanation in the patches, abbreviated if you like, so all recipients
+know why this needs doing and that it isn't an existing bug.
 
 James
 
