@@ -2,153 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BA943D26
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 17:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD1E43D06
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 17:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731911AbfFMPjm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 11:39:42 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:37580 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731919AbfFMJyY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 05:54:24 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 19so10678907pfa.4
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 02:54:23 -0700 (PDT)
+        id S1732177AbfFMPi7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 11:38:59 -0400
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:38047 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731939AbfFMJ5q (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 05:57:46 -0400
+Received: by mail-vs1-f68.google.com with SMTP id k9so3087129vso.5
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 02:57:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=hjw/27BiWyRsokNbznNmO94DEfRuOPMKzlIXgRI+H5k=;
-        b=WUhQgDpav09wCsvAut2BWW+R7sS7LtghDHpfI6v0bUGLZjzR+QUQRAULtuQ+dBOAS+
-         5B9NTVliKzqPVgFAQafRgRYnR51hBF4bFPqnp+SsVxb/s1dw527gW4ZdAD71YLZdwcQ0
-         kP0XOt6g2JH7P49I+eaVhp4nGWzzZa4kZC41fTHL4Dh4FeCF8y1xkbVGRNCVSFpZMYT1
-         seXbQTfhtWg/Y2ZFYMhZdfSkXlmqGNBTcy0L6z6YZU0v3YRzsY93irO3uxYz27fLorQY
-         xCaAv7PNE+Wc9gb1a0ZIBFgBoTFuvbNfAi4+vMKRTRmWIgoX9FjCYaWw5pHArsOCxWin
-         Y5wA==
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xbxjq+/UWnkmz/Lz2NuZarwVK3ifkKHPS3ppszMgh6E=;
+        b=fEqFpleuGhOamNp5m2EH71DOiuFlFeO8LAoM/7Lp8TSo2eVpZ9KPxeKGpTLl5GjcwV
+         S3d/AsmOzAXn2VmPPGGFecfnZaHbXbcxYJ+UVbXEz+fkjYrgIs2yGsUVg9uCX7fQmPrd
+         Vshj30LgbeysHLD1OUon+3yIb+M7yDp2isl3Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hjw/27BiWyRsokNbznNmO94DEfRuOPMKzlIXgRI+H5k=;
-        b=N0IXb9zae1S2rcNVRPkBeDYy25MAS908HuX6Sm8Z4Bt8vHqQ0vMRSOIMF/pC2V+S/V
-         lpZxcxY4qgvevNVz0PvOrlMCyGTGPhbmDAK7hUwpUsH+4WpkbDYwTgMVUX2YqRdLyYOY
-         c0TU2O8apIEVkJJwLXvkO69yT/r0Y6HyLZUjVzJgaVMeI/fcVq/eJzZnmTY/abC2MPvF
-         EqLStyH2MXLqkSEKd55c1OBN4uD+G89pr28Z0U7HyJwQGHJrmfGlhT/iySGYZCfGpt7v
-         A17CW/0isa2s9wF/SYVI5ZZQZfioKE9piIj5tjMphN2FZiwYPV4wO6yOprXI6LlruUrj
-         Qq2g==
-X-Gm-Message-State: APjAAAVcaZoMTmdKLI/BgMXqMwtYosQhiFnGLF+J+3gtgVclp0TxYmrR
-        gIb/x2QcL5rQN6Mzq2bAZYuTBQ==
-X-Google-Smtp-Source: APXvYqyRW+yesk5LbA1w8QMeFbdIKEhSaWce+1/TtkgKa+kMImAbjDmOqy9rTc27doz8KV05Ir4xXQ==
-X-Received: by 2002:a17:90a:3225:: with SMTP id k34mr4393711pjb.31.1560419663353;
-        Thu, 13 Jun 2019 02:54:23 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id u97sm3965453pjb.26.2019.06.13.02.54.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 02:54:21 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 15:24:19 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     swboyd@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
-        vincent.guittot@linaro.org, mturquette@baylibre.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
-        dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
-Message-ID: <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-2-rnayak@codeaurora.org>
- <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
- <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
- <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xbxjq+/UWnkmz/Lz2NuZarwVK3ifkKHPS3ppszMgh6E=;
+        b=Qde7uG6JCTDZzK+T30ga+45KC05o6uNYLe/5tTWIeQ9sYTGAd57aFZDM1u0rAkn/2m
+         KEZK0lH2Yp55GFpETqjDKKaKqE7z7KoXY6KXBhaWE6PJPzvahUseTDs9Bc1L8MMPvpT+
+         a7Ptw2Q/0SHRjm2GDaddeFTSLkzs6yjwSwF9pRGF8avbiyY13cnxJhVD4CN3SM5EexWV
+         Ea4x6qccGSSZGolZDZ6u4mpBvuWVjuGDdZuPLVDHzyvvM7wxEhRXBoXnNnHOnPj4d80T
+         FpkvwDDa2SXPEq5TUTgkBoPJ1UnLW9ZD4M7xKdoAKFDZGpMec6rSiUumkZG6SVvFq5b5
+         GxRA==
+X-Gm-Message-State: APjAAAWcVD/CPorlaZIlJVTkxuXf7jc0KGT3TAEPxjDFB+lbTxJJyQIK
+        eUFDgmRiNKeyGrhHOFMrsoFMoBF+vvG0TMGVang3iA==
+X-Google-Smtp-Source: APXvYqy8eW2B7bGa1hDxGrsKEeZEhxQC13lqGDOpm+tCyesLdD1fgE55BDfcTpopDHtmpo3xBKwWIrlu4iHQQYmeJtk=
+X-Received: by 2002:a67:ebcb:: with SMTP id y11mr8620799vso.138.1560419865266;
+ Thu, 13 Jun 2019 02:57:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+References: <20190607184053.GA11513@embeddedor>
+In-Reply-To: <20190607184053.GA11513@embeddedor>
+From:   Sumit Saxena <sumit.saxena@broadcom.com>
+Date:   Thu, 13 Jun 2019 15:27:33 +0530
+Message-ID: <CAL2rwxpUyVE5T2QBT7ze5QoeH3KgkXCWPwjgQKuAUrd4VxHEOg@mail.gmail.com>
+Subject: Re: [PATCH] scsi: megaraid_sas: Use struct_size() helper
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 12-06-19, 13:55, Viresh Kumar wrote:
-> Okay, I have applied this patch (alone) to the OPP tree with minor
-> modifications in commit log and diff.
+On Sat, Jun 8, 2019 at 12:10 AM Gustavo A. R. Silva
+<gustavo@embeddedor.com> wrote:
+>
+> One of the more common cases of allocation size calculations is finding
+> the size of a structure that has a zero-sized array at the end, along
+> with memory for some number of elements for that array. For example:
+>
+> struct MR_PD_CFG_SEQ_NUM_SYNC {
+>         ...
+>         struct MR_PD_CFG_SEQ seq[1];
+> } __packed;
+>
+> Make use of the struct_size() helper instead of an open-coded version
+> in order to avoid any potential type mistakes.
+>
+> So, replace the following form:
+>
+> sizeof(struct MR_PD_CFG_SEQ_NUM_SYNC) + (sizeof(struct MR_PD_CFG_SEQ) * (MAX_PHYSICAL_DEVICES - 1))
+>
+> with:
+>
+> struct_size(pd_sync, seq, MAX_PHYSICAL_DEVICES - 1)
+>
+> This code was detected with the help of Coccinelle.
+>
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
 
-And I have removed it now :)
-
-I am confused as hell on what we should be doing and what we are doing
-right now. And if we should do better.
-
-Let me explain with an example.
-
-- The clock provider supports following frequencies: 500, 600, 700,
-  800, 900, 1000 MHz.
-
-- The OPP table contains/supports only a subset: 500, 700, 1000 MHz.
-
-Now, the request to change the frequency starts from cpufreq
-governors, like schedutil when they calls:
-
-__cpufreq_driver_target(policy, 599 MHz, CPUFREQ_RELATION_L);
-
-CPUFREQ_RELATION_L means: lowest frequency at or above target. And so
-I would expect the frequency to get set to 600MHz (if we look at clock
-driver) or 700MHz (if we look at OPP table). I think we should decide
-this thing from the OPP table only as that's what the platform guys
-want us to use. So, we should end up with 700 MHz.
-
-Then we land into dev_pm_opp_set_rate(), which does this (which is
-code copied from earlier version of cpufreq-dt driver):
-
-- clk_round_rate(clk, 599 MHz).
-
-  clk_round_rate() returns the highest frequency lower than target. So
-  it must return 500 MHz (I haven't tested this yet, all theoretical).
-
-- _find_freq_ceil(opp_table, 500 MHz).
-
-  This works like CPUFREQ_RELATION_L, so we find lowest frequency >=
-  target freq. And so we should get: 500 MHz itself as OPP table has
-  it.
-
-- clk_set_rate(clk, 500 MHz).
-
-  This must be doing round-rate again, but I think we will settle with
-  500 MHz eventually.
-
-
-Now the questionnaire:
-
-- Is this whole exercise correct ?
-- We shouldn't have landed on 500 MHz, right ?
-- Is there anything wrong with the above theory (I am going to test it soon though).
-- Why do we need to do the first clock_round_rate() ? Should we remove
-  it ?
-
-
-
-Now lets move to this patch, which makes it more confusing.
-
-The OPP tables for CPUs and GPUs should already be somewhat like fmax
-tables for particular voltage values and that's why both cpufreq and
-OPP core try to find a frequency higher than target so we choose the
-most optimum one power-efficiency wise.
-
-For cases where the OPP table is only a subset of the clk-providers
-table (almost always), if we let the clock provider to find the
-nearest frequency (which is lower) we will run the CPU/GPU at a
-not-so-optimal frequency. i.e. if 500, 600, 700 MHz all need voltage
-to be 1.2 V, we should be running at 700 always, while we may end up
-running at 500 MHz.
-
-This kind of behavior (introduced by this patch) is important for
-other devices which want to run at the nearest frequency to target
-one, but not for CPUs/GPUs. So, we need to tag these IO devices
-separately, maybe from DT ? So we select the closest match instead of
-most optimal one.
-
-But lets fix the existing issues first and then think about this
-patch.
-
--- 
-viresh
+> ---
+>  drivers/scsi/megaraid/megaraid_sas_fusion.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> index a25b6b4b6548..56bd524dddbf 100644
+> --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> @@ -1191,7 +1191,7 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
+>  int
+>  megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend) {
+>         int ret = 0;
+> -       u32 pd_seq_map_sz;
+> +       size_t pd_seq_map_sz;
+>         struct megasas_cmd *cmd;
+>         struct megasas_dcmd_frame *dcmd;
+>         struct fusion_context *fusion = instance->ctrl_context;
+> @@ -1200,9 +1200,7 @@ megasas_sync_pd_seq_num(struct megasas_instance *instance, bool pend) {
+>
+>         pd_sync = (void *)fusion->pd_seq_sync[(instance->pd_seq_map_id & 1)];
+>         pd_seq_h = fusion->pd_seq_phys[(instance->pd_seq_map_id & 1)];
+> -       pd_seq_map_sz = sizeof(struct MR_PD_CFG_SEQ_NUM_SYNC) +
+> -                       (sizeof(struct MR_PD_CFG_SEQ) *
+> -                       (MAX_PHYSICAL_DEVICES - 1));
+> +       pd_seq_map_sz = struct_size(pd_sync, seq, MAX_PHYSICAL_DEVICES - 1);
+>
+>         cmd = megasas_get_cmd(instance);
+>         if (!cmd) {
+> --
+> 2.21.0
+>
