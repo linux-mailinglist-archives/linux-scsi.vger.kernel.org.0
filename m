@@ -2,24 +2,33 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E9B45413
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 07:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77494543C
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 07:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725864AbfFNFjG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Jun 2019 01:39:06 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:55994 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725808AbfFNFjG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 Jun 2019 01:39:06 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id C026922BFB;
-        Fri, 14 Jun 2019 01:39:01 -0400 (EDT)
-Date:   Fri, 14 Jun 2019 15:39:10 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
+        id S1726017AbfFNFs1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Jun 2019 01:48:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47826 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725801AbfFNFs1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 14 Jun 2019 01:48:27 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 60C122133D;
+        Fri, 14 Jun 2019 05:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560491306;
+        bh=VSW1Yi1WUX3bgXsbFbk8tVjvLE83E3JNc9bzd89Pv6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0uw2nntHXiooJt2oxdTguna2RDTHM4B8zoHPe938P1k7E/G64rBj+gQy5a5XUouux
+         M8tI1nKSCflY0bZ+Npg/a3TE7rWWinr0r+Oe28d4yQOosHp38spAv1p6yrB8dfpUb4
+         /eyuz8SypS0Yr7qiHsdkQfDm7Eua5ONROwy8C5Us=
+Date:   Fri, 14 Jun 2019 07:48:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Ming Lei <ming.lei@redhat.com>
-cc:     linux-scsi@vger.kernel.org,
+Cc:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
         Bart Van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.com>,
         Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
@@ -29,25 +38,26 @@ cc:     linux-scsi@vger.kernel.org,
         James Smart <james.smart@broadcom.com>,
         "Juergen E . Fischer" <fischer@norbit.de>,
         Michael Schmitz <schmitzmic@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Finn Thain <fthain@telegraphics.com.au>,
         devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Oliver Neukum <oliver@neukum.org>
-Subject: Re: [PATCH V3 07/15] usb: image: microtek: use sg helper to operate
- scatterlist
-In-Reply-To: <20190614025316.7360-8-ming.lei@redhat.com>
-Message-ID: <alpine.LNX.2.21.1906141536000.33@nippy.intranet>
-References: <20190614025316.7360-1-ming.lei@redhat.com> <20190614025316.7360-8-ming.lei@redhat.com>
+        Benjamin Block <bblock@linux.ibm.com>
+Subject: Re: [PATCH V3 08/15] staging: unisys: visorhba: use sg helper to
+ operate scatterlist
+Message-ID: <20190614054824.GA27319@kroah.com>
+References: <20190614025316.7360-1-ming.lei@redhat.com>
+ <20190614025316.7360-9-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190614025316.7360-9-ming.lei@redhat.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 14 Jun 2019, Ming Lei wrote:
-
+On Fri, Jun 14, 2019 at 10:53:09AM +0800, Ming Lei wrote:
 > Use the scatterlist iterators and remove direct indexing of the
 > scatterlist array.
 > 
@@ -55,89 +65,11 @@ On Fri, 14 Jun 2019, Ming Lei wrote:
 > chained with one runtime allocated scatterlist if the pre-allocated one
 > isn't enough for the whole request.
 > 
-> Cc: Oliver Neukum <oliver@neukum.org>
+> Cc: devel@driverdev.osuosl.org
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-usb@vger.kernel.org
 > Signed-off-by: Ming Lei <ming.lei@redhat.com>
 > ---
->  drivers/usb/image/microtek.c | 20 ++++++++------------
->  drivers/usb/image/microtek.h |  2 +-
->  2 files changed, 9 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
-> index 607be1f4fe27..0a57c2cc8e5a 100644
-> --- a/drivers/usb/image/microtek.c
-> +++ b/drivers/usb/image/microtek.c
-> @@ -488,7 +488,6 @@ static void mts_command_done( struct urb *transfer )
->  
->  static void mts_do_sg (struct urb* transfer)
->  {
-> -	struct scatterlist * sg;
->  	int status = transfer->status;
->  	MTS_INT_INIT();
->  
-> @@ -500,13 +499,12 @@ static void mts_do_sg (struct urb* transfer)
->  		mts_transfer_cleanup(transfer);
->          }
->  
-> -	sg = scsi_sglist(context->srb);
-> -	context->fragment++;
-> +	context->curr_sg = sg_next(context->curr_sg);
->  	mts_int_submit_urb(transfer,
->  			   context->data_pipe,
-> -			   sg_virt(&sg[context->fragment]),
-> -			   sg[context->fragment].length,
-> -			   context->fragment + 1 == scsi_sg_count(context->srb) ?
-> +			   sg_virt(context->curr_sg),
-> +			   context->curr_sg->length,
-> +			   sg_is_last(context->curr_sg) ?
->  			   mts_data_done : mts_do_sg);
->  }
->  
-> @@ -526,22 +524,20 @@ static void
->  mts_build_transfer_context(struct scsi_cmnd *srb, struct mts_desc* desc)
->  {
->  	int pipe;
-> -	struct scatterlist * sg;
-> -	
-> +
->  	MTS_DEBUG_GOT_HERE();
->  
->  	desc->context.instance = desc;
->  	desc->context.srb = srb;
-> -	desc->context.fragment = 0;
->  
->  	if (!scsi_bufflen(srb)) {
->  		desc->context.data = NULL;
->  		desc->context.data_length = 0;
->  		return;
->  	} else {
-> -		sg = scsi_sglist(srb);
-> -		desc->context.data = sg_virt(&sg[0]);
-> -		desc->context.data_length = sg[0].length;
-> +		desc->context.curr_sg = scsi_sglist(srb);
-> +		desc->context.data = sg_virt(desc->context.curr_sg);
-> +		desc->context.data_length = desc->context.curr_sg->length;
->  	}
->  
+>  drivers/staging/unisys/visorhba/visorhba_main.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 
-Would it not be better to initialize desc->context.curr_sg in both 
-branches of this conditional?
-
--- 
-
->  
-> diff --git a/drivers/usb/image/microtek.h b/drivers/usb/image/microtek.h
-> index 66685e59241a..7bd5f4639c4a 100644
-> --- a/drivers/usb/image/microtek.h
-> +++ b/drivers/usb/image/microtek.h
-> @@ -21,7 +21,7 @@ struct mts_transfer_context
->  	void *data;
->  	unsigned data_length;
->  	int data_pipe;
-> -	int fragment;
-> +	struct scatterlist *curr_sg;
->  
->  	u8 *scsi_status; /* status returned from ep_response after command completion */
->  };
-> 
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
