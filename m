@@ -2,91 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2D746352
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 17:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F6546616
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 19:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbfFNPsg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Jun 2019 11:48:36 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:48852 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725775AbfFNPsg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 14 Jun 2019 11:48:36 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 3BF7377BCBC15E276B64;
-        Fri, 14 Jun 2019 23:48:31 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Fri, 14 Jun 2019
- 23:48:24 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <QLogic-Storage-Upstream@cavium.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] scsi: qedi: Make some symbols static
-Date:   Fri, 14 Jun 2019 23:48:20 +0800
-Message-ID: <20190614154820.26744-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1726817AbfFNRsX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Jun 2019 13:48:23 -0400
+Received: from smtp2.ono.com ([62.42.230.179]:38699 "EHLO smtp2.ono.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726082AbfFNRsW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 14 Jun 2019 13:48:22 -0400
+X-Junkmail-Premium-Raw: score=26/50,refid=2.7.2:2019.6.14.164816:17:26.894,ip=62.42.230.134,rules=__HAS_MSGID,
+ __SANE_MSGID, MSGID_JMAIL_DEFAULT, INVALID_MSGID_NO_FQDN, __HAS_FROM,
+ FROM_NAME_PHRASE, FROM_NAME_ALLCAPS, __HAS_REPLYTO, __FRAUD_WEBMAIL_REPLYTO,
+ BLANK_SUBJECT, __MIME_VERSION, __CT, __CT_TEXT_PLAIN, __CTE, MISSING_HEADERS,
+ __ANY_URI, __FRAUD_BODY_WEBMAIL, __URI_NO_WWW, __NO_HTML_TAG_RAW,
+ BODYTEXTP_SIZE_400_LESS, BODY_SIZE_200_299, BODYTEXTP_SIZE_3000_LESS,
+ __MIME_TEXT_P1, __MIME_TEXT_ONLY, __URI_NS, HTML_00_01, HTML_00_10,
+ BODY_SIZE_5000_LESS, __FRAUD_WEBMAIL, WEBMAIL_REPLYTO_NOT_FROM,
+ FRAUD_WEBMAIL_R_NOT_F, __MIME_TEXT_P, FRAUD_LITTLE_BODY,
+ __PHISH_SPEAR_STRUCTURE_1, BODY_SIZE_1000_LESS, BODY_SIZE_2000_LESS,
+ SMALL_BODY, __PHISH_SPEAR_STRUCTURE_2, REPLYTO_FROM_DIFF_ADDY, NO_URI_HTTPS,
+ BODY_SIZE_7000_LESS, TO_MALFORMED
+Received: from resprs04 (62.42.230.134) by smtp2.ono.com (9.0.019.09-1)
+        id 5CAF0F5D033A9A92; Fri, 14 Jun 2019 19:48:18 +0200
+Received: from (149.126.75.1) by webmailcpr04n.ono.com;  Fri, 14 Jun 2019 19:48:17 +0200
+Message-ID: <33296203.262531560534497614.JavaMail.defaultUser@defaultHost>
+Date:   Fri, 14 Jun 2019 19:48:17 +0200 (CEST)
+From:   DR ALBERT ZONGO <rjpd@ono.com>
+Reply-To: dralbertddzongo@gmail.com
+Subject: 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain;charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix sparse warnings:
 
-drivers/scsi/qedi/qedi_iscsi.c:1541:6: warning:
- symbol 'qedi_get_iscsi_error' was not declared. Should it be static?
-drivers/scsi/qedi/qedi_main.c:1806:17: warning:
- symbol 'qedi_get_cmd_from_tid' was not declared. Should it be static?
-drivers/scsi/qedi/qedi_main.c:47:6: warning:
- symbol 'qedi_ll2_buf_size' was not declared. Should it be static?
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/scsi/qedi/qedi_iscsi.c | 2 +-
- drivers/scsi/qedi/qedi_main.c  | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
-index 8829880..e0bc8c8 100644
---- a/drivers/scsi/qedi/qedi_iscsi.c
-+++ b/drivers/scsi/qedi/qedi_iscsi.c
-@@ -1535,7 +1535,7 @@ static const struct {
- 	},
- };
- 
--char *qedi_get_iscsi_error(enum iscsi_error_types err_code)
-+static char *qedi_get_iscsi_error(enum iscsi_error_types err_code)
- {
- 	int i;
- 	char *msg = NULL;
-diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
-index 1b58e63..4651a20 100644
---- a/drivers/scsi/qedi/qedi_main.c
-+++ b/drivers/scsi/qedi/qedi_main.c
-@@ -41,7 +41,7 @@ module_param(qedi_io_tracing, uint, 0644);
- MODULE_PARM_DESC(qedi_io_tracing,
- 		 " Enable logging of SCSI requests/completions into trace buffer. (default off).");
- 
--uint qedi_ll2_buf_size = 0x400;
-+static uint qedi_ll2_buf_size = 0x400;
- module_param(qedi_ll2_buf_size, uint, 0644);
- MODULE_PARM_DESC(qedi_ll2_buf_size,
- 		 "parameter to set ping packet size, default - 0x400, Jumbo packets - 0x2400.");
-@@ -1813,7 +1813,7 @@ void qedi_get_proto_itt(struct qedi_ctx *qedi, u32 tid, u32 *proto_itt)
- 		  tid, *proto_itt);
- }
- 
--struct qedi_cmd *qedi_get_cmd_from_tid(struct qedi_ctx *qedi, u32 tid)
-+static struct qedi_cmd *qedi_get_cmd_from_tid(struct qedi_ctx *qedi, u32 tid)
- {
- 	struct qedi_cmd *cmd = NULL;
- 
--- 
-2.7.4
+--
+Greetings,
 
+I have an intending proposal for you please i need you to contact my 
+private
+
+ E-mail (dralbertddzongo@gmail.com) for more updates,
+
+Best Wishes.
+
+DR ALBERT ZONGO
+
+--
 
