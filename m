@@ -2,158 +2,154 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E07C145235
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 04:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A7C453FB
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 07:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726831AbfFNCyr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 22:54:47 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34668 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726259AbfFNCyp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 22:54:45 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 8BDF35944C;
-        Fri, 14 Jun 2019 02:54:44 +0000 (UTC)
-Received: from localhost (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C24375C3F8;
-        Fri, 14 Jun 2019 02:54:43 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-Subject: [PATCH V3 15/15] NCR5380: Support chained sg lists
-Date:   Fri, 14 Jun 2019 10:53:16 +0800
-Message-Id: <20190614025316.7360-16-ming.lei@redhat.com>
-In-Reply-To: <20190614025316.7360-1-ming.lei@redhat.com>
-References: <20190614025316.7360-1-ming.lei@redhat.com>
+        id S1725812AbfFNF1i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Jun 2019 01:27:38 -0400
+Received: from mail-pl1-f170.google.com ([209.85.214.170]:44633 "EHLO
+        mail-pl1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726114AbfFNF1h (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 Jun 2019 01:27:37 -0400
+Received: by mail-pl1-f170.google.com with SMTP id t7so501582plr.11
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 22:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gpmRrAai2U/u8FOxmf1mMEHtb8C5DvBiK/78zCxWoN8=;
+        b=FdtBwKkGrvc8PbkOh7IgHRgb+bO406Z3RgusnYcYmsIkqRO8qW5ggLC/SPBKMfBsK2
+         PesYYhBmzjDv4oFUeFgNGNgrVn9OhG6mawN1KgvA5PRLbqEZ4r6b2BDd4mu+7LMJKEoC
+         v3zMw08i6e4xTK71w47QkprUWXzQQe3AMsDDNfZ10xd3gFDUKOzG9z8e+mmrzznd3gME
+         p8R3KCVWTAOEb0hwDzrOw0tpa2pEI7n7eVqcO+zZvOtCqlSoIh4M/i74FRgLRGoRwaMG
+         M8uzUA+O3fsjv2HRPPyu8ZZVN8th2KR+5YcNfF+x7GMwHxgW03ayzewUvHxZTgiEOzWR
+         b1GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gpmRrAai2U/u8FOxmf1mMEHtb8C5DvBiK/78zCxWoN8=;
+        b=UQ3rG0OwVOO4SuqBG+rt/roC+g99Xk4AcbkE2aGs5e/T0znljupnpUATQAuPZ/KelG
+         Rcxgdu2jZnSmeGyYqocbW7pbEXy0mUPVC5+iIbAlCC79NYtCtXf188TBatOkuWynfpw+
+         JyT09EiEErR6SWpue0sG43oane30cZoQ69nFTwX3H1i5bzqG4VkMLM/fnuXEZxTG+pJq
+         duaSgKQlx2MBRUpmKZW6qpLUaWhA1Ngyegp+bOB9LqIAXSwQdJ7EhsYhOmw23HYhzei+
+         Pc+05jMBIU54mKJ9rqDuycGnjapBz6arthq1ooUbqvUNlcfvm7EpIO5mqfmA6/jLiV0d
+         wY2Q==
+X-Gm-Message-State: APjAAAUohcTUQafM2KnYkzYDbRTnfygAKm3oJ4myr0gS8SFC0hEh45ke
+        heiXfkqmvTAbkXDzXdJKeplo4w==
+X-Google-Smtp-Source: APXvYqyzY+ZcDwS257e/DcRosvfsCUeYIQheDqeTIxEJrU3JUxKmTdM1JbGHllR8eOi2yEYOZ8KXFQ==
+X-Received: by 2002:a17:902:7c90:: with SMTP id y16mr1583679pll.238.1560490056827;
+        Thu, 13 Jun 2019 22:27:36 -0700 (PDT)
+Received: from localhost ([122.172.66.84])
+        by smtp.gmail.com with ESMTPSA id f88sm2289322pjg.5.2019.06.13.22.27.34
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 13 Jun 2019 22:27:34 -0700 (PDT)
+Date:   Fri, 14 Jun 2019 10:57:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     swboyd@chromium.org, Rajendra Nayak <rnayak@codeaurora.org>,
+        vincent.guittot@linaro.org, mturquette@baylibre.com
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-scsi@vger.kernel.org, ulf.hansson@linaro.org,
+        dianders@chromium.org, rafael@kernel.org
+Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
+Message-ID: <20190614052732.4w6vvwwich2h4cgu@vireshk-i7>
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
+ <20190320094918.20234-2-rnayak@codeaurora.org>
+ <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+ <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
+ <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
+ <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Fri, 14 Jun 2019 02:54:44 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Finn Thain <fthain@telegraphics.com.au>
+On 13-06-19, 15:24, Viresh Kumar wrote:
+> I am confused as hell on what we should be doing and what we are doing
+> right now. And if we should do better.
+> 
+> Let me explain with an example.
+> 
+> - The clock provider supports following frequencies: 500, 600, 700,
+>   800, 900, 1000 MHz.
+> 
+> - The OPP table contains/supports only a subset: 500, 700, 1000 MHz.
+> 
+> Now, the request to change the frequency starts from cpufreq
+> governors, like schedutil when they calls:
+> 
+> __cpufreq_driver_target(policy, 599 MHz, CPUFREQ_RELATION_L);
+> 
+> CPUFREQ_RELATION_L means: lowest frequency at or above target. And so
+> I would expect the frequency to get set to 600MHz (if we look at clock
+> driver) or 700MHz (if we look at OPP table). I think we should decide
+> this thing from the OPP table only as that's what the platform guys
+> want us to use. So, we should end up with 700 MHz.
+> 
+> Then we land into dev_pm_opp_set_rate(), which does this (which is
+> code copied from earlier version of cpufreq-dt driver):
+> 
+> - clk_round_rate(clk, 599 MHz).
+> 
+>   clk_round_rate() returns the highest frequency lower than target. So
+>   it must return 500 MHz (I haven't tested this yet, all theoretical).
+> 
+> - _find_freq_ceil(opp_table, 500 MHz).
+> 
+>   This works like CPUFREQ_RELATION_L, so we find lowest frequency >=
+>   target freq. And so we should get: 500 MHz itself as OPP table has
+>   it.
+> 
+> - clk_set_rate(clk, 500 MHz).
+> 
+>   This must be doing round-rate again, but I think we will settle with
+>   500 MHz eventually.
+> 
+> 
+> Now the questionnaire:
+> 
+> - Is this whole exercise correct ?
 
-My understanding is that support for chained scatterlists is to
-become mandatory for LLDs.
+No, I missed the call to cpufreq_frequency_table_target() in
+__cpufreq_driver_target() which finds the exact frequency from cpufreq table
+(which was created using opp table) and so we never screw up here. Sorry for
+confusing everyone on this :(
 
-Use the scatterlist iterators and remove direct indexing of the
-scatterlist array.
+> Now lets move to this patch, which makes it more confusing.
+> 
+> The OPP tables for CPUs and GPUs should already be somewhat like fmax
+> tables for particular voltage values and that's why both cpufreq and
+> OPP core try to find a frequency higher than target so we choose the
+> most optimum one power-efficiency wise.
+> 
+> For cases where the OPP table is only a subset of the clk-providers
+> table (almost always), if we let the clock provider to find the
+> nearest frequency (which is lower) we will run the CPU/GPU at a
+> not-so-optimal frequency. i.e. if 500, 600, 700 MHz all need voltage
+> to be 1.2 V, we should be running at 700 always, while we may end up
+> running at 500 MHz.
 
-This way allows us to pre-allocate one small scatterlist, which can be
-chained with one runtime allocated scatterlist if the pre-allocated one
-isn't enough for the whole request.
+This won't happen for CPUs because of the reason I explained earlier. cpufreq
+core does the rounding before calling dev_pm_opp_set_rate(). And no other
+devices use dev_pm_opp_set_rate() right now apart from CPUs, so we are not going
+to break anything.
 
-Cc: Michael Schmitz <schmitzmic@gmail.com>
-Reviewed-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
----
- drivers/scsi/NCR5380.c | 41 ++++++++++++++++++-----------------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
+> This kind of behavior (introduced by this patch) is important for
+> other devices which want to run at the nearest frequency to target
+> one, but not for CPUs/GPUs. So, we need to tag these IO devices
+> separately, maybe from DT ? So we select the closest match instead of
+> most optimal one.
 
-diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
-index fe0535affc14..4ef44fafe6ca 100644
---- a/drivers/scsi/NCR5380.c
-+++ b/drivers/scsi/NCR5380.c
-@@ -149,12 +149,10 @@ static inline void initialize_SCp(struct scsi_cmnd *cmd)
- 
- 	if (scsi_bufflen(cmd)) {
- 		cmd->SCp.buffer = scsi_sglist(cmd);
--		cmd->SCp.buffers_residual = scsi_sg_count(cmd) - 1;
- 		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
- 		cmd->SCp.this_residual = cmd->SCp.buffer->length;
- 	} else {
- 		cmd->SCp.buffer = NULL;
--		cmd->SCp.buffers_residual = 0;
- 		cmd->SCp.ptr = NULL;
- 		cmd->SCp.this_residual = 0;
- 	}
-@@ -163,6 +161,17 @@ static inline void initialize_SCp(struct scsi_cmnd *cmd)
- 	cmd->SCp.Message = 0;
- }
- 
-+static inline void advance_sg_buffer(struct scsi_cmnd *cmd)
-+{
-+	struct scatterlist *s = cmd->SCp.buffer;
-+
-+	if (!cmd->SCp.this_residual && s && !sg_is_last(s)) {
-+		cmd->SCp.buffer = sg_next(s);
-+		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
-+		cmd->SCp.this_residual = cmd->SCp.buffer->length;
-+	}
-+}
-+
- /**
-  * NCR5380_poll_politely2 - wait for two chip register values
-  * @hostdata: host private data
-@@ -1672,12 +1681,7 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
- 			    sun3_dma_setup_done != cmd) {
- 				int count;
- 
--				if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
--					++cmd->SCp.buffer;
--					--cmd->SCp.buffers_residual;
--					cmd->SCp.this_residual = cmd->SCp.buffer->length;
--					cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
--				}
-+				advance_sg_buffer(cmd);
- 
- 				count = sun3scsi_dma_xfer_len(hostdata, cmd);
- 
-@@ -1727,15 +1731,11 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
- 				 * scatter-gather list, move onto the next one.
- 				 */
- 
--				if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
--					++cmd->SCp.buffer;
--					--cmd->SCp.buffers_residual;
--					cmd->SCp.this_residual = cmd->SCp.buffer->length;
--					cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
--					dsprintk(NDEBUG_INFORMATION, instance, "%d bytes and %d buffers left\n",
--					         cmd->SCp.this_residual,
--					         cmd->SCp.buffers_residual);
--				}
-+				advance_sg_buffer(cmd);
-+				dsprintk(NDEBUG_INFORMATION, instance,
-+					"this residual %d, sg ents %d\n",
-+					cmd->SCp.this_residual,
-+					sg_nents(cmd->SCp.buffer));
- 
- 				/*
- 				 * The preferred transfer method is going to be
-@@ -2136,12 +2136,7 @@ static void NCR5380_reselect(struct Scsi_Host *instance)
- 	if (sun3_dma_setup_done != tmp) {
- 		int count;
- 
--		if (!tmp->SCp.this_residual && tmp->SCp.buffers_residual) {
--			++tmp->SCp.buffer;
--			--tmp->SCp.buffers_residual;
--			tmp->SCp.this_residual = tmp->SCp.buffer->length;
--			tmp->SCp.ptr = sg_virt(tmp->SCp.buffer);
--		}
-+		advance_sg_buffer(tmp);
- 
- 		count = sun3scsi_dma_xfer_len(hostdata, tmp);
- 
+Hmm, so this patch won't break anything and I am inclined to apply it again :)
+
+Does anyone see any other issues with it, which I might be missing ?
+
 -- 
-2.20.1
-
+viresh
