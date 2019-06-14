@@ -2,125 +2,144 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C115454C2
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 08:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE8A845524
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 08:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725836AbfFNGcO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Jun 2019 02:32:14 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:38240 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725775AbfFNGcO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 Jun 2019 02:32:14 -0400
-Received: by mail-pl1-f193.google.com with SMTP id f97so587146plb.5
-        for <linux-scsi@vger.kernel.org>; Thu, 13 Jun 2019 23:32:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+B7qKXGJFcpQLr7qp/Npmcr+UB+pLON9p4u3OT4sydE=;
-        b=IteYjWMcdrUIqBhhG5AEnX6ufnl4qdQ94/AhbuAqyXzyusOiHbjueExr31Z/7k3vK1
-         8qxjudR4xriHfmMP9c6US25vQWx1jXjkH8k/Mu3slZvFI70Hc9fpA4PC3oQ3cfq1GnBz
-         DfiY/Ib8YY5gn+P1ODVqEgVHY/OCOLDh+1M7OSwV8m1AeZ5bgYJrZvSrMPc7hH111ZRA
-         oE5TmKKmdmW3InOVhB9xPk5eSBVIU7YqJ2GCgHUCJMKB/rJVw1WSQxmqP9gSfpKZ/htO
-         va49FUHCzSBqKq6qVHw9WUMQZMZWYPylyZmguBUq1jqSAbUvDs/rqipmfDendsqMUjtu
-         zJtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+B7qKXGJFcpQLr7qp/Npmcr+UB+pLON9p4u3OT4sydE=;
-        b=tfPAElI56HoCeIyxdmVuLh5MQsa2im7woM3lXJPWZXZDkyq2F2mhEPpGibZlN+8jjL
-         ypuOnBwEwUwr0XbpgAO7pPBkGLkFhqvKuEuBcT/u97sOe+T/2kEyQJPBY9Qjx/eUMVym
-         5TWgGKfQsdAdA17aTkD9Jy06KdcPql6Y+yHs7/2c+bpby5Tvqir7YGnbaziP7ys5yLlg
-         neta4r3N2vwx8EeOqSsA2T+iUEY0C4FQCxjRvDB0XgmyOUEzU3lRC9z+cnZ6F5N0UVUQ
-         tL6TK2wHiTTm7R3C3TKMeWcTFucuiU+OBTL+L4KVyJ8QbdfHNgV+DKCl2RhqwcnW8bOZ
-         /5QQ==
-X-Gm-Message-State: APjAAAWnv1UayZMJFOMdd12zFtknnqwVNWPmFGdfwlNWBe1LFS8505wQ
-        CLo6ENkS8o7fSNs0IKhyKaV4zQ==
-X-Google-Smtp-Source: APXvYqwaUgWQWH6DKaYdF1Cdc9oLYapZi22Rqa6xAUqkllNSLwfCxqoVWtlD/qftHOdi36hhnvLW8A==
-X-Received: by 2002:a17:902:2ba9:: with SMTP id l38mr85574068plb.300.1560493933681;
-        Thu, 13 Jun 2019 23:32:13 -0700 (PDT)
-Received: from localhost ([122.172.66.84])
-        by smtp.gmail.com with ESMTPSA id x25sm1719091pfm.48.2019.06.13.23.32.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 13 Jun 2019 23:32:12 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 12:02:10 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Rajendra Nayak <rnayak@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-scsi@vger.kernel.org, swboyd@chromium.org,
-        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
-Subject: Re: [RFC v2 02/11] OPP: Make dev_pm_opp_set_rate() with freq=0 as
- valid
-Message-ID: <20190614063210.lfsquoycronah3fe@vireshk-i7>
-References: <20190320094918.20234-1-rnayak@codeaurora.org>
- <20190320094918.20234-3-rnayak@codeaurora.org>
+        id S1726011AbfFNG56 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Jun 2019 02:57:58 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:34620 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725837AbfFNG56 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 14 Jun 2019 02:57:58 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id F32B259463;
+        Fri, 14 Jun 2019 06:57:57 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-17.pek2.redhat.com [10.72.8.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7AC7A39C3;
+        Fri, 14 Jun 2019 06:57:43 +0000 (UTC)
+Date:   Fri, 14 Jun 2019 14:57:38 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Oliver Neukum <oliver@neukum.org>
+Subject: Re: [PATCH V3 07/15] usb: image: microtek: use sg helper to operate
+ scatterlist
+Message-ID: <20190614065737.GB24393@ming.t460p>
+References: <20190614025316.7360-1-ming.lei@redhat.com>
+ <20190614025316.7360-8-ming.lei@redhat.com>
+ <alpine.LNX.2.21.1906141536000.33@nippy.intranet>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190320094918.20234-3-rnayak@codeaurora.org>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <alpine.LNX.2.21.1906141536000.33@nippy.intranet>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Fri, 14 Jun 2019 06:57:58 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 20-03-19, 15:19, Rajendra Nayak wrote:
-> For devices with performance state, we use dev_pm_opp_set_rate()
-> to set the appropriate clk rate and the performance state.
-> We do need a way to *remove* the performance state vote when
-> we idle the device and turn the clocks off. Use dev_pm_opp_set_rate()
-> with freq=0 to achieve this.
+On Fri, Jun 14, 2019 at 03:39:10PM +1000, Finn Thain wrote:
+> On Fri, 14 Jun 2019, Ming Lei wrote:
 > 
-> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> ---
->  drivers/opp/core.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
+> > Use the scatterlist iterators and remove direct indexing of the
+> > scatterlist array.
+> > 
+> > This way allows us to pre-allocate one small scatterlist, which can be
+> > chained with one runtime allocated scatterlist if the pre-allocated one
+> > isn't enough for the whole request.
+> > 
+> > Cc: Oliver Neukum <oliver@neukum.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: linux-usb@vger.kernel.org
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > ---
+> >  drivers/usb/image/microtek.c | 20 ++++++++------------
+> >  drivers/usb/image/microtek.h |  2 +-
+> >  2 files changed, 9 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
+> > index 607be1f4fe27..0a57c2cc8e5a 100644
+> > --- a/drivers/usb/image/microtek.c
+> > +++ b/drivers/usb/image/microtek.c
+> > @@ -488,7 +488,6 @@ static void mts_command_done( struct urb *transfer )
+> >  
+> >  static void mts_do_sg (struct urb* transfer)
+> >  {
+> > -	struct scatterlist * sg;
+> >  	int status = transfer->status;
+> >  	MTS_INT_INIT();
+> >  
+> > @@ -500,13 +499,12 @@ static void mts_do_sg (struct urb* transfer)
+> >  		mts_transfer_cleanup(transfer);
+> >          }
+> >  
+> > -	sg = scsi_sglist(context->srb);
+> > -	context->fragment++;
+> > +	context->curr_sg = sg_next(context->curr_sg);
+> >  	mts_int_submit_urb(transfer,
+> >  			   context->data_pipe,
+> > -			   sg_virt(&sg[context->fragment]),
+> > -			   sg[context->fragment].length,
+> > -			   context->fragment + 1 == scsi_sg_count(context->srb) ?
+> > +			   sg_virt(context->curr_sg),
+> > +			   context->curr_sg->length,
+> > +			   sg_is_last(context->curr_sg) ?
+> >  			   mts_data_done : mts_do_sg);
+> >  }
+> >  
+> > @@ -526,22 +524,20 @@ static void
+> >  mts_build_transfer_context(struct scsi_cmnd *srb, struct mts_desc* desc)
+> >  {
+> >  	int pipe;
+> > -	struct scatterlist * sg;
+> > -	
+> > +
+> >  	MTS_DEBUG_GOT_HERE();
+> >  
+> >  	desc->context.instance = desc;
+> >  	desc->context.srb = srb;
+> > -	desc->context.fragment = 0;
+> >  
+> >  	if (!scsi_bufflen(srb)) {
+> >  		desc->context.data = NULL;
+> >  		desc->context.data_length = 0;
+> >  		return;
+> >  	} else {
+> > -		sg = scsi_sglist(srb);
+> > -		desc->context.data = sg_virt(&sg[0]);
+> > -		desc->context.data_length = sg[0].length;
+> > +		desc->context.curr_sg = scsi_sglist(srb);
+> > +		desc->context.data = sg_virt(desc->context.curr_sg);
+> > +		desc->context.data_length = desc->context.curr_sg->length;
+> >  	}
+> >  
+> 
+> Would it not be better to initialize desc->context.curr_sg in both 
+> branches of this conditional?
 
-What about this instead ?
+I think either way is fine given desc->context.curr_sg is used only
+if 'context->data' isn't NULL, see mts_command_done().
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 2fe96c2363a3..9accf8bb6afc 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -711,7 +711,7 @@ static int _set_required_opps(struct device *dev,
- 
-        /* Single genpd case */
-        if (!genpd_virt_devs) {
--               pstate = opp->required_opps[0]->pstate;
-+               pstate = likely(opp) ? opp->required_opps[0]->pstate : 0;
-                ret = dev_pm_genpd_set_performance_state(dev, pstate);
-                if (ret) {
-                        dev_err(dev, "Failed to set performance state of %s: %d (%d)\n",
-@@ -729,7 +729,7 @@ static int _set_required_opps(struct device *dev,
-        mutex_lock(&opp_table->genpd_virt_dev_lock);
- 
-        for (i = 0; i < opp_table->required_opp_count; i++) {
--               pstate = opp->required_opps[i]->pstate;
-+               pstate = likely(opp) ? opp->required_opps[i]->pstate : 0;
- 
-                if (!genpd_virt_devs[i])
-                        continue;
-@@ -770,14 +770,13 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 
-        if (unlikely(!target_freq)) {
-                if (opp_table->required_opp_tables) {
--                       /* drop the performance state vote */
--                       dev_pm_genpd_set_performance_state(dev, 0);
--                       return 0;
-+                       ret = _set_required_opps(dev, opp_table, NULL);
-                } else {
--                       dev_err(dev, "%s: Invalid target frequency %lu\n", __func__,
--                               target_freq);
--                       return -EINVAL;
-+                       dev_err(dev, "target frequency can't be 0\n");
-+                       ret = -EINVAL;
-                }
-+
-+               goto put_opp_table;
-        }
- 
-        clk = opp_table->clk;
+So I'd keep the patch as it is.
+
+Thanks,
+Ming
