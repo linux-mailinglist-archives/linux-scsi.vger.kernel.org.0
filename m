@@ -2,33 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E8D0451F1
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 04:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78AE451FA
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 04:41:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725789AbfFNCgw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 22:36:52 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:18570 "EHLO huawei.com"
+        id S1725812AbfFNCla (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 22:41:30 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:33096 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725765AbfFNCgw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 22:36:52 -0400
-Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id A5F6E7656D109436D821;
-        Fri, 14 Jun 2019 10:36:49 +0800 (CST)
+        id S1725765AbfFNCl3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 22:41:29 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 78812A7D564B635DBDEA;
+        Fri, 14 Jun 2019 10:41:27 +0800 (CST)
 Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
- 14.3.439.0; Fri, 14 Jun 2019 10:36:39 +0800
+ DGGEMS401-HUB.china.huawei.com (10.3.19.201) with Microsoft SMTP Server id
+ 14.3.439.0; Fri, 14 Jun 2019 10:41:21 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+To:     Karen Xie <kxie@chelsio.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Varun Prakash <varun@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Mike Christie <mchristi@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>
+        "Martin K. Petersen" <martin.petersen@oracle.com>
 CC:     YueHaibing <yuehaibing@huawei.com>, <linux-scsi@vger.kernel.org>,
-        <target-devel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] cxgbit: remove set but not used variable 'ppmax'
-Date:   Fri, 14 Jun 2019 02:44:13 +0000
-Message-ID: <20190614024413.110449-1-yuehaibing@huawei.com>
+        <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] scsi: cxgb4i: remove set but not used variable 'ppmax'
+Date:   Fri, 14 Jun 2019 02:48:56 +0000
+Message-ID: <20190614024856.115652-1-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Type:   text/plain; charset=US-ASCII
@@ -42,8 +40,8 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes gcc '-Wunused-but-set-variable' warning:
 
-drivers/target/iscsi/cxgbit/cxgbit_ddp.c: In function 'cxgbit_ddp_init':
-drivers/target/iscsi/cxgbit/cxgbit_ddp.c:303:15: warning:
+drivers/scsi/cxgbi/cxgb4i/cxgb4i.c: In function 'cxgb4i_ddp_init':
+drivers/scsi/cxgbi/cxgb4i/cxgb4i.c:2072:15: warning:
  variable 'ppmax' set but not used [-Wunused-but-set-variable]
 
 It's not used since commit a248384e6420 ("cxgb4/libcxgb/cxgb4i/cxgbit:
@@ -51,30 +49,29 @@ enable eDRAM page pods for iSCSI")
 
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/target/iscsi/cxgbit/cxgbit_ddp.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/scsi/cxgbi/cxgb4i/cxgb4i.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/target/iscsi/cxgbit/cxgbit_ddp.c b/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
-index 1443ef045a5f..fe1be5feaf21 100644
---- a/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
-+++ b/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
-@@ -300,7 +300,6 @@ int cxgbit_ddp_init(struct cxgbit_device *cdev)
- 	struct cxgb4_lld_info *lldi = &cdev->lldi;
- 	struct net_device *ndev = cdev->lldi.ports[0];
+diff --git a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
+index 66d6e1f4b3c3..0fbb4edc4161 100644
+--- a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
++++ b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
+@@ -2069,7 +2069,6 @@ static int cxgb4i_ddp_init(struct cxgbi_device *cdev)
+ 	struct cxgb4_lld_info *lldi = cxgbi_cdev_priv(cdev);
+ 	struct net_device *ndev = cdev->ports[0];
  	struct cxgbi_tag_format tformat;
 -	unsigned int ppmax;
- 	int ret, i;
+ 	int i, err;
  
  	if (!lldi->vr->iscsi.size) {
-@@ -308,8 +307,6 @@ int cxgbit_ddp_init(struct cxgbit_device *cdev)
- 		return -EACCES;
+@@ -2078,7 +2077,6 @@ static int cxgb4i_ddp_init(struct cxgbi_device *cdev)
  	}
  
+ 	cdev->flags |= CXGBI_FLAG_USE_PPOD_OFLDQ;
 -	ppmax = lldi->vr->iscsi.size >> PPOD_SIZE_SHIFT;
--
+ 
  	memset(&tformat, 0, sizeof(struct cxgbi_tag_format));
  	for (i = 0; i < 4; i++)
- 		tformat.pgsz_order[i] = (lldi->iscsi_pgsz_order >> (i << 3))
 
 
 
