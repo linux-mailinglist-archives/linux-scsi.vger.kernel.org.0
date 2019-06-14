@@ -2,91 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0E8450E9
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 02:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E8D0451F1
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 04:37:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbfFNAwY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 20:52:24 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:56510 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725985AbfFNAwY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Jun 2019 20:52:24 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 9BB5F308338F;
-        Fri, 14 Jun 2019 00:52:23 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E4EEC1A8F1;
-        Fri, 14 Jun 2019 00:52:11 +0000 (UTC)
-Date:   Fri, 14 Jun 2019 08:52:07 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>
-Subject: Re: [PATCH V2 00/15] scsi: use sg helper to operate sgl
-Message-ID: <20190614005205.GA14436@ming.t460p>
-References: <20190613071335.5679-1-ming.lei@redhat.com>
- <1560444171.3329.46.camel@HansenPartnership.com>
+        id S1725789AbfFNCgw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 22:36:52 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:18570 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725765AbfFNCgw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 22:36:52 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id A5F6E7656D109436D821;
+        Fri, 14 Jun 2019 10:36:49 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS413-HUB.china.huawei.com (10.3.19.213) with Microsoft SMTP Server id
+ 14.3.439.0; Fri, 14 Jun 2019 10:36:39 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Varun Prakash <varun@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Mike Christie <mchristi@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>
+CC:     YueHaibing <yuehaibing@huawei.com>, <linux-scsi@vger.kernel.org>,
+        <target-devel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] cxgbit: remove set but not used variable 'ppmax'
+Date:   Fri, 14 Jun 2019 02:44:13 +0000
+Message-ID: <20190614024413.110449-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1560444171.3329.46.camel@HansenPartnership.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Fri, 14 Jun 2019 00:52:24 +0000 (UTC)
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 09:42:51AM -0700, James Bottomley wrote:
-> On Thu, 2019-06-13 at 15:13 +0800, Ming Lei wrote:
-> > Hi,
-> > 
-> > Most of drivers use sg helpers to operate sgl, however there is
-> > still a few drivers which operate sgl directly, this way can't
-> > work in case of chained sgl.
-> 
-> This isn't a useful explanation of the issue you make it sound like a
-> bug, which it isn't: it's a change of behaviour we'd like to introduce
-> in SCSI.  Please reword the explanation more along the lines of
-> 
-> ---
-> Scsi MQ makes a large static allocation for the first scatter gather
-> list chunk for the driver to use.  This is a performance headache we'd
-> like to fix by reducing the size of the allocation to a 2 element
-> array.  Doing this will break the current guarantee that any driver
-> using SG_ALL doesn't need to use the scatterlist iterators and can get
-> away with directly dereferencing the array.  Thus we need to update all
-> drivers to use the scatterlist iterators and remove direct indexing of
-> the scatterlist array before reducing the initial scatterlist
-> allocation size in SCSI.
-> ---
-> 
-> Which explains what we're trying to do and why.
-> 
-> In particular changelogs like this
-> 
-> > The current way isn't safe for chained sgl, so use sgl helper to
-> > operate sgl.
-> 
-> Are just plain wrong:  They were perfectly safe until you altered the
-> conditions for using non-chained sgls.  Please use the above
-> explanation in the patches, abbreviated if you like, so all recipients
-> know why this needs doing and that it isn't an existing bug.
+Fixes gcc '-Wunused-but-set-variable' warning:
 
-OK, will update with the above commit log in V3.
+drivers/target/iscsi/cxgbit/cxgbit_ddp.c: In function 'cxgbit_ddp_init':
+drivers/target/iscsi/cxgbit/cxgbit_ddp.c:303:15: warning:
+ variable 'ppmax' set but not used [-Wunused-but-set-variable]
 
-Thanks,
-Ming
+It's not used since commit a248384e6420 ("cxgb4/libcxgb/cxgb4i/cxgbit:
+enable eDRAM page pods for iSCSI")
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/target/iscsi/cxgbit/cxgbit_ddp.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/target/iscsi/cxgbit/cxgbit_ddp.c b/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
+index 1443ef045a5f..fe1be5feaf21 100644
+--- a/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
++++ b/drivers/target/iscsi/cxgbit/cxgbit_ddp.c
+@@ -300,7 +300,6 @@ int cxgbit_ddp_init(struct cxgbit_device *cdev)
+ 	struct cxgb4_lld_info *lldi = &cdev->lldi;
+ 	struct net_device *ndev = cdev->lldi.ports[0];
+ 	struct cxgbi_tag_format tformat;
+-	unsigned int ppmax;
+ 	int ret, i;
+ 
+ 	if (!lldi->vr->iscsi.size) {
+@@ -308,8 +307,6 @@ int cxgbit_ddp_init(struct cxgbit_device *cdev)
+ 		return -EACCES;
+ 	}
+ 
+-	ppmax = lldi->vr->iscsi.size >> PPOD_SIZE_SHIFT;
+-
+ 	memset(&tformat, 0, sizeof(struct cxgbi_tag_format));
+ 	for (i = 0; i < 4; i++)
+ 		tformat.pgsz_order[i] = (lldi->iscsi_pgsz_order >> (i << 3))
+
+
+
