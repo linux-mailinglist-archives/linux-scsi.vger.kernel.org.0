@@ -2,106 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 906C044E15
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Jun 2019 23:05:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0E8450E9
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 02:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729948AbfFMVFh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Jun 2019 17:05:37 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36941 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727274AbfFMVFh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Jun 2019 17:05:37 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 19so32844pfa.4;
-        Thu, 13 Jun 2019 14:05:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=nGIzlfyMtWXfYkMWkeMnt3GQvr8tI9iFdtflB9NEcR0=;
-        b=o6awC/yqgP89v7ZNzJm+Vx0n0TInFJFUyczt/ABMUyhorQQGQDKQvbAfmBt2ATTh0Z
-         0ovpyLfusP6v4zOcfT+7TnPp3cgeBSCryK0nGaorfLAQ8+ynXkvwYFD5B6ljHYyOrwR8
-         H2qTa3TrFVLw6PRdQYwfY8Ag08UlwPS/JNvdoxxLdh1ObEOImmVHFQ1hWMRksGToCnBh
-         zkn59dDEATw5M9p8RFqM1o4WldRjDnie09yFqcfYvFR7C3Dy06qqAIT6/3f5HbJgH9lY
-         BV2JUyjZdCBNTwwhjS6E4V2anyayn1sJAM995XwS40QlwNC02tkCl6cfNDB7VyEZQq1J
-         hcEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nGIzlfyMtWXfYkMWkeMnt3GQvr8tI9iFdtflB9NEcR0=;
-        b=tlZf4S0cg/4+ApvZj4+y4SERg2trr1M1Cjv99I62+Vvofusf/Tr6uYfHD9nwtCardo
-         bhmZepz6wSni0W/zZdBhvI8nrP9RyQlZhKprQOnV0b97TS4N2LjSUDsQozjk4rfmzSbk
-         EF8W/6xwZWtZIOXieacDq9UeSRvCK13NCWD6pZNG28gkTvMUZDx0v8JDiFXo+z/F25UC
-         N05zqUKUwxJrYX7onkkO9Cv8M9DulyWpctMX7riBkE7q5Gm7yc6ZjBrvAyWsb1jVInAp
-         jWxVV9wcGcuUUHKjg89D78Ffd64IEN3zX48sIaXIa+ipCT7LXWcEilgyItfVk4Ep3AUc
-         buag==
-X-Gm-Message-State: APjAAAVLo0X5b7x1KiPzS0ULVuPZekfwMHUG5w8oTUFIgZ0jNg+a3kL0
-        ZlbdDledlGDVcwj+e8scpB0=
-X-Google-Smtp-Source: APXvYqwAEyjLJQfMr+GN6f4kQuA5+N8IXcoBqBcGgZCHosfwOJRCA+Nsr6KriKTTOtkhDtsF/Y4bMA==
-X-Received: by 2002:a62:3543:: with SMTP id c64mr12639125pfa.242.1560459936281;
-        Thu, 13 Jun 2019 14:05:36 -0700 (PDT)
-Received: from localhost ([123.213.206.190])
-        by smtp.gmail.com with ESMTPSA id 128sm599697pff.16.2019.06.13.14.05.35
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 13 Jun 2019 14:05:35 -0700 (PDT)
-Date:   Fri, 14 Jun 2019 06:05:33 +0900
-From:   Minwoo Im <minwoo.im.dev@gmail.com>
-To:     Minwoo Im <minwoo.im@samsung.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
-        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
-        "chaitra.basappa@broadcom.com" <chaitra.basappa@broadcom.com>,
-        "suganath-prabu.subramani@broadcom.com" 
-        <suganath-prabu.subramani@broadcom.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        Sarah Cho <sohyeon.jo@samsung.com>,
-        Sungjun Park <sj1228.park@samsung.com>,
-        Gyeongmin Nam <gm.nam@samsung.com>,
-        Sanggwan Lee <sanggwan.lee@samsung.com>
-Subject: Re: [RFC PATCH] mpt3sas: support target smid for [abort|query] task
-Message-ID: <20190613210533.GA25375@minwooim-desktop>
-References: <CGME20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36@epcms2p7>
- <20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36@epcms2p7>
+        id S1726567AbfFNAwY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Jun 2019 20:52:24 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:56510 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725985AbfFNAwY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Jun 2019 20:52:24 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 9BB5F308338F;
+        Fri, 14 Jun 2019 00:52:23 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E4EEC1A8F1;
+        Fri, 14 Jun 2019 00:52:11 +0000 (UTC)
+Date:   Fri, 14 Jun 2019 08:52:07 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>
+Subject: Re: [PATCH V2 00/15] scsi: use sg helper to operate sgl
+Message-ID: <20190614005205.GA14436@ming.t460p>
+References: <20190613071335.5679-1-ming.lei@redhat.com>
+ <1560444171.3329.46.camel@HansenPartnership.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190613075402epcms2p7dbd2e2f7c80bd2aef2c5dd3736393d36@epcms2p7>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <1560444171.3329.46.camel@HansenPartnership.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Fri, 14 Jun 2019 00:52:24 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 19-06-13 16:54:02, Minwoo Im wrote:
-> We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
-> to /dev/mpt3ctl.  If the given task_type is either abort task or query
-> task, it may need a field named "Initiator Port Transfer Tag to Manage"
-> in the IU.
+On Thu, Jun 13, 2019 at 09:42:51AM -0700, James Bottomley wrote:
+> On Thu, 2019-06-13 at 15:13 +0800, Ming Lei wrote:
+> > Hi,
+> > 
+> > Most of drivers use sg helpers to operate sgl, however there is
+> > still a few drivers which operate sgl directly, this way can't
+> > work in case of chained sgl.
 > 
-> Current code does not support to check target IPTT tag from the
-> tm_request.  This patch introduces to check TaskMID given from the
-> userspace as a target tag.  We have a rule of relationship between
-> (struct request *req->tag) and smid in mpt3sas_base.c:
+> This isn't a useful explanation of the issue you make it sound like a
+> bug, which it isn't: it's a change of behaviour we'd like to introduce
+> in SCSI.  Please reword the explanation more along the lines of
 > 
-> 3318 u16
-> 3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
-> 3320         struct scsi_cmnd *scmd)
-> 3321 {
-> 3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
-> 3323         unsigned int tag = scmd->request->tag;
-> 3324         u16 smid;
-> 3325
-> 3326         smid = tag + 1;
-> 
-> So if we want to abort a request tagged #X, then we can pass (X + 1) to
-> this IOCTL handler.
-> 
-> Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
 > ---
+> Scsi MQ makes a large static allocation for the first scatter gather
+> list chunk for the driver to use.  This is a performance headache we'd
+> like to fix by reducing the size of the allocation to a 2 element
+> array.  Doing this will break the current guarantee that any driver
+> using SG_ALL doesn't need to use the scatterlist iterators and can get
+> away with directly dereferencing the array.  Thus we need to update all
+> drivers to use the scatterlist iterators and remove direct indexing of
+> the scatterlist array before reducing the initial scatterlist
+> allocation size in SCSI.
+> ---
+> 
+> Which explains what we're trying to do and why.
+> 
+> In particular changelogs like this
+> 
+> > The current way isn't safe for chained sgl, so use sgl helper to
+> > operate sgl.
+> 
+> Are just plain wrong:  They were perfectly safe until you altered the
+> conditions for using non-chained sgls.  Please use the above
+> explanation in the patches, abbreviated if you like, so all recipients
+> know why this needs doing and that it isn't an existing bug.
 
-Sorry for the duplicated patches on the same mailing list.  Please ignore
-the first two of it.
+OK, will update with the above commit log in V3.
 
 Thanks,
+Ming
