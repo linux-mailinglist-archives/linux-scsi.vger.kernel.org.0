@@ -2,73 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 416C7468D1
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 22:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2C446924
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Jun 2019 22:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725825AbfFNUZW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Jun 2019 16:25:22 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:46129 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbfFNUZW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 14 Jun 2019 16:25:22 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 81so2065635pfy.13
-        for <linux-scsi@vger.kernel.org>; Fri, 14 Jun 2019 13:25:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=j9sYU9ZbZNyYZlyRo+JyUijIkgxJOehfv1U4uwckqCw=;
-        b=ZCMgi5fZAQQ6ImVDmRGKzfcw+7RQWejcQ0JE9ySi7ov+srlm6KPVR6rV18LpNXA7AQ
-         zz4jI7cLuknDLneVGLb+4dZmmKH4eEVTSddI0xvUl7VXyJJrdsULaiuW+rwm4suZKe35
-         2jMN3a5ieNN/HBD1DE9OWKfCGOfAU7W9lLLmr25+GucIiTXI4X/L74Fwd18ayE+1ru+a
-         0HOtuLrWZVOmCa8lD5nOL8IAtxW7s4hB7XKKRXBKhODhMHUaJRqbcVUS5flhGcw1nIXd
-         R4QcEsKyJW6LMA98mF1xoW6Evd8n36BBy5mHp775jeyKyxeS+uQM6K927XGUq+QEXqSe
-         +HCA==
-X-Gm-Message-State: APjAAAXYcHvrcwnFAo7ZjGWzKGL4APFeG02czcbiisiuXjYhWkf5jDs/
-        5++mq1Ujncs73A4dwyQ2ZLXbf7gt
-X-Google-Smtp-Source: APXvYqzhYAZmauDBe9+FZW6IAVXXSkXtFk+GTxxd8kYG4y/3Pk+TsCeUOo7xM90vo2NTf2Bd0cx05g==
-X-Received: by 2002:a17:90a:d814:: with SMTP id a20mr13060338pjv.48.1560543921321;
-        Fri, 14 Jun 2019 13:25:21 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id z11sm3266146pjn.2.2019.06.14.13.25.20
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 14 Jun 2019 13:25:20 -0700 (PDT)
-Subject: Re: [PATCH] qla2xxx: Fix hardlockup in abort command during driver
- remove.
-To:     Himanshu Madhani <hmadhani@marvell.com>,
-        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org
-References: <20190614143627.10768-1-hmadhani@marvell.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <cfadf755-d97d-3c37-c02d-a95512d31771@acm.org>
-Date:   Fri, 14 Jun 2019 13:25:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1728054AbfFNUa7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Jun 2019 16:30:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54802 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726917AbfFNUa6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 14 Jun 2019 16:30:58 -0400
+Received: from sasha-vm.mshome.net (unknown [131.107.159.134])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6BC0921841;
+        Fri, 14 Jun 2019 20:30:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560544257;
+        bh=ZujzLGtZIzPwo5XQIVhDX0Yl5TftEs5UwsxtROafMGA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MrwgkAjKC1IU2HGwdX73OvMLKoEaqI+yg2Qm+5yO9ahkUeNRh+bYGBzi3nmPflJvK
+         iQ98QTMa8zovyTPEWTaC98lXL6LblWNPI7nKSB7bHPx4tZ86w6MNiVEL14UTLPWCzV
+         A1WmcNgXhMbdHpicjz6uDV91Ebf3yy7iUqio+1lM=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Avri Altman <avri.altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 08/10] scsi: ufs: Check that space was properly alloced in copy_query_response
+Date:   Fri, 14 Jun 2019 16:30:44 -0400
+Message-Id: <20190614203046.28077-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190614203046.28077-1-sashal@kernel.org>
+References: <20190614203046.28077-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190614143627.10768-1-hmadhani@marvell.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/14/19 7:36 AM, Himanshu Madhani wrote:
-> diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-> index 172ef21827dd..d056f5e7cf93 100644
-> --- a/drivers/scsi/qla2xxx/qla_os.c
-> +++ b/drivers/scsi/qla2xxx/qla_os.c
-> @@ -1731,8 +1731,8 @@ static void qla2x00_abort_srb(struct qla_qpair *qp, srb_t *sp, const int res,
->   	     !test_bit(ABORT_ISP_ACTIVE, &vha->dpc_flags) &&
->   	     !qla2x00_isp_reg_stat(ha))) {
->   		sp->comp = &comp;
-> -		rval = ha->isp_ops->abort_command(sp);
->   		spin_unlock_irqrestore(qp->qp_lock_ptr, *flags);
-> +		rval = ha->isp_ops->abort_command(sp);
->   
->   		switch (rval) {
->   		case QLA_SUCCESS:
+From: Avri Altman <avri.altman@wdc.com>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+[ Upstream commit 1c90836f70f9a8ef7b7ad9e1fdd8961903e6ced6 ]
+
+struct ufs_dev_cmd is the main container that supports device management
+commands. In the case of a read descriptor request, we assume that the
+proper space was allocated in dev_cmd to hold the returning descriptor.
+
+This is no longer true, as there are flows that doesn't use dev_cmd for
+device management requests, and was wrong in the first place.
+
+Fixes: d44a5f98bb49 (ufs: query descriptor API)
+Signed-off-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Acked-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 7322a17660d1..b140e81c4f7d 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -853,7 +853,8 @@ int ufshcd_copy_query_response(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 	memcpy(&query_res->upiu_res, &lrbp->ucd_rsp_ptr->qr, QUERY_OSF_SIZE);
+ 
+ 	/* Get the descriptor */
+-	if (lrbp->ucd_rsp_ptr->qr.opcode == UPIU_QUERY_OPCODE_READ_DESC) {
++	if (hba->dev_cmd.query.descriptor &&
++	    lrbp->ucd_rsp_ptr->qr.opcode == UPIU_QUERY_OPCODE_READ_DESC) {
+ 		u8 *descp = (u8 *)lrbp->ucd_rsp_ptr +
+ 				GENERAL_UPIU_REQUEST_SIZE;
+ 		u16 resp_len;
+-- 
+2.20.1
+
