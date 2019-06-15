@@ -2,108 +2,156 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D613147140
-	for <lists+linux-scsi@lfdr.de>; Sat, 15 Jun 2019 18:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589F44718C
+	for <lists+linux-scsi@lfdr.de>; Sat, 15 Jun 2019 20:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbfFOQYn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 15 Jun 2019 12:24:43 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:46809 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726770AbfFOQYm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 15 Jun 2019 12:24:42 -0400
-Received: by mail-lf1-f65.google.com with SMTP id z15so3704863lfh.13;
-        Sat, 15 Jun 2019 09:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:subject:date:user-agent:mime-version
-         :content-transfer-encoding:content-disposition:message-id;
-        bh=O8TenXf8n3Y7pwA2CkxS3CiasLg3xi/TeSP6+th2mY4=;
-        b=kGN8va3DtJTnAewO5ElzvA2LoOWuyNLEx6u5SbB4Bmi7KZhCr05f4SjJdHUDJdjtDo
-         0rUwdEzwEXk6O8lQp5whqVyOHVUEHnvOnVpCQq/lVoLzTpWTIkwaHRcVOA0wwkfBsD1C
-         /OP8/tJt7pRaG5SsSHxUhfuU0Vy6h0dg+cUBvWTh+LImUP7q7JPATwyX4n2r8vs0V6/5
-         nQfGnYmJoBYw8QGL4UC4hyFKq4s0CWuJNQyRgMf53S1J7kXiZFJPbgCIO1+Mavd1lthe
-         jCredm6N87A+ie8JIEwVqTO8C3BF7pvdfQfA/91dunSoHQUxsctB1/XD7xqmTNvx/Tha
-         Cv8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:subject:date:user-agent:mime-version
-         :content-transfer-encoding:content-disposition:message-id;
-        bh=O8TenXf8n3Y7pwA2CkxS3CiasLg3xi/TeSP6+th2mY4=;
-        b=DrSzGWR67rppY5U2IlvDchy9kYlF7OgRIzfVFZh9kPrk+E4+NkhpvnWIhoSTGjQgcP
-         KDgRgAwqTe5pnF3ocvdcu/lmgMn+T3X5FWjCIcBVvZGwFM/BYDcS6VmbTtbXc8WS+yXZ
-         aGsWM/She+VMDyOYWi2QN8ucTMVwbD8CWgnHSLkfbkvlNNeu5fcAOS0K76szyT4qfWFy
-         46XqvNpI8uTgeE0b6Qji130zM8B9LD9YoBkRMKvk3BaWhnhNib357QLaaxVsei74PHB7
-         +061+JxxW67pTKObL+ca4LOSmcX7Ee7wgQg5I6ybJAq+OZgJfTEr8y1r0BDZT9znaV9l
-         ypdA==
-X-Gm-Message-State: APjAAAWvv60smbbISACeb9ls2ov2iZfvgVsdgnON5OCrLAy0yWW49Uu9
-        wOTC7fWUvj/Q6g47qAKYPHy1OZZN
-X-Google-Smtp-Source: APXvYqxqHog0+uavUMt/3YkHEAzBWKuri1yzFFxIkV8dT2Njs1O78x2OggvP+CW8SDdFnBpViuBxfg==
-X-Received: by 2002:ac2:43b7:: with SMTP id t23mr2691780lfl.110.1560615879725;
-        Sat, 15 Jun 2019 09:24:39 -0700 (PDT)
-Received: from [192.168.1.100] ([176.116.252.109])
-        by smtp.gmail.com with ESMTPSA id m21sm918566lfh.20.2019.06.15.09.24.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 15 Jun 2019 09:24:39 -0700 (PDT)
-From:   Andrew Randrianasulu <randrianasulu@gmail.com>
-To:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: Bug 7805 strikes again?
-Date:   Sat, 15 Jun 2019 19:16:09 +0300
-User-Agent: KMail/1.9.10
+        id S1726366AbfFOSTF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 15 Jun 2019 14:19:05 -0400
+Received: from mail-eopbgr770124.outbound.protection.outlook.com ([40.107.77.124]:32075
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725270AbfFOSTF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 15 Jun 2019 14:19:05 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none;
+ b=wIleWJRiam4EVx3svO1CRgD0nMsPzb2/U1WekeUgmbYE4czALZirtK9cWNZT/IPGMAs13ZbasksnP+PNi9lKVCnsR2VK9GLSxcSQqlDjaYe8xg5cOPMKrtzpq7dQXsMi2v+GkrIvmmYITFZRs4/MOmmUcL6+czpsAF/LZPvK7xk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=testarcselector01;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PqdhfVYwlPfozmgkJio+lofchHcLhfxJUW3rF/EoxK0=;
+ b=QBofWH9NdlaFN+ws636TmHvIHwHP+ujOtrIfZ9Xu3bQE6FtoNapFW+pRA7wjDJ3G12XyJhWN9oAQtRqecCsJhQMAQcsgsmpsB7KBgciSLy5EEIb67tHyGESJjR8Ung9hSCnO6C6mt+XwoykbCs1JG3Y5UV/0LhEcp9vl2KW/rPQ=
+ARC-Authentication-Results: i=1; test.office365.com
+ 1;spf=none;dmarc=none;dkim=none;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PqdhfVYwlPfozmgkJio+lofchHcLhfxJUW3rF/EoxK0=;
+ b=MWGdD/K0UahKsITpZq07xF7Hij1hVH2XkSyYOHmQ6EbXtppY6pi5bJ17xVwue6U7tBfwDWSL0HLDaT3VINJSG0pnMim2nT6K62dSqO3qNa8bHStFMqMPPzVxSkciIPIjrwbwJVN9Zz7JhvKrtTHBeYDLBW3AklHDPwTaEjmci3g=
+Received: from BL0PR2101MB1348.namprd21.prod.outlook.com
+ (2603:10b6:208:92::22) by BL0PR2101MB1012.namprd21.prod.outlook.com
+ (2603:10b6:207:37::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2008.1; Sat, 15 Jun
+ 2019 18:19:01 +0000
+Received: from BL0PR2101MB1348.namprd21.prod.outlook.com
+ ([fe80::ec20:70a:433e:a052]) by BL0PR2101MB1348.namprd21.prod.outlook.com
+ ([fe80::ec20:70a:433e:a052%2]) with mapi id 15.20.2008.007; Sat, 15 Jun 2019
+ 18:19:01 +0000
+From:   Michael Kelley <mikelley@microsoft.com>
+To:     brandonbonaby94 <brandonbonaby94@gmail.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "sashal@kernel.org" <sashal@kernel.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+CC:     brandonbonaby94 <brandonbonaby94@gmail.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] scsi: storvsc: Add ability to change scsi queue depth
+Thread-Topic: [PATCH] scsi: storvsc: Add ability to change scsi queue depth
+Thread-Index: AQHVIwu2hVNRohUcjEaExf3NA7oXWKadBz2w
+Date:   Sat, 15 Jun 2019 18:19:00 +0000
+Message-ID: <BL0PR2101MB13482F73342F77866D6A6AABD7E90@BL0PR2101MB1348.namprd21.prod.outlook.com>
+References: <20190614234822.5193-1-brandonbonaby94@gmail.com>
+In-Reply-To: <20190614234822.5193-1-brandonbonaby94@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=mikelley@ntdev.microsoft.com;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2019-06-15T18:18:58.2507928Z;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=45d65e2e-9da9-4357-aa96-bb219a120e27;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=mikelley@microsoft.com; 
+x-originating-ip: [24.22.167.197]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 270d8398-76ce-4541-ca62-08d6f1bdf125
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BL0PR2101MB1012;
+x-ms-traffictypediagnostic: BL0PR2101MB1012:
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-microsoft-antispam-prvs: <BL0PR2101MB10129C929B439FE8EC085A8BD7E90@BL0PR2101MB1012.namprd21.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2582;
+x-forefront-prvs: 0069246B74
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(39860400002)(136003)(366004)(396003)(346002)(199004)(189003)(71200400001)(11346002)(446003)(486006)(66446008)(110136005)(25786009)(52536014)(316002)(66476007)(10290500003)(76116006)(66946007)(2201001)(73956011)(55016002)(64756008)(86362001)(66556008)(476003)(7736002)(68736007)(22452003)(2501003)(54906003)(4326008)(66066001)(256004)(14444005)(8990500004)(3846002)(7696005)(6116002)(52396003)(33656002)(14454004)(1511001)(2906002)(81166006)(76176011)(81156014)(9686003)(229853002)(102836004)(6506007)(8676002)(5660300002)(6436002)(99286004)(10090500001)(6246003)(53936002)(71190400001)(478600001)(74316002)(26005)(8936002)(305945005)(186003);DIR:OUT;SFP:1102;SCL:1;SRVR:BL0PR2101MB1012;H:BL0PR2101MB1348.namprd21.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: microsoft.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: j+S+WsWN8c8BpFtnesChRu7w36GPqFoArNDsNwGZFLUT6QMyoIbuZ3AiMH6H8wU1rCPWrIim9g1TotB5dAS331foO5udKDGVEbD8FcBNk9mnYN7Mziv14/KAbC7rPOPj/6Y677LUGDP8esCoU7xUZhBXuczJC3lRP6AaHkUOrqaUft882eDokkqIvtj/HWRnKstOs5foCCsaHY2Ty0QVgu+Tl0dGKO+f0vL3K+WGLzkcM4r5rzxwtohYk0LY0IYVExhIe92ND/ZcMxjV95+HX3hs6TQAxqpYWLtTYFvcs3GncH/ye/PojvGvfhONMfClZVIbNO+pUsqJnX3p7Xu0uTp7X4l5vYydkJyJji3353lccL0gpvjya/wqggrdDoxxiuzSR76v9tdtgyTeKw8TzBM3wmCBoDZ9TYxQ4giHQTk=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain;
-  charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <201906151916.09688.randrianasulu@gmail.com>
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 270d8398-76ce-4541-ca62-08d6f1bdf125
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2019 18:19:00.8556
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mikelley@ntdev.microsoft.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR2101MB1012
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello!
+From: Branden Bonaby <brandonbonaby94@gmail.com> Sent: Friday, June 14, 201=
+9 4:48 PM
+>=20
+> Adding functionality to allow the SCSI queue depth to be changed,
+> by utilizing the "scsi_change_queue_depth" function.
+>=20
+> Signed-off-by: Branden Bonaby <brandonbonaby94@gmail.com>
+> ---
+>  drivers/scsi/storvsc_drv.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>=20
+> diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
+> index 8472de1007ff..719ca9906fc2 100644
+> --- a/drivers/scsi/storvsc_drv.c
+> +++ b/drivers/scsi/storvsc_drv.c
+> @@ -387,6 +387,7 @@ enum storvsc_request_type {
+>=20
+>  static int storvsc_ringbuffer_size =3D (128 * 1024);
+>  static u32 max_outstanding_req_per_channel;
+> +static int storvsc_change_queue_depth(struct scsi_device *sdev, int queu=
+e_depth);
+>=20
+>  static int storvsc_vcpus_per_sub_channel =3D 4;
+>=20
+> @@ -1711,6 +1712,7 @@ static struct scsi_host_template scsi_driver =3D {
+>  	.dma_boundary =3D		PAGE_SIZE-1,
+>  	.no_write_same =3D	1,
+>  	.track_queue_depth =3D	1,
+> +	.change_queue_depth =3D	storvsc_change_queue_depth,
+>  };
+>=20
+>  enum {
+> @@ -1917,6 +1919,15 @@ static int storvsc_probe(struct hv_device *device,
+>  	return ret;
+>  }
+>=20
+> +/* Change a scsi target's queue depth */
+> +static int storvsc_change_queue_depth(struct scsi_device *sdev, int queu=
+e_depth)
+> +{
+> +	if (queue_depth > scsi_driver.can_queue){
+> +		queue_depth =3D scsi_driver.can_queue;
+> +	}
+> +	return scsi_change_queue_depth(sdev, queue_depth);
+> +}
+> +
+>  static int storvsc_remove(struct hv_device *dev)
+>  {
+>  	struct storvsc_device *stor_device =3D hv_get_drvdata(dev);
+> --
+> 2.17.1
 
-I was puzzled by strange fact my qemu stopped to boot DVDs I made over years, if I put them in physical drive and try to boot them via qemu.
-After  a lot of digging I found possible reason: wrongly-set block device size on /dev/sr0
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
-And this lead me to
-https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=619757
-
-and
-https://bugzilla.kernel.org/show_bug.cgi?id=7805
-
-so I checked if my dmesg had anything related to pktcdvd:
-
- dmesg | grep pkt
-[    7.681270] pktcdvd: pktcdvd0: writer mapped to sr0
-
-
-blockdev --getsize64 /dev/sr0
-1073741312
-pktsetup -d /dev/sr0
-pktsetup: Error: Can't tear down packet device '/dev/sr0': Inappropriate ioctl for device
-
- blockdev --getsize64 /dev/sr0
-4700372992
-
-after this I can boot my DVD fully (before it was failing at mounting squashfs images):
-qemu-system-x86_64 -enable-kvm -display sdl,gl=on -cdrom /dev/sr0 -m 1G -soundhw es1370 -usbdevice mouse -smp 3 -cpu max
-
- uname -a
-Linux slax 5.1.6-x64 #1 SMP PREEMPT Fri May 31 23:49:35 MSK 2019 x86_64 AMD FX(tm)-4300 Quad-Core Processor AuthenticAMD GNU/Linux
-
-Userspace is 32-bit Slackware (mix of many versions).
-
- sg_inq /dev/sr0
-standard INQUIRY:
-  PQual=0  Device_type=5  RMB=1  LU_CONG=0  version=0x05  [SPC-3]
-  [AERC=0]  [TrmTsk=0]  NormACA=1  HiSUP=1  Resp_data_format=2
-  SCCS=0  ACC=0  TPGS=0  3PC=0  Protect=0  [BQue=0]
-  EncServ=0  MultiP=0  [MChngr=0]  [ACKREQQ=0]  Addr16=0
-  [RelAdr=0]  WBus16=0  Sync=0  [Linked=0]  [TranDis=0]  CmdQue=0
-  [SPI: Clocking=0x0  QAS=0  IUS=0]
-    length=96 (0x60)   Peripheral device type: cd/dvd
- Vendor identification: ASUS
- Product identification: DRW-24D5MT
- Product revision level: 1.00
