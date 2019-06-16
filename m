@@ -2,113 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E098471FF
-	for <lists+linux-scsi@lfdr.de>; Sat, 15 Jun 2019 22:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FADE47374
+	for <lists+linux-scsi@lfdr.de>; Sun, 16 Jun 2019 09:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbfFOUFv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Sat, 15 Jun 2019 16:05:51 -0400
-Received: from mail.wl.linuxfoundation.org ([198.145.29.98]:35908 "EHLO
-        mail.wl.linuxfoundation.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725270AbfFOUFv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 15 Jun 2019 16:05:51 -0400
-Received: from mail.wl.linuxfoundation.org (localhost [127.0.0.1])
-        by mail.wl.linuxfoundation.org (Postfix) with ESMTP id BB60626E78
-        for <linux-scsi@vger.kernel.org>; Sat, 15 Jun 2019 20:05:49 +0000 (UTC)
-Received: by mail.wl.linuxfoundation.org (Postfix, from userid 486)
-        id AF9E127F85; Sat, 15 Jun 2019 20:05:49 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
-        pdx-wl-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=2.0 tests=BAYES_00,NO_RECEIVED,
-        NO_RELAYS autolearn=unavailable version=3.3.1
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 71981] Writing session to CD does not update some important
- cached information
-Date:   Sat, 15 Jun 2019 20:05:48 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: low
-X-Bugzilla-Who: rogerx.oss@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-71981-11613-xWXGPrWX8Q@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-71981-11613@https.bugzilla.kernel.org/>
-References: <bug-71981-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726069AbfFPHC0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 16 Jun 2019 03:02:26 -0400
+Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:26053 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725860AbfFPHC0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 16 Jun 2019 03:02:26 -0400
+Received: from localhost.localdomain ([86.243.180.47])
+        by mwinf5d17 with ME
+        id RK2N2000C11lVym03K2NQE; Sun, 16 Jun 2019 09:02:23 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 16 Jun 2019 09:02:23 +0200
+X-ME-IP: 86.243.180.47
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] scsi: tcmu: Simplify 'tcmu_update_uio_info()'
+Date:   Sun, 16 Jun 2019 09:02:20 +0200
+Message-Id: <20190616070220.24189-1-christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=71981
+Use 'kasprintf()' instead of:
+   - snprintf(NULL, 0...
+   - kmalloc(...
+   - snprintf(...
 
-Roger (rogerx.oss@gmail.com) changed:
+This is less verbose and saves 7 bytes (i.e. the space for '/(null)') if
+'udev->dev_config' is NULL.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |rogerx.oss@gmail.com
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/target/target_core_user.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
---- Comment #1 from Roger (rogerx.oss@gmail.com) ---
-I'm also seeing the following error within my logs, subsequently causing BD-R
-(and likely CD/DVD) media to not be able to be mounted, either manually or by
-using autofs.
-
-kernel: isofs_fill_super: bread failed, dev=sr0, iso_blknum=16, block=16
-
-In my case, seems to be due to previous failed growisofs sessions when writing
-at a higher riskier speeds to (Verbatim 50GB) dual layer BD-R media, but within
-drive & media manufacturer's recommendations.  The BD-R drive I'm using, LG
-WH16NS60 displays both this dual layer write problem and subsequent reading
-problems.  The previous LG WH14NS40 BD-R drive, displayed the similar scenario
-but I did not catch the scsi/kernel error within logs.
-
-Either rebooting and/or using the media within a Windows or secondary computer,
-the media can be read.
-
-The above error seems to be caused by:
-# mount -t iso9660 /dev/sr0 /mnt/tmp
-mount: /mnt/tmp1: wrong fs type, bad option, bad superblock on /dev/sr0,
-missing codepage or helper program, or other error.
-32 :-(
-
-WORKAROUND
-SOFT RESET SCSI BUS
-https://zedt.eu/tech/linux/soft-resetting-sata-devices-linux/
-
-Get host number:
-# readlink /sys/block/sdX
-../devices/pci0000:00/0000:00:1f.2/host1/target1:0:0/1:0:0:0/block/sr0
-
-Trigger device delete:
-# echo 1 > /sys/block/sdX/device/delete
-
-Trigger device scan on host controller number as specified above:
-# echo "- - -" > /sys/class/scsi_host/host1/scan
-
-Long story short, this looks like a kernel/growisofs problem.  Growisofs is
-having difficulties writing dual layer (Verbatim) bluray (BD-R) media at speeds
-above speed=1 here.  An error condition is likely incurred, either or both the
-kernel or growisofs is having problems properly handling.  The writing problem
-is also experienced under MS Windows 10, due to likely MS Windows 10 using max
-speed. Not known if MS Windows 10 is also have problems with reading after scsi
-bus errors as described above, etc.
-
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index b43d6385a1a0..04eda111920e 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -1824,20 +1824,18 @@ static int tcmu_update_uio_info(struct tcmu_dev *udev)
+ {
+ 	struct tcmu_hba *hba = udev->hba->hba_ptr;
+ 	struct uio_info *info;
+-	size_t size, used;
+ 	char *str;
+ 
+ 	info = &udev->uio_info;
+-	size = snprintf(NULL, 0, "tcm-user/%u/%s/%s", hba->host_id, udev->name,
+-			udev->dev_config);
+-	size += 1; /* for \0 */
+-	str = kmalloc(size, GFP_KERNEL);
+-	if (!str)
+-		return -ENOMEM;
+ 
+-	used = snprintf(str, size, "tcm-user/%u/%s", hba->host_id, udev->name);
+ 	if (udev->dev_config[0])
+-		snprintf(str + used, size - used, "/%s", udev->dev_config);
++		str = kasprintf(GFP_KERNEL, "tcm-user/%u/%s/%s", hba->host_id,
++				udev->name, udev->dev_config);
++	else
++		str = kasprintf(GFP_KERNEL, "tcm-user/%u/%s", hba->host_id,
++				udev->name);
++	if (!str)
++		return -ENOMEM;
+ 
+ 	/* If the old string exists, free it */
+ 	kfree(info->name);
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.20.1
+
