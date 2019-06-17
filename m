@@ -2,61 +2,167 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C1548A3B
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 19:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDD848AC8
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 19:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728613AbfFQRfI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 13:35:08 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:38894 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726173AbfFQRfI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 13:35:08 -0400
-Received: by mail-ot1-f65.google.com with SMTP id d17so10110344oth.5;
-        Mon, 17 Jun 2019 10:35:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nWpDQmZNg8zKVk12QskQ7NNS05C4fI/JmZBKLdKyu8Q=;
-        b=FM2Q7ZOmlVoFwsuJQDbrn3PkqbHIxnRIpgV3g1ovINvWTJ+//zBB4/7vkDSfEFgWoQ
-         +WqKju8P0rZT/UTt59Lyx83dFB8pPF8hkZY9+whx6TfxtrWPdDJjHRL5hu2HH7WyR7xj
-         qHQiv+hrC/PuduuouWWKwe1ytv1AoZm6Ss4fJ3/vcEsBGXBTtLL8X0P0v30x4flFA++H
-         DGsAorJ/+96KCJYSvy4EDcWmwh68XIPUAm1xec4Q8lNMaWqcHR8+nXwUhdAFowFEOWkH
-         LjEkNvDgJNDQyvjrMfE2K+tV7nB0R/ziSK73uv2wjkIH24t3m1aXJ86dT3LC3JI/1yRC
-         24nA==
-X-Gm-Message-State: APjAAAVhmqVXOeX65zmzgno2QPbEOmApBarmaf7E7WzQngsYaaq4vLuC
-        FqixJtMvjAk8JGaJMRBy2A5D6+GL
-X-Google-Smtp-Source: APXvYqwN0qju9dtyrVDJLTxV0rvPxolJl3H38qslFsbaaN9rmLu8EL2nad9C/muzD7FHUWYwo2jf/w==
-X-Received: by 2002:a9d:7245:: with SMTP id a5mr21278150otk.232.1560792906692;
-        Mon, 17 Jun 2019 10:35:06 -0700 (PDT)
-Received: from ?IPv6:2600:1700:65a0:78e0:514:7862:1503:8e4d? ([2600:1700:65a0:78e0:514:7862:1503:8e4d])
-        by smtp.gmail.com with ESMTPSA id p13sm4642077otq.15.2019.06.17.10.35.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jun 2019 10:35:05 -0700 (PDT)
-Subject: Re: [PATCH 6/8] IB/srp: set virt_boundary_mask in the scsi host
-To:     Christoph Hellwig <hch@lst.de>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190617122000.22181-1-hch@lst.de>
- <20190617122000.22181-7-hch@lst.de>
-From:   Sagi Grimberg <sagi@grimberg.me>
-Message-ID: <d660e5ab-c1a9-a1dc-b63b-147a1b77b6e8@grimberg.me>
-Date:   Mon, 17 Jun 2019 10:35:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <20190617122000.22181-7-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728605AbfFQRui (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 13:50:38 -0400
+Received: from hosting.gsystem.sk ([212.5.213.30]:50658 "EHLO
+        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726047AbfFQRuh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 13:50:37 -0400
+Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id 408E47A03E0;
+        Mon, 17 Jun 2019 19:50:36 +0200 (CEST)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Hariprasad Kelam <hariprasad.kelam@gmail.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        David Rientjes <rientjes@google.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] [resend] wd719x: Fix resets and aborts
+Date:   Mon, 17 Jun 2019 19:50:12 +0200
+Message-Id: <20190617175012.25323-1-linux@zary.sk>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+Host reset oopses because it calls wd719x_chip_init, which calls
+request_firmware, under a spinlock. Stop the RISC first, then flush
+active SCBs under a spinlock. Finally call wd719x_chip_init unlocked.
+
+Also found and fixed more bugs during tests:
+
+Affected active SCBs were not flushed during abort, bus and device
+reset. This caused problems in a following host reset (hang or oops).
+
+Device and bus reset failed under load because the result of the reset
+command is WD719X_SUE_TERM or WD719X_SUE_RESET. Don't treat these codes
+as error in wd719x_wait_done.
+
+wd719x_direct_cmd for RESET/ABORT commands didn't work properly,
+causing timeouts. Looks like it was caused by the WD719X_DISABLE_INT
+bit. Not setting it for RESET/ABORT commands seems to fix the probem.
+Also lower the log level of the corresponding "direct command
+completed" message to debug.
+
+Unfortunately, my documentation is missing some pages, including page
+67 (SPIDER67.gif) about resets :(
+
+Reported-by: Hariprasad Kelam <hariprasad.kelam@gmail.com>
+Signed-off-by: Ondrej Zary <linux@zary.sk>
+---
+ drivers/scsi/wd719x.c | 42 ++++++++++++++++++++++++++++++------------
+ 1 file changed, 30 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/scsi/wd719x.c b/drivers/scsi/wd719x.c
+index e3310e9488d2..2b44b0be2e00 100644
+--- a/drivers/scsi/wd719x.c
++++ b/drivers/scsi/wd719x.c
+@@ -107,8 +107,15 @@ static inline int wd719x_wait_done(struct wd719x *wd, int timeout)
+ 	}
+ 
+ 	if (status != WD719X_INT_NOERRORS) {
++		u8 sue = wd719x_readb(wd, WD719X_AMR_SCB_ERROR);
++		/* we get this after wd719x_dev_reset, it's not an error */
++		if (sue == WD719X_SUE_TERM)
++			return 0;
++		/* we get this after wd719x_bus_reset, it's not an error */
++		if (sue == WD719X_SUE_RESET)
++			return 0;
+ 		dev_err(&wd->pdev->dev, "direct command failed, status 0x%02x, SUE 0x%02x\n",
+-			status, wd719x_readb(wd, WD719X_AMR_SCB_ERROR));
++			status, sue);
+ 		return -EIO;
+ 	}
+ 
+@@ -127,8 +134,10 @@ static int wd719x_direct_cmd(struct wd719x *wd, u8 opcode, u8 dev, u8 lun,
+ 	if (wd719x_wait_ready(wd))
+ 		return -ETIMEDOUT;
+ 
+-	/* make sure we get NO interrupts */
+-	dev |= WD719X_DISABLE_INT;
++	/* disable interrupts except for RESET/ABORT (it breaks them) */
++	if (opcode != WD719X_CMD_BUSRESET && opcode != WD719X_CMD_ABORT &&
++	    opcode != WD719X_CMD_ABORT_TAG && opcode != WD719X_CMD_RESET)
++		dev |= WD719X_DISABLE_INT;
+ 	wd719x_writeb(wd, WD719X_AMR_CMD_PARAM, dev);
+ 	wd719x_writeb(wd, WD719X_AMR_CMD_PARAM_2, lun);
+ 	wd719x_writeb(wd, WD719X_AMR_CMD_PARAM_3, tag);
+@@ -464,6 +473,7 @@ static int wd719x_abort(struct scsi_cmnd *cmd)
+ 	spin_lock_irqsave(wd->sh->host_lock, flags);
+ 	result = wd719x_direct_cmd(wd, action, cmd->device->id,
+ 				   cmd->device->lun, cmd->tag, scb->phys, 0);
++	wd719x_finish_cmd(scb, DID_ABORT);
+ 	spin_unlock_irqrestore(wd->sh->host_lock, flags);
+ 	if (result)
+ 		return FAILED;
+@@ -476,6 +486,7 @@ static int wd719x_reset(struct scsi_cmnd *cmd, u8 opcode, u8 device)
+ 	int result;
+ 	unsigned long flags;
+ 	struct wd719x *wd = shost_priv(cmd->device->host);
++	struct wd719x_scb *scb, *tmp;
+ 
+ 	dev_info(&wd->pdev->dev, "%s reset requested\n",
+ 		 (opcode == WD719X_CMD_BUSRESET) ? "bus" : "device");
+@@ -483,6 +494,12 @@ static int wd719x_reset(struct scsi_cmnd *cmd, u8 opcode, u8 device)
+ 	spin_lock_irqsave(wd->sh->host_lock, flags);
+ 	result = wd719x_direct_cmd(wd, opcode, device, 0, 0, 0,
+ 				   WD719X_WAIT_FOR_SCSI_RESET);
++	/* flush all SCBs (or all for a device if dev_reset) */
++	list_for_each_entry_safe(scb, tmp, &wd->active_scbs, list) {
++		if (opcode == WD719X_CMD_BUSRESET ||
++		    scb->cmd->device->id == device)
++			wd719x_finish_cmd(scb, DID_RESET);
++	}
+ 	spin_unlock_irqrestore(wd->sh->host_lock, flags);
+ 	if (result)
+ 		return FAILED;
+@@ -505,22 +522,23 @@ static int wd719x_host_reset(struct scsi_cmnd *cmd)
+ 	struct wd719x *wd = shost_priv(cmd->device->host);
+ 	struct wd719x_scb *scb, *tmp;
+ 	unsigned long flags;
+-	int result;
+ 
+ 	dev_info(&wd->pdev->dev, "host reset requested\n");
+ 	spin_lock_irqsave(wd->sh->host_lock, flags);
+-	/* Try to reinit the RISC */
+-	if (wd719x_chip_init(wd) == 0)
+-		result = SUCCESS;
+-	else
+-		result = FAILED;
++	/* stop the RISC */
++	if (wd719x_direct_cmd(wd, WD719X_CMD_SLEEP, 0, 0, 0, 0,
++			      WD719X_WAIT_FOR_RISC))
++		dev_warn(&wd->pdev->dev, "RISC sleep command failed\n");
++	/* disable RISC */
++	wd719x_writeb(wd, WD719X_PCI_MODE_SELECT, 0);
+ 
+ 	/* flush all SCBs */
+ 	list_for_each_entry_safe(scb, tmp, &wd->active_scbs, list)
+-		wd719x_finish_cmd(scb, result);
++		wd719x_finish_cmd(scb, DID_RESET);
+ 	spin_unlock_irqrestore(wd->sh->host_lock, flags);
+ 
+-	return result;
++	/* Try to reinit the RISC */
++	return wd719x_chip_init(wd) == 0 ? SUCCESS : FAILED;
+ }
+ 
+ static int wd719x_biosparam(struct scsi_device *sdev, struct block_device *bdev,
+@@ -672,7 +690,7 @@ static irqreturn_t wd719x_interrupt(int irq, void *dev_id)
+ 			else
+ 				dev_err(&wd->pdev->dev, "card returned invalid SCB pointer\n");
+ 		} else
+-			dev_warn(&wd->pdev->dev, "direct command 0x%x completed\n",
++			dev_dbg(&wd->pdev->dev, "direct command 0x%x completed\n",
+ 				 regs.bytes.OPC);
+ 		break;
+ 	case WD719X_INT_PIOREADY:
+-- 
+Ondrej Zary
+
