@@ -2,41 +2,34 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 528D44851A
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 16:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625FA48531
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 16:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfFQORU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 10:17:20 -0400
-Received: from smtp.nue.novell.com ([195.135.221.5]:55022 "EHLO
+        id S1726920AbfFQOU7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 10:20:59 -0400
+Received: from smtp.nue.novell.com ([195.135.221.5]:55955 "EHLO
         smtp.nue.novell.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726005AbfFQORU (ORCPT
+        with ESMTP id S1726215AbfFQOU6 (ORCPT
         <rfc822;groupwise-linux-scsi@vger.kernel.org:0:0>);
-        Mon, 17 Jun 2019 10:17:20 -0400
+        Mon, 17 Jun 2019 10:20:58 -0400
 Received: from [10.160.4.48] (charybdis.suse.de [149.44.162.66])
-        by smtp.nue.novell.com with ESMTP (TLS encrypted); Mon, 17 Jun 2019 16:17:18 +0200
-Subject: Re: [PATCH 1/3] scsi: Do not allow user space to change the SCSI
- device state into SDEV_BLOCK
-To:     James Smart <james.smart@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Ming Lei <ming.lei@redhat.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>
-References: <20190605201435.233701-1-bvanassche@acm.org>
- <20190605201435.233701-2-bvanassche@acm.org>
- <cec3e805-c834-a389-9666-bb79ed86057d@suse.de>
- <22ce1f30-a3c5-fc7d-0f1e-e2ca589682bb@acm.org>
- <470d4c41-1f9e-730e-a1dc-a27f9e971bc1@suse.com> <yq1tvd1lgql.fsf@oracle.com>
- <d7d48fc4-9df6-74d1-f308-bf5a9d8ef0a7@broadcom.com>
+        by smtp.nue.novell.com with ESMTP (TLS encrypted); Mon, 17 Jun 2019 16:20:57 +0200
+Subject: Re: [PATCH] fcoe: avoid memset across pointer boundaries
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Hannes Reinecke <hare@suse.de>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+References: <20190604093028.79673-1-hare@suse.de>
+ <CAHk-=wg85nK-9JwOsx4RqbPpVoNsV3f9fnm9s=3nVoC34o7ePw@mail.gmail.com>
 From:   Hannes Reinecke <hare@suse.com>
-Message-ID: <4f86591c-4460-0200-a912-e6f26e436f9c@suse.com>
-Date:   Mon, 17 Jun 2019 16:17:17 +0200
+Message-ID: <992bdcda-14d2-e5f3-5783-cf1a3022f40b@suse.com>
+Date:   Mon, 17 Jun 2019 16:20:56 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <d7d48fc4-9df6-74d1-f308-bf5a9d8ef0a7@broadcom.com>
+In-Reply-To: <CAHk-=wg85nK-9JwOsx4RqbPpVoNsV3f9fnm9s=3nVoC34o7ePw@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -45,18 +38,61 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/7/19 5:46 PM, James Smart wrote:
-> On 6/7/2019 5:30 AM, Martin K. Petersen wrote:
->> Hannes,
+On 6/7/19 10:55 PM, Linus Torvalds wrote:
+> On Tue, Jun 4, 2019 at 2:30 AM Hannes Reinecke <hare@suse.de> wrote:
 >>
->>> So let's restrict userspace to only ever setting 'RUNNING' or
->>> 'OFFLINE'.  None of the other states make sense to set from userspace.
->> Yes, please!
->>
+>> Gcc-9 complains for a memset across pointer boundaries, which happens
+>> as the code tries to allocate a flexible array on the stack.
+>> Turns out we cannot do this without relying on gcc-isms, so
+>> this patch converts the stack allocation in proper kzalloc() calls.
 > 
-> +1 for me too
+> Getting back to this - maybe you already fixed this in your bigger
+> patch series, but I noted a problem with this:
 > 
-Ok, will be drafting up a patch.
+>>  static inline struct fcoe_rport *fcoe_ctlr_rport(struct fc_rport_priv *rdata)
+>>  {
+>> -       return (struct fcoe_rport *)(rdata + 1);
+>> +       return (struct fcoe_rport *)(&rdata->rpriv);
+>>  }
+> ...
+>> @@ -212,6 +212,7 @@ struct fc_rport_priv {
+>>         struct rcu_head             rcu;
+>>         u16                         sp_features;
+>>         u8                          spp_type;
+>> +       char                        rpriv[];
+>>  };
+> 
+> The above does not work at all on machines that have alignment
+> constraints, because now your fcoe_rport pointer will be very much
+> mis-aligned.
+> 
+> The old "(rdata + 1)" thing was also potentially mis-aligned: the size
+> of "struct fc_rport_priv" is aligned, but it's aligned to the
+> alignment of fc_rport_priv, not to the alignment of struct fcoe_rport.
+> 
+> But in practice the old alignment was probably "good enough".
+> 
+> But the "char rpriv[]" model definitely has horrendous explicit
+> mix-alignment, with that previous single-byte spp_type member. It's
+> almost certainly at a 3-byte offset.
+> 
+> On x86, you won't notice. It won't even perform all that badly. But on
+> other architectures it might not work at all, or perform horribly
+> badly.
+> 
+> Using at least "u64 rpriv[]" might be better.  I didn't look at your
+> other patch version.
+> 
+Thanks for the heads-up.
+I actually had discussed the alignment problematic with our gcc folks,
+and they claimed that the only portable way for specifying an abstract
+array at the end of the structure was indeed to use 'char n[]'; they
+claimed 'u64' would have different alignment issues etc and would only
+work reliably on gcc.
+
+So I might as well going back to the original style, as the offending
+calls have been fixed with a different patch quite independently of this
+issue.
 
 Cheers,
 
