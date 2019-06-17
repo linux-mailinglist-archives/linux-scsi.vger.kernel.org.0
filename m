@@ -2,27 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EDBF47888
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 05:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E03A6478AF
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 05:35:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727635AbfFQDIh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 16 Jun 2019 23:08:37 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:55780 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727413AbfFQDIg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 16 Jun 2019 23:08:36 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 38427C04FF86;
-        Mon, 17 Jun 2019 03:08:36 +0000 (UTC)
-Received: from localhost (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1703B101E69D;
-        Mon, 17 Jun 2019 03:08:34 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        id S1727671AbfFQDfs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 16 Jun 2019 23:35:48 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:47442 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727669AbfFQDfs (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 16 Jun 2019 23:35:48 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 2F7832931B;
+        Sun, 16 Jun 2019 23:35:42 -0400 (EDT)
+Date:   Mon, 17 Jun 2019 13:35:53 +1000 (AEST)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Ming Lei <ming.lei@redhat.com>
+cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
         Bart Van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.com>,
         Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
@@ -32,128 +29,143 @@ Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         James Smart <james.smart@broadcom.com>,
         "Juergen E . Fischer" <fischer@norbit.de>,
         Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Benjamin Block <bblock@linux.ibm.com>
-Subject: [PATCH V4 16/16] NCR5380: Support chained sg lists
-Date:   Mon, 17 Jun 2019 11:03:49 +0800
-Message-Id: <20190617030349.26415-17-ming.lei@redhat.com>
-In-Reply-To: <20190617030349.26415-1-ming.lei@redhat.com>
-References: <20190617030349.26415-1-ming.lei@redhat.com>
+Subject: Re: [PATCH V4 11/16] scsi: aha152x: use sg helper to operate
+ scatterlist
+In-Reply-To: <20190617030349.26415-12-ming.lei@redhat.com>
+Message-ID: <alpine.LNX.2.21.1906171334330.168@nippy.intranet>
+References: <20190617030349.26415-1-ming.lei@redhat.com> <20190617030349.26415-12-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Mon, 17 Jun 2019 03:08:36 +0000 (UTC)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Finn Thain <fthain@telegraphics.com.au>
+On Mon, 17 Jun 2019, Ming Lei wrote:
 
-My understanding is that support for chained scatterlists is to
-become mandatory for LLDs.
+> Use the scatterlist iterators and remove direct indexing of the
+> scatterlist array.
+> 
+> This way allows us to pre-allocate one small scatterlist, which can be
+> chained with one runtime allocated scatterlist if the pre-allocated one
+> isn't enough for the whole request.
+> 
+> Finn added the change to replace SCp.buffers_residual with sg_is_last()
+> for fixing updating it, and the similar change has been applied on
+> NCR5380.c
+> 
+> Cc: Finn Thain <fthain@telegraphics.com.au>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
 
-Use the scatterlist iterators and remove direct indexing of the
-scatterlist array.
+Reviewed-by: Finn Thain <fthain@telegraphics.com.au>
 
-This way allows us to pre-allocate one small scatterlist, which can be
-chained with one runtime allocated scatterlist if the pre-allocated one
-isn't enough for the whole request.
-
-Cc: Michael Schmitz <schmitzmic@gmail.com>
-Reviewed-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
----
- drivers/scsi/NCR5380.c | 41 ++++++++++++++++++-----------------------
- 1 file changed, 18 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
-index fe0535affc14..4ef44fafe6ca 100644
---- a/drivers/scsi/NCR5380.c
-+++ b/drivers/scsi/NCR5380.c
-@@ -149,12 +149,10 @@ static inline void initialize_SCp(struct scsi_cmnd *cmd)
- 
- 	if (scsi_bufflen(cmd)) {
- 		cmd->SCp.buffer = scsi_sglist(cmd);
--		cmd->SCp.buffers_residual = scsi_sg_count(cmd) - 1;
- 		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
- 		cmd->SCp.this_residual = cmd->SCp.buffer->length;
- 	} else {
- 		cmd->SCp.buffer = NULL;
--		cmd->SCp.buffers_residual = 0;
- 		cmd->SCp.ptr = NULL;
- 		cmd->SCp.this_residual = 0;
- 	}
-@@ -163,6 +161,17 @@ static inline void initialize_SCp(struct scsi_cmnd *cmd)
- 	cmd->SCp.Message = 0;
- }
- 
-+static inline void advance_sg_buffer(struct scsi_cmnd *cmd)
-+{
-+	struct scatterlist *s = cmd->SCp.buffer;
-+
-+	if (!cmd->SCp.this_residual && s && !sg_is_last(s)) {
-+		cmd->SCp.buffer = sg_next(s);
-+		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
-+		cmd->SCp.this_residual = cmd->SCp.buffer->length;
-+	}
-+}
-+
- /**
-  * NCR5380_poll_politely2 - wait for two chip register values
-  * @hostdata: host private data
-@@ -1672,12 +1681,7 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
- 			    sun3_dma_setup_done != cmd) {
- 				int count;
- 
--				if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
--					++cmd->SCp.buffer;
--					--cmd->SCp.buffers_residual;
--					cmd->SCp.this_residual = cmd->SCp.buffer->length;
--					cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
--				}
-+				advance_sg_buffer(cmd);
- 
- 				count = sun3scsi_dma_xfer_len(hostdata, cmd);
- 
-@@ -1727,15 +1731,11 @@ static void NCR5380_information_transfer(struct Scsi_Host *instance)
- 				 * scatter-gather list, move onto the next one.
- 				 */
- 
--				if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
--					++cmd->SCp.buffer;
--					--cmd->SCp.buffers_residual;
--					cmd->SCp.this_residual = cmd->SCp.buffer->length;
--					cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
--					dsprintk(NDEBUG_INFORMATION, instance, "%d bytes and %d buffers left\n",
--					         cmd->SCp.this_residual,
--					         cmd->SCp.buffers_residual);
--				}
-+				advance_sg_buffer(cmd);
-+				dsprintk(NDEBUG_INFORMATION, instance,
-+					"this residual %d, sg ents %d\n",
-+					cmd->SCp.this_residual,
-+					sg_nents(cmd->SCp.buffer));
- 
- 				/*
- 				 * The preferred transfer method is going to be
-@@ -2136,12 +2136,7 @@ static void NCR5380_reselect(struct Scsi_Host *instance)
- 	if (sun3_dma_setup_done != tmp) {
- 		int count;
- 
--		if (!tmp->SCp.this_residual && tmp->SCp.buffers_residual) {
--			++tmp->SCp.buffer;
--			--tmp->SCp.buffers_residual;
--			tmp->SCp.this_residual = tmp->SCp.buffer->length;
--			tmp->SCp.ptr = sg_virt(tmp->SCp.buffer);
--		}
-+		advance_sg_buffer(tmp);
- 
- 		count = sun3scsi_dma_xfer_len(hostdata, tmp);
- 
 -- 
-2.20.1
 
+> ---
+>  drivers/scsi/aha152x.c | 42 ++++++++++++++++++++----------------------
+>  1 file changed, 20 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+> index 97872838b983..6d0518f616cb 100644
+> --- a/drivers/scsi/aha152x.c
+> +++ b/drivers/scsi/aha152x.c
+> @@ -948,7 +948,6 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
+>  	   SCp.ptr              : buffer pointer
+>  	   SCp.this_residual    : buffer length
+>  	   SCp.buffer           : next buffer
+> -	   SCp.buffers_residual : left buffers in list
+>  	   SCp.phase            : current state of the command */
+>  
+>  	if ((phase & resetting) || !scsi_sglist(SCpnt)) {
+> @@ -956,13 +955,11 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
+>  		SCpnt->SCp.this_residual = 0;
+>  		scsi_set_resid(SCpnt, 0);
+>  		SCpnt->SCp.buffer           = NULL;
+> -		SCpnt->SCp.buffers_residual = 0;
+>  	} else {
+>  		scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
+>  		SCpnt->SCp.buffer           = scsi_sglist(SCpnt);
+>  		SCpnt->SCp.ptr              = SG_ADDRESS(SCpnt->SCp.buffer);
+>  		SCpnt->SCp.this_residual    = SCpnt->SCp.buffer->length;
+> -		SCpnt->SCp.buffers_residual = scsi_sg_count(SCpnt) - 1;
+>  	}
+>  
+>  	DO_LOCK(flags);
+> @@ -2030,10 +2027,9 @@ static void datai_run(struct Scsi_Host *shpnt)
+>  				}
+>  
+>  				if (CURRENT_SC->SCp.this_residual == 0 &&
+> -				    CURRENT_SC->SCp.buffers_residual > 0) {
+> +				    !sg_is_last(CURRENT_SC->SCp.buffer)) {
+>  					/* advance to next buffer */
+> -					CURRENT_SC->SCp.buffers_residual--;
+> -					CURRENT_SC->SCp.buffer++;
+> +					CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
+>  					CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
+>  					CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
+>  				}
+> @@ -2136,10 +2132,10 @@ static void datao_run(struct Scsi_Host *shpnt)
+>  			CMD_INC_RESID(CURRENT_SC, -2 * data_count);
+>  		}
+>  
+> -		if(CURRENT_SC->SCp.this_residual==0 && CURRENT_SC->SCp.buffers_residual>0) {
+> +		if(CURRENT_SC->SCp.this_residual==0 &&
+> +		   !sg_is_last(CURRENT_SC->SCp.buffer)) {
+>  			/* advance to next buffer */
+> -			CURRENT_SC->SCp.buffers_residual--;
+> -			CURRENT_SC->SCp.buffer++;
+> +			CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
+>  			CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
+>  			CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
+>  		}
+> @@ -2158,22 +2154,24 @@ static void datao_run(struct Scsi_Host *shpnt)
+>  static void datao_end(struct Scsi_Host *shpnt)
+>  {
+>  	if(TESTLO(DMASTAT, DFIFOEMP)) {
+> -		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) -
+> -			GETSTCNT();
+> +		int done = GETSTCNT();
+> +		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) - done;
+> +		struct scatterlist *sg = scsi_sglist(CURRENT_SC);
+>  
+>  		CMD_INC_RESID(CURRENT_SC, data_count);
+>  
+> -		data_count -= CURRENT_SC->SCp.ptr -
+> -			SG_ADDRESS(CURRENT_SC->SCp.buffer);
+> -		while(data_count>0) {
+> -			CURRENT_SC->SCp.buffer--;
+> -			CURRENT_SC->SCp.buffers_residual++;
+> -			data_count -= CURRENT_SC->SCp.buffer->length;
+> +		/* Locate the first SG entry not yet sent */
+> +		while (done > 0 && !sg_is_last(sg)) {
+> +			if (done < sg->length)
+> +				break;
+> +			done -= sg->length;
+> +			sg = sg_next(sg);
+>  		}
+> -		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) -
+> -			data_count;
+> -		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length +
+> -			data_count;
+> +
+> +		CURRENT_SC->SCp.buffer = sg;
+> +		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) + done;
+> +		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length -
+> +			done;
+>  	}
+>  
+>  	SETPORT(SXFRCTL0, CH1|CLRCH1|CLRSTCNT);
+> @@ -2501,7 +2499,7 @@ static void get_command(struct seq_file *m, struct scsi_cmnd * ptr)
+>  
+>  	seq_printf(m, "); resid=%d; residual=%d; buffers=%d; phase |",
+>  		scsi_get_resid(ptr), ptr->SCp.this_residual,
+> -		ptr->SCp.buffers_residual);
+> +		sg_nents(ptr->SCp.buffer) - 1);
+>  
+>  	if (ptr->SCp.phase & not_issued)
+>  		seq_puts(m, "not issued|");
+> 
