@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6218C486D1
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 17:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39653486D2
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 17:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728269AbfFQPSa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 11:18:30 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34487 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbfFQPS3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 11:18:29 -0400
-Received: by mail-pf1-f193.google.com with SMTP id c85so5872341pfc.1
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2019 08:18:29 -0700 (PDT)
+        id S1728322AbfFQPSb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 11:18:31 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:32931 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbfFQPSb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 11:18:31 -0400
+Received: by mail-pf1-f196.google.com with SMTP id x15so5876265pfq.0
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2019 08:18:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=56VzP6loyvCbiQA6Sh4850/nEbd1cCME9gjuek5ksrc=;
-        b=NzR0ulDWQH+xNg07zA55xlxtvFPyrUMw+2PCcjCsn14SA3isVrnSxJUnWSSrgy+Zet
-         UhmwG43DexdJ4tUwTX/tUScIdbAXqhHNtGMh3QURTq8zQlH/wI5jHNnadU0lyIvkEpXQ
-         C1sd+mYEiN/okKucvcPJfipWr7aprTOmOG9GUvDBUoshFZp0V5e446TGXbOFY6fj3rxJ
-         VijNvqPsaXEefIy+vYBaSjgrd7oGCVUOtPsamsVHXwuhhZl/QzIY/GVUycjXCB+k09Hd
-         8j9ciyuqSrmixEJHtL6V9x7IYSbjbeagK18IUacdJ52qpRy1fqwDMyM8g7plqSQE/7gc
-         AQaw==
-X-Gm-Message-State: APjAAAXG/PK52G5YaeyGUWNxQFwu5pOMBA651k7fo4dxZIPk/oG4RKHt
-        MS41kWFqV2SW+0sVYXQUP5Y=
-X-Google-Smtp-Source: APXvYqwGuRuMYq/SRxvIpmUFJhHrUy9erW1Z+DAiFN44z8aTJhurnO5Qe+1WfPN/sWIGbSvHfLvH1w==
-X-Received: by 2002:aa7:8f2c:: with SMTP id y12mr30583816pfr.38.1560784709094;
-        Mon, 17 Jun 2019 08:18:29 -0700 (PDT)
+        bh=g+MKUUj69ETXmnzh4N6h+VZvivosQHlAwM0q9HI0Gwo=;
+        b=aKj4LgOHwbCw01kuGr0h5fdaQx8BKgNmhqXbHchEL5ToMD+NM6JllU751kjWechC69
+         9ZbCrmdZJvVI9G8vQGhh8RmNqLwo/FShGm0/om/BI84nHktFTfp6IYt3JfMGXalcll0p
+         pe55GPp3/mgtDZ860skK2MsS6YndIwdqWlzhHD26TweQKZm1TTS8fAqqxluYZDsWUdpj
+         Gzzm+Hu4kkp13ZDNKXJ327IJzU/Kn1TYfsqqYLJKAV6TblDNjpuT266JLwYeGwhpvIev
+         MCrGElk/UTpgdMh63gy7/ZNKml0FEER90/3SSJQE7AtGRAH/upOhNYsVzYZSTHv71aM1
+         buJQ==
+X-Gm-Message-State: APjAAAWeuw+iXrFkAJXfctczPmgVat0nGsqdf2irdEu2v3yPr4R4u5Ey
+        eIRgLT6Dl+LBZRzdJ6W6jjo=
+X-Google-Smtp-Source: APXvYqwsvjO/rAFItUBZKgMd/TIJPIpNJ9HiOLy30Jk94lc7JsxIMzv6EnKLE6Oj6ByL45d0R3G4jw==
+X-Received: by 2002:aa7:8c0f:: with SMTP id c15mr88074948pfd.113.1560784710463;
+        Mon, 17 Jun 2019 08:18:30 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id n5sm12529949pgd.26.2019.06.17.08.18.27
+        by smtp.gmail.com with ESMTPSA id n5sm12529949pgd.26.2019.06.17.08.18.29
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 17 Jun 2019 08:18:28 -0700 (PDT)
+        Mon, 17 Jun 2019 08:18:29 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -41,13 +41,10 @@ Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Hannes Reinecke <hare@suse.com>,
         Johannes Thumshirn <jthumshirn@suse.de>,
         Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <james.smart@broadcom.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Laurence Oberman <loberman@redhat.com>
-Subject: [PATCH v4 1/3] scsi: Restrict user space SCSI device state changes to "running" and "offfline"
-Date:   Mon, 17 Jun 2019 08:18:18 -0700
-Message-Id: <20190617151820.241583-2-bvanassche@acm.org>
+        Hannes Reinecke <hare@suse.de>
+Subject: [PATCH v4 2/3] scsi: Avoid that .queuecommand() gets called for a blocked SCSI device
+Date:   Mon, 17 Jun 2019 08:18:19 -0700
+Message-Id: <20190617151820.241583-3-bvanassche@acm.org>
 X-Mailer: git-send-email 2.20.GIT
 In-Reply-To: <20190617151820.241583-1-bvanassche@acm.org>
 References: <20190617151820.241583-1-bvanassche@acm.org>
@@ -58,68 +55,89 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The ability to modify the SCSI device state was introduced by commit
-638127e579a4 ("[PATCH] Fix error handler offline behaviour"; v2.6.12). That
-same commit introduced the following device states:
+Several SCSI transport and LLD drivers surround code that does not
+tolerate concurrent calls of .queuecommand() with scsi_target_block() /
+scsi_target_unblock(). These last two functions use
+blk_mq_quiesce_queue() / blk_mq_unquiesce_queue() for scsi-mq request
+queues to prevent concurrent .queuecommand() calls. However, that is
+not sufficient to prevent .queuecommand() calls from scsi_send_eh_cmnd().
+Hence surround the .queuecommand() call from the SCSI error handler with
+code that avoids that .queuecommand() gets called in the blocked state.
 
-       { SDEV_CREATED, "created" },
-       { SDEV_RUNNING, "running" },
-       { SDEV_CANCEL,  "cancel"  },
-       { SDEV_DEL,     "deleted" },
-       { SDEV_QUIESCE, "quiesce" },
-       { SDEV_OFFLINE, "offline" },
+Note: converting the .queuecommand() call in scsi_send_eh_cmnd() into
+code that calls blk_get_request() + blk_execute_rq() is not an option
+since scsi_send_eh_cmnd() must be able to make forward progress even
+if all requests have been allocated.
 
-The SDEV_BLOCK state was introduced later to avoid that an FC cable pull
-would immediately result in an I/O error (commit 1094e682310e; "[PATCH]
-suspending I/Os to a device"; v2.6.12). That same patch introduced the
-ability to set the SDEV_BLOCK state from user space. I'm not sure whether
-that ability was introduced on purpose or accidentally.
-
-Since there is agreement that only writing "running" or "offline" into
-the SCSI sysfs device state attribute makes sense, restrict sysfs writes
-to these values.
-
-This patch makes sure that SDEV_BLOCK is only used for its original
-purpose, namely to allow transport drivers and LLDs to block further
-.queuecommand() calls while transport layer or adapter recovery is in
-progress.
-
-Note: a web search for "/sys/class/scsi_device" AND "device/state"
-revealed several storage configuration guides. The instructions I found
-in these guides tell users to write the value "running" or "offline" in
-the SCSI device state sysfs attribute and no other values.
-
-Cc: Christoph Hellwig <hch@lst.de>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
 Cc: Ming Lei <ming.lei@redhat.com>
 Cc: Hannes Reinecke <hare@suse.de>
 Cc: Johannes Thumshirn <jthumshirn@suse.de>
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Ewan D. Milne <emilne@redhat.com>
-Cc: Laurence Oberman <loberman@redhat.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/scsi_sysfs.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/scsi/scsi_error.c | 26 ++++++++++++++++++++++++--
+ drivers/scsi/scsi_lib.c   |  4 ----
+ 2 files changed, 24 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 3b119ca0cc0c..850cdc731a1f 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -766,8 +766,13 @@ store_state_field(struct device *dev, struct device_attribute *attr,
- 			break;
- 		}
- 	}
--	if (!state)
-+	switch (state) {
-+	case SDEV_RUNNING:
-+	case SDEV_OFFLINE:
-+		break;
-+	default:
- 		return -EINVAL;
-+	}
+diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+index 8e9680572b9f..d516dd1b824d 100644
+--- a/drivers/scsi/scsi_error.c
++++ b/drivers/scsi/scsi_error.c
+@@ -1054,7 +1054,7 @@ static int scsi_send_eh_cmnd(struct scsi_cmnd *scmd, unsigned char *cmnd,
+ 	struct scsi_device *sdev = scmd->device;
+ 	struct Scsi_Host *shost = sdev->host;
+ 	DECLARE_COMPLETION_ONSTACK(done);
+-	unsigned long timeleft = timeout;
++	unsigned long timeleft = timeout, delay;
+ 	struct scsi_eh_save ses;
+ 	const unsigned long stall_for = msecs_to_jiffies(100);
+ 	int rtn;
+@@ -1065,7 +1065,29 @@ static int scsi_send_eh_cmnd(struct scsi_cmnd *scmd, unsigned char *cmnd,
  
- 	mutex_lock(&sdev->state_mutex);
- 	ret = scsi_device_set_state(sdev, state);
+ 	scsi_log_send(scmd);
+ 	scmd->scsi_done = scsi_eh_done;
+-	rtn = shost->hostt->queuecommand(shost, scmd);
++
++	/*
++	 * Lock sdev->state_mutex to avoid that scsi_device_quiesce() can
++	 * change the SCSI device state after we have examined it and before
++	 * .queuecommand() is called.
++	 */
++	mutex_lock(&sdev->state_mutex);
++	while (sdev->sdev_state == SDEV_BLOCK && timeleft > 0) {
++		mutex_unlock(&sdev->state_mutex);
++		SCSI_LOG_ERROR_RECOVERY(5, sdev_printk(KERN_DEBUG, sdev,
++			"%s: state %d <> %d\n", __func__, sdev->sdev_state,
++			SDEV_BLOCK));
++		delay = min(timeleft, stall_for);
++		timeleft -= delay;
++		msleep(jiffies_to_msecs(delay));
++		mutex_lock(&sdev->state_mutex);
++	}
++	if (sdev->sdev_state != SDEV_BLOCK)
++		rtn = shost->hostt->queuecommand(shost, scmd);
++	else
++		rtn = SCSI_MLQUEUE_DEVICE_BUSY;
++	mutex_unlock(&sdev->state_mutex);
++
+ 	if (rtn) {
+ 		if (timeleft > stall_for) {
+ 			scsi_eh_restore_cmnd(scmd, &ses);
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index b4a63e4fcf73..ec5b4b5bc011 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -2632,10 +2632,6 @@ EXPORT_SYMBOL_GPL(scsi_internal_device_block_nowait);
+  * a legal transition). When the device is in this state, command processing
+  * is paused until the device leaves the SDEV_BLOCK state. See also
+  * scsi_internal_device_unblock().
+- *
+- * To do: avoid that scsi_send_eh_cmnd() calls queuecommand() after
+- * scsi_internal_device_block() has blocked a SCSI device and also
+- * remove the rport mutex lock and unlock calls from srp_queuecommand().
+  */
+ static int scsi_internal_device_block(struct scsi_device *sdev)
+ {
 -- 
 2.22.0.rc3
 
