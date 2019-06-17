@@ -2,96 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 594B049226
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 23:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CE1495A8
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 01:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbfFQVLJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 17:11:09 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:44203 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726607AbfFQVLJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 17:11:09 -0400
-Received: by mail-pf1-f195.google.com with SMTP id t16so6316313pfe.11;
-        Mon, 17 Jun 2019 14:11:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=opkG1qef1rxaB9MLU7WTvGnCWk3AjYn68RxS3C8luR4=;
-        b=aL6zFVE+sKOg/mLKBs8ggt2NPzITwtSP8e+l6Cr7cBTh0Zh9zdic+No42M/2fYcG3w
-         a61On09uk3Z4XbMxE2vVIsQlfNgwEGbMRX9//B096CqBtvRYnGwovRfECA9+cAFLzFEE
-         Gs1fAaarb/T+/UHWzZnzZmb7i5IelwuI4Gzdd5XztjzNCEd8F6kTwU/g6qRPzxOt+Ziu
-         In/VwuWSIdQFZA1MzxM/mhcJqDaQ1omxWwhf6SmoX6Oab8DgocmbXNWQ1EeVPcYs7soA
-         1TnqLS2mu0ZWMEW/8aOBWShiNNaCJY7jYSFooFemWJfw2SwCVwKsYBhNvjN4mfpLKuJc
-         oXIw==
-X-Gm-Message-State: APjAAAVQIboWgMKKdBCT7ZbUGU2ZR6cWvMKSo4q5y5j3C/jEqq2qRx67
-        yLX4pWqfrvrd8qV+i+UUhiA=
-X-Google-Smtp-Source: APXvYqyGNr9bMK5hPPswV5Y15Ekkz7I470S6OP0w859vv5dnOxfcXFe+JNmM62YPFNzTyK+G/3EsUg==
-X-Received: by 2002:a17:90a:778c:: with SMTP id v12mr972067pjk.141.1560805868191;
-        Mon, 17 Jun 2019 14:11:08 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id f17sm13277058pgv.16.2019.06.17.14.11.07
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 17 Jun 2019 14:11:07 -0700 (PDT)
-Subject: Re: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Martin Petersen <martin.petersen@oracle.com>
-Cc:     SCSI <linux-scsi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Douglas Gilbert <dgilbert@interlog.com>
-References: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <621306ee-7ab6-9cd2-e934-94b3d6d731fc@acm.org>
-Date:   Mon, 17 Jun 2019 14:11:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727000AbfFQXEY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 19:04:24 -0400
+Received: from mx6378.ciavia.eu ([178.156.202.117]:50051 "EHLO
+        slot0.presuure.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1727399AbfFQXEY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 19:04:24 -0400
+X-Greylist: delayed 1835 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jun 2019 19:04:23 EDT
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=presuure.ga;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=nuekwa@presuure.ga;
+ bh=EclTUBt0EgOxKrPKBvCtV8KGfLA=;
+ b=H27B+vVVUYUyZFWtOMwjcMwRxq8q/+2pSsMvg1xxvDb6FQD+KQGikARtDoqyfCNFVoU+jcuiPPdE
+   dOm02RVxrnI2qEIIXwXbF2JEDNLQXMk8zlEVoeSrcs24uPoUwoiaTmirsVv9zCB6OPmF5BCNAR09
+   phzVrt36IhD+waopxqTmPSyorDWrwSRQOd0+8hcCk4HV0/uvJ5z+hak62ykUa2quzMUIXUnTdSzf
+   pPP/AoTu+2DQLApRJj/s0cLjhm6gEfNt3tjPoDzh/waZ+YvSGPhvVtKjzxte5TpREmWE7nq2mqoM
+   vkbjEQ9fyGSp79+nQH3GIpFIEC9gjL8XUWXrTA==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=presuure.ga;
+ b=KviXrR/tSLGZj/Q26XtDBTJqlF+UwGkS4hg5wSL/anMWFLYaLZjaGkQytzFe4sd5gIFzTTLRNDzx
+   YF2YiyQah0c620rsCelm6hEmRYMeXalvjeWvF1srnL0loNx6SpFzfIMevlSM3Pzk7Mc8RKIb3kQI
+   ODH8Rq+LIzMIao4KIr+cUs0+mjOyuPyCchPZ9yVuaYx4Fho2DAcqmsxj5fZCpFJn7vctpH4lturY
+   Ope04n5yeR9sGLI6mIdDwnKpxGwqYDIZT3g1SD+BxXi2TGNy4QFFHP6f0lcqOdrVAWpKrOGG3Jul
+   /YQgD8xmRWV1TMTYWZbpORFOBRs+E4jrgJYfSQ==;
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: June inquiry
+To:     Recipients <nuekwa@presuure.ga>
+From:   "Marketing Dept" <nuekwa@presuure.ga>
+Date:   Tue, 18 Jun 2019 01:30:23 +0300
+Reply-To: great.pacific@aol.com
+Message-ID: <0.0.2.65B.1D5255C3A107970.0@slot0.presuure.ga>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/12/19 6:59 AM, Marc Gonzalez wrote:
-> According to the option's help message, SCSI_PROC_FS has been
-> superseded for ~15 years. Don't select it by default anymore.
-> 
-> Signed-off-by: Marc Gonzalez <marc.w.gonzalez@free.fr>
-> ---
->   drivers/scsi/Kconfig | 3 ---
->   1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-> index 73bce9b6d037..8c95e9ad6470 100644
-> --- a/drivers/scsi/Kconfig
-> +++ b/drivers/scsi/Kconfig
-> @@ -54,14 +54,11 @@ config SCSI_NETLINK
->   config SCSI_PROC_FS
->   	bool "legacy /proc/scsi/ support"
->   	depends on SCSI && PROC_FS
-> -	default y
->   	---help---
->   	  This option enables support for the various files in
->   	  /proc/scsi.  In Linux 2.6 this has been superseded by
->   	  files in sysfs but many legacy applications rely on this.
->   
-> -	  If unsure say Y.
-> -
->   comment "SCSI support type (disk, tape, CD-ROM)"
->   	depends on SCSI
+Hello dear,
+ =
 
-Hi Doug,
+We are in the market for your products after meeting at your stand during l=
+ast expo.
+ =
 
-If I run grep "/proc/scsi" over the sg3_utils source code then grep 
-reports 38 matches for that string. Does sg3_utils break with 
-SCSI_PROC_FS=n?
+Please kindly send us your latest catalog and price list so as to start a n=
+ew project/order as promised during the exhibition. =
 
-Thanks,
+ =
 
-Bart.
+I would appreciate your response about the above details required so we can=
+ revert back to you asap.
+ =
+
+Kind regards
+ =
+
+Hyuan Cloe
