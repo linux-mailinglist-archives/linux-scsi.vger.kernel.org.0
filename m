@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC2947D0B
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 10:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DA7D47D10
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 10:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbfFQI3i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 04:29:38 -0400
-Received: from verein.lst.de ([213.95.11.211]:34156 "EHLO newverein.lst.de"
+        id S1727537AbfFQI3w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 04:29:52 -0400
+Received: from verein.lst.de ([213.95.11.211]:34173 "EHLO newverein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725810AbfFQI3g (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 17 Jun 2019 04:29:36 -0400
+        id S1725810AbfFQI3w (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 17 Jun 2019 04:29:52 -0400
 Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 5E18368CFE; Mon, 17 Jun 2019 10:29:07 +0200 (CEST)
-Date:   Mon, 17 Jun 2019 10:29:07 +0200
+        id 4E31468D04; Mon, 17 Jun 2019 10:29:23 +0200 (CEST)
+Date:   Mon, 17 Jun 2019 10:29:23 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Ming Lei <ming.lei@redhat.com>
 Cc:     linux-scsi@vger.kernel.org,
@@ -33,21 +33,21 @@ Cc:     linux-scsi@vger.kernel.org,
         devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Benjamin Block <bblock@linux.ibm.com>
-Subject: Re: [PATCH V4 13/16] scsi: pcmcia: nsp_cs: use sg helper to
- operate scatterlist
-Message-ID: <20190617082907.GM7455@lst.de>
-References: <20190617030349.26415-1-ming.lei@redhat.com> <20190617030349.26415-14-ming.lei@redhat.com>
+Subject: Re: [PATCH V4 14/16] scsi: ppa: use sg helper to operate
+ scatterlist
+Message-ID: <20190617082923.GN7455@lst.de>
+References: <20190617030349.26415-1-ming.lei@redhat.com> <20190617030349.26415-15-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190617030349.26415-14-ming.lei@redhat.com>
+In-Reply-To: <20190617030349.26415-15-ming.lei@redhat.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 11:03:46AM +0800, Ming Lei wrote:
+On Mon, Jun 17, 2019 at 11:03:47AM +0800, Ming Lei wrote:
 > Use the scatterlist iterators and remove direct indexing of the
 > scatterlist array.
 > 
