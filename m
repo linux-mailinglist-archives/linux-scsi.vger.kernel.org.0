@@ -2,80 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE3F5481CA
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 14:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF84483AD
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 15:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727665AbfFQMU1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 08:20:27 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:59252 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727627AbfFQMUY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 08:20:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From
-        :Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=QmF+hMORbQndpCz32PB+cZz6ZyE8AYGsI14jgQiJTGk=; b=b/Db0BK20TJuwRjOioLVHLjfCP
-        h0tNT6G+x72Lb4VACGbEjLKCc2EuIorIcUIk9AjaDE40GJ1TGwMHfizV9PYWXJwG0aaxpjF6pssHC
-        n9KdkoApYCeHtw3BBhh3ksfCB0QgJ52hSU2Mz9QF8wrEXte7SlPAHC5AdHuL2Gqql87SxzSI2ivWh
-        9VdpkfuSLKJhmFJF3+1+1bolgO0OHXcQPBbYx10GjZxfvZLBw9JjG6NBOi6coBDLpbSZyVhmB4Lqr
-        wr8eE/xR16kTjIKNT7AOV9jfx2e8yqxuZTdBZ/Ev1K0ETjeySqndLq0HnXl8ymTavhst/9jyH3PK/
-        ZZ9NnB7A==;
-Received: from clnet-p19-102.ikbnet.co.at ([83.175.77.102] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hcqcY-0004hd-7k; Mon, 17 Jun 2019 12:20:22 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Sagi Grimberg <sagi@grimberg.me>, Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 8/8] megaraid_sas: set an unlimited max_segment_size
-Date:   Mon, 17 Jun 2019 14:20:00 +0200
-Message-Id: <20190617122000.22181-9-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190617122000.22181-1-hch@lst.de>
-References: <20190617122000.22181-1-hch@lst.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        id S1726173AbfFQNQj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 09:16:39 -0400
+Received: from stargate.chelsio.com ([12.32.117.8]:47948 "EHLO
+        stargate.chelsio.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbfFQNQj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 09:16:39 -0400
+Received: from fcoe-test11.asicdesigners.com (fcoe-test11.blr.asicdesigners.com [10.193.185.180])
+        by stargate.chelsio.com (8.13.8/8.13.8) with ESMTP id x5HDGVOC018542;
+        Mon, 17 Jun 2019 06:16:32 -0700
+From:   Varun Prakash <varun@chelsio.com>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, dt@chelsio.com, indranil@chelsio.com,
+        ganji.aravind@chelsio.com, varun@chelsio.com
+Subject: [PATCH] scsi: cxgb4i: add support for IEEE_8021QAZ_APP_SEL_STREAM selector
+Date:   Mon, 17 Jun 2019 18:46:26 +0530
+Message-Id: <1560777386-5295-1-git-send-email-varun@chelsio.com>
+X-Mailer: git-send-email 2.0.2
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When using a virt_boundary_mask, as done for NVMe devices attached to
-megaraid_sas controllers we require an unlimited max_segment_size, as
-the virt boundary merging code assumes that.  But we also need to
-propagate that to the DMA mapping layer to make dma-debug happy.  The
-SCSI layer takes care of that when using the per-host virt_boundary
-setting, but given that megaraid_sas only wants to set the virt_boundary
-for actual NVMe devices we can't rely on that.  The DMA layer maximum
-segment is global to the HBA however, so we have to set it explicitly.
-This patch assumes that megaraid_sas does not have a segment size
-limitation, which seems true based on the SGL format, but will need
-to be verified.
+IEEE_8021QAZ_APP_SEL_STREAM is a valid selector
+for iSCSI connections, so add code to use
+IEEE_8021QAZ_APP_SEL_STREAM selector to get priority
+mask.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Varun Prakash <varun@chelsio.com>
 ---
- drivers/scsi/megaraid/megaraid_sas_base.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/scsi/cxgbi/cxgb4i/cxgb4i.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 3dd1df472dc6..59f709dbbab9 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3207,6 +3207,7 @@ static struct scsi_host_template megasas_template = {
- 	.shost_attrs = megaraid_host_attrs,
- 	.bios_param = megasas_bios_param,
- 	.change_queue_depth = scsi_change_queue_depth,
-+	.max_segment_size = 0xffffffff,
- 	.no_write_same = 1,
- };
+diff --git a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
+index 124f334..0e767e6 100644
+--- a/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
++++ b/drivers/scsi/cxgbi/cxgb4i/cxgb4i.c
+@@ -1665,8 +1665,12 @@ static u8 get_iscsi_dcb_priority(struct net_device *ndev)
+ 		return 0;
  
+ 	if (caps & DCB_CAP_DCBX_VER_IEEE) {
+-		iscsi_dcb_app.selector = IEEE_8021QAZ_APP_SEL_ANY;
++		iscsi_dcb_app.selector = IEEE_8021QAZ_APP_SEL_STREAM;
+ 		rv = dcb_ieee_getapp_mask(ndev, &iscsi_dcb_app);
++		if (!rv) {
++			iscsi_dcb_app.selector = IEEE_8021QAZ_APP_SEL_ANY;
++			rv = dcb_ieee_getapp_mask(ndev, &iscsi_dcb_app);
++		}
+ 	} else if (caps & DCB_CAP_DCBX_VER_CEE) {
+ 		iscsi_dcb_app.selector = DCB_APP_IDTYPE_PORTNUM;
+ 		rv = dcb_getapp(ndev, &iscsi_dcb_app);
+@@ -2251,7 +2255,8 @@ cxgb4_dcb_change_notify(struct notifier_block *self, unsigned long val,
+ 	u8 priority;
+ 
+ 	if (iscsi_app->dcbx & DCB_CAP_DCBX_VER_IEEE) {
+-		if (iscsi_app->app.selector != IEEE_8021QAZ_APP_SEL_ANY)
++		if ((iscsi_app->app.selector != IEEE_8021QAZ_APP_SEL_STREAM) &&
++		    (iscsi_app->app.selector != IEEE_8021QAZ_APP_SEL_ANY))
+ 			return NOTIFY_DONE;
+ 
+ 		priority = iscsi_app->app.priority;
 -- 
-2.20.1
+2.0.2
 
