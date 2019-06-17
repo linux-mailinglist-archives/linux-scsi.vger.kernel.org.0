@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D93B47C42
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 10:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A9F47CC0
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 10:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726712AbfFQI0X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 04:26:23 -0400
-Received: from verein.lst.de ([213.95.11.211]:34053 "EHLO newverein.lst.de"
+        id S1727997AbfFQI16 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 04:27:58 -0400
+Received: from verein.lst.de ([213.95.11.211]:34073 "EHLO newverein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725884AbfFQI0X (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 17 Jun 2019 04:26:23 -0400
+        id S1727906AbfFQI1f (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 17 Jun 2019 04:27:35 -0400
 Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 100D168C7B; Mon, 17 Jun 2019 10:25:54 +0200 (CEST)
-Date:   Mon, 17 Jun 2019 10:25:53 +0200
+        id BDECB68CEC; Mon, 17 Jun 2019 10:27:06 +0200 (CEST)
+Date:   Mon, 17 Jun 2019 10:27:06 +0200
 From:   Christoph Hellwig <hch@lst.de>
 To:     Ming Lei <ming.lei@redhat.com>
 Cc:     linux-scsi@vger.kernel.org,
@@ -32,21 +32,30 @@ Cc:     linux-scsi@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
         Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-Subject: Re: [PATCH V4 08/16] staging: unisys: visorhba: use sg helper to
- operate scatterlist
-Message-ID: <20190617082553.GH7455@lst.de>
-References: <20190617030349.26415-1-ming.lei@redhat.com> <20190617030349.26415-9-ming.lei@redhat.com>
+        Benjamin Block <bblock@linux.ibm.com>,
+        Kim Bradley <kim.jamie.bradley@gmail.com>
+Subject: Re: [PATCH V4 09/16] staging: rtsx: use sg helper to operate
+ scatterlist
+Message-ID: <20190617082706.GI7455@lst.de>
+References: <20190617030349.26415-1-ming.lei@redhat.com> <20190617030349.26415-10-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190617030349.26415-9-ming.lei@redhat.com>
+In-Reply-To: <20190617030349.26415-10-ming.lei@redhat.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The patch itsel looks good, but another case of buggy kmap it seems:
+On Mon, Jun 17, 2019 at 11:03:42AM +0800, Ming Lei wrote:
+> Use the scatterlist iterators and remove direct indexing of the
+> scatterlist array.
+> 
+> This way allows us to pre-allocate one small scatterlist, which can be
+> chained with one runtime allocated scatterlist if the pre-allocated one
+> isn't enough for the whole request.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+The scatterlist handling here looks completely bogus, it really
+needs to stop using the index and switch to proper sg_next-based
+iteration.
