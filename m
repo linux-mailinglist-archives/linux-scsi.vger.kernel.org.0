@@ -2,63 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC5347D19
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 10:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49ACD47D6F
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 10:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727639AbfFQIbP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 04:31:15 -0400
-Received: from verein.lst.de ([213.95.11.211]:34227 "EHLO newverein.lst.de"
+        id S1727702AbfFQIpG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 04:45:06 -0400
+Received: from verein.lst.de ([213.95.11.211]:34464 "EHLO newverein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727469AbfFQIbP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 17 Jun 2019 04:31:15 -0400
+        id S1725971AbfFQIpG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 17 Jun 2019 04:45:06 -0400
 Received: by newverein.lst.de (Postfix, from userid 2407)
-        id 00D9768D0D; Mon, 17 Jun 2019 10:30:45 +0200 (CEST)
-Date:   Mon, 17 Jun 2019 10:30:45 +0200
+        id 6715C68AFE; Mon, 17 Jun 2019 10:44:33 +0200 (CEST)
+Date:   Mon, 17 Jun 2019 10:44:33 +0200
 From:   Christoph Hellwig <hch@lst.de>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
+To:     Kashyap Desai <kashyap.desai@broadcom.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Sebastian Ott <sebott@linux.ibm.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Max Gurtovoy <maxg@mellanox.com>,
         Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-Subject: Re: [PATCH V4 16/16] NCR5380: Support chained sg lists
-Message-ID: <20190617083045.GP7455@lst.de>
-References: <20190617030349.26415-1-ming.lei@redhat.com> <20190617030349.26415-17-ming.lei@redhat.com>
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
+        PDL-MPT-FUSIONLINUX <mpt-fusionlinux.pdl@broadcom.com>,
+        linux-hyperv@vger.kernel.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/13] megaraid_sas: set virt_boundary_mask in the scsi
+ host
+Message-ID: <20190617084433.GA7969@lst.de>
+References: <20190605190836.32354-1-hch@lst.de> <20190605190836.32354-11-hch@lst.de> <cd713506efb9579d1f69a719d831c28d@mail.gmail.com> <20190608081400.GA19573@lst.de> <98f6557ae91a7cdfe8069fcf7d788c88@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190617030349.26415-17-ming.lei@redhat.com>
+In-Reply-To: <98f6557ae91a7cdfe8069fcf7d788c88@mail.gmail.com>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 11:03:49AM +0800, Ming Lei wrote:
-> From: Finn Thain <fthain@telegraphics.com.au>
-> 
-> My understanding is that support for chained scatterlists is to
-> become mandatory for LLDs.
-> 
-> Use the scatterlist iterators and remove direct indexing of the
-> scatterlist array.
-> 
-> This way allows us to pre-allocate one small scatterlist, which can be
-> chained with one runtime allocated scatterlist if the pre-allocated one
-> isn't enough for the whole request.
+On Fri, Jun 14, 2019 at 01:28:47AM +0530, Kashyap Desai wrote:
+> Is there any changes in API  blk_queue_virt_boundary? I could not find
+> relevant code which account for this. Can you help ?
+> Which git repo shall I use for testing ? That way I can confirm, I didn't
+> miss relevant changes.
 
-Looks good,
+Latest mainline plus the series (which is about to get resent).
+blk_queue_virt_boundary now forced an unlimited max_hw_sectors as that
+is how PRP-like schemes work, to work around a block driver merging
+bug.  But we also need to communicate that limit to the DMA layer so
+that we don't set a smaller iommu segment size limitation.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+> >From your above explanation, it means (after this patch) max segment size
+> of the MR controller will be set to 4K.
+> Earlier it is possible to receive single SGE of 64K datalength (Since max
+> seg size was 64K), but now the same buffer will reach the driver having 16
+> SGEs (Each SGE will contain 4K length).
+
+No, there is no more limit for the size of the segment at all,
+as for PRPs each PRP is sort of a segment from the hardware perspective.
+We just require the segments to not have gaps, as PRPs don't allow for
+that.
+
+That being said I think these patches are wrong for the case of megaraid
+or mpt having both NVMe and SAS/ATA devices behind a single controller.
+Is that a valid configuration?
