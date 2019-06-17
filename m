@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59E244917F
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 22:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8543A49180
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 22:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbfFQUi4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 16:38:56 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44884 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726614AbfFQUi4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 16:38:56 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n2so6407579pgp.11
-        for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2019 13:38:56 -0700 (PDT)
+        id S1727516AbfFQUi6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 16:38:58 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:44964 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726614AbfFQUi6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 16:38:58 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t7so4618592plr.11
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2019 13:38:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2bzhZ/0bJMlJtKoSR596Xvy5+hf0Ue/caRQu/90SRDE=;
-        b=olYCSPqKb9u7HE6Ue47IrE5EuL1csS6JyzsimXlWXpkQLAvtRtSGxKlW17Ngq43lC5
-         Fl47UYdQPkY3Ooc9m9jpSEesrqKIO3G8MAUCWh8ZSepWv5QJu2UEbbSklRr3arCWNNFE
-         VJzBIz6SwKQNZ3Rt0cLV9A/lHy0re4qt6tQj3DtXZys9G8cjLBFfMyhfgnk+Llt3lECK
-         sloTFYW3gliTa3LzjcQIFeS0/oEMTr7NTEerdpeanDC80Nm0DHfty/etFlxxC/Gd9wGi
-         6OnM85kptlSBX9vFZJ/gJPSPWPF0f/6RHnVrJn7wtqjjtiMA6gMqRdONXHyebrewQlCW
-         xKGg==
-X-Gm-Message-State: APjAAAWpnxVBnyvURbTaMsEeva3jhW49VeB4Xcok8c//g1/yaRRBZdQM
-        t71FiHdZLjp5J9Ma/0pwNHA=
-X-Google-Smtp-Source: APXvYqzVL9LCWgO/3DAY9CnzXfM7mHS7IQrrIEea0tQt/ThIURbD24C5wIJXCGT3F9VmXbuC40tGug==
-X-Received: by 2002:a17:90a:601:: with SMTP id j1mr909113pjj.96.1560803935934;
-        Mon, 17 Jun 2019 13:38:55 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=D5nxhCsG5eBtX2g1+XctCX/DLLLVt2de/J2dzQq5Ok0=;
+        b=DzN9k6eAZ+uftp8tyR4m7+tOomgIL5+rhyNBT18yIPvvJIF14QhMjl48gio6Eh+Pb2
+         3oFOGpqu7TE5OT6hdAOgfz0/okRym9p1w/+UHW/i9rP8riJ3dMKc+Ft2on6NcG4TJaaD
+         z5b4SUdZE/ITshiKp+RlLO93JQM/MbrpZo7mSks69Hn4xMAnRo2lxJ9jnbyKrfLr17HI
+         KiAHs1nsxgt40KMrsH7JDk1XQNa/7IXmOQg59GSTPHYuYiWgSkhTY46osidnTv/ZJrU1
+         S7R+M2zJ2BnmNHlogCUzGQlhhb6uskFaTwY/7LmL98RsGk1mhSQIEzW8bGePfTtkA6Oj
+         GV4Q==
+X-Gm-Message-State: APjAAAU472ThuyhHgC+FqW/dxA0XbXG3T+KWvbZKOeh+hh+gFJkwjIwa
+        4PR5yQ3QxQRvajv0zhEHIGREhK6xgnI=
+X-Google-Smtp-Source: APXvYqz5FkK81BapvVYgZGgtMjB6ngsIt+wJcrTQRtfEL7R4zukqmqiXsuQ/k5VaqWU/00o166q2dg==
+X-Received: by 2002:a17:902:f216:: with SMTP id gn22mr91471908plb.118.1560803937301;
+        Mon, 17 Jun 2019 13:38:57 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id z20sm16835620pfk.72.2019.06.17.13.38.54
+        by smtp.gmail.com with ESMTPSA id z20sm16835620pfk.72.2019.06.17.13.38.55
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 17 Jun 2019 13:38:54 -0700 (PDT)
+        Mon, 17 Jun 2019 13:38:56 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -40,11 +40,15 @@ Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
         Hannes Reinecke <hare@suse.com>,
         Johannes Thumshirn <jthumshirn@suse.de>,
         "Ewan D . Milne" <emilne@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 0/6] qla2xxx abort handling fixes
-Date:   Mon, 17 Jun 2019 13:38:41 -0700
-Message-Id: <20190617203847.184407-1-bvanassche@acm.org>
+        Bart Van Assche <bvanassche@acm.org>,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        Giridhar Malavali <gmalavali@marvell.com>
+Subject: [PATCH 1/6] qla2xxx: Make qla2x00_abort_srb() again decrease the sp reference count
+Date:   Mon, 17 Jun 2019 13:38:42 -0700
+Message-Id: <20190617203847.184407-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.20.GIT
+In-Reply-To: <20190617203847.184407-1-bvanassche@acm.org>
+References: <20190617203847.184407-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -52,43 +56,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin,
+Since qla2x00_abort_srb() starts with increasing the reference count of
+@sp, decrease that same reference count before returning.
 
-This patch series includes two fixes for patches that went upstream during the
-v5.2-r1 merge window and a fix for a race condition in the abort handling code.
-Please consider this patch series for kernel v5.3.
+Cc: Himanshu Madhani <hmadhani@marvell.com>
+Cc: Giridhar Malavali <gmalavali@marvell.com>
+Fixes: 219d27d7147e ("scsi: qla2xxx: Fix race conditions in the code for aborting SCSI commands") # v5.2.
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/qla2xxx/qla_os.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Thanks,
-
-Bart.
-
-Bart Van Assche (6):
-  qla2xxx: Make qla2x00_abort_srb() again decrease the sp reference
-    count
-  qla2xxx: Really fix qla2xxx_eh_abort()
-  qla2xxx: Enable type checking for the SRB free and done callback
-    functions
-  qla2xxx: Move the sp->ref_count initialization into
-    qla2xxx_get_qpair_sp()
-  qla2xxx: Make the code for freeing SRBs more systematic
-  qla2xxx: Only free an SRB once the reference count drops to zero
-
- drivers/scsi/qla2xxx/qla_bsg.c    |  12 +-
- drivers/scsi/qla2xxx/qla_def.h    |  17 +-
- drivers/scsi/qla2xxx/qla_gbl.h    |  15 +-
- drivers/scsi/qla2xxx/qla_gs.c     | 272 +++++++++++++-----------------
- drivers/scsi/qla2xxx/qla_init.c   |  96 +++++------
- drivers/scsi/qla2xxx/qla_inline.h |   1 +
- drivers/scsi/qla2xxx/qla_iocb.c   |  70 ++++----
- drivers/scsi/qla2xxx/qla_mbx.c    |  10 +-
- drivers/scsi/qla2xxx/qla_mid.c    |   6 +-
- drivers/scsi/qla2xxx/qla_mr.c     |   6 +-
- drivers/scsi/qla2xxx/qla_nvme.c   |  45 +++--
- drivers/scsi/qla2xxx/qla_nvme.h   |   2 +-
- drivers/scsi/qla2xxx/qla_os.c     |  98 +++++------
- drivers/scsi/qla2xxx/qla_target.c |   8 +-
- 14 files changed, 295 insertions(+), 363 deletions(-)
-
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index d056f5e7cf93..1bdf634e7117 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -1746,6 +1746,8 @@ static void qla2x00_abort_srb(struct qla_qpair *qp, srb_t *sp, const int res,
+ 		spin_lock_irqsave(qp->qp_lock_ptr, *flags);
+ 		sp->comp = NULL;
+ 	}
++
++	atomic_dec(&sp->ref_count);
+ }
+ 
+ static void
 -- 
 2.22.0.rc3
 
