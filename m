@@ -2,134 +2,130 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D81478FA
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 06:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376E647919
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 06:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbfFQEHp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 00:07:45 -0400
-Received: from ushosting.nmnhosting.com ([66.55.73.32]:44232 "EHLO
-        ushosting.nmnhosting.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbfFQEHo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 00:07:44 -0400
-Received: from mail2.nmnhosting.com (unknown [202.169.106.97])
-        by ushosting.nmnhosting.com (Postfix) with ESMTPS id E75102DC007F;
-        Mon, 17 Jun 2019 00:07:39 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=d-silva.org;
-        s=201810a; t=1560744460;
-        bh=fcIJWb9zFrSz2UB8a7mxef1I4k9iDutEwQyvrCEDLlQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=WCFaSA53OEIg+og8L/naQbQPlaTsOoXPKsvTwtmXP2Vk09oVK0XuS5AD3x5/CqLrM
-         G0GIng39m1v0lZ4sKpUf3T99/+YBxM9RX44WLALuhESqgh+r5BAShy10176lEQBE3q
-         DQvd2fgD6zwuDb2r3HtAMEKvNfyGEklzY4KUQ+U+VxMilUgRO+yfLfvjALw1DuedIj
-         U07cuyKZx46E0NJINEB5+8FVHhYvvSWxSY7sKWAoGvSBG/TJ18P0TuXGu+r+H6bH0e
-         aXUQ8ilJHofP52ff/zDalxsvFnS/I19R0WtGSyZHeql8nV+rZAy3ckW9tGr7DubBUl
-         qpbsJvQK16Hb/jOSoEHhPkG1VKXuLKMb1qy/wzkUplRpkQy3lck+ggy2ukzRhUgkqh
-         N1Q6mMJi30A9PGd1HWpWuLWkLg4LedcJItJ961IWPw6XnamogZOK4OajearEtq6Wug
-         Q7fZpUvUrqSKSyRRBPeipKEoLRw/YY+95nWqf7l5GKHjuTC0GylNVU3e6c29Aa3j+X
-         5pRuwG5Xw/zIJlIzmObseyKrpDD4TC7M/3O2j/4ernSmXnXxPfSq1dRv9DqHM2oKIk
-         cA8ovQOzGfvEiJha5fCrgByfWUnR6D8Ngp3/azplb/9QJOs0SiH1pg9yh8F/C3rFek
-         9RkRnoy0sArwZ3E9Df8kzHf0=
-Received: from adsilva.ozlabs.ibm.com (static-82-10.transact.net.au [122.99.82.10] (may be forged))
-        (authenticated bits=0)
-        by mail2.nmnhosting.com (8.15.2/8.15.2) with ESMTPSA id x5H47CvI055927
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 17 Jun 2019 14:07:28 +1000 (AEST)
-        (envelope-from alastair@d-silva.org)
-Message-ID: <da2ff58290c4b6f08eb5ac25c288bdd03b5688f7.camel@d-silva.org>
-Subject: Re: [PATCH v3 3/7] lib/hexdump.c: Optionally suppress lines of
- repeated bytes
-From:   "Alastair D'Silva" <alastair@d-silva.org>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Stanislaw Gruszka <sgruszka@redhat.com>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
-Date:   Mon, 17 Jun 2019 14:07:12 +1000
-In-Reply-To: <20190617020430.8708-4-alastair@au1.ibm.com>
-References: <20190617020430.8708-1-alastair@au1.ibm.com>
-         <20190617020430.8708-4-alastair@au1.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
+        id S1725869AbfFQEX3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 00:23:29 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45884 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbfFQEX3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 00:23:29 -0400
+Received: by mail-pf1-f195.google.com with SMTP id r1so4911137pfq.12
+        for <linux-scsi@vger.kernel.org>; Sun, 16 Jun 2019 21:23:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=fF6C6yU+ctNlGc2XdhZFZfZxRPV+pLz7dQXBNdsmYaM=;
+        b=PYYs/y+1YUsOQ0sFRqqd6xXWi4ZM2jSQo31Oth3e1idd3rfW2G4cEqPfTxb906ZHhS
+         J20pfjoh+JPr7Ik4Gntk4Q/Pvj8u46EIUPLIJ6ioGwBUrShNhVxeyDWglmH9Ok9TzYhF
+         wSZTjnUSQ+qfJxhiBuKgGfh+2fCmWigoLv68DKRuRn6DGjQevSTZ30B10Cx8jD4rNGCh
+         eYqw9FCi14QTDsvH7z9+e5wfdAp1yRo61z0kEDVzIrIrgn4kzs674wKYT/MJtQy7+C0H
+         IvC1qJHq2Zhw/cgnuPlQpl2i/1E5EmllbfvhrBNp6UdC//DXdizXv6Gxhec6lDyctSGO
+         qCwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fF6C6yU+ctNlGc2XdhZFZfZxRPV+pLz7dQXBNdsmYaM=;
+        b=C5wOS1UeMqgpuV0yxhUngwajjC2t6I9aTNJnmqsKqnuYmdrjaRHD6fp1V+3mL961Jp
+         ssM2hdQXrLGR6tv1YZxFLkg0ZMMqeGa1vq7zgQkm+urEOIBXi7vjF/ZLruqlUzLb3Ody
+         7lJTjDalxSHYGNr10THjvEar9VeELatvR9M4He2vNBdNpEDuvwzuomfU3kLpxPuhQB7+
+         BkGwDHsq84d6sJnHNEDDR1TqKt5Mv0dvCIpTsMlnGSJqO2SQAXXYR9CtELEHujIcHbDR
+         GJiUek8twuXkDmxzmXHOCSIXoK2QjMyAZXXBm7F7cPHzQjM/froGWu7F9I1QuOE+DIb+
+         X0ew==
+X-Gm-Message-State: APjAAAWHw9SoUcIp7/i77IKjTJNsyLoGu4WA9IAhwSC9b0jEngKMBBae
+        aRw3ezyLGv88idqvV4ZVsylndA==
+X-Google-Smtp-Source: APXvYqwGCOwwX/fHLmkix7aoXMTAB8HwyZ9nxohqcmG4iD/6uJ9F4lZt0jQoC6EC0dO6ZKmwaf0C7Q==
+X-Received: by 2002:a17:90a:24e4:: with SMTP id i91mr25143081pje.9.1560745043955;
+        Sun, 16 Jun 2019 21:17:23 -0700 (PDT)
+Received: from localhost ([122.172.66.84])
+        by smtp.gmail.com with ESMTPSA id w187sm11086622pfb.4.2019.06.16.21.17.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 16 Jun 2019 21:17:23 -0700 (PDT)
+Date:   Mon, 17 Jun 2019 09:47:21 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rajendra Nayak <rnayak@codeaurora.org>
+Cc:     swboyd@chromium.org, vincent.guittot@linaro.org,
+        mturquette@baylibre.com, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-scsi@vger.kernel.org,
+        ulf.hansson@linaro.org, dianders@chromium.org, rafael@kernel.org
+Subject: Re: [RFC v2 01/11] OPP: Don't overwrite rounded clk rate
+Message-ID: <20190617041721.5xdr3kl4xxe6gy4m@vireshk-i7>
+References: <20190320094918.20234-1-rnayak@codeaurora.org>
+ <20190320094918.20234-2-rnayak@codeaurora.org>
+ <20190611105432.x3nzqiib35t6mvyg@vireshk-i7>
+ <c173a57d-a4de-99f7-e8d8-28a7612f4ca3@codeaurora.org>
+ <20190612082506.m735bsk7bjijf2yg@vireshk-i7>
+ <20190613095419.lfjeko7nmxtix2n4@vireshk-i7>
+ <20190614052732.4w6vvwwich2h4cgu@vireshk-i7>
+ <20190617035058.veo7uwqjrpa6kykt@vireshk-i7>
+ <a912c8b2-080d-7ab7-670b-b687ec3a2c92@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail2.nmnhosting.com [10.0.1.20]); Mon, 17 Jun 2019 14:07:35 +1000 (AEST)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a912c8b2-080d-7ab7-670b-b687ec3a2c92@codeaurora.org>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 2019-06-17 at 12:04 +1000, Alastair D'Silva wrote:
-> From: Alastair D'Silva <alastair@d-silva.org>
+On 17-06-19, 09:37, Rajendra Nayak wrote:
 > 
-> Some buffers may only be partially filled with useful data, while the
-> rest
-> is padded (typically with 0x00 or 0xff).
 > 
-> This patch introduces a flag to allow the supression of lines of
-> repeated
-> bytes, which are replaced with '** Skipped %u bytes of value 0x%x **'
+> On 6/17/2019 9:20 AM, Viresh Kumar wrote:
+> > On 14-06-19, 10:57, Viresh Kumar wrote:
+> > > Hmm, so this patch won't break anything and I am inclined to apply it again :)
+> > > 
+> > > Does anyone see any other issues with it, which I might be missing ?
+> > 
+> > I have updated the commit log a bit more to clarify on things, please let me
+> > know if it looks okay.
+> > 
+> >      opp: Don't overwrite rounded clk rate
+> >      The OPP table normally contains 'fmax' values corresponding to the
+> >      voltage or performance levels of each OPP, but we don't necessarily want
+> >      all the devices to run at fmax all the time. Running at fmax makes sense
+> >      for devices like CPU/GPU, which have a finite amount of work to do and
+> >      since a specific amount of energy is consumed at an OPP, its better to
+> >      run at the highest possible frequency for that voltage value.
+> >      On the other hand, we have IO devices which need to run at specific
+> >      frequencies only for their proper functioning, instead of maximum
+> >      possible frequency.
+> >      The OPP core currently roundup to the next possible OPP for a frequency
+> >      and select the fmax value. To support the IO devices by the OPP core,
+> >      lets do the roundup to fetch the voltage or performance state values,
+> >      but not use the OPP frequency value. Rather use the value returned by
+> >      clk_round_rate().
+> >      The current user, cpufreq, of dev_pm_opp_set_rate() already does the
+> >      rounding to the next OPP before calling this routine and it won't
+> >      have any side affects because of this change.
 > 
-> An inline wrapper function is provided for backwards compatibility
-> with
-> existing code, which maintains the original behaviour.
-> 
-> Signed-off-by: Alastair D'Silva <alastair@d-silva.org>
-> ---
->  include/linux/printk.h | 25 +++++++++---
->  lib/hexdump.c          | 91 ++++++++++++++++++++++++++++++++++++--
-> ----
->  2 files changed, 99 insertions(+), 17 deletions(-)
-> 
-> diff --git a/include/linux/printk.h b/include/linux/printk.h
-> index cefd374c47b1..d7754799cfe0 100644
-> --- a/include/linux/printk.h
-> +++ b/include/linux/printk.h
-> @@ -481,13 +481,18 @@ enum {
->  	DUMP_PREFIX_ADDRESS,
->  	DUMP_PREFIX_OFFSET
->  };
-> +
->  extern int hex_dump_to_buffer(const void *buf, size_t len, int
-> rowsize,
->  			      int groupsize, char *linebuf, size_t
-> linebuflen,
->  			      bool ascii);
-> +
-> +#define HEXDUMP_ASCII			BIT(0)
-> +#define HEXDUMP_SUPPRESS_REPEATED	BIT(1)
-> +
+> Looks good to me. Should this also be documented someplace that dev_pm_opp_set_rate()
+> would not be able to distinguish between its users trying to scale CPU/GPU's vs IO
+> devices, so its the callers responsibility to round it accordingly before calling the
+> API?
 
-This is missing the include of linux/bits.h, I'll fix this in the next
-version.
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index 0fbc77f05048..bae94bfa1e96 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -751,8 +751,11 @@ static int _set_required_opps(struct device *dev,
+  * @dev:        device for which we do this operation
+  * @target_freq: frequency to achieve
+  *
+- * This configures the power-supplies and clock source to the levels specified
+- * by the OPP corresponding to the target_freq.
++ * This configures the power-supplies to the levels specified by the OPP
++ * corresponding to the target_freq, and programs the clock to a value <=
++ * target_freq, as rounded by clk_round_rate(). Device wanting to run at fmax
++ * provided by the opp, should have already rounded to the target OPP's
++ * frequency.
+  */
 
 -- 
-Alastair D'Silva           mob: 0423 762 819
-skype: alastair_dsilva    
-Twitter: @EvilDeece
-blog: http://alastair.d-silva.org
-
-
+viresh
