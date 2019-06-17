@@ -2,97 +2,136 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C88F848081
-	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 13:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA864814C
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Jun 2019 13:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728018AbfFQLT7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 07:19:59 -0400
-Received: from mout.kundenserver.de ([212.227.126.130]:51601 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727846AbfFQLT7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 07:19:59 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1N0Fl9-1iW9Fr2hwl-00xL9C; Mon, 17 Jun 2019 13:19:40 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Ondrej Zary <linux@zary.sk>,
-        Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: fdomain: fix building pcmcia front-end
-Date:   Mon, 17 Jun 2019 13:19:17 +0200
-Message-Id: <20190617111937.2355936-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Ft7A+L+Rr9iEQAM1pAHYVAEso0+XdaZFK2sYmt+ngiJcm0laXJ1
- +o16oKqC3FRm99GEeCbWW7/pIFVs6UsAK8OhiPNLl8aGcSWI31a+Wtx3g2I61iVoBiUvoKc
- royoq8jozOIZBwCDMtFcO0q6nTa9PSANsErViZUz0ygbNXVIjgr/ou5m82EwWjfSjoe0V1f
- iRI/q0izxIvGXPQtxkJ9g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:q8l1WVXaUlI=:BUJ+7U6WS0M//LNrl2MEVu
- Kqex6414Zc60ujZ3auqcDTuSlEpwE/PJjDDLZ9/NoMqcg5LhQtfIpjnDKhTynoI7zVmYZjbP5
- vI3JpBtz8v1Tj8WrjjV6GJhXAoo21aXh0OZ4z75e6A/9Z3HnoJcBooHs5X4V2c6jGiJ658thc
- Tp2WYs3s1ZAbejnOfome6axeLy6l9vC1cwcgxbJeG9hovDgg7yqt+pzUB3g1LxMp+4awnEnNA
- pVV+ibuTbzj5L7twFEzl4pHCJtVS+NsjU6RFl0dvjpw07qocS4SZxkR/HgCM0KkGctOpBq9Ok
- PHp6hjbN+8xwEIgMcJkG9hNf8dqV6UsgLmqiVGZQ3ViW1vccNMDPEXN1eEr6lqa14y3MD2Y04
- w1ZSRaG451NPF5jGXh+/WObN7TGqzaodTa7bWrECEOZMabJpVuYVQSMCM5LJDvwVa35OvS82+
- HPYIw3T85UVTFAN/TC0STC0nmzi5QO6Ld+kfYlwU487siZ6ITQEooztQb4ylxsdNbukTPR0Hr
- gFak5Ue/dPUn20RdTq1aF15JnCZqUWFBn+pmg06+f94I8FnOpoxM6G2TEKyhQ/Y8Brl33n8Qb
- pFq2nqcuuJYVn7DmgbN5VrOF2ouxzj4KxMd0uDtry2rXQkl0T44SLmKVNRrCa2+LRkGN25USc
- 9AxLhjCy63uaRoyL1+3N/YFpxqBKmsC4F4mWEEDPkncGmXBs99dC3Gt9zBl4os0hM1cikkQLV
- D8MP/WoKnfg1gNyAdbuxaMJIw4md5wxv4vUEfw==
+        id S1726243AbfFQLzE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 07:55:04 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:43836 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725763AbfFQLzE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 07:55:04 -0400
+Received: by mail-wr1-f68.google.com with SMTP id p13so9596202wru.10
+        for <linux-scsi@vger.kernel.org>; Mon, 17 Jun 2019 04:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=p0dSD1o3AHgXjVo+yieUQmDjtFsBPsysRj0uW6rU34Q=;
+        b=JENV0KnCmt/Dwk1nXe4AAcmIlf8KhWmyC5H8iva+UYLv7mbtGJ0z6XGxDKgADB3mc6
+         rWrDUEnlr7Z3WBR9EPiHQxpW0Y5lZKAqUubjryNHbX92fe9VM2FmqZYWPaXA2VskP5kP
+         P+W8mb/lqsiQx19zu9P/AygnBVAedl1BkZpmDBLHAyoyfper03B+CGrryRT3MBS40yIF
+         ardqfg0t+y0tjIZSl31JtWjeYOUhY7yewjXFSKHJHErNJfdMp7wjg4UgYWWRy5DEVR32
+         CAklr0Q9IklvXe9CJ1rZQ9ejaPSM5hxzMhN+IcMFFNBvnR8l48AhNMGqPf8Zf1/+fgsf
+         ApcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=p0dSD1o3AHgXjVo+yieUQmDjtFsBPsysRj0uW6rU34Q=;
+        b=mJf6L95zRVKUbcesCaxrBstIu4A1ZAyogTOTO4aDfTulz+VoorkB4PuZFvt58nGWZ/
+         mfDpggdiY9Z4ieSDw5tbUgfHPS/HRQ7TtvhqhjzHP6LXr3cm5f+VsDTPIFFFpjdds1Ab
+         Ogwadc6ocNbmRs+o9ZZfHDtR7rxaHfJUOVBVBWX4WUieTSBCEX4jIKAKL8ENVFZud7LJ
+         dAt9HBl0QfTzs1yWuVtmOHG3qAq+NW/35C3WG/Nb8eIIapN3K9ew0aKadTcKZLDUVqTm
+         Nyb9RiS0nVTlCMnDrDN+mPngaFl39euMqU3BcbVtdUdAarzhOub1EIlbLpRPSIBEiReE
+         +6UQ==
+X-Gm-Message-State: APjAAAWWNnpN2AAbVb0eTfA8/tGDhOhdQf7JREiVIugQOoLiiqKfs69D
+        rkIsBpLi4ekrrEfqP5AL/hwI1w==
+X-Google-Smtp-Source: APXvYqxXsJTvKjCphVHMwx4/FebOUiKV+9+M6nNY9VXfS4ti2jmM79hV6vZe/fK3Ujbd/dMlNttV+A==
+X-Received: by 2002:adf:dc45:: with SMTP id m5mr8831205wrj.148.1560772502724;
+        Mon, 17 Jun 2019 04:55:02 -0700 (PDT)
+Received: from dell.watershed.co.uk ([2.27.35.243])
+        by smtp.gmail.com with ESMTPSA id n1sm10193748wrx.39.2019.06.17.04.55.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 17 Jun 2019 04:55:01 -0700 (PDT)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     agross@kernel.org, david.brown@linaro.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, pedrom.sousa@synopsys.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-arm-msm@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
+        bjorn.andersson@linaro.org, Lee Jones <lee.jones@linaro.org>
+Subject: [PATCH 1/1] scsi: ufs-qcom: Add support for platforms booting ACPI
+Date:   Mon, 17 Jun 2019 12:54:54 +0100
+Message-Id: <20190617115454.3226-1-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We get a warning when CONFIG_SCSI_LOWLEVEL is disabled here:
+New Qualcomm AArch64 based laptops are now available which use UFS
+as their primary data storage medium.  These devices are supplied
+with ACPI support out of the box.  This patch ensures the Qualcomm
+UFS driver will be bound when the "QCOM24A5" H/W device is
+advertised as present.
 
-WARNING: unmet direct dependencies detected for SCSI_FDOMAIN
-  Depends on [n]: SCSI_LOWLEVEL [=n] && SCSI [=y]
-  Selected by [m]:
-  - PCMCIA_FDOMAIN [=m] && SCSI_LOWLEVEL_PCMCIA [=y] && SCSI [=y] && PCMCIA [=y] && m && MODULES [=y]
-
-Move the common support outside of the SCSI_LOWLEVEL section.
-Alternatively, we could move all of SCSI_LOWLEVEL_PCMCIA into
-SCSI_LOWLEVEL. This would be more sensible, but might cause
-surprises for users that have SCSI_LOWLEVEL disabled.
-
-Fixes: 7d47fa065e62 ("scsi: fdomain: Add PCMCIA support")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/scsi/Kconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/scsi/ufs/ufs-qcom.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 75f66f8ad3ea..dffe4b31e205 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -642,10 +642,6 @@ config SCSI_DMX3191D
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called dmx3191d.
+diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+index 3aeadb14aae1..364af6a63e35 100644
+--- a/drivers/scsi/ufs/ufs-qcom.c
++++ b/drivers/scsi/ufs/ufs-qcom.c
+@@ -12,6 +12,7 @@
+  *
+  */
  
--config SCSI_FDOMAIN
--	tristate
--	depends on SCSI
--
- config SCSI_FDOMAIN_PCI
- 	tristate "Future Domain TMC-3260/AHA-2920A PCI SCSI support"
- 	depends on PCI && SCSI
-@@ -1527,6 +1523,10 @@ endif # SCSI_LOWLEVEL
++#include <linux/acpi.h>
+ #include <linux/time.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+@@ -164,6 +165,9 @@ static int ufs_qcom_init_lane_clks(struct ufs_qcom_host *host)
+ 	int err = 0;
+ 	struct device *dev = host->hba->dev;
  
- source "drivers/scsi/pcmcia/Kconfig"
- 
-+config SCSI_FDOMAIN
-+	tristate
-+	depends on SCSI
++	if (has_acpi_companion(dev))
++		return 0;
 +
- source "drivers/scsi/device_handler/Kconfig"
+ 	err = ufs_qcom_host_clk_get(dev, "rx_lane0_sync_clk",
+ 					&host->rx_l0_sync_clk, false);
+ 	if (err)
+@@ -1208,9 +1212,13 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+ 			__func__, err);
+ 		goto out_variant_clear;
+ 	} else if (IS_ERR(host->generic_phy)) {
+-		err = PTR_ERR(host->generic_phy);
+-		dev_err(dev, "%s: PHY get failed %d\n", __func__, err);
+-		goto out_variant_clear;
++		if (has_acpi_companion(dev)) {
++			host->generic_phy = NULL;
++		} else {
++			err = PTR_ERR(host->generic_phy);
++			dev_err(dev, "%s: PHY get failed %d\n", __func__, err);
++			goto out_variant_clear;
++		}
+ 	}
  
- endmenu
+ 	err = ufs_qcom_bus_register(host);
+@@ -1680,6 +1688,14 @@ static const struct of_device_id ufs_qcom_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, ufs_qcom_of_match);
+ 
++#ifdef CONFIG_ACPI
++static const struct acpi_device_id ufs_qcom_acpi_match[] = {
++	{ "QCOM24A5" },
++	{ },
++};
++MODULE_DEVICE_TABLE(acpi, ufs_qcom_acpi_match);
++#endif
++
+ static const struct dev_pm_ops ufs_qcom_pm_ops = {
+ 	.suspend	= ufshcd_pltfrm_suspend,
+ 	.resume		= ufshcd_pltfrm_resume,
+@@ -1696,6 +1712,7 @@ static struct platform_driver ufs_qcom_pltform = {
+ 		.name	= "ufshcd-qcom",
+ 		.pm	= &ufs_qcom_pm_ops,
+ 		.of_match_table = of_match_ptr(ufs_qcom_of_match),
++		.acpi_match_table = ACPI_PTR(ufs_qcom_acpi_match),
+ 	},
+ };
+ module_platform_driver(ufs_qcom_pltform);
 -- 
-2.20.0
+2.17.1
 
