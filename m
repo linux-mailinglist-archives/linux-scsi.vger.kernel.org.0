@@ -2,58 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A28754A98A
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 20:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E764A9D5
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 20:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730169AbfFRSMB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 14:12:01 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:20558 "EHLO
+        id S1729981AbfFRS2V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 14:28:21 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:52170 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727616AbfFRSMB (ORCPT
+        by vger.kernel.org with ESMTP id S1729642AbfFRS2V (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 18 Jun 2019 14:12:01 -0400
+        Tue, 18 Jun 2019 14:28:21 -0400
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5II4cjk015571;
-        Tue, 18 Jun 2019 11:11:59 -0700
+        by mx0a-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5IIJvDr028152;
+        Tue, 18 Jun 2019 11:28:07 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=1Rhg3meYJ3OxnNZ2ZPE32LQrbyAsZ5erPqj9zbBW3d8=;
- b=DCcjLBScT023ZKsXDXvgiWktHyTx4OEQ5+nxg24aN5LzECb9DB3BXrJND+rm7oE6Plah
- cQ22+kwk6WKOvSROpYxiABLFxe+J6l2Kh70P3Jzhmxg+c072UtMpuUBvDitOJXEt/H57
- 8NMJ1vCaRxnOBt4L5zoHBHzUkefXgETbtIVKa8OBoSaNb7ORysifwfal79+t4/z0Mvtk
- bkYPtyb2fSFuQoHKg1/DHtyM9DI1IEidOoANB9IBta41nKl5tcJlDU1JQNB3+usANCgE
- mDYxHNWUAdCP79/gOdruOrT2rvJmZscTLn8hYhRtMEtcX/oIHhnYyWnQXUhGfxc0/Mgg ug== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2t73vqgcuy-1
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=pfpt0818;
+ bh=14WHG/6koUiAraFQFQj9EJrk1mUG3yGssbStczxcOLk=;
+ b=a2k6qapEp4PBYL2JKqo43J7G8uZyB8ybydHysMJf6gTTlpZoetL9ROeAKj+B139/bufu
+ ue4OoWke8ThS0W02si2cMCilRSic90r6VKz7latogZLT9zv+MobnlYuoWiUbnijVt6/t
+ tiU+1DcV3j+zdsPCKzdXq5Pal7HkPRCjv4KSpYgc5ZTrBDSm5p9oJJshg3Djp0YVaxAV
+ qHzQFTOGg9Cdt4lXUq/IpEzgd++hbfnE+GCUvOLPFjKiwokfUW4dFyJSRxner4M8pv+H
+ TAo+1BzDVcryH5R1GCKZUX+eQ0Vq1Pywe8+z4/6295LB3fGpVxqXMZE6IjpSurm4p57E Ww== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2t73vqgf1u-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jun 2019 11:11:59 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 18 Jun
- 2019 11:11:58 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Tue, 18 Jun 2019 11:11:58 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 1B9563F7041;
-        Tue, 18 Jun 2019 11:11:58 -0700 (PDT)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x5IIBvne016610;
-        Tue, 18 Jun 2019 11:11:57 -0700
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x5IIBv78016609;
-        Tue, 18 Jun 2019 11:11:57 -0700
-From:   Himanshu Madhani <hmadhani@marvell.com>
-To:     <James.Bottomley@HansenPartnership.com>,
-        <martin.petersen@oracle.com>
-CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH v2 3/3] qla2xxx: Fix NVME cmd and LS cmd timeout race condition
-Date:   Tue, 18 Jun 2019 11:10:21 -0700
-Message-ID: <20190618181021.16547-4-hmadhani@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20190618181021.16547-1-hmadhani@marvell.com>
-References: <20190618181021.16547-1-hmadhani@marvell.com>
+        Tue, 18 Jun 2019 11:28:07 -0700
+Received: from SC-EXCH02.marvell.com (10.93.176.82) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 18 Jun
+ 2019 11:28:06 -0700
+Received: from NAM01-BN3-obe.outbound.protection.outlook.com (104.47.33.55) by
+ SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Tue, 18 Jun 2019 11:28:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=14WHG/6koUiAraFQFQj9EJrk1mUG3yGssbStczxcOLk=;
+ b=QGmTkxHR0aqrL8xOot3/OP6xt7uh8Ub/gurgGnCs6a6KCYDSG3hg9E9PmFhizbtYk5MphWg3Oq9E0n8R5jDWGwK41B2WwOkSX2ubtOx8EQP9A/m9ZMlXSMlwFHBvwCuH5SOm3+4Tpdcf34QZmvjUzVCnDOjHbODCIc96b8p2OvE=
+Received: from MWHPR18MB1488.namprd18.prod.outlook.com (10.175.7.135) by
+ MWHPR18MB0926.namprd18.prod.outlook.com (10.173.120.137) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1987.13; Tue, 18 Jun 2019 18:28:01 +0000
+Received: from MWHPR18MB1488.namprd18.prod.outlook.com
+ ([fe80::9034:6d9f:c17e:58dd]) by MWHPR18MB1488.namprd18.prod.outlook.com
+ ([fe80::9034:6d9f:c17e:58dd%2]) with mapi id 15.20.1987.014; Tue, 18 Jun 2019
+ 18:28:01 +0000
+From:   Quinn Tran <qutran@marvell.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        "James.Bottomley@HansenPartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH 3/3] qla2xxx: Fix NVME cmd and LS cmd timeout
+ race condition
+Thread-Topic: [EXT] Re: [PATCH 3/3] qla2xxx: Fix NVME cmd and LS cmd timeout
+ race condition
+Thread-Index: AQHVIv4BL39boxvrlkmr8rNsBpQqaKabuesAgAAJVwCABJD0AP//wncAgAGAUgD//7TGgA==
+Date:   Tue, 18 Jun 2019 18:28:00 +0000
+Message-ID: <D17E4394-131D-46BB-AA97-99708BE1AD6C@marvell.com>
+References: <20190614221020.19173-1-hmadhani@marvell.com>
+ <20190614221020.19173-4-hmadhani@marvell.com>
+ <dc2bad07-0ba0-06e7-b52a-57f774bc3ff2@acm.org>
+ <CDBC6094-EA99-45BE-A420-404ED6A3BE0F@marvell.com>
+ <e5b17e5a-49d1-7496-a395-9a09bb791a7f@acm.org>
+ <52D4CB41-2BD6-4CD6-B779-DC4C5F0CE94E@marvell.com>
+ <2d582a54-024a-186a-fa52-6bc8123247e9@acm.org>
+In-Reply-To: <2d582a54-024a-186a-fa52-6bc8123247e9@acm.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [198.186.1.5]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dc5fb19e-0f23-476a-16d9-08d6f41ab1e5
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR18MB0926;
+x-ms-traffictypediagnostic: MWHPR18MB0926:
+x-microsoft-antispam-prvs: <MWHPR18MB092693AA383D90472B5D9D4CD5EA0@MWHPR18MB0926.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 007271867D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(396003)(346002)(136003)(366004)(39850400004)(51914003)(51444003)(189003)(199004)(53936002)(7736002)(2501003)(186003)(446003)(476003)(2616005)(110136005)(81166006)(486006)(6506007)(53546011)(81156014)(8676002)(6436002)(66946007)(73956011)(91956017)(5660300002)(76116006)(8936002)(76176011)(66476007)(66446008)(64756008)(2906002)(66556008)(25786009)(26005)(86362001)(71200400001)(478600001)(102836004)(6512007)(6116002)(71190400001)(2201001)(66066001)(11346002)(14444005)(6246003)(229853002)(3846002)(6486002)(99286004)(4326008)(14454004)(36756003)(316002)(33656002)(305945005)(256004)(68736007)(5024004);DIR:OUT;SFP:1101;SCL:1;SRVR:MWHPR18MB0926;H:MWHPR18MB1488.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: marvell.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Jp2+Tr5BIpTNi4Lvg/uQMbGoAubEeIRiADLd7Pgd8VhcyE9yPFZUd4MQ3vYA3Th/Piis+FenhR5s9f/cAE6O2J4YtRhyzmaTfivgsyJ1YxTaGph5gJbO6WZwt5SQtahTU/nPw41luUb15TjE1yXmw1/YwTNIqWpA5IGsq6M5ZwgJW94lmTPdBshmLXVNumkpLMNfgzwS48+Slo3xil9ixTtyX0+yV2s/7aAwFI+IcoQEkQ8H3a9UJ+Zg2OA1nYd+tiIeQ8dsDA/vr4e6UBXk6TeMDKLDGid0/xwZXGgwWBnbiLft/SJWxLP8UK5Olzr3FdVF7tZqqtS5K0QXjEKFaTAUvPVbciDX84RtSaLSI5sWTJCGNuZhFfuaKEjWSpzIixdo48DY5XJ57lz7cFGIFj/TC8t1BUiZPGwbl5zRJZ8=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <81E4D2E497CCFE4B8B9018F5F1211461@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc5fb19e-0f23-476a-16d9-08d6f41ab1e5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2019 18:28:00.9160
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qutran@marvell.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR18MB0926
+X-OriginatorOrg: marvell.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-18_08:,,
  signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
@@ -61,324 +106,82 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
-
-This patch uses kref to protect access between fcp_abort
-path and nvme command and LS command completion path.
-Stack trace below shows the abort path is accessing stale
-memory (nvme_private->sp).
-
-When command kref reaches 0, nvme_private & srb resource will
-be disconnected from each other.  Any subsequence nvme abort
-request will not be able to reference the original srb.
-
-[ 5631.003998] BUG: unable to handle kernel paging request at 00000010000005d8
-[ 5631.004016] IP: [<ffffffffc087df92>] qla_nvme_abort_work+0x22/0x100 [qla2xxx]
-[ 5631.004086] Workqueue: events qla_nvme_abort_work [qla2xxx]
-[ 5631.004097] RIP: 0010:[<ffffffffc087df92>]  [<ffffffffc087df92>] qla_nvme_abort_work+0x22/0x100 [qla2xxx]
-[ 5631.004109] Call Trace:
-[ 5631.004115]  [<ffffffffaa4b8174>] ? pwq_dec_nr_in_flight+0x64/0xb0
-[ 5631.004117]  [<ffffffffaa4b9d4f>] process_one_work+0x17f/0x440
-[ 5631.004120]  [<ffffffffaa4bade6>] worker_thread+0x126/0x3c0
-
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
----
- drivers/scsi/qla2xxx/qla_def.h  |   2 +
- drivers/scsi/qla2xxx/qla_nvme.c | 164 ++++++++++++++++++++++++++++------------
- drivers/scsi/qla2xxx/qla_nvme.h |   1 +
- 3 files changed, 117 insertions(+), 50 deletions(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 602ed24bb806..85a27ee5d647 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -532,6 +532,8 @@ typedef struct srb {
- 	uint8_t cmd_type;
- 	uint8_t pad[3];
- 	atomic_t ref_count;
-+	struct kref cmd_kref;	/* need to migrate ref_count over to this */
-+	void *priv;
- 	wait_queue_head_t nvme_ls_waitq;
- 	struct fc_port *fcport;
- 	struct scsi_qla_host *vha;
-diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
-index 2c64457ce713..78df476e80a1 100644
---- a/drivers/scsi/qla2xxx/qla_nvme.c
-+++ b/drivers/scsi/qla2xxx/qla_nvme.c
-@@ -123,53 +123,91 @@ static int qla_nvme_alloc_queue(struct nvme_fc_local_port *lport,
- 	return 0;
- }
- 
-+static void qla_nvme_release_fcp_cmd_kref(struct kref *kref)
-+{
-+	struct srb *sp = container_of(kref, struct srb, cmd_kref);
-+	struct nvme_private *priv = (struct nvme_private *)sp->priv;
-+	struct nvmefc_fcp_req *fd;
-+	struct srb_iocb *nvme;
-+	unsigned long flags;
-+
-+	if (!priv)
-+		goto out;
-+
-+	nvme = &sp->u.iocb_cmd;
-+	fd = nvme->u.nvme.desc;
-+
-+	spin_lock_irqsave(&priv->cmd_lock, flags);
-+	priv->sp = NULL;
-+	sp->priv = NULL;
-+	if (priv->comp_status == QLA_SUCCESS) {
-+		fd->rcv_rsplen = nvme->u.nvme.rsp_pyld_len;
-+	} else {
-+		fd->rcv_rsplen = 0;
-+		fd->transferred_length = 0;
-+	}
-+	fd->status = 0;
-+	spin_unlock_irqrestore(&priv->cmd_lock, flags);
-+
-+	fd->done(fd);
-+out:
-+	qla2xxx_rel_qpair_sp(sp->qpair, sp);
-+}
-+
-+static void qla_nvme_release_ls_cmd_kref(struct kref *kref)
-+{
-+	struct srb *sp = container_of(kref, struct srb, cmd_kref);
-+	struct nvme_private *priv = (struct nvme_private *)sp->priv;
-+	struct nvmefc_ls_req *fd;
-+	unsigned long flags;
-+
-+	if (!priv)
-+		goto out;
-+
-+	spin_lock_irqsave(&priv->cmd_lock, flags);
-+	priv->sp = NULL;
-+	sp->priv = NULL;
-+	spin_unlock_irqrestore(&priv->cmd_lock, flags);
-+
-+	fd = priv->fd;
-+	fd->done(fd, priv->comp_status);
-+out:
-+	qla2x00_rel_sp(sp);
-+}
-+
-+static void qla_nvme_ls_complete(struct work_struct *work)
-+{
-+	struct nvme_private *priv =
-+		container_of(work, struct nvme_private, ls_work);
-+
-+	kref_put(&priv->sp->cmd_kref, qla_nvme_release_ls_cmd_kref);
-+}
-+
- static void qla_nvme_sp_ls_done(void *ptr, int res)
- {
- 	srb_t *sp = ptr;
--	struct srb_iocb *nvme;
--	struct nvmefc_ls_req   *fd;
- 	struct nvme_private *priv;
- 
--	if (WARN_ON_ONCE(atomic_read(&sp->ref_count) == 0))
-+	if (WARN_ON_ONCE(kref_read(&sp->cmd_kref) == 0))
- 		return;
- 
--	atomic_dec(&sp->ref_count);
--
- 	if (res)
- 		res = -EINVAL;
- 
--	nvme = &sp->u.iocb_cmd;
--	fd = nvme->u.nvme.desc;
--	priv = fd->private;
-+	priv = (struct nvme_private *)sp->priv;
- 	priv->comp_status = res;
-+	INIT_WORK(&priv->ls_work, qla_nvme_ls_complete);
- 	schedule_work(&priv->ls_work);
--	/* work schedule doesn't need the sp */
--	qla2x00_rel_sp(sp);
- }
- 
-+/* it assumed that QPair lock is held. */
- static void qla_nvme_sp_done(void *ptr, int res)
- {
- 	srb_t *sp = ptr;
--	struct srb_iocb *nvme;
--	struct nvmefc_fcp_req *fd;
-+	struct nvme_private *priv = (struct nvme_private *)sp->priv;
- 
--	nvme = &sp->u.iocb_cmd;
--	fd = nvme->u.nvme.desc;
--
--	if (WARN_ON_ONCE(atomic_read(&sp->ref_count) == 0))
--		return;
--
--	atomic_dec(&sp->ref_count);
--
--	if (res == QLA_SUCCESS) {
--		fd->rcv_rsplen = nvme->u.nvme.rsp_pyld_len;
--	} else {
--		fd->rcv_rsplen = 0;
--		fd->transferred_length = 0;
--	}
--	fd->status = 0;
--	fd->done(fd);
--	qla2xxx_rel_qpair_sp(sp->qpair, sp);
-+	priv->comp_status = res;
-+	kref_put(&sp->cmd_kref, qla_nvme_release_fcp_cmd_kref);
- 
- 	return;
- }
-@@ -188,44 +226,53 @@ static void qla_nvme_abort_work(struct work_struct *work)
- 	       __func__, sp, sp->handle, fcport, fcport->deleted);
- 
- 	if (!ha->flags.fw_started && (fcport && fcport->deleted))
--		return;
-+		goto out;
- 
- 	if (ha->flags.host_shutting_down) {
- 		ql_log(ql_log_info, sp->fcport->vha, 0xffff,
- 		    "%s Calling done on sp: %p, type: 0x%x, sp->ref_count: 0x%x\n",
- 		    __func__, sp, sp->type, atomic_read(&sp->ref_count));
- 		sp->done(sp, 0);
--		return;
-+		goto out;
- 	}
- 
--	if (WARN_ON_ONCE(atomic_read(&sp->ref_count) == 0))
--		return;
--
- 	rval = ha->isp_ops->abort_command(sp);
- 
- 	ql_dbg(ql_dbg_io, fcport->vha, 0x212b,
- 	    "%s: %s command for sp=%p, handle=%x on fcport=%p rval=%x\n",
- 	    __func__, (rval != QLA_SUCCESS) ? "Failed to abort" : "Aborted",
- 	    sp, sp->handle, fcport, rval);
-+
-+out:
-+	/* kref_get was done before work was schedule. */
-+	if (sp->type == SRB_NVME_CMD)
-+		kref_put(&sp->cmd_kref, qla_nvme_release_fcp_cmd_kref);
-+	else if (sp->type == SRB_NVME_LS)
-+		kref_put(&sp->cmd_kref, qla_nvme_release_ls_cmd_kref);
- }
- 
- static void qla_nvme_ls_abort(struct nvme_fc_local_port *lport,
-     struct nvme_fc_remote_port *rport, struct nvmefc_ls_req *fd)
- {
- 	struct nvme_private *priv = fd->private;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&priv->cmd_lock, flags);
-+	if (!priv->sp) {
-+		spin_unlock_irqrestore(&priv->cmd_lock, flags);
-+		return;
-+	}
-+
-+	if (!kref_get_unless_zero(&priv->sp->cmd_kref)) {
-+		spin_unlock_irqrestore(&priv->cmd_lock, flags);
-+		return;
-+	}
-+	spin_unlock_irqrestore(&priv->cmd_lock, flags);
- 
- 	INIT_WORK(&priv->abort_work, qla_nvme_abort_work);
- 	schedule_work(&priv->abort_work);
- }
- 
--static void qla_nvme_ls_complete(struct work_struct *work)
--{
--	struct nvme_private *priv =
--	    container_of(work, struct nvme_private, ls_work);
--	struct nvmefc_ls_req *fd = priv->fd;
--
--	fd->done(fd, priv->comp_status);
--}
- 
- static int qla_nvme_ls_req(struct nvme_fc_local_port *lport,
-     struct nvme_fc_remote_port *rport, struct nvmefc_ls_req *fd)
-@@ -253,11 +300,12 @@ static int qla_nvme_ls_req(struct nvme_fc_local_port *lport,
- 	sp->type = SRB_NVME_LS;
- 	sp->name = "nvme_ls";
- 	sp->done = qla_nvme_sp_ls_done;
--	atomic_set(&sp->ref_count, 1);
--	nvme = &sp->u.iocb_cmd;
-+	sp->priv = (void *)priv;
- 	priv->sp = sp;
-+	kref_init(&sp->cmd_kref);
-+	spin_lock_init(&priv->cmd_lock);
-+	nvme = &sp->u.iocb_cmd;
- 	priv->fd = fd;
--	INIT_WORK(&priv->ls_work, qla_nvme_ls_complete);
- 	nvme->u.nvme.desc = fd;
- 	nvme->u.nvme.dir = 0;
- 	nvme->u.nvme.dl = 0;
-@@ -274,9 +322,10 @@ static int qla_nvme_ls_req(struct nvme_fc_local_port *lport,
- 	if (rval != QLA_SUCCESS) {
- 		ql_log(ql_log_warn, vha, 0x700e,
- 		    "qla2x00_start_sp failed = %d\n", rval);
--		atomic_dec(&sp->ref_count);
- 		wake_up(&sp->nvme_ls_waitq);
--		sp->free(sp);
-+		sp->priv = NULL;
-+		priv->sp = NULL;
-+		qla2x00_rel_sp(sp);
- 		return rval;
- 	}
- 
-@@ -288,6 +337,18 @@ static void qla_nvme_fcp_abort(struct nvme_fc_local_port *lport,
-     struct nvmefc_fcp_req *fd)
- {
- 	struct nvme_private *priv = fd->private;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&priv->cmd_lock, flags);
-+	if (!priv->sp) {
-+		spin_unlock_irqrestore(&priv->cmd_lock, flags);
-+		return;
-+	}
-+	if (!kref_get_unless_zero(&priv->sp->cmd_kref)) {
-+		spin_unlock_irqrestore(&priv->cmd_lock, flags);
-+		return;
-+	}
-+	spin_unlock_irqrestore(&priv->cmd_lock, flags);
- 
- 	INIT_WORK(&priv->abort_work, qla_nvme_abort_work);
- 	schedule_work(&priv->abort_work);
-@@ -511,8 +572,10 @@ static int qla_nvme_post_cmd(struct nvme_fc_local_port *lport,
- 	if (!sp)
- 		return -EBUSY;
- 
--	atomic_set(&sp->ref_count, 1);
- 	init_waitqueue_head(&sp->nvme_ls_waitq);
-+	kref_init(&sp->cmd_kref);
-+	spin_lock_init(&priv->cmd_lock);
-+	sp->priv = (void *)priv;
- 	priv->sp = sp;
- 	sp->type = SRB_NVME_CMD;
- 	sp->name = "nvme_cmd";
-@@ -526,9 +589,10 @@ static int qla_nvme_post_cmd(struct nvme_fc_local_port *lport,
- 	if (rval != QLA_SUCCESS) {
- 		ql_log(ql_log_warn, vha, 0x212d,
- 		    "qla2x00_start_nvme_mq failed = %d\n", rval);
--		atomic_dec(&sp->ref_count);
- 		wake_up(&sp->nvme_ls_waitq);
--		sp->free(sp);
-+		sp->priv = NULL;
-+		priv->sp = NULL;
-+		qla2xxx_rel_qpair_sp(sp->qpair, sp);
- 	}
- 
- 	return rval;
-diff --git a/drivers/scsi/qla2xxx/qla_nvme.h b/drivers/scsi/qla2xxx/qla_nvme.h
-index 2d088add7011..67bb4a2a3742 100644
---- a/drivers/scsi/qla2xxx/qla_nvme.h
-+++ b/drivers/scsi/qla2xxx/qla_nvme.h
-@@ -34,6 +34,7 @@ struct nvme_private {
- 	struct work_struct ls_work;
- 	struct work_struct abort_work;
- 	int comp_status;
-+	spinlock_t cmd_lock;
- };
- 
- struct qla_nvme_rport {
--- 
-2.12.0
-
+DQrvu79PbiA2LzE4LzE5LCA4OjU3IEFNLCAiQmFydCBWYW4gQXNzY2hlIiA8YnZhbmFzc2NoZUBh
+Y20ub3JnPiB3cm90ZToNCg0KICAgIE9uIDYvMTcvMTkgNTowMSBQTSwgUXVpbm4gVHJhbiB3cm90
+ZToNCiAgICA+IEF0dGFjaGVkIGlzIHRoZSBjbGVhbi11cCBwYXRjaCB0aGF0IHdlIGhlbGQgYmFj
+ayBmcm9tIHRoZSBzZXJpZXMuID4gV2UgZmVsdCBpdCB3YXNuJ3QgcmVhZHkgZm9yIHdpZGVyIGF1
+ZGllbmNlIGJlY2F1c2UgaXQgbmVlZGVkIGFkZGl0aW9uYWwNCiAgICA+IHNvYWsgdGltZSB3aXRo
+IG91ciB0ZXN0IGdyb3VwLg0KICAgID4gDQogICAgPiBXZSB3YW50IHRvIGFoZWFkIGFuZCBzaGFy
+ZSBpdCB3aXRoIHlvdSB0byBsZXQgeW91IGtub3cgdGhhdCB3ZSBpbnRlbnQNCiAgICA+IHRvIGNs
+ZWFudXAgdGhlIGR1cGxpY2F0ZSBhdG9taWMgW3JlZl9jb3VudHxrcmVmXS4gIE9uY2UgaXQgaGFz
+IHNvbWUNCiAgICA+IHNvYWsgdGltZSBpbiBvdXIgdGVzdCBncm91cCwgd2UnbGwgc3VibWl0IGl0
+IGluIHRoZSBuZXh0IFJDIHdpbmRvdy4NCiAgICANCiAgICBIaSBRdWlubiwNCiAgICANCiAgICBU
+aGFuayB5b3UgZm9yIGhhdmluZyBzaGFyZWQgdGhhdCBwYXRjaCBlYXJseS4gTXkgY29tbWVudHMg
+YWJvdXQgdGhhdCANCiAgICBwYXRjaCBhcmUgYXMgZm9sbG93czoNCiAgICAtIFRoZSBwYXRjaCBk
+ZXNjcmlwdGlvbiBpcyBub3QgY29ycmVjdC4gVG9kYXkgZnJlZWluZyBvZiBhbiBTUkIgZG9lcyBu
+b3QgDQogICAgaGFwcGVuIHdoZW4gcmVmX2NvdW50IHJlYWNoZXMgemVybyBidXQgaXQgaGFwcGVu
+cyB3aGVuIHRoZSBmaXJtd2FyZSANCiAgICByZXBvcnRzIGEgY29tcGxldGlvbi4gVGhhdCBpcyB3
+aHkgdG9kYXkgdGhlIGFib3J0IGNvZGUgY2FuIHRyaWdnZXIgYSANCiAgICB1c2UtYWZ0ZXItZnJl
+ZS4gcmVmX2NvdW50IGlzIG9ubHkgdXNlZnVsIHRvZGF5IGZvciB0aGUgYWJvcnQgY29kZSB0byAN
+CiAgICBkZXRlY3QgYXRvbWljYWxseSB3aGV0aGVyIG9yIG5vdCB0aGUgZmlybXdhcmUgYWxyZWFk
+eSByZXBvcnRlZCB0aGF0IGEgDQogICAgcmVxdWVzdCBjb21wbGV0ZWQuDQoNClFUOiBCYXJ0LCB0
+aGFua3MgZm9yIHRoZSBhZGRpdGlvbmFsIGV5ZXMuICBUaGlzIHBhdGNoIG1hZGUgYWRkaXRpb25h
+bCBzYWZlIGd1YXJkIHRvIHByZXZlbnQgdXNlIGFmdGVyIGZyZWUuICBXaGVuIHRoZSBvcmlnaW5h
+bCBJTyBhcnJpdmUgaW50byBRTEEgZHJpdmVyLCBRTEEgd2lsbCBiaW5kIHNjc2lfY21uZCAmIHNy
+YiB0b2dldGhlci4gIFdoZW4gdGhlIGtyZWYgcmVhY2hlcyAwLCB3ZSB3aWxsIHVuYmluZCB0aGUg
+MiBzdHJ1Y3R1cmVzIHdpdGggTlVMTCBwb2ludGVyLiAgQW55IGF0dGVtcHQgb24gJ3VzZSBhZnRl
+ciBmcmVlJyB3aWxsIGJlIGJsb2NrIGJ5IG51bGwgcG9pbnRlci4gIFdlIHJlc2VydmUgYWRkaXRp
+b25hbCBzY3JhdGNoIHNwYWNlIGF0IHRoZSBlbmQgb2Ygc2NzaV9jbW5kIChzcmJfcHJpdmF0ZSkg
+dG8gZmFjaWxpdGF0ZSB0aGUgYmluZCBhbmQgdW5iaW5kLg0KDQo4NzkgcWxhX3JlbGVhc2VfZmNw
+X2NtZF9rcmVmKHN0cnVjdCBrcmVmICprcmVmKQ0KODgwIHsNCiA4ODEgICAgICAgICBzdHJ1Y3Qg
+c3JiICpzcCA9IGNvbnRhaW5lcl9vZihrcmVmLCBzdHJ1Y3Qgc3JiLCBjbWRfa3JlZik7DQogODgy
+ICAgICAgICAgc3RydWN0IHNjc2lfY21uZCAqY21kID0gR0VUX0NNRF9TUChzcCk7DQogODg0ICAg
+ICAgICAgc3RydWN0IHNyYl9wcml2YXRlICpwcml2ID0gKHN0cnVjdCBzcmJfcHJpdmF0ZSopKGNt
+ZCArIDEpOw0KLi4NCiA4ODggICAgICAgICBzcGluX2xvY2tfaXJxc2F2ZSgmcHJpdi0+Y21kX2xv
+Y2ssIGZsYWdzKTsNCiA4ODkgICAgICAgICBDTURfU1AoY21kKSA9IE5VTEw7ICAgIDw8PDwgdW5i
+aW5kIHNjc2lfY21uZCBmcm9tIHNyYi4NCiA4OTAgICAgICAgICBzcC0+dS5zY21kLmNtZCA9IE5V
+TEw7DQogODkxICAgICAgICAgc3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmcHJpdi0+Y21kX2xvY2ss
+IGZsYWdzKTsNCn0NCg0KMTM1OSBzdGF0aWMgaW50DQoxMzYwIHFsYTJ4eHhfZWhfYWJvcnQoc3Ry
+dWN0IHNjc2lfY21uZCAqY21kKQ0KMTM2MSB7DQouLg0KMTM3MCAgICAgICAgIHN0cnVjdCBzcmJf
+cHJpdmF0ZSAqcHJpdiA9IChzdHJ1Y3Qgc3JiX3ByaXZhdGUqKShjbWQgKyAxKTsNCi4uDQoxMzgy
+IA0KMTM4MyAgICAgICAgIHNwaW5fbG9ja19pcnFzYXZlKCZwcml2LT5jbWRfbG9jaywgZmxhZ3Mp
+Ow0KMTM4NCAgICAgICAgIHNwID0gKHNyYl90ICopIENNRF9TUChjbWQpOw0KMTM4NSAgICAgICAg
+IGlmICghc3AgfHwgIXNwLT5xcGFpciB8fA0KMTM4NiAgICAgICAgICAgICAocHJpdi0+Y21kX2lk
+ICE9IHNwLT5jbWRfaWQpIHx8DQoxMzg3ICAgICAgICAgICAgIChzcC0+ZmNwb3J0ICYmIHNwLT5m
+Y3BvcnQtPmRlbGV0ZWQpKSB7DQoxMzg4ICAgICAgICAgICAgICAgICBzcGluX3VubG9ja19pcnFy
+ZXN0b3JlKCZwcml2LT5jbWRfbG9jaywgZmxhZ3MpOw0KMTM4OSAgICAgICAgICAgICAgICAgcmV0
+dXJuIFNVQ0NFU1M7DQoxMzkwICAgICAgICAgfQ0KICANCg0KDQogICAgLSBPbmx5IGNhbGxpbmcg
+Y21kLT5zY3NpLWRvbmUoY21kKSB3aGVuIHRoZSByZWZlcmVuY2UgY291bnQgcmVhY2hlcyB6ZXJv
+IA0KICAgIGludm9sdmVzIGEgYmVoYXZpb3IgY2hhbmdlLiBJZiBhIGNvbW1hbmQgY29tcGxldGlv
+biBhbmQgYSByZXF1ZXN0IHRvIA0KICAgIGFib3J0IGEgY29tbWFuZCByYWNlLCB0aGlzIHBhdGNo
+IHdpbGwgcmVwb3J0IHRoZSBjb21tYW5kIGFzIGFib3J0ZWQgdG8gDQogICAgdGhlIFNDU0kgbWlk
+LWxheWVyIGluc3RlYWQgb2YgYXMgY29tcGxldGVkLiBUaGlzIGNoYW5nZSBoYXMgbm90IGJlZW4g
+DQogICAgbWVudGlvbmVkIGluIHRoZSBwYXRjaCBkZXNjcmlwdGlvbi4gSXMgdGhpcyBjaGFuZ2Ug
+cGVyaGFwcyB1bmludGVudGlvbmFsPw0KUVQ6ICBJIGJlbGlldmUgdGhlIG9yaWdpbmFsIGNvZGUg
+aGFzIHRoZSBzYW1lIGJlaGF2aW9yLiAgV2UncmUgdHJ5aW5nIHRvIHByZXNlcnZlIHByZWNlZGVu
+dC4gIFdpbGwgcmV2aXNpdCB0byBkaWZmZXJlbnRpYXRlIHRoZSAyIHN0YXR1cyBjb2RlIHRoZSBk
+ZXNjcmliZWQgcmFjZS4NCg0KICAgIC0gSSB0aGluayB0aGF0IHRoaXMgcGF0Y2ggZG9lcyBub3Qg
+YWRkcmVzcyB0aGUgbWVtb3J5IGxlYWsgdGhhdCBjYW4gYmUgDQogICAgdHJpZ2dlcmVkIGJ5IGFi
+b3J0aW5nIGEgY29tbWFuZC4gSWYgYSBjb21tYW5kIGlzIGFib3J0ZWQgaXQgd2lsbCBiZSANCiAg
+ICBmcmVlZCBieSBxbGFfcmVsZWFzZV9mY3BfY21kX2tyZWYoKSBjYWxsaW5nIHFsYTJ4eHhfcmVs
+X3FwYWlyX3NwKCkgYW5kIA0KICAgIGJ5IHFsYTJ4eHhfcmVsX3FwYWlyX3NwKCkgY2FsbGluZyBz
+cC0+ZnJlZShzcCkuIEhvd2V2ZXIsIHRoZSANCiAgICBpbXBsZW1lbnRhdGlvbiBvZiB0aGUgZnJl
+ZSBmdW5jdGlvbiBmb3IgbXVsdGlwbGUgU1JCIHR5cGVzIGlzIGluY29tcGxldGUuDQoNClFUOiAg
+QXMgZm9yIHRoZSBvdGhlciB0eXBlIFNSQiwgSSBmb2xsb3cgd2hhdCB5b3UncmUgcG9pbnRpbmcg
+YXQuICBXZSBkbyBoYXZlIGFub3RoZXIgcGF0Y2goaXMpIHRvIGFkZHJlc3MgdGhpcyBvdGhlciBj
+b3JuZXIuICBXaWxsIHF1ZXVlIGl0IHVwIHRvIGdvIG91dCBhbHNvIHdpdGggdGhlIG5leHQgd2lu
+ZG93LiBJdCdzIGN1cnJlbnRseSBiZWluZyBzb2FrIGluIG91ciB0ZXN0IGdyb3VwLg0KDQogICAg
+LSBUaGUgYXBwcm9hY2ggZm9yIGF2b2lkaW5nIHRoYXQgcWxhMnh4eF9laF9hYm9ydCgpIHRyaWdn
+ZXJzIGEgDQogICAgdXNlLWFmdGVyLWZyZWUgKHRoZSBuZXcgc3JiX3ByaXZhdGUgc3RydWN0dXJl
+KSBpcyBpbnRlcmVzdGluZy4gSG93ZXZlciwgDQogICAgdGhhdCBhcHByb2FjaCBkb2VzIG5vdCBs
+b29rIGNvcnJlY3QgdG8gbWUuIFRoZSBwYXRjaCBhdHRhY2hlZCB0byB0aGUgDQogICAgcHJldmlv
+dXMgZS1tYWlsIGluc2VydHMgdGhlIGZvbGxvd2luZyBjb2RlIGluIHFsYTJ4eHhfZWhfYWJvcnQo
+KToNCiAgICAgICAnc3AgPSBDTURfU1AoY21kKTsgaWYgKCFzcCB8fCAhc3AtPnFwYWlyIHx8IC4u
+LikgcmV0dXJuIFNVQ0NFU1MnDQogICAgQXMgb25lIGNhbiBzZWUgdGhlIHNwIHBvaW50ZXIgaXMg
+ZGVyZWZlcmVuY2VkIGFsdGhvdWdoIHRoZSBtZW1vcnkgaXQgDQogICAgcG9pbnRzIGF0IGNvdWxk
+IGFscmVhZHkgaGF2ZSBiZWVuIGZyZWVkIGFuZCBjb3VsZCBoYXZlIGJlZW4gcmVhbGxvY2F0ZWQg
+DQogICAgYnkgYW5vdGhlciBkcml2ZXIgb3IgYW5vdGhlciBwcm9jZXNzLiBTbyBJIGRvbid0IHRo
+aW5rIHRoZSBuZXcgY29kZSBmb3IgDQogICAgYXZvaWRpbmcgYSB1c2UtYWZ0ZXItZnJlZSBpcyBj
+b3JyZWN0Lg0KDQpRVDogIE9LLiBXaWxsIHJlbW92ZSBvbGQgZGVmZW5zaXZlIGNoZWNrIHRoYXQg
+bWF5IHN0aWxsIGNhdXNlIHVzZSBhZnRlciBmcmVlLg0KDQotLS0tDQogICAgDQogICAgVGhhbmtz
+LA0KICAgIA0KICAgIEJhcnQuDQogICAgDQoNCg==
