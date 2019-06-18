@@ -2,92 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2965649E40
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 12:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5667849E97
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 12:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729123AbfFRKaV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 06:30:21 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:35936 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbfFRKaV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 06:30:21 -0400
-Received: by mail-qt1-f194.google.com with SMTP id p15so14599060qtl.3;
-        Tue, 18 Jun 2019 03:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wtQ3H/RqcO/beRnWTkfjA8r0vVjyM6yxlkekBWvD7LM=;
-        b=GDTAByqqryYew57KnXrF6BB4jcZDHDJSYOH0Liw4w2FuBWdi9jPUufwFQbY5yW3CSL
-         xbpl21kkDHBd3ZpnOE3L8z/koeG/Ch3X9/CFxOMH+m8Z46N1QWFSGVI/Lh1nvWHWECOy
-         n7/j8311G2axMLG+Y2eTVId5/iYM/ZDji3s8YWwL3Ps0sZHC/7n9L58Hl5F+vy8UQy16
-         2qr0qjR0LgSkFZuOC63cHGW3mad9lhxwnTRR28mrVT3wxHf9k3RkbdhMoICrHzQYh2cU
-         j1YncGZfnq1fW3J1/sAc1kN8xy25XIjV8J1y/4KBi4gC8ex0GObUmgnc3PjUjzyW5NQQ
-         vJ4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wtQ3H/RqcO/beRnWTkfjA8r0vVjyM6yxlkekBWvD7LM=;
-        b=o7OXbG7Xd+0X9Cg8UVqPupHyJRtByxHz6BAKjQ2NLfhfnieq3nH2xaaSoaY5xDE9+U
-         qc5AR2zzLbpjCiHZqux9C9i6eqMQdYjE4dZorWahl+akyomUwhDWCdGoCKfPT3o62u4P
-         MbknZjaPPTjrKk+wSbZShlxxqPosqPbx3opQfJzAZK9Oshs940YAY5XuMCjfKdodds+L
-         4inK6PbcSXPGoPEr6P0xkI3ZiHHTHjpof4RhhudA+IwXAOiORCFSLvYulVgjIrpM+YT7
-         NjURCw7QcxlQo/uFyB0IbBez1ktj7QKwkoEOnQ1VBK8olLWDPwJshml6DBiTYsmQ+Dsr
-         NZTg==
-X-Gm-Message-State: APjAAAWk1gENcrCYFmRyVAOKU2bInoODHnvzil4yKsZqUTV5pr/6TPzW
-        DKtJIiVFm6Yr6+9HA7cFShxv+/pQzg4=
-X-Google-Smtp-Source: APXvYqxfmZ10id4CdcAHra7m9KtxjeyGAqoO+t/QgcAFgYk5fWTCphfe/nyulxHSUuKuthplCU0EyA==
-X-Received: by 2002:a0c:df8a:: with SMTP id w10mr15422264qvl.140.1560853819843;
-        Tue, 18 Jun 2019 03:30:19 -0700 (PDT)
-Received: from geeko ([186.212.50.252])
-        by smtp.gmail.com with ESMTPSA id z126sm8586992qkb.7.2019.06.18.03.30.13
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 03:30:18 -0700 (PDT)
-Date:   Tue, 18 Jun 2019 07:30:04 -0300
-From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "open list:USB MASS STORAGE DRIVER" <linux-usb@vger.kernel.org>,
-        "open list:USB MASS STORAGE DRIVER" 
-        <usb-storage@lists.one-eyed-alien.net>
-Subject: Re: [PATCH 2/2] usb: storage: scsiglue: Do not skip VPD if
- try_vpd_pages is set
-Message-ID: <20190618103001.GA9372@geeko>
-References: <20190618013146.21961-1-marcos.souza.org@gmail.com>
- <20190618013146.21961-3-marcos.souza.org@gmail.com>
- <20190618064947.GB22457@kroah.com>
+        id S1729347AbfFRKvJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 06:51:09 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38882 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729098AbfFRKvJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 18 Jun 2019 06:51:09 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 5291EAF4E;
+        Tue, 18 Jun 2019 10:51:07 +0000 (UTC)
+Subject: Re: [PATCH 1/3] qla2xxx: Fix kernel crash after disconnecting NVMe
+ devices
+To:     Himanshu Madhani <hmadhani@marvell.com>,
+        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org
+References: <20190614221020.19173-1-hmadhani@marvell.com>
+ <20190614221020.19173-2-hmadhani@marvell.com>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <271857f5-e4c0-4e1c-2555-57aebcc6dd3e@suse.de>
+Date:   Tue, 18 Jun 2019 12:51:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190618064947.GB22457@kroah.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190614221020.19173-2-hmadhani@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 08:49:47AM +0200, Greg Kroah-Hartman wrote:
-> On Mon, Jun 17, 2019 at 10:31:46PM -0300, Marcos Paulo de Souza wrote:
-> > If BLIST_TRY_VPD_PAGES is set for a device, even for an USB, it should
-> > be honored, so only set skip_vpd_pages is try_vpd_pages is not set.
-> > 
-> > Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-> > ---
-> >  drivers/usb/storage/scsiglue.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
+On 6/15/19 12:10 AM, Himanshu Madhani wrote:
+> From: Arun Easi <aeasi@marvell.com>
 > 
-> Where is patch 1/2 of this series?
-
-You can find it here:
-https://lore.kernel.org/lkml/20190618013146.21961-2-marcos.souza.org@gmail.com/
-
+> BUG: unable to handle kernel NULL pointer dereference at           (null)
+> IP: [<ffffffffc050d10c>] qla_nvme_unregister_remote_port+0x6c/0xf0 [qla2xxx]
+> PGD 800000084cf41067 PUD 84d288067 PMD 0
+> Oops: 0000 [#1] SMP
+> Call Trace:
+>  [<ffffffff98abcfdf>] process_one_work+0x17f/0x440
+>  [<ffffffff98abdca6>] worker_thread+0x126/0x3c0
+>  [<ffffffff98abdb80>] ? manage_workers.isra.26+0x2a0/0x2a0
+>  [<ffffffff98ac4f81>] kthread+0xd1/0xe0
+>  [<ffffffff98ac4eb0>] ? insert_kthread_work+0x40/0x40
+>  [<ffffffff9918ad37>] ret_from_fork_nospec_begin+0x21/0x21
+>  [<ffffffff98ac4eb0>] ? insert_kthread_work+0x40/0x40
+> RIP  [<ffffffffc050d10c>] qla_nvme_unregister_remote_port+0x6c/0xf0 [qla2xxx]
 > 
-> confused,
+> The crash is due to a bad entry in the nvme_rport_list. This list is not
+> protected, and when a remoteport_delete callback is called, driver
+> traverses the list and crashes.
 > 
-> greg k-h
+> Actually, the list could be removed and driver could traverse the main
+> fcport list instead. Fix does exactly that.
+> 
+> Signed-off-by: Arun Easi <aeasi@marvell.com>
+> Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
+> ---
+>  drivers/scsi/qla2xxx/qla_def.h  |  1 -
+>  drivers/scsi/qla2xxx/qla_nvme.c | 52 ++++++++++++++++++++---------------------
+>  drivers/scsi/qla2xxx/qla_nvme.h |  1 -
+>  drivers/scsi/qla2xxx/qla_os.c   |  1 -
+>  4 files changed, 25 insertions(+), 30 deletions(-)
+> 
+[ .. ]
+> diff --git a/drivers/scsi/qla2xxx/qla_nvme.h b/drivers/scsi/qla2xxx/qla_nvme.h
+> index d3b8a6440113..2d088add7011 100644
+> --- a/drivers/scsi/qla2xxx/qla_nvme.h
+> +++ b/drivers/scsi/qla2xxx/qla_nvme.h
+> @@ -37,7 +37,6 @@ struct nvme_private {
+>  };
+>  
+>  struct qla_nvme_rport {
+> -	struct list_head list;
+>  	struct fc_port *fcport;
+>  };
+>  
+Where is the point of this structure now?
+Please drop it, and use fc_port directly.
 
+Cheers,
+
+Hannes
 -- 
-Thanks,
-Marcos
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
