@@ -2,109 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BB54A0A4
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 14:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786A04A0FB
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 14:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbfFRMTt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 08:19:49 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:49334 "EHLO mx1.redhat.com"
+        id S1728018AbfFRMjk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 08:39:40 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44139 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725913AbfFRMTs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 18 Jun 2019 08:19:48 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1725913AbfFRMjk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 18 Jun 2019 08:39:40 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 61E723092677;
-        Tue, 18 Jun 2019 12:19:48 +0000 (UTC)
-Received: from emilne (unknown [10.18.25.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BC41462926;
-        Tue, 18 Jun 2019 12:19:46 +0000 (UTC)
-Message-ID: <19b22c14d7864df5c7f79934a4e1cd39934325b7.camel@redhat.com>
-Subject: Re: [PATCH 1/3] qla2xxx: Fix kernel crash after disconnecting NVMe
- devices
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     Hannes Reinecke <hare@suse.de>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org
-Date:   Tue, 18 Jun 2019 08:19:46 -0400
-In-Reply-To: <271857f5-e4c0-4e1c-2555-57aebcc6dd3e@suse.de>
-References: <20190614221020.19173-1-hmadhani@marvell.com>
-         <20190614221020.19173-2-hmadhani@marvell.com>
-         <271857f5-e4c0-4e1c-2555-57aebcc6dd3e@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Tue, 18 Jun 2019 12:19:48 +0000 (UTC)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 45Snhl0Bsrz9sCJ;
+        Tue, 18 Jun 2019 22:39:34 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        Linas Vepstas <linasvepstas@gmail.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Sam Bobroff <sbobroff@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        "Manoj N. Kumar" <manoj@linux.ibm.com>,
+        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
+        Uma Krishnan <ukrishn@linux.ibm.com>,
+        Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jslaby@suse.com>, linux-pci@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-scsi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Andrew Donnellan <andrew.donnellan@au1.ibm.com>
+Subject: Re: [PATCH v4 19/28] docs: powerpc: convert docs to ReST and rename to *.rst
+In-Reply-To: <20190614143635.3aff154d@lwn.net>
+References: <cover.1560361364.git.mchehab+samsung@kernel.org> <63560c1ee7174952e148a353840a17969fe0be2d.1560361364.git.mchehab+samsung@kernel.org> <20190614143635.3aff154d@lwn.net>
+Date:   Tue, 18 Jun 2019 22:39:32 +1000
+Message-ID: <87blyvoynv.fsf@concordia.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2019-06-18 at 12:51 +0200, Hannes Reinecke wrote:
-> On 6/15/19 12:10 AM, Himanshu Madhani wrote:
-> > From: Arun Easi <aeasi@marvell.com>
-> > 
-> > BUG: unable to handle kernel NULL pointer dereference at           (null)
-> > IP: [<ffffffffc050d10c>] qla_nvme_unregister_remote_port+0x6c/0xf0 [qla2xxx]
-> > PGD 800000084cf41067 PUD 84d288067 PMD 0
-> > Oops: 0000 [#1] SMP
-> > Call Trace:
-> >  [<ffffffff98abcfdf>] process_one_work+0x17f/0x440
-> >  [<ffffffff98abdca6>] worker_thread+0x126/0x3c0
-> >  [<ffffffff98abdb80>] ? manage_workers.isra.26+0x2a0/0x2a0
-> >  [<ffffffff98ac4f81>] kthread+0xd1/0xe0
-> >  [<ffffffff98ac4eb0>] ? insert_kthread_work+0x40/0x40
-> >  [<ffffffff9918ad37>] ret_from_fork_nospec_begin+0x21/0x21
-> >  [<ffffffff98ac4eb0>] ? insert_kthread_work+0x40/0x40
-> > RIP  [<ffffffffc050d10c>] qla_nvme_unregister_remote_port+0x6c/0xf0 [qla2xxx]
-> > 
-> > The crash is due to a bad entry in the nvme_rport_list. This list is not
-> > protected, and when a remoteport_delete callback is called, driver
-> > traverses the list and crashes.
-> > 
-> > Actually, the list could be removed and driver could traverse the main
-> > fcport list instead. Fix does exactly that.
-> > 
-> > Signed-off-by: Arun Easi <aeasi@marvell.com>
-> > Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
-> > ---
-> >  drivers/scsi/qla2xxx/qla_def.h  |  1 -
-> >  drivers/scsi/qla2xxx/qla_nvme.c | 52 ++++++++++++++++++++---------------------
-> >  drivers/scsi/qla2xxx/qla_nvme.h |  1 -
-> >  drivers/scsi/qla2xxx/qla_os.c   |  1 -
-> >  4 files changed, 25 insertions(+), 30 deletions(-)
-> > 
-> 
-> [ .. ]
-> > diff --git a/drivers/scsi/qla2xxx/qla_nvme.h b/drivers/scsi/qla2xxx/qla_nvme.h
-> > index d3b8a6440113..2d088add7011 100644
-> > --- a/drivers/scsi/qla2xxx/qla_nvme.h
-> > +++ b/drivers/scsi/qla2xxx/qla_nvme.h
-> > @@ -37,7 +37,6 @@ struct nvme_private {
-> >  };
-> >  
-> >  struct qla_nvme_rport {
-> > -	struct list_head list;
-> >  	struct fc_port *fcport;
-> >  };
-> >  
-> 
-> Where is the point of this structure now?
-> Please drop it, and use fc_port directly.
+Jonathan Corbet <corbet@lwn.net> writes:
+> On Wed, 12 Jun 2019 14:52:55 -0300
+> Mauro Carvalho Chehab <mchehab+samsung@kernel.org> wrote:
+>
+>> Convert docs to ReST and add them to the arch-specific
+>> book.
+>> 
+>> The conversion here was trivial, as almost every file there
+>> was already using an elegant format close to ReST standard.
+>> 
+>> The changes were mostly to mark literal blocks and add a few
+>> missing section title identifiers.
+>> 
+>> One note with regards to "--": on Sphinx, this can't be used
+>> to identify a list, as it will format it badly. This can be
+>> used, however, to identify a long hyphen - and "---" is an
+>> even longer one.
+>> 
+>> At its new index.rst, let's add a :orphan: while this is not linked to
+>> the main index.rst file, in order to avoid build warnings.
+>> 
+>> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+>> Acked-by: Andrew Donnellan <andrew.donnellan@au1.ibm.com> # cxl
+>
+> This one fails to apply because ...
+>
+> [...]
+>
+>> diff --git a/Documentation/PCI/pci-error-recovery.rst b/Documentation/PCI/pci-error-recovery.rst
+>> index 83db42092935..acc21ecca322 100644
+>> --- a/Documentation/PCI/pci-error-recovery.rst
+>> +++ b/Documentation/PCI/pci-error-recovery.rst
+>> @@ -422,3 +422,24 @@ That is, the recovery API only requires that:
+>>     - drivers/net/cxgb3
+>>     - drivers/net/s2io.c
+>>     - drivers/net/qlge
+>> +
+>> +>>> As of this writing, there is a growing list of device drivers with
+>> +>>> patches implementing error recovery. Not all of these patches are in
+>> +>>> mainline yet. These may be used as "examples":
+>> +>>>
+>> +>>> drivers/scsi/ipr
+>> +>>> drivers/scsi/sym53c8xx_2
+>> +>>> drivers/scsi/qla2xxx
+>> +>>> drivers/scsi/lpfc
+>> +>>> drivers/next/bnx2.c
+>> +>>> drivers/next/e100.c
+>> +>>> drivers/net/e1000
+>> +>>> drivers/net/e1000e
+>> +>>> drivers/net/ixgb
+>> +>>> drivers/net/ixgbe
+>> +>>> drivers/net/cxgb3
+>> +>>> drivers/net/s2io.c
+>> +>>> drivers/net/qlge  
+>
+> ...of this, which has the look of a set of conflict markers that managed
+> to get committed...?
 
-I thought about mentioning that, but nvme_fc_remote_port's
-->private field is allocated by .remote_priv_sz in the call to
-nvme_fc_register_remoteport(), so I don't see a clean way to
-just set ->private to the fc_port.
+I don't think so.
 
-And, if a driver-specific field needs to be added later, it
-would all have to be put back.
+There's some other uses of >>> in that file, eg about line 162:
 
--Ewan
+  >>> The current powerpc implementation assumes that a device driver will
+  >>> *not* schedule or semaphore in this routine; the current powerpc
+  >>> implementation uses one kernel thread to notify all devices;
+  >>> thus, if one device sleeps/schedules, all devices are affected.
+  >>> Doing better requires complex multi-threaded logic in the error
+  >>> recovery implementation (e.g. waiting for all notification threads
+  >>> to "join" before proceeding with recovery.)  This seems excessively
+  >>> complex and not worth implementing.
 
-> 
-> Cheers,
-> 
-> Hannes
+
+So it's just an odd choice of emphasis device I think.
+
+cheers
