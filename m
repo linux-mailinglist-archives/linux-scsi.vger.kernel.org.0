@@ -2,98 +2,158 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 816FC49669
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 02:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D524967D
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 02:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726378AbfFRAqy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 20:46:54 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:33338 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbfFRAqy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 20:46:54 -0400
-Received: by mail-wm1-f68.google.com with SMTP id h19so1100775wme.0;
-        Mon, 17 Jun 2019 17:46:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8040MIo3hoL1siZlh+IJp6lN+yzLI4mFWNXimyvlAT8=;
-        b=icnDnXp2u0Gupr9hz5qzVK3sx/3roplA+0k5zd87GQng1nhz6SqoI9E/novxYoKwEE
-         lDapE2xsyKXmDEcfKzyyGSJO4UvZdJOviYjvwxqimwFPQ1Wa2/Ht/iE79Gmve6jMIEtC
-         Jvao9tinNnvRSJ5Zj1z/RquntQwL2Bria4lsckZyZPjw+qLyXD9VLXzZxG/6M+0Hwe8b
-         +qOcMZi/96TSSJ9iMyTLyNhuBaMOapSTjmP/ho9zdnB9PqViGM1v6uyXqEQAPL8vAtQ8
-         weaAmGBCWsrh+SFbRgt46IDw/hRb6T5hP9PQPFWkggP/47wl84BjQ2hQyAtgeD6z0c8K
-         Gf3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8040MIo3hoL1siZlh+IJp6lN+yzLI4mFWNXimyvlAT8=;
-        b=g6a3jcIr10lG78mzNFPDkSlvCptboKvI3zrBetvr4slCXMuJirzwm9415SgijUbhH8
-         tlb6rzjZuUgBvWcVKtVFxbX1P+/Vtxy8IuPyPVDxPpjLE0pg0Je3MAXiO1yUuEYmjyjp
-         0ql7KA5zxhMuHa/C1iJE+sYJ1/mTFyuL/JRwJAHCYIZi4Uo4433RvhGbCTDyQAug3zao
-         1FOqRnDyZEhSEA1G2GSVRfWXECXDhR69MN4UWxj1a6yFYkiDFLPmMzoa3/Z9xwRdIkpe
-         6dpMkP/lp5hKGqRURbTVAMuPc+72vxgld25otYdA/qX1tI1pefuzhT1cLuPGp/x4GPQX
-         w8Ww==
-X-Gm-Message-State: APjAAAUZzW1qNvg+mx6em+MVbKvLpTL0Y6S+WLs8BLhUTiWbhBXwD+rE
-        G6VOcmahaXkLaXibAgFsdJ70X635RAqHIyD/S+I=
-X-Google-Smtp-Source: APXvYqxMSUnTcEGSu/iiFpFg9Mxu8aSAdN3/6SxVGuAWKQLmuwThyhLKW85M76Jcf4jRiGyxe2H+tYw93p+WDXmfkhQ=
-X-Received: by 2002:a05:600c:204c:: with SMTP id p12mr813975wmg.121.1560818811702;
- Mon, 17 Jun 2019 17:46:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190617122000.22181-1-hch@lst.de> <20190617122000.22181-8-hch@lst.de>
-In-Reply-To: <20190617122000.22181-8-hch@lst.de>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Tue, 18 Jun 2019 08:46:40 +0800
-Message-ID: <CACVXFVObpdjN6V9qS-C9NG5xcrPqmx-X22qVamOSZf81Vog6zw@mail.gmail.com>
-Subject: Re: [PATCH 7/8] mpt3sas: set an unlimited max_segment_size for SAS
- 3.0 HBAs
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
-        linux-hyperv@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1726898AbfFRA5d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 20:57:33 -0400
+Received: from ushosting.nmnhosting.com ([66.55.73.32]:35430 "EHLO
+        ushosting.nmnhosting.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfFRA5d (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 20:57:33 -0400
+Received: from mail2.nmnhosting.com (unknown [202.169.106.97])
+        by ushosting.nmnhosting.com (Postfix) with ESMTPS id 2797C2DC0096;
+        Mon, 17 Jun 2019 20:57:31 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=d-silva.org;
+        s=201810a; t=1560819452;
+        bh=u7VpYNn8JpTLdyHPUljh2Z7wehVtDH+n9nHQNgN6N2A=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=jvSabEdrNHOl7NlBGL5YcdZQfi+fpB9BO+GaqBWlR/PP+V/1JX3MOC/vdfprE+d4q
+         W0UTx/depws8/q6fCe4qsmxzaHqtVkUa+v+Mp2PYjaUrKq1XeKLKJ3TPmwKDKYb7Ix
+         tm9Ggg2c204E7SWf1Kzm3b7UURvQRUF+YtE1qaFXWb7M1bSsECs2dxPGyAy4TwdTwu
+         YrzjrIAdGWVZDKXuSQHyDOqmmePgS4sV2lw+tlA9IZJRT1DXVvYEFcSGBy5FTId/0l
+         fqkDcrBYmDhMWn+3CZbnwx7qgnLFWM0LDHsbAyxHAnRZtM+pOmK0XpTf0aiYcsAURz
+         JAHTKkLHxAgXWfC3qIJOHW9mN0wLp5AYzfNmMC3C5ks7bZYsWq3PGnPXMMgDkMzyop
+         xeuPVBo2+37GGuWiHd1PVStu6wl0eKfSBJgyWJvhXbnAdDsbuqzYFH9Boz+O6C1oWT
+         2Stkwa1MvSezs7en91awfFUNUzrvwbjOv/IZIK0ZFoGni+dz4kIbQSJzdLLHGKQkgV
+         TVlkQn6TAJU90DRRiC92kuMldKfElutBjDwzhohJifPcEvF9T9IrE1SS4Zaz3ft2Rz
+         ho6zF2/9j+ouJCRd5AcHglBo4L8CMDItufZhI5pCGZ7PhbKy0bPXekMmqRlgelk8er
+         vDFIJF20+9ye5cMw79l/tHxg=
+Received: from adsilva.ozlabs.ibm.com (static-82-10.transact.net.au [122.99.82.10] (may be forged))
+        (authenticated bits=0)
+        by mail2.nmnhosting.com (8.15.2/8.15.2) with ESMTPSA id x5I0v17n063106
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 18 Jun 2019 10:57:17 +1000 (AEST)
+        (envelope-from alastair@d-silva.org)
+Message-ID: <b2651117ca8a55d94b7e14e273d25199515039c3.camel@d-silva.org>
+Subject: Re: [PATCH v3 2/7] lib/hexdump.c: Relax rowsize checks in
+ hex_dump_to_buffer
+From:   "Alastair D'Silva" <alastair@d-silva.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
+Date:   Tue, 18 Jun 2019 10:57:00 +1000
+In-Reply-To: <94413756-c927-a4ca-dd59-47e3cc87d58d@infradead.org>
+References: <20190617020430.8708-1-alastair@au1.ibm.com>
+         <20190617020430.8708-3-alastair@au1.ibm.com>
+         <94413756-c927-a4ca-dd59-47e3cc87d58d@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail2.nmnhosting.com [10.0.1.20]); Tue, 18 Jun 2019 10:57:27 +1000 (AEST)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 8:21 PM Christoph Hellwig <hch@lst.de> wrote:
->
-> When using a virt_boundary_mask, as done for NVMe devices attached to
-> mpt3sas controllers we require an unlimited max_segment_size, as the
-> virt boundary merging code assumes that.  But we also need to propagate
-> that to the DMA mapping layer to make dma-debug happy.  The SCSI layer
-> takes care of that when using the per-host virt_boundary setting, but
-> given that mpt3sas only wants to set the virt_boundary for actual
-> NVMe devices we can't rely on that.  The DMA layer maximum segment
-> is global to the HBA however, so we have to set it explicitly.  This
-> patch assumes that mpt3sas does not have a segment size limitation,
-> which seems true based on the SGL format, but will need to be verified.
->
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/scsi/mpt3sas/mpt3sas_scsih.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> index 1ccfbc7eebe0..c719b807f6d8 100644
-> --- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> +++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> @@ -10222,6 +10222,7 @@ static struct scsi_host_template mpt3sas_driver_template = {
->         .this_id                        = -1,
->         .sg_tablesize                   = MPT3SAS_SG_DEPTH,
->         .max_sectors                    = 32767,
-> +       .max_segment_size               = 0xffffffff,
+On Mon, 2019-06-17 at 15:47 -0700, Randy Dunlap wrote:
+> Hi,
+> Just a comment style nit below...
+> 
+> On 6/16/19 7:04 PM, Alastair D'Silva wrote:
+> > From: Alastair D'Silva <alastair@d-silva.org>
+> > 
+> > This patch removes the hardcoded row limits and allows for
+> > other lengths. These lengths must still be a multiple of
+> > groupsize.
+> > 
+> > This allows structs that are not 16/32 bytes to display on
+> > a single line.
+> > 
+> > This patch also expands the self-tests to test row sizes
+> > up to 64 bytes (though they can now be arbitrarily long).
+> > 
+> > Signed-off-by: Alastair D'Silva <alastair@d-silva.org>
+> > ---
+> >  lib/hexdump.c      | 48 ++++++++++++++++++++++++++++--------------
+> >  lib/test_hexdump.c | 52 ++++++++++++++++++++++++++++++++++++++--
+> > ------
+> >  2 files changed, 75 insertions(+), 25 deletions(-)
+> > 
+> > diff --git a/lib/hexdump.c b/lib/hexdump.c
+> > index 81b70ed37209..3943507bc0e9 100644
+> > --- a/lib/hexdump.c
+> > +++ b/lib/hexdump.c
+> > @@ -246,17 +248,29 @@ void print_hex_dump(const char *level, const
+> > char *prefix_str, int prefix_type,
+> >  {
+> >  	const u8 *ptr = buf;
+> >  	int i, linelen, remaining = len;
+> > -	unsigned char linebuf[32 * 3 + 2 + 32 + 1];
+> > +	unsigned char *linebuf;
+> > +	unsigned int linebuf_len;
+> >  
+> > -	if (rowsize != 16 && rowsize != 32)
+> > -		rowsize = 16;
+> > +	if (rowsize % groupsize)
+> > +		rowsize -= rowsize % groupsize;
+> > +
+> > +	/* Worst case line length:
+> > +	 * 2 hex chars + space per byte in, 2 spaces, 1 char per byte
+> > in, NULL
+> > +	 */
+> 
+> According to Documentation/process/coding-style.rst:
+> 
+> The preferred style for long (multi-line) comments is:
+> 
+> .. code-block:: c
+> 
+> 	/*
+> 	 * This is the preferred style for multi-line
+> 	 * comments in the Linux kernel source code.
+> 	 * Please use it consistently.
+> 	 *
+> 	 * Description:  A column of asterisks on the left side,
+> 	 * with beginning and ending almost-blank lines.
+> 	 */
+> 
 
-.max_segment_size should be aligned, either setting it here correctly or
-forcing to make it aligned in scsi-core.
+Thanks Randy, I'll address this.
 
-Thanks,
-Ming Lei
+
+-- 
+Alastair D'Silva           mob: 0423 762 819
+skype: alastair_dsilva    
+Twitter: @EvilDeece
+blog: http://alastair.d-silva.org
+
+
