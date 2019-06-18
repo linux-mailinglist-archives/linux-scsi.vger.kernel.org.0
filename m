@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9732049D59
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 11:32:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98A349D5A
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 11:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729455AbfFRJcr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 05:32:47 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:39049 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729453AbfFRJcr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 05:32:47 -0400
-Received: by mail-pl1-f196.google.com with SMTP id b7so5466354pls.6
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2019 02:32:46 -0700 (PDT)
+        id S1729465AbfFRJcu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 05:32:50 -0400
+Received: from mail-pg1-f179.google.com ([209.85.215.179]:33308 "EHLO
+        mail-pg1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729457AbfFRJcu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 05:32:50 -0400
+Received: by mail-pg1-f179.google.com with SMTP id k187so7377223pga.0
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2019 02:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=k+VtLc4WyqsDZY5PU4sB86ptthuO0zTsd/EMjJ4soVA=;
-        b=hbJTFWg4X9Nob9HV5wsMnivL6QWuWMe27JNCQmoXD2G4GBS/1mTCKexQG1fgsw+/s1
-         KKDDvthvIuHRphhdowoLjLNk5kMQuurIOoDFgY+OXZIE6KHikTrXkob+rxo9gu0/ktx7
-         5a4fVFr9PsUOpB2ZLEIUv430e47p5DHvZDL8g=
+        bh=qEhDn6rRZThgyxo7YIFd8FLXDZvRzwuIxzQT2hhuIiM=;
+        b=A4CJyG1VROxq+zvd3XogD3g2DhD5NePl69D279p0Db6sajRe4jX2XBuE+UUgB5s1/9
+         ZR2BO/JJYV1bHW8t0U1BYudL7Ca2jBnn1jfShCAuK24TWlYk7EJ/UioRkGemGmWif8n5
+         2xqYufkEhZWX6mmx+kI9nPZzR6+PUWKPyk2Kw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=k+VtLc4WyqsDZY5PU4sB86ptthuO0zTsd/EMjJ4soVA=;
-        b=XZgdBHGxYy73dU0u95zfxnvPYYMoQdPvqrGXpE14uS4UV+GDnAz7HYfkLPwO7xTFDT
-         yiLDt6vUjPgPOqgF/OSrFfSi3Q95+wHOGd3j6UW+DG6dA9ztCrFjtw8Bo8RIwPoH3Ljy
-         heNyTYPTUOzVT61108ssudzRKSxTADVdff7KgxbpkcmwiBuFhy00Xx+2iWfyGkvRB+7G
-         zILpMqqnaroyo5I+ck/tViMQj9gvHPolcsSHkKlXQpxXyvJ4hZF+/YF7MlN/c2oWwbdz
-         OqmkOScD0VBo9O3GekXK1IFQcOcWeY3dc1U7/Esjfnvl2uTFVld26mqtVGF0CBNSuIG7
-         iXMg==
-X-Gm-Message-State: APjAAAWPSN7mzw0oH8rs6jT7o0sHTM4MtK8SjqOWFN+jM9Fc19icyKmW
-        K2OF8VWYqpayMd4yGlcttZNutZDzXf0nlOIiL9EgPbpiZfgcjDxtksbJ4lRuNXUumemwJshwmRY
-        IkVDkLtLL6+mccS0/AIOZB5+su7H62w7rYO+y0RKGxkw06kfZNvjKSJ/O+3AcdwvtDOPi7uRh+6
-        GsgVJL9dHADg==
-X-Google-Smtp-Source: APXvYqyh/mwXcArml3QtHMzinr7S3sM3vuekPebiobCpNIvrygl3rRh0WPY/tUnUU6MTvyls9wpuvQ==
-X-Received: by 2002:a17:902:740c:: with SMTP id g12mr59125451pll.128.1560850366162;
-        Tue, 18 Jun 2019 02:32:46 -0700 (PDT)
+        bh=qEhDn6rRZThgyxo7YIFd8FLXDZvRzwuIxzQT2hhuIiM=;
+        b=aM3uVV8rLneQ9kJerQ6Fr6aMcP1fe0lzuh28x3Fa7GzEqSPwl+g7r6SGuTKHONRHVa
+         0Bz+vkRGCM/pOfWfCQWPZhggGlf3mHpKCAeH8WF07UiEFy2tD/AWm17aFrwASCigCO1k
+         LKCV9rHRpzp6mWrOEmHwK6nGdphiMXt1V4467mxabSOjzPnP/Q3IukJ1j8v8JWp9jeLD
+         x16YyI0rhiglBS5cNI82kRsvPfJgRyTHkI+2hjGpEPmQPmOJPVfentL4Tpw6kQXY4bvF
+         PSvGrd9XupuAV8ymUSjNyhzJvFHESf3AEaL93SqKfqUoKQTIhjbs0REjXW7dM7w8BvGC
+         bLDA==
+X-Gm-Message-State: APjAAAWKudgGhPc+aboYAGrU0A/DC1iq7/dRj7CB1cmoPHrA6PqGlr+W
+        Q4pK8Eh4giMCdrcIdljnWBUo9gn7uKfKhP55Rea9SgWiCVFHsuCIIoRRYBocFI9R3UI5c5sxYP6
+        OhHy8720NBNh8aXNUhxYxQXWiwH9JmW+/PvExuP8TyVOA3gF3zDJjXEJqbTqkfOCWNZTC4tvVCi
+        /05ur9xlfXyQ==
+X-Google-Smtp-Source: APXvYqyeAdP13hALs7mog+uvO3S3zuoJnT9UxkmRgHEQiTm3/WIeCVv44SnDtEs5hVaKkSFafWOeRg==
+X-Received: by 2002:a63:29c2:: with SMTP id p185mr1792257pgp.216.1560850369236;
+        Tue, 18 Jun 2019 02:32:49 -0700 (PDT)
 Received: from dhcp-10-123-20-30.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id z20sm21394809pfk.72.2019.06.18.02.32.43
+        by smtp.gmail.com with ESMTPSA id z20sm21394809pfk.72.2019.06.18.02.32.46
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 02:32:45 -0700 (PDT)
+        Tue, 18 Jun 2019 02:32:48 -0700 (PDT)
 From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
         kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
         sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
         Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [PATCH 06/18] megaraid_sas: In probe context, retry IOC INIT once if firmware is in fault
-Date:   Tue, 18 Jun 2019 15:01:55 +0530
-Message-Id: <20190618093207.9939-7-chandrakanth.patil@broadcom.com>
+Subject: [PATCH 07/18] megaraid_sas: Don't send FPIO to RL Bypass queue
+Date:   Tue, 18 Jun 2019 15:01:56 +0530
+Message-Id: <20190618093207.9939-8-chandrakanth.patil@broadcom.com>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190618093207.9939-1-chandrakanth.patil@broadcom.com>
 References: <20190618093207.9939-1-chandrakanth.patil@broadcom.com>
@@ -59,77 +59,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Issue: Under certain conditions, controller goes in FAULT state after
-IOC INIT fired to firmware. Such Fault can be recovered through controller
-reset.
+Firmware does not expect FastPath IO sent through Region Lock Bypass queue.
+Though firmware never exposes such settings when fastpath IO can be sent
+to RL bypass queue but it's safer to remove dead code which directs
+fastpath IO to RL Bypass queue.
 
-Fix: In driver probe context, if firmware fault is observed post IOC INIT,
-driver would do controller reset followed by retry logic for IOC INIT
-command.
-
-Signed-off-by: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
 Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 ---
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index 855199c..1d34609 100644
+index 1d34609..2d72ad7 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -1009,6 +1009,7 @@ wait_and_poll(struct megasas_instance *instance, struct megasas_cmd *cmd,
- {
- 	int i;
- 	struct megasas_header *frame_hdr = &cmd->frame->hdr;
-+	u32 status_reg;
- 
- 	u32 msecs = seconds * 1000;
- 
-@@ -1018,6 +1019,12 @@ wait_and_poll(struct megasas_instance *instance, struct megasas_cmd *cmd,
- 	for (i = 0; (i < msecs) && (frame_hdr->cmd_status == 0xff); i += 20) {
- 		rmb();
- 		msleep(20);
-+		if (!(i % 5000)) {
-+			status_reg = instance->instancet->read_fw_status_reg(instance)
-+					& MFI_STATE_MASK;
-+			if (status_reg == MFI_STATE_FAULT)
-+				break;
-+		}
- 	}
- 
- 	if (frame_hdr->cmd_status == MFI_STAT_INVALID_STATUS)
-@@ -1722,6 +1729,7 @@ megasas_init_adapter_fusion(struct megasas_instance *instance)
- 	struct fusion_context *fusion;
- 	u32 scratch_pad_1;
- 	int i = 0, count;
-+	u32 status_reg;
- 
- 	fusion = instance->ctrl_context;
- 
-@@ -1804,8 +1812,21 @@ megasas_init_adapter_fusion(struct megasas_instance *instance)
- 	if (megasas_alloc_cmds_fusion(instance))
- 		goto fail_alloc_cmds;
- 
--	if (megasas_ioc_init_fusion(instance))
--		goto fail_ioc_init;
-+	if (megasas_ioc_init_fusion(instance)) {
-+		status_reg = instance->instancet->read_fw_status_reg(instance);
-+		if (((status_reg & MFI_STATE_MASK) == MFI_STATE_FAULT) &&
-+		    (status_reg & MFI_RESET_ADAPTER)) {
-+			/* Do a chip reset and then retry IOC INIT once */
-+			if (megasas_adp_reset_wait_for_ready
-+				(instance, true, 0) == FAILED)
-+				goto fail_ioc_init;
-+
-+			if (megasas_ioc_init_fusion(instance))
-+				goto fail_ioc_init;
-+		} else {
-+			goto fail_ioc_init;
-+		}
-+	}
- 
- 	megasas_display_intel_branding(instance);
- 	if (megasas_get_ctrl_info(instance)) {
+@@ -2878,10 +2878,6 @@ megasas_build_ldio_fusion(struct megasas_instance *instance,
+ 			(MPI2_REQ_DESCRIPT_FLAGS_FP_IO
+ 			 << MEGASAS_REQ_DESCRIPT_FLAGS_TYPE_SHIFT);
+ 		if (instance->adapter_type == INVADER_SERIES) {
+-			if (rctx->reg_lock_flags == REGION_TYPE_UNUSED)
+-				cmd->request_desc->SCSIIO.RequestFlags =
+-					(MEGASAS_REQ_DESCRIPT_FLAGS_NO_LOCK <<
+-					MEGASAS_REQ_DESCRIPT_FLAGS_TYPE_SHIFT);
+ 			rctx->type = MPI2_TYPE_CUDA;
+ 			rctx->nseg = 0x1;
+ 			io_request->IoFlags |= cpu_to_le16(MPI25_SAS_DEVICE0_FLAGS_ENABLED_FAST_PATH);
 -- 
 2.9.5
 
