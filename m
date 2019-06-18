@@ -2,138 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C3349EA7
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 12:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F2149EB5
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 12:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729473AbfFRKwt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 06:52:49 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39154 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726037AbfFRKwt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 18 Jun 2019 06:52:49 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 674C5AF26;
-        Tue, 18 Jun 2019 10:52:47 +0000 (UTC)
-Subject: Re: [PATCH 2/3] qla2xxx: on session delete return nvme cmd
-To:     Himanshu Madhani <hmadhani@marvell.com>,
-        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org
-References: <20190614221020.19173-1-hmadhani@marvell.com>
- <20190614221020.19173-3-hmadhani@marvell.com>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <5bb176ce-3ef0-220f-e9d8-2a1c86d3933b@suse.de>
-Date:   Tue, 18 Jun 2019 12:52:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1729598AbfFRK5F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 06:57:05 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:35568 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729507AbfFRK5E (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 06:57:04 -0400
+Received: by mail-qt1-f193.google.com with SMTP id d23so14682214qto.2;
+        Tue, 18 Jun 2019 03:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=iNtD4nqgdcjPq+QbDW9ufam1Yl9j9a7cFfLokrIpxow=;
+        b=Hg2UJ6zYatddEJUePiDtn1leIbAiQveIqQogq/ccMmVFikaKELdmz0Nj7Us3EywoE3
+         cxRfBgJkvpxi+ol73OHAMeMF6jnw4ppS5HPJpzhv7Tvq4RKXVSSL2gG9Mxtyu1hiWupk
+         mlqWXC+vNKf3v8JlAcfGSV5HLefd5W9hJq6+diAmmDba3ktN5hMWyD3paNr2jVUbgW2l
+         GrMnxTW4g7mr4QcAR39XhYqD0sgotTWC9ZECcQiFT9t01kEdzVy8zIw1Kc2XiAOfQYNV
+         zSzaDgTKKVb0gCjG4ulsKx8fekLbBZbsNrRRwr9MazmF2Ds2wodDjbbbjViAgHx/qlCs
+         LGbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iNtD4nqgdcjPq+QbDW9ufam1Yl9j9a7cFfLokrIpxow=;
+        b=U0KGFqtRy469MRo4NWUZNtM9x+6xdCPcCfArmGoIS7pr5tzEbTGpBIVyvO6xzviz6m
+         b0Rt5zZ12sb1uvSBiVEY5Vcmy3aRCdkgP3D7EmMYHUrIW9D0ALFGvoikV7fpmCcJJryv
+         HansbobJP2mFASiE9f0dqiZgToMyILXsytDJSkC1B61/+lod88afKlH+BpgA8Vwxn+J7
+         QPAEX0KejUgQtLBnYyUYWUWFHK3WT1tIDlgnbQp2K897zqOyloZ8lrgLUEzHTi4IcvPV
+         bagqQwoDa71/OEpnjKWOqVHGDWXKtozLVTDNlRtmN4zVZgxFG03nSJWB93QWNWoAEHIU
+         tpUA==
+X-Gm-Message-State: APjAAAVLIYT3iwaRRJRYVfWXXEUJ9nIP20NZB3Q6tdtnclkD7fl9ZF/7
+        T2ZP1+m0dB9z/syuXh9QYcXShAToyIM=
+X-Google-Smtp-Source: APXvYqz133Gc8bVKrmUTYrRI8fbiciUcJ6gGBNxtrfY0FrDsAY5v8xnU1h1yCQ+jJVHjCdNqa0ZyjA==
+X-Received: by 2002:aed:39e7:: with SMTP id m94mr19891860qte.0.1560855423728;
+        Tue, 18 Jun 2019 03:57:03 -0700 (PDT)
+Received: from geeko ([186.212.50.252])
+        by smtp.gmail.com with ESMTPSA id g35sm2874993qtg.92.2019.06.18.03.56.43
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 18 Jun 2019 03:57:03 -0700 (PDT)
+Date:   Tue, 18 Jun 2019 07:56:33 -0300
+From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "open list:USB MASS STORAGE DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:USB MASS STORAGE DRIVER" 
+        <usb-storage@lists.one-eyed-alien.net>
+Subject: Re: [PATCH 2/2] usb: storage: scsiglue: Do not skip VPD if
+ try_vpd_pages is set
+Message-ID: <20190618105631.GB9372@geeko>
+References: <20190618013146.21961-1-marcos.souza.org@gmail.com>
+ <20190618013146.21961-3-marcos.souza.org@gmail.com>
+ <20190618064947.GB22457@kroah.com>
+ <20190618103001.GA9372@geeko>
+ <20190618105203.GA18349@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20190614221020.19173-3-hmadhani@marvell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190618105203.GA18349@kroah.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/15/19 12:10 AM, Himanshu Madhani wrote:
-> From: Quinn Tran <qutran@marvell.com>
+On Tue, Jun 18, 2019 at 12:52:03PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Jun 18, 2019 at 07:30:04AM -0300, Marcos Paulo de Souza wrote:
+> > On Tue, Jun 18, 2019 at 08:49:47AM +0200, Greg Kroah-Hartman wrote:
+> > > On Mon, Jun 17, 2019 at 10:31:46PM -0300, Marcos Paulo de Souza wrote:
+> > > > If BLIST_TRY_VPD_PAGES is set for a device, even for an USB, it should
+> > > > be honored, so only set skip_vpd_pages is try_vpd_pages is not set.
+> > > > 
+> > > > Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+> > > > ---
+> > > >  drivers/usb/storage/scsiglue.c | 7 +++++--
+> > > >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > > 
+> > > Where is patch 1/2 of this series?
+> > 
+> > You can find it here:
+> > https://lore.kernel.org/lkml/20190618013146.21961-2-marcos.souza.org@gmail.com/
 > 
-> - on session delete or chip reset, reject all NVME commands.
-> - on NVME command submission error, free srb resource.
-> 
-> Signed-off-by: Quinn Tran <qutran@marvell.com>
-> Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
-> ---
->  drivers/scsi/qla2xxx/qla_nvme.c | 20 +++++++++++++-------
->  1 file changed, 13 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
-> index 99220a3cf734..ead10e1a81fc 100644
-> --- a/drivers/scsi/qla2xxx/qla_nvme.c
-> +++ b/drivers/scsi/qla2xxx/qla_nvme.c
-> @@ -253,6 +253,10 @@ static int qla_nvme_ls_req(struct nvme_fc_local_port *lport,
->  
->  	vha = fcport->vha;
->  	ha = vha->hw;
-> +
-> +	if (!ha->flags.fw_started || (fcport && fcport->deleted))
-> +		return rval;
-> +
->  	/* Alloc SRB structure */
->  	sp = qla2x00_get_sp(vha, fcport, GFP_ATOMIC);
->  	if (!sp)
-> @@ -284,6 +288,7 @@ static int qla_nvme_ls_req(struct nvme_fc_local_port *lport,
->  		    "qla2x00_start_sp failed = %d\n", rval);
->  		atomic_dec(&sp->ref_count);
->  		wake_up(&sp->nvme_ls_waitq);
-> +		sp->free(sp);
->  		return rval;
->  	}
->  
-> @@ -500,7 +505,7 @@ static int qla_nvme_post_cmd(struct nvme_fc_local_port *lport,
->  
->  	vha = fcport->vha;
->  
-> -	if (test_bit(ABORT_ISP_ACTIVE, &vha->dpc_flags))
-> +	if ((qpair && !qpair->fw_started) || (fcport && fcport->deleted))
->  		return rval;
->  
->  	/*
-Huh ?
-So 'fcport == NULL' is okay here?
-I seriously doubt this ...
+> So is this 2/2 patch independant of 1/2 and can go throught the USB
+> tree, or do they both need to be together?
 
-Cheers,
+I think it is, since we are not dealing with something specific to a device in
+this patch.
 
-Hannes
+> 
+> As it is, I have no idea what to do with this patch :(
+Sorry, I relied in get_maintainer.pl only, so you weren't CCed in both patches.
+But feel free to grab this patch in your tree.
+> 
+> thanks,
+> 
+> greg k-h
+
 -- 
-Dr. Hannes Reinecke		   Teamlead Storage & Networking
-hare@suse.de			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+Thanks,
+Marcos
