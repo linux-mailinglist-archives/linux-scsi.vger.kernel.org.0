@@ -2,83 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BAB649D69
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 11:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2965649E40
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 12:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729417AbfFRJdZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 05:33:25 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35050 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726330AbfFRJdY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 05:33:24 -0400
-Received: by mail-pf1-f195.google.com with SMTP id d126so7329558pfd.2
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2019 02:33:24 -0700 (PDT)
+        id S1729123AbfFRKaV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 06:30:21 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:35936 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725934AbfFRKaV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 06:30:21 -0400
+Received: by mail-qt1-f194.google.com with SMTP id p15so14599060qtl.3;
+        Tue, 18 Jun 2019 03:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=K1LOMhUpywtS5Uzk5w46aLkAjiUVQZ4DE25kBQbLzcQ=;
-        b=GQ9qAlIX/9Y8ONTNPAvLl0WcNn7swioYU/AkSoXXFPOqu0LPEwzmhRqOXMJC9nV5r2
-         ASnDDmsnHxsqLzBKVA/+PHRfj12SLCdRqRv47MqzsOPNsri7Nhst1rOBWm/dB1MDxGce
-         WZVWmnVpglf9czhP+xrDbN0fIMJOQuAzdeF4I=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wtQ3H/RqcO/beRnWTkfjA8r0vVjyM6yxlkekBWvD7LM=;
+        b=GDTAByqqryYew57KnXrF6BB4jcZDHDJSYOH0Liw4w2FuBWdi9jPUufwFQbY5yW3CSL
+         xbpl21kkDHBd3ZpnOE3L8z/koeG/Ch3X9/CFxOMH+m8Z46N1QWFSGVI/Lh1nvWHWECOy
+         n7/j8311G2axMLG+Y2eTVId5/iYM/ZDji3s8YWwL3Ps0sZHC/7n9L58Hl5F+vy8UQy16
+         2qr0qjR0LgSkFZuOC63cHGW3mad9lhxwnTRR28mrVT3wxHf9k3RkbdhMoICrHzQYh2cU
+         j1YncGZfnq1fW3J1/sAc1kN8xy25XIjV8J1y/4KBi4gC8ex0GObUmgnc3PjUjzyW5NQQ
+         vJ4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=K1LOMhUpywtS5Uzk5w46aLkAjiUVQZ4DE25kBQbLzcQ=;
-        b=AAZxThVhyXOMiU48CVxV1TnxE0J3AZtjkRcS7Dh3+WVSZRRp8oOsNTOtdfZMDAnJDK
-         0Egl3mKH5mTKe8MPUiogg+v8IZLvlwDjvuiytIlnbexzalDDQ0bOMMe4p3po6dfItDjP
-         itpwXhK3K0lHSB8qcbMqwYV5CjGyLdWO6Qu1N4ov/kF0H67L7TnfadUnUrzeNh6D/rk1
-         EYUdh0JscOGREvU68523TuNliyRidSyf4IXPkBL9rZJTT5/Qh9P7pn7nbtOZzVPyFDi1
-         DYsDISCiRbcLgMuc4OCwe+p1r6olKGV+WhcamYr1DLHCdZNnIYlikAp8TsMRHUBmohaS
-         VgsA==
-X-Gm-Message-State: APjAAAWYeK7wKyrGvhA7T9EM6F0OKD1bXLpr3xB/amiAnz9XYuHH7QmB
-        zWt7OBetc3ssxDiUgSahes957vKX9H6bhr6h59XdS5XwqYnrYsxpqr2tkZj8lF+pk4/5TuXkyoY
-        iybJKEQfWkEQAxT7T7iN6uar8sJ+kcECALMBZgjqR8XmaSKG+1saF0mO1XgfLEuwnPZshlrWQoc
-        GkS6KGML+ShA==
-X-Google-Smtp-Source: APXvYqzxXmKnAH7gK98URoSrh2C51yZyDwSXKDaD9GF9wESw9EvLFJewSEZ/s7zh7ydWbJuUChOndQ==
-X-Received: by 2002:a17:90a:77c4:: with SMTP id e4mr4167757pjs.86.1560850403948;
-        Tue, 18 Jun 2019 02:33:23 -0700 (PDT)
-Received: from dhcp-10-123-20-30.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id z20sm21394809pfk.72.2019.06.18.02.33.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wtQ3H/RqcO/beRnWTkfjA8r0vVjyM6yxlkekBWvD7LM=;
+        b=o7OXbG7Xd+0X9Cg8UVqPupHyJRtByxHz6BAKjQ2NLfhfnieq3nH2xaaSoaY5xDE9+U
+         qc5AR2zzLbpjCiHZqux9C9i6eqMQdYjE4dZorWahl+akyomUwhDWCdGoCKfPT3o62u4P
+         MbknZjaPPTjrKk+wSbZShlxxqPosqPbx3opQfJzAZK9Oshs940YAY5XuMCjfKdodds+L
+         4inK6PbcSXPGoPEr6P0xkI3ZiHHTHjpof4RhhudA+IwXAOiORCFSLvYulVgjIrpM+YT7
+         NjURCw7QcxlQo/uFyB0IbBez1ktj7QKwkoEOnQ1VBK8olLWDPwJshml6DBiTYsmQ+Dsr
+         NZTg==
+X-Gm-Message-State: APjAAAWk1gENcrCYFmRyVAOKU2bInoODHnvzil4yKsZqUTV5pr/6TPzW
+        DKtJIiVFm6Yr6+9HA7cFShxv+/pQzg4=
+X-Google-Smtp-Source: APXvYqxfmZ10id4CdcAHra7m9KtxjeyGAqoO+t/QgcAFgYk5fWTCphfe/nyulxHSUuKuthplCU0EyA==
+X-Received: by 2002:a0c:df8a:: with SMTP id w10mr15422264qvl.140.1560853819843;
+        Tue, 18 Jun 2019 03:30:19 -0700 (PDT)
+Received: from geeko ([186.212.50.252])
+        by smtp.gmail.com with ESMTPSA id z126sm8586992qkb.7.2019.06.18.03.30.13
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 02:33:23 -0700 (PDT)
-From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
-        sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [PATCH 18/18] megaraid_sas: Update driver version to 07.710.06.00-rc1
-Date:   Tue, 18 Jun 2019 15:02:07 +0530
-Message-Id: <20190618093207.9939-19-chandrakanth.patil@broadcom.com>
-X-Mailer: git-send-email 2.9.5
-In-Reply-To: <20190618093207.9939-1-chandrakanth.patil@broadcom.com>
-References: <20190618093207.9939-1-chandrakanth.patil@broadcom.com>
+        Tue, 18 Jun 2019 03:30:18 -0700 (PDT)
+Date:   Tue, 18 Jun 2019 07:30:04 -0300
+From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "open list:USB MASS STORAGE DRIVER" <linux-usb@vger.kernel.org>,
+        "open list:USB MASS STORAGE DRIVER" 
+        <usb-storage@lists.one-eyed-alien.net>
+Subject: Re: [PATCH 2/2] usb: storage: scsiglue: Do not skip VPD if
+ try_vpd_pages is set
+Message-ID: <20190618103001.GA9372@geeko>
+References: <20190618013146.21961-1-marcos.souza.org@gmail.com>
+ <20190618013146.21961-3-marcos.souza.org@gmail.com>
+ <20190618064947.GB22457@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190618064947.GB22457@kroah.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
----
- drivers/scsi/megaraid/megaraid_sas.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Tue, Jun 18, 2019 at 08:49:47AM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Jun 17, 2019 at 10:31:46PM -0300, Marcos Paulo de Souza wrote:
+> > If BLIST_TRY_VPD_PAGES is set for a device, even for an USB, it should
+> > be honored, so only set skip_vpd_pages is try_vpd_pages is not set.
+> > 
+> > Signed-off-by: Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+> > ---
+> >  drivers/usb/storage/scsiglue.c | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> Where is patch 1/2 of this series?
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index 0b38691..dc0f71f 100644
---- a/drivers/scsi/megaraid/megaraid_sas.h
-+++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -33,8 +33,8 @@
- /*
-  * MegaRAID SAS Driver meta data
-  */
--#define MEGASAS_VERSION				"07.708.03.00-rc1"
--#define MEGASAS_RELDATE				"March 14, 2019"
-+#define MEGASAS_VERSION				"07.710.06.00-rc1"
-+#define MEGASAS_RELDATE				"June 18, 2019"
- 
- /*
-  * Device IDs
+You can find it here:
+https://lore.kernel.org/lkml/20190618013146.21961-2-marcos.souza.org@gmail.com/
+
+> 
+> confused,
+> 
+> greg k-h
+
 -- 
-2.9.5
-
+Thanks,
+Marcos
