@@ -2,173 +2,119 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D37497D9
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 05:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9D54991B
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 08:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbfFRDyH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 23:54:07 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:35764 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbfFRDyH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Jun 2019 23:54:07 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id BF1812956A;
-        Mon, 17 Jun 2019 23:54:01 -0400 (EDT)
-Date:   Tue, 18 Jun 2019 13:54:12 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Ming Lei <ming.lei@redhat.com>
-cc:     linux-scsi@vger.kernel.org,
+        id S1728872AbfFRGpA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 02:45:00 -0400
+Received: from smtp.nue.novell.com ([195.135.221.5]:34905 "EHLO
+        smtp.nue.novell.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726238AbfFRGpA (ORCPT
+        <rfc822;groupwise-linux-scsi@vger.kernel.org:0:0>);
+        Tue, 18 Jun 2019 02:45:00 -0400
+Received: from [10.160.4.48] (charybdis.suse.de [149.44.162.66])
+        by smtp.nue.novell.com with ESMTP (TLS encrypted); Tue, 18 Jun 2019 08:24:58 +0200
+Subject: Re: [PATCH v4 1/3] scsi: Restrict user space SCSI device state
+ changes to "running" and "offfline"
+To:     Bart Van Assche <bvanassche@acm.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Hannes Reinecke <hare@suse.de>,
         James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-Subject: Re: [PATCH V5 11/16] scsi: aha152x: use sg helper to operate
- scatterlist
-In-Reply-To: <20190618013757.22401-12-ming.lei@redhat.com>
-Message-ID: <alpine.LNX.2.21.1906181352030.8@nippy.intranet>
-References: <20190618013757.22401-1-ming.lei@redhat.com> <20190618013757.22401-12-ming.lei@redhat.com>
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Laurence Oberman <loberman@redhat.com>
+References: <20190617151820.241583-1-bvanassche@acm.org>
+ <20190617151820.241583-2-bvanassche@acm.org>
+From:   Hannes Reinecke <hare@suse.com>
+Message-ID: <16d58f6b-c797-409c-9259-a4dbf6b4e4a4@suse.com>
+Date:   Tue, 18 Jun 2019 08:24:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20190617151820.241583-2-bvanassche@acm.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 18 Jun 2019, Ming Lei wrote:
-
-> From: Finn Thain <fthain@telegraphics.com.au>
+On 6/17/19 5:18 PM, Bart Van Assche wrote:
+> The ability to modify the SCSI device state was introduced by commit
+> 638127e579a4 ("[PATCH] Fix error handler offline behaviour"; v2.6.12). That
+> same commit introduced the following device states:
 > 
-> Use the scatterlist iterators and remove direct indexing of the
-> scatterlist array.
+>        { SDEV_CREATED, "created" },
+>        { SDEV_RUNNING, "running" },
+>        { SDEV_CANCEL,  "cancel"  },
+>        { SDEV_DEL,     "deleted" },
+>        { SDEV_QUIESCE, "quiesce" },
+>        { SDEV_OFFLINE, "offline" },
 > 
-> This way allows us to pre-allocate one small scatterlist, which can be
-> chained with one runtime allocated scatterlist if the pre-allocated one
-> isn't enough for the whole request.
+> The SDEV_BLOCK state was introduced later to avoid that an FC cable pull
+> would immediately result in an I/O error (commit 1094e682310e; "[PATCH]
+> suspending I/Os to a device"; v2.6.12). That same patch introduced the
+> ability to set the SDEV_BLOCK state from user space. I'm not sure whether
+> that ability was introduced on purpose or accidentally.
 > 
-> Finn added the change to replace SCp.buffers_residual with sg_is_last()
-> for fixing updating it, and the similar change has been applied on
-> NCR5380.c
+> Since there is agreement that only writing "running" or "offline" into
+> the SCSI sysfs device state attribute makes sense, restrict sysfs writes
+> to these values.
 > 
-> Cc: Finn Thain <fthain@telegraphics.com.au>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-
-Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
-
+> This patch makes sure that SDEV_BLOCK is only used for its original
+> purpose, namely to allow transport drivers and LLDs to block further
+> .queuecommand() calls while transport layer or adapter recovery is in
+> progress.
+> 
+> Note: a web search for "/sys/class/scsi_device" AND "device/state"
+> revealed several storage configuration guides. The instructions I found
+> in these guides tell users to write the value "running" or "offline" in
+> the SCSI device state sysfs attribute and no other values.
+> 
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Ming Lei <ming.lei@redhat.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Cc: Johannes Thumshirn <jthumshirn@suse.de>
+> Cc: James Smart <james.smart@broadcom.com>
+> Cc: Ewan D. Milne <emilne@redhat.com>
+> Cc: Laurence Oberman <loberman@redhat.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 > ---
->  drivers/scsi/aha152x.c | 46 +++++++++++++++++++++---------------------
->  1 file changed, 23 insertions(+), 23 deletions(-)
+>  drivers/scsi/scsi_sysfs.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
-> index 97872838b983..f07f3fa9b58d 100644
-> --- a/drivers/scsi/aha152x.c
-> +++ b/drivers/scsi/aha152x.c
-> @@ -948,7 +948,6 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
->  	   SCp.ptr              : buffer pointer
->  	   SCp.this_residual    : buffer length
->  	   SCp.buffer           : next buffer
-> -	   SCp.buffers_residual : left buffers in list
->  	   SCp.phase            : current state of the command */
->  
->  	if ((phase & resetting) || !scsi_sglist(SCpnt)) {
-> @@ -956,13 +955,11 @@ static int aha152x_internal_queue(struct scsi_cmnd *SCpnt,
->  		SCpnt->SCp.this_residual = 0;
->  		scsi_set_resid(SCpnt, 0);
->  		SCpnt->SCp.buffer           = NULL;
-> -		SCpnt->SCp.buffers_residual = 0;
->  	} else {
->  		scsi_set_resid(SCpnt, scsi_bufflen(SCpnt));
->  		SCpnt->SCp.buffer           = scsi_sglist(SCpnt);
->  		SCpnt->SCp.ptr              = SG_ADDRESS(SCpnt->SCp.buffer);
->  		SCpnt->SCp.this_residual    = SCpnt->SCp.buffer->length;
-> -		SCpnt->SCp.buffers_residual = scsi_sg_count(SCpnt) - 1;
+> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+> index 3b119ca0cc0c..850cdc731a1f 100644
+> --- a/drivers/scsi/scsi_sysfs.c
+> +++ b/drivers/scsi/scsi_sysfs.c
+> @@ -766,8 +766,13 @@ store_state_field(struct device *dev, struct device_attribute *attr,
+>  			break;
+>  		}
 >  	}
+> -	if (!state)
+> +	switch (state) {
+> +	case SDEV_RUNNING:
+> +	case SDEV_OFFLINE:
+> +		break;
+> +	default:
+>  		return -EINVAL;
+> +	}
 >  
->  	DO_LOCK(flags);
-> @@ -2030,10 +2027,9 @@ static void datai_run(struct Scsi_Host *shpnt)
->  				}
->  
->  				if (CURRENT_SC->SCp.this_residual == 0 &&
-> -				    CURRENT_SC->SCp.buffers_residual > 0) {
-> +				    !sg_is_last(CURRENT_SC->SCp.buffer)) {
->  					/* advance to next buffer */
-> -					CURRENT_SC->SCp.buffers_residual--;
-> -					CURRENT_SC->SCp.buffer++;
-> +					CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
->  					CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
->  					CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
->  				}
-> @@ -2136,10 +2132,10 @@ static void datao_run(struct Scsi_Host *shpnt)
->  			CMD_INC_RESID(CURRENT_SC, -2 * data_count);
->  		}
->  
-> -		if(CURRENT_SC->SCp.this_residual==0 && CURRENT_SC->SCp.buffers_residual>0) {
-> +		if (CURRENT_SC->SCp.this_residual == 0 &&
-> +		    !sg_is_last(CURRENT_SC->SCp.buffer)) {
->  			/* advance to next buffer */
-> -			CURRENT_SC->SCp.buffers_residual--;
-> -			CURRENT_SC->SCp.buffer++;
-> +			CURRENT_SC->SCp.buffer = sg_next(CURRENT_SC->SCp.buffer);
->  			CURRENT_SC->SCp.ptr           = SG_ADDRESS(CURRENT_SC->SCp.buffer);
->  			CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length;
->  		}
-> @@ -2158,22 +2154,26 @@ static void datao_run(struct Scsi_Host *shpnt)
->  static void datao_end(struct Scsi_Host *shpnt)
->  {
->  	if(TESTLO(DMASTAT, DFIFOEMP)) {
-> -		int data_count = (DATA_LEN - scsi_get_resid(CURRENT_SC)) -
-> -			GETSTCNT();
-> +		u32 datao_cnt = GETSTCNT();
-> +		int datao_out = DATA_LEN - scsi_get_resid(CURRENT_SC);
-> +		int done;
-> +		struct scatterlist *sg = scsi_sglist(CURRENT_SC);
->  
-> -		CMD_INC_RESID(CURRENT_SC, data_count);
-> +		CMD_INC_RESID(CURRENT_SC, datao_out - datao_cnt);
->  
-> -		data_count -= CURRENT_SC->SCp.ptr -
-> -			SG_ADDRESS(CURRENT_SC->SCp.buffer);
-> -		while(data_count>0) {
-> -			CURRENT_SC->SCp.buffer--;
-> -			CURRENT_SC->SCp.buffers_residual++;
-> -			data_count -= CURRENT_SC->SCp.buffer->length;
-> +		done = scsi_bufflen(CURRENT_SC) - scsi_get_resid(CURRENT_SC);
-> +		/* Locate the first SG entry not yet sent */
-> +		while (done > 0 && !sg_is_last(sg)) {
-> +			if (done < sg->length)
-> +				break;
-> +			done -= sg->length;
-> +			sg = sg_next(sg);
->  		}
-> -		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) -
-> -			data_count;
-> -		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length +
-> -			data_count;
-> +
-> +		CURRENT_SC->SCp.buffer = sg;
-> +		CURRENT_SC->SCp.ptr = SG_ADDRESS(CURRENT_SC->SCp.buffer) + done;
-> +		CURRENT_SC->SCp.this_residual = CURRENT_SC->SCp.buffer->length -
-> +			done;
->  	}
->  
->  	SETPORT(SXFRCTL0, CH1|CLRCH1|CLRSTCNT);
-> @@ -2501,7 +2501,7 @@ static void get_command(struct seq_file *m, struct scsi_cmnd * ptr)
->  
->  	seq_printf(m, "); resid=%d; residual=%d; buffers=%d; phase |",
->  		scsi_get_resid(ptr), ptr->SCp.this_residual,
-> -		ptr->SCp.buffers_residual);
-> +		sg_nents(ptr->SCp.buffer) - 1);
->  
->  	if (ptr->SCp.phase & not_issued)
->  		seq_puts(m, "not issued|");
+>  	mutex_lock(&sdev->state_mutex);
+>  	ret = scsi_device_set_state(sdev, state);
 > 
+Reviewed-by: Hannes Reinecke <hare@suse.com>
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		               zSeries & Storage
+hare@suse.com			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: F. Imendörffer, J. Smithard, D. Upmanyu, G. Norton
+HRB 21284 (AG Nürnberg)
