@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F1EB49D57
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 11:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4952049D58
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 11:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729443AbfFRJcm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 05:32:42 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33954 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729272AbfFRJcl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 05:32:41 -0400
-Received: by mail-pg1-f196.google.com with SMTP id p10so7385607pgn.1
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2019 02:32:41 -0700 (PDT)
+        id S1729450AbfFRJco (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 05:32:44 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:33050 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729272AbfFRJco (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 05:32:44 -0400
+Received: by mail-pf1-f194.google.com with SMTP id x15so7337903pfq.0
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2019 02:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Wo7RQezSw797loYVS0n34QvnDialeFwRJ/cXlc9gP5w=;
-        b=NR3eWK9ShwHNXcJQG1V1KFGbgu3eggndZiWrm8wrMOi4N/g04Qj4zufirAWxd/L2Zc
-         njI6NBf7gT8bTtP0td0fnv6msKA/RUjT5kInB5mOpi4ycUOpsjZlTtGt/nUI1v7z2raO
-         tlZ/qg9X1aiW5q6owyPoT8qzWYAzDDzgbtYpw=
+        bh=x21bqmk9dLzO1D0BNR75+yjl+IKbX45VB/zMtMVbSDI=;
+        b=Z/Yt7f2nQP+L+BudJvXi3sPni8YKDePlkFd9Rdp6o2Izoyfu4ZsplH2k1Mm825cknT
+         KSNyCuAk3dBhfYvMhX6fxJIqNOAwqDqT2txfTxz9KQHokswNSImAiZc696nZ9nelL5/o
+         y+wJ0zq+d1rhMa8GsMUjAx7SvHSxO48JmV3f0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Wo7RQezSw797loYVS0n34QvnDialeFwRJ/cXlc9gP5w=;
-        b=VmxK8vDkRtDfY0rU8VdOA7YjrKHpYT/1nsJLbYb7Ad7F1krH/5fW3Lfv6EH/eOP7ML
-         +LH00SS0VK+PZQveZy9p1cPUu+A2SoQsUDhdvjZHu1lHWCA1JHXk2U/rYR0uIfj5P7ZG
-         XgyUXtOXYAMPJzJxJeF5ZjrxRD6qcQo+tr+QiYddpWUwtt8Ja4o5xM3r9bsZlvZ0Z28b
-         Olp6HkGE75elqQpBtLd9MSe/ItSx47rSKHuIENwj36IKqpfieeBANTD8sK7ZjdJneG2i
-         duATiCP5GNKayzi9fQDUHX9ntBaxtPMzN0C1uEgr0PRgBRFhmrhqx22wIZqUWDXd+/kV
-         IQbA==
-X-Gm-Message-State: APjAAAVbpta22ypQskgdNXVZVFoIXudgQZGTVUDjQvhNYJ5GBslDLtcI
-        7NQ7QU+ABFFTFV8/NaZE80qANC7QwIXLu6v3v7z6fjGt+9x2OCDBN7pNJSiRFb1Vzhx78SAC50m
-        WXcl0HLUPpjniBHjn7jaWaIT6BdjhLmTBiYiqzyGmfQ9hBWkAI96OOwj1XBT5/3n1Behg/Zi03k
-        7/YdsSnTulcQ==
-X-Google-Smtp-Source: APXvYqw/KxOPQr9lLqwJ5lF8YB6EcVEWaMFeX2KFXZm9eP0p0bNpfKVw+AzRPj3VVtwX9u2hPwfxZQ==
-X-Received: by 2002:a17:90a:2768:: with SMTP id o95mr4069939pje.37.1560850360134;
-        Tue, 18 Jun 2019 02:32:40 -0700 (PDT)
+        bh=x21bqmk9dLzO1D0BNR75+yjl+IKbX45VB/zMtMVbSDI=;
+        b=dWolplJ2KzFgyVvYcBEnCaCFTJSeDEPExfahS9pkcfQ9N4k6SMYCrcgCvrjxvwr0Xg
+         LkIVxL2IdJR5gCkBhDCLbpP0TDw81SXNKI1eBrb50N9hhNs+LuV271KgqGGE3IK11zCs
+         /OaBX6XouAmu8zWqF5mQQnxhRt9oh6yZq/N2L82akKD3NZLWgjDk79evgJY192rhdYs1
+         dM+Nsq9WE8INJqdm9q8vYraFqlg+NI4ldKfH2Ft0R+1+rSZ0PvPSHHPA8c9HTfYW6aOe
+         ST2FX9t4EX/kASeP4QDomsHbYubi/WAPPWkB1xl7i74Yn76vWP3g8RJmbdadI5kE5nfn
+         a53g==
+X-Gm-Message-State: APjAAAUVD4NTpcNxBA3xpp154y8ixJsaBpop0ZYbDeQ4Soeap/aoa1b4
+        u1ldXJ3oY0iKA6ygm1GEFXMzUeHyAXVJS1DZQTggD659enq7h5nsfLoW+jiN9GEiNPjUhe1rLAe
+        sWRA1VIBYEKuauZ2GTYCWmUaU6Ep4SdakY5nylCjH9Y37qcT5baVjaW4JF3k7X9wutgPbp5GWQd
+        JtDWVJYa5lNA==
+X-Google-Smtp-Source: APXvYqygAsrt8KDFbah6rkxM0B8TJyiRHwHXNRNaeKIao1oYY7KgHIyi+cohFGAZpjqo8NryLvnlmA==
+X-Received: by 2002:aa7:90c9:: with SMTP id k9mr44486546pfk.171.1560850363173;
+        Tue, 18 Jun 2019 02:32:43 -0700 (PDT)
 Received: from dhcp-10-123-20-30.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id z20sm21394809pfk.72.2019.06.18.02.32.37
+        by smtp.gmail.com with ESMTPSA id z20sm21394809pfk.72.2019.06.18.02.32.40
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 18 Jun 2019 02:32:39 -0700 (PDT)
+        Tue, 18 Jun 2019 02:32:42 -0700 (PDT)
 From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
         kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
         sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
         Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [PATCH 04/18] megaraid_sas: Call disable_irq from process IRQ poll
-Date:   Tue, 18 Jun 2019 15:01:53 +0530
-Message-Id: <20190618093207.9939-5-chandrakanth.patil@broadcom.com>
+Subject: [PATCH 05/18] megaraid_sas: Release Mutex lock before OCR in case of DCMD timeout
+Date:   Tue, 18 Jun 2019 15:01:54 +0530
+Message-Id: <20190618093207.9939-6-chandrakanth.patil@broadcom.com>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190618093207.9939-1-chandrakanth.patil@broadcom.com>
 References: <20190618093207.9939-1-chandrakanth.patil@broadcom.com>
@@ -59,72 +59,94 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On PowerPC architecture, calling disable_irq_nosync from IRQ context is
-not providing the required effect.
+Issue: There is possibility of few DCMDs timing out with 'reset_mutex'
+lock held. As part of DCMD timeout handling, driver calls function
+megasas_reset_fusion which also tries to acquire same lock 'reset_mutex'
+and end up with deadlock.
 
-In current megaraid_sas driver, disable_irq_nosync is being called from
-IRQ context before enabling IRQ poll. But due to the issue seen on PPC,
-after IRQ poll disable and legacy ISR is enabled, we are not seeing our
-ISR getting called.
+Fix: Upon timeout of DCMDs(which are fired with 'reset_mutex' lock held),
+driver will release 'reset_mutex' before calling OCR function and will
+acquire lock again after OCR function returns.
 
-Fix: Call disable_irq from IRQ poll thread context instead of IRQ context.
-
-Signed-off-by: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
 Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 ---
- drivers/scsi/megaraid/megaraid_sas.h        |  1 +
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 12 +++++++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ drivers/scsi/megaraid/megaraid_sas_base.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index a972021..d333b8e 100644
---- a/drivers/scsi/megaraid/megaraid_sas.h
-+++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -2186,6 +2186,7 @@ struct megasas_irq_context {
- 	u32 os_irq;
- 	struct irq_poll irqpoll;
- 	bool irq_poll_scheduled;
-+	bool irq_line_enable;
- };
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index 7d1cf4e..54bb48e 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -4369,8 +4369,10 @@ megasas_get_pd_info(struct megasas_instance *instance, struct scsi_device *sdev)
+ 		switch (dcmd_timeout_ocr_possible(instance)) {
+ 		case INITIATE_OCR:
+ 			cmd->flags |= DRV_DCMD_SKIP_REFIRE;
++			mutex_unlock(&instance->reset_mutex);
+ 			megasas_reset_fusion(instance->host,
+ 				MFI_IO_TIMEOUT_OCR);
++			mutex_lock(&instance->reset_mutex);
+ 			break;
+ 		case KILL_ADAPTER:
+ 			megaraid_sas_kill_hba(instance);
+@@ -4861,8 +4863,10 @@ megasas_host_device_list_query(struct megasas_instance *instance,
+ 		switch (dcmd_timeout_ocr_possible(instance)) {
+ 		case INITIATE_OCR:
+ 			cmd->flags |= DRV_DCMD_SKIP_REFIRE;
++			mutex_unlock(&instance->reset_mutex);
+ 			megasas_reset_fusion(instance->host,
+ 				MFI_IO_TIMEOUT_OCR);
++			mutex_lock(&instance->reset_mutex);
+ 			break;
+ 		case KILL_ADAPTER:
+ 			megaraid_sas_kill_hba(instance);
+@@ -5010,8 +5014,10 @@ void megasas_get_snapdump_properties(struct megasas_instance *instance)
+ 		switch (dcmd_timeout_ocr_possible(instance)) {
+ 		case INITIATE_OCR:
+ 			cmd->flags |= DRV_DCMD_SKIP_REFIRE;
++			mutex_unlock(&instance->reset_mutex);
+ 			megasas_reset_fusion(instance->host,
+ 				MFI_IO_TIMEOUT_OCR);
++			mutex_lock(&instance->reset_mutex);
+ 			break;
+ 		case KILL_ADAPTER:
+ 			megaraid_sas_kill_hba(instance);
+@@ -5141,8 +5147,10 @@ megasas_get_ctrl_info(struct megasas_instance *instance)
+ 		switch (dcmd_timeout_ocr_possible(instance)) {
+ 		case INITIATE_OCR:
+ 			cmd->flags |= DRV_DCMD_SKIP_REFIRE;
++			mutex_unlock(&instance->reset_mutex);
+ 			megasas_reset_fusion(instance->host,
+ 				MFI_IO_TIMEOUT_OCR);
++			mutex_lock(&instance->reset_mutex);
+ 			break;
+ 		case KILL_ADAPTER:
+ 			megaraid_sas_kill_hba(instance);
+@@ -6398,8 +6406,10 @@ megasas_get_target_prop(struct megasas_instance *instance,
+ 		switch (dcmd_timeout_ocr_possible(instance)) {
+ 		case INITIATE_OCR:
+ 			cmd->flags |= DRV_DCMD_SKIP_REFIRE;
++			mutex_unlock(&instance->reset_mutex);
+ 			megasas_reset_fusion(instance->host,
+ 					     MFI_IO_TIMEOUT_OCR);
++			mutex_lock(&instance->reset_mutex);
+ 			break;
+ 		case KILL_ADAPTER:
+ 			megaraid_sas_kill_hba(instance);
+@@ -7801,10 +7811,13 @@ megasas_mgmt_fw_ioctl(struct megasas_instance *instance,
+ 		opcode = le32_to_cpu(cmd->frame->dcmd.opcode);
  
- struct MR_DRV_SYSTEM_INFO {
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index dc27da1..855199c 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -3603,7 +3603,7 @@ complete_cmd_fusion(struct megasas_instance *instance, u32 MSIxIndex,
- 			if (irq_context) {
- 				if (!irq_context->irq_poll_scheduled) {
- 					irq_context->irq_poll_scheduled = true;
--					disable_irq_nosync(irq_context->os_irq);
-+					irq_context->irq_line_enable = true;
- 					irq_poll_sched(&irq_context->irqpoll);
- 				}
- 				return num_completed;
-@@ -3683,6 +3683,11 @@ int megasas_irqpoll(struct irq_poll *irqpoll, int budget)
- 	irq_ctx = container_of(irqpoll, struct megasas_irq_context, irqpoll);
- 	instance = irq_ctx->instance;
+ 	if (opcode == MR_DCMD_CTRL_SHUTDOWN) {
++		mutex_lock(&instance->reset_mutex);
+ 		if (megasas_get_ctrl_info(instance) != DCMD_SUCCESS) {
+ 			megasas_return_cmd(instance, cmd);
++			mutex_unlock(&instance->reset_mutex);
+ 			return -1;
+ 		}
++		mutex_unlock(&instance->reset_mutex);
+ 	}
  
-+	if (irq_ctx->irq_line_enable) {
-+		disable_irq(irq_ctx->os_irq);
-+		irq_ctx->irq_line_enable = false;
-+	}
-+
- 	num_entries = complete_cmd_fusion(instance, irq_ctx->MSIxIndex, irq_ctx);
- 	if (num_entries < budget) {
- 		irq_poll_complete(irqpoll);
-@@ -3728,6 +3733,11 @@ irqreturn_t megasas_isr_fusion(int irq, void *devp)
- 	if (instance->mask_interrupts)
- 		return IRQ_NONE;
- 
-+#if defined(ENABLE_IRQ_POLL)
-+	if (irq_context->irq_poll_scheduled)
-+		return IRQ_HANDLED;
-+#endif
-+
- 	if (!instance->msix_vectors) {
- 		mfiStatus = instance->instancet->clear_intr(instance);
- 		if (!mfiStatus)
+ 	if (opcode == MR_DRIVER_SET_APP_CRASHDUMP_MODE) {
 -- 
 2.9.5
 
