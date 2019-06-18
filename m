@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8335A496F9
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 03:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E194496FC
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 03:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727479AbfFRBjc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 17 Jun 2019 21:39:32 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:42828 "EHLO mx1.redhat.com"
+        id S1726723AbfFRBjh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Jun 2019 21:39:37 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:39272 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726243AbfFRBjc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 17 Jun 2019 21:39:32 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        id S1726091AbfFRBjh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 17 Jun 2019 21:39:37 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id B91CB307D85A;
-        Tue, 18 Jun 2019 01:39:31 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 268C03082E1E;
+        Tue, 18 Jun 2019 01:39:37 +0000 (UTC)
 Received: from localhost (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BB41591F23;
-        Tue, 18 Jun 2019 01:39:28 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 059948095E;
+        Tue, 18 Jun 2019 01:39:33 +0000 (UTC)
 From:   Ming Lei <ming.lei@redhat.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>
@@ -38,15 +38,15 @@ Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Benjamin Block <bblock@linux.ibm.com>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH V5 14/16] scsi: ppa: use sg helper to operate scatterlist
-Date:   Tue, 18 Jun 2019 09:37:55 +0800
-Message-Id: <20190618013757.22401-15-ming.lei@redhat.com>
+Subject: [PATCH V5 15/16] scsi: wd33c93: use sg helper to operate scatterlist
+Date:   Tue, 18 Jun 2019 09:37:56 +0800
+Message-Id: <20190618013757.22401-16-ming.lei@redhat.com>
 In-Reply-To: <20190618013757.22401-1-ming.lei@redhat.com>
 References: <20190618013757.22401-1-ming.lei@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.48]); Tue, 18 Jun 2019 01:39:31 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Tue, 18 Jun 2019 01:39:37 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -63,22 +63,22 @@ Reviewed-by: Christoph Hellwig <hch@lst.de>
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 Signed-off-by: Ming Lei <ming.lei@redhat.com>
 ---
- drivers/scsi/ppa.c | 2 +-
+ drivers/scsi/wd33c93.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ppa.c b/drivers/scsi/ppa.c
-index 35213082e933..a406cc825426 100644
---- a/drivers/scsi/ppa.c
-+++ b/drivers/scsi/ppa.c
-@@ -590,7 +590,7 @@ static int ppa_completion(struct scsi_cmnd *cmd)
- 		if (cmd->SCp.buffer && !cmd->SCp.this_residual) {
- 			/* if scatter/gather, advance to the next segment */
- 			if (cmd->SCp.buffers_residual--) {
--				cmd->SCp.buffer++;
-+				cmd->SCp.buffer = sg_next(cmd->SCp.buffer);
- 				cmd->SCp.this_residual =
- 				    cmd->SCp.buffer->length;
- 				cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
+diff --git a/drivers/scsi/wd33c93.c b/drivers/scsi/wd33c93.c
+index 74be04f2357c..ae5935c0a149 100644
+--- a/drivers/scsi/wd33c93.c
++++ b/drivers/scsi/wd33c93.c
+@@ -744,7 +744,7 @@ transfer_bytes(const wd33c93_regs regs, struct scsi_cmnd *cmd,
+  * source or destination for THIS transfer.
+  */
+ 	if (!cmd->SCp.this_residual && cmd->SCp.buffers_residual) {
+-		++cmd->SCp.buffer;
++		cmd->SCp.buffer = sg_next(cmd->SCp.buffer);
+ 		--cmd->SCp.buffers_residual;
+ 		cmd->SCp.this_residual = cmd->SCp.buffer->length;
+ 		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
 -- 
 2.20.1
 
