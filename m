@@ -2,84 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98F934AB32
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Jun 2019 21:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0A54ADF1
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 00:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730261AbfFRTtZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 15:49:25 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46078 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730176AbfFRTtY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 15:49:24 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r1so8244843pfq.12
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2019 12:49:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=a0eH3duDf3iRm1d+2txgYEfezVl8hZtXdHrct9Cop/g=;
-        b=d3BvjFQm3Q6e/TdSZqH2TKplwJZ0yBFcPX0bWgWV6QIMtA/hW3oGzBeJShPli5M2fC
-         m2sIbjcqgdLeNFgkFDZjX79+C7e9ozNLls+JYjn+7BCSaD+VWlFLnUg7SWtTS3iwzCEo
-         OyVDZJ5OxkScwNuB6Ucb2I1JJgOsAQ+6WuePIulOuHGiT/4duHtjLqDiufm+19CIRUIQ
-         vNOk0YI/ftJ63iNa01HUrML9C5jmQpyKOT2DQn6w+4+qTFXy7IeA9p+ZV7YaPlnyqHbM
-         ALgZlM9gyfDFCy8yX+p803gulXryWvcsNtqXqGz6ZFAbLBQ9tJLDf8vMy7X6sPlbB/Bt
-         RO4w==
-X-Gm-Message-State: APjAAAVqZFr7rvdDkhJyiOuxMHs7Uip01Hw4UsFTizuO7ZJDEWaIQK4S
-        850vYlCxTifTO1teNwgb/6GFNVv3usw=
-X-Google-Smtp-Source: APXvYqyHesbwdFzQwDw5dMpFW7uch/0b7ONy4lP5ORcnvGFcgn7KhpouPRm0lpLuc0PGpU/bF7eWKA==
-X-Received: by 2002:a63:6ec1:: with SMTP id j184mr4242711pgc.225.1560887363538;
-        Tue, 18 Jun 2019 12:49:23 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id w22sm1863905pfi.175.2019.06.18.12.49.22
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Tue, 18 Jun 2019 12:49:22 -0700 (PDT)
-Subject: Re: [PATCH v2 3/3] qla2xxx: Fix NVME cmd and LS cmd timeout race
- condition
-To:     Himanshu Madhani <hmadhani@marvell.com>,
-        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org
-References: <20190618181021.16547-1-hmadhani@marvell.com>
- <20190618181021.16547-4-hmadhani@marvell.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <72f94746-5d2a-321f-04f2-c8ad30f0bd3c@acm.org>
-Date:   Tue, 18 Jun 2019 12:49:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1730428AbfFRWoA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 18:44:00 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:58484 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730176AbfFRWoA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 18 Jun 2019 18:44:00 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id E361C308FC4E;
+        Tue, 18 Jun 2019 22:43:59 +0000 (UTC)
+Received: from mchristi.msp.csb (unknown [10.64.242.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6903D5C1B5;
+        Tue, 18 Jun 2019 22:43:58 +0000 (UTC)
+Reply-To: mchristi@redhat.com
+Subject: Re: [PATCH] scsi: tcmu: Simplify 'tcmu_update_uio_info()'
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <20190616070220.24189-1-christophe.jaillet@wanadoo.fr>
+From:   Michael Christie <mchristi@redhat.com>
+Organization: Red Hat
+Message-ID: <2ffa1964-30b1-d8bd-a2e2-608fe4f06f45@redhat.com>
+Date:   Tue, 18 Jun 2019 17:43:57 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-In-Reply-To: <20190618181021.16547-4-hmadhani@marvell.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20190616070220.24189-1-christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Tue, 18 Jun 2019 22:44:00 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/18/19 11:10 AM, Himanshu Madhani wrote:
-> +out:
-> +	/* kref_get was done before work was schedule. */
-> +	if (sp->type == SRB_NVME_CMD)
-> +		kref_put(&sp->cmd_kref, qla_nvme_release_fcp_cmd_kref);
-> +	else if (sp->type == SRB_NVME_LS)
-> +		kref_put(&sp->cmd_kref, qla_nvme_release_ls_cmd_kref);
+On 06/16/2019 02:02 AM, Christophe JAILLET wrote:
+> Use 'kasprintf()' instead of:
+>    - snprintf(NULL, 0...
+>    - kmalloc(...
+>    - snprintf(...
+> 
+> This is less verbose and saves 7 bytes (i.e. the space for '/(null)') if
+> 'udev->dev_config' is NULL.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/target/target_core_user.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+> index b43d6385a1a0..04eda111920e 100644
+> --- a/drivers/target/target_core_user.c
+> +++ b/drivers/target/target_core_user.c
+> @@ -1824,20 +1824,18 @@ static int tcmu_update_uio_info(struct tcmu_dev *udev)
+>  {
+>  	struct tcmu_hba *hba = udev->hba->hba_ptr;
+>  	struct uio_info *info;
+> -	size_t size, used;
+>  	char *str;
+>  
+>  	info = &udev->uio_info;
+> -	size = snprintf(NULL, 0, "tcm-user/%u/%s/%s", hba->host_id, udev->name,
+> -			udev->dev_config);
+> -	size += 1; /* for \0 */
+> -	str = kmalloc(size, GFP_KERNEL);
+> -	if (!str)
+> -		return -ENOMEM;
+>  
+> -	used = snprintf(str, size, "tcm-user/%u/%s", hba->host_id, udev->name);
+>  	if (udev->dev_config[0])
+> -		snprintf(str + used, size - used, "/%s", udev->dev_config);
+> +		str = kasprintf(GFP_KERNEL, "tcm-user/%u/%s/%s", hba->host_id,
+> +				udev->name, udev->dev_config);
+> +	else
+> +		str = kasprintf(GFP_KERNEL, "tcm-user/%u/%s", hba->host_id,
+> +				udev->name);
+> +	if (!str)
+> +		return -ENOMEM;
+>  
+>  	/* If the old string exists, free it */
+>  	kfree(info->name);
+> 
 
-Hi Himanshu and Quinn,
+Thanks.
 
-The above code looks ugly to me. I would prefer that the 
-qla_nvme_release_fcp_cmd_kref() and qla_nvme_release_ls_cmd_kref() are 
-consolidated into a single function such that the above code can be 
-changed into a single kref_put() call.
-
-Additionally, I think this patch introduces a behavior change. Today if 
-a completion and abort request race, the NVMe command is completed. I 
-think this patch changes that behavior into failing the NVMe command 
-with status "aborted". That behavior change has not been described in 
-the commit message. That makes me wonder whether that behavior change is 
-unintentional?
-
-Thanks,
-
-Bart.
-
-
+Acked-by: Mike Christie <mchristi@redhat.com>
