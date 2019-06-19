@@ -2,96 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D244B796
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 14:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23C54BB68
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 16:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731678AbfFSMDU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 08:03:20 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:46473 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726246AbfFSMDU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Jun 2019 08:03:20 -0400
-Received: by mail-qk1-f196.google.com with SMTP id x18so10662624qkn.13;
-        Wed, 19 Jun 2019 05:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=UUNDJ4YT5sYe2FSF11R8Qj2KGP81ymPOsgrPA4bzlUM=;
-        b=tGUQUW65p6WjgVCM2/lZ12D8gBKslhHKRm5kkwDJN4DXSuK4hLzZAwUvjukLfRQeGE
-         yMWqA79F5yIo11HDizUNdV3vX4zxcPy/yz/7Y2c/BdCQAP0pAD/pT01zIbpTIrMVhG6a
-         pWWoBrCXg2Gr8HV/xcIUifnm4emFfzDrG9VADVfGzhrNybHtTeJwJf91XNHHTmD77O2G
-         34E19ceLrLkYYaUqMoc8M9w5F9/n+Dbf6kBnIHyr6Ezkj+wZDHR7SAci+GGI2rr+EC4y
-         CPOGu5tv2LpKzVGl3rdCp7uqtyHjgIEvp/YctuzPs5QUhGZ2MS6K4+VUueNs1SVHRK/a
-         H71g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UUNDJ4YT5sYe2FSF11R8Qj2KGP81ymPOsgrPA4bzlUM=;
-        b=kwXkKndAa4S6Lq/k4ZpXe5Xm39uYpOCNy30d39fhuixXOVkkzF2PgbqSH5VMPnQ5HL
-         HLsMWHSO0l67DwFp482TJOYZE7M7C5yH77J7Ba0bMCmmgxFZla0TNqnrMLIy3nHeJmKH
-         5/ugnRReJ0EwCMeLqwydaUbaKLg71rFjbOLKdBnrU5YLN9u7ltqdxX6C+7u55qfx016b
-         zA0IMQ65AG8aMtHUPprkKC0CBCRde5XQ0F0dFoHTx8sal73wIi0K+vZVsnTsFShg1DEY
-         5OYT2hjuI4xBwyVCxWzmM+Nj5ZyrCK4QdytavSUp4g8bq/N9bfnZqlfdMTmFncpXnBn4
-         zJmw==
-X-Gm-Message-State: APjAAAWVE5w99SEORduMKVlj/B1WbifmhGbHVN4Oo6I8dDN4zkPagHY4
-        MKEC6+eGzRbPDs53LdH02iM=
-X-Google-Smtp-Source: APXvYqxBoaY0rL+zlXSIQpf+ih0yitbR1m/XjjH1n/Rjg85Fccc83qRq07beePWyBu5iXiE7CJBNRA==
-X-Received: by 2002:a37:696:: with SMTP id 144mr95924137qkg.250.1560945799007;
-        Wed, 19 Jun 2019 05:03:19 -0700 (PDT)
-Received: from continental ([186.212.50.252])
-        by smtp.gmail.com with ESMTPSA id s134sm10974868qke.51.2019.06.19.05.03.16
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 19 Jun 2019 05:03:18 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 09:03:52 -0300
-From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH 1/2] scsi: devinfo: BLIST_TRY_VPD_PAGES for SanDisk
- Cruzer Blade
-Message-ID: <20190619120346.GC26980@continental>
-References: <20190618013146.21961-1-marcos.souza.org@gmail.com>
- <20190618013146.21961-2-marcos.souza.org@gmail.com>
- <yq1r27quuod.fsf@oracle.com>
- <20190619094540.GA26980@continental>
+        id S1729670AbfFSO0Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 10:26:25 -0400
+Received: from gateway21.websitewelcome.com ([192.185.45.250]:25358 "EHLO
+        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729581AbfFSO0Y (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 19 Jun 2019 10:26:24 -0400
+X-Greylist: delayed 1434 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jun 2019 10:26:24 EDT
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway21.websitewelcome.com (Postfix) with ESMTP id B5722400D05D7
+        for <linux-scsi@vger.kernel.org>; Wed, 19 Jun 2019 09:02:29 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id dbAThdwzZ90ondbAThd8Tq; Wed, 19 Jun 2019 09:02:29 -0500
+X-Authority-Reason: nr=8
+Received: from cablelink-187-160-61-213.pcs.intercable.net ([187.160.61.213]:49078 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hdbAS-001mAC-H7; Wed, 19 Jun 2019 09:02:28 -0500
+Date:   Wed, 19 Jun 2019 09:02:27 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] scsi: mvsas: Use struct_size() in kzalloc()
+Message-ID: <20190619140227.GA9877@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190619094540.GA26980@continental>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.160.61.213
+X-Source-L: No
+X-Exim-ID: 1hdbAS-001mAC-H7
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: cablelink-187-160-61-213.pcs.intercable.net (embeddedor) [187.160.61.213]:49078
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 3
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jun 19, 2019 at 06:45:43AM -0300, Marcos Paulo de Souza wrote:
-> On Tue, Jun 18, 2019 at 11:21:22PM -0400, Martin K. Petersen wrote:
-> > 
-> > Marcos,
-> > 
-> > > Currently, all USB devices skip VPD pages, even when the device
-> > > supports them (SPC-3 and later), but some of them support VPD, like
-> > > Cruzer Blade.
-> > 
-> > What's your confidence level wrt. all Cruzer Blades handling this
-> > correctly? How many devices have you tested this change with?
-> 
-> I've tested three Cruzer Blades that I have at hand, and all  of them have VPD
-> support, and also checked with a friend of mine that also have one. I can't say
-> about "all others" but so far, 4/4 devices that I tested have VPD. (They were all
-> SPC-3 or SPC-4 compliant).
-> 
+One of the more common cases of allocation size calculations is finding
+the size of a structure that has a zero-sized array at the end, along
+with memory for some number of elements for that array. For example:
 
-My first idea was to add a vendor:product mapping at SCSI layer, but so far I
-haven't found one, so I added the model/vendor found by INQUIRY. Would it be
-better to check for prod:vendor (as values, instead of the description)?
+struct mvs_info {
+        ...
+        struct mvs_slot_info slot_info[0];
+};
 
-Thanks,
-Marcos
+instance = kzalloc(sizeof(sizeof(*mvi) + count * sizeof(struct mvs_slot_info),
+                   GFP_KERNEL);
 
+Instead of leaving these open-coded and prone to type mistakes, we can
+now use the new struct_size() helper:
 
-> > 
-> > -- 
-> > Martin K. Petersen	Oracle Linux Engineering
+instance = kzalloc(struct_size(mvi, slot_info, count), GFP_KERNEL);
+
+This code was detected with the help of Coccinelle.
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/scsi/mvsas/mv_init.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index da719b0694dc..3f2022fd2335 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -350,9 +350,9 @@ static struct mvs_info *mvs_pci_alloc(struct pci_dev *pdev,
+ 	struct mvs_info *mvi = NULL;
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 
+-	mvi = kzalloc(sizeof(*mvi) +
+-		(1L << mvs_chips[ent->driver_data].slot_width) *
+-		sizeof(struct mvs_slot_info), GFP_KERNEL);
++	mvi = kzalloc(struct_size(mvi, slot_info,
++		      1L << mvs_chips[ent->driver_data].slot_width),
++		      GFP_KERNEL);
+ 	if (!mvi)
+ 		return NULL;
+ 
+-- 
+2.21.0
+
