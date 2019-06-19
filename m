@@ -2,153 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F9A4C1B5
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 21:49:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7654C1D8
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 21:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726251AbfFSTtE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 15:49:04 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:46488 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726175AbfFSTtE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Jun 2019 15:49:04 -0400
-Received: by mail-pg1-f196.google.com with SMTP id v9so212507pgr.13
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Jun 2019 12:49:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fT+GP8wuoqIZvVNpIrHXF4NLPmgnDvFIomxIS61gl70=;
-        b=IibEzDvvK/Quho6LE5VtfNb/wWtFlxsalEkcL+ZuSC4cQ3trDk9e6WtYzN8QRGQm3A
-         dripdpwnYNZPebFiM3w6hqerJhRi/FXWc3zyO+BbNdaLCG6A9uHwHdjqfY0bNuZKM5SW
-         HKQ47zADaV3tl4qDkm6o1CuU4DWaFrGUx3Y9jiHN//buD9LCeA2GDuypDuMbTzShMkKG
-         SySnpB/E7InFt16iRkH30MmO/wdnAIdkzZcYWq/82T3u5ncC2/A1tUzDITH35jiA4vtf
-         BV/HuttWukR7EqEmrAsJQjy+sMT4bct8Ba+tRwNWfkW9XWGAG1xGpfTAtTIP8FcDI6ZS
-         heTQ==
-X-Gm-Message-State: APjAAAXCMidkahkXZbkAbutPjeK6dp7ULHTm0mnOWheiqspT71LUTmXk
-        32Nnv4QtYXoUpe1I0p3MAX0=
-X-Google-Smtp-Source: APXvYqy8wKiX2bBQdtdbq9ZqjW5S8/iUfPycBeuh83BLQjKKTjJYzXpBk0uXej0jqyi7QgmhfkU+Vw==
-X-Received: by 2002:a63:4e:: with SMTP id 75mr2826003pga.318.1560973743684;
-        Wed, 19 Jun 2019 12:49:03 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id v9sm24858415pgj.69.2019.06.19.12.49.02
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 19 Jun 2019 12:49:02 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        Giridhar Malavali <gmalavali@marvell.com>
-Subject: [PATCH] qla2xxx: Make sure that aborted commands are freed
-Date:   Wed, 19 Jun 2019 12:48:55 -0700
-Message-Id: <20190619194855.52199-1-bvanassche@acm.org>
-X-Mailer: git-send-email 2.20.GIT
+        id S1726496AbfFST4s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 15:56:48 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:55546 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726143AbfFST4r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Jun 2019 15:56:47 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5JJmvvv096125;
+        Wed, 19 Jun 2019 19:55:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=Dx6Z35vdNa5nIMJSjGHBX/AyEwrPlmIse17O8d4CIes=;
+ b=AFcKAjAZa98grkt8c2ZUAJ1rrBBeiPg99ObteAW/twZWxZVJCEXJHvfDzicV3j1F3I4d
+ gfCfT7F4TXGH3m6l3c1Gf6WjZ/J+8tVdoRkuC8GzY5W4r/gTQjPs0Ph7Mj2vMhHr1KQW
+ 4XxP7fs5UIkBpYGWFWp7uLncYPf4QnCeeyIkylt/ULMQv6qetBhEulIaTeC/AhAlFR2F
+ eqvmv0zurefeCZtAJJTMV9f49dcWUJMjYDvXPeNcMGZjuzD1cXOERwLJeD3uokqtQ4S7
+ JgwGH0zUvICMS37SF0EzEPi0iA6cw33oD+C1nQJwOzOQrMh/3Mo/r9kmNlg6cFDp9iSM og== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2t7809dehk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jun 2019 19:55:53 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5JJtBMV111747;
+        Wed, 19 Jun 2019 19:55:52 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 2t77yn9p7g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jun 2019 19:55:52 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5JJte3f022148;
+        Wed, 19 Jun 2019 19:55:40 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 19 Jun 2019 12:55:39 -0700
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>
+Subject: Re: [PATCH V5 00/16] use sg helper to operate scatterlist
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190618013757.22401-1-ming.lei@redhat.com>
+        <yq11rzqzacx.fsf@oracle.com>
+        <3df71d64-78fb-c6fc-f456-a0b626abff3b@acm.org>
+Date:   Wed, 19 Jun 2019 15:55:36 -0400
+In-Reply-To: <3df71d64-78fb-c6fc-f456-a0b626abff3b@acm.org> (Bart Van Assche's
+        message of "Wed, 19 Jun 2019 12:43:47 -0700")
+Message-ID: <yq1wohhs62v.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9293 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906190163
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9293 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906190163
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The LIO core requires that the target driver callback functions
-.queue_data_in() and .queue_status() call target_put_sess_cmd() or
-transport_generic_free_cmd(). These calls may happen synchronously or
-asynchronously. Make sure that one of these LIO functions is called
-in case a command has been aborted. This patch avoids that the code
-for removing a session hangs due to commands that do not make progress.
 
-Cc: Himanshu Madhani <hmadhani@marvell.com>
-Cc: Giridhar Malavali <gmalavali@marvell.com>
-Fixes: 694833ee00c4 ("scsi: tcm_qla2xxx: Do not allow aborted cmd to advance.") # v4.13.
-Fixes: a07100e00ac4 ("qla2xxx: Fix TMR ABORT interaction issue between qla2xxx and TCM") # v4.5.
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/qla2xxx/qla_target.c  | 13 ++++++++-----
- drivers/scsi/qla2xxx/tcm_qla2xxx.c |  4 ++++
- 2 files changed, 12 insertions(+), 5 deletions(-)
+Bart,
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index f559be647c33..08cafaaf6ab2 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -3216,7 +3216,8 @@ int qlt_xmit_response(struct qla_tgt_cmd *cmd, int xmit_type,
- 	if (!qpair->fw_started || (cmd->reset_count != qpair->chip_reset) ||
- 	    (cmd->sess && cmd->sess->deleted)) {
- 		cmd->state = QLA_TGT_STATE_PROCESSED;
--		return 0;
-+		res = 0;
-+		goto free;
- 	}
- 
- 	ql_dbg_qp(ql_dbg_tgt, qpair, 0xe018,
-@@ -3227,9 +3228,8 @@ int qlt_xmit_response(struct qla_tgt_cmd *cmd, int xmit_type,
- 
- 	res = qlt_pre_xmit_response(cmd, &prm, xmit_type, scsi_status,
- 	    &full_req_cnt);
--	if (unlikely(res != 0)) {
--		return res;
--	}
-+	if (unlikely(res != 0))
-+		goto free;
- 
- 	spin_lock_irqsave(qpair->qp_lock_ptr, flags);
- 
-@@ -3249,7 +3249,8 @@ int qlt_xmit_response(struct qla_tgt_cmd *cmd, int xmit_type,
- 			vha->flags.online, qla2x00_reset_active(vha),
- 			cmd->reset_count, qpair->chip_reset);
- 		spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
--		return 0;
-+		res = 0;
-+		goto free;
- 	}
- 
- 	/* Does F/W have an IOCBs for this request */
-@@ -3352,6 +3353,8 @@ int qlt_xmit_response(struct qla_tgt_cmd *cmd, int xmit_type,
- 	qlt_unmap_sg(vha, cmd);
- 	spin_unlock_irqrestore(qpair->qp_lock_ptr, flags);
- 
-+free:
-+	vha->hw->tgt.tgt_ops->free_cmd(cmd);
- 	return res;
- }
- EXPORT_SYMBOL(qlt_xmit_response);
-diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-index 52a3e948ef49..fc10a4d5a8ff 100644
---- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-+++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-@@ -628,6 +628,7 @@ static int tcm_qla2xxx_queue_data_in(struct se_cmd *se_cmd)
- {
- 	struct qla_tgt_cmd *cmd = container_of(se_cmd,
- 				struct qla_tgt_cmd, se_cmd);
-+	struct scsi_qla_host *vha = cmd->vha;
- 
- 	if (cmd->aborted) {
- 		/* Cmd can loop during Q-full.  tcm_qla2xxx_aborted_task
-@@ -640,6 +641,7 @@ static int tcm_qla2xxx_queue_data_in(struct se_cmd *se_cmd)
- 			cmd->se_cmd.transport_state,
- 			cmd->se_cmd.t_state,
- 			cmd->se_cmd.se_cmd_flags);
-+		vha->hw->tgt.tgt_ops->free_cmd(cmd);
- 		return 0;
- 	}
- 
-@@ -667,6 +669,7 @@ static int tcm_qla2xxx_queue_status(struct se_cmd *se_cmd)
- {
- 	struct qla_tgt_cmd *cmd = container_of(se_cmd,
- 				struct qla_tgt_cmd, se_cmd);
-+	struct scsi_qla_host *vha = cmd->vha;
- 	int xmit_type = QLA_TGT_XMIT_STATUS;
- 
- 	if (cmd->aborted) {
-@@ -680,6 +683,7 @@ static int tcm_qla2xxx_queue_status(struct se_cmd *se_cmd)
- 		    cmd, kref_read(&cmd->se_cmd.cmd_kref),
- 		    cmd->se_cmd.transport_state, cmd->se_cmd.t_state,
- 		    cmd->se_cmd.se_cmd_flags);
-+		vha->hw->tgt.tgt_ops->free_cmd(cmd);
- 		return 0;
- 	}
- 	cmd->bufflen = se_cmd->data_length;
+> Do you perhaps plan to push out these patches at a later time? It
+> seems like that branch has not been updated recently:
+
+I had a test failure on this end, that's why I didn't push. Appears to
+be hardware-related, though. Still looking into it.
+
 -- 
-2.22.0.rc3
-
+Martin K. Petersen	Oracle Linux Engineering
