@@ -2,79 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB0E4AFC0
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 03:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AA7B4B034
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 04:42:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbfFSB4u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 21:56:50 -0400
-Received: from mail-io1-f45.google.com ([209.85.166.45]:46654 "EHLO
-        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfFSB4u (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 21:56:50 -0400
-Received: by mail-io1-f45.google.com with SMTP id i10so34349961iol.13;
-        Tue, 18 Jun 2019 18:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ix5Dfi/dkMWuL6+NBxIipP5XBxtV2JHvQAM496TixnA=;
-        b=NM7iFiBm9AcwTZxgpCTJ7ENufhBoK11MdreuVOpDr7vpYCvD0JqtkxVhZOgz9NMc5g
-         KBw23PzXOi7mBrqmkM6x+B9rpubLHjFsFysldj3GsgQOTnQRl1v5RO6NtDaloNA5vdMn
-         NXo56YzvzutWit29DNI6yW9d0cjSR91eJW360xShk7g6SbYEJaiJAEeY58gt9ktTH5//
-         LqXLqy1MbuGWV6X3cLbu1T8ecAJNX4iiEvuHb9Ft9NlSqPKRF38thaKUe8Zof1++09Bq
-         6/6S2p3o+kkspD1z0DmuF2rkkh8t1mnL4omb/h9aVHsDN0jUQ3nqf/v1D5y8vGWkJDpQ
-         y98A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ix5Dfi/dkMWuL6+NBxIipP5XBxtV2JHvQAM496TixnA=;
-        b=ShqPPE4J+1bokV+pkq/6xZ7WvvEtu56Y85ruRglDSgnTaFh5QkFjd1YNVJFZdfixEH
-         uf16OJTJmgXnQFAXfyKhhA78+/uCfenh+pUyF85XPUGA2WgbHmxO5inwKd0FljdQZ3Wp
-         hq6tK45Y9AziaK0uV9+E/6hSA/9g5eNb8xZjEwjpkCgj0z2DTeLksi7U7KBQBkTMgpkR
-         891dYWTZAL3x8EZAN718o5pyHcZL5dBY854eRiYARzdv65N+A9sO5RgJt6c5/T2lzxy6
-         lCVv+cD0wfPcv7wx7LPGk0efkqmeYpSFhllMypSUHXeiRdsZldcSdWn/bINPinczzSUk
-         9LMA==
-X-Gm-Message-State: APjAAAXYlKo489s1KNu0hs1a7NpT41zfRnyXvMWU3YA5fPgyOFzHLE0f
-        BdUhDHfrjUlZq9CSkcf/BA==
-X-Google-Smtp-Source: APXvYqxYo1AvZW5YC39VWmRxsXda+tg6UF5zULyzvOQPoEKPBoQiFHtI9M9DOtcpQXMU++wkpulVEw==
-X-Received: by 2002:a05:6638:3d6:: with SMTP id r22mr5999891jaq.71.1560909409374;
-        Tue, 18 Jun 2019 18:56:49 -0700 (PDT)
-Received: from Test-Virtual-Machine (d24-141-106-246.home.cgocable.net. [24.141.106.246])
-        by smtp.gmail.com with ESMTPSA id n17sm13670828iog.63.2019.06.18.18.56.48
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 18 Jun 2019 18:56:48 -0700 (PDT)
-Date:   Tue, 18 Jun 2019 21:56:46 -0400
-From:   Branden Bonaby <brandonbonaby94@gmail.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        sashal@kernel.org, jejb@linux.ibm.com,
-        linux-hyperv@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: storvsc: Add ability to change scsi queue depth
-Message-ID: <20190619015646.GA21617@Test-Virtual-Machine>
-References: <20190614234822.5193-1-brandonbonaby94@gmail.com>
- <yq1fto6xtxw.fsf@oracle.com>
+        id S1729050AbfFSCkv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 22:40:51 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:32770 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726047AbfFSCkv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 22:40:51 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J2Z4c7055041;
+        Wed, 19 Jun 2019 02:40:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=UBq4dVb/yGNxx/nIjeQCABVn3daS+MyzXu6IPurCzSg=;
+ b=2v56QvCI9B8VSHPDIuE3cR54AdkkAVI1yczdRDRjEtkreysInPeoci63DeiposS2Ml4S
+ locuIgIh8awTEXO9yn+1pfTUQxaf7tRzsIRK66ikT7Nm3smMcPK7MWQZ7O/zHQGoBJjH
+ CNd/E+0liXZqO5MIgUorGpcYC193uksP40waxfhfVvuX/wg6mlAWo5z8+UjocPbAaPA4
+ 544Z5CbCi+aQOiMUTvP0WAOjlPtSIdymY6iW8f9jt+seBGNL5Sh5/H4CGIccskTL4kmx
+ ZpCfJ7vT9Mhfk8oRULeUXdygmN5t4beR1K9efd2+kJ1/bbMS5otmd0sp5g9cd0CSNn6J vA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2t78098pj9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jun 2019 02:40:37 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J2d70V144695;
+        Wed, 19 Jun 2019 02:40:37 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2t77ymtsf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 19 Jun 2019 02:40:36 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5J2eYxX031384;
+        Wed, 19 Jun 2019 02:40:34 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 19 Jun 2019 02:40:33 +0000
+To:     Finn Thain <fthain@telegraphics.com.au>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Michael Schmitz" <schmitzmic@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Joshua Thompson" <funaho@jurai.org>, linux-m68k@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] NCR5380 drivers: fixes and other improvements
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <cover.1560043151.git.fthain@telegraphics.com.au>
+Date:   Tue, 18 Jun 2019 22:40:31 -0400
+In-Reply-To: <cover.1560043151.git.fthain@telegraphics.com.au> (Finn Thain's
+        message of "Sun, 09 Jun 2019 11:19:11 +1000")
+Message-ID: <yq1lfxywb4w.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yq1fto6xtxw.fsf@oracle.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9292 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=636
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906190019
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9292 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=680 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906190019
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 09:08:59PM -0400, Martin K. Petersen wrote:
-> 
-> Branden,
-> 
-> > Adding functionality to allow the SCSI queue depth to be changed, by
-> > utilizing the "scsi_change_queue_depth" function.
-> 
-> Applied to 5.3/scsi-queue. Please run checkpatch before submission. I
-> fixed it up this time.
-> 
-> Thanks!
 
-Oh I see what you mean about the brackets, thanks will do next time.
+Finn,
+
+> Among other improvements, this patch series fixes a data corruption bug
+> in the mac_scsi driver and a bug in the EH abort routine in the core
+> 5380 driver.
+>
+> For consistency I have ignored certain checkpatch.pl complaints about
+> the indentation in mac_scsi.c. The remaining complaints seem to be
+> false positives.
+>
+> Some of these patches are not trivial to backport. Those patches have
+> been nominated for recent -stable branches only.
+
+Applied to 5.3/scsi-queue, thanks!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
