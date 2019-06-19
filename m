@@ -2,76 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 849ED4B229
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 08:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83564B298
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 09:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730502AbfFSGe7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 02:34:59 -0400
-Received: from smtp.nue.novell.com ([195.135.221.5]:50208 "EHLO
-        smtp.nue.novell.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbfFSGe7 (ORCPT
-        <rfc822;groupwise-linux-scsi@vger.kernel.org:0:0>);
-        Wed, 19 Jun 2019 02:34:59 -0400
-Received: from [10.160.4.48] (charybdis.suse.de [149.44.162.66])
-        by smtp.nue.novell.com with ESMTP (TLS encrypted); Wed, 19 Jun 2019 08:34:57 +0200
-Subject: Re: [PATCH] scsi: scsi_sysfs.c: Hide wwid sdev attr if VPD is not
- supported
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org
-References: <20190612020828.8140-1-marcos.souza.org@gmail.com>
- <yq1muieuu17.fsf@oracle.com>
-From:   Hannes Reinecke <hare@suse.com>
-Message-ID: <850765d7-da85-3fc1-7bf4-f0edcb63f8d8@suse.com>
-Date:   Wed, 19 Jun 2019 08:34:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
-MIME-Version: 1.0
-In-Reply-To: <yq1muieuu17.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1730846AbfFSHFq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 03:05:46 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33722 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726251AbfFSHFq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 19 Jun 2019 03:05:46 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id CA423AB7D;
+        Wed, 19 Jun 2019 07:05:44 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 6BC8B1E4329; Wed, 19 Jun 2019 09:05:43 +0200 (CEST)
+From:   Jan Kara <jack@suse.cz>
+To:     Jim Gill <jgill@vmware.com>
+Cc:     VMware PV-Drivers <pv-drivers@vmware.com>,
+        linux-scsi@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        stable@vger.kernel.org
+Subject: [PATCH] scsi: vmw_pscsi: Fix use-after-free in pvscsi_queue_lck()
+Date:   Wed, 19 Jun 2019 09:05:41 +0200
+Message-Id: <20190619070541.30070-1-jack@suse.cz>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/19/19 5:35 AM, Martin K. Petersen wrote:
-> 
-> Marcos,
-> 
->> WWID composed from VPD data from device, specifically page 0x83. So,
->> when a device does not have VPD support, for example USB storage
->> devices where VPD is specifically disabled, a read into <blk
->> device>/device/wwid file will always return ENXIO. To avoid this,
->> change the scsi_sdev_attr_is_visible function to hide wwid sysfs file
->> when the devices does not support VPD.
-> 
-> Not a big fan of attribute files that come and go.
-> 
-> Why not just return an empty string? Hannes?
-> 
-Actually, the intention of the 'wwid' attribute was to have a common
-place where one could look up the global id.
-As such it actually serves a dual purpose, namely indicating that there
-_is_ a global ID _and_ that this kernel (version) has support for 'wwid'
-attribute. This is to resolve one big issue we have to udev nowadays,
-which is figuring out if a specific sysfs attribute is actually
-supported on this particular kernel.
-Dynamic attributes are 'nicer' on a conceptual level, but make the above
-test nearly impossible, as we now have _two_ possibilities why a
-specific attribute is not present.
-So making 'wwid' conditional would actually defeat its very purpose, and
-we should leave it blank if not supported.
+Once we unlock adapter->hw_lock in pvscsi_queue_lck() nothing prevents just
+queued scsi_cmnd from completing and freeing the request. Thus cmd->cmnd[0]
+dereference can dereference already freed request leading to kernel crashes or
+other issues (which one of our customers observed). Store cmd->cmnd[0] in a
+local variable before unlocking adapter->hw_lock to fix the issue.
 
-Cheers,
+CC: stable@vger.kernel.org
+Signed-off-by: Jan Kara <jack@suse.cz>
+---
+ drivers/scsi/vmw_pvscsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Hannes
+diff --git a/drivers/scsi/vmw_pvscsi.c b/drivers/scsi/vmw_pvscsi.c
+index ecee4b3ff073..377b07b2feeb 100644
+--- a/drivers/scsi/vmw_pvscsi.c
++++ b/drivers/scsi/vmw_pvscsi.c
+@@ -763,6 +763,7 @@ static int pvscsi_queue_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd
+ 	struct pvscsi_adapter *adapter = shost_priv(host);
+ 	struct pvscsi_ctx *ctx;
+ 	unsigned long flags;
++	unsigned char op;
+ 
+ 	spin_lock_irqsave(&adapter->hw_lock, flags);
+ 
+@@ -775,13 +776,14 @@ static int pvscsi_queue_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd
+ 	}
+ 
+ 	cmd->scsi_done = done;
++	op = cmd->cmnd[0];
+ 
+ 	dev_dbg(&cmd->device->sdev_gendev,
+-		"queued cmd %p, ctx %p, op=%x\n", cmd, ctx, cmd->cmnd[0]);
++		"queued cmd %p, ctx %p, op=%x\n", cmd, ctx, op);
+ 
+ 	spin_unlock_irqrestore(&adapter->hw_lock, flags);
+ 
+-	pvscsi_kick_io(adapter, cmd->cmnd[0]);
++	pvscsi_kick_io(adapter, op);
+ 
+ 	return 0;
+ }
 -- 
-Dr. Hannes Reinecke		               zSeries & Storage
-hare@suse.com			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: F. Imendörffer, J. Smithard, D. Upmanyu, G. Norton
-HRB 21284 (AG Nürnberg)
+2.16.4
+
