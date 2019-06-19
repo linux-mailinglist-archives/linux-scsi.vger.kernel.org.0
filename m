@@ -2,110 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77E874C0D4
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 20:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5164C181
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 21:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726191AbfFSSgm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 14:36:42 -0400
-Received: from hosting.gsystem.sk ([212.5.213.30]:40510 "EHLO
-        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbfFSSgm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Jun 2019 14:36:42 -0400
-Received: from [192.168.0.2] (188-167-68-178.dynamic.chello.sk [188.167.68.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hosting.gsystem.sk (Postfix) with ESMTPSA id 2E7187A0318;
-        Wed, 19 Jun 2019 20:36:41 +0200 (CEST)
-From:   Ondrej Zary <linux@zary.sk>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: fdomain: fix building pcmcia front-end
-Date:   Wed, 19 Jun 2019 20:36:37 +0200
-User-Agent: KMail/1.9.10
-Cc:     Arnd Bergmann <arnd@arndb.de>,
+        id S1730405AbfFST2h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 15:28:37 -0400
+Received: from gateway33.websitewelcome.com ([192.185.146.97]:36898 "EHLO
+        gateway33.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726482AbfFST2h (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 19 Jun 2019 15:28:37 -0400
+Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
+        by gateway33.websitewelcome.com (Postfix) with ESMTP id 943891D7D18
+        for <linux-scsi@vger.kernel.org>; Wed, 19 Jun 2019 14:28:36 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id dgG4hm9rP2qH7dgG4hw3N4; Wed, 19 Jun 2019 14:28:36 -0500
+X-Authority-Reason: nr=8
+Received: from cablelink-187-160-61-213.pcs.intercable.net ([187.160.61.213]:34582 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1hdgG3-000c4E-GC; Wed, 19 Jun 2019 14:28:35 -0500
+Date:   Wed, 19 Jun 2019 14:28:33 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190617111937.2355936-1-arnd@arndb.de> <yq1v9x2uv2a.fsf@oracle.com>
-In-Reply-To: <yq1v9x2uv2a.fsf@oracle.com>
-X-KMail-QuotePrefix: > 
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] scsi: virtio_scsi: Use struct_size() helper
+Message-ID: <20190619192833.GA825@embeddedor>
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Message-Id: <201906192036.37384.linux@zary.sk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.160.61.213
+X-Source-L: No
+X-Exim-ID: 1hdgG3-000c4E-GC
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: cablelink-187-160-61-213.pcs.intercable.net (embeddedor) [187.160.61.213]:34582
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 8
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wednesday 19 June 2019 05:13:01 Martin K. Petersen wrote:
-> 
-> Arnd,
-> 
-> > Move the common support outside of the SCSI_LOWLEVEL section.
-> > Alternatively, we could move all of SCSI_LOWLEVEL_PCMCIA into
-> > SCSI_LOWLEVEL. This would be more sensible, but might cause surprises
-> > for users that have SCSI_LOWLEVEL disabled.
-> 
-> It seems messy to me that PCMCIA lives outside of the LOWLEVEL section.
-> 
-> Given that the number of users that rely on PCMCIA for their system disk
-> is probably pretty low, I think I'm leaning towards cleaning things up
-> instead of introducing a nonsensical top level option.
-> 
-> Or even better: Get rid of SCSI_FDOMAIN as a user-visible option and
-> select it if either of the PCI/ISA/PCMCIA drivers are enabled.
+One of the more common cases of allocation size calculations is finding
+the size of a structure that has a zero-sized array at the end, along
+with memory for some number of elements for that array. For example:
 
-SCSI_FDOMAIN is not an user-visible option. PCI/ISA/PCMCIA drivers select it:
+struct virtio_scsi {
+	...
+        struct virtio_scsi_vq req_vqs[];
+};
 
-Symbol: PCMCIA_FDOMAIN [=m]
-Type  : tristate
-Prompt: Future Domain PCMCIA support
-  Location:
-    -> Device Drivers
-      -> SCSI device support
-        -> PCMCIA SCSI adapter support (SCSI_LOWLEVEL_PCMCIA [=y])
-  Defined at drivers/scsi/pcmcia/Kconfig:22
-  Depends on: SCSI_LOWLEVEL_PCMCIA [=y] && SCSI [=y] && PCMCIA [=m] && m && MODULES [=y]
-  Selects: SCSI_FDOMAIN [=m]
+Make use of the struct_size() helper instead of an open-coded version
+in order to avoid any potential type mistakes.
 
+So, replace the following form:
 
-Symbol: SCSI_FDOMAIN [=m]
-Type  : tristate
-  Defined at drivers/scsi/Kconfig:666
-  Depends on: SCSI_LOWLEVEL [=y] && SCSI [=y]
-  Selected by [m]:
-  - SCSI_FDOMAIN_PCI [=m] && SCSI_LOWLEVEL [=y] && PCI [=y] && SCSI [=y]
-  - SCSI_FDOMAIN_ISA [=m] && SCSI_LOWLEVEL [=y] && ISA [=y] && SCSI [=y]
-  - PCMCIA_FDOMAIN [=m] && SCSI_LOWLEVEL_PCMCIA [=y] && SCSI [=y] && PCMCIA [=m] && m && MODULES [=y]
+sizeof(*vscsi) + sizeof(vscsi->req_vqs[0]) * num_queues
 
+with:
 
-Symbol: SCSI_FDOMAIN_ISA [=m]
-Type  : tristate
-Prompt: Future Domain 16xx ISA SCSI support
-  Location:
-    -> Device Drivers
-      -> SCSI device support
-        -> SCSI low-level drivers (SCSI_LOWLEVEL [=y])
-  Defined at drivers/scsi/Kconfig:687
-  Depends on: SCSI_LOWLEVEL [=y] && ISA [=y] && SCSI [=y]
-  Selects: CHECK_SIGNATURE [=y] && SCSI_FDOMAIN [=m]
+struct_size(vscsi, req_vqs, num_queues)
 
+This code was detected with the help of Coccinelle.
 
-Symbol: SCSI_FDOMAIN_PCI [=m]
-Type  : tristate
-Prompt: Future Domain TMC-3260/AHA-2920A PCI SCSI support
-  Location:
-    -> Device Drivers
-      -> SCSI device support
-        -> SCSI low-level drivers (SCSI_LOWLEVEL [=y])
-  Defined at drivers/scsi/Kconfig:670
-  Depends on: SCSI_LOWLEVEL [=y] && PCI [=y] && SCSI [=y]
-  Selects: SCSI_FDOMAIN [=m]
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/scsi/virtio_scsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-
+diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+index 13f1b3b9923a..ed4f79bffc73 100644
+--- a/drivers/scsi/virtio_scsi.c
++++ b/drivers/scsi/virtio_scsi.c
+@@ -795,7 +795,7 @@ static int virtscsi_probe(struct virtio_device *vdev)
+ 	num_targets = virtscsi_config_get(vdev, max_target) + 1;
+ 
+ 	shost = scsi_host_alloc(&virtscsi_host_template,
+-		sizeof(*vscsi) + sizeof(vscsi->req_vqs[0]) * num_queues);
++				struct_size(vscsi, req_vqs, num_queues));
+ 	if (!shost)
+ 		return -ENOMEM;
+ 
 -- 
-Ondrej Zary
+2.21.0
+
