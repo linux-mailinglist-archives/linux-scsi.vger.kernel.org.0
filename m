@@ -2,113 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 296834C20C
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 22:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FFE4C1A4
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 21:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726251AbfFSUFw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 16:05:52 -0400
-Received: from gateway34.websitewelcome.com ([192.185.148.222]:49042 "EHLO
-        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726244AbfFSUFw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 19 Jun 2019 16:05:52 -0400
-X-Greylist: delayed 1400 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jun 2019 16:05:52 EDT
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway34.websitewelcome.com (Postfix) with ESMTP id 803B33E72
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Jun 2019 14:42:32 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id dgTYhkiCv90ondgTYhjqeR; Wed, 19 Jun 2019 14:42:32 -0500
-X-Authority-Reason: nr=8
-Received: from cablelink-187-160-61-213.pcs.intercable.net ([187.160.61.213]:12106 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hdgTX-000jo6-Cw; Wed, 19 Jun 2019 14:42:31 -0500
-Date:   Wed, 19 Jun 2019 14:41:26 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Willem Riede <osst@riede.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     osst-users@lists.sourceforge.net, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] scsi: osst: Use struct_size() in kzalloc()
-Message-ID: <20190619194126.GA3069@embeddedor>
+        id S1730020AbfFSTnv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 15:43:51 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:45858 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726230AbfFSTnu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Jun 2019 15:43:50 -0400
+Received: by mail-pg1-f194.google.com with SMTP id s21so208391pga.12;
+        Wed, 19 Jun 2019 12:43:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vkDuWR4Ufpj0xciDQcbKjPFVsG7k2MUKXN7wSLo/irQ=;
+        b=naWKF5qxbT+Oz6omRJ46geiqeLoZoZHtQbEOxN+grTO1SdVlBwo50NfGxQmc/FFlud
+         bRuio6JuptysRHXJLBLP9e0onk5K2zobBF/ZgXR55k2OnsVIk1CLgLAKvOYpsbqLfbgn
+         8lz1jH0IIET/SR2arPzhvk5ZR/XkClOGMqhG34sWHKfh+Z/FaC/Ic8Zzrio9htfk0Vov
+         jX5TgVwNESXuaFck3KieYKrHoP0ifxE6FS8PdsWvCgLX49YosANv8zPNgJFXc9iaXXdG
+         L5GmXDGIoIsw2rCQfkztD+VLRN6YveY5PAH4N0s/sqdMvEUs64o/3c+8H/UGixsSUcIS
+         0Hnw==
+X-Gm-Message-State: APjAAAXkTUCyLc6jGutDKRt/hS+K8P+APD3lvohkc2MAoj282LMxRlAZ
+        fEfCSsFtyIy5eXCyC/qZXCgv4hHT7B8=
+X-Google-Smtp-Source: APXvYqzu0qVkLU1Bjj2t90oYtlQ8S7ihvZbF2diaNzgHmiBEJPWw0dSSJHUCdg1/QQ9BlByLhmOSHQ==
+X-Received: by 2002:a63:5a02:: with SMTP id o2mr8900735pgb.93.1560973429816;
+        Wed, 19 Jun 2019 12:43:49 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id r4sm2325798pjd.28.2019.06.19.12.43.48
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Wed, 19 Jun 2019 12:43:48 -0700 (PDT)
+Subject: Re: [PATCH V5 00/16] use sg helper to operate scatterlist
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     linux-scsi@vger.kernel.org,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>
+References: <20190618013757.22401-1-ming.lei@redhat.com>
+ <yq11rzqzacx.fsf@oracle.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <3df71d64-78fb-c6fc-f456-a0b626abff3b@acm.org>
+Date:   Wed, 19 Jun 2019 12:43:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.160.61.213
-X-Source-L: No
-X-Exim-ID: 1hdgTX-000jo6-Cw
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: cablelink-187-160-61-213.pcs.intercable.net (embeddedor) [187.160.61.213]:12106
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 14
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+In-Reply-To: <yq11rzqzacx.fsf@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-One of the more common cases of allocation size calculations is finding
-the size of a structure that has a zero-sized array at the end, along
-with memory for some number of elements for that array. For example:
+On 6/18/19 5:29 PM, Martin K. Petersen wrote:
+> I applied this series with a bunch of edits and clarifying comments. It
+> was quite the nightmare to rebase 5.3/scsi-queue to satisfy the ordering
+> requirements, locate the scattered fixes, tweak tags, etc. Hope I got
+> everything right.
 
-struct osst_buffer {
-  ...
-  struct scatterlist sg[1];    /* MUST BE last item                               */
-} ;
+Hi Martin,
 
-i = sizeof(struct osst_buffer) + (osst_max_sg_segs - 1) * sizeof(struct scatterlist);
-instance = kzalloc(i, GFP_KERNEL);
+Do you perhaps plan to push out these patches at a later time? It seems 
+like that branch has not been updated recently:
 
-Instead of leaving these open-coded and prone to type mistakes, we can
-now use the new struct_size() helper:
+$ git show --format=fuller mkp-scsi/5.3/scsi-queue | head -n7
+commit f3e88ad00f58e9a05986be3028b2ed8654c601c9
+Author:     Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+AuthorDate: Fri May 31 08:14:43 2019 -0400
+Commit:     Martin K. Petersen <martin.petersen@oracle.com>
+CommitDate: Fri Jun 7 10:17:06 2019 -0400
 
-instance = kzalloc(struct_size(instance, sg, count), GFP_KERNEL);
+     scsi: mpt3sas: Update driver version to 29.100.00.00
 
-Notice that, in this case, variable i is not necessary, hence it
-is removed.
+Thanks,
 
-This code was detected with the help of Coccinelle.
-
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/scsi/osst.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/scsi/osst.c b/drivers/scsi/osst.c
-index 815bb4097c1b..a11455a7e6bf 100644
---- a/drivers/scsi/osst.c
-+++ b/drivers/scsi/osst.c
-@@ -5307,7 +5307,6 @@ static long osst_compat_ioctl(struct file * file, unsigned int cmd_in, unsigned
- /* Try to allocate a new tape buffer skeleton. Caller must not hold os_scsi_tapes_lock */
- static struct osst_buffer * new_tape_buffer( int from_initialization, int need_dma, int max_sg )
- {
--	int i;
- 	gfp_t priority;
- 	struct osst_buffer *tb;
- 
-@@ -5316,8 +5315,7 @@ static struct osst_buffer * new_tape_buffer( int from_initialization, int need_d
- 	else
- 		priority = GFP_KERNEL;
- 
--	i = sizeof(struct osst_buffer) + (osst_max_sg_segs - 1) * sizeof(struct scatterlist);
--	tb = kzalloc(i, priority);
-+	tb = kzalloc(struct_size(tb, sg, osst_max_sg_segs - 1), priority);
- 	if (!tb) {
- 		printk(KERN_NOTICE "osst :I: Can't allocate new tape buffer.\n");
- 		return NULL;
--- 
-2.21.0
-
+Bart.
