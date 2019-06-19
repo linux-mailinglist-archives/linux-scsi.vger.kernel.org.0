@@ -2,90 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A17D4B184
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 07:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849ED4B229
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 08:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730253AbfFSFm1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 01:42:27 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:40474 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725892AbfFSFm1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Jun 2019 01:42:27 -0400
-Received: by mail-wm1-f65.google.com with SMTP id v19so294735wmj.5
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Jun 2019 22:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=/cpf3zq+TFw4UEIBZS68FxYFecgYH1xkj5zf5lev0W8=;
-        b=cCHl/gxL/zXc4WXMsveXwVsU3cxUW+ACFRX97VZSnWNLVolF18pOwLb4cZ5wfy5RnJ
-         3REAqJcFK/oGI2QJKcdjOZzJo77brsZ933bk0GZFC6Yb2FeFRu/ZUcdxus4jSMt5QMmv
-         cb5mKHlWsJqPkUdz1B5NnEwJWJoHUrL5L43sT51FshRXu6kSGA18KFYUDbdIq3gciajm
-         RcT5NEUePlSW1DD27FCL//Db+0LRRjSYEJXPvbTgus3ZYx7ERKnhVKaedqbEpQlbN+J+
-         As7P0XNVfOhDqFB3DaVhv4y3AmIyWNhEna4XviYfA0OCDgHVzB72f+z0351/UGM/LxtR
-         RG9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=/cpf3zq+TFw4UEIBZS68FxYFecgYH1xkj5zf5lev0W8=;
-        b=i2jETLpBXNFISiCy0tGIvw1/s8nt+nn/h5IqxGYvDeaWbbxb5ONkGqzxwtSeM88FmI
-         /xLFzxqNtmbocbeHdRWD2ob9D0aqzR1cLsNef3lILVyACef5uXMoVw5G5owH0zZgo5o9
-         po0nLFO/i32FkdqdC9UPT4OxMgNgcHwwXQcssraMLvhTK3PbiA4B8zDetKMxxWWdWOOp
-         vpCsBNtEMYv3OHxzDAobAxitEnCE5tZaDSUMYvt9vaS3Su5qj5eQUkmENzdW0eP2PsT5
-         JnAgQ8BLbDH5yL2hGxBH1QHZyEi+di+1bEZbGOTnH72V1/WxRaUpNi9V4KI6Yu59i4tt
-         2c1A==
-X-Gm-Message-State: APjAAAWQj+HUFB6O7j7oon+lP32YTCsSTc+zh0wM2Umqo5L0L8EFIR3G
-        1CPHDU8DhpU/frlSloJYsSZGLg==
-X-Google-Smtp-Source: APXvYqz1GbEe2qolDZxYNYoUdvQZ5fsE8k6qQo1nlTIumvRmIvonzAOQdnQDSY6CuatAS38KNkwUlw==
-X-Received: by 2002:a1c:6c0a:: with SMTP id h10mr6205898wmc.40.1560922945130;
-        Tue, 18 Jun 2019 22:42:25 -0700 (PDT)
-Received: from dell ([2.27.35.243])
-        by smtp.gmail.com with ESMTPSA id u18sm293652wmd.19.2019.06.18.22.42.24
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 18 Jun 2019 22:42:24 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 06:42:22 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     agross@kernel.org, david.brown@linaro.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, pedrom.sousa@synopsys.com, jejb@linux.ibm.com,
-        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        ard.biesheuvel@linaro.org, jlhugo@gmail.com,
-        bjorn.andersson@linaro.org
-Subject: Re: [PATCH 1/1] scsi: ufs-qcom: Add support for platforms booting
- ACPI
-Message-ID: <20190619054222.GE18371@dell>
-References: <20190617115454.3226-1-lee.jones@linaro.org>
- <yq1zhmeuvst.fsf@oracle.com>
+        id S1730502AbfFSGe7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 02:34:59 -0400
+Received: from smtp.nue.novell.com ([195.135.221.5]:50208 "EHLO
+        smtp.nue.novell.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbfFSGe7 (ORCPT
+        <rfc822;groupwise-linux-scsi@vger.kernel.org:0:0>);
+        Wed, 19 Jun 2019 02:34:59 -0400
+Received: from [10.160.4.48] (charybdis.suse.de [149.44.162.66])
+        by smtp.nue.novell.com with ESMTP (TLS encrypted); Wed, 19 Jun 2019 08:34:57 +0200
+Subject: Re: [PATCH] scsi: scsi_sysfs.c: Hide wwid sdev attr if VPD is not
+ supported
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org
+References: <20190612020828.8140-1-marcos.souza.org@gmail.com>
+ <yq1muieuu17.fsf@oracle.com>
+From:   Hannes Reinecke <hare@suse.com>
+Message-ID: <850765d7-da85-3fc1-7bf4-f0edcb63f8d8@suse.com>
+Date:   Wed, 19 Jun 2019 08:34:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
+In-Reply-To: <yq1muieuu17.fsf@oracle.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <yq1zhmeuvst.fsf@oracle.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Ard, Martin,
-
-On Tue, 18 Jun 2019, Martin K. Petersen wrote:
-> > New Qualcomm AArch64 based laptops are now available which use UFS
-> > as their primary data storage medium.  These devices are supplied
-> > with ACPI support out of the box.  This patch ensures the Qualcomm
-> > UFS driver will be bound when the "QCOM24A5" H/W device is
-> > advertised as present.
+On 6/19/19 5:35 AM, Martin K. Petersen wrote:
 > 
-> Applied to 5.3/scsi-queue. Thanks!
+> Marcos,
+> 
+>> WWID composed from VPD data from device, specifically page 0x83. So,
+>> when a device does not have VPD support, for example USB storage
+>> devices where VPD is specifically disabled, a read into <blk
+>> device>/device/wwid file will always return ENXIO. To avoid this,
+>> change the scsi_sdev_attr_is_visible function to hide wwid sysfs file
+>> when the devices does not support VPD.
+> 
+> Not a big fan of attribute files that come and go.
+> 
+> Why not just return an empty string? Hannes?
+> 
+Actually, the intention of the 'wwid' attribute was to have a common
+place where one could look up the global id.
+As such it actually serves a dual purpose, namely indicating that there
+_is_ a global ID _and_ that this kernel (version) has support for 'wwid'
+attribute. This is to resolve one big issue we have to udev nowadays,
+which is figuring out if a specific sysfs attribute is actually
+supported on this particular kernel.
+Dynamic attributes are 'nicer' on a conceptual level, but make the above
+test nearly impossible, as we now have _two_ possibilities why a
+specific attribute is not present.
+So making 'wwid' conditional would actually defeat its very purpose, and
+we should leave it blank if not supported.
 
-Ideal.  Thanks for your help.
+Cheers,
 
+Hannes
 -- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Dr. Hannes Reinecke		               zSeries & Storage
+hare@suse.com			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: F. Imendörffer, J. Smithard, D. Upmanyu, G. Norton
+HRB 21284 (AG Nürnberg)
