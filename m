@@ -2,85 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA90C4B52C
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 11:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7CD4B57A
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 11:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731424AbfFSJpQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 05:45:16 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:46062 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbfFSJpQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Jun 2019 05:45:16 -0400
-Received: by mail-qt1-f196.google.com with SMTP id j19so19027637qtr.12;
-        Wed, 19 Jun 2019 02:45:16 -0700 (PDT)
+        id S1731136AbfFSJvi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 05:51:38 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:46097 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726826AbfFSJvh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Jun 2019 05:51:37 -0400
+Received: by mail-qt1-f193.google.com with SMTP id h21so19027996qtn.13;
+        Wed, 19 Jun 2019 02:51:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6yzdUzmo404LE41DAFTy9JSL/AHqS+IofJkeqyqlqXM=;
-        b=YSQsPBdeVFqPO4k13m19F3LD8n08NG8MIn8ioPb1XG58y0cb9sh9s2inNUBQZ2ViiW
-         An/UM8unZjM82w8J4wrfPZPqVnewNa4/p2kqYw4lmUwb8t2Ib7GzvWX8+9+/fUynGDHS
-         aC58zCRNqpWGrVgy/NHjasLEfX/AOTqda4pdvgAaoQ8lbR3Vid4PEdOl5XUtGeusLODS
-         avj2sCcioN0Wu9HJH+cIbWogVYUqSqVt4KoJ67zJDnoMqYh6m+B3vt5Y2tcSL+XSsmzk
-         1haaRyFLLB7R1mo2H8v1rlQgauVDYGIz/GoYDwaFeCPNPuV8OdIK/Bz/lTXznSw6pJjt
-         9pgA==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=3eEZ2qQ0T+vNBvySVU2f2K2n0PUB27s0eFB2a2GHHpw=;
+        b=Ky3SesKJdQbqCg6lv2g/uWL5yTM5H21azkmaCE5DUZGzH7yfJ4LSMV8Zb26vGJbmqZ
+         cDFJROUQLq4vKzYRjGbAuo381vwuIFZb4Wa9kgbHVSd2T4tfdZJl1SAcJk8Dz09rJBDS
+         HR7nrt7HpYtm8rwO6wo9TvW3zgOnPa/CGc4hX6/AOgOXoCp49teZ9JiHZ560D2TyemSr
+         DVR7LfcNpU7Y5Wb+gYtDZXthnNz4hUhVMF3KNA0j8DkOhC3Bf09mMhXi8AmiuXlGTi47
+         HKVuKHudef9vuuqYNjjtxyX9cnlHkTfgJ2cb/skXM5JmyvFg/VlLbBi2A8fuF1YE3FpG
+         zdGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6yzdUzmo404LE41DAFTy9JSL/AHqS+IofJkeqyqlqXM=;
-        b=lWJM60FVDLDJ10zJS1sCtSb5EECE2/TgliNXkcdtcVqMcpUCGlq69KYE+jBr6ZORv+
-         XoV8xHWzbWMNWGHD/ikK4cOqJJg2ti/DjgqzkfvcwSXYJmH4SHPZ9NO5KECF+4NseY8q
-         c0ePKS95V04xWaLPheSj5seqG4uoKkyVx7SwRL3+JTvg5Rya3NLcmuxO7GQlM/oBxFgX
-         OhNj2vpPwZinRkxGCr4kAbE/lTErnYD3PKUK8XSDlOZWRUET4Xrkmqwc+WPyLpYCyWXp
-         cEiSjQo3HPggGVIIjoe57co6STDgGi7eN8YQgSmsWck8qKtmn7d5GYnhQRIcGHXt9oMK
-         DRHg==
-X-Gm-Message-State: APjAAAUYHhGJe+CvxLODT8fv+aYOt4TKg6GtlV9cUVXg6Jrpv01Ee4HF
-        KDw0Am8i5aUpudZ4AnIGq+pqdfs6Lls=
-X-Google-Smtp-Source: APXvYqwkgLAF0LrMgAIKw/7vQrmKnZS+4+KL47Na2ywBqsjuimj4HEiHz7IiwfCRl6Qfje+SSMtOww==
-X-Received: by 2002:aed:33e6:: with SMTP id v93mr105873713qtd.157.1560937515388;
-        Wed, 19 Jun 2019 02:45:15 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=3eEZ2qQ0T+vNBvySVU2f2K2n0PUB27s0eFB2a2GHHpw=;
+        b=WJGrwPOOJ0T5I1TPqbV0c7mmrEY6RCzJLMexRh6g/FT4rrwnFPODnYANaeQoVBN/uM
+         kg3ybL6EdE9RAt1/X17Lw/gc0p2ztUgyPKpaM+WxKInba+xVnNCMWszSW07zMpdIQ1tJ
+         NPByIRb2E9F4zVn491owU4HGL4PnlHrjnrYRtQ2ORnrMG78tpSANjRnGqJeYG7T2eU0N
+         d22h4DgpkmN5cNwj6UTDfzEGAoSD5xmOCpZp4+GiEes4XMMQZT4vN34ypQIeSRMTBa3C
+         B8SgeDFnpkKTBGMP7Nfy856hN+2xlwTWdjftegKjk26DPLgxbcYtc3KIywzrxeEXC7Ey
+         pHBQ==
+X-Gm-Message-State: APjAAAUdzbQToIutpF7BGeEpwFI2aprx6PqUM9uGZLUbOs1zKzMAFNqr
+        fVb9FYthUQXX++rwA4p4Orbcb//ZJi4=
+X-Google-Smtp-Source: APXvYqxY9AqHFrq4Px1xuxAzlm+uOWclwFVuRwuqndIRWiVaBEWV0tK9BgMpqoe3H3v/8lcSK1F9ZA==
+X-Received: by 2002:ac8:3971:: with SMTP id t46mr85568562qtb.164.1560937896697;
+        Wed, 19 Jun 2019 02:51:36 -0700 (PDT)
 Received: from continental ([186.212.50.252])
-        by smtp.gmail.com with ESMTPSA id t197sm9802121qke.2.2019.06.19.02.45.12
+        by smtp.gmail.com with ESMTPSA id c18sm10048430qkk.73.2019.06.19.02.51.33
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 19 Jun 2019 02:45:14 -0700 (PDT)
-Date:   Wed, 19 Jun 2019 06:45:43 -0300
+        Wed, 19 Jun 2019 02:51:35 -0700 (PDT)
+Date:   Wed, 19 Jun 2019 06:52:09 -0300
 From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH 1/2] scsi: devinfo: BLIST_TRY_VPD_PAGES for SanDisk
- Cruzer Blade
-Message-ID: <20190619094540.GA26980@continental>
-References: <20190618013146.21961-1-marcos.souza.org@gmail.com>
- <20190618013146.21961-2-marcos.souza.org@gmail.com>
- <yq1r27quuod.fsf@oracle.com>
+To:     Hannes Reinecke <hare@suse.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] scsi: scsi_sysfs.c: Hide wwid sdev attr if VPD is not
+ supported
+Message-ID: <20190619095208.GB26980@continental>
+References: <20190612020828.8140-1-marcos.souza.org@gmail.com>
+ <yq1muieuu17.fsf@oracle.com>
+ <850765d7-da85-3fc1-7bf4-f0edcb63f8d8@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <yq1r27quuod.fsf@oracle.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <850765d7-da85-3fc1-7bf4-f0edcb63f8d8@suse.com>
 User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jun 18, 2019 at 11:21:22PM -0400, Martin K. Petersen wrote:
-> 
-> Marcos,
-> 
-> > Currently, all USB devices skip VPD pages, even when the device
-> > supports them (SPC-3 and later), but some of them support VPD, like
-> > Cruzer Blade.
-> 
-> What's your confidence level wrt. all Cruzer Blades handling this
-> correctly? How many devices have you tested this change with?
+On Wed, Jun 19, 2019 at 08:34:56AM +0200, Hannes Reinecke wrote:
+> On 6/19/19 5:35 AM, Martin K. Petersen wrote:
+> > 
+> > Marcos,
+> > 
+> >> WWID composed from VPD data from device, specifically page 0x83. So,
+> >> when a device does not have VPD support, for example USB storage
+> >> devices where VPD is specifically disabled, a read into <blk
+> >> device>/device/wwid file will always return ENXIO. To avoid this,
+> >> change the scsi_sdev_attr_is_visible function to hide wwid sysfs file
+> >> when the devices does not support VPD.
+> > 
+> > Not a big fan of attribute files that come and go.
+> > 
+> > Why not just return an empty string? Hannes?
+> > 
+> Actually, the intention of the 'wwid' attribute was to have a common
+> place where one could look up the global id.
+> As such it actually serves a dual purpose, namely indicating that there
+> _is_ a global ID _and_ that this kernel (version) has support for 'wwid'
+> attribute. This is to resolve one big issue we have to udev nowadays,
+> which is figuring out if a specific sysfs attribute is actually
+> supported on this particular kernel.
+> Dynamic attributes are 'nicer' on a conceptual level, but make the above
+> test nearly impossible, as we now have _two_ possibilities why a
+> specific attribute is not present.
+> So making 'wwid' conditional would actually defeat its very purpose, and
+> we should leave it blank if not supported.
 
-I've tested three Cruzer Blades that I have at hand, and all  of them have VPD
-support, and also checked with a friend of mine that also have one. I can't say
-about "all others" but so far, 4/4 devices that I tested have VPD. (They were all
-SPC-3 or SPC-4 compliant).
+My intention was to apply the same approach used for VPD pages, which currently
+also hides the attributes if not supported by the device. So, if vpd pages are
+hidden, there is no usage for wwid. But I also like the idea of the vpd pages
+being blank if not supported by the device.
 
 > 
+> Cheers,
+> 
+> Hannes
 > -- 
-> Martin K. Petersen	Oracle Linux Engineering
+> Dr. Hannes Reinecke		               zSeries & Storage
+> hare@suse.com			               +49 911 74053 688
+> SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+> GF: F. Imendörffer, J. Smithard, D. Upmanyu, G. Norton
+> HRB 21284 (AG Nürnberg)
