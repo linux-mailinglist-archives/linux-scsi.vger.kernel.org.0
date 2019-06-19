@@ -2,92 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA7B4B034
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 04:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8374B039
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 04:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729050AbfFSCkv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 22:40:51 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:32770 "EHLO
+        id S1726689AbfFSCp1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 22:45:27 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:35760 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726047AbfFSCkv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 22:40:51 -0400
+        with ESMTP id S1726181AbfFSCp0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 22:45:26 -0400
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J2Z4c7055041;
-        Wed, 19 Jun 2019 02:40:37 GMT
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J2iICo061175;
+        Wed, 19 Jun 2019 02:45:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2018-07-02;
- bh=UBq4dVb/yGNxx/nIjeQCABVn3daS+MyzXu6IPurCzSg=;
- b=2v56QvCI9B8VSHPDIuE3cR54AdkkAVI1yczdRDRjEtkreysInPeoci63DeiposS2Ml4S
- locuIgIh8awTEXO9yn+1pfTUQxaf7tRzsIRK66ikT7Nm3smMcPK7MWQZ7O/zHQGoBJjH
- CNd/E+0liXZqO5MIgUorGpcYC193uksP40waxfhfVvuX/wg6mlAWo5z8+UjocPbAaPA4
- 544Z5CbCi+aQOiMUTvP0WAOjlPtSIdymY6iW8f9jt+seBGNL5Sh5/H4CGIccskTL4kmx
- ZpCfJ7vT9Mhfk8oRULeUXdygmN5t4beR1K9efd2+kJ1/bbMS5otmd0sp5g9cd0CSNn6J vA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2t78098pj9-1
+ bh=VLQ+HJbgpmoE8VBgWRCt6rLQFlu2VXg32E2waD5MT30=;
+ b=bho3lQ9P1UvLWrwwphxjVAciAdEAd9lo/bfkq982ti7mKMtMII6hks+x2Y4U8F1WQljN
+ pFkkBHe1nWQag+EqBnmIVZDZrMnvrRI7vFFeZoUE3jTHrVXRZXX4KeQANWeCwFQL+JEJ
+ bLNXV0UcxGP38VXgri+CmgltB7JY+nMltHaat08c6ryNEkB6YuULpnI34wIls4ayBwCg
+ 0OogoKEQHq5MVQtd95KfY0SmYYZtKLPFg8g8GwJA1x/RCCcOSkkhkXSK2CK7HqRX7Wkb
+ 7lGU93c4sppTJ7nm0Ewh8sYbve2guc9OQlt80DHdl60gB/vMQ4c/JRiHbuXK1qPOOshl zw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2t78098pw5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jun 2019 02:40:37 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J2d70V144695;
-        Wed, 19 Jun 2019 02:40:37 GMT
+        Wed, 19 Jun 2019 02:45:12 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J2heaa091822;
+        Wed, 19 Jun 2019 02:45:12 GMT
 Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2t77ymtsf2-1
+        by userp3030.oracle.com with ESMTP id 2t77ymtthw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jun 2019 02:40:36 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5J2eYxX031384;
-        Wed, 19 Jun 2019 02:40:34 GMT
+        Wed, 19 Jun 2019 02:45:12 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5J2jBuH000851;
+        Wed, 19 Jun 2019 02:45:11 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 19 Jun 2019 02:40:33 +0000
-To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        with ESMTP ; Tue, 18 Jun 2019 19:45:11 -0700
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Michael Schmitz" <schmitzmic@gmail.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Joshua Thompson" <funaho@jurai.org>, linux-m68k@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] NCR5380 drivers: fixes and other improvements
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: megaraid_sas: Use struct_size() helper
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <cover.1560043151.git.fthain@telegraphics.com.au>
-Date:   Tue, 18 Jun 2019 22:40:31 -0400
-In-Reply-To: <cover.1560043151.git.fthain@telegraphics.com.au> (Finn Thain's
-        message of "Sun, 09 Jun 2019 11:19:11 +1000")
-Message-ID: <yq1lfxywb4w.fsf@oracle.com>
+References: <20190607184053.GA11513@embeddedor>
+Date:   Tue, 18 Jun 2019 22:45:08 -0400
+In-Reply-To: <20190607184053.GA11513@embeddedor> (Gustavo A. R. Silva's
+        message of "Fri, 7 Jun 2019 13:40:53 -0500")
+Message-ID: <yq1h88mwax7.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9292 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=636
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=653
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906190019
+ engine=8.0.1-1810050000 definitions=main-1906190020
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9292 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=680 adultscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=698 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906190019
+ definitions=main-1906190020
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Finn,
+Gustavo,
 
-> Among other improvements, this patch series fixes a data corruption bug
-> in the mac_scsi driver and a bug in the EH abort routine in the core
-> 5380 driver.
+> One of the more common cases of allocation size calculations is finding
+> the size of a structure that has a zero-sized array at the end, along
+> with memory for some number of elements for that array. For example:
 >
-> For consistency I have ignored certain checkpatch.pl complaints about
-> the indentation in mac_scsi.c. The remaining complaints seem to be
-> false positives.
+> struct MR_PD_CFG_SEQ_NUM_SYNC {
+> 	...
+>         struct MR_PD_CFG_SEQ seq[1];
+> } __packed;
 >
-> Some of these patches are not trivial to backport. Those patches have
-> been nominated for recent -stable branches only.
+> Make use of the struct_size() helper instead of an open-coded version
+> in order to avoid any potential type mistakes.
 
 Applied to 5.3/scsi-queue, thanks!
 
