@@ -2,20 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 987134BAA3
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 16:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C534BA05
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 15:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728652AbfFSOD2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 10:03:28 -0400
-Received: from mail.excellent-customer-service.com ([185.216.140.110]:33027
+        id S1730796AbfFSNcW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 09:32:22 -0400
+Received: from mail.excellent-customer-service.com ([185.216.140.110]:42780
         "EHLO chulaseafood.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726238AbfFSOD2 (ORCPT
+        by vger.kernel.org with ESMTP id S1730340AbfFSNcW (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 19 Jun 2019 10:03:28 -0400
+        Wed, 19 Jun 2019 09:32:22 -0400
+X-Greylist: delayed 3626 seconds by postgrey-1.27 at vger.kernel.org; Wed, 19 Jun 2019 09:32:21 EDT
 To:     linux-scsi@vger.kernel.org
-Subject: =?UTF-8?B?wrcgICAgICAgICBjYW4geW91IGFzc2lzdCBtZT8=?=
-Message-ID: <b4e256ad2bb2c9e7857d76484f5df273@airkinglimited.com>
-Date:   Wed, 19 Jun 2019 12:41:03 +0200
+Subject: =?UTF-8?B?ICAgICAgIHF1ZXN0aW9u4oCm?=
+Message-ID: <133da46aa83e6dfb3d368a6e2704d705@airkinglimited.com>
+Date:   Wed, 19 Jun 2019 13:36:25 +0200
 From:   "Laura" <ansitaksi@verizon.net>
 Reply-To: turisnig@sina.com
 MIME-Version: 1.0
