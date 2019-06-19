@@ -2,85 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE5A4BCAD
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 17:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17CB4BE44
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 18:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbfFSPWH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Jun 2019 11:22:07 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:38448 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725899AbfFSPWH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 19 Jun 2019 11:22:07 -0400
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id D4782C18B2C2;
-        Wed, 19 Jun 2019 15:13:21 +0000 (UTC)
-Received: from emilne (unknown [10.18.25.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 21FDE5D9D6;
-        Wed, 19 Jun 2019 15:13:17 +0000 (UTC)
-Message-ID: <a05c420e46d995a2397c46d416eaeb627c94ea11.camel@redhat.com>
-Subject: Re: [PATCH] scsi: vmw_pscsi: Fix use-after-free in
- pvscsi_queue_lck()
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     Jan Kara <jack@suse.cz>, Jim Gill <jgill@vmware.com>
-Cc:     VMware PV-Drivers <pv-drivers@vmware.com>,
-        linux-scsi@vger.kernel.org, stable@vger.kernel.org
-Date:   Wed, 19 Jun 2019 11:13:16 -0400
-In-Reply-To: <20190619070541.30070-1-jack@suse.cz>
-References: <20190619070541.30070-1-jack@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Mime-Version: 1.0
+        id S1729990AbfFSQbe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Jun 2019 12:31:34 -0400
+Received: from smtprelay0234.hostedemail.com ([216.40.44.234]:46325 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725899AbfFSQbe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 19 Jun 2019 12:31:34 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay05.hostedemail.com (Postfix) with ESMTP id D3FFA1801A0B4;
+        Wed, 19 Jun 2019 16:31:31 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 
+X-HE-Tag: cakes27_80e37c98d9d58
+X-Filterd-Recvd-Size: 3106
+Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf09.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 19 Jun 2019 16:31:25 +0000 (UTC)
+Message-ID: <9a000734375c0801fc16b71f4be1235f9b857772.camel@perches.com>
+Subject: Re: [PATCH v3 0/7] Hexdump Enhancements
+From:   Joe Perches <joe@perches.com>
+To:     Alastair D'Silva <alastair@au1.ibm.com>, alastair@d-silva.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
+Date:   Wed, 19 Jun 2019 09:31:24 -0700
+In-Reply-To: <20190617020430.8708-1-alastair@au1.ibm.com>
+References: <20190617020430.8708-1-alastair@au1.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Wed, 19 Jun 2019 15:13:29 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 2019-06-19 at 09:05 +0200, Jan Kara wrote:
-> Once we unlock adapter->hw_lock in pvscsi_queue_lck() nothing prevents just
-> queued scsi_cmnd from completing and freeing the request. Thus cmd->cmnd[0]
-> dereference can dereference already freed request leading to kernel crashes or
-> other issues (which one of our customers observed). Store cmd->cmnd[0] in a
-> local variable before unlocking adapter->hw_lock to fix the issue.
+On Mon, 2019-06-17 at 12:04 +1000, Alastair D'Silva wrote:
+> From: Alastair D'Silva <alastair@d-silva.org>
 > 
-> CC: stable@vger.kernel.org
-> Signed-off-by: Jan Kara <jack@suse.cz>
-> ---
->  drivers/scsi/vmw_pvscsi.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Apologies for the large CC list, it's a heads up for those responsible
+> for subsystems where a prototype change in generic code causes a change
+> in those subsystems.
 > 
-> diff --git a/drivers/scsi/vmw_pvscsi.c b/drivers/scsi/vmw_pvscsi.c
-> index ecee4b3ff073..377b07b2feeb 100644
-> --- a/drivers/scsi/vmw_pvscsi.c
-> +++ b/drivers/scsi/vmw_pvscsi.c
-> @@ -763,6 +763,7 @@ static int pvscsi_queue_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd
->  	struct pvscsi_adapter *adapter = shost_priv(host);
->  	struct pvscsi_ctx *ctx;
->  	unsigned long flags;
-> +	unsigned char op;
->  
->  	spin_lock_irqsave(&adapter->hw_lock, flags);
->  
-> @@ -775,13 +776,14 @@ static int pvscsi_queue_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd
->  	}
->  
->  	cmd->scsi_done = done;
-> +	op = cmd->cmnd[0];
->  
->  	dev_dbg(&cmd->device->sdev_gendev,
-> -		"queued cmd %p, ctx %p, op=%x\n", cmd, ctx, cmd->cmnd[0]);
-> +		"queued cmd %p, ctx %p, op=%x\n", cmd, ctx, op);
->  
->  	spin_unlock_irqrestore(&adapter->hw_lock, flags);
->  
-> -	pvscsi_kick_io(adapter, cmd->cmnd[0]);
-> +	pvscsi_kick_io(adapter, op);
->  
->  	return 0;
->  }
+> This series enhances hexdump.
 
-Reviewed-by: Ewan D. Milne <emilne@redhat.com>
+Still not a fan of these patches.
+
+> These improve the readability of the dumped data in certain situations
+> (eg. wide terminals are available, many lines of empty bytes exist, etc).
+
+Changing hexdump's last argument from bool to int is odd.
+
+Perhaps a new function should be added instead of changing
+the existing hexdump.
+
+> The default behaviour of hexdump is unchanged, however, the prototype
+> for hex_dump_to_buffer() has changed, and print_hex_dump() has been
+> renamed to print_hex_dump_ext(), with a wrapper replacing it for
+> compatibility with existing code, which would have been too invasive to
+> change.
+> 
+> Hexdump selftests have be run & confirmed passed.
+
 
