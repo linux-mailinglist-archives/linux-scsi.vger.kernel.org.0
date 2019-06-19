@@ -2,68 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFDF64AF5B
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 03:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997EF4AF72
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Jun 2019 03:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729204AbfFSBKr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Jun 2019 21:10:47 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:37354 "EHLO
+        id S1729349AbfFSBVg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Jun 2019 21:21:36 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:43582 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725988AbfFSBKr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 21:10:47 -0400
+        with ESMTP id S1726158AbfFSBVg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Jun 2019 21:21:36 -0400
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J14gVQ192813;
-        Wed, 19 Jun 2019 01:10:45 GMT
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J14gVq192813;
+        Wed, 19 Jun 2019 01:21:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2018-07-02;
- bh=gYDJ565bmJ/QILPFBSke6/24C2eShrgNLI/7RNOCw/w=;
- b=icfG0FHWMgimSuNPuK9FMjXUPxMOECtOivd6pKYKAlFth5lA7sZVGJOzbZjppfZVnNXh
- WbcVRbEE6oOHJG366THADmDiveFXk/KKvFk4+5vy8jbmFc/pBS/WkR7y+rbS+gzmYezk
- m0epdJZz6kg+TwkEQXfBBQ5DzItXsVMXAu21UcDifGXzV0CHDlW441b7FVcxIhpJp4lu
- XQnwPL3CPNAo9ATiseE3r36n1e5GjbhD8KtmOyEQeHJWa3sdsOTm8o/vmrmVBg4UBmBI
- 4QXYi7tCtcLTStp8798vWxD4u6aFhZK5Fb5RjHgHbAbKnpq4iFAVWIIltkuvaYvIIJr+ nw== 
+ bh=MMQvbBgyvP8fRxmHsb8Us7gkwLCMMcE5Oq2smVIAGBQ=;
+ b=5Yhu8ZL5FsufrfyFGUPaz/+/qN2s/CoIBPdRt569RSO1OGHh2heamF6g5H8ou3N2DLHb
+ G/OZlcXJEXWMgVcWCfj+V94LIIhMm3jljFEBPCOoMyYVEIzDAhdGteugdH9dkgHFbB1V
+ BZd/NtEw+VKklOYsEwh7F1uETe2oKB8CiyHjeWhAXmHeR+36L/3Ut0xO5tXbblTIWaBy
+ e1O23aDzy6mscm2Pm+G0/1VwIl2Pllb37PrWLTh0k/7cm5niBmns5zv8oQ04cRsM2xDX
+ GH7YCZalDiMGDv4RMAa9/rddDu3z8q8t3DFbEXrbdstbhlrJdUXRaFLk6QlZj58PQL2v cw== 
 Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2t78098g35-1
+        by userp2130.oracle.com with ESMTP id 2t78098gv3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jun 2019 01:10:45 +0000
+        Wed, 19 Jun 2019 01:21:21 +0000
 Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J19D8l054858;
-        Wed, 19 Jun 2019 01:10:44 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2t77yn20dn-1
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5J1LC6i075148;
+        Wed, 19 Jun 2019 01:21:20 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 2t77yn23at-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jun 2019 01:10:44 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5J1AgQA031238;
-        Wed, 19 Jun 2019 01:10:43 GMT
+        Wed, 19 Jun 2019 01:21:20 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5J1LI0a020768;
+        Wed, 19 Jun 2019 01:21:18 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 18 Jun 2019 18:10:42 -0700
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+        with ESMTP ; Tue, 18 Jun 2019 18:21:18 -0700
+To:     Varun Prakash <varun@chelsio.com>
 Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] scsi: tcmu: Simplify 'tcmu_update_uio_info()'
+        dt@chelsio.com, indranil@chelsio.com, ganji.aravind@chelsio.com
+Subject: Re: [PATCH] scsi: cxgb4i: add support for IEEE_8021QAZ_APP_SEL_STREAM selector
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <20190616070220.24189-1-christophe.jaillet@wanadoo.fr>
-Date:   Tue, 18 Jun 2019 21:10:40 -0400
-In-Reply-To: <20190616070220.24189-1-christophe.jaillet@wanadoo.fr>
-        (Christophe JAILLET's message of "Sun, 16 Jun 2019 09:02:20 +0200")
-Message-ID: <yq1blyuxtv3.fsf@oracle.com>
+References: <1560777386-5295-1-git-send-email-varun@chelsio.com>
+Date:   Tue, 18 Jun 2019 21:21:16 -0400
+In-Reply-To: <1560777386-5295-1-git-send-email-varun@chelsio.com> (Varun
+        Prakash's message of "Mon, 17 Jun 2019 18:46:26 +0530")
+Message-ID: <yq17e9ixtdf.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9292 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=920
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1810050000 definitions=main-1906190007
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9292 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=984 adultscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
  definitions=main-1906190007
 Sender: linux-scsi-owner@vger.kernel.org
@@ -72,17 +71,13 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Christophe,
+Varun,
 
-> Use 'kasprintf()' instead of:
->    - snprintf(NULL, 0...
->    - kmalloc(...
->    - snprintf(...
->
-> This is less verbose and saves 7 bytes (i.e. the space for '/(null)') if
-> 'udev->dev_config' is NULL.
+> IEEE_8021QAZ_APP_SEL_STREAM is a valid selector for iSCSI connections,
+> so add code to use IEEE_8021QAZ_APP_SEL_STREAM selector to get
+> priority mask.
 
-Applied to 5.3/scsi-queue. Thanks!
+Applied to 5.3/scsi-queue, thanks!
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
