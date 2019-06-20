@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C46D4CC60
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Jun 2019 12:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A505A4CC61
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Jun 2019 12:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbfFTKx1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 20 Jun 2019 06:53:27 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:45034 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730913AbfFTKx1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Jun 2019 06:53:27 -0400
-Received: by mail-pl1-f193.google.com with SMTP id t7so1229167plr.11
-        for <linux-scsi@vger.kernel.org>; Thu, 20 Jun 2019 03:53:26 -0700 (PDT)
+        id S1731359AbfFTKxa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 20 Jun 2019 06:53:30 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:39380 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730886AbfFTKxa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Jun 2019 06:53:30 -0400
+Received: by mail-pg1-f196.google.com with SMTP id 196so1389121pgc.6
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Jun 2019 03:53:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=FIPydZ3jEWaeWPodWxnrqDckJVIVod1VLHb1/9k7Fxg=;
-        b=C37TnUNgK2YbPci9uOJobq5KNzA+A+oiysW38CzBbc4iSFwdANu3U6HNn+PHdf7bAF
-         ECLqgDryleWUMga+GBg2mHDpKoTnHDeZoQ3e9OGY74t9ZZRoP35uwHmwr4Hcn0UyUctz
-         ENrXcGVBhVahwBq5rdels2Pn+XPF4XQWzwZsc=
+        bh=T4xFAUQiRTbKSvU/plzn2gO53ObR6gnzkNhb7ykrKfo=;
+        b=G5XsJ81MN+KW8okC+p1/CN7PoN7qqQctkRFqVDeCyKiKCChohLodbDnGEXUC8a3W3B
+         RECZqI/0Nu1eKjbVeGzXkbDUB1LXc4B3fxTy4W19NHbH+C3eYMpNbhqSQUkTAgm+254j
+         lvGcpUXLHi72UbtW26aTGDbpK5IbrcP93Uv5Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=FIPydZ3jEWaeWPodWxnrqDckJVIVod1VLHb1/9k7Fxg=;
-        b=FF3wojJFo75owBxCJfpRdwNhjCObPLwae1A6Q/8SkYb4Aze5CxriKWUnEg4CYL67xU
-         an/lCfO1YBiXqTNOXxpmF23Q4mYMQOUGfsNoT7RPHcqkL4aoFD6xqnePPmdfzNdO4i/J
-         7NWyj/G+ECmrgkhFOtlPIDnbsF5FrZexL/g/lwMzTQAfmYoegOKK67/FtftHl49rmjUh
-         ykIYSnEalhv+EvFkzwmH7xN6XcCEeW3QXQduul6ufCX1oSJjsBfN7eqCqcACsvBScjnA
-         N8tfKKbOcISBgTzvJHY5JZxq+aqTq5cwJaNKeRTe8h5ccp+7kCb+82lqKw911gkUeGkb
-         dKNA==
-X-Gm-Message-State: APjAAAVruB+ZHtV7VW1D3PD7idmzWBFPz5Y8LhA8HaUbfBzKAG74TKBn
-        Vdo0qYkftrhfeYI9twBQPQEE6Kt1ljqtvpnEwQdCQNyX/iyYmQqDfZ4udrs+dlXkpK1qkelpm0s
-        DG/haAtEIAvrI97g38bwlAb4EyB5qpE2JxbJdSBFGZ+Mk4QQ78hG2/1BYh5F79V90MBnoE9fjo6
-        J47Mx4btxpk93o
-X-Google-Smtp-Source: APXvYqwdRMkMNfo/Lu1IQ4cd52dE8TnHe3stgtT7C3v6Fc/LDbRjDzBCw6k7DLkehpf8cS9rskLzsA==
-X-Received: by 2002:a17:902:108a:: with SMTP id c10mr122170257pla.48.1561028005949;
-        Thu, 20 Jun 2019 03:53:25 -0700 (PDT)
+        bh=T4xFAUQiRTbKSvU/plzn2gO53ObR6gnzkNhb7ykrKfo=;
+        b=OKWbVmfbAc0KVMmg6HNGbBRcdnk1P/HRuodPjltzH68ALB+OP4l2R5luvWTndW5zqv
+         wbSjkcsZdvBPBOdkGIBwm0XDaE5qP1yKBZK2XXoHpd8MawgWF4QhdYDP1JlROVmq2DVw
+         uuLGNUNK+eZRkwwlutbTixcYq8vXELQECIJHIwn6Zb20Ocic5WS3VVl1HXsFln4FRI2X
+         1xmKrFCDsN2vPfJ972kecBJMHOTFsqv4UCDYDlSgGsgovWhmpGUzyircqppvWZF3wUVn
+         Fb/yMpY9Dr8B/dfg6RYlaKqoIpW+tXN3kB2px0ab0KozecT3v4te0Bx+uqVMx0rotAxg
+         X6Gg==
+X-Gm-Message-State: APjAAAWWQjwRirYf5F1vNZvZpztWOeHVDBPtbf0w0hcLuvqEK/QEpGog
+        JiHx/qq0Rx6VBM7hL2LTpWyHya+JFBMiCPtBij0lymHMGeYS/OfuD9ubWt5j5YkHeNjZFxPQ6xI
+        W+m7GuWSqeYqgo4yRtBobT6cFqLVtuoDnZm2DXyzH/roxrSycU9gZ7FBI8OPv+29lWZNMN+pgO0
+        tTkn7yp9Pqu8Wt
+X-Google-Smtp-Source: APXvYqwFHO8MVMk5KPpkrQcPzMZhjagDPI1NbBUUs3pTA4lLdwHUTBOLKK/v9Ki1Zx1iQYOsRDIjpg==
+X-Received: by 2002:a62:4dc5:: with SMTP id a188mr131813919pfb.8.1561028008903;
+        Thu, 20 Jun 2019 03:53:28 -0700 (PDT)
 Received: from dhcp-10-123-20-30.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id l7sm24793995pfl.9.2019.06.20.03.53.23
+        by smtp.gmail.com with ESMTPSA id l7sm24793995pfl.9.2019.06.20.03.53.26
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 20 Jun 2019 03:53:25 -0700 (PDT)
+        Thu, 20 Jun 2019 03:53:28 -0700 (PDT)
 From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
         kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
         sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
         Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [PATCH v2 15/18] megaraid_sas: Set affinity for high IOPs reply queues
-Date:   Thu, 20 Jun 2019 16:22:05 +0530
-Message-Id: <20190620105208.15011-16-chandrakanth.patil@broadcom.com>
+Subject: [PATCH v2 16/18] megaraid_sas: Use high IOPs queues based on IO workload
+Date:   Thu, 20 Jun 2019 16:22:06 +0530
+Message-Id: <20190620105208.15011-17-chandrakanth.patil@broadcom.com>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190620105208.15011-1-chandrakanth.patil@broadcom.com>
 References: <20190620105208.15011-1-chandrakanth.patil@broadcom.com>
@@ -59,67 +59,105 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-High iops queues are mapped to non-managed IRQs. Set affinity of
-non-managed irqs to local numa node.  Low latency queues are mapped to
-managed IRQs.
-
-Driver reserves some reply queues for high iops queues (through
-pci_alloc_irq_vectors_affinity and .pre_vectors interface). The rest of
-queues are for low latency.
-
-Based on IO workload, driver will decide which group of reply queues
-(either high iops queues or low latency queues) to be used.
-High iops queues will be mapped to local numa node of controller and
-low latency queues will be mapped to CPUs across numa nodes. In general,
-high iops and low latency queues should fit into 128 reply queues
-which is the max number of reply queues supported by Aero adapters.
+The driver will use round-robin method for IO submission in batches within
+the high iops queues when the number of in-flight ios on the target device
+is larger than 8. Otherwise the driver will use low latency reply queues.
 
 Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
 Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 ---
- drivers/scsi/megaraid/megaraid_sas_base.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ drivers/scsi/megaraid/megaraid_sas.h        |  3 +++
+ drivers/scsi/megaraid/megaraid_sas_fp.c     |  1 +
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 16 ++++++++++++++--
+ drivers/scsi/megaraid/megaraid_sas_fusion.h |  1 +
+ 4 files changed, 19 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 2e3c7fd..fec3e57 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -5672,6 +5672,26 @@ int megasas_get_device_list(struct megasas_instance *instance)
- 	return SUCCESS;
- }
+diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
+index 02e6e15..3f4cb52 100644
+--- a/drivers/scsi/megaraid/megaraid_sas.h
++++ b/drivers/scsi/megaraid/megaraid_sas.h
+@@ -2253,6 +2253,8 @@ enum MR_PD_TYPE {
  
-+/**
-+ * megasas_set_high_iops_queue_affinity_hint -	Set affinity hint for high IOPs queues
-+ * @instance:					Adapter soft state
-+ * return:					void
-+ */
-+static inline void
-+megasas_set_high_iops_queue_affinity_hint(struct megasas_instance *instance)
-+{
-+	int i;
-+	int local_numa_node;
-+
-+	if (instance->balanced_mode) {
-+		local_numa_node = dev_to_node(&instance->pdev->dev);
-+
-+		for (i = 0; i < instance->low_latency_index_start; i++)
-+			irq_set_affinity_hint(pci_irq_vector(instance->pdev, i),
-+				cpumask_of_node(local_numa_node));
-+	}
-+}
-+
- static int
- __megasas_alloc_irq_vectors(struct megasas_instance *instance)
- {
-@@ -5729,6 +5749,8 @@ megasas_alloc_irq_vectors(struct megasas_instance *instance)
- 	else
- 		instance->msix_vectors = 0;
+ /*Aero performance parameters*/
+ #define MR_HIGH_IOPS_QUEUE_COUNT	8
++#define MR_DEVICE_HIGH_IOPS_DEPTH	8
++#define MR_HIGH_IOPS_BATCH_COUNT	16
  
-+	if (instance->smp_affinity_enable)
-+		megasas_set_high_iops_queue_affinity_hint(instance);
- }
+ struct megasas_instance {
  
- /**
+@@ -2362,6 +2364,7 @@ struct megasas_instance {
+ 	atomic_t ldio_outstanding;
+ 	atomic_t fw_reset_no_pci_access;
+ 	atomic64_t total_io_count;
++	atomic64_t high_iops_outstanding;
+ 
+ 	struct megasas_instance_template *instancet;
+ 	struct tasklet_struct isr_tasklet;
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fp.c b/drivers/scsi/megaraid/megaraid_sas_fp.c
+index 43a2e49..f9f7c34 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fp.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fp.c
+@@ -1038,6 +1038,7 @@ MR_BuildRaidContext(struct megasas_instance *instance,
+ 	stripSize = 1 << raid->stripeShift;
+ 	stripe_mask = stripSize-1;
+ 
++	io_info->data_arms = raid->rowDataSize;
+ 
+ 	/*
+ 	 * calculate starting row and stripe, and number of strips and rows
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index 845ca2f..90dced4 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -2811,6 +2811,7 @@ megasas_build_ldio_fusion(struct megasas_instance *instance,
+ 	io_info.r1_alt_dev_handle = MR_DEVHANDLE_INVALID;
+ 	scsi_buff_len = scsi_bufflen(scp);
+ 	io_request->DataLength = cpu_to_le32(scsi_buff_len);
++	io_info.data_arms = 1;
+ 
+ 	if (scp->sc_data_direction == DMA_FROM_DEVICE)
+ 		io_info.isRead = 1;
+@@ -2830,7 +2831,13 @@ megasas_build_ldio_fusion(struct megasas_instance *instance,
+ 			fp_possible = (io_info.fpOkForIo > 0) ? true : false;
+ 	}
+ 
+-	if (instance->msix_load_balance)
++	if (instance->balanced_mode &&
++		atomic_read(&scp->device->device_busy) >
++		(io_info.data_arms * MR_DEVICE_HIGH_IOPS_DEPTH))
++		cmd->request_desc->SCSIIO.MSIxIndex =
++			mega_mod64((atomic64_add_return(1, &instance->high_iops_outstanding) /
++				MR_HIGH_IOPS_BATCH_COUNT), instance->low_latency_index_start);
++	else if (instance->msix_load_balance)
+ 		cmd->request_desc->SCSIIO.MSIxIndex =
+ 			(mega_mod64(atomic64_add_return(1, &instance->total_io_count),
+ 				    instance->msix_vectors));
+@@ -3157,7 +3164,12 @@ megasas_build_syspd_fusion(struct megasas_instance *instance,
+ 
+ 	cmd->request_desc->SCSIIO.DevHandle = io_request->DevHandle;
+ 
+-	if (instance->msix_load_balance)
++	if (instance->balanced_mode &&
++		atomic_read(&scmd->device->device_busy) > MR_DEVICE_HIGH_IOPS_DEPTH)
++		cmd->request_desc->SCSIIO.MSIxIndex =
++			mega_mod64((atomic64_add_return(1, &instance->high_iops_outstanding) /
++				MR_HIGH_IOPS_BATCH_COUNT), instance->low_latency_index_start);
++	else if (instance->msix_load_balance)
+ 		cmd->request_desc->SCSIIO.MSIxIndex =
+ 			(mega_mod64(atomic64_add_return(1, &instance->total_io_count),
+ 				    instance->msix_vectors));
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.h b/drivers/scsi/megaraid/megaraid_sas_fusion.h
+index ca32b2b..6fe3343 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.h
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.h
+@@ -962,6 +962,7 @@ struct IO_REQUEST_INFO {
+ 	u8  pd_after_lb;
+ 	u16 r1_alt_dev_handle; /* raid 1/10 only */
+ 	bool ra_capable;
++	u8 data_arms;
+ };
+ 
+ struct MR_LD_TARGET_SYNC {
 -- 
 2.9.5
 
