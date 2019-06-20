@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60BFA4CC51
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Jun 2019 12:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA364CC52
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Jun 2019 12:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731253AbfFTKwt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 20 Jun 2019 06:52:49 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:35461 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbfFTKws (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Jun 2019 06:52:48 -0400
-Received: by mail-pl1-f193.google.com with SMTP id p1so1253931plo.2
-        for <linux-scsi@vger.kernel.org>; Thu, 20 Jun 2019 03:52:48 -0700 (PDT)
+        id S1731352AbfFTKww (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 20 Jun 2019 06:52:52 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:46193 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726211AbfFTKwv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Jun 2019 06:52:51 -0400
+Received: by mail-pf1-f195.google.com with SMTP id 81so1436238pfy.13
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Jun 2019 03:52:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Ao3L+nsrX/w76VkkQgVXFDTTGZFNBOjj6cS0RAgCCzo=;
-        b=NVU9C85b911tDn/rgZjDyOUQE+o3FQBUVryOctC2Oap/RMdY/41g+lol5kgsaLx8cD
-         oAj60a/io7k6QumP6U9artIUzNY5Dfq5VOe4mr1QeyuvxFAz3ijM+w8jNuYbeaJ/6vSd
-         CJTWM+GwvH7XrF0WIjNOgyyLfOIDXDObtA1ig=
+        bh=1YBgpyZC5t+wsWk7wChS8HOs3vSiojNUjxFitgNjZEY=;
+        b=ZeWGoddCgf5Zu/D8mcM7cd0skwanPa65lMVgnNLSp+8i6R4+mYVIXy9BCNEsDkLgdk
+         c2zABFLrFqD7xN2aPhR2CGokcvFwLaeYYh9y1m8KeIlDVQB3TRkhleeoWoqdZaYJf76e
+         84JplUWe5tfISzrl1DQLBbU25yMS1hy/ZdOC0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Ao3L+nsrX/w76VkkQgVXFDTTGZFNBOjj6cS0RAgCCzo=;
-        b=iN9iJCMqKlUavkTcjgal0yIZiGEe4nAP6DVE/7qS5BB0NSM0osleZbaTLCLdaih7k7
-         10So+5rSF1hkFdxRLAwlh0jE/TAtYZ9v8/2OhB15UXAlVWX+1S7WOM8ghSeB4fmqIHE+
-         8Zk2EjIo7czxFAHva1CSr5FKKdy2ZBNZxXhPFqlKgeNSvee/GJYno2eJTHJm8wCuBaA+
-         6mUTgmWRXHEStzWEdsWXjzZpQXCidXL5l6c39wAW7kaqx0fWs3Uf/gS3xbr1n+KTDmDm
-         doyzArw3QCiHGc43u3QnzYWD+xocghehYPdPJVVz8pA+Bp4IhP0MBRPLWkH0I83eo09h
-         MI1w==
-X-Gm-Message-State: APjAAAVvQ60rQufnB/rlIO0bQlGnhH4mOdF1CcFo/K6m2sDnog9N0fkE
-        7SRX0A82Q7yJhs10VaUKcuszCuJl0oJZr/Q/mri+bQjptfvWUIVzy+I62AVBKOWnlJ3fZeIHoM/
-        gf67QmM9r3dcOYI1W/5cFG7KrqynblA8BrfUaHsqM7+sjqYByA+zbUnyMv1TG9E2bT3uEnlsvZD
-        ARQRQltsX9yQFcSdw=
-X-Google-Smtp-Source: APXvYqwHAz98+SyCVYRyiKlmqvS69B8ghuvp2tYQJ4+OqxbD1ISKqJjE09QPkDMRwaokiTUC2AWZrw==
-X-Received: by 2002:a17:902:ab90:: with SMTP id f16mr121854134plr.262.1561027967917;
-        Thu, 20 Jun 2019 03:52:47 -0700 (PDT)
+        bh=1YBgpyZC5t+wsWk7wChS8HOs3vSiojNUjxFitgNjZEY=;
+        b=SVXJnuxcON0gLn09spxRj/yFH0hVQXM0TjGnbIhwLbusd8FN5We4QY0CHcpLf8F6bD
+         204reBgoV5PKsqVZDs+RMso9NbV4UHLIZk+PtuoNLkfxscilzSmSrRCpNdwwJGt30bnD
+         ZLwWA+TnnGdegxquqJ+OqPjM0miuLXLCIBbzf4oVl0SDOK0vdTiAxM4MHzvFxrmzS/44
+         Rz7/3Lxe9JP2HzDvab2Ot4d2k1Ud4n4e2dk0hBBqAeEymiJikh6aRK2rnwGqQV9gv9kE
+         Up2om//vjkOgqagATHAJS5Hbbi+2D8M3nUBL1o7n90+KRQpMMJaKdp65+GxhQcpwheYp
+         ADPg==
+X-Gm-Message-State: APjAAAVaFdcBqFy+w7Gf/793r472sofbAQVi92rVfI6E5fyiLMn4avfw
+        fAZeugO3m0p23FiOmIsq2G9K4As3rfwYz7SAqhkVhj2yhupP3FEqdqi7Ze9/ZhFiXVvwgoS49ON
+        2hTGP9ix6ua1ZdkaX45RcB3LLfEGnndo1ES8QybHYLav56GLqOME8C69mLDeyUqvpHUHShrn4gf
+        0EKL/0hu9dCNYLO6o=
+X-Google-Smtp-Source: APXvYqyjOD35Y12gwlG04i0/E1+ObcIJ2h4o5dro3MD/r1XojXbH9DcbqX69DwqF97K7Fufz3CVEjA==
+X-Received: by 2002:aa7:9212:: with SMTP id 18mr91367938pfo.120.1561027970993;
+        Thu, 20 Jun 2019 03:52:50 -0700 (PDT)
 Received: from dhcp-10-123-20-30.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id l7sm24793995pfl.9.2019.06.20.03.52.45
+        by smtp.gmail.com with ESMTPSA id l7sm24793995pfl.9.2019.06.20.03.52.48
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 20 Jun 2019 03:52:47 -0700 (PDT)
+        Thu, 20 Jun 2019 03:52:50 -0700 (PDT)
 From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
         kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
         sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
         Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [PATCH v2 03/18] megaraid_sas: Remove few debug counters from IO path
-Date:   Thu, 20 Jun 2019 16:21:53 +0530
-Message-Id: <20190620105208.15011-4-chandrakanth.patil@broadcom.com>
+Subject: [PATCH v2 04/18] megaraid_sas: Call disable_irq from process IRQ poll
+Date:   Thu, 20 Jun 2019 16:21:54 +0530
+Message-Id: <20190620105208.15011-5-chandrakanth.patil@broadcom.com>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190620105208.15011-1-chandrakanth.patil@broadcom.com>
 References: <20190620105208.15011-1-chandrakanth.patil@broadcom.com>
@@ -59,73 +59,72 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
+On PowerPC architecture, calling disable_irq_nosync from IRQ context is
+not providing the required effect.
+
+In current megaraid_sas driver, disable_irq_nosync is being called from
+IRQ context before enabling IRQ poll. But due to the issue seen on PPC,
+after IRQ poll disable and legacy ISR is enabled, we are not seeing our
+ISR getting called.
+
+Fix: Call disable_irq from IRQ poll thread context instead of IRQ context.
+
+Signed-off-by: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
 Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 ---
- drivers/scsi/megaraid/megaraid_sas.h        | 5 -----
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 5 -----
- 2 files changed, 10 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas.h        |  1 +
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 12 +++++++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index 61bcf7a..a972021 100644
+index a972021..d333b8e 100644
 --- a/drivers/scsi/megaraid/megaraid_sas.h
 +++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -2323,11 +2323,6 @@ struct megasas_instance {
- 	atomic_t fw_outstanding;
- 	atomic_t ldio_outstanding;
- 	atomic_t fw_reset_no_pci_access;
--	atomic_t ieee_sgl;
--	atomic_t prp_sgl;
--	atomic_t sge_holes_type1;
--	atomic_t sge_holes_type2;
--	atomic_t sge_holes_type3;
- 	atomic64_t total_io_count;
+@@ -2186,6 +2186,7 @@ struct megasas_irq_context {
+ 	u32 os_irq;
+ 	struct irq_poll irqpoll;
+ 	bool irq_poll_scheduled;
++	bool irq_line_enable;
+ };
  
- 	struct megasas_instance_template *instancet;
+ struct MR_DRV_SYSTEM_INFO {
 diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index 4411408..dac8552 100644
+index dac8552..b8a5bbf 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -2066,7 +2066,6 @@ megasas_is_prp_possible(struct megasas_instance *instance,
- 			    mega_mod64(sg_dma_address(sg_scmd),
- 				       mr_nvme_pg_size)) {
- 				build_prp = false;
--				atomic_inc(&instance->sge_holes_type1);
- 				break;
- 			}
- 		}
-@@ -2076,7 +2075,6 @@ megasas_is_prp_possible(struct megasas_instance *instance,
- 					sg_dma_len(sg_scmd)),
- 					mr_nvme_pg_size))) {
- 				build_prp = false;
--				atomic_inc(&instance->sge_holes_type2);
- 				break;
- 			}
- 		}
-@@ -2085,7 +2083,6 @@ megasas_is_prp_possible(struct megasas_instance *instance,
- 			if (mega_mod64(sg_dma_address(sg_scmd),
- 				       mr_nvme_pg_size)) {
- 				build_prp = false;
--				atomic_inc(&instance->sge_holes_type3);
- 				break;
- 			}
- 		}
-@@ -2218,7 +2215,6 @@ megasas_make_prp_nvme(struct megasas_instance *instance, struct scsi_cmnd *scmd,
- 	main_chain_element->Length =
- 			cpu_to_le32(num_prp_in_chain * sizeof(u64));
+@@ -3601,7 +3601,7 @@ complete_cmd_fusion(struct megasas_instance *instance, u32 MSIxIndex,
+ 			if (irq_context) {
+ 				if (!irq_context->irq_poll_scheduled) {
+ 					irq_context->irq_poll_scheduled = true;
+-					disable_irq_nosync(irq_context->os_irq);
++					irq_context->irq_line_enable = true;
+ 					irq_poll_sched(&irq_context->irqpoll);
+ 				}
+ 				return num_completed;
+@@ -3681,6 +3681,11 @@ int megasas_irqpoll(struct irq_poll *irqpoll, int budget)
+ 	irq_ctx = container_of(irqpoll, struct megasas_irq_context, irqpoll);
+ 	instance = irq_ctx->instance;
  
--	atomic_inc(&instance->prp_sgl);
- 	return build_prp;
- }
++	if (irq_ctx->irq_line_enable) {
++		disable_irq(irq_ctx->os_irq);
++		irq_ctx->irq_line_enable = false;
++	}
++
+ 	num_entries = complete_cmd_fusion(instance, irq_ctx->MSIxIndex, irq_ctx);
+ 	if (num_entries < budget) {
+ 		irq_poll_complete(irqpoll);
+@@ -3726,6 +3731,11 @@ irqreturn_t megasas_isr_fusion(int irq, void *devp)
+ 	if (instance->mask_interrupts)
+ 		return IRQ_NONE;
  
-@@ -2293,7 +2289,6 @@ megasas_make_sgl_fusion(struct megasas_instance *instance,
- 			memset(sgl_ptr, 0, instance->max_chain_frame_sz);
- 		}
- 	}
--	atomic_inc(&instance->ieee_sgl);
- }
- 
- /**
++#if defined(ENABLE_IRQ_POLL)
++	if (irq_context->irq_poll_scheduled)
++		return IRQ_HANDLED;
++#endif
++
+ 	if (!instance->msix_vectors) {
+ 		mfiStatus = instance->instancet->clear_intr(instance);
+ 		if (!mfiStatus)
 -- 
 2.9.5
 
