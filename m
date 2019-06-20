@@ -2,110 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C13EF4DD02
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Jun 2019 23:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291254DD0C
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Jun 2019 23:53:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbfFTVrZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 20 Jun 2019 17:47:25 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:58474 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726015AbfFTVrY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Jun 2019 17:47:24 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5KLhxKU004623;
-        Thu, 20 Jun 2019 21:47:10 GMT
+        id S1726031AbfFTVxd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 20 Jun 2019 17:53:33 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:49268 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfFTVxc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Jun 2019 17:53:32 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5KLmcVH098536;
+        Thu, 20 Jun 2019 21:52:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2018-07-02;
- bh=IE9TD5eL6LGXQo7rYRggqfOlzYr+mtZp6vIZPxJmskQ=;
- b=r4Rng49KNSI5jwEHefRWVXBmfVm0jfIeKEEyjyQVPWzEnonAis1AW0utcWPY7cIoHBF/
- bjcUfaUWrfysip/Gq7fgFdahhk6byhd0Pp69iXmzLF/sY6oF++yZ8O+7pNJvc3fMSdsw
- cKVTGp+PJ8EZFEKT/f66KD7Vp1RAcOC6wuysLCYWtRBTD8LjIZi15WU5jbAYLvR+ricq
- LO6LO1D+ezphhcKML99Bp8IBBGTMyILRmSxbW8Z+J1AG6BroF+1jH1qOo14g9sHSiJGi
- cgXOblKKRjO1FIuWn+X+f/lExzATHCUwA/DaDz3+hARLWv/KJMgKb2OegZ+Xwj757Pe5 Rg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2t7809kcc6-1
+ bh=kDQao6pEV9HdsFlEB4nEftCDUPOrB/eF7wS+pHAhRRw=;
+ b=h3QxGgfYliCuHMG24Vd/aSTO0WiOkw1pba+5vBNAdpNfO8gWbU+9BHoY06+BRfY4/rzs
+ fZphZf30Cgc9C5j2WZjCIcGaZfscUXuJmGUGEtuwyF1ZF/vnDvKoinUjZFe5GO/VRi2Z
+ +8I0tB3m0cETV26m2a2bslk8/O+NQ1rlrKaIMcr6C65ISsArrvvvQAIA2G0Zx0OPfqJ0
+ oTfkNlcbuChQK61JXYnobxMzlMStz1GD3x5b4WMNPBo5QZa74rC1z0r99Wb720fKOnEq
+ POInXBaWgmaJsN5GNC3D2PythRNUBOBNI3a9PrXWq9z/hiUX5GaitggBoYiTXKL456Am rQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2t7809keu2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jun 2019 21:47:10 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5KLjnj3178049;
-        Thu, 20 Jun 2019 21:47:09 GMT
+        Thu, 20 Jun 2019 21:52:53 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5KLpHkr119716;
+        Thu, 20 Jun 2019 21:52:52 GMT
 Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 2t77ynuub3-1
+        by aserp3030.oracle.com with ESMTP id 2t7rdxda0w-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 20 Jun 2019 21:47:09 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5KLl50A011658;
-        Thu, 20 Jun 2019 21:47:06 GMT
+        Thu, 20 Jun 2019 21:52:52 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5KLqoHC014433;
+        Thu, 20 Jun 2019 21:52:50 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 20 Jun 2019 14:47:05 -0700
-To:     Marc Gonzalez <marc.w.gonzalez@free.fr>
-Cc:     Douglas Gilbert <dgilbert@interlog.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Bart Van Assche <bvanassche@acm.org>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Martin Petersen <martin.petersen@oracle.com>,
-        SCSI <linux-scsi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
+        with ESMTP ; Thu, 20 Jun 2019 14:52:49 -0700
+To:     Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mst@redhat.com, jasowang@redhat.com, pbonzini@redhat.com,
+        stefanha@redhat.com, jejb@linux.ibm.com, martin.petersen@oracle.com
+Subject: Re: [PATCH 1/1] scsi: virtio_scsi: remove unused 'affinity_hint_set'
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
-        <621306ee-7ab6-9cd2-e934-94b3d6d731fc@acm.org>
-        <fb2d2e74-6725-4bf2-cf6c-63c0a2a10f4f@interlog.com>
-        <alpine.LNX.2.21.1906181107240.287@nippy.intranet>
-        <017cf3cf-ecd8-19c2-3bbd-7e7c28042c3c@free.fr>
-        <f8339103-5b45-b72d-9f87-fd4dd7b3081e@interlog.com>
-        <f1f98ab0-399a-6c12-073d-ee8ad47d5588@free.fr>
-        <48912bc0-8c79-408d-7ed2-c127b99b8bcc@interlog.com>
-        <e04e14b7-e1ee-c0c1-9e6d-2628d2c873a9@free.fr>
-Date:   Thu, 20 Jun 2019 17:47:01 -0400
-In-Reply-To: <e04e14b7-e1ee-c0c1-9e6d-2628d2c873a9@free.fr> (Marc Gonzalez's
-        message of "Thu, 20 Jun 2019 11:01:39 +0200")
-Message-ID: <yq1muicq696.fsf@oracle.com>
+References: <1560930739-25692-1-git-send-email-dongli.zhang@oracle.com>
+Date:   Thu, 20 Jun 2019 17:52:46 -0400
+In-Reply-To: <1560930739-25692-1-git-send-email-dongli.zhang@oracle.com>
+        (Dongli Zhang's message of "Wed, 19 Jun 2019 15:52:19 +0800")
+Message-ID: <yq1imszrkk1.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9294 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=638
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=966
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906200155
+ engine=8.0.1-1810050000 definitions=main-1906200156
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9294 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=691 adultscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906200155
+ definitions=main-1906200156
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Marc,
+Dongli,
 
-> (I work on smaller systems where we do use /proc occasionally, but we
-> don't enable CHR_DEV_SG or SCSI_PROC_FS.)
+> The 'affinity_hint_set' is not used any longer since
+> commit 0d9f0a52c8b9 ("virtio_scsi: use virtio IRQ affinity").
 
-Many sg apps depend on SCSI_PROC_FS. That doesn't imply that only sg
-apps depend on it.
-
-As an example, with SCSI_PROC_FS enabled we don't need your SanDisk
-Cruzer Blade patch at all since you can tweak the blacklist flags from
-user space.
-
-Also, the "legacy" moniker was wishful thinking. Applied to the Kconfig
-option at a time where sysfs was new and shiny and considered the
-solution to all the kernel's problems. But that wholesale transition of
-all interfaces from /proc simply never took place. What happened was
-that *new* functionality largely went to sysfs.
-
-Note that I don't have a problem adding missing knobs to sysfs where it
-makes sense. But it will obviously take a while for userland apps to
-adopt it.
+Applied to 5.3/scsi-queue. Thanks!
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
