@@ -2,62 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 557084C7D3
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Jun 2019 09:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D374C82D
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Jun 2019 09:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725966AbfFTHEP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 20 Jun 2019 03:04:15 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:35780 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725977AbfFTHEP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Jun 2019 03:04:15 -0400
-Received: by mail-qk1-f194.google.com with SMTP id l128so1248019qke.2
-        for <linux-scsi@vger.kernel.org>; Thu, 20 Jun 2019 00:04:14 -0700 (PDT)
+        id S1726122AbfFTHSC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 20 Jun 2019 03:18:02 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:40412 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725875AbfFTHSC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Jun 2019 03:18:02 -0400
+Received: by mail-qk1-f195.google.com with SMTP id c70so1245191qkg.7
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Jun 2019 00:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qra3uPbmwxdDyA4AaZlBHKJVrJf/WvX+mVnEuv9KXzU=;
-        b=W8Kq8n3Tk/T94dHOWAMcyWhdnrnuJks3EX2wE7Bfqelm6h6U/w8oSPk7CCXKmTjmoU
-         TfeeCKVRvJNzayy9f6Wi+t1jtIkmar2UUzYZX9NejWdA9c0Y6KWK9OBS3ZGo5Qs2aFIW
-         DRhFxFA4WqFOqWagNobpAj/17ziKwPPEJgIUw=
+        bh=qLCAlHwAV59KipcYAs6JDS7NjR2Bz+Umvzb+EPHiAMQ=;
+        b=aFoFZJbubFQdIzb80M3XMF34bA+rS9rc4Pv2y2BcHdwE/A/plJ0UHn352pl5lhFzVv
+         BTmSF6iMoapsAu+0kCG69Db4fvOnwgLhaOpylhry7p1XGP57fo7ioC2E1pZkLypaqRY0
+         VKf0/bThGSKGsqPp8HqnNeoMDW8VXVIBLd5ks=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qra3uPbmwxdDyA4AaZlBHKJVrJf/WvX+mVnEuv9KXzU=;
-        b=peBWziUojXOAMegWISODYBcJACZrFcCDJXDP1j10h8u0SHYsAfm8y8PrrqDKXuqqjm
-         tNlk6a4OAXnZ+lRWTAaNlywNyWjGNwTm+fT9FjFHv3Qoiibpw/6IgtJTZzCFXuRYHtrS
-         fsU+AkyPRRzmNfcUBFfFXAp5JkEk+yB/1CJpcmLemZ7+yG0QmijEpChcjCFtezYkx2C/
-         stmYg/riQxNYR7uYNoAMeNuKR9nI+Y/AY3G6pufCdPlSyWbYRJMj+sHOrZlL5RX6Cbqi
-         5GiMZTXij3JnBD7rb+s1LnE8E42MHMLodShnKI77/WnIO1UHyNFtIJ8CfezlRg9Macwe
-         LMKg==
-X-Gm-Message-State: APjAAAUUTbZMQ8opYpIfImVa6mNiDp6ubPLKedFFmYirn2dFfMAqx6D+
-        ozscsLc0K5QxBWzaodQqksx+nLSl3NR7cIGzdQzQMA==
-X-Google-Smtp-Source: APXvYqyn0Z6SBnEwII20nrJnyGd3pOxDX+LJHUmak7ix9Cp2YOWeFQYLIzeYzQfPuf1S6FLxj/0GSbcuVaf/Pu4uJV4=
-X-Received: by 2002:a37:ea0c:: with SMTP id t12mr35032475qkj.117.1561014254295;
- Thu, 20 Jun 2019 00:04:14 -0700 (PDT)
+        bh=qLCAlHwAV59KipcYAs6JDS7NjR2Bz+Umvzb+EPHiAMQ=;
+        b=q5EYfMWvYzkcnRCBOBYQcRNgKpkTVrVaWo8hIQnpWWjlhm7/kvzVK/j1rpowqC6EhL
+         m2J0iWLJZWbbgB+ovDuZb2S5Caqh0FZ0HausM/pVzrpwU8bgQftbfWS4TjsJ6emI2d5+
+         pLlvZN3XzDaibwrbVxDd1wTsHdS2ZsT1Ct4Y0ZsHvnxdYcGBsim71VWZRweejFf67rfa
+         zui4strO/to0oirEHYXIaXXI2bx1bHn+yNE16lXLp7AJaFsifJssNgJxxpGV+XP2JQX7
+         fvvsdOZoWfxbLRpuhTz98rQnbM8CFYBPBhQMHGMBW3aIyhr4tAvTuM5LLCp0qbDrHM1/
+         b3Bg==
+X-Gm-Message-State: APjAAAV4JACaw0CUxNCc47JPR2+pW/E1JtAsYqM5o13vnfMkFS60V8Ga
+        vNHgS/AcwwCSw3Gy5yrDzUonG1tElZ+hBBHeOCgM6A==
+X-Google-Smtp-Source: APXvYqwqKCqhSBx5oEwr8e9D2iMl1IG4YsDV20OsP9wmsgtLZ+rmq0Ui/hq08Tke7vV1KmjyMt1vMmRVJIqKtIK+0H4=
+X-Received: by 2002:a37:9cc4:: with SMTP id f187mr84596865qke.23.1561015080712;
+ Thu, 20 Jun 2019 00:18:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190617122000.22181-1-hch@lst.de> <20190617122000.22181-8-hch@lst.de>
- <CACVXFVObpdjN6V9qS-C9NG5xcrPqmx-X22qVamOSZf81Vog6zw@mail.gmail.com> <CA+RiK64sFfY79i7q2YbN5HcZ4wzVOcLWgDJnPbf6=ycdcmC-Mg@mail.gmail.com>
-In-Reply-To: <CA+RiK64sFfY79i7q2YbN5HcZ4wzVOcLWgDJnPbf6=ycdcmC-Mg@mail.gmail.com>
+References: <20190614144144.6448-1-thenzl@redhat.com> <20190614144144.6448-2-thenzl@redhat.com>
+In-Reply-To: <20190614144144.6448-2-thenzl@redhat.com>
 From:   Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Date:   Thu, 20 Jun 2019 12:38:52 +0530
-Message-ID: <CA+RiK64_31h+UHA7r3BdPo7AjUTyfEKYfskEquqbCZ84d4pbKw@mail.gmail.com>
-Subject: Re: [PATCH 7/8] mpt3sas: set an unlimited max_segment_size for SAS
- 3.0 HBAs
-To:     Ming Lei <tom.leiming@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        megaraidlinux.pdl@broadcom.com,
-        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>,
-        linux-hyperv@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Thu, 20 Jun 2019 12:52:39 +0530
+Message-ID: <CA+RiK65BdoDOKvaCTQD-Yuk9vGQA98JKyVGZc0==X4QKcgVYBg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] scsi: mpt3sas: make driver options visible in sys
+To:     Tomas Henzl <thenzl@redhat.com>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Sathya Prakash <Sathya.Prakash@broadcom.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -66,45 +57,117 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Acked-by: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 
-On Thu, Jun 20, 2019 at 12:34 PM Suganath Prabu Subramani
-<suganath-prabu.subramani@broadcom.com> wrote:
+On Fri, Jun 14, 2019 at 8:12 PM Tomas Henzl <thenzl@redhat.com> wrote:
 >
-> Please consider this as Acked-by: Suganath Prabu
-> <suganath-prabu.subramani@broadcom.com>
+> Support is easier with all driver parameters visible in sysfs.
+> Also I've replaced a constant with an octal permission.
+>
+> Signed-off-by: Tomas Henzl <thenzl@redhat.com>
+> ---
+>  drivers/scsi/mpt3sas/mpt3sas_base.c  | 14 +++++++-------
+>  drivers/scsi/mpt3sas/mpt3sas_scsih.c | 14 +++++++-------
+>  2 files changed, 14 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+> index e6377ec07..839930764 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+> @@ -74,28 +74,28 @@ static MPT_CALLBACK mpt_callbacks[MPT_MAX_CALLBACKS];
+>  #define MAX_HBA_QUEUE_DEPTH    30000
+>  #define MAX_CHAIN_DEPTH                100000
+>  static int max_queue_depth = -1;
+> -module_param(max_queue_depth, int, 0);
+> +module_param(max_queue_depth, int, 0444);
+>  MODULE_PARM_DESC(max_queue_depth, " max controller queue depth ");
+>
+>  static int max_sgl_entries = -1;
+> -module_param(max_sgl_entries, int, 0);
+> +module_param(max_sgl_entries, int, 0444);
+>  MODULE_PARM_DESC(max_sgl_entries, " max sg entries ");
+>
+>  static int msix_disable = -1;
+> -module_param(msix_disable, int, 0);
+> +module_param(msix_disable, int, 0444);
+>  MODULE_PARM_DESC(msix_disable, " disable msix routed interrupts (default=0)");
+>
+>  static int smp_affinity_enable = 1;
+> -module_param(smp_affinity_enable, int, S_IRUGO);
+> +module_param(smp_affinity_enable, int, 0444);
+>  MODULE_PARM_DESC(smp_affinity_enable, "SMP affinity feature enable/disable Default: enable(1)");
+>
+>  static int max_msix_vectors = -1;
+> -module_param(max_msix_vectors, int, 0);
+> +module_param(max_msix_vectors, int, 0444);
+>  MODULE_PARM_DESC(max_msix_vectors,
+>         " max msix vectors");
+>
+>  static int irqpoll_weight = -1;
+> -module_param(irqpoll_weight, int, 0);
+> +module_param(irqpoll_weight, int, 0444);
+>  MODULE_PARM_DESC(irqpoll_weight,
+>         "irq poll weight (default= one fourth of HBA queue depth)");
+>
+> @@ -104,7 +104,7 @@ MODULE_PARM_DESC(mpt3sas_fwfault_debug,
+>         " enable detection of firmware fault and halt firmware - (default=0)");
+>
+>  static int perf_mode = -1;
+> -module_param(perf_mode, int, 0);
+> +module_param(perf_mode, int, 0444);
+>  MODULE_PARM_DESC(perf_mode,
+>         "Performance mode (only for Aero/Sea Generation), options:\n\t\t"
+>         "0 - balanced: high iops mode is enabled &\n\t\t"
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+> index 1f6aa8b19..27c731a3f 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+> @@ -113,22 +113,22 @@ MODULE_PARM_DESC(logging_level,
 >
 >
-> On Tue, Jun 18, 2019 at 6:16 AM Ming Lei <tom.leiming@gmail.com> wrote:
-> >
-> > On Mon, Jun 17, 2019 at 8:21 PM Christoph Hellwig <hch@lst.de> wrote:
-> > >
-> > > When using a virt_boundary_mask, as done for NVMe devices attached to
-> > > mpt3sas controllers we require an unlimited max_segment_size, as the
-> > > virt boundary merging code assumes that.  But we also need to propagate
-> > > that to the DMA mapping layer to make dma-debug happy.  The SCSI layer
-> > > takes care of that when using the per-host virt_boundary setting, but
-> > > given that mpt3sas only wants to set the virt_boundary for actual
-> > > NVMe devices we can't rely on that.  The DMA layer maximum segment
-> > > is global to the HBA however, so we have to set it explicitly.  This
-> > > patch assumes that mpt3sas does not have a segment size limitation,
-> > > which seems true based on the SGL format, but will need to be verified.
-> > >
-> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > > ---
-> > >  drivers/scsi/mpt3sas/mpt3sas_scsih.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> > > index 1ccfbc7eebe0..c719b807f6d8 100644
-> > > --- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> > > +++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> > > @@ -10222,6 +10222,7 @@ static struct scsi_host_template mpt3sas_driver_template = {
-> > >         .this_id                        = -1,
-> > >         .sg_tablesize                   = MPT3SAS_SG_DEPTH,
-> > >         .max_sectors                    = 32767,
-> > > +       .max_segment_size               = 0xffffffff,
-> >
-> > .max_segment_size should be aligned, either setting it here correctly or
-> > forcing to make it aligned in scsi-core.
-> >
-> > Thanks,
-> > Ming Lei
+>  static ushort max_sectors = 0xFFFF;
+> -module_param(max_sectors, ushort, 0);
+> +module_param(max_sectors, ushort, 0444);
+>  MODULE_PARM_DESC(max_sectors, "max sectors, range 64 to 32767  default=32767");
+>
+>
+>  static int missing_delay[2] = {-1, -1};
+> -module_param_array(missing_delay, int, NULL, 0);
+> +module_param_array(missing_delay, int, NULL, 0444);
+>  MODULE_PARM_DESC(missing_delay, " device missing delay , io missing delay");
+>
+>  /* scsi-mid layer global parmeter is max_report_luns, which is 511 */
+>  #define MPT3SAS_MAX_LUN (16895)
+>  static u64 max_lun = MPT3SAS_MAX_LUN;
+> -module_param(max_lun, ullong, 0);
+> +module_param(max_lun, ullong, 0444);
+>  MODULE_PARM_DESC(max_lun, " max lun, default=16895 ");
+>
+>  static ushort hbas_to_enumerate;
+> -module_param(hbas_to_enumerate, ushort, 0);
+> +module_param(hbas_to_enumerate, ushort, 0444);
+>  MODULE_PARM_DESC(hbas_to_enumerate,
+>                 " 0 - enumerates both SAS 2.0 & SAS 3.0 generation HBAs\n \
+>                   1 - enumerates only SAS 2.0 generation HBAs\n \
+> @@ -142,17 +142,17 @@ MODULE_PARM_DESC(hbas_to_enumerate,
+>   * Either bit can be set, or both
+>   */
+>  static int diag_buffer_enable = -1;
+> -module_param(diag_buffer_enable, int, 0);
+> +module_param(diag_buffer_enable, int, 0444);
+>  MODULE_PARM_DESC(diag_buffer_enable,
+>         " post diag buffers (TRACE=1/SNAPSHOT=2/EXTENDED=4/default=0)");
+>  static int disable_discovery = -1;
+> -module_param(disable_discovery, int, 0);
+> +module_param(disable_discovery, int, 0444);
+>  MODULE_PARM_DESC(disable_discovery, " disable discovery ");
+>
+>
+>  /* permit overriding the host protection capabilities mask (EEDP/T10 PI) */
+>  static int prot_mask = -1;
+> -module_param(prot_mask, int, 0);
+> +module_param(prot_mask, int, 0444);
+>  MODULE_PARM_DESC(prot_mask, " host protection capabilities mask, def=7 ");
+>
+>
+> --
+> 2.20.1
+>
