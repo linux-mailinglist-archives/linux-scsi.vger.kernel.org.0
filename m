@@ -2,149 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FF474E08D
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Jun 2019 08:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C334E18E
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Jun 2019 10:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726135AbfFUGhR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Jun 2019 02:37:17 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:39283 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726045AbfFUGhQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Jun 2019 02:37:16 -0400
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190621063713epoutp0401c4cc377adb9cc4dc8cedee94ce0b23~qI0zRuNvt1401714017epoutp04c
-        for <linux-scsi@vger.kernel.org>; Fri, 21 Jun 2019 06:37:13 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190621063713epoutp0401c4cc377adb9cc4dc8cedee94ce0b23~qI0zRuNvt1401714017epoutp04c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561099033;
-        bh=FUXfEF/JZH7Df1KRLWEPZkDMvrBOyREUHuamqsN/wwk=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=VayEJiU8NciideFFKQowZke/tdKrSvIws31Vi0UvfXuC9ovTpRmKOZ1nwyjI76Hgh
-         2NXp06qC+YSxFCwc+ZkjJ2/3eIq5DxbshuOTv/XSzKsTEiEXodvL3SrPPKdibsXsKf
-         ywudkW10xfZ9S1UhpSIaAL+pzlCrU2c3GpwdKG4Q=
-Received: from epsmges2p3.samsung.com (unknown [182.195.40.187]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20190621063710epcas2p107eaab8554a6da203408dd69ba651303~qI0wV7sQ62189321893epcas2p1v;
-        Fri, 21 Jun 2019 06:37:10 +0000 (GMT)
-X-AuditID: b6c32a47-133ff7000000106e-70-5d0c7b15da6d
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        B9.0F.04206.51B7C0D5; Fri, 21 Jun 2019 15:37:09 +0900 (KST)
-Mime-Version: 1.0
-Subject: [RESEND RFC PATCH] mpt3sas: support target smid for [abort|query]
- task
-Reply-To: minwoo.im@samsung.com
-From:   Minwoo Im <minwoo.im@samsung.com>
-To:     "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
-        "suganath-prabu.subramani@broadcom.com" 
-        <suganath-prabu.subramani@broadcom.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     Minwoo Im <minwoo.im@samsung.com>,
-        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S1726074AbfFUIDr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Jun 2019 04:03:47 -0400
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:11671 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726027AbfFUIDr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Jun 2019 04:03:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1561104226; x=1592640226;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=TeZ26a+PxC3lQu+M7ez6ooy2C9mhPwXq4Ab//I5IsYI=;
+  b=b1Jmd1aMRRhtWeSx8Vo0KY8jA8VEvINrZGwOmpg5yrJeleHxMmK/OT69
+   m3YPFcCi2xefGRjwFJRU44o7fftjQHnNH4ym/luUa1YWzVBLqa+B+iBZN
+   wkPWpXmD+s3DpFa4hTXk9zT1iDaw3enEPE+zBCQPk1ZC/nKErqpXYWJea
+   VFsxlGRjsk2jnVvAHCL2Uj5d2pQeCmjOAo/7D7jV8We9WQsijsbbYWniB
+   irQL92GgvB64N4PGE9ppo18AJZpIE2Hu/FxuadU+mLS1XP5n3GHuduTG7
+   ChHD0GxT5P+ge0AAh2oIY6aYQJedhlwP2jZJMhbwJbcQBsVzNs3suXVWI
+   A==;
+X-IronPort-AV: E=Sophos;i="5.63,399,1557158400"; 
+   d="scan'208";a="217505749"
+Received: from mail-co1nam03lp2050.outbound.protection.outlook.com (HELO NAM03-CO1-obe.outbound.protection.outlook.com) ([104.47.40.50])
+  by ob1.hgst.iphmx.com with ESMTP; 21 Jun 2019 16:03:45 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TeZ26a+PxC3lQu+M7ez6ooy2C9mhPwXq4Ab//I5IsYI=;
+ b=dCFbIQpfe1Yw4LiNDzk+SoTxDNIZ9tP0xzvlepR3qGCckrBaZveSTaKg55vzRwPoC6byRjFC2yFDzkvPO+3PS3q9ZxTc+IbQnXqVb3I8f3bSJTUACVpmBDC7g5OZR97wF3h+9uFfpUGnLWngWGk5gNIAqeY4Cfmql92H8jAXktM=
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.58.207) by
+ BYAPR04MB4837.namprd04.prod.outlook.com (52.135.240.96) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1987.15; Fri, 21 Jun 2019 08:03:44 +0000
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::e94e:8ead:40b1:fae6]) by BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::e94e:8ead:40b1:fae6%7]) with mapi id 15.20.1987.014; Fri, 21 Jun 2019
+ 08:03:44 +0000
+From:   Damien Le Moal <Damien.LeMoal@wdc.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Euihyeok Kwon <eh81.kwon@samsung.com>,
-        Sarah Cho <sohyeon.jo@samsung.com>,
-        Sanggwan Lee <sanggwan.lee@samsung.com>,
-        Gyeongmin Nam <gm.nam@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20190621063708epcms2p309f4173afabe5de28942ba15d13987f7@epcms2p3>
-Date:   Fri, 21 Jun 2019 15:37:08 +0900
-X-CMS-MailID: 20190621063708epcms2p309f4173afabe5de28942ba15d13987f7
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIJsWRmVeSWpSXmKPExsWy7bCmua5oNU+swb1+douPK3axWzx852yx
-        6MY2Jou9t7QtLu+aw2bRfX0Hm8Xy4/+YLJ6dPsBsMfd1A5PFoq3vWS02zLvFYrH+0AQ2i2dn
-        Yhx4PWbdP8vmMWHRAUaPj09vsXj0bVnF6PF5k1wAa1SOTUZqYkpqkUJqXnJ+SmZeuq2Sd3C8
-        c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QhUoKZYk5pUChgMTiYiV9O5ui/NKSVIWM/OIS
-        W6XUgpScAkPDAr3ixNzi0rx0veT8XCtDAwMjU6DKhJyMJ6smMxfsFqo4euE3SwNjA38XIyeH
-        hICJxNZb65i7GLk4hAR2MEpcmdME5HBw8AoISvzdIQxSIywQKHGiaSYbSFhIQF7ixysDiLCm
-        xLvdZ1hBbDYBdYmGqa9YQMaICPxjlPi79C0TiMMscJxZYuHHRawQy3glZrQ/ZYGwpSW2L9/K
-        CGGLStxc/ZYdxn5/bD5UXESi9d5ZZghbUOLBz92MIEdICEhI3HtnB2HWS2xZYQGySkKghVHi
-        xpu1UK36Eo3PP4Kt4hXwlfg/aR9YnEVAVeLJvD1QY1wkDnwqBQkzA721/e0csM+Zgf5av0sf
-        okJZ4sgtFogKPomOw3/ZYf7YMe8JE4StLPHx0CGoGyUlll96zQZhe0hs/zoXrEYIGICzu8+x
-        TWCUn4UI2llI9s5C2LuAkXkVo1hqQXFuemqxUYExcmxuYgQnTy33HYzbzvkcYhTgYFTi4T0w
-        iztWiDWxrLgy9xCjBAezkggvTw5PrBBvSmJlVWpRfnxRaU5q8SFGU6DvJzJLiSbnAxN7Xkm8
-        oamRmZmBpamFqZmRhZI47ybumzFCAumJJanZqakFqUUwfUwcnFINjNlJ2855u8T5OmxkT73H
-        xBVW1rREnkOhmdEl6ZxuRITq0t5okdLJ6sslNuidW7eLwyth99+1kcV/nHJEjJn8FwQvyFJ5
-        m1QVMSu5wkwpaJ73z0lPJq/6tiXiStjPuzeYoucGulk/v2d+PPzzl+aOU1ft/JO6lhZPmqWV
-        tMaz44npvAo78Y6DSizFGYmGWsxFxYkA+kuLG7QDAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190621063708epcms2p309f4173afabe5de28942ba15d13987f7
-References: <CGME20190621063708epcms2p309f4173afabe5de28942ba15d13987f7@epcms2p3>
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] sd_zbc: Fix report zones buffer allocation
+Thread-Topic: [PATCH] sd_zbc: Fix report zones buffer allocation
+Thread-Index: AQHVJxsEGH+YXZvugk2bYyKptWPqEg==
+Date:   Fri, 21 Jun 2019 08:03:43 +0000
+Message-ID: <BYAPR04MB58169740768B79E99F3BB7DCE7E70@BYAPR04MB5816.namprd04.prod.outlook.com>
+References: <20190620034812.3254-1-damien.lemoal@wdc.com>
+ <b6f250ad-0473-4643-8611-e395295e0379@acm.org>
+ <BYAPR04MB5816D6F4B36032ADEF6A8482E7E70@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <18ab1c5d-338b-7464-46f2-911492aa548c@acm.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Damien.LeMoal@wdc.com; 
+x-originating-ip: [129.253.182.57]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: bcf5ab8f-6360-4f4b-9b06-08d6f61efb25
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:BYAPR04MB4837;
+x-ms-traffictypediagnostic: BYAPR04MB4837:
+wdcipoutbound: EOP-TRUE
+x-microsoft-antispam-prvs: <BYAPR04MB483727B0A34FD2E48BC1B6E9E7E70@BYAPR04MB4837.namprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0075CB064E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(136003)(376002)(39860400002)(366004)(396003)(199004)(189003)(68736007)(25786009)(2906002)(86362001)(4326008)(64756008)(72206003)(52536014)(14444005)(71190400001)(14454004)(66066001)(6246003)(478600001)(71200400001)(6436002)(55016002)(53936002)(66946007)(66446008)(66556008)(256004)(66476007)(73956011)(76116006)(9686003)(305945005)(486006)(476003)(33656002)(2501003)(74316002)(229853002)(446003)(3846002)(8676002)(5660300002)(316002)(81166006)(76176011)(110136005)(102836004)(7696005)(53546011)(186003)(6506007)(26005)(99286004)(81156014)(8936002)(7736002)(6116002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4837;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 5ejHMyJmINsXEe7U+AJY8DlS9GM8sKcXc25WC4mOsodb09qz+Z8dWzwW37CjpBbo2nJV06AtOBV3Oze3p/RvRZ82WfbYDS1mXPbh6lX/3jOM6lYXP8N3w6W7o0B4RDHRpYAbotWh2YbitcP5Z6mFr48YicTjhZmzKNRBgN8MYhegEvle6uENbQflKSBhVO10XamUwil3gJLRpN+mgez1bUx9SWm2zC9TEMlXJCOCk/8jkc88oENJeccxgeYEFpu87KNYH+P4f6V+udKLGPR8cVX3bvf5i4CQh65cDEZS5QWr95RCAfF8rQAr53innmS4ste0N1bwei9XhAxen1vSf7Pwfla+ivY9wEvZ+bZ9UTNvVxUW95Fn2tUWbQaO0Ntsci1OHcrKtEF0k3cxBTRf5c0q3htPt3NyxnW2HxaftDg=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bcf5ab8f-6360-4f4b-9b06-08d6f61efb25
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2019 08:03:43.9083
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Damien.LeMoal@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4837
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
-to /dev/mpt3ctl.  If the given task_type is either abort task or query
-task, it may need a field named "Initiator Port Transfer Tag to Manage"
-in the IU.
-
-Current code does not support to check target IPTT tag from the
-tm_request.  This patch introduces to check TaskMID given from the
-userspace as a target tag.  We have a rule of relationship between
-(struct request *req->tag) and smid in mpt3sas_base.c:
-
-3318 u16
-3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
-3320         struct scsi_cmnd *scmd)
-3321 {
-3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
-3323         unsigned int tag = scmd->request->tag;
-3324         u16 smid;
-3325
-3326         smid = tag + 1;
-
-So if we want to abort a request tagged #X, then we can pass (X + 1) to
-this IOCTL handler.
-
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Cc: James E.J. Bottomley <jejb@linux.ibm.com>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: MPT-FusionLinux.pdl@broadcom.com
-Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
----
- drivers/scsi/mpt3sas/mpt3sas_ctl.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-index b2bb47c14d35..5c7539dae713 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-@@ -596,15 +596,17 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command *karg,
- 		if (priv_data->sas_target->handle != handle)
- 			continue;
- 		st = scsi_cmd_priv(scmd);
--		tm_request->TaskMID = cpu_to_le16(st->smid);
--		found = 1;
-+		if (tm_request->TaskMID == st->smid) {
-+			tm_request->TaskMID = cpu_to_le16(st->smid);
-+			found = 1;
-+		}
- 	}
- 
- 	if (!found) {
- 		dctlprintk(ioc,
--			   ioc_info(ioc, "%s: handle(0x%04x), lun(%d), no active mid!!\n",
-+			   ioc_info(ioc, "%s: handle(0x%04x), lun(%d), no matched mid(%d)!!\n",
- 				    desc, le16_to_cpu(tm_request->DevHandle),
--				    lun));
-+				    lun, tm_request->TaskMID));
- 		tm_reply = ioc->ctl_cmds.reply;
- 		tm_reply->DevHandle = tm_request->DevHandle;
- 		tm_reply->Function = MPI2_FUNCTION_SCSI_TASK_MGMT;
--- 
-2.16.1
+Bart,=0A=
+=0A=
+On 2019/06/21 12:46, Bart Van Assche wrote:=0A=
+> On 6/20/19 5:58 PM, Damien Le Moal wrote:=0A=
+>> The REPORT_ZONES command is executed using scsi_execute_req(). Can we pa=
+ss a=0A=
+>> vmalloc-ed buffer to that function ? It does look like it since scsi_exe=
+cute_rq=0A=
+>> calls bio_rq_map_kern() which then calls bio_map_kern() which goes throu=
+gh the=0A=
+>> list of pages of the buffer. Just would like to confirm I understand thi=
+s correctly.=0A=
+>>=0A=
+>> My concern with using vmalloc is that the worst case scenario will resul=
+t in all=0A=
+>> pages of the buffer being non contiguous. In this case, since the report=
+ zones=0A=
+>> command cannot be split, we would need to limit the allocation to max_se=
+gments *=0A=
+>> page size, and that can be pretty small for some HBAs.=0A=
+>>=0A=
+>> Another reason I did not pursue the vmalloc route is that the processing=
+ of the=0A=
+>> report zones reply to transform zone information into struct blkzone is =
+really=0A=
+>> painful to do with a vmalloced buffer as every page of the buffer needs =
+to be=0A=
+>> kmap()/kunmap(). The code was like that when REPORT ZONES was processed =
+as a=0A=
+>> BIO/request, but it was a lot of code for not much to be done. Or is the=
+re a=0A=
+>> more elegant solution for in-kernel mapping of a vmalloc buffer ?=0A=
+> =0A=
+> Hi Damien,=0A=
+> =0A=
+> I don't think that bio_rq_map_kern() works with vmalloc-ed buffers. How =
+=0A=
+> about using is_vmalloc_addr() inside scsi_execute_req() to determine =0A=
+> whether or not the buffer passed to that function has been allocated =0A=
+> with vmalloc()? There may be other scsi_execute_req() callers that can =
+=0A=
+> benefit from passing a vmalloc-ed buffer to that function.=0A=
+=0A=
+Sure, we could do that. But since most (if not all) users of scsi_execute_r=
+eq()=0A=
+need only a very small buffer, I am not sure if this would be very useful.=
+=0A=
+=0A=
+> Regarding the maximum segment size: is mpt3sas still the most popular =0A=
+> HBA? Is the maximum segment size 128 for that driver? Is 128 * 4 KB =3D =
+=0A=
+> 512 KB big enough for the report zones buffer?=0A=
+=0A=
+Sure, it works, but compared to the target 1MB allocation that my patch has=
+,=0A=
+that doubles the number of requests needed for reporting the zones of an en=
+tire=0A=
+drive. Since this is however not used a lot, I guess it is okay. But still,=
+ I do=0A=
+not like very much slowing down revalidate() nor regular blkdev_report_zone=
+s()=0A=
+calls...=0A=
+=0A=
+> Regarding the loop that calls sd_zbc_parse_report(): are you sure that =
+=0A=
+> that kmap()/kunmap() calls would be necessary in that loop?=0A=
+=0A=
+No I am not sure. I will check again.=0A=
+=0A=
+Best regards.=0A=
+=0A=
+-- =0A=
+Damien Le Moal=0A=
+Western Digital Research=0A=
