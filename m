@@ -2,167 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 292434F690
-	for <lists+linux-scsi@lfdr.de>; Sat, 22 Jun 2019 17:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA864F6FA
+	for <lists+linux-scsi@lfdr.de>; Sat, 22 Jun 2019 18:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfFVPbw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 22 Jun 2019 11:31:52 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:51274 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726138AbfFVPbw (ORCPT
+        id S1726451AbfFVQ3K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 22 Jun 2019 12:29:10 -0400
+Received: from sonic316-11.consmr.mail.bf2.yahoo.com ([74.6.130.121]:45659
+        "EHLO sonic316-11.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726447AbfFVQ3J (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 22 Jun 2019 11:31:52 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3FBA88EE105;
-        Sat, 22 Jun 2019 08:31:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1561217511;
-        bh=T65+vk73Z2CaX9Tc5+vGvjBb20vMTuCAgO9aJXpwF4Q=;
-        h=Subject:From:To:Cc:Date:From;
-        b=p72xwm+xQ+vBm3M1v+K5P/Nu1txCJNxGl2N36mk3KCkE5j6UypR4Thb0EU9mipNfx
-         sNsevNE9ZWTwl0Jy45+occEVyy9FNAM8ypxLvTwbw5DiLzjnFP59FWUj0aT8HAknwf
-         h/9mCEd7/NbMDR9wETMqlo+/NgLY3V0qFxcoA9uA=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id emMTLkq_VslB; Sat, 22 Jun 2019 08:31:51 -0700 (PDT)
-Received: from jarvis.lan (unknown [50.35.68.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id BD77D8EE0D7;
-        Sat, 22 Jun 2019 08:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1561217510;
-        bh=T65+vk73Z2CaX9Tc5+vGvjBb20vMTuCAgO9aJXpwF4Q=;
-        h=Subject:From:To:Cc:Date:From;
-        b=ALNjQzy7sKBavhitCPabl8p/5nFr775EgND8esZd5m1Ee80LVQA3aISlAw1A0UwAj
-         +CPcbtIjuUmU3KNQQA6ysDhpCBZIgbpWjGWr1TO9nTnErLbXzXURgr434WI42zbcCT
-         vpX5ZUTzr/PELiBRv20myxjZrIzH4D17e7O8UjAg=
-Message-ID: <1561217509.3260.5.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.2-rc5
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sat, 22 Jun 2019 08:31:49 -0700
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        Sat, 22 Jun 2019 12:29:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220948; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=Sqmma7rQCC9csXbuiUU3W2/3JNoNH7S8264Vtax3p6vjP/GOy3xpD3wbU2PRR9kt9Hpkf+FIWW9PMCnOCaw1O79buHof/+e4XCSgtAjG8InDhCml6NU6QqPjKJ3zDc6ntgnpVqWtJnbhtjoUqIbv1W6GU8NTi8qVdCcmhrTc1IZ6aiOxpvBar7FQmN3jAwZcqruMWVYBgbk1LAoNqGvQ8jjOiTjNhCDJjpcLi94EE60gk+qIfYgu1AQDdd9wVo7X6i3XlVR9KCYw0l7ikZmlDSVkcSrrmJBlognD3+QlW4wko0RiyOGAXy+sEMAa8UXhFfxEEhf+A0WfqKBKwkVQbg==
+X-YMail-OSG: 3TA6aNEVM1mHk4tfSNROwYxIcekGBuzt5YSl8uAf.0_HHQ2LGDBhX2FGT2.Do_z
+ _0DV280q.YGRxDLoRDSJM82e2d5hsgoPZVcKxWsle6Z3oHX8Omo6hY9bu5QjJLY68zQNKFXygJQb
+ l1z62dHRy69xOFvl6tq.81EbMsOh1_cirrcCk2fMX_Jmwx0sebG__1rhE6wzzo_NDP9VbvIqZ9bR
+ 2icQk1E4jS_eT.9i5S8Sf0xsdShl9dMibpAXRU93yOYuHTQIa_P77tZTcStgCsIVxKiDvC3a0NxY
+ 8gZtRhwFdS641nFzLb368UTov.mB4xMHIDhTJv9NazaTg1j8sw18ET29s.TqlBmXHg8vLU94qBpd
+ 5PlUttniCcoNFEJpnLF3UUydECDiL8Z11cc18YJXwsIeDfFkYqHGX5XdA4jNj054mfKUIhoNEakn
+ WUKps59xvPMOhDCVBujS9v_vJClG4fXrBtjl.W_LQqwsSCutxIcdvaqHEtURhc6MkAEPdp4bTGI.
+ srA9smb.rYGHYAQmfGBYSrMpzCORaFwD3sLBOdwCdBjEVVdu.sBEOGddWsx2T8AZRYYy5nvR9Foz
+ bPsz41tE4__SqGjxrktEJ2_s2wIQAUza2deZFDGXc6T62eXwgZpA4Pp2nGTmGbFQ6h4nAMd51HJh
+ T3GzQn8s4GOn.0BKRwZDpwf7w10rv6JPk5nAgLZOaX7LfFs2yeq7fnFrg4OCOiG9MCMxrUNq6gf7
+ VomHdE0MTMCDmL3Ebk4K0YUhXaCTht27MRDaoJusaRVRGavzgn0vj3Z4n7xxu27l7AAqrNZTRmUI
+ n_b8fWLMzkIFoI7ZcmL_O5d2bYctv7x0WqIS4U6onMjRr4HtPSPFTejqwRtmzChG01EgeDt1Xu9J
+ 3fp8ciCxthupmhAtFqCrukMze7VttucN.DpeM8bKmVw1EDgn.s_L.L9fVdDwg2umGkLNazDxoP0_
+ dzbgtjASRdO1.JaxkowN5gRT6rna4oVoAmbHsjQ4rLTjBWSWz8ZqQDlV43apY.buigbJvn4Qmvf1
+ GxhsPAlHlnnGfjZ9pr3BSAVXKd_Qs83vYaBOYxWdXDlwxBl9.1.bnCTqFBLXCTND1BZASE2pli5W
+ fu842ttK3BMCdw5COU_fvmE4HTFnTUQ5tN2a6KHryWZiInkZpWdo8I9xFucw8IlPI3qY2rDSegZk
+ LLEiGCawsrUj04Yg3uv6LVIzJaVvTytAzboyOeQVTgoj.0EfkvEtgpXm3
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:29:08 +0000
+Date:   Sat, 22 Jun 2019 16:29:03 +0000 (UTC)
+From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
+Reply-To: miss.fmayusuf11@gmail.com
+Message-ID: <1743094696.311303.1561220943310@mail.yahoo.com>
+Subject: From:Miss: Fatima Yusuf.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Three driver fixes (and one version number update): a suspend hang in
-ufs, a qla hard lock on module removal and a qedi panic during
-discovery.
-
-The patch is available here:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-
-The short changelog is:
-
-Arun Easi (1):
-      scsi: qla2xxx: Fix hardlockup in abort command during driver remove
-
-Nilesh Javali (2):
-      scsi: qedi: update driver version to 8.37.0.20
-      scsi: qedi: Check targetname while finding boot target information
-
-Stanley Chu (1):
-      scsi: ufs: Avoid runtime suspend possibly being blocked forever
 
 
-And the diffstat:
+From:Miss: Fatima Yusuf.
 
- drivers/scsi/qedi/qedi_main.c    |  3 +++
- drivers/scsi/qedi/qedi_version.h |  6 +++---
- drivers/scsi/qla2xxx/qla_os.c    |  2 +-
- drivers/scsi/ufs/ufshcd-pltfrm.c | 11 ++++-------
- 4 files changed, 11 insertions(+), 11 deletions(-)
+For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
 
-With full diff below
+I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
 
-James
+Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
 
----
+I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
 
-diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
-index e5db9a9954dc..a6ff7be0210a 100644
---- a/drivers/scsi/qedi/qedi_main.c
-+++ b/drivers/scsi/qedi/qedi_main.c
-@@ -990,6 +990,9 @@ static int qedi_find_boot_info(struct qedi_ctx *qedi,
- 		if (!iscsi_is_session_online(cls_sess))
- 			continue;
- 
-+		if (!sess->targetname)
-+			continue;
-+
- 		if (pri_ctrl_flags) {
- 			if (!strcmp(pri_tgt->iscsi_name, sess->targetname) &&
- 			    !strcmp(pri_tgt->ip_addr, ep_ip_addr)) {
-diff --git a/drivers/scsi/qedi/qedi_version.h b/drivers/scsi/qedi/qedi_version.h
-index 41bcbbafebd4..2c17544c7785 100644
---- a/drivers/scsi/qedi/qedi_version.h
-+++ b/drivers/scsi/qedi/qedi_version.h
-@@ -7,8 +7,8 @@
-  * this source tree.
-  */
- 
--#define QEDI_MODULE_VERSION	"8.33.0.21"
-+#define QEDI_MODULE_VERSION	"8.37.0.20"
- #define QEDI_DRIVER_MAJOR_VER		8
--#define QEDI_DRIVER_MINOR_VER		33
-+#define QEDI_DRIVER_MINOR_VER		37
- #define QEDI_DRIVER_REV_VER		0
--#define QEDI_DRIVER_ENG_VER		21
-+#define QEDI_DRIVER_ENG_VER		20
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 172ef21827dd..d056f5e7cf93 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -1731,8 +1731,8 @@ static void qla2x00_abort_srb(struct qla_qpair *qp, srb_t *sp, const int res,
- 	     !test_bit(ABORT_ISP_ACTIVE, &vha->dpc_flags) &&
- 	     !qla2x00_isp_reg_stat(ha))) {
- 		sp->comp = &comp;
--		rval = ha->isp_ops->abort_command(sp);
- 		spin_unlock_irqrestore(qp->qp_lock_ptr, *flags);
-+		rval = ha->isp_ops->abort_command(sp);
- 
- 		switch (rval) {
- 		case QLA_SUCCESS:
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index 8a74ec30c3d2..d7d521b394c3 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -430,24 +430,21 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 		goto dealloc_host;
- 	}
- 
--	pm_runtime_set_active(&pdev->dev);
--	pm_runtime_enable(&pdev->dev);
--
- 	ufshcd_init_lanes_per_dir(hba);
- 
- 	err = ufshcd_init(hba, mmio_base, irq);
- 	if (err) {
- 		dev_err(dev, "Initialization failed\n");
--		goto out_disable_rpm;
-+		goto dealloc_host;
- 	}
- 
- 	platform_set_drvdata(pdev, hba);
- 
-+	pm_runtime_set_active(&pdev->dev);
-+	pm_runtime_enable(&pdev->dev);
-+
- 	return 0;
- 
--out_disable_rpm:
--	pm_runtime_disable(&pdev->dev);
--	pm_runtime_set_suspended(&pdev->dev);
- dealloc_host:
- 	ufshcd_dealloc_host(hba);
- out:
+I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
+
+My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
+
+I am waiting to hear from you.
+Yours Sincerely,
+Miss.Fatima Yusuf.
