@@ -2,85 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC4350497
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 10:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93714504C0
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 10:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbfFXIa0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 04:30:26 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:26786 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726612AbfFXIaZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 24 Jun 2019 04:30:25 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5O8UJtH025749
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=PzzMHQDckej4ZZU5dwQ27oJhHYNqec72OO2R6ztJi3c=;
- b=GWkI3IgjxZU9eKuqO+G3c57U1ftYQrQZfYzNVJKwkEtNrsfUUKvleYntIun12JOYUbPN
- yMRcgbk8EilhkmitGC2PHMYjzuZMiicJ6rWQPEpCc8LRsr8WnPAY8oJBs1hBLc23s+g9
- LJqebRy8+asPsMrEuSKN4rHfyiV2+kQoLMZ7HD7OPN6WI3OL5rPkxvAuokto3B5YEdZ8
- yhOlz0pvpn7XQNFZEMcd+kqVrFC1gzTU11rniGVFjst90LdJo9tJj8ill8FFoUUWOZtt
- ZshdwJYWmk2I4lbQQeQHHhwC5ALBiGL+d49+h4Xz5/gaoZn40GjU+cCq03qy9J79KlM2 8Q== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2t9kujdw8c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:22 -0700
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 24 Jun
- 2019 01:30:20 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Mon, 24 Jun 2019 01:30:20 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 507F33F7041;
-        Mon, 24 Jun 2019 01:30:20 -0700 (PDT)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x5O8UK9Z023243;
-        Mon, 24 Jun 2019 01:30:20 -0700
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x5O8UKgC023242;
-        Mon, 24 Jun 2019 01:30:20 -0700
-From:   Saurav Kashyap <skashyap@marvell.com>
-To:     <martin.petersen@oracle.com>
-CC:     <gbasrur@marvell.com>, <svernekar@marvell.com>,
-        <linux-scsi@vger.kernel.org>
-Subject: [PATCH 6/6] bnx2fc: Update the driver version to 2.12.10.
-Date:   Mon, 24 Jun 2019 01:30:00 -0700
-Message-ID: <20190624083000.23074-7-skashyap@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20190624083000.23074-1-skashyap@marvell.com>
-References: <20190624083000.23074-1-skashyap@marvell.com>
+        id S1727344AbfFXIoY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 04:44:24 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:37758 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726690AbfFXIoX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 24 Jun 2019 04:44:23 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 485AF31628FA;
+        Mon, 24 Jun 2019 08:44:12 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B0AC1001B01;
+        Mon, 24 Jun 2019 08:43:57 +0000 (UTC)
+Date:   Mon, 24 Jun 2019 16:43:52 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Hannes Reinecke <hare@suse.com>,
+        John Garry <john.garry@huawei.com>,
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 2/9] block: null_blk: introduce module parameter of
+ 'g_host_tags'
+Message-ID: <20190624084351.GA10941@ming.t460p>
+References: <20190531022801.10003-1-ming.lei@redhat.com>
+ <20190531022801.10003-3-ming.lei@redhat.com>
+ <2f592878-4381-b6bb-2023-200a7df7093c@acm.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_06:,,
- signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2f592878-4381-b6bb-2023-200a7df7093c@acm.org>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Mon, 24 Jun 2019 08:44:23 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update the driver version to 2.12.10.
+On Fri, May 31, 2019 at 08:39:04AM -0700, Bart Van Assche wrote:
+> On 5/30/19 7:27 PM, Ming Lei wrote:
+> > +static int g_host_tags = 0;
+> 
+> Static variables should not be explicitly initialized to zero.
 
-Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
----
- drivers/scsi/bnx2fc/bnx2fc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+OK
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc.h b/drivers/scsi/bnx2fc/bnx2fc.h
-index 170abe9..3b84db8 100644
---- a/drivers/scsi/bnx2fc/bnx2fc.h
-+++ b/drivers/scsi/bnx2fc/bnx2fc.h
-@@ -66,7 +66,7 @@
- #include "bnx2fc_constants.h"
- 
- #define BNX2FC_NAME		"bnx2fc"
--#define BNX2FC_VERSION		"2.11.8"
-+#define BNX2FC_VERSION		"2.12.10"
- 
- #define PFX			"bnx2fc: "
- 
--- 
-1.8.3.1
+> 
+> > +module_param_named(host_tags, g_host_tags, int, S_IRUGO);
+> > +MODULE_PARM_DESC(host_tags, "All submission queues share one tags");
+>                                                             ^^^^^^^^
+> Did you perhaps mean "one tagset"?
 
+tagset means one set of tags, here all submission queues share one
+single tag space(tags), see 'struct blk_mq_tags'.
+
+
+thanks, 
+Ming
