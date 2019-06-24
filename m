@@ -2,72 +2,196 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6034150FB6
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 17:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97A055100F
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 17:13:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730197AbfFXPIJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 11:08:09 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45139 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727454AbfFXPII (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 11:08:08 -0400
-Received: by mail-pg1-f195.google.com with SMTP id z19so4318860pgl.12
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 08:08:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=//+yb1s+2WCzorVKt4krr3UA/67QO+7fwRSikEv9loA=;
-        b=Mu9VZCXySXtdfCGlcT64c8Wqk8Ns9kGbQgiC8JHqjp1PoF4VDK+RYQwuKGUhFAPK2t
-         f/WYzg0F7p/xSSVZDr+in0bC6lVuuZZl5R/MH8Z2+YvwjmCcTVzBV/egyZHvYvhJsxfM
-         nmj0GER3PSo8smStULjHlmMJeBO7Mx9WAqhvqyzNgD3T/7j5ZCC93v/TV7jIN9PylCiQ
-         RxyGgs8C0+dKIKFwAwyMwurtaQAMeO/lMznAbAWwzui1edXzZSobjiBpFgyNebPqYzN4
-         nUUSj+6Iq93b/gz/pccj3QiL9U+fopkzaooIlftxuTAZ2k399nIq7D/rJ2h7iN8+c8eY
-         Zqmw==
-X-Gm-Message-State: APjAAAWmTHNo7Dtee3JrtDtWC7EBkjzjpo5JZ/9+Jpy6abHqltO/zzQ1
-        pLGIUegat7iDEsEfO1ifvKtvgVCL
-X-Google-Smtp-Source: APXvYqzgY/9jV738A6n7/KIvlmhbTwtoKitUOF8Oj/m4//RrMibRciye4zJ/SmD0MuWqKOqyo9n8Ug==
-X-Received: by 2002:a17:90a:9b8a:: with SMTP id g10mr24937297pjp.66.1561388887912;
-        Mon, 24 Jun 2019 08:08:07 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id h12sm25430176pje.12.2019.06.24.08.08.06
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jun 2019 08:08:07 -0700 (PDT)
-Subject: Re: [PATCH] sd_zbc: Fix report zones buffer allocation
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        id S1730498AbfFXPNg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 11:13:36 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:62186 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729740AbfFXPNg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 24 Jun 2019 11:13:36 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5OF3TFp133883
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 11:13:35 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tb0tygjtj-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 11:13:35 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <maier@linux.ibm.com>;
+        Mon, 24 Jun 2019 16:13:32 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 24 Jun 2019 16:13:26 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5OFDPht43974882
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jun 2019 15:13:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A448AE053;
+        Mon, 24 Jun 2019 15:13:25 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7827FAE045;
+        Mon, 24 Jun 2019 15:13:24 +0000 (GMT)
+Received: from oc4120165700.ibm.com (unknown [9.152.98.199])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 24 Jun 2019 15:13:24 +0000 (GMT)
+Subject: Re: [PATCH V5 10/16] s390: zfcp_fc: use sg helper to operate
+ scatterlist
+To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>
-References: <20190620034812.3254-1-damien.lemoal@wdc.com>
- <b6f250ad-0473-4643-8611-e395295e0379@acm.org>
- <BN8PR04MB58120578F3032EC46017CBF6E7E60@BN8PR04MB5812.namprd04.prod.outlook.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <5a37d32e-0699-0e7f-836c-d58734f21816@acm.org>
-Date:   Mon, 24 Jun 2019 08:08:05 -0700
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20190618013757.22401-1-ming.lei@redhat.com>
+ <20190618013757.22401-11-ming.lei@redhat.com>
+From:   Steffen Maier <maier@linux.ibm.com>
+Date:   Mon, 24 Jun 2019 17:13:24 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <BN8PR04MB58120578F3032EC46017CBF6E7E60@BN8PR04MB5812.namprd04.prod.outlook.com>
+In-Reply-To: <20190618013757.22401-11-ming.lei@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19062415-0028-0000-0000-0000037D2117
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19062415-0029-0000-0000-0000243D3EE9
+Message-Id: <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906240122
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/22/19 12:44 AM, Damien Le Moal wrote:
-> I have a fix along the lines you suggested, but since it modifies
-> bio_rq_map_kern(), I would rather not push that as a bug fix this late in RC.
-> Would you agree to accept the fix patch as is for now and I will send the more
-> complete fix for 5.3 ? Note that this more complete fix also reworks the similar
-> memory allocation for the struct blk_zone array used for zone revalidation. Put
-> all together, the use of report zones uses only vmalloc-ed buffers and data
-> structures, reduces pressure on the memory system and reducing chances of failures.
+Hi Ming,
 
-Hi Damien,
+On 6/18/19 3:37 AM, Ming Lei wrote:
+> Use the scatterlist iterators and remove direct indexing of the
+> scatterlist array.
+> 
+> This way allows us to pre-allocate one small scatterlist, which can be
+> chained with one runtime allocated scatterlist if the pre-allocated one
+> isn't enough for the whole request.
+> 
+> Cc: Steffen Maier <maier@linux.ibm.com>
+> Cc: Benjamin Block <bblock@linux.ibm.com>
+> Cc: Martin Schwidefsky <schwidefsky@de.ibm.com>
+> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> Acked-by: Benjamin Block <bblock@linux.ibm.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>   drivers/s390/scsi/zfcp_fc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
+> index 33eddb02ee30..b018b61bd168 100644
+> --- a/drivers/s390/scsi/zfcp_fc.c
+> +++ b/drivers/s390/scsi/zfcp_fc.c
+> @@ -620,7 +620,7 @@ static void zfcp_fc_sg_free_table(struct scatterlist *sg, int count)
+>   {
+>   	int i;
+>   
+> -	for (i = 0; i < count; i++, sg++)
+> +	for (i = 0; i < count; i++, sg = sg_next(sg))
+>   		if (sg)
+>   			free_page((unsigned long) sg_virt(sg));
+>   		else
+> @@ -641,7 +641,7 @@ static int zfcp_fc_sg_setup_table(struct scatterlist *sg, int count)
+>   	int i;
+>   
+>   	sg_init_table(sg, count);
+> -	for (i = 0; i < count; i++, sg++) {
+> +	for (i = 0; i < count; i++, sg = sg_next(sg)) {
+>   		addr = (void *) get_zeroed_page(GFP_KERNEL);
+>   		if (!addr) {
+>   			zfcp_fc_sg_free_table(sg, i);
+> 
 
-I think it's up to Martin to decide how to proceed.
+I'm still catching up with emails that came during my vacation, so I'm not 
+fully up-to-date on the current state of this and how to bring in potential 
+fixups on top.
 
-Bart.
+I think, we also have two more (not so obvious) places in the corresponding 
+response/completion code path, where we might need to introduce the proper 
+iterator helper:
+
+zfcp_fsf.c:
+
+static int zfcp_fc_eval_gpn_ft(struct zfcp_fc_req *fc_req,
+			       struct zfcp_adapter *adapter, int max_entries)
+{
+	struct scatterlist *sg = &fc_req->sg_rsp;
+...
+	/* first entry is the header */
+	for (x = 1; x < max_entries && !last; x++) {
+...
+		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
+...
+		else
+			acc = sg_virt(++sg);
+                                       ^^^^
+
+zfcp_dbf.c:
+
+static u16 zfcp_dbf_san_res_cap_len_if_gpn_ft(char *tag,
+					      struct zfcp_fsf_req *fsf,
+					      u16 len)
+{
+	struct scatterlist *resp_entry = ct_els->resp;
+...
+	/* the basic CT_IU preamble is the same size as one entry in the GPN_FT
+	 * response, allowing us to skip special handling for it - just skip it
+	 */
+	for (x = 1; x < max_entries && !last; x++) {
+		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
+...
+		else
+			acc = sg_virt(++resp_entry);
+                                       ^^^^^^^^^^^^
+
+
+What do you think?
+
+-- 
+Mit freundlichen Gruessen / Kind regards
+Steffen Maier
+
+Linux on IBM Z Development
+
+https://www.ibm.com/privacy/us/en/
+IBM Deutschland Research & Development GmbH
+Vorsitzender des Aufsichtsrats: Matthias Hartmann
+Geschaeftsfuehrung: Dirk Wittkopp
+Sitz der Gesellschaft: Boeblingen
+Registergericht: Amtsgericht Stuttgart, HRB 243294
+
