@@ -2,128 +2,468 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EEA5051F
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 11:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E105090C
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 12:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728265AbfFXJGL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 05:06:11 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:57434 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725916AbfFXJGK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 05:06:10 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5O949Vk149094;
-        Mon, 24 Jun 2019 09:06:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2018-07-02; bh=UsJ7/y/cLqh/pltGuIkUX4yW5joUxJdaV2InzqpTWzY=;
- b=lUinhVggQwvlCmdiqzKPWSVCuigbxqCzK2NxrVbx7INjbCraGG5UVgZXmqSecN/jHWf7
- QMDLULiMZyvCD9VljqW1XCXl+wO4x7g/OEO3lJS3T2Ar2aHZrl5tHaJZraIeIY4cV0cu
- WmdGJylAUYjeT6sE3eB8RaF+7uLXzLKo8KKPSo4Xvz26p25xfNiBN2cGt9O9R5fwgV4p
- C51/cwINET9Nqgfn3ZCjt0HLcyQKPhUZRwruN4pbJ2Y3dD4SFQ0VUJQyfoNh7GQg2oTl
- GOf8sFWFGCUCd1chRGeGLtXnB8/pXzz/04o24xhSxW6AwtVtkFXCvAHNXrGHiIH/kGF9 nQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2t9brsw71d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jun 2019 09:06:06 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5O95Qua110570;
-        Mon, 24 Jun 2019 09:06:06 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2t9acbd6fk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jun 2019 09:06:05 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5O9641D010964;
-        Mon, 24 Jun 2019 09:06:05 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 24 Jun 2019 02:06:04 -0700
-Date:   Mon, 24 Jun 2019 12:05:55 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     kbuild@01.org, Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Cc:     kbuild-all@01.org, linux-scsi@vger.kernel.org,
-        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
-        sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: Re: [PATCH v2 17/18] megaraid_sas: Introduce various Aero
- performance modes
-Message-ID: <20190624090555.GP18776@kadam>
+        id S1729070AbfFXKhE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 06:37:04 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40191 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729018AbfFXKhD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 06:37:03 -0400
+Received: by mail-lf1-f66.google.com with SMTP id a9so9648224lff.7
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 03:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lightnvm-io.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=oTiOFxVES8ExAdXX1OOjH4R5LjzN3726xPDWxG4HRq4=;
+        b=DGnoPGvoOspePaNMAjJ1jR3iAy/fc4OzOXhfpK9Ef5yik/Y6tQg7RaNUEppINQ+Y0p
+         G6PNXKM37lwOCQQAhcPAgVhJfKrzKT4GcgdYcKUG4a1W85dFI8BamZRSLroxPYnCB0V3
+         +3D9oS9gUxlkaqShktmgnpvHTl0sPpuVgI4PkLmSRVvo1xnAxVgFE/wGClEpGlg0gOXw
+         w8oiOL7dLXsxJTbGE7+Xgkbm0JH2cIq5tHr6YIL57qpJg0iw9CnZYpF/HWeNlKVNmBeZ
+         1YIAUq5j6cdu5BsN8nrwRGqgxAdUnqXYOkA5p2D5Rdrlt1NwcP1k+aOqE6+c8dabzFKx
+         lvDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=oTiOFxVES8ExAdXX1OOjH4R5LjzN3726xPDWxG4HRq4=;
+        b=bjBSTjZkXyd/LigQV+Drg1PNjqF6DYRU9GwRTzbpkOKOv7XKl6Rp4vYfmDfbrbaBvC
+         Jb07yTs+zYPyF5SJLUqGDxdlYWYT2Y+vkYcTRl0BhubcGwLZzfU3H6tDT9W6E2xs0E6H
+         unPALuv6aoY/+E92psmHi5/fCsUsgMnbj+Dkbw8kw9R+y99VwXru+skeLWQO4JU3qPXY
+         svnIRm+0hdgMoDcLINWaW+ynBk/tAqP9LP4EHuqYzsJc1EjUZUUvDluqaWjpi0YG93Ud
+         6WfoIdyn0Kn6n9JEpNGPmxDUsTUhh32wh87O15KL6cdcE+texHrIOZJI6OOETIH2vJbj
+         4lOA==
+X-Gm-Message-State: APjAAAVrdCn/z9eTjM9ikJ98lbWZMPACjqzdJNWTwxZU5qEhN0aTwvPE
+        MPP2K/BlwWHAdH07bkAaRfR1sQ==
+X-Google-Smtp-Source: APXvYqz/ZyeypH2tAxsqXFPFYlRYy02rxWbXkL8ssj13H4C5OHrK7MDdkdtE7Bw/S/Iv2M9wD/DmVQ==
+X-Received: by 2002:ac2:5a5e:: with SMTP id r30mr13013266lfn.12.1561372619224;
+        Mon, 24 Jun 2019 03:36:59 -0700 (PDT)
+Received: from [192.168.0.36] (2-111-91-225-cable.dk.customer.tdc.net. [2.111.91.225])
+        by smtp.googlemail.com with ESMTPSA id y15sm1694183lje.11.2019.06.24.03.36.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 24 Jun 2019 03:36:58 -0700 (PDT)
+Subject: Re: [PATCH 1/4] block: add zone open, close and finish support
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
+        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
+        Ajay Joshi <Ajay.Joshi@wdc.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "James.Bottomley@HansenPartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>
+References: <20190621130711.21986-1-mb@lightnvm.io>
+ <20190621130711.21986-2-mb@lightnvm.io>
+ <BYAPR04MB5816F7C8CA5B915DEEAF22D2E7E60@BYAPR04MB5816.namprd04.prod.outlook.com>
+From:   =?UTF-8?Q?Matias_Bj=c3=b8rling?= <mb@lightnvm.io>
+Message-ID: <2a60eeed-8b7e-13ac-78ed-04ed44e13bca@lightnvm.io>
+Date:   Mon, 24 Jun 2019 12:36:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190620105208.15011-18-chandrakanth.patil@broadcom.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9297 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906240076
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9297 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906240076
+In-Reply-To: <BYAPR04MB5816F7C8CA5B915DEEAF22D2E7E60@BYAPR04MB5816.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Chandrakanth,
+On 6/22/19 2:51 AM, Damien Le Moal wrote:
+> Matias,
+> 
+> Some comments inline below.
+> 
+> On 2019/06/21 22:07, Matias Bjørling wrote:
+>> From: Ajay Joshi <ajay.joshi@wdc.com>
+>>
+>> Zoned block devices allows one to control zone transitions by using
+>> explicit commands. The available transitions are:
+>>
+>>    * Open zone: Transition a zone to open state.
+>>    * Close zone: Transition a zone to closed state.
+>>    * Finish zone: Transition a zone to full state.
+>>
+>> Allow kernel to issue these transitions by introducing
+>> blkdev_zones_mgmt_op() and add three new request opcodes:
+>>
+>>    * REQ_IO_ZONE_OPEN, REQ_IO_ZONE_CLOSE, and REQ_OP_ZONE_FINISH
+>>
+>> Allow user-space to issue the transitions through the following ioctls:
+>>
+>>    * BLKOPENZONE, BLKCLOSEZONE, and BLKFINISHZONE.
+>>
+>> Signed-off-by: Ajay Joshi <ajay.joshi@wdc.com>
+>> Signed-off-by: Aravind Ramesh <aravind.ramesh@wdc.com>
+>> Signed-off-by: Matias Bjørling <matias.bjorling@wdc.com>
+>> ---
+>>   block/blk-core.c              |  3 ++
+>>   block/blk-zoned.c             | 51 ++++++++++++++++++++++---------
+>>   block/ioctl.c                 |  5 ++-
+>>   include/linux/blk_types.h     | 27 +++++++++++++++--
+>>   include/linux/blkdev.h        | 57 ++++++++++++++++++++++++++++++-----
+>>   include/uapi/linux/blkzoned.h | 17 +++++++++--
+>>   6 files changed, 133 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/block/blk-core.c b/block/blk-core.c
+>> index 8340f69670d8..c0f0dbad548d 100644
+>> --- a/block/blk-core.c
+>> +++ b/block/blk-core.c
+>> @@ -897,6 +897,9 @@ generic_make_request_checks(struct bio *bio)
+>>   			goto not_supported;
+>>   		break;
+>>   	case REQ_OP_ZONE_RESET:
+>> +	case REQ_OP_ZONE_OPEN:
+>> +	case REQ_OP_ZONE_CLOSE:
+>> +	case REQ_OP_ZONE_FINISH:
+>>   		if (!blk_queue_is_zoned(q))
+>>   			goto not_supported;
+>>   		break;
+>> diff --git a/block/blk-zoned.c b/block/blk-zoned.c
+>> index ae7e91bd0618..d0c933593b93 100644
+>> --- a/block/blk-zoned.c
+>> +++ b/block/blk-zoned.c
+>> @@ -201,20 +201,22 @@ int blkdev_report_zones(struct block_device *bdev, sector_t sector,
+>>   EXPORT_SYMBOL_GPL(blkdev_report_zones);
+>>   
+>>   /**
+>> - * blkdev_reset_zones - Reset zones write pointer
+>> + * blkdev_zones_mgmt_op - Perform the specified operation on the zone(s)
+>>    * @bdev:	Target block device
+>> - * @sector:	Start sector of the first zone to reset
+>> - * @nr_sectors:	Number of sectors, at least the length of one zone
+>> + * @op:		Operation to be performed on the zone(s)
+>> + * @sector:	Start sector of the first zone to operate on
+>> + * @nr_sectors:	Number of sectors, at least the length of one zone and
+>> + *              must be zone size aligned.
+>>    * @gfp_mask:	Memory allocation flags (for bio_alloc)
+>>    *
+>>    * Description:
+>> - *    Reset the write pointer of the zones contained in the range
+>> + *    Perform the specified operation contained in the range
+> 	Perform the specified operation over the sector range
+>>    *    @sector..@sector+@nr_sectors. Specifying the entire disk sector range
+>>    *    is valid, but the specified range should not contain conventional zones.
+>>    */
+>> -int blkdev_reset_zones(struct block_device *bdev,
+>> -		       sector_t sector, sector_t nr_sectors,
+>> -		       gfp_t gfp_mask)
+>> +int blkdev_zones_mgmt_op(struct block_device *bdev, enum req_opf op,
+>> +			 sector_t sector, sector_t nr_sectors,
+>> +			 gfp_t gfp_mask)
+>>   {
+>>   	struct request_queue *q = bdev_get_queue(bdev);
+>>   	sector_t zone_sectors;
+>> @@ -226,6 +228,9 @@ int blkdev_reset_zones(struct block_device *bdev,
+>>   	if (!blk_queue_is_zoned(q))
+>>   		return -EOPNOTSUPP;
+>>   
+>> +	if (!op_is_zone_mgmt_op(op))
+>> +		return -EOPNOTSUPP;
+> 
+> EINVAL may be better here.
+> 
+>> +
+>>   	if (bdev_read_only(bdev))
+>>   		return -EPERM;
+>>   
+>> @@ -248,7 +253,7 @@ int blkdev_reset_zones(struct block_device *bdev,
+>>   		bio = blk_next_bio(bio, 0, gfp_mask);
+>>   		bio->bi_iter.bi_sector = sector;
+>>   		bio_set_dev(bio, bdev);
+>> -		bio_set_op_attrs(bio, REQ_OP_ZONE_RESET, 0);
+>> +		bio_set_op_attrs(bio, op, 0);
+>>   
+>>   		sector += zone_sectors;
+>>   
+>> @@ -264,7 +269,7 @@ int blkdev_reset_zones(struct block_device *bdev,
+>>   
+>>   	return ret;
+>>   }
+>> -EXPORT_SYMBOL_GPL(blkdev_reset_zones);
+>> +EXPORT_SYMBOL_GPL(blkdev_zones_mgmt_op);
+>>   
+>>   /*
+>>    * BLKREPORTZONE ioctl processing.
+>> @@ -329,15 +334,16 @@ int blkdev_report_zones_ioctl(struct block_device *bdev, fmode_t mode,
+>>   }
+>>   
+>>   /*
+>> - * BLKRESETZONE ioctl processing.
+>> + * Zone operation (open, close, finish or reset) ioctl processing.
+>>    * Called from blkdev_ioctl.
+>>    */
+>> -int blkdev_reset_zones_ioctl(struct block_device *bdev, fmode_t mode,
+>> -			     unsigned int cmd, unsigned long arg)
+>> +int blkdev_zones_mgmt_op_ioctl(struct block_device *bdev, fmode_t mode,
+>> +				unsigned int cmd, unsigned long arg)
+>>   {
+>>   	void __user *argp = (void __user *)arg;
+>>   	struct request_queue *q;
+>>   	struct blk_zone_range zrange;
+>> +	enum req_opf op;
+>>   
+>>   	if (!argp)
+>>   		return -EINVAL;
+>> @@ -358,8 +364,25 @@ int blkdev_reset_zones_ioctl(struct block_device *bdev, fmode_t mode,
+>>   	if (copy_from_user(&zrange, argp, sizeof(struct blk_zone_range)))
+>>   		return -EFAULT;
+>>   
+>> -	return blkdev_reset_zones(bdev, zrange.sector, zrange.nr_sectors,
+>> -				  GFP_KERNEL);
+>> +	switch (cmd) {
+>> +	case BLKRESETZONE:
+>> +		op = REQ_OP_ZONE_RESET;
+>> +		break;
+>> +	case BLKOPENZONE:
+>> +		op = REQ_OP_ZONE_OPEN;
+>> +		break;
+>> +	case BLKCLOSEZONE:
+>> +		op = REQ_OP_ZONE_CLOSE;
+>> +		break;
+>> +	case BLKFINISHZONE:
+>> +		op = REQ_OP_ZONE_FINISH;
+>> +		break;
+>> +	default:
+>> +		return -ENOTTY;
+>> +	}
+>> +
+>> +	return blkdev_zones_mgmt_op(bdev, op, zrange.sector, zrange.nr_sectors,
+>> +				    GFP_KERNEL);
+>>   }
+>>   
+>>   static inline unsigned long *blk_alloc_zone_bitmap(int node,
+>> diff --git a/block/ioctl.c b/block/ioctl.c
+>> index 15a0eb80ada9..df7fe54db158 100644
+>> --- a/block/ioctl.c
+>> +++ b/block/ioctl.c
+>> @@ -532,7 +532,10 @@ int blkdev_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
+>>   	case BLKREPORTZONE:
+>>   		return blkdev_report_zones_ioctl(bdev, mode, cmd, arg);
+>>   	case BLKRESETZONE:
+>> -		return blkdev_reset_zones_ioctl(bdev, mode, cmd, arg);
+>> +	case BLKOPENZONE:
+>> +	case BLKCLOSEZONE:
+>> +	case BLKFINISHZONE:
+>> +		return blkdev_zones_mgmt_op_ioctl(bdev, mode, cmd, arg);
+>>   	case BLKGETZONESZ:
+>>   		return put_uint(arg, bdev_zone_sectors(bdev));
+>>   	case BLKGETNRZONES:
+>> diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+>> index 95202f80676c..067ef9242275 100644
+>> --- a/include/linux/blk_types.h
+>> +++ b/include/linux/blk_types.h
+>> @@ -284,13 +284,20 @@ enum req_opf {
+>>   	REQ_OP_DISCARD		= 3,
+>>   	/* securely erase sectors */
+>>   	REQ_OP_SECURE_ERASE	= 5,
+>> -	/* reset a zone write pointer */
+>> -	REQ_OP_ZONE_RESET	= 6,
+>>   	/* write the same sector many times */
+>>   	REQ_OP_WRITE_SAME	= 7,
+>>   	/* write the zero filled sector many times */
+>>   	REQ_OP_WRITE_ZEROES	= 9,
+>>   
+>> +	/* reset a zone write pointer */
+>> +	REQ_OP_ZONE_RESET	= 16,
+>> +	/* Open zone(s) */
+>> +	REQ_OP_ZONE_OPEN	= 17,
+>> +	/* Close zone(s) */
+>> +	REQ_OP_ZONE_CLOSE	= 18,
+>> +	/* Finish zone(s) */
+>> +	REQ_OP_ZONE_FINISH	= 19,
+>> +
+>>   	/* SCSI passthrough using struct scsi_request */
+>>   	REQ_OP_SCSI_IN		= 32,
+>>   	REQ_OP_SCSI_OUT		= 33,
+>> @@ -375,6 +382,22 @@ static inline void bio_set_op_attrs(struct bio *bio, unsigned op,
+>>   	bio->bi_opf = op | op_flags;
+>>   }
+>>   
+>> +/*
+>> + * Check if the op is zoned operation.
+>        Check if op is a zone management operation.
+>> + */
+>> +static inline bool op_is_zone_mgmt_op(enum req_opf op)
+> 
+> Similarly to "op_is_write" pattern, "op_is_zone_mgmt" may be a better name.
+> 
+>> +{
+>> +	switch (op) {
+>> +	case REQ_OP_ZONE_RESET:
+>> +	case REQ_OP_ZONE_OPEN:
+>> +	case REQ_OP_ZONE_CLOSE:
+>> +	case REQ_OP_ZONE_FINISH:
+>> +		return true;
+>> +	default:
+>> +		return false;
+>> +	}
+>> +}
+>> +
+>>   static inline bool op_is_write(unsigned int op)
+>>   {
+>>   	return (op & 1);
+>> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+>> index 592669bcc536..943084f9dc9c 100644
+>> --- a/include/linux/blkdev.h
+>> +++ b/include/linux/blkdev.h
+>> @@ -348,14 +348,15 @@ extern unsigned int blkdev_nr_zones(struct block_device *bdev);
+>>   extern int blkdev_report_zones(struct block_device *bdev,
+>>   			       sector_t sector, struct blk_zone *zones,
+>>   			       unsigned int *nr_zones, gfp_t gfp_mask);
+>> -extern int blkdev_reset_zones(struct block_device *bdev, sector_t sectors,
+>> -			      sector_t nr_sectors, gfp_t gfp_mask);
+>>   extern int blk_revalidate_disk_zones(struct gendisk *disk);
+>>   
+>>   extern int blkdev_report_zones_ioctl(struct block_device *bdev, fmode_t mode,
+>>   				     unsigned int cmd, unsigned long arg);
+>> -extern int blkdev_reset_zones_ioctl(struct block_device *bdev, fmode_t mode,
+>> -				    unsigned int cmd, unsigned long arg);
+>> +extern int blkdev_zones_mgmt_op_ioctl(struct block_device *bdev, fmode_t mode,
+>> +					unsigned int cmd, unsigned long arg);
+>> +extern int blkdev_zones_mgmt_op(struct block_device *bdev, enum req_opf op,
+>> +				sector_t sector, sector_t nr_sectors,
+>> +				gfp_t gfp_mask);
+> 
+> To keep the grouping of declarations, may be declare this one where
+> blkdev_reset_zones() was ?
+> 
+>>   
+>>   #else /* CONFIG_BLK_DEV_ZONED */
+>>   
+>> @@ -376,15 +377,57 @@ static inline int blkdev_report_zones_ioctl(struct block_device *bdev,
+>>   	return -ENOTTY;
+>>   }
+>>   
+>> -static inline int blkdev_reset_zones_ioctl(struct block_device *bdev,
+>> -					   fmode_t mode, unsigned int cmd,
+>> -					   unsigned long arg)
+>> +static inline int blkdev_zones_mgmt_op_ioctl(struct block_device *bdev,
+>> +					     fmode_t mode, unsigned int cmd,
+>> +					     unsigned long arg)
+>> +{
+>> +	return -ENOTTY;
+>> +}
+>> +
+>> +static inline int blkdev_zones_mgmt_op(struct block_device *bdev,
+>> +				       enum req_opf op,
+>> +				       sector_t sector, sector_t nr_sectors,
+>> +				       gfp_t gfp_mask)
+>>   {
+>>   	return -ENOTTY;
+> 
+> That should be -ENOTSUPP. This is not an ioctl. The ioctl call is above this one.
+> 
+>>   }
+>>   
+>>   #endif /* CONFIG_BLK_DEV_ZONED */
+>>   
+>> +static inline int blkdev_reset_zones(struct block_device *bdev,
+>> +				     sector_t sector, sector_t nr_sectors,
+>> +				     gfp_t gfp_mask)
+>> +{
+>> +	return blkdev_zones_mgmt_op(bdev, REQ_OP_ZONE_RESET,
+>> +				    sector, nr_sectors, gfp_mask);
+>> +}
+>> +
+>> +static inline int blkdev_open_zones(struct block_device *bdev,
+>> +				    sector_t sector, sector_t nr_sectors,
+>> +				    gfp_t gfp_mask)
+>> +{
+>> +	return blkdev_zones_mgmt_op(bdev, REQ_OP_ZONE_OPEN,
+>> +				    sector, nr_sectors, gfp_mask);
+>> +}
+>> +
+>> +static inline int blkdev_close_zones(struct block_device *bdev,
+>> +				     sector_t sector, sector_t nr_sectors,
+>> +				     gfp_t gfp_mask)
+>> +{
+>> +	return blkdev_zones_mgmt_op(bdev, REQ_OP_ZONE_CLOSE,
+>> +				    sector, nr_sectors,
+>> +				    gfp_mask);
+>> +}
+>> +
+>> +static inline int blkdev_finish_zones(struct block_device *bdev,
+>> +				      sector_t sector, sector_t nr_sectors,
+>> +				      gfp_t gfp_mask)
+>> +{
+>> +	return blkdev_zones_mgmt_op(bdev, REQ_OP_ZONE_FINISH,
+>> +				    sector, nr_sectors,
+>> +				    gfp_mask);
+>> +}
+>> +
+>>   struct request_queue {
+>>   	/*
+>>   	 * Together with queue_head for cacheline sharing
+>> diff --git a/include/uapi/linux/blkzoned.h b/include/uapi/linux/blkzoned.h
+>> index 498eec813494..701e0692b8d3 100644
+>> --- a/include/uapi/linux/blkzoned.h
+>> +++ b/include/uapi/linux/blkzoned.h
+>> @@ -120,9 +120,11 @@ struct blk_zone_report {
+>>   };
+>>   
+>>   /**
+>> - * struct blk_zone_range - BLKRESETZONE ioctl request
+>> - * @sector: starting sector of the first zone to issue reset write pointer
+>> - * @nr_sectors: Total number of sectors of 1 or more zones to reset
+>> + * struct blk_zone_range - BLKRESETZONE/BLKOPENZONE/
+>> + *			   BLKCLOSEZONE/BLKFINISHZONE ioctl
+>> + *			   request
+>> + * @sector: starting sector of the first zone to operate on
+>> + * @nr_sectors: Total number of sectors of all zones to operate on
+>>    */
+>>   struct blk_zone_range {
+>>   	__u64		sector;
+>> @@ -139,10 +141,19 @@ struct blk_zone_range {
+>>    *                sector range. The sector range must be zone aligned.
+>>    * @BLKGETZONESZ: Get the device zone size in number of 512 B sectors.
+>>    * @BLKGETNRZONES: Get the total number of zones of the device.
+>> + * @BLKOPENZONE: Open the zones in the specified sector range. The
+>> + *               sector range must be zone aligned.
+>> + * @BLKCLOSEZONE: Close the zones in the specified sector range. The
+>> + *                sector range must be zone aligned.
+>> + * @BLKFINISHZONE: Finish the zones in the specified sector range. The
+>> + *                 sector range must be zone aligned.
+>>    */
+>>   #define BLKREPORTZONE	_IOWR(0x12, 130, struct blk_zone_report)
+>>   #define BLKRESETZONE	_IOW(0x12, 131, struct blk_zone_range)
+>>   #define BLKGETZONESZ	_IOR(0x12, 132, __u32)
+>>   #define BLKGETNRZONES	_IOR(0x12, 133, __u32)
+>> +#define BLKOPENZONE	_IOW(0x12, 134, struct blk_zone_range)
+>> +#define BLKCLOSEZONE	_IOW(0x12, 135, struct blk_zone_range)
+>> +#define BLKFINISHZONE	_IOW(0x12, 136, struct blk_zone_range)
+>>   
+>>   #endif /* _UAPI_BLKZONED_H */
+>>
+> 
+> 
 
-url:    https://github.com/0day-ci/linux/commits/Chandrakanth-Patil/megaraid_sas-driver-updates-to-07-710-06-00-rc1/20190621-003611
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+Thanks Damien.
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+I was wondering if we should, instead of introducing three new ioctls, 
+make a v2 of the zone mgmt API?
 
-New smatch warnings:
-drivers/scsi/megaraid/megaraid_sas_base.c:6031 megasas_init_fw() warn: curly braces intended?
+Something like the following data structure being passed from user-space:
 
-Old smatch warnings:
-drivers/scsi/megaraid/megaraid_sas_base.c:1883 megasas_set_dynamic_target_properties() warn: if statement not indented
-drivers/scsi/megaraid/megaraid_sas_base.c:3445 megasas_complete_cmd() error: we previously assumed 'cmd->scmd' could be null (see line 3412)
-drivers/scsi/megaraid/megaraid_sas_base.c:6015 megasas_init_fw() error: we previously assumed 'fusion' could be null (see line 5914)
+struct blk_zone_mgmt {
+	__u8		opcode;
+	__u8 		resv[3];
+	__u32		flags;
+	__u64		sector;
+	__u64		nr_sectors;
+	__u64		resv1; /* to make room if we where do pass a data 			 
+data pointer through this API */
+};
 
-# https://github.com/0day-ci/linux/commit/0020c0465179c06d4dac82747eeffccc59b9a6e4
-git remote add linux-review https://github.com/0day-ci/linux
-git remote update linux-review
-git checkout 0020c0465179c06d4dac82747eeffccc59b9a6e4
-vim +6031 drivers/scsi/megaraid/megaraid_sas_base.c
-
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6018  			/*
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6019  			 * Performance mode settings provided through module parameter-perf_mode will
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6020  			 * take affect only for:
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6021  			 * 1. Aero family of adapters.
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6022  			 * 2. When user sets module parameter- perf_mode in range of 0-2.
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6023  			 */
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6024  			if ((perf_mode >= MR_BALANCED_PERF_MODE) &&
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6025  				(perf_mode <= MR_LATENCY_PERF_MODE))
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6026  				instance->perf_mode = perf_mode;
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6027  			/*
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6028  			 * If intr coalescing is not supported by controller FW, then IOPs
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6029  			 * and Balanced modes are not feasible.
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6030  			 */
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20 @6031  				if (!intr_coalescing)
-
-This if statement is indented as if it's part of the earlier condition
-but the comments aren't so it's not clear what was intended.
-
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6032  					instance->perf_mode = MR_LATENCY_PERF_MODE;
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6033  
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6034  		}
-ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6035  
-0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6036  		if (instance->perf_mode == MR_BALANCED_PERF_MODE)
-ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6037  			instance->low_latency_index_start =
-ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6038  				MR_HIGH_IOPS_QUEUE_COUNT;
-ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6039  		else
-ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6040  			instance->low_latency_index_start = 1;
-ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6041  
-ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6042  		num_msix_req = num_online_cpus() + instance->low_latency_index_start;
-
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+-Matias
