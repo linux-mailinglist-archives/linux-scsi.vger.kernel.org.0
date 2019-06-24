@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D63E50495
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 10:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C8C50496
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 10:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727825AbfFXIaQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 04:30:16 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:33436 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726612AbfFXIaQ (ORCPT
+        id S1727861AbfFXIaV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 04:30:21 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:63786 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726612AbfFXIaV (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 24 Jun 2019 04:30:16 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5O8Tkf6024688
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:15 -0700
+        Mon, 24 Jun 2019 04:30:21 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5O8UABr025698
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:19 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=jKQP7NH0Uu9r0bSPPLG77OhF0Io0cZUL6EdjKYR9cmA=;
- b=J1atqdHZe7RNfKO9dKoV5TfE1gMFStaW9P8VQlmkQm7grRakVf2d1idJQqtVwnIV/TSF
- owavzehOGHeS+YE8c7aaNWtlOPTz+hkt7E56neZ8dj/hrH1hlwAehW3/8tlvaqO7xHAc
- 8njzUXmTZYgfEYl7Yra6slbdLeCpbAbm3o6LGo+RdxCrVnISAL0fDwxUB5YjvTWURm84
- aeKyKVtTPQ9qAj1AIy5hW+j5N9GBpii78D9QvQjfdlYjrq9cy6CnJmJ1yo6DtX+/VDVy
- J3TukLZ1sPC99tVY/7Zb4St1mwwatzvJVFCGsRkgYvUMGf8X75At0alyQWbbunqfdhli Mw== 
+ content-type; s=pfpt0818; bh=uKu3aP8fHwrtOs7ov9atA4Ul8K35VQEiTcf+O74BQlk=;
+ b=T8/uaY2yKjKW5i+hFLBTWTEWapzFGMlfm6W1lBuB3yqNr4oeLg6swny3xgWVpnyZUYSV
+ UeCvNi6aXelGJwdxMrLNIBizoi6DnrnUNjVk4g6ybNxJIE7nzyjFE+gYEe2Xnkz3IQEy
+ YV/C155kkBWqrJCtKE9vMnPQF4J0/8t/vdVKI//d1zDkHCD9Nq0g8wBpgn/aiz34xKYh
+ QiP7iziM+FAimUq7NcNJ98nM5sqPvuRebQDO+DFtv9IbcBz+zZFnu6vbumekhvyByHLd
+ 2r1h4VvIGuWoI/aYRSZ8jO9dcQbrdoWIVuPwgp+VSnkvdRnraZxwAHOf7O/sCfueECor Ng== 
 Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2tarxr8dpg-1
+        by mx0b-0016f401.pphosted.com with ESMTP id 2t9kujdw88-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:15 -0700
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:19 -0700
 Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
  (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 24 Jun
- 2019 01:30:14 -0700
+ 2019 01:30:17 -0700
 Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
  (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Mon, 24 Jun 2019 01:30:14 -0700
+ Transport; Mon, 24 Jun 2019 01:30:17 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id EC4463F7041;
-        Mon, 24 Jun 2019 01:30:13 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 246ED3F703F;
+        Mon, 24 Jun 2019 01:30:17 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x5O8UDKD023235;
-        Mon, 24 Jun 2019 01:30:13 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x5O8UGUq023239;
+        Mon, 24 Jun 2019 01:30:17 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x5O8UDYp023234;
-        Mon, 24 Jun 2019 01:30:13 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x5O8UGcU023238;
+        Mon, 24 Jun 2019 01:30:16 -0700
 From:   Saurav Kashyap <skashyap@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <gbasrur@marvell.com>, <svernekar@marvell.com>,
         <linux-scsi@vger.kernel.org>
-Subject: [PATCH 4/6] bnx2fc: Do not allow both a cleanup completion and abort completion for the same request.
-Date:   Mon, 24 Jun 2019 01:29:58 -0700
-Message-ID: <20190624083000.23074-5-skashyap@marvell.com>
+Subject: [PATCH 5/6] bnx2fc: Limit the IO size according to the FW capability.
+Date:   Mon, 24 Jun 2019 01:29:59 -0700
+Message-ID: <20190624083000.23074-6-skashyap@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20190624083000.23074-1-skashyap@marvell.com>
 References: <20190624083000.23074-1-skashyap@marvell.com>
@@ -61,84 +61,77 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-- If firmware send any one of cleanup or abort completion, it means
- other won't be send, clean out flags for other as well.
+- Reduce the sg_tablesize to 255.
+- Reduce the MAX BDs firmware can handle to 255.
+- Return IO to ML if BD goes more then 255 after split.
+- Correct the size of each BD split to 0xffff.
 
 Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
 ---
- drivers/scsi/bnx2fc/bnx2fc.h    |  1 +
- drivers/scsi/bnx2fc/bnx2fc_io.c | 32 ++++++++++++++++++++++++++++++++
- 2 files changed, 33 insertions(+)
+ drivers/scsi/bnx2fc/bnx2fc.h      |  5 +++--
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c |  3 ++-
+ drivers/scsi/bnx2fc/bnx2fc_io.c   | 11 +++++++++++
+ 3 files changed, 16 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/bnx2fc/bnx2fc.h b/drivers/scsi/bnx2fc/bnx2fc.h
-index 5d7e21a..14cc692 100644
+index 14cc692..170abe9 100644
 --- a/drivers/scsi/bnx2fc/bnx2fc.h
 +++ b/drivers/scsi/bnx2fc/bnx2fc.h
-@@ -457,6 +457,7 @@ struct bnx2fc_cmd {
- #define BNX2FC_FLAG_ELS_TIMEOUT		0xb
- #define BNX2FC_FLAG_CMD_LOST		0xc
- #define BNX2FC_FLAG_SRR_SENT		0xd
-+#define BNX2FC_FLAG_ISSUE_CLEANUP_REQ	0xe
- 	u8 rec_retry;
- 	u8 srr_retry;
- 	u32 srr_offset;
+@@ -75,8 +75,9 @@
+ #define BNX2X_DOORBELL_PCI_BAR		2
+ 
+ #define BNX2FC_MAX_BD_LEN		0xffff
+-#define BNX2FC_BD_SPLIT_SZ		0x8000
+-#define BNX2FC_MAX_BDS_PER_CMD		256
++#define BNX2FC_BD_SPLIT_SZ		0xffff
++#define BNX2FC_MAX_BDS_PER_CMD		255
++#define BNX2FC_FW_MAX_BDS_PER_CMD	255
+ 
+ #define BNX2FC_SQ_WQES_MAX	256
+ 
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+index a75e74a..7796799 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
+@@ -2971,7 +2971,8 @@ static struct scsi_host_template bnx2fc_shost_template = {
+ 	.this_id		= -1,
+ 	.cmd_per_lun		= 3,
+ 	.sg_tablesize		= BNX2FC_MAX_BDS_PER_CMD,
+-	.max_sectors		= 1024,
++	.dma_boundary           = 0x7fff,
++	.max_sectors		= 0x3fbf,
+ 	.track_queue_depth	= 1,
+ 	.slave_configure	= bnx2fc_slave_configure,
+ 	.shost_attrs		= bnx2fc_host_attrs,
 diff --git a/drivers/scsi/bnx2fc/bnx2fc_io.c b/drivers/scsi/bnx2fc/bnx2fc_io.c
-index 88c392b..d7eb5e1 100644
+index d7eb5e1..ff0c696 100644
 --- a/drivers/scsi/bnx2fc/bnx2fc_io.c
 +++ b/drivers/scsi/bnx2fc/bnx2fc_io.c
-@@ -1048,6 +1048,9 @@ int bnx2fc_initiate_cleanup(struct bnx2fc_cmd *io_req)
- 	/* Obtain free SQ entry */
- 	bnx2fc_add_2_sq(tgt, xid);
+@@ -1660,6 +1660,7 @@ static int bnx2fc_map_sg(struct bnx2fc_cmd *io_req)
+ 	u64 addr;
+ 	int i;
  
-+	/* Set flag that cleanup request is pending with the firmware */
-+	set_bit(BNX2FC_FLAG_ISSUE_CLEANUP_REQ, &io_req->req_flags);
-+
- 	/* Ring doorbell */
- 	bnx2fc_ring_doorbell(tgt);
- 
-@@ -1324,6 +1327,25 @@ void bnx2fc_process_cleanup_compl(struct bnx2fc_cmd *io_req,
- 	BNX2FC_IO_DBG(io_req, "Entered process_cleanup_compl "
- 			      "refcnt = %d, cmd_type = %d\n",
- 		   kref_read(&io_req->refcount), io_req->cmd_type);
-+	/*
-+	 * Test whether there is a cleanup request pending. If not just
-+	 * exit.
-+	 */
-+	if (!test_and_clear_bit(BNX2FC_FLAG_ISSUE_CLEANUP_REQ,
-+				&io_req->req_flags))
-+		return;
-+	/*
-+	 * If we receive a cleanup completion for this request then the
-+	 * firmware will not give us an abort completion for this request
-+	 * so clear any ABTS pending flags.
-+	 */
-+	if (test_bit(BNX2FC_FLAG_ISSUE_ABTS, &io_req->req_flags) &&
-+	    !test_bit(BNX2FC_FLAG_ABTS_DONE, &io_req->req_flags)) {
-+		set_bit(BNX2FC_FLAG_ABTS_DONE, &io_req->req_flags);
-+		if (io_req->wait_for_abts_comp)
-+			complete(&io_req->abts_done);
-+	}
-+
- 	bnx2fc_scsi_done(io_req, DID_ERROR);
- 	kref_put(&io_req->refcount, bnx2fc_cmd_release);
- 	if (io_req->wait_for_cleanup_comp)
-@@ -1351,6 +1373,16 @@ void bnx2fc_process_abts_compl(struct bnx2fc_cmd *io_req,
- 		return;
++	WARN_ON(scsi_sg_count(sc) > BNX2FC_MAX_BDS_PER_CMD);
+ 	/*
+ 	 * Use dma_map_sg directly to ensure we're using the correct
+ 	 * dev struct off of pcidev.
+@@ -1707,6 +1708,16 @@ static int bnx2fc_build_bd_list_from_sg(struct bnx2fc_cmd *io_req)
  	}
+ 	io_req->bd_tbl->bd_valid = bd_count;
  
 +	/*
-+	 * If we receive an ABTS completion here then we will not receive
-+	 * a cleanup completion so clear any cleanup pending flags.
++	 * Return the command to ML if BD count increase the max number
++	 * that can be handled by FW.
 +	 */
-+	if (test_bit(BNX2FC_FLAG_ISSUE_CLEANUP_REQ, &io_req->req_flags)) {
-+		clear_bit(BNX2FC_FLAG_ISSUE_CLEANUP_REQ, &io_req->req_flags);
-+		if (io_req->wait_for_cleanup_comp)
-+			complete(&io_req->cleanup_done);
++	if (bd_count > BNX2FC_FW_MAX_BDS_PER_CMD) {
++		pr_err("bd_count = %d increased FW supported max BD(255), task_id = 0x%x\n",
++		       bd_count, io_req->xid);
++		return -ENOMEM;
 +	}
 +
- 	/* Do not issue RRQ as this IO is already cleanedup */
- 	if (test_and_set_bit(BNX2FC_FLAG_IO_CLEANUP,
- 				&io_req->req_flags))
+ 	return 0;
+ }
+ 
 -- 
 1.8.3.1
 
