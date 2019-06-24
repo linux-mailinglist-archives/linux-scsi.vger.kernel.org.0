@@ -2,172 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8168850510
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 11:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EEA5051F
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 11:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727634AbfFXJDB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 05:03:01 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:7662 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727135AbfFXJDA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 24 Jun 2019 05:03:00 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5O91bKi018254;
-        Mon, 24 Jun 2019 02:02:50 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=JbT9Y2Xlz5O+YqKqe87VQn8LXedd2rbu7t8vBtSiUfY=;
- b=PoSJfsOaimzZ+eNfsrRv5JCxmQMXQnEkvD/sSK1vPRLaP/OoKNHIjtDxLuehfuZ36rCX
- Pv/kKXtQ5rMHQpAllHFm5Q6UX3PYn2ZkG5zRDMjBasWMDR7cpESTY27XBvZ0kDED0jJv
- bSWfqaStbGmr1EUv7wfcswPYfQkNMs/MfE1bgkZz9PHEDDqljQJd/RsgoI00Ap99a284
- DJjqUBydxKfGYVB4UBa76+gBTfPEBA4fJF98zA16t1FcK9L0HhcHt2J2E0gM6vzFG58x
- wsQInv+TygrySulEJaiEItE2neGBq7IvuBeRHiT82Wzcg9WNVzl+/ZRZOEhUQnsgn7JV 1g== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2t9kuje08p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jun 2019 02:02:49 -0700
-Received: from SC-EXCH02.marvell.com (10.93.176.82) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 24 Jun
- 2019 02:02:46 -0700
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (104.47.48.55) by
- SC-EXCH02.marvell.com (10.93.176.82) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Mon, 24 Jun 2019 02:02:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JbT9Y2Xlz5O+YqKqe87VQn8LXedd2rbu7t8vBtSiUfY=;
- b=Zxv+wAbnhlcoZk9m0lndmEbXG3kRRK4YISnE9eD3fOrpn2y/xb4/5yYY5aKzD3VAkUUJf/HggAKqcbo9lG+0I7jpA2YwlpNKwjneJ+8VboD4mKbKTUDg3DFKf/zL5XK+OcterVfbi9+1Nu+NHuWW1iPEB1zGrGIXpR3pSQRaZpA=
-Received: from MN2PR18MB2527.namprd18.prod.outlook.com (20.179.82.202) by
- MN2PR18MB3423.namprd18.prod.outlook.com (10.255.239.12) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Mon, 24 Jun 2019 09:02:45 +0000
-Received: from MN2PR18MB2527.namprd18.prod.outlook.com
- ([fe80::7084:6d4b:c3cf:28b4]) by MN2PR18MB2527.namprd18.prod.outlook.com
- ([fe80::7084:6d4b:c3cf:28b4%7]) with mapi id 15.20.2008.014; Mon, 24 Jun 2019
- 09:02:45 +0000
-From:   Saurav Kashyap <skashyap@marvell.com>
-To:     Lin Yi <teroincn@163.com>,
-        "QLogic-Storage-Upstream@qlogic.com" 
-        <QLogic-Storage-Upstream@qlogic.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "liujian6@iie.ac.cn" <liujian6@iie.ac.cn>,
-        "csong@cs.ucr.edu" <csong@cs.ucr.edu>,
-        "zhiyunq@cs.ucr.edu" <zhiyunq@cs.ucr.edu>,
-        "yiqiuping@gmail.com" <yiqiuping@gmail.com>
-Subject: Re: [PATCH 2/2] scsi :bnx2fc :bnx2fc_els :fix bnx2fc_cmd refcount
- imbalance in send_srr
-Thread-Topic: [PATCH 2/2] scsi :bnx2fc :bnx2fc_els :fix bnx2fc_cmd refcount
- imbalance in send_srr
-Thread-Index: AQHVKWczALuIphnQzUCd5TB/YMoCu6aq4IcA
-Date:   Mon, 24 Jun 2019 09:02:45 +0000
-Message-ID: <D9368F19.190B1%skashyap@marvell.com>
-References: <cover.1561254730.git.teroincn@163.com>
- <a5e2a774fe72c62d9a28f101adb41a3600dc3951.1561254730.git.teroincn@163.com>
-In-Reply-To: <a5e2a774fe72c62d9a28f101adb41a3600dc3951.1561254730.git.teroincn@163.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [114.143.185.87]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5a073909-9b6c-4f36-8dc6-08d6f882b92e
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MN2PR18MB3423;
-x-ms-traffictypediagnostic: MN2PR18MB3423:
-x-microsoft-antispam-prvs: <MN2PR18MB34230C437DA4D233D7BFA514D2E00@MN2PR18MB3423.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-forefront-prvs: 007814487B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(136003)(376002)(39850400004)(346002)(396003)(189003)(199004)(51914003)(7736002)(5660300002)(71190400001)(66066001)(71200400001)(86362001)(2906002)(316002)(68736007)(110136005)(478600001)(2501003)(54906003)(6512007)(81156014)(6486002)(81166006)(8676002)(186003)(8936002)(6506007)(53936002)(26005)(305945005)(6436002)(76116006)(66556008)(11346002)(66476007)(64756008)(446003)(66446008)(2616005)(486006)(476003)(91956017)(73956011)(14444005)(256004)(99286004)(25786009)(36756003)(6246003)(4326008)(14454004)(76176011)(6116002)(3846002)(229853002)(53546011)(102836004)(66946007);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB3423;H:MN2PR18MB2527.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: EceD+m8D07d4m8gWrv98gToCDnBFs5w6LvXcJsk+kRHsZ8zfIAjcGf/Z3CMf3lGwisb/tNh0TfUwo0yaWo79iM08du+KsJIn8rPmULiUmEz7polmaDZEdl8/4iRD4VqEEl92KhKDdZHRN/PICpmXOerDAE2piNHC4fOTZCXwm0gZzlNeVI1x3toiqRn+evEidB3E86UYKf6WklHcjla75FDRO343ZMWNwT9kjF0KXOWKaNCdx7QR+v8f7krRu5nlH84AuybxN5MsdwlRCHX3tdDaybeMlhVb6g3mCKKSI7Au0XhcmRHz/P90IEsjUMw+Q/10RGvvN5XgphnFm+qVz2lWrPbiPh5kHPWL/eJOVfMxnxyLG+231geqjShW5fBLLQlH5PsYf114vjiaks4e3hkuQv2mlJMq6J/9jbaSpzw=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <9613CB582B4F704396FD1987E7766953@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1728265AbfFXJGL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 05:06:11 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:57434 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725916AbfFXJGK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 05:06:10 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5O949Vk149094;
+        Mon, 24 Jun 2019 09:06:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type : in-reply-to;
+ s=corp-2018-07-02; bh=UsJ7/y/cLqh/pltGuIkUX4yW5joUxJdaV2InzqpTWzY=;
+ b=lUinhVggQwvlCmdiqzKPWSVCuigbxqCzK2NxrVbx7INjbCraGG5UVgZXmqSecN/jHWf7
+ QMDLULiMZyvCD9VljqW1XCXl+wO4x7g/OEO3lJS3T2Ar2aHZrl5tHaJZraIeIY4cV0cu
+ WmdGJylAUYjeT6sE3eB8RaF+7uLXzLKo8KKPSo4Xvz26p25xfNiBN2cGt9O9R5fwgV4p
+ C51/cwINET9Nqgfn3ZCjt0HLcyQKPhUZRwruN4pbJ2Y3dD4SFQ0VUJQyfoNh7GQg2oTl
+ GOf8sFWFGCUCd1chRGeGLtXnB8/pXzz/04o24xhSxW6AwtVtkFXCvAHNXrGHiIH/kGF9 nQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2t9brsw71d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jun 2019 09:06:06 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5O95Qua110570;
+        Mon, 24 Jun 2019 09:06:06 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2t9acbd6fk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 24 Jun 2019 09:06:05 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5O9641D010964;
+        Mon, 24 Jun 2019 09:06:05 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 24 Jun 2019 02:06:04 -0700
+Date:   Mon, 24 Jun 2019 12:05:55 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@01.org, Chandrakanth Patil <chandrakanth.patil@broadcom.com>
+Cc:     kbuild-all@01.org, linux-scsi@vger.kernel.org,
+        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
+        sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>
+Subject: Re: [PATCH v2 17/18] megaraid_sas: Introduce various Aero
+ performance modes
+Message-ID: <20190624090555.GP18776@kadam>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a073909-9b6c-4f36-8dc6-08d6f882b92e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2019 09:02:45.4487
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: skashyap@marvell.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB3423
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_07:,,
- signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190620105208.15011-18-chandrakanth.patil@broadcom.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9297 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906240076
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9297 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906240076
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Lin,
+Hi Chandrakanth,
 
+url:    https://github.com/0day-ci/linux/commits/Chandrakanth-Patil/megaraid_sas-driver-updates-to-07-710-06-00-rc1/20190621-003611
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
 
-On 23/06/19, 7:28 AM, "linux-scsi-owner@vger.kernel.org on behalf of Lin
-Yi" <linux-scsi-owner@vger.kernel.org on behalf of teroincn@163.com> wrote:
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
->if cb_arg alloc failed, we can't release orig_io_req refcount before
->we take it's refcount. call kref_get before malloc, so as to pair with
->the kref_put on the srr_err path.
->
->Signed-off-by: Lin Yi <teroincn@163.com>
->---
-> drivers/scsi/bnx2fc/bnx2fc_els.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/scsi/bnx2fc/bnx2fc_els.c
->b/drivers/scsi/bnx2fc/bnx2fc_els.c
->index 709bb92..c201ddf 100644
->--- a/drivers/scsi/bnx2fc/bnx2fc_els.c
->+++ b/drivers/scsi/bnx2fc/bnx2fc_els.c
->@@ -633,13 +633,13 @@ int bnx2fc_send_srr(struct bnx2fc_cmd *orig_io_req,
->u32 offset, u8 r_ctl)
-> 	BNX2FC_IO_DBG(orig_io_req, "Sending SRR\n");
-> 	memset(&srr, 0, sizeof(srr));
->=20
->+	kref_get(&orig_io_req->refcount);
-> 	cb_arg =3D kzalloc(sizeof(struct bnx2fc_els_cb_arg), GFP_ATOMIC);
-> 	if (!cb_arg) {
-> 		printk(KERN_ERR PFX "Unable to allocate cb_arg for SRR\n");
-> 		rc =3D -ENOMEM;
-> 		goto srr_err;
-> 	}
->-	kref_get(&orig_io_req->refcount);
->=20
-> 	cb_arg->aborted_io_req =3D orig_io_req;
->=20
->--=20
->1.9.1
+New smatch warnings:
+drivers/scsi/megaraid/megaraid_sas_base.c:6031 megasas_init_fw() warn: curly braces intended?
 
-Thanks for the patch, but this is not the correct fix. If kzalloc fails,
-control will reach label srr_err and try to free cb_arg.
-Correct fix is to move the srr_err label down.
+Old smatch warnings:
+drivers/scsi/megaraid/megaraid_sas_base.c:1883 megasas_set_dynamic_target_properties() warn: if statement not indented
+drivers/scsi/megaraid/megaraid_sas_base.c:3445 megasas_complete_cmd() error: we previously assumed 'cmd->scmd' could be null (see line 3412)
+drivers/scsi/megaraid/megaraid_sas_base.c:6015 megasas_init_fw() error: we previously assumed 'fusion' could be null (see line 5914)
 
-@@ -680,7 +680,6 @@ int bnx2fc_send_srr(struct bnx2fc_cmd *orig_io_req,
-u32 offset, u8 r_ctl)
-        rc =3D bnx2fc_initiate_els(tgt, ELS_SRR, &srr, sizeof(srr),
-                                 bnx2fc_srr_compl, cb_arg,
-                                 r_a_tov);
--srr_err:
-        if (rc) {
-                BNX2FC_IO_DBG(orig_io_req, "SRR failed - release\n");
-                spin_lock_bh(&tgt->tgt_lock);
-@@ -690,6 +689,7 @@ srr_err:
-        } else
-                set_bit(BNX2FC_FLAG_SRR_SENT, &orig_io_req->req_flags);
-=20
-+srr_err:
-        return rc;
- }
+# https://github.com/0day-ci/linux/commit/0020c0465179c06d4dac82747eeffccc59b9a6e4
+git remote add linux-review https://github.com/0day-ci/linux
+git remote update linux-review
+git checkout 0020c0465179c06d4dac82747eeffccc59b9a6e4
+vim +6031 drivers/scsi/megaraid/megaraid_sas_base.c
 
-Submit an update patch.
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6018  			/*
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6019  			 * Performance mode settings provided through module parameter-perf_mode will
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6020  			 * take affect only for:
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6021  			 * 1. Aero family of adapters.
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6022  			 * 2. When user sets module parameter- perf_mode in range of 0-2.
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6023  			 */
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6024  			if ((perf_mode >= MR_BALANCED_PERF_MODE) &&
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6025  				(perf_mode <= MR_LATENCY_PERF_MODE))
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6026  				instance->perf_mode = perf_mode;
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6027  			/*
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6028  			 * If intr coalescing is not supported by controller FW, then IOPs
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6029  			 * and Balanced modes are not feasible.
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6030  			 */
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20 @6031  				if (!intr_coalescing)
 
-Thanks,
-~Saurav
+This if statement is indented as if it's part of the earlier condition
+but the comments aren't so it's not clear what was intended.
 
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6032  					instance->perf_mode = MR_LATENCY_PERF_MODE;
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6033  
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6034  		}
+ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6035  
+0020c04651 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6036  		if (instance->perf_mode == MR_BALANCED_PERF_MODE)
+ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6037  			instance->low_latency_index_start =
+ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6038  				MR_HIGH_IOPS_QUEUE_COUNT;
+ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6039  		else
+ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6040  			instance->low_latency_index_start = 1;
+ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6041  
+ea76a259b5 drivers/scsi/megaraid/megaraid_sas_base.c Chandrakanth Patil         2019-06-20  6042  		num_msix_req = num_online_cpus() + instance->low_latency_index_start;
 
->
-
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
