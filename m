@@ -2,106 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37C7F50B32
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 14:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8191450B9D
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 15:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727855AbfFXM4M (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 08:56:12 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:34918 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726557AbfFXM4M (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 08:56:12 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5OCsH8T142990;
-        Mon, 24 Jun 2019 12:54:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=qBtE7sGwA87+xuHMqYneEv1QZDMB/76C0feGN55wyx0=;
- b=uWG74qSOevMqS3+3gY+xVCFUKT/S2CjrcyT8GpbVO7o4lS51CYzqQe3TPv2Q9/jDqh7M
- T1VtuMC79SxAgwvQgBGyCRV3E8PfZqxbAstE1fZC1zD5fV+LphmQqhwEvo7Ux5R4hUwD
- z337eR1PywfoYftfamjxIBKxI/yiOflJbDrqQ+6ZJdTSVZNp8G5E04g76HrdfzYF+yqy
- v6yszWVTJ+6ifeKFtNnOIIDT/NA9DGsQUw0Y6x3TKIUYI+e5+GbPzIwmDhvxj5pWezMq
- znoIjDt3Zo55K2FRiOSU73wk1J+RfB8rUw7YeoLwQQ+RKHKjLnaZZyyapt67QT2t75p+ jg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2t9cyq666q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jun 2019 12:54:50 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5OCrn9W105054;
-        Mon, 24 Jun 2019 12:54:49 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2t99f38p0u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 24 Jun 2019 12:54:49 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5OCsiOw018764;
-        Mon, 24 Jun 2019 12:54:45 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 24 Jun 2019 05:54:43 -0700
-To:     Ming Lei <tom.leiming@gmail.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Ming Lei <ming.lei@redhat.com>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        id S1730966AbfFXNOg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 09:14:36 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:36866 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730794AbfFXNOf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 24 Jun 2019 09:14:35 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id C9A3C23D76724DA3C42B;
+        Mon, 24 Jun 2019 21:14:32 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Mon, 24 Jun 2019
+ 21:14:28 +0800
+Subject: Re: [PATCH 1/9] blk-mq: allow hw queues to share hostwide tags
+To:     Ming Lei <ming.lei@redhat.com>
+References: <20190531022801.10003-1-ming.lei@redhat.com>
+ <20190531022801.10003-2-ming.lei@redhat.com>
+ <0f1773af-170a-a6b5-54ce-274dacb2b63a@huawei.com>
+ <20190624084614.GC10941@ming.t460p>
+CC:     Jens Axboe <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
         James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
         Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list\:STAGING SUBSYSTEM" <devel@driverdev.osuosl.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-Subject: Re: [PATCH V5 00/16] use sg helper to operate scatterlist
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190618013757.22401-1-ming.lei@redhat.com>
-        <yq11rzqzacx.fsf@oracle.com>
-        <3df71d64-78fb-c6fc-f456-a0b626abff3b@acm.org>
-        <yq1wohhs62v.fsf@oracle.com>
-        <CACVXFVM2ZiSwqy9QpE2A2VDWY5-dny-H=Lw2J0bEh7zuA5aj5Q@mail.gmail.com>
-Date:   Mon, 24 Jun 2019 08:54:39 -0400
-In-Reply-To: <CACVXFVM2ZiSwqy9QpE2A2VDWY5-dny-H=Lw2J0bEh7zuA5aj5Q@mail.gmail.com>
-        (Ming Lei's message of "Mon, 24 Jun 2019 20:40:15 +0800")
-Message-ID: <yq1pnn3nnxs.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        Don Brace <don.brace@microsemi.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        "Sathya Prakash" <sathya.prakash@broadcom.com>,
+        Christoph Hellwig <hch@lst.de>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <19e409fa-d734-b0b6-b62f-787a1000e2b1@huawei.com>
+Date:   Mon, 24 Jun 2019 14:14:22 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9297 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=677
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906240105
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9297 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=726 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906240105
+In-Reply-To: <20190624084614.GC10941@ming.t460p>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.238]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 24/06/2019 09:46, Ming Lei wrote:
+> On Wed, Jun 05, 2019 at 03:10:51PM +0100, John Garry wrote:
+>> On 31/05/2019 03:27, Ming Lei wrote:
+>>> index 32b8ad3d341b..49d73d979cb3 100644
+>>> --- a/block/blk-mq.c
+>>> +++ b/block/blk-mq.c
+>>> @@ -2433,6 +2433,11 @@ static bool __blk_mq_alloc_rq_map(struct blk_mq_tag_set *set, int hctx_idx)
+>>>  {
+>>>  	int ret = 0;
+>>>
+>>
+>> Hi Ming,
+>>
+>>> +	if ((set->flags & BLK_MQ_F_HOST_TAGS) && hctx_idx) {
+>>> +		set->tags[hctx_idx] = set->tags[0];
+>>
+>> Here we set all tags same as that of hctx index 0.
+>>
+>>> +		return true;
+>>
+>>
+>> As such, I think that the error handling in __blk_mq_alloc_rq_maps() is made
+>> a little fragile:
+>>
+>> __blk_mq_alloc_rq_maps(struct blk_mq_tag_set *set)
+>> {
+>> 	int i;
+>>
+>> 	for (i = 0; i < set->nr_hw_queues; i++)
+>> 		if (!__blk_mq_alloc_rq_map(set, i))
+>> 			goto out_unwind;
+>>
+>> 	return 0;
+>>
+>> out_unwind:
+>> 	while (--i >= 0)
+>> 		blk_mq_free_rq_map(set->tags[i]);
+>>
+>> 	return -ENOMEM;
+>> }
+>>
+>> If __blk_mq_alloc_rq_map(, i > 1) fails for when BLK_MQ_F_HOST_TAGS FLAG is
+>> set (even though today it can't), then we would try to free set->tags[0]
+>> multiple times.
+>
 
-Ming,
+Hi Ming,
 
-> Today I found the whole patchset disappears from 5.3/scsi-queue, seems
-> something is wrong?
+> Good catch, and the issue can be addressed easily by setting set->hctx[i] as
+> NULL, then check 'tags' in blk_mq_free_rq_map().
 
-Your changes are in 5.3/scsi-sg. I put them in a separate branch to
-avoid having to rebase the rest of the queue in case we find more
-issues.
+OK, so you could do that. But I just think that it's not a great 
+practice in general to have multiple pointers pointing at the same 
+dynamic memory.
 
-My for-next branch is based on 5.3/scsi-queue and 5.3/scsi-sg.
+Thanks,
+John
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+>
+> Thanks,
+> Ming
+>
+> .
+>
+
+
