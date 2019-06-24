@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E26350492
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 10:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE6850494
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 10:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727682AbfFXIaJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 04:30:09 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:56732 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726612AbfFXIaJ (ORCPT
+        id S1727782AbfFXIaP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 04:30:15 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:35544 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726622AbfFXIaP (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 24 Jun 2019 04:30:09 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5O8U2Ts025408
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:08 -0700
+        Mon, 24 Jun 2019 04:30:15 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5O8UBRF025709
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:13 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=fQMvga80lf5wMRsR2hyk4X+vIG9cDlUmukMEWoREf1w=;
- b=CTP2QS+mDchk/zXwCxGD92eWxlB/ltB7TE56iBySrzs6ShrEoVukWf4/vgE2WpXmLXWk
- TC/fgfgY3eH9zuv29ZU+sJKt//YbFoT5tP4Fgpw3vRl/Wg8JWFg0qg1o2TNlQGOQ2wHe
- ecWKoVGWKmX2nWrcpD4bgcD7pVBpeXzu7nsTtsvXAKy0pX69ZirTnooQd8PRHsIUBsYr
- DiGmUgoYt02eLGUTRCX5ETxlE6oDo8Zbtlc3wm5zlLjDnna5XVbqfDyRrn7GL0wq/uIl
- J1C/U/JWrNVt7uix3fkyvImXKqV6/oeTJjhWuHQSJJM2BZ0uzD+6DPxELmFzrAE+YtIy iQ== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2tarxr8dp4-1
+ content-type; s=pfpt0818; bh=dLvOz6g4McFfaoKj3H4yB8GTJcDg1DYhqTa2QtWyWyY=;
+ b=TIPtj7SmZ8CU6tW+W2kPrgf6Nqw21L0LectopHo0OwQgQ1hirIRaqssu/GRPDxdf7rf9
+ C2h1cRnkoQapG7tysoTBM0RkBsRROkVmdU24U4zeJ0pI/W+WlL+s0paX8vRB84C5+8D2
+ W9Ez5KALvFNQuyjrA3jd1cQkqhAIqt8IDdhj/jRLBtM8F6/EpXm+XaKEg7sYb/mxLc6e
+ ljHhH6SkQWra5/gq1r4YYyt9q8Sd380qwi9haIcjIb/79ZVnwKM+LYBPOXwmEo0UrDrN
+ uhhTSf2EUqLLzosGiDtNcIbhANqqxxt1KOl5C32dBAFNluVwi8HSusxm7pHvgF7MvBtf tw== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2t9kujdw7h-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:08 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 24 Jun
- 2019 01:30:07 -0700
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:13 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 24 Jun
+ 2019 01:30:11 -0700
 Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
  (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Mon, 24 Jun 2019 01:30:07 -0700
+ Transport; Mon, 24 Jun 2019 01:30:11 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 89D933F7041;
-        Mon, 24 Jun 2019 01:30:07 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id C1E0D3F7044;
+        Mon, 24 Jun 2019 01:30:10 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x5O8U7Nm023219;
-        Mon, 24 Jun 2019 01:30:07 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x5O8UAs6023231;
+        Mon, 24 Jun 2019 01:30:10 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x5O8U7ch023218;
-        Mon, 24 Jun 2019 01:30:07 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x5O8UAZ1023222;
+        Mon, 24 Jun 2019 01:30:10 -0700
 From:   Saurav Kashyap <skashyap@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <gbasrur@marvell.com>, <svernekar@marvell.com>,
         <linux-scsi@vger.kernel.org>
-Subject: [PATCH 2/6] bnx2fc: Only put reference to io_req in bnx2fc_abts_cleanup if cleanup times out.
-Date:   Mon, 24 Jun 2019 01:29:56 -0700
-Message-ID: <20190624083000.23074-3-skashyap@marvell.com>
+Subject: [PATCH 3/6] bnx2fc: Separate out completion flags and variables for abort and cleanup.
+Date:   Mon, 24 Jun 2019 01:29:57 -0700
+Message-ID: <20190624083000.23074-4-skashyap@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20190624083000.23074-1-skashyap@marvell.com>
 References: <20190624083000.23074-1-skashyap@marvell.com>
@@ -61,92 +61,245 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Chad Dupuis <cdupuis@marvell.com>
+- Separate out abort and cleanup flag and completion, to have better
+understaning of what is getting processed.
 
-In certain tests where the SCSI error handler issues an abort that is
-already outstanding we will cleanup the command so that the SCSI error
-handler can proceed.  In some of these cases we were seeing a command
-mismatch:
-
- kernel: scsi host2: bnx2fc: xid:0x42b eh_abort - refcnt = 2
- kernel: bnx2fc: eh_abort: io_req (xid = 0x42b) already in abts processing
- kernel: scsi host2: bnx2fc: xid:0x42b Entered bnx2fc_initiate_cleanup
- kernel: scsi host2: bnx2fc: xid:0x42b CLEANUP io_req xid = 0x80b
- kernel: scsi host2: bnx2fc: xid:0x80b cq_compl- cleanup resp rcvd
- kernel: scsi host2: bnx2fc: xid:0x42b complete - rx_state = 9
- kernel: scsi host2: bnx2fc: xid:0x42b Entered process_cleanup_compl refcnt = 2, cmd_type = 1
- kernel: scsi host2: bnx2fc: xid:0x42b scsi_done. err_code = 0x7
- kernel: scsi host2: bnx2fc: xid:0x42b sc=ffff8807f93dfb80, result=0x7, retries=0, allowed=5
- kernel: ------------[ cut here ]------------
- kernel: WARNING: at /root/rpmbuild/BUILD/netxtreme2-7.14.43/obj/default/bnx2fc-2.12.1/driver/bnx2fc_io.c:1347 bnx2fc_eh_abort+0x56f/0x680 [bnx2fc]()
- kernel: xid=0x42b refcount=-1
- kernel: Modules linked in:
- kernel: nls_utf8 isofs sr_mod cdrom tcp_lp dm_round_robin xt_CHECKSUM iptable_mangle ipt_MASQUERADE nf_nat_masquerade_ipv4 iptable_nat nf_nat_ipv4 nf_nat nf_conntrack_ipv4 nf_defrag_ipv4 xt_conntrack nf_conntrack ipt_REJECT nf_reject_ipv4 tun bridge ebtable_filter ebtables fuse ip6table_filter ip6_tables iptable_filter bnx2fc(OE) cnic(OE) uio fcoe libfcoe 8021q libfc garp mrp scsi_transport_fc stp llc scsi_tgt vfat fat dm_service_time intel_powerclamp coretemp intel_rapl iosf_mbi kvm_intel kvm irqbypass crc32_pclmul ghash_clmulni_intel aesni_intel lrw gf128mul glue_helper ablk_helper cryptd ses enclosure ipmi_ssif i2c_core hpilo hpwdt wmi sg ipmi_devintf pcspkr ipmi_si ipmi_msghandler shpchp acpi_power_meter dm_multipath nfsd auth_rpcgss nfs_acl lockd grace sunrpc ip_tables xfs sd_mod crc_t10dif
- kernel: crct10dif_generic bnx2x(OE) crct10dif_pclmul crct10dif_common crc32c_intel mdio ptp pps_core libcrc32c smartpqi scsi_transport_sas fjes uas usb_storage dm_mirror dm_region_hash dm_log dm_mod
- kernel: CPU: 9 PID: 2012 Comm: scsi_eh_2 Tainted: G        W  OE  ------------   3.10.0-514.el7.x86_64 #1
- kernel: Hardware name: HPE Synergy 480 Gen10/Synergy 480 Gen10 Compute Module, BIOS I42 03/21/2018
- kernel: ffff8807f25a3d98 0000000015e7fa0c ffff8807f25a3d50 ffffffff81685eac
- kernel: ffff8807f25a3d88 ffffffff81085820 ffff8807f8e39000 ffff880801ff7468
- kernel: ffff880801ff7610 0000000000002002 ffff8807f8e39014 ffff8807f25a3df0
- kernel: Call Trace:
- kernel: [<ffffffff81685eac>] dump_stack+0x19/0x1b
- kernel: [<ffffffff81085820>] warn_slowpath_common+0x70/0xb0
- kernel: [<ffffffff810858bc>] warn_slowpath_fmt+0x5c/0x80
- kernel: [<ffffffff8168d842>] ? _raw_spin_lock_bh+0x12/0x50
- kernel: [<ffffffffa0549e6f>] bnx2fc_eh_abort+0x56f/0x680 [bnx2fc]
- kernel: [<ffffffff814570af>] scsi_error_handler+0x59f/0x8b0
- kernel: [<ffffffff81456b10>] ? scsi_eh_get_sense+0x250/0x250
- kernel: [<ffffffff810b052f>] kthread+0xcf/0xe0
- kernel: [<ffffffff810b0460>] ? kthread_create_on_node+0x140/0x140
- kernel: [<ffffffff81696418>] ret_from_fork+0x58/0x90
- kernel: [<ffffffff810b0460>] ? kthread_create_on_node+0x140/0x140
- kernel: ---[ end trace 42deb88f2032b111 ]---
-
-The reason that there was a mismatch is that the SCSI command is actual
-returned from the cleanup handler.  In previous testing, the type of
-cleanup notification we'd get from the CQE did not trigger the code that
-returned the SCSI command.  To overcome the previous behavior we would put
-a reference in bnx2fc_abts_cleanup() to account for the SCSI command.
-However in cases where the SCSI command is actually off we end up with an
-extra put.
-
-The fix for this is to only take the extra put in bnx2fc_abts_cleanup if
-the completion for the cleanup times out.
-
-Signed-off-by: Chad Dupuis <cdupuis@marvell.com>
 Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
 ---
- drivers/scsi/bnx2fc/bnx2fc_io.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/scsi/bnx2fc/bnx2fc.h     |  6 ++--
+ drivers/scsi/bnx2fc/bnx2fc_io.c  | 59 ++++++++++++++++++++++------------------
+ drivers/scsi/bnx2fc/bnx2fc_tgt.c | 10 +++----
+ 3 files changed, 41 insertions(+), 34 deletions(-)
 
+diff --git a/drivers/scsi/bnx2fc/bnx2fc.h b/drivers/scsi/bnx2fc/bnx2fc.h
+index 901a316..5d7e21a 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc.h
++++ b/drivers/scsi/bnx2fc/bnx2fc.h
+@@ -433,8 +433,10 @@ struct bnx2fc_cmd {
+ 	void (*cb_func)(struct bnx2fc_els_cb_arg *cb_arg);
+ 	struct bnx2fc_els_cb_arg *cb_arg;
+ 	struct delayed_work timeout_work; /* timer for ULP timeouts */
+-	struct completion tm_done;
+-	int wait_for_comp;
++	struct completion abts_done;
++	struct completion cleanup_done;
++	int wait_for_abts_comp;
++	int wait_for_cleanup_comp;
+ 	u16 xid;
+ 	struct fcoe_err_report_entry err_entry;
+ 	struct fcoe_task_ctx_entry *task;
 diff --git a/drivers/scsi/bnx2fc/bnx2fc_io.c b/drivers/scsi/bnx2fc/bnx2fc_io.c
-index 8def63c..578ff53 100644
+index 578ff53..88c392b 100644
 --- a/drivers/scsi/bnx2fc/bnx2fc_io.c
 +++ b/drivers/scsi/bnx2fc/bnx2fc_io.c
-@@ -1097,16 +1097,16 @@ static int bnx2fc_abts_cleanup(struct bnx2fc_cmd *io_req)
- 	time_left = wait_for_completion_timeout(&io_req->tm_done,
+@@ -70,7 +70,7 @@ static void bnx2fc_cmd_timeout(struct work_struct *work)
+ 							&io_req->req_flags)) {
+ 			/* Handle eh_abort timeout */
+ 			BNX2FC_IO_DBG(io_req, "eh_abort timed out\n");
+-			complete(&io_req->tm_done);
++			complete(&io_req->abts_done);
+ 		} else if (test_bit(BNX2FC_FLAG_ISSUE_ABTS,
+ 				    &io_req->req_flags)) {
+ 			/* Handle internally generated ABTS timeout */
+@@ -775,31 +775,32 @@ retry_tmf:
+ 	io_req->on_tmf_queue = 1;
+ 	list_add_tail(&io_req->link, &tgt->active_tm_queue);
+ 
+-	init_completion(&io_req->tm_done);
+-	io_req->wait_for_comp = 1;
++	init_completion(&io_req->abts_done);
++	io_req->wait_for_abts_comp = 1;
+ 
+ 	/* Ring doorbell */
+ 	bnx2fc_ring_doorbell(tgt);
+ 	spin_unlock_bh(&tgt->tgt_lock);
+ 
+-	rc = wait_for_completion_timeout(&io_req->tm_done,
++	rc = wait_for_completion_timeout(&io_req->abts_done,
+ 					 interface->tm_timeout * HZ);
+ 	spin_lock_bh(&tgt->tgt_lock);
+ 
+-	io_req->wait_for_comp = 0;
++	io_req->wait_for_abts_comp = 0;
+ 	if (!(test_bit(BNX2FC_FLAG_TM_COMPL, &io_req->req_flags))) {
+ 		set_bit(BNX2FC_FLAG_TM_TIMEOUT, &io_req->req_flags);
+ 		if (io_req->on_tmf_queue) {
+ 			list_del_init(&io_req->link);
+ 			io_req->on_tmf_queue = 0;
+ 		}
+-		io_req->wait_for_comp = 1;
++		io_req->wait_for_cleanup_comp = 1;
++		init_completion(&io_req->cleanup_done);
+ 		bnx2fc_initiate_cleanup(io_req);
+ 		spin_unlock_bh(&tgt->tgt_lock);
+-		rc = wait_for_completion_timeout(&io_req->tm_done,
++		rc = wait_for_completion_timeout(&io_req->cleanup_done,
+ 						 BNX2FC_FW_TIMEOUT);
+ 		spin_lock_bh(&tgt->tgt_lock);
+-		io_req->wait_for_comp = 0;
++		io_req->wait_for_cleanup_comp = 0;
+ 		if (!rc)
+ 			kref_put(&io_req->refcount, bnx2fc_cmd_release);
+ 	}
+@@ -1085,7 +1086,8 @@ static int bnx2fc_abts_cleanup(struct bnx2fc_cmd *io_req)
+ 	struct bnx2fc_rport *tgt = io_req->tgt;
+ 	unsigned int time_left;
+ 
+-	io_req->wait_for_comp = 1;
++	init_completion(&io_req->cleanup_done);
++	io_req->wait_for_cleanup_comp = 1;
+ 	bnx2fc_initiate_cleanup(io_req);
+ 
+ 	spin_unlock_bh(&tgt->tgt_lock);
+@@ -1094,9 +1096,8 @@ static int bnx2fc_abts_cleanup(struct bnx2fc_cmd *io_req)
+ 	 * Can't wait forever on cleanup response lest we let the SCSI error
+ 	 * handler wait forever
+ 	 */
+-	time_left = wait_for_completion_timeout(&io_req->tm_done,
++	time_left = wait_for_completion_timeout(&io_req->cleanup_done,
  						BNX2FC_FW_TIMEOUT);
- 	io_req->wait_for_comp = 0;
--	if (!time_left)
-+	if (!time_left) {
+-	io_req->wait_for_comp = 0;
+ 	if (!time_left) {
  		BNX2FC_IO_DBG(io_req, "%s(): Wait for cleanup timed out.\n",
  			      __func__);
- 
--	/*
--	 * Release reference held by SCSI command the cleanup completion
--	 * hits the BNX2FC_CLEANUP case in bnx2fc_process_cq_compl() and
--	 * thus the SCSI command is not returnedi by bnx2fc_scsi_done().
--	 */
--	kref_put(&io_req->refcount, bnx2fc_cmd_release);
-+		/*
-+		 * Put the extra reference to the SCSI command since it would
-+		 * not have been returned in this case.
-+		 */
-+		kref_put(&io_req->refcount, bnx2fc_cmd_release);
-+	}
+@@ -1109,6 +1110,7 @@ static int bnx2fc_abts_cleanup(struct bnx2fc_cmd *io_req)
+ 	}
  
  	spin_lock_bh(&tgt->tgt_lock);
++	io_req->wait_for_cleanup_comp = 0;
  	return SUCCESS;
+ }
+ 
+@@ -1197,7 +1199,8 @@ int bnx2fc_eh_abort(struct scsi_cmnd *sc_cmd)
+ 	/* Move IO req to retire queue */
+ 	list_add_tail(&io_req->link, &tgt->io_retire_queue);
+ 
+-	init_completion(&io_req->tm_done);
++	init_completion(&io_req->abts_done);
++	init_completion(&io_req->cleanup_done);
+ 
+ 	if (test_and_set_bit(BNX2FC_FLAG_ISSUE_ABTS, &io_req->req_flags)) {
+ 		printk(KERN_ERR PFX "eh_abort: io_req (xid = 0x%x) "
+@@ -1225,26 +1228,28 @@ int bnx2fc_eh_abort(struct scsi_cmnd *sc_cmd)
+ 		kref_put(&io_req->refcount,
+ 			 bnx2fc_cmd_release); /* drop timer hold */
+ 	set_bit(BNX2FC_FLAG_EH_ABORT, &io_req->req_flags);
+-	io_req->wait_for_comp = 1;
++	io_req->wait_for_abts_comp = 1;
+ 	rc = bnx2fc_initiate_abts(io_req);
+ 	if (rc == FAILED) {
++		io_req->wait_for_cleanup_comp = 1;
+ 		bnx2fc_initiate_cleanup(io_req);
+ 		spin_unlock_bh(&tgt->tgt_lock);
+-		wait_for_completion(&io_req->tm_done);
++		wait_for_completion(&io_req->cleanup_done);
+ 		spin_lock_bh(&tgt->tgt_lock);
+-		io_req->wait_for_comp = 0;
++		io_req->wait_for_cleanup_comp = 0;
+ 		goto done;
+ 	}
+ 	spin_unlock_bh(&tgt->tgt_lock);
+ 
+ 	/* Wait 2 * RA_TOV + 1 to be sure timeout function hasn't fired */
+-	time_left = wait_for_completion_timeout(&io_req->tm_done,
+-	    (2 * rp->r_a_tov + 1) * HZ);
++	time_left = wait_for_completion_timeout(&io_req->abts_done,
++						(2 * rp->r_a_tov + 1) * HZ);
+ 	if (time_left)
+-		BNX2FC_IO_DBG(io_req, "Timed out in eh_abort waiting for tm_done");
++		BNX2FC_IO_DBG(io_req,
++			      "Timed out in eh_abort waiting for abts_done");
+ 
+ 	spin_lock_bh(&tgt->tgt_lock);
+-	io_req->wait_for_comp = 0;
++	io_req->wait_for_abts_comp = 0;
+ 	if (test_bit(BNX2FC_FLAG_IO_COMPL, &io_req->req_flags)) {
+ 		BNX2FC_IO_DBG(io_req, "IO completed in a different context\n");
+ 		rc = SUCCESS;
+@@ -1321,8 +1326,8 @@ void bnx2fc_process_cleanup_compl(struct bnx2fc_cmd *io_req,
+ 		   kref_read(&io_req->refcount), io_req->cmd_type);
+ 	bnx2fc_scsi_done(io_req, DID_ERROR);
+ 	kref_put(&io_req->refcount, bnx2fc_cmd_release);
+-	if (io_req->wait_for_comp)
+-		complete(&io_req->tm_done);
++	if (io_req->wait_for_cleanup_comp)
++		complete(&io_req->cleanup_done);
+ }
+ 
+ void bnx2fc_process_abts_compl(struct bnx2fc_cmd *io_req,
+@@ -1390,10 +1395,10 @@ void bnx2fc_process_abts_compl(struct bnx2fc_cmd *io_req,
+ 	bnx2fc_cmd_timer_set(io_req, r_a_tov);
+ 
+ io_compl:
+-	if (io_req->wait_for_comp) {
++	if (io_req->wait_for_abts_comp) {
+ 		if (test_and_clear_bit(BNX2FC_FLAG_EH_ABORT,
+ 				       &io_req->req_flags))
+-			complete(&io_req->tm_done);
++			complete(&io_req->abts_done);
+ 	} else {
+ 		/*
+ 		 * We end up here when ABTS is issued as
+@@ -1577,9 +1582,9 @@ void bnx2fc_process_tm_compl(struct bnx2fc_cmd *io_req,
+ 	sc_cmd->scsi_done(sc_cmd);
+ 
+ 	kref_put(&io_req->refcount, bnx2fc_cmd_release);
+-	if (io_req->wait_for_comp) {
++	if (io_req->wait_for_abts_comp) {
+ 		BNX2FC_IO_DBG(io_req, "tm_compl - wake up the waiter\n");
+-		complete(&io_req->tm_done);
++		complete(&io_req->abts_done);
+ 	}
+ }
+ 
+@@ -1926,10 +1931,10 @@ void bnx2fc_process_scsi_cmd_compl(struct bnx2fc_cmd *io_req,
+ 		 * between command abort and (late) completion.
+ 		 */
+ 		BNX2FC_IO_DBG(io_req, "xid not on active_cmd_queue\n");
+-		if (io_req->wait_for_comp)
++		if (io_req->wait_for_abts_comp)
+ 			if (test_and_clear_bit(BNX2FC_FLAG_EH_ABORT,
+ 					       &io_req->req_flags))
+-				complete(&io_req->tm_done);
++				complete(&io_req->abts_done);
+ 	}
+ 
+ 	bnx2fc_unmap_sg_list(io_req);
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_tgt.c b/drivers/scsi/bnx2fc/bnx2fc_tgt.c
+index d735e87..50384b4 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_tgt.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_tgt.c
+@@ -187,7 +187,7 @@ void bnx2fc_flush_active_ios(struct bnx2fc_rport *tgt)
+ 				/* Handle eh_abort timeout */
+ 				BNX2FC_IO_DBG(io_req, "eh_abort for IO "
+ 					      "cleaned up\n");
+-				complete(&io_req->tm_done);
++				complete(&io_req->abts_done);
+ 			}
+ 			kref_put(&io_req->refcount,
+ 				 bnx2fc_cmd_release); /* drop timer hold */
+@@ -210,8 +210,8 @@ void bnx2fc_flush_active_ios(struct bnx2fc_rport *tgt)
+ 		list_del_init(&io_req->link);
+ 		io_req->on_tmf_queue = 0;
+ 		BNX2FC_IO_DBG(io_req, "tm_queue cleanup\n");
+-		if (io_req->wait_for_comp)
+-			complete(&io_req->tm_done);
++		if (io_req->wait_for_abts_comp)
++			complete(&io_req->abts_done);
+ 	}
+ 
+ 	list_for_each_entry_safe(io_req, tmp, &tgt->els_queue, link) {
+@@ -251,8 +251,8 @@ void bnx2fc_flush_active_ios(struct bnx2fc_rport *tgt)
+ 				/* Handle eh_abort timeout */
+ 				BNX2FC_IO_DBG(io_req, "eh_abort for IO "
+ 					      "in retire_q\n");
+-				if (io_req->wait_for_comp)
+-					complete(&io_req->tm_done);
++				if (io_req->wait_for_abts_comp)
++					complete(&io_req->abts_done);
+ 			}
+ 			kref_put(&io_req->refcount, bnx2fc_cmd_release);
+ 		}
 -- 
 1.8.3.1
 
