@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DA750EDC
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 16:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AB4F50EDE
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 16:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730237AbfFXOnM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 10:43:12 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:35367 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727641AbfFXOnM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 10:43:12 -0400
-Received: by mail-pg1-f194.google.com with SMTP id s27so7248544pgl.2
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 07:43:11 -0700 (PDT)
+        id S1730279AbfFXOnO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 10:43:14 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42292 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730259AbfFXOnO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 10:43:14 -0400
+Received: by mail-pl1-f194.google.com with SMTP id ay6so6980878plb.9
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 07:43:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=urA4pdWuWd6tf9IQ2Z5lWYjHQew0QaOk1+ndmni+EOE=;
-        b=HPOC5OVy+mxVENgqavAlzWuiFuwqRRro+l0NjraqjlnwN8Zvb9cNGvw5boW+v+Zpan
-         Zto6U1ClJUY3cEwp3lQqXQLw0TWHTLD2GpPy6H0Nicz76s/3tBkFkBujljbSTG/eyJSo
-         MAiQZTOSoA57ZTjxLi7fs1isJN8SSltKi+kiI=
+        bh=7iZ9ehHlIvmBorBohkBuydVhwFmdpy7sDBaqRwPxVwo=;
+        b=AO42MT7hPkzLjlOYcOSux7wPabHyIRs+B7SIHpGPBEjLp02XQuBc5/8oRG4G7b0N7t
+         yj7SUid5XkRPwEcaERXWELqdqjp3VuC+KerwjpQsN9ZBa5JG5qVaDvZnrNotBA8WVzhk
+         G/fHYVkRqPo42K/SBGOUwUkfZmFy84ASf9P7w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=urA4pdWuWd6tf9IQ2Z5lWYjHQew0QaOk1+ndmni+EOE=;
-        b=aNM1qrN471zf0RfUVkJ2CcKf+7b0cwGVpDrGQxfnyvIKMw+aRf6oa0KJjjbkIAEB/g
-         jK7AJzJ8/ODU7lVz/M0VQWYZP3CcGyEAQhqL7C+Mbheam5nGJTTxmF+OUpCs4us4k2cm
-         zewFC/p3Yt0D6VH4UxWMG+ACxw7IOj0J7+sKffwYUTuiQtRVv+i5RBGBz8bO96ic657T
-         a36w4y3Q7SfFClag4xD8W26dpWeMRNahpWvgy8PAxV4sskbO1OkaRmFC3I/KV3ykteJf
-         fPYN1WrEj/FLwJUA8dYM8cItYXsBXXdl2pp7Yxzi1r6SiomegX2ktCsD3bPXFtFui75Z
-         aFdw==
-X-Gm-Message-State: APjAAAU2z1727PIStrdYB1oeSZQVOLRXAe4w5L9wt/TWzoCWWx1l5Td5
-        zwinL9G466cScfbpvM1phzDRNg==
-X-Google-Smtp-Source: APXvYqyNcNl1HsJQpfGHp6gn51hQmovZnp4CvA0iz3lV5hXVIc97Ee4PhLyBHJ0fs/WKxPI9+y1mXA==
-X-Received: by 2002:a17:90a:350c:: with SMTP id q12mr25431859pjb.46.1561387391367;
-        Mon, 24 Jun 2019 07:43:11 -0700 (PDT)
+        bh=7iZ9ehHlIvmBorBohkBuydVhwFmdpy7sDBaqRwPxVwo=;
+        b=SqGER4QqD6pF+rdMNx//X3pAT022wtaDqMbGD/xyi8Ysz5izl44eYe9ckLwCgKAqT/
+         9/Je+4CREyfxSyn2yhB4YLXSNd7PL8T8ya9pemdeahhFiBlI3qXrBaZRat1sxEp/b1kr
+         7/enDHSiO6C1j1+Cr7uTrmp/rRAa+saosXsTSQ5zJHc0dDwZX3k9r5t+JWXEChS6Nqjw
+         bai3UhLdskeIEHY67RBVLadsr9cRzd3Kpv+6l7O9+JsyOSI7GnLD16Lv8AaBxpFyQyCt
+         CsCQ17n3TXOs5oB3GXatlRLVk9fv/tZ813zgCq1vYxROfTuAHZTa602NjRm4dWP4fMRq
+         picA==
+X-Gm-Message-State: APjAAAWvEprO/C7EjdPv1coOxEJYXV+icJa2eki024QXtnmCZFshWOgd
+        dxHgURVvSUmVtwvSQzVm9FebYg==
+X-Google-Smtp-Source: APXvYqzAxQsriwWr74oQS1WPtJD7POvTqyNBKz066dgBgXk2z1ISXTFvk1gWYYP67aZfRjOEwYjfRQ==
+X-Received: by 2002:a17:902:2862:: with SMTP id e89mr13602561plb.258.1561387393478;
+        Mon, 24 Jun 2019 07:43:13 -0700 (PDT)
 Received: from dhcp-10-123-20-15.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id k197sm12991799pgc.22.2019.06.24.07.43.09
+        by smtp.gmail.com with ESMTPSA id k197sm12991799pgc.22.2019.06.24.07.43.11
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 24 Jun 2019 07:43:10 -0700 (PDT)
+        Mon, 24 Jun 2019 07:43:12 -0700 (PDT)
 From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 To:     martin.petersen@oracle.com
 Cc:     linux-scsi@vger.kernel.org, suganath-prabu.subramani@broadcom.com,
         sathya.prakash@broadcom.com,
         Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Subject: [PATCH 1/4] mpt3sas: Remove CPU arch check to determine perf_mode
-Date:   Mon, 24 Jun 2019 10:42:53 -0400
-Message-Id: <1561387376-28323-2-git-send-email-sreekanth.reddy@broadcom.com>
+Subject: [PATCH 2/4] mpt3sas: Fix look configured PCIe link speed not cap
+Date:   Mon, 24 Jun 2019 10:42:54 -0400
+Message-Id: <1561387376-28323-3-git-send-email-sreekanth.reddy@broadcom.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1561387376-28323-1-git-send-email-sreekanth.reddy@broadcom.com>
 References: <1561387376-28323-1-git-send-email-sreekanth.reddy@broadcom.com>
@@ -56,56 +56,50 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently default perf_mode is set to 'balanced' on Intel architecture
-machines and on other machines default perf_mode is set to 'latency'
-mode.
+While enabling high iops queues driver should look for HBA's
+configured PCIe link speed instead of looking for HBA's max
+capacity link speed.
 
-Now this CPU architecture check is removed while determining the
-perf_mode. And default perf_mode mode is set to 'balanced' mode on
-all machines.
-
-User can choose the required performance mode using perf_mode
-module parameter.
+i.e. Enable high iops queues only if Aero/Sea HBA's configured
+PCIe link speed is set to 16GT/s speed.
 
 Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 16 +---------------
- 1 file changed, 1 insertion(+), 15 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index cae7441..d55f134 100644
+index d55f134..8a47e02 100644
 --- a/drivers/scsi/mpt3sas/mpt3sas_base.c
 +++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -113,8 +113,7 @@ MODULE_PARM_DESC(perf_mode,
- 	"interrupt coalescing is enabled on all queues,\n\t\t"
- 	"2 - latency: high iops mode is disabled &\n\t\t"
- 	"interrupt coalescing is enabled on all queues with timeout value 0xA,\n"
--	"\t\tdefault - on Intel architecture, default perf_mode is\n\t\t"
--	" 'balanced' and in others architectures the default mode is 'latency'"
-+	"\t\tdefault - default perf_mode is 'balanced'"
- 	);
+@@ -2979,7 +2979,7 @@ static void
+ _base_check_and_enable_high_iops_queues(struct MPT3SAS_ADAPTER *ioc,
+ 		int hba_msix_vector_count)
+ {
+-	enum pci_bus_speed speed = PCI_SPEED_UNKNOWN;
++	u16 lnksta, speed;
  
- enum mpt3sas_perf_mode {
-@@ -2990,19 +2989,6 @@ _base_check_and_enable_high_iops_queues(struct MPT3SAS_ADAPTER *ioc,
+ 	if (perf_mode == MPT_PERF_MODE_IOPS ||
+ 	    perf_mode == MPT_PERF_MODE_LATENCY) {
+@@ -2989,15 +2989,10 @@ _base_check_and_enable_high_iops_queues(struct MPT3SAS_ADAPTER *ioc,
  
  	if (perf_mode == MPT_PERF_MODE_DEFAULT) {
  
--#if defined(CONFIG_X86)
--		/*
--		 * Use global variable boot_cpu_data.x86_vendor to
--		 * determine whether the architecture is Intel or not.
--		 */
--		if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL) {
--			ioc->high_iops_queues = 0;
--			return;
--		}
--#else
--		ioc->high_iops_queues = 0;
--		return;
--#endif
- 		speed = pcie_get_speed_cap(ioc->pdev);
- 		dev_info(&ioc->pdev->dev, "PCIe device speed is %s\n",
- 		     speed == PCIE_SPEED_2_5GT ? "2.5GHz" :
+-		speed = pcie_get_speed_cap(ioc->pdev);
+-		dev_info(&ioc->pdev->dev, "PCIe device speed is %s\n",
+-		     speed == PCIE_SPEED_2_5GT ? "2.5GHz" :
+-		     speed == PCIE_SPEED_5_0GT ? "5.0GHz" :
+-		     speed == PCIE_SPEED_8_0GT ? "8.0GHz" :
+-		     speed == PCIE_SPEED_16_0GT ? "16.0GHz" :
+-		     "Unknown");
++		pcie_capability_read_word(ioc->pdev, PCI_EXP_LNKSTA, &lnksta);
++		speed = lnksta & PCI_EXP_LNKSTA_CLS;
+ 
+-		if (speed < PCIE_SPEED_16_0GT) {
++		if (speed < 0x4) {
+ 			ioc->high_iops_queues = 0;
+ 			return;
+ 		}
 -- 
 1.8.3.1
 
