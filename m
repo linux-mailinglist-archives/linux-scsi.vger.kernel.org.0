@@ -2,122 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87F7F50471
-	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 10:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5049650491
+	for <lists+linux-scsi@lfdr.de>; Mon, 24 Jun 2019 10:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727797AbfFXIWU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 04:22:20 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:38530 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727028AbfFXIWT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 04:22:19 -0400
-Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
-  viswas.g@microsemi.com designates 208.19.100.22 as permitted
-  sender) identity=mailfrom; client-ip=208.19.100.22;
-  receiver=esa4.microchip.iphmx.com;
-  envelope-from="viswas.g@microsemi.com";
-  x-sender="viswas.g@microsemi.com"; x-conformance=spf_only;
-  x-record-type="v=spf1"; x-record-text="v=spf1
-  ip4:208.19.100.20 ip4:208.19.100.21 ip4:208.19.100.22
-  ip4:208.19.100.23 ip4:208.19.99.221 ip4:208.19.99.222
-  ip4:208.19.99.223 ip4:208.19.99.225 -all"
-Received-SPF: None (esa4.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@smtp.microsemi.com) identity=helo;
-  client-ip=208.19.100.22; receiver=esa4.microchip.iphmx.com;
-  envelope-from="viswas.g@microsemi.com";
-  x-sender="postmaster@smtp.microsemi.com";
-  x-conformance=spf_only
-Authentication-Results: esa4.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=viswas.g@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com; dmarc=fail (p=none dis=none) d=microchip.com
-X-IronPort-AV: E=Sophos;i="5.63,411,1557212400"; 
-   d="scan'208";a="38080752"
-Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.22])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 24 Jun 2019 01:22:18 -0700
-Received: from AVMBX3.microsemi.net (10.100.34.33) by AVMBX2.microsemi.net
- (10.100.34.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 24 Jun
- 2019 01:22:17 -0700
-Received: from AVMBX2.microsemi.net (10.100.34.32) by AVMBX3.microsemi.net
- (10.100.34.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 24 Jun
- 2019 01:22:17 -0700
-Received: from localhost (10.41.130.49) by avmbx2.microsemi.net (10.100.34.32)
- with Microsoft SMTP Server id 15.1.1713.5 via Frontend Transport; Mon, 24 Jun
- 2019 01:22:16 -0700
-From:   Deepak Ukey <deepak.ukey@microchip.com>
-To:     <linux-scsi@vger.kernel.org>
-CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        <Viswas.G@microcchip.com>, <deepak.ukey@microchip.com>,
-        <jinpu.wang@profitbricks.com>, <martin.petersen@oracle.com>
-Subject: [PATCH 3/3] pm80xx : Modified the logic to collect IOP event logs.
-Date:   Mon, 24 Jun 2019 13:52:28 +0530
-Message-ID: <20190624082228.27433-4-deepak.ukey@microchip.com>
-X-Mailer: git-send-email 2.19.0-rc1
-In-Reply-To: <20190624082228.27433-1-deepak.ukey@microchip.com>
-References: <20190624082228.27433-1-deepak.ukey@microchip.com>
+        id S1727760AbfFXIaE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 04:30:04 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:36434 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726612AbfFXIaE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 24 Jun 2019 04:30:04 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5O8LFI5018312
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:03 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0818;
+ bh=0Jl9opByMl2foQaulfwcB17a/TK3mV6W9rftvoCWFgU=;
+ b=kKHG9grTLUvLTQE2GcUsdbwp0ZRqLtDBhk+KnyQ8q1IW679Hce1DL02cfFmsF4NgX3C6
+ svIDuQrlr8lWFcvOoHCv+maPWbIWF2RRMKsRg4phBA7/G1nxL5lSjnDP55dJqs+T+Xxx
+ tv0kfhRtA7YA7s5Rupoy5egAN9DUTY0crETqu3iYqgpf9E0QatY0RHBSn3rQRXgiPITs
+ c7uLSu4KNnzUAB3tvnUFtV3WuysyrhBqdPP7F9esrS/w/CDzJIObHrjSOtVvPN43SQaD
+ qANgeVBH17Cc/pj/rV6fV4m6Fn73dL+FXKcBDtHRtSAjqyB/9Mmk+WAy810/tlCTbfeh bg== 
+Received: from sc-exch04.marvell.com ([199.233.58.184])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2t9kujdw7e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 01:30:03 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH04.marvell.com
+ (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 24 Jun
+ 2019 01:30:01 -0700
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Mon, 24 Jun 2019 01:30:01 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id 2BBD43F704B;
+        Mon, 24 Jun 2019 01:30:01 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x5O8U1wM023109;
+        Mon, 24 Jun 2019 01:30:01 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x5O8U07p023108;
+        Mon, 24 Jun 2019 01:30:00 -0700
+From:   Saurav Kashyap <skashyap@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <gbasrur@marvell.com>, <svernekar@marvell.com>,
+        <linux-scsi@vger.kernel.org>
+Subject: [PATCH 0/6] bnx2fc: Update to the driver.
+Date:   Mon, 24 Jun 2019 01:29:54 -0700
+Message-ID: <20190624083000.23074-1-skashyap@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-24_06:,,
+ signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Added the logic for collecting IOP log respective to event log size.
+Hi Martin,
 
-Signed-off-by: Deepak Ukey <deepak.ukey@microchip.com>
-Signed-off-by: Viswas G <Viswas.G@microchip.com>
----
- drivers/scsi/pm8001/pm8001_ctl.c | 33 +++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+This series fixes various issues reported by internal testing.
+Kindly apply this series to scsi-queue at your earliest convenience.
 
-diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
-index c7e0a42c..6b85016 100644
---- a/drivers/scsi/pm8001/pm8001_ctl.c
-+++ b/drivers/scsi/pm8001/pm8001_ctl.c
-@@ -492,25 +492,26 @@ static ssize_t pm8001_ctl_iop_log_show(struct device *cdev,
- 	struct Scsi_Host *shost = class_to_shost(cdev);
- 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
- 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
--#define IOP_MEMMAP(r, c) \
--	(*(u32 *)((u8*)pm8001_ha->memoryMap.region[IOP].virt_ptr + (r) * 32 \
--	+ (c)))
--	int i;
- 	char *str = buf;
--	int max = 2;
--	for (i = 0; i < max; i++) {
--		str += sprintf(str, "0x%08x 0x%08x 0x%08x 0x%08x 0x%08x 0x%08x"
--			       "0x%08x 0x%08x\n",
--			       IOP_MEMMAP(i, 0),
--			       IOP_MEMMAP(i, 4),
--			       IOP_MEMMAP(i, 8),
--			       IOP_MEMMAP(i, 12),
--			       IOP_MEMMAP(i, 16),
--			       IOP_MEMMAP(i, 20),
--			       IOP_MEMMAP(i, 24),
--			       IOP_MEMMAP(i, 28));
-+	u32 read_size =
-+		pm8001_ha->main_cfg_tbl.pm80xx_tbl.event_log_size / 1024;
-+	static u32 start, end, count;
-+	u32 max_read_times = 32;
-+	u32 max_count = (read_size * 1024) / (max_read_times * 4);
-+	u32 *temp = (u32 *)pm8001_ha->memoryMap.region[IOP].virt_ptr;
-+
-+	if ((count % max_count) == 0) {
-+		start = 0;
-+		end = max_read_times;
-+		count = 0;
-+	} else {
-+		start = end;
-+		end = end + max_read_times;
- 	}
- 
-+	for (; start < end; start++)
-+		str += sprintf(str, "%08x ", *(temp+start));
-+	count++;
- 	return str - buf;
- }
- static DEVICE_ATTR(iop_log, S_IRUGO, pm8001_ctl_iop_log_show, NULL);
+Thanks,
+~Saurav
+
+Chad Dupuis (2):
+  bnx2fc: Redo setting source FCoE MAC.
+  bnx2fc: Only put reference to io_req in bnx2fc_abts_cleanup if cleanup
+    times out.
+
+Saurav Kashyap (4):
+  bnx2fc: Separate out completion flags and variables for abort and
+    cleanup.
+  bnx2fc: Do not allow both a cleanup completion and abort completion
+    for the same request.
+  bnx2fc: Limit the IO size according to the FW capability.
+  bnx2fc: Update the driver version to 2.12.10.
+
+ drivers/scsi/bnx2fc/bnx2fc.h      |  14 +++--
+ drivers/scsi/bnx2fc/bnx2fc_els.c  |  56 ++++++++++++------
+ drivers/scsi/bnx2fc/bnx2fc_fcoe.c |   3 +-
+ drivers/scsi/bnx2fc/bnx2fc_io.c   | 116 +++++++++++++++++++++++++++-----------
+ drivers/scsi/bnx2fc/bnx2fc_tgt.c  |  10 ++--
+ 5 files changed, 138 insertions(+), 61 deletions(-)
+
 -- 
-1.8.5.6
+1.8.3.1
 
