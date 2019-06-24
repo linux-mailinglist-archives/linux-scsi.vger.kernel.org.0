@@ -2,194 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1334551E3A
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 00:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702C251E55
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 00:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbfFXW16 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 18:27:58 -0400
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:57302 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726263AbfFXW16 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 18:27:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1561415278; x=1592951278;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=Ad2l5Rxs2ffri8g3/mqgPG6MkPo0WoV3ruZusr+gDMo=;
-  b=JGNj9qVbmozRW8+dFxTTdY0KgyS+pg+7fOTmlE12yLUuXH8q8eG+sPCS
-   5TA2tmxC8LKzc81vvT4LW0HKnBXLIKOLO4/dxlX4Gjom9f6aa1jBXL6Gv
-   mY0WIUGQEVY63ywo0Yq/NI9/ZHWVWtdKWIrEuSlgjof6jTi2T701/GrXQ
-   fi3nUAdQ8/LTmhbHRI9Qn+a0YgSXvKOeyxDCEn50HOuGeUVhjNHesZKxP
-   udLM+6Wm5CoQZ7u8/0cK7xgyM8ECyJkx9wbBI7o1rVe4F4PFdnasEW5xN
-   0J/25yExLiJQDLyFVsHbvLFEm0xBqIWyxjP9N1UpuaSSEjTsmE5rwYIES
-   g==;
-X-IronPort-AV: E=Sophos;i="5.63,413,1557158400"; 
-   d="scan'208";a="113058832"
-Received: from mail-co1nam04lp2057.outbound.protection.outlook.com (HELO NAM04-CO1-obe.outbound.protection.outlook.com) ([104.47.45.57])
-  by ob1.hgst.iphmx.com with ESMTP; 25 Jun 2019 06:27:57 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+        id S1726450AbfFXWcO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 18:32:14 -0400
+Received: from mail-eopbgr00050.outbound.protection.outlook.com ([40.107.0.50]:23877
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726388AbfFXWcN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 24 Jun 2019 18:32:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kqNwmNu5y/f2dDCnQjmEaTDgAzDeVr7iRYr3FaankfI=;
- b=fKHBfaJYGdwkzrI+S7TORyjZlHR+bWnvzSxZp0rS+eUWKvhOmiTqCqJZed0JQKtRV9ZR4v9JkCeJkZJ+FTn0yUYgtpqGKGfsbI9dOZJNf/LINcpTfTBcRpmLhypGwW2dEJzM1Hys21rIsd/+OwlY6tIxuMYqbYGQ3ovHyqXBE0E=
-Received: from BYAPR04MB5749.namprd04.prod.outlook.com (20.179.58.26) by
- BYAPR04MB5510.namprd04.prod.outlook.com (20.178.232.28) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.17; Mon, 24 Jun 2019 22:27:55 +0000
-Received: from BYAPR04MB5749.namprd04.prod.outlook.com
- ([fe80::fc2b:fcd4:7782:53d6]) by BYAPR04MB5749.namprd04.prod.outlook.com
- ([fe80::fc2b:fcd4:7782:53d6%7]) with mapi id 15.20.2008.014; Mon, 24 Jun 2019
- 22:27:55 +0000
-From:   Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        =?iso-8859-1?Q?Matias_Bj=F8rling?= <mb@lightnvm.io>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
-        Ajay Joshi <Ajay.Joshi@wdc.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>
-CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>
-Subject: Re: [PATCH 1/4] block: add zone open, close and finish support
-Thread-Topic: [PATCH 1/4] block: add zone open, close and finish support
-Thread-Index: AQHVKDJQD2Z4QYw9b06emkXLk9EL8A==
-Date:   Mon, 24 Jun 2019 22:27:55 +0000
-Message-ID: <BYAPR04MB5749CEFBB45EA34BD3345CD686E00@BYAPR04MB5749.namprd04.prod.outlook.com>
-References: <20190621130711.21986-1-mb@lightnvm.io>
- <20190621130711.21986-2-mb@lightnvm.io>
- <ee5764fb-473a-f118-eaac-95478d885f6f@acm.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Chaitanya.Kulkarni@wdc.com; 
-x-originating-ip: [199.255.44.250]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f19b20c5-2b5f-4ce0-1129-08d6f8f3345f
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB5510;
-x-ms-traffictypediagnostic: BYAPR04MB5510:
-wdcipoutbound: EOP-TRUE
-x-microsoft-antispam-prvs: <BYAPR04MB5510DDA3901AD74B1FC1B8E386E00@BYAPR04MB5510.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:494;
-x-forefront-prvs: 007814487B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(366004)(136003)(346002)(376002)(396003)(189003)(199004)(71190400001)(76116006)(4326008)(52536014)(25786009)(2501003)(71200400001)(5660300002)(33656002)(66574012)(66946007)(73956011)(66446008)(64756008)(66556008)(66476007)(68736007)(54906003)(486006)(316002)(476003)(110136005)(446003)(14444005)(256004)(6116002)(3846002)(7416002)(66066001)(76176011)(72206003)(102836004)(53546011)(6506007)(99286004)(186003)(26005)(55016002)(7696005)(53936002)(6246003)(478600001)(6436002)(86362001)(8676002)(2906002)(2201001)(9686003)(14454004)(8936002)(229853002)(81156014)(7736002)(81166006)(305945005)(74316002)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB5510;H:BYAPR04MB5749.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 201BaMtI03Vi7dtOD1ZJgoB3JwjF8mf77v7Gzcs1YS9HKG04swsK21mWQQX17bOXylHKuFhh9nnwUAT2F8QbSY+LBVS83zqmP0vhPAK2Zyp008GtlmZmJDKe2rR7apm43B1mwfLanffZWjqJdvLlbQFiIQ965Jh+AxCXWYHbc+UAmLt0mRUlxfAw2UsEyCY6YS6fYysEfcRdSn7w4GLIzs7jf1uTa8l22/cndNhJM49u7jH6/qF/sO8H2B006xClgj/XWxXrKnVMFVAwdOvSQJWWKW2M3uulY+CphqnlYHoloo3gbPEG+tK7cPC5FAEWjQ/IrzvOrqOeMeJXXLehR2Pw7+IEFmzEeNtB527qjjk8Oq4alkRaaLarDYsv/qcr3HTNOiKWGQ7KEsoA/945ajuZe7ROf/52BKx6GGm8W8o=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ bh=XN4+lVoQ+cOhCtCUzOmlmlY7AZq9vD0eMs1RW46yp0U=;
+ b=LXTAztfnnZaR4vCAyWym15Zi67JPdOiy68GR6Ut9fLjhk7/cnBrXMD6wChzl1NsVVKObJPPVfNq/1mWSxCrIw1s4NQVIz0IxVnl0uohzCf97P9HGqB5mJZpm0whZ4DWrdmyVZVXBq9+w+cWG2y70Ra3TfKLDjMt8Tq1Du/5IVvM=
+Received: from DB6PR05CA0014.eurprd05.prod.outlook.com (2603:10a6:6:14::27) by
+ AM4PR0501MB2337.eurprd05.prod.outlook.com (2603:10a6:200:53::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2008.16; Mon, 24 Jun
+ 2019 22:32:10 +0000
+Received: from VE1EUR03FT055.eop-EUR03.prod.protection.outlook.com
+ (2a01:111:f400:7e09::209) by DB6PR05CA0014.outlook.office365.com
+ (2603:10a6:6:14::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.2008.16 via Frontend
+ Transport; Mon, 24 Jun 2019 22:32:10 +0000
+Authentication-Results: spf=pass (sender IP is 193.47.165.134)
+ smtp.mailfrom=mellanox.com; vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=pass action=none
+ header.from=mellanox.com;
+Received-SPF: Pass (protection.outlook.com: domain of mellanox.com designates
+ 193.47.165.134 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.47.165.134; helo=mtlcas13.mtl.com;
+Received: from mtlcas13.mtl.com (193.47.165.134) by
+ VE1EUR03FT055.mail.protection.outlook.com (10.152.19.158) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.2008.13 via Frontend Transport; Mon, 24 Jun 2019 22:32:09 +0000
+Received: from MTLCAS13.mtl.com (10.0.8.78) by mtlcas13.mtl.com (10.0.8.78)
+ with Microsoft SMTP Server (TLS) id 15.0.1178.4; Tue, 25 Jun 2019 01:32:09
+ +0300
+Received: from MTLCAS01.mtl.com (10.0.8.71) by MTLCAS13.mtl.com (10.0.8.78)
+ with Microsoft SMTP Server (TLS) id 15.0.1178.4 via Frontend Transport; Tue,
+ 25 Jun 2019 01:32:09 +0300
+Received: from [172.16.0.6] (172.16.0.6) by MTLCAS01.mtl.com (10.0.8.71) with
+ Microsoft SMTP Server (TLS) id 14.3.301.0; Tue, 25 Jun 2019 01:32:06 +0300
+Subject: Re: [PATCH 5/8] IB/iser: set virt_boundary_mask in the scsi host
+To:     Christoph Hellwig <hch@lst.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Sagi Grimberg <sagi@grimberg.me>,
+        Bart Van Assche <bvanassche@acm.org>,
+        <linux-rdma@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <megaraidlinux.pdl@broadcom.com>,
+        <MPT-FusionLinux.pdl@broadcom.com>, <linux-hyperv@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20190617122000.22181-1-hch@lst.de>
+ <20190617122000.22181-6-hch@lst.de>
+From:   Max Gurtovoy <maxg@mellanox.com>
+Message-ID: <bbea1029-e434-a633-5516-fe6a92e60beb@mellanox.com>
+Date:   Tue, 25 Jun 2019 01:32:06 +0300
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f19b20c5-2b5f-4ce0-1129-08d6f8f3345f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Jun 2019 22:27:55.7511
+In-Reply-To: <20190617122000.22181-6-hch@lst.de>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [172.16.0.6]
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:193.47.165.134;IPV:NLI;CTRY:IL;EFV:NLI;SFV:NSPM;SFS:(10009020)(136003)(376002)(39860400002)(346002)(396003)(2980300002)(189003)(199004)(2616005)(65826007)(7416002)(486006)(16526019)(26005)(77096007)(126002)(336012)(446003)(476003)(54906003)(16576012)(58126008)(23676004)(2486003)(106002)(356004)(7736002)(305945005)(229853002)(47776003)(70586007)(2906002)(70206006)(8676002)(81156014)(81166006)(65956001)(65806001)(67846002)(478600001)(230700001)(186003)(50466002)(76176011)(64126003)(110136005)(316002)(11346002)(3846002)(53546011)(6116002)(558084003)(4326008)(86362001)(5660300002)(31696002)(31686004)(8936002)(6246003)(36756003)(3940600001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM4PR0501MB2337;H:mtlcas13.mtl.com;FPR:;SPF:Pass;LANG:en;PTR:mail13.mellanox.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1a4a9614-d169-4a47-9da4-08d6f8f3cbb9
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(4709080)(1401327)(2017052603328)(7193020);SRVR:AM4PR0501MB2337;
+X-MS-TrafficTypeDiagnostic: AM4PR0501MB2337:
+X-Microsoft-Antispam-PRVS: <AM4PR0501MB2337CA366F2AA78E17D1EFABB6E00@AM4PR0501MB2337.eurprd05.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:813;
+X-Forefront-PRVS: 007814487B
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: LVuO0N6wtddtvKl1LL1Z73/Uzmeh7Kv2WF8quQAsWAJfWXUYwhtg1/66+IruTRauyQlfWSTFUNTyrj60P3lt2W5XbrHun4QiwOqN9XEITaRtPTVKX8OrUUliTvLan/H8ZCV3LZ8DVf7fPivFeYy0eiyuXbsD0wAb+herqMzHNEHHs5u4xqSyZXU9ss7or4RyZT6Qs+YEFD7YNIOQrAQkiP6WZcAlrKkqF4x9/16b8l+TR5Z7a09oovg9C4PHJ/LVImEvPzi3EBqFr6heiPgPdIgYiPAkMH76oNPjkrh6gRE+DPnsPEMJc7ubpVPnjIewV/HinJVvrK96VRsmG1jb9wYjawm5NdcUW6qhbXv8leoMOXRomxWZAQTQaLf1GvPG6PO0Ak0K7uQOmSZK4lx0eWZUe9k4Wx6xTa26TiiDpvI=
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jun 2019 22:32:09.4232
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Chaitanya.Kulkarni@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5510
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a4a9614-d169-4a47-9da4-08d6f8f3cbb9
+X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a652971c-7d2e-4d9b-a6a4-d149256f461b;Ip=[193.47.165.134];Helo=[mtlcas13.mtl.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM4PR0501MB2337
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/24/19 12:43 PM, Bart Van Assche wrote:=0A=
-> On 6/21/19 6:07 AM, Matias Bj=F8rling wrote:=0A=
->> diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h=0A=
->> index 95202f80676c..067ef9242275 100644=0A=
->> --- a/include/linux/blk_types.h=0A=
->> +++ b/include/linux/blk_types.h=0A=
->> @@ -284,13 +284,20 @@ enum req_opf {=0A=
->>    	REQ_OP_DISCARD		=3D 3,=0A=
->>    	/* securely erase sectors */=0A=
->>    	REQ_OP_SECURE_ERASE	=3D 5,=0A=
->> -	/* reset a zone write pointer */=0A=
->> -	REQ_OP_ZONE_RESET	=3D 6,=0A=
->>    	/* write the same sector many times */=0A=
->>    	REQ_OP_WRITE_SAME	=3D 7,=0A=
->>    	/* write the zero filled sector many times */=0A=
->>    	REQ_OP_WRITE_ZEROES	=3D 9,=0A=
->>    =0A=
->> +	/* reset a zone write pointer */=0A=
->> +	REQ_OP_ZONE_RESET	=3D 16,=0A=
->> +	/* Open zone(s) */=0A=
->> +	REQ_OP_ZONE_OPEN	=3D 17,=0A=
->> +	/* Close zone(s) */=0A=
->> +	REQ_OP_ZONE_CLOSE	=3D 18,=0A=
->> +	/* Finish zone(s) */=0A=
->> +	REQ_OP_ZONE_FINISH	=3D 19,=0A=
->> +=0A=
->>    	/* SCSI passthrough using struct scsi_request */=0A=
->>    	REQ_OP_SCSI_IN		=3D 32,=0A=
->>    	REQ_OP_SCSI_OUT		=3D 33,=0A=
->> @@ -375,6 +382,22 @@ static inline void bio_set_op_attrs(struct bio *bio=
-, unsigned op,=0A=
->>    	bio->bi_opf =3D op | op_flags;=0A=
->>    }=0A=
-> =0A=
-> Are the new operation types ever passed to op_is_write()? The definition=
-=0A=
-> of that function is as follows:=0A=
-> =0A=
-May be we should change numbering since blktrace also relies on the =0A=
-having on_is_write() without looking at the rq_ops().=0A=
-=0A=
-197  * Data direction bit lookup=0A=
-  198  */=0A=
-  199 static const u32 ddir_act[2] =3D { BLK_TC_ACT(BLK_TC_READ),=0A=
-  200                                  BLK_TC_ACT(BLK_TC_WRITE) };  <----=
-=0A=
-  201=0A=
-  202 #define BLK_TC_RAHEAD           BLK_TC_AHEAD=0A=
-  203 #define BLK_TC_PREFLUSH         BLK_TC_FLUSH=0A=
-  204=0A=
-  205 /* The ilog2() calls fall out because they're constant */=0A=
-  206 #define MASK_TC_BIT(rw, __name) ((rw & REQ_ ## __name) << \=0A=
-  207           (ilog2(BLK_TC_ ## __name) + BLK_TC_SHIFT - __REQ_ ## =0A=
-__name))=0A=
-  208=0A=
-  209 /*=0A=
-  210  * The worker for the various blk_add_trace*() types. Fills out a=0A=
-  211  * blk_io_trace structure and places it in a per-cpu subbuffer.=0A=
-  212  */=0A=
-  213 static void __blk_add_trace(struct blk_trace *bt, sector_t sector, =
-=0A=
-int bytes,=0A=
-  214                      int op, int op_flags, u32 what, int error, =0A=
-int pdu_len,=0A=
-  215                      void *pdu_data, union kernfs_node_id *cgid)=0A=
-  216 {=0A=
-  217         struct task_struct *tsk =3D current;=0A=
-  218         struct ring_buffer_event *event =3D NULL;=0A=
-  219         struct ring_buffer *buffer =3D NULL;=0A=
-  220         struct blk_io_trace *t;=0A=
-  221         unsigned long flags =3D 0;=0A=
-  222         unsigned long *sequence;=0A=
-  223         pid_t pid;=0A=
-  224         int cpu, pc =3D 0;=0A=
-  225         bool blk_tracer =3D blk_tracer_enabled;=0A=
-  226         ssize_t cgid_len =3D cgid ? sizeof(*cgid) : 0;=0A=
-  227=0A=
-  228         if (unlikely(bt->trace_state !=3D Blktrace_running && =0A=
-!blk_tracer))=0A=
-  229                 return;=0A=
-  230=0A=
-  231         what |=3D ddir_act[op_is_write(op) ? WRITE : READ];  <--- =0A=
-=0A=
-=0A=
-> static inline bool op_is_write(unsigned int op)=0A=
-> {=0A=
-> 	return (op & 1);=0A=
-> }=0A=
-> =0A=
-=0A=
+On 6/17/2019 3:19 PM, Christoph Hellwig wrote:
+> This ensures all proper DMA layer handling is taken care of by the
+> SCSI midlayer.
+>
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+
+Looks good,
+
+Reviewed-by: Max Gurtovoy <maxg@mellanox.com>
+
