@@ -2,56 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74029520A9
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 04:33:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DEA7520AA
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 04:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730499AbfFYCd1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 22:33:27 -0400
-Received: from m12-12.163.com ([220.181.12.12]:37270 "EHLO m12-12.163.com"
+        id S1730476AbfFYCe2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 22:34:28 -0400
+Received: from m12-17.163.com ([220.181.12.17]:45349 "EHLO m12-17.163.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726774AbfFYCd0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 24 Jun 2019 22:33:26 -0400
+        id S1726774AbfFYCe2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 24 Jun 2019 22:34:28 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Message-ID:MIME-Version; bh=lAONc
-        5PtMxKToIAGu8XShVayG56eoMSu8q+iXj2bFJk=; b=MrD9KKBJlOYRs98KLWg4Z
-        CsYStNI1t7K8UEk4J07GwzW2Gs4CfhAMv16ixa88MQwT1AHWxxK7Iro5SLU4AWu/
-        QGdoV4SMPljWpi+WnFtttu9Y5RwtWi3sQhnOhhWwOExj9r7DoHgAeFD7tzFd21iI
-        T4dtaNmR3Z/65cQgphvabk=
-Received: from tero-machine (unknown [116.117.135.205])
-        by smtp8 (Coremail) with SMTP id DMCowACXNtvihxFdcytVBA--.22033S3;
-        Tue, 25 Jun 2019 10:33:10 +0800 (CST)
-Date:   Tue, 25 Jun 2019 10:33:04 +0800
+        s=s110527; h=Date:From:Subject:Message-ID:MIME-Version; bh=V/NHV
+        lgeoEcsfWlF6ZsWh7EpLDGp+iF+yROt+7W2jHg=; b=D0DS0WQBVf1MzANWnpx/L
+        5EOuB2cmK84CRQ7WHoev765pqbU+aolpNeboS+ViSyf/WJ/cDONjE748Yb6gdsZN
+        SuBEvF6QnOQJT+eNtGVc+g+Ipo81RB97dHnoTWoIjdASb0dEqqYWPmQbmkaem+R6
+        L4f8xTD/pKHd4fYN/pTDAs=
+Received: from tero-machine (unknown [116.136.19.114])
+        by smtp13 (Coremail) with SMTP id EcCowABnKf8oiBFdWtdjAw--.29077S3;
+        Tue, 25 Jun 2019 10:34:18 +0800 (CST)
+Date:   Tue, 25 Jun 2019 10:34:16 +0800
 From:   Lin Yi <teroincn@163.com>
-To:     QLogic-Storage-Upstream@qlogic.com, skashyap@marvell.com
+To:     skashyap@marvell.com, QLogic-Storage-Upstream@qlogic.com
 Cc:     linux-scsi@vger.kernel.org
-Subject: [PATCH v2 0/2] Fix struct bnx2fc_cmd refcount imbalance in several
- functions
-Message-ID: <cover.1561429511.git.teroincn@163.com>
+Subject: [PATCH v2 1/2] scsi :bnx2fc :bnx2fc_els :fix bnx2fc_cmd refcount
+ imbalance in send_rec
+Message-ID: <c0bd1183bc048eeb29f66e71bfac03fc3f6db222.1561429511.git.teroincn@163.com>
+References: <cover.1561429511.git.teroincn@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1561429511.git.teroincn@163.com>
 User-Agent: Mutt/1.5.21 (2010-09-15)
-X-CM-TRANSID: DMCowACXNtvihxFdcytVBA--.22033S3
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUatCzDUUUU
-X-Originating-IP: [116.117.135.205]
-X-CM-SenderInfo: 5whu0xxqfqqiywtou0bp/1tbiERHeElWBnJT7bwAAsE
+X-CM-TRANSID: EcCowABnKf8oiBFdWtdjAw--.29077S3
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZw18GF1xCw1kWF1xCrW3Jrb_yoWkJwcE93
+        yDtr97X3yfJrZrCw1kAr4rJ34ayr1xXFWjqFyYkFySyF1xZ3yUZrs8Zrs7Xry5X3yIg3Z8
+        JFW5J3sFkwn8CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnjsjUUUUUU==
+X-Originating-IP: [116.136.19.114]
+X-CM-SenderInfo: 5whu0xxqfqqiywtou0bp/1tbiShHeElPAF9meigAAse
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-in bnx2fc_send_rec and bnx2fc_send_srr, it calls the separate kref_put on err handle path, we can't release refcount before taking it's refcount, so avoid calling it inthe err path.
+if cb_arg alloc failed, we can't release the struct orig_io_req refcount
+before we take it's refcount. As Saurav said, move the rec_err label down to avoid
+unnecessary refcount release and nullptr free.
 
-Lin Yi (2):
-  scsi :bnx2fc :bnx2fc_els :fix bnx2fc_cmd refcount imbalance in
-    send_rec
-  scsi :bnx2fc :bnx2fc_els :fix bnx2fc_cmd refcount imbalance in
-    send_srr
+Signed-off-by: Lin Yi <teroincn@163.com>
+---
+Changes in v2:
+  - move the rec_err label down instead of moving kref_get.
+---
+---
+ drivers/scsi/bnx2fc/bnx2fc_els.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/scsi/bnx2fc/bnx2fc_els.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_els.c b/drivers/scsi/bnx2fc/bnx2fc_els.c
+index 76e65a3..e33b94f 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_els.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_els.c
+@@ -610,7 +610,6 @@ int bnx2fc_send_rec(struct bnx2fc_cmd *orig_io_req)
+ 	rc = bnx2fc_initiate_els(tgt, ELS_REC, &rec, sizeof(rec),
+ 				 bnx2fc_rec_compl, cb_arg,
+ 				 r_a_tov);
+-rec_err:
+ 	if (rc) {
+ 		BNX2FC_IO_DBG(orig_io_req, "REC failed - release\n");
+ 		spin_lock_bh(&tgt->tgt_lock);
+@@ -618,6 +617,7 @@ int bnx2fc_send_rec(struct bnx2fc_cmd *orig_io_req)
+ 		spin_unlock_bh(&tgt->tgt_lock);
+ 		kfree(cb_arg);
+ 	}
++rec_err:
+ 	return rc;
+ }
+ 
 -- 
 1.9.1
 
