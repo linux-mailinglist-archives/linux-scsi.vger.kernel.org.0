@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D09E854D2C
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 13:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A332154D2D
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 13:05:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730157AbfFYLFb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 07:05:31 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36547 "EHLO
+        id S1730164AbfFYLFe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 07:05:34 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46075 "EHLO
         mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726419AbfFYLFb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 07:05:31 -0400
-Received: by mail-pl1-f196.google.com with SMTP id k8so8677816plt.3
-        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 04:05:30 -0700 (PDT)
+        with ESMTP id S1730159AbfFYLFe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 07:05:34 -0400
+Received: by mail-pl1-f196.google.com with SMTP id bi6so8657311plb.12
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 04:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=M5Ikn0WwF0jEYEACrmAo3QQIMRMmJhSVmksSrHy10kE=;
-        b=RreL/fvgJFCzzZq1KQgOlvNEYP5SRK7t3sPUZtQo9d0oeLU4ha3Wcevq8e4gbxHwaQ
-         XqZSCBrv8L8LHVJsO01/m0gCRwudKse5EPNkCO4fZpyurmF8hBpSxI/St6fjG7MyJFPT
-         4OsbVni0XcvEY2WYsdobGxeAMF/ZCXCkfWlBk=
+        bh=sEFNuVq5acDFnuFNK80WEE4N3ubRxRDH6lU83qeQjQo=;
+        b=dKTQgkvpWFKCISQ7HDFy5Nn00y/rwgYNY+Cu1OzAepN2SKg4oaBP/jx32R1zhiQ/47
+         AF6cmKT15L4k3Ktu9Q5m8fLwN+vxaroU0gTxqp2NO2Ilg55zSUSlVT0mTE4ThXumRxHo
+         5uzQ4wQ+GUiOgABl4UkEJc55iTI7AEIHvKSfA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=M5Ikn0WwF0jEYEACrmAo3QQIMRMmJhSVmksSrHy10kE=;
-        b=EjdcqpoVXsZdAAr2lN/Uqxx4or7bzzgqC15hZwySqbp+2srUERidldb96UN+J6AmQX
-         BOV97P0YdRxJanRrxSROq7yzgmsmMbCtlhvo2OlNYtcozBZv/Vi1x45JPcHkt2QuIajy
-         F14j+Ekvx7qKE5ZBqxU8+OYQ6UfPlTDX2wGt5PQIYM8p90osHrUdtmmo+YrPvcSnUl9F
-         c10waHM9ZngXw+sgm9+CADijrMHQ5lcCZv+Pj6dg1wZWxw3UTiElW6LrtiLckCNsy1JT
-         kADBot57kLOXG4peXeRcNuShX0WZfVNBHQZYmTmnYEUqVVFUu+A7brtu2SpJRPG3JYf8
-         qMJw==
-X-Gm-Message-State: APjAAAVQQG65yfciBNIqmgXfzx26iGUfjrLfp8pmPAqJIKQ4usIiOFRI
-        J9caZx1ru6Z+uHh2hQxy/BEHudr3WcyJCW23yfg2hDZMNVJ1f0C5UvYvvNd2krA6TVTQruk3IUE
-        hkQ+NaRjLo4Z6ybfl5u3zt+dt2M/E8BSx3a5wi5na7ncEYAZfxP2/HBjv0F+tAtA4c71yHS5QHo
-        0ykwC39Kx93OVo
-X-Google-Smtp-Source: APXvYqxLJKefa6cXFGH34xEtLj6l3sWJwuLk2zkxtHI7IQN5Q3P+h8DVTLSaNFtCzp6rkdo4WSaIFQ==
-X-Received: by 2002:a17:902:a5c5:: with SMTP id t5mr156477905plq.288.1561460729981;
-        Tue, 25 Jun 2019 04:05:29 -0700 (PDT)
+        bh=sEFNuVq5acDFnuFNK80WEE4N3ubRxRDH6lU83qeQjQo=;
+        b=LEhyCfhoE4qbszKi4cwaUaDlbUUcJnPzB4dR/pnSsh7qxE6lEwOY5nJHqFk11kDzbw
+         61JvUR5DX/Yo4IVpAOuOZjioVkkK94kRdSGIpdw28/th0t71fale8lbquhIw+Y2Qv5Xx
+         muLWcE2EoI9WN7p6v2F4m7OCQTy4YsEDj1Iqp9kFXFNc65uWW12gWU9NORbwtTSmEFD/
+         h6Lo3wBPrrjbG0QNhE2OhhRLoil+QdWLL4j8BqrrYGVPvuQ4oq+KlCJVyjJSyCenMqb0
+         fQFW4qmT4nYGUmBqI+TcvuSZeS0vLbbzG+QTVjUk8WXdnXkFgqqXk+ywwl2rsgE/wKCs
+         NyAw==
+X-Gm-Message-State: APjAAAX/h0fSuLZc8wiUNmlxKA4NgNJmSGwXUFJv6LvuHhRW28LLURYa
+        m5vz+b14SBCNjGlXCGA6NgQTy+xEIwKTz8vL8HCxXpFkrdWjLrE2/4v+vIkx8rFQoDvO4I19LBY
+        L42ZXER9lJBEV1KSdd/+RBRbOlMgYWu50WNjvD8xliLzjl2kqBUjEyv4vulBgRr63wPBOLDnRut
+        v3dYcQD9qdLg==
+X-Google-Smtp-Source: APXvYqxGZLTkrcfl94O53EiQlforUixvCRRsvKg09Wol6G6k6mARVfks2sN7psrXh6HTLupmIyhX/w==
+X-Received: by 2002:a17:902:f082:: with SMTP id go2mr17863767plb.25.1561460733072;
+        Tue, 25 Jun 2019 04:05:33 -0700 (PDT)
 Received: from dhcp-10-123-20-30.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id t5sm14757389pgh.46.2019.06.25.04.05.27
+        by smtp.gmail.com with ESMTPSA id t5sm14757389pgh.46.2019.06.25.04.05.30
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 25 Jun 2019 04:05:29 -0700 (PDT)
+        Tue, 25 Jun 2019 04:05:32 -0700 (PDT)
 From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
@@ -49,9 +49,9 @@ Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
         sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
         anand.lodnoor@broadcom.com,
         Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [PATCH v3 12/18] megaraid_sas: Add support for MPI toolbox commands
-Date:   Tue, 25 Jun 2019 16:34:30 +0530
-Message-Id: <20190625110436.4703-13-chandrakanth.patil@broadcom.com>
+Subject: [PATCH v3 13/18] megaraid_sas: Add support for High IOPs queues
+Date:   Tue, 25 Jun 2019 16:34:31 +0530
+Message-Id: <20190625110436.4703-14-chandrakanth.patil@broadcom.com>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190625110436.4703-1-chandrakanth.patil@broadcom.com>
 References: <20190625110436.4703-1-chandrakanth.patil@broadcom.com>
@@ -60,203 +60,284 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Added driver support to allow passthrough MPI toolbox type MFI commands
-to firmware based on firmware capability.
+Aero controllers support balanced performance mode through the ability to
+configure queues with different properties.
 
-Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
+Reply queues with interrupt coalescing enabled are called "high iops reply
+queues" and reply queues with interrupt coalescing disabled are called "low
+latency reply queues".
+
+The driver configures a combination of high iops and low latency reply
+queues if:
+
+ - HBA is an AERO controller;
+
+ - MSI-X vectors supported by the HBA is 128;
+
+ - Total CPU count in the system more than high iops queue count;
+
+ - Driver is loaded with default max_msix_vectors module parameter; and
+
+ - System booted in non-kdump mode.
+
+Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
 Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 ---
- drivers/scsi/megaraid/megaraid_sas.h        | 36 ++++++++++++++++++++++++++++-
- drivers/scsi/megaraid/megaraid_sas_base.c   | 31 ++++++++++++++++++++++++-
- drivers/scsi/megaraid/megaraid_sas_fusion.c |  7 ++++++
- 3 files changed, 72 insertions(+), 2 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas.h        |   6 ++
+ drivers/scsi/megaraid/megaraid_sas_base.c   | 135 ++++++++++++++++++++++++----
+ drivers/scsi/megaraid/megaraid_sas_fusion.c |  11 +++
+ 3 files changed, 135 insertions(+), 17 deletions(-)
 
 diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index cd63281..83baac3 100644
+index 83baac3..5b17d0f 100644
 --- a/drivers/scsi/megaraid/megaraid_sas.h
 +++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -208,6 +208,7 @@ enum MFI_CMD_OP {
- 	MFI_CMD_SMP		= 0x7,
- 	MFI_CMD_STP		= 0x8,
- 	MFI_CMD_NVME		= 0x9,
-+	MFI_CMD_TOOLBOX		= 0xa,
- 	MFI_CMD_OP_COUNT,
- 	MFI_CMD_INVALID		= 0xff
- };
-@@ -1467,7 +1468,39 @@ struct megasas_ctrl_info {
+@@ -1640,6 +1640,7 @@ enum FW_BOOT_CONTEXT {
+ #define MR_ATOMIC_DESCRIPTOR_SUPPORT_OFFSET	(1 << 24)
  
- 	u8 reserved6[64];
+ #define MR_CAN_HANDLE_64_BIT_DMA_OFFSET		(1 << 25)
++#define MR_INTR_COALESCING_SUPPORT_OFFSET	(1 << 26)
  
--	u32 rsvdForAdptOp[64];
-+	struct {
-+	#if defined(__BIG_ENDIAN_BITFIELD)
-+		u32 reserved:19;
-+		u32 support_pci_lane_margining: 1;
-+		u32 support_psoc_update:1;
-+		u32 support_force_personality_change:1;
-+		u32 support_fde_type_mix:1;
-+		u32 support_snap_dump:1;
-+		u32 support_nvme_tm:1;
-+		u32 support_oce_only:1;
-+		u32 support_ext_mfg_vpd:1;
-+		u32 support_pcie:1;
-+		u32 support_cvhealth_info:1;
-+		u32 support_profile_change:2;
-+		u32 mr_config_ext2_supported:1;
-+	#else
-+		u32 mr_config_ext2_supported:1;
-+		u32 support_profile_change:2;
-+		u32 support_cvhealth_info:1;
-+		u32 support_pcie:1;
-+		u32 support_ext_mfg_vpd:1;
-+		u32 support_oce_only:1;
-+		u32 support_nvme_tm:1;
-+		u32 support_snap_dump:1;
-+		u32 support_fde_type_mix:1;
-+		u32 support_force_personality_change:1;
-+		u32 support_psoc_update:1;
-+		u32 support_pci_lane_margining: 1;
-+		u32 reserved:19;
-+	#endif
-+	} adapter_operations5;
+ #define MEGASAS_WATCHDOG_THREAD_INTERVAL	1000
+ #define MEGASAS_WAIT_FOR_NEXT_DMA_MSECS		20
+@@ -2250,6 +2251,9 @@ enum MR_PD_TYPE {
+ #define MR_DEFAULT_NVME_MDTS_KB		128
+ #define MR_NVME_PAGE_SIZE_MASK		0x000000FF
+ 
++/*Aero performance parameters*/
++#define MR_HIGH_IOPS_QUEUE_COUNT	8
 +
-+	u32 rsvdForAdptOp[63];
+ struct megasas_instance {
  
- 	u8 reserved7[3];
- 
-@@ -2399,6 +2432,7 @@ struct megasas_instance {
- 	u8 enable_fw_dev_list;
+ 	unsigned int *reply_map;
+@@ -2433,6 +2437,8 @@ struct megasas_instance {
  	bool atomic_desc_support;
  	bool support_seqnum_jbod_fp;
-+	bool support_pci_lane_margining;
+ 	bool support_pci_lane_margining;
++	u8  low_latency_index_start;
++	bool balanced_mode;
  };
  
  struct MR_LD_VF_MAP {
 diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 81e708b..4c7a093 100644
+index 4c7a093..2e3c7fd 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_base.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -188,6 +188,7 @@ static u32 support_poll_for_event;
- u32 megasas_dbg_lvl;
- static u32 support_device_change;
- static bool support_nvme_encapsulation;
-+static bool support_pci_lane_margining;
+@@ -5472,6 +5472,8 @@ megasas_setup_irqs_ioapic(struct megasas_instance *instance)
+ 				__func__, __LINE__);
+ 		return -1;
+ 	}
++	instance->balanced_mode = false;
++	instance->low_latency_index_start = 0;
+ 	return 0;
+ }
  
- /* define lock for aen poll */
- spinlock_t poll_aen_lock;
-@@ -3494,6 +3495,7 @@ megasas_complete_cmd(struct megasas_instance *instance, struct megasas_cmd *cmd,
- 	case MFI_CMD_SMP:
- 	case MFI_CMD_STP:
- 	case MFI_CMD_NVME:
-+	case MFI_CMD_TOOLBOX:
- 		megasas_complete_int_cmd(instance, cmd);
- 		break;
+@@ -5610,9 +5612,11 @@ megasas_setup_jbod_map(struct megasas_instance *instance)
+ static void megasas_setup_reply_map(struct megasas_instance *instance)
+ {
+ 	const struct cpumask *mask;
+-	unsigned int queue, cpu;
++	unsigned int queue, cpu, low_latency_index_start;
  
-@@ -5099,6 +5101,7 @@ megasas_get_ctrl_info(struct megasas_instance *instance)
- 		le32_to_cpus((u32 *)&ci->adapterOperations2);
- 		le32_to_cpus((u32 *)&ci->adapterOperations3);
- 		le16_to_cpus((u16 *)&ci->adapter_operations4);
-+		le32_to_cpus((u32 *)&ci->adapter_operations5);
+-	for (queue = 0; queue < instance->msix_vectors; queue++) {
++	low_latency_index_start = instance->low_latency_index_start;
++
++	for (queue = low_latency_index_start; queue < instance->msix_vectors; queue++) {
+ 		mask = pci_irq_get_affinity(instance->pdev, queue);
+ 		if (!mask)
+ 			goto fallback;
+@@ -5623,8 +5627,14 @@ static void megasas_setup_reply_map(struct megasas_instance *instance)
+ 	return;
  
- 		/* Update the latest Ext VD info.
- 		 * From Init path, store current firmware details.
-@@ -5112,6 +5115,8 @@ megasas_get_ctrl_info(struct megasas_instance *instance)
- 			ci->adapter_operations4.support_pd_map_target_id;
- 		instance->support_nvme_passthru =
- 			ci->adapter_operations4.support_nvme_passthru;
-+		instance->support_pci_lane_margining =
-+			ci->adapter_operations5.support_pci_lane_margining;
- 		instance->task_abort_tmo = ci->TaskAbortTO;
- 		instance->max_reset_tmo = ci->MaxResetTO;
+ fallback:
+-	for_each_possible_cpu(cpu)
+-		instance->reply_map[cpu] = cpu % instance->msix_vectors;
++	queue = low_latency_index_start;
++	for_each_possible_cpu(cpu) {
++		instance->reply_map[cpu] = queue;
++		if (queue == (instance->msix_vectors - 1))
++			queue = low_latency_index_start;
++		else
++			queue++;
++	}
+ }
  
-@@ -5145,6 +5150,8 @@ megasas_get_ctrl_info(struct megasas_instance *instance)
- 			 instance->task_abort_tmo, instance->max_reset_tmo);
- 		dev_info(&instance->pdev->dev, "JBOD sequence map support\t: %s\n",
- 			 instance->support_seqnum_jbod_fp ? "Yes" : "No");
-+		dev_info(&instance->pdev->dev, "PCI Lane Margining support\t: %s\n",
-+			 instance->support_pci_lane_margining ? "Yes" : "No");
+ /**
+@@ -5661,6 +5671,66 @@ int megasas_get_device_list(struct megasas_instance *instance)
  
- 		break;
- 
-@@ -7793,7 +7800,9 @@ megasas_mgmt_fw_ioctl(struct megasas_instance *instance,
- 
- 	if ((ioc->frame.hdr.cmd >= MFI_CMD_OP_COUNT) ||
- 	    ((ioc->frame.hdr.cmd == MFI_CMD_NVME) &&
--	    !instance->support_nvme_passthru)) {
-+	    !instance->support_nvme_passthru) ||
-+	    ((ioc->frame.hdr.cmd == MFI_CMD_TOOLBOX) &&
-+	    !instance->support_pci_lane_margining)) {
- 		dev_err(&instance->pdev->dev,
- 			"Received invalid ioctl command 0x%x\n",
- 			ioc->frame.hdr.cmd);
-@@ -8277,6 +8286,14 @@ support_nvme_encapsulation_show(struct device_driver *dd, char *buf)
- 
- static DRIVER_ATTR_RO(support_nvme_encapsulation);
- 
-+static ssize_t
-+support_pci_lane_margining_show(struct device_driver *dd, char *buf)
+ 	return SUCCESS;
+ }
++
++static int
++__megasas_alloc_irq_vectors(struct megasas_instance *instance)
 +{
-+	return sprintf(buf, "%u\n", support_pci_lane_margining);
++	int i, irq_flags;
++	struct irq_affinity desc = { .pre_vectors = instance->low_latency_index_start };
++	struct irq_affinity *descp = &desc;
++
++	irq_flags = PCI_IRQ_MSIX;
++
++	if (instance->smp_affinity_enable)
++		irq_flags |= PCI_IRQ_AFFINITY;
++	else
++		descp = NULL;
++
++	i = pci_alloc_irq_vectors_affinity(instance->pdev,
++		instance->low_latency_index_start,
++		instance->msix_vectors, irq_flags, descp);
++
++	return i;
 +}
 +
-+static DRIVER_ATTR_RO(support_pci_lane_margining);
++/**
++ * megasas_alloc_irq_vectors -	Allocate IRQ vectors/enable MSI-x vectors
++ * @instance:			Adapter soft state
++ * return:			void
++ */
++static void
++megasas_alloc_irq_vectors(struct megasas_instance *instance)
++{
++	int i;
++	unsigned int num_msix_req;
 +
- static inline void megasas_remove_scsi_device(struct scsi_device *sdev)
- {
- 	sdev_printk(KERN_INFO, sdev, "SCSI device is removed\n");
-@@ -8546,6 +8563,7 @@ static int __init megasas_init(void)
- 	support_poll_for_event = 2;
- 	support_device_change = 1;
- 	support_nvme_encapsulation = true;
-+	support_pci_lane_margining = true;
- 
- 	memset(&megasas_mgmt_info, 0, sizeof(megasas_mgmt_info));
- 
-@@ -8602,8 +8620,17 @@ static int __init megasas_init(void)
- 	if (rval)
- 		goto err_dcf_support_nvme_encapsulation;
- 
-+	rval = driver_create_file(&megasas_pci_driver.driver,
-+				  &driver_attr_support_pci_lane_margining);
-+	if (rval)
-+		goto err_dcf_support_pci_lane_margining;
++	i = __megasas_alloc_irq_vectors(instance);
 +
- 	return rval;
- 
-+err_dcf_support_pci_lane_margining:
-+	driver_remove_file(&megasas_pci_driver.driver,
-+			   &driver_attr_support_nvme_encapsulation);
++	if (instance->balanced_mode && (i != instance->msix_vectors)) {
++		if (instance->msix_vectors)
++			pci_free_irq_vectors(instance->pdev);
++		/*Disable Balanced IOPs mode and try realloc vectors*/
++		instance->balanced_mode = false;
++		instance->low_latency_index_start = 1;
++		num_msix_req = num_online_cpus() + instance->low_latency_index_start;
 +
- err_dcf_support_nvme_encapsulation:
- 	driver_remove_file(&megasas_pci_driver.driver,
- 			   &driver_attr_support_device_change);
-@@ -8643,6 +8670,8 @@ static void __exit megasas_exit(void)
- 	driver_remove_file(&megasas_pci_driver.driver, &driver_attr_version);
- 	driver_remove_file(&megasas_pci_driver.driver,
- 			   &driver_attr_support_nvme_encapsulation);
-+	driver_remove_file(&megasas_pci_driver.driver,
-+			   &driver_attr_support_pci_lane_margining);
++		instance->msix_vectors = min(num_msix_req,
++				instance->msix_vectors);
++
++		i = __megasas_alloc_irq_vectors(instance);
++
++	}
++
++	dev_info(&instance->pdev->dev,
++		"requested/available msix %d/%d\n", instance->msix_vectors, i);
++
++	if (i > 0)
++		instance->msix_vectors = i;
++	else
++		instance->msix_vectors = 0;
++
++}
++
+ /**
+  * megasas_init_fw -	Initializes the FW
+  * @instance:		Adapter soft state
+@@ -5680,6 +5750,8 @@ static int megasas_init_fw(struct megasas_instance *instance)
+ 	int i, j, loop;
+ 	struct IOV_111 *iovPtr;
+ 	struct fusion_context *fusion;
++	bool intr_coalescing;
++	unsigned int num_msix_req;
  
- 	pci_unregister_driver(&megasas_pci_driver);
- 	megasas_exit_debugfs();
+ 	fusion = instance->ctrl_context;
+ 
+@@ -5799,7 +5871,6 @@ static int megasas_init_fw(struct megasas_instance *instance)
+ 	msix_enable = (instance->instancet->read_fw_status_reg(instance) &
+ 		       0x4000000) >> 0x1a;
+ 	if (msix_enable && !msix_disable) {
+-		int irq_flags = PCI_IRQ_MSIX;
+ 
+ 		scratch_pad_1 = megasas_readl
+ 			(instance, &instance->reg_set->outbound_scratch_pad_1);
+@@ -5865,19 +5936,49 @@ static int megasas_init_fw(struct megasas_instance *instance)
+ 		} else /* MFI adapters */
+ 			instance->msix_vectors = 1;
+ 
+-		/* Don't bother allocating more MSI-X vectors than cpus */
+-		instance->msix_vectors = min(instance->msix_vectors,
+-					     (unsigned int)num_online_cpus());
+-		if (instance->smp_affinity_enable)
+-			irq_flags |= PCI_IRQ_AFFINITY;
+-		i = pci_alloc_irq_vectors(instance->pdev, 1,
+-					  instance->msix_vectors, irq_flags);
+-		if (i > 0) {
+-			instance->msix_vectors = i;
+-		} else {
+-			instance->msix_vectors = 0;
++
++		/*
++		 * For Aero(if few conditions are met), driver will configure
++		 * few additional reply queues with interrupt coalescing enabled.
++		 * These queues with interrupt coalescing enabled are called
++		 * High IOPs queues and rest of reply queues(based on number of
++		 * logical CPUs) are termed as Low latency queues.
++		 *
++		 * Total Number of reply queues = High IOPs queues + low latency queues
++		 *
++		 * For rest of fusion adapters, 1 additional reply queue will be
++		 * reserved for management commands, rest of reply queues
++		 * (based on number of logical CPUs) will be used for IOs and
++		 * referenced as IO queues.
++		 * Total Number of reply queues = 1 + IO queues
++		 *
++		 * MFI adapters supports single MSI-x so single reply queue
++		 * will be used for IO and management commands.
++		 */
++
++		intr_coalescing = (scratch_pad_1 & MR_INTR_COALESCING_SUPPORT_OFFSET) ?
++								true : false;
++		if (intr_coalescing &&
++			(num_online_cpus() >= MR_HIGH_IOPS_QUEUE_COUNT) &&
++			(instance->msix_vectors == MEGASAS_MAX_MSIX_QUEUES))
++			instance->balanced_mode = true;
++		else
++			instance->balanced_mode = false;
++
++		if (instance->balanced_mode)
++			instance->low_latency_index_start =
++				MR_HIGH_IOPS_QUEUE_COUNT;
++		else
++			instance->low_latency_index_start = 1;
++
++		num_msix_req = num_online_cpus() + instance->low_latency_index_start;
++
++		instance->msix_vectors = min(num_msix_req,
++				instance->msix_vectors);
++
++		megasas_alloc_irq_vectors(instance);
++		if (!instance->msix_vectors)
+ 			instance->msix_load_balance = false;
+-		}
+ 	}
+ 	/*
+ 	 * MSI-X host index 0 is common for all adapter.
 diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index 058d22b..e124341 100644
+index e124341..44bfbe8 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -4246,6 +4246,13 @@ void megasas_refire_mgmt_cmd(struct megasas_instance *instance)
- 			}
+@@ -1058,6 +1058,7 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
+ 	u32 scratch_pad_1;
+ 	ktime_t time;
+ 	bool cur_fw_64bit_dma_capable;
++	bool cur_intr_coalescing;
  
- 			break;
-+		case MFI_CMD_TOOLBOX:
-+			if (!instance->support_pci_lane_margining) {
-+				cmd_mfi->frame->hdr.cmd_status = MFI_STAT_INVALID_CMD;
-+				result = COMPLETE_CMD;
-+			}
+ 	fusion = instance->ctrl_context;
+ 
+@@ -1091,6 +1092,16 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
+ 		goto fail_fw_init;
+ 	}
+ 
++	cur_intr_coalescing = (scratch_pad_1 & MR_INTR_COALESCING_SUPPORT_OFFSET) ?
++							true : false;
 +
-+			break;
- 		default:
- 			break;
- 		}
++	if ((instance->low_latency_index_start ==
++		MR_HIGH_IOPS_QUEUE_COUNT) && cur_intr_coalescing)
++		instance->balanced_mode = true;
++
++	dev_info(&instance->pdev->dev, "Balanced mode :%s\n",
++		instance->balanced_mode ? "Yes" : "No");
++
+ 	instance->fw_sync_cache_support = (scratch_pad_1 &
+ 		MR_CAN_HANDLE_SYNC_CACHE_OFFSET) ? 1 : 0;
+ 	dev_info(&instance->pdev->dev, "FW supports sync cache\t: %s\n",
 -- 
 2.9.5
 
