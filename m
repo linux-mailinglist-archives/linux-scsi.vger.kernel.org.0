@@ -2,102 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C5B553CC
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 17:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DC5553DD
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 17:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731329AbfFYP4A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 11:56:00 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36080 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbfFYP4A (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 11:56:00 -0400
-Received: by mail-pl1-f195.google.com with SMTP id k8so9085025plt.3;
-        Tue, 25 Jun 2019 08:55:59 -0700 (PDT)
+        id S1731486AbfFYP7L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 11:59:11 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:39963 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728422AbfFYP7L (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 11:59:11 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w10so9162950pgj.7;
+        Tue, 25 Jun 2019 08:59:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=X8PyZ6mm09HvpAjBsN2bzxK8nd8cfLA+VCOhqGU8yjE=;
-        b=I5N7UWptXauuBXj0zCCEqNUP6Ikcvnh0iUfEdHUe9jMdkFcxlT+nI2FFF/9d3LfmlE
-         5KD1XFPShCo6Nht+1WjDMfGYv+TrBU4jyEa2mQ2W0om0iL+AcQSpTZasjMKCcoV0VpGw
-         ixao1WARIi0zXaeqiKgan6dAvCL6Tb6PAbboSzerx6n5NJU5l384Zf8dJvORmE7q9hvE
-         Zz3P9gEkZWK5jpCReQx7JWMT2pEUTU1pCKJuby0CTm3zmPngK6LQTDKHlvxoSZnZku62
-         LGrZP60u7GgFaXAia9hICu3UEEMmgHUwjDk3ktpIZDN6kpW3wO4ONonAbcbi9MtlhMkM
-         uKig==
-X-Gm-Message-State: APjAAAVsLAKAArFUE7xVSOwdWZ1rqY0D9CMQqu56xEM356Dff/r6MYpD
-        lQHZ6fvquh8fhqfGFQauCBY=
-X-Google-Smtp-Source: APXvYqzqnMz19/tkZ2lWR1LALGAy9toe5Xj906/48mLtj3J82ryMK3ntCRQMy81JplrGUfNQYwrwTg==
-X-Received: by 2002:a17:902:8203:: with SMTP id x3mr72155467pln.304.1561478159207;
-        Tue, 25 Jun 2019 08:55:59 -0700 (PDT)
+        bh=wcZ4fBG9NeZpTK3uYdZwLaowSCssiEZDYa5gltsOLE8=;
+        b=T6cb7PwrOoBJ3xc22KrEkvza3R51XVUm+S1/an3wB3U3m411s7w8shyREVnd2NTeHo
+         nBB52mdeqN8eZfTTAVTKRZQDe7ETMwsUXd7G4buRuyr0M7M9I252h+yrOlZu8MfQAet0
+         kR6MkGmDiqOZfqenlf0rwakgmUVmxVfArzsZgblHlzvbf2f/t10VH7Tjjxsl3hWbV+hj
+         FJlKO2ACoAFb97emlwhoXkZ5SxhBjrl2iHN8yTWlXdfzlF/7Pk6nUOlobiNbSenkXxLK
+         Ps0/JaYBwV7s9yQfjEx1kvQI7lo2vBOIuJMXI0o2P+etI3V1SrGIORHxMYpI0q2dll35
+         TRwg==
+X-Gm-Message-State: APjAAAVh6sFTwezfznx8PUa5wfKsrVjM5mEUbxnXDegkQoANFx1lBFB2
+        MZHbnP/Ozv2MdEU9UCa5zcA=
+X-Google-Smtp-Source: APXvYqzK5Wob4kRvUauwcem7uvspmf/Q4N5OQ2XvFrYFmIIrZ79oLGa1FZHPfMlFiesN9n3RFQEnfA==
+X-Received: by 2002:a17:90a:2ec2:: with SMTP id h2mr7265236pjs.119.1561478350370;
+        Tue, 25 Jun 2019 08:59:10 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id 5sm14545676pfh.109.2019.06.25.08.55.57
+        by smtp.gmail.com with ESMTPSA id p15sm9472110pjf.27.2019.06.25.08.59.08
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 08:55:58 -0700 (PDT)
-Subject: Re: [PATCH 1/4] block: add zone open, close and finish support
-To:     =?UTF-8?Q?Matias_Bj=c3=b8rling?= <mb@lightnvm.io>,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
+        Tue, 25 Jun 2019 08:59:09 -0700 (PDT)
+Subject: Re: [PATCH 1/3] block: Allow mapping of vmalloc-ed buffers
+To:     Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
         Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
-        Ajay Joshi <Ajay.Joshi@wdc.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>
-References: <20190621130711.21986-1-mb@lightnvm.io>
- <20190621130711.21986-2-mb@lightnvm.io>
- <ee5764fb-473a-f118-eaac-95478d885f6f@acm.org>
- <BYAPR04MB5749CEFBB45EA34BD3345CD686E00@BYAPR04MB5749.namprd04.prod.outlook.com>
- <cce08df0-0b4d-833d-64ce-f9b81f7ad7ca@lightnvm.io>
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>
+References: <20190625024625.23976-1-damien.lemoal@wdc.com>
+ <20190625024625.23976-2-damien.lemoal@wdc.com>
+ <BYAPR04MB5749C9178CB54B4A488408A986E30@BYAPR04MB5749.namprd04.prod.outlook.com>
 From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <79ca395d-8019-9ec8-0c0b-194ca6d9eda0@acm.org>
-Date:   Tue, 25 Jun 2019 08:55:56 -0700
+Message-ID: <47ab2698-9767-b080-59b7-2c4b3afaa6d3@acm.org>
+Date:   Tue, 25 Jun 2019 08:59:08 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <cce08df0-0b4d-833d-64ce-f9b81f7ad7ca@lightnvm.io>
+In-Reply-To: <BYAPR04MB5749C9178CB54B4A488408A986E30@BYAPR04MB5749.namprd04.prod.outlook.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/25/19 3:35 AM, Matias Bjørling wrote:
-> On 6/25/19 12:27 AM, Chaitanya Kulkarni wrote:
->> On 6/24/19 12:43 PM, Bart Van Assche wrote:
->>> static inline bool op_is_write(unsigned int op)
->>> {
->>>     return (op & 1);
->>> }
->>>
->>
-> 
-> The zone mgmt commands are neither write nor reads commands. I guess, 
-> one could characterize them as write commands, but they don't write any 
-> data, they update a state of a zone on a drive. One should keep it as 
-> is? and make sure the zone mgmt commands don't get categorized as either 
-> read/write.
-
-Since the open, close and finish operations support modifying zone data 
-I propose to characterize these as write commands. How about the 
-following additional changes:
-- Make bio_check_ro() refuse open/close/flush/reset zone operations for 
-read-only partitions (see also commit a32e236eb93e ("Partially revert 
-"block: fail op_is_write() requests to read-only partitions"") # v4.18).
-- In submit_bio(), change op_is_write(bio_op(bio)) ? "WRITE" : "READ" 
-into something that uses blk_op_str().
-- Add open/close/flush zone support be added in blk_partition_remap().
-
-Thanks,
+On 6/24/19 8:24 PM, Chaitanya Kulkarni wrote:
+> nit:- Can we use is_vmalloc_addr() call directly so that
+> "if (is_vmalloc)" ->  "if (is_vmalloc_addr(data))" and remove is_vmalloc
+> variable.
+That would change a single call of is_vmalloc_addr() into multiple?
 
 Bart.
