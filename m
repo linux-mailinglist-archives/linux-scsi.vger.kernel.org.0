@@ -2,231 +2,158 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C64F55A10
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 23:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAAEC55BB1
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 00:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726519AbfFYVhC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 17:37:02 -0400
-Received: from ms.lwn.net ([45.79.88.28]:34688 "EHLO ms.lwn.net"
+        id S1726412AbfFYWxQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 18:53:16 -0400
+Received: from mga03.intel.com ([134.134.136.65]:27018 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726014AbfFYVhB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Jun 2019 17:37:01 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id E0D4B30A;
-        Tue, 25 Jun 2019 21:36:59 +0000 (UTC)
-Date:   Tue, 25 Jun 2019 15:36:58 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Phong Tran <tranmanphong@gmail.com>
-Cc:     skhan@linuxfoundation.org, martin.petersen@oracle.com,
-        axboe@kernel.dk, avri.altman@wdc.com, beanhuo@micron.com,
-        evgreen@chromium.org, henrik@austad.us, jpittman@redhat.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] scsi: convert to rst for documenation
-Message-ID: <20190625153658.53ad0e18@lwn.net>
-In-Reply-To: <20190622151947.29115-1-tranmanphong@gmail.com>
-References: <20190622151947.29115-1-tranmanphong@gmail.com>
-Organization: LWN.net
+        id S1726357AbfFYWxP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 25 Jun 2019 18:53:15 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Jun 2019 15:53:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,417,1557212400"; 
+   d="scan'208";a="188447174"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 25 Jun 2019 15:53:08 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1hfuJH-000Cwq-Tu; Wed, 26 Jun 2019 06:53:07 +0800
+Date:   Wed, 26 Jun 2019 06:52:59 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Alastair D'Silva <alastair@au1.ibm.com>
+Cc:     kbuild-all@01.org, alastair@d-silva.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v4 4/7] lib/hexdump.c: Replace ascii bool in
+ hex_dump_to_buffer with flags
+Message-ID: <201906260657.2cnctJGF%lkp@intel.com>
+References: <20190625031726.12173-5-alastair@au1.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190625031726.12173-5-alastair@au1.ibm.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 22 Jun 2019 22:19:47 +0700
-Phong Tran <tranmanphong@gmail.com> wrote:
+Hi Alastair,
 
-> - Update to the link in documenation
-> - Remove trailing white space
-> - Adaptation the sphinx doc syntax
-> 
-> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+Thank you for the patch! Perhaps something to improve:
 
-Thanks for working to improve the documentation!  That said, I think this
-patch needs a fair amount of work before we are ready to accept it.  I'll
-only get partway in, but it should be enough to start with.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.2-rc6 next-20190625]
+[if your patch is applied to the wrong git tree, please drop us a note to help improve the system]
 
-The first overall thing I would like to point out (and hopefully the SCSI
-folks won't fight me too much on this) is that Documentation/scsi is the
-wrong place for much of this stuff.  We are doing our best to organize the
-documentation with the audience in mind.  So, for example, documents that
-are of interest to system administrators should go into
-Documentation/admin-guide.  Information for driver developers should go in
-Documentation/driver-api.  And so on.
+url:    https://github.com/0day-ci/linux/commits/Alastair-D-Silva/Hexdump-Enhancements/20190625-224046
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-rc1-7-g2b96cd8-dirty
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-[...]
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-> diff --git a/Documentation/scsi/link_power_management_policy.rst b/Documentation/scsi/link_power_management_policy.rst
-> new file mode 100644
-> index 000000000000..170f58c94cac
-> --- /dev/null
-> +++ b/Documentation/scsi/link_power_management_policy.rst
-> @@ -0,0 +1,22 @@
-> +SCSI Power Management Policy
-> +============================
-> +
-> +This parameter allows the user to set the link (interface) power management.
-> +There are 3 possible options:
 
-This isn't your fault, but...*which* parameter allows this?  The document
-describes the values, but not where they can be set.  That makes it less
-than fully useful.
+sparse warnings: (new ones prefixed by >>)
 
-> ++-------------------+------------------------------------------------------+
-> +| Value             | Effect                                               |
-> ++===================+======================================================+
-> +| min_power         | Tell the controller to try to make the link use the  |
-> +|                   | least possible power when possible. This may         |
-> +|                   | sacrifice some performance due to increased latency  |
-> +|                   | when coming out of lower power states.               |
-> ++-------------------+------------------------------------------------------+
-> +| max_performance   | Generally, this means no power management. Tell      |
-> +|                   | the controller to have performance be a priority     |
-> +|                   | over power management.                               |
-> ++-------------------+------------------------------------------------------+
-> +| medium_power      | Tell the controller to enter a lower power state     |
-> +|                   | when possible, but do not enter the lowest power     |
-> +|                   | state, thus improving latency over min_power setting.|
-> ++-------------------+------------------------------------------------------+
+   sound/soc/intel/skylake/skl-debug.c:191:34: sparse: sparse: incorrect type in argument 1 (different address spaces) @@    expected void [noderef] <asn:2> *to @@    got eref] <asn:2> *to @@
+   sound/soc/intel/skylake/skl-debug.c:191:34: sparse:    expected void [noderef] <asn:2> *to
+   sound/soc/intel/skylake/skl-debug.c:191:34: sparse:    got unsigned char *
+   sound/soc/intel/skylake/skl-debug.c:191:51: sparse: sparse: incorrect type in argument 2 (different address spaces) @@    expected void const *from @@    got void [noderef] <asn:2> void const *from @@
+   sound/soc/intel/skylake/skl-debug.c:191:51: sparse:    expected void const *from
+   sound/soc/intel/skylake/skl-debug.c:191:51: sparse:    got void [noderef] <asn:2> *[assigned] fw_reg_addr
+>> sound/soc/intel/skylake/skl-debug.c:195:35: sparse: sparse: too many arguments for function hex_dump_to_buffer
+--
+>> drivers/gpu/drm/tinydrm/core/tinydrm-helpers.c:93:27: sparse: sparse: too many arguments for function hex_dump_to_buffer
+--
+>> sound/soc/sof/xtensa/core.c:125:35: sparse: sparse: too many arguments for function hex_dump_to_buffer
 
-[...]
+vim +195 sound/soc/intel/skylake/skl-debug.c
 
-> diff --git a/Documentation/scsi/scsi-changer.txt b/Documentation/scsi/scsi-changer.rst
-> similarity index 71%
-> rename from Documentation/scsi/scsi-changer.txt
-> rename to Documentation/scsi/scsi-changer.rst
-> index ade046ea7c17..a4923873c77b 100644
-> --- a/Documentation/scsi/scsi-changer.txt
-> +++ b/Documentation/scsi/scsi-changer.rst
-> @@ -1,4 +1,3 @@
-> -
->  README for the SCSI media changer driver
->  ========================================
->  
-> @@ -10,7 +9,7 @@ common small CD-ROM changers, neither one-lun-per-slot SCSI changers
->  nor IDE drives.
->  
->  Userland tools available from here:
-> -	http://linux.bytesex.org/misc/changer.html
-> +    http://linux.bytesex.org/misc/changer.html
->  
->  
->  General Information
-> @@ -28,15 +27,17 @@ The SCSI changer model is complex, compared to - for example - IDE-CD
->  changers. But it allows to handle nearly all possible cases. It knows
->  4 different types of changer elements:
->  
-> +::
+d14700a0 Vinod Koul  2017-06-30  170  
+bdd0384a Vunny Sodhi 2017-06-30  171  static ssize_t fw_softreg_read(struct file *file, char __user *user_buf,
+bdd0384a Vunny Sodhi 2017-06-30  172  			       size_t count, loff_t *ppos)
+bdd0384a Vunny Sodhi 2017-06-30  173  {
+bdd0384a Vunny Sodhi 2017-06-30  174  	struct skl_debug *d = file->private_data;
+bdd0384a Vunny Sodhi 2017-06-30  175  	struct sst_dsp *sst = d->skl->skl_sst->dsp;
+bdd0384a Vunny Sodhi 2017-06-30  176  	size_t w0_stat_sz = sst->addr.w0_stat_sz;
+bdd0384a Vunny Sodhi 2017-06-30  177  	void __iomem *in_base = sst->mailbox.in_base;
+bdd0384a Vunny Sodhi 2017-06-30  178  	void __iomem *fw_reg_addr;
+bdd0384a Vunny Sodhi 2017-06-30  179  	unsigned int offset;
+bdd0384a Vunny Sodhi 2017-06-30  180  	char *tmp;
+bdd0384a Vunny Sodhi 2017-06-30  181  	ssize_t ret = 0;
+bdd0384a Vunny Sodhi 2017-06-30  182  
+bdd0384a Vunny Sodhi 2017-06-30  183  	tmp = kzalloc(FW_REG_BUF, GFP_KERNEL);
+bdd0384a Vunny Sodhi 2017-06-30  184  	if (!tmp)
+bdd0384a Vunny Sodhi 2017-06-30  185  		return -ENOMEM;
+bdd0384a Vunny Sodhi 2017-06-30  186  
+bdd0384a Vunny Sodhi 2017-06-30  187  	fw_reg_addr = in_base - w0_stat_sz;
+bdd0384a Vunny Sodhi 2017-06-30  188  	memset(d->fw_read_buff, 0, FW_REG_BUF);
+bdd0384a Vunny Sodhi 2017-06-30  189  
+bdd0384a Vunny Sodhi 2017-06-30  190  	if (w0_stat_sz > 0)
+bdd0384a Vunny Sodhi 2017-06-30 @191  		__iowrite32_copy(d->fw_read_buff, fw_reg_addr, w0_stat_sz >> 2);
+bdd0384a Vunny Sodhi 2017-06-30  192  
+bdd0384a Vunny Sodhi 2017-06-30  193  	for (offset = 0; offset < FW_REG_SIZE; offset += 16) {
+bdd0384a Vunny Sodhi 2017-06-30  194  		ret += snprintf(tmp + ret, FW_REG_BUF - ret, "%#.4x: ", offset);
+bdd0384a Vunny Sodhi 2017-06-30 @195  		hex_dump_to_buffer(d->fw_read_buff + offset, 16, 16, 4,
+bdd0384a Vunny Sodhi 2017-06-30  196  				   tmp + ret, FW_REG_BUF - ret, 0);
+bdd0384a Vunny Sodhi 2017-06-30  197  		ret += strlen(tmp + ret);
+bdd0384a Vunny Sodhi 2017-06-30  198  
+bdd0384a Vunny Sodhi 2017-06-30  199  		/* print newline for each offset */
+bdd0384a Vunny Sodhi 2017-06-30  200  		if (FW_REG_BUF - ret > 0)
+bdd0384a Vunny Sodhi 2017-06-30  201  			tmp[ret++] = '\n';
+bdd0384a Vunny Sodhi 2017-06-30  202  	}
+bdd0384a Vunny Sodhi 2017-06-30  203  
+bdd0384a Vunny Sodhi 2017-06-30  204  	ret = simple_read_from_buffer(user_buf, count, ppos, tmp, ret);
+bdd0384a Vunny Sodhi 2017-06-30  205  	kfree(tmp);
+bdd0384a Vunny Sodhi 2017-06-30  206  
+bdd0384a Vunny Sodhi 2017-06-30  207  	return ret;
+bdd0384a Vunny Sodhi 2017-06-30  208  }
+bdd0384a Vunny Sodhi 2017-06-30  209  
 
-Two notes:
+:::::: The code at line 195 was first introduced by commit
+:::::: bdd0384a5ada8bb5745e5f29c10a5ba88827efad ASoC: Intel: Skylake: Add support to read firmware registers
 
- - You can put the double colon on the line above ("...elements::") and
-   don't need to make a separate line for it.
+:::::: TO: Vunny Sodhi <vunnyx.sodhi@intel.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
 
- - But, more to the point, please avoid the temptation to use a literal
-   block for something that doesn't actually require that treatment. This
-   should be reworked as an RST definition list.
-
->    media transport - this one shuffles around the media, i.e. the
->                      transport arm.  Also known as "picker".
->    storage         - a slot which can hold a media.
->    import/export   - the same as above, but is accessible from outside,
->                      i.e. there the operator (you !) can use this to
->                      fill in and remove media from the changer.
-> -		    Sometimes named "mailslot".
-> +            Sometimes named "mailslot".
->    data transfer   - this is the device which reads/writes, i.e. the
-> -		    CD-ROM / Tape / whatever drive.
-> +            CD-ROM / Tape / whatever drive.
-
-[...]
-
-> diff --git a/Documentation/scsi/scsi-generic.txt b/Documentation/scsi/scsi-generic.rst
-> similarity index 70%
-> rename from Documentation/scsi/scsi-generic.txt
-> rename to Documentation/scsi/scsi-generic.rst
-> index 51be20a6a14d..8356810160f0 100644
-> --- a/Documentation/scsi/scsi-generic.txt
-> +++ b/Documentation/scsi/scsi-generic.rst
-> @@ -1,8 +1,10 @@
-> -            Notes on Linux SCSI Generic (sg) driver
-> -            ---------------------------------------
-> -                                                        20020126
-> +=======================================
-> +Notes on Linux SCSI Generic (sg) driver
-> +=======================================
-> +20020126
-> +
->  Introduction
-> -============
-> +------------
->  The SCSI Generic driver (sg) is one of the four "high level" SCSI device
->  drivers along with sd, st and sr (disk, tape and CDROM respectively). Sg
->  is more generalized (but lower level) than its siblings and tends to be
-> @@ -16,20 +18,20 @@ and examples.
->  
->  
->  Major versions of the sg driver
-> -===============================
-> +-------------------------------
->  There are three major versions of sg found in the linux kernel (lk):
-> -      - sg version 1 (original) from 1992 to early 1999 (lk 2.2.5) . 
-> -	It is based in the sg_header interface structure.
-> +      - sg version 1 (original) from 1992 to early 1999 (lk 2.2.5) .
-> +        It is based in the sg_header interface structure.
->        - sg version 2 from lk 2.2.6 in the 2.2 series. It is based on
-> -	an extended version of the sg_header interface structure.
-> +        an extended version of the sg_header interface structure.
->        - sg version 3 found in the lk 2.4 series (and the lk 2.5 series).
-> -	It adds the sg_io_hdr interface structure.
-> +        It adds the sg_io_hdr interface structure.
-
-Perhaps we don't *really* need to preserve information about what versions
-were around in the 1990's?
-
->  Sg driver documentation
-> -=======================
-> +-----------------------
->  The most recent documentation of the sg driver is kept at the Linux
-> -Documentation Project's (LDP) site: 
-> +Documentation Project's (LDP) site:
->  http://www.tldp.org/HOWTO/SCSI-Generic-HOWTO
-
-That document claims to have been last updated in 2002.  Is there really
-nothing more recent than that?
-
->  This describes the sg version 3 driver found in the lk 2.4 series.
-
-...and it's unclear to me that users of the 5.x kernel are much concerned
-with what was found in 2.4.
-
-That is the problem with this document in general.  I suspect that about
-the only useful information left in it is the location of the sg3_utils
-source.  I honestly don't think that it helps the documentation that much
-to carry forward ancient information to the RST format.
-
-Of course, doing this right by deleting obsolete information and updating
-the documents to reflect current reality is a *lot* more work.  Probably
-far more than you were thinking of signing up for.  If you were willing to
-work on this, there may be somebody from the SCSI community who would be in
-a position to help you with it.
-
-Unfortunately, the SCSI community probably did not see this patch because
-you didn't copy the linux-scsi list.  I'll fix that now, but they will not
-have seen your original patch.  You should be sure to include them on
-future postings.
-
-I would like to make a suggestion, in addition to all of the above: rather
-than trying to do a mass conversion in a single 4000-line patch, start with
-a single file and post a patch doing just that one, being sure to include
-the linux-scsi list.  That will give everybody something more workable to
-start with.
-
-Thanks,
-
-jon
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
