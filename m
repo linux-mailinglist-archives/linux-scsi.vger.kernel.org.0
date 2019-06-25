@@ -2,188 +2,146 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E3E54F88
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 15:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11A3054FC5
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 15:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730213AbfFYNCS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 09:02:18 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:50022 "EHLO
+        id S1729605AbfFYNF4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 09:05:56 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:50714 "EHLO
         mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730175AbfFYNCS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 09:02:18 -0400
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190625130215epoutp01b01a6433e541dc267f619045dc6203b3~rcqHbZbCT0314703147epoutp01B
-        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 13:02:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190625130215epoutp01b01a6433e541dc267f619045dc6203b3~rcqHbZbCT0314703147epoutp01B
+        with ESMTP id S1730189AbfFYNF4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 09:05:56 -0400
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190625130554epoutp015a03c731d8374e66aa8c2a58d71597b0~rctTW3-tq0314703147epoutp01L
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 13:05:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190625130554epoutp015a03c731d8374e66aa8c2a58d71597b0~rctTW3-tq0314703147epoutp01L
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561467735;
-        bh=1mfCW/D0RvA9qgVuTZWRRLeacuSFvpug25rw8ivnGkE=;
+        s=mail20170921; t=1561467954;
+        bh=SzKCe4+Sc9lt7brPnRnOBQ+CfgHKlZDYLTSIKaovreo=;
         h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=UDobX6GWkv6jtBcI5pdVOi3ojv1Z/LhJh6JK7gU1PMBLKMlVKAJaZt5k+BMA3QDGP
-         xaa0VNa0sdi7+3s9FSHsudo/RexyOorTbh73BEX5QqoS0CBtUU0m7ceoGd0JIgxFhR
-         M0EuOqS/r8CcRITeBoug3CbB6oOLepkmzbTDrCEw=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20190625130214epcas5p1b5abed54d0f40c0dfa17e35ef4c14060~rcqHCuiRY0738707387epcas5p1o;
-        Tue, 25 Jun 2019 13:02:14 +0000 (GMT)
+        b=W1OwQCpWDouGLMVm0vzxOKYVph33zVCIMCF//NHFhkd5d1z30BNb1ct79nnVOIep9
+         98HYTK0vVmLKmgJ2FcsmH/b+7UXAl0Ew7SViVWOpTLBriJFdPFe+VBtYfiNvOXSMiv
+         f7inkyl3bY1LwEc0MhJG3nON+o59X8a01q3H5g/s=
+Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20190625130553epcas5p37417664d9abc51afaba711987964c483~rctTA1CTL2315223152epcas5p3-;
+        Tue, 25 Jun 2019 13:05:53 +0000 (GMT)
 Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        DC.CE.04067.65B121D5; Tue, 25 Jun 2019 22:02:14 +0900 (KST)
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1C.54.04071.13C121D5; Tue, 25 Jun 2019 22:05:53 +0900 (KST)
 Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
         epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20190625130214epcas5p39bf94a9a6d46d83c9da55df0eb8e3df1~rcqGVA_o62450024500epcas5p3k;
-        Tue, 25 Jun 2019 13:02:14 +0000 (GMT)
+        20190625130553epcas5p3c495b378785f3c88543dca31183c42cc~rctSStQAu2318523185epcas5p30;
+        Tue, 25 Jun 2019 13:05:53 +0000 (GMT)
 Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
         epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190625130214epsmtrp25225908f950faabb0dd1de864cbbce03~rcqGUPivn0790407904epsmtrp2u;
-        Tue, 25 Jun 2019 13:02:14 +0000 (GMT)
-X-AuditID: b6c32a4b-7a3ff70000000fe3-f5-5d121b56fc76
+        20190625130553epsmtrp239a950b39f02df4feb29127ab8b4e904~rctSRzoZl0790407904epsmtrp2L;
+        Tue, 25 Jun 2019 13:05:53 +0000 (GMT)
+X-AuditID: b6c32a49-5b7ff70000000fe7-84-5d121c310538
 Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
         epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        27.FF.03662.55B121D5; Tue, 25 Jun 2019 22:02:13 +0900 (KST)
+        2A.00.03662.03C121D5; Tue, 25 Jun 2019 22:05:53 +0900 (KST)
 Received: from [107.108.73.28] (unknown [107.108.73.28]) by
         epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190625130212epsmtip2ef4a176364b84106f7faf62e3d3ebc4a~rcqEgAkIx0459504595epsmtip2U;
-        Tue, 25 Jun 2019 13:02:12 +0000 (GMT)
-Subject: Re: [PATCH v3 1/3] scsi: ufs: Introduce vops for resetting device
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Avri Altman <avri.altman@wdc.com>,
+        20190625130550epsmtip2dc68f87aa56449c2f9e827495615ca7d~rctQFBh8h0348003480epsmtip2k;
+        Tue, 25 Jun 2019 13:05:50 +0000 (GMT)
+Subject: Re: [PATCH] Documentation: scsi: ufs: announce ufs-tool v1.0
+To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
         Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-scsi@vger.kernel.org
+        Avri Altman <avri.altman@wdc.com>
+Cc:     Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Evan Green <evgreen@chromium.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avi Shchislowski <avi.shchislowski@wdc.com>,
+        Alex Lemberg <alex.lemberg@wdc.com>,
+        Arthur Simchaev <Arthur.Simchaev@sandisk.com>
 From:   Alim Akhtar <alim.akhtar@samsung.com>
-Message-ID: <ad1c2a2a-91d6-25ce-9dfb-3b386b572ee2@samsung.com>
-Date:   Tue, 25 Jun 2019 18:11:24 +0530
+Message-ID: <d4e4cd78-18d1-1087-87f0-cb87f6ae99e5@samsung.com>
+Date:   Tue, 25 Jun 2019 18:15:03 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
         Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <20190608050450.12056-2-bjorn.andersson@linaro.org>
+In-Reply-To: <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SeUgUcRTH+83Mzo7iys/V8qWRsaWQkZYHDRQmXQzaBdGJlkNOarrrsuuR
-        USHaqR2aVLa5aoIaJkWbeIuyLR5YZtqqiEHYFmlkpqslhuQ4Rv73ee993/v+3uPHkEqrzIOJ
-        0yQJOg2foKIdqepX6303HvFURm5qaAxguz7NUuzIjJVmO5vHKLbI0iVjSwaqCTa3+Y2c7a0v
-        oNns/lqaLe1/R7DlbXMEe7l1imKvNFnkoU5cZWEl4kwVN2huqK+R5nJKWhD38/MgxVU1TyJu
-        0rSau9aSTRxkTjhuixYS4lIEnX9IlGPso8ZxpH2x4pzVWClPRyMuWciBARwE9l6bLAs5Mkrc
-        gODtx3eLwQSCiXwbIQXTCNpr7xH/WqzfyiiRlbgJwag9QBJ9R5CXcx+JBVccBlmXByix4IaH
-        57tvz8rFgMQ2BANzGQsqGm+ADw+qFsYqcAhYhnpokSnsDTXGaZnIy/Ex6K2qR5LGBToe2uan
-        MowDDgVLXbKYJrE7DNqKCIm9oOZ7ASl6AS6RQ8ZT++Kzd0Fn5UtSYlcYbauSS+wBk2NNtDgT
-        cDzcrA+U0hegtLCVkng7tLwvWLAl8Xp4Xu8vWTnDrVnxQmKnAq5fVUpqb8gcsy52ekJudrZM
-        Yg76Mp4g6VYdCKbKjSgHrTEsWcywZBvDkm0M/52LEVWBVgpavTpG0AdrAzVCqp+eV+uTNTF+
-        pxPVJrTw2XzDa5Gpa68ZYQapnBS/W3GkUsan6NPUZgQMqXJTlPLzKUU0n3Ze0CWe0iUnCHoz
-        8mQolbvirswaocQxfJIQLwhaQfevSjAOHulIWx1z3H5mzxxx/tKv/N2r9ge3W7wy73np/qzr
-        iP02PlrdLK9zcbsalHpoxnvLmi/OaXyUz/SOZUfnTmGfwsMnn5etvWOyJ9sL97Kk884Irc5p
-        z1Z7XpixLjFYLe/5cdL6bLi7QvM4/LU2Pt1mqT17MWmf8auvObXb4J4V3bmj2HxARelj+c2+
-        pE7P/wUN40LhaAMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsWy7bCSvG6otFCswcQWG4tzj3+zWLz8eZXN
-        4vT+dywW84+cY7VYdGMbk8XE/WfZLS7vmsNm0X19B5vF0usXmSyWH//HZNFy7CuLReveI+wO
-        PB5r5q1h9Ni0qpPN4861PWweExYdYPT4+PQWi8eW/Z8ZPT5vkvNoP9DNFMARxWWTkpqTWZZa
-        pG+XwJUxe88HxoKNYhVX565hb2B8KdjFyMkhIWAicfX1MpYuRi4OIYHdjBLTNy5lgkhIS1zf
-        OIEdwhaWWPnvOTtE0WtGiSXPtrKAJIQFvCS6Wm6AdYsIPGKUmHZjETOIwyzwBKhq2XuwKiGB
-        k4wSf19GgNhsAtoSd6dvAVvBK2AnceTOJTYQm0VAVWL73G+sILaoQIREX9tsNogaQYmTM58A
-        zeHg4BRwkDiysxQkzCxgJjFv80NmCFtc4taT+UwQtrzE9rdzmCcwCs1C0j0LScssJC2zkLQs
-        YGRZxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHIlaWjsYT5yIP8QowMGoxMO74IhA
-        rBBrYllxZe4hRgkOZiUR3qWJQCHelMTKqtSi/Pii0pzU4kOM0hwsSuK88vnHIoUE0hNLUrNT
-        UwtSi2CyTBycUg2MmbOjNdZNUNW5GNMxYY94V+OygKliNnuPCTj98emdlG3256x83kHNyc9v
-        OWzdpu5xb3rCbq+7G2ucbih4T425wjfLcJHYlbVVyZvUtesmGDQG+c5ONVUWnLPsolra5w+z
-        diaz5diKT+f0fxpTw3laM13s3qWGDK+vuqe/Cm96U9Ry8tKSi0+UlFiKMxINtZiLihMBZOtz
-        EsACAAA=
-X-CMS-MailID: 20190625130214epcas5p39bf94a9a6d46d83c9da55df0eb8e3df1
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHec/Ozs5Wy9dl+aRhtbJIyUsZnA+iYRdO5IegD6k0bNXBTJ12
+        5iWlxMguauGlSJ2WVqhlI8nWBUvUhU4LDU3zUqHRJLRcqcwrWW1nld9+7///f97neeChRQqr
+        2I2O1iRyvEYdq6Rk5JOXm722+K9WqPy+TQQwbWY9xbx7cID5WdAiYeZq+iRMVn6lmLHWlYuY
+        kdkeimn6lEUy7ZVNFHN+sJBgqvM1TK/Rgpic3mcUU2VaIJjMFivJVDzuRzswOz9XgNiSjE6S
+        vfNihGCHjI9INrOtgWSnay5R7PjwAMle178hWEPDJGInaz3Yi405xP4lEbLAY1xsdDLH+wYd
+        lh1vyG1DCUbZqQ5DlyQDddHZSEoDDgC9tZ/IRjJagZ8j0LfeR8JjAsFonsnhTCEoHp9G/0oM
+        gyLBqEcwpLvnSI0hyDYNU7bUcrwbvuou2g0XXE/AwJfvdkOEmwmofL/TxhT2ho+Fhj8hmpbj
+        IOi4dsImk9gTaqyd9vgKHAZvDXX2znLsDG3FZtLGUszCaOsAIXzpCgPmMgevgadjpfbpAHdI
+        oOtGkUgYexfMln9x8HIYNRkkArvBpKWess0AOAYu120T5NNQcbOFFDgYGrtLSVtEhDdDTZ2v
+        0GoZXJk3E0KlHC5dUAhpTzhn6XFUukN+To5YYBZMtyx2XYFLEJS85PPQWt2ixXSLltEtWkb3
+        v3E5IqvRKi5BGxfFabcn+Gu4FB+tOk6bpInyORofV4vsx+i19xnSdYQaEaaRcql8pgWrFGJ1
+        sjY1zoiAFild5BXqP5L8mDo1jePjI/mkWE5rRO40qXSVF4h7DilwlDqRi+G4BI7/6xK01C0D
+        pTp1h0TEaA589jgS/CP+9NFNJdEFr1R8ZJGsXaU5OJidso8PdNqoyxzdOaWcO7ShKuRt4wbV
+        jJlzT3rYPL2+6aRbbaPziqv63vDH6VIvy1mL+9iRkMkF6URwa2jZ69KtH5q9V3bGj4UX+Vnm
+        cjt/3HbtHW84Y+wbTtuT9etwWPrddUpSe1zt7yXiterfT0ij74gDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA02RbUhTYRiGe885np2tRm/T8FXLwSgCI8uIeg1ZQhiHAg36k9HSQ578yH2w
+        40cLKiHLLyiVUNpMpVJLRqKbJWZMl8wt0FAza2kmaGJWFrK0RZLbDPbv4n7u6+GBhyFlg1Qk
+        k63J4/UaLldBS6inLxXyPXHbZKp9HY8I7Jox0/jtk1P4b7VDhL1t70S4rKo5BHu6G0k8/3uM
+        xn3TZRQebO6j8Y2pWgK3VmnwuP07wBXjXTRuGVglcLHDQ+GmzvcgEbJ/vNWANRUNU+yDnnmC
+        /WS3UGyxy0axy22lNPtz1k2xNebXBGu1LQF2qSOaLemtIE5uPCNJyOBzswt4/V5luiTLdtsF
+        dHbJpSHriKgIjDDlQMwgeACZrVNkOZAwMvgcoKllNxEYRKHx9kpRgEPR49U5P8vgAkDuxV0+
+        DoVJaMFY4u+HQRuBptuv+BaRcIBApR7n+lYTQDbzHO1r0XA3mqy1rhkMI4VKNHQnxxdTcCdq
+        8wz7K1vhaXTrpsnPUrgFue7OUD4WQxZ9cQaOI+FBVG+ZJgMcjtwzDeu5HD37VkdWApkxSDcG
+        KcYgxRikNAKqFUTwOkGdqRbidPs1fGGswKmFfE1m7HmtugP4nxwT0wWczjQ7gAxQbJI29kOV
+        LIQrEAxqO0AMqQiTNnFrkTSDM1zm9do0fX4uL9hBFEMpwqVyrSNVBjO5PP4iz+t4/f8pwYgj
+        i0D02UPUxIj4x2h+b08fEKWEfF2OGDW8qR4bvH/VItLUM15l8cLijmMGd/JxXX1dp9vQWtNy
+        4kXD59mU7bMbclTDFmblqFfZdOHVivzcaFeC1vFw/mOSMX7ClfwrPYVx3hsI/RB/zaTqXl0p
+        7DULicTm60cmEx1ukas/w354rEZBCVlcXAypF7h/a3b8LuACAAA=
+X-CMS-MailID: 20190625130553epcas5p3c495b378785f3c88543dca31183c42cc
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
-X-CMS-RootMailID: 20190608050458epcas1p30f03f6d448eb962a6af56a4c0b021ef0
-References: <20190608050450.12056-1-bjorn.andersson@linaro.org>
-        <CGME20190608050458epcas1p30f03f6d448eb962a6af56a4c0b021ef0@epcas1p3.samsung.com>
-        <20190608050450.12056-2-bjorn.andersson@linaro.org>
+X-CMS-RootMailID: 20190625123640epcas1p2b043961d1b03d2fea1f3c9ddc8d2760d
+References: <CGME20190625123640epcas1p2b043961d1b03d2fea1f3c9ddc8d2760d@epcas1p2.samsung.com>
+        <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Bjorn,
-Are you planning to address Bean's comment on patch#2 and want to 
-re-spin this series?
-I am ok with taking this patch as it is and take a Softreset patch as a 
-separate patch.
+Hi Arthur,
+Does this tools provides a way for ufs device partition provising from 
+user space as well?
+(have not used this tool till now, planning to use soon)
 
-On 6/8/19 10:34 AM, Bjorn Andersson wrote:
-> Some UFS memory devices needs their reset line toggled in order to get
-> them into a good state for initialization. Provide a new vops to allow
-> the platform driver to implement this operation.
+On 6/25/19 6:06 PM, Arthur Simchaev wrote:
+> From: Arthur Simchaev <Arthur.Simchaev@sandisk.com>
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> The ufs-tool stable release v1.0 is available at
+> https://github.com/westerndigitalcorporation/ufs-tool
+> 
+> Feedback and bug reports, as always, are welcomed.
+> 
+> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
 > ---
-feel free to add
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+>   Documentation/scsi/ufs.txt | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> Changes since v2:
-> - New patch, to allow moving implementation to platform driver
-> 
->   drivers/scsi/ufs/ufshcd.c | 6 ++++++
->   drivers/scsi/ufs/ufshcd.h | 8 ++++++++
->   2 files changed, 14 insertions(+)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 04d3686511c8..ee895a625456 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -6191,6 +6191,9 @@ static int ufshcd_reset_and_restore(struct ufs_hba *hba)
->   	int retries = MAX_HOST_RESET_RETRIES;
+> diff --git a/Documentation/scsi/ufs.txt b/Documentation/scsi/ufs.txt
+> index 1769f71..ae4643f 100644
+> --- a/Documentation/scsi/ufs.txt
+> +++ b/Documentation/scsi/ufs.txt
+> @@ -158,6 +158,11 @@ send SG_IO with the applicable sg_io_v4:
+>   If you wish to read or write a descriptor, use the appropriate xferp of
+>   sg_io_v4.
 >   
->   	do {
-> +		/* Reset the attached device */
-> +		ufshcd_vops_device_reset(hba);
-> +
->   		err = ufshcd_host_reset_and_restore(hba);
->   	} while (err && --retries);
+> +The user-space tool that interacts with the ufs-bsg endpoint and uses its
+> +upiu-based protocol, is available at
+> +https://github.com/westerndigitalcorporation/ufs-tool.
+> +For more detailed information about the tool and the tool's supported
+> +features, please see the tool's README.
 >   
-> @@ -8322,6 +8325,9 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
->   		goto exit_gating;
->   	}
->   
-> +	/* Reset the attached device */
-> +	ufshcd_vops_device_reset(hba);
-> +
->   	/* Host controller enable */
->   	err = ufshcd_hba_enable(hba);
->   	if (err) {
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 994d73d03207..cd8139052ed6 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -298,6 +298,7 @@ struct ufs_pwr_mode_info {
->    * @resume: called during host controller PM callback
->    * @dbg_register_dump: used to dump controller debug information
->    * @phy_initialization: used to initialize phys
-> + * @device_reset: called to issue a reset pulse on the UFS device
->    */
->   struct ufs_hba_variant_ops {
->   	const char *name;
-> @@ -326,6 +327,7 @@ struct ufs_hba_variant_ops {
->   	int     (*resume)(struct ufs_hba *, enum ufs_pm_op);
->   	void	(*dbg_register_dump)(struct ufs_hba *hba);
->   	int	(*phy_initialization)(struct ufs_hba *);
-> +	void	(*device_reset)(struct ufs_hba *);
->   };
->   
->   /* clock gating state  */
-> @@ -1045,6 +1047,12 @@ static inline void ufshcd_vops_dbg_register_dump(struct ufs_hba *hba)
->   		hba->vops->dbg_register_dump(hba);
->   }
->   
-> +static inline void ufshcd_vops_device_reset(struct ufs_hba *hba)
-> +{
-> +	if (hba->vops && hba->vops->device_reset)
-> +		hba->vops->device_reset(hba);
-> +}
-> +
->   extern struct ufs_pm_lvl_states ufs_pm_lvl_states[];
->   
->   /*
+>   UFS Specifications can be found at,
+>   UFS - http://www.jedec.org/sites/default/files/docs/JESD220.pdf
 > 
