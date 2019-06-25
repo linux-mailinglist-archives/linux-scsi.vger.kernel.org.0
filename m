@@ -2,329 +2,188 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47BFD54EFF
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 14:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E3E54F88
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 15:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728691AbfFYMgu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 08:36:50 -0400
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:14898 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbfFYMgu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 08:36:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1561466209; x=1593002209;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=PzBw+VL2FYfqwgkkhZDXCP2vS5OcKxqGM4KtRqsG488=;
-  b=Iw3Owu9DYC5JXxONDYOsbh2q0pqNb9izCoGuBsf4hVMXEv9/vGYFWw+M
-   EJawpPAVYV4F8tChba9SXwL5Tg0xSkCQblHDdM2kz3/OrhaT8ZKPM5YeQ
-   WDVektTf8mo0V/5aKuJyBzzKSqEiVAq0RxKlX81qYG0II+C1UkyZGSWr3
-   xEQJNy/3opmMdSbf7maQ+65LBMUICquG03HPjVRCyxeCrf1gndbsQ+1oi
-   +Xknsi4Lp197oA8fpY0HZ6pZWlm/uTvyZYLRt+QTXVs02mmOPZvoyEYr8
-   3CXAcBDy/mDr8+ak/jXTNX+1aFmzbn+WcdNFzDVql3Yz5ExbtVVPhoqKN
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.63,415,1557158400"; 
-   d="scan'208";a="113114685"
-Received: from mail-co1nam05lp2055.outbound.protection.outlook.com (HELO NAM05-CO1-obe.outbound.protection.outlook.com) ([104.47.48.55])
-  by ob1.hgst.iphmx.com with ESMTP; 25 Jun 2019 20:36:48 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MLYyMfRmNHDXWRmqXJkoDA1AFufNIOrHUUEn4BbKARs=;
- b=cnoQZeo4Ik6YPzGglDncYeCS0s09AKD8h4pDNVhHBY8xzqyYOViCBnpnfBkl7dWlwzLtpkkwHCbieFBQBcuqPVdADv+fZ2P9QQyMSWfWJ99GcK42jq6jpf6PUSESy+MAQIzJ7zb0CaVi1navGiloFe8XsvE56hrf+HSYyxxXL3c=
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.58.207) by
- BYAPR04MB5432.namprd04.prod.outlook.com (20.178.51.17) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Tue, 25 Jun 2019 12:36:46 +0000
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::e94e:8ead:40b1:fae6]) by BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::e94e:8ead:40b1:fae6%7]) with mapi id 15.20.2008.017; Tue, 25 Jun 2019
- 12:36:46 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     =?iso-8859-1?Q?Matias_Bj=F8rling?= <mb@lightnvm.io>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
-        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
-        Ajay Joshi <Ajay.Joshi@wdc.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>
-CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>
-Subject: Re: [PATCH 2/4] null_blk: add zone open, close, and finish support
-Thread-Topic: [PATCH 2/4] null_blk: add zone open, close, and finish support
-Thread-Index: AQHVKDJPvRqrrDdCI02PGkGKUbxkfQ==
-Date:   Tue, 25 Jun 2019 12:36:45 +0000
-Message-ID: <BYAPR04MB581665C81B89838BC022BF7BE7E30@BYAPR04MB5816.namprd04.prod.outlook.com>
-References: <20190621130711.21986-1-mb@lightnvm.io>
- <20190621130711.21986-3-mb@lightnvm.io>
- <BYAPR04MB5816D471063D970DDCF9AEC7E7E60@BYAPR04MB5816.namprd04.prod.outlook.com>
- <1aa6552c-ecf9-a168-df75-ec8c52ddbea6@lightnvm.io>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Damien.LeMoal@wdc.com; 
-x-originating-ip: [60.117.181.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7818b15d-1f38-40a9-6d70-08d6f969c934
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB5432;
-x-ms-traffictypediagnostic: BYAPR04MB5432:
-wdcipoutbound: EOP-TRUE
-x-microsoft-antispam-prvs: <BYAPR04MB543279E0BE36C574315CA342E7E30@BYAPR04MB5432.namprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0079056367
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(376002)(346002)(39860400002)(366004)(396003)(199004)(189003)(8676002)(7416002)(6246003)(99286004)(14444005)(446003)(4326008)(74316002)(3846002)(6116002)(14454004)(91956017)(486006)(476003)(256004)(5660300002)(55016002)(316002)(305945005)(52536014)(72206003)(2906002)(7736002)(25786009)(68736007)(54906003)(73956011)(66946007)(110136005)(64756008)(9686003)(66556008)(66476007)(66446008)(53936002)(229853002)(7696005)(81166006)(66066001)(76176011)(66574012)(71190400001)(478600001)(71200400001)(102836004)(6506007)(186003)(53546011)(8936002)(81156014)(26005)(76116006)(2501003)(86362001)(2201001)(33656002)(6436002)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB5432;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: kYQpOYjsDU06Uc7yoQxfUK6kC7AWxSmd6WvYafg/EaoMM9vTKh1pI+u3XZLB1SZSrf5LvN+R0jNZFGNXkIiIn8U0lVJ7UATpJETezFR4VLMUOW+8r4tRJJYHdthPTNSLkqOi9OqwfStHF5ed6vdOBk2eXxgKSOGAnn2j0tN+S9jVwnVfeVm8JD75vnekVMS+NS7wITSSlAAYwQzUazHhPzXzFQGEmYPnywiNk2RDF9M1ljBjyHOjUFbgZK+4qqz7qAQI+2vOGrFHFLwXAVe+Oi2Qnd6msA7B/y8FC62W3BjQRS2vZBCTBRQ/Ilz+VShJN/IXtQ/sIhRb+u1JJOCiliUtf6H9mFzf5soU79cI8xmpG9XyNitv2GjbYB+kXTWpdUuKEcgkjQx+kXMmO2oXRk0w8eDb/LDs9EvtvbABlJc=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S1730213AbfFYNCS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 09:02:18 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:50022 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730175AbfFYNCS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 09:02:18 -0400
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190625130215epoutp01b01a6433e541dc267f619045dc6203b3~rcqHbZbCT0314703147epoutp01B
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 13:02:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190625130215epoutp01b01a6433e541dc267f619045dc6203b3~rcqHbZbCT0314703147epoutp01B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1561467735;
+        bh=1mfCW/D0RvA9qgVuTZWRRLeacuSFvpug25rw8ivnGkE=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=UDobX6GWkv6jtBcI5pdVOi3ojv1Z/LhJh6JK7gU1PMBLKMlVKAJaZt5k+BMA3QDGP
+         xaa0VNa0sdi7+3s9FSHsudo/RexyOorTbh73BEX5QqoS0CBtUU0m7ceoGd0JIgxFhR
+         M0EuOqS/r8CcRITeBoug3CbB6oOLepkmzbTDrCEw=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+        20190625130214epcas5p1b5abed54d0f40c0dfa17e35ef4c14060~rcqHCuiRY0738707387epcas5p1o;
+        Tue, 25 Jun 2019 13:02:14 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        DC.CE.04067.65B121D5; Tue, 25 Jun 2019 22:02:14 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20190625130214epcas5p39bf94a9a6d46d83c9da55df0eb8e3df1~rcqGVA_o62450024500epcas5p3k;
+        Tue, 25 Jun 2019 13:02:14 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20190625130214epsmtrp25225908f950faabb0dd1de864cbbce03~rcqGUPivn0790407904epsmtrp2u;
+        Tue, 25 Jun 2019 13:02:14 +0000 (GMT)
+X-AuditID: b6c32a4b-7a3ff70000000fe3-f5-5d121b56fc76
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        27.FF.03662.55B121D5; Tue, 25 Jun 2019 22:02:13 +0900 (KST)
+Received: from [107.108.73.28] (unknown [107.108.73.28]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20190625130212epsmtip2ef4a176364b84106f7faf62e3d3ebc4a~rcqEgAkIx0459504595epsmtip2U;
+        Tue, 25 Jun 2019 13:02:12 +0000 (GMT)
+Subject: Re: [PATCH v3 1/3] scsi: ufs: Introduce vops for resetting device
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+Message-ID: <ad1c2a2a-91d6-25ce-9dfb-3b386b572ee2@samsung.com>
+Date:   Tue, 25 Jun 2019 18:11:24 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.7.1
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7818b15d-1f38-40a9-6d70-08d6f969c934
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2019 12:36:45.6705
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Damien.LeMoal@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5432
+In-Reply-To: <20190608050450.12056-2-bjorn.andersson@linaro.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SeUgUcRTH+83Mzo7iys/V8qWRsaWQkZYHDRQmXQzaBdGJlkNOarrrsuuR
+        USHaqR2aVLa5aoIaJkWbeIuyLR5YZtqqiEHYFmlkpqslhuQ4Rv73ee993/v+3uPHkEqrzIOJ
+        0yQJOg2foKIdqepX6303HvFURm5qaAxguz7NUuzIjJVmO5vHKLbI0iVjSwaqCTa3+Y2c7a0v
+        oNns/lqaLe1/R7DlbXMEe7l1imKvNFnkoU5cZWEl4kwVN2huqK+R5nJKWhD38/MgxVU1TyJu
+        0rSau9aSTRxkTjhuixYS4lIEnX9IlGPso8ZxpH2x4pzVWClPRyMuWciBARwE9l6bLAs5Mkrc
+        gODtx3eLwQSCiXwbIQXTCNpr7xH/WqzfyiiRlbgJwag9QBJ9R5CXcx+JBVccBlmXByix4IaH
+        57tvz8rFgMQ2BANzGQsqGm+ADw+qFsYqcAhYhnpokSnsDTXGaZnIy/Ex6K2qR5LGBToe2uan
+        MowDDgVLXbKYJrE7DNqKCIm9oOZ7ASl6AS6RQ8ZT++Kzd0Fn5UtSYlcYbauSS+wBk2NNtDgT
+        cDzcrA+U0hegtLCVkng7tLwvWLAl8Xp4Xu8vWTnDrVnxQmKnAq5fVUpqb8gcsy52ekJudrZM
+        Yg76Mp4g6VYdCKbKjSgHrTEsWcywZBvDkm0M/52LEVWBVgpavTpG0AdrAzVCqp+eV+uTNTF+
+        pxPVJrTw2XzDa5Gpa68ZYQapnBS/W3GkUsan6NPUZgQMqXJTlPLzKUU0n3Ze0CWe0iUnCHoz
+        8mQolbvirswaocQxfJIQLwhaQfevSjAOHulIWx1z3H5mzxxx/tKv/N2r9ge3W7wy73np/qzr
+        iP02PlrdLK9zcbsalHpoxnvLmi/OaXyUz/SOZUfnTmGfwsMnn5etvWOyJ9sL97Kk884Irc5p
+        z1Z7XpixLjFYLe/5cdL6bLi7QvM4/LU2Pt1mqT17MWmf8auvObXb4J4V3bmj2HxARelj+c2+
+        pE7P/wUN40LhaAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLIsWRmVeSWpSXmKPExsWy7bCSvG6otFCswcQWG4tzj3+zWLz8eZXN
+        4vT+dywW84+cY7VYdGMbk8XE/WfZLS7vmsNm0X19B5vF0usXmSyWH//HZNFy7CuLReveI+wO
+        PB5r5q1h9Ni0qpPN4861PWweExYdYPT4+PQWi8eW/Z8ZPT5vkvNoP9DNFMARxWWTkpqTWZZa
+        pG+XwJUxe88HxoKNYhVX565hb2B8KdjFyMkhIWAicfX1MpYuRi4OIYHdjBLTNy5lgkhIS1zf
+        OIEdwhaWWPnvOTtE0WtGiSXPtrKAJIQFvCS6Wm6AdYsIPGKUmHZjETOIwyzwBKhq2XuwKiGB
+        k4wSf19GgNhsAtoSd6dvAVvBK2AnceTOJTYQm0VAVWL73G+sILaoQIREX9tsNogaQYmTM58A
+        zeHg4BRwkDiysxQkzCxgJjFv80NmCFtc4taT+UwQtrzE9rdzmCcwCs1C0j0LScssJC2zkLQs
+        YGRZxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kRHIlaWjsYT5yIP8QowMGoxMO74IhA
+        rBBrYllxZe4hRgkOZiUR3qWJQCHelMTKqtSi/Pii0pzU4kOM0hwsSuK88vnHIoUE0hNLUrNT
+        UwtSi2CyTBycUg2MmbOjNdZNUNW5GNMxYY94V+OygKliNnuPCTj98emdlG3256x83kHNyc9v
+        OWzdpu5xb3rCbq+7G2ucbih4T425wjfLcJHYlbVVyZvUtesmGDQG+c5ONVUWnLPsolra5w+z
+        diaz5diKT+f0fxpTw3laM13s3qWGDK+vuqe/Cm96U9Ry8tKSi0+UlFiKMxINtZiLihMBZOtz
+        EsACAAA=
+X-CMS-MailID: 20190625130214epcas5p39bf94a9a6d46d83c9da55df0eb8e3df1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20190608050458epcas1p30f03f6d448eb962a6af56a4c0b021ef0
+References: <20190608050450.12056-1-bjorn.andersson@linaro.org>
+        <CGME20190608050458epcas1p30f03f6d448eb962a6af56a4c0b021ef0@epcas1p3.samsung.com>
+        <20190608050450.12056-2-bjorn.andersson@linaro.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019/06/25 20:06, Matias Bj=F8rling wrote:=0A=
-> On 6/22/19 3:02 AM, Damien Le Moal wrote:=0A=
->> On 2019/06/21 22:07, Matias Bj=F8rling wrote:=0A=
->>> From: Ajay Joshi <ajay.joshi@wdc.com>=0A=
->>>=0A=
->>> Implement REQ_OP_ZONE_OPEN, REQ_OP_ZONE_CLOSE and REQ_OP_ZONE_FINISH=0A=
->>> support to allow explicit control of zone states.=0A=
->>>=0A=
->>> Signed-off-by: Ajay Joshi <ajay.joshi@wdc.com>=0A=
->>> Signed-off-by: Matias Bj=F8rling <matias.bjorling@wdc.com>=0A=
->>> ---=0A=
->>>   drivers/block/null_blk.h       |  4 ++--=0A=
->>>   drivers/block/null_blk_main.c  | 13 ++++++++++---=0A=
->>>   drivers/block/null_blk_zoned.c | 33 ++++++++++++++++++++++++++++++---=
-=0A=
->>>   3 files changed, 42 insertions(+), 8 deletions(-)=0A=
->>>=0A=
->>> diff --git a/drivers/block/null_blk.h b/drivers/block/null_blk.h=0A=
->>> index 34b22d6523ba..62ef65cb0f3e 100644=0A=
->>> --- a/drivers/block/null_blk.h=0A=
->>> +++ b/drivers/block/null_blk.h=0A=
->>> @@ -93,7 +93,7 @@ int null_zone_report(struct gendisk *disk, sector_t s=
-ector,=0A=
->>>   		     gfp_t gfp_mask);=0A=
->>>   void null_zone_write(struct nullb_cmd *cmd, sector_t sector,=0A=
->>>   			unsigned int nr_sectors);=0A=
->>> -void null_zone_reset(struct nullb_cmd *cmd, sector_t sector);=0A=
->>> +void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t sector);=0A=
->>>   #else=0A=
->>>   static inline int null_zone_init(struct nullb_device *dev)=0A=
->>>   {=0A=
->>> @@ -111,6 +111,6 @@ static inline void null_zone_write(struct nullb_cmd=
- *cmd, sector_t sector,=0A=
->>>   				   unsigned int nr_sectors)=0A=
->>>   {=0A=
->>>   }=0A=
->>> -static inline void null_zone_reset(struct nullb_cmd *cmd, sector_t sec=
-tor) {}=0A=
->>> +static inline void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t s=
-ector) {}=0A=
->>>   #endif /* CONFIG_BLK_DEV_ZONED */=0A=
->>>   #endif /* __NULL_BLK_H */=0A=
->>> diff --git a/drivers/block/null_blk_main.c b/drivers/block/null_blk_mai=
-n.c=0A=
->>> index 447d635c79a2..5058fb980c9c 100644=0A=
->>> --- a/drivers/block/null_blk_main.c=0A=
->>> +++ b/drivers/block/null_blk_main.c=0A=
->>> @@ -1209,10 +1209,17 @@ static blk_status_t null_handle_cmd(struct null=
-b_cmd *cmd)=0A=
->>>   			nr_sectors =3D blk_rq_sectors(cmd->rq);=0A=
->>>   		}=0A=
->>>   =0A=
->>> -		if (op =3D=3D REQ_OP_WRITE)=0A=
->>> +		switch (op) {=0A=
->>> +		case REQ_OP_WRITE:=0A=
->>>   			null_zone_write(cmd, sector, nr_sectors);=0A=
->>> -		else if (op =3D=3D REQ_OP_ZONE_RESET)=0A=
->>> -			null_zone_reset(cmd, sector);=0A=
->>> +			break;=0A=
->>> +		case REQ_OP_ZONE_RESET:=0A=
->>> +		case REQ_OP_ZONE_OPEN:=0A=
->>> +		case REQ_OP_ZONE_CLOSE:=0A=
->>> +		case REQ_OP_ZONE_FINISH:=0A=
->>> +			null_zone_mgmt_op(cmd, sector);=0A=
->>> +			break;=0A=
->>> +		}=0A=
->>>   	}=0A=
->>>   out:=0A=
->>>   	/* Complete IO by inline, softirq or timer */=0A=
->>> diff --git a/drivers/block/null_blk_zoned.c b/drivers/block/null_blk_zo=
-ned.c=0A=
->>> index fca0c97ff1aa..47d956b2e148 100644=0A=
->>> --- a/drivers/block/null_blk_zoned.c=0A=
->>> +++ b/drivers/block/null_blk_zoned.c=0A=
->>> @@ -121,17 +121,44 @@ void null_zone_write(struct nullb_cmd *cmd, secto=
-r_t sector,=0A=
->>>   	}=0A=
->>>   }=0A=
->>>   =0A=
->>> -void null_zone_reset(struct nullb_cmd *cmd, sector_t sector)=0A=
->>> +void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t sector)=0A=
->>>   {=0A=
->>>   	struct nullb_device *dev =3D cmd->nq->dev;=0A=
->>>   	unsigned int zno =3D null_zone_no(dev, sector);=0A=
->>>   	struct blk_zone *zone =3D &dev->zones[zno];=0A=
->>> +	enum req_opf op =3D req_op(cmd->rq);=0A=
->>>   =0A=
->>>   	if (zone->type =3D=3D BLK_ZONE_TYPE_CONVENTIONAL) {=0A=
->>>   		cmd->error =3D BLK_STS_IOERR;=0A=
->>>   		return;=0A=
->>>   	}=0A=
->>>   =0A=
->>> -	zone->cond =3D BLK_ZONE_COND_EMPTY;=0A=
->>> -	zone->wp =3D zone->start;=0A=
->>> +	switch (op) {=0A=
->>> +	case REQ_OP_ZONE_RESET:=0A=
->>> +		zone->cond =3D BLK_ZONE_COND_EMPTY;=0A=
->>> +		zone->wp =3D zone->start;=0A=
->>> +		return;=0A=
->>> +	case REQ_OP_ZONE_OPEN:=0A=
->>> +		if (zone->cond =3D=3D BLK_ZONE_COND_FULL) {=0A=
->>> +			cmd->error =3D BLK_STS_IOERR;=0A=
->>> +			return;=0A=
->>> +		}=0A=
->>> +		zone->cond =3D BLK_ZONE_COND_EXP_OPEN;=0A=
->>=0A=
->>=0A=
->> With ZBC, open of a full zone is a "nop". No error. So I would rather ha=
-ve this as:=0A=
->>=0A=
->> 		if (zone->cond !=3D BLK_ZONE_COND_FULL)=0A=
->> 			zone->cond =3D BLK_ZONE_COND_EXP_OPEN;=0A=
->> 		=0A=
-> Is this only ZBC? I can't find a reference to it in ZAC. I think it =0A=
-> should fail. One is trying to open a zone that is full, one can't open =
-=0A=
-> it again. It's done for this round.=0A=
-=0A=
-Page 52/53, section 5.2.6.3.2:=0A=
-=0A=
-If the OPEN ALL bit is cleared to zero and the zone specified by the ZONE I=
-D=0A=
-field (see 5.2.4.3.3) is in Zone Condition:=0A=
-a) EMPTY, IMPLICITLY OPENED, or CLOSED, then the device shall process an=0A=
-Explicitly Open Zone function=0A=
-(see 4.6.3.4.10) for the zone specified by the ZONE ID field;=0A=
-b) EXPLICITLY OPENED or FULL, then the device shall:=0A=
-	A) not change the zone's state; and=0A=
-	B) return successful command completion;=0A=
-=0A=
->>=0A=
->>> +		return;=0A=
->>> +	case REQ_OP_ZONE_CLOSE:=0A=
->>> +		if (zone->cond =3D=3D BLK_ZONE_COND_FULL) {=0A=
->>> +			cmd->error =3D BLK_STS_IOERR;=0A=
->>> +			return;=0A=
->>> +		}=0A=
->>> +		zone->cond =3D BLK_ZONE_COND_CLOSED;=0A=
->>=0A=
->> Sam as for open. Closing a full zone on ZBC is a nop. =0A=
-> =0A=
-> I think this should cause error.=0A=
-=0A=
-See ZAB/ZAC close command description. Same text as above, almost. Not an e=
-rror.=0A=
-It is a nop. ZAC page 48, section 5.2.4.3.2:=0A=
-=0A=
-If the CLOSE ALL bit is cleared to zero and the zone specified by the ZONE =
-ID=0A=
-field (see 5.2.4.3.3) is in Zone Condition:=0A=
-a) IMPLICITLY OPENED, or EXPLICITLY OPENED, then the device shall process a=
-=0A=
-Close Zone function=0A=
-(see 4.6.3.4.11) for the zone specified by the ZONE ID field;=0A=
-b) EMPTY, CLOSED, or FULL, then the device shall:=0A=
-	A) not change the zone's state; and=0A=
-	B) return successful command completion;=0A=
-=0A=
-> =0A=
-> And the code above would=0A=
->> also set an empty zone to closed. Finally, if the zone is open but nothi=
-ng was=0A=
->> written to it, it must be returned to empty condition, not closed. =0A=
-> =0A=
-> Only on a reset event right? In general, if I do a expl. open, close it, =
-=0A=
-> it should not go to empty.=0A=
-=0A=
-See the zone state machine. It does return to empty from expl open if nothi=
-ng=0A=
-was written, that is, if the WP is still at zone start. This text is in ZAC=
-=0A=
-section 4.6.3.4.11 as noted above:=0A=
-=0A=
-For the specified zone, the Zone Condition state machine processing of this=
-=0A=
-function (e.g., as shown in the ZC2: Implicit_Open state (see 4.6.3.4.3))=
-=0A=
-results in the Zone Condition for the specified zone becoming:=0A=
-a) EMPTY, if the write pointer indicates the lowest LBA in the zone and Non=
-=0A=
-Sequential Write Resources Active is false; or=0A=
-b) CLOSED, if the write pointer does not indicate the lowest LBA in the zon=
-e or=0A=
-Non-Sequential Write Resources Active is true.=0A=
-=0A=
-> =0A=
-> So something=0A=
->> like this is needed.=0A=
->>=0A=
->> 		switch (zone->cond) {=0A=
->> 		case BLK_ZONE_COND_FULL:=0A=
->> 		case BLK_ZONE_COND_EMPTY:=0A=
->> 			break;=0A=
->> 		case BLK_ZONE_COND_EXP_OPEN:=0A=
->> 			if (zone->wp =3D=3D zone->start) {=0A=
->> 				zone->cond =3D BLK_ZONE_COND_EMPTY;=0A=
->> 				break;=0A=
->> 			}=0A=
->> 		/* fallthrough */=0A=
->> 		default:=0A=
->> 			zone->cond =3D BLK_ZONE_COND_CLOSED;=0A=
->> 		}=0A=
->>=0A=
->>> +		return;=0A=
->>> +	case REQ_OP_ZONE_FINISH:=0A=
->>> +		zone->cond =3D BLK_ZONE_COND_FULL;=0A=
->>> +		zone->wp =3D zone->start + zone->len;=0A=
->>> +		return;=0A=
->>> +	default:=0A=
->>> +		/* Invalid zone condition */=0A=
->>> +		cmd->error =3D BLK_STS_IOERR;=0A=
->>> +		return;=0A=
->>> +	}=0A=
->>>   }=0A=
->>>=0A=
->>=0A=
->>=0A=
-> =0A=
-> =0A=
-=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+Hi Bjorn,
+Are you planning to address Bean's comment on patch#2 and want to 
+re-spin this series?
+I am ok with taking this patch as it is and take a Softreset patch as a 
+separate patch.
+
+On 6/8/19 10:34 AM, Bjorn Andersson wrote:
+> Some UFS memory devices needs their reset line toggled in order to get
+> them into a good state for initialization. Provide a new vops to allow
+> the platform driver to implement this operation.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+feel free to add
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+> 
+> Changes since v2:
+> - New patch, to allow moving implementation to platform driver
+> 
+>   drivers/scsi/ufs/ufshcd.c | 6 ++++++
+>   drivers/scsi/ufs/ufshcd.h | 8 ++++++++
+>   2 files changed, 14 insertions(+)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 04d3686511c8..ee895a625456 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -6191,6 +6191,9 @@ static int ufshcd_reset_and_restore(struct ufs_hba *hba)
+>   	int retries = MAX_HOST_RESET_RETRIES;
+>   
+>   	do {
+> +		/* Reset the attached device */
+> +		ufshcd_vops_device_reset(hba);
+> +
+>   		err = ufshcd_host_reset_and_restore(hba);
+>   	} while (err && --retries);
+>   
+> @@ -8322,6 +8325,9 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+>   		goto exit_gating;
+>   	}
+>   
+> +	/* Reset the attached device */
+> +	ufshcd_vops_device_reset(hba);
+> +
+>   	/* Host controller enable */
+>   	err = ufshcd_hba_enable(hba);
+>   	if (err) {
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> index 994d73d03207..cd8139052ed6 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -298,6 +298,7 @@ struct ufs_pwr_mode_info {
+>    * @resume: called during host controller PM callback
+>    * @dbg_register_dump: used to dump controller debug information
+>    * @phy_initialization: used to initialize phys
+> + * @device_reset: called to issue a reset pulse on the UFS device
+>    */
+>   struct ufs_hba_variant_ops {
+>   	const char *name;
+> @@ -326,6 +327,7 @@ struct ufs_hba_variant_ops {
+>   	int     (*resume)(struct ufs_hba *, enum ufs_pm_op);
+>   	void	(*dbg_register_dump)(struct ufs_hba *hba);
+>   	int	(*phy_initialization)(struct ufs_hba *);
+> +	void	(*device_reset)(struct ufs_hba *);
+>   };
+>   
+>   /* clock gating state  */
+> @@ -1045,6 +1047,12 @@ static inline void ufshcd_vops_dbg_register_dump(struct ufs_hba *hba)
+>   		hba->vops->dbg_register_dump(hba);
+>   }
+>   
+> +static inline void ufshcd_vops_device_reset(struct ufs_hba *hba)
+> +{
+> +	if (hba->vops && hba->vops->device_reset)
+> +		hba->vops->device_reset(hba);
+> +}
+> +
+>   extern struct ufs_pm_lvl_states ufs_pm_lvl_states[];
+>   
+>   /*
+> 
