@@ -2,153 +2,169 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EB2520BE
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 04:46:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780F652121
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 05:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730601AbfFYCqc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 22:46:32 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:51039 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730587AbfFYCqc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 22:46:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1561430792; x=1592966792;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7ACOvz/I4Pkq6BKjCanVA2jilXHheAcb+PFhiYQaSC8=;
-  b=WX8bu1eB4fjZ9ZcEE+VRY3hyspmG5Xov6PtgTYACWM1IelyE/3i6uQDW
-   R3ewCCrUGwHcNxnyqWQGc9imwiA6inCq7nMsu1qShR8Lugzs+ylNdG4Tp
-   Z7E5nL0z/XJFBZ/pFdGPeUh9ayzbKROM3pzaBmoDvE8b4A9jNP8n+n/23
-   pdWQ93z6xk2jP43/d7TnW9leXQ2u1Oe3k5N8DwmqLoFkK3MgheQf3uq1r
-   Ig15A1Uaea+3zQQDyTOUHLTeFyTbl4583HVexOBTD7hlfzPR4cDyZ8RYK
-   6BoGfWwAKlMTEJM9MeTjDSrIhac1JJxAaLfcZO7DDZ0WOLHDgUB6FXcKa
-   w==;
-X-IronPort-AV: E=Sophos;i="5.63,413,1557158400"; 
-   d="scan'208";a="112654048"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 25 Jun 2019 10:46:32 +0800
-IronPort-SDR: QwUXBA4LjWp0KQYK6qSFGLByVxg/2xIW6BP5kkB/POoem+tkxEvtGzewCOOWdrGkZl8s8OjXq1
- E2VAoAOLCiQCReB24Uhkwk7vYKzqDWyg7p6BcYUFY5UTWtdIV7WDdxNJ9h1APSrQ0sJ3EeIL28
- OjItY6KzNrc6NyjO1s/diWPKRqAAzcnc4TwxPBwjyH4J0fN2qdjL8wbxGQnZTk/DEZOMRMCc/O
- aXbbrNzYwSKfZBv/LjWCDtCLZzzUqLtP2RYJ2xVikZhGXzdmdbqvqT9etW9K5nVkpOScLSBNbl
- JzehsRjARTIOydYofq2cag55
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP; 24 Jun 2019 19:45:48 -0700
-IronPort-SDR: kcVlWk6MzJiPz8TBlagyFjbw7Sv+dPkY8/JUvcay9NZs47zuKAhniFHdVJzDhftUcYVx5pRIc/
- 5Yv3Y7iOOs1oWcEFPTM6k4JzpFamLnEnCcne5skz7Mr6sT4GNuuwjJVmwS0vKIwvDjRH05X8SP
- YEj35ujyFcxJx5YAmv5FH2SSjk/cdYeYj/Gu8x36lGt6yEEabkMU0c0tYStLZ/4pDosl4SHlc1
- tiCdu+YgeIv6dEZjHDNR5fd2RupQdumY7rOI01rjSib3BbVK09xHH+9LL1bNAryBbWG97FvKEw
- Xrw=
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip01.wdc.com with ESMTP; 24 Jun 2019 19:46:30 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 3/3] block: Limit zone array allocation size
-Date:   Tue, 25 Jun 2019 11:46:25 +0900
-Message-Id: <20190625024625.23976-4-damien.lemoal@wdc.com>
+        id S1730098AbfFYDUR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 23:20:17 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25444 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728673AbfFYDTg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 24 Jun 2019 23:19:36 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5P36NG8110656
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 23:19:35 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tbaaytfua-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 23:19:35 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <alastair@au1.ibm.com>;
+        Tue, 25 Jun 2019 04:19:31 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 25 Jun 2019 04:19:22 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5P3JLkE57212948
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 25 Jun 2019 03:19:21 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2310FAE057;
+        Tue, 25 Jun 2019 03:19:21 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 76678AE056;
+        Tue, 25 Jun 2019 03:19:20 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 25 Jun 2019 03:19:20 +0000 (GMT)
+Received: from adsilva.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 1790BA01B9;
+        Tue, 25 Jun 2019 13:19:19 +1000 (AEST)
+From:   "Alastair D'Silva" <alastair@au1.ibm.com>
+To:     alastair@d-silva.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
+Subject: [PATCH v4 0/7] Hexdump Enhancements
+Date:   Tue, 25 Jun 2019 13:17:19 +1000
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190625024625.23976-1-damien.lemoal@wdc.com>
-References: <20190625024625.23976-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19062503-0008-0000-0000-000002F6B5BD
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19062503-0009-0000-0000-00002263E424
+Message-Id: <20190625031726.12173-1-alastair@au1.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-25_02:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906250024
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Limit the size of the struct blk_zone array used in
-blk_revalidate_disk_zones() to avoid memory allocation failures leading
-to disk revalidation failure. Further reduce the likelyhood of these
-failures by using kvmalloc() instead of directly allocating contiguous
-pages.
+From: Alastair D'Silva <alastair@d-silva.org>
 
-Fixes: 515ce6061312 ("scsi: sd_zbc: Fix sd_zbc_report_zones() buffer allocation")
-Fixes: e76239a3748c ("block: add a report_zones method")
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
----
- block/blk-zoned.c      | 29 +++++++++++++----------------
- include/linux/blkdev.h |  5 +++++
- 2 files changed, 18 insertions(+), 16 deletions(-)
+Apologies for the large CC list, it's a heads up for those responsible
+for subsystems where a prototype change in generic code causes a change
+in those subsystems.
 
-diff --git a/block/blk-zoned.c b/block/blk-zoned.c
-index ae7e91bd0618..26f878b9b5f5 100644
---- a/block/blk-zoned.c
-+++ b/block/blk-zoned.c
-@@ -373,22 +373,20 @@ static inline unsigned long *blk_alloc_zone_bitmap(int node,
-  * Allocate an array of struct blk_zone to get nr_zones zone information.
-  * The allocated array may be smaller than nr_zones.
-  */
--static struct blk_zone *blk_alloc_zones(int node, unsigned int *nr_zones)
-+static struct blk_zone *blk_alloc_zones(unsigned int *nr_zones)
- {
--	size_t size = *nr_zones * sizeof(struct blk_zone);
--	struct page *page;
--	int order;
--
--	for (order = get_order(size); order >= 0; order--) {
--		page = alloc_pages_node(node, GFP_NOIO | __GFP_ZERO, order);
--		if (page) {
--			*nr_zones = min_t(unsigned int, *nr_zones,
--				(PAGE_SIZE << order) / sizeof(struct blk_zone));
--			return page_address(page);
--		}
-+	struct blk_zone *zones;
-+	size_t nrz = min(*nr_zones, BLK_ZONED_REPORT_MAX_ZONES);
-+
-+	zones = kvcalloc(nrz, sizeof(struct blk_zone), GFP_NOIO);
-+	if (!zones) {
-+		*nr_zones = 0;
-+		return NULL;
- 	}
- 
--	return NULL;
-+	*nr_zones = nrz;
-+
-+	return zones;
- }
- 
- void blk_queue_free_zone_bitmaps(struct request_queue *q)
-@@ -443,7 +441,7 @@ int blk_revalidate_disk_zones(struct gendisk *disk)
- 
- 	/* Get zone information and initialize seq_zones_bitmap */
- 	rep_nr_zones = nr_zones;
--	zones = blk_alloc_zones(q->node, &rep_nr_zones);
-+	zones = blk_alloc_zones(&rep_nr_zones);
- 	if (!zones)
- 		goto out;
- 
-@@ -480,8 +478,7 @@ int blk_revalidate_disk_zones(struct gendisk *disk)
- 	blk_mq_unfreeze_queue(q);
- 
- out:
--	free_pages((unsigned long)zones,
--		   get_order(rep_nr_zones * sizeof(struct blk_zone)));
-+	kvfree(zones);
- 	kfree(seq_zones_wlock);
- 	kfree(seq_zones_bitmap);
- 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 592669bcc536..f7faac856017 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -344,6 +344,11 @@ struct queue_limits {
- 
- #ifdef CONFIG_BLK_DEV_ZONED
- 
-+/*
-+ * Maximum number of zones to report with a single report zones command.
-+ */
-+#define BLK_ZONED_REPORT_MAX_ZONES	8192U
-+
- extern unsigned int blkdev_nr_zones(struct block_device *bdev);
- extern int blkdev_report_zones(struct block_device *bdev,
- 			       sector_t sector, struct blk_zone *zones,
+This series enhances hexdump.
+
+These improve the readability of the dumped data in certain situations
+(eg. wide terminals are available, many lines of empty bytes exist, etc).
+
+The default behaviour of hexdump is unchanged, however, the prototype
+for hex_dump_to_buffer() has changed, and print_hex_dump() has been
+renamed to print_hex_dump_ext(), with a wrapper replacing it for
+compatibility with existing code, which would have been too invasive to
+change.
+
+Hexdump selftests have be run & confirmed passed.
+
+Changelog:
+V4:
+ - Add missing header (linux/bits.h)
+ - Fix comment formatting
+ - Create hex_dump_to_buffer_ext & make hex_dump_to_buffer a wrapper
+V3:
+ - Fix inline documention
+ - use BIT macros
+ - use u32 rather than u64 for flags
+V2:
+ - Fix failing selftests
+ - Fix precedence bug in 'Replace ascii bool in hex_dump_to_buffer...'
+ - Remove hardcoded new lengths & instead relax the checks in
+   hex_dump_to_buffer, allocating the buffer from the heap instead of the
+   stack.
+ - Replace the skipping of lines of 0x00/0xff with skipping lines of
+   repeated characters, announcing what has been skipped.
+ - Add spaces as an optional N-group separator
+ - Allow byte ordering to be maintained when HEXDUMP_RETAIN_BYTE_ORDERING
+   is set.
+ - Updated selftests to cover 'Relax rowsize checks' &
+   'Optionally retain byte ordering'
+
+Alastair D'Silva (7):
+  lib/hexdump.c: Fix selftests
+  lib/hexdump.c: Relax rowsize checks in hex_dump_to_buffer
+  lib/hexdump.c: Optionally suppress lines of repeated bytes
+  lib/hexdump.c: Replace ascii bool in hex_dump_to_buffer with flags
+  lib/hexdump.c: Allow multiple groups to be separated by lines '|'
+  lib/hexdump.c: Allow multiple groups to be separated by spaces
+  lib/hexdump.c: Optionally retain byte ordering
+
+ drivers/gpu/drm/i915/intel_engine_cs.c        |   5 +-
+ drivers/isdn/hardware/mISDN/mISDNisar.c       |  10 +-
+ drivers/mailbox/mailbox-test.c                |   8 +-
+ drivers/net/ethernet/amd/xgbe/xgbe-drv.c      |   2 +-
+ .../net/ethernet/synopsys/dwc-xlgmac-common.c |   2 +-
+ drivers/net/wireless/ath/ath10k/debug.c       |   7 +-
+ .../net/wireless/intel/iwlegacy/3945-mac.c    |   4 +-
+ drivers/platform/chrome/wilco_ec/debugfs.c    |  10 +-
+ drivers/scsi/scsi_logging.c                   |   8 +-
+ drivers/staging/fbtft/fbtft-core.c            |   2 +-
+ fs/seq_file.c                                 |   6 +-
+ include/linux/printk.h                        |  75 ++++-
+ lib/hexdump.c                                 | 267 +++++++++++++++---
+ lib/test_hexdump.c                            | 154 +++++++---
+ 14 files changed, 438 insertions(+), 122 deletions(-)
+
 -- 
 2.21.0
 
