@@ -2,101 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E6E5214F
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 05:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7275226D
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 07:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbfFYDmr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 23:42:47 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:60762 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726362AbfFYDmr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 23:42:47 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id C559829B30;
-        Mon, 24 Jun 2019 23:42:42 -0400 (EDT)
-Date:   Tue, 25 Jun 2019 13:42:40 +1000 (AEST)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Ming Lei <ming.lei@redhat.com>
-cc:     Steffen Maier <maier@linux.ibm.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        id S1727709AbfFYFBj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 01:01:39 -0400
+Received: from smtprelay0091.hostedemail.com ([216.40.44.91]:45052 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726579AbfFYFBj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 25 Jun 2019 01:01:39 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 443B3C1DC84;
+        Tue, 25 Jun 2019 05:01:37 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 
+X-HE-Tag: sock17_81d375461e95b
+X-Filterd-Recvd-Size: 2811
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf20.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 25 Jun 2019 05:01:32 +0000 (UTC)
+Message-ID: <3ae4c1a4a72f8ee6b75c45adfbe543fc0a7b5da1.camel@perches.com>
+Subject: Re: [PATCH v4 0/7] Hexdump Enhancements
+From:   Joe Perches <joe@perches.com>
+To:     Alastair D'Silva <alastair@au1.ibm.com>, alastair@d-silva.org
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH V5 10/16] s390: zfcp_fc: use sg helper to operate
- scatterlist
-In-Reply-To: <20190625023027.GF23777@ming.t460p>
-Message-ID: <alpine.LNX.2.21.1906251342280.8@nippy.intranet>
-References: <20190618013757.22401-1-ming.lei@redhat.com> <20190618013757.22401-11-ming.lei@redhat.com> <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com> <20190625011902.GA23777@ming.t460p> <alpine.LNX.2.21.1906251157160.8@nippy.intranet>
- <20190625023027.GF23777@ming.t460p>
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <sgruszka@redhat.com>,
+        Benson Leung <bleung@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
+Date:   Mon, 24 Jun 2019 22:01:30 -0700
+In-Reply-To: <20190625031726.12173-1-alastair@au1.ibm.com>
+References: <20190625031726.12173-1-alastair@au1.ibm.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 25 Jun 2019, Ming Lei wrote:
+On Tue, 2019-06-25 at 13:17 +1000, Alastair D'Silva wrote:
+> From: Alastair D'Silva <alastair@d-silva.org>
+> 
+> Apologies for the large CC list, it's a heads up for those responsible
+> for subsystems where a prototype change in generic code causes a change
+> in those subsystems.
+[]
+> The default behaviour of hexdump is unchanged, however, the prototype
+> for hex_dump_to_buffer() has changed, and print_hex_dump() has been
+> renamed to print_hex_dump_ext(), with a wrapper replacing it for
+> compatibility with existing code, which would have been too invasive to
+> change.
 
-> On Tue, Jun 25, 2019 at 12:01:24PM +1000, Finn Thain wrote:
-> > > diff --git a/drivers/s390/scsi/zfcp_dbf.c b/drivers/s390/scsi/zfcp_dbf.c
-> > > index dccdb41bed8c..c7129f5234f0 100644
-> > > --- a/drivers/s390/scsi/zfcp_dbf.c
-> > > +++ b/drivers/s390/scsi/zfcp_dbf.c
-> > > @@ -552,7 +552,7 @@ static u16 zfcp_dbf_san_res_cap_len_if_gpn_ft(char *tag,
-> > >  		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
-> > >  			acc++;
-> > >  		else
-> > > -			acc = sg_virt(++resp_entry);
-> > > +			acc = sg_virt(resp_entry = sg_next(resp_entry));
-> > 
-> > Shouldn't that be,
-> > 
-> > 			acc = sg_virt(sg_next(resp_entry));
-> 
-> resp_entry needs to be updated.
-> 
+I believe this cover letter is misleading.
 
-Right, sorry for the noise.
+The point of the wrapper is to avoid unnecessary changes
+in existing
+code.
 
--- 
 
-> > 
-> > >  
-> > >  		last = acc->fp_flags & FC_NS_FID_LAST;
-> > >  	}
-> > > diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
-> > > index b018b61bd168..5048812ce660 100644
-> > > --- a/drivers/s390/scsi/zfcp_fc.c
-> > > +++ b/drivers/s390/scsi/zfcp_fc.c
-> > > @@ -742,7 +742,7 @@ static int zfcp_fc_eval_gpn_ft(struct zfcp_fc_req *fc_req,
-> > >  		if (x % (ZFCP_FC_GPN_FT_ENT_PAGE + 1))
-> > >  			acc++;
-> > >  		else
-> > > -			acc = sg_virt(++sg);
-> > > +			acc = sg_virt(sg = sg_next(sg));
-> > 
-> > and
-> > 
-> > 			acc = sg_virt(sg_next(sg));
-> > 
-> > ?
-> 
-> Same with above.
-> 
-> Thanks,
-> Ming
-> 
