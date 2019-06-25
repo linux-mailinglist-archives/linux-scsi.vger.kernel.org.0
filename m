@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A332154D2D
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 13:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB0D54D2E
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 13:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730164AbfFYLFe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 07:05:34 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:46075 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730159AbfFYLFe (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 07:05:34 -0400
-Received: by mail-pl1-f196.google.com with SMTP id bi6so8657311plb.12
-        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 04:05:33 -0700 (PDT)
+        id S1730046AbfFYLFh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 07:05:37 -0400
+Received: from mail-pl1-f170.google.com ([209.85.214.170]:35508 "EHLO
+        mail-pl1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726419AbfFYLFh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 07:05:37 -0400
+Received: by mail-pl1-f170.google.com with SMTP id w24so785475plp.2
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 04:05:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=sEFNuVq5acDFnuFNK80WEE4N3ubRxRDH6lU83qeQjQo=;
-        b=dKTQgkvpWFKCISQ7HDFy5Nn00y/rwgYNY+Cu1OzAepN2SKg4oaBP/jx32R1zhiQ/47
-         AF6cmKT15L4k3Ktu9Q5m8fLwN+vxaroU0gTxqp2NO2Ilg55zSUSlVT0mTE4ThXumRxHo
-         5uzQ4wQ+GUiOgABl4UkEJc55iTI7AEIHvKSfA=
+        bh=6QT4tQX6YeIvXgliqgWDFrZYwJqIGjTRFovye1EtSvM=;
+        b=L/C4oBt2uTruu3VeHMREOtQrokUTdAvACtRW0EKa9vuxY6BbpUHmyARvZdX+5ZCZzh
+         j6iy7GmhQjMMg4SyCJ8JHyN3kjokc9w2fhHgV0+85U/ZDk9P2er3Na8t2RvI+Yi02yJr
+         yzxaqVxqVgk6KIt7iWetoochJkD+qSQI4qzBM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=sEFNuVq5acDFnuFNK80WEE4N3ubRxRDH6lU83qeQjQo=;
-        b=LEhyCfhoE4qbszKi4cwaUaDlbUUcJnPzB4dR/pnSsh7qxE6lEwOY5nJHqFk11kDzbw
-         61JvUR5DX/Yo4IVpAOuOZjioVkkK94kRdSGIpdw28/th0t71fale8lbquhIw+Y2Qv5Xx
-         muLWcE2EoI9WN7p6v2F4m7OCQTy4YsEDj1Iqp9kFXFNc65uWW12gWU9NORbwtTSmEFD/
-         h6Lo3wBPrrjbG0QNhE2OhhRLoil+QdWLL4j8BqrrYGVPvuQ4oq+KlCJVyjJSyCenMqb0
-         fQFW4qmT4nYGUmBqI+TcvuSZeS0vLbbzG+QTVjUk8WXdnXkFgqqXk+ywwl2rsgE/wKCs
-         NyAw==
-X-Gm-Message-State: APjAAAX/h0fSuLZc8wiUNmlxKA4NgNJmSGwXUFJv6LvuHhRW28LLURYa
-        m5vz+b14SBCNjGlXCGA6NgQTy+xEIwKTz8vL8HCxXpFkrdWjLrE2/4v+vIkx8rFQoDvO4I19LBY
-        L42ZXER9lJBEV1KSdd/+RBRbOlMgYWu50WNjvD8xliLzjl2kqBUjEyv4vulBgRr63wPBOLDnRut
-        v3dYcQD9qdLg==
-X-Google-Smtp-Source: APXvYqxGZLTkrcfl94O53EiQlforUixvCRRsvKg09Wol6G6k6mARVfks2sN7psrXh6HTLupmIyhX/w==
-X-Received: by 2002:a17:902:f082:: with SMTP id go2mr17863767plb.25.1561460733072;
-        Tue, 25 Jun 2019 04:05:33 -0700 (PDT)
+        bh=6QT4tQX6YeIvXgliqgWDFrZYwJqIGjTRFovye1EtSvM=;
+        b=dtGA42ezFq1uQv5McCvIhgHHvB24rFhLEPhLRXw/Q5q/wJfU1HuUVdNZfRibYk6ZJE
+         ugbRkJNtWsykV/TxzM58eCEG979DnzdYEK/f9u5TJ0oKRpZmfr0P6y/96JcA160WT2M6
+         ZkTqswzascdR+c/OHqSvfe4vsOBoh6hZGCN77HCicGdzoZ9JBIpsOYsagDOPZzVTIT2U
+         630cYFTJzfMTcTCsac4zjKAKBBxffqaQM6TYDN3mQZhmC1Oqp1rgzndIIUAKQJQskQnC
+         3Bzk2KAFQy2ihY8AouoAOjmL9Bna1N1uTUsY7FWKWwxMhDnFJn0kg6NJpo5Nv+VnHSU+
+         vqNQ==
+X-Gm-Message-State: APjAAAXg8nbTDsENi5rc1dgYop5EFL3dLwaYzywAglUuodxEz7Q9tAml
+        GW6Ef9RDHb/Xf/JXB6nJv1PALUCnUnOZgVAAEHkYjm9zFh7UjT4k61lk1HV6ZMRq0r4Rh4kw3FY
+        9ZwNOlJ+S6WhqFdkaJXXPQR9Bw+mKy+zWr4vX9m3vhD/g8+tHtX01uajOfUYQZuU9LUumdfyoxX
+        eCSCtNKtg5Ig==
+X-Google-Smtp-Source: APXvYqwnAsxDeXpju+2/NdwNwOdKinkQHkRcV4n3i1rlB/70NgA3oDicBK7GsTKILcHmWs+PDKU7rQ==
+X-Received: by 2002:a17:902:d891:: with SMTP id b17mr29001319plz.48.1561460736127;
+        Tue, 25 Jun 2019 04:05:36 -0700 (PDT)
 Received: from dhcp-10-123-20-30.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id t5sm14757389pgh.46.2019.06.25.04.05.30
+        by smtp.gmail.com with ESMTPSA id t5sm14757389pgh.46.2019.06.25.04.05.33
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 25 Jun 2019 04:05:32 -0700 (PDT)
+        Tue, 25 Jun 2019 04:05:35 -0700 (PDT)
 From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
@@ -49,9 +49,9 @@ Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
         sasikumar.pc@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
         anand.lodnoor@broadcom.com,
         Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: [PATCH v3 13/18] megaraid_sas: Add support for High IOPs queues
-Date:   Tue, 25 Jun 2019 16:34:31 +0530
-Message-Id: <20190625110436.4703-14-chandrakanth.patil@broadcom.com>
+Subject: [PATCH v3 14/18] megaraid_sas: Enable coalescing for high IOPs queues
+Date:   Tue, 25 Jun 2019 16:34:32 +0530
+Message-Id: <20190625110436.4703-15-chandrakanth.patil@broadcom.com>
 X-Mailer: git-send-email 2.9.5
 In-Reply-To: <20190625110436.4703-1-chandrakanth.patil@broadcom.com>
 References: <20190625110436.4703-1-chandrakanth.patil@broadcom.com>
@@ -60,284 +60,49 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Aero controllers support balanced performance mode through the ability to
-configure queues with different properties.
-
-Reply queues with interrupt coalescing enabled are called "high iops reply
-queues" and reply queues with interrupt coalescing disabled are called "low
-latency reply queues".
-
-The driver configures a combination of high iops and low latency reply
-queues if:
-
- - HBA is an AERO controller;
-
- - MSI-X vectors supported by the HBA is 128;
-
- - Total CPU count in the system more than high iops queue count;
-
- - Driver is loaded with default max_msix_vectors module parameter; and
-
- - System booted in non-kdump mode.
+Driver should enable interrupt coalescing(during driver load and after
+Controller Reset) for High IOPs queues by masking  appropriate bits in
+IOC INIT frame.
 
 Signed-off-by: Kashyap Desai <kashyap.desai@broadcom.com>
 Signed-off-by: Chandrakanth Patil <chandrakanth.patil@broadcom.com>
 ---
- drivers/scsi/megaraid/megaraid_sas.h        |   6 ++
- drivers/scsi/megaraid/megaraid_sas_base.c   | 135 ++++++++++++++++++++++++----
- drivers/scsi/megaraid/megaraid_sas_fusion.c |  11 +++
- 3 files changed, 135 insertions(+), 17 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas.h        | 2 +-
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 8 ++++++++
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index 83baac3..5b17d0f 100644
+index 5b17d0f..02e6e15 100644
 --- a/drivers/scsi/megaraid/megaraid_sas.h
 +++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -1640,6 +1640,7 @@ enum FW_BOOT_CONTEXT {
- #define MR_ATOMIC_DESCRIPTOR_SUPPORT_OFFSET	(1 << 24)
+@@ -1819,7 +1819,7 @@ struct megasas_init_frame {
+ 	__le32 pad_0;		/*0Ch */
  
- #define MR_CAN_HANDLE_64_BIT_DMA_OFFSET		(1 << 25)
-+#define MR_INTR_COALESCING_SUPPORT_OFFSET	(1 << 26)
+ 	__le16 flags;		/*10h */
+-	__le16 reserved_3;		/*12h */
++	__le16 replyqueue_mask;		/*12h */
+ 	__le32 data_xfer_len;	/*14h */
  
- #define MEGASAS_WATCHDOG_THREAD_INTERVAL	1000
- #define MEGASAS_WAIT_FOR_NEXT_DMA_MSECS		20
-@@ -2250,6 +2251,9 @@ enum MR_PD_TYPE {
- #define MR_DEFAULT_NVME_MDTS_KB		128
- #define MR_NVME_PAGE_SIZE_MASK		0x000000FF
- 
-+/*Aero performance parameters*/
-+#define MR_HIGH_IOPS_QUEUE_COUNT	8
-+
- struct megasas_instance {
- 
- 	unsigned int *reply_map;
-@@ -2433,6 +2437,8 @@ struct megasas_instance {
- 	bool atomic_desc_support;
- 	bool support_seqnum_jbod_fp;
- 	bool support_pci_lane_margining;
-+	u8  low_latency_index_start;
-+	bool balanced_mode;
- };
- 
- struct MR_LD_VF_MAP {
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 4c7a093..2e3c7fd 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -5472,6 +5472,8 @@ megasas_setup_irqs_ioapic(struct megasas_instance *instance)
- 				__func__, __LINE__);
- 		return -1;
- 	}
-+	instance->balanced_mode = false;
-+	instance->low_latency_index_start = 0;
- 	return 0;
- }
- 
-@@ -5610,9 +5612,11 @@ megasas_setup_jbod_map(struct megasas_instance *instance)
- static void megasas_setup_reply_map(struct megasas_instance *instance)
- {
- 	const struct cpumask *mask;
--	unsigned int queue, cpu;
-+	unsigned int queue, cpu, low_latency_index_start;
- 
--	for (queue = 0; queue < instance->msix_vectors; queue++) {
-+	low_latency_index_start = instance->low_latency_index_start;
-+
-+	for (queue = low_latency_index_start; queue < instance->msix_vectors; queue++) {
- 		mask = pci_irq_get_affinity(instance->pdev, queue);
- 		if (!mask)
- 			goto fallback;
-@@ -5623,8 +5627,14 @@ static void megasas_setup_reply_map(struct megasas_instance *instance)
- 	return;
- 
- fallback:
--	for_each_possible_cpu(cpu)
--		instance->reply_map[cpu] = cpu % instance->msix_vectors;
-+	queue = low_latency_index_start;
-+	for_each_possible_cpu(cpu) {
-+		instance->reply_map[cpu] = queue;
-+		if (queue == (instance->msix_vectors - 1))
-+			queue = low_latency_index_start;
-+		else
-+			queue++;
-+	}
- }
- 
- /**
-@@ -5661,6 +5671,66 @@ int megasas_get_device_list(struct megasas_instance *instance)
- 
- 	return SUCCESS;
- }
-+
-+static int
-+__megasas_alloc_irq_vectors(struct megasas_instance *instance)
-+{
-+	int i, irq_flags;
-+	struct irq_affinity desc = { .pre_vectors = instance->low_latency_index_start };
-+	struct irq_affinity *descp = &desc;
-+
-+	irq_flags = PCI_IRQ_MSIX;
-+
-+	if (instance->smp_affinity_enable)
-+		irq_flags |= PCI_IRQ_AFFINITY;
-+	else
-+		descp = NULL;
-+
-+	i = pci_alloc_irq_vectors_affinity(instance->pdev,
-+		instance->low_latency_index_start,
-+		instance->msix_vectors, irq_flags, descp);
-+
-+	return i;
-+}
-+
-+/**
-+ * megasas_alloc_irq_vectors -	Allocate IRQ vectors/enable MSI-x vectors
-+ * @instance:			Adapter soft state
-+ * return:			void
-+ */
-+static void
-+megasas_alloc_irq_vectors(struct megasas_instance *instance)
-+{
-+	int i;
-+	unsigned int num_msix_req;
-+
-+	i = __megasas_alloc_irq_vectors(instance);
-+
-+	if (instance->balanced_mode && (i != instance->msix_vectors)) {
-+		if (instance->msix_vectors)
-+			pci_free_irq_vectors(instance->pdev);
-+		/*Disable Balanced IOPs mode and try realloc vectors*/
-+		instance->balanced_mode = false;
-+		instance->low_latency_index_start = 1;
-+		num_msix_req = num_online_cpus() + instance->low_latency_index_start;
-+
-+		instance->msix_vectors = min(num_msix_req,
-+				instance->msix_vectors);
-+
-+		i = __megasas_alloc_irq_vectors(instance);
-+
-+	}
-+
-+	dev_info(&instance->pdev->dev,
-+		"requested/available msix %d/%d\n", instance->msix_vectors, i);
-+
-+	if (i > 0)
-+		instance->msix_vectors = i;
-+	else
-+		instance->msix_vectors = 0;
-+
-+}
-+
- /**
-  * megasas_init_fw -	Initializes the FW
-  * @instance:		Adapter soft state
-@@ -5680,6 +5750,8 @@ static int megasas_init_fw(struct megasas_instance *instance)
- 	int i, j, loop;
- 	struct IOV_111 *iovPtr;
- 	struct fusion_context *fusion;
-+	bool intr_coalescing;
-+	unsigned int num_msix_req;
- 
- 	fusion = instance->ctrl_context;
- 
-@@ -5799,7 +5871,6 @@ static int megasas_init_fw(struct megasas_instance *instance)
- 	msix_enable = (instance->instancet->read_fw_status_reg(instance) &
- 		       0x4000000) >> 0x1a;
- 	if (msix_enable && !msix_disable) {
--		int irq_flags = PCI_IRQ_MSIX;
- 
- 		scratch_pad_1 = megasas_readl
- 			(instance, &instance->reg_set->outbound_scratch_pad_1);
-@@ -5865,19 +5936,49 @@ static int megasas_init_fw(struct megasas_instance *instance)
- 		} else /* MFI adapters */
- 			instance->msix_vectors = 1;
- 
--		/* Don't bother allocating more MSI-X vectors than cpus */
--		instance->msix_vectors = min(instance->msix_vectors,
--					     (unsigned int)num_online_cpus());
--		if (instance->smp_affinity_enable)
--			irq_flags |= PCI_IRQ_AFFINITY;
--		i = pci_alloc_irq_vectors(instance->pdev, 1,
--					  instance->msix_vectors, irq_flags);
--		if (i > 0) {
--			instance->msix_vectors = i;
--		} else {
--			instance->msix_vectors = 0;
-+
-+		/*
-+		 * For Aero(if few conditions are met), driver will configure
-+		 * few additional reply queues with interrupt coalescing enabled.
-+		 * These queues with interrupt coalescing enabled are called
-+		 * High IOPs queues and rest of reply queues(based on number of
-+		 * logical CPUs) are termed as Low latency queues.
-+		 *
-+		 * Total Number of reply queues = High IOPs queues + low latency queues
-+		 *
-+		 * For rest of fusion adapters, 1 additional reply queue will be
-+		 * reserved for management commands, rest of reply queues
-+		 * (based on number of logical CPUs) will be used for IOs and
-+		 * referenced as IO queues.
-+		 * Total Number of reply queues = 1 + IO queues
-+		 *
-+		 * MFI adapters supports single MSI-x so single reply queue
-+		 * will be used for IO and management commands.
-+		 */
-+
-+		intr_coalescing = (scratch_pad_1 & MR_INTR_COALESCING_SUPPORT_OFFSET) ?
-+								true : false;
-+		if (intr_coalescing &&
-+			(num_online_cpus() >= MR_HIGH_IOPS_QUEUE_COUNT) &&
-+			(instance->msix_vectors == MEGASAS_MAX_MSIX_QUEUES))
-+			instance->balanced_mode = true;
-+		else
-+			instance->balanced_mode = false;
-+
-+		if (instance->balanced_mode)
-+			instance->low_latency_index_start =
-+				MR_HIGH_IOPS_QUEUE_COUNT;
-+		else
-+			instance->low_latency_index_start = 1;
-+
-+		num_msix_req = num_online_cpus() + instance->low_latency_index_start;
-+
-+		instance->msix_vectors = min(num_msix_req,
-+				instance->msix_vectors);
-+
-+		megasas_alloc_irq_vectors(instance);
-+		if (!instance->msix_vectors)
- 			instance->msix_load_balance = false;
--		}
- 	}
- 	/*
- 	 * MSI-X host index 0 is common for all adapter.
+ 	__le32 queue_info_new_phys_addr_lo;	/*18h */
 diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index e124341..44bfbe8 100644
+index 44bfbe8..845ca2f 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -1058,6 +1058,7 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
- 	u32 scratch_pad_1;
- 	ktime_t time;
- 	bool cur_fw_64bit_dma_capable;
-+	bool cur_intr_coalescing;
+@@ -1186,6 +1186,14 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
+ 		cpu_to_le32(lower_32_bits(ioc_init_handle));
+ 	init_frame->data_xfer_len = cpu_to_le32(sizeof(struct MPI2_IOC_INIT_REQUEST));
  
- 	fusion = instance->ctrl_context;
- 
-@@ -1091,6 +1092,16 @@ megasas_ioc_init_fusion(struct megasas_instance *instance)
- 		goto fail_fw_init;
- 	}
- 
-+	cur_intr_coalescing = (scratch_pad_1 & MR_INTR_COALESCING_SUPPORT_OFFSET) ?
-+							true : false;
++	/*
++	 * Each bit in replyqueue_mask represents one group of MSI-x vectors
++	 * (each group has 8 vectors)
++	 */
++	if (instance->balanced_mode)
++		init_frame->replyqueue_mask =
++		       cpu_to_le16(~(~0 << instance->low_latency_index_start / 8));
 +
-+	if ((instance->low_latency_index_start ==
-+		MR_HIGH_IOPS_QUEUE_COUNT) && cur_intr_coalescing)
-+		instance->balanced_mode = true;
-+
-+	dev_info(&instance->pdev->dev, "Balanced mode :%s\n",
-+		instance->balanced_mode ? "Yes" : "No");
-+
- 	instance->fw_sync_cache_support = (scratch_pad_1 &
- 		MR_CAN_HANDLE_SYNC_CACHE_OFFSET) ? 1 : 0;
- 	dev_info(&instance->pdev->dev, "FW supports sync cache\t: %s\n",
+ 	req_desc.u.low = cpu_to_le32(lower_32_bits(cmd->frame_phys_addr));
+ 	req_desc.u.high = cpu_to_le32(upper_32_bits(cmd->frame_phys_addr));
+ 	req_desc.MFAIo.RequestFlags =
 -- 
 2.9.5
 
