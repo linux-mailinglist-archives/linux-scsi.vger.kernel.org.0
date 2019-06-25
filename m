@@ -2,151 +2,138 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBAD5232B
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 07:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAB15292D
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 12:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728536AbfFYFwa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 01:52:30 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:62868 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727648AbfFYFwa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Jun 2019 01:52:30 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5P5nouT013024;
-        Mon, 24 Jun 2019 22:52:25 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=pfpt0818;
- bh=mimxo+7t+9KqsL5YdbWNjSBvg8JahZyeuQYsDqNYfgc=;
- b=UZ+JU5f69k75WzXzAClPZbVTQodC2KcvVseac/PSYjaY+fI881zO4Pqwnune5UyfoTUh
- D2TrDQhtImpkHJAeObcxEcojB79LZ3zBZm1agLny84cUGFBPbpygoMd5pdS8I/knNOZw
- 7TVc0MiMnvTUQPIGAMGwv95pW8supX8EXaRqY4Uw3aMrf2TN851QtnsAZKWof3Mlswxy
- nk6XVSdo3wJiF3JdPFTYg8mrvEA/QYvMNhimgKO0+dZBAQu0TT7/pfkmH9NumT1/di1T
- lf+VFKxYPDpXHXUc3iqyLFxxThhNf/SaNcc4k0TKtv3sxhm9I3kLqfActuS1kDFX20K0 5A== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2tbcudr5p4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 24 Jun 2019 22:52:25 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Mon, 24 Jun
- 2019 22:52:23 -0700
-Received: from NAM03-DM3-obe.outbound.protection.outlook.com (104.47.41.50) by
- SC-EXCH01.marvell.com (10.93.176.81) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Mon, 24 Jun 2019 22:52:23 -0700
+        id S1731168AbfFYKNk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 06:13:40 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38797 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727763AbfFYKNk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 06:13:40 -0400
+Received: by mail-wm1-f67.google.com with SMTP id s15so2343180wmj.3
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 03:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=marvell.onmicrosoft.com; s=selector2-marvell-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mimxo+7t+9KqsL5YdbWNjSBvg8JahZyeuQYsDqNYfgc=;
- b=T3+ckGLtxTQK+jS+VuzDxH0uKnSpd9S1ceOJhGORp8FHZXkllTYR8nAvw12nFewqpc79YB3S5MjYyt4HhrGKRqA1xoCB2BhvhK8G50eqxojSNj+7sGaJ/96MJCw3ej+cn56Q1YzQnkxmNOI/FLdkkxB42cMC4NSsDFa4mbXj2tU=
-Received: from MN2PR18MB2527.namprd18.prod.outlook.com (20.179.82.202) by
- MN2PR18MB2781.namprd18.prod.outlook.com (20.179.20.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2008.16; Tue, 25 Jun 2019 05:52:22 +0000
-Received: from MN2PR18MB2527.namprd18.prod.outlook.com
- ([fe80::7084:6d4b:c3cf:28b4]) by MN2PR18MB2527.namprd18.prod.outlook.com
- ([fe80::7084:6d4b:c3cf:28b4%7]) with mapi id 15.20.2008.014; Tue, 25 Jun 2019
- 05:52:22 +0000
-From:   Saurav Kashyap <skashyap@marvell.com>
-To:     Lin Yi <teroincn@163.com>,
-        "QLogic-Storage-Upstream@qlogic.com" 
-        <QLogic-Storage-Upstream@qlogic.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: Re: [EXT] [PATCH v2 2/2] scsi :bnx2fc :bnx2fc_els :fix bnx2fc_cmd
- refcount imbalance in send_srr
-Thread-Topic: [EXT] [PATCH v2 2/2] scsi :bnx2fc :bnx2fc_els :fix bnx2fc_cmd
- refcount imbalance in send_srr
-Thread-Index: AQHVKv6sT/ugAxCWDUmWwUk1p8OFAaasOmqA
-Date:   Tue, 25 Jun 2019 05:52:22 +0000
-Message-ID: <D937B438.1911E%skashyap@marvell.com>
-References: <cover.1561429511.git.teroincn@163.com>
- <ffe1e2d44c08a0132bbd6686b11020ca20e77689.1561429511.git.teroincn@163.com>
-In-Reply-To: <ffe1e2d44c08a0132bbd6686b11020ca20e77689.1561429511.git.teroincn@163.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [114.143.185.87]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e0800373-f631-4162-c2a5-08d6f9314ab8
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:MN2PR18MB2781;
-x-ms-traffictypediagnostic: MN2PR18MB2781:
-x-microsoft-antispam-prvs: <MN2PR18MB2781FF0FF862910A97C7C985D2E30@MN2PR18MB2781.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3631;
-x-forefront-prvs: 0079056367
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(136003)(376002)(396003)(366004)(346002)(51914003)(199004)(189003)(305945005)(53546011)(102836004)(6506007)(73956011)(8936002)(81166006)(71190400001)(71200400001)(26005)(7736002)(68736007)(486006)(4326008)(478600001)(76176011)(66556008)(66476007)(66446008)(64756008)(81156014)(86362001)(186003)(2906002)(316002)(5660300002)(66066001)(66946007)(110136005)(99286004)(6436002)(446003)(6512007)(3846002)(36756003)(6486002)(8676002)(256004)(2616005)(476003)(91956017)(2501003)(14444005)(229853002)(76116006)(53936002)(6116002)(14454004)(6246003)(11346002)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR18MB2781;H:MN2PR18MB2527.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: marvell.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: dXwmIpyY5wi+ywjdxH+lA1RPuASpjZToxEG8uu3lziVklCQQ2DyaTL6aoswBaMbRTUd58NASpIno/IxT5TBHVKyPqajrHfy9cW4I2B7cnQewyBPyC9qJL7fvFSwT7IyZCHJj++3grKwyfyuOZZJoRyTezW1zJob+NOYfSS+PCFc9syzajFhRGI/ytDqCKnIN1rJn+lpwMnxknOps6XFt8NagweXgFhhIYvh/2DVHX2UTioDaCwwnWMqamw52w9I2qXGOIQqdfN/McZr6BrEkDlgkmsRtXacNQjG+qEu1CoRTAFwlMfoxNMo09bwrzUBPMhzWLRt5C4hp8p9bYJOqtJ1E3uYAHWvlNfUh51Nr2gvVSCPYNCBnH9M9zz44AnAQhOZwujgc3LU0HVqrWFc+OWd1vtNYgLkvkRb4V0QrzZY=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <A9A60ED32D5F6E478204BA03B15CC55B@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=cloud.ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l4FI2Mjv3obtQY3/kX1+h+mCrl5QXonexmBJsaf11W8=;
+        b=SS+1RaB8fWsRaVLnbZ929zTGt5EpJBybsCPsBYmNHJAygZgjJ/TBudQL0YaGc2yb0I
+         k5h6VB7eR7iUOHA2EVX20zAox7vRYFI1tufDCRGAQM/7U/cQeHvq1hsV4m7aaC3QjgDN
+         hJ/94G9VOBdHzRgJpvYLnlw//S43TWBeaNHjj94Nz7WYkq8Wl/zZShFqfBzfRIysAl+d
+         dyrsz7NeXCCOP/gzMFstYZC6V/GL5hetGBojSFAmL1oDIMp1paJB7stdfupdfmg1c9Km
+         WDmicsMqRcNHOBBKT0JQycKRWbY9SQ9dv1pCHZXj2+ZHd6TnK3yClD6kkRiagiKv4cMA
+         75bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l4FI2Mjv3obtQY3/kX1+h+mCrl5QXonexmBJsaf11W8=;
+        b=i7GtU1FJ4TLb1TLr5CiPAZB+d8dDcsmnc6yDF2IY+6YIUYBxmB0zHMf90UBfgouPDe
+         k1Mm84H6mbR09Bv/7WpRITj2yENWHeCHZlrAuWMVSHktAT+dGv8Jla56AQkASYEudKIi
+         /s7o8BUpUQCFRpSYg8OlwurvsEl1T+VbKBmVtqs5Mu1ZAze7GfBibjH8qNpVgES5z9uR
+         bBFKW7enFtzmOf91Swvs2EzbmcJX/60v9vv8N2OLqds+1Vsw0twAlYZI0LZnWw9gjLWI
+         TjX/hANyCbXV+Z9KpdvU7ap64qwzCd3SsAzAVf/c1KPaRiY7b5ZnFy8vfwzCsQkJLNk0
+         dBmA==
+X-Gm-Message-State: APjAAAXUNk5YEdbv62Q+SmAew/lAEV1unvyR26Z8E2rLI9dwBTe5LVi+
+        UXwZ4J8/Dx65FOlnzCNsjkXTwvuBO9Wy33lMNMQRDg==
+X-Google-Smtp-Source: APXvYqxPYJG5ZjsEZZmkb6U8+3mLsdyorGI/HYfaK27AwGYFPQ81uz6PkwuGOaEBnEEewUSX+Ax+uqZ417P3kUQd1JY=
+X-Received: by 2002:a1c:b457:: with SMTP id d84mr20750077wmf.153.1561457618074;
+ Tue, 25 Jun 2019 03:13:38 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0800373-f631-4162-c2a5-08d6f9314ab8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2019 05:52:22.0460
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: skashyap@marvell.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB2781
-X-OriginatorOrg: marvell.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-25_04:,,
- signatures=0
+References: <20190624082228.27433-1-deepak.ukey@microchip.com> <20190624082228.27433-2-deepak.ukey@microchip.com>
+In-Reply-To: <20190624082228.27433-2-deepak.ukey@microchip.com>
+From:   Jinpu Wang <jinpu.wang@cloud.ionos.com>
+Date:   Tue, 25 Jun 2019 12:13:27 +0200
+Message-ID: <CAMGffEmVTxCBPUsqbSZRL-eH0dzT+PdTftmFFEMP_Jw7Uxb2tA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] pm80xx : Fixed kernel panic during error recovery for
+ SATA drive.
+To:     Deepak Ukey <deepak.ukey@microchip.com>
+Cc:     Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
+        Vasanthalakshmi.Tharmarajan@microchip.com, Viswas.G@microcchip.com,
+        Jack Wang <jinpu.wang@profitbricks.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Lin,
+Hi Deepak,
 
-On 25/06/19, 8:05 AM, "Lin Yi" <teroincn@163.com> wrote:
+Thanks for the patch, comment inline.
+On Mon, Jun 24, 2019 at 10:22 AM Deepak Ukey <deepak.ukey@microchip.com> wrote:
+>
+> Disabling the SATA drive interface cause kernel panic. When the drive
+> Interface is disabled, device should be deregistered after aborting
+> all pending IO's.
+Can you share the call trace for the panic?
 
->External Email
 >
->----------------------------------------------------------------------
->if cb_arg alloc failed, we can't release the struct orig_io_req refcount
->before we take it's refcount. As Saurav said, move the srr_err label
->down to avoid unnecessary refcount release and nullptr free.
+> Signed-off-by: Deepak Ukey <deepak.ukey@microchip.com>
+> Signed-off-by: Viswas G <Viswas.G@microchip.com>
+> ---
+>  drivers/scsi/pm8001/pm8001_sas.c | 6 +++++-
+>  drivers/scsi/pm8001/pm80xx_hwi.c | 2 +-
+>  drivers/scsi/pm8001/pm80xx_hwi.h | 1 +
+>  3 files changed, 7 insertions(+), 2 deletions(-)
 >
->Signed-off-by: Lin Yi <teroincn@163.com>
->---
->Changes in v2:
-> -move the srr_err label down instead of moving kref_get.
->---
-> drivers/scsi/bnx2fc/bnx2fc_els.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
+> index 88eef3b..0d680f3 100644
+> --- a/drivers/scsi/pm8001/pm8001_sas.c
+> +++ b/drivers/scsi/pm8001/pm8001_sas.c
+> @@ -889,6 +889,8 @@ static void pm8001_dev_gone_notify(struct domain_device *dev)
+>                         pm8001_exec_internal_task_abort(pm8001_ha, pm8001_dev ,
+>                                 dev, 1, 0);
+>                         spin_lock_irqsave(&pm8001_ha->lock, flags);
+> +                       while (pm8001_dev->running_req)
+> +                               msleep(20);
+We are holding spin lock, and sleep, are you sure it's right?
+>                 }
+>                 PM8001_CHIP_DISP->dereg_dev_req(pm8001_ha, device_id);
+>                 pm8001_free_dev(pm8001_dev);
+> @@ -1256,8 +1258,10 @@ int pm8001_abort_task(struct sas_task *task)
+>                         PM8001_MSG_DBG(pm8001_ha,
+>                                 pm8001_printk("Waiting for Port reset\n"));
+>                         wait_for_completion(&completion_reset);
+> -                       if (phy->port_reset_status)
+> +                       if (phy->port_reset_status) {
+> +                               pm8001_dev_gone_notify(dev);
+>                                 goto out;
+> +                       }
 >
->diff --git a/drivers/scsi/bnx2fc/bnx2fc_els.c
->b/drivers/scsi/bnx2fc/bnx2fc_els.c
->index e33b94f..b807736 100644
->--- a/drivers/scsi/bnx2fc/bnx2fc_els.c
->+++ b/drivers/scsi/bnx2fc/bnx2fc_els.c
->@@ -654,7 +654,6 @@ int bnx2fc_send_srr(struct bnx2fc_cmd *orig_io_req,
->u32 offset, u8 r_ctl)
-> 	rc =3D bnx2fc_initiate_els(tgt, ELS_SRR, &srr, sizeof(srr),
-> 				 bnx2fc_srr_compl, cb_arg,
-> 				 r_a_tov);
->-srr_err:
-> 	if (rc) {
-> 		BNX2FC_IO_DBG(orig_io_req, "SRR failed - release\n");
-> 		spin_lock_bh(&tgt->tgt_lock);
->@@ -664,6 +663,7 @@ int bnx2fc_send_srr(struct bnx2fc_cmd *orig_io_req,
->u32 offset, u8 r_ctl)
-> 	} else
-> 		set_bit(BNX2FC_FLAG_SRR_SENT, &orig_io_req->req_flags);
->=20
->+srr_err:
-> 	return rc;
-> }
->=20
->--=20
->1.9.1
+>                         /*
+>                          * 4. SATA Abort ALL
+> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+> index 301de40..63e8af7 100644
+> --- a/drivers/scsi/pm8001/pm80xx_hwi.c
+> +++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+> @@ -604,7 +604,7 @@ static void update_main_config_table(struct pm8001_hba_info *pm8001_ha)
+>                 pm8001_ha->main_cfg_tbl.pm80xx_tbl.port_recovery_timer &=
+>                                         0x0000ffff;
+>                 pm8001_ha->main_cfg_tbl.pm80xx_tbl.port_recovery_timer |=
+> -                                       0x140000;
+> +                                       CHIP_8006_PORT_RECOVERY_TIMEOUT;
+>         }
+>         pm8001_mw32(address, MAIN_PORT_RECOVERY_TIMER,
+>                         pm8001_ha->main_cfg_tbl.pm80xx_tbl.port_recovery_timer);
+> diff --git a/drivers/scsi/pm8001/pm80xx_hwi.h b/drivers/scsi/pm8001/pm80xx_hwi.h
+> index 84d7426..a22bb4d 100644
+> --- a/drivers/scsi/pm8001/pm80xx_hwi.h
+> +++ b/drivers/scsi/pm8001/pm80xx_hwi.h
+> @@ -230,6 +230,7 @@
+>  #define SAS_MAX_AIP                     0x200000
+>  #define IT_NEXUS_TIMEOUT       0x7D0
+>  #define PORT_RECOVERY_TIMEOUT  ((IT_NEXUS_TIMEOUT/100) + 30)
+> +#define CHIP_8006_PORT_RECOVERY_TIMEOUT 0x640000
+This value is 4x bigger than the original, is it a intended, can you
+mention is in commit message why?
+>
+>  #ifdef __LITTLE_ENDIAN_BITFIELD
+>  struct sas_identify_frame_local {
+> --
+> 1.8.5.6
+>
 
-Thanks for the patch.
-
-Asked-by: Saurav Kashyap <skashyap@marvell.com>
->
->
-
+Regards,
+Jack
