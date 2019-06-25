@@ -2,288 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0270754FAC
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 15:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE1555223
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 16:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730165AbfFYND6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 09:03:58 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:45120 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730141AbfFYND6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 09:03:58 -0400
-Received: by mail-lj1-f193.google.com with SMTP id m23so16140752lje.12
-        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 06:03:56 -0700 (PDT)
+        id S1730886AbfFYOjT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 10:39:19 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:62887 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730777AbfFYOjS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 10:39:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1561473558; x=1593009558;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=v79ozKUyeBpCWFe3wnWGCGh1/kWW9fjsxDbXH2BpWBg=;
+  b=Dc9Rt1DdP6KRjsyhJJKgzN7n94p7zPVmmq6au+HF4cfevXCx0ww7bwA+
+   9oKcG+Dz9uAeZ2QL6nkPPtiWELPjIZE08kR7Y8nGbMfULkDZoGJBhxUW3
+   cuT2m/931aWHCJ9n9IFXTioQQieTZZY3x2Xcr5R7PJDH94gdjPtNaA3be
+   hXRm3WeifCu+w3HkfBForjzm5yD5QFfOd190GTl0S8j8crQtkDVNwMoVP
+   0IRkTCVzDoM58R2ByMTo5nF5cR1bTp8Iao5cTfi9hTOTHyFNfzdXa5RLK
+   b/jKsvKf+AITSWQ2wKbOE0MvcVyyPjFMbPE29kCPJ/f+p/EryjVk8APQc
+   w==;
+X-IronPort-AV: E=Sophos;i="5.63,416,1557158400"; 
+   d="scan'208";a="111488144"
+Received: from mail-bn3nam01lp2053.outbound.protection.outlook.com (HELO NAM01-BN3-obe.outbound.protection.outlook.com) ([104.47.33.53])
+  by ob1.hgst.iphmx.com with ESMTP; 25 Jun 2019 22:39:16 +0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lightnvm-io.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ARK2prxRV/r8YkWxnnbALm6Pw85xxSzYq4sr4VIfIYM=;
-        b=UkrW7PyHLM+UCjb9yNI25LpeVNz39xUL9IGQsHEnSehYh9reiTPFnLo9YPWm1VgUAc
-         0iCj70AO4HDdbWbKWKBvit4BXpFxpcEmJdZgNglmsuoJpiC10Z+jxs47WMxyb1WCErIb
-         FiKkEPSVJqpgSegB1A3nSFoIwkdDlBue8EQuXk4W+9hdJ6Xd4dofZmW9UCkfHjJXMrjv
-         Rl2mK+FyUsa9j/j3NsMT2RIF/rou5i5LIu3ieZQNbeJR5r4vOIpeVXfdr0Nru4t6hS52
-         RqELOSABdrgUuyBHfbFUkYMtJk9+xnk7Nd4WkJxmJMxYM+WQ0wlgaGE7cufyyBvINyWJ
-         S9mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ARK2prxRV/r8YkWxnnbALm6Pw85xxSzYq4sr4VIfIYM=;
-        b=gAMAwkBk738UdeEzSRexS+AGcByP5+YfI5K249XOMFX6mAVLbh9gT7++aoX7f49SQU
-         ojLEHZs1Pmvao3L0VyjiQQSD5d5KPYuqSEEcqKXs8ezx1X+mJWQ6Ny3atvxnx0/Bf7rf
-         4xm1oFrZ9vBKzaQgfauyt60WJD9fZkS+ijxsvTpwI/7g4tTfqQ0LmxZmYufWyBV7LxZD
-         z6O5DNSEJOPO3/3QY/HvzorJadF74Hk399VWR8JcSiHwLB7jW2GCGVPHweDzC1IqCHvs
-         CgylS3x0VljxKnC3U0y9wYmzpSAPHrDWIa+RMR2DKPsFSDQF9jQ51gUjjmIVAYhXAM2c
-         kmaQ==
-X-Gm-Message-State: APjAAAU92vhFcMSNCRfLPbPu7LY5UXtQFZ70WVaKOXaJ2dqIadq4ZYUB
-        Vb0NJivWOPYIrNHvyn0Zx661pg==
-X-Google-Smtp-Source: APXvYqxHO1flsaGt4P5qYTOlxVD2HC4muB9gcro4b9JaKCo31KcUlf6dWiReFri6tJtYcHieGpJY+w==
-X-Received: by 2002:a2e:9e1a:: with SMTP id e26mr18452425ljk.158.1561467835635;
-        Tue, 25 Jun 2019 06:03:55 -0700 (PDT)
-Received: from [192.168.0.36] (2-111-91-225-cable.dk.customer.tdc.net. [2.111.91.225])
-        by smtp.googlemail.com with ESMTPSA id x22sm1972057lfq.20.2019.06.25.06.03.53
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 25 Jun 2019 06:03:54 -0700 (PDT)
-Subject: Re: [PATCH 2/4] null_blk: add zone open, close, and finish support
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
-        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
-        Ajay Joshi <Ajay.Joshi@wdc.com>,
-        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v79ozKUyeBpCWFe3wnWGCGh1/kWW9fjsxDbXH2BpWBg=;
+ b=hApKcsn8ttYnUqK9yJ1Z91IgTM1Yb47IwofVY8SV9EEnBN/PP9EMD1y83XNbTdg9mwnHb8gZJ+FcownXYRvbxu7zpbkhwO/bwne6XcMNLQMMnRsKYJDy5cZrBIFMZyzAb0KPeN5Vh3QbhsP0rIc5GgMHD2kjyca/Xs+D8veoUTs=
+Received: from DM5PR04MB1132.namprd04.prod.outlook.com (10.173.172.135) by
+ DM5PR04MB3755.namprd04.prod.outlook.com (10.172.189.22) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.16; Tue, 25 Jun 2019 14:39:13 +0000
+Received: from DM5PR04MB1132.namprd04.prod.outlook.com
+ ([fe80::dc69:42e6:c063:a885]) by DM5PR04MB1132.namprd04.prod.outlook.com
+ ([fe80::dc69:42e6:c063:a885%3]) with mapi id 15.20.2008.017; Tue, 25 Jun 2019
+ 14:39:13 +0000
+From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
+To:     Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Matias Bjorling <Matias.Bjorling@wdc.com>
-References: <20190621130711.21986-1-mb@lightnvm.io>
- <20190621130711.21986-3-mb@lightnvm.io>
- <BYAPR04MB5816D471063D970DDCF9AEC7E7E60@BYAPR04MB5816.namprd04.prod.outlook.com>
- <1aa6552c-ecf9-a168-df75-ec8c52ddbea6@lightnvm.io>
- <BYAPR04MB581665C81B89838BC022BF7BE7E30@BYAPR04MB5816.namprd04.prod.outlook.com>
-From:   =?UTF-8?Q?Matias_Bj=c3=b8rling?= <mb@lightnvm.io>
-Message-ID: <f70736f5-4edf-c925-d22a-a3238761da90@lightnvm.io>
-Date:   Tue, 25 Jun 2019 15:03:53 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        "kernel@vger.kernel.org" <kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        Avri Altman <Avri.Altman@wdc.com>
+CC:     Bean Huo <beanhuo@micron.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Evan Green <evgreen@chromium.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Avi Shchislowski <Avi.Shchislowski@wdc.com>,
+        Alex Lemberg <Alex.Lemberg@wdc.com>
+Subject: RE: [PATCH] Documentation: scsi: ufs: announce ufs-tool v1.0
+Thread-Topic: [PATCH] Documentation: scsi: ufs: announce ufs-tool v1.0
+Thread-Index: AQHVK1KaNlGAmc8lW06K1OPlrADX4aasUPiAgAAfgTA=
+Date:   Tue, 25 Jun 2019 14:39:13 +0000
+Message-ID: <DM5PR04MB113202B71F488EDC658847ACEDE30@DM5PR04MB1132.namprd04.prod.outlook.com>
+References: <CGME20190625123640epcas1p2b043961d1b03d2fea1f3c9ddc8d2760d@epcas1p2.samsung.com>
+        <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
+ <d4e4cd78-18d1-1087-87f0-cb87f6ae99e5@samsung.com>
+In-Reply-To: <d4e4cd78-18d1-1087-87f0-cb87f6ae99e5@samsung.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Arthur.Simchaev@wdc.com; 
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fe3ddf4c-9b0f-4129-65a6-08d6f97ae4bf
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DM5PR04MB3755;
+x-ms-traffictypediagnostic: DM5PR04MB3755:
+wdcipoutbound: EOP-TRUE
+x-microsoft-antispam-prvs: <DM5PR04MB37559FDB5969EAD09A8D15C0EDE30@DM5PR04MB3755.namprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-forefront-prvs: 0079056367
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(376002)(346002)(136003)(39860400002)(366004)(199004)(189003)(6506007)(7696005)(99286004)(5660300002)(316002)(76116006)(73956011)(81156014)(11346002)(66946007)(81166006)(64756008)(8676002)(7736002)(66556008)(256004)(102836004)(52536014)(2201001)(6636002)(66446008)(74316002)(76176011)(14454004)(8936002)(6246003)(186003)(72206003)(26005)(86362001)(54906003)(4326008)(6116002)(305945005)(2501003)(25786009)(66066001)(2906002)(7416002)(66476007)(33656002)(55016002)(9686003)(53936002)(3846002)(6436002)(71190400001)(478600001)(229853002)(71200400001)(476003)(486006)(68736007)(446003)(558084003)(110136005);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR04MB3755;H:DM5PR04MB1132.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: SbuiY1i2uQbqMni2xH66GNDbNPx7lqtalBUhbA5EbXcl+/T8N7KwuWo9Dy3UYFU+lgWQagGvp0VFGuE2rcXgbDjjCLBQiBvHNtvgp/kzbNK+Th6t5zJoydgi6WngexBeSbIlIzNyLy3ptdc9arkJkaX7dkCULzddx6edsPyCI2qmLE/8odfMlhqYb16Rs3EKeevkRwYLJk23nhUgmZ65BRsSSNUhnkZ1BY0psbquge3aURdVbazbKNUThhukOv7lGgKbBNgsV00BLB4sEANM1Ky+ioNS8CEYism4Txzdb9S6qC0YVLk1TfW64aPqoUXJpkbR+cuU2mP1xg22Nk0OH0x6hW1tOOtGSU9aH3IEQR3ujarUmKQBqJrUEyiuC7AMdpem+UFKfSeEF9fyYUcW1Ca+8cHw+gWfTVIM4gVAfGs=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <BYAPR04MB581665C81B89838BC022BF7BE7E30@BYAPR04MB5816.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe3ddf4c-9b0f-4129-65a6-08d6f97ae4bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2019 14:39:13.6236
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Arthur.Simchaev@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR04MB3755
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/25/19 2:36 PM, Damien Le Moal wrote:
-> On 2019/06/25 20:06, Matias Bjørling wrote:
->> On 6/22/19 3:02 AM, Damien Le Moal wrote:
->>> On 2019/06/21 22:07, Matias Bjørling wrote:
->>>> From: Ajay Joshi <ajay.joshi@wdc.com>
->>>>
->>>> Implement REQ_OP_ZONE_OPEN, REQ_OP_ZONE_CLOSE and REQ_OP_ZONE_FINISH
->>>> support to allow explicit control of zone states.
->>>>
->>>> Signed-off-by: Ajay Joshi <ajay.joshi@wdc.com>
->>>> Signed-off-by: Matias Bjørling <matias.bjorling@wdc.com>
->>>> ---
->>>>    drivers/block/null_blk.h       |  4 ++--
->>>>    drivers/block/null_blk_main.c  | 13 ++++++++++---
->>>>    drivers/block/null_blk_zoned.c | 33 ++++++++++++++++++++++++++++++---
->>>>    3 files changed, 42 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/drivers/block/null_blk.h b/drivers/block/null_blk.h
->>>> index 34b22d6523ba..62ef65cb0f3e 100644
->>>> --- a/drivers/block/null_blk.h
->>>> +++ b/drivers/block/null_blk.h
->>>> @@ -93,7 +93,7 @@ int null_zone_report(struct gendisk *disk, sector_t sector,
->>>>    		     gfp_t gfp_mask);
->>>>    void null_zone_write(struct nullb_cmd *cmd, sector_t sector,
->>>>    			unsigned int nr_sectors);
->>>> -void null_zone_reset(struct nullb_cmd *cmd, sector_t sector);
->>>> +void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t sector);
->>>>    #else
->>>>    static inline int null_zone_init(struct nullb_device *dev)
->>>>    {
->>>> @@ -111,6 +111,6 @@ static inline void null_zone_write(struct nullb_cmd *cmd, sector_t sector,
->>>>    				   unsigned int nr_sectors)
->>>>    {
->>>>    }
->>>> -static inline void null_zone_reset(struct nullb_cmd *cmd, sector_t sector) {}
->>>> +static inline void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t sector) {}
->>>>    #endif /* CONFIG_BLK_DEV_ZONED */
->>>>    #endif /* __NULL_BLK_H */
->>>> diff --git a/drivers/block/null_blk_main.c b/drivers/block/null_blk_main.c
->>>> index 447d635c79a2..5058fb980c9c 100644
->>>> --- a/drivers/block/null_blk_main.c
->>>> +++ b/drivers/block/null_blk_main.c
->>>> @@ -1209,10 +1209,17 @@ static blk_status_t null_handle_cmd(struct nullb_cmd *cmd)
->>>>    			nr_sectors = blk_rq_sectors(cmd->rq);
->>>>    		}
->>>>    
->>>> -		if (op == REQ_OP_WRITE)
->>>> +		switch (op) {
->>>> +		case REQ_OP_WRITE:
->>>>    			null_zone_write(cmd, sector, nr_sectors);
->>>> -		else if (op == REQ_OP_ZONE_RESET)
->>>> -			null_zone_reset(cmd, sector);
->>>> +			break;
->>>> +		case REQ_OP_ZONE_RESET:
->>>> +		case REQ_OP_ZONE_OPEN:
->>>> +		case REQ_OP_ZONE_CLOSE:
->>>> +		case REQ_OP_ZONE_FINISH:
->>>> +			null_zone_mgmt_op(cmd, sector);
->>>> +			break;
->>>> +		}
->>>>    	}
->>>>    out:
->>>>    	/* Complete IO by inline, softirq or timer */
->>>> diff --git a/drivers/block/null_blk_zoned.c b/drivers/block/null_blk_zoned.c
->>>> index fca0c97ff1aa..47d956b2e148 100644
->>>> --- a/drivers/block/null_blk_zoned.c
->>>> +++ b/drivers/block/null_blk_zoned.c
->>>> @@ -121,17 +121,44 @@ void null_zone_write(struct nullb_cmd *cmd, sector_t sector,
->>>>    	}
->>>>    }
->>>>    
->>>> -void null_zone_reset(struct nullb_cmd *cmd, sector_t sector)
->>>> +void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t sector)
->>>>    {
->>>>    	struct nullb_device *dev = cmd->nq->dev;
->>>>    	unsigned int zno = null_zone_no(dev, sector);
->>>>    	struct blk_zone *zone = &dev->zones[zno];
->>>> +	enum req_opf op = req_op(cmd->rq);
->>>>    
->>>>    	if (zone->type == BLK_ZONE_TYPE_CONVENTIONAL) {
->>>>    		cmd->error = BLK_STS_IOERR;
->>>>    		return;
->>>>    	}
->>>>    
->>>> -	zone->cond = BLK_ZONE_COND_EMPTY;
->>>> -	zone->wp = zone->start;
->>>> +	switch (op) {
->>>> +	case REQ_OP_ZONE_RESET:
->>>> +		zone->cond = BLK_ZONE_COND_EMPTY;
->>>> +		zone->wp = zone->start;
->>>> +		return;
->>>> +	case REQ_OP_ZONE_OPEN:
->>>> +		if (zone->cond == BLK_ZONE_COND_FULL) {
->>>> +			cmd->error = BLK_STS_IOERR;
->>>> +			return;
->>>> +		}
->>>> +		zone->cond = BLK_ZONE_COND_EXP_OPEN;
->>>
->>>
->>> With ZBC, open of a full zone is a "nop". No error. So I would rather have this as:
->>>
->>> 		if (zone->cond != BLK_ZONE_COND_FULL)
->>> 			zone->cond = BLK_ZONE_COND_EXP_OPEN;
->>> 		
->> Is this only ZBC? I can't find a reference to it in ZAC. I think it
->> should fail. One is trying to open a zone that is full, one can't open
->> it again. It's done for this round.
-> 
-> Page 52/53, section 5.2.6.3.2:
-> 
-> If the OPEN ALL bit is cleared to zero and the zone specified by the ZONE ID
-> field (see 5.2.4.3.3) is in Zone Condition:
-> a) EMPTY, IMPLICITLY OPENED, or CLOSED, then the device shall process an
-> Explicitly Open Zone function
-> (see 4.6.3.4.10) for the zone specified by the ZONE ID field;
-> b) EXPLICITLY OPENED or FULL, then the device shall:
-> 	A) not change the zone's state; and
-> 	B) return successful command completion;
-> 
->>>
->>>> +		return;
->>>> +	case REQ_OP_ZONE_CLOSE:
->>>> +		if (zone->cond == BLK_ZONE_COND_FULL) {
->>>> +			cmd->error = BLK_STS_IOERR;
->>>> +			return;
->>>> +		}
->>>> +		zone->cond = BLK_ZONE_COND_CLOSED;
->>>
->>> Sam as for open. Closing a full zone on ZBC is a nop.
->>
->> I think this should cause error.
-> 
-> See ZAB/ZAC close command description. Same text as above, almost. Not an error.
-> It is a nop. ZAC page 48, section 5.2.4.3.2:
-> 
-> If the CLOSE ALL bit is cleared to zero and the zone specified by the ZONE ID
-> field (see 5.2.4.3.3) is in Zone Condition:
-> a) IMPLICITLY OPENED, or EXPLICITLY OPENED, then the device shall process a
-> Close Zone function
-> (see 4.6.3.4.11) for the zone specified by the ZONE ID field;
-> b) EMPTY, CLOSED, or FULL, then the device shall:
-> 	A) not change the zone's state; and
-> 	B) return successful command completion;
-> 
->>
->> And the code above would
->>> also set an empty zone to closed. Finally, if the zone is open but nothing was
->>> written to it, it must be returned to empty condition, not closed.
->>
->> Only on a reset event right? In general, if I do a expl. open, close it,
->> it should not go to empty.
-> 
-> See the zone state machine. It does return to empty from expl open if nothing
-> was written, that is, if the WP is still at zone start. This text is in ZAC
-> section 4.6.3.4.11 as noted above:
-> 
-> For the specified zone, the Zone Condition state machine processing of this
-> function (e.g., as shown in the ZC2: Implicit_Open state (see 4.6.3.4.3))
-> results in the Zone Condition for the specified zone becoming:
-> a) EMPTY, if the write pointer indicates the lowest LBA in the zone and Non
-> Sequential Write Resources Active is false; or
-> b) CLOSED, if the write pointer does not indicate the lowest LBA in the zone or
-> Non-Sequential Write Resources Active is true.
-> 
-
-Schooled! That is what one gets from having the spec in paper form on 
-the table ;)
-
->>
->> So something
->>> like this is needed.
->>>
->>> 		switch (zone->cond) {
->>> 		case BLK_ZONE_COND_FULL:
->>> 		case BLK_ZONE_COND_EMPTY:
->>> 			break;
->>> 		case BLK_ZONE_COND_EXP_OPEN:
->>> 			if (zone->wp == zone->start) {
->>> 				zone->cond = BLK_ZONE_COND_EMPTY;
->>> 				break;
->>> 			}
->>> 		/* fallthrough */
->>> 		default:
->>> 			zone->cond = BLK_ZONE_COND_CLOSED;
->>> 		}
->>>
->>>> +		return;
->>>> +	case REQ_OP_ZONE_FINISH:
->>>> +		zone->cond = BLK_ZONE_COND_FULL;
->>>> +		zone->wp = zone->start + zone->len;
->>>> +		return;
->>>> +	default:
->>>> +		/* Invalid zone condition */
->>>> +		cmd->error = BLK_STS_IOERR;
->>>> +		return;
->>>> +	}
->>>>    }
->>>>
->>>
->>>
->>
->>
-> 
-> 
-
+IEhpIEFsaW0gDQoNCiBZZXMgeW91IGNhbiwgYnkgd3JpdGluZyB0aGUgY29uZmlndXJhdGlvbiBk
+ZXNjcmlwdG9yLg0KDQpSZWdhcmRzDQpBcnRodXINCg0KPiANCj4gSGkgQXJ0aHVyLA0KPiBEb2Vz
+IHRoaXMgdG9vbHMgcHJvdmlkZXMgYSB3YXkgZm9yIHVmcyBkZXZpY2UgcGFydGl0aW9uIHByb3Zp
+c2luZyBmcm9tDQo+IHVzZXIgc3BhY2UgYXMgd2VsbD8NCj4gKGhhdmUgbm90IHVzZWQgdGhpcyB0
+b29sIHRpbGwgbm93LCBwbGFubmluZyB0byB1c2Ugc29vbikNCj4gDQoNCg==
