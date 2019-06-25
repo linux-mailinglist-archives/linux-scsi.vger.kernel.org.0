@@ -2,398 +2,148 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE53520FE
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 05:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6F75213D
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 05:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729286AbfFYDTj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 24 Jun 2019 23:19:39 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:4286 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729139AbfFYDTj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 24 Jun 2019 23:19:39 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5P36Pkg110756
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 23:19:37 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tbaaytfus-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Mon, 24 Jun 2019 23:19:37 -0400
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <alastair@au1.ibm.com>;
-        Tue, 25 Jun 2019 04:19:33 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 25 Jun 2019 04:19:24 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5P3JNlS54657122
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 25 Jun 2019 03:19:23 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 496AFA405F;
-        Tue, 25 Jun 2019 03:19:23 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4EE9DA4067;
-        Tue, 25 Jun 2019 03:19:22 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 25 Jun 2019 03:19:22 +0000 (GMT)
-Received: from adsilva.ozlabs.ibm.com (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 93295A03B6;
-        Tue, 25 Jun 2019 13:19:19 +1000 (AEST)
-From:   "Alastair D'Silva" <alastair@au1.ibm.com>
-To:     alastair@d-silva.org
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Stanislaw Gruszka <sgruszka@redhat.com>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH v4 7/7] lib/hexdump.c: Optionally retain byte ordering
-Date:   Tue, 25 Jun 2019 13:17:26 +1000
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190625031726.12173-1-alastair@au1.ibm.com>
-References: <20190625031726.12173-1-alastair@au1.ibm.com>
+        id S1726393AbfFYDYc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 24 Jun 2019 23:24:32 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:53318 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725268AbfFYDYc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 24 Jun 2019 23:24:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1561433071; x=1592969071;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=K5bXV0aYCMFXSpeWcC5UhvVrw4hiPYcdPTByQTYNIdI=;
+  b=QMyzfoqXWKW4lNcnsctjdQdswf3u+DIf5eAanuHJcXHW/l5x3oWy0ysY
+   JHNy/2ggSmlmfJXOKXMv2zNXc/Uj23jovMV+MPF3KhCl4b4QLm+JZS8R5
+   2485LXIEe2hndFNrqVA91qeIgR5jvE5maBHlKV7Y7LjCjyeBoXC7LjBxm
+   AayqEGAQ9/av5aG38O2rk7TLHmFIT1ozs880Jvr6NBNrSBbz2TFqb6fNP
+   BHMufXK7tzGsMTd7uGcMR6+aM4hhS0LthYWgAiWUEg5pMvV/TGrWRS/rs
+   1y5sIY0qb1E2yM5m4kjsbJH/D7bq/+uhX3MWIBme6P1wz0g5DpX5rXQ4w
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.63,413,1557158400"; 
+   d="scan'208";a="111437200"
+Received: from mail-co1nam05lp2052.outbound.protection.outlook.com (HELO NAM05-CO1-obe.outbound.protection.outlook.com) ([104.47.48.52])
+  by ob1.hgst.iphmx.com with ESMTP; 25 Jun 2019 11:24:30 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wFfeB2rsTqSXZPpUK7DMv6CRWeMQn+/DK0M+zTvmUKg=;
+ b=OkqjWn6aQWl3qYiFNE6HIIRe5yaHX6fTU1w5yO3uK7LEyFBXCGfBiU33rnxO5/J8coOBck8WxTqmKPpaUYsn+3xywl3ozEmE9kugMQguac68xHlRNUzj0eq5QDIjfG17bhirNA2KIIFKs8u1VY2yfTR4Ivc2OkkJuaZ/+smkYfU=
+Received: from BYAPR04MB5749.namprd04.prod.outlook.com (20.179.58.26) by
+ BYAPR04MB4006.namprd04.prod.outlook.com (52.135.215.33) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.17; Tue, 25 Jun 2019 03:24:27 +0000
+Received: from BYAPR04MB5749.namprd04.prod.outlook.com
+ ([fe80::fc2b:fcd4:7782:53d6]) by BYAPR04MB5749.namprd04.prod.outlook.com
+ ([fe80::fc2b:fcd4:7782:53d6%7]) with mapi id 15.20.2008.014; Tue, 25 Jun 2019
+ 03:24:27 +0000
+From:   Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+CC:     Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH 1/3] block: Allow mapping of vmalloc-ed buffers
+Thread-Topic: [PATCH 1/3] block: Allow mapping of vmalloc-ed buffers
+Thread-Index: AQHVKwA0CgkpItjWVEOnwU70Lez80g==
+Date:   Tue, 25 Jun 2019 03:24:26 +0000
+Message-ID: <BYAPR04MB5749C9178CB54B4A488408A986E30@BYAPR04MB5749.namprd04.prod.outlook.com>
+References: <20190625024625.23976-1-damien.lemoal@wdc.com>
+ <20190625024625.23976-2-damien.lemoal@wdc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chaitanya.Kulkarni@wdc.com; 
+x-originating-ip: [199.255.44.170]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 51ca4612-3e48-47e2-ba62-08d6f91ca0d4
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB4006;
+x-ms-traffictypediagnostic: BYAPR04MB4006:
+wdcipoutbound: EOP-TRUE
+x-microsoft-antispam-prvs: <BYAPR04MB4006A4E5D5F3B76207900E8C86E30@BYAPR04MB4006.namprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1332;
+x-forefront-prvs: 0079056367
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(366004)(136003)(39860400002)(396003)(346002)(199004)(189003)(229853002)(316002)(6436002)(54906003)(66066001)(110136005)(53936002)(55016002)(33656002)(9686003)(6246003)(53546011)(6506007)(102836004)(73956011)(66946007)(66476007)(64756008)(66556008)(66446008)(186003)(26005)(25786009)(99286004)(76176011)(7696005)(52536014)(476003)(72206003)(446003)(4326008)(68736007)(7736002)(305945005)(478600001)(74316002)(76116006)(8676002)(81156014)(81166006)(3846002)(6116002)(8936002)(71190400001)(71200400001)(86362001)(256004)(14444005)(2906002)(14454004)(2501003)(5660300002)(486006);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4006;H:BYAPR04MB5749.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: ndK5klYOD2CjCLCAjLPed8co1scXT3ob4MU+IjLggwwuIr5taIKHv7+qal77ytViucC8Cy7trbeEN/QR9yLBYDW5r1h7c9Um6d6YsuXhp3gebmBbeX3EuiBKhm8fzA6xlSwI24sJFZzbtHMoolVVqjUrLGa987Yb6iKTCywSfGOf/QbHdIDExRdc7TVimOFnVImsSEyPoTwvpb0X/DK1k865U56zjRxSsA3E5F+M1imv8l6G0trlphRbOVjhBM3lktjNEbBQf5ZsqIa93NFSYiCCOIZJKYIYoPGsZLbeddQsUwllICFAltLZJeAhbFx2TEEZb090n2/JhAAu6cLND9f7MN0ii0Pdb9YW7BnLhkZMncKJWRVbSEwXcfhFPI01B/e11riAgAkEgVBiBHyPir1U/A8L/rv1TEz7O4ElGM8=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19062503-0028-0000-0000-0000037D42B6
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062503-0029-0000-0000-0000243D6256
-Message-Id: <20190625031726.12173-8-alastair@au1.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-25_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906250024
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51ca4612-3e48-47e2-ba62-08d6f91ca0d4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2019 03:24:26.2685
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Chaitanya.Kulkarni@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4006
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Alastair D'Silva <alastair@d-silva.org>
-
-The behaviour of hexdump groups is to print the data out as if
-it was a native-endian number.
-
-This patch tweaks the documentation to make this clear, and also
-adds the HEXDUMP_RETAIN_BYTE_ORDER flag to allow groups of
-multiple bytes to be printed without affecting the ordering
-of the printed bytes.
-
-Signed-off-by: Alastair D'Silva <alastair@d-silva.org>
----
- include/linux/printk.h |  1 +
- lib/hexdump.c          | 30 ++++++++++++++++----
- lib/test_hexdump.c     | 62 ++++++++++++++++++++++++++++--------------
- 3 files changed, 68 insertions(+), 25 deletions(-)
-
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index 1d082291facf..ed1a79aa9695 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -491,6 +491,7 @@ enum {
- #define HEXDUMP_2_GRP_SPACES		BIT(5)
- #define HEXDUMP_4_GRP_SPACES		BIT(6)
- #define HEXDUMP_8_GRP_SPACES		BIT(7)
-+#define HEXDUMP_RETAIN_BYTE_ORDER	BIT(8)
- 
- extern int hex_dump_to_buffer_ext(const void *buf, size_t len, int rowsize,
- 			      int groupsize, char *linebuf, size_t linebuflen,
-diff --git a/lib/hexdump.c b/lib/hexdump.c
-index e09e3cf8e595..29024eccf5da 100644
---- a/lib/hexdump.c
-+++ b/lib/hexdump.c
-@@ -127,7 +127,8 @@ static void separator_parameters(u64 flags, int groupsize, int *sep_chars,
-  * @buf: data blob to dump
-  * @len: number of bytes in the @buf
-  * @rowsize: number of bytes to print per line; must be a multiple of groupsize
-- * @groupsize: number of bytes to print at a time (1, 2, 4, 8; default = 1)
-+ * @groupsize: number of bytes to convert to a native endian number and print:
-+ * 	       1, 2, 4, 8; default = 1
-  * @linebuf: where to put the converted data
-  * @linebuflen: total size of @linebuf, including space for terminating NUL
-  * @flags: A bitwise OR of the following flags:
-@@ -138,6 +139,9 @@ static void separator_parameters(u64 flags, int groupsize, int *sep_chars,
-  *	HEXDUMP_2_GRP_SPACES:		insert a ' ' after every 2 groups
-  *	HEXDUMP_4_GRP_SPACES:		insert a ' ' after every 4 groups
-  *	HEXDUMP_8_GRP_SPACES:		insert a ' ' after every 8 groups
-+ *	HEXDUMP_RETAIN_BYTE_ORDER:	Retain the byte ordering of groups
-+ *					instead of treating each group as a
-+ *					native-endian number
-  *
-  * hex_dump_to_buffer() works on one "line" of output at a time, converting
-  * <groupsize> bytes of input to hexadecimal (and optionally printable ASCII)
-@@ -172,6 +176,7 @@ int hex_dump_to_buffer_ext(const void *buf, size_t len, int rowsize,
- 	int ret;
- 	int sep_chars = 0;
- 	char sep = 0;
-+	bool big_endian = (flags & HEXDUMP_RETAIN_BYTE_ORDER) ? 1 : 0;
- 
- 	if (!is_power_of_2(groupsize) || groupsize > 8)
- 		groupsize = 1;
-@@ -203,10 +208,13 @@ int hex_dump_to_buffer_ext(const void *buf, size_t len, int rowsize,
- 		const u64 *ptr8 = buf;
- 
- 		for (j = 0; j < ngroups; j++) {
-+			u64 val = big_endian ?
-+					be64_to_cpu(get_unaligned(ptr8 + j)) :
-+					get_unaligned(ptr8 + j);
- 			ret = snprintf(linebuf + lx, linebuflen - lx,
- 				       "%s%16.16llx",
- 				       j ? group_separator(j, flags) : "",
--				       get_unaligned(ptr8 + j));
-+				       val);
- 			if (ret >= linebuflen - lx)
- 				goto overflow1;
- 			lx += ret;
-@@ -215,10 +223,14 @@ int hex_dump_to_buffer_ext(const void *buf, size_t len, int rowsize,
- 		const u32 *ptr4 = buf;
- 
- 		for (j = 0; j < ngroups; j++) {
-+			u32 val = big_endian ?
-+					be32_to_cpu(get_unaligned(ptr4 + j)) :
-+					get_unaligned(ptr4 + j);
-+
- 			ret = snprintf(linebuf + lx, linebuflen - lx,
- 				       "%s%8.8x",
- 				       j ? group_separator(j, flags) : "",
--				       get_unaligned(ptr4 + j));
-+				       val);
- 			if (ret >= linebuflen - lx)
- 				goto overflow1;
- 			lx += ret;
-@@ -227,10 +239,14 @@ int hex_dump_to_buffer_ext(const void *buf, size_t len, int rowsize,
- 		const u16 *ptr2 = buf;
- 
- 		for (j = 0; j < ngroups; j++) {
-+			u16 val = big_endian ?
-+					be16_to_cpu(get_unaligned(ptr2 + j)) :
-+					get_unaligned(ptr2 + j);
-+
- 			ret = snprintf(linebuf + lx, linebuflen - lx,
- 				       "%s%4.4x",
- 				       j ? group_separator(j, flags) : "",
--				       get_unaligned(ptr2 + j));
-+				       val);
- 			if (ret >= linebuflen - lx)
- 				goto overflow1;
- 			lx += ret;
-@@ -332,7 +348,8 @@ static void announce_skipped(const char *level, const char *prefix_str,
-  * @prefix_type: controls whether prefix of an offset, address, or none
-  *  is printed (%DUMP_PREFIX_OFFSET, %DUMP_PREFIX_ADDRESS, %DUMP_PREFIX_NONE)
-  * @rowsize: number of bytes to print per line; must be a multiple of groupsize
-- * @groupsize: number of bytes to print at a time (1, 2, 4, 8; default = 1)
-+ * @groupsize: number of bytes to convert to a native endian number and print:
-+ * 	       1, 2, 4, 8; default = 1
-  * @buf: data blob to dump
-  * @len: number of bytes in the @buf
-  * @ascii: include ASCII after the hex output
-@@ -343,6 +360,9 @@ static void announce_skipped(const char *level, const char *prefix_str,
-  *	HEXDUMP_2_GRP_LINES:		insert a '|' after every 2 groups
-  *	HEXDUMP_4_GRP_LINES:		insert a '|' after every 4 groups
-  *	HEXDUMP_8_GRP_LINES:		insert a '|' after every 8 groups
-+ *	HEXDUMP_RETAIN_BYTE_ORDER:	Retain the byte ordering of groups
-+ *					instead of treating each group as a
-+ *					native-endian number
-  *
-  * Given a buffer of u8 data, print_hex_dump() prints a hex + ASCII dump
-  * to the kernel log at the specified kernel log level, with an optional
-diff --git a/lib/test_hexdump.c b/lib/test_hexdump.c
-index ad43218437f1..d2cfcb3e2d2b 100644
---- a/lib/test_hexdump.c
-+++ b/lib/test_hexdump.c
-@@ -98,14 +98,15 @@ static unsigned failed_tests __initdata;
- 
- static void __init test_hexdump_prepare_test(size_t len, int rowsize,
- 					     int groupsize, char *test,
--					     size_t testlen, bool ascii)
-+					     size_t testlen, u64 flags)
- {
- 	char *p;
- 	const char * const *result;
- 	size_t l = len;
- 	int gs = groupsize, rs = rowsize;
- 	unsigned int i;
--	const bool is_be = IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
-+	const bool is_be = IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) ||
-+			(flags & HEXDUMP_RETAIN_BYTE_ORDER);
- 
- 	if (l > rs)
- 		l = rs;
-@@ -142,7 +143,7 @@ static void __init test_hexdump_prepare_test(size_t len, int rowsize,
- 		p--;
- 
- 	/* ASCII part */
--	if (ascii) {
-+	if (flags & HEXDUMP_ASCII) {
- 		do {
- 			*p++ = ' ';
- 		} while (p < test + rs * 2 + rs / gs + 1);
-@@ -157,7 +158,7 @@ static void __init test_hexdump_prepare_test(size_t len, int rowsize,
- #define TEST_HEXDUMP_BUF_SIZE		(64 * 3 + 2 + 64 + 1)
- 
- static void __init test_hexdump(size_t len, int rowsize, int groupsize,
--				bool ascii)
-+				u64 flags)
- {
- 	char test[TEST_HEXDUMP_BUF_SIZE];
- 	char real[TEST_HEXDUMP_BUF_SIZE];
-@@ -166,12 +167,11 @@ static void __init test_hexdump(size_t len, int rowsize, int groupsize,
- 
- 	memset(real, FILL_CHAR, sizeof(real));
- 	hex_dump_to_buffer_ext(data_b, len, rowsize, groupsize,
--			       real, sizeof(real),
--			       ascii ? HEXDUMP_ASCII : 0);
-+			real, sizeof(real), flags);
- 
- 	memset(test, FILL_CHAR, sizeof(test));
- 	test_hexdump_prepare_test(len, rowsize, groupsize, test, sizeof(test),
--				  ascii);
-+				  flags);
- 
- 	if (memcmp(test, real, TEST_HEXDUMP_BUF_SIZE)) {
- 		pr_err("Len: %zu row: %d group: %d\n", len, rowsize, groupsize);
-@@ -194,7 +194,7 @@ static void __init test_hexdump_set(int rowsize, bool ascii)
- 
- static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 					 int rowsize, int groupsize,
--					 bool ascii)
-+					 u64 flags)
- {
- 	char test[TEST_HEXDUMP_BUF_SIZE];
- 	char buf[TEST_HEXDUMP_BUF_SIZE];
-@@ -206,8 +206,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 	memset(buf, FILL_CHAR, sizeof(buf));
- 
- 	rc = hex_dump_to_buffer_ext(data_b, len, rowsize, groupsize,
--				    buf, buflen,
--				    ascii ? HEXDUMP_ASCII : 0);
-+				    buf, buflen, flags);
- 
- 	/*
- 	 * Caller must provide the data length multiple of groupsize. The
-@@ -224,12 +223,12 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 		  - 1 /* no trailing space */;
- 	}
- 
--	expected_len = (ascii) ? ascii_len : hex_len;
-+	expected_len = (flags & HEXDUMP_ASCII) ? ascii_len : hex_len;
- 
- 	fill_point = min_t(int, expected_len + 1, buflen);
- 	if (buflen) {
- 		test_hexdump_prepare_test(len, rowsize, groupsize, test,
--					  sizeof(test), ascii);
-+					  sizeof(test), flags);
- 		test[fill_point - 1] = '\0';
- 	}
- 	memset(test + fill_point, FILL_CHAR, sizeof(test) - fill_point);
-@@ -239,8 +238,8 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 	buf[sizeof(buf) - 1] = '\0';
- 
- 	if (!match) {
--		pr_err("rowsize: %u groupsize: %u ascii: %d Len: %zu buflen: %zu strlen: %zu\n",
--			rowsize, groupsize, ascii, len, buflen,
-+		pr_err("rowsize: %u groupsize: %u flags: %llx Len: %zu buflen: %zu strlen: %zu\n",
-+			rowsize, groupsize, flags, len, buflen,
- 			strnlen(buf, sizeof(buf)));
- 		pr_err("Result: %d '%-.*s'\n", rc, (int)buflen, buf);
- 		pr_err("Expect: %d '%-.*s'\n", expected_len, (int)buflen, test);
-@@ -249,7 +248,7 @@ static void __init test_hexdump_overflow(size_t buflen, size_t len,
- 	}
- }
- 
--static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
-+static void __init test_hexdump_overflow_set(size_t buflen, u64 flags)
- {
- 	unsigned int i = 0;
- 	int rs = (get_random_int() % 4 + 1) * 16;
-@@ -258,7 +257,7 @@ static void __init test_hexdump_overflow_set(size_t buflen, bool ascii)
- 		int gs = 1 << i;
- 		size_t len = get_random_int() % rs + gs;
- 
--		test_hexdump_overflow(buflen, rounddown(len, gs), rs, gs, ascii);
-+		test_hexdump_overflow(buflen, rounddown(len, gs), rs, gs, flags);
- 	} while (i++ < 3);
- }
- 
-@@ -266,20 +265,43 @@ static int __init test_hexdump_init(void)
- {
- 	unsigned int i;
- 	int rowsize;
-+	u64 flags;
- 
-+	flags = 0;
- 	rowsize = (get_random_int() % 4 + 1) * 16;
- 	for (i = 0; i < 16; i++)
--		test_hexdump_set(rowsize, false);
-+		test_hexdump_set(rowsize, flags);
- 
-+	flags = HEXDUMP_ASCII;
- 	rowsize = (get_random_int() % 4 + 1) * 16;
- 	for (i = 0; i < 16; i++)
--		test_hexdump_set(rowsize, true);
-+		test_hexdump_set(rowsize, flags);
- 
-+	flags = HEXDUMP_RETAIN_BYTE_ORDER;
-+	rowsize = (get_random_int() % 2 + 1) * 16;
-+	for (i = 0; i < 16; i++)
-+		test_hexdump_set(rowsize, flags);
-+
-+	flags = HEXDUMP_ASCII | HEXDUMP_RETAIN_BYTE_ORDER;
-+	rowsize = (get_random_int() % 2 + 1) * 16;
-+	for (i = 0; i < 16; i++)
-+		test_hexdump_set(rowsize, flags);
-+
-+	flags = 0;
-+	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
-+		test_hexdump_overflow_set(i, flags);
-+
-+	flags = HEXDUMP_ASCII;
-+	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
-+		test_hexdump_overflow_set(i, flags);
-+
-+	flags = HEXDUMP_RETAIN_BYTE_ORDER;
- 	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
--		test_hexdump_overflow_set(i, false);
-+		test_hexdump_overflow_set(i, flags);
- 
-+	flags = HEXDUMP_ASCII | HEXDUMP_RETAIN_BYTE_ORDER;
- 	for (i = 0; i <= TEST_HEXDUMP_BUF_SIZE; i++)
--		test_hexdump_overflow_set(i, true);
-+		test_hexdump_overflow_set(i, flags);
- 
- 	if (failed_tests == 0)
- 		pr_info("all %u tests passed\n", total_tests);
--- 
-2.21.0
-
+Looks good with one nit, can be done at the time of applying patch.=0A=
+=0A=
+Reviewed-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>=0A=
+=0A=
+On 6/24/19 7:46 PM, Damien Le Moal wrote:=0A=
+> To allow the SCSI subsystem scsi_execute_req() function to issue=0A=
+> requests using large buffers that are better allocated with vmalloc()=0A=
+> rather than kmalloc(), modify bio_map_kern() to allow passing a buffer=0A=
+> allocated with the vmalloc() function. To do so, simply test the buffer=
+=0A=
+> address using is_vmalloc_addr() and use vmalloc_to_page() instead of=0A=
+> virt_to_page() to obtain the pages of vmalloc-ed buffers.=0A=
+> =0A=
+> Fixes: 515ce6061312 ("scsi: sd_zbc: Fix sd_zbc_report_zones() buffer allo=
+cation")=0A=
+> Fixes: e76239a3748c ("block: add a report_zones method")=0A=
+> Cc: stable@vger.kernel.org=0A=
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>=0A=
+> ---=0A=
+>   block/bio.c | 8 +++++++-=0A=
+>   1 file changed, 7 insertions(+), 1 deletion(-)=0A=
+> =0A=
+> diff --git a/block/bio.c b/block/bio.c=0A=
+> index ce797d73bb43..05afcaf655f3 100644=0A=
+> --- a/block/bio.c=0A=
+> +++ b/block/bio.c=0A=
+> @@ -1501,6 +1501,8 @@ struct bio *bio_map_kern(struct request_queue *q, v=
+oid *data, unsigned int len,=0A=
+>   	unsigned long end =3D (kaddr + len + PAGE_SIZE - 1) >> PAGE_SHIFT;=0A=
+>   	unsigned long start =3D kaddr >> PAGE_SHIFT;=0A=
+>   	const int nr_pages =3D end - start;=0A=
+> +	bool is_vmalloc =3D is_vmalloc_addr(data); > +	struct page *page;=0A=
+>   	int offset, i;=0A=
+>   	struct bio *bio;=0A=
+>   =0A=
+> @@ -1518,7 +1520,11 @@ struct bio *bio_map_kern(struct request_queue *q, =
+void *data, unsigned int len,=0A=
+>   		if (bytes > len)=0A=
+>   			bytes =3D len;=0A=
+>   =0A=
+> -		if (bio_add_pc_page(q, bio, virt_to_page(data), bytes,=0A=
+> +		if (is_vmalloc)=0A=
+nit:- Can we use is_vmalloc_addr() call directly so that=0A=
+"if (is_vmalloc)" ->  "if (is_vmalloc_addr(data))" and remove is_vmalloc =
+=0A=
+variable.=0A=
+> +			page =3D vmalloc_to_page(data);=0A=
+> +		else=0A=
+> +			page =3D virt_to_page(data);=0A=
+> +		if (bio_add_pc_page(q, bio, page, bytes,=0A=
+>   				    offset) < bytes) {=0A=
+>   			/* we don't support partial mappings */=0A=
+>   			bio_put(bio);=0A=
+> =0A=
+=0A=
