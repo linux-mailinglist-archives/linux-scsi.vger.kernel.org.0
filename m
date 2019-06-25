@@ -2,146 +2,288 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A3054FC5
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 15:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0270754FAC
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Jun 2019 15:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729605AbfFYNF4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 09:05:56 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:50714 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730189AbfFYNF4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 09:05:56 -0400
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190625130554epoutp015a03c731d8374e66aa8c2a58d71597b0~rctTW3-tq0314703147epoutp01L
-        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 13:05:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190625130554epoutp015a03c731d8374e66aa8c2a58d71597b0~rctTW3-tq0314703147epoutp01L
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1561467954;
-        bh=SzKCe4+Sc9lt7brPnRnOBQ+CfgHKlZDYLTSIKaovreo=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=W1OwQCpWDouGLMVm0vzxOKYVph33zVCIMCF//NHFhkd5d1z30BNb1ct79nnVOIep9
-         98HYTK0vVmLKmgJ2FcsmH/b+7UXAl0Ew7SViVWOpTLBriJFdPFe+VBtYfiNvOXSMiv
-         f7inkyl3bY1LwEc0MhJG3nON+o59X8a01q3H5g/s=
-Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20190625130553epcas5p37417664d9abc51afaba711987964c483~rctTA1CTL2315223152epcas5p3-;
-        Tue, 25 Jun 2019 13:05:53 +0000 (GMT)
-Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
-        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        1C.54.04071.13C121D5; Tue, 25 Jun 2019 22:05:53 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20190625130553epcas5p3c495b378785f3c88543dca31183c42cc~rctSStQAu2318523185epcas5p30;
-        Tue, 25 Jun 2019 13:05:53 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20190625130553epsmtrp239a950b39f02df4feb29127ab8b4e904~rctSRzoZl0790407904epsmtrp2L;
-        Tue, 25 Jun 2019 13:05:53 +0000 (GMT)
-X-AuditID: b6c32a49-5b7ff70000000fe7-84-5d121c310538
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        2A.00.03662.03C121D5; Tue, 25 Jun 2019 22:05:53 +0900 (KST)
-Received: from [107.108.73.28] (unknown [107.108.73.28]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20190625130550epsmtip2dc68f87aa56449c2f9e827495615ca7d~rctQFBh8h0348003480epsmtip2k;
-        Tue, 25 Jun 2019 13:05:50 +0000 (GMT)
-Subject: Re: [PATCH] Documentation: scsi: ufs: announce ufs-tool v1.0
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Avri Altman <avri.altman@wdc.com>
-Cc:     Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Evan Green <evgreen@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avi Shchislowski <avi.shchislowski@wdc.com>,
-        Alex Lemberg <alex.lemberg@wdc.com>,
-        Arthur Simchaev <Arthur.Simchaev@sandisk.com>
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-Message-ID: <d4e4cd78-18d1-1087-87f0-cb87f6ae99e5@samsung.com>
-Date:   Tue, 25 Jun 2019 18:15:03 +0530
+        id S1730165AbfFYND6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 09:03:58 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45120 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730141AbfFYND6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 09:03:58 -0400
+Received: by mail-lj1-f193.google.com with SMTP id m23so16140752lje.12
+        for <linux-scsi@vger.kernel.org>; Tue, 25 Jun 2019 06:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lightnvm-io.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ARK2prxRV/r8YkWxnnbALm6Pw85xxSzYq4sr4VIfIYM=;
+        b=UkrW7PyHLM+UCjb9yNI25LpeVNz39xUL9IGQsHEnSehYh9reiTPFnLo9YPWm1VgUAc
+         0iCj70AO4HDdbWbKWKBvit4BXpFxpcEmJdZgNglmsuoJpiC10Z+jxs47WMxyb1WCErIb
+         FiKkEPSVJqpgSegB1A3nSFoIwkdDlBue8EQuXk4W+9hdJ6Xd4dofZmW9UCkfHjJXMrjv
+         Rl2mK+FyUsa9j/j3NsMT2RIF/rou5i5LIu3ieZQNbeJR5r4vOIpeVXfdr0Nru4t6hS52
+         RqELOSABdrgUuyBHfbFUkYMtJk9+xnk7Nd4WkJxmJMxYM+WQ0wlgaGE7cufyyBvINyWJ
+         S9mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ARK2prxRV/r8YkWxnnbALm6Pw85xxSzYq4sr4VIfIYM=;
+        b=gAMAwkBk738UdeEzSRexS+AGcByP5+YfI5K249XOMFX6mAVLbh9gT7++aoX7f49SQU
+         ojLEHZs1Pmvao3L0VyjiQQSD5d5KPYuqSEEcqKXs8ezx1X+mJWQ6Ny3atvxnx0/Bf7rf
+         4xm1oFrZ9vBKzaQgfauyt60WJD9fZkS+ijxsvTpwI/7g4tTfqQ0LmxZmYufWyBV7LxZD
+         z6O5DNSEJOPO3/3QY/HvzorJadF74Hk399VWR8JcSiHwLB7jW2GCGVPHweDzC1IqCHvs
+         CgylS3x0VljxKnC3U0y9wYmzpSAPHrDWIa+RMR2DKPsFSDQF9jQ51gUjjmIVAYhXAM2c
+         kmaQ==
+X-Gm-Message-State: APjAAAU92vhFcMSNCRfLPbPu7LY5UXtQFZ70WVaKOXaJ2dqIadq4ZYUB
+        Vb0NJivWOPYIrNHvyn0Zx661pg==
+X-Google-Smtp-Source: APXvYqxHO1flsaGt4P5qYTOlxVD2HC4muB9gcro4b9JaKCo31KcUlf6dWiReFri6tJtYcHieGpJY+w==
+X-Received: by 2002:a2e:9e1a:: with SMTP id e26mr18452425ljk.158.1561467835635;
+        Tue, 25 Jun 2019 06:03:55 -0700 (PDT)
+Received: from [192.168.0.36] (2-111-91-225-cable.dk.customer.tdc.net. [2.111.91.225])
+        by smtp.googlemail.com with ESMTPSA id x22sm1972057lfq.20.2019.06.25.06.03.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 25 Jun 2019 06:03:54 -0700 (PDT)
+Subject: Re: [PATCH 2/4] null_blk: add zone open, close, and finish support
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>,
+        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
+        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
+        Ajay Joshi <Ajay.Joshi@wdc.com>,
+        Aravind Ramesh <Aravind.Ramesh@wdc.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "James.Bottomley@HansenPartnership.com" 
+        <James.Bottomley@HansenPartnership.com>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>
+References: <20190621130711.21986-1-mb@lightnvm.io>
+ <20190621130711.21986-3-mb@lightnvm.io>
+ <BYAPR04MB5816D471063D970DDCF9AEC7E7E60@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <1aa6552c-ecf9-a168-df75-ec8c52ddbea6@lightnvm.io>
+ <BYAPR04MB581665C81B89838BC022BF7BE7E30@BYAPR04MB5816.namprd04.prod.outlook.com>
+From:   =?UTF-8?Q?Matias_Bj=c3=b8rling?= <mb@lightnvm.io>
+Message-ID: <f70736f5-4edf-c925-d22a-a3238761da90@lightnvm.io>
+Date:   Tue, 25 Jun 2019 15:03:53 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
-        Thunderbird/60.7.1
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-In-Reply-To: <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0hTYRjHec/Ozs5Wy9dl+aRhtbJIyUsZnA+iYRdO5IegD6k0bNXBTJ12
-        5iWlxMguauGlSJ2WVqhlI8nWBUvUhU4LDU3zUqHRJLRcqcwrWW1nld9+7///f97neeChRQqr
-        2I2O1iRyvEYdq6Rk5JOXm722+K9WqPy+TQQwbWY9xbx7cID5WdAiYeZq+iRMVn6lmLHWlYuY
-        kdkeimn6lEUy7ZVNFHN+sJBgqvM1TK/Rgpic3mcUU2VaIJjMFivJVDzuRzswOz9XgNiSjE6S
-        vfNihGCHjI9INrOtgWSnay5R7PjwAMle178hWEPDJGInaz3Yi405xP4lEbLAY1xsdDLH+wYd
-        lh1vyG1DCUbZqQ5DlyQDddHZSEoDDgC9tZ/IRjJagZ8j0LfeR8JjAsFonsnhTCEoHp9G/0oM
-        gyLBqEcwpLvnSI0hyDYNU7bUcrwbvuou2g0XXE/AwJfvdkOEmwmofL/TxhT2ho+Fhj8hmpbj
-        IOi4dsImk9gTaqyd9vgKHAZvDXX2znLsDG3FZtLGUszCaOsAIXzpCgPmMgevgadjpfbpAHdI
-        oOtGkUgYexfMln9x8HIYNRkkArvBpKWess0AOAYu120T5NNQcbOFFDgYGrtLSVtEhDdDTZ2v
-        0GoZXJk3E0KlHC5dUAhpTzhn6XFUukN+To5YYBZMtyx2XYFLEJS85PPQWt2ixXSLltEtWkb3
-        v3E5IqvRKi5BGxfFabcn+Gu4FB+tOk6bpInyORofV4vsx+i19xnSdYQaEaaRcql8pgWrFGJ1
-        sjY1zoiAFild5BXqP5L8mDo1jePjI/mkWE5rRO40qXSVF4h7DilwlDqRi+G4BI7/6xK01C0D
-        pTp1h0TEaA589jgS/CP+9NFNJdEFr1R8ZJGsXaU5OJidso8PdNqoyxzdOaWcO7ShKuRt4wbV
-        jJlzT3rYPL2+6aRbbaPziqv63vDH6VIvy1mL+9iRkMkF6URwa2jZ69KtH5q9V3bGj4UX+Vnm
-        cjt/3HbtHW84Y+wbTtuT9etwWPrddUpSe1zt7yXiterfT0ij74gDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02RbUhTYRiGe885np2tRm/T8FXLwSgCI8uIeg1ZQhiHAg36k9HSQ578yH2w
-        40cLKiHLLyiVUNpMpVJLRqKbJWZMl8wt0FAza2kmaGJWFrK0RZLbDPbv4n7u6+GBhyFlg1Qk
-        k63J4/UaLldBS6inLxXyPXHbZKp9HY8I7Jox0/jtk1P4b7VDhL1t70S4rKo5BHu6G0k8/3uM
-        xn3TZRQebO6j8Y2pWgK3VmnwuP07wBXjXTRuGVglcLHDQ+GmzvcgEbJ/vNWANRUNU+yDnnmC
-        /WS3UGyxy0axy22lNPtz1k2xNebXBGu1LQF2qSOaLemtIE5uPCNJyOBzswt4/V5luiTLdtsF
-        dHbJpSHriKgIjDDlQMwgeACZrVNkOZAwMvgcoKllNxEYRKHx9kpRgEPR49U5P8vgAkDuxV0+
-        DoVJaMFY4u+HQRuBptuv+BaRcIBApR7n+lYTQDbzHO1r0XA3mqy1rhkMI4VKNHQnxxdTcCdq
-        8wz7K1vhaXTrpsnPUrgFue7OUD4WQxZ9cQaOI+FBVG+ZJgMcjtwzDeu5HD37VkdWApkxSDcG
-        KcYgxRikNAKqFUTwOkGdqRbidPs1fGGswKmFfE1m7HmtugP4nxwT0wWczjQ7gAxQbJI29kOV
-        LIQrEAxqO0AMqQiTNnFrkTSDM1zm9do0fX4uL9hBFEMpwqVyrSNVBjO5PP4iz+t4/f8pwYgj
-        i0D02UPUxIj4x2h+b08fEKWEfF2OGDW8qR4bvH/VItLUM15l8cLijmMGd/JxXX1dp9vQWtNy
-        4kXD59mU7bMbclTDFmblqFfZdOHVivzcaFeC1vFw/mOSMX7ClfwrPYVx3hsI/RB/zaTqXl0p
-        7DULicTm60cmEx1ukas/w354rEZBCVlcXAypF7h/a3b8LuACAAA=
-X-CMS-MailID: 20190625130553epcas5p3c495b378785f3c88543dca31183c42cc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20190625123640epcas1p2b043961d1b03d2fea1f3c9ddc8d2760d
-References: <CGME20190625123640epcas1p2b043961d1b03d2fea1f3c9ddc8d2760d@epcas1p2.samsung.com>
-        <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
+In-Reply-To: <BYAPR04MB581665C81B89838BC022BF7BE7E30@BYAPR04MB5816.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Arthur,
-Does this tools provides a way for ufs device partition provising from 
-user space as well?
-(have not used this tool till now, planning to use soon)
+On 6/25/19 2:36 PM, Damien Le Moal wrote:
+> On 2019/06/25 20:06, Matias Bjørling wrote:
+>> On 6/22/19 3:02 AM, Damien Le Moal wrote:
+>>> On 2019/06/21 22:07, Matias Bjørling wrote:
+>>>> From: Ajay Joshi <ajay.joshi@wdc.com>
+>>>>
+>>>> Implement REQ_OP_ZONE_OPEN, REQ_OP_ZONE_CLOSE and REQ_OP_ZONE_FINISH
+>>>> support to allow explicit control of zone states.
+>>>>
+>>>> Signed-off-by: Ajay Joshi <ajay.joshi@wdc.com>
+>>>> Signed-off-by: Matias Bjørling <matias.bjorling@wdc.com>
+>>>> ---
+>>>>    drivers/block/null_blk.h       |  4 ++--
+>>>>    drivers/block/null_blk_main.c  | 13 ++++++++++---
+>>>>    drivers/block/null_blk_zoned.c | 33 ++++++++++++++++++++++++++++++---
+>>>>    3 files changed, 42 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/drivers/block/null_blk.h b/drivers/block/null_blk.h
+>>>> index 34b22d6523ba..62ef65cb0f3e 100644
+>>>> --- a/drivers/block/null_blk.h
+>>>> +++ b/drivers/block/null_blk.h
+>>>> @@ -93,7 +93,7 @@ int null_zone_report(struct gendisk *disk, sector_t sector,
+>>>>    		     gfp_t gfp_mask);
+>>>>    void null_zone_write(struct nullb_cmd *cmd, sector_t sector,
+>>>>    			unsigned int nr_sectors);
+>>>> -void null_zone_reset(struct nullb_cmd *cmd, sector_t sector);
+>>>> +void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t sector);
+>>>>    #else
+>>>>    static inline int null_zone_init(struct nullb_device *dev)
+>>>>    {
+>>>> @@ -111,6 +111,6 @@ static inline void null_zone_write(struct nullb_cmd *cmd, sector_t sector,
+>>>>    				   unsigned int nr_sectors)
+>>>>    {
+>>>>    }
+>>>> -static inline void null_zone_reset(struct nullb_cmd *cmd, sector_t sector) {}
+>>>> +static inline void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t sector) {}
+>>>>    #endif /* CONFIG_BLK_DEV_ZONED */
+>>>>    #endif /* __NULL_BLK_H */
+>>>> diff --git a/drivers/block/null_blk_main.c b/drivers/block/null_blk_main.c
+>>>> index 447d635c79a2..5058fb980c9c 100644
+>>>> --- a/drivers/block/null_blk_main.c
+>>>> +++ b/drivers/block/null_blk_main.c
+>>>> @@ -1209,10 +1209,17 @@ static blk_status_t null_handle_cmd(struct nullb_cmd *cmd)
+>>>>    			nr_sectors = blk_rq_sectors(cmd->rq);
+>>>>    		}
+>>>>    
+>>>> -		if (op == REQ_OP_WRITE)
+>>>> +		switch (op) {
+>>>> +		case REQ_OP_WRITE:
+>>>>    			null_zone_write(cmd, sector, nr_sectors);
+>>>> -		else if (op == REQ_OP_ZONE_RESET)
+>>>> -			null_zone_reset(cmd, sector);
+>>>> +			break;
+>>>> +		case REQ_OP_ZONE_RESET:
+>>>> +		case REQ_OP_ZONE_OPEN:
+>>>> +		case REQ_OP_ZONE_CLOSE:
+>>>> +		case REQ_OP_ZONE_FINISH:
+>>>> +			null_zone_mgmt_op(cmd, sector);
+>>>> +			break;
+>>>> +		}
+>>>>    	}
+>>>>    out:
+>>>>    	/* Complete IO by inline, softirq or timer */
+>>>> diff --git a/drivers/block/null_blk_zoned.c b/drivers/block/null_blk_zoned.c
+>>>> index fca0c97ff1aa..47d956b2e148 100644
+>>>> --- a/drivers/block/null_blk_zoned.c
+>>>> +++ b/drivers/block/null_blk_zoned.c
+>>>> @@ -121,17 +121,44 @@ void null_zone_write(struct nullb_cmd *cmd, sector_t sector,
+>>>>    	}
+>>>>    }
+>>>>    
+>>>> -void null_zone_reset(struct nullb_cmd *cmd, sector_t sector)
+>>>> +void null_zone_mgmt_op(struct nullb_cmd *cmd, sector_t sector)
+>>>>    {
+>>>>    	struct nullb_device *dev = cmd->nq->dev;
+>>>>    	unsigned int zno = null_zone_no(dev, sector);
+>>>>    	struct blk_zone *zone = &dev->zones[zno];
+>>>> +	enum req_opf op = req_op(cmd->rq);
+>>>>    
+>>>>    	if (zone->type == BLK_ZONE_TYPE_CONVENTIONAL) {
+>>>>    		cmd->error = BLK_STS_IOERR;
+>>>>    		return;
+>>>>    	}
+>>>>    
+>>>> -	zone->cond = BLK_ZONE_COND_EMPTY;
+>>>> -	zone->wp = zone->start;
+>>>> +	switch (op) {
+>>>> +	case REQ_OP_ZONE_RESET:
+>>>> +		zone->cond = BLK_ZONE_COND_EMPTY;
+>>>> +		zone->wp = zone->start;
+>>>> +		return;
+>>>> +	case REQ_OP_ZONE_OPEN:
+>>>> +		if (zone->cond == BLK_ZONE_COND_FULL) {
+>>>> +			cmd->error = BLK_STS_IOERR;
+>>>> +			return;
+>>>> +		}
+>>>> +		zone->cond = BLK_ZONE_COND_EXP_OPEN;
+>>>
+>>>
+>>> With ZBC, open of a full zone is a "nop". No error. So I would rather have this as:
+>>>
+>>> 		if (zone->cond != BLK_ZONE_COND_FULL)
+>>> 			zone->cond = BLK_ZONE_COND_EXP_OPEN;
+>>> 		
+>> Is this only ZBC? I can't find a reference to it in ZAC. I think it
+>> should fail. One is trying to open a zone that is full, one can't open
+>> it again. It's done for this round.
+> 
+> Page 52/53, section 5.2.6.3.2:
+> 
+> If the OPEN ALL bit is cleared to zero and the zone specified by the ZONE ID
+> field (see 5.2.4.3.3) is in Zone Condition:
+> a) EMPTY, IMPLICITLY OPENED, or CLOSED, then the device shall process an
+> Explicitly Open Zone function
+> (see 4.6.3.4.10) for the zone specified by the ZONE ID field;
+> b) EXPLICITLY OPENED or FULL, then the device shall:
+> 	A) not change the zone's state; and
+> 	B) return successful command completion;
+> 
+>>>
+>>>> +		return;
+>>>> +	case REQ_OP_ZONE_CLOSE:
+>>>> +		if (zone->cond == BLK_ZONE_COND_FULL) {
+>>>> +			cmd->error = BLK_STS_IOERR;
+>>>> +			return;
+>>>> +		}
+>>>> +		zone->cond = BLK_ZONE_COND_CLOSED;
+>>>
+>>> Sam as for open. Closing a full zone on ZBC is a nop.
+>>
+>> I think this should cause error.
+> 
+> See ZAB/ZAC close command description. Same text as above, almost. Not an error.
+> It is a nop. ZAC page 48, section 5.2.4.3.2:
+> 
+> If the CLOSE ALL bit is cleared to zero and the zone specified by the ZONE ID
+> field (see 5.2.4.3.3) is in Zone Condition:
+> a) IMPLICITLY OPENED, or EXPLICITLY OPENED, then the device shall process a
+> Close Zone function
+> (see 4.6.3.4.11) for the zone specified by the ZONE ID field;
+> b) EMPTY, CLOSED, or FULL, then the device shall:
+> 	A) not change the zone's state; and
+> 	B) return successful command completion;
+> 
+>>
+>> And the code above would
+>>> also set an empty zone to closed. Finally, if the zone is open but nothing was
+>>> written to it, it must be returned to empty condition, not closed.
+>>
+>> Only on a reset event right? In general, if I do a expl. open, close it,
+>> it should not go to empty.
+> 
+> See the zone state machine. It does return to empty from expl open if nothing
+> was written, that is, if the WP is still at zone start. This text is in ZAC
+> section 4.6.3.4.11 as noted above:
+> 
+> For the specified zone, the Zone Condition state machine processing of this
+> function (e.g., as shown in the ZC2: Implicit_Open state (see 4.6.3.4.3))
+> results in the Zone Condition for the specified zone becoming:
+> a) EMPTY, if the write pointer indicates the lowest LBA in the zone and Non
+> Sequential Write Resources Active is false; or
+> b) CLOSED, if the write pointer does not indicate the lowest LBA in the zone or
+> Non-Sequential Write Resources Active is true.
+> 
 
-On 6/25/19 6:06 PM, Arthur Simchaev wrote:
-> From: Arthur Simchaev <Arthur.Simchaev@sandisk.com>
+Schooled! That is what one gets from having the spec in paper form on 
+the table ;)
+
+>>
+>> So something
+>>> like this is needed.
+>>>
+>>> 		switch (zone->cond) {
+>>> 		case BLK_ZONE_COND_FULL:
+>>> 		case BLK_ZONE_COND_EMPTY:
+>>> 			break;
+>>> 		case BLK_ZONE_COND_EXP_OPEN:
+>>> 			if (zone->wp == zone->start) {
+>>> 				zone->cond = BLK_ZONE_COND_EMPTY;
+>>> 				break;
+>>> 			}
+>>> 		/* fallthrough */
+>>> 		default:
+>>> 			zone->cond = BLK_ZONE_COND_CLOSED;
+>>> 		}
+>>>
+>>>> +		return;
+>>>> +	case REQ_OP_ZONE_FINISH:
+>>>> +		zone->cond = BLK_ZONE_COND_FULL;
+>>>> +		zone->wp = zone->start + zone->len;
+>>>> +		return;
+>>>> +	default:
+>>>> +		/* Invalid zone condition */
+>>>> +		cmd->error = BLK_STS_IOERR;
+>>>> +		return;
+>>>> +	}
+>>>>    }
+>>>>
+>>>
+>>>
+>>
+>>
 > 
-> The ufs-tool stable release v1.0 is available at
-> https://github.com/westerndigitalcorporation/ufs-tool
 > 
-> Feedback and bug reports, as always, are welcomed.
-> 
-> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
-> ---
->   Documentation/scsi/ufs.txt | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/scsi/ufs.txt b/Documentation/scsi/ufs.txt
-> index 1769f71..ae4643f 100644
-> --- a/Documentation/scsi/ufs.txt
-> +++ b/Documentation/scsi/ufs.txt
-> @@ -158,6 +158,11 @@ send SG_IO with the applicable sg_io_v4:
->   If you wish to read or write a descriptor, use the appropriate xferp of
->   sg_io_v4.
->   
-> +The user-space tool that interacts with the ufs-bsg endpoint and uses its
-> +upiu-based protocol, is available at
-> +https://github.com/westerndigitalcorporation/ufs-tool.
-> +For more detailed information about the tool and the tool's supported
-> +features, please see the tool's README.
->   
->   UFS Specifications can be found at,
->   UFS - http://www.jedec.org/sites/default/files/docs/JESD220.pdf
-> 
+
