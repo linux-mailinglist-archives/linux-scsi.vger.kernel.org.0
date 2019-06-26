@@ -2,150 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E446355D72
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 03:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCD955DCF
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 03:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726535AbfFZB2r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 21:28:47 -0400
-Received: from ushosting.nmnhosting.com ([66.55.73.32]:47446 "EHLO
-        ushosting.nmnhosting.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726037AbfFZB2r (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 21:28:47 -0400
-Received: from mail2.nmnhosting.com (unknown [202.169.106.97])
-        by ushosting.nmnhosting.com (Postfix) with ESMTPS id E68172DC0076;
-        Tue, 25 Jun 2019 21:28:43 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=d-silva.org;
-        s=201810a; t=1561512524;
-        bh=8vdGphBYIKXv89awGOAQ/cgWRG22AyeDg2eeDYLZ3zI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=alSxZcqu57hfIi9j9AhbXS8R6Sp8P9EIyLX38MQJ9PvxVXzIuDLw+GMwM5K31tSbM
-         gzdS9k+A1COhdwdvmxUTT7neeouLyzPVXBbbQIUqbYpng9jjLKSTVkUtfCzbM2traV
-         66aBsJesrmb2pquAr+ikAnlFtIz2MX8COw6xImMdDzX7cORTSmL/7suBd2fWgHGcSa
-         CSgtsbZsT6q7z1xworHDg8t0cQqtep34bRKMyEiFivuEsvS7KvfT0XDE+ir1QbaFpe
-         qNJCJvTwUWvEm1B+kFjLaSMS3n+SpewSyAwVWdMioky2aZjNRxFrSlIwEMfnHy7fKu
-         37248Myte0LZ3cwEfXQtWD4I3ropVT1011THvyQlNqoj5HYjPxJXzQS6TEePLg55il
-         d1e10RdRKAs0H649v7SEHnGTaG5XhEUbgoBfaN+rXX2kxC+uvk3GCCKHYYkcJZAAgv
-         0NREGULbA9C+5QStsPe8IqzAuUhhWmKLguptMEYpWMMi4DrZ/q7woDAkIOBtw70S9z
-         xBmgxWDEVL3pwhhtGcpR0yZETTuHII506PHFURlIBdSloaX9GFdyV5O/4o4dYbggD2
-         FPLHvHF+9fk1N7j7sdJKzKIP2EWISpMCfTv7hDzkRR1480DJuZxLGr/YfvYJtT2cBa
-         aQ8Wmv3nDA7FqMwj0k32Ebg8=
-Received: from adsilva.ozlabs.ibm.com (static-82-10.transact.net.au [122.99.82.10] (may be forged))
-        (authenticated bits=0)
-        by mail2.nmnhosting.com (8.15.2/8.15.2) with ESMTPSA id x5Q1SOP1029666
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 26 Jun 2019 11:28:39 +1000 (AEST)
-        (envelope-from alastair@d-silva.org)
-Message-ID: <ef3aac0cb37fd7bb421db313e839809fd7649d05.camel@d-silva.org>
-Subject: Re: [PATCH v4 5/7] lib/hexdump.c: Allow multiple groups to be
- separated by lines '|'
-From:   "Alastair D'Silva" <alastair@d-silva.org>
-To:     Joe Perches <joe@perches.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Stanislaw Gruszka <sgruszka@redhat.com>,
-        Benson Leung <bleung@chromium.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-fsdevel@vger.kernel.org
-Date:   Wed, 26 Jun 2019 11:28:01 +1000
-In-Reply-To: <c364c36338d385eba60c523828ad8995c792ae4d.camel@perches.com>
-References: <20190625031726.12173-1-alastair@au1.ibm.com>
-         <20190625031726.12173-6-alastair@au1.ibm.com>
-         <c364c36338d385eba60c523828ad8995c792ae4d.camel@perches.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.2 (3.32.2-1.fc30) 
+        id S1726549AbfFZBiJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 21:38:09 -0400
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:15066 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbfFZBiI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 21:38:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1561513088; x=1593049088;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=HAX9bjKesgLkDyPdkUx59AA6olcn0kK3yvInepWdkF4=;
+  b=W1Xus/tNBmnVVl9kcQh+iks3oZl79VEzZgn9Jk1gaanMbrI8yL/L3LTD
+   gboshYBo3gF2pWXYAORI57xsKGvOgKQqT8ZMvPLRfRcOjrs1374jF0vb2
+   ehPE2DFC5jFMzVbPai+iS78FidcNp5p2NypRT2wg/umc++E9zEuBZ9n3o
+   uvl1F2anf4vrA7MWi1zCH+nY+sXQmTlps6/GHHilpUxnb+Bmyh99G0A7J
+   SDlrxLwb7MME3zkbpPZXTrCd8qBjWeJ0ISvusfOlZ6JCXDiewLM5LaPxr
+   wMgiOs9423gc3qMIa7GTGcZSieYe1ES4HvizUnS1gIvU5l2jSuj0i2P2n
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.63,418,1557158400"; 
+   d="scan'208";a="116422019"
+Received: from mail-co1nam04lp2050.outbound.protection.outlook.com (HELO NAM04-CO1-obe.outbound.protection.outlook.com) ([104.47.45.50])
+  by ob1.hgst.iphmx.com with ESMTP; 26 Jun 2019 09:38:07 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QB+EqwU8JWtOyRnZ5zjDrCnv7+9ZgHS9hD6R8W8gGa4=;
+ b=x5EWgi/R5qJxBz+h8RTvl0VgFr7C3XfaroqMs/cwQCXCOmqaWdXrznxj8mWUzSrWAnnhSke6Q/uA0vVEUtB8aZKVXohFrunvybYFF16g2Cre6or6a+mvRpUG35PKc1ZBtFBaOaUxn+z9nXP0G6qkdX8cT7RvNEFWEYSlRc3LZyU=
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.58.207) by
+ BYAPR04MB4341.namprd04.prod.outlook.com (20.176.251.143) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.17; Wed, 26 Jun 2019 01:38:05 +0000
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::e94e:8ead:40b1:fae6]) by BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::e94e:8ead:40b1:fae6%7]) with mapi id 15.20.2008.017; Wed, 26 Jun 2019
+ 01:38:05 +0000
+From:   Damien Le Moal <Damien.LeMoal@wdc.com>
+To:     Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>
+CC:     Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 1/3] block: Allow mapping of vmalloc-ed buffers
+Thread-Topic: [PATCH 1/3] block: Allow mapping of vmalloc-ed buffers
+Thread-Index: AQHVKwA0O+IlYIAO80SILz5RMubhpQ==
+Date:   Wed, 26 Jun 2019 01:38:05 +0000
+Message-ID: <BYAPR04MB58160BAAFBDE4C399C412F1FE7E20@BYAPR04MB5816.namprd04.prod.outlook.com>
+References: <20190625024625.23976-1-damien.lemoal@wdc.com>
+ <20190625024625.23976-2-damien.lemoal@wdc.com>
+ <BYAPR04MB5749C9178CB54B4A488408A986E30@BYAPR04MB5749.namprd04.prod.outlook.com>
+ <47ab2698-9767-b080-59b7-2c4b3afaa6d3@acm.org>
+ <BYAPR04MB57498FD0AE458FE6196DD7BA86E30@BYAPR04MB5749.namprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Damien.LeMoal@wdc.com; 
+x-originating-ip: [199.255.47.12]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c701dc64-7647-4bdc-4607-08d6f9d6efab
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB4341;
+x-ms-traffictypediagnostic: BYAPR04MB4341:
+wdcipoutbound: EOP-TRUE
+x-microsoft-antispam-prvs: <BYAPR04MB4341D9FAD6DF1411F4D20CE7E7E20@BYAPR04MB4341.namprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 00808B16F3
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(376002)(136003)(396003)(366004)(346002)(189003)(199004)(66556008)(64756008)(5660300002)(73956011)(66446008)(66946007)(52536014)(76116006)(91956017)(66476007)(256004)(2906002)(229853002)(14454004)(2501003)(446003)(6116002)(3846002)(486006)(72206003)(476003)(4744005)(33656002)(68736007)(71190400001)(71200400001)(8936002)(6246003)(6436002)(26005)(66066001)(305945005)(102836004)(74316002)(7736002)(9686003)(53936002)(110136005)(86362001)(316002)(53546011)(81156014)(55016002)(81166006)(25786009)(4326008)(6506007)(7696005)(76176011)(99286004)(186003)(478600001)(8676002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4341;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: bhvVCy3BvboGAGfolkTL/O/4ye2V8ZYkBp4ZIC6UwjXahgXfFhvA+zgqunTE851F8W3cRzqTGDKlFGhCEly9QHy8c5h8YiHt+VW0ErLm3sRUsNyRHlAfwGyduqUBlEoN+8gAlVvlMDNI2MZ9JGTCTbzncNuyHkccm7QBeWvs9xPNKdUg03RFTBl7Ev3HRhsjr297LsUxPicPJ0M1VCtSXV2T4A+v0Bq5If0L/SD8L55iKRHF9dA50/v9EY4ZJ+24X3dUGnhUDcXGbJeGnRNkYc2SG85VB66DiaEDmWuYVV9k5PMT3nVad6aDaBG2/bMJBZGMA+lhaUtUb4Q0wF+vpwLVxTsUnF3gtx0hWEwgbS02AXoJgaIFpjFbkxWG4fsuMIDqMJcyobeyu07xO2C7oP7IfcZyu209C72wX6vG4/0=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail2.nmnhosting.com [10.0.1.20]); Wed, 26 Jun 2019 11:28:40 +1000 (AEST)
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c701dc64-7647-4bdc-4607-08d6f9d6efab
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jun 2019 01:38:05.7851
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Damien.LeMoal@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4341
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 2019-06-24 at 22:37 -0700, Joe Perches wrote:
-> On Tue, 2019-06-25 at 13:17 +1000, Alastair D'Silva wrote:
-> > From: Alastair D'Silva <alastair@d-silva.org>
-> > 
-> > With the wider display format, it can become hard to identify how
-> > many
-> > bytes into the line you are looking at.
-> > 
-> > The patch adds new flags to hex_dump_to_buffer() and
-> > print_hex_dump() to
-> > print vertical lines to separate every N groups of bytes.
-> > 
-> > eg.
-> > buf:00000000: 454d414e 43415053|4e495f45
-> > 00584544  NAMESPAC|E_INDEX.
-> > buf:00000010: 00000000 00000002|00000000
-> > 00000000  ........|........
-> > 
-> > Signed-off-by: Alastair D'Silva <alastair@d-silva.org>
-> > ---
-> >  include/linux/printk.h |  3 +++
-> >  lib/hexdump.c          | 59 ++++++++++++++++++++++++++++++++++++
-> > ------
-> >  2 files changed, 54 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/include/linux/printk.h b/include/linux/printk.h
-> []
-> > @@ -485,6 +485,9 @@ enum {
-> >  
-> >  #define HEXDUMP_ASCII			BIT(0)
-> >  #define HEXDUMP_SUPPRESS_REPEATED	BIT(1)
-> > +#define HEXDUMP_2_GRP_LINES		BIT(2)
-> > +#define HEXDUMP_4_GRP_LINES		BIT(3)
-> > +#define HEXDUMP_8_GRP_LINES		BIT(4)
-> 
-> These aren't really bits as only one value should be set
-> as 8 overrides 4 and 4 overrides 2.
-
-This should be the other way around, as we should be emitting alternate
-seperators based on the smallest grouping (2 implies 4 and 8, and 4
-implies 8). I'll fix the logic.
-
-I can't come up with a better way to represent these without making the
-API more complex, if you have a suggestion, I'm happy to hear it.
-
-> 
-> I would also expect this to be a value of 2 in your above
-> example, rather than 8.  It's described as groups not bytes.
-> 
-> The example is showing a what would normally be a space ' '
-> separator as a vertical bar '|' every 2nd grouping.
-> 
-
-The above example shows a group size of 4 bytes, and
-HEXDUMP_2_GRP_LINES set, with 2 groups being 8 bytes.
-
-I'll make that clearer in the commit message.
-
--- 
-Alastair D'Silva           mob: 0423 762 819
-skype: alastair_dsilva    
-Twitter: @EvilDeece
-blog: http://alastair.d-silva.org
-
-
+On 2019/06/26 1:06, Chaitanya Kulkarni wrote:=0A=
+> On 06/25/2019 08:59 AM, Bart Van Assche wrote:=0A=
+>> On 6/24/19 8:24 PM, Chaitanya Kulkarni wrote:=0A=
+>>> nit:- Can we use is_vmalloc_addr() call directly so that=0A=
+>>> "if (is_vmalloc)" ->  "if (is_vmalloc_addr(data))" and remove is_vmallo=
+c=0A=
+>>> variable.=0A=
+>> That would change a single call of is_vmalloc_addr() into multiple?=0A=
+> =0A=
+> Well is_vmalloc_addr() it is an in-line helper with address comparison.=
+=0A=
+> =0A=
+> is it too expensive to have such a comparison in the loop ?=0A=
+=0A=
+Probably not, but I do not see the point in calling it for every page eithe=
+r=0A=
+since the cost of the additional bool on the stack is likely also very low.=
+=0A=
+=0A=
+-- =0A=
+Damien Le Moal=0A=
+Western Digital Research=0A=
