@@ -2,154 +2,156 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55FED562B6
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 08:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B6F5645C
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 10:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726828AbfFZGyo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jun 2019 02:54:44 -0400
-Received: from esa6.hgst.iphmx.com ([216.71.154.45]:6026 "EHLO
-        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725797AbfFZGyo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jun 2019 02:54:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1561532084; x=1593068084;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lg8pbEXqIGRxgTLVtp82Eq91m5uzXzwMVXBnCRVLznI=;
-  b=SM3U5xNOZV7tLSs98JA3uEiHfVt/68zCr8lb1VVy9y8EticzcUwltiAR
-   dWl8TTQvCxUraLBP7W//LTjXIqS22BSqKDA3ZNlFG7AjNPj095nFPGLpr
-   VoQhYw5nnVLrJmXnsa7rB2ykzsd75D6YzkyxtZUPOcZcl9Buoxagyh5oV
-   Lcfgltyv0osqKXd7T+pxbl09goOHxSfM5axo+lutVam80xdxtuWnmPRHC
-   545vTj4bGAt6AH6C62pqpogW7sTXi8ZbwZ+KS6FBMwEsEjgjL1/Xohg/F
-   f4oycu0y7oIBH2y5XmqNEWZgDhHy4sVD/HGM+npE6EdAj5DwfMKfQ7zIr
-   w==;
-X-IronPort-AV: E=Sophos;i="5.63,418,1557158400"; 
-   d="scan'208";a="113191703"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Jun 2019 14:54:44 +0800
-IronPort-SDR: bmORhHA7aTB2gYCjuZF4T880EfeucvE0q/RmsIuj9HaDHqBSvddiQ85Lm8rc6GZxzi0qO5eMGn
- B5Fp4P5QwMT3AbUMA8QYn3/njU4IpzlmD83+h+NS9oWfjLYC9p3XLUKv14PaxDM1o/FhWYkytV
- OsDDr4XcAkuIcMuqQteH8SdTypno29kgti5jggksoeKhWN8mF1DEdhMJj6zWyzp7jhpYNfyAPy
- kvhucwzgo+QVP4ysyBHOg5O8v833HUIL9zX+TAFoJPPMLI61NlauEUPRyH5IR2aM8fl0mbgdvl
- kIyvn4V9b5OOOkg75ZHFChBF
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP; 25 Jun 2019 23:53:59 -0700
-IronPort-SDR: geqr5wrf7iTpSBlPFWkEbdWJAoVbqZr4G4trWXWPy1eZNlGWv0XAoFJnUULODTJQB6t0D7DWnE
- bu3Wk7/BE2SzyzWE9mD1r4kjkPwz/XDODk7+wxfF1BeCqkbpSUrxzM2v5QkIe8Jmv8HAVbgR9N
- 8lWlt+Kn79l57jlVSSlkXfP0qBv3SssKkCYTCIsaMyULvrJwZdIeRJ+udPrK1jjIAPm4h0F6uY
- cVNPbsOX7aFVOw9hHwdv7wl5i0LWBV0d9+17HJ/+0AMJlZ4BPv6pFH9AnL8cYmm53kAn/yZTba
- nQ8=
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip02.wdc.com with ESMTP; 25 Jun 2019 23:54:42 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     linux-scsi@vger.kernel.org,
+        id S1725876AbfFZIRq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jun 2019 04:17:46 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12504 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726341AbfFZIRp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 26 Jun 2019 04:17:45 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5Q8HXRO117998
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Jun 2019 04:17:44 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tc2j1nkks-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Jun 2019 04:17:44 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <maier@linux.ibm.com>;
+        Wed, 26 Jun 2019 09:17:41 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 26 Jun 2019 09:17:35 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5Q8HZfM34340886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jun 2019 08:17:35 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E5A67A4040;
+        Wed, 26 Jun 2019 08:17:34 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0BAC0A4051;
+        Wed, 26 Jun 2019 08:17:34 +0000 (GMT)
+Received: from oc4120165700.ibm.com (unknown [9.152.99.211])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jun 2019 08:17:33 +0000 (GMT)
+Subject: Re: [PATCH V5 10/16] s390: zfcp_fc: use sg helper to operate
+ scatterlist
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH V3 3/3] block: Limit zone array allocation size
-Date:   Wed, 26 Jun 2019 15:54:38 +0900
-Message-Id: <20190626065438.19307-4-damien.lemoal@wdc.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190626065438.19307-1-damien.lemoal@wdc.com>
-References: <20190626065438.19307-1-damien.lemoal@wdc.com>
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
+        Cathy Avery <cavery@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Brian King <brking@us.ibm.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Juergen E . Fischer" <fischer@norbit.de>,
+        Michael Schmitz <schmitzmic@gmail.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        linux-s390@vger.kernel.org
+References: <20190618013757.22401-1-ming.lei@redhat.com>
+ <20190618013757.22401-11-ming.lei@redhat.com>
+ <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com>
+ <20190625011902.GA23777@ming.t460p>
+ <93d3d89e-a9ae-691f-d1f8-0463f714957d@linux.ibm.com>
+ <20190626030751.GA26340@ming.t460p>
+From:   Steffen Maier <maier@linux.ibm.com>
+Date:   Wed, 26 Jun 2019 10:17:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190626030751.GA26340@ming.t460p>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19062608-4275-0000-0000-000003465983
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19062608-4276-0000-0000-000038565D75
+Message-Id: <1353d755-de62-d575-4c7b-d20d59d07f23@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-26_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906260101
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Limit the size of the struct blk_zone array used in
-blk_revalidate_disk_zones() to avoid memory allocation failures leading
-to disk revalidation failure. Further reduce the likelyhood of these
-failures by using kvmalloc() instead of directly allocating contiguous
-pages.
+Hi Ming,
 
-Fixes: 515ce6061312 ("scsi: sd_zbc: Fix sd_zbc_report_zones() buffer allocation")
-Fixes: e76239a3748c ("block: add a report_zones method")
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
----
- block/blk-zoned.c      | 29 +++++++++++++----------------
- include/linux/blkdev.h |  5 +++++
- 2 files changed, 18 insertions(+), 16 deletions(-)
+On 6/26/19 5:07 AM, Ming Lei wrote:
+> On Tue, Jun 25, 2019 at 12:51:04PM +0200, Steffen Maier wrote:
+>> I don't mind doing this change for zfcp. However, I'm having doubts
+>> regarding the rationale in the commit description.
 
-diff --git a/block/blk-zoned.c b/block/blk-zoned.c
-index ae7e91bd0618..26f878b9b5f5 100644
---- a/block/blk-zoned.c
-+++ b/block/blk-zoned.c
-@@ -373,22 +373,20 @@ static inline unsigned long *blk_alloc_zone_bitmap(int node,
-  * Allocate an array of struct blk_zone to get nr_zones zone information.
-  * The allocated array may be smaller than nr_zones.
-  */
--static struct blk_zone *blk_alloc_zones(int node, unsigned int *nr_zones)
-+static struct blk_zone *blk_alloc_zones(unsigned int *nr_zones)
- {
--	size_t size = *nr_zones * sizeof(struct blk_zone);
--	struct page *page;
--	int order;
--
--	for (order = get_order(size); order >= 0; order--) {
--		page = alloc_pages_node(node, GFP_NOIO | __GFP_ZERO, order);
--		if (page) {
--			*nr_zones = min_t(unsigned int, *nr_zones,
--				(PAGE_SIZE << order) / sizeof(struct blk_zone));
--			return page_address(page);
--		}
-+	struct blk_zone *zones;
-+	size_t nrz = min(*nr_zones, BLK_ZONED_REPORT_MAX_ZONES);
-+
-+	zones = kvcalloc(nrz, sizeof(struct blk_zone), GFP_NOIO);
-+	if (!zones) {
-+		*nr_zones = 0;
-+		return NULL;
- 	}
- 
--	return NULL;
-+	*nr_zones = nrz;
-+
-+	return zones;
- }
- 
- void blk_queue_free_zone_bitmaps(struct request_queue *q)
-@@ -443,7 +441,7 @@ int blk_revalidate_disk_zones(struct gendisk *disk)
- 
- 	/* Get zone information and initialize seq_zones_bitmap */
- 	rep_nr_zones = nr_zones;
--	zones = blk_alloc_zones(q->node, &rep_nr_zones);
-+	zones = blk_alloc_zones(&rep_nr_zones);
- 	if (!zones)
- 		goto out;
- 
-@@ -480,8 +478,7 @@ int blk_revalidate_disk_zones(struct gendisk *disk)
- 	blk_mq_unfreeze_queue(q);
- 
- out:
--	free_pages((unsigned long)zones,
--		   get_order(rep_nr_zones * sizeof(struct blk_zone)));
-+	kvfree(zones);
- 	kfree(seq_zones_wlock);
- 	kfree(seq_zones_bitmap);
- 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 592669bcc536..f7faac856017 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -344,6 +344,11 @@ struct queue_limits {
- 
- #ifdef CONFIG_BLK_DEV_ZONED
- 
-+/*
-+ * Maximum number of zones to report with a single report zones command.
-+ */
-+#define BLK_ZONED_REPORT_MAX_ZONES	8192U
-+
- extern unsigned int blkdev_nr_zones(struct block_device *bdev);
- extern int blkdev_report_zones(struct block_device *bdev,
- 			       sector_t sector, struct blk_zone *zones,
+> However, I still suggest to do it because it will make us to audit SCSI chained
+> sg uses much easier. And the change shouldn't have performance effect.
+
+>> If I was not mistaken above, the following could be more descriptive parts
+>> of a patch/commit description, with hopefully less confusion for anyone
+>> having to look at zfcp git history a few weeks/months/years from now:
+>>
+>> "While not required for this SCSI MQ change regarding scatterlist
+>> allocation, change all other scatterlist iterators in zfcp to the safe
+>> sg_next() even if not necessary as these changed zfcp-internal scatterlists
+>> are linear and unchained. This may avoid confusion about a potential need
+>> for conversions in the future."
+
+Sure, let's change the code, but could you please update the description of 
+your below new patch to something like I drafted above regarding rationale?
+
+If you would like to send a V2, I'll be happy to give a Reviewed-by.
+
+>>>   From c9c368308fefbf034d670984fe9746a4181fe514 Mon Sep 17 00:00:00 2001
+>>> From: Ming Lei <ming.lei@redhat.com>
+>>> Date: Tue, 25 Jun 2019 09:15:34 +0800
+>>> Subject: [PATCH] s390: scsi: use sg helper to iterate over scatterlist
+
+>>> Unlike the legacy I/O path, scsi-mq preallocates a large array to hold
+>>> the scatterlist for each request. This static allocation can consume
+>>> substantial amounts of memory on modern controllers which support a
+>>> large number of concurrently outstanding requests.
+
+>>> To facilitate a switch to a smaller static allocation combined with a
+>>> dynamic allocation for requests that need it, we need to make sure all
+>>> SCSI drivers handle chained scatterlists correctly.
+
+>>> Convert remaining drivers that directly dereference the scatterlist
+>>> array to using the iterator functions.
+
+> OK, I still suggest to apply the patch for the mentioned reason if you
+> are fine.
+
+
+
 -- 
-2.21.0
+Mit freundlichen Gruessen / Kind regards
+Steffen Maier
+
+Linux on IBM Z Development
+
+https://www.ibm.com/privacy/us/en/
+IBM Deutschland Research & Development GmbH
+Vorsitzender des Aufsichtsrats: Matthias Hartmann
+Geschaeftsfuehrung: Dirk Wittkopp
+Sitz der Gesellschaft: Boeblingen
+Registergericht: Amtsgericht Stuttgart, HRB 243294
 
