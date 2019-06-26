@@ -2,154 +2,198 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51ED755DEF
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 03:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DFF455F2A
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 04:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbfFZBsG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 21:48:06 -0400
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:15693 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726401AbfFZBsF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Jun 2019 21:48:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1561513685; x=1593049685;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lg8pbEXqIGRxgTLVtp82Eq91m5uzXzwMVXBnCRVLznI=;
-  b=aQi5wADhiDEtCJ3BHRVBpBE9Lq+sEDSZTwzUI2xP55f5i68X4T+lZ+cC
-   Z9CRBaxeSmS9O/CxnAqggbJ84h3M3EqLH5KRAgiCZB3rR36iHOWMC7Xcy
-   B/7EGe2BdsLCr0RkSZJj8tUbwVshYuofdMU2l/2/aBNRcFFIF2uX5go8r
-   076ERCt0RqeGaS2bUiEUjHIBQy1lL90x6U7mXlhUvgCfiFRXFtr2d+eC5
-   dj21VT3dLH1dYcJvG9oSM/u11h3WmTIIkTW6ypBY5tbe86WUa0nDW4p23
-   SdCSQxkoGJmpyubKHFwe3Zne3LjnAkvyrfoAMIJxfrbRsV7YMM0NHDTJN
-   g==;
-X-IronPort-AV: E=Sophos;i="5.63,418,1557158400"; 
-   d="scan'208";a="116422529"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 26 Jun 2019 09:48:05 +0800
-IronPort-SDR: qOTpe0DgvT2kbr4ZRc65rQ/WV56GJ4qjw4c1z2Np58uNJpNj1GXBuTfbv1pRxg5iXd0BpI5y2J
- 9hm28/A7T/n59MGXgbqIHT1L3EIyX7CEtUtZvF6svLUehIS7Edg/Gcj2KimP1LwUDwPQu6isdP
- HX65Kf3bVk6Wvtubd8GHcEeUtK+LvMo6TP5kERry4rCorhL/mgHvRncpw8mApoD1upKUY2igb2
- 0nL6QC2zxE4RkteTK+WfDfkCpxr3RotmSqqXViVm+LSPyGKjoKLlm2JIfESn18V6Ho788lhJrU
- 8qhomkrIjm5HKNwB7zkWl4WQ
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP; 25 Jun 2019 18:47:15 -0700
-IronPort-SDR: H4nLPmYfq04J07ckE/4WlprUwtVMa0PVFo+Q4P6rLf3po4rMydwLksfkOQmiKuBQDhugAmisGH
- R9f6seEXxfEh1uJdcfV3dAw7G4ReMms/3XKAuanQs6UiR0wYzNeCB7uAuZT8d7aA8NTbdiFFNr
- 63YDb/rKnot4mNriGXn5bQTsACiiXwiIwsR5e0O/dnWmo6znvIexi6PMDAuUN/9SY+sIi4Nsgy
- p/pKagM/CJhpylikmnHf40Qg6fMgUtg34ePHfN8zk4nChpttv/c0MXC+hB6fw2sbttCBi9yCAP
- Iak=
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip02.wdc.com with ESMTP; 25 Jun 2019 18:48:03 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH V2 3/3] block: Limit zone array allocation size
-Date:   Wed, 26 Jun 2019 10:47:59 +0900
-Message-Id: <20190626014759.15285-4-damien.lemoal@wdc.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190626014759.15285-1-damien.lemoal@wdc.com>
-References: <20190626014759.15285-1-damien.lemoal@wdc.com>
+        id S1726387AbfFZCrm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 22:47:42 -0400
+Received: from smtp.h3c.com ([60.191.123.56]:25511 "EHLO h3cspam01-ex.h3c.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726339AbfFZCrm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 25 Jun 2019 22:47:42 -0400
+Received: from DAG2EX10-IDC.srv.huawei-3com.com ([10.8.0.73])
+        by h3cspam01-ex.h3c.com with ESMTPS id x5Q2lHVb093319
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 26 Jun 2019 10:47:17 +0800 (GMT-8)
+        (envelope-from zhang.guanghui@h3c.com)
+Received: from DAG2EX10-IDC.srv.huawei-3com.com (10.8.0.73) by
+ DAG2EX10-IDC.srv.huawei-3com.com (10.8.0.73) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Wed, 26 Jun 2019 10:47:18 +0800
+Received: from BJHUB01-EX.srv.huawei-3com.com (10.63.20.169) by
+ DAG2EX10-IDC.srv.huawei-3com.com (10.8.0.73) with Microsoft SMTP Server
+ (version=TLS1_0, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.1.1713.5
+ via Frontend Transport; Wed, 26 Jun 2019 10:47:18 +0800
+Received: from H3CMLB12-EX.srv.huawei-3com.com ([fe80::10fe:abde:731b:fdde])
+ by BJHUB01-EX.srv.huawei-3com.com ([::1]) with mapi id 14.03.0415.000; Wed,
+ 26 Jun 2019 10:47:11 +0800
+From:   Zhangguanghui <zhang.guanghui@h3c.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+CC:     "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        Zhangguanghui <zhang.guanghui@h3c.com>,
+        "linux-scsi (linux-scsi@vger.kernel.org)" 
+        <linux-scsi@vger.kernel.org>
+Subject: scsi_dh_alua: re-initialize pg->interval in alua_rtpg_work
+Thread-Topic: scsi_dh_alua: re-initialize pg->interval in alua_rtpg_work
+Thread-Index: AdUZFvRVssxeCtkaRVKiSohiNkbGogAExAKABKbwJkA=
+Date:   Wed, 26 Jun 2019 02:47:10 +0000
+Message-ID: <E3535A62B291B54FBD1D003696CCB537011CED1F5C@H3CMLB12-EX.srv.huawei-3com.com>
+References: <E3535A62B291B54FBD1D003696CCB5370109330EA0@H3CMLB14-EX.srv.huawei-3com.com>
+ <20190602180033.GR24680@kadam>
+In-Reply-To: <20190602180033.GR24680@kadam>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.114.72.62]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-DNSRBL: 
+X-MAIL: h3cspam01-ex.h3c.com x5Q2lHVb093319
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Limit the size of the struct blk_zone array used in
-blk_revalidate_disk_zones() to avoid memory allocation failures leading
-to disk revalidation failure. Further reduce the likelyhood of these
-failures by using kvmalloc() instead of directly allocating contiguous
-pages.
-
-Fixes: 515ce6061312 ("scsi: sd_zbc: Fix sd_zbc_report_zones() buffer allocation")
-Fixes: e76239a3748c ("block: add a report_zones method")
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
----
- block/blk-zoned.c      | 29 +++++++++++++----------------
- include/linux/blkdev.h |  5 +++++
- 2 files changed, 18 insertions(+), 16 deletions(-)
-
-diff --git a/block/blk-zoned.c b/block/blk-zoned.c
-index ae7e91bd0618..26f878b9b5f5 100644
---- a/block/blk-zoned.c
-+++ b/block/blk-zoned.c
-@@ -373,22 +373,20 @@ static inline unsigned long *blk_alloc_zone_bitmap(int node,
-  * Allocate an array of struct blk_zone to get nr_zones zone information.
-  * The allocated array may be smaller than nr_zones.
-  */
--static struct blk_zone *blk_alloc_zones(int node, unsigned int *nr_zones)
-+static struct blk_zone *blk_alloc_zones(unsigned int *nr_zones)
- {
--	size_t size = *nr_zones * sizeof(struct blk_zone);
--	struct page *page;
--	int order;
--
--	for (order = get_order(size); order >= 0; order--) {
--		page = alloc_pages_node(node, GFP_NOIO | __GFP_ZERO, order);
--		if (page) {
--			*nr_zones = min_t(unsigned int, *nr_zones,
--				(PAGE_SIZE << order) / sizeof(struct blk_zone));
--			return page_address(page);
--		}
-+	struct blk_zone *zones;
-+	size_t nrz = min(*nr_zones, BLK_ZONED_REPORT_MAX_ZONES);
-+
-+	zones = kvcalloc(nrz, sizeof(struct blk_zone), GFP_NOIO);
-+	if (!zones) {
-+		*nr_zones = 0;
-+		return NULL;
- 	}
- 
--	return NULL;
-+	*nr_zones = nrz;
-+
-+	return zones;
- }
- 
- void blk_queue_free_zone_bitmaps(struct request_queue *q)
-@@ -443,7 +441,7 @@ int blk_revalidate_disk_zones(struct gendisk *disk)
- 
- 	/* Get zone information and initialize seq_zones_bitmap */
- 	rep_nr_zones = nr_zones;
--	zones = blk_alloc_zones(q->node, &rep_nr_zones);
-+	zones = blk_alloc_zones(&rep_nr_zones);
- 	if (!zones)
- 		goto out;
- 
-@@ -480,8 +478,7 @@ int blk_revalidate_disk_zones(struct gendisk *disk)
- 	blk_mq_unfreeze_queue(q);
- 
- out:
--	free_pages((unsigned long)zones,
--		   get_order(rep_nr_zones * sizeof(struct blk_zone)));
-+	kvfree(zones);
- 	kfree(seq_zones_wlock);
- 	kfree(seq_zones_bitmap);
- 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 592669bcc536..f7faac856017 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -344,6 +344,11 @@ struct queue_limits {
- 
- #ifdef CONFIG_BLK_DEV_ZONED
- 
-+/*
-+ * Maximum number of zones to report with a single report zones command.
-+ */
-+#define BLK_ZONED_REPORT_MAX_ZONES	8192U
-+
- extern unsigned int blkdev_nr_zones(struct block_device *bdev);
- extern int blkdev_report_zones(struct block_device *bdev,
- 			       sector_t sector, struct blk_zone *zones,
--- 
-2.21.0
-
+SGkNCiAgICAgICAgVGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgeW91IHJlcGx5LCBJIGhhdmUgdHJp
+ZWQgdG8gY29udGFjdCAzUEFSDQphYm91dCB0aGlzIGlzc3VlLg0KICAgSHVuZHJlZHMgb2YgdGhl
+bSBmbG9vZGluZyB0aGUgbG9nIGZvciBzb21lIHNlY29uZHMgdGhhdCBpcyBhbiBzZXJpb3VzIHBy
+b2JsZW0uDQpJdCBjYW4gYmUgcmVwcm9kdWNlZCBvbiB0aGUgTGludXggNC4xNCBrZXJuZWwgdmVy
+c2lvbiBvciB0aGUgbGFzdGVzdCB2ZXJzaW9uIGZvciAzUEFSIHN0b3JhZ2UNClJlbW90ZSBDb3B5
+IEZhaWxvdmVyIHBsYXRmb3JtIHdoZW4gdGhlIG1haW4gc3RvcmFnZSBpcyBwb3dlcmVkIG9mZi4N
+CkhvdyB0byBzb2x2ZSBpdCA/DQoNCkkgaGF2ZSBmb3VuZCB0aGF0IHRoZSBsYXN0ZXN0IHBhdGNo
+ICdwZy0+aW50ZXJ2YWwgPSAyMDAwJyBpcyBpbmNvcnJlY3QsDQpwZy0+aW50ZXJ2YWwgPSAyIG1h
+eWJlIGlzIHJlYXNvbmFibGUsIDIgc2Vjb25kcyBkZWxheSwgcmV0cnkgLg0KQnV0IEkgaGF2ZSBh
+biBuZXcgaWRlYS4NCkkgYW0gd29uZGVyaW5nIGlmIHRoZSBwYXRjaCBpcyByZWFzb25hYmxlIHRv
+IHVzZSB0aGUgZnVuY3Rpb24gcHJpbnRrX3RpbWVkX3JhdGVsaW1pdCgmaiwgNTAwKSwNCmNhbiB5
+b3UgaGVscCBtZSByZXZpZXcgYW5kIGNvbW1pdCB0aGlzIHBhdGNoLCBCZXN0IHJlZ2FyZHMNCg0K
+RGV0YWlsczoNCkp1biAgMiAxMTo0Mjo0OCBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODEz
+MzJdIHNkIDE6MDozOjI6IFthbHVhXSBBZGQuIFNlbnNlOiBMb2dpY2FsIHVuaXQgbm90IGFjY2Vz
+c2libGUsIGFzeW1tZXRyaWMgYWNjZXNzIHN0YXRlIHRyYW5zaXRpb24NCkp1biAgMiAxMTo0Mjo0
+OCBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODEzODJdIHNkIDE6MDozOjE6IGFsdWE6IHJ0
+cGcgcmV0cnkNCkp1biAgMiAxMTo0Mjo0OCBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODEz
+ODhdIHNkIDE6MDozOjE6IFthbHVhXSBTZW5zZSBLZXkgOiBOb3QgUmVhZHkgW2N1cnJlbnRdDQpK
+dW4gIDIgMTE6NDI6NDggY3Zrbm9kZTIwNTgga2VybmVsOiBbIDg0NTEuODgxMzkwXSBzZCAxOjA6
+MzoxOiBbYWx1YV0gQWRkLiBTZW5zZTogTG9naWNhbCB1bml0IG5vdCBhY2Nlc3NpYmxlLCBhc3lt
+bWV0cmljIGFjY2VzcyBzdGF0ZSB0cmFuc2l0aW9uDQpKdW4gIDIgMTE6NDI6NDggY3Zrbm9kZTIw
+NTgga2VybmVsOiBbIDg0NTEuODgxMzk0XSBzZCA4OjA6MzowOiBhbHVhOiBydHBnIHJldHJ5DQpK
+dW4gIDIgMTE6NDI6NDggY3Zrbm9kZTIwNTgga2VybmVsOiBbIDg0NTEuODgxNDAwXSBzZCA4OjA6
+MzowOiBbYWx1YV0gU2Vuc2UgS2V5IDogTm90IFJlYWR5IFtjdXJyZW50XQ0KSnVuICAyIDExOjQy
+OjQ4IGN2a25vZGUyMDU4IGtlcm5lbDogWyA4NDUxLjg4MTQwMV0gc2QgODowOjM6MDogW2FsdWFd
+IEFkZC4gU2Vuc2U6IExvZ2ljYWwgdW5pdCBub3QgYWNjZXNzaWJsZSwgYXN5bW1ldHJpYyBhY2Nl
+c3Mgc3RhdGUgdHJhbnNpdGlvbg0KSnVuICAyIDExOjQyOjQ4IGN2a25vZGUyMDU4IGtlcm5lbDog
+WyA4NDUxLjg4MTQyMV0gc2QgMTowOjM6MjogYWx1YTogcnRwZyByZXRyeQ0KSnVuICAyIDExOjQy
+OjQ4IGN2a25vZGUyMDU4IGtlcm5lbDogWyA4NDUxLjg4MTQyN10gc2QgMTowOjM6MjogW2FsdWFd
+IFNlbnNlIEtleSA6IE5vdCBSZWFkeSBbY3VycmVudF0NCkp1biAgMiAxMTo0Mjo0OCBjdmtub2Rl
+MjA1OCBrZXJuZWw6IFsgODQ1MS44ODE0MjhdIHNkIDE6MDozOjI6IFthbHVhXSBBZGQuIFNlbnNl
+OiBMb2dpY2FsIHVuaXQgbm90IGFjY2Vzc2libGUsIGFzeW1tZXRyaWMgYWNjZXNzIHN0YXRlIHRy
+YW5zaXRpb24NCkp1biAgMiAxMTo0Mjo0OCBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODE0
+ODFdIHNkIDE6MDozOjE6IGFsdWE6IHJ0cGcgcmV0cnkNCg0KDQpAQCAtNTc2LDkgKzU3NiwxMiBA
+QCBzdGF0aWMgaW50IGFsdWFfcnRwZyhzdHJ1Y3Qgc2NzaV9kZXZpY2UgKnNkZXYsIHN0cnVjdCBh
+bHVhX3BvcnRfZ3JvdXAgKnBnKQ0KICAgICAgICAgICAgICAgICAgICAgICAgZXJyID0gU0NTSV9E
+SF9SRVRSWTsNCiAgICAgICAgICAgICAgICBpZiAoZXJyID09IFNDU0lfREhfUkVUUlkgJiYNCiAg
+ICAgICAgICAgICAgICAgICAgcGctPmV4cGlyeSAhPSAwICYmIHRpbWVfYmVmb3JlKGppZmZpZXMs
+IHBnLT5leHBpcnkpKSB7DQotICAgICAgICAgICAgICAgICAgICAgICBzZGV2X3ByaW50ayhLRVJO
+X0VSUiwgc2RldiwgIiVzOiBydHBnIHJldHJ5XG4iLA0KKyAgICAgICAgICAgICAgICAgICAgICAg
+c3RhdGljIHVuc2lnbmVkIGxvbmcgaW50IGo7DQorICAgICAgICAgICAgICAgICAgICAgICBpZiAo
+cHJpbnRrX3RpbWVkX3JhdGVsaW1pdCgmaiwgNTAwKSkgew0KKyAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICBzZGV2X3ByaW50ayhLRVJOX0VSUiwgc2RldiwgIiVzOiBydHBnIHJldHJ5XG4i
+LA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgQUxVQV9ESF9OQU1FKTsNCi0g
+ICAgICAgICAgICAgICAgICAgICAgIHNjc2lfcHJpbnRfc2Vuc2VfaGRyKHNkZXYsIEFMVUFfREhf
+TkFNRSwgJnNlbnNlX2hkcik7DQorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNjc2lf
+cHJpbnRfc2Vuc2VfaGRyKHNkZXYsIEFMVUFfREhfTkFNRSwgJnNlbnNlX2hkcik7DQorICAgICAg
+ICAgICAgICAgICAgICAgICB9DQogICAgICAgICAgICAgICAgICAgICAgICBrZnJlZShidWZmKTsN
+CiAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiBlcnI7DQogICAgICAgICAgICAgICAgfQ0K
+DQoNCi0tLS0t6YKu5Lu25Y6f5Lu2LS0tLS0NCuWPkeS7tuS6ujogRGFuIENhcnBlbnRlciBbbWFp
+bHRvOmRhbi5jYXJwZW50ZXJAb3JhY2xlLmNvbV0NCuWPkemAgeaXtumXtDogMjAxOeW5tDbmnIgz
+5pelIDI6MDENCuaUtuS7tuS6ujogemhhbmdndWFuZ2h1aSAoQ2xvdWQpDQrmioTpgIE6IG1hcnRp
+bi5wZXRlcnNlbkBvcmFjbGUuY29tDQrkuLvpopg6IFJlOiBzY3NpX2RoX2FsdWE6IHJlLWluaXRp
+YWxpemUgcGctPmludGVydmFsIGluIGFsdWFfcnRwZ193b3JrDQoNCk9uIFN1biwgSnVuIDAyLCAy
+MDE5IGF0IDA3OjU4OjE5QU0gKzAwMDAsIFpoYW5nZ3VhbmdodWkgd3JvdGU6DQo+IEhpDQo+DQo+
+IFRoZSBtZXNzYWdlcyBhcHBlYXIgYWZ0ZXIgYSAzUEFSIHN0b3JhZ2UgY29udHJvbGxlciBzaHV0
+ZG93biBhbmQgdGhlcmUgYXJlIGh1bmRyZWRzIG9mIHRoZW0gZmxvb2RpbmcgdGhlIGxvZy4NCj4N
+Cj4gdGhpcyBpcyBhbiBwcm9ibGVtLiBidXQgSeKAmW0gbm90IHN1cmUgaWYgdGhlIHBhdGNoIGlz
+IHJlYXNvbmFibGUuIENhbiB5b3UgaGVscCByZXZpZXcgdGhlIHBhdGNoLCB0aGFua3MuDQo+DQo+
+IEl0J3MgcG9zc2libGUgdG8gdXNlICIgcGctPmludGVydmFsID0gMCIsIHRoaXMgY2F1c2VzIGFu
+IGludGVuc2UgcmVxdWVpbmcgb2YgdGhlIEFMVUEgd29yayBxdWV1ZSBmb3Igc29tZXMgc2Vjb25k
+cyBhbmQgaXQgZmxvb2RzIHRoZSBrZXJuZWwgbG9nLg0KPg0KPiBUaGUgcmVwb3J0cyBwb2ludGVk
+IG91dCB0aGF0IHdlIHNob3VsZCBwcm9iYWJseSByZS1pbml0aWFsaXplIGl0IGZvciBldmVyeSBp
+dGVyYXRpb24gdGhyb3VnaCB0aGUgcmV0cnkgbG9vcC4NCj4gSnVuICAyIDExOjQyOjQ4IGN2a25v
+ZGUyMDU4IGtlcm5lbDogWyA4NDUxLjg4MTMzMl0gc2QgMTowOjM6MjogW2FsdWFdIEFkZC4gU2Vu
+c2U6IExvZ2ljYWwgdW5pdCBub3QgYWNjZXNzaWJsZSwgYXN5bW1ldHJpYyBhY2Nlc3Mgc3RhdGUg
+dHJhbnNpdGlvbg0KPiBKdW4gIDIgMTE6NDI6NDggY3Zrbm9kZTIwNTgga2VybmVsOiBbIDg0NTEu
+ODgxMzgyXSBzZCAxOjA6MzoxOiBhbHVhOiBydHBnIHJldHJ5DQo+IEp1biAgMiAxMTo0Mjo0OCBj
+dmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODEzODhdIHNkIDE6MDozOjE6IFthbHVhXSBTZW5z
+ZSBLZXkgOiBOb3QgUmVhZHkgW2N1cnJlbnRdDQo+IEp1biAgMiAxMTo0Mjo0OCBjdmtub2RlMjA1
+OCBrZXJuZWw6IFsgODQ1MS44ODEzOTBdIHNkIDE6MDozOjE6IFthbHVhXSBBZGQuIFNlbnNlOiBM
+b2dpY2FsIHVuaXQgbm90IGFjY2Vzc2libGUsIGFzeW1tZXRyaWMgYWNjZXNzIHN0YXRlIHRyYW5z
+aXRpb24NCj4gSnVuICAyIDExOjQyOjQ4IGN2a25vZGUyMDU4IGtlcm5lbDogWyA4NDUxLjg4MTM5
+NF0gc2QgODowOjM6MDogYWx1YTogcnRwZyByZXRyeQ0KPiBKdW4gIDIgMTE6NDI6NDggY3Zrbm9k
+ZTIwNTgga2VybmVsOiBbIDg0NTEuODgxNDAwXSBzZCA4OjA6MzowOiBbYWx1YV0gU2Vuc2UgS2V5
+IDogTm90IFJlYWR5IFtjdXJyZW50XQ0KPiBKdW4gIDIgMTE6NDI6NDggY3Zrbm9kZTIwNTgga2Vy
+bmVsOiBbIDg0NTEuODgxNDAxXSBzZCA4OjA6MzowOiBbYWx1YV0gQWRkLiBTZW5zZTogTG9naWNh
+bCB1bml0IG5vdCBhY2Nlc3NpYmxlLCBhc3ltbWV0cmljIGFjY2VzcyBzdGF0ZSB0cmFuc2l0aW9u
+DQo+IEp1biAgMiAxMTo0Mjo0OCBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODE0MjFdIHNk
+IDE6MDozOjI6IGFsdWE6IHJ0cGcgcmV0cnkNCj4gSnVuICAyIDExOjQyOjQ4IGN2a25vZGUyMDU4
+IGtlcm5lbDogWyA4NDUxLjg4MTQyN10gc2QgMTowOjM6MjogW2FsdWFdIFNlbnNlIEtleSA6IE5v
+dCBSZWFkeSBbY3VycmVudF0NCj4gSnVuICAyIDExOjQyOjQ4IGN2a25vZGUyMDU4IGtlcm5lbDog
+WyA4NDUxLjg4MTQyOF0gc2QgMTowOjM6MjogW2FsdWFdIEFkZC4gU2Vuc2U6IExvZ2ljYWwgdW5p
+dCBub3QgYWNjZXNzaWJsZSwgYXN5bW1ldHJpYyBhY2Nlc3Mgc3RhdGUgdHJhbnNpdGlvbg0KPiBK
+dW4gIDIgMTE6NDI6NDggY3Zrbm9kZTIwNTgga2VybmVsOiBbIDg0NTEuODgxNDgxXSBzZCAxOjA6
+MzoxOiBhbHVhOiBydHBnIHJldHJ5DQo+IEp1biAgMiAxMTo0Mjo0OCBjdmtub2RlMjA1OCBrZXJu
+ZWw6IFsgODQ1MS44ODE0ODddIHNkIDE6MDozOjE6IFthbHVhXSBTZW5zZSBLZXkgOiBOb3QgUmVh
+ZHkgW2N1cnJlbnRdDQo+IEp1biAgMiAxMTo0Mjo0OCBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1
+MS44ODE0ODldIHNkIDE6MDozOjE6IFthbHVhXSBBZGQuIFNlbnNlOiBMb2dpY2FsIHVuaXQgbm90
+IGFjY2Vzc2libGUsIGFzeW1tZXRyaWMgYWNjZXNzIHN0YXRlIHRyYW5zaXRpb24NCj4gSnVuICAy
+IDExOjQyOjQ4IGN2a25vZGUyMDU4IGtlcm5lbDogWyA4NDUxLjg4MTQ5Nl0gc2QgODowOjM6MDog
+YWx1YTogcnRwZyByZXRyeQ0KPiBKdW4gIDIgMTE6NDI6NDggY3Zrbm9kZTIwNTgga2VybmVsOiBb
+IDg0NTEuODgxNTAxXSBzZCA4OjA6MzowOiBbYWx1YV0gU2Vuc2UgS2V5IDogTm90IFJlYWR5IFtj
+dXJyZW50XQ0KPiBKdW4gIDIgMTE6NDI6NDggY3Zrbm9kZTIwNTgga2VybmVsOiBbIDg0NTEuODgx
+NTA0XSBzZCA4OjA6MzowOiBbYWx1YV0gQWRkLiBTZW5zZTogTG9naWNhbCB1bml0IG5vdCBhY2Nl
+c3NpYmxlLCBhc3ltbWV0cmljIGFjY2VzcyBzdGF0ZSB0cmFuc2l0aW9uDQo+IEp1biAgMiAxMTo0
+Mjo0OCBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODE1MjZdIHNkIDE6MDozOjI6IGFsdWE6
+IHJ0cGcgcmV0cnkNCj4gSnVuICAyIDExOjQyOjQ4IGN2a25vZGUyMDU4IGtlcm5lbDogWyA4NDUx
+Ljg4MTUzNV0gc2QgMTowOjM6MjogW2FsdWFdIFNlbnNlIEtleSA6IE5vdCBSZWFkeSBbY3VycmVu
+dF0NCj4gSnVuICAyIDExOjQyOjQ4IGN2a25vZGUyMDU4IGtlcm5lbDogWyA4NDUxLjg4MTUzOV0g
+c2QgMTowOjM6MjogW2FsdWFdIEFkZC4gU2Vuc2U6IExvZ2ljYWwgdW5pdCBub3QgYWNjZXNzaWJs
+ZSwgYXN5bW1ldHJpYyBhY2Nlc3Mgc3RhdGUgdHJhbnNpdGlvbg0KPiBKdW4gIDIgMTE6NDI6NDkg
+Y3Zrbm9kZTIwNTgga2VybmVsOiBbIDg0NTEuODgxNTgzXSBzZCAxOjA6MzoxOiBhbHVhOiBydHBn
+IHJldHJ5DQo+IEp1biAgMiAxMTo0Mjo0OSBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODE1
+ODldIHNkIDE6MDozOjE6IFthbHVhXSBTZW5zZSBLZXkgOiBOb3QgUmVhZHkgW2N1cnJlbnRdDQo+
+IEp1biAgMiAxMTo0Mjo0OSBjdmtub2RlMjA1OCBrZXJuZWw6IFsgODQ1MS44ODE1OTJdIHNkIDE6
+MDozOjE6IFthbHVhXSBBZGQuIFNlbnNlOiBMb2dpY2FsIHVuaXQgbm90IGFjY2Vzc2libGUsIGFz
+eW1tZXRyaWMgYWNjZXNzIHN0YXRlIHRyYW5zaXRpb24NCj4gSnVuICAyIDExOjQyOjQ5IGN2a25v
+ZGUyMDU4IGtlcm5lbDogWyA4NDUxLjg4MTYwMF0gc2QgODowOjM6MDogYWx1YTogcnRwZyByZXRy
+eQ0KPg0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zY3NpL2RldmljZV9oYW5kbGVyL3Njc2lfZGhf
+YWx1YS5jIGIvZHJpdmVycy9zY3NpL2RldmljZV9oYW5kbGVyL3Njc2lfZGhfYWx1YS5jDQo+DQo+
+IGluZGV4IDA5NjJmZDUuLjZiMTA2MGEgMTAwNjQ0DQo+DQo+IC0tLSBhL2RyaXZlcnMvc2NzaS9k
+ZXZpY2VfaGFuZGxlci9zY3NpX2RoX2FsdWEuYw0KPg0KPiArKysgYi9kcml2ZXJzL3Njc2kvZGV2
+aWNlX2hhbmRsZXIvc2NzaV9kaF9hbHVhLmMNCj4NCj4gQEAgLTgxNCw2ICs4MTQsNyBAQCBzdGF0
+aWMgdm9pZCBhbHVhX3J0cGdfd29yayhzdHJ1Y3Qgd29ya19zdHJ1Y3QgKndvcmspDQo+DQo+ICAg
+ICAgICAgICAgICAgICBpZiAoZXJyID09IFNDU0lfREhfUkVUUlkgfHwgcGctPmZsYWdzICYgQUxV
+QV9QR19SVU5fUlRQRykgew0KPg0KPiAgICAgICAgICAgICAgICAgICAgICAgICBwZy0+ZmxhZ3Mg
+Jj0gfkFMVUFfUEdfUlVOTklORzsNCj4NCj4gICAgICAgICAgICAgICAgICAgICAgICAgcGctPmZs
+YWdzIHw9IEFMVUFfUEdfUlVOX1JUUEc7DQo+DQo+ICsgICAgICAgICAgICAgICAgICAgICAgIHBn
+LT5pbnRlcnZhbCA9IDIwMDA7DQoNCnBnLT5pbnRlcnZhbCBpcyB0aGUgdGltZSBpbiBzZWNvbmRz
+IHNvIHRoaXMgaXMgYSAzMyBtaW51dGUgZGVsYXkuICBUaGF0DQppcyB0b28gbG9uZy4NCg0KVGhp
+cyBzZWVtcyBsaWtlIGEgaGFyZHdhcmUgcHJvYmxlbS4gIEhhdmUgeW91IHRyaWVkIHRvIGNvbnRh
+Y3QgM1BBUg0KYWJvdXQgdGhpcyBpc3N1ZT8NCg0KcmVnYXJkcywNCmRhbiBjYXJwZW50ZXINCg0K
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLQ0K5pys6YKu5Lu25Y+K5YW26ZmE5Lu25ZCr5pyJ5paw5Y2O5LiJ
+6ZuG5Zui55qE5L+d5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit
+5YiX5Ye6DQrnmoTkuKrkurrmiJbnvqTnu4TjgILnpoHmraLku7vkvZXlhbbku5bkurrku6Xku7vk
+vZXlvaLlvI/kvb/nlKjvvIjljIXmi6zkvYbkuI3pmZDkuo7lhajpg6jmiJbpg6jliIblnLDms4Tp
+nLLjgIHlpI3liLbjgIENCuaIluaVo+WPke+8ieacrOmCruS7tuS4reeahOS/oeaBr+OAguWmguae
+nOaCqOmUmeaUtuS6huacrOmCruS7tu+8jOivt+aCqOeri+WNs+eUteivneaIlumCruS7tumAmuef
+peWPkeS7tuS6uuW5tuWIoOmZpOacrA0K6YKu5Lu277yBDQpUaGlzIGUtbWFpbCBhbmQgaXRzIGF0
+dGFjaG1lbnRzIGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9ybWF0aW9uIGZyb20gTmV3IEgzQywg
+d2hpY2ggaXMNCmludGVuZGVkIG9ubHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFk
+ZHJlc3MgaXMgbGlzdGVkIGFib3ZlLiBBbnkgdXNlIG9mIHRoZQ0KaW5mb3JtYXRpb24gY29udGFp
+bmVkIGhlcmVpbiBpbiBhbnkgd2F5IChpbmNsdWRpbmcsIGJ1dCBub3QgbGltaXRlZCB0bywgdG90
+YWwgb3IgcGFydGlhbA0KZGlzY2xvc3VyZSwgcmVwcm9kdWN0aW9uLCBvciBkaXNzZW1pbmF0aW9u
+KSBieSBwZXJzb25zIG90aGVyIHRoYW4gdGhlIGludGVuZGVkDQpyZWNpcGllbnQocykgaXMgcHJv
+aGliaXRlZC4gSWYgeW91IHJlY2VpdmUgdGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3Rp
+ZnkgdGhlIHNlbmRlcg0KYnkgcGhvbmUgb3IgZW1haWwgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBp
+dCENCg==
