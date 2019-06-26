@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8617560B6
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 05:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5747756064
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 05:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727585AbfFZDoc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Jun 2019 23:44:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55890 "EHLO mail.kernel.org"
+        id S1727403AbfFZDpu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Jun 2019 23:45:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57508 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726907AbfFZDoc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Jun 2019 23:44:32 -0400
-Received: from sasha-vm.mshome.net (mobile-107-77-172-98.mobile.att.net [107.77.172.98])
+        id S1727163AbfFZDpt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 25 Jun 2019 23:45:49 -0400
+Received: from sasha-vm.mshome.net (mobile-107-77-172-74.mobile.att.net [107.77.172.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8630420659;
-        Wed, 26 Jun 2019 03:44:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B86A6216E3;
+        Wed, 26 Jun 2019 03:45:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561520671;
-        bh=MPRfLOQ78hjLqogfhFdAgFJlEob2kBJlBUS3vqVz0o0=;
+        s=default; t=1561520748;
+        bh=NC0Nour7rmEOz1JnhkIaZafBUKJxVBxTFvqtGjl9Cdk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Upnwbeqznw/8UMA7BHWseZsKolfKFYTC76mhcG/7jhBaOG0tWuKBBSPsiAwQJXkjA
-         DKpO4KvIctCn9BcAKnXbOmwjRdvYBg3ypB5bDPKHnKVqmxp9RDpJctoG8IFN/q2RZT
-         cR+io2HAG0x0ETgbTvYBSTADJX76/MWFClPlmLiM=
+        b=XLQ4MnrtvmQhb4xkg95bdajAmW6PS+p8TelfX65nIxJi6PdkeC8gjOOAHQBIkaL3L
+         4I/D+K/Ys8fChHXfBS+N8zHZJpEHyu8ooVQSXdhCFr/RG+CxyML4y+3Lzcahag1q7u
+         x7qs3F4AEmq2LETjYBlJ2pz/Wjw9gMQvbCMQMXYI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Don Brace <don.brace@microsemi.com>,
@@ -32,12 +32,12 @@ Cc:     Don Brace <don.brace@microsemi.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, esc.storagedev@microsemi.com,
         linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 21/34] scsi: hpsa: correct ioaccel2 chaining
-Date:   Tue, 25 Jun 2019 23:43:22 -0400
-Message-Id: <20190626034335.23767-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 15/21] scsi: hpsa: correct ioaccel2 chaining
+Date:   Tue, 25 Jun 2019 23:45:00 -0400
+Message-Id: <20190626034506.24125-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190626034335.23767-1-sashal@kernel.org>
-References: <20190626034335.23767-1-sashal@kernel.org>
+In-Reply-To: <20190626034506.24125-1-sashal@kernel.org>
+References: <20190626034506.24125-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,10 +69,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index c120929d4ffe..c43eccdea65d 100644
+index 5b4b7f9be2d7..6d520e8945f7 100644
 --- a/drivers/scsi/hpsa.c
 +++ b/drivers/scsi/hpsa.c
-@@ -4923,7 +4923,7 @@ static int hpsa_scsi_ioaccel2_queue_command(struct ctlr_info *h,
+@@ -4800,7 +4800,7 @@ static int hpsa_scsi_ioaccel2_queue_command(struct ctlr_info *h,
  			curr_sg->reserved[0] = 0;
  			curr_sg->reserved[1] = 0;
  			curr_sg->reserved[2] = 0;
@@ -81,7 +81,7 @@ index c120929d4ffe..c43eccdea65d 100644
  
  			curr_sg = h->ioaccel2_cmd_sg_list[c->cmdindex];
  		}
-@@ -4940,6 +4940,11 @@ static int hpsa_scsi_ioaccel2_queue_command(struct ctlr_info *h,
+@@ -4817,6 +4817,11 @@ static int hpsa_scsi_ioaccel2_queue_command(struct ctlr_info *h,
  			curr_sg++;
  		}
  
@@ -94,10 +94,10 @@ index c120929d4ffe..c43eccdea65d 100644
  		case DMA_TO_DEVICE:
  			cp->direction &= ~IOACCEL2_DIRECTION_MASK;
 diff --git a/drivers/scsi/hpsa_cmd.h b/drivers/scsi/hpsa_cmd.h
-index 21a726e2eec6..f6afca4b2319 100644
+index 078afe448115..ecf15344b55d 100644
 --- a/drivers/scsi/hpsa_cmd.h
 +++ b/drivers/scsi/hpsa_cmd.h
-@@ -517,6 +517,7 @@ struct ioaccel2_sg_element {
+@@ -516,6 +516,7 @@ struct ioaccel2_sg_element {
  	u8 reserved[3];
  	u8 chain_indicator;
  #define IOACCEL2_CHAIN 0x80
