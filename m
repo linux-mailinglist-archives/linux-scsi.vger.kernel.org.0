@@ -2,156 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B6F5645C
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 10:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E921A5647C
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 10:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725876AbfFZIRq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jun 2019 04:17:46 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12504 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726341AbfFZIRp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 26 Jun 2019 04:17:45 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5Q8HXRO117998
-        for <linux-scsi@vger.kernel.org>; Wed, 26 Jun 2019 04:17:44 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tc2j1nkks-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Wed, 26 Jun 2019 04:17:44 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <maier@linux.ibm.com>;
-        Wed, 26 Jun 2019 09:17:41 +0100
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 26 Jun 2019 09:17:35 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5Q8HZfM34340886
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jun 2019 08:17:35 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5A67A4040;
-        Wed, 26 Jun 2019 08:17:34 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0BAC0A4051;
-        Wed, 26 Jun 2019 08:17:34 +0000 (GMT)
-Received: from oc4120165700.ibm.com (unknown [9.152.99.211])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 26 Jun 2019 08:17:33 +0000 (GMT)
-Subject: Re: [PATCH V5 10/16] s390: zfcp_fc: use sg helper to operate
- scatterlist
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, Jim Gill <jgill@vmware.com>,
-        Cathy Avery <cavery@redhat.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Brian King <brking@us.ibm.com>,
-        James Smart <james.smart@broadcom.com>,
-        "Juergen E . Fischer" <fischer@norbit.de>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        linux-s390@vger.kernel.org
-References: <20190618013757.22401-1-ming.lei@redhat.com>
- <20190618013757.22401-11-ming.lei@redhat.com>
- <95bfa1fb-d0eb-fc61-ecc0-001ae52a326f@linux.ibm.com>
- <20190625011902.GA23777@ming.t460p>
- <93d3d89e-a9ae-691f-d1f8-0463f714957d@linux.ibm.com>
- <20190626030751.GA26340@ming.t460p>
-From:   Steffen Maier <maier@linux.ibm.com>
-Date:   Wed, 26 Jun 2019 10:17:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726989AbfFZIYY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jun 2019 04:24:24 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41221 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725379AbfFZIYY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jun 2019 04:24:24 -0400
+Received: by mail-wr1-f67.google.com with SMTP id c2so1609883wrm.8
+        for <linux-scsi@vger.kernel.org>; Wed, 26 Jun 2019 01:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloud.ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qoHDUC0TOnPRAuFJuw7NvCRlP+IzdmmkS0BHV8cdSyw=;
+        b=QZCh9yshaHtx0WHoUXe2mAGJWifAWUjdlflN8ak0BrgUD6NBfMzr6ivwrDt8OV34h5
+         O+fI+Krr0h1SEyfgYAm/fFqfHbxZoIbnCehj7WzHJLgTNVC60+5kSaA+6/58yOzvLOSx
+         vWKEALIj3p9Mhtn9MGdK0wwsjqvACh4+5d4ys9mWCGdbOFMM4QZjs0fG8xGgC+j0/7Tm
+         4xfg9pbIZCQYfTrAWwvbsIYyoRYmugGtvwYe32wIYJ9llSAQnK5H1RMTkgTQCMTdlSXm
+         OVoPr03+kU25GW3n0lpjmgqJeV0CuOQoFc1160zBnr3IqkOdMD5P7cORwfMmXGlJzHYk
+         uPlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qoHDUC0TOnPRAuFJuw7NvCRlP+IzdmmkS0BHV8cdSyw=;
+        b=Q0FSIk/sofjMr3BSUmF7xPP6cPo1caEtgV2qmKwWzSf79Ya6W1D0HXwiNRWAISStZ/
+         yNK5YFhwVBIlxchkfMOXqAosXt5MrUB7b9Em1+y4NvDjROVhoWQOA8ytUzOcGCdiNQOt
+         XK0dKGKJZF9TGUBeMMKgAjeDSGWNpt2xShkKjzl8TEd7TU7EO2V4YDN1Aiw3+Uzr0LFH
+         ojuuTQs98lxjqFrHK+iex6Fakbp/lOGEQYy2f5cEifDAKZt5l4eyc7rCSBESqwzcL6h6
+         GiPWgulnIcGaGrOLBw8ZPnFOncHzWON2pwaobGQdrBx+I3+Dle4vQFFZrQSlriljMG8G
+         DH9g==
+X-Gm-Message-State: APjAAAVde2PrbZu2qQd4Tl+rw7ilCTgHewncV5pQ0yrCdkXYcomz7RG8
+        2sF9WEV7L6T4rmyrenxKm6rv28L+oQaVsMcgj0jDlQ==
+X-Google-Smtp-Source: APXvYqzF12NoOlXK812hIqYOZ7DP+jhw/dTCwwKhVaPBbW1QEybMOEJixqIxgWUjgUxqm58NmQnO/vWbAdUGFpExBgU=
+X-Received: by 2002:a5d:4752:: with SMTP id o18mr2530464wrs.74.1561537462272;
+ Wed, 26 Jun 2019 01:24:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190626030751.GA26340@ming.t460p>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19062608-4275-0000-0000-000003465983
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19062608-4276-0000-0000-000038565D75
-Message-Id: <1353d755-de62-d575-4c7b-d20d59d07f23@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-26_04:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1906260101
+References: <20190624082228.27433-1-deepak.ukey@microchip.com> <20190624082228.27433-4-deepak.ukey@microchip.com>
+In-Reply-To: <20190624082228.27433-4-deepak.ukey@microchip.com>
+From:   Jinpu Wang <jinpu.wang@cloud.ionos.com>
+Date:   Wed, 26 Jun 2019 10:24:11 +0200
+Message-ID: <CAMGffEmwjfQCST+=6a3dV92q0_J+te8cb-H2YM1PG7LZ-SM13Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] pm80xx : Modified the logic to collect IOP event logs.
+To:     Deepak Ukey <deepak.ukey@microchip.com>
+Cc:     Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
+        Vasanthalakshmi.Tharmarajan@microchip.com, Viswas.G@microcchip.com,
+        Jack Wang <jinpu.wang@profitbricks.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Ming,
+On Mon, Jun 24, 2019 at 10:22 AM Deepak Ukey <deepak.ukey@microchip.com> wrote:
+>
+> Added the logic for collecting IOP log respective to event log size.
+>
+> Signed-off-by: Deepak Ukey <deepak.ukey@microchip.com>
+> Signed-off-by: Viswas G <Viswas.G@microchip.com>
+> ---
+Thanks, looks fine.
+Reviewed-by: Jack Wang <jinpu.wang@cloud.ionos.com>
 
-On 6/26/19 5:07 AM, Ming Lei wrote:
-> On Tue, Jun 25, 2019 at 12:51:04PM +0200, Steffen Maier wrote:
->> I don't mind doing this change for zfcp. However, I'm having doubts
->> regarding the rationale in the commit description.
-
-> However, I still suggest to do it because it will make us to audit SCSI chained
-> sg uses much easier. And the change shouldn't have performance effect.
-
->> If I was not mistaken above, the following could be more descriptive parts
->> of a patch/commit description, with hopefully less confusion for anyone
->> having to look at zfcp git history a few weeks/months/years from now:
->>
->> "While not required for this SCSI MQ change regarding scatterlist
->> allocation, change all other scatterlist iterators in zfcp to the safe
->> sg_next() even if not necessary as these changed zfcp-internal scatterlists
->> are linear and unchained. This may avoid confusion about a potential need
->> for conversions in the future."
-
-Sure, let's change the code, but could you please update the description of 
-your below new patch to something like I drafted above regarding rationale?
-
-If you would like to send a V2, I'll be happy to give a Reviewed-by.
-
->>>   From c9c368308fefbf034d670984fe9746a4181fe514 Mon Sep 17 00:00:00 2001
->>> From: Ming Lei <ming.lei@redhat.com>
->>> Date: Tue, 25 Jun 2019 09:15:34 +0800
->>> Subject: [PATCH] s390: scsi: use sg helper to iterate over scatterlist
-
->>> Unlike the legacy I/O path, scsi-mq preallocates a large array to hold
->>> the scatterlist for each request. This static allocation can consume
->>> substantial amounts of memory on modern controllers which support a
->>> large number of concurrently outstanding requests.
-
->>> To facilitate a switch to a smaller static allocation combined with a
->>> dynamic allocation for requests that need it, we need to make sure all
->>> SCSI drivers handle chained scatterlists correctly.
-
->>> Convert remaining drivers that directly dereference the scatterlist
->>> array to using the iterator functions.
-
-> OK, I still suggest to apply the patch for the mentioned reason if you
-> are fine.
-
-
-
--- 
-Mit freundlichen Gruessen / Kind regards
-Steffen Maier
-
-Linux on IBM Z Development
-
-https://www.ibm.com/privacy/us/en/
-IBM Deutschland Research & Development GmbH
-Vorsitzender des Aufsichtsrats: Matthias Hartmann
-Geschaeftsfuehrung: Dirk Wittkopp
-Sitz der Gesellschaft: Boeblingen
-Registergericht: Amtsgericht Stuttgart, HRB 243294
-
+>  drivers/scsi/pm8001/pm8001_ctl.c | 33 +++++++++++++++++----------------
+>  1 file changed, 17 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+> index c7e0a42c..6b85016 100644
+> --- a/drivers/scsi/pm8001/pm8001_ctl.c
+> +++ b/drivers/scsi/pm8001/pm8001_ctl.c
+> @@ -492,25 +492,26 @@ static ssize_t pm8001_ctl_iop_log_show(struct device *cdev,
+>         struct Scsi_Host *shost = class_to_shost(cdev);
+>         struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+>         struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+> -#define IOP_MEMMAP(r, c) \
+> -       (*(u32 *)((u8*)pm8001_ha->memoryMap.region[IOP].virt_ptr + (r) * 32 \
+> -       + (c)))
+> -       int i;
+>         char *str = buf;
+> -       int max = 2;
+> -       for (i = 0; i < max; i++) {
+> -               str += sprintf(str, "0x%08x 0x%08x 0x%08x 0x%08x 0x%08x 0x%08x"
+> -                              "0x%08x 0x%08x\n",
+> -                              IOP_MEMMAP(i, 0),
+> -                              IOP_MEMMAP(i, 4),
+> -                              IOP_MEMMAP(i, 8),
+> -                              IOP_MEMMAP(i, 12),
+> -                              IOP_MEMMAP(i, 16),
+> -                              IOP_MEMMAP(i, 20),
+> -                              IOP_MEMMAP(i, 24),
+> -                              IOP_MEMMAP(i, 28));
+> +       u32 read_size =
+> +               pm8001_ha->main_cfg_tbl.pm80xx_tbl.event_log_size / 1024;
+> +       static u32 start, end, count;
+> +       u32 max_read_times = 32;
+> +       u32 max_count = (read_size * 1024) / (max_read_times * 4);
+> +       u32 *temp = (u32 *)pm8001_ha->memoryMap.region[IOP].virt_ptr;
+> +
+> +       if ((count % max_count) == 0) {
+> +               start = 0;
+> +               end = max_read_times;
+> +               count = 0;
+> +       } else {
+> +               start = end;
+> +               end = end + max_read_times;
+>         }
+>
+> +       for (; start < end; start++)
+> +               str += sprintf(str, "%08x ", *(temp+start));
+> +       count++;
+>         return str - buf;
+>  }
+>  static DEVICE_ATTR(iop_log, S_IRUGO, pm8001_ctl_iop_log_show, NULL);
+> --
+> 1.8.5.6
+>
