@@ -2,55 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E02FA5683F
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 14:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421A156A0F
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 15:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727259AbfFZMHk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jun 2019 08:07:40 -0400
-Received: from mail.vodokanal.poltava.ua ([91.219.220.27]:57275 "EHLO
-        mail.vodokanal.poltava.ua" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726339AbfFZMHk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jun 2019 08:07:40 -0400
-Received: by mail.vodokanal.poltava.ua (Postfix, from userid 80)
-        id C871922C44D; Wed, 26 Jun 2019 14:19:01 +0300 (EEST)
-Received: from 192.168.0.119
-        (SquirrelMail authenticated user test@vodokanal.poltava.ua)
-        by mail.vodokanal.poltava.ua with HTTP;
-        Wed, 26 Jun 2019 12:19:01 +0100
-Message-ID: <be6afb8d68f3a6f3240e3c6a1756ccb8.squirrel@mail.vodokanal.poltava.ua>
-Date:   Wed, 26 Jun 2019 12:19:01 +0100
-Subject: LOANS !!!
-From:   "Dial Direct Loans" <dialdirect@info.org>
-Reply-To: infodialdirectloans@mail2consultant.com
-User-Agent: SquirrelMail/1.4.21
+        id S1727371AbfFZNLA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jun 2019 09:11:00 -0400
+Received: from zyloware.com ([23.95.19.78]:33765 "EHLO chulaseafood.com"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726347AbfFZNK7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 26 Jun 2019 09:10:59 -0400
+X-Greylist: delayed 4612 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jun 2019 09:10:55 EDT
+To:     linux-scsi@vger.kernel.org
+Subject: =?UTF-8?B?wrcgICAgICAgICBjYW4geW91IGd1aWRlIG1lPw==?=
+Message-ID: <d274c45949eca2c9f782ec837e370a50@inaflashweb.com>
+Date:   Wed, 26 Jun 2019 13:35:59 +0200
+From:   "Laura" <ansitaasdsaksi@verizon.net>
+Reply-To: ansitaasdsaksi@verizon.net
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Priority: 3 (Normal)
-Importance: Normal
-To:     undisclosed-recipients:;
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi,
 
-Dial Direct Loan SA
+Did you see my email below from last week?
+
+We manufacture ALL custom LOGO and branded products – over 300,000 to
+choose from.
+
+The most asked about product that we make, are the custom printed USB flash
+drives!
+We can print your logo on them and load your digital images, videos and
+files!
+
+http://inaflashweb.com
+
+Here is what we include:
+-Any size memory you need: 64MB up to 128GB
+-We will print your logo on both sides, just ask!
+-Very Low Order Minimums
+-Need them quickly? Not a problem, we offer Rush Service
+http://inaflashweb.com
+
+NEW: We can make a custom shaped USB drive to look like your Logo or
+product!
+
+Email over a copy of your logo and we will create a design mock up for you
+at no cost!
+
+Our higher memory sizes are a really good option right now!
+
+Ask about the “Double Your Memory” upgrade promotion going on right
+now!
+
+Pricing is low right now, so let us know what you need and we will get you
+a quick quote.
+
+We will beat any competitors pricing, send us your last invoice and we will
+beat it!
+
+We always offer great rates for schools and nonprofits as well.
+
+Let us know what you would like quoted?
+http://inaflashweb.com
+
+Regards,
 
 
-Consolidate your debts with Dial Direct Loan SA for your peace of
-mind at a fixed interest rate of 4.75%,personal and business loans
-are also welcome.For details  and file in your applications by sending an
-email
-to:infodialdirectloans@mail2consultant.com
 
-
-
-Yours in Service,
-Susan Muller (Mrs.),
-Senior Consultant,
-Loan Application Team
-Dial Direct Loan SA
-Tel No: +27717231058
-
+Sabrina Millons
++1-888-480-8218
+Custom USB Account Manager
+http://inaflashweb.com
 
