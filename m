@@ -2,87 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AAC56B9A
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 16:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3A5156BC3
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 16:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727516AbfFZOOb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jun 2019 10:14:31 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:32868 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726484AbfFZOOb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 26 Jun 2019 10:14:31 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 70355204192;
-        Wed, 26 Jun 2019 16:14:28 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id PwazqP0WQn-2; Wed, 26 Jun 2019 16:14:26 +0200 (CEST)
-Received: from [192.168.48.23] (host-45-58-224-183.dyn.295.ca [45.58.224.183])
-        by smtp.infotech.no (Postfix) with ESMTPA id CFD38204153;
-        Wed, 26 Jun 2019 16:14:25 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH 0/2] scsi: add support for request batching
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, stefanha@redhat.com
-References: <20190530112811.3066-1-pbonzini@redhat.com>
- <746ad64a-4047-1597-a0d4-f14f3529cc19@redhat.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <65e5ad25-a475-989a-ce3d-400a8c90cb61@interlog.com>
-Date:   Wed, 26 Jun 2019 10:14:23 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <746ad64a-4047-1597-a0d4-f14f3529cc19@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
+        id S1726628AbfFZOWk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jun 2019 10:22:40 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:45478 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725958AbfFZOWj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 26 Jun 2019 10:22:39 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x5QE8fEN062121;
+        Wed, 26 Jun 2019 10:22:35 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tc8m3dnsw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jun 2019 10:22:35 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x5QEKtn5016708;
+        Wed, 26 Jun 2019 14:22:34 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01dal.us.ibm.com with ESMTP id 2t9by77qjp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Jun 2019 14:22:34 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x5QEMXeO59441604
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jun 2019 14:22:33 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0FA796E04C;
+        Wed, 26 Jun 2019 14:22:33 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62A316E05D;
+        Wed, 26 Jun 2019 14:22:31 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.80.213.131])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 26 Jun 2019 14:22:31 +0000 (GMT)
+Message-ID: <1561558950.3435.2.camel@linux.ibm.com>
+Subject: Re: [PATCH] scsi: mpt3sas: clean up a sizeof()
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>
+Cc:     Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Date:   Wed, 26 Jun 2019 07:22:30 -0700
+In-Reply-To: <20190626101243.GF3242@mwanda>
+References: <20190626101243.GF3242@mwanda>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-26_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1906260169
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-06-26 9:51 a.m., Paolo Bonzini wrote:
-> On 30/05/19 13:28, Paolo Bonzini wrote:
->> This allows a list of requests to be issued, with the LLD only writing
->> the hardware doorbell when necessary, after the last request was prepared.
->> This is more efficient if we have lists of requests to issue, particularly
->> on virtualized hardware, where writing the doorbell is more expensive than
->> on real hardware.
->>
->> This applies to any HBA, either singlequeue or multiqueue; the second
->> patch implements it for virtio-scsi.
->>
->> Paolo
->>
->> Paolo Bonzini (2):
->>    scsi_host: add support for request batching
->>    virtio_scsi: implement request batching
->>
->>   drivers/scsi/scsi_lib.c    | 37 ++++++++++++++++++++++---
->>   drivers/scsi/virtio_scsi.c | 55 +++++++++++++++++++++++++++-----------
->>   include/scsi/scsi_cmnd.h   |  1 +
->>   include/scsi/scsi_host.h   | 16 +++++++++--
->>   4 files changed, 89 insertions(+), 20 deletions(-)
->>
+On Wed, 2019-06-26 at 13:12 +0300, Dan Carpenter wrote:
+> This patch is just a cleanup and doesn't change run time because both
+> sizeof EVENT and SCSI are 84 bytes.  But this is clearly a cut and
+> paste
+> error and the SCSI struct was intended.
 > 
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  drivers/scsi/mpt3sas/mpt3sas_ctl.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Ping?  Are there any more objections?
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> index d4ecfbbe738c..06a901ed743c 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> @@ -3280,7 +3280,7 @@ diag_trigger_scsi_store(struct device *cdev,
+>  	spin_lock_irqsave(&ioc->diag_trigger_lock, flags);
+>  	sz = min(sizeof(struct SL_WH_SCSI_TRIGGERS_T), count);
+>  	memset(&ioc->diag_trigger_scsi, 0,
+> -	    sizeof(struct SL_WH_EVENT_TRIGGERS_T));
+> +	    sizeof(struct SL_WH_SCSI_TRIGGERS_T));
 
-I have no objections, just a few questions.
+Please can we make this the correct pattern of
 
-To implement this is the scsi_debug driver, a per device queue would
-need to be added, correct? Then a 'commit_rqs' call would be expected
-at some later point and it would drain that queue and submit each
-command. Or is the queue draining ongoing in the LLD and 'commit_rqs'
-means: don't return until that queue is empty?
+sizeof(ioc->diag_trigger_scsi)
 
-So does that mean in the normal (i.e. non request batching) case
-there are two calls to the LLD for each submitted command? Or is
-'commit_rqs' optional, a sync-ing type command?
-
-Doug Gilbert
-
+James
 
