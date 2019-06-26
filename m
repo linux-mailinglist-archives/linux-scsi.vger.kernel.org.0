@@ -2,122 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E921A5647C
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 10:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CF156660
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Jun 2019 12:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbfFZIYY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jun 2019 04:24:24 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:41221 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725379AbfFZIYY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jun 2019 04:24:24 -0400
-Received: by mail-wr1-f67.google.com with SMTP id c2so1609883wrm.8
-        for <linux-scsi@vger.kernel.org>; Wed, 26 Jun 2019 01:24:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloud.ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qoHDUC0TOnPRAuFJuw7NvCRlP+IzdmmkS0BHV8cdSyw=;
-        b=QZCh9yshaHtx0WHoUXe2mAGJWifAWUjdlflN8ak0BrgUD6NBfMzr6ivwrDt8OV34h5
-         O+fI+Krr0h1SEyfgYAm/fFqfHbxZoIbnCehj7WzHJLgTNVC60+5kSaA+6/58yOzvLOSx
-         vWKEALIj3p9Mhtn9MGdK0wwsjqvACh4+5d4ys9mWCGdbOFMM4QZjs0fG8xGgC+j0/7Tm
-         4xfg9pbIZCQYfTrAWwvbsIYyoRYmugGtvwYe32wIYJ9llSAQnK5H1RMTkgTQCMTdlSXm
-         OVoPr03+kU25GW3n0lpjmgqJeV0CuOQoFc1160zBnr3IqkOdMD5P7cORwfMmXGlJzHYk
-         uPlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qoHDUC0TOnPRAuFJuw7NvCRlP+IzdmmkS0BHV8cdSyw=;
-        b=Q0FSIk/sofjMr3BSUmF7xPP6cPo1caEtgV2qmKwWzSf79Ya6W1D0HXwiNRWAISStZ/
-         yNK5YFhwVBIlxchkfMOXqAosXt5MrUB7b9Em1+y4NvDjROVhoWQOA8ytUzOcGCdiNQOt
-         XK0dKGKJZF9TGUBeMMKgAjeDSGWNpt2xShkKjzl8TEd7TU7EO2V4YDN1Aiw3+Uzr0LFH
-         ojuuTQs98lxjqFrHK+iex6Fakbp/lOGEQYy2f5cEifDAKZt5l4eyc7rCSBESqwzcL6h6
-         GiPWgulnIcGaGrOLBw8ZPnFOncHzWON2pwaobGQdrBx+I3+Dle4vQFFZrQSlriljMG8G
-         DH9g==
-X-Gm-Message-State: APjAAAVde2PrbZu2qQd4Tl+rw7ilCTgHewncV5pQ0yrCdkXYcomz7RG8
-        2sF9WEV7L6T4rmyrenxKm6rv28L+oQaVsMcgj0jDlQ==
-X-Google-Smtp-Source: APXvYqzF12NoOlXK812hIqYOZ7DP+jhw/dTCwwKhVaPBbW1QEybMOEJixqIxgWUjgUxqm58NmQnO/vWbAdUGFpExBgU=
-X-Received: by 2002:a5d:4752:: with SMTP id o18mr2530464wrs.74.1561537462272;
- Wed, 26 Jun 2019 01:24:22 -0700 (PDT)
+        id S1727107AbfFZKM4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jun 2019 06:12:56 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:49252 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725930AbfFZKM4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jun 2019 06:12:56 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5QA8Yvr072598;
+        Wed, 26 Jun 2019 10:12:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
+ bh=AN9iBdCTp++0R1aM0KHljpCXnwdkIag9kwI7UnIdRQA=;
+ b=G0DCSynVQYxnpeXuOjXsrOYCgfuhTsGxBTQAZ8MaUreGkC9qFeWbeOWiYD1fklbWHStj
+ zA+upOPnG5sMAirdEw4A1wV76CjD86cFnIupOI6rqgSkem/szQKXyWwpDNEah1d3hLWB
+ ZbqU1+lUeQf2tRG4SN+OIybAmCrpjQnE6bFvl7J2RVeX9R9hPIl6MUuVwIfPz1cei5n4
+ WTkOYA3AUos7PHGJYjM2n4Ow3uaqeV4kOCZpYlBN4S2Bhs/qOQVarEpipP5MR8psccOJ
+ VF0OHLU5gvNfiqk+AjvpAu+7hzfDRviY3Nxgh1l9WER76/pHWy6ldeUrp3sYXNUrXPk/ TQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2t9brt9f0w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jun 2019 10:12:52 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5QACYk3047729;
+        Wed, 26 Jun 2019 10:12:52 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2t99f4crj7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 26 Jun 2019 10:12:52 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5QACpBL006491;
+        Wed, 26 Jun 2019 10:12:51 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 26 Jun 2019 03:12:50 -0700
+Date:   Wed, 26 Jun 2019 13:12:43 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Sathya Prakash <sathya.prakash@broadcom.com>
+Cc:     Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] scsi: mpt3sas: clean up a sizeof()
+Message-ID: <20190626101243.GF3242@mwanda>
 MIME-Version: 1.0
-References: <20190624082228.27433-1-deepak.ukey@microchip.com> <20190624082228.27433-4-deepak.ukey@microchip.com>
-In-Reply-To: <20190624082228.27433-4-deepak.ukey@microchip.com>
-From:   Jinpu Wang <jinpu.wang@cloud.ionos.com>
-Date:   Wed, 26 Jun 2019 10:24:11 +0200
-Message-ID: <CAMGffEmwjfQCST+=6a3dV92q0_J+te8cb-H2YM1PG7LZ-SM13Q@mail.gmail.com>
-Subject: Re: [PATCH 3/3] pm80xx : Modified the logic to collect IOP event logs.
-To:     Deepak Ukey <deepak.ukey@microchip.com>
-Cc:     Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
-        Vasanthalakshmi.Tharmarajan@microchip.com, Viswas.G@microcchip.com,
-        Jack Wang <jinpu.wang@profitbricks.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9299 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=991
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906260123
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9299 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906260122
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 10:22 AM Deepak Ukey <deepak.ukey@microchip.com> wrote:
->
-> Added the logic for collecting IOP log respective to event log size.
->
-> Signed-off-by: Deepak Ukey <deepak.ukey@microchip.com>
-> Signed-off-by: Viswas G <Viswas.G@microchip.com>
-> ---
-Thanks, looks fine.
-Reviewed-by: Jack Wang <jinpu.wang@cloud.ionos.com>
+This patch is just a cleanup and doesn't change run time because both
+sizeof EVENT and SCSI are 84 bytes.  But this is clearly a cut and paste
+error and the SCSI struct was intended.
 
->  drivers/scsi/pm8001/pm8001_ctl.c | 33 +++++++++++++++++----------------
->  1 file changed, 17 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
-> index c7e0a42c..6b85016 100644
-> --- a/drivers/scsi/pm8001/pm8001_ctl.c
-> +++ b/drivers/scsi/pm8001/pm8001_ctl.c
-> @@ -492,25 +492,26 @@ static ssize_t pm8001_ctl_iop_log_show(struct device *cdev,
->         struct Scsi_Host *shost = class_to_shost(cdev);
->         struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
->         struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
-> -#define IOP_MEMMAP(r, c) \
-> -       (*(u32 *)((u8*)pm8001_ha->memoryMap.region[IOP].virt_ptr + (r) * 32 \
-> -       + (c)))
-> -       int i;
->         char *str = buf;
-> -       int max = 2;
-> -       for (i = 0; i < max; i++) {
-> -               str += sprintf(str, "0x%08x 0x%08x 0x%08x 0x%08x 0x%08x 0x%08x"
-> -                              "0x%08x 0x%08x\n",
-> -                              IOP_MEMMAP(i, 0),
-> -                              IOP_MEMMAP(i, 4),
-> -                              IOP_MEMMAP(i, 8),
-> -                              IOP_MEMMAP(i, 12),
-> -                              IOP_MEMMAP(i, 16),
-> -                              IOP_MEMMAP(i, 20),
-> -                              IOP_MEMMAP(i, 24),
-> -                              IOP_MEMMAP(i, 28));
-> +       u32 read_size =
-> +               pm8001_ha->main_cfg_tbl.pm80xx_tbl.event_log_size / 1024;
-> +       static u32 start, end, count;
-> +       u32 max_read_times = 32;
-> +       u32 max_count = (read_size * 1024) / (max_read_times * 4);
-> +       u32 *temp = (u32 *)pm8001_ha->memoryMap.region[IOP].virt_ptr;
-> +
-> +       if ((count % max_count) == 0) {
-> +               start = 0;
-> +               end = max_read_times;
-> +               count = 0;
-> +       } else {
-> +               start = end;
-> +               end = end + max_read_times;
->         }
->
-> +       for (; start < end; start++)
-> +               str += sprintf(str, "%08x ", *(temp+start));
-> +       count++;
->         return str - buf;
->  }
->  static DEVICE_ATTR(iop_log, S_IRUGO, pm8001_ctl_iop_log_show, NULL);
-> --
-> 1.8.5.6
->
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/scsi/mpt3sas/mpt3sas_ctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+index d4ecfbbe738c..06a901ed743c 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+@@ -3280,7 +3280,7 @@ diag_trigger_scsi_store(struct device *cdev,
+ 	spin_lock_irqsave(&ioc->diag_trigger_lock, flags);
+ 	sz = min(sizeof(struct SL_WH_SCSI_TRIGGERS_T), count);
+ 	memset(&ioc->diag_trigger_scsi, 0,
+-	    sizeof(struct SL_WH_EVENT_TRIGGERS_T));
++	    sizeof(struct SL_WH_SCSI_TRIGGERS_T));
+ 	memcpy(&ioc->diag_trigger_scsi, buf, sz);
+ 	if (ioc->diag_trigger_scsi.ValidEntries > NUM_VALID_ENTRIES)
+ 		ioc->diag_trigger_scsi.ValidEntries = NUM_VALID_ENTRIES;
+-- 
+2.20.1
+
