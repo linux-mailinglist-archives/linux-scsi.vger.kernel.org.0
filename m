@@ -2,59 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A538658905
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 19:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFA958906
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 19:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbfF0RoT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Jun 2019 13:44:19 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33532 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726796AbfF0RoT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jun 2019 13:44:19 -0400
-Received: by mail-pl1-f195.google.com with SMTP id c14so1693723plo.0;
-        Thu, 27 Jun 2019 10:44:19 -0700 (PDT)
+        id S1727237AbfF0Ro3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Jun 2019 13:44:29 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:42913 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727213AbfF0Ro2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jun 2019 13:44:28 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q10so1583459pff.9;
+        Thu, 27 Jun 2019 10:44:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=fMSiZev5TC+RJzc16L/mj1DXSyzROvrHBBpdoAkI4pA=;
-        b=j1qZqxDCY1SE+3POtAF4fIPpydkT991PUh1oofQZPKaJWSjB2/xoYZzpkrowByRCze
-         bdbOdV661xZNJCqkUSmqEBvRG99kwldxO16Vu17L69JFTnln0hOPns87XE3PmRH1lUva
-         PCAzjXFm28A+9bZ6VQrDsbIL5B0Rww50JQesQh2osh4oDE6/JWHriV1v0dC96U68cn+/
-         ILiYp93BJOPXr5LQ0U/YUII3kSgiYrADhhUrBmehJ3a/+4snMWRacFWUGJvwFgwOxmjB
-         POdvKmQUsXwCyOhtlU4Q1osXDT6dfbNJJjsRFmNIwudAqH1yEyDf+QptNmHDsOtGHFrC
-         ZxHQ==
+        bh=SBYZqfoyt3K/CiQ07Hd+w3JcvKRR1GsSR4h2B9nj7xg=;
+        b=T6LC9hZenINjqqDXUyOQ8cpWIotOtfsGNBmVYBfyibVD1fEoRavsY5Vge//7qZVKcK
+         bwx1l6dnQfLhaSrdxzw3QhFwp6OJhXkkNRBneMosZ4CYyOv6TMV6jgXkONMSH8FYJTC/
+         p2rVBMrjgLv/DwQiDJVLLK/UpGZUyhAD0RR330lwN49Lm+TzWNoANXeLciBUG3D+ujCs
+         8wNVTOeN3kLutE6dvBbWfgO6Bj7/4RREgmzhuK5E9SWz9+stX9DSR4YZ+wF5PUFHSIZ2
+         QPG9iihcOOV7Tz81M1OrN2g8mnvTsesUffKMvkDCUgPvFRp80EwnQWdLIrp+X2mvDkly
+         q4dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=fMSiZev5TC+RJzc16L/mj1DXSyzROvrHBBpdoAkI4pA=;
-        b=c50tc2YLiS+zp6uZWJF6TTuP7vJWtAj0ppRgRqBPA2IoBsQiX4ef2gbkkJO/hmsu/U
-         KtWoHZVgwzjEN1a4GAEk4YpmtirWfizPtJCv0sBEKvJWw2obBjU6e/OLaKDFlrLjcJxk
-         fsK1HaXclaW65zkQoozVaBU2Sdx0udnUyMvHp0Bh/ax3bRpfIOZD+XxAltMAe/6xe0hj
-         N75IEzQE4CBJ6whM0Ugdk6jBmlwRFYRMK4iB1AT8Ol1Cqhqq4eFSeRTllm0T+/iqhzn5
-         rka82LVSvs1iJ+76FHgfmPd7RJN/G6VfaWzGdZ9ASJxf8bxM2uGNglQkYr4xrFTBUsCS
-         Tvwg==
-X-Gm-Message-State: APjAAAWTUpJvey1Q90z+D0r7ljkbB5ElFni7Kve7rry/dU3f7IaP9hP8
-        tP2kg7lD2+euFCczpr5v5ps=
-X-Google-Smtp-Source: APXvYqz6DciFrJAZR8kflqpCUghCNuNS4CyzELd9ZB59oZi5uUdIFGgT4WxsfhD/mnIoQXiwQqYt5Q==
-X-Received: by 2002:a17:902:f087:: with SMTP id go7mr6033850plb.330.1561657458740;
-        Thu, 27 Jun 2019 10:44:18 -0700 (PDT)
+        bh=SBYZqfoyt3K/CiQ07Hd+w3JcvKRR1GsSR4h2B9nj7xg=;
+        b=RxybbMHo3+rx1YmB6dvUVBIK9Q844owmRxBGQ1pLad2e0fE6E9eftdGqXebXewgoGD
+         AplGKlnPV1DjdhMsCjHESew5nbfj3OphslCnI2dpsrgWSnNzJBqcyL6JciOAfIYIgc7w
+         SWxN+XLrbeDYXeCFnQv8KXj/bXlB1EpLdn+RVKu77qR7OtfSbi9Lzb3+SrigfEBycrYA
+         54Rzhf2mtYIoxYGKWmDZzZIygrRljNKS0Ktxli1Ap4jwC5X3mV13FhC4hEzwHtVpgkaG
+         YCmwU/vnW4WLytmuSfHZmTyc1KMBuNoJvH87tndETntnQY/CzcpjEIGqmHbK6sutXW2p
+         XtIg==
+X-Gm-Message-State: APjAAAU6JQr134+ZbZm42AVinxCneSgMSCcO11Kyy1H3HM1UND6+eKjh
+        Bz4Ez8NJQsGVC0bGwibqNfc=
+X-Google-Smtp-Source: APXvYqwE7v/Y/QRUQ3xwREW6I4PY0Fav0OD7fG5EREhwO0AnfYmtHTMxD60KAXBzvjSzya4y8RtTOQ==
+X-Received: by 2002:a63:e53:: with SMTP id 19mr4815445pgo.137.1561657467705;
+        Thu, 27 Jun 2019 10:44:27 -0700 (PDT)
 Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id w7sm3978503pfb.117.2019.06.27.10.44.16
+        by smtp.googlemail.com with ESMTPSA id q1sm3962760pfg.84.2019.06.27.10.44.24
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 10:44:18 -0700 (PDT)
+        Thu, 27 Jun 2019 10:44:27 -0700 (PDT)
 From:   Fuqian Huang <huangfq.daxian@gmail.com>
 Cc:     Fuqian Huang <huangfq.daxian@gmail.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Chaitra P B <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 59/87] scsi: mpt3sas: remove memset after dma_alloc_coherent
-Date:   Fri, 28 Jun 2019 01:44:05 +0800
-Message-Id: <20190627174406.5360-1-huangfq.daxian@gmail.com>
+Subject: [PATCH 60/87] scsi: megaraid: remove memset after kcalloc
+Date:   Fri, 28 Jun 2019 01:44:20 +0800
+Message-Id: <20190627174420.5466-1-huangfq.daxian@gmail.com>
 X-Mailer: git-send-email 2.11.0
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
@@ -62,36 +61,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In commit af7ddd8a627c
-("Merge tag 'dma-mapping-4.21' of git://git.infradead.org/users/hch/dma-mapping"),
-dma_alloc_coherent has already zeroed the memory.
-So memset is not needed.
+kcalloc already zeros the memory.
+memset is unneeded.
 
 Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_transport.c | 2 --
+ drivers/scsi/megaraid/megaraid_sas_base.c | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_transport.c b/drivers/scsi/mpt3sas/mpt3sas_transport.c
-index 60ae2d0feb2b..b09af57840d8 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_transport.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_transport.c
-@@ -1111,7 +1111,6 @@ _transport_get_expander_phy_error_log(struct MPT3SAS_ADAPTER *ioc,
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index 3dd1df472dc6..342b39bc9210 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -4141,8 +4141,6 @@ int megasas_alloc_cmds(struct megasas_instance *instance)
+ 		return -ENOMEM;
  	}
  
- 	rc = -EINVAL;
--	memset(data_out, 0, sz);
- 	phy_error_log_request = data_out;
- 	phy_error_log_request->smp_frame_type = 0x40;
- 	phy_error_log_request->function = 0x11;
-@@ -1401,7 +1400,6 @@ _transport_expander_phy_control(struct MPT3SAS_ADAPTER *ioc,
- 	}
- 
- 	rc = -EINVAL;
--	memset(data_out, 0, sz);
- 	phy_control_request = data_out;
- 	phy_control_request->smp_frame_type = 0x40;
- 	phy_control_request->function = 0x91;
+-	memset(instance->cmd_list, 0, sizeof(struct megasas_cmd *) *max_cmd);
+-
+ 	for (i = 0; i < max_cmd; i++) {
+ 		instance->cmd_list[i] = kmalloc(sizeof(struct megasas_cmd),
+ 						GFP_KERNEL);
 -- 
 2.11.0
 
