@@ -2,55 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FD258919
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 19:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5BA5891F
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 19:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbfF0Rpd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Jun 2019 13:45:33 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44130 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726689AbfF0Rpd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jun 2019 13:45:33 -0400
-Received: by mail-pf1-f193.google.com with SMTP id t16so1579519pfe.11;
-        Thu, 27 Jun 2019 10:45:33 -0700 (PDT)
+        id S1726890AbfF0Rpn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Jun 2019 13:45:43 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40862 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726673AbfF0Rpm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jun 2019 13:45:42 -0400
+Received: by mail-pf1-f195.google.com with SMTP id p184so1588643pfp.7;
+        Thu, 27 Jun 2019 10:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=KsHBBlQbrCLiejasWVdLGkq8oWdlc6LBhKtDSdN6QwI=;
-        b=KY7Zmbkl7qw6LDvC3ZwNK5HTCeKRuj9VSWuC8yGWbfgWyys4s5tnioNfTLidt0Yw4H
-         okf+F/crK+d6udKSUXt0keoA1Kh5n5zMs5hgq5sxPZAfvujOdfEqjVJzQzjP/m1tunIL
-         C+14CfjUqB+HOIdCQPBwrlQ/XdUiedpd0p4gbQ6FGsLMXhOUuxDboWts0OJ8RX9RiAOe
-         Q++wZSoGCR0PAmuWxm1Rc+BSqDaD3MfwO+4Ht62bxl/J/dX0A/em5dF44Mxx7b9N4Epf
-         knu+dlnACDd2mTX8R5D+qGajwfX0uqZOjtBIBM4PsERdRZBGDCCZIMv3RlxiYBE6Lz+c
-         aEZw==
+        bh=to+YLLcx4mRm6uwEhLu6r0Vfyic5/ofLdSpuyp1FJnI=;
+        b=cNBX7HN05gnqavPhgH/nQb9BTWUfUbvZrDv9s7UznkMNx869UM8UNVDequVAvHM9xe
+         PwtXHgxC0CRIuRrqpC0ozPFpgs38dejeZvfRVv2bdRu7NW86sD7LOcp62cfCdnDwFrjd
+         GPsd3wwa9AHS8zms0+MKxYNnEQeMYJ+DD+SpBFpUkrC3UJbAuiAmNH5z4G1EO4sZh5Gf
+         MyDvVix6v386omcOlmxfHwSHS/cvNOEXLrsNbe68Zc9juZRrNK07bzf2GFTYOG4UZs6s
+         PQ1kfv1LvXkLPqZgdeyJDrdsiDcXNPcHuFP/mAuwkhhuSQMjWgfRxBd2WseFFZS8h6Nv
+         FoTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=KsHBBlQbrCLiejasWVdLGkq8oWdlc6LBhKtDSdN6QwI=;
-        b=fq3ggpMATTlrjt6yfu2J7iYEm374CCk1Z4SzWNC4J/V+rNKqwj6KbWsoutgv8+twMC
-         ScKXFt3CVd1WWeD4Xak62QgKk9MXbVQuwWTW/anv8NtHemsWq0tenM91e2+XKn3CgPam
-         1ZujlD7qa1NhS5yEfDyTOh6+L0gO5XehqX3T8F/pDfanH6SPUO+jHrso4bGMhY+2uUXl
-         6ANwccCTgOyFPk2EM/Hw7AGKHAnl/754XekZR4bvKkuC0pv/dPdK081kf8AA04zSyQ6g
-         YfxBAjXrbH7mCeUbazGVj8uHBd2YWzeyqCxWKWCX3URE8wCmqT1rD1AjrCAYcMvXzCsh
-         sctQ==
-X-Gm-Message-State: APjAAAWMUhHhxFyI61KODtMQZbnlj9MNXOX0694zFsASls7fVq0lhx5E
-        YSs1dUBE0gl5JX1rhP+v198=
-X-Google-Smtp-Source: APXvYqyZtS7FMaw4a4j8BfcYCwdI54uw7GmeSz+cjw4tU6m37ZYKtM3INsA421+ZjDSnCsDBZrmlLQ==
-X-Received: by 2002:a17:90a:30e4:: with SMTP id h91mr7166684pjb.37.1561657532831;
-        Thu, 27 Jun 2019 10:45:32 -0700 (PDT)
+        bh=to+YLLcx4mRm6uwEhLu6r0Vfyic5/ofLdSpuyp1FJnI=;
+        b=LGfVCDc8QAvWj9/ml5XAfZlPNj3m8lH6UCKSI0fJcN7p9V79Gq7cwXKJrvVZnXCwh1
+         z8d0CqX5FaY5/mytKK3j1Y9wdjJfW3qBg1aMcl50W06YviRA8MTJC4fhKO9Otlih8v24
+         F1JbSuB8VstUtPZmdG/R9EYXLjOJ9tqi/S8RmMwt8SZeIPTlReMpzJkOgh5mRDgIUuXY
+         p3qBM70U/9MR3HR4EgS3ReyH/gUPoXpmQGGtC8itK7/Nx+9TN/g6mYjm5tfO78mKFDlT
+         QP4I7pALlHIqo75+Y76PAgdljT2DTi9RhqGWNodJrlg1DORt75Rn/NKMSQ95omyDmaZf
+         cBDA==
+X-Gm-Message-State: APjAAAV+IWW7y17BXXNSH6KljevjwGp/N2++AbuXPsAbEqrfKzTNWNJk
+        nxi37IqYOVu6f+a4CWpY3RuXTEZUobv77w==
+X-Google-Smtp-Source: APXvYqyyOYVCgav2HAI39gcd/3DCfCItKxManmXr01iOJGAwkrWnmAODqZqwsrdQOIVq1ZpgXUeFjw==
+X-Received: by 2002:a17:90a:26a1:: with SMTP id m30mr7583928pje.59.1561657541911;
+        Thu, 27 Jun 2019 10:45:41 -0700 (PDT)
 Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id d9sm2591082pgj.34.2019.06.27.10.45.30
+        by smtp.googlemail.com with ESMTPSA id g9sm2394525pgs.78.2019.06.27.10.45.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 10:45:32 -0700 (PDT)
+        Thu, 27 Jun 2019 10:45:41 -0700 (PDT)
 From:   Fuqian Huang <huangfq.daxian@gmail.com>
 Cc:     Fuqian Huang <huangfq.daxian@gmail.com>,
-        QLogic-Storage-Upstream@qlogic.com,
+        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 66/87] scsi: bnx2fc: remove memset after dma_alloc_coherent in bnx2fc_io.c
-Date:   Fri, 28 Jun 2019 01:45:26 +0800
-Message-Id: <20190627174526.5940-1-huangfq.daxian@gmail.com>
+Subject: [PATCH 67/87] scsi: bfa: remove memset after dma_alloc_coherent in bfad.c
+Date:   Fri, 28 Jun 2019 01:45:34 +0800
+Message-Id: <20190627174534.6045-1-huangfq.daxian@gmail.com>
 X-Mailer: git-send-email 2.11.0
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
@@ -65,22 +66,21 @@ So memset is not needed.
 
 Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
 ---
- drivers/scsi/bnx2fc/bnx2fc_io.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/scsi/bfa/bfad.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_io.c b/drivers/scsi/bnx2fc/bnx2fc_io.c
-index 8def63c0755f..92b289466797 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_io.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_io.c
-@@ -614,8 +614,6 @@ int bnx2fc_init_mp_req(struct bnx2fc_cmd *io_req)
- 		bnx2fc_free_mp_resc(io_req);
- 		return FAILED;
+diff --git a/drivers/scsi/bfa/bfad.c b/drivers/scsi/bfa/bfad.c
+index 2f9213b257a4..39ac58337290 100644
+--- a/drivers/scsi/bfa/bfad.c
++++ b/drivers/scsi/bfa/bfad.c
+@@ -622,7 +622,6 @@ bfad_hal_mem_alloc(struct bfad_s *bfad)
+ 			goto ext;
+ 		}
+ 		dma_elem->dma = phys_addr;
+-		memset(dma_elem->kva, 0, dma_elem->mem_len);
  	}
--	memset(mp_req->req_buf, 0, CNIC_PAGE_SIZE);
--	memset(mp_req->resp_buf, 0, CNIC_PAGE_SIZE);
- 
- 	/* Allocate and map mp_req_bd and mp_resp_bd */
- 	sz = sizeof(struct fcoe_bd_ctx);
+ ext:
+ 	return rc;
 -- 
 2.11.0
 
