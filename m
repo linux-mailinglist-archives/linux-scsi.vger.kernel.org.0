@@ -2,191 +2,178 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEE557D76
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 09:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB4C57E08
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 10:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbfF0Hre (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Jun 2019 03:47:34 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:47494 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726375AbfF0Hre (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 27 Jun 2019 03:47:34 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id E1F153083391;
-        Thu, 27 Jun 2019 07:47:33 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-24.pek2.redhat.com [10.72.8.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 81E415D71C;
-        Thu, 27 Jun 2019 07:47:25 +0000 (UTC)
-Date:   Thu, 27 Jun 2019 15:47:21 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Damien Le Moal <damien.lemoal@wdc.com>
-Cc:     linux-scsi@vger.kernel.org,
+        id S1726441AbfF0IO7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Jun 2019 04:14:59 -0400
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:44269 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726382AbfF0IO7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jun 2019 04:14:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1561623299; x=1593159299;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=NSydXb5ZgDl/kBCPFcS/Q/syWEKV2Fw6sHwFEMC5ZSU=;
+  b=POQzWKvN39QVVbpFntV3BXCwrwGIh4ejV6iXfR2lzPdOFxVcN+rwYtYK
+   O2aQ71NyLa7mUK1mxlJbYUxrTE1nqoQ4qRzGGMawxj/qOGaFVB5/7/gfe
+   USVax9gXmkkKiSAxYZymycYecWdCaRyDNgqmva9VBOMnlwY4CojoGrhMZ
+   CMeIeFi5zHcuRVXmfgWIcdZWeEAie4WmjzmA+4MdFaYkpOl/FulKbn1eS
+   uJZ9cp7KpMeWFmNWTA9hEQs4ssrQj7zcoPiddld9NzgRqA+dX20dqceJ8
+   BUbQVJnl1Cg3qPrWFYZecz+tVBF4KyuOXHbD6EzozwWsG3yHUOiFu4iky
+   w==;
+X-IronPort-AV: E=Sophos;i="5.63,423,1557158400"; 
+   d="scan'208";a="113297686"
+Received: from mail-co1nam03lp2055.outbound.protection.outlook.com (HELO NAM03-CO1-obe.outbound.protection.outlook.com) ([104.47.40.55])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Jun 2019 16:14:58 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=testarcselector01; d=microsoft.com; cv=none;
+ b=ZD3NHb48ZHCu5tpfxTpvLGWcfXTjzacAdUHxHtRmTQzXl1rVK4+2V6gIuNqjMOSnAPjKzYdsO96q2EoP8xxQiUqlj+tGDTIdhPZmPhcFQWjUgMBgqfaeqgVrCALmvGPoUxXE4gGkLnUwC4Q8M62Mxgww9lBOtPzljb8y6OWfVUo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=testarcselector01;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Efec09yEukizbIoYE3/0gnMl6dK7jI5m0a2wO/yUm8c=;
+ b=kDiPlvOHN/JLtDvoLoCgIJUp3nB7XU9BZdIHhnALRYhttSTL5d5UkYOqEvNov6id2zjF7wWL1tTYD34xzNUZssZSrKCmweZthSGazo+2+8mDwOp/D7/weqshBGYlyLs3p6JXPrxW7rpVHqd1lz6cD4pF9jd3Xl4JwrLKCCLrd18=
+ARC-Authentication-Results: i=1; test.office365.com
+ 1;spf=none;dmarc=none;dkim=none;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Efec09yEukizbIoYE3/0gnMl6dK7jI5m0a2wO/yUm8c=;
+ b=rnR9H/O0cJJxM5uT4WaudcNSi5Zb3UIv20DXqb5VJHqlVOnyj1dhAnvgUWiHLaBwRQ393RIa+Z/hnqa8YhZWudJ1RFeDPvIKvj468nrw6P1xjXpDeuVdilWhJcR7V5CuOXd2WI7An0Va242DiYvT8IZD90tywAk2grpzHyHlPAI=
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.58.207) by
+ BYAPR04MB4279.namprd04.prod.outlook.com (20.176.251.22) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2008.16; Thu, 27 Jun 2019 08:14:56 +0000
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::e94e:8ead:40b1:fae6]) by BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::e94e:8ead:40b1:fae6%7]) with mapi id 15.20.2008.017; Thu, 27 Jun 2019
+ 08:14:56 +0000
+From:   Damien Le Moal <Damien.LeMoal@wdc.com>
+To:     Christoph Hellwig <hch@lst.de>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
         Bart Van Assche <bvanassche@acm.org>
 Subject: Re: [PATCH V4 1/3] block: Allow mapping of vmalloc-ed buffers
-Message-ID: <20190627074720.GB24671@ming.t460p>
+Thread-Topic: [PATCH V4 1/3] block: Allow mapping of vmalloc-ed buffers
+Thread-Index: AQHVLJMD9dFUXSCKoEarjaRxND+ocQ==
+Date:   Thu, 27 Jun 2019 08:14:56 +0000
+Message-ID: <BYAPR04MB581674B8668D6F3015C5C0C6E7FD0@BYAPR04MB5816.namprd04.prod.outlook.com>
 References: <20190627024910.23987-1-damien.lemoal@wdc.com>
- <20190627024910.23987-2-damien.lemoal@wdc.com>
+ <20190627024910.23987-2-damien.lemoal@wdc.com> <20190627072800.GA9949@lst.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Damien.LeMoal@wdc.com; 
+x-originating-ip: [199.255.47.12]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6d69f6f7-d32e-4bf8-c167-08d6fad78a68
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB4279;
+x-ms-traffictypediagnostic: BYAPR04MB4279:
+x-microsoft-antispam-prvs: <BYAPR04MB4279F882E1493DB452A5BB27E7FD0@BYAPR04MB4279.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 008184426E
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(376002)(39860400002)(136003)(396003)(346002)(199004)(189003)(14444005)(316002)(81166006)(7736002)(81156014)(102836004)(76176011)(52536014)(305945005)(256004)(68736007)(72206003)(53546011)(6916009)(186003)(91956017)(486006)(66066001)(74316002)(8936002)(7696005)(99286004)(26005)(3846002)(229853002)(476003)(6116002)(478600001)(6436002)(446003)(66946007)(5660300002)(55016002)(53936002)(6506007)(71200400001)(71190400001)(14454004)(54906003)(33656002)(86362001)(76116006)(25786009)(66556008)(73956011)(2906002)(64756008)(66446008)(9686003)(66476007)(6246003)(8676002)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4279;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 5mQQmzrVw7FEdZCqoDbiwQHT/PC5Dz177FhfmizLE+qFhFRj3kvjyAvyZkPQbyifRPKxMHf6Hjuc8punC0yTfUGHTogYiEcUQF7IkngRpDp8/41hYuE6y9h3tTw0yw3s47NBy+vclYkrHRVtDT5CWpKUwICBUBieoKsxktZwdGKL1TpxaP7PBYFyFXdMXVe1W7+W/W4jbwvqHbMaBzYGAv97K364gQYk7nspqINoA/09BwUZNKHvYrBUg9aZflngednu+ILS+TVxcuoB+mlin8phlR+Njv/WZOgelEZqnRVbwzUCsoD0iD8TQ1KatHRWQaJ7FpELvi1uVDqnOCADYaEwywkbkcEo0fVJXD1YKBTefJt4CWuaU9zQGImQPo4L53UZs2dbBtKsHqnoNN65u9P6zkqjhu1SVXqWZuLpNWQ=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190627024910.23987-2-damien.lemoal@wdc.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Thu, 27 Jun 2019 07:47:34 +0000 (UTC)
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6d69f6f7-d32e-4bf8-c167-08d6fad78a68
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jun 2019 08:14:56.5798
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Damien.LeMoal@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4279
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 11:49:08AM +0900, Damien Le Moal wrote:
-> To allow the SCSI subsystem scsi_execute_req() function to issue
-> requests using large buffers that are better allocated with vmalloc()
-> rather than kmalloc(), modify bio_map_kern() and bio_copy_kern() to
-> allow passing a buffer allocated with vmalloc(). To do so, detect
-> vmalloc-ed buffers using is_vmalloc_addr(). For vmalloc-ed buffers,
-> flush the buffer using flush_kernel_vmap_range(), use vmalloc_to_page()
-> instead of virt_to_page() to obtain the pages of the buffer, and
-> invalidate the buffer addresses with invalidate_kernel_vmap_range() on
-> completion of read BIOs. This last point is executed using the function
-> bio_invalidate_vmalloc_pages() which is defined only if the
-> architecture defines ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE, that is, if the
-> architecture actually needs the invalidation done.
-> 
-> Fixes: 515ce6061312 ("scsi: sd_zbc: Fix sd_zbc_report_zones() buffer allocation")
-> Fixes: e76239a3748c ("block: add a report_zones method")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-> ---
->  block/bio.c | 43 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 42 insertions(+), 1 deletion(-)
-> 
-> diff --git a/block/bio.c b/block/bio.c
-> index ce797d73bb43..1c21d1e7f1b8 100644
-> --- a/block/bio.c
-> +++ b/block/bio.c
-> @@ -16,6 +16,7 @@
->  #include <linux/workqueue.h>
->  #include <linux/cgroup.h>
->  #include <linux/blk-cgroup.h>
-> +#include <linux/highmem.h>
->  
->  #include <trace/events/block.h>
->  #include "blk.h"
-> @@ -1479,8 +1480,26 @@ void bio_unmap_user(struct bio *bio)
->  	bio_put(bio);
->  }
->  
-> +#ifdef ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
-> +static void bio_invalidate_vmalloc_pages(struct bio *bio)
-> +{
-> +	if (bio->bi_private) {
-> +		struct bvec_iter_all iter_all;
-> +		struct bio_vec *bvec;
-> +		unsigned long len = 0;
-> +
-> +		bio_for_each_segment_all(bvec, bio, iter_all)
-> +			len += bvec->bv_len;
-> +		invalidate_kernel_vmap_range(bio->bi_private, len);
-> +	}
-> +}
-> +#else
-> +static void bio_invalidate_vmalloc_pages(struct bio *bio) {}
-> +#endif
-> +
->  static void bio_map_kern_endio(struct bio *bio)
->  {
-> +	bio_invalidate_vmalloc_pages(bio);
->  	bio_put(bio);
->  }
->  
-> @@ -1501,6 +1520,8 @@ struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
->  	unsigned long end = (kaddr + len + PAGE_SIZE - 1) >> PAGE_SHIFT;
->  	unsigned long start = kaddr >> PAGE_SHIFT;
->  	const int nr_pages = end - start;
-> +	bool is_vmalloc = is_vmalloc_addr(data);
-> +	struct page *page;
->  	int offset, i;
->  	struct bio *bio;
->  
-> @@ -1508,6 +1529,12 @@ struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
->  	if (!bio)
->  		return ERR_PTR(-ENOMEM);
->  
-> +	if (is_vmalloc) {
-> +		flush_kernel_vmap_range(data, len);
-> +		if ((!op_is_write(bio_op(bio))))
-> +			bio->bi_private = data;
-> +	}
-> +
->  	offset = offset_in_page(kaddr);
->  	for (i = 0; i < nr_pages; i++) {
->  		unsigned int bytes = PAGE_SIZE - offset;
-> @@ -1518,7 +1545,11 @@ struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
->  		if (bytes > len)
->  			bytes = len;
->  
-> -		if (bio_add_pc_page(q, bio, virt_to_page(data), bytes,
-> +		if (!is_vmalloc)
-> +			page = virt_to_page(data);
-> +		else
-> +			page = vmalloc_to_page(data);
-> +		if (bio_add_pc_page(q, bio, page, bytes,
->  				    offset) < bytes) {
->  			/* we don't support partial mappings */
->  			bio_put(bio);
-> @@ -1531,6 +1562,7 @@ struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
->  	}
->  
->  	bio->bi_end_io = bio_map_kern_endio;
-> +
->  	return bio;
->  }
->  EXPORT_SYMBOL(bio_map_kern);
-> @@ -1543,6 +1575,7 @@ static void bio_copy_kern_endio(struct bio *bio)
->  
->  static void bio_copy_kern_endio_read(struct bio *bio)
->  {
-> +	unsigned long len = 0;
->  	char *p = bio->bi_private;
->  	struct bio_vec *bvec;
->  	struct bvec_iter_all iter_all;
-> @@ -1550,8 +1583,12 @@ static void bio_copy_kern_endio_read(struct bio *bio)
->  	bio_for_each_segment_all(bvec, bio, iter_all) {
->  		memcpy(p, page_address(bvec->bv_page), bvec->bv_len);
->  		p += bvec->bv_len;
-> +		len += bvec->bv_len;
->  	}
->  
-> +	if (is_vmalloc_addr(bio->bi_private))
-> +		invalidate_kernel_vmap_range(bio->bi_private, len);
-> +
->  	bio_copy_kern_endio(bio);
->  }
->  
-> @@ -1572,6 +1609,7 @@ struct bio *bio_copy_kern(struct request_queue *q, void *data, unsigned int len,
->  	unsigned long kaddr = (unsigned long)data;
->  	unsigned long end = (kaddr + len + PAGE_SIZE - 1) >> PAGE_SHIFT;
->  	unsigned long start = kaddr >> PAGE_SHIFT;
-> +	bool is_vmalloc = is_vmalloc_addr(data);
->  	struct bio *bio;
->  	void *p = data;
->  	int nr_pages = 0;
-> @@ -1587,6 +1625,9 @@ struct bio *bio_copy_kern(struct request_queue *q, void *data, unsigned int len,
->  	if (!bio)
->  		return ERR_PTR(-ENOMEM);
->  
-> +	if (is_vmalloc)
-> +		flush_kernel_vmap_range(data, len);
-> +
-
-Are your sure that invalidate[|flush]_kernel_vmap_range is needed for
-bio_copy_kernel? The vmalloc buffer isn't involved in IO, and only
-accessed by CPU.
-
-Thanks,
-Ming
+Christoph,=0A=
+=0A=
+On 2019/06/27 16:28, Christoph Hellwig wrote:=0A=
+>> +#ifdef ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE=0A=
+> =0A=
+> That seems like an odd constructu, as you don't call=0A=
+> flush_kernel_dcache_page.  From looking whoe defines it it seems=0A=
+> to be about the right set of architectures, but that might be=0A=
+> by a mix of chance and similar requirements for cache flushing.=0A=
+=0A=
+This comes from include/linux/highmem.h:=0A=
+=0A=
+#ifndef ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE=0A=
+static inline void flush_kernel_dcache_page(struct page *page)=0A=
+{=0A=
+}=0A=
+static inline void flush_kernel_vmap_range(void *vaddr, int size)=0A=
+{=0A=
+}=0A=
+static inline void invalidate_kernel_vmap_range(void *vaddr, int size)=0A=
+{=0A=
+}=0A=
+#endif=0A=
+=0A=
+which I guessed is for the architectures that do not need the flush/invalid=
+ate=0A=
+vmap functions. I copied. Is there a better way ? The point was to avoid do=
+ing=0A=
+the loop on the bvec for the range length on architectures that have an emp=
+ty=0A=
+definition of invalidate_kernel_vmap_range().=0A=
+=0A=
+> =0A=
+>> +static void bio_invalidate_vmalloc_pages(struct bio *bio)=0A=
+>> +{=0A=
+>> +	if (bio->bi_private) {=0A=
+>> +		struct bvec_iter_all iter_all;=0A=
+>> +		struct bio_vec *bvec;=0A=
+>> +		unsigned long len =3D 0;=0A=
+>> +=0A=
+>> +		bio_for_each_segment_all(bvec, bio, iter_all)=0A=
+>> +			len +=3D bvec->bv_len;=0A=
+>> +             invalidate_kernel_vmap_range(bio->bi_private, len);=0A=
+> =0A=
+> We control the bio here, so we can directly iterate over the=0A=
+> segments instead of doing the fairly expensive bio_for_each_segment_all=
+=0A=
+> call that goes to each page and builds a bvec for it.=0A=
+=0A=
+OK. Got it. Will update it.=0A=
+=0A=
+> =0A=
+>> +	struct page *page;=0A=
+>>  	int offset, i;=0A=
+>>  	struct bio *bio;=0A=
+>>  =0A=
+>> @@ -1508,6 +1529,12 @@ struct bio *bio_map_kern(struct request_queue *q,=
+ void *data, unsigned int len,=0A=
+>>  	if (!bio)=0A=
+>>  		return ERR_PTR(-ENOMEM);=0A=
+>>  =0A=
+>> +	if (is_vmalloc) {=0A=
+>> +		flush_kernel_vmap_range(data, len);=0A=
+>> +		if ((!op_is_write(bio_op(bio))))=0A=
+>> +			bio->bi_private =3D data;=0A=
+>> +	}=0A=
+> =0A=
+> We've just allocate the bio, so bio->bi_opf is not actually set at=0A=
+> this point unfortunately.=0A=
+=0A=
+OK. I will move the check to the completion path then.=0A=
+=0A=
+Thanks !=0A=
+=0A=
+-- =0A=
+Damien Le Moal=0A=
+Western Digital Research=0A=
