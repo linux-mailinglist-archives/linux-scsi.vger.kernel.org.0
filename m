@@ -2,35 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D68055793D
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 04:04:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9FB57975
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 04:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfF0CEo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jun 2019 22:04:44 -0400
-Received: from [60.13.42.244] ([60.13.42.244]:53176 "EHLO
-        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726830AbfF0CEo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 26 Jun 2019 22:04:44 -0400
-X-Greylist: delayed 2387 seconds by postgrey-1.27 at vger.kernel.org; Wed, 26 Jun 2019 22:04:43 EDT
-Received: from localhost (localhost [IPv6:::1])
-        by localhost.localdomain (Postfix) with SMTP id 5AA0C11F8D91
-        for <linux-scsi@vger.kernel.org>; Thu, 27 Jun 2019 08:48:39 +0800 (CST)
-From:   linux-scsi@vger.kernel.org
-To:     Aqhlinux-scsi@vger.kernel.org
-Reply-To: demexinruslan+D1O1@gmail.com
-Subject: =?utf-8?B?0JrQu9C40LXQvdGC0YHQutC40LUg0LHQsNC30YshIEVt?=
-        =?utf-8?B?YWlsOiBwcm9kYXdlekBhcm15c3B5LmNvbSDQo9C30L3Q?=
-        =?utf-8?B?sNC50YLQtSDQv9C+0LTRgNC+0LHQvdC10LUh?=
+        id S1726898AbfF0C1P (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jun 2019 22:27:15 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:53010 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726833AbfF0C1P (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jun 2019 22:27:15 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5R2OJCr158484;
+        Thu, 27 Jun 2019 02:27:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=wTJmtSmsKZEwIH7KReMQGmLwFMGAH0weuV2WcidpqCI=;
+ b=4R5vNhuy3qrtDpQ/trcm6kBkzz2g5W/b7NUGmRp8OzyZk8dBJCRT9EHIrX5/5RJ8tr1A
+ weSIeBS9TvK6iathXYhQxUZ4GZXyZRGY7Dh/HveNReVm6tFvy8up5jXGL7BANcNl4OXM
+ ZE98hYNKMztuWAl4D1y73yX7wPEgEQxP1FrrGtCqEOxamNbPE7twbO53c5UCJHnURx8U
+ s/XMYYn2D/V/oS71pq8Jo1ImbfgxRkVKiBUS3W1yF3ytM+7RAT7xgtmcrYdT1rWf2DHq
+ 34vJA1LfrzqjQtIKh21zNU1jvU4SBlWF4IOTnUV6dRr6rpYTkJxVrTTjv/nNWkvfm81G 4A== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2t9c9pwh19-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Jun 2019 02:26:59 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5R2PSuV097622;
+        Thu, 27 Jun 2019 02:26:59 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2tat7d4p47-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 27 Jun 2019 02:26:59 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5R2QumM032359;
+        Thu, 27 Jun 2019 02:26:56 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 26 Jun 2019 19:26:56 -0700
+To:     "Bean Huo \(beanhuo\)" <beanhuo@micron.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Evan Green <evgreen@chromium.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi\@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH v2 0/3] scsi: ufs: typo fixes and improvement
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <BN7PR08MB5684A44F56972BCE0972B28EDBE10@BN7PR08MB5684.namprd08.prod.outlook.com>
+Date:   Wed, 26 Jun 2019 22:26:53 -0400
+In-Reply-To: <BN7PR08MB5684A44F56972BCE0972B28EDBE10@BN7PR08MB5684.namprd08.prod.outlook.com>
+        (Bean Huo's message of "Sun, 23 Jun 2019 17:37:56 +0000")
+Message-ID: <yq1k1d7lq4y.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8";
-Content-Transfer-Encoding: base64
-Message-Id: <20190627004839.5AA0C11F8D91@localhost.localdomain>
-Date:   Thu, 27 Jun 2019 08:48:39 +0800 (CST)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9300 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=945
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906270027
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9300 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=990 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906270027
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-0JrQu9C40LXQvdGC0YHQutC40LUg0LHQsNC30YshIEVtYWlsOiBwcm9kYXdlekBhcm15c3B5LmNv
-bSDQo9C30L3QsNC50YLQtSDQv9C+0LTRgNC+0LHQvdC10LUhDQo=
+
+Bean,
+
+> This series patch is to fix several typos and fix one issue of twice
+> completing ufs-bsg job in case of UPIU/DME command failed.
+>
+> Changed since v1:
+>     - split v1 patch
+>     - add fixes tag
+>     - delete needless blank line
+
+Applied to 5.3/scsi-queue. Mostly by hand. Please use git send-email to
+post patches. Thanks!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
