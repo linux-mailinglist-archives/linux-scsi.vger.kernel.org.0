@@ -2,95 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 158A2579B1
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 04:51:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353AB579A6
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 04:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbfF0CvE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jun 2019 22:51:04 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:44626 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726762AbfF0CvE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jun 2019 22:51:04 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5R2nkMN067077;
-        Thu, 27 Jun 2019 02:50:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=BXNZu2kIZV5mPU1BKZ6CDqoTZvg2cWw9JnnZY2jWA5Q=;
- b=uZDIqHcM/bxCrC3aLX710LR6O+rc6tmv32UlWjTyaWVxZFe1CVp404uRCsN4cpLqLMyJ
- G67STszIHBujIynPVc4FuxCVguXw+SzoeMe/d7SnBgfX9Nt1y3zV6x7aKQ/1M/6u+wmy
- QfEWHWnGipiwD28ckBdRSMEFOqoI1XZdCJKsxJckwvdGQiKiGTD9mcdD8jyAQG8khugD
- k1sqTh1A71FkI7LHW0CC6MZ5ro6+luSCu6Yr56DxOJy7Zkc+GD87+M+rz30Y6N7e5gdd
- D/e0NYvVblIpTVIZzzjkobcNuYjVBHSLpS0tAA0BdoV1r7YnDY89tc0XniTwv8PWBZSz AA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2t9cyqngq8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Jun 2019 02:50:48 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5R2mmF2133416;
-        Thu, 27 Jun 2019 02:48:48 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2tat7d4u5s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Jun 2019 02:48:48 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5R2maE2027809;
-        Thu, 27 Jun 2019 02:48:36 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 26 Jun 2019 19:48:35 -0700
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        id S1726945AbfF0CtN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jun 2019 22:49:13 -0400
+Received: from esa1.hgst.iphmx.com ([68.232.141.245]:34994 "EHLO
+        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726829AbfF0CtM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 26 Jun 2019 22:49:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1561603752; x=1593139752;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=E0hftjpsF+Kau0lGhV8j+bPXbIbWwoKJzrqW74jtxtE=;
+  b=khTcvIHLfMCVLzwG1ee2y1D8Uq36+WdoOKbh9kjpYqcqaQXl3AZF5vqc
+   S4YZyFAFtDIi+WQSLTJ2NE+TwDxC6rS0YV4loqCdGoKldQC+W/kzEJEj+
+   vI4Av0HMK45vjH+wWwtrDjjDi2fR9CxJyDvsqmd00GZDNP8Oxw1Ux2yEA
+   NTUBDx9mRvQQpZ44wzPmLeJUW78lDBs4k+UR9vxv0+gdhp7a8sIznUDxA
+   PY6hkC50W43BGXmzCoH46CXMlal0kS/xF7R/ZKL96Bt8z83IkK6wTP7YN
+   n404BEDvxoLa4cxG30Q0zhyQZuxNToTm9dmodeLvCxwfkFlZO/0Z1BQoj
+   g==;
+X-IronPort-AV: E=Sophos;i="5.63,422,1557158400"; 
+   d="scan'208";a="218022024"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 27 Jun 2019 10:49:11 +0800
+IronPort-SDR: /+A0qUZw4sEPySWSRUGbfX87WlPZL84ApO2CecYTwoPy53Doqnqlc7NNzks2AtUSImz9k5z1oy
+ SIRMWo+QQshFeuqlheFUcrWRMvIjhMJ9GI6RJMFx698Enx27VqoVJupV9GjyXKuoQr9XYVLXKl
+ LUEJtUE1hvRPWF6Xu5Jx9baro5RVnmJ9mdoEM922gChtBfFbxgybwABiR+kvZj0+/anu/anNu/
+ W4HfueNlo6fHmUjrJi2SOIhT8sIBk20KOF4CI4bz8FXqbjzJNLcsj6KgqXmLgQ0QsdbfmXMiGb
+ 62dQsFADeFhn433hRr/ve+Yp
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP; 26 Jun 2019 19:48:20 -0700
+IronPort-SDR: 16n8vWYVWNzHhnxF8f5OkL82zZYTsytQY3GffVNo7kPkI9P2vrwl8nleWo+tUuZbnslJKQEBhY
+ eZNCbJA9uPHBaiSXx+N6NKVp2GRehNJOTBwHysGgj5LMULaCCzXJRfNBCR0tb9x05heqb+O3Bu
+ Y3PrdSTUrosngpkvSTv27TR3hVv1d6Awp9WiykvH2NpQ9CG1OL3/YLejlaRmKmDtfd7RGVG34x
+ ZEszuAmN2mflH+/N8ZndLH31JE9jJ+jJdXgxqi2wY3mHQsH/aiSOLGGcwjkTAZUlfYoY6eQkpe
+ HQA=
+Received: from washi.fujisawa.hgst.com ([10.149.53.254])
+  by uls-op-cesaip01.wdc.com with ESMTP; 26 Jun 2019 19:49:11 -0700
+From:   Damien Le Moal <damien.lemoal@wdc.com>
+To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-@vger.kernel.org,
-        kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Evan Green <evgreen@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avi Shchislowski <avi.shchislowski@wdc.com>,
-        Alex Lemberg <alex.lemberg@wdc.com>,
-        Arthur Simchaev <Arthur.Simchaev@sandisk.com>
-Subject: Re: [PATCH] Documentation: scsi: ufs: announce ufs-tool v1.0
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
-Date:   Wed, 26 Jun 2019 22:48:31 -0400
-In-Reply-To: <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
-        (Arthur Simchaev's message of "Tue, 25 Jun 2019 15:36:00 +0300")
-Message-ID: <yq136jvlp4w.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH V4 0/3] Fix zone revalidation memory allocation failures
+Date:   Thu, 27 Jun 2019 11:49:07 +0900
+Message-Id: <20190627024910.23987-1-damien.lemoal@wdc.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9300 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=860
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906270031
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9300 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=915 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906270031
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+This series addresses a reccuring problem with zone revalidation
+failures observed during extensive testing with memory constrained
+system and device hot-plugging.
 
-Arthur,
+The problem source is failure to allocate large memory areas with
+alloc_pages() or kmalloc() in blk_revalidate_disk_zones() to store the
+disk array of zones (struct blk_zone) or in sd_zbc_report_zones() for
+the report zones command reply buffer.
 
-> +The user-space tool that interacts with the ufs-bsg endpoint and uses its
-> +upiu-based protocol, is available at
-> +https://github.com/westerndigitalcorporation/ufs-tool.
+The solution proposed here is to:
+1) limit the number of zones to be reported with a single report zones
+command execution, and
+2) Use vmalloc to allocate large-ish arrays and buffers in place of
+alloc_pages() or kmalloc().
 
-Applied to 5.3/scsi-queue. Thanks!
+With these changes, tests do not show any zone revalidation failures
+while not impacting the time taken for a disk zone inspection during
+device scan and revalidation.
+
+Changes from v3:
+* Reworked use of flush_kernel_vmap_range() and
+  invalidate_kernel_vmap_range() to contain the calls within bio.c,
+  transparently to the user of bio_map_kern().
+* Add similar support to bio_copy_kern().
+
+Changes from v2:
+* Move invalidate_kernel_vmap_range() of vmalloc-ed buffer to sd_zbc.c
+  in patch 2, after completion of scsi_execute_req().
+* In patch 2, add flush_kernel_vmap_range() before scsi_execute_req().
+
+Changes from V1:
+* Added call to invalidate_kernel_vmap_range() for vmalloc-ed buffers
+  in patch 1.
+* Fixed patch 2 compilation error with Sparc64 (kbuild robot)
+
+Damien Le Moal (3):
+  block: Allow mapping of vmalloc-ed buffers
+  sd_zbc: Fix report zones buffer allocation
+  block: Limit zone array allocation size
+
+ block/bio.c            | 43 +++++++++++++++++++++-
+ block/blk-zoned.c      | 29 +++++++--------
+ drivers/scsi/sd_zbc.c  | 83 +++++++++++++++++++++++++++++++-----------
+ include/linux/blkdev.h |  5 +++
+ 4 files changed, 122 insertions(+), 38 deletions(-)
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.21.0
+
