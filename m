@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA7957616
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 02:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E02657676
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 02:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728229AbfF0AfM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Jun 2019 20:35:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39632 "EHLO mail.kernel.org"
+        id S1729055AbfF0AjN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Jun 2019 20:39:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43438 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727467AbfF0AfL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:35:11 -0400
+        id S1727687AbfF0AjM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:39:12 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1A871217F4;
-        Thu, 27 Jun 2019 00:35:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 071352187F;
+        Thu, 27 Jun 2019 00:39:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561595710;
-        bh=ffipq4PLWCLGIasi6+ngkJmbXXy5sUL79DtV3ZtnifA=;
+        s=default; t=1561595951;
+        bh=PxxH4QTHtBhbxA2etIh3yvMhvli/RI3cZiMYBOuS4Q8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AJ+s275fGjK5lcbJmchjM0WQAenOQYd50QjG+PSXh6lEWBXL49gWxcEO+2fcMg/mU
-         rmKsWInJAZGhE1FGfKzxWu8Kovr7ZI3LRfDCfeKZ94m05Q1NZjGZKgFSbsOdG92D+Q
-         GPCH87bU5q4Eb7dBmthMxQoPBi5oRvTQeBRNie3s=
+        b=x1Ky5hEDrPKcZXMtbtvAlxFGaKul3YuuIYPgepG4Rz6JJqHdzawtkfYY5tmeX8EaX
+         cp/gLgUR+Avay3Bl2tqIJZRtRyQS9fLAbuNmw57Oeb+zkBz4TvV0rqHpC7W2MYXu/m
+         DYux6Tqrg3AtyPZZVIIB0wc8qXcoF6q3b0qJpcWU=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Nilesh Javali <njavali@marvell.com>, Lee Duncan <lduncan@suse.com>,
         Chris Leech <cleech@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 88/95] scsi: qedi: Check targetname while finding boot target information
-Date:   Wed, 26 Jun 2019 20:30:13 -0400
-Message-Id: <20190627003021.19867-88-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 56/60] scsi: qedi: Check targetname while finding boot target information
+Date:   Wed, 26 Jun 2019 20:36:11 -0400
+Message-Id: <20190627003616.20767-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190627003021.19867-1-sashal@kernel.org>
-References: <20190627003021.19867-1-sashal@kernel.org>
+In-Reply-To: <20190627003616.20767-1-sashal@kernel.org>
+References: <20190627003616.20767-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -95,10 +95,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/scsi/qedi/qedi_main.c b/drivers/scsi/qedi/qedi_main.c
-index e5db9a9954dc..a6ff7be0210a 100644
+index 4de740da547b..763c7628356b 100644
 --- a/drivers/scsi/qedi/qedi_main.c
 +++ b/drivers/scsi/qedi/qedi_main.c
-@@ -990,6 +990,9 @@ static int qedi_find_boot_info(struct qedi_ctx *qedi,
+@@ -955,6 +955,9 @@ static int qedi_find_boot_info(struct qedi_ctx *qedi,
  		if (!iscsi_is_session_online(cls_sess))
  			continue;
  
