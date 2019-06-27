@@ -2,75 +2,141 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C420258453
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 16:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C029586C8
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 18:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbfF0OQv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Jun 2019 10:16:51 -0400
-Received: from verein.lst.de ([213.95.11.210]:39044 "EHLO newverein.lst.de"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726370AbfF0OQv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 27 Jun 2019 10:16:51 -0400
-Received: by newverein.lst.de (Postfix, from userid 2407)
-        id EB65768C7B; Thu, 27 Jun 2019 16:09:00 +0200 (CEST)
-Date:   Thu, 27 Jun 2019 16:09:00 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Damien Le Moal <damien.lemoal@wdc.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH V5 2/3] sd_zbc: Fix report zones buffer allocation
-Message-ID: <20190627140900.GB6209@lst.de>
-References: <20190627092944.20957-1-damien.lemoal@wdc.com> <20190627092944.20957-3-damien.lemoal@wdc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190627092944.20957-3-damien.lemoal@wdc.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+        id S1726620AbfF0QOU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Jun 2019 12:14:20 -0400
+Received: from relay.sw.ru ([185.231.240.75]:44580 "EHLO relay.sw.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726464AbfF0QOR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 27 Jun 2019 12:14:17 -0400
+Received: from [10.94.4.83] (helo=finist-ce7.sw.ru)
+        by relay.sw.ru with esmtp (Exim 4.92)
+        (envelope-from <khorenko@virtuozzo.com>)
+        id 1hgX2H-00047n-6O; Thu, 27 Jun 2019 19:14:09 +0300
+From:   Konstantin Khorenko <khorenko@virtuozzo.com>
+To:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        Prasad B Munirathnam <prasad.munirathnam@microsemi.com>,
+        Raghava Aditya Renukunta 
+        <RaghavaAditya.Renukunta@microsemi.com>
+Cc:     Konstantin Khorenko <khorenko@virtuozzo.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 0/1] aacraid: Host adapter Adaptec 6405 constantly resets under high io load
+Date:   Thu, 27 Jun 2019 19:14:07 +0300
+Message-Id: <20190627161408.10295-1-khorenko@virtuozzo.com>
+X-Mailer: git-send-email 2.15.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> @@ -79,6 +80,7 @@ static int sd_zbc_do_report_zones(struct scsi_disk *sdkp, unsigned char *buf,
->  	put_unaligned_be32(buflen, &cmd[10]);
->  	if (partial)
->  		cmd[14] = ZBC_REPORT_ZONE_PARTIAL;
-> +
->  	memset(buf, 0, buflen);
->  
->  	result = scsi_execute_req(sdp, cmd, DMA_FROM_DEVICE,
+Problem description:
+====================
+A node with Adaptec 6405 controller, latest BIOS V5.3-0[19204]
+A lot of disks attached to the controller.
+Simple test: running mkfs.ext4 on many disks on the same controller in
+parallel
+(mkfs is not important here, any serious io load triggers controller aborts)
 
-Spurious whitespace change.
+Results:
+* no problems (controller resets) with kernels prior to
+  395e5df79a95 ("scsi: aacraid: Remove reference to Series-9")
 
-> +static void *sd_zbc_alloc_report_buffer(struct request_queue *q,
-> +					unsigned int nr_zones, size_t *buflen,
-> +					gfp_t gfp_mask)
-> +{
-> +	size_t bufsize;
-> +	void *buf;
-> +
-> +	/*
-> +	 * Report zone buffer size should be at most 64B times the number of
-> +	 * zones requested plus the 64B reply header, but should be at least
-> +	 * SECTOR_SIZE for ATA devices.
-> +	 * Make sure that this size does not exceed the hardware capabilities.
-> +	 * Furthermore, since the report zone command cannot be split, make
-> +	 * sure that the allocated buffer can always be mapped by limiting the
-> +	 * number of pages allocated to the HBA max segments limit.
-> +	 */
-> +	nr_zones = min(nr_zones, SD_ZBC_REPORT_MAX_ZONES);
-> +	bufsize = roundup((nr_zones + 1) * 64, 512);
-> +	bufsize = min_t(size_t, bufsize,
-> +			queue_max_hw_sectors(q) << SECTOR_SHIFT);
-> +	bufsize = min_t(size_t, bufsize, queue_max_segments(q) << PAGE_SHIFT);
-> +
-> +	buf = __vmalloc(bufsize, gfp_mask, PAGE_KERNEL);
+* latest ms kernel v5.2-rc6-15-g249155c20f9b - mkfs processes are in D state,
+  lot of complains in logs like:
 
-__vmalloc is odd in that it takes a gfp parameter, but can't actually
-use it for the page table allocations.  So you'll need to do
-memalloc_noio_save here, or even better do that in the block layer and
-remove the gfp_t parameter from ->report_zones.
+  [  654.894633] aacraid: Host adapter abort request.
+  aacraid: Outstanding commands on (0,1,43,0):
+  [  699.441034] aacraid: Host adapter abort request.
+  aacraid: Outstanding commands on (0,1,40,0):
+  [  699.442950] aacraid: Host adapter reset request. SCSI hang ?
+  [  714.457428] aacraid: Host adapter reset request. SCSI hang ?
+  ...
+  [  759.514759] aacraid: Host adapter reset request. SCSI hang ?
+  [  759.514869] aacraid 0000:03:00.0: outstanding cmd: midlevel-0
+  [  759.514870] aacraid 0000:03:00.0: outstanding cmd: lowlevel-0
+  [  759.514872] aacraid 0000:03:00.0: outstanding cmd: error handler-498
+  [  759.514873] aacraid 0000:03:00.0: outstanding cmd: firmware-471
+  [  759.514875] aacraid 0000:03:00.0: outstanding cmd: kernel-60
+  [  759.514912] aacraid 0000:03:00.0: Controller reset type is 3
+  [  759.515013] aacraid 0000:03:00.0: Issuing IOP reset
+  [  850.296705] aacraid 0000:03:00.0: IOP reset succeeded
+
+Same complains on Ubuntu kernel 4.15.0-50-generic:
+https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1777586
+
+Controller:
+===========
+03:00.0 RAID bus controller: Adaptec Series 6 - 6G SAS/PCIe 2 (rev 01)
+         Subsystem: Adaptec Series 6 - ASR-6405 - 4 internal 6G SAS ports
+
+Test:
+=====
+# cat dev.list
+/dev/sdq1
+/dev/sde1
+/dev/sds1
+/dev/sdb1
+/dev/sdk1
+/dev/sdaj1
+/dev/sdaf1
+/dev/sdd1
+/dev/sdac1
+/dev/sdai1
+/dev/sdz1
+/dev/sdj1
+/dev/sdy1
+/dev/sdn1
+/dev/sdae1
+/dev/sdg1
+/dev/sdi1
+/dev/sdc1
+/dev/sdf1
+/dev/sdl1
+/dev/sda1
+/dev/sdab1
+/dev/sdr1
+/dev/sdo1
+/dev/sdah1
+/dev/sdm1
+/dev/sdt1
+/dev/sdp1
+/dev/sdad1
+/dev/sdh1
+
+===========================================
+# cat run_mkfs.sh
+#!/bin/bash
+
+while read i; do
+   mkfs.ext4 $i -q -E lazy_itable_init=1 -O uninit_bg -m 0 &
+done
+
+=================================
+# cat dev.list | ./run_mkfs.sh
+
+The issue is 100% reproducible.
+
+i've bisected to the culprit patch, it's
+395e5df79a95 ("scsi: aacraid: Remove reference to Series-9")
+
+it changes arc ctrl checks for Series-6 controllers
+and i've checked that resurrection of original logic in arc ctrl checks
+eliminates controller hangs/resets.
+
+
+Konstantin Khorenko (1):
+  scsi: aacraid: resurrect correct arc ctrl checks for Series-6
+
+ drivers/scsi/aacraid/aacraid.h  | 11 -----------
+ drivers/scsi/aacraid/comminit.c | 14 ++++++++++----
+ drivers/scsi/aacraid/commsup.c  |  4 +++-
+ drivers/scsi/aacraid/linit.c    |  7 +++++--
+ 4 files changed, 18 insertions(+), 18 deletions(-)
+
+-- 
+2.15.1
 
