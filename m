@@ -2,104 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CE85A573
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jun 2019 21:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B693A5A7C0
+	for <lists+linux-scsi@lfdr.de>; Sat, 29 Jun 2019 01:48:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726879AbfF1Twn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Jun 2019 15:52:43 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:39956 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726819AbfF1Twn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Jun 2019 15:52:43 -0400
-Received: by mail-yw1-f65.google.com with SMTP id b143so4634230ywb.7
-        for <linux-scsi@vger.kernel.org>; Fri, 28 Jun 2019 12:52:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/Zbt8t4OGSrBZUltQdpu2XfV4/PLifVH/Z0A6OyR0+8=;
-        b=bsREio19ZCYiktCkIASujl5tmzasz+I6GbX0QwjW1yWtrPHLtl8F72d/tP0OV718gu
-         JhET9fkvZSnspuxgKrEOx/1kP1SYjQ7fj0fI/XoKoCGyk+qi6UDO6wRJo+hNRVYcyyxq
-         0JSncshPTPt64doooXNY6ma4/ktV2ka0yVK/xrE/yAYCFGpIjfHmlQ4eCCCi+mJeJUsc
-         8W4PI0vw66GNUmY1JGqXcSHa2CiCZHRkpxNiXv/kZ+fttkGp4qs1PP7G81iPFP6xFUG7
-         n7G6MbZWqfBIpLiVXTzG3xd/E7GrLNqS/TCCUVcsr/qDjsGrDy2eGI721OOsI6wgTV9h
-         S/yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/Zbt8t4OGSrBZUltQdpu2XfV4/PLifVH/Z0A6OyR0+8=;
-        b=ml745aeUp0KPRPNw2yuMlXm8zCucPJAS55M8Px4XSOpp5MXs8O3pXRt130WdFMOgiL
-         O00261T6GHqsMe9jffLhfkjMHJx9vmqOXhHy7E/qcES1RXgayecVNAfLpdXWtxpnfcc2
-         WfOeyQ1qd4cNTB3UzGPoiT56y9tTFasGCfyjbBWlUb26Yn6j/9WFfjWjHNS5k18uqGfV
-         PpPbbGPaCYbPU/r630JLnLVOHq3ILqDtJojXfBaGL8kX6ICChcXeelNaVXwIyXUKUw2X
-         N6nFn/Nb0OgRoiIBtFvRrWunMuZNVGyK8F2TTohMyDnPPwCfSss/7G3rlAzL8/WQrtYX
-         rRyQ==
-X-Gm-Message-State: APjAAAXQwyJe5DkiJsfzRHPI4hNOblZjUk2wNlp3jONkI6xKw470SPoD
-        a2ztHcTOqRG7QKiR4YPza1IFvwm5Jc4=
-X-Google-Smtp-Source: APXvYqwx1qQX7jDj7sbQsa9UKXZ9WAQGkoloDCyybo6LArXuMCbbpsej7ZRWo2R1ymyozzguAE8ZtA==
-X-Received: by 2002:a81:6857:: with SMTP id d84mr7493610ywc.122.1561751562049;
-        Fri, 28 Jun 2019 12:52:42 -0700 (PDT)
-Received: from mail-yw1-f46.google.com (mail-yw1-f46.google.com. [209.85.161.46])
-        by smtp.gmail.com with ESMTPSA id b127sm678467ywb.7.2019.06.28.12.52.40
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
-        Fri, 28 Jun 2019 12:52:41 -0700 (PDT)
-Received: by mail-yw1-f46.google.com with SMTP id l79so4630297ywe.11
-        for <linux-scsi@vger.kernel.org>; Fri, 28 Jun 2019 12:52:40 -0700 (PDT)
-X-Received: by 2002:a81:8357:: with SMTP id t84mr7023115ywf.109.1561751559659;
- Fri, 28 Jun 2019 12:52:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190628123819.2785504-1-arnd@arndb.de> <20190628123819.2785504-3-arnd@arndb.de>
-In-Reply-To: <20190628123819.2785504-3-arnd@arndb.de>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 28 Jun 2019 15:52:03 -0400
-X-Gmail-Original-Message-ID: <CA+FuTSdL=GwjhbERsePAJfbakgEQZb7X51UHw=+4R9dJD3JD4A@mail.gmail.com>
-Message-ID: <CA+FuTSdL=GwjhbERsePAJfbakgEQZb7X51UHw=+4R9dJD3JD4A@mail.gmail.com>
-Subject: Re: [PATCH 3/4] staging: rtl8712: reduce stack usage, again
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Wensong Zhang <wensong@linux-vs.org>,
-        Simon Horman <horms@verge.net.au>,
-        Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        James Morris <jmorris@namei.org>, linux-scsi@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        devel@driverdev.osuosl.org,
-        Network Development <netdev@vger.kernel.org>,
-        lvs-devel@vger.kernel.org,
-        netfilter-devel <netfilter-devel@vger.kernel.org>,
-        coreteam@netfilter.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Nishka Dasgupta <nishkadg.linux@gmail.com>
+        id S1726956AbfF1Xs0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Jun 2019 19:48:26 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:60726 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726643AbfF1Xs0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 28 Jun 2019 19:48:26 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0D6838EE0F5;
+        Fri, 28 Jun 2019 16:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1561765706;
+        bh=8TfBUOwrfWPIW8hwVX/RWo8daA0gmzbJ8Erv3ZCUqCc=;
+        h=Subject:From:To:Cc:Date:From;
+        b=l0lt12s84JjE6WmBrY3R3qhZi5EUect7aahlyIOwAxw7Xv79sLoyBnPiuM0C3scgY
+         KdTFWGT1CEtUZicjiM1cR95SbhksJUlIRru1CjV908qs8BkkHcXVB1LmswmDUTrucR
+         1Pz6/krxXW9OQNO0k18jiOXYOegAFj/M+mY7jZoU=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IvOhdlC4EP8L; Fri, 28 Jun 2019 16:48:25 -0700 (PDT)
+Received: from jarvis.lan (unknown [50.35.68.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 69B728EE0C7;
+        Fri, 28 Jun 2019 16:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1561765705;
+        bh=8TfBUOwrfWPIW8hwVX/RWo8daA0gmzbJ8Erv3ZCUqCc=;
+        h=Subject:From:To:Cc:Date:From;
+        b=H7MKM6/RiP9cM8NbXMApxe7/yrMrJNZhw966+2vWU/FM8/S2SGD3ohTC+NSzjpZw9
+         hH2STS3eWZJMM3DJIgwvcMapgo7RaYqrxZPPvzMhGzavrP1FuZHeSXB92JmzfrOKTP
+         WzOQNTBamUcgw3J+jQE9b4qFaD6hlpJbXppD8EHU=
+Message-ID: <1561765703.5883.12.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.2-rc6
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 28 Jun 2019 16:48:23 -0700
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jun 28, 2019 at 8:41 AM Arnd Bergmann <arnd@arndb.de> wrote:
->
-> An earlier patch I sent reduced the stack usage enough to get
-> below the warning limit, and I could show this was safe, but with
-> GCC_PLUGIN_STRUCTLEAK_BYREF_ALL, it gets worse again because large stack
-> variables in the same function no longer overlap:
->
-> drivers/staging/rtl8712/rtl871x_ioctl_linux.c: In function 'translate_scan.isra.2':
-> drivers/staging/rtl8712/rtl871x_ioctl_linux.c:322:1: error: the frame size of 1200 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
->
-> Split out the largest two blocks in the affected function into two
-> separate functions and mark those noinline_for_stack.
->
-> Fixes: 8c5af16f7953 ("staging: rtl8712: reduce stack usage")
-> Fixes: 81a56f6dcd20 ("gcc-plugins: structleak: Generalize to all variable types")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+One simple fix for a driver use after free.
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+The patch is available here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+
+The short changelog is:
+
+Jan Kara (1):
+      scsi: vmw_pscsi: Fix use-after-free in pvscsi_queue_lck()
+
+And the diffstat:
+
+ drivers/scsi/vmw_pvscsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/scsi/vmw_pvscsi.c b/drivers/scsi/vmw_pvscsi.c
+index ecee4b3ff073..377b07b2feeb 100644
+--- a/drivers/scsi/vmw_pvscsi.c
++++ b/drivers/scsi/vmw_pvscsi.c
+@@ -763,6 +763,7 @@ static int pvscsi_queue_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd
+ 	struct pvscsi_adapter *adapter = shost_priv(host);
+ 	struct pvscsi_ctx *ctx;
+ 	unsigned long flags;
++	unsigned char op;
+ 
+ 	spin_lock_irqsave(&adapter->hw_lock, flags);
+ 
+@@ -775,13 +776,14 @@ static int pvscsi_queue_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd
+ 	}
+ 
+ 	cmd->scsi_done = done;
++	op = cmd->cmnd[0];
+ 
+ 	dev_dbg(&cmd->device->sdev_gendev,
+-		"queued cmd %p, ctx %p, op=%x\n", cmd, ctx, cmd->cmnd[0]);
++		"queued cmd %p, ctx %p, op=%x\n", cmd, ctx, op);
+ 
+ 	spin_unlock_irqrestore(&adapter->hw_lock, flags);
+ 
+-	pvscsi_kick_io(adapter, cmd->cmnd[0]);
++	pvscsi_kick_io(adapter, op);
+ 
+ 	return 0;
+ }
