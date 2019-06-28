@@ -2,97 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5D3595DD
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jun 2019 10:18:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADB3597EA
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jun 2019 11:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbfF1IR7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Jun 2019 04:17:59 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:19120 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726632AbfF1IR7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 28 Jun 2019 04:17:59 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 634BE66BDE366B1C257B;
-        Fri, 28 Jun 2019 16:17:51 +0800 (CST)
-Received: from [127.0.0.1] (10.202.227.238) by DGGEMS401-HUB.china.huawei.com
- (10.3.19.201) with Microsoft SMTP Server id 14.3.439.0; Fri, 28 Jun 2019
- 16:17:47 +0800
-Subject: Re: [PATCH 58/87] scsi: mvsas: remove memset after dma_alloc_coherent
-To:     Fuqian Huang <huangfq.daxian@gmail.com>
-References: <20190627174355.5252-1-huangfq.daxian@gmail.com>
-CC:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Allison Randal <allison@lohutok.net>,
-        "Johannes Thumshirn" <jthumshirn@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <cf7d2136-b298-ac4f-2264-5ceecf99175b@huawei.com>
-Date:   Fri, 28 Jun 2019 09:17:41 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.3.0
-MIME-Version: 1.0
-In-Reply-To: <20190627174355.5252-1-huangfq.daxian@gmail.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.238]
-X-CFilter-Loop: Reflected
+        id S1726657AbfF1JvR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Jun 2019 05:51:17 -0400
+Received: from mail-pg1-f177.google.com ([209.85.215.177]:41276 "EHLO
+        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726633AbfF1JvR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Jun 2019 05:51:17 -0400
+Received: by mail-pg1-f177.google.com with SMTP id q4so877102pgj.8
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Jun 2019 02:51:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=YwYOSHhKqL2V8VaSIWY/HLQqXyDe9+j81Kj3CzYdKRw=;
+        b=daTekRFQK1GWPhQBKesObC8lSzwbGEIAMFyL8pLBlRRzSYA9uAufW8wPYHQlvabxU1
+         c0S9ca88H88Mv7wM3jnDF6d2g5x+p15dZChzPbHdEq2WDv/ShO6XEpfL9n7DEYrXaEs4
+         f8KMiyRcPYFtPvxVNDzKW0cZxEGJh5A+nWCj8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=YwYOSHhKqL2V8VaSIWY/HLQqXyDe9+j81Kj3CzYdKRw=;
+        b=olxwag1iPbar/SQwb5rKsIloAbmxeApVgubn/Gd5UbCLPE0MhuNN4pwHmnhWCDFxg8
+         NWKQA/2aI3u6NvTEEhlRT/7JfyIMfav0uwTbkcAm7J1R7PfEnnOgS5sqTWCWI4s46JXJ
+         QvjQxfijik9xyBF8T2jb3eRqr1DsGxmn9NWr0dIjTwz7wC4n9zdtsvqwtDHRp1og/eWH
+         x2iGN2Ai7/yBiLiozH6SPcnXoH21k/vUNtxD+VvcmPkZW+sbcLmJDpMJkpm9d9QyPwf7
+         uS/9cOQ4SodaxTTNnEKjKUzb6X0vNjnRZudi2IPryzVOz3wBCTxjc9rbwfMccEIpwWJl
+         szjQ==
+X-Gm-Message-State: APjAAAWzD788mJkF3nIkY6Ast7pl74JmctMFbk3AZZS759/83AuNvdnJ
+        oqGIe2vZBUJjEeQuKe6yzUf5KP+UCH+EBIX6AeHRwkCHk+EKB6iefnZjLC9buHQIo0uxFfn6JXs
+        s0NFML4USEzsE78pD2V+m6VgDgPReEZ9ANFaNsfYlQzssFG9GH6LgmDNOnKi+rzp/B5MXDca8zs
+        a4gFvVjFiQgUQcNvpyo2SZlXI=
+X-Google-Smtp-Source: APXvYqzjlg/2yNkR207tjWvzEK180okLsds4rzUI7zmY3dQP0pTUqshf3M5th6THf0Dx7kMdnEGfpg==
+X-Received: by 2002:a17:90a:cb8e:: with SMTP id a14mr11842811pju.124.1561715476034;
+        Fri, 28 Jun 2019 02:51:16 -0700 (PDT)
+Received: from dhcp-135-24-192-142.dhcp.broadcom.net ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id q19sm2096975pfc.62.2019.06.28.02.51.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jun 2019 02:51:15 -0700 (PDT)
+From:   Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
+Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
+        sasikumar.pc@broadcom.com, chandrakanth.patil@broadcom.com,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+Subject: [PATCH 0/4] megaraid_sas: driver updates
+Date:   Fri, 28 Jun 2019 02:50:37 -0700
+Message-Id: <1561715441-1428-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
+X-Mailer: git-send-email 2.4.3
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 27/06/2019 18:43, Fuqian Huang wrote:
-> In commit af7ddd8a627c
+Hi Martin,
+This series contains four driver update patches.
+The first patch contains a fix for calculating the target ID
+sent to firmware. This patch was sent earlier as well[1], but
+got lost in the v2 series due to a mail client issue.
+Second patch enables newly added "msix_load_balance" flag
+only for Invader and later generation controllers.
+Third patch adds a module parameter which controls logging
+of async event notifications from firmware.
+Fourth patch updates the driver version.
+Please consider these patches for 5.3/scsi-queue.
 
-That's a merge commit. I think that you maybe are thinking of 
-specifically commit 518a2f1925c3.
+[1]: https://www.spinics.net/lists/stable/msg299673.html
 
-> ("Merge tag 'dma-mapping-4.21' of git://git.infradead.org/users/hch/dma-mapping"),
+Thanks,
+Shivasharan
+ 
+Shivasharan S (4):
+  megaraid_sas: Fix calculation of target ID
+  megaraid_sas: Enable msix_load_balance for Invader and later
+    controllers
+  megaraid_sas: Add module parameter for FW Async event logging
+  megaraid_sas: Update driver version to 07.710.50.00
 
-nit: this can be spread of multiple lines at whitespace delimiters
+ drivers/scsi/megaraid/megaraid_sas.h      |  4 ++--
+ drivers/scsi/megaraid/megaraid_sas_base.c | 24 +++++++++++++++++++++---
+ 2 files changed, 23 insertions(+), 5 deletions(-)
 
-> dma_alloc_coherent has already zeroed the memory.
-> So memset is not needed.
->
-> Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
-> ---
->  drivers/scsi/mvsas/mv_init.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
-> index da719b0694dc..f2fae160691d 100644
-> --- a/drivers/scsi/mvsas/mv_init.c
-> +++ b/drivers/scsi/mvsas/mv_init.c
-> @@ -241,19 +241,16 @@ static int mvs_alloc(struct mvs_info *mvi, struct Scsi_Host *shost)
->  				     &mvi->tx_dma, GFP_KERNEL);
->  	if (!mvi->tx)
->  		goto err_out;
-> -	memset(mvi->tx, 0, sizeof(*mvi->tx) * MVS_CHIP_SLOT_SZ);
->  	mvi->rx_fis = dma_alloc_coherent(mvi->dev, MVS_RX_FISL_SZ,
->  					 &mvi->rx_fis_dma, GFP_KERNEL);
->  	if (!mvi->rx_fis)
->  		goto err_out;
-> -	memset(mvi->rx_fis, 0, MVS_RX_FISL_SZ);
->
->  	mvi->rx = dma_alloc_coherent(mvi->dev,
->  				     sizeof(*mvi->rx) * (MVS_RX_RING_SZ + 1),
->  				     &mvi->rx_dma, GFP_KERNEL);
->  	if (!mvi->rx)
->  		goto err_out;
-> -	memset(mvi->rx, 0, sizeof(*mvi->rx) * (MVS_RX_RING_SZ + 1));
->  	mvi->rx[0] = cpu_to_le32(0xfff);
->  	mvi->rx_cons = 0xfff;
->
-> @@ -262,7 +259,6 @@ static int mvs_alloc(struct mvs_info *mvi, struct Scsi_Host *shost)
->  				       &mvi->slot_dma, GFP_KERNEL);
->  	if (!mvi->slot)
->  		goto err_out;
-> -	memset(mvi->slot, 0, sizeof(*mvi->slot) * slot_nr);
->
->  	mvi->bulk_buffer = dma_alloc_coherent(mvi->dev,
->  				       TRASH_BUCKET_SIZE,
->
-
+-- 
+2.9.5
 
