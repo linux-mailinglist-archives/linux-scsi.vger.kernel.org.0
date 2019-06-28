@@ -2,99 +2,172 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0F05892B
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Jun 2019 19:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A804B58EE8
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Jun 2019 02:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726620AbfF0RqZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Jun 2019 13:46:25 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:40151 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726540AbfF0RqZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jun 2019 13:46:25 -0400
-Received: by mail-pl1-f196.google.com with SMTP id a93so1688390pla.7;
-        Thu, 27 Jun 2019 10:46:24 -0700 (PDT)
+        id S1726586AbfF1AM0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Jun 2019 20:12:26 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:52872 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726506AbfF1AM0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Jun 2019 20:12:26 -0400
+Received: by mail-wm1-f66.google.com with SMTP id s3so7326229wms.2;
+        Thu, 27 Jun 2019 17:12:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=PIRPhI/UMnvi08tcprrRrj6ERaBMz8yibtguFMM+LZU=;
-        b=BCtDioW4dEpvPLoJf3TTXi+A7STbvxDOR+CivoGxs1TOGswespN6j0/TugrsFlHGML
-         yfWDjKKtGlTm5vC2WEKtg+6T7dtga+O7PkZhxEirr7PdSsjCnCDCqdsbVZQoJgtSYBGK
-         fetg679xQIQM/WnstgMP50wgO8UmyXH95YcKQp+SFqil2yrzIFlNGrtqa0zEkqglF7I4
-         rmR+oqNPfUzO4ZqX+neyoPGQObCyHrLE4jL832/5Eh53vvmua2uixAOA6H9fQXRnvNQr
-         0fofAiO3i1JEC7GBqX0RpeHT9S8XHWSyhntKLc6Wo824Y0VpaUfSMyL7S5O6iZI2RkIz
-         thgg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6A5DdWssKcMJqU8jJ4+ldhQjK6u4VCdf4h/8qoyEITo=;
+        b=e1acp849SUhRbKbOZA1US5sCdUgaFmD1ydXI5AKiuIXAjY9jhwq+EbRmvpzDjZyyJF
+         KAdayvOXBm7ASTS/dFbxrBnXxJwTB40GRJcCPnRv9GS+Al6/YW62YjpjLJiFAVp4tJO9
+         63ywDW7xTlHoib5K/SAuMzwZxTtSMeHLgP89N/yHCuC+s4Bk0/T3+B171FTOtQr6jUy3
+         QY1IME3EgP3DmHpuvpjy7dzq6iuNCcG/CVUN2YcqePfSEKfkWSfGHKBnsC09e0YbjS9O
+         E705R/KoGu6eCNMcCnEz9lSWVXqPdHY4HUA0UsqcGJdqODDlXZVUy20gXTdrsbP0WLwM
+         8RUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=PIRPhI/UMnvi08tcprrRrj6ERaBMz8yibtguFMM+LZU=;
-        b=Cnjq8weZoVU9VdQEPzhT2CyY9S4ffXuoA4dlmPDycugPsun15TssqfHOBDtHDAgTmc
-         fitqOUTIpx6S/U0fNa4xAXxJ3zuUIhs4inBIjmC5JWDABeWeR1xICHPoqki4RNOHrLAY
-         9wAA8YKKDhalk8m9+Ca31Mhst9x+EEqQslO/UHVGRXKcMjJ88z4Or1xTqXddS4aCF0oB
-         JlzNwtVes79cO97fuv0moLXR9DgDUhQwWhcqbvjxoH3Ixtgp7/qfkCTQBhNUMR9s9ewG
-         PMh/0b2ST0mJE0okO2Oisj/lTbBnpFcj4N9DYsZZrsbBIxYAd3gn0wFaPNeWEWdiKwir
-         1zNA==
-X-Gm-Message-State: APjAAAXxu7j+7uInNv6fNjN0NYoRzuwkxkOxeZjQXfbgFf4rmdZZrUON
-        HShEDQUcJmt6Pov8uKQqoSE=
-X-Google-Smtp-Source: APXvYqw17O07SCOj8UceZp3DgyEdO56/1F6KUbC0eBBxKuzwbpMiaPsKtg/aeYIyTf41ZnxkCutoFQ==
-X-Received: by 2002:a17:902:8207:: with SMTP id x7mr6046456pln.63.1561657584494;
-        Thu, 27 Jun 2019 10:46:24 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id e188sm4453637pfh.99.2019.06.27.10.46.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 27 Jun 2019 10:46:24 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Fuqian Huang <huangfq.daxian@gmail.com>,
-        Adam Radford <aradford@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 71/87] scsi: 3w-xxxx: remove memset after dma_alloc_coherent
-Date:   Fri, 28 Jun 2019 01:46:12 +0800
-Message-Id: <20190627174612.6366-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6A5DdWssKcMJqU8jJ4+ldhQjK6u4VCdf4h/8qoyEITo=;
+        b=ijLEC1zPtbeTd7uLTAtsctTP64bT7zE1/6ulR4fIHrV4g6YBHu65Q8nn8m6erBDgOZ
+         lIxtr/x64szeJEjNWU785/mw3fntBS6S/fYwAnjFyOFfUEuYZSbvoIVZBFkLmE2drLYY
+         FjBnpPHXUEyOyly2jnrns4CD9zCKHrj3XOmrFmWRmYR5O4cUlgumfXe+7i7Ep2HtYJIT
+         J+wO+osigjdrl8bX4lldgS8KQKtRISA91uVpHB8VA48rwJxWKWJCoHJk1sQSuYm00pO8
+         WbgAFnMFWBQyr8kq9pig8LegHjm1VWPCG0n9S1Qm4hB+0s7AyX1N1kL32gbX9YEq6EJ1
+         EX8w==
+X-Gm-Message-State: APjAAAVL4oLeQJyDMeJ5US4k9KQXfmQ78rbG/tuqt0bk/pjd3TbinseF
+        vtj4raYnklBpqN45H0QNvAyGG2Lq6QvjUjMMS8A=
+X-Google-Smtp-Source: APXvYqy+Nf+gi6LTn/5IPEdcOcHUr7oN+Kkfulo7BoxMddF4Mog5W+xbuT9SAMoBdayS9XPwpRKR9za3zGkffH9sZFw=
+X-Received: by 2002:a05:600c:204c:: with SMTP id p12mr4841587wmg.121.1561680744175;
+ Thu, 27 Jun 2019 17:12:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190627092944.20957-1-damien.lemoal@wdc.com> <20190627092944.20957-2-damien.lemoal@wdc.com>
+In-Reply-To: <20190627092944.20957-2-damien.lemoal@wdc.com>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Fri, 28 Jun 2019 08:12:12 +0800
+Message-ID: <CACVXFVP-VvtmEADFfOAOTAbE6q_NTfE9JL21CuWYLwXzRA=BBA@mail.gmail.com>
+Subject: Re: [PATCH V5 1/3] block: Allow mapping of vmalloc-ed buffers
+To:     Damien Le Moal <damien.lemoal@wdc.com>
+Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In commit af7ddd8a627c
-("Merge tag 'dma-mapping-4.21' of git://git.infradead.org/users/hch/dma-mapping"),
-dma_alloc_coherent has already zeroed the memory.
-So memset is not needed.
+On Thu, Jun 27, 2019 at 5:31 PM Damien Le Moal <damien.lemoal@wdc.com> wrote:
+>
+> To allow the SCSI subsystem scsi_execute_req() function to issue
+> requests using large buffers that are better allocated with vmalloc()
+> rather than kmalloc(), modify bio_map_kern() to allow passing a buffer
+> allocated with vmalloc().
+>
+> To do so, detect vmalloc-ed buffers using is_vmalloc_addr(). For
+> vmalloc-ed buffers, flush the buffer using flush_kernel_vmap_range(),
+> use vmalloc_to_page() instead of virt_to_page() to obtain the pages of
+> the buffer, and invalidate the buffer addresses with
+> invalidate_kernel_vmap_range() on completion of read BIOs. This last
+> point is executed using the function bio_invalidate_vmalloc_pages()
+> which is defined only if the architecture defines
+> ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE, that is, if the architecture
+> actually needs the invalidation done.
+>
+> Fixes: 515ce6061312 ("scsi: sd_zbc: Fix sd_zbc_report_zones() buffer allocation")
+> Fixes: e76239a3748c ("block: add a report_zones method")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+> ---
+>  block/bio.c | 29 ++++++++++++++++++++++++++++-
+>  1 file changed, 28 insertions(+), 1 deletion(-)
+>
+> diff --git a/block/bio.c b/block/bio.c
+> index ce797d73bb43..bbba5f08b2ef 100644
+> --- a/block/bio.c
+> +++ b/block/bio.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/workqueue.h>
+>  #include <linux/cgroup.h>
+>  #include <linux/blk-cgroup.h>
+> +#include <linux/highmem.h>
+>
+>  #include <trace/events/block.h>
+>  #include "blk.h"
+> @@ -1479,8 +1480,22 @@ void bio_unmap_user(struct bio *bio)
+>         bio_put(bio);
+>  }
+>
+> +static void bio_invalidate_vmalloc_pages(struct bio *bio)
+> +{
+> +#ifdef ARCH_HAS_FLUSH_KERNEL_DCACHE_PAGE
+> +       if (bio->bi_private && !op_is_write(bio_op(bio))) {
+> +               unsigned long i, len = 0;
+> +
+> +               for (i = 0; i < bio->bi_vcnt; i++)
+> +                       len += bio->bi_io_vec[i].bv_len;
+> +               invalidate_kernel_vmap_range(bio->bi_private, len);
+> +       }
+> +#endif
+> +}
+> +
+>  static void bio_map_kern_endio(struct bio *bio)
+>  {
+> +       bio_invalidate_vmalloc_pages(bio);
+>         bio_put(bio);
+>  }
+>
+> @@ -1501,6 +1516,8 @@ struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
+>         unsigned long end = (kaddr + len + PAGE_SIZE - 1) >> PAGE_SHIFT;
+>         unsigned long start = kaddr >> PAGE_SHIFT;
+>         const int nr_pages = end - start;
+> +       bool is_vmalloc = is_vmalloc_addr(data);
+> +       struct page *page;
+>         int offset, i;
+>         struct bio *bio;
+>
+> @@ -1508,6 +1525,11 @@ struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
+>         if (!bio)
+>                 return ERR_PTR(-ENOMEM);
+>
+> +       if (is_vmalloc) {
+> +               flush_kernel_vmap_range(data, len);
+> +               bio->bi_private = data;
+> +       }
+> +
+>         offset = offset_in_page(kaddr);
+>         for (i = 0; i < nr_pages; i++) {
+>                 unsigned int bytes = PAGE_SIZE - offset;
+> @@ -1518,7 +1540,11 @@ struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
+>                 if (bytes > len)
+>                         bytes = len;
+>
+> -               if (bio_add_pc_page(q, bio, virt_to_page(data), bytes,
+> +               if (!is_vmalloc)
+> +                       page = virt_to_page(data);
+> +               else
+> +                       page = vmalloc_to_page(data);
+> +               if (bio_add_pc_page(q, bio, page, bytes,
+>                                     offset) < bytes) {
+>                         /* we don't support partial mappings */
+>                         bio_put(bio);
+> @@ -1531,6 +1557,7 @@ struct bio *bio_map_kern(struct request_queue *q, void *data, unsigned int len,
+>         }
+>
+>         bio->bi_end_io = bio_map_kern_endio;
+> +
+>         return bio;
+>  }
+>  EXPORT_SYMBOL(bio_map_kern);
+> --
+> 2.21.0
+>
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
- drivers/scsi/3w-9xxx.c | 2 --
- drivers/scsi/3w-xxxx.c | 2 --
- 2 files changed, 4 deletions(-)
+Looks fine:
 
-diff --git a/drivers/scsi/3w-9xxx.c b/drivers/scsi/3w-9xxx.c
-index 3337b1e80412..da17d9104e6b 100644
---- a/drivers/scsi/3w-9xxx.c
-+++ b/drivers/scsi/3w-9xxx.c
-@@ -534,8 +534,6 @@ static int twa_allocate_memory(TW_Device_Extension *tw_dev, int size, int which)
- 		goto out;
- 	}
- 
--	memset(cpu_addr, 0, size*TW_Q_LENGTH);
--
- 	for (i = 0; i < TW_Q_LENGTH; i++) {
- 		switch(which) {
- 		case 0:
-diff --git a/drivers/scsi/3w-xxxx.c b/drivers/scsi/3w-xxxx.c
-index 2b1e0d503020..26703ef52a2e 100644
---- a/drivers/scsi/3w-xxxx.c
-+++ b/drivers/scsi/3w-xxxx.c
-@@ -848,8 +848,6 @@ static int tw_allocate_memory(TW_Device_Extension *tw_dev, int size, int which)
- 		return 1;
- 	}
- 
--	memset(cpu_addr, 0, size*TW_Q_LENGTH);
--
- 	for (i=0;i<TW_Q_LENGTH;i++) {
- 		switch(which) {
- 		case 0:
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+
 -- 
-2.11.0
-
+Ming Lei
