@@ -2,106 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B693A5A7C0
-	for <lists+linux-scsi@lfdr.de>; Sat, 29 Jun 2019 01:48:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CE3F5A7F3
+	for <lists+linux-scsi@lfdr.de>; Sat, 29 Jun 2019 03:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726956AbfF1Xs0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Jun 2019 19:48:26 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:60726 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726643AbfF1Xs0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 28 Jun 2019 19:48:26 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0D6838EE0F5;
-        Fri, 28 Jun 2019 16:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1561765706;
-        bh=8TfBUOwrfWPIW8hwVX/RWo8daA0gmzbJ8Erv3ZCUqCc=;
-        h=Subject:From:To:Cc:Date:From;
-        b=l0lt12s84JjE6WmBrY3R3qhZi5EUect7aahlyIOwAxw7Xv79sLoyBnPiuM0C3scgY
-         KdTFWGT1CEtUZicjiM1cR95SbhksJUlIRru1CjV908qs8BkkHcXVB1LmswmDUTrucR
-         1Pz6/krxXW9OQNO0k18jiOXYOegAFj/M+mY7jZoU=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IvOhdlC4EP8L; Fri, 28 Jun 2019 16:48:25 -0700 (PDT)
-Received: from jarvis.lan (unknown [50.35.68.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 69B728EE0C7;
-        Fri, 28 Jun 2019 16:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1561765705;
-        bh=8TfBUOwrfWPIW8hwVX/RWo8daA0gmzbJ8Erv3ZCUqCc=;
-        h=Subject:From:To:Cc:Date:From;
-        b=H7MKM6/RiP9cM8NbXMApxe7/yrMrJNZhw966+2vWU/FM8/S2SGD3ohTC+NSzjpZw9
-         hH2STS3eWZJMM3DJIgwvcMapgo7RaYqrxZPPvzMhGzavrP1FuZHeSXB92JmzfrOKTP
-         WzOQNTBamUcgw3J+jQE9b4qFaD6hlpJbXppD8EHU=
-Message-ID: <1561765703.5883.12.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.2-rc6
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 28 Jun 2019 16:48:23 -0700
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726729AbfF2BCZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Jun 2019 21:02:25 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43909 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726652AbfF2BCZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Jun 2019 21:02:25 -0400
+Received: by mail-pg1-f196.google.com with SMTP id f25so3305679pgv.10
+        for <linux-scsi@vger.kernel.org>; Fri, 28 Jun 2019 18:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=azV1r3kI2De1UK1aLNSrZEl+F3quwpOsTs6ORAV3f/U=;
+        b=exOxzW0mQUJI5jG9KbqHRNoEtMgv2Rk6OTpa4sq5AmInZp7kIDz5wW8eCeUZvUZQQ6
+         vAzkWqb4TUo8i75aF8JJ+6smTY97vkOp/nEJ9HRHdDU7cE7O2t1Uux8dl0W0U4vAqp4S
+         Sb9mTvaQMK60+HGFklKkt2Ma8/x7cydN+Q4SE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=azV1r3kI2De1UK1aLNSrZEl+F3quwpOsTs6ORAV3f/U=;
+        b=hQm7OCFoLkqjzVIsPAB7rdWhm7NKSL4IJnOULPcaOtTfrO7Q0Hk5rkeE6+jVw/Gzp1
+         tdDdSNrq2pPWVkyoGLHo/of6uFUcMuyskPvj70LBz7hjPPOYgt3SM2OpwY70ssyn5JMX
+         4H0ARXpm8i4fBM4C5JvEO/QxnoaJ7Ksgbg1ZAGZpcgt8u5UgVwQjPNQPl4Zgl8og9/pf
+         J0q6LAQDwucRlBZokuI8Da+F64WO8FpD+icgTj/iJH7U56imJ/nOSqEF6GBs47IrD1UB
+         AtOXmomaMz3EeATZNOig36J5o1pZ6UF2dDdR7QaKSQcFJ3CSLqwJpTnj4hK49ld5byt8
+         XSYA==
+X-Gm-Message-State: APjAAAUIfOjf4Un1LdiVJHOlROVg1/Bj/lascOJQ//0FECO5HNn4VT5z
+        Rx57StyN2sBA2JxNsbZvtQLIG0HpwzxQ79HHSRk5Ikg3g2yWTS8lQBuBLc0aecNurmknn0ucPGe
+        NjQgCo1Y0ieGB4I+79JEG1V6Avoy4HrgZAhOqKw2pizr8GiebViKFDlF7E/OiX1dpjKppdDLnFo
+        OrzBIrmO6faP566/H/da5udSQ=
+X-Google-Smtp-Source: APXvYqzTmJqFv9iZ58G6kS5r6RDqAvDjBNIfFiKxg+4MA/CpalepPWTgL0XwhJu0nY0gTU8kXl8Hdw==
+X-Received: by 2002:a63:2326:: with SMTP id j38mr12264025pgj.134.1561770144267;
+        Fri, 28 Jun 2019 18:02:24 -0700 (PDT)
+Received: from dhcp-135-24-192-142.dhcp.broadcom.net ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id y11sm5400868pfb.119.2019.06.28.18.02.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 28 Jun 2019 18:02:22 -0700 (PDT)
+From:   Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com
+Cc:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
+        sasikumar.pc@broadcom.com, chandrakanth.patil@broadcom.com,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/4] megaraid_sas: Fix calculation of target ID
+Date:   Fri, 28 Jun 2019 18:02:12 -0700
+Message-Id: <1561770132-27408-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
+X-Mailer: git-send-email 2.4.3
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-One simple fix for a driver use after free.
+In megasas_get_target_prop(), driver is incorrectly calculating the
+target ID for devices with channel 1 and 3.
+Due to this, firmware will either fail the command (if there is no
+device with the target id sent from driver) or could return the
+properties for a target which was not intended.
+Devices could end up with the wrong queue depth due to this.
 
-The patch is available here:
+Fix target id calculation for channel 1 and 3.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-
-The short changelog is:
-
-Jan Kara (1):
-      scsi: vmw_pscsi: Fix use-after-free in pvscsi_queue_lck()
-
-And the diffstat:
-
- drivers/scsi/vmw_pvscsi.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-With full diff below.
-
-James
-
+Fixes: 96188a89cc6d ("scsi: megaraid_sas: NVME interface target prop added")
+Cc: stable@vger.kernel.org
+Signed-off-by: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
 ---
+ drivers/scsi/megaraid/megaraid_sas_base.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/vmw_pvscsi.c b/drivers/scsi/vmw_pvscsi.c
-index ecee4b3ff073..377b07b2feeb 100644
---- a/drivers/scsi/vmw_pvscsi.c
-+++ b/drivers/scsi/vmw_pvscsi.c
-@@ -763,6 +763,7 @@ static int pvscsi_queue_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd
- 	struct pvscsi_adapter *adapter = shost_priv(host);
- 	struct pvscsi_ctx *ctx;
- 	unsigned long flags;
-+	unsigned char op;
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index b4c0bbc..9321878 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -6558,7 +6558,8 @@ megasas_get_target_prop(struct megasas_instance *instance,
+ 	int ret;
+ 	struct megasas_cmd *cmd;
+ 	struct megasas_dcmd_frame *dcmd;
+-	u16 targetId = (sdev->channel % 2) + sdev->id;
++	u16 targetId = ((sdev->channel % 2) * MEGASAS_MAX_DEV_PER_CHANNEL) +
++			sdev->id;
  
- 	spin_lock_irqsave(&adapter->hw_lock, flags);
+ 	cmd = megasas_get_cmd(instance);
  
-@@ -775,13 +776,14 @@ static int pvscsi_queue_lck(struct scsi_cmnd *cmd, void (*done)(struct scsi_cmnd
- 	}
- 
- 	cmd->scsi_done = done;
-+	op = cmd->cmnd[0];
- 
- 	dev_dbg(&cmd->device->sdev_gendev,
--		"queued cmd %p, ctx %p, op=%x\n", cmd, ctx, cmd->cmnd[0]);
-+		"queued cmd %p, ctx %p, op=%x\n", cmd, ctx, op);
- 
- 	spin_unlock_irqrestore(&adapter->hw_lock, flags);
- 
--	pvscsi_kick_io(adapter, cmd->cmnd[0]);
-+	pvscsi_kick_io(adapter, op);
- 
- 	return 0;
- }
+-- 
+2.9.5
+
