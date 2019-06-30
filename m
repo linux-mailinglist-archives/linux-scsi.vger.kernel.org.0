@@ -2,54 +2,146 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8A8F5A9DA
-	for <lists+linux-scsi@lfdr.de>; Sat, 29 Jun 2019 11:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1645B198
+	for <lists+linux-scsi@lfdr.de>; Sun, 30 Jun 2019 22:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726925AbfF2JaH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 29 Jun 2019 05:30:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45480 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726839AbfF2JaG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 29 Jun 2019 05:30:06 -0400
-Subject: Re: [GIT PULL] SCSI fixes for 5.2-rc6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561800605;
-        bh=WOXdSCgush3mp6rcNJHNy5t/NBk55YbPt/Uh/a/K8rA=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=MJBVyBZhwW0dAKH/SSGiDOJs3lOzoCYRcE8GVIalsZ3zA86oKViJNUC6rIdgXnoR5
-         T1jsXdmuKFBSil96HN1/+qfzd+6NUT51WbRuWL+MA4iR69Si7xO9Apt+NFPy8V5xLA
-         KkX0dppNXWKvKnD60vcVQwtlUyd8z6+rdHfpaAYQ=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1561765703.5883.12.camel@HansenPartnership.com>
-References: <1561765703.5883.12.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1561765703.5883.12.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 240b4cc8fd5db138b675297d4226ec46594d9b3b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5b607ba862f30364aef0b0d40cab8afccf339616
-Message-Id: <156180060583.8003.14079749695911722306.pr-tracker-bot@kernel.org>
-Date:   Sat, 29 Jun 2019 09:30:05 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1726811AbfF3UrS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 30 Jun 2019 16:47:18 -0400
+Received: from ja.ssi.bg ([178.16.129.10]:43766 "EHLO ja.ssi.bg"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726669AbfF3UrS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 30 Jun 2019 16:47:18 -0400
+X-Greylist: delayed 494 seconds by postgrey-1.27 at vger.kernel.org; Sun, 30 Jun 2019 16:47:16 EDT
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x5UKafTT007280;
+        Sun, 30 Jun 2019 23:36:41 +0300
+Date:   Sun, 30 Jun 2019 23:36:41 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Arnd Bergmann <arnd@arndb.de>
+cc:     Kees Cook <keescook@chromium.org>,
+        Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devel@driverdev.osuosl.org,
+        netdev@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Subject: Re: [PATCH 4/4] ipvs: reduce kernel stack usage
+In-Reply-To: <20190628123819.2785504-4-arnd@arndb.de>
+Message-ID: <alpine.LFD.2.21.1906302308280.3788@ja.home.ssi.bg>
+References: <20190628123819.2785504-1-arnd@arndb.de> <20190628123819.2785504-4-arnd@arndb.de>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Fri, 28 Jun 2019 16:48:23 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+	Hello,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5b607ba862f30364aef0b0d40cab8afccf339616
+On Fri, 28 Jun 2019, Arnd Bergmann wrote:
 
-Thank you!
+> With the new CONFIG_GCC_PLUGIN_STRUCTLEAK_BYREF_ALL option, the stack
+> usage in the ipvs debug output grows because each instance of
+> IP_VS_DBG_BUF() now has its own buffer of 160 bytes that add up
+> rather than reusing the stack slots:
+> 
+> net/netfilter/ipvs/ip_vs_core.c: In function 'ip_vs_sched_persist':
+> net/netfilter/ipvs/ip_vs_core.c:427:1: error: the frame size of 1052 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> net/netfilter/ipvs/ip_vs_core.c: In function 'ip_vs_new_conn_out':
+> net/netfilter/ipvs/ip_vs_core.c:1231:1: error: the frame size of 1048 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> net/netfilter/ipvs/ip_vs_ftp.c: In function 'ip_vs_ftp_out':
+> net/netfilter/ipvs/ip_vs_ftp.c:397:1: error: the frame size of 1104 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> net/netfilter/ipvs/ip_vs_ftp.c: In function 'ip_vs_ftp_in':
+> net/netfilter/ipvs/ip_vs_ftp.c:555:1: error: the frame size of 1200 bytes is larger than 1024 bytes [-Werror=frame-larger-than=]
+> 
+> Since printk() already has a way to print IPv4/IPv6 addresses using
+> the %pIS format string, use that instead, combined with a macro that
+> creates a local sockaddr structure on the stack. These will still
+> add up, but the stack frames are now under 200 bytes.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+> I'm not sure this actually does what I think it does. Someone
+> needs to verify that we correctly print the addresses here.
+> I've also only added three files that caused the warning messages
+> to be reported. There are still a lot of other instances of
+> IP_VS_DBG_BUF() that could be converted the same way after the
+> basic idea is confirmed.
+> ---
+>  include/net/ip_vs.h             | 71 +++++++++++++++++++--------------
+>  net/netfilter/ipvs/ip_vs_core.c | 44 ++++++++++----------
+>  net/netfilter/ipvs/ip_vs_ftp.c  | 20 +++++-----
+>  3 files changed, 72 insertions(+), 63 deletions(-)
+> 
+> diff --git a/include/net/ip_vs.h b/include/net/ip_vs.h
+> index 3759167f91f5..3dfbeef67be6 100644
+> --- a/include/net/ip_vs.h
+> +++ b/include/net/ip_vs.h
+> @@ -227,6 +227,16 @@ static inline const char *ip_vs_dbg_addr(int af, char *buf, size_t buf_len,
+>  		       sizeof(ip_vs_dbg_buf), addr,			\
+>  		       &ip_vs_dbg_idx)
+>  
+> +#define IP_VS_DBG_SOCKADDR4(fam, addr, port)				\
+> +	(struct sockaddr*)&(struct sockaddr_in)				\
+> +	{ .sin_family = (fam), .sin_addr = (addr)->in, .sin_port = (port) }
+> +#define IP_VS_DBG_SOCKADDR6(fam, addr, port)				\
+> +	(struct sockaddr*)&(struct sockaddr_in6) \
+> +	{ .sin6_family = (fam), .sin6_addr = (addr)->in6, .sin6_port = (port) }
+> +#define IP_VS_DBG_SOCKADDR(fam, addr, port) (fam == AF_INET ?		\
+> +			IP_VS_DBG_SOCKADDR4(fam, addr, port) :		\
+> +			IP_VS_DBG_SOCKADDR6(fam, addr, port))
+> +
+>  #define IP_VS_DBG(level, msg, ...)					\
+>  	do {								\
+>  		if (level <= ip_vs_get_debug_level())			\
+> @@ -251,6 +261,7 @@ static inline const char *ip_vs_dbg_addr(int af, char *buf, size_t buf_len,
+>  #else	/* NO DEBUGGING at ALL */
+>  #define IP_VS_DBG_BUF(level, msg...)  do {} while (0)
+>  #define IP_VS_ERR_BUF(msg...)  do {} while (0)
+> +#define IP_VS_DBG_SOCKADDR(fam, addr, port) NULL
+>  #define IP_VS_DBG(level, msg...)  do {} while (0)
+>  #define IP_VS_DBG_RL(msg...)  do {} while (0)
+>  #define IP_VS_DBG_PKT(level, af, pp, skb, ofs, msg)	do {} while (0)
+> @@ -1244,31 +1255,31 @@ static inline void ip_vs_control_del(struct ip_vs_conn *cp)
+>  {
+>  	struct ip_vs_conn *ctl_cp = cp->control;
+>  	if (!ctl_cp) {
+> -		IP_VS_ERR_BUF("request control DEL for uncontrolled: "
+> -			      "%s:%d to %s:%d\n",
+> -			      IP_VS_DBG_ADDR(cp->af, &cp->caddr),
+> -			      ntohs(cp->cport),
+> -			      IP_VS_DBG_ADDR(cp->af, &cp->vaddr),
+> -			      ntohs(cp->vport));
+> +		pr_err("request control DEL for uncontrolled: "
+> +		       "%pISp to %pISp\n",
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+	ip_vs_dbg_addr() used compact form (%pI6c), so it would be
+better to use %pISc and %pISpc everywhere in IPVS...
+
+	Also, note that before now port was printed with %d and
+ntohs() was used, now port should be in network order, so:
+
+- ntohs() should be removed
+- htons() should be added, if missing. At first look, this case
+is not present in IPVS, we have only ntohs() usage
+
+Regards
+
+--
+Julian Anastasov <ja@ssi.bg>
