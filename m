@@ -2,98 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5BD5BFA8
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Jul 2019 17:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CEE5C1F2
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Jul 2019 19:25:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727669AbfGAPWH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Jul 2019 11:22:07 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:33292 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726869AbfGAPWH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 1 Jul 2019 11:22:07 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1729496AbfGARZy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Jul 2019 13:25:54 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:48382 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729465AbfGARZy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 1 Jul 2019 13:25:54 -0400
+X-Greylist: delayed 638 seconds by postgrey-1.27 at vger.kernel.org; Mon, 01 Jul 2019 13:25:53 EDT
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id DBC3841209;
+        Mon,  1 Jul 2019 17:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1562001314; x=
+        1563815715; bh=2pTfcDA66tjDGwu7Oi5jwYbieNU5oSXtY1QDybfj+eY=; b=g
+        9bCI01zzUbD/K8vtiK8j0BJI3C4o7X4UQCwGJ5yzaxkgms7B2knd5x+ntWWIdCrO
+        WRHz3z9iTU30cF4yrNYUZ2LPPs9MTST85LDFvwQ3lkYvjRl+pZIkQadpfKDek8KV
+        5FK+9+xDsptoF8PS7aoDiDous4cq5d+Inc/LTTuD78=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id A86K5mYJZYYm; Mon,  1 Jul 2019 20:15:14 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id C19483082A9A;
-        Mon,  1 Jul 2019 15:21:54 +0000 (UTC)
-Received: from localhost (unknown [10.36.118.60])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 268386F947;
-        Mon,  1 Jul 2019 15:21:49 +0000 (UTC)
-Date:   Mon, 1 Jul 2019 16:21:48 +0100
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        by mta-01.yadro.com (Postfix) with ESMTPS id E422041860;
+        Mon,  1 Jul 2019 20:15:13 +0300 (MSK)
+Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
+ (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Mon, 1 Jul
+ 2019 20:15:13 +0300
+From:   Roman Bolshakov <r.bolshakov@yadro.com>
+To:     <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+CC:     Roman Bolshakov <r.bolshakov@yadro.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: virtio_scsi: Use struct_size() helper
-Message-ID: <20190701152148.GG11900@stefanha-x1.localdomain>
-References: <20190619192833.GA825@embeddedor>
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH] scsi: target/iblock: Fix overrun in WRITE SAME emulation
+Date:   Mon, 1 Jul 2019 20:12:28 +0300
+Message-ID: <20190701171226.81654-1-r.bolshakov@yadro.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="+sHJum3is6Tsg7/J"
-Content-Disposition: inline
-In-Reply-To: <20190619192833.GA825@embeddedor>
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Mon, 01 Jul 2019 15:22:07 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.17.128.60]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+WRITE SAME corrupts data on the block device behind iblock if the
+command is emulated. The emulation code issues (M - 1) * N times more
+bios than requested, where M is the number of 512 blocks per real block
+size and N is the NUMBER OF LOGICAL BLOCKS specified in WRITE SAME
+command. So, for a device with 4k blocks, 7 * N more LBAs gets written
+after the requested range.
 
---+sHJum3is6Tsg7/J
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The issue happens because the number of 512 byte sectors to be written
+is decreased one by one while the real bios are typically from 1 to 8
+512 byte sectors per bio.
 
-On Wed, Jun 19, 2019 at 02:28:33PM -0500, Gustavo A. R. Silva wrote:
-> One of the more common cases of allocation size calculations is finding
-> the size of a structure that has a zero-sized array at the end, along
-> with memory for some number of elements for that array. For example:
->=20
-> struct virtio_scsi {
-> 	...
->         struct virtio_scsi_vq req_vqs[];
-> };
->=20
-> Make use of the struct_size() helper instead of an open-coded version
-> in order to avoid any potential type mistakes.
->=20
-> So, replace the following form:
->=20
-> sizeof(*vscsi) + sizeof(vscsi->req_vqs[0]) * num_queues
->=20
-> with:
->=20
-> struct_size(vscsi, req_vqs, num_queues)
->=20
-> This code was detected with the help of Coccinelle.
->=20
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-> ---
->  drivers/scsi/virtio_scsi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
+---
+ drivers/target/target_core_iblock.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index f4a075303e9a..6949ea8bc387 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -502,7 +502,7 @@ iblock_execute_write_same(struct se_cmd *cmd)
+ 
+ 		/* Always in 512 byte units for Linux/Block */
+ 		block_lba += sg->length >> SECTOR_SHIFT;
+-		sectors -= 1;
++		sectors -= sg->length >> SECTOR_SHIFT;
+ 	}
+ 
+ 	iblock_submit_bios(&list);
+-- 
+2.22.0
 
---+sHJum3is6Tsg7/J
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAl0aJQwACgkQnKSrs4Gr
-c8hU0wf/SEM8YCmD62jJAJNbhuuxbgPPdSmJV/Oh3RzqiM/ujaeDjX1Msi+8fFbR
-NlE7Cr9xEkGuEacjWbl+MNio761nAUo5Ibln9uws3BTpnHClVohmaat2RfuRyoB5
-0O1FC55L1Gj8+/RaRoZAO3gld6TM5+KFuptuYN4kOl9/DJDSbjoGX11dFtyL6Jut
-mSdjs07Koh+Uxt+2/gIEoflBy6tr8nbOIpIb0qI9Y+4iYXUFPvRqDhqnZ1TezcWE
-T4lWINqg4FuT+MMmCAyk8KLhj9FVKLMG7mCRT/R+emhi2yTwyMwvKLYeMW0uikUQ
-2NfsNT8OZBYFNEdUzjeCiw4Mg8f99A==
-=FseJ
------END PGP SIGNATURE-----
-
---+sHJum3is6Tsg7/J--
