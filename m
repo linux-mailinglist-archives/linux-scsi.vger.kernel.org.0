@@ -2,89 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CEE5C1F2
-	for <lists+linux-scsi@lfdr.de>; Mon,  1 Jul 2019 19:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC7A5C1EE
+	for <lists+linux-scsi@lfdr.de>; Mon,  1 Jul 2019 19:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729496AbfGARZy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 1 Jul 2019 13:25:54 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:48382 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729465AbfGARZy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 1 Jul 2019 13:25:54 -0400
-X-Greylist: delayed 638 seconds by postgrey-1.27 at vger.kernel.org; Mon, 01 Jul 2019 13:25:53 EDT
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id DBC3841209;
-        Mon,  1 Jul 2019 17:15:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        content-type:content-type:content-transfer-encoding:mime-version
-        :x-mailer:message-id:date:date:subject:subject:from:from
-        :received:received:received; s=mta-01; t=1562001314; x=
-        1563815715; bh=2pTfcDA66tjDGwu7Oi5jwYbieNU5oSXtY1QDybfj+eY=; b=g
-        9bCI01zzUbD/K8vtiK8j0BJI3C4o7X4UQCwGJ5yzaxkgms7B2knd5x+ntWWIdCrO
-        WRHz3z9iTU30cF4yrNYUZ2LPPs9MTST85LDFvwQ3lkYvjRl+pZIkQadpfKDek8KV
-        5FK+9+xDsptoF8PS7aoDiDous4cq5d+Inc/LTTuD78=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id A86K5mYJZYYm; Mon,  1 Jul 2019 20:15:14 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id E422041860;
-        Mon,  1 Jul 2019 20:15:13 +0300 (MSK)
-Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
- (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Mon, 1 Jul
- 2019 20:15:13 +0300
-From:   Roman Bolshakov <r.bolshakov@yadro.com>
-To:     <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
-CC:     Roman Bolshakov <r.bolshakov@yadro.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH] scsi: target/iblock: Fix overrun in WRITE SAME emulation
-Date:   Mon, 1 Jul 2019 20:12:28 +0300
-Message-ID: <20190701171226.81654-1-r.bolshakov@yadro.com>
-X-Mailer: git-send-email 2.22.0
+        id S1729464AbfGARZp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 1 Jul 2019 13:25:45 -0400
+Received: from sonic306-36.consmr.mail.bf2.yahoo.com ([74.6.132.235]:42959
+        "EHLO sonic306-36.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729004AbfGARZp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 1 Jul 2019 13:25:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1562001944; bh=QFQXNGn0FJohU3l97Cng3z90qjIEAqAKmbCVyMu/adQ=; h=Date:From:Reply-To:Subject:References:From:Subject; b=Io9NL4lnVvdtK8VRVGLxZ8rA/ytXf2PNU5x/h3MaFo7Hb7b2OPZLVGspmb61RE5rZ9PqqoN1esVCurf9vURU1fjUxFGdAfc1RP+6pIbuELIQsK6YEJvvo9XUz3UNWqC3A/I9SefoNQdRZowftz07ZMnSkG8l03MloiJDh7QJ2T8QFH+mg8e/eEvw0BnTX2KY+deFfnko+W6uhvmkfV7pEH7HsszQ4x7ofbhXn5ez0Ih/xKPBScb+g9lMQnvCoIpH5kwRfY8Bstg2pwgjZOVHQ9fT6mYWO6pWyjnmk5gfUvD4t2BFtSskDEvgHrgZkd/7+lyE2xVEsbkGOAtAsNtNLA==
+X-YMail-OSG: owEhKTEVM1mxv1RUXQTuBXbn0W9dKpRWFvq52iZw927uEW2d0GbhsKKoutdQ5mg
+ dGU1saTEaeA1Ua4tez5.glnlbkxwkjyj8xoYPT0Norx64ugkaR2JYtG3x_e24hoeB2_pzMN._KTN
+ csaS1TLRinota2PsamLloCauxznnv8gK7VFbDTkT4kFnB93ENGfyq7Cw61vcR.nZfwpzWuuOivgh
+ NbpzlwDzUw10slcKItdm5pHiwFFU6PCpH5NfPYkvFk7E_ziSe7C_7yQvr2L2j8tZ7lfjOeBN6lI5
+ l8aR6HAIx1WTilOL7VPA12AY_eEGHnmS1h4gONIxQQwTI3kXzV8xg8AB7sPecjDYlzOjIO5uvOd1
+ Wj94UDglNfEi2NCqyR9wdfWT39rP23z8uU0KXdk9q2x6vVxuaDawvdZ1sTwGBmzkYxzurZZXc_J_
+ 33i7POi0DVCPwTqhnbZrud1BWXsActRCNQqmPuZejfXpZ8vABmW7dwq4qZjXnjNhCXoCu2UxHczf
+ 7qt.xqlJwGM3VzgpFoM.rXq8ZueI1HWHCDH4S_2YlMoUEEpSt4JPmeXtI7Ra1Vb2UNXR0brHzJfF
+ KfQ_mXPoAauW28R2As0GzLupY0G636TEKi7fBJ.IO16rO5052oteu.ytXVZKABNrOrgbnwR42xCK
+ 3muMi3FxqqKhtNKHNJtbe7IreDxQcxYivAgLayMg0H34OgwCufWCBT2jawMGSb2MJ.kzFG4x_4xX
+ gaTFy05qOaOti2xY3XGfklWDlPCGolBij_39hsMR5mwcDn7d9vKYGJ2CqafP52e8TZr2QYN2312u
+ t4OUsc6MXuDF4bXFWajw4fWtFoabYxpwG696d5lA9F4Mg.sIIv1HCVX.Hdhp1eKWhFfbsY5p4.ON
+ FrgrUnrjTyFU5q14Vr6d19NJ48V7JXsgXE1DtAkOPHM3ZJJ4jVfLDn2YbScldfYFySMaBnySKrrF
+ rRsxPI1JCZku9W5alhmadWIrAYEKuWTvd0whTblF6P3eUb36U9a1aE_JsoSai3vnJK3Xg2oEnTpJ
+ _13MQFLB19xZdPC.wApMJ36M0mI48khQdUtxnEXKpDPhSb5OzkDt7rswiJQBdyehWnkG_9pysHB0
+ MGtsheKxCDoAgJNdoTNFh2SYI0_iOewtvN0nHtYg342EbgcIuktrJsdCRx.xNwJm6sVTkHSPrVeK
+ oWqY_Mv.f77QEUGU.UJKWrwdwykVQhz6bzCRI48_TSS.iOCcRirarGmQDskknQhsjYqx4h8dfJbh
+ aByTVMD_ziSGfLJC4sn2e3NU-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.bf2.yahoo.com with HTTP; Mon, 1 Jul 2019 17:25:44 +0000
+Date:   Mon, 1 Jul 2019 17:23:43 +0000 (UTC)
+From:   Major Dennis Hornbeck <bc65@bacman.online>
+Reply-To: Major Dennis Hornbeck <hornbeckmajordennis637@gmail.com>
+Message-ID: <1468183126.914512.1562001823079@mail.yahoo.com>
+Subject: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.17.128.60]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1468183126.914512.1562001823079.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.13913 YahooMailBasic Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-WRITE SAME corrupts data on the block device behind iblock if the
-command is emulated. The emulation code issues (M - 1) * N times more
-bios than requested, where M is the number of 512 blocks per real block
-size and N is the NUMBER OF LOGICAL BLOCKS specified in WRITE SAME
-command. So, for a device with 4k blocks, 7 * N more LBAs gets written
-after the requested range.
+I am in the military unit here in Afghanistan, we have some amount of funds that we want to move out of the country. My partners and I need a good partner someone we can trust. It is risk free and legal. Reply to this email: hornbeckmajordennis637@gmail.com
 
-The issue happens because the number of 512 byte sectors to be written
-is decreased one by one while the real bios are typically from 1 to 8
-512 byte sectors per bio.
-
-Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
----
- drivers/target/target_core_iblock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index f4a075303e9a..6949ea8bc387 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -502,7 +502,7 @@ iblock_execute_write_same(struct se_cmd *cmd)
- 
- 		/* Always in 512 byte units for Linux/Block */
- 		block_lba += sg->length >> SECTOR_SHIFT;
--		sectors -= 1;
-+		sectors -= sg->length >> SECTOR_SHIFT;
- 	}
- 
- 	iblock_submit_bios(&list);
--- 
-2.22.0
-
+Regards,
+Major Dennis Hornbeck.
