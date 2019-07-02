@@ -2,93 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0492C5D585
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2019 19:43:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 898FB5D6C1
+	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jul 2019 21:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727028AbfGBRnv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Jul 2019 13:43:51 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:44441 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725996AbfGBRnv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jul 2019 13:43:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1562089451; x=1593625451;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=mMR/hpYFy80l7odJC6OZkX7C/Iat9UiqQzK/zSp4tQc=;
-  b=VP2l2NDJxQaVVtPbjuwxZaMx/HlgE8wnuqCk0OdqBu92Gem3fpoGK7gO
-   6wfosra8u2TNrpQMdwee8kwbQZ5ncJDeOPUL3SRT1Zp21w1aV8fkP1AO8
-   NqahwXOpr/Wxyfbl6xjds+7Ks+CLwZgidOtcvZNce+Gd7ogTHZn1wh2P1
-   KuucLd9o5dzHrv4PSckmb/ywrQHIbccqyfUAkSMBIMDYKi8WySmlCtyA0
-   HupDGm62+B4Kp++WqkCCl2SRoRlcGF3rg8E5geGNHygrSgIhiizsH1oAe
-   oS6Al6HNExAlTVnljSreCMuPnxuWnqeFD7s+J5fg00dh0J06XZfecpjLn
-   g==;
-IronPort-SDR: Rxxu6cf6WwWdhuYIIirrUwZtP5uFnB3JN+/YJ6cGeF0ULosq4KG18HLuJEQNeVZCCUCx6vpvg0
- H45rXZvY5pogP4VUj71oNsJldmvVq6gIsudJ2T4M0ncw4KLUpNlCuQjKrqN10H5hkiaty33bdK
- aOv6WeB0zdLgxJAC0NNEx97GQwK2kXuOz4Ors2iOrX1lWGqirSQ6DQYY35fkYFDlTfo5KRPDde
- zuNuN37LoKUTv+dUd+cvibOp23jIBE74Ax0M5xIT8rzoyUYQKqY7qVD75r9eTcIRxxV+WjJKux
- Wlw=
-X-IronPort-AV: E=Sophos;i="5.63,444,1557158400"; 
-   d="scan'208";a="211924307"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 03 Jul 2019 01:44:10 +0800
-IronPort-SDR: kfwnae2bo8FnkKJRSnxuzQFZalLGD64K20P4lQ/FjMhmxAi1SM5CrTG4RitQQF6F3KRhWKaUzv
- ux8K99snYNUwh5yACl7GDrHJpLdYYF78kWSgOqru4Rsp4hrqU0a6lYAdygYEJQFfPk8AWbDyny
- jo9QXn8sv/JpXZmDqJxCXSd+UgPFBC6Ae4bWVGOMxP+AGa8/q3RK+Mb719BHScQQWJUeb+GSPO
- i/STsvUo3WPuDJWO9QhcwNv1Ig3Dt95yFzo1RhUEguGWjpvijHjU4rbHulnUPFVzEaW5z8J2sc
- kHfo41cOhYpRez39RtQs3Gan
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP; 02 Jul 2019 10:42:49 -0700
-IronPort-SDR: ZZ3hK2bjvxPpoDYY3dGllgVu8h4y5aH5oKqXW08FxIs6lNu/zSn8Lq0Vc3CKh0UxLaxt9BwD0v
- 3fTd0ZB6CA1nNk66QTwybNGG7hulaPt/5JjQ4RaSIjxNw/RiC1ddUlmt5cVduRWWvDMc6DPeRv
- QY23K1dCOsFVfF6zsp2JXeQ1ammNVuRE1dwh/CDI01AburqpZV0KpfKqu1xuzoJfo0j+AG3k47
- ScfjN3W9uVeTshYH+ctIEZjqQRzreo7anBy5gwBbh5bWBmg6n07aXYscmGEGj90oNrBHWiocWt
- PF0=
-Received: from cvenusqemu.hgst.com ([10.202.66.73])
-  by uls-op-cesaip02.wdc.com with ESMTP; 02 Jul 2019 10:43:50 -0700
-From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-To:     linux-block@vger.kernel.org
-Cc:     colyli@suse.de, linux-bcache@vger.kernel.org,
-        linux-btrace@vger.kernel.org, xen-devel@lists.xenproject.org,
-        kent.overstreet@gmail.com, yuchao0@huawei.com, jaegeuk@kernel.org,
-        damien.lemoal@wdc.com, konrad.wilk@oracle.com,
-        roger.pau@citrix.com, bvanassche@acm.org,
-        linux-scsi@vger.kernel.org,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: [COMPILE TEST ONLY PATCH V3 9/9] xen/blkback: use helper in vbd_sz()
-Date:   Tue,  2 Jul 2019 10:42:35 -0700
-Message-Id: <20190702174236.3332-10-chaitanya.kulkarni@wdc.com>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20190702174236.3332-1-chaitanya.kulkarni@wdc.com>
-References: <20190702174236.3332-1-chaitanya.kulkarni@wdc.com>
+        id S1727047AbfGBTSD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Jul 2019 15:18:03 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:53414 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726329AbfGBTSD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 2 Jul 2019 15:18:03 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 7C75B411F8;
+        Tue,  2 Jul 2019 19:18:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        content-type:content-type:content-transfer-encoding:mime-version
+        :x-mailer:message-id:date:date:subject:subject:from:from
+        :received:received:received; s=mta-01; t=1562095080; x=
+        1563909481; bh=sjz/K56KGGCUexLYlwc8FGJTk9NAU+HD2VlXyj7iZEo=; b=X
+        7QiXo6pWgRewg7Gb8QysJaesR+7+NeD1ml86xm7cJ0r9JmgBJz578d4d+x4Jr+2s
+        trlob+A2Z7huB6QYczjbYevGw20IRMhVQ7TuMZ+Gx79hix7R49Q6QLNdfUUfBnhC
+        GiKyA2vew32eV+pGsATYyjswzTDxCi4e42IhsB8Ztk=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id V4ehjoBIEHyI; Tue,  2 Jul 2019 22:18:00 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 6A81A411D9;
+        Tue,  2 Jul 2019 22:18:00 +0300 (MSK)
+Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
+ (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Tue, 2 Jul
+ 2019 22:18:00 +0300
+From:   Roman Bolshakov <r.bolshakov@yadro.com>
+To:     <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+CC:     Roman Bolshakov <r.bolshakov@yadro.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <stable@vger.kernel.org>, Bart Van Assche <bvanassche@acm.org>
+Subject: [RESEND PATCH] scsi: target/iblock: Fix overrun in WRITE SAME emulation
+Date:   Tue, 2 Jul 2019 22:16:38 +0300
+Message-ID: <20190702191636.26481-1-r.bolshakov@yadro.com>
+X-Mailer: git-send-email 2.22.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [172.17.128.60]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch updates the vbd_sz() macro with newly introduced helper
-function to read the nr_sects from block device's hd_parts with the
-help of part_nr_sects_read().
+WRITE SAME corrupts data on the block device behind iblock if the
+command is emulated. The emulation code issues (M - 1) * N times more
+bios than requested, where M is the number of 512 blocks per real block
+size and N is the NUMBER OF LOGICAL BLOCKS specified in WRITE SAME
+command. So, for a device with 4k blocks, 7 * N more LBAs gets written
+after the requested range.
 
-Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+The issue happens because the number of 512 byte sectors to be written
+is decreased one by one while the real bios are typically from 1 to 8
+512 byte sectors per bio.
+
+Fixes: c66ac9db8d4a ("[SCSI] target: Add LIO target core v4.0.0-rc6")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/block/xen-blkback/common.h | 2 +-
+ drivers/target/target_core_iblock.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/xen-blkback/common.h b/drivers/block/xen-blkback/common.h
-index 1d3002d773f7..f96cb8d1cb99 100644
---- a/drivers/block/xen-blkback/common.h
-+++ b/drivers/block/xen-blkback/common.h
-@@ -359,7 +359,7 @@ struct pending_req {
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index f4a075303e9a..6949ea8bc387 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -502,7 +502,7 @@ iblock_execute_write_same(struct se_cmd *cmd)
  
+ 		/* Always in 512 byte units for Linux/Block */
+ 		block_lba += sg->length >> SECTOR_SHIFT;
+-		sectors -= 1;
++		sectors -= sg->length >> SECTOR_SHIFT;
+ 	}
  
- #define vbd_sz(_v)	((_v)->bdev->bd_part ? \
--			 (_v)->bdev->bd_part->nr_sects : \
-+			  bdev_nr_sects((_v)->bdev) : \
- 			  get_capacity((_v)->bdev->bd_disk))
- 
- #define xen_blkif_get(_b) (atomic_inc(&(_b)->refcnt))
+ 	iblock_submit_bios(&list);
 -- 
-2.19.1
+2.22.0
 
