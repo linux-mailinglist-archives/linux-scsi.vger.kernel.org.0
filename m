@@ -2,75 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 840CD5E67A
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 16:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D165E74E
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 17:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbfGCOXP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jul 2019 10:23:15 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:48388 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725830AbfGCOXO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 10:23:14 -0400
-Received: (qmail 2846 invoked by uid 2102); 3 Jul 2019 10:23:13 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 3 Jul 2019 10:23:13 -0400
-Date:   Wed, 3 Jul 2019 10:23:13 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Johannes Thumshirn <jthumshirn@suse.de>
-cc:     Andrea Vai <andrea.vai@unipv.it>, Jens Axboe <axboe@kernel.dk>,
-        <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-In-Reply-To: <20190703072934.GA4026@x250.microfocus.com>
-Message-ID: <Pine.LNX.4.44L0.1907031020220.1547-100000@iolanthe.rowland.org>
+        id S1726678AbfGCPDb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Jul 2019 11:03:31 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:45458 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726605AbfGCPDb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 11:03:31 -0400
+Received: by mail-pf1-f193.google.com with SMTP id r1so1403676pfq.12;
+        Wed, 03 Jul 2019 08:03:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=UpKw9Zxoxe8rge03LP2f6638eI4p8y0legXuCWEjCsI=;
+        b=ICppt5lQcaGL40MP1SDxZWfyOqWoiNJPn1viioHfqHinIW1hSNeOuOwgJDGYA5OIVx
+         l1PJ+JXCfjC04S3ZxA/2dyjVjb34vc5q4i/z6V1kPeMMnoaMidgtGjzagEEqiJw9pg5/
+         PRvRzDQJaahpjVW/xrhy+/PyNRusP2RzUTzy4iJiP3+i9FQGI1Q9+AmaG/G+Ccvv8ASx
+         99NQM61TL0AUnXNfAl3pLUGFqBH4i9O710nCA4qdz0NBYY9OO7XRlawjZa9OOdHWWP0u
+         jnBI40lY3GuxQamj/mkqFTibIbtapuq6clhjAxHuDsLCqUmeU83LhYxp8MKb+l53sa1z
+         /Y4Q==
+X-Gm-Message-State: APjAAAWaFZ8uBLxegWcwfZSvyVzNzJECrE3itJV/jyNBLcdS+BkdF4jT
+        6emqME+uy7NylDTuq8w8Bo5w1JFRfZs=
+X-Google-Smtp-Source: APXvYqyR83vJcx0j6MO8XREogh+x0eiGjMP5GA+fOFSvZ7wYxEQvReZcXoMSmjWhPLNI5xsp0sPuDQ==
+X-Received: by 2002:a17:90a:ff17:: with SMTP id ce23mr13281431pjb.47.1562166210114;
+        Wed, 03 Jul 2019 08:03:30 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id o13sm2450376pje.28.2019.07.03.08.03.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 03 Jul 2019 08:03:29 -0700 (PDT)
+Subject: Re: [PATCH V3 1/9] block: add a helper function to read nr_setcs
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-block@vger.kernel.org
+Cc:     colyli@suse.de, linux-bcache@vger.kernel.org,
+        linux-btrace@vger.kernel.org, xen-devel@lists.xenproject.org,
+        kent.overstreet@gmail.com, yuchao0@huawei.com, jaegeuk@kernel.org,
+        damien.lemoal@wdc.com, konrad.wilk@oracle.com,
+        roger.pau@citrix.com, linux-scsi@vger.kernel.org
+References: <20190702174236.3332-1-chaitanya.kulkarni@wdc.com>
+ <20190702174236.3332-2-chaitanya.kulkarni@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <26917678-fd82-b6c8-761e-220bc7d3b179@acm.org>
+Date:   Wed, 3 Jul 2019 08:03:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <20190702174236.3332-2-chaitanya.kulkarni@wdc.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 3 Jul 2019, Johannes Thumshirn wrote:
+On 7/2/19 10:42 AM, Chaitanya Kulkarni wrote:
+> +/* Helper function to read the bdev->bd_part->nr_sects */
+> +static inline sector_t bdev_nr_sects(struct block_device *bdev)
+> +{
+> +	return part_nr_sects_read(bdev->bd_part);
+> +}
 
-> On Wed, Jul 03, 2019 at 12:36:30AM +0200, Andrea Vai wrote:
-> > On 02/07/19 13:51:17, Johannes Thumshirn wrote:
-> > > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
-> > > > Hi,
-> > > >   I have a problem writing data to a USB pendrive, and it seems
-> > > > kernel-related. With the help of Greg an Alan (thanks) and some
-> > > > bisect, I found out the offending commit being
-> > > > 
-> > > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-> > > >
-> > > > [...]
-> > > 
-> > > Hi,
-> > > 
-> > > Can you please check what IO scheduler you have set for your USB pendrive?
-> > > 
-> > > i.e. with:
-> > > cat /sys/block/$DISK/queue/scheduler
-> > >
-> > 
-> > # cat /sys/block/sdf/queue/scheduler
-> > [mq-deadline] none
-> 
-> One thing you can try as well is building a kernel with CONFIG_IOSCHED_BFQ and
-> use it. Deadline is probably not the best choice for a slow drive.
+Is the comment above bdev_nr_sects() really useful or should it be left out?
 
-Andrea, another thing you could try is to collect a usbmon trace under 
-one of the "slow" kernels.  Follow the instructions in 
-Documentation/usb/usbmon.txt.  I think you could kill the file-copy 
-operation after just a couple of seconds; that should provide enough 
-trace information to help see what causes the slowdown.
+Thanks,
 
-(If you want, do the same test with a "fast" kernel and then we'll 
-compare the results.)
-
-Alan Stern
-
+Bart.
