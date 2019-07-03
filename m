@@ -2,57 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A80F5E514
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 15:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BED75E525
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 15:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfGCNPu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jul 2019 09:15:50 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:46815 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726430AbfGCNPu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 09:15:50 -0400
-Received: by mail-pl1-f195.google.com with SMTP id e5so1222543pls.13;
-        Wed, 03 Jul 2019 06:15:50 -0700 (PDT)
+        id S1726915AbfGCNRF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Jul 2019 09:17:05 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42032 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725830AbfGCNRE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 09:17:04 -0400
+Received: by mail-pf1-f194.google.com with SMTP id q10so1267611pff.9;
+        Wed, 03 Jul 2019 06:17:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=LDQEYa+SYRPSXa6Z0KLZW9PBv8GE8Q8lsLimzp9JewE=;
-        b=nQcna9PTESD3RoynbhwHnSnUmp5C5172N/oEukmKxN4f2z/XThQtuh/onzbIz2hPQ4
-         KqlBuOrjS1QHbMggUh0QpljV/f9lD206sVyTfMJosviVDX0o+50RyZ7LxuSkNSr24lyX
-         W9BkpOWwH8WTqY1ljJQGKkc9yFsOts73Gg3PfUEe/4bB1eDr7VFhNpX0gpBSx57GncxH
-         KrYj9Xy1/9ytaFKRSW53JGXd132Th3yTKTk8FoFxhFpWmDhmexvHj0TaV513OE0yL8lY
-         PfqHTy+SV7ViVb9XsCA6a3F3a/ISHybOKNk62GMvG0Y8Jt8pAPUX9/3d6o/IzFyRmurB
-         qQqg==
+        bh=LEzHlm28gGet2lhOMmasiQomKY8boopFZ+WIZBJDyvs=;
+        b=WMVUZFjzHMTx1SiFC6QqBmLu5L/8GKw7D8NU1p+UR8LRgD472Wu+CccWaogEDGjQHh
+         F9o84urBZVUOCt33V94Vrh5dt3/hS80w5vHz9HWFDEFkSMFlUlqZ0ZxjDYw78RMVQAuB
+         6gGNd2H5uIr+PTzDp7WgEVUQih6Sb1wi2Q3sF3bOSSOLplYvVq/YjEAhdGsCb9oRJgYx
+         tVGT7BHsYdlIe6eVZvG9U9ecxpFc8/PpCQtzwOX3goMknaYj49cfjnH0b8hfm/HguVj5
+         oFr9PGbe39OIrYSwZ+R5F/RBxrSalthAfS8/jIyw8FYCx7wbW1MRXSmfLs9nEmzJ04do
+         9HDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LDQEYa+SYRPSXa6Z0KLZW9PBv8GE8Q8lsLimzp9JewE=;
-        b=Tx/tRuFdP/bervDf/60Axds/wM6IVqyUkOZGq1Sa3N6piEqrKuiubclW6krxygiFZi
-         4PW8SwKHEHeqlC+UXv65Zek5f2MQ+6liu7NYh45tGR72cPB5Sg0CmkQT/uXOz1WJNd8l
-         u1pmHeg4/8yxe9byK0Tf+ManZVGjwOJSxJl3qizXCUDgBbWe3G6xRQOupCIVa8bNocWV
-         rSyHFXXWBmZjURPxI1I9CLB8DEMwCbtLdjnfKSuoU+IX89SKxn+Cnoe2LOMAe0xn+cTu
-         TUAcG7QiGxl8zzD7UEMy/d7/9M1Ob/K4IdGYsogbDx0MtMvjockHcZ9kFYCqEH6iV/1H
-         FGeg==
-X-Gm-Message-State: APjAAAXTT5XmGl0Vwmh3UyCIBgQNG/K8TBbgqMnCVIJvCAC7ygfQwFRv
-        jd3Ep2lgYiW/MF0bM4nIzpY=
-X-Google-Smtp-Source: APXvYqzbEbGSd38TnKedTO7iV+o3OuKmTVu4X5miAXlN4my9KxRt6PNKYskMAzIqkFz39V0iJCsyjg==
-X-Received: by 2002:a17:902:722:: with SMTP id 31mr41709199pli.163.1562159750070;
-        Wed, 03 Jul 2019 06:15:50 -0700 (PDT)
+        bh=LEzHlm28gGet2lhOMmasiQomKY8boopFZ+WIZBJDyvs=;
+        b=Jixd7sFwKU0gHZPsLYc0TYmPbo+tiHxRlSviQSMsXdlLU0RqstD2W1sqw4njlrYxwd
+         mPrjwTawvjawvdJ/C8gRY8n1urXz9jj3ZrDJO50jsX8P0HK3bd5neF1QoP8dfmIx9Rru
+         vKtyb+GeSea4qJn4iglV4ZaOHzBtqarNM/7oxqiuh5aIcUE0d95bfi+7LbP7kz2Iq7H7
+         4SKof0v3ngH/znhjmcMH5mLRMtotYNyvVJiOMWhz7VIx1XX+jmYx8t32dUKQvBYvWySQ
+         zibvA9iZ9zwYKc39vvxBNUpIXxvixknx+rlywCD6zcBld/qIILpbnPVZBJKGunnAgsuG
+         ikgw==
+X-Gm-Message-State: APjAAAVHqE3w1mGHe0DJUiN8Fpu8mMYBbA+BTOEwfGn8FLTpFbkHMaml
+        Ea0TgiSWzEyzadzlQX8xajI=
+X-Google-Smtp-Source: APXvYqzxURePBgEEl4xflBI3no+G3GDCoImlDugCHhH2Oydl5/KfT4D2v859t+LRm7mLilxqrqVW0Q==
+X-Received: by 2002:a63:211c:: with SMTP id h28mr24226183pgh.438.1562159824265;
+        Wed, 03 Jul 2019 06:17:04 -0700 (PDT)
 Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id h62sm5716627pgc.54.2019.07.03.06.15.46
+        by smtp.googlemail.com with ESMTPSA id 22sm2434929pfu.179.2019.07.03.06.17.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Jul 2019 06:15:49 -0700 (PDT)
+        Wed, 03 Jul 2019 06:17:03 -0700 (PDT)
 From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Chaitra P B <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+Cc:     Hannes Reinecke <hare@suse.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        QLogic-Storage-Upstream@qlogic.com, linux-scsi@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH 13/30] message/fusion: Use kmemdup rather than duplicating its implementation
-Date:   Wed,  3 Jul 2019 21:15:39 +0800
-Message-Id: <20190703131539.25270-1-huangfq.daxian@gmail.com>
+Subject: [PATCH 20/30] scsi: Use kmemdup rather than duplicating its implementation
+Date:   Wed,  3 Jul 2019 21:16:55 +0800
+Message-Id: <20190703131655.25594-1-huangfq.daxian@gmail.com>
 X-Mailer: git-send-email 2.11.0
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
@@ -68,28 +67,92 @@ Suggestion to use kmemdup rather than using kmalloc/kzalloc + memset.
 
 Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
 ---
- drivers/message/fusion/mptbase.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/aic7xxx/aic79xx_core.c | 3 +--
+ drivers/scsi/aic7xxx/aic7xxx_core.c | 3 +--
+ drivers/scsi/myrb.c                 | 4 +---
+ drivers/scsi/qla4xxx/ql4_os.c       | 7 ++-----
+ 4 files changed, 5 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-index d8882b0a1338..e0c57cecddd3 100644
---- a/drivers/message/fusion/mptbase.c
-+++ b/drivers/message/fusion/mptbase.c
-@@ -6001,13 +6001,12 @@ mpt_findImVolumes(MPT_ADAPTER *ioc)
- 	if (mpt_config(ioc, &cfg) != 0)
- 		goto out;
+diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic79xx_core.c
+index 7e5044bf05c0..f4bc88c50dcd 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_core.c
++++ b/drivers/scsi/aic7xxx/aic79xx_core.c
+@@ -9442,10 +9442,9 @@ ahd_loadseq(struct ahd_softc *ahd)
+ 	if (cs_count != 0) {
  
--	mem = kmalloc(iocpage2sz, GFP_KERNEL);
-+	mem = kmemdup((u8 *)pIoc2, iocpage2sz, GFP_KERNEL);
- 	if (!mem) {
+ 		cs_count *= sizeof(struct cs);
+-		ahd->critical_sections = kmalloc(cs_count, GFP_ATOMIC);
++		ahd->critical_sections = kmemdup(cs_table, cs_count, GFP_ATOMIC);
+ 		if (ahd->critical_sections == NULL)
+ 			panic("ahd_loadseq: Could not malloc");
+-		memcpy(ahd->critical_sections, cs_table, cs_count);
+ 	}
+ 	ahd_outb(ahd, SEQCTL0, PERRORDIS|FAILDIS|FASTMODE);
+ 
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
+index a9d40d3b90ef..7ea4e45309ff 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_core.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
+@@ -6907,10 +6907,9 @@ ahc_loadseq(struct ahc_softc *ahc)
+ 	if (cs_count != 0) {
+ 
+ 		cs_count *= sizeof(struct cs);
+-		ahc->critical_sections = kmalloc(cs_count, GFP_ATOMIC);
++		ahc->critical_sections = kmemdup(cs_table, cs_count, GFP_ATOMIC);
+ 		if (ahc->critical_sections == NULL)
+ 			panic("ahc_loadseq: Could not malloc");
+-		memcpy(ahc->critical_sections, cs_table, cs_count);
+ 	}
+ 	ahc_outb(ahc, SEQCTL, PERRORDIS|FAILDIS|FASTMODE);
+ 
+diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
+index 539ac8ce4fcd..5e6b5e7ae93a 100644
+--- a/drivers/scsi/myrb.c
++++ b/drivers/scsi/myrb.c
+@@ -1658,14 +1658,12 @@ static int myrb_ldev_slave_alloc(struct scsi_device *sdev)
+ 	if (!ldev_info)
+ 		return -ENXIO;
+ 
+-	sdev->hostdata = kzalloc(sizeof(*ldev_info), GFP_KERNEL);
++	sdev->hostdata = kmemdup(ldev_info, sizeof(*ldev_info), GFP_KERNEL);
+ 	if (!sdev->hostdata)
+ 		return -ENOMEM;
+ 	dev_dbg(&sdev->sdev_gendev,
+ 		"slave alloc ldev %d state %x\n",
+ 		ldev_num, ldev_info->state);
+-	memcpy(sdev->hostdata, ldev_info,
+-	       sizeof(*ldev_info));
+ 	switch (ldev_info->raid_level) {
+ 	case MYRB_RAID_LEVEL0:
+ 		level = RAID_LEVEL_LINEAR;
+diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
+index 8c674eca09f1..8f8c64e5f02d 100644
+--- a/drivers/scsi/qla4xxx/ql4_os.c
++++ b/drivers/scsi/qla4xxx/ql4_os.c
+@@ -3559,21 +3559,18 @@ static int qla4xxx_copy_from_fwddb_param(struct iscsi_bus_flash_session *sess,
+ 	conn->port = le16_to_cpu(fw_ddb_entry->port);
+ 
+ 	options = le16_to_cpu(fw_ddb_entry->options);
+-	conn->ipaddress = kzalloc(IPv6_ADDR_LEN, GFP_KERNEL);
++	conn->ipaddress = kmemdup(fw_ddb_entry->ip_addr, IPv6_ADDR_LEN, GFP_KERNEL);
+ 	if (!conn->ipaddress) {
  		rc = -ENOMEM;
- 		goto out;
+ 		goto exit_copy;
  	}
  
--	memcpy(mem, (u8 *)pIoc2, iocpage2sz);
- 	ioc->raid_data.pIocPg2 = (IOCPage2_t *) mem;
+-	conn->redirect_ipaddr = kzalloc(IPv6_ADDR_LEN, GFP_KERNEL);
++	conn->redirect_ipaddr = kmemdup(fw_ddb_entry->tgt_addr, IPv6_ADDR_LEN, GFP_KERNEL);
+ 	if (!conn->redirect_ipaddr) {
+ 		rc = -ENOMEM;
+ 		goto exit_copy;
+ 	}
  
- 	mpt_read_ioc_pg_3(ioc);
+-	memcpy(conn->ipaddress, fw_ddb_entry->ip_addr, IPv6_ADDR_LEN);
+-	memcpy(conn->redirect_ipaddr, fw_ddb_entry->tgt_addr, IPv6_ADDR_LEN);
+-
+ 	if (test_bit(OPT_IPV6_DEVICE, &options)) {
+ 		conn->ipv6_traffic_class = fw_ddb_entry->ipv4_tos;
+ 
 -- 
 2.11.0
 
