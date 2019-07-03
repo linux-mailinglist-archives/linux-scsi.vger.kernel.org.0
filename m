@@ -2,92 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC245D93A
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 02:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E31515D8A2
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 02:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727107AbfGCAiV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Jul 2019 20:38:21 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:37834 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727033AbfGCAiV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jul 2019 20:38:21 -0400
-Received: by mail-oi1-f193.google.com with SMTP id t76so576969oih.4;
-        Tue, 02 Jul 2019 17:38:21 -0700 (PDT)
+        id S1727095AbfGCA0l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Jul 2019 20:26:41 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40800 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726150AbfGCA0k (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jul 2019 20:26:40 -0400
+Received: by mail-pg1-f195.google.com with SMTP id w10so218242pgj.7;
+        Tue, 02 Jul 2019 17:26:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=aBBXhrXh9/4XOgm4YO50PZ7nN7ZBQawsgLFlMkXEs1w=;
-        b=V8vpjBx1kzZa2mv6jb/tVkHvFf0jcI4WTGGOotiqRdxM+1C9MhPEoVjM//rJbTykNo
-         ldSHgjY7uLogQ7N/1qWi31GeqMrPakJSE4e8mxx2PbQDlFu5D0M6I4WGF9MqRzajhdNz
-         +KXHG7yOnR8KHMDh1bRb7sAsONTXUjJn5E1iqJ3iAcXDgD5YjndFxyIznXMYfpJVweNs
-         l2jtSDIAkS/QZN5SPFRbaGQ3ZSokN7GLUrSlLYFjvCNbBt6iPaxD6ifqNqjvu4JDZ0a8
-         S4lkXFKFRQPgnzslQNCbtAx9fC4spPYhRk8nz3b1smN8oOf9QKengOCpV/VQJYI8MgF3
-         h7ig==
+        bh=G2YqfkEvAQAEaHiI4AbuUSgjkEW4+tXLhh4WWMs6JGc=;
+        b=tizq4CrVTABFZl6lnMuMEVk6tKI1qJnrWGFe4D/LjmvB+V/tTxAnsgpyrZ8ifIyQMT
+         DeSjjLtTF+MYi9fu+Udh57TbTdSonKNX1fyQwjbtUsQ1mNxyYGZ0tOg7kdONrRwWYHRU
+         /81FIsGttSimYEFso4N+gs0xCCAPgOYT7desTo5Us0nvxbySoSFC5NjbJlBLCdASlvYe
+         Z+BerYub+aib38bjlte4Y2MPUytGx4mmaBBg24mm2Se4RN4gJJ/BwU8sdjhBPIqh0JjG
+         vO+YziBW9IDARDb2dlpWDmQmaMHMRdAKP9RusLrskr5Z+0YQY4lT5v/jU4vBxDvMKwVO
+         ynBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=aBBXhrXh9/4XOgm4YO50PZ7nN7ZBQawsgLFlMkXEs1w=;
-        b=szJ+5hF/VfKsNPJAj1FLvqiTo65IE1ulqSdRvG7Qv5WuVFqgCP8ecc9sjeQbKoK7np
-         aLbaQguE138IYJNWuZ0btmRYwnNrJWByjplvckiNbgmYJQV3GpRV97V/ubFu0H/H6x5h
-         +zCKEx/uNwNwdtNcKhmAmUWfvQe2MgCJVdMg1LowheJlnF+w3aLci88ykNsTYhFBn0nN
-         8hdllgVByowa5yK8hvRHNwZLCqmvn42ylDL7LHiGVk62PNPLHrUEi/4TT7Yx31FoM5YH
-         pv95nG+alEmu95y8xv5bL1Sh5eJhW+541p9Wm6e6RFGfMs3JLtYjEKnTuKg6vg9ald8a
-         4G4g==
-X-Gm-Message-State: APjAAAXi+syjNNXyjDb5IyBsiHgLmlr8qJdvgYsXKyIVRom0Wv/XBbOH
-        xioi0H7dDOSZUaoEbsqV3k7udCp31CY=
-X-Google-Smtp-Source: APXvYqwnTjoGdkjeDwZ2laVOlEN4b75Fj9Qb/yLUyGM1yb/F0z2LXav1KxBP0foWkEJJqVcDI1V4lw==
-X-Received: by 2002:a63:f14:: with SMTP id e20mr33320739pgl.227.1562108916478;
-        Tue, 02 Jul 2019 16:08:36 -0700 (PDT)
-Received: from continental ([189.58.144.164])
-        by smtp.gmail.com with ESMTPSA id 2sm129227pff.174.2019.07.02.16.08.33
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 02 Jul 2019 16:08:35 -0700 (PDT)
-Date:   Tue, 2 Jul 2019 20:09:19 -0300
-From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>
-Subject: Re: [PATCH 1/2] scsi: devinfo: BLIST_TRY_VPD_PAGES for SanDisk
- Cruzer Blade
-Message-ID: <20190702230919.GB19791@continental>
-References: <20190618013146.21961-1-marcos.souza.org@gmail.com>
- <20190618013146.21961-2-marcos.souza.org@gmail.com>
- <yq1r27quuod.fsf@oracle.com>
- <20190619094540.GA26980@continental>
- <20190619120346.GC26980@continental>
- <yq14l4kro9l.fsf@oracle.com>
+        bh=G2YqfkEvAQAEaHiI4AbuUSgjkEW4+tXLhh4WWMs6JGc=;
+        b=YcHjJbAoBwDOL91jJCesHPC+ll8kDFpBgsA2kdJsBTnplL3cuTZa9q18eiUdxRh71r
+         GoK4ciKg9u++p+g0i/hCwv7veIlbTKx1LnMlcsNppewnlhqzdtF58/shW7QUtFfijZa3
+         ZYWhc1XyGw8kOtC+pAvZb4XlCgotull7+GIVOtGVYzWYBQ5wNxc/I5x04ftOMDRaD6m3
+         rFU3O4gl3h1qD1W28l3y9ZOLVDMelAARSh9/5OX8xAJMrFwjY8yANMJrg06WkGFKZe/c
+         j2a61MopcbUMdiWey3LOK10cDOGK6R9hemWuivB9rp7sER4riDpMfXY48rR3JldH8Pk/
+         HXww==
+X-Gm-Message-State: APjAAAUGeytt7k7Ag4ies8iP4HBUz0oc/0POnehYsOLM8sL9w2Li/kVx
+        Jusd2/WjPuN60LYcaWHYGO8=
+X-Google-Smtp-Source: APXvYqy+IWFwh62Asy5np8pkDyBI/cyqwDN82970y6xL03Sfn32ecxy0iA6/KhMffPZM6PpjIKF3hg==
+X-Received: by 2002:a17:90a:1785:: with SMTP id q5mr8609557pja.106.1562113148665;
+        Tue, 02 Jul 2019 17:19:08 -0700 (PDT)
+Received: from localhost ([123.213.206.190])
+        by smtp.gmail.com with ESMTPSA id y5sm246107pgv.12.2019.07.02.17.19.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Jul 2019 17:19:07 -0700 (PDT)
+Date:   Wed, 3 Jul 2019 09:19:04 +0900
+From:   Minwoo Im <minwoo.im.dev@gmail.com>
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Cc:     linux-block@vger.kernel.org, colyli@suse.de,
+        linux-bcache@vger.kernel.org, linux-btrace@vger.kernel.org,
+        xen-devel@lists.xenproject.org, kent.overstreet@gmail.com,
+        yuchao0@huawei.com, jaegeuk@kernel.org, damien.lemoal@wdc.com,
+        konrad.wilk@oracle.com, roger.pau@citrix.com, bvanassche@acm.org,
+        linux-scsi@vger.kernel.org, Minwoo Im <minwoo.im.dev@gmail.com>
+Subject: Re: [PATCH V3 1/9] block: add a helper function to read nr_setcs
+Message-ID: <20190703001904.GB15705@minwoo-desktop>
+References: <20190702174236.3332-1-chaitanya.kulkarni@wdc.com>
+ <20190702174236.3332-2-chaitanya.kulkarni@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <yq14l4kro9l.fsf@oracle.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190702174236.3332-2-chaitanya.kulkarni@wdc.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jun 20, 2019 at 04:32:38PM -0400, Martin K. Petersen wrote:
-> 
-> Marcos,
-> 
-> > My first idea was to add a vendor:product mapping at SCSI layer, but
-> > so far I haven't found one, so I added the model/vendor found by
-> > INQUIRY. Would it be better to check for prod:vendor (as values,
-> > instead of the description)?
-> 
-> Your patch is functionally fine. I'm just trying to establish how risky
-> it is for me to pick it up.
+On 19-07-02 10:42:27, Chaitanya Kulkarni wrote:
+> This patch introduces helper function to read the number of sectors
+> from struct block_device->bd_part member. For more details Please refer
+> to the comment in the include/linux/genhd.h for part_nr_sects_read().
 
-I've tried to find any official document about Cruzer Blade devices, stating
-that all of them have at least SPC-3 to support VPD, but no luck so far :(
+Without bd_mutex locked, this helper seems useful to have.
 
-So feel free to ignore the patch if you think it's too risky.
-
-Thanks,
-Marcos
-
-> 
-> -- 
-> Martin K. Petersen	Oracle Linux Engineering
+Reviewed-by: Minwoo Im <minwoo.im.dev@gmail.com>
