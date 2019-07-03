@@ -2,78 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C025E7D3
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 17:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B882E5E8EB
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 18:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbfGCP1d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jul 2019 11:27:33 -0400
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:52937 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725933AbfGCP1d (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 11:27:33 -0400
-Received: by mail-wm1-f50.google.com with SMTP id s3so2657950wms.2
-        for <linux-scsi@vger.kernel.org>; Wed, 03 Jul 2019 08:27:32 -0700 (PDT)
+        id S1727101AbfGCQ3O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Jul 2019 12:29:14 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:36779 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726473AbfGCQ3O (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 12:29:14 -0400
+Received: by mail-pl1-f195.google.com with SMTP id k8so1531661plt.3;
+        Wed, 03 Jul 2019 09:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=colorremedies-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FYQTDTIAXw+vyt/yEFYqaswqL2mofUSVAgjKdZ+8JC8=;
-        b=T8v0L5JGhXWwKu69bSYeRCeqpQSkDOeG+Yf8RPqlCaahsO1OWVA3wdff/rUZbwv6jn
-         sGwDr5APDUvU5cAkfsuwRQ3SwE3qpO4R2nRLpZxHFQLDVuuUVALgDRc3l5cZtPMyHbKu
-         QckXPdfNpQDrCEoLIBrM4apkXGigpszgQcm1A2NMoz6X0dHJTJsqldNB9vK+OMlZ4fI9
-         QNLwXT3+5wc29XmAsowSruFWFHIwSfeZ2gYapk39T6Z14230F6JOW37HfbFCu9Xyn1IL
-         IOBCl9eFPdUUJZn9k6X9LbT8rRBM9T3IRwkK/OsWidXizEGO8jgoj0Aa2afHbZDIF+Op
-         j4zg==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Sx51BEU96kLzOqHMh+2nDWJWJOKqGwfS67NtG6OObZs=;
+        b=sjZOttVShHaH3btE2OF+Uil8M3AW/3VldRboShe2e6NBoVCsZWTYwsqF5lL6wIbB+1
+         5lqXqOFcy+j/LCk+5N+C5I+feeUgILfrEAGjQ1KzY2cFvAYH62vh95mzlJuZiCZpUHpM
+         yNF9LQ8M91/McsFXbzjU6u3lmRaZq8xfwarKPBXtLtg1LBlA08O6+XmxsyIMf5ckaOGb
+         0OACN6sgAeWCKIaxbwRIep2GKfvmmnlZ7bGQ13N2UBGhtM+Ss6HPmDFmmENR8cySSKoy
+         ix4ICWKy6RxEPCW+siRoduvHEReFBwHpg7FwvpKhDoBpum3QSpBQU8BQRGQuhu9t11yz
+         FaQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FYQTDTIAXw+vyt/yEFYqaswqL2mofUSVAgjKdZ+8JC8=;
-        b=QnSJW6335Qqx9N8wiM7UEoaov3fg/Pg4XyO90oW8E4pYySYdQGQQaB01WuYz4TsN27
-         +s/9FR5ID0viDet3xB66O6UxC7I3v/qyPBvrHhAaHnPtmS2ZYFgFeQ26dOCPM3KJ542+
-         thxmZMOKU4FPOiQ1xtFkEB2f8h9d6hjYK3J4sMdn8zhQ0sMsx9pnGLoj0L5G3otnOvVm
-         s6ByXdBgbWGzF587vHGzxS829UQmelkMgKsc1kxiwNAlplqk42ZXZC1hEDWl+SmuQFOI
-         lanJZj24Uf7kwDcpOozz9Uaafc4d4Qhq1U9aDbhLPldyxCFhNat82pylhr937QC/uatE
-         9sjA==
-X-Gm-Message-State: APjAAAVtYje8R6BoUOPyBGj8zlHG7LYbhbclu/LfW9LMrpnPhYqwiUfv
-        Fkt2SamydgOjOdbm4hEz3GD3UnGOOEPCYhI3XKc=
-X-Google-Smtp-Source: APXvYqzkX+gi2hx7vKrLCwcoKQg+CojCrI2I3R4EMcB3HNM4POqM/wwhL1AA4y80MyXA1GDh9LBQsJKa95/xRmmePHg=
-X-Received: by 2002:a1c:2c41:: with SMTP id s62mr8522581wms.8.1562167651517;
- Wed, 03 Jul 2019 08:27:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
- <20190702120112.GA19890@ming.t460p> <20190702223931.GB3735@brian.unipv.it>
- <20190703020119.GA23872@ming.t460p> <20190703051117.GA6458@brian.unipv.it> <20190703063603.GA32123@ming.t460p>
-In-Reply-To: <20190703063603.GA32123@ming.t460p>
-From:   Chris Murphy <lists@colorremedies.com>
-Date:   Wed, 3 Jul 2019 09:27:20 -0600
-Message-ID: <CAJCQCtRCeY1tbhe84Uy-WfQg5jaur3VyOc+ROwmgC6ZZExApQQ@mail.gmail.com>
-Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Andrea Vai <andrea.vai@unipv.it>, Jens Axboe <axboe@kernel.dk>,
-        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Sx51BEU96kLzOqHMh+2nDWJWJOKqGwfS67NtG6OObZs=;
+        b=Z0+bwi0dgvQyAiI92Zwzk81Nlhnt+u3RItM9jVPwwywIAD2jiXI6hMbsL45BQeM9I8
+         XsnEr/WPBD1AxQuJE0S7m7uaP6UxRUwziSF+YAvXH7d2KCbF2YlvjClXCg8z0XC8ZlFh
+         1QP/EuJMkl7A3oC5OeMBEpWCXbW5we3T3WseRZqyJXCpDBTFtinHonXJewdkL97Ol88Q
+         XnDK2BVYFRBDjRitipiEWddkXLMjAs8Zwl8QkhJ88l0j2j7nyNgbS5BOtNM9j7gInVUB
+         2py5zJUTspYGonx9m7SQnYpTTSSj06dC3y9TuUvD0l/0+eOmGFaorh9+3MoKiRQ/suPb
+         DIEA==
+X-Gm-Message-State: APjAAAVgO0lz1pmxTKHviIDSnuu03+Jn6jhy/2KwKYAAAl6xwBLTsb2k
+        0HoK1vO6aY3xkz1D8d7i9jQ=
+X-Google-Smtp-Source: APXvYqx0QZFK4KAjWCf/IdegUuL5GcA9T4IH3Va+O37A95xl3lDF9/ZIf5UewCKjRL+tR3ooICNTpQ==
+X-Received: by 2002:a17:902:4c88:: with SMTP id b8mr44884570ple.29.1562171354064;
+        Wed, 03 Jul 2019 09:29:14 -0700 (PDT)
+Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.googlemail.com with ESMTPSA id i9sm7814851pgo.46.2019.07.03.09.29.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 03 Jul 2019 09:29:13 -0700 (PDT)
+From:   Fuqian Huang <huangfq.daxian@gmail.com>
+Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
+        Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Fuqian Huang <huangfq.daxian@gmail.com>
+Subject: [PATCH v2 14/35] message/fusion: Use kmemdup rather than duplicating its implementation
+Date:   Thu,  4 Jul 2019 00:29:06 +0800
+Message-Id: <20190703162906.32507-1-huangfq.daxian@gmail.com>
+X-Mailer: git-send-email 2.11.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jul 3, 2019 at 12:36 AM Ming Lei <ming.lei@redhat.com> wrote:
->
-> BTW, 'rotational' shouldn't be set for USB drive, except for USB HDD,
-> but that shouldn't be related with your issue.
+kmemdup is introduced to duplicate a region of memory in a neat way.
+Rather than kmalloc/kzalloc + memcpy, which the programmer needs to
+write the size twice (sometimes lead to mistakes), kmemdup improves
+readability, leads to smaller code and also reduce the chances of mistakes.
+Suggestion to use kmemdup rather than using kmalloc/kzalloc + memcpy.
 
-I get
-/sys/block/sdb/queue/rotational:1
-for all USB flash drives on all computers with every kernel since
-forever, including 5.2rc7. Lexar, Samsung, Kingston.
+Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+---
+Changes in v2:
+  - Fix a typo in commit message (memset -> memcpy)
 
+ drivers/message/fusion/mptbase.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
+diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
+index d8882b0a1338..e0c57cecddd3 100644
+--- a/drivers/message/fusion/mptbase.c
++++ b/drivers/message/fusion/mptbase.c
+@@ -6001,13 +6001,12 @@ mpt_findImVolumes(MPT_ADAPTER *ioc)
+ 	if (mpt_config(ioc, &cfg) != 0)
+ 		goto out;
+ 
+-	mem = kmalloc(iocpage2sz, GFP_KERNEL);
++	mem = kmemdup((u8 *)pIoc2, iocpage2sz, GFP_KERNEL);
+ 	if (!mem) {
+ 		rc = -ENOMEM;
+ 		goto out;
+ 	}
+ 
+-	memcpy(mem, (u8 *)pIoc2, iocpage2sz);
+ 	ioc->raid_data.pIocPg2 = (IOCPage2_t *) mem;
+ 
+ 	mpt_read_ioc_pg_3(ioc);
 -- 
-Chris Murphy
+2.11.0
+
