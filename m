@@ -2,157 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BED75E525
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 15:17:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACA85E55B
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 15:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbfGCNRF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jul 2019 09:17:05 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42032 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725830AbfGCNRE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 09:17:04 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q10so1267611pff.9;
-        Wed, 03 Jul 2019 06:17:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=LEzHlm28gGet2lhOMmasiQomKY8boopFZ+WIZBJDyvs=;
-        b=WMVUZFjzHMTx1SiFC6QqBmLu5L/8GKw7D8NU1p+UR8LRgD472Wu+CccWaogEDGjQHh
-         F9o84urBZVUOCt33V94Vrh5dt3/hS80w5vHz9HWFDEFkSMFlUlqZ0ZxjDYw78RMVQAuB
-         6gGNd2H5uIr+PTzDp7WgEVUQih6Sb1wi2Q3sF3bOSSOLplYvVq/YjEAhdGsCb9oRJgYx
-         tVGT7BHsYdlIe6eVZvG9U9ecxpFc8/PpCQtzwOX3goMknaYj49cfjnH0b8hfm/HguVj5
-         oFr9PGbe39OIrYSwZ+R5F/RBxrSalthAfS8/jIyw8FYCx7wbW1MRXSmfLs9nEmzJ04do
-         9HDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=LEzHlm28gGet2lhOMmasiQomKY8boopFZ+WIZBJDyvs=;
-        b=Jixd7sFwKU0gHZPsLYc0TYmPbo+tiHxRlSviQSMsXdlLU0RqstD2W1sqw4njlrYxwd
-         mPrjwTawvjawvdJ/C8gRY8n1urXz9jj3ZrDJO50jsX8P0HK3bd5neF1QoP8dfmIx9Rru
-         vKtyb+GeSea4qJn4iglV4ZaOHzBtqarNM/7oxqiuh5aIcUE0d95bfi+7LbP7kz2Iq7H7
-         4SKof0v3ngH/znhjmcMH5mLRMtotYNyvVJiOMWhz7VIx1XX+jmYx8t32dUKQvBYvWySQ
-         zibvA9iZ9zwYKc39vvxBNUpIXxvixknx+rlywCD6zcBld/qIILpbnPVZBJKGunnAgsuG
-         ikgw==
-X-Gm-Message-State: APjAAAVHqE3w1mGHe0DJUiN8Fpu8mMYBbA+BTOEwfGn8FLTpFbkHMaml
-        Ea0TgiSWzEyzadzlQX8xajI=
-X-Google-Smtp-Source: APXvYqzxURePBgEEl4xflBI3no+G3GDCoImlDugCHhH2Oydl5/KfT4D2v859t+LRm7mLilxqrqVW0Q==
-X-Received: by 2002:a63:211c:: with SMTP id h28mr24226183pgh.438.1562159824265;
-        Wed, 03 Jul 2019 06:17:04 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id 22sm2434929pfu.179.2019.07.03.06.17.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Jul 2019 06:17:03 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Hannes Reinecke <hare@suse.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        QLogic-Storage-Upstream@qlogic.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH 20/30] scsi: Use kmemdup rather than duplicating its implementation
-Date:   Wed,  3 Jul 2019 21:16:55 +0800
-Message-Id: <20190703131655.25594-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726870AbfGCNYl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Jul 2019 09:24:41 -0400
+Received: from mta-02.yadro.com ([89.207.88.252]:45744 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726621AbfGCNYl (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 3 Jul 2019 09:24:41 -0400
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 71FA2404CF;
+        Wed,  3 Jul 2019 13:24:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        user-agent:in-reply-to:content-disposition:content-type
+        :content-type:mime-version:references:message-id:subject:subject
+        :from:from:date:date:received:received:received; s=mta-01; t=
+        1562160277; x=1563974678; bh=8aaSSBPPvnmQjKYICwro5iMnTGy3ei1sDS9
+        Ie5CW9OU=; b=h7gQT6LzJL2An/tcbAHR7enXqg+udr+xtZl8pzZOgjCyWDpzb+/
+        bZQrgTfkQxvLNdT5Vyl1iCIf4rDZHVGI8z/Eh/Om0dMcNvmVK9TgmiSmWMNdl1Dh
+        13j0vNh8Q4xYo0NnzfwWrfw4HmOj9cn4d/TKmhWM6H/cxZkrwUVODnYk=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id VFxRkbpa4CvX; Wed,  3 Jul 2019 16:24:37 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id EDDD8404CB;
+        Wed,  3 Jul 2019 16:24:36 +0300 (MSK)
+Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
+ (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Wed, 3 Jul
+ 2019 16:24:36 +0300
+Date:   Wed, 3 Jul 2019 16:24:36 +0300
+From:   Roman Bolshakov <r.bolshakov@yadro.com>
+To:     Michael Christie <mchristi@redhat.com>
+CC:     <target-devel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        <stable@vger.kernel.org>, Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [RESEND PATCH] scsi: target/iblock: Fix overrun in WRITE SAME
+ emulation
+Message-ID: <20190703132436.22k53mprnrn5fxcj@SPB-NB-133.local>
+References: <20190702191636.26481-1-r.bolshakov@yadro.com>
+ <a1c14025-cb00-7f64-a633-82019a3b6813@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <a1c14025-cb00-7f64-a633-82019a3b6813@redhat.com>
+User-Agent: NeoMutt/20180716
+X-Originating-IP: [172.17.128.60]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-kmemdup is introduced to duplicate a region of memory in a neat way.
-Rather than kmalloc/kzalloc + memset, which the programmer needs to
-write the size twice (sometimes lead to mistakes), kmemdup improves
-readability, leads to smaller code and also reduce the chances of mistakes.
-Suggestion to use kmemdup rather than using kmalloc/kzalloc + memset.
+On Wed, Jul 03, 2019 at 12:40:29PM +0900, Michael Christie wrote:
+> On 07/03/2019 04:16 AM, Roman Bolshakov wrote:
+> > WRITE SAME corrupts data on the block device behind iblock if the
+> > command is emulated. The emulation code issues (M - 1) * N times more
+> > bios than requested, where M is the number of 512 blocks per real block
+> > size and N is the NUMBER OF LOGICAL BLOCKS specified in WRITE SAME
+> > command. So, for a device with 4k blocks, 7 * N more LBAs gets written
+> > after the requested range.
+> > 
+> > The issue happens because the number of 512 byte sectors to be written
+> > is decreased one by one while the real bios are typically from 1 to 8
+> > 512 byte sectors per bio.
+> > 
+> Roman,
+> 
+> The patch looks ok to me. Just one question. How did you hit this?
+> 
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
- drivers/scsi/aic7xxx/aic79xx_core.c | 3 +--
- drivers/scsi/aic7xxx/aic7xxx_core.c | 3 +--
- drivers/scsi/myrb.c                 | 4 +---
- drivers/scsi/qla4xxx/ql4_os.c       | 7 ++-----
- 4 files changed, 5 insertions(+), 12 deletions(-)
+Hi Michael,
 
-diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic79xx_core.c
-index 7e5044bf05c0..f4bc88c50dcd 100644
---- a/drivers/scsi/aic7xxx/aic79xx_core.c
-+++ b/drivers/scsi/aic7xxx/aic79xx_core.c
-@@ -9442,10 +9442,9 @@ ahd_loadseq(struct ahd_softc *ahd)
- 	if (cs_count != 0) {
- 
- 		cs_count *= sizeof(struct cs);
--		ahd->critical_sections = kmalloc(cs_count, GFP_ATOMIC);
-+		ahd->critical_sections = kmemdup(cs_table, cs_count, GFP_ATOMIC);
- 		if (ahd->critical_sections == NULL)
- 			panic("ahd_loadseq: Could not malloc");
--		memcpy(ahd->critical_sections, cs_table, cs_count);
- 	}
- 	ahd_outb(ahd, SEQCTL0, PERRORDIS|FAILDIS|FASTMODE);
- 
-diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
-index a9d40d3b90ef..7ea4e45309ff 100644
---- a/drivers/scsi/aic7xxx/aic7xxx_core.c
-+++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
-@@ -6907,10 +6907,9 @@ ahc_loadseq(struct ahc_softc *ahc)
- 	if (cs_count != 0) {
- 
- 		cs_count *= sizeof(struct cs);
--		ahc->critical_sections = kmalloc(cs_count, GFP_ATOMIC);
-+		ahc->critical_sections = kmemdup(cs_table, cs_count, GFP_ATOMIC);
- 		if (ahc->critical_sections == NULL)
- 			panic("ahc_loadseq: Could not malloc");
--		memcpy(ahc->critical_sections, cs_table, cs_count);
- 	}
- 	ahc_outb(ahc, SEQCTL, PERRORDIS|FAILDIS|FASTMODE);
- 
-diff --git a/drivers/scsi/myrb.c b/drivers/scsi/myrb.c
-index 539ac8ce4fcd..5e6b5e7ae93a 100644
---- a/drivers/scsi/myrb.c
-+++ b/drivers/scsi/myrb.c
-@@ -1658,14 +1658,12 @@ static int myrb_ldev_slave_alloc(struct scsi_device *sdev)
- 	if (!ldev_info)
- 		return -ENXIO;
- 
--	sdev->hostdata = kzalloc(sizeof(*ldev_info), GFP_KERNEL);
-+	sdev->hostdata = kmemdup(ldev_info, sizeof(*ldev_info), GFP_KERNEL);
- 	if (!sdev->hostdata)
- 		return -ENOMEM;
- 	dev_dbg(&sdev->sdev_gendev,
- 		"slave alloc ldev %d state %x\n",
- 		ldev_num, ldev_info->state);
--	memcpy(sdev->hostdata, ldev_info,
--	       sizeof(*ldev_info));
- 	switch (ldev_info->raid_level) {
- 	case MYRB_RAID_LEVEL0:
- 		level = RAID_LEVEL_LINEAR;
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 8c674eca09f1..8f8c64e5f02d 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -3559,21 +3559,18 @@ static int qla4xxx_copy_from_fwddb_param(struct iscsi_bus_flash_session *sess,
- 	conn->port = le16_to_cpu(fw_ddb_entry->port);
- 
- 	options = le16_to_cpu(fw_ddb_entry->options);
--	conn->ipaddress = kzalloc(IPv6_ADDR_LEN, GFP_KERNEL);
-+	conn->ipaddress = kmemdup(fw_ddb_entry->ip_addr, IPv6_ADDR_LEN, GFP_KERNEL);
- 	if (!conn->ipaddress) {
- 		rc = -ENOMEM;
- 		goto exit_copy;
- 	}
- 
--	conn->redirect_ipaddr = kzalloc(IPv6_ADDR_LEN, GFP_KERNEL);
-+	conn->redirect_ipaddr = kmemdup(fw_ddb_entry->tgt_addr, IPv6_ADDR_LEN, GFP_KERNEL);
- 	if (!conn->redirect_ipaddr) {
- 		rc = -ENOMEM;
- 		goto exit_copy;
- 	}
- 
--	memcpy(conn->ipaddress, fw_ddb_entry->ip_addr, IPv6_ADDR_LEN);
--	memcpy(conn->redirect_ipaddr, fw_ddb_entry->tgt_addr, IPv6_ADDR_LEN);
--
- 	if (test_bit(OPT_IPV6_DEVICE, &options)) {
- 		conn->ipv6_traffic_class = fw_ddb_entry->ipv4_tos;
- 
--- 
-2.11.0
+The initiator was CentOS 7.x with distro kernel (3.10.0-x). There were
+two cases:
+ * Initiatalization [1] and online resize of ext4 filesystem [2]
+   use WRITE SAME [3] for zeroing. TCM doesn't support RSOC, so
+   the initiator defaults to using WRITE SAME (10). The filesystem
+   showed errors after online resize;
+ * a WRITE SAME command for the last LBA was stuck in multipath. TCM
+   always returned LOGICAL UNIT NOT SUPPORTED for the command. The
+   resason of the response is because some bios were sent beyond the
+   sector limit. WRITE SAME with NUMBER OF LOGICAL BLOCKS == 1 was
+   failing for the last 7 LBAs.
 
+> Did you by any chance export this disk to a ESX initiator and was it
+> doing WRITE SAME to zero out data. But, did the device being used by
+> iblock not support the zero out command (was
+> /sys/block/XYZ/queue/write_zeroes_max_bytes == 0)?
+> 
+
+It did not support zero out and write same, both
+write_zeroes_max_bytes/write_same_max_bytes == 0
+
+> Or, did you just send a WRITE SAME command manually using some tools
+> like sg utils and it had a non zero'd buffer to write out?
+> 
+
+Yes, I triaged the issues above with sg_write_same/sg_dd and non-zero
+buffer.
+
+1. https://patchwork.ozlabs.org/patch/66590/
+2. https://lists.openwall.net/linux-ext4/2012/01/04/14
+3. https://www.spinics.net/lists/linux-scsi/msg57783.html
+
+Best regards,
+Roman
