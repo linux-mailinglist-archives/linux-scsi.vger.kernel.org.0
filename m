@@ -2,57 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B882E5E8EB
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 18:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D3C5E8FD
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 18:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbfGCQ3O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jul 2019 12:29:14 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:36779 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726473AbfGCQ3O (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 12:29:14 -0400
-Received: by mail-pl1-f195.google.com with SMTP id k8so1531661plt.3;
-        Wed, 03 Jul 2019 09:29:14 -0700 (PDT)
+        id S1726928AbfGCQaU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Jul 2019 12:30:20 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:42344 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726621AbfGCQaU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 12:30:20 -0400
+Received: by mail-pl1-f196.google.com with SMTP id ay6so1509438plb.9;
+        Wed, 03 Jul 2019 09:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=Sx51BEU96kLzOqHMh+2nDWJWJOKqGwfS67NtG6OObZs=;
-        b=sjZOttVShHaH3btE2OF+Uil8M3AW/3VldRboShe2e6NBoVCsZWTYwsqF5lL6wIbB+1
-         5lqXqOFcy+j/LCk+5N+C5I+feeUgILfrEAGjQ1KzY2cFvAYH62vh95mzlJuZiCZpUHpM
-         yNF9LQ8M91/McsFXbzjU6u3lmRaZq8xfwarKPBXtLtg1LBlA08O6+XmxsyIMf5ckaOGb
-         0OACN6sgAeWCKIaxbwRIep2GKfvmmnlZ7bGQ13N2UBGhtM+Ss6HPmDFmmENR8cySSKoy
-         ix4ICWKy6RxEPCW+siRoduvHEReFBwHpg7FwvpKhDoBpum3QSpBQU8BQRGQuhu9t11yz
-         FaQg==
+        bh=2zWvMdzA/V9RyhmUcmhxRuOGTZVdTb4bDJ/gtFYjG8w=;
+        b=EH58ZxTTDW/gvWq+rRCkWLUjidFoA+hvkhdhLqyvRmIDziAlIzaUfd7TdKSZnaWLKO
+         xoV7NSefQySIIFqsIH+MvTCOLf2ZLAXjOG7O2bw7LZC4JMKAzh16Icy3vBJD3ZOTtn6j
+         XDSaMKSnhcP2hHeF/glVyoPgNTpBmEc+sfP/wHI2MeDMGhhPj0c2h2U0UeSDnSYz4I6z
+         Ug0wwmTv5bqWuo0hfXCw2JdzvulmlaTVcYuMLDwEhrle1CKoYyMcgLg+jdWbpNUxD8Fx
+         3+qv6q9uqXeYkH6bEBhH73Y6rvVymohaOZoIK78hODQcEW7KmCTaFpvQ/rNZe60ciBf5
+         p0MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Sx51BEU96kLzOqHMh+2nDWJWJOKqGwfS67NtG6OObZs=;
-        b=Z0+bwi0dgvQyAiI92Zwzk81Nlhnt+u3RItM9jVPwwywIAD2jiXI6hMbsL45BQeM9I8
-         XsnEr/WPBD1AxQuJE0S7m7uaP6UxRUwziSF+YAvXH7d2KCbF2YlvjClXCg8z0XC8ZlFh
-         1QP/EuJMkl7A3oC5OeMBEpWCXbW5we3T3WseRZqyJXCpDBTFtinHonXJewdkL97Ol88Q
-         XnDK2BVYFRBDjRitipiEWddkXLMjAs8Zwl8QkhJ88l0j2j7nyNgbS5BOtNM9j7gInVUB
-         2py5zJUTspYGonx9m7SQnYpTTSSj06dC3y9TuUvD0l/0+eOmGFaorh9+3MoKiRQ/suPb
-         DIEA==
-X-Gm-Message-State: APjAAAVgO0lz1pmxTKHviIDSnuu03+Jn6jhy/2KwKYAAAl6xwBLTsb2k
-        0HoK1vO6aY3xkz1D8d7i9jQ=
-X-Google-Smtp-Source: APXvYqx0QZFK4KAjWCf/IdegUuL5GcA9T4IH3Va+O37A95xl3lDF9/ZIf5UewCKjRL+tR3ooICNTpQ==
-X-Received: by 2002:a17:902:4c88:: with SMTP id b8mr44884570ple.29.1562171354064;
-        Wed, 03 Jul 2019 09:29:14 -0700 (PDT)
+        bh=2zWvMdzA/V9RyhmUcmhxRuOGTZVdTb4bDJ/gtFYjG8w=;
+        b=ozisrdeMFRo85HWDQ43A8NX8k8BWqvkaiFKnWbmyuc7UQtVhIVNX2W75KmDrwhtWyG
+         CExOUF+QllWO0gEK6XVbGG81xt/6qX32m7HZJfs+5YdPSXbWtOyiOE2hk7xjICq55q2m
+         PVQwc0fW4j7Rzm0ZtiIfraqWgTH00Mw05XGGaZfcrVZZBoZkaHro5gb2XbO2JVr+1Ikk
+         ULFJcG3KIVJIvz884N7QiTdj309H/F3LTRxgJPXePawiR4x/eeVbPsdNQq5mVjszFegC
+         Hh5a6M7JPt3aVcb3qJenNCAX+cTtEexHZsEzHgjIBY/wETZ4eFuqDU/v0x7M4PR+BLSg
+         UQ3w==
+X-Gm-Message-State: APjAAAVcMW8EVrXJFbFbaKGs/hHk5lgYLLniwyJ6AibMOtuDCJCzwvb9
+        bVvHejUyObtM/KYfe6onBho=
+X-Google-Smtp-Source: APXvYqyaQVg2V0LNXQ+367v5bLDi2dS1KGUjL/rC6yn1x5xvwLQPlYKuQGJ2mAnjFyAz5HGMk49fmA==
+X-Received: by 2002:a17:902:124:: with SMTP id 33mr44436846plb.145.1562171419914;
+        Wed, 03 Jul 2019 09:30:19 -0700 (PDT)
 Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id i9sm7814851pgo.46.2019.07.03.09.29.10
+        by smtp.googlemail.com with ESMTPSA id b16sm1245055pfo.54.2019.07.03.09.30.17
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Jul 2019 09:29:13 -0700 (PDT)
+        Wed, 03 Jul 2019 09:30:19 -0700 (PDT)
 From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     Sathya Prakash <sathya.prakash@broadcom.com>,
-        Chaitra P B <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+Cc:     Hannes Reinecke <hare@suse.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH v2 14/35] message/fusion: Use kmemdup rather than duplicating its implementation
-Date:   Thu,  4 Jul 2019 00:29:06 +0800
-Message-Id: <20190703162906.32507-1-huangfq.daxian@gmail.com>
+Subject: [PATCH v2 22/35] scsi/aic7xxx: Use kmemdup rather than duplicating its implementation
+Date:   Thu,  4 Jul 2019 00:30:10 +0800
+Message-Id: <20190703163010.364-1-huangfq.daxian@gmail.com>
 X-Mailer: git-send-email 2.11.0
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
@@ -71,28 +69,42 @@ Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
 Changes in v2:
   - Fix a typo in commit message (memset -> memcpy)
 
- drivers/message/fusion/mptbase.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/aic7xxx/aic79xx_core.c | 3 +--
+ drivers/scsi/aic7xxx/aic7xxx_core.c | 3 +--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-index d8882b0a1338..e0c57cecddd3 100644
---- a/drivers/message/fusion/mptbase.c
-+++ b/drivers/message/fusion/mptbase.c
-@@ -6001,13 +6001,12 @@ mpt_findImVolumes(MPT_ADAPTER *ioc)
- 	if (mpt_config(ioc, &cfg) != 0)
- 		goto out;
+diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic79xx_core.c
+index 7e5044bf05c0..f4bc88c50dcd 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_core.c
++++ b/drivers/scsi/aic7xxx/aic79xx_core.c
+@@ -9442,10 +9442,9 @@ ahd_loadseq(struct ahd_softc *ahd)
+ 	if (cs_count != 0) {
  
--	mem = kmalloc(iocpage2sz, GFP_KERNEL);
-+	mem = kmemdup((u8 *)pIoc2, iocpage2sz, GFP_KERNEL);
- 	if (!mem) {
- 		rc = -ENOMEM;
- 		goto out;
+ 		cs_count *= sizeof(struct cs);
+-		ahd->critical_sections = kmalloc(cs_count, GFP_ATOMIC);
++		ahd->critical_sections = kmemdup(cs_table, cs_count, GFP_ATOMIC);
+ 		if (ahd->critical_sections == NULL)
+ 			panic("ahd_loadseq: Could not malloc");
+-		memcpy(ahd->critical_sections, cs_table, cs_count);
  	}
+ 	ahd_outb(ahd, SEQCTL0, PERRORDIS|FAILDIS|FASTMODE);
  
--	memcpy(mem, (u8 *)pIoc2, iocpage2sz);
- 	ioc->raid_data.pIocPg2 = (IOCPage2_t *) mem;
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
+index a9d40d3b90ef..7ea4e45309ff 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_core.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
+@@ -6907,10 +6907,9 @@ ahc_loadseq(struct ahc_softc *ahc)
+ 	if (cs_count != 0) {
  
- 	mpt_read_ioc_pg_3(ioc);
+ 		cs_count *= sizeof(struct cs);
+-		ahc->critical_sections = kmalloc(cs_count, GFP_ATOMIC);
++		ahc->critical_sections = kmemdup(cs_table, cs_count, GFP_ATOMIC);
+ 		if (ahc->critical_sections == NULL)
+ 			panic("ahc_loadseq: Could not malloc");
+-		memcpy(ahc->critical_sections, cs_table, cs_count);
+ 	}
+ 	ahc_outb(ahc, SEQCTL, PERRORDIS|FAILDIS|FASTMODE);
+ 
 -- 
 2.11.0
 
