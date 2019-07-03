@@ -2,104 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4347A5E901
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 18:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C025A5EB8B
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 20:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727248AbfGCQam (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jul 2019 12:30:42 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:38031 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727026AbfGCQam (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 12:30:42 -0400
-Received: by mail-pl1-f196.google.com with SMTP id 9so1528915ple.5;
-        Wed, 03 Jul 2019 09:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=7wXx06T/IUNp6oBgghvWe6cqc1XKSwPyK8KitWgobzA=;
-        b=RZqJ9WmQQAn1gBWJEAInQbDWB1RxPxh6bFHZFJHz7j9fn+AVDgFdXiCr2GUpPZ14hc
-         Lt23+XGQ+9a266T2hwpF7MVzpjzKp90TQaEZpI5vwywoX8/+Oe3Zd2gpM9DXNYuiNXP8
-         WXpToLF9UvUgUOqn6YAXS7rjMI28dX0kmYpCxZ1DEFc7MbLFAZJEU3llhM/kE0mjwki6
-         sAa1XPyXW3Yaiou7u9nG++Ob5sFk2AbhD4yQy0EdxvAjaV5MEQZI2m0uCVhlfW83wtNc
-         w9ZdE6OU8KBgQ0Bwj792DKBGRopLbaUxGCZtFxPa+3U53+oxovtDIl6xdGMCwhY3y5Wu
-         eBvg==
+        id S1727198AbfGCS0B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Jul 2019 14:26:01 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:43185 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727190AbfGCS0B (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 14:26:01 -0400
+Received: by mail-io1-f70.google.com with SMTP id y5so3512501ioj.10
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Jul 2019 11:26:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=7wXx06T/IUNp6oBgghvWe6cqc1XKSwPyK8KitWgobzA=;
-        b=pjGZzXSaZZX8/oH+EfOxf0PeBOEftA8dH+pS6x4hgZty6ZcgzuR6Ll1HEn0EjosHgb
-         NSkg4+gnVC2AkpJZ7ff923rSKxAL9qk/XawTCPBTsS0wty3Q5/k42awKQsYAgG6aiE+9
-         DI+1E/ab43/MMj7HY3Bb6s/Cntn+XxaDo1ebaQUOiDqNtymlov0Pt8JNMFTZmAJrtbro
-         QEVFo/CFxus8tC6vilH+E+FWVrWRBv1bJBDW02sJx2BrXbzFmbNi0q4k9hkZofRWiwuv
-         JW5uPpbgWrMhpI/OtFzpbieIaW8oKdrMW8auGKgy9qMaSRwkRaOI5Xt3lGdI0CtgnyKa
-         rcXw==
-X-Gm-Message-State: APjAAAWAVJy2arI0TeGlVyQPncmW+3hayW5++xK6PwboYuLT8qF1dyJv
-        3i7UlV0h54Ekt7VDKgjKq49iJxjkJOA=
-X-Google-Smtp-Source: APXvYqw4o0oxVLBmrbz0jv8BE45v8P5Frva/GlaNzQRYHirRI5pvAY2fMjfBVdbbxVgIlDHxXS+mxw==
-X-Received: by 2002:a17:902:8205:: with SMTP id x5mr44053928pln.279.1562171441723;
-        Wed, 03 Jul 2019 09:30:41 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id r2sm3258932pfl.67.2019.07.03.09.30.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 03 Jul 2019 09:30:41 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     QLogic-Storage-Upstream@qlogic.com,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH v2 24/35] scsi/qla4xxx: Use kmemdup rather than duplicating its implementation
-Date:   Thu,  4 Jul 2019 00:30:33 +0800
-Message-Id: <20190703163033.456-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
-To:     unlisted-recipients:; (no To-header on input)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Ol2oTL6I09LrbBugODTrPEcLgmAtDlXO+xFKA9FYWzI=;
+        b=KA2ctyWoBIbcIyaFden4nOrTUoTYLpfJ1qv/X6n7mOjVcH6SRF1tU3DtIIyzN/Igq1
+         j3JDzCTZgZC8WR56C479pGcZME1ajixJLNow3X+B83WzupA30qbtxVEh/ox9MM9kPj9m
+         tJLlsG/Lo2nSKB2ySV3O/UKniT5OBMJxPDrz7h3JT83ICySqO1ydyNbSPzLHpICR4r3Z
+         EHlaLqdNabY5sq69JBQ9NjSkNAIlz6uHhtMi4hG/+7/vhB7K2Gf9nLdXy+dHGouYrhu9
+         KgGInaSFRuneWT/1N63NEDEQOdRtwV3f4mlnCEpiRrLPdcD34OG1kpqJZu63w8Be1AcZ
+         uHiw==
+X-Gm-Message-State: APjAAAVN+h3LQR6xyNRYhNBNIJD0FJRE4yiutc8A6B2AR5De2Dr15yC7
+        Fz4A6UIB/cgqT7AT+U316U1JshTPpU0lyUpxOkJVmMo0ezwe
+X-Google-Smtp-Source: APXvYqwnKz9Y5ErGzM/oENrZog1dO7eB2V3AocjmtCzYXUDUaLNQ1kAbKUGqE/0CNl8wQiJx3GqOLtHaUDhnnEPnEz2HNfDxKgvN
+MIME-Version: 1.0
+X-Received: by 2002:a02:c50a:: with SMTP id s10mr45090759jam.106.1562178360550;
+ Wed, 03 Jul 2019 11:26:00 -0700 (PDT)
+Date:   Wed, 03 Jul 2019 11:26:00 -0700
+In-Reply-To: <00000000000035c756058848954a@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000041ac74058ccafe0d@google.com>
+Subject: Re: KASAN: use-after-free Read in hci_cmd_timeout
+From:   syzbot <syzbot+19a9f729f05272857487@syzkaller.appspotmail.com>
+To:     chaitra.basappa@broadcom.com, davem@davemloft.net,
+        jejb@linux.vnet.ibm.com, johan.hedberg@gmail.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, marcel@holtmann.org,
+        martin.petersen@oracle.com, mpt-fusionlinux.pdl@broadcom.com,
+        netdev@vger.kernel.org, sathya.prakash@broadcom.com,
+        suganath-prabu.subramani@broadcom.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-kmemdup is introduced to duplicate a region of memory in a neat way.
-Rather than kmalloc/kzalloc + memcpy, which the programmer needs to
-write the size twice (sometimes lead to mistakes), kmemdup improves
-readability, leads to smaller code and also reduce the chances of mistakes.
-Suggestion to use kmemdup rather than using kmalloc/kzalloc + memcpy.
+syzbot has bisected this bug to:
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
-Changes in v2:
-  - Fix a typo in commit message (memset -> memcpy)
+commit ff92b9dd9268507e23fc10cc4341626cef50367c
+Author: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
+Date:   Thu Oct 25 14:03:40 2018 +0000
 
- drivers/scsi/qla4xxx/ql4_os.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+     scsi: mpt3sas: Update MPI headers to support Aero controllers
 
-diff --git a/drivers/scsi/qla4xxx/ql4_os.c b/drivers/scsi/qla4xxx/ql4_os.c
-index 8c674eca09f1..8f8c64e5f02d 100644
---- a/drivers/scsi/qla4xxx/ql4_os.c
-+++ b/drivers/scsi/qla4xxx/ql4_os.c
-@@ -3559,21 +3559,18 @@ static int qla4xxx_copy_from_fwddb_param(struct iscsi_bus_flash_session *sess,
- 	conn->port = le16_to_cpu(fw_ddb_entry->port);
- 
- 	options = le16_to_cpu(fw_ddb_entry->options);
--	conn->ipaddress = kzalloc(IPv6_ADDR_LEN, GFP_KERNEL);
-+	conn->ipaddress = kmemdup(fw_ddb_entry->ip_addr, IPv6_ADDR_LEN, GFP_KERNEL);
- 	if (!conn->ipaddress) {
- 		rc = -ENOMEM;
- 		goto exit_copy;
- 	}
- 
--	conn->redirect_ipaddr = kzalloc(IPv6_ADDR_LEN, GFP_KERNEL);
-+	conn->redirect_ipaddr = kmemdup(fw_ddb_entry->tgt_addr, IPv6_ADDR_LEN, GFP_KERNEL);
- 	if (!conn->redirect_ipaddr) {
- 		rc = -ENOMEM;
- 		goto exit_copy;
- 	}
- 
--	memcpy(conn->ipaddress, fw_ddb_entry->ip_addr, IPv6_ADDR_LEN);
--	memcpy(conn->redirect_ipaddr, fw_ddb_entry->tgt_addr, IPv6_ADDR_LEN);
--
- 	if (test_bit(OPT_IPV6_DEVICE, &options)) {
- 		conn->ipv6_traffic_class = fw_ddb_entry->ipv4_tos;
- 
--- 
-2.11.0
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=130ac8dda00000
+start commit:   eca94432 Bluetooth: Fix faulty expression for minimum encr..
+git tree:       upstream
+final crash:    https://syzkaller.appspot.com/x/report.txt?x=108ac8dda00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=170ac8dda00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f6451f0da3d42d53
+dashboard link: https://syzkaller.appspot.com/bug?extid=19a9f729f05272857487
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=125b7999a00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176deefba00000
 
+Reported-by: syzbot+19a9f729f05272857487@syzkaller.appspotmail.com
+Fixes: ff92b9dd9268 ("scsi: mpt3sas: Update MPI headers to support Aero  
+controllers")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
