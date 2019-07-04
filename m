@@ -2,75 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C025A5EB8B
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jul 2019 20:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842D75F417
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2019 09:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727198AbfGCS0B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jul 2019 14:26:01 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:43185 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727190AbfGCS0B (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jul 2019 14:26:01 -0400
-Received: by mail-io1-f70.google.com with SMTP id y5so3512501ioj.10
-        for <linux-scsi@vger.kernel.org>; Wed, 03 Jul 2019 11:26:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Ol2oTL6I09LrbBugODTrPEcLgmAtDlXO+xFKA9FYWzI=;
-        b=KA2ctyWoBIbcIyaFden4nOrTUoTYLpfJ1qv/X6n7mOjVcH6SRF1tU3DtIIyzN/Igq1
-         j3JDzCTZgZC8WR56C479pGcZME1ajixJLNow3X+B83WzupA30qbtxVEh/ox9MM9kPj9m
-         tJLlsG/Lo2nSKB2ySV3O/UKniT5OBMJxPDrz7h3JT83ICySqO1ydyNbSPzLHpICR4r3Z
-         EHlaLqdNabY5sq69JBQ9NjSkNAIlz6uHhtMi4hG/+7/vhB7K2Gf9nLdXy+dHGouYrhu9
-         KgGInaSFRuneWT/1N63NEDEQOdRtwV3f4mlnCEpiRrLPdcD34OG1kpqJZu63w8Be1AcZ
-         uHiw==
-X-Gm-Message-State: APjAAAVN+h3LQR6xyNRYhNBNIJD0FJRE4yiutc8A6B2AR5De2Dr15yC7
-        Fz4A6UIB/cgqT7AT+U316U1JshTPpU0lyUpxOkJVmMo0ezwe
-X-Google-Smtp-Source: APXvYqwnKz9Y5ErGzM/oENrZog1dO7eB2V3AocjmtCzYXUDUaLNQ1kAbKUGqE/0CNl8wQiJx3GqOLtHaUDhnnEPnEz2HNfDxKgvN
+        id S1727121AbfGDHrk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 Jul 2019 03:47:40 -0400
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:24916 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726087AbfGDHrk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 Jul 2019 03:47:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1562226459; x=1593762459;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=GHJ0KDUKPpKmudHJ1R6fXfGfOnD9MDCx3n80VozxZkc=;
+  b=nCN7FX9Y30DCTA7lcG2zcCUf2baTQKGZlqG0W2VP4jsDGS0JQRTA2yCb
+   OMSK0TgJOW9gzNddafyJv4zbhcOnWM8z386YX1Fm3YI9mlF38XRps6dnu
+   nI2ac/oaGMXYHT3gyyjP7QZnt0j/P2xJpjPfifSs99xn52yBn4M6AiNQG
+   cjyE8irBAfQqBEfAyxzkCB3ygFNAk+2g3uwkSwDL2Ff1Ubc7rtMz3Y6Ok
+   JXIPCRAOSQtr5SGjfqpEF/R1qCcl28W8v7hiwEcK572ElJoSw4UuPFV+Z
+   4ReGYXNNp+QKznV/Ur9j8sTaHnQ2OR5pZZmrs/FboJuLlgdXokB3r/ikw
+   w==;
+IronPort-SDR: PILL87nLDIqKdsCBX3eoxwoLK+WGqVAgL1NxyMT0GpQi2M6iUS6PmFksZzJbDJqzrLji0J/cfU
+ pZf71bs+ypstSzqYSk+vk1/OLQ3PlRmcaQSgSXAGOatj3VlnozBHOryaFBh2uR9waWi5OrjgFG
+ Q+A1vOyAKF99JxPr7QRcDY+dYm3K7Zh/hy7Dl7L8795xh40ESSY9KdJXaE7sQInRNyX+t005ss
+ hMIg7szG+n5yFymdZme+OIscQhkbzjmEobACdjwkPVyzFLfYMXWZdou4tLH2/MtHdwf+hl+hBv
+ JCA=
+X-IronPort-AV: E=Sophos;i="5.63,449,1557158400"; 
+   d="scan'208";a="113406057"
+Received: from mail-bl2nam02lp2058.outbound.protection.outlook.com (HELO NAM02-BL2-obe.outbound.protection.outlook.com) ([104.47.38.58])
+  by ob1.hgst.iphmx.com with ESMTP; 04 Jul 2019 15:47:38 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wJU4zL1vwbjl6BVjVf23ywhF12yR0dYXibUkejsCdDo=;
+ b=NUZhtBm+3xpVnZ2Ap5Zfg4fU2QORe64o3f5Dmi4O3UvZjGD8edftop27C98ZIcmmIl079Ie2tFE7bzq+n2rNL99WFwZ4EVy9MS101nU2JH4BRvAMeDU2/yF+hEu1ZUxhs9PAKeLSClXJEjMtE1rXGjSFYuetm4hb08z+n/bJH2M=
+Received: from DM6PR04MB4923.namprd04.prod.outlook.com (20.176.109.84) by
+ DM6PR04MB6009.namprd04.prod.outlook.com (20.178.225.206) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2052.18; Thu, 4 Jul 2019 07:47:37 +0000
+Received: from DM6PR04MB4923.namprd04.prod.outlook.com
+ ([fe80::4443:24aa:16cb:ec73]) by DM6PR04MB4923.namprd04.prod.outlook.com
+ ([fe80::4443:24aa:16cb:ec73%7]) with mapi id 15.20.2052.010; Thu, 4 Jul 2019
+ 07:47:36 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Pedro Sousa <PedroM.Sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+CC:     Avi Shchislowski <Avi.Shchislowski@wdc.com>,
+        Alex Lemberg <Alex.Lemberg@wdc.com>
+Subject: RE: [PATCH] scsi: uapi: ufs: Fix SPDX license identifier
+Thread-Topic: [PATCH] scsi: uapi: ufs: Fix SPDX license identifier
+Thread-Index: AQHVISOkIGq/TXYo40K7pkiAfhMabKaxBgUAgAkw5cA=
+Date:   Thu, 4 Jul 2019 07:47:36 +0000
+Message-ID: <DM6PR04MB49232962D82A0A4F5424014FFCFA0@DM6PR04MB4923.namprd04.prod.outlook.com>
+References: <1560346477-13944-1-git-send-email-avri.altman@wdc.com>
+ <MN2PR12MB3167D6E742D06055FDCFB17ACCFC0@MN2PR12MB3167.namprd12.prod.outlook.com>
+In-Reply-To: <MN2PR12MB3167D6E742D06055FDCFB17ACCFC0@MN2PR12MB3167.namprd12.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Avri.Altman@wdc.com; 
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f1b1164f-7e54-49c2-6c17-08d70053e1f5
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DM6PR04MB6009;
+x-ms-traffictypediagnostic: DM6PR04MB6009:
+x-microsoft-antispam-prvs: <DM6PR04MB6009671C77D2AF4B695406C5FCFA0@DM6PR04MB6009.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 0088C92887
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(199004)(189003)(66066001)(6436002)(55016002)(4744005)(6246003)(5660300002)(52536014)(25786009)(86362001)(229853002)(54906003)(68736007)(76116006)(110136005)(2201001)(9686003)(66946007)(73956011)(64756008)(66476007)(66556008)(66446008)(2501003)(316002)(7696005)(14444005)(478600001)(305945005)(33656002)(53936002)(14454004)(71190400001)(6506007)(102836004)(71200400001)(486006)(76176011)(4326008)(256004)(72206003)(99286004)(2906002)(26005)(476003)(74316002)(8936002)(446003)(8676002)(81156014)(81166006)(11346002)(186003)(7736002)(6116002)(3846002);DIR:OUT;SFP:1102;SCL:1;SRVR:DM6PR04MB6009;H:DM6PR04MB4923.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: znESxxZaZVYaa9Vp6qy8i1sIQHQT7EOcyp7i1HNIMcYI/lwRQKEGK0FlUgGEeDLvyzOfEgHa8XDhXhMqqxd5wnMETYZxnKX3zjim2n6COOAUtPE0/dxdCrS/k4W9KRLAwUZ4LakqYitp5stZUjI1QK0lxGRBljiBcYAlEWfgn4tckST0WCOan8/b7BocgCt6DJp53tWqd2uwLM+ejwxhOIqLlrqG0MzRNIX8JOZPVvXIAlvoaY0SbDgLW+pWk7XLgdvv5Yli2NjQ9x+CevGjwAd3UbWeS1koqJ/5hkxaNNoY4Ru5WSsjryecISaW+WV5RGRag8UwSSBd4eDDb2oxfu+YZw3f8v8F4h9bG+xxhDy11iODdBYBNVNwE8QxmrqFU0bQbzZ2v1CcStwqY5zy41kETLOYnKG4snlr1CalbB0=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a02:c50a:: with SMTP id s10mr45090759jam.106.1562178360550;
- Wed, 03 Jul 2019 11:26:00 -0700 (PDT)
-Date:   Wed, 03 Jul 2019 11:26:00 -0700
-In-Reply-To: <00000000000035c756058848954a@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041ac74058ccafe0d@google.com>
-Subject: Re: KASAN: use-after-free Read in hci_cmd_timeout
-From:   syzbot <syzbot+19a9f729f05272857487@syzkaller.appspotmail.com>
-To:     chaitra.basappa@broadcom.com, davem@davemloft.net,
-        jejb@linux.vnet.ibm.com, johan.hedberg@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, marcel@holtmann.org,
-        martin.petersen@oracle.com, mpt-fusionlinux.pdl@broadcom.com,
-        netdev@vger.kernel.org, sathya.prakash@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1b1164f-7e54-49c2-6c17-08d70053e1f5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2019 07:47:36.8058
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR04MB6009
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-syzbot has bisected this bug to:
+Martin - a kind reminder.
 
-commit ff92b9dd9268507e23fc10cc4341626cef50367c
-Author: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
-Date:   Thu Oct 25 14:03:40 2018 +0000
+Thanks,
+Avri
 
-     scsi: mpt3sas: Update MPI headers to support Aero controllers
+> Subject: RE: [PATCH] scsi: uapi: ufs: Fix SPDX license identifier
+>=20
+> From: Avri Altman <avri.altman@wdc.com>
+> Date: Wed, Jun 12, 2019 at 14:34:37
+>=20
+> > added 'WITH Linux-syscall-note' exception, which is the officially
+> > assigned exception identifier for the kernel syscall exception.
+> > This exception makes it possible to include GPL headers into non GPL
+> > code, without confusing license compliance tools.
+> >
+> > fixes: a851b2bd3632 (scsi: uapi: ufs: Make utp_upiu_req visible to user
+> > 		     space)
+> >
+> > Signed-off-by: Avri Altman <avri.altman@wdc.com>
+> Reviewed-by: Pedro Sousa <pedrom.sousa@synopsys.com>
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=130ac8dda00000
-start commit:   eca94432 Bluetooth: Fix faulty expression for minimum encr..
-git tree:       upstream
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=108ac8dda00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=170ac8dda00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f6451f0da3d42d53
-dashboard link: https://syzkaller.appspot.com/bug?extid=19a9f729f05272857487
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=125b7999a00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=176deefba00000
-
-Reported-by: syzbot+19a9f729f05272857487@syzkaller.appspotmail.com
-Fixes: ff92b9dd9268 ("scsi: mpt3sas: Update MPI headers to support Aero  
-controllers")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
