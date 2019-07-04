@@ -2,56 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8732C5F6C2
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2019 12:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C845F74C
+	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2019 13:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727529AbfGDKlH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 Jul 2019 06:41:07 -0400
-Received: from dc2-smtprelay2.synopsys.com ([198.182.61.142]:33710 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727519AbfGDKlG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 Jul 2019 06:41:06 -0400
-Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 6DA73C0AC1;
-        Thu,  4 Jul 2019 10:41:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1562236866; bh=W9DiiVzGuE9bqsYZnpGDvwYFykAk+sgLIaGI3u84pTA=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=YTgc7OytuhR/26auW4Fz2oeqe8zo7A6Dag+8Y/imU1zRDlFfsloYBYPwfSwHI+S4P
-         r07+gIVUjxYNSKAvxftrB/UFGfB4cUGGlTSNTElAjyTcnrKnwXlot0emLfhQHNv8Io
-         hxVtrsftOYotiXkirZi6IGPnAwDWYHvBplt9+CNdalDZzE+d8/cJJ7lfcTE2Su7s8K
-         WSQmRLr+Bsdi3BREnHU1rYngXUCN6Thk9GoKMM3JJvHGtsdbST3zYXVgquDjlzlcQ+
-         DdWh2ziacOaamQIjxejB7vn3Z4tmaNvEJl9uDrhXYWKKrEzXlp+XwjL6DB878J76kV
-         lfBK20pYuNw9A==
-Received: from US01WXQAHTC1.internal.synopsys.com (us01wxqahtc1.internal.synopsys.com [10.12.238.230])
-        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id A9A44A009A;
-        Thu,  4 Jul 2019 10:41:02 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WXQAHTC1.internal.synopsys.com (10.12.238.230) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 4 Jul 2019 03:40:02 -0700
-Received: from NAM05-BY2-obe.outbound.protection.outlook.com (10.13.134.195)
- by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Thu, 4 Jul 2019 03:40:01 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector1-synopsys-onmicrosoft-com;
+        id S1727548AbfGDLn6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 Jul 2019 07:43:58 -0400
+Received: from mail-eopbgr680065.outbound.protection.outlook.com ([40.107.68.65]:51917
+        "EHLO NAM04-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727436AbfGDLn6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 4 Jul 2019 07:43:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pQGQW7UhP/F0yZX/3SQcAmZoHOKnv/HAQVD4ZR+hTxw=;
- b=V2zKD57jxx5EC1Qt6az1RS2nXwHG1zEElcaENiE5lxHloDqMd1f7jWo++nXVtZBtpHcim4DXdjkEaVtbxFSHe2o97H8Ffg/zpyIJH8hlG5movC5sWtVSNHSUGL416eRcE7DoN939wH/J9DWJ5tTIiZezjdkySR5rJ33oH7oqJDE=
-Received: from MN2PR12MB3167.namprd12.prod.outlook.com (20.179.80.95) by
- MN2PR12MB3325.namprd12.prod.outlook.com (20.178.243.141) with Microsoft SMTP
+ bh=eL0MffnH/K68iCfyGWbILxpR5kgJo/55+JosbuLVVGI=;
+ b=ADCBDPcmVC0/JJdFW72TCD3qGH6NlHkkDo7RfG2nomXIZ+L4TYT2Ck7FhXA71BUW4oWTwBMS5UNqS4wY87csyQfXY+bVuOKecUcQT+DRFEinPETCVVivwjgdqrX55Q3SN7Wsq5A3MhRMznDuO1gRIWZHzSxcL0kIXruCTK2lbyw=
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.31.141) by
+ BN7PR08MB4372.namprd08.prod.outlook.com (52.135.251.155) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2032.20; Thu, 4 Jul 2019 10:40:01 +0000
-Received: from MN2PR12MB3167.namprd12.prod.outlook.com
- ([fe80::24d8:6500:f338:d9b]) by MN2PR12MB3167.namprd12.prod.outlook.com
- ([fe80::24d8:6500:f338:d9b%7]) with mapi id 15.20.2052.010; Thu, 4 Jul 2019
- 10:40:01 +0000
-From:   Pedro Sousa <PedroM.Sousa@synopsys.com>
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
+ 15.20.2052.18; Thu, 4 Jul 2019 11:43:14 +0000
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::4dd2:da15:6626:c3b0]) by BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::4dd2:da15:6626:c3b0%3]) with mapi id 15.20.2052.010; Thu, 4 Jul 2019
+ 11:43:14 +0000
+From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
+To:     Pedro Sousa <PedroM.Sousa@synopsys.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
@@ -69,183 +45,158 @@ CC:     Stanley Chu <stanley.chu@mediatek.com>,
         Alex Lemberg <alex.lemberg@wdc.com>,
         Arthur Simchaev <Arthur.Simchaev@sandisk.com>,
         Joao Pinto <Joao.Pinto@synopsys.com>
-Subject: RE: [PATCH] Documentation: scsi: ufs: announce ufs-tool v1.0
-Thread-Topic: [PATCH] Documentation: scsi: ufs: announce ufs-tool v1.0
-Thread-Index: AQHVK1KrZze5mUE7CUiQGHdLfZqa4qa6TPUQ
-Date:   Thu, 4 Jul 2019 10:40:00 +0000
-Message-ID: <MN2PR12MB316796A709A4A0358D530A3CCCFA0@MN2PR12MB3167.namprd12.prod.outlook.com>
+Subject: RE: [EXT] RE: [PATCH] Documentation: scsi: ufs: announce ufs-tool
+ v1.0
+Thread-Topic: [EXT] RE: [PATCH] Documentation: scsi: ufs: announce ufs-tool
+ v1.0
+Thread-Index: AQHVMlT+ykLyY5FioEuDavl9kb+FgKa6U0VQ
+Date:   Thu, 4 Jul 2019 11:43:14 +0000
+Message-ID: <BN7PR08MB5684FC6EECF227274B6F58E9DBFA0@BN7PR08MB5684.namprd08.prod.outlook.com>
 References: <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
-In-Reply-To: <1561466160-13512-1-git-send-email-Arthur.Simchaev@wdc.com>
-Accept-Language: en-US
+ <MN2PR12MB316796A709A4A0358D530A3CCCFA0@MN2PR12MB3167.namprd12.prod.outlook.com>
+In-Reply-To: <MN2PR12MB316796A709A4A0358D530A3CCCFA0@MN2PR12MB3167.namprd12.prod.outlook.com>
+Accept-Language: en-150, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcc291c2FcYXBw?=
- =?us-ascii?Q?ZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5?=
- =?us-ascii?Q?ZTM1Ylxtc2dzXG1zZy0xMTQ4ZjM0Ny05ZTQ4LTExZTktYmMwZi1iODA4Y2Yz?=
- =?us-ascii?Q?YjJlNWVcYW1lLXRlc3RcMTE0OGYzNDgtOWU0OC0xMWU5LWJjMGYtYjgwOGNm?=
- =?us-ascii?Q?M2IyZTVlYm9keS50eHQiIHN6PSIyNDEzIiB0PSIxMzIwNjcxMDM5OTEyMDE0?=
- =?us-ascii?Q?NDIiIGg9Ik5jenlYLzkyZEpmSlBBc1NXbURxSFFmL1ZNQT0iIGlkPSIiIGJs?=
- =?us-ascii?Q?PSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUJRSkFBQ2kv?=
- =?us-ascii?Q?dWpUVkRMVkFhTEhtczhESjBwMW9zZWF6d01uU25VT0FBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFIQUFBQUNrQ0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFF?=
- =?us-ascii?Q?QUFRQUJBQUFBMUN5NExnQUFBQUFBQUFBQUFBQUFBSjRBQUFCbUFHa0FiZ0Jo?=
- =?us-ascii?Q?QUc0QVl3QmxBRjhBY0FCc0FHRUFiZ0J1QUdrQWJnQm5BRjhBZHdCaEFIUUFa?=
- =?us-ascii?Q?UUJ5QUcwQVlRQnlBR3NBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVB?=
- =?us-ascii?Q?QUFBQUFBQUFBZ0FBQUFBQW5nQUFBR1lBYndCMUFHNEFaQUJ5QUhrQVh3QndB?=
- =?us-ascii?Q?R0VBY2dCMEFHNEFaUUJ5QUhNQVh3Qm5BR1lBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FBQUFB?=
- =?us-ascii?Q?QUNlQUFBQVpnQnZBSFVBYmdCa0FISUFlUUJmQUhBQVlRQnlBSFFBYmdCbEFI?=
- =?us-ascii?Q?SUFjd0JmQUhNQVlRQnRBSE1BZFFCdUFHY0FYd0JqQUc4QWJnQm1BQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJtQUc4QWRR?=
- =?us-ascii?Q?QnVBR1FBY2dCNUFGOEFjQUJoQUhJQWRBQnVBR1VBY2dCekFGOEFjd0JoQUcw?=
- =?us-ascii?Q?QWN3QjFBRzRBWndCZkFISUFaUUJ6QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?RUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHWUFid0IxQUc0QVpBQnlBSGtBWHdC?=
- =?us-ascii?Q?d0FHRUFjZ0IwQUc0QVpRQnlBSE1BWHdCekFHMEFhUUJqQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFDQUFB?=
- =?us-ascii?Q?QUFBQ2VBQUFBWmdCdkFIVUFiZ0JrQUhJQWVRQmZBSEFBWVFCeUFIUUFiZ0Js?=
- =?us-ascii?Q?QUhJQWN3QmZBSE1BZEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQm1BRzhB?=
- =?us-ascii?Q?ZFFCdUFHUUFjZ0I1QUY4QWNBQmhBSElBZEFCdUFHVUFjZ0J6QUY4QWRBQnpB?=
- =?us-ascii?Q?RzBBWXdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdZQWJ3QjFBRzRBWkFCeUFIa0FY?=
- =?us-ascii?Q?d0J3QUdFQWNnQjBBRzRBWlFCeUFITUFYd0IxQUcwQVl3QUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNB?=
- =?us-ascii?Q?QUFBQUFDZUFBQUFad0IwQUhNQVh3QndBSElBYndCa0FIVUFZd0IwQUY4QWRB?=
- =?us-ascii?Q?QnlBR0VBYVFCdUFHa0FiZ0JuQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCekFH?=
- =?us-ascii?Q?RUFiQUJsQUhNQVh3QmhBR01BWXdCdkFIVUFiZ0IwQUY4QWNBQnNBR0VBYmdB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBSE1BWVFCc0FHVUFjd0JmQUhF?=
- =?us-ascii?Q?QWRRQnZBSFFBWlFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFB?=
- =?us-ascii?Q?Q0FBQUFBQUNlQUFBQWN3QnVBSEFBY3dCZkFHd0FhUUJqQUdVQWJnQnpBR1VB?=
- =?us-ascii?Q?WHdCMEFHVUFjZ0J0QUY4QU1RQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJ6?=
- =?us-ascii?Q?QUc0QWNBQnpBRjhBYkFCcEFHTUFaUUJ1QUhNQVpRQmZBSFFBWlFCeUFHMEFY?=
- =?us-ascii?Q?d0J6QUhRQWRRQmtBR1VBYmdCMEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFIWUFad0JmQUdzQVpRQjVB?=
- =?us-ascii?Q?SGNBYndCeUFHUUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFB?=
- =?us-ascii?Q?QUFDQUFBQUFBQT0iLz48L21ldGE+?=
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=sousa@synopsys.com; 
-x-originating-ip: [83.174.63.141]
+ smtp.mailfrom=beanhuo@micron.com; 
+x-originating-ip: [165.225.81.73]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c9c2678d-101e-4d66-9f0a-08d7006bf787
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MN2PR12MB3325;
-x-ms-traffictypediagnostic: MN2PR12MB3325:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <MN2PR12MB33253162ADAA4BBE36CC36BECCFA0@MN2PR12MB3325.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1265;
+x-ms-office365-filtering-correlation-id: eff0707c-b06e-4cc9-f13e-08d70074ccbe
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN7PR08MB4372;
+x-ms-traffictypediagnostic: BN7PR08MB4372:|BN7PR08MB4372:
+x-ms-exchange-purlcount: 3
+x-microsoft-antispam-prvs: <BN7PR08MB437223617F9BA31FE3978C7ADBFA0@BN7PR08MB4372.namprd08.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-forefront-prvs: 0088C92887
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(39850400004)(136003)(396003)(376002)(189003)(199004)(8676002)(99286004)(81166006)(74316002)(7696005)(7736002)(81156014)(305945005)(71190400001)(71200400001)(966005)(6506007)(102836004)(14454004)(256004)(14444005)(186003)(26005)(66066001)(2501003)(76176011)(11346002)(446003)(6116002)(3846002)(476003)(478600001)(52536014)(2906002)(316002)(68736007)(110136005)(54906003)(73956011)(486006)(5660300002)(107886003)(76116006)(66946007)(33656002)(7416002)(6436002)(66556008)(25786009)(66476007)(64756008)(66446008)(86362001)(4326008)(8936002)(229853002)(6246003)(55016002)(6306002)(2201001)(53936002)(9686003)(921003)(1121003);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR12MB3325;H:MN2PR12MB3167.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(376002)(136003)(366004)(396003)(189003)(199004)(13464003)(26005)(11346002)(110136005)(316002)(68736007)(6436002)(74316002)(76116006)(54906003)(66446008)(64756008)(66556008)(66476007)(66946007)(73956011)(486006)(102836004)(55236004)(966005)(7696005)(3846002)(6116002)(14454004)(2501003)(476003)(55016002)(7736002)(25786009)(229853002)(446003)(81166006)(81156014)(33656002)(4326008)(256004)(7416002)(2906002)(14444005)(8676002)(66066001)(71200400001)(71190400001)(6246003)(9686003)(99286004)(8936002)(6306002)(305945005)(52536014)(478600001)(76176011)(186003)(86362001)(2201001)(45080400002)(6506007)(5660300002)(53936002)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB4372;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: micron.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 0lluSPEWnSlGFyVOr/FyTTzFMXJARRhaR/EcvWlScyJpAfTFBcKC1cpu7hDzvn20yVFZIdvLwTBzE+VvFnQ2wwpsh9E0HzFRiwVo9GJHlF7UiDO2TUfoarnwETaSnIVeCD0dAY2tkBifmuWNmQqd8cPGKHomqoDg1493+maA0o96rRMMr5Zb8RB6U/dHFbZw6IKmqOEP2Ppt0u87cFiiMFBUz8h7AC2bzPdmU/6/tglvl186yWI+230pZVkpKDAA9xWxgihRzY16UEL+Hwk1z6oSGbapoMihuO5M255ZXIujqKj1ZV8k9ZH9CGEpYobCcM3cPyXtFmT3onxFIK1ji3JQujaWurE+DeM7kC5NRRYIAjhXm8riGJKEi26ZnZ0PAARee9FOQ1zGn9r2YDQMCS7ENGnfU4qOtIeisfCnJ5o=
+x-microsoft-antispam-message-info: RStTCSz++El7z6vs8mVHXO6VLwemrK21o5VXmy6qGUm7poa2CqLGtpOdTcqygTfTnRfGlPgqZQFm3AqT+s5VjP++6RTPgAQbAtaJnZl//0GWzC2PVsRYkYUgZ7hNl8y+A9474zpwfOJbI/TRx4OUnMB94Zc4YJAaklW2ysRdNn02ZRMQI2Y6Vb/C7A+d2W3hUPRLAySVZpdUKTjJxu6c/MBmBMSHdlLx6e62RTZN8wEtTpdwTItkZGLyDH3jeeQrZwJm+GLuuZa4/Hi8Wf3dJ93BMAT5Lm7CPrznVtR7KkhdIbDoUA1KoIT0dfSk93xSQYGfQVEI4OpVatXrmNSfgJ5qCqQ8NzVhakgI3t37n/FrJ2Z+sidT4OyJuN5a6RzkN2/pkcwNVVUymzjJ859pLD9JRjk+xutavZft95KPGiU=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: c9c2678d-101e-4d66-9f0a-08d7006bf787
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2019 10:40:00.9516
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eff0707c-b06e-4cc9-f13e-08d70074ccbe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Jul 2019 11:43:14.6267
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sousa@synopsys.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3325
-X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-userprincipalname: beanhuo@micron.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB4372
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Arthur,
+Hi, Pedro
+Thanks for your positive affirmation.=20
+For the UFS, we need this kind of tool which is be exclusively used for UFS=
+ device.
 
-Very glad to see the ufs-tool coming to light! I will try to give it a=20
-run as soon as I get free time slot.
+Two years ago, I asked the question about " UFS utilities" and " is it nece=
+ssary to have a ufs-utils tool?" in SCSI mail list.=20
+In the end, I suffered a rebuff, was rejected.
 
-The "maintenance" of the tool will be through github, correct?=20
-I took a fast look at the Bean Huo pull request (especially the UniPro=20
-command part) and it would be very useful, if I get the time to test it=20
-should I mention that in the github pull-request?
+                                                     --Bean Huo
 
-Thank you,
-Pedro Sousa
-
-
-From: Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Date: Tue, Jun 25, 2019 at 13:36:00
-
-> From: Arthur Simchaev <Arthur.Simchaev@sandisk.com>
->=20
-> The ufs-tool stable release v1.0 is available at
-> https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__github.com_western=
-digitalcorporation_ufs-2Dtool&d=3DDwIBAQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3Dg_q=
-wcP4gtO-yTlPB3EORzwKHYiXOsyQ6rIu-FZXM-tQ&m=3DjLoVADGdO8Ujrm183cXHL72PszxSrs=
-3HDz2EnwmBi_k&s=3D45exXIMsZKp_awsgelPGw8LnGOnWzaP5NZyi9ZJDQRY&e=3D=20
->=20
-> Feedback and bug reports, as always, are welcomed.
->=20
-> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
-> ---
->  Documentation/scsi/ufs.txt | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/Documentation/scsi/ufs.txt b/Documentation/scsi/ufs.txt
-> index 1769f71..ae4643f 100644
-> --- a/Documentation/scsi/ufs.txt
-> +++ b/Documentation/scsi/ufs.txt
-> @@ -158,6 +158,11 @@ send SG_IO with the applicable sg_io_v4:
->  If you wish to read or write a descriptor, use the appropriate xferp of
->  sg_io_v4.
-> =20
-> +The user-space tool that interacts with the ufs-bsg endpoint and uses it=
-s
-> +upiu-based protocol, is available at
-> +https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__github.com_wester=
-ndigitalcorporation_ufs-2Dtool&d=3DDwIBAQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3Dg_=
-qwcP4gtO-yTlPB3EORzwKHYiXOsyQ6rIu-FZXM-tQ&m=3DjLoVADGdO8Ujrm183cXHL72PszxSr=
-s3HDz2EnwmBi_k&s=3D45exXIMsZKp_awsgelPGw8LnGOnWzaP5NZyi9ZJDQRY&e=3D .
-> +For more detailed information about the tool and the tool's supported
-> +features, please see the tool's README.
-> =20
->  UFS Specifications can be found at,
->  UFS - https://urldefense.proofpoint.com/v2/url?u=3Dhttp-3A__www.jedec.or=
-g_sites_default_files_docs_JESD220.pdf&d=3DDwIBAQ&c=3DDPL6_X_6JkXFx7AXWqB0t=
-g&r=3Dg_qwcP4gtO-yTlPB3EORzwKHYiXOsyQ6rIu-FZXM-tQ&m=3DjLoVADGdO8Ujrm183cXHL=
-72PszxSrs3HDz2EnwmBi_k&s=3DfmlYwpgHkwIeqSSwfVuYbwnQWldMsFZo4Z00TxEYElI&e=3D=
-=20
-> --=20
-> 2.7.4
-
+>-----Original Message-----
+>From: linux-scsi-owner@vger.kernel.org <linux-scsi-owner@vger.kernel.org>
+>On Behalf Of Pedro Sousa
+>Sent: Thursday, July 4, 2019 12:40 PM
+>To: Arthur Simchaev <Arthur.Simchaev@wdc.com>; Bean Huo (beanhuo)
+><beanhuo@micron.com>; James E . J . Bottomley <jejb@linux.vnet.ibm.com>;
+>Martin K . Petersen <martin.petersen@oracle.com>; linux-
+>scsi@vger.kernel.org; linux-@mx0a-00230701.pphosted.com;
+>kernel@vger.kernel.org; Arnd Bergmann <arnd@arndb.de>; Alim Akhtar
+><alim.akhtar@samsung.com>; Avri Altman <avri.altman@wdc.com>
+>Cc: Stanley Chu <stanley.chu@mediatek.com>; Doug Anderson
+><dianders@chromium.org>; Evan Green <evgreen@chromium.org>; Adrian
+>Hunter <adrian.hunter@intel.com>; Avi Shchislowski
+><avi.shchislowski@wdc.com>; Alex Lemberg <alex.lemberg@wdc.com>; Arthur
+>Simchaev <Arthur.Simchaev@sandisk.com>; Joao Pinto
+><Joao.Pinto@synopsys.com>
+>Subject: [EXT] RE: [PATCH] Documentation: scsi: ufs: announce ufs-tool v1.=
+0
+>
+>Hello Arthur,
+>
+>Very glad to see the ufs-tool coming to light! I will try to give it a run=
+ as soon
+>as I get free time slot.
+>
+>The "maintenance" of the tool will be through github, correct?
+>I took a fast look at the Bean Huo pull request (especially the UniPro
+>command part) and it would be very useful, if I get the time to test it sh=
+ould I
+>mention that in the github pull-request?
+>
+>Thank you,
+>Pedro Sousa
+>
+>
+>From: Arthur Simchaev <Arthur.Simchaev@wdc.com>
+>Date: Tue, Jun 25, 2019 at 13:36:00
+>
+>> From: Arthur Simchaev <Arthur.Simchaev@sandisk.com>
+>>
+>> The ufs-tool stable release v1.0 is available at
+>> https://nam01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgith
+>> ub.com%2Fwesterndigitalcorporation%2Fufs-
+>tool&amp;data=3D02%7C01%7Cbeanh
+>>
+>uo%40micron.com%7C887a4692da7b4503241308d7006c1fa6%7Cf38a5ecd281
+>34862b
+>>
+>11bac1d563c806f%7C0%7C1%7C636978336710114637&amp;sdata=3DgeK7Ml7ku
+>n3P12p
+>> f01e6ts2%2FFzJU%2FFK4n6nAyZ0hITY%3D&amp;reserved=3D0=3D
+>>
+>> Feedback and bug reports, as always, are welcomed.
+>>
+>> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
+>> ---
+>>  Documentation/scsi/ufs.txt | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/scsi/ufs.txt b/Documentation/scsi/ufs.txt
+>> index 1769f71..ae4643f 100644
+>> --- a/Documentation/scsi/ufs.txt
+>> +++ b/Documentation/scsi/ufs.txt
+>> @@ -158,6 +158,11 @@ send SG_IO with the applicable sg_io_v4:
+>>  If you wish to read or write a descriptor, use the appropriate xferp
+>> of  sg_io_v4.
+>>
+>> +The user-space tool that interacts with the ufs-bsg endpoint and uses
+>> +its upiu-based protocol, is available at
+>>
+>+https://nam01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgithu
+>b.com%2Fwesterndigitalcorporation%2Fufs-
+>tool&amp;data=3D02%7C01%7Cbeanhuo%40micron.com%7C887a4692da7b4503
+>241308d7006c1fa6%7Cf38a5ecd28134862b11bac1d563c806f%7C0%7C1%7C636
+>978336710114637&amp;sdata=3DgeK7Ml7kun3P12pf01e6ts2%2FFzJU%2FFK4n6n
+>AyZ0hITY%3D&amp;reserved=3D0=3D .
+>> +For more detailed information about the tool and the tool's supported
+>> +features, please see the tool's README.
+>>
+>>  UFS Specifications can be found at,
+>>  UFS -
+>>
+>https://nam01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fwww.j
+>>
+>edec.org%2Fsites%2Fdefault%2Ffiles%2Fdocs%2FJESD220.pdf&amp;data=3D02%7
+>C
+>>
+>01%7Cbeanhuo%40micron.com%7C887a4692da7b4503241308d7006c1fa6%7Cf
+>38a5ec
+>>
+>d28134862b11bac1d563c806f%7C0%7C1%7C636978336710114637&amp;sdata
+>=3DzSSL4
+>> iTVsy6m1dQORu6FyDzCzWf%2BL94ftaMR2YN53cI%3D&amp;reserved=3D0=3D
+>> --
+>> 2.7.4
+>
 
