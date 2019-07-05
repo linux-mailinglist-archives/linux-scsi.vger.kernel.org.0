@@ -2,63 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD525FB18
-	for <lists+linux-scsi@lfdr.de>; Thu,  4 Jul 2019 17:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1AA5FF3D
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jul 2019 03:01:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727883AbfGDPkk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 4 Jul 2019 11:40:40 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:46178 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727454AbfGDPkk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 Jul 2019 11:40:40 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
-        (Exim 4.76)
-        (envelope-from <colin.king@canonical.com>)
-        id 1hj3qd-0002R9-PK; Thu, 04 Jul 2019 15:40:35 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     QLogic-Storage-Upstream@qlogic.com,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: bnx2fc: remove redundant assignment to variable rc
-Date:   Thu,  4 Jul 2019 16:40:35 +0100
-Message-Id: <20190704154035.15233-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.20.1
+        id S1727338AbfGEBBM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 4 Jul 2019 21:01:12 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:35780 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726024AbfGEBBM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 4 Jul 2019 21:01:12 -0400
+Received: by mail-wm1-f68.google.com with SMTP id l2so373089wmg.0;
+        Thu, 04 Jul 2019 18:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7LtxNi+8FnUawhqN2BoV1q5YaICdoGGasmOZOaJ0jpE=;
+        b=VeKZrTQrAtr/R1e7E9LGHYxk3RCLvMhvqcvDtNJlR0UQ1jiZRVu3BYYYvOuikODeAt
+         oJbi0tffyHcjqoJDlt4pLnVsyifrX3HzDUywgBI2/dMCFysidTg0QnoJm748YhM4zEll
+         1DbYw0HbwU0mXCk+kEr04e+wb/DXI1ZLJ5hXZPLz3XLn/v+4UlhKNor2c+e5Wd58cgro
+         c5APCo3nFgKpcJE+sctXBKKDqhkBdqZL/mWnjzsA7mLv92gWaIXv3Z3mZCrp58KTWT8z
+         dQWiO6W2dUfNuhRf4DEHO4pxKmR1iOw7BilOi39hGXWpaJwtnyuR0WdQ0orH12G1RwIR
+         0yIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7LtxNi+8FnUawhqN2BoV1q5YaICdoGGasmOZOaJ0jpE=;
+        b=IKVNuvB6MaeHWsGpVSX5m6E6HYrx0tDX4bwXmE0hr98AY0dVka7axk/M2tCWMIb3SU
+         +ENQHMyQB686D05+43bdH/VFhhjeC9QuqGylxYdBec4TM0CpE7IEMIonmGVXQgWzeJb+
+         MIJ60pJU1IJo8sGDyzWmSMr2a/Wp08yrUtyZx9OahWtnbWgiC4LfQJQ3JRqgQfqit2aL
+         wohHpYp1IVG0zswRbtv9/5qlMFzHEJs9lXLBeKFAhOI7o/O5gLtQQhGAAgl17ccCJhHH
+         6nNHE4HZ1qGclCWCrpMPITnF21mW5gppc6q1rLe5AUz0NVpznhISfzhslRrW4jPnzAQ4
+         l+4w==
+X-Gm-Message-State: APjAAAUyp2bEuU0a2cZa96vxqUGiQJOCclTGaNyiP8hfpjO199Edk6SZ
+        WgO3Bca81T1hwG7rWpykRX41p9pIv2ffTILb+6E=
+X-Google-Smtp-Source: APXvYqxWUjNasMFkYsHLRnokZmHKfBKm6i6kh0NDnLi0Is28JRpT9qpTTdXPSyq5fGjKQ274A9qXUq4X2NmZZRvAs6U=
+X-Received: by 2002:a05:600c:204c:: with SMTP id p12mr421726wmg.121.1562288469490;
+ Thu, 04 Jul 2019 18:01:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20190530112811.3066-1-pbonzini@redhat.com> <20190530112811.3066-2-pbonzini@redhat.com>
+ <CACVXFVP-B7uKUGn75rZdu0e4QxUOsSqv8FL0vY2ubmuucvxqjQ@mail.gmail.com> <bd7fa062-6c71-13a2-5bbf-0dea859ae75f@redhat.com>
+In-Reply-To: <bd7fa062-6c71-13a2-5bbf-0dea859ae75f@redhat.com>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Fri, 5 Jul 2019 09:00:58 +0800
+Message-ID: <CACVXFVNuFLMOmX_KuvQG-+-zasAxcbrL+sbXEGaKa8C1K3mxKQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] scsi_host: add support for request batching
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KVM General <kvm@vger.kernel.org>, jejb@linux.ibm.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Stefan Hajnoczi <stefanha@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Mon, Jun 3, 2019 at 4:16 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 31/05/19 05:27, Ming Lei wrote:
+> > It should be fine to implement scsi_commit_rqs() as:
+> >
+> >  if (shost->hostt->commit_rqs)
+> >        shost->hostt->commit_rqs(shost, hctx->queue_num);
+> >
+> > then scsi_mq_ops_no_commit can be saved.
+> >
+> > Because .commit_rqs() is only called when BLK_STS_*_RESOURCE is
+> > returned from scsi_queue_rq(), at that time shost->hostt->commit_rqs should
+> > have been hit from cache given .queuecommand is called via
+> > host->hostt->queuecommand.
+>
+> This is not about d-cache, it's about preserving the heuristics that
+> blk-mq applies depending on whether commit_rqs is there or not.
 
-The variable rc is being initialized with a value that is never
-read and it is being updated later with a new value. The
-initialization is redundant and can be removed.
+Fair enough, at least difference would be made by the check in
+blk_mq_make_request() if scsi_commit_rqs is provided unconditionally,
+so looks fine:
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-index 7796799bf04a..4eb3fe9ed189 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-@@ -1893,7 +1893,7 @@ static void bnx2fc_stop(struct bnx2fc_interface *interface)
- static int bnx2fc_fw_init(struct bnx2fc_hba *hba)
- {
- #define BNX2FC_INIT_POLL_TIME		(1000 / HZ)
--	int rc = -1;
-+	int rc;
- 	int i = HZ;
- 
- 	rc = bnx2fc_bind_adapter_devices(hba);
--- 
-2.20.1
 
+Thanks,
+Ming Lei
