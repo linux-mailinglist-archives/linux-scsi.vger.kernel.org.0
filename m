@@ -2,155 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A33B060B36
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jul 2019 19:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A92B60D4B
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jul 2019 23:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727321AbfGERx1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 Jul 2019 13:53:27 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:56627 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726743AbfGERx1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 5 Jul 2019 13:53:27 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id E4702204199;
-        Fri,  5 Jul 2019 19:53:23 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ISHY-xOxtrmM; Fri,  5 Jul 2019 19:53:17 +0200 (CEST)
-Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 6983E204145;
-        Fri,  5 Jul 2019 19:53:15 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
-To:     Hannes Reinecke <hare@suse.de>,
-        "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Martin Petersen <martin.petersen@oracle.com>
-Cc:     SCSI <linux-scsi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-References: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
- <621306ee-7ab6-9cd2-e934-94b3d6d731fc@acm.org>
- <fb2d2e74-6725-4bf2-cf6c-63c0a2a10f4f@interlog.com>
- <da579578-349e-1320-0867-14fde659733e@acm.org>
- <AT5PR8401MB11695CC7286B2D2F98FB9EADABEA0@AT5PR8401MB1169.NAMPRD84.PROD.OUTLOOK.COM>
- <1ad3e7ba-008d-31ad-89a0-b118b36e14e2@suse.de>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <e2469890-e0ae-fb79-4aa9-125cdaeedb2b@interlog.com>
-Date:   Fri, 5 Jul 2019 13:53:12 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727667AbfGEVtg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 5 Jul 2019 17:49:36 -0400
+Received: from out176.e-adjacentdigital.co.uk ([178.156.202.12]:55670 "EHLO
+        slot0.mathewsons.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1725882AbfGEVtf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Jul 2019 17:49:35 -0400
+X-Greylist: delayed 622 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jul 2019 17:49:34 EDT
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=mathewsons.ga;
+ h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=purchase@mathewsons.ga;
+ bh=onxYcir3NvpNjk2I/gjm/O+ljxo=;
+ b=O4RK1DBam7QhixS740hX78+vxRdq5HRa91VsJCnMjxGPTWgDNV+lWt77ADKIqAop3DzZWHkexQHN
+   2kW/OKJ+Cc3GY/Q6Kkw5Kgsdkbj0OlbwhHfZmvktPB16B9y0lyA4KGHvZvPgJacY/+IpzN5jY/ya
+   Z4ioZ8ATKuyQc/ypmuMajQyI7uPJC+qkRNuiGKbPeu5gkwPyDPzKqRZhweAx/oXNr76WpUpHnRfz
+   +ydfO+FP8ry544/88g0mKcoJHAPzy1Sqnb7g0EkSafC1ubqiiOWGj+uPC5zbU909QUkVoHnuKRsG
+   YeqjAaeZlv5LYTVz6MtM2Uh4veDKwxetUF8bvw==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=mathewsons.ga;
+ b=k+3h8FYVamEQ3QWdbPwiKnwMtoTVun/Ni0bCO2OLQMm9kg4gpg4dYKP/ejwL4Nyk4Z9vJqLab0gV
+   iJOO9B1027TLAN1KjnS7pR/z50lQYW1tvnpQbAvFI/pXN5Ekbo10jbeZdmlI5l9fMcDqQjepn59x
+   GBl+vRNcayrxbae9kbO/SGo6z+3w685qIcuIDjLs9ino+5mmh7OFi9YbF6FQweVRiTZ2pckUA9cV
+   RBl4q9bBblsYGyScqkDzneNVwRzBATAkaXXrDSGO5FuJ89hv+a6X5td36Nt6t377oe0CK5gVo9mk
+   Bu04RrlYsgHDgM7OUdh1SHgwWoaFRV7b6VgMKg==;
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <1ad3e7ba-008d-31ad-89a0-b118b36e14e2@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Quotes needed For July Shipments
+To:     Recipients <purchase@mathewsons.ga>
+From:   "Sales -Jpexcc." <purchase@mathewsons.ga>
+Date:   Sat, 06 Jul 2019 00:39:03 +0300
+Reply-To: jpexcc@aol.com
+Message-ID: <0.0.39.647.1D53379DEAE056C.0@slot0.mathewsons.ga>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-07-05 3:22 a.m., Hannes Reinecke wrote:
-> On 6/18/19 7:43 PM, Elliott, Robert (Servers) wrote:
->>
->>
->>> -----Original Message-----
->>> From: linux-kernel-owner@vger.kernel.org [mailto:linux-kernel-owner@vger.kernel.org] On Behalf Of Bart
->>> Van Assche
->>> Sent: Monday, June 17, 2019 10:28 PM
->>> To: dgilbert@interlog.com; Marc Gonzalez <marc.w.gonzalez@free.fr>; James Bottomley
->>> <jejb@linux.ibm.com>; Martin Petersen <martin.petersen@oracle.com>
->>> Cc: SCSI <linux-scsi@vger.kernel.org>; LKML <linux-kernel@vger.kernel.org>; Christoph Hellwig
->>> <hch@lst.de>
->>> Subject: Re: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
->>>
->>> On 6/17/19 5:35 PM, Douglas Gilbert wrote:
->>>> For sg3_utils:
->>>>
->>>> $ find . -name '*.c' -exec grep "/proc/scsi" {} \; -print
->>>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->>>> ./src/sg_read.c
->>>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->>>> ./src/sgp_dd.c
->>>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->>>> ./src/sgm_dd.c
->>>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->>>> ./src/sg_dd.c
->>>>                   "'echo 1 > /proc/scsi/sg/allow_dio'\n", q_len,
->>>> dirio_count);
->>>> ./testing/sg_tst_bidi.c
->>>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->>>> ./examples/sgq_dd.c
->>>>
->>>> That is 6 (not 38) by my count.
->>>
->>> Hi Doug,
->>>
->>> This is the command I ran:
->>>
->>> $ git grep /proc/scsi | wc -l
->>> 38
->>>
->>> I think your query excludes scripts/rescan-scsi-bus.sh.
->>>
->>> Bart.
->>
->> Here's the full list to ensure the discussion doesn't overlook anything:
->>
->> sg3_utils-1.44$ grep -R /proc/scsi .
->> ./src/sg_read.c:static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->> ./src/sgp_dd.c:static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->> ./src/sgm_dd.c:static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->> ./src/sg_dd.c:static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->> ./scripts/rescan-scsi-bus.sh:# Return hosts. /proc/scsi/HOSTADAPTER/? must exist
->> ./scripts/rescan-scsi-bus.sh:  for driverdir in /proc/scsi/*; do
->> ./scripts/rescan-scsi-bus.sh:    driver=${driverdir#/proc/scsi/}
->> ./scripts/rescan-scsi-bus.sh:      name=${hostdir#/proc/scsi/*/}
->> ./scripts/rescan-scsi-bus.sh:# Get /proc/scsi/scsi info for device $host:$channel:$id:$lun
->> ./scripts/rescan-scsi-bus.sh:    SCSISTR=$(grep -A "$LN" -e "$grepstr" /proc/scsi/scsi)
->> ./scripts/rescan-scsi-bus.sh:    DRV=`grep 'Attached drivers:' /proc/scsi/scsi 2>/dev/null`
->> ./scripts/rescan-scsi-bus.sh:      echo "scsi report-devs 1" >/proc/scsi/scsi
->> ./scripts/rescan-scsi-bus.sh:      DRV=`grep 'Attached drivers:' /proc/scsi/scsi 2>/dev/null`
->> ./scripts/rescan-scsi-bus.sh:      echo "scsi report-devs 0" >/proc/scsi/scsi
->> ./scripts/rescan-scsi-bus.sh:# Outputs description from /proc/scsi/scsi (unless arg passed)
->> ./scripts/rescan-scsi-bus.sh:        echo "scsi remove-single-device $devnr" > /proc/scsi/scsi
->> ./scripts/rescan-scsi-bus.sh:          echo "scsi add-single-device $devnr" > /proc/scsi/scsi
->> ./scripts/rescan-scsi-bus.sh:      echo "scsi add-single-device $devnr" > /proc/scsi/scsi
->> ./scripts/rescan-scsi-bus.sh:      echo "scsi add-single-device $devnr" > /proc/scsi/scsi
->> ./scripts/rescan-scsi-bus.sh:      echo "scsi add-single-device $host $channel $id $SCAN_WILD_CARD" > /proc/scsi/scsi
->> ./scripts/rescan-scsi-bus.sh:if test ! -d /sys/class/scsi_host/ -a ! -d /proc/scsi/; then
->> ./ChangeLog:    /proc/scsi/sg/allow_dio is '0'
->> ./ChangeLog:  - change sg_debug to call system("cat /proc/scsi/sg/debug");
->> ./suse/sg3_utils.changes:  * Support systems without /proc/scsi
->> ./examples/sgq_dd.c:static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
->> ./doc/sg_read.8:If direct IO is selected and /proc/scsi/sg/allow_dio
->> ./doc/sg_read.8:"echo 1 > /proc/scsi/sg/allow_dio". An alternate way to avoid the
->> ./doc/sg_map.8:observing the output of the command: "cat /proc/scsi/scsi".
->> ./doc/sgp_dd.8:at completion. If direct IO is selected and /proc/scsi/sg/allow_dio
->> ./doc/sgp_dd.8:this at completion. If direct IO is selected and /proc/scsi/sg/allow_dio
->> ./doc/sgp_dd.8:mapping to SCSI block devices should be checked with 'cat /proc/scsi/scsi'
->> ./doc/sg_dd.8:notes this at completion. If direct IO is selected and /proc/scsi/sg/allow_dio
->> ./doc/sg_dd.8:this at completion. If direct IO is selected and /proc/scsi/sg/allow_dio
->> ./doc/sg_dd.8:with 'echo 1 > /proc/scsi/sg/allow_dio'.
->> ./doc/sg_dd.8:mapping to SCSI block devices should be checked with 'cat /proc/scsi/scsi',
->>
->>
-> As mentioned, rescan-scsi-bus.sh is keeping references to /proc/scsi as
-> a fall back only, as it's meant to work kernel independent. Per default
-> it'll be using /sys, and will happily work without /proc/scsi.
-> 
-> So it's really only /proc/scsi/sg which carries some meaningful
-> information; maybe we should move/copy it to somewhere else.
-> 
-> I personally like getting rid of /proc/scsi.
+Hello dear,
+ =
 
-/proc/scsi/device_info doesn't seem to be in sysfs.
+We are in the market for your products after meeting at your stand during l=
+ast expo.
+ =
 
-Could the contents of /proc/scsi/sg/* be placed in
-/sys/class/scsi_generic/* ? Currently that directory only has symlinks
-to the sg devices.
+Please kindly send us your latest catalog and price list so as to start a n=
+ew project/order as promised during the exhibition. =
 
-Doug Gilbert
+ =
+
+I would appreciate your response about the above details required so we can=
+ revert back to you asap.
+ =
+
+Kind regards
+ =
+
+Rhema Zoeh
