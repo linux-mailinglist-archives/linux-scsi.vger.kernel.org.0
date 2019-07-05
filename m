@@ -2,28 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC366014F
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jul 2019 09:14:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9E160155
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jul 2019 09:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbfGEHOT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 Jul 2019 03:14:19 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56500 "EHLO mx1.suse.de"
+        id S1726004AbfGEHSH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 5 Jul 2019 03:18:07 -0400
+Received: from mx2.suse.de ([195.135.220.15]:57170 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726427AbfGEHOT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 5 Jul 2019 03:14:19 -0400
+        id S1725862AbfGEHSH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 5 Jul 2019 03:18:07 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 2DE28B016;
-        Fri,  5 Jul 2019 07:13:59 +0000 (UTC)
-Subject: Re: [PATCH 0/2] scsi: add support for request batching
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org, stefanha@redhat.com
-References: <20190530112811.3066-1-pbonzini@redhat.com>
- <746ad64a-4047-1597-a0d4-f14f3529cc19@redhat.com>
- <yq1lfxnk8ar.fsf@oracle.com>
- <48c7d581-6ec8-260a-b4ba-217aef516305@redhat.com>
+        by mx1.suse.de (Postfix) with ESMTP id 0A88AAF7C;
+        Fri,  5 Jul 2019 07:18:05 +0000 (UTC)
+Subject: Re: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
+To:     Bart Van Assche <bvanassche@acm.org>, dgilbert@interlog.com,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Martin Petersen <martin.petersen@oracle.com>
+Cc:     SCSI <linux-scsi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
+ <621306ee-7ab6-9cd2-e934-94b3d6d731fc@acm.org>
+ <fb2d2e74-6725-4bf2-cf6c-63c0a2a10f4f@interlog.com>
+ <da579578-349e-1320-0867-14fde659733e@acm.org>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -69,12 +72,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <80dd68bf-a544-25ec-568f-cee1cf0c8cfd@suse.de>
-Date:   Fri, 5 Jul 2019 09:13:59 +0200
+Message-ID: <719dd2ea-b5e5-c694-36ef-9513ed0c2d06@suse.de>
+Date:   Fri, 5 Jul 2019 09:18:04 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <48c7d581-6ec8-260a-b4ba-217aef516305@redhat.com>
+In-Reply-To: <da579578-349e-1320-0867-14fde659733e@acm.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -83,15 +86,40 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/27/19 10:17 AM, Paolo Bonzini wrote:
-> On 27/06/19 05:37, Martin K. Petersen wrote:
->>> Ping?  Are there any more objections?
->> It's a core change so we'll need some more reviews. I suggest you
->> resubmit.
+On 6/18/19 5:28 AM, Bart Van Assche wrote:
+> On 6/17/19 5:35 PM, Douglas Gilbert wrote:
+>> For sg3_utils:
+>>
+>> $ find . -name '*.c' -exec grep "/proc/scsi" {} \; -print
+>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
+>> ./src/sg_read.c
+>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
+>> ./src/sgp_dd.c
+>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
+>> ./src/sgm_dd.c
+>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
+>> ./src/sg_dd.c
+>>                  "'echo 1 > /proc/scsi/sg/allow_dio'\n", q_len,
+>> dirio_count);
+>> ./testing/sg_tst_bidi.c
+>> static const char * proc_allow_dio = "/proc/scsi/sg/allow_dio";
+>> ./examples/sgq_dd.c
+>>  
+>> That is 6 (not 38) by my count.
 > 
-> Resubmit exactly the same patches?
-> Where is the ->commit_rqs() callback invoked?
-I don't seem to be able to find it...
+> Hi Doug,
+> 
+> This is the command I ran:
+> 
+> $ git grep /proc/scsi | wc -l
+> 38
+> 
+> I think your query excludes scripts/rescan-scsi-bus.sh.
+> 
+You can ignore rescan-scsi-bus.sh.
+It's keeping /proc access as a fallback option only (as it's meant to be
+kernel-independent); it will be using /sys per default and will happily
+work without /proc/scsi.
 
 Cheers,
 
