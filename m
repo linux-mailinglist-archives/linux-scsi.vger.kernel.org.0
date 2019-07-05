@@ -2,105 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D97F601C5
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jul 2019 09:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE34605A1
+	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jul 2019 13:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728054AbfGEHwT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 Jul 2019 03:52:19 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34922 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727455AbfGEHwT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 5 Jul 2019 03:52:19 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5D76BACD4;
-        Fri,  5 Jul 2019 07:52:17 +0000 (UTC)
-Subject: Re: [PATCH 2/2] virtio_scsi: implement request batching
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, stefanha@redhat.com
+        id S1728717AbfGEL6o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 5 Jul 2019 07:58:44 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39817 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727212AbfGEL6n (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Jul 2019 07:58:43 -0400
+Received: by mail-wr1-f65.google.com with SMTP id x4so9643365wrt.6
+        for <linux-scsi@vger.kernel.org>; Fri, 05 Jul 2019 04:58:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sSP7etyox4aCXSbmmXqtAa/Z3YWMIdovt5LD60sC6pk=;
+        b=OIEr0AjX/pZPS8DPAZzXZGBa/u9sEyAt6k+ouDFW7g8mqTof5hUR+4PIQG1EwFa2ws
+         kZBMDxm0bAbARVM3V49Uc9AYr2/dgcxSOMLVdcdY9Trz7oPRHJRXaNTA/XB564bXE0Yj
+         8WJQPKgHuew7dmKP0UsjwqSby4g2RH4vKymW07cbg8lNOoeDAMXxqNgaZnzb722TmmER
+         NP28lq6IaCCHc7umP95bAcN2pk1dw5vA0sGISRlCMa/WvIzK4KQ00TvjhvcCqLUjRQs3
+         S8IHxQUXSNwxpCcBmyAoSBh1Hbad7X5ColSXSR3olzMpUpyaFs6+XEb+IrIiigASjmfN
+         nhoQ==
+X-Gm-Message-State: APjAAAVBgnPd3ovcT9oNzmakj8w2HU0G7vm/QKS8+GEtx4PvGyPHsbml
+        nDQcrTEVJ6K2ZtXjNVE2aNO7fw==
+X-Google-Smtp-Source: APXvYqxyhtfq5EKToa35JCnlw7GpbLScGtHw2moWsKyk282RbMxrzF+Y3/E6uFyVJoI/9J7VWPQvkg==
+X-Received: by 2002:a5d:5450:: with SMTP id w16mr4049000wrv.128.1562327921117;
+        Fri, 05 Jul 2019 04:58:41 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:e943:5a4e:e068:244a? ([2001:b07:6468:f312:e943:5a4e:e068:244a])
+        by smtp.gmail.com with ESMTPSA id 72sm8576148wrk.22.2019.07.05.04.58.39
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 05 Jul 2019 04:58:40 -0700 (PDT)
+Subject: Re: [PATCH 0/2] scsi: add support for request batching
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        jejb@linux.ibm.com, linux-scsi@vger.kernel.org, stefanha@redhat.com
 References: <20190530112811.3066-1-pbonzini@redhat.com>
- <20190530112811.3066-3-pbonzini@redhat.com>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <ec1a4902-d661-3a63-2dca-ca7692e225ae@suse.de>
-Date:   Fri, 5 Jul 2019 09:52:16 +0200
+ <746ad64a-4047-1597-a0d4-f14f3529cc19@redhat.com>
+ <yq1lfxnk8ar.fsf@oracle.com>
+ <48c7d581-6ec8-260a-b4ba-217aef516305@redhat.com>
+ <80dd68bf-a544-25ec-568f-cee1cf0c8cfd@suse.de>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <6c2cf159-9ba2-da39-6e1c-95dea7e111ba@redhat.com>
+Date:   Fri, 5 Jul 2019 13:58:39 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190530112811.3066-3-pbonzini@redhat.com>
+In-Reply-To: <80dd68bf-a544-25ec-568f-cee1cf0c8cfd@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/30/19 1:28 PM, Paolo Bonzini wrote:
-> Adding the command and kicking the virtqueue so far was done one after
-> another.  Make the kick optional, so that we can take into account SCMD_LAST.
-> We also need a commit_rqs callback to kick the device if blk-mq aborts
-> the submission before the last request is reached.
-> 
-> Suggested-by: Stefan Hajnoczi <stefanha@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  drivers/scsi/virtio_scsi.c | 55 +++++++++++++++++++++++++++-----------
->  1 file changed, 40 insertions(+), 15 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.com>
+On 05/07/19 09:13, Hannes Reinecke wrote:
+> On 6/27/19 10:17 AM, Paolo Bonzini wrote:
+>> On 27/06/19 05:37, Martin K. Petersen wrote:
+>>>> Ping?  Are there any more objections?
+>>> It's a core change so we'll need some more reviews. I suggest you
+>>> resubmit.
+>> Resubmit exactly the same patches?
+>> Where is the ->commit_rqs() callback invoked?
+> I don't seem to be able to find it...
 
-Cheers,
+Stefan answered, and the series now has three reviews!  It may be late
+for 5.3 but I hope this can go in soon.
 
-Hannes
--- 
-Dr. Hannes Reinecke		   Teamlead Storage & Networking
-hare@suse.de			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+Thanks,
+
+Paolo
