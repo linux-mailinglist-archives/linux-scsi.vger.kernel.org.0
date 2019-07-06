@@ -2,62 +2,142 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A92B60D4B
-	for <lists+linux-scsi@lfdr.de>; Fri,  5 Jul 2019 23:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F7F560F16
+	for <lists+linux-scsi@lfdr.de>; Sat,  6 Jul 2019 07:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727667AbfGEVtg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 5 Jul 2019 17:49:36 -0400
-Received: from out176.e-adjacentdigital.co.uk ([178.156.202.12]:55670 "EHLO
-        slot0.mathewsons.ga" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbfGEVtf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 5 Jul 2019 17:49:35 -0400
-X-Greylist: delayed 622 seconds by postgrey-1.27 at vger.kernel.org; Fri, 05 Jul 2019 17:49:34 EDT
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=mathewsons.ga;
- h=Content-Type:MIME-Version:Content-Transfer-Encoding:Content-Description:Subject:To:From:Date:Reply-To:Message-ID; i=purchase@mathewsons.ga;
- bh=onxYcir3NvpNjk2I/gjm/O+ljxo=;
- b=O4RK1DBam7QhixS740hX78+vxRdq5HRa91VsJCnMjxGPTWgDNV+lWt77ADKIqAop3DzZWHkexQHN
-   2kW/OKJ+Cc3GY/Q6Kkw5Kgsdkbj0OlbwhHfZmvktPB16B9y0lyA4KGHvZvPgJacY/+IpzN5jY/ya
-   Z4ioZ8ATKuyQc/ypmuMajQyI7uPJC+qkRNuiGKbPeu5gkwPyDPzKqRZhweAx/oXNr76WpUpHnRfz
-   +ydfO+FP8ry544/88g0mKcoJHAPzy1Sqnb7g0EkSafC1ubqiiOWGj+uPC5zbU909QUkVoHnuKRsG
-   YeqjAaeZlv5LYTVz6MtM2Uh4veDKwxetUF8bvw==
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=mathewsons.ga;
- b=k+3h8FYVamEQ3QWdbPwiKnwMtoTVun/Ni0bCO2OLQMm9kg4gpg4dYKP/ejwL4Nyk4Z9vJqLab0gV
-   iJOO9B1027TLAN1KjnS7pR/z50lQYW1tvnpQbAvFI/pXN5Ekbo10jbeZdmlI5l9fMcDqQjepn59x
-   GBl+vRNcayrxbae9kbO/SGo6z+3w685qIcuIDjLs9ino+5mmh7OFi9YbF6FQweVRiTZ2pckUA9cV
-   RBl4q9bBblsYGyScqkDzneNVwRzBATAkaXXrDSGO5FuJ89hv+a6X5td36Nt6t377oe0CK5gVo9mk
-   Bu04RrlYsgHDgM7OUdh1SHgwWoaFRV7b6VgMKg==;
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Quotes needed For July Shipments
-To:     Recipients <purchase@mathewsons.ga>
-From:   "Sales -Jpexcc." <purchase@mathewsons.ga>
-Date:   Sat, 06 Jul 2019 00:39:03 +0300
-Reply-To: jpexcc@aol.com
-Message-ID: <0.0.39.647.1D53379DEAE056C.0@slot0.mathewsons.ga>
+        id S1725970AbfGFFW4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 6 Jul 2019 01:22:56 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:38654 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725900AbfGFFW4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Jul 2019 01:22:56 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 292BC8EE1F7;
+        Fri,  5 Jul 2019 22:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1562390575;
+        bh=8jmEOU50I7YWCZs78zwZmgKTRzKugItrfou5fNlhW1g=;
+        h=Subject:From:To:Cc:Date:From;
+        b=dAkN4F6u2tVoHUkaYx9ZGWuiRKx6uZ4Gw85Z+hvli3hDl4g4c5oE0jmrHjkEqrU4v
+         QxUvfvPpr419emydHeaD4rQdDsEvksiAq56twZPWpqNxBFtlsoOOkxLyHpFuQCiSpw
+         N+RjnQKM67ygjQ+Lyikh/lcZ1Xrpxb1XaL3Gb8Gk=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id aUCthC6yLCvf; Fri,  5 Jul 2019 22:22:55 -0700 (PDT)
+Received: from jarvis.lan (unknown [50.35.68.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id AD4738EE0CF;
+        Fri,  5 Jul 2019 22:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1562390574;
+        bh=8jmEOU50I7YWCZs78zwZmgKTRzKugItrfou5fNlhW1g=;
+        h=Subject:From:To:Cc:Date:From;
+        b=ac3q7uyz9KL8F5dR3yxgQ9/uOvfatrH65g8I00o5JQC/yUgY+h5wd2ePM9Szx4ntv
+         0lEzON9VXWAnQQNrz5WLuPUCFVN6s8c59q/NmYgtJZwotGLv9LtBGg67NJN2neSkPf
+         QcU8HzWzHQ9VMPYdqRJ2tE6DsrOvB85hvdKbnu0s=
+Message-ID: <1562390573.10899.20.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.2-rc7
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 05 Jul 2019 22:22:53 -0700
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello dear,
- =
+Two iscsi fixes.  One for an oops in the client which can be triggered
+by the server authentication protocol and the other in the target code
+which causes data corruption.
 
-We are in the market for your products after meeting at your stand during l=
-ast expo.
- =
+The patch is available here:
 
-Please kindly send us your latest catalog and price list so as to start a n=
-ew project/order as promised during the exhibition. =
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
- =
+The short changelog is:
 
-I would appreciate your response about the above details required so we can=
- revert back to you asap.
- =
+Maurizio Lombardi (1):
+      scsi: iscsi: set auth_protocol back to NULL if CHAP_A value is not supported
 
-Kind regards
- =
+Roman Bolshakov (1):
+      scsi: target/iblock: Fix overrun in WRITE SAME emulation
 
-Rhema Zoeh
+And the diffstat:
+
+ drivers/target/iscsi/iscsi_target_auth.c | 16 ++++++++--------
+ drivers/target/target_core_iblock.c      |  2 +-
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/target/iscsi/iscsi_target_auth.c b/drivers/target/iscsi/iscsi_target_auth.c
+index 4e680d753941..e2fa3a3bc81d 100644
+--- a/drivers/target/iscsi/iscsi_target_auth.c
++++ b/drivers/target/iscsi/iscsi_target_auth.c
+@@ -89,6 +89,12 @@ static int chap_check_algorithm(const char *a_str)
+ 	return CHAP_DIGEST_UNKNOWN;
+ }
+ 
++static void chap_close(struct iscsi_conn *conn)
++{
++	kfree(conn->auth_protocol);
++	conn->auth_protocol = NULL;
++}
++
+ static struct iscsi_chap *chap_server_open(
+ 	struct iscsi_conn *conn,
+ 	struct iscsi_node_auth *auth,
+@@ -126,7 +132,7 @@ static struct iscsi_chap *chap_server_open(
+ 	case CHAP_DIGEST_UNKNOWN:
+ 	default:
+ 		pr_err("Unsupported CHAP_A value\n");
+-		kfree(conn->auth_protocol);
++		chap_close(conn);
+ 		return NULL;
+ 	}
+ 
+@@ -141,19 +147,13 @@ static struct iscsi_chap *chap_server_open(
+ 	 * Generate Challenge.
+ 	 */
+ 	if (chap_gen_challenge(conn, 1, aic_str, aic_len) < 0) {
+-		kfree(conn->auth_protocol);
++		chap_close(conn);
+ 		return NULL;
+ 	}
+ 
+ 	return chap;
+ }
+ 
+-static void chap_close(struct iscsi_conn *conn)
+-{
+-	kfree(conn->auth_protocol);
+-	conn->auth_protocol = NULL;
+-}
+-
+ static int chap_server_compute_md5(
+ 	struct iscsi_conn *conn,
+ 	struct iscsi_node_auth *auth,
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index b5ed9c377060..efebacd36101 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -515,7 +515,7 @@ iblock_execute_write_same(struct se_cmd *cmd)
+ 
+ 		/* Always in 512 byte units for Linux/Block */
+ 		block_lba += sg->length >> SECTOR_SHIFT;
+-		sectors -= 1;
++		sectors -= sg->length >> SECTOR_SHIFT;
+ 	}
+ 
+ 	iblock_submit_bios(&list);
