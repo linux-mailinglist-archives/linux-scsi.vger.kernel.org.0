@@ -2,142 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7F560F16
-	for <lists+linux-scsi@lfdr.de>; Sat,  6 Jul 2019 07:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B2260FA4
+	for <lists+linux-scsi@lfdr.de>; Sat,  6 Jul 2019 11:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbfGFFW4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 6 Jul 2019 01:22:56 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:38654 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725900AbfGFFW4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Jul 2019 01:22:56 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 292BC8EE1F7;
-        Fri,  5 Jul 2019 22:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1562390575;
-        bh=8jmEOU50I7YWCZs78zwZmgKTRzKugItrfou5fNlhW1g=;
-        h=Subject:From:To:Cc:Date:From;
-        b=dAkN4F6u2tVoHUkaYx9ZGWuiRKx6uZ4Gw85Z+hvli3hDl4g4c5oE0jmrHjkEqrU4v
-         QxUvfvPpr419emydHeaD4rQdDsEvksiAq56twZPWpqNxBFtlsoOOkxLyHpFuQCiSpw
-         N+RjnQKM67ygjQ+Lyikh/lcZ1Xrpxb1XaL3Gb8Gk=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aUCthC6yLCvf; Fri,  5 Jul 2019 22:22:55 -0700 (PDT)
-Received: from jarvis.lan (unknown [50.35.68.20])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id AD4738EE0CF;
-        Fri,  5 Jul 2019 22:22:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1562390574;
-        bh=8jmEOU50I7YWCZs78zwZmgKTRzKugItrfou5fNlhW1g=;
-        h=Subject:From:To:Cc:Date:From;
-        b=ac3q7uyz9KL8F5dR3yxgQ9/uOvfatrH65g8I00o5JQC/yUgY+h5wd2ePM9Szx4ntv
-         0lEzON9VXWAnQQNrz5WLuPUCFVN6s8c59q/NmYgtJZwotGLv9LtBGg67NJN2neSkPf
-         QcU8HzWzHQ9VMPYdqRJ2tE6DsrOvB85hvdKbnu0s=
-Message-ID: <1562390573.10899.20.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.2-rc7
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 05 Jul 2019 22:22:53 -0700
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1725988AbfGFJde (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 6 Jul 2019 05:33:34 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:50192 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725957AbfGFJde (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 6 Jul 2019 05:33:34 -0400
+Received: by mail-wm1-f66.google.com with SMTP id v15so918908wml.0
+        for <linux-scsi@vger.kernel.org>; Sat, 06 Jul 2019 02:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=KhgqzCQR1IGaHi6EqGsNl677Y7LMM3Dec/41gZZE7/E=;
+        b=gR2DkyD7wyDVjiEb1jMXkr6UfIlzpZc05RvCnt0yzOXun5+jkRdABFvumAV7zhPiiw
+         DADQIi6j60RFWVves3wPB/j+FtFx0T+IrCl068AFMumb0vdfImPkgsGxURtnPv2m0V0/
+         Q/VPfzvzm7YAAEynXo/tfDyQgdAnL8n0PNxwICcIhAULq0H1psx5dFlbgaw/E0d1y2OD
+         vk81GxpzSni5+vF63uDvJj4dnkuMTf1VtWtysGmEJQOlPY1LQg2yhrhXJfRUmGBv57fN
+         nk1n3JybdiohCbIwcAiD2NzEp/gMhBwpIpHznPAzYTe+w0qLbHzIZZmr5WMjtbD4Cjq+
+         BHfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KhgqzCQR1IGaHi6EqGsNl677Y7LMM3Dec/41gZZE7/E=;
+        b=eEnrIboEvLGVaeNLkufCj9jKyZYjQlJnDdIAiZmvPeYwIXA4cyICYEjB35PjmJzA2u
+         IhtlJ0kpJqO0jxL3sQdQlfMPKCtul4MxhqA2AM9s56KuDgFTIHE6Cp0SkEEfIkmGxGzH
+         iXd4W/2u3408Le8Yrv2Lnq3NjNJ+1QEBsdntqDdjr4qBH6TqEugBGw/cJ14aAOzgqb6m
+         6ImOe4u+a6zdaLVtUvvJCNp7HTR77auo9BzDCc3f2NATBqXYM8P+DNo81ua2Okuc9rGH
+         iF/fDyv9dtWQ9U3oLfyv0AizPOqYCO7dPKLDN+JH3KutsSnsf8ufWJbvtOj8b4bsjpnB
+         jeUg==
+X-Gm-Message-State: APjAAAX7FTwk1JWiUUyIWKm06W6246xC+4rmC7IQ5Cr840VLPpHYZOQQ
+        YuKGSAilfplAop3ONW9Xy3nWsA==
+X-Google-Smtp-Source: APXvYqzCsMbYkP1Xj6vDsW5o/AARKwqoL8QsFKt0zc2PPmuxkGOaGrF0KV927epB16rTeabfSYcVHQ==
+X-Received: by 2002:a7b:c104:: with SMTP id w4mr7786116wmi.42.1562405611513;
+        Sat, 06 Jul 2019 02:33:31 -0700 (PDT)
+Received: from brian.unipv.it ([5.170.48.41])
+        by smtp.gmail.com with ESMTPSA id w23sm12328006wmi.45.2019.07.06.02.33.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 06 Jul 2019 02:33:30 -0700 (PDT)
+Date:   Sat, 6 Jul 2019 11:33:27 +0200
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20190706093327.GA31927@brian.unipv.it>
+References: <cc54d51ec7a203eceb76d62fc230b378b1da12e1.camel@unipv.it>
+ <20190702120112.GA19890@ming.t460p>
+ <20190702223931.GB3735@brian.unipv.it>
+ <20190703020119.GA23872@ming.t460p>
+ <20190703051117.GA6458@brian.unipv.it>
+ <20190703063603.GA32123@ming.t460p>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190703063603.GA32123@ming.t460p>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Two iscsi fixes.  One for an oops in the client which can be triggered
-by the server authentication protocol and the other in the target code
-which causes data corruption.
+On 03/07/19 14:36:05, Ming Lei wrote:
+> On Wed, Jul 03, 2019 at 07:11:17AM +0200, Andrea Vai wrote:
+> > On 03/07/19 10:01:23, Ming Lei wrote:
+> > > On Wed, Jul 03, 2019 at 12:39:31AM +0200, Andrea Vai wrote:
+> > > > On 02/07/19 20:01:13, Ming Lei wrote:
+> > > > > On Tue, Jul 02, 2019 at 12:46:45PM +0200, Andrea Vai wrote:
+> > > > > > Hi,
+> > > > > >   I have a problem writing data to a USB pendrive, and it seems
+> > > > > > kernel-related. With the help of Greg an Alan (thanks) and some
+> > > > > > bisect, I found out the offending commit being
+> > > > > > 
+> > > > > > commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+> > > > > > 
+> > > > > >  [...]    
+> > > > > >     
+> [...]
+> Then could you install bcc package and collect the IO trace?
+> 
+> 	sudo /usr/share/bcc/tools/biosnoop | grep sdN
+> 
+> sdN is your USB disk device name.
 
-The patch is available here:
+The command runs forever (or at least for hours) without giving any output through "|grep sdf". The device is connected, but not mounted. Maybe I should run the command with the device mounted? Or while performing the test?
+The command itself seems to work, as /usr/share/bcc/tools/biosnoop | tee -a biosnoop.txt produces an output file sized about some MB in some hours. 
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+What should I do?
 
-The short changelog is:
+Thanks,
+Andrea
 
-Maurizio Lombardi (1):
-      scsi: iscsi: set auth_protocol back to NULL if CHAP_A value is not supported
-
-Roman Bolshakov (1):
-      scsi: target/iblock: Fix overrun in WRITE SAME emulation
-
-And the diffstat:
-
- drivers/target/iscsi/iscsi_target_auth.c | 16 ++++++++--------
- drivers/target/target_core_iblock.c      |  2 +-
- 2 files changed, 9 insertions(+), 9 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/target/iscsi/iscsi_target_auth.c b/drivers/target/iscsi/iscsi_target_auth.c
-index 4e680d753941..e2fa3a3bc81d 100644
---- a/drivers/target/iscsi/iscsi_target_auth.c
-+++ b/drivers/target/iscsi/iscsi_target_auth.c
-@@ -89,6 +89,12 @@ static int chap_check_algorithm(const char *a_str)
- 	return CHAP_DIGEST_UNKNOWN;
- }
- 
-+static void chap_close(struct iscsi_conn *conn)
-+{
-+	kfree(conn->auth_protocol);
-+	conn->auth_protocol = NULL;
-+}
-+
- static struct iscsi_chap *chap_server_open(
- 	struct iscsi_conn *conn,
- 	struct iscsi_node_auth *auth,
-@@ -126,7 +132,7 @@ static struct iscsi_chap *chap_server_open(
- 	case CHAP_DIGEST_UNKNOWN:
- 	default:
- 		pr_err("Unsupported CHAP_A value\n");
--		kfree(conn->auth_protocol);
-+		chap_close(conn);
- 		return NULL;
- 	}
- 
-@@ -141,19 +147,13 @@ static struct iscsi_chap *chap_server_open(
- 	 * Generate Challenge.
- 	 */
- 	if (chap_gen_challenge(conn, 1, aic_str, aic_len) < 0) {
--		kfree(conn->auth_protocol);
-+		chap_close(conn);
- 		return NULL;
- 	}
- 
- 	return chap;
- }
- 
--static void chap_close(struct iscsi_conn *conn)
--{
--	kfree(conn->auth_protocol);
--	conn->auth_protocol = NULL;
--}
--
- static int chap_server_compute_md5(
- 	struct iscsi_conn *conn,
- 	struct iscsi_node_auth *auth,
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index b5ed9c377060..efebacd36101 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -515,7 +515,7 @@ iblock_execute_write_same(struct se_cmd *cmd)
- 
- 		/* Always in 512 byte units for Linux/Block */
- 		block_lba += sg->length >> SECTOR_SHIFT;
--		sectors -= 1;
-+		sectors -= sg->length >> SECTOR_SHIFT;
- 	}
- 
- 	iblock_submit_bios(&list);
