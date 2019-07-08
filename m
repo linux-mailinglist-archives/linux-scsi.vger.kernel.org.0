@@ -2,95 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FA5C61F34
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jul 2019 15:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB05662118
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jul 2019 17:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728581AbfGHNCk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Jul 2019 09:02:40 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:49530 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728242AbfGHNCk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 8 Jul 2019 09:02:40 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id B2ADC20423F;
-        Mon,  8 Jul 2019 15:02:37 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7Hwv6m74jWwG; Mon,  8 Jul 2019 15:02:28 +0200 (CEST)
-Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id C280620416A;
-        Mon,  8 Jul 2019 15:02:26 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
-To:     Hannes Reinecke <hare@suse.de>,
-        "Elliott, Robert (Servers)" <elliott@hpe.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Marc Gonzalez <marc.w.gonzalez@free.fr>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Martin Petersen <martin.petersen@oracle.com>
-Cc:     SCSI <linux-scsi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-References: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
- <621306ee-7ab6-9cd2-e934-94b3d6d731fc@acm.org>
- <fb2d2e74-6725-4bf2-cf6c-63c0a2a10f4f@interlog.com>
- <da579578-349e-1320-0867-14fde659733e@acm.org>
- <AT5PR8401MB11695CC7286B2D2F98FB9EADABEA0@AT5PR8401MB1169.NAMPRD84.PROD.OUTLOOK.COM>
- <1ad3e7ba-008d-31ad-89a0-b118b36e14e2@suse.de>
- <e2469890-e0ae-fb79-4aa9-125cdaeedb2b@interlog.com>
- <284c3ecc-b3a8-eeec-92d5-5eda1f20f691@suse.de>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <5155c7bd-f339-33bb-1a84-18ea75963db2@interlog.com>
-Date:   Mon, 8 Jul 2019 09:02:23 -0400
+        id S1730341AbfGHPEy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 Jul 2019 11:04:54 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:43071 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730233AbfGHPEx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Jul 2019 11:04:53 -0400
+Received: by mail-pf1-f195.google.com with SMTP id i189so7745599pfg.10;
+        Mon, 08 Jul 2019 08:04:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=uuzMBczhpFd4zcYpjMdhnitg6M+5a5PUQK3Xnc+A9H8=;
+        b=j8J6o81O8Kel0trZLKq/QJTiW8o9fOeSVRjcZ4jVDKP6IzQTQH348leOzEaTap+3PN
+         I1mO0PAi8OCArSZWpzAjCoL09jKyK8q1BcjLRqwzuukGzNnFRnPF43JPKT3zg0dqvQ0b
+         4HmPKNrRchQAQSr586Nc7tpzJumVLQKh+aQw77MKRJm65iGgXPx5psTwWhn6zVR3jvDT
+         Y/IIfOU6aa8fjZgzu9EGVZmhv5jeCl93oZW7W7/FcNwwcp9wUA8ng+GLlEycbZiWx+gl
+         dTwLaFU6jiUH8vDClP9oq4UVBVIhyawDk3xfxRl6CpIXcXpooiYCvrWHShlNzBoXPEzD
+         iLtQ==
+X-Gm-Message-State: APjAAAUcl5dj6iOFlAg4qczfv9fpfQJ7fR5OfpdG7LNtsLWwn5RShQiM
+        K5XR1Rz2sWE+csJSo9Bfx7/F55pa
+X-Google-Smtp-Source: APXvYqyJlMgwmQ5yvGTru8xbts6noQsMZxodcWdtoYVrpsTXXjLpzN1qyUzURq/d7YVTiwSh76fHqw==
+X-Received: by 2002:a17:90a:208d:: with SMTP id f13mr25643200pjg.68.1562598292667;
+        Mon, 08 Jul 2019 08:04:52 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id 1sm17843072pfe.102.2019.07.08.08.04.51
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 08 Jul 2019 08:04:51 -0700 (PDT)
+Subject: Re: [PATCH] scsi: Remove unreachable code
+To:     Ding Xiang <dingxiang@cmss.chinamobile.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1562234156-11945-1-git-send-email-dingxiang@cmss.chinamobile.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <82794d9a-8f36-7012-da6a-1e05ce2bb3cb@acm.org>
+Date:   Mon, 8 Jul 2019 08:04:50 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <284c3ecc-b3a8-eeec-92d5-5eda1f20f691@suse.de>
+In-Reply-To: <1562234156-11945-1-git-send-email-dingxiang@cmss.chinamobile.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-07-08 2:01 a.m., Hannes Reinecke wrote:
-> On 7/5/19 7:53 PM, Douglas Gilbert wrote:
->> On 2019-07-05 3:22 a.m., Hannes Reinecke wrote:
-> [ .. ]
->>> As mentioned, rescan-scsi-bus.sh is keeping references to /proc/scsi as
->>> a fall back only, as it's meant to work kernel independent. Per default
->>> it'll be using /sys, and will happily work without /proc/scsi.
->>>
->>> So it's really only /proc/scsi/sg which carries some meaningful
->>> information; maybe we should move/copy it to somewhere else.
->>>
->>> I personally like getting rid of /proc/scsi.
->>
->> /proc/scsi/device_info doesn't seem to be in sysfs.
->>
->> Could the contents of /proc/scsi/sg/* be placed in
->> /sys/class/scsi_generic/* ? Currently that directory only has symlinks
->> to the sg devices.
->>
-> The sg parameters are already available in /sys/module/sg/parameters;
-> so from that perspective I feel we're good.
+On 7/4/19 2:55 AM, Ding Xiang wrote:
+> The return code after switch default is unreachable,
+> so remove it.
+> 
+> Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
+> ---
+>   drivers/scsi/scsi_error.c | 1 -
+>   1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+> index bfa569f..12180f0 100644
+> --- a/drivers/scsi/scsi_error.c
+> +++ b/drivers/scsi/scsi_error.c
+> @@ -1909,7 +1909,6 @@ int scsi_decide_disposition(struct scsi_cmnd *scmd)
+>   	default:
+>   		return FAILED;
+>   	}
+> -	return FAILED;
 
-# ls /sys/module/sg/parameters/
-allow_dio  def_reserved_size  scatter_elem_sz
+I'd rather remove the "default: return FAILED;" code than make the above 
+change. If status_byte() ever would be changed into an inline function 
+that returns an enum then my alternative will allow the compiler to 
+verify whether all enum labels have been handled. No such check will be 
+performed if the above patch would be applied.
 
-# ls /proc/scsi/sg/
-allow_dio  debug  def_reserved_size  device_hdr  devices  device_strs
-red_debug  version
-
-So that doesn't work, what are in 'parameters' are passed in at
-module/driver initialization. Back to my original question: Could the
-contents of /proc/scsi/sg/* be placed in /sys/class/scsi_generic/* ?
-
-> Problem is /proc/scsi/device_info, for which we currently don't have any
-> other location to store it at.
-> Hmm.
-
-Doug Gilbert
-
+Bart.
