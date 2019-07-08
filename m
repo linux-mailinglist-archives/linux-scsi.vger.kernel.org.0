@@ -2,100 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D29361A0F
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jul 2019 06:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A2461A7E
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jul 2019 08:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727518AbfGHEiQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Jul 2019 00:38:16 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:47439 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727434AbfGHEiP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Jul 2019 00:38:15 -0400
-X-UUID: 0439ed65322c48718f153102bd87e18b-20190708
-X-UUID: 0439ed65322c48718f153102bd87e18b-20190708
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 347739192; Mon, 08 Jul 2019 12:38:03 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 8 Jul 2019 12:37:59 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 8 Jul 2019 12:37:59 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <evgreen@chromium.org>, <beanhuo@micron.com>,
-        <marc.w.gonzalez@free.fr>, <ygardi@codeaurora.org>,
-        <subhashj@codeaurora.org>, <sthumma@codeaurora.org>,
-        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 3/3] scsi: ufs: Do not reset error history during host reset
-Date:   Mon, 8 Jul 2019 12:37:57 +0800
-Message-ID: <1562560677-3985-4-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1562560677-3985-1-git-send-email-stanley.chu@mediatek.com>
-References: <1562560677-3985-1-git-send-email-stanley.chu@mediatek.com>
+        id S1728892AbfGHGBM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 Jul 2019 02:01:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39654 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728075AbfGHGBM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 8 Jul 2019 02:01:12 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id CEC2FAF06;
+        Mon,  8 Jul 2019 06:01:09 +0000 (UTC)
+Subject: Re: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
+To:     dgilbert@interlog.com,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Martin Petersen <martin.petersen@oracle.com>
+Cc:     SCSI <linux-scsi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
+ <621306ee-7ab6-9cd2-e934-94b3d6d731fc@acm.org>
+ <fb2d2e74-6725-4bf2-cf6c-63c0a2a10f4f@interlog.com>
+ <da579578-349e-1320-0867-14fde659733e@acm.org>
+ <AT5PR8401MB11695CC7286B2D2F98FB9EADABEA0@AT5PR8401MB1169.NAMPRD84.PROD.OUTLOOK.COM>
+ <1ad3e7ba-008d-31ad-89a0-b118b36e14e2@suse.de>
+ <e2469890-e0ae-fb79-4aa9-125cdaeedb2b@interlog.com>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <284c3ecc-b3a8-eeec-92d5-5eda1f20f691@suse.de>
+Date:   Mon, 8 Jul 2019 08:01:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: E6439C50B647F94D2A57FB5A31BC59C04D1BA7504CA56B85EAEF93D6A1032FFF2000:8
-X-MTK:  N
+In-Reply-To: <e2469890-e0ae-fb79-4aa9-125cdaeedb2b@interlog.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently UFS error history will be reset and lost during host reset
-flow by ufschd_probe_hba().
+On 7/5/19 7:53 PM, Douglas Gilbert wrote:
+> On 2019-07-05 3:22 a.m., Hannes Reinecke wrote:
+[ .. ]
+>> As mentioned, rescan-scsi-bus.sh is keeping references to /proc/scsi as
+>> a fall back only, as it's meant to work kernel independent. Per default
+>> it'll be using /sys, and will happily work without /proc/scsi.
+>>
+>> So it's really only /proc/scsi/sg which carries some meaningful
+>> information; maybe we should move/copy it to somewhere else.
+>>
+>> I personally like getting rid of /proc/scsi.
+> 
+> /proc/scsi/device_info doesn't seem to be in sysfs.
+> 
+> Could the contents of /proc/scsi/sg/* be placed in
+> /sys/class/scsi_generic/* ? Currently that directory only has symlinks
+> to the sg devices.
+> 
+The sg parameters are already available in /sys/module/sg/parameters;
+so from that perspective I feel we're good.
+Problem is /proc/scsi/device_info, for which we currently don't have any
+other location to store it at.
+Hmm.
 
-We shall not reset it and then error history can be kept as completed
-as possible to improve debugging.
+Cheers,
 
-In addition, fix a minor display error in ufshcd_print_err_hist().
-
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufshcd.c | 13 +------------
- 1 file changed, 1 insertion(+), 12 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index b8b874311509..a46c3d2b2ea3 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -402,7 +402,7 @@ static void ufshcd_print_err_hist(struct ufs_hba *hba,
- 
- 		if (err_hist->reg[p] == 0)
- 			continue;
--		dev_err(hba->dev, "%s[%d] = 0x%x at %lld us\n", err_name, i,
-+		dev_err(hba->dev, "%s[%d] = 0x%x at %lld us\n", err_name, p,
- 			err_hist->reg[p], ktime_to_us(err_hist->tstamp[p]));
- 		found = true;
- 	}
-@@ -6690,19 +6690,8 @@ static void ufshcd_tune_unipro_params(struct ufs_hba *hba)
- 
- static void ufshcd_clear_dbg_ufs_stats(struct ufs_hba *hba)
- {
--	int err_reg_hist_size = sizeof(struct ufs_err_reg_hist);
--
- 	hba->ufs_stats.hibern8_exit_cnt = 0;
- 	hba->ufs_stats.last_hibern8_exit_tstamp = ktime_set(0, 0);
--
--	memset(&hba->ufs_stats.pa_err, 0, err_reg_hist_size);
--	memset(&hba->ufs_stats.dl_err, 0, err_reg_hist_size);
--	memset(&hba->ufs_stats.nl_err, 0, err_reg_hist_size);
--	memset(&hba->ufs_stats.tl_err, 0, err_reg_hist_size);
--	memset(&hba->ufs_stats.dme_err, 0, err_reg_hist_size);
--	memset(&hba->ufs_stats.fatal_err, 0, err_reg_hist_size);
--	memset(&hba->ufs_stats.auto_hibern8_err, 0, err_reg_hist_size);
--
- 	hba->req_abort_count = 0;
- }
- 
+Hannes
 -- 
-2.18.0
-
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
