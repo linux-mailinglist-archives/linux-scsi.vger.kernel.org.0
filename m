@@ -2,196 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7743161C8F
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jul 2019 11:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA5C61F34
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jul 2019 15:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729941AbfGHJsJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Jul 2019 05:48:09 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:44943 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728720AbfGHJsJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Jul 2019 05:48:09 -0400
-Received: by mail-wr1-f65.google.com with SMTP id p17so5118759wrf.11;
-        Mon, 08 Jul 2019 02:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NwlWZnZ7zBN6lMDrY9iRaKbV18Be9yKKcDp04eaQZqw=;
-        b=L4X9uWXbU6RiKrYoUg2tgRwaWORYDiSTVLOeYpeJuxAruwz0azPyvOk8Jf4yhJqizT
-         Sjoag1bsd1lnxDMWoqWXLrdD3yVIUh57JZAPA2c3H3H2zbBYt8B67jd6Pel/2AgEa4gP
-         UaPzoeGUom5LJOBnL8pK/c/SnqUrKVpurbOn9VAskieXCXaYvjvzLjXxB8RiP3Z+TCF2
-         +S//IhKshMXkeWfHs9dFTv19u1RT3CyGreaY1P1dNUic3NzRB4JNQfiBJ+2VqzfRAsMr
-         ppKkr0g9JXj/PxeiIUrvGdln+1TpbzM9iqSsIbUChjswX3i3/1qDjh4PNGHFEs0oVxrK
-         0PxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NwlWZnZ7zBN6lMDrY9iRaKbV18Be9yKKcDp04eaQZqw=;
-        b=EXHQ+bBHIbGMhQofgKY3URGs8vyMe7T5152Tt0f7vnrrin8aXb4Ca6e2QpZ7b0oHf3
-         uODp1M5mHGFGob6HxziiEcZ7r+C1CsG1l1Y6tZkSyXvI1sYwOpvW4eBWN7hs21S5eXMB
-         2JnEnVf4d6Qdr7U3BpTS13v8EWCuAVC5f9Jga3PxLyCvV78YUKf/e7ZqmbSh+lJQDw4F
-         F5s/f5ZL1o3UgecaTTZf2XqyffBYfbFPraTPx7QnrAvL0H5NpTsH+T49loAkacY0K9Dw
-         0TjWlJjora6uBqH5mAjRcMV/7mIAX/4qv4EVyBg9FVX6mwXAe0woswjM8eWjo+7KpXwn
-         jy5Q==
-X-Gm-Message-State: APjAAAWSECR/XzS8smlkSYFIvxBw7hSF1oxU53U8vwsYPEshKCgTZvJt
-        F1ZTjDqoImPY9WU0f7xT2FSmJXemPFBFbM22L3o=
-X-Google-Smtp-Source: APXvYqxE67dD1GsBy6jRCG+SGo9SeaPdmJ0+fghvBxDKCiPovhUbI/A/avBvpADnzJyDg0CyZ7K+xQiy1/iVQCXybjo=
-X-Received: by 2002:a05:6000:1011:: with SMTP id a17mr18005281wrx.0.1562579286243;
- Mon, 08 Jul 2019 02:48:06 -0700 (PDT)
+        id S1728581AbfGHNCk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 Jul 2019 09:02:40 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:49530 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728242AbfGHNCk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 8 Jul 2019 09:02:40 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id B2ADC20423F;
+        Mon,  8 Jul 2019 15:02:37 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 7Hwv6m74jWwG; Mon,  8 Jul 2019 15:02:28 +0200 (CEST)
+Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id C280620416A;
+        Mon,  8 Jul 2019 15:02:26 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH v1] scsi: Don't select SCSI_PROC_FS by default
+To:     Hannes Reinecke <hare@suse.de>,
+        "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Marc Gonzalez <marc.w.gonzalez@free.fr>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Martin Petersen <martin.petersen@oracle.com>
+Cc:     SCSI <linux-scsi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <2de15293-b9be-4d41-bc67-a69417f27f7a@free.fr>
+ <621306ee-7ab6-9cd2-e934-94b3d6d731fc@acm.org>
+ <fb2d2e74-6725-4bf2-cf6c-63c0a2a10f4f@interlog.com>
+ <da579578-349e-1320-0867-14fde659733e@acm.org>
+ <AT5PR8401MB11695CC7286B2D2F98FB9EADABEA0@AT5PR8401MB1169.NAMPRD84.PROD.OUTLOOK.COM>
+ <1ad3e7ba-008d-31ad-89a0-b118b36e14e2@suse.de>
+ <e2469890-e0ae-fb79-4aa9-125cdaeedb2b@interlog.com>
+ <284c3ecc-b3a8-eeec-92d5-5eda1f20f691@suse.de>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <5155c7bd-f339-33bb-1a84-18ea75963db2@interlog.com>
+Date:   Mon, 8 Jul 2019 09:02:23 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20190530112811.3066-1-pbonzini@redhat.com> <20190530112811.3066-3-pbonzini@redhat.com>
-In-Reply-To: <20190530112811.3066-3-pbonzini@redhat.com>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Mon, 8 Jul 2019 17:47:54 +0800
-Message-ID: <CACVXFVPE7vX1pEPH0G_C_eZW8eztdTEg8Xr=8+D=9-eVeMNZ_g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] virtio_scsi: implement request batching
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM General <kvm@vger.kernel.org>, jejb@linux.ibm.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <284c3ecc-b3a8-eeec-92d5-5eda1f20f691@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, May 30, 2019 at 7:28 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> Adding the command and kicking the virtqueue so far was done one after
-> another.  Make the kick optional, so that we can take into account SCMD_LAST.
-> We also need a commit_rqs callback to kick the device if blk-mq aborts
-> the submission before the last request is reached.
->
-> Suggested-by: Stefan Hajnoczi <stefanha@redhat.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  drivers/scsi/virtio_scsi.c | 55 +++++++++++++++++++++++++++-----------
->  1 file changed, 40 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-> index 8af01777d09c..918c811cea95 100644
-> --- a/drivers/scsi/virtio_scsi.c
-> +++ b/drivers/scsi/virtio_scsi.c
-> @@ -375,14 +375,7 @@ static void virtscsi_event_done(struct virtqueue *vq)
->         virtscsi_vq_done(vscsi, &vscsi->event_vq, virtscsi_complete_event);
->  };
->
-> -/**
-> - * virtscsi_add_cmd - add a virtio_scsi_cmd to a virtqueue
-> - * @vq         : the struct virtqueue we're talking about
-> - * @cmd                : command structure
-> - * @req_size   : size of the request buffer
-> - * @resp_size  : size of the response buffer
-> - */
-> -static int virtscsi_add_cmd(struct virtqueue *vq,
-> +static int __virtscsi_add_cmd(struct virtqueue *vq,
->                             struct virtio_scsi_cmd *cmd,
->                             size_t req_size, size_t resp_size)
->  {
-> @@ -427,17 +420,39 @@ static int virtscsi_add_cmd(struct virtqueue *vq,
->         return virtqueue_add_sgs(vq, sgs, out_num, in_num, cmd, GFP_ATOMIC);
->  }
->
-> -static int virtscsi_kick_cmd(struct virtio_scsi_vq *vq,
-> +static void virtscsi_kick_vq(struct virtio_scsi_vq *vq)
-> +{
-> +       bool needs_kick;
-> +       unsigned long flags;
-> +
-> +       spin_lock_irqsave(&vq->vq_lock, flags);
-> +       needs_kick = virtqueue_kick_prepare(vq->vq);
-> +       spin_unlock_irqrestore(&vq->vq_lock, flags);
-> +
-> +       if (needs_kick)
-> +               virtqueue_notify(vq->vq);
-> +}
-> +
-> +/**
-> + * virtscsi_add_cmd - add a virtio_scsi_cmd to a virtqueue, optionally kick it
-> + * @vq         : the struct virtqueue we're talking about
-> + * @cmd                : command structure
-> + * @req_size   : size of the request buffer
-> + * @resp_size  : size of the response buffer
-> + * @kick       : whether to kick the virtqueue immediately
-> + */
-> +static int virtscsi_add_cmd(struct virtio_scsi_vq *vq,
->                              struct virtio_scsi_cmd *cmd,
-> -                            size_t req_size, size_t resp_size)
-> +                            size_t req_size, size_t resp_size,
-> +                            bool kick)
->  {
->         unsigned long flags;
->         int err;
->         bool needs_kick = false;
->
->         spin_lock_irqsave(&vq->vq_lock, flags);
-> -       err = virtscsi_add_cmd(vq->vq, cmd, req_size, resp_size);
-> -       if (!err)
-> +       err = __virtscsi_add_cmd(vq->vq, cmd, req_size, resp_size);
-> +       if (!err && kick)
->                 needs_kick = virtqueue_kick_prepare(vq->vq);
->
->         spin_unlock_irqrestore(&vq->vq_lock, flags);
-> @@ -502,6 +517,7 @@ static int virtscsi_queuecommand(struct Scsi_Host *shost,
->         struct virtio_scsi *vscsi = shost_priv(shost);
->         struct virtio_scsi_vq *req_vq = virtscsi_pick_vq_mq(vscsi, sc);
->         struct virtio_scsi_cmd *cmd = scsi_cmd_priv(sc);
-> +       bool kick;
->         unsigned long flags;
->         int req_size;
->         int ret;
-> @@ -531,7 +547,8 @@ static int virtscsi_queuecommand(struct Scsi_Host *shost,
->                 req_size = sizeof(cmd->req.cmd);
->         }
->
-> -       ret = virtscsi_kick_cmd(req_vq, cmd, req_size, sizeof(cmd->resp.cmd));
-> +       kick = (sc->flags & SCMD_LAST) != 0;
-> +       ret = virtscsi_add_cmd(req_vq, cmd, req_size, sizeof(cmd->resp.cmd), kick);
->         if (ret == -EIO) {
->                 cmd->resp.cmd.response = VIRTIO_SCSI_S_BAD_TARGET;
->                 spin_lock_irqsave(&req_vq->vq_lock, flags);
-> @@ -549,8 +566,8 @@ static int virtscsi_tmf(struct virtio_scsi *vscsi, struct virtio_scsi_cmd *cmd)
->         int ret = FAILED;
->
->         cmd->comp = &comp;
-> -       if (virtscsi_kick_cmd(&vscsi->ctrl_vq, cmd,
-> -                             sizeof cmd->req.tmf, sizeof cmd->resp.tmf) < 0)
-> +       if (virtscsi_add_cmd(&vscsi->ctrl_vq, cmd,
-> +                             sizeof cmd->req.tmf, sizeof cmd->resp.tmf, true) < 0)
->                 goto out;
->
->         wait_for_completion(&comp);
-> @@ -664,6 +681,13 @@ static int virtscsi_map_queues(struct Scsi_Host *shost)
->         return blk_mq_virtio_map_queues(qmap, vscsi->vdev, 2);
->  }
->
-> +static void virtscsi_commit_rqs(struct Scsi_Host *shost, u16 hwq)
-> +{
-> +       struct virtio_scsi *vscsi = shost_priv(shost);
-> +
-> +       virtscsi_kick_vq(&vscsi->req_vqs[hwq]);
-> +}
-> +
->  /*
->   * The host guarantees to respond to each command, although I/O
->   * latencies might be higher than on bare metal.  Reset the timer
-> @@ -681,6 +705,7 @@ static struct scsi_host_template virtscsi_host_template = {
->         .this_id = -1,
->         .cmd_size = sizeof(struct virtio_scsi_cmd),
->         .queuecommand = virtscsi_queuecommand,
-> +       .commit_rqs = virtscsi_commit_rqs,
->         .change_queue_depth = virtscsi_change_queue_depth,
->         .eh_abort_handler = virtscsi_abort,
->         .eh_device_reset_handler = virtscsi_device_reset,
-> --
-> 2.21.0
->
+On 2019-07-08 2:01 a.m., Hannes Reinecke wrote:
+> On 7/5/19 7:53 PM, Douglas Gilbert wrote:
+>> On 2019-07-05 3:22 a.m., Hannes Reinecke wrote:
+> [ .. ]
+>>> As mentioned, rescan-scsi-bus.sh is keeping references to /proc/scsi as
+>>> a fall back only, as it's meant to work kernel independent. Per default
+>>> it'll be using /sys, and will happily work without /proc/scsi.
+>>>
+>>> So it's really only /proc/scsi/sg which carries some meaningful
+>>> information; maybe we should move/copy it to somewhere else.
+>>>
+>>> I personally like getting rid of /proc/scsi.
+>>
+>> /proc/scsi/device_info doesn't seem to be in sysfs.
+>>
+>> Could the contents of /proc/scsi/sg/* be placed in
+>> /sys/class/scsi_generic/* ? Currently that directory only has symlinks
+>> to the sg devices.
+>>
+> The sg parameters are already available in /sys/module/sg/parameters;
+> so from that perspective I feel we're good.
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+# ls /sys/module/sg/parameters/
+allow_dio  def_reserved_size  scatter_elem_sz
 
-Thanks,
-Ming Lei
+# ls /proc/scsi/sg/
+allow_dio  debug  def_reserved_size  device_hdr  devices  device_strs
+red_debug  version
+
+So that doesn't work, what are in 'parameters' are passed in at
+module/driver initialization. Back to my original question: Could the
+contents of /proc/scsi/sg/* be placed in /sys/class/scsi_generic/* ?
+
+> Problem is /proc/scsi/device_info, for which we currently don't have any
+> other location to store it at.
+> Hmm.
+
+Doug Gilbert
+
