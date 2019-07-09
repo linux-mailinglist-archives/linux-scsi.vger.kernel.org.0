@@ -2,86 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3C863C27
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jul 2019 21:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BECB63C9B
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jul 2019 22:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbfGITtF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 9 Jul 2019 15:49:05 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:50298 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbfGITtF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Jul 2019 15:49:05 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x69JmwqP026550;
-        Tue, 9 Jul 2019 19:48:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=CmQbH8XJlLLeBfq76uQ18uqsTOTGRsTpvEFjktn/zmM=;
- b=KpUMySPyViEgkkaX/oUCUDyBS+C6O6Ic+0ZPNXD5H8Zxin2skZzqyvdWXkAWc/hB1kM/
- JzRxAvllvQ7oeqo3ydMr6kGqTapDOrkL4b/RQpz4QZSEREPhsB4hDenAkY68l8Buhr38
- HY5L35HcOXmrdOVMWskHGYLnEnmGTOJWCxVFrhmaQyQt5Q44p4udPxfH5TkEkgysbZqs
- jDpzi7JuqVFXxotGzxBqEJ+Eem7zUgybHNSY6llK4wBU7enr8Wg0onqrsY8g09VnwSD4
- feoQzR/FAtYU+PSa32TFq6azgTR0gZ5b5yuJ8/NRHMqx2EDgpXNefmDG+svQ2Ox8iy7K YQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2tjm9qp8us-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 09 Jul 2019 19:48:58 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x69JmAnq137219;
-        Tue, 9 Jul 2019 19:48:54 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2tmmh35b4q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 09 Jul 2019 19:48:54 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x69JmntI020580;
-        Tue, 9 Jul 2019 19:48:52 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 09 Jul 2019 12:48:49 -0700
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] first round of SCSI updates for the 5.2+ merge window
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <1562699693.3362.93.camel@HansenPartnership.com>
-        <yq1lfx7c80r.fsf@oracle.com>
-        <1562701406.3362.105.camel@HansenPartnership.com>
-Date:   Tue, 09 Jul 2019 15:48:46 -0400
-In-Reply-To: <1562701406.3362.105.camel@HansenPartnership.com> (James
-        Bottomley's message of "Tue, 09 Jul 2019 12:43:26 -0700")
-Message-ID: <yq1ef2zc7kx.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1729611AbfGIUQE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 9 Jul 2019 16:16:04 -0400
+Received: from mail.wl.linuxfoundation.org ([198.145.29.98]:41408 "EHLO
+        mail.wl.linuxfoundation.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729526AbfGIUQE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Jul 2019 16:16:04 -0400
+Received: from mail.wl.linuxfoundation.org (localhost [127.0.0.1])
+        by mail.wl.linuxfoundation.org (Postfix) with ESMTP id A240928877
+        for <linux-scsi@vger.kernel.org>; Tue,  9 Jul 2019 20:16:03 +0000 (UTC)
+Received: by mail.wl.linuxfoundation.org (Postfix, from userid 486)
+        id 96D77288AC; Tue,  9 Jul 2019 20:16:03 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
+        pdx-wl-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=2.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS autolearn=unavailable version=3.3.1
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 204119] New: scsi_mod: Could not allocate 4104 bytes percpu
+ data
+Date:   Tue, 09 Jul 2019 20:16:02 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: IO/Storage
+X-Bugzilla-Component: SCSI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jpalus@fastmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-204119-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9313 signatures=668688
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=721
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1907090235
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9313 signatures=668688
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=790 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1907090235
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=204119
 
-James,
+            Bug ID: 204119
+           Summary: scsi_mod: Could not allocate 4104 bytes percpu data
+           Product: IO/Storage
+           Version: 2.5
+    Kernel Version: 5.2
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: SCSI
+          Assignee: linux-scsi@vger.kernel.org
+          Reporter: jpalus@fastmail.com
+        Regression: No
 
-> Actually, I was planning a second pull request for that one.  I
-> presume you think it's ready to go?
+After upgrading to 5.2 scsi_mod fails to insert (CONFIG_X86_VSMP is not set):
 
-It's spent 3 weeks in -next without any complaints.
+Jul 09 09:50:25 localhost kernel: percpu: allocation failed, size=4104 align=32
+atomic=0, alloc from reserved chunk failed
+Jul 09 09:50:25 localhost kernel: CPU: 0 PID: 372 Comm: systemd-udevd Tainted:
+G                T 5.2.0-0.1 #1
+Jul 09 09:50:25 localhost kernel: Hardware name: System manufacturer System
+Product Name/Z170-PRO, BIOS 3801 03/14/2018
+Jul 09 09:50:25 localhost kernel: Call Trace:
+Jul 09 09:50:25 localhost kernel:  dump_stack+0x5c/0x78
+Jul 09 09:50:25 localhost kernel:  pcpu_alloc.cold.12+0x22/0x45
+Jul 09 09:50:25 localhost kernel:  ? __vmalloc_node_range+0x1cf/0x240
+Jul 09 09:50:25 localhost kernel:  load_module+0xd8f/0x2500
+Jul 09 09:50:25 localhost kernel:  ? map_vm_area+0x38/0x50
+Jul 09 09:50:25 localhost kernel:  ? __vmalloc_node_range+0x1cf/0x240
+Jul 09 09:50:25 localhost kernel:  ? __se_sys_init_module+0x136/0x160
+Jul 09 09:50:25 localhost kernel:  __se_sys_init_module+0x136/0x160
+Jul 09 09:50:25 localhost kernel:  do_syscall_64+0x5b/0x130
+Jul 09 09:50:25 localhost kernel:  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+Jul 09 09:50:25 localhost kernel: RIP: 0033:0x7f3a5c452afe
+Jul 09 09:50:25 localhost kernel: Code: 48 8b 0d 85 43 0c 00 f7 d8 64 89 01 48
+83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 49 89 ca b8 af 00 00
+00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 52 43 0c 00 f7 d8 64 89 01 48
+Jul 09 09:50:25 localhost kernel: RSP: 002b:00007ffc9d2f6768 EFLAGS: 00000202
+ORIG_RAX: 00000000000000af
+Jul 09 09:50:25 localhost kernel: RAX: ffffffffffffffda RBX: 00000000008b5cf0
+RCX: 00007f3a5c452afe
+Jul 09 09:50:25 localhost kernel: RDX: 00007f3a5c7ae865 RSI: 000000000007f110
+RDI: 00007f3a5a3c7010
+Jul 09 09:50:25 localhost kernel: RBP: 00007f3a5c7ae865 R08: 000000000000005f
+R09: 00000000008b5ab0
+Jul 09 09:50:25 localhost kernel: R10: 00000000008a0010 R11: 0000000000000202
+R12: 00007f3a5a3c7010
+Jul 09 09:50:25 localhost kernel: R13: 00000000008a4000 R14: 0000000000020000
+R15: 00000000008b5cf0
+Jul 09 09:50:25 localhost kernel: scsi_mod: Could not allocate 4104 bytes
+percpu data
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+You are receiving this mail because:
+You are the assignee for the bug.
