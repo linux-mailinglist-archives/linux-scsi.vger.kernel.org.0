@@ -2,83 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D3A62AD1
-	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jul 2019 23:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D35C62DB3
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jul 2019 03:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732451AbfGHVPn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Jul 2019 17:15:43 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:37234 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405330AbfGHVPn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Jul 2019 17:15:43 -0400
-Received: by mail-io1-f66.google.com with SMTP id q22so16736309iog.4
-        for <linux-scsi@vger.kernel.org>; Mon, 08 Jul 2019 14:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=z4B1DM+aYjxU+okrUuJoTvRLDFQzAUQP1MHsJfZ8ctg=;
-        b=SLhX0XQ7jdunERsvbzW5rmWFMqQbNfd/ssL4EHiPd6010D+g7edXvw0buXR4poj5vG
-         Mm7UH0Nx6BJnd9DXCxXqgGpH+0zV+NW0kn78r1uWiEjrMvsK2iQhpTEhme1ozrNFrLJf
-         Sa23fjW00XLs0pLpVWpdsmqkDuKelJ2dxCnSeCTqpTzgC/M8SJzIrMA2iPbadLE8oyjf
-         fqf+tS3Aw10UX6PyXEtJhThn7yBoooYBBvw7FwMHL+uBiAugFssNKGv0qHVJoDioaEx8
-         qNDUraVvr9BXTY70aabpxIVOahC5yPVD/1nmTEQeNnhnBkSXu8SqSMjjepwlCtXj5NVB
-         1KWA==
+        id S1726403AbfGIBsg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 Jul 2019 21:48:36 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:42346 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfGIBsg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Jul 2019 21:48:36 -0400
+Received: by mail-io1-f65.google.com with SMTP id u19so39671009ior.9;
+        Mon, 08 Jul 2019 18:48:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=z4B1DM+aYjxU+okrUuJoTvRLDFQzAUQP1MHsJfZ8ctg=;
-        b=TmZqj9mFhpkI5qTFbh8hFD9MKYHq9+HIeRQKV1eASOxArmP9N1AmkjPYYpJc/pxSuO
-         zlHqL59hvHuFkAdP/noNWOXDSR0d55RtVUwvhcoUIurXFSJkP6833So/GcPbpLcOHsZk
-         qM4JgVsmIBHAml8xWfDg1XV+FI3LYXsvRGUraHJZDJCe8hDwlRRzpV8HA5eJR4D9HWWD
-         RMNXwUTtCCuxdCaiXysIW1cqGPE3l8uFtv11Hfw1BmJmhc3nmvnJZnnxFMpURooTfB8k
-         ynK7guCtHagt8upZuVlai7YODqPXpIXLDxuhbXs6YFc39O15S6VKlihIIixs3CiDRpSl
-         YN5Q==
-X-Gm-Message-State: APjAAAVLE3vcNZB8Ptjo5O8nCV4yr93rfIqdM5GCwcCouX140FPnPfdH
-        L8v4CriOt6RWf8+ndRBMMoRZnW0P/9To+r7lUFQ=
-X-Google-Smtp-Source: APXvYqw1IJHNrCAcS88FviMesY21KKq/oTbZJWaR5+dS6ohOnl+Jhmx3B2/WSN6fqz+imi80wnklJb0xBshRy82sHCU=
-X-Received: by 2002:a5d:8890:: with SMTP id d16mr18544504ioo.274.1562620542083;
- Mon, 08 Jul 2019 14:15:42 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=GvfjGGlw3UxBPItY7HGBbTvYAxu5k/MIEMpMCZvF99I=;
+        b=UTaJYLljlZRjSzoNqmRsxcW5o04wdkEn61vm2x2yoJQZNWFEPz/TXS6F6f10E2I828
+         TWYm8pLJKD3K7eQWrcBFemgo6df+9o8hXMgPQjGxX1QiefPirXKZRO4SKmosuOydeHD9
+         gjvbf//mAUMVOZ46MMCgjpLg5EI3znf4dzDcPqcO0b28PNJYv5iHHSVwtjVt0fZPsR3T
+         zK22YQVpMUlsMW9CWNkb0JQg21Mkct0kjXJ0Vzdg4TeqP8M95FJ4qct0sHE0a7G/I1jY
+         Zt5X2HIs5GNssXAG/WYrtT/pxtRRRDNyS1Lqbto+qwxpp0CXlml3MyYBXki+Tpv7xFDe
+         L/HQ==
+X-Gm-Message-State: APjAAAXFyqpmeqfTpnmXG+jSqZJWNOa8J7rOMp+GF239vQYqHquz10Lr
+        jcmsOsuQQbCC2cfdDEBS7A==
+X-Google-Smtp-Source: APXvYqx8/pBZlcjplRHgCgiL8IcLhiig4B4YXatyJvJH9FgiUfObN2umu8Y0q9OyU8ZtGCD+ohGRiQ==
+X-Received: by 2002:a5d:8c97:: with SMTP id g23mr22369768ion.250.1562636914903;
+        Mon, 08 Jul 2019 18:48:34 -0700 (PDT)
+Received: from localhost ([64.188.179.252])
+        by smtp.gmail.com with ESMTPSA id l5sm25436032ioq.83.2019.07.08.18.48.33
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 08 Jul 2019 18:48:34 -0700 (PDT)
+Date:   Mon, 8 Jul 2019 19:48:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Andy Gross <agross@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Evan Green <evgreen@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] scsi: ufs: Allow resetting the UFS device
+Message-ID: <20190709014832.GA14402@bogus>
+References: <20190606010249.3538-1-bjorn.andersson@linaro.org>
+ <20190606010249.3538-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:ac0:8bac:0:0:0:0:0 with HTTP; Mon, 8 Jul 2019 14:15:41 -0700 (PDT)
-Reply-To: muahammedrabia@gmail.com
-From:   "Mrs. Rabia Muahammed " <udumachambers2@gmail.com>
-Date:   Mon, 8 Jul 2019 16:15:41 -0500
-Message-ID: <CAAaKNyY-yOvtZuTSpn4FhxXtjszwv-eU72Mx9Vhdp+c7BgDawg@mail.gmail.com>
-Subject: From Mrs. Rabia Muahammed
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190606010249.3538-3-bjorn.andersson@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-From Mrs. Rabia Muahammed
+On Wed, Jun 05, 2019 at 06:02:48PM -0700, Bjorn Andersson wrote:
+> Acquire the device-reset GPIO and toggle this to reset the UFS device
+> during initialization and host reset.
+> 
+> Based on downstream support implemented by Subhash Jadavani
+> <subhashj@codeaurora.org>.
+> 
+> Tested-by: John Stultz <john.stultz@linaro.org>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+> 
+> Changes since v1:
+> - Added gpio to DT binding document
+> - Fixed spelling of UFS
+> 
+>  .../devicetree/bindings/ufs/ufshcd-pltfrm.txt |  2 +
+>  drivers/scsi/ufs/ufshcd.c                     | 44 +++++++++++++++++++
+>  drivers/scsi/ufs/ufshcd.h                     |  4 ++
+>  3 files changed, 50 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt b/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
+> index a74720486ee2..d562d8b4919c 100644
+> --- a/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
+> +++ b/Documentation/devicetree/bindings/ufs/ufshcd-pltfrm.txt
+> @@ -54,6 +54,8 @@ Optional properties:
+>  			  PHY reset from the UFS controller.
+>  - resets            : reset node register
+>  - reset-names       : describe reset node register, the "rst" corresponds to reset the whole UFS IP.
+> +- device-reset-gpios	: A phandle and gpio specifier denoting the GPIO connected
+> +			  to the RESET pin of the UFS memory device.
 
-Dear Good Friend
+A sign we should have a child node for the device...
 
-My Name Is Mrs. Rabia Muahammed , I am a banker in (GARANTI BANK
-ISTANBUL TURKEY (G B I T)
-I want to transfer an abandoned sum of 25.5 millions USD to your
-account. 50% will be for you. No risk involved. Contact me for more
-details. Kindly reply me back.
+Doesn't using 'reset-gpios' work as I doubt one would have a GPIO reset 
+for the host controller.
 
-
-Fill this information
-
-
-Full name:
-Direct cell number:
-Country:
-City:
-Age :
-Gender:
-Occupation:
-
-
-Please respond urgently
-
-
-Regards,
-Mrs.Rabia Muahammed
+Rob
