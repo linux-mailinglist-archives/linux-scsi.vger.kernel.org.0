@@ -2,133 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 298BC62DD8
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jul 2019 04:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EB062FA6
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jul 2019 06:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726046AbfGICGP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Jul 2019 22:06:15 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2189 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725886AbfGICGP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 8 Jul 2019 22:06:15 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 670AC1DB1BC9877BC235;
-        Tue,  9 Jul 2019 10:06:13 +0800 (CST)
-Received: from [127.0.0.1] (10.177.96.203) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Tue, 9 Jul 2019
- 10:06:05 +0800
-Subject: Re: [PATCH v2] scsi: kill useless scsi_use_blk_mq and force_blk_mq
-To:     <martin.petersen@oracle.com>, <jejb@linux.vnet.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>
-References: <20190604133515.40311-1-yanaijie@huawei.com>
-From:   Jason Yan <yanaijie@huawei.com>
-Message-ID: <eba1acbd-7001-82d9-0661-40a551f01b5e@huawei.com>
-Date:   Tue, 9 Jul 2019 10:06:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
-MIME-Version: 1.0
-In-Reply-To: <20190604133515.40311-1-yanaijie@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.177.96.203]
-X-CFilter-Loop: Reflected
+        id S1725886AbfGIEe4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 9 Jul 2019 00:34:56 -0400
+Received: from condef-08.nifty.com ([202.248.20.73]:43382 "EHLO
+        condef-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725818AbfGIEe4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Jul 2019 00:34:56 -0400
+X-Greylist: delayed 344 seconds by postgrey-1.27 at vger.kernel.org; Tue, 09 Jul 2019 00:34:54 EDT
+Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-08.nifty.com with ESMTP id x694PqsU019279
+        for <linux-scsi@vger.kernel.org>; Tue, 9 Jul 2019 13:25:52 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-09.nifty.com with ESMTP id x694OqVj009969;
+        Tue, 9 Jul 2019 13:24:53 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com x694OqVj009969
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1562646294;
+        bh=4ZrbChqp9XlDbu2jnXmxXGqVpaJBsEdyTZt35TheD7k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h/yr3UD8r29twM9ZfD0rvCb5/Opp9qq5QZkleLNk2AI81UAh2X00lSLE5z86mpfLN
+         pdrjTHpIGoKjDA9TFenfXZ0+xzGmVBl/DCMSPi36hrtgq/Pvt4m4ffHERWOQR8DTB4
+         mPHDsDQGLsB81EZRttpzi5oBObO8MXyqY76LW+SuMM5Xh9J5pj7abreOl/bZ1rtzoP
+         f8CokcSxN6a8mc5iJ3/jX0/vLcViH2nWnbbO4V6TsWlfy2xWjWwpMBG0c4aqnfqRrP
+         lbnhIw7tQZAdcJAC4K6tXzG7hkUK02jGToWNTo7ZOYLRbwQNAzTLc+mtaj8kOQGRB+
+         K7taoDasQ497Q==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Nicolas Pitre <nico@fluxnic.net>, Sam Ravnborg <sam@ravnborg.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Michal Marek <michal.lkml@markovi.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: [PATCH 00/11] kbuild: create *.mod with directory path and remove MODVERDIR
+Date:   Tue,  9 Jul 2019 13:24:04 +0900
+Message-Id: <20190709042416.27554-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ping?
 
-On 2019/6/4 21:35, Jason Yan wrote:
-> The legacy path is gone and we do not have to choose mq or not. The
-> module parameter scsi_use_blk_mq and scsi_host_template.force_blk_mq
-> is useless now.
-> 
-> Signed-off-by: Jason Yan <yanaijie@huawei.com>
-> ---
-> 
-> v2: remove force_blk_mq too
-> 
->   drivers/scsi/scsi.c        | 4 ----
->   drivers/scsi/scsi_priv.h   | 1 -
->   drivers/scsi/scsi_sysfs.c  | 8 --------
->   drivers/scsi/virtio_scsi.c | 1 -
->   include/scsi/scsi_host.h   | 3 ---
->   5 files changed, 17 deletions(-)
-> 
-> diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-> index 653d5ea6c5d9..7049aabb86e0 100644
-> --- a/drivers/scsi/scsi.c
-> +++ b/drivers/scsi/scsi.c
-> @@ -765,10 +765,6 @@ MODULE_LICENSE("GPL");
->   module_param(scsi_logging_level, int, S_IRUGO|S_IWUSR);
->   MODULE_PARM_DESC(scsi_logging_level, "a bit mask of logging levels");
->   
-> -/* This should go away in the future, it doesn't do anything anymore */
-> -bool scsi_use_blk_mq = true;
-> -module_param_named(use_blk_mq, scsi_use_blk_mq, bool, S_IWUSR | S_IRUGO);
-> -
->   static int __init init_scsi(void)
->   {
->   	int error;
-> diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
-> index 5f21547b2ad2..a4f0741524d8 100644
-> --- a/drivers/scsi/scsi_priv.h
-> +++ b/drivers/scsi/scsi_priv.h
-> @@ -29,7 +29,6 @@ extern int scsi_init_hosts(void);
->   extern void scsi_exit_hosts(void);
->   
->   /* scsi.c */
-> -extern bool scsi_use_blk_mq;
->   int scsi_init_sense_cache(struct Scsi_Host *shost);
->   void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd);
->   #ifdef CONFIG_SCSI_LOGGING
-> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-> index dbb206c90ecf..403832ee17e0 100644
-> --- a/drivers/scsi/scsi_sysfs.c
-> +++ b/drivers/scsi/scsi_sysfs.c
-> @@ -386,15 +386,7 @@ show_host_busy(struct device *dev, struct device_attribute *attr, char *buf)
->   }
->   static DEVICE_ATTR(host_busy, S_IRUGO, show_host_busy, NULL);
->   
-> -static ssize_t
-> -show_use_blk_mq(struct device *dev, struct device_attribute *attr, char *buf)
-> -{
-> -	return sprintf(buf, "1\n");
-> -}
-> -static DEVICE_ATTR(use_blk_mq, S_IRUGO, show_use_blk_mq, NULL);
-> -
->   static struct attribute *scsi_sysfs_shost_attrs[] = {
-> -	&dev_attr_use_blk_mq.attr,
->   	&dev_attr_unique_id.attr,
->   	&dev_attr_host_busy.attr,
->   	&dev_attr_cmd_per_lun.attr,
-> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-> index 13f1b3b9923a..f4e3c0310c7d 100644
-> --- a/drivers/scsi/virtio_scsi.c
-> +++ b/drivers/scsi/virtio_scsi.c
-> @@ -687,7 +687,6 @@ static struct scsi_host_template virtscsi_host_template = {
->   	.dma_boundary = UINT_MAX,
->   	.map_queues = virtscsi_map_queues,
->   	.track_queue_depth = 1,
-> -	.force_blk_mq = 1,
->   };
->   
->   #define virtscsi_config_get(vdev, fld) \
-> diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-> index a5fcdad4a03e..2bf56cdb6195 100644
-> --- a/include/scsi/scsi_host.h
-> +++ b/include/scsi/scsi_host.h
-> @@ -425,9 +425,6 @@ struct scsi_host_template {
->   	/* True if the controller does not support WRITE SAME */
->   	unsigned no_write_same:1;
->   
-> -	/* True if the low-level driver supports blk-mq only */
-> -	unsigned force_blk_mq:1;
-> -
->   	/*
->   	 * Countdown for host blocking with no commands outstanding.
->   	 */
-> 
+This series kills the long standing MODVERDIR.
+
+Since MODVERDIR has a flat structure, it cannot avoid a race
+condition when somebody introduces a module name conflict.
+
+Kbuild now reads modules.order to get the list of all modules.
+
+The post-processing/installation stages will be more robust
+and simpler.
+
+
+
+Masahiro Yamada (11):
+  kbuild: do not create empty modules.order in the prepare stage
+  kbuild: get rid of kernel/ prefix from in-tree modules.{order,builtin}
+  kbuild: remove duplication from modules.order in sub-directories
+  scsi: remove pointless $(MODVERDIR)/$(obj)/53c700.ver
+  kbuild: modinst: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: modsign: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: modpost: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: create *.mod with full directory path and remove MODVERDIR
+  kbuild: remove the first line of *.mod files
+  kbuild: remove 'prepare1' target
+  kbuild: split out *.mod out of {single,multi}-used-m rules
+
+ .gitignore                  |  1 +
+ Documentation/dontdiff      |  1 +
+ Makefile                    | 33 +++++++++------------------------
+ drivers/scsi/Makefile       |  2 +-
+ scripts/Makefile.build      | 33 ++++++++++++++++-----------------
+ scripts/Makefile.modbuiltin |  2 +-
+ scripts/Makefile.modinst    |  5 +----
+ scripts/Makefile.modpost    | 17 +++++++++--------
+ scripts/Makefile.modsign    |  3 +--
+ scripts/adjust_autoksyms.sh | 11 ++++-------
+ scripts/mod/sumversion.c    | 23 ++++-------------------
+ scripts/modules-check.sh    |  2 +-
+ scripts/package/mkspec      |  2 +-
+ 13 files changed, 50 insertions(+), 85 deletions(-)
+
+-- 
+2.17.1
 
