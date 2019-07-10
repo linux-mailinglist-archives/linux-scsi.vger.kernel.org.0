@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF84464946
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jul 2019 17:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA6864931
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jul 2019 17:05:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728429AbfGJPF3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Jul 2019 11:05:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34750 "EHLO mail.kernel.org"
+        id S1728107AbfGJPFA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Jul 2019 11:05:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35172 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728015AbfGJPCz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 10 Jul 2019 11:02:55 -0400
+        id S1728111AbfGJPDP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 10 Jul 2019 11:03:15 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF98A2064B;
-        Wed, 10 Jul 2019 15:02:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 429CE208C4;
+        Wed, 10 Jul 2019 15:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1562770974;
+        s=default; t=1562770994;
         bh=LMO9SlGP21+nsQr6IidSCJbD4Vg7RTJcjTaiZ0yhzkI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UDDBcwz2cV0dsihAsC9uqu1/4RlcdrXBt504B0eJhcoU3LSwx0TUWB2MooTgd+gXz
-         s5cTmNe//iIUnCEOTINNO8HeRaOyfrAFmOMpNyQaKjElN0rnubcD9/QsjsknB8dRZO
-         wplQNDGvUBvwJgCINcQIS0QLlSWW7QjNGDpi+5yE=
+        b=yl0fX3Sub7+LL3WofA3xBrXj0LYHT+5740JHYorTwJEJM+fgGNHVkcwJyp9N+LSFi
+         7nSc+BjkZ8sDO02KGb/43EexgM1tGTtWZQS/TVIrZZGANbCPU/KBHMeQ0cet7M3B/k
+         7c1Ii1qg4dzN9CjNBav1VdMYZbnrASfL5eS7dQyk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Maurizio Lombardi <mlombard@redhat.com>,
@@ -30,12 +30,12 @@ Cc:     Maurizio Lombardi <mlombard@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 07/11] scsi: iscsi: set auth_protocol back to NULL if CHAP_A value is not supported
-Date:   Wed, 10 Jul 2019 11:02:34 -0400
-Message-Id: <20190710150240.6984-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 6/9] scsi: iscsi: set auth_protocol back to NULL if CHAP_A value is not supported
+Date:   Wed, 10 Jul 2019 11:02:56 -0400
+Message-Id: <20190710150301.7129-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190710150240.6984-1-sashal@kernel.org>
-References: <20190710150240.6984-1-sashal@kernel.org>
+In-Reply-To: <20190710150301.7129-1-sashal@kernel.org>
+References: <20190710150301.7129-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
