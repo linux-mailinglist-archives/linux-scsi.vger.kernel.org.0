@@ -2,39 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FEB64C14
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jul 2019 20:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FA764C67
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jul 2019 20:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbfGJS3F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Jul 2019 14:29:05 -0400
-Received: from m4a0041g.houston.softwaregrp.com ([15.124.2.87]:42463 "EHLO
-        m4a0041g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727242AbfGJS3E (ORCPT
+        id S1727821AbfGJSw0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Jul 2019 14:52:26 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49250 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727415AbfGJSw0 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 10 Jul 2019 14:29:04 -0400
-X-Greylist: delayed 1729 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jul 2019 14:28:58 EDT
-Received: FROM m4a0041g.houston.softwaregrp.com (15.120.17.147) BY m4a0041g.houston.softwaregrp.com WITH ESMTP;
- Wed, 10 Jul 2019 18:28:48 +0000
-Received: from M4W0334.microfocus.com (2002:f78:1192::f78:1192) by
- M4W0335.microfocus.com (2002:f78:1193::f78:1193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10; Wed, 10 Jul 2019 17:47:34 +0000
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (15.124.8.13) by
- M4W0334.microfocus.com (15.120.17.146) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10 via Frontend Transport; Wed, 10 Jul 2019 17:47:34 +0000
-Received: from BN6PR18MB1172.namprd18.prod.outlook.com (10.172.207.147) by
- BN6PR18MB1266.namprd18.prod.outlook.com (10.172.210.20) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.19; Wed, 10 Jul 2019 17:47:32 +0000
-Received: from BN6PR18MB1172.namprd18.prod.outlook.com
- ([fe80::38f3:d27c:6480:d073]) by BN6PR18MB1172.namprd18.prod.outlook.com
- ([fe80::38f3:d27c:6480:d073%3]) with mapi id 15.20.2052.020; Wed, 10 Jul 2019
- 17:47:31 +0000
-From:   Lee Duncan <LDuncan@suse.com>
-To:     Yang Bin <yang.bin18@zte.com.cn>
-CC:     "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        Wed, 10 Jul 2019 14:52:26 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6AIqNx7140731
+        for <linux-scsi@vger.kernel.org>; Wed, 10 Jul 2019 14:52:25 -0400
+Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tnjdt0pcq-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Wed, 10 Jul 2019 14:52:24 -0400
+Received: from localhost
+        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <jejb@linux.ibm.com>;
+        Wed, 10 Jul 2019 19:52:17 +0100
+Received: from b01cxnp23034.gho.pok.ibm.com (9.57.198.29)
+        by e11.ny.us.ibm.com (146.89.104.198) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 10 Jul 2019 19:52:14 +0100
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6AIqD2M53084638
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Jul 2019 18:52:13 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0B5CB28058;
+        Wed, 10 Jul 2019 18:52:13 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1FD82805A;
+        Wed, 10 Jul 2019 18:52:11 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.176.217])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 10 Jul 2019 18:52:11 +0000 (GMT)
+Subject: Re: [PATCH] Check sk before sendpage
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     Lee Duncan <LDuncan@suse.com>, Yang Bin <yang.bin18@zte.com.cn>
+Cc:     "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
         "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
         "cleech@redhat.com" <cleech@redhat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -42,70 +51,78 @@ CC:     "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
         "wang.liang82@zte.com.cn" <wang.liang82@zte.com.cn>,
         "wang.yi59@zte.com.cn" <wang.yi59@zte.com.cn>,
         "xue.zhihong@zte.com.cn" <xue.zhihong@zte.com.cn>
-Subject: Re: [PATCH] Check sk before sendpage
-Thread-Topic: [PATCH] Check sk before sendpage
-Thread-Index: AQHVNvHttUE0icmf0Uic+RrHE7gyJ6bEISiA
-Date:   Wed, 10 Jul 2019 17:47:31 +0000
-Message-ID: <1bc364ff-5bff-47ac-611a-f75c43f4bd1b@suse.com>
+Date:   Wed, 10 Jul 2019 11:52:11 -0700
+In-Reply-To: <1bc364ff-5bff-47ac-611a-f75c43f4bd1b@suse.com>
 References: <1562743809-31133-1-git-send-email-yang.bin18@zte.com.cn>
-In-Reply-To: <1562743809-31133-1-git-send-email-yang.bin18@zte.com.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: DB6PR07CA0011.eurprd07.prod.outlook.com
- (2603:10a6:6:2d::21) To BN6PR18MB1172.namprd18.prod.outlook.com
- (2603:10b6:404:eb::19)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=LDuncan@suse.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [73.25.22.216]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 556321fc-1cb4-4059-7736-08d7055eaea7
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN6PR18MB1266;
-x-ms-traffictypediagnostic: BN6PR18MB1266:
-x-microsoft-antispam-prvs: <BN6PR18MB1266F6A8BC0BF729D3DB010DDAF00@BN6PR18MB1266.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4125;
-x-forefront-prvs: 0094E3478A
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(4636009)(376002)(396003)(136003)(366004)(39860400002)(346002)(199004)(189003)(68736007)(8676002)(31686004)(316002)(6486002)(478600001)(14454004)(31696002)(186003)(5660300002)(36756003)(4326008)(6916009)(86362001)(25786009)(6436002)(6506007)(80792005)(66556008)(81166006)(26005)(7736002)(81156014)(486006)(2906002)(71200400001)(71190400001)(53546011)(229853002)(446003)(64756008)(76176011)(66946007)(386003)(99286004)(6116002)(54906003)(476003)(102836004)(6512007)(66476007)(6246003)(53936002)(11346002)(8936002)(2616005)(256004)(7416002)(4744005)(52116002)(66066001)(305945005)(66446008)(3846002)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:BN6PR18MB1266;H:BN6PR18MB1172.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: suse.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: LrqtibLnWL2tJF5btRWJ0Cw7rDxKCZNDs9c8kU/nRpW58exwVDexAD0PkRGRFNqDrIOIcgeCYDvVGZmzz8nIAlL/ss4TCCgjly0j4/B/z+Fj/qj/TjA+ocO1a7EuzRkIq9OGvR4xo00qykDorRRO0DxrMrjkcz5PpDCkMV9BL/YzPa3/6ujfqJ4WYkf290/2aRHj3qJcGDlZrDOC7W6x6/EutEsvBxGzDvbPtZn5VypuqJcUSgR5/cALGKn7ib+l5+SUGNzjl4PAIeOM1oLKgTK+VLY0Oy4sk4dt8McCDGcj8tGOld1rm5Jb5zx5/GbWPLvh34oJ1ctCouDPzR0jzl6176ZvEgc+BlfI6VZJBRBCZyb6QogKDvkOFbeQ9rgYb0R6bGI1fmWbjN9lT3ZbJkwgOpfNKLSsXxIAc+t+ccU=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F3B3AF6B642FCC40B3B4B1F936A8554A@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 556321fc-1cb4-4059-7736-08d7055eaea7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Jul 2019 17:47:31.7946
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 856b813c-16e5-49a5-85ec-6f081e13b527
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LDuncan@suse.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR18MB1266
-X-OriginatorOrg: suse.com
+         <1bc364ff-5bff-47ac-611a-f75c43f4bd1b@suse.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19071018-2213-0000-0000-000003AC1E9A
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011405; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000286; SDB=6.01230277; UDB=6.00647997; IPR=6.01011546;
+ MB=3.00027669; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-10 18:52:16
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19071018-2214-0000-0000-00005F2DE79F
+Message-Id: <1562784731.3213.98.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-10_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907100214
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-T24gNy8xMC8xOSAxMjozMCBBTSwgWWFuZyBCaW4gd3JvdGU6DQoNCj4gRnJvbTogIiBZYW5nIEJp
-biAiPHlhbmcuYmluMThAenRlLmNvbS5jbj4NCj4NCj4gQmVmb3JlIHhtaXQsaXNjc2kgbWF5IGRp
-c2Nvbm5lY3QganVzdCBub3cuDQo+IFNvIG11c3QgY2hlY2sgY29ubmVjdGlvbiBzb2NrIE5VTEwg
-b3Igbm90LG9yIGtlcm5lbCB3aWxsIGNyYXNoIGZvcg0KPiBhY2Nlc3NpbmcgTlVMTCBwb2ludGVy
-Lg0KPg0KPiBTaWduZWQtb2ZmLWJ5OiBZYW5nIEJpbiA8eWFuZy5iaW4xOEB6dGUuY29tLmNuPg0K
-PiAtLS0NCj4gIGRyaXZlcnMvc2NzaS9pc2NzaV90Y3AuYyB8IDMgKysrDQo+ICAxIGZpbGUgY2hh
-bmdlZCwgMyBpbnNlcnRpb25zKCspDQo+DQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvaXNj
-c2lfdGNwLmMgYi9kcml2ZXJzL3Njc2kvaXNjc2lfdGNwLmMNCj4gaW5kZXggN2JlZGJlOC4uYTU5
-YzQ5ZiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zY3NpL2lzY3NpX3RjcC5jDQo+ICsrKyBiL2Ry
-aXZlcnMvc2NzaS9pc2NzaV90Y3AuYw0KPiBAQCAtMjY0LDYgKzI2NCw5IEBAIHN0YXRpYyBpbnQg
-aXNjc2lfc3dfdGNwX3htaXRfc2VnbWVudChzdHJ1Y3QgaXNjc2lfdGNwX2Nvbm4gKnRjcF9jb25u
-LA0KPiAgCXVuc2lnbmVkIGludCBjb3BpZWQgPSAwOw0KPiAgCWludCByID0gMDsNCj4gIA0KPiAr
-CWlmICghc2spDQo+ICsJCXJldHVybiAtRU5PVENPTk47DQo+ICsNCj4gIAl3aGlsZSAoIWlzY3Np
-X3RjcF9zZWdtZW50X2RvbmUodGNwX2Nvbm4sIHNlZ21lbnQsIDAsIHIpKSB7DQo+ICAJCXN0cnVj
-dCBzY2F0dGVybGlzdCAqc2c7DQo+ICAJCXVuc2lnbmVkIGludCBvZmZzZXQsIGNvcHk7DQo+DQoN
-CklmIHRoZSBzb2NrZXQgY2FuIGJlIGNsb3NlZCByaWdodCBiZWZvcmUgaXNjc2lfc3dfdGNwX3ht
-aXRfc2VnbWVudCgpIGlzDQpjYWxsZWQsIGNhbiBpdCBiZSBjYWxsZWQgaW4gdGhlIG1pZGRsZSBv
-ZiBzZW5kaW5nIHNlZ21lbnRzPyAoSW4gd2hpY2gNCmNhc2UgdGhlIGNoZWNrIHdvdWxkIGhhdmUg
-dG8gYmUgaW4gdGhlIHdoaWxlIGxvb3AuKQ0KDQotLSANCg0KTGVlIER1bmNhbg0KDQo=
+On Wed, 2019-07-10 at 17:47 +0000, Lee Duncan wrote:
+> On 7/10/19 12:30 AM, Yang Bin wrote:
+> 
+> > From: " Yang Bin "<yang.bin18@zte.com.cn>
+> > 
+> > Before xmit,iscsi may disconnect just now.
+> > So must check connection sock NULL or not,or kernel will crash for
+> > accessing NULL pointer.
+> > 
+> > Signed-off-by: Yang Bin <yang.bin18@zte.com.cn>
+> > ---
+> >  drivers/scsi/iscsi_tcp.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+> > index 7bedbe8..a59c49f 100644
+> > --- a/drivers/scsi/iscsi_tcp.c
+> > +++ b/drivers/scsi/iscsi_tcp.c
+> > @@ -264,6 +264,9 @@ static int iscsi_sw_tcp_xmit_segment(struct
+> > iscsi_tcp_conn *tcp_conn,
+> >  	unsigned int copied = 0;
+> >  	int r = 0;
+> >  
+> > +	if (!sk)
+> > +		return -ENOTCONN;
+> > +
+> >  	while (!iscsi_tcp_segment_done(tcp_conn, segment, 0, r)) {
+> >  		struct scatterlist *sg;
+> >  		unsigned int offset, copy;
+> > 
+> 
+> If the socket can be closed right before iscsi_sw_tcp_xmit_segment()
+> is called, can it be called in the middle of sending segments? (In
+> which case the check would have to be in the while loop.)
+
+I think the important point is: is this an actual observed bug or just
+a theoretical problem?
+
+The reason for asking is this call is controlled directly by the
+ISCSI_UEVENT_DESTROY_CONN event sent by the iscsi daemon.  Obviously if
+the daemon goes haywire and doesn't shut down the connection before
+sending the destroy event, we may get the crash, but I would be
+inclined to say fix the daemon.
+
+James
+
