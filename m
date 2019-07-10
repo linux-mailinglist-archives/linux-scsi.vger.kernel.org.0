@@ -2,127 +2,200 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FA764C67
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jul 2019 20:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CED64ED4
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 00:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727821AbfGJSw0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Jul 2019 14:52:26 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:49250 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727415AbfGJSw0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 10 Jul 2019 14:52:26 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6AIqNx7140731
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Jul 2019 14:52:25 -0400
-Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tnjdt0pcq-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Jul 2019 14:52:24 -0400
-Received: from localhost
-        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <jejb@linux.ibm.com>;
-        Wed, 10 Jul 2019 19:52:17 +0100
-Received: from b01cxnp23034.gho.pok.ibm.com (9.57.198.29)
-        by e11.ny.us.ibm.com (146.89.104.198) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 10 Jul 2019 19:52:14 +0100
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6AIqD2M53084638
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 10 Jul 2019 18:52:13 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0B5CB28058;
-        Wed, 10 Jul 2019 18:52:13 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1FD82805A;
-        Wed, 10 Jul 2019 18:52:11 +0000 (GMT)
-Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.176.217])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed, 10 Jul 2019 18:52:11 +0000 (GMT)
-Subject: Re: [PATCH] Check sk before sendpage
-From:   James Bottomley <jejb@linux.ibm.com>
-To:     Lee Duncan <LDuncan@suse.com>, Yang Bin <yang.bin18@zte.com.cn>
-Cc:     "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "cleech@redhat.com" <cleech@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "wang.liang82@zte.com.cn" <wang.liang82@zte.com.cn>,
-        "wang.yi59@zte.com.cn" <wang.yi59@zte.com.cn>,
-        "xue.zhihong@zte.com.cn" <xue.zhihong@zte.com.cn>
-Date:   Wed, 10 Jul 2019 11:52:11 -0700
-In-Reply-To: <1bc364ff-5bff-47ac-611a-f75c43f4bd1b@suse.com>
-References: <1562743809-31133-1-git-send-email-yang.bin18@zte.com.cn>
-         <1bc364ff-5bff-47ac-611a-f75c43f4bd1b@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
+        id S1727619AbfGJW4O (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Jul 2019 18:56:14 -0400
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:46078 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726708AbfGJW4O (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Jul 2019 18:56:14 -0400
+Received: by mail-pl1-f202.google.com with SMTP id y9so2061957plp.12
+        for <linux-scsi@vger.kernel.org>; Wed, 10 Jul 2019 15:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=32EvgBFnAv8ONpLqCSd3ioyTEVOAmc+wOjmDzUT8IVQ=;
+        b=U98632Z82hYy5Krk4Woknk4M3J9Oxbj8OLfRcRkOhGhPsLAgvlQ8rL9cjAJhLQGT0e
+         nCfY2aMLctKH69TtquMoZpasiCSaNu9WP3yBAzUUbRQV4pKQdoUmylbSx427Z6QJe+Zc
+         XUyFaop39sDlqJv7rWzmRkcjpxyL+cehPcD3+KZr4BOSB2t4QIKV2J9aUANKGFF0b4RV
+         SEPT/+e+lPQTrLb0lC8jN6riSephuN1tXaX5Jqeb9/n+hVCc1tFDWqp8O6PDklw8PheP
+         TahcnXsLHuoRbvMEJGYz1WRDNelCbzAdlcE/6FLE+qvY21MZ2HRfX3yQtfzql02E8Qjb
+         zszA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=32EvgBFnAv8ONpLqCSd3ioyTEVOAmc+wOjmDzUT8IVQ=;
+        b=uD8iWxkZBKKg/oo5aiZG8MQ0zkf78kEmjC24b2M+i4otF2PMiUvoqwHfXaHw6o8W78
+         2Z6oEDdUYmAXaBJe6cstqI+czsY0EPsr1ESPJCRHYP8gE0LQ0ouag7MnufLovfMxtzlE
+         wr/cmhL9/M9OCkJmqwZGUGrRysWBUjbgWI5qtpEWghNuQzIqaEBbYBC65y9xn2yTaTll
+         VFdvKvimz2P3WlMwrOgnz0h1XjSB1BJmlIr95O63zDTo9AY3uQIBMdVZE69IxUP7C4vC
+         3KSNz11SID+Lb1hdj9sJ8FvZJ6P55LpU6sbku6WR3l0PphycacFkYcWji+hgp/VB/yuq
+         76nQ==
+X-Gm-Message-State: APjAAAVNjRsMAiuvhJoEsKNK4uGOBFl0gSfjV1tuCACUniNYh+IXlBJN
+        ZvZjfr0Op32Bly6OTwVosQjf6PpFl/I=
+X-Google-Smtp-Source: APXvYqzdWJGCD39Cu1PKryLNuGp95rnlt/uZL9RjQk8mERUDsK4hp6quJ1mm2cPMcmKqqfHIDneVHcjisAg=
+X-Received: by 2002:a63:b904:: with SMTP id z4mr749685pge.388.1562799373417;
+ Wed, 10 Jul 2019 15:56:13 -0700 (PDT)
+Date:   Wed, 10 Jul 2019 15:56:01 -0700
+Message-Id: <20190710225609.192252-1-satyat@google.com>
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19071018-2213-0000-0000-000003AC1E9A
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011405; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01230277; UDB=6.00647997; IPR=6.01011546;
- MB=3.00027669; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-10 18:52:16
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19071018-2214-0000-0000-00005F2DE79F
-Message-Id: <1562784731.3213.98.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-10_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907100214
+X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+Subject: [PATCH v3 0/8] Inline Encryption Support
+From:   Satya Tangirala <satyat@google.com>
+To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Parshuram Raju Thombare <pthombar@cadence.com>,
+        Ladvine D Almeida <ladvine.dalmeida@synopsys.com>,
+        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
+        Kuohong Wang <kuohong.wang@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Satya Tangirala <satyat@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 2019-07-10 at 17:47 +0000, Lee Duncan wrote:
-> On 7/10/19 12:30 AM, Yang Bin wrote:
-> 
-> > From: " Yang Bin "<yang.bin18@zte.com.cn>
-> > 
-> > Before xmit,iscsi may disconnect just now.
-> > So must check connection sock NULL or not,or kernel will crash for
-> > accessing NULL pointer.
-> > 
-> > Signed-off-by: Yang Bin <yang.bin18@zte.com.cn>
-> > ---
-> >  drivers/scsi/iscsi_tcp.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-> > index 7bedbe8..a59c49f 100644
-> > --- a/drivers/scsi/iscsi_tcp.c
-> > +++ b/drivers/scsi/iscsi_tcp.c
-> > @@ -264,6 +264,9 @@ static int iscsi_sw_tcp_xmit_segment(struct
-> > iscsi_tcp_conn *tcp_conn,
-> >  	unsigned int copied = 0;
-> >  	int r = 0;
-> >  
-> > +	if (!sk)
-> > +		return -ENOTCONN;
-> > +
-> >  	while (!iscsi_tcp_segment_done(tcp_conn, segment, 0, r)) {
-> >  		struct scatterlist *sg;
-> >  		unsigned int offset, copy;
-> > 
-> 
-> If the socket can be closed right before iscsi_sw_tcp_xmit_segment()
-> is called, can it be called in the middle of sending segments? (In
-> which case the check would have to be in the while loop.)
+This patch series adds support for Inline Encryption to the block layer,
+UFS, fscrypt and f2fs.
 
-I think the important point is: is this an actual observed bug or just
-a theoretical problem?
+Inline Encryption hardware allows software to specify an encryption context
+(an encryption key, crypto algorithm, data unit num, data unit size, etc.)
+along with a data transfer request to a storage device, and the inline
+encryption hardware will use that context to en/decrypt the data. The
+inline encryption hardware is part of the storage device, and it
+conceptually sits on the data path between system memory and the storage
+device. Inline Encryption hardware has become increasingly common, and we
+want to support it in the kernel.
 
-The reason for asking is this call is controlled directly by the
-ISCSI_UEVENT_DESTROY_CONN event sent by the iscsi daemon.  Obviously if
-the daemon goes haywire and doesn't shut down the connection before
-sending the destroy event, we may get the crash, but I would be
-inclined to say fix the daemon.
+Inline Encryption hardware implementations often function around the
+concept of a limited number of "keyslots", which can hold an encryption
+context each. The storage device can be directed to en/decrypt any
+particular request with the encryption context stored in any particular
+keyslot.
 
-James
+Patch 1 introduces a Keyslot Manager to efficiently manage keyslots.
+The keyslot manager also functions as the interface that blk-crypto
+(introduced in Path 3), will use to program keys into inline encryption
+hardware. For more information on the Keyslot Manager, refer to
+documentation found in block/keyslot-manager.c and linux/keyslot-manager.h.
+
+Patch 2 introduces struct bio_crypt_ctx, and a ptr to one in struct bio,
+which allows struct bio to represent an encryption context that can be
+passed down the storage stack from the filesystem layer to the storage
+driver.
+
+Patch 3 introduces blk-crypto. Blk-crypto delegates crypto operations to
+inline encryption hardware when available, and also contains a software
+fallback to the kernel crypto API. Blk-crypto also makes it possible for
+layered devices like device mapper to make use of inline encryption
+hardware. Given that blk-crypto works as a software fallback, we are
+considering removing file content en/decryption from fscrypt and simply
+using blk-crypto in a future patch. For more details on blk-crypto, refer
+to Documentation/block/blk-crypto.txt.
+
+Patches 4-6 add support for inline encryption into the UFS driver according
+to the JEDEC UFS HCI v2.1 specification. Inline encryption support for
+other drivers (like eMMC) may be added in the same way - the device driver
+should set up a Keyslot Manager in the device's request_queue (refer to
+the UFS crypto additions in ufshcd-crypto.c and ufshcd.c for an example).
+
+Patches 7 and 8 add support to fscrypt and f2fs, so that we have
+a complete stack that can make use of inline encryption.
+
+There have been a few patch sets addressing Inline Encryption Support in
+the past. Briefly, this patch set differs from those as follows:
+
+1) "crypto: qce: ice: Add support for Inline Crypto Engine"
+is specific to certain hardware, while our patch set's Inline
+Encryption support for UFS is implemented according to the JEDEC UFS
+specification.
+
+2) "scsi: ufs: UFS Host Controller crypto changes" registers inline
+encryption support as a kernel crypto algorithm. Our patch views inline
+encryption as being fundamentally different from a generic crypto
+provider (in that inline encryption is tied to a device), and so does
+not use the kernel crypto API to represent inline encryption hardware.
+
+3) "scsi: ufs: add real time/inline crypto support to UFS HCD" requires
+the device mapper to work - our patch does not.
+
+Changes v2 => v3:
+ - Overhauled keyslot manager's get keyslot logic and optimized LRU.
+ - Block crypto en/decryption fallback now supports data unit sizes
+   that divide each of the bio's segment's lengths (instead of requiring
+   each segment's length to be the same as the data unit size).
+ - fscrypt master key is now keyed additionally by super_block and
+   ci_ctfm != NULL.
+ - all references of "hw encryption" are replaced by inline encryption.
+ - address various other review comments from Eric.
+
+Changes v1 => v2:
+ - Block layer and UFS changes are split into 3 patches each.
+ - We now only have a ptr to a struct bio_crypt_ctx in struct bio, instead
+   of the struct itself.
+ - struct bio_crypt_ctx no longer has flags.
+ - blk-crypto now correctly handles the case when it fails to init
+   (because of insufficient memory), but kernel continues to boot.
+ - ufshcd-crypto now works on big endian cpus.
+ - Many cleanups.
+
+Satya Tangirala (8):
+  block: Keyslot Manager for Inline Encryption
+  block: Add encryption context to struct bio
+  block: blk-crypto for Inline Encryption
+  scsi: ufs: UFS driver v2.1 spec crypto additions
+  scsi: ufs: UFS crypto API
+  scsi: ufs: Add inline encryption support to UFS
+  fscrypt: wire up fscrypt to use blk-crypto
+  f2fs: Wire up f2fs to use inline encryption via fscrypt
+
+ Documentation/block/inline-encryption.txt | 185 +++++++
+ block/Kconfig                             |   8 +
+ block/Makefile                            |   2 +
+ block/bio-crypt-ctx.c                     | 122 +++++
+ block/bio.c                               |  16 +-
+ block/blk-core.c                          |  11 +-
+ block/blk-crypto.c                        | 585 ++++++++++++++++++++++
+ block/blk-merge.c                         |  34 +-
+ block/bounce.c                            |   9 +-
+ block/keyslot-manager.c                   | 314 ++++++++++++
+ drivers/md/dm.c                           |  15 +-
+ drivers/scsi/ufs/Kconfig                  |  10 +
+ drivers/scsi/ufs/Makefile                 |   1 +
+ drivers/scsi/ufs/ufshcd-crypto.c          | 435 ++++++++++++++++
+ drivers/scsi/ufs/ufshcd-crypto.h          |  86 ++++
+ drivers/scsi/ufs/ufshcd.c                 |  84 +++-
+ drivers/scsi/ufs/ufshcd.h                 |  29 ++
+ drivers/scsi/ufs/ufshci.h                 |  67 ++-
+ fs/crypto/Kconfig                         |   6 +
+ fs/crypto/bio.c                           | 138 ++++-
+ fs/crypto/crypto.c                        |   4 +
+ fs/crypto/fscrypt_private.h               |  11 +
+ fs/crypto/keyinfo.c                       |  94 +++-
+ fs/crypto/policy.c                        |  10 +
+ fs/f2fs/data.c                            |  83 ++-
+ fs/f2fs/super.c                           |  13 +-
+ include/linux/bio.h                       | 208 ++++++++
+ include/linux/blk-crypto.h                |  40 ++
+ include/linux/blk_types.h                 |   7 +
+ include/linux/blkdev.h                    |   6 +
+ include/linux/fscrypt.h                   |  62 +++
+ include/linux/keyslot-manager.h           |  75 +++
+ include/uapi/linux/fs.h                   |   3 +-
+ 33 files changed, 2697 insertions(+), 76 deletions(-)
+ create mode 100644 Documentation/block/inline-encryption.txt
+ create mode 100644 block/bio-crypt-ctx.c
+ create mode 100644 block/blk-crypto.c
+ create mode 100644 block/keyslot-manager.c
+ create mode 100644 drivers/scsi/ufs/ufshcd-crypto.c
+ create mode 100644 drivers/scsi/ufs/ufshcd-crypto.h
+ create mode 100644 include/linux/blk-crypto.h
+ create mode 100644 include/linux/keyslot-manager.h
+
+-- 
+2.22.0.410.gd8fdbe21b5-goog
 
