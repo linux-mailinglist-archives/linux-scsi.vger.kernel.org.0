@@ -2,75 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0C1646E2
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jul 2019 15:22:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA99B6471C
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jul 2019 15:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbfGJNWL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Jul 2019 09:22:11 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42711 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725956AbfGJNWL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Jul 2019 09:22:11 -0400
-Received: by mail-wr1-f65.google.com with SMTP id a10so2444112wrp.9
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Jul 2019 06:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloud.ionos.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iuCuePR1Hu7EgnZWVvGENfWaqsk17G7vC4PclLSX4FU=;
-        b=emAfHO/5J/fj+ibbMe9RY6mRAE6Rif/6Mm/RyvEmo7WRwz8LzoF+zvl0xeX4/EZwVs
-         ZSds5GDyd73K4n15pGghz0OiLrby8xMhhRB3FWlnOjVr8lDVcrUGnXF1LHMRkiE+YvPX
-         4rF7cF5YE6x1qEo11TmDAt6ADReEfFPW0SHf1xq9nPQnhA+qSPTOJH4s466lBXZhBuX1
-         ovt6BY4wc9zzXlqD116GsLNTy6uSvPLCf6/GZ0R3S0cHIZ63kkG3bhnV8WevdLosRnZE
-         /of4px1Gyxzo1ILwwKBjl+ncKcqvcbYGQwsTdrXvGs24ihKmG9FQa+CTY8O+jvx1pDM8
-         1DhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iuCuePR1Hu7EgnZWVvGENfWaqsk17G7vC4PclLSX4FU=;
-        b=W5OA9UPCbmmLq8LZp7v3qDnD1M8oJBzFqRuPWxC5flM0BP3pyuVf/jsT9gmSOiO5fX
-         z1MCKeNTChc95K9qJGE2vwD0uztDU23kBI7QU05yw+XElCThx7Gg2nrbiiomPp7+rUbC
-         219MaUq748ic/ekq47oPEyPRSzr2smv2p8Nq6mhzJC7QC7HaiOqlYnygTKColzvPX3XD
-         r3sHdNZoYIC72u4pXmcCk5Mxv9pytBgMemRUqoA6ShADilDt+LvpYNr/1B/2gEWgzBwy
-         6J/QWbwx49fbjt4ogaFTCVGk/keHdJq1UaqfPepLH+y5nOKbUHKpjw0cfRMILyiQ10qa
-         adrA==
-X-Gm-Message-State: APjAAAXeqRgG1/rBGZYOBB79m4eEhUtiwDpxr8ZGgrC4t7/CWAOx4e5r
-        ghdklzITYJuQQmGqM9JjbkcbDSUDumlN6Zy5hK4GKpemVb8=
-X-Google-Smtp-Source: APXvYqzFd163g0WrFppDIN2YqJDvTQPbR9WWhUGoiMoHhU2OProDoAD7jnH/nrtGGPMHpIi1rYBd1uugiYlxY1oi5YI=
-X-Received: by 2002:a5d:4b0b:: with SMTP id v11mr33131509wrq.202.1562764929657;
- Wed, 10 Jul 2019 06:22:09 -0700 (PDT)
+        id S1727621AbfGJNid (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 10 Jul 2019 09:38:33 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:6790 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727112AbfGJNib (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Jul 2019 09:38:31 -0400
+X-UUID: 4766aa64a9854b878be08da1a446ac06-20190710
+X-UUID: 4766aa64a9854b878be08da1a446ac06-20190710
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 172332617; Wed, 10 Jul 2019 21:38:24 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 10 Jul 2019 21:38:23 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 10 Jul 2019 21:38:23 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <pedrom.sousa@synopsys.com>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <evgreen@chromium.org>, <beanhuo@micron.com>,
+        <marc.w.gonzalez@free.fr>, <ygardi@codeaurora.org>,
+        <subhashj@codeaurora.org>, <sthumma@codeaurora.org>,
+        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v3 0/4] scsi: ufs: Provide fatal and auto-hibern8 error history
+Date:   Wed, 10 Jul 2019 21:38:17 +0800
+Message-ID: <1562765901-18328-1-git-send-email-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-References: <20190709100050.6947-1-deepak.ukey@microchip.com> <20190709100050.6947-2-deepak.ukey@microchip.com>
-In-Reply-To: <20190709100050.6947-2-deepak.ukey@microchip.com>
-From:   Jinpu Wang <jinpu.wang@cloud.ionos.com>
-Date:   Wed, 10 Jul 2019 15:21:58 +0200
-Message-ID: <CAMGffEkOAqv=+3hTObkNX5t5qn90Zdw33QxFcOMS61ziFMqfzQ@mail.gmail.com>
-Subject: Re: [PATCH V2 1/3] pm80xx : Fixed kernel panic during error recovery
- for SATA drive.
-To:     Deepak Ukey <deepak.ukey@microchip.com>
-Cc:     Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
-        Vasanthalakshmi.Tharmarajan@microchip.com, Viswas.G@microchip.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jul 9, 2019 at 12:00 PM Deepak Ukey <deepak.ukey@microchip.com> wrote:
->
-> Disabling the SATA drive interface cause kernel panic. When the drive
-> Interface is disabled, device should be deregistered after aborting
-> all pending IO's. Also changed the port recovery timeout to 10000 ms
-> for PM8006 controller.
->
->         V2:
->                 -Acquired spin lock after aborting all requests.
->
-> Signed-off-by: Deepak Ukey <deepak.ukey@microchip.com>
-> Signed-off-by: Viswas G <Viswas.G@microchip.com>
-There other 2 patches already picked up by Martin.
+This patchset provides more information of fatal errros and auto-hibern8 errors
+to improve debugging by keeping their error history as completed as possible.
 
-This new version looks fine. Thanks, Deepak.
-Reviewed-by:  Jack Wang <jinpu.wang@cloud.ionos.com>
+Thanks Avri so much for prompt reviewing patchset v1.
+
+I would like to post new version to add one more patch "scsi: ufs: Add history of fatal events"
+to provide history for "non-interrupt-based" errors and abnormal events as well.
+
+Example of fatal errors,
+- Link startup error
+- Suspend error
+- Resume error
+
+Example of abnormal events,
+- Task or request abort
+- Device reset (now equals to Logical Unit Reset)
+- Host reset
+
+Changes in v3:
+- Fix one missing place to track link startup error (Avri Altman)
+- Add history of device reset events (Avri Altman)
+- Add history of host reset events
+
+Changes in v2:
+- Add new patch "scsi: ufs: Add history of fatal events"
+
+Stanley Chu (4):
+  scsi: ufs: Change names related to error history
+  scsi: ufs: Add fatal and auto-hibern8 error history
+  scsi: ufs: Do not reset error history during host reset
+  scsi: ufs: Add history of fatal events
+
+ drivers/scsi/ufs/ufshcd.c | 94 ++++++++++++++++++++++++---------------
+ drivers/scsi/ufs/ufshcd.h | 42 ++++++++++++-----
+ 2 files changed, 90 insertions(+), 46 deletions(-)
+
+-- 
+2.18.0
+
