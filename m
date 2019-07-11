@@ -2,99 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C749564FC3
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 03:05:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A1B65033
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 04:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727866AbfGKBFA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Jul 2019 21:05:00 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:53401 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726708AbfGKBFA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Jul 2019 21:05:00 -0400
-Received: by mail-wm1-f67.google.com with SMTP id x15so3988832wmj.3
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Jul 2019 18:04:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2IfhzGaTMvR1JoBV5xWHOxO+UIF3B/TY2O/RfSWHRnA=;
-        b=uT1qSazn70ZQddcoZ26D5t2b1na+DrLMLGHaUiJ08qaKIh3NdBYIM5V/8hpuOotEML
-         VBmMLmNuHLDTxVqQaOnxdDllNP0jtnZVdBL4yvXFPgGqF6BOD06uO1p9f1desq7OPJ1k
-         Gx8FnMW2yJGnRsC8+TAdKI8UcxGYUwCsjXPnLp/0Q2w2zHz31HIE1uq8uz7NVQYTNU/Z
-         QVi/PPxkBsv2Lb8j1RfD7DVytwn6gyiupwRDFOCkbn1OBqBVKAiVMLRZJfSItSXwJDWU
-         25TY9t/qxh2uidL6r2r3i5wP7CaHTlwIRh1qzluPnolyGev6ZfdYA8kGnh0ld6UYHmtF
-         8k2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2IfhzGaTMvR1JoBV5xWHOxO+UIF3B/TY2O/RfSWHRnA=;
-        b=ce67nGYmQzDRy+/KS1zM5Q2/pwo6B2+H9YvuY7TadSCNQociL8790OijaoNFHxIsBn
-         bMDTZeHn0g1J57veM2UY32DVLounv2QH/O8IXY9V/6K1tavb1IPuTaWYuAJjjlmlKHDz
-         h2N3nOUsobbzJDZVU/9IhE9t21TE6Al/wYOJj4lFzOl4nWI2iyTl4hM0CfXLlonm6ahj
-         4xdSxBxUPofgt70OYe1O6QzgD1pok93IwKXeViJftDcDVDal6d8mMoapKLeX4pwNApsA
-         Az1jnh1hBxjcUe26DSk48T3sjCiqQHwHGceaRkyOreICt0ZcuiMplAor5vZEifi2OtDQ
-         tTcQ==
-X-Gm-Message-State: APjAAAUtIaXTGe/Z9q7Nxq4IH0N9ZMCOqhOGp1vtIj2PJ1zRlvT7DW1z
-        AVouRjifQ5zoEyvS+/9SBZTb+DAjHMGUsJPXuAM=
-X-Google-Smtp-Source: APXvYqy/mA8amvZpJht5/7/95orE0LZyTM55YTzcw4pwmDSz/0Nxgb4zJEn0Hewo7827BBuI2fexG1Hpno7AnfZCZQg=
-X-Received: by 2002:a1c:a7c6:: with SMTP id q189mr480500wme.146.1562807099003;
- Wed, 10 Jul 2019 18:04:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190702112705.30458-1-mlombard@redhat.com>
-In-Reply-To: <20190702112705.30458-1-mlombard@redhat.com>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Thu, 11 Jul 2019 09:04:47 +0800
-Message-ID: <CACVXFVOCAuitQDiykJeTTHPp2uxMpBz=sd=2CzAQoBxJX4_=BA@mail.gmail.com>
-Subject: Re: [PATCH] scsi: use scmd_printk() to print which command timed out
-To:     Maurizio Lombardi <mlombard@redhat.com>
-Cc:     jejb@linux.ibm.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>
+        id S1726048AbfGKCiG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 10 Jul 2019 22:38:06 -0400
+Received: from mail.wl.linuxfoundation.org ([198.145.29.98]:60016 "EHLO
+        mail.wl.linuxfoundation.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725977AbfGKCiG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 10 Jul 2019 22:38:06 -0400
+Received: from mail.wl.linuxfoundation.org (localhost [127.0.0.1])
+        by mail.wl.linuxfoundation.org (Postfix) with ESMTP id 4FC392875F
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Jul 2019 02:38:05 +0000 (UTC)
+Received: by mail.wl.linuxfoundation.org (Postfix, from userid 486)
+        id 441E7287E3; Thu, 11 Jul 2019 02:38:05 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
+        pdx-wl-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=2.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS autolearn=ham version=3.3.1
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 204119] scsi_mod: Could not allocate 4104 bytes percpu data
+Date:   Thu, 11 Jul 2019 02:38:03 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: IO/Storage
+X-Bugzilla-Component: SCSI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bvanassche@acm.org
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-204119-11613-YKQi5y2Jrx@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-204119-11613@https.bugzilla.kernel.org/>
+References: <bug-204119-11613@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jul 2, 2019 at 7:28 PM Maurizio Lombardi <mlombard@redhat.com> wrote:
->
-> With a possibly faulty disk the following messages may appear in the logs:
->
-> kernel: sd 0:0:9:0: timing out command, waited 180s
-> kernel: sd 0:0:9:0: timing out command, waited 20s
-> kernel: sd 0:0:9:0: timing out command, waited 20s
-> kernel: sd 0:0:9:0: timing out command, waited 60s
-> kernel: sd 0:0:9:0: timing out command, waited 20s
->
-> This is not very informative because it's not possible to identify
-> the command that timed out.
->
-> This patch replaces sdev_printk() with scmd_printk().
->
-> Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
-> ---
->  drivers/scsi/scsi_lib.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index f6437b98296b..97ed233fa469 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -1501,7 +1501,7 @@ static void scsi_softirq_done(struct request *rq)
->         disposition = scsi_decide_disposition(cmd);
->         if (disposition != SUCCESS &&
->             time_before(cmd->jiffies_at_alloc + wait_for, jiffies)) {
-> -               sdev_printk(KERN_ERR, cmd->device,
-> +               scmd_printk(KERN_ERR, cmd,
->                             "timing out command, waited %lus\n",
->                             wait_for/HZ);
->                 disposition = SUCCESS;
-> --
-> Maurizio Lombardi
->
+https://bugzilla.kernel.org/show_bug.cgi?id=204119
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+--- Comment #8 from Bart Van Assche (bvanassche@acm.org) ---
+Thanks for testing! I will submit a more elaborate patch after the merge window
+has closed.
 
-Thanks,
-Ming Lei
+-- 
+You are receiving this mail because:
+You are the assignee for the bug.
