@@ -2,65 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A1B65033
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 04:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E58651A3
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 07:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726048AbfGKCiG convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 10 Jul 2019 22:38:06 -0400
-Received: from mail.wl.linuxfoundation.org ([198.145.29.98]:60016 "EHLO
-        mail.wl.linuxfoundation.org" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725977AbfGKCiG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 10 Jul 2019 22:38:06 -0400
-Received: from mail.wl.linuxfoundation.org (localhost [127.0.0.1])
-        by mail.wl.linuxfoundation.org (Postfix) with ESMTP id 4FC392875F
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Jul 2019 02:38:05 +0000 (UTC)
-Received: by mail.wl.linuxfoundation.org (Postfix, from userid 486)
-        id 441E7287E3; Thu, 11 Jul 2019 02:38:05 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
-        pdx-wl-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=2.0 tests=BAYES_00,NO_RECEIVED,
-        NO_RELAYS autolearn=ham version=3.3.1
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 204119] scsi_mod: Could not allocate 4104 bytes percpu data
-Date:   Thu, 11 Jul 2019 02:38:03 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: IO/Storage
-X-Bugzilla-Component: SCSI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bvanassche@acm.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-204119-11613-YKQi5y2Jrx@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-204119-11613@https.bugzilla.kernel.org/>
-References: <bug-204119-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1727680AbfGKFtL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jul 2019 01:49:11 -0400
+Received: from condef-01.nifty.com ([202.248.20.66]:25854 "EHLO
+        condef-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726119AbfGKFtK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 01:49:10 -0400
+Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-01.nifty.com with ESMTP id x6B5kDqg025645
+        for <linux-scsi@vger.kernel.org>; Thu, 11 Jul 2019 14:46:14 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id x6B5ip8K031345;
+        Thu, 11 Jul 2019 14:44:52 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com x6B5ip8K031345
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1562823892;
+        bh=dURe8OXsJ3VqMwo+bDGqg5UHB/JeoagK5A52yE/eJIQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o8B7IsVTM7O8ebdGZ8tXaasbQBj5NmkLDOc3iIhjP9359znVcnQTuUdOK6UC6mmXE
+         45Zgwg/FsLQbgWRTlt/cU4aJJN8/PTsL9ZG999cPSmXIOI7U3JpBnqRIntmkQU7Qcy
+         ndcdt66nJrGMd6XGsEI3b7RUskh67AzBy420AzW8vMIpKeodw3IM5blZI2k7ftRXMZ
+         kj/VXexLQ8POkXfh58JLCoFBvE4fR4AzvMNOB/oxL5n78EgsV11LNlNYsIUoV7O+9a
+         40u4AMEut6WnHxXuzOoxbEO/QqBnE1/vLBWaqQaHOa6mgs8heu+mi8jCXRawzjhtj9
+         6IUAcLtXUswvA==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Sam Ravnborg <sam@ravnborg.org>, Nicolas Pitre <nico@fluxnic.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-scsi@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Michal Marek <michal.lkml@markovi.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: [PATCH v2 00/11] kbuild: create *.mod with directory path and remove MODVERDIR
+Date:   Thu, 11 Jul 2019 14:44:23 +0900
+Message-Id: <20190711054434.1177-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=204119
 
---- Comment #8 from Bart Van Assche (bvanassche@acm.org) ---
-Thanks for testing! I will submit a more elaborate patch after the merge window
-has closed.
+This series kills the long standing MODVERDIR.
+
+Since MODVERDIR has a flat structure, it cannot avoid a race
+condition when somebody introduces a module name conflict.
+
+Kbuild now reads modules.order to get the list of all modules.
+
+The post-processing/installation stages will be more robust
+and simpler.
+
+
+Masahiro Yamada (11):
+  kbuild: do not create empty modules.order in the prepare stage
+  kbuild: get rid of kernel/ prefix from in-tree modules.{order,builtin}
+  kbuild: remove duplication from modules.order in sub-directories
+  scsi: remove pointless $(MODVERDIR)/$(obj)/53c700.ver
+  kbuild: modinst: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: modsign: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: modpost: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: create *.mod with full directory path and remove MODVERDIR
+  kbuild: remove the first line of *.mod files
+  kbuild: remove 'prepare1' target
+  kbuild: split out *.mod out of {single,multi}-used-m rules
+
+ .gitignore                  |  1 +
+ Documentation/dontdiff      |  1 +
+ Makefile                    | 36 ++++++++++--------------------------
+ drivers/scsi/Makefile       |  2 +-
+ scripts/Makefile.build      | 33 +++++++++++++++------------------
+ scripts/Makefile.modbuiltin |  2 +-
+ scripts/Makefile.modinst    |  5 +----
+ scripts/Makefile.modpost    | 17 +++++++++--------
+ scripts/Makefile.modsign    |  3 +--
+ scripts/adjust_autoksyms.sh | 11 ++++-------
+ scripts/mod/sumversion.c    | 23 ++++-------------------
+ scripts/modules-check.sh    |  2 +-
+ scripts/package/mkspec      |  2 +-
+ 13 files changed, 50 insertions(+), 88 deletions(-)
 
 -- 
-You are receiving this mail because:
-You are the assignee for the bug.
+2.17.1
+
