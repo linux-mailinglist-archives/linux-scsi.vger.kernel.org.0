@@ -2,77 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B533658A3
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 16:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCAF661BB
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 00:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728535AbfGKOP5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 10:15:57 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2206 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728438AbfGKOP4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 11 Jul 2019 10:15:56 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 33F913F460D8909F38C3;
-        Thu, 11 Jul 2019 22:15:51 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Thu, 11 Jul 2019
- 22:15:44 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jthumshirn@suse.de>, <dan.carpenter@oracle.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] scsi: aic94xx: Remove unnecessary null check
-Date:   Thu, 11 Jul 2019 22:15:39 +0800
-Message-ID: <20190711141539.13892-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+        id S1729187AbfGKWaW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jul 2019 18:30:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34000 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728927AbfGKWaL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Jul 2019 18:30:11 -0400
+Subject: Re: [GIT PULL] SCSI topic updates for the 5.2+ merge window: sg
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562884210;
+        bh=leH1KsbWQXhuRX1P7inJn8QYUcdUWj0Axb7Wept1qEA=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=cnv7VIpbEYpgbpo3ukvqSIG/0jlfgN2LOdwnnz8T9vedMKv+G9mSRgIM6AwkBBG38
+         rZ5E9fjGRPzH4RZyFIVhZGeYNiZflIM6N1tqEpmrfcWitLqcUPy0FV2PDycA9cTd61
+         lN8Kt+dmgOgjg5Laz9YjnwwmeJCL7Ye8ER6MQaVI=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1562705278.30003.8.camel@HansenPartnership.com>
+References: <1562705278.30003.8.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1562705278.30003.8.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-sg
+X-PR-Tracked-Commit-Id: 3e99b3b13a1fc8f7354edaee4c04f73a07faba69
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1f7563f743d7081710a9d186a8b203997d09f383
+Message-Id: <156288421069.10140.5154229734157920631.pr-tracker-bot@kernel.org>
+Date:   Thu, 11 Jul 2019 22:30:10 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-kmem_cache_destroy() can handle NULL pointer correctly, so there is
-no need to check NULL pointer before calling kmem_cache_destroy().
+The pull request you sent on Tue, 09 Jul 2019 13:47:58 -0700:
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/scsi/aic94xx/aic94xx_init.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-sg
 
-diff --git a/drivers/scsi/aic94xx/aic94xx_init.c b/drivers/scsi/aic94xx/aic94xx_init.c
-index 261d8e4..f5781e3 100644
---- a/drivers/scsi/aic94xx/aic94xx_init.c
-+++ b/drivers/scsi/aic94xx/aic94xx_init.c
-@@ -565,8 +565,7 @@ static void asd_destroy_ha_caches(struct asd_ha_struct *asd_ha)
- 	if (asd_ha->hw_prof.scb_ext)
- 		asd_free_coherent(asd_ha, asd_ha->hw_prof.scb_ext);
- 
--	if (asd_ha->hw_prof.ddb_bitmap)
--		kfree(asd_ha->hw_prof.ddb_bitmap);
-+	kfree(asd_ha->hw_prof.ddb_bitmap);
- 	asd_ha->hw_prof.ddb_bitmap = NULL;
- 
- 	for (i = 0; i < ASD_MAX_PHYS; i++) {
-@@ -641,12 +640,10 @@ static int asd_create_global_caches(void)
- 
- static void asd_destroy_global_caches(void)
- {
--	if (asd_dma_token_cache)
--		kmem_cache_destroy(asd_dma_token_cache);
-+	kmem_cache_destroy(asd_dma_token_cache);
- 	asd_dma_token_cache = NULL;
- 
--	if (asd_ascb_cache)
--		kmem_cache_destroy(asd_ascb_cache);
-+	kmem_cache_destroy(asd_ascb_cache);
- 	asd_ascb_cache = NULL;
- }
- 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1f7563f743d7081710a9d186a8b203997d09f383
+
+Thank you!
+
 -- 
-2.7.4
-
-
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
