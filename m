@@ -2,30 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB3FA6588E
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 16:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72FD65899
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 16:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728335AbfGKOMa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 10:12:30 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:2205 "EHLO huawei.com"
+        id S1728569AbfGKON4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jul 2019 10:13:56 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:47838 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726116AbfGKOM3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 11 Jul 2019 10:12:29 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id EA90B653E1675FDF9488;
-        Thu, 11 Jul 2019 22:12:26 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.439.0; Thu, 11 Jul 2019
- 22:12:18 +0800
+        id S1726116AbfGKONz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Jul 2019 10:13:55 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id ED862E47ECC0F52E1CD9;
+        Thu, 11 Jul 2019 22:13:52 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.439.0; Thu, 11 Jul 2019
+ 22:13:43 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
-To:     <james.smart@broadcom.com>, <dick.kennedy@broadcom.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+To:     <qla2xxx-upstream@qlogic.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
 CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] scsi: lpfc: Remove unnecessary null check before kfree
-Date:   Thu, 11 Jul 2019 22:10:37 +0800
-Message-ID: <20190711141037.57880-1-yuehaibing@huawei.com>
+Subject: [PATCH v2 -next] scsi: qla2xxx: Remove unnecessary null check
+Date:   Thu, 11 Jul 2019 22:13:17 +0800
+Message-ID: <20190711141317.52192-1-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
+In-Reply-To: <20190711140908.26896-1-yuehaibing@huawei.com>
+References: <20190711140908.26896-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.133.213.239]
@@ -35,29 +37,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-A null check before a kfree is redundant, so remove it.
-This is detected by coccinelle.
+A null check before dma_pool_destroy is redundant,
+so remove it. This is detected by coccinelle.
 
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
- drivers/scsi/lpfc/lpfc_bsg.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+v2: fix commit log
+---
+ drivers/scsi/qla2xxx/qla_os.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
-index b7216d6..c7f6623 100644
---- a/drivers/scsi/lpfc/lpfc_bsg.c
-+++ b/drivers/scsi/lpfc/lpfc_bsg.c
-@@ -1276,9 +1276,7 @@ lpfc_bsg_hba_set_event(struct bsg_job *job)
- 	return 0; /* call job done later */
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 2e58cff..3c59157 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -4731,8 +4731,7 @@ qla2x00_mem_free(struct qla_hw_data *ha)
+ 		}
+ 	}
  
- job_error:
--	if (dd_data != NULL)
--		kfree(dd_data);
--
-+	kfree(dd_data);
- 	job->dd_data = NULL;
- 	return rc;
- }
+-	if (ha->dif_bundl_pool)
+-		dma_pool_destroy(ha->dif_bundl_pool);
++	dma_pool_destroy(ha->dif_bundl_pool);
+ 	ha->dif_bundl_pool = NULL;
+ 
+ 	qlt_mem_free(ha);
 -- 
 2.7.4
 
