@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD70E653F1
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 11:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15521657E4
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 15:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728083AbfGKJjX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 05:39:23 -0400
-Received: from mail.thorholdings.com ([201.218.124.195]:52327 "EHLO
-        bdsupport.top" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727595AbfGKJjW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 05:39:22 -0400
-To:     linux-scsi@vger.kernel.org
-From:   Oliver Klemens <info@bdsupport.top>
-Subject: FW: Kontakt.
-Date:   Thu, 11 Jul 2019 04:39:22 -0500
-Message-ID: <20190711_093922_076184.info@bdsupport.top>
-X-Mailer: WEBMAIL
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Mime-Version: 1.0
+        id S1728777AbfGKN2p convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 11 Jul 2019 09:28:45 -0400
+Received: from mail.univ-saida.dz ([41.110.190.118]:57496 "EHLO
+        mail.univ-saida.dz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727956AbfGKN2p (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 09:28:45 -0400
+Received: from mail.univ-saida.dz (localhost [127.0.0.1])
+        by mail.univ-saida.dz (Postfix) with ESMTPS id 6AD50245F341F;
+        Thu, 11 Jul 2019 10:25:41 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.univ-saida.dz (Postfix) with ESMTP id BBBCE245EA40C;
+        Thu, 11 Jul 2019 09:04:54 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mail.univ-saida.dz
+Received: from mail.univ-saida.dz ([127.0.0.1])
+        by localhost (mail.univ-saida.dz [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id zE0lT35KOOwA; Thu, 11 Jul 2019 09:04:54 +0100 (CET)
+Received: from PUYOLD126.localdomain (unknown [105.112.98.190])
+        by mail.univ-saida.dz (Postfix) with ESMTPSA id 746BB245F340F;
+        Thu, 11 Jul 2019 09:04:47 +0100 (CET)
+Content-Type: text/plain; charset="iso-8859-1"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Spende
+To:     Recipients <info@att.net>
+From:   info@att.net
+Date:   Thu, 11 Jul 2019 09:04:39 +0100
+Reply-To: MAVISWANCZYK11@hotmail.com
+Message-Id: <20190711080447.746BB245F340F@mail.univ-saida.dz>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Sehr geehrte Damen und Herren,
+Hallo Am Mrs Mavis Wancyzk, Sie haben eine Spende von 2,800,000.00EUR Ich gewann die America Lottery im Wert von $ 758.7 Millionen und ich spende einen Teil davon an f�nf gl�ckliche Menschen und Wohlt�tigkeits-H�user in Erinnerung an meinen verstorbenen Ehemann, der an Krebs gestorben ist. Kontaktieren Sie mich f�r weitere Details unter:
+[maviswanczyk11@hotmail.com]
 
-nach unserem Besuch Ihrer Homepage möchten wir Ihnen ein Angebot von Produkten vorstellen, das Ihnen ermöglichen wird, den Verkauf Ihrer Produkte sowie Dienstleistungen deutlich zu erhöhen.
 
-Gewinnen Sie gezielt neue Kunden. Mit den täglich aktualisierten Firmenadressen aus der Firmendatenbank GC-Contact erreichen Sie Ihre Zielgruppe punktgenau.
-
----
-1. Gesamtpaket 2019 DE - 1,4 Mio. Firmenadressen ( 1 457 620 ) - 190 € ( bis zum 11.07.2019 )
-2. Gesamtpaket 2019 DE,AT,CH - 1,7 Mio. Firmenadressen ( 1 747 921 ) - 240 € ( bis zum 11.07.2019 )
----
-3. Schweiz 2019 ( 187 911 ) - 149 € ( bis zum 11.07.2019 )
-4. Österreich 2019 ( 104 000 ) - 149 € ( bis zum 11.07.2019 )
----
-
-http://www.dbc-adressen.top/?page=catalog
-
-Mit freundlichen Grüßen
-Oliver Klemens
-
+http://Money.cnn.com/2017/08/23/News/Powerball-700-Million-Jackpot/Index.html
