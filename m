@@ -2,32 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B72FD65899
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 16:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B533658A3
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jul 2019 16:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728569AbfGKON4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 10:13:56 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:47838 "EHLO huawei.com"
+        id S1728535AbfGKOP5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jul 2019 10:15:57 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2206 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726116AbfGKONz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 11 Jul 2019 10:13:55 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id ED862E47ECC0F52E1CD9;
-        Thu, 11 Jul 2019 22:13:52 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS401-HUB.china.huawei.com
- (10.3.19.201) with Microsoft SMTP Server id 14.3.439.0; Thu, 11 Jul 2019
- 22:13:43 +0800
+        id S1728438AbfGKOP4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Jul 2019 10:15:56 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 33F913F460D8909F38C3;
+        Thu, 11 Jul 2019 22:15:51 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Thu, 11 Jul 2019
+ 22:15:44 +0800
 From:   YueHaibing <yuehaibing@huawei.com>
-To:     <qla2xxx-upstream@qlogic.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jthumshirn@suse.de>, <dan.carpenter@oracle.com>
 CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
         YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH v2 -next] scsi: qla2xxx: Remove unnecessary null check
-Date:   Thu, 11 Jul 2019 22:13:17 +0800
-Message-ID: <20190711141317.52192-1-yuehaibing@huawei.com>
+Subject: [PATCH -next] scsi: aic94xx: Remove unnecessary null check
+Date:   Thu, 11 Jul 2019 22:15:39 +0800
+Message-ID: <20190711141539.13892-1-yuehaibing@huawei.com>
 X-Mailer: git-send-email 2.10.2.windows.1
-In-Reply-To: <20190711140908.26896-1-yuehaibing@huawei.com>
-References: <20190711140908.26896-1-yuehaibing@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.133.213.239]
@@ -37,30 +35,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-A null check before dma_pool_destroy is redundant,
-so remove it. This is detected by coccinelle.
+kmem_cache_destroy() can handle NULL pointer correctly, so there is
+no need to check NULL pointer before calling kmem_cache_destroy().
 
 Signed-off-by: YueHaibing <yuehaibing@huawei.com>
 ---
-v2: fix commit log
----
- drivers/scsi/qla2xxx/qla_os.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/aic94xx/aic94xx_init.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 2e58cff..3c59157 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -4731,8 +4731,7 @@ qla2x00_mem_free(struct qla_hw_data *ha)
- 		}
- 	}
+diff --git a/drivers/scsi/aic94xx/aic94xx_init.c b/drivers/scsi/aic94xx/aic94xx_init.c
+index 261d8e4..f5781e3 100644
+--- a/drivers/scsi/aic94xx/aic94xx_init.c
++++ b/drivers/scsi/aic94xx/aic94xx_init.c
+@@ -565,8 +565,7 @@ static void asd_destroy_ha_caches(struct asd_ha_struct *asd_ha)
+ 	if (asd_ha->hw_prof.scb_ext)
+ 		asd_free_coherent(asd_ha, asd_ha->hw_prof.scb_ext);
  
--	if (ha->dif_bundl_pool)
--		dma_pool_destroy(ha->dif_bundl_pool);
-+	dma_pool_destroy(ha->dif_bundl_pool);
- 	ha->dif_bundl_pool = NULL;
+-	if (asd_ha->hw_prof.ddb_bitmap)
+-		kfree(asd_ha->hw_prof.ddb_bitmap);
++	kfree(asd_ha->hw_prof.ddb_bitmap);
+ 	asd_ha->hw_prof.ddb_bitmap = NULL;
  
- 	qlt_mem_free(ha);
+ 	for (i = 0; i < ASD_MAX_PHYS; i++) {
+@@ -641,12 +640,10 @@ static int asd_create_global_caches(void)
+ 
+ static void asd_destroy_global_caches(void)
+ {
+-	if (asd_dma_token_cache)
+-		kmem_cache_destroy(asd_dma_token_cache);
++	kmem_cache_destroy(asd_dma_token_cache);
+ 	asd_dma_token_cache = NULL;
+ 
+-	if (asd_ascb_cache)
+-		kmem_cache_destroy(asd_ascb_cache);
++	kmem_cache_destroy(asd_ascb_cache);
+ 	asd_ascb_cache = NULL;
+ }
+ 
 -- 
 2.7.4
 
