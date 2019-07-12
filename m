@@ -2,97 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4A466B01
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 12:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB76A66FD7
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 15:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbfGLKn7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Jul 2019 06:43:59 -0400
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:53773
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726050AbfGLKn7 (ORCPT
+        id S1727615AbfGLNRA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jul 2019 09:17:00 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:11606 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727189AbfGLNRA (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 12 Jul 2019 06:43:59 -0400
-X-IronPort-AV: E=Sophos;i="5.63,482,1557180000"; 
-   d="scan'208";a="313309971"
-Received: from vaio-julia.rsr.lip6.fr ([132.227.76.33])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jul 2019 12:43:55 +0200
-Date:   Fri, 12 Jul 2019 12:43:52 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@lip6.fr>
-X-X-Sender: jll@hadrien
-To:     Hannes Reinecke <hare@suse.de>
-cc:     Colin King <colin.king@canonical.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: libfc: fix null pointer dereference on a null
- lport
-In-Reply-To: <14c9e345-dd98-63e7-5ba2-679f10760fe6@suse.de>
-Message-ID: <alpine.DEB.2.20.1907121243220.3900@hadrien>
-References: <20190702091835.13629-1-colin.king@canonical.com> <14c9e345-dd98-63e7-5ba2-679f10760fe6@suse.de>
-User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
+        Fri, 12 Jul 2019 09:17:00 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6CDDPOF188874
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Jul 2019 09:16:58 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2tptjuh22r-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Jul 2019 09:16:58 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <bblock@linux.ibm.com>;
+        Fri, 12 Jul 2019 14:16:57 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 12 Jul 2019 14:16:54 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6CDGqkn40632534
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 Jul 2019 13:16:53 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C2096AE053;
+        Fri, 12 Jul 2019 13:16:52 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B042AAE051;
+        Fri, 12 Jul 2019 13:16:52 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.152.212.90])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 12 Jul 2019 13:16:52 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1hlvPw-0005iR-Dw; Fri, 12 Jul 2019 15:16:52 +0200
+Date:   Fri, 12 Jul 2019 15:16:52 +0200
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Fedor Loshakov <loshakov@linux.ibm.com>,
+        Jens Remus <jremus@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-scsi@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 0/3] zfcp: fixes for the zFCP device driver
+References: <cover.1562098940.git.bblock@linux.ibm.com>
+ <yq1pnmg6ozj.fsf@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1695843507-1562928232=:3900"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <yq1pnmg6ozj.fsf@oracle.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-TM-AS-GCONF: 00
+x-cbid: 19071213-0028-0000-0000-00000383BDB7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19071213-0029-0000-0000-00002443D5B9
+Message-Id: <20190712131652.GC27203@t480-pf1aa2c2.w3ibm.bluemix.net>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-12_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907120144
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---8323329-1695843507-1562928232=:3900
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+On Thu, Jul 11, 2019 at 09:06:08PM -0400, Martin K. Petersen wrote:
+> 
+> Benjamin,
+> 
+> > So please consider them for the next cycle. Or should I not have send
+> > them in that case? Sorry, this step of the process was a bit unclear
+> > to me.
+> 
+> A fix is a fix. Applied the series to 5.3/scsi-fixes. Thanks!
+> 
 
+Thanks Martin.
 
+-- 
+With Best Regards, Benjamin Block      /      Linux on IBM Z Kernel Development
+IBM Systems & Technology Group   /  IBM Deutschland Research & Development GmbH
+Vorsitz. AufsR.: Matthias Hartmann       /      Geschäftsführung: Dirk Wittkopp
+Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
 
-On Fri, 12 Jul 2019, Hannes Reinecke wrote:
-
-> On 7/2/19 11:18 AM, Colin King wrote:
-> > From: Colin Ian King <colin.king@canonical.com>
-> >
-> > Currently if lport is null then the null lport pointer is dereference
-> > when printing out debug via the FC_LPORT_DB macro. Fix this by using
-> > the more generic FC_LIBFC_DBG debug macro instead that does not use
-> > lport.
-> >
-> > Addresses-Coverity: ("Dereference after null check")
-> > Fixes: 7414705ea4ae ("libfc: Add runtime debugging with debug_logging module parameter")
-> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> > ---
-> >  drivers/scsi/libfc/fc_exch.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
-> > index 025cd2ff9f65..c477fadbf504 100644
-> > --- a/drivers/scsi/libfc/fc_exch.c
-> > +++ b/drivers/scsi/libfc/fc_exch.c
-> > @@ -2591,8 +2591,8 @@ void fc_exch_recv(struct fc_lport *lport, struct fc_frame *fp)
-> >
-> >  	/* lport lock ? */
-> >  	if (!lport || lport->state == LPORT_ST_DISABLED) {
-> > -		FC_LPORT_DBG(lport, "Receiving frames for an lport that "
-> > -			     "has not been initialized correctly\n");
-> > +		FC_LIBFC_DBG("Receiving frames for an lport that "
-> > +			     "has not been initialized correctly\n");
-
-If the code is being changed, perhaps the string could be put onto one
-line as well.
-
-julia
-
-> >  		fc_frame_free(fp);
-> >  		return;
-> >  	}
-> >
-> Reviewed-by: Hannes Reinecke <hare@suse.com>
->
-> Cheers,
->
-> Hannes
-> --
-> Dr. Hannes Reinecke		   Teamlead Storage & Networking
-> hare@suse.de			               +49 911 74053 688
-> SUSE LINUX GmbH, Maxfeldstr. 5, 90409 NÃ¼rnberg
-> GF: Felix ImendÃ¶rffer, Mary Higgins, Sri Rasiah
-> HRB 21284 (AG NÃ¼rnberg)
->
---8323329-1695843507-1562928232=:3900--
