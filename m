@@ -2,164 +2,124 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C005E665D8
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 06:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135056670A
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 08:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729444AbfGLEo2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Jul 2019 00:44:28 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:52210 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729407AbfGLEo1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jul 2019 00:44:27 -0400
-X-UUID: 1839d0dd11714fcc927a218b4654d3dc-20190712
-X-UUID: 1839d0dd11714fcc927a218b4654d3dc-20190712
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1647407647; Fri, 12 Jul 2019 12:44:20 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 12 Jul 2019 12:44:18 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 12 Jul 2019 12:44:18 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <evgreen@chromium.org>, <beanhuo@micron.com>,
-        <marc.w.gonzalez@free.fr>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 2/2] scsi: ufs: Fix broken hba->outstanding_tasks
-Date:   Fri, 12 Jul 2019 12:44:16 +0800
-Message-ID: <1562906656-27154-3-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1562906656-27154-1-git-send-email-stanley.chu@mediatek.com>
-References: <1562906656-27154-1-git-send-email-stanley.chu@mediatek.com>
+        id S1726047AbfGLGeg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jul 2019 02:34:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40234 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725562AbfGLGeg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 12 Jul 2019 02:34:36 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 405B5AFA9;
+        Fri, 12 Jul 2019 06:34:34 +0000 (UTC)
+Subject: Re: [PATCH] scsi: libfc: fix null pointer dereference on a null lport
+To:     Colin King <colin.king@canonical.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190702091835.13629-1-colin.king@canonical.com>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <14c9e345-dd98-63e7-5ba2-679f10760fe6@suse.de>
+Date:   Fri, 12 Jul 2019 08:34:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190702091835.13629-1-colin.king@canonical.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently bits in hba->outstanding_tasks are cleared only after their
-corresponding task management commands are successfully done by
-__ufshcd_issue_tm_cmd().
+On 7/2/19 11:18 AM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> Currently if lport is null then the null lport pointer is dereference
+> when printing out debug via the FC_LPORT_DB macro. Fix this by using
+> the more generic FC_LIBFC_DBG debug macro instead that does not use
+> lport.
+> 
+> Addresses-Coverity: ("Dereference after null check")
+> Fixes: 7414705ea4ae ("libfc: Add runtime debugging with debug_logging module parameter")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  drivers/scsi/libfc/fc_exch.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
+> index 025cd2ff9f65..c477fadbf504 100644
+> --- a/drivers/scsi/libfc/fc_exch.c
+> +++ b/drivers/scsi/libfc/fc_exch.c
+> @@ -2591,8 +2591,8 @@ void fc_exch_recv(struct fc_lport *lport, struct fc_frame *fp)
+>  
+>  	/* lport lock ? */
+>  	if (!lport || lport->state == LPORT_ST_DISABLED) {
+> -		FC_LPORT_DBG(lport, "Receiving frames for an lport that "
+> -			     "has not been initialized correctly\n");
+> +		FC_LIBFC_DBG("Receiving frames for an lport that "
+> +			     "has not been initialized correctly\n");
+>  		fc_frame_free(fp);
+>  		return;
+>  	}
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.com>
 
-If timeout happens in a task management command, its corresponding
-bit in hba->outstanding_tasks will not be cleared until next task
-management command with the same tag used successfully finishes.‧
+Cheers,
 
-This is wrong and can lead to some issues, like power consumpton issue.
-For example, ufshcd_release() and ufshcd_gate_work() will do nothing
-if hba->outstanding_tasks is not zero even if both UFS host and devices
-are actually idle.
-
-Because error handling flow, i.e., ufshcd_reset_and_restore(), will be
-triggered after any task management command times out, we fix this by
-clearing corresponding hba->outstanding_tasks bits during this flow.
-To achieve this, we need a mask to track timed-out commands and thus
-error handling flow can clear their tags specifically.
-
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufshcd.c | 38 +++++++++++++++++++++++++++++++-------
- drivers/scsi/ufs/ufshcd.h |  1 +
- 2 files changed, 32 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index a667dbb547f2..f780066edf26 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -731,7 +731,6 @@ static inline void ufshcd_outstanding_req_clear(struct ufs_hba *hba, int tag)
- static inline void ufshcd_outstanding_task_clear(struct ufs_hba *hba, int tag)
- {
- 	__clear_bit(tag, &hba->outstanding_tasks);
--	dev_info(hba->dev, "clear outstanding_tasks: %d\n", tag);
- }
- 
- /**
-@@ -5540,11 +5539,34 @@ static void ufshcd_check_errors(struct ufs_hba *hba)
-  */
- static void ufshcd_tmc_handler(struct ufs_hba *hba)
- {
--	u32 tm_doorbell;
-+	u32 tm_doorbell, tag;
-+	unsigned long tm_err_handled = 0;
-+	unsigned long tm_done;
- 
- 	tm_doorbell = ufshcd_readl(hba, REG_UTP_TASK_REQ_DOOR_BELL);
- 	hba->tm_condition = tm_doorbell ^ hba->outstanding_tasks;
--	wake_up(&hba->tm_wq);
-+	tm_done = hba->tm_condition;
-+
-+	/* clean resources for timed-out tasks */
-+	for_each_set_bit(tag, &hba->tm_condition, hba->nutmrs) {
-+		if (test_and_clear_bit(tag, &hba->tm_slots_err)) {
-+			clear_bit(tag, &hba->tm_condition);
-+			ufshcd_put_tm_slot(hba, tag);
-+			ufshcd_outstanding_task_clear(hba, tag);
-+			__set_bit(tag, &tm_err_handled);
-+		}
-+	}
-+
-+	/*
-+	 * Now tag waiters can get free tags if tags were occupied
-+	 * by timed-out tasks
-+	 */
-+	if (tm_err_handled)
-+		wake_up(&hba->tm_tag_wq);
-+
-+	/* if we have normal tasks, they shall have post-processing */
-+	if (tm_err_handled != tm_done)
-+		wake_up(&hba->tm_wq);
- }
- 
- /**
-@@ -5682,6 +5704,7 @@ static int __ufshcd_issue_tm_cmd(struct ufs_hba *hba,
- 		if (ufshcd_clear_tm_cmd(hba, free_slot))
- 			dev_WARN(hba->dev, "%s: unable clear tm cmd (slot %d) after timeout\n",
- 					__func__, free_slot);
-+		set_bit(free_slot, &hba->tm_slots_err);
- 		err = -ETIMEDOUT;
- 	} else {
- 		err = 0;
-@@ -5692,12 +5715,13 @@ static int __ufshcd_issue_tm_cmd(struct ufs_hba *hba,
- 		spin_lock_irqsave(hba->host->host_lock, flags);
- 		ufshcd_outstanding_task_clear(hba, free_slot);
- 		spin_unlock_irqrestore(hba->host->host_lock, flags);
--
- 	}
- 
--	clear_bit(free_slot, &hba->tm_condition);
--	ufshcd_put_tm_slot(hba, free_slot);
--	wake_up(&hba->tm_tag_wq);
-+	if (!(test_bit(free_slot, &hba->tm_slots_err))) {
-+		clear_bit(free_slot, &hba->tm_condition);
-+		ufshcd_put_tm_slot(hba, free_slot);
-+		wake_up(&hba->tm_tag_wq);
-+	}
- 
- 	ufshcd_release(hba);
- 	return err;
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index a43c7135f33d..4e4dfa6e233c 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -645,6 +645,7 @@ struct ufs_hba {
- 	wait_queue_head_t tm_tag_wq;
- 	unsigned long tm_condition;
- 	unsigned long tm_slots_in_use;
-+	unsigned long tm_slots_err;
- 
- 	struct uic_command *active_uic_cmd;
- 	struct mutex uic_cmd_mutex;
+Hannes
 -- 
-2.18.0
-
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
