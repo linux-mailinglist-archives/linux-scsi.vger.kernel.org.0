@@ -2,114 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E39B366990
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 11:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B4A466B01
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 12:44:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726069AbfGLJDz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Jul 2019 05:03:55 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:33255 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbfGLJDz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jul 2019 05:03:55 -0400
-Received: by mail-pl1-f193.google.com with SMTP id c14so4462109plo.0;
-        Fri, 12 Jul 2019 02:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=i93erGQBEdGUvhjnj900r6ImbBuHJewNb/EPkRjgFew=;
-        b=Z07apoYj4RIC+0LNfxgd6x0FLOITlM4REZEHTQ3WMwMzpqrAF53njy07hpNn3Ijm58
-         d/mzdc+qqSsp9G+WoR9XqJOptmNHHRUkvzm6S2YNE9k9Ulm4UvvmK+/kgXkEF2xRDawO
-         p1S+JYa1HPNS00sY0DVPDBDep9dCVfm1pUlJz1BJNlLBp7rvK4pcQpc899o4irEYeILz
-         EAb6qcJh23GPGjsxVmsBzQyQMui+qxfmyitaEYdN/adGMTNVFJaNVCtZaPAJi7AzQf5L
-         S9nx6WNwKJcKrYvWU3BtOnQFRsdaK729Q42R9OAhqhRQAet/AWeSC4CGAnaUjokNS4KY
-         i6Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=i93erGQBEdGUvhjnj900r6ImbBuHJewNb/EPkRjgFew=;
-        b=GOKiam7eIas9O1o2Lz3LuNCsK3byA1GVLBDf62jn2uQfghPh+hn9z2kTxXXlsrmjws
-         fZRZTpiF3UjpW2piSxkxEkz8AvA+DGpYM4GQadMGLedA8AHtrnJGbefjT6vEJz3sU3Fe
-         mTIeTRrdoXPRwqWB4re7zXZRA0T1ZyYGSr2QqdpFn95jT0KIGqEAnQIjhRSohWr8lGkM
-         +u/LBp2ZWtWTlWnT0xYneZQfKobWXgEcJB9+2Esg8TpyklxZTslnkl3N6HCS2sobOQvw
-         yGqCGtDzLbmT1g2lWHe/JXwl+dHIYoT4tf27vmR1Pjb5Z/htBLZQSsWF8GbBRfJC7aab
-         Y9og==
-X-Gm-Message-State: APjAAAUD6jsSeq+h215ekbLrvjU/XsQI9d78fWSZwORd6PeEADSKkCak
-        pT+RqbDe+tmTsbWfTSQumu8=
-X-Google-Smtp-Source: APXvYqxdW9/IthRQ7rsmpCwbf0zLG/Lgcp8qZuEfY0tONfvOF6G0RNnXVCtqwWbLt7x1yyzKwe3SDA==
-X-Received: by 2002:a17:902:76c6:: with SMTP id j6mr10061115plt.102.1562922234461;
-        Fri, 12 Jul 2019 02:03:54 -0700 (PDT)
-Received: from localhost ([123.213.206.190])
-        by smtp.gmail.com with ESMTPSA id y8sm7341206pfn.52.2019.07.12.02.03.52
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 12 Jul 2019 02:03:53 -0700 (PDT)
-Date:   Fri, 12 Jul 2019 18:03:50 +0900
-From:   Minwoo Im <minwoo.im.dev@gmail.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        id S1726140AbfGLKn7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jul 2019 06:43:59 -0400
+Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:53773
+        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726050AbfGLKn7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 12 Jul 2019 06:43:59 -0400
+X-IronPort-AV: E=Sophos;i="5.63,482,1557180000"; 
+   d="scan'208";a="313309971"
+Received: from vaio-julia.rsr.lip6.fr ([132.227.76.33])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Jul 2019 12:43:55 +0200
+Date:   Fri, 12 Jul 2019 12:43:52 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@lip6.fr>
+X-X-Sender: jll@hadrien
+To:     Hannes Reinecke <hare@suse.de>
+cc:     Colin King <colin.king@canonical.com>,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Keith Busch <keith.busch@intel.com>,
-        Minwoo Im <minwoo.im.dev@gmail.com>
-Subject: Re: [RFC PATCH 3/7] blk-mq: stop to handle IO before hctx's all CPUs
- become offline
-Message-ID: <20190712090350.GB31048@minwoo-desktop>
-References: <20190712024726.1227-1-ming.lei@redhat.com>
- <20190712024726.1227-4-ming.lei@redhat.com>
+        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: libfc: fix null pointer dereference on a null
+ lport
+In-Reply-To: <14c9e345-dd98-63e7-5ba2-679f10760fe6@suse.de>
+Message-ID: <alpine.DEB.2.20.1907121243220.3900@hadrien>
+References: <20190702091835.13629-1-colin.king@canonical.com> <14c9e345-dd98-63e7-5ba2-679f10760fe6@suse.de>
+User-Agent: Alpine 2.20 (DEB 67 2015-01-07)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190712024726.1227-4-ming.lei@redhat.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+Content-Type: multipart/mixed; BOUNDARY="8323329-1695843507-1562928232=:3900"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 19-07-12 10:47:22, Ming Lei wrote:
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index e5ef40c603ca..028c5d78e409 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -2205,6 +2205,64 @@ int blk_mq_alloc_rqs(struct blk_mq_tag_set *set, struct blk_mq_tags *tags,
->  	return -ENOMEM;
->  }
->  
-> +static bool blk_mq_count_inflight_rq(struct request *rq, void *data,
-> +				     bool reserved)
-> +{
-> +	unsigned *count = data;
-> +
-> +	if ((blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT))
-> +		(*count)++;
-> +
-> +	return true;
-> +}
-> +
-> +unsigned blk_mq_tags_inflight_rqs(struct blk_mq_tags *tags)
-> +{
-> +	unsigned count = 0;
-> +
-> +	blk_mq_all_tag_busy_iter(tags, blk_mq_count_inflight_rq, &count);
-> +
-> +	return count;
-> +}
+--8323329-1695843507-1562928232=:3900
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 
-Ming,
 
-Maybe it can be static?
 
-> +
-> +static void blk_mq_drain_inflight_rqs(struct blk_mq_hw_ctx *hctx)
-> +{
-> +	while (1) {
-> +		if (!blk_mq_tags_inflight_rqs(hctx->tags))
-> +			break;
-> +		msleep(5);
-> +	}
-> +}
+On Fri, 12 Jul 2019, Hannes Reinecke wrote:
+
+> On 7/2/19 11:18 AM, Colin King wrote:
+> > From: Colin Ian King <colin.king@canonical.com>
+> >
+> > Currently if lport is null then the null lport pointer is dereference
+> > when printing out debug via the FC_LPORT_DB macro. Fix this by using
+> > the more generic FC_LIBFC_DBG debug macro instead that does not use
+> > lport.
+> >
+> > Addresses-Coverity: ("Dereference after null check")
+> > Fixes: 7414705ea4ae ("libfc: Add runtime debugging with debug_logging module parameter")
+> > Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> > ---
+> >  drivers/scsi/libfc/fc_exch.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
+> > index 025cd2ff9f65..c477fadbf504 100644
+> > --- a/drivers/scsi/libfc/fc_exch.c
+> > +++ b/drivers/scsi/libfc/fc_exch.c
+> > @@ -2591,8 +2591,8 @@ void fc_exch_recv(struct fc_lport *lport, struct fc_frame *fp)
+> >
+> >  	/* lport lock ? */
+> >  	if (!lport || lport->state == LPORT_ST_DISABLED) {
+> > -		FC_LPORT_DBG(lport, "Receiving frames for an lport that "
+> > -			     "has not been initialized correctly\n");
+> > +		FC_LIBFC_DBG("Receiving frames for an lport that "
+> > +			     "has not been initialized correctly\n");
+
+If the code is being changed, perhaps the string could be put onto one
+line as well.
+
+julia
+
+> >  		fc_frame_free(fp);
+> >  		return;
+> >  	}
+> >
+> Reviewed-by: Hannes Reinecke <hare@suse.com>
+>
+> Cheers,
+>
+> Hannes
+> --
+> Dr. Hannes Reinecke		   Teamlead Storage & Networking
+> hare@suse.de			               +49 911 74053 688
+> SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+> GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+> HRB 21284 (AG Nürnberg)
+>
+--8323329-1695843507-1562928232=:3900--
