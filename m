@@ -2,142 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0156677A
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 09:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5A266918
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 10:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725908AbfGLHJ6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Jul 2019 03:09:58 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:56524 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725889AbfGLHJ5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 12 Jul 2019 03:09:57 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id E855770AC2F4937F8316;
-        Fri, 12 Jul 2019 15:09:51 +0800 (CST)
-Received: from [127.0.0.1] (10.74.223.225) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Fri, 12 Jul 2019
- 15:09:46 +0800
-Subject: Re: [PATCH v2] scsi: kill useless scsi_use_blk_mq and force_blk_mq
-To:     Jason Yan <yanaijie@huawei.com>, <martin.petersen@oracle.com>,
-        <jejb@linux.vnet.ibm.com>
-CC:     <linux-scsi@vger.kernel.org>
-References: <20190604133515.40311-1-yanaijie@huawei.com>
- <eba1acbd-7001-82d9-0661-40a551f01b5e@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <4a67e2d1-60b0-3f38-899d-0877f2691946@huawei.com>
-Date:   Fri, 12 Jul 2019 15:09:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726323AbfGLIZ7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jul 2019 04:25:59 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:33083 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726073AbfGLIZ7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jul 2019 04:25:59 -0400
+Received: by mail-pg1-f196.google.com with SMTP id m4so4218303pgk.0
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Jul 2019 01:25:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/RTxoumVNtB1PBld0antS4Z7J0pCK7ZhiGq0s+u+T8Q=;
+        b=BAFql+HaVxohUfVl9mYP/S5YzuA9cwdMGK2nCDIC66akftcSMq/vzOqHPsPfc6/6QO
+         3jbIxFLWL9RGB511maoma3UoAL51vux8VnJePTL/VCgMZPr6RxN5Bw1+YMc/2Gt+m8we
+         3O5VAqNXBto7Ij4ZOE6HDlreMkSzh4Wj+AQqk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/RTxoumVNtB1PBld0antS4Z7J0pCK7ZhiGq0s+u+T8Q=;
+        b=gXLdnVV3GVhG3vOh4AuOhpA7B7M0DuamVYgjpkdDYl3lnCP21JTB9tfD/V+RipLGtY
+         RPRyPdbVVQrijAhO95Bd/NjEJHpk3CuCwsr8nVfR0uy7NmGboQt9EXlyUiNaCg99JzAD
+         dN0ns+2XwFNIJLZzdH9b+oxxEu+WotSNF53T6PopOESS9332fWS6TPZ97Mdcul2HNYMB
+         z4UmtNQNX6LW8FKriTkV1rxcWjI3STgvqCutUCk+ygyePEG+J/IhF4S5egYJkE5L08tk
+         YXOxBwgwUymH5UAZcn0DRBtQclEqcQ3/uEau1ivdbnP8GdfE6Z5yXUKFRexexVrQVEPL
+         qazA==
+X-Gm-Message-State: APjAAAXGyfcMYbx117BJEMzaQAleE0kdgGTycEDDYG8TE0auMly+NJBs
+        rLSgWoO4DdOaWCPnxfYVvkr0IMAyYJeOQfF0BK+5uA==
+X-Google-Smtp-Source: APXvYqwAnknqjQvGUnrEC5ubqLeQGMCESFeladMIiOfwXF9UrCGRG+5+L2hqDm0nBHA51jOduboUlYnwqXtHNbzKgbU=
+X-Received: by 2002:a17:90a:ac14:: with SMTP id o20mr10306970pjq.114.1562919958370;
+ Fri, 12 Jul 2019 01:25:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <eba1acbd-7001-82d9-0661-40a551f01b5e@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.74.223.225]
-X-CFilter-Loop: Reflected
+References: <CGME20190621063708epcms2p309f4173afabe5de28942ba15d13987f7@epcms2p3>
+ <20190621063708epcms2p309f4173afabe5de28942ba15d13987f7@epcms2p3>
+In-Reply-To: <20190621063708epcms2p309f4173afabe5de28942ba15d13987f7@epcms2p3>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Fri, 12 Jul 2019 13:55:47 +0530
+Message-ID: <CAK=zhgr_T8vA=BCdFCT37RxGCgS3xr8Wp9MEMK_9nZ=oYHy=7Q@mail.gmail.com>
+Subject: Re: [RESEND RFC PATCH] mpt3sas: support target smid for [abort|query] task
+To:     minwoo.im@samsung.com
+Cc:     "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
+        "suganath-prabu.subramani@broadcom.com" 
+        <suganath-prabu.subramani@broadcom.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Euihyeok Kwon <eh81.kwon@samsung.com>,
+        Sarah Cho <sohyeon.jo@samsung.com>,
+        Sanggwan Lee <sanggwan.lee@samsung.com>,
+        Gyeongmin Nam <gm.nam@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-在 09/07/2019 10:06, Jason Yan 写道:
-> ping?
-> 
-> On 2019/6/4 21:35, Jason Yan wrote:
->> The legacy path is gone and we do not have to choose mq or not. The
->> module parameter scsi_use_blk_mq and scsi_host_template.force_blk_mq
->> is useless now.
->>
->> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+On Fri, Jun 21, 2019 at 12:07 PM Minwoo Im <minwoo.im@samsung.com> wrote:
+>
+> We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
+> to /dev/mpt3ctl.  If the given task_type is either abort task or query
+> task, it may need a field named "Initiator Port Transfer Tag to Manage"
+> in the IU.
+>
+> Current code does not support to check target IPTT tag from the
+> tm_request.  This patch introduces to check TaskMID given from the
+> userspace as a target tag.  We have a rule of relationship between
+> (struct request *req->tag) and smid in mpt3sas_base.c:
+>
+> 3318 u16
+> 3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
+> 3320         struct scsi_cmnd *scmd)
+> 3321 {
+> 3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
+> 3323         unsigned int tag = scmd->request->tag;
+> 3324         u16 smid;
+> 3325
+> 3326         smid = tag + 1;
+>
+> So if we want to abort a request tagged #X, then we can pass (X + 1) to
+> this IOCTL handler.
+>
+> Cc: Sathya Prakash <sathya.prakash@broadcom.com>
+> Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+> Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+> Cc: Martin K. Petersen <martin.petersen@oracle.com>
+> Cc: MPT-FusionLinux.pdl@broadcom.com
+> Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
+> ---
+>  drivers/scsi/mpt3sas/mpt3sas_ctl.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> index b2bb47c14d35..5c7539dae713 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> @@ -596,15 +596,17 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command *karg,
+>                 if (priv_data->sas_target->handle != handle)
+>                         continue;
+>                 st = scsi_cmd_priv(scmd);
+> -               tm_request->TaskMID = cpu_to_le16(st->smid);
+> -               found = 1;
+> +               if (tm_request->TaskMID == st->smid) {
 
-Reviewed-by: John Garry <john.garry@huawei.com>
+I think it will difficult for the user to find the smid that he want
+to abort. For this user has to enable the scsi logging level and get
+the tag and pass the ioctl with tag +1 value in TaskMID field. And
+hence currently driver will loop over all the smid's and if it fines
+any outstanding smid then it will issue task abort or task query TM
+for this outstanding smid to the HBA firmware.
 
->> ---
->>
->> v2: remove force_blk_mq too
->>
->>   drivers/scsi/scsi.c        | 4 ----
->>   drivers/scsi/scsi_priv.h   | 1 -
->>   drivers/scsi/scsi_sysfs.c  | 8 --------
->>   drivers/scsi/virtio_scsi.c | 1 -
->>   include/scsi/scsi_host.h   | 3 ---
->>   5 files changed, 17 deletions(-)
->>
->> diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
->> index 653d5ea6c5d9..7049aabb86e0 100644
->> --- a/drivers/scsi/scsi.c
->> +++ b/drivers/scsi/scsi.c
->> @@ -765,10 +765,6 @@ MODULE_LICENSE("GPL");
->>   module_param(scsi_logging_level, int, S_IRUGO|S_IWUSR);
->>   MODULE_PARM_DESC(scsi_logging_level, "a bit mask of logging levels");
->> -/* This should go away in the future, it doesn't do anything anymore */
->> -bool scsi_use_blk_mq = true;
->> -module_param_named(use_blk_mq, scsi_use_blk_mq, bool, S_IWUSR | 
->> S_IRUGO);
->> -
->>   static int __init init_scsi(void)
->>   {
->>       int error;
->> diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
->> index 5f21547b2ad2..a4f0741524d8 100644
->> --- a/drivers/scsi/scsi_priv.h
->> +++ b/drivers/scsi/scsi_priv.h
->> @@ -29,7 +29,6 @@ extern int scsi_init_hosts(void);
->>   extern void scsi_exit_hosts(void);
->>   /* scsi.c */
->> -extern bool scsi_use_blk_mq;
->>   int scsi_init_sense_cache(struct Scsi_Host *shost);
->>   void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd);
->>   #ifdef CONFIG_SCSI_LOGGING
->> diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
->> index dbb206c90ecf..403832ee17e0 100644
->> --- a/drivers/scsi/scsi_sysfs.c
->> +++ b/drivers/scsi/scsi_sysfs.c
->> @@ -386,15 +386,7 @@ show_host_busy(struct device *dev, struct 
->> device_attribute *attr, char *buf)
->>   }
->>   static DEVICE_ATTR(host_busy, S_IRUGO, show_host_busy, NULL);
->> -static ssize_t
->> -show_use_blk_mq(struct device *dev, struct device_attribute *attr, 
->> char *buf)
->> -{
->> -    return sprintf(buf, "1\n");
->> -}
->> -static DEVICE_ATTR(use_blk_mq, S_IRUGO, show_use_blk_mq, NULL);
->> -
->>   static struct attribute *scsi_sysfs_shost_attrs[] = {
->> -    &dev_attr_use_blk_mq.attr,
->>       &dev_attr_unique_id.attr,
->>       &dev_attr_host_busy.attr,
->>       &dev_attr_cmd_per_lun.attr,
->> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
->> index 13f1b3b9923a..f4e3c0310c7d 100644
->> --- a/drivers/scsi/virtio_scsi.c
->> +++ b/drivers/scsi/virtio_scsi.c
->> @@ -687,7 +687,6 @@ static struct scsi_host_template 
->> virtscsi_host_template = {
->>       .dma_boundary = UINT_MAX,
->>       .map_queues = virtscsi_map_queues,
->>       .track_queue_depth = 1,
->> -    .force_blk_mq = 1,
->>   };
->>   #define virtscsi_config_get(vdev, fld) \
->> diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
->> index a5fcdad4a03e..2bf56cdb6195 100644
->> --- a/include/scsi/scsi_host.h
->> +++ b/include/scsi/scsi_host.h
->> @@ -425,9 +425,6 @@ struct scsi_host_template {
->>       /* True if the controller does not support WRITE SAME */
->>       unsigned no_write_same:1;
->> -    /* True if the low-level driver supports blk-mq only */
->> -    unsigned force_blk_mq:1;
->> -
->>       /*
->>        * Countdown for host blocking with no commands outstanding.
->>        */
->>
-> 
-> 
-> .
-> 
+May be we can do like below,
+* First check whether user provided "TaskMID" is non zero or not. if
+user provided TaskMID is non-zero and if this TaskMID is outstanding
+then driver will issue TaskAbort/QueryTask TM with this TaskMID value
+else driver will loop over all the smid's and if finds any smid is
+outstanding then it will issue TaskAbort/QueryTask TM with TaskMID
+value set to outstanding smid.
 
+With the above logic still legacy application will be supported
+without breaking anything where they provide TaskMID filed as zero.
+And it also allows the user to abort the IO which he wants.
 
+Thanks,
+Sreekanth
+
+> +                       tm_request->TaskMID = cpu_to_le16(st->smid);
+> +                       found = 1;
+> +               }
+>         }
+>
+>         if (!found) {
+>                 dctlprintk(ioc,
+> -                          ioc_info(ioc, "%s: handle(0x%04x), lun(%d), no active mid!!\n",
+> +                          ioc_info(ioc, "%s: handle(0x%04x), lun(%d), no matched mid(%d)!!\n",
+>                                     desc, le16_to_cpu(tm_request->DevHandle),
+> -                                   lun));
+> +                                   lun, tm_request->TaskMID));
+>                 tm_reply = ioc->ctl_cmds.reply;
+>                 tm_reply->DevHandle = tm_request->DevHandle;
+>                 tm_reply->Function = MPI2_FUNCTION_SCSI_TASK_MGMT;
+> --
+> 2.16.1
