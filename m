@@ -2,85 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B7EE66479
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 04:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F56166495
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 04:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728998AbfGLCiv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 22:38:51 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:43937 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726505AbfGLCiv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 22:38:51 -0400
-Received: by mail-qt1-f194.google.com with SMTP id w17so6631582qto.10
-        for <linux-scsi@vger.kernel.org>; Thu, 11 Jul 2019 19:38:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=rxGwl9brbbzNCTzS3nb+kHgPol3S82HiUdfpZte44UA=;
-        b=KNE5UQatfkZsxQNrj0+QT2u2+irJgLHmF7sUlmSU6LLVaQysxVj65rjFOOYldXCuSp
-         X0OECJYiiAVWkmU2PVPy4P+NIyuRjxq1b9/c4ut0qyzMV6tHQGiVuhDQ20W2PX7ejBv7
-         WSIzdAwPNri5vEXg9UlQ61iIy/Mzcmb3JwqduI8INbAm2Yu/m29QsMJyGv2CrJQdXLrk
-         /o/X0Vt3J8PopivGcjKjO7l2j3Lajj4QOsI3yhlgsUqKYpd5BP+gHo3W4+kchqkHpyQk
-         y/lnWq19Bji8+9kZs9rHgdNm2aPKMJ3p2S5PIeeBh2uyHe9NUYfc+O8QlsgedXk7iEVy
-         m2IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=rxGwl9brbbzNCTzS3nb+kHgPol3S82HiUdfpZte44UA=;
-        b=RRvBvxR9DBPyKvId3CGsrBE/ZhbIgb8C3a9lNiviOz+le5p0bSSwAmIcdXj5CA0xhV
-         Za6mPrYNamm+Hqbttms+Hc9GVeRv7TCt5pA7NDA6XqV5sPPfZllnx9S/C+KRVDU0f9bx
-         5IJC76cxD1G0UlDhVDkiKAowp9MMZp3W0qDZJ9zfEP8gfGUth/wQImB1rEtcq/Gfe6R7
-         wsGXta5P3mdbus6jFkCMEQ+rru/cTgTNFRbcqJAB1kvZt5JuOZlcCASnYK8b6urEroTP
-         pRV0juxLxRDZ+5n+ySCBA+wWRdDKHfeQQSZA4nb/ViQn00Vumr7nNOQleRlHr1dtrBBF
-         Itig==
-X-Gm-Message-State: APjAAAVPWH77bT+RMlmciq4CMKanj75nipG41pduDLpzBLY/yPUpGgYy
-        87ZpN0/9nXXtCPNmUNk7izZUr4vzw3CJoTlPeKg=
-X-Google-Smtp-Source: APXvYqwPEooXRUKVjkZjXizE3BLGsKLk5TKBNuYXUkQLupYqwDsRYEvrXJXNbQwe0UJ9+410oxDqE/VDoG7ok/LZGPU=
-X-Received: by 2002:ac8:384c:: with SMTP id r12mr4376577qtb.153.1562899130547;
- Thu, 11 Jul 2019 19:38:50 -0700 (PDT)
+        id S1729205AbfGLCrj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jul 2019 22:47:39 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:60940 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729051AbfGLCrj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Jul 2019 22:47:39 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 25DD2C057EC6;
+        Fri, 12 Jul 2019 02:47:39 +0000 (UTC)
+Received: from localhost (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 01098600CD;
+        Fri, 12 Jul 2019 02:47:35 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Keith Busch <keith.busch@intel.com>
+Subject: [RFC PATCH 0/7] blk-mq: improvement on handling IO during CPU hotplug
+Date:   Fri, 12 Jul 2019 10:47:19 +0800
+Message-Id: <20190712024726.1227-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-Reply-To: zongok96@gmail.com
-Received: by 2002:ac8:70da:0:0:0:0:0 with HTTP; Thu, 11 Jul 2019 19:38:50
- -0700 (PDT)
-From:   "Mr. Karim Zongo" <kzongo210@gmail.com>
-Date:   Fri, 12 Jul 2019 04:38:50 +0200
-X-Google-Sender-Auth: OEBzH0o4_eEFPNTGZXIHay8dFqQ
-Message-ID: <CAH6L2M+58hVgH8mgpF+AuEH19Lx3gOE2xciZcqeur135ZGfvww@mail.gmail.com>
-Subject: PLEASE I NEED YOUR ASSISTANCE.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Fri, 12 Jul 2019 02:47:39 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Compliment of the day,
+Hi,
 
-I am Mr. Karim Zongo Have a Business Proposal of $5.3 million For You.
-I am aware of the unsafe nature of the internet, and was compelled to
-use this medium due to the nature of this project.
+Thomas mentioned:
+    "
+     That was the constraint of managed interrupts from the very beginning:
+    
+      The driver/subsystem has to quiesce the interrupt line and the associated
+      queue _before_ it gets shutdown in CPU unplug and not fiddle with it
+      until it's restarted by the core when the CPU is plugged in again.
+    "
 
-I have access to very vital information that can be used to transfer
-this huge amount of money, which may culminate into the investment of
-the said funds into your company or any lucrative venture in your
-country.
+But no drivers or blk-mq do that before one hctx becomes dead(all
+CPUs for one hctx are offline), and even it is worse, blk-mq stills tries
+to run hw queue after hctx is dead, see blk_mq_hctx_notify_dead().
 
-If you will like to assist me as a partner then indicate your
-interest, after which we shall both discuss the modalities and the
-sharing percentage.
+This patchset tries to address the issue by two stages:
 
-Upon receipt of your reply on your expression of Interest I will give
-you full details,
-on how the business will be executed I am open for negotiation. You
-should forward your reply to this private email id
-(zongok96@gmail.com) Thanks for your anticipated cooperation.
+1) add one new cpuhp state of CPUHP_AP_BLK_MQ_ONLINE
 
-Note you might receive this message in your inbox or spam or junk
-folder, depends on your web host or server network.
+- mark the hctx as internal stopped, and drain all in-flight requests
+if the hctx is going to be dead.
 
-Thanks=E2=80=99
-Best Regards
-Mr. Karim Zongo
+2) re-submit IO in the state of CPUHP_BLK_MQ_DEAD after the hctx becomes dead
+
+- steal bios from the request, and resubmit them via generic_make_request(),
+then these IO will be mapped to other live hctx for dispatch
+
+Please comment & review, thanks!
+
+
+Ming Lei (7):
+  blk-mq: add new state of BLK_MQ_S_INTERNAL_STOPPED
+  blk-mq: add blk-mq flag of BLK_MQ_F_NO_MANAGED_IRQ
+  blk-mq: stop to handle IO before hctx's all CPUs become offline
+  blk-mq: add callback of .free_request
+  SCSI: implement .free_request callback
+  blk-mq: re-submit IO in case that hctx is dead
+  blk-mq: handle requests dispatched from IO scheduler in case that hctx
+    is dead
+
+ block/blk-mq-debugfs.c     |   2 +
+ block/blk-mq-tag.c         |   2 +-
+ block/blk-mq-tag.h         |   2 +
+ block/blk-mq.c             | 147 ++++++++++++++++++++++++++++++++++---
+ block/blk-mq.h             |   3 +-
+ drivers/block/loop.c       |   2 +-
+ drivers/md/dm-rq.c         |   2 +-
+ drivers/scsi/scsi_lib.c    |  13 ++++
+ include/linux/blk-mq.h     |  12 +++
+ include/linux/cpuhotplug.h |   1 +
+ 10 files changed, 170 insertions(+), 16 deletions(-)
+
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Hannes Reinecke <hare@suse.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Keith Busch <keith.busch@intel.com>
+
+
+-- 
+2.20.1
+
