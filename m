@@ -2,91 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED03666357
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 03:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D6C6635F
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 03:32:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728855AbfGLBWv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 21:22:51 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:57082 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726587AbfGLBWv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 21:22:51 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6C1IWkE122640;
-        Fri, 12 Jul 2019 01:22:42 GMT
+        id S1728862AbfGLBcU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jul 2019 21:32:20 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:34782 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726587AbfGLBcU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 21:32:20 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6C1U4Oo020371;
+        Fri, 12 Jul 2019 01:32:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2018-07-02;
- bh=xQU+hIivwsk9Rgrtj3FTlVDAx40vNslWzQ7vly9iFMo=;
- b=4MLyLJF1v7L46qE3bvdDCqhPczhMgzy6mj0EV2QiD37GqOkHkaCjNi7akQx4ELqVlyfG
- MYq8cL6iJEygj2PMQdCYDWOWIsjx52AbrI9JU0E88bCCYwo/q63llIUusRCO4QMKddS3
- 1RdRC5uDszASR/VpDYBzoKj0o1R8511F7FNv6iq/oe/6POYOt5tkq+C1HdxpJFZsovqX
- XZ4oU0D2n8wORtsO5I+IGg0zScJ7cAPbbhLWwR6kzwyAvber22sl5EUEtQNwWYDhTcZz
- cGduXHyNlIOXTBMlT8KeJ5W+neHs9f3Pmli0lSJKdyWmrYEz/eLZz4z/NgsQPfa8GNOu Vw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2tjm9r2xy0-1
+ bh=NXDuTQP1XB+Wm9eBFSp+S1/dpd+7DqWERF846TeJNqQ=;
+ b=oH/ozLYEK3K87Zw+IRtEF03KmFdD46y3p1s1bMdlpD3S10aGH0Qn3lT0cYyNPbfSgWZ5
+ CUKaWW4f12/92SaVpixXXZN5y3SX5dByNk3Nc1Ux8bP2YEdUvkhxx0EeklF4E0PDIcd3
+ pZQ7MrN/VVTDc4DgzS9zdH4rrSMPGYoc7qQGpM5mo9W25C+E4iN1VE84mHgZCyJ84KSj
+ FBfl0u2MqAMAvdsE9IktIAxbLNlWK8Xt8kBihukSHn8+r0Uw5o3GT6zgQOL7M07Tc1hB
+ WK7P52jo8lczkp5uQYGepweSLlEabgjs7u3hpqve4NjhKejae5f/WauO1TTDnex/iA2t NQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2tjkkq2yy1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Jul 2019 01:22:41 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6C1MaY8159282;
-        Fri, 12 Jul 2019 01:22:41 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2tn1j1vbpm-1
+        Fri, 12 Jul 2019 01:32:14 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6C1RlNH103457;
+        Fri, 12 Jul 2019 01:30:14 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2tmwgygked-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Jul 2019 01:22:41 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6C1MVF7007771;
-        Fri, 12 Jul 2019 01:22:31 GMT
+        Fri, 12 Jul 2019 01:30:13 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6C1U9An022240;
+        Fri, 12 Jul 2019 01:30:10 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 11 Jul 2019 18:22:31 -0700
-To:     James Bottomley <jejb@linux.vnet.ibm.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avi Shchislowski <avi.shchislowski@wdc.com>,
-        Alex Lemberg <alex.lemberg@wdc.com>
-Subject: Re: [PATCH] scsi: uapi: ufs: Fix SPDX license identifier
+        with ESMTP ; Thu, 11 Jul 2019 18:30:09 -0700
+To:     Konstantin Khorenko <khorenko@virtuozzo.com>
+Cc:     Prasad B Munirathnam <prasad.munirathnam@microsemi.com>,
+        Raghava Aditya Renukunta 
+        <RaghavaAditya.Renukunta@microsemi.com>,
+        David Carroll <david.carroll@microsemi.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        "Andrey Jr . Melnikov" <temnota.am@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Subject: Re: [PATCH v2 2/2] scsi: aacraid: Remove references to Series-9 (only)
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <1560346477-13944-1-git-send-email-avri.altman@wdc.com>
-        <yq1ef2w9kig.fsf@oracle.com>
-        <1562890815.2915.13.camel@linux.vnet.ibm.com>
-Date:   Thu, 11 Jul 2019 21:22:28 -0400
-In-Reply-To: <1562890815.2915.13.camel@linux.vnet.ibm.com> (James Bottomley's
-        message of "Thu, 11 Jul 2019 17:20:15 -0700")
-Message-ID: <yq1d0ig6o8b.fsf@oracle.com>
+References: <2a6f5cc2-40cb-647c-003d-aae594d05062@virtuozzo.com>
+        <20190710093113.27936-1-khorenko@virtuozzo.com>
+        <20190710093113.27936-3-khorenko@virtuozzo.com>
+Date:   Thu, 11 Jul 2019 21:30:07 -0400
+In-Reply-To: <20190710093113.27936-3-khorenko@virtuozzo.com> (Konstantin
+        Khorenko's message of "Wed, 10 Jul 2019 12:31:13 +0300")
+Message-ID: <yq15zo86nvk.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9315 signatures=668688
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=852
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=806
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1907120016
+ engine=8.0.1-1810050000 definitions=main-1907120017
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9315 signatures=668688
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=899 adultscore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=862 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1907120015
+ definitions=main-1907120017
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-James,
+Hi Konstantin,
 
-> Just to note: this isn't technically a licence change at all.  The
-> entire kernel is covered by the system call exception and this file is
-> thus also covered.  It's really a simple tag change to allow tools
-> which parse uapi header files to recognise from the SPDX tags that this
-> is a kernel header to which the Linux-syscall-note applies.
+> The patch removes references to Series 9 adapters following
+> 395e5df79a95 ("scsi: aacraid: Remove reference to Series-9"),
+> but doesn't touch Series 6 adapters logic.
 
-OK.
+We'll need some guidance from the Microsemi folks on this issue.
+
+> https://bugzilla.redhat.com/show_bug.cgi?id=1724077
+> https://jira.sw.ru/browse/PSBM-95736
+
+These two links don't appear to be publicly accessible and therefore do
+not belong in the patch.
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
