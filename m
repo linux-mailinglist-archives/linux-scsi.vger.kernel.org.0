@@ -2,26 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 135056670A
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 08:34:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96BA66749
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 08:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726047AbfGLGeg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Jul 2019 02:34:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40234 "EHLO mx1.suse.de"
+        id S1726073AbfGLGwf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jul 2019 02:52:35 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44416 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725562AbfGLGeg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 12 Jul 2019 02:34:36 -0400
+        id S1726033AbfGLGwf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 12 Jul 2019 02:52:35 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 405B5AFA9;
-        Fri, 12 Jul 2019 06:34:34 +0000 (UTC)
-Subject: Re: [PATCH] scsi: libfc: fix null pointer dereference on a null lport
-To:     Colin King <colin.king@canonical.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190702091835.13629-1-colin.king@canonical.com>
+        by mx1.suse.de (Postfix) with ESMTP id 398A0AFE4;
+        Fri, 12 Jul 2019 06:52:33 +0000 (UTC)
+Subject: Re: scsi_dh_alua: re-initialize pg->interval in alua_rtpg_work
+To:     Zhangguanghui <zhang.guanghui@h3c.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi (linux-scsi@vger.kernel.org)" 
+        <linux-scsi@vger.kernel.org>
+References: <E3535A62B291B54FBD1D003696CCB5370109330EA0@H3CMLB14-EX.srv.huawei-3com.com>
+ <20190602180033.GR24680@kadam>
+ <E3535A62B291B54FBD1D003696CCB537011CED1F5C@H3CMLB12-EX.srv.huawei-3com.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -67,12 +69,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <14c9e345-dd98-63e7-5ba2-679f10760fe6@suse.de>
-Date:   Fri, 12 Jul 2019 08:34:33 +0200
+Message-ID: <be058304-7b1f-8b7d-9449-b3ea7d854902@suse.de>
+Date:   Fri, 12 Jul 2019 08:52:32 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190702091835.13629-1-colin.king@canonical.com>
+In-Reply-To: <E3535A62B291B54FBD1D003696CCB537011CED1F5C@H3CMLB12-EX.srv.huawei-3com.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -81,38 +83,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/2/19 11:18 AM, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On 6/26/19 4:47 AM, Zhangguanghui wrote:
+> Hi
+>         Thank you very much for you reply, I have tried to contact 3PAR
+> about this issue.
+>    Hundreds of them flooding the log for some seconds that is an serious problem.
+> It can be reproduced on the Linux 4.14 kernel version or the lastest version for 3PAR storage
+> Remote Copy Failover platform when the main storage is powered off.
+> How to solve it ?
 > 
-> Currently if lport is null then the null lport pointer is dereference
-> when printing out debug via the FC_LPORT_DB macro. Fix this by using
-> the more generic FC_LIBFC_DBG debug macro instead that does not use
-> lport.
+> I have found that the lastest patch 'pg->interval = 2000' is incorrect,
+> pg->interval = 2 maybe is reasonable, 2 seconds delay, retry .
+> But I have an new idea.
+> I am wondering if the patch is reasonable to use the function printk_timed_ratelimit(&j, 500),
+> can you help me review and commit this patch, Best regards
 > 
-> Addresses-Coverity: ("Dereference after null check")
-> Fixes: 7414705ea4ae ("libfc: Add runtime debugging with debug_logging module parameter")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/scsi/libfc/fc_exch.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
-> index 025cd2ff9f65..c477fadbf504 100644
-> --- a/drivers/scsi/libfc/fc_exch.c
-> +++ b/drivers/scsi/libfc/fc_exch.c
-> @@ -2591,8 +2591,8 @@ void fc_exch_recv(struct fc_lport *lport, struct fc_frame *fp)
->  
->  	/* lport lock ? */
->  	if (!lport || lport->state == LPORT_ST_DISABLED) {
-> -		FC_LPORT_DBG(lport, "Receiving frames for an lport that "
-> -			     "has not been initialized correctly\n");
-> +		FC_LIBFC_DBG("Receiving frames for an lport that "
-> +			     "has not been initialized correctly\n");
->  		fc_frame_free(fp);
->  		return;
->  	}
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.com>
+Well, the thing is that there really is _not_ a delay, not even a 2
+seconds one.
+I'd rather fix that first and see if that wouldn't be enough.
+Will be sending a patch for it.
 
 Cheers,
 
