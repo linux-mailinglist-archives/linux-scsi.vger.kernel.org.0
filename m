@@ -2,100 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA1BB67210
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 17:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6144A67305
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 18:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727012AbfGLPM6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Jul 2019 11:12:58 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:37405 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726449AbfGLPM6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jul 2019 11:12:58 -0400
-Received: by mail-io1-f67.google.com with SMTP id q22so21055559iog.4
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Jul 2019 08:12:58 -0700 (PDT)
+        id S1726982AbfGLQJ7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jul 2019 12:09:59 -0400
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:19105 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726867AbfGLQJ6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jul 2019 12:09:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1562947861; x=1594483861;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=N0fhyTrShdGrfIW5zABp0j8FA7VDbZFhG3Fjh78mCWY=;
+  b=EX78Am3YmUBBzP9jqt5n8T9a4o17ht3kvSmuxqV/PnxHvndQfaSRkRWJ
+   m1GD63IV9kvZ9k5DOE63by6RWlby3L5DZ6IzJd7w7uOy2vgJ9P2yDLaNu
+   P0wrPMvSsbguMd/N2s4hyJHq9FFZvmSRgqcH9tBRWKJp40wI4ioNTLMPf
+   y5xWnW3LN+w03H8HGr2piLl7x7Kd02+AniwnJET683V6BMn003MmOfEIL
+   yGb3y/m/seYXHO3uZ9OLdnq/K2Fn//O9TdSR1nlla+GYs9fLo2LoVgH6R
+   TO7pwXsZiyWZV7RizAhfjWPzyXQuG0kdmjCyXb4MqT5cy+tnccwHUh5XL
+   A==;
+IronPort-SDR: D7AKZ0sFotlHabHpoZYaGMlm/sydqrz7/jqe+0fse36zw+twTcdZhYTT7MlL0ogV0CKYTD55Gf
+ Bsr2889sTfy/fjz0AmhXWUW/HzFzQVnlr9a939AsqK2BjTAwJgbdLKHdPZkJ4/1uutLKEUG2oS
+ ixF0mtoh0DBGZKyxKNd0HIZZnMM0sayw/CHbgPIBMhOWqf1HSDECJbNf6uFj+O8f9fBDElS60m
+ eAOWlVIw9dMYzDqHv41RHTXPlHbO80gMayCx1rw5SnOhmQ6xfbWc0WIU1B5s3ZLJAflbLLFuQ3
+ mOo=
+X-IronPort-AV: E=Sophos;i="5.63,483,1557158400"; 
+   d="scan'208";a="212841637"
+Received: from mail-by2nam01lp2054.outbound.protection.outlook.com (HELO NAM01-BY2-obe.outbound.protection.outlook.com) ([104.47.34.54])
+  by ob1.hgst.iphmx.com with ESMTP; 13 Jul 2019 00:11:00 +0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TgV+P5xUNL5epV/ZpLeslnEZ8CdbgVF9nNrx/k03o8g=;
-        b=CGNvk4/dqGZ6+i1O+wfwJKZoo7ZYVaVuFsXwbqWoKa2XITkHd3rk7eN+9PMEwi0ihT
-         l0BWkPExicPNlcfnNhprd86+MADEO/JMKNcrEfFYDcy4UtSlyJGgqGti1tMF6ZQp1Pw7
-         PgB5kmZlAOgYnnICnXaE4Ce6bjaK0DqQ1LgWCGLeCGYaGSWtlukgKp30GZNQ0H4JqKou
-         Bhzr1mlWRh38YS94B8YBVD967PLS6In5oR2rO4WHBu5RroQ4ZqfcdoRTxKZGAbtzyhwH
-         JSlZc1isR6qSYuSho0mHJeLajd0JRjwkmewOWFe26AkCy+6Kjq6/vqcAg+wTP3Y8clDE
-         OwDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TgV+P5xUNL5epV/ZpLeslnEZ8CdbgVF9nNrx/k03o8g=;
-        b=oiRtVUxW2m8/cAd6MFFebXqUoCSdsRKx8g/x7jn9ZhjrElVSOKWB76Rjkv7pX4918S
-         vPxSNpbpkqyM7bemyo9pdlxzla2icmxUXQk7lTfvkwRlJKG4dbCSwAZ3oIwZwdnfuqEt
-         E8Ziq0QXx22kDfbGkMcWpC3YNBrbbw4Ql6wQVflRwH3WFswdOd/H8XXm5MTXHF8JxgC7
-         wGVKLeMb3UicxlrjNePW4vJuKo5MoElvsTUxhrIjnjPblVbXCmwPu6TQqmA2GVjW0hhn
-         ZLn44S1okjnQuXFkfXuE180JNJcDhABfrPcyWmfDcgTk7YMpTjrAE8UVMspSkjT5jx09
-         ZEJA==
-X-Gm-Message-State: APjAAAUIT0eNXfbIXy+fpqemDNKFpAAiaCFwoKDz5ZBrIPDds7bgwBca
-        3kcjGVzcRVx5SoRrX8rKYFM=
-X-Google-Smtp-Source: APXvYqzNOs4ktys5P/q5Zi/E8ueb3gbQD/m0JLYFVa+rUUweNFsMDDkgPqUBftGoeg2lyKpUDsUArg==
-X-Received: by 2002:a5d:8c81:: with SMTP id g1mr11632533ion.239.1562944377622;
-        Fri, 12 Jul 2019 08:12:57 -0700 (PDT)
-Received: from [192.168.1.158] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id l5sm15960501ioq.83.2019.07.12.08.12.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 12 Jul 2019 08:12:56 -0700 (PDT)
-Subject: Re: [PATCH V6 0/4] Fix zone revalidation memory allocation failures
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>
-References: <20190701050918.27511-1-damien.lemoal@wdc.com>
- <BYAPR04MB5816BC7EC358F5785AEE1EA9E7F60@BYAPR04MB5816.namprd04.prod.outlook.com>
- <cb26f686-ce7e-9d1a-4735-2375d65c0ea5@kernel.dk>
-Message-ID: <27386e10-7494-7fcf-f203-484db5c3c69c@kernel.dk>
-Date:   Fri, 12 Jul 2019 09:12:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <cb26f686-ce7e-9d1a-4735-2375d65c0ea5@kernel.dk>
-Content-Type: text/plain; charset=utf-8
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pDqjVCuNjygIykNV6cNUa9bqD2yACUy0tABSvnq9LH8=;
+ b=NCcXh2b2sDhx2kujb9Mi9sQjnCYoIL7v+saCw3b9UvlfBu4AwEhdHn/6a/NuFDaOIkcVUtCpPZ49UhWCpV8b4sFB9xqHr8qd/vBLp1q9XaoomtOQHdzCgQmui2yVJm+Y22Syi3fUzsgUXlC8RCMR1HtCRw9OiK0QJSc/O975Y50=
+Received: from BYAPR04MB5749.namprd04.prod.outlook.com (20.179.58.26) by
+ BYAPR04MB5992.namprd04.prod.outlook.com (20.178.233.21) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2052.19; Fri, 12 Jul 2019 16:09:57 +0000
+Received: from BYAPR04MB5749.namprd04.prod.outlook.com
+ ([fe80::8025:ccea:a0e6:9078]) by BYAPR04MB5749.namprd04.prod.outlook.com
+ ([fe80::8025:ccea:a0e6:9078%5]) with mapi id 15.20.2073.008; Fri, 12 Jul 2019
+ 16:09:57 +0000
+From:   Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "colyli@suse.de" <colyli@suse.de>,
+        "linux-bcache@vger.kernel.org" <linux-bcache@vger.kernel.org>,
+        "linux-btrace@vger.kernel.org" <linux-btrace@vger.kernel.org>,
+        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
+        "kent.overstreet@gmail.com" <kent.overstreet@gmail.com>,
+        "yuchao0@huawei.com" <yuchao0@huawei.com>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        "konrad.wilk@oracle.com" <konrad.wilk@oracle.com>,
+        "roger.pau@citrix.com" <roger.pau@citrix.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH V4 1/9] block: add a helper function to read nr_setcs
+Thread-Topic: [PATCH V4 1/9] block: add a helper function to read nr_setcs
+Thread-Index: AQHVNb2Z4KyEErtQ+UKxJ+HV/zvqXg==
+Date:   Fri, 12 Jul 2019 16:09:56 +0000
+Message-ID: <BYAPR04MB5749AF90A9E9C81B4A6857F386F20@BYAPR04MB5749.namprd04.prod.outlook.com>
+References: <20190708184711.2984-1-chaitanya.kulkarni@wdc.com>
+ <20190708184711.2984-2-chaitanya.kulkarni@wdc.com>
+ <yq18st457yb.fsf@oracle.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chaitanya.Kulkarni@wdc.com; 
+x-originating-ip: [199.255.45.64]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 1fd8b164-03d7-4925-211a-08d706e3622d
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB5992;
+x-ms-traffictypediagnostic: BYAPR04MB5992:
+x-microsoft-antispam-prvs: <BYAPR04MB59928DC0BC9E08C4D8F6E87B86F20@BYAPR04MB5992.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-forefront-prvs: 00963989E5
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(199004)(189003)(6506007)(316002)(71200400001)(74316002)(68736007)(8676002)(52536014)(53546011)(486006)(7736002)(476003)(81156014)(229853002)(305945005)(71190400001)(54906003)(81166006)(86362001)(446003)(7416002)(9686003)(99286004)(66066001)(2906002)(55016002)(4326008)(53936002)(6116002)(3846002)(4744005)(14454004)(478600001)(25786009)(7696005)(8936002)(186003)(66946007)(66476007)(6916009)(76176011)(66446008)(66556008)(64756008)(33656002)(26005)(256004)(5660300002)(6436002)(76116006)(102836004)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB5992;H:BYAPR04MB5749.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: m65h7YZuEY0B2mfDKE2vkIXVULnruRvyk75fkhxpzgV8FGZL0HMHPsVsO3Ld72vawN7WKVVQVXbNEJOmwfyNDP2X4a+0E0paeczD8wg8EJdAk/MO31iAajhL+AClW8vfPHDJxKpz6murAWqgDaWbazuQSy0jckZX4eiBk6CvM943Zgx+byGUPYfyINRdHDL/cvOEIMyW0DZt8bX9qToeV6rDXeZXWJnCz2EWjWnKcjDNOG9yw0cMYRInUFzmF8Dp7k+BYNk4UxCHdsb4X9p6N17n1ruhBfeEFtMd9MzKAEjKWLfM4lmH5QnVWwFc35IF0T0ny/7DZiTyjcatQnmN1qV/jZ+mz/bps1cVRQ/K1JFQKMab76cKP5gARNjhf8PUjQnUxyEF/QBlfMbONiOUw0ACwiDqha4PIrw/QTNZJfU=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fd8b164-03d7-4925-211a-08d706e3622d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2019 16:09:56.9522
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Chaitanya.Kulkarni@wdc.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5992
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/11/19 8:05 PM, Jens Axboe wrote:
-> On 7/7/19 8:02 PM, Damien Le Moal wrote:
->> On 2019/07/01 14:09, Damien Le Moal wrote:
->>> This series addresses a recuring problem with zone revalidation
->>> failures observed during extensive testing with memory constrained
->>> system and device hot-plugging.
->>
->> Jens, Martin,
->>
->> Any comment regarding this series ?
-> 
-> LGTM, I'll queue it up for this release.
-
-This broke !CONFIG_BLK_DEV_ZONED builds for null_blk, btw. Please be
-sure to test with zoned enabled and disabled in your builds when
-changing things that affect both.
-
-I fixed it up:
-
-http://git.kernel.dk/cgit/linux-block/commit/?h=for-linus&id=e347946439ed70e3af0d0c330b36d5648e71727b
-
--- 
-Jens Axboe
-
+On 7/11/19 6:59 PM, Martin K. Petersen wrote:=0A=
+> Hi Chaitanya,=0A=
+>=0A=
+>> +static inline sector_t bdev_nr_sects(struct block_device *bdev)=0A=
+>> +{=0A=
+>> +	return part_nr_sects_read(bdev->bd_part);=0A=
+>> +}=0A=
+> Can bdev end up being NULL in any of the call sites?=0A=
+>=0A=
+> Otherwise no objections.=0A=
+>=0A=
+Thanks for mentioning that. Initial version which was not posted had=0A=
+that check.=0A=
+=0A=
+This series just replaces the existing accesses without changing anything.=
+=0A=
+=0A=
+So if any of the exiting code has that bug then it will blow up nicely.=0A=
+=0A=
+For future callers I don't mind adding a new check and resend the series.=
+=0A=
+=0A=
+Would you prefer adding a check  ?=0A=
+=0A=
+=0A=
