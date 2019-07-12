@@ -2,110 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0466664A4
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 04:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89C95665D9
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 06:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729248AbfGLCsO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 22:48:14 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:55374 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728743AbfGLCsO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 11 Jul 2019 22:48:14 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 4E694C049589;
-        Fri, 12 Jul 2019 02:48:14 +0000 (UTC)
-Received: from localhost (ovpn-8-19.pek2.redhat.com [10.72.8.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6D79219C67;
-        Fri, 12 Jul 2019 02:48:13 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Keith Busch <keith.busch@intel.com>
-Subject: [RFC PATCH 7/7] blk-mq: handle requests dispatched from IO scheduler in case that hctx is dead
-Date:   Fri, 12 Jul 2019 10:47:26 +0800
-Message-Id: <20190712024726.1227-8-ming.lei@redhat.com>
-In-Reply-To: <20190712024726.1227-1-ming.lei@redhat.com>
-References: <20190712024726.1227-1-ming.lei@redhat.com>
+        id S1729516AbfGLEo3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jul 2019 00:44:29 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:13938 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729188AbfGLEo3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jul 2019 00:44:29 -0400
+X-UUID: 4317ff5b31624b9c9681947c79ea7cd6-20190712
+X-UUID: 4317ff5b31624b9c9681947c79ea7cd6-20190712
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 1930554801; Fri, 12 Jul 2019 12:44:19 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 12 Jul 2019 12:44:17 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 12 Jul 2019 12:44:17 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <pedrom.sousa@synopsys.com>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
+        <evgreen@chromium.org>, <beanhuo@micron.com>,
+        <marc.w.gonzalez@free.fr>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v1 0/2] scsi: ufs: Fix broken hba->outstanding_tasks
+Date:   Fri, 12 Jul 2019 12:44:14 +0800
+Message-ID: <1562906656-27154-1-git-send-email-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Fri, 12 Jul 2019 02:48:14 +0000 (UTC)
+X-TM-SNTS-SMTP: 6CE500BED1A01CEE061009D235263B53C480307527484BCFEC3F55144357D55B2000:8
+X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If hctx becomes dead, all in-queue IO requests aimed at this hctx have to
-be re-submitted, so cover requests queued in scheduler queue.
+Currently bits in hba->outstanding_tasks are cleared only after their
+corresponding task management commands are successfully done by
+__ufshcd_issue_tm_cmd().
 
-Cc: Bart Van Assche <bvanassche@acm.org>
-Cc: Hannes Reinecke <hare@suse.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Keith Busch <keith.busch@intel.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- block/blk-mq.c | 30 +++++++++++++++++++++++++-----
- 1 file changed, 25 insertions(+), 5 deletions(-)
+If timeout happens in a task management command, its corresponding
+bit in hba->outstanding_tasks will not be cleared until next task
+management command with the same tag used successfully finishes.‧
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index e4588d30840c..3ad1944a8e70 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2298,6 +2298,7 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
- 	enum hctx_type type;
- 	bool hctx_dead;
- 	struct request *rq;
-+	struct elevator_queue *e;
- 
- 	hctx = hlist_entry_safe(node, struct blk_mq_hw_ctx, cpuhp_dead);
- 	ctx = __blk_mq_get_ctx(hctx->queue, cpu);
-@@ -2309,12 +2310,31 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
- 	hctx_dead = cpumask_first_and(hctx->cpumask, cpu_online_mask) >=
- 		nr_cpu_ids;
- 
--	spin_lock(&ctx->lock);
--	if (!list_empty(&ctx->rq_lists[type])) {
--		list_splice_init(&ctx->rq_lists[type], &tmp);
--		blk_mq_hctx_clear_pending(hctx, ctx);
-+	e = hctx->queue->elevator;
-+	if (!e) {
-+		spin_lock(&ctx->lock);
-+		if (!list_empty(&ctx->rq_lists[type])) {
-+			list_splice_init(&ctx->rq_lists[type], &tmp);
-+			blk_mq_hctx_clear_pending(hctx, ctx);
-+		}
-+		spin_unlock(&ctx->lock);
-+	} else if (hctx_dead) {
-+		LIST_HEAD(sched_tmp);
-+
-+		while ((rq = e->type->ops.dispatch_request(hctx))) {
-+			if (rq->mq_hctx != hctx)
-+				list_add(&rq->queuelist, &sched_tmp);
-+			else
-+				list_add(&rq->queuelist, &tmp);
-+		}
-+
-+		while (!list_empty(&sched_tmp)) {
-+			rq = list_entry(sched_tmp.next, struct request,
-+					queuelist);
-+			list_del_init(&rq->queuelist);
-+			blk_mq_sched_insert_request(rq, true, true, true);
-+		}
- 	}
--	spin_unlock(&ctx->lock);
- 
- 	if (list_empty(&tmp))
- 		return 0;
+This is wrong and can lead to some issues, like power consumpton issue.
+For example, ufshcd_release() and ufshcd_gate_work() will do nothing
+if hba->outstanding_tasks is not zero even if both UFS host and devices
+are actually idle.
+
+Because error handling flow, i.e., ufshcd_reset_and_restore(), will be
+triggered after any task management command times out, we fix this by
+clearing corresponding hba->outstanding_tasks bits during this flow.
+To achieve this, we need a mask to track timed-out commands and thus
+error handling flow can clear their tags specifically.
+
+Stanley Chu (2):
+  scsi: ufs: Make new function for clearing outstanding task bits
+  scsi: ufs: Fix broken hba->outstanding_tasks
+
+ drivers/scsi/ufs/ufshcd.c | 49 +++++++++++++++++++++++++++++++++------
+ drivers/scsi/ufs/ufshcd.h |  1 +
+ 2 files changed, 43 insertions(+), 7 deletions(-)
+
 -- 
-2.20.1
+2.18.0
 
