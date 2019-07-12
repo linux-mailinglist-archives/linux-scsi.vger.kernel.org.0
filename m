@@ -2,144 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 962D16631B
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 02:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1006C6633A
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 03:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728796AbfGLAwI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 20:52:08 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:15118 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728102AbfGLAwI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 20:52:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1562892727; x=1594428727;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=vNeUAl7sNMj2d9vYIXTchLpR6N22JmonanZ+iSOedhs=;
-  b=VMC+z0Gu7JQC4Q1gfLbefS3XxMxSb/QMmDgRZpqPVGzhobDMN3UXra+U
-   1aQCTVxiaHSSP6FflSn4b6gig131bbKNl4N7krcPrp2X6KMDhFH/Ugc+/
-   6YQNZoBk2BIJG1DPZ/LtsMU3C2Nka6ney3+4jO/wLkPY0nRJAWzkzBcBb
-   Yunrf6km6kU2dqDuzWmU17gnWO2kpAJ7DQ4LVJTUa5e8GeOzTUG5SRG3U
-   3uKpFvbncW+mAQjlfOdJNsMzsi9Zh0whyv63T6+IhQX1C680qAh6cGTZU
-   yOEripadBdtJbOxpEOPNmF0UonecRaTkv9heKyIE0AXCSqsz3SjRA+mnO
-   Q==;
-IronPort-SDR: 12atzZ1Pm52tkCdIU28oKZMuOsdIb/LBXMCGqTpVX5Mvj8VmHlAHklxX9Bt/D4mSeuo0I+lAgk
- 4DbefdD1Lqp3J+K40lkHNC/nyQlQfaXNddx/suyHoCuAdq5uoyIyoKkOlWMnCds6/OcbEp+bqO
- WHnYhU8ZeUcml1fEM7UlN6KzYjv/jnifnPbUbK8CSD9BcUzXgQP07VLLwC2AT0JbwJk8JT1Z0I
- yIRs2lSTC4dCNTpLJCvjZ6yMS+qIYAYJBYzyO2DS0dQHw7mZCEra/KKITr8JVn03irG7yNfMvW
- Gcs=
-X-IronPort-AV: E=Sophos;i="5.63,480,1557158400"; 
-   d="scan'208";a="219259508"
-Received: from mail-bn3nam04lp2051.outbound.protection.outlook.com (HELO NAM04-BN3-obe.outbound.protection.outlook.com) ([104.47.46.51])
-  by ob1.hgst.iphmx.com with ESMTP; 12 Jul 2019 08:52:06 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vNeUAl7sNMj2d9vYIXTchLpR6N22JmonanZ+iSOedhs=;
- b=YkGeuHrB4wyV5L152Wy8lu14uPYwzlBz0OZXA/lMSJov3wWLiUxBIjQN5xDi/2iMP22ygxXq4SpD7Z5b4B7Um+D5KK8fbxKkHb32Ot40o+xdPKOQ7M68vdPqxmn+/LKv4qhWSZSyjMZIzsWNjhzIPc/Q8qVMVwcSBkI+zYBx3C8=
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.58.207) by
- BYAPR04MB4630.namprd04.prod.outlook.com (52.135.238.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.17; Fri, 12 Jul 2019 00:52:05 +0000
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::65a9:db0a:646d:eb1e]) by BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::65a9:db0a:646d:eb1e%6]) with mapi id 15.20.2073.008; Fri, 12 Jul 2019
- 00:52:05 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH V6 3/4] sd_zbc: Fix report zones buffer allocation
-Thread-Topic: [PATCH V6 3/4] sd_zbc: Fix report zones buffer allocation
-Thread-Index: AQHVL8sveLyE842Ki02oZZ+qoDG8mg==
-Date:   Fri, 12 Jul 2019 00:52:05 +0000
-Message-ID: <BYAPR04MB58168DD2A9F429D515E377A1E7F20@BYAPR04MB5816.namprd04.prod.outlook.com>
-References: <20190701050918.27511-1-damien.lemoal@wdc.com>
- <20190701050918.27511-4-damien.lemoal@wdc.com> <yq1wogo85c6.fsf@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Damien.LeMoal@wdc.com; 
-x-originating-ip: [199.255.47.9]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 23f6199b-c36b-4af5-a0dc-08d7066328b9
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB4630;
-x-ms-traffictypediagnostic: BYAPR04MB4630:
-x-microsoft-antispam-prvs: <BYAPR04MB4630A65B44B9B6D9542D4E77E7F20@BYAPR04MB4630.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 00963989E5
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(39860400002)(396003)(136003)(346002)(376002)(189003)(199004)(9686003)(6436002)(7416002)(71200400001)(55016002)(66946007)(91956017)(2906002)(6116002)(64756008)(66476007)(76116006)(81156014)(6916009)(66446008)(8936002)(14444005)(33656002)(71190400001)(53936002)(8676002)(229853002)(86362001)(316002)(25786009)(256004)(446003)(52536014)(66556008)(68736007)(3846002)(26005)(478600001)(14454004)(53546011)(54906003)(7696005)(476003)(6506007)(74316002)(102836004)(186003)(305945005)(6246003)(76176011)(81166006)(66066001)(5660300002)(7736002)(99286004)(4326008)(486006)(3714002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4630;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ON4hoFoQyaNYDZARdyMnqFHp1OJh8lUr2ji2Mwdrzjw0Wo7u/0g/+5OAr/HHRIlumjHIXYyMNw3VOFfQBD3q9FOeL7gAxHipVcyumxdmuo7gP+N9cf8bcCxQ3+5Gi9MEh9N7XDdib6dZ+YuI6CO1D9xHdOgjoo15JTqXyLSCpWmiApf3812GtJuQamEXyZ7swd38ZTzMZQgGwcotk8b5VInMmJLEcir1WRq8rY+dRvdAR2VcHC6//+R7orMr5oaUH3kQ+PYbWJo49q5eRvKjN+3dkayC9n5/e/hbb2Rf6Lleck3pGW9k6uVKuJ7kanwzSHZNNXqC+wZC2BSt4NyPEyTgDOJQFemp8PHo5+mCmPr0Ftp4DYz8+2koCUPAc+g8shqjacfr/lt7ycHOEiu8DddO3WN6iXudYRJpVXGiBOQ=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1728951AbfGLBFS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jul 2019 21:05:18 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:42412 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728102AbfGLBFR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 21:05:17 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6C14HPH112124;
+        Fri, 12 Jul 2019 01:05:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=vzV86aF3j7x4Rx+cp83GPVm2vEM8IfwQZYJajwK1WPU=;
+ b=N/HiMb+2VEcSvac6H1d2RxQETI4PM2Gtr0P7YPOOEiGqlDL77NHYGOSDb9qLSa8lmipa
+ 0qbt+p/pCqA65y8m6kqvZp0rP8eBGEdSJIP0Tf0ykoklghExZNzYxXK6ivmLa9K4qCML
+ 8EGEAPyZULa9mmqx8fDEA1ckWkdTOky3BFBcOj5cgzUtCFNuJMWife7Q8Nb2c1BtkNjM
+ zLZzxOzynyJ+TSLUKiZZtYBoEKzUzjU/j9RpVpWQ3Jzkt8LAtpobJYBB+3cQxOybJW8D
+ 1cwIPt3cugMjbcHMq+OVC14UUdEyCQS0htxkPaefRKDPmv1wEx1DMKcXI1VRl9p6BwTp JA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2tjm9r2w1j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 Jul 2019 01:05:14 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6C12xuJ028006;
+        Fri, 12 Jul 2019 01:05:14 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2tmwgyg3tt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 Jul 2019 01:05:13 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6C15CIn007814;
+        Fri, 12 Jul 2019 01:05:12 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 11 Jul 2019 18:05:11 -0700
+To:     Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
+Cc:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        kiran-kumar.kasturi@broadcom.com, sankar.patra@broadcom.com,
+        sasikumar.pc@broadcom.com, chandrakanth.patil@broadcom.com
+Subject: Re: [PATCH 0/4] megaraid_sas: driver updates
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <1561715441-1428-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
+Date:   Thu, 11 Jul 2019 21:05:09 -0400
+In-Reply-To: <1561715441-1428-1-git-send-email-shivasharan.srikanteshwara@broadcom.com>
+        (Shivasharan S.'s message of "Fri, 28 Jun 2019 02:50:37 -0700")
+Message-ID: <yq1tvbs6p16.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23f6199b-c36b-4af5-a0dc-08d7066328b9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2019 00:52:05.0187
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Damien.LeMoal@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4630
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9315 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1907120012
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9315 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907120012
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Martin,=0A=
-=0A=
-On 2019/07/12 9:28, Martin K. Petersen wrote:=0A=
-> =0A=
-> Damien,=0A=
-> =0A=
->> During disk scan and revalidation done with sd_revalidate(), the zones=
-=0A=
->> of a zoned disk are checked using the helper function=0A=
->> blk_revalidate_disk_zones() if a configuration change is detected=0A=
->> (change in the number of zones or zone size). The function=0A=
->> blk_revalidate_disk_zones() issues report_zones calls that are very=0A=
->> large, that is, to obtain zone information for all zones of the disk=0A=
->> with a single command. The size of the report zones command buffer=0A=
->> necessary for such large request generally is lower than the disk=0A=
->> max_hw_sectors and KMALLOC_MAX_SIZE (4MB) and succeeds on boot (no=0A=
->> memory fragmentation), but often fail at run time (e.g. hot-plug=0A=
->> event). This causes the disk revalidation to fail and the disk=0A=
->> capacity to be changed to 0.=0A=
-> =0A=
-> Probably easiest to funnel this through block with the rest of the=0A=
-> series.=0A=
-=0A=
-Sounds good to me.=0A=
-=0A=
-Jens,=0A=
-=0A=
-Could you please consider this series for 5.3 ? We have been using it in te=
-sts=0A=
-since 2-3 weeks ago (5.2-rc6) without any problems. All revalidation proble=
-ms=0A=
-disappeared and with no side effects detected.=0A=
-=0A=
-Thank you.=0A=
-=0A=
-> Acked-by: Martin K. Petersen <martin.petersen@oracle.com>=0A=
-=0A=
-Thanks !=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+
+Shivasharan,
+
+> This series contains four driver update patches.  The first patch
+> contains a fix for calculating the target ID sent to firmware. This
+> patch was sent earlier as well[1], but got lost in the v2 series due
+> to a mail client issue.  Second patch enables newly added
+> "msix_load_balance" flag only for Invader and later generation
+> controllers.  Third patch adds a module parameter which controls
+> logging of async event notifications from firmware.  Fourth patch
+> updates the driver version.  Please consider these patches for
+> 5.3/scsi-queue.
+
+Applied to 5.3/scsi-fixes, thanks!
+
+-- 
+Martin K. Petersen	Oracle Linux Engineering
