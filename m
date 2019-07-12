@@ -2,88 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 073366629B
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 01:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FDE662AF
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jul 2019 02:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729185AbfGKX4F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jul 2019 19:56:05 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:40424 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726865AbfGKX4F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 19:56:05 -0400
-Received: by mail-qk1-f196.google.com with SMTP id s145so5120050qke.7;
-        Thu, 11 Jul 2019 16:56:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aRNuz2cGdh0jwMcd7BVODz2p7ghKkaxc8od21UOb/kY=;
-        b=vNjXr5x8JB+9fSBHpxi735cLzfk78HGHCWQvj5ZOSlo6qDfuoufVsV9wW2kmEb7pnW
-         WycwAmcuEWpVCYtLFP2f5tC3FJ5FMb4eBSzK9zvoF/M67PcbM6+lGFGxHFgtBWtHP5lq
-         seCyziM5Dn+fXrzKCazn/NUnZix6ELDnqPqhAfUIL+QG8D3lbC7DLYCBOOoyqoSIlTuq
-         A8iP6/dZvaD/PJLTw2oshOdd/dtSevSWKiGJmbjQSrrswAIKD45IqAt1giqACB1np1Ai
-         BfDqSQRzKsL9lFXpBnSgmIhfnri1+Ljx9EQQQnZuSbZvxfXZMGFZls4BoGtqEIq7ctLw
-         2oSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aRNuz2cGdh0jwMcd7BVODz2p7ghKkaxc8od21UOb/kY=;
-        b=JcVmnqM+wJhX/KJEQ668NzwAVYp7RfOpnGd4Ofmh7GG27iKYDtre+AfGZ+nAuWyIVQ
-         fqoODY/us0msOZwfnNKJhkUlO3PnLQfFiY8KRlTJGU8488IMpf1RqMshwXDAbY9c3czr
-         BYKlRWLUP+3ipgxXgLSkET+T5W4/xIZaYOVU8dvlq8zxXvfujC6l98jSvCeOM8eWiRil
-         00emxCxhY9NE8JSPjlB9aomwF4e6fKDddF+TVmyENudn/Y9DxDpD/PxrfBodz2PeAdrh
-         MlTw4TKIWXCNp02fC6CohG6j/fUs1nKbDTSrN+kQNhSUWAzu6i6aR/gfD0l2ywKeZrJT
-         4LJg==
-X-Gm-Message-State: APjAAAXKFt2D+/EGLc+oZBwqyXgnV2gI2imtWsCjsrs8RoT+DYLLOPB9
-        kVXNGW+ipGyzCwUCNkqTzA==
-X-Google-Smtp-Source: APXvYqw2iOJ8mTp/sJ+7TcNM3IfKEeIWs2Yyihuj7jlMr0gl33hyizoIcR4XHLhP0gx8WLUJMj6V2w==
-X-Received: by 2002:ae9:de05:: with SMTP id s5mr4175390qkf.184.1562889364204;
-        Thu, 11 Jul 2019 16:56:04 -0700 (PDT)
-Received: from localhost.localdomain (modemcable148.230-83-70.mc.videotron.ca. [70.83.230.148])
-        by smtp.googlemail.com with ESMTPSA id v84sm2888699qkb.0.2019.07.11.16.56.03
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 11 Jul 2019 16:56:03 -0700 (PDT)
-From:   Keyur Patel <iamkeyur96@gmail.com>
-Cc:     iamkeyur96@gmail.com, Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        id S1729098AbfGLAOz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jul 2019 20:14:55 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:33936 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728574AbfGLAOy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jul 2019 20:14:54 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6C0EiMg167808;
+        Fri, 12 Jul 2019 00:14:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=DzEpnMM0XIAZkQhNkXNTuL7KgSoHSwCJotnMkirnVEQ=;
+ b=Y9ZB+DwWn1FBl8gge1tLuPESrvTj1OuQh8MQnbYMyXNAhcffXJwwyDCSLiy8p9B9yLLd
+ mrdB6qHBOh+cXEnmNU0G3cQU81KI5/nqgeDA2/132TLNNMMYrM67lWMIrMXZDJhw0Gr/
+ RDxp1sKvi1JcsWElMwL+vb2xhwOuDGQcyhC/+tgz9z1xzTbuR2ZYCNEh/VJUHWVBp2J4
+ qdg2628rRnyPgCHBqf4Ntar3KPmfwyEQHYvPYLPVhFVKqHLC0BKm/JESImTWXAV1094l
+ 9FAFrXUrlVQ63BgutRXznAyP0YGR2eWWBKADm/K8Kt6DCkEZc4qdkcnfPzMRYwhGH9Wx vQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 2tjkkq2tgt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 Jul 2019 00:14:44 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6C0Cg1u150839;
+        Fri, 12 Jul 2019 00:14:43 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2tn1j1u2p6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 Jul 2019 00:14:43 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6C0EYYc026045;
+        Fri, 12 Jul 2019 00:14:34 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 11 Jul 2019 17:14:34 -0700
+To:     Avri Altman <avri.altman@wdc.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.vnet.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: g_NCR5380: Use !x in place of NULL comparisons
-Date:   Thu, 11 Jul 2019 19:55:46 -0400
-Message-Id: <20190711235546.28081-1-iamkeyur96@gmail.com>
-X-Mailer: git-send-email 2.22.0
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avi Shchislowski <avi.shchislowski@wdc.com>,
+        Alex Lemberg <alex.lemberg@wdc.com>
+Subject: Re: [PATCH] scsi: uapi: ufs: Fix SPDX license identifier
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <1560346477-13944-1-git-send-email-avri.altman@wdc.com>
+Date:   Thu, 11 Jul 2019 20:14:31 -0400
+In-Reply-To: <1560346477-13944-1-git-send-email-avri.altman@wdc.com> (Avri
+        Altman's message of "Wed, 12 Jun 2019 16:34:37 +0300")
+Message-ID: <yq1ef2w9kig.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9315 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=978
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1907120001
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9315 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907120001
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Change (x == NULL) to !x and (x != NULL) to x, to fix
-following checkpatch.pl warnings:
-CHECK: Comparison to NULL could be written "!x".
 
-Signed-off-by: Keyur Patel <iamkeyur96@gmail.com>
----
- drivers/scsi/g_NCR5380.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Avri,
 
-diff --git a/drivers/scsi/g_NCR5380.c b/drivers/scsi/g_NCR5380.c
-index 2ab774e62e40..6813094155d3 100644
---- a/drivers/scsi/g_NCR5380.c
-+++ b/drivers/scsi/g_NCR5380.c
-@@ -312,7 +312,7 @@ static int generic_NCR5380_init_one(struct scsi_host_template *tpnt,
- 	}
- 
- 	instance = scsi_host_alloc(tpnt, sizeof(struct NCR5380_hostdata));
--	if (instance == NULL) {
-+	if (!instance) {
- 		ret = -ENOMEM;
- 		goto out_unmap;
- 	}
+> added 'WITH Linux-syscall-note' exception, which is the officially
+> assigned exception identifier for the kernel syscall exception.
+> This exception makes it possible to include GPL headers into non GPL
+> code, without confusing license compliance tools.
+
+I'd like Arnd to ack the license change since he has made changes
+(however mechanical) to the file.
+
 -- 
-2.22.0
-
+Martin K. Petersen	Oracle Linux Engineering
