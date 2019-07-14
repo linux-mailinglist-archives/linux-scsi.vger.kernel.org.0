@@ -2,155 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A6667CCD
-	for <lists+linux-scsi@lfdr.de>; Sun, 14 Jul 2019 05:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6749F67E29
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Jul 2019 09:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbfGNDoZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 13 Jul 2019 23:44:25 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:27189 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728009AbfGNDoX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 13 Jul 2019 23:44:23 -0400
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20190714034419epoutp02f388266b7de77713f4d92c61ecbc5dc5~xKTaCmN4O0094400944epoutp02z
-        for <linux-scsi@vger.kernel.org>; Sun, 14 Jul 2019 03:44:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20190714034419epoutp02f388266b7de77713f4d92c61ecbc5dc5~xKTaCmN4O0094400944epoutp02z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1563075859;
-        bh=51EVK/VVBV4bQIfR6AA8vvn+T0TomM5j6lduh/y2oCw=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=AlNDBD8FvU1mxLfDaE9+r3JpY6VmURlTK2kgKGc1qDhTK7W0mFnYt1ECJhS2j6xuW
-         HnyPkuEU6p6pkKL7ZdzZW7hCwidGUNA7AKHY1FbsfSBf2yg8mPM3epHximEshpDSLt
-         JJwKhTB6hp6M/O72g7QjpWjjYXWr0PmHQ3+B0jdk=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-        20190714034418epcas2p3296a1f5033d55ce2d383b28d29f0db61~xKTY0R_Qe3243732437epcas2p3_;
-        Sun, 14 Jul 2019 03:44:18 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.40.186]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 45mXb440DBzMqYll; Sun, 14 Jul
-        2019 03:44:16 +0000 (GMT)
-X-AuditID: b6c32a45-ddfff7000000103c-19-5d2aa510dce2
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        48.9B.04156.015AA2D5; Sun, 14 Jul 2019 12:44:16 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH V2] mpt3sas: support target smid for [abort|query] task
-Reply-To: minwoo.im@samsung.com
-From:   Minwoo Im <minwoo.im@samsung.com>
-To:     "sreekanth.reddy@broadcom.com" <sreekanth.reddy@broadcom.com>,
-        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
-        "suganath-prabu.subramani@broadcom.com" 
-        <suganath-prabu.subramani@broadcom.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     Minwoo Im <minwoo.im@samsung.com>,
-        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Euihyeok Kwon <eh81.kwon@samsung.com>,
-        Sarah Cho <sohyeon.jo@samsung.com>,
-        Sanggwan Lee <sanggwan.lee@samsung.com>,
-        Gyeongmin Nam <gm.nam@samsung.com>,
-        Sungjun Park <sj1228.park@samsung.com>,
-        "minwoo.im.dev@gmail.com" <minwoo.im.dev@gmail.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
-Date:   Sun, 14 Jul 2019 12:44:15 +0900
-X-CMS-MailID: 20190714034415epcms2p25f9787cb71993a30f58524d2f355b543
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrMJsWRmVeSWpSXmKPExsWy7bCmqa7AUq1Yg6UbxS0+rtjFbvHwnbPF
-        ohvbmCz23tK2uLxrDptF9/UdbBbLj/9jsvjVyW3x7PQBZou5rxuYLBZtfc9qsWHeLRaL7pMe
-        FusPTWCzmPn1KbvFszMxDgIes+6fZfPYOesuu8eERQcYPT4+vcXi0bdlFaPH501yAWxROTYZ
-        qYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmptkouPgG6bpk5QDcrKZQl5pQC
-        hQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgoMDQv0ihNzi0vz0vWS83OtDA0MjEyBKhNyMn63
-        zmItmChU8WZrB3sD422+LkZODgkBE4mTbX/Yuhi5OIQEdjBKnFz6kKWLkYODV0BQ4u8OYZAa
-        YQF3iQufdrGChIUE5CV+vDKACGtKvNt9hhXEZhNQl2iY+ooFZIyIwH4miY0fN7CAJJgFlrFI
-        3O8ygNjFKzGj/SkLhC0tsX35VkYIW1Ti5uq37DD2+2PzoeIiEq33zjJD2IISD37uZgS5QUJA
-        QuLeOzsIs15iywoLkLUSAi2MEjferIVq1ZdofP4RbBWvgK/EgWWz2EBsFgFVieWPO5kgalwk
-        HkxoZIQ4U15i+9s5zCAzmYH+Wr9LH2K8ssSRW1CP8El0HP7LDvPIjnlPoKYoS3w8dAjqSEmJ
-        5Zdes0HYHhLzOxaB2UICgRIPv/xnm8AoPwsRtLOQ7J2FsHcBI/MqRrHUguLc9NRiowJD5Njc
-        xAhOsFquOxhnnPM5xCjAwajEw7uDWytWiDWxrLgy9xCjBAezkgjvqv/qsUK8KYmVValF+fFF
-        pTmpxYcYTYHen8gsJZqcD0z+eSXxhqZGZmYGlqYWpmZGFkrivJu5b8YICaQnlqRmp6YWpBbB
-        9DFxcEo1MF6RWjc1ZMnmr0/nu7nPaNypkXHS6Y+E7HW1yykXAqenxR77pL2291QW7/P0Y1sv
-        KP9Uq0xrv9gxee/eWGal5IVqVZOZbsxemZB3OmKt55X67cdaJq5X9t98PuGT9vX6NXNEtY8/
-        fOJhqWF6Re6zbOb3Fzujuq4mcbi3Flzf8yzI4XKCaKbOnwtKLMUZiYZazEXFiQCrMirrxgMA
-        AA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20190714034415epcms2p25f9787cb71993a30f58524d2f355b543
-References: <CGME20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
+        id S1726728AbfGNH0f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 14 Jul 2019 03:26:35 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:44901 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbfGNH0f (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Jul 2019 03:26:35 -0400
+Received: by mail-io1-f65.google.com with SMTP id s7so29024870iob.11
+        for <linux-scsi@vger.kernel.org>; Sun, 14 Jul 2019 00:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=P6sHoVXq5IYzfdLJutY8tydwGGbuFVHoSe7YCPHjv08=;
+        b=eDdaCb1WOXx1i4nI1bpdBIxc+FEmSIzhiwUdeoDMbjRj/F1eBgc2vhapNSJLTMgkvA
+         gbgzR+O75bseTj2Z5x3MOf+DBt/KqC1s4iPzBn/St6vXO8qpksgPM1zTN+QPc6+JmiUc
+         BL4GM4tdrX6RdyE8tFsg3x//rd2nQM02r3vK3OTkJBiTBxi+zdd0fsHVdQUy+6WRppUu
+         GoqIBvsvt/ScIniKOnRxYg8IQ19xGeCrO3Nj4PJvIIx0/kOixl9GiBt+HIaTP1eQshww
+         2aYyDobiHPAkK6uw/LU6C+zVfeGLSIlI8Ayb9FkZiD2EGaXVfyslQADcDeigt9HRPtwc
+         AWwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=P6sHoVXq5IYzfdLJutY8tydwGGbuFVHoSe7YCPHjv08=;
+        b=gZ66qpBX7IwWmkTkJMHIUl1EhHiKjmRSPntS61+Czuq2YkM/WyyUQHchw9i/DSZ5TZ
+         8K2be2eQp8vuU3Zb6Cm+lBYKkXQlB61F8cFwM8NmKmt6dqRzfatvfYh/ZsEhsOa8a4R2
+         frV5B2iMN5xMw8nOTsD0gBTUntfwjgaE60gJ3g8S+V0kiz8hiLrVE1QY4TSC6PbReYR8
+         tJe3AsY0gKDEbDRR/z5yHkm+LTSwf7tsiF8LxvnHHyvcstkVPmnJnczm/N98nDui+ylE
+         EtgqgHcTB0FBiP8OmXVwkp1AbAOmNFJVjc7noI2nojEcieZrUlV4QJse6FocpYcP6FSO
+         B8Sw==
+X-Gm-Message-State: APjAAAXlBfUM+Tv2I4IEsbqZX5dvgaR4w4oHJwdWS1S1f4fr7zG/bzAY
+        VPAsyNqJ/vnEttr9o0zjERzkU+e+WGh+9XXkK/qRNcZ5
+X-Google-Smtp-Source: APXvYqxDDXfeUvjavG6NbfAnB8vUpb7QiYOvIXxuCjKgAJlrkNrcnMZ7F1prDOHy7e5GXd/pOp6VDvwmSxI+FrcLEpA=
+X-Received: by 2002:a02:6a22:: with SMTP id l34mr21539574jac.126.1563089194696;
+ Sun, 14 Jul 2019 00:26:34 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:6638:5b3:0:0:0:0 with HTTP; Sun, 14 Jul 2019 00:26:34
+ -0700 (PDT)
+Reply-To: sirjimmyisu@aol.com
+From:   ZENITH BAN PLC <sirjimmyisu15@gmail.com>
+Date:   Sun, 14 Jul 2019 08:26:34 +0100
+Message-ID: <CAKB3Wo+S1GSbbbDCdQrd=a6VpSkWQNBH+CkcjvL8QpKUkc8r3w@mail.gmail.com>
+Subject: Yours Faithfully,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
-to /dev/mpt3ctl.  If the given task_type is either abort task or query
-task, it may need a field named "Initiator Port Transfer Tag to Manage"
-in the IU.
+Dear Beneficiary,
 
-Current code does not support to check target IPTT tag from the
-tm_request.  This patch introduces to check TaskMID given from the
-userspace as a target tag.  We have a rule of relationship between
-(struct request *req->tag) and smid in mpt3sas_base.c:
+It is with gladness, i write you this message, to congratulate you on
+the successful release of the sum of $5 Million USD to you, Credited
+to Online Bank ATM Card account that was set up for you in our bank .
 
-3318 u16
-3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
-3320         struct scsi_cmnd *scmd)
-3321 {
-3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
-3323         unsigned int tag = scmd->request->tag;
-3324         u16 smid;
-3325
-3326         smid = tag + 1;
 
-So if we want to abort a request tagged #X, then we can pass (X + 1) to
-this IOCTL handler.  Otherwise, user space just can pass 0 TaskMID to
-abort the first outstanding smid which is legacy behaviour.
+The Metropolitan Courier is unable to complete the Delivery of your
+ATM Card with the details we received from IMF, So we require some
+more information in order to complete this transfer.
 
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: James E.J. Bottomley <jejb@linux.ibm.com>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: MPT-FusionLinux.pdl@broadcom.com
-Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
----
- drivers/scsi/mpt3sas/mpt3sas_ctl.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+* Your Full Names:_______________
+* Contact Address:_______________
+* SMS Text Phone:________________
+* Mobile Phone:_________________
+* Home Phone:__________________
+* Fax:_________________________
+* Occupation:___________________
+* Marital Status:_________________
+* Age:_________________________
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-index b2bb47c14d35..f6b8fd90610a 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-@@ -596,8 +596,16 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command *karg,
- 		if (priv_data->sas_target->handle != handle)
- 			continue;
- 		st = scsi_cmd_priv(scmd);
--		tm_request->TaskMID = cpu_to_le16(st->smid);
--		found = 1;
-+
-+		/*
-+		 * If the given TaskMID from the user space is zero, then the
-+		 * first outstanding smid will be picked up.  Otherwise,
-+		 * targeted smid will be the one.
-+		 */
-+		if (!tm_request->TaskMID || tm_request->TaskMID == st->smid) {
-+			tm_request->TaskMID = cpu_to_le16(st->smid);
-+			found = 1;
-+		}
- 	}
- 
- 	if (!found) {
--- 
-2.16.1
+In order to resolve this problem, Please email us immediately. As soon
+as this information is received.
 
+Reply to: sirjimmyisu@aol.com
+
+Thank you as we anticipate your prompt response.
+
+Yours Faithfully,
+Mr. Jimmy Isu
