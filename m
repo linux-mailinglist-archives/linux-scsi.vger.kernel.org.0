@@ -2,139 +2,153 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 936416768C
-	for <lists+linux-scsi@lfdr.de>; Sat, 13 Jul 2019 00:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A9667CAB
+	for <lists+linux-scsi@lfdr.de>; Sun, 14 Jul 2019 04:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728072AbfGLWdd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Jul 2019 18:33:33 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:26705 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727790AbfGLWdd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jul 2019 18:33:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1562970812; x=1594506812;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=cZaO/huk/mrw/uSTRcu2vwWDIqZDPc37x7B9FiZrYLQ=;
-  b=rgSXt9rGppwZz8H7W4rx9qp9GCukg5/n57NvGL5fZcLKG0ZE/RBFwrwK
-   8qfiNaBW6GoL1lxUe1FYBZ4HAgTvtRWE1/TCabr/6YO9fIRfN/3on8b1R
-   SzLLqFAaTl/JTWVT/+ANTAaGpGqEli4tKzv3ikJeRqVh3KqWesKSWliXB
-   NFhnsXy6Q5ufScCgNNsLYEsxcHzOD1v4l8fifCG8yBT7Mbs/oxqYbbo4o
-   sDRStTYzgCau5jPv7jONO4g44OQiyQw6LU91KQjm8K8+liFc8x1kxgq9e
-   RRPppPiHGlbjcCPpfqAKXdl+PhlMreWCBwcPUd2AcJeY+CcaCcdYAIAg+
-   Q==;
-IronPort-SDR: tsCGHpEouwsmmlpp7mWElGzBqwSww5j+aXmyV0YCw4vAzSJ48g8kykjk4d3lWDu6R2c09hiCbv
- vmSHuD/ce+c2fwwf+vcSpMqTWSHbJceVdGJEOB3o0+sicBHiOK88lLRHV/cvk7XYzlI2OO/0ru
- GtZIxPDIgBRla4NPqPDRR+48vRVsSeqXcr8rA9a4We3sqdqyQoJa2YT4byu1IlxztivrGm48rR
- lLV3TDbEYDf0flr+3vt5HpkusWv4tQBVoDAEbcaHcDSXdQ2JNuXdy138SYDTWFTj8rUcygMntj
- 7VY=
-X-IronPort-AV: E=Sophos;i="5.63,484,1557158400"; 
-   d="scan'208";a="219352955"
-Received: from mail-co1nam03lp2052.outbound.protection.outlook.com (HELO NAM03-CO1-obe.outbound.protection.outlook.com) ([104.47.40.52])
-  by ob1.hgst.iphmx.com with ESMTP; 13 Jul 2019 06:33:30 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cZaO/huk/mrw/uSTRcu2vwWDIqZDPc37x7B9FiZrYLQ=;
- b=YhQ6lFbJMmz5ypx07Ge8/13MGly/KxPvMLSs1eVlshFAE3sMxFuYvbEFq+ew7ZTIRn5oTIC1fSlC2B8AAWjSH7BHj7LlsF2HBUzQXRizcAVVXVUYWcGaenfjTO4uqZjmEPFGKlu22s9kCS63MLwMYPT4tNMnCiT+TKmEEJC3IdE=
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.58.207) by
- BYAPR04MB4696.namprd04.prod.outlook.com (52.135.240.23) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.19; Fri, 12 Jul 2019 22:33:22 +0000
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::65a9:db0a:646d:eb1e]) by BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::65a9:db0a:646d:eb1e%6]) with mapi id 15.20.2073.012; Fri, 12 Jul 2019
- 22:33:22 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     Jens Axboe <axboe@kernel.dk>,
+        id S1727995AbfGNCR6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 13 Jul 2019 22:17:58 -0400
+Received: from mailout1.samsung.com ([203.254.224.24]:41780 "EHLO
+        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727918AbfGNCR6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 13 Jul 2019 22:17:58 -0400
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20190714021754epoutp010f72f2e0a0c63b173fa89ceb6e172075~xJH9Tyu-O0673106731epoutp015
+        for <linux-scsi@vger.kernel.org>; Sun, 14 Jul 2019 02:17:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20190714021754epoutp010f72f2e0a0c63b173fa89ceb6e172075~xJH9Tyu-O0673106731epoutp015
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1563070674;
+        bh=yNAoPuRoPzyZ4mRfa7HYfRK55kOEm67EhAubhyYqoXQ=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=l8n9tSki1NutIF5cz/cTpm4aUr9VCCh1SOcv48mS97giPgH7pPidWfj3zJAxu92zi
+         xeqfNbQFuNVFHXtu4fTQsvwpEd/9pflI9Im0SwJBVLt3bhi88XggMbrWOzjJROphp5
+         DLaIPP5dkd3+bERtL3M30IQVs3tBQ4GykTqK4EDc=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20190714021754epcas2p38ba7dd96266371e2281d77273b97b176~xJH8o00nl2917029170epcas2p3G;
+        Sun, 14 Jul 2019 02:17:54 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.189]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 45mVgP0swczMqYlh; Sun, 14 Jul
+        2019 02:17:53 +0000 (GMT)
+X-AuditID: b6c32a46-fd5ff70000001035-85-5d2a90d0f030
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        16.61.04149.0D09A2D5; Sun, 14 Jul 2019 11:17:53 +0900 (KST)
+Mime-Version: 1.0
+Subject: Re: [RESEND RFC PATCH] mpt3sas: support target smid for
+ [abort|query] task
+Reply-To: minwoo.im@samsung.com
+From:   Minwoo Im <minwoo.im@samsung.com>
+To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Minwoo Im <minwoo.im@samsung.com>
+CC:     "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
+        "suganath-prabu.subramani@broadcom.com" 
+        <suganath-prabu.subramani@broadcom.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
         "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-CC:     Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH V6 0/4] Fix zone revalidation memory allocation failures
-Thread-Topic: [PATCH V6 0/4] Fix zone revalidation memory allocation failures
-Thread-Index: AQHVL8ssJYyertgVkky0I6r2FZ0yYw==
-Date:   Fri, 12 Jul 2019 22:33:21 +0000
-Message-ID: <BYAPR04MB5816F76F09488AE706B49F72E7F20@BYAPR04MB5816.namprd04.prod.outlook.com>
-References: <20190701050918.27511-1-damien.lemoal@wdc.com>
- <BYAPR04MB5816BC7EC358F5785AEE1EA9E7F60@BYAPR04MB5816.namprd04.prod.outlook.com>
- <cb26f686-ce7e-9d1a-4735-2375d65c0ea5@kernel.dk>
- <27386e10-7494-7fcf-f203-484db5c3c69c@kernel.dk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Damien.LeMoal@wdc.com; 
-x-originating-ip: [60.117.181.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b5d904e4-7c9b-440a-2390-08d70718f247
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB4696;
-x-ms-traffictypediagnostic: BYAPR04MB4696:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <BYAPR04MB469631F5CF470FB512E24703E7F20@BYAPR04MB4696.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:1388;
-x-forefront-prvs: 00963989E5
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(376002)(39860400002)(136003)(346002)(366004)(199004)(189003)(66066001)(486006)(2201001)(74316002)(91956017)(86362001)(186003)(8936002)(81156014)(33656002)(305945005)(7736002)(53546011)(102836004)(5660300002)(14454004)(6506007)(446003)(71200400001)(81166006)(8676002)(26005)(110136005)(71190400001)(54906003)(99286004)(4326008)(476003)(76176011)(64756008)(7416002)(2501003)(9686003)(55016002)(6246003)(6306002)(316002)(66946007)(52536014)(3846002)(66476007)(68736007)(2906002)(7696005)(478600001)(14444005)(256004)(229853002)(6436002)(25786009)(966005)(53936002)(66446008)(4744005)(6116002)(66556008)(76116006);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4696;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: oBv38V8vuDEVIIvHi+SwYfH2AiuG1gqVdZ56z9hL5fPr87EqSm+NQ7nfb3qvWmAMXF+sWavPmqbIQIFDm0R9WGOAS4ONoDM+oXFIdAN1rvRzOlmzvKb4hHdoVr5/Dj0sBNG52EgOtLkf7xKpDZZfha2DFW2wwuIQ+yqybopbHwqV7+S/QO7mUn8bnIuwci0mzM16FGgqMI3JF08BLz6gzEgjlDlTk2kqcPXLI29Bl1YQRUulUlQcHww5C8hk+MWiVj0MPrWfmVmEpjZxVsrz7yW/hFY/4ONRMb0Z3P8I4ijNthH6drQ3hgQI2xnxyrxdQhWikL8ZqPlQigHop8XWLT1z6pLq9C4wvLbpFTs+DzqqGclY4hwXufhsuupdx2xYIP0yoyytHwiaCceVnQayQllzadFMFwHZ74azL7tzqeU=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5d904e4-7c9b-440a-2390-08d70718f247
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jul 2019 22:33:21.9173
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Damien.LeMoal@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4696
+        Euihyeok Kwon <eh81.kwon@samsung.com>,
+        Sarah Cho <sohyeon.jo@samsung.com>,
+        Sanggwan Lee <sanggwan.lee@samsung.com>,
+        Gyeongmin Nam <gm.nam@samsung.com>,
+        "minwoo.im.dev@gmail.com" <minwoo.im.dev@gmail.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <CAK=zhgr_T8vA=BCdFCT37RxGCgS3xr8Wp9MEMK_9nZ=oYHy=7Q@mail.gmail.com>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20190714021752epcms2p6994026d1e2b3738f2857f8eff307c866@epcms2p6>
+Date:   Sun, 14 Jul 2019 11:17:52 +0900
+X-CMS-MailID: 20190714021752epcms2p6994026d1e2b3738f2857f8eff307c866
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrNJsWRmVeSWpSXmKPExsWy7bCmhe7FCVqxBm2nmSw+rtjFbvHwnbPF
+        ohvbmCz23tK2uLxrDptF9/UdbBbLj/9jsvjVyW3x7PQBZou5rxuYLBZtfc9qsWHeLRaL9Ycm
+        sFnM/PqU3eLZmRgHfo9Z98+yeeycdZfdY8KiA4weH5/eYvHo27KK0ePzJrkAtqgcm4zUxJTU
+        IoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE3FRbJRefAF23zByge5UUyhJzSoFCAYnF
+        xUr6djZF+aUlqQoZ+cUltkqpBSk5BYaGBXrFibnFpXnpesn5uVaGBgZGpkCVCTkZsz+cYy14
+        JVjReG4OWwPjdd4uRk4OCQETiVNbJzB2MXJxCAnsYJRY+OcTaxcjBwevgKDE3x3CIDXCAqES
+        kx+dZQEJCwnIS/x4ZQAR1pR4t/sMK4jNJqAu0TD1FQuILSIQLvFo1mdGEJtZ4DqrxKs98hCr
+        eCVmtD9lgbClJbYv3wpWwykQKHHm5Wl2iLioxM3Vb+Hs98fmM0LYIhKt984yQ9iCEg9+7mYE
+        OUdCQELi3js7CLNeYssKC5BHJARaGCVuvFkL1aov0fj8I9haXgFfiYcHfzKB2CwCqhJHDy2D
+        Guki8fHoVBaIk+Ultr+dwwwykxnoxfW79CHGK0scuQVVwSfRcfgvO8xTO+Y9YYKwlSU+HjoE
+        NVFSYvml12wQtofE9q9zmSBhfIdRYsXcNUwTGBVmIYJ5FpLFsxAWL2BkXsUollpQnJueWmxU
+        YIQcs5sYwQlXy20H45JzPocYBTgYlXh4d3BrxQqxJpYVV+YeYpTgYFYS4V31Xz1WiDclsbIq
+        tSg/vqg0J7X4EKMp0P8TmaVEk/OB2SCvJN7Q1MjMzMDS1MLUzMhCSZx3E/fNGCGB9MSS1OzU
+        1ILUIpg+Jg5OqQbGXaXLem4nbdobMufCNG3ZQo+HD6Yt4b8Xvqyj81zy3dfbO23P77cITtWc
+        2nK8KKgy2WOpx5rXh6++eKasXV2QMeFdx42GTV/4Sz7vLl12t39e6YrTSxmSwkw+MPO5bf32
+        SE1Ha1XUrJ9ds5ecra+u7jt3JFfx/onjDXK3Nxq0PXzSUlV5bY3iOiWW4oxEQy3mouJEAN6E
+        pE/OAwAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190621063708epcms2p309f4173afabe5de28942ba15d13987f7
+References: <CAK=zhgr_T8vA=BCdFCT37RxGCgS3xr8Wp9MEMK_9nZ=oYHy=7Q@mail.gmail.com>
+        <20190621063708epcms2p309f4173afabe5de28942ba15d13987f7@epcms2p3>
+        <CGME20190621063708epcms2p309f4173afabe5de28942ba15d13987f7@epcms2p6>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019/07/13 0:13, Jens Axboe wrote:=0A=
-> On 7/11/19 8:05 PM, Jens Axboe wrote:=0A=
->> On 7/7/19 8:02 PM, Damien Le Moal wrote:=0A=
->>> On 2019/07/01 14:09, Damien Le Moal wrote:=0A=
->>>> This series addresses a recuring problem with zone revalidation=0A=
->>>> failures observed during extensive testing with memory constrained=0A=
->>>> system and device hot-plugging.=0A=
->>>=0A=
->>> Jens, Martin,=0A=
->>>=0A=
->>> Any comment regarding this series ?=0A=
->>=0A=
->> LGTM, I'll queue it up for this release.=0A=
-> =0A=
-> This broke !CONFIG_BLK_DEV_ZONED builds for null_blk, btw. Please be=0A=
-> sure to test with zoned enabled and disabled in your builds when=0A=
-> changing things that affect both.=0A=
-=0A=
-I always check the !CONFIG_BLK_DEV_ZONED case. But clearly I made a mistake=
-=0A=
-somewhere on this one and missed the problem. My apologies for that.=0A=
-=0A=
-> =0A=
-> I fixed it up:=0A=
-> =0A=
-> http://git.kernel.dk/cgit/linux-block/commit/?h=3Dfor-linus&id=3De3479464=
-39ed70e3af0d0c330b36d5648e71727b=0A=
-=0A=
-Thank you for this.=0A=
-=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+Hi Sreekanth,
+
+> >  drivers/scsi/mpt3sas/mpt3sas_ctl.c | 10 ++++++----
+> >  1 file changed, 6 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> > index b2bb47c14d35..5c7539dae713 100644
+> > --- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> > +++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> > @@ -596,15 +596,17 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc,
+> struct mpt3_ioctl_command *karg,
+> >                 if (priv_data->sas_target->handle != handle)
+> >                         continue;
+> >                 st = scsi_cmd_priv(scmd);
+> > -               tm_request->TaskMID = cpu_to_le16(st->smid);
+> > -               found = 1;
+> > +               if (tm_request->TaskMID == st->smid) {
+> 
+> I think it will difficult for the user to find the smid that he want
+> to abort. For this user has to enable the scsi logging level and get
+> the tag and pass the ioctl with tag +1 value in TaskMID field. And
+> hence currently driver will loop over all the smid's and if it fines
+> any outstanding smid then it will issue task abort or task query TM
+> for this outstanding smid to the HBA firmware.
+
+Sreekanth,
+
+You're exactly right because I have done this kind of abort based on
+The scsi logs with logging level configured.
+
+> 
+> May be we can do like below,
+> * First check whether user provided "TaskMID" is non zero or not. if
+> user provided TaskMID is non-zero and if this TaskMID is outstanding
+> then driver will issue TaskAbort/QueryTask TM with this TaskMID value
+
+Okay.  If I get it right, you mean to check the given TaskMID(!=0) is
+Outstanding or not is by an iteration first.
+
+> else driver will loop over all the smid's and if finds any smid is
+> outstanding then it will issue TaskAbort/QueryTask TM with TaskMID
+> value set to outstanding smid.
+
+Got your point here.  I'll make a conditional statement for the case
+where the TaskMID is zero which is the legacy behaviour.
+
+> With the above logic still legacy application will be supported
+> without breaking anything where they provide TaskMID filed as zero.
+> And it also allows the user to abort the IO which he wants.
+
+Sure, I'll prepare V2 patch soon.
+
+Thanks Sreekanth,
+
+		Minwoo Im
