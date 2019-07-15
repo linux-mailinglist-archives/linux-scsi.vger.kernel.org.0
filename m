@@ -2,87 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 968326873D
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jul 2019 12:45:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFA9687C2
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jul 2019 13:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729831AbfGOKn5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jul 2019 06:43:57 -0400
-Received: from esa1.hc3370-68.iphmx.com ([216.71.145.142]:61349 "EHLO
-        esa1.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729591AbfGOKn5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jul 2019 06:43:57 -0400
-X-Greylist: delayed 427 seconds by postgrey-1.27 at vger.kernel.org; Mon, 15 Jul 2019 06:43:57 EDT
-Authentication-Results: esa1.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=roger.pau@citrix.com; spf=Pass smtp.mailfrom=roger.pau@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
-Received-SPF: None (esa1.hc3370-68.iphmx.com: no sender
-  authenticity information available from domain of
-  roger.pau@citrix.com) identity=pra; client-ip=162.221.158.21;
-  receiver=esa1.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="roger.pau@citrix.com";
-  x-conformance=sidf_compatible
-Received-SPF: Pass (esa1.hc3370-68.iphmx.com: domain of
-  roger.pau@citrix.com designates 162.221.158.21 as permitted
-  sender) identity=mailfrom; client-ip=162.221.158.21;
-  receiver=esa1.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="roger.pau@citrix.com";
-  x-conformance=sidf_compatible; x-record-type="v=spf1";
-  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
-  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
-  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
-  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83 ~all"
-Received-SPF: None (esa1.hc3370-68.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@mail.citrix.com) identity=helo;
-  client-ip=162.221.158.21; receiver=esa1.hc3370-68.iphmx.com;
-  envelope-from="roger.pau@citrix.com";
-  x-sender="postmaster@mail.citrix.com";
-  x-conformance=sidf_compatible
-IronPort-SDR: Pgm/UNT/R6e5AUfaKfE5m6EKWEYn2DqPlSy8urRB+oeHpISgw3aIjI+fKlvkOTxjLL7cNxAwhq
- AXtEXcP/rBMWyPn47gY7iEk1KRYpl8Ac2KhKRCUc7qwbgb/W55FlOBBlqBXgKz4DIBaQ+1pUma
- y/aRKqTA8yy+J79JrXeSk83q8Uv4Mdo3g5RCkI3u0QViWbClbpb+uz0iSnsrWBVKDY1/XJo1y3
- 7tGcYswO/EHZSGHAb3qv2xZGu2Tfbht++e1zi1ChSDIoevZHQZTihEmcK53b0W0TlBXKXT5dhu
- R7E=
-X-SBRS: 2.7
-X-MesageID: 2991308
-X-Ironport-Server: esa1.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.158.21
-X-Policy: $RELAYED
-X-IronPort-AV: E=Sophos;i="5.63,493,1557201600"; 
-   d="scan'208";a="2991308"
-Date:   Mon, 15 Jul 2019 12:36:40 +0200
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-CC:     <linux-block@vger.kernel.org>, <colyli@suse.de>,
-        <linux-bcache@vger.kernel.org>, <linux-btrace@vger.kernel.org>,
-        <xen-devel@lists.xenproject.org>, <kent.overstreet@gmail.com>,
-        <yuchao0@huawei.com>, <jaegeuk@kernel.org>,
-        <damien.lemoal@wdc.com>, <konrad.wilk@oracle.com>,
-        <bvanassche@acm.org>, <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH V4 9/9] xen/blkback: use helper in vbd_sz()
-Message-ID: <20190715103640.i6gwasdjdkltm47n@MacBook-Air-de-Roger.local>
-References: <20190708184711.2984-1-chaitanya.kulkarni@wdc.com>
- <20190708184711.2984-10-chaitanya.kulkarni@wdc.com>
+        id S1729915AbfGOLEU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Jul 2019 07:04:20 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:45896 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729955AbfGOLES (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jul 2019 07:04:18 -0400
+Received: by mail-oi1-f196.google.com with SMTP id m206so12278062oib.12
+        for <linux-scsi@vger.kernel.org>; Mon, 15 Jul 2019 04:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
+        b=Iux65787KeJtZlk/UWQ8a71sdq3L+JuOBHwZwxVHUOu0Hal0brUmaUtWDT+1EakAhq
+         MtJF/vbEQagCDLqdjzXV0tE8x5YNwPsclB57z/jA+URpkAaidKGibNAiJ897B2Q2rv9p
+         uYOBtZylJRmtRio8wDP4GwRiBknU84/FmWsMFw620mFEJwR9vSM1QlmEIUdghWeLiQPg
+         3/o6A/ASY/U2XQTJeOVMsZoeyZcCfYvLw2Rbw2pE/fk67uX5NyEzWB6tv7TG5MeHZvc/
+         X3yp2nduS0Os162TiWKhkMGOmC5wMIt1cVEoe4V7hwUEXyYLehvgYaVidvFk20QbqjFn
+         kL9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=at1U0zLzNGQlxAxn9clrRSHSPpGB2zlKGmciYViXmzQ=;
+        b=JDrPvsLS92GMY9aE2j0q1Mw3+EoLlnewQ9edCBErJGhruWBCuEsfAPByJaWCqTE8aU
+         tQC9vciMFUFgSAdy0lza4jiIohYSUQgVQ9/Ru4Yccu5kZVFeDF8IsP06aGrZXiEoj6U3
+         sMPK/aoUotTg1HXI0S2mkbe/IpDMyFOFGmQuQk3cX6H64YZLIKRmOhWlBrBKaSjKePQ/
+         5/NRC9KavAjW+dqmuYuUZBi/amyusf4H3OBY/kCuF6JRZ6wCJ4H8pnUExdGlDOZR8mMB
+         9rsC68ENu8mxkKH+Geo2+JNCcW4JUGbpi+e8TasG+BedGSwllgdJ3bk7DN4/p9xzvgBW
+         6a1g==
+X-Gm-Message-State: APjAAAWjH/n4AXj6C2EZPEWDJfMpUh5yKdenKDbmkMdtLTBGev7ysTZt
+        LtHfRes0h/MAElq3Yhd/3RMABpky9g4WsxAa3s+9nX1+/qE=
+X-Google-Smtp-Source: APXvYqwI9SCHvCHLnvHckfwL+oW1shcNAvZVS/wk3iQ3LTmyEMELfYQBoBiEv/cUvggIHp2fQao9ul2L5mSBnKj2EDA=
+X-Received: by 2002:a63:ad07:: with SMTP id g7mr24480194pgf.405.1563188657092;
+ Mon, 15 Jul 2019 04:04:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190708184711.2984-10-chaitanya.kulkarni@wdc.com>
-User-Agent: NeoMutt/20180716
-X-ClientProxiedBy: AMSPEX02CAS02.citrite.net (10.69.22.113) To
- AMSPEX02CL02.citrite.net (10.69.22.126)
+Received: by 2002:a17:90a:b78d:0:0:0:0 with HTTP; Mon, 15 Jul 2019 04:04:16
+ -0700 (PDT)
+From:   Donald Douglas <ddouglasng@gmail.com>
+Date:   Mon, 15 Jul 2019 04:04:16 -0700
+Message-ID: <CALVR28EP4VMYZDqzau6uFTJmxHs6we+nYre3JstaZ5qSsvppFQ@mail.gmail.com>
+Subject: Kindly Respond
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jul 08, 2019 at 11:47:11AM -0700, Chaitanya Kulkarni wrote:
-> This patch updates the vbd_sz() macro with newly introduced helper
-> function to read the nr_sects from block device's hd_parts with the
-> help of part_nr_sects_read().
-> 
-> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Hello,
+I am Barr Fredrick Mbogo a business consultant i have a lucrative
+business to discuss with you from the Eastern part of Africa Uganda to
+be precise aimed at agreed percentage upon your acceptance of my hand
+in business and friendship. Kindly respond to me if you are interested
+to partner with me for an update. Very important.
 
-Acked-by: Roger Pau Monné <roger.pau@citrix.com>
-
-Thanks, Roger.
+Yours Sincerely,
+Donald Douglas,
+For,
+Barr Frederick Mbogo
+Legal Consultant.
+Reply to: barrfredmbogo@consultant.com
