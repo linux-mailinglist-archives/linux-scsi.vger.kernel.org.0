@@ -2,108 +2,176 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E126834C
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jul 2019 07:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AEC68371
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jul 2019 08:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbfGOFig (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jul 2019 01:38:36 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:37497 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725385AbfGOFig (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jul 2019 01:38:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1563169115; x=1594705115;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=v+bSBg6jjIAj4+AXOXVxZAQGqn3jMajngF3sUFLboa4=;
-  b=XTxJjDZf2zRpGms183oaJIGeQv7gJ4nW4SrPOQzQmt4gusmpef1Pzejk
-   e+RijdevFI/n8fkn0IDxcGlWOO4DKEY3rX/OfB+YQbwiwrlKkgp4qfFde
-   629kMchJVnUufO+kfwJc06p4K7p4KTz9bfsW5PxekxgCM9XsZpiZFbK9T
-   KWKlzfRRCz6kfZhwqwX+oTjCErnOjyTW4FFto6FqlbRSRgczgNjx9ZqDC
-   GLk/d1auMAtpIbDnk+IBRDpl4O5ofGX4RSr43IyI/CRRLfXBHqyky/taR
-   cHVgAdQe8gFO0n8WGqKTpwBoTzDbCvIc8V0SnyJ99pb9AeLNuZvSChaNp
-   g==;
-IronPort-SDR: Xj9rxWAf4q8cvHXfPR6HhEXQcdehbJeXRjWWRZG9dFKB2A/19gVfbCkfFZdOpHi/OLz4LOlCMD
- G446NMLxDzyW3m3rjEifrZq2etEzaI9V+Z39PMI933bWmCXQXm6Fnv8I/vHw8ogmxDyJevet1M
- 5PwoarbJ6zx3v6TlwpDNjAJo5Sk7Jy8PFV/I8EKLIJokNELAGpfj4AVN2zY28AHmBRGB1J8KRs
- MhywbkINte7FN3/oiXnfu54e0Et4etT3Q4M2zhhC4x7GVzm2CWIJYoH/4TK4P/9Hfyk4YrlhVa
- hF8=
-X-IronPort-AV: E=Sophos;i="5.63,493,1557158400"; 
-   d="scan'208";a="219467783"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Jul 2019 13:38:35 +0800
-IronPort-SDR: VCb40TSfXw4SkHY+9sok5FMij9qh/COwXXhwJwDHYoq46mMSa5Ti1oJRsvpdroswnjqqAEuZyQ
- B0Aow9+ePinANFwZ6IvuJzXSUEwf76NDAYSdzKZvWFDVrPZtebFWIcgrD2qOpdf0EtBI6JznQF
- jtRtMN5kz4UdYmL929vQynRyDMlPzTuiSl9BLM8kTewl0f0F+CwoWRiIMG4feUmT1gcCFRs97I
- 487zr4YeDl5PpMM7FxZ6cPVe7Yk1UIFT57foqZ3POcVXchusWRSO6ck7EaIV6VFZXLsKLqNm6d
- 9dLifxVEETD2Zpr7Vo/pkOTP
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP; 14 Jul 2019 22:37:10 -0700
-IronPort-SDR: y+vpzPHJZp/IHdGFEGtQjRhb5l7KwOBuEKFB3udkb+zhATdyWNCqohOX8KoR3+IefvpWUDE+dT
- WLiu2aV7WYzWfu3dALvzsn+AHDFD3cTyGkE+4wRGKDKFT792UIKRYQtGDY8ZlJ6qidHQ6i2ngJ
- hr9SHCHFVDBqebxIZfinf0A4QID0f1rV1a0T+qCPjnsZ9FX2G/wKyfPSz24qFEjHb9ZFOWSeiL
- dDTQBQwMFufHbEHORFv7BlutHZFVyyvXlL+M6clsx/LUwYA1pHneQqyN2oE/V2TFo6KskO4pIl
- iO4=
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip01.wdc.com with ESMTP; 14 Jul 2019 22:38:35 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH] scsi: sd_zbc: Fix compilation warning
-Date:   Mon, 15 Jul 2019 14:38:33 +0900
-Message-Id: <20190715053833.5973-1-damien.lemoal@wdc.com>
-X-Mailer: git-send-email 2.21.0
+        id S1728952AbfGOGNk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Jul 2019 02:13:40 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52670 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726075AbfGOGNj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 15 Jul 2019 02:13:39 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id E7ECFAEA4;
+        Mon, 15 Jul 2019 06:13:37 +0000 (UTC)
+Subject: Re: [PATCH V2] mpt3sas: support target smid for [abort|query] task
+To:     minwoo.im@samsung.com,
+        "sreekanth.reddy@broadcom.com" <sreekanth.reddy@broadcom.com>,
+        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
+        "suganath-prabu.subramani@broadcom.com" 
+        <suganath-prabu.subramani@broadcom.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+Cc:     "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Euihyeok Kwon <eh81.kwon@samsung.com>,
+        Sarah Cho <sohyeon.jo@samsung.com>,
+        Sanggwan Lee <sanggwan.lee@samsung.com>,
+        Gyeongmin Nam <gm.nam@samsung.com>,
+        Sungjun Park <sj1228.park@samsung.com>,
+        "minwoo.im.dev@gmail.com" <minwoo.im.dev@gmail.com>
+References: <CGME20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
+ <20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <860cc8cf-6419-c649-b2d9-19b82f6ebc99@suse.de>
+Date:   Mon, 15 Jul 2019 08:13:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-kbuild test robot gets the following compilation warning using gcc 7.4
-cross compilation for c6x (GCC_VERSION=7.4.0 make.cross ARCH=c6x).
+On 7/14/19 5:44 AM, Minwoo Im wrote:
+> We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
+> to /dev/mpt3ctl.  If the given task_type is either abort task or query
+> task, it may need a field named "Initiator Port Transfer Tag to Manage"
+> in the IU.
+> 
+> Current code does not support to check target IPTT tag from the
+> tm_request.  This patch introduces to check TaskMID given from the
+> userspace as a target tag.  We have a rule of relationship between
+> (struct request *req->tag) and smid in mpt3sas_base.c:
+> 
+> 3318 u16
+> 3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
+> 3320         struct scsi_cmnd *scmd)
+> 3321 {
+> 3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
+> 3323         unsigned int tag = scmd->request->tag;
+> 3324         u16 smid;
+> 3325
+> 3326         smid = tag + 1;
+> 
+> So if we want to abort a request tagged #X, then we can pass (X + 1) to
+> this IOCTL handler.  Otherwise, user space just can pass 0 TaskMID to
+> abort the first outstanding smid which is legacy behaviour.
+> 
+> Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+> Cc: Sathya Prakash <sathya.prakash@broadcom.com>
+> Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+> Cc: Martin K. Petersen <martin.petersen@oracle.com>
+> Cc: MPT-FusionLinux.pdl@broadcom.com
+> Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
+> ---
+>  drivers/scsi/mpt3sas/mpt3sas_ctl.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> index b2bb47c14d35..f6b8fd90610a 100644
+> --- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> +++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> @@ -596,8 +596,16 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command *karg,
+>  		if (priv_data->sas_target->handle != handle)
+>  			continue;
+>  		st = scsi_cmd_priv(scmd);
+> -		tm_request->TaskMID = cpu_to_le16(st->smid);
+> -		found = 1;
+> +
+> +		/*
+> +		 * If the given TaskMID from the user space is zero, then the
+> +		 * first outstanding smid will be picked up.  Otherwise,
+> +		 * targeted smid will be the one.
+> +		 */
+> +		if (!tm_request->TaskMID || tm_request->TaskMID == st->smid) {
+> +			tm_request->TaskMID = cpu_to_le16(st->smid);
+> +			found = 1;
+> +		}
+>  	}
+>  
+>  	if (!found) {
+> 
+I think this is fundamentally wrong.
+ABORT_TASK is used to abort a single task, which of course has to be
+known beforehand. If you don't know the task, what exactly do you hope
+to achieve here? Aborting random I/O?
+Or, even worse, aborting I/O the driver uses internally and corrupt the
+internal workflow of the driver?
 
-   In file included from include/asm-generic/bug.h:18:0,
-                    from arch/c6x/include/asm/bug.h:12,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:12,
-                    from include/asm-generic/current.h:5,
-                    from ./arch/c6x/include/generated/asm/current.h:1,
-                    from include/linux/sched.h:12,
-                    from include/linux/blkdev.h:5,
-                    from drivers//scsi/sd_zbc.c:11:
-   drivers//scsi/sd_zbc.c: In function 'sd_zbc_read_zones':
->> include/linux/kernel.h:62:48: warning: 'zone_blocks' may be used
-   uninitialized in this function [-Wmaybe-uninitialized]
-    #define __round_mask(x, y) ((__typeof__(x))((y)-1))
-                                                   ^
-   drivers//scsi/sd_zbc.c:464:6: note: 'zone_blocks' was declared here
-     u32 zone_blocks;
-         ^~~~~~~~~~~
+We should simply disallow any ABORT TASK from userspace if the TaskMID
+is zero. And I would even argue to disabllow ABORT TASK from userspace
+completely, as the smid is never relayed to userland, and as such the
+user cannot know which task should be aborted.
 
-Fix this by initializing the zone_blocks variable to 0.
+Cheers,
 
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
----
- drivers/scsi/sd_zbc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/sd_zbc.c b/drivers/scsi/sd_zbc.c
-index db16c19e05c4..5d6ff3931632 100644
---- a/drivers/scsi/sd_zbc.c
-+++ b/drivers/scsi/sd_zbc.c
-@@ -461,7 +461,7 @@ int sd_zbc_read_zones(struct scsi_disk *sdkp, unsigned char *buf)
- {
- 	struct gendisk *disk = sdkp->disk;
- 	unsigned int nr_zones;
--	u32 zone_blocks;
-+	u32 zone_blocks = 0;
- 	int ret;
- 
- 	if (!sd_is_zoned(sdkp))
+Hannes
 -- 
-2.21.0
-
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
