@@ -2,116 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AD66A01E
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2019 02:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CB26A09D
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2019 04:53:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733115AbfGPA4v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jul 2019 20:56:51 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:37119 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1732085AbfGPA4u (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jul 2019 20:56:50 -0400
-X-UUID: 67650c6ad766468f9b1737099f6b2991-20190716
-X-UUID: 67650c6ad766468f9b1737099f6b2991-20190716
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (mhqrelay.mediatek.com ESMTP with TLS)
-        with ESMTP id 1836918223; Tue, 16 Jul 2019 08:56:45 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Tue, 16 Jul
- 2019 08:56:44 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Tue, 16 Jul 2019 08:56:44 +0800
-Message-ID: <1563238604.7235.5.camel@mtkswgap22>
-Subject: Re: [PATCH v1] scsi: ufs: change msleep to usleep_range
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     "Bean Huo (beanhuo)" <beanhuo@micron.com>
-CC:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Evan Green <evgreen@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Date:   Tue, 16 Jul 2019 08:56:44 +0800
-In-Reply-To: <BN7PR08MB5684BBB44FD0E43501558A20DBCF0@BN7PR08MB5684.namprd08.prod.outlook.com>
-References: <BN7PR08MB5684BBB44FD0E43501558A20DBCF0@BN7PR08MB5684.namprd08.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+        id S1731152AbfGPCxJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Jul 2019 22:53:09 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:2268 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730712AbfGPCxJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 15 Jul 2019 22:53:09 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id C4F12D142B9E642D0495;
+        Tue, 16 Jul 2019 10:53:06 +0800 (CST)
+Received: from [127.0.0.1] (10.74.223.225) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Tue, 16 Jul 2019
+ 10:53:01 +0800
+Subject: Re: [RFC PATCH 2/7] blk-mq: add blk-mq flag of
+ BLK_MQ_F_NO_MANAGED_IRQ
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>, Bart Van Assche <bvanassche@acm.org>,
+        "Hannes Reinecke" <hare@suse.com>, Christoph Hellwig <hch@lst.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Keith Busch <keith.busch@intel.com>
+References: <20190712024726.1227-1-ming.lei@redhat.com>
+ <20190712024726.1227-3-ming.lei@redhat.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <ce954a60-5a7a-a13d-b999-6f973a440d22@huawei.com>
+Date:   Tue, 16 Jul 2019 10:53:00 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-X-MTK:  N
+In-Reply-To: <20190712024726.1227-3-ming.lei@redhat.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.74.223.225]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Bean,
+ÔÚ 12/07/2019 10:47, Ming Lei Ð´µÀ:
+> We will stop hw queue and wait for completion of in-flight requests
+> when one hctx is becoming dead in the following patch. This way may
+> cause dead-lock for some stacking blk-mq drivers, such as dm-rq and
+> loop.
+> 
+> Add blk-mq flag of BLK_MQ_F_NO_MANAGED_IRQ and mark it for dm-rq and
+> loop, so we needn't to wait for completion of in-flight requests of
+> dm-rq & loop, then the potential dead-lock can be avoided.
 
-On Mon, 2019-07-15 at 11:21 +0000, Bean Huo (beanhuo) wrote:
-> From: Bean Huo <beanhuo@micron.com>
+Wouldn't it make more sense to have the flag name be like 
+BLK_MQ_F_DONT_DRAIN_STOPPED_HCTX?
+
+I did not think that blk-mq is specifically concerned with managed 
+interrupts, but only their indirect effect.
+
 > 
-> This patch is to change msleep() to usleep_range() based on
-> Documentation/timers/timers-howto.txt. It suggests using
-> usleep_range() for small msec(1ms - 20ms) since msleep()
-> will often sleep longer than desired value.
-> 
-> After changing, booting time will be 5ms-10ms faster than before.
-> I tested this change on two different platforms, one has 5ms faster,
-> another one is about 10ms. I think this is different on different
-> platform.
-> 
-> Actually, from UFS host side, 1ms-5ms delay is already sufficient for
-> its initialization of the local UIC layer.
-> 
-> Fixes: 7a3e97b0dc4b ([SCSI] ufshcd: UFS Host controller driver)
-> Signed-off-by: Bean Huo <beanhuo@micron.com>
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Cc: Hannes Reinecke <hare@suse.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Keith Busch <keith.busch@intel.com>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
 > ---
->  drivers/scsi/ufs/ufshcd.c | 10 ++--------
->  1 file changed, 2 insertions(+), 8 deletions(-)
+>   block/blk-mq-debugfs.c | 1 +
+>   drivers/block/loop.c   | 2 +-
+>   drivers/md/dm-rq.c     | 2 +-
+>   include/linux/blk-mq.h | 1 +
+>   4 files changed, 4 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index a208589426b1..21f7b3b8026c 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -4213,12 +4213,6 @@ static int ufshcd_hba_execute_hce(struct ufs_hba *hba)
->  {
->  	int retry;
->  
-> -	/*
-> -	 * msleep of 1 and 5 used in this function might result in msleep(20),
-> -	 * but it was necessary to send the UFS FPGA to reset mode during
-> -	 * development and testing of this driver. msleep can be changed to
-> -	 * mdelay and retry count can be reduced based on the controller.
-> -	 */
->  	if (!ufshcd_is_hba_active(hba))
->  		/* change controller state to "reset state" */
->  		ufshcd_hba_stop(hba, true);
-> @@ -4241,7 +4235,7 @@ static int ufshcd_hba_execute_hce(struct ufs_hba *hba)
->  	 * instruction might be read back.
->  	 * This delay can be changed based on the controller.
->  	 */
-> -	msleep(1);
-> +	usleep_range(1000, 1100);
->  
->  	/* wait for the host controller to complete initialization */
->  	retry = 10;
-> @@ -4253,7 +4247,7 @@ static int ufshcd_hba_execute_hce(struct ufs_hba *hba)
->  				"Controller enable failed\n");
->  			return -EIO;
->  		}
-> -		msleep(5);
-> +		usleep_range(5000, 5100);
->  	}
->  
->  	/* enable UIC related interrupts */
+> diff --git a/block/blk-mq-debugfs.c b/block/blk-mq-debugfs.c
+> index af40a02c46ee..24fff8c90942 100644
+> --- a/block/blk-mq-debugfs.c
+> +++ b/block/blk-mq-debugfs.c
+> @@ -240,6 +240,7 @@ static const char *const hctx_flag_name[] = {
+>   	HCTX_FLAG_NAME(TAG_SHARED),
+>   	HCTX_FLAG_NAME(BLOCKING),
+>   	HCTX_FLAG_NAME(NO_SCHED),
+> +	HCTX_FLAG_NAME(NO_MANAGED_IRQ),
+>   };
+>   #undef HCTX_FLAG_NAME
+>   
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index 44c9985f352a..199d76e8bf46 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -1986,7 +1986,7 @@ static int loop_add(struct loop_device **l, int i)
+>   	lo->tag_set.queue_depth = 128;
+>   	lo->tag_set.numa_node = NUMA_NO_NODE;
+>   	lo->tag_set.cmd_size = sizeof(struct loop_cmd);
+> -	lo->tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
+> +	lo->tag_set.flags = BLK_MQ_F_SHOULD_MERGE | BLK_MQ_F_NO_MANAGED_IRQ;
 
-Acked-by: Stanley Chu <stanley.chu@mediatek.com>
+nit: at this point in the series you're setting a flag which is never 
+checked.
 
-Thanks,
-Stanley
-
+>   	lo->tag_set.driver_data = lo;
+>   
+>   	err = blk_mq_alloc_tag_set(&lo->tag_set);
+> diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
+> index 5f7063f05ae0..f7fbef2d3cd7 100644
+> --- a/drivers/md/dm-rq.c
+> +++ b/drivers/md/dm-rq.c
+> @@ -546,7 +546,7 @@ int dm_mq_init_request_queue(struct mapped_device *md, struct dm_table *t)
+>   	md->tag_set->ops = &dm_mq_ops;
+>   	md->tag_set->queue_depth = dm_get_blk_mq_queue_depth();
+>   	md->tag_set->numa_node = md->numa_node_id;
+> -	md->tag_set->flags = BLK_MQ_F_SHOULD_MERGE;
+> +	md->tag_set->flags = BLK_MQ_F_SHOULD_MERGE | BLK_MQ_F_NO_MANAGED_IRQ;
+>   	md->tag_set->nr_hw_queues = dm_get_blk_mq_nr_hw_queues();
+>   	md->tag_set->driver_data = md;
+>   
+> diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+> index 3a731c3c0762..911cdc6479dc 100644
+> --- a/include/linux/blk-mq.h
+> +++ b/include/linux/blk-mq.h
+> @@ -219,6 +219,7 @@ struct blk_mq_ops {
+>   enum {
+>   	BLK_MQ_F_SHOULD_MERGE	= 1 << 0,
+>   	BLK_MQ_F_TAG_SHARED	= 1 << 1,
+> +	BLK_MQ_F_NO_MANAGED_IRQ	= 1 << 2,
+>   	BLK_MQ_F_BLOCKING	= 1 << 5,
+>   	BLK_MQ_F_NO_SCHED	= 1 << 6,
+>   	BLK_MQ_F_ALLOC_POLICY_START_BIT = 8,
+> 
 
 
