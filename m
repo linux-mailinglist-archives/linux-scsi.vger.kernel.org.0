@@ -2,91 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 128426AAF5
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2019 16:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364606AF60
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2019 20:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387916AbfGPOvT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Jul 2019 10:51:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41986 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728470AbfGPOvS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 16 Jul 2019 10:51:18 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3614B2173C;
-        Tue, 16 Jul 2019 14:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563288677;
-        bh=sonO2Wj/dB2WVkbnigGOIptZBiYzU9g2oAVvNNhm8N0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cJpVGUzwvpQrBfw5VxnjM7fZDMqN8buukyY5uNJV0ilBSNzK8xmxbSP8KeFgOPVGk
-         CdhPYLcquPdpNPv9IfGMnbk93gK1YgS3rEW3NEieCmVZ/yyatbJnN9K/XZrO4tC0sv
-         vpJ81lt0Z15VjbKndmSpPGS7eGfx6pNckGHuM6H8=
-Received: by mail-oi1-f178.google.com with SMTP id w196so15751312oie.7;
-        Tue, 16 Jul 2019 07:51:17 -0700 (PDT)
-X-Gm-Message-State: APjAAAUzNDjM6CkTAVBj689g9/0ymmtl7lnTF+3weDk1ZY69iWxZD8Fb
-        YeSU/Sse0VxX7EvIzce7nrEzXEfu1SiFQCQa6NU=
-X-Google-Smtp-Source: APXvYqznotTEvyaymhJh/wAMu0w2H5gcuDv5j22SZvycyNMyxsk7XBmOnJ7QXnjodYkrV1FF1kduEHzUtbpafqpVCNU=
-X-Received: by 2002:aca:1b0c:: with SMTP id b12mr2605814oib.123.1563288676578;
- Tue, 16 Jul 2019 07:51:16 -0700 (PDT)
+        id S1728579AbfGPS4u convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 16 Jul 2019 14:56:50 -0400
+Received: from us-smtp-delivery-131.mimecast.com ([63.128.21.131]:43845 "EHLO
+        us-smtp-delivery-131.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728495AbfGPS4u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 16 Jul 2019 14:56:50 -0400
+X-Greylist: delayed 369 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Jul 2019 14:56:50 EDT
+Received: from mailhub4.stratus.com (134.111.1.17 [134.111.1.17]) by
+ relay.mimecast.com with ESMTP id us-mta-338-PX2rPO6EOZmpvfP-lTuKFw-1; Tue,
+ 16 Jul 2019 14:50:39 -0400
+Received: from EXHQ1.corp.stratus.com (exhq1.corp.stratus.com [134.111.200.125])
+        by mailhub4.stratus.com (8.12.11/8.12.11) with ESMTP id x6GIod05002352;
+        Tue, 16 Jul 2019 14:50:39 -0400
+Received: from linuxdev.lnx.eng.stratus.com (134.111.220.63) by
+ EXHQ1.corp.stratus.com (134.111.200.125) with Microsoft SMTP Server (TLS) id
+ 14.3.279.2; Tue, 16 Jul 2019 14:50:34 -0400
+From:   Bill Kuzeja <William.Kuzeja@stratus.com>
+To:     <linux-scsi@vger.kernel.org>
+CC:     <qla2xxx-upstream@qlogic.com>, <William.Kuzeja@stratus.com>
+Subject: [PATCH] qla2xxx: Fix gnl.l memory leak on adapter init failure
+Date:   Tue, 16 Jul 2019 14:50:39 -0400
+Message-ID: <1563303039-4367-1-git-send-email-William.Kuzeja@stratus.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-References: <20190712022018.27989-1-alex.shi@linux.alibaba.com> <20190712022018.27989-2-alex.shi@linux.alibaba.com>
-In-Reply-To: <20190712022018.27989-2-alex.shi@linux.alibaba.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Tue, 16 Jul 2019 16:51:05 +0200
-X-Gmail-Original-Message-ID: <CAJKOXPcnMM=h9-MW4qg4OTxaY5eBQ=4tH=Gbd3tSuckFvSOPcw@mail.gmail.com>
-Message-ID: <CAJKOXPcnMM=h9-MW4qg4OTxaY5eBQ=4tH=Gbd3tSuckFvSOPcw@mail.gmail.com>
-Subject: Re: [PATCH 02/12] Documentation/arm: repointer docs to Documentation/arch/arm
-To:     Alex Shi <alex.shi@linux.alibaba.com>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-omap@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>, linux-ia64@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, linux-sh@vger.kernel.org,
-        Kukjin Kim <kgene@kernel.org>, linux-crypto@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MC-Unique: PX2rPO6EOZmpvfP-lTuKFw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: 8BIT
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 12 Jul 2019 at 04:20, Alex Shi <alex.shi@linux.alibaba.com> wrote:
->
-> Since we move 'arm/arm64' docs to Documentation/arch/{arm,arm64} dir,
-> redirect the doc pointer to them.
->
-> Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Kukjin Kim <kgene@kernel.org>
-> Cc: Krzysztof Kozlowski <krzk@kernel.org>
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-serial@vger.kernel.org
-> ---
->  Documentation/arch/arm/Samsung-S3C24XX/GPIO.txt    |  2 +-
->  .../arch/arm/Samsung-S3C24XX/Overview.txt          |  6 +++---
->  Documentation/arch/arm/Samsung/GPIO.txt            |  2 +-
->  Documentation/arch/arm/Samsung/Overview.txt        |  4 ++--
->  Documentation/devicetree/bindings/arm/xen.txt      |  2 +-
->  Documentation/devicetree/booting-without-of.txt    |  4 ++--
->  Documentation/translations/zh_CN/arm/Booting       |  4 ++--
->  .../translations/zh_CN/arm/kernel_user_helpers.txt |  4 ++--
->  MAINTAINERS                                        |  6 +++---
+If HBA initialization fails unexpectedly (exiting via probe_failed:), we 
+may fail to free vha->gnl.l. So that we don't attempt to double free,
+set this pointer to NULL after a free and check for NULL at probe_failed:
+so we know whether or not to call dma_free_coherent. 
 
-I assume it will go through doc tree, so for Samsung:
-Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
+Signed-off-by: Bill Kuzeja <william.kuzeja@stratus.com>
+---
+ drivers/scsi/qla2xxx/qla_attr.c |  2 ++
+ drivers/scsi/qla2xxx/qla_os.c   | 11 ++++++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
+index 8d560c5..6b7b390 100644
+--- a/drivers/scsi/qla2xxx/qla_attr.c
++++ b/drivers/scsi/qla2xxx/qla_attr.c
+@@ -2956,6 +2956,8 @@ void qla_insert_tgt_attrs(void)
+ 	dma_free_coherent(&ha->pdev->dev, vha->gnl.size, vha->gnl.l,
+ 	    vha->gnl.ldma);
+ 
++	vha->gnl.l = NULL;
++
+ 	vfree(vha->scan.l);
+ 
+ 	if (vha->qpair && vha->qpair->vp_idx == vha->vp_idx) {
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 2e58cff..98e60a3 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -3440,6 +3440,12 @@ static void qla2x00_iocb_work_fn(struct work_struct *work)
+ 	return 0;
+ 
+ probe_failed:
++	if (base_vha->gnl.l) {
++		dma_free_coherent(&ha->pdev->dev, base_vha->gnl.size,
++				base_vha->gnl.l, base_vha->gnl.ldma);
++		base_vha->gnl.l = NULL;
++	}
++
+ 	if (base_vha->timer_active)
+ 		qla2x00_stop_timer(base_vha);
+ 	base_vha->flags.online = 0;
+@@ -3673,7 +3679,7 @@ static void qla2x00_iocb_work_fn(struct work_struct *work)
+ 	if (!atomic_read(&pdev->enable_cnt)) {
+ 		dma_free_coherent(&ha->pdev->dev, base_vha->gnl.size,
+ 		    base_vha->gnl.l, base_vha->gnl.ldma);
+-
++		base_vha->gnl.l = NULL;
+ 		scsi_host_put(base_vha->host);
+ 		kfree(ha);
+ 		pci_set_drvdata(pdev, NULL);
+@@ -3713,6 +3719,8 @@ static void qla2x00_iocb_work_fn(struct work_struct *work)
+ 	dma_free_coherent(&ha->pdev->dev,
+ 		base_vha->gnl.size, base_vha->gnl.l, base_vha->gnl.ldma);
+ 
++	base_vha->gnl.l = NULL;
++
+ 	vfree(base_vha->scan.l);
+ 
+ 	if (IS_QLAFX00(ha))
+@@ -4816,6 +4824,7 @@ struct scsi_qla_host *qla2x00_create_host(struct scsi_host_template *sht,
+ 		    "Alloc failed for scan database.\n");
+ 		dma_free_coherent(&ha->pdev->dev, vha->gnl.size,
+ 		    vha->gnl.l, vha->gnl.ldma);
++		vha->gnl.l = NULL;
+ 		scsi_remove_host(vha->host);
+ 		return NULL;
+ 	}
+-- 
+1.8.3.1
+
