@@ -2,254 +2,126 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 268BF6A0B4
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2019 05:03:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652876A1EB
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2019 07:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730296AbfGPDDU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jul 2019 23:03:20 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:36350 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728256AbfGPDDU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 15 Jul 2019 23:03:20 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id C7AF8FF383205C9B2B50;
-        Tue, 16 Jul 2019 11:03:16 +0800 (CST)
-Received: from [127.0.0.1] (10.74.223.225) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Tue, 16 Jul 2019
- 11:03:13 +0800
-Subject: Re: [RFC PATCH 3/7] blk-mq: stop to handle IO before hctx's all CPUs
- become offline
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, Bart Van Assche <bvanassche@acm.org>,
-        "Hannes Reinecke" <hare@suse.com>, Christoph Hellwig <hch@lst.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Keith Busch <keith.busch@intel.com>
-References: <20190712024726.1227-1-ming.lei@redhat.com>
- <20190712024726.1227-4-ming.lei@redhat.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <91f2a5ce-614a-1e4d-6830-81750cf7f708@huawei.com>
-Date:   Tue, 16 Jul 2019 11:03:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
-MIME-Version: 1.0
-In-Reply-To: <20190712024726.1227-4-ming.lei@redhat.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.74.223.225]
+        id S1729640AbfGPFoT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Jul 2019 01:44:19 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:21761 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726655AbfGPFoS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Jul 2019 01:44:18 -0400
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20190716054415epoutp0419215b02787570be0baadf4b6070aada~xzOrswN8D1730717307epoutp04K
+        for <linux-scsi@vger.kernel.org>; Tue, 16 Jul 2019 05:44:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20190716054415epoutp0419215b02787570be0baadf4b6070aada~xzOrswN8D1730717307epoutp04K
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1563255855;
+        bh=T+tZsyXWgOgF9q0OYheRXgflUx2HgoqlmnEXCHyGDtQ=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=IFHPNZnfMQgfAu492U/ApOXOCtPnd+5kk0I0866sr9GpoNgYsIXS+WylxhPEv3sTe
+         eWLRiIT5zMapbqgSy32ivOgHZiRTtCY6tiG93qFk6Nag4xvdfjUQNSJt1zdFHPvnC4
+         88M0vGyh7Uj/UGvoXLLtl3o3wl2bCQ/SGOAAk1bo=
+Received: from epsnrtp6.localdomain (unknown [182.195.42.167]) by
+        epcas2p3.samsung.com (KnoxPortal) with ESMTP id
+        20190716054414epcas2p3b1bdb471b940602f62c2eac0ba29c81e~xzOq1tSy10919109191epcas2p3M;
+        Tue, 16 Jul 2019 05:44:14 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.40.181]) by
+        epsnrtp6.localdomain (Postfix) with ESMTP id 45nq8X65Z6zMqYkh; Tue, 16 Jul
+        2019 05:44:12 +0000 (GMT)
+X-AuditID: b6c32a45-df7ff7000000103c-05-5d2d642c4802
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        59.13.04156.C246D2D5; Tue, 16 Jul 2019 14:44:12 +0900 (KST)
+Mime-Version: 1.0
+Subject: Re: [PATCH V2] mpt3sas: support target smid for [abort|query] task
+Reply-To: minwoo.im@samsung.com
+From:   Minwoo Im <minwoo.im@samsung.com>
+To:     Hannes Reinecke <hare@suse.de>, Minwoo Im <minwoo.im@samsung.com>,
+        "sreekanth.reddy@broadcom.com" <sreekanth.reddy@broadcom.com>,
+        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
+        "suganath-prabu.subramani@broadcom.com" 
+        <suganath-prabu.subramani@broadcom.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
+CC:     "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Euihyeok Kwon <eh81.kwon@samsung.com>,
+        Sarah Cho <sohyeon.jo@samsung.com>,
+        Sanggwan Lee <sanggwan.lee@samsung.com>,
+        Gyeongmin Nam <gm.nam@samsung.com>,
+        Sungjun Park <sj1228.park@samsung.com>,
+        "minwoo.im.dev@gmail.com" <minwoo.im.dev@gmail.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <860cc8cf-6419-c649-b2d9-19b82f6ebc99@suse.de>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20190716054412epcms2p76849500e9450ac399bb123fc9b345c23@epcms2p7>
+Date:   Tue, 16 Jul 2019 14:44:12 +0900
+X-CMS-MailID: 20190716054412epcms2p76849500e9450ac399bb123fc9b345c23
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJJsWRmVeSWpSXmKPExsWy7bCmma5Oim6swcv1hhYfV+xit3j4ztli
+        z6JJTBaLbmxjsth7S9vi8q45bBbd13ewWSw//o/J4lcnt8Wz0weYLea+bgCq2vqe1WLDvFss
+        Ft0nPSzWH5rAZjHz61N2i2dnYhwEPWbdP8vmsXPWXXaPCYsOMHp8fHqLxaNvyypGj82nqz0+
+        b5ILYI/KsclITUxJLVJIzUvOT8nMS7dV8g6Od443NTMw1DW0tDBXUshLzE21VXLxCdB1y8wB
+        Ol5JoSwxpxQoFJBYXKykb2dTlF9akqqQkV9cYquUWpCSU2BoWKBXnJhbXJqXrpecn2tlaGBg
+        ZApUmZCT8XrXMbaCl1wV/+dtYm1gPMnRxcjJISFgIrFi+gbGLkYuDiGBHYwSj5+tYuli5ODg
+        FRCU+LtDGKRGWMBb4uvFw2wgYSEBeYkfrwwgwpoS73afYQWx2QTUJRqmvmIBGSMi0MIssXxt
+        N9hMZoFmFomH52ezQizjlZjR/pQFwpaW2L58KyOIzSlgLfFp42qouKjEzdVv2WHs98fmM0LY
+        IhKt984yQ9iCEg9+7mYEOUhCQELi3js7CLNeYssKC5C1EgItjBI33qyFatWXaHz+EWw8r4Cv
+        xJ0lb8DiLAKqEqsmnGSCqHGReLh+H5jNDPTj9rdzmEFmMgM9uX6XPsR4ZYkjt1ggKvgkOg7/
+        ZYd5ase8J1BTlCU+HjoEdaSkxPJLr9kgbA+J+R2LwGwhgWOMEheWZE1gVJiFCOdZSPbOQti7
+        gJF5FaNYakFxbnpqsVGBIXLUbmIEJ2Mt1x2MM875HGIU4GBU4uE9sUcnVog1say4MvcQowQH
+        s5IIr+1X7Vgh3pTEyqrUovz4otKc1OJDjKZA709klhJNzgdmirySeENTIzMzA0tTC1MzIwsl
+        cd7N3DdjhATSE0tSs1NTC1KLYPqYODilGhjn116JTsv4M/n6jkU/D5Y/W9Vc2Luq+N5vm5i9
+        U5O/zNytohAl9sp3Je+doNAlejdEXhcxWB8u/21+5K9524QGzdADCu48nmf1DJKeSc5M2zfr
+        x1e7HVfP/9V9Ljqj0tvYPzAq/EHbhW83Nrgt+GqxUl9gY9xPT90bv+aEsy06k3pM4EwU97NV
+        SizFGYmGWsxFxYkAPNlgNdwDAAA=
+DLP-Filter: Pass
 X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20190714034415epcms2p25f9787cb71993a30f58524d2f355b543
+References: <860cc8cf-6419-c649-b2d9-19b82f6ebc99@suse.de>
+        <20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
+        <CGME20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p7>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ÔÚ 12/07/2019 10:47, Ming Lei Ð´µÀ:
-> Most of blk-mq drivers depend on managed IRQ's auto-affinity to setup
-> up queue mapping. Thomas mentioned the following point[1]:
+> I think this is fundamentally wrong.
+> ABORT_TASK is used to abort a single task, which of course has to be
+> known beforehand. If you don't know the task, what exactly do you hope
+> to achieve here? Aborting random I/O?
+> Or, even worse, aborting I/O the driver uses internally and corrupt the
+> internal workflow of the driver?
+
+This patch is nothing but a case-addition to the existing code.  I also
+have a doubt here why the first picked SMID should be aborted/queried,
+but not for this time in this patch.
+
 > 
-> "
->   That was the constraint of managed interrupts from the very beginning:
-> 
->    The driver/subsystem has to quiesce the interrupt line and the associated
->    queue _before_ it gets shutdown in CPU unplug and not fiddle with it
->    until it's restarted by the core when the CPU is plugged in again.
-> "
-> 
-> However, current blk-mq implementation doesn't quiesce hw queue before
-> the last CPU in the hctx is shutdown. Even worse, CPUHP_BLK_MQ_DEAD is
-> one cpuhp state handled after the CPU is down, so there isn't any chance
-> to quiesce hctx for blk-mq wrt. CPU hotplug.
-> 
-> Add new cpuhp state of CPUHP_AP_BLK_MQ_ONLINE for blk-mq to stop queues
-> and wait for completion of in-flight requests.
-> 
-> [1] https://lore.kernel.org/linux-block/alpine.DEB.2.21.1904051331270.1802@nanos.tec.linutronix.de/
-> 
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Cc: Hannes Reinecke <hare@suse.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Keith Busch <keith.busch@intel.com>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->   block/blk-mq-tag.c         |  2 +-
->   block/blk-mq-tag.h         |  2 ++
->   block/blk-mq.c             | 67 ++++++++++++++++++++++++++++++++++++++
->   include/linux/blk-mq.h     |  1 +
->   include/linux/cpuhotplug.h |  1 +
->   5 files changed, 72 insertions(+), 1 deletion(-)
-> 
-> diff --git a/block/blk-mq-tag.c b/block/blk-mq-tag.c
-> index da19f0bc8876..bcefb213ad69 100644
-> --- a/block/blk-mq-tag.c
-> +++ b/block/blk-mq-tag.c
-> @@ -324,7 +324,7 @@ static void bt_tags_for_each(struct blk_mq_tags *tags, struct sbitmap_queue *bt,
->    *		true to continue iterating tags, false to stop.
->    * @priv:	Will be passed as second argument to @fn.
->    */
-> -static void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
-> +void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
->   		busy_tag_iter_fn *fn, void *priv)
->   {
->   	if (tags->nr_reserved_tags)
-> diff --git a/block/blk-mq-tag.h b/block/blk-mq-tag.h
-> index 61deab0b5a5a..321fd6f440e6 100644
-> --- a/block/blk-mq-tag.h
-> +++ b/block/blk-mq-tag.h
-> @@ -35,6 +35,8 @@ extern int blk_mq_tag_update_depth(struct blk_mq_hw_ctx *hctx,
->   extern void blk_mq_tag_wakeup_all(struct blk_mq_tags *tags, bool);
->   void blk_mq_queue_tag_busy_iter(struct request_queue *q, busy_iter_fn *fn,
->   		void *priv);
-> +void blk_mq_all_tag_busy_iter(struct blk_mq_tags *tags,
-> +		busy_tag_iter_fn *fn, void *priv);
->   
->   static inline struct sbq_wait_state *bt_wait_ptr(struct sbitmap_queue *bt,
->   						 struct blk_mq_hw_ctx *hctx)
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index e5ef40c603ca..028c5d78e409 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -2205,6 +2205,64 @@ int blk_mq_alloc_rqs(struct blk_mq_tag_set *set, struct blk_mq_tags *tags,
->   	return -ENOMEM;
->   }
->   
-> +static bool blk_mq_count_inflight_rq(struct request *rq, void *data,
-> +				     bool reserved)
-> +{
-> +	unsigned *count = data;
-> +
-> +	if ((blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT))
-> +		(*count)++;
-> +
-> +	return true;
-> +}
-> +
-> +unsigned blk_mq_tags_inflight_rqs(struct blk_mq_tags *tags)
-> +{
-> +	unsigned count = 0;
-> +
-> +	blk_mq_all_tag_busy_iter(tags, blk_mq_count_inflight_rq, &count);
-> +
-> +	return count;
-> +}
-> +
-> +static void blk_mq_drain_inflight_rqs(struct blk_mq_hw_ctx *hctx)
-> +{
-> +	while (1) {
-> +		if (!blk_mq_tags_inflight_rqs(hctx->tags))
-> +			break;
-> +		msleep(5);
-> +	}
-> +}
-> +
-> +static int blk_mq_hctx_notify_online(unsigned int cpu, struct hlist_node *node)
-> +{
-> +	struct blk_mq_hw_ctx *hctx = hlist_entry_safe(node,
-> +			struct blk_mq_hw_ctx, cpuhp_online);
-> +	unsigned prev_cpu = -1;
-> +
-> +	if (hctx->flags & BLK_MQ_F_NO_MANAGED_IRQ)
-> +		return 0;
+> We should simply disallow any ABORT TASK from userspace if the TaskMID
+> is zero. And I would even argue to disabllow ABORT TASK from userspace
+> completely, as the smid is never relayed to userland, and as such the
+> user cannot know which task should be aborted.
 
-is it possible to make this check at registration, such that we don't 
-even register for when (hctx->flags & BLK_MQ_F_NO_MANAGED_IRQ)?
+System administrator might want to query task or abort task if something
+happens based on the tag in block layer via debugfs or some logs.
+You're right that userspaces has nothing to do with the tag generation
+which will be held inside block layer.  But some of administrator would
+know the relationship between smid and tag which can be found at debugfs
+or the logs.
 
-> +
-> +	while (true) {
-> +		unsigned other_cpu = cpumask_next_and(prev_cpu, hctx->cpumask,
+I'm not sure if it's okay to be picked, but if we can request TMF for the
+Targeted smid to the HBA firmware, it would be great to test devices or
+Figure out what happened in the target device.
 
-nit: to me name next_cpu seems better
-
-> +				cpu_online_mask);
-> +
-> +		if (other_cpu >= nr_cpu_ids)
-> +			break;
-> +
-> +		/* return if there is other online CPU on this hctx */
-> +		if (other_cpu != cpu)
-> +			return 0;
-> +
-> +		prev_cpu = other_cpu;
-> +	}
-> +
-> +	set_bit(BLK_MQ_S_INTERNAL_STOPPED, &hctx->state);
-> +	blk_mq_drain_inflight_rqs(hctx);
-> +
-> +	return 0;
-> +}
-> +
->   /*
->    * 'cpu' is going away. splice any existing rq_list entries from this
->    * software queue to the hw queue dispatch list, and ensure that it
-> @@ -2221,6 +2279,9 @@ static int blk_mq_hctx_notify_dead(unsigned int cpu, struct hlist_node *node)
->   	ctx = __blk_mq_get_ctx(hctx->queue, cpu);
->   	type = hctx->type;
->   
-> +	if (test_bit(BLK_MQ_S_INTERNAL_STOPPED, &hctx->state))
-> +		clear_bit(BLK_MQ_S_INTERNAL_STOPPED, &hctx->state);
-
-can you just always clear the bit without the test?
-
-> +
->   	spin_lock(&ctx->lock);
->   	if (!list_empty(&ctx->rq_lists[type])) {
->   		list_splice_init(&ctx->rq_lists[type], &tmp);
-> @@ -2243,6 +2304,8 @@ static void blk_mq_remove_cpuhp(struct blk_mq_hw_ctx *hctx)
->   {
->   	cpuhp_state_remove_instance_nocalls(CPUHP_BLK_MQ_DEAD,
->   					    &hctx->cpuhp_dead);
-> +	cpuhp_state_remove_instance_nocalls(CPUHP_AP_BLK_MQ_ONLINE,
-> +					    &hctx->cpuhp_online);
->   }
->   
->   /* hctx->ctxs will be freed in queue's release handler */
-> @@ -2301,6 +2364,8 @@ static int blk_mq_init_hctx(struct request_queue *q,
->   	hctx->queue_num = hctx_idx;
->   
->   	cpuhp_state_add_instance_nocalls(CPUHP_BLK_MQ_DEAD, &hctx->cpuhp_dead);
-> +	cpuhp_state_add_instance_nocalls(CPUHP_AP_BLK_MQ_ONLINE,
-> +			&hctx->cpuhp_online);
->   
->   	hctx->tags = set->tags[hctx_idx];
->   
-> @@ -3536,6 +3601,8 @@ static int __init blk_mq_init(void)
->   {
->   	cpuhp_setup_state_multi(CPUHP_BLK_MQ_DEAD, "block/mq:dead", NULL,
->   				blk_mq_hctx_notify_dead);
-> +	cpuhp_setup_state_multi(CPUHP_AP_BLK_MQ_ONLINE, "block/mq:online",
-> +				NULL, blk_mq_hctx_notify_online);
->   	return 0;
->   }
->   subsys_initcall(blk_mq_init);
-> diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-> index 911cdc6479dc..dc86bdac08f4 100644
-> --- a/include/linux/blk-mq.h
-> +++ b/include/linux/blk-mq.h
-> @@ -59,6 +59,7 @@ struct blk_mq_hw_ctx {
->   	atomic_t		nr_active;
->   
->   	struct hlist_node	cpuhp_dead;
-> +	struct hlist_node	cpuhp_online;
-
-I'd reorder with cpuhp_dead
-
->   	struct kobject		kobj;
->   
->   	unsigned long		poll_considered;
-> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-> index 87c211adf49e..5177f7bbcb88 100644
-> --- a/include/linux/cpuhotplug.h
-> +++ b/include/linux/cpuhotplug.h
-> @@ -147,6 +147,7 @@ enum cpuhp_state {
->   	CPUHP_AP_SMPBOOT_THREADS,
->   	CPUHP_AP_X86_VDSO_VMA_ONLINE,
->   	CPUHP_AP_IRQ_AFFINITY_ONLINE,
-> +	CPUHP_AP_BLK_MQ_ONLINE,
->   	CPUHP_AP_ARM_MVEBU_SYNC_CLOCKS,
->   	CPUHP_AP_X86_INTEL_EPB_ONLINE,
->   	CPUHP_AP_PERF_ONLINE,
-> 
-
-
+Thanks,
