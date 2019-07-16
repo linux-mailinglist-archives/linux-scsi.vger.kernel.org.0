@@ -2,100 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 576FA6AA3E
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2019 16:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD816AAA8
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jul 2019 16:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733302AbfGPOFX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Jul 2019 10:05:23 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35695 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727796AbfGPOFW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Jul 2019 10:05:22 -0400
-Received: by mail-pg1-f196.google.com with SMTP id s1so3195694pgr.2
-        for <linux-scsi@vger.kernel.org>; Tue, 16 Jul 2019 07:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=aoVagbFNhgXjrt3W/Zg0iqvw808Ej48g/8edVM2FIxY=;
-        b=oB+KUHUY8jt3xmhaIq2rMBhWkYYVxc9eFPInFzebpABp/zB+uYCQgZ3glw+vyYLnV/
-         2mg0EhT075HTjuRnRbAKJuaqPU6ib+K895FCPnCxGwszWDGOVKc/wfSnREM+UVMRqXuv
-         ZnK5puZMup9/KjRqYLNSRS01VzBq4dGdDSRsonnY3FhPNMMziuHRz/Ej0PvtLCYFO8fn
-         f78ZjcEb4EYtPsZ22IkAKG8on/FD308r+91bk9uDXS/bIliBn7bIFfX7rXQdNq2RpHUI
-         lyg4akf0G03slJn5OrL6b2iISkyDq+PBy/dQYwKhRTaUFQ7GjaLqGsS6wAOseBsIwewQ
-         Fd9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=aoVagbFNhgXjrt3W/Zg0iqvw808Ej48g/8edVM2FIxY=;
-        b=g1oLdB7w4gB0E5kwUQmkgUsds3Ybnw6EdIWCmzbhBYzNI5vfn21zGQw/M5wbh2Qgrq
-         iIPASl/VlTQu9zummHYXurS4yDte27JGBYY8t/tU1mN65pMJnMfSfd2WtkIqwRMhG1T8
-         9Wh11YpYImF2K4UVQkmG7u8kacrD6P54B69sHmpKTq1MscFZl9OnxsPbOjoZ1yf2qALf
-         hFXRtboMzrf54aSl+b3+ElXhU2rMzeILQ0J2ApedMCERv/oJFZkDW6VnfYwulV8KK5ra
-         S+T3fC0nXtxFq8Gzn9p/eI0cfA7RPn5q6sZMBOujI4cr7gnvv2a/8SAIioOOojOLQlkk
-         IVew==
-X-Gm-Message-State: APjAAAXZ/ft4MSx+8D6z3YFIDYoHBldzlX5XHaanl0ycFdAm0o4nMye0
-        yTQv+t115dHpGb31047IXyioNPFLH0A=
-X-Google-Smtp-Source: APXvYqzjx0xWwCczyNCO7AxzI9Vek3/4hKvb7RI6GhrXm06aGJFLjKM6citOIZnYOh4ngmsyCA3uRQ==
-X-Received: by 2002:a63:9318:: with SMTP id b24mr24121376pge.31.1563285922055;
-        Tue, 16 Jul 2019 07:05:22 -0700 (PDT)
-Received: from [192.168.1.121] (66.29.164.166.static.utbb.net. [66.29.164.166])
-        by smtp.gmail.com with ESMTPSA id i198sm7788161pgd.44.2019.07.16.07.05.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 16 Jul 2019 07:05:20 -0700 (PDT)
-Subject: Re: [PATCH] scsi: sd_zbc: Fix compilation warning
-To:     Damien Le Moal <damien.lemoal@wdc.com>, linux-block@vger.kernel.org
-Cc:     linux-scsi@vger.kernel.org,
+        id S2387649AbfGPOeg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Jul 2019 10:34:36 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:59340 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726997AbfGPOef (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Jul 2019 10:34:35 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6GEXc6X118762;
+        Tue, 16 Jul 2019 14:34:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=wcok+3RTtJX2p3OrX5xAg1cYhVxypBr1vogRy8E1pFU=;
+ b=mq44+sD1nwkd3jR7BkAOlS4XfhvqilkKUszGGdvUSTOZs5ifDo2PYykJXYHa+4OHXGr/
+ 6WOpQPK2bTNgjXvCfIUdYAq4hqIQ3wuhCaWvzJMSJELtAc/XlPCgZhCxQaGDmxtEcZic
+ DWwKqQ7V7XSvoJ1nowjh9GvnHH299E1LNsvUNGrTV8Fx5GnfGF2qpaWjnUO0b/dmrJY0
+ a6UIxVHTOTsX8yHhI5QnQMTWHjR0Uo34y433Q5Xq34FwtR7BB/H3jvSHf1f/wD8dx2Od
+ c4l1phk7BaAWalKy8RtzLfjz7yr9XQM5mqtK7ZrH+4xY+n8Rtmdf3uusDgD1MBEZjIU5 wg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2tq7xqvv27-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Jul 2019 14:34:29 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6GEXI60002180;
+        Tue, 16 Jul 2019 14:34:29 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2tq5bcexm9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Jul 2019 14:34:29 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6GEYQWp001569;
+        Tue, 16 Jul 2019 14:34:27 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 16 Jul 2019 14:34:25 +0000
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH] scsi: sd_zbc: Fix compilation warning
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
 References: <20190715053833.5973-1-damien.lemoal@wdc.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <f4812ac1-dfae-73d7-4722-4158c38d2382@kernel.dk>
-Date:   Tue, 16 Jul 2019 08:05:18 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        <f4812ac1-dfae-73d7-4722-4158c38d2382@kernel.dk>
+Date:   Tue, 16 Jul 2019 10:34:23 -0400
+In-Reply-To: <f4812ac1-dfae-73d7-4722-4158c38d2382@kernel.dk> (Jens Axboe's
+        message of "Tue, 16 Jul 2019 08:05:18 -0600")
+Message-ID: <yq1ftn6121c.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20190715053833.5973-1-damien.lemoal@wdc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9320 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=808
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1907160179
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9320 signatures=668688
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=875 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907160179
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/14/19 11:38 PM, Damien Le Moal wrote:
-> kbuild test robot gets the following compilation warning using gcc 7.4
-> cross compilation for c6x (GCC_VERSION=7.4.0 make.cross ARCH=c6x).
-> 
->     In file included from include/asm-generic/bug.h:18:0,
->                      from arch/c6x/include/asm/bug.h:12,
->                      from include/linux/bug.h:5,
->                      from include/linux/thread_info.h:12,
->                      from include/asm-generic/current.h:5,
->                      from ./arch/c6x/include/generated/asm/current.h:1,
->                      from include/linux/sched.h:12,
->                      from include/linux/blkdev.h:5,
->                      from drivers//scsi/sd_zbc.c:11:
->     drivers//scsi/sd_zbc.c: In function 'sd_zbc_read_zones':
->>> include/linux/kernel.h:62:48: warning: 'zone_blocks' may be used
->     uninitialized in this function [-Wmaybe-uninitialized]
->      #define __round_mask(x, y) ((__typeof__(x))((y)-1))
->                                                     ^
->     drivers//scsi/sd_zbc.c:464:6: note: 'zone_blocks' was declared here
->       u32 zone_blocks;
->           ^~~~~~~~~~~
-> 
-> Fix this by initializing the zone_blocks variable to 0.
 
-Probably worth noting that this is a false positive, and even if it is,
-include a Fixes: entry as well.
+Jens,
 
-Otherwise obviously looks fine to me. Martin, do you want to pick this
-one up?
+> Otherwise obviously looks fine to me. Martin, do you want to pick this
+> one up?
+
+Yep, I'll merge it.
 
 -- 
-Jens Axboe
-
+Martin K. Petersen	Oracle Linux Engineering
