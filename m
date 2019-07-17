@@ -2,94 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6565B6B4E1
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Jul 2019 05:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 460DF6B695
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Jul 2019 08:24:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728317AbfGQDI3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Jul 2019 23:08:29 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:57436 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726069AbfGQDI2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Jul 2019 23:08:28 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6H35cca191468;
-        Wed, 17 Jul 2019 03:08:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=UEaaAVvgCGyb+7Yj61X9MJGTm0YgTvSRv1ONnMOutJQ=;
- b=GOiTdgfTFSbb/EFuPcJN7jTYkY32Qmns5pYKAj8sb8IUcHKX3AiiAvu0KZr2DhGuUTjl
- Q+ViMT+0FbMmKkcPnICdmmxs+N+7nfidYVrJDJsF3cXRn0PLLpbAfF2s3M7HLZv0gYfj
- WNqq+LZR5C8T+WQ0Vdks5WvoyMpZaAnPccg6+SN5MIYBLpU6kfSOxxbmnsSvzWTTdLZM
- brw8TGVSUYnNBT4KD2ukTj6IdHno3pnlq/aIADGZlnIFmhVSgz3vb9x1y5cGcIIffbgh
- jvOO1we7rSUyeE9/yl0uH6nLZFtLVSeZ7ecKJmDL0/wp2mT4NG3B8YXVUcdziP4fQpvR 0g== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2tq78pquay-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Jul 2019 03:08:00 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6H32jv8038951;
-        Wed, 17 Jul 2019 03:08:00 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 2tq4du8s0c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 17 Jul 2019 03:08:00 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6H37wC2022960;
-        Wed, 17 Jul 2019 03:07:58 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 17 Jul 2019 03:07:58 +0000
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Max Gurtovoy <maxg@mellanox.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org,
-        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: properly communicate queue limits to the DMA layer v2
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190617122000.22181-1-hch@lst.de>
-        <20190715165823.GA10029@lst.de> <yq1tvbn2ofc.fsf@oracle.com>
-        <20190715174617.GA11094@lst.de>
-Date:   Tue, 16 Jul 2019 23:07:55 -0400
-In-Reply-To: <20190715174617.GA11094@lst.de> (Christoph Hellwig's message of
-        "Mon, 15 Jul 2019 19:46:17 +0200")
-Message-ID: <yq1y30xxss4.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9320 signatures=668688
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=907
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1907170036
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9320 signatures=668688
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=953 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1907170036
+        id S1725936AbfGQGYK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jul 2019 02:24:10 -0400
+Received: from condef-02.nifty.com ([202.248.20.67]:28650 "EHLO
+        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725873AbfGQGYK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Jul 2019 02:24:10 -0400
+Received: from conuserg-10.nifty.com ([10.126.8.73])by condef-02.nifty.com with ESMTP id x6H6IpYI006390;
+        Wed, 17 Jul 2019 15:18:51 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-10.nifty.com with ESMTP id x6H6I5Oc009435;
+        Wed, 17 Jul 2019 15:18:06 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com x6H6I5Oc009435
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1563344286;
+        bh=MsNRvlaE02YX1DTdpyxIjkokwz0Ur1MdtPkFVwAq4b4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oq3djoWpo5WcGiuxcGvDlSmpHWrZr4kgViu2MjtmR1w8MEVYnSfr2mP4e04Ptg9kd
+         wyFg3Ycl2l0fQvSostoJg0269KOkRZR0cGf3kw3/cH4Nn67ugenUgiHeRBrofPvLt6
+         4gXYWNCsMp7iXdiLIbUxLzIpH3rZDoYOO/bRkdjJmzKepG2gRIwb1u2uVt0NmfiY7c
+         wyhhDMuG7r6fQEyiYXU+XoFcdLW4hzWwjfFpkUxFBbvu7sFwifEHp08xAZpmJPJqW0
+         isneZcJ3sCva4Z/DOlClTkLv/FqyqykwttLTfpbGThqEFuZ9MhOlYvxAIeFyoJSSZx
+         NeHOHn3Up2Hag==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Renninger <trenn@suse.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH v3 00/12] kbuild: create *.mod with directory path and remove MODVERDIR
+Date:   Wed, 17 Jul 2019 15:17:48 +0900
+Message-Id: <20190717061800.10018-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Christoph,
+This series kills the long standing MODVERDIR.
 
-> I think all the patches on the block side went into 5.2, but it's been
-> a while, so I might misremember..
+Since MODVERDIR has a flat structure, it cannot avoid a race
+condition when somebody introduces a module name conflict.
 
-I checked my notes and the reason I held them back was that I was
-waiting for a response from Broadcom wrt. the megaraid segment size
-limitation.  However, given that mpt3sas was acked, I assume it's the
-same thing.
+Kbuild now reads modules.order to get the list of all modules.
 
-I'm not so keen on how big the last batch of patches for the merge
-window is getting. But I queued your fixes up for 5.3.
+The post-processing/installation stages will be more robust
+and simpler.
+
+
+
+Masahiro Yamada (12):
+  kbuild: do not create empty modules.order in the prepare stage
+  kbuild: get rid of kernel/ prefix from in-tree modules.{order,builtin}
+  kbuild: remove duplication from modules.order in sub-directories
+  scsi: remove pointless $(MODVERDIR)/$(obj)/53c700.ver
+  kbuild: modinst: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: modsign: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: modpost: read modules.order instead of $(MODVERDIR)/*.mod
+  kbuild: export_report: read modules.order instead of
+    .tmp_versions/*.mod
+  kbuild: create *.mod with full directory path and remove MODVERDIR
+  kbuild: remove the first line of *.mod files
+  kbuild: remove 'prepare1' target
+  kbuild: split out *.mod out of {single,multi}-used-m rules
+
+ .gitignore                                 |  1 +
+ Documentation/dontdiff                     |  1 +
+ Makefile                                   | 36 ++++++-------------
+ drivers/scsi/Makefile                      |  2 +-
+ lib/Kconfig.debug                          | 12 +------
+ scripts/Makefile.build                     | 40 +++++++++-------------
+ scripts/Makefile.modbuiltin                |  2 +-
+ scripts/Makefile.modinst                   |  5 +--
+ scripts/Makefile.modpost                   | 19 +++++-----
+ scripts/Makefile.modsign                   |  3 +-
+ scripts/adjust_autoksyms.sh                | 14 +++-----
+ scripts/export_report.pl                   | 11 +++---
+ scripts/mod/sumversion.c                   | 23 +++----------
+ scripts/modules-check.sh                   |  2 +-
+ scripts/package/mkspec                     |  2 +-
+ tools/power/cpupower/debug/kernel/Makefile |  4 +--
+ 16 files changed, 62 insertions(+), 115 deletions(-)
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.17.1
+
