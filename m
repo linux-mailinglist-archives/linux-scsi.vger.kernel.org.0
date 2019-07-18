@@ -2,60 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF686CA31
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 09:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E7F6CAD4
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 10:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727527AbfGRHpl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 03:45:41 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:40223 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726386AbfGRHpk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 03:45:40 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w10so12488039pgj.7;
-        Thu, 18 Jul 2019 00:45:40 -0700 (PDT)
+        id S1733131AbfGRISu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 04:18:50 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34872 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726397AbfGRISu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 04:18:50 -0400
+Received: by mail-pl1-f193.google.com with SMTP id w24so13481060plp.2;
+        Thu, 18 Jul 2019 01:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jYg175Do8ulNmF1GihD7s07sa1JEEtvEBEJHzo1oiXs=;
-        b=U1xi765P5BHoCVO87bBSYGBNnHnNnLhMVvRX26T15rQit+QyLMQsVJmI5gO1jYh4+i
-         SXGLCt2B/OgZwEsrlaZXfdOJQFeopTCjWrJYO6mbYnDCZJfnsIiAGgPd0mijuCYjfgvp
-         CIodNtNHFgdlx+JuesbmiYhb5oY9iAl5ysdZoj+vT9M9GqdQ0L9StOHdMidHJk7O43FM
-         E9WmXW6IrnIUoVC/CIy2ATn7en2FHBTM1YLfTn+uH31ylDE2Gb376kVEJBKgL//g6blj
-         ZMniJVQ+JsUOGJ+tYPhUhVcmWhRFMyl5D2pGbMbDCEeptcSxwyIWv21awiOdYq94S/5E
-         ZD5g==
+        h=from:to:cc:subject:date:message-id;
+        bh=11mjxUgmlKpFT65Qn2eRET8NgzSw6D9B85VQzs3KMfo=;
+        b=HtvtQx53myfqvYkQHosyY0m2p2GWHSgJJFqxDjRNT3U1hCs+p/fPZ89zb5atB9tEHk
+         upOI07pZfj0LpeDY79dNU+aDhdiMhF2PuuZ9ecJHPFs7P6E3BGj5WWeYyuZM0Csf/Npd
+         wTJq85Ysb2fGCQNjrp+6WDjrjbBonUxrMZnAdQeklgBldQHRe5jppXfpjvKKeHcB0bSt
+         PkzVzGTgWBcF0I44iDTR/dLI13Iz77Iav2txppTF+8e34wwtKdz0Cea78dER1cWCLjiL
+         zBrTPRwFNYIIIW0NYoH2gqsIxMjf1SbqEF1cSUJKRVh5IhW9GDveHDWeGEvcBHfQMm5z
+         KvyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jYg175Do8ulNmF1GihD7s07sa1JEEtvEBEJHzo1oiXs=;
-        b=quhCIUXcYYxE/c9WVH0Fp2QvOVhUidNng9zzsv0ig5AFlbiqcrJJCD3Dbr+3z+v7eP
-         8f/TaioZKD1h2BW9b00FFbvK1FKeSAca582HBwMykA6tvmeLsXG8lHVSYbrPTAMCQbg8
-         4pumSnplnoyjRaEKzyJ79xB/DVSkuw5zOTYHgu31nsR+FppnkOOJLLB2HrwgsNfMvlU7
-         9pjmD5B7JozwWi/tnfd43ED5yJrmxDxP0FgHhYTp6xX4Yf9XpyvllRDQXPDh84pM2npu
-         FKM0lfs2sJNKxV1MCCIFBkAoxJtXy/SFeyYG7m4Z625tdrIheTqS/N3SbZAtkWZ7tufE
-         E13w==
-X-Gm-Message-State: APjAAAUvHncBxTmtv5KlAKVWMfbaEhrs+S1CCr5Ao3W3xSl55B7N41ZA
-        NFB1UeGPq5POq9oMLhYPLX0=
-X-Google-Smtp-Source: APXvYqzK7nB7cyQB8dbgD8opmtY/G40dqXGy1mNVncPwxvZXhsWzp3qBDIsPYPzQpv+VFb6jdRyYdQ==
-X-Received: by 2002:a65:6281:: with SMTP id f1mr43590875pgv.400.1563435940226;
-        Thu, 18 Jul 2019 00:45:40 -0700 (PDT)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.gmail.com with ESMTPSA id y128sm42349646pgy.41.2019.07.18.00.45.37
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 18 Jul 2019 00:45:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=11mjxUgmlKpFT65Qn2eRET8NgzSw6D9B85VQzs3KMfo=;
+        b=Bak/pQjPa5hXCqo9oUSkLnNVoHCDyNip7QbC5pluWbryevJ4gMsbdhllCl8Fs2irnw
+         jvK6jy9fWVMQYQnyfoWbZ30ub+4TndOke7JlbA/Wmv+eBvF9ySk8HYTDvCxNYe5Ua5rw
+         vlYcAAm6cycGYtRulP1whbz++zv5K0e7sClovEvUlUXPCSI98onB/M5huKyW5tbYHWQu
+         qa2kF/XJCC6YWhdVtOjLvOiGfw9j8b9s75O79EaTmLG5fmV++gqcioDoW6BkN37KVSYF
+         EA7vOTKkQM10ALZTH5elAwmR6i4hc35xGXUzJ5045skXO9hCQQypHgeH6If7jArEtwG/
+         9LuA==
+X-Gm-Message-State: APjAAAVz9mIptoM5z6QW9zyO/Vtg/yY/KYgmzvODe7FT/gmR4dF0UPZd
+        0nGALvFqPvFa4FyA2P8TLrY=
+X-Google-Smtp-Source: APXvYqxQjMJEfvJGrhGFiRueAoYUztOJhNxXAleug7p9acbsgKYgBHkrzTU/a9kvRRQPAFedi8jUWg==
+X-Received: by 2002:a17:902:9a42:: with SMTP id x2mr49146527plv.106.1563437929386;
+        Thu, 18 Jul 2019 01:18:49 -0700 (PDT)
+Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.googlemail.com with ESMTPSA id l4sm26669847pff.50.2019.07.18.01.18.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Jul 2019 01:18:48 -0700 (PDT)
 From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     qla2xxx-upstream@qlogic.com,
+Cc:     QLogic-Storage-Upstream@cavium.com,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH 1/3] scsi: qla2xxx: Replace vmalloc + memset with vzalloc
-Date:   Thu, 18 Jul 2019 15:45:18 +0800
-Message-Id: <20190718074518.16273-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: [PATCH 3/3] scsi: qedf: Replace vmalloc + memset with vzalloc
+Date:   Thu, 18 Jul 2019 16:18:32 +0800
+Message-Id: <20190718081832.28808-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.11.0
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -63,53 +59,31 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 Use vzalloc instead of using vmalloc to allocate memory
-and then zeroing it with memset.
+and then zeroing it with memset 0.
 This simplifies the code.
 
 Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 ---
+ drivers/scsi/qedf/qedf_dbg.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- drivers/scsi/qla2xxx/qla_attr.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
-index 8d560c562e9c..2b92d4659934 100644
---- a/drivers/scsi/qla2xxx/qla_attr.c
-+++ b/drivers/scsi/qla2xxx/qla_attr.c
-@@ -382,7 +382,7 @@ qla2x00_sysfs_write_optrom_ctl(struct file *filp, struct kobject *kobj,
- 		ha->optrom_region_size = size;
+diff --git a/drivers/scsi/qedf/qedf_dbg.c b/drivers/scsi/qedf/qedf_dbg.c
+index e0387e495261..0d2aed82882a 100644
+--- a/drivers/scsi/qedf/qedf_dbg.c
++++ b/drivers/scsi/qedf/qedf_dbg.c
+@@ -106,11 +106,10 @@ qedf_dbg_info(struct qedf_dbg_ctx *qedf, const char *func, u32 line,
+ int
+ qedf_alloc_grc_dump_buf(u8 **buf, uint32_t len)
+ {
+-		*buf = vmalloc(len);
++		*buf = vzalloc(len);
+ 		if (!(*buf))
+ 			return -ENOMEM;
  
- 		ha->optrom_state = QLA_SREADING;
--		ha->optrom_buffer = vmalloc(ha->optrom_region_size);
-+		ha->optrom_buffer = vzalloc(ha->optrom_region_size);
- 		if (ha->optrom_buffer == NULL) {
- 			ql_log(ql_log_warn, vha, 0x7062,
- 			    "Unable to allocate memory for optrom retrieval "
-@@ -404,7 +404,6 @@ qla2x00_sysfs_write_optrom_ctl(struct file *filp, struct kobject *kobj,
- 		    "Reading flash region -- 0x%x/0x%x.\n",
- 		    ha->optrom_region_start, ha->optrom_region_size);
+-		memset(*buf, 0, len);
+ 		return 0;
+ }
  
--		memset(ha->optrom_buffer, 0, ha->optrom_region_size);
- 		ha->isp_ops->read_optrom(vha, ha->optrom_buffer,
- 		    ha->optrom_region_start, ha->optrom_region_size);
- 		break;
-@@ -457,7 +456,7 @@ qla2x00_sysfs_write_optrom_ctl(struct file *filp, struct kobject *kobj,
- 		ha->optrom_region_size = size;
- 
- 		ha->optrom_state = QLA_SWRITING;
--		ha->optrom_buffer = vmalloc(ha->optrom_region_size);
-+		ha->optrom_buffer = vzalloc(ha->optrom_region_size);
- 		if (ha->optrom_buffer == NULL) {
- 			ql_log(ql_log_warn, vha, 0x7066,
- 			    "Unable to allocate memory for optrom update "
-@@ -472,7 +471,6 @@ qla2x00_sysfs_write_optrom_ctl(struct file *filp, struct kobject *kobj,
- 		    "Staging flash region write -- 0x%x/0x%x.\n",
- 		    ha->optrom_region_start, ha->optrom_region_size);
- 
--		memset(ha->optrom_buffer, 0, ha->optrom_region_size);
- 		break;
- 	case 3:
- 		if (ha->optrom_state != QLA_SWRITING) {
 -- 
 2.20.1
 
