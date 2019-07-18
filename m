@@ -2,93 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D445A6D386
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 20:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2473B6D3AE
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 20:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727972AbfGRSMM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 14:12:12 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:33621 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726649AbfGRSMM (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 14:12:12 -0400
-Received: by mail-lf1-f68.google.com with SMTP id x3so19964903lfc.0;
-        Thu, 18 Jul 2019 11:12:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=ACngBykYqB0o3NihblCBOiLR+sDnmChE/17QqNQkmcw=;
-        b=uJSTcsru+2y77L4tXI8gTk0Vh9M9kZz58/Bo/v3O06SEgqw+rIDR6rjtygmpsUf4oy
-         Ri5PteBnltXPOLBcJEnzLXbaODQrcetYoBQRTqF7Hv1O5zVMIAL9IYTkT7xMEe86Bm0r
-         AIxfMGoV+q86LemSXRXZC1MOo4B/PQdNZTPNYLCbPYZmMYfQmQJIZIQv74DTCLuJ7yq7
-         CKmImcvKEMTowz6QhWlpYn8uWH4+MBbCecpX3GksUKIG71hIl6ozhV3vbAQj74KKOBKR
-         1Tb5Dni1kxWb2GB4R2dHSA1AgTLORIwChFc+2NX2cAiwF0RhFfEIbIcm9qqfX6m7mAlM
-         KyFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=ACngBykYqB0o3NihblCBOiLR+sDnmChE/17QqNQkmcw=;
-        b=IIbreBdrfcVIyLgQj11Z5pbgrutAbZd0WTCp+3qTN8Ua8RMXSTm3AwyhyjMmA10kjk
-         u+/WOOjHul01ygK28BgAAU0EsLlxJEG90vTwaOOjNFxg3AtgDqoW3IHRuH86Gi4eRsqm
-         pY5qFAH0CPNi6XboasKVaxlm+IvT/PgxzzFAtbiJgESEOSd8WVoEkCqNUhHraLd9Ko6m
-         Iir0sRvSyP911Z1NdnxXYgaH+opu7jDMT5W6nGhJY1IlNo9vSEh4/QmH4+gYESg2Wkoh
-         Dei9XPIGzc0k8iekwn3y6xq2/Hb5/XjDIB///7p0WJHAm0rJCs6b2/JCVhWXcZWCY4yo
-         1NhA==
-X-Gm-Message-State: APjAAAWnfnlOJ3vVHM4weWMR2ywTTeiRjqrNUonR30PZBPMZZPHBcVXn
-        tbZ5h308EFYkLh/qhfVXbGc=
-X-Google-Smtp-Source: APXvYqxR8eJn2cUmQMFU+uiC3HTCCXhxoJvfz5G4665Mq6Y8N0RiDcyjRnmmQ8gQDTeHx/LtGcuxcQ==
-X-Received: by 2002:a19:a87:: with SMTP id 129mr20910465lfk.98.1563473530065;
-        Thu, 18 Jul 2019 11:12:10 -0700 (PDT)
-Received: from ul001888.eu.tieto.com ([91.90.160.140])
-        by smtp.gmail.com with ESMTPSA id x137sm4098586lff.23.2019.07.18.11.12.09
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 18 Jul 2019 11:12:09 -0700 (PDT)
-From:   Vasyl Gomonovych <gomonovych@gmail.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org
-Cc:     Vasyl Gomonovych <gomonovych@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: pmcraid: Use dma_pool_zalloc rather than dma_pool_alloc
-Date:   Thu, 18 Jul 2019 20:11:46 +0200
-Message-Id: <20190718181146.23019-1-gomonovych@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S2391154AbfGRSS1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 14:18:27 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:42268 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391148AbfGRSS0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 18 Jul 2019 14:18:26 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 30D0C317916D;
+        Thu, 18 Jul 2019 18:18:26 +0000 (UTC)
+Received: from llong.remote.csb (dhcp-17-160.bos.redhat.com [10.18.17.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B2DA41001B35;
+        Thu, 18 Jul 2019 18:18:25 +0000 (UTC)
+Subject: Re: [PATCH] scsi: ses: Fix out-of-bounds memory access in
+ ses_enclosure_data_process()
+To:     James Bottomley <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190501180535.26718-1-longman@redhat.com>
+ <1fd39969-4413-2f11-86b2-729787680efa@redhat.com>
+ <1558363938.3742.1.camel@linux.ibm.com>
+From:   Waiman Long <longman@redhat.com>
+Organization: Red Hat
+Message-ID: <729b0751-01a6-7c0b-ce0d-f19807b59dee@redhat.com>
+Date:   Thu, 18 Jul 2019 14:18:25 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <1558363938.3742.1.camel@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Thu, 18 Jul 2019 18:18:26 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use *_pool_zalloc rather than *_pool_alloc followed by memset with 0
-The semantic patch that makes this change is available
-in scripts/coccinelle/api/alloc/pool_zalloc-simple.cocci.
+On 5/20/19 10:52 AM, James Bottomley wrote:
+> On Mon, 2019-05-20 at 10:41 -0400, Waiman Long wrote:
+> [...]
+>>> --- a/drivers/scsi/ses.c
+>>> +++ b/drivers/scsi/ses.c
+>>> @@ -605,9 +605,14 @@ static void ses_enclosure_data_process(struct
+>>> enclosure_device *edev,
+>>>  			     /* these elements are optional */
+>>>  			     type_ptr[0] ==
+>>> ENCLOSURE_COMPONENT_SCSI_TARGET_PORT ||
+>>>  			     type_ptr[0] ==
+>>> ENCLOSURE_COMPONENT_SCSI_INITIATOR_PORT ||
+>>> -			     type_ptr[0] ==
+>>> ENCLOSURE_COMPONENT_CONTROLLER_ELECTRONICS))
+>>> +			     type_ptr[0] ==
+>>> ENCLOSURE_COMPONENT_CONTROLLER_ELECTRONICS)) {
+>>>  				addl_desc_ptr += addl_desc_ptr[1]
+>>> + 2;
+>>>  
+>>> +				/* Ensure no out-of-bounds memory
+>>> access */
+>>> +				if (addl_desc_ptr >= ses_dev-
+>>>> page10 +
+>>> +						     ses_dev-
+>>>> page10_len)
+>>> +					addl_desc_ptr = NULL;
+>>> +			}
+>>>  		}
+>>>  	}
+>>>  	kfree(buf);
+>> Ping! Any comment on this patch.
+> The update looks fine to me:
+>
+> Reviewed-by: James E.J. Bottomley <jejb@linux.ibm.com>
+>
+> It might also be interesting to find out how the proliant is
+> structuring this descriptor array to precipitate the out of bounds: Is
+> it just an off by one or something more serious?
+>
+> James
+>
+Is someone going to merge this patch in the current cycle?
 
-Signed-off-by: Vasyl Gomonovych <gomonovych@gmail.com>
----
- drivers/scsi/pmcraid.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
-
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index 71ff3936da4f945f3d8a798a8b2129ca3c07ec22..f79d7750934e629c6d6edc1a075205247889531d 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -4653,9 +4653,7 @@ static int pmcraid_allocate_control_blocks(struct pmcraid_instance *pinstance)
- 		return -ENOMEM;
- 
- 	for (i = 0; i < PMCRAID_MAX_CMD; i++) {
--		pinstance->cmd_list[i]->ioa_cb =
--			dma_pool_alloc(
--				pinstance->control_pool,
-+		pinstance->cmd_list[i]->ioa_cb = dma_pool_zalloc(pinstance->control_pool,
- 				GFP_KERNEL,
- 				&(pinstance->cmd_list[i]->ioa_cb_bus_addr));
- 
-@@ -4663,8 +4661,6 @@ static int pmcraid_allocate_control_blocks(struct pmcraid_instance *pinstance)
- 			pmcraid_release_control_blocks(pinstance, i);
- 			return -ENOMEM;
- 		}
--		memset(pinstance->cmd_list[i]->ioa_cb, 0,
--			sizeof(struct pmcraid_control_block));
- 	}
- 	return 0;
- }
--- 
-2.17.1
+Thanks,
+Longman
 
