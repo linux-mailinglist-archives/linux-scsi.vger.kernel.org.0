@@ -2,82 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 766926D452
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 21:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7248C6D4A4
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 21:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727781AbfGRTC7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 15:02:59 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:40528 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727685AbfGRTC7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 15:02:59 -0400
-Received: by mail-lf1-f66.google.com with SMTP id b17so19995437lff.7;
-        Thu, 18 Jul 2019 12:02:57 -0700 (PDT)
+        id S2391379AbfGRTWf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 15:22:35 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35137 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391376AbfGRTWe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 15:22:34 -0400
+Received: by mail-lj1-f195.google.com with SMTP id x25so28502091ljh.2;
+        Thu, 18 Jul 2019 12:22:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=HB/bd47iRXpFzL6ymnsSikUvO8FPX+2PI8fyAjuW//g=;
-        b=ix4Fqd9wxwYwDgrgC7if/Ja6EXYAtIlQosTXdEgLUnxla479zBMT5FU86muxSYLZgH
-         iyo3BABNMAoSWk7OSzIUu2gQWlOOiW6PiTUIFw7m9I7uKOfnnFPJyDkip9UhK7jQdmZs
-         R6Z9seRmBWN9l4ALVQTFzuakuWkReZx72GU9BcV8wH3pGZ4242TCNdnRp6PZSUysy3lc
-         X+parvLr3zlXh8Y6ICCFWj/4jIsCoQzP6m9oCpHdhlWf0kWZwchbtcK3kGYZD1o9hcw7
-         SnLbIy0QD1BojrP9RM+gZM3xArpgw00n8uE1zEjtCNStpEMf8cE570pDVd45TZ9yoKjD
-         g1ug==
+        bh=MPOypPN7ES0HfrHOEJDZEvTo/LO4/CTjZDQyk4lr3t0=;
+        b=YM9MWHGsPnDHX7Mv99dr0tlsFi5P7oTEzIcDA+oIRobemnxvVR6kl+HVRUPCzPzWrJ
+         kYIbsOuJcrOQkIhN2Q9Xuad5MSrtvqFdi+S2fsKIrFMkSMxHpkHxriYxPUKVMJrFuAoC
+         M341gtwHCiCQsWIePgsOcCVDhjUmI0KUX4gSr07dhQ0YJGA0hnoDxOe3By2hlOIbBt6w
+         RrEsacL+fR8pQMsnwS0fxb74fylv6ug4Wpb5HMF9lRMrN94w1TidGoEGxU3GWfblXIck
+         AYy+/jx48NSF2IMc7H6Z4U6M8+oHrbkPAh/rmeNBOMNF/ee7tYpa2aD4KmlA7nVJJfGN
+         6obg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=HB/bd47iRXpFzL6ymnsSikUvO8FPX+2PI8fyAjuW//g=;
-        b=nMUHF9ECuYPzzJqZWTM9PTgGE/SNLEBXtYOSOOWNMsoSvdrzmo59iM32KuaOryyqjV
-         1GErQKqEqYQAs5hK+8kwHLWwzB+DdlPUs6ud7sPIMH4lZksl0DFa3M0fmyBD6lB3mGtq
-         N0ht20pq3f90+tByJjBm+uiYN5dH+5ZVQjjcNi6C3aUYFLjJ1pzfve9U0cqQBOv35L1X
-         u+RnNvR2RWQhPh01+ZegUc8LLo6+i+3Yr1GLwhCEpB/vT7zhxj6oPpMRJ7I/wv/TNSFq
-         5ZGtaRh3K7N8C1FxJDHOYNVqwyxCTr6teEIB7bc6qDMWzEQUo66fUrwggp7E1ngn+PoN
-         eMdw==
-X-Gm-Message-State: APjAAAVVu0keWM+uXn/0wOEVDX7t4Op+u7cuzcOmRwZJTYJ/Od7GniCI
-        w1nirsnTjwaK6QpFK33XDuk=
-X-Google-Smtp-Source: APXvYqyp0EUj2X5MUNmi6S433nDN9vCK+4YeXM8FssJZ5i+spMaSQHQq89MCzBenSKy362Zini1hqA==
-X-Received: by 2002:ac2:454e:: with SMTP id j14mr21179643lfm.7.1563476576941;
-        Thu, 18 Jul 2019 12:02:56 -0700 (PDT)
+        bh=MPOypPN7ES0HfrHOEJDZEvTo/LO4/CTjZDQyk4lr3t0=;
+        b=W8uB46AXP3KcQIUNAAA6Rc+3T4rN9Qpawrh6QCMm+sr5rTGm/R1y4Q1ANKTv/7MB6L
+         mAMKT6r1yzP7FHlI4xQ84VQ8D3av5fz+QkzxrZiv+Q0d65p+M8oz4vk2u4E3FiAFPG6f
+         5QxeFwyEvCu7fggPmsMJmxqC9tYINguUO8M7i7TTGiJoO2nrv00XE3FNEPp0L5pBh+vA
+         wxn70jvhT2WhjC6eYjfnkNAtwkY1Ji+xUz8I3Qt1GWNHl3Z2s3p/+eoI6AI5ZdYYfWrQ
+         2LlKwyY6O57ncrGSwNlDkZ59+xEwQ4GyJt2enMcsPcCZXCQu+mXka7ZSH2kC9mNhDBhc
+         ppNA==
+X-Gm-Message-State: APjAAAVDhXYerIFbgFI6PbvhHzWum16ySyzTBairmfRw9Pw3DSQgq5TI
+        VPcs26B9E5vJhdKxif/g7YM=
+X-Google-Smtp-Source: APXvYqwL2MHCOiSjNvUiBBlpDkZGWrJxYFRv6K3r/k53MVqrEx7+Vb397Z/B5mM5Y4Hr69R7uKUHkw==
+X-Received: by 2002:a2e:814e:: with SMTP id t14mr25946476ljg.167.1563477752556;
+        Thu, 18 Jul 2019 12:22:32 -0700 (PDT)
 Received: from ul001888.eu.tieto.com ([91.90.160.140])
-        by smtp.gmail.com with ESMTPSA id z22sm5272431ljz.20.2019.07.18.12.02.54
+        by smtp.gmail.com with ESMTPSA id o8sm3545512lfi.15.2019.07.18.12.22.31
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 18 Jul 2019 12:02:55 -0700 (PDT)
+        Thu, 18 Jul 2019 12:22:31 -0700 (PDT)
 From:   Vasyl Gomonovych <gomonovych@gmail.com>
-To:     satishkh@cisco.com, sebaddel@cisco.com, kartilak@cisco.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org
+To:     linuxdrivers@attotech.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
 Cc:     Vasyl Gomonovych <gomonovych@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] fnic: remove casting vmalloc
-Date:   Thu, 18 Jul 2019 21:02:35 +0200
-Message-Id: <20190718190235.8089-1-gomonovych@gmail.com>
+Subject: [PATCH] [SCSI] esas2r: remove casting dma_alloc_coherent
+Date:   Thu, 18 Jul 2019 21:22:15 +0200
+Message-Id: <20190718192215.17248-1-gomonovych@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Fix allocation style
 Generated by:  alloc_cast.cocci
 
 Signed-off-by: Vasyl Gomonovych <gomonovych@gmail.com>
 ---
- drivers/scsi/fnic/fnic_debugfs.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/esas2r/esas2r_ioctl.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
-index 21991c99db7c..8c5bae6165d6 100644
---- a/drivers/scsi/fnic/fnic_debugfs.c
-+++ b/drivers/scsi/fnic/fnic_debugfs.c
-@@ -59,8 +59,7 @@ int fnic_debugfs_init(void)
- 						fnic_trace_debugfs_root);
+diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esas2r_ioctl.c
+index 3d130523c288..eece7e80cb59 100644
+--- a/drivers/scsi/esas2r/esas2r_ioctl.c
++++ b/drivers/scsi/esas2r/esas2r_ioctl.c
+@@ -1552,7 +1552,7 @@ static int allocate_fw_buffers(struct esas2r_adapter *a, u32 length)
  
- 	/* Allocate memory to structure */
--	fc_trc_flag = (struct fc_trace_flag_type *)
--		vmalloc(sizeof(struct fc_trace_flag_type));
-+	fc_trc_flag = vmalloc(sizeof(struct fc_trace_flag_type));
+ 	a->firmware.orig_len = length;
  
- 	if (fc_trc_flag) {
- 		fc_trc_flag->fc_row_file = 0;
+-	a->firmware.data = (u8 *)dma_alloc_coherent(&a->pcid->dev,
++	a->firmware.data = dma_alloc_coherent(&a->pcid->dev,
+ 						    (size_t)length,
+ 						    (dma_addr_t *)&a->firmware.
+ 						    phys,
+@@ -1899,7 +1899,7 @@ int esas2r_write_vda(struct esas2r_adapter *a, const char *buf, long off,
+ 
+ 	if (!a->vda_buffer) {
+ 		dma_addr_t dma_addr;
+-		a->vda_buffer = (u8 *)dma_alloc_coherent(&a->pcid->dev,
++		a->vda_buffer = dma_alloc_coherent(&a->pcid->dev,
+ 							 (size_t)
+ 							 VDA_MAX_BUFFER_SIZE,
+ 							 &dma_addr,
+@@ -2068,7 +2068,7 @@ int esas2r_write_fs(struct esas2r_adapter *a, const char *buf, long off,
+ re_allocate_buffer:
+ 			a->fs_api_buffer_size = length;
+ 
+-			a->fs_api_buffer = (u8 *)dma_alloc_coherent(
++			a->fs_api_buffer = dma_alloc_coherent(
+ 				&a->pcid->dev,
+ 				(size_t)a->fs_api_buffer_size,
+ 				(dma_addr_t *)&a->ppfs_api_buffer,
 -- 
 2.17.1
 
