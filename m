@@ -2,83 +2,235 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AADC86D4C5
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 21:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A166D4D2
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 21:36:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391001AbfGRTbb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 15:31:31 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:43869 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728111AbfGRTbb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 15:31:31 -0400
-Received: by mail-lj1-f195.google.com with SMTP id y17so3909008ljk.10;
-        Thu, 18 Jul 2019 12:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=qcL3LovIaG2I+4/Ya4EZq8QuwXXlyROXKp2x+863zag=;
-        b=bxDHW8OFGKYh0iChgAPve01fDS61WHbwQNju+rrB0FSCA+XHKytTf+UIw0WXhxeDH8
-         IH2MQR1ydnwuDrKJB/yeqqg3tKgrXHMbBYNpTCRDxyW3+GzIub5F1P036SSsx1keDjsN
-         2T3AuKSXyI6IoAG1MAMqr0UdfxvVcDD+K3p6RsKKUHEEurWWIh5lRqZZuiuVCe0e2dsQ
-         PyCLFDKcwCmNCTb17Ba+ZU2xm+QBUBwpxAocdg2IIHvMXB1hMQqChTRc0Ceyd08nr1HU
-         6v3l0BlgbcImFhLdwzi9fcf1BFH9uH+IslFAQvgUeSxv8aYQpoVcZwNHz2Qg3Px+RugR
-         Bs6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=qcL3LovIaG2I+4/Ya4EZq8QuwXXlyROXKp2x+863zag=;
-        b=FWHmIdy7DdTOqgZmgrhlVXnNl2G6XLy0aul/fnGxBFma+mxpELK3JvCbadLVZqO+zY
-         nR1tHNBDgnBBXc8NhoCILj94ZZ/No/8sUuQxQEnVPJPw+NdFcKve/jxroGya8VFu6q2r
-         PKQkQ4NImHuOsWGBrFVoKyjmdwgTdOJ8HIvGDYfW01zpsmx8QKLZo+htmznkWjkMOU5J
-         UQnqxwpJ5u/zmFuVY68O9jfMR1miBjaOwhdPjWvz2dqh2CaO+jjWL7RBS49Xzyredf/J
-         VVKtQalr9VD4nJPt5jdEJ4Wdo3r+uUzl9j3DM+3c3+qP82YF6hKk4/qyVe/ZWaRh0/fA
-         V+mQ==
-X-Gm-Message-State: APjAAAW/O1WSNeOlNMDLVsZUcJvHQcRkGo1KRcspxRX8M5P92kWoM4pc
-        CBp/p9YcF/MKg3i0Wt+NfF1tpf8weyngMw==
-X-Google-Smtp-Source: APXvYqyVZBlbCBK1Y7Pv7LjJuRnTwXIED6u/+IBJTZFH9W7ohhUCtmgd+v2B/Rpb3qJcXdxW/jwBUw==
-X-Received: by 2002:a2e:870f:: with SMTP id m15mr25339251lji.223.1563478289408;
-        Thu, 18 Jul 2019 12:31:29 -0700 (PDT)
-Received: from ul001888.eu.tieto.com ([91.90.160.140])
-        by smtp.gmail.com with ESMTPSA id x137sm4124120lff.23.2019.07.18.12.31.28
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 18 Jul 2019 12:31:28 -0700 (PDT)
-From:   Vasyl Gomonovych <gomonovych@gmail.com>
-To:     tyreld@linux.ibm.com, benh@kernel.crashing.org, paulus@samba.org,
-        mpe@ellerman.id.au, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc:     Vasyl Gomonovych <gomonovych@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: ibmvscsi: remove casting dma_alloc_coherent
-Date:   Thu, 18 Jul 2019 21:31:12 +0200
-Message-Id: <20190718193112.17709-1-gomonovych@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S2387815AbfGRTgt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 15:36:49 -0400
+Received: from smtprelay0162.hostedemail.com ([216.40.44.162]:53434 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727687AbfGRTgt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 18 Jul 2019 15:36:49 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay07.hostedemail.com (Postfix) with ESMTP id A019B181D12E7;
+        Thu, 18 Jul 2019 19:36:47 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::,RULES_HIT:2:41:69:355:379:599:960:966:968:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1535:1593:1594:1605:1730:1747:1777:1792:2196:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3622:3865:3866:3867:3870:3871:3872:4049:4118:4321:4385:4605:5007:7875:7903:8603:9592:10004:10848:11026:11232:11658:11914:12043:12048:12297:12438:12555:12683:12740:12760:12895:13439:14096:14097:14659:21080:21451:21611:21627:30012:30054:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:26,LUA_SUMMARY:none
+X-HE-Tag: duck35_58333dbfa7011
+X-Filterd-Recvd-Size: 7148
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Thu, 18 Jul 2019 19:36:45 +0000 (UTC)
+Message-ID: <5cce2a9f73f6bf5ee55c576f98a28b04fdbe05d6.camel@perches.com>
+Subject: Re: [PATCH] fnic: remove casting vmalloc
+From:   Joe Perches <joe@perches.com>
+To:     Vasyl Gomonovych <gomonovych@gmail.com>, satishkh@cisco.com,
+        sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Date:   Thu, 18 Jul 2019 12:36:44 -0700
+In-Reply-To: <20190718190235.8089-1-gomonovych@gmail.com>
+References: <20190718190235.8089-1-gomonovych@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix allocation style
-Generated by:  alloc_cast.cocci
+On Thu, 2019-07-18 at 21:02 +0200, Vasyl Gomonovych wrote:
+> Generated by:  alloc_cast.cocci
 
-Signed-off-by: Vasyl Gomonovych <gomonovych@gmail.com>
+Please look deeper than just the cocci output.
+
+> diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
+[]
+> @@ -59,8 +59,7 @@ int fnic_debugfs_init(void)
+>  						fnic_trace_debugfs_root);
+>  
+>  	/* Allocate memory to structure */
+> -	fc_trc_flag = (struct fc_trace_flag_type *)
+> -		vmalloc(sizeof(struct fc_trace_flag_type));
+> +	fc_trc_flag = vmalloc(sizeof(struct fc_trace_flag_type));
+>  
+>  	if (fc_trc_flag) {
+>  		fc_trc_flag->fc_row_file = 0;
+
+Not your fault, but this code is not well written.
+
+struct fc_trace_flag_type is:
+
+drivers/scsi/fnic/fnic_debugfs.c:struct fc_trace_flag_type {
+drivers/scsi/fnic/fnic_debugfs.c-       u8 fc_row_file;
+drivers/scsi/fnic/fnic_debugfs.c-       u8 fc_normal_file;
+drivers/scsi/fnic/fnic_debugfs.c-       u8 fnic_trace;
+drivers/scsi/fnic/fnic_debugfs.c-       u8 fc_trace;
+drivers/scsi/fnic/fnic_debugfs.c-       u8 fc_clear;
+drivers/scsi/fnic/fnic_debugfs.c-};
+
+It doesn't require vmalloc as it's just 5 bytes in size.
+Might as well do either of allocate it with kmalloc
+or because it's a singleton, just create a static.
+
+Maybe:
 ---
- drivers/scsi/ibmvscsi/ibmvscsi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/scsi/fnic/fnic_debugfs.c | 55 ++++++++++++++++------------------------
+ 1 file changed, 22 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
-index 7f66a7783209..7e9b3e409851 100644
---- a/drivers/scsi/ibmvscsi/ibmvscsi.c
-+++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
-@@ -715,8 +715,7 @@ static int map_sg_data(struct scsi_cmnd *cmd,
+diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
+index 21991c99db7c..72071bd4c9a1 100644
+--- a/drivers/scsi/fnic/fnic_debugfs.c
++++ b/drivers/scsi/fnic/fnic_debugfs.c
+@@ -31,15 +31,13 @@ static struct dentry *fnic_fc_rdata_trace_debugfs_file;
+ static struct dentry *fnic_fc_trace_enable;
+ static struct dentry *fnic_fc_trace_clear;
  
- 	/* get indirect table */
- 	if (!evt_struct->ext_list) {
--		evt_struct->ext_list = (struct srp_direct_buf *)
--			dma_alloc_coherent(dev,
-+		evt_struct->ext_list = dma_alloc_coherent(dev,
- 					   SG_ALL * sizeof(struct srp_direct_buf),
- 					   &evt_struct->ext_list_token, 0);
- 		if (!evt_struct->ext_list) {
--- 
-2.17.1
+-struct fc_trace_flag_type {
++static struct {
+ 	u8 fc_row_file;
+ 	u8 fc_normal_file;
+ 	u8 fnic_trace;
+ 	u8 fc_trace;
+ 	u8 fc_clear;
+-};
+-
+-static struct fc_trace_flag_type *fc_trc_flag;
++} fc_trc_flag;
+ 
+ /*
+  * fnic_debugfs_init - Initialize debugfs for fnic debug logging
+@@ -52,26 +50,18 @@ static struct fc_trace_flag_type *fc_trc_flag;
+  */
+ int fnic_debugfs_init(void)
+ {
+-	int rc = -1;
+ 	fnic_trace_debugfs_root = debugfs_create_dir("fnic", NULL);
+ 
+ 	fnic_stats_debugfs_root = debugfs_create_dir("statistics",
+ 						fnic_trace_debugfs_root);
+ 
+-	/* Allocate memory to structure */
+-	fc_trc_flag = (struct fc_trace_flag_type *)
+-		vmalloc(sizeof(struct fc_trace_flag_type));
+-
+-	if (fc_trc_flag) {
+-		fc_trc_flag->fc_row_file = 0;
+-		fc_trc_flag->fc_normal_file = 1;
+-		fc_trc_flag->fnic_trace = 2;
+-		fc_trc_flag->fc_trace = 3;
+-		fc_trc_flag->fc_clear = 4;
+-	}
++	fc_trc_flag.fc_row_file = 0;
++	fc_trc_flag.fc_normal_file = 1;
++	fc_trc_flag.fnic_trace = 2;
++	fc_trc_flag.fc_trace = 3;
++	fc_trc_flag.fc_clear = 4;
+ 
+-	rc = 0;
+-	return rc;
++	return 0;
+ }
+ 
+ /*
+@@ -89,8 +79,7 @@ void fnic_debugfs_terminate(void)
+ 	debugfs_remove(fnic_trace_debugfs_root);
+ 	fnic_trace_debugfs_root = NULL;
+ 
+-	if (fc_trc_flag)
+-		vfree(fc_trc_flag);
++	memset(&fc_trc_flag, 0, sizeof(fc_trc_flag));
+ }
+ 
+ /*
+@@ -121,11 +110,11 @@ static ssize_t fnic_trace_ctrl_read(struct file *filp,
+ 	u8 *trace_type;
+ 	len = 0;
+ 	trace_type = (u8 *)filp->private_data;
+-	if (*trace_type == fc_trc_flag->fnic_trace)
++	if (*trace_type == fc_trc_flag.fnic_trace)
+ 		len = sprintf(buf, "%u\n", fnic_tracing_enabled);
+-	else if (*trace_type == fc_trc_flag->fc_trace)
++	else if (*trace_type == fc_trc_flag.fc_trace)
+ 		len = sprintf(buf, "%u\n", fnic_fc_tracing_enabled);
+-	else if (*trace_type == fc_trc_flag->fc_clear)
++	else if (*trace_type == fc_trc_flag.fc_clear)
+ 		len = sprintf(buf, "%u\n", fnic_fc_trace_cleared);
+ 	else
+ 		pr_err("fnic: Cannot read to any debugfs file\n");
+@@ -172,11 +161,11 @@ static ssize_t fnic_trace_ctrl_write(struct file *filp,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (*trace_type == fc_trc_flag->fnic_trace)
++	if (*trace_type == fc_trc_flag.fnic_trace)
+ 		fnic_tracing_enabled = val;
+-	else if (*trace_type == fc_trc_flag->fc_trace)
++	else if (*trace_type == fc_trc_flag.fc_trace)
+ 		fnic_fc_tracing_enabled = val;
+-	else if (*trace_type == fc_trc_flag->fc_clear)
++	else if (*trace_type == fc_trc_flag.fc_clear)
+ 		fnic_fc_trace_cleared = val;
+ 	else
+ 		pr_err("fnic: cannot write to any debugfs file\n");
+@@ -218,7 +207,7 @@ static int fnic_trace_debugfs_open(struct inode *inode,
+ 	if (!fnic_dbg_prt)
+ 		return -ENOMEM;
+ 
+-	if (*rdata_ptr == fc_trc_flag->fnic_trace) {
++	if (*rdata_ptr == fc_trc_flag.fnic_trace) {
+ 		fnic_dbg_prt->buffer = vmalloc(array3_size(3, trace_max_pages,
+ 							   PAGE_SIZE));
+ 		if (!fnic_dbg_prt->buffer) {
+@@ -347,13 +336,13 @@ void fnic_trace_debugfs_init(void)
+ 	fnic_trace_enable = debugfs_create_file("tracing_enable",
+ 					S_IFREG|S_IRUGO|S_IWUSR,
+ 					fnic_trace_debugfs_root,
+-					&(fc_trc_flag->fnic_trace),
++					&fc_trc_flag.fnic_trace,
+ 					&fnic_trace_ctrl_fops);
+ 
+ 	fnic_trace_debugfs_file = debugfs_create_file("trace",
+ 					S_IFREG|S_IRUGO|S_IWUSR,
+ 					fnic_trace_debugfs_root,
+-					&(fc_trc_flag->fnic_trace),
++					&fc_trc_flag.fnic_trace,
+ 					&fnic_trace_debugfs_fops);
+ }
+ 
+@@ -390,27 +379,27 @@ void fnic_fc_trace_debugfs_init(void)
+ 	fnic_fc_trace_enable = debugfs_create_file("fc_trace_enable",
+ 					S_IFREG|S_IRUGO|S_IWUSR,
+ 					fnic_trace_debugfs_root,
+-					&(fc_trc_flag->fc_trace),
++					&fc_trc_flag.fc_trace,
+ 					&fnic_trace_ctrl_fops);
+ 
+ 	fnic_fc_trace_clear = debugfs_create_file("fc_trace_clear",
+ 					S_IFREG|S_IRUGO|S_IWUSR,
+ 					fnic_trace_debugfs_root,
+-					&(fc_trc_flag->fc_clear),
++					&fc_trc_flag.fc_clear,
+ 					&fnic_trace_ctrl_fops);
+ 
+ 	fnic_fc_rdata_trace_debugfs_file =
+ 		debugfs_create_file("fc_trace_rdata",
+ 				    S_IFREG|S_IRUGO|S_IWUSR,
+ 				    fnic_trace_debugfs_root,
+-				    &(fc_trc_flag->fc_normal_file),
++				    &fc_trc_flag.fc_normal_file,
+ 				    &fnic_trace_debugfs_fops);
+ 
+ 	fnic_fc_trace_debugfs_file =
+ 		debugfs_create_file("fc_trace",
+ 				    S_IFREG|S_IRUGO|S_IWUSR,
+ 				    fnic_trace_debugfs_root,
+-				    &(fc_trc_flag->fc_row_file),
++				    &fc_trc_flag.fc_row_file,
+ 				    &fnic_trace_debugfs_fops);
+ }
+ 
 
