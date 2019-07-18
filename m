@@ -2,132 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D34E6C966
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 08:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF686CA31
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 09:45:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726488AbfGRGqi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 02:46:38 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:8678 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726472AbfGRGqi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 02:46:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1563432398; x=1594968398;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=XH/xLghjclFjmGZULGzE+zOCNkzC+Rge0wBhhcqlxiE=;
-  b=meEqKqf2eqtBgEAp1IgiVnfgmVdUilGUFqM9KNQkOOefKUlJ26O47tSK
-   6JfmoEIIG7taj/vzPy0WQNsHiG94snHrBXyQXjJ1wq9HvXtmHsirV0+Rn
-   CNVgets2AHkbKeQ+EgH2MjwnyJMbq7vtTR7T6vrBVfBiPKxesdKcjXzrp
-   cB3gsA7EpHM/F6QvaEpiNpdQJW01sKGq7aLGWSHlzdzCsHZi2qvhvkOyu
-   UhJY+8K6PLV99RyvCV9Rs8FXq33uTsa+yS3TxFTnC0KyekMHht5pbA5by
-   kOUOXJ0onFI3nHqfCNtURvfqBYDNlB8sxE3WYcCW1BJHHbQXz0X3B+B8y
-   Q==;
-IronPort-SDR: aoBWnHPR9VfOyTT8RnEBZQE3NlpI73ulsX/urxkqtEzJGrhpQ4ij+tNRm0VLn1pt9NszZ2J3IS
- SLHiyKUTqvJnRPPwZd8lvnHlD9zwqyfpWI4Ys2iAm+Bc/JZBIPNN6IV/fLEpThbSc7yZtC+U+k
- Vr0X0m7jBHWcYgJ2SbvZuGGy2Efs6alh2VXJ28EBKSA34j/sKu7sNfD1S1pOXo8BScpj1zsfL/
- EbJMnt6a0WtWHw6eBRcr9rIy//FR9tVNTKukmqK/eMD6DUTvZ+tHCuTHe42rw/tbHAXH5gjDnb
- cMI=
-X-IronPort-AV: E=Sophos;i="5.64,276,1559491200"; 
-   d="scan'208";a="114473251"
-Received: from mail-dm3nam05lp2054.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) ([104.47.49.54])
-  by ob1.hgst.iphmx.com with ESMTP; 18 Jul 2019 14:46:37 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WoTyQLIk4SNIkhVG/rpcf6uwS+o7+0FEv2HY+mAOR/ftJwZuMBfbmQIekktoVGYfA94R65ae8s261pigDMsfG9AlpOgu1qGTXd/JmD9Q4CCEBY+bhnJVBimxBw80Sk8agaO7icJK4GjTjtdeYZ/6ZU6zaNzlybLmwi1nw8/TsIZdinLaaFuf4Lm49JAbpAcEui8fyKArZlqB3mMI2frY3CfXukhVjRsVSXYZNUL3xwWPvaDzmNHzZkBeywKoC2Pf+yqR043D8zIl4m0KpfikSHofovL8VgNH+a89obr1pxFrKLFmSY/7BR8/Mw1p1n38aWhx9xZD+Oc6mvRIQH14sQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kPavYDlqZoyuLGMPRPBJmOZY1rgRVxy2gymti2/a+/I=;
- b=CX4yBy9hG/xTdd+0Zh3e/99d4MbNF7StNHAJQjUQZyGqfOwxE4bGOabBj2ZTbT+qf1iM9GV7W8cKfFGrO3Lo+Aw3NWL1OU8l7iSfWgTeg6szL6TL6hSYV0in1bQY72TMsDe8oh8rmDHWBg8tyLU6DcQxkb1qtKIOU2Oj6yrm3Xvadu7NyJwg542Dgt0DA++piTbwmTTiR6yvH5OR/ub646Y/mxG8iW4WLXhpzmgG1Y/tkZRsNwFvdSguZ0sbaTn+hNFCex/MPDEJR0Ti4ruU0GgL3y0v1cuOb9PjvvhivW/r8RQAB72tpdPwToxJy1UOqXwRxQcf9v/L6rXoPqOg2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wdc.com;dmarc=pass action=none header.from=wdc.com;dkim=pass
- header.d=wdc.com;arc=none
+        id S1727527AbfGRHpl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 03:45:41 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40223 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726386AbfGRHpk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 03:45:40 -0400
+Received: by mail-pg1-f195.google.com with SMTP id w10so12488039pgj.7;
+        Thu, 18 Jul 2019 00:45:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kPavYDlqZoyuLGMPRPBJmOZY1rgRVxy2gymti2/a+/I=;
- b=DDN9dDHMuHXLtdjwR/mz7BgXN/0OV5gYIfvYBxueFj+RXAkPXukY7cpbsUG+gntNIiI5Qdv4JeyH95ZHE88y9LMJ1BXKkG5tebbyDM+UTnJZCVB64UP6STrMQ81yAeLNKkKsZBiHRwqWbJhJEoWLXIuanYeaHm0HxPbbIbYn+Po=
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
- SN6PR04MB4334.namprd04.prod.outlook.com (52.135.72.30) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.11; Thu, 18 Jul 2019 06:46:35 +0000
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::a102:1701:9c05:96b3]) by SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::a102:1701:9c05:96b3%5]) with mapi id 15.20.2094.011; Thu, 18 Jul 2019
- 06:46:35 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <jejb@linux.vnet.ibm.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avi Shchislowski <Avi.Shchislowski@wdc.com>,
-        Alex Lemberg <Alex.Lemberg@wdc.com>
-Subject: RE: [PATCH] scsi: uapi: ufs: Fix SPDX license identifier
-Thread-Topic: [PATCH] scsi: uapi: ufs: Fix SPDX license identifier
-Thread-Index: AQHVISOkIGq/TXYo40K7pkiAfhMabKbGS2d+gAABeYCAABGCt4AJx32A
-Date:   Thu, 18 Jul 2019 06:46:35 +0000
-Message-ID: <SN6PR04MB4925B7FC2F71730A5932F7EFFCC80@SN6PR04MB4925.namprd04.prod.outlook.com>
-References: <1560346477-13944-1-git-send-email-avri.altman@wdc.com>
-        <yq1ef2w9kig.fsf@oracle.com>    <1562890815.2915.13.camel@linux.vnet.ibm.com>
- <yq1d0ig6o8b.fsf@oracle.com>
-In-Reply-To: <yq1d0ig6o8b.fsf@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: edafb04c-3e81-4ca8-0bcd-08d70b4bad9d
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB4334;
-x-ms-traffictypediagnostic: SN6PR04MB4334:
-x-microsoft-antispam-prvs: <SN6PR04MB433408EFC0A34708321D097DFCC80@SN6PR04MB4334.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 01026E1310
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(136003)(366004)(346002)(376002)(39860400002)(199004)(189003)(76116006)(66446008)(66946007)(64756008)(4744005)(186003)(66476007)(476003)(86362001)(446003)(11346002)(66556008)(66066001)(26005)(71190400001)(5660300002)(71200400001)(74316002)(6246003)(6436002)(52536014)(9686003)(305945005)(478600001)(55016002)(7736002)(53936002)(2906002)(81156014)(99286004)(81166006)(8936002)(3846002)(256004)(6116002)(76176011)(54906003)(486006)(229853002)(4326008)(7696005)(110136005)(6506007)(102836004)(68736007)(33656002)(8676002)(14454004)(25786009)(316002);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB4334;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: zaw46+F1GqIrCIo2AtuQrrfmO1Y3V0M9bRjNR3VMcyKePtHEUZGRCv4/bVSYVq+AoYSRbEvNLAHgep+Qdl/hnJYp0FKuTdlOSwECHgidZqtbW0/HAt5A7aBwCYwCQ/HRApJTWVBuEAOSi1aEuU254jJnw9wsAlg2MuUjfE43R1TlPZ72KkP+e/YqND8o3FyQValuFvdYdVg4yTZUjktWFGbWaVYUhB9K5iTeA4WF6HAtvBdSuW5stgBR7rEckbrPAtgnAIMQKzU22uJNt6rUhXM0TC+/TvGdlLx71iTABCicJxHkYh0npS12FBIf8P4khjiZjB3xSlyL53k16XmltqymhU3yFEVgp+RrisJaaYZEE31y1dG27Olnuj3AHU0Zj4Am4Lj0Uv6CW6o3H799zcubtInAQL4ZwDbPe6a2vYU=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jYg175Do8ulNmF1GihD7s07sa1JEEtvEBEJHzo1oiXs=;
+        b=U1xi765P5BHoCVO87bBSYGBNnHnNnLhMVvRX26T15rQit+QyLMQsVJmI5gO1jYh4+i
+         SXGLCt2B/OgZwEsrlaZXfdOJQFeopTCjWrJYO6mbYnDCZJfnsIiAGgPd0mijuCYjfgvp
+         CIodNtNHFgdlx+JuesbmiYhb5oY9iAl5ysdZoj+vT9M9GqdQ0L9StOHdMidHJk7O43FM
+         E9WmXW6IrnIUoVC/CIy2ATn7en2FHBTM1YLfTn+uH31ylDE2Gb376kVEJBKgL//g6blj
+         ZMniJVQ+JsUOGJ+tYPhUhVcmWhRFMyl5D2pGbMbDCEeptcSxwyIWv21awiOdYq94S/5E
+         ZD5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jYg175Do8ulNmF1GihD7s07sa1JEEtvEBEJHzo1oiXs=;
+        b=quhCIUXcYYxE/c9WVH0Fp2QvOVhUidNng9zzsv0ig5AFlbiqcrJJCD3Dbr+3z+v7eP
+         8f/TaioZKD1h2BW9b00FFbvK1FKeSAca582HBwMykA6tvmeLsXG8lHVSYbrPTAMCQbg8
+         4pumSnplnoyjRaEKzyJ79xB/DVSkuw5zOTYHgu31nsR+FppnkOOJLLB2HrwgsNfMvlU7
+         9pjmD5B7JozwWi/tnfd43ED5yJrmxDxP0FgHhYTp6xX4Yf9XpyvllRDQXPDh84pM2npu
+         FKM0lfs2sJNKxV1MCCIFBkAoxJtXy/SFeyYG7m4Z625tdrIheTqS/N3SbZAtkWZ7tufE
+         E13w==
+X-Gm-Message-State: APjAAAUvHncBxTmtv5KlAKVWMfbaEhrs+S1CCr5Ao3W3xSl55B7N41ZA
+        NFB1UeGPq5POq9oMLhYPLX0=
+X-Google-Smtp-Source: APXvYqzK7nB7cyQB8dbgD8opmtY/G40dqXGy1mNVncPwxvZXhsWzp3qBDIsPYPzQpv+VFb6jdRyYdQ==
+X-Received: by 2002:a65:6281:: with SMTP id f1mr43590875pgv.400.1563435940226;
+        Thu, 18 Jul 2019 00:45:40 -0700 (PDT)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id y128sm42349646pgy.41.2019.07.18.00.45.37
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 18 Jul 2019 00:45:39 -0700 (PDT)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     qla2xxx-upstream@qlogic.com,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH 1/3] scsi: qla2xxx: Replace vmalloc + memset with vzalloc
+Date:   Thu, 18 Jul 2019 15:45:18 +0800
+Message-Id: <20190718074518.16273-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: edafb04c-3e81-4ca8-0bcd-08d70b4bad9d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jul 2019 06:46:35.8258
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4334
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Martin,
+Use vzalloc instead of using vmalloc to allocate memory
+and then zeroing it with memset.
+This simplifies the code.
 
-Are there any further clarifications required?
-Thanks,
-Avri
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+---
 
->=20
->=20
-> James,
->=20
-> > Just to note: this isn't technically a licence change at all.  The
-> > entire kernel is covered by the system call exception and this file is
-> > thus also covered.  It's really a simple tag change to allow tools
-> > which parse uapi header files to recognise from the SPDX tags that this
-> > is a kernel header to which the Linux-syscall-note applies.
->=20
-> OK.
->=20
-> --
-> Martin K. Petersen	Oracle Linux Engineering
+ drivers/scsi/qla2xxx/qla_attr.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
+index 8d560c562e9c..2b92d4659934 100644
+--- a/drivers/scsi/qla2xxx/qla_attr.c
++++ b/drivers/scsi/qla2xxx/qla_attr.c
+@@ -382,7 +382,7 @@ qla2x00_sysfs_write_optrom_ctl(struct file *filp, struct kobject *kobj,
+ 		ha->optrom_region_size = size;
+ 
+ 		ha->optrom_state = QLA_SREADING;
+-		ha->optrom_buffer = vmalloc(ha->optrom_region_size);
++		ha->optrom_buffer = vzalloc(ha->optrom_region_size);
+ 		if (ha->optrom_buffer == NULL) {
+ 			ql_log(ql_log_warn, vha, 0x7062,
+ 			    "Unable to allocate memory for optrom retrieval "
+@@ -404,7 +404,6 @@ qla2x00_sysfs_write_optrom_ctl(struct file *filp, struct kobject *kobj,
+ 		    "Reading flash region -- 0x%x/0x%x.\n",
+ 		    ha->optrom_region_start, ha->optrom_region_size);
+ 
+-		memset(ha->optrom_buffer, 0, ha->optrom_region_size);
+ 		ha->isp_ops->read_optrom(vha, ha->optrom_buffer,
+ 		    ha->optrom_region_start, ha->optrom_region_size);
+ 		break;
+@@ -457,7 +456,7 @@ qla2x00_sysfs_write_optrom_ctl(struct file *filp, struct kobject *kobj,
+ 		ha->optrom_region_size = size;
+ 
+ 		ha->optrom_state = QLA_SWRITING;
+-		ha->optrom_buffer = vmalloc(ha->optrom_region_size);
++		ha->optrom_buffer = vzalloc(ha->optrom_region_size);
+ 		if (ha->optrom_buffer == NULL) {
+ 			ql_log(ql_log_warn, vha, 0x7066,
+ 			    "Unable to allocate memory for optrom update "
+@@ -472,7 +471,6 @@ qla2x00_sysfs_write_optrom_ctl(struct file *filp, struct kobject *kobj,
+ 		    "Staging flash region write -- 0x%x/0x%x.\n",
+ 		    ha->optrom_region_start, ha->optrom_region_size);
+ 
+-		memset(ha->optrom_buffer, 0, ha->optrom_region_size);
+ 		break;
+ 	case 3:
+ 		if (ha->optrom_state != QLA_SWRITING) {
+-- 
+2.20.1
+
