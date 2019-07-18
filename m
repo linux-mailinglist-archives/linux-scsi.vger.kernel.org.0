@@ -2,111 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FC4C6D40B
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 20:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 766926D452
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 21:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728153AbfGRShT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 14:37:19 -0400
-Received: from smtprelay0099.hostedemail.com ([216.40.44.99]:40318 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726649AbfGRShT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 18 Jul 2019 14:37:19 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id E6E7A100E86C1;
-        Thu, 18 Jul 2019 18:37:17 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::,RULES_HIT:41:355:379:599:960:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1542:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:2914:3138:3139:3140:3141:3142:3353:3622:3865:3867:3870:3871:3874:4321:4605:5007:6119:7903:10004:10400:10848:11026:11232:11233:11473:11658:11914:12043:12296:12297:12438:12555:12740:12760:12895:13439:14181:14659:14721:14819:21080:21627:30054:30070:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:30,LUA_SUMMARY:none
-X-HE-Tag: story87_557edf194a62
-X-Filterd-Recvd-Size: 3234
-Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
-        (Authenticated sender: joe@perches.com)
-        by omf02.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 18 Jul 2019 18:37:16 +0000 (UTC)
-Message-ID: <649403d7dbf2e4e21a96bd9a20b7cb659b97fe38.camel@perches.com>
-Subject: Re: [PATCH] scsi: pmcraid: Use dma_pool_zalloc rather than
- dma_pool_alloc
-From:   Joe Perches <joe@perches.com>
-To:     Vasyl Gomonovych <gomonovych@gmail.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 18 Jul 2019 11:37:14 -0700
-In-Reply-To: <20190718181051.22882-1-gomonovych@gmail.com>
-References: <20190718181051.22882-1-gomonovych@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727781AbfGRTC7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 15:02:59 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:40528 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727685AbfGRTC7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 15:02:59 -0400
+Received: by mail-lf1-f66.google.com with SMTP id b17so19995437lff.7;
+        Thu, 18 Jul 2019 12:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=HB/bd47iRXpFzL6ymnsSikUvO8FPX+2PI8fyAjuW//g=;
+        b=ix4Fqd9wxwYwDgrgC7if/Ja6EXYAtIlQosTXdEgLUnxla479zBMT5FU86muxSYLZgH
+         iyo3BABNMAoSWk7OSzIUu2gQWlOOiW6PiTUIFw7m9I7uKOfnnFPJyDkip9UhK7jQdmZs
+         R6Z9seRmBWN9l4ALVQTFzuakuWkReZx72GU9BcV8wH3pGZ4242TCNdnRp6PZSUysy3lc
+         X+parvLr3zlXh8Y6ICCFWj/4jIsCoQzP6m9oCpHdhlWf0kWZwchbtcK3kGYZD1o9hcw7
+         SnLbIy0QD1BojrP9RM+gZM3xArpgw00n8uE1zEjtCNStpEMf8cE570pDVd45TZ9yoKjD
+         g1ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=HB/bd47iRXpFzL6ymnsSikUvO8FPX+2PI8fyAjuW//g=;
+        b=nMUHF9ECuYPzzJqZWTM9PTgGE/SNLEBXtYOSOOWNMsoSvdrzmo59iM32KuaOryyqjV
+         1GErQKqEqYQAs5hK+8kwHLWwzB+DdlPUs6ud7sPIMH4lZksl0DFa3M0fmyBD6lB3mGtq
+         N0ht20pq3f90+tByJjBm+uiYN5dH+5ZVQjjcNi6C3aUYFLjJ1pzfve9U0cqQBOv35L1X
+         u+RnNvR2RWQhPh01+ZegUc8LLo6+i+3Yr1GLwhCEpB/vT7zhxj6oPpMRJ7I/wv/TNSFq
+         5ZGtaRh3K7N8C1FxJDHOYNVqwyxCTr6teEIB7bc6qDMWzEQUo66fUrwggp7E1ngn+PoN
+         eMdw==
+X-Gm-Message-State: APjAAAVVu0keWM+uXn/0wOEVDX7t4Op+u7cuzcOmRwZJTYJ/Od7GniCI
+        w1nirsnTjwaK6QpFK33XDuk=
+X-Google-Smtp-Source: APXvYqyp0EUj2X5MUNmi6S433nDN9vCK+4YeXM8FssJZ5i+spMaSQHQq89MCzBenSKy362Zini1hqA==
+X-Received: by 2002:ac2:454e:: with SMTP id j14mr21179643lfm.7.1563476576941;
+        Thu, 18 Jul 2019 12:02:56 -0700 (PDT)
+Received: from ul001888.eu.tieto.com ([91.90.160.140])
+        by smtp.gmail.com with ESMTPSA id z22sm5272431ljz.20.2019.07.18.12.02.54
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 18 Jul 2019 12:02:55 -0700 (PDT)
+From:   Vasyl Gomonovych <gomonovych@gmail.com>
+To:     satishkh@cisco.com, sebaddel@cisco.com, kartilak@cisco.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org
+Cc:     Vasyl Gomonovych <gomonovych@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] fnic: remove casting vmalloc
+Date:   Thu, 18 Jul 2019 21:02:35 +0200
+Message-Id: <20190718190235.8089-1-gomonovych@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-07-18 at 20:10 +0200, Vasyl Gomonovych wrote:
-> Use *_pool_zalloc rather than *_pool_alloc followed by memset with 0
-> The semantic patch that makes this change is available
-> in scripts/coccinelle/api/alloc/pool_zalloc-simple.cocci.
-[]
-> diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-[]
-> @@ -4653,9 +4653,7 @@ static int pmcraid_allocate_control_blocks(struct pmcraid_instance *pinstance)
->  		return -ENOMEM;
->  
->  	for (i = 0; i < PMCRAID_MAX_CMD; i++) {
-> -		pinstance->cmd_list[i]->ioa_cb =
-> -			dma_pool_alloc(
-> -				pinstance->control_pool,
-> +		pinstance->cmd_list[i]->ioa_cb = dma_pool_zalloc(pinstance->control_pool,
->  				GFP_KERNEL,
->  				&(pinstance->cmd_list[i]->ioa_cb_bus_addr));
->  
-> @@ -4663,8 +4661,6 @@ static int pmcraid_allocate_control_blocks(struct pmcraid_instance *pinstance)
->  			pmcraid_release_control_blocks(pinstance, i);
->  			return -ENOMEM;
->  		}
-> -		memset(pinstance->cmd_list[i]->ioa_cb, 0,
-> -			sizeof(struct pmcraid_control_block));
->  	}
->  	return 0;
->  }
+Generated by:  alloc_cast.cocci
 
-While this change is somewhat overdone as only
-dma_pool_alloc could be changed to dma_pool_zalloc
-on the same line without rewrapping other arguments,
-I'd generally write this with a temporary like:
+Signed-off-by: Vasyl Gomonovych <gomonovych@gmail.com>
 ---
- drivers/scsi/pmcraid.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+ drivers/scsi/fnic/fnic_debugfs.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
-index 71ff3936da4f..88e7b18ad44d 100644
---- a/drivers/scsi/pmcraid.c
-+++ b/drivers/scsi/pmcraid.c
-@@ -4653,19 +4653,17 @@ static int pmcraid_allocate_control_blocks(struct pmcraid_instance *pinstance)
- 		return -ENOMEM;
+diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
+index 21991c99db7c..8c5bae6165d6 100644
+--- a/drivers/scsi/fnic/fnic_debugfs.c
++++ b/drivers/scsi/fnic/fnic_debugfs.c
+@@ -59,8 +59,7 @@ int fnic_debugfs_init(void)
+ 						fnic_trace_debugfs_root);
  
- 	for (i = 0; i < PMCRAID_MAX_CMD; i++) {
--		pinstance->cmd_list[i]->ioa_cb =
--			dma_pool_alloc(
--				pinstance->control_pool,
--				GFP_KERNEL,
--				&(pinstance->cmd_list[i]->ioa_cb_bus_addr));
-+		struct pmcraid_cmd *cmd = pinstance->cmd_list[i];
+ 	/* Allocate memory to structure */
+-	fc_trc_flag = (struct fc_trace_flag_type *)
+-		vmalloc(sizeof(struct fc_trace_flag_type));
++	fc_trc_flag = vmalloc(sizeof(struct fc_trace_flag_type));
  
--		if (!pinstance->cmd_list[i]->ioa_cb) {
-+		cmd->ioa_cb = dma_pool_zalloc(pinstance->control_pool,
-+					      GFP_KERNEL,
-+					      &cmd->ioa_cb_bus_addr);
-+		if (!cmd->ioa_cb) {
- 			pmcraid_release_control_blocks(pinstance, i);
- 			return -ENOMEM;
- 		}
--		memset(pinstance->cmd_list[i]->ioa_cb, 0,
--			sizeof(struct pmcraid_control_block));
- 	}
-+
- 	return 0;
- }
- 
+ 	if (fc_trc_flag) {
+ 		fc_trc_flag->fc_row_file = 0;
+-- 
+2.17.1
 
