@@ -2,102 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC146D075
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 16:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 694136D37D
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 20:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390390AbfGROwM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 10:52:12 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:47368 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727685AbfGROwM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 18 Jul 2019 10:52:12 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id A9918308338F;
-        Thu, 18 Jul 2019 14:52:11 +0000 (UTC)
-Received: from localhost (unknown [10.18.25.174])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6953A4E6D2;
-        Thu, 18 Jul 2019 14:52:02 +0000 (UTC)
-Date:   Thu, 18 Jul 2019 10:52:01 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, dm-devel@redhat.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] blk-mq: add callback of .cleanup_rq
-Message-ID: <20190718145201.GA2305@redhat.com>
-References: <20190718032519.28306-1-ming.lei@redhat.com>
- <20190718032519.28306-2-ming.lei@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190718032519.28306-2-ming.lei@redhat.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Thu, 18 Jul 2019 14:52:12 +0000 (UTC)
+        id S1728014AbfGRSLL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 14:11:11 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42217 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726040AbfGRSLL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 14:11:11 -0400
+Received: by mail-lj1-f196.google.com with SMTP id t28so28264133lje.9;
+        Thu, 18 Jul 2019 11:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=ACngBykYqB0o3NihblCBOiLR+sDnmChE/17QqNQkmcw=;
+        b=jItEiZ4smIzaJkxpqnRTFanp5FpRVV/67ycDHQXpzrPJUx6p2owcwNeJImKQR310CW
+         kzWda1OmdsgvC/hwoMkcUThzcnaAyihMpvlEJTatPYHAQTsAbsi+ad84rmJC+2s9uVcc
+         VLGK5ET37aeorCMQ7iDU/hMxd+X6MggGYi1tyrIcYeNdG7LgNFwzfoQInw8Uz1vDLgmd
+         oO9sMR2R9B80MnJbpZoW5NZw4QjXXfanxvFzbDby4tzMMPBcWq18ciQldrvPzEXj8gLa
+         dvCMWmL2VmoSpQVYgVflj+/rXLXkk0Q0Mkw6Oe89uDp+Ip8lZLsyVXnovBkT30NPEqkO
+         N2Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=ACngBykYqB0o3NihblCBOiLR+sDnmChE/17QqNQkmcw=;
+        b=lDyyO6q2EN7BjeVemhoZ6jjK5an0Z8yQ821HBvOiinWmgU+inoqzjAiYOk9v/bAP/V
+         rM40gTfo5wmprWVpF4qj8moTs9LiRXj4mg9tdHbDrkWhiG9DGHFl8RcJmnJ68T/R7zLp
+         VZPJQEeuNLNoOk+ANZT9a7PNCHsAWom28sx84AXf+ts3Rr4wwCMAGc/mQ4plZ+nyM/J2
+         ScrJJtVbrxY2EpwmdYU1+/q3sWcb3k793qt0Ktugw/PfpUB8zKU4kiPgQkEhXi9Zqd8G
+         NbmxEc44an+hczPyvySMElFYIZ1GZIYGv1TQ7Lg8e5mziMncjuAtiBmYum3Wevqu1yjE
+         AUvA==
+X-Gm-Message-State: APjAAAWBj8YoSBP/hZTaPsL/cQ6gkN6wiMkO1H+G0MmXSXD82uRp/X0o
+        KGQ9OZojkXz+rxrFOwTAPuQ=
+X-Google-Smtp-Source: APXvYqz/XTtQof1rtC+XVjV+AQYDnfiRRkma3v5LvU9uzKZHguKDa20vmBNi3JFOkSc7d9PhykRxWg==
+X-Received: by 2002:a2e:9048:: with SMTP id n8mr5868906ljg.37.1563473469447;
+        Thu, 18 Jul 2019 11:11:09 -0700 (PDT)
+Received: from ul001888.eu.tieto.com ([91.90.160.140])
+        by smtp.gmail.com with ESMTPSA id k82sm5196001lje.30.2019.07.18.11.11.08
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 18 Jul 2019 11:11:08 -0700 (PDT)
+From:   Vasyl Gomonovych <gomonovych@gmail.com>
+To:     gomonovych@gmail.com
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: pmcraid: Use dma_pool_zalloc rather than dma_pool_alloc
+Date:   Thu, 18 Jul 2019 20:10:51 +0200
+Message-Id: <20190718181051.22882-1-gomonovych@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jul 17 2019 at 11:25pm -0400,
-Ming Lei <ming.lei@redhat.com> wrote:
+Use *_pool_zalloc rather than *_pool_alloc followed by memset with 0
+The semantic patch that makes this change is available
+in scripts/coccinelle/api/alloc/pool_zalloc-simple.cocci.
 
-> dm-rq needs to free request which has been dispatched and not completed
-> by underlying queue. However, the underlying queue may have allocated
-> private stuff for this request in .queue_rq(), so dm-rq will leak the
-> request private part.
+Signed-off-by: Vasyl Gomonovych <gomonovych@gmail.com>
+---
+ drivers/scsi/pmcraid.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-No, SCSI (and blk-mq) will leak.  DM doesn't know anything about the
-internal memory SCSI uses.  That memory is a SCSI implementation detail.
+diff --git a/drivers/scsi/pmcraid.c b/drivers/scsi/pmcraid.c
+index 71ff3936da4f945f3d8a798a8b2129ca3c07ec22..f79d7750934e629c6d6edc1a075205247889531d 100644
+--- a/drivers/scsi/pmcraid.c
++++ b/drivers/scsi/pmcraid.c
+@@ -4653,9 +4653,7 @@ static int pmcraid_allocate_control_blocks(struct pmcraid_instance *pinstance)
+ 		return -ENOMEM;
+ 
+ 	for (i = 0; i < PMCRAID_MAX_CMD; i++) {
+-		pinstance->cmd_list[i]->ioa_cb =
+-			dma_pool_alloc(
+-				pinstance->control_pool,
++		pinstance->cmd_list[i]->ioa_cb = dma_pool_zalloc(pinstance->control_pool,
+ 				GFP_KERNEL,
+ 				&(pinstance->cmd_list[i]->ioa_cb_bus_addr));
+ 
+@@ -4663,8 +4661,6 @@ static int pmcraid_allocate_control_blocks(struct pmcraid_instance *pinstance)
+ 			pmcraid_release_control_blocks(pinstance, i);
+ 			return -ENOMEM;
+ 		}
+-		memset(pinstance->cmd_list[i]->ioa_cb, 0,
+-			sizeof(struct pmcraid_control_block));
+ 	}
+ 	return 0;
+ }
+-- 
+2.17.1
 
-Please fix header to properly reflect which layer is doing the leaking.
-
-> Add one new callback of .cleanup_rq() to fix the memory leak issue.
-> 
-> Another use case is to free request when the hctx is dead during
-> cpu hotplug context.
-> 
-> Cc: Ewan D. Milne <emilne@redhat.com>
-> Cc: Bart Van Assche <bvanassche@acm.org>
-> Cc: Hannes Reinecke <hare@suse.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Mike Snitzer <snitzer@redhat.com>
-> Cc: dm-devel@redhat.com
-> Cc: <stable@vger.kernel.org>
-> Fixes: 396eaf21ee17 ("blk-mq: improve DM's blk-mq IO merging via blk_insert_cloned_request feedback")
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> ---
->  drivers/md/dm-rq.c     |  1 +
->  include/linux/blk-mq.h | 13 +++++++++++++
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
-> index c9e44ac1f9a6..21d5c1784d0c 100644
-> --- a/drivers/md/dm-rq.c
-> +++ b/drivers/md/dm-rq.c
-> @@ -408,6 +408,7 @@ static int map_request(struct dm_rq_target_io *tio)
->  		ret = dm_dispatch_clone_request(clone, rq);
->  		if (ret == BLK_STS_RESOURCE || ret == BLK_STS_DEV_RESOURCE) {
->  			blk_rq_unprep_clone(clone);
-> +			blk_mq_cleanup_rq(clone);
->  			tio->ti->type->release_clone_rq(clone, &tio->info);
->  			tio->clone = NULL;
->  			return DM_MAPIO_REQUEUE;
-
-Requiring upper layer driver (dm-rq) to explicitly call blk_mq_cleanup_rq() 
-seems wrong.  In this instance tio->ti->type->release_clone_rq()
-(dm-mpath's multipath_release_clone) calls blk_put_request().  Why can't
-blk_put_request(), or blk_mq_free_request(), call blk_mq_cleanup_rq()?
-
-Not looked at the cpu hotplug case you mention, but my naive thought is
-it'd be pretty weird to also sprinkle a call to blk_mq_cleanup_rq() from
-that specific "dead hctx" code path.
-
-Mike
