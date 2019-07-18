@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 694136D37D
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 20:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D445A6D386
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 20:13:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728014AbfGRSLL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 14:11:11 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:42217 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726040AbfGRSLL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 14:11:11 -0400
-Received: by mail-lj1-f196.google.com with SMTP id t28so28264133lje.9;
-        Thu, 18 Jul 2019 11:11:10 -0700 (PDT)
+        id S1727972AbfGRSMM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 14:12:12 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33621 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726649AbfGRSMM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 18 Jul 2019 14:12:12 -0400
+Received: by mail-lf1-f68.google.com with SMTP id x3so19964903lfc.0;
+        Thu, 18 Jul 2019 11:12:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
         bh=ACngBykYqB0o3NihblCBOiLR+sDnmChE/17QqNQkmcw=;
-        b=jItEiZ4smIzaJkxpqnRTFanp5FpRVV/67ycDHQXpzrPJUx6p2owcwNeJImKQR310CW
-         kzWda1OmdsgvC/hwoMkcUThzcnaAyihMpvlEJTatPYHAQTsAbsi+ad84rmJC+2s9uVcc
-         VLGK5ET37aeorCMQ7iDU/hMxd+X6MggGYi1tyrIcYeNdG7LgNFwzfoQInw8Uz1vDLgmd
-         oO9sMR2R9B80MnJbpZoW5NZw4QjXXfanxvFzbDby4tzMMPBcWq18ciQldrvPzEXj8gLa
-         dvCMWmL2VmoSpQVYgVflj+/rXLXkk0Q0Mkw6Oe89uDp+Ip8lZLsyVXnovBkT30NPEqkO
-         N2Mg==
+        b=uJSTcsru+2y77L4tXI8gTk0Vh9M9kZz58/Bo/v3O06SEgqw+rIDR6rjtygmpsUf4oy
+         Ri5PteBnltXPOLBcJEnzLXbaODQrcetYoBQRTqF7Hv1O5zVMIAL9IYTkT7xMEe86Bm0r
+         AIxfMGoV+q86LemSXRXZC1MOo4B/PQdNZTPNYLCbPYZmMYfQmQJIZIQv74DTCLuJ7yq7
+         CKmImcvKEMTowz6QhWlpYn8uWH4+MBbCecpX3GksUKIG71hIl6ozhV3vbAQj74KKOBKR
+         1Tb5Dni1kxWb2GB4R2dHSA1AgTLORIwChFc+2NX2cAiwF0RhFfEIbIcm9qqfX6m7mAlM
+         KyFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
         bh=ACngBykYqB0o3NihblCBOiLR+sDnmChE/17QqNQkmcw=;
-        b=lDyyO6q2EN7BjeVemhoZ6jjK5an0Z8yQ821HBvOiinWmgU+inoqzjAiYOk9v/bAP/V
-         rM40gTfo5wmprWVpF4qj8moTs9LiRXj4mg9tdHbDrkWhiG9DGHFl8RcJmnJ68T/R7zLp
-         VZPJQEeuNLNoOk+ANZT9a7PNCHsAWom28sx84AXf+ts3Rr4wwCMAGc/mQ4plZ+nyM/J2
-         ScrJJtVbrxY2EpwmdYU1+/q3sWcb3k793qt0Ktugw/PfpUB8zKU4kiPgQkEhXi9Zqd8G
-         NbmxEc44an+hczPyvySMElFYIZ1GZIYGv1TQ7Lg8e5mziMncjuAtiBmYum3Wevqu1yjE
-         AUvA==
-X-Gm-Message-State: APjAAAWBj8YoSBP/hZTaPsL/cQ6gkN6wiMkO1H+G0MmXSXD82uRp/X0o
-        KGQ9OZojkXz+rxrFOwTAPuQ=
-X-Google-Smtp-Source: APXvYqz/XTtQof1rtC+XVjV+AQYDnfiRRkma3v5LvU9uzKZHguKDa20vmBNi3JFOkSc7d9PhykRxWg==
-X-Received: by 2002:a2e:9048:: with SMTP id n8mr5868906ljg.37.1563473469447;
-        Thu, 18 Jul 2019 11:11:09 -0700 (PDT)
+        b=IIbreBdrfcVIyLgQj11Z5pbgrutAbZd0WTCp+3qTN8Ua8RMXSTm3AwyhyjMmA10kjk
+         u+/WOOjHul01ygK28BgAAU0EsLlxJEG90vTwaOOjNFxg3AtgDqoW3IHRuH86Gi4eRsqm
+         pY5qFAH0CPNi6XboasKVaxlm+IvT/PgxzzFAtbiJgESEOSd8WVoEkCqNUhHraLd9Ko6m
+         Iir0sRvSyP911Z1NdnxXYgaH+opu7jDMT5W6nGhJY1IlNo9vSEh4/QmH4+gYESg2Wkoh
+         Dei9XPIGzc0k8iekwn3y6xq2/Hb5/XjDIB///7p0WJHAm0rJCs6b2/JCVhWXcZWCY4yo
+         1NhA==
+X-Gm-Message-State: APjAAAWnfnlOJ3vVHM4weWMR2ywTTeiRjqrNUonR30PZBPMZZPHBcVXn
+        tbZ5h308EFYkLh/qhfVXbGc=
+X-Google-Smtp-Source: APXvYqxR8eJn2cUmQMFU+uiC3HTCCXhxoJvfz5G4665Mq6Y8N0RiDcyjRnmmQ8gQDTeHx/LtGcuxcQ==
+X-Received: by 2002:a19:a87:: with SMTP id 129mr20910465lfk.98.1563473530065;
+        Thu, 18 Jul 2019 11:12:10 -0700 (PDT)
 Received: from ul001888.eu.tieto.com ([91.90.160.140])
-        by smtp.gmail.com with ESMTPSA id k82sm5196001lje.30.2019.07.18.11.11.08
+        by smtp.gmail.com with ESMTPSA id x137sm4098586lff.23.2019.07.18.11.12.09
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 18 Jul 2019 11:11:08 -0700 (PDT)
+        Thu, 18 Jul 2019 11:12:09 -0700 (PDT)
 From:   Vasyl Gomonovych <gomonovych@gmail.com>
-To:     gomonovych@gmail.com
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org
+Cc:     Vasyl Gomonovych <gomonovych@gmail.com>,
+        linux-kernel@vger.kernel.org
 Subject: [PATCH] scsi: pmcraid: Use dma_pool_zalloc rather than dma_pool_alloc
-Date:   Thu, 18 Jul 2019 20:10:51 +0200
-Message-Id: <20190718181051.22882-1-gomonovych@gmail.com>
+Date:   Thu, 18 Jul 2019 20:11:46 +0200
+Message-Id: <20190718181146.23019-1-gomonovych@gmail.com>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
