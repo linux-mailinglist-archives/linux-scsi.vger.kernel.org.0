@@ -2,143 +2,143 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 565646E59E
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jul 2019 14:27:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B3366ECC3
+	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jul 2019 01:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728148AbfGSM1B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Jul 2019 08:27:01 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:57412 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727552AbfGSM1B (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 19 Jul 2019 08:27:01 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1732936AbfGSXd2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Jul 2019 19:33:28 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:51014 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728247AbfGSXd2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 19 Jul 2019 19:33:28 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id CFADB8EE109;
+        Fri, 19 Jul 2019 16:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1563579207;
+        bh=LqTkQf38ZyZNHBsEs0FRO7l02fVIaHk37E45mYH6Eus=;
+        h=Subject:From:To:Cc:Date:From;
+        b=PgS4m85goUu3itIpIledemu5peXYvopzu/9hisi8eRVhR9IkFipWKEFRuzlEapolb
+         gctP4Q8ax7vIBS74F9qlAX4q36qNTkwSj8P5AKj2n+AoVUAwPmJ08/v7RqBkYfPkak
+         Dwh6v6Xw1LWsvoWTPKvc6Q60Yvs8Z/HXKiNnys84=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id yOQ9zMAQY4U6; Fri, 19 Jul 2019 16:33:27 -0700 (PDT)
+Received: from [192.168.11.4] (122x212x32x58.ap122.ftth.ucom.ne.jp [122.212.32.58])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 236F53086258;
-        Fri, 19 Jul 2019 12:27:00 +0000 (UTC)
-Received: from localhost (unknown [10.18.25.174])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 807A61001B14;
-        Fri, 19 Jul 2019 12:26:55 +0000 (UTC)
-Date:   Fri, 19 Jul 2019 08:26:54 -0400
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>, dm-devel@redhat.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] blk-mq: add callback of .cleanup_rq
-Message-ID: <20190719122654.GA7339@redhat.com>
-References: <20190718032519.28306-1-ming.lei@redhat.com>
- <20190718032519.28306-2-ming.lei@redhat.com>
- <20190718145201.GA2305@redhat.com>
- <20190719013546.GA12004@ming.t460p>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190719013546.GA12004@ming.t460p>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.49]); Fri, 19 Jul 2019 12:27:00 +0000 (UTC)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 910868EE0EF;
+        Fri, 19 Jul 2019 16:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1563579207;
+        bh=LqTkQf38ZyZNHBsEs0FRO7l02fVIaHk37E45mYH6Eus=;
+        h=Subject:From:To:Cc:Date:From;
+        b=PgS4m85goUu3itIpIledemu5peXYvopzu/9hisi8eRVhR9IkFipWKEFRuzlEapolb
+         gctP4Q8ax7vIBS74F9qlAX4q36qNTkwSj8P5AKj2n+AoVUAwPmJ08/v7RqBkYfPkak
+         Dwh6v6Xw1LWsvoWTPKvc6Q60Yvs8Z/HXKiNnys84=
+Message-ID: <1563579201.1602.7.camel@HansenPartnership.com>
+Subject: [GIT PULL] final round of SCSI updates for the 5.2+ merge window
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 20 Jul 2019 08:33:21 +0900
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Jul 18 2019 at  9:35pm -0400,
-Ming Lei <ming.lei@redhat.com> wrote:
+This is the final round of mostly small fixes in our initial
+submit.  It's mostly minor fixes and driver updates.  The only change
+of note is adding a virt_boundary_mask to the SCSI host and host
+template to parametrise this for NVMe devices instead of having them do
+a call in slave_alloc.  It's a fairly straightforward conversion except
+in the two NVMe handling drivers that didn't set it who now have a
+virtual infinity parameter added.
 
-> On Thu, Jul 18, 2019 at 10:52:01AM -0400, Mike Snitzer wrote:
-> > On Wed, Jul 17 2019 at 11:25pm -0400,
-> > Ming Lei <ming.lei@redhat.com> wrote:
-> > 
-> > > dm-rq needs to free request which has been dispatched and not completed
-> > > by underlying queue. However, the underlying queue may have allocated
-> > > private stuff for this request in .queue_rq(), so dm-rq will leak the
-> > > request private part.
-> > 
-> > No, SCSI (and blk-mq) will leak.  DM doesn't know anything about the
-> > internal memory SCSI uses.  That memory is a SCSI implementation detail.
-> 
-> It isn't noting to do with dm-rq, which frees one request after BLK_STS_*RESOURCE
-> is returned from blk_insert_cloned_request(), in this case it has to be
-> the user for releasing the request private data.
-> 
-> > 
-> > Please fix header to properly reflect which layer is doing the leaking.
-> 
-> Fine.
-> 
-> > 
-> > > Add one new callback of .cleanup_rq() to fix the memory leak issue.
-> > > 
-> > > Another use case is to free request when the hctx is dead during
-> > > cpu hotplug context.
-> > > 
-> > > Cc: Ewan D. Milne <emilne@redhat.com>
-> > > Cc: Bart Van Assche <bvanassche@acm.org>
-> > > Cc: Hannes Reinecke <hare@suse.com>
-> > > Cc: Christoph Hellwig <hch@lst.de>
-> > > Cc: Mike Snitzer <snitzer@redhat.com>
-> > > Cc: dm-devel@redhat.com
-> > > Cc: <stable@vger.kernel.org>
-> > > Fixes: 396eaf21ee17 ("blk-mq: improve DM's blk-mq IO merging via blk_insert_cloned_request feedback")
-> > > Signed-off-by: Ming Lei <ming.lei@redhat.com>
-> > > ---
-> > >  drivers/md/dm-rq.c     |  1 +
-> > >  include/linux/blk-mq.h | 13 +++++++++++++
-> > >  2 files changed, 14 insertions(+)
-> > > 
-> > > diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
-> > > index c9e44ac1f9a6..21d5c1784d0c 100644
-> > > --- a/drivers/md/dm-rq.c
-> > > +++ b/drivers/md/dm-rq.c
-> > > @@ -408,6 +408,7 @@ static int map_request(struct dm_rq_target_io *tio)
-> > >  		ret = dm_dispatch_clone_request(clone, rq);
-> > >  		if (ret == BLK_STS_RESOURCE || ret == BLK_STS_DEV_RESOURCE) {
-> > >  			blk_rq_unprep_clone(clone);
-> > > +			blk_mq_cleanup_rq(clone);
-> > >  			tio->ti->type->release_clone_rq(clone, &tio->info);
-> > >  			tio->clone = NULL;
-> > >  			return DM_MAPIO_REQUEUE;
-> > 
-> > Requiring upper layer driver (dm-rq) to explicitly call blk_mq_cleanup_rq() 
-> > seems wrong.  In this instance tio->ti->type->release_clone_rq()
-> > (dm-mpath's multipath_release_clone) calls blk_put_request().  Why can't
-> > blk_put_request(), or blk_mq_free_request(), call blk_mq_cleanup_rq()?
-> 
-> I did think about doing it in blk_put_request(), and I just want to
-> avoid the little cost in generic fast path, given freeing request after
-> dispatch is very unusual, so far only nvme multipath and dm-rq did in
-> that way.
-> 
-> However, if no one objects to move blk_mq_cleanup_rq() to blk_put_request()
-> or blk_mq_free_request(), I am fine to do that in V2.
+The patch is available here:
 
-Think it'd be a less fragile/nuanced way to extend the blk-mq
-interface.  Otherwise there is potential for other future drivers
-experiencing leaks.
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-> > Not looked at the cpu hotplug case you mention, but my naive thought is
-> > it'd be pretty weird to also sprinkle a call to blk_mq_cleanup_rq() from
-> > that specific "dead hctx" code path.
-> 
-> It isn't weird, and it is exactly what NVMe multipath is doing, please see
-> nvme_failover_req(). And it is just that nvme doesn't allocate request
-> private data.
-> 
-> Wrt. blk-mq cpu hotplug handling: after one hctx is dead, we can't dispatch
-> request to this hctx any more, however one request has been bounded to its
-> hctx since its allocation and the association can't(or quite hard to) be
-> changed any more, do you have any better idea to deal with this issue?
+The short changelog is:
 
-No, as I prefaced before "Not looked at the cpu hotplug case you
-mention".  As such I should've stayed silent ;)
+Arnd Bergmann (1):
+      scsi: lpfc: reduce stack size with CONFIG_GCC_PLUGIN_STRUCTLEAK_VERBOSE
 
-But my point was we should hook off current interfaces rather than rely
-on a new primary function call.
+Benjamin Block (3):
+      scsi: zfcp: fix GCC compiler warning emitted with -Wmaybe-uninitialized
+      scsi: zfcp: fix request object use-after-free in send path causing wrong traces
+      scsi: zfcp: fix request object use-after-free in send path causing seqno errors
 
-Mike
+Christoph Hellwig (8):
+      scsi: megaraid_sas: set an unlimited max_segment_size
+      scsi: mpt3sas: set an unlimited max_segment_size for SAS 3.0 HBAs
+      scsi: IB/srp: set virt_boundary_mask in the scsi host
+      scsi: IB/iser: set virt_boundary_mask in the scsi host
+      scsi: storvsc: set virt_boundary_mask in the scsi host template
+      scsi: ufshcd: set max_segment_size in the scsi host template
+      scsi: core: take the DMA max mapping size into account
+      scsi: core: add a host / host template field for the virt boundary
+
+Colin Ian King (1):
+      scsi: libfc: fix null pointer dereference on a null lport
+
+Damien Le Moal (1):
+      scsi: sd_zbc: Fix compilation warning
+
+Deepak Ukey (1):
+      scsi: pm80xx: Fixed kernel panic during error recovery for SATA drive
+
+Denis Efremov (1):
+      scsi: libsas: remove the exporting of sas_wait_eh
+
+Marcos Paulo de Souza (1):
+      scsi: devinfo: BLIST_TRY_VPD_PAGES for SanDisk Cruzer Blade
+
+Maurizio Lombardi (1):
+      scsi: core: use scmd_printk() to print which command timed out
+
+Ming Lei (1):
+      scsi: core: Fix race on creating sense cache
+
+Shivasharan S (4):
+      scsi: megaraid_sas: Update driver version to 07.710.50.00
+      scsi: megaraid_sas: Add module parameter for FW Async event logging
+      scsi: megaraid_sas: Enable msix_load_balance for Invader and later controllers
+      scsi: megaraid_sas: Fix calculation of target ID
+
+YueHaibing (1):
+      scsi: megaraid_sas: Make some symbols static
+
+And the diffstat:
+
+ drivers/infiniband/ulp/iser/iscsi_iser.c  | 35 ++++----------------
+ drivers/infiniband/ulp/srp/ib_srp.c       | 18 ++--------
+ drivers/s390/scsi/zfcp_erp.c              |  7 ++++
+ drivers/s390/scsi/zfcp_fsf.c              | 55 +++++++++++++++++++++++++++----
+ drivers/scsi/hosts.c                      |  3 ++
+ drivers/scsi/libfc/fc_exch.c              |  2 +-
+ drivers/scsi/libsas/sas_scsi_host.c       |  1 -
+ drivers/scsi/lpfc/lpfc_debugfs.h          |  2 +-
+ drivers/scsi/megaraid/megaraid_sas.h      |  4 +--
+ drivers/scsi/megaraid/megaraid_sas_base.c | 31 +++++++++++++----
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c      |  1 +
+ drivers/scsi/pm8001/pm8001_sas.c          |  6 +++-
+ drivers/scsi/pm8001/pm80xx_hwi.c          |  2 +-
+ drivers/scsi/pm8001/pm80xx_hwi.h          |  2 ++
+ drivers/scsi/scsi_devinfo.c               |  2 ++
+ drivers/scsi/scsi_lib.c                   | 13 +++++---
+ drivers/scsi/sd_zbc.c                     |  2 +-
+ drivers/scsi/storvsc_drv.c                |  5 ++-
+ drivers/scsi/ufs/ufshcd.c                 |  3 +-
+ include/scsi/scsi_host.h                  |  3 ++
+ 20 files changed, 123 insertions(+), 74 deletions(-)
+
+James
+
