@@ -2,235 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A166D4D2
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jul 2019 21:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEB556D874
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jul 2019 03:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387815AbfGRTgt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jul 2019 15:36:49 -0400
-Received: from smtprelay0162.hostedemail.com ([216.40.44.162]:53434 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727687AbfGRTgt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 18 Jul 2019 15:36:49 -0400
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id A019B181D12E7;
-        Thu, 18 Jul 2019 19:36:47 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::,RULES_HIT:2:41:69:355:379:599:960:966:968:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1535:1593:1594:1605:1730:1747:1777:1792:2196:2199:2393:2559:2562:2828:3138:3139:3140:3141:3142:3622:3865:3866:3867:3870:3871:3872:4049:4118:4321:4385:4605:5007:7875:7903:8603:9592:10004:10848:11026:11232:11658:11914:12043:12048:12297:12438:12555:12683:12740:12760:12895:13439:14096:14097:14659:21080:21451:21611:21627:30012:30054:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:26,LUA_SUMMARY:none
-X-HE-Tag: duck35_58333dbfa7011
-X-Filterd-Recvd-Size: 7148
-Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
-        (Authenticated sender: joe@perches.com)
-        by omf07.hostedemail.com (Postfix) with ESMTPA;
-        Thu, 18 Jul 2019 19:36:45 +0000 (UTC)
-Message-ID: <5cce2a9f73f6bf5ee55c576f98a28b04fdbe05d6.camel@perches.com>
-Subject: Re: [PATCH] fnic: remove casting vmalloc
-From:   Joe Perches <joe@perches.com>
-To:     Vasyl Gomonovych <gomonovych@gmail.com>, satishkh@cisco.com,
-        sebaddel@cisco.com, kartilak@cisco.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Date:   Thu, 18 Jul 2019 12:36:44 -0700
-In-Reply-To: <20190718190235.8089-1-gomonovych@gmail.com>
-References: <20190718190235.8089-1-gomonovych@gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.30.5-0ubuntu0.18.10.1 
+        id S1726351AbfGSBgM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jul 2019 21:36:12 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:37610 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726015AbfGSBgM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 18 Jul 2019 21:36:12 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 43972C0A4F49;
+        Fri, 19 Jul 2019 01:36:11 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EE9D360CD7;
+        Fri, 19 Jul 2019 01:35:53 +0000 (UTC)
+Date:   Fri, 19 Jul 2019 09:35:47 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Mike Snitzer <snitzer@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>, dm-devel@redhat.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] blk-mq: add callback of .cleanup_rq
+Message-ID: <20190719013546.GA12004@ming.t460p>
+References: <20190718032519.28306-1-ming.lei@redhat.com>
+ <20190718032519.28306-2-ming.lei@redhat.com>
+ <20190718145201.GA2305@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190718145201.GA2305@redhat.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Fri, 19 Jul 2019 01:36:11 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-07-18 at 21:02 +0200, Vasyl Gomonovych wrote:
-> Generated by:  alloc_cast.cocci
+On Thu, Jul 18, 2019 at 10:52:01AM -0400, Mike Snitzer wrote:
+> On Wed, Jul 17 2019 at 11:25pm -0400,
+> Ming Lei <ming.lei@redhat.com> wrote:
+> 
+> > dm-rq needs to free request which has been dispatched and not completed
+> > by underlying queue. However, the underlying queue may have allocated
+> > private stuff for this request in .queue_rq(), so dm-rq will leak the
+> > request private part.
+> 
+> No, SCSI (and blk-mq) will leak.  DM doesn't know anything about the
+> internal memory SCSI uses.  That memory is a SCSI implementation detail.
 
-Please look deeper than just the cocci output.
+It isn't noting to do with dm-rq, which frees one request after BLK_STS_*RESOURCE
+is returned from blk_insert_cloned_request(), in this case it has to be
+the user for releasing the request private data.
 
-> diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
-[]
-> @@ -59,8 +59,7 @@ int fnic_debugfs_init(void)
->  						fnic_trace_debugfs_root);
->  
->  	/* Allocate memory to structure */
-> -	fc_trc_flag = (struct fc_trace_flag_type *)
-> -		vmalloc(sizeof(struct fc_trace_flag_type));
-> +	fc_trc_flag = vmalloc(sizeof(struct fc_trace_flag_type));
->  
->  	if (fc_trc_flag) {
->  		fc_trc_flag->fc_row_file = 0;
+> 
+> Please fix header to properly reflect which layer is doing the leaking.
 
-Not your fault, but this code is not well written.
+Fine.
 
-struct fc_trace_flag_type is:
+> 
+> > Add one new callback of .cleanup_rq() to fix the memory leak issue.
+> > 
+> > Another use case is to free request when the hctx is dead during
+> > cpu hotplug context.
+> > 
+> > Cc: Ewan D. Milne <emilne@redhat.com>
+> > Cc: Bart Van Assche <bvanassche@acm.org>
+> > Cc: Hannes Reinecke <hare@suse.com>
+> > Cc: Christoph Hellwig <hch@lst.de>
+> > Cc: Mike Snitzer <snitzer@redhat.com>
+> > Cc: dm-devel@redhat.com
+> > Cc: <stable@vger.kernel.org>
+> > Fixes: 396eaf21ee17 ("blk-mq: improve DM's blk-mq IO merging via blk_insert_cloned_request feedback")
+> > Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> > ---
+> >  drivers/md/dm-rq.c     |  1 +
+> >  include/linux/blk-mq.h | 13 +++++++++++++
+> >  2 files changed, 14 insertions(+)
+> > 
+> > diff --git a/drivers/md/dm-rq.c b/drivers/md/dm-rq.c
+> > index c9e44ac1f9a6..21d5c1784d0c 100644
+> > --- a/drivers/md/dm-rq.c
+> > +++ b/drivers/md/dm-rq.c
+> > @@ -408,6 +408,7 @@ static int map_request(struct dm_rq_target_io *tio)
+> >  		ret = dm_dispatch_clone_request(clone, rq);
+> >  		if (ret == BLK_STS_RESOURCE || ret == BLK_STS_DEV_RESOURCE) {
+> >  			blk_rq_unprep_clone(clone);
+> > +			blk_mq_cleanup_rq(clone);
+> >  			tio->ti->type->release_clone_rq(clone, &tio->info);
+> >  			tio->clone = NULL;
+> >  			return DM_MAPIO_REQUEUE;
+> 
+> Requiring upper layer driver (dm-rq) to explicitly call blk_mq_cleanup_rq() 
+> seems wrong.  In this instance tio->ti->type->release_clone_rq()
+> (dm-mpath's multipath_release_clone) calls blk_put_request().  Why can't
+> blk_put_request(), or blk_mq_free_request(), call blk_mq_cleanup_rq()?
 
-drivers/scsi/fnic/fnic_debugfs.c:struct fc_trace_flag_type {
-drivers/scsi/fnic/fnic_debugfs.c-       u8 fc_row_file;
-drivers/scsi/fnic/fnic_debugfs.c-       u8 fc_normal_file;
-drivers/scsi/fnic/fnic_debugfs.c-       u8 fnic_trace;
-drivers/scsi/fnic/fnic_debugfs.c-       u8 fc_trace;
-drivers/scsi/fnic/fnic_debugfs.c-       u8 fc_clear;
-drivers/scsi/fnic/fnic_debugfs.c-};
+I did think about doing it in blk_put_request(), and I just want to
+avoid the little cost in generic fast path, given freeing request after
+dispatch is very unusual, so far only nvme multipath and dm-rq did in
+that way.
 
-It doesn't require vmalloc as it's just 5 bytes in size.
-Might as well do either of allocate it with kmalloc
-or because it's a singleton, just create a static.
+However, if no one objects to move blk_mq_cleanup_rq() to blk_put_request()
+or blk_mq_free_request(), I am fine to do that in V2.
 
-Maybe:
----
- drivers/scsi/fnic/fnic_debugfs.c | 55 ++++++++++++++++------------------------
- 1 file changed, 22 insertions(+), 33 deletions(-)
+> 
+> Not looked at the cpu hotplug case you mention, but my naive thought is
+> it'd be pretty weird to also sprinkle a call to blk_mq_cleanup_rq() from
+> that specific "dead hctx" code path.
 
-diff --git a/drivers/scsi/fnic/fnic_debugfs.c b/drivers/scsi/fnic/fnic_debugfs.c
-index 21991c99db7c..72071bd4c9a1 100644
---- a/drivers/scsi/fnic/fnic_debugfs.c
-+++ b/drivers/scsi/fnic/fnic_debugfs.c
-@@ -31,15 +31,13 @@ static struct dentry *fnic_fc_rdata_trace_debugfs_file;
- static struct dentry *fnic_fc_trace_enable;
- static struct dentry *fnic_fc_trace_clear;
- 
--struct fc_trace_flag_type {
-+static struct {
- 	u8 fc_row_file;
- 	u8 fc_normal_file;
- 	u8 fnic_trace;
- 	u8 fc_trace;
- 	u8 fc_clear;
--};
--
--static struct fc_trace_flag_type *fc_trc_flag;
-+} fc_trc_flag;
- 
- /*
-  * fnic_debugfs_init - Initialize debugfs for fnic debug logging
-@@ -52,26 +50,18 @@ static struct fc_trace_flag_type *fc_trc_flag;
-  */
- int fnic_debugfs_init(void)
- {
--	int rc = -1;
- 	fnic_trace_debugfs_root = debugfs_create_dir("fnic", NULL);
- 
- 	fnic_stats_debugfs_root = debugfs_create_dir("statistics",
- 						fnic_trace_debugfs_root);
- 
--	/* Allocate memory to structure */
--	fc_trc_flag = (struct fc_trace_flag_type *)
--		vmalloc(sizeof(struct fc_trace_flag_type));
--
--	if (fc_trc_flag) {
--		fc_trc_flag->fc_row_file = 0;
--		fc_trc_flag->fc_normal_file = 1;
--		fc_trc_flag->fnic_trace = 2;
--		fc_trc_flag->fc_trace = 3;
--		fc_trc_flag->fc_clear = 4;
--	}
-+	fc_trc_flag.fc_row_file = 0;
-+	fc_trc_flag.fc_normal_file = 1;
-+	fc_trc_flag.fnic_trace = 2;
-+	fc_trc_flag.fc_trace = 3;
-+	fc_trc_flag.fc_clear = 4;
- 
--	rc = 0;
--	return rc;
-+	return 0;
- }
- 
- /*
-@@ -89,8 +79,7 @@ void fnic_debugfs_terminate(void)
- 	debugfs_remove(fnic_trace_debugfs_root);
- 	fnic_trace_debugfs_root = NULL;
- 
--	if (fc_trc_flag)
--		vfree(fc_trc_flag);
-+	memset(&fc_trc_flag, 0, sizeof(fc_trc_flag));
- }
- 
- /*
-@@ -121,11 +110,11 @@ static ssize_t fnic_trace_ctrl_read(struct file *filp,
- 	u8 *trace_type;
- 	len = 0;
- 	trace_type = (u8 *)filp->private_data;
--	if (*trace_type == fc_trc_flag->fnic_trace)
-+	if (*trace_type == fc_trc_flag.fnic_trace)
- 		len = sprintf(buf, "%u\n", fnic_tracing_enabled);
--	else if (*trace_type == fc_trc_flag->fc_trace)
-+	else if (*trace_type == fc_trc_flag.fc_trace)
- 		len = sprintf(buf, "%u\n", fnic_fc_tracing_enabled);
--	else if (*trace_type == fc_trc_flag->fc_clear)
-+	else if (*trace_type == fc_trc_flag.fc_clear)
- 		len = sprintf(buf, "%u\n", fnic_fc_trace_cleared);
- 	else
- 		pr_err("fnic: Cannot read to any debugfs file\n");
-@@ -172,11 +161,11 @@ static ssize_t fnic_trace_ctrl_write(struct file *filp,
- 	if (ret < 0)
- 		return ret;
- 
--	if (*trace_type == fc_trc_flag->fnic_trace)
-+	if (*trace_type == fc_trc_flag.fnic_trace)
- 		fnic_tracing_enabled = val;
--	else if (*trace_type == fc_trc_flag->fc_trace)
-+	else if (*trace_type == fc_trc_flag.fc_trace)
- 		fnic_fc_tracing_enabled = val;
--	else if (*trace_type == fc_trc_flag->fc_clear)
-+	else if (*trace_type == fc_trc_flag.fc_clear)
- 		fnic_fc_trace_cleared = val;
- 	else
- 		pr_err("fnic: cannot write to any debugfs file\n");
-@@ -218,7 +207,7 @@ static int fnic_trace_debugfs_open(struct inode *inode,
- 	if (!fnic_dbg_prt)
- 		return -ENOMEM;
- 
--	if (*rdata_ptr == fc_trc_flag->fnic_trace) {
-+	if (*rdata_ptr == fc_trc_flag.fnic_trace) {
- 		fnic_dbg_prt->buffer = vmalloc(array3_size(3, trace_max_pages,
- 							   PAGE_SIZE));
- 		if (!fnic_dbg_prt->buffer) {
-@@ -347,13 +336,13 @@ void fnic_trace_debugfs_init(void)
- 	fnic_trace_enable = debugfs_create_file("tracing_enable",
- 					S_IFREG|S_IRUGO|S_IWUSR,
- 					fnic_trace_debugfs_root,
--					&(fc_trc_flag->fnic_trace),
-+					&fc_trc_flag.fnic_trace,
- 					&fnic_trace_ctrl_fops);
- 
- 	fnic_trace_debugfs_file = debugfs_create_file("trace",
- 					S_IFREG|S_IRUGO|S_IWUSR,
- 					fnic_trace_debugfs_root,
--					&(fc_trc_flag->fnic_trace),
-+					&fc_trc_flag.fnic_trace,
- 					&fnic_trace_debugfs_fops);
- }
- 
-@@ -390,27 +379,27 @@ void fnic_fc_trace_debugfs_init(void)
- 	fnic_fc_trace_enable = debugfs_create_file("fc_trace_enable",
- 					S_IFREG|S_IRUGO|S_IWUSR,
- 					fnic_trace_debugfs_root,
--					&(fc_trc_flag->fc_trace),
-+					&fc_trc_flag.fc_trace,
- 					&fnic_trace_ctrl_fops);
- 
- 	fnic_fc_trace_clear = debugfs_create_file("fc_trace_clear",
- 					S_IFREG|S_IRUGO|S_IWUSR,
- 					fnic_trace_debugfs_root,
--					&(fc_trc_flag->fc_clear),
-+					&fc_trc_flag.fc_clear,
- 					&fnic_trace_ctrl_fops);
- 
- 	fnic_fc_rdata_trace_debugfs_file =
- 		debugfs_create_file("fc_trace_rdata",
- 				    S_IFREG|S_IRUGO|S_IWUSR,
- 				    fnic_trace_debugfs_root,
--				    &(fc_trc_flag->fc_normal_file),
-+				    &fc_trc_flag.fc_normal_file,
- 				    &fnic_trace_debugfs_fops);
- 
- 	fnic_fc_trace_debugfs_file =
- 		debugfs_create_file("fc_trace",
- 				    S_IFREG|S_IRUGO|S_IWUSR,
- 				    fnic_trace_debugfs_root,
--				    &(fc_trc_flag->fc_row_file),
-+				    &fc_trc_flag.fc_row_file,
- 				    &fnic_trace_debugfs_fops);
- }
- 
+It isn't weird, and it is exactly what NVMe multipath is doing, please see
+nvme_failover_req(). And it is just that nvme doesn't allocate request
+private data.
 
+Wrt. blk-mq cpu hotplug handling: after one hctx is dead, we can't dispatch
+request to this hctx any more, however one request has been bounded to its
+hctx since its allocation and the association can't(or quite hard to) be
+changed any more, do you have any better idea to deal with this issue?
+
+
+Thanks,
+Ming
