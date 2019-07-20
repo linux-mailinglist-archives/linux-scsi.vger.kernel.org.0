@@ -2,104 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 791806ED52
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jul 2019 04:30:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9AA6ED6E
+	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jul 2019 05:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390227AbfGTC3z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Jul 2019 22:29:55 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:54279 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728058AbfGTC3z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jul 2019 22:29:55 -0400
-Received: by mail-wm1-f68.google.com with SMTP id p74so30301847wme.4;
-        Fri, 19 Jul 2019 19:29:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=btizYwfe6mTTxTPSbiY0caw59UmfBlWe5Uygrq3sqMY=;
-        b=clh9eyLflZh8u307sMXectwSBF7U7lnttdUVNcqGltZM6aSGlUurJ+vHncBUYYMx9d
-         6LKKPIAe9vwuR56CwNHqGBwPQHMCyBjhPBFqtIRwVCbwH9emd+4hgRZeqGhKUmkxmf2p
-         fS/SRTfaAxaTxThjKMpTljw/HGjQ3m5moykiRNMDDo1Ugw1NGov+rYGtsV9zmZx/Xsh6
-         PErHp7FdpLLevkaOCMJeVTyEVzTLvwJvQkTR7TR7vnyyc/8bFwAdTRGCJB6G4GDA+XnG
-         zsAgGIoU534mLqp4RcoTvixNIjGtAwDEEn1JwFhTW8LGDIEmss6up5RhC/baAvAFrePf
-         CZ0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=btizYwfe6mTTxTPSbiY0caw59UmfBlWe5Uygrq3sqMY=;
-        b=mWgQjfVcgSLbZF34f658AQiQU+x4xDbyIxPlDnVN1fdPOAKfrE1RsJctRmIMTA0UK6
-         hnPUQ1jXxLDlYYPZZHy9+X4KsSVvOvbOwPix/VWaSKXPUghyw6JfaoDwaVFZjn0zpv1v
-         9Al1m/Hh3BUAhEyhM6unQvIHBCc78xT2+drPkyLhH9LNqa0dpZcz/i2rATRe+cMOAMFw
-         uvEMMmy4NNA9SOPlW+Zgj6YnQhj+KjaGOtaV9oxyYwX19vyBEjFseKYTqMIkbhK0cK9h
-         lG4Kv+ONTzjt/FiDxp6F0z0JTgNdzgIY76fIFBwPXeesnTZPJrvEwO2ULUMhe6ESV4RP
-         uM3g==
-X-Gm-Message-State: APjAAAU7Ao00qG8wa1U/AmEVR/ql92uNM4tKpxOOzKjcBKU4O4qfsEZz
-        FvZeIyl5jvd56cN9hif/rx+qAiOqjQ9qzdgyvZRubXrHT0M1FA==
-X-Google-Smtp-Source: APXvYqzUcdut1lbHeqsszLDgLCKsa9HVLpPrATMQnDMEQXYAAFrwtQVzYjkwMKeXp9Ko0ZVuMiA+yA46DXDXyopz65A=
-X-Received: by 2002:a1c:a7c6:: with SMTP id q189mr51263042wme.146.1563589792642;
- Fri, 19 Jul 2019 19:29:52 -0700 (PDT)
+        id S1729238AbfGTDGv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Jul 2019 23:06:51 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:45764 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727602AbfGTDGv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 19 Jul 2019 23:06:51 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 6457030832C8;
+        Sat, 20 Jul 2019 03:06:51 +0000 (UTC)
+Received: from localhost (ovpn-8-23.pek2.redhat.com [10.72.8.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1A835619AB;
+        Sat, 20 Jul 2019 03:06:43 +0000 (UTC)
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        stable@vger.kernel.org
+Subject: [PATCH V2 0/2] block/scsi/dm-rq: fix leak of request private data in dm-mpath
+Date:   Sat, 20 Jul 2019 11:06:35 +0800
+Message-Id: <20190720030637.14447-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-References: <1563579201.1602.7.camel@HansenPartnership.com>
-In-Reply-To: <1563579201.1602.7.camel@HansenPartnership.com>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Sat, 20 Jul 2019 10:29:40 +0800
-Message-ID: <CACVXFVNOPhiUhrgw07sna0dt5Jy2zckbNXDWPPRAGadXQAS_mQ@mail.gmail.com>
-Subject: Re: [GIT PULL] final round of SCSI updates for the 5.2+ merge window
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Sat, 20 Jul 2019 03:06:51 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, Jul 20, 2019 at 8:38 AM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> This is the final round of mostly small fixes in our initial
-> submit.  It's mostly minor fixes and driver updates.  The only change
-> of note is adding a virt_boundary_mask to the SCSI host and host
-> template to parametrise this for NVMe devices instead of having them do
-> a call in slave_alloc.  It's a fairly straightforward conversion except
-> in the two NVMe handling drivers that didn't set it who now have a
-> virtual infinity parameter added.
->
-> The patch is available here:
->
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
->
-> The short changelog is:
->
-> Arnd Bergmann (1):
->       scsi: lpfc: reduce stack size with CONFIG_GCC_PLUGIN_STRUCTLEAK_VERBOSE
->
-> Benjamin Block (3):
->       scsi: zfcp: fix GCC compiler warning emitted with -Wmaybe-uninitialized
->       scsi: zfcp: fix request object use-after-free in send path causing wrong traces
->       scsi: zfcp: fix request object use-after-free in send path causing seqno errors
->
-> Christoph Hellwig (8):
->       scsi: megaraid_sas: set an unlimited max_segment_size
->       scsi: mpt3sas: set an unlimited max_segment_size for SAS 3.0 HBAs
->       scsi: IB/srp: set virt_boundary_mask in the scsi host
->       scsi: IB/iser: set virt_boundary_mask in the scsi host
->       scsi: storvsc: set virt_boundary_mask in the scsi host template
->       scsi: ufshcd: set max_segment_size in the scsi host template
->       scsi: core: take the DMA max mapping size into account
+Hi,
 
-It has been observed on NVMe the above approach("take the DMA max
-mapping size into account") causes performance regression, so I'd
-suggest to fix dma_max_mapping_size() first.
+When one request is dispatched to LLD via dm-rq, if the result is
+BLK_STS_*RESOURCE, dm-rq will free the request. However, LLD may allocate
+private data for this request, so this way will cause memory leak.
 
-Christoph has posted fix already, but looks not merged yet:
+Add .cleanup_rq() callback and implement it in SCSI for fixing the issue,
+since SCSI is the only driver which allocates private requst data in
+.queue_rq() path.
 
-      https://lkml.org/lkml/2019/7/17/62
+Another use case of this callback is to free the request and re-submit
+bios during cpu hotplug when the hctx is dead, see the following link:
+
+https://lore.kernel.org/linux-block/f122e8f2-5ede-2d83-9ca0-bc713ce66d01@huawei.com/T/#t
+
+V2:
+	- run .cleanup_rq() in blk_mq_free_request(), as suggested by Mike 
 
 
-Thanks,
-Ming Lei
+Ming Lei (2):
+  blk-mq: add callback of .cleanup_rq
+  scsi: implement .cleanup_rq callback
+
+ block/blk-mq.c          |  3 +++
+ drivers/scsi/scsi_lib.c | 28 ++++++++++++++++++++--------
+ include/linux/blk-mq.h  |  7 +++++++
+ 3 files changed, 30 insertions(+), 8 deletions(-)
+
+Cc: Ewan D. Milne <emilne@redhat.com>
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Hannes Reinecke <hare@suse.com>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Mike Snitzer <snitzer@redhat.com>
+Cc: dm-devel@redhat.com
+Cc: <stable@vger.kernel.org>
+Fixes: 396eaf21ee17 ("blk-mq: improve DM's blk-mq IO merging via blk_insert_cloned_request feedback")
+
+-- 
+2.20.1
+
