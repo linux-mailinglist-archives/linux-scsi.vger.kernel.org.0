@@ -2,91 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7F06ECE3
-	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jul 2019 02:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791806ED52
+	for <lists+linux-scsi@lfdr.de>; Sat, 20 Jul 2019 04:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728850AbfGTAKF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Jul 2019 20:10:05 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:41086 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728092AbfGTAKF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jul 2019 20:10:05 -0400
-Received: by mail-io1-f66.google.com with SMTP id j5so57819883ioj.8
-        for <linux-scsi@vger.kernel.org>; Fri, 19 Jul 2019 17:10:05 -0700 (PDT)
+        id S2390227AbfGTC3z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Jul 2019 22:29:55 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:54279 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728058AbfGTC3z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jul 2019 22:29:55 -0400
+Received: by mail-wm1-f68.google.com with SMTP id p74so30301847wme.4;
+        Fri, 19 Jul 2019 19:29:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=jM+4g5JiZyjOqAV8wiANQ1zsn+o6kT9z+OGCr2hwPzs=;
-        b=XIE/3mQfNPmZPucCRkExTrs+Dc27ExUafxpWoUXpdp/vC4DFKDhEAPDkJ15tEflwsH
-         FE9W3jBIKLyA4SX23Hwr1KZsDiTjsDcMLrxDcVQ2m3fZzsd4UfuZps6ogMwVYilstIXF
-         mwENzZkADSc5TekZ+Yabck+bho2KruKDaVcUSm+edFOw/mQ7qf8vScL0WI4zd7Otkn0x
-         WU/olOI1EoKlXIl5Wi7wil0AWDuyadtUPR+7p2ebYIkKcNBL/t7cnQxDPmw4dRecGHY/
-         xHBT2Agt3XRcQiVB8zj846QvgxXC92E49JNjRsQLaRQlx6bKFKIQ209Cd+wMq91jdmep
-         4NCA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=btizYwfe6mTTxTPSbiY0caw59UmfBlWe5Uygrq3sqMY=;
+        b=clh9eyLflZh8u307sMXectwSBF7U7lnttdUVNcqGltZM6aSGlUurJ+vHncBUYYMx9d
+         6LKKPIAe9vwuR56CwNHqGBwPQHMCyBjhPBFqtIRwVCbwH9emd+4hgRZeqGhKUmkxmf2p
+         fS/SRTfaAxaTxThjKMpTljw/HGjQ3m5moykiRNMDDo1Ugw1NGov+rYGtsV9zmZx/Xsh6
+         PErHp7FdpLLevkaOCMJeVTyEVzTLvwJvQkTR7TR7vnyyc/8bFwAdTRGCJB6G4GDA+XnG
+         zsAgGIoU534mLqp4RcoTvixNIjGtAwDEEn1JwFhTW8LGDIEmss6up5RhC/baAvAFrePf
+         CZ0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=jM+4g5JiZyjOqAV8wiANQ1zsn+o6kT9z+OGCr2hwPzs=;
-        b=ofWZY5YWzu4hynxthXIHXyh4+y0vZuQC/mIM1ADWAri68nQ3lKZVbJYJjbfWMzgH7I
-         xGalo7MaRyiTdYdd67Mw35KQ9dWjARWyc0ozuFlo+Tnps5B1gerA0npzupVdmqFSu+CL
-         czUgR4Wpa5QPMfaIbeIJQObmd28qRyj4ixQs3ftGvriu4dioQzPgSSs+TrGSvgpPlM4c
-         t4iDk+x7BXZRKIjE3VpP1DusyTLIgmpB50o34LlC8rFettDJJGQCso4xBZwrBn0ZzoaY
-         Tseg/aK6iyR9Gjn1xPnSD6FetLxc1Rx1MMwNiBXxm0PDIFsJ9FHjYue/17uFr+KcnkpJ
-         EFEg==
-X-Gm-Message-State: APjAAAUiqPmp0o7/T5jSTshhFPQxMKP6Dxn9+S03XXB4ekz+ekNgtc0h
-        +Z7HKnQTR1miY2cVKlMj4JUlLSFzZ8hwo090DFQ=
-X-Google-Smtp-Source: APXvYqwhezK0SUX67oFldnv8+Wj7jWxvwq3eMwku3XVdX182Bm2L+dZwnuK7LmkbN2YP+9RSj0WDQiv+O4Ap27oGRO0=
-X-Received: by 2002:a5d:915a:: with SMTP id y26mr52715245ioq.207.1563581404875;
- Fri, 19 Jul 2019 17:10:04 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=btizYwfe6mTTxTPSbiY0caw59UmfBlWe5Uygrq3sqMY=;
+        b=mWgQjfVcgSLbZF34f658AQiQU+x4xDbyIxPlDnVN1fdPOAKfrE1RsJctRmIMTA0UK6
+         hnPUQ1jXxLDlYYPZZHy9+X4KsSVvOvbOwPix/VWaSKXPUghyw6JfaoDwaVFZjn0zpv1v
+         9Al1m/Hh3BUAhEyhM6unQvIHBCc78xT2+drPkyLhH9LNqa0dpZcz/i2rATRe+cMOAMFw
+         uvEMMmy4NNA9SOPlW+Zgj6YnQhj+KjaGOtaV9oxyYwX19vyBEjFseKYTqMIkbhK0cK9h
+         lG4Kv+ONTzjt/FiDxp6F0z0JTgNdzgIY76fIFBwPXeesnTZPJrvEwO2ULUMhe6ESV4RP
+         uM3g==
+X-Gm-Message-State: APjAAAU7Ao00qG8wa1U/AmEVR/ql92uNM4tKpxOOzKjcBKU4O4qfsEZz
+        FvZeIyl5jvd56cN9hif/rx+qAiOqjQ9qzdgyvZRubXrHT0M1FA==
+X-Google-Smtp-Source: APXvYqzUcdut1lbHeqsszLDgLCKsa9HVLpPrATMQnDMEQXYAAFrwtQVzYjkwMKeXp9Ko0ZVuMiA+yA46DXDXyopz65A=
+X-Received: by 2002:a1c:a7c6:: with SMTP id q189mr51263042wme.146.1563589792642;
+ Fri, 19 Jul 2019 19:29:52 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: jemillasmith10@gmail.com
-Received: by 2002:a6b:6f15:0:0:0:0:0 with HTTP; Fri, 19 Jul 2019 17:10:04
- -0700 (PDT)
-From:   Abu Salam <jemillasmith10@gmail.com>
-Date:   Fri, 19 Jul 2019 16:10:04 -0800
-X-Google-Sender-Auth: oxxw9YqPwgKEIGM7GylPZrKZL_o
-Message-ID: <CAJR+jmvppZNkrvj6eOQfUweN3xhBewWtm+rN-P37s9uay4035Q@mail.gmail.com>
-Subject: compensation
-To:     undisclosed-recipients:;
+References: <1563579201.1602.7.camel@HansenPartnership.com>
+In-Reply-To: <1563579201.1602.7.camel@HansenPartnership.com>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Sat, 20 Jul 2019 10:29:40 +0800
+Message-ID: <CACVXFVNOPhiUhrgw07sna0dt5Jy2zckbNXDWPPRAGadXQAS_mQ@mail.gmail.com>
+Subject: Re: [GIT PULL] final round of SCSI updates for the 5.2+ merge window
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+On Sat, Jul 20, 2019 at 8:38 AM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> This is the final round of mostly small fixes in our initial
+> submit.  It's mostly minor fixes and driver updates.  The only change
+> of note is adding a virt_boundary_mask to the SCSI host and host
+> template to parametrise this for NVMe devices instead of having them do
+> a call in slave_alloc.  It's a fairly straightforward conversion except
+> in the two NVMe handling drivers that didn't set it who now have a
+> virtual infinity parameter added.
+>
+> The patch is available here:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+>
+> The short changelog is:
+>
+> Arnd Bergmann (1):
+>       scsi: lpfc: reduce stack size with CONFIG_GCC_PLUGIN_STRUCTLEAK_VERBOSE
+>
+> Benjamin Block (3):
+>       scsi: zfcp: fix GCC compiler warning emitted with -Wmaybe-uninitialized
+>       scsi: zfcp: fix request object use-after-free in send path causing wrong traces
+>       scsi: zfcp: fix request object use-after-free in send path causing seqno errors
+>
+> Christoph Hellwig (8):
+>       scsi: megaraid_sas: set an unlimited max_segment_size
+>       scsi: mpt3sas: set an unlimited max_segment_size for SAS 3.0 HBAs
+>       scsi: IB/srp: set virt_boundary_mask in the scsi host
+>       scsi: IB/iser: set virt_boundary_mask in the scsi host
+>       scsi: storvsc: set virt_boundary_mask in the scsi host template
+>       scsi: ufshcd: set max_segment_size in the scsi host template
+>       scsi: core: take the DMA max mapping size into account
 
-I'm sorry but happy to inform you about my success in getting those
-funds transferred under the cooperation of a new partner from Vietnam,
-though I tried my best to involve you in the business but God decided
-the whole situations. Presently I=E2=80=99m in Vietnam for investment proje=
-cts
-with my own share of the total sum. Meanwhile, I didn't forget your
-past efforts and attempts to assist me in transferring those funds
-despite that it failed us some how.
+It has been observed on NVMe the above approach("take the DMA max
+mapping size into account") causes performance regression, so I'd
+suggest to fix dma_max_mapping_size() first.
 
-Now contact my secretary in Burkina Faso her name is Ms. Jemilla Smith
-on her e-mail address below  jemillasmith10@gmail.com  ask her to send
-you the total of $1.1Milion which I kept for your compensation for all
-the past efforts and attempts to assist me in this matter. I
-appreciated your efforts at that time very much. So feel free and get
-in touched with my secretary Ms. Jemilla Smith and instruct her where
-to send the amount to you. Please do let me know immediately you
-receive it so that we can share joy after all the sufferness at that
-time.
+Christoph has posted fix already, but looks not merged yet:
 
-In the moment, I=E2=80=99m very busy here because of the investment project=
-s
-which I and the new partner are having at hand, finally, remember that
-I had forwarded instruction to the secretary on your behalf to receive
-that money, so feel free to get in touch with Ms. Jemilla Smith she
-will send the amount to you without any delay OK. Extend my greetings
-to your family.
+      https://lkml.org/lkml/2019/7/17/62
 
-My Best regards
-Yours brother
-Mr. Abu Salam
-Greetings from Vietnam
+
+Thanks,
+Ming Lei
