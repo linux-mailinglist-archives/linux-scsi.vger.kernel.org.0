@@ -2,92 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA506F20C
-	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jul 2019 08:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B956F22A
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jul 2019 09:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726022AbfGUGrv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 21 Jul 2019 02:47:51 -0400
-Received: from mail.ampi.com.tw ([211.22.54.232]:36654 "EHLO
-        HQIMSVA.ampi.com.tw" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725830AbfGUGrv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 21 Jul 2019 02:47:51 -0400
-X-Greylist: delayed 1441 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Jul 2019 02:47:50 EDT
-Received: from HQIMSVA.ampi.com.tw (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E687FFC242;
-        Sun, 21 Jul 2019 14:23:47 +0800 (CST)
-Received: from HQIMSVA.ampi.com.tw (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CE74FFC236;
-        Sun, 21 Jul 2019 14:23:47 +0800 (CST)
-Received: from mail.ampi.com.tw (unknown [192.168.1.248])
-        by HQIMSVA.ampi.com.tw (Postfix) with ESMTPS;
-        Sun, 21 Jul 2019 14:23:47 +0800 (CST)
-Received: from ampi.com.tw (localhost [127.0.0.1])
-        by mail.ampi.com.tw (8.14.4/8.14.4) with ESMTP id x6L6UaEO008085;
-        Sun, 21 Jul 2019 14:30:36 +0800
-From:   "=?UTF-8?Q?PMB_=EF=BF=BD?=\=?UTF-8?Q?=EF=BF=BD?=}=?UTF-8?Q?=EF=BF=BDa?=" 
-        <re_shu@ampi.com.tw>
-Reply-To: yrc.co.ltd.jp@hotmail.com
-Subject: RE
-Date:   Sun, 21 Jul 2019 14:30:36 +0800
-Message-Id: <20190721063031.M11027@ampi.com.tw>
-X-Mailer: OpenWebMail 3.00_beta4 20140806 79bb7cc
-X-OriginatingIP: 105.112.98.71 (re_shu)
+        id S1726148AbfGUH0V convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Sun, 21 Jul 2019 03:26:21 -0400
+Received: from mail.wl.linuxfoundation.org ([198.145.29.98]:48966 "EHLO
+        mail.wl.linuxfoundation.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726146AbfGUH0U (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 21 Jul 2019 03:26:20 -0400
+Received: from mail.wl.linuxfoundation.org (localhost [127.0.0.1])
+        by mail.wl.linuxfoundation.org (Postfix) with ESMTP id 564E22871E
+        for <linux-scsi@vger.kernel.org>; Sun, 21 Jul 2019 07:26:20 +0000 (UTC)
+Received: by mail.wl.linuxfoundation.org (Postfix, from userid 486)
+        id 4AA2428757; Sun, 21 Jul 2019 07:26:20 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on
+        pdx-wl-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=2.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS autolearn=ham version=3.3.1
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 204243] WARNING: possible circular locking dependency detected
+ [sr_mod]
+Date:   Sun, 21 Jul 2019 07:26:19 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: IO/Storage
+X-Bugzilla-Component: SCSI
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: scdbackup@gmx.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-204243-11613-ypoB1vu8kc@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-204243-11613@https.bugzilla.kernel.org/>
+References: <bug-204243-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-To:     undisclosed-recipients:;
-X-TM-AS-GCONF: 00
-X-TM-AS-Product-Ver: IMSVA-9.1.0.1600-8.5.0.1020-24782.005
-X-TM-AS-Result: No-4.527-5.0-31-10
-X-imss-scan-details: No-4.527-5.0-31-10
-X-TMASE-Version: IMSVA-9.1.0.1600-8.5.1020-24782.005
-X-TMASE-Result: 10-4.527200-10.000000
-X-TMASE-MatchedRID: NVd9t7aJM2dEN1lrY4B1Df48iDghCUMx+JrusXmPH9gJEXxmav2ijB6m
-        H3EG+jcfeEsd0ktnjr831HzuueQGju/Pzxjxyhd5SdzZs8Odv6qs/vMFnvXRhlIwpPWB00V2V45
-        xebOrd5Jf3/muWhRDq51cIkNY9iUDnKg65KVB+P0q+YfQqUJoXJdVhpfI8IEDmbdPE3zcujgs3j
-        1Y8+uIxR8GgtDrJ1crnMvC67olx74/fJqz2fxZF/chnc7wRcMU+WTbxKBj+esgbDoGOzjZ62Xpd
-        FT3sj5Mime1Av5S+OR7wldoFev5rw9bh4WEvKYfvHKClHGjjr3V+4fM7EOkuDtRBnJrWkwP4bZt
-        9+qxj0P+quxBz2an+l+24nCsUSFNei68po9xfQascQW+NCamorJz0UuwlI0dPcCXjNqUmkXfd+P
-        6wwCt8xoxTJ4LSy1oFQs4aFTGDtIyW6LbcL+0zDOjkTNGR4oq1mz8dMl3h/K+cGd9O9QU5TgHS1
-        xUOOxWovlg3yH363HRXm0uOnmo177XShnjyRg6kIvYAgU40apQgM35Z0mqSLPS0dNMJOiaHdyTD
-        eYcI9Ea9ETZoom49UersMJuvMO5
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear:
+https://bugzilla.kernel.org/show_bug.cgi?id=204243
 
-Yokohama Rubber Manufacturing Company requires a reputable individual and 
-company representation for our delinquent accounts customers in America 
-and North America. We are seeking for representation for our business 
-interest in America and North America.
+Thomas Schmitt (scdbackup@gmx.net) changed:
 
-We are currently having a high volume of delinquent customers in this 
-region. Haven't fully respected and completed our own side of the supply 
-obligations,  we need an Agent representative who can assist in handling 
-our delinquent account collections in your region.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |scdbackup@gmx.net
 
-Upon your prompt acceptance of the above proposal, we shall be requiring 
-your details  as  listed bellow.
+--- Comment #2 from Thomas Schmitt (scdbackup@gmx.net) ---
+Hi,
 
-Full Names:
-Full Contact Address:
-Occupation:
-Company Name: (If Any)
-Tel:
-Cell Phone Number:
-Fax Numbers:
-Age:
+the lock in sr_block_open() is a nuisance since it was introduced by
+a daring mass change nine years ago:
+  https://lkml.org/lkml/2010/9/14/338
+It has a history of complaints about slowing down concurrent use of
+ioctl(SG_IO) on different sr drives:
+  https://marc.info/?l=linux-scsi&m=135705061804384&w=2
+As developer of libburn i had to develop workarounds in userspace:
+  http://libburnia-project.org/wiki/ConcurrentLinuxSr
+None of them is really satisfying.
 
-Please accept our warmest appreciation of your decision in offering your 
-services as we look forward to your prompt response.
+Since 3 years i use /dev/sg* instead of /dev/sr* for burning. The older
+readers will remember the relief when we could use hd and sr and thus
+had proper coordination with mount(8). This is gone, at least for systems
+where more than one optical drive shall be used concurrently.
 
+So, as did others before, i propose to remove the mutex_lock()/mutex_unlock()
+pair in sr_block_ioctl().
 
-Note: You shall be entitle to 10% of every collection from our clients.
+(Actually the other mutex_lock()/mutex_unlock() pairs introduced by
+   https://lkml.org/lkml/2010/9/14/338
+ should be examined whether they are appropriate replacements of the
+ previously existing BKLs. They don't have this long lasting impact on
+ multi-drive operation, though.)
 
-Regards,
-Head of Tire
-Takaharu Fushimi
-Yokohama Rubber Manufacturing Company
+Have a nice day :)
 
+Thomas
+
+-- 
+You are receiving this mail because:
+You are the assignee for the bug.
