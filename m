@@ -2,90 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5756F12D
-	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jul 2019 03:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA506F20C
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jul 2019 08:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726095AbfGUB02 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 20 Jul 2019 21:26:28 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:39170 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725812AbfGUB02 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 20 Jul 2019 21:26:28 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6L1P20u143374;
-        Sun, 21 Jul 2019 01:26:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=9hHGsPKfR8NAiZ8q14pCvULu4nbcjx7dgUHOR7zIL80=;
- b=TIGiSNaamgeJId5CYLvzohpHgqRpgXIk1BuoOaRfXKxU1KqmGtgzil6T7qu/kg2v4QPO
- GW9t5nvJyeHE56is5stLzsg67k6teaN0tcWR9OIh0xGnPpJWibrQlAXqpDAns2Hhm9jZ
- q3HKMrQC6S9l9Ks4iWk5/YURwkZxEc8Z4EKZgnO9KaG/bDoYx/H5ORah4XK9LPN5EXJM
- l3b6igMmyO9rybtrgKLqe+0aSXFX6EYBsxGklZnAkStPk/DI+MHBIb2bDTCPxh5JgBKf
- M+x0Pt832yo4TqZJmSXvGGtUKq5POSYv2yM02N3KAlVRBPOTln4TpMUwuoF2+zecDmVs aw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2tuukq9qp0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 21 Jul 2019 01:26:15 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6L1NFMY168708;
-        Sun, 21 Jul 2019 01:26:15 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2tuts1xmkn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 21 Jul 2019 01:26:14 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6L1Q918030511;
-        Sun, 21 Jul 2019 01:26:11 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 21 Jul 2019 01:26:08 +0000
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Hannes Reinecke <hare@suse.com>
-Subject: Re: [PATCH] fcoe: avoid memset across pointer boundaries
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190604093028.79673-1-hare@suse.de>
-        <CAHk-=wheOAo2tQ2mfsSE2iAxxURg62jVt9QsZBL1TPL52aZbvQ@mail.gmail.com>
-Date:   Sat, 20 Jul 2019 21:26:06 -0400
-In-Reply-To: <CAHk-=wheOAo2tQ2mfsSE2iAxxURg62jVt9QsZBL1TPL52aZbvQ@mail.gmail.com>
-        (Linus Torvalds's message of "Sat, 20 Jul 2019 12:21:40 -0700")
-Message-ID: <yq1wogcuqj5.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1726022AbfGUGrv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 21 Jul 2019 02:47:51 -0400
+Received: from mail.ampi.com.tw ([211.22.54.232]:36654 "EHLO
+        HQIMSVA.ampi.com.tw" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725830AbfGUGrv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 21 Jul 2019 02:47:51 -0400
+X-Greylist: delayed 1441 seconds by postgrey-1.27 at vger.kernel.org; Sun, 21 Jul 2019 02:47:50 EDT
+Received: from HQIMSVA.ampi.com.tw (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E687FFC242;
+        Sun, 21 Jul 2019 14:23:47 +0800 (CST)
+Received: from HQIMSVA.ampi.com.tw (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE74FFC236;
+        Sun, 21 Jul 2019 14:23:47 +0800 (CST)
+Received: from mail.ampi.com.tw (unknown [192.168.1.248])
+        by HQIMSVA.ampi.com.tw (Postfix) with ESMTPS;
+        Sun, 21 Jul 2019 14:23:47 +0800 (CST)
+Received: from ampi.com.tw (localhost [127.0.0.1])
+        by mail.ampi.com.tw (8.14.4/8.14.4) with ESMTP id x6L6UaEO008085;
+        Sun, 21 Jul 2019 14:30:36 +0800
+From:   "=?UTF-8?Q?PMB_=EF=BF=BD?=\=?UTF-8?Q?=EF=BF=BD?=}=?UTF-8?Q?=EF=BF=BDa?=" 
+        <re_shu@ampi.com.tw>
+Reply-To: yrc.co.ltd.jp@hotmail.com
+Subject: RE
+Date:   Sun, 21 Jul 2019 14:30:36 +0800
+Message-Id: <20190721063031.M11027@ampi.com.tw>
+X-Mailer: OpenWebMail 3.00_beta4 20140806 79bb7cc
+X-OriginatingIP: 105.112.98.71 (re_shu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9324 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1907210014
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9324 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1907210015
+Content-Type: text/plain; charset=utf-8
+To:     undisclosed-recipients:;
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSVA-9.1.0.1600-8.5.0.1020-24782.005
+X-TM-AS-Result: No-4.527-5.0-31-10
+X-imss-scan-details: No-4.527-5.0-31-10
+X-TMASE-Version: IMSVA-9.1.0.1600-8.5.1020-24782.005
+X-TMASE-Result: 10-4.527200-10.000000
+X-TMASE-MatchedRID: NVd9t7aJM2dEN1lrY4B1Df48iDghCUMx+JrusXmPH9gJEXxmav2ijB6m
+        H3EG+jcfeEsd0ktnjr831HzuueQGju/Pzxjxyhd5SdzZs8Odv6qs/vMFnvXRhlIwpPWB00V2V45
+        xebOrd5Jf3/muWhRDq51cIkNY9iUDnKg65KVB+P0q+YfQqUJoXJdVhpfI8IEDmbdPE3zcujgs3j
+        1Y8+uIxR8GgtDrJ1crnMvC67olx74/fJqz2fxZF/chnc7wRcMU+WTbxKBj+esgbDoGOzjZ62Xpd
+        FT3sj5Mime1Av5S+OR7wldoFev5rw9bh4WEvKYfvHKClHGjjr3V+4fM7EOkuDtRBnJrWkwP4bZt
+        9+qxj0P+quxBz2an+l+24nCsUSFNei68po9xfQascQW+NCamorJz0UuwlI0dPcCXjNqUmkXfd+P
+        6wwCt8xoxTJ4LSy1oFQs4aFTGDtIyW6LbcL+0zDOjkTNGR4oq1mz8dMl3h/K+cGd9O9QU5TgHS1
+        xUOOxWovlg3yH363HRXm0uOnmo177XShnjyRg6kIvYAgU40apQgM35Z0mqSLPS0dNMJOiaHdyTD
+        eYcI9Ea9ETZoom49UersMJuvMO5
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Dear:
 
-Linus,
+Yokohama Rubber Manufacturing Company requires a reputable individual and 
+company representation for our delinquent accounts customers in America 
+and North America. We are seeking for representation for our business 
+interest in America and North America.
 
-> The gcc-9 warnings are still there, and as annoying as they were
-> originally. Appended for your viewing "pleasure" once again, in case
-> you don't have gcc-9 installed..
+We are currently having a high volume of delinquent customers in this 
+region. Haven't fully respected and completed our own side of the supply 
+obligations,  we need an Agent representative who can assist in handling 
+our delinquent account collections in your region.
 
-I didn't merge them because Bart had some comments and I was expecting
-Hannes to address those and repost.
+Upon your prompt acceptance of the above proposal, we shall be requiring 
+your details  as  listed bellow.
 
-Hannes: Please fix!
+Full Names:
+Full Contact Address:
+Occupation:
+Company Name: (If Any)
+Tel:
+Cell Phone Number:
+Fax Numbers:
+Age:
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Please accept our warmest appreciation of your decision in offering your 
+services as we look forward to your prompt response.
+
+
+Note: You shall be entitle to 10% of every collection from our clients.
+
+Regards,
+Head of Tire
+Takaharu Fushimi
+Yokohama Rubber Manufacturing Company
+
