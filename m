@@ -2,131 +2,401 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC886F349
-	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jul 2019 14:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44FA6F39A
+	for <lists+linux-scsi@lfdr.de>; Sun, 21 Jul 2019 16:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbfGUMwx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 21 Jul 2019 08:52:53 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:56296 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726430AbfGUMwx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 21 Jul 2019 08:52:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1563713572; x=1595249572;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=jr/9iVwfIsb8WMeguz+EcBRhicX7u1nuWFZ7yQfaR3g=;
-  b=kYYau7dJWr3kNUpx3Yx5gvQV8oY5c1xXZl7LNY/8S7JxuovI7FHco3lq
-   XMMFGh2Bc6iS60P55+LZpnU0vawvVxPOPAuNeWDytYRGJeuY6HS0Y26M0
-   4YCMGmIW9o461UZQYAXrHR7pVNbvmSsvwvl9tqVJVbPOMnKnKoa5KTARE
-   sbJP1SToJv3WAcWZcQRiD4BTl4XyINaFTX+4RP2SOzTxjxDjoaWMOE0dr
-   hUC/U5lVd5uagzZGariJ2wtnx3cDE+QKFePeXxLc/Il+3re8PZPSUoNB7
-   pJ44FcHgSu2o0BSRpdR+ZpCGIzbaBI+ye9/gcReV51AloHDGYoae17+Ws
-   g==;
-IronPort-SDR: bRaC+u2BWF7b57H2NfjCi0RC0KYH3n36VG4Rg2Pq0MNzT/+RKPj4mqP2FstqbrN5VLiEspX5Bx
- cdxbwtbgpJUrYYPsljVz2Y0h7xpKRa3Tps9qzcHwg9m1dSMT6M76415F8QznU3kc3AVXOqa1iQ
- yJDwfJRr04mXpOyQUWfOCi9hxJsyTP6S3/i16BtspObzJyTtPh/SUdE2X2SwWt7RAvhrBw+AQR
- a+3dG+xU/+PvxDuL975Hj/1NsIll5GXSEviA8meGIF4Pmfu8dNY9SMWgTPShUkVz6TbnxH4mrH
- Gw8=
-X-IronPort-AV: E=Sophos;i="5.64,290,1559491200"; 
-   d="scan'208";a="114700015"
-Received: from mail-sn1nam04lp2057.outbound.protection.outlook.com (HELO NAM04-SN1-obe.outbound.protection.outlook.com) ([104.47.44.57])
-  by ob1.hgst.iphmx.com with ESMTP; 21 Jul 2019 20:52:49 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iDja1mMlaTkvsIPn7PJIZZj3X0bnp5nanPd897A3uHtbComFyFmRYBb+K/dlT5/fTr1F63BI5PVdaMso2Xx6NNXPQWUjKGvy5wFr726hYOb/dGg8/D8p2kWS89hmDTWzuf0MLEco6v+ofOJ7Nsq+UaeC04jhrLNAVoJpzXaNp0CZ5RtAUZaP3qEPvOtHq1Tb1lBMkuPeQrZd7SoAh8M+lpFUQG/nMMyP+TDFwYGo49gEA590DLjhBkfvwexZEOesID5J0KaNlsBdjGdrTpIDhWlJAKWcIUv/44Rn4XPsCGevNziYh4dj0L+RSdzjWABPu2H87XhntN74dnXxzfLIcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jr/9iVwfIsb8WMeguz+EcBRhicX7u1nuWFZ7yQfaR3g=;
- b=e41gmSt7FZ1ve1pM16h923WIKQ9ilEkmiY/YYdTzJfYjSRuq6A7Fs6iLFlh3uptiKoS+RWiwqBt+QYGUcthB3FfgIWY7JbZx23KxBplEoTjm4zDApKLazWeC1r12Hu0jNiU7/c1fp1bUKam0Ujsidmbvn30tEeMNJ3M7oSGq7q4KKhghY+OaZ1fMLSH+1pUs27hNb1BQ/6sbceVOq/LNqUmtei8CVBbkrERIVMy1nKGed/VtJrLwR5OdOBy2oaHtDgxNJp6PoVbpCgnFQhqDd7vbBeRQDXC53r+vn8tYxYQz91susDvEyKFSNI5KoQbQeeJkg7vSz0iv1fNT9eubsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wdc.com;dmarc=pass action=none header.from=wdc.com;dkim=pass
- header.d=wdc.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jr/9iVwfIsb8WMeguz+EcBRhicX7u1nuWFZ7yQfaR3g=;
- b=Ds64fUyr+sVWndcP45+iDYV3di3uBdW5vFWERUlZkV8ayzYdA4mN818e28h8R+UGuNlMbGwHkBU3/UZR/6sOnoO4kExTn05m/Uq2jC223a87hmJRlSpTeMuNoHDAkbUtdm3AGxLjxjb7HXqEIekdqRFqDp80mQ9B9RmHwfCUzBs=
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
- SN6PR04MB4110.namprd04.prod.outlook.com (52.135.82.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.16; Sun, 21 Jul 2019 12:52:47 +0000
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::a102:1701:9c05:96b3]) by SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::a102:1701:9c05:96b3%5]) with mapi id 15.20.2094.011; Sun, 21 Jul 2019
- 12:52:47 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Stanley Chu <stanley.chu@mediatek.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
-CC:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "evgreen@chromium.org" <evgreen@chromium.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>
-Subject: RE: [PATCH v1 0/2] scsi: ufs: Fix broken hba->outstanding_tasks
-Thread-Topic: [PATCH v1 0/2] scsi: ufs: Fix broken hba->outstanding_tasks
-Thread-Index: AQHVOGx9NdHB1Jz3wEWNwY1jARxa+abVESuAgAADy1A=
-Date:   Sun, 21 Jul 2019 12:52:47 +0000
-Message-ID: <SN6PR04MB4925BD03422B827F76A5F7E5FCC50@SN6PR04MB4925.namprd04.prod.outlook.com>
-References: <1562906656-27154-1-git-send-email-stanley.chu@mediatek.com>
- <SN6PR04MB4925208835D4760249E82DB7FCC50@SN6PR04MB4925.namprd04.prod.outlook.com>
-In-Reply-To: <SN6PR04MB4925208835D4760249E82DB7FCC50@SN6PR04MB4925.namprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9841e0cd-f76d-4092-a333-08d70dda54ee
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB4110;
-x-ms-traffictypediagnostic: SN6PR04MB4110:
-x-microsoft-antispam-prvs: <SN6PR04MB4110B6E5E8F863C6CD48245BFCC50@SN6PR04MB4110.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:6430;
-x-forefront-prvs: 0105DAA385
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(396003)(346002)(366004)(39860400002)(376002)(199004)(189003)(478600001)(76116006)(66946007)(256004)(25786009)(110136005)(2201001)(54906003)(76176011)(66476007)(66556008)(64756008)(66446008)(476003)(446003)(11346002)(316002)(486006)(6506007)(2501003)(8676002)(186003)(7696005)(7736002)(102836004)(99286004)(305945005)(74316002)(52536014)(26005)(6116002)(6436002)(55016002)(2906002)(81156014)(33656002)(81166006)(6246003)(9686003)(2940100002)(86362001)(66066001)(229853002)(4744005)(5660300002)(71190400001)(71200400001)(8936002)(68736007)(53936002)(4326008)(7416002)(3846002)(14454004);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB4110;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: /8E5USBtaTOhNNdSxYUVpLthBdAeOQHTDAAU58S2IJyP40X2vSQbPvUK6TAatNE/wmdwzt1YCpOKrGgMXeSaj9RfEhOuwtndfKqiotlKOzP9sfVD9FfxyU/pbHi/QI0tJCiY8PNhetVQeYoS7+tdTy2eu3S0pmxzXJiv1+3G21wGqGnMj5bHlP0pRalCRe9xji/VdU/ZOXm5PsREoIUmjPCVKggQfOrqQcfGqHvOsWHNnX9n1vlFcRGFX6rj6DiIpfmVySNGhiF4KUbaxoOqpvVvw4D3xakAe2W2T3CBpyfpXsKplTuEwuBJrzPyzq7iQmzk4Kmzc3dvQFjl41MnBHxrxRGVFd7U0O2fJLz6lrrqDcHwecKUmYzPUkcsBmtcCxd7cjD7chgrIDA5Cu3BY4mzEi5GOl1VF1vSg81i9ZY=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726431AbfGUOOB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 21 Jul 2019 10:14:01 -0400
+Received: from mga03.intel.com ([134.134.136.65]:36440 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726311AbfGUOOB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 21 Jul 2019 10:14:01 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Jul 2019 07:14:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,291,1559545200"; 
+   d="scan'208";a="159636198"
+Received: from twinkler-lnx.jer.intel.com ([10.12.91.48])
+  by orsmga007.jf.intel.com with ESMTP; 21 Jul 2019 07:13:57 -0700
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>
+Cc:     Alex Lemberg <Alex.Lemberg@wdc.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH RESEND] scsi: ufs: revamp string descriptor reading
+Date:   Sun, 21 Jul 2019 17:02:12 +0300
+Message-Id: <20190721140212.8980-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9841e0cd-f76d-4092-a333-08d70dda54ee
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jul 2019 12:52:47.4062
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4110
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-PiANCj4gSGksDQo+IA0KPiA+DQo+ID4gQ3VycmVudGx5IGJpdHMgaW4gaGJhLT5vdXRzdGFuZGlu
-Z190YXNrcyBhcmUgY2xlYXJlZCBvbmx5IGFmdGVyIHRoZWlyDQo+ID4gY29ycmVzcG9uZGluZyB0
-YXNrIG1hbmFnZW1lbnQgY29tbWFuZHMgYXJlIHN1Y2Nlc3NmdWxseSBkb25lIGJ5DQo+ID4gX191
-ZnNoY2RfaXNzdWVfdG1fY21kKCkuDQo+ID4NCj4gPiBJZiB0aW1lb3V0IGhhcHBlbnMgaW4gYSB0
-YXNrIG1hbmFnZW1lbnQgY29tbWFuZCwgaXRzIGNvcnJlc3BvbmRpbmcNCj4gPiBiaXQgaW4gaGJh
-LT5vdXRzdGFuZGluZ190YXNrcyB3aWxsIG5vdCBiZSBjbGVhcmVkIHVudGlsIG5leHQgdGFzaw0K
-PiA+IG1hbmFnZW1lbnQgY29tbWFuZCB3aXRoIHRoZSBzYW1lIHRhZyB1c2VkIHN1Y2Nlc3NmdWxs
-eSBmaW5pc2hlcy7igKcNCj4gdWZzaGNkX2NsZWFyX3RtX2NtZCBpcyBhbHNvIGNhbGxlZCBhcyBw
-YXJ0IG9mIHVmc2hjZF9lcnJfaGFuZGxlci4NCj4gRG9lcyB0aGlzIGNoYW5nZSBzb21ldGhpbmcg
-aW4geW91ciBhc3N1bXB0aW9ucz8NCkFuZCBCVFcgdGhlcmUgaXMgYSBzcGVjaWZpYyBfX2NsZWFy
-X2JpdCBpbiBfX3Vmc2hjZF9pc3N1ZV90bV9jbWQoKSBpbiBjYXNlIG9mIGEgVE8uDQoNCj4gDQo+
-IFRoYW5rcywNCj4gQXZyaQ0KPiANCg==
+Define new a type: uc_string_id for easier string
+handling and less casting. Reduce number or string
+copies in price of a dynamic allocation.
+
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+Tested-by: Avri Altman <avri.altman@wdc.com>
+---
+
+Resend: It was reviewed by not merged.
+
+ drivers/scsi/ufs/ufs-sysfs.c |  20 ++---
+ drivers/scsi/ufs/ufs.h       |   2 +-
+ drivers/scsi/ufs/ufshcd.c    | 164 +++++++++++++++++++++--------------
+ drivers/scsi/ufs/ufshcd.h    |   9 +-
+ 4 files changed, 115 insertions(+), 80 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
+index f478685122ff..13e357f01025 100644
+--- a/drivers/scsi/ufs/ufs-sysfs.c
++++ b/drivers/scsi/ufs/ufs-sysfs.c
+@@ -570,10 +570,11 @@ static ssize_t _name##_show(struct device *dev,				\
+ 	struct ufs_hba *hba = dev_get_drvdata(dev);			\
+ 	int ret;							\
+ 	int desc_len = QUERY_DESC_MAX_SIZE;				\
+-	u8 *desc_buf;							\
++	char *desc_buf;							\
++									\
+ 	desc_buf = kzalloc(QUERY_DESC_MAX_SIZE, GFP_ATOMIC);		\
+-	if (!desc_buf)							\
+-		return -ENOMEM;						\
++	if (!desc_buf)                                                  \
++		return -ENOMEM;                                         \
+ 	ret = ufshcd_query_descriptor_retry(hba,			\
+ 		UPIU_QUERY_OPCODE_READ_DESC, QUERY_DESC_IDN_DEVICE,	\
+ 		0, 0, desc_buf, &desc_len);				\
+@@ -582,14 +583,13 @@ static ssize_t _name##_show(struct device *dev,				\
+ 		goto out;						\
+ 	}								\
+ 	index = desc_buf[DEVICE_DESC_PARAM##_pname];			\
+-	memset(desc_buf, 0, QUERY_DESC_MAX_SIZE);			\
+-	if (ufshcd_read_string_desc(hba, index, desc_buf,		\
+-		QUERY_DESC_MAX_SIZE, true)) {				\
+-		ret = -EINVAL;						\
++	kfree(desc_buf);						\
++	desc_buf = NULL;						\
++	ret = ufshcd_read_string_desc(hba, index, &desc_buf,		\
++				      SD_ASCII_STD);			\
++	if (ret < 0)							\
+ 		goto out;						\
+-	}								\
+-	ret = snprintf(buf, PAGE_SIZE, "%s\n",				\
+-		desc_buf + QUERY_DESC_HDR_SIZE);			\
++	ret = snprintf(buf, PAGE_SIZE, "%s\n", desc_buf);		\
+ out:									\
+ 	kfree(desc_buf);						\
+ 	return ret;							\
+diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
+index 99a9c4d16f6b..b3e1b2a0f463 100644
+--- a/drivers/scsi/ufs/ufs.h
++++ b/drivers/scsi/ufs/ufs.h
+@@ -541,7 +541,7 @@ struct ufs_dev_info {
+  */
+ struct ufs_dev_desc {
+ 	u16 wmanufacturerid;
+-	char model[MAX_MODEL_LEN + 1];
++	char *model;
+ };
+ 
+ /**
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index a3b6cd1a623d..e2740353332a 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -299,16 +299,6 @@ static void ufshcd_scsi_block_requests(struct ufs_hba *hba)
+ 		scsi_block_requests(hba->host);
+ }
+ 
+-/* replace non-printable or non-ASCII characters with spaces */
+-static inline void ufshcd_remove_non_printable(char *val)
+-{
+-	if (!val)
+-		return;
+-
+-	if (*val < 0x20 || *val > 0x7e)
+-		*val = ' ';
+-}
+-
+ static void ufshcd_add_cmd_upiu_trace(struct ufs_hba *hba, unsigned int tag,
+ 		const char *str)
+ {
+@@ -3130,7 +3120,7 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 			   enum desc_idn desc_id,
+ 			   int desc_index,
+ 			   u8 param_offset,
+-			   u8 *param_read_buf,
++			   void *param_read_buf,
+ 			   u8 param_size)
+ {
+ 	int ret;
+@@ -3198,7 +3188,7 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ static inline int ufshcd_read_desc(struct ufs_hba *hba,
+ 				   enum desc_idn desc_id,
+ 				   int desc_index,
+-				   u8 *buf,
++				   void *buf,
+ 				   u32 size)
+ {
+ 	return ufshcd_read_desc_param(hba, desc_id, desc_index, 0, buf, size);
+@@ -3216,49 +3206,78 @@ static int ufshcd_read_device_desc(struct ufs_hba *hba, u8 *buf, u32 size)
+ 	return ufshcd_read_desc(hba, QUERY_DESC_IDN_DEVICE, 0, buf, size);
+ }
+ 
++/**
++ * struct uc_string_id - unicode string
++ *
++ * @len: size of this descriptor inclusive
++ * @type: descriptor type
++ * @uc: unicode string character
++ */
++struct uc_string_id {
++	u8 len;
++	u8 type;
++	wchar_t uc[0];
++} __packed;
++
++/* replace non-printable or non-ASCII characters with spaces */
++static inline char ufshcd_remove_non_printable(char ch)
++{
++	return (ch >= 0x20 && ch <= 0x7e) ? ch : ' ';
++}
++
+ /**
+  * ufshcd_read_string_desc - read string descriptor
+  * @hba: pointer to adapter instance
+  * @desc_index: descriptor index
+- * @buf: pointer to buffer where descriptor would be read
+- * @size: size of buf
++ * @buf: pointer to buffer where descriptor would be read,
++ *       the caller should free the memory.
+  * @ascii: if true convert from unicode to ascii characters
++ *         null terminated string.
+  *
+- * Return 0 in case of success, non-zero otherwise
++ * Return:
++ * *      string size on success.
++ * *      -ENOMEM: on allocation failure
++ * *      -EINVAL: on a wrong parameter
+  */
+-int ufshcd_read_string_desc(struct ufs_hba *hba, int desc_index,
+-			    u8 *buf, u32 size, bool ascii)
++int ufshcd_read_string_desc(struct ufs_hba *hba, u8 desc_index,
++			    char **buf, bool ascii)
+ {
+-	int err = 0;
++	struct uc_string_id *uc_str;
++	char *str;
++	int ret;
+ 
+-	err = ufshcd_read_desc(hba,
+-				QUERY_DESC_IDN_STRING, desc_index, buf, size);
++	if (!buf)
++		return -EINVAL;
+ 
+-	if (err) {
+-		dev_err(hba->dev, "%s: reading String Desc failed after %d retries. err = %d\n",
+-			__func__, QUERY_REQ_RETRIES, err);
++	uc_str = kzalloc(QUERY_DESC_MAX_SIZE, GFP_KERNEL);
++	if (!uc_str)
++		return -ENOMEM;
++
++	ret = ufshcd_read_desc(hba, QUERY_DESC_IDN_STRING,
++			       desc_index, uc_str,
++			       QUERY_DESC_MAX_SIZE);
++	if (ret < 0) {
++		dev_err(hba->dev, "Reading String Desc failed after %d retries. err = %d\n",
++			QUERY_REQ_RETRIES, ret);
++		str = NULL;
++		goto out;
++	}
++
++	if (uc_str->len <= QUERY_DESC_HDR_SIZE) {
++		dev_dbg(hba->dev, "String Desc is of zero length\n");
++		str = NULL;
++		ret = 0;
+ 		goto out;
+ 	}
+ 
+ 	if (ascii) {
+-		int desc_len;
+-		int ascii_len;
++		ssize_t ascii_len;
+ 		int i;
+-		char *buff_ascii;
+-
+-		desc_len = buf[0];
+ 		/* remove header and divide by 2 to move from UTF16 to UTF8 */
+-		ascii_len = (desc_len - QUERY_DESC_HDR_SIZE) / 2 + 1;
+-		if (size < ascii_len + QUERY_DESC_HDR_SIZE) {
+-			dev_err(hba->dev, "%s: buffer allocated size is too small\n",
+-					__func__);
+-			err = -ENOMEM;
+-			goto out;
+-		}
+-
+-		buff_ascii = kmalloc(ascii_len, GFP_KERNEL);
+-		if (!buff_ascii) {
+-			err = -ENOMEM;
++		ascii_len = (uc_str->len - QUERY_DESC_HDR_SIZE) / 2 + 1;
++		str = kzalloc(ascii_len, GFP_KERNEL);
++		if (!str) {
++			ret = -ENOMEM;
+ 			goto out;
+ 		}
+ 
+@@ -3266,22 +3285,29 @@ int ufshcd_read_string_desc(struct ufs_hba *hba, int desc_index,
+ 		 * the descriptor contains string in UTF16 format
+ 		 * we need to convert to utf-8 so it can be displayed
+ 		 */
+-		utf16s_to_utf8s((wchar_t *)&buf[QUERY_DESC_HDR_SIZE],
+-				desc_len - QUERY_DESC_HDR_SIZE,
+-				UTF16_BIG_ENDIAN, buff_ascii, ascii_len);
++		ret = utf16s_to_utf8s(uc_str->uc,
++				      uc_str->len - QUERY_DESC_HDR_SIZE,
++				      UTF16_BIG_ENDIAN, str, ascii_len);
+ 
+ 		/* replace non-printable or non-ASCII characters with spaces */
+-		for (i = 0; i < ascii_len; i++)
+-			ufshcd_remove_non_printable(&buff_ascii[i]);
++		for (i = 0; i < ret; i++)
++			str[i] = ufshcd_remove_non_printable(str[i]);
+ 
+-		memset(buf + QUERY_DESC_HDR_SIZE, 0,
+-				size - QUERY_DESC_HDR_SIZE);
+-		memcpy(buf + QUERY_DESC_HDR_SIZE, buff_ascii, ascii_len);
+-		buf[QUERY_DESC_LENGTH_OFFSET] = ascii_len + QUERY_DESC_HDR_SIZE;
+-		kfree(buff_ascii);
++		str[ret++] = '\0';
++
++	} else {
++		str = kzalloc(uc_str->len, GFP_KERNEL);
++		if (!str) {
++			ret = -ENOMEM;
++			goto out;
++		}
++		memcpy(str, uc_str, uc_str->len);
++		ret = uc_str->len;
+ 	}
+ out:
+-	return err;
++	*buf = str;
++	kfree(uc_str);
++	return ret;
+ }
+ 
+ /**
+@@ -6452,6 +6478,9 @@ static int ufs_get_device_desc(struct ufs_hba *hba,
+ 	u8 model_index;
+ 	u8 *desc_buf;
+ 
++	if (!dev_desc)
++		return -EINVAL;
++
+ 	buff_len = max_t(size_t, hba->desc_size.dev_desc,
+ 			 QUERY_DESC_MAX_SIZE + 1);
+ 	desc_buf = kmalloc(buff_len, GFP_KERNEL);
+@@ -6475,31 +6504,31 @@ static int ufs_get_device_desc(struct ufs_hba *hba,
+ 				     desc_buf[DEVICE_DESC_PARAM_MANF_ID + 1];
+ 
+ 	model_index = desc_buf[DEVICE_DESC_PARAM_PRDCT_NAME];
+-
+-	/* Zero-pad entire buffer for string termination. */
+-	memset(desc_buf, 0, buff_len);
+-
+-	err = ufshcd_read_string_desc(hba, model_index, desc_buf,
+-				      QUERY_DESC_MAX_SIZE, true/*ASCII*/);
+-	if (err) {
++	err = ufshcd_read_string_desc(hba, model_index,
++				      &dev_desc->model, SD_ASCII_STD);
++	if (err < 0) {
+ 		dev_err(hba->dev, "%s: Failed reading Product Name. err = %d\n",
+ 			__func__, err);
+ 		goto out;
+ 	}
+ 
+-	desc_buf[QUERY_DESC_MAX_SIZE] = '\0';
+-	strlcpy(dev_desc->model, (desc_buf + QUERY_DESC_HDR_SIZE),
+-		min_t(u8, desc_buf[QUERY_DESC_LENGTH_OFFSET],
+-		      MAX_MODEL_LEN));
+-
+-	/* Null terminate the model string */
+-	dev_desc->model[MAX_MODEL_LEN] = '\0';
++	/*
++	 * ufshcd_read_string_desc returns size of the string
++	 * reset the error value
++	 */
++	err = 0;
+ 
+ out:
+ 	kfree(desc_buf);
+ 	return err;
+ }
+ 
++static void ufs_put_device_desc(struct ufs_dev_desc *dev_desc)
++{
++	kfree(dev_desc->model);
++	dev_desc->model = NULL;
++}
++
+ static void ufs_fixup_device_setup(struct ufs_hba *hba,
+ 				   struct ufs_dev_desc *dev_desc)
+ {
+@@ -6508,8 +6537,9 @@ static void ufs_fixup_device_setup(struct ufs_hba *hba,
+ 	for (f = ufs_fixups; f->quirk; f++) {
+ 		if ((f->card.wmanufacturerid == dev_desc->wmanufacturerid ||
+ 		     f->card.wmanufacturerid == UFS_ANY_VENDOR) &&
+-		    (STR_PRFX_EQUAL(f->card.model, dev_desc->model) ||
+-		     !strcmp(f->card.model, UFS_ANY_MODEL)))
++		     ((dev_desc->model &&
++		       STR_PRFX_EQUAL(f->card.model, dev_desc->model)) ||
++		      !strcmp(f->card.model, UFS_ANY_MODEL)))
+ 			hba->dev_quirks |= f->quirk;
+ 	}
+ }
+@@ -6860,6 +6890,8 @@ static int ufshcd_probe_hba(struct ufs_hba *hba)
+ 	}
+ 
+ 	ufs_fixup_device_setup(hba, &card);
++	ufs_put_device_desc(&card);
++
+ 	ufshcd_tune_unipro_params(hba);
+ 
+ 	/* UFS device is also active now */
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 994d73d03207..10935548d1fc 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -885,14 +885,17 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 			   enum desc_idn desc_id,
+ 			   int desc_index,
+ 			   u8 param_offset,
+-			   u8 *param_read_buf,
++			   void *param_read_buf,
+ 			   u8 param_size);
+ int ufshcd_query_attr(struct ufs_hba *hba, enum query_opcode opcode,
+ 		      enum attr_idn idn, u8 index, u8 selector, u32 *attr_val);
+ int ufshcd_query_flag(struct ufs_hba *hba, enum query_opcode opcode,
+ 	enum flag_idn idn, bool *flag_res);
+-int ufshcd_read_string_desc(struct ufs_hba *hba, int desc_index,
+-			    u8 *buf, u32 size, bool ascii);
++
++#define SD_ASCII_STD true
++#define SD_RAW false
++int ufshcd_read_string_desc(struct ufs_hba *hba, u8 desc_index,
++			    char **buf, bool ascii);
+ 
+ int ufshcd_hold(struct ufs_hba *hba, bool async);
+ void ufshcd_release(struct ufs_hba *hba);
+-- 
+2.20.1
+
