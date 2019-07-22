@@ -2,78 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79ABA6FC06
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 11:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E08BF6FD91
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 12:17:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728717AbfGVJUx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Jul 2019 05:20:53 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:50656 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727744AbfGVJUx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 05:20:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=rozEWPkakpWOVwCBsdppdcawJNVVlIw+Eg8lASKNsgg=; b=tpkF1ayflIjh50YVCiIn61zsk
-        585NNt4GTav6znbiEh1nk7blBJDc4sIiGh980AUQln3qSyxICFWhCLRT0GbPYuDr6OYKmlMA+MYn4
-        YKX1UgcCicQwtRrLctNcdiEyYNDJWADTfK90HK3wQidBEL3ehgl2tjmh7J1mLtWu33buFKJDQLLG2
-        ctnqQimtuNqiaNzB7V5E0GCta+pc88Y6jjomsupaMd2evzlP002O4FNs9nH2xkE1q06lb00ItDuKT
-        p7y4RNQw3rVvV+bJqbDefPnWuXcS5g8+A7gWxtwwYSCf75AexTWccRKIeIBdDmmnPn3KAvb+jyrGW
-        XM4Jvxkpw==;
-Received: from 089144207240.atnat0016.highway.bob.at ([89.144.207.240] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hpUUs-0002Si-9l; Mon, 22 Jul 2019 09:20:42 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     martin.petersen@oracle.com
-Cc:     bvanassche@acm.org, tom.leiming@gmail.com, dexuan.linux@gmail.com,
-        Damien.LeMoal@wdc.com, linux-scsi@vger.kernel.org
-Subject: [PATCH] scsi: fix the dma_max_mapping_size call
-Date:   Mon, 22 Jul 2019 11:20:38 +0200
-Message-Id: <20190722092038.17659-1-hch@lst.de>
-X-Mailer: git-send-email 2.20.1
+        id S1729403AbfGVKRJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Jul 2019 06:17:09 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:45490 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728569AbfGVKRJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 06:17:09 -0400
+Received: by mail-qk1-f195.google.com with SMTP id s22so28165276qkj.12;
+        Mon, 22 Jul 2019 03:17:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7CJkKA7SZFRonSxwlZKyw8W6pgs5EdX5dwdC50uPvBs=;
+        b=IfyEGn1teOvseGqamLGm6eYMrp4kEADYmxLmuf3lwn47e7irJLZzzSadD5rA/AIBI9
+         goH41xTw+8mHRl1BZvXsR//j0Bkx/qgpjDwxg+U0Sgv/xiZjg8KtvmyTZALR9IWcaIXV
+         CkKHYuQh8zqpoaziifRWNQJj6IFlA4GCuNLjekCgFw/JORcJrYdvAW9z1V4W6KoM1wwm
+         VULx2b8vVGz68sAMPswtsad+XUrTWq6NgpiZCM1ZVw4TMgy/CGbdJbHgWLP86SU1dGvd
+         Z5pyX3CkxJbOlpaYN+NcMGuBrk11hsJl17wOl6wns3nwJxlMqgXlSlT1u12RZg1yhaEA
+         FtQA==
+X-Gm-Message-State: APjAAAXq6SoJbRtNpNdtsju6Iqd40f0IQCjpznLrKw1xRcgd1JB/roKO
+        6vLan+lWSBG81Y9PJP7R6HGzDTE7JDS31A46Yqg=
+X-Google-Smtp-Source: APXvYqy7ISax661sJxUrp3WbLhv5BC0kus4uGgZKznelHiJHcAGScOZIvY+BAP14dw/qwJzgUC+dnqfk8j1fG+ylzm4=
+X-Received: by 2002:a37:4ac3:: with SMTP id x186mr44360140qka.138.1563790627957;
+ Mon, 22 Jul 2019 03:17:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20190628123819.2785504-1-arnd@arndb.de> <20190628123819.2785504-4-arnd@arndb.de>
+ <alpine.LFD.2.21.1906302308280.3788@ja.home.ssi.bg>
+In-Reply-To: <alpine.LFD.2.21.1906302308280.3788@ja.home.ssi.bg>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 22 Jul 2019 12:16:51 +0200
+Message-ID: <CAK8P3a03wShPgL85K-0W3UUc3QJWLbbs+ZVAnkKLkqg00vVehw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] ipvs: reduce kernel stack usage
+To:     Julian Anastasov <ja@ssi.bg>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Wensong Zhang <wensong@linux-vs.org>,
+        Simon Horman <horms@verge.net.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        James Morris <jmorris@namei.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        Networking <netdev@vger.kernel.org>, lvs-devel@vger.kernel.org,
+        netfilter-devel <netfilter-devel@vger.kernel.org>,
+        coreteam@netfilter.org, Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We should only call dma_max_mapping_size for devices that have a DMA
-mask set, otherwise we can run into a NULL pointer dereference that
-will crash the system.
+On Sun, Jun 30, 2019 at 10:37 PM Julian Anastasov <ja@ssi.bg> wrote:
+> On Fri, 28 Jun 2019, Arnd Bergmann wrote:
 
-Also we need to do right shift to get the sectors from the size in
-bytes, not a left shift.
+> >       struct ip_vs_conn *ctl_cp = cp->control;
+> >       if (!ctl_cp) {
+> > -             IP_VS_ERR_BUF("request control DEL for uncontrolled: "
+> > -                           "%s:%d to %s:%d\n",
+> > -                           IP_VS_DBG_ADDR(cp->af, &cp->caddr),
+> > -                           ntohs(cp->cport),
+> > -                           IP_VS_DBG_ADDR(cp->af, &cp->vaddr),
+> > -                           ntohs(cp->vport));
+> > +             pr_err("request control DEL for uncontrolled: "
+> > +                    "%pISp to %pISp\n",
 
-Fixes: bdd17bdef7d8 ("scsi: core: take the DMA max mapping size into account")
-Reported-by: Bart Van Assche <bvanassche@acm.org>
-Reported-by: Ming Lei <tom.leiming@gmail.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/scsi/scsi_lib.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+(replying a bit late)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 9381171c2fc0..11e64b50497f 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1784,8 +1784,10 @@ void __scsi_init_queue(struct Scsi_Host *shost, struct request_queue *q)
- 		blk_queue_max_integrity_segments(q, shost->sg_prot_tablesize);
- 	}
- 
--	shost->max_sectors = min_t(unsigned int, shost->max_sectors,
--			dma_max_mapping_size(dev) << SECTOR_SHIFT);
-+	if (dev->dma_mask) {
-+		shost->max_sectors = min_t(unsigned int, shost->max_sectors,
-+				dma_max_mapping_size(dev) >> SECTOR_SHIFT);
-+	}
- 	blk_queue_max_hw_sectors(q, shost->max_sectors);
- 	if (shost->unchecked_isa_dma)
- 		blk_queue_bounce_limit(q, BLK_BOUNCE_ISA);
--- 
-2.20.1
+>         ip_vs_dbg_addr() used compact form (%pI6c), so it would be
+> better to use %pISc and %pISpc everywhere in IPVS...
 
+done
+
+>         Also, note that before now port was printed with %d and
+> ntohs() was used, now port should be in network order, so:
+>
+> - ntohs() should be removed
+
+done
+
+> - htons() should be added, if missing. At first look, this case
+> is not present in IPVS, we have only ntohs() usage
+
+I found one case in ip_vs_ftp_in() that needs it in order to subtract one:
+
+                IP_VS_DBG(7, "protocol %s %pISpc %pISpc\n",
+                          ip_vs_proto_name(ipvsh->protocol),
+-                         IP_VS_DBG_SOCKADDR(cp->af, &to, ntohs(port)),
++                         IP_VS_DBG_SOCKADDR(cp->af, &to, port),
+                          IP_VS_DBG_SOCKADDR(cp->af, &cp->vaddr,
+-                                             ntohs(cp->vport)-1));
++                                            htons(ntohs(cp->vport)-1)));
+
+Thanks for the review, I'll send a new patch after some more
+build testing on the new version.
+
+       Arnd
