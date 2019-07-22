@@ -2,139 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 302186F95A
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 08:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 728CA6F96B
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 08:19:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726943AbfGVGKz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Jul 2019 02:10:55 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:52473 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbfGVGKz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 02:10:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1563775854; x=1595311854;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=1z0fPG4ODXUuRK5B2usOH1yIwOkSIaN900JZfbTFX8M=;
-  b=gAD4+g16n4ruM1EJSvI4vuqSI8JEOztZEinQtFppR8Qg/S2r5NyqivAV
-   aAbB+ycnqcVC2W/AgEYOr9Ed+Bk+dKjOug/0MRfld395jSTtyvjuz/SGU
-   peFup+XXHknmhI17Pn6rfkqvCrr2k9agCKIF7aF4O1YNS3h3ee0l+Mt1r
-   ftEWxX+rr54z4nP/EZ8u0+Mr2QdZvU9LjF4HliNE2sgfhrV/B7rM0FJlD
-   iHAK3mKns9WUl1Y1VDTPI+tRdY35D90i7Ff3UVdzJMO/3/XqBkjVxaH7l
-   myAvbv533T0viWiOF6wy2GT6PxZqi1p1PHF3BZQSHhwdSFjmb+zUGOBYl
-   g==;
-IronPort-SDR: TMsJvBfOFpSpZt+SRvrM/LIgqY8DOU1JclVoxx+It/mNjOj4iq4rBkuiwgAYAWw5R+f5ZJmBJR
- 9nfTK+9o/a7Gfm8FvBkoVmZDPPtM6RSmIgt7B/YLHY4mx5+wIJGbl0UlOPD2nnfdnsw2l8BHXT
- ccJ48Wg48dnimvosiDMrMxgLPq7o0hDoWXjN1jiPdeRTasTHQGGENzF27JGIhjWOl/ZOce2CHn
- pV86FrYp6824LuZrmrxKzVnnWNUk2fOLb6R+nvhPXF14VkE3UFRGU01iL/0QM4V74wi4MLrebC
- gww=
-X-IronPort-AV: E=Sophos;i="5.64,294,1559491200"; 
-   d="scan'208";a="220092472"
-Received: from mail-by2nam05lp2059.outbound.protection.outlook.com (HELO NAM05-BY2-obe.outbound.protection.outlook.com) ([104.47.50.59])
-  by ob1.hgst.iphmx.com with ESMTP; 22 Jul 2019 14:10:26 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jWOm+ro7sYhFa8Bi2crXa/4kfvtclXGkmcWs9Zv6oa95uEzEsK0+IbvqcpMzWmXOqlIqs8ECIKhzE4yNQwCRQKcMn5BPjhY/iXkwd19QdvkwGA6zVZVVoEsbRp3PcRNNnuvml+snrZ6kZf5u7nstNcpu+XUE0U+a50a9H2err30tLLcn+5A/4iLS1AI/S/oRAEpFQyrdQzRtxxMvcVSYbeqDkN0jsKdCvCeIhxiIh+cIgzPR6rZ7QLIE8L9KwzIuJqEaQk03h7wsksAs8tPU8s0TAe3+dW8UDfcdiYun2AlW5EiTlhT1CVLzrNyCFfpD19qM4VepaDBmA7pOZM6VWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1z0fPG4ODXUuRK5B2usOH1yIwOkSIaN900JZfbTFX8M=;
- b=TxyFnGLDXzTYjWWfrUaT3ci7jG+HGzobMbgO3gzGXVpZnCGz6pSP7HIWr9J3MTyqyKD74HiyLiq1bsy/tV5kK1hovABnJWxJSFYXyyPP5e+7KTT1XFPTFMsPoW85p96rIs9n8rPs1fLtkJkK7XAZRbyYBzJ/JMt1e2liR6Gl+eD2bosbLNOYTAo18MEeIsBvuu7eFBxANkJ51kaxo+32l/lJ3FSXDO78US1HOaf/r6XzUDWlIZI2SWo1gW+HbKP3GbmulflyANgAYCUFjUKzRzt+TY7Q5/X8FbWhqSf4mkKBqHw8vHgBDUcrtT8/gYlhaLyAtP74qKkM+V8gHTsUlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wdc.com;dmarc=pass action=none header.from=wdc.com;dkim=pass
- header.d=wdc.com;arc=none
+        id S1727452AbfGVGTD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Jul 2019 02:19:03 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:33012 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726139AbfGVGTD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 02:19:03 -0400
+Received: by mail-pf1-f194.google.com with SMTP id g2so16870759pfq.0;
+        Sun, 21 Jul 2019 23:19:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1z0fPG4ODXUuRK5B2usOH1yIwOkSIaN900JZfbTFX8M=;
- b=s81HSn6NWlLlQ+eed9EckkJnhkcJJva1y/yCAIyexF5qQ+whNByqn2+PptToZOM4/lTe+6xM53qTVgDttSK5eLAIe1Ib2v4QC29N6tODFaJLNo/5pqOLR9uYKoZs92vSZ3fyXOkBV9PSqW36PMMXC+YHKaQk+YornMr9t8A28AM=
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com (52.135.114.82) by
- SN6PR04MB5200.namprd04.prod.outlook.com (20.178.6.144) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2094.16; Mon, 22 Jul 2019 06:10:25 +0000
-Received: from SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::a102:1701:9c05:96b3]) by SN6PR04MB4925.namprd04.prod.outlook.com
- ([fe80::a102:1701:9c05:96b3%5]) with mapi id 15.20.2094.011; Mon, 22 Jul 2019
- 06:10:25 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Stanley Chu <stanley.chu@mediatek.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
-CC:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "evgreen@chromium.org" <evgreen@chromium.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>
-Subject: RE: [PATCH v1 0/2] scsi: ufs: Fix broken hba->outstanding_tasks
-Thread-Topic: [PATCH v1 0/2] scsi: ufs: Fix broken hba->outstanding_tasks
-Thread-Index: AQHVOGx9NdHB1Jz3wEWNwY1jARxa+abVESuAgAADy1CAAR6tgA==
-Date:   Mon, 22 Jul 2019 06:10:25 +0000
-Message-ID: <SN6PR04MB49256F66F259185F3876CCABFCC40@SN6PR04MB4925.namprd04.prod.outlook.com>
-References: <1562906656-27154-1-git-send-email-stanley.chu@mediatek.com>
- <SN6PR04MB4925208835D4760249E82DB7FCC50@SN6PR04MB4925.namprd04.prod.outlook.com> 
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4230b482-7ea0-4486-2546-08d70e6b49db
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:SN6PR04MB5200;
-x-ms-traffictypediagnostic: SN6PR04MB5200:
-x-microsoft-antispam-prvs: <SN6PR04MB5200518FA375111CD6C9B3D4FCC40@SN6PR04MB5200.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 01068D0A20
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(366004)(39860400002)(346002)(396003)(136003)(189003)(199004)(66066001)(64756008)(66946007)(66446008)(66476007)(66556008)(81166006)(81156014)(2201001)(76116006)(8936002)(25786009)(256004)(4326008)(7416002)(86362001)(478600001)(99286004)(14454004)(110136005)(54906003)(316002)(486006)(76176011)(476003)(26005)(5660300002)(6246003)(305945005)(7696005)(2906002)(6436002)(74316002)(229853002)(53936002)(6506007)(102836004)(52536014)(33656002)(186003)(71190400001)(71200400001)(2501003)(8676002)(9686003)(3846002)(55016002)(7736002)(6116002)(446003)(68736007);DIR:OUT;SFP:1102;SCL:1;SRVR:SN6PR04MB5200;H:SN6PR04MB4925.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: UN4gjd8vM8Y28stlW6bY/iJhHEO1YnhfYZbcaIJ8ojZmIFtM6II9CQERWsndLVBpMCww4ABXCEGYiga06eWOte2A1SoEXdKyvBdEydflCOyXu+S1vPDEyPEKQBRqucdPfrinBQmlHdDgN206+hNpXJSr1IB/km/TDhvI9Fo8z+GpNG65oixgkz+qEhSq3PS1W66b5+k8qkE0zhkT7ic35VETBX5/41aq9cz1ezf71OPiN4FiZQhGkGCGuqvLKwZklSvi+PJc9iqXXO4qqzUfK8BfdHliIztX/KaZWu3BQYQ7QIh70spqEDXif6YufyRmO3DkDhxQfPT/pYw7QvOpr9278IxfIVuTSnI3rx4EcZ4/TFimyHbHL2hRkl7UWFEutzs/h3+NCoGVGVQj+Y6bvXQ5Q8NFl990x+LsI875SYM=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rcdqlzHUQt7XBsK1hTFYKy/3r6Ehn237+Py48+xDn+I=;
+        b=j5Xnzq3f2Sv24VBWIqb1nn/Sc9eyDIWM0HZ3nuy+bUfm36rdxT1lnP5LJB2ozG+DLs
+         7UotDiVN2x4jODQLOoELRAhyqtYFnG563mF9bxZTGL+rtcoU0iKsuZorAfF7zHQQa/ZO
+         K+KdDHy+J1vA9/7eKqGT3+5gppO13c6sMJSfCDGDw83TTVYsrz+kbjF9kDR0wO26r/bB
+         an76d0akQuVgbBDWgxBeuvHEHcm4fLKcnDYWTVv/AJoGuqLmI8HlYLNpxOV9Lp7WuRj+
+         xEwxHhIbKySoh/3JUhSwqEECUxWUcOcoasL6i+dRxgw1Af3Nrt4Ny9fSLEjOTf+Mfupk
+         tf4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rcdqlzHUQt7XBsK1hTFYKy/3r6Ehn237+Py48+xDn+I=;
+        b=s5UpuqpFRxepfcTsYifP9PaPNfPpxHUOm23sbhMl2oPq64wDMweAv7XJH7SvZgkFLq
+         mr+3cfZ0DGzxUlU+Ti9BYbIvM1bIeM2BRmXEegJoaYnynZvNKLOm5omNOXvlCdMuTkb6
+         um6j4mx3Ps9hVQf4iYekmpRpdxA6WMw3pKos6pPOqHPpaGNhtEd1oLUv77auGUVwGTJB
+         EiNQ6t3MMXfQuFgGWBVHO9D8VhEWX4E+Jmc2zy4Xs21NG2I/wP9gXSs4aVzG3A2fl+zt
+         ponXXRpdTzK9pCZC0TESk+GlEBFq/Bfkn70eW26Ho430hyMyKM6sOFwA7Ot03bSrCRiv
+         H4ew==
+X-Gm-Message-State: APjAAAUWtQFMCAkpXAMyKJ6lUMP9a5IwirgbYP9SQKzdU/AOrK/+CJgS
+        mW5Vmpr3oCYrgiRrUUXXDNZ3XFMoIJPxC9bm15E=
+X-Google-Smtp-Source: APXvYqxz0Mn39ZLSrxozs58dILvVZm5lnQS4eXXcOSHdIi++AV8TVlWDaPY0Q2A8MQQK9hYQ1SNmdIOoNH6ZGUntmHU=
+X-Received: by 2002:a17:90a:9bca:: with SMTP id b10mr75184813pjw.90.1563776342120;
+ Sun, 21 Jul 2019 23:19:02 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4230b482-7ea0-4486-2546-08d70e6b49db
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jul 2019 06:10:25.7923
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB5200
+References: <20190617122000.22181-1-hch@lst.de> <20190617122000.22181-3-hch@lst.de>
+ <5d143a03-edd5-5878-780b-45d87313a813@acm.org> <CACVXFVMWM3xg6EEyoyNjkLPv=8+wQKiHj6erMS_gGX25f-Ot4g@mail.gmail.com>
+In-Reply-To: <CACVXFVMWM3xg6EEyoyNjkLPv=8+wQKiHj6erMS_gGX25f-Ot4g@mail.gmail.com>
+From:   Dexuan-Linux Cui <dexuan.linux@gmail.com>
+Date:   Sun, 21 Jul 2019 23:18:51 -0700
+Message-ID: <CAA42JLY4zWnCEMXbR+NNbixjOyKfnMqQ0ujJdP5_gus_tu88Jw@mail.gmail.com>
+Subject: Re: [PATCH 2/8] scsi: take the DMA max mapping size into account
+To:     Ming Lei <tom.leiming@gmail.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        megaraidlinux.pdl@broadcom.com, MPT-FusionLinux.pdl@broadcom.com,
+        linux-hyperv@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>, v-lide@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-PiANCj4gPg0KPiA+IEhpLA0KPiA+DQo+ID4gPg0KPiA+ID4gQ3VycmVudGx5IGJpdHMgaW4gaGJh
-LT5vdXRzdGFuZGluZ190YXNrcyBhcmUgY2xlYXJlZCBvbmx5IGFmdGVyIHRoZWlyDQo+ID4gPiBj
-b3JyZXNwb25kaW5nIHRhc2sgbWFuYWdlbWVudCBjb21tYW5kcyBhcmUgc3VjY2Vzc2Z1bGx5IGRv
-bmUgYnkNCj4gPiA+IF9fdWZzaGNkX2lzc3VlX3RtX2NtZCgpLg0KPiA+ID4NCj4gPiA+IElmIHRp
-bWVvdXQgaGFwcGVucyBpbiBhIHRhc2sgbWFuYWdlbWVudCBjb21tYW5kLCBpdHMgY29ycmVzcG9u
-ZGluZw0KPiA+ID4gYml0IGluIGhiYS0+b3V0c3RhbmRpbmdfdGFza3Mgd2lsbCBub3QgYmUgY2xl
-YXJlZCB1bnRpbCBuZXh0IHRhc2sNCj4gPiA+IG1hbmFnZW1lbnQgY29tbWFuZCB3aXRoIHRoZSBz
-YW1lIHRhZyB1c2VkIHN1Y2Nlc3NmdWxseSBmaW5pc2hlcy7igKcNCj4gPiB1ZnNoY2RfY2xlYXJf
-dG1fY21kIGlzIGFsc28gY2FsbGVkIGFzIHBhcnQgb2YgdWZzaGNkX2Vycl9oYW5kbGVyLg0KPiA+
-IERvZXMgdGhpcyBjaGFuZ2Ugc29tZXRoaW5nIGluIHlvdXIgYXNzdW1wdGlvbnM/DQo+IEFuZCBC
-VFcgdGhlcmUgaXMgYSBzcGVjaWZpYyBfX2NsZWFyX2JpdCBpbiBfX3Vmc2hjZF9pc3N1ZV90bV9j
-bWQoKSBpbiBjYXNlDQo+IG9mIGEgVE8uDQoNCkdhdmUgaXQgYW5vdGhlciBsb29rIC0gDQpJZiBp
-bmRlZWQgdGhpcyBiaXQgaXNuJ3QgY2xlYXJlZCBhcyBwYXJ0IG9mIHRoZSBlcnJvciBmbG93IHRo
-YXQgdGhlIHRpbWVvdXQgdHJpZ2dlcnMsDQpJIHRoaW5rIHlvdSBzaG91bGQgcmVsYXRlIHRvIHVm
-c2hjZF9jbGVhcl90bV9jbWQgc3BlY2lmaWNhbGx5IGluIHlvdXIgY29tbWl0IGxvZyAtIA0KQmVj
-YXVzZSB0aGlzIGlzIHRoZSBvYnZpb3VzIHBsYWNlIHdoZXJlIHRoZSBiaXQgY2xlYW51cCBzaG91
-bGQgdGFrZSBwbGFjZS4NCg0KQWxzbyB0aGUgZml4IHNob3VsZCBiZSBtdWNoIG1vcmUgaW50dWl0
-aXZlIElNTyAtIA0KVG9kYXkgd2UgZG8gX19jbGVhcl9iaXQoKSBvbiBzdWNjZXNzLCB1ZnNoY2Rf
-Y2xlYXJfdG1fY21kKCkgb24gZXJyb3IsDQpBbmQgYWxzbyB1ZnNoY2RfcHV0X3RtX3Nsb3QoKSBl
-aXRoZXIgd2F5Pw0KDQpNYXliZSB5b3UgY2FuIGNob29zZSBhIHNpbmdsZSBwbGFjZSB0byBjbGVh
-ciBpdCwgd2l0aG91dCBhbnkgYWRkaXRpb25hbCBjb2RlPw0KDQpUaGFua3MsDQpBdnJpDQo=
+On Sun, Jul 21, 2019 at 11:01 PM Ming Lei <tom.leiming@gmail.com> wrote:
+>
+> On Tue, Jun 18, 2019 at 4:57 AM Bart Van Assche <bvanassche@acm.org> wrote:
+> >
+> > On 6/17/19 5:19 AM, Christoph Hellwig wrote:
+> > > We need to limit the devices max_sectors to what the DMA mapping
+> > > implementation can support.  If not we risk running out of swiotlb
+> > > buffers easily.
+> > >
+> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > > ---
+> > >   drivers/scsi/scsi_lib.c | 2 ++
+> > >   1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> > > index d333bb6b1c59..f233bfd84cd7 100644
+> > > --- a/drivers/scsi/scsi_lib.c
+> > > +++ b/drivers/scsi/scsi_lib.c
+> > > @@ -1768,6 +1768,8 @@ void __scsi_init_queue(struct Scsi_Host *shost, struct request_queue *q)
+> > >               blk_queue_max_integrity_segments(q, shost->sg_prot_tablesize);
+> > >       }
+> > >
+> > > +     shost->max_sectors = min_t(unsigned int, shost->max_sectors,
+> > > +                     dma_max_mapping_size(dev) << SECTOR_SHIFT);
+> > >       blk_queue_max_hw_sectors(q, shost->max_sectors);
+> > >       if (shost->unchecked_isa_dma)
+> > >               blk_queue_bounce_limit(q, BLK_BOUNCE_ISA);
+> >
+> > Does dma_max_mapping_size() return a value in bytes? Is
+> > shost->max_sectors a number of sectors? If so, are you sure that "<<
+> > SECTOR_SHIFT" is the proper conversion? Shouldn't that be ">>
+> > SECTOR_SHIFT" instead?
+>
+> Now the patch has been committed, '<< SECTOR_SHIFT' needs to be fixed.
+>
+> Also the following kernel oops is triggered on qemu, and looks
+> device->dma_mask is NULL.
+>
+> Ming Lei
+
+FYI: we also see the panic with a Linux kernel 5.2.0-next-20190719
+running on Hyper-V:
+
+[    7.429053] RIP: 0010:dma_direct_max_mapping_size+0x26/0x80
+[    7.429053] Code: 0f b6 c0 c3 0f 1f 44 00 00 55 48 89 e5 41 54 53
+48 89 fb e8 4c 14 00 00 84 c0 74 45 48 8b 83 28 02 00 00 4c 8b a3 38
+02 00 00 <48> 8b 00 48 85 c0 74 0c 4d 85 e4 74 36 49 39 c4 4c 0f 47 e0
+48 89
+[    7.429053] RSP: 0018:ffffc1d5005efbc0 EFLAGS: 00010202
+[    7.429053] RAX: 0000000000000000 RBX: ffff9cf86d24c428 RCX: 0000000000000000
+[    7.429053] RDX: ffff9cf86d12dd00 RSI: 0000000000000200 RDI: ffff9cf86d24c428
+[    7.429053] RBP: ffffc1d5005efbd0 R08: ffff9cf86fcaf0e0 R09: ffff9cf86e0072c0
+[    7.429053] R10: ffffc1d5005efa70 R11: 00000000000301a0 R12: 0000000000000000
+[    7.429053] R13: ffff9cf86d24c428 R14: 0000000000000400 R15: ffff9cf825cff000
+[    7.429053] FS:  0000000000000000(0000) GS:ffff9cf86fc80000(0000)
+knlGS:0000000000000000
+[    7.429053] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    7.429053] CR2: 0000000000000000 CR3: 00000003c700a001 CR4: 00000000003606e0
+[    7.456569] NET: Registered protocol family 17
+[    7.429053] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[    7.469803] Key type dns_resolver registered
+[    7.429053] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[    7.429053] Call Trace:
+[    7.429053]  dma_max_mapping_size+0x39/0x50
+[    7.429053]  __scsi_init_queue+0x7f/0x140
+[    7.429053]  scsi_mq_alloc_queue+0x38/0x60
+[    7.429053]  scsi_alloc_sdev+0x1da/0x2b0
+[    7.429053]  scsi_probe_and_add_lun+0x471/0xe60
+[    7.429053]  __scsi_scan_target+0xfc/0x610
+[    7.429053]  scsi_scan_channel+0x66/0xa0
+[    7.429053]  scsi_scan_host_selected+0xf3/0x160
+[    7.429053]  do_scsi_scan_host+0x93/0xa0
+[    7.429053]  do_scan_async+0x1c/0x190
+[    7.429053]  async_run_entry_fn+0x3c/0x150
+[    7.429053]  process_one_work+0x1f7/0x3f0
+[    7.429053]  worker_thread+0x34/0x400
+[    7.429053]  kthread+0x121/0x140
+[    7.429053]  ret_from_fork+0x35/0x40
+[    7.429053] Modules linked in:
+[    7.429053] CR2: 0000000000000000
+[    7.766122] BUG: kernel NULL pointer dereference, address: 0000000000000000
+
+Thanks,
+-- Dexuan
