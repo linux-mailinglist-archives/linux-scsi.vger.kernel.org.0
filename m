@@ -2,174 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF9A702E1
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 17:00:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 214137037A
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 17:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726819AbfGVPAD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Jul 2019 11:00:03 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:40807 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725899AbfGVPAD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 11:00:03 -0400
-Received: by mail-pl1-f193.google.com with SMTP id a93so19279671pla.7;
-        Mon, 22 Jul 2019 08:00:03 -0700 (PDT)
+        id S1727729AbfGVPSx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Jul 2019 11:18:53 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:34297 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727036AbfGVPSx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 11:18:53 -0400
+Received: by mail-qk1-f196.google.com with SMTP id t8so28889570qkt.1
+        for <linux-scsi@vger.kernel.org>; Mon, 22 Jul 2019 08:18:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=H/mgA5Q6Tay1+ixdoqgmaZ9E59OoWK8q1G0jb5mfWTU=;
-        b=T/wva0ycJqMHPLQKhAXy5V2lfzKN76yWpvWsrPHtca0NDIyzmovmqZgvwVqF14v2L8
-         fBrD47foZqJBwmOlF5kvBbL5MtnGVvtp6/bOZvyElrrjnl63poUJtgV/ycVD0VAkKCe0
-         IJWuezmPWL2Onh1qDU+eD3K5ATWu2YrINCgSIrdoGFLXUa5IyTfvzNGUJAblJbCNi3p5
-         8fPvWMfBE8yA5Y1Gts097/nIort/T/1wP1L1J4wFIhOKveGGWVIYyN8/YbCTc6HmCYI5
-         r7xdAi1ReLdIIJwpHR+9VK//9e7Uz4d7vSNv9p/9skFEMIpNHEgnPE1wGq4kbPK2N+3H
-         Pqlw==
+        d=gpiccoli-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JmSc9WFYzR3PHi025ZIgVCOWEAkk9unY2S5ILJ0IpK4=;
+        b=PzH5wNnYnxuvcsZi/2rEASC0MXxkNHoL5L1TbvOxMl2Z6GfPgS1izZJzVufUdM9J19
+         WMej1ZfszLUkyFhJX+XLEr8zE5cwfnnwl/s0OHBzy2IBAyKGcPoJy/tP9YA7/R+IikF8
+         aPz/x1QE/pFbRciN2xWu3nHFhxfCWVLgSLnQd7pPwvPacK8xW4yd2+VrfvkSXXEDB5cb
+         aKZmcknbH/JEhNXwb1SbDCv69r1Thqg+qlBnvSIDNO5c9XELTBr5nvl+uMONz85y0JmS
+         aGtssuSjiGjBx/XEv1whDpjIii/fY1XUSA/wyQrb/JdWAw7I6pllHZMoIeJ+wW40LeU1
+         7aag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=H/mgA5Q6Tay1+ixdoqgmaZ9E59OoWK8q1G0jb5mfWTU=;
-        b=qk9NDY1hPvmnCl8i9A0F9d2RFvKbdlcFeA4u9M8vuU8PMSwhvQkg25xHCNDWCggQcs
-         Af//vCouwZJaVuAP3WvlLMVVpm/ayRbNU7jOaz+XMEskCKAvNKZxQ9NNXd8Q8HX0n9EN
-         oi2pQZmKYxmvwFbf8SNL9Xh99iXv15f0IfEGvvd1iHeTs1e/lYx0tZHcm+QfEekK5HbN
-         bPyeeY+eT081Y7tjDRW7Qr7U0O5+imXEuZgKRiaUNTAQbsJ5n0ICM3ne6koy340LBEl9
-         nENBOCwaqCPHB9gSpW/4xLkAIqASyfUIJW7G1q5gtVOBk/lm5ZRT7do56hPbsQm0m9KZ
-         3Ndw==
-X-Gm-Message-State: APjAAAV2WpQwxynm//oihyc7koHoml4T3btjtw/ju+CXI6JKqaYhzsN9
-        08Kc4x45b5JbZMSqC5cYi6Jpi8wV
-X-Google-Smtp-Source: APXvYqxgJ+C74y1G4cEu9kZN1sEr0LOAv6Ih4XmhsV8n8HLqX2VM3eQps23ZbUAPOuHVbaq3um9WrQ==
-X-Received: by 2002:a17:902:8ec3:: with SMTP id x3mr74560918plo.313.1563807602716;
-        Mon, 22 Jul 2019 08:00:02 -0700 (PDT)
-Received: from mita-MS-7A45.lan (KD027092233113.ppp-bb.dion.ne.jp. [27.92.233.113])
-        by smtp.gmail.com with ESMTPSA id a16sm42533174pfd.68.2019.07.22.07.59.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 22 Jul 2019 08:00:02 -0700 (PDT)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-block@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH v2 3/3] scsi: sd: stop polling disk stats by ledtrig-blk during runtime suspend
-Date:   Mon, 22 Jul 2019 23:59:12 +0900
-Message-Id: <1563807552-23498-4-git-send-email-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1563807552-23498-1-git-send-email-akinobu.mita@gmail.com>
-References: <1563807552-23498-1-git-send-email-akinobu.mita@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JmSc9WFYzR3PHi025ZIgVCOWEAkk9unY2S5ILJ0IpK4=;
+        b=PkJ5NKNcBDivWMcoLCQLqxT5Ofh4cGQH2s1+CVUHJInA0qWiuNx9JF3ddtZMwLCVmR
+         w/hHYt5Y8f5+NRLrIDsspsAQVkgHnUK8Wsf4vdyU174JnsBLtx1+XIuU1FCFDd6MxDGj
+         5r6pMp5bJmM1m3d2dAPVgsZwZ7viIqlk8Zg3j27G8uiF1XTBBzGGW4n/dOmPBtth+eaD
+         ukv5b/6dWOJ0pj+U73bNPcLDv/Xx/YzE1W5FAZcdGF2Ul8LUKn7grJv4JWjMJPSgmxfV
+         OZklSdDyfnxvFuCkZoGB4GPDqLVxPRg8MzyTs+jZdWBmyFfN9Ldt/JH699KKK8Z8ysXj
+         W+Vw==
+X-Gm-Message-State: APjAAAWLZhIIXYVohtRIEN+z2gP57TqNnli19N2FX1drFSHOf1tvnP4c
+        w84Xk6AEsc3zczQzs9yBonMtzJqx7X896UzL8/8=
+X-Google-Smtp-Source: APXvYqy7Z5uxbr/Zjzdm8AwwtNEXlP36Y73Wn0Oz8TA4Z7/DVbyOAJLWmvuqwWCwc3DA7IJoO6hgpCIlAoFS+5BYOBE=
+X-Received: by 2002:a05:620a:247:: with SMTP id q7mr49835114qkn.265.1563808732696;
+ Mon, 22 Jul 2019 08:18:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190722092038.17659-1-hch@lst.de>
+In-Reply-To: <20190722092038.17659-1-hch@lst.de>
+From:   "Guilherme G. Piccoli" <kernel@gpiccoli.net>
+Date:   Mon, 22 Jul 2019 12:18:16 -0300
+Message-ID: <CALJn8nNbj1zu0HyvLiLe-6oC6D5vb1tzT41otL52rZ+MaF9QvQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: fix the dma_max_mapping_size call
+To:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, Bart Van Assche <bvanassche@acm.org>,
+        tom.leiming@gmail.com, dexuan.linux@gmail.com,
+        Damien.LeMoal@wdc.com,
+        "Guilherme G. Piccoli" <gpiccoli@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The LED block device activity trigger periodically polls the disk stats
-to collect the activity.  However, it is pointless to poll while the
-scsi device is in runtime suspend.
+Hi Christoph, thanks for the fix. I just faced a crash[0] booting
+v5.3-rc1 in a KVM guest, and your patch fixed it.
+Feel free to add:
 
-This stops polling disk stats when the device is successfully runtime
-suspended, and restarts polling when the device is successfully runtime
-resumed.
+Tested-by: Guilherme G. Piccoli <gpiccoli@canonical.com>
 
-Cc: Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>
-Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Dan Murphy <dmurphy@ti.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
----
- drivers/scsi/sd.c | 40 +++++++++++++++++++++++-----------------
- 1 file changed, 23 insertions(+), 17 deletions(-)
+Cheers,
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 149d406..5f73142 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3538,7 +3538,7 @@ static int sd_suspend_common(struct device *dev, bool ignore_stop_errors)
- {
- 	struct scsi_disk *sdkp = dev_get_drvdata(dev);
- 	struct scsi_sense_hdr sshdr;
--	int ret = 0;
-+	int ret;
- 
- 	if (!sdkp)	/* E.g.: runtime suspend following sd_remove() */
- 		return 0;
-@@ -3550,18 +3550,16 @@ static int sd_suspend_common(struct device *dev, bool ignore_stop_errors)
- 		if (ret) {
- 			/* ignore OFFLINE device */
- 			if (ret == -ENODEV)
--				return 0;
--
--			if (!scsi_sense_valid(&sshdr) ||
--			    sshdr.sense_key != ILLEGAL_REQUEST)
--				return ret;
-+				goto success;
- 
- 			/*
- 			 * sshdr.sense_key == ILLEGAL_REQUEST means this drive
- 			 * doesn't support sync. There's not much to do and
- 			 * suspend shouldn't fail.
- 			 */
--			ret = 0;
-+			if (!scsi_sense_valid(&sshdr) ||
-+			    sshdr.sense_key != ILLEGAL_REQUEST)
-+				return ret;
- 		}
- 	}
- 
-@@ -3569,11 +3567,14 @@ static int sd_suspend_common(struct device *dev, bool ignore_stop_errors)
- 		sd_printk(KERN_NOTICE, sdkp, "Stopping disk\n");
- 		/* an error is not worth aborting a system sleep */
- 		ret = sd_start_stop_device(sdkp, 0);
--		if (ignore_stop_errors)
--			ret = 0;
-+		if (ret && !ignore_stop_errors)
-+			return ret;
- 	}
- 
--	return ret;
-+success:
-+	ledtrig_blk_disable(sdkp->disk);
-+
-+	return 0;
- }
- 
- static int sd_suspend_system(struct device *dev)
-@@ -3589,19 +3590,24 @@ static int sd_suspend_runtime(struct device *dev)
- static int sd_resume(struct device *dev)
- {
- 	struct scsi_disk *sdkp = dev_get_drvdata(dev);
--	int ret;
- 
- 	if (!sdkp)	/* E.g.: runtime resume at the start of sd_probe() */
- 		return 0;
- 
--	if (!sdkp->device->manage_start_stop)
--		return 0;
-+	if (sdkp->device->manage_start_stop) {
-+		int ret;
-+
-+		sd_printk(KERN_NOTICE, sdkp, "Starting disk\n");
-+		ret = sd_start_stop_device(sdkp, 1);
-+		if (ret)
-+			return ret;
- 
--	sd_printk(KERN_NOTICE, sdkp, "Starting disk\n");
--	ret = sd_start_stop_device(sdkp, 1);
--	if (!ret)
- 		opal_unlock_from_suspend(sdkp->opal_dev);
--	return ret;
-+	}
-+
-+	ledtrig_blk_enable(sdkp->disk);
-+
-+	return 0;
- }
- 
- /**
--- 
-2.7.4
 
+Guilherme
+
+[0]
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 0 P4D 0
+Oops: 0000 [#1] SMP PTI
+Workqueue: events_unbound async_run_entry_fn
+RIP: 0010:dma_direct_max_mapping_size+0x26/0x80
+RSP: 0018:ffffa316c0843bc0 EFLAGS: 00010202
+RAX: 0000000000000000 RBX: ffff8d98a88eb810 RCX: 0000000000000000
+RDX: ffff8d98a86cab80 RSI: 000000000000007e RDI: ffff8d98a88eb810
+RBP: ffffa316c0843bd0 R08: ffff8d98af9b00e0 R09: ffff8d98ad8072c0
+R10: ffffa316c0843a70 R11: 00000000000311a0 R12: 0000000000000000
+R13: ffff8d98a88eb810 R14: 000000000000ffff R15: ffff8d98a3dbd000
+FS:  0000000000000000(0000) GS:ffff8d98af980000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 0000000429d08000 CR4: 00000000000006e0
+Call Trace:
+ dma_max_mapping_size+0x39/0x50
+ __scsi_init_queue+0x7f/0x140
+ scsi_mq_alloc_queue+0x38/0x60
+ scsi_alloc_sdev+0x1da/0x2b0
+ scsi_probe_and_add_lun+0x471/0xe60
+ ? __pm_runtime_resume+0x5b/0x80
+ __scsi_scan_target+0xfc/0x610
+ ? __switch_to_asm+0x40/0x70
+ ? __switch_to_asm+0x34/0x70
+ ? __switch_to_asm+0x40/0x70
+ scsi_scan_channel+0x66/0xa0
+ scsi_scan_host_selected+0xf3/0x160
+ do_scsi_scan_host+0x93/0xa0
+ do_scan_async+0x1c/0x190
+[...]
