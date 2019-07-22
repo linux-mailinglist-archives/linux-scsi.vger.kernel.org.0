@@ -2,103 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 214137037A
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 17:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87E7A70404
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 17:40:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbfGVPSx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Jul 2019 11:18:53 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:34297 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727036AbfGVPSx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 11:18:53 -0400
-Received: by mail-qk1-f196.google.com with SMTP id t8so28889570qkt.1
-        for <linux-scsi@vger.kernel.org>; Mon, 22 Jul 2019 08:18:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gpiccoli-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JmSc9WFYzR3PHi025ZIgVCOWEAkk9unY2S5ILJ0IpK4=;
-        b=PzH5wNnYnxuvcsZi/2rEASC0MXxkNHoL5L1TbvOxMl2Z6GfPgS1izZJzVufUdM9J19
-         WMej1ZfszLUkyFhJX+XLEr8zE5cwfnnwl/s0OHBzy2IBAyKGcPoJy/tP9YA7/R+IikF8
-         aPz/x1QE/pFbRciN2xWu3nHFhxfCWVLgSLnQd7pPwvPacK8xW4yd2+VrfvkSXXEDB5cb
-         aKZmcknbH/JEhNXwb1SbDCv69r1Thqg+qlBnvSIDNO5c9XELTBr5nvl+uMONz85y0JmS
-         aGtssuSjiGjBx/XEv1whDpjIii/fY1XUSA/wyQrb/JdWAw7I6pllHZMoIeJ+wW40LeU1
-         7aag==
+        id S1728575AbfGVPk1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Jul 2019 11:40:27 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:43727 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726944AbfGVPk1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 11:40:27 -0400
+Received: by mail-pf1-f193.google.com with SMTP id i189so17558831pfg.10;
+        Mon, 22 Jul 2019 08:40:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JmSc9WFYzR3PHi025ZIgVCOWEAkk9unY2S5ILJ0IpK4=;
-        b=PkJ5NKNcBDivWMcoLCQLqxT5Ofh4cGQH2s1+CVUHJInA0qWiuNx9JF3ddtZMwLCVmR
-         w/hHYt5Y8f5+NRLrIDsspsAQVkgHnUK8Wsf4vdyU174JnsBLtx1+XIuU1FCFDd6MxDGj
-         5r6pMp5bJmM1m3d2dAPVgsZwZ7viIqlk8Zg3j27G8uiF1XTBBzGGW4n/dOmPBtth+eaD
-         ukv5b/6dWOJ0pj+U73bNPcLDv/Xx/YzE1W5FAZcdGF2Ul8LUKn7grJv4JWjMJPSgmxfV
-         OZklSdDyfnxvFuCkZoGB4GPDqLVxPRg8MzyTs+jZdWBmyFfN9Ldt/JH699KKK8Z8ysXj
-         W+Vw==
-X-Gm-Message-State: APjAAAWLZhIIXYVohtRIEN+z2gP57TqNnli19N2FX1drFSHOf1tvnP4c
-        w84Xk6AEsc3zczQzs9yBonMtzJqx7X896UzL8/8=
-X-Google-Smtp-Source: APXvYqy7Z5uxbr/Zjzdm8AwwtNEXlP36Y73Wn0Oz8TA4Z7/DVbyOAJLWmvuqwWCwc3DA7IJoO6hgpCIlAoFS+5BYOBE=
-X-Received: by 2002:a05:620a:247:: with SMTP id q7mr49835114qkn.265.1563808732696;
- Mon, 22 Jul 2019 08:18:52 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=9VDIEaBQFbumPn4Bce8zgt7MQLL9xp5pDaU4ejJmVDg=;
+        b=HbXbSf2siFI7RoYBcjwG5qMJdJ8iaUBVB23bvupFZQD/G4zq+YDi7IvYLEjXqTJzWA
+         SqJDhlEyGEfri/a8yfalssNSK8+VHjQgXp3mgrM/sHd4P0PFfJz1mDgSTdp4mHWS1jyW
+         JgZJm8n4FMol+6nIvasgb5WI+RgJs5cgs6nygik1s+zGAEZi3/ju8mew6R7WXMl275zW
+         pP+b9VawFvXi9gQkWuE/PsGmjiTwRIutqm1a9QwpJ2OMT6ZuRR2QipLflTTf2gRSHZFb
+         6Rshd+tYuexauHmtQ92bThJ7/PDEnr3Mmp8lctyNu2LiVdUSGqxlYAX2n1nb3g5nAhw1
+         Ro7A==
+X-Gm-Message-State: APjAAAVRNJV3+AFnCzkY84Jhko3E5vHKY1yjwdOCPSljBpCOrXVPw0Wq
+        nNK6rD5Xr2iBHs1A1XXQUjM73GRG
+X-Google-Smtp-Source: APXvYqzPGeYPDGcgeAkgH93yM2lKMQlRZowrweQeb+g1Y8vjkzbLJ9ZNl2ah7SODOkL9aCxA75AdGg==
+X-Received: by 2002:a17:90a:b312:: with SMTP id d18mr75654365pjr.35.1563810025966;
+        Mon, 22 Jul 2019 08:40:25 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id 85sm41323334pfv.130.2019.07.22.08.40.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jul 2019 08:40:24 -0700 (PDT)
+Subject: Re: [PATCH V2 2/2] scsi: implement .cleanup_rq callback
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        stable@vger.kernel.org
+References: <20190720030637.14447-1-ming.lei@redhat.com>
+ <20190720030637.14447-3-ming.lei@redhat.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <eed624d5-0585-699c-9084-9f5f0ea09e52@acm.org>
+Date:   Mon, 22 Jul 2019 08:40:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20190722092038.17659-1-hch@lst.de>
-In-Reply-To: <20190722092038.17659-1-hch@lst.de>
-From:   "Guilherme G. Piccoli" <kernel@gpiccoli.net>
-Date:   Mon, 22 Jul 2019 12:18:16 -0300
-Message-ID: <CALJn8nNbj1zu0HyvLiLe-6oC6D5vb1tzT41otL52rZ+MaF9QvQ@mail.gmail.com>
-Subject: Re: [PATCH] scsi: fix the dma_max_mapping_size call
-To:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, Bart Van Assche <bvanassche@acm.org>,
-        tom.leiming@gmail.com, dexuan.linux@gmail.com,
-        Damien.LeMoal@wdc.com,
-        "Guilherme G. Piccoli" <gpiccoli@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190720030637.14447-3-ming.lei@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Christoph, thanks for the fix. I just faced a crash[0] booting
-v5.3-rc1 in a KVM guest, and your patch fixed it.
-Feel free to add:
+On 7/19/19 8:06 PM, Ming Lei wrote:
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index e1da8c70a266..52537c145762 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -154,12 +154,9 @@ scsi_set_blocked(struct scsi_cmnd *cmd, int reason)
+>   
+>   static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd)
+>   {
+> -	if (cmd->request->rq_flags & RQF_DONTPREP) {
+> -		cmd->request->rq_flags &= ~RQF_DONTPREP;
+> -		scsi_mq_uninit_cmd(cmd);
+> -	} else {
+> -		WARN_ON_ONCE(true);
+> -	}
+> +	WARN_ON_ONCE(!(cmd->request->rq_flags & RQF_DONTPREP));
+> +
+> +	scsi_mq_uninit_cmd(cmd);
+>   	blk_mq_requeue_request(cmd->request, true);
+>   }
 
-Tested-by: Guilherme G. Piccoli <gpiccoli@canonical.com>
+The above changes are independent of this patch series. Have you 
+considered to move these into a separate patch?
 
-Cheers,
+> +/*
+> + * Only called when the request isn't completed by SCSI, and not freed by
+> + * SCSI
+> + */
+> +static void scsi_cleanup_rq(struct request *rq)
+> +{
+> +	struct scsi_cmnd *cmd = blk_mq_rq_to_pdu(rq);
+> +
+> +	scsi_mq_uninit_cmd(cmd);
+> +}
 
+Is the comment above this function correct? The previous patch adds an 
+unconditional call to mq_ops->cleanup_rq() in blk_mq_free_request().
 
-Guilherme
+Thanks,
 
-[0]
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 0 P4D 0
-Oops: 0000 [#1] SMP PTI
-Workqueue: events_unbound async_run_entry_fn
-RIP: 0010:dma_direct_max_mapping_size+0x26/0x80
-RSP: 0018:ffffa316c0843bc0 EFLAGS: 00010202
-RAX: 0000000000000000 RBX: ffff8d98a88eb810 RCX: 0000000000000000
-RDX: ffff8d98a86cab80 RSI: 000000000000007e RDI: ffff8d98a88eb810
-RBP: ffffa316c0843bd0 R08: ffff8d98af9b00e0 R09: ffff8d98ad8072c0
-R10: ffffa316c0843a70 R11: 00000000000311a0 R12: 0000000000000000
-R13: ffff8d98a88eb810 R14: 000000000000ffff R15: ffff8d98a3dbd000
-FS:  0000000000000000(0000) GS:ffff8d98af980000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000429d08000 CR4: 00000000000006e0
-Call Trace:
- dma_max_mapping_size+0x39/0x50
- __scsi_init_queue+0x7f/0x140
- scsi_mq_alloc_queue+0x38/0x60
- scsi_alloc_sdev+0x1da/0x2b0
- scsi_probe_and_add_lun+0x471/0xe60
- ? __pm_runtime_resume+0x5b/0x80
- __scsi_scan_target+0xfc/0x610
- ? __switch_to_asm+0x40/0x70
- ? __switch_to_asm+0x34/0x70
- ? __switch_to_asm+0x40/0x70
- scsi_scan_channel+0x66/0xa0
- scsi_scan_host_selected+0xf3/0x160
- do_scsi_scan_host+0x93/0xa0
- do_scan_async+0x1c/0x190
-[...]
+Bart.
