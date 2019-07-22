@@ -2,98 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4EAF7052E
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 18:15:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD186705B9
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 18:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730547AbfGVQPW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Jul 2019 12:15:22 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:39620 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728673AbfGVQPV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 12:15:21 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6MG8q1q149978;
-        Mon, 22 Jul 2019 16:15:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2018-07-02;
- bh=sNykf3duT3KzCBKfLuPVcEcJgxJJOt5PG7Ky6LhfGBg=;
- b=XR/oQdO9LakeOCRh/4OvsUlJDwl6jZsNIYKc4VPLBaFYaWTvoqTm3xXl7zb8Zb1QLXSU
- f6qV4NRSJg3v4vk9boMV5VkY2UXszzyDpb+4sF3KATZeTooaPBtPjtyABtph6jGEyJ1l
- NSwfXX3UtacfyWaojdFPZlwcJlQL7e11HvBDvcHpFVM8bmXiQbH1j2dvI6P2RypGz6fV
- ymYxBBjsQgFldbp8SWIZWOR0zQOHSXkqhqukb9W9AmF+M3XKVbnO79ljtEkzLB2uYXo4
- Iw2YpQz+B0Ytk1yoi8k0tGUANShgQl+3n9wde7G0e77BBMWitoqepyxGj+Baoz7Hcvl5 VQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2tuukqft2w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Jul 2019 16:15:19 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6MG8Knj034407;
-        Mon, 22 Jul 2019 16:15:18 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2tut9mbtt2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 Jul 2019 16:15:18 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6MGFH9E032465;
-        Mon, 22 Jul 2019 16:15:18 GMT
-Received: from jubi-laptop.us.oracle.com (/10.11.23.49)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 22 Jul 2019 09:15:17 -0700
-From:   Junxiao Bi <junxiao.bi@oracle.com>
-To:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        martin.petersen@oracle.com, junxiao.bi@oracle.com
-Subject: [PATCH RESEND] scsi: megaraid_sas: fix panic on loading firmware crashdump
-Date:   Mon, 22 Jul 2019 09:15:24 -0700
-Message-Id: <20190722161524.23192-1-junxiao.bi@oracle.com>
-X-Mailer: git-send-email 2.17.1
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9325 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=740
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1907220180
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9325 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=786 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1907220180
+        id S1730560AbfGVQvc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Jul 2019 12:51:32 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:35452 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728752AbfGVQvb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 12:51:31 -0400
+Received: by mail-pg1-f195.google.com with SMTP id s1so11626050pgr.2;
+        Mon, 22 Jul 2019 09:51:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sx4jGeZD1NAFZD3tRCTmaYml1fVFOhGJ/2sRj2Sic6g=;
+        b=laMC66jr1i34BApU20ATF+b80NLJrA5zDeYpvIrHvBFtGcdgpPd0Qe5aJjJQHtK1BX
+         IH48OJKSvKpRS4X1pABnMSdZMHQOaxCaIGeKrKgIjBnEmQLKZYB7YgtF/aNdnQpZn9+T
+         irxA7qVgJw7SShS8FXcIWUJ7PJj+Ejr4q8aYLKn1NHxgsAQXaVSnwTZbLetMO0zPad55
+         bcJL/s2nRjqabKNd2WWOp4ddpAZTXy6ASGCYzvSgOKA1BeByCIEE0Y84jaRRO5t4pPef
+         wAvsA6bMtOTNjO/n89tLganov9F4m5E3q2tpD6LIIOcY45TTFDNYw1QirUk7TAFEjbxR
+         dNRw==
+X-Gm-Message-State: APjAAAV8O6j1bHUJeTXvAxIoSWt4JM3onAAyGIjqbREmq2SutfkgoWZQ
+        lKLsagGnrVgmoc188q2v+eX2T83i
+X-Google-Smtp-Source: APXvYqzgKB+ahambBQH5r+rB5Xfqr8ZuYUyKs+7UZ6PacGfkrBMgMtfp+VqBqVxhZA1PNYh9nmwRsw==
+X-Received: by 2002:a17:90a:3247:: with SMTP id k65mr34724555pjb.49.1563814290331;
+        Mon, 22 Jul 2019 09:51:30 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id m4sm75534750pff.108.2019.07.22.09.51.28
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 22 Jul 2019 09:51:29 -0700 (PDT)
+Subject: Re: [PATCH V2 1/2] blk-mq: add callback of .cleanup_rq
+To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        stable@vger.kernel.org
+References: <20190720030637.14447-1-ming.lei@redhat.com>
+ <20190720030637.14447-2-ming.lei@redhat.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <4ffe9dd8-9e86-fd93-828e-78c1e5931c5f@acm.org>
+Date:   Mon, 22 Jul 2019 09:51:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20190720030637.14447-2-ming.lei@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-While loading fw crashdump in function fw_crash_buffer_show(),
-left bytes in one dma chunk was not checked, if copying size
-over it, overflow access will cause kernel panic.
+On 7/19/19 8:06 PM, Ming Lei wrote:
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index b038ec680e84..fc38d95c557f 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -502,6 +502,9 @@ void blk_mq_free_request(struct request *rq)
+>   	struct blk_mq_ctx *ctx = rq->mq_ctx;
+>   	struct blk_mq_hw_ctx *hctx = rq->mq_hctx;
+>   
+> +	if (q->mq_ops->cleanup_rq)
+> +		q->mq_ops->cleanup_rq(rq);
+> +
+>   	if (rq->rq_flags & RQF_ELVPRIV) {
+>   		if (e && e->type->ops.finish_request)
+>   			e->type->ops.finish_request(rq);
 
-Signed-off-by: Junxiao Bi <junxiao.bi@oracle.com>
----
- drivers/scsi/megaraid/megaraid_sas_base.c | 3 +++
- 1 file changed, 3 insertions(+)
+I'm concerned about the performance impact of this change. How about not 
+introducing .cleanup_rq() and adding a call to
+scsi_mq_uninit_cmd() in scsi_queue_rq() just before that function 
+returns BLK_STS_RESOURCE or BLK_STS_DEV_RESOURCE?
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 80ab9700f1de..3eef0858fa8e 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3153,6 +3153,7 @@ fw_crash_buffer_show(struct device *cdev,
- 		(struct megasas_instance *) shost->hostdata;
- 	u32 size;
- 	unsigned long dmachunk = CRASH_DMA_BUF_SIZE;
-+	unsigned long chunk_left_bytes;
- 	unsigned long src_addr;
- 	unsigned long flags;
- 	u32 buff_offset;
-@@ -3176,6 +3177,8 @@ fw_crash_buffer_show(struct device *cdev,
- 	}
- 
- 	size = (instance->fw_crash_buffer_size * dmachunk) - buff_offset;
-+	chunk_left_bytes = dmachunk - (buff_offset % dmachunk);
-+	size = (size > chunk_left_bytes) ? chunk_left_bytes : size;
- 	size = (size >= PAGE_SIZE) ? (PAGE_SIZE - 1) : size;
- 
- 	src_addr = (unsigned long)instance->crash_buf[buff_offset / dmachunk] +
--- 
-2.17.1
+Thanks,
 
+Bart.
