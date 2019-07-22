@@ -2,104 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBD86FF66
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 14:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DDC702D7
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 16:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730247AbfGVMUH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Jul 2019 08:20:07 -0400
-Received: from mout.kundenserver.de ([212.227.126.187]:60043 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbfGVMUH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 08:20:07 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MlNcr-1iGa743GlZ-00lmi6; Mon, 22 Jul 2019 14:19:23 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     Ondrej Zary <linux@zary.sk>, Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH A] scsi: fdomain: fix building pcmcia front-end
-Date:   Mon, 22 Jul 2019 14:19:07 +0200
-Message-Id: <20190722121908.163702-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:pih0PRpMLRnsyASveFq762x1B4Pp+tSzefsjFfToNrgjwgXAKNi
- 7J0JAsSN/wpygNqUds8RLf3J+YqfnxxCnl1wMsfTlLrfRLmAV6wvw+NeGeUCbLZENTK3pAd
- TBMvWkkbRwlzRLiS+ORAcaSv9ArJ651p573+xUU9SuTj99o8twBENNliTH5HEh4yiiiQtKc
- 1eezaSqRPeY8mmyaR0pmQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xIV9qNDtFMI=:1LirOuy2Qf9M+mfI/A3dZP
- XxEdzME0d0KlIvg9ZtyJ8zUq/QJcQtmow7JzOhKV9yYtjmrICNZY6smc/SxbIaUigHX2d0Wm5
- iFzTxhgOdNA/OxLY1/XQJkAkubUvve/rOWb7/k7FaMZxp8kofBuAeXrgNxwst6TPz25qfxyaS
- 1D2OxsigN/pvmyiweZClMpNdlFwX4cAUhBJzHK+MwXDXk241sBzevlnvukBiB2lB9S/ADNBzf
- Ox6F5ULnJ2aQFDwfFdRwdidhJsHT2MZ5lbJe8AVsBSa5blYwxHEc6w2szrWDFSJqukx0ZD6P0
- L/xHvCxCHSZ1ulRBSOHyNjoG4qTK5NGSaCnVKjEXuGiYTEhStEuk1Wf/ZBSgb8/0/StJjchi7
- ysVUgrCpS0+lqwtsCtow2t6pBhaf/qypseF3wL2VceHpATnXTmjJtxYdoQP+kCbfmhFoiFuNl
- EqQZhp+/PjMt2hjCfgDB9w3gloJzCjs52nciNS7PrsVl/ARYiyb3LDEOZe8vfmz2NiRlQJ85E
- FDsgNJmulYfUqp6iGpdLuXC751Jj4eksA9PbRoQKwN9y8FsxkHFcR7uJYjMPQst6YGx07gjEq
- yjOxwSZS5kPg8a0+wbkLFymYFh774R/NpJlwHJpISDC4NWwOZDeLUpG595Tq2JJPpRmMXUYYe
- 26HH8uc16iTbHs1MqC58eBQn08Dpu+eKkOPMuoO5KLLzj2FIkK01sWGrsx98/CE1IsGBzV9l2
- pGzo7FqmeE8ojcDpYYCTY3br3mlOSEYD6fcD1Q==
+        id S1726784AbfGVO7c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Jul 2019 10:59:32 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44917 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725899AbfGVO7c (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 10:59:32 -0400
+Received: by mail-pf1-f194.google.com with SMTP id t16so17479987pfe.11;
+        Mon, 22 Jul 2019 07:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=CSY0GIGjxOGwbMhm3bGvidcWT9sCWPIvO8wnBMqQ0JE=;
+        b=rwjc3keFlsWaPBmJ8jLB4C3po38Ym8n1XBk8VgQd9HJCKrQLggoj2eeHBebKXJCEWw
+         +5/fTyM/6UEYMfsibbR0twX2KHz5JoDBXYNvBeSolov9t9iTajKhkkNsIm1vQQwr8jcd
+         tqa9IZgzyyRNZ6M3Kzkaub6HVd5EYu3HjDtENdnS8VDIrm51OL2Z+IYhmoHg+zpNIMPe
+         DoW0O0OrTzQPuwICT2QSIkOb7VjHUHRzoTSGO7cP+F6dTkacuH41xWkkRUmOQJoiarjA
+         PMBa1GzvEg9l9BIZjCcYtamQaNznWJHTophD77077rgCxWIiXvB2U/sKiBhN3SCfUxvF
+         z/ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=CSY0GIGjxOGwbMhm3bGvidcWT9sCWPIvO8wnBMqQ0JE=;
+        b=t+H5F1XWwGDanprDAgCKZi4W+55wOtVfTMEYPi/FBs4FGZvt1oa5L9rIaNIt79F/OT
+         vPBL6QUI3a75JVXPno1ResBbEcaUi1lh8JHnVm14CsVkaxAT/Lx8n/OibopVX/pYcFD6
+         R6u44hdugmoQ/TrgssTKhJ8jgrKe7RHn6AIskll98A5dCxcWxVAZfu7X5OurxIOFGiRU
+         oJR9GkxXg7b7vTko6vFL7Lh3Kr8i7gGJs7xwb21SvybWvD4cGttVpbsIYtmrXhjKybbu
+         OcUYO7ZP9hFv8Dbh/ZUucq+TaWHxCiMFeTZCloI1pwC+q3jWZjNas58G9mbZDzfPlpp7
+         know==
+X-Gm-Message-State: APjAAAXyh4zr1kOo6JZau6u78KjIFyz2m6pT5vQZPJEQ+8PiBBBqdEt1
+        5mmbEI4/SKsgnIvqWMazF8uACxiE
+X-Google-Smtp-Source: APXvYqwdWhKl99dnVa7COvkAeKns+UC3ecDFUj5QGoWmZsb3trQe6iycfl33UfSdS3TCLbM2sMM3ow==
+X-Received: by 2002:a17:90a:d997:: with SMTP id d23mr74094110pjv.84.1563807571097;
+        Mon, 22 Jul 2019 07:59:31 -0700 (PDT)
+Received: from mita-MS-7A45.lan (KD027092233113.ppp-bb.dion.ne.jp. [27.92.233.113])
+        by smtp.gmail.com with ESMTPSA id a16sm42533174pfd.68.2019.07.22.07.59.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 22 Jul 2019 07:59:30 -0700 (PDT)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-block@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH v2 0/3] introduce LED block device activity trigger
+Date:   Mon, 22 Jul 2019 23:59:09 +0900
+Message-Id: <1563807552-23498-1-git-send-email-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We get a warning when CONFIG_SCSI_LOWLEVEL is disabled here:
+This work is inspired by the report on linux-nvme mailing list.
 
-WARNING: unmet direct dependencies detected for SCSI_FDOMAIN
-  Depends on [n]: SCSI_LOWLEVEL [=n] && SCSI [=y]
-  Selected by [m]:
-  - PCMCIA_FDOMAIN [=m] && SCSI_LOWLEVEL_PCMCIA [=y] && SCSI [=y] && PCMCIA [=y] && m && MODULES [=y]
+disk-activity trigger not working for nvme disk:
+http://lists.infradead.org/pipermail/linux-nvme/2019-July/025253.html
 
-Move the common support outside of the SCSI_LOWLEVEL section.
-Alternatively, we could move all of SCSI_LOWLEVEL_PCMCIA into
-SCSI_LOWLEVEL. This would be more sensible, but might cause
-surprises for users that have SCSI_LOWLEVEL disabled.
+This LED block device activity trigger works with any block devices.
 
-Fixes: 7d47fa065e62 ("scsi: fdomain: Add PCMCIA support")
-Link: https://lore.kernel.org/lkml/20190617111937.2355936-1-arnd@arndb.de/t
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-One of two ways to fix the problem, please pick either
+* v2
+- Remove "move declaration of led_stop_software_blink() to linux/leds.h" patch
+- Move the trigger implementation to drivers/leds/trigger
+- s/blk_ledtrig/ledtrig_blk/
+- Add CONFIG_LEDS_TRIGGER_BLOCK
+- Fix wrong bitops usages
+- Add interface to stop and restart polling disk stats
+- Stop polling disk stats for scsi disk during runtime suspend
 
-There was some confusion about this the first time I posted
-it. As Ondrej pointed out, there is no user visible top-level
-option here, just a hidden symbol.
+Akinobu Mita (3):
+  block: introduce LED block device activity trigger
+  ledtrig-blk: add interface to stop and restart polling disk stats
+  scsi: sd: stop polling disk stats by ledtrig-blk during runtime
+    suspend
 
- drivers/scsi/Kconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ block/genhd.c                      |   2 +
+ drivers/leds/trigger/Kconfig       |   7 +
+ drivers/leds/trigger/Makefile      |   1 +
+ drivers/leds/trigger/ledtrig-blk.c | 258 +++++++++++++++++++++++++++++++++++++
+ drivers/scsi/sd.c                  |  40 +++---
+ include/linux/genhd.h              |   3 +
+ include/linux/leds.h               |  38 ++++++
+ 7 files changed, 332 insertions(+), 17 deletions(-)
+ create mode 100644 drivers/leds/trigger/ledtrig-blk.c
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 75f66f8ad3ea..dffe4b31e205 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -642,10 +642,6 @@ config SCSI_DMX3191D
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called dmx3191d.
- 
--config SCSI_FDOMAIN
--	tristate
--	depends on SCSI
--
- config SCSI_FDOMAIN_PCI
- 	tristate "Future Domain TMC-3260/AHA-2920A PCI SCSI support"
- 	depends on PCI && SCSI
-@@ -1527,6 +1523,10 @@ endif # SCSI_LOWLEVEL
- 
- source "drivers/scsi/pcmcia/Kconfig"
- 
-+config SCSI_FDOMAIN
-+	tristate
-+	depends on SCSI
-+
- source "drivers/scsi/device_handler/Kconfig"
- 
- endmenu
+Cc: Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>
+Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Dan Murphy <dmurphy@ti.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
 -- 
-2.20.0
+2.7.4
 
