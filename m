@@ -2,103 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E7A70404
-	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 17:40:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EAF7052E
+	for <lists+linux-scsi@lfdr.de>; Mon, 22 Jul 2019 18:15:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728575AbfGVPk1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 22 Jul 2019 11:40:27 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43727 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726944AbfGVPk1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 11:40:27 -0400
-Received: by mail-pf1-f193.google.com with SMTP id i189so17558831pfg.10;
-        Mon, 22 Jul 2019 08:40:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9VDIEaBQFbumPn4Bce8zgt7MQLL9xp5pDaU4ejJmVDg=;
-        b=HbXbSf2siFI7RoYBcjwG5qMJdJ8iaUBVB23bvupFZQD/G4zq+YDi7IvYLEjXqTJzWA
-         SqJDhlEyGEfri/a8yfalssNSK8+VHjQgXp3mgrM/sHd4P0PFfJz1mDgSTdp4mHWS1jyW
-         JgZJm8n4FMol+6nIvasgb5WI+RgJs5cgs6nygik1s+zGAEZi3/ju8mew6R7WXMl275zW
-         pP+b9VawFvXi9gQkWuE/PsGmjiTwRIutqm1a9QwpJ2OMT6ZuRR2QipLflTTf2gRSHZFb
-         6Rshd+tYuexauHmtQ92bThJ7/PDEnr3Mmp8lctyNu2LiVdUSGqxlYAX2n1nb3g5nAhw1
-         Ro7A==
-X-Gm-Message-State: APjAAAVRNJV3+AFnCzkY84Jhko3E5vHKY1yjwdOCPSljBpCOrXVPw0Wq
-        nNK6rD5Xr2iBHs1A1XXQUjM73GRG
-X-Google-Smtp-Source: APXvYqzPGeYPDGcgeAkgH93yM2lKMQlRZowrweQeb+g1Y8vjkzbLJ9ZNl2ah7SODOkL9aCxA75AdGg==
-X-Received: by 2002:a17:90a:b312:: with SMTP id d18mr75654365pjr.35.1563810025966;
-        Mon, 22 Jul 2019 08:40:25 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id 85sm41323334pfv.130.2019.07.22.08.40.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Jul 2019 08:40:24 -0700 (PDT)
-Subject: Re: [PATCH V2 2/2] scsi: implement .cleanup_rq callback
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        stable@vger.kernel.org
-References: <20190720030637.14447-1-ming.lei@redhat.com>
- <20190720030637.14447-3-ming.lei@redhat.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <eed624d5-0585-699c-9084-9f5f0ea09e52@acm.org>
-Date:   Mon, 22 Jul 2019 08:40:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20190720030637.14447-3-ming.lei@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1730547AbfGVQPW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 22 Jul 2019 12:15:22 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:39620 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728673AbfGVQPV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 22 Jul 2019 12:15:21 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6MG8q1q149978;
+        Mon, 22 Jul 2019 16:15:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2018-07-02;
+ bh=sNykf3duT3KzCBKfLuPVcEcJgxJJOt5PG7Ky6LhfGBg=;
+ b=XR/oQdO9LakeOCRh/4OvsUlJDwl6jZsNIYKc4VPLBaFYaWTvoqTm3xXl7zb8Zb1QLXSU
+ f6qV4NRSJg3v4vk9boMV5VkY2UXszzyDpb+4sF3KATZeTooaPBtPjtyABtph6jGEyJ1l
+ NSwfXX3UtacfyWaojdFPZlwcJlQL7e11HvBDvcHpFVM8bmXiQbH1j2dvI6P2RypGz6fV
+ ymYxBBjsQgFldbp8SWIZWOR0zQOHSXkqhqukb9W9AmF+M3XKVbnO79ljtEkzLB2uYXo4
+ Iw2YpQz+B0Ytk1yoi8k0tGUANShgQl+3n9wde7G0e77BBMWitoqepyxGj+Baoz7Hcvl5 VQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2tuukqft2w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Jul 2019 16:15:19 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6MG8Knj034407;
+        Mon, 22 Jul 2019 16:15:18 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2tut9mbtt2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Jul 2019 16:15:18 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6MGFH9E032465;
+        Mon, 22 Jul 2019 16:15:18 GMT
+Received: from jubi-laptop.us.oracle.com (/10.11.23.49)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 22 Jul 2019 09:15:17 -0700
+From:   Junxiao Bi <junxiao.bi@oracle.com>
+To:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kashyap.desai@broadcom.com,
+        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
+        martin.petersen@oracle.com, junxiao.bi@oracle.com
+Subject: [PATCH RESEND] scsi: megaraid_sas: fix panic on loading firmware crashdump
+Date:   Mon, 22 Jul 2019 09:15:24 -0700
+Message-Id: <20190722161524.23192-1-junxiao.bi@oracle.com>
+X-Mailer: git-send-email 2.17.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9325 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=740
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1907220180
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9325 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=786 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1907220180
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/19/19 8:06 PM, Ming Lei wrote:
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index e1da8c70a266..52537c145762 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -154,12 +154,9 @@ scsi_set_blocked(struct scsi_cmnd *cmd, int reason)
->   
->   static void scsi_mq_requeue_cmd(struct scsi_cmnd *cmd)
->   {
-> -	if (cmd->request->rq_flags & RQF_DONTPREP) {
-> -		cmd->request->rq_flags &= ~RQF_DONTPREP;
-> -		scsi_mq_uninit_cmd(cmd);
-> -	} else {
-> -		WARN_ON_ONCE(true);
-> -	}
-> +	WARN_ON_ONCE(!(cmd->request->rq_flags & RQF_DONTPREP));
-> +
-> +	scsi_mq_uninit_cmd(cmd);
->   	blk_mq_requeue_request(cmd->request, true);
->   }
+While loading fw crashdump in function fw_crash_buffer_show(),
+left bytes in one dma chunk was not checked, if copying size
+over it, overflow access will cause kernel panic.
 
-The above changes are independent of this patch series. Have you 
-considered to move these into a separate patch?
+Signed-off-by: Junxiao Bi <junxiao.bi@oracle.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_base.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> +/*
-> + * Only called when the request isn't completed by SCSI, and not freed by
-> + * SCSI
-> + */
-> +static void scsi_cleanup_rq(struct request *rq)
-> +{
-> +	struct scsi_cmnd *cmd = blk_mq_rq_to_pdu(rq);
-> +
-> +	scsi_mq_uninit_cmd(cmd);
-> +}
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index 80ab9700f1de..3eef0858fa8e 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -3153,6 +3153,7 @@ fw_crash_buffer_show(struct device *cdev,
+ 		(struct megasas_instance *) shost->hostdata;
+ 	u32 size;
+ 	unsigned long dmachunk = CRASH_DMA_BUF_SIZE;
++	unsigned long chunk_left_bytes;
+ 	unsigned long src_addr;
+ 	unsigned long flags;
+ 	u32 buff_offset;
+@@ -3176,6 +3177,8 @@ fw_crash_buffer_show(struct device *cdev,
+ 	}
+ 
+ 	size = (instance->fw_crash_buffer_size * dmachunk) - buff_offset;
++	chunk_left_bytes = dmachunk - (buff_offset % dmachunk);
++	size = (size > chunk_left_bytes) ? chunk_left_bytes : size;
+ 	size = (size >= PAGE_SIZE) ? (PAGE_SIZE - 1) : size;
+ 
+ 	src_addr = (unsigned long)instance->crash_buf[buff_offset / dmachunk] +
+-- 
+2.17.1
 
-Is the comment above this function correct? The previous patch adds an 
-unconditional call to mq_ops->cleanup_rq() in blk_mq_free_request().
-
-Thanks,
-
-Bart.
