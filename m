@@ -2,147 +2,170 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB00711C6
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jul 2019 08:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0207B716EE
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jul 2019 13:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbfGWGRW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jul 2019 02:17:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51556 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725837AbfGWGRV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 23 Jul 2019 02:17:21 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id EA985AE8C;
-        Tue, 23 Jul 2019 06:17:19 +0000 (UTC)
-Subject: Re: [PATCH 2/3] fcoe: avoid memset across pointer boundaries
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Bart van Assche <bvanassche@acm.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-References: <20190722062231.115865-1-hare@suse.de>
- <20190722062231.115865-3-hare@suse.de> <20190722115013.GC32052@lst.de>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <792ac9f8-a87f-98ce-170a-7db301c124e6@suse.de>
-Date:   Tue, 23 Jul 2019 08:17:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1731282AbfGWL2F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Jul 2019 07:28:05 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34874 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731276AbfGWL2B (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jul 2019 07:28:01 -0400
+Received: by mail-pg1-f194.google.com with SMTP id s1so12978575pgr.2
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Jul 2019 04:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=M085sQxZRNbz0OBDy5dlhICQwU4DuRFnxzjIAf3um2Q=;
+        b=Y/HU4gBu9cfcIksRpnfWvBh3ybK9Bdyb0tmjGu2jg+zF1zDuRdlJGxKPMPadJiVqQS
+         9jIk1wVgo+/DmqjMa8XIFinj35cZdfffqzX94lAcwGZpjzd0kOUHhJ4OjM1RNhdkPzFA
+         3CUz89uvZhtOmr12Jxz1gVcaI1WmTk3pE4n40=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=M085sQxZRNbz0OBDy5dlhICQwU4DuRFnxzjIAf3um2Q=;
+        b=cyE8rsCK0YCr1xPx3ztPXVTRGEdGNyqWCc7kdD4H2+wIt9AQ8DX4EDFfGy/e1CHahd
+         T4AYYx/WJZNy4iWcwPpoEvk2yVago1TrjVgt2LYipYjKDK8Q0VwXeiOImUYXOavZuRyL
+         +UckhcAr7h3FFt6W1OzRLfk/zvZ4TKX5ltKB1TY2dcdlg9/k2yRSs9EgYsSQs8azPSyM
+         Sx3skSICe2IyHaPMjWKoETeSCbcyUlXfD5ClmeteqGyf4bNULdwM7N/z6xbprCQaRdLm
+         jbtVrr9SpvDylpL2aPQKGV1GvCzmFb16U5A2D7+lQhtj7Oo+2q5hzSz5h9G5Qapkhynd
+         8Rcg==
+X-Gm-Message-State: APjAAAWtvpSifMJIwS5Vi7mVzbCdszGDEJ7rs9DDXRkTvjVmgzd/ABXB
+        C/7vZEsvLPazgAGu4M9TKRNlyvozFwh+yUDZBG+U1w==
+X-Google-Smtp-Source: APXvYqzZDkTOgdXMUeFY02PsNikZPUtkh8JUhyh0C8GPkwyZQsAdDCcvXpyCzfTYtmLlC5j4vyeCjt4Ewfi4KJPcXuk=
+X-Received: by 2002:a63:b346:: with SMTP id x6mr76347800pgt.218.1563881280431;
+ Tue, 23 Jul 2019 04:28:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190722115013.GC32052@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CGME20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
+ <20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2> <860cc8cf-6419-c649-b2d9-19b82f6ebc99@suse.de>
+In-Reply-To: <860cc8cf-6419-c649-b2d9-19b82f6ebc99@suse.de>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Tue, 23 Jul 2019 16:57:49 +0530
+Message-ID: <CAK=zhgocY3Ute_6RiowaWsOROx3+Nzq6+WvkobmR_SB0Rt9_1g@mail.gmail.com>
+Subject: Re: [PATCH V2] mpt3sas: support target smid for [abort|query] task
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     minwoo.im@samsung.com,
+        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
+        "suganath-prabu.subramani@broadcom.com" 
+        <suganath-prabu.subramani@broadcom.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Euihyeok Kwon <eh81.kwon@samsung.com>,
+        Sarah Cho <sohyeon.jo@samsung.com>,
+        Sanggwan Lee <sanggwan.lee@samsung.com>,
+        Gyeongmin Nam <gm.nam@samsung.com>,
+        Sungjun Park <sj1228.park@samsung.com>,
+        "minwoo.im.dev@gmail.com" <minwoo.im.dev@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/22/19 1:50 PM, Christoph Hellwig wrote:
-> On Mon, Jul 22, 2019 at 08:22:30AM +0200, Hannes Reinecke wrote:
->> Gcc-9 complains for a memset across pointer boundaries, which happens
->> as the code tries to allocate a flexible array on the stack.
->> Turns out we cannot do this without relying on gcc-isms, so
->> with this patch we'll embed the fc_rport_priv structure into
->> fcoe_rport, can use the normal 'container_of' outcast, and
->> will only have to do a memset over one structure.
-> 
-> This looks mostly good, but:
-> 
-> I think the subject and changelog are a bit odd.  What you do here
-> is to change that way how the private data is allocated by embeddeding
-> the fc_rport_priv structure into the private data, so that should be
-> the focus of the description.  That this was triggered by the memset
-> warning might be worth mentioning, but probably only after explaining
-> what you did.
-> 
-Yeah, that was carried over from the original patch.
-Will be updating it.
+On Mon, Jul 15, 2019 at 11:43 AM Hannes Reinecke <hare@suse.de> wrote:
+>
+> On 7/14/19 5:44 AM, Minwoo Im wrote:
+> > We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MG=
+MT)
+> > to /dev/mpt3ctl.  If the given task_type is either abort task or query
+> > task, it may need a field named "Initiator Port Transfer Tag to Manage"
+> > in the IU.
+> >
+> > Current code does not support to check target IPTT tag from the
+> > tm_request.  This patch introduces to check TaskMID given from the
+> > userspace as a target tag.  We have a rule of relationship between
+> > (struct request *req->tag) and smid in mpt3sas_base.c:
+> >
+> > 3318 u16
+> > 3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_id=
+x,
+> > 3320         struct scsi_cmnd *scmd)
+> > 3321 {
+> > 3322         struct scsiio_tracker *request =3D scsi_cmd_priv(scmd);
+> > 3323         unsigned int tag =3D scmd->request->tag;
+> > 3324         u16 smid;
+> > 3325
+> > 3326         smid =3D tag + 1;
+> >
+> > So if we want to abort a request tagged #X, then we can pass (X + 1) to
+> > this IOCTL handler.  Otherwise, user space just can pass 0 TaskMID to
+> > abort the first outstanding smid which is legacy behaviour.
+> >
+> > Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+> > Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
+> > Cc: Sathya Prakash <sathya.prakash@broadcom.com>
+> > Cc: James E.J. Bottomley <jejb@linux.ibm.com>
+> > Cc: Martin K. Petersen <martin.petersen@oracle.com>
+> > Cc: MPT-FusionLinux.pdl@broadcom.com
+> > Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
+> > ---
+> >  drivers/scsi/mpt3sas/mpt3sas_ctl.c | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/=
+mpt3sas_ctl.c
+> > index b2bb47c14d35..f6b8fd90610a 100644
+> > --- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> > +++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
+> > @@ -596,8 +596,16 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, str=
+uct mpt3_ioctl_command *karg,
+> >               if (priv_data->sas_target->handle !=3D handle)
+> >                       continue;
+> >               st =3D scsi_cmd_priv(scmd);
+> > -             tm_request->TaskMID =3D cpu_to_le16(st->smid);
+> > -             found =3D 1;
+> > +
+> > +             /*
+> > +              * If the given TaskMID from the user space is zero, then=
+ the
+> > +              * first outstanding smid will be picked up.  Otherwise,
+> > +              * targeted smid will be the one.
+> > +              */
+> > +             if (!tm_request->TaskMID || tm_request->TaskMID =3D=3D st=
+->smid) {
+> > +                     tm_request->TaskMID =3D cpu_to_le16(st->smid);
+> > +                     found =3D 1;
+> > +             }
+> >       }
+> >
+> >       if (!found) {
+> >
+> I think this is fundamentally wrong.
+> ABORT_TASK is used to abort a single task, which of course has to be
+> known beforehand. If you don't know the task, what exactly do you hope
+> to achieve here? Aborting random I/O?
+> Or, even worse, aborting I/O the driver uses internally and corrupt the
+> internal workflow of the driver?
+>
+> We should simply disallow any ABORT TASK from userspace if the TaskMID
+> is zero. And I would even argue to disabllow ABORT TASK from userspace
+> completely, as the smid is never relayed to userland, and as such the
+> user cannot know which task should be aborted.
 
->> @@ -2738,10 +2736,7 @@ static int fcoe_ctlr_vn_recv(struct fcoe_ctlr *fip, struct sk_buff *skb)
->>  {
->>  	struct fip_header *fiph;
->>  	enum fip_vn2vn_subcode sub;
->> -	struct {
->> -		struct fc_rport_priv rdata;
->> -		struct fcoe_rport frport;
->> -	} buf;
->> +	struct fcoe_rport buf;
-> 
-> Wouldn't rport or frport be a better name for this variable?
-> 
-Possibly ...
-Keeping it at 'buf' introduced less churn, but by all means...
+Hannes,
 
->>  	fiph = (struct fip_header *)skb->data;
->> @@ -2757,7 +2752,8 @@ static int fcoe_ctlr_vn_recv(struct fcoe_ctlr *fip, struct sk_buff *skb)
->>  		goto drop;
->>  	}
->>  
->> -	rc = fcoe_ctlr_vn_parse(fip, skb, &buf.rdata);
->> +	memset(&buf, 0, sizeof(buf));
-> 
-> Instead of the memset you could do an initialization at declaration
-> time:
-> 
-> 	struct fcoe_rport rport = { };
-> 
-Would probably optimized to the same assembler code by the compiler, but
-okay.
+This interface was added long time back in mpt2sas driver and I don't
+have exact reason of adding this interface at that time.
+But I know that this interface is still used by BRCM test team & few
+customers only for some functionality and regression testing.
 
-Will be reposting.
+Thanks,
+Sreekanth
 
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke		   Teamlead Storage & Networking
-hare@suse.de			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+>
+> Cheers,
+>
+> Hannes
+> --
+> Dr. Hannes Reinecke                Teamlead Storage & Networking
+> hare@suse.de                                   +49 911 74053 688
+> SUSE LINUX GmbH, Maxfeldstr. 5, 90409 N=C3=BCrnberg
+> GF: Felix Imend=C3=B6rffer, Mary Higgins, Sri Rasiah
+> HRB 21284 (AG N=C3=BCrnberg)
