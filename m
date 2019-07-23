@@ -2,51 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 187FB71D17
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jul 2019 18:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E58571D21
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jul 2019 18:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388042AbfGWQq0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jul 2019 12:46:26 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:24404 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730094AbfGWQqX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 23 Jul 2019 12:46:23 -0400
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6NGhGVl059221
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Jul 2019 12:46:21 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2tx60rr3uv-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 23 Jul 2019 12:46:21 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <maier@linux.ibm.com>;
-        Tue, 23 Jul 2019 17:46:19 +0100
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 23 Jul 2019 17:46:17 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6NGk19Q32244062
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 23 Jul 2019 16:46:01 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0FEAA11C052;
-        Tue, 23 Jul 2019 16:46:16 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCEB111C04C;
-        Tue, 23 Jul 2019 16:46:15 +0000 (GMT)
-Received: from oc4120165700.ibm.com (unknown [9.152.96.145])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 23 Jul 2019 16:46:15 +0000 (GMT)
-Subject: Re: Linux 5.3-rc1
-To:     Guenter Roeck <linux@roeck-us.net>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S2388202AbfGWQwL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Jul 2019 12:52:11 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:40028 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729558AbfGWQwL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jul 2019 12:52:11 -0400
+Received: by mail-pl1-f193.google.com with SMTP id a93so20789533pla.7;
+        Tue, 23 Jul 2019 09:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4Qj5IIwqgNLGa4ZWyo6tUF4BC8UycTqmBaNZSmrXNZk=;
+        b=Awwfyfh60aonP3N7bKnwltr2gXTT5/zdbyZWzrWakq/yDwEdPjPO60XRc0+lUIgng8
+         kAwjo3Ot/bfunUovy8IqYTaOstnCCP+hu1sW/orQydMOyA6G+0mNEYwLni3TPFbjDIr/
+         ZoJN8pv3OJuu9EiD9DRd32Qqvx3jDcQOoHDgTcZQ2wP7CBLfZkZi5Q+8nWjhp/W9akH6
+         61UMyFrgSaTU39Mud2TjL3LtiOKzreKuiPwc9yKegLiEOfex6W7GQ+/FQRpJBOiTzF4B
+         19hQrS93pEWzdlyhd6uP9VdkYnQguexyquNpmcJAcAOtfqupn0+z5M9X2On1LweJt3Zt
+         QqTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4Qj5IIwqgNLGa4ZWyo6tUF4BC8UycTqmBaNZSmrXNZk=;
+        b=pgFRJWZ1DZ6kd+vCxUELm/jNW2k8fAoRu8ReUpBj3k5MLqQDYqVV8YElf4/jJAOENX
+         Tl9yVSux8jpyjOEwXpOJjUXg73cpCv7F6qGiahO202xZeZ0uuZ4ZimNY4wroP7O85Exz
+         v2Mr2+gjB9i67RnV4PDl40QQRhg658pCB5Eu1N/5v2qm1jxfEok+LSmrjrTWtj5hAv7j
+         f8/6Yy2lfASlEmNEjP6vXnsPyacF+9+OiT0AcxWXgpsF9JoIrW+2DVKvoyMnSG1urfUd
+         WZtEJ+4oshk8HlZbMIYocDfLXlPkymTU6Es6GEaFbHZh8kgDo3PEU4DnfE8KMv/Op1tH
+         JI7g==
+X-Gm-Message-State: APjAAAVo7rYIrK9vmVBM8Al0gEtGQrJ+VLMi71vuUIBJ+V2uFN6sHQg5
+        pvxR+4A0jz/DmJn+bhDsypuyARLA
+X-Google-Smtp-Source: APXvYqweNH6jJ1TzfFfD8qzOD4kaJ5w9jn/POrjk2ZwtyWxqLieOXDssHNdNfpoakojURgVSAY33og==
+X-Received: by 2002:a17:902:54f:: with SMTP id 73mr79980802plf.246.1563900730978;
+        Tue, 23 Jul 2019 09:52:10 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a15sm51228528pfg.102.2019.07.23.09.52.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 23 Jul 2019 09:52:09 -0700 (PDT)
+Date:   Tue, 23 Jul 2019 09:52:08 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Steffen Maier <maier@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         Christoph Hellwig <hch@lst.de>,
         linux-scsi <linux-scsi@vger.kernel.org>
+Subject: Re: Linux 5.3-rc1
+Message-ID: <20190723165208.GA26316@roeck-us.net>
 References: <CAHk-=wiVjkTqzP6OppBuLQZ+t1mpRQC4T+Ho4Wg2sBAapKd--Q@mail.gmail.com>
  <20190722222126.GA27291@roeck-us.net>
  <1563839144.2504.5.camel@HansenPartnership.com>
@@ -55,75 +62,61 @@ References: <CAHk-=wiVjkTqzP6OppBuLQZ+t1mpRQC4T+Ho4Wg2sBAapKd--Q@mail.gmail.com>
  <1e05670d-9e28-1b1d-249d-743c736e6d63@linux.ibm.com>
  <1563895995.3609.10.camel@HansenPartnership.com>
  <20190723161918.GB9140@roeck-us.net>
-From:   Steffen Maier <maier@linux.ibm.com>
-Date:   Tue, 23 Jul 2019 18:46:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+ <1563899014.3609.26.camel@HansenPartnership.com>
 MIME-Version: 1.0
-In-Reply-To: <20190723161918.GB9140@roeck-us.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19072316-0016-0000-0000-0000029577A1
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19072316-0017-0000-0000-000032F36903
-Message-Id: <f8f135a8-62ea-fb8b-339f-2fce8024ee1b@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-23_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907230168
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1563899014.3609.26.camel@HansenPartnership.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/23/19 6:19 PM, Guenter Roeck wrote:
-> On Tue, Jul 23, 2019 at 08:33:15AM -0700, James Bottomley wrote:
-> [ ... ]
->>
->> Yes, I think so.  Can someone try this, or something like it.
->>
->> Thanks,
->>
->> James
->>
->> ---
->>
->> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
->> index 9381171c2fc0..4715671a1537 100644
->> --- a/drivers/scsi/scsi_lib.c
->> +++ b/drivers/scsi/scsi_lib.c
->> @@ -1793,7 +1793,8 @@ void __scsi_init_queue(struct Scsi_Host *shost, struct request_queue *q)
->>   	dma_set_seg_boundary(dev, shost->dma_boundary);
->>   
->>   	blk_queue_max_segment_size(q, shost->max_segment_size);
->> -	blk_queue_virt_boundary(q, shost->virt_boundary_mask);
->> +	if (shost->virt_boundary_mask)
->> +		blk_queue_virt_boundary(q, shost->virt_boundary_mask);
->>   	dma_set_max_seg_size(dev, queue_max_segment_size(q));
->>   
->>   	/*
+On Tue, Jul 23, 2019 at 09:23:34AM -0700, James Bottomley wrote:
+> On Tue, 2019-07-23 at 09:19 -0700, Guenter Roeck wrote:
+> > On Tue, Jul 23, 2019 at 08:33:15AM -0700, James Bottomley wrote:
+> > [ ... ]
+> > > 
+> > > Yes, I think so.  Can someone try this, or something like it.
+> > > 
+> > > Thanks,
+> > > 
+> > > James
+> > > 
+> > > ---
+> > > 
+> > > diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> > > index 9381171c2fc0..4715671a1537 100644
+> > > --- a/drivers/scsi/scsi_lib.c
+> > > +++ b/drivers/scsi/scsi_lib.c
+> > > @@ -1793,7 +1793,8 @@ void __scsi_init_queue(struct Scsi_Host
+> > > *shost, struct request_queue *q)
+> > >  	dma_set_seg_boundary(dev, shost->dma_boundary);
+> > >  
+> > >  	blk_queue_max_segment_size(q, shost->max_segment_size);
+> > > -	blk_queue_virt_boundary(q, shost->virt_boundary_mask);
+> > > +	if (shost->virt_boundary_mask)
+> > > +		blk_queue_virt_boundary(q, shost-
+> > > >virt_boundary_mask);
+> > >  	dma_set_max_seg_size(dev, queue_max_segment_size(q));
+> > >  
+> > >  	/*
+> > 
+> > This fixes the problem for me.
 > 
-> This fixes the problem for me.
+> Great, thanks!
+> 
+> I'm thinking this is the more correct fix:
+> 
+> https://lore.kernel.org/linux-block/1563896932.3609.15.camel@HansenPartnership.com/
+> 
+> But we'll see what Jens says.
 
-+1
-(on a first glimpse with zfcp)
+Yes, that patch also fixes the problem with sata-sii3112.
 
+Guenter
 
--- 
-Mit freundlichen Gruessen / Kind regards
-Steffen Maier
-
-Linux on IBM Z Development
-
-https://www.ibm.com/privacy/us/en/
-IBM Deutschland Research & Development GmbH
-Vorsitzender des Aufsichtsrats: Matthias Hartmann
-Geschaeftsfuehrung: Dirk Wittkopp
-Sitz der Gesellschaft: Boeblingen
-Registergericht: Amtsgericht Stuttgart, HRB 243294
-
+> 
+> James
+> 
