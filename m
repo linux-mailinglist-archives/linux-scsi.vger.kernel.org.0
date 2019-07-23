@@ -2,170 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A20E671A7E
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jul 2019 16:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD70571B31
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jul 2019 17:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388025AbfGWOfR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jul 2019 10:35:17 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:46786 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388162AbfGWOfQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 23 Jul 2019 10:35:16 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id B598BF1B5B365C8F856F;
-        Tue, 23 Jul 2019 22:35:05 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.439.0; Tue, 23 Jul 2019
- 22:34:58 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
-        <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <megaraidlinux.pdl@broadcom.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] scsi: megaraid_sas: Make some functions static
-Date:   Tue, 23 Jul 2019 22:34:50 +0800
-Message-ID: <20190723143450.33916-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+        id S2388579AbfGWPO1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Jul 2019 11:14:27 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:38866 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729004AbfGWPO1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 23 Jul 2019 11:14:27 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A8C8B8EE147;
+        Tue, 23 Jul 2019 08:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1563894866;
+        bh=w7q5QNoBfsqpgw7GXu/6oW54dlngCPjMzC6fAoZt/Bs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=t2sXYvg2AcoJg19sebikgnWmsovJMQ2xg0q6uyzfwFKqu3LYgvcILcbZ7tgSehK1z
+         ZYo7LhAoHE4cbqadBcNGFJW6J8u2dq0DhUe9m5ww7t0zwjgp2Gi/ObVJp4E6ZXuLPK
+         UAwazd5xLlyfVzc7tjkkij3Z+aeDVpDd3m33Cqqo=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id rfahQdfxX0zQ; Tue, 23 Jul 2019 08:14:25 -0700 (PDT)
+Received: from jarvis.lan (unknown [50.35.68.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 6274D8EE0EF;
+        Tue, 23 Jul 2019 08:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1563894864;
+        bh=w7q5QNoBfsqpgw7GXu/6oW54dlngCPjMzC6fAoZt/Bs=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=j0vPgDujNCWgZRs4QVk4lgNq+IOhbdpTDTceLlR7BJA6soPPp93VBdCAoXMVUo2fj
+         a8TRyzDkakVHu76IjrPdOl5TBsZpTnO3QIgcQ4hzkjgVdcHdq9nQq5dUhj7F362TZt
+         SAJDfDdVuyLs+WD2e9yNsYEjxo+AGy6z5LJYvR2A=
+Message-ID: <1563894861.3609.6.camel@HansenPartnership.com>
+Subject: Re: Linux 5.3-rc1
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Guenter Roeck <linux@roeck-us.net>, Christoph Hellwig <hch@lst.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+Date:   Tue, 23 Jul 2019 08:14:21 -0700
+In-Reply-To: <20190723145805.GA5809@roeck-us.net>
+References: <CAHk-=wiVjkTqzP6OppBuLQZ+t1mpRQC4T+Ho4Wg2sBAapKd--Q@mail.gmail.com>
+         <20190722222126.GA27291@roeck-us.net> <20190723054841.GA17148@lst.de>
+         <20190723145805.GA5809@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix sparse warnings:
+On Tue, 2019-07-23 at 07:58 -0700, Guenter Roeck wrote:
+> On Tue, Jul 23, 2019 at 07:48:41AM +0200, Christoph Hellwig wrote:
+> > The fix was sent last morning my time:
+> > 
+> > https://marc.info/?l=linux-scsi&m=156378725427719&w=2
+> 
+> Here is the updated bisect for the ppc scsi problem.
+> 
+> Guenter
+> 
+> ---
+> # bad: [f65420df914a85e33b2c8b1cab310858b2abb7c0] Merge tag 'scsi-
+> fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+> # good: [168c79971b4a7be7011e73bf488b740a8e1135c8] Merge tag 'kbuild-
+> v5.3-2' of
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild
+> git bisect start 'f65420df914a' '168c79971b4a'
+> # good: [106d45f350c7cac876844dc685845cba4ffdb70b] scsi: zfcp: fix
+> request object use-after-free in send path causing wrong traces
+> git bisect good 106d45f350c7cac876844dc685845cba4ffdb70b
+> # bad: [bdd17bdef7d8da4d8eee254abb4c92d8a566bdc1] scsi: core: take
+> the DMA max mapping size into account
+> git bisect bad bdd17bdef7d8da4d8eee254abb4c92d8a566bdc1
+> # good: [0cdc58580b37a160fac4b884266b8b7cb096f539] scsi: sd_zbc: Fix
+> compilation warning
+> git bisect good 0cdc58580b37a160fac4b884266b8b7cb096f539
+> # bad: [7ad388d8e4c703980b7018b938cdeec58832d78d] scsi: core: add a
+> host / host template field for the virt boundary
+> git bisect bad 7ad388d8e4c703980b7018b938cdeec58832d78d
+> # good: [f9b0530fa02e0c73f31a49ef743e8f44eb8e32cc] scsi: core: Fix
+> race on creating sense cache
+> git bisect good f9b0530fa02e0c73f31a49ef743e8f44eb8e32cc
+> # first bad commit: [7ad388d8e4c703980b7018b938cdeec58832d78d] scsi:
+> core: add a host / host template field for the virt boundary
 
-drivers/scsi/megaraid/megaraid_sas_fusion.c:541:1: warning: symbol 'megasas_alloc_cmdlist_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:580:1: warning: symbol 'megasas_alloc_request_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:661:1: warning: symbol 'megasas_alloc_reply_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:738:1: warning: symbol 'megasas_alloc_rdpq_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:920:1: warning: symbol 'megasas_alloc_cmds_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:1740:1: warning: symbol 'megasas_init_adapter_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:1966:1: warning: symbol 'map_cmd_status' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:2379:1: warning: symbol 'megasas_set_pd_lba' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:2718:1: warning: symbol 'megasas_build_ldio_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:3215:1: warning: symbol 'megasas_build_io_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:3328:6: warning: symbol 'megasas_prepare_secondRaid1_IO' was not declared. Should it be static?
+And reverting that commit fixes your problem?
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index a32b3f0..120e3c4 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -537,7 +537,7 @@ static int megasas_create_sg_sense_fusion(struct megasas_instance *instance)
- 	return 0;
- }
- 
--int
-+static int
- megasas_alloc_cmdlist_fusion(struct megasas_instance *instance)
- {
- 	u32 max_mpt_cmd, i, j;
-@@ -576,7 +576,8 @@ megasas_alloc_cmdlist_fusion(struct megasas_instance *instance)
- 
- 	return 0;
- }
--int
-+
-+static int
- megasas_alloc_request_fusion(struct megasas_instance *instance)
- {
- 	struct fusion_context *fusion;
-@@ -657,7 +658,7 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
- 	return 0;
- }
- 
--int
-+static int
- megasas_alloc_reply_fusion(struct megasas_instance *instance)
- {
- 	int i, count;
-@@ -734,7 +735,7 @@ megasas_alloc_reply_fusion(struct megasas_instance *instance)
- 	return 0;
- }
- 
--int
-+static int
- megasas_alloc_rdpq_fusion(struct megasas_instance *instance)
- {
- 	int i, j, k, msix_count;
-@@ -916,7 +917,7 @@ megasas_free_reply_fusion(struct megasas_instance *instance) {
-  * and is used as SMID of the cmd.
-  * SMID value range is from 1 to max_fw_cmds.
-  */
--int
-+static int
- megasas_alloc_cmds_fusion(struct megasas_instance *instance)
- {
- 	int i;
-@@ -1736,7 +1737,7 @@ static inline void megasas_free_ioc_init_cmd(struct megasas_instance *instance)
-  *
-  * This is the main function for initializing firmware.
-  */
--u32
-+static u32
- megasas_init_adapter_fusion(struct megasas_instance *instance)
- {
- 	struct fusion_context *fusion;
-@@ -1962,7 +1963,7 @@ megasas_fusion_stop_watchdog(struct megasas_instance *instance)
-  * @ext_status :	ext status of cmd returned by FW
-  */
- 
--void
-+static void
- map_cmd_status(struct fusion_context *fusion,
- 		struct scsi_cmnd *scmd, u8 status, u8 ext_status,
- 		u32 data_length, u8 *sense)
-@@ -2375,7 +2376,7 @@ int megasas_make_sgl(struct megasas_instance *instance, struct scsi_cmnd *scp,
-  *
-  * Used to set the PD LBA in CDB for FP IOs
-  */
--void
-+static void
- megasas_set_pd_lba(struct MPI2_RAID_SCSI_IO_REQUEST *io_request, u8 cdb_len,
- 		   struct IO_REQUEST_INFO *io_info, struct scsi_cmnd *scp,
- 		   struct MR_DRV_RAID_MAP_ALL *local_map_ptr, u32 ref_tag)
-@@ -2714,7 +2715,7 @@ megasas_set_raidflag_cpu_affinity(struct fusion_context *fusion,
-  * Prepares the io_request and chain elements (sg_frame) for IO
-  * The IO can be for PD (Fast Path) or LD
-  */
--void
-+static void
- megasas_build_ldio_fusion(struct megasas_instance *instance,
- 			  struct scsi_cmnd *scp,
- 			  struct megasas_cmd_fusion *cmd)
-@@ -3211,7 +3212,7 @@ megasas_build_syspd_fusion(struct megasas_instance *instance,
-  * Invokes helper functions to prepare request frames
-  * and sets flags appropriate for IO/Non-IO cmd
-  */
--int
-+static int
- megasas_build_io_fusion(struct megasas_instance *instance,
- 			struct scsi_cmnd *scp,
- 			struct megasas_cmd_fusion *cmd)
-@@ -3325,9 +3326,9 @@ megasas_get_request_descriptor(struct megasas_instance *instance, u16 index)
- /* megasas_prepate_secondRaid1_IO
-  *  It prepares the raid 1 second IO
-  */
--void megasas_prepare_secondRaid1_IO(struct megasas_instance *instance,
--			    struct megasas_cmd_fusion *cmd,
--			    struct megasas_cmd_fusion *r1_cmd)
-+static void megasas_prepare_secondRaid1_IO(struct megasas_instance *instance,
-+					   struct megasas_cmd_fusion *cmd,
-+					   struct megasas_cmd_fusion *r1_cmd)
- {
- 	union MEGASAS_REQUEST_DESCRIPTOR_UNION *req_desc, *req_desc2 = NULL;
- 	struct fusion_context *fusion;
--- 
-2.7.4
-
+James
 
