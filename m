@@ -2,172 +2,238 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E10EE7194D
-	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jul 2019 15:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8394B71A43
+	for <lists+linux-scsi@lfdr.de>; Tue, 23 Jul 2019 16:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390281AbfGWNeC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jul 2019 09:34:02 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46366 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732718AbfGWNeC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jul 2019 09:34:02 -0400
-Received: by mail-pl1-f193.google.com with SMTP id c2so20601502plz.13;
-        Tue, 23 Jul 2019 06:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=w9+ZmzMTvq2iSo2ujhpLGpBEFet1WMn1gqo2dfrjb/E=;
-        b=MSNTvFrZdBuTkcv6J2c6zOvMJXPHLl2nsaaSqrUy2hsatnWGr5v3RhzF5Qv/2HSSoB
-         FiBL0ucr8akcV/auBmb36ZqMaEXHkmF4I9TXRksG6QZFRIrha8lxDGZPIi7fxrsOPKTq
-         M97+AkClcvMWEMYg2e5hfjhbZ76x6Wh3yhCue68czqoOL4Ao0Pz1QNtmxzYfrjf+97OB
-         BjFyvKFbrj6zwXH4VDAjgNDoG6t0ylgO90UrUYG85x036+ywDTX+n3KkSf956+vhYweo
-         7i6xIGGN//Fo5oWiCyXJF94IA4Fl25mbT576y+Xi5A3MN8SBr4RhhnXDPslisLwvCzDc
-         Ocpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=w9+ZmzMTvq2iSo2ujhpLGpBEFet1WMn1gqo2dfrjb/E=;
-        b=etZO09hmND/Lt2V9jUXVkvxO6NW52S4dJlwqNxbCUnvVv4gJJOHcrlCeD0hoifD/wp
-         /OInGoBk4CTkD4/9+EOc2KSJvDh3sDF8maDMukAvvTT2GEpdM/wm2EvQB5hbghhG7Bdf
-         hG/LVnU7PU1I7rFp/LnoFTAotpV7CtCJyBZaSK1mFa/6E3qqbvSjbL5t03b/aq3oncj2
-         I9o3R+lzM3xa2x5asFzUPiKlYNGnfpzgJI1Ju2rxjytWByBfuAdHhRAAvSLgSJBhLOPN
-         U5yY5mFipX5eS6HIrHxrVa04G8uC43y2jnlPcOoXxscYa8fojyExGMJNR62IcQzOBHmH
-         G8Fw==
-X-Gm-Message-State: APjAAAVQbdL0BhGmISyA8WSfP2TUPlCLvuf42bedqY3kJ8q3jQmgTHRn
-        t8PDgCZ0R1cyMxEtE0YWyw0=
-X-Google-Smtp-Source: APXvYqxna/HiWFKj4QIrOWVI0xdv7iyo5CoL30GT9u3tN6dvHQdEsTVYdRn8y+YgGhdlOi/5ydEDOQ==
-X-Received: by 2002:a17:902:f216:: with SMTP id gn22mr78826259plb.118.1563888841134;
-        Tue, 23 Jul 2019 06:34:01 -0700 (PDT)
-Received: from localhost ([123.213.206.190])
-        by smtp.gmail.com with ESMTPSA id h26sm46900292pfq.64.2019.07.23.06.33.59
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 23 Jul 2019 06:34:00 -0700 (PDT)
-Date:   Tue, 23 Jul 2019 22:33:58 +0900
-From:   Minwoo Im <minwoo.im.dev@gmail.com>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Hannes Reinecke <hare@suse.de>
-Cc:     minwoo.im@samsung.com,
-        "sathya.prakash@broadcom.com" <sathya.prakash@broadcom.com>,
-        "suganath-prabu.subramani@broadcom.com" 
-        <suganath-prabu.subramani@broadcom.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "MPT-FusionLinux.pdl@broadcom.com" <MPT-FusionLinux.pdl@broadcom.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Euihyeok Kwon <eh81.kwon@samsung.com>,
-        Sarah Cho <sohyeon.jo@samsung.com>,
-        Sanggwan Lee <sanggwan.lee@samsung.com>,
-        Gyeongmin Nam <gm.nam@samsung.com>,
-        Sungjun Park <sj1228.park@samsung.com>,
-        Minwoo Im <minwoo.im.dev@gmail.com>
-Subject: Re: [PATCH V2] mpt3sas: support target smid for [abort|query] task
-Message-ID: <20190723133358.GB7148@minwoo-desktop>
-References: <CGME20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
- <20190714034415epcms2p25f9787cb71993a30f58524d2f355b543@epcms2p2>
- <860cc8cf-6419-c649-b2d9-19b82f6ebc99@suse.de>
- <CAK=zhgocY3Ute_6RiowaWsOROx3+Nzq6+WvkobmR_SB0Rt9_1g@mail.gmail.com>
+        id S2390306AbfGWOZX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 23 Jul 2019 10:25:23 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:11900 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729921AbfGWOZU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 23 Jul 2019 10:25:20 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6NEMIji120106
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Jul 2019 10:25:19 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2tx2u9uqj4-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Tue, 23 Jul 2019 10:25:18 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <maier@linux.ibm.com>;
+        Tue, 23 Jul 2019 15:25:15 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 23 Jul 2019 15:25:13 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6NEPC1130146878
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 23 Jul 2019 14:25:12 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2BBD811C054;
+        Tue, 23 Jul 2019 14:25:12 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA4A511C05C;
+        Tue, 23 Jul 2019 14:25:11 +0000 (GMT)
+Received: from oc4120165700.ibm.com (unknown [9.152.96.145])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 23 Jul 2019 14:25:11 +0000 (GMT)
+Subject: Re: Linux 5.3-rc1
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+References: <CAHk-=wiVjkTqzP6OppBuLQZ+t1mpRQC4T+Ho4Wg2sBAapKd--Q@mail.gmail.com>
+ <20190722222126.GA27291@roeck-us.net>
+ <1563839144.2504.5.camel@HansenPartnership.com>
+ <4dc6ef77-afce-1c6d-add3-8df76332e672@roeck-us.net>
+ <1563859682.2504.17.camel@HansenPartnership.com>
+From:   Steffen Maier <maier@linux.ibm.com>
+Date:   Tue, 23 Jul 2019 16:25:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAK=zhgocY3Ute_6RiowaWsOROx3+Nzq6+WvkobmR_SB0Rt9_1g@mail.gmail.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <1563859682.2504.17.camel@HansenPartnership.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19072314-0008-0000-0000-00000300153F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19072314-0009-0000-0000-0000226DA2A9
+Message-Id: <1e05670d-9e28-1b1d-249d-743c736e6d63@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-23_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907230143
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 19-07-23 16:57:49, Sreekanth Reddy wrote:
-> On Mon, Jul 15, 2019 at 11:43 AM Hannes Reinecke <hare@suse.de> wrote:
-> >
-> > On 7/14/19 5:44 AM, Minwoo Im wrote:
-> > > We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
-> > > to /dev/mpt3ctl.  If the given task_type is either abort task or query
-> > > task, it may need a field named "Initiator Port Transfer Tag to Manage"
-> > > in the IU.
-> > >
-> > > Current code does not support to check target IPTT tag from the
-> > > tm_request.  This patch introduces to check TaskMID given from the
-> > > userspace as a target tag.  We have a rule of relationship between
-> > > (struct request *req->tag) and smid in mpt3sas_base.c:
-> > >
-> > > 3318 u16
-> > > 3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
-> > > 3320         struct scsi_cmnd *scmd)
-> > > 3321 {
-> > > 3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
-> > > 3323         unsigned int tag = scmd->request->tag;
-> > > 3324         u16 smid;
-> > > 3325
-> > > 3326         smid = tag + 1;
-> > >
-> > > So if we want to abort a request tagged #X, then we can pass (X + 1) to
-> > > this IOCTL handler.  Otherwise, user space just can pass 0 TaskMID to
-> > > abort the first outstanding smid which is legacy behaviour.
-> > >
-> > > Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> > > Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-> > > Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-> > > Cc: James E.J. Bottomley <jejb@linux.ibm.com>
-> > > Cc: Martin K. Petersen <martin.petersen@oracle.com>
-> > > Cc: MPT-FusionLinux.pdl@broadcom.com
-> > > Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
-> > > ---
-> > >  drivers/scsi/mpt3sas/mpt3sas_ctl.c | 12 ++++++++++--
-> > >  1 file changed, 10 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-> > > index b2bb47c14d35..f6b8fd90610a 100644
-> > > --- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-> > > +++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-> > > @@ -596,8 +596,16 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command *karg,
-> > >               if (priv_data->sas_target->handle != handle)
-> > >                       continue;
-> > >               st = scsi_cmd_priv(scmd);
-> > > -             tm_request->TaskMID = cpu_to_le16(st->smid);
-> > > -             found = 1;
-> > > +
-> > > +             /*
-> > > +              * If the given TaskMID from the user space is zero, then the
-> > > +              * first outstanding smid will be picked up.  Otherwise,
-> > > +              * targeted smid will be the one.
-> > > +              */
-> > > +             if (!tm_request->TaskMID || tm_request->TaskMID == st->smid) {
-> > > +                     tm_request->TaskMID = cpu_to_le16(st->smid);
-> > > +                     found = 1;
-> > > +             }
-> > >       }
-> > >
-> > >       if (!found) {
-> > >
-> > I think this is fundamentally wrong.
-> > ABORT_TASK is used to abort a single task, which of course has to be
-> > known beforehand. If you don't know the task, what exactly do you hope
-> > to achieve here? Aborting random I/O?
-> > Or, even worse, aborting I/O the driver uses internally and corrupt the
-> > internal workflow of the driver?
-> >
-> > We should simply disallow any ABORT TASK from userspace if the TaskMID
-> > is zero. And I would even argue to disabllow ABORT TASK from userspace
-> > completely, as the smid is never relayed to userland, and as such the
-> > user cannot know which task should be aborted.
-> 
-> Hannes,
-> 
-> This interface was added long time back in mpt2sas driver and I don't
-> have exact reason of adding this interface at that time.
-> But I know that this interface is still used by BRCM test team & few
-> customers only for some functionality and regression testing.
+On 7/23/19 7:28 AM, James Bottomley wrote:
+> On Mon, 2019-07-22 at 19:42 -0700, Guenter Roeck wrote:
+>> On 7/22/19 4:45 PM, James Bottomley wrote:
+>>> [linux-scsi added to cc]
+>>> On Mon, 2019-07-22 at 15:21 -0700, Guenter Roeck wrote:
+>>>> On Sun, Jul 21, 2019 at 02:33:38PM -0700, Linus Torvalds wrote:
+>>>>
+>>>> [ ... ]
+>>>>>
+>>>>> Go test,
+>>>>>
+>>>>
+>>>> Things looked pretty good until a few days ago. Unfortunately,
+>>>> the last few days brought in a couple of issues.
+>>>>
+>>>> riscv:virt:defconfig:scsi[virtio]
+>>>> riscv:virt:defconfig:scsi[virtio-pci]
+>>>>
+>>>> Boot tests crash with no useful backtrace. Bisect points to
+>>>> merge ac60602a6d8f ("Merge tag 'dma-mapping-5.3-1'"). Log is at
+>>>> https://kerneltests.org/builders/qemu-riscv64-master/builds/238/s
+>>>> teps
+>>>> /qemubuildcommand_1/logs/stdio
+>>>>
+>>>> ppc:mpc8544ds:mpc85xx_defconfig:sata-sii3112
+>>>> ppc64:pseries:pseries_defconfig:sata-sii3112
+>>>> ppc64:pseries:pseries_defconfig:little:sata-sii3112
+>>>> ppc64:ppce500:corenet64_smp_defconfig:e5500:sata-sii3112
+>>>>
+>>>> ata1: lost interrupt (Status 0x50)
+>>>> ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x6 frozen
+>>>> ata1.00: failed command: READ DMA
+>>>>
+>>>> and many similar errors. Boot ultimately times out. Bisect points
+>>>> to
+>>>> merge
+>>>> f65420df914a ("Merge tag 'scsi-fixes'").
+>>>>
+>>>> Logs:
+>>>> https://kerneltests.org/builders/qemu-ppc64-master/builds/1212/st
+>>>> eps/
+>>>> qemubuildcommand/logs/stdio
+>>>> https://kerneltests.org/builders/qemu-ppc-master/builds/1255/step
+>>>> s/qe
+>>>> mubuildcommand/logs/stdio
+>>>>
+>>>> Guenter
+>>>>
+>>>> ---
+>>>> riscv bisect log
+>>>>
+>>>> # bad: [5f9e832c137075045d15cd6899ab0505cfb2ca4b] Linus 5.3-rc1
+>>>> # good: [bdd17bdef7d8da4d8eee254abb4c92d8a566bdc1] scsi: core:
+>>>> take
+>>>> the DMA max mapping size into account
 
-Actually I have sent this patch for the testing purpose for the SAS storage
-that I'm working with now.  Some of test platform could figure out which
-command has to be aborted or queried via debugfs and information from the
-device itself with some other methods.  If the mpt3sas driver supports
-the targeted TMF for a single command, then it would be great for the
-testing.
+>>>> # first bad commit: [ac60602a6d8f6830dee89f4b87ee005f62eb7171]
+>>>> Merge
+>>>> tag 'dma-mapping-5.3-1' of git://git.infradead.org/users/hch/dma-
+>>>> mapping
 
-Thanks,
-	Minwoo Im
+>>> When a bisect lands on a merge commit it usually indicates bad
+>>> interaction between two trees.  The way to find it is to do a
+>>> bisect,
+>>> but merge up to the other side of the scsi-fixes pull before
+>>> running
+>>> tests so the interaction is exposed in the bisect.
+>>>
+>>
+>> Can you provide instructions for dummies ?
+> 
+> do a man git-bisect and then follow the 'Automatically bisect with
+> temporary modifications' example.  You substitute
+> 168c79971b4a7be7011e73bf488b740a8e1135c8 for hot-fix
+> 
+>>> However my money is on:
+>>>
+>>>
+>>> commit bdd17bdef7d8da4d8eee254abb4c92d8a566bdc1
+>>> Author: Christoph Hellwig <hch@lst.de>
+>>> Date:   Mon Jun 17 14:19:54 2019 +0200
+>>>
+>>>       scsi: core: take the DMA max mapping size into account
+>>>    
+>>> Now that I look at the code again:
+>>>
+>>>
+>>> +       shost->max_sectors = min_t(unsigned int, shost-
+>>>> max_sectors,
+>>> +                       dma_max_mapping_size(dev) << SECTOR_SHIFT);
+>>>
+>>> That shift looks to be the wrong way around (should be >>).  I bet
+>>> something is giving a very large number which becomes zero on left
+>>> shift, meaning max_sectors gets set to zero.
+>>>
+>>
+>> That does indeed look bad, but changing it doesn't make a difference.
+> 
+> Odd, all the other changes are driver specific (and not in ATA) apart
+> from this one:
+> 
+> commit 7ad388d8e4c703980b7018b938cdeec58832d78d
+> Author: Christoph Hellwig <hch@lst.de>
+> Date:   Mon Jun 17 14:19:53 2019 +0200
+> 
+>      scsi: core: add a host / host template field for the virt boundary
+> 
+> 
+> I suppose it could be because the virt_boundary_mask isn't set, but
+> that should just set zero, which is what block usually does.
+
+I found max_segment_size unexpectedly to be UINT_MAX with zfcp today in our CI. 
+My investigations are still very early, but I thought, I share a few thoughts 
+as I'm way too unfamiliar with the DMA business and thus hope for help.
+
+Above commit introduced an unconditional call to blk_queue_virt_boundary(q, 
+shost->virt_boundary_mask), _after_ blk_queue_max_segment_size(q, 
+shost->max_segment_size).
+
+Looking at the source, dma_set_max_seg_size() seems to unconditionally 
+overwrite max_segment_size:
+
+> /**
+>  * blk_queue_virt_boundary - set boundary rules for bio merging
+>  * @q:  the request queue for the device
+>  * @mask:  the memory boundary mask
+>  **/
+> void blk_queue_virt_boundary(struct request_queue *q, unsigned long mask)
+> {
+> 	q->limits.virt_boundary_mask = mask;
+> 
+> 	/*
+> 	 * Devices that require a virtual boundary do not support scatter/gather
+> 	 * I/O natively, but instead require a descriptor list entry for each
+> 	 * page (which might not be idential to the Linux PAGE_SIZE).  Because
+> 	 * of that they are not limited by our notion of "segment size".
+> 	 */
+> 	q->limits.max_segment_size = UINT_MAX;
+> }
+> EXPORT_SYMBOL(blk_queue_virt_boundary);
+
+Wild guess: Do we need to make the call to blk_queue_virt_boundary() conditional?
+
+Cf. https://www.spinics.net/lists/linux-scsi/msg131077.html ("[PATCH v2] iser: 
+explicitly set shost max_segment_size if non virtual boundary devices")
+
+-- 
+Mit freundlichen Gruessen / Kind regards
+Steffen Maier
+
+Linux on IBM Z Development
+
+https://www.ibm.com/privacy/us/en/
+IBM Deutschland Research & Development GmbH
+Vorsitzender des Aufsichtsrats: Matthias Hartmann
+Geschaeftsfuehrung: Dirk Wittkopp
+Sitz der Gesellschaft: Boeblingen
+Registergericht: Amtsgericht Stuttgart, HRB 243294
+
