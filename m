@@ -2,89 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A74572467
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jul 2019 04:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AED5726C1
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jul 2019 06:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728318AbfGXCW0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 23 Jul 2019 22:22:26 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:40294 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726108AbfGXCWZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 23 Jul 2019 22:22:25 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6O2IcGu127041;
-        Wed, 24 Jul 2019 02:22:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=O3L0hEVKDKZnrEZsfBbbw5fx4ZV/eyWU7SgYXlGHE/8=;
- b=eNk/msqA2asOeZQzRx7y0ku1Qld1bJ+tfZh6EhXp/rlv0B2DDl5yJEjf7nqzlG4LVSKt
- vjfa+88VpqtDXAjzNCgSA3URlmR52OeeZe8wW/l9A78j2ATfskJeogJ2huR+hx+rPl/i
- T+32nNofbjuKa0Msx9Sa7UcBE5YjAskCiai6w9f/gnhBfOKfziAtDR5+jTY25aWD7IwX
- i4E4dP470ln029BjQWNsgZfBTSEHq/MzikEjBhcKHRTIWLTxA/WalJj0vDC8VxlYUJBm
- 97fNL2VmeCShQPe0jdYtlZPdz/CUkitd25cngPFglITcEq04cwVlZk4Z1Rc6/n5mKm/i Rw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2tx61bt7q9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Jul 2019 02:22:21 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6O2IXBT072941;
-        Wed, 24 Jul 2019 02:22:21 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2tx60wy8v8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 24 Jul 2019 02:22:21 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6O2MKYF021853;
-        Wed, 24 Jul 2019 02:22:20 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 23 Jul 2019 19:22:20 -0700
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        id S1726148AbfGXEhm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Jul 2019 00:37:42 -0400
+Received: from mga09.intel.com ([134.134.136.24]:13122 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725883AbfGXEhm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 24 Jul 2019 00:37:42 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jul 2019 21:37:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,300,1559545200"; 
+   d="scan'208";a="163732690"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 23 Jul 2019 21:37:39 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1hq922-000Frk-Bd; Wed, 24 Jul 2019 12:37:38 +0800
+Date:   Wed, 24 Jul 2019 12:37:15 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     kbuild-all@01.org, netdev@vger.kernel.org,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Subject: Re: [PATCH 0/3] Fix more magic values in the Future Domain drivers
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <a6fcf19e-d8ed-80c6-6d5a-53f143c08d99@cogentembedded.com>
-Date:   Tue, 23 Jul 2019 22:22:18 -0400
-In-Reply-To: <a6fcf19e-d8ed-80c6-6d5a-53f143c08d99@cogentembedded.com> (Sergei
-        Shtylyov's message of "Tue, 16 Jul 2019 23:37:16 +0300")
-Message-ID: <yq1blxkqihx.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net: fix semicolon.cocci warnings
+Message-ID: <20190724043714.s3mdrehckrvksvob@1905cc33b6dd>
+References: <201907241208.upolDRPG%lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9327 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1907240024
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9327 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1907240024
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201907241208.upolDRPG%lkp@intel.com>
+X-Patchwork-Hint: ignore
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+From: kbuild test robot <lkp@intel.com>
 
-Sergei,
+drivers/target/iscsi/cxgbit/cxgbit_target.c:1451:47-48: Unneeded semicolon
 
-> Here's a set of 3 patches against the Linus' repo. The recently
-> resurrected Future Domain SCSI driver got a facelift by Ondrej (thank
-> you!); however, several magic numbers were overlooked, so I went and
-> fixed these cases.
->
-> Future Domain's stuff isn't new to me -- I wrote a FD SCSI driver for
-> another OS back in '90s... I thought I might still have a real card
-> somewhere in my flat but none were found... :-(
 
-Ondrej: Please review!
+ Remove unneeded semicolon.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Generated by: scripts/coccinelle/misc/semicolon.cocci
+
+Fixes: d7840976e391 ("net: Use skb accessors in network drivers")
+CC: Matthew Wilcox (Oracle) <willy@infradead.org>
+Signed-off-by: kbuild test robot <lkp@intel.com>
+---
+
+tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/davem/net-next.git master
+head:   3e3bb69589e482e0783f28d4cd1d8e56fda0bcbb
+commit: d7840976e3915669382c62ddd1700960f348328e [7/33] net: Use skb accessors in network drivers
+
+ cxgbit_target.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/target/iscsi/cxgbit/cxgbit_target.c
++++ b/drivers/target/iscsi/cxgbit/cxgbit_target.c
+@@ -1448,7 +1448,7 @@ cxgbit_lro_skb_merge(struct cxgbit_sock
+ 		hpdu_cb->frags++;
+ 		hpdu_cb->hfrag_idx = hfrag_idx;
+ 
+-		len = skb_frag_size(&hssi->frags[hfrag_idx]);;
++		len = skb_frag_size(&hssi->frags[hfrag_idx]);
+ 		hskb->len += len;
+ 		hskb->data_len += len;
+ 		hskb->truesize += len;
