@@ -2,81 +2,131 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AED5726C1
-	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jul 2019 06:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF657272A
+	for <lists+linux-scsi@lfdr.de>; Wed, 24 Jul 2019 07:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbfGXEhm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 24 Jul 2019 00:37:42 -0400
-Received: from mga09.intel.com ([134.134.136.24]:13122 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725883AbfGXEhm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 24 Jul 2019 00:37:42 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Jul 2019 21:37:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,300,1559545200"; 
-   d="scan'208";a="163732690"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 23 Jul 2019 21:37:39 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1hq922-000Frk-Bd; Wed, 24 Jul 2019 12:37:38 +0800
-Date:   Wed, 24 Jul 2019 12:37:15 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     kbuild-all@01.org, netdev@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: fix semicolon.cocci warnings
-Message-ID: <20190724043714.s3mdrehckrvksvob@1905cc33b6dd>
-References: <201907241208.upolDRPG%lkp@intel.com>
+        id S1726086AbfGXFIu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 24 Jul 2019 01:08:50 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:46305 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725894AbfGXFIt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 24 Jul 2019 01:08:49 -0400
+X-UUID: 4a06b605661c4987865286829ec6b91f-20190724
+X-UUID: 4a06b605661c4987865286829ec6b91f-20190724
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (mhqrelay.mediatek.com ESMTP with TLS)
+        with ESMTP id 647929779; Wed, 24 Jul 2019 13:08:26 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 24 Jul 2019 13:08:24 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 24 Jul 2019 13:08:25 +0800
+Message-ID: <1563944904.7235.8.camel@mtkswgap22>
+Subject: RE: [PATCH v1 0/2] scsi: ufs: Fix broken hba->outstanding_tasks
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     Avri Altman <Avri.Altman@wdc.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>,
+        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "evgreen@chromium.org" <evgreen@chromium.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>
+Date:   Wed, 24 Jul 2019 13:08:24 +0800
+In-Reply-To: <SN6PR04MB49256F66F259185F3876CCABFCC40@SN6PR04MB4925.namprd04.prod.outlook.com>
+References: <1562906656-27154-1-git-send-email-stanley.chu@mediatek.com>
+         <SN6PR04MB4925208835D4760249E82DB7FCC50@SN6PR04MB4925.namprd04.prod.outlook.com>
+         <SN6PR04MB49256F66F259185F3876CCABFCC40@SN6PR04MB4925.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201907241208.upolDRPG%lkp@intel.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: kbuild test robot <lkp@intel.com>
+Hi Avri,
 
-drivers/target/iscsi/cxgbit/cxgbit_target.c:1451:47-48: Unneeded semicolon
+On Mon, 2019-07-22 at 06:10 +0000, Avri Altman wrote:
+> > 
+> > >
+> > > Hi,
+> > >
+> > > >
+> > > > Currently bits in hba->outstanding_tasks are cleared only after their
+> > > > corresponding task management commands are successfully done by
+> > > > __ufshcd_issue_tm_cmd().
+> > > >
+> > > > If timeout happens in a task management command, its corresponding
+> > > > bit in hba->outstanding_tasks will not be cleared until next task
+> > > > management command with the same tag used successfully finishes.‧
+> > > ufshcd_clear_tm_cmd is also called as part of ufshcd_err_handler.
+> > > Does this change something in your assumptions?
+> > And BTW there is a specific __clear_bit in __ufshcd_issue_tm_cmd() in case
+> > of a TO.
+> 
+> Gave it another look - 
+> If indeed this bit isn't cleared as part of the error flow that the timeout triggers,
+> I think you should relate to ufshcd_clear_tm_cmd specifically in your commit log - 
+> Because this is the obvious place where the bit cleanup should take place.
+> 
+> Also the fix should be much more intuitive IMO - 
+> Today we do __clear_bit() on success, ufshcd_clear_tm_cmd() on error,
+> And also ufshcd_put_tm_slot() either way?
+> 
+> Maybe you can choose a single place to clear it, without any additional code?
+
+ufshcd_clear_tm_cmd() is similar to ufshcd_clear_cmd() which tries to
+write timed-out bit in "clear register". They do not clean bits in both
+outstanding masks.
+
+Another reason to not to do outstanding bits cleanup in
+ufshcd_clear_tm_cmd() is: if host is unable to clear TM command by
+setting "clear register", the TM command may be still "outstanding" in
+the device. In this case, it may be better to do cleanup after reset is
+done. Cleanup includes bits in hba->outstanding_tasks and
+hba->tm_slots_in_use which is possibly cleaned too early by
+ufshcd_put_tm_slot() if command is timed-out now.
+
+Referring to error handling flow of hba->outstanding_reqs, all timed-out
+bits will be cleaned by ufshcd_reset_and_restore() =>
+ufshcd_transfer_req_compl() after reset is done. Similar handling for
+hba->outstanding_tasks could be applied, i.e., do cleanup by
+ufshcd_reset_and_restore() => ufshcd_tmc_handler().
+
+The next thing is what you suggested: How to make the fix more
+intuitive. Patchset v2 will be uploaded for review: It tries to
+"re-factor" cleanup jobs first, and then add fixed flow to make the
+whole patch more readable.
+
+One more thing, above description and flow is done through UFSHCD SCSI
+error handling routines registered with SCSI Midlayer. For TM command
+timeout happening in bsg path without error handling triggered by SCSI
+layer, we may need to consider to handle those tasks in future patches.
+
+> 
+> Thanks,
+> Avri
+
+Thanks,
+Stanley
+
+> _______________________________________________
+> Linux-mediatek mailing list
+> Linux-mediatek@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-mediatek
 
 
- Remove unneeded semicolon.
-
-Generated by: scripts/coccinelle/misc/semicolon.cocci
-
-Fixes: d7840976e391 ("net: Use skb accessors in network drivers")
-CC: Matthew Wilcox (Oracle) <willy@infradead.org>
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
-
-tree:   https://kernel.googlesource.com/pub/scm/linux/kernel/git/davem/net-next.git master
-head:   3e3bb69589e482e0783f28d4cd1d8e56fda0bcbb
-commit: d7840976e3915669382c62ddd1700960f348328e [7/33] net: Use skb accessors in network drivers
-
- cxgbit_target.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- a/drivers/target/iscsi/cxgbit/cxgbit_target.c
-+++ b/drivers/target/iscsi/cxgbit/cxgbit_target.c
-@@ -1448,7 +1448,7 @@ cxgbit_lro_skb_merge(struct cxgbit_sock
- 		hpdu_cb->frags++;
- 		hpdu_cb->hfrag_idx = hfrag_idx;
- 
--		len = skb_frag_size(&hssi->frags[hfrag_idx]);;
-+		len = skb_frag_size(&hssi->frags[hfrag_idx]);
- 		hskb->len += len;
- 		hskb->data_len += len;
- 		hskb->truesize += len;
