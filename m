@@ -2,156 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B885E76F57
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 18:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85A976F6D
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 19:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387567AbfGZQtJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 12:49:09 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33094 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387538AbfGZQtJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 12:49:09 -0400
-Received: by mail-pg1-f196.google.com with SMTP id f20so15808458pgj.0
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 09:49:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hWgAO/PUWkxDSsozkfpBkkLPdiQCYYk9g450H0msWuU=;
-        b=IgkYAFUe12g5vPXxy3xynIFd3ZQ3Z+Js92ZAAiIVPTKd3ywryXrIZLUDaBVdWzeY0S
-         TaIsZmQahrI+Sgbvtj/eLgOTbK+i70Laurwa6k4pliPRM0q/QRZztbVZQFCqM2wZAgrx
-         WSchhJ364v9+jeGI06QOkC2r5KWYZixi0wku89KbOCrhcxzA4cEbv1F/7duFWJ8l2SVW
-         ZT8cIwavJ09js9ZkXeJvmHyWnOj46sx2U+x5zZ8dOi98cBw4mvoHuxslS8qcVscn9gzg
-         NoFH83IDn72unSCFq8C3gHkdMab4P+2t+cgnuuko57rP5LIer8VjLRxYx5/s6OzCVWN9
-         IbHw==
-X-Gm-Message-State: APjAAAWZtlfkVDEeNuPztdz7LRZcZSJec4ArkWTwEC/lsCiwkeedEpTx
-        gUkKEZTrFUqPE7qEKSCQOLs=
-X-Google-Smtp-Source: APXvYqyvrcfgJEjY26jsNQzfOeDJrylY7r6DjK6N5LytZh92kRua8ii9aLQq+0/IlpXfZp/G26KW7w==
-X-Received: by 2002:a65:68c8:: with SMTP id k8mr7857037pgt.192.1564159748630;
-        Fri, 26 Jul 2019 09:49:08 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id b36sm80923246pjc.16.2019.07.26.09.49.07
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 26 Jul 2019 09:49:07 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+        id S1728230AbfGZRA1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 13:00:27 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55302 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727617AbfGZRA1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 26 Jul 2019 13:00:27 -0400
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6QGuu9R026600;
+        Fri, 26 Jul 2019 13:00:10 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u02husp9u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Jul 2019 13:00:09 -0400
+Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x6QGv88N027221;
+        Fri, 26 Jul 2019 13:00:09 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u02husp90-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Jul 2019 13:00:09 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x6QGsLpl006787;
+        Fri, 26 Jul 2019 17:00:08 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma01wdc.us.ibm.com with ESMTP id 2tymfe5nrh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 26 Jul 2019 17:00:08 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6QH071460228088
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 Jul 2019 17:00:07 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 070E06E053;
+        Fri, 26 Jul 2019 17:00:07 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66E7E6E054;
+        Fri, 26 Jul 2019 17:00:05 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.131.103])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Fri, 26 Jul 2019 17:00:05 +0000 (GMT)
+Message-ID: <1564160404.9950.1.camel@linux.vnet.ibm.com>
+Subject: Re: [PATCH 3/4] Complain if scsi_target_block() fails
+From:   James Bottomley <jejb@linux.vnet.ibm.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
 Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Jan Palus <jpalus@fastmail.com>,
         Hannes Reinecke <hare@suse.com>,
         Johannes Thumshirn <jthumshirn@suse.de>,
         Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 4/4] Reduce memory required for SCSI logging
-Date:   Fri, 26 Jul 2019 09:48:55 -0700
-Message-Id: <20190726164855.130084-5-bvanassche@acm.org>
-X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
-In-Reply-To: <20190726164855.130084-1-bvanassche@acm.org>
+Date:   Fri, 26 Jul 2019 10:00:04 -0700
+In-Reply-To: <20190726164855.130084-4-bvanassche@acm.org>
 References: <20190726164855.130084-1-bvanassche@acm.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+         <20190726164855.130084-4-bvanassche@acm.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-26_12:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907260207
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The data structure used for log messages is so large that it can cause a
-boot failure. Since allocations from that data structure can fail anyway,
-use kmalloc() / kfree() instead of that data structure.
+On Fri, 2019-07-26 at 09:48 -0700, Bart Van Assche wrote:
+> If scsi_target_block() fails that can break the code that calls this
+> function. Hence complain loudly if scsi_target_block() fails.
+> 
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Hannes Reinecke <hare@suse.com>
+> Cc: Johannes Thumshirn <jthumshirn@suse.de>
+> Cc: Ming Lei <ming.lei@redhat.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>  drivers/scsi/scsi_lib.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index bbed72eff9c9..c9630bd59b5a 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -2770,6 +2770,8 @@ int scsi_target_block(struct device *dev)
+>  	else
+>  		device_for_each_child(dev, &ret, target_block);
+>  
+> +	WARN_ONCE(ret, "ret = %d\n", ret);
+> +
 
-See also https://bugzilla.kernel.org/show_bug.cgi?id=204119.
-See also commit ded85c193a39 ("scsi: Implement per-cpu logging buffer") # v4.0.
+If this is the only point to the previous change to make SCSI target
+block return an error, why not put the WARN_ONCE in device_block?  That
+way you'll at least know which device was the problem.
 
-Reported-by: Jan Palus <jpalus@fastmail.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Hannes Reinecke <hare@suse.com>
-Cc: Johannes Thumshirn <jthumshirn@suse.de>
-Cc: Ming Lei <ming.lei@redhat.com>
-Cc: Jan Palus <jpalus@fastmail.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/scsi_logging.c | 48 +++----------------------------------
- include/scsi/scsi_dbg.h     |  2 --
- 2 files changed, 3 insertions(+), 47 deletions(-)
-
-diff --git a/drivers/scsi/scsi_logging.c b/drivers/scsi/scsi_logging.c
-index 39b8cc4574b4..c6ed0b12e807 100644
---- a/drivers/scsi/scsi_logging.c
-+++ b/drivers/scsi/scsi_logging.c
-@@ -15,57 +15,15 @@
- #include <scsi/scsi_eh.h>
- #include <scsi/scsi_dbg.h>
- 
--#define SCSI_LOG_SPOOLSIZE 4096
--
--#if (SCSI_LOG_SPOOLSIZE / SCSI_LOG_BUFSIZE) > BITS_PER_LONG
--#warning SCSI logging bitmask too large
--#endif
--
--struct scsi_log_buf {
--	char buffer[SCSI_LOG_SPOOLSIZE];
--	unsigned long map;
--};
--
--static DEFINE_PER_CPU(struct scsi_log_buf, scsi_format_log);
--
- static char *scsi_log_reserve_buffer(size_t *len)
- {
--	struct scsi_log_buf *buf;
--	unsigned long map_bits = sizeof(buf->buffer) / SCSI_LOG_BUFSIZE;
--	unsigned long idx = 0;
--
--	preempt_disable();
--	buf = this_cpu_ptr(&scsi_format_log);
--	idx = find_first_zero_bit(&buf->map, map_bits);
--	if (likely(idx < map_bits)) {
--		while (test_and_set_bit(idx, &buf->map)) {
--			idx = find_next_zero_bit(&buf->map, map_bits, idx);
--			if (idx >= map_bits)
--				break;
--		}
--	}
--	if (WARN_ON(idx >= map_bits)) {
--		preempt_enable();
--		return NULL;
--	}
--	*len = SCSI_LOG_BUFSIZE;
--	return buf->buffer + idx * SCSI_LOG_BUFSIZE;
-+	*len = 128;
-+	return kmalloc(*len, GFP_ATOMIC);
- }
- 
- static void scsi_log_release_buffer(char *bufptr)
- {
--	struct scsi_log_buf *buf;
--	unsigned long idx;
--	int ret;
--
--	buf = this_cpu_ptr(&scsi_format_log);
--	if (bufptr >= buf->buffer &&
--	    bufptr < buf->buffer + SCSI_LOG_SPOOLSIZE) {
--		idx = (bufptr - buf->buffer) / SCSI_LOG_BUFSIZE;
--		ret = test_and_clear_bit(idx, &buf->map);
--		WARN_ON(!ret);
--	}
--	preempt_enable();
-+	kfree(bufptr);
- }
- 
- static inline const char *scmd_name(const struct scsi_cmnd *scmd)
-diff --git a/include/scsi/scsi_dbg.h b/include/scsi/scsi_dbg.h
-index e03bd9d41fa8..7b196d234626 100644
---- a/include/scsi/scsi_dbg.h
-+++ b/include/scsi/scsi_dbg.h
-@@ -6,8 +6,6 @@ struct scsi_cmnd;
- struct scsi_device;
- struct scsi_sense_hdr;
- 
--#define SCSI_LOG_BUFSIZE 128
--
- extern void scsi_print_command(struct scsi_cmnd *);
- extern size_t __scsi_format_command(char *, size_t,
- 				   const unsigned char *, size_t);
--- 
-2.22.0.709.g102302147b-goog
+James
 
