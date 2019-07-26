@@ -2,174 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A425876B89
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 16:24:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A211F76B90
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 16:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387538AbfGZOY5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 10:24:57 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:43567 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbfGZOY5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 10:24:57 -0400
-Received: by mail-ed1-f67.google.com with SMTP id e3so53463964edr.10
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 07:24:55 -0700 (PDT)
+        id S1727502AbfGZO0A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 10:26:00 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:34595 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727366AbfGZO0A (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 10:26:00 -0400
+Received: by mail-qt1-f195.google.com with SMTP id k10so52820651qtq.1
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 07:25:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=iKvptB00eRJtAAyTA2xD7jIbIFN8n5r7X55dRtJg5Cw=;
-        b=f5L5IA3ayQmsQHY5KhIVuOFZAzingVgEcKk8EvRC5mL0KaqQyGnWAI0cbPTrNNuCz7
-         K18hM9pz10KIe5v0Z75fubUwSrYuFdOojHzAiYoIdyx9DO1Z5oW1vH1CNjwbsYziO6sT
-         /QI7SGtnnJxli3UbqAjXRyOHKL5kB7R4In+E8=
+        d=lca.pw; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=WTNB9/sSUp3RvghC3N7AVUzrEDJYp8g0FPiSPT+2XmY=;
+        b=IE0RZWx//RRo+SUPna44fGwa3H83J/6k6ORc+Rz2IlkOveVpNT1DGd4MnPYXZ+04AV
+         9XQxJEG26nX0gY91WPbL6hMCTPqAfleSp43IEFQhaJ54PMVaProxdSjOFyWv5n4JdvDn
+         o5R3X0qyI6AyUarBkYZVyT7V6WwJZypymVQskeQlX1uSoPnJD3ru+AQq3CvOJFFIJpuE
+         JtVzLWHBhyqcT4pSq2h0Tbv5n7nw/Kp9NGb8fBMnUKSceZrVeNu9YCe2bLVa3zuGIoMW
+         ab4MfMKbtuXDez7tfWTxgQ77j3aYEkeD+4efnKuyjhaIHHimKHhL1vvvi9uH/AASXbA8
+         Wc5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=iKvptB00eRJtAAyTA2xD7jIbIFN8n5r7X55dRtJg5Cw=;
-        b=PPhdfGyJMzSMvXDF4H030Igu1Mt7Q5aVgV3rD2Kh8pGcGLU4M62TBCeDLfuNDG44zG
-         dwnETM4Ihqh86WNeutH4zLG4pc9Si6UevWz9fcrXl/BPJiVRT4JgsKgbrswrIMyHa8Z1
-         uIWZ1HimBCM8P9HSGKtP1atibVzzUvoEVbRFl8sT4tiggwtdXjwgFPsBU5dN3NEmV/KG
-         az78ahEWohsx9+zguLJFQaQubIoSOoqxxSSMPuyR2GPFvETxyNDJ1ZPF2dv9VWkNw1lL
-         YmlOs+LtaD46tvcLC+A+SRSmm/PAYsioQmrnMYMPr7ks0XPbipVfviabiK6VHME4mGXy
-         KGpw==
-X-Gm-Message-State: APjAAAW9iCWLaJSsVzoz8evowYxnjw6W5aUajBlq3tYSltp4LgNEqMxC
-        MdiRqpHbrq6co3+igCutTNo=
-X-Google-Smtp-Source: APXvYqziEeXaDKlMzj6WkqFhfWfsWvSAtDFO47Ob8pLZS5KABUGhUNYgZNlFDTi49ewicGXyP7F9Dg==
-X-Received: by 2002:a50:ad48:: with SMTP id z8mr82669671edc.66.1564151094716;
-        Fri, 26 Jul 2019 07:24:54 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
-        by smtp.gmail.com with ESMTPSA id m31sm14121701edd.42.2019.07.26.07.24.52
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 26 Jul 2019 07:24:53 -0700 (PDT)
-Date:   Fri, 26 Jul 2019 16:24:50 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
-        Don Brace <don.brace@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        rcu@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        esc.storagedev@microsemi.com, SCSI <linux-scsi@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH 1/7] docs: fix broken doc references due to renames
-Message-ID: <20190726142450.GJ15868@phenom.ffwll.local>
-Mail-Followup-To: Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Ajay Gupta <ajayg@nvidia.com>, Don Brace <don.brace@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        rcu@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>, esc.storagedev@microsemi.com,
-        SCSI <linux-scsi@vger.kernel.org>, Wolfram Sang <wsa@the-dreams.de>
-References: <cover.1564140865.git.mchehab+samsung@kernel.org>
- <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
- <CAL_JsqK_rfHehrKW_NS89BOV0=dYoao0H=zOzG=D-724vKduKw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqK_rfHehrKW_NS89BOV0=dYoao0H=zOzG=D-724vKduKw@mail.gmail.com>
-X-Operating-System: Linux phenom 4.19.0-5-amd64 
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=WTNB9/sSUp3RvghC3N7AVUzrEDJYp8g0FPiSPT+2XmY=;
+        b=bc3PqMKYK/1cGnZOhHbYWRKQz6bDjVBi8SgiXhqnoln2NODYcy82oKfhAMgljwl7lU
+         nRT1r1+PwTmpphVcPI2Mqo75b5cmlMt0rrJd34Ow6p9Mf/4D6O30JYtkSo89I4pxtZ3E
+         zXzAJYoqRKkk9sgMc9X0DdgvS2A9/eMkvNs/7sCw4wCAwu9pTrbIGARwDApWt2smDztH
+         OPW2kri9jMtRHlc7hhhu8XPNYNIjUZnSo/JnuDj3VooiS17tChaOt6ZW0yYceNbqYPMp
+         HeGg4PLFBnvdc9NV5v8t0oBQuaN3v3XyLv84lrKxhzPFgvgcHYL3cbGVFEHvE40PnIMz
+         GsaA==
+X-Gm-Message-State: APjAAAUAaX6c7U6NSf6bQlkQjCP/HlPPpbaWfsB3OGqeNHmBJGaZ2pkf
+        X+7HFsWDwMeLxkrEtfksxmAoEQ==
+X-Google-Smtp-Source: APXvYqw7RxbbTRB1wYmPz1aZ7z6CkuQJpFWipr6DnxLizs1HK6WYvq1PfoOxTVIsTZP+MX2WlhfIww==
+X-Received: by 2002:a0c:d066:: with SMTP id d35mr66686999qvh.221.1564151159483;
+        Fri, 26 Jul 2019 07:25:59 -0700 (PDT)
+Received: from qcai.nay.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id l19sm30771521qtb.6.2019.07.26.07.25.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 26 Jul 2019 07:25:58 -0700 (PDT)
+From:   Qian Cai <cai@lca.pw>
+To:     martin.petersen@oracle.com
+Cc:     jejb@linux.ibm.com, kashyap.desai@broadcom.com,
+        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Qian Cai <cai@lca.pw>
+Subject: [PATCH] scsi/megaraid_sas: fix a compilation warning
+Date:   Fri, 26 Jul 2019 10:25:43 -0400
+Message-Id: <1564151143-22889-1-git-send-email-cai@lca.pw>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 07:41:35AM -0600, Rob Herring wrote:
-> On Fri, Jul 26, 2019 at 5:47 AM Mauro Carvalho Chehab
-> <mchehab+samsung@kernel.org> wrote:
-> >
-> > Some files got renamed but probably due to some merge conflicts,
-> > a few references still point to the old locations.
-> >
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> > Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C part
-> > Reviewed-by: Jerry Hoemann <jerry.hoemann@hpe.com> # hpwdt.rst
-> > ---
-> >  Documentation/RCU/rculist_nulls.txt                   |  2 +-
-> >  Documentation/devicetree/bindings/arm/idle-states.txt |  2 +-
-> >  Documentation/locking/spinlocks.rst                   |  4 ++--
-> >  Documentation/memory-barriers.txt                     |  2 +-
-> >  Documentation/translations/ko_KR/memory-barriers.txt  |  2 +-
-> >  Documentation/watchdog/hpwdt.rst                      |  2 +-
-> >  MAINTAINERS                                           | 10 +++++-----
-> >  drivers/gpu/drm/drm_modes.c                           |  2 +-
+The commit de516379e85f ("scsi: megaraid_sas: changes to function
+prototypes") introduced a comilation warning due to it changed the
+function prototype of read_fw_status_reg() to take an instance pointer
+instead, but forgot to remove an unused variable.
 
-for the drm part:
+drivers/scsi/megaraid/megaraid_sas_fusion.c: In function
+'megasas_fusion_update_can_queue':
+drivers/scsi/megaraid/megaraid_sas_fusion.c:326:39: warning: variable
+'reg_set' set but not used [-Wunused-but-set-variable]
+  struct megasas_register_set __iomem *reg_set;
+                                       ^~~~~~~
+Fixes: de516379e85f ("scsi: megaraid_sas: changes to function prototypes")
+Signed-off-by: Qian Cai <cai@lca.pw>
+---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-
-> >  drivers/i2c/busses/i2c-nvidia-gpu.c                   |  2 +-
-> >  drivers/scsi/hpsa.c                                   |  4 ++--
-> >  10 files changed, 16 insertions(+), 16 deletions(-)
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index a32b3f0fcd15..e8092d59d575 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -323,9 +323,6 @@ inline void megasas_return_cmd_fusion(struct megasas_instance *instance,
+ {
+ 	u16 cur_max_fw_cmds = 0;
+ 	u16 ldio_threshold = 0;
+-	struct megasas_register_set __iomem *reg_set;
+-
+-	reg_set = instance->reg_set;
+ 
+ 	/* ventura FW does not fill outbound_scratch_pad_2 with queue depth */
+ 	if (instance->adapter_type < VENTURA_SERIES)
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+1.8.3.1
+
