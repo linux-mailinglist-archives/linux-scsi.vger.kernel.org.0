@@ -2,108 +2,169 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3BE76A23
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 15:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295AD76A18
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 15:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728143AbfGZN4a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 09:56:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48914 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387777AbfGZNlu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jul 2019 09:41:50 -0400
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2672A22CF5;
-        Fri, 26 Jul 2019 13:41:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564148509;
-        bh=zX30Y7I8lGQSE39mcBLgCQnD1zhzLqgkvgnTgW8bI/U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=k7/MYg0MGLbki0g3EqS6d5XoAuDjmxLmZ5gir1IHBeua4yDd4S/goV17so5PiFt8n
-         +FJh7ZVsJa/LcxUvub/nflNlyhoyELQboQqE6meOYLtPh7zlfMdNwoyEKTbOxO4dvN
-         n1+yN7Rq6NuEbvgyeiChNQerVHe6alV6d3tfnU8g=
-Received: by mail-qk1-f172.google.com with SMTP id v22so39029500qkj.8;
-        Fri, 26 Jul 2019 06:41:49 -0700 (PDT)
-X-Gm-Message-State: APjAAAW6M4OTnD6ssHM6XypNkKeXuIX16MHEhAhKgQNS9mb8d+YFTD4h
-        wk3szdOcuFgO0FJ3KMpWPvDVUqaPGOoQOF9q9Q==
-X-Google-Smtp-Source: APXvYqxjuwBX7ksE7JbZB0mI6ceV0xcxiT8SPZ6Gi56d7P4U1vzH0bY2zZ15ZhXiikKw8Sd4XxO8RlHxVifobutyBU8=
-X-Received: by 2002:a37:a010:: with SMTP id j16mr64220208qke.152.1564148507205;
- Fri, 26 Jul 2019 06:41:47 -0700 (PDT)
+        id S1728018AbfGZN4G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 09:56:06 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:39926 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728452AbfGZN4F (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 26 Jul 2019 09:56:05 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 358F2D34AB62BD8B557C;
+        Fri, 26 Jul 2019 21:56:01 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS407-HUB.china.huawei.com
+ (10.3.19.207) with Microsoft SMTP Server id 14.3.439.0; Fri, 26 Jul 2019
+ 21:55:52 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
+        <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <megaraidlinux.pdl@broadcom.com>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: [PATCH -next] scsi: megaraid_sas: Make a bunch of functions static
+Date:   Fri, 26 Jul 2019 21:55:40 +0800
+Message-ID: <20190726135540.48780-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-References: <cover.1564140865.git.mchehab+samsung@kernel.org> <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
-In-Reply-To: <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 26 Jul 2019 07:41:35 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqK_rfHehrKW_NS89BOV0=dYoao0H=zOzG=D-724vKduKw@mail.gmail.com>
-Message-ID: <CAL_JsqK_rfHehrKW_NS89BOV0=dYoao0H=zOzG=D-724vKduKw@mail.gmail.com>
-Subject: Re: [PATCH 1/7] docs: fix broken doc references due to renames
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
-        Don Brace <don.brace@microsemi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        rcu@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux I2C <linux-i2c@vger.kernel.org>,
-        esc.storagedev@microsemi.com, SCSI <linux-scsi@vger.kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 5:47 AM Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> wrote:
->
-> Some files got renamed but probably due to some merge conflicts,
-> a few references still point to the old locations.
->
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C part
-> Reviewed-by: Jerry Hoemann <jerry.hoemann@hpe.com> # hpwdt.rst
-> ---
->  Documentation/RCU/rculist_nulls.txt                   |  2 +-
->  Documentation/devicetree/bindings/arm/idle-states.txt |  2 +-
->  Documentation/locking/spinlocks.rst                   |  4 ++--
->  Documentation/memory-barriers.txt                     |  2 +-
->  Documentation/translations/ko_KR/memory-barriers.txt  |  2 +-
->  Documentation/watchdog/hpwdt.rst                      |  2 +-
->  MAINTAINERS                                           | 10 +++++-----
->  drivers/gpu/drm/drm_modes.c                           |  2 +-
->  drivers/i2c/busses/i2c-nvidia-gpu.c                   |  2 +-
->  drivers/scsi/hpsa.c                                   |  4 ++--
->  10 files changed, 16 insertions(+), 16 deletions(-)
+Fix sparse warnings:
 
-Acked-by: Rob Herring <robh@kernel.org>
+drivers/scsi/megaraid/megaraid_sas_fusion.c:3369:1: warning: symbol 'complete_cmd_fusion' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:3535:6: warning: symbol 'megasas_sync_irqs' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:3554:1: warning: symbol 'megasas_complete_cmd_dpc_fusion' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:3573:13: warning: symbol 'megasas_isr_fusion' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:3604:1: warning: symbol 'build_mpt_mfi_pass_thru' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:3661:40: warning: symbol 'build_mpt_cmd' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:3688:1: warning: symbol 'megasas_issue_dcmd_fusion' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:3881:5: warning: symbol 'megasas_wait_for_outstanding_fusion' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:4005:6: warning: symbol 'megasas_refire_mgmt_cmd' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:4525:25: warning: symbol 'megasas_get_peer_instance' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fusion.c:4825:7: warning: symbol 'megasas_fusion_crash_dump' was not declared. Should it be static?
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 26 ++++++++++++++------------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index 120e3c4..10ef99e 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -3511,7 +3511,7 @@ megasas_complete_r1_command(struct megasas_instance *instance,
+  * @instance:			Adapter soft state
+  * Completes all commands that is in reply descriptor queue
+  */
+-int
++static int
+ complete_cmd_fusion(struct megasas_instance *instance, u32 MSIxIndex,
+ 		    struct megasas_irq_context *irq_context)
+ {
+@@ -3702,7 +3702,7 @@ static void megasas_enable_irq_poll(struct megasas_instance *instance)
+  * megasas_sync_irqs -	Synchronizes all IRQs owned by adapter
+  * @instance:			Adapter soft state
+  */
+-void megasas_sync_irqs(unsigned long instance_addr)
++static void megasas_sync_irqs(unsigned long instance_addr)
+ {
+ 	u32 count, i;
+ 	struct megasas_instance *instance =
+@@ -3760,7 +3760,7 @@ int megasas_irqpoll(struct irq_poll *irqpoll, int budget)
+  *
+  * Tasklet to complete cmds
+  */
+-void
++static void
+ megasas_complete_cmd_dpc_fusion(unsigned long instance_addr)
+ {
+ 	struct megasas_instance *instance =
+@@ -3780,7 +3780,7 @@ megasas_complete_cmd_dpc_fusion(unsigned long instance_addr)
+ /**
+  * megasas_isr_fusion - isr entry point
+  */
+-irqreturn_t megasas_isr_fusion(int irq, void *devp)
++static irqreturn_t megasas_isr_fusion(int irq, void *devp)
+ {
+ 	struct megasas_irq_context *irq_context = devp;
+ 	struct megasas_instance *instance = irq_context->instance;
+@@ -3816,7 +3816,7 @@ irqreturn_t megasas_isr_fusion(int irq, void *devp)
+  * mfi_cmd:			megasas_cmd pointer
+  *
+  */
+-void
++static void
+ build_mpt_mfi_pass_thru(struct megasas_instance *instance,
+ 			struct megasas_cmd *mfi_cmd)
+ {
+@@ -3874,7 +3874,7 @@ build_mpt_mfi_pass_thru(struct megasas_instance *instance,
+  * @cmd:			mfi cmd to build
+  *
+  */
+-union MEGASAS_REQUEST_DESCRIPTOR_UNION *
++static union MEGASAS_REQUEST_DESCRIPTOR_UNION *
+ build_mpt_cmd(struct megasas_instance *instance, struct megasas_cmd *cmd)
+ {
+ 	union MEGASAS_REQUEST_DESCRIPTOR_UNION *req_desc = NULL;
+@@ -3900,7 +3900,7 @@ build_mpt_cmd(struct megasas_instance *instance, struct megasas_cmd *cmd)
+  * @cmd:			mfi cmd pointer
+  *
+  */
+-void
++static void
+ megasas_issue_dcmd_fusion(struct megasas_instance *instance,
+ 			  struct megasas_cmd *cmd)
+ {
+@@ -4096,8 +4096,9 @@ static inline void megasas_trigger_snap_dump(struct megasas_instance *instance)
+ }
+ 
+ /* This function waits for outstanding commands on fusion to complete */
+-int megasas_wait_for_outstanding_fusion(struct megasas_instance *instance,
+-					int reason, int *convert)
++static int
++megasas_wait_for_outstanding_fusion(struct megasas_instance *instance,
++				    int reason, int *convert)
+ {
+ 	int i, outstanding, retval = 0, hb_seconds_missed = 0;
+ 	u32 fw_state, abs_state;
+@@ -4221,7 +4222,7 @@ void  megasas_reset_reply_desc(struct megasas_instance *instance)
+  * megasas_refire_mgmt_cmd :	Re-fire management commands
+  * @instance:				Controller's soft instance
+ */
+-void megasas_refire_mgmt_cmd(struct megasas_instance *instance)
++static void megasas_refire_mgmt_cmd(struct megasas_instance *instance)
+ {
+ 	int j;
+ 	struct megasas_cmd_fusion *cmd_fusion;
+@@ -4747,7 +4748,8 @@ int megasas_reset_target_fusion(struct scsi_cmnd *scmd)
+ }
+ 
+ /*SRIOV get other instance in cluster if any*/
+-struct megasas_instance *megasas_get_peer_instance(struct megasas_instance *instance)
++static struct
++megasas_instance *megasas_get_peer_instance(struct megasas_instance *instance)
+ {
+ 	int i;
+ 
+@@ -5053,7 +5055,7 @@ int megasas_reset_fusion(struct Scsi_Host *shost, int reason)
+ }
+ 
+ /* Fusion Crash dump collection */
+-void  megasas_fusion_crash_dump(struct megasas_instance *instance)
++static void  megasas_fusion_crash_dump(struct megasas_instance *instance)
+ {
+ 	u32 status_reg;
+ 	u8 partial_copy = 0;
+-- 
+2.7.4
+
+
