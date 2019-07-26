@@ -2,92 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A211F76B90
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 16:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF27A76B96
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 16:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727502AbfGZO0A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 10:26:00 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:34595 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727366AbfGZO0A (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 10:26:00 -0400
-Received: by mail-qt1-f195.google.com with SMTP id k10so52820651qtq.1
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 07:25:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=WTNB9/sSUp3RvghC3N7AVUzrEDJYp8g0FPiSPT+2XmY=;
-        b=IE0RZWx//RRo+SUPna44fGwa3H83J/6k6ORc+Rz2IlkOveVpNT1DGd4MnPYXZ+04AV
-         9XQxJEG26nX0gY91WPbL6hMCTPqAfleSp43IEFQhaJ54PMVaProxdSjOFyWv5n4JdvDn
-         o5R3X0qyI6AyUarBkYZVyT7V6WwJZypymVQskeQlX1uSoPnJD3ru+AQq3CvOJFFIJpuE
-         JtVzLWHBhyqcT4pSq2h0Tbv5n7nw/Kp9NGb8fBMnUKSceZrVeNu9YCe2bLVa3zuGIoMW
-         ab4MfMKbtuXDez7tfWTxgQ77j3aYEkeD+4efnKuyjhaIHHimKHhL1vvvi9uH/AASXbA8
-         Wc5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=WTNB9/sSUp3RvghC3N7AVUzrEDJYp8g0FPiSPT+2XmY=;
-        b=bc3PqMKYK/1cGnZOhHbYWRKQz6bDjVBi8SgiXhqnoln2NODYcy82oKfhAMgljwl7lU
-         nRT1r1+PwTmpphVcPI2Mqo75b5cmlMt0rrJd34Ow6p9Mf/4D6O30JYtkSo89I4pxtZ3E
-         zXzAJYoqRKkk9sgMc9X0DdgvS2A9/eMkvNs/7sCw4wCAwu9pTrbIGARwDApWt2smDztH
-         OPW2kri9jMtRHlc7hhhu8XPNYNIjUZnSo/JnuDj3VooiS17tChaOt6ZW0yYceNbqYPMp
-         HeGg4PLFBnvdc9NV5v8t0oBQuaN3v3XyLv84lrKxhzPFgvgcHYL3cbGVFEHvE40PnIMz
-         GsaA==
-X-Gm-Message-State: APjAAAUAaX6c7U6NSf6bQlkQjCP/HlPPpbaWfsB3OGqeNHmBJGaZ2pkf
-        X+7HFsWDwMeLxkrEtfksxmAoEQ==
-X-Google-Smtp-Source: APXvYqw7RxbbTRB1wYmPz1aZ7z6CkuQJpFWipr6DnxLizs1HK6WYvq1PfoOxTVIsTZP+MX2WlhfIww==
-X-Received: by 2002:a0c:d066:: with SMTP id d35mr66686999qvh.221.1564151159483;
-        Fri, 26 Jul 2019 07:25:59 -0700 (PDT)
-Received: from qcai.nay.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id l19sm30771521qtb.6.2019.07.26.07.25.57
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Jul 2019 07:25:58 -0700 (PDT)
-From:   Qian Cai <cai@lca.pw>
-To:     martin.petersen@oracle.com
-Cc:     jejb@linux.ibm.com, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, shivasharan.srikanteshwara@broadcom.com,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Qian Cai <cai@lca.pw>
-Subject: [PATCH] scsi/megaraid_sas: fix a compilation warning
-Date:   Fri, 26 Jul 2019 10:25:43 -0400
-Message-Id: <1564151143-22889-1-git-send-email-cai@lca.pw>
-X-Mailer: git-send-email 1.8.3.1
+        id S2387402AbfGZO1H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 10:27:07 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:58188 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbfGZO1H (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 10:27:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=nYu9AqARyg1s9xhIySXzwj35RjVZXlDWPNT++weib0Q=; b=L6TPMw34jBusFt1s+qu213+qb
+        KGYpi2YSVUoYuGkZ3fazfm/2etpjsXmYTz7h4egt1ZYYYyosg8PjN2teBZ3tFpHQKHEKLZMcGzVUg
+        ZyGitzgaYZRugjqFc6rrxndPFB68yIdbMrkmItpFfS8TnGZJ9dzYk6wLTZS6S1zfk7tVvNrhNJQws
+        YWeNJngl+hdJ0xmxdwgvAb853vUEyy33B5HzicmU9CTdTk7GQz/tluuNfmTSHIbsF0sDoy3EaVqWl
+        EGeFQlMVyCERG7Nqqd3dRiIGE61OoIEgKpQ/ftyEewv/bDBh0iICjZk3QpoeBIeqe7F94grrYQLJV
+        lXpuP+f5Q==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hr1Ba-0000WQ-UX; Fri, 26 Jul 2019 14:27:06 +0000
+Date:   Fri, 26 Jul 2019 07:27:06 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Suganath Prabu <suganath-prabu.subramani@broadcom.com>
+Cc:     linux-scsi@vger.kernel.org, stable@vger.kernel.org,
+        Sathya.Prakash@broadcom.com, kashyap.desai@broadcom.com,
+        sreekanth.reddy@broadcom.com
+Subject: Re: [PATCH] mpt3sas: Use 63-bit DMA addressing on SAS35 HBA
+Message-ID: <20190726142706.GA1734@infradead.org>
+References: <1564135257-33188-1-git-send-email-suganath-prabu.subramani@broadcom.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1564135257-33188-1-git-send-email-suganath-prabu.subramani@broadcom.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The commit de516379e85f ("scsi: megaraid_sas: changes to function
-prototypes") introduced a comilation warning due to it changed the
-function prototype of read_fw_status_reg() to take an instance pointer
-instead, but forgot to remove an unused variable.
+On Fri, Jul 26, 2019 at 06:00:57AM -0400, Suganath Prabu wrote:
+> Although SAS3 & SAS3.5 IT HBA controllers support
+> 64-bit DMA addressing, as per hardware design,
+> DMA address with all 64-bits set (0xFFFFFFFF-FFFFFFFF)
+> results in a firmware fault.
 
-drivers/scsi/megaraid/megaraid_sas_fusion.c: In function
-'megasas_fusion_update_can_queue':
-drivers/scsi/megaraid/megaraid_sas_fusion.c:326:39: warning: variable
-'reg_set' set but not used [-Wunused-but-set-variable]
-  struct megasas_register_set __iomem *reg_set;
-                                       ^~~~~~~
-Fixes: de516379e85f ("scsi: megaraid_sas: changes to function prototypes")
-Signed-off-by: Qian Cai <cai@lca.pw>
----
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index a32b3f0fcd15..e8092d59d575 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -323,9 +323,6 @@ inline void megasas_return_cmd_fusion(struct megasas_instance *instance,
- {
- 	u16 cur_max_fw_cmds = 0;
- 	u16 ldio_threshold = 0;
--	struct megasas_register_set __iomem *reg_set;
--
--	reg_set = instance->reg_set;
- 
- 	/* ventura FW does not fill outbound_scratch_pad_2 with queue depth */
- 	if (instance->adapter_type < VENTURA_SERIES)
--- 
-1.8.3.1
-
+Linux will never send a dma address with all bits set anyway, as that
+is our magic escape for the dma_addr_t error value.  Additionally to
+generate that address you'd need a 1-byte sized, 1-byte aligned buffer,
+which we never use.
