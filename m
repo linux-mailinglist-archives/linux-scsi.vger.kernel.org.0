@@ -2,79 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B127C7736C
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 23:26:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024A87738F
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 23:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728337AbfGZV0L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 17:26:11 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:40441 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727398AbfGZV0L (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 17:26:11 -0400
-Received: by mail-pg1-f195.google.com with SMTP id w10so25348324pgj.7
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 14:26:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/BioJDF/rIjl+CtJqnboEQmXMiHa9an0qkjuH2k+UAo=;
-        b=Sv+79lDbrIDKMxMgo+/iS+pM2lfIwZHfDZqPAdaCwlBxV7mB5VFv7yoiifj3mxmyy9
-         gxFEo+RWN+DsQ7Xxe2YBCyVlGkvzRiUvNigzbW9QkKCuS9JmmfDulweLeuRQvDfyzacB
-         WZarv8GOuyRsPysoEa9T53odByZXLVirW/ZAQtSXIvy8u1V3jBjOOTO47PfRKP30Yl1P
-         ejThy7GFtW6lwcv4j8sKsFDMKWuvUrpeYXTGb/i3oxKLpg40CEqZ1PnsGHT3NtXT6mNK
-         kubJcIyRaW2wyP2Dv+5yy5NUJkNoi0vPpoDNiK0bnODIk5H8uv3O5+I3D1oZnj4KTv+x
-         4ShA==
-X-Gm-Message-State: APjAAAWzRnhsPYhCqrF6MUwWL89hSIwXmTpnR8a3GoHPLNvsS7yAJoQE
-        nUJRZYYgnWeba94Ezxwr9G//GNHR
-X-Google-Smtp-Source: APXvYqxNiZWsKAnhNo2i3bfQB8RAlnpdYy8sZ24gUHz/NTnlYHybx4wtOx/Kytt/Qx0f9BZd2QZ6Fg==
-X-Received: by 2002:a65:6259:: with SMTP id q25mr53692834pgv.145.1564176369911;
-        Fri, 26 Jul 2019 14:26:09 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id p19sm62035381pfn.99.2019.07.26.14.26.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 26 Jul 2019 14:26:09 -0700 (PDT)
-Subject: Re: [PATCH 03/15] qla2xxx: Fix abort timeout race condition.
-To:     Himanshu Madhani <hmadhani@marvell.com>,
-        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org
-References: <20190726160740.25687-1-hmadhani@marvell.com>
- <20190726160740.25687-4-hmadhani@marvell.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <32d19825-b571-314e-f605-76e05e17925f@acm.org>
-Date:   Fri, 26 Jul 2019 14:26:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20190726160740.25687-4-hmadhani@marvell.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728511AbfGZVkV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 17:40:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58886 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726999AbfGZVkU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 26 Jul 2019 17:40:20 -0400
+Subject: Re: [GIT PULL] SCSI fixes for 5.3-rc1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564177220;
+        bh=VBlbRVTdDM9X5wUuccB0nWAXEEoTBnPckG68xFCQ+lg=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=bc+BcKiJiz1mi/tpO366FUzu4CCbWdIMYS0MeE+TUxtAQp14i+maqRaOnxhi4AcD5
+         09YSHLdNlW45mHfCoiXtfBqsbwI590TRGQjPaXZohrWSWz+ng0WOke5O5cLKUPsFKg
+         dwICbUSLzCpEIxu6GPNDENcHfOIZNiekcCvFLo0E=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1564171685.9950.14.camel@HansenPartnership.com>
+References: <1564171685.9950.14.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1564171685.9950.14.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+X-PR-Tracked-Commit-Id: 20122994e38aef0ae50555884d287adde6641c94
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a689838913670765f7754bb1ba749acac9541626
+Message-Id: <156417722011.826.16480120807211637212.pr-tracker-bot@kernel.org>
+Date:   Fri, 26 Jul 2019 21:40:20 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/26/19 9:07 AM, Himanshu Madhani wrote:
->   static void qla24xx_abort_sp_done(void *ptr, int res)
-> @@ -109,7 +122,8 @@ static void qla24xx_abort_sp_done(void *ptr, int res)
->   	srb_t *sp = ptr;
->   	struct srb_iocb *abt = &sp->u.iocb_cmd;
->   
-> -	if (del_timer(&sp->u.iocb_cmd.timer)) {
-> +	if ((res == QLA_OS_TIMER_EXPIRED) ||
-> +	    del_timer(&sp->u.iocb_cmd.timer)) {
->   		if (sp->flags & SRB_WAKEUP_ON_COMP)
->   			complete(&abt->u.abt.comp);
->   		else
+The pull request you sent on Fri, 26 Jul 2019 13:08:05 -0700:
 
-A better fix is probably to ignore the return value of del_timer() - see 
-also "[PATCH 20/20] qla2xxx: Fix qla24xx_abort_sp_done()" 
-(https://www.spinics.net/lists/linux-scsi/msg130664.html).
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-Anyway, I'm fine with this and the other 14 patches going upstream. I 
-can rebase my patches on top of this patch series.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a689838913670765f7754bb1ba749acac9541626
 
-Bart.
+Thank you!
 
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
