@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F80A76E96
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 18:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F5E76E98
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 18:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727388AbfGZQIN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 12:08:13 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:32050 "EHLO
+        id S1728325AbfGZQIQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 12:08:16 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:55548 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726141AbfGZQIN (ORCPT
+        by vger.kernel.org with ESMTP id S1726141AbfGZQIQ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jul 2019 12:08:13 -0400
+        Fri, 26 Jul 2019 12:08:16 -0400
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x6QG5fBa017783;
-        Fri, 26 Jul 2019 09:08:10 -0700
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x6QG552b017085;
+        Fri, 26 Jul 2019 09:08:14 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=2PKUIoz3U9tfKMQRxvXXcTbbGTF7Yw+w28FO7cun8Qg=;
- b=XUOSoB/6ZJuQ3U2mbBhkNk9AXoV12UlV6/cBieXLLSWhtIFkDL5IdmEdcKLJ5tQFDKwk
- Gp5w6fR+7Gwhd00CiWGz9Hnm4qUuhlJsl2nbUMeKu72uIFGI48wji/IjWtz7RA4A8KL5
- IrOB9r+ZCuDsDK0Fe9bZKck991m0c4pCPRNQ/6TgJ74WyxoJf3BEeQuuXusAbb1vxeOq
- yFhnXXi43sCkyMBwRiC7MMQTwOCd9emsnXX/S2Ucfqc3D/0RFuFoHFsQJrDyD/B23mn9
- ZdtMYMrYvIdRzZOZiPN8W2wU87YPsuSDc7Th9lDlQCjTs1X1Se2lsJy1LbxgVktE9oFf mw== 
+ content-type; s=pfpt0818; bh=U0LtqyZINzdlylPjBvHcVaxn41MFkG3ufUCjGcu6nPQ=;
+ b=WLRirnZhXCFycXVX/jIEmse0MeZpBuW662E2MoG8/2V/T49GIzX2ulQy9VwsKZX5myWR
+ S1pug+MlcYj0xdY9SYfUjz61REpumdhdOhoQSGZhzKSsC+7omK0bO5aYdmXQJZmvj40O
+ M8EieIbaWIxAuhMcyG1aC2NeW2QDJTPBuGjk5msnqIB7mV7d01f2Nb2VR2eyI+geRXHm
+ AWqsk8F0PROZIpOgrvIb0ePv2U7tS8yeineXzVLejrJf3dosDGtT27fBzoQYxKrZTVLw
+ 8JI7+9eMCHAoqEbwGKlQDqcK/iFsboE2t2OjwWTrz2S6RwF5l0CvPWfX+B+qoRfqSxnT UQ== 
 Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2tx61rqjy9-2
+        by mx0a-0016f401.pphosted.com with ESMTP id 2tx61rqjyf-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 26 Jul 2019 09:08:10 -0700
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH03.marvell.com
+        Fri, 26 Jul 2019 09:08:14 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
  (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Fri, 26 Jul
- 2019 09:08:09 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Fri, 26 Jul 2019 09:08:09 -0700
+ 2019 09:08:13 -0700
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Fri, 26 Jul 2019 09:08:12 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 9A28C3F7040;
-        Fri, 26 Jul 2019 09:08:09 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id C43B33F7040;
+        Fri, 26 Jul 2019 09:08:12 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x6QG89ZW025770;
-        Fri, 26 Jul 2019 09:08:09 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x6QG8CGN025774;
+        Fri, 26 Jul 2019 09:08:12 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x6QG89If025769;
-        Fri, 26 Jul 2019 09:08:09 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x6QG8CqP025773;
+        Fri, 26 Jul 2019 09:08:12 -0700
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 10/15] qla2xxx: Correct error handling during initialization failures
-Date:   Fri, 26 Jul 2019 09:07:35 -0700
-Message-ID: <20190726160740.25687-11-hmadhani@marvell.com>
+Subject: [PATCH 11/15] qla2xxx: Fix failed NVME port discovery after a short device port loss
+Date:   Fri, 26 Jul 2019 09:07:36 -0700
+Message-ID: <20190726160740.25687-12-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20190726160740.25687-1-hmadhani@marvell.com>
 References: <20190726160740.25687-1-hmadhani@marvell.com>
@@ -61,104 +61,54 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Andrew Vasquez <andrewv@marvell.com>
+From: Arun Easi <aeasi@marvell.com>
 
-Current code misses or fails to account for proper recovery during early
-initialization failures:
+The following sequence of event leads to NVME port disappearing:
+    - device port shut
+    - nvme_fc_unregister_remoteport
+    - device port online
+    - remote port delete completes
+    - relogin is scheduled
+    - "post gidpn" message appears due to rscn generation # mismatch
 
-- Properly unwind allocations during probe() failures.
-- Protect against non-initialization memory allocations during
-  unwinding.
-- Propagate error status during HW initialization.
-- Release SCSI host reference when memory allocations fail.
+In short, if a device comes back online sooner than an unregister completion,
+a mismatch in rscn generation number occurs, which is not handled correctly
+during device relogin. Fix this by starting with a redo of GNL.
 
-Signed-off-by: Andrew Vasquez <andrewv@marvell.com>
+When ql2xextended_error_logging is enabled, the re-plugged device's discovery
+stops with the following messages printed:
+
+--8<--
+qla2xxx [0000:41:00.0]-480d:3: Relogin scheduled.
+qla2xxx [0000:41:00.0]-4800:3: DPC handler sleeping.
+qla2xxx [0000:41:00.0]-2902:3: qla24xx_handle_relogin_event 21:00:00:24:ff:17:9e:91 DS 0 LS 7 P 0 del 2 cnfl
+   (null) rscn 1|2 login 1|2 fl 1
+qla2xxx [0000:41:00.0]-28e9:3: qla24xx_handle_relogin_event 1666 21:00:00:24:ff:17:9e:91 post gidpn
+qla2xxx [0000:41:00.0]-480e:3: Relogin end.
+--8<--
+
+Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c |  4 ++++
- drivers/scsi/qla2xxx/qla_os.c   | 16 ++++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ drivers/scsi/qla2xxx/qla_init.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 02bbc5bdaa43..1a8b4a587e0f 100644
+index 1a8b4a587e0f..194a15b2f5f7 100644
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -2293,6 +2293,10 @@ qla2x00_initialize_adapter(scsi_qla_host_t *vha)
- 	if (qla_ini_mode_enabled(vha) || qla_dual_mode_enabled(vha))
- 		rval = qla2x00_init_rings(vha);
- 
-+	/* No point in continuing if firmware initialization failed. */
-+	if (rval != QLA_SUCCESS)
-+		return rval;
-+
- 	ha->flags.chip_reset_done = 1;
- 
- 	if (rval == QLA_SUCCESS && IS_QLA84XX(ha)) {
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index d34f6ba36a03..17d581563eec 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -1809,8 +1809,13 @@ qla2x00_abort_all_cmds(scsi_qla_host_t *vha, int res)
- 	int que;
- 	struct qla_hw_data *ha = vha->hw;
- 
-+	/* Continue only if initialization complete. */
-+	if (!ha->base_qpair)
-+		return;
- 	__qla2x00_abort_all_cmds(ha->base_qpair, res);
- 
-+	if (!ha->queue_pair_map)
-+		return;
- 	for (que = 0; que < ha->max_qpairs; que++) {
- 		if (!ha->queue_pair_map[que])
- 			continue;
-@@ -3163,6 +3168,7 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
- 		ql_log(ql_log_fatal, base_vha, 0x003d,
- 		    "Failed to allocate memory for queue pointers..."
- 		    "aborting.\n");
-+		ret = -ENODEV;
- 		goto probe_failed;
+@@ -1687,9 +1687,9 @@ void qla24xx_handle_relogin_event(scsi_qla_host_t *vha,
  	}
  
-@@ -4717,7 +4723,7 @@ qla2x00_mem_free(struct qla_hw_data *ha)
- 	mempool_destroy(ha->ctx_mempool);
- 	ha->ctx_mempool = NULL;
- 
--	if (ql2xenabledif) {
-+	if (ql2xenabledif && ha->dif_bundl_pool) {
- 		struct dsd_dma *dsd, *nxt;
- 
- 		list_for_each_entry_safe(dsd, nxt, &ha->pool.unusable.head,
-@@ -4738,10 +4744,8 @@ qla2x00_mem_free(struct qla_hw_data *ha)
- 			kfree(dsd);
- 			ha->dif_bundle_kallocs--;
- 		}
--	}
+ 	if (fcport->last_rscn_gen != fcport->rscn_gen) {
+-		ql_dbg(ql_dbg_disc, vha, 0x20e9, "%s %d %8phC post gidpn\n",
++		ql_dbg(ql_dbg_disc, vha, 0x20e9, "%s %d %8phC post gnl\n",
+ 		    __func__, __LINE__, fcport->port_name);
 -
--	if (ha->dif_bundl_pool)
- 		dma_pool_destroy(ha->dif_bundl_pool);
-+	}
- 	ha->dif_bundl_pool = NULL;
- 
- 	qlt_mem_free(ha);
-@@ -4813,7 +4817,7 @@ struct scsi_qla_host *qla2x00_create_host(struct scsi_host_template *sht,
- 	if (!vha->gnl.l) {
- 		ql_log(ql_log_fatal, vha, 0xd04a,
- 		    "Alloc failed for name list.\n");
--		scsi_remove_host(vha->host);
-+		scsi_host_put(vha->host);
- 		return NULL;
++		qla24xx_post_gnl_work(vha, fcport);
+ 		return;
  	}
  
-@@ -4825,7 +4829,7 @@ struct scsi_qla_host *qla2x00_create_host(struct scsi_host_template *sht,
- 		    "Alloc failed for scan database.\n");
- 		dma_free_coherent(&ha->pdev->dev, vha->gnl.size,
- 		    vha->gnl.l, vha->gnl.ldma);
--		scsi_remove_host(vha->host);
-+		scsi_host_put(vha->host);
- 		return NULL;
- 	}
- 	INIT_DELAYED_WORK(&vha->scan.scan_work, qla_scan_work_fn);
 -- 
 2.12.0
 
