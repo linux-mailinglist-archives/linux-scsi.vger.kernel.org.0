@@ -2,56 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF27A76B96
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 16:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C392976E8C
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 18:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387402AbfGZO1H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 10:27:07 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:58188 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbfGZO1H (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 10:27:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=nYu9AqARyg1s9xhIySXzwj35RjVZXlDWPNT++weib0Q=; b=L6TPMw34jBusFt1s+qu213+qb
-        KGYpi2YSVUoYuGkZ3fazfm/2etpjsXmYTz7h4egt1ZYYYyosg8PjN2teBZ3tFpHQKHEKLZMcGzVUg
-        ZyGitzgaYZRugjqFc6rrxndPFB68yIdbMrkmItpFfS8TnGZJ9dzYk6wLTZS6S1zfk7tVvNrhNJQws
-        YWeNJngl+hdJ0xmxdwgvAb853vUEyy33B5HzicmU9CTdTk7GQz/tluuNfmTSHIbsF0sDoy3EaVqWl
-        EGeFQlMVyCERG7Nqqd3dRiIGE61OoIEgKpQ/ftyEewv/bDBh0iICjZk3QpoeBIeqe7F94grrYQLJV
-        lXpuP+f5Q==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hr1Ba-0000WQ-UX; Fri, 26 Jul 2019 14:27:06 +0000
-Date:   Fri, 26 Jul 2019 07:27:06 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Suganath Prabu <suganath-prabu.subramani@broadcom.com>
-Cc:     linux-scsi@vger.kernel.org, stable@vger.kernel.org,
-        Sathya.Prakash@broadcom.com, kashyap.desai@broadcom.com,
-        sreekanth.reddy@broadcom.com
-Subject: Re: [PATCH] mpt3sas: Use 63-bit DMA addressing on SAS35 HBA
-Message-ID: <20190726142706.GA1734@infradead.org>
-References: <1564135257-33188-1-git-send-email-suganath-prabu.subramani@broadcom.com>
+        id S1726643AbfGZQHt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 12:07:49 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:3376 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726086AbfGZQHt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 26 Jul 2019 12:07:49 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x6QG6wS9025944;
+        Fri, 26 Jul 2019 09:07:42 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0818;
+ bh=FX6wALfTpZCnINzv/umKgMd0uDaJok7KxUziBz+YtFE=;
+ b=kcsDPVnCrQpyg07IQAolgXT/jmar0L0KOhxiY5B01lTIVwfkRiN792+AynOlln4e851h
+ oTflmbMgotWNoy3HyeacM/0NS2ldpy6Z/Q2aqML1G8VBvptCv6/JoFu5tkupPUq9GMnK
+ MkhTSp0uSbtXtq8dZPA4eGUPKVFPzTwJBhNNEi57fOPgZM81+HymcQZRaKP01uGexC6m
+ pM5Zt9Oqf2WE33TUbIAUkLfvii8Zg5G4GqM1U7vYE/tzThDBGyzBJHWrAwg0iiwG0SM1
+ kgbvZRo8bJiOeAUU4+/H4+r1VQqnzXaePZ+Dp9RUisw0A7qS9kHpwcdfaYTtJR2bxjII GA== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2tx6256xa0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 26 Jul 2019 09:07:42 -0700
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Fri, 26 Jul
+ 2019 09:07:41 -0700
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Fri, 26 Jul 2019 09:07:41 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id CCEA83F703F;
+        Fri, 26 Jul 2019 09:07:40 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x6QG7eMG025722;
+        Fri, 26 Jul 2019 09:07:40 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x6QG7e0s025721;
+        Fri, 26 Jul 2019 09:07:40 -0700
+From:   Himanshu Madhani <hmadhani@marvell.com>
+To:     <James.Bottomley@HansenPartnership.com>,
+        <martin.petersen@oracle.com>
+CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
+Subject: [PATCH 00/15] qla2xxx: Bug fixes for the driver
+Date:   Fri, 26 Jul 2019 09:07:25 -0700
+Message-ID: <20190726160740.25687-1-hmadhani@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1564135257-33188-1-git-send-email-suganath-prabu.subramani@broadcom.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:5.22.84,1.0.8
+ definitions=2019-07-26_11:2019-07-26,2019-07-26 signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 06:00:57AM -0400, Suganath Prabu wrote:
-> Although SAS3 & SAS3.5 IT HBA controllers support
-> 64-bit DMA addressing, as per hardware design,
-> DMA address with all 64-bits set (0xFFFFFFFF-FFFFFFFF)
-> results in a firmware fault.
+Hi Martin, 
 
-Linux will never send a dma address with all bits set anyway, as that
-is our magic escape for the dma_addr_t error value.  Additionally to
-generate that address you'd need a 1-byte sized, 1-byte aligned buffer,
-which we never use.
+This series contains bug fixes for the driver. Most of the fixes are obvious memory
+leak and/or error handling fixes.
+
+Please apply this series to 5.4/scsi-queue at your earliest convenience. 
+
+Thanks,
+Himanshu
+
+Andrew Vasquez (2):
+  qla2xxx: Correct error handling during initialization failures
+  qla2xxx: Use common update-firmware-options routine for ISP27xx+
+
+Arun Easi (1):
+  qla2xxx: Fix failed NVME port discovery after a short device port loss
+
+Himanshu Madhani (2):
+  qla2xxx: Fix DMA unmap leak
+  qla2xxx: Update driver version to 10.01.00.18-k
+
+Quinn Tran (10):
+  qla2xxx: Fix different size DMA Alloc/Unmap
+  qla2xxx: Fix abort timeout race condition.
+  qla2xxx: Use Correct index for Q-Pair array
+  qla2xxx: Skip FW dump on LOOP initialization error
+  qla2xxx: Reject EH_{abort|device_reset|target_request}
+  qla2xxx: Fix Relogin to prevent modifying scan_state flag
+  qla2xxx: Fix premature timer expiration
+  qla2xxx: Retry fabric Scan on IOCB queue full
+  qla2xxx: Fix hang in fcport delete path
+  qla2xxx: Allow NVME IO to resume with short cable pull
+
+ drivers/scsi/qla2xxx/qla_bsg.c     |  4 +++
+ drivers/scsi/qla2xxx/qla_def.h     |  2 ++
+ drivers/scsi/qla2xxx/qla_gs.c      | 30 ++++++++++++++++-----
+ drivers/scsi/qla2xxx/qla_init.c    | 54 +++++++++++++++++++++++++++++---------
+ drivers/scsi/qla2xxx/qla_iocb.c    |  5 +++-
+ drivers/scsi/qla2xxx/qla_isr.c     |  1 -
+ drivers/scsi/qla2xxx/qla_nvme.c    |  4 ++-
+ drivers/scsi/qla2xxx/qla_os.c      | 28 +++++++++++++++-----
+ drivers/scsi/qla2xxx/qla_target.c  |  3 ++-
+ drivers/scsi/qla2xxx/qla_version.h |  2 +-
+ 10 files changed, 102 insertions(+), 31 deletions(-)
+
+-- 
+2.12.0
+
