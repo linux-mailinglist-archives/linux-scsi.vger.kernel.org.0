@@ -2,115 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E142C76ED5
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 18:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AAB76F41
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 18:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728715AbfGZQU6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 12:20:58 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48516 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728611AbfGZQU4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jul 2019 12:20:56 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6QG6IDC097676
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 12:20:55 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2u03p9v1jk-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 12:20:55 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <bblock@linux.ibm.com>;
-        Fri, 26 Jul 2019 17:20:53 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 26 Jul 2019 17:20:48 +0100
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6QGKlGD34930820
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 26 Jul 2019 16:20:47 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0A7744C04A;
-        Fri, 26 Jul 2019 16:20:47 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EBE964C040;
-        Fri, 26 Jul 2019 16:20:46 +0000 (GMT)
-Received: from t480-pf1aa2c2 (unknown [9.152.212.110])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Fri, 26 Jul 2019 16:20:46 +0000 (GMT)
-Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92)
-        (envelope-from <bblock@linux.ibm.com>)
-        id 1hr2xa-0001Ek-Lx; Fri, 26 Jul 2019 18:20:46 +0200
-Date:   Fri, 26 Jul 2019 18:20:46 +0200
-From:   Benjamin Block <bblock@linux.ibm.com>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH V2 0/2] block/scsi/dm-rq: fix leak of request private
- data in dm-mpath
-References: <20190720030637.14447-1-ming.lei@redhat.com>
+        id S1728954AbfGZQp2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 12:45:28 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:37446 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728930AbfGZQp2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 12:45:28 -0400
+Received: by mail-qt1-f193.google.com with SMTP id y26so53216991qto.4
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 09:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=qaOWGs23G49TWwws7WjjdoCv06+sXW9upizbWmsREGM=;
+        b=MBKJbuMrs9FSTsgDbpfMEC2iM+Mgo/gNYAa3SM3aaQ8NIBY6v4rD+MmM6UONYqYX8y
+         fV6WIXzbBAtiC04TwawPu+avmWl7u6cCkPHfj7xZ7EBr3sjoSW9pLTlEWMwG4I9nEBuB
+         kbcCDp0IYhpUBF9aQOgKEjOHuISU6K21Q/KE9/ocl8zP/tfnDZYWpUKHH4fwMyEo1IVp
+         Ex0vqVhpapA0o+umQN6+Mh/SRg/Ff8VCFCxkyc6aHlXs2QQ89RTq1BaWvSq3RxCyQgBl
+         QnyScmmox2OYfEA5SrYaInW8kG1ozHCMQxHZWV3Vz8yXtGI4WanKuJwTW8cQPAjXIO9j
+         pUVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=qaOWGs23G49TWwws7WjjdoCv06+sXW9upizbWmsREGM=;
+        b=lpF+/W8ks0Js7QK/QAaoP0r4nUYPQwyi88RLvsqy/ng2ZmYQfCKX4CLM5WsWkUhyrc
+         ynedX8aBEjpLIIGMTWVEl8vUnO0pteLlYK48LPJxvCit68Ba7nPXW8Y8CjozmVpkVgUN
+         f8tEn5ovz1FIAWJRJixHApIvNZGhcn2N6z/HEGtdJJLFjPoCGisYqdhmEi2iF1IFYygP
+         GkVkHOrwCrR91JGqybBa3ggvStMfUyVUt8NP4v8ytKn0L029Nj1sLlwWFoSPn3Zjrv3j
+         PUQKnXaDDVLO95jC8bkDxjyZiW1EYCsw67lj+xoSNpAdK6EkwmdChV2Ot6riYFjHB9nU
+         CY7Q==
+X-Gm-Message-State: APjAAAVXhnhpRoWJJkFwIJdw2G9CT1ctiQdJumXILe2IYnR60kmMkbHe
+        zs4O7AmSx2TAyP2+eQy+AlTMgAu0Nh3njYEPmS0=
+X-Google-Smtp-Source: APXvYqyRqfPcz7rcgMGQO0a1Xg8BgrG0FA5d73BKM93l8ujPyfPbiSSGVebQirNV9WxwZB6CZnlKxYXOzdXOIou0f1E=
+X-Received: by 2002:ac8:4252:: with SMTP id r18mr6404984qtm.357.1564159527359;
+ Fri, 26 Jul 2019 09:45:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190720030637.14447-1-ming.lei@redhat.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-TM-AS-GCONF: 00
-x-cbid: 19072616-0016-0000-0000-00000296814D
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19072616-0017-0000-0000-000032F482E9
-Message-Id: <20190726162046.GA7523@t480-pf1aa2c2>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-26_12:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907260195
+Received: by 2002:aed:3544:0:0:0:0:0 with HTTP; Fri, 26 Jul 2019 09:45:26
+ -0700 (PDT)
+Reply-To: dhl.benin2019@outlook.com
+From:   "DR, MOHAMMED BUHARI, PRESIDENT OF NIGERIA" 
+        <westernunion.benin982@gmail.com>
+Date:   Fri, 26 Jul 2019 17:45:26 +0100
+Message-ID: <CAP=nHBKv0J2KVfmfnQs7YrrDs_VuL_F5x-ghM0J6qN3=fYF1qA@mail.gmail.com>
+Subject: Attn Dear Atm Card beneficiary. GOOD NEWS,Shipment number:
+ 4Z69536197319960 Content Packages: ATM Visa Card, amount of $18.5Million
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hey Ming Lei,
+Attn Dear Atm Card beneficiary.
 
-On Sat, Jul 20, 2019 at 11:06:35AM +0800, Ming Lei wrote:
-> Hi,
-> 
-> When one request is dispatched to LLD via dm-rq, if the result is
-> BLK_STS_*RESOURCE, dm-rq will free the request. However, LLD may allocate
-> private data for this request, so this way will cause memory leak.
+GOOD NEWS,
+This is to inform you that i have paid the delivery fees for your ATM
+Master Card
+I paid it because our bank director stated that before, they
+So contact Dr. William Roberts, Director DHL Courier
+Company Benin to receive your delivery ATM Visa Card amount of $18.5m US Dollars
+It is shipment was registered to your addres.
+Contact the office now to know when they will delivery arrive to your country
 
-I am confused about this. Probably because I am not up-to-date with
-all of blk-mq. But if you free the LLD private data before the request
-is finished, what is the LLD doing if the request finishes afterwards?
-Would that not be an automatic use-after-free?
+Email id: dhl.benin2019@outlook.com
+Tel/mobile, +229 99652699
+Contact the office now to know when they will delivery arrive to your
+country today
+Shipment Details
+-----------------------------------------------------
+Shipment number: 4Z69536197319960
+Content Packages: ATM Visa Card amount of $18.5Million
+Scheduled Delivery
+Remember I have paid the insurance and Security Keeping fees for you
+But the only money you are required to send to this company is $125.00
+been your accurate ATM Visa Card clearance Fee before they will effect
+the delivery to you.
+Send the required delivery fee $125.00 only to the DHL Office on this
+information
+Payment is to be made via Western Union or Money Gram transfer for
+security purposes.
 
-> 
-> Add .cleanup_rq() callback and implement it in SCSI for fixing the issue,
-> since SCSI is the only driver which allocates private requst data in
-> .queue_rq() path.
-> 
-> Another use case of this callback is to free the request and re-submit
-> bios during cpu hotplug when the hctx is dead, see the following link:
-> 
-> https://lore.kernel.org/linux-block/f122e8f2-5ede-2d83-9ca0-bc713ce66d01@huawei.com/T/#t
-> 
-> V2:
-> 	- run .cleanup_rq() in blk_mq_free_request(), as suggested by Mike 
+Receive's Name---------------------Alan Ude
+Country-------------------------------------Benin
+City-----------------------------------Cotonou
+Quest-------------------------------Honest
+Answer----------------------------------Trust
+Amount---------------------------$125.00 only
+Let me know once you send the fee today okay.
 
--- 
-With Best Regards, Benjamin Block      /      Linux on IBM Z Kernel Development
-IBM Systems & Technology Group   /  IBM Deutschland Research & Development GmbH
-Vorsitz. AufsR.: Matthias Hartmann       /      Geschäftsführung: Dirk Wittkopp
-Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
+Blessing upon, blessing upon, blessing upon blessing upon,God has
+chosen you for testimony time,
+I wait for your urgent reply
 
+Sincerely
+DR, MOHAMMED BUHARI, PRESIDENT OF NIGERIA
