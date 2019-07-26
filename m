@@ -2,83 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6554176EA5
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 18:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E142C76ED5
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 18:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbfGZQK2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 12:10:28 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:13738 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726871AbfGZQK2 (ORCPT
+        id S1728715AbfGZQU6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 12:20:58 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:48516 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728611AbfGZQU4 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jul 2019 12:10:28 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x6QG6wSE025944;
-        Fri, 26 Jul 2019 09:08:27 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=l0fa2yfkakNglHCsvR+g3Vvmi4b6Pb/o68AkmpvjeDU=;
- b=DDNsnnpI/eclT7bWyeGGoQXOKjBHjIQNc8Sp7uYyb5DluSdvO6ek52yJFlQRPM5pQwz1
- DrSoW0uYd4c36wGABvxTfSYjUtXkzZ/QCpWM4GxElDG6qudKtuYonq6PR0sq+MLkD6RI
- iBQOEZoJvRlTsl48axipNKTovMh8mv9UHEibEKyGIW5PfEoJEt4FOl2giEy+CAkFWgjM
- bsi/s145qCg/kjt2tLdJOJPy391oRJnXXtUM0MZl6ZuLCpVVfvG3oPr0VmslrRYyCFa9
- 8hVuM1hs/ZRq0bJH8pHkFq3e2CDfmLDoKfJnahLvNutPU9Ym3l/HWksTODvYA5L8ahAR 1A== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2tx6256xdd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 26 Jul 2019 09:08:27 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Fri, 26 Jul
- 2019 09:08:25 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Fri, 26 Jul 2019 09:08:25 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 8799E3F703F;
-        Fri, 26 Jul 2019 09:08:25 -0700 (PDT)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x6QG8PBO025790;
-        Fri, 26 Jul 2019 09:08:25 -0700
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x6QG8PBL025789;
-        Fri, 26 Jul 2019 09:08:25 -0700
-From:   Himanshu Madhani <hmadhani@marvell.com>
-To:     <James.Bottomley@HansenPartnership.com>,
-        <martin.petersen@oracle.com>
-CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 15/15] qla2xxx: Update driver version to 10.01.00.18-k
-Date:   Fri, 26 Jul 2019 09:07:40 -0700
-Message-ID: <20190726160740.25687-16-hmadhani@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20190726160740.25687-1-hmadhani@marvell.com>
-References: <20190726160740.25687-1-hmadhani@marvell.com>
+        Fri, 26 Jul 2019 12:20:56 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6QG6IDC097676
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 12:20:55 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2u03p9v1jk-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 12:20:55 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <bblock@linux.ibm.com>;
+        Fri, 26 Jul 2019 17:20:53 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 26 Jul 2019 17:20:48 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6QGKlGD34930820
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 26 Jul 2019 16:20:47 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0A7744C04A;
+        Fri, 26 Jul 2019 16:20:47 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EBE964C040;
+        Fri, 26 Jul 2019 16:20:46 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.152.212.110])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 26 Jul 2019 16:20:46 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1hr2xa-0001Ek-Lx; Fri, 26 Jul 2019 18:20:46 +0200
+Date:   Fri, 26 Jul 2019 18:20:46 +0200
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH V2 0/2] block/scsi/dm-rq: fix leak of request private
+ data in dm-mpath
+References: <20190720030637.14447-1-ming.lei@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:5.22.84,1.0.8
- definitions=2019-07-26_11:2019-07-26,2019-07-26 signatures=0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190720030637.14447-1-ming.lei@redhat.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
+X-TM-AS-GCONF: 00
+x-cbid: 19072616-0016-0000-0000-00000296814D
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19072616-0017-0000-0000-000032F482E9
+Message-Id: <20190726162046.GA7523@t480-pf1aa2c2>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-26_12:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907260195
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hey Ming Lei,
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index cd6bdf71e533..0833546a1b43 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -7,7 +7,7 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.01.00.16-k"
-+#define QLA2XXX_VERSION      "10.01.00.18-k"
- 
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	1
+On Sat, Jul 20, 2019 at 11:06:35AM +0800, Ming Lei wrote:
+> Hi,
+> 
+> When one request is dispatched to LLD via dm-rq, if the result is
+> BLK_STS_*RESOURCE, dm-rq will free the request. However, LLD may allocate
+> private data for this request, so this way will cause memory leak.
+
+I am confused about this. Probably because I am not up-to-date with
+all of blk-mq. But if you free the LLD private data before the request
+is finished, what is the LLD doing if the request finishes afterwards?
+Would that not be an automatic use-after-free?
+
+> 
+> Add .cleanup_rq() callback and implement it in SCSI for fixing the issue,
+> since SCSI is the only driver which allocates private requst data in
+> .queue_rq() path.
+> 
+> Another use case of this callback is to free the request and re-submit
+> bios during cpu hotplug when the hctx is dead, see the following link:
+> 
+> https://lore.kernel.org/linux-block/f122e8f2-5ede-2d83-9ca0-bc713ce66d01@huawei.com/T/#t
+> 
+> V2:
+> 	- run .cleanup_rq() in blk_mq_free_request(), as suggested by Mike 
+
 -- 
-2.12.0
+With Best Regards, Benjamin Block      /      Linux on IBM Z Kernel Development
+IBM Systems & Technology Group   /  IBM Deutschland Research & Development GmbH
+Vorsitz. AufsR.: Matthias Hartmann       /      Geschäftsführung: Dirk Wittkopp
+Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
 
