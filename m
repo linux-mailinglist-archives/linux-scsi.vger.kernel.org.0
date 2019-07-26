@@ -2,145 +2,174 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66EFC76A69
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 15:58:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A425876B89
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 16:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387778AbfGZN6q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 09:58:46 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:41812 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387753AbfGZN6p (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jul 2019 09:58:45 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 4F8FD5449E7E1747B8BC;
-        Fri, 26 Jul 2019 21:58:43 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.439.0; Fri, 26 Jul 2019
- 21:58:33 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>, <hch@lst.de>,
-        <arnd@arndb.de>
-CC:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] scsi: initio: Make some functions static
-Date:   Fri, 26 Jul 2019 21:58:14 +0800
-Message-ID: <20190726135814.48760-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S2387538AbfGZOY5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 10:24:57 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:43567 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbfGZOY5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 10:24:57 -0400
+Received: by mail-ed1-f67.google.com with SMTP id e3so53463964edr.10
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 07:24:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iKvptB00eRJtAAyTA2xD7jIbIFN8n5r7X55dRtJg5Cw=;
+        b=f5L5IA3ayQmsQHY5KhIVuOFZAzingVgEcKk8EvRC5mL0KaqQyGnWAI0cbPTrNNuCz7
+         K18hM9pz10KIe5v0Z75fubUwSrYuFdOojHzAiYoIdyx9DO1Z5oW1vH1CNjwbsYziO6sT
+         /QI7SGtnnJxli3UbqAjXRyOHKL5kB7R4In+E8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=iKvptB00eRJtAAyTA2xD7jIbIFN8n5r7X55dRtJg5Cw=;
+        b=PPhdfGyJMzSMvXDF4H030Igu1Mt7Q5aVgV3rD2Kh8pGcGLU4M62TBCeDLfuNDG44zG
+         dwnETM4Ihqh86WNeutH4zLG4pc9Si6UevWz9fcrXl/BPJiVRT4JgsKgbrswrIMyHa8Z1
+         uIWZ1HimBCM8P9HSGKtP1atibVzzUvoEVbRFl8sT4tiggwtdXjwgFPsBU5dN3NEmV/KG
+         az78ahEWohsx9+zguLJFQaQubIoSOoqxxSSMPuyR2GPFvETxyNDJ1ZPF2dv9VWkNw1lL
+         YmlOs+LtaD46tvcLC+A+SRSmm/PAYsioQmrnMYMPr7ks0XPbipVfviabiK6VHME4mGXy
+         KGpw==
+X-Gm-Message-State: APjAAAW9iCWLaJSsVzoz8evowYxnjw6W5aUajBlq3tYSltp4LgNEqMxC
+        MdiRqpHbrq6co3+igCutTNo=
+X-Google-Smtp-Source: APXvYqziEeXaDKlMzj6WkqFhfWfsWvSAtDFO47Ob8pLZS5KABUGhUNYgZNlFDTi49ewicGXyP7F9Dg==
+X-Received: by 2002:a50:ad48:: with SMTP id z8mr82669671edc.66.1564151094716;
+        Fri, 26 Jul 2019 07:24:54 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
+        by smtp.gmail.com with ESMTPSA id m31sm14121701edd.42.2019.07.26.07.24.52
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 26 Jul 2019 07:24:53 -0700 (PDT)
+Date:   Fri, 26 Jul 2019 16:24:50 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
+        Don Brace <don.brace@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        rcu@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>,
+        esc.storagedev@microsemi.com, SCSI <linux-scsi@vger.kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: Re: [PATCH 1/7] docs: fix broken doc references due to renames
+Message-ID: <20190726142450.GJ15868@phenom.ffwll.local>
+Mail-Followup-To: Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <andrea.parri@amarulasolutions.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <maxime.ripard@bootlin.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Ajay Gupta <ajayg@nvidia.com>, Don Brace <don.brace@microsemi.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        rcu@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" <linux-arch@vger.kernel.org>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux I2C <linux-i2c@vger.kernel.org>, esc.storagedev@microsemi.com,
+        SCSI <linux-scsi@vger.kernel.org>, Wolfram Sang <wsa@the-dreams.de>
+References: <cover.1564140865.git.mchehab+samsung@kernel.org>
+ <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
+ <CAL_JsqK_rfHehrKW_NS89BOV0=dYoao0H=zOzG=D-724vKduKw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL_JsqK_rfHehrKW_NS89BOV0=dYoao0H=zOzG=D-724vKduKw@mail.gmail.com>
+X-Operating-System: Linux phenom 4.19.0-5-amd64 
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix sparse warnings:
+On Fri, Jul 26, 2019 at 07:41:35AM -0600, Rob Herring wrote:
+> On Fri, Jul 26, 2019 at 5:47 AM Mauro Carvalho Chehab
+> <mchehab+samsung@kernel.org> wrote:
+> >
+> > Some files got renamed but probably due to some merge conflicts,
+> > a few references still point to the old locations.
+> >
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> > Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C part
+> > Reviewed-by: Jerry Hoemann <jerry.hoemann@hpe.com> # hpwdt.rst
+> > ---
+> >  Documentation/RCU/rculist_nulls.txt                   |  2 +-
+> >  Documentation/devicetree/bindings/arm/idle-states.txt |  2 +-
+> >  Documentation/locking/spinlocks.rst                   |  4 ++--
+> >  Documentation/memory-barriers.txt                     |  2 +-
+> >  Documentation/translations/ko_KR/memory-barriers.txt  |  2 +-
+> >  Documentation/watchdog/hpwdt.rst                      |  2 +-
+> >  MAINTAINERS                                           | 10 +++++-----
+> >  drivers/gpu/drm/drm_modes.c                           |  2 +-
 
-drivers/scsi/initio.c:881:22: warning: symbol 'initio_find_busy_scb' was not declared. Should it be static?
-drivers/scsi/initio.c:919:22: warning: symbol 'initio_find_done_scb' was not declared. Should it be static?
-drivers/scsi/initio.c:1657:5: warning: symbol 'initio_state_7' was not declared. Should it be static?
-drivers/scsi/initio.c:1743:5: warning: symbol 'initio_xpad_in' was not declared. Should it be static?
-drivers/scsi/initio.c:1767:5: warning: symbol 'initio_xpad_out' was not declared. Should it be static?
-drivers/scsi/initio.c:1792:5: warning: symbol 'initio_status_msg' was not declared. Should it be static?
-drivers/scsi/initio.c:1842:5: warning: symbol 'int_initio_busfree' was not declared. Should it be static?
-drivers/scsi/initio.c:1912:5: warning: symbol 'int_initio_resel' was not declared. Should it be static?
-drivers/scsi/initio.c:2368:5: warning: symbol 'initio_bus_device_reset' was not declared. Should it be static?
+for the drm part:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/scsi/initio.c | 20 +++++++++++---------
- 1 file changed, 11 insertions(+), 9 deletions(-)
+Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
-index 41fd64c..ed9e87a 100644
---- a/drivers/scsi/initio.c
-+++ b/drivers/scsi/initio.c
-@@ -864,7 +864,8 @@ static void initio_unlink_busy_scb(struct initio_host * host, struct scsi_ctrl_b
- 	return;
- }
- 
--struct scsi_ctrl_blk *initio_find_busy_scb(struct initio_host * host, u16 tarlun)
-+static struct
-+scsi_ctrl_blk *initio_find_busy_scb(struct initio_host *host, u16 tarlun)
- {
- 	struct scsi_ctrl_blk *tmp, *prev;
- 	u16 scbp_tarlun;
-@@ -902,7 +903,8 @@ static void initio_append_done_scb(struct initio_host * host, struct scsi_ctrl_b
- 	}
- }
- 
--struct scsi_ctrl_blk *initio_find_done_scb(struct initio_host * host)
-+static struct
-+scsi_ctrl_blk *initio_find_done_scb(struct initio_host *host)
- {
- 	struct scsi_ctrl_blk *tmp;
- 
-@@ -1640,7 +1642,7 @@ static int initio_state_6(struct initio_host * host)
-  *
-  */
- 
--int initio_state_7(struct initio_host * host)
-+static int initio_state_7(struct initio_host *host)
- {
- 	int cnt, i;
- 
-@@ -1726,7 +1728,7 @@ static int initio_xfer_data_out(struct initio_host * host)
- 	return 0;		/* return to OS, wait xfer done , let jas_isr come in */
- }
- 
--int initio_xpad_in(struct initio_host * host)
-+static int initio_xpad_in(struct initio_host *host)
- {
- 	struct scsi_ctrl_blk *scb = host->active;
- 	struct target_control *active_tc = host->active_tc;
-@@ -1750,7 +1752,7 @@ int initio_xpad_in(struct initio_host * host)
- 	}
- }
- 
--int initio_xpad_out(struct initio_host * host)
-+static int initio_xpad_out(struct initio_host *host)
- {
- 	struct scsi_ctrl_blk *scb = host->active;
- 	struct target_control *active_tc = host->active_tc;
-@@ -1775,7 +1777,7 @@ int initio_xpad_out(struct initio_host * host)
- 	}
- }
- 
--int initio_status_msg(struct initio_host * host)
-+static int initio_status_msg(struct initio_host *host)
- {				/* status & MSG_IN */
- 	struct scsi_ctrl_blk *scb = host->active;
- 	u8 msg;
-@@ -1825,7 +1827,7 @@ int initio_status_msg(struct initio_host * host)
- 
- 
- /* scsi bus free */
--int int_initio_busfree(struct initio_host * host)
-+static int int_initio_busfree(struct initio_host *host)
- {
- 	struct scsi_ctrl_blk *scb = host->active;
- 
-@@ -1895,7 +1897,7 @@ static int int_initio_scsi_rst(struct initio_host * host)
-  *	and continue processing that command.
-  */
- 
--int int_initio_resel(struct initio_host * host)
-+static int int_initio_resel(struct initio_host *host)
- {
- 	struct scsi_ctrl_blk *scb;
- 	struct target_control *active_tc;
-@@ -2351,7 +2353,7 @@ static void initio_select_atn3(struct initio_host * host, struct scsi_ctrl_blk *
-  *	Perform a device reset and abort all pending SCBs for the
-  *	victim device
-  */
--int initio_bus_device_reset(struct initio_host * host)
-+static int initio_bus_device_reset(struct initio_host *host)
- {
- 	struct scsi_ctrl_blk *scb = host->active;
- 	struct target_control *active_tc = host->active_tc;
+> >  drivers/i2c/busses/i2c-nvidia-gpu.c                   |  2 +-
+> >  drivers/scsi/hpsa.c                                   |  4 ++--
+> >  10 files changed, 16 insertions(+), 16 deletions(-)
+> 
+> Acked-by: Rob Herring <robh@kernel.org>
+
 -- 
-2.7.4
-
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
