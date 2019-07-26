@@ -2,76 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B82FA77044
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 19:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8A0770CD
+	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 20:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728821AbfGZR3H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 13:29:07 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:41744 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728059AbfGZR3G (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 13:29:06 -0400
-Received: by mail-qk1-f194.google.com with SMTP id v22so39602897qkj.8;
-        Fri, 26 Jul 2019 10:29:06 -0700 (PDT)
+        id S1727692AbfGZSAm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 14:00:42 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:43296 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727083AbfGZSAm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 26 Jul 2019 14:00:42 -0400
+Received: by mail-pl1-f194.google.com with SMTP id 4so18038957pld.10
+        for <linux-scsi@vger.kernel.org>; Fri, 26 Jul 2019 11:00:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wrswEMq49v0E6o4rCshYouYaas2WPZBTPTlCzSQC26c=;
-        b=BsAs8CEVE29gEs+jDGIH87bg5feWerYpY/8VF8FGCIxBgBNhIYi9OraX5TcO6BZY2h
-         iHr4Jk7CHnTuImVgL0ZHbYSQKO6gMmqls4GFn23DX56+phLs5tzeRRyE2BkvpLvJV6BW
-         8L6P3lTvtPJSneWU8V46hsXrfmjQqUXNcUjVss+m/AYN6sIEgiPAFpA910eZCgLxdMxL
-         /zTnWoahpInZ+il+U4gA89ztwWBImvulYv+9RPtBVhutQKQHiX+IHOGbwiIMuwE4nYia
-         1/hKepg9i10tTjULkPRMTeOkIF05eHTlVdsJ+cXtV19L3KweCvOE4Jd8USLjihYeYbPr
-         vhCg==
-X-Gm-Message-State: APjAAAWKfTA92harVsT/7lsAOXzj9EzCPopNJIDrLLD6KeMIfqeqA+ae
-        U4yf/ksLHlNpXCjpLVBBBkhDyZLSrHI9912jshI=
-X-Google-Smtp-Source: APXvYqyeBztnXSiBRW7+PbidYoc+fBMsn3sfImtAWkG860mdcYkPRzviwCac/eeCIlsHK4v5dz+V77TwlT5nEb1WPzo=
-X-Received: by 2002:a37:4ac3:: with SMTP id x186mr61461306qka.138.1564162145449;
- Fri, 26 Jul 2019 10:29:05 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vB1bFidDOWZSCkiOPQE1pzSoILXy5Xtre/DdArG/EGk=;
+        b=bRSHv8SzRRgfb3HdtXnNbYWTxoQXl/n+t5mep9n4A8zZBu1Inus+0tAib0SGNNr3S0
+         FR6LWvFkoTMRWrtObAbVk5dxvHx7x5lPOmFIu3IiXdEfP5vNtyK3D2rVgayhM36Jnoko
+         fkPugNo+FFlcgl5guWzgbX9g8PDIp8n6Sc4SH4tl0eYs4PHEn5roHxmTP7dPIFThUlmW
+         EIbhwyp5GwsuCgHMnlntqAV9665F1f+Izkr8jm/XeiwLuOPGWUwo7yLUg+3WM9cEvrtP
+         UN6OLYf6XTHeeHxT4Mz6Wgfk0L5jnnF32g007fyU6Uwn3cXjvI7QRef3IlXEC4xy65Nr
+         +KLA==
+X-Gm-Message-State: APjAAAWQzgpUrnK4JsWj9b+r6Hhorc019f/NGL7rUk7sDLib3Cj07xdq
+        r9MZp7DxCGksDCU0mKbeLrw=
+X-Google-Smtp-Source: APXvYqydB8DGJKBWAHlH4Wt9LtE4fInagThVYSW9ichqT0XDznlomfLOHCjAQ3OCtfu2du1k3PziTA==
+X-Received: by 2002:a17:902:9896:: with SMTP id s22mr93294746plp.4.1564164041856;
+        Fri, 26 Jul 2019 11:00:41 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id bo20sm39874865pjb.23.2019.07.26.11.00.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 26 Jul 2019 11:00:40 -0700 (PDT)
+Subject: Re: [PATCH 3/4] Complain if scsi_target_block() fails
+To:     James Bottomley <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Ming Lei <ming.lei@redhat.com>
+References: <20190726164855.130084-1-bvanassche@acm.org>
+ <20190726164855.130084-4-bvanassche@acm.org>
+ <1564160404.9950.1.camel@linux.vnet.ibm.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <210a31fb-37d1-93ab-c339-f8cc410f65d7@acm.org>
+Date:   Fri, 26 Jul 2019 11:00:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20190726135814.48760-1-yuehaibing@huawei.com>
-In-Reply-To: <20190726135814.48760-1-yuehaibing@huawei.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 26 Jul 2019 19:28:49 +0200
-Message-ID: <CAK8P3a0q4BVxjEHOAmO2hQGKBWObYitC=ix-Jy8fPuxPxbk0ag@mail.gmail.com>
-Subject: Re: [PATCH -next] scsi: initio: Make some functions static
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1564160404.9950.1.camel@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 3:59 PM YueHaibing <yuehaibing@huawei.com> wrote:
->
-> Fix sparse warnings:
->
-> drivers/scsi/initio.c:881:22: warning: symbol 'initio_find_busy_scb' was not declared. Should it be static?
-> drivers/scsi/initio.c:919:22: warning: symbol 'initio_find_done_scb' was not declared. Should it be static?
-> drivers/scsi/initio.c:1657:5: warning: symbol 'initio_state_7' was not declared. Should it be static?
-> drivers/scsi/initio.c:1743:5: warning: symbol 'initio_xpad_in' was not declared. Should it be static?
-> drivers/scsi/initio.c:1767:5: warning: symbol 'initio_xpad_out' was not declared. Should it be static?
-> drivers/scsi/initio.c:1792:5: warning: symbol 'initio_status_msg' was not declared. Should it be static?
-> drivers/scsi/initio.c:1842:5: warning: symbol 'int_initio_busfree' was not declared. Should it be static?
-> drivers/scsi/initio.c:1912:5: warning: symbol 'int_initio_resel' was not declared. Should it be static?
-> drivers/scsi/initio.c:2368:5: warning: symbol 'initio_bus_device_reset' was not declared. Should it be static?
->
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+On 7/26/19 10:00 AM, James Bottomley wrote:
+> On Fri, 2019-07-26 at 09:48 -0700, Bart Van Assche wrote:
+>> If scsi_target_block() fails that can break the code that calls this
+>> function. Hence complain loudly if scsi_target_block() fails.
+>>
+>> Cc: Christoph Hellwig <hch@lst.de>
+>> Cc: Hannes Reinecke <hare@suse.com>
+>> Cc: Johannes Thumshirn <jthumshirn@suse.de>
+>> Cc: Ming Lei <ming.lei@redhat.com>
+>> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+>> ---
+>>   drivers/scsi/scsi_lib.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+>> index bbed72eff9c9..c9630bd59b5a 100644
+>> --- a/drivers/scsi/scsi_lib.c
+>> +++ b/drivers/scsi/scsi_lib.c
+>> @@ -2770,6 +2770,8 @@ int scsi_target_block(struct device *dev)
+>>   	else
+>>   		device_for_each_child(dev, &ret, target_block);
+>>   
+>> +	WARN_ONCE(ret, "ret = %d\n", ret);
+>> +
+> 
+> If this is the only point to the previous change to make SCSI target
+> block return an error, why not put the WARN_ONCE in device_block?  That
+> way you'll at least know which device was the problem.
 
-The patch looks fine, but I wonder if sparse should print a different
-warning message
-here. Note that those functions are in fact static, they just have a
-'static' forward
-declaration followed by a definition without the 'static' keyword.
+Hi James,
 
-The change does improve readability of course, so maybe it's not worth changing
-sparse.
+Adding a WARN_ON_ONCE() statement in device_block() sounds like a good 
+idea to me. But since scsi_target_block() can fail, I think it should 
+have a return value that indicates whether or not it succeeded.
 
-      Arnd
+Bart.
