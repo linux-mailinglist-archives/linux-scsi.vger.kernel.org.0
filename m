@@ -2,54 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 024A87738F
-	for <lists+linux-scsi@lfdr.de>; Fri, 26 Jul 2019 23:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7417775DB
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jul 2019 04:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728511AbfGZVkV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 17:40:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58886 "EHLO mail.kernel.org"
+        id S1727614AbfG0CMi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 22:12:38 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:44584 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726999AbfGZVkU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jul 2019 17:40:20 -0400
-Subject: Re: [GIT PULL] SCSI fixes for 5.3-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564177220;
-        bh=VBlbRVTdDM9X5wUuccB0nWAXEEoTBnPckG68xFCQ+lg=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=bc+BcKiJiz1mi/tpO366FUzu4CCbWdIMYS0MeE+TUxtAQp14i+maqRaOnxhi4AcD5
-         09YSHLdNlW45mHfCoiXtfBqsbwI590TRGQjPaXZohrWSWz+ng0WOke5O5cLKUPsFKg
-         dwICbUSLzCpEIxu6GPNDENcHfOIZNiekcCvFLo0E=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1564171685.9950.14.camel@HansenPartnership.com>
-References: <1564171685.9950.14.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1564171685.9950.14.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 20122994e38aef0ae50555884d287adde6641c94
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a689838913670765f7754bb1ba749acac9541626
-Message-Id: <156417722011.826.16480120807211637212.pr-tracker-bot@kernel.org>
-Date:   Fri, 26 Jul 2019 21:40:20 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1726115AbfG0CMi (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 26 Jul 2019 22:12:38 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 69654307B17E;
+        Sat, 27 Jul 2019 02:12:38 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-20.pek2.redhat.com [10.72.8.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2E2525D9C6;
+        Sat, 27 Jul 2019 02:12:24 +0000 (UTC)
+Date:   Sat, 27 Jul 2019 10:12:20 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Benjamin Block <bblock@linux.ibm.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH V2 0/2] block/scsi/dm-rq: fix leak of request private
+ data in dm-mpath
+Message-ID: <20190727021219.GA6926@ming.t460p>
+References: <20190720030637.14447-1-ming.lei@redhat.com>
+ <20190726162046.GA7523@t480-pf1aa2c2>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190726162046.GA7523@t480-pf1aa2c2>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Sat, 27 Jul 2019 02:12:38 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Fri, 26 Jul 2019 13:08:05 -0700:
+On Fri, Jul 26, 2019 at 06:20:46PM +0200, Benjamin Block wrote:
+> Hey Ming Lei,
+> 
+> On Sat, Jul 20, 2019 at 11:06:35AM +0800, Ming Lei wrote:
+> > Hi,
+> > 
+> > When one request is dispatched to LLD via dm-rq, if the result is
+> > BLK_STS_*RESOURCE, dm-rq will free the request. However, LLD may allocate
+> > private data for this request, so this way will cause memory leak.
+> 
+> I am confused about this. Probably because I am not up-to-date with
+> all of blk-mq. But if you free the LLD private data before the request
+> is finished, what is the LLD doing if the request finishes afterwards?
+> Would that not be an automatic use-after-free?
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+Wrt. this special use case, the underlying request is totally covered by
+dm-rq after .queue_rq() returns BLK_STS_*RESOURCE. So the request won't
+be re-dispatched by blk-mq at all.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a689838913670765f7754bb1ba749acac9541626
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+thanks,
+Ming
