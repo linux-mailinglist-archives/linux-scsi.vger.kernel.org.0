@@ -2,98 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 208FC775E4
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jul 2019 04:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE17B77644
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jul 2019 05:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727947AbfG0CQE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 22:16:04 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:51300 "EHLO mx1.redhat.com"
+        id S1727246AbfG0Dhm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 26 Jul 2019 23:37:42 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:54530 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727908AbfG0CQD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jul 2019 22:16:03 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 69EEF8553D;
-        Sat, 27 Jul 2019 02:16:03 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-20.pek2.redhat.com [10.72.8.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 87B8F600C0;
-        Sat, 27 Jul 2019 02:15:48 +0000 (UTC)
-Date:   Sat, 27 Jul 2019 10:15:44 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     kernel test robot <rong.a.chen@intel.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, "Ewan D . Milne" <emilne@redhat.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        stable@vger.kernel.org, lkp@01.org
-Subject: Re: [scsi] ae86a1c553: BUG:kernel_NULL_pointer_dereference,address
-Message-ID: <20190727021523.GB6926@ming.t460p>
-References: <20190720030637.14447-3-ming.lei@redhat.com>
- <20190725104629.GC3640@shao2-debian>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190725104629.GC3640@shao2-debian>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Sat, 27 Jul 2019 02:16:03 +0000 (UTC)
+        id S1727083AbfG0Dhm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 26 Jul 2019 23:37:42 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id D9BE620419A;
+        Sat, 27 Jul 2019 05:37:40 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LxYwiTblA3EN; Sat, 27 Jul 2019 05:37:34 +0200 (CEST)
+Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 72CFD20417C;
+        Sat, 27 Jul 2019 05:37:32 +0200 (CEST)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
+        bart.vanassche@wdc.com
+Subject: [PATCH v2 00/18] sg: add v4 interface
+Date:   Fri, 26 Jul 2019 23:37:10 -0400
+Message-Id: <20190727033728.21134-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+This patchset extends the SCSI generic (sg) driver found in lk 5.3 .
+The sg driver has a version number which is visible via
+ioctl(SG_GET_VERSION_NUM) and is bumped from 3.5.36 to 4.0.03 by this
+patchset. The additions and changes are described in some detail in
+this long webpage:
+    http://sg.danny.cz/sg/sg_v40.html
 
-Thanks for your report!
+Most new features described in the above webpage are not implemented
+in this patchset. Features that are not included are file descriptor
+sharing, request sharing, multiple requests (in one invocation) and
+the extended ioctl(). A later patchset may add those features. The
+SG_IOSUMIT, SG_IOSUBMIT_V3, SG_IORECEIVE and SG_IORECEIVE_V3 ioctls
+are added in this patchset.
 
-On Thu, Jul 25, 2019 at 06:46:29PM +0800, kernel test robot wrote:
-> FYI, we noticed the following commit (built with gcc-7):
-> 
-> commit: ae86a1c5530b52dc44a280e78feb0c4eb2dd8595 ("[PATCH V2 2/2] scsi: implement .cleanup_rq callback")
-> url: https://github.com/0day-ci/linux/commits/Ming-Lei/blk-mq-add-callback-of-cleanup_rq/20190720-133431
-> 
-> 
-> in testcase: blktests
-> with following parameters:
-> 
-> 	disk: 1SSD
-> 	test: block-group1
-> 
-> 
-> 
-> on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 4G
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> 
-> +---------------------------------------------------------------------------------------------------------------+------------+------------+
-> |                                                                                                               | bd222ca85f | ae86a1c553 |
-> +---------------------------------------------------------------------------------------------------------------+------------+------------+
-> | boot_successes                                                                                                | 0          | 0          |
-> | boot_failures                                                                                                 | 11         | 14         |
-> | BUG:kernel_reboot-without-warning_in_test_stage                                                               | 11         | 1          |
-> | BUG:kernel_NULL_pointer_dereference,address                                                                   | 0          | 4          |
-> | Oops:#[##]                                                                                                    | 0          | 4          |
-> | RIP:scsi_queue_rq                                                                                             | 0          | 4          |
-> | Kernel_panic-not_syncing:Fatal_exception                                                                      | 0          | 4          |
-> | invoked_oom-killer:gfp_mask=0x                                                                                | 0          | 9          |
-> | Mem-Info                                                                                                      | 0          | 9          |
-> | page_allocation_failure:order:#,mode:#(GFP_KERNEL|__GFP_RETRY_MAYFAIL),nodemask=(null),cpuset=/,mems_allowed= | 0          | 2          |
-> +---------------------------------------------------------------------------------------------------------------+------------+------------+
-> 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <rong.a.chen@intel.com>
-> 
-> 
-> [  140.974865] BUG: kernel NULL pointer dereference, address: 000000000000001c
+Testing:
+The sg3_utils package has several extensions in sg3_utils-1.45 beta
+(revision 829 (see http://sg.danny.cz/sg)) to support and test the
+version 4 sg driver presented in this patchset.
+The new and revised testing utilities are outlined on the
+same webpage as above in the second half of the section
+titled: "15 Downloads and testing".
 
-Yeah, I know this issue, and it has been fixed in either V3 or V4.
+This patchset is against Martin Petersen's 5.4/scsi-queue branch.
+To apply this patchset to lk 5.2 and earlier, the ktime_get_boottime_ns()
+call needs to be changed back to ktime_get_boot_ns().
 
-Thanks,
-Ming
+Changes since v1 (sent to linux-scsi list on 20190616):
+  - change ktime_get_boot_ns() to ktime_get_boottime_ns() to reflect
+    kernel API change first seen in lk 5.3.0-rc1
+
+
+Douglas Gilbert (18):
+  sg: move functions around
+  sg: remove typedefs, type+formatting cleanup
+  sg: sg_log and is_enabled
+  sg: rework sg_poll(), minor changes
+  sg: bitops in sg_device
+  sg: make open count an atomic
+  sg: move header to uapi section
+  sg: speed sg_poll and sg_get_num_waiting
+  sg: sg_allow_if_err_recovery and renames
+  sg: remove most access_ok functions
+  sg: replace rq array with lists
+  sg: sense buffer rework
+  sg: add sg v4 interface support
+  sg: rework debug info
+  sg: add 8 byte SCSI LUN to sg_scsi_id
+  sg: expand sg_comm_wr_t
+  sg: add sg_iosubmit_v3 and sg_ioreceive_v3 ioctls
+  sg: bump version to 4.0.03
+
+ drivers/scsi/sg.c      | 4373 ++++++++++++++++++++++++++--------------
+ include/scsi/sg.h      |  268 +--
+ include/uapi/scsi/sg.h |  373 ++++
+ 3 files changed, 3269 insertions(+), 1745 deletions(-)
+ create mode 100644 include/uapi/scsi/sg.h
+
+-- 
+2.17.1
+
