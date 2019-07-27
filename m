@@ -2,79 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DD877656
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jul 2019 05:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0F5777E1
+	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jul 2019 11:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbfG0DiM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 26 Jul 2019 23:38:12 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:54668 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728097AbfG0DiK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 26 Jul 2019 23:38:10 -0400
+        id S1728573AbfG0J0L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 27 Jul 2019 05:26:11 -0400
+Received: from smtp180.sjtu.edu.cn ([202.120.2.180]:60894 "EHLO
+        smtp180.sjtu.edu.cn" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728273AbfG0J0L (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 27 Jul 2019 05:26:11 -0400
+Received: from proxy01.sjtu.edu.cn (unknown [202.112.26.54])
+        by smtp180.sjtu.edu.cn (Postfix) with ESMTPS id 38B961008CBC3;
+        Sat, 27 Jul 2019 17:26:08 +0800 (CST)
 Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 04B7B2041AF;
-        Sat, 27 Jul 2019 05:38:09 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vvjEtoXmxhSp; Sat, 27 Jul 2019 05:38:07 +0200 (CEST)
-Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 38A1F20417C;
-        Sat, 27 Jul 2019 05:38:06 +0200 (CEST)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        bart.vanassche@wdc.com
-Subject: [PATCH v2 18/18] sg: bump version to 4.0.03
-Date:   Fri, 26 Jul 2019 23:37:28 -0400
-Message-Id: <20190727033728.21134-19-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190727033728.21134-1-dgilbert@interlog.com>
-References: <20190727033728.21134-1-dgilbert@interlog.com>
+        by proxy01.sjtu.edu.cn (Postfix) with ESMTP id 25DA720424204;
+        Sat, 27 Jul 2019 17:26:08 +0800 (CST)
+X-Virus-Scanned: amavisd-new at proxy01.sjtu.edu.cn
+Received: from proxy01.sjtu.edu.cn ([127.0.0.1])
+        by localhost (proxy01.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 7hgHdNnGfx-I; Sat, 27 Jul 2019 17:26:08 +0800 (CST)
+Received: from xywang-pc.ipads-lab.se.sjtu.edu.cn (unknown [202.120.40.82])
+        (Authenticated sender: xywang.sjtu@sjtu.edu.cn)
+        by proxy01.sjtu.edu.cn (Postfix) with ESMTPA id EE2A920424202;
+        Sat, 27 Jul 2019 17:26:07 +0800 (CST)
+From:   Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
+Cc:     QLogic-Storage-Upstream@cavium.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
+Subject: [PATCH] scsi/qedf: avoid accessing uninitialized data
+Date:   Sat, 27 Jul 2019 17:25:49 +0800
+Message-Id: <20190727092549.6169-1-xywang.sjtu@sjtu.edu.cn>
+X-Mailer: git-send-email 2.11.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that the sg version 4 interface is supported:
-  - with ioctl(SG_IO) for synchronous/blocking use
-  - with ioctl(SG_IOSUBMIT) and ioctl(SG_IORECEIVE) for
-    async/non-blocking use
-Plus new ioctl(SG_IOSUBMIT_V3) and ioctl(SG_IORECEIVE_V3)
-potentially replace write() and read() for the sg
-version 3 interface. Bump major driver version number
-from 3 to 4.
+Similar to commit b2d3492fc591 ("scsi: bnx2fc: Fix error handling
+in probe()"), qedf_cmd_mgr_alloc() allocates cmgr->io_bdt_pool
+without initializing it with zero. Though each item of this array
+is explicitly initialized with kmalloc() in the for-loop below,
+kmalloc() may fail in the middle of the loop and make the caller
+go into qedf_cmd_mgr_free(), where some uninitialized
+cmgr->io_bdt_pool items are accessed.
 
-The main new feature is the removal of the fixed 16 element
-array of requests per file descriptor. It is replaced by
-two lists: one for active (inflight) requests and a free
-list. Also sg_requests objects are not freed until the
-owning file descriptor is closed; rather these objects
-are re-used when multiple commands are sent to the same
-file descriptor.
+Fix this by allocating cmgr->io_bdt_pool with kcalloc().
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: Wang Xiayang <xywang.sjtu@sjtu.edu.cn>
 ---
- drivers/scsi/sg.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/qedf/qedf_io.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 51e28913699e..6cfe4dd9d248 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -12,9 +12,9 @@
-  *
-  */
+diff --git a/drivers/scsi/qedf/qedf_io.c b/drivers/scsi/qedf/qedf_io.c
+index d881e822f92c..2851b0cd1df8 100644
+--- a/drivers/scsi/qedf/qedf_io.c
++++ b/drivers/scsi/qedf/qedf_io.c
+@@ -254,7 +254,7 @@ struct qedf_cmd_mgr *qedf_cmd_mgr_alloc(struct qedf_ctx *qedf)
+ 	}
  
--static int sg_version_num = 30901;  /* [x]xyyzz where [x] empty when x=0 */
--#define SG_VERSION_STR "3.9.01"		/* [x]x.[y]y.zz */
--static char *sg_version_date = "20190606";
-+static int sg_version_num = 40003;  /* [x]xyyzz where [x] empty when x=0 */
-+#define SG_VERSION_STR "4.0.03"		/* [x]x.[y]y.zz */
-+static char *sg_version_date = "20190612";
+ 	/* Allocate pool of io_bdts - one for each qedf_ioreq */
+-	cmgr->io_bdt_pool = kmalloc_array(num_ios, sizeof(struct io_bdt *),
++	cmgr->io_bdt_pool = kcalloc(num_ios, sizeof(struct io_bdt *),
+ 	    GFP_KERNEL);
  
- #include <linux/module.h>
- 
+ 	if (!cmgr->io_bdt_pool) {
 -- 
-2.17.1
+2.11.0
 
