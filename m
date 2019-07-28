@@ -2,136 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 258E177B42
-	for <lists+linux-scsi@lfdr.de>; Sat, 27 Jul 2019 20:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B4D77FAF
+	for <lists+linux-scsi@lfdr.de>; Sun, 28 Jul 2019 15:51:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388107AbfG0Sxq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 27 Jul 2019 14:53:46 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37160 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387794AbfG0Sxp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 27 Jul 2019 14:53:45 -0400
-Received: by mail-pf1-f195.google.com with SMTP id 19so26020583pfa.4;
-        Sat, 27 Jul 2019 11:53:45 -0700 (PDT)
+        id S1726065AbfG1NvT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 28 Jul 2019 09:51:19 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:32925 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726044AbfG1NvS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Jul 2019 09:51:18 -0400
+Received: by mail-pl1-f196.google.com with SMTP id c14so26414791plo.0;
+        Sun, 28 Jul 2019 06:51:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=y3DnasAilMtI3RHpffbNTgKJ99rymltM1iusWTe3er4=;
-        b=Ix+I4uDUS+gstrellW1g3Ojk4+fwQ2/s3x9Iu03wCV2yR0JJ5oQDgFZOeqTuyGDrny
-         EuiEnHsq8/vKBvSOmZFZNYgbsAj5t3Df70F9XY+1FyTQXCxi9ko9ktlCVNJql+pyiEfK
-         aGaWBAkqEyp8t1mfUMmMnoBoATOQ3qzoWSC6i+oraTxhAFL/BbqkIlDwiNRb4+F/rWp7
-         /h4UK1pDWIa5HGI8yq51vQx1QV3PaHRUKNEwoRC6WaCOJxuTkBsQt1Gq6yYarZJsJ5we
-         J8aiugN7hfvWBo9+a+LDXnyNur2GOzWOBj4QLKPe7ohqfhzvEWYm1k+bB/JQFtGXtA3r
-         4xTg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=J5EWyWb6OJG/qo28K8qrU5tbTM1GhiRTe7zmHtkL0sU=;
+        b=N9evRnuLmAVuLHTqQAZ3uOBrXAThgh5gzpWjrFhIEwZMgblSRcil4F6BTvabT/JSCp
+         0ll60vQnyXY4013QRHvhcNfQ4ViIB19pdRICB9rM0INQ71s53e5qR1n3TXdPJB/XpCxe
+         oKiCxrV9+IoYmcRrjVrWTgW/u29NIy9L7mvb20VdR6jzjymiRgRpFr+IjLXWdfrSeN4t
+         Uiry6wzxvRIn5BbhSnzX74/j91+N5ntITfgusBUWHcdd4X1HaOPyD7i7Q6lfv7B5qgbj
+         VSwpgjyaLdcbbxf9U8J/M7aZPtrMBG6B0O6B8S/p5mnrTbA3nmZVSrPZpzn8qeLgk0s8
+         Xb9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=y3DnasAilMtI3RHpffbNTgKJ99rymltM1iusWTe3er4=;
-        b=E9tvL7LgYtG28qoqvFbpi+tlr9+FIHGpbeuZx9xZw9oASIFO9Le4Y7MyHUIbwiGcrb
-         v4I/tJkbUMC7hkEHIwuewnMInsnG3N3/xVduBOyUegFldr3JG+hR7nGs+tuYNa8fy/GY
-         57fLt2nE6DryiULMlgdRcVVT75qRf9MSrwJz7XRh8tnpTB0OS76++gO0IGXr2b6bA+Fg
-         TTonE4kNbDIB/WPziWxUa40DxBSA4GMnWJZ86a76h77ohyDtBDzG4/jDdbdMpcwmA+1u
-         mgaVPP8GYUCsiIaJqtZs/3IjZJDZCgW7fwAaryS6t6AOiLrKRBqXJCT/xZ0xAbK9a7cH
-         rs2w==
-X-Gm-Message-State: APjAAAWpjskDbYXKLo/DvALdB7l12IyuhwMnnM7FJKg7QFm/BOIrK20i
-        miqxCelbrJdQ2HucjnoG1Von/3dVJN8=
-X-Google-Smtp-Source: APXvYqxYevqHhJ6dt1EzQWwOWP8c4KB8DdOUpnfAfnIMcQ6mqofCdtY7VyEV2Cy2pdWlVImmnMp1CQ==
-X-Received: by 2002:a62:2f06:: with SMTP id v6mr28749668pfv.195.1564253624486;
-        Sat, 27 Jul 2019 11:53:44 -0700 (PDT)
-Received: from localhost.localdomain ([123.213.206.190])
-        by smtp.gmail.com with ESMTPSA id j10sm22023163pfn.188.2019.07.27.11.53.40
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sat, 27 Jul 2019 11:53:43 -0700 (PDT)
-From:   Minwoo Im <minwoo.im.dev@gmail.com>
-To:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Euihyeok Kwon <eh81.kwon@samsung.com>,
-        Sarah Cho <sohyeon.jo@samsung.com>,
-        Sanggwan Lee <sanggwan.lee@samsung.com>,
-        Gyeongmin Nam <gm.nam@samsung.com>,
-        Sungjun Park <sj1228.park@samsung.com>,
-        Minwoo Im <minwoo.im@samsung.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com,
-        Minwoo Im <minwoo.im.dev@gmail.com>
-Subject: [RESEND PATCH] mpt3sas: support target smid for [abort|query] task
-Date:   Sun, 28 Jul 2019 03:53:37 +0900
-Message-Id: <20190727185337.19299-1-minwoo.im.dev@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=J5EWyWb6OJG/qo28K8qrU5tbTM1GhiRTe7zmHtkL0sU=;
+        b=nljlKU8v4hxDgdWAFc7VNh07Nv+87D+5fbfYyLxAUAycU6dCbLjGKaT7e8vfUk/GDo
+         5kBJZxQcmjuYcMGdwl/wWTjz91CrXe9RzSFyITijPNphU4OpnsE9OhSHTQY6/WHzjmma
+         waMOCQ3OTkRiCqH1K81w+zjrE5ycpFsxsua8AMlApBunxHuCxtWqyTFCudbH6ROea50b
+         tk/LEUefgPzqcTWYEDHFAIZnMJRnS5xVB7Yd7OQRedXtmqZm8hPyGvApBi48kXyOMAyE
+         d7gyQwurDNOAiwkBOblC+DVwH2T+OoVd84aO//DmQIJBAd+Bev90Ejag/xZgEchoiH4W
+         yDAg==
+X-Gm-Message-State: APjAAAWb1YVWmTcw9Tms4Fln6cgN3LSZ7YRhhqbAJYZEbmNDpGQKcxGw
+        y8Q9mGSc6BS0WGIVT++wWLfiUuwNMye8FSKUXyo=
+X-Google-Smtp-Source: APXvYqzql+I3rtHiPCzP+iWAhOvUZgDGGiWzkArham9wCsJ28xyhN0cqGq4Wqdx4n6uUVWM9QWfe+Hti42qY6lh88Kk=
+X-Received: by 2002:a17:902:44f:: with SMTP id 73mr106702962ple.192.1564321878030;
+ Sun, 28 Jul 2019 06:51:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <1563807552-23498-1-git-send-email-akinobu.mita@gmail.com>
+ <1563807552-23498-2-git-send-email-akinobu.mita@gmail.com> <44a6093f-7df7-9442-c33b-5827eb5f187b@gmail.com>
+In-Reply-To: <44a6093f-7df7-9442-c33b-5827eb5f187b@gmail.com>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Sun, 28 Jul 2019 22:51:06 +0900
+Message-ID: <CAC5umygzNj=7LjzrzrVgOyLiZrKckaCgH68j0COFuWvX1yZAzA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] block: introduce LED block device activity trigger
+To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     linux-block@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
+        Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Minwoo Im <minwoo.im@samsung.com>
+2019=E5=B9=B47=E6=9C=8827=E6=97=A5(=E5=9C=9F) 6:22 Jacek Anaszewski <jacek.=
+anaszewski@gmail.com>:
+>
+> Hi Akinobu,
+>
+> Thank you for the v2. I've checked and it works as expected.
+>
+> One thing is missing though - ABI documentation.
+>
+> Please add Documentation/ABI/testing/sysfs-class-led-trigger-blk
+> and document read, write and discard files.
 
-From: Minwoo Im <minwoo.im@samsung.com>
+OK. I'll add document like below.
 
-We can request task management IOCTL command(MPI2_FUNCTION_SCSI_TASK_MGMT)
-to /dev/mpt3ctl.  If the given task_type is either abort task or query
-task, it may need a field named "Initiator Port Transfer Tag to Manage"
-in the IU.
+What:           /sys/class/leds/<led>/interval
+Date:           Aug 2019
+KernelVersion:  5.4
+Contact:        linux-leds@vger.kernel.org
+Description:
+                Specifies the duration of the LED blink in milliseconds.
+                Defaults to 50 ms.
 
-Current code does not support to check target IPTT tag from the
-tm_request.  This patch introduces to check TaskMID given from the
-userspace as a target tag.  We have a rule of relationship between
-(struct request *req->tag) and smid in mpt3sas_base.c:
+What:           /sys/class/leds/<led>/read
+Date:           Aug 2019
+KernelVersion:  5.4
+Contact:        linux-leds@vger.kernel.org
+Description:
+                Signal data read on the block device.
+                If set to 0, the LED will not blink on data read.
+                If set to 1 (default), the LED will blink for the milliseco=
+nds
+                specified in interval to signal data read.
 
-3318 u16
-3319 mpt3sas_base_get_smid_scsiio(struct MPT3SAS_ADAPTER *ioc, u8 cb_idx,
-3320         struct scsi_cmnd *scmd)
-3321 {
-3322         struct scsiio_tracker *request = scsi_cmd_priv(scmd);
-3323         unsigned int tag = scmd->request->tag;
-3324         u16 smid;
-3325
-3326         smid = tag + 1;
+What:           /sys/class/leds/<led>/write
+Date:           Aug 2019
+KernelVersion:  5.4
+Contact:        linux-leds@vger.kernel.org
+Description:
+                Signal data written on the block device.
+                If set to 0, the LED will not blink on data written.
+                If set to 1 (default), the LED will blink for the milliseco=
+nds
+                specified in interval to signal data written.
 
-So if we want to abort a request tagged #X, then we can pass (X + 1) to
-this IOCTL handler.  Otherwise, user space just can pass 0 TaskMID to
-abort the first outstanding smid which is legacy behaviour.
-
-Cc: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-Cc: James E.J. Bottomley <jejb@linux.ibm.com>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: MPT-FusionLinux.pdl@broadcom.com
-Signed-off-by: Minwoo Im <minwoo.im@samsung.com>
-Acked-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Signed-off-by: Minwoo Im <minwoo.im.dev@gmail.com>
----
- drivers/scsi/mpt3sas/mpt3sas_ctl.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_ctl.c b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-index d4ecfbbe738c..a26c5516ea3e 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_ctl.c
-@@ -596,8 +596,16 @@ _ctl_set_task_mid(struct MPT3SAS_ADAPTER *ioc, struct mpt3_ioctl_command *karg,
- 		if (priv_data->sas_target->handle != handle)
- 			continue;
- 		st = scsi_cmd_priv(scmd);
--		tm_request->TaskMID = cpu_to_le16(st->smid);
--		found = 1;
-+
-+		/*
-+		 * If the given TaskMID from the user space is zero, then the
-+		 * first outstanding smid will be picked up.  Otherwise,
-+		 * targeted smid will be the one.
-+		 */
-+		if (!tm_request->TaskMID || tm_request->TaskMID == st->smid) {
-+			tm_request->TaskMID = cpu_to_le16(st->smid);
-+			found = 1;
-+		}
- 	}
- 
- 	if (!found) {
--- 
-2.17.1
-
+What:           /sys/class/leds/<led>/discard
+Date:           Aug 2019
+KernelVersion:  5.4
+Contact:        linux-leds@vger.kernel.org
+Description:
+                Signal data discarded on the block device.
+                If set to 0, the LED will not blink on data discarded.
+                If set to 1 (default), the LED will blink for the milliseco=
+nds
+                specified in interval to signal data discarded.
