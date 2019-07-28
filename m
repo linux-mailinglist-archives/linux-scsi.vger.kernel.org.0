@@ -2,130 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DF9177FBF
-	for <lists+linux-scsi@lfdr.de>; Sun, 28 Jul 2019 16:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B00F78089
+	for <lists+linux-scsi@lfdr.de>; Sun, 28 Jul 2019 18:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726082AbfG1OB2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 28 Jul 2019 10:01:28 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46926 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbfG1OB1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Jul 2019 10:01:27 -0400
-Received: by mail-pf1-f196.google.com with SMTP id c3so3534033pfa.13;
-        Sun, 28 Jul 2019 07:01:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=NRafqqL/OnqN2ZpY7kTQX7CWX4qWrQHLhACG154FPvw=;
-        b=TkILfb/0g5zGSSi3I/bK9urvqTntxorYMX3rWE0QQXHwCwO3GDzLZStgEyMogD4+V/
-         2Rml+GYYCNDMmdk4gSEF7Z3vAfEXAQQTliEUiAFWW+3uRXyxD0eFJsnIBbaEtQiubtUs
-         I5LnYUT0W9BhRPpKBxVlirfqzcUNEae8HU84TOfaUMA86XTnOcvmXZO694ZDDgPJUI2N
-         v+xyP7EZO+kXCny7wRJVx2Hsbf343K6FQfvFTyU4TQpMR7+EstRnuXG6MgW7LW6MzZhl
-         WsbqxqOPKqemP3zacj6FoS7bjIepsrjixQ2LGwCzrDtH9H+wNHninVEIcRV2yDmV0BFs
-         KnmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=NRafqqL/OnqN2ZpY7kTQX7CWX4qWrQHLhACG154FPvw=;
-        b=pLjS2Vo4DfEVx+rZeywB5uERGiJqisYJeBXWT3LmJBaUXy4+JQmMi8HffagHWQTT1e
-         i4x1Q1fwSHbyFIdBvt7hliHHucBd9O5nQir4GJPIvCPNk/gh/Ja1Fkm0y8MLoZRB2rp1
-         v/5KVvz5Hhy0A0iFE0xbe1icHHxuZhI1IftH/Xu8ey6rsyN5sdKxrJGXdHXUBEuXFoPX
-         M4pGZH7CmLSYjFiMmrRjD1NV2eaD/Y6h2JxGJvRjKZr32NcyWEO0awMluboh8B0d8O0C
-         h5qmRDPV+fLPg4eKIVTZr2z6jG+wNrxYks3nX3Pv1vczYYIqXVPXFwXwnL76W5bfV6Ur
-         eaIg==
-X-Gm-Message-State: APjAAAUr5mWIvnOqv0UQGY1JfWhuz0il+GF0ZLwbSF4tuw8KfMWTsYss
-        ulYcQdRV+/UmGgfd2zhtNPIwo70g
-X-Google-Smtp-Source: APXvYqzAci1FG8L/T/tBkvm8atyPsd9NaE9XTWBINy6Da8ZRwSqvc3ek3yObSOKWfnjOmqFBAPk8WQ==
-X-Received: by 2002:a17:90a:cb81:: with SMTP id a1mr104603570pju.81.1564322487093;
-        Sun, 28 Jul 2019 07:01:27 -0700 (PDT)
-Received: from mita-MS-7A45.lan ([240f:34:212d:1:c118:b59:e3b3:19e7])
-        by smtp.gmail.com with ESMTPSA id k36sm59911042pgl.42.2019.07.28.07.01.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 28 Jul 2019 07:01:26 -0700 (PDT)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-block@vger.kernel.org, linux-leds@vger.kernel.org,
+        id S1726178AbfG1QwL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 28 Jul 2019 12:52:11 -0400
+Received: from condef-08.nifty.com ([202.248.20.73]:34063 "EHLO
+        condef-08.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726082AbfG1QwL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 28 Jul 2019 12:52:11 -0400
+Received: from conuserg-08.nifty.com ([10.126.8.71])by condef-08.nifty.com with ESMTP id x6SGkx1O001355
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 01:46:59 +0900
+Received: from grover.flets-west.jp (softbank126026094249.bbtec.net [126.26.94.249]) (authenticated)
+        by conuserg-08.nifty.com with ESMTP id x6SGkjTu023020;
+        Mon, 29 Jul 2019 01:46:45 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com x6SGkjTu023020
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1564332406;
+        bh=Kf4ni2+7vXA+zu0PGCXWsKLl1UCXC9jZRZ/P0itgank=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PIGa1a1ZNv7dcaLYKaBvgdoisYSc3IfpvgejNlTvjS5Ji8v8AvA2oErRLzCpEEbJg
+         7U955bpSCo4E8H1xJVoTYdxsJobTIYUiL4JV46+7604Hf88GGEJH3UhPAlcklYRTke
+         1K/LnGPxdRQ3ayYFWAhy/kAMkdblWhbUi5BMjYM8SKDOwm/ZMfBVc6a61JUtiD0+1d
+         zmqn8g++U/pS/OxNh3xDPepuKkVucvG1vuoFIJuuHb3Jp27DcN90tk3BLJhY8RhJkH
+         ICfaoN3yF+GD5a7T833uuYCJ3KvqdqQ19ePJtmf8Qzw61YVyZ/zCM5AoFCF6VvBLrH
+         pqLNZZvwPZeMw==
+X-Nifty-SrcIP: [126.26.94.249]
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        GOTO Masanori <gotom@debian.or.jp>,
-        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
-Subject: [PATCH 3/3] scsi: nsp32: rename LED_* macros to EXT_PORT_LED_*
-Date:   Sun, 28 Jul 2019 23:00:46 +0900
-Message-Id: <1564322446-28255-4-git-send-email-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1564322446-28255-1-git-send-email-akinobu.mita@gmail.com>
-References: <1564322446-28255-1-git-send-email-akinobu.mita@gmail.com>
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: ch: add include guard to chio.h
+Date:   Mon, 29 Jul 2019 01:46:43 +0900
+Message-Id: <20190728164643.16335-1-yamada.masahiro@socionext.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The nsp32 driver defines LED_ON and LED_OFF macros for EXT_PORT_DDR or
-EXT_PORT register values.  The LED_OFF and LED_ON macros conflict with
-the LED subsystem's LED_OFF and LED_ON enums.
+Add a header include guard just in case.
 
-This renames these LED_* macros to EXT_PORT_LED_* in nsp32 driver.
-
-Cc: Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>
-Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Dan Murphy <dmurphy@ti.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: GOTO Masanori <gotom@debian.or.jp>
-Cc: YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
 ---
- drivers/scsi/nsp32.c | 6 +++---
- drivers/scsi/nsp32.h | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/nsp32.c b/drivers/scsi/nsp32.c
-index 70db792..330cf4c 100644
---- a/drivers/scsi/nsp32.c
-+++ b/drivers/scsi/nsp32.c
-@@ -763,7 +763,7 @@ static int nsp32_arbitration(struct scsi_cmnd *SCpnt, unsigned int base)
- 	if (arbit & ARBIT_WIN) {
- 		/* Arbitration succeeded */
- 		SCpnt->result = DID_OK << 16;
--		nsp32_index_write1(base, EXT_PORT, LED_ON); /* PCI LED on */
-+		nsp32_index_write1(base, EXT_PORT, EXT_PORT_LED_ON); /* PCI LED on */
- 	} else if (arbit & ARBIT_FAIL) {
- 		/* Arbitration failed */
- 		SCpnt->result = DID_BUS_BUSY << 16;
-@@ -1137,8 +1137,8 @@ static int nsp32hw_init(nsp32_hw_data *data)
- 	nsp32_write2(base, IRQ_CONTROL, 0);
+ include/uapi/linux/chio.h | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
+
+diff --git a/include/uapi/linux/chio.h b/include/uapi/linux/chio.h
+index 689fc93fafda..e1cad4c319ee 100644
+--- a/include/uapi/linux/chio.h
++++ b/include/uapi/linux/chio.h
+@@ -3,6 +3,9 @@
+  * ioctl interface for the scsi media changer driver
+  */
  
- 	/* PCI LED off */
--	nsp32_index_write1(base, EXT_PORT_DDR, LED_OFF);
--	nsp32_index_write1(base, EXT_PORT,     LED_OFF);
-+	nsp32_index_write1(base, EXT_PORT_DDR, EXT_PORT_LED_OFF);
-+	nsp32_index_write1(base, EXT_PORT,     EXT_PORT_LED_OFF);
++#ifndef _UAPI_LINUX_CHIO_H
++#define _UAPI_LINUX_CHIO_H
++
+ /* changer element types */
+ #define CHET_MT   0	/* media transport element (robot) */
+ #define CHET_ST   1	/* storage element (media slots) */
+@@ -160,10 +163,4 @@ struct changer_set_voltag {
+ #define CHIOSVOLTAG    _IOW('c',18,struct changer_set_voltag)
+ #define CHIOGVPARAMS   _IOR('c',19,struct changer_vendor_params)
  
- 	return TRUE;
- }
-diff --git a/drivers/scsi/nsp32.h b/drivers/scsi/nsp32.h
-index ab0726c..a7553ea 100644
---- a/drivers/scsi/nsp32.h
-+++ b/drivers/scsi/nsp32.h
-@@ -306,8 +306,8 @@ typedef u16 u16_le;
- 
- #define EXT_PORT_DDR		0x02	/* BASE+08, IDX+02, B, R/W */
- #define EXT_PORT		0x03	/* BASE+08, IDX+03, B, R/W */
--# define LED_ON	 (0)
--# define LED_OFF BIT(0)
-+# define EXT_PORT_LED_ON	(0)
-+# define EXT_PORT_LED_OFF	BIT(0)
- 
- #define IRQ_SELECT		0x04	/* BASE+08, IDX+04, W, R/W */
- # define IRQSELECT_RESELECT_IRQ      BIT(0)
+-/* ---------------------------------------------------------------------- */
+-
+-/*
+- * Local variables:
+- * c-basic-offset: 8
+- * End:
+- */
++#endif /* _UAPI_LINUX_CHIO_H */
 -- 
-2.7.4
+2.17.1
 
