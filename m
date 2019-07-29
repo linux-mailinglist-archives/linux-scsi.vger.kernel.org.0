@@ -2,103 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B02F78F0A
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 17:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6138C78F16
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 17:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728709AbfG2PV0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 11:21:26 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:44213 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728023AbfG2PV0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 11:21:26 -0400
-Received: by mail-pg1-f196.google.com with SMTP id i18so28427567pgl.11;
-        Mon, 29 Jul 2019 08:21:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=TwfQwt6LD/cxb9biYp1Swn/1NHjur0aXs6Bu0dcwxbc=;
-        b=UQRYLyGF3XOYZJKFpELr3jKuI0Fwk2dKgQoZR5McEfKZBvfT3FXkEUO/AaJjjC6228
-         yDHj3eD3E1mXMEiCijZCXMRvwe9CujBlYb1W/991gbrDUlkP9bU6JJvwL3rL0sCrq+Lx
-         bxIaC1Wl2ZM/IQ3jY9byclaW3LbDDTZj1icltPMmb/OWvZW0F45eHA8k/k89pv4T4tpR
-         Nu7QEZAsa6E21PJL+y016LWp+Y/oS3GfPxppeiTY9T4tFrPLmdBVRGiKTH9PXiZdNlqj
-         hMyDjFli5mLASWNBzei2MLvRXH8M2HitaxsQIC5g+PJEfA6b/eeKvg6VLITxaputQGd1
-         nbTQ==
+        id S2387974AbfG2PXL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 11:23:11 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38783 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387913AbfG2PXL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 11:23:11 -0400
+Received: by mail-pg1-f193.google.com with SMTP id f5so19611199pgu.5
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 08:23:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TwfQwt6LD/cxb9biYp1Swn/1NHjur0aXs6Bu0dcwxbc=;
-        b=UREyGDmg/2JS/RQiZpl9PRDMmaMZSSJaJH9I+Hln7Z7dsGUpAbvN1zkNcVUH6s7Veq
-         LSu36M+wpa4YrIT1NqaH3Q/GSALGNUAZoDzcKaSZxtADn4RMYRmqkf4VvaZnwF0CiEZY
-         E2yJZBNbEHsupnhcCqE6aTkuHJXHlKn5w5G+WeYTuJREzqvudnHaj5Fg2IvdSwjW7FMt
-         bj8Z4Z2tPYqtje6SAfGYYiJWxx9ztNzBNUAk9K8/z8TRyBHy0A3ZxGcu2UMI6u6VL004
-         tH54FgPVrEX7G0IsQ7R1987HhgPRu4GrhZLjlDqKEuSHZQCBVT9m/QayTsbTJKfqn0El
-         DfqQ==
-X-Gm-Message-State: APjAAAWP9a6PU4fQm42gNjKokxyo/+2Zv3Z5QSb1/VrjQKhFjTtka/D3
-        1ZFRDQ+nydryhL9BaI2Yulwxk6dMkf3j8eGVa6s=
-X-Google-Smtp-Source: APXvYqwG1i5tUPO+UoK9/5VWAU2u7Ro7sloiP4Fhq6RNEnBz6mfxah8ZzSWSRJ8xVPdISajqbA5KC+qNwxPLMh8txZA=
-X-Received: by 2002:a63:4185:: with SMTP id o127mr64617641pga.82.1564413685438;
- Mon, 29 Jul 2019 08:21:25 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZFPsZGrgmuO+Rmy7FDgE6Px2dxlnDjn3m4UlbO07otg=;
+        b=iyj1cZiEVjIRd0ywLubkMmExle+uEmCtwc29XZVndGHJJUK8h74CTUZ0E25VkC5H+a
+         LpUP69L9PiA2+ew9eI2FqtzTLaUHS0d71bcqRRiD8Z5GdVYRmw9nYt1+WdSwzYEEPRmy
+         4V/HmbNAgdRGvCe56eBz0VO1vZyBDzpON0YndURAytAu4PqgQGZNomZc4Z94ee24Vuii
+         hzpDOH21uTgfoHSYL/KQ9txQLiFUv+HLTKvqflKE+ZSURQDJjiat5RHYpTgTDcyOv4MN
+         4wymnXuXJTJDIIlUcGCaBtfonfzeXcOrXtAS4szh/DaVJUp93Ix0lhEWjVCgPkIc9BW5
+         Tz2Q==
+X-Gm-Message-State: APjAAAUinxiCKXQOmZOZzipaGTszWHYJqyy1iiaTSpYAKKHXuTEPEkKX
+        LsP6uqHJh/dw7RADBTuvs11nS4KY
+X-Google-Smtp-Source: APXvYqxC7Nq4YI4Z8yo4d8kv8SjjiIl2V70otqH08c7g+R5BcA6E9JmcvFSLjLaofOLvWz/eNepX/Q==
+X-Received: by 2002:a17:90a:c70c:: with SMTP id o12mr87424762pjt.62.1564413789928;
+        Mon, 29 Jul 2019 08:23:09 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id h12sm70792516pje.12.2019.07.29.08.23.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 08:23:08 -0700 (PDT)
+Subject: Re: [PATCH 4/4] Reduce memory required for SCSI logging
+To:     Hannes Reinecke <hare@suse.de>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     Jan Palus <jpalus@fastmail.com>, Christoph Hellwig <hch@lst.de>,
+        Ming Lei <ming.lei@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        linux-scsi@vger.kernel.org
+References: <20190726164855.130084-1-bvanassche@acm.org>
+ <20190726164855.130084-5-bvanassche@acm.org>
+ <5fcb2eb5-3eb2-d6ee-1846-fb26afe39046@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <5b5ca8a2-20ab-11bd-88d5-b2673f53f23e@acm.org>
+Date:   Mon, 29 Jul 2019 08:23:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <1564322446-28255-1-git-send-email-akinobu.mita@gmail.com>
- <1564322446-28255-2-git-send-email-akinobu.mita@gmail.com> <85aa571d-69c4-a35c-8b9a-770cc3662baa@gmail.com>
-In-Reply-To: <85aa571d-69c4-a35c-8b9a-770cc3662baa@gmail.com>
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-Date:   Tue, 30 Jul 2019 00:21:14 +0900
-Message-ID: <CAC5umyggeHZJrW7BR7o+GgnQiW5zaSP+cqMeW_CgWwqLVOjNZQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] block: umem: rename LED_* macros to LEDCTRL_*
-To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     linux-block@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>,
-        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <5fcb2eb5-3eb2-d6ee-1846-fb26afe39046@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-2019=E5=B9=B47=E6=9C=8829=E6=97=A5(=E6=9C=88) 2:30 Jacek Anaszewski <jacek.=
-anaszewski@gmail.com>:
->
-> Hi Akinobu,
->
-> On 7/28/19 4:00 PM, Akinobu Mita wrote:
-> > The umem driver defines LED_* macros for MEMCTRLCMD_LEDCTRL register
-> > values.  The LED_OFF and LED_ON macros conflict with the LED subsystem'=
-s
-> > LED_OFF and LED_ON enums.
-> >
-> > This renames these LED_* macros to LEDCTRL_* in umem driver.
-> [...]
-> >
-> > diff --git a/drivers/block/umem.h b/drivers/block/umem.h
-> > index 5838497..8563fdc 100644
-> > --- a/drivers/block/umem.h
-> > +++ b/drivers/block/umem.h
-> > @@ -32,16 +32,16 @@
-> >  #define  MEM_2_GB            0xe0
-> >
-> >  #define MEMCTRLCMD_LEDCTRL   0x08
-> > -#define  LED_REMOVE          2
-> > -#define  LED_FAULT           4
-> > -#define  LED_POWER           6
-> > -#define       LED_FLIP               255
-> > -#define  LED_OFF             0x00
-> > -#define  LED_ON                      0x01
-> > -#define  LED_FLASH_3_5               0x02
-> > -#define  LED_FLASH_7_0               0x03
-> > -#define  LED_POWER_ON                0x00
-> > -#define  LED_POWER_OFF               0x01
-> > +#define  LEDCTRL_REMOVE              2
->
-> This way the namespacing prefix still begins with "LED",
-> which can lead to further conflicts in the future.
+On 7/28/19 11:21 PM, Hannes Reinecke wrote:
+> You've just disabled the prime reason why I did implement SCSI logging;
+> namely to provide per-cpu buffers where messages can be printed into.
+> 
+> We can move to kmalloc (or even kvmalloc), but the per-cpu pointer need
+> to be kept.
 
-How about renaming 'LED_ON' to 'MEMCTRLCMD_LEDCTRL_ON', and 'LED_OFF' to
-'MEMCTRLCMD_LEDCTRL_OFF' ?
+Hi Hannes,
+
+The approach without my patch is as follows:
+* Allocate a buffer for a single line of logging output.
+* Call scnprintf() or another formatting function one or more times to
+   produce a single line of logging output.
+* Call dev_printk() to send that single line to the console.
+* Free the allocated buffer.
+
+With my patch applied that approach is retained. The only difference is 
+how the buffer is allocated. I don't see why the SCSI logging code would 
+need any per-cpu memory to avoid line splitting.
+
+Bart.
