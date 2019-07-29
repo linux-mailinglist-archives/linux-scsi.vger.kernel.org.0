@@ -2,25 +2,25 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B8078A88
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60D478A8E
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387699AbfG2L3N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 07:29:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40750 "EHLO mx1.suse.de"
+        id S2387738AbfG2L3m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 07:29:42 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40888 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387676AbfG2L3N (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 07:29:13 -0400
+        id S2387665AbfG2L3l (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jul 2019 07:29:41 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 2F2FEB077;
-        Mon, 29 Jul 2019 11:29:11 +0000 (UTC)
-Subject: Re: [PATCH v2 07/18] sg: move header to uapi section
+        by mx1.suse.de (Postfix) with ESMTP id 0EF4FAF39;
+        Mon, 29 Jul 2019 11:29:40 +0000 (UTC)
+Subject: Re: [PATCH v2 08/18] sg: speed sg_poll and sg_get_num_waiting
 To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com,
         bart.vanassche@wdc.com
 References: <20190727033728.21134-1-dgilbert@interlog.com>
- <20190727033728.21134-8-dgilbert@interlog.com>
+ <20190727033728.21134-9-dgilbert@interlog.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -66,12 +66,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <8fe22df9-6532-23a7-40a4-6973bbe3a934@suse.de>
-Date:   Mon, 29 Jul 2019 13:29:10 +0200
+Message-ID: <b53f6b30-e212-7b9b-9ed7-0c66b4d98186@suse.de>
+Date:   Mon, 29 Jul 2019 13:29:39 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190727033728.21134-8-dgilbert@interlog.com>
+In-Reply-To: <20190727033728.21134-9-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -81,16 +81,15 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 7/27/19 5:37 AM, Douglas Gilbert wrote:
-> Move user interface part of scsi/sg.h into the new header file:
-> include/uapi/scsi/sg.h . Since scsi/sg.h includes the new header,
-> other code including scsi/sg.h should not be impacted.
+> Track the number of submitted and waiting (for read/receive)
+> requests on each file descriptor with two atomic integers.
+> This speeds sg_poll() and ioctl(SG_GET_NUM_WAITING) which
+> are oft used with the asynchronous (non-blocking) interfaces.
 > 
 > Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 > ---
->  include/scsi/sg.h      | 268 ++-------------------------------
->  include/uapi/scsi/sg.h | 329 +++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 338 insertions(+), 259 deletions(-)
->  create mode 100644 include/uapi/scsi/sg.h
+>  drivers/scsi/sg.c | 54 +++++++++++++++++++++++------------------------
+>  1 file changed, 27 insertions(+), 27 deletions(-)
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.com>
 
