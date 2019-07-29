@@ -2,183 +2,209 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF7378A15
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6723B78A4A
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387535AbfG2LDv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 07:03:51 -0400
-Received: from gateway30.websitewelcome.com ([192.185.148.2]:48146 "EHLO
-        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387530AbfG2LDu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 07:03:50 -0400
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway30.websitewelcome.com (Postfix) with ESMTP id A4CEB3ED7
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 06:03:49 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id s3RVhpuk02qH7s3RVhsMQR; Mon, 29 Jul 2019 06:03:49 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Qp3MYjU9xtCwvEwflfo80+6YQEhXbF1QhokUUB+6Gsk=; b=S1PU0dbz4bGQhEq57U7f2EIUcz
-        LKPhyyl6P5P2B3STh+EXR56EnwgWJv5snTRwnnA3CTcaALZJY2QDesZzVe7yvaVyzkBSMfB9PDApM
-        5/SrSc74+9NwlZI4GAHGwImsvurL7c+MXyxM8dw/KHOfZ9eoh8HGn50lFHvCWbbi8Gj2u/wYgNoJU
-        032qTcs0Eof1R6LCEG6bSShdD5BWzVfc8wAj18vcYFNapJ5IEY+BNtwo8yy/YB8OW14PS7EEoEVfV
-        3wVdEEA9plXOJqt+9mQQdfNoYSa+SYxKO00bgZ0R3jf4Vx27vxd0Pol1oprdr1Tjvf0EAPBKUdJx3
-        ae/kQHhA==;
-Received: from [187.192.11.120] (port=46236 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hs3RU-0007bm-EP; Mon, 29 Jul 2019 06:03:48 -0500
-Date:   Mon, 29 Jul 2019 06:03:45 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH] scsi: qlogicpti: Mark expected switch fall-throughs
-Message-ID: <20190729110345.GA2603@embeddedor>
+        id S2387575AbfG2LQ5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 07:16:57 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38078 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387475AbfG2LQ5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jul 2019 07:16:57 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id DC42DABD0;
+        Mon, 29 Jul 2019 11:16:55 +0000 (UTC)
+Subject: Re: [PATCH v2 05/18] sg: bitops in sg_device
+To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com,
+        bart.vanassche@wdc.com
+References: <20190727033728.21134-1-dgilbert@interlog.com>
+ <20190727033728.21134-6-dgilbert@interlog.com>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <09886ead-133b-ae41-cea3-00641b66e521@suse.de>
+Date:   Mon, 29 Jul 2019 13:16:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.192.11.120
-X-Source-L: No
-X-Exim-ID: 1hs3RU-0007bm-EP
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.11.120]:46236
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 3
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+In-Reply-To: <20190727033728.21134-6-dgilbert@interlog.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Mark switch cases where we are expecting to fall through.
+On 7/27/19 5:37 AM, Douglas Gilbert wrote:
+> Introduce bitops in sg_device to replace an atomic, a bool and a
+> char. That char (sgdebug) had been reduced to only two states.
+> Add some associated macros to make the code a little clearer.
+> 
+> Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+> ---
+>  drivers/scsi/sg.c | 104 +++++++++++++++++++++++-----------------------
+>  1 file changed, 53 insertions(+), 51 deletions(-)
+> 
+> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+> index 9aa1b1030033..97ce84f0c51b 100644
+> --- a/drivers/scsi/sg.c
+> +++ b/drivers/scsi/sg.c
+> @@ -74,6 +74,11 @@ static char *sg_version_date = "20190606";
+>  
+>  #define SG_DEFAULT_TIMEOUT mult_frac(SG_DEFAULT_TIMEOUT_USER, HZ, USER_HZ)
+>  
+> +/* Bit positions (flags) for sg_device::fdev_bm bitmask follow */
+> +#define SG_FDEV_EXCLUDE		0	/* have fd open with O_EXCL */
+> +#define SG_FDEV_DETACHING	1	/* may be unexpected device removal */
+> +#define SG_FDEV_LOG_SENSE	2	/* set by ioctl(SG_SET_DEBUG) */
+> +
+>  int sg_big_buff = SG_DEF_RESERVED_SIZE;
+>  /* N.B. This variable is readable and writeable via
+>     /proc/scsi/sg/def_reserved_size . Each time sg_open() is called a buffer
+> @@ -155,14 +160,12 @@ struct sg_device { /* holds the state of each scsi generic device */
+>  	struct scsi_device *device;
+>  	wait_queue_head_t open_wait;    /* queue open() when O_EXCL present */
+>  	struct mutex open_rel_lock;     /* held when in open() or release() */
+> -	int sg_tablesize;	/* adapter's max scatter-gather table size */
+> -	u32 index;		/* device index number */
+>  	struct list_head sfds;
+>  	rwlock_t sfd_lock;      /* protect access to sfd list */
+> -	atomic_t detaching;     /* 0->device usable, 1->device detaching */
+> -	bool exclude;		/* 1->open(O_EXCL) succeeded and is active */
+> +	int sg_tablesize;	/* adapter's max scatter-gather table size */
+> +	u32 index;		/* device index number */
+>  	int open_cnt;		/* count of opens (perhaps < num(sfds) ) */
+> -	char sgdebug;		/* 0->off, 1->sense, 9->dump dev, 10-> all devs */
+> +	unsigned long fdev_bm[1];	/* see SG_FDEV_* defines above */
 
-This patch fixes the following warnings (Building: sparc defconfig):
+Just use 'unsigned long fdev_bm' (or maybe 'unsigned long fdev_flags').
+No point in declaring a one-entry array.
 
-drivers/scsi/qlogicpti.c: In function 'qlogicpti_mbox_command':
-drivers/scsi/qlogicpti.c:202:10: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 6: sbus_writew(param[5], qpti->qregs + MBOX5);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:203:2: note: here
-  case 5: sbus_writew(param[4], qpti->qregs + MBOX4);
-  ^~~~
-drivers/scsi/qlogicpti.c:203:10: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 5: sbus_writew(param[4], qpti->qregs + MBOX4);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:204:2: note: here
-  case 4: sbus_writew(param[3], qpti->qregs + MBOX3);
-  ^~~~
-drivers/scsi/qlogicpti.c:204:10: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 4: sbus_writew(param[3], qpti->qregs + MBOX3);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:205:2: note: here
-  case 3: sbus_writew(param[2], qpti->qregs + MBOX2);
-  ^~~~
-drivers/scsi/qlogicpti.c:205:10: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 3: sbus_writew(param[2], qpti->qregs + MBOX2);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:206:2: note: here
-  case 2: sbus_writew(param[1], qpti->qregs + MBOX1);
-  ^~~~
-drivers/scsi/qlogicpti.c:206:10: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 2: sbus_writew(param[1], qpti->qregs + MBOX1);
-          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:207:2: note: here
-  case 1: sbus_writew(param[0], qpti->qregs + MBOX0);
-  ^~~~
-drivers/scsi/qlogicpti.c:256:19: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 6: param[5] = sbus_readw(qpti->qregs + MBOX5);
-          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:257:2: note: here
-  case 5: param[4] = sbus_readw(qpti->qregs + MBOX4);
-  ^~~~
-drivers/scsi/qlogicpti.c:257:19: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 5: param[4] = sbus_readw(qpti->qregs + MBOX4);
-          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:258:2: note: here
-  case 4: param[3] = sbus_readw(qpti->qregs + MBOX3);
-  ^~~~
-drivers/scsi/qlogicpti.c:258:19: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 4: param[3] = sbus_readw(qpti->qregs + MBOX3);
-          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:259:2: note: here
-  case 3: param[2] = sbus_readw(qpti->qregs + MBOX2);
-  ^~~~
-drivers/scsi/qlogicpti.c:259:19: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 3: param[2] = sbus_readw(qpti->qregs + MBOX2);
-          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:260:2: note: here
-  case 2: param[1] = sbus_readw(qpti->qregs + MBOX1);
-  ^~~~
-drivers/scsi/qlogicpti.c:260:19: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  case 2: param[1] = sbus_readw(qpti->qregs + MBOX1);
-          ~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-drivers/scsi/qlogicpti.c:261:2: note: here
-  case 1: param[0] = sbus_readw(qpti->qregs + MBOX0);
-  ^~~~
+>  	struct gendisk *disk;
+>  	struct cdev * cdev;	/* char_dev [sysfs: /sys/cdev/major/sg<n>] */
+>  	struct kref d_ref;
+> @@ -200,6 +203,9 @@ static void sg_device_destroy(struct kref *kref);
+>  #define SZ_SG_IO_HDR ((int)sizeof(struct sg_io_hdr))	/* v3 header */
+>  #define SZ_SG_REQ_INFO ((int)sizeof(struct sg_req_info))
+>  
+> +#define SG_IS_DETACHING(sdp) test_bit(SG_FDEV_DETACHING, (sdp)->fdev_bm)
+> +#define SG_HAVE_EXCLUDE(sdp) test_bit(SG_FDEV_EXCLUDE, (sdp)->fdev_bm)
+> +
+>  /*
+>   * Kernel needs to be built with CONFIG_SCSI_LOGGING to see log messages.
+>   * 'depth' is a number between 1 (most severe) and 7 (most noisy, most
+> @@ -273,26 +279,26 @@ sg_wait_open_event(struct sg_device *sdp, bool o_excl)
+>  		while (sdp->open_cnt > 0) {
+>  			mutex_unlock(&sdp->open_rel_lock);
+>  			retval = wait_event_interruptible(sdp->open_wait,
+> -					(atomic_read(&sdp->detaching) ||
+> +					(SG_IS_DETACHING(sdp) ||
+>  					 !sdp->open_cnt));
+>  			mutex_lock(&sdp->open_rel_lock);
+>  
+>  			if (retval) /* -ERESTARTSYS */
+>  				return retval;
+> -			if (atomic_read(&sdp->detaching))
+> +			if (SG_IS_DETACHING(sdp))
+>  				return -ENODEV;
+>  		}
+>  	} else {
+> -		while (sdp->exclude) {
+> +		while (SG_HAVE_EXCLUDE(sdp)) {
+>  			mutex_unlock(&sdp->open_rel_lock);
+>  			retval = wait_event_interruptible(sdp->open_wait,
+> -					(atomic_read(&sdp->detaching) ||
+> -					 !sdp->exclude));
+> +					(SG_IS_DETACHING(sdp) ||
+> +					 !SG_HAVE_EXCLUDE(sdp)));
+>  			mutex_lock(&sdp->open_rel_lock);
+>  
+>  			if (retval) /* -ERESTARTSYS */
+>  				return retval;
+> -			if (atomic_read(&sdp->detaching))
+> +			if (SG_IS_DETACHING(sdp))
+>  				return -ENODEV;
+>  		}
+>  	}
+> @@ -354,7 +360,7 @@ sg_open(struct inode *inode, struct file *filp)
+>  				goto error_mutex_locked;
+>  			}
+>  		} else {
+> -			if (sdp->exclude) {
+> +			if (SG_HAVE_EXCLUDE(sdp)) {
+>  				retval = -EBUSY;
+>  				goto error_mutex_locked;
+>  			}
+> @@ -367,10 +373,10 @@ sg_open(struct inode *inode, struct file *filp)
+>  
+>  	/* N.B. at this point we are holding the open_rel_lock */
+>  	if (o_excl)
+> -		sdp->exclude = true;
+> +		set_bit(SG_FDEV_EXCLUDE, sdp->fdev_bm);
+>  
+>  	if (sdp->open_cnt < 1) {  /* no existing opens */
+> -		sdp->sgdebug = 0;
+> +		clear_bit(SG_FDEV_LOG_SENSE, sdp->fdev_bm);
+>  		q = sdp->device->request_queue;
+>  		sdp->sg_tablesize = queue_max_segments(q);
+>  	}
+Do not use 'set_bit' and 'clear_bit' on their own; the do not imply any
+memory barriers, so concurrent  open() calls will not necessarily see
+the real value.
+So either use some XX_bit() variant which returns a value (like
+test_and_set_bit()), or add an explicit memory barrier.
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/scsi/qlogicpti.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Cheers,
 
-diff --git a/drivers/scsi/qlogicpti.c b/drivers/scsi/qlogicpti.c
-index 9335849f6bea..d539beef3ce8 100644
---- a/drivers/scsi/qlogicpti.c
-+++ b/drivers/scsi/qlogicpti.c
-@@ -200,10 +200,15 @@ static int qlogicpti_mbox_command(struct qlogicpti *qpti, u_short param[], int f
- 	/* Write mailbox command registers. */
- 	switch (mbox_param[param[0]] >> 4) {
- 	case 6: sbus_writew(param[5], qpti->qregs + MBOX5);
-+		/* Fall through */
- 	case 5: sbus_writew(param[4], qpti->qregs + MBOX4);
-+		/* Fall through */
- 	case 4: sbus_writew(param[3], qpti->qregs + MBOX3);
-+		/* Fall through */
- 	case 3: sbus_writew(param[2], qpti->qregs + MBOX2);
-+		/* Fall through */
- 	case 2: sbus_writew(param[1], qpti->qregs + MBOX1);
-+		/* Fall through */
- 	case 1: sbus_writew(param[0], qpti->qregs + MBOX0);
- 	}
- 
-@@ -254,10 +259,15 @@ static int qlogicpti_mbox_command(struct qlogicpti *qpti, u_short param[], int f
- 	/* Read back output parameters. */
- 	switch (mbox_param[param[0]] & 0xf) {
- 	case 6: param[5] = sbus_readw(qpti->qregs + MBOX5);
-+		/* Fall through */
- 	case 5: param[4] = sbus_readw(qpti->qregs + MBOX4);
-+		/* Fall through */
- 	case 4: param[3] = sbus_readw(qpti->qregs + MBOX3);
-+		/* Fall through */
- 	case 3: param[2] = sbus_readw(qpti->qregs + MBOX2);
-+		/* Fall through */
- 	case 2: param[1] = sbus_readw(qpti->qregs + MBOX1);
-+		/* Fall through */
- 	case 1: param[0] = sbus_readw(qpti->qregs + MBOX0);
- 	}
- 
+Hannes
 -- 
-2.22.0
-
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
