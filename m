@@ -2,94 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 599AD787B2
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 10:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49F1787C4
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 10:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbfG2Io7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 04:44:59 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:35693 "EHLO
+        id S1726787AbfG2Ivm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 04:51:42 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:40192 "EHLO
         mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727109AbfG2Io6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 04:44:58 -0400
-Received: by mail-pl1-f196.google.com with SMTP id w24so27236379plp.2;
-        Mon, 29 Jul 2019 01:44:58 -0700 (PDT)
+        with ESMTP id S1726496AbfG2Ivm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 04:51:42 -0400
+Received: by mail-pl1-f196.google.com with SMTP id a93so27193130pla.7;
+        Mon, 29 Jul 2019 01:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id;
-        bh=/+k1cCW3hB4jfxvc/1cVEskjGWMvsmOcHLSENoPU7GI=;
-        b=QgsPjR6+2ydKYWsEeSqNt36OdA3VK9LDM1mcbMdX+VeR9RlzAB+rXipZBmLJslJbsa
-         vMxQgFbpOsNmF0weY6+7gMWlI23LQF3u5avrnO5ZqFizWofBu8EkUh46zTz9HSa27Ow1
-         SuMynRhriZQhm2/9OWniLJIWyR0jNrQBk/nd9cj+/DIFqgcMLw/ZZbhA5V9sjXAMlv4m
-         Gt7cy7gLcAFFCuLj1okXKOfaJ88ACvERBS9x9vB/Z/nM8ZVQBTWtmnPs1oCr5bxrA0+Z
-         Tk5QLMNegGTf5X2MxJ49oC0HGhoOtPmiKeZfLfqyZnkV8klD1p4sFfFe6S4LGJkcgNiO
-         xyIw==
+        bh=svoEGIS6JJLnt3fINDHmfTIOc9wsEgzoN9quNg/YowE=;
+        b=pEJdIFprQYLCpzmIFeu6lFKku5emKHFUHnPPoYvXzJJLxchnab0QXqj/5Cmb/gkppb
+         AfcgRHW++PPG/YjoZwVnc9GWj4O2S3+CxUA3ucVhLzhGMNGNewLtAf3MBJ8ee+X43mpZ
+         EM68jx1i9/HlraYGEePCzu8o1Gr4arm63FDqfCZPSlAMHL/PESElkbSn74awmpKmzTAo
+         idngfVU4P4OhxgqWlQ2aWYBN9pEuYvvW6Zdxxn+/fDg5bsDkFpEstWMP1+TuupZhBm58
+         nKzJZxj2+UUWs+rMb2wQhmO6H+MMG3sLekstjqNS93AGmcBNWG9GxHWZVkEtmRNVjeoC
+         qS+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=/+k1cCW3hB4jfxvc/1cVEskjGWMvsmOcHLSENoPU7GI=;
-        b=I1dUICZd5gsrbv1qqwbUDQAY2zO5cLjcNOdyJRqQyy1adrKE5wqGQm5r4Tcsv6R52B
-         fObljxWdE427Pg+haWpwC4muYbzwqxM2Hx/H5VcI8SyeEppWILpuB3RYO0YDniYzDNfG
-         jTgCNV5dQdHPhGBSmXweAlY+5AHqDWdFkqbt/vSNrGK4mQlDigQvKdjHvaapuBWSRyTv
-         oCFzmUbrRe28OU98Xzp3yaemisd0sMe6MzN+GNL+GIrE7MoDOpyNx7x+24DkBdo7XMq3
-         2li8WkPANhPuY8Xwm9o7r5q9E2DN3gduR5iUgDIf9eNvI8x6AGL9ONdaAyL9oFFuoQ57
-         BlQw==
-X-Gm-Message-State: APjAAAVwrYuzjpNMcN34ujU6rahr+89MgBDV+dRJKf05Oi680tmS9tFt
-        F6XzSPip0t2TpenAAMIsXjw=
-X-Google-Smtp-Source: APXvYqxyUGjlnANrB+Ew505+Qs1f/ObGsAHz6lT1EZ8qVfUnG5Da+47G4eaBso7cvhU+OQUPkrXhFA==
-X-Received: by 2002:a17:902:6a85:: with SMTP id n5mr101625957plk.73.1564389898217;
-        Mon, 29 Jul 2019 01:44:58 -0700 (PDT)
+        bh=svoEGIS6JJLnt3fINDHmfTIOc9wsEgzoN9quNg/YowE=;
+        b=qqvDvQKnUkqTsII8YbDL/Ki1RHBs646G7j4v83wVK85hZ+nIUtwGqdhg8ZBtLfAC64
+         NWC+w0294U3DXA8aufwe1VhO5533/ExfJk4LZxIpmefLQQKSJHBUD4sR+AGE1uNx6C08
+         lJeUodGyhKPUfMl7FhXUJ7eEJfco8qOd1obw3c6dXrVxbnWOc73WYSg+838+Nurbhv+e
+         rk9ivbNaW0tRuziSH9X4+X0g8KNdq7++NG7k5UvYb+pUwp+Sgbeg8YS4Z4LhchVn4aVx
+         8JI0MvwYCU7hZ3Xc3Q8clqY+MnJS8+VwLgVb73igjbMEYc519TRkayh5LCRKR+PxoOUm
+         zN4A==
+X-Gm-Message-State: APjAAAUKXkTo/Hyr4XiBD2cpmSG//+8RhEI9lvoNONKZN4j7uj5ZGAod
+        7FwbwXAyeQP1gFD6f47y9Vw=
+X-Google-Smtp-Source: APXvYqw7YlTnhq3ZWq3KQ41z1U+W7rgUYsI+svD/LtuWfzhrz4IGzjS6yyoKypNH0fNGUzZ35EVk/Q==
+X-Received: by 2002:a17:902:f087:: with SMTP id go7mr108636948plb.330.1564390302027;
+        Mon, 29 Jul 2019 01:51:42 -0700 (PDT)
 Received: from oslab.tsinghua.edu.cn ([2402:f000:4:72:808::3ca])
-        by smtp.gmail.com with ESMTPSA id r18sm59992863pfg.77.2019.07.29.01.44.56
+        by smtp.gmail.com with ESMTPSA id h6sm57907464pfb.20.2019.07.29.01.51.39
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Jul 2019 01:44:57 -0700 (PDT)
+        Mon, 29 Jul 2019 01:51:41 -0700 (PDT)
 From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     qla2xxx-upstream@qlogic.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH] scsi: qla2xxx: Fix possible null-pointer dereferences in qla2x00_alloc_fcport()
-Date:   Mon, 29 Jul 2019 16:44:51 +0800
-Message-Id: <20190729084451.29290-1-baijiaju1990@gmail.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com, varun@chelsio.com,
+        hare@suse.com, osandov@fb.com, jthumshirn@suse.de, axboe@kernel.dk
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] scsi: csiostor: Fix a possible null-pointer dereference in csio_eh_lun_reset_handler()
+Date:   Mon, 29 Jul 2019 16:51:35 +0800
+Message-Id: <20190729085135.29403-1-baijiaju1990@gmail.com>
 X-Mailer: git-send-email 2.17.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In qla2x00_alloc_fcport(), fcport is assigned to NULL in the error
-handling code on line 4880:
-    fcport = NULL;
+In csio_eh_lun_reset_handler(), there is an if statement on line 2072 to
+check whether rn is NULL:
+    if (!rn)
 
-Then fcport is used on lines 4883-4886:
-    INIT_WORK(&fcport->del_work, qla24xx_delete_sess_fn);
-	INIT_WORK(&fcport->reg_work, qla_register_fcport_fn);
-	INIT_LIST_HEAD(&fcport->gnl_entry);
-	INIT_LIST_HEAD(&fcport->list);
+When rn is NULL, it is used on line 2217:
+    CSIO_INC_STATS(rn, n_lun_rst_fail);
 
-Thus, possible null-pointer dereferences may occur.
+Thus, a possible null-pointer dereference may occur.
 
-To fix these bugs, qla2x00_alloc_fcport() directly returns NULL 
-in the error handling code.
+To fix this bug, csio_eh_lun_reset_handler() directly returns FAILED
+when rn is NULL.
 
-These bugs are found by a static analysis tool STCheck written by us.
+This bug is found by a static analysis tool STCheck written by us.
 
 Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 2 +-
+ drivers/scsi/csiostor/csio_scsi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 4059655639d9..da83034d4759 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -4877,7 +4877,7 @@ qla2x00_alloc_fcport(scsi_qla_host_t *vha, gfp_t flags)
- 		ql_log(ql_log_warn, vha, 0xd049,
- 		    "Failed to allocate ct_sns request.\n");
- 		kfree(fcport);
--		fcport = NULL;
-+		return NULL;
- 	}
+diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
+index 469d0bc9f5fe..c81d743d3544 100644
+--- a/drivers/scsi/csiostor/csio_scsi.c
++++ b/drivers/scsi/csiostor/csio_scsi.c
+@@ -2070,7 +2070,7 @@ csio_eh_lun_reset_handler(struct scsi_cmnd *cmnd)
+ 	struct csio_scsi_level_data sld;
  
- 	INIT_WORK(&fcport->del_work, qla24xx_delete_sess_fn);
+ 	if (!rn)
+-		goto fail;
++		return FAILED;
+ 
+ 	csio_dbg(hw, "Request to reset LUN:%llu (ssni:0x%x tgtid:%d)\n",
+ 		      cmnd->device->lun, rn->flowid, rn->scsi_id);
 -- 
 2.17.0
 
