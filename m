@@ -2,25 +2,25 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 486D478AB7
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F414B78ABB
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387625AbfG2Lk2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 07:40:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:43582 "EHLO mx1.suse.de"
+        id S2387644AbfG2LmF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 07:42:05 -0400
+Received: from mx2.suse.de ([195.135.220.15]:43842 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387467AbfG2Lk2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 07:40:28 -0400
+        id S2387483AbfG2LmF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jul 2019 07:42:05 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 64C6BAC45;
-        Mon, 29 Jul 2019 11:40:26 +0000 (UTC)
-Subject: Re: [PATCH v2 15/18] sg: add 8 byte SCSI LUN to sg_scsi_id
+        by mx1.suse.de (Postfix) with ESMTP id 17C3AAC45;
+        Mon, 29 Jul 2019 11:42:03 +0000 (UTC)
+Subject: Re: [PATCH v2 16/18] sg: expand sg_comm_wr_t
 To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com,
         bart.vanassche@wdc.com
 References: <20190727033728.21134-1-dgilbert@interlog.com>
- <20190727033728.21134-16-dgilbert@interlog.com>
+ <20190727033728.21134-17-dgilbert@interlog.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -66,12 +66,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <10ec9439-d850-4ec7-ab67-116abf0fcfcf@suse.de>
-Date:   Mon, 29 Jul 2019 13:40:25 +0200
+Message-ID: <0489c32b-2a0c-faf8-baf1-19f204cd605d@suse.de>
+Date:   Mon, 29 Jul 2019 13:42:02 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190727033728.21134-16-dgilbert@interlog.com>
+In-Reply-To: <20190727033728.21134-17-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -81,25 +81,18 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 7/27/19 5:37 AM, Douglas Gilbert wrote:
-> The existing ioctl(SG_GET_SCSI_ID) fills a object of type
-> struct sg_scsi_id whose last field is int unused[2]. Add
-> an anonymous union with u8 scsi_lun[8] sharing those last
-> 8 bytes. This patch will place the current device's full
-> LUN in the scsi_lun array using T10's preferred LUN
-> format (i.e. an array of 8 bytes) when
-> ioctl(SG_GET_SCSI_ID) is called.
-> 
-> Note that structure already contains a 'lun' field but that
-> is a 32 bit integer. Users of this upgrade should choose
-> the scsi_lun array field henceforth but existing code
-> can remain as it is and will get the same 'lun' value with
-> the version 3 or version 4 driver.
+> The internal struct sg_comm_wr_t was added when the number of
+> arguments to sg_common_write() became excessive. Expand this idea
+> so multiple calls to sg_fetch_cmnd() can be deferred until a
+> scsi_request object is ready to receive the command. This saves
+> a 252 byte stack allocation on every submit path. Prior to this
+> and a few other changes, the kernel infrastructure was warning
+> about excessive stack usage.
 > 
 > Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 > ---
->  drivers/scsi/sg.c      | 5 +++--
->  include/uapi/scsi/sg.h | 5 ++++-
->  2 files changed, 7 insertions(+), 3 deletions(-)
+>  drivers/scsi/sg.c | 178 ++++++++++++++++++++++++----------------------
+>  1 file changed, 92 insertions(+), 86 deletions(-)
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.com>
 
