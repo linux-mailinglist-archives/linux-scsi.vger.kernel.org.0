@@ -2,130 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F1278AE5
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257E178AF5
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387835AbfG2Luu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 07:50:50 -0400
-Received: from gateway23.websitewelcome.com ([192.185.49.60]:19484 "EHLO
-        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387482AbfG2Luu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 07:50:50 -0400
-X-Greylist: delayed 1304 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 07:50:50 EDT
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id EA05CA25F
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 06:29:05 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id s3pxhWtCh4FKps3pxhgm3o; Mon, 29 Jul 2019 06:29:05 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=nTNq8k0oMaS+PPNp0AqzfLae8nXfzeNscQDCOrTOOdA=; b=ls/83NAkEaXSGpDkCGJhhzQXmg
-        vhrXJ8dTfh17VYQYN2BgzQoyPHoCNjCemvTZ+Iq7rkUscRfwa7GlQmF38GnaxiUwKhgQeFW97IKJm
-        x2gcsRC29B18WF8wyaDo2UiCY+x6gpSl4B/ZSZt33xgIn+q7YBQVk8xB6Z13JNSnttExV2zX7N8J5
-        6qsBrJjgJVYHxygEsf3emqIhFjxvjeN3Jj4brrr9g+lnv/7kQQtcydf4ciwoe2mqfWz7WjMNUAK8U
-        p2FQH48AXxrPtCB3MRUf46dZk0PgIn1e632NMa1jFlzgI6BBFp+Mv2pDf84abUNLMap60DvWMFrd/
-        4E7P8TVg==;
-Received: from [187.192.11.120] (port=47322 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hs3pw-000Joy-Pw; Mon, 29 Jul 2019 06:29:04 -0500
-Date:   Mon, 29 Jul 2019 06:29:02 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Michael Cyr <mikecyr@linux.ibm.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH] scsi: ibmvscsi_tgt: Mark expected switch fall-throughs
-Message-ID: <20190729112902.GA3768@embeddedor>
+        id S2387692AbfG2Lzr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 07:55:47 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:40850 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387637AbfG2Lzr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 07:55:47 -0400
+Received: by mail-pl1-f193.google.com with SMTP id a93so27381486pla.7
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 04:55:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=czQpOJ6NuB0rUDf29fzM6UP2/EP/3PAdN6JNsSVcd9E=;
+        b=SKqUP1HnACYqd/z5Klcn8luKJZj9VIaiqYnPhM/yFVb26lQlu5aaO5cfbcpDxonlXp
+         3sTvCuNq9sjnuzFAvkZ6c98VHSA8Hnd5HYi5XrSKwph8MN7kylrXTYmAt4860wJ4tLiH
+         YCDRj/DginXLBID1iz0jOQPTrjOjerBfn+BU0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=czQpOJ6NuB0rUDf29fzM6UP2/EP/3PAdN6JNsSVcd9E=;
+        b=SJ5aeWGiaQ/gA9e0LDoftMReBVKfBjgqycTDVWb4fw1rQGmsvZMrwBD3rUdkD7RhEA
+         CQEaVxGXpg75mj9OgWQ5E5qHVXUdH898dmk7pUaB6R+YTVdcp/VZVzQZsN1W32P3PLHD
+         YtpFZgyHSuHZjTGgbps0XT06GvYvmunSyiOiLJXm894STy6q2gEQv/B2rFsotlhFuZ5d
+         5Q6K0iNhFPi9kELpoSjnxRy7H4mi3DJZdVT4Y6ITRJ8A/msL4897uN20xV68CA3DEPJz
+         GAkoBmH2FQHmHzJMHTn9nMINlDgWeFhulKpeRp7BxXrwBj7EfS+n1zpgoweMzIH/NVdf
+         MhFg==
+X-Gm-Message-State: APjAAAXd4c8TBPkkCNpD5eLCzl4ZntCIQ/txNqVrA9c3bc5R5l3fGOkD
+        HgqGgxuhT4SrzpnpIKPoKduM3aJLKJZcg2DGP3+rvg==
+X-Google-Smtp-Source: APXvYqzntWCCVv2xWXoAwAcJGIukFyDTCIFmzHCDWxwPYM2wXpIyjfq3qWda2a1NuhbLbRx2/ziFluLy+Qv17uqV51I=
+X-Received: by 2002:a17:902:2ae8:: with SMTP id j95mr100868250plb.276.1564401346581;
+ Mon, 29 Jul 2019 04:55:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.192.11.120
-X-Source-L: No
-X-Exim-ID: 1hs3pw-000Joy-Pw
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.11.120]:47322
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 28
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+References: <1564135257-33188-1-git-send-email-suganath-prabu.subramani@broadcom.com>
+ <20190726142706.GA1734@infradead.org>
+In-Reply-To: <20190726142706.GA1734@infradead.org>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Mon, 29 Jul 2019 17:25:35 +0530
+Message-ID: <CAK=zhgrWW_vOkXKRYRbiMdHgiT7u=Ra_pCkO_HkmQrCdVXfJBQ@mail.gmail.com>
+Subject: Re: [PATCH] mpt3sas: Use 63-bit DMA addressing on SAS35 HBA
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Suganath Prabu <suganath-prabu.subramani@broadcom.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>, stable@vger.kernel.org,
+        Sathya Prakash <Sathya.Prakash@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Mark switch cases where we are expecting to fall through.
+On Fri, Jul 26, 2019 at 7:57 PM Christoph Hellwig <hch@infradead.org> wrote:
+>
+> On Fri, Jul 26, 2019 at 06:00:57AM -0400, Suganath Prabu wrote:
+> > Although SAS3 & SAS3.5 IT HBA controllers support
+> > 64-bit DMA addressing, as per hardware design,
+> > DMA address with all 64-bits set (0xFFFFFFFF-FFFFFFFF)
+> > results in a firmware fault.
+>
+> Linux will never send a dma address with all bits set anyway, as that
+> is our magic escape for the dma_addr_t error value.  Additionally to
+> generate that address you'd need a 1-byte sized, 1-byte aligned buffer,
+> which we never use.
 
-This patch fixes the following warnings (Building: powerpc allyesconfig):
+I agree with your above statement. But it is also possible that
+0xFFFFFFFF-FFFFFFFF falls under the DMA able range, e.g. SGE's start
+address is 0xFFFFFFFF-FFFF000 and data length is 0x1000 bytes. So when
+HBA tries to DMA the data at 0xFFFFFFFF-FFFFFFFF location then it will
+faults the firmware due to it's hardware design.
 
-drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c: In function 'ibmvscsis_adapter_info':
-drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1582:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
-   if (connection_broken(vscsi))
-      ^
-drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1584:2: note: here
-  default:
-  ^~~~~~~
-drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c: In function 'ibmvscsis_ping_response':
-drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:2494:16: warning: this statement may fall through [-Wimplicit-fallthrough=]
-   vscsi->flags |= CLIENT_FAILED;
-drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:2495:2: note: here
-  case H_DROPPED:
-  ^~~~
-drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:2496:16: warning: this statement may fall through [-Wimplicit-fallthrough=]
-   vscsi->flags |= RESPONSE_Q_DOWN;
-drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:2497:2: note: here
-  case H_REMOTE_PARM:
-  ^~~~
+We have observed above example's SGE address and length on AMD systems
+with SME & IOMMU enabled.
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-index 7f9535392a93..a929fe76102b 100644
---- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-+++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-@@ -1581,6 +1581,7 @@ static long ibmvscsis_adapter_info(struct scsi_info *vscsi,
- 	case H_PERMISSION:
- 		if (connection_broken(vscsi))
- 			flag_bits = (RESPONSE_Q_DOWN | CLIENT_FAILED);
-+		/* Fall through */
- 	default:
- 		dev_err(&vscsi->dev, "adapter_info: h_copy_rdma to client failed, rc %ld\n",
- 			rc);
-@@ -2492,8 +2493,10 @@ static long ibmvscsis_ping_response(struct scsi_info *vscsi)
- 		break;
- 	case H_CLOSED:
- 		vscsi->flags |= CLIENT_FAILED;
-+		/* Fall through */
- 	case H_DROPPED:
- 		vscsi->flags |= RESPONSE_Q_DOWN;
-+		/* Fall through */
- 	case H_REMOTE_PARM:
- 		dev_err(&vscsi->dev, "ping_response: h_send_crq failed, rc %ld\n",
- 			rc);
--- 
-2.22.0
-
+Thanks,
+Sreekanth
