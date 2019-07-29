@@ -2,46 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59868786FA
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 10:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599AD787B2
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 10:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727466AbfG2IEz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 04:04:55 -0400
-Received: from smtp.profeco.gob.mx ([201.144.226.30]:45406 "EHLO
-        owa.profeco.gob.mx" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727440AbfG2IEz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 04:04:55 -0400
-X-Greylist: delayed 316 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Jul 2019 04:04:55 EDT
-Received: from PFCOCEEXCH1.profeco.gob.mx ([fe80::74e8:1f6e:c056:bda]) by
- PFCOCEEXCH03.profeco.gob.mx ([::1]) with mapi id 14.03.0415.000; Mon, 29 Jul
- 2019 02:59:32 -0500
-From:   Ana Elena Carrubba Castro <aecarrubbac@profeco.gob.mx>
-To:     "NO-REPLY@MICROSOFT.NET" <NO-REPLY@MICROSOFT.NET>
-Subject: 10 of your incoming messages has been suspended
-Thread-Topic: 10 of your incoming messages has been suspended
-Thread-Index: AdVF444kvfrsAZyiRAO962MuPxWnqg==
-Date:   Mon, 29 Jul 2019 07:59:32 +0000
-Message-ID: <A34B2E54A18BF64A99574FB9E04F6BAB02A9115243@PFCOCEEXCH1.profeco.gob.mx>
-Accept-Language: es-MX, en-US
-Content-Language: es-MX
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [196.171.184.84]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+        id S1727788AbfG2Io7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 04:44:59 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:35693 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727109AbfG2Io6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 04:44:58 -0400
+Received: by mail-pl1-f196.google.com with SMTP id w24so27236379plp.2;
+        Mon, 29 Jul 2019 01:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=/+k1cCW3hB4jfxvc/1cVEskjGWMvsmOcHLSENoPU7GI=;
+        b=QgsPjR6+2ydKYWsEeSqNt36OdA3VK9LDM1mcbMdX+VeR9RlzAB+rXipZBmLJslJbsa
+         vMxQgFbpOsNmF0weY6+7gMWlI23LQF3u5avrnO5ZqFizWofBu8EkUh46zTz9HSa27Ow1
+         SuMynRhriZQhm2/9OWniLJIWyR0jNrQBk/nd9cj+/DIFqgcMLw/ZZbhA5V9sjXAMlv4m
+         Gt7cy7gLcAFFCuLj1okXKOfaJ88ACvERBS9x9vB/Z/nM8ZVQBTWtmnPs1oCr5bxrA0+Z
+         Tk5QLMNegGTf5X2MxJ49oC0HGhoOtPmiKeZfLfqyZnkV8klD1p4sFfFe6S4LGJkcgNiO
+         xyIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=/+k1cCW3hB4jfxvc/1cVEskjGWMvsmOcHLSENoPU7GI=;
+        b=I1dUICZd5gsrbv1qqwbUDQAY2zO5cLjcNOdyJRqQyy1adrKE5wqGQm5r4Tcsv6R52B
+         fObljxWdE427Pg+haWpwC4muYbzwqxM2Hx/H5VcI8SyeEppWILpuB3RYO0YDniYzDNfG
+         jTgCNV5dQdHPhGBSmXweAlY+5AHqDWdFkqbt/vSNrGK4mQlDigQvKdjHvaapuBWSRyTv
+         oCFzmUbrRe28OU98Xzp3yaemisd0sMe6MzN+GNL+GIrE7MoDOpyNx7x+24DkBdo7XMq3
+         2li8WkPANhPuY8Xwm9o7r5q9E2DN3gduR5iUgDIf9eNvI8x6AGL9ONdaAyL9oFFuoQ57
+         BlQw==
+X-Gm-Message-State: APjAAAVwrYuzjpNMcN34ujU6rahr+89MgBDV+dRJKf05Oi680tmS9tFt
+        F6XzSPip0t2TpenAAMIsXjw=
+X-Google-Smtp-Source: APXvYqxyUGjlnANrB+Ew505+Qs1f/ObGsAHz6lT1EZ8qVfUnG5Da+47G4eaBso7cvhU+OQUPkrXhFA==
+X-Received: by 2002:a17:902:6a85:: with SMTP id n5mr101625957plk.73.1564389898217;
+        Mon, 29 Jul 2019 01:44:58 -0700 (PDT)
+Received: from oslab.tsinghua.edu.cn ([2402:f000:4:72:808::3ca])
+        by smtp.gmail.com with ESMTPSA id r18sm59992863pfg.77.2019.07.29.01.44.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 01:44:57 -0700 (PDT)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     qla2xxx-upstream@qlogic.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] scsi: qla2xxx: Fix possible null-pointer dereferences in qla2x00_alloc_fcport()
+Date:   Mon, 29 Jul 2019 16:44:51 +0800
+Message-Id: <20190729084451.29290-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-VVJHRU5UIE1JQ1JPU09GVCBOT1RJRklDQVRJT04NCg0KMTAgb2YgeW91ciBpbmNvbWluZyBtZXNz
-YWdlcyBoYXMgYmVlbiBzdXNwZW5kZWQgbm93IGJlY2F1c2UgeW91ciBlbWFpbCBib3ggYWNjb3Vu
-dCBuZWVkcyB0byBiZSB2ZXJpZmllZCBub3cuIERvIHZlcmlmeTxodHRwczovL2t1aW9lc3VlNC53
-aXhzaXRlLmNvbS9teXNpdGU+IHlvdXIgZW1haWwgYm94IGFjY291bnQgbm93IHRvIHJlY2VpdmUg
-dGhlc2UgbWVzc2FnZXMgdGhhdCBoYXMgYmVlbiBzdXNwZW5kZWQuDQoNCg0KTWljcm9zb2Z0IFZl
-cmlmaWNhdGlvbiBUZWFtDQoNCg0KDQpNaWNyb3NvZnQgwqkgMjAxOSBXZWJtYWlsIC5JbmMgLiBB
-bGwgcmlnaHRzIHJlc2VydmVkLg0K4oCcTGEgaW5mb3JtYWNpw7NuIGRlIGVzdGUgY29ycmVvIGFz
-w60gY29tbyBsYSBjb250ZW5pZGEgZW4gbG9zIGRvY3VtZW50b3MgcXVlIHNlIGFkanVudGFuLCBw
-dWVkZSBzZXIgb2JqZXRvIGRlIHNvbGljaXR1ZGVzIGRlIGFjY2VzbyBhIGxhIGluZm9ybWFjacOz
-buKAnS4NCg==
+In qla2x00_alloc_fcport(), fcport is assigned to NULL in the error
+handling code on line 4880:
+    fcport = NULL;
+
+Then fcport is used on lines 4883-4886:
+    INIT_WORK(&fcport->del_work, qla24xx_delete_sess_fn);
+	INIT_WORK(&fcport->reg_work, qla_register_fcport_fn);
+	INIT_LIST_HEAD(&fcport->gnl_entry);
+	INIT_LIST_HEAD(&fcport->list);
+
+Thus, possible null-pointer dereferences may occur.
+
+To fix these bugs, qla2x00_alloc_fcport() directly returns NULL 
+in the error handling code.
+
+These bugs are found by a static analysis tool STCheck written by us.
+
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ drivers/scsi/qla2xxx/qla_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index 4059655639d9..da83034d4759 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -4877,7 +4877,7 @@ qla2x00_alloc_fcport(scsi_qla_host_t *vha, gfp_t flags)
+ 		ql_log(ql_log_warn, vha, 0xd049,
+ 		    "Failed to allocate ct_sns request.\n");
+ 		kfree(fcport);
+-		fcport = NULL;
++		return NULL;
+ 	}
+ 
+ 	INIT_WORK(&fcport->del_work, qla24xx_delete_sess_fn);
+-- 
+2.17.0
+
