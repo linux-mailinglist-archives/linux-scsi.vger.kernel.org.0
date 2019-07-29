@@ -2,208 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B4C78897
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 11:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5B8788B3
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 11:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728006AbfG2JiF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 05:38:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:40724 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727911AbfG2JiF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 05:38:05 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86135344;
-        Mon, 29 Jul 2019 02:38:04 -0700 (PDT)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 468AE3F694;
-        Mon, 29 Jul 2019 02:38:04 -0700 (PDT)
-Received: by e110455-lin.cambridge.arm.com (Postfix, from userid 1000)
-        id C804368240B; Mon, 29 Jul 2019 10:38:02 +0100 (BST)
-Date:   Mon, 29 Jul 2019 10:38:02 +0100
-From:   Liviu Dudau <liviu.dudau@arm.com>
-To:     Pei Hsuan Hung <afcidk@gmail.com>
-Cc:     trivial@kernel.org, Russell Currey <ruscur@russell.cc>,
-        Sam Bobroff <sbobroff@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jeremy Kerr <jk@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Brian Starkey <brian.starkey@arm.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
+        id S1728059AbfG2Jni (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 05:43:38 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42120 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728024AbfG2Jnh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jul 2019 05:43:37 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 81B4BAF40;
+        Mon, 29 Jul 2019 09:43:35 +0000 (UTC)
+Subject: Re: [PATCH 1/3] block: umem: rename LED_* macros to LEDCTRL_*
+To:     Akinobu Mita <akinobu.mita@gmail.com>, linux-block@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc:     Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Jens Axboe <axboe@kernel.dk>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH] Fix typo reigster to register
-Message-ID: <20190729093802.y33mfklarh23yngl@e110455-lin.cambridge.arm.com>
-References: <20190727142111.20039-1-afcidk@gmail.com>
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <1564322446-28255-1-git-send-email-akinobu.mita@gmail.com>
+ <1564322446-28255-2-git-send-email-akinobu.mita@gmail.com>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <a0564cab-e690-afae-be41-ecef262c3ebf@suse.de>
+Date:   Mon, 29 Jul 2019 11:43:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <1564322446-28255-2-git-send-email-akinobu.mita@gmail.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190727142111.20039-1-afcidk@gmail.com>
-User-Agent: NeoMutt/20180716
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Pei,
-
-On Sat, Jul 27, 2019 at 10:21:09PM +0800, Pei Hsuan Hung wrote:
-> Signed-off-by: Pei Hsuan Hung <afcidk@gmail.com>
-> Cc: trivial@kernel.org
+On 7/28/19 4:00 PM, Akinobu Mita wrote:
+> The umem driver defines LED_* macros for MEMCTRLCMD_LEDCTRL register
+> values.  The LED_OFF and LED_ON macros conflict with the LED subsystem's
+> LED_OFF and LED_ON enums.
+> 
+> This renames these LED_* macros to LEDCTRL_* in umem driver.
+> 
+> Cc: Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>
+> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Dan Murphy <dmurphy@ti.com>
+> Cc: Jens Axboe <axboe@kernel.dk>
+> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 > ---
->  arch/powerpc/kernel/eeh.c                           | 2 +-
->  arch/powerpc/platforms/cell/spufs/switch.c          | 4 ++--
->  drivers/extcon/extcon-rt8973a.c                     | 2 +-
->  drivers/gpu/drm/arm/malidp_regs.h                   | 2 +-
->  drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h | 2 +-
->  drivers/scsi/lpfc/lpfc_hbadisc.c                    | 4 ++--
->  fs/userfaultfd.c                                    | 2 +-
->  7 files changed, 9 insertions(+), 9 deletions(-)
+>  drivers/block/umem.c | 20 ++++++++++----------
+>  drivers/block/umem.h | 20 ++++++++++----------
+>  2 files changed, 20 insertions(+), 20 deletions(-)
 > 
-> diff --git a/arch/powerpc/kernel/eeh.c b/arch/powerpc/kernel/eeh.c
-> index c0e4b73191f3..d75c9c24ec4d 100644
-> --- a/arch/powerpc/kernel/eeh.c
-> +++ b/arch/powerpc/kernel/eeh.c
-> @@ -1030,7 +1030,7 @@ int __init eeh_ops_register(struct eeh_ops *ops)
->  }
->  
->  /**
-> - * eeh_ops_unregister - Unreigster platform dependent EEH operations
-> + * eeh_ops_unregister - Unregister platform dependent EEH operations
->   * @name: name of EEH platform operations
->   *
->   * Unregister the platform dependent EEH operation callback
-> diff --git a/arch/powerpc/platforms/cell/spufs/switch.c b/arch/powerpc/platforms/cell/spufs/switch.c
-> index 5c3f5d088c3b..9548a086937b 100644
-> --- a/arch/powerpc/platforms/cell/spufs/switch.c
-> +++ b/arch/powerpc/platforms/cell/spufs/switch.c
-> @@ -574,7 +574,7 @@ static inline void save_mfc_rag(struct spu_state *csa, struct spu *spu)
->  {
->  	/* Save, Step 38:
->  	 *     Save RA_GROUP_ID register and the
-> -	 *     RA_ENABLE reigster in the CSA.
-> +	 *     RA_ENABLE register in the CSA.
->  	 */
->  	csa->priv1.resource_allocation_groupID_RW =
->  		spu_resource_allocation_groupID_get(spu);
-> @@ -1227,7 +1227,7 @@ static inline void restore_mfc_rag(struct spu_state *csa, struct spu *spu)
->  {
->  	/* Restore, Step 29:
->  	 *     Restore RA_GROUP_ID register and the
-> -	 *     RA_ENABLE reigster from the CSA.
-> +	 *     RA_ENABLE register from the CSA.
->  	 */
->  	spu_resource_allocation_groupID_set(spu,
->  			csa->priv1.resource_allocation_groupID_RW);
-> diff --git a/drivers/extcon/extcon-rt8973a.c b/drivers/extcon/extcon-rt8973a.c
-> index 40c07f4d656e..e75c03792398 100644
-> --- a/drivers/extcon/extcon-rt8973a.c
-> +++ b/drivers/extcon/extcon-rt8973a.c
-> @@ -270,7 +270,7 @@ static int rt8973a_muic_get_cable_type(struct rt8973a_muic_info *info)
->  	}
->  	cable_type = adc & RT8973A_REG_ADC_MASK;
->  
-> -	/* Read Device 1 reigster to identify correct cable type */
-> +	/* Read Device 1 register to identify correct cable type */
->  	ret = regmap_read(info->regmap, RT8973A_REG_DEV1, &dev1);
->  	if (ret) {
->  		dev_err(info->dev, "failed to read DEV1 register\n");
-> diff --git a/drivers/gpu/drm/arm/malidp_regs.h b/drivers/gpu/drm/arm/malidp_regs.h
-> index 993031542fa1..0d81b34a4212 100644
-> --- a/drivers/gpu/drm/arm/malidp_regs.h
-> +++ b/drivers/gpu/drm/arm/malidp_regs.h
-> @@ -145,7 +145,7 @@
->  #define     MALIDP_SE_COEFFTAB_DATA_MASK	0x3fff
->  #define     MALIDP_SE_SET_COEFFTAB_DATA(x) \
->  		((x) & MALIDP_SE_COEFFTAB_DATA_MASK)
-> -/* Enhance coeffents reigster offset */
-> +/* Enhance coeffents register offset */
+Reviewed-by: Hannes Reinecke <hare@suse.com>
 
-Unless this patch was generated by a script I think it is worth correcting the
-other spelling mistake on that line as well: coefficients rather than coeffents.
+Cheers,
 
-With that: Acked-by: Liviu Dudau <liviu.dudau@arm.com>
-
-Best regards,
-Liviu
-
->  #define MALIDP_SE_IMAGE_ENH			0x3C
->  /* ENH_LIMITS offset 0x0 */
->  #define     MALIDP_SE_ENH_LOW_LEVEL		24
-> diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h b/drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h
-> index 99c6f7eefd85..d03c8f12a15c 100644
-> --- a/drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h
-> +++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h
-> @@ -58,7 +58,7 @@ struct fw_priv {
->  	/* 0x81: PCI-AP, 01:PCIe, 02: 92S-U,
->  	 * 0x82: USB-AP, 0x12: 72S-U, 03:SDIO */
->  	u8 hci_sel;
-> -	/* the same value as reigster value  */
-> +	/* the same value as register value  */
->  	u8 chip_version;
->  	/* customer  ID low byte */
->  	u8 customer_id_0;
-> diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-> index 28ecaa7fc715..9e116bd79836 100644
-> --- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-> +++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-> @@ -6551,7 +6551,7 @@ lpfc_sli4_unregister_fcf(struct lpfc_hba *phba)
->   * lpfc_unregister_fcf_rescan - Unregister currently registered fcf and rescan
->   * @phba: Pointer to hba context object.
->   *
-> - * This function unregisters the currently reigstered FCF. This function
-> + * This function unregisters the currently registered FCF. This function
->   * also tries to find another FCF for discovery by rescan the HBA FCF table.
->   */
->  void
-> @@ -6609,7 +6609,7 @@ lpfc_unregister_fcf_rescan(struct lpfc_hba *phba)
->   * lpfc_unregister_fcf - Unregister the currently registered fcf record
->   * @phba: Pointer to hba context object.
->   *
-> - * This function just unregisters the currently reigstered FCF. It does not
-> + * This function just unregisters the currently registered FCF. It does not
->   * try to find another FCF for discovery.
->   */
->  void
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index ccbdbd62f0d8..612dc1240f90 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -267,7 +267,7 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
->  #endif /* CONFIG_HUGETLB_PAGE */
->  
->  /*
-> - * Verify the pagetables are still not ok after having reigstered into
-> + * Verify the pagetables are still not ok after having registered into
->   * the fault_pending_wqh to avoid userland having to UFFDIO_WAKE any
->   * userfault that has already been resolved, if userfaultfd_read and
->   * UFFDIO_COPY|ZEROPAGE are being run simultaneously on two different
-> -- 
-> 2.17.1
-> 
-
+Hannes
 -- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
