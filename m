@@ -2,25 +2,25 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D52B378A81
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BCAC78A82
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387641AbfG2L2F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 07:28:05 -0400
-Received: from mx2.suse.de ([195.135.220.15]:40476 "EHLO mx1.suse.de"
+        id S2387662AbfG2L21 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 07:28:27 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40540 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387629AbfG2L2F (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 07:28:05 -0400
+        id S2387576AbfG2L20 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jul 2019 07:28:26 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 7641BB0B6;
-        Mon, 29 Jul 2019 11:28:03 +0000 (UTC)
-Subject: Re: [PATCH v2 03/18] sg: sg_log and is_enabled
+        by mx1.suse.de (Postfix) with ESMTP id F1592B01C;
+        Mon, 29 Jul 2019 11:28:24 +0000 (UTC)
+Subject: Re: [PATCH v2 04/18] sg: rework sg_poll(), minor changes
 To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com,
         bart.vanassche@wdc.com
 References: <20190727033728.21134-1-dgilbert@interlog.com>
- <20190727033728.21134-4-dgilbert@interlog.com>
+ <20190727033728.21134-5-dgilbert@interlog.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -66,12 +66,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <f59cabd9-9976-ea3c-8516-f5dcb8316b0c@suse.de>
-Date:   Mon, 29 Jul 2019 13:28:03 +0200
+Message-ID: <df65d3e6-c0ab-f35c-4330-f33b9e1da1d8@suse.de>
+Date:   Mon, 29 Jul 2019 13:28:24 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190727033728.21134-4-dgilbert@interlog.com>
+In-Reply-To: <20190727033728.21134-5-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -81,35 +81,14 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 7/27/19 5:37 AM, Douglas Gilbert wrote:
-> Replace SCSI_LOG_TIMEOUT macros with SG_LOG macros across the driver.
-> The definition of SG_LOG calls SCSI_LOG_TIMEOUT if given and derived
-> pointers are non-zero, calls pr_info otherwise. SG_LOGS additionally
-> prints the sg device name and the thread id. The thread id is very
-> useful, even in single threaded invocations because the driver not
-> only uses the invocer's thread but also uses work queues and the
-> main callback (i.e. sg_rq_end_io()) may hit any thread. Some
-> interesting cases arise when the callback hits its invocer's
-> thread.
-> 
-> SG_LOGS takes 48 bytes on the stack to build this printf format
-> string: "sg%u: tid=%d" whose size is clearly bounded above by
-> the maximum size of those two integers.
-> Protecting against the 'current' pointer being zero is for safety
-> and the case where the boot device is SCSI and the sg driver is
-> built into the kernel. Also when debugging, getting a message
-> from a compromised kernel can be very useful in pinpointing the
-> location of the failure.
-> 
-> The simple fact that the SG_LOG macro is shorter than
-> SCSI_LOG_TIMEOUT macro allow more error message "payload" per line.
-> 
-> Also replace #if and #ifdef conditional compilations with
-> the IS_ENABLED macro.
+> Re-arrange code in sg_poll(). Rename sg_read_oxfer() to
+> sg_rd_append(). In sg_start_req() rename rw to r0w.
+> Plus associated changes demanded by checkpatch.pl
 > 
 > Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 > ---
->  drivers/scsi/sg.c | 252 +++++++++++++++++++++++-----------------------
->  1 file changed, 125 insertions(+), 127 deletions(-)
+>  drivers/scsi/sg.c | 65 ++++++++++++++++++++++-------------------------
+>  1 file changed, 30 insertions(+), 35 deletions(-)
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.com>
 
