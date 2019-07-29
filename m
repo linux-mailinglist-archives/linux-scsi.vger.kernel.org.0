@@ -2,107 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 523D578E01
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 16:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5C878E79
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 16:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727036AbfG2OaK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 10:30:10 -0400
-Received: from gateway20.websitewelcome.com ([192.185.49.40]:31697 "EHLO
-        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726556AbfG2OaK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 10:30:10 -0400
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 849B3400C4EEE
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 08:26:41 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id s6fBhrlcU90ons6fBhjOwd; Mon, 29 Jul 2019 09:30:09 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=0RJo8enbcNLdJ2TXKB/Bo9r6HXH+BZhHSn25BJmwwc0=; b=aEMwnak/TqMhZPljJxLMAzT+2z
-        H+18G5XudUiKbSQj3/w+38q2eyf/a+pkOseoZC33aApPWYe/2Dw+BtE3b0fHzTQQTN4UULKZzUW3+
-        /UJU4HVIYvsginxtu9KhcoTZkwDoyufa1/Pr24rkUCJ8DdqDXQ2fbu8UM9nIJMoS2VC+wstAwux/r
-        rUuw74/VBKuKogdVZywvxeuYTcNGHUhp04HMQ6X+sXN+sbMmOVuDt7btihTbdg/31vvkwDW9T8iuh
-        xZ+woM881dhPqLnelNfOkFFJVNpZVm8WFTPScTsxTkcFf4BZKrEJKOIkN/+a3Ls6DF4zFLE24UkUV
-        CM0Wc3nw==;
-Received: from [187.192.11.120] (port=50422 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1hs6fA-002KU8-C1; Mon, 29 Jul 2019 09:30:08 -0500
-Date:   Mon, 29 Jul 2019 09:30:07 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH] scsi: sun3_scsi: Mark expected switch fall-throughs
-Message-ID: <20190729143007.GA8067@embeddedor>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.192.11.120
-X-Source-L: No
-X-Exim-ID: 1hs6fA-002KU8-C1
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.11.120]:50422
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 11
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+        id S1728305AbfG2OzV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 10:55:21 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:47785 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726281AbfG2OzV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 10:55:21 -0400
+Received: from orion.localdomain ([77.4.29.213]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1My2pz-1iabhp0e9H-00zVu0; Mon, 29 Jul 2019 16:53:34 +0200
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH] drivers: scsi: Kconfig: minor indention fixes
+Date:   Mon, 29 Jul 2019 16:53:33 +0200
+Message-Id: <1564412013-30893-1-git-send-email-info@metux.net>
+X-Mailer: git-send-email 1.9.1
+X-Provags-ID: V03:K1:xzhcNkMu2jW4LChw2xGWTYi+VXMJqg6RPiVceSHF81BcP8GvEQV
+ 5kFehbIgMnnNUd/B+/9CJbl0OYQq6Ij+6n/cXW4XkkYyFefyam5OvN3iS8MBBXsZ9p0fdqZ
+ rvzzkfjt3FLxj0dQDutxFg0a22uce8gJvKpcur3XO+AMYTdqKnx8lMVR9o3hw9Ozc7YInpj
+ 2qkqe5NELiakT+lT5tdEQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:BrnYRfFxzhI=:IfTQRqdNFkVhzydFE1ZCLq
+ sOSn7jKkqFTmbyIxdekA7IFJyQaqgyEQltJUG4uZBiMMqbEGRbdDrWs2YlQeRtMyXFwD5ZHoE
+ V9QetRxtb5xoCO5suH7CpdjiZP+W6FWt6Q9p+ZKnclaJgM6qlMnyQuyIq3SC0dTbhEyP6XKBR
+ NcM3Bt3e6TNNDeUmOyNbMr/AawbLaPvbr3fcJr9XBADJxl/38RNd03sbP9aEagwDrE9vI+lI6
+ DCkDgMSK9qirhxdLFLLRrFU6wyuaCGph1CaKIo40KnbfIUPl/qlyoDZ0K1Q/Hac1+GH5MW0vT
+ HabcuYclAD3C8diZH2sywYVRniPhAl7WqdFCuSx4VwjHgxTzpDSwJN8C0uGTF2m4XMle+Fj6H
+ qi5PsQMTA/I2WTK4iMTBt/xKt4HWaS7hhmeoPzKvMepdWrk0Y/z7S+p8F/XdYZXsi25KejkFe
+ 49WcK31SaAVKOD0+OUPN8qgEKNUgt0KNA3wfpgV4+KpAg7ex3iWWnOK8NfI2edFfsar9lWpou
+ ntjfvDqNeEUscJUu6mRUer93Fi2iWQLoLyUynrBmEQ3Cno2iVEZwbyskcfW+u7Y9GAt48xLW6
+ 7n8LoVv4i5R+8Qi3EOsxpP3noG3iQmAaj399H4sv8zb7PbD2BjsH0rl7tIifGHx9+8Ky5JR3S
+ XjPC+f3tqBMZtzOvEsdoXCQoaGjjrJbSlfsL2JfZyiqA1f0cAvmeVEIJZ6Y/TGwDPc9HN91Fu
+ T3RggB1/sUKDF7h59lQ+4eue+2idpIuw62l/QQ==
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Mark switch cases where we are expecting to fall through.
+Align the indentions to the common practise in Kconfig files,
+make it look at little bit prettier. Just whitespace changes.
 
-This patch fixes the following warnings:
-
-drivers/scsi/sun3_scsi.c: warning: this statement may fall through
-[-Wimplicit-fallthrough=]:  => 399:9, 403:9
-
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Signed-off-by: Enrico Weigelt <info@metux.net>
 ---
- drivers/scsi/sun3_scsi.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/Kconfig | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/sun3_scsi.c b/drivers/scsi/sun3_scsi.c
-index 3d80ab67a626..955e4c938d49 100644
---- a/drivers/scsi/sun3_scsi.c
-+++ b/drivers/scsi/sun3_scsi.c
-@@ -397,10 +397,12 @@ static int sun3scsi_dma_finish(int write_flag)
- 		case CSR_LEFT_3:
- 			*vaddr = (dregs->bpack_lo & 0xff00) >> 8;
- 			vaddr--;
-+			/* Fall through */
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index 1b92f3c..1332671 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -2,9 +2,9 @@
+ menu "SCSI device support"
  
- 		case CSR_LEFT_2:
- 			*vaddr = (dregs->bpack_hi & 0x00ff);
- 			vaddr--;
-+			/* Fall through */
+ config SCSI_MOD
+-       tristate
+-       default y if SCSI=n || SCSI=y
+-       default m if SCSI=m
++	tristate
++	default y if SCSI=n || SCSI=y
++	default m if SCSI=m
  
- 		case CSR_LEFT_1:
- 			*vaddr = (dregs->bpack_hi & 0xff00) >> 8;
+ config RAID_ATTRS
+ 	tristate "RAID Transport Class"
+@@ -1480,14 +1480,14 @@ config ZFCP
+ 	depends on S390 && QDIO && SCSI
+ 	depends on SCSI_FC_ATTRS
+ 	help
+-          If you want to access SCSI devices attached to your IBM eServer
+-          zSeries by means of Fibre Channel interfaces say Y.
+-          For details please refer to the documentation provided by IBM at
+-          <http://oss.software.ibm.com/developerworks/opensource/linux390>
++	  If you want to access SCSI devices attached to your IBM eServer
++	  zSeries by means of Fibre Channel interfaces say Y.
++	  For details please refer to the documentation provided by IBM at
++	  <http://oss.software.ibm.com/developerworks/opensource/linux390>
+ 
+-          This driver is also available as a module. This module will be
+-          called zfcp. If you want to compile it as a module, say M here
+-          and read <file:Documentation/kbuild/modules.rst>.
++	  This driver is also available as a module. This module will be
++	  called zfcp. If you want to compile it as a module, say M here
++	  and read <file:Documentation/kbuild/modules.rst>.
+ 
+ config SCSI_PMCRAID
+ 	tristate "PMC SIERRA Linux MaxRAID adapter support"
+@@ -1518,8 +1518,8 @@ config SCSI_VIRTIO
+ 	tristate "virtio-scsi support"
+ 	depends on VIRTIO
+ 	help
+-          This is the virtual HBA driver for virtio.  If the kernel will
+-          be used in a virtual machine, say Y or M.
++	  This is the virtual HBA driver for virtio. If the kernel will
++	  be used in a virtual machine, say Y or M.
+ 
+ source "drivers/scsi/csiostor/Kconfig"
+ 
 -- 
-2.22.0
+1.9.1
 
