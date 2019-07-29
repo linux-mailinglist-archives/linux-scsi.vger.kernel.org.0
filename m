@@ -2,81 +2,193 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 257E178AF5
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 13:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E34178BE1
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 14:38:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387692AbfG2Lzr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 07:55:47 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:40850 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387637AbfG2Lzr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 07:55:47 -0400
-Received: by mail-pl1-f193.google.com with SMTP id a93so27381486pla.7
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 04:55:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=czQpOJ6NuB0rUDf29fzM6UP2/EP/3PAdN6JNsSVcd9E=;
-        b=SKqUP1HnACYqd/z5Klcn8luKJZj9VIaiqYnPhM/yFVb26lQlu5aaO5cfbcpDxonlXp
-         3sTvCuNq9sjnuzFAvkZ6c98VHSA8Hnd5HYi5XrSKwph8MN7kylrXTYmAt4860wJ4tLiH
-         YCDRj/DginXLBID1iz0jOQPTrjOjerBfn+BU0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=czQpOJ6NuB0rUDf29fzM6UP2/EP/3PAdN6JNsSVcd9E=;
-        b=SJ5aeWGiaQ/gA9e0LDoftMReBVKfBjgqycTDVWb4fw1rQGmsvZMrwBD3rUdkD7RhEA
-         CQEaVxGXpg75mj9OgWQ5E5qHVXUdH898dmk7pUaB6R+YTVdcp/VZVzQZsN1W32P3PLHD
-         YtpFZgyHSuHZjTGgbps0XT06GvYvmunSyiOiLJXm894STy6q2gEQv/B2rFsotlhFuZ5d
-         5Q6K0iNhFPi9kELpoSjnxRy7H4mi3DJZdVT4Y6ITRJ8A/msL4897uN20xV68CA3DEPJz
-         GAkoBmH2FQHmHzJMHTn9nMINlDgWeFhulKpeRp7BxXrwBj7EfS+n1zpgoweMzIH/NVdf
-         MhFg==
-X-Gm-Message-State: APjAAAXd4c8TBPkkCNpD5eLCzl4ZntCIQ/txNqVrA9c3bc5R5l3fGOkD
-        HgqGgxuhT4SrzpnpIKPoKduM3aJLKJZcg2DGP3+rvg==
-X-Google-Smtp-Source: APXvYqzntWCCVv2xWXoAwAcJGIukFyDTCIFmzHCDWxwPYM2wXpIyjfq3qWda2a1NuhbLbRx2/ziFluLy+Qv17uqV51I=
-X-Received: by 2002:a17:902:2ae8:: with SMTP id j95mr100868250plb.276.1564401346581;
- Mon, 29 Jul 2019 04:55:46 -0700 (PDT)
+        id S2387904AbfG2MiH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 08:38:07 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:35793 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387903AbfG2MiH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jul 2019 08:38:07 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id B9570204247;
+        Mon, 29 Jul 2019 14:38:04 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WiPz5yHo4Frb; Mon, 29 Jul 2019 14:38:04 +0200 (CEST)
+Received: from [82.134.31.183] (unknown [82.134.31.183])
+        by smtp.infotech.no (Postfix) with ESMTPA id 7FCE020414E;
+        Mon, 29 Jul 2019 14:38:04 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH v2 05/18] sg: bitops in sg_device
+To:     Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com,
+        bart.vanassche@wdc.com
+References: <20190727033728.21134-1-dgilbert@interlog.com>
+ <20190727033728.21134-6-dgilbert@interlog.com>
+ <09886ead-133b-ae41-cea3-00641b66e521@suse.de>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <089c55b2-6023-bbf0-f436-d9d2f598e51e@interlog.com>
+Date:   Mon, 29 Jul 2019 14:38:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <1564135257-33188-1-git-send-email-suganath-prabu.subramani@broadcom.com>
- <20190726142706.GA1734@infradead.org>
-In-Reply-To: <20190726142706.GA1734@infradead.org>
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Date:   Mon, 29 Jul 2019 17:25:35 +0530
-Message-ID: <CAK=zhgrWW_vOkXKRYRbiMdHgiT7u=Ra_pCkO_HkmQrCdVXfJBQ@mail.gmail.com>
-Subject: Re: [PATCH] mpt3sas: Use 63-bit DMA addressing on SAS35 HBA
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Suganath Prabu <suganath-prabu.subramani@broadcom.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>, stable@vger.kernel.org,
-        Sathya Prakash <Sathya.Prakash@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <09886ead-133b-ae41-cea3-00641b66e521@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 7:57 PM Christoph Hellwig <hch@infradead.org> wrote:
->
-> On Fri, Jul 26, 2019 at 06:00:57AM -0400, Suganath Prabu wrote:
-> > Although SAS3 & SAS3.5 IT HBA controllers support
-> > 64-bit DMA addressing, as per hardware design,
-> > DMA address with all 64-bits set (0xFFFFFFFF-FFFFFFFF)
-> > results in a firmware fault.
->
-> Linux will never send a dma address with all bits set anyway, as that
-> is our magic escape for the dma_addr_t error value.  Additionally to
-> generate that address you'd need a 1-byte sized, 1-byte aligned buffer,
-> which we never use.
+On 2019-07-29 1:16 p.m., Hannes Reinecke wrote:
+> On 7/27/19 5:37 AM, Douglas Gilbert wrote:
+>> Introduce bitops in sg_device to replace an atomic, a bool and a
+>> char. That char (sgdebug) had been reduced to only two states.
+>> Add some associated macros to make the code a little clearer.
+>>
+>> Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+>> ---
+>>   drivers/scsi/sg.c | 104 +++++++++++++++++++++++-----------------------
+>>   1 file changed, 53 insertions(+), 51 deletions(-)
+>>
+>> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+>> index 9aa1b1030033..97ce84f0c51b 100644
+>> --- a/drivers/scsi/sg.c
+>> +++ b/drivers/scsi/sg.c
+>> @@ -74,6 +74,11 @@ static char *sg_version_date = "20190606";
+>>   
+>>   #define SG_DEFAULT_TIMEOUT mult_frac(SG_DEFAULT_TIMEOUT_USER, HZ, USER_HZ)
+>>   
+>> +/* Bit positions (flags) for sg_device::fdev_bm bitmask follow */
+>> +#define SG_FDEV_EXCLUDE		0	/* have fd open with O_EXCL */
+>> +#define SG_FDEV_DETACHING	1	/* may be unexpected device removal */
+>> +#define SG_FDEV_LOG_SENSE	2	/* set by ioctl(SG_SET_DEBUG) */
+>> +
+>>   int sg_big_buff = SG_DEF_RESERVED_SIZE;
+>>   /* N.B. This variable is readable and writeable via
+>>      /proc/scsi/sg/def_reserved_size . Each time sg_open() is called a buffer
+>> @@ -155,14 +160,12 @@ struct sg_device { /* holds the state of each scsi generic device */
+>>   	struct scsi_device *device;
+>>   	wait_queue_head_t open_wait;    /* queue open() when O_EXCL present */
+>>   	struct mutex open_rel_lock;     /* held when in open() or release() */
+>> -	int sg_tablesize;	/* adapter's max scatter-gather table size */
+>> -	u32 index;		/* device index number */
+>>   	struct list_head sfds;
+>>   	rwlock_t sfd_lock;      /* protect access to sfd list */
+>> -	atomic_t detaching;     /* 0->device usable, 1->device detaching */
+>> -	bool exclude;		/* 1->open(O_EXCL) succeeded and is active */
+>> +	int sg_tablesize;	/* adapter's max scatter-gather table size */
+>> +	u32 index;		/* device index number */
+>>   	int open_cnt;		/* count of opens (perhaps < num(sfds) ) */
+>> -	char sgdebug;		/* 0->off, 1->sense, 9->dump dev, 10-> all devs */
+>> +	unsigned long fdev_bm[1];	/* see SG_FDEV_* defines above */
+> 
+> Just use 'unsigned long fdev_bm' (or maybe 'unsigned long fdev_flags').
+> No point in declaring a one-entry array.
 
-I agree with your above statement. But it is also possible that
-0xFFFFFFFF-FFFFFFFF falls under the DMA able range, e.g. SGE's start
-address is 0xFFFFFFFF-FFFF000 and data length is 0x1000 bytes. So when
-HBA tries to DMA the data at 0xFFFFFFFF-FFFFFFFF location then it will
-faults the firmware due to it's hardware design.
+The point is to make the invocations cleaner by removing the need for
+"&" on the second argument of bitops.
 
-We have observed above example's SGE address and length on AMD systems
-with SME & IOMMU enabled.
+I find it easier on the eye and less error prone to read:
+     set_bit(SG_FDEV_EXCLUDE, sdp->fdev_bm);
 
-Thanks,
-Sreekanth
+than:
+     set_bit(SG_FDEV_EXCLUDE, &sdp->fdev_bm);
+
+include/linux/fdtable.h uses the same technique with
+full_fds_bits_init and full_fds_bits.
+
+It also makes the code more robust if the number of flags became larger
+than sizeof(unsigned long)*8 . That is unlikely to be the case here.
+
+>>   	struct gendisk *disk;
+>>   	struct cdev * cdev;	/* char_dev [sysfs: /sys/cdev/major/sg<n>] */
+>>   	struct kref d_ref;
+>> @@ -200,6 +203,9 @@ static void sg_device_destroy(struct kref *kref);
+>>   #define SZ_SG_IO_HDR ((int)sizeof(struct sg_io_hdr))	/* v3 header */
+>>   #define SZ_SG_REQ_INFO ((int)sizeof(struct sg_req_info))
+>>   
+>> +#define SG_IS_DETACHING(sdp) test_bit(SG_FDEV_DETACHING, (sdp)->fdev_bm)
+>> +#define SG_HAVE_EXCLUDE(sdp) test_bit(SG_FDEV_EXCLUDE, (sdp)->fdev_bm)
+>> +
+>>   /*
+>>    * Kernel needs to be built with CONFIG_SCSI_LOGGING to see log messages.
+>>    * 'depth' is a number between 1 (most severe) and 7 (most noisy, most
+>> @@ -273,26 +279,26 @@ sg_wait_open_event(struct sg_device *sdp, bool o_excl)
+>>   		while (sdp->open_cnt > 0) {
+>>   			mutex_unlock(&sdp->open_rel_lock);
+>>   			retval = wait_event_interruptible(sdp->open_wait,
+>> -					(atomic_read(&sdp->detaching) ||
+>> +					(SG_IS_DETACHING(sdp) ||
+>>   					 !sdp->open_cnt));
+>>   			mutex_lock(&sdp->open_rel_lock);
+>>   
+>>   			if (retval) /* -ERESTARTSYS */
+>>   				return retval;
+>> -			if (atomic_read(&sdp->detaching))
+>> +			if (SG_IS_DETACHING(sdp))
+>>   				return -ENODEV;
+>>   		}
+>>   	} else {
+>> -		while (sdp->exclude) {
+>> +		while (SG_HAVE_EXCLUDE(sdp)) {
+>>   			mutex_unlock(&sdp->open_rel_lock);
+>>   			retval = wait_event_interruptible(sdp->open_wait,
+>> -					(atomic_read(&sdp->detaching) ||
+>> -					 !sdp->exclude));
+>> +					(SG_IS_DETACHING(sdp) ||
+>> +					 !SG_HAVE_EXCLUDE(sdp)));
+>>   			mutex_lock(&sdp->open_rel_lock);
+>>   
+>>   			if (retval) /* -ERESTARTSYS */
+>>   				return retval;
+>> -			if (atomic_read(&sdp->detaching))
+>> +			if (SG_IS_DETACHING(sdp))
+>>   				return -ENODEV;
+>>   		}
+>>   	}
+>> @@ -354,7 +360,7 @@ sg_open(struct inode *inode, struct file *filp)
+>>   				goto error_mutex_locked;
+>>   			}
+>>   		} else {
+>> -			if (sdp->exclude) {
+>> +			if (SG_HAVE_EXCLUDE(sdp)) {
+>>   				retval = -EBUSY;
+>>   				goto error_mutex_locked;
+>>   			}
+>> @@ -367,10 +373,10 @@ sg_open(struct inode *inode, struct file *filp)
+>>   
+>>   	/* N.B. at this point we are holding the open_rel_lock */
+>>   	if (o_excl)
+>> -		sdp->exclude = true;
+>> +		set_bit(SG_FDEV_EXCLUDE, sdp->fdev_bm);
+>>   
+>>   	if (sdp->open_cnt < 1) {  /* no existing opens */
+>> -		sdp->sgdebug = 0;
+>> +		clear_bit(SG_FDEV_LOG_SENSE, sdp->fdev_bm);
+>>   		q = sdp->device->request_queue;
+>>   		sdp->sg_tablesize = queue_max_segments(q);
+>>   	}
+> Do not use 'set_bit' and 'clear_bit' on their own; the do not imply any
+> memory barriers, so concurrent  open() calls will not necessarily see
+> the real value.
+
+That code is inside a critical section protected by a mutex that
+establishes a seq_cst ordering. So maybe it should be __clear_bit()
+instead.
+
+However there may be other unprotected instances that need that
+change. I will check that.
+
+> So either use some XX_bit() variant which returns a value (like
+> test_and_set_bit()), or add an explicit memory barrier.
+> 
+> Cheers,
+> 
+> Hannes
+> 
+
