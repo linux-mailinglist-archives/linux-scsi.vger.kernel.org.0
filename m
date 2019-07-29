@@ -2,83 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3434578E9A
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 17:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B02F78F0A
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 17:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728693AbfG2PCp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 11:02:45 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:36088 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727168AbfG2PCo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 11:02:44 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3D4EF8EE128;
-        Mon, 29 Jul 2019 08:02:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1564412564;
-        bh=AXFFEJd9Z+18E4ObOxvkjLDLsngNOvQy6aoRiwcys2A=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=EprW1r+EW/YWTOUw/uvCXRsE7c7By6UIgumC4MaW1eJu2fXPEecjGfFRQfkdy0U2I
-         B8HdedUX5X0f0fbVa0MDGNpR6c/0Wl600FHmM+Z5t1Yj7ayetkPnygB+bcqiLnCkvs
-         r+9sqS+4sCpGDEZjL2W4X6Hl2wEe45cRXMEkmnWA=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ql8M7lsLqgpc; Mon, 29 Jul 2019 08:02:44 -0700 (PDT)
-Received: from jarvis.lan (unknown [50.35.71.147])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 943F48EE116;
-        Mon, 29 Jul 2019 08:02:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1564412564;
-        bh=AXFFEJd9Z+18E4ObOxvkjLDLsngNOvQy6aoRiwcys2A=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=EprW1r+EW/YWTOUw/uvCXRsE7c7By6UIgumC4MaW1eJu2fXPEecjGfFRQfkdy0U2I
-         B8HdedUX5X0f0fbVa0MDGNpR6c/0Wl600FHmM+Z5t1Yj7ayetkPnygB+bcqiLnCkvs
-         r+9sqS+4sCpGDEZjL2W4X6Hl2wEe45cRXMEkmnWA=
-Message-ID: <1564412562.3501.9.camel@HansenPartnership.com>
-Subject: Re: [PATCH] target: iscsi: iscsi_target_tpg: Fix a possible
- null-pointer dereference in iscsit_tpg_add_network_portal()
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>, martin.petersen@oracle.com,
-        kstewart@linuxfoundation.org, allison@lohutok.net,
-        rfontana@redhat.com, tglx@linutronix.de, gregkh@linuxfoundation.org
-Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 29 Jul 2019 08:02:42 -0700
-In-Reply-To: <20190729022956.18192-1-baijiaju1990@gmail.com>
-References: <20190729022956.18192-1-baijiaju1990@gmail.com>
+        id S1728709AbfG2PV0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 11:21:26 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44213 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728023AbfG2PV0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 11:21:26 -0400
+Received: by mail-pg1-f196.google.com with SMTP id i18so28427567pgl.11;
+        Mon, 29 Jul 2019 08:21:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TwfQwt6LD/cxb9biYp1Swn/1NHjur0aXs6Bu0dcwxbc=;
+        b=UQRYLyGF3XOYZJKFpELr3jKuI0Fwk2dKgQoZR5McEfKZBvfT3FXkEUO/AaJjjC6228
+         yDHj3eD3E1mXMEiCijZCXMRvwe9CujBlYb1W/991gbrDUlkP9bU6JJvwL3rL0sCrq+Lx
+         bxIaC1Wl2ZM/IQ3jY9byclaW3LbDDTZj1icltPMmb/OWvZW0F45eHA8k/k89pv4T4tpR
+         Nu7QEZAsa6E21PJL+y016LWp+Y/oS3GfPxppeiTY9T4tFrPLmdBVRGiKTH9PXiZdNlqj
+         hMyDjFli5mLASWNBzei2MLvRXH8M2HitaxsQIC5g+PJEfA6b/eeKvg6VLITxaputQGd1
+         nbTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TwfQwt6LD/cxb9biYp1Swn/1NHjur0aXs6Bu0dcwxbc=;
+        b=UREyGDmg/2JS/RQiZpl9PRDMmaMZSSJaJH9I+Hln7Z7dsGUpAbvN1zkNcVUH6s7Veq
+         LSu36M+wpa4YrIT1NqaH3Q/GSALGNUAZoDzcKaSZxtADn4RMYRmqkf4VvaZnwF0CiEZY
+         E2yJZBNbEHsupnhcCqE6aTkuHJXHlKn5w5G+WeYTuJREzqvudnHaj5Fg2IvdSwjW7FMt
+         bj8Z4Z2tPYqtje6SAfGYYiJWxx9ztNzBNUAk9K8/z8TRyBHy0A3ZxGcu2UMI6u6VL004
+         tH54FgPVrEX7G0IsQ7R1987HhgPRu4GrhZLjlDqKEuSHZQCBVT9m/QayTsbTJKfqn0El
+         DfqQ==
+X-Gm-Message-State: APjAAAWP9a6PU4fQm42gNjKokxyo/+2Zv3Z5QSb1/VrjQKhFjTtka/D3
+        1ZFRDQ+nydryhL9BaI2Yulwxk6dMkf3j8eGVa6s=
+X-Google-Smtp-Source: APXvYqwG1i5tUPO+UoK9/5VWAU2u7Ro7sloiP4Fhq6RNEnBz6mfxah8ZzSWSRJ8xVPdISajqbA5KC+qNwxPLMh8txZA=
+X-Received: by 2002:a63:4185:: with SMTP id o127mr64617641pga.82.1564413685438;
+ Mon, 29 Jul 2019 08:21:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <1564322446-28255-1-git-send-email-akinobu.mita@gmail.com>
+ <1564322446-28255-2-git-send-email-akinobu.mita@gmail.com> <85aa571d-69c4-a35c-8b9a-770cc3662baa@gmail.com>
+In-Reply-To: <85aa571d-69c4-a35c-8b9a-770cc3662baa@gmail.com>
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Tue, 30 Jul 2019 00:21:14 +0900
+Message-ID: <CAC5umyggeHZJrW7BR7o+GgnQiW5zaSP+cqMeW_CgWwqLVOjNZQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] block: umem: rename LED_* macros to LEDCTRL_*
+To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc:     linux-block@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>,
+        Pavel Machek <pavel@ucw.cz>, Dan Murphy <dmurphy@ti.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 2019-07-29 at 10:29 +0800, Jia-Ju Bai wrote:
-> In iscsit_tpg_add_network_portal(), there is an if statement on line
-> 496
-> to check whether tpg->tpg_tiqn is NULL:
->     if (tpg->tpg_tiqn)
-> 
-> When tpg->tpg_tiqn is NULL, it is used on line 508:
->     pr_debug(..., tpg->tpg_tiqn->tiqn, ...);
-> 
-> Thus, a possible null-pointer dereference may occur.
-> 
-> To fix this bug, tpg->tpg_tiqn is checked before being used.
-> 
-> This bug is found by a static analysis tool STCheck written by us.
+2019=E5=B9=B47=E6=9C=8829=E6=97=A5(=E6=9C=88) 2:30 Jacek Anaszewski <jacek.=
+anaszewski@gmail.com>:
+>
+> Hi Akinobu,
+>
+> On 7/28/19 4:00 PM, Akinobu Mita wrote:
+> > The umem driver defines LED_* macros for MEMCTRLCMD_LEDCTRL register
+> > values.  The LED_OFF and LED_ON macros conflict with the LED subsystem'=
+s
+> > LED_OFF and LED_ON enums.
+> >
+> > This renames these LED_* macros to LEDCTRL_* in umem driver.
+> [...]
+> >
+> > diff --git a/drivers/block/umem.h b/drivers/block/umem.h
+> > index 5838497..8563fdc 100644
+> > --- a/drivers/block/umem.h
+> > +++ b/drivers/block/umem.h
+> > @@ -32,16 +32,16 @@
+> >  #define  MEM_2_GB            0xe0
+> >
+> >  #define MEMCTRLCMD_LEDCTRL   0x08
+> > -#define  LED_REMOVE          2
+> > -#define  LED_FAULT           4
+> > -#define  LED_POWER           6
+> > -#define       LED_FLIP               255
+> > -#define  LED_OFF             0x00
+> > -#define  LED_ON                      0x01
+> > -#define  LED_FLASH_3_5               0x02
+> > -#define  LED_FLASH_7_0               0x03
+> > -#define  LED_POWER_ON                0x00
+> > -#define  LED_POWER_OFF               0x01
+> > +#define  LEDCTRL_REMOVE              2
+>
+> This way the namespacing prefix still begins with "LED",
+> which can lead to further conflicts in the future.
 
-I don't really think this is helpful.  The first question is, is the
-implied might be NULL check correct?  The tpg_tiqn is always set by a
-non-dummy driver and I think network configuration is only done for the
-non dummy driver, so I suspect the NULL check is wrong.  Secondly even
-if the NULL check were correct, I think there's still a need for some
-debugging output, so the proposed patch also looks wrong.
-
-James
-
+How about renaming 'LED_ON' to 'MEMCTRLCMD_LEDCTRL_ON', and 'LED_OFF' to
+'MEMCTRLCMD_LEDCTRL_OFF' ?
