@@ -2,106 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5C878E79
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 16:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3434578E9A
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 17:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728305AbfG2OzV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 10:55:21 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:47785 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726281AbfG2OzV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 10:55:21 -0400
-Received: from orion.localdomain ([77.4.29.213]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1My2pz-1iabhp0e9H-00zVu0; Mon, 29 Jul 2019 16:53:34 +0200
-From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH] drivers: scsi: Kconfig: minor indention fixes
-Date:   Mon, 29 Jul 2019 16:53:33 +0200
-Message-Id: <1564412013-30893-1-git-send-email-info@metux.net>
-X-Mailer: git-send-email 1.9.1
-X-Provags-ID: V03:K1:xzhcNkMu2jW4LChw2xGWTYi+VXMJqg6RPiVceSHF81BcP8GvEQV
- 5kFehbIgMnnNUd/B+/9CJbl0OYQq6Ij+6n/cXW4XkkYyFefyam5OvN3iS8MBBXsZ9p0fdqZ
- rvzzkfjt3FLxj0dQDutxFg0a22uce8gJvKpcur3XO+AMYTdqKnx8lMVR9o3hw9Ozc7YInpj
- 2qkqe5NELiakT+lT5tdEQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BrnYRfFxzhI=:IfTQRqdNFkVhzydFE1ZCLq
- sOSn7jKkqFTmbyIxdekA7IFJyQaqgyEQltJUG4uZBiMMqbEGRbdDrWs2YlQeRtMyXFwD5ZHoE
- V9QetRxtb5xoCO5suH7CpdjiZP+W6FWt6Q9p+ZKnclaJgM6qlMnyQuyIq3SC0dTbhEyP6XKBR
- NcM3Bt3e6TNNDeUmOyNbMr/AawbLaPvbr3fcJr9XBADJxl/38RNd03sbP9aEagwDrE9vI+lI6
- DCkDgMSK9qirhxdLFLLRrFU6wyuaCGph1CaKIo40KnbfIUPl/qlyoDZ0K1Q/Hac1+GH5MW0vT
- HabcuYclAD3C8diZH2sywYVRniPhAl7WqdFCuSx4VwjHgxTzpDSwJN8C0uGTF2m4XMle+Fj6H
- qi5PsQMTA/I2WTK4iMTBt/xKt4HWaS7hhmeoPzKvMepdWrk0Y/z7S+p8F/XdYZXsi25KejkFe
- 49WcK31SaAVKOD0+OUPN8qgEKNUgt0KNA3wfpgV4+KpAg7ex3iWWnOK8NfI2edFfsar9lWpou
- ntjfvDqNeEUscJUu6mRUer93Fi2iWQLoLyUynrBmEQ3Cno2iVEZwbyskcfW+u7Y9GAt48xLW6
- 7n8LoVv4i5R+8Qi3EOsxpP3noG3iQmAaj399H4sv8zb7PbD2BjsH0rl7tIifGHx9+8Ky5JR3S
- XjPC+f3tqBMZtzOvEsdoXCQoaGjjrJbSlfsL2JfZyiqA1f0cAvmeVEIJZ6Y/TGwDPc9HN91Fu
- T3RggB1/sUKDF7h59lQ+4eue+2idpIuw62l/QQ==
+        id S1728693AbfG2PCp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 11:02:45 -0400
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:36088 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727168AbfG2PCo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 29 Jul 2019 11:02:44 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 3D4EF8EE128;
+        Mon, 29 Jul 2019 08:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1564412564;
+        bh=AXFFEJd9Z+18E4ObOxvkjLDLsngNOvQy6aoRiwcys2A=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=EprW1r+EW/YWTOUw/uvCXRsE7c7By6UIgumC4MaW1eJu2fXPEecjGfFRQfkdy0U2I
+         B8HdedUX5X0f0fbVa0MDGNpR6c/0Wl600FHmM+Z5t1Yj7ayetkPnygB+bcqiLnCkvs
+         r+9sqS+4sCpGDEZjL2W4X6Hl2wEe45cRXMEkmnWA=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ql8M7lsLqgpc; Mon, 29 Jul 2019 08:02:44 -0700 (PDT)
+Received: from jarvis.lan (unknown [50.35.71.147])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 943F48EE116;
+        Mon, 29 Jul 2019 08:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1564412564;
+        bh=AXFFEJd9Z+18E4ObOxvkjLDLsngNOvQy6aoRiwcys2A=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=EprW1r+EW/YWTOUw/uvCXRsE7c7By6UIgumC4MaW1eJu2fXPEecjGfFRQfkdy0U2I
+         B8HdedUX5X0f0fbVa0MDGNpR6c/0Wl600FHmM+Z5t1Yj7ayetkPnygB+bcqiLnCkvs
+         r+9sqS+4sCpGDEZjL2W4X6Hl2wEe45cRXMEkmnWA=
+Message-ID: <1564412562.3501.9.camel@HansenPartnership.com>
+Subject: Re: [PATCH] target: iscsi: iscsi_target_tpg: Fix a possible
+ null-pointer dereference in iscsit_tpg_add_network_portal()
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>, martin.petersen@oracle.com,
+        kstewart@linuxfoundation.org, allison@lohutok.net,
+        rfontana@redhat.com, tglx@linutronix.de, gregkh@linuxfoundation.org
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 29 Jul 2019 08:02:42 -0700
+In-Reply-To: <20190729022956.18192-1-baijiaju1990@gmail.com>
+References: <20190729022956.18192-1-baijiaju1990@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Align the indentions to the common practise in Kconfig files,
-make it look at little bit prettier. Just whitespace changes.
+On Mon, 2019-07-29 at 10:29 +0800, Jia-Ju Bai wrote:
+> In iscsit_tpg_add_network_portal(), there is an if statement on line
+> 496
+> to check whether tpg->tpg_tiqn is NULL:
+>     if (tpg->tpg_tiqn)
+> 
+> When tpg->tpg_tiqn is NULL, it is used on line 508:
+>     pr_debug(..., tpg->tpg_tiqn->tiqn, ...);
+> 
+> Thus, a possible null-pointer dereference may occur.
+> 
+> To fix this bug, tpg->tpg_tiqn is checked before being used.
+> 
+> This bug is found by a static analysis tool STCheck written by us.
 
-Signed-off-by: Enrico Weigelt <info@metux.net>
----
- drivers/scsi/Kconfig | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+I don't really think this is helpful.  The first question is, is the
+implied might be NULL check correct?  The tpg_tiqn is always set by a
+non-dummy driver and I think network configuration is only done for the
+non dummy driver, so I suspect the NULL check is wrong.  Secondly even
+if the NULL check were correct, I think there's still a need for some
+debugging output, so the proposed patch also looks wrong.
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 1b92f3c..1332671 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -2,9 +2,9 @@
- menu "SCSI device support"
- 
- config SCSI_MOD
--       tristate
--       default y if SCSI=n || SCSI=y
--       default m if SCSI=m
-+	tristate
-+	default y if SCSI=n || SCSI=y
-+	default m if SCSI=m
- 
- config RAID_ATTRS
- 	tristate "RAID Transport Class"
-@@ -1480,14 +1480,14 @@ config ZFCP
- 	depends on S390 && QDIO && SCSI
- 	depends on SCSI_FC_ATTRS
- 	help
--          If you want to access SCSI devices attached to your IBM eServer
--          zSeries by means of Fibre Channel interfaces say Y.
--          For details please refer to the documentation provided by IBM at
--          <http://oss.software.ibm.com/developerworks/opensource/linux390>
-+	  If you want to access SCSI devices attached to your IBM eServer
-+	  zSeries by means of Fibre Channel interfaces say Y.
-+	  For details please refer to the documentation provided by IBM at
-+	  <http://oss.software.ibm.com/developerworks/opensource/linux390>
- 
--          This driver is also available as a module. This module will be
--          called zfcp. If you want to compile it as a module, say M here
--          and read <file:Documentation/kbuild/modules.rst>.
-+	  This driver is also available as a module. This module will be
-+	  called zfcp. If you want to compile it as a module, say M here
-+	  and read <file:Documentation/kbuild/modules.rst>.
- 
- config SCSI_PMCRAID
- 	tristate "PMC SIERRA Linux MaxRAID adapter support"
-@@ -1518,8 +1518,8 @@ config SCSI_VIRTIO
- 	tristate "virtio-scsi support"
- 	depends on VIRTIO
- 	help
--          This is the virtual HBA driver for virtio.  If the kernel will
--          be used in a virtual machine, say Y or M.
-+	  This is the virtual HBA driver for virtio. If the kernel will
-+	  be used in a virtual machine, say Y or M.
- 
- source "drivers/scsi/csiostor/Kconfig"
- 
--- 
-1.9.1
+James
 
