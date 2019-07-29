@@ -2,101 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 373D779127
-	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 18:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A003179156
+	for <lists+linux-scsi@lfdr.de>; Mon, 29 Jul 2019 18:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728798AbfG2Qip (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 12:38:45 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35767 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727481AbfG2Qio (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 12:38:44 -0400
-Received: by mail-pf1-f195.google.com with SMTP id u14so28332690pfn.2
-        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 09:38:44 -0700 (PDT)
+        id S1728271AbfG2QqP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 12:46:15 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33258 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727859AbfG2QqO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 12:46:14 -0400
+Received: by mail-pg1-f195.google.com with SMTP id f20so19311305pgj.0
+        for <linux-scsi@vger.kernel.org>; Mon, 29 Jul 2019 09:46:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=+08c+PdXIBVeY6sDHfUjTE9cNjO6KyMEPTgMj7V2IY4=;
-        b=JZjXEn6QYGEaImI7V1iUAdLhYZw+xOBslJwMzGz0qIiJ1mxf2/qcPESNBb5IZQ6Zi0
-         l0Hvc6j2QUyhIUuWRbNzPSyKiMbLB6WU5H0DWxMm29fVsPXeMsiHs8opmPpQXwdGrT9Q
-         e1gVS+ZMXJlJodmV3Wc15altBqNOZou3V7FbI=
+        bh=XB62ZlwhO0yjn1D18g6mJedhYXvVJ+OT4E/XDQe9ZCk=;
+        b=kNGpuKj266Cp80GsF21mWtbjwjw0TwpMwcxKSTrWp1fKs229lQ5Q6fKNDlF8XNZOby
+         DIzPP5WCZcmvdoALsMOTeDg/H1GNliIN45wzak4RfJPYn8DhadOjKojLjSnwjQKNX9+c
+         F+p98alnCGB01sujC8ZfcDPZtrNUcOETIWJr8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+08c+PdXIBVeY6sDHfUjTE9cNjO6KyMEPTgMj7V2IY4=;
-        b=Y7azElZxaSZaCusJjKTVV0fQh1KvjfqFbB620a8rC+VmooGDlczJ9LcZjv7+sZL29s
-         7j5WJ70EXJt2RPRkG56gqzNIOORYswh+sZPXIAgHRDd88JKO/TrZUbrL6nTnTgq+IEpa
-         x2aN2Z3TE1BCFIe2nPLsdedYG3oadrPrEzBW6k3weXbaINf/htMEMRTuWoItEjJr2gM5
-         7vMQqkB/0hZAA1/Lpm9qjkOoPo4K3AT88+9asJ3rG7GzsuNe0X6zTG31qRH0YOgAXN6l
-         bLc/NaGIBEPIjvVTGJBveebHetdRUvaZfFPyyEijZljMMikNxQWxWlTFSaKGYrKaWtu/
-         IFzA==
-X-Gm-Message-State: APjAAAXnxot7wQ8R+Y7mA9MT8fOYRJOvwZ+iUp2G+FcUd4bCpF4B7r+F
-        DblTbs/Rh7GkotRNnpvhByHV8g==
-X-Google-Smtp-Source: APXvYqyELyrdfBSbaJc1b/4/p8QGl1qLzaYkHKBSMm8jZldpOoqQAfcTWUmpFaevBfT0PPNVUHwiBQ==
-X-Received: by 2002:a63:494d:: with SMTP id y13mr106885695pgk.109.1564418324034;
-        Mon, 29 Jul 2019 09:38:44 -0700 (PDT)
+        bh=XB62ZlwhO0yjn1D18g6mJedhYXvVJ+OT4E/XDQe9ZCk=;
+        b=c9L7CZJtyNY/Xe4yTAE+kLXDCVd8uVavHVDvqmbR7oyOKFVVxl4RLMiMbj2opdvL0c
+         yoCLvK2UK39/13bX/ZZ8I4nclqU12qMPJMhpFJmRAPFn37aiTyktde/gvX0+B1U/lJ+L
+         YCXLRX8nobhB3ozEVEC02PGvukBYSt0TTE45L8Vz3ywxQ/IHu13zQIatOBiWMCAA5fc4
+         36bUzCn8r07WBv6shd81AdXrwluTSwJfUPVdCPR7fuXnHi1v9EOJ33hKiDwN3QlXEP45
+         uB1Bmf/zROmtcrA4dux3ikVsRrFUfecPOEEqBT/xueSvLP3QDYL7HtBwApxJWaY5uV7X
+         h7Hw==
+X-Gm-Message-State: APjAAAU4xx+sAr9wSILdF7n3T8LP2TJwhGLGbKe/kk0lPfJRndbN7t5+
+        lPyyfvnkq4lYDnPlshCaVYJxoQ==
+X-Google-Smtp-Source: APXvYqz9qJOM5dIi2ju6tb+8erAlPufIhyFtbb5+Wt/6x+Za99SlREIVsU/CBsi5YAwjGE7lxc5zNw==
+X-Received: by 2002:aa7:9ab5:: with SMTP id x21mr37126562pfi.139.1564418774350;
+        Mon, 29 Jul 2019 09:46:14 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q144sm63458340pfc.103.2019.07.29.09.38.43
+        by smtp.gmail.com with ESMTPSA id 35sm70258236pgw.91.2019.07.29.09.46.13
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 29 Jul 2019 09:38:43 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 09:38:42 -0700
+        Mon, 29 Jul 2019 09:46:13 -0700 (PDT)
+Date:   Mon, 29 Jul 2019 09:46:12 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Tyrel Datwyler <tyreld@linux.ibm.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+Cc:     Michael Cyr <mikecyr@linux.ibm.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] scsi: ibmvfc: Mark expected switch fall-throughs
-Message-ID: <201907290938.022D08EA@keescook>
-References: <20190729002608.GA25263@embeddedor>
+Subject: Re: [PATCH] scsi: ibmvscsi_tgt: Mark expected switch fall-throughs
+Message-ID: <201907290946.C8FFE767@keescook>
+References: <20190729112902.GA3768@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190729002608.GA25263@embeddedor>
+In-Reply-To: <20190729112902.GA3768@embeddedor>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, Jul 28, 2019 at 07:26:08PM -0500, Gustavo A. R. Silva wrote:
+On Mon, Jul 29, 2019 at 06:29:02AM -0500, Gustavo A. R. Silva wrote:
 > Mark switch cases where we are expecting to fall through.
 > 
-> This patch fixes the following warnings:
+> This patch fixes the following warnings (Building: powerpc allyesconfig):
 > 
-> drivers/scsi/ibmvscsi/ibmvfc.c: In function 'ibmvfc_npiv_login_done':
-> drivers/scsi/ibmvscsi/ibmvfc.c:4022:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    ibmvfc_retry_host_init(vhost);
->    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c:4023:2: note: here
->   case IBMVFC_MAD_DRIVER_FAILED:
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c: In function 'ibmvscsis_adapter_info':
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1582:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    if (connection_broken(vscsi))
+>       ^
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:1584:2: note: here
+>   default:
+>   ^~~~~~~
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c: In function 'ibmvscsis_ping_response':
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:2494:16: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    vscsi->flags |= CLIENT_FAILED;
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:2495:2: note: here
+>   case H_DROPPED:
 >   ^~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c: In function 'ibmvfc_bsg_request':
-> drivers/scsi/ibmvscsi/ibmvfc.c:1830:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    port_id = (bsg_request->rqst_data.h_els.port_id[0] << 16) |
->    ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     (bsg_request->rqst_data.h_els.port_id[1] << 8) |
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     bsg_request->rqst_data.h_els.port_id[2];
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c:1833:2: note: here
->   case FC_BSG_RPT_ELS:
->   ^~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c:1838:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    port_id = (bsg_request->rqst_data.h_ct.port_id[0] << 16) |
->    ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     (bsg_request->rqst_data.h_ct.port_id[1] << 8) |
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     bsg_request->rqst_data.h_ct.port_id[2];
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c:1841:2: note: here
->   case FC_BSG_RPT_CT:
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:2496:16: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    vscsi->flags |= RESPONSE_Q_DOWN;
+> drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c:2497:2: note: here
+>   case H_REMOTE_PARM:
 >   ^~~~
 > 
 > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
@@ -107,37 +94,32 @@ Reviewed-by: Kees Cook <keescook@chromium.org>
 -Kees
 
 > ---
->  drivers/scsi/ibmvscsi/ibmvfc.c | 3 +++
+>  drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 3 +++
 >  1 file changed, 3 insertions(+)
 > 
-> diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-> index 8cdbac076a1b..df897df5cafe 100644
-> --- a/drivers/scsi/ibmvscsi/ibmvfc.c
-> +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-> @@ -1830,6 +1830,7 @@ static int ibmvfc_bsg_request(struct bsg_job *job)
->  		port_id = (bsg_request->rqst_data.h_els.port_id[0] << 16) |
->  			(bsg_request->rqst_data.h_els.port_id[1] << 8) |
->  			bsg_request->rqst_data.h_els.port_id[2];
-> +		/* fall through */
->  	case FC_BSG_RPT_ELS:
->  		fc_flags = IBMVFC_FC_ELS;
+> diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+> index 7f9535392a93..a929fe76102b 100644
+> --- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+> +++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+> @@ -1581,6 +1581,7 @@ static long ibmvscsis_adapter_info(struct scsi_info *vscsi,
+>  	case H_PERMISSION:
+>  		if (connection_broken(vscsi))
+>  			flag_bits = (RESPONSE_Q_DOWN | CLIENT_FAILED);
+> +		/* Fall through */
+>  	default:
+>  		dev_err(&vscsi->dev, "adapter_info: h_copy_rdma to client failed, rc %ld\n",
+>  			rc);
+> @@ -2492,8 +2493,10 @@ static long ibmvscsis_ping_response(struct scsi_info *vscsi)
 >  		break;
-> @@ -1838,6 +1839,7 @@ static int ibmvfc_bsg_request(struct bsg_job *job)
->  		port_id = (bsg_request->rqst_data.h_ct.port_id[0] << 16) |
->  			(bsg_request->rqst_data.h_ct.port_id[1] << 8) |
->  			bsg_request->rqst_data.h_ct.port_id[2];
-> +		/* fall through */
->  	case FC_BSG_RPT_CT:
->  		fc_flags = IBMVFC_FC_CT_IU;
->  		break;
-> @@ -4020,6 +4022,7 @@ static void ibmvfc_npiv_login_done(struct ibmvfc_event *evt)
->  		return;
->  	case IBMVFC_MAD_CRQ_ERROR:
->  		ibmvfc_retry_host_init(vhost);
-> +		/* fall through */
->  	case IBMVFC_MAD_DRIVER_FAILED:
->  		ibmvfc_free_event(evt);
->  		return;
+>  	case H_CLOSED:
+>  		vscsi->flags |= CLIENT_FAILED;
+> +		/* Fall through */
+>  	case H_DROPPED:
+>  		vscsi->flags |= RESPONSE_Q_DOWN;
+> +		/* Fall through */
+>  	case H_REMOTE_PARM:
+>  		dev_err(&vscsi->dev, "ping_response: h_send_crq failed, rc %ld\n",
+>  			rc);
 > -- 
 > 2.22.0
 > 
