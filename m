@@ -2,81 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2AC7AEF9
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 19:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBBA7B180
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 20:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729329AbfG3RJc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 13:09:32 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:33306 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728184AbfG3RJc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 13:09:32 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UH6Yrv059358;
-        Tue, 30 Jul 2019 17:08:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=zoxY5i1KK7gEr+cs+DfNAHFLcFxnIeardz8X41qPnxA=;
- b=QW+llM2xWta6PYt5oybtLnBka2QevkmrK3qbVvIX6hQUn9lFRV/ULuMsDIjU0dFdEi9t
- tXHN9c5gWZD6bYXJQ8A+VQQrNCtr3Q/4tIHpSR7rLxF0gotPf4TZkBLcqypP8YK374tI
- CaY8RioPW6wberV4V7B/ihCMPkFoTRIyhl4VVVpRvBH3WfYu2uYO+R4XqfS6hcWQSl49
- knM4khHq+INY3QpQAu/fx8IXeDdTB2gheaGEdnQHPuDq4iDH4gBcuTB/vUjrtlNnz+l0
- /UAyMRENdWRaGK5GY06ubIOlX7SvLBElvhk9OkLle+R1ms+S04nV7qL+FrvO+7xtoa47 lA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2u0f8qytvg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 17:08:14 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UH2lBD167232;
-        Tue, 30 Jul 2019 17:08:13 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2u0xv8aj93-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 17:08:13 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6UH8Bci024178;
-        Tue, 30 Jul 2019 17:08:12 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 30 Jul 2019 10:08:11 -0700
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+        id S1728482AbfG3SRe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 14:17:34 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45379 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388166AbfG3SQq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 14:16:46 -0400
+Received: by mail-pf1-f196.google.com with SMTP id r1so30254077pfq.12
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 11:16:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ejbky3Ait/2fuVRBv/Aea0ZW9E8YvQRjIE68KrxG858=;
+        b=g7NxQfqoHmAHu6FjiviV+l42gg60rayxYXW9umctHkawL0+ZOaMmX4rSGjSIgYitw/
+         JwYphBkhREl0mc9HGhGRpP4mJRGKBlCHFsIf4zXpF7AwUnneoonMz0J6Fi+rLAp6N6PY
+         M/6I/sE+dEfMD36MCDCUmiNTGgs+7tt2vwqqA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ejbky3Ait/2fuVRBv/Aea0ZW9E8YvQRjIE68KrxG858=;
+        b=J6q7Dg2MVYGtTw8tzZQKkhthGvHlhxdOF1ow7IfLSwlc3JzTEK93Q0k2WF8YG6STv8
+         3E0RhXzfzGB1EZYNahAsewBJFwNX4FWkvChdzHGjK0/I685PnjXf/fMW3gAKPishelDT
+         X7RMXrOCnRax3UmuQIVRVDMj90ZAJnoo8OUKOAlWtd2oMNI78O4yJ5RkKNHLMgd4xeaC
+         XKx2zi+p+/P5q55IXPymbdq2lTKWogmenvws1Rrzl2kZKjtiEoClKBVtyJ23qHSZ1qEd
+         v687gUwB/N5hg7kY9lcgwGjrMZH7aXe3E9BQYXn221Xv4UfXuMfgPyZBY1GQSHiznDB+
+         EFBA==
+X-Gm-Message-State: APjAAAVwCRuGxm/jJrNQdV1wtpfP1u170S4haTnQG1vPP6K/HJwieEy9
+        7sVgKqBJUEODMyNyW9Vy21uJ0VYdQscrqQ==
+X-Google-Smtp-Source: APXvYqzaS9Quj+uj+10jY75vRg+7pd4gpdEfZ85MzPRqS6VPRENa+I85aezt52LGvJ1whXawhY8vFg==
+X-Received: by 2002:a65:680b:: with SMTP id l11mr15407071pgt.35.1564510605774;
+        Tue, 30 Jul 2019 11:16:45 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.45
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 30 Jul 2019 11:16:45 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     linux-kernel@vger.kernel.org
 Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: scsi_debugfs: Use for_each_set_bit to simplify code
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190725200751.64570-1-andriy.shevchenko@linux.intel.com>
-Date:   Tue, 30 Jul 2019 13:08:09 -0400
-In-Reply-To: <20190725200751.64570-1-andriy.shevchenko@linux.intel.com> (Andy
-        Shevchenko's message of "Thu, 25 Jul 2019 23:07:51 +0300")
-Message-ID: <yq1ef27mow6.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        linux-scsi@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v6 56/57] scsi: Remove dev_err() usage after platform_get_irq()
+Date:   Tue, 30 Jul 2019 11:15:56 -0700
+Message-Id: <20190730181557.90391-57-swboyd@chromium.org>
+X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
+In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
+References: <20190730181557.90391-1-swboyd@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=874
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1907300178
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=941 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1907300178
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+We don't need dev_err() messages when platform_get_irq() fails now that
+platform_get_irq() prints an error message itself when something goes
+wrong. Let's remove these prints with a simple semantic patch.
 
-Andy,
+// <smpl>
+@@
+expression ret;
+struct platform_device *E;
+@@
 
-> We can use for_each_set_bit() to slightly simplify the code.
+ret =
+(
+platform_get_irq(E, ...)
+|
+platform_get_irq_byname(E, ...)
+);
 
-Applied to 5.4/scsi-queue. Thanks!
+if ( \( ret < 0 \| ret <= 0 \) )
+{
+(
+-if (ret != -EPROBE_DEFER)
+-{ ...
+-dev_err(...);
+-... }
+|
+...
+-dev_err(...);
+)
+...
+}
+// </smpl>
 
+While we're here, remove braces on if statements that only have one
+statement (manually).
+
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+Please apply directly to subsystem trees
+
+ drivers/scsi/ufs/ufshcd-pltfrm.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+index d7d521b394c3..f84943553454 100644
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.c
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+@@ -404,7 +404,6 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0) {
+-		dev_err(dev, "IRQ resource not available\n");
+ 		err = -ENODEV;
+ 		goto out;
+ 	}
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Sent by a computer through tubes
+
