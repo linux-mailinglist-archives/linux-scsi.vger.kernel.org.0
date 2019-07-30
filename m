@@ -2,90 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E83F7A33C
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 10:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BC27AB83
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 16:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730961AbfG3Ikx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 04:40:53 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:33663 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728354AbfG3Ikx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 04:40:53 -0400
-Received: by mail-pg1-f193.google.com with SMTP id f20so20454950pgj.0;
-        Tue, 30 Jul 2019 01:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oht354i7nlKO87/dRT8d2R9vughNR8TfvgXEqGm1tuc=;
-        b=HA5f+/WosIJHoAnUdpExXjkFvcjZ8PqeonpPEaug0kxLT+HDAG5PFC8VSZbbPacAqB
-         tnpBGfCnOIU2ghnvy5ooo05Pd/VcuiM6yCrMm66kbs5Kpa+7b72A8+vhG5O6584koEJc
-         9xLpvRLXMwd5NzrkgiXErFub01sC9pr/2nmwONgOLu3Zyntyr0lTC1ZgBg8ack9FmeB/
-         BCluqjV7XsJ0l+V7LNNXaj22P3I3FtMKvsu2L/r/TtsnZuIRb7T5VruDuj1lyHxBiEpN
-         JlB5xbZ9TgWM2EXHUKZu+Wa9Ng3z4ULnBd9QWq5/wlGY7ODwLCxI0V9lxDiC5CaRGBYW
-         O+jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oht354i7nlKO87/dRT8d2R9vughNR8TfvgXEqGm1tuc=;
-        b=CAGH/6LBykFXzr9PRi6tLLMhDAni1wE1k+ya8naf4h2NhaLcDIjNHn8uYzY+t+WJdG
-         WxeBmblthucaBgHtQgjUbtRytHkI/iLWASdueHxcT3pjjOoWo6QjmrnuCE3GL89faBND
-         W9FUgcndzEyNhWA7yMjd4kmAsEozY0jtpqY4+RjPya0C6+/nP1imQwMFDEKsh/sr57D0
-         CsFkXtP8ReuGc+Ev8i+4zhYBtdkDvogweXY/sBMNRfzvOvPo8rYWOnaW4uLvy71i9WML
-         HPVp+Va9nVch8QcCchXc8rhv/wFqrND47GaqMwnPjjnyYMyq2DwyHp01CwtYwp7sh+zL
-         /Hbw==
-X-Gm-Message-State: APjAAAWTFje4O3hfG/yksN3PW8VHEbncmBEU2+TA+yFiVPVISQlt5JY5
-        DppxKaQjHJe7RiMxd/m1pqs=
-X-Google-Smtp-Source: APXvYqwWh4taE6b552+xWeQnh2QXA/XQN0XAPxd0ucxcVOReiXhx0SNiyHXX5+T/cCyLrqStwDL1KA==
-X-Received: by 2002:a63:ab08:: with SMTP id p8mr18894180pgf.340.1564476052524;
-        Tue, 30 Jul 2019 01:40:52 -0700 (PDT)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
-        by smtp.gmail.com with ESMTPSA id m9sm108158454pgr.24.2019.07.30.01.40.50
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 30 Jul 2019 01:40:51 -0700 (PDT)
-From:   Chuhong Yuan <hslester96@gmail.com>
+        id S1730686AbfG3O4o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 10:56:44 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12382 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727129AbfG3O4o (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 30 Jul 2019 10:56:44 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6UErg6t144567
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 10:56:42 -0400
+Received: from e13.ny.us.ibm.com (e13.ny.us.ibm.com [129.33.205.203])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2u2nuhxs8w-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 10:56:42 -0400
+Received: from localhost
+        by e13.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <jejb@linux.ibm.com>;
+        Tue, 30 Jul 2019 15:56:41 +0100
+Received: from b01cxnp22034.gho.pok.ibm.com (9.57.198.24)
+        by e13.ny.us.ibm.com (146.89.104.200) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 30 Jul 2019 15:56:39 +0100
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6UEuci351446036
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Jul 2019 14:56:38 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 906EF2805E;
+        Tue, 30 Jul 2019 14:56:38 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CCA2E28059;
+        Tue, 30 Jul 2019 14:56:37 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.131.103])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Jul 2019 14:56:37 +0000 (GMT)
+Subject: Re: [PATCH] scsi: 3w-sas: Fix unterminated strncpy
+From:   James Bottomley <jejb@linux.ibm.com>
+To:     Chuhong Yuan <hslester96@gmail.com>
 Cc:     Adam Radford <aradford@gmail.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] scsi: 3w-sas: Fix unterminated strncpy
-Date:   Tue, 30 Jul 2019 16:40:47 +0800
-Message-Id: <20190730084047.26482-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 30 Jul 2019 07:56:37 -0700
+In-Reply-To: <20190730084047.26482-1-hslester96@gmail.com>
+References: <20190730084047.26482-1-hslester96@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19073014-0064-0000-0000-000004047A97
+X-IBM-SpamModules-Scores: 
+X-IBM-SpamModules-Versions: BY=3.00011523; HX=3.00000242; KW=3.00000007;
+ PH=3.00000004; SC=3.00000287; SDB=6.01239635; UDB=6.00653626; IPR=6.01021048;
+ MB=3.00027958; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-30 14:56:41
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19073014-0065-0000-0000-00003E79B900
+Message-Id: <1564498597.4300.10.camel@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-30_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=734 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907300154
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-strncpy(dest, src, strlen(src)) leads to unterminated
-dest, which is dangerous.
-Here driver_version's len is 32 and TW_DRIVER_VERSION
-is shorter than 32.
-Therefore strcpy is OK.
+On Tue, 2019-07-30 at 16:40 +0800, Chuhong Yuan wrote:
+> strncpy(dest, src, strlen(src)) leads to unterminated
+> dest, which is dangerous.
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
- drivers/scsi/3w-sas.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I don't buy that.  The structure is only used for the
+TW_IOCTL_GET_COMPATIBILITY_INFO ioctl and all the fields for that are
+fixed width and are copied over as such.
 
-diff --git a/drivers/scsi/3w-sas.c b/drivers/scsi/3w-sas.c
-index dda6fa857709..96f529c613a6 100644
---- a/drivers/scsi/3w-sas.c
-+++ b/drivers/scsi/3w-sas.c
-@@ -1328,7 +1328,7 @@ static int twl_reset_sequence(TW_Device_Extension *tw_dev, int soft_reset)
- 		}
- 
- 		/* Load rest of compatibility struct */
--		strncpy(tw_dev->tw_compat_info.driver_version, TW_DRIVER_VERSION, strlen(TW_DRIVER_VERSION));
-+		strcpy(tw_dev->tw_compat_info.driver_version, TW_DRIVER_VERSION);
- 		tw_dev->tw_compat_info.driver_srl_high = TW_CURRENT_DRIVER_SRL;
- 		tw_dev->tw_compat_info.driver_branch_high = TW_CURRENT_DRIVER_BRANCH;
- 		tw_dev->tw_compat_info.driver_build_high = TW_CURRENT_DRIVER_BUILD;
--- 
-2.20.1
+> Here driver_version's len is 32 and TW_DRIVER_VERSION
+> is shorter than 32.
+> Therefore strcpy is OK.
+
+The best practice for copying a string to a fixed width destination
+that does get printed within the kernel would be what the 3w-9xxx.c
+does
+
+	strlcpy(tw_dev->tw_compat_info.driver_version, TW_DRIVER_VERSION,
+		sizeof(tw_dev->tw_compat_info.driver_version));
+
+But as I said, it doesn't really matter for a fixed width field that's
+never printed within the kernel.
+
+James
 
