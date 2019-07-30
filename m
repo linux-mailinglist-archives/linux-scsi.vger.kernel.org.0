@@ -2,123 +2,140 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CBBA7B180
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 20:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66F57B2B0
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 20:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728482AbfG3SRe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 14:17:34 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45379 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388166AbfG3SQq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 14:16:46 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r1so30254077pfq.12
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 11:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ejbky3Ait/2fuVRBv/Aea0ZW9E8YvQRjIE68KrxG858=;
-        b=g7NxQfqoHmAHu6FjiviV+l42gg60rayxYXW9umctHkawL0+ZOaMmX4rSGjSIgYitw/
-         JwYphBkhREl0mc9HGhGRpP4mJRGKBlCHFsIf4zXpF7AwUnneoonMz0J6Fi+rLAp6N6PY
-         M/6I/sE+dEfMD36MCDCUmiNTGgs+7tt2vwqqA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ejbky3Ait/2fuVRBv/Aea0ZW9E8YvQRjIE68KrxG858=;
-        b=J6q7Dg2MVYGtTw8tzZQKkhthGvHlhxdOF1ow7IfLSwlc3JzTEK93Q0k2WF8YG6STv8
-         3E0RhXzfzGB1EZYNahAsewBJFwNX4FWkvChdzHGjK0/I685PnjXf/fMW3gAKPishelDT
-         X7RMXrOCnRax3UmuQIVRVDMj90ZAJnoo8OUKOAlWtd2oMNI78O4yJ5RkKNHLMgd4xeaC
-         XKx2zi+p+/P5q55IXPymbdq2lTKWogmenvws1Rrzl2kZKjtiEoClKBVtyJ23qHSZ1qEd
-         v687gUwB/N5hg7kY9lcgwGjrMZH7aXe3E9BQYXn221Xv4UfXuMfgPyZBY1GQSHiznDB+
-         EFBA==
-X-Gm-Message-State: APjAAAVwCRuGxm/jJrNQdV1wtpfP1u170S4haTnQG1vPP6K/HJwieEy9
-        7sVgKqBJUEODMyNyW9Vy21uJ0VYdQscrqQ==
-X-Google-Smtp-Source: APXvYqzaS9Quj+uj+10jY75vRg+7pd4gpdEfZ85MzPRqS6VPRENa+I85aezt52LGvJ1whXawhY8vFg==
-X-Received: by 2002:a65:680b:: with SMTP id l11mr15407071pgt.35.1564510605774;
-        Tue, 30 Jul 2019 11:16:45 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id g1sm106744083pgg.27.2019.07.30.11.16.45
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 30 Jul 2019 11:16:45 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        id S2388495AbfG3Swn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 14:52:43 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53230 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388066AbfG3Swm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 30 Jul 2019 14:52:42 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6UIqHkx069707;
+        Tue, 30 Jul 2019 14:52:20 -0400
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u2ug104w0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Jul 2019 14:52:20 -0400
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x6UIoX14012934;
+        Tue, 30 Jul 2019 18:52:19 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01wdc.us.ibm.com with ESMTP id 2u0e86fyqc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Jul 2019 18:52:19 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6UIqE8X49938730
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Jul 2019 18:52:14 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5EFF6E052;
+        Tue, 30 Jul 2019 18:52:14 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2A09C6E04E;
+        Tue, 30 Jul 2019 18:52:14 +0000 (GMT)
+Received: from p8tul1-build.aus.stglabs.ibm.com (unknown [9.3.141.206])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Tue, 30 Jul 2019 18:52:13 +0000 (GMT)
+Date:   Tue, 30 Jul 2019 13:52:13 -0500
+From:   "Matthew R. Ochs" <mrochs@linux.ibm.com>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     "Manoj N. Kumar" <manoj@linux.ibm.com>,
+        Uma Krishnan <ukrishn@linux.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v6 56/57] scsi: Remove dev_err() usage after platform_get_irq()
-Date:   Tue, 30 Jul 2019 11:15:56 -0700
-Message-Id: <20190730181557.90391-57-swboyd@chromium.org>
-X-Mailer: git-send-email 2.22.0.709.g102302147b-goog
-In-Reply-To: <20190730181557.90391-1-swboyd@chromium.org>
-References: <20190730181557.90391-1-swboyd@chromium.org>
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH] scsi: cxlflash: Mark expected switch fall-throughs
+Message-ID: <20190730185213.GA10811@p8tul1-build.aus.stglabs.ibm.com>
+References: <20190729002119.GA25068@embeddedor>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190729002119.GA25068@embeddedor>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-30_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907300192
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We don't need dev_err() messages when platform_get_irq() fails now that
-platform_get_irq() prints an error message itself when something goes
-wrong. Let's remove these prints with a simple semantic patch.
+On Sun, Jul 28, 2019 at 07:21:19PM -0500, Gustavo A. R. Silva wrote:
+> Mark switch cases where we are expecting to fall through.
+> 
+> This patch fixes the following warnings:
+> 
+> drivers/scsi/cxlflash/main.c: In function 'send_afu_cmd':
+> drivers/scsi/cxlflash/main.c:2347:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    if (rc) {
+>       ^
+> drivers/scsi/cxlflash/main.c:2357:2: note: here
+>   case -EAGAIN:
+>   ^~~~
+> drivers/scsi/cxlflash/main.c: In function 'term_intr':
+> drivers/scsi/cxlflash/main.c:754:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    if (index == PRIMARY_HWQ)
+>       ^
+> drivers/scsi/cxlflash/main.c:756:2: note: here
+>   case UNMAP_TWO:
+>   ^~~~
+> drivers/scsi/cxlflash/main.c:757:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    cfg->ops->unmap_afu_irq(hwq->ctx_cookie, 2, hwq);
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/cxlflash/main.c:758:2: note: here
+>   case UNMAP_ONE:
+>   ^~~~
+> drivers/scsi/cxlflash/main.c:759:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    cfg->ops->unmap_afu_irq(hwq->ctx_cookie, 1, hwq);
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/cxlflash/main.c:760:2: note: here
+>   case FREE_IRQ:
+>   ^~~~
+> drivers/scsi/cxlflash/main.c: In function 'cxlflash_remove':
+> drivers/scsi/cxlflash/main.c:975:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    cxlflash_release_chrdev(cfg);
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/cxlflash/main.c:976:2: note: here
+>   case INIT_STATE_SCSI:
+>   ^~~~
+> drivers/scsi/cxlflash/main.c:978:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    scsi_remove_host(cfg->host);
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/cxlflash/main.c:979:2: note: here
+>   case INIT_STATE_AFU:
+>   ^~~~
+> drivers/scsi/cxlflash/main.c:980:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    term_afu(cfg);
+>    ^~~~~~~~~~~~~
+> drivers/scsi/cxlflash/main.c:981:2: note: here
+>   case INIT_STATE_PCI:
+>   ^~~~
+> drivers/scsi/cxlflash/main.c:983:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    pci_disable_device(pdev);
+>    ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/cxlflash/main.c:984:2: note: here
+>   case INIT_STATE_NONE:
+>   ^~~~
+> drivers/scsi/cxlflash/main.c: In function 'num_hwqs_store':
+> drivers/scsi/cxlflash/main.c:3018:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    if (cfg->state == STATE_NORMAL)
+>       ^
+> drivers/scsi/cxlflash/main.c:3020:2: note: here
+>   default:
+>   ^~~~~~~
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
 
-// <smpl>
-@@
-expression ret;
-struct platform_device *E;
-@@
-
-ret =
-(
-platform_get_irq(E, ...)
-|
-platform_get_irq_byname(E, ...)
-);
-
-if ( \( ret < 0 \| ret <= 0 \) )
-{
-(
--if (ret != -EPROBE_DEFER)
--{ ...
--dev_err(...);
--... }
-|
-...
--dev_err(...);
-)
-...
-}
-// </smpl>
-
-While we're here, remove braces on if statements that only have one
-statement (manually).
-
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
-
-Please apply directly to subsystem trees
-
- drivers/scsi/ufs/ufshcd-pltfrm.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index d7d521b394c3..f84943553454 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -404,7 +404,6 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0) {
--		dev_err(dev, "IRQ resource not available\n");
- 		err = -ENODEV;
- 		goto out;
- 	}
--- 
-Sent by a computer through tubes
+Acked-by: Matthew R. Ochs <mrochs@linux.ibm.com>
 
