@@ -2,317 +2,205 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E4779CB5
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 01:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA99C79ED6
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 04:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729517AbfG2XTA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 29 Jul 2019 19:19:00 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55088 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725818AbfG2XS7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 29 Jul 2019 19:18:59 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6TNH3BO063522;
-        Mon, 29 Jul 2019 19:17:24 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2u27cxx1xv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jul 2019 19:17:24 -0400
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x6TNGwSv062662;
-        Mon, 29 Jul 2019 19:17:23 -0400
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2u27cxx1x9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jul 2019 19:17:23 -0400
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x6TNEpdI020884;
-        Mon, 29 Jul 2019 23:17:22 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02wdc.us.ibm.com with ESMTP id 2u0e85sx2r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Jul 2019 23:17:22 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6TNHLfd35127572
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Jul 2019 23:17:21 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 70E4EB2066;
-        Mon, 29 Jul 2019 23:17:21 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27D13B2067;
-        Mon, 29 Jul 2019 23:17:21 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 29 Jul 2019 23:17:21 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id D719B16C1EAE; Mon, 29 Jul 2019 16:17:24 -0700 (PDT)
-Date:   Mon, 29 Jul 2019 16:17:24 -0700
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <andrea.parri@amarulasolutions.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <maxime.ripard@bootlin.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Ajay Gupta <ajayg@nvidia.com>,
-        Don Brace <don.brace@microsemi.com>,
+        id S1731413AbfG3CoC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 29 Jul 2019 22:44:02 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:42885 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730921AbfG3CoC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 29 Jul 2019 22:44:02 -0400
+Received: by mail-pl1-f193.google.com with SMTP id ay6so28299715plb.9;
+        Mon, 29 Jul 2019 19:44:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=Lic9FsBbFIhilgJH9jdHsI1bCHTQauGCm3mQSU4XvTM=;
+        b=VmG+Y5P5Dh2me3MuRE5xoeE8+31ZRDRtvUDuryelSgr1QOdkF5UR4sfAhfawGrnF4o
+         5z+N42GmX4JOKqZ419NY+2NeE03748lWU8fiklu8RZ45CTP6kfm07+wnuBPZD0l/m5eZ
+         sj/oDPdL0HQ6u9F5Hg+63dtbGim4BW6TYSL7dMhLzzjxpFh+aeB4uJjvYW9ZLnsBn1Cy
+         S4n5cNVSOCaep4vWkFG9oDjODxzzuZwA+Rwztr0UpO+gASp2OxeVjMX2U1or+lSZLknx
+         AtwaNIAqMlMZm2/n9t8nvsT0txtyJvMaBHXwN6XKLSfsykgh1nxG6imehh5Pjy7OYhtV
+         6rtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=Lic9FsBbFIhilgJH9jdHsI1bCHTQauGCm3mQSU4XvTM=;
+        b=MGCGuaf42flvV47oOQOprayfWaepHmMAz5AdtuIVy5/R/CBOl8p04A/aDV2M9c/3sN
+         sdgUyzNqIrkkUvVBM/obK/CEbvnVVg7VDH52JjoSZmCI7bSUGDn0ZARt/DpcCUP8iGIX
+         HTu+93xzhZ1/aYP11LKtHSEXXYz1ksYvgPVlNP6nj71/BqJ9RftLMOAYMRfJygSqyC3K
+         SRQV3LhGXsN/3474I0n1kBm0itbnj0XVWy34fKENhkh64dqjmdVrEBMn2nIB6n0d9HiV
+         ICdNS0ktwpiIt8CIhtcmBpHYKHAbC0p/7pdAwTgbQuEa+uUVO1FrcjcoRpBFDP4Hn6uP
+         ZKGQ==
+X-Gm-Message-State: APjAAAVCzmiabYYOl2MGCIYGXcTNA9KZwZhV4zzwd+Y7ZjjfLl2KqsZI
+        6tXTR12NMRq5tINPLqrNIz4=
+X-Google-Smtp-Source: APXvYqzNN+4+CjaPSeMWQ2/PLSQRyBZtcEjOJ6XJ3AsKOmbbAHM9cei4O5VqaExHC48K6xXqNKYu5w==
+X-Received: by 2002:a17:902:1107:: with SMTP id d7mr11773332pla.184.1564454641476;
+        Mon, 29 Jul 2019 19:44:01 -0700 (PDT)
+Received: from localhost.localdomain (220-128-162-163.HINET-IP.hinet.net. [220.128.162.163])
+        by smtp.googlemail.com with ESMTPSA id v185sm70944442pfb.14.2019.07.29.19.43.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Jul 2019 19:44:01 -0700 (PDT)
+From:   Pei-Hsuan Hung <afcidk@gmail.com>
+Cc:     Pei-Hsuan Hung <afcidk@gmail.com>, trivial@kernel.org,
+        Russell Currey <ruscur@russell.cc>,
+        Sam Bobroff <sbobroff@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Jeremy Kerr <jk@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Brian Starkey <brian.starkey@arm.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        rcu@vger.kernel.org, linux-doc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-i2c@vger.kernel.org, esc.storagedev@microsemi.com,
-        linux-scsi@vger.kernel.org, Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: [PATCH 1/7] docs: fix broken doc references due to renames
-Message-ID: <20190729231724.GH14271@linux.ibm.com>
-Reply-To: paulmck@linux.ibm.com
-References: <cover.1564140865.git.mchehab+samsung@kernel.org>
- <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <430ed96cb234805d1deb216e8c8559da22cc6bac.1564140865.git.mchehab+samsung@kernel.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-29_11:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907290255
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v2] Fix typo reigster to register
+Date:   Tue, 30 Jul 2019 10:42:32 +0800
+Message-Id: <20190730024235.26273-1-afcidk@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <liviu.dudau@arm.com>
+References: <liviu.dudau@arm.com>
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 08:47:21AM -0300, Mauro Carvalho Chehab wrote:
-> Some files got renamed but probably due to some merge conflicts,
-> a few references still point to the old locations.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-> Acked-by: Wolfram Sang <wsa@the-dreams.de> # I2C part
-> Reviewed-by: Jerry Hoemann <jerry.hoemann@hpe.com> # hpwdt.rst
+Signed-off-by: Pei-Hsuan Hung <afcidk@gmail.com>
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+Cc: trivial@kernel.org
+---
+Hi Liviu, thanks for your reply.
+This patch is generated by a script so at first I didn't notice there is
+also a typo in the word coefficient. I've fixed the typo in this
+version.
 
-Acked-by: Paul E. McKenney <paulmck@linux.ibm.com>
+ arch/powerpc/kernel/eeh.c                           | 2 +-
+ arch/powerpc/platforms/cell/spufs/switch.c          | 4 ++--
+ drivers/extcon/extcon-rt8973a.c                     | 2 +-
+ drivers/gpu/drm/arm/malidp_regs.h                   | 2 +-
+ drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h | 2 +-
+ drivers/scsi/lpfc/lpfc_hbadisc.c                    | 2 +-
+ fs/userfaultfd.c                                    | 2 +-
+ 7 files changed, 8 insertions(+), 8 deletions(-)
 
-> ---
->  Documentation/RCU/rculist_nulls.txt                   |  2 +-
->  Documentation/devicetree/bindings/arm/idle-states.txt |  2 +-
->  Documentation/locking/spinlocks.rst                   |  4 ++--
->  Documentation/memory-barriers.txt                     |  2 +-
->  Documentation/translations/ko_KR/memory-barriers.txt  |  2 +-
->  Documentation/watchdog/hpwdt.rst                      |  2 +-
->  MAINTAINERS                                           | 10 +++++-----
->  drivers/gpu/drm/drm_modes.c                           |  2 +-
->  drivers/i2c/busses/i2c-nvidia-gpu.c                   |  2 +-
->  drivers/scsi/hpsa.c                                   |  4 ++--
->  10 files changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Documentation/RCU/rculist_nulls.txt b/Documentation/RCU/rculist_nulls.txt
-> index 8151f0195f76..23f115dc87cf 100644
-> --- a/Documentation/RCU/rculist_nulls.txt
-> +++ b/Documentation/RCU/rculist_nulls.txt
-> @@ -1,7 +1,7 @@
->  Using hlist_nulls to protect read-mostly linked lists and
->  objects using SLAB_TYPESAFE_BY_RCU allocations.
->  
-> -Please read the basics in Documentation/RCU/listRCU.txt
-> +Please read the basics in Documentation/RCU/listRCU.rst
->  
->  Using special makers (called 'nulls') is a convenient way
->  to solve following problem :
-> diff --git a/Documentation/devicetree/bindings/arm/idle-states.txt b/Documentation/devicetree/bindings/arm/idle-states.txt
-> index 326f29b270ad..2d325bed37e5 100644
-> --- a/Documentation/devicetree/bindings/arm/idle-states.txt
-> +++ b/Documentation/devicetree/bindings/arm/idle-states.txt
-> @@ -703,4 +703,4 @@ cpus {
->      https://www.devicetree.org/specifications/
->  
->  [6] ARM Linux Kernel documentation - Booting AArch64 Linux
-> -    Documentation/arm64/booting.txt
-> +    Documentation/arm64/booting.rst
-> diff --git a/Documentation/locking/spinlocks.rst b/Documentation/locking/spinlocks.rst
-> index 098107fb7d86..e93ec6645238 100644
-> --- a/Documentation/locking/spinlocks.rst
-> +++ b/Documentation/locking/spinlocks.rst
-> @@ -82,7 +82,7 @@ itself.  The read lock allows many concurrent readers.  Anything that
->  **changes** the list will have to get the write lock.
->  
->     NOTE! RCU is better for list traversal, but requires careful
-> -   attention to design detail (see Documentation/RCU/listRCU.txt).
-> +   attention to design detail (see Documentation/RCU/listRCU.rst).
->  
->  Also, you cannot "upgrade" a read-lock to a write-lock, so if you at _any_
->  time need to do any changes (even if you don't do it every time), you have
-> @@ -90,7 +90,7 @@ to get the write-lock at the very beginning.
->  
->     NOTE! We are working hard to remove reader-writer spinlocks in most
->     cases, so please don't add a new one without consensus.  (Instead, see
-> -   Documentation/RCU/rcu.txt for complete information.)
-> +   Documentation/RCU/rcu.rst for complete information.)
->  
->  ----
->  
-> diff --git a/Documentation/memory-barriers.txt b/Documentation/memory-barriers.txt
-> index 045bb8148fe9..1adbb8a371c7 100644
-> --- a/Documentation/memory-barriers.txt
-> +++ b/Documentation/memory-barriers.txt
-> @@ -548,7 +548,7 @@ There are certain things that the Linux kernel memory barriers do not guarantee:
->  
->  	[*] For information on bus mastering DMA and coherency please read:
->  
-> -	    Documentation/PCI/pci.rst
-> +	    Documentation/driver-api/pci/pci.rst
->  	    Documentation/DMA-API-HOWTO.txt
->  	    Documentation/DMA-API.txt
->  
-> diff --git a/Documentation/translations/ko_KR/memory-barriers.txt b/Documentation/translations/ko_KR/memory-barriers.txt
-> index a33c2a536542..2774624ee843 100644
-> --- a/Documentation/translations/ko_KR/memory-barriers.txt
-> +++ b/Documentation/translations/ko_KR/memory-barriers.txt
-> @@ -569,7 +569,7 @@ ACQUIRE 는 해당 오퍼레이션의 로드 부분에만 적용되고 RELEASE 
->  
->  	[*] 버스 마스터링 DMA 와 일관성에 대해서는 다음을 참고하시기 바랍니다:
->  
-> -	    Documentation/PCI/pci.rst
-> +	    Documentation/driver-api/pci/pci.rst
->  	    Documentation/DMA-API-HOWTO.txt
->  	    Documentation/DMA-API.txt
->  
-> diff --git a/Documentation/watchdog/hpwdt.rst b/Documentation/watchdog/hpwdt.rst
-> index c165d92cfd12..c824cd7f6e32 100644
-> --- a/Documentation/watchdog/hpwdt.rst
-> +++ b/Documentation/watchdog/hpwdt.rst
-> @@ -63,7 +63,7 @@ Last reviewed: 08/20/2018
->   and loop forever.  This is generally not what a watchdog user wants.
->  
->   For those wishing to learn more please see:
-> -	Documentation/kdump/kdump.rst
-> +	Documentation/admin-guide/kdump/kdump.rst
->  	Documentation/admin-guide/kernel-parameters.txt (panic=)
->  	Your Linux Distribution specific documentation.
->  
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 4e2a525e22c0..51bdbd230174 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -899,7 +899,7 @@ L:	linux-iio@vger.kernel.org
->  W:	http://ez.analog.com/community/linux-device-drivers
->  S:	Supported
->  F:	drivers/iio/adc/ad7124.c
-> -F:	Documentation/devicetree/bindings/iio/adc/adi,ad7124.txt
-> +F:	Documentation/devicetree/bindings/iio/adc/adi,ad7124.yaml
->  
->  ANALOG DEVICES INC AD7606 DRIVER
->  M:	Stefan Popa <stefan.popa@analog.com>
-> @@ -4190,7 +4190,7 @@ M:	Jens Axboe <axboe@kernel.dk>
->  L:	cgroups@vger.kernel.org
->  L:	linux-block@vger.kernel.org
->  T:	git git://git.kernel.dk/linux-block
-> -F:	Documentation/cgroup-v1/blkio-controller.rst
-> +F:	Documentation/admin-guide/cgroup-v1/blkio-controller.rst
->  F:	block/blk-cgroup.c
->  F:	include/linux/blk-cgroup.h
->  F:	block/blk-throttle.c
-> @@ -6317,7 +6317,7 @@ FLEXTIMER FTM-QUADDEC DRIVER
->  M:	Patrick Havelange <patrick.havelange@essensium.com>
->  L:	linux-iio@vger.kernel.org
->  S:	Maintained
-> -F:	Documentation/ABI/testing/sysfs-bus-counter-ftm-quadddec
-> +F:	Documentation/ABI/testing/sysfs-bus-counter-ftm-quaddec
->  F:	Documentation/devicetree/bindings/counter/ftm-quaddec.txt
->  F:	drivers/counter/ftm-quaddec.c
->  
-> @@ -6856,7 +6856,7 @@ R:	Sagi Shahar <sagis@google.com>
->  R:	Jon Olson <jonolson@google.com>
->  L:	netdev@vger.kernel.org
->  S:	Supported
-> -F:	Documentation/networking/device_drivers/google/gve.txt
-> +F:	Documentation/networking/device_drivers/google/gve.rst
->  F:	drivers/net/ethernet/google
->  
->  GPD POCKET FAN DRIVER
-> @@ -12137,7 +12137,7 @@ M:	Thomas Hellstrom <thellstrom@vmware.com>
->  M:	"VMware, Inc." <pv-drivers@vmware.com>
->  L:	virtualization@lists.linux-foundation.org
->  S:	Supported
-> -F:	Documentation/virt/paravirt_ops.txt
-> +F:	Documentation/virt/paravirt_ops.rst
->  F:	arch/*/kernel/paravirt*
->  F:	arch/*/include/asm/paravirt*.h
->  F:	include/linux/hypervisor.h
-> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
-> index 74a5739df506..80fcd5dc1558 100644
-> --- a/drivers/gpu/drm/drm_modes.c
-> +++ b/drivers/gpu/drm/drm_modes.c
-> @@ -1686,7 +1686,7 @@ static int drm_mode_parse_cmdline_options(char *str, size_t len,
->   *
->   * Additionals options can be provided following the mode, using a comma to
->   * separate each option. Valid options can be found in
-> - * Documentation/fb/modedb.txt.
-> + * Documentation/fb/modedb.rst.
->   *
->   * The intermediate drm_cmdline_mode structure is required to store additional
->   * options from the command line modline like the force-enable/disable flag.
-> diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> index cfc76b5de726..5a1235fd86bb 100644
-> --- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-> +++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-> @@ -364,7 +364,7 @@ static void gpu_i2c_remove(struct pci_dev *pdev)
->  /*
->   * We need gpu_i2c_suspend() even if it is stub, for runtime pm to work
->   * correctly. Without it, lspci shows runtime pm status as "D0" for the card.
-> - * Documentation/power/pci.txt also insists for driver to provide this.
-> + * Documentation/power/pci.rst also insists for driver to provide this.
->   */
->  static __maybe_unused int gpu_i2c_suspend(struct device *dev)
->  {
-> diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-> index 43a6b5350775..eaf6177ac9ee 100644
-> --- a/drivers/scsi/hpsa.c
-> +++ b/drivers/scsi/hpsa.c
-> @@ -7798,7 +7798,7 @@ static void hpsa_free_pci_init(struct ctlr_info *h)
->  	hpsa_disable_interrupt_mode(h);		/* pci_init 2 */
->  	/*
->  	 * call pci_disable_device before pci_release_regions per
-> -	 * Documentation/PCI/pci.rst
-> +	 * Documentation/driver-api/pci/pci.rst
->  	 */
->  	pci_disable_device(h->pdev);		/* pci_init 1 */
->  	pci_release_regions(h->pdev);		/* pci_init 2 */
-> @@ -7881,7 +7881,7 @@ static int hpsa_pci_init(struct ctlr_info *h)
->  clean1:
->  	/*
->  	 * call pci_disable_device before pci_release_regions per
-> -	 * Documentation/PCI/pci.rst
-> +	 * Documentation/driver-api/pci/pci.rst
->  	 */
->  	pci_disable_device(h->pdev);
->  	pci_release_regions(h->pdev);
-> -- 
-> 2.21.0
-> 
+diff --git a/arch/powerpc/kernel/eeh.c b/arch/powerpc/kernel/eeh.c
+index c0e4b73191f3..d75c9c24ec4d 100644
+--- a/arch/powerpc/kernel/eeh.c
++++ b/arch/powerpc/kernel/eeh.c
+@@ -1030,7 +1030,7 @@ int __init eeh_ops_register(struct eeh_ops *ops)
+ }
+ 
+ /**
+- * eeh_ops_unregister - Unreigster platform dependent EEH operations
++ * eeh_ops_unregister - Unregister platform dependent EEH operations
+  * @name: name of EEH platform operations
+  *
+  * Unregister the platform dependent EEH operation callback
+diff --git a/arch/powerpc/platforms/cell/spufs/switch.c b/arch/powerpc/platforms/cell/spufs/switch.c
+index 5c3f5d088c3b..9548a086937b 100644
+--- a/arch/powerpc/platforms/cell/spufs/switch.c
++++ b/arch/powerpc/platforms/cell/spufs/switch.c
+@@ -574,7 +574,7 @@ static inline void save_mfc_rag(struct spu_state *csa, struct spu *spu)
+ {
+ 	/* Save, Step 38:
+ 	 *     Save RA_GROUP_ID register and the
+-	 *     RA_ENABLE reigster in the CSA.
++	 *     RA_ENABLE register in the CSA.
+ 	 */
+ 	csa->priv1.resource_allocation_groupID_RW =
+ 		spu_resource_allocation_groupID_get(spu);
+@@ -1227,7 +1227,7 @@ static inline void restore_mfc_rag(struct spu_state *csa, struct spu *spu)
+ {
+ 	/* Restore, Step 29:
+ 	 *     Restore RA_GROUP_ID register and the
+-	 *     RA_ENABLE reigster from the CSA.
++	 *     RA_ENABLE register from the CSA.
+ 	 */
+ 	spu_resource_allocation_groupID_set(spu,
+ 			csa->priv1.resource_allocation_groupID_RW);
+diff --git a/drivers/extcon/extcon-rt8973a.c b/drivers/extcon/extcon-rt8973a.c
+index 40c07f4d656e..e75c03792398 100644
+--- a/drivers/extcon/extcon-rt8973a.c
++++ b/drivers/extcon/extcon-rt8973a.c
+@@ -270,7 +270,7 @@ static int rt8973a_muic_get_cable_type(struct rt8973a_muic_info *info)
+ 	}
+ 	cable_type = adc & RT8973A_REG_ADC_MASK;
+ 
+-	/* Read Device 1 reigster to identify correct cable type */
++	/* Read Device 1 register to identify correct cable type */
+ 	ret = regmap_read(info->regmap, RT8973A_REG_DEV1, &dev1);
+ 	if (ret) {
+ 		dev_err(info->dev, "failed to read DEV1 register\n");
+diff --git a/drivers/gpu/drm/arm/malidp_regs.h b/drivers/gpu/drm/arm/malidp_regs.h
+index 993031542fa1..9b4f95d8ccec 100644
+--- a/drivers/gpu/drm/arm/malidp_regs.h
++++ b/drivers/gpu/drm/arm/malidp_regs.h
+@@ -145,7 +145,7 @@
+ #define     MALIDP_SE_COEFFTAB_DATA_MASK	0x3fff
+ #define     MALIDP_SE_SET_COEFFTAB_DATA(x) \
+ 		((x) & MALIDP_SE_COEFFTAB_DATA_MASK)
+-/* Enhance coeffents reigster offset */
++/* Enhance coefficients register offset */
+ #define MALIDP_SE_IMAGE_ENH			0x3C
+ /* ENH_LIMITS offset 0x0 */
+ #define     MALIDP_SE_ENH_LOW_LEVEL		24
+diff --git a/drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h b/drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h
+index 99c6f7eefd85..d03c8f12a15c 100644
+--- a/drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h
++++ b/drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.h
+@@ -58,7 +58,7 @@ struct fw_priv {
+ 	/* 0x81: PCI-AP, 01:PCIe, 02: 92S-U,
+ 	 * 0x82: USB-AP, 0x12: 72S-U, 03:SDIO */
+ 	u8 hci_sel;
+-	/* the same value as reigster value  */
++	/* the same value as register value  */
+ 	u8 chip_version;
+ 	/* customer  ID low byte */
+ 	u8 customer_id_0;
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 28ecaa7fc715..42b125602d72 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -6551,7 +6551,7 @@ lpfc_sli4_unregister_fcf(struct lpfc_hba *phba)
+  * lpfc_unregister_fcf_rescan - Unregister currently registered fcf and rescan
+  * @phba: Pointer to hba context object.
+  *
+- * This function unregisters the currently reigstered FCF. This function
++ * This function unregisters the currently registered FCF. This function
+  * also tries to find another FCF for discovery by rescan the HBA FCF table.
+  */
+ void
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index ccbdbd62f0d8..612dc1240f90 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -267,7 +267,7 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
+ #endif /* CONFIG_HUGETLB_PAGE */
+ 
+ /*
+- * Verify the pagetables are still not ok after having reigstered into
++ * Verify the pagetables are still not ok after having registered into
+  * the fault_pending_wqh to avoid userland having to UFFDIO_WAKE any
+  * userfault that has already been resolved, if userfaultfd_read and
+  * UFFDIO_COPY|ZEROPAGE are being run simultaneously on two different
+-- 
+2.17.1
+
