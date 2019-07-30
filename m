@@ -2,71 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 283117AD4A
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 18:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D279A7AD57
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 18:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729705AbfG3QJC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 12:09:02 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:43194 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727698AbfG3QJC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 12:09:02 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UG3hdu000753;
-        Tue, 30 Jul 2019 16:08:41 GMT
+        id S1730708AbfG3QOm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 12:14:42 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:38734 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727988AbfG3QOl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 12:14:41 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UGDm0R012637;
+        Tue, 30 Jul 2019 16:13:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2018-07-02;
- bh=oLw5J2eruM1dv+opvKWd2QA5hlfKsVrUXpjMXfm7MdU=;
- b=KHlH7ioNf4bHxA7+xhxahq5TF4s7gAhC2tACNkDMFeINlOamRF1LFtl281kI7vXkX72d
- D468cfTGEk5deOeoCiGKKXbRl/63vz963O9L6tdxc90Ua5kXhOkO9wmGIG1OXp8fQHsa
- AYqLAailqmXyYsCaYUMQ31OSaC0HFfbricxE6PZjWYgz9EjQ13hibpmLOjlItutju9qp
- g80AaX2zglsaLxIbadb0AR1fbiZQpMlhQMPWztTSZbE82BpyCvQUuvefqHO5xx0JR9XY
- +q/TVr/1MRBdt+MVfyZpOZrHoLD3XND9FcL/ea8/Ptk+9qfC4eOAmiDQGuA3RfgT+oZB lg== 
+ bh=mZvdEtHT1IHCixeTgGoyQtz4Ve18vviw6EtEdtv9tNI=;
+ b=G5BysJ7aYfc6U5Pha375DxwLWdJBhki0MY8Vi1jqGNZn9e8laI6FcSAKVpElSNP1zcs2
+ Qvxgp+o/fWRjnpwojybHq4TkhElYbw6uWvjqi6S2OUIHZoa2TpeTxO9CdjI/yYYZwCiS
+ x8pSzfWrbTTJJluSHxEhN8Gv2ynpeGTfwYmSwb1a8idsHez0HSO9iAWrqaTLm3CTsxSj
+ lY3p/VKEPpX2Ju5IYC5sGJrvNbXuFVtYqnGq0So+YdER4qyC7M4Bd6EO98S1vfuPxfFO
+ op6jvgKyyvQswfl2i9ToWzXT8gsL2XLNeshQMmhajX/uGZY3csloTkHd5N6Xb4pVNnjA Lw== 
 Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2u0e1tqqw9-1
+        by userp2120.oracle.com with ESMTP id 2u0f8qyh4n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 16:08:41 +0000
+        Tue, 30 Jul 2019 16:13:48 +0000
 Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UG7aLU097161;
-        Tue, 30 Jul 2019 16:08:40 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 2u0bqu8u58-1
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UGDTjJ110753;
+        Tue, 30 Jul 2019 16:13:46 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2u0bqu8xj0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 16:08:40 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6UG8cQL003029;
-        Tue, 30 Jul 2019 16:08:38 GMT
+        Tue, 30 Jul 2019 16:13:46 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6UGDhsu016424;
+        Tue, 30 Jul 2019 16:13:43 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 30 Jul 2019 09:08:37 -0700
+        with ESMTP ; Tue, 30 Jul 2019 09:13:42 -0700
 To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     <qla2xxx-upstream@qlogic.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>
-Subject: Re: [PATCH v2 -next] scsi: qla2xxx: Remove unnecessary null check
+Cc:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jthumshirn@suse.de>, <dan.carpenter@oracle.com>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH -next] scsi: aic94xx: Remove unnecessary null check
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <20190711140908.26896-1-yuehaibing@huawei.com>
-        <20190711141317.52192-1-yuehaibing@huawei.com>
-Date:   Tue, 30 Jul 2019 12:08:35 -0400
-In-Reply-To: <20190711141317.52192-1-yuehaibing@huawei.com>
-        (yuehaibing@huawei.com's message of "Thu, 11 Jul 2019 22:13:17 +0800")
-Message-ID: <yq1d0hro67w.fsf@oracle.com>
+References: <20190711141539.13892-1-yuehaibing@huawei.com>
+Date:   Tue, 30 Jul 2019 12:13:40 -0400
+In-Reply-To: <20190711141539.13892-1-yuehaibing@huawei.com>
+        (yuehaibing@huawei.com's message of "Thu, 11 Jul 2019 22:15:39 +0800")
+Message-ID: <yq18ssfo5zf.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=963
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=894
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1907300167
+ engine=8.0.1-1906280000 definitions=main-1907300168
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
  suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=961 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1907300166
+ definitions=main-1907300168
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -75,8 +74,8 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 YueHaibing,
 
-> A null check before dma_pool_destroy is redundant,
-> so remove it. This is detected by coccinelle.
+> kmem_cache_destroy() can handle NULL pointer correctly, so there is
+> no need to check NULL pointer before calling kmem_cache_destroy().
 
 Applied to 5.4/scsi-queue. Thanks!
 
