@@ -2,99 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16BC27AB83
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 16:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283117AD4A
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 18:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730686AbfG3O4o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 10:56:44 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12382 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727129AbfG3O4o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 30 Jul 2019 10:56:44 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6UErg6t144567
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 10:56:42 -0400
-Received: from e13.ny.us.ibm.com (e13.ny.us.ibm.com [129.33.205.203])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2u2nuhxs8w-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 10:56:42 -0400
-Received: from localhost
-        by e13.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-scsi@vger.kernel.org> from <jejb@linux.ibm.com>;
-        Tue, 30 Jul 2019 15:56:41 +0100
-Received: from b01cxnp22034.gho.pok.ibm.com (9.57.198.24)
-        by e13.ny.us.ibm.com (146.89.104.200) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 30 Jul 2019 15:56:39 +0100
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6UEuci351446036
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 14:56:38 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 906EF2805E;
-        Tue, 30 Jul 2019 14:56:38 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CCA2E28059;
-        Tue, 30 Jul 2019 14:56:37 +0000 (GMT)
-Received: from jarvis.ext.hansenpartnership.com (unknown [9.85.131.103])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Jul 2019 14:56:37 +0000 (GMT)
-Subject: Re: [PATCH] scsi: 3w-sas: Fix unterminated strncpy
-From:   James Bottomley <jejb@linux.ibm.com>
-To:     Chuhong Yuan <hslester96@gmail.com>
-Cc:     Adam Radford <aradford@gmail.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 30 Jul 2019 07:56:37 -0700
-In-Reply-To: <20190730084047.26482-1-hslester96@gmail.com>
-References: <20190730084047.26482-1-hslester96@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19073014-0064-0000-0000-000004047A97
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011523; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000287; SDB=6.01239635; UDB=6.00653626; IPR=6.01021048;
- MB=3.00027958; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-30 14:56:41
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19073014-0065-0000-0000-00003E79B900
-Message-Id: <1564498597.4300.10.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-30_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=734 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907300154
+        id S1729705AbfG3QJC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 12:09:02 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:43194 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727698AbfG3QJC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 12:09:02 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UG3hdu000753;
+        Tue, 30 Jul 2019 16:08:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=oLw5J2eruM1dv+opvKWd2QA5hlfKsVrUXpjMXfm7MdU=;
+ b=KHlH7ioNf4bHxA7+xhxahq5TF4s7gAhC2tACNkDMFeINlOamRF1LFtl281kI7vXkX72d
+ D468cfTGEk5deOeoCiGKKXbRl/63vz963O9L6tdxc90Ua5kXhOkO9wmGIG1OXp8fQHsa
+ AYqLAailqmXyYsCaYUMQ31OSaC0HFfbricxE6PZjWYgz9EjQ13hibpmLOjlItutju9qp
+ g80AaX2zglsaLxIbadb0AR1fbiZQpMlhQMPWztTSZbE82BpyCvQUuvefqHO5xx0JR9XY
+ +q/TVr/1MRBdt+MVfyZpOZrHoLD3XND9FcL/ea8/Ptk+9qfC4eOAmiDQGuA3RfgT+oZB lg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2u0e1tqqw9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Jul 2019 16:08:41 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UG7aLU097161;
+        Tue, 30 Jul 2019 16:08:40 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 2u0bqu8u58-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Jul 2019 16:08:40 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6UG8cQL003029;
+        Tue, 30 Jul 2019 16:08:38 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 30 Jul 2019 09:08:37 -0700
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     <qla2xxx-upstream@qlogic.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH v2 -next] scsi: qla2xxx: Remove unnecessary null check
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190711140908.26896-1-yuehaibing@huawei.com>
+        <20190711141317.52192-1-yuehaibing@huawei.com>
+Date:   Tue, 30 Jul 2019 12:08:35 -0400
+In-Reply-To: <20190711141317.52192-1-yuehaibing@huawei.com>
+        (yuehaibing@huawei.com's message of "Thu, 11 Jul 2019 22:13:17 +0800")
+Message-ID: <yq1d0hro67w.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=963
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1907300167
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1907300166
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2019-07-30 at 16:40 +0800, Chuhong Yuan wrote:
-> strncpy(dest, src, strlen(src)) leads to unterminated
-> dest, which is dangerous.
 
-I don't buy that.  The structure is only used for the
-TW_IOCTL_GET_COMPATIBILITY_INFO ioctl and all the fields for that are
-fixed width and are copied over as such.
+YueHaibing,
 
-> Here driver_version's len is 32 and TW_DRIVER_VERSION
-> is shorter than 32.
-> Therefore strcpy is OK.
+> A null check before dma_pool_destroy is redundant,
+> so remove it. This is detected by coccinelle.
 
-The best practice for copying a string to a fixed width destination
-that does get printed within the kernel would be what the 3w-9xxx.c
-does
+Applied to 5.4/scsi-queue. Thanks!
 
-	strlcpy(tw_dev->tw_compat_info.driver_version, TW_DRIVER_VERSION,
-		sizeof(tw_dev->tw_compat_info.driver_version));
-
-But as I said, it doesn't really matter for a fixed width field that's
-never printed within the kernel.
-
-James
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
