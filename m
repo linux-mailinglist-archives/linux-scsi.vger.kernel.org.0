@@ -2,96 +2,135 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B77BC7B3EE
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 22:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79AF7B41B
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 22:15:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727541AbfG3UDB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 16:03:01 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:42254 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726174AbfG3UDB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 16:03:01 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UJwTu3003829;
-        Tue, 30 Jul 2019 20:02:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=PRuifwtBdlMAtrPrUPTDS6ONh/DQGdobk5Ch65KcSmo=;
- b=S0AuQAcR4+/LS+GqDZF/Kz+HLGXGn1dGVHhYKZ+ZDb15xSE7vhFvLLu16rcbRcrOwyOm
- ZkH5EKJDaEsKSK7lPSByt8mfiUZF2szLKpyjGTp/B36DzVjnUa2pSuFCT4VAyW1fsz70
- kRh/zRj8ySK8woBrP9ALZAaNPXNaxCptnmNzAITAU3iZhWGvHQRhdqiePnNm/G/VZO22
- f1ZwBdwPzZz79rF1r10CSj0oHMY6zFC1hawqSiL02vkJAGd/Ie6aRVr7HeINZ2WSKfIa
- rVEor7rZm7OMnvo4wE/BcVc1qQ1KQr1iFRJ9f9Dq3HQoV7ZAyiHBSPTb3SaavlK95AJ8 gQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2u0e1trwjd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 20:02:54 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UK2qnY165614;
-        Tue, 30 Jul 2019 20:02:53 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2u0xv8e5xb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 20:02:52 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6UK2mD0030873;
-        Tue, 30 Jul 2019 20:02:48 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 30 Jul 2019 13:02:47 -0700
-To:     Minwoo Im <minwoo.im.dev@gmail.com>
-Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Euihyeok Kwon <eh81.kwon@samsung.com>,
-        Sarah Cho <sohyeon.jo@samsung.com>,
-        Sanggwan Lee <sanggwan.lee@samsung.com>,
-        Gyeongmin Nam <gm.nam@samsung.com>,
-        Sungjun Park <sj1228.park@samsung.com>,
-        Minwoo Im <minwoo.im@samsung.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com
-Subject: Re: [RESEND PATCH] mpt3sas: support target smid for [abort|query] task
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190727185337.19299-1-minwoo.im.dev@gmail.com>
-Date:   Tue, 30 Jul 2019 16:02:44 -0400
-In-Reply-To: <20190727185337.19299-1-minwoo.im.dev@gmail.com> (Minwoo Im's
-        message of "Sun, 28 Jul 2019 03:53:37 +0900")
-Message-ID: <yq1sgqnl28r.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1727991AbfG3UPG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 16:15:06 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36011 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727941AbfG3UPF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 16:15:05 -0400
+Received: by mail-ot1-f66.google.com with SMTP id r6so67679179oti.3
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 13:15:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5RzApq6XFoztBnIqNk8vSnTrtbUfODyGJJfunMohfoM=;
+        b=Zwx0RQpMg/Mqj/9z5S89A3ZEJVMpYC9h+xxOXAaZcuU5PCAM8m9Gqaz//RnKDBGDqW
+         9liyDLB1BwWzU+ZNcxIkUlAhEM4dwaxEWMetA5zngGXxvLUm9KzmX8yqMCHjIc+8qA1I
+         4Kz3jT1Z/FAcCfiuMTNuiLT9z2kiwc9S0x8YZz6OVlR8h69bqZIY4y5U2CziwyfAHt6S
+         8CcPZTmDK53Mwk0qwS3iX6X/MjsfAEfTAQNYo9qJOCNeLP9BFCn9fMgZ4bp/B5yi3zOB
+         uh6pK4X9QLjcA5W2PzdnflMG8qYA3C40MW87vpeyNAEv23qLtzsWi1Ofnp3dkIf+XH59
+         Buzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5RzApq6XFoztBnIqNk8vSnTrtbUfODyGJJfunMohfoM=;
+        b=Ib/VMQICjpdIVw7aeRbeIYtYiWxX98/2uCTXKJygSflKuAi+Em3fmK64GauZYRqI9O
+         I6vyUr5omEXLGLCz32vjNdPyS3rCI1gjqw93iqvNuZIpl0M4K+unIOMqROzIgwRKLQVc
+         3jhMvaP8M7Dpdd+Hs9OZZoLqPmql9zUw8HYhgSlZ33CMT9LVQ49Jh7t/ZBbFIUvYtnVT
+         0cig/TEnrBBIHYR4ZwdqaBTffH6Np0w5qYthbviGYICv+nx53vhY6AOypVpM3PWFo70k
+         LvYD5QEXie+vVz3DiRSz8Kfa1wVGPM4M1UZDGFsz+UgPS5L9i/4QzenImeGCNs5kkgzl
+         0vSQ==
+X-Gm-Message-State: APjAAAWSIOEXZaGaJ37Z7pVS4NAHENXoOTJOKIbVuWKfpL1rb6651j4K
+        STaAQWbS589SnER7QSZzub1y0mSj/pt0m/ZOvRjLZg==
+X-Google-Smtp-Source: APXvYqw9ObVuL9+XuGR4o0J2QBLrDkVcN3aYitNJvsGPbv5ZPcYvxRI6eCPCNx+pUD4yOvd0Fq+ICTQ9s+BKXhNpUpI=
+X-Received: by 2002:a9d:7248:: with SMTP id a8mr23671169otk.363.1564517704838;
+ Tue, 30 Jul 2019 13:15:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1907300204
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1907300203
+References: <20190730192552.4014288-1-arnd@arndb.de> <20190730195819.901457-1-arnd@arndb.de>
+In-Reply-To: <20190730195819.901457-1-arnd@arndb.de>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 30 Jul 2019 13:14:52 -0700
+Message-ID: <CAPcyv4i_nHzV155RcgnAQ189aq2Lfd2g8pA1D5NbZqo9E_u+Dw@mail.gmail.com>
+Subject: Re: [PATCH v5 13/29] compat_ioctl: move more drivers to compat_ptr_ioctl
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-iio@vger.kernel.org, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        linux-pci@vger.kernel.org, linux-nvme@lists.infradead.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        sparclinux@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>, qat-linux@intel.com,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        linux-input@vger.kernel.org, Darren Hart <dvhart@infradead.org>,
+        "Linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        linux-remoteproc@vger.kernel.org,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        David Sterba <dsterba@suse.com>,
+        platform-driver-x86@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Wireless List <linux-wireless@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        tee-dev@lists.linaro.org,
+        linux-crypto <linux-crypto@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-btrfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Tue, Jul 30, 2019 at 12:59 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> The .ioctl and .compat_ioctl file operations have the same prototype so
+> they can both point to the same function, which works great almost all
+> the time when all the commands are compatible.
+>
+> One exception is the s390 architecture, where a compat pointer is only
+> 31 bit wide, and converting it into a 64-bit pointer requires calling
+> compat_ptr(). Most drivers here will never run in s390, but since we now
+> have a generic helper for it, it's easy enough to use it consistently.
+>
+> I double-checked all these drivers to ensure that all ioctl arguments
+> are used as pointers or are ignored, but are not interpreted as integer
+> values.
+>
+> Acked-by: Jason Gunthorpe <jgg@mellanox.com>
+> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: David Sterba <dsterba@suse.com>
+> Acked-by: Darren Hart (VMware) <dvhart@infradead.org>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/nvdimm/bus.c                        | 4 ++--
+[..]
+> diff --git a/drivers/nvdimm/bus.c b/drivers/nvdimm/bus.c
+> index 798c5c4aea9c..6ca142d833ab 100644
+> --- a/drivers/nvdimm/bus.c
+> +++ b/drivers/nvdimm/bus.c
+> @@ -1229,7 +1229,7 @@ static const struct file_operations nvdimm_bus_fops = {
+>         .owner = THIS_MODULE,
+>         .open = nd_open,
+>         .unlocked_ioctl = bus_ioctl,
+> -       .compat_ioctl = bus_ioctl,
+> +       .compat_ioctl = compat_ptr_ioctl,
+>         .llseek = noop_llseek,
+>  };
+>
+> @@ -1237,7 +1237,7 @@ static const struct file_operations nvdimm_fops = {
+>         .owner = THIS_MODULE,
+>         .open = nd_open,
+>         .unlocked_ioctl = dimm_ioctl,
+> -       .compat_ioctl = dimm_ioctl,
+> +       .compat_ioctl = compat_ptr_ioctl,
+>         .llseek = noop_llseek,
+>  };
 
-Minwoo,
-
-> We can request task management IOCTL
-> command(MPI2_FUNCTION_SCSI_TASK_MGMT) to /dev/mpt3ctl.  If the given
-> task_type is either abort task or query task, it may need a field
-> named "Initiator Port Transfer Tag to Manage" in the IU.
-
-Applied to 5.4/scsi-queue, thank you!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Acked-by: Dan Williams <dan.j.williams@intel.com>
