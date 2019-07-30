@@ -2,87 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 998F07AD7A
-	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 18:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86057AE33
+	for <lists+linux-scsi@lfdr.de>; Tue, 30 Jul 2019 18:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727127AbfG3QZD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 12:25:03 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:53902 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725889AbfG3QZD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 12:25:03 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UGNUc4021439;
-        Tue, 30 Jul 2019 16:24:54 GMT
+        id S1726510AbfG3QmY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 12:42:24 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:36440 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726305AbfG3QmY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 12:42:24 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UGd2xD032095;
+        Tue, 30 Jul 2019 16:41:42 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2018-07-02;
- bh=TGv4YSWswRKFCDZ7rg/IxdWVdb4awoeVkilaTJMnVfo=;
- b=b+LzWRPkJlqDrvsLwXU323bT519eCQVPd3kgsC+NRsjefVauxTMgC5pU0e0FGTMHucHN
- zE90yf0MefL1B4XvpRVETG47CDuo0eEcH/7lUeFGCO5EF2f0ilo5AQYaLn/rnEJkhrnZ
- 2Ay/hVR15ov6AG2LCSNoSCIXwU6ZbmIpddM093IXmvS3Y9xRGg7LMCGtCwWXvn4NpwZP
- mLNyrNn0rHoHziLvTM/1lMJiqy61DDJywNJwtt/DHEhtxA5v2+lrelhuTaEGc7b6LJvj
- 96K6Ttd7eivzUeOMOq6VD6r/Z+85u2wWCdn6/1xht3wK40Egr9YlN38nt1McgKmEXHPx mw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2u0f8qyk76-1
+ bh=oIwO59hUp/CL+1WXK/UtBzApd+3ZRaAirJ8LuIZuBu4=;
+ b=hFzHOAZfhOpgS9sFiq2Fbwr68nv3I+a6YwFvOFAtNmqmH4Ya8xOmHHYruh5xT9XYwVzE
+ pO16/VtTsSUSeusiSwMn6MO5lYZYd+nkhMqUhOWwuXJghGn6DWnxzmuzI6P3b2Cbfs6r
+ OS6w12unLyk8SiwfI/6UfovCYedLtpjPVRgDxGm6HXiFLr7Or2FiLAobZIe7A8nk0+u6
+ yiSVv9aOBHhjkZ0Kzxk0wtmY1vLYDut9ql9VUqC9I0HrpTCqMn+tk7+/usCPMWuvJ6jK
+ BA/2cNDIOzW7QZsNfCfz1NgtjaGVc/wh2QorbMq2mprzyfoFtCB4Of5NxFLlg/3eM7pQ MQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2u0e1tqwu4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 16:24:53 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UGMSJ5079719;
-        Tue, 30 Jul 2019 16:24:53 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2u0xv89tg0-1
+        Tue, 30 Jul 2019 16:41:42 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x6UGbuJ1165628;
+        Tue, 30 Jul 2019 16:41:41 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2u0bqu9ejf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jul 2019 16:24:52 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x6UGOlTC002146;
-        Tue, 30 Jul 2019 16:24:51 GMT
+        Tue, 30 Jul 2019 16:41:41 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x6UGfbh2002013;
+        Tue, 30 Jul 2019 16:41:37 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 30 Jul 2019 09:24:47 -0700
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCHv3 0/3] fcoe: cleanup fc_rport_priv usage
+        with ESMTP ; Tue, 30 Jul 2019 09:41:37 -0700
+To:     Don Brace <don.brace@microsemi.com>
+Cc:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
+        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
+        <bader.alisaleh@microchip.com>, <gerry.morong@microchip.com>,
+        <mahesh.rajashekhara@microchip.com>, <hch@infradead.org>,
+        <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
+        <POSWALD@suse.com>, <shunyong.yang@hxt-semitech.com>,
+        <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 0/2] hpsa updates
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <20190724090056.7506-1-hare@suse.de>
-Date:   Tue, 30 Jul 2019 12:24:45 -0400
-In-Reply-To: <20190724090056.7506-1-hare@suse.de> (Hannes Reinecke's message
-        of "Wed, 24 Jul 2019 11:00:53 +0200")
-Message-ID: <yq1v9vjmqwi.fsf@oracle.com>
+References: <156400599822.14150.10317539253759491318.stgit@brunhilda>
+Date:   Tue, 30 Jul 2019 12:41:34 -0400
+In-Reply-To: <156400599822.14150.10317539253759491318.stgit@brunhilda> (Don
+        Brace's message of "Wed, 24 Jul 2019 17:07:59 -0500")
+Message-ID: <yq1r267mq4h.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=958
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=801
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1907300170
+ engine=8.0.1-1906280000 definitions=main-1907300173
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9334 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=868 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1907300170
+ definitions=main-1907300173
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Hannes,
+Don,
 
-> the fcoe vn2vn code is using the 'fc_rport_priv' structure as argument
-> to its internal function, but is really expecting a struct fcoe_rport
-> to immediately follow this one. This is not only confusing but also an
-> error for new compilers.  So clean up the usage by embedding
-> fc_rport_priv into fcoe_rport, and use the fcoe_rport structure
-> wherever possible.  This patchset also contains some minor whitespace
-> cleanups for libfc.h.
+> These patches are based on Linus's tree
 
 Applied to 5.3/scsi-fixes. Thanks!
 
