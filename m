@@ -2,84 +2,126 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75DD77C74B
-	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 17:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E65A87C8CF
+	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 18:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbfGaPrw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 31 Jul 2019 11:47:52 -0400
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:38105 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727349AbfGaPrv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Jul 2019 11:47:51 -0400
-Received: by mail-qt1-f193.google.com with SMTP id n11so67033681qtl.5;
-        Wed, 31 Jul 2019 08:47:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=83OSe7y2aU72IIQHUhZp7X/NaI9ahxBDb1zvEgcPWYg=;
-        b=stvDV/xL+VOq1KnvigR23c8LqadzJBpq7gku4pd7eBzYzbbd74+SNY3tPA5WvVQuTy
-         SGzXMdHLU3ITXUfPgnhC3hCyCwOYgDfgl+izJPjZMUTEnCxMrfeS7tpb4spbzl50hAIR
-         zROeaUOOaBW58TSR7H6lLtUyOIBdu23oM7N/4bwba05eCWZd26W4QGbJ5j9gMWUeD2ZJ
-         fDIPs3UBfdppH7m4v3bEAOzgLoTVqJeDdWhKVF4DtGO4rfHMNYooFf8g/paKicylCcG1
-         B3ikbi1liLsYSnXro7cJrqYRVmUebEqfmexBfPczc4xVkQ8UgxnADFA9etLFevPz0vOS
-         kSVw==
-X-Gm-Message-State: APjAAAVNGbix6pwlmZtLTjVqNjHbcdKw8d1VJMX0GN8PMvzxOPxRhVGF
-        I0jOA8GZUn+cbDEpm7HHO2liQRYDtaBP682FQN0=
-X-Google-Smtp-Source: APXvYqyxedT2V2Y2ueteq5CdjTWcyt+qnzC20u56SIyvSN4Tvj+mYfIXi7Eg+U3QdqrIQo3qfLl+9AJWummnynXCsSA=
-X-Received: by 2002:a0c:b758:: with SMTP id q24mr88044697qve.45.1564588070611;
- Wed, 31 Jul 2019 08:47:50 -0700 (PDT)
+        id S1728650AbfGaQfd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 31 Jul 2019 12:35:33 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:35838 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726817AbfGaQfd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Jul 2019 12:35:33 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x6VGZKlT008471;
+        Wed, 31 Jul 2019 11:35:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1564590920;
+        bh=/frXQ4KOaIB5wlfnm3bIFpuw4RJxR6iAeoBpUdEjJNk=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Rilh8BWbZ/+l5TBDpm11NM07/fO1kW/j9UZbET7VD4xAYd2fm73ZTz/gGdsfy6oeO
+         yd2Ps56ie9I7ICEtrMu702nYrxUVhBBDGK5XBKxAc4tUpcIGG2ZCDC/jGNbvPoUC7Q
+         mSccOg1j90bPH/QHJiqOP83ij2QHbIzGExCTiYkA=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x6VGZKqP093095
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 31 Jul 2019 11:35:20 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 31
+ Jul 2019 11:35:19 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 31 Jul 2019 11:35:19 -0500
+Received: from [10.250.133.139] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x6VGZFVL083599;
+        Wed, 31 Jul 2019 11:35:16 -0500
+Subject: Re: [PATCH] scsi: ufs: Additional clock initialization in Cadence UFS
+To:     Anil Varughese <aniljoy@cadence.com>, <alim.akhtar@samsung.com>,
+        <avri.altman@wdc.com>, <pedrom.sousa@synopsys.com>
+CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>, <hare@suse.de>,
+        <rafalc@cadence.com>, <mparab@cadence.com>, <jank@cadence.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20190731083614.25926-1-aniljoy@cadence.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <77210067-ee65-4c12-9c7e-2b78260acdef@ti.com>
+Date:   Wed, 31 Jul 2019 22:05:15 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20190730192552.4014288-1-arnd@arndb.de> <20190730195819.901457-1-arnd@arndb.de>
- <20190730195819.901457-3-arnd@arndb.de> <20190731105039.GB3488@osiris>
-In-Reply-To: <20190731105039.GB3488@osiris>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 31 Jul 2019 17:47:33 +0200
-Message-ID: <CAK8P3a05o37-JPU4RcDGACbhXtLXLn8hWYfkmZskh1r7z8Zo0g@mail.gmail.com>
-Subject: Re: [PATCH v5 15/29] compat_ioctl: move tape handling into drivers
-To:     Heiko Carstens <heiko.carstens@de.ibm.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        =?UTF-8?Q?Kai_M=C3=A4kisara?= <Kai.Makisara@kolumbus.fi>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190731083614.25926-1-aniljoy@cadence.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 12:51 PM Heiko Carstens
-<heiko.carstens@de.ibm.com> wrote:
->
-> On Tue, Jul 30, 2019 at 09:55:31PM +0200, Arnd Bergmann wrote:
-> > MTIOCPOS and MTIOCGET are incompatible between 32-bit and 64-bit user
-> > space, and traditionally have been translated in fs/compat_ioctl.c.
-> >
-> > To get rid of that translation handler, move a corresponding
-> > implementation into each of the four drivers implementing those commands.
-> >
-> > The interesting part of that is now in a new linux/mtio.h header that
-> > wraps the existing uapi/linux/mtio.h header and provides an abstraction
-> > to let drivers handle both cases easily. Using an in_compat_syscall()
-> > check, the caller does not have to keep track of whether this was
-> > called through .unlocked_ioctl() or .compat_ioctl().
-> >
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->
-> Besides the two minor things below
->
-> Acked-by: Heiko Carstens <heiko.carstens@de.ibm.com>
+Hi,
 
-Thanks a lot for the reviewed. Both issues are fixed now, and
-I'm pushing out new git branches after adding the other Acks
-I got so far.
+On 31-Jul-19 2:06 PM, Anil Varughese wrote:
+> Configure CDNS_UFS_REG_HCLKDIV in .hce_enable_notify()
+> because if UFSHCD resets the controller ip because of
+> phy or device related errors then CDNS_UFS_REG_HCLKDIV
+> is reset to default value and .setup_clock() is not
+> called later in the sequence whereas hce_enable_notify
+> will be called everytime controller is reenabled.
+>
+So, now that CDNS_UFS_REG_HCLKDIV is configured in .hce_enable_notify(),
+is it still required to have the same code in .setup_clock() as well?
+Isn't setting up CDNS_UFS_REG_HCLKDIV in .hce_enable_notify() alone not
+sufficient?
 
-      Arnd
+Regards
+Vignesh
+
+> Signed-off-by: Anil Varughese <aniljoy@cadence.com>
+> ---
+>  drivers/scsi/ufs/cdns-pltfrm.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/scsi/ufs/cdns-pltfrm.c b/drivers/scsi/ufs/cdns-pltfrm.c
+> index 86dbb723f..15ee54d28 100644
+> --- a/drivers/scsi/ufs/cdns-pltfrm.c
+> +++ b/drivers/scsi/ufs/cdns-pltfrm.c
+> @@ -78,6 +78,22 @@ static int cdns_ufs_setup_clocks(struct ufs_hba *hba, bool on,
+>  	return cdns_ufs_set_hclkdiv(hba);
+>  }
+>  
+> +/**
+> + * Called before and after HCE enable bit is set.
+> + * @hba: host controller instance
+> + * @status: notify stage (pre, post change)
+> + *
+> + * Return zero for success and non-zero for failure
+> + */
+> +static int cdns_ufs_hce_enable_notify(struct ufs_hba *hba,
+> +				      enum ufs_notify_change_status status)
+> +{
+> +	if (status != PRE_CHANGE)
+> +		return 0;
+> +
+> +	return cdns_ufs_set_hclkdiv(hba);
+> +}
+> +
+>  /**
+>   * cdns_ufs_init - performs additional ufs initialization
+>   * @hba: host controller instance
+> @@ -115,12 +131,14 @@ static int cdns_ufs_m31_16nm_phy_initialization(struct ufs_hba *hba)
+>  static const struct ufs_hba_variant_ops cdns_ufs_pltfm_hba_vops = {
+>  	.name = "cdns-ufs-pltfm",
+>  	.setup_clocks = cdns_ufs_setup_clocks,
+> +	.hce_enable_notify = cdns_ufs_hce_enable_notify,
+>  };
+>  
+>  static const struct ufs_hba_variant_ops cdns_ufs_m31_16nm_pltfm_hba_vops = {
+>  	.name = "cdns-ufs-pltfm",
+>  	.init = cdns_ufs_init,
+>  	.setup_clocks = cdns_ufs_setup_clocks,
+> +	.hce_enable_notify = cdns_ufs_hce_enable_notify,
+>  	.phy_initialization = cdns_ufs_m31_16nm_phy_initialization,
+>  };
+>  
+> 
