@@ -2,126 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E65A87C8CF
-	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 18:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1E77C9A7
+	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 19:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728650AbfGaQfd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 31 Jul 2019 12:35:33 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:35838 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726817AbfGaQfd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Jul 2019 12:35:33 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x6VGZKlT008471;
-        Wed, 31 Jul 2019 11:35:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1564590920;
-        bh=/frXQ4KOaIB5wlfnm3bIFpuw4RJxR6iAeoBpUdEjJNk=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=Rilh8BWbZ/+l5TBDpm11NM07/fO1kW/j9UZbET7VD4xAYd2fm73ZTz/gGdsfy6oeO
-         yd2Ps56ie9I7ICEtrMu702nYrxUVhBBDGK5XBKxAc4tUpcIGG2ZCDC/jGNbvPoUC7Q
-         mSccOg1j90bPH/QHJiqOP83ij2QHbIzGExCTiYkA=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x6VGZKqP093095
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 31 Jul 2019 11:35:20 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 31
- Jul 2019 11:35:19 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 31 Jul 2019 11:35:19 -0500
-Received: from [10.250.133.139] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x6VGZFVL083599;
-        Wed, 31 Jul 2019 11:35:16 -0500
-Subject: Re: [PATCH] scsi: ufs: Additional clock initialization in Cadence UFS
-To:     Anil Varughese <aniljoy@cadence.com>, <alim.akhtar@samsung.com>,
-        <avri.altman@wdc.com>, <pedrom.sousa@synopsys.com>
-CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>, <hare@suse.de>,
-        <rafalc@cadence.com>, <mparab@cadence.com>, <jank@cadence.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20190731083614.25926-1-aniljoy@cadence.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <77210067-ee65-4c12-9c7e-2b78260acdef@ti.com>
-Date:   Wed, 31 Jul 2019 22:05:15 +0530
+        id S1727487AbfGaRBB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 31 Jul 2019 13:01:01 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44394 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbfGaRBA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Jul 2019 13:01:00 -0400
+Received: by mail-pg1-f196.google.com with SMTP id i18so32338063pgl.11
+        for <linux-scsi@vger.kernel.org>; Wed, 31 Jul 2019 10:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wvTs5xEozfiExi7xEoYt+bLRPEBzmr9OsBv38+eAAKE=;
+        b=TKJgfjsS5IYwy+P3DPQfhSAOJsZMHiwnaO8gTStjT5xv7uTjtMX4UpmjV1e1H7VaEF
+         ErRH9zxhqlqRjp7oK4F2ZCBOBRzuDrXyS6EdTjxuWqkxV6Mnog2hBptwU3c8FkkfaAeO
+         cOkngSA0JQzgNcbb9KQmx+e2yi+bHlY7tlYyQSZFGB2h1+OHpRr4j5m6rXf7tA8hzxMw
+         Tf73wAN03x37asqMfpaq8C2nX/d9dVJpPbCgO+a8scBa2Xp5Aw1G3yI9TUI4ciAroQpE
+         F/w7NMq/jGSIUx3iDc/7FqG9jVLts9l8H8NACyC38CgLIZ8wuJZDY89hoHrXMe9sGrrs
+         1sdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wvTs5xEozfiExi7xEoYt+bLRPEBzmr9OsBv38+eAAKE=;
+        b=STNgOJQAWcWNIoKqNoZoXb2mpANbQmOVBXV9BPLrf4LZhC/jkpzs1JL7NTa55gwgSr
+         ZX9j5haIhY4cr0l5o9cJdjfk33gGmn6eSAgVNGKMjvYqUyW7oeJOUCWXiEA2pRvFzjWo
+         RUAJoKdjQI+NW7Fj43nftZj6rN0n8VRw+66OpK3G5wMeLhr/7JiC5KZXGwT/cG6aG11Y
+         +qNp3UUOQsSBgi0uJhwvVsyf0c2T+3oNejBpgx0vKpGmGm2DwbbR0jTRiziYGKH3YqCu
+         vY2UZC58QHHmnTown/xSGYsUjMfx+i4WPccYQLwiLx+/me/vfio+Bh5E/SeRGg8XkiFX
+         qoSQ==
+X-Gm-Message-State: APjAAAWWxUqX3Rt7VuQes2JK5vFEgVfrsD3q8GTjAxI6rt8zlZlxBgVY
+        iUqpaVE3eE9FNS3eozp4KPKxGDUF
+X-Google-Smtp-Source: APXvYqz0np4cyiQx4CehVSfPQn+X2UKfbg3OjteHaqYfPy0pT1f5K8idIHgFIMAcelwqTWOxA7l5bQ==
+X-Received: by 2002:aa7:81d4:: with SMTP id c20mr48760865pfn.235.1564592460170;
+        Wed, 31 Jul 2019 10:01:00 -0700 (PDT)
+Received: from [10.230.29.90] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id h26sm72077724pfq.64.2019.07.31.10.00.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 31 Jul 2019 10:00:59 -0700 (PDT)
+Subject: Re: [PATCH] lpfc: Mitigate high memory pre-allocation by SCSI-MQ
+To:     Ming Lei <tom.leiming@gmail.com>
+Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+References: <20190731000759.6272-1-jsmart2021@gmail.com>
+ <CACVXFVOSWQDvaeSJ_UFxB7pS=6QvTVhL0-MdTTcd1yWNWFAomA@mail.gmail.com>
+From:   James Smart <jsmart2021@gmail.com>
+Message-ID: <5c562288-2da1-ea54-28fe-f5976f2087eb@gmail.com>
+Date:   Wed, 31 Jul 2019 10:00:55 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190731083614.25926-1-aniljoy@cadence.com>
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <CACVXFVOSWQDvaeSJ_UFxB7pS=6QvTVhL0-MdTTcd1yWNWFAomA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
-
-On 31-Jul-19 2:06 PM, Anil Varughese wrote:
-> Configure CDNS_UFS_REG_HCLKDIV in .hce_enable_notify()
-> because if UFSHCD resets the controller ip because of
-> phy or device related errors then CDNS_UFS_REG_HCLKDIV
-> is reset to default value and .setup_clock() is not
-> called later in the sequence whereas hce_enable_notify
-> will be called everytime controller is reenabled.
->
-So, now that CDNS_UFS_REG_HCLKDIV is configured in .hce_enable_notify(),
-is it still required to have the same code in .setup_clock() as well?
-Isn't setting up CDNS_UFS_REG_HCLKDIV in .hce_enable_notify() alone not
-sufficient?
-
-Regards
-Vignesh
-
-> Signed-off-by: Anil Varughese <aniljoy@cadence.com>
-> ---
->  drivers/scsi/ufs/cdns-pltfrm.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
+On 7/30/2019 7:31 PM, Ming Lei wrote:
+> Hi James,
 > 
-> diff --git a/drivers/scsi/ufs/cdns-pltfrm.c b/drivers/scsi/ufs/cdns-pltfrm.c
-> index 86dbb723f..15ee54d28 100644
-> --- a/drivers/scsi/ufs/cdns-pltfrm.c
-> +++ b/drivers/scsi/ufs/cdns-pltfrm.c
-> @@ -78,6 +78,22 @@ static int cdns_ufs_setup_clocks(struct ufs_hba *hba, bool on,
->  	return cdns_ufs_set_hclkdiv(hba);
->  }
->  
-> +/**
-> + * Called before and after HCE enable bit is set.
-> + * @hba: host controller instance
-> + * @status: notify stage (pre, post change)
-> + *
-> + * Return zero for success and non-zero for failure
-> + */
-> +static int cdns_ufs_hce_enable_notify(struct ufs_hba *hba,
-> +				      enum ufs_notify_change_status status)
-> +{
-> +	if (status != PRE_CHANGE)
-> +		return 0;
-> +
-> +	return cdns_ufs_set_hclkdiv(hba);
-> +}
-> +
->  /**
->   * cdns_ufs_init - performs additional ufs initialization
->   * @hba: host controller instance
-> @@ -115,12 +131,14 @@ static int cdns_ufs_m31_16nm_phy_initialization(struct ufs_hba *hba)
->  static const struct ufs_hba_variant_ops cdns_ufs_pltfm_hba_vops = {
->  	.name = "cdns-ufs-pltfm",
->  	.setup_clocks = cdns_ufs_setup_clocks,
-> +	.hce_enable_notify = cdns_ufs_hce_enable_notify,
->  };
->  
->  static const struct ufs_hba_variant_ops cdns_ufs_m31_16nm_pltfm_hba_vops = {
->  	.name = "cdns-ufs-pltfm",
->  	.init = cdns_ufs_init,
->  	.setup_clocks = cdns_ufs_setup_clocks,
-> +	.hce_enable_notify = cdns_ufs_hce_enable_notify,
->  	.phy_initialization = cdns_ufs_m31_16nm_phy_initialization,
->  };
->  
+> Could the default hw queue count be set as numa node number? This way
+> should work
+> fine most of times.
 > 
+> Thanks,
+> Ming Lei
+> 
+
+Well... I could. But I have 2 reservations:
+- I assume most systems will be 2 sockets thus 2 numa nodes - there's 
+something appealing to have at least 2 per socket in this case.
+- I do like having a fixed value as it means there is a fixed 
+expectation for what the max is and doesn't vary by platform.
+
+Thoughts ?
+
+-- james
