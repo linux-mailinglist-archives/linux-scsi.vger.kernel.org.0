@@ -2,139 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 911FA7CF44
-	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 23:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08267D081
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 00:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbfGaVCK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 31 Jul 2019 17:02:10 -0400
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:41878 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726268AbfGaVCK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Jul 2019 17:02:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1564606931; x=1596142931;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=NSomUKo7kGp1ISvH1icFd6X5WQMDjpWSwgevf/PzYy0=;
-  b=pJ83vmctxZaJomgd1VFVSo5KKWWchYnh+pT5+DToNcanP2J1IzTWrLBd
-   mrBz2PAQyR/MwjQjH8mfLbZ1FAT+SEcFxm7DVFZ4AcxEjcpQy2vfeHE4P
-   yuhgflFJUQAuklui/i+lG4ZA051n6/nSrZIP1W+uBgIHXbOTFymEpA7vZ
-   muV6KUSgVk7eHDHpC8wd0bwG+11FT9W7ckiIV/MwVhWyM/ANYFDfYb00/
-   P8Ilo73WYvVRmanfVFL9IFvr2EDC70Vl6VWnyxdTU74zaASJebkHaQ0ue
-   irLnIekIrbvk6XbdiHvEPz9maPUBCB/4zqVMOXH425WF8J67dJzOxzs2k
-   A==;
-IronPort-SDR: v51SlOvX79Tp5a6YYZKzN2d6NF4pGXx2a1UdcdmA5+9U+mbc1uy95kqvNVy8Mv7VIDRE0EpviD
- 7J0k0lzAEwEXHqeOBinrgD9NoEnRzFs80bxg94UwiQLzoMvmqSPVf2r6vWGrA4yXs5HdJ1PXQU
- pr/FEqXGDs4LpWzrau+0xmrl2gkKpOHw/mVz2iytzgiNkX73P3Qw+HUw0lL9TcCEcvvXzPrZam
- kUJsrLSMK8jnk71MhLICM/gcOYRWMVmIYaBh3LdbQsm9yXxO2OYljK47J7aAzTjIfoWy7zwwKG
- AwI=
-X-IronPort-AV: E=Sophos;i="5.64,331,1559491200"; 
-   d="scan'208";a="119303865"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Aug 2019 05:02:07 +0800
-IronPort-SDR: luzbxR8g/CenbYOAkcDZZFORQgqlEhOO7DljDf6Pmps2aQAXDVxP/4IzhhXLizpt0Ai+xU0/m7
- D+3l0/+TYkwKlh+5jY7OMGHO6NX5096Tps4ti4kNoqrf/jhtLDX/npSEGHh2GkK0UZgz8spz0x
- y5ZTeQ+ngidH/3BPlYUc5T52+YCuJXOjOGpE2mVhqPLXNGGn0Pg3zwh8vb4VpeRjwv1sKMirce
- aw5WAFk/YFuP23HviNhEsbBu48e4CKQjxDrYvFhrh+73yAMevoMQc9kuwlbUxI9K65vRYddGaP
- cb2C9AF+f2WD8+ibGRq38nfR
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2019 14:00:06 -0700
-IronPort-SDR: EIf/bz18sWQ5oKgdcNXtK/+/6sB3XfeDvjnP+iV/h4SdMlQBJ4AK0O+9oUBHmGf5YCOnr/iAn+
- 3KUx9r4eCSeKO35hri4x6vu5A05BDe64+dHtnXplehg9cZOKwkZJcgQlB27CttGUJHTxqZO1h1
- 1ZGejDYuV1GcC288RWYFpPgn1erkkRIMfw61ERNiiIRtfn78AL42aM7byyAPTwb0Hx+DGucVGU
- 2npTa9S8dA77EBLbBrzZRlowZB6GWegMV8kA6U3Vjq7ZyERqk1olRy74HsT5mRSUbYYn8mSFpA
- g44=
-Received: from cvenusqemu.hgst.com ([10.202.66.73])
-  by uls-op-cesaip02.wdc.com with ESMTP; 31 Jul 2019 14:02:05 -0700
-From:   Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     axboe@kernel.dk, jejb@linux.ibm.com, dennis@kernel.org,
-        hare@suse.com, damien.lemoal@wdc.com, sagi@grimberg.me,
-        dennisszhou@gmail.com, jthumshirn@suse.de, osandov@fb.com,
-        ming.lei@redhat.com, tj@kernel.org, bvanassche@acm.org,
-        martin.petersen@oracle.com,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Subject: [PATCH 4/4] null_blk: implement REQ_OP_ZONE_RESET_ALL
-Date:   Wed, 31 Jul 2019 14:01:02 -0700
-Message-Id: <20190731210102.3472-5-chaitanya.kulkarni@wdc.com>
-X-Mailer: git-send-email 2.17.0
-In-Reply-To: <20190731210102.3472-1-chaitanya.kulkarni@wdc.com>
-References: <20190731210102.3472-1-chaitanya.kulkarni@wdc.com>
+        id S1730519AbfGaWL4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 31 Jul 2019 18:11:56 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:54698 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726073AbfGaWL4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Jul 2019 18:11:56 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <colin.king@canonical.com>)
+        id 1hswp6-0006oT-HR; Wed, 31 Jul 2019 22:11:52 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: bfa: remove redundant assignment to variable error
+Date:   Wed, 31 Jul 2019 23:11:52 +0100
+Message-Id: <20190731221152.15304-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch implements newly introduced zone reset all operation for
-null_blk driver.
+From: Colin Ian King <colin.king@canonical.com>
 
-Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+Variable error is being initialized with a value that is never read
+and error is being re-assigned a little later on. The assignment is
+redundant and hence can be removed.
+
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/block/null_blk_main.c  |  3 +++
- drivers/block/null_blk_zoned.c | 28 ++++++++++++++++++++++------
- 2 files changed, 25 insertions(+), 6 deletions(-)
+ drivers/scsi/bfa/bfad_im.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/block/null_blk_main.c b/drivers/block/null_blk_main.c
-index 99328ded60d1..99c56d72ff78 100644
---- a/drivers/block/null_blk_main.c
-+++ b/drivers/block/null_blk_main.c
-@@ -1214,6 +1214,8 @@ static blk_status_t null_handle_cmd(struct nullb_cmd *cmd)
- 			null_zone_write(cmd, sector, nr_sectors);
- 		else if (op == REQ_OP_ZONE_RESET)
- 			null_zone_reset(cmd, sector);
-+		else if (op == REQ_OP_ZONE_RESET_ALL)
-+			null_zone_reset(cmd, 0);
- 	}
- out:
- 	/* Complete IO by inline, softirq or timer */
-@@ -1688,6 +1690,7 @@ static int null_add_dev(struct nullb_device *dev)
+diff --git a/drivers/scsi/bfa/bfad_im.c b/drivers/scsi/bfa/bfad_im.c
+index b2014cb96f58..22f06be2606f 100644
+--- a/drivers/scsi/bfa/bfad_im.c
++++ b/drivers/scsi/bfa/bfad_im.c
+@@ -536,7 +536,7 @@ bfad_im_scsi_host_alloc(struct bfad_s *bfad, struct bfad_im_port_s *im_port,
+ 			struct device *dev)
+ {
+ 	struct bfad_im_port_pointer *im_portp;
+-	int error = 1;
++	int error;
  
- 		blk_queue_chunk_sectors(nullb->q, dev->zone_size_sects);
- 		nullb->q->limits.zoned = BLK_ZONED_HM;
-+		blk_queue_flag_set(QUEUE_FLAG_ZONE_RESETALL, nullb->q);
- 	}
- 
- 	nullb->q->queuedata = nullb;
-diff --git a/drivers/block/null_blk_zoned.c b/drivers/block/null_blk_zoned.c
-index cb28d93f2bd1..8c7f5bf81975 100644
---- a/drivers/block/null_blk_zoned.c
-+++ b/drivers/block/null_blk_zoned.c
-@@ -125,12 +125,28 @@ void null_zone_reset(struct nullb_cmd *cmd, sector_t sector)
- 	struct nullb_device *dev = cmd->nq->dev;
- 	unsigned int zno = null_zone_no(dev, sector);
- 	struct blk_zone *zone = &dev->zones[zno];
-+	size_t i;
-+
-+	switch (req_op(cmd->rq)) {
-+	case REQ_OP_ZONE_RESET_ALL:
-+		for (i = 0; i < dev->nr_zones; i++) {
-+			if (zone[i].type == BLK_ZONE_TYPE_CONVENTIONAL)
-+				continue;
-+			zone[i].cond = BLK_ZONE_COND_EMPTY;
-+			zone[i].wp = zone[i].start;
-+		}
-+		break;
-+	case REQ_OP_ZONE_RESET:
-+		if (zone->type == BLK_ZONE_TYPE_CONVENTIONAL) {
-+			cmd->error = BLK_STS_IOERR;
-+			return;
-+		}
- 
--	if (zone->type == BLK_ZONE_TYPE_CONVENTIONAL) {
--		cmd->error = BLK_STS_IOERR;
--		return;
-+		zone->cond = BLK_ZONE_COND_EMPTY;
-+		zone->wp = zone->start;
-+		break;
-+	default:
-+		cmd->error = BLK_STS_NOTSUPP;
-+		break;
- 	}
--
--	zone->cond = BLK_ZONE_COND_EMPTY;
--	zone->wp = zone->start;
- }
+ 	mutex_lock(&bfad_mutex);
+ 	error = idr_alloc(&bfad_im_port_index, im_port, 0, 0, GFP_KERNEL);
 -- 
-2.17.0
+2.20.1
 
