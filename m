@@ -2,188 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 702DF7B67E
-	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 02:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CD27B7B6
+	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 03:43:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728179AbfGaAIG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 20:08:06 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:42076 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726167AbfGaAIG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 20:08:06 -0400
-Received: by mail-pg1-f196.google.com with SMTP id t132so30902968pgb.9
-        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 17:08:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=+pr19sAtvJiG2lnIbrgkMW1M0VdKkC/b2Q5Z+hvu1tM=;
-        b=NyY9LTatnmTalZvkgVkdDZ9tJ+V9IdSrsboaVHf5BiSs9VW6KG9uo2xj0N0R4HCwKv
-         HdrHxHg+N133Q6WBlBCUeCnBcyllmzrrLM9mTHTFDpOoiRstQmHOx/JBVAH74i25ThrP
-         JslgS4VmZrzFJEaCET36l9v9pIu7siH7QGqjpusL7+zjBL6eDMBGG1E7WoT+b9Snbg4t
-         v4Ml9cFXeU0ofz1zhjy1QTEXl52ApxBDUt6TjYRpDxUc32t7wVuj/2Ds9OqEjdRj4VGy
-         vfH1mk2k3c8JtTB7YExGVAPgVA9w6775KP9/P+Tt4zXGjLPm0EfqmA7Jn/LnbYCOFmVV
-         USkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+pr19sAtvJiG2lnIbrgkMW1M0VdKkC/b2Q5Z+hvu1tM=;
-        b=Z2LIj05Phu9qr/JSVfyLmgKw34npKB1ANr/J/19nEEGeHBVjyvsiTkEXBv3DaIeDlG
-         cGUcXo2/6rVOfzgTFgXiAXkrHbS2w9ztWMCZc8Pr8ZT5iWzIcb/h3jhO1Jqj268DOx8W
-         a7TisU8dIVDiaq2QDg4eSY9JJLz8jVvJqyzTGSWoeMgGZUY9mrcFvZ21HBh+50pl86RL
-         KIB11S2RRkNWAkGsvJ3GiN786U904Rr5CiCVLYHHpd2bSZvlobjLaT53vARS+MOuaaQs
-         WZboiNXuWj6Ut8JzwrOAMgZ0xNuUf2atOnmQftNXxBXE17knkYa5FUD4POq1+7o7TmuQ
-         1XjA==
-X-Gm-Message-State: APjAAAUZFcTQAF5JYJmdmK+EsR/0QUT03Mkvo2pt63eanXkfubVO1oB1
-        2BSGImZQ2066abibswuHoN8Q/mgZ
-X-Google-Smtp-Source: APXvYqx3dgkNdO6M1AoxLnCpinhykguIxR0R8HKvGP68VcuJ6HxGRgPYxGsu2gYKrAXDyJwCQ7zsUw==
-X-Received: by 2002:a63:e48:: with SMTP id 8mr23908758pgo.389.1564531685222;
-        Tue, 30 Jul 2019 17:08:05 -0700 (PDT)
-Received: from os42.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id n5sm69544468pfn.38.2019.07.30.17.08.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 30 Jul 2019 17:08:04 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH] lpfc: Mitigate high memory pre-allocation by SCSI-MQ
-Date:   Tue, 30 Jul 2019 17:07:59 -0700
-Message-Id: <20190731000759.6272-1-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.13.7
+        id S1726691AbfGaBm4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 21:42:56 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44408 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725209AbfGaBmz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 30 Jul 2019 21:42:55 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6V1g9Yw114786;
+        Tue, 30 Jul 2019 21:42:10 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2u2xpgdhd1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Jul 2019 21:42:09 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x6V1eY6d012373;
+        Wed, 31 Jul 2019 01:41:57 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma03dal.us.ibm.com with ESMTP id 2u0e86txuw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Jul 2019 01:41:57 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6V1furp62128528
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 Jul 2019 01:41:56 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 96DD2C6057;
+        Wed, 31 Jul 2019 01:41:56 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A750DC605F;
+        Wed, 31 Jul 2019 01:41:54 +0000 (GMT)
+Received: from oc6857751186.ibm.com (unknown [9.80.208.54])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed, 31 Jul 2019 01:41:54 +0000 (GMT)
+Subject: Re: [PATCH] scsi: ibmvfc: Mark expected switch fall-throughs
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20190729002608.GA25263@embeddedor>
+From:   Tyrel Datwyler <tyreld@linux.ibm.com>
+Message-ID: <58a4f287-8311-31ee-f403-16b0adcf0271@linux.ibm.com>
+Date:   Tue, 30 Jul 2019 18:41:53 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20190729002608.GA25263@embeddedor>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-31_01:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907310015
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When SCSI-MQ is enabled, the SCSI-MQ layers will do pre-allocation of
-MQ resources based on shost values set by the driver. In newer cases
-of the driver, which attempts to set nr_hw_queues to the cpu count,
-the multipliers become excessive, with a single shost having SCSI-MQ
-pre-allocation reaching into the multiple GBytes range.  NPIV, which
-creates additional shosts, only multiply this overhead. On lower-memory
-systems, this can exhaust system memory very quickly, resulting in a
-system crash or failures in the driver or elsewhere due to low memory
-conditions.
+On 7/28/19 5:26 PM, Gustavo A. R. Silva wrote:
+> Mark switch cases where we are expecting to fall through.
+> 
+> This patch fixes the following warnings:
+> 
+> drivers/scsi/ibmvscsi/ibmvfc.c: In function 'ibmvfc_npiv_login_done':
+> drivers/scsi/ibmvscsi/ibmvfc.c:4022:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    ibmvfc_retry_host_init(vhost);
+>    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/ibmvscsi/ibmvfc.c:4023:2: note: here
+>   case IBMVFC_MAD_DRIVER_FAILED:
+>   ^~~~
+> drivers/scsi/ibmvscsi/ibmvfc.c: In function 'ibmvfc_bsg_request':
+> drivers/scsi/ibmvscsi/ibmvfc.c:1830:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    port_id = (bsg_request->rqst_data.h_els.port_id[0] << 16) |
+>    ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     (bsg_request->rqst_data.h_els.port_id[1] << 8) |
+>     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     bsg_request->rqst_data.h_els.port_id[2];
+>     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/ibmvscsi/ibmvfc.c:1833:2: note: here
+>   case FC_BSG_RPT_ELS:
+>   ^~~~
+> drivers/scsi/ibmvscsi/ibmvfc.c:1838:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    port_id = (bsg_request->rqst_data.h_ct.port_id[0] << 16) |
+>    ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     (bsg_request->rqst_data.h_ct.port_id[1] << 8) |
+>     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     bsg_request->rqst_data.h_ct.port_id[2];
+>     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/scsi/ibmvscsi/ibmvfc.c:1841:2: note: here
+>   case FC_BSG_RPT_CT:
+>   ^~~~
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+> ---
 
-After testing several scenarios, the situation can be mitigated by
-limiting the value set in shost->nr_hw_queues to 4. Although the shost
-values were changed, the driver still had per-cpu hardware queues of
-its own that allowed parallelization per-cpu.  Testing revealed that
-even with the smallish number for nr_hw_queues for SCSI-MQ, performance
-levels remained near maximum with the within-driver affiinitization.
-
-A module parameter was created to allow the value set for the
-nr_hw_queues to be tunable.
-
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc.h      |  1 +
- drivers/scsi/lpfc/lpfc_attr.c | 17 +++++++++++++++++
- drivers/scsi/lpfc/lpfc_init.c | 12 ++++++++----
- drivers/scsi/lpfc/lpfc_sli4.h |  5 +++++
- 4 files changed, 31 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
-index 2c3bb8a966e5..bade2e025ecf 100644
---- a/drivers/scsi/lpfc/lpfc.h
-+++ b/drivers/scsi/lpfc/lpfc.h
-@@ -824,6 +824,7 @@ struct lpfc_hba {
- 	uint32_t cfg_cq_poll_threshold;
- 	uint32_t cfg_cq_max_proc_limit;
- 	uint32_t cfg_fcp_cpu_map;
-+	uint32_t cfg_fcp_mq_threshold;
- 	uint32_t cfg_hdw_queue;
- 	uint32_t cfg_irq_chann;
- 	uint32_t cfg_suppress_rsp;
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index ea62322ffe2b..d267f57d1738 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -5709,6 +5709,19 @@ LPFC_ATTR_RW(nvme_embed_cmd, 1, 0, 2,
- 	     "Embed NVME Command in WQE");
- 
- /*
-+ * lpfc_fcp_mq_threshold: Set the number of Hardware Queues the driver
-+ * will advertise it supports to the SCSI layer.
-+ *
-+ *      0    = Configure nr_hw_queues by the number of CPUs or HW queues.
-+ *      1,128 = Manually specify nr_hw_queue value to be advertised,
-+ *
-+ * Value range is [0,128]. Default value is 4.
-+ */
-+LPFC_ATTR_R(fcp_mq_threshold, LPFC_FCP_MQ_THRESHOLD_DEF,
-+	    LPFC_FCP_MQ_THRESHOLD_MIN, LPFC_FCP_MQ_THRESHOLD_MAX,
-+	    "Set the number of SCSI Queues advertised");
-+
-+/*
-  * lpfc_hdw_queue: Set the number of Hardware Queues the driver
-  * will advertise it supports to the NVME and  SCSI layers. This also
-  * will map to the number of CQ/WQ pairs the driver will create.
-@@ -6030,6 +6043,7 @@ struct device_attribute *lpfc_hba_attrs[] = {
- 	&dev_attr_lpfc_cq_poll_threshold,
- 	&dev_attr_lpfc_cq_max_proc_limit,
- 	&dev_attr_lpfc_fcp_cpu_map,
-+	&dev_attr_lpfc_fcp_mq_threshold,
- 	&dev_attr_lpfc_hdw_queue,
- 	&dev_attr_lpfc_irq_chann,
- 	&dev_attr_lpfc_suppress_rsp,
-@@ -7112,6 +7126,7 @@ lpfc_get_cfgparam(struct lpfc_hba *phba)
- 	/* Initialize first burst. Target vs Initiator are different. */
- 	lpfc_nvme_enable_fb_init(phba, lpfc_nvme_enable_fb);
- 	lpfc_nvmet_fb_size_init(phba, lpfc_nvmet_fb_size);
-+	lpfc_fcp_mq_threshold_init(phba, lpfc_fcp_mq_threshold);
- 	lpfc_hdw_queue_init(phba, lpfc_hdw_queue);
- 	lpfc_irq_chann_init(phba, lpfc_irq_chann);
- 	lpfc_enable_bbcr_init(phba, lpfc_enable_bbcr);
-@@ -7135,6 +7150,8 @@ lpfc_get_cfgparam(struct lpfc_hba *phba)
- 	phba->cfg_enable_pbde = 0;
- 
- 	/* A value of 0 means use the number of CPUs found in the system */
-+	if (phba->cfg_fcp_mq_threshold == 0)
-+		phba->cfg_fcp_mq_threshold = phba->sli4_hba.num_present_cpu;
- 	if (phba->cfg_hdw_queue == 0)
- 		phba->cfg_hdw_queue = phba->sli4_hba.num_present_cpu;
- 	if (phba->cfg_irq_chann == 0)
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index faf43b1d3dbe..3e387ee95610 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -4309,10 +4309,14 @@ lpfc_create_port(struct lpfc_hba *phba, int instance, struct device *dev)
- 	shost->max_cmd_len = 16;
- 
- 	if (phba->sli_rev == LPFC_SLI_REV4) {
--		if (phba->cfg_fcp_io_sched == LPFC_FCP_SCHED_BY_HDWQ)
--			shost->nr_hw_queues = phba->cfg_hdw_queue;
--		else
--			shost->nr_hw_queues = phba->sli4_hba.num_present_cpu;
-+		if (phba->cfg_fcp_mq_threshold > phba->sli4_hba.num_present_cpu)
-+			phba->cfg_fcp_mq_threshold =
-+				phba->sli4_hba.num_present_cpu;
-+		if (phba->cfg_fcp_io_sched == LPFC_FCP_SCHED_BY_HDWQ &&
-+		    phba->cfg_fcp_mq_threshold > phba->cfg_hdw_queue)
-+			phba->cfg_fcp_mq_threshold = phba->cfg_hdw_queue;
-+
-+		shost->nr_hw_queues = phba->cfg_fcp_mq_threshold;
- 
- 		shost->dma_boundary =
- 			phba->sli4_hba.pc_sli4_params.sge_supp_len-1;
-diff --git a/drivers/scsi/lpfc/lpfc_sli4.h b/drivers/scsi/lpfc/lpfc_sli4.h
-index 3aeca387b22a..ccd0392720e3 100644
---- a/drivers/scsi/lpfc/lpfc_sli4.h
-+++ b/drivers/scsi/lpfc/lpfc_sli4.h
-@@ -44,6 +44,11 @@
- #define LPFC_HBA_HDWQ_MAX	128
- #define LPFC_HBA_HDWQ_DEF	0
- 
-+/* FCP MQ queue count limiting */
-+#define LPFC_FCP_MQ_THRESHOLD_MIN	0
-+#define LPFC_FCP_MQ_THRESHOLD_MAX	128
-+#define LPFC_FCP_MQ_THRESHOLD_DEF	4
-+
- /* Common buffer size to accomidate SCSI and NVME IO buffers */
- #define LPFC_COMMON_IO_BUF_SZ	768
- 
--- 
-2.13.7
-
+Acked-by: Tyrel Datwyler <tyreld@linux.ibm.com>
