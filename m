@@ -2,113 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CD27B7B6
-	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 03:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B362B7B801
+	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 04:31:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726691AbfGaBm4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 30 Jul 2019 21:42:56 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44408 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725209AbfGaBmz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 30 Jul 2019 21:42:55 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6V1g9Yw114786;
-        Tue, 30 Jul 2019 21:42:10 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2u2xpgdhd1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Jul 2019 21:42:09 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x6V1eY6d012373;
-        Wed, 31 Jul 2019 01:41:57 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma03dal.us.ibm.com with ESMTP id 2u0e86txuw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Jul 2019 01:41:57 +0000
-Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6V1furp62128528
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Jul 2019 01:41:56 GMT
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 96DD2C6057;
-        Wed, 31 Jul 2019 01:41:56 +0000 (GMT)
-Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A750DC605F;
-        Wed, 31 Jul 2019 01:41:54 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.80.208.54])
-        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 31 Jul 2019 01:41:54 +0000 (GMT)
-Subject: Re: [PATCH] scsi: ibmvfc: Mark expected switch fall-throughs
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20190729002608.GA25263@embeddedor>
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-Message-ID: <58a4f287-8311-31ee-f403-16b0adcf0271@linux.ibm.com>
-Date:   Tue, 30 Jul 2019 18:41:53 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726902AbfGaCbp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 30 Jul 2019 22:31:45 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43590 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725877AbfGaCbo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 30 Jul 2019 22:31:44 -0400
+Received: by mail-wr1-f65.google.com with SMTP id p13so67838347wru.10
+        for <linux-scsi@vger.kernel.org>; Tue, 30 Jul 2019 19:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mK5awaGODBitIbEv1ECjc6oodMU3pryVoINMLbed2tA=;
+        b=ubrxWUoO0vQWTAJ66pFXPS0H4rV5TvtuNOv4FTfU3VSB3gy8E2p8tBqVec5IZXL90T
+         9gZeAgbkzWRujgv4IPEs+IdghGUzEpST3hyhlgWg5sqI+5UL70NPQMqeRyXtENHODUR7
+         yo47TUpOyIoFA3wukKpzH4B1glZ0PWh+sft5oFKhPguHqMdwmnbeWzaD5hO4lXLJCpho
+         6BIg8WwU8S/Zm60eXymyK2OZ2UtVRt6QSL5X6n9G4DCTO/nkLxwSUE44MP4q57awaTiN
+         atRZTcaJgFXX5uCGKKnbu9ipWDah9MQFPQEwSfpuNLx42qZ7C9cUtLeTeP0uE6A+lfYe
+         LZXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mK5awaGODBitIbEv1ECjc6oodMU3pryVoINMLbed2tA=;
+        b=or7veyoJK93aMzeDN/PwI07XreCqvZMnI3zwC64l5y7+zmqZkzmBhSYP5pQZFBd+m1
+         BKGniacVJVhbLqIG234TajYr8PrlzIHD+gvQBxwqjxGbjMsMdioGJjM3QtqdZgDnrBU4
+         svGNB+bZMJPHNC3HUFeOUM7z0goUJWb/vPkrF1GLpUhgxDXHCACl8M/Q1Mhjs2QMVWgv
+         NpIPGRrazNwnFHS3qP+VisQoB+/o7yoXpb/GsvnCUjei/eAEweKZWVt7rgUlAQmG6v/P
+         1XcMl/IU6bq6D/mXFm1gcUHlEdPQgBgScB4ZT1gA6itWdWlvKdmHYRiFdTK7oV5uT1uZ
+         pi+Q==
+X-Gm-Message-State: APjAAAX72IpIfhbghup1CZvMKiJNAYMrNaWDXNcac0Y4nigEqobMCWLL
+        AI3g9/wT2rWVVwgQmDo8Y55iWAztl4Ck8QgHB2K2+gBHFvg=
+X-Google-Smtp-Source: APXvYqyXKGzaUQeaIhsF1eV7B/anX/THEmCHj00OuRe9qYYlMCjyD9jEUYTHU7kHWNlNYqRwS56caiLrkcTLj3+7UzY=
+X-Received: by 2002:adf:e4c6:: with SMTP id v6mr124431035wrm.315.1564540302162;
+ Tue, 30 Jul 2019 19:31:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190729002608.GA25263@embeddedor>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-31_01:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1907310015
+References: <20190731000759.6272-1-jsmart2021@gmail.com>
+In-Reply-To: <20190731000759.6272-1-jsmart2021@gmail.com>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Wed, 31 Jul 2019 10:31:30 +0800
+Message-ID: <CACVXFVOSWQDvaeSJ_UFxB7pS=6QvTVhL0-MdTTcd1yWNWFAomA@mail.gmail.com>
+Subject: Re: [PATCH] lpfc: Mitigate high memory pre-allocation by SCSI-MQ
+To:     James Smart <jsmart2021@gmail.com>
+Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/28/19 5:26 PM, Gustavo A. R. Silva wrote:
-> Mark switch cases where we are expecting to fall through.
-> 
-> This patch fixes the following warnings:
-> 
-> drivers/scsi/ibmvscsi/ibmvfc.c: In function 'ibmvfc_npiv_login_done':
-> drivers/scsi/ibmvscsi/ibmvfc.c:4022:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    ibmvfc_retry_host_init(vhost);
->    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c:4023:2: note: here
->   case IBMVFC_MAD_DRIVER_FAILED:
->   ^~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c: In function 'ibmvfc_bsg_request':
-> drivers/scsi/ibmvscsi/ibmvfc.c:1830:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    port_id = (bsg_request->rqst_data.h_els.port_id[0] << 16) |
->    ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     (bsg_request->rqst_data.h_els.port_id[1] << 8) |
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     bsg_request->rqst_data.h_els.port_id[2];
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c:1833:2: note: here
->   case FC_BSG_RPT_ELS:
->   ^~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c:1838:11: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    port_id = (bsg_request->rqst_data.h_ct.port_id[0] << 16) |
->    ~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     (bsg_request->rqst_data.h_ct.port_id[1] << 8) |
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->     bsg_request->rqst_data.h_ct.port_id[2];
->     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/scsi/ibmvscsi/ibmvfc.c:1841:2: note: here
->   case FC_BSG_RPT_CT:
->   ^~~~
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+On Wed, Jul 31, 2019 at 8:24 AM James Smart <jsmart2021@gmail.com> wrote:
+>
+> When SCSI-MQ is enabled, the SCSI-MQ layers will do pre-allocation of
+> MQ resources based on shost values set by the driver. In newer cases
+> of the driver, which attempts to set nr_hw_queues to the cpu count,
+> the multipliers become excessive, with a single shost having SCSI-MQ
+> pre-allocation reaching into the multiple GBytes range.  NPIV, which
+> creates additional shosts, only multiply this overhead. On lower-memory
+> systems, this can exhaust system memory very quickly, resulting in a
+> system crash or failures in the driver or elsewhere due to low memory
+> conditions.
+>
+> After testing several scenarios, the situation can be mitigated by
+> limiting the value set in shost->nr_hw_queues to 4. Although the shost
+> values were changed, the driver still had per-cpu hardware queues of
+> its own that allowed parallelization per-cpu.  Testing revealed that
+> even with the smallish number for nr_hw_queues for SCSI-MQ, performance
+> levels remained near maximum with the within-driver affiinitization.
+>
+> A module parameter was created to allow the value set for the
+> nr_hw_queues to be tunable.
+>
+> Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+> Signed-off-by: James Smart <jsmart2021@gmail.com>
 > ---
+>  drivers/scsi/lpfc/lpfc.h      |  1 +
+>  drivers/scsi/lpfc/lpfc_attr.c | 17 +++++++++++++++++
+>  drivers/scsi/lpfc/lpfc_init.c | 12 ++++++++----
+>  drivers/scsi/lpfc/lpfc_sli4.h |  5 +++++
+>  4 files changed, 31 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
+> index 2c3bb8a966e5..bade2e025ecf 100644
+> --- a/drivers/scsi/lpfc/lpfc.h
+> +++ b/drivers/scsi/lpfc/lpfc.h
+> @@ -824,6 +824,7 @@ struct lpfc_hba {
+>         uint32_t cfg_cq_poll_threshold;
+>         uint32_t cfg_cq_max_proc_limit;
+>         uint32_t cfg_fcp_cpu_map;
+> +       uint32_t cfg_fcp_mq_threshold;
+>         uint32_t cfg_hdw_queue;
+>         uint32_t cfg_irq_chann;
+>         uint32_t cfg_suppress_rsp;
+> diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+> index ea62322ffe2b..d267f57d1738 100644
+> --- a/drivers/scsi/lpfc/lpfc_attr.c
+> +++ b/drivers/scsi/lpfc/lpfc_attr.c
+> @@ -5709,6 +5709,19 @@ LPFC_ATTR_RW(nvme_embed_cmd, 1, 0, 2,
+>              "Embed NVME Command in WQE");
+>
+>  /*
+> + * lpfc_fcp_mq_threshold: Set the number of Hardware Queues the driver
+> + * will advertise it supports to the SCSI layer.
+> + *
+> + *      0    = Configure nr_hw_queues by the number of CPUs or HW queues.
+> + *      1,128 = Manually specify nr_hw_queue value to be advertised,
+> + *
+> + * Value range is [0,128]. Default value is 4.
+> + */
+> +LPFC_ATTR_R(fcp_mq_threshold, LPFC_FCP_MQ_THRESHOLD_DEF,
+> +           LPFC_FCP_MQ_THRESHOLD_MIN, LPFC_FCP_MQ_THRESHOLD_MAX,
+> +           "Set the number of SCSI Queues advertised");
 
-Acked-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Hi James,
+
+Could the default hw queue count be set as numa node number? This way
+should work
+fine most of times.
+
+Thanks,
+Ming Lei
