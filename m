@@ -2,124 +2,150 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A107BE0C
-	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 12:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 361D87BEA9
+	for <lists+linux-scsi@lfdr.de>; Wed, 31 Jul 2019 12:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbfGaKJ6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 31 Jul 2019 06:09:58 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:9261 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbfGaKJ6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 31 Jul 2019 06:09:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1564567798; x=1596103798;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=WAwuweJrEgd2UDtVBxTNqldHlRm6VqKiLQFazhsKvR8=;
-  b=Bpybt7toL+v7o58d+YKYr237FuhXjtPzbh4OrgYl1RyELayueu95i+Sy
-   zITHkGtkBCFw8/HWg1d3nmG0uV1/heugp1CHTxVS7xfUzShEVvtUmgpCS
-   xsoI932LJgFjLjTUEbO9CTrbuuuF/PnrbXTNn3cQNoWEnma5rqfw5XM6Q
-   JJmYyL4AQAoUWOQiPj0oooM0537y7Dei3+3lqXkBZV+UKZJr6/51fLvtS
-   FV3zjM9LZLa4jkovdnZDBp8dY1Ocj115Z6iRJ4g6U5TYtraTTz92Pmhp4
-   NklXHidjafexkDG0uL+GweobxizbMxIOCLoIR2BrxW/VaPfpnJ7sR7pFh
-   Q==;
-IronPort-SDR: 1JybFdu3HQw8yM+WuDRWqHYOeEKjD1B58hycptIE03A+PKoB0mIjHVe7674NmLVYLOloRy2vNu
- n1BMfIxO5QkXIQgqu2wjA3mB3hfSVj+v3kKi88kJX14EgB0R6wyYshHFr08dh9p78Z4QIccwyJ
- lGjfud7S5HBGtAOuy21zbDK0nSvb4ku2c0fdv9OA4VnPF5B9y7b5ofeYlAg04L+MNc26OEnEFu
- 8wN/mhXs18IqcbR2ZyIhBtWszca87iKHoz4YK4jAdGd3hfcM37R6o2qrEnYB7wTxRICXLwGIdX
- wCQ=
-X-IronPort-AV: E=Sophos;i="5.64,329,1559491200"; 
-   d="scan'208";a="115587183"
-Received: from mail-sn1nam02lp2059.outbound.protection.outlook.com (HELO NAM02-SN1-obe.outbound.protection.outlook.com) ([104.47.36.59])
-  by ob1.hgst.iphmx.com with ESMTP; 31 Jul 2019 18:09:57 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KQy3H+17/fj+XZPM+1De9AFwm5mPsK9ru9WJt/ikUy4BdHhvK43KORredUb7zyAGEVR2eyGS5Hi0hePWDzBkQRXOpjLpvfEB0BZEp06zw5O3R+XL4XKvouV58QqcCwJOxj8ZgqcxxOn6v6Dj9MGwo7wRfAwOqexEWBlW8wslNCq7QyyaBxWCiMEQM7WrCymahP7xbPKEIwP9iOzAN/AKsaRd9Ytn48lET+mCScoUn/KaZsaDhbcx9T0A3qhK1M6Goz3QVBTPNGyqH/3IuXcnt4oqbp7xp8pevIDSS1SGBVF4XCqnjYP+ZV+wpWNfc+nAhOAEbIHihvzwumb4fkgLjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WAwuweJrEgd2UDtVBxTNqldHlRm6VqKiLQFazhsKvR8=;
- b=n2/i6EbTNCarM+O2SN0w6IUpcgZViUyofRkxB7x/UfD2pl4ki0YonLoLXJ6f9APVHfN7bkvxo18967ogimIzmWMC2qeOXT+otcoLVz8k1wEtVpCBT3HS44xKpFu087HvmyUBxLz+Mq+VrmMFgFP22RTB8+Al+jmbUGWuWAxhpuL5CyFhCKpkCMVI0tN9Bv6W7f43TUMb+razw+3O2ZswTAOEQ6MazdYJdYYKEoRo3JT2Zn62j6MXi80+PlIFraUvFdqAuJh13Gsrs1+vUYZ0qE+6N0amtgrJacM6SGnszun6JQCcCo4+hbG2ML1hbi1nJueCtiRs1ud5Nhtli43fkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wdc.com;dmarc=pass action=none header.from=wdc.com;dkim=pass
- header.d=wdc.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WAwuweJrEgd2UDtVBxTNqldHlRm6VqKiLQFazhsKvR8=;
- b=b3hTfkyjYJKMeKRiTYso1cX1/Q3QGjHp32x/O29mVTqJ/vtpmHi1FTQ6PU5cZFeglgxgCbOeWsO3AIxIS6AxHOKjXF978+ZwPtP4ATXABSPmcGCJyW3B11PTPgGBWCZS/Eqk2hL8MHgMm25LzHbB+qtobyydQvJpMluRWs6wypg=
-Received: from MN2PR04MB6991.namprd04.prod.outlook.com (10.186.144.209) by
- MN2PR04MB6445.namprd04.prod.outlook.com (52.132.169.11) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2136.13; Wed, 31 Jul 2019 10:09:55 +0000
-Received: from MN2PR04MB6991.namprd04.prod.outlook.com
- ([fe80::5d3b:c35e:a95a:51e2]) by MN2PR04MB6991.namprd04.prod.outlook.com
- ([fe80::5d3b:c35e:a95a:51e2%3]) with mapi id 15.20.2115.005; Wed, 31 Jul 2019
- 10:09:55 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     Anil Varughese <aniljoy@cadence.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>
-CC:     "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "hare@suse.de" <hare@suse.de>,
-        "rafalc@cadence.com" <rafalc@cadence.com>,
-        "mparab@cadence.com" <mparab@cadence.com>,
-        "jank@cadence.com" <jank@cadence.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] scsi: ufs: Additional clock initialization in Cadence UFS
-Thread-Topic: [PATCH] scsi: ufs: Additional clock initialization in Cadence
- UFS
-Thread-Index: AQHVR3tcf/mCdBEWqU6Uux3DMp7HZKbkgPKQ
-Date:   Wed, 31 Jul 2019 10:09:54 +0000
-Message-ID: <MN2PR04MB699133D84C627AE30C6A50CDFCDF0@MN2PR04MB6991.namprd04.prod.outlook.com>
-References: <20190731083614.25926-1-aniljoy@cadence.com>
-In-Reply-To: <20190731083614.25926-1-aniljoy@cadence.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e71d768c-825e-4757-1fe6-08d7159f3c34
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:MN2PR04MB6445;
-x-ms-traffictypediagnostic: MN2PR04MB6445:
-x-microsoft-antispam-prvs: <MN2PR04MB6445B8193A6DE8B0A9AE1BD8FCDF0@MN2PR04MB6445.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 011579F31F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(376002)(366004)(39860400002)(136003)(396003)(189003)(199004)(86362001)(316002)(8676002)(81166006)(8936002)(81156014)(5660300002)(486006)(52536014)(110136005)(54906003)(2501003)(478600001)(6246003)(25786009)(4326008)(9686003)(305945005)(6436002)(229853002)(55016002)(68736007)(7736002)(53936002)(76176011)(2201001)(26005)(102836004)(256004)(74316002)(7696005)(14454004)(7416002)(186003)(6506007)(99286004)(6116002)(64756008)(66556008)(66476007)(3846002)(66446008)(66946007)(11346002)(476003)(446003)(76116006)(71190400001)(71200400001)(66066001)(4744005)(2906002)(33656002);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR04MB6445;H:MN2PR04MB6991.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: erBPUDobGILlZI0oIToSHV/lBdjP8kGBScoxefuv7QULoGCrfmS3NwfDgF+uL+9bBNk9UNnj7iOPC1W73mRn5ULLoeqVDEuQlnJc+yNcY63VJzzW3PB71bLw91ab+F3fv5YrN4iXNKq+C1XQG6ORn4FI/USe+xmdygJIRVQvH/OoWGtxKxy8Ap1uZlMBKNZSUVo0CHqEovqfuIed16whYne5PyTMsQ9a3aG2cWPtXoqcJ9Sq/Y0i69Yl1dk5ThNqYx1qbCiLvdf/ueMQaqBJRTVKGd0qhpxUo1TUvVNgRYiaKmqR57LsUfhT70GeFVdEw254Yr9KC8ooVo1jIu5RdxymKc0Hj/PiiCBnF2yTruzNaHesv1Myp5hQwEJIeFBYE4c2XFPQxlo0TMWISISp3vxnLk7SBKmxwBWej1zhyU4=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2387856AbfGaKuy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 31 Jul 2019 06:50:54 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:63602 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387854AbfGaKux (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 31 Jul 2019 06:50:53 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6VAnust013471
+        for <linux-scsi@vger.kernel.org>; Wed, 31 Jul 2019 06:50:53 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u39k4818x-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Wed, 31 Jul 2019 06:50:51 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <heiko.carstens@de.ibm.com>;
+        Wed, 31 Jul 2019 11:50:47 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 31 Jul 2019 11:50:42 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6VAoO2a36831616
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 Jul 2019 10:50:24 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 35FC8A4059;
+        Wed, 31 Jul 2019 10:50:41 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CC671A4055;
+        Wed, 31 Jul 2019 10:50:40 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.134])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed, 31 Jul 2019 10:50:40 +0000 (GMT)
+Date:   Wed, 31 Jul 2019 12:50:39 +0200
+From:   Heiko Carstens <heiko.carstens@de.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-ide@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v5 15/29] compat_ioctl: move tape handling into drivers
+References: <20190730192552.4014288-1-arnd@arndb.de>
+ <20190730195819.901457-1-arnd@arndb.de>
+ <20190730195819.901457-3-arnd@arndb.de>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e71d768c-825e-4757-1fe6-08d7159f3c34
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jul 2019 10:09:54.9276
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Avri.Altman@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6445
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190730195819.901457-3-arnd@arndb.de>
+X-TM-AS-GCONF: 00
+x-cbid: 19073110-0008-0000-0000-000003028EAC
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19073110-0009-0000-0000-0000227033BB
+Message-Id: <20190731105039.GB3488@osiris>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-31_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=670 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907310112
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->=20
-> Configure CDNS_UFS_REG_HCLKDIV in .hce_enable_notify()
-> because if UFSHCD resets the controller ip because of
-> phy or device related errors then CDNS_UFS_REG_HCLKDIV
-> is reset to default value and .setup_clock() is not
-> called later in the sequence whereas hce_enable_notify
-> will be called everytime controller is reenabled.
->=20
-> Signed-off-by: Anil Varughese <aniljoy@cadence.com>
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
+On Tue, Jul 30, 2019 at 09:55:31PM +0200, Arnd Bergmann wrote:
+> MTIOCPOS and MTIOCGET are incompatible between 32-bit and 64-bit user
+> space, and traditionally have been translated in fs/compat_ioctl.c.
+> 
+> To get rid of that translation handler, move a corresponding
+> implementation into each of the four drivers implementing those commands.
+> 
+> The interesting part of that is now in a new linux/mtio.h header that
+> wraps the existing uapi/linux/mtio.h header and provides an abstraction
+> to let drivers handle both cases easily. Using an in_compat_syscall()
+> check, the caller does not have to keep track of whether this was
+> called through .unlocked_ioctl() or .compat_ioctl().
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+Besides the two minor things below
+
+Acked-by: Heiko Carstens <heiko.carstens@de.ibm.com>
+
+> diff --git a/include/linux/mtio.h b/include/linux/mtio.h
+> new file mode 100644
+> index 000000000000..fa2783fd37d1
+> --- /dev/null
+> +++ b/include/linux/mtio.h
+> @@ -0,0 +1,59 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef _LINUX_MTIO_COMPAT_H
+> +#define _LINUX_MTIO_COMPAT_H
+> +
+> +#include <linux/compat.h>
+> +#include <uapi/linux/mtio.h>
+> +#include <linux/uaccess.h>
+> +
+> +/*
+> + * helper functions for implementing compat ioctls on the four tape
+> + * drivers: we define the 32-bit layout of each incompatible strucucture,
+
+typo: structure
+
+> + * plus a wrapper function to copy it to user space in either format.
+> + */
+> +
+> +struct	mtget32 {
+> +	s32	mt_type;
+> +	s32	mt_resid;
+> +	s32	mt_dsreg;
+> +	s32	mt_gstat;
+> +	s32	mt_erreg;
+> +	s32	mt_fileno;
+> +	s32	mt_blkno;
+> +};
+> +#define	MTIOCGET32	_IOR('m', 2, struct mtget32)
+> +
+> +struct	mtpos32 {
+> +	s32 	mt_blkno;
+> +};
+> +#define	MTIOCPOS32	_IOR('m', 3, struct mtpos32)
+> +
+> +static inline int put_user_mtget(void __user *u, struct mtget *k)
+> +{
+> +	struct mtget32 k32 = {
+> +		.mt_type   = k->mt_type,
+> +		.mt_resid  = k->mt_resid,
+> +		.mt_dsreg  = k->mt_dsreg,
+> +		.mt_gstat  = k->mt_gstat,
+> +		.mt_fileno = k->mt_fileno,
+> +		.mt_blkno  = k->mt_blkno,
+> +	};
+
+mt_erreg is missing here.
+
