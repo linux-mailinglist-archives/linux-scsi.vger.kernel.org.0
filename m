@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7E37E1A9
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F147E1AA
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388040AbfHAR5R (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Aug 2019 13:57:17 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:40989 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731930AbfHAR5Q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:57:16 -0400
-Received: by mail-pl1-f196.google.com with SMTP id m9so32422655pls.8
-        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:57:16 -0700 (PDT)
+        id S2388043AbfHAR5S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Aug 2019 13:57:18 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43227 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731930AbfHAR5S (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:57:18 -0400
+Received: by mail-pg1-f195.google.com with SMTP id r22so7018461pgk.10
+        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:57:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=pp7OvrYC0nJ/EPdn5pDdQGfjoGl0YNVSGEvxTi+SKno=;
-        b=NzYF/j1ByGPKW6R6XXRUKUusfsWT2++Sw3/8XYczxijipeV2RBIO1ItJdTi92KMpug
-         iuB3K+TR2bFHK7633L3aDJbgaexlRwmcpytYRS/Ta1CSQNpqZxeSSAWfJltDhAVn3gMa
-         jvIB+arvo8FcHU1GhxaibsBWTBcHED2gYAgopruzeXo2JY+ivEdf6d7Ft1XJ+ep5N8tp
-         nciHluHb/VIpck/Fd2BYC7hQ13pqaJttwgIqPEiN9gDxG1X1xd/wpqU5UKEQ/yTXmvWJ
-         u6KH8wKaFAb8EDM5v/Q1ot9mkcjW1P1DOMrm0U+V2N5Evwm+DzcN4XkSgDLbaVFYdshL
-         +1oA==
-X-Gm-Message-State: APjAAAW0T5Y+4dH2+acdZeVv8yNLNhpxvNczKOkM7ZESD9/UXGs6W7r9
-        y007+XZlQO1r6bn3ylTcWMI=
-X-Google-Smtp-Source: APXvYqwshBp9XmYctVr3QcWQwYDQvF6Oi2DbF2i8A+MaLFwfD0m39pHyobVjbSv0HDyGUvgRps/tVA==
-X-Received: by 2002:a17:902:fa2:: with SMTP id 31mr129446112plz.38.1564682235805;
-        Thu, 01 Aug 2019 10:57:15 -0700 (PDT)
+        bh=PovcotU8DbX5bHo1fcUepWMJUFF4zr/eTWjoB68qYno=;
+        b=VPg0dcQVLszMiARD4ZBSvTxaXhACU7zS47RZ5UQEVVg5TlLeoXNUtJypTPlQMwtic0
+         w6WBNDuWC0isaSV9B+aw2xlr0I5XYMDcCHuY/VsyrUdqsep4XWaT3Lmijga0XDjTjcMn
+         lEkkoWPnqxBvWjt7cWUFpJSuUwSNAuBA7NEYRAnRVqZ9q6X1WtVibqY6FOHfUGy9dUCc
+         HjUiZu3v/+vZ4sxuO8CMzlFlKKqEiG9zMwnrKzeDA2cuKVqCMai3J8oqZDtbnb7pTkpO
+         9u1hL1nOLI7LQa94vWDYRiRV1XtajCaA1yFK2EnhLkYXEJHqPFwOa4TdCAgVzVrM3XnA
+         pagw==
+X-Gm-Message-State: APjAAAWHWYv/XdYjsKAmxv3M2wGlFwmNk4KZWL34LgmvbttDVBhS19kq
+        KYjhZ9rKNUuSUARq6PCp+1Y=
+X-Google-Smtp-Source: APXvYqxiX9tJhCghZTcXaQMwZN6LwLwKhq4bZrO6Y7St7rzjWKEoaJvNG7Ph1y/8+Kl189Uli95IHQ==
+X-Received: by 2002:a63:4522:: with SMTP id s34mr119340297pga.362.1564682237537;
+        Thu, 01 Aug 2019 10:57:17 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.57.14
+        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.57.15
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 10:57:15 -0700 (PDT)
+        Thu, 01 Aug 2019 10:57:16 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Himanshu Madhani <hmadhani@marvell.com>,
         Giridhar Malavali <gmalavali@marvell.com>
-Subject: [PATCH 40/59] qla2xxx: Make it explicit that ELS pass-through IOCBs use little endian
-Date:   Thu,  1 Aug 2019 10:55:55 -0700
-Message-Id: <20190801175614.73655-41-bvanassche@acm.org>
+Subject: [PATCH 41/59] qla2xxx: Set the responder mode if appropriate for ELS pass-through IOCBs
+Date:   Thu,  1 Aug 2019 10:55:56 -0700
+Message-Id: <20190801175614.73655-42-bvanassche@acm.org>
 X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
 In-Reply-To: <20190801175614.73655-1-bvanassche@acm.org>
 References: <20190801175614.73655-1-bvanassche@acm.org>
@@ -52,68 +52,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-According to the firmware documentation the firmware expects all ELS
-pass-through IOCB parameters in little endian format. Make this explicit.
+According to the firmware documentation responder mode must be set for
+ELS pass-through IOCBs if a response is expected.
 
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Cc: Giridhar Malavali <gmalavali@marvell.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_fw.h   | 8 ++++----
- drivers/scsi/qla2xxx/qla_iocb.c | 7 ++++---
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ drivers/scsi/qla2xxx/qla_iocb.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_fw.h b/drivers/scsi/qla2xxx/qla_fw.h
-index df079a8c2b33..732bb871c433 100644
---- a/drivers/scsi/qla2xxx/qla_fw.h
-+++ b/drivers/scsi/qla2xxx/qla_fw.h
-@@ -761,13 +761,13 @@ struct els_entry_24xx {
- #define ECF_CLR_PASSTHRU_PEND	BIT_12
- #define ECF_INCL_FRAME_HDR	BIT_11
- 
--	uint32_t rx_byte_count;
--	uint32_t tx_byte_count;
-+	__le32	 rx_byte_count;
-+	__le32	 tx_byte_count;
- 
- 	__le64	 tx_address __packed;	/* Data segment 0 address. */
--	uint32_t tx_len;		/* Data segment 0 length. */
-+	__le32	 tx_len;		/* Data segment 0 length. */
- 	__le64	 rx_address __packed;	/* Data segment 1 address. */
--	uint32_t rx_len;		/* Data segment 1 length. */
-+	__le32	 rx_len;		/* Data segment 1 length. */
- };
- 
- struct els_sts_entry_24xx {
 diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index 6b120254f414..c7b91827c1e7 100644
+index c7b91827c1e7..2da7c92e320b 100644
 --- a/drivers/scsi/qla2xxx/qla_iocb.c
 +++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -2704,12 +2704,12 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
+@@ -2700,9 +2700,9 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
+ 	els_iocb->s_id[0] = vha->d_id.b.al_pa;
+ 	els_iocb->s_id[1] = vha->d_id.b.area;
+ 	els_iocb->s_id[2] = vha->d_id.b.domain;
+-	els_iocb->control_flags = 0;
  
  	if (elsio->u.els_logo.els_cmd == ELS_DCMD_PLOGI) {
++		els_iocb->control_flags = 0;
  		els_iocb->tx_byte_count = els_iocb->tx_len =
--			sizeof(struct els_plogi_payload);
-+			cpu_to_le32(sizeof(struct els_plogi_payload));
+ 			cpu_to_le32(sizeof(struct els_plogi_payload));
  		put_unaligned_le64(elsio->u.els_plogi.els_plogi_pyld_dma,
- 				   &els_iocb->tx_address);
- 		els_iocb->rx_dsd_count = 1;
- 		els_iocb->rx_byte_count = els_iocb->rx_len =
--			sizeof(struct els_plogi_payload);
-+			cpu_to_le32(sizeof(struct els_plogi_payload));
- 		put_unaligned_le64(elsio->u.els_plogi.els_resp_pyld_dma,
- 				   &els_iocb->rx_address);
- 
-@@ -2718,7 +2718,8 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
+@@ -2718,6 +2718,7 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
  		ql_dump_buffer(ql_log_info, vha, 0x0109,
  		    (uint8_t *)els_iocb, 0x70);
  	} else {
--		els_iocb->tx_byte_count = sizeof(struct els_logo_payload);
-+		els_iocb->tx_byte_count =
-+			cpu_to_le32(sizeof(struct els_logo_payload));
++		els_iocb->control_flags = 1 << 13;
+ 		els_iocb->tx_byte_count =
+ 			cpu_to_le32(sizeof(struct els_logo_payload));
  		put_unaligned_le64(elsio->u.els_logo.els_logo_pyld_dma,
- 				   &els_iocb->tx_address);
- 		els_iocb->tx_len = cpu_to_le32(sizeof(struct els_logo_payload));
 -- 
 2.22.0.770.g0f2c4a37fd-goog
 
