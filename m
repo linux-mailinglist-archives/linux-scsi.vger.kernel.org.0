@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C797E187
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6297E188
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387953AbfHAR4b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Aug 2019 13:56:31 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:43152 "EHLO
+        id S2387957AbfHAR4d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Aug 2019 13:56:33 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42056 "EHLO
         mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727508AbfHAR4b (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:56:31 -0400
-Received: by mail-pg1-f196.google.com with SMTP id r22so7017451pgk.10
-        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:56:31 -0700 (PDT)
+        with ESMTP id S1727508AbfHAR4c (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:56:32 -0400
+Received: by mail-pg1-f196.google.com with SMTP id t132so34611693pgb.9
+        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:56:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kSyrUPCu9oxrgNWWQcEYQeFmNc2QamvroWhcLTeDZ74=;
-        b=rL+QVffqSYsMMFRWXLG/iCBioYiMwA5ATMb8f5uYJgY0xXj31hIJIn2rFZ/4MVH4Nr
-         ztKNl2iAS+t7wbSQ1F2FabsD45/+h3Aon6yDzHQSi4ok8uOlRMnisFKv7jRpLyEALiqh
-         6+L07MKf4EQVZsYGyScbqOD+3iDRP8esxtqbX9bZeJxsAxWt2DZw/tFqVZTFFpAx7aMI
-         9lshoCmB1ilFATU4JOgP4yWdyZLpyJBBVAEQnw9x0V0XPOF83wo+pirA4FKpw7OKEluK
-         wp6J6WajQdGU8Y/Gvt4NZK3PCOjlQoAAtzI8D/1+w0h8+EqP/odfoXyyfePEEkBiP/sQ
-         pLNQ==
-X-Gm-Message-State: APjAAAW/VLa/axotuja0zimnRJ7827S+/6nw8YDMcX2Clped6lV+2GlN
-        UH8A+xqNIQLWxxuWh3r9uWg=
-X-Google-Smtp-Source: APXvYqxHQrM9S6twLR/vwhnb0lJV8oi1/pzX6V+e2YG6IhiguGE+h/Pxw/o8Fuom/ThWORDM/kyu+A==
-X-Received: by 2002:aa7:8dd2:: with SMTP id j18mr54159954pfr.88.1564682190625;
-        Thu, 01 Aug 2019 10:56:30 -0700 (PDT)
+        bh=REjcNzC0hs4YOAZ6fVLuSwV8KptEfncYABLVTEHl8yM=;
+        b=aBWGedgxNMw0AM9SUXgt/b88cH85veN8107txwT3mOng7V35YLBDC1cGRz+bA4CGjU
+         GRBmlPppTSSmwz4xNwND84ETJ6n38Y/eEw+DSw7FghhhRUr5YP8kgHZj3fsarCk0xZl+
+         lRxgbvME/4KV4WaEEwOtlxZI65zOno8fKSR4aLdFHQ32h0/c3OWDQrXegyvsiBNayyZq
+         NzYCD4OT0h/+AigiozwdVclkQy9W4OtbgmCiZg5Cw8kodK5er88ZYGFONSvioUb3HAoy
+         iqpmW/A9qB8F0F232vWuTDAIG6J4Ha8eqQle6VloRhtQd/wP7Qg+lrtffh5Z8g5Om4ct
+         d8Jg==
+X-Gm-Message-State: APjAAAXgKCXLlDH8tTFJ4qZJLlyXKJA/vYDZP/4v1ULbR5XgO6324VFU
+        ChrC4m9aVj6qAr4SwzkKx7k=
+X-Google-Smtp-Source: APXvYqymZL710bTrj8kBZTaC+XUMcKkFhXjE7Y+Hrjudm5a3STJkQAErzEH0kLXuY7LZ9Ut/1oH9hg==
+X-Received: by 2002:a17:90a:d996:: with SMTP id d22mr33088pjv.86.1564682191963;
+        Thu, 01 Aug 2019 10:56:31 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.56.29
+        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.56.30
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 10:56:29 -0700 (PDT)
+        Thu, 01 Aug 2019 10:56:31 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Himanshu Madhani <hmadhani@marvell.com>,
         Giridhar Malavali <gmalavali@marvell.com>
-Subject: [PATCH 06/59] qla2xxx: Remove an include directive from qla_mr.c
-Date:   Thu,  1 Aug 2019 10:55:21 -0700
-Message-Id: <20190801175614.73655-7-bvanassche@acm.org>
+Subject: [PATCH 07/59] qla2xxx: Remove a superfluous forward declaration
+Date:   Thu,  1 Aug 2019 10:55:22 -0700
+Message-Id: <20190801175614.73655-8-bvanassche@acm.org>
 X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
 In-Reply-To: <20190801175614.73655-1-bvanassche@acm.org>
 References: <20190801175614.73655-1-bvanassche@acm.org>
@@ -52,28 +52,29 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-There is no bsg code in the qla_mr.c source file. Hence do not include
-the <linux/bsg-lib.h> header file from qla_mr.c.
+Since qlt_make_local_sess() is defined before it is called, remove the
+forward declaration of that function.
 
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Cc: Giridhar Malavali <gmalavali@marvell.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_mr.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_target.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
-index 942ee13b96a4..cd892edec4dc 100644
---- a/drivers/scsi/qla2xxx/qla_mr.c
-+++ b/drivers/scsi/qla2xxx/qla_mr.c
-@@ -10,7 +10,6 @@
- #include <linux/pci.h>
- #include <linux/ratelimit.h>
- #include <linux/vmalloc.h>
--#include <linux/bsg-lib.h>
- #include <scsi/scsi_tcq.h>
- #include <linux/utsname.h>
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index d0061ae1488e..4c5f9c02c379 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -4106,8 +4106,6 @@ static inline int qlt_get_fcp_task_attr(struct scsi_qla_host *vha,
+ 	return fcp_task_attr;
+ }
  
+-static struct fc_port *qlt_make_local_sess(struct scsi_qla_host *,
+-					uint8_t *);
+ /*
+  * Process context for I/O path into tcm_qla2xxx code
+  */
 -- 
 2.22.0.770.g0f2c4a37fd-goog
 
