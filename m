@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6476C7E1BC
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330927E1BD
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388102AbfHAR5j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Aug 2019 13:57:39 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45993 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387963AbfHAR5j (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:57:39 -0400
-Received: by mail-pf1-f195.google.com with SMTP id r1so34496212pfq.12
-        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:57:38 -0700 (PDT)
+        id S2388110AbfHAR5k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Aug 2019 13:57:40 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41842 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387963AbfHAR5k (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:57:40 -0400
+Received: by mail-pg1-f196.google.com with SMTP id x15so24272943pgg.8
+        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:57:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EhFQNj283ds4+ZGrKCdh7tPisaHbmzrJm6/C8COrbh8=;
-        b=q5wjY+wbuwFDR6Rij3hX31WGPBppwaZKpLWkQznV1iZ25V7IYwOZFYD+EkQ5l8ZJ/5
-         fMfhByMQGbQMiNphwRohJ0j3qPtwya1KwjKWYLzGxA7vqDMC4+FIj5n5EuAh2yNno6xK
-         bmv0/VbljlRRmg8gnfiGY/sJ1Esvz08Q9gfRjzwLatlF1LF5I3roNDlDx+jZ7OAl0P8m
-         rqJJPRM4MdOD871/0D4qcDZB8DXsrhDCgUNN7m95vzQO03Xq36+SGM5ijpj9SNvoFYXP
-         uPLjrXPi6vfxp/VSLLvXWOhL5svV7LVKzyrnM+AzsYeNX7ZWbslrOF/2kefEY8FCKnRS
-         Romw==
-X-Gm-Message-State: APjAAAVUtshEIbcgImS8L/gI/eSpE9f1HomK42lDzfE/CZ2sEw8XPFFw
-        y+NsdE2Bbx6Q+Bx6FoiDJl4=
-X-Google-Smtp-Source: APXvYqzxFOlLOs4EkVzihhX1zEXNtur0K9RgWMXnTqh7yOyhyUsk9vYaAfW63vk3QQoE+sklMzkWlg==
-X-Received: by 2002:a63:7709:: with SMTP id s9mr4490536pgc.296.1564682258337;
-        Thu, 01 Aug 2019 10:57:38 -0700 (PDT)
+        bh=Hc0KHc81mEQYHJMEBfdSPfBGuvvuheIPelj6hWSFKEM=;
+        b=Cs8Hn2P+c5M9rU5ZBTQhQzGoHYy9DGfGDmd0IPt4k1U3JeteHfZcNi9e+EFx4ZhEcj
+         36SE+htzvkc9shAJJKVrOm6l3d0ykGUgFH6Azjeywvhc3oivmqYedClylQNCisGCzA7U
+         TLLqlLYGbHpMZ5z2fPWaA/bNpdin/WeEfpx26h5eCjKqWhwk7lEJYu13A0bzhRe6/Psd
+         oA3ctZemdx1YT4/vLPq0YwXhT7KWyq0CtunE4HQ3miDJ6nCh4SudRmbh33pzF3ey6lBs
+         ci9xAi77fZL6+xAkziZ1YwPFDtwrkJ0hBr0stLmisAxJ4k6LIOV4q3b2KZD5qK0ZwOZZ
+         yliA==
+X-Gm-Message-State: APjAAAVZ5oupb2jabV9ceR0unzKtmvttZCsveFWPXg82x8+46JyBuF+R
+        5Gk7WtJMuFxCbVguEkHQeV4dv9z/
+X-Google-Smtp-Source: APXvYqzJkTrFXiRmpkJW/4u9ukW8TeSfOZ0uFHtjBkjuElpy3y6J66EJZUxV/5SMfWSSRTdwWQNNBw==
+X-Received: by 2002:a65:5b8e:: with SMTP id i14mr118926317pgr.188.1564682259930;
+        Thu, 01 Aug 2019 10:57:39 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.57.37
+        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.57.38
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 10:57:37 -0700 (PDT)
+        Thu, 01 Aug 2019 10:57:38 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Himanshu Madhani <hmadhani@marvell.com>,
         Giridhar Malavali <gmalavali@marvell.com>
-Subject: [PATCH 56/59] qla2xxx: Introduce qla2x00_els_dcmd2_free()
-Date:   Thu,  1 Aug 2019 10:56:11 -0700
-Message-Id: <20190801175614.73655-57-bvanassche@acm.org>
+Subject: [PATCH 57/59] qla2xxx: Remove two superfluous if-tests
+Date:   Thu,  1 Aug 2019 10:56:12 -0700
+Message-Id: <20190801175614.73655-58-bvanassche@acm.org>
 X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
 In-Reply-To: <20190801175614.73655-1-bvanassche@acm.org>
 References: <20190801175614.73655-1-bvanassche@acm.org>
@@ -52,132 +52,56 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch reduces code duplication.
+This patch fixes the following Coverity complaint:
+
+Null-checking sp->u.iocb_cmd.u.ctarg.rsp suggests that it may be null, but
+it has already been dereferenced on all paths leading to the check.
+
+See also commit e374f9f59281 ("scsi: qla2xxx: Migrate switch registration commands away from mailbox interface") # v4.16.
 
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Cc: Giridhar Malavali <gmalavali@marvell.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h  |  2 +-
- drivers/scsi/qla2xxx/qla_gbl.h  |  2 ++
- drivers/scsi/qla2xxx/qla_gs.c   | 12 +---------
- drivers/scsi/qla2xxx/qla_iocb.c | 40 ++++++++++++++-------------------
- 4 files changed, 21 insertions(+), 35 deletions(-)
+ drivers/scsi/qla2xxx/qla_gs.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index a971d4245d89..873a6aef1c5c 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -455,7 +455,7 @@ struct srb_iocb {
- 			struct els_logo_payload *els_logo_pyld;
- 			dma_addr_t els_logo_pyld_dma;
- 		} els_logo;
--		struct {
-+		struct els_plogi {
- #define ELS_DCMD_PLOGI 0x3
- 			uint32_t flags;
- 			uint32_t els_cmd;
-diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
-index 9fb6f589602b..0dced8eff5f3 100644
---- a/drivers/scsi/qla2xxx/qla_gbl.h
-+++ b/drivers/scsi/qla2xxx/qla_gbl.h
-@@ -45,6 +45,8 @@ extern int qla2x00_local_device_login(scsi_qla_host_t *, fc_port_t *);
- 
- extern int qla24xx_els_dcmd_iocb(scsi_qla_host_t *, int, port_id_t);
- extern int qla24xx_els_dcmd2_iocb(scsi_qla_host_t *, int, fc_port_t *, bool);
-+extern void qla2x00_els_dcmd2_free(scsi_qla_host_t *vha,
-+				   struct els_plogi *els_plogi);
- 
- extern void qla2x00_update_fcports(scsi_qla_host_t *);
- 
 diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index 0e1df8232c75..bf8b30c4827c 100644
+index bf8b30c4827c..03f94eb372b6 100644
 --- a/drivers/scsi/qla2xxx/qla_gs.c
 +++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -3119,17 +3119,7 @@ void qla24xx_sp_unmap(scsi_qla_host_t *vha, srb_t *sp)
- 
- 	switch (sp->type) {
- 	case SRB_ELS_DCMD:
--		if (c->u.els_plogi.els_plogi_pyld)
+@@ -3295,20 +3295,17 @@ static void qla2x00_async_gpnid_sp_done(srb_t *sp, int res)
+ 	e = qla2x00_alloc_work(vha, QLA_EVT_UNMAP);
+ 	if (!e) {
+ 		/* please ignore kernel warning. otherwise, we have mem leak. */
+-		if (sp->u.iocb_cmd.u.ctarg.req) {
 -			dma_free_coherent(&vha->hw->pdev->dev,
--			    c->u.els_plogi.tx_size,
--			    c->u.els_plogi.els_plogi_pyld,
--			    c->u.els_plogi.els_plogi_pyld_dma);
--
--		if (c->u.els_plogi.els_resp_pyld)
+-				sp->u.iocb_cmd.u.ctarg.req_allocated_size,
+-				sp->u.iocb_cmd.u.ctarg.req,
+-				sp->u.iocb_cmd.u.ctarg.req_dma);
+-			sp->u.iocb_cmd.u.ctarg.req = NULL;
+-		}
+-		if (sp->u.iocb_cmd.u.ctarg.rsp) {
 -			dma_free_coherent(&vha->hw->pdev->dev,
--			    c->u.els_plogi.rx_size,
--			    c->u.els_plogi.els_resp_pyld,
--			    c->u.els_plogi.els_resp_pyld_dma);
-+		qla2x00_els_dcmd2_free(vha, &c->u.els_plogi);
- 		break;
- 	case SRB_CT_PTHRU_CMD:
- 	default:
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index 39c7738c0a55..7021fbeb6d23 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -2717,6 +2717,21 @@ qla2x00_els_dcmd2_iocb_timeout(void *data)
- 	sp->done(sp, QLA_FUNCTION_TIMEOUT);
- }
- 
-+void qla2x00_els_dcmd2_free(scsi_qla_host_t *vha, struct els_plogi *els_plogi)
-+{
-+	if (els_plogi->els_plogi_pyld)
+-				sp->u.iocb_cmd.u.ctarg.rsp_allocated_size,
+-				sp->u.iocb_cmd.u.ctarg.rsp,
+-				sp->u.iocb_cmd.u.ctarg.rsp_dma);
+-			sp->u.iocb_cmd.u.ctarg.rsp = NULL;
+-		}
 +		dma_free_coherent(&vha->hw->pdev->dev,
-+				  els_plogi->tx_size,
-+				  els_plogi->els_plogi_pyld,
-+				  els_plogi->els_plogi_pyld_dma);
++				  sp->u.iocb_cmd.u.ctarg.req_allocated_size,
++				  sp->u.iocb_cmd.u.ctarg.req,
++				  sp->u.iocb_cmd.u.ctarg.req_dma);
++		sp->u.iocb_cmd.u.ctarg.req = NULL;
 +
-+	if (els_plogi->els_resp_pyld)
 +		dma_free_coherent(&vha->hw->pdev->dev,
-+				  els_plogi->rx_size,
-+				  els_plogi->els_resp_pyld,
-+				  els_plogi->els_resp_pyld_dma);
-+}
-+
- static void qla2x00_els_dcmd2_sp_done(srb_t *sp, int res)
- {
- 	fc_port_t *fcport = sp->fcport;
-@@ -2748,17 +2763,7 @@ static void qla2x00_els_dcmd2_sp_done(srb_t *sp, int res)
- 		if (!e) {
- 			struct srb_iocb *elsio = &sp->u.iocb_cmd;
++				  sp->u.iocb_cmd.u.ctarg.rsp_allocated_size,
++				  sp->u.iocb_cmd.u.ctarg.rsp,
++				  sp->u.iocb_cmd.u.ctarg.rsp_dma);
++		sp->u.iocb_cmd.u.ctarg.rsp = NULL;
  
--			if (elsio->u.els_plogi.els_plogi_pyld)
--				dma_free_coherent(&sp->vha->hw->pdev->dev,
--				    elsio->u.els_plogi.tx_size,
--				    elsio->u.els_plogi.els_plogi_pyld,
--				    elsio->u.els_plogi.els_plogi_pyld_dma);
--
--			if (elsio->u.els_plogi.els_resp_pyld)
--				dma_free_coherent(&sp->vha->hw->pdev->dev,
--				    elsio->u.els_plogi.rx_size,
--				    elsio->u.els_plogi.els_resp_pyld,
--				    elsio->u.els_plogi.els_resp_pyld_dma);
-+			qla2x00_els_dcmd2_free(vha, &elsio->u.els_plogi);
- 			sp->free(sp);
- 			return;
- 		}
-@@ -2858,18 +2863,7 @@ qla24xx_els_dcmd2_iocb(scsi_qla_host_t *vha, int els_opcode,
- 
- out:
- 	fcport->flags &= ~(FCF_ASYNC_SENT);
--	if (elsio->u.els_plogi.els_plogi_pyld)
--		dma_free_coherent(&sp->vha->hw->pdev->dev,
--		    elsio->u.els_plogi.tx_size,
--		    elsio->u.els_plogi.els_plogi_pyld,
--		    elsio->u.els_plogi.els_plogi_pyld_dma);
--
--	if (elsio->u.els_plogi.els_resp_pyld)
--		dma_free_coherent(&sp->vha->hw->pdev->dev,
--		    elsio->u.els_plogi.rx_size,
--		    elsio->u.els_plogi.els_resp_pyld,
--		    elsio->u.els_plogi.els_resp_pyld_dma);
--
-+	qla2x00_els_dcmd2_free(vha, &elsio->u.els_plogi);
- 	sp->free(sp);
- done:
- 	return rval;
+ 		sp->free(sp);
+ 		return;
 -- 
 2.22.0.770.g0f2c4a37fd-goog
 
