@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C117E193
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D96097E194
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:56:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387983AbfHAR4r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Aug 2019 13:56:47 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:43373 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731621AbfHAR4q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:56:46 -0400
-Received: by mail-pf1-f193.google.com with SMTP id i189so34507979pfg.10
-        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:56:46 -0700 (PDT)
+        id S2387985AbfHAR4s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Aug 2019 13:56:48 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41751 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731544AbfHAR4s (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:56:48 -0400
+Received: by mail-pg1-f196.google.com with SMTP id x15so24271784pgg.8
+        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:56:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6v1O9CfR6TeRmnq7YFF7lfjikId/v4WXzcSDhTGUZPQ=;
-        b=Ra4ND76QCWEORuD+QKKZL80IOqCjdRZLov8p7kIhPkt7CssDiIqOoU/hQ8b46FFGHF
-         IkRZv3oozjhR52UkyQaEDgTkM+RSfjDsVup576ZkB+px/qWEo0p1x9tlICyJA5Hy+esg
-         uRtPlGFPkXDRS6l7/p6WW/1sSJCROokjBSEpfRxwE6qjhL02Hfg+CGijIRyFrJ3EjIC/
-         5gzvVPRuKqBHfMVbOKVVKaUyczVgooVHnn36VMCct3oN8vkf/NwLEMAmcmBuJXRmniDv
-         uYWOs4dQqo+/jqelkE+qc4FOu+VJdWdXaLFB2zMfsACrxEGgLUCBWC6PoV2j95aHMMOE
-         Ldvg==
-X-Gm-Message-State: APjAAAV0AFUlDKQ7K+ltBjxTexGcPpdYMkv8K0kUoPVPRer/khvDtotW
-        tHIVUycU2d6dKiW/0js6dcY=
-X-Google-Smtp-Source: APXvYqxptjJsN/Ccte1e3j08kdtW4cUBBcnzrmqOWU31aE5t9wUQnwtB9nUmPMbdhRWQDogFlyfO8g==
-X-Received: by 2002:a65:614a:: with SMTP id o10mr5333440pgv.407.1564682206026;
-        Thu, 01 Aug 2019 10:56:46 -0700 (PDT)
+        bh=n56A+S0GJfQRXtZQxBXinzxMXs9JIFCI/MzB4azduTs=;
+        b=tXwAed2/ozugrM8qzgCjrrNVgBSRwmgF/n/Ay/D+KerhymZwyFuZoRulXFTk2ufV5l
+         dzqMLm8DvGi8+mMr0s1q4yquccuoIy2/+TNYsMRI23MD1k0tTgmcJOx33BvC15zjqtQ+
+         WNlVvaEaUSk9O9JsN0BqRbcW0aGA5eZMaddqmIY/3ylNAbAaNCgulnkHYk5D5ZSYJS23
+         lkE3GUM0vIS438Ked+1gdOIsPNmRzkg3VTPXyvJaKMlJEBGleX2bbLh/mPc9izbsylVB
+         /5tvHOA3zbVsKA3oA+/KNFXXG9jZYSbHFrn4/DjpRe1PRsEDq1azQ9mDE+h9OLzTJuj9
+         0nBQ==
+X-Gm-Message-State: APjAAAWCRr5W8n7Qy8E9/QsFZvwIBR3Cpp/obESAqAdgrt4G6XHNfCqk
+        r5bZw4OlLtoFixfse1cUH4c=
+X-Google-Smtp-Source: APXvYqzthEuOxM5Xk2cilw65G+TI7HvtAvmM4O4xD96RV8/cX+OzEFiRJzBgXaynejZrFQkrohNzrA==
+X-Received: by 2002:a63:1f50:: with SMTP id q16mr9690125pgm.274.1564682207375;
+        Thu, 01 Aug 2019 10:56:47 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.56.44
+        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.56.46
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 10:56:45 -0700 (PDT)
+        Thu, 01 Aug 2019 10:56:46 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Himanshu Madhani <hmadhani@marvell.com>,
         Giridhar Malavali <gmalavali@marvell.com>
-Subject: [PATCH 18/59] qla2xxx: Simplify qla24xx_abort_sp_done()
-Date:   Thu,  1 Aug 2019 10:55:33 -0700
-Message-Id: <20190801175614.73655-19-bvanassche@acm.org>
+Subject: [PATCH 19/59] qla2xxx: Fix session lookup in qlt_abort_work()
+Date:   Thu,  1 Aug 2019 10:55:34 -0700
+Message-Id: <20190801175614.73655-20-bvanassche@acm.org>
 X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
 In-Reply-To: <20190801175614.73655-1-bvanassche@acm.org>
 References: <20190801175614.73655-1-bvanassche@acm.org>
@@ -52,39 +52,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of explicitly checking whether a timeout has occurred, ignore
-the del_timer() return value.
+Pass the correct session ID to find_sess_by_s_id() instead of passing
+an uninitialized variable.
 
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Cc: Giridhar Malavali <gmalavali@marvell.com>
+Fixes: 2d70c103fd2a ("[SCSI] qla2xxx: Add LLD target-mode infrastructure for >= 24xx series") # v3.5.
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ drivers/scsi/qla2xxx/qla_target.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index c24d7667d3c9..cab5f2f90714 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -122,13 +122,11 @@ static void qla24xx_abort_sp_done(void *ptr, int res)
- 	srb_t *sp = ptr;
- 	struct srb_iocb *abt = &sp->u.iocb_cmd;
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 12a3e77e0d02..ea22e62257cb 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -6198,7 +6198,6 @@ static void qlt_abort_work(struct qla_tgt *tgt,
+ 	struct qla_hw_data *ha = vha->hw;
+ 	struct fc_port *sess = NULL;
+ 	unsigned long flags = 0, flags2 = 0;
+-	uint32_t be_s_id;
+ 	uint8_t s_id[3];
+ 	int rc;
  
--	if ((res == QLA_OS_TIMER_EXPIRED) ||
--	    del_timer(&sp->u.iocb_cmd.timer)) {
--		if (sp->flags & SRB_WAKEUP_ON_COMP)
--			complete(&abt->u.abt.comp);
--		else
--			sp->free(sp);
--	}
-+	del_timer(&sp->u.iocb_cmd.timer);
-+	if (sp->flags & SRB_WAKEUP_ON_COMP)
-+		complete(&abt->u.abt.comp);
-+	else
-+		sp->free(sp);
- }
+@@ -6211,8 +6210,7 @@ static void qlt_abort_work(struct qla_tgt *tgt,
+ 	s_id[1] = prm->abts.fcp_hdr_le.s_id[1];
+ 	s_id[2] = prm->abts.fcp_hdr_le.s_id[0];
  
- static int qla24xx_async_abort_cmd(srb_t *cmd_sp, bool wait)
+-	sess = ha->tgt.tgt_ops->find_sess_by_s_id(vha,
+-	    (unsigned char *)&be_s_id);
++	sess = ha->tgt.tgt_ops->find_sess_by_s_id(vha, s_id);
+ 	if (!sess) {
+ 		spin_unlock_irqrestore(&ha->tgt.sess_lock, flags2);
+ 
 -- 
 2.22.0.770.g0f2c4a37fd-goog
 
