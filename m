@@ -2,46 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1867E189
-	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:56:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D0B7E18A
+	for <lists+linux-scsi@lfdr.de>; Thu,  1 Aug 2019 19:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387958AbfHAR4e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Aug 2019 13:56:34 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36091 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727508AbfHAR4e (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:56:34 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l21so34616690pgm.3
-        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:56:33 -0700 (PDT)
+        id S2387963AbfHAR4f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 1 Aug 2019 13:56:35 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34415 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727508AbfHAR4f (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 13:56:35 -0400
+Received: by mail-pf1-f194.google.com with SMTP id b13so34505345pfo.1
+        for <linux-scsi@vger.kernel.org>; Thu, 01 Aug 2019 10:56:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hZ9pWExBM5wNCojvBz8B7tbglunQZ3GCEA+BBoT6WRk=;
-        b=C5RZl6lL54Bma8WAbo3weS/vm2aZFHPwFh5GvrhMSDW9QgBEgXfDZ4rLA4M8ZbhWyx
-         7kGnmrmwGjlnUumkdyck6fHExWuDW2cpXRhRFCFsSIGm9HdGN5uTOwkQUbS098Dp+owf
-         RFGzu6TdiGuwBkdbE+ipxhH5dvjxNfSwYA+iZn4TH/2gk68got1ROXQFVa1ss4OjmaX7
-         h7iXy+6Lq4bgZVAf1snKWzrxxA1k9psd9B0dMWoHswjdtDL3NUulluyeNBYRDqLbzb3+
-         MkrXmDvsYUifmSpxRMKlLQhw6ueAOl9COdjmuQg67LXRG/8rx2DGZN+/ierqd4Ll4iQk
-         5wkQ==
-X-Gm-Message-State: APjAAAU5IyhLk1/7wsOsmnaNz9+gA5PhoryYlxci8IYtD6zJ++EGdUk5
-        D0C4mBi+s+6ivjYeX/L0Ek6GmkPd
-X-Google-Smtp-Source: APXvYqxukSezu2VXJv6qwLynqWv+3HKphQ/O3nSALoKygz//UwDzeWxh2YdZwGZXndQoxieC/rygyQ==
-X-Received: by 2002:a62:6c1:: with SMTP id 184mr53449170pfg.230.1564682193173;
-        Thu, 01 Aug 2019 10:56:33 -0700 (PDT)
+        bh=tG/4QnRonC0x0+dTWs+jPTTdt3EB2vU77rljMNCZWw0=;
+        b=KMe0X6Tigeq73bNt04UrdvmWYavC+weH9FWZKaIo92/AZ1QjIRKq/LVot2mK9L+2E9
+         0KXwXnUvkJvbPrsR83J9x3ou9fIXohJwaYk72mBOJ9EOpXY7+pUceJ339OQzFYNvOhqZ
+         s53wsl33Fxz6ugh/p+Hbkl8xYDXWRjbvfQZ17uMND4dE5HeGlwBtDgBZhlE2t1QIW5Ou
+         pvTlZFQh+siEbOoMbpLim+R1v8eduRUmjha9wF6geofaxnvIKuKmUcXXsB6A+SrkiadV
+         Ioq9HbhuhF39YuscyX6SzZ+hFEtnOK2WvmSbtw3QZXv/329raFby1THa1184nSlXbSmp
+         ZMSA==
+X-Gm-Message-State: APjAAAUlS4H9K3M90W1C4+lgJFB2lPZlNiSHk1GP33VNkGFZ3Keg/OKl
+        SsYkMXMw11YweliJ30yoQbQ8aJJI
+X-Google-Smtp-Source: APXvYqwPmpBby7BOdWgJj/n/fL/rWldAjm61vzSFll2FWuBrHsMvzaK4KA76dvRHpPuitkbi4kgeqA==
+X-Received: by 2002:a17:90a:206a:: with SMTP id n97mr58354pjc.10.1564682194441;
+        Thu, 01 Aug 2019 10:56:34 -0700 (PDT)
 Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.56.31
+        by smtp.gmail.com with ESMTPSA id y10sm73144114pfm.66.2019.08.01.10.56.33
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 01 Aug 2019 10:56:32 -0700 (PDT)
+        Thu, 01 Aug 2019 10:56:33 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
 Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Himanshu Madhani <hmadhani@marvell.com>,
         Giridhar Malavali <gmalavali@marvell.com>
-Subject: [PATCH 08/59] qla2xxx: Declare the fourth ql_dump_buffer() argument const
-Date:   Thu,  1 Aug 2019 10:55:23 -0700
-Message-Id: <20190801175614.73655-9-bvanassche@acm.org>
+Subject: [PATCH 09/59] qla2xxx: Change the return type of qla2x00_update_ms_fdmi_iocb() into void
+Date:   Thu,  1 Aug 2019 10:55:24 -0700
+Message-Id: <20190801175614.73655-10-bvanassche@acm.org>
 X-Mailer: git-send-email 2.22.0.770.g0f2c4a37fd-goog
 In-Reply-To: <20190801175614.73655-1-bvanassche@acm.org>
 References: <20190801175614.73655-1-bvanassche@acm.org>
@@ -52,44 +52,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch makes it clear to humans and also to the compiler that
-ql_dump_buffer() does not modify the memory the @buf argument points at.
+The value returned by this function is not used. Hence change the
+return type of this function into 'void' and remove the return
+statement.
 
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Cc: Giridhar Malavali <gmalavali@marvell.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_dbg.c | 3 ++-
- drivers/scsi/qla2xxx/qla_gbl.h | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_gs.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_dbg.c b/drivers/scsi/qla2xxx/qla_dbg.c
-index 9e80646722e2..30afc59c1870 100644
---- a/drivers/scsi/qla2xxx/qla_dbg.c
-+++ b/drivers/scsi/qla2xxx/qla_dbg.c
-@@ -2743,7 +2743,8 @@ ql_dump_regs(uint level, scsi_qla_host_t *vha, uint id)
+diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
+index 7dc9eeb0c401..5ec3c2b96f3f 100644
+--- a/drivers/scsi/qla2xxx/qla_gs.c
++++ b/drivers/scsi/qla2xxx/qla_gs.c
+@@ -1479,7 +1479,7 @@ qla24xx_prep_ms_fdmi_iocb(scsi_qla_host_t *vha, uint32_t req_size,
+ 	return ct_pkt;
+ }
  
- 
- void
--ql_dump_buffer(uint level, scsi_qla_host_t *vha, uint id, void *buf, uint size)
-+ql_dump_buffer(uint level, scsi_qla_host_t *vha, uint id, const void *buf,
-+	       uint size)
+-static inline ms_iocb_entry_t *
++static void
+ qla2x00_update_ms_fdmi_iocb(scsi_qla_host_t *vha, uint32_t req_size)
  {
- 	uint cnt;
+ 	struct qla_hw_data *ha = vha->hw;
+@@ -1493,8 +1493,6 @@ qla2x00_update_ms_fdmi_iocb(scsi_qla_host_t *vha, uint32_t req_size)
+ 		ms_pkt->req_bytecount = cpu_to_le32(req_size);
+ 		ms_pkt->req_dsd.length = ms_pkt->req_bytecount;
+ 	}
+-
+-	return ms_pkt;
+ }
  
-diff --git a/drivers/scsi/qla2xxx/qla_gbl.h b/drivers/scsi/qla2xxx/qla_gbl.h
-index f9669fdf7798..6f6801722a09 100644
---- a/drivers/scsi/qla2xxx/qla_gbl.h
-+++ b/drivers/scsi/qla2xxx/qla_gbl.h
-@@ -630,7 +630,7 @@ extern ulong qla27xx_fwdt_template_size(void *);
- 
- extern void qla2xxx_dump_post_process(scsi_qla_host_t *, int);
- extern void ql_dump_regs(uint, scsi_qla_host_t *, uint);
--extern void ql_dump_buffer(uint, scsi_qla_host_t *, uint, void *, uint);
-+extern void ql_dump_buffer(uint, scsi_qla_host_t *, uint, const void *, uint);
- /*
-  * Global Function Prototypes in qla_gs.c source file.
-  */
+ /**
 -- 
 2.22.0.770.g0f2c4a37fd-goog
 
