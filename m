@@ -2,242 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 959EB7E762
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 03:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1557EF22
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 10:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388713AbfHBBHj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 1 Aug 2019 21:07:39 -0400
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:43364 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388658AbfHBBHi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 1 Aug 2019 21:07:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1564708058; x=1596244058;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=+7ltFzWWSD1CF3GHa44SnNZQWVpk6t0nxCUU96kG9os=;
-  b=mgfAWNAdcW3r1GqOhrdcONkc1vxjFVmEgVD9n9RB6+LxOSBbvJysv1Ce
-   3GER4sKpJ4Ox8jkMhsjgOF5oyPbSVEvUIoDdYxYWS0eTkmQ6sN/WKuwMY
-   6xA8vSh7P+6y9QpZ8VGhtkrNh+apZFN5cxFLlSmGUm1r2fqHOmYfT8+s+
-   +0hFd8V2GJc3MVm5jGIW56mKCASHh8H+7KVJsGSPeIF31R4RglLyWFd7H
-   2/dJrF1iKMLT8Dxd0A9I35Bu8XiMnYYsNYZdNAAKknbKxevKaXXjMsJT4
-   aNP98Kmoxg76KcNhWK4UyuBqE5MXibLebreq7hzZz2FU2VV0CsSwZ4OF6
-   A==;
-IronPort-SDR: sJu0iGOHD5BGZMqd2ygHeK+CjbC9K4MzaQ3OG6I3ZLFbCZXrAvOhdfkeGzZsvyO7RiOpMzzxHY
- Avme+ajz9NWjljAuqW3PVY0lUHvYdPgZySvUJRASCvwzyNsCoEfv6wi+QS0sjGkiGIdHXHtw7+
- uS7Bqh8IMojDrXGXPjC/ynkeQbYqCcIiLWYZdIX3dlct2Bk8m/gXvyF8j9BUeUWC7U1JX2bCAy
- 1O/aRSPJ4bFGNdeVbIsrHuEfU62AbN7zpvDxuiDUG0YhFxepVbW6KyUXh1XcmwVbbXzPB/UaQh
- A8s=
-X-IronPort-AV: E=Sophos;i="5.64,336,1559491200"; 
-   d="scan'208";a="115755109"
-Received: from mail-dm3nam05lp2053.outbound.protection.outlook.com (HELO NAM05-DM3-obe.outbound.protection.outlook.com) ([104.47.49.53])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Aug 2019 09:07:27 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n/+LoAAyoYSXOuPmm3hHq2ZKgnHmha16XNaejyPtRuvTeb1q4giEqznVnGqQVo3zw1gXXqrDtQMHorUb8hCdYV02OlxNTk3keUxx+uxdwV3FXeOJwIE2LZQUN0Sax/WZMWzgITxKM7v4OKgaAqwzBiQ0CEmk09zxc15ZNnXtBth1PeiIJ+Naj8PAPOmF004Y7Ym3wXVXmZxS4VrXUrD3IqhMbhLtRwlWmdWvPcI4yQPHeLKSbK/nyWRSnVFH+LvNCRPlDzUBESSoIuMSobjyDNjfzUxp1iAh5aOibrRR5BbwKOQ/mOy8WwbW3SdmFE/DmdVxECCeZ1R58bOnc3vKpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZFfWFfAIMBNzsPTd4o8MSA5aL+9xvaz33X/kr5NHCCo=;
- b=U7DDWBAdXiOh9ljjcLYZPXmled+UP6AllhYOgCnMsBb0XuBH5p8TiUz+VGhqVJnRokApCYSxnOz484cZv8l1TK/56BTCS3KfOdqqsrbjaA9NNUQv0YMKRlHJUclTXDwOUSGgMjtnqusIFo9pFW5BlZsRtSak9b6j6yKR2mEEtvpYeN+PAvA3r6MCHTdLYQjivbiRAALD+QakMU873evWCHbMv2NzazD15yfZ3BFuDe9XuOIicxKNJnKX7tPJiV/2f0P/ttYsunA6ulrgeb2qkJXoAA8ec4nn+UEkQd0PrWW/DE17Lgc5nY3eYayfR5f3mhc3BZAecjLBtTQ5iAkFPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wdc.com;dmarc=pass action=none header.from=wdc.com;dkim=pass
- header.d=wdc.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZFfWFfAIMBNzsPTd4o8MSA5aL+9xvaz33X/kr5NHCCo=;
- b=Nq1S2cty+Sg8NSpypeEQ0u6CKyEzmwIjRDz5OjnhPplfKn+qA7Vu/Je/sEmSdjOMbeGFN2hph/wPX69FFQEupbz8tULMTvw1ZOaegE8981krRpotGp3Xp62py2KbItsbBsG7bv0CczYirIwAHSs4wmPL12/aVc3ld7TLVgeGUts=
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.58.207) by
- BYAPR04MB4103.namprd04.prod.outlook.com (52.135.216.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2115.15; Fri, 2 Aug 2019 01:07:26 +0000
-Received: from BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::65a9:db0a:646d:eb1e]) by BYAPR04MB5816.namprd04.prod.outlook.com
- ([fe80::65a9:db0a:646d:eb1e%6]) with mapi id 15.20.2136.010; Fri, 2 Aug 2019
- 01:07:26 +0000
-From:   Damien Le Moal <Damien.LeMoal@wdc.com>
-To:     Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "dennis@kernel.org" <dennis@kernel.org>,
-        "hare@suse.com" <hare@suse.com>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "dennisszhou@gmail.com" <dennisszhou@gmail.com>,
-        "jthumshirn@suse.de" <jthumshirn@suse.de>,
-        "osandov@fb.com" <osandov@fb.com>,
-        "ming.lei@redhat.com" <ming.lei@redhat.com>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Subject: Re: [PATCH V2 3/4] scsi: implement REQ_OP_ZONE_RESET_ALL
-Thread-Topic: [PATCH V2 3/4] scsi: implement REQ_OP_ZONE_RESET_ALL
-Thread-Index: AQHVSI5o3BN681RaXUGmIyildT++Bg==
-Date:   Fri, 2 Aug 2019 01:07:25 +0000
-Message-ID: <BYAPR04MB5816E0755EA3A1D90C8FA63AE7D90@BYAPR04MB5816.namprd04.prod.outlook.com>
+        id S2404103AbfHBIYT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Aug 2019 04:24:19 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39322 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726164AbfHBIYT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 2 Aug 2019 04:24:19 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 38BA4AE6D;
+        Fri,  2 Aug 2019 08:24:17 +0000 (UTC)
+Subject: Re: [PATCH V2 1/4] block: add req op to reset all zones and flag
+To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc:     bvanassche@acm.org, osandov@fb.com, dennisszhou@gmail.com,
+        sagi@grimberg.me, axboe@kernel.dk, dennis@kernel.org,
+        tj@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        ming.lei@redhat.com, Hannes Reinecke <hare@suse.com>,
+        jthumshirn@suse.de, damien.lemoal@wdc.com
 References: <20190801172638.4060-1-chaitanya.kulkarni@wdc.com>
- <20190801172638.4060-4-chaitanya.kulkarni@wdc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Damien.LeMoal@wdc.com; 
-x-originating-ip: [60.117.181.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 08cbb364-3c6d-41ea-d710-08d716e5c84c
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:BYAPR04MB4103;
-x-ms-traffictypediagnostic: BYAPR04MB4103:
-x-microsoft-antispam-prvs: <BYAPR04MB4103A4C3A94AB5F12296A740E7D90@BYAPR04MB4103.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-forefront-prvs: 011787B9DD
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(136003)(346002)(396003)(376002)(366004)(189003)(199004)(5660300002)(8936002)(81156014)(2906002)(8676002)(6246003)(66476007)(26005)(66946007)(2201001)(7696005)(3846002)(71190400001)(53936002)(53546011)(7736002)(76176011)(110136005)(6116002)(52536014)(7416002)(91956017)(76116006)(54906003)(99286004)(71200400001)(66446008)(256004)(9686003)(102836004)(55016002)(86362001)(229853002)(6506007)(81166006)(14444005)(6436002)(25786009)(66556008)(64756008)(74316002)(446003)(305945005)(4326008)(2501003)(33656002)(476003)(14454004)(486006)(68736007)(186003)(66066001)(478600001)(316002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4103;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ZR/h3M15miQS3icTZdcp9euzsHvKALXp1KMj50XVLnniaj//FZ3coCYrwVFCo1RVekP7uCLpenOn9fnKuNK0wt1GjiYIFg54FOPpwnWGgumPEnXd5b/j5OmUL/cUzjARvLhbfFS3bNRH35qSnIfRG/bdlvRBiX/FLWsvz9p/wKn0B1JzKIGQYgEy6u3AUO/e0We+Y2EOx0vi6Jo+AMdlqLuf4Wf3HFY//lac9tsEssVlMTOpjAxzU9z0HufPFmWVq45cCRAJIJOPphd/UMuwd54WgnAwvKc4MptxsJT1M1ZSAR7/seOEd5AibzGH+ePwIOiFCVVZFlbXM8TWRtwOX42NC4UgTe9c99ml7cS0PtFV85e4qQ2TJ7M/v+XTN1TSrEqkHVirL7oICptGBGvu5xcOXb5B986VmOSU2oyuhHk=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <20190801172638.4060-2-chaitanya.kulkarni@wdc.com>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <c90b21a4-37ed-de81-963d-8f65383122b9@suse.de>
+Date:   Fri, 2 Aug 2019 10:24:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08cbb364-3c6d-41ea-d710-08d716e5c84c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Aug 2019 01:07:25.8496
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Damien.LeMoal@wdc.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4103
+In-Reply-To: <20190801172638.4060-2-chaitanya.kulkarni@wdc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019/08/02 2:27, Chaitanya Kulkarni wrote:=0A=
-> This patch implements the zone reset all operation for sd_zbc.c. We add=
-=0A=
-> a new boolean parameter for the sd_zbc_setup_reset_cmd() to indicate=0A=
-> REQ_OP_ZONE_RESET_ALL command setup. Along with that we add support in=0A=
-> the completion path for the zone reset all.=0A=
-> =0A=
-> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>=0A=
-> ---=0A=
->  drivers/scsi/sd.c     |  5 ++++-=0A=
->  drivers/scsi/sd.h     |  5 +++--=0A=
->  drivers/scsi/sd_zbc.c | 10 ++++++++--=0A=
->  3 files changed, 15 insertions(+), 5 deletions(-)=0A=
-> =0A=
-> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c=0A=
-> index a3406bd62391..42ef930c4df5 100644=0A=
-> --- a/drivers/scsi/sd.c=0A=
-> +++ b/drivers/scsi/sd.c=0A=
-> @@ -1292,7 +1292,9 @@ static blk_status_t sd_init_command(struct scsi_cmn=
-d *cmd)=0A=
->  	case REQ_OP_WRITE:=0A=
->  		return sd_setup_read_write_cmnd(cmd);=0A=
->  	case REQ_OP_ZONE_RESET:=0A=
-> -		return sd_zbc_setup_reset_cmnd(cmd);=0A=
-> +		return sd_zbc_setup_reset_cmnd(cmd, false);=0A=
-> +	case REQ_OP_ZONE_RESET_ALL:=0A=
-> +		return sd_zbc_setup_reset_cmnd(cmd, true);=0A=
->  	default:=0A=
->  		WARN_ON_ONCE(1);=0A=
->  		return BLK_STS_NOTSUPP;=0A=
-> @@ -1958,6 +1960,7 @@ static int sd_done(struct scsi_cmnd *SCpnt)=0A=
->  	case REQ_OP_WRITE_ZEROES:=0A=
->  	case REQ_OP_WRITE_SAME:=0A=
->  	case REQ_OP_ZONE_RESET:=0A=
-> +	case REQ_OP_ZONE_RESET_ALL:=0A=
->  		if (!result) {=0A=
->  			good_bytes =3D blk_rq_bytes(req);=0A=
->  			scsi_set_resid(SCpnt, 0);=0A=
-> diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h=0A=
-> index 38c50946fc42..1eab779f812b 100644=0A=
-> --- a/drivers/scsi/sd.h=0A=
-> +++ b/drivers/scsi/sd.h=0A=
-> @@ -209,7 +209,7 @@ static inline int sd_is_zoned(struct scsi_disk *sdkp)=
-=0A=
->  =0A=
->  extern int sd_zbc_read_zones(struct scsi_disk *sdkp, unsigned char *buff=
-er);=0A=
->  extern void sd_zbc_print_zones(struct scsi_disk *sdkp);=0A=
-> -extern blk_status_t sd_zbc_setup_reset_cmnd(struct scsi_cmnd *cmd);=0A=
-> +extern blk_status_t sd_zbc_setup_reset_cmnd(struct scsi_cmnd *cmd, bool =
-all);=0A=
->  extern void sd_zbc_complete(struct scsi_cmnd *cmd, unsigned int good_byt=
-es,=0A=
->  			    struct scsi_sense_hdr *sshdr);=0A=
->  extern int sd_zbc_report_zones(struct gendisk *disk, sector_t sector,=0A=
-> @@ -225,7 +225,8 @@ static inline int sd_zbc_read_zones(struct scsi_disk =
-*sdkp,=0A=
->  =0A=
->  static inline void sd_zbc_print_zones(struct scsi_disk *sdkp) {}=0A=
->  =0A=
-> -static inline blk_status_t sd_zbc_setup_reset_cmnd(struct scsi_cmnd *cmd=
-)=0A=
-> +static inline blk_status_t sd_zbc_setup_reset_cmnd(struct scsi_cmnd *cmd=
-,=0A=
-> +						   bool all)=0A=
->  {=0A=
->  	return BLK_STS_TARGET;=0A=
->  }=0A=
-> diff --git a/drivers/scsi/sd_zbc.c b/drivers/scsi/sd_zbc.c=0A=
-> index db16c19e05c4..c1c7140ea787 100644=0A=
-> --- a/drivers/scsi/sd_zbc.c=0A=
-> +++ b/drivers/scsi/sd_zbc.c=0A=
-> @@ -209,10 +209,11 @@ static inline sector_t sd_zbc_zone_sectors(struct s=
-csi_disk *sdkp)=0A=
->  /**=0A=
->   * sd_zbc_setup_reset_cmnd - Prepare a RESET WRITE POINTER scsi command.=
-=0A=
->   * @cmd: the command to setup=0A=
-> + * @all: Reset all zones control.=0A=
->   *=0A=
->   * Called from sd_init_command() for a REQ_OP_ZONE_RESET request.=0A=
->   */=0A=
-> -blk_status_t sd_zbc_setup_reset_cmnd(struct scsi_cmnd *cmd)=0A=
-> +blk_status_t sd_zbc_setup_reset_cmnd(struct scsi_cmnd *cmd, bool all)=0A=
->  {=0A=
->  	struct request *rq =3D cmd->request;=0A=
->  	struct scsi_disk *sdkp =3D scsi_disk(rq->rq_disk);=0A=
-> @@ -234,7 +235,10 @@ blk_status_t sd_zbc_setup_reset_cmnd(struct scsi_cmn=
-d *cmd)=0A=
->  	memset(cmd->cmnd, 0, cmd->cmd_len);=0A=
->  	cmd->cmnd[0] =3D ZBC_OUT;=0A=
->  	cmd->cmnd[1] =3D ZO_RESET_WRITE_POINTER;=0A=
-> -	put_unaligned_be64(block, &cmd->cmnd[2]);=0A=
-> +	if (all)=0A=
-> +		cmd->cmnd[14] =3D 0x1;=0A=
-> +	else=0A=
-> +		put_unaligned_be64(block, &cmd->cmnd[2]);=0A=
->  =0A=
->  	rq->timeout =3D SD_TIMEOUT;=0A=
->  	cmd->sc_data_direction =3D DMA_NONE;=0A=
-> @@ -261,6 +265,7 @@ void sd_zbc_complete(struct scsi_cmnd *cmd, unsigned =
-int good_bytes,=0A=
->  =0A=
->  	switch (req_op(rq)) {=0A=
->  	case REQ_OP_ZONE_RESET:=0A=
-> +	case REQ_OP_ZONE_RESET_ALL:=0A=
->  =0A=
->  		if (result &&=0A=
->  		    sshdr->sense_key =3D=3D ILLEGAL_REQUEST &&=0A=
-> @@ -487,6 +492,7 @@ int sd_zbc_read_zones(struct scsi_disk *sdkp, unsigne=
-d char *buf)=0A=
->  	/* The drive satisfies the kernel restrictions: set it up */=0A=
->  	blk_queue_chunk_sectors(sdkp->disk->queue,=0A=
->  			logical_to_sectors(sdkp->device, zone_blocks));=0A=
-> +	blk_queue_flag_set(QUEUE_FLAG_ZONE_RESETALL, sdkp->disk->queue);=0A=
->  	nr_zones =3D round_up(sdkp->capacity, zone_blocks) >> ilog2(zone_blocks=
-);=0A=
->  =0A=
->  	/* READ16/WRITE16 is mandatory for ZBC disks */=0A=
-> =0A=
-=0A=
-Reviewed-by: Damien Le Moal <damien.lemoal@wdc.com>=0A=
-=0A=
--- =0A=
-Damien Le Moal=0A=
-Western Digital Research=0A=
+On 8/1/19 7:26 PM, Chaitanya Kulkarni wrote:
+> This patch introduces a new request operation REQ_OP_ZONE_RESET_ALL.
+> This is useful for the applications like mkfs where it needs to reset
+> all the zones present on the underlying block device. As part for this
+> patch we also introduce new QUEUE_FLAG_ZONE_RESETALL which indicates the
+> queue zone reset all capability and corresponding helper macro.
+> 
+> Reviewed-by: Damien Le Moal <damien.lemoal@wdc.com>
+> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
+> ---
+>  include/linux/blk_types.h | 2 ++
+>  include/linux/blkdev.h    | 3 +++
+>  2 files changed, 5 insertions(+)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.com>
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke		   Teamlead Storage & Networking
+hare@suse.de			               +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
