@@ -2,107 +2,130 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C89B7EF2F
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 10:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AA17F537
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 12:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404123AbfHBI0C (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Aug 2019 04:26:02 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39860 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726164AbfHBI0B (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 2 Aug 2019 04:26:01 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id C8C40AFE2;
-        Fri,  2 Aug 2019 08:25:59 +0000 (UTC)
-Subject: Re: [PATCH V2 4/4] null_blk: implement REQ_OP_ZONE_RESET_ALL
-To:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     bvanassche@acm.org, osandov@fb.com, dennisszhou@gmail.com,
-        sagi@grimberg.me, axboe@kernel.dk, dennis@kernel.org,
-        tj@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        ming.lei@redhat.com, Hannes Reinecke <hare@suse.com>,
-        jthumshirn@suse.de, damien.lemoal@wdc.com
-References: <20190801172638.4060-1-chaitanya.kulkarni@wdc.com>
- <20190801172638.4060-5-chaitanya.kulkarni@wdc.com>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <809a35d7-6263-4d2e-7543-b6f93a018cbd@suse.de>
-Date:   Fri, 2 Aug 2019 10:25:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1728704AbfHBKi7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Aug 2019 06:38:59 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:36476 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726948AbfHBKi7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Aug 2019 06:38:59 -0400
+Received: by mail-pl1-f193.google.com with SMTP id k8so33514791plt.3;
+        Fri, 02 Aug 2019 03:38:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e4E4iDDaEWxYk44Dl3X7u2CSK86rWU28f6rz4PaFwgQ=;
+        b=c8mY5/Y7W2lQCMx8ytsyVH4mgYIDLMxGPxo/ulv0efyAz/l9DhtoZCRVfZtulpCMpf
+         rarpmQ3vmepmhWfBs++FeswM9anMdyrYQ0Kxj/LNCalVPdRgKhd1fyJpZDxwJsJgwtUU
+         XpsaZDFdCRJJL1AfD868hQ1WaJ2pLZp0lc2dWUlcK2zmaeMWYt0GGcPNPIRCA11L2689
+         dXpezlDH8EibWcOonFaU0eYNiRaj5m3f5Zp+7AOorvvdQziZpTpHSCOiu1BtebzzDbNl
+         tCqf7uolEbcI7BFc7r5DJlri4AKGyz/nyb/A8QRTziu5xu3YA50uKS435oXPhx2E9rIc
+         xpHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e4E4iDDaEWxYk44Dl3X7u2CSK86rWU28f6rz4PaFwgQ=;
+        b=nDR2bPHKcQqHMQOgijrG5cdYcE1z4elfGuJgTJLM/U1R84g6d4fK5BZpV/GQqUfHDZ
+         7Do6KNE/5hYLh+jeAvHS7G2ZT5drPbvn48cYLGpy9lKKrX+aMBDazy/Hetr0TdUSwXZX
+         1w1wCFT688zFDhDlYXuCf1zsbp6zHF+tYAtPmKstizAOjXZ5jNqCvbmB9Z1Ee0MbJKt5
+         H0KFnI+0GkbSmEDbPIl00ZXtZAhxwQizi9uEsqnDQvi5htvPjRW9AYpuyo/I6V9j60Ax
+         mZcUu5zI9rrw60wfX348amssG1x3hSRNjkml46jpCMf64R1vm0gDHkUaWnGqdpEOWNic
+         sQZw==
+X-Gm-Message-State: APjAAAX93Sj3jRBWNeGV0tXHtk6XW0Hf2jJ3uSnagawnHbsaWD2zyLZD
+        f/loPkJpmmIKV/kDOwsixymHhpa8
+X-Google-Smtp-Source: APXvYqxnl1Jt2TcCRuQFZrvNRna0aRcZxqEdjYEJgDyqBoeDcIwRP6j5vNpV1JHjyEPKLrDRgfwesw==
+X-Received: by 2002:a17:902:9041:: with SMTP id w1mr17262022plz.132.1564742338100;
+        Fri, 02 Aug 2019 03:38:58 -0700 (PDT)
+Received: from k8s-VirtualBox.cn.ibm.com ([103.49.135.195])
+        by smtp.gmail.com with ESMTPSA id c23sm67395405pgj.62.2019.08.02.03.38.55
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 02 Aug 2019 03:38:57 -0700 (PDT)
+From:   Li Zhong <lizhongfs@gmail.com>
+To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Cc:     martin.petersen@oracle.com, lizhongfs@gmail.com
+Subject: [RFC PATCH] target: tcmu: clean the nl_cmd of the udev when nl send fails
+Date:   Fri,  2 Aug 2019 18:38:30 +0800
+Message-Id: <20190802103830.8881-1-lizhongfs@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20190801172638.4060-5-chaitanya.kulkarni@wdc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/1/19 7:26 PM, Chaitanya Kulkarni wrote:
-> This patch implements newly introduced zone reset all operation for
-> null_blk driver.
-> 
-> Reviewed-by: Damien Le Moal <damien.lemoal@wdc.com>
-> Signed-off-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-> ---
->  drivers/block/null_blk_main.c  |  3 +++
->  drivers/block/null_blk_zoned.c | 28 ++++++++++++++++++++++------
->  2 files changed, 25 insertions(+), 6 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.com>
+If the userspace process crashes while we send the nl msg, it is possible
+that the cmd in curr_nl_cmd of tcmu_dev never gets reset to 0, and
+and returns busy for other commands after the userspace process is
+restartd.
 
-Cheers,
+More details below:
 
-Hannes
+/backstores/user:file/file> set attribute dev_size=2048
+Cannot set attribute dev_size: [Errno 3] No such process
+/backstores/user:file/file> set attribute dev_size=2048
+Cannot set attribute dev_size: [Errno 16] Device or resource busy
+
+with following kernel messages:
+[173605.747169] Unable to reconfigure device
+[173616.686674] tcmu daemon: command reply support 1.
+[173623.866978] netlink cmd 3 already executing on file
+[173623.866984] Unable to reconfigure device
+
+Also, it is not safe to leave the nl_cmd in the list, and not get
+deleted.
+
+This patch removes the nl_cmd from the list, and clear its data if
+it is not sent successfully.
+
+Signed-off-by: Li Zhong <lizhongfs@gmail.com>
+---
+ drivers/target/target_core_user.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index 04eda111920e..4ae3103e204c 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -1708,6 +1708,24 @@ static int tcmu_init_genl_cmd_reply(struct tcmu_dev *udev, int cmd)
+ 	return 0;
+ }
+ 
++static void tcmu_destroy_genl_cmd_reply(struct tcmu_dev *udev)
++{
++	struct tcmu_nl_cmd *nl_cmd = &udev->curr_nl_cmd;
++
++	if (!tcmu_kern_cmd_reply_supported)
++		return;
++
++	if (udev->nl_reply_supported <= 0)
++		return;
++
++	mutex_lock(&tcmu_nl_cmd_mutex);
++
++	list_del(&nl_cmd->nl_list);
++	memset(nl_cmd, 0, sizeof(*nl_cmd));
++
++	mutex_unlock(&tcmu_nl_cmd_mutex);
++}
++
+ static int tcmu_wait_genl_cmd_reply(struct tcmu_dev *udev)
+ {
+ 	struct tcmu_nl_cmd *nl_cmd = &udev->curr_nl_cmd;
+@@ -1788,6 +1806,9 @@ static int tcmu_netlink_event_send(struct tcmu_dev *udev,
+ 	if (ret == 0 ||
+ 	   (ret == -ESRCH && cmd == TCMU_CMD_ADDED_DEVICE))
+ 		return tcmu_wait_genl_cmd_reply(udev);
++	else
++		/* If failure, remove from the list and clear the nl_cmd */
++		tcmu_destroy_genl_cmd_reply(udev);
+ 
+ 	return ret;
+ }
 -- 
-Dr. Hannes Reinecke		   Teamlead Storage & Networking
-hare@suse.de			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+2.20.1
+
