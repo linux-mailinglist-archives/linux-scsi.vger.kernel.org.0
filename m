@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 537C07F95C
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 15:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA8C7FAB8
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 15:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394735AbfHBN1G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Aug 2019 09:27:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37848 "EHLO mail.kernel.org"
+        id S2393781AbfHBNWb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Aug 2019 09:22:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32890 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394717AbfHBN1D (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 2 Aug 2019 09:27:03 -0400
+        id S2393776AbfHBNWa (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 2 Aug 2019 09:22:30 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 43CF321874;
-        Fri,  2 Aug 2019 13:27:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1623B21841;
+        Fri,  2 Aug 2019 13:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564752422;
-        bh=J5CYI7fhl0cw3YAPWG669inFrbneWOgsZL6tUna83Ic=;
+        s=default; t=1564752148;
+        bh=caMsOfUPLaJWgqmGNKDwovTLV47oxgrHUy1Ar1Jbalw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2A+t2vxa9SVKT4/ktw0/XJsDG8RsuuBhX3D6g41YcotEzQo3PPRJjECQQdn9gekrG
-         cc6mNFGL2vasXdV/EXW4u4cbwlVRCtTN0vpGcALnPGggX3h7PzLLqprMFHNZVlH5Dq
-         52X1bet6szFkkoWnAFWZ1ksXZBAV6y+Y4If3HzwY=
+        b=yk0wWSX91U8JLZ+nilcbh0cJQJPb8bp7+QWGlfvvGc5i71rKJ3QE0iTXMdLiaqRdG
+         qBGEQq3wP7w8JwNOn8fK1BjPR3ctfdmcvCkaZddIa3bPkUVK0fwYWv4faoWkHa6sKq
+         +o5di8y9RQ/hXWGRGhOw2YgCRU7ShXaPXx1zq6I0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tyrel Datwyler <tyreld@linux.vnet.ibm.com>,
@@ -30,12 +30,12 @@ Cc:     Tyrel Datwyler <tyreld@linux.vnet.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH AUTOSEL 4.4 15/17] scsi: ibmvfc: fix WARN_ON during event pool release
-Date:   Fri,  2 Aug 2019 09:26:32 -0400
-Message-Id: <20190802132635.14885-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 65/76] scsi: ibmvfc: fix WARN_ON during event pool release
+Date:   Fri,  2 Aug 2019 09:19:39 -0400
+Message-Id: <20190802131951.11600-65-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190802132635.14885-1-sashal@kernel.org>
-References: <20190802132635.14885-1-sashal@kernel.org>
+In-Reply-To: <20190802131951.11600-1-sashal@kernel.org>
+References: <20190802131951.11600-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -99,10 +99,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/ibmvscsi/ibmvfc.c b/drivers/scsi/ibmvscsi/ibmvfc.c
-index 1f9f9e5af2072..0526a47e30a3f 100644
+index acd16e0d52cfe..8cdbac076a1b6 100644
 --- a/drivers/scsi/ibmvscsi/ibmvfc.c
 +++ b/drivers/scsi/ibmvscsi/ibmvfc.c
-@@ -4869,8 +4869,8 @@ static int ibmvfc_remove(struct vio_dev *vdev)
+@@ -4864,8 +4864,8 @@ static int ibmvfc_remove(struct vio_dev *vdev)
  
  	spin_lock_irqsave(vhost->host->host_lock, flags);
  	ibmvfc_purge_requests(vhost, DID_ERROR);
