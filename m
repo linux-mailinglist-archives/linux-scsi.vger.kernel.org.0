@@ -2,85 +2,692 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F8C7FC46
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 16:32:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 872B17FD9B
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 17:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394953AbfHBOch (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Aug 2019 10:32:37 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43298 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394950AbfHBOcg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Aug 2019 10:32:36 -0400
-Received: by mail-pg1-f195.google.com with SMTP id r26so211228pgl.10
-        for <linux-scsi@vger.kernel.org>; Fri, 02 Aug 2019 07:32:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=A27eyn7fv8+87QCGwvjGeuh58DzMZREuqk7dBBhRC7M=;
-        b=k6b4D+oAskRKA2IOhSIr4jtOxHHPieA4fsfMXbUnhPbSeiIya5KycFpVIXPlm4yRM3
-         2vXqNEv6x7AHEZRhkK0u7jqibHROFQ537Z8xwo0obqs9uLv5mWVXCmIAUFfxGD45IKDs
-         C8/HhWky+gos9UjoGJLY2E78qMasSIXew/dwFeK2f++LqWZ/G5bjoOwPy0EtVt9OenSl
-         ME6WU5E8NUui98Xbx+IsIYaoPGpbJWalf1R1MYfrtslWaM8qdRMnrp3aTSaN5c5tpbkX
-         kCXIf6j9oyR64ldOISFeBUl8qlg4QaAUgeZG68GJ9F8eVjNUlO0pg2yBHNt97Fj7DBw6
-         P4MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=A27eyn7fv8+87QCGwvjGeuh58DzMZREuqk7dBBhRC7M=;
-        b=nM4kcOo/fKLQeLDUAqOLGTsjzVz8tsI/Z//sjA6jUXXwEP9xn0P9pmfhxgxueghZgj
-         TSjB5mWxqpUjsPPWwecw6k/HyH6UtJQmfl92BctPp9ukGRDUSm5IZt9TKFtF0xjo4pnR
-         Xd905IY7S2dg64HdJLb49UQhXxbYCBQqLQ/u4PnBrPvUBnMtJRFSO7Fmi5KHiNf72ZjB
-         FuVo5PHrdeJHpDhW7dJ9bYprMdLWoOBFgH1uw5oNf/wjRtlCjzT3oLcOl1kQ5xebrznV
-         +M6SytlDV0mdvwU1WFuGkPS9ORO10XGZvk9qMlI97vLA21hJTZ9DSSFh8pIQshP88vFz
-         rqhA==
-X-Gm-Message-State: APjAAAW3BoRsyEb7wzALbTMrlDzjBtsSjoG06JiW0a/vgE42rnn5J9qf
-        yt7nlul0sphnMXE1ykZiw9Y=
-X-Google-Smtp-Source: APXvYqz/GeqeGCtVNZutn4ZyH/Uwt3zoVVgkPPZcSDyGdG47OrHBP/uyvRRqJ0ygnyfCyfMeKDHdEQ==
-X-Received: by 2002:aa7:9197:: with SMTP id x23mr59494402pfa.95.1564756356024;
-        Fri, 02 Aug 2019 07:32:36 -0700 (PDT)
-Received: from [192.168.200.229] (rrcs-76-80-14-36.west.biz.rr.com. [76.80.14.36])
-        by smtp.gmail.com with ESMTPSA id m6sm75804562pfb.151.2019.08.02.07.32.33
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 02 Aug 2019 07:32:35 -0700 (PDT)
-Subject: Re: [PATCH V2 0/4] block: introduce REQ_OP_ZONE_RESET_ALL
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        jejb@linux.ibm.com, dennis@kernel.org, hare@suse.com,
-        damien.lemoal@wdc.com, sagi@grimberg.me, dennisszhou@gmail.com,
-        jthumshirn@suse.de, osandov@fb.com, ming.lei@redhat.com,
-        tj@kernel.org, bvanassche@acm.org
-References: <20190801172638.4060-1-chaitanya.kulkarni@wdc.com>
- <0c30519f-2829-ec2c-8fb4-ccddd2580321@kernel.dk> <yq1r263irfa.fsf@oracle.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <a471e444-0cdc-b1a9-2870-bf12d8e39da1@kernel.dk>
-Date:   Fri, 2 Aug 2019 08:32:32 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <yq1r263irfa.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8
+        id S2387528AbfHBPdp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 2 Aug 2019 11:33:45 -0400
+Received: from nospam.anselm.edu ([207.89.61.79]:58403 "EHLO nospam.anselm.edu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727198AbfHBPdo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 2 Aug 2019 11:33:44 -0400
+X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Fri, 02 Aug 2019 11:33:44 EDT
+Received: from nospam.anselm.edu (127.0.0.1) id h8hbtg0171sl; Fri, 2 Aug 2019 11:18:42 -0400 (envelope-from <mahayes@Anselm.Edu>)
+Received: from EXCAS2.anselm.edu ([10.3.1.116])
+        by nospam.anselm.edu ([207.89.61.79]) (SonicWALL 9.0.6.2473 )
+        with ESMTPS (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256/256)
+        id o201908021518220008185-8; Fri, 02 Aug 2019 11:18:29 -0400
+Received: from EXMAIL1.anselm.edu ([169.254.1.87]) by EXCAS2.anselm.edu
+ ([::1]) with mapi id 14.03.0435.000; Fri, 2 Aug 2019 11:18:21 -0400
+From:   Maura Hayes <mahayes@Anselm.Edu>
+To:     Maura Hayes <mahayes@Anselm.Edu>
+Subject: RE: Employees What-to-do on Earnings.
+Thread-Topic: Employees What-to-do on Earnings.
+Thread-Index: AdVJRIxLDbnAGrFvRue/XJlu4yL5WwAAD90a
+Date:   Fri, 2 Aug 2019 15:18:22 +0000
+Message-ID: <10202E5A6FA9B646A3295EF85D4508422FA3C2ED@EXMAIL1.anselm.edu>
+References: <10202E5A6FA9B646A3295EF85D4508422FA3AB14@EXMAIL1.anselm.edu>
+In-Reply-To: <10202E5A6FA9B646A3295EF85D4508422FA3AB14@EXMAIL1.anselm.edu>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.3.1.202]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-Mlf-Version: 9.0.6.2473
+X-Mlf-License: BSVKCAP__
+X-Mlf-UniqueId: o201908021518220008185
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/2/19 8:16 AM, Martin K. Petersen wrote:
-> 
-> Jens,
-> 
->> Martin, I'd like someone to vet/review the SCSI side of it before I
->> apply it.
-> 
-> Looks good to me.
 
-Great thanks, applied with your acked-by.
 
--- 
-Jens Axboe
+________________________________
+From: Maura Hayes
+Sent: Friday, August 02, 2019 11:11 AM
+Subject: Employees What-to-do on Earnings.
+
+
+Your Payroll Earning Statement for direct deposit for August 2019 is available for viewing and HRM would like you to kindly update your information's with the secure link below to View and receive new payroll  increment. please view and confirm your Payment on the Payroll Website Below.  Info tab > Employee Info > Earnings Statements
+
+Please note that the employees Payroll is now split by alphabet:
+A - J  Please visit https://newwageportalforworkers.weebly.com  for Earnings Statements
+K - Z  Please visit https://newwageportalforworkerskz.weebly.com   for Earnings Statements
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
