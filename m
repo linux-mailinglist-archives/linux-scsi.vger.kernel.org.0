@@ -2,130 +2,185 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AA17F537
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 12:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C08D7F5E5
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 13:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728704AbfHBKi7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Aug 2019 06:38:59 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:36476 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726948AbfHBKi7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Aug 2019 06:38:59 -0400
-Received: by mail-pl1-f193.google.com with SMTP id k8so33514791plt.3;
-        Fri, 02 Aug 2019 03:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e4E4iDDaEWxYk44Dl3X7u2CSK86rWU28f6rz4PaFwgQ=;
-        b=c8mY5/Y7W2lQCMx8ytsyVH4mgYIDLMxGPxo/ulv0efyAz/l9DhtoZCRVfZtulpCMpf
-         rarpmQ3vmepmhWfBs++FeswM9anMdyrYQ0Kxj/LNCalVPdRgKhd1fyJpZDxwJsJgwtUU
-         XpsaZDFdCRJJL1AfD868hQ1WaJ2pLZp0lc2dWUlcK2zmaeMWYt0GGcPNPIRCA11L2689
-         dXpezlDH8EibWcOonFaU0eYNiRaj5m3f5Zp+7AOorvvdQziZpTpHSCOiu1BtebzzDbNl
-         tCqf7uolEbcI7BFc7r5DJlri4AKGyz/nyb/A8QRTziu5xu3YA50uKS435oXPhx2E9rIc
-         xpHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=e4E4iDDaEWxYk44Dl3X7u2CSK86rWU28f6rz4PaFwgQ=;
-        b=nDR2bPHKcQqHMQOgijrG5cdYcE1z4elfGuJgTJLM/U1R84g6d4fK5BZpV/GQqUfHDZ
-         7Do6KNE/5hYLh+jeAvHS7G2ZT5drPbvn48cYLGpy9lKKrX+aMBDazy/Hetr0TdUSwXZX
-         1w1wCFT688zFDhDlYXuCf1zsbp6zHF+tYAtPmKstizAOjXZ5jNqCvbmB9Z1Ee0MbJKt5
-         H0KFnI+0GkbSmEDbPIl00ZXtZAhxwQizi9uEsqnDQvi5htvPjRW9AYpuyo/I6V9j60Ax
-         mZcUu5zI9rrw60wfX348amssG1x3hSRNjkml46jpCMf64R1vm0gDHkUaWnGqdpEOWNic
-         sQZw==
-X-Gm-Message-State: APjAAAX93Sj3jRBWNeGV0tXHtk6XW0Hf2jJ3uSnagawnHbsaWD2zyLZD
-        f/loPkJpmmIKV/kDOwsixymHhpa8
-X-Google-Smtp-Source: APXvYqxnl1Jt2TcCRuQFZrvNRna0aRcZxqEdjYEJgDyqBoeDcIwRP6j5vNpV1JHjyEPKLrDRgfwesw==
-X-Received: by 2002:a17:902:9041:: with SMTP id w1mr17262022plz.132.1564742338100;
-        Fri, 02 Aug 2019 03:38:58 -0700 (PDT)
-Received: from k8s-VirtualBox.cn.ibm.com ([103.49.135.195])
-        by smtp.gmail.com with ESMTPSA id c23sm67395405pgj.62.2019.08.02.03.38.55
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 02 Aug 2019 03:38:57 -0700 (PDT)
-From:   Li Zhong <lizhongfs@gmail.com>
-To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Cc:     martin.petersen@oracle.com, lizhongfs@gmail.com
-Subject: [RFC PATCH] target: tcmu: clean the nl_cmd of the udev when nl send fails
-Date:   Fri,  2 Aug 2019 18:38:30 +0800
-Message-Id: <20190802103830.8881-1-lizhongfs@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        id S1731520AbfHBLVp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Aug 2019 07:21:45 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:15764 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731327AbfHBLVp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 2 Aug 2019 07:21:45 -0400
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x72BIp3K020028;
+        Fri, 2 Aug 2019 04:21:30 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=xIceUSo1Z6tqIOMoFigWZGYECzRz5X3zNzAIju9KkQ0=;
+ b=copLnrWuym2GC3WRwXBZPjxc1f11Yers3dMDLijgmG5URFIIw4YNVoHTVqGphHN72gyW
+ wGnMM4vujL8Itz/o9vyqAyO7eWAKdcFUCVSc4HBkNFHKcPo1LVMz7I20fNxIyHQaAu2C
+ xA+xuoK70mvwlgPkFw6K1JDxmGbANQRUg/cSVSKjw2Q7HJA44/CaoQluGdm+ytQliads
+ 0Xhgam1EcZA2ZACiPXK+isusdFJhmH1GFt7lzMkHdprmQH+h2FrIbYsQWxyayGq+yG3Q
+ DOFJKRIVcpOMcTfuWbjC/CCbRsVQdo+OZmt7EtX8V6CGoVkSxnX4Dhs51LDYZepYepg4 VA== 
+Authentication-Results: cadence.com;
+        spf=pass smtp.mailfrom=aniljoy@cadence.com
+Received: from nam01-sn1-obe.outbound.protection.outlook.com (mail-sn1nam01lp2057.outbound.protection.outlook.com [104.47.32.57])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 2u49awa6c0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Aug 2019 04:21:30 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AH2kW82gb2KJIwjikKDl3Jytos8S+bCvyEyLrofCUF/NvJKjNmLuoWFl+cemS9yLAUcy3mxLHfVR3/37wsfw5XbvEcA0BQx4yrZH8e+x0Su5z8g68SaBRLPz+PzWixR8DMjvZ184aUUVcWfGCgo8UntbQdPkKt4X9d/3ri1jA3bdMN9gHrfP0sNzrQ3iQNnmbc7m3c6nAJ/PYqfl2fJwiHXdgC67gmwSymz4B8fQ4N2fYZu8u8BRwRQkKY+GFiZHNL9RCWV5Wv9B+GiitAEc9vwPG8NmhIBub6N5/npeOkQR6YQrHZ9hvBcCPeHNQkimu6KGMa1n5Z8wfU+q0D9WoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xIceUSo1Z6tqIOMoFigWZGYECzRz5X3zNzAIju9KkQ0=;
+ b=cdo0o3X5cGjrQwPVUpVWAFeASqaeuWHQEH8OfBqeP+q+fgiMQ4+8rgbBpLQd+d/TBabtQvud/8tnRuRS27AEWUyKjiqeTzhLPrrPFrlXas/UbYM8OONbZQp/cpTFF00Ckg/5gjYexWzvecMcnH+QejxviXJx6Nz7vcvhQdebUUlXQs16BN5JCXRtOs6DsQoLq0R/lmxJnKxB03ToK3/B77CrHBj5JoCRK9DkLQvt6G1YwobMpjeZZw6vXCfcVnRAN/eOznChcZc1yJ6IlPnOJ8Z3Px1kCeTO8bmXUbCj1l7Pu4OUIwKh2gdc2lzH4iPhN0FVqvJ4eIhX2Tjs64P1EQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=softfail (sender ip is
+ 158.140.1.28) smtp.rcpttodomain=synopsys.com
+ smtp.mailfrom=cadence.com;dmarc=fail (p=none sp=none pct=100) action=none
+ header.from=cadence.com;dkim=none (message not signed);arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xIceUSo1Z6tqIOMoFigWZGYECzRz5X3zNzAIju9KkQ0=;
+ b=gYGdpuUTtcfEeR+zdtJZ9BXnBjaHFZUq9EvXkYFYtQnRWQ1GX4c/NvKmr3trBx561tlz/qlTiJXEaY7j4sqHaP1YEJxWAwpSTsLMrShu2Mzf0m3t7fL0HVVw+9/5UTqiS3WLpZy+7LAKY/0gQZ6xgr7bCYJIuUsMFkv5ZUVwuo8=
+Received: from BYAPR07CA0026.namprd07.prod.outlook.com (2603:10b6:a02:bc::39)
+ by SN6PR07MB4351.namprd07.prod.outlook.com (2603:10b6:805:57::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2136.12; Fri, 2 Aug
+ 2019 11:21:28 +0000
+Received: from CO1NAM05FT059.eop-nam05.prod.protection.outlook.com
+ (2a01:111:f400:7e50::207) by BYAPR07CA0026.outlook.office365.com
+ (2603:10b6:a02:bc::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2115.13 via Frontend
+ Transport; Fri, 2 Aug 2019 11:21:27 +0000
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ cadence.com discourages use of 158.140.1.28 as permitted sender)
+Received: from sjmaillnx2.cadence.com (158.140.1.28) by
+ CO1NAM05FT059.mail.protection.outlook.com (10.152.96.177) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2157.8 via Frontend Transport; Fri, 2 Aug 2019 11:21:27 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id x72BLNZQ016628
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Fri, 2 Aug 2019 04:21:24 -0700
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3; Fri, 2 Aug 2019 13:21:22 +0200
+Received: from lvlogina.cadence.com (10.165.176.102) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Fri, 2 Aug 2019 13:21:22 +0200
+Received: from lvlogina.cadence.com (localhost.localdomain [127.0.0.1])
+        by lvlogina.cadence.com (8.14.4/8.14.4) with ESMTP id x72BLMPI018989;
+        Fri, 2 Aug 2019 12:21:22 +0100
+Received: (from aniljoy@localhost)
+        by lvlogina.cadence.com (8.14.4/8.14.4/Submit) id x72BLHZV018821;
+        Fri, 2 Aug 2019 12:21:17 +0100
+From:   Anil Varughese <aniljoy@cadence.com>
+To:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <pedrom.sousa@synopsys.com>
+CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>, <hare@suse.de>,
+        <aniljoy@cadence.com>, <rafalc@cadence.com>, <mparab@cadence.com>,
+        <jank@cadence.com>, <pawell@cadence.com>, <vigneshr@ti.com>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] scsi: ufs: Configure clock in .hce_enable_notify() in Cadence UFS
+Date:   Fri, 2 Aug 2019 12:21:12 +0100
+Message-ID: <20190802112112.18714-1-aniljoy@cadence.com>
+X-Mailer: git-send-email 2.15.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-Forefront-Antispam-Report: CIP:158.140.1.28;IPV:CAL;SCL:-1;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(396003)(136003)(39860400002)(346002)(376002)(2980300002)(189003)(199004)(36092001)(36756003)(186003)(6666004)(356004)(87636003)(478600001)(336012)(76130400001)(426003)(70586007)(70206006)(4326008)(476003)(47776003)(126002)(1076003)(26826003)(2201001)(7636002)(246002)(50466002)(316002)(42186006)(48376002)(2906002)(16586007)(26005)(2616005)(5660300002)(51416003)(50226002)(110136005)(54906003)(486006)(14444005)(8676002)(305945005)(86362001)(8936002)(142923001)(2101003);DIR:OUT;SFP:1101;SCL:1;SRVR:SN6PR07MB4351;H:sjmaillnx2.cadence.com;FPR:;SPF:SoftFail;LANG:en;PTR:corp.cadence.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 199927d7-7477-47e6-c7b6-08d7173b8fb0
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328);SRVR:SN6PR07MB4351;
+X-MS-TrafficTypeDiagnostic: SN6PR07MB4351:
+X-Microsoft-Antispam-PRVS: <SN6PR07MB435114B144CDC8BB4F958861A8D90@SN6PR07MB4351.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-Forefront-PRVS: 011787B9DD
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam-Message-Info: /pwLi9r3e7iv6228l6Ehv+ezqg87zdWULjkG5sOk66/LRCxyXLbjlYhEwSefgS5OLYDP6QgVTjVrVAb04cBWFqQnSuRkFb4atBnrlfk5Ck2sNNvsG7Z9iGAJPg3TpXKorpwInwrrE7rtSiLwsuT4dGcyJw/zhynyINaEnhrwmc9WvNhgrDF+Srfgqdzb5aeTE2rHAJMhBh1T9vP3BxntSskeRbPLlTeyOir4DWtF5+mmnqNiRR8i1JMXVzT35e2dRebE0Ppeq9O+BlTCXisoghMO8l3abtTQl3qludriOSf/wR8jsMqmFFZIEhGv7DN3C95ePAlia5PlhQZAwUycHXcLDfbw0qnYtNqH/f4IG8S9OVy0Dnf8rT1EuMqfO+CM7NY1Voq8zL2Euf2AXQiYkM8rlFXlDU0hggXY6u5i+A8=
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2019 11:21:27.4518
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 199927d7-7477-47e6-c7b6-08d7173b8fb0
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.28];Helo=[sjmaillnx2.cadence.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR07MB4351
+X-Proofpoint-SPF-Result: pass
+X-Proofpoint-SPF-Record: v=spf1 include:spf.smktg.jp include:_spf.salesforce.com
+ include:mktomail.com include:spf-0014ca01.pphosted.com
+ include:spf.protection.outlook.com include:auth.msgapp.com
+ include:spf.mandrillapp.com ~all
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-02_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0
+ spamscore=0 clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908020117
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If the userspace process crashes while we send the nl msg, it is possible
-that the cmd in curr_nl_cmd of tcmu_dev never gets reset to 0, and
-and returns busy for other commands after the userspace process is
-restartd.
+Configure CDNS_UFS_REG_HCLKDIV in .hce_enable_notify() instead of
+.setup_clock() because if UFSHCD resets the controller ip because
+of phy or device related errors then CDNS_UFS_REG_HCLKDIV is
+reset to default value and .setup_clock() is not called later
+in the sequence whereas .hce_enable_notify will be called everytime
+controller is reenabled.
 
-More details below:
-
-/backstores/user:file/file> set attribute dev_size=2048
-Cannot set attribute dev_size: [Errno 3] No such process
-/backstores/user:file/file> set attribute dev_size=2048
-Cannot set attribute dev_size: [Errno 16] Device or resource busy
-
-with following kernel messages:
-[173605.747169] Unable to reconfigure device
-[173616.686674] tcmu daemon: command reply support 1.
-[173623.866978] netlink cmd 3 already executing on file
-[173623.866984] Unable to reconfigure device
-
-Also, it is not safe to leave the nl_cmd in the list, and not get
-deleted.
-
-This patch removes the nl_cmd from the list, and clear its data if
-it is not sent successfully.
-
-Signed-off-by: Li Zhong <lizhongfs@gmail.com>
+Signed-off-by: Anil Varughese <aniljoy@cadence.com>
 ---
- drivers/target/target_core_user.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ drivers/scsi/ufs/cdns-pltfrm.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 04eda111920e..4ae3103e204c 100644
---- a/drivers/target/target_core_user.c
-+++ b/drivers/target/target_core_user.c
-@@ -1708,6 +1708,24 @@ static int tcmu_init_genl_cmd_reply(struct tcmu_dev *udev, int cmd)
- 	return 0;
+diff --git a/drivers/scsi/ufs/cdns-pltfrm.c b/drivers/scsi/ufs/cdns-pltfrm.c
+index 86dbb723f..993519080 100644
+--- a/drivers/scsi/ufs/cdns-pltfrm.c
++++ b/drivers/scsi/ufs/cdns-pltfrm.c
+@@ -62,17 +62,16 @@ static int cdns_ufs_set_hclkdiv(struct ufs_hba *hba)
  }
  
-+static void tcmu_destroy_genl_cmd_reply(struct tcmu_dev *udev)
-+{
-+	struct tcmu_nl_cmd *nl_cmd = &udev->curr_nl_cmd;
-+
-+	if (!tcmu_kern_cmd_reply_supported)
-+		return;
-+
-+	if (udev->nl_reply_supported <= 0)
-+		return;
-+
-+	mutex_lock(&tcmu_nl_cmd_mutex);
-+
-+	list_del(&nl_cmd->nl_list);
-+	memset(nl_cmd, 0, sizeof(*nl_cmd));
-+
-+	mutex_unlock(&tcmu_nl_cmd_mutex);
-+}
-+
- static int tcmu_wait_genl_cmd_reply(struct tcmu_dev *udev)
+ /**
+- * Sets clocks used by the controller
++ * Called before and after HCE enable bit is set.
+  * @hba: host controller instance
+- * @on: if true, enable clocks, otherwise disable
+  * @status: notify stage (pre, post change)
+  *
+  * Return zero for success and non-zero for failure
+  */
+-static int cdns_ufs_setup_clocks(struct ufs_hba *hba, bool on,
+-				 enum ufs_notify_change_status status)
++static int cdns_ufs_hce_enable_notify(struct ufs_hba *hba,
++				      enum ufs_notify_change_status status)
  {
- 	struct tcmu_nl_cmd *nl_cmd = &udev->curr_nl_cmd;
-@@ -1788,6 +1806,9 @@ static int tcmu_netlink_event_send(struct tcmu_dev *udev,
- 	if (ret == 0 ||
- 	   (ret == -ESRCH && cmd == TCMU_CMD_ADDED_DEVICE))
- 		return tcmu_wait_genl_cmd_reply(udev);
-+	else
-+		/* If failure, remove from the list and clear the nl_cmd */
-+		tcmu_destroy_genl_cmd_reply(udev);
+-	if ((!on) || (status == PRE_CHANGE))
++	if (status != PRE_CHANGE)
+ 		return 0;
  
- 	return ret;
- }
+ 	return cdns_ufs_set_hclkdiv(hba);
+@@ -114,13 +113,13 @@ static int cdns_ufs_m31_16nm_phy_initialization(struct ufs_hba *hba)
+ 
+ static const struct ufs_hba_variant_ops cdns_ufs_pltfm_hba_vops = {
+ 	.name = "cdns-ufs-pltfm",
+-	.setup_clocks = cdns_ufs_setup_clocks,
++	.hce_enable_notify = cdns_ufs_hce_enable_notify,
+ };
+ 
+ static const struct ufs_hba_variant_ops cdns_ufs_m31_16nm_pltfm_hba_vops = {
+ 	.name = "cdns-ufs-pltfm",
+ 	.init = cdns_ufs_init,
+-	.setup_clocks = cdns_ufs_setup_clocks,
++	.hce_enable_notify = cdns_ufs_hce_enable_notify,
+ 	.phy_initialization = cdns_ufs_m31_16nm_phy_initialization,
+ };
+ 
 -- 
-2.20.1
+2.15.0
 
