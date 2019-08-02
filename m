@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2267F8C6
-	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 15:22:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353F97F926
+	for <lists+linux-scsi@lfdr.de>; Fri,  2 Aug 2019 15:27:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393786AbfHBNWb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 2 Aug 2019 09:22:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32866 "EHLO mail.kernel.org"
+        id S2394359AbfHBNZQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 2 Aug 2019 09:25:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36008 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393768AbfHBNW2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 2 Aug 2019 09:22:28 -0400
+        id S1730769AbfHBNZP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 2 Aug 2019 09:25:15 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D233F21851;
-        Fri,  2 Aug 2019 13:22:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C1CF521841;
+        Fri,  2 Aug 2019 13:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1564752147;
-        bh=KsHzOT2Drjqxf6iB103uSixfYulLYN8nGhERHI61auA=;
+        s=default; t=1564752314;
+        bh=72dxgCU6Zqx8IvobvUYlXOI1lwmxrHw8RA7ve7oLk4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0QFukPevohtZ7ZdimZbzG1edajdM/l1rV50uGuumvcolXN0anhPfk3FO9e0MRC6nx
-         +S9oj+humxZ1FCbi1fAYPUegUCFComdxg3/nB4wrQOmpTnFZ84YL991vw3dDEYHC1N
-         Kkc6FiLozrZFEgo+i5UFsrBb4hVkNEQtk3erNYCQ=
+        b=ypV7i5FL9OoSL/N9zIC6K1qc72Bi6IQ1P6CJabwqmH5SGTiZo/Alt3wsPTOqifm2A
+         xvXOSieAgA8sTP+GJHfGG/g7G3h5SErs+Yz8VqAOLWSdogRxf7dn+5Mt4FHs4KqFN3
+         RDvfBR4Gs+DBCrIF/VIw/PWOJChV+ixrDP1nvkHI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Junxiao Bi <junxiao.bi@oracle.com>,
@@ -30,12 +30,12 @@ Cc:     Junxiao Bi <junxiao.bi@oracle.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>,
         megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 64/76] scsi: megaraid_sas: fix panic on loading firmware crashdump
-Date:   Fri,  2 Aug 2019 09:19:38 -0400
-Message-Id: <20190802131951.11600-64-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 24/30] scsi: megaraid_sas: fix panic on loading firmware crashdump
+Date:   Fri,  2 Aug 2019 09:24:16 -0400
+Message-Id: <20190802132422.13963-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190802131951.11600-1-sashal@kernel.org>
-References: <20190802131951.11600-1-sashal@kernel.org>
+In-Reply-To: <20190802132422.13963-1-sashal@kernel.org>
+References: <20190802132422.13963-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,10 +62,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+)
 
 diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 7237114a1d534..5f30016e9b64f 100644
+index 73acd3e9ded75..8595d83229b77 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_base.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3045,6 +3045,7 @@ megasas_fw_crash_buffer_show(struct device *cdev,
+@@ -2976,6 +2976,7 @@ megasas_fw_crash_buffer_show(struct device *cdev,
  	u32 size;
  	unsigned long buff_addr;
  	unsigned long dmachunk = CRASH_DMA_BUF_SIZE;
@@ -73,7 +73,7 @@ index 7237114a1d534..5f30016e9b64f 100644
  	unsigned long src_addr;
  	unsigned long flags;
  	u32 buff_offset;
-@@ -3070,6 +3071,8 @@ megasas_fw_crash_buffer_show(struct device *cdev,
+@@ -3001,6 +3002,8 @@ megasas_fw_crash_buffer_show(struct device *cdev,
  	}
  
  	size = (instance->fw_crash_buffer_size * dmachunk) - buff_offset;
