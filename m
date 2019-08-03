@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8536F8066E
-	for <lists+linux-scsi@lfdr.de>; Sat,  3 Aug 2019 16:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0898066F
+	for <lists+linux-scsi@lfdr.de>; Sat,  3 Aug 2019 16:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391024AbfHCOAS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 3 Aug 2019 10:00:18 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36286 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387781AbfHCOAS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 3 Aug 2019 10:00:18 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l21so37466310pgm.3
-        for <linux-scsi@vger.kernel.org>; Sat, 03 Aug 2019 07:00:17 -0700 (PDT)
+        id S2391038AbfHCOAU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 3 Aug 2019 10:00:20 -0400
+Received: from mail-pf1-f182.google.com ([209.85.210.182]:43077 "EHLO
+        mail-pf1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387781AbfHCOAU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 3 Aug 2019 10:00:20 -0400
+Received: by mail-pf1-f182.google.com with SMTP id i189so37430289pfg.10
+        for <linux-scsi@vger.kernel.org>; Sat, 03 Aug 2019 07:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Y151potURalM4a9rPPaFD6S1UTRiyK+Hq+doF1sRmSw=;
-        b=N6/XU2OiBRLFZHtNTVhxIjZunFmCPbG654dCbU7u+bNJlA0SjN0+xH1cxtJk1XkOHX
-         RoDvh9VansiBo/l0GndtdSp1fxVtk26RxraiRO8M5scDQ7RWrkzKg8Sp7GOZ7Hl39/Ny
-         onbLBUs3vEfcBt562Q289Y5/eFMWoOAU+VFg8=
+        bh=fzp+d3FnBlvBe0Zqb+mhGXKaWVGRNrQqQAg82JCQoTU=;
+        b=PXjfrHj6I3IRvAWH9FVNB1eCo7o7jxNXIs8CkLky/xTvmL0nMVWDdfx8eP+1VZ0qf8
+         jr6kGFPu2l5wPgx2RT7BYj5n4u9HgYF+qoZbUA7kSJtv16chwGqxY9t0bDifBD9abDko
+         jryKSqtdHarmNDDUWSUxVxRc/hosW7nq/TdBs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Y151potURalM4a9rPPaFD6S1UTRiyK+Hq+doF1sRmSw=;
-        b=CM+0d/tOawRPvRunYnWdQQOHary/hYpefmb6T/dPuEwl5+b7xTk58s+sLspRwv86q1
-         Gk+Xj6lPRIh4uuQx684E7xYGyPUqB5C7xhZIv0vBCpGvWShVT7bv3Hv2ApDBLyqzMpJ9
-         zzWGxjHfvH4o1UGvrRhIbAeMANVNKN2WeqYz5YFZsMulhgLjAwop/TALqoiU8CpEHHBN
-         lBxC/NiKu45IKqJWsVxL7rH1GQfoh62q7mNW/77U038vQWiZqf0r/LVtUl/W7sZU8nRj
-         9NOjMQZjSgX3bnmdrPvlvbJIoJw3FVlTEec0QVvXTG6i+GZgOeGKyxFlQoq6w33TPg4o
-         kQDw==
-X-Gm-Message-State: APjAAAU6yxRVvoJnzM76G6DZ0A7Wh6qGQMNUY3EGSMyGGw2ZCtB7jCwp
-        B6HExzVYcFR/RsrpiyJgG+/DDzqr/5NYUswXBPsXQvscsCR7BjsRmb+Zi+NwgvDxVS61HLYN7YR
-        s77bSlJP1DZuqNKawK7QDDvGALjE92XkaZl7dKmh+jbOBm/3ReUiTTpxgDV7Hi5o9zxxLJ3ItNP
-        nxp/6fnmnqs7QN8HPPEg==
-X-Google-Smtp-Source: APXvYqzsPOPnEKpAJVHLpAs0EA1D48WwNm2mCSID3y1eSrlCZfIi9BcO8B34DOzU6BmwQZdjYLkb5Q==
-X-Received: by 2002:a63:cb4b:: with SMTP id m11mr55412663pgi.49.1564840816647;
-        Sat, 03 Aug 2019 07:00:16 -0700 (PDT)
+        bh=fzp+d3FnBlvBe0Zqb+mhGXKaWVGRNrQqQAg82JCQoTU=;
+        b=ccKGyC52a2AofPP1KZTFnQMgppypAfDXG3f34494IxpCL7Iud1Sz623TDVezS4gYck
+         5M4C247nT8B2n0hgCm3vF0cyedvQwowI6aXPljsnYMBuD703/6txIkerii5Kh5uk7Ifs
+         YpthbqaDlPDJeev+1RTsEn3VXQ8RxpuagcBA2viMjjNhcOv5i6THS3szPV7nSPkkCBCm
+         f/yNDoXonhTfmoBoUhs+x7WMOkr5mrd1naoQwpAp9lHHiPjJ3IanzbDDxiXItP6MH9e1
+         v07msKn2zI9ur9PFCVMGPIejNALwas+po8dGOH0Z/1/l7Gf5T0nOXrSBcwJ/Wf1evg/y
+         umtw==
+X-Gm-Message-State: APjAAAUADtCt3IFBsijHbRXnCrm4RZ6ctosqyxEvLzGKCvtDcpxJHfrM
+        XtHP9d7Fu0veionWQlsWmxGXrLLO1q3pk2eJ/eC0pqgI4TAWqepHXph4r48tecnoi7OZEuvtlUl
+        Erwxo0+YRJk51EknvVqrF8B8VvGRUJnk6EjyxCrcgXDkem5rUZ5gP7IdbZCJCkWUEwRKw2StFfh
+        YbuQg0UiZR6GiSakuuBA==
+X-Google-Smtp-Source: APXvYqy0DJTVcx3p21HCd024mq2/Ge6waUzq2vtOvtFoKG8TE8UoQjVkgVHt27HXh3m6ASbGCTGSCw==
+X-Received: by 2002:a63:6947:: with SMTP id e68mr93254050pgc.60.1564840819144;
+        Sat, 03 Aug 2019 07:00:19 -0700 (PDT)
 Received: from dhcp-10-123-20-15.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id c69sm11711615pje.6.2019.08.03.07.00.14
+        by smtp.gmail.com with ESMTPSA id c69sm11711615pje.6.2019.08.03.07.00.16
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 03 Aug 2019 07:00:16 -0700 (PDT)
+        Sat, 03 Aug 2019 07:00:18 -0700 (PDT)
 From:   Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     Sathya.Prakash@broadcom.com, kashyap.desai@broadcom.com,
         sreekanth.reddy@broadcom.com,
         Suganath Prabu <suganath-prabu.subramani@broadcom.com>
-Subject: [PATCH 03/12] mpt3sas: Gracefully handle online firmware update
-Date:   Sat,  3 Aug 2019 09:59:48 -0400
-Message-Id: <1564840797-5876-4-git-send-email-suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH 04/12] mpt3sas: Update MPI headers to 2.6.8 spec
+Date:   Sat,  3 Aug 2019 09:59:49 -0400
+Message-Id: <1564840797-5876-5-git-send-email-suganath-prabu.subramani@broadcom.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1564840797-5876-1-git-send-email-suganath-prabu.subramani@broadcom.com>
 References: <1564840797-5876-1-git-send-email-suganath-prabu.subramani@broadcom.com>
@@ -58,164 +58,259 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Issue:
-During online Firmware upgrade operations, It is possible
-that, MaxDevHandles filed in IOCFacts may change with new FW.
-With this we may observe kernel panics when driver try to access
-the pd_handles or blocking_handles buffers at offset greater than the
-old firmware's MaxDevHandle value.
-
-Fix:
-_base_check_ioc_facts_changes() looks for increase/decrease in IOCFacts
-attributes during online firmware upgrade and increases the pd_handles,
-blocking_handles, etc buffer sizes to new firmware's MaxDevHandle value
-if this new firmware's MaxDevHandle value is greater than the
-old firmware's MaxDevHandle value.
+Updated MPI to 2.6.8 specification and header files to 2.00.54.
 
 Signed-off-by: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 93 +++++++++++++++++++++++++++++++++++++
- drivers/scsi/mpt3sas/mpt3sas_base.h |  2 +
- 2 files changed, 95 insertions(+)
+ drivers/scsi/mpt3sas/mpi/mpi2.h       |  5 +++--
+ drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h  | 10 +++++++--
+ drivers/scsi/mpt3sas/mpi/mpi2_image.h | 39 +++++++++++++++++++----------------
+ drivers/scsi/mpt3sas/mpi/mpi2_pci.h   | 13 ++++++------
+ drivers/scsi/mpt3sas/mpi/mpi2_tool.h  | 13 ++++++------
+ 5 files changed, 46 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index ba83f59..a2a70a5 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -7120,6 +7120,13 @@ mpt3sas_base_attach(struct MPT3SAS_ADAPTER *ioc)
- 	if (r)
- 		goto out_free_resources;
+diff --git a/drivers/scsi/mpt3sas/mpi/mpi2.h b/drivers/scsi/mpt3sas/mpi/mpi2.h
+index 7efd17a..18b1e31 100644
+--- a/drivers/scsi/mpt3sas/mpi/mpi2.h
++++ b/drivers/scsi/mpt3sas/mpi/mpi2.h
+@@ -9,7 +9,7 @@
+  *                 scatter/gather formats.
+  * Creation Date:  June 21, 2006
+  *
+- *  mpi2.h Version:  02.00.53
++ *  mpi2.h Version:  02.00.54
+  *
+  * NOTE: Names (typedefs, defines, etc.) beginning with an MPI25 or Mpi25
+  *       prefix are for use only on MPI v2.5 products, and must not be used
+@@ -121,6 +121,7 @@
+  * 08-15-18  02.00.52  Bumped MPI2_HEADER_VERSION_UNIT.
+  * 08-28-18  02.00.53  Bumped MPI2_HEADER_VERSION_UNIT.
+  *                     Added MPI2_IOCSTATUS_FAILURE
++ * 12-17-18  02.00.54  Bumped MPI2_HEADER_VERSION_UNIT
+  *  --------------------------------------------------------------------------
+  */
  
-+	/*
-+	 * Copy current copy of IOCFacts in prev_fw_facts
-+	 * and it will be used during online firmware upgrade.
-+	 */
-+	memcpy(&ioc->prev_fw_facts, &ioc->facts,
-+	    sizeof(struct mpt3sas_facts));
-+
- 	ioc->non_operational_loop = 0;
- 	ioc->got_task_abort_from_ioctl = 0;
- 	return 0;
-@@ -7282,6 +7289,85 @@ mpt3sas_wait_for_commands_to_complete(struct MPT3SAS_ADAPTER *ioc)
- }
+@@ -161,7 +162,7 @@
  
- /**
-+ * _base_check_ioc_facts_changes - Look for increase/decrease of IOCFacts
-+ *     attributes during online firmware upgrade and update the corresponding
-+ *     IOC variables accordingly.
-+ *
-+ * @ioc: Pointer to MPT_ADAPTER structure
-+ */
-+static int
-+_base_check_ioc_facts_changes(struct MPT3SAS_ADAPTER *ioc)
-+{
-+	u16 pd_handles_sz;
-+	void *pd_handles = NULL, *blocking_handles = NULL;
-+	void *pend_os_device_add = NULL, *device_remove_in_progress = NULL;
-+	struct mpt3sas_facts *old_facts = &ioc->prev_fw_facts;
-+
-+	if (ioc->facts.MaxDevHandle > old_facts->MaxDevHandle) {
-+		pd_handles_sz = (ioc->facts.MaxDevHandle / 8);
-+		if (ioc->facts.MaxDevHandle % 8)
-+			pd_handles_sz++;
-+
-+		pd_handles = krealloc(ioc->pd_handles, pd_handles_sz,
-+		    GFP_KERNEL);
-+		if (!pd_handles) {
-+			ioc_info(ioc,
-+			    "Unable to allocate the memory for pd_handles of sz: %d\n",
-+			    pd_handles_sz);
-+			return -ENOMEM;
-+		}
-+		memset(pd_handles + ioc->pd_handles_sz, 0,
-+		    (pd_handles_sz - ioc->pd_handles_sz));
-+		ioc->pd_handles = pd_handles;
-+
-+		blocking_handles = krealloc(ioc->blocking_handles,
-+		    pd_handles_sz, GFP_KERNEL);
-+		if (!blocking_handles) {
-+			ioc_info(ioc,
-+			    "Unable to allocate the memory for "
-+			    "blocking_handles of sz: %d\n",
-+			    pd_handles_sz);
-+			return -ENOMEM;
-+		}
-+		memset(blocking_handles + ioc->pd_handles_sz, 0,
-+		    (pd_handles_sz - ioc->pd_handles_sz));
-+		ioc->blocking_handles = blocking_handles;
-+		ioc->pd_handles_sz = pd_handles_sz;
-+
-+		pend_os_device_add = krealloc(ioc->pend_os_device_add,
-+		    pd_handles_sz, GFP_KERNEL);
-+		if (!pend_os_device_add) {
-+			ioc_info(ioc,
-+			    "Unable to allocate the memory for pend_os_device_add of sz: %d\n",
-+			    pd_handles_sz);
-+			return -ENOMEM;
-+		}
-+		memset(pend_os_device_add + ioc->pend_os_device_add_sz, 0,
-+		    (pd_handles_sz - ioc->pend_os_device_add_sz));
-+		ioc->pend_os_device_add = pend_os_device_add;
-+		ioc->pend_os_device_add_sz = pd_handles_sz;
-+
-+		device_remove_in_progress = krealloc(
-+		    ioc->device_remove_in_progress, pd_handles_sz, GFP_KERNEL);
-+		if (!device_remove_in_progress) {
-+			ioc_info(ioc,
-+			    "Unable to allocate the memory for "
-+			    "device_remove_in_progress of sz: %d\n "
-+			    , pd_handles_sz);
-+			return -ENOMEM;
-+		}
-+		memset(device_remove_in_progress +
-+		    ioc->device_remove_in_progress_sz, 0,
-+		    (pd_handles_sz - ioc->device_remove_in_progress_sz));
-+		ioc->device_remove_in_progress = device_remove_in_progress;
-+		ioc->device_remove_in_progress_sz = pd_handles_sz;
-+	}
-+
-+	memcpy(&ioc->prev_fw_facts, &ioc->facts, sizeof(struct mpt3sas_facts));
-+	return 0;
-+}
-+
-+/**
-  * mpt3sas_base_hard_reset_handler - reset controller
-  * @ioc: Pointer to MPT_ADAPTER structure
-  * @type: FORCE_BIG_HAMMER or SOFT_RESET
-@@ -7344,6 +7430,13 @@ mpt3sas_base_hard_reset_handler(struct MPT3SAS_ADAPTER *ioc,
- 	if (r)
- 		goto out;
  
-+	r = _base_check_ioc_facts_changes(ioc);
-+	if (r) {
-+		ioc_info(ioc,
-+		    "Some of the parameters got changed in this new firmware"
-+		    " image and it requires system reboot\n");
-+		goto out;
-+	}
- 	if (ioc->rdpq_array_enable && !ioc->rdpq_array_capable)
- 		panic("%s: Issue occurred with flashing controller firmware."
- 		      "Please reboot the system and ensure that the correct"
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-index 6afbdb0..5cd6148 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.h
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-@@ -1066,6 +1066,7 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct MPT3SAS_ADAPTER *ioc);
-  * @event_log: event log pointer
-  * @event_masks: events that are masked
-  * @facts: static facts data
-+ * @prev_fw_facts: previous fw facts data
-  * @pfacts: static port facts data
-  * @manu_pg0: static manufacturing page 0
-  * @manu_pg10: static manufacturing page 10
-@@ -1276,6 +1277,7 @@ struct MPT3SAS_ADAPTER {
+ /* Unit and Dev versioning for this MPI header set */
+-#define MPI2_HEADER_VERSION_UNIT            (0x35)
++#define MPI2_HEADER_VERSION_UNIT            (0x36)
+ #define MPI2_HEADER_VERSION_DEV             (0x00)
+ #define MPI2_HEADER_VERSION_UNIT_MASK       (0xFF00)
+ #define MPI2_HEADER_VERSION_UNIT_SHIFT      (8)
+diff --git a/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h b/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
+index 167d79d..3a6871a 100644
+--- a/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
++++ b/drivers/scsi/mpt3sas/mpi/mpi2_cnfg.h
+@@ -7,7 +7,7 @@
+  *         Title:  MPI Configuration messages and pages
+  * Creation Date:  November 10, 2006
+  *
+- *    mpi2_cnfg.h Version:  02.00.46
++ *    mpi2_cnfg.h Version:  02.00.47
+  *
+  * NOTE: Names (typedefs, defines, etc.) beginning with an MPI25 or Mpi25
+  *       prefix are for use only on MPI v2.5 products, and must not be used
+@@ -244,6 +244,11 @@
+  *                     Added DMDReport Delay Time defines to
+  *                     PCIeIOUnitPage1
+  * --------------------------------------------------------------------------
++ * 08-02-18  02.00.44  Added Slotx2, Slotx4 to ManPage 7.
++ * 08-15-18  02.00.45  Added ProductSpecific field at end of IOC Page 1
++ * 08-28-18  02.00.46  Added NVMs Write Cache flag to IOUnitPage1
++ *                     Added DMDReport Delay Time defines to PCIeIOUnitPage1
++ * 12-17-18  02.00.47  Swap locations of Slotx2 and Slotx4 in ManPage 7.
+  */
  
- 	/* static config pages */
- 	struct mpt3sas_facts facts;
-+	struct mpt3sas_facts prev_fw_facts;
- 	struct mpt3sas_port_facts *pfacts;
- 	Mpi2ManufacturingPage0_t manu_pg0;
- 	struct Mpi2ManufacturingPage10_t manu_pg10;
+ #ifndef MPI2_CNFG_H
+@@ -810,7 +815,8 @@ typedef struct _MPI2_MANPAGE7_CONNECTOR_INFO {
+ 	U8                          Location;               /*0x14 */
+ 	U8                          ReceptacleID;           /*0x15 */
+ 	U16                         Slot;                   /*0x16 */
+-	U32                         Reserved2;              /*0x18 */
++	U16                         Slotx2;                 /*0x18 */
++	U16                         Slotx4;                 /*0x1A */
+ } MPI2_MANPAGE7_CONNECTOR_INFO,
+ 	*PTR_MPI2_MANPAGE7_CONNECTOR_INFO,
+ 	Mpi2ManPage7ConnectorInfo_t,
+diff --git a/drivers/scsi/mpt3sas/mpi/mpi2_image.h b/drivers/scsi/mpt3sas/mpi/mpi2_image.h
+index 4959585..a3f6778 100644
+--- a/drivers/scsi/mpt3sas/mpi/mpi2_image.h
++++ b/drivers/scsi/mpt3sas/mpi/mpi2_image.h
+@@ -5,7 +5,7 @@
+  *          Name: mpi2_image.h
+  * Description: Contains definitions for firmware and other component images
+  * Creation Date: 04/02/2018
+- *       Version: 02.06.03
++ *       Version: 02.06.04
+  *
+  *
+  * Version History
+@@ -17,6 +17,8 @@
+  * 08-14-18  02.06.01  Corrected define for MPI26_IMAGE_HEADER_SIGNATURE0_MPI26
+  * 08-28-18  02.06.02  Added MPI2_EXT_IMAGE_TYPE_RDE
+  * 09-07-18  02.06.03  Added MPI26_EVENT_PCIE_TOPO_PI_16_LANES
++ * 12-17-18  02.06.04  Addd MPI2_EXT_IMAGE_TYPE_PBLP
++ *			Shorten some defines to be compatible with DOS
+  */
+ #ifndef MPI2_IMAGE_H
+ #define MPI2_IMAGE_H
+@@ -200,17 +202,17 @@ typedef struct _MPI26_COMPONENT_IMAGE_HEADER {
+ #define MPI26_IMAGE_HEADER_SIGNATURE0_MPI26                     (0xEB000042)
+ 
+ /**** Definitions for Signature1 field ****/
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_APPLICATION              (0x20505041)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_CBB                      (0x20424243)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_MFG                      (0x2047464D)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_BIOS                     (0x534F4942)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_HIIM                     (0x4D494948)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_HIIA                     (0x41494948)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_CPLD                     (0x444C5043)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_SPD                      (0x20445053)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_NVDATA                   (0x5444564E)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_GAS_GAUGE                (0x20534147)
+-#define MPI26_IMAGE_HEADER_SIGNATURE1_PBLP                     (0x50424C50)
++#define MPI26_IMAGE_HEADER_SIG1_APPLICATION              (0x20505041)
++#define MPI26_IMAGE_HEADER_SIG1_CBB                      (0x20424243)
++#define MPI26_IMAGE_HEADER_SIG1_MFG                      (0x2047464D)
++#define MPI26_IMAGE_HEADER_SIG1_BIOS                     (0x534F4942)
++#define MPI26_IMAGE_HEADER_SIG1_HIIM                     (0x4D494948)
++#define MPI26_IMAGE_HEADER_SIG1_HIIA                     (0x41494948)
++#define MPI26_IMAGE_HEADER_SIG1_CPLD                     (0x444C5043)
++#define MPI26_IMAGE_HEADER_SIG1_SPD                      (0x20445053)
++#define MPI26_IMAGE_HEADER_SIG1_NVDATA                   (0x5444564E)
++#define MPI26_IMAGE_HEADER_SIG1_GAS_GAUGE                (0x20534147)
++#define MPI26_IMAGE_HEADER_SIG1_PBLP                     (0x504C4250)
+ 
+ /**** Definitions for Signature2 field ****/
+ #define MPI26_IMAGE_HEADER_SIGNATURE2_VALUE                    (0x50584546)
+@@ -278,6 +280,7 @@ typedef struct _MPI2_EXT_IMAGE_HEADER {
+ #define MPI2_EXT_IMAGE_TYPE_MEGARAID                (0x08)
+ #define MPI2_EXT_IMAGE_TYPE_ENCRYPTED_HASH          (0x09)
+ #define MPI2_EXT_IMAGE_TYPE_RDE                     (0x0A)
++#define MPI2_EXT_IMAGE_TYPE_PBLP                    (0x0B)
+ #define MPI2_EXT_IMAGE_TYPE_MIN_PRODUCT_SPECIFIC    (0x80)
+ #define MPI2_EXT_IMAGE_TYPE_MAX_PRODUCT_SPECIFIC    (0xFF)
+ 
+@@ -472,12 +475,12 @@ Mpi25EncryptedHashEntry_t, *pMpi25EncryptedHashEntry_t;
+ #define MPI25_HASH_ALGORITHM_UNUSED             (0x00)
+ #define MPI25_HASH_ALGORITHM_SHA256             (0x01)
+ 
+-#define MPI26_HASH_ALGORITHM_VERSION_MASK       (0xE0)
+-#define MPI26_HASH_ALGORITHM_VERSION_NONE       (0x00)
+-#define MPI26_HASH_ALGORITHM_VERSION_SHA1       (0x20)
+-#define MPI26_HASH_ALGORITHM_VERSION_SHA2       (0x40)
+-#define MPI26_HASH_ALGORITHM_VERSION_SHA3       (0x60)
+-#define MPI26_HASH_ALGORITHM_SIZE_MASK          (0x1F)
++#define MPI26_HASH_ALGORITHM_VER_MASK		(0xE0)
++#define MPI26_HASH_ALGORITHM_VER_NONE		(0x00)
++#define MPI26_HASH_ALGORITHM_VER_SHA1		(0x20)
++#define MPI26_HASH_ALGORITHM_VER_SHA2		(0x40)
++#define MPI26_HASH_ALGORITHM_VER_SHA3		(0x60)
++#define MPI26_HASH_ALGORITHM_SIZE_MASK		(0x1F)
+ #define MPI26_HASH_ALGORITHM_SIZE_256           (0x01)
+ #define MPI26_HASH_ALGORITHM_SIZE_512           (0x02)
+ 
+diff --git a/drivers/scsi/mpt3sas/mpi/mpi2_pci.h b/drivers/scsi/mpt3sas/mpi/mpi2_pci.h
+index 63a0950..bb7b79c 100644
+--- a/drivers/scsi/mpt3sas/mpi/mpi2_pci.h
++++ b/drivers/scsi/mpt3sas/mpi/mpi2_pci.h
+@@ -6,7 +6,7 @@
+  *         Title:  MPI PCIe Attached Devices structures and definitions.
+  * Creation Date:  October 9, 2012
+  *
+- * mpi2_pci.h Version:  02.00.03
++ * mpi2_pci.h Version:  02.00.04
+  *
+  * NOTE: Names (typedefs, defines, etc.) beginning with an MPI25 or Mpi25
+  *       prefix are for use only on MPI v2.5 products, and must not be used
+@@ -24,6 +24,8 @@
+  * 07-01-16  02.00.02  Added MPI26_NVME_FLAGS_FORCE_ADMIN_ERR_RESP to
+  *                     NVME Encapsulated Request.
+  * 07-22-18  02.00.03  Updted flags field for NVME Encapsulated req
++ * 12-17-18  02.00.04  Added MPI26_PCIE_DEVINFO_SCSI
++ *			Shortten some defines to be compatible with DOS
+  * --------------------------------------------------------------------------
+  */
+ 
+@@ -41,7 +43,7 @@
+ #define MPI26_PCIE_DEVINFO_NO_DEVICE            (0x00000000)
+ #define MPI26_PCIE_DEVINFO_PCI_SWITCH           (0x00000001)
+ #define MPI26_PCIE_DEVINFO_NVME                 (0x00000003)
+-
++#define MPI26_PCIE_DEVINFO_SCSI                 (0x00000004)
+ 
+ /****************************************************************************
+ *  NVMe Encapsulated message
+@@ -75,10 +77,9 @@ typedef struct _MPI26_NVME_ENCAPSULATED_REQUEST {
+ #define MPI26_NVME_FLAGS_SUBMISSIONQ_IO             (0x0000)
+ #define MPI26_NVME_FLAGS_SUBMISSIONQ_ADMIN          (0x0010)
+ /*Error Response Address Space */
+-#define MPI26_NVME_FLAGS_MASK_ERROR_RSP_ADDR        (0x000C)
+-#define MPI26_NVME_FLAGS_MASK_ERROR_RSP_ADDR_MASK   (0x000C)
+-#define MPI26_NVME_FLAGS_SYSTEM_RSP_ADDR            (0x0000)
+-#define MPI26_NVME_FLAGS_IOCCTL_RSP_ADDR            (0x0008)
++#define MPI26_NVME_FLAGS_ERR_RSP_ADDR_MASK          (0x000C)
++#define MPI26_NVME_FLAGS_ERR_RSP_ADDR_SYSTEM        (0x0000)
++#define MPI26_NVME_FLAGS_ERR_RSP_ADDR_IOCTL         (0x0008)
+ /* Data Direction*/
+ #define MPI26_NVME_FLAGS_DATADIRECTION_MASK         (0x0003)
+ #define MPI26_NVME_FLAGS_NODATATRANSFER             (0x0000)
+diff --git a/drivers/scsi/mpt3sas/mpi/mpi2_tool.h b/drivers/scsi/mpt3sas/mpi/mpi2_tool.h
+index 3f966b6..17ef7f6 100644
+--- a/drivers/scsi/mpt3sas/mpi/mpi2_tool.h
++++ b/drivers/scsi/mpt3sas/mpi/mpi2_tool.h
+@@ -7,7 +7,7 @@
+  *         Title:  MPI diagnostic tool structures and definitions
+  * Creation Date:  March 26, 2007
+  *
+- *   mpi2_tool.h Version:  02.00.15
++ *   mpi2_tool.h Version:  02.00.16
+  *
+  * Version History
+  * ---------------
+@@ -40,6 +40,7 @@
+  *                     Tool Request Message.
+  * 07-22-18  02.00.15  Added defines for new TOOLBOX_PCIE_LANE_MARGINING tool.
+  *                     Added option for DeviceInfo field in ISTWI tool.
++ * 12-17-18  02.00.16  Shorten some defines to be compatible with DOS.
+  * --------------------------------------------------------------------------
+  */
+ 
+@@ -230,11 +231,11 @@ typedef struct _MPI2_TOOLBOX_ISTWI_READ_WRITE_REQUEST {
+ #define MPI2_TOOL_ISTWI_FLAG_PAGE_ADDR_MASK         (0x07)
+ 
+ /*MPI26 TOOLBOX Request MsgFlags defines */
+-#define MPI26_TOOLBOX_REQ_MSGFLAGS_ADDRESSING_MASK     (0x01)
++#define MPI26_TOOL_ISTWI_MSGFLG_ADDR_MASK           (0x01)
+ /*Request uses Man Page 43 device index addressing */
+-#define MPI26_TOOLBOX_REQ_MSGFLAGS_ADDRESSING_DEVINDEX (0x00)
++#define MPI26_TOOL_ISTWI_MSGFLG_ADDR_INDEX          (0x00)
+ /*Request uses Man Page 43 device info struct addressing */
+-#define MPI26_TOOLBOX_REQ_MSGFLAGS_ADDRESSING_DEVINFO  (0x01)
++#define MPI26_TOOL_ISTWI_MSGFLG_ADDR_INFO           (0x01)
+ 
+ /*Toolbox ISTWI Read Write Tool reply message */
+ typedef struct _MPI2_TOOLBOX_ISTWI_REPLY {
+@@ -403,7 +404,7 @@ Mpi2ToolboxTextDisplayRequest_t,
+  */
+ 
+ /*Toolbox Backend Lane Margining Tool request message */
+-typedef struct _MPI26_TOOLBOX_LANE_MARGINING_REQUEST {
++typedef struct _MPI26_TOOLBOX_LANE_MARGIN_REQUEST {
+ 	U8 Tool;			/*0x00 */
+ 	U8 Reserved1;			/*0x01 */
+ 	U8 ChainOffset;			/*0x02 */
+@@ -434,7 +435,7 @@ typedef struct _MPI26_TOOLBOX_LANE_MARGINING_REQUEST {
+ 
+ 
+ /*Toolbox Backend Lane Margining Tool reply message */
+-typedef struct _MPI26_TOOLBOX_LANE_MARGINING_REPLY {
++typedef struct _MPI26_TOOLBOX_LANE_MARGIN_REPLY {
+ 	U8 Tool;			/*0x00 */
+ 	U8 Reserved1;			/*0x01 */
+ 	U8 MsgLength;			/*0x02 */
 -- 
 1.8.3.1
 
