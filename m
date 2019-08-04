@@ -2,84 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ABCD80A6F
-	for <lists+linux-scsi@lfdr.de>; Sun,  4 Aug 2019 12:33:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D7780C04
+	for <lists+linux-scsi@lfdr.de>; Sun,  4 Aug 2019 20:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726034AbfHDKd6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 4 Aug 2019 06:33:58 -0400
-Received: from sonic310-42.consmr.mail.bf2.yahoo.com ([74.6.135.216]:38554
-        "EHLO sonic310-42.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725941AbfHDKd6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 4 Aug 2019 06:33:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1564914836; bh=HXEhLH7CRxfsXKJ1sRQ+Gpa5M9xjOa2TrkLDufu5AVE=; h=Date:From:Reply-To:Subject:From:Subject; b=YA14iKnFkjQgkVHbeuvvqqocrCh8C9f236Fqflnot93jfnXxuKSARjg94UWIQsvTuXsAOwCOUkalUgC2V1hUvYJtoLECdPcMR5v/ohcinsMOEDXxt8vgV7WJfxTKw54y0HMqNgczuQCd6PTNDTACW0uA+T+sxDNTD96iwldH1LepiPjpTzhkCLlOXz0i0/hTDmOrnHFOLGmH9aLXH3aprid1LxvGqt3+wba0UoYFnrbw0tha62qj7vbDKh5h6qFtcUYjB9R3JtSGXoUbhOqeXfXioSgbd4mDw0X4QpilcdCqlcCQmWj9/xDybKs1gX5Y8uCcAf2TkRcmx/fjxMMiCA==
-X-YMail-OSG: pOTfQHQVM1mgO1kw5_oEXtSFavDFzhdyWxXBJ8rlPlIkU.9OrxwwCYXTQo4GQRq
- lGNYkQpb5mJiiy.gBS3WRKflt7jyjgdt5EKFSUd9QobIu0JMFCxse3Hu9Qj7yL_cSL5lvzJgISLz
- LBw6.F3i3n9FTx3iNLXl81UnSEB0vXUg5TYOymVqE4jIEhFgEfKcf.yjT_vmVnZz7v5noEzsgHtT
- zKtZXzdZtkrOlAhVb0yykFlfxK.4NHAdxct9dXP8USpK8xYddepNsriG5XHR3U6kjwyrkMuks7ik
- AlZOPL4rOOaSeDPo.0fctdda0tJbh9BboKmTSLwcOALu5NiWBzD32ybos_gJ1qitRo7YjbI0356D
- 14U94Z.MIRtKW2SU1cssO_7N2IyDi9r_astZ2c7V.6g.XPY1CiYTN6osz4jBj7lFzyJBainY.7Zu
- MKeNJ68Ytez6K68IrfVk0IM4dlXfXJJ0_Mnuhl4gpxCqtIzUVImDL5fJ_Wif4VGQpNrJlu9n0Vat
- _HIro1bAvW_yWs6Ujz3NBsTJb64Lj4YYwp58VuOJeNIqzy9w8ApMAd.FOFuVXM1UA0_RcbqGATz1
- bixtsuS_gMVBXkXaN53HORM9Q.mp.Y0nBy5egUBQLPD_perMk6KzXX5eSFHBb5cuJ__r.i_9RqBu
- qw2Y7lX.hA5kL1lj40Hauh4VWWoR89R5bGCTefNh13DSyvPVBbhLKUUAK3TJNkAS2P0N7LGCxWZM
- jcR..DNSOCAgu_5nxksapRs1nyXuN.ZblPrq731ZkHfiALOgNyY3JYg5KNeaNYLnHert9FODdzXp
- eC2gAvdDbncLxWlgnAYT3E9DkBO0Sf9FVfLSEsZLepZJ9UVEOXcGB.3D_OjGYqgJtKV7gGsemG_4
- HyRzea0w7wQQYNcH9ScsekVZA2rumub2weYMLA1izlxfCnOBVyXjaaxrXwb65sAt3r7DncxUJ458
- 6eSeYj6KOnsvSoO.VHwrF7tuWJV8ZHDluZ25fA.S4DaxJv3NXwrZkrtkj7wm2jE7Pnb5.OvPIbjM
- RpZZ7tTmmWebEcaE_ltRFplAhLn61FKWoWom2KdVfHQeyyiHTbIuuJDsU0SDq7PmXEe8JfT0g6DF
- fRiwfE93BbgnOVlbMNpq1sIEudKLDo.41.3nB7KxOb1D2ktoz0EgsG0tJvjsyndXnWRnuTDaiXIF
- wL4jGrxQglXibqBlPQXkzoz8xQFPZnvOxykX8BPF2TZ04pgNvfIxz11nHnUZJOVYfihruA7vENx2
- VDs3_qWRAeYFXRP0Lp47ePg--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.bf2.yahoo.com with HTTP; Sun, 4 Aug 2019 10:33:56 +0000
-Date:   Sun, 4 Aug 2019 10:31:55 +0000 (UTC)
-From:   "Mrs. Lorita Thomas" <lvthomas@posteo.net>
-Reply-To: lth63409@gmail.com
-Message-ID: <327733550.836657.1564914715688@mail.yahoo.com>
-Subject: Hoffe, ich kann dir vertrauen
+        id S1726536AbfHDSf5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 4 Aug 2019 14:35:57 -0400
+Received: from se1-lax1.servconfig.com ([104.244.124.86]:39429 "EHLO
+        se1-lax1.servconfig.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbfHDSf5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 4 Aug 2019 14:35:57 -0400
+X-Greylist: delayed 3923 seconds by postgrey-1.27 at vger.kernel.org; Sun, 04 Aug 2019 14:35:56 EDT
+Received: from res217.servconfig.com ([192.145.239.54])
+        by se1-lax1.servconfig.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <pardesitrotter@res217.servconfig.com>)
+        id 1huK3v-000WkH-0D
+        for linux-scsi@vger.kernel.org; Sun, 04 Aug 2019 13:12:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=res217.servconfig.com; s=default; h=Content-Type:MIME-Version:Message-ID:
+        Reply-To:From:Date:Subject:To:Sender:Cc:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=HbSbiftHda3N0iB7xZ7hvLkTiPxN5U++kFE200LAZKQ=; b=bJWk6e/5tjsTUCx5TVBJfoHO43
+        aOn70hVf3T85UAn6PR/F2qhFzxVSA+xhWH6cyj7rsqRvkSKU5WAt3MAUEN7MaNXGMiJNpbWYBwpR6
+        GIg/LMMzQmiuHETGZpW83JJfk3YlL1Vi0iEOjTLsgHnPvS7timHPRYrqCwXMaG/gR27CG/CkYzsq5
+        ZmOY6gOglQZM2vohJzYstvpWpeZCzY+9wm+hCGYekIlJhvMpr2CGANS5S+f5IoFB6OU/6g5uc3zXw
+        2GHqeoXrF1grehUaLkac+cnOuczito04YsA3aqcWqwkhcrEY6CDAFiiM5jnrx3UtLwpmolV5TEwBD
+        bSsFbpYQ==;
+Received: from pardesitrotter by res217.servconfig.com with local (Exim 4.92)
+        (envelope-from <pardesitrotter@res217.servconfig.com>)
+        id 1huK3k-009z9P-TI
+        for linux-scsi@vger.kernel.org; Sun, 04 Aug 2019 10:12:40 -0700
+To:     linux-scsi@vger.kernel.org
+Subject: Pardesi Trotter "Invest $ 5,000 in Bitcoin once and get $ 70,000 passive income per month"
+Date:   Sun, 4 Aug 2019 17:12:40 +0000
+From:   Pardesi Trotter <wordpress@pardesitrotter.com>
+Reply-To: uns.gang@gmail.com
+Message-ID: <1d39be14adb4014c8a766f70cb223eec@pardesitrotter.com>
+X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-To:     unlisted-recipients:; (no To-header on input)
+X-Get-Message-Sender-Via: res217.servconfig.com: authenticated_id: pardesitrotter/from_h
+X-Authenticated-Sender: res217.servconfig.com: wordpress@pardesitrotter.com
+X-Originating-IP: 192.145.239.54
+X-SpamExperts-Domain: res217.servconfig.com
+X-SpamExperts-Username: 192.145.239.54
+Authentication-Results: servconfig.com; auth=pass smtp.auth=192.145.239.54@res217.servconfig.com
+X-SpamExperts-Outgoing-Class: unsure
+X-SpamExperts-Outgoing-Evidence: Combined (0.79)
+X-Recommended-Action: accept
+X-Filter-ID: Mvzo4OR0dZXEDF/gcnlw0YiRRkpbHZ8F3zevhEShTfypSDasLI4SayDByyq9LIhV4jJ4rfCYOhco
+ wL3i9TFjVUTNWdUk1Ol2OGx3IfrIJKywOmJyM1qr8uRnWBrbSAGDQd8pSQ5vgaRAQXJShcsaKbsr
+ 2GHY/oPc/Sj6e6fjMOPgo34CxMJsfFVRRl+N7XQzHLhQhaRO9sJvA+CgQbifrkMC83EcGqebH9oT
+ x2HeTuKF3wTDxLMJW2H608Ryhl9KMMcyhWftAf7IeIBArf7CA2Mkx7eK6eVyk2jmKKs7zUxTKdmK
+ mbJmIzSVQuvw/FwNDzn23lmbQ455+TwtsPDDuakyADUV+YPlDVGLglQJ524woCTxLKweTbuJ+19z
+ syHV9b4qrw079OEQLOggyuOVA5L24vQRIIq+FmPL2khrF0ZqLQa/nBnd5/rp1qu0oCqUF2Qoy/nj
+ Gu8kOUbAdJrasYWgtkyaRaxq6tVl++pE5oOcO0dvzPl2k+QS4nxKfCqVax9aqWLRKqMTnPDyJYH3
+ DGsI1JuLkyxl+s9t81KNtzOdA1atij9I2cPX8pbEQmIlLYxG0axR7xEpzKsyxrpVaLTlo0e71UIn
+ awUsVFFOlV/74O4hBSz/kkmPgL+fgIguW+jF21cfJFLrEfxctmvA3PDzFkh0ChGwNcnCh545kpr2
+ CUVZeMjAVcHS4U+Qits37ALjRjJu03wKW5aq6I67gWXpV3JAuc1jN0mkq2fxzDGr2AKavaEIrLeF
+ bFtXuRaD0z6bhalFEM/pjPCQA+BAlhfOiKn0YOYOrwdIjNwNM/CIWGEhI1ZsGzmL93hpdWUFEAU3
+ YLz8spnaWMHtOzGZBZGwK6styG7XtOhYYbYljJlm4zuNRcgRKiGg7nXFaZTxC4AWpisCo0A22Dm0
+ RjEmzSdpdVQN0S8jOblc6zO3y7AutCx1I2YYnY4mB9iiCg+JFCQJHN24lF4VxauwnmmEPTYGdNMU
+ Zfn/IjgrL7VklxvYVQSF7DNeeGWd9hlMkududsqglwOSF4+B3qccW0ARrxoKvS/L43GsNdUh7JpS
+ UCLKvehWcr1T8XQqgcaSiRPXfcsvPH8XaBPfCXwlAm8GGg==
+X-Report-Abuse-To: spam@se1-lax1.servconfig.com
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Message Body:
+$10000 per day New Binary Options Trading Service Takes Bitcoin-Only Payments: http://lsetaganin.tk/sx117?&mrayg=DBxrIGDzkXb9UM
 
+--
+This e-mail was sent from a contact form on Pardesi Trotter (http://pardesitrotter.com)
 
-Hallo Herr,
-
-Gerne schreibe ich Ihnen nach Abw=C3=A4gung Ihres Profils Mein Name
-ist Frau Lorita Thomas eine Staatsangeh=C3=B6rigkeit von Kuwait. Ich bin ve=
-rheiratet mit Herrn Vincent Thomas, der neun Jahre f=C3=BCr die malaysische=
- =C3=96lgesellschaft gearbeitet hat bevor er im Jahr 2012 starb. Wir waren =
-viele Jahre verheiratet ohne Kind starb er nach einer kurzen Krankheit, die=
- nur von Dauer war vier Tage. Vor seinem Tod wurden wir beide wiedergeboren=
-, aber keine Christen Diskriminierung jeglicher Religion.
-
-Als mein verstorbener Ehemann noch lebte, haben wir 8,3 Millionen Dollar ei=
-ngezahlt (Acht Millionen dreihunderttausend US-Dollar) mit einer BANK,
-Derzeit ist dieses Geld noch bei der Bank. K=C3=BCrzlich hat mein Arzt erz=
-=C3=A4hlt
-mir, dass ich wegen Krebs die n=C3=A4chsten drei Monate nicht durchhalten w=
-=C3=BCrde
-Problem. Was mich am meisten st=C3=B6rt, ist mein Schlaganfall. Nachdem ich=
- meine gekannt habe Voraussetzung Ich m=C3=B6chte diesen Fonds der Kirche o=
-der besser noch einer spenden Christen, Muslime oder jeder, der damit umgeh=
-en kann Person, die dieses Geld so einsetzt, wie ich es anweisen werde
-hierin. Ich m=C3=B6chte eine muslimische oder christliche Kirche, die diese=
-n Fonds nutzt an: Kirchen, Waisenh=C3=A4user, Fl=C3=BCchtlinge, Forschungsz=
-entren und Witwen das Wort Gottes zu verbreiten und sicherzustellen, dass d=
-as Haus Gottes ist gepflegt.
-
-Wer dem Herrn dienen will, muss ihm im Geiste dienen und
-Wahrheit. Bitte bete immer dein ganzes Leben lang. Jede Verz=C3=B6gerung in
-Ihre Antwort gibt mir Raum bei der Beschaffung f=C3=BCr eine Kirche, Christ=
-ian oder Muslim oder eine gute Person f=C3=BCr diesen gleichen Zweck. Bitte=
- versichere es mir dass du dementsprechend handelst, wie ich hier in angege=
-ben habe.
-
-Ich hoffe, bald von Ihnen zu h=C3=B6ren.
-Sei gesegnet.
-Dein,
-Frau Lorita Vincent Thomas
