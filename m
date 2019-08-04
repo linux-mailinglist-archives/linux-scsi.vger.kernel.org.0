@@ -2,64 +2,44 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6371E8080D
-	for <lists+linux-scsi@lfdr.de>; Sat,  3 Aug 2019 21:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABCD80A6F
+	for <lists+linux-scsi@lfdr.de>; Sun,  4 Aug 2019 12:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728195AbfHCThT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 3 Aug 2019 15:37:19 -0400
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:46855 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728121AbfHCThT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 3 Aug 2019 15:37:19 -0400
-Received: by mail-ot1-f53.google.com with SMTP id z23so53199868ote.13
-        for <linux-scsi@vger.kernel.org>; Sat, 03 Aug 2019 12:37:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lucidpixels.com; s=google;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=Tv2T/5LhQExvr0Ft3hxbrMy7PyDH7uXIbhau7p31o/4=;
-        b=oTq68OHW2mUyOqBxFjqGKh69Fi/JUissXQlzSE28d8cBGqVKIMfPdrXIDwxQbmR9nn
-         Z5xCzbBXxN3n3al4fsxJ9aZA3vOmmWP0ryDRkhf6CTZuozaJ08f17h/GXaGef37EcA15
-         HTxcNxpqK9iAKbki+RynYG0B4pMEQ5GkUSc4o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=Tv2T/5LhQExvr0Ft3hxbrMy7PyDH7uXIbhau7p31o/4=;
-        b=evcSgv15buAHTPSJ4FYYBM6WdrkQyJTz6Shg3w+JJu5bbJdt7eZ8Lu6j8bkcoiA9Zj
-         NPhWWWCpLIfVmGzUkM+WR929H4UekwRVYab424aX82K7hKi8fhZMkkfNEw94oUUvHyhe
-         2LCEwfofYp2SwvS6t6zp+mGZgfZxK1jkG3bnhIP9AVSMNc72xXYD+TAH5WTlyfSHz29i
-         NwU3s1uMcOcaUeTg1DY1CmfWsb6NHuIRmIouKiRD0JCM4c9m8iSmQTp2eSIkqlcWgtHn
-         IdFGWkvHfL8j0PUpbfqbvUWZUD+rqWxo1JGPO32n7lvQpDJHjwoJB6zbKmExAVFjMIHF
-         hPNQ==
-X-Gm-Message-State: APjAAAVUNs14ER+HWIZWFHcKlCXv6tWtSrf6395eq/+b/p2kJUmO0tR5
-        xp4Cg7UwaAuN6V/XzCRwC84NGL8xwY4=
-X-Google-Smtp-Source: APXvYqxGrk3LpN098P1GH7zuwOKodMYCU32/4wSnYHzjKuE76mDNxMbKISVxiA6bKHx20Sr/wZNGDg==
-X-Received: by 2002:a9d:63c7:: with SMTP id e7mr108610344otl.165.1564861038121;
-        Sat, 03 Aug 2019 12:37:18 -0700 (PDT)
-Received: from WARPC (pool-173-72-201-135.clppva.fios.verizon.net. [173.72.201.135])
-        by smtp.gmail.com with ESMTPSA id 98sm28670948oti.18.2019.08.03.12.37.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 03 Aug 2019 12:37:17 -0700 (PDT)
-From:   "Justin Piszcz" <jpiszcz@lucidpixels.com>
-To:     <damien.lemoal@wdc.com>
-Cc:     "'LKML'" <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        "'Alan Stern'" <stern@rowland.harvard.edu>
-References: <006d01d549db$54e42140$feac63c0$@lucidpixels.com> <Pine.LNX.4.44L0.1908031458330.22056-100000@netrider.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1908031458330.22056-100000@netrider.rowland.org>
-Subject: RE: 5.2.x kernel: WD 8TB USB Drives: Unaligned partial completion (resid=78, sector_sz=512)
-Date:   Sat, 3 Aug 2019 15:37:16 -0400
-Message-ID: <001b01d54a32$dbb09260$9311b720$@lucidpixels.com>
+        id S1726034AbfHDKd6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 4 Aug 2019 06:33:58 -0400
+Received: from sonic310-42.consmr.mail.bf2.yahoo.com ([74.6.135.216]:38554
+        "EHLO sonic310-42.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725941AbfHDKd6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 4 Aug 2019 06:33:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1564914836; bh=HXEhLH7CRxfsXKJ1sRQ+Gpa5M9xjOa2TrkLDufu5AVE=; h=Date:From:Reply-To:Subject:From:Subject; b=YA14iKnFkjQgkVHbeuvvqqocrCh8C9f236Fqflnot93jfnXxuKSARjg94UWIQsvTuXsAOwCOUkalUgC2V1hUvYJtoLECdPcMR5v/ohcinsMOEDXxt8vgV7WJfxTKw54y0HMqNgczuQCd6PTNDTACW0uA+T+sxDNTD96iwldH1LepiPjpTzhkCLlOXz0i0/hTDmOrnHFOLGmH9aLXH3aprid1LxvGqt3+wba0UoYFnrbw0tha62qj7vbDKh5h6qFtcUYjB9R3JtSGXoUbhOqeXfXioSgbd4mDw0X4QpilcdCqlcCQmWj9/xDybKs1gX5Y8uCcAf2TkRcmx/fjxMMiCA==
+X-YMail-OSG: pOTfQHQVM1mgO1kw5_oEXtSFavDFzhdyWxXBJ8rlPlIkU.9OrxwwCYXTQo4GQRq
+ lGNYkQpb5mJiiy.gBS3WRKflt7jyjgdt5EKFSUd9QobIu0JMFCxse3Hu9Qj7yL_cSL5lvzJgISLz
+ LBw6.F3i3n9FTx3iNLXl81UnSEB0vXUg5TYOymVqE4jIEhFgEfKcf.yjT_vmVnZz7v5noEzsgHtT
+ zKtZXzdZtkrOlAhVb0yykFlfxK.4NHAdxct9dXP8USpK8xYddepNsriG5XHR3U6kjwyrkMuks7ik
+ AlZOPL4rOOaSeDPo.0fctdda0tJbh9BboKmTSLwcOALu5NiWBzD32ybos_gJ1qitRo7YjbI0356D
+ 14U94Z.MIRtKW2SU1cssO_7N2IyDi9r_astZ2c7V.6g.XPY1CiYTN6osz4jBj7lFzyJBainY.7Zu
+ MKeNJ68Ytez6K68IrfVk0IM4dlXfXJJ0_Mnuhl4gpxCqtIzUVImDL5fJ_Wif4VGQpNrJlu9n0Vat
+ _HIro1bAvW_yWs6Ujz3NBsTJb64Lj4YYwp58VuOJeNIqzy9w8ApMAd.FOFuVXM1UA0_RcbqGATz1
+ bixtsuS_gMVBXkXaN53HORM9Q.mp.Y0nBy5egUBQLPD_perMk6KzXX5eSFHBb5cuJ__r.i_9RqBu
+ qw2Y7lX.hA5kL1lj40Hauh4VWWoR89R5bGCTefNh13DSyvPVBbhLKUUAK3TJNkAS2P0N7LGCxWZM
+ jcR..DNSOCAgu_5nxksapRs1nyXuN.ZblPrq731ZkHfiALOgNyY3JYg5KNeaNYLnHert9FODdzXp
+ eC2gAvdDbncLxWlgnAYT3E9DkBO0Sf9FVfLSEsZLepZJ9UVEOXcGB.3D_OjGYqgJtKV7gGsemG_4
+ HyRzea0w7wQQYNcH9ScsekVZA2rumub2weYMLA1izlxfCnOBVyXjaaxrXwb65sAt3r7DncxUJ458
+ 6eSeYj6KOnsvSoO.VHwrF7tuWJV8ZHDluZ25fA.S4DaxJv3NXwrZkrtkj7wm2jE7Pnb5.OvPIbjM
+ RpZZ7tTmmWebEcaE_ltRFplAhLn61FKWoWom2KdVfHQeyyiHTbIuuJDsU0SDq7PmXEe8JfT0g6DF
+ fRiwfE93BbgnOVlbMNpq1sIEudKLDo.41.3nB7KxOb1D2ktoz0EgsG0tJvjsyndXnWRnuTDaiXIF
+ wL4jGrxQglXibqBlPQXkzoz8xQFPZnvOxykX8BPF2TZ04pgNvfIxz11nHnUZJOVYfihruA7vENx2
+ VDs3_qWRAeYFXRP0Lp47ePg--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.bf2.yahoo.com with HTTP; Sun, 4 Aug 2019 10:33:56 +0000
+Date:   Sun, 4 Aug 2019 10:31:55 +0000 (UTC)
+From:   "Mrs. Lorita Thomas" <lvthomas@posteo.net>
+Reply-To: lth63409@gmail.com
+Message-ID: <327733550.836657.1564914715688@mail.yahoo.com>
+Subject: Hoffe, ich kann dir vertrauen
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 14.0
-Thread-Index: AQJuodioyS95OAww8I/7mT9ERbmjcKW3HLjQ
-Content-Language: en-us
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -67,53 +47,39 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 
 
------Original Message-----
-From: Alan Stern [mailto:stern@rowland.harvard.edu]=20
-Sent: Saturday, August 3, 2019 3:00 PM
-To: Justin Piszcz
-Cc: 'LKML'; linux-usb@vger.kernel.org; linux-scsi@vger.kernel.org
-Subject: Re: 5.2.x kernel: WD 8TB USB Drives: Unaligned partial =
-completion (resid=3D78, sector_sz=3D512)
+Hallo Herr,
 
-On Sat, 3 Aug 2019, Justin Piszcz wrote:
+Gerne schreibe ich Ihnen nach Abw=C3=A4gung Ihres Profils Mein Name
+ist Frau Lorita Thomas eine Staatsangeh=C3=B6rigkeit von Kuwait. Ich bin ve=
+rheiratet mit Herrn Vincent Thomas, der neun Jahre f=C3=BCr die malaysische=
+ =C3=96lgesellschaft gearbeitet hat bevor er im Jahr 2012 starb. Wir waren =
+viele Jahre verheiratet ohne Kind starb er nach einer kurzen Krankheit, die=
+ nur von Dauer war vier Tage. Vor seinem Tod wurden wir beide wiedergeboren=
+, aber keine Christen Diskriminierung jeglicher Religion.
 
-> Attached 2 x brand new Western Digital 8TB USB 3.0 drives awhile back =
-and
-> ran some file copy tests and was getting these warnings-- is there any =
-way
-> to avoid these warnings?=EF=BF=BD I did confirm with parted that the =
-partition was
-> aligned but this appears to be something related to the firmware on =
-the
-> device according to [1] and [2]?
->=20
-> [1]=EF=BF=BDhttps://patchwork.kernel.org/patch/9573203/
-> [2] https://patchwork.kernel.org/patch/9597797/
+Als mein verstorbener Ehemann noch lebte, haben wir 8,3 Millionen Dollar ei=
+ngezahlt (Acht Millionen dreihunderttausend US-Dollar) mit einer BANK,
+Derzeit ist dieses Geld noch bei der Bank. K=C3=BCrzlich hat mein Arzt erz=
+=C3=A4hlt
+mir, dass ich wegen Krebs die n=C3=A4chsten drei Monate nicht durchhalten w=
+=C3=BCrde
+Problem. Was mich am meisten st=C3=B6rt, ist mein Schlaganfall. Nachdem ich=
+ meine gekannt habe Voraussetzung Ich m=C3=B6chte diesen Fonds der Kirche o=
+der besser noch einer spenden Christen, Muslime oder jeder, der damit umgeh=
+en kann Person, die dieses Geld so einsetzt, wie ich es anweisen werde
+hierin. Ich m=C3=B6chte eine muslimische oder christliche Kirche, die diese=
+n Fonds nutzt an: Kirchen, Waisenh=C3=A4user, Fl=C3=BCchtlinge, Forschungsz=
+entren und Witwen das Wort Gottes zu verbreiten und sicherzustellen, dass d=
+as Haus Gottes ist gepflegt.
 
-Just out of curiosity, why did you not address your email to the author=20
-or committer of this patch?  Surely they would be the people in the=20
-best position to answer your questions.
+Wer dem Herrn dienen will, muss ihm im Geiste dienen und
+Wahrheit. Bitte bete immer dein ganzes Leben lang. Jede Verz=C3=B6gerung in
+Ihre Antwort gibt mir Raum bei der Beschaffung f=C3=BCr eine Kirche, Christ=
+ian oder Muslim oder eine gute Person f=C3=BCr diesen gleichen Zweck. Bitte=
+ versichere es mir dass du dementsprechend handelst, wie ich hier in angege=
+ben habe.
 
-[ .. ]
-
-Fixed.
-
-I had been researching this issue and did not find any useful notes on =
-the mailing lists--hopefully this will help others if there's a copy of =
-the response on the mailing list.
-
-These drives [1] [2] are the ones noted as affected when used on Linux =
-[1] plugged in directly to a Linux PC (w/USB 3.0/XHCI) and [2] when in a =
-USB enclosure with a JMicron SATA Bridge.
-
-[1] WDBBGB0080HBK-NESN - =
-https://www.wd.com/products/external-storage/my-book-new.html#WDBBGB0080H=
-BK-NESN
-[2] WD40EZRZ-22GXCB0 - =
-https://www.wd.com/products/internal-storage/wd-blue-pc-desktop-hard-driv=
-e.html  (In a USB enclosure with a JMicron SATA Bridge - per Markus)
-
-Regards,
-
-Justin.
-
+Ich hoffe, bald von Ihnen zu h=C3=B6ren.
+Sei gesegnet.
+Dein,
+Frau Lorita Vincent Thomas
