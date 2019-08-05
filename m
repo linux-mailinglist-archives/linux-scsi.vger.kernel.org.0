@@ -2,98 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E88CB8122F
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2019 08:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC60C81233
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2019 08:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727445AbfHEGWw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 5 Aug 2019 02:22:52 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:38548 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727412AbfHEGWv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Aug 2019 02:22:51 -0400
-Received: by mail-ed1-f65.google.com with SMTP id r12so42778040edo.5;
-        Sun, 04 Aug 2019 23:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tGdeKkO6NF7wDJ7Q5bh/TgttU4eme3KB46fSMxOwVRA=;
-        b=M9YZ2YxqcdoIX7YXTDFw+22XCqU+0OIb5RpWCbwZW4THqevYUE3gzQ3/n9FCZs0Puj
-         8XYIDbH/DEDPGkjbGuKPUKD19eFwZRx3Ni890NOrXOe/NlO/Jby9xvzJers3NsVxnCI2
-         OcH6NoXkcntvuBZ8sn3drrNH/jS+JwcYehMb8OgUFStTQgwkU3ISGZT0TQvDMFr1hmgk
-         9UYFOVfu2hsVIQU2QLTrAPJbp0SKqhIsrGp9Qf9NDZsxI8TcFdP8DzStbDSqsQ/KDfN5
-         kzY8USuixdBFDnvS97LfvawcTXwFb5+6VobAHwLsTxPEhWREAPK35NLOOhknHbzUlDeO
-         JVRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tGdeKkO6NF7wDJ7Q5bh/TgttU4eme3KB46fSMxOwVRA=;
-        b=lDODaL2y7DAZnf5DO0QEYL1tc2DldYPgUUTXAiVmSC5bjbF/KzT7Y73G5p5TFNxay1
-         IWZHOZEJtDJlmZR/WfxQLd5/R9KiB5QiktvN1i0Gx6oPww8v7KghaeztBgHVpOp2266z
-         FlvpHt05KxlKx2gRw3TdzHsAQPSAirEHFhOzpAB9hc/g+A+/OjxFRqwMKp/9kRAWZoBm
-         mcclRX4gl8tp+ZWN95J+mN5g/QFvCIe8qiGqiuYZ7hS+LbZb7Yc1eKVijIzHVkTF7zGw
-         0JJAm4rYRDPrJWYldstLpFZYJ55/lkTr73fv8Q5dM0I0fysR2um+mveZk9WmXYm/bR0J
-         0n6Q==
-X-Gm-Message-State: APjAAAWuH5oDMIdi4ePHMPaguvIeo3raKIB324pJ9aMTre+uZnP89iI4
-        3W/M1x/T8eBna8O6wq3jWTNCC5JhDrsUusNFXKI=
-X-Google-Smtp-Source: APXvYqzflf4qXhYsaRJU4r6IXLMuCAO7l8ggqaaQXaXViLftYO5nPqiMMBo7z3qWSwykuxGy5zY9MuxJGY+x7SYvG0U=
-X-Received: by 2002:a50:fb0a:: with SMTP id d10mr103635158edq.124.1564986169613;
- Sun, 04 Aug 2019 23:22:49 -0700 (PDT)
+        id S1726877AbfHEGYH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 5 Aug 2019 02:24:07 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:58178 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbfHEGYH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Aug 2019 02:24:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1564986248; x=1596522248;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dy07uosSr7cKziYkXSNyPTsOxT7lydWAZPZiedfNQB4=;
+  b=Gb1z+smh2ZUJRHzz12c5n8FKcXRtoAued/OQZ95xNLR5nQOE9C2qhIvN
+   X7uiGx47OIxlDIGehgP1B7FI9RiMFMtD+MLJPKx+Xi4PkuYLqxx9bLpjU
+   ZgYW6RbqItgxtuRKbZzuMxiSv9krdp4DTN36S0HUDY8J4CVFN0cj3Me1e
+   KKBPqj2VkDO29a4scztFqAg3D3VGblLIyx6nQJzvKIGjoSmY5hxVqI0ZH
+   GOw5NWkXGNAWwR9K80gv+DFf8K2LwsMF4f8Kq1X4Erzc3eWLbiorq3VCO
+   4raXw43EmrPTuzEjnsvfzwPiaa86I+04c1bsICqSgnU9ukJr+ykdpBDzq
+   Q==;
+IronPort-SDR: nHS2v3CCOze4Dhg6c0h6DWdijIXBMv4OsAtd4mrMj1skBC7kOq5GUhTLr2y68GREaZvHKcvztQ
+ iRVPtUB1ko03SScBatApfCXPpR7eYLNOAoLw4X/DX3/ymD8lsyjNkcQgGVcAXrbL23Qc+JuG0A
+ I9V9lw9EUCYJ/IkDbItlsnLtKpriDt7WT5fK0w3tMFnhO2I150cnx4ceqR3Xm5nxlq8sjbT8Wy
+ llKJtNycCRlhnMKZTGCnmVxdTFgF+uPzjLOVW1rytxCifcPdSsBQTyANORjfODFSShhjErKF6S
+ sdE=
+X-IronPort-AV: E=Sophos;i="5.64,348,1559491200"; 
+   d="scan'208";a="114977754"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 05 Aug 2019 14:24:07 +0800
+IronPort-SDR: obY7fVXZQ1GYI4Ao5QcID/UPNrlYBK9BSWCyXUaXD9PJ7z7CjkgfqHoZ52P3sOu8Mv5QVpQZTj
+ 5VTMgdY44rCQ5ogBD25O2M1joW6LX3Bji1Mu91TL7Id8KBBMedeypXDdUO2oXccejIP/bzsbB6
+ evL1CVHx+CAndA2FmtX7+MDiG9+bgaKiCmgYbIZwqL6AXwC4RoXI6D6exg0U6sntrjTIfGcx4h
+ yu5NLrE1yJiXmYsMViiVTwwqztKTT4MIDAoazTuL114y+fJqVixUqGwCm/XDARAOHb5Dqlryy+
+ qExjG8wpVy4MX9cbRo0GGwB8
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2019 23:21:59 -0700
+IronPort-SDR: 0ifyC7AQgrYkOhlpSlsHxA8cotwCTpt8O3eVbCNt7e5nVAiqUYE93p1q0Xr/e6C8zYEHadQdvO
+ IQ+odcXFW9a+Og/hrY2O9+ZAsinMydpZ37V+eSAMUnoxvBuTlWguRkoWgiGGcpyxGEuqeIHq42
+ aH9dFc/VvpaDNWd0d0Sgo6kBxagd5dIqbbNnKg5r+6CzMHAFqYyjW34dgme/D3Z0gQyY20UHwR
+ KhgvUFeg6jzsg2cmSfiON1/jDT/sqYGyNh6gKUiNmHlyuV+iE4wvLs8SY82ZooCrcrBvB9q+BH
+ Isc=
+Received: from naota.dhcp.fujisawa.hgst.com (HELO naota.fujisawa.hgst.com) ([10.149.53.115])
+  by uls-op-cesaip02.wdc.com with ESMTP; 04 Aug 2019 23:24:06 -0700
+From:   Naohiro Aota <naohiro.aota@wdc.com>
+To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Cc:     Nicholas Bellinger <nab@linux-iscsi.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>
+Subject: [PATCH] scsi: target/tcm_loop: update upper limit of LUN
+Date:   Mon,  5 Aug 2019 15:23:13 +0900
+Message-Id: <20190805062313.343221-1-naohiro.aota@wdc.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-References: <20190730084047.26482-1-hslester96@gmail.com> <1564498597.4300.10.camel@linux.ibm.com>
-In-Reply-To: <1564498597.4300.10.camel@linux.ibm.com>
-From:   Chuhong Yuan <hslester96@gmail.com>
-Date:   Mon, 5 Aug 2019 14:22:38 +0800
-Message-ID: <CANhBUQ0KD9YqYWT-m7q-7FcqAwRstVPzh_s2rRmCCjwQYcivBQ@mail.gmail.com>
-Subject: Re: [PATCH] scsi: 3w-sas: Fix unterminated strncpy
-To:     James Bottomley <jejb@linux.ibm.com>
-Cc:     Adam Radford <aradford@gmail.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jul 30, 2019 at 10:56 PM James Bottomley <jejb@linux.ibm.com> wrote:
->
-> On Tue, 2019-07-30 at 16:40 +0800, Chuhong Yuan wrote:
-> > strncpy(dest, src, strlen(src)) leads to unterminated
-> > dest, which is dangerous.
->
-> I don't buy that.  The structure is only used for the
-> TW_IOCTL_GET_COMPATIBILITY_INFO ioctl and all the fields for that are
-> fixed width and are copied over as such.
->
-> > Here driver_version's len is 32 and TW_DRIVER_VERSION
-> > is shorter than 32.
-> > Therefore strcpy is OK.
->
-> The best practice for copying a string to a fixed width destination
-> that does get printed within the kernel would be what the 3w-9xxx.c
-> does
->
->         strlcpy(tw_dev->tw_compat_info.driver_version, TW_DRIVER_VERSION,
->                 sizeof(tw_dev->tw_compat_info.driver_version));
->
+targetcli-fb (or its library: rtslib-fb) allows us to create LUN up to
+65535. On the other hand, the kernel driver is limiting max_lun to 0.
 
-This is right, and strscpy() is better than strlcpy(). strlcpy() is deprecated
-now according to the documentation.
-I choose strcpy() since it has better performance and there is no worry of
-overflow here. And I find there are indeed some places using strcpy() to fix
-this problem, like add_man_viewer() in tools/perf/builtin-help.c.
+This limitation causes an actual problem when you delete a loopback device
+(using /sys/class/scsi_device/${lun}/device/delete) and rescan it (using
+/sys/class/scsi_host/host${h}/scan). You can delete the device, but cannot
+rescan it because its LUN is larger than the max_lun and so the scan
+request results in -EINVAL error in scsi_scan_host_selected().
 
-> But as I said, it doesn't really matter for a fixed width field that's
-> never printed within the kernel.
->
+This commit fix the upper limit to be as same as rtslib-fb allows.
 
-I think it is not good to leave a exploitable place here, and fixing it does not
-need much effort.
+Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
+---
+ drivers/target/loopback/tcm_loop.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Regards,
-Chuhong
+diff --git a/drivers/target/loopback/tcm_loop.c b/drivers/target/loopback/tcm_loop.c
+index 3305b47fdf53..3db541ad727d 100644
+--- a/drivers/target/loopback/tcm_loop.c
++++ b/drivers/target/loopback/tcm_loop.c
+@@ -336,10 +336,10 @@ static int tcm_loop_driver_probe(struct device *dev)
+ 	 */
+ 	*((struct tcm_loop_hba **)sh->hostdata) = tl_hba;
+ 	/*
+-	 * Setup single ID, Channel and LUN for now..
++	 * Setup single ID, and Channel for now..
+ 	 */
+ 	sh->max_id = 2;
+-	sh->max_lun = 0;
++	sh->max_lun = 65536;
+ 	sh->max_channel = 0;
+ 	sh->max_cmd_len = SCSI_MAX_VARLEN_CDB_SIZE;
+ 
+-- 
+2.22.0
 
-> James
->
