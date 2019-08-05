@@ -2,127 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A683813D1
-	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2019 10:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 330D6818EC
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2019 14:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbfHEIBy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 5 Aug 2019 04:01:54 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:41184 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726423AbfHEIBy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 5 Aug 2019 04:01:54 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7581as8080687;
-        Mon, 5 Aug 2019 03:01:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1564992096;
-        bh=7sv9PjcFwV9v+UJTNk3jI9UE2QxN5A6jgKLgQowNCpA=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=SiF6CtKiRta8wjwuDh6WKaoLpEknj8qZReXU80pe5XITEbLAgQB1fZ5DI1OOqCb8h
-         gQavyEiEzJ38lDba9+y0Q67tuDu0ZME1wMXXpCUzo3Dmq8VrcPhC+joI4mPtiNAjIO
-         VJZ5w29F/ZYK13NaeL1JEE9uHWFUD+DcQ5BZjsbQ=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7581ZWM112160
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 5 Aug 2019 03:01:36 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 5 Aug
- 2019 03:01:35 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 5 Aug 2019 03:01:35 -0500
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7581VBW040191;
-        Mon, 5 Aug 2019 03:01:31 -0500
-Subject: Re: [PATCH v2] scsi: ufs: Configure clock in .hce_enable_notify() in
- Cadence UFS
-To:     Anil Varughese <aniljoy@cadence.com>, <alim.akhtar@samsung.com>,
-        <avri.altman@wdc.com>, <pedrom.sousa@synopsys.com>
-CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>, <hare@suse.de>,
-        <rafalc@cadence.com>, <mparab@cadence.com>, <jank@cadence.com>,
-        <pawell@cadence.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20190802112112.18714-1-aniljoy@cadence.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <86985e8d-2aa8-5583-f899-925191f2041d@ti.com>
-Date:   Mon, 5 Aug 2019 13:32:14 +0530
+        id S1728058AbfHEMNh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 5 Aug 2019 08:13:37 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:36113 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727553AbfHEMNh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 5 Aug 2019 08:13:37 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 1481E20423A;
+        Mon,  5 Aug 2019 14:13:35 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id qNHDHyTnk9xf; Mon,  5 Aug 2019 14:13:34 +0200 (CEST)
+Received: from [82.134.31.183] (unknown [82.134.31.183])
+        by smtp.infotech.no (Postfix) with ESMTPA id E2E45204153;
+        Mon,  5 Aug 2019 14:13:34 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+To:     SCSI development list <linux-scsi@vger.kernel.org>,
+        Hannes Reinecke <hare@suse.de>
+Cc:     "Martin K. Petersen" <martin.petersen@ORACLE.COM>,
+        jejb@linux.vnet.ibm.com, Bart Van Assche <bvanassche@acm.org>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Subject: RFC: scsi_lib: export scsi_alloc_sense_buffer() and
+ scsi_free_sense_buffer()
+Message-ID: <2381e5dd-7963-0d97-ff44-b02b57e4c601@interlog.com>
+Date:   Mon, 5 Aug 2019 14:13:34 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190802112112.18714-1-aniljoy@cadence.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+In a review comment to this post:
+     [PATCH v2 12/18] sg: sense buffer rework
 
-On 02/08/19 4:51 PM, Anil Varughese wrote:
-> Configure CDNS_UFS_REG_HCLKDIV in .hce_enable_notify() instead of
-> .setup_clock() because if UFSHCD resets the controller ip because
-> of phy or device related errors then CDNS_UFS_REG_HCLKDIV is
-> reset to default value and .setup_clock() is not called later
-> in the sequence whereas .hce_enable_notify will be called everytime
-> controller is reenabled.
-> 
-> Signed-off-by: Anil Varughese <aniljoy@cadence.com>
-> ---
+Hannes said:
+ > Maybe it's worthwhile using a mempool here for sense buffers; frequest
+ > kmalloc()/kfree() really should be avoided.
+ >
+ > Also the allocation at end_io time is slightly dodgy; I'd rather have
+ > the sense allocated before setting up the command. Thing is, the end_io
+ > callback might be called at any time and in about every context
+ > (including from an interrupt handler), so I really would avoid having to
+ > do kmalloc() there.
 
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
 
->  drivers/scsi/ufs/cdns-pltfrm.c | 13 ++++++-------
->  1 file changed, 6 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/cdns-pltfrm.c b/drivers/scsi/ufs/cdns-pltfrm.c
-> index 86dbb723f..993519080 100644
-> --- a/drivers/scsi/ufs/cdns-pltfrm.c
-> +++ b/drivers/scsi/ufs/cdns-pltfrm.c
-> @@ -62,17 +62,16 @@ static int cdns_ufs_set_hclkdiv(struct ufs_hba *hba)
->  }
->  
->  /**
-> - * Sets clocks used by the controller
-> + * Called before and after HCE enable bit is set.
->   * @hba: host controller instance
-> - * @on: if true, enable clocks, otherwise disable
->   * @status: notify stage (pre, post change)
->   *
->   * Return zero for success and non-zero for failure
->   */
-> -static int cdns_ufs_setup_clocks(struct ufs_hba *hba, bool on,
-> -				 enum ufs_notify_change_status status)
-> +static int cdns_ufs_hce_enable_notify(struct ufs_hba *hba,
-> +				      enum ufs_notify_change_status status)
->  {
-> -	if ((!on) || (status == PRE_CHANGE))
-> +	if (status != PRE_CHANGE)
->  		return 0;
->  
->  	return cdns_ufs_set_hclkdiv(hba);
-> @@ -114,13 +113,13 @@ static int cdns_ufs_m31_16nm_phy_initialization(struct ufs_hba *hba)
->  
->  static const struct ufs_hba_variant_ops cdns_ufs_pltfm_hba_vops = {
->  	.name = "cdns-ufs-pltfm",
-> -	.setup_clocks = cdns_ufs_setup_clocks,
-> +	.hce_enable_notify = cdns_ufs_hce_enable_notify,
->  };
->  
->  static const struct ufs_hba_variant_ops cdns_ufs_m31_16nm_pltfm_hba_vops = {
->  	.name = "cdns-ufs-pltfm",
->  	.init = cdns_ufs_init,
-> -	.setup_clocks = cdns_ufs_setup_clocks,
-> +	.hce_enable_notify = cdns_ufs_hce_enable_notify,
->  	.phy_initialization = cdns_ufs_m31_16nm_phy_initialization,
->  };
->  
-> 
+The problem, seen from the POV of the sg driver, is to get a sense_buffer
+either before, or at the time of, sg_rq_end_io(). It needs to be by the end
+of that call because the inherited code for the sg driver comments that
+the associated request and scsi_request object(s) will be "freed" toward
+the end of sg_rq_end_io() to maximize re-use of those objects.
 
--- 
-Regards
-Vignesh
+To get a sense_buffer _before_ sg_rq_end_io() seems an unnecessary imposition
+as I would guesstimate that the sense buffer is actually needed between
+1% and 0.00001% of the time. Then that leaves fetching a sense_buffer within
+sg_rq_end_io() _only_ when it is needed, copying the contents from either
+scsi_request::sense [or scsi_cmnd::sense_buffer, which is damn confusing]
+into an sg owned sense buffer before the request and associated
+scsi_request (and associated scsi_cmnd) object is "freed" (actually put back
+into the pool for re-use, I suspect).
+
+Now addressing Hannes' comment: scsi_lib.c already has a sense buffer pool,
+actually two of them:
+    static struct kmem_cache *scsi_sense_cache;
+    static struct kmem_cache *scsi_sense_isadma_cache;
+
+So it would be good to re-use that code, as I assume it works and is
+efficient. But the two needed functions:
+     scsi_alloc_sense_buffer() and scsi_free_sense_buffer()
+
+are declared static and not exported.
+
+So is that cache appropriate for the sg driver (and perhaps st and
+ses drivers) and if so can those scsi_lib functions be exported?
+They are a little over-constrained for what the sg driver needs.
+
+
+As for the "dodgy" comment, I believe that is only in cases where
+kernel janitors come along and unwisely change a gfp_mask from
+GFP_ATOMIC to GFP_KERNEL. Hopefully a comment like
+        ... , GFP_ATOMIC /* <-- leave */);
+will catch the attention of a janitor, a reviewer, or someone debugging
+broken code.
+
+Doug Gilbert
+
+
+PS: The split personalities of scsi_request and scsi_cmnd:
+Here is a quick survey of ULDs in the scsi subsystem:
+
+ULD    Uses
+==========================
+sd     scsi_cmnd (only)
+sr     scsi_cmnd (only)
+st     scsi_request (only)
+sg     scsi_request (only)
+ch     neither
+ses    neither
+
+Rationale ?
+
+
+
