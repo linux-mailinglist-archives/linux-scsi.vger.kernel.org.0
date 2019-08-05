@@ -2,80 +2,135 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D7780C04
-	for <lists+linux-scsi@lfdr.de>; Sun,  4 Aug 2019 20:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5ABB80FC7
+	for <lists+linux-scsi@lfdr.de>; Mon,  5 Aug 2019 02:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbfHDSf5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 4 Aug 2019 14:35:57 -0400
-Received: from se1-lax1.servconfig.com ([104.244.124.86]:39429 "EHLO
-        se1-lax1.servconfig.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726526AbfHDSf5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 4 Aug 2019 14:35:57 -0400
-X-Greylist: delayed 3923 seconds by postgrey-1.27 at vger.kernel.org; Sun, 04 Aug 2019 14:35:56 EDT
-Received: from res217.servconfig.com ([192.145.239.54])
-        by se1-lax1.servconfig.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <pardesitrotter@res217.servconfig.com>)
-        id 1huK3v-000WkH-0D
-        for linux-scsi@vger.kernel.org; Sun, 04 Aug 2019 13:12:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=res217.servconfig.com; s=default; h=Content-Type:MIME-Version:Message-ID:
-        Reply-To:From:Date:Subject:To:Sender:Cc:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HbSbiftHda3N0iB7xZ7hvLkTiPxN5U++kFE200LAZKQ=; b=bJWk6e/5tjsTUCx5TVBJfoHO43
-        aOn70hVf3T85UAn6PR/F2qhFzxVSA+xhWH6cyj7rsqRvkSKU5WAt3MAUEN7MaNXGMiJNpbWYBwpR6
-        GIg/LMMzQmiuHETGZpW83JJfk3YlL1Vi0iEOjTLsgHnPvS7timHPRYrqCwXMaG/gR27CG/CkYzsq5
-        ZmOY6gOglQZM2vohJzYstvpWpeZCzY+9wm+hCGYekIlJhvMpr2CGANS5S+f5IoFB6OU/6g5uc3zXw
-        2GHqeoXrF1grehUaLkac+cnOuczito04YsA3aqcWqwkhcrEY6CDAFiiM5jnrx3UtLwpmolV5TEwBD
-        bSsFbpYQ==;
-Received: from pardesitrotter by res217.servconfig.com with local (Exim 4.92)
-        (envelope-from <pardesitrotter@res217.servconfig.com>)
-        id 1huK3k-009z9P-TI
-        for linux-scsi@vger.kernel.org; Sun, 04 Aug 2019 10:12:40 -0700
-To:     linux-scsi@vger.kernel.org
-Subject: Pardesi Trotter "Invest $ 5,000 in Bitcoin once and get $ 70,000 passive income per month"
-Date:   Sun, 4 Aug 2019 17:12:40 +0000
-From:   Pardesi Trotter <wordpress@pardesitrotter.com>
-Reply-To: uns.gang@gmail.com
-Message-ID: <1d39be14adb4014c8a766f70cb223eec@pardesitrotter.com>
-X-Mailer: PHPMailer 5.2.22 (https://github.com/PHPMailer/PHPMailer)
+        id S1726847AbfHEAgW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 4 Aug 2019 20:36:22 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:44298 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726709AbfHEAgV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 4 Aug 2019 20:36:21 -0400
+Received: by mail-ed1-f68.google.com with SMTP id k8so77053196edr.11;
+        Sun, 04 Aug 2019 17:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qu1SlTXZhUWK45zuZk7QKnR3x5h9TT7qch2dobJvjmU=;
+        b=QvXlLBkQSJpCdW5FCsQrr4LyK7KQoVB2/IouVLBUJTKFu/uycU8BYPyRwi8QqVdskl
+         hNWvTYvsyZExH4iy4V97xYqE+1ixGAEknwxfkaAZ+YOaAGgniH2Titnac8RJx05CfB5E
+         r4QkQ/2IL2cUn3xIYPesHcnSY/vHCwY9N1+koSMbQ+Fyl2bIyMwXXRLe7JaED3ZgSFG0
+         ipoApMYVUJhuTSTbfMNAYMLI+RWje+rAvex6Vj5RyYcQp1wZP9j0ovxLqRcVet83fnUP
+         nMypgYiw40Q+gVU9op5oWyVCuBAO9cd61NQMn025edzkN5mCXD4L35+w3Z8e4mXnkZJG
+         CGyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qu1SlTXZhUWK45zuZk7QKnR3x5h9TT7qch2dobJvjmU=;
+        b=MoUghqWDC/IHv0CkM9fo9NuJ+CvPR28EfQwIurPGWg2Tjo8L4E4mcVuWBhAYd2fXsR
+         6Zo/dSPumqjURQs2COw4l1+BeD8D+DllPmwJ+7kaaJLrUDnZ00fiEUuC2p6f8ljIRlCO
+         D24j9FM6AVmmn76O1jWy5rCyq4iSuUyf4n6hcxAYNzrSNJZO8Zgg/DAFRpxso32ibhUh
+         Or//Aoo3k7+VxQb8tJNYNYgkZdT1ERCMRsXsEo9TVF/Ix3WSeLAoTo9zARu3H2OldzXK
+         dyLlLmnxx02l+OcTG3rg0uBrKnoljqhsxM8zE9426DIGCb9FYn2y5ZTKm88CIKrNhipi
+         y3CA==
+X-Gm-Message-State: APjAAAWqTaHTIvho5WxX+5N+dngNxt0bRHyhLBegI102nWMo/q3QHhoW
+        RST8kmpd45TD3cZqsWRkTtBbL78+L6EAE+8YakA=
+X-Google-Smtp-Source: APXvYqyNy9TlNF+TLNVhMmkV26H9PcBhGwSU/mhKPpblR5BNyuZ5+3e0AenY9wlLdEaJTHpJhtqos1TRQsMUZWjYpIM=
+X-Received: by 2002:a17:906:ccc3:: with SMTP id ot3mr116792547ejb.113.1564965379544;
+ Sun, 04 Aug 2019 17:36:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Get-Message-Sender-Via: res217.servconfig.com: authenticated_id: pardesitrotter/from_h
-X-Authenticated-Sender: res217.servconfig.com: wordpress@pardesitrotter.com
-X-Originating-IP: 192.145.239.54
-X-SpamExperts-Domain: res217.servconfig.com
-X-SpamExperts-Username: 192.145.239.54
-Authentication-Results: servconfig.com; auth=pass smtp.auth=192.145.239.54@res217.servconfig.com
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.79)
-X-Recommended-Action: accept
-X-Filter-ID: Mvzo4OR0dZXEDF/gcnlw0YiRRkpbHZ8F3zevhEShTfypSDasLI4SayDByyq9LIhV4jJ4rfCYOhco
- wL3i9TFjVUTNWdUk1Ol2OGx3IfrIJKywOmJyM1qr8uRnWBrbSAGDQd8pSQ5vgaRAQXJShcsaKbsr
- 2GHY/oPc/Sj6e6fjMOPgo34CxMJsfFVRRl+N7XQzHLhQhaRO9sJvA+CgQbifrkMC83EcGqebH9oT
- x2HeTuKF3wTDxLMJW2H608Ryhl9KMMcyhWftAf7IeIBArf7CA2Mkx7eK6eVyk2jmKKs7zUxTKdmK
- mbJmIzSVQuvw/FwNDzn23lmbQ455+TwtsPDDuakyADUV+YPlDVGLglQJ524woCTxLKweTbuJ+19z
- syHV9b4qrw079OEQLOggyuOVA5L24vQRIIq+FmPL2khrF0ZqLQa/nBnd5/rp1qu0oCqUF2Qoy/nj
- Gu8kOUbAdJrasYWgtkyaRaxq6tVl++pE5oOcO0dvzPl2k+QS4nxKfCqVax9aqWLRKqMTnPDyJYH3
- DGsI1JuLkyxl+s9t81KNtzOdA1atij9I2cPX8pbEQmIlLYxG0axR7xEpzKsyxrpVaLTlo0e71UIn
- awUsVFFOlV/74O4hBSz/kkmPgL+fgIguW+jF21cfJFLrEfxctmvA3PDzFkh0ChGwNcnCh545kpr2
- CUVZeMjAVcHS4U+Qits37ALjRjJu03wKW5aq6I67gWXpV3JAuc1jN0mkq2fxzDGr2AKavaEIrLeF
- bFtXuRaD0z6bhalFEM/pjPCQA+BAlhfOiKn0YOYOrwdIjNwNM/CIWGEhI1ZsGzmL93hpdWUFEAU3
- YLz8spnaWMHtOzGZBZGwK6styG7XtOhYYbYljJlm4zuNRcgRKiGg7nXFaZTxC4AWpisCo0A22Dm0
- RjEmzSdpdVQN0S8jOblc6zO3y7AutCx1I2YYnY4mB9iiCg+JFCQJHN24lF4VxauwnmmEPTYGdNMU
- Zfn/IjgrL7VklxvYVQSF7DNeeGWd9hlMkududsqglwOSF4+B3qccW0ARrxoKvS/L43GsNdUh7JpS
- UCLKvehWcr1T8XQqgcaSiRPXfcsvPH8XaBPfCXwlAm8GGg==
-X-Report-Abuse-To: spam@se1-lax1.servconfig.com
+References: <20190802103830.8881-1-lizhongfs@gmail.com> <5D446BC2.9000303@redhat.com>
+In-Reply-To: <5D446BC2.9000303@redhat.com>
+From:   Li Zhong <lizhongfs@gmail.com>
+Date:   Mon, 5 Aug 2019 08:36:08 +0800
+Message-ID: <CABKycOVsj-rgqHc_ouRaWh49pr5+h3G9KdryejcGSTLSOri+5A@mail.gmail.com>
+Subject: Re: [RFC PATCH] target: tcmu: clean the nl_cmd of the udev when nl
+ send fails
+To:     Mike Christie <mchristi@redhat.com>
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        martin.petersen@oracle.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Message Body:
-$10000 per day New Binary Options Trading Service Takes Bitcoin-Only Payments: http://lsetaganin.tk/sx117?&mrayg=DBxrIGDzkXb9UM
+On Sat, Aug 3, 2019 at 12:58 AM Mike Christie <mchristi@redhat.com> wrote:
+>
+> On 08/02/2019 05:38 AM, Li Zhong wrote:
+> > If the userspace process crashes while we send the nl msg, it is possible
+> > that the cmd in curr_nl_cmd of tcmu_dev never gets reset to 0, and
+> > and returns busy for other commands after the userspace process is
+> > restartd.
+> >
+> > More details below:
+> >
+> > /backstores/user:file/file> set attribute dev_size=2048
+> > Cannot set attribute dev_size: [Errno 3] No such process
+> > /backstores/user:file/file> set attribute dev_size=2048
+> > Cannot set attribute dev_size: [Errno 16] Device or resource busy
+> >
+> > with following kernel messages:
+> > [173605.747169] Unable to reconfigure device
+> > [173616.686674] tcmu daemon: command reply support 1.
+> > [173623.866978] netlink cmd 3 already executing on file
+> > [173623.866984] Unable to reconfigure device
+> >
+> > Also, it is not safe to leave the nl_cmd in the list, and not get
+> > deleted.
+> >
+> > This patch removes the nl_cmd from the list, and clear its data if
+> > it is not sent successfully.
+> >
+> > Signed-off-by: Li Zhong <lizhongfs@gmail.com>
+> > ---
+> >  drivers/target/target_core_user.c | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> >
+> > diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+> > index 04eda111920e..4ae3103e204c 100644
+> > --- a/drivers/target/target_core_user.c
+> > +++ b/drivers/target/target_core_user.c
+> > @@ -1708,6 +1708,24 @@ static int tcmu_init_genl_cmd_reply(struct tcmu_dev *udev, int cmd)
+> >       return 0;
+> >  }
+> >
+> > +static void tcmu_destroy_genl_cmd_reply(struct tcmu_dev *udev)
+> > +{
+> > +     struct tcmu_nl_cmd *nl_cmd = &udev->curr_nl_cmd;
+> > +
+> > +     if (!tcmu_kern_cmd_reply_supported)
+> > +             return;
+> > +
+> > +     if (udev->nl_reply_supported <= 0)
+> > +             return;
+> > +
+> > +     mutex_lock(&tcmu_nl_cmd_mutex);
+> > +
+> > +     list_del(&nl_cmd->nl_list);
+> > +     memset(nl_cmd, 0, sizeof(*nl_cmd));
+> > +
+> > +     mutex_unlock(&tcmu_nl_cmd_mutex);
+> > +}
+> > +
+> >  static int tcmu_wait_genl_cmd_reply(struct tcmu_dev *udev)
+> >  {
+> >       struct tcmu_nl_cmd *nl_cmd = &udev->curr_nl_cmd;
+> > @@ -1788,6 +1806,9 @@ static int tcmu_netlink_event_send(struct tcmu_dev *udev,
+> >       if (ret == 0 ||
+> >          (ret == -ESRCH && cmd == TCMU_CMD_ADDED_DEVICE))
+> >               return tcmu_wait_genl_cmd_reply(udev);
+> > +     else
+> > +             /* If failure, remove from the list and clear the nl_cmd */
+>
+> Drop the comment. We know it is in the failure path already and the
+> function name tells us it cleans up the command.
 
---
-This e-mail was sent from a contact form on Pardesi Trotter (http://pardesitrotter.com)
+Thank you for the review, Will drop it.
 
+>
+> > +             tcmu_destroy_genl_cmd_reply(udev);
+> >
+>
