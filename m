@@ -2,194 +2,180 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1DFE82C62
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 09:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1129382DBA
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 10:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732065AbfHFHLv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Aug 2019 03:11:51 -0400
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:35347 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731711AbfHFHLv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Aug 2019 03:11:51 -0400
-Received: by mail-vk1-f193.google.com with SMTP id m17so17172618vkl.2
-        for <linux-scsi@vger.kernel.org>; Tue, 06 Aug 2019 00:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n8Ci/8H9wUX2m10wfVRVtTIcb057+1T5ctq2J+f6Y+w=;
-        b=L4bV7RoJjNCz5iprmtYNV/GYfL8PvHtlYPWeKdPrNLD1WPNHQPSokIzRc9q0QuyP2x
-         WTEdX4UNSTmIg3O1jFWfRPvWZxiMqrEuxNk/1lj4DyEhApWJm27fI4oJnnCSzx3Wh3aU
-         Cdpi3YNAd5TKzlYoW4sdPGS0XAkrTRgjqkjuw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n8Ci/8H9wUX2m10wfVRVtTIcb057+1T5ctq2J+f6Y+w=;
-        b=nSgj+7l4audtcbAYr9H0BfCyCn6cUiXqAwBPUK+GY1w/QAWMWTzU+AfHdrRl7wKgkg
-         wiojB0h/XlSpNzIYr4LXBZSszyrjY1bYVbc45UrdUIz9nVy9XjsJudcAxgKPxDrPUVzW
-         B8ze/ToLvkedBOIol+LPRvwUJ33NNDY1ONLHnToglzqJ8cyQDnuPlpzNwzFpJDufajLF
-         8Aqrgbk3pATyo4n3MDLV9VSI3HeZw8SlqG7+jEEAcJh3X1FteIW2mibzdX10e4oxkWCw
-         kp0iyvu4SmALceTUFiGpYNHWS4iHSJp3p0ZIibPTBgJKJgnXm8FvJsFSzAobyS/PwWv5
-         nAuw==
-X-Gm-Message-State: APjAAAXaTCwhPyljnrqMGpkGX34wqE7YIvPVyERey9jr1ZmW98xTI11V
-        Hye3k9gfu22Ef60Zy3h8T72BB6O0Ha0WInUkTJ4YOQ==
-X-Google-Smtp-Source: APXvYqzUbqSd2bMaWsSsiOkndLEKbbXAFec9haL6ZQufi/FgOn9IAPeJfXrOApEQgI56Y9cdOaAilurGG+b2JGKItk8=
-X-Received: by 2002:a1f:8887:: with SMTP id k129mr621675vkd.3.1565075509481;
- Tue, 06 Aug 2019 00:11:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190726135540.48780-1-yuehaibing@huawei.com>
-In-Reply-To: <20190726135540.48780-1-yuehaibing@huawei.com>
-From:   Sumit Saxena <sumit.saxena@broadcom.com>
-Date:   Tue, 6 Aug 2019 12:41:37 +0530
-Message-ID: <CAL2rwxpw_vz14Fwq+HPTnVYzc9xCrgC7OpCBSGsurZsVKZEdfw@mail.gmail.com>
-Subject: Re: [PATCH -next] scsi: megaraid_sas: Make a bunch of functions static
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     Kashyap Desai <kashyap.desai@broadcom.com>,
-        Shivasharan Srikanteshwara 
-        <shivasharan.srikanteshwara@broadcom.com>,
+        id S1732079AbfHFI3x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Aug 2019 04:29:53 -0400
+Received: from gateway34.websitewelcome.com ([192.185.148.204]:13469 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728998AbfHFI3x (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Aug 2019 04:29:53 -0400
+Received: from cm13.websitewelcome.com (cm13.websitewelcome.com [100.42.49.6])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id 38E8E92276D
+        for <linux-scsi@vger.kernel.org>; Tue,  6 Aug 2019 03:29:07 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id uuqBhL9zh3Qi0uuqBh4WOn; Tue, 06 Aug 2019 03:29:07 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=WVAi0vZcLPXALGm+zh7ti9JDHwAnJCM0op5bLb/Mk3w=; b=VSLzJXXT7nHuLGrQFBFMGdZgZ3
+        xcmZmZegT8ArbZCoOmm8NDGWYi27CDkR2icGD+btZlUoFGtTwFvUX1YTfnPjHkj7QDlbTRN6LQzIK
+        wxmb4DRV0M2rXmLDSpAbkTsL5wCioyrbqeJrBkF0HYNeyxZbqc8wet05waMxiHzkz7XcCKnoTDeuQ
+        19rAesSQ7qHGIOc9ivqKc5YJFzJ1JUEmy9GTEVxVwXPRR3K5Il/vLm24Nhdz82ruP3RrvgmxxkVqG
+        VshRsgW1jXGJNBbGaPPOruhIIKATwSlxrh3vcXio44JisZmK5xJwLtVqoOMNltXXCFViF6HHcCpoC
+        txBRGWvw==;
+Received: from [187.192.11.120] (port=44456 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1huuq9-000v9N-Fr; Tue, 06 Aug 2019 03:29:05 -0500
+Date:   Tue, 6 Aug 2019 03:29:02 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Russell King <linux@armlinux.org.uk>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
-Content-Type: text/plain; charset="UTF-8"
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] scsi: fas216: Mark expected switch fall-throughs
+Message-ID: <20190806082902.GA11122@embeddedor>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.11.120
+X-Source-L: No
+X-Exim-ID: 1huuq9-000v9N-Fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [187.192.11.120]:44456
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 10
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jul 26, 2019 at 7:26 PM YueHaibing <yuehaibing@huawei.com> wrote:
->
-> Fix sparse warnings:
->
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:3369:1: warning: symbol 'complete_cmd_fusion' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:3535:6: warning: symbol 'megasas_sync_irqs' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:3554:1: warning: symbol 'megasas_complete_cmd_dpc_fusion' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:3573:13: warning: symbol 'megasas_isr_fusion' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:3604:1: warning: symbol 'build_mpt_mfi_pass_thru' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:3661:40: warning: symbol 'build_mpt_cmd' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:3688:1: warning: symbol 'megasas_issue_dcmd_fusion' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:3881:5: warning: symbol 'megasas_wait_for_outstanding_fusion' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:4005:6: warning: symbol 'megasas_refire_mgmt_cmd' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:4525:25: warning: symbol 'megasas_get_peer_instance' was not declared. Should it be static?
-> drivers/scsi/megaraid/megaraid_sas_fusion.c:4825:7: warning: symbol 'megasas_fusion_crash_dump' was not declared. Should it be static?
->
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
-Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
-> ---
->  drivers/scsi/megaraid/megaraid_sas_fusion.c | 26 ++++++++++++++------------
->  1 file changed, 14 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-> index 120e3c4..10ef99e 100644
-> --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-> +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-> @@ -3511,7 +3511,7 @@ megasas_complete_r1_command(struct megasas_instance *instance,
->   * @instance:                  Adapter soft state
->   * Completes all commands that is in reply descriptor queue
->   */
-> -int
-> +static int
->  complete_cmd_fusion(struct megasas_instance *instance, u32 MSIxIndex,
->                     struct megasas_irq_context *irq_context)
->  {
-> @@ -3702,7 +3702,7 @@ static void megasas_enable_irq_poll(struct megasas_instance *instance)
->   * megasas_sync_irqs - Synchronizes all IRQs owned by adapter
->   * @instance:                  Adapter soft state
->   */
-> -void megasas_sync_irqs(unsigned long instance_addr)
-> +static void megasas_sync_irqs(unsigned long instance_addr)
->  {
->         u32 count, i;
->         struct megasas_instance *instance =
-> @@ -3760,7 +3760,7 @@ int megasas_irqpoll(struct irq_poll *irqpoll, int budget)
->   *
->   * Tasklet to complete cmds
->   */
-> -void
-> +static void
->  megasas_complete_cmd_dpc_fusion(unsigned long instance_addr)
->  {
->         struct megasas_instance *instance =
-> @@ -3780,7 +3780,7 @@ megasas_complete_cmd_dpc_fusion(unsigned long instance_addr)
->  /**
->   * megasas_isr_fusion - isr entry point
->   */
-> -irqreturn_t megasas_isr_fusion(int irq, void *devp)
-> +static irqreturn_t megasas_isr_fusion(int irq, void *devp)
->  {
->         struct megasas_irq_context *irq_context = devp;
->         struct megasas_instance *instance = irq_context->instance;
-> @@ -3816,7 +3816,7 @@ irqreturn_t megasas_isr_fusion(int irq, void *devp)
->   * mfi_cmd:                    megasas_cmd pointer
->   *
->   */
-> -void
-> +static void
->  build_mpt_mfi_pass_thru(struct megasas_instance *instance,
->                         struct megasas_cmd *mfi_cmd)
->  {
-> @@ -3874,7 +3874,7 @@ build_mpt_mfi_pass_thru(struct megasas_instance *instance,
->   * @cmd:                       mfi cmd to build
->   *
->   */
-> -union MEGASAS_REQUEST_DESCRIPTOR_UNION *
-> +static union MEGASAS_REQUEST_DESCRIPTOR_UNION *
->  build_mpt_cmd(struct megasas_instance *instance, struct megasas_cmd *cmd)
->  {
->         union MEGASAS_REQUEST_DESCRIPTOR_UNION *req_desc = NULL;
-> @@ -3900,7 +3900,7 @@ build_mpt_cmd(struct megasas_instance *instance, struct megasas_cmd *cmd)
->   * @cmd:                       mfi cmd pointer
->   *
->   */
-> -void
-> +static void
->  megasas_issue_dcmd_fusion(struct megasas_instance *instance,
->                           struct megasas_cmd *cmd)
->  {
-> @@ -4096,8 +4096,9 @@ static inline void megasas_trigger_snap_dump(struct megasas_instance *instance)
->  }
->
->  /* This function waits for outstanding commands on fusion to complete */
-> -int megasas_wait_for_outstanding_fusion(struct megasas_instance *instance,
-> -                                       int reason, int *convert)
-> +static int
-> +megasas_wait_for_outstanding_fusion(struct megasas_instance *instance,
-> +                                   int reason, int *convert)
->  {
->         int i, outstanding, retval = 0, hb_seconds_missed = 0;
->         u32 fw_state, abs_state;
-> @@ -4221,7 +4222,7 @@ void  megasas_reset_reply_desc(struct megasas_instance *instance)
->   * megasas_refire_mgmt_cmd :   Re-fire management commands
->   * @instance:                          Controller's soft instance
->  */
-> -void megasas_refire_mgmt_cmd(struct megasas_instance *instance)
-> +static void megasas_refire_mgmt_cmd(struct megasas_instance *instance)
->  {
->         int j;
->         struct megasas_cmd_fusion *cmd_fusion;
-> @@ -4747,7 +4748,8 @@ int megasas_reset_target_fusion(struct scsi_cmnd *scmd)
->  }
->
->  /*SRIOV get other instance in cluster if any*/
-> -struct megasas_instance *megasas_get_peer_instance(struct megasas_instance *instance)
-> +static struct
-> +megasas_instance *megasas_get_peer_instance(struct megasas_instance *instance)
->  {
->         int i;
->
-> @@ -5053,7 +5055,7 @@ int megasas_reset_fusion(struct Scsi_Host *shost, int reason)
->  }
->
->  /* Fusion Crash dump collection */
-> -void  megasas_fusion_crash_dump(struct megasas_instance *instance)
-> +static void  megasas_fusion_crash_dump(struct megasas_instance *instance)
->  {
->         u32 status_reg;
->         u8 partial_copy = 0;
-> --
-> 2.7.4
->
->
+Mark switch cases where we are expecting to fall through.
+
+Fix the following warnings (Building: rpc_defconfig arm):
+
+drivers/scsi/arm/fas216.c: In function ‘fas216_disconnect_intr’:
+drivers/scsi/arm/fas216.c:913:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if (fas216_get_last_msg(info, info->scsi.msgin_fifo) == ABORT) {
+      ^
+drivers/scsi/arm/fas216.c:919:2: note: here
+  default:    /* huh?     */
+  ^~~~~~~
+drivers/scsi/arm/fas216.c: In function ‘fas216_kick’:
+drivers/scsi/arm/fas216.c:1959:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   fas216_allocate_tag(info, SCpnt);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/arm/fas216.c:1960:2: note: here
+  case TYPE_OTHER:
+  ^~~~
+drivers/scsi/arm/fas216.c: In function ‘fas216_busservice_intr’:
+drivers/scsi/arm/fas216.c:1413:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   fas216_stoptransfer(info);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/arm/fas216.c:1414:2: note: here
+  case STATE(STAT_STATUS, PHASE_SELSTEPS):/* Sel w/ steps -> Status       */
+  ^~~~
+drivers/scsi/arm/fas216.c:1424:3: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   fas216_stoptransfer(info);
+   ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/arm/fas216.c:1425:2: note: here
+  case STATE(STAT_MESGIN, PHASE_COMMAND): /* Command -> Message In */
+  ^~~~
+drivers/scsi/arm/fas216.c: In function ‘fas216_funcdone_intr’:
+drivers/scsi/arm/fas216.c:1573:6: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   if ((stat & STAT_BUSMASK) == STAT_MESGIN) {
+      ^
+drivers/scsi/arm/fas216.c:1579:2: note: here
+  default:
+  ^~~~~~~
+drivers/scsi/arm/fas216.c: In function ‘fas216_handlesync’:
+drivers/scsi/arm/fas216.c:605:20: warning: this statement may fall through [-Wimplicit-fallthrough=]
+   info->scsi.phase = PHASE_MSGOUT_EXPECT;
+   ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/arm/fas216.c:607:2: note: here
+  case async:
+  ^~~~
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/scsi/arm/fas216.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/scsi/arm/fas216.c b/drivers/scsi/arm/fas216.c
+index aea4fd73c862..6c68c2303638 100644
+--- a/drivers/scsi/arm/fas216.c
++++ b/drivers/scsi/arm/fas216.c
+@@ -603,6 +603,7 @@ static void fas216_handlesync(FAS216_Info *info, char *msg)
+ 		msgqueue_flush(&info->scsi.msgs);
+ 		msgqueue_addmsg(&info->scsi.msgs, 1, MESSAGE_REJECT);
+ 		info->scsi.phase = PHASE_MSGOUT_EXPECT;
++		/* fall through */
+ 
+ 	case async:
+ 		dev->period = info->ifcfg.asyncperiod / 4;
+@@ -915,6 +916,7 @@ static void fas216_disconnect_intr(FAS216_Info *info)
+ 			fas216_done(info, DID_ABORT);
+ 			break;
+ 		}
++		/* else, fall through */
+ 
+ 	default:				/* huh?					*/
+ 		printk(KERN_ERR "scsi%d.%c: unexpected disconnect in phase %s\n",
+@@ -1411,6 +1413,8 @@ static void fas216_busservice_intr(FAS216_Info *info, unsigned int stat, unsigne
+ 	case STATE(STAT_STATUS, PHASE_DATAOUT): /* Data Out     -> Status       */
+ 	case STATE(STAT_STATUS, PHASE_DATAIN):  /* Data In      -> Status       */
+ 		fas216_stoptransfer(info);
++		/* fall through */
++
+ 	case STATE(STAT_STATUS, PHASE_SELSTEPS):/* Sel w/ steps -> Status       */
+ 	case STATE(STAT_STATUS, PHASE_MSGOUT):  /* Message Out  -> Status       */
+ 	case STATE(STAT_STATUS, PHASE_COMMAND): /* Command      -> Status       */
+@@ -1422,6 +1426,8 @@ static void fas216_busservice_intr(FAS216_Info *info, unsigned int stat, unsigne
+ 	case STATE(STAT_MESGIN, PHASE_DATAOUT): /* Data Out     -> Message In   */
+ 	case STATE(STAT_MESGIN, PHASE_DATAIN):  /* Data In      -> Message In   */
+ 		fas216_stoptransfer(info);
++		/* fall through */
++
+ 	case STATE(STAT_MESGIN, PHASE_COMMAND):	/* Command	-> Message In	*/
+ 	case STATE(STAT_MESGIN, PHASE_SELSTEPS):/* Sel w/ steps -> Message In   */
+ 	case STATE(STAT_MESGIN, PHASE_MSGOUT):  /* Message Out  -> Message In   */
+@@ -1575,6 +1581,7 @@ static void fas216_funcdone_intr(FAS216_Info *info, unsigned int stat, unsigned
+ 			fas216_message(info);
+ 			break;
+ 		}
++		/* else, fall through */
+ 
+ 	default:
+ 		fas216_log(info, 0, "internal phase %s for function done?"
+@@ -1957,6 +1964,7 @@ static void fas216_kick(FAS216_Info *info)
+ 	switch (where_from) {
+ 	case TYPE_QUEUE:
+ 		fas216_allocate_tag(info, SCpnt);
++		/* fall through */
+ 	case TYPE_OTHER:
+ 		fas216_start_command(info, SCpnt);
+ 		break;
+-- 
+2.22.0
+
