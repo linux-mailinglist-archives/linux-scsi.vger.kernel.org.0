@@ -2,39 +2,43 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 438BC83B42
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 23:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A938B83C44
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 23:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727538AbfHFVeK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Aug 2019 17:34:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51932 "EHLO mail.kernel.org"
+        id S1728700AbfHFVft (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Aug 2019 17:35:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53576 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727498AbfHFVeF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 6 Aug 2019 17:34:05 -0400
+        id S1727479AbfHFVfr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 6 Aug 2019 17:35:47 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 878BE2089E;
-        Tue,  6 Aug 2019 21:34:03 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7A573217F5;
+        Tue,  6 Aug 2019 21:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565127244;
-        bh=pLnDJTQhnpdXSEjLDUcXDftSa5atnaXw1zNrsUQeBwQ=;
+        s=default; t=1565127346;
+        bh=V76xE9yx0XUDLCJlnul7L7uvJfM4tYzp8LxJd5ggxiI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OMr9KdLBrAGoypF3Dt99YzutwlAeIilxmT0DEtJ//OVg+Pe9s9Z3Mwk/P3mKVPUhA
-         Rsc0VZd1x2NsBB19d3BCCMsDOVdlB+W3OyVzd8dtOts5xHc7hgeJllb8Wo2SpkGu+L
-         wWeemILWCH3ADAIpiG1vGKogOO61sKG9ByBu0C2c=
+        b=h6cEojdhiB/Uc3u2JqxWV+kLdfS9MB8ZxXohCl+J18wWLobojc8K5iQ7CG8hP4/Dq
+         ovDH1rzPKg4jJ9w0vqaoVO841Fz8y1HXRhYVrdIINaSXoFNfLYoo89B6QiO++i5vty
+         mQjEhPYuZMlHPsRv07tsFtMChWG6yaVFDVGphg3k=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Himanshu Madhani <hmadhani@marvell.com>,
+Cc:     Don Brace <don.brace@microsemi.com>,
+        Bader Ali - Saleh <bader.alisaleh@microsemi.com>,
+        Scott Teel <scott.teel@microsemi.com>,
+        Scott Benesh <scott.benesh@microsemi.com>,
+        Kevin Barnett <kevin.barnett@microsemi.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 26/59] scsi: qla2xxx: Fix possible fcport null-pointer dereferences
-Date:   Tue,  6 Aug 2019 17:32:46 -0400
-Message-Id: <20190806213319.19203-26-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, esc.storagedev@microsemi.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 13/32] scsi: hpsa: correct scsi command status issue after reset
+Date:   Tue,  6 Aug 2019 17:35:01 -0400
+Message-Id: <20190806213522.19859-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190806213319.19203-1-sashal@kernel.org>
-References: <20190806213319.19203-1-sashal@kernel.org>
+In-Reply-To: <20190806213522.19859-1-sashal@kernel.org>
+References: <20190806213522.19859-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,48 +48,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jia-Ju Bai <baijiaju1990@gmail.com>
+From: Don Brace <don.brace@microsemi.com>
 
-[ Upstream commit e82f04ec6ba91065fd33a6201ffd7cab840e1475 ]
+[ Upstream commit eeebce1862970653cdf5c01e98bc669edd8f529a ]
 
-In qla2x00_alloc_fcport(), fcport is assigned to NULL in the error
-handling code on line 4880:
-    fcport = NULL;
-
-Then fcport is used on lines 4883-4886:
-    INIT_WORK(&fcport->del_work, qla24xx_delete_sess_fn);
-	INIT_WORK(&fcport->reg_work, qla_register_fcport_fn);
-	INIT_LIST_HEAD(&fcport->gnl_entry);
-	INIT_LIST_HEAD(&fcport->list);
-
-Thus, possible null-pointer dereferences may occur.
-
-To fix these bugs, qla2x00_alloc_fcport() directly returns NULL
-in the error handling code.
-
-These bugs are found by a static analysis tool STCheck written by us.
-
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
-Acked-by: Himanshu Madhani <hmadhani@marvell.com>
+Reviewed-by: Bader Ali - Saleh <bader.alisaleh@microsemi.com>
+Reviewed-by: Scott Teel <scott.teel@microsemi.com>
+Reviewed-by: Scott Benesh <scott.benesh@microsemi.com>
+Reviewed-by: Kevin Barnett <kevin.barnett@microsemi.com>
+Signed-off-by: Don Brace <don.brace@microsemi.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/hpsa.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 54772d4c377f9..6a4c719497ca1 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -4877,7 +4877,7 @@ qla2x00_alloc_fcport(scsi_qla_host_t *vha, gfp_t flags)
- 		ql_log(ql_log_warn, vha, 0xd049,
- 		    "Failed to allocate ct_sns request.\n");
- 		kfree(fcport);
--		fcport = NULL;
-+		return NULL;
- 	}
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index c43eccdea65d2..f570b8c5d857c 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -2320,6 +2320,8 @@ static int handle_ioaccel_mode2_error(struct ctlr_info *h,
+ 	case IOACCEL2_SERV_RESPONSE_COMPLETE:
+ 		switch (c2->error_data.status) {
+ 		case IOACCEL2_STATUS_SR_TASK_COMP_GOOD:
++			if (cmd)
++				cmd->result = 0;
+ 			break;
+ 		case IOACCEL2_STATUS_SR_TASK_COMP_CHK_COND:
+ 			cmd->result |= SAM_STAT_CHECK_CONDITION;
+@@ -2479,8 +2481,10 @@ static void process_ioaccel2_completion(struct ctlr_info *h,
  
- 	INIT_WORK(&fcport->del_work, qla24xx_delete_sess_fn);
+ 	/* check for good status */
+ 	if (likely(c2->error_data.serv_response == 0 &&
+-			c2->error_data.status == 0))
++			c2->error_data.status == 0)) {
++		cmd->result = 0;
+ 		return hpsa_cmd_free_and_done(h, c, cmd);
++	}
+ 
+ 	/*
+ 	 * Any RAID offload error results in retry which will use
+@@ -5617,6 +5621,12 @@ static int hpsa_scsi_queue_command(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
+ 	}
+ 	c = cmd_tagged_alloc(h, cmd);
+ 
++	/*
++	 * This is necessary because the SML doesn't zero out this field during
++	 * error recovery.
++	 */
++	cmd->result = 0;
++
+ 	/*
+ 	 * Call alternate submit routine for I/O accelerated commands.
+ 	 * Retries always go down the normal I/O path.
 -- 
 2.20.1
 
