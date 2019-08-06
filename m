@@ -2,24 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E33F82E78
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 11:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3BB82EA7
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 11:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731735AbfHFJMD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Aug 2019 05:12:03 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41396 "EHLO mx1.suse.de"
+        id S1732254AbfHFJZW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Aug 2019 05:25:22 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45622 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728056AbfHFJMD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 6 Aug 2019 05:12:03 -0400
+        id S1730068AbfHFJZW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 6 Aug 2019 05:25:22 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BC479ADEC;
-        Tue,  6 Aug 2019 09:12:01 +0000 (UTC)
-Subject: Re: [PATCH v2] lpfc: Mitigate high memory pre-allocation by SCSI-MQ
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
-Cc:     Dick Kennedy <dick.kennedy@broadcom.com>,
-        Ming Lei <tom.leiming@gmail.com>
-References: <20190801220941.19615-1-jsmart2021@gmail.com>
+        by mx1.suse.de (Postfix) with ESMTP id 83305AE6F;
+        Tue,  6 Aug 2019 09:25:19 +0000 (UTC)
+Subject: Re: [PATCH] lpfc: Fix Buffer Overflow Error
+To:     KyleMahlkuch <kmahlkuc@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+References: <1562948135-5533-1-git-send-email-kmahlkuc@linux.vnet.ibm.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -65,12 +64,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <aceb02fc-0790-6246-7fac-1e765bf9e3cf@suse.de>
-Date:   Tue, 6 Aug 2019 11:12:01 +0200
+Message-ID: <a8b38655-018e-4bc7-0dbf-792f72cbc8b6@suse.de>
+Date:   Tue, 6 Aug 2019 11:25:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20190801220941.19615-1-jsmart2021@gmail.com>
+In-Reply-To: <1562948135-5533-1-git-send-email-kmahlkuc@linux.vnet.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -79,138 +78,145 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/2/19 12:09 AM, James Smart wrote:
-> When SCSI-MQ is enabled, the SCSI-MQ layers will do pre-allocation of
-> MQ resources based on shost values set by the driver. In newer cases
-> of the driver, which attempts to set nr_hw_queues to the cpu count,
-> the multipliers become excessive, with a single shost having SCSI-MQ
-> pre-allocation reaching into the multiple GBytes range.  NPIV, which
-> creates additional shosts, only multiply this overhead. On lower-memory
-> systems, this can exhaust system memory very quickly, resulting in a
-> system crash or failures in the driver or elsewhere due to low memory
-> conditions.
+On 7/12/19 6:15 PM, KyleMahlkuch wrote:
+> Power and x86 have different page sizes so rather than allocate the
+> buffer based on number of pages we should allocate space by using
+> max_sectors. There is also code in lpfc_scsi.c to be sure we don't
+> write past the end of this buffer.
 > 
-> After testing several scenarios, the situation can be mitigated by
-> limiting the value set in shost->nr_hw_queues to 4. Although the shost
-> values were changed, the driver still had per-cpu hardware queues of
-> its own that allowed parallelization per-cpu.  Testing revealed that
-> even with the smallish number for nr_hw_queues for SCSI-MQ, performance
-> levels remained near maximum with the within-driver affiinitization.
-> 
-> A module parameter was created to allow the value set for the
-> nr_hw_queues to be tunable.
-> 
-> Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-> Signed-off-by: James Smart <jsmart2021@gmail.com>
-> CC: Ming Lei <tom.leiming@gmail.com>
-> 
+> Signed-off-by: KyleMahlkuch <kmahlkuc@linux.vnet.ibm.com>
 > ---
-> v2:
->   revised to set nr_hw_queues to minimum of 2 per numa node or
->       max value specified by module parameter.
->   raised default value for module parameter to 8.
-> ---
->  drivers/scsi/lpfc/lpfc.h      |  1 +
->  drivers/scsi/lpfc/lpfc_attr.c | 15 +++++++++++++++
->  drivers/scsi/lpfc/lpfc_init.c | 10 ++++++----
->  drivers/scsi/lpfc/lpfc_sli4.h |  5 +++++
->  4 files changed, 27 insertions(+), 4 deletions(-)
+>  drivers/scsi/lpfc/lpfc_init.c | 41 +++++++----------------------------------
+>  drivers/scsi/lpfc/lpfc_scsi.c | 14 ++++++++++++--
+>  2 files changed, 19 insertions(+), 36 deletions(-)
 > 
-> diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
-> index 2c3bb8a966e5..bade2e025ecf 100644
-> --- a/drivers/scsi/lpfc/lpfc.h
-> +++ b/drivers/scsi/lpfc/lpfc.h
-> @@ -824,6 +824,7 @@ struct lpfc_hba {
->  	uint32_t cfg_cq_poll_threshold;
->  	uint32_t cfg_cq_max_proc_limit;
->  	uint32_t cfg_fcp_cpu_map;
-> +	uint32_t cfg_fcp_mq_threshold;
->  	uint32_t cfg_hdw_queue;
->  	uint32_t cfg_irq_chann;
->  	uint32_t cfg_suppress_rsp;
-> diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-> index ea62322ffe2b..8d8c495b5b60 100644
-> --- a/drivers/scsi/lpfc/lpfc_attr.c
-> +++ b/drivers/scsi/lpfc/lpfc_attr.c
-> @@ -5709,6 +5709,19 @@ LPFC_ATTR_RW(nvme_embed_cmd, 1, 0, 2,
->  	     "Embed NVME Command in WQE");
->  
->  /*
-> + * lpfc_fcp_mq_threshold: Set the maximum number of Hardware Queues
-> + * the driver will advertise it supports to the SCSI layer.
-> + *
-> + *      0    = Set nr_hw_queues by the number of CPUs or HW queues.
-> + *      1,128 = Manually specify the maximum nr_hw_queue value to be set,
-> + *
-> + * Value range is [0,128]. Default value is 8.
-> + */
-> +LPFC_ATTR_R(fcp_mq_threshold, LPFC_FCP_MQ_THRESHOLD_DEF,
-> +	    LPFC_FCP_MQ_THRESHOLD_MIN, LPFC_FCP_MQ_THRESHOLD_MAX,
-> +	    "Set the number of SCSI Queues advertised");
-> +
-> +/*
->   * lpfc_hdw_queue: Set the number of Hardware Queues the driver
->   * will advertise it supports to the NVME and  SCSI layers. This also
->   * will map to the number of CQ/WQ pairs the driver will create.
-> @@ -6030,6 +6043,7 @@ struct device_attribute *lpfc_hba_attrs[] = {
->  	&dev_attr_lpfc_cq_poll_threshold,
->  	&dev_attr_lpfc_cq_max_proc_limit,
->  	&dev_attr_lpfc_fcp_cpu_map,
-> +	&dev_attr_lpfc_fcp_mq_threshold,
->  	&dev_attr_lpfc_hdw_queue,
->  	&dev_attr_lpfc_irq_chann,
->  	&dev_attr_lpfc_suppress_rsp,
-> @@ -7112,6 +7126,7 @@ lpfc_get_cfgparam(struct lpfc_hba *phba)
->  	/* Initialize first burst. Target vs Initiator are different. */
->  	lpfc_nvme_enable_fb_init(phba, lpfc_nvme_enable_fb);
->  	lpfc_nvmet_fb_size_init(phba, lpfc_nvmet_fb_size);
-> +	lpfc_fcp_mq_threshold_init(phba, lpfc_fcp_mq_threshold);
->  	lpfc_hdw_queue_init(phba, lpfc_hdw_queue);
->  	lpfc_irq_chann_init(phba, lpfc_irq_chann);
->  	lpfc_enable_bbcr_init(phba, lpfc_enable_bbcr);
 > diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-> index faf43b1d3dbe..03998579d6ee 100644
+> index eaaef68..59b52a0 100644
 > --- a/drivers/scsi/lpfc/lpfc_init.c
 > +++ b/drivers/scsi/lpfc/lpfc_init.c
-> @@ -4309,10 +4309,12 @@ lpfc_create_port(struct lpfc_hba *phba, int instance, struct device *dev)
->  	shost->max_cmd_len = 16;
+> @@ -39,6 +39,7 @@
+>  #include <linux/msi.h>
+>  #include <linux/irq.h>
+>  #include <linux/bitops.h>
+> +#include <linux/vmalloc.h>
 >  
->  	if (phba->sli_rev == LPFC_SLI_REV4) {
-> -		if (phba->cfg_fcp_io_sched == LPFC_FCP_SCHED_BY_HDWQ)
-> -			shost->nr_hw_queues = phba->cfg_hdw_queue;
-> -		else
-> -			shost->nr_hw_queues = phba->sli4_hba.num_present_cpu;
-> +		if (!phba->cfg_fcp_mq_threshold ||
-> +		    phba->cfg_fcp_mq_threshold > phba->cfg_hdw_queue)
-> +			phba->cfg_fcp_mq_threshold = phba->cfg_hdw_queue;
-> +
-> +		shost->nr_hw_queues = min_t(int, 2 * num_possible_nodes(),
-> +					    phba->cfg_fcp_mq_threshold);
+>  #include <scsi/scsi.h>
+>  #include <scsi/scsi_device.h>
+> @@ -7549,7 +7550,6 @@ struct lpfc_rpi_hdr *
+>  	uint32_t old_mask;
+>  	uint32_t old_guard;
 >  
->  		shost->dma_boundary =
->  			phba->sli4_hba.pc_sli4_params.sge_supp_len-1;
-> diff --git a/drivers/scsi/lpfc/lpfc_sli4.h b/drivers/scsi/lpfc/lpfc_sli4.h
-> index 3aeca387b22a..329f7aa7e169 100644
-> --- a/drivers/scsi/lpfc/lpfc_sli4.h
-> +++ b/drivers/scsi/lpfc/lpfc_sli4.h
-> @@ -44,6 +44,11 @@
->  #define LPFC_HBA_HDWQ_MAX	128
->  #define LPFC_HBA_HDWQ_DEF	0
+> -	int pagecnt = 10;
+>  	if (phba->cfg_prot_mask && phba->cfg_prot_guard) {
+>  		lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
+>  				"1478 Registering BlockGuard with the "
+> @@ -7588,23 +7588,9 @@ struct lpfc_rpi_hdr *
+>  	}
 >  
-> +/* FCP MQ queue count limiting */
-> +#define LPFC_FCP_MQ_THRESHOLD_MIN	0
-> +#define LPFC_FCP_MQ_THRESHOLD_MAX	128
-> +#define LPFC_FCP_MQ_THRESHOLD_DEF	8
-> +
->  /* Common buffer size to accomidate SCSI and NVME IO buffers */
->  #define LPFC_COMMON_IO_BUF_SZ	768
+>  	if (!_dump_buf_data) {
+> -		while (pagecnt) {
+> -			spin_lock_init(&_dump_buf_lock);
+> -			_dump_buf_data =
+> -				(char *) __get_free_pages(GFP_KERNEL, pagecnt);
+> -			if (_dump_buf_data) {
+> -				lpfc_printf_log(phba, KERN_ERR, LOG_BG,
+> -					"9043 BLKGRD: allocated %d pages for "
+> -				       "_dump_buf_data at 0x%p\n",
+> -				       (1 << pagecnt), _dump_buf_data);
+> -				_dump_buf_data_order = pagecnt;
+> -				memset(_dump_buf_data, 0,
+> -				       ((1 << PAGE_SHIFT) << pagecnt));
+> -				break;
+> -			} else
+> -				--pagecnt;
+> -		}
+> -		if (!_dump_buf_data_order)
+> +		_dump_buf_data = (char *) vmalloc(shost->hostt->max_sectors * 512);
+> +		_dump_buf_data_order = get_order(shost->hostt->max_sectors * 512);
+> +		if (!_dump_buf_data)
+>  			lpfc_printf_log(phba, KERN_ERR, LOG_BG,
+>  				"9044 BLKGRD: ERROR unable to allocate "
+>  			       "memory for hexdump\n");
+> @@ -7613,22 +7599,9 @@ struct lpfc_rpi_hdr *
+>  			"9045 BLKGRD: already allocated _dump_buf_data=0x%p"
+>  		       "\n", _dump_buf_data);
+>  	if (!_dump_buf_dif) {
+> -		while (pagecnt) {
+> -			_dump_buf_dif =
+> -				(char *) __get_free_pages(GFP_KERNEL, pagecnt);
+> -			if (_dump_buf_dif) {
+> -				lpfc_printf_log(phba, KERN_ERR, LOG_BG,
+> -					"9046 BLKGRD: allocated %d pages for "
+> -				       "_dump_buf_dif at 0x%p\n",
+> -				       (1 << pagecnt), _dump_buf_dif);
+> -				_dump_buf_dif_order = pagecnt;
+> -				memset(_dump_buf_dif, 0,
+> -				       ((1 << PAGE_SHIFT) << pagecnt));
+> -				break;
+> -			} else
+> -				--pagecnt;
+> -		}
+> -		if (!_dump_buf_dif_order)
+> +		_dump_buf_dif = (char *) vmalloc(shost->hostt->max_sectors * 512);
+> +		_dump_buf_dif_order = get_order(shost->hostt->max_sectors * 512);
+> +		if (!_dump_buf_dif)
+>  			lpfc_printf_log(phba, KERN_ERR, LOG_BG,
+>  			"9047 BLKGRD: ERROR unable to allocate "
+>  			       "memory for hexdump\n");
+> diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+> index ba996fb..719612d 100644
+> --- a/drivers/scsi/lpfc/lpfc_scsi.c
+> +++ b/drivers/scsi/lpfc/lpfc_scsi.c
+> @@ -92,7 +92,7 @@ struct scsi_dif_tuple {
+>  static void
+>  lpfc_debug_save_data(struct lpfc_hba *phba, struct scsi_cmnd *cmnd)
+>  {
+> -	void *src, *dst;
+> +	void *src, *dst, *end;
+>  	struct scatterlist *sgde = scsi_sglist(cmnd);
 >  
+>  	if (!_dump_buf_data) {
+> @@ -110,7 +110,12 @@ struct scsi_dif_tuple {
+>  	}
+>  
+>  	dst = (void *) _dump_buf_data;
+> +	end = ((char *) dst) + ((1 << PAGE_SHIFT) << _dump_buf_data_order);
+>  	while (sgde) {
+> +		if (dst + sgde->length >= end) {
+> +			printk(KERN_ERR "overflow buffer\n");
+> +			break;
+> +		}
+>  		src = sg_virt(sgde);
+>  		memcpy(dst, src, sgde->length);
+>  		dst += sgde->length;
+> @@ -121,7 +126,7 @@ struct scsi_dif_tuple {
+>  static void
+>  lpfc_debug_save_dif(struct lpfc_hba *phba, struct scsi_cmnd *cmnd)
+>  {
+> -	void *src, *dst;
+> +	void *src, *dst, *end;
+>  	struct scatterlist *sgde = scsi_prot_sglist(cmnd);
+>  
+>  	if (!_dump_buf_dif) {
+> @@ -138,7 +143,12 @@ struct scsi_dif_tuple {
+>  	}
+>  
+>  	dst = _dump_buf_dif;
+> +	end = ((char *) dst) + ((1 << PAGE_SHIFT) << _dump_buf_dif_order);
+>  	while (sgde) {
+> +		if (dst + sgde->length >= end) {
+> +			printk(KERN_ERR "overflow buffer\n");
+> +			break;
+> +		}
+>  		src = sg_virt(sgde);
+>  		memcpy(dst, src, sgde->length);
+>  		dst += sgde->length;
 > 
-I would actually use the HW limit here; there are some machines where
-being able to leverage all HW queues might be preferable.
+Not sure this is correct.
+vmalloc() is not equivalent to __get_pages().
 
-Otherwise:
-Reviewed-by: Hannes Reinecke <hare@suse.com>
+I would rather start off with the fixed buffer size (say, 40k), and
+calculate the values like pagecnt etc from there.
 
 Cheers,
 
