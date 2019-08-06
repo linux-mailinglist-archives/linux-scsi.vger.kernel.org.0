@@ -2,228 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3BB82EA7
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 11:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC27582FA5
+	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 12:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732254AbfHFJZW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Aug 2019 05:25:22 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45622 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730068AbfHFJZW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 6 Aug 2019 05:25:22 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 83305AE6F;
-        Tue,  6 Aug 2019 09:25:19 +0000 (UTC)
-Subject: Re: [PATCH] lpfc: Fix Buffer Overflow Error
-To:     KyleMahlkuch <kmahlkuc@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <1562948135-5533-1-git-send-email-kmahlkuc@linux.vnet.ibm.com>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <a8b38655-018e-4bc7-0dbf-792f72cbc8b6@suse.de>
-Date:   Tue, 6 Aug 2019 11:25:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1732428AbfHFKXy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Aug 2019 06:23:54 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:44087 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726713AbfHFKXy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Aug 2019 06:23:54 -0400
+Received: by mail-ed1-f66.google.com with SMTP id k8so81764920edr.11;
+        Tue, 06 Aug 2019 03:23:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nHAZm0GZeVyi0k2jXAqZJ6+K/F+OXmkni52x4h/2WKU=;
+        b=W6yaIi5Eo9POup4WUZfRIHlyJ8IGxq+DvAHVwLOkie5rWs0Fk9vvDlFBrcwFpoK+VL
+         Tj0JydlTDm1RimAaQo0IBtt0NGVl1bzVHDI3DDYlzgCDaqlQoQAc43r3qj7Ivm8RcyhC
+         eJKN/HvOYiTmeFsPcLvX9daiIIXSgCUlLR/bJOUTieraPl+UPBZrrJQFtXaclzq/bra+
+         AF+Zksj+MchmgA6LNPHlmULwQwjjdyA4PjX01pHQg3/ZCrqEzkOKxlLBpKVN6jmSv01r
+         C80UUtClWdQqFzFISc93OQENgf7/tFHSDLNumfYDptwVttiXjO3XgQEc1Tc+85IfBkBA
+         9y8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nHAZm0GZeVyi0k2jXAqZJ6+K/F+OXmkni52x4h/2WKU=;
+        b=tdMKdsBAdbrtBhxYHaokf5Ibn8HPuH0qfkGNbT9ewlu3G53+zDCY7us5ksycetQ2h7
+         FwJDyc/3bYG7IxkiJz1H2jq4VaD5ifz+PK4x3PcJmgURTUAamDCVMppm5BTWasdnuFNI
+         FdaX/uicv9gbV3FqAk5Vontu7PjgXXrPEQKGz77dBRPW+YMANLuv6ffSxkAAyq98CQ1v
+         +hGjiNrdkkyUBD3vk6qqimDRME+4CyQAuj6gHpLIQcJgikQunC9ja1Wz07efWj+DIr/x
+         W5v/IYufaoqS+IP5nNJFJqLkwUwTBAIDDCKJrem5zWYBThyvXe8hLj3kcqnqGAv6Esjf
+         mGeg==
+X-Gm-Message-State: APjAAAXnHzPpDYVmlDzTcxBmn72mkgc1nizfYx7ehTUl3n9XDfEeYsA7
+        KfWiSDPa9ZRdjbGSZ7rTp3k=
+X-Google-Smtp-Source: APXvYqxNSOOeEKipsPzXzNB35eNLgJeH0dlFgOZerwtyAg1/J6mRzv95o7+dpOqMTQU7nPiqxQkS0w==
+X-Received: by 2002:a17:906:8386:: with SMTP id p6mr2356514ejx.139.1565087031956;
+        Tue, 06 Aug 2019 03:23:51 -0700 (PDT)
+Received: from continental ([187.112.244.117])
+        by smtp.gmail.com with ESMTPSA id jt17sm14779247ejb.90.2019.08.06.03.23.44
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 06 Aug 2019 03:23:51 -0700 (PDT)
+Date:   Tue, 6 Aug 2019 07:24:56 -0300
+From:   Marcos Paulo de Souza <marcos.souza.org@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Keith Busch <kbusch@kernel.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>, Ming Lei <ming.lei@redhat.com>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "open list:BLOCK LAYER" <linux-block@vger.kernel.org>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        "open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:SCSI TARGET SUBSYSTEM" <target-devel@vger.kernel.org>
+Subject: Re: [PATCH] block: Remove request_queue argument from
+ blk_execute_rq_nowait
+Message-ID: <20190806102456.GA29914@continental>
+References: <20190806011754.7722-1-marcos.souza.org@gmail.com>
+ <20190806051911.GA13409@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <1562948135-5533-1-git-send-email-kmahlkuc@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190806051911.GA13409@lst.de>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 7/12/19 6:15 PM, KyleMahlkuch wrote:
-> Power and x86 have different page sizes so rather than allocate the
-> buffer based on number of pages we should allocate space by using
-> max_sectors. There is also code in lpfc_scsi.c to be sure we don't
-> write past the end of this buffer.
+On Tue, Aug 06, 2019 at 07:19:11AM +0200, Christoph Hellwig wrote:
+> On Mon, Aug 05, 2019 at 10:17:51PM -0300, Marcos Paulo de Souza wrote:
+> > +void blk_execute_rq_nowait(struct gendisk *bd_disk, struct request *rq,
+> > +			int at_head, rq_end_io_fn *done)
 > 
-> Signed-off-by: KyleMahlkuch <kmahlkuc@linux.vnet.ibm.com>
-> ---
->  drivers/scsi/lpfc/lpfc_init.c | 41 +++++++----------------------------------
->  drivers/scsi/lpfc/lpfc_scsi.c | 14 ++++++++++++--
->  2 files changed, 19 insertions(+), 36 deletions(-)
+> We store a ->rq_disk in struct request, so we should also not need
+> that.  And at_head should either become a bool, or be replaced with
+> a flags argument, ints used boolean are usually not a good idea.
+
+Makes sense.
+
 > 
-> diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-> index eaaef68..59b52a0 100644
-> --- a/drivers/scsi/lpfc/lpfc_init.c
-> +++ b/drivers/scsi/lpfc/lpfc_init.c
-> @@ -39,6 +39,7 @@
->  #include <linux/msi.h>
->  #include <linux/irq.h>
->  #include <linux/bitops.h>
-> +#include <linux/vmalloc.h>
->  
->  #include <scsi/scsi.h>
->  #include <scsi/scsi_device.h>
-> @@ -7549,7 +7550,6 @@ struct lpfc_rpi_hdr *
->  	uint32_t old_mask;
->  	uint32_t old_guard;
->  
-> -	int pagecnt = 10;
->  	if (phba->cfg_prot_mask && phba->cfg_prot_guard) {
->  		lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
->  				"1478 Registering BlockGuard with the "
-> @@ -7588,23 +7588,9 @@ struct lpfc_rpi_hdr *
->  	}
->  
->  	if (!_dump_buf_data) {
-> -		while (pagecnt) {
-> -			spin_lock_init(&_dump_buf_lock);
-> -			_dump_buf_data =
-> -				(char *) __get_free_pages(GFP_KERNEL, pagecnt);
-> -			if (_dump_buf_data) {
-> -				lpfc_printf_log(phba, KERN_ERR, LOG_BG,
-> -					"9043 BLKGRD: allocated %d pages for "
-> -				       "_dump_buf_data at 0x%p\n",
-> -				       (1 << pagecnt), _dump_buf_data);
-> -				_dump_buf_data_order = pagecnt;
-> -				memset(_dump_buf_data, 0,
-> -				       ((1 << PAGE_SHIFT) << pagecnt));
-> -				break;
-> -			} else
-> -				--pagecnt;
-> -		}
-> -		if (!_dump_buf_data_order)
-> +		_dump_buf_data = (char *) vmalloc(shost->hostt->max_sectors * 512);
-> +		_dump_buf_data_order = get_order(shost->hostt->max_sectors * 512);
-> +		if (!_dump_buf_data)
->  			lpfc_printf_log(phba, KERN_ERR, LOG_BG,
->  				"9044 BLKGRD: ERROR unable to allocate "
->  			       "memory for hexdump\n");
-> @@ -7613,22 +7599,9 @@ struct lpfc_rpi_hdr *
->  			"9045 BLKGRD: already allocated _dump_buf_data=0x%p"
->  		       "\n", _dump_buf_data);
->  	if (!_dump_buf_dif) {
-> -		while (pagecnt) {
-> -			_dump_buf_dif =
-> -				(char *) __get_free_pages(GFP_KERNEL, pagecnt);
-> -			if (_dump_buf_dif) {
-> -				lpfc_printf_log(phba, KERN_ERR, LOG_BG,
-> -					"9046 BLKGRD: allocated %d pages for "
-> -				       "_dump_buf_dif at 0x%p\n",
-> -				       (1 << pagecnt), _dump_buf_dif);
-> -				_dump_buf_dif_order = pagecnt;
-> -				memset(_dump_buf_dif, 0,
-> -				       ((1 << PAGE_SHIFT) << pagecnt));
-> -				break;
-> -			} else
-> -				--pagecnt;
-> -		}
-> -		if (!_dump_buf_dif_order)
-> +		_dump_buf_dif = (char *) vmalloc(shost->hostt->max_sectors * 512);
-> +		_dump_buf_dif_order = get_order(shost->hostt->max_sectors * 512);
-> +		if (!_dump_buf_dif)
->  			lpfc_printf_log(phba, KERN_ERR, LOG_BG,
->  			"9047 BLKGRD: ERROR unable to allocate "
->  			       "memory for hexdump\n");
-> diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-> index ba996fb..719612d 100644
-> --- a/drivers/scsi/lpfc/lpfc_scsi.c
-> +++ b/drivers/scsi/lpfc/lpfc_scsi.c
-> @@ -92,7 +92,7 @@ struct scsi_dif_tuple {
->  static void
->  lpfc_debug_save_data(struct lpfc_hba *phba, struct scsi_cmnd *cmnd)
->  {
-> -	void *src, *dst;
-> +	void *src, *dst, *end;
->  	struct scatterlist *sgde = scsi_sglist(cmnd);
->  
->  	if (!_dump_buf_data) {
-> @@ -110,7 +110,12 @@ struct scsi_dif_tuple {
->  	}
->  
->  	dst = (void *) _dump_buf_data;
-> +	end = ((char *) dst) + ((1 << PAGE_SHIFT) << _dump_buf_data_order);
->  	while (sgde) {
-> +		if (dst + sgde->length >= end) {
-> +			printk(KERN_ERR "overflow buffer\n");
-> +			break;
-> +		}
->  		src = sg_virt(sgde);
->  		memcpy(dst, src, sgde->length);
->  		dst += sgde->length;
-> @@ -121,7 +126,7 @@ struct scsi_dif_tuple {
->  static void
->  lpfc_debug_save_dif(struct lpfc_hba *phba, struct scsi_cmnd *cmnd)
->  {
-> -	void *src, *dst;
-> +	void *src, *dst, *end;
->  	struct scatterlist *sgde = scsi_prot_sglist(cmnd);
->  
->  	if (!_dump_buf_dif) {
-> @@ -138,7 +143,12 @@ struct scsi_dif_tuple {
->  	}
->  
->  	dst = _dump_buf_dif;
-> +	end = ((char *) dst) + ((1 << PAGE_SHIFT) << _dump_buf_dif_order);
->  	while (sgde) {
-> +		if (dst + sgde->length >= end) {
-> +			printk(KERN_ERR "overflow buffer\n");
-> +			break;
-> +		}
->  		src = sg_virt(sgde);
->  		memcpy(dst, src, sgde->length);
->  		dst += sgde->length;
+> > @@ -81,7 +80,7 @@ void blk_execute_rq(struct request_queue *q, struct gendisk *bd_disk,
 > 
-Not sure this is correct.
-vmalloc() is not equivalent to __get_pages().
+> And all the same argument changes that apply to blk_execute_rq_nowait
+> apply to blk_execute_rq as well.
 
-I would rather start off with the fixed buffer size (say, 40k), and
-calculate the values like pagecnt etc from there.
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke		   Teamlead Storage & Networking
-hare@suse.de			               +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+Thanks for the suggestions, I will send a v2 soon.
