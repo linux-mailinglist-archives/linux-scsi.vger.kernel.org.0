@@ -2,105 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA71283BCC
-	for <lists+linux-scsi@lfdr.de>; Tue,  6 Aug 2019 23:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BF0840C2
+	for <lists+linux-scsi@lfdr.de>; Wed,  7 Aug 2019 03:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729591AbfHFViE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 6 Aug 2019 17:38:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55746 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729583AbfHFViD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 6 Aug 2019 17:38:03 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0360B2189E;
-        Tue,  6 Aug 2019 21:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565127483;
-        bh=6++WtZkK6nDEnlyx/al3i56a+F9edKAwW/l6M1rHbpI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HVIiqojLZPxcmkrX6U0jmQ0Y4yH3YYdv46cxtTi7br5SZPXVZww7S+hXEYIL3F/A4
-         9C1xMpCeef9XdUkgD8ueK0gipUaKOi0fS14Y2qjRElnC3Jbq1um3iGcXkZpdf/DbB9
-         BDsyDr+QJqAzL9PqIMBebcsls3BtR6IcQ5uVNbQg=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Don Brace <don.brace@microsemi.com>,
-        Bader Ali - Saleh <bader.alisaleh@microsemi.com>,
-        Scott Teel <scott.teel@microsemi.com>,
-        Scott Benesh <scott.benesh@microsemi.com>,
-        Kevin Barnett <kevin.barnett@microsemi.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, esc.storagedev@microsemi.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 07/14] scsi: hpsa: correct scsi command status issue after reset
-Date:   Tue,  6 Aug 2019 17:37:41 -0400
-Message-Id: <20190806213749.20689-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190806213749.20689-1-sashal@kernel.org>
-References: <20190806213749.20689-1-sashal@kernel.org>
+        id S1729924AbfHGBjr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 6 Aug 2019 21:39:47 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:37800 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729380AbfHGBjn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 6 Aug 2019 21:39:43 -0400
+Received: by mail-wm1-f68.google.com with SMTP id f17so78246218wme.2;
+        Tue, 06 Aug 2019 18:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MRGHhYFTRmS6ThghCzMlHBCCluvRIS5WKEjM9Zj/Oi0=;
+        b=K76IQ8Uckf1ZSmTdM0fjpVm4GXZbhtGAQtHES1wlaPV9imsJRJX1pFQCvDaZAVkOoQ
+         sur/mJytGkWLtj+2qFHOulrszTQfnmogSlbeIzROwwa9actS/uIFSM7d7sc5bROU8VKR
+         ogmCOQM2dw40A5p0hijAetDrfeZcmeKv4ILKmW69mNyVo8VfqwN25Vl5zGXip/aOUP/Z
+         qnRdq9ULFEQ3WtdpTrYCFcWCzi3Fit/e4x0XdPMlTO/dUYHTvB5xouGHiBpTKCtWgMyc
+         2A12s4KsfrT67t3zreYh7+kocTyvgYik5EX/ex/wIoidUtYJt94AvVFU9tJlA/Z87gZY
+         TmbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MRGHhYFTRmS6ThghCzMlHBCCluvRIS5WKEjM9Zj/Oi0=;
+        b=Zi95dvSSb+NxKLmbcyM7+n60H0lttpMgffOfjpkr0SCkY8XUtum9zIFq1BZoOQQbWW
+         gim3NM0/AFAjvXw9hRIiK00ocZc2Puimx2IGE4IeYne8L940hveIyjcvc5XuN2gQNvBS
+         tf7leu+epXTkwa3Di9y+3rWjiuIg/xxxGuzjINXIrmXSzJMXfVhJJC+LvTCVq7J9ASns
+         NWmZzOp8dinuIXiaBSLWPzT09AP/A2tDQjoSbDVoviwNLFgzEO5sHlVL2jFpTHJFWTHB
+         Ivc8tmwz5T1wVvDvZMYqdGb3zROixZJS6RTF69I9lZrSbvUehqo0D72csmkulI4NV/cP
+         +0lg==
+X-Gm-Message-State: APjAAAXo8tACwYmehLYdTfOK3ZntBUnc+PsayxPenYwFskSumUwPSl2D
+        FY9v96Wpp5yhWDGos3zYhMxb8BQpEdiDi92EscOTBAF1TavoaQ==
+X-Google-Smtp-Source: APXvYqx0acCsydZ58mqegE8RiOYTsCCQ1bEgdXz6IJYvIOmCYhJ9OaK7eAh/VmI8XcJ4D+a87XOBayZLGwIFu9IHLDw=
+X-Received: by 2002:a1c:a985:: with SMTP id s127mr6914821wme.163.1565141981380;
+ Tue, 06 Aug 2019 18:39:41 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20190801220941.19615-1-jsmart2021@gmail.com> <CACVXFVO7vmGJj_N_MT7roZDmWNHbEGR=MsOqkpb7NTptF3=DOw@mail.gmail.com>
+ <227b2bc2-9778-6d38-a68b-26a799a0caeb@gmail.com>
+In-Reply-To: <227b2bc2-9778-6d38-a68b-26a799a0caeb@gmail.com>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Wed, 7 Aug 2019 09:39:29 +0800
+Message-ID: <CACVXFVM7sdY_rHZCsi3uTkyOme4rmNERk41754kW-yjNFN4FXQ@mail.gmail.com>
+Subject: Re: [PATCH v2] lpfc: Mitigate high memory pre-allocation by SCSI-MQ
+To:     James Smart <jsmart2021@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Don Brace <don.brace@microsemi.com>
+On Wed, Aug 7, 2019 at 1:13 AM James Smart <jsmart2021@gmail.com> wrote:
+>
+> On 8/5/2019 6:09 PM, Ming Lei wrote:
+> >
+> > I am wondering why you use 2 * num_possible_nodes() as the limit instead of
+> > num_possible_nodes(), could you explain it a bit?
+>
+> The number comes from most systems being dual socket systems, thus a
+> numa node count of 2. Some of these dual socket systems can be high cpu
+> counts per socket. We did see a difference, on different architectures
+> and where cpu counts were high per socket, that more hwqs per socket did
+> help. So if there can be more than 1 hwq per socket then I think that is
+> goodness.
 
-[ Upstream commit eeebce1862970653cdf5c01e98bc669edd8f529a ]
+I guess it isn't related with CPU cores per socket, what matters is number of
+sockets, given each CPU core in same socket is in same position wrt. RW
+preformance on same shared memory, so looks the following way is what
+we need:
 
-Reviewed-by: Bader Ali - Saleh <bader.alisaleh@microsemi.com>
-Reviewed-by: Scott Teel <scott.teel@microsemi.com>
-Reviewed-by: Scott Benesh <scott.benesh@microsemi.com>
-Reviewed-by: Kevin Barnett <kevin.barnett@microsemi.com>
-Signed-off-by: Don Brace <don.brace@microsemi.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/hpsa.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ shost->nr_hw_queues = max_t(int,  num_possible_nodes(),
+                                          nr_processor_sockets);
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index e0952882e1320..fcce3ae119fa4 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -2153,6 +2153,8 @@ static int handle_ioaccel_mode2_error(struct ctlr_info *h,
- 	case IOACCEL2_SERV_RESPONSE_COMPLETE:
- 		switch (c2->error_data.status) {
- 		case IOACCEL2_STATUS_SR_TASK_COMP_GOOD:
-+			if (cmd)
-+				cmd->result = 0;
- 			break;
- 		case IOACCEL2_STATUS_SR_TASK_COMP_CHK_COND:
- 			cmd->result |= SAM_STAT_CHECK_CONDITION;
-@@ -2320,8 +2322,10 @@ static void process_ioaccel2_completion(struct ctlr_info *h,
- 
- 	/* check for good status */
- 	if (likely(c2->error_data.serv_response == 0 &&
--			c2->error_data.status == 0))
-+			c2->error_data.status == 0)) {
-+		cmd->result = 0;
- 		return hpsa_cmd_free_and_done(h, c, cmd);
-+	}
- 
- 	/*
- 	 * Any RAID offload error results in retry which will use
-@@ -5236,6 +5240,12 @@ static int hpsa_scsi_queue_command(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
- 	}
- 	c = cmd_tagged_alloc(h, cmd);
- 
-+	/*
-+	 * This is necessary because the SML doesn't zero out this field during
-+	 * error recovery.
-+	 */
-+	cmd->result = 0;
-+
- 	/*
- 	 * Call alternate submit routine for I/O accelerated commands.
- 	 * Retries always go down the normal I/O path.
--- 
-2.20.1
+However, I don't know how to retrieve 'nr_processor_sockets' in kernel.
+Maybe topology_max_packages() can be used for x86, not see how to
+read it for other ARCHs.
 
+Cc Thomas and linux-kernel list.
+
+Thanks,
+Ming Lei
