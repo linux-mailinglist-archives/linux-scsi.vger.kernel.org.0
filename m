@@ -2,74 +2,129 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FD588A14C
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 16:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655A98A236
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 17:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726936AbfHLOiA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Aug 2019 10:38:00 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:52592 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726480AbfHLOiA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Aug 2019 10:38:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=QgVM0Nc4JKFwdyMPbzHcurXExj3SOYhChc53F/6E75Y=; b=PMyGrvtm2XSt3HfqEiElV8ziE
-        Zsc1EQ0lsE9dS1ISJthy+7QYrtTzJLlqn9Cld5lrXIqDyTyBdXpVnMltvSL0+aVRsolNKrZOFy/NF
-        FS9B2iDdqox0Ox76A6adVW99za3xNDvgYAeu7rYVGnnYA0O8+Z0iXdvceOZhYUNNJoXIsNCtSRbEw
-        xd8XGKLGjdyE4DSO8MACOhtnfiheybzAeHe3DwN4czSN3gd03HY4Tz6ScORQ3uQ0pY+t3xL625++L
-        4OWJl+BZQYluO8kJwIpGeuG8X5NNn4tLe30VF7u9ZGX5GSfTpa8hk9RNhgU9VADyrMvNSkVK6iHv+
-        5mrUViFcg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hxBSS-0004xH-15; Mon, 12 Aug 2019 14:38:00 +0000
-Date:   Mon, 12 Aug 2019 07:37:59 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Douglas Gilbert <dgilbert@interlog.com>
-Cc:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        jejb@linux.vnet.ibm.com, hare@suse.de, bvanassche@acm.org
-Subject: Re: [PATCH v3 12/20] sg: sense buffer rework
-Message-ID: <20190812143759.GE16127@infradead.org>
-References: <20190807114252.2565-1-dgilbert@interlog.com>
- <20190807114252.2565-13-dgilbert@interlog.com>
+        id S1727458AbfHLPYk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Aug 2019 11:24:40 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:28767 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727037AbfHLPYk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Aug 2019 11:24:40 -0400
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id x7CFOFVG015133;
+        Tue, 13 Aug 2019 00:24:16 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x7CFOFVG015133
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1565623456;
+        bh=/ZLs0+GV+nR6TLnoM6cTJUiEDAyiLErBYzFGbX3v72M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=OJzpQWw2Fwn/3fQ8DT/dj2bh1YFydaCAq5v8YJE8AxCIe3WPS2T5YtkW77TWjg9Tz
+         NoPYiwNyTZ1D4o7k8CKS1haSTcSef3BiTAMomiGs87V+5ICLpWQfMf9oiUGg/NdJVa
+         XR/HQovpgZ5u/XigRZl1C435CMvqiCsSUiMIch+Wvjr3r+UX2mL8LAttxrl0kqyAOH
+         GanJ99UvCbY4bHWZ/zsww5K0gRvD2Ezm7Tx8AWjUNbXiMzoe7Saef+lIqw8OrswMSy
+         VLezLRZfFoAtfQ8/5mqinYzP2XYhoQ0knpYwMA0q5isCpqxmy4PKpUdZaJ2QyPTriE
+         7FK8Zf13mX2xQ==
+X-Nifty-SrcIP: [209.85.221.182]
+Received: by mail-vk1-f182.google.com with SMTP id r13so292799vke.12;
+        Mon, 12 Aug 2019 08:24:16 -0700 (PDT)
+X-Gm-Message-State: APjAAAVMe2zbbQ5LGhS2eWq39HREyZFrilPa36wIzmT03ve3zkXzkpQM
+        WLG01bFqrJDQRsZ72sSK5Y+it/954scagU/RzWM=
+X-Google-Smtp-Source: APXvYqyf2GMOFUsRxNDu7JdMijybibC42MDZO/L+m1JKVxZCXdD83lEdp4K2xTiKxVjtWaNp/waolXng2NwGRKVWNbI=
+X-Received: by 2002:a1f:93cd:: with SMTP id v196mr5084585vkd.84.1565623454953;
+ Mon, 12 Aug 2019 08:24:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190807114252.2565-13-dgilbert@interlog.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+References: <20190809002104.18599-1-stancheff@cray.com> <20190809002104.18599-2-stancheff@cray.com>
+In-Reply-To: <20190809002104.18599-2-stancheff@cray.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Tue, 13 Aug 2019 00:23:38 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAScm9P+QMZiqqSQnOoPsN54OTcTGpaDgxTbjJ_knoeGhA@mail.gmail.com>
+Message-ID: <CAK7LNAScm9P+QMZiqqSQnOoPsN54OTcTGpaDgxTbjJ_knoeGhA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kbuild: recursive build of external kernel modules
+To:     Shaun Tancheff <shaun@tancheff.com>
+Cc:     Shaun Tancheff <stancheff@cray.com>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Renninger <trenn@suse.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Aug 07, 2019 at 01:42:44PM +0200, Douglas Gilbert wrote:
-> The biggest single item in the sg_request object is the sense
-> buffer array which is SCSI_SENSE_BUFFERSIZE bytes long. That
-> constant started out at 18 bytes 20 years ago and is 96 bytes
-> now and might grow in the future. On the other hand the sense
-> buffer is only used by a small number of SCSI commands: those
-> that fail and those that want to return more information
-> other than a SCSI status of GOOD.
-> 
-> Set up a small mempool called "sg_sense" that is only used as
-> required and released back to the mempool as soon as practical.
-> 
-> Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
-> 
-> -
-> 
-> The scsi_lib.c file in the scsi mid-level maintains two sense
-> buffer caches but declares them and their access functions
-> static so they can't use by the sg driver. Perhaps the fastest
-> option would be to transfer ownership of a (non-empty) sense
-> buffer from the scsi_lib.c file to the sg driver. This technique
-> may be useful to ther ULDs.
+On Fri, Aug 9, 2019 at 9:21 AM Shaun Tancheff <shaun@tancheff.com> wrote:
+>
+> When building a tree of external modules stage 2 fails
+> silently as the root modules.order is empty.
+>
+> Modify the modules.order location to be fixed to the
+> root when KBUILD_EXTMOD is specified and write all
+> module paths to the single modules.order file.
 
-Why do you need your own storage for the sense buffer?  As soon
-as you have allocate the request/scsi_request you can use its
-sense buffer.  There shouldn't really be a need to keep a copy
-around.
+Could you try v5.3-rc4 please?
 
+
+
+
+> Signed-off-by: Shaun Tancheff <stancheff@cray.com>
+> ---
+>  Makefile               | 1 +
+>  scripts/Makefile.build | 8 +++++++-
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/Makefile b/Makefile
+> index 23cdf1f41364..a9964492f47e 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -1622,6 +1622,7 @@ $(module-dirs): prepare $(objtree)/Module.symvers
+>
+>  modules: $(module-dirs)
+>         @$(kecho) '  Building modules, stage 2.';
+> +       $(Q)$rm -f $(KBUILD_EXTMOD)/modules.order
+>         $(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
+>
+>  PHONY += modules_install
+> diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+> index 0d434d0afc0b..f9908b3d59e0 100644
+> --- a/scripts/Makefile.build
+> +++ b/scripts/Makefile.build
+> @@ -64,7 +64,13 @@ builtin-target := $(obj)/built-in.a
+>  endif
+>
+>  ifeq ($(CONFIG_MODULES)$(need-modorder),y1)
+> +ifneq ($(KBUILD_EXTMOD),)
+> +modorder-target := $(KBUILD_EXTMOD)/modules.order
+> +modorder-add := >>
+> +else
+>  modorder-target := $(obj)/modules.order
+> +modorder-add := >
+> +endif
+>  endif
+>
+>  mod-targets := $(patsubst %.o, %.mod, $(obj-m))
+> @@ -423,7 +429,7 @@ endif # builtin-target
+>  $(modorder-target): $(subdir-ym) FORCE
+>         $(Q){ $(foreach m, $(modorder), \
+>         $(if $(filter %/modules.order, $m), cat $m, echo $m);) :; } \
+> -       | $(AWK) '!x[$$0]++' - > $@
+> +       | $(AWK) '!x[$$0]++' - $(modorder-add) $@
+>
+>  #
+>  # Rule to compile a set of .o files into one .a file (with symbol table)
+> --
+> 2.20.1
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
