@@ -2,79 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72AC98A129
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 16:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78D638A14F
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 16:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727273AbfHLOce (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Aug 2019 10:32:34 -0400
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:36487 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726296AbfHLOce (ORCPT
+        id S1726840AbfHLOi6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Aug 2019 10:38:58 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:21426 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726817AbfHLOi6 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 12 Aug 2019 10:32:34 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 55B9920260;
-        Mon, 12 Aug 2019 10:32:33 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 12 Aug 2019 10:32:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=P0wi0PpykWML/yKIJ62vyF1mno1
-        HZGC4tJREhnvhDWw=; b=J6u+7i4NUZmNZ58Dcat04bU40x6S3+9uUZdAsPy6yia
-        U5cU7JLwYR7O5YdiVx+II4bweu2rjkM78MKN9Lq2k8/VjyRwgxmIEMZ7kDMhPMXB
-        OlZbKjDnOZJGZ2Utgrz0g8Ir21gOeFOWXGttMUpArOfJNCo/Ywr0ktth+5Smd/Gf
-        vvwaki9IPII4MIVQ2QmiR4DqvUvKFw6+IDW65gtfIoKM0aV/SeJh16GBrvP5bVyC
-        SwFqexupwWd1EXOX9FRY5pfnmTcya1uXpyYFt9fsonxcZbMN0BNlJ5mh9fXfWhSp
-        scKs2ub6T7caVYoSLSMn5l/tN9nfhKn8M6rhTwMbnbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=P0wi0P
-        pykWML/yKIJ62vyF1mno1HZGC4tJREhnvhDWw=; b=zbOV4FNcKfI7TI+M5YrHG4
-        W/WBCW9rGuHPwWmMc8wmnP3h4Bww46gOZFBVMVcpbbfJwls8vKE0iDq0diI/jxHy
-        qj1NJ70Qaqf/2EaT3Ixr1+WAH6zVDz9CaVvxVAdhicgYlOM8d7GV7ozuVtZ5O33A
-        3wKUIjKDXzCi+hrhnLx3ngw7OGne01GuUNDWOPbPq2qLUn34vgm3qAz9LKGitg2M
-        HRQUrmYSFtoUtYWFv3l4/JMbji8jjsQ3cOCKJVOHPDM1fkQyidci6Wd1V5I3KyTl
-        VsBq/aFhPDqvj2kMLrMy9a2lbAhgwSO9qS4GKmgfqBvZPRbeRdBboPLYz7ykgSzg
-        ==
-X-ME-Sender: <xms:gHhRXb4PFwbZLS-dTHh6giuDPXRgocAkcMaZL4Xt2PkFt4m5dod84A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddruddvgedgjeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgepud
-X-ME-Proxy: <xmx:gHhRXcFbOScBgN6stsDktgk_dWqt-N3seIe488meDzOcb89cV7NnxQ>
-    <xmx:gHhRXRnS3UP7SIL5iBPzlJx1gdeXSBYOD-3_D0FjaSEw1dno6dZ1Cw>
-    <xmx:gHhRXcao2FrOZTbzIkdraZF6vPY8xDAFnUfC7fqrLVxgG8hHVMRUXw>
-    <xmx:gXhRXT7uLVb-pBv7jq2nWXNx9beJk4iKm9MAY71Wroi67ZkE4-Sv9w>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 016DF380075;
-        Mon, 12 Aug 2019 10:32:31 -0400 (EDT)
-Date:   Mon, 12 Aug 2019 16:32:30 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Douglas Gilbert <dgilbert@interlog.com>,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        jejb@linux.vnet.ibm.com, hare@suse.de, bvanassche@acm.org,
-        linux-spdx@vger.kernel.org
+        Mon, 12 Aug 2019 10:38:58 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7CEWB8Y038480;
+        Mon, 12 Aug 2019 10:35:13 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ub9afhxwt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Aug 2019 10:35:13 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7CETp5C021839;
+        Mon, 12 Aug 2019 14:35:12 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01dal.us.ibm.com with ESMTP id 2u9nj6fes0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 12 Aug 2019 14:35:12 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7CEZAOX58655116
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 12 Aug 2019 14:35:10 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D478D6E056;
+        Mon, 12 Aug 2019 14:35:10 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7802B6E050;
+        Mon, 12 Aug 2019 14:35:09 +0000 (GMT)
+Received: from jarvis.ext.hansenpartnership.com (unknown [9.80.199.198])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 12 Aug 2019 14:35:09 +0000 (GMT)
+Message-ID: <1565620508.3422.6.camel@linux.vnet.ibm.com>
 Subject: Re: [PATCH v3 07/20] sg: move header to uapi section
-Message-ID: <20190812143230.GB14068@kroah.com>
-References: <20190807114252.2565-1-dgilbert@interlog.com>
- <20190807114252.2565-8-dgilbert@interlog.com>
- <20190812142451.GG8105@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+From:   James Bottomley <jejb@linux.vnet.ibm.com>
+To:     Christoph Hellwig <hch@infradead.org>,
+        Douglas Gilbert <dgilbert@interlog.com>
+Cc:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        hare@suse.de, bvanassche@acm.org, linux-spdx@vger.kernel.org
+Date:   Mon, 12 Aug 2019 07:35:08 -0700
 In-Reply-To: <20190812142451.GG8105@infradead.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20190807114252.2565-1-dgilbert@interlog.com>
+         <20190807114252.2565-8-dgilbert@interlog.com>
+         <20190812142451.GG8105@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-12_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908120163
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 07:24:51AM -0700, Christoph Hellwig wrote:
+On Mon, 2019-08-12 at 07:24 -0700, Christoph Hellwig wrote:
+> [note: question for the linux-spdx audience below]
+> 
+> > -
+> >  #ifdef __KERNEL__
+> >  extern int sg_big_buff; /* for sysctl */
+> >  #endif
+> 
+> FYI, these __KERNEL__ ifdefs in non-uapi headers should go away.
+> 
+> >  
+> > +/*
+> > + * In version 3.9.01 of the sg driver, this file was spilt in two,
+> > with the
+> > + * bulk of the user space interface being placed in the file being
+> > included
+> > + * in the following line.
+> > + */
+> > +#include <uapi/scsi/sg.h>
+> 
+> Splitting uapi headers is standard practive, no need for the comment,
+> especially not with a meaningless driver version number.
+> 
 > > diff --git a/include/uapi/scsi/sg.h b/include/uapi/scsi/sg.h
 > > new file mode 100644
 > > index 000000000000..072b45bd732f
@@ -85,19 +101,14 @@ On Mon, Aug 12, 2019 at 07:24:51AM -0700, Christoph Hellwig wrote:
 > 
 > This needs the syscall noticed for uapi headers.  FYI, what is our
 > stance of just adding that notice to headers newly moved to UAPI?
-
-Just add them.
-
 > Do we need agreement from everyone who touched the file?  Or just
 > after we started the split and SPDX annotations, as in this case
 > this header used to be available to user programs?
 
-The license of the entire kernel source is pretty obvious that anything
-UABI related needs the dual license, so adding it is fine.
+It's pretty much covered by the original linux COPYING file, which
+contains the systemcall exception for everything.  I think our
+intention is that this still applies globally, so things can be moved
+into the UAPI without additional permissions.
 
-If not, the scripts will notice and we will just end up generating a
-patch to fix it anyway :)
+James
 
-thanks,
-
-greg k-h
