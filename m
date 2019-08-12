@@ -2,99 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59877898B4
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 10:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E2789B1F
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 12:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbfHLIbw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Aug 2019 04:31:52 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41586 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727063AbfHLIbw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Aug 2019 04:31:52 -0400
-Received: by mail-pl1-f193.google.com with SMTP id m9so47434586pls.8;
-        Mon, 12 Aug 2019 01:31:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=GkXc2q6hrKT3n5tKIOqt3FKeJIiJ+UpY638YqYejrko=;
-        b=nHv5Or8eGV6zJWYGj930jnePCX274A1UNwnrFU1OCWtmOI5K8gVQo46jqobYxJLJMG
-         gyhR2Lm92hfXVz1M6QgpSeC6uv85D/MN1PNLsAGqRRFz2I29w6d90EMgFMzEXSRandZE
-         RLEWH3SvOHQ/weg4HgPL1+c/yIMfNIvnBHCDweZ28QH14I0iKYFPb3bKqqYrXdrPpZdS
-         bFKDkbazfc4NNmanPJmfRRmZgAeUmplIPxBzI3f+w71Wa4O+hzRpExcYpqNnnHcWLDLj
-         1cQnfHGvR6EcL3MbZKIcODoSTSB4B+5gTB6YGGJwBVj4eyjOuSfWo+SjEKpeirDUXKbd
-         dGZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=GkXc2q6hrKT3n5tKIOqt3FKeJIiJ+UpY638YqYejrko=;
-        b=aOzmMdCMe2jHRkOaQ5G72l/R9qoLa5QTjl4z+mUUo22FHNQJvbhqhqqYozYhRpstb3
-         uLl+Bd81leQw1GJQD+Vn6dCTQ57SLsG09ElEmLLcQxqdqs0AKLxumdL1eAo4ky5fmPqN
-         u4FPbBOm5Nz5kkgu4E585zXhYjUljb5kstoHjAc5U4JpmEfWhnV1Iq+dJmDpGrFFKP4a
-         Z4VL5cdR8Sd1Tvr4W2BH8seQoFrpcxmJgVWZHosNEOPiAv5ypXM4yo8KiwrxQvPMHR0X
-         SWaMCi/9r6DCEImiZd4Tcg3AiX0ojsnVZTVjZ1Aq7R7dt2ORgvlsndZ+6WA6vSf3GjDr
-         SIxg==
-X-Gm-Message-State: APjAAAU6Iyv2EjKkAx9L008XyQzvHIprMQeD4sOhW8nxKnWg8Pn+J5DS
-        34vvL9tyX7AjG8LcOxt6k5k=
-X-Google-Smtp-Source: APXvYqzDrULP/oJzmzyREYSwdnYyvzp7mxxgjDbGZr1nn/ZwUPLGo0KeKQdor5FN7PQP5LRHg8vnbg==
-X-Received: by 2002:a17:902:e30b:: with SMTP id cg11mr32341992plb.335.1565598711739;
-        Mon, 12 Aug 2019 01:31:51 -0700 (PDT)
-Received: from hfq-skylake.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.googlemail.com with ESMTPSA id w2sm9100203pjr.27.2019.08.12.01.31.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 12 Aug 2019 01:31:50 -0700 (PDT)
-From:   Fuqian Huang <huangfq.daxian@gmail.com>
-Cc:     James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fuqian Huang <huangfq.daxian@gmail.com>
-Subject: [PATCH] scsi: lpfc: use spin_lock_irqsave instead of spin_lock_irq in IRQ context
-Date:   Mon, 12 Aug 2019 16:31:34 +0800
-Message-Id: <20190812083134.7033-1-huangfq.daxian@gmail.com>
-X-Mailer: git-send-email 2.11.0
+        id S1727747AbfHLKPl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Aug 2019 06:15:41 -0400
+Received: from sonic315-15.consmr.mail.bf2.yahoo.com ([74.6.134.125]:43530
+        "EHLO sonic315-15.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727323AbfHLKPk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 12 Aug 2019 06:15:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1565604939; bh=tPdyM4f7Tq8kspt5syr9wxbiHLUxanV8lkCr2Pkkkas=; h=Date:From:Reply-To:Subject:From:Subject; b=EXujxIZQM3gbLSH5laqqNzMAaTxDbnnU/a8WaGtyhBvtaiB8HaPNNziW6L6nWOule+p+sPiAp2d/qwgwV4LFB1UdU8L87Y0t+8/DdXOf1VE4V2ilCT7rhtOR8vVcDJ7vA5D3NjiPJ1zVW6Wh0TmuHBYmzgt2HDWyb1BPXI1UlnO8jJunBf/BuNpQQjpiBwW3do2vaW7BRDk1JgS4HBket9/GYpJrGJiQ29aJDPMTARP0gTHknSNIT6SMOFBFNXo2H4pHHR6J8NkAEuZiNW7jwSLO/Bi5hxDSgEsjqFRQcBZ5xELgDYMqsSbec1BuM88uw14X1+DymH8L9BZSBR9rlQ==
+X-YMail-OSG: 7l55mJYVM1mC2fL_k.BG2wggnARqIXH9lSOBvS4RCDdpOrcqL2u6wKmmtlkbYe3
+ 8zG96a75I02RodMscBgOu3MBUz_4ixpAVSpc2H3PNTbUveMdV7xcPfb.ZtvX88EtUEF1xZ3RBmEy
+ MQ.GeUrjJ6GfY4gD0Jd11H2W1Ok761VfVGBpijJ17AWnAvuuGiwZ1tFaid.7k4RXxrI5rEliuq1C
+ uDXZpHAwlPO.gercT8LGsq7k46hEXElJJzmKwnVxkHHvl0t2ANl79PIIRZoSwO_3Y.slmw6wM5ww
+ QXWRohBGAtfGz3cnfkqNZw8NDvYS8n6swU0XCgcRhgL_X.h0Y9LqcYrEiCEoAFGp6EfWDPsaA4Qe
+ vk9wII4nZefI0IBw_scf3MOarvSarlN6b9QH7Vd08xHWEjw7nMR6yV99.SZHmAn6UBvKlTAvo3Dc
+ o1y7ujFj2Kbe7s8MMP5lMcyOpMHdDp3fsMfZZo858vk.9sqzQORZb5hsEt0.Ai7Xt36uXWXh5SMA
+ UPFvgB6ZmV2t1VC9lGZpAQS8x95gBefAWryx41Ag_g6nDLauepmhhGMOgGwEWbQQdKzTUz6kRvN5
+ fMEAIQHTkyRrIJFLCrgaTdYBUDR8mgHew2q9J2IcSf0Yi8KZG6nBLaLZNahu9mfEVoMOe6pLMWAm
+ pZu4SkkCCYZ7Ut4NjtdSvfdopa_eIavaGHBs70nNy4kHbLhl9QFyVGtICDEBwbsh6KyG5cjbMsdB
+ sKGzSi8adWhTyiPYl1aG.8yY5nOviXx6P4.qkqZgoeSGVqMkQ8rh0ZJbfLozvdkswJmMmIiV0v9g
+ zLBllY1Lx4Fq9J8Yc3WZ4fnjdPVHstfbq6JsFYGQRiOuR71tizd5qArKinnwSMHnnrqTCVqvQogV
+ 5F.XjVbNQMMNiDdYVrcjeBFkgvFroyvcGOvgd.S6zvCG4ASmgPCf_zEfKCapjlUGW7.i0KytoskO
+ 969PwbbjcLBIoFyq6PmxKs2QSpydsIkeBMf8d_t76y.kHnOUwCztQ_t1S0i2nF6Zg8_2ZyOUKNT.
+ 0Pp4UhRgGQfD1SEh7uxIKrM66NDyY_RdYP04rnUT3.KR3QtBV6o45i_6GjF2XyE_vPNR3yEi6wn_
+ Bq2srbJkHoHhknI7K2.DEioScd4Xotzn9sgMkfvWoHyKSXpxzBVpGJN5QyvTefwqFUGk5ea43nUO
+ OKnQ6XFUrwYyV69yp7OFx7b9vU2qb1VRqIEZUcdj7VnF5LMBwyzwI_Cp636dvQKmw6zGw_Diy9bU
+ 2d0GJtKgb0A--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.bf2.yahoo.com with HTTP; Mon, 12 Aug 2019 10:15:39 +0000
+Date:   Mon, 12 Aug 2019 10:15:35 +0000 (UTC)
+From:   Aisha Gaddafi <gaddafi661@gmail.com>
+Reply-To: gaisha983@gmail.com
+Message-ID: <300712006.2989078.1565604935757@mail.yahoo.com>
+Subject: Dear Friend,
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-As spin_unlock_irq will enable interrupts.
-Function lpfc_findnode_rpi is called from
-    lpfc_sli_abts_err_handler (./drivers/scsi/lpfc/lpfc_sli.c)
- <- lpfc_sli_async_event_handler
- <- lpfc_sli_process_unsol_iocb
- <- lpfc_sli_handle_fast_ring_event
- <- lpfc_sli_fp_intr_handler
- <- lpfc_sli_intr_handler
- and lpfc_sli_intr_handler is an interrupt handler.
-Interrupts are enabled in interrupt handler.
-Use spin_lock_irqsave/spin_unlock_irqrestore instead of spin_(un)lock_irq
-in IRQ context to avoid this.
+Dear Friend,
 
-Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
----
- drivers/scsi/lpfc/lpfc_hbadisc.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I came across your e-mail contact prior a private search while in need of 
+your assistance. My name is Aisha  Gaddafi a single Mother and a Widow with 
+three Children. I am the only biological Daughter of late Libyan President 
+(Late Colonel Muammar Gaddafi).
 
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index 28ecaa7fc715..cf02c352b324 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -6065,10 +6065,11 @@ lpfc_findnode_rpi(struct lpfc_vport *vport, uint16_t rpi)
- {
- 	struct Scsi_Host *shost = lpfc_shost_from_vport(vport);
- 	struct lpfc_nodelist *ndlp;
-+	unsigned long flags;
- 
--	spin_lock_irq(shost->host_lock);
-+	spin_lock_irqsave(shost->host_lock, flags);
- 	ndlp = __lpfc_findnode_rpi(vport, rpi);
--	spin_unlock_irq(shost->host_lock);
-+	spin_unlock_irqrestore(shost->host_lock, flags);
- 	return ndlp;
- }
- 
--- 
-2.11.0
+I have investment funds worth Twenty Seven Million Five Hundred Thousand 
+United State Dollar ($27.500.000.00 ) and i need a trusted investment 
+Manager/Partner because of my current refugee status, however, I am 
+interested in you for investment project assistance in your country, may be 
+from there, we can build business relationship in the nearest future.
 
+I am willing to negotiate investment/business profit sharing ratio with you 
+base on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply urgent 
+to enable me provide you more information about the investment funds.
+
+Your Urgent Reply Will Be Appreciated.
+
+Best Regards
+Mrs Aisha Gaddafi
+(gaisha983@gmail.com)
