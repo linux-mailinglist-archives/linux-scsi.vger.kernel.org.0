@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 191928952F
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 03:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E1E8954C
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 04:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726747AbfHLBgI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 11 Aug 2019 21:36:08 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:48184 "EHLO huawei.com"
+        id S1726307AbfHLCAQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 11 Aug 2019 22:00:16 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4657 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726144AbfHLBgI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 11 Aug 2019 21:36:08 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 49FDF76FD2DBFE3D8E2D;
-        Mon, 12 Aug 2019 09:36:06 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS410-HUB.china.huawei.com
- (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Mon, 12 Aug 2019
- 09:35:55 +0800
+        id S1726236AbfHLCAQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 11 Aug 2019 22:00:16 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 117E496AD85FA51FADD4;
+        Mon, 12 Aug 2019 10:00:14 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.439.0; Mon, 12 Aug 2019
+ 10:00:04 +0800
 From:   zhengbin <zhengbin13@huawei.com>
 To:     <bvanassche@acm.org>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <ming.lei@redhat.com>,
         <linux-scsi@vger.kernel.org>
 CC:     <houtao1@huawei.com>, <yanaijie@huawei.com>,
         <zhengbin13@huawei.com>
-Subject: [PATCH v2] SCSI: fix queue cleanup race before scsi_requeue_run_queue is done
-Date:   Mon, 12 Aug 2019 09:42:25 +0800
-Message-ID: <1565574145-45910-1-git-send-email-zhengbin13@huawei.com>
+Subject: [PATCH v3] SCSI: fix queue cleanup race before scsi_requeue_run_queue is done
+Date:   Mon, 12 Aug 2019 10:06:33 +0800
+Message-ID: <1565575593-114286-1-git-send-email-zhengbin13@huawei.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
@@ -107,11 +107,11 @@ Freed by task 46843:
 Fixes: 8dc765d438f1 ("SCSI: fix queue cleanup race before queue initialization is done")
 Signed-off-by: zhengbin <zhengbin13@huawei.com>
 ---
- drivers/scsi/scsi_lib.c | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ drivers/scsi/scsi_lib.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 11e64b5..5b9656e 100644
+index 11e64b5..620771d 100644
 --- a/drivers/scsi/scsi_lib.c
 +++ b/drivers/scsi/scsi_lib.c
 @@ -531,6 +531,11 @@ void scsi_requeue_run_queue(struct work_struct *work)
@@ -134,7 +134,7 @@ index 11e64b5..5b9656e 100644
 
  	if (blk_update_request(req, error, bytes))
  		return true;
-@@ -613,12 +619,16 @@ static bool scsi_end_request(struct request *req, blk_status_t error,
+@@ -613,12 +619,15 @@ static bool scsi_end_request(struct request *req, blk_status_t error,
  	__blk_mq_end_request(req, error);
 
  	if (scsi_target(sdev)->single_lun ||
@@ -145,8 +145,7 @@ index 11e64b5..5b9656e 100644
 +		ret = kblockd_schedule_work(&sdev->requeue_work);
 +		if (!ret)
 +			percpu_ref_put(&q->q_usage_counter);
-+	}
-+	else {
++	} else {
  		blk_mq_run_hw_queues(q, true);
 +		percpu_ref_put(&q->q_usage_counter);
 +	}
