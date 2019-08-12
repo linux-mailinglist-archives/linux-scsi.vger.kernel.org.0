@@ -2,81 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAD78A230
-	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 17:23:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D728A250
+	for <lists+linux-scsi@lfdr.de>; Mon, 12 Aug 2019 17:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727263AbfHLPXl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 12 Aug 2019 11:23:41 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:50176 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726831AbfHLPXl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 12 Aug 2019 11:23:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=j335fiiDQMBjJDi/0YItD4IEXZCw2bFlsQGThx9UUxc=; b=RFejK4MgtfOMyLRCkPcGWWTXk
-        nTXMwXgnvOqZBGhKIdS/oTSJC7Fa85pRnJpLb7/jmoDHvGt61cOj4sd/jUfzOjmAhwKkJxvFq1SaV
-        XiwPP5ctlHaLhGtfWQPjQ8/0lfftVXJfOlBjbWk+B0IDUDkXl1kii7giVW1MT54tQFaITVWSYQHgL
-        mvUbOF1EpBU8ob8+BygFFUD/GZdH7lceZc9oHRBQ+TOVrjJD1JsXp5w8kquMyGbYL3L+qYdUjt1z+
-        vo5heiTAcl4VEqb3Dmlgae8apLDPWMUyZJ0wmeKksUAfdqieEIFJqSdegrazCsWwroeB82cwHwW59
-        fLV17OjtA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hxCAd-0005L5-Uf; Mon, 12 Aug 2019 15:23:39 +0000
-Date:   Mon, 12 Aug 2019 08:23:39 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     James Bottomley <jejb@linux.vnet.ibm.com>
-Cc:     Douglas Gilbert <dgilbert@interlog.com>,
-        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-api@vger.kernel.org, martin.petersen@oracle.com,
-        hare@suse.de, bvanassche@acm.org
-Subject: Re: [PATCH v3 00/20] sg: add v4 interface
-Message-ID: <20190812152339.GA15295@infradead.org>
-References: <20190807114252.2565-1-dgilbert@interlog.com>
- <1565291455.3435.48.camel@linux.vnet.ibm.com>
+        id S1728106AbfHLPaU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 12 Aug 2019 11:30:20 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:49245 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727503AbfHLPaU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 12 Aug 2019 11:30:20 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 912E585536;
+        Mon, 12 Aug 2019 15:30:20 +0000 (UTC)
+Received: from [10.10.124.11] (ovpn-124-11.rdu2.redhat.com [10.10.124.11])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B55775C1B5;
+        Mon, 12 Aug 2019 15:30:19 +0000 (UTC)
+Subject: Re: [PATCH v2] tcmu: avoid use-after-free after command timeout
+To:     Dmitry Fomichev <dmitry.fomichev@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        target-devel@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+References: <20190811182510.1706-1-dmitry.fomichev@wdc.com>
+Cc:     Damien Le Moal <damien.lemoal@wdc.com>
+From:   Mike Christie <mchristi@redhat.com>
+Message-ID: <5D51860B.1060902@redhat.com>
+Date:   Mon, 12 Aug 2019 10:30:19 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
+ Thunderbird/38.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1565291455.3435.48.camel@linux.vnet.ibm.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20190811182510.1706-1-dmitry.fomichev@wdc.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Mon, 12 Aug 2019 15:30:20 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 12:10:55PM -0700, James Bottomley wrote:
-> Since this will be an extension of something that exists both in your
-> sg driver and in the block bsg interface (and thus needs an
-> implementation there), I added both linux-block and linux-api to the cc
-> (the latter because you're adding to an API).
+On 08/11/2019 01:25 PM, Dmitry Fomichev wrote:
+> In tcmu_handle_completion() function, the variable called read_len is
+> always initialized with a value taken from se_cmd structure. If this
+> function is called to complete an expired (timed out) out command, the
+> session command pointed by se_cmd is likely to be already deallocated by
+> the target core at that moment. As the result, this access triggers a
+> use-after-free warning from KASAN.
 > 
-> Simply extending sg to use the v4 header protocol in uapi/linux/bsg.h
-> is fine modulo the code being in the right form.  The problems are the
-> new ioctls you want to add that would need to be present there as well.
->  The specific question being how we support async or non-blocking I/O
-> on the sg and bsg interfaces.  The standard way we add asynchronous I/O
-> is supposed to be via .poll on the file descriptor.  you already use
-> read and write in sg and bsg doesn't have a polling interface, but it
-> looks like we could use MSG to signal an ioctl is ready to be serviced
-> for both.  Would shifting to a non-blocking poll based interface for
-> ioctls remove the need to add these SG_IOSUBMIT/SG_IORECEIVE ioctls
-> since we could now do everything over blocking or non-blocking SG_IO?
+> This patch fixes the code not to touch se_cmd when completing timed out
+> TCMU commands. It also resets the pointer to se_cmd at the time when the
+> TCMU_CMD_BIT_EXPIRED flag is set because it is going to become invalid
+> after calling target_complete_cmd() later in the same function,
+> tcmu_check_expired_cmd().
+> 
+> Signed-off-by: Dmitry Fomichev <dmitry.fomichev@wdc.com>
+> ---
 
-I've spent some wading through this patchset, and it is huge.  I thing
-we need to stage it a bit better and split it into multiple.
+Acked-by: Mike Christie <mchristi@redhat.com>
 
- 1) One (or maybe even multiple) with all the cleanups and minor
-    speedups.  That alone is a lot of changes, and will take a while
-    to settle
- 2) extending the bsg/v4 API to /dev/sg.  I think that is very useful,
-    although I need to look at the details a bit more
- 3) adding a new async API.  While this seems very useful from the
-    theoretical perspective, I really thing the guts need to be in
-    common code and then be used by sg and the block device nodes
-    (if it happens to be an ioctl).  What worries me a bit there
-    is that we have another way to deal with async I/O.  I wonder
-    if we can fit this into aio/io_uring somehow.  But I'd rather
-    not even thing about that much until we've done all the groundwork.
