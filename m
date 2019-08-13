@@ -2,146 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1B3B8C271
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Aug 2019 22:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52978C331
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Aug 2019 23:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbfHMU67 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 13 Aug 2019 16:58:59 -0400
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:44504 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726066AbfHMU66 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 13 Aug 2019 16:58:58 -0400
-Received: by mail-oi1-f173.google.com with SMTP id k22so676049oiw.11
-        for <linux-scsi@vger.kernel.org>; Tue, 13 Aug 2019 13:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lucidpixels.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VLXSFRnf/VIzQ21AcmSK772oG4DlhLGeRGOKcwe7z2Y=;
-        b=RwjDgHIBooTMtsgMMMv7jZGN7mBlZ1nzEENknrebjwK9A6Wp6aUeAHB1auBdMY68VA
-         Tji92esv4uo8l5MCJ1BP+2/nW2CAjQNhhWztMtyYpCOmGt+A4E9wEAhQUXYAkxe0EB04
-         t8K5QC/AwYNiOGiB8eVzxFSiQo1JBhxcKwuQI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VLXSFRnf/VIzQ21AcmSK772oG4DlhLGeRGOKcwe7z2Y=;
-        b=KZnsmShSAgamrznP3qql/vsHplm1IAO2qdySDKgh8LtDBygFDrDXRIwBQ817U77Gcu
-         fUKOooRlWhdRUMKsFa/BJQ2NqoVU74aXiI7GaPE2B8oJq2X5s20tqKzu1Ol7UtpMkedJ
-         miTeBGDOloN2zJS9tsad5NQN4TIC/RllmjUF4x4dg5F5pfd37LB6q4vdeYxBB0kfSp/2
-         jOgVjr9b6lGNAv8TVwB6Z1RcgH/NDDlsYPwJTXB0xdroEaIHjk3LLf2DYuLS9Nyj+qXG
-         XyDojV/K8OHBenJ8Q3+AqQCzZnQWttBHqj+UseFhBfU+t1d7P/CAk9ZeNLQ/nRFEy/a3
-         iiBw==
-X-Gm-Message-State: APjAAAVmG2AMjP9cKcAnEI1u58SyXJXrZpAp0aDESqOdyTtxzQ9+bU0r
-        PT0jaPPvQPg8oh3a+L71U9KJZ2MmCTL2dXMpRKXYmQ==
-X-Google-Smtp-Source: APXvYqwT9kvM1vnuNFGjd4qoVslPyJL8Ssw80+EBOGlrtoa0kEl6HdgrfAcXq6R3Lzz2qlWEvzcuAzUCWlqlYvNUaPc=
-X-Received: by 2002:aca:1109:: with SMTP id 9mr2984466oir.100.1565729936999;
- Tue, 13 Aug 2019 13:58:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <006d01d549db$54e42140$feac63c0$@lucidpixels.com>
- <yq1ftmcct1j.fsf@oracle.com> <002d01d54dc3$17c278c0$47476a40$@lucidpixels.com>
- <yq1r25p7qzp.fsf@oracle.com> <BYAPR04MB58166DE7AFE1081CEDF674BDE7D20@BYAPR04MB5816.namprd04.prod.outlook.com>
-In-Reply-To: <BYAPR04MB58166DE7AFE1081CEDF674BDE7D20@BYAPR04MB5816.namprd04.prod.outlook.com>
-From:   Justin Piszcz <jpiszcz@lucidpixels.com>
-Date:   Tue, 13 Aug 2019 16:58:46 -0400
-Message-ID: <CAO9zADxursoc-tLjhCdJauzw4t_kokgOyg0kHC8b9kaBH8oUqA@mail.gmail.com>
-Subject: Re: 5.2.x kernel: WD 8TB USB Drives: Unaligned partial completion
- (resid=78, sector_sz=512)
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        id S1726974AbfHMVGi convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 13 Aug 2019 17:06:38 -0400
+Received: from m9a0001g.houston.softwaregrp.com ([15.124.64.66]:54171 "EHLO
+        m9a0001g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726560AbfHMVGi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 13 Aug 2019 17:06:38 -0400
+X-Greylist: delayed 1568 seconds by postgrey-1.27 at vger.kernel.org; Tue, 13 Aug 2019 17:06:37 EDT
+Received: FROM m9a0001g.houston.softwaregrp.com (15.121.0.191) BY m9a0001g.houston.softwaregrp.com WITH ESMTP
+ FOR linux-scsi@vger.kernel.org;
+ Tue, 13 Aug 2019 21:06:14 +0000
+Received: from M9W0068.microfocus.com (2002:f79:bf::f79:bf) by
+ M9W0068.microfocus.com (2002:f79:bf::f79:bf) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10; Tue, 13 Aug 2019 20:31:07 +0000
+Received: from NAM05-CO1-obe.outbound.protection.outlook.com (15.124.72.10) by
+ M9W0068.microfocus.com (15.121.0.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10 via Frontend Transport; Tue, 13 Aug 2019 20:31:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aXMwMapwaUmJc5kBEHd6UbI/WFdSfcbCxYz0+SzWxXYm2eNAR8+3SkXsmtrkERuDE+YPTU3G3pNwOJ82wT+Dm53NNSK3MVQ5A0G6PW5An4RoGshagF518aIFo/Lyj0PdtD0AA/6MKVhZsNuVf7ySmWYEvCjRIfsB4Y+re2WiefKgK9UsLPluUAucVoffvXfaDGqj1QaYZcOdov5Pk9GOhx9oSJW1tOagSKyA7YoV2Ho9VoYfDrefUk0sCc0dSobZ+QwQfzxZadxvVd1TbDky0F5E9OXTDselINNIsL3LKvOFZf0GWrOK0rWGo8VKjSN0cfKw124lLRZnevO7S05VtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a/koJh9iRsXmSMRW/rRuhhulP2IR289NhYEMkZLFI5I=;
+ b=UHAJ0zhUfeTJUKZOFJqmSwnen7mre+GHjhNVGRwsE9jrc6W/HEztAazDmim3+sUTv2fDPhks5P/laxZn4vwOMVBI/OB9Q2PDI6+HZYbhfeTXzHFR2/WDzRehX3OPas7MYPlgwZb4HNoSrRC1el857x/Pb+ry5nQPWhwE6B5LuczxQeQ2AjsR7QP9LNsnOkypMU2mpLwHSB+7uizwP0zmABGOOnViUzVrlTdhaohhAceS86Vfsmahn5bX8NEEaailQLCL4p2dX6ownAsAq4y+1QyJJfNUIgU7g7Lm4K7JcaJmgMlBHhJxitl3ZKwS3RV8QUtMSrcfchuBHAsGe8Zj9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Received: from CH2PR18MB3349.namprd18.prod.outlook.com (52.132.246.91) by
+ CH2PR18MB3430.namprd18.prod.outlook.com (52.132.246.206) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2157.14; Tue, 13 Aug 2019 20:31:05 +0000
+Received: from CH2PR18MB3349.namprd18.prod.outlook.com
+ ([fe80::8818:7a86:93d7:561a]) by CH2PR18MB3349.namprd18.prod.outlook.com
+ ([fe80::8818:7a86:93d7:561a%6]) with mapi id 15.20.2157.022; Tue, 13 Aug 2019
+ 20:31:05 +0000
+From:   Martin Wilck <Martin.Wilck@suse.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Himanshu Madhani <hmadhani@marvell.com>
+CC:     Bart Van Assche <Bart.VanAssche@sandisk.com>,
+        Joe Carnuccio <joe.carnuccio@cavium.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Martin Wilck <Martin.Wilck@suse.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH 0/3] scsi: qla2xxx: fixes for FW trace/dump buffers
+Thread-Topic: [PATCH 0/3] scsi: qla2xxx: fixes for FW trace/dump buffers
+Thread-Index: AQHVUhYH5w0Urzg+Q0aQfFT7/cf/gw==
+Date:   Tue, 13 Aug 2019 20:31:04 +0000
+Message-ID: <20190813203034.7354-1-martin.wilck@suse.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: AM6PR0502CA0012.eurprd05.prod.outlook.com
+ (2603:10a6:209:1::25) To CH2PR18MB3349.namprd18.prod.outlook.com
+ (2603:10b6:610:2c::27)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Martin.Wilck@suse.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.22.0
+x-originating-ip: [94.218.227.174]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: afe5cc80-c18b-492c-c001-08d7202d29ce
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CH2PR18MB3430;
+x-ms-traffictypediagnostic: CH2PR18MB3430:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CH2PR18MB3430167CCC32E4A21F76CEC1FCD20@CH2PR18MB3430.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 01283822F8
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(396003)(39860400002)(136003)(376002)(346002)(199004)(189003)(71190400001)(53936002)(478600001)(64756008)(110136005)(71200400001)(66476007)(81156014)(66556008)(6486002)(81166006)(5660300002)(50226002)(54906003)(66446008)(316002)(99286004)(6512007)(6436002)(8936002)(66946007)(2906002)(86362001)(36756003)(4326008)(26005)(102836004)(186003)(4744005)(305945005)(14454004)(7736002)(14444005)(256004)(25786009)(386003)(8676002)(66066001)(3846002)(6116002)(52116002)(2616005)(486006)(44832011)(1076003)(476003)(6506007);DIR:OUT;SFP:1102;SCL:1;SRVR:CH2PR18MB3430;H:CH2PR18MB3349.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: suse.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: H3C3yvin+Lf+Ifki/nCI6BDFHehFq6XF7t95W37015ZBtk3l9SPAXvUDYOMFP6nIjF8agNeo7H+SQhnfmX0s/KlVc9m8Y0VLbHJNuaDILz8AW3liIxT3Bf5FyvkQDhED1X4dr9eNPCwHiyNZBIUxxVTEBFo8uOsaQggkIEgT8v66Q16DY9TqEFK7M466pHI5Q+WoDnBjbOz3Wh6EhRZFFa03bn49b7MP3KhpVDkvxJ5HgsSNn06443ICLWOayPcfWEBw8dm8xEPGbvW9bf0qSbcUJ5DpAZNe4UwQNK0hboEFgLxBpLGe+VtMn09qXHEezG6SDn2+ZBxsgFmkebjZqtAXDLIUMRMmUGh+5yr1sYcvf3c0wsqAGAXCA3gRNwzB6tZu9JN9kaVpAzkMiU+xmRvlir7+7JUSNwxPmyrv1Gk=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: afe5cc80-c18b-492c-c001-08d7202d29ce
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2019 20:31:05.0852
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 856b813c-16e5-49a5-85ec-6f081e13b527
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6kyNJvmkhyCYp+JFwKu83nZtx3w8X9iQJYMJRI6CAxUGFW4xr6YH23Cru1WiHIL1dWYVlrpSZJp+uQa8dIsZsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR18MB3430
+X-OriginatorOrg: suse.com
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 6:48 AM Damien Le Moal <Damien.LeMoal@wdc.com> wrote:
->
-> On 2019/08/12 19:12, Martin K. Petersen wrote:
-> >
-> > Justin,
-> >
-> >>> Attached 2 x brand new Western Digital 8TB USB 3.0 drives awhile back
-> >>> and ran some file copy tests and was getting these warnings-- is
-> >>> there any way to avoid these warnings?  I did confirm with parted
-> >>> that the partition was aligned but this appears to be something
-> >>> related to the firmware on the device according to [1] and [2]?
-> >
-> >> sg_vpd_bdc.txt
-> >> Block device characteristics VPD page (SBC):
-> >>   Nominal rotation rate: 5400 rpm
-> >>   Product type: Not specified
-> >>   WABEREQ=0
-> >>   WACEREQ=0
-> >>   Nominal form factor: 3.5 inch
-> >>   ZONED=0
-> >
-> > Damien: What can we do to limit the messages in cases like this? Would
-> > it make sense to make the residual warning conditional on sd_is_zoned()?
-> >
->
-> Justin,
->
-> Can you send the output of "lsscsi" for these drives ? I need the exact disk
-> model ref name and FW version to see if there is an update for this problem, if
-> it is a known one. If it is not, I will signal it and get a fix started.
->
+From: Martin Wilck <mwilck@suse.com>
 
-Requested lsscsi output:
+Hi Himanshu, hi Martin,
 
+Please consider this series for merging.
 
-[7:0:0:0]    disk    WD       My Book 25EE     4004  /dev/sdf
-[7:0:0:1]    enclosu WD       SES Device       4004  -
-[8:0:0:0]    disk    WD       My Book 25EE     4004  /dev/sdg
-[8:0:0:1]    enclosu WD       SES Device       4004  -
+The first patch of the series is a fix for a memory corruption we
+saw in a test where qla2xxx was loaded/unloaded repeatedly under
+memory pressure. The other ones are consistency fixes that occured
+to me while working on this part of the code.
 
-Host: scsi7 Channel: 00 Target: 00 Lun: 00
-  Vendor: WD       Model: My Book 25EE     Rev: 4004
-  Type:   Direct-Access                    ANSI SCSI revision: 06
-Host: scsi7 Channel: 00 Target: 00 Lun: 01
-  Vendor: WD       Model: SES Device       Rev: 4004
-  Type:   Enclosure                        ANSI SCSI revision: 06
-Host: scsi8 Channel: 00 Target: 00 Lun: 00
-  Vendor: WD       Model: My Book 25EE     Rev: 4004
-  Type:   Direct-Access                    ANSI SCSI revision: 06
-Host: scsi8 Channel: 00 Target: 00 Lun: 01
-  Vendor: WD       Model: SES Device       Rev: 4004
-  Type:   Enclosure                        ANSI SCSI revision: 06
-
-[7:0:0:0]    disk    WD       My Book 25EE     4004  /dev/sdf
-  state=running queue_depth=1 scsi_level=7 type=0 device_blocked=0 timeout=30
-[7:0:0:1]    enclosu WD       SES Device       4004  -
-  state=running queue_depth=1 scsi_level=7 type=13 device_blocked=0 timeout=30
-[8:0:0:0]    disk    WD       My Book 25EE     4004  /dev/sdg
-  state=running queue_depth=1 scsi_level=7 type=0 device_blocked=0 timeout=30
-[8:0:0:1]    enclosu WD       SES Device       4004  -
-  state=running queue_depth=1 scsi_level=7 type=13 device_blocked=0 timeout=30
-
-[7:0:0:0]    disk    none                              /dev/sdf
-[7:0:0:1]    enclosu 5000cca252e63312  -
-[8:0:0:0]    disk    none                              /dev/sdg
-[8:0:0:1]    enclosu 5000cca252e6a2f9  -
-
-[7:0:0:0]    disk    WD       My Book 25EE     4004  /dev/sdf   8.00TB
-[7:0:0:1]    enclosu WD       SES Device       4004  -               -
-[8:0:0:0]    disk    WD       My Book 25EE     4004  /dev/sdg   8.00TB
-[8:0:0:1]    enclosu WD       SES Device       4004  -               -
-
-
-[7:0:0:0]    disk    usb:1-1.2:1.0                   /dev/sdf
-[7:0:0:1]    enclosu usb:1-1.2:1.0                   -
-[8:0:0:0]    disk    usb:1-1.1:1.0                   /dev/sdg
-[8:0:0:1]    enclosu usb:1-1.1:1.0                   -
-
-# smartctl -a /dev/sdg
-/dev/sdg: Unknown USB bridge [0x1058:0x25ee (0x4004)]
-
-# smartctl -a /dev/sdf
-/dev/sdf: Unknown USB bridge [0x1058:0x25ee (0x4004)]
+The behavior in the failure case was not consistent in the current
+code; patch 3/3 makes the code do what I think makes most sense in
+a failure scenario.
 
 Regards,
+Martin
 
-Justin.
+Martin Wilck (3):
+  scsi: qla2xxx: qla2x00_alloc_fw_dump: set ha->eft
+  scsi: qla2xxx: unset RCE/EFT fields in failure case
+  scsi: qla2xxx: calculate dump size if EFT alloc fails
+
+ drivers/scsi/qla2xxx/qla_init.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+-- 
+2.22.0
+
