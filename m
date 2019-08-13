@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B17FB8C28C
-	for <lists+linux-scsi@lfdr.de>; Tue, 13 Aug 2019 23:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDDE8C332
+	for <lists+linux-scsi@lfdr.de>; Tue, 13 Aug 2019 23:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727116AbfHMVDO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 13 Aug 2019 17:03:14 -0400
-Received: from m9a0002g.houston.softwaregrp.com ([15.124.64.67]:37784 "EHLO
-        m9a0002g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727088AbfHMVDN (ORCPT
+        id S1727079AbfHMVGl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 13 Aug 2019 17:06:41 -0400
+Received: from m9a0003g.houston.softwaregrp.com ([15.124.64.68]:45388 "EHLO
+        m9a0003g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726560AbfHMVGk (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 13 Aug 2019 17:03:13 -0400
-Received: FROM m9a0002g.houston.softwaregrp.com (15.121.0.190) BY m9a0002g.houston.softwaregrp.com WITH ESMTP
+        Tue, 13 Aug 2019 17:06:40 -0400
+Received: FROM m9a0003g.houston.softwaregrp.com (15.121.0.191) BY m9a0003g.houston.softwaregrp.com WITH ESMTP
  FOR linux-scsi@vger.kernel.org;
- Tue, 13 Aug 2019 21:02:42 +0000
+ Tue, 13 Aug 2019 21:06:12 +0000
 Received: from M4W0335.microfocus.com (2002:f78:1193::f78:1193) by
- M9W0067.microfocus.com (2002:f79:be::f79:be) with Microsoft SMTP Server
+ M9W0068.microfocus.com (2002:f79:bf::f79:bf) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10; Tue, 13 Aug 2019 20:31:08 +0000
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com (15.124.8.11) by
+ 15.1.1591.10; Tue, 13 Aug 2019 20:31:13 +0000
+Received: from NAM05-CO1-obe.outbound.protection.outlook.com (15.124.8.10) by
  M4W0335.microfocus.com (15.120.17.147) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10 via Frontend Transport; Tue, 13 Aug 2019 20:31:09 +0000
+ 15.1.1591.10 via Frontend Transport; Tue, 13 Aug 2019 20:31:13 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ShX6k/Fuz6I3juxX5mJ+sfR+JlaJ5jvSMOQAzY9EuvuTIXF8FNQbyef3cw2xWlRdSDzuKo0UARZT3qHZzgAunYqWVmF/3yw8U26iqeWmn/NNLRzMappnBCV8FUMANC6NQLmW1YlGDINjxPA/YxpUKqa2jjSmXyLMgS19UnFTNILyhDvJMslh2hfd3JB0TAVrzVaccBNRLBF/InyfG1bdYslAzvBR/a0o73ZkUZuwY6jkZfU2fT/wMP8Xhs9bJGwuWcXO9EnbAvC6uB9yBywfi6PHQgau7wMzIIzzO7QEQbZ4ldAJCWNbqaaggHWSGuWC3LaOoABbA116V7hX8McF/A==
+ b=jDXEClbP55AAOvw5V2xwNM3axuJqJ1Sys2OagHTHzdJWM7IYvBl7sRnOv+RCaMZ/g0VVE8KhNuunLQ+MrYsn31/kred1ohUchRnx1ebixjCAyNoM/tV6mqLHEefJ9Ipzq938DSgR6snbpQz9JMmG8m69nlKEVbPNXLbLwg6oQ5c7Zj89cy+Mdki6tpWk404JOs9mJCth1jE3WpvLD+6F2xxhlyKQUEmbe9jSIkJJW+GuSO32Y7JbY2+/0KSKeVGiS6tfSMF7NxN4+R77PV2TLCFitbGMoPwRIHUPvdSivCAeJCdsdOP6zGstxvVe/UFJdXrsT0ClFfRpEMJbCYyo3w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oCqLD57xO0gflcJfrVOgLuxP4FR6U+XweOaYdp1Vn+M=;
- b=DZ0QSLSWcKPWAV8gLudpP96wvaUkGAne9pGUMSXyjuvWRbfMt5YriNgBHW+teGgbzNOUZzrB9R7sISkvnuK6Npp/rRHtjFdBxUyy+5NROHvwXQTlqsm4g+CTni1qNJgWql91GUTdSZo2e3HXFK0FbU7yerx2GWBte3P2s0RfJrwGM0q8WKEg3xq3jEBq7IK/817zqQWWMEXQPTV2/1Do1a42WIy8XYKV2WXbrVhiwQ0DAyHhIxKc4gJthfADA9EXI4PCPQ5c7PgGeOfdL9zCA6/9Xy+/Le3czR0lnG4sn8v8WpxDkHdm8Iu4tp/1stBe6pI2Aie53mDUNbnidSRtKw==
+ bh=Q4QaegRr4INuxZtTuEd18U8xeBeNhBcoBh7Rn/BF2nc=;
+ b=jMLLBertMXsNA+tHdlQtMXZXjWPx7hUl0iCR9uaeRGUiIDXVOGRGXes4ZfmkpFBom4hLhcUu7kE9votZIT/24g/qJjCwqG6cnD6JOjKCmFw64v5DtEov9Y7Q1LEsQ00gGaEZ7YdY+4K5DVP9UNheJO0doXtkT91t9gccg3PQo9YEQ0dv4HGCN58+sh1Ve1YyunP5lv1BBxfQ/rd0739wokA3eyieXgRCpmrXxJZIEt+sUXhZ6cg5mlQNcIgBuDe7Ua5Td300QJ9LjOHb1VUPNDIdla8nQ38ckRjleACKsYy+LJMGNs1hKOo/s+mLtBe99HiENE756SXtYjDoQaFt8Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
 Received: from CH2PR18MB3349.namprd18.prod.outlook.com (52.132.246.91) by
- CH2PR18MB3430.namprd18.prod.outlook.com (52.132.246.206) with Microsoft SMTP
+ CH2PR18MB3366.namprd18.prod.outlook.com (52.132.246.148) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2157.14; Tue, 13 Aug 2019 20:31:08 +0000
+ 15.20.2157.21; Tue, 13 Aug 2019 20:31:12 +0000
 Received: from CH2PR18MB3349.namprd18.prod.outlook.com
  ([fe80::8818:7a86:93d7:561a]) by CH2PR18MB3349.namprd18.prod.outlook.com
  ([fe80::8818:7a86:93d7:561a%6]) with mapi id 15.20.2157.022; Tue, 13 Aug 2019
- 20:31:07 +0000
+ 20:31:12 +0000
 From:   Martin Wilck <Martin.Wilck@suse.com>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Himanshu Madhani <hmadhani@marvell.com>
@@ -51,11 +51,12 @@ CC:     Bart Van Assche <Bart.VanAssche@sandisk.com>,
         Martin Wilck <Martin.Wilck@suse.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 1/3] scsi: qla2xxx: qla2x00_alloc_fw_dump: set ha->eft
-Thread-Topic: [PATCH 1/3] scsi: qla2xxx: qla2x00_alloc_fw_dump: set ha->eft
-Thread-Index: AQHVUhYJzKIvwNb7KkmQp5i87fb5BQ==
-Date:   Tue, 13 Aug 2019 20:31:07 +0000
-Message-ID: <20190813203034.7354-2-martin.wilck@suse.com>
+Subject: [PATCH 3/3] scsi: qla2xxx: calculate dump size if EFT alloc fails
+Thread-Topic: [PATCH 3/3] scsi: qla2xxx: calculate dump size if EFT alloc
+ fails
+Thread-Index: AQHVUhYLUXzRWI/JRUeS69TkO7HK1g==
+Date:   Tue, 13 Aug 2019 20:31:11 +0000
+Message-ID: <20190813203034.7354-4-martin.wilck@suse.com>
 References: <20190813203034.7354-1-martin.wilck@suse.com>
 In-Reply-To: <20190813203034.7354-1-martin.wilck@suse.com>
 Accept-Language: en-US
@@ -71,29 +72,29 @@ x-ms-exchange-messagesentrepresentingtype: 1
 x-mailer: git-send-email 2.22.0
 x-originating-ip: [94.218.227.174]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e259d88d-f6f1-4cfd-be0f-08d7202d2b79
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CH2PR18MB3430;
-x-ms-traffictypediagnostic: CH2PR18MB3430:
+x-ms-office365-filtering-correlation-id: 2187d57a-dc59-42f4-0669-08d7202d2e3d
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:CH2PR18MB3366;
+x-ms-traffictypediagnostic: CH2PR18MB3366:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CH2PR18MB3430E46F3EB53D52AFCC33CAFCD20@CH2PR18MB3430.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-microsoft-antispam-prvs: <CH2PR18MB3366C284FF00FE776EB64911FCD20@CH2PR18MB3366.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2803;
 x-forefront-prvs: 01283822F8
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(396003)(39860400002)(136003)(376002)(346002)(199004)(189003)(71190400001)(53936002)(478600001)(64756008)(110136005)(71200400001)(66476007)(81156014)(66556008)(6486002)(81166006)(5660300002)(50226002)(54906003)(66446008)(316002)(99286004)(6512007)(6436002)(8936002)(66946007)(2906002)(86362001)(36756003)(4326008)(26005)(102836004)(186003)(4744005)(305945005)(14454004)(7736002)(256004)(25786009)(386003)(8676002)(66066001)(3846002)(6116002)(52116002)(76176011)(11346002)(2616005)(486006)(44832011)(1076003)(476003)(446003)(6506007);DIR:OUT;SFP:1102;SCL:1;SRVR:CH2PR18MB3430;H:CH2PR18MB3349.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(39860400002)(396003)(376002)(136003)(366004)(189003)(199004)(71190400001)(6436002)(8936002)(54906003)(110136005)(76176011)(2906002)(66066001)(52116002)(50226002)(71200400001)(316002)(81156014)(81166006)(4326008)(5660300002)(6486002)(256004)(25786009)(3846002)(7736002)(1076003)(26005)(8676002)(6512007)(478600001)(53936002)(6116002)(486006)(2616005)(186003)(11346002)(14454004)(305945005)(446003)(44832011)(36756003)(66556008)(64756008)(386003)(6506007)(66946007)(66446008)(102836004)(66476007)(99286004)(476003)(86362001);DIR:OUT;SFP:1102;SCL:1;SRVR:CH2PR18MB3366;H:CH2PR18MB3349.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: suse.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: CMo1Q3/CrRWoaMKg8KFlvyxQvmjlWPavNayjC8tg4OoJMyF70B03elgtFNAlAKjm23WxBaZNhEm6TX9OQe3r2dv8W3r6sq+K125Jh5tdEvyiCfvqLSl/p/aNTsVM9I9EX3VO5tATa2MIjJ1nYZqLD3+nSpOg5x2iBzqWk27De4lFwSuP9yk5LiYnOPsVZ4YCsl5aMwvA1dpqbSUdpBDXJvH/d3rtAHRs/3ePtoJwhYKCiejeU5ZYKCaO/edbyirlxgxSZsjSc2ViEQy5pCqsOVhRSIoJ+XUwAVbUxvWSqXKcGMwt1y8wHz968zOFO8RHE70R7ctGj02QE1/Bw+cPl72YncD9O2pWguZu5tIROSZcVVr5sbBkVXg2JH93XGSx/uPu/md2tb5Xd/CGtlZhn7HLPw5+5ScZy1cMCoGj/nU=
+x-microsoft-antispam-message-info: LKdWYEAbZ8hwDqa4L6g3M7fe7raGSGWRPVjlxiQd2foqj7IPg9WKdy88twbTNox1DP+mNErKakgNRpFg2cSeTYRAGRS8FPykjyTtPaXInXG0Bj0wNDf6pfBduwD5xQf8GEw7DJlK9GMsVKY+QxCIRiCEosv0bQNdrmnfM6KrbaPzDReqDtujuDGmJT/J/HHLbSzlLHS8TBzZQJuzmCu8HiZc535Tte2IE5vtlwSirI2YkJ+aJvZ1QX5QdWxbQe6OEVxkgSs/6kc/FC6djHXWPMXwAN8Oc+EVx4JBrE1KYHn79jZYaYtgZEE6ibbnaMsReOsUYXCA1kiVHV7nWg2qqZiVhnuBncstz1yZDVPJvqzcnjjxoCZiW8WY6hS9jn1wyzReHuUszABSFq1DlJJXzX34w/kNg6MUQcKCWR8PsD8=
 Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: e259d88d-f6f1-4cfd-be0f-08d7202d2b79
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2019 20:31:07.6197
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2187d57a-dc59-42f4-0669-08d7202d2e3d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2019 20:31:11.9271
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 856b813c-16e5-49a5-85ec-6f081e13b527
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rDHPP97Qc/etlopXTwXpYFR3XidMnsCjfOWTiPCVAJyusmRKSocbIKkyJpNbDXyEGdaWq5ARt2rqpIkO5sdYEg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR18MB3430
+X-MS-Exchange-CrossTenant-userprincipalname: 6ZnmQMh2lTmTCNUU9DbNz8SiKIWLkKH0Xl5cKf7rvnPSLIXTwVBJ4LWsWZpcT1x/J60NoFQmU6B8/mxqy5yicA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR18MB3366
 X-OriginatorOrg: suse.com
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -102,35 +103,48 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Martin Wilck <mwilck@suse.com>
 
-In qla2x00_alloc_fw_dump(), an existing EFT buffer (e.g. from
-previous invocation of qla2x00_alloc_offload_mem()) is freed.
-The buffer is then re-allocated, but without setting the eft and
-eft_dma fields to the new values.
+It seems right to try and calculate the dump size properly
+even in the error case, before allocating the dump buffers.
 
-Fixes: a28d9e4ef997 "scsi: qla2xxx: Add support for multiple fwdump
-templates/segments"
 Cc: Joe Carnuccio <joe.carnuccio@cavium.com>
 Cc: Quinn Tran <qutran@marvell.com>
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Cc: Bart Van Assche <bvanassche@acm.org>
 Signed-off-by: Martin Wilck <mwilck@suse.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/qla2xxx/qla_init.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 535dc21..6dd68be 100644
+index ca9c3f3..8427436 100644
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -3197,6 +3197,8 @@ qla2x00_alloc_fw_dump(scsi_qla_host_t *vha)
+@@ -3191,7 +3191,7 @@ qla2x00_alloc_fw_dump(scsi_qla_host_t *vha)
+ 			    EFT_SIZE / 1024);
+ 			ha->eft = NULL;
+ 			ha->eft_dma = 0;
+-			goto allocate;
++			goto calc_dump_size;
+ 		}
+ 
+ 		rval = qla2x00_enable_eft_trace(vha, tc_dma, EFT_NUM_BUFFERS);
+@@ -3202,7 +3202,7 @@ qla2x00_alloc_fw_dump(scsi_qla_host_t *vha)
+ 			    tc_dma);
+ 			ha->eft = NULL;
+ 			ha->eft_dma = 0;
+-			goto allocate;
++			goto calc_dump_size;
+ 		}
  		ql_dbg(ql_dbg_init, vha, 0x00c3,
  		    "Allocated (%d KB) EFT ...\n", EFT_SIZE / 1024);
- 		eft_size = EFT_SIZE;
-+		ha->eft_dma = tc_dma;
-+		ha->eft = tc;
+@@ -3211,6 +3211,7 @@ qla2x00_alloc_fw_dump(scsi_qla_host_t *vha)
+ 		ha->eft = tc;
  	}
  
++calc_dump_size:
  	if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
+ 		struct fwdt *fwdt = ha->fwdt;
+ 		uint j;
 -- 
 2.22.0
 
