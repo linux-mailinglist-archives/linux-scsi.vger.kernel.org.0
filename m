@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B078E173
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Aug 2019 01:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929CA8E171
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Aug 2019 01:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729104AbfHNX5c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1729112AbfHNX5c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Wed, 14 Aug 2019 19:57:32 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:45359 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728947AbfHNX5a (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Aug 2019 19:57:30 -0400
-Received: by mail-pf1-f195.google.com with SMTP id w26so316515pfq.12
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Aug 2019 16:57:30 -0700 (PDT)
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:46585 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729009AbfHNX5b (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Aug 2019 19:57:31 -0400
+Received: by mail-pg1-f195.google.com with SMTP id w3so401355pgt.13
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Aug 2019 16:57:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=N/3rb523l7fqHLZw22JXzBCXMrIQL4Ktlwfk0iVLa38=;
-        b=XzGieJDQm+PhYmOqFFIaSTpQEjCXHCkDLKrSiQATRzsujQrKOao5v0XS16Kk5WyaaA
-         CcxaRlAxhfHnjmFcry/PF5IWlQhNL56yuBrUaQmQVPMWJoINMS0HXUhH85DzMkUrxN0W
-         gzxWaylaqe7dO2ZdIsIBRbXX1rAgvne1Waz68CFk6VTpGlqc6OGXWPrzid1ULHj2LXpJ
-         AlVkjfzx+NNWObts+F6sN+RJ1Kdr5IdbIvhJ1TS9jH5mzyRZ63mZrW3RLulm+XFv+86+
-         Fc9IbXjIasCN1I/kTgAElq7GTnpv5FVkeOl8y3J/S+4BSPUU3ydRbG3kktq/PVwMvKRe
-         7fuA==
+        bh=nxbEK20vGbYFJ2RUgDJbR9ITRszWaYsi31ec7mlqlm4=;
+        b=tiX4RlnJFUl10ptB7NoEiKU3QzkdAnkgunRiluc7a0R3hK8bthpesnDaaUuSrGkvQy
+         p1MW/KPMTS30rpuIUokaHO2zSGH2P6+VKI23JgmUxOJ7jGBdjdjCSjloHGwzCMJ8uq0V
+         NZiCAaiwxOCmf8G8ZtqXmuf+4kATgeQN+QL3RBPFF0AEI+QSKdDrpp5Z6AZ45/T5uXyk
+         DkE0DqGYsIpyYA6Dw84uwDSZoOvY8blR82uI41DJHGeS5cdoacdXgpSYbaZiqzGPlJZ4
+         stuJfdjgL97rn7cLbNKC/r6XgEY5WA/W3Y/afxO4USA80UntFuES0mOAYLQYsM2eLEII
+         vQ7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=N/3rb523l7fqHLZw22JXzBCXMrIQL4Ktlwfk0iVLa38=;
-        b=WgbM1/9jrgByoHzcZRl4Yc0pEkJE/Z9yUeaWoZXwKTyGqz6j60Te7Rgp5cY8aXmebC
-         9zWm1shJXZ9EpC9CXe+D2ENIHIdhbGG+SO2mqILALWvKKdzXtM2eoUadO/W0M3kvEXPo
-         o6yQ/ibTPg06qNZSNrep41FQoxkOSLwC5ttvl5GxVkDEkl9xq3yMGoM7liMIbMj1Bv+I
-         PvkgP/YQX/o0WwLL5V7NOiUXppiQHDUxZMEGY+qzc21piYWnowg1MDMQurpzfSaxjttY
-         woLrZTwTSnXjsYuxk8dh4zz9Nzw1/92Lnkiy1lV9m2hyQSq8KC+FFeUl5s1qPodKjwOo
-         8NAA==
-X-Gm-Message-State: APjAAAV3o1cvpt6tsWY8FTG9Y1wx/VsorrMbs9bFRGfReVb8/1CklsmQ
-        rFcJ30VWNia3waJB+dfaj+i2m4GR
-X-Google-Smtp-Source: APXvYqwbXnUtOthz12CLIuz5D13Y4VZ12IZmNOY0yDwhv+/1yJZqSnCTP8OIjJUpz6/8peMxH22MhQ==
-X-Received: by 2002:a62:fb15:: with SMTP id x21mr2652910pfm.233.1565827049964;
-        Wed, 14 Aug 2019 16:57:29 -0700 (PDT)
+        bh=nxbEK20vGbYFJ2RUgDJbR9ITRszWaYsi31ec7mlqlm4=;
+        b=glaflZQGKW1Tg0jAbHGK5qMJAaI5hjBfCie2gIBzSzIUZHDcvKKRKSAzTOc+QN9iPJ
+         oHOZdvxkkumJJrz1RFZ4/xMvKt1EA5Qgpsl5chkimsUmzOhf87rs0n9A9FKq+OI3WZzD
+         TiW8GPX6AKax5v5ukIfpOT9CYtMYgGXKFb8agWei8fRa+JrgMA9fiYLDfd/6YMjOjCcb
+         6BVf//OrphfNUSglb+RkarbRzwG45gtHMhbsc3BsnJwfpu+WxJnv5Qd9H8CDh0TWo0i3
+         qNzE6MdU3ojAycazaojKWeHKOcGLebnZcqdx2CG6Dp/yoH4tkeK0b6vIg74E/C6zHDYl
+         mXNw==
+X-Gm-Message-State: APjAAAUcdsgCFqxvmmGz8YrV86BcTsiWwMnX171ssfLa0zDywIHYmc+P
+        6kZo2Yma68YSWoT0U7/7hbMh1TeT
+X-Google-Smtp-Source: APXvYqw1CQCOEJe15G7FyqZyGhewzApkgmHlI4zSnpf1rI8AWdjdzQFpwGO0UG61+5bhgpA1G0p2Pg==
+X-Received: by 2002:aa7:90c9:: with SMTP id k9mr2484859pfk.171.1565827050680;
+        Wed, 14 Aug 2019 16:57:30 -0700 (PDT)
 Received: from pallmd1.broadcom.com ([192.19.223.252])
         by smtp.gmail.com with ESMTPSA id k22sm987299pfk.157.2019.08.14.16.57.29
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 14 Aug 2019 16:57:29 -0700 (PDT)
+        Wed, 14 Aug 2019 16:57:30 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 10/42] lpfc: Fix issuing init_vpi mbox on SLI-3 card
-Date:   Wed, 14 Aug 2019 16:56:40 -0700
-Message-Id: <20190814235712.4487-11-jsmart2021@gmail.com>
+Subject: [PATCH 11/42] lpfc: Fix Oops in nvme_register with target logout/login
+Date:   Wed, 14 Aug 2019 16:56:41 -0700
+Message-Id: <20190814235712.4487-12-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20190814235712.4487-1-jsmart2021@gmail.com>
 References: <20190814235712.4487-1-jsmart2021@gmail.com>
@@ -58,38 +58,56 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The driver is inadvertantly trying to issue an INIT_VPI mailbox
-command on an SLI-3 driver. The command is specific to SLI-4. When
-the call is made to send the command, if on an SLI-3 adapter, an
-array pointer is NULL and the driver will oops.
+lpfc_nvme_register_port hit a null prev_ndlp pointer in a test
+with lots of target ports swapping addresses. The oldport value
+was stale, thus it's ndlp (prev_ndlp set to it) was used.
 
-Fix by restricting the command to SLI-4 adapters only.
+Fix by moving oldrport pointer checks, and if used prev_ndlp pointer
+assignment, to be done while the lock is held.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_vport.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/scsi/lpfc/lpfc_nvme.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_vport.c b/drivers/scsi/lpfc/lpfc_vport.c
-index 343bc71d4615..b76646357980 100644
---- a/drivers/scsi/lpfc/lpfc_vport.c
-+++ b/drivers/scsi/lpfc/lpfc_vport.c
-@@ -527,9 +527,11 @@ disable_vport(struct fc_vport *fc_vport)
- 	 * scsi_host_put() to release the vport.
- 	 */
- 	lpfc_mbx_unreg_vpi(vport);
--	spin_lock_irq(shost->host_lock);
--	vport->fc_flag |= FC_VPORT_NEEDS_INIT_VPI;
--	spin_unlock_irq(shost->host_lock);
-+	if (phba->sli_rev == LPFC_SLI_REV4) {
-+		spin_lock_irq(shost->host_lock);
-+		vport->fc_flag |= FC_VPORT_NEEDS_INIT_VPI;
-+		spin_unlock_irq(shost->host_lock);
+diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
+index 946642cee3df..9746808cf94f 100644
+--- a/drivers/scsi/lpfc/lpfc_nvme.c
++++ b/drivers/scsi/lpfc/lpfc_nvme.c
+@@ -2317,9 +2317,13 @@ lpfc_nvme_register_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 
+ 	spin_lock_irq(&vport->phba->hbalock);
+ 	oldrport = lpfc_ndlp_get_nrport(ndlp);
+-	spin_unlock_irq(&vport->phba->hbalock);
+-	if (!oldrport)
++	if (oldrport) {
++		prev_ndlp = oldrport->ndlp;
++		spin_unlock_irq(&vport->phba->hbalock);
++	} else {
++		spin_unlock_irq(&vport->phba->hbalock);
+ 		lpfc_nlp_get(ndlp);
 +	}
  
- 	lpfc_vport_set_state(vport, FC_VPORT_DISABLED);
- 	lpfc_printf_vlog(vport, KERN_ERR, LOG_VPORT,
+ 	ret = nvme_fc_register_remoteport(localport, &rpinfo, &remote_port);
+ 	if (!ret) {
+@@ -2338,7 +2342,6 @@ lpfc_nvme_register_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 			/* New remoteport record does not guarantee valid
+ 			 * host private memory area.
+ 			 */
+-			prev_ndlp = oldrport->ndlp;
+ 			if (oldrport == remote_port->private) {
+ 				/* Same remoteport - ndlp should match.
+ 				 * Just reuse.
+@@ -2352,7 +2355,7 @@ lpfc_nvme_register_port(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 						 remote_port->port_name,
+ 						 remote_port->port_id,
+ 						 remote_port->port_role,
+-						 prev_ndlp,
++						 oldrport->ndlp,
+ 						 ndlp,
+ 						 ndlp->nlp_type,
+ 						 ndlp->nlp_DID);
 -- 
 2.13.7
 
