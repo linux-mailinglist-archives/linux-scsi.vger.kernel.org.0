@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 956D68E16B
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Aug 2019 01:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A1B8E16F
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Aug 2019 01:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728972AbfHNX50 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Aug 2019 19:57:26 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35013 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726119AbfHNX50 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Aug 2019 19:57:26 -0400
-Received: by mail-pl1-f194.google.com with SMTP id gn20so337927plb.2
+        id S1729084AbfHNX5a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Aug 2019 19:57:30 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33222 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728947AbfHNX51 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Aug 2019 19:57:27 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n190so438183pgn.0
         for <linux-scsi@vger.kernel.org>; Wed, 14 Aug 2019 16:57:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=xc9Wv3svCPf69lmVFx6hl/SDyVuNcI+jzEO6uRy4iLY=;
-        b=FQ/2QG/1XDFM6ypQHi5dMdKGKEsNc6KBIPWdoD5rLvjcAhhFV4DBCKltHgA19kfu+/
-         RTixnA+ViZX1kY+tJ2M++kIfiK+00p+gbY7WxXMjSbQDAs+RATiaFOql83HwogdmirIY
-         pQsasVZcBjYIEdFHEqgWh+2SocHGX6uXoiOI2Wti1kWo6HepQhvCZSlmAh1UkqThRj98
-         VAoQSeESMkVo55Iahl6Bagk6QJnDLxmhlJyynUBPZgp34SQvTD99GF9t2MG6gZEP7BzH
-         9oFr+SZwDVhXJK0v+ClvOC4Nxa95WjdaHyPwuF/7OTwpV2Pl3iM49WiLcqgpXYvZrvu1
-         dI1A==
+        bh=8yIhMcON7xLN0hMLhvEm8QIWhIJo6dFKEW3lh9pAS0U=;
+        b=T1K6mGDeN+2eWmUtmmvo7n1+xkRoaU7Fot39S9ftxjOiil+BlVOKq8wi/vgMy7G9yu
+         d+5+17XvzoxfZJS23K1gmCfpQ/nMPBYmbV4fplNejf4l66Shsfs1tBZdG9TXB6vehBC2
+         pWvEfWm0hS7gKCvLXwDAxOGMgXvdTh2Mhn1cAAqcfWAPG9VYRMfWQVW1hpo7PUk3GSRP
+         LV0jDrc+n4YixB1P8vgmZqUTVOt4h8UIaX0FjdXHjaZexLamwRLAh5iqbATrTnXcFjWI
+         /yIsyYiHvSdcFF2ncdWOAUY6p8eFm+gh487JzjABCyqm+zEEfL+dLmWGR010Kp2tObKM
+         8V+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=xc9Wv3svCPf69lmVFx6hl/SDyVuNcI+jzEO6uRy4iLY=;
-        b=h8Tw3DfIKbBslrnnq9Ww5Npq8CfVciAeHKEhI5wCT8Ww5uJrf3RFE3PYX2ORbrELYW
-         +UNut5GOcii92aCaEeSp2ueTXVhYG/dCd9x2bqOGrAh86eCC2U6TIOuOW9V+TQKQyjyE
-         tc4KvjUEjsFt1c4LmJQG2NE9HqdACxuKkFJgJGQ59fWSFH5eaK+DYI4vA9t3oa4HOTnq
-         +c5L2TjG+mQHUTN+22IXAWe4TnP+zaI49H8AbEqxGnYkYOJzuEHU0NUr2la8vLD1VIFb
-         qU9REzW/2CRAZeKUd25WLV0bOellXn7uBujgLaZNQp9P2HbcXvSOuSC9uVYToA84M7bI
-         Fr1g==
-X-Gm-Message-State: APjAAAUYssqqJUKQ38X9jd900UB9xFKNUb264ZoOP/aQisY65VfFiTLS
-        RWIKEd2zUTg1gLLDIp/PmBQyqTks
-X-Google-Smtp-Source: APXvYqwDtse4ZyiL33JH6gAyGUvQ/nwNlnYUjCRRD46cjRLmruhFU4s9Ad0PK6k985pP3Bomcldn4Q==
-X-Received: by 2002:a17:902:82c4:: with SMTP id u4mr1817910plz.196.1565827045558;
-        Wed, 14 Aug 2019 16:57:25 -0700 (PDT)
+        bh=8yIhMcON7xLN0hMLhvEm8QIWhIJo6dFKEW3lh9pAS0U=;
+        b=D8oslY3JucRU5QHuc9tl6FYrY53psaov8W0bffnZrFEoNSGDN815QMzKXCe5q12cZX
+         dRXolvSaM/LiPrwkvjet2o7HslAQjVtcdFkWwLG7qIDzva+eG4UJs7XQniQ3AgFsOIgY
+         JJmEnqQWRz1xTSJT+ZcybiMzWMVSmxu/xJ4M5Ut3GHFABN/NR9mjXlvOf8ioCVfL7aeb
+         t38l87BZdHLoUK0UVw1lPBw9MGX5Zmash8gcImT/mt8zCcWkATRjwECL+JcPKKjULd+B
+         cn9Ucqvvnxt2kxuGsIqWn/PCPROZ+dNrc1W93JwW0tTa3md7rkrca/snzktCagCvpqyr
+         eVmg==
+X-Gm-Message-State: APjAAAWSqVhnPM9s5e/L2YFs6N6b9zmMh166LBt5tD608Jglg/Dhuepv
+        elUBDqcYT/zLM6hpROUi43EzUP07
+X-Google-Smtp-Source: APXvYqz8eQONFv2bUjX63+1oQeVlClR73BMFg1tsOnxN59ql3Eeo54xcMn90rZT6K1tCk6CuX+5G8Q==
+X-Received: by 2002:aa7:8602:: with SMTP id p2mr2593987pfn.138.1565827046263;
+        Wed, 14 Aug 2019 16:57:26 -0700 (PDT)
 Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k22sm987299pfk.157.2019.08.14.16.57.24
+        by smtp.gmail.com with ESMTPSA id k22sm987299pfk.157.2019.08.14.16.57.25
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
         Wed, 14 Aug 2019 16:57:25 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 04/42] lpfc: Fix crash on driver unload in wq free
-Date:   Wed, 14 Aug 2019 16:56:34 -0700
-Message-Id: <20190814235712.4487-5-jsmart2021@gmail.com>
+Subject: [PATCH 05/42] lpfc: Fix failure to clear non-zero eq_delay after io rate reduction
+Date:   Wed, 14 Aug 2019 16:56:35 -0700
+Message-Id: <20190814235712.4487-6-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20190814235712.4487-1-jsmart2021@gmail.com>
 References: <20190814235712.4487-1-jsmart2021@gmail.com>
@@ -58,46 +58,81 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If a timer routine uses workqueues, it could fire before the
-workqueue is allocated.
+Unusually high IO latency can be observed with little IO in
+progress. The latency may remain high regardless of amount of IO and
+can only be cleared by forcing lpfc_fcp_imax values to non-zero and
+then back to zero.
 
-Fix by allocating the workqueue before the timer routines are setup
+The driver's eq_delay mechanism that scales the interrupt coalescing
+based on io completion load failed to reduce or turn off coalescing
+when load decreased. Specifically, if no io completed on a cpu within
+an eq_delay polling window, the eq delay processing was skipped and no
+change was made to the coalescing values. This left the coalescing
+values set when they were no longer applicable.
+
+Fix by always clearing the percpu counters for each time period and
+always run the eq_delay calculations if an eq has a non-zero
+coalescing value.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_init.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/scsi/lpfc/lpfc_init.c | 32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 02231370428a..50d641f65af9 100644
+index 50d641f65af9..72353c9c0fa9 100644
 --- a/drivers/scsi/lpfc/lpfc_init.c
 +++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -6415,6 +6415,11 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
- 	if (rc)
- 		return -ENODEV;
+@@ -1262,6 +1262,7 @@ lpfc_hb_eq_delay_work(struct work_struct *work)
+ 	unsigned char *eqcnt = NULL;
+ 	uint32_t usdelay;
+ 	int i;
++	bool update = false;
  
-+	/* Allocate all driver workqueues here */
-+
-+	/* The lpfc_wq workqueue for deferred irq use */
-+	phba->wq = alloc_workqueue("lpfc_wq", WQ_MEM_RECLAIM, 0);
-+
- 	/*
- 	 * Initialize timers used by driver
- 	 */
-@@ -6998,12 +7003,6 @@ lpfc_setup_driver_resource_phase2(struct lpfc_hba *phba)
- 		return error;
- 	}
+ 	if (!phba->cfg_auto_imax || phba->pport->load_flag & FC_UNLOADING)
+ 		return;
+@@ -1275,20 +1276,29 @@ lpfc_hb_eq_delay_work(struct work_struct *work)
+ 	if (!eqcnt)
+ 		goto requeue;
  
--	/* The lpfc_wq workqueue for deferred irq use, is only used for SLI4 */
--	if (phba->sli_rev == LPFC_SLI_REV4)
--		phba->wq = alloc_workqueue("lpfc_wq", WQ_MEM_RECLAIM, 0);
--	else
--		phba->wq = NULL;
+-	/* Loop thru all IRQ vectors */
+-	for (i = 0; i < phba->cfg_irq_chann; i++) {
+-		/* Get the EQ corresponding to the IRQ vector */
+-		eq = phba->sli4_hba.hba_eq_hdl[i].eq;
+-		if (eq && eqcnt[eq->last_cpu] < 2)
+-			eqcnt[eq->last_cpu]++;
+-		continue;
+-	}
++	if (phba->cfg_irq_chann > 1) {
++		/* Loop thru all IRQ vectors */
++		for (i = 0; i < phba->cfg_irq_chann; i++) {
++			/* Get the EQ corresponding to the IRQ vector */
++			eq = phba->sli4_hba.hba_eq_hdl[i].eq;
++			if (!eq)
++				continue;
++			if (eq->q_mode) {
++				update = true;
++				break;
++			}
++			if (eqcnt[eq->last_cpu] < 2)
++				eqcnt[eq->last_cpu]++;
++		}
++	} else
++		update = true;
+ 
+ 	for_each_present_cpu(i) {
+-		if (phba->cfg_irq_chann > 1 && eqcnt[i] < 2)
+-			continue;
 -
- 	return 0;
- }
+ 		eqi = per_cpu_ptr(phba->sli4_hba.eq_info, i);
++		if (!update && eqcnt[i] < 2) {
++			eqi->icnt = 0;
++			continue;
++		}
  
+ 		usdelay = (eqi->icnt / LPFC_IMAX_THRESHOLD) *
+ 			   LPFC_EQ_DELAY_STEP;
 -- 
 2.13.7
 
