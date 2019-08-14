@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 704A28E170
-	for <lists+linux-scsi@lfdr.de>; Thu, 15 Aug 2019 01:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088C88E172
+	for <lists+linux-scsi@lfdr.de>; Thu, 15 Aug 2019 01:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729093AbfHNX5a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 14 Aug 2019 19:57:30 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36209 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729009AbfHNX53 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Aug 2019 19:57:29 -0400
-Received: by mail-pg1-f193.google.com with SMTP id l21so427859pgm.3
-        for <linux-scsi@vger.kernel.org>; Wed, 14 Aug 2019 16:57:28 -0700 (PDT)
+        id S1729103AbfHNX5b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 14 Aug 2019 19:57:31 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:40894 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728983AbfHNX5a (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 14 Aug 2019 19:57:30 -0400
+Received: by mail-pl1-f194.google.com with SMTP id a93so329544pla.7
+        for <linux-scsi@vger.kernel.org>; Wed, 14 Aug 2019 16:57:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=eZb9Sh/Id9LGVS6VszTrgSFU/EYwl8ejD+Flvz7I7kE=;
-        b=hbdFjPVjpFUCIJHXxigCX07LvJDeCAZKV4HU+q8mfxMfMPbE0pqTcCLlfTDH/Yspzp
-         0ISammLJgTLblnoHm1PLENQBSTivgJYo6cTbqyiB1e21uYnFDOU4Dw6OrvMW5hMhvlk5
-         6tlPKyp2nbRsOLwL8Utfj1n/Mqwq5JkuO83nZ52O8t8XPm5Zna3/4LDzwHnpjlwSTWYb
-         nDdSiR1yFTy8oRl/O6LfGiXKEEqG3OJIwhfcmtjnK48qfJsUk/iT6HsInuYoDASXQ2bg
-         8zqRW4lZP3UQ7AKD74pVJoSWcGL+HjcocSYgSVJJsqn0bRnMvDfs6zeEsQnVEBJIbNkz
-         l5tA==
+        bh=NAVHtSROOA6grjVPNxByNxQSRFAr4kBJBub/nRw1Q2w=;
+        b=oWm7eCS8W/mR1h/lWJVb2mJRU+hp36ytMzKBmlh+leJIGXsQoxpCtB2Hpxpfi5nAs3
+         8ZcqcascBYvEbMuUU6oKgjUwVeQWVkUyb8CAYYWG61JGvPpnmSTCPa0l8BtNELrVlkDb
+         QhPpJj0Xx3Qz/QrS3SsWq6J2S9YavB5y2LHedx/q93GbKtJr5zF8/pwvmNaQTeGelDqG
+         guc+PT5UU3yxRjqERMSTLUw1JeBcTQqdmWXsKm0v+Xh2y6nzD8IYvtBawpIfbJDvvvK8
+         9qO2CC9alJf0uSYZRuTzWX11zKTxxxQmau+m2fY1fhWzanUYZ8JwZj0dL9hEvjTRQ7Kd
+         TIjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=eZb9Sh/Id9LGVS6VszTrgSFU/EYwl8ejD+Flvz7I7kE=;
-        b=bSQS+x+idPT7sey5qtI/pzxDvStPUl6Yd/edlYqFy5PgGpNeFLsPv973jH8ZA2oY4L
-         pTg9yig6xwSovqdfajwmlaTX2p5kDw6kFKbzPaOOqik94sIBSwfZis9OhfbcnzcFstzR
-         ndqSCCUWciFcuvr6HEpq63ntGn4U3pDTvTSRgnGGbyWzRbyEbmWNQdKUKbA1ktvfAdAI
-         h7hKK/HYS+ztXZ6rf8vLIySp06p3zgF2nuFGYqDF2qjddQSRw30cl6wUJoK1KNZrXBJu
-         3eCUCNXEgwIXMllpPsYMRmje59FQ8vM6atXtouf6UhPY/qOsb0/mkjDgUGtss/HPSCwZ
-         m1GQ==
-X-Gm-Message-State: APjAAAV74n1R9vRLJ5SDrQbzWgTZRiKunln4AQiTNIX85c7j3XIhdIbK
-        BHkGlaNWi6kHPRbzcjm/LfmZcY5s
-X-Google-Smtp-Source: APXvYqwqQqiVJq0YcYtizl5y1n+yP11c7mwUvPotoBlUESXL4AsRFUOOY7fgDnwurPMntl+tj6FY5w==
-X-Received: by 2002:aa7:8a92:: with SMTP id a18mr2636093pfc.216.1565827048515;
-        Wed, 14 Aug 2019 16:57:28 -0700 (PDT)
+        bh=NAVHtSROOA6grjVPNxByNxQSRFAr4kBJBub/nRw1Q2w=;
+        b=KYk0LVq288eR8BacOMDKMBL2Gv+ItgAoHsEFDqfZvQvbdE6McpvCU34U9KFe4zQf3r
+         /ZqstD0oZahjWUlSuiPAW1GtNyeC/XaCuOK8SX+1BEw/bYLk0fhKAgu4qDX0HENYV4xD
+         9Sh0M3c8Lr1MX36QveJ+DX70G4kDcjFwmOLJLZ8G5zhTU4wUc0wbHmqwIo6T81LTw38f
+         D8Fp2GmjO4yzRqheY6QRIWaasdio14HvNCIix7EBWoXguvPqfkjRfnVGTlyU17/xzuSw
+         vp6rFwwG/cdXAtD0kviek9uDyKJxtwkg6kAJ/vRyKnDYK6Cu2NnYKZZ5JljSMwjHHZwZ
+         gBqQ==
+X-Gm-Message-State: APjAAAVcx8FdUE8pJoTLlRqSb2JbsVZzj6CopGEuqvEv5zxExSIM1MWC
+        XdGVgI5QP0NaO3aqJVcFbp7fIh/6
+X-Google-Smtp-Source: APXvYqxnUL1c0VXKdip/TjJ/nKiX5hdlIpEunEIW1XY/Jg5gQEuEjAGXzusFcH2DH27troZwu6tqoQ==
+X-Received: by 2002:a17:902:ba81:: with SMTP id k1mr1846767pls.213.1565827049225;
+        Wed, 14 Aug 2019 16:57:29 -0700 (PDT)
 Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id k22sm987299pfk.157.2019.08.14.16.57.27
+        by smtp.gmail.com with ESMTPSA id k22sm987299pfk.157.2019.08.14.16.57.28
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
         Wed, 14 Aug 2019 16:57:28 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 08/42] lpfc: Fix discovery when target has no GID_FT information
-Date:   Wed, 14 Aug 2019 16:56:38 -0700
-Message-Id: <20190814235712.4487-9-jsmart2021@gmail.com>
+Subject: [PATCH 09/42] lpfc: Fix ADISC reception terminating login state if a NVME target
+Date:   Wed, 14 Aug 2019 16:56:39 -0700
+Message-Id: <20190814235712.4487-10-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20190814235712.4487-1-jsmart2021@gmail.com>
 References: <20190814235712.4487-1-jsmart2021@gmail.com>
@@ -58,75 +58,73 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Some remote ports may be slow in registering their GID_FT
-protocol information with the fabric. If the remote port is
-an initiator, it may send PLOGI to the port before the GID_FT
-logic is complete. Meaning, after accepting the PLOGI, when the
-driver may see no response to the GID_FT that is issued after
-the login to determine the protocols supported so that proper
-PRLI's may be transmit. If the driver has no fc4 information,
-it currently stops and the remote port is not discovered.
+If a target issues an ADISC to the port and the target is a NVME
+target, the driver is inadvertantly invalidating the login and
+marking the remote port as logged out. Communication with the
+target is lost.
 
-Fix by issuing a LOGO when there is no GID_FT information.
-The LOGO completion handling will attempt to re-login if the
-nport_id is still present.
+Revise the ADISC check so that FCP or NVME targets will be
+marked valid at the end of ADISC processing.
+Enhance logging to recognize condition better.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_ct.c        | 16 +++++++++++++++-
- drivers/scsi/lpfc/lpfc_nportdisc.c |  6 +++++-
- 2 files changed, 20 insertions(+), 2 deletions(-)
+ drivers/scsi/lpfc/lpfc_nportdisc.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_ct.c b/drivers/scsi/lpfc/lpfc_ct.c
-index 3246942ff2ff..c2ac6cb730e8 100644
---- a/drivers/scsi/lpfc/lpfc_ct.c
-+++ b/drivers/scsi/lpfc/lpfc_ct.c
-@@ -1215,12 +1215,26 @@ lpfc_cmpl_ct_cmd_gft_id(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 					 FC_TYPE_FCP, FC_TYPE_NVME,
- 					 ndlp->nlp_state);
- 
--			if (ndlp->nlp_state == NLP_STE_REG_LOGIN_ISSUE) {
-+			if (ndlp->nlp_state == NLP_STE_REG_LOGIN_ISSUE &&
-+			    ndlp->nlp_fc4_type) {
- 				ndlp->nlp_prev_state = NLP_STE_REG_LOGIN_ISSUE;
- 
- 				lpfc_nlp_set_state(vport, ndlp,
- 						   NLP_STE_PRLI_ISSUE);
- 				lpfc_issue_els_prli(vport, ndlp, 0);
-+			} else if (!ndlp->nlp_fc4_type) {
-+				/* If fc4 type is still unknown, then LOGO */
-+				lpfc_printf_vlog(vport, KERN_INFO,
-+						 LOG_DISCOVERY,
-+						 "6443 Sending LOGO ndlp x%px,"
-+						 "DID x%06x with fc4_type: "
-+						 "x%08x, state: %d\n",
-+						 ndlp, did, ndlp->nlp_fc4_type,
-+						 ndlp->nlp_state);
-+				lpfc_issue_els_logo(vport, ndlp, 0);
-+				ndlp->nlp_prev_state = NLP_STE_REG_LOGIN_ISSUE;
-+				lpfc_nlp_set_state(vport, ndlp,
-+						   NLP_STE_NPR_NODE);
- 			}
- 		}
- 	} else
 diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index c58000cd744f..d76d76081d1a 100644
+index d76d76081d1a..f4eea52c66f5 100644
 --- a/drivers/scsi/lpfc/lpfc_nportdisc.c
 +++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -1822,7 +1822,11 @@ lpfc_cmpl_reglogin_reglogin_issue(struct lpfc_vport *vport,
+@@ -614,7 +614,7 @@ lpfc_rcv_padisc(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 		}
+ out:
+ 		/* If we are authenticated, move to the proper state */
+-		if (ndlp->nlp_type & NLP_FCP_TARGET)
++		if (ndlp->nlp_type & (NLP_FCP_TARGET | NLP_NVME_TARGET))
+ 			lpfc_nlp_set_state(vport, ndlp, NLP_STE_MAPPED_NODE);
+ 		else
+ 			lpfc_nlp_set_state(vport, ndlp, NLP_STE_UNMAPPED_NODE);
+@@ -2903,18 +2903,21 @@ lpfc_disc_state_machine(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 	uint32_t(*func) (struct lpfc_vport *, struct lpfc_nodelist *, void *,
+ 			 uint32_t);
+ 	uint32_t got_ndlp = 0;
++	uint32_t data1;
  
- 		ndlp->nlp_prev_state = NLP_STE_REG_LOGIN_ISSUE;
- 		lpfc_nlp_set_state(vport, ndlp, NLP_STE_PRLI_ISSUE);
--		lpfc_issue_els_prli(vport, ndlp, 0);
-+		if (lpfc_issue_els_prli(vport, ndlp, 0)) {
-+			lpfc_issue_els_logo(vport, ndlp, 0);
-+			ndlp->nlp_prev_state = NLP_STE_REG_LOGIN_ISSUE;
-+			lpfc_nlp_set_state(vport, ndlp, NLP_STE_NPR_NODE);
-+		}
- 	} else {
- 		if ((vport->fc_flag & FC_PT2PT) && phba->nvmet_support)
- 			phba->targetport->port_id = vport->fc_myDID;
+ 	if (lpfc_nlp_get(ndlp))
+ 		got_ndlp = 1;
+ 
+ 	cur_state = ndlp->nlp_state;
+ 
++	data1 = (((uint32_t)ndlp->nlp_fc4_type << 16) |
++		((uint32_t)ndlp->nlp_type));
+ 	/* DSM in event <evt> on NPort <nlp_DID> in state <cur_state> */
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
+ 			 "0211 DSM in event x%x on NPort x%x in "
+ 			 "state %d rpi x%x Data: x%x x%x\n",
+ 			 evt, ndlp->nlp_DID, cur_state, ndlp->nlp_rpi,
+-			 ndlp->nlp_flag, ndlp->nlp_fc4_type);
++			 ndlp->nlp_flag, data1);
+ 
+ 	lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_DSM,
+ 		 "DSM in:          evt:%d ste:%d did:x%x",
+@@ -2925,10 +2928,13 @@ lpfc_disc_state_machine(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
+ 
+ 	/* DSM out state <rc> on NPort <nlp_DID> */
+ 	if (got_ndlp) {
++		data1 = (((uint32_t)ndlp->nlp_fc4_type << 16) |
++			((uint32_t)ndlp->nlp_type));
+ 		lpfc_printf_vlog(vport, KERN_INFO, LOG_DISCOVERY,
+ 			 "0212 DSM out state %d on NPort x%x "
+-			 "rpi x%x Data: x%x\n",
+-			 rc, ndlp->nlp_DID, ndlp->nlp_rpi, ndlp->nlp_flag);
++			 "rpi x%x Data: x%x x%x\n",
++			 rc, ndlp->nlp_DID, ndlp->nlp_rpi, ndlp->nlp_flag,
++			 data1);
+ 
+ 		lpfc_debugfs_disc_trc(vport, LPFC_DISC_TRC_DSM,
+ 			"DSM out:         ste:%d did:x%x flg:x%x",
 -- 
 2.13.7
 
