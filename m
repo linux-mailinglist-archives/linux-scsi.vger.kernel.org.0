@@ -2,48 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E038FB1F
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2019 08:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4411E8FFD0
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2019 12:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726724AbfHPGfN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 16 Aug 2019 02:35:13 -0400
-Received: from mx.ecuator.ro ([82.77.13.10]:45162 "EHLO mx.ecuator.ro"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726565AbfHPGfM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 16 Aug 2019 02:35:12 -0400
-X-Greylist: delayed 14883 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Aug 2019 02:35:11 EDT
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mx.ecuator.ro (Postfix) with ESMTP id A42B786BE66;
-        Fri, 16 Aug 2019 03:21:01 +0300 (EEST)
-Received: from mx.ecuator.ro ([127.0.0.1])
-        by localhost (mx.ecuator.ro [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id VCzCIhA6cb-Q; Fri, 16 Aug 2019 03:21:01 +0300 (EEST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mx.ecuator.ro (Postfix) with ESMTP id CBE7F86BE61;
-        Fri, 16 Aug 2019 03:21:00 +0300 (EEST)
-X-Virus-Scanned: amavisd-new at ecuator.ro
-Received: from mx.ecuator.ro ([127.0.0.1])
-        by localhost (mx.ecuator.ro [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CBnX4sRlPzxH; Fri, 16 Aug 2019 03:21:00 +0300 (EEST)
-Received: from [192.168.88.248] (unknown [81.171.58.198])
-        by mx.ecuator.ro (Postfix) with ESMTPSA id 9629586BE54;
-        Fri, 16 Aug 2019 03:20:56 +0300 (EEST)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1727117AbfHPKNu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 16 Aug 2019 06:13:50 -0400
+Received: from sonic311-23.consmr.mail.ne1.yahoo.com ([66.163.188.204]:38111
+        "EHLO sonic311-23.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727039AbfHPKNu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 16 Aug 2019 06:13:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1565950429; bh=tPdyM4f7Tq8kspt5syr9wxbiHLUxanV8lkCr2Pkkkas=; h=Date:From:Reply-To:Subject:From:Subject; b=KzZIvSlT/tkgHH/H1HsXcwAXCmFM0k71WwppyCFiF8SCh3QhIh6FLSrxBhCkL/DK+juxDoUpasXEtPBry43TrH3UD7Lo25eRrerTaP3GS5SAXW7iF99hs4eg+SRem3aoTaO3narLINvuhfuf97RpnjINR8z3K7zQ8Ofg9avLeW4cVxHkGjlXEIkfY3zHoC6SQmWJOg023TE+MiNWvg8+MpnuZj6K7PTsLV3mtmEbJxShrAQtwEZMLz/yddIl6z1UmLW1qaHG/vfeP6qYAB4KTifxoHQa/m3stxWn6NgCdwN+hDS4IDYl/5HdyMJHBPUo15/scuJzsGTyN3AJYKpGqw==
+X-YMail-OSG: c42ZiIgVM1nJL50rJK1cZjZDtCdll1G1wDkzbCSiZVSsEIpyToBx3fb_G2eMuF2
+ GFHJwRateeNws7FK0DbavyhkIDTKoEOsMA6gcHzQnM0QOqJ0saEPX5DV5ysY1o0SarRTs19_y4B6
+ VSD8fxT5PfK2_wpyu91AAVgBfjYS2J3GWbh6Afc.CJzfRbvdVzqTqc.GQbvSsqDnYJ91_.RZhCY4
+ ZXj3xJwtLEAa6Zpj6ICmnut93XJ3C2mSLuRS9gWV5ugOUUunawBZrh9gi.ZVO9gllwjPwmu0mibR
+ Knskz9lhx2n2wtUvuvBAsVr6cNlNxNrKmimIPKo69wNjyvIv6L2eA2CKdRp.md2MTB6cABIrJs2n
+ fXghW1U7ZrxEzPTjPQEmBjjMziIa02zrihQH1RVPaXF4.08.PHahOObdBvvWFR21t82jDeMFc0iK
+ 5GJPT6WOIhxGnxXQpNjqswveQoJNF2IcADcYrDT2_R76lVaXDP3FyeQnWegG8WCyuWs4dInnQu1i
+ WEntt0APfBL3xaSDkKru0hitv2wpz9tEw5gEeyh3rRBtrwD4AVN2C5IYHcPEIysE3SsB5wHqrJy5
+ ofMQb8Wu_4KxtIDJ1KVueJEOSOCCpOWIkjGIoHJs5WCyQmdqJxXMe4QYnTMlyeCT2RdANVJLtsav
+ 79IR.fOIJWjY9FdMwL24ibju5ZYq20Wrpf9PwrxmYYqERCMGjs3Pj9KMZFD2VOWHnOV9RSmr1J9n
+ j8cWXZXZq2.kN2syAkaLN.bb4sYG5ZZqkvDp13YstaXuZm6HP4GptHYMsZ98OfCDD470_QqMHAce
+ JUIGcOKZiQtzNWEiw6r21L2kDkf51RZmymLX1JDCm154ZDlPYieYB_NJK6GyC20raD1fo9CbgWER
+ hXf0Kk2l1QrfgQMM2KT.zIlJkaV26y0MeOiUrkB7YkTKYpj7l42TTn9j0SvmDDpB.Ww7NgDWj5eN
+ 2.gUeZyrhEYKsMraK4YVf5JikZhTuiBJBD_P0nsgPKhRfuwNDAHfAOl_qZ63qqLDisz00.pXagWZ
+ DgzShumLlbT02os90oIMAfAGVB6BkJL9x4SvFyranmlwsRzkeGEMSkrAeZcpB9TZgDDbrENpiIWi
+ vTHLqhdmJO4Blrp0zTlwIw.4bt3eXFxDMGdoXvFvPzNHOblnnpqMO4U7pz9VSiPPjit62og91tkC
+ bZmF1VriuUqSD1OKJKxsqqRRDLBua3_H1EtueIJSsuLQ0ESJoZ1cNl.G.4Z02LXLEgn15hDO4Ubs
+ KBoAWvo3cJdb7
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Fri, 16 Aug 2019 10:13:49 +0000
+Date:   Fri, 16 Aug 2019 10:13:45 +0000 (UTC)
+From:   Aisha Gaddafi <gaddafi661@gmail.com>
+Reply-To: gaisha983@gmail.com
+Message-ID: <208601980.6195563.1565950425294@mail.yahoo.com>
+Subject: Dear Friend,
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: leihen ohne sorgen
-To:     Recipients <financiar@ecuator.ro>
-From:   "Mr Muller Dieter" <financiar@ecuator.ro>
-Date:   Fri, 16 Aug 2019 01:24:40 +0100
-Reply-To: stewarrt.lf01@gmail.com
-Message-Id: <20190816002056.9629586BE54@mx.ecuator.ro>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Brauchen Sie dringend Geld? Wir können dir helfen!
-Bist du durch die aktuelle Situation in Schwierigkeiten oder droht dir Ärger?
-Auf diese Weise geben wir Ihnen die Möglichkeit, eine neue Entwicklung zu nehmen.
-Als reiche Person fühle ich mich verpflichtet, Menschen zu helfen, die Schwierigkeiten haben, ihnen eine Chance zu geben. Jeder verdiente eine zweite Chance und da die Regierung scheitert, wird es von anderen kommen müssen.
+Dear Friend,
+
+I came across your e-mail contact prior a private search while in need of 
+your assistance. My name is Aisha  Gaddafi a single Mother and a Widow with 
+three Children. I am the only biological Daughter of late Libyan President 
+(Late Colonel Muammar Gaddafi).
+
+I have investment funds worth Twenty Seven Million Five Hundred Thousand 
+United State Dollar ($27.500.000.00 ) and i need a trusted investment 
+Manager/Partner because of my current refugee status, however, I am 
+interested in you for investment project assistance in your country, may be 
+from there, we can build business relationship in the nearest future.
+
+I am willing to negotiate investment/business profit sharing ratio with you 
+base on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply urgent 
+to enable me provide you more information about the investment funds.
+
+Your Urgent Reply Will Be Appreciated.
+
+Best Regards
+Mrs Aisha Gaddafi
+(gaisha983@gmail.com)
