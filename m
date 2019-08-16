@@ -2,103 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD9B90783
-	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2019 20:10:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FDE4907C0
+	for <lists+linux-scsi@lfdr.de>; Fri, 16 Aug 2019 20:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727546AbfHPSKj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 16 Aug 2019 14:10:39 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:42738 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727451AbfHPSKj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 16 Aug 2019 14:10:39 -0400
-Received: by mail-pg1-f195.google.com with SMTP id p3so3311154pgb.9;
-        Fri, 16 Aug 2019 11:10:38 -0700 (PDT)
+        id S1727500AbfHPS3L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 16 Aug 2019 14:29:11 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44995 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726469AbfHPS3L (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 16 Aug 2019 14:29:11 -0400
+Received: by mail-pg1-f196.google.com with SMTP id i18so3330749pgl.11
+        for <linux-scsi@vger.kernel.org>; Fri, 16 Aug 2019 11:29:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=fO2nsXcOD91Fm46vHTqedwEk5UPGSK+PcdJntAHJITw=;
+        b=JtcVwZzKGVQoVyORWfnN0RvnjgUAdSYtszryB/kqDvycnAkOZj4CD+aYDhFiCUbXSD
+         MbUjqfJX87rTTap9bwWCZs2hWHNU8pqDgykvM5JtQvq1lB/s7KCDNkM4j9ZU0TtJ1Ia3
+         RgDpsZECWAb+O9K753TCZzDkjMYXqbtiHml9M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=g3Rtqd5AFTZf6nYXP6J7lz92csL9uIjbEcEcwtwYRRw=;
-        b=Jq4VaaH4kjvkY+bBzy6ZR/qjaNtLa60CNfuddJ7dFI32pOT9VqSciVfTKLiPoprFlE
-         c77tQX3tW/hyN53z7TYnONFVShHUViMEuAp+KcDGFgfer5j2GFOjauuSKiaz3um9w/BL
-         8welwAb4+hucBIja7WyOmUWVz9lG6j2XqDbfH9/RNbHd+VzFWW4CyKuATTQuONJHJRqT
-         2dgOegzS97pA8dlJD8ZqmFtSXTfsJVtcmziGS6KdQI0eJVRh6s0xFIcyUMnAGf7zZL5H
-         KqRLBkzW64Eb/akbut6L1Gl3VUWGdbSxy11HRyyZ7Qc/ab0sekcl7VYjeZCdeW7cM/oB
-         tGTg==
-X-Gm-Message-State: APjAAAX/PGD7aDJ8hNOWhxTn8+VAN/QCH4smYgw1HDvrg+zXSlNVthe1
-        +WZBb/2By0wLUWxQNoVRB1U=
-X-Google-Smtp-Source: APXvYqwefgCTm02Zk4vb33Cg30dAXglQjkJZ1DqupmIjiFqWo/tqNkyv6kdrlQM/1wCeaX8SRLSVrA==
-X-Received: by 2002:a17:90a:ca0f:: with SMTP id x15mr8251943pjt.82.1565979038433;
-        Fri, 16 Aug 2019 11:10:38 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id u3sm4159655pjn.5.2019.08.16.11.10.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Aug 2019 11:10:37 -0700 (PDT)
-Subject: Re: [PATCH v3 00/20] sg: add v4 interface
-To:     dgilbert@interlog.com, James Bottomley <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-api@vger.kernel.org
-Cc:     martin.petersen@oracle.com, hare@suse.de,
-        Arnd Bergmann <arnd@arndb.de>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20190807114252.2565-1-dgilbert@interlog.com>
- <1565291455.3435.48.camel@linux.vnet.ibm.com>
- <7edab448-22cc-493a-f745-acc5be38f6a5@interlog.com>
- <1565305243.25619.27.camel@linux.vnet.ibm.com>
- <51e7cdfb-7921-9368-9b78-90ba5ac50c77@interlog.com>
- <6606add1-7ae7-5d8d-e660-d267164981d9@acm.org>
- <d0c60641-0607-a9c4-e79d-b6e850ef8682@interlog.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <e25e6a74-4d54-3d91-d48d-ba9c91b2a874@acm.org>
-Date:   Fri, 16 Aug 2019 11:10:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=fO2nsXcOD91Fm46vHTqedwEk5UPGSK+PcdJntAHJITw=;
+        b=VK+DsR4OMbTpUMk38cGLxP/eH3RyJSMXDMX6sw7N5sfj5dfO3encUrS0pMUBwaO7Cq
+         htvcDe+gtRrrNxlu2Drv9LeZqTfSlw1PtGVRuP/R/pDU3tnAZrTxwYOg7SvT5sADAax1
+         LA9kxXLvrYidqeaCgr1n8ycTBo5ENny5y23dCwwrgiiz2glEqWI+mTntBO28Lqt3rFeB
+         5eVSjc15I1JVlEjuBcD/IE+UHGl8ul9QOSLKtJsA7+dPAtSHfNnZ54kk08XheCe3svtY
+         LvxnvVxVuzSJON2oXD+QMBJNxJnMly7HZRokgN9f5bxCbWDEN6U1rvZHlTBQVJaPT0GI
+         aN2g==
+X-Gm-Message-State: APjAAAVeULfjhE/lEHM/nt1Uyw7HVktCCmGFrDUICGy23NcljG60In71
+        nzTsaVq8gm3U5BTrnJEH7hl05w==
+X-Google-Smtp-Source: APXvYqx4E4JEXIT3W1CyMQZyjzARmanb7SGgfATKCbUvdQ3JAktgB0NC2WDkgr+ANVTd8O3uSbdJcA==
+X-Received: by 2002:a63:1c22:: with SMTP id c34mr8916153pgc.56.1565980151108;
+        Fri, 16 Aug 2019 11:29:11 -0700 (PDT)
+Received: from [10.69.45.46] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o11sm7563672pfh.114.2019.08.16.11.29.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 16 Aug 2019 11:29:10 -0700 (PDT)
+Subject: Re: [PATCH] scsi: lpfc: use spin_lock_irqsave instead of
+ spin_lock_irq in IRQ context
+To:     Fuqian Huang <huangfq.daxian@gmail.com>
+Cc:     Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190812083134.7033-1-huangfq.daxian@gmail.com>
+From:   James Smart <james.smart@broadcom.com>
+Message-ID: <2cc6df9c-50d2-651c-9534-8a91e8e30bd8@broadcom.com>
+Date:   Fri, 16 Aug 2019 11:29:08 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <d0c60641-0607-a9c4-e79d-b6e850ef8682@interlog.com>
+In-Reply-To: <20190812083134.7033-1-huangfq.daxian@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 8/16/19 8:59 AM, Douglas Gilbert wrote:
-> On 2019-08-15 1:30 p.m., Bart Van Assche wrote:
->> HSMR disks. What we need is the ability to discover, read, write and 
->> configure such disks, support for the non-standard HSMR flex protocol, 
->> the ability to give certain users or groups access to a subset of the 
->> LBAs and also the ability to make that information persistent. I think 
->> that such functionality could be implemented by extending LVM and by 
->> adding support for all ZBC commands we need in the block layer, device 
->> mapper layer and also in the asynchronous I/O layer. The block, dm and 
->> aio layers already support submitting commands asynchronously but do 
->> not yet support all the ZBC commands that we use.
-> 
-> I believe that you will find that the more layers of abstraction that are
-> placed between the actual device and the OS level API, the more difficult
-> the discovery process will be. And in some cases you will need to get to
-> a management layer to let those management functions "pass-through" those
-> layers. Some RAID card drivers take advantage of the no_uld_attach flag in
-> scsi_device to expose real devices, but only to the sg/bsg interface for
-> management purposes (for utilities like smartmontools) and do not produce
-> sd device nodes.
+On 8/12/2019 1:31 AM, Fuqian Huang wrote:
+> As spin_unlock_irq will enable interrupts.
+> Function lpfc_findnode_rpi is called from
+>      lpfc_sli_abts_err_handler (./drivers/scsi/lpfc/lpfc_sli.c)
+>   <- lpfc_sli_async_event_handler
+>   <- lpfc_sli_process_unsol_iocb
+>   <- lpfc_sli_handle_fast_ring_event
+>   <- lpfc_sli_fp_intr_handler
+>   <- lpfc_sli_intr_handler
+>   and lpfc_sli_intr_handler is an interrupt handler.
+> Interrupts are enabled in interrupt handler.
+> Use spin_lock_irqsave/spin_unlock_irqrestore instead of spin_(un)lock_irq
+> in IRQ context to avoid this.
+>
+> Signed-off-by: Fuqian Huang <huangfq.daxian@gmail.com>
+> ---
+>   drivers/scsi/lpfc/lpfc_hbadisc.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+> index 28ecaa7fc715..cf02c352b324 100644
+> --- a/drivers/scsi/lpfc/lpfc_hbadisc.c
+> +++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+> @@ -6065,10 +6065,11 @@ lpfc_findnode_rpi(struct lpfc_vport *vport, uint16_t rpi)
+>   {
+>   	struct Scsi_Host *shost = lpfc_shost_from_vport(vport);
+>   	struct lpfc_nodelist *ndlp;
+> +	unsigned long flags;
+>   
+> -	spin_lock_irq(shost->host_lock);
+> +	spin_lock_irqsave(shost->host_lock, flags);
+>   	ndlp = __lpfc_findnode_rpi(vport, rpi);
+> -	spin_unlock_irq(shost->host_lock);
+> +	spin_unlock_irqrestore(shost->host_lock, flags);
+>   	return ndlp;
+>   }
+>   
 
-Isn't the very purpose of an operating system to provide device drivers 
-and other abstraction layers such that not every application has to 
-implement these?
+Thank you.
 
-My opinion is that using SG/IO to control SMR disks is suboptimal. A 
-very powerful feature of the Linux block layer is the ability to stack 
-block drivers. SG/IO is fundamentally incompatible with stacking block 
-drivers. Stacking requires having access to the LBA, request size and 
-other block layer request attributes. I don't think that we want to add 
-code for parsing SCSI, NVMe pass-through commands etc. in block drivers 
-as the device mapper.
+Reviewed-by: James Smart <james.smart@broadcom.com>
 
-Hence my proposal to improve support in the block layer for ZBC instead 
-of using SG/IO to control SMR disks.
-
-Bart.
-
+-- james
