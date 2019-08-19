@@ -2,106 +2,146 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B67389271C
-	for <lists+linux-scsi@lfdr.de>; Mon, 19 Aug 2019 16:38:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D644A94A76
+	for <lists+linux-scsi@lfdr.de>; Mon, 19 Aug 2019 18:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726893AbfHSOip (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 19 Aug 2019 10:38:45 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:49710 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726261AbfHSOip (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 19 Aug 2019 10:38:45 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id D573480BA7; Mon, 19 Aug 2019 16:38:29 +0200 (CEST)
-Date:   Mon, 19 Aug 2019 16:38:42 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>, linux-block@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-scsi@vger.kernel.org,
-        Frank Steiner <fsteiner-mail1@bio.ifi.lmu.de>,
-        Dan Murphy <dmurphy@ti.com>, Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>
-Subject: Re: [PATCH v4 4/5] block: introduce LED block device activity trigger
-Message-ID: <20190819143842.GA25401@amd>
-References: <1565888399-21550-1-git-send-email-akinobu.mita@gmail.com>
- <1565888399-21550-5-git-send-email-akinobu.mita@gmail.com>
- <20190817145509.GA18381@amd>
- <925633c4-a459-5e84-9c9a-502a504fdc82@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="d6Gm4EdcadzBjdND"
-Content-Disposition: inline
-In-Reply-To: <925633c4-a459-5e84-9c9a-502a504fdc82@gmail.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+        id S1727801AbfHSQf6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 19 Aug 2019 12:35:58 -0400
+Received: from relay.sw.ru ([185.231.240.75]:35494 "EHLO relay.sw.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727356AbfHSQf6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 19 Aug 2019 12:35:58 -0400
+Received: from [10.94.4.83] (helo=finist-ce7.sw.ru)
+        by relay.sw.ru with esmtp (Exim 4.92)
+        (envelope-from <khorenko@virtuozzo.com>)
+        id 1hzkdH-0001ug-5r; Mon, 19 Aug 2019 19:35:47 +0300
+From:   Konstantin Khorenko <khorenko@virtuozzo.com>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sagar Biradar <sagar.biradar@microchip.com>
+Cc:     Konstantin Khorenko <khorenko@virtuozzo.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Subject: [PATCH v3 0/1] aacraid: Host adapter Adaptec 6405 constantly resets under high io load
+Date:   Mon, 19 Aug 2019 19:35:45 +0300
+Message-Id: <20190819163546.915-1-khorenko@virtuozzo.com>
+X-Mailer: git-send-email 2.15.1
+In-Reply-To: <yq15zo86nvk.fsf@oracle.com>
+References: <yq15zo86nvk.fsf@oracle.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Problem description:
+====================
+A node with Adaptec 6405 controller, latest BIOS V5.3-0[19204]
+A lot of disks attached to the controller.
+Simple test: running mkfs.ext4 on many disks on the same controller in
+parallel (mkfs is not important here, any serious io load triggers controller
+aborts)
 
---d6Gm4EdcadzBjdND
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Results:
+* no problems (controller resets) with kernels prior to
+  395e5df79a95 ("scsi: aacraid: Remove reference to Series-9")
 
-On Sat 2019-08-17 22:07:43, Jacek Anaszewski wrote:
-> On 8/17/19 4:55 PM, Pavel Machek wrote:
-> > On Fri 2019-08-16 01:59:58, Akinobu Mita wrote:
-> >> This allows LEDs to be controlled by block device activity.
-> >>
-> >> We already have ledtrig-disk (LED disk activity trigger), but the lower
-> >> level disk drivers need to utilize ledtrig_disk_activity() to make the
-> >> LED blink.
-> >>
-> >> The LED block device trigger doesn't require the lower level drivers to
-> >> have any instrumentation. The activity is collected by polling the disk
-> >> stats.
-> >>
-> >> Example:
-> >>
-> >> echo block-nvme0n1 > /sys/class/leds/diy/trigger
-> >=20
-> > Lets use one trigger "block" and have the device as a parameter,
-> > please.
-> >=20
-> > We already have 1000 cpu triggers on 1000 cpu machines, and yes, its a
-> > disaster we'll need to fix. Lets not repeat the same mistake here.
-> >=20
-> > I guess it may be slightly more work. Sorry about that.
->=20
-> We should be able to list available block devices to set,
-> so the problem would be not avoided anyway.
+* latest ms kernel v5.2-rc6-15-g249155c20f9b - mkfs processes are in D state,
+  lot of complains in logs like:
 
-Should we? We need to list triggers, but we may not list all the devices...
+  [  654.894633] aacraid: Host adapter abort request.
+  aacraid: Outstanding commands on (0,1,43,0):
+  [  699.441034] aacraid: Host adapter abort request.
+  aacraid: Outstanding commands on (0,1,40,0):
+  [  699.442950] aacraid: Host adapter reset request. SCSI hang ?
+  [  714.457428] aacraid: Host adapter reset request. SCSI hang ?
+  ...
+  [  759.514759] aacraid: Host adapter reset request. SCSI hang ?
+  [  759.514869] aacraid 0000:03:00.0: outstanding cmd: midlevel-0
+  [  759.514870] aacraid 0000:03:00.0: outstanding cmd: lowlevel-0
+  [  759.514872] aacraid 0000:03:00.0: outstanding cmd: error handler-498
+  [  759.514873] aacraid 0000:03:00.0: outstanding cmd: firmware-471
+  [  759.514875] aacraid 0000:03:00.0: outstanding cmd: kernel-60
+  [  759.514912] aacraid 0000:03:00.0: Controller reset type is 3
+  [  759.515013] aacraid 0000:03:00.0: Issuing IOP reset
+  [  850.296705] aacraid 0000:03:00.0: IOP reset succeeded
 
-> And Greg already proposed
-> a solution for trigger file PAGE_SIZE overflow, so this should not pose
-> a big problem in the future once that is implemented.
+Same complains on Ubuntu kernel 4.15.0-50-generic:
+https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1777586
 
-Which still leaves us with pretty big/ugly triggers file... and we do
-not have the fix in the tree yet.
+Controller:
+===========
+03:00.0 RAID bus controller: Adaptec Series 6 - 6G SAS/PCIe 2 (rev 01)
+         Subsystem: Adaptec Series 6 - ASR-6405 - 4 internal 6G SAS ports
 
-Best regards,
+Test:
+=====
+# cat dev.list
+/dev/sdq1
+/dev/sde1
+/dev/sds1
+/dev/sdb1
+/dev/sdk1
+/dev/sdaj1
+/dev/sdaf1
+/dev/sdd1
+/dev/sdac1
+/dev/sdai1
+/dev/sdz1
+/dev/sdj1
+/dev/sdy1
+/dev/sdn1
+/dev/sdae1
+/dev/sdg1
+/dev/sdi1
+/dev/sdc1
+/dev/sdf1
+/dev/sdl1
+/dev/sda1
+/dev/sdab1
+/dev/sdr1
+/dev/sdo1
+/dev/sdah1
+/dev/sdm1
+/dev/sdt1
+/dev/sdp1
+/dev/sdad1
+/dev/sdh1
 
-									Pavel
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
+===========================================
+# cat run_mkfs.sh
+#!/bin/bash
 
---d6Gm4EdcadzBjdND
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+while read i; do
+   mkfs.ext4 $i -q -E lazy_itable_init=1 -O uninit_bg -m 0 &
+done
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+=================================
+# cat dev.list | ./run_mkfs.sh
 
-iEYEARECAAYFAl1atHIACgkQMOfwapXb+vJUHgCgkeT3UaFwfpz7+MSgycx3Oc4s
-Oc8An3rmb4OVTm//ScEzJqndWpDtv96c
-=dfr0
------END PGP SIGNATURE-----
+The issue is 100% reproducible.
 
---d6Gm4EdcadzBjdND--
+i've bisected to the culprit patch, it's
+395e5df79a95 ("scsi: aacraid: Remove reference to Series-9")
+
+it changes arc ctrl checks for Series-6 controllers
+and i've checked that resurrection of original logic in arc ctrl checks
+eliminates controller hangs/resets.
+
+Konstantin Khorenko (1):
+  scsi: aacraid: resurrect correct arc ctrl checks for Series-6
+
+--
+v3 changes:
+ * introduced another wrapper to check for devices except for Series 6
+   controllers upon request from Sagar Biradar (Microchip)
+
+ * dropped mentions of private bug ids
+
+
+ drivers/scsi/aacraid/aacraid.h  | 11 +++++++++++
+ drivers/scsi/aacraid/comminit.c |  5 ++---
+ drivers/scsi/aacraid/linit.c    |  2 +-
+ 3 files changed, 14 insertions(+), 4 deletions(-)
+
+-- 
+2.15.1
+
