@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 659D09951F
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2019 15:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B668B9951E
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2019 15:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731045AbfHVNc6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 22 Aug 2019 09:32:58 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:41204 "EHLO huawei.com"
+        id S1731123AbfHVNc5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 22 Aug 2019 09:32:57 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:4761 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730899AbfHVNc6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 22 Aug 2019 09:32:58 -0400
+        id S1726422AbfHVNc4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 22 Aug 2019 09:32:56 -0400
 Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 91A344EC96B7B77345CE;
+        by Forcepoint Email with ESMTP id 7253A4A23F94D1A11603;
         Thu, 22 Aug 2019 21:32:51 +0800 (CST)
 Received: from huawei.com (10.90.53.225) by DGGEMS413-HUB.china.huawei.com
  (10.3.19.213) with Microsoft SMTP Server id 14.3.439.0; Thu, 22 Aug 2019
@@ -22,10 +22,12 @@ To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
         <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
 CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH 0/2] scsi: megaraid: remove some set but not used variables
-Date:   Thu, 22 Aug 2019 21:39:12 +0800
-Message-ID: <1566481154-47760-1-git-send-email-zhengbin13@huawei.com>
+Subject: [PATCH 1/2] scsi: megaraid: remove set but not used variable 'reg_set'
+Date:   Thu, 22 Aug 2019 21:39:13 +0800
+Message-ID: <1566481154-47760-2-git-send-email-zhengbin13@huawei.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1566481154-47760-1-git-send-email-zhengbin13@huawei.com>
+References: <1566481154-47760-1-git-send-email-zhengbin13@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.90.53.225]
@@ -35,14 +37,31 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-zhengbin (2):
-  scsi: megaraid: remove set but not used variable 'reg_set'
-  scsi: megaraid: remove set but not used variables 'debugBlk','fusion'
+Fixes gcc '-Wunused-but-set-variable' warning:
 
- drivers/scsi/megaraid/megaraid_sas_fp.c     | 7 +------
+drivers/scsi/megaraid/megaraid_sas_fusion.c: In function megasas_fusion_update_can_queue:
+drivers/scsi/megaraid/megaraid_sas_fusion.c:311:39: warning: variable reg_set set but not used [-Wunused-but-set-variable]]
+
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: zhengbin <zhengbin13@huawei.com>
+---
  drivers/scsi/megaraid/megaraid_sas_fusion.c | 3 ---
- 2 files changed, 1 insertion(+), 9 deletions(-)
+ 1 file changed, 3 deletions(-)
 
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index 120e3c4..fdf6559 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -323,9 +323,6 @@ megasas_fusion_update_can_queue(struct megasas_instance *instance, int fw_boot_c
+ {
+ 	u16 cur_max_fw_cmds = 0;
+ 	u16 ldio_threshold = 0;
+-	struct megasas_register_set __iomem *reg_set;
+-
+-	reg_set = instance->reg_set;
+
+ 	/* ventura FW does not fill outbound_scratch_pad_2 with queue depth */
+ 	if (instance->adapter_type < VENTURA_SERIES)
 --
 2.7.4
 
