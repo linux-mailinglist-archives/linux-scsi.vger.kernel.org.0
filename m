@@ -2,17 +2,17 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EFF995A9
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2019 15:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDFA2995A7
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2019 15:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731965AbfHVN6j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 22 Aug 2019 09:58:39 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:33936 "EHLO huawei.com"
+        id S1731989AbfHVN63 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 22 Aug 2019 09:58:29 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:33946 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731614AbfHVN6j (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 22 Aug 2019 09:58:39 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 138A121FB36AF0A6D579;
+        id S1731965AbfHVN62 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 22 Aug 2019 09:58:28 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 3B2A06CD05FAB9B881FA;
         Thu, 22 Aug 2019 21:58:24 +0800 (CST)
 Received: from huawei.com (10.90.53.225) by DGGEMS411-HUB.china.huawei.com
  (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Thu, 22 Aug 2019
@@ -21,9 +21,9 @@ From:   zhengbin <zhengbin13@huawei.com>
 To:     <hare@suse.com>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
 CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH 1/3] scsi: aic7xxx: remove set but not used variables 'ahd','paused','wait','saved_scsiid'
-Date:   Thu, 22 Aug 2019 22:04:43 +0800
-Message-ID: <1566482685-117305-2-git-send-email-zhengbin13@huawei.com>
+Subject: [PATCH 3/3] scsi: aic7xxx: remove set but not used variables 'tinfo','lqistat2'
+Date:   Thu, 22 Aug 2019 22:04:45 +0800
+Message-ID: <1566482685-117305-4-git-send-email-zhengbin13@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1566482685-117305-1-git-send-email-zhengbin13@huawei.com>
 References: <1566482685-117305-1-git-send-email-zhengbin13@huawei.com>
@@ -38,68 +38,73 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes gcc '-Wunused-but-set-variable' warning:
 
-drivers/scsi/aic7xxx/aic79xx_osm.c: In function ahd_linux_slave_configure:
-drivers/scsi/aic7xxx/aic79xx_osm.c:703:20: warning: variable ahd set but not used [-Wunused-but-set-variable]
-drivers/scsi/aic7xxx/aic79xx_osm.c: In function ahd_linux_dev_reset:
-drivers/scsi/aic7xxx/aic79xx_osm.c:789:9: warning: variable wait set but not used [-Wunused-but-set-variable]
-drivers/scsi/aic7xxx/aic79xx_osm.c: In function ahd_linux_dev_reset:
-drivers/scsi/aic7xxx/aic79xx_osm.c:788:9: warning: variable paused set but not used [-Wunused-but-set-variable]
-drivers/scsi/aic7xxx/aic79xx_osm.c: In function ahd_linux_queue_abort_cmd:
-drivers/scsi/aic7xxx/aic79xx_osm.c:2155:9: warning: variable saved_scsiid set but not used [-Wunused-but-set-variable]
+drivers/scsi/aic7xxx/aic79xx_core.c: In function ahd_dump_sglist:
+drivers/scsi/aic7xxx/aic79xx_core.c:1738:14: warning: variable len set but not used [-Wunused-but-set-variable]
+drivers/scsi/aic7xxx/aic79xx_core.c: In function ahd_handle_seqint:
+drivers/scsi/aic7xxx/aic79xx_core.c:1911:26: warning: variable tinfo set but not used [-Wunused-but-set-variable]
+drivers/scsi/aic7xxx/aic79xx_core.c: In function ahd_handle_transmission_error:
+drivers/scsi/aic7xxx/aic79xx_core.c:2672:8: warning: variable lqistat2 set but not used [-Wunused-but-set-variable]
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: zhengbin <zhengbin13@huawei.com>
 ---
- drivers/scsi/aic7xxx/aic79xx_osm.c | 9 ---------
- 1 file changed, 9 deletions(-)
+ drivers/scsi/aic7xxx/aic79xx_core.c | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/scsi/aic7xxx/aic79xx_osm.c b/drivers/scsi/aic7xxx/aic79xx_osm.c
-index 5799251..18ca82f 100644
---- a/drivers/scsi/aic7xxx/aic79xx_osm.c
-+++ b/drivers/scsi/aic7xxx/aic79xx_osm.c
-@@ -700,9 +700,6 @@ ahd_linux_slave_alloc(struct scsi_device *sdev)
- static int
- ahd_linux_slave_configure(struct scsi_device *sdev)
- {
--	struct	ahd_softc *ahd;
--
--	ahd = *((struct ahd_softc **)sdev->host->hostdata);
- 	if (bootverbose)
- 		sdev_printk(KERN_INFO, sdev, "Slave Configure\n");
+diff --git a/drivers/scsi/aic7xxx/aic79xx_core.c b/drivers/scsi/aic7xxx/aic79xx_core.c
+index 7e5044b..75d94d6 100644
+--- a/drivers/scsi/aic7xxx/aic79xx_core.c
++++ b/drivers/scsi/aic7xxx/aic79xx_core.c
+@@ -1743,8 +1743,8 @@ ahd_dump_sglist(struct scb *scb)
+ 				       i,
+ 				       (uint32_t)((addr >> 32) & 0xFFFFFFFF),
+ 				       (uint32_t)(addr & 0xFFFFFFFF),
+-				       sg_list[i].len & AHD_SG_LEN_MASK,
+-				       (sg_list[i].len & AHD_DMA_LAST_SEG)
++				       len & AHD_SG_LEN_MASK,
++				       (len & AHD_DMA_LAST_SEG)
+ 				     ? " Last" : "");
+ 			}
+ 		} else {
+@@ -1906,9 +1906,6 @@ ahd_handle_seqint(struct ahd_softc *ahd, u_int intstat)
+ 		{
+ 			struct	ahd_devinfo devinfo;
+ 			struct	scb *scb;
+-			struct	ahd_initiator_tinfo *targ_info;
+-			struct	ahd_tmode_tstate *tstate;
+-			struct	ahd_transinfo *tinfo;
+ 			u_int	scbid;
 
-@@ -785,16 +782,12 @@ ahd_linux_dev_reset(struct scsi_cmnd *cmd)
- 	struct scb *reset_scb;
- 	u_int  cdb_byte;
- 	int    retval = SUCCESS;
--	int    paused;
--	int    wait;
- 	struct	ahd_initiator_tinfo *tinfo;
- 	struct	ahd_tmode_tstate *tstate;
- 	unsigned long flags;
- 	DECLARE_COMPLETION_ONSTACK(done);
-
- 	reset_scb = NULL;
--	paused = FALSE;
--	wait = FALSE;
- 	ahd = *(struct ahd_softc **)cmd->device->host->hostdata;
-
- 	scmd_printk(KERN_INFO, cmd,
-@@ -2152,7 +2145,6 @@ ahd_linux_queue_abort_cmd(struct scsi_cmnd *cmd)
- 	u_int  saved_scbptr;
- 	u_int  active_scbptr;
- 	u_int  last_phase;
--	u_int  saved_scsiid;
- 	u_int  cdb_byte;
- 	int    retval;
- 	int    was_paused;
-@@ -2268,7 +2260,6 @@ ahd_linux_queue_abort_cmd(struct scsi_cmnd *cmd)
- 	 * passed in command.  That command is currently active on the
- 	 * bus or is in the disconnected state.
- 	 */
--	saved_scsiid = ahd_inb(ahd, SAVED_SCSIID);
- 	if (last_phase != P_BUSFREE
- 	    && SCB_GET_TAG(pending_scb) == active_scbptr) {
-
+ 			/*
+@@ -1936,12 +1933,6 @@ ahd_handle_seqint(struct ahd_softc *ahd, u_int intstat)
+ 					    SCB_GET_LUN(scb),
+ 					    SCB_GET_CHANNEL(ahd, scb),
+ 					    ROLE_INITIATOR);
+-			targ_info = ahd_fetch_transinfo(ahd,
+-							devinfo.channel,
+-							devinfo.our_scsiid,
+-							devinfo.target,
+-							&tstate);
+-			tinfo = &targ_info->curr;
+ 			ahd_set_width(ahd, &devinfo, MSG_EXT_WDTR_BUS_8_BIT,
+ 				      AHD_TRANS_ACTIVE, /*paused*/TRUE);
+ 			ahd_set_syncrate(ahd, &devinfo, /*period*/0,
+@@ -2669,7 +2660,6 @@ ahd_handle_transmission_error(struct ahd_softc *ahd)
+ 	struct	scb *scb;
+ 	u_int	scbid;
+ 	u_int	lqistat1;
+-	u_int	lqistat2;
+ 	u_int	msg_out;
+ 	u_int	curphase;
+ 	u_int	lastphase;
+@@ -2680,7 +2670,6 @@ ahd_handle_transmission_error(struct ahd_softc *ahd)
+ 	scb = NULL;
+ 	ahd_set_modes(ahd, AHD_MODE_SCSI, AHD_MODE_SCSI);
+ 	lqistat1 = ahd_inb(ahd, LQISTAT1) & ~(LQIPHASE_LQ|LQIPHASE_NLQ);
+-	lqistat2 = ahd_inb(ahd, LQISTAT2);
+ 	if ((lqistat1 & (LQICRCI_NLQ|LQICRCI_LQ)) == 0
+ 	 && (ahd->bugs & AHD_NLQICRC_DELAYED_BUG) != 0) {
+ 		u_int lqistate;
 --
 2.7.4
 
