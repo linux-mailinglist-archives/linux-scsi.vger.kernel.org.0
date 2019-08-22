@@ -2,32 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7EC99600
-	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2019 16:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25399962C
+	for <lists+linux-scsi@lfdr.de>; Thu, 22 Aug 2019 16:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733299AbfHVOL2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 22 Aug 2019 10:11:28 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4765 "EHLO huawei.com"
+        id S2387736AbfHVORo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 22 Aug 2019 10:17:44 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5195 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1733285AbfHVOL2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 22 Aug 2019 10:11:28 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 76CA169528A23CF9E8BA;
-        Thu, 22 Aug 2019 22:11:24 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS406-HUB.china.huawei.com
- (10.3.19.206) with Microsoft SMTP Server id 14.3.439.0; Thu, 22 Aug 2019
- 22:11:16 +0800
+        id S1732331AbfHVORo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 22 Aug 2019 10:17:44 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 8596F5C4896BD44C105B;
+        Thu, 22 Aug 2019 22:13:14 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Thu, 22 Aug 2019
+ 22:13:04 +0800
 From:   zhengbin <zhengbin13@huawei.com>
-To:     <anil.gurumurthy@qlogic.com>, <sudarsana.kalluru@qlogic.com>,
+To:     <mcgrof@kernel.org>, <colin.king@canonical.com>,
         <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
         <linux-scsi@vger.kernel.org>
 CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH 4/4] scsi: bfa: remove set but not used variable 'pgoff'
-Date:   Thu, 22 Aug 2019 22:17:46 +0800
-Message-ID: <1566483466-120175-5-git-send-email-zhengbin13@huawei.com>
+Subject: [PATCH] scsi: arcmsr: remove set but not used variable 'flags'
+Date:   Thu, 22 Aug 2019 22:19:35 +0800
+Message-ID: <1566483575-120713-1-git-send-email-zhengbin13@huawei.com>
 X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1566483466-120175-1-git-send-email-zhengbin13@huawei.com>
-References: <1566483466-120175-1-git-send-email-zhengbin13@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.90.53.225]
@@ -39,106 +37,32 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes gcc '-Wunused-but-set-variable' warning:
 
-drivers/scsi/bfa/bfa_ioc.c: In function bfa_iocpf_sm_fwcheck_entry:
-drivers/scsi/bfa/bfa_ioc.c:712:27: warning: variable pgoff set but not used [-Wunused-but-set-variable]
-drivers/scsi/bfa/bfa_ioc.c: In function bfa_ioc_fwver_get:
-drivers/scsi/bfa/bfa_ioc.c:1451:13: warning: variable pgoff set but not used [-Wunused-but-set-variable]
-drivers/scsi/bfa/bfa_ioc.c: In function bfa_ioc_fwsig_invalidate:
-drivers/scsi/bfa/bfa_ioc.c:1673:13: warning: variable pgoff set but not used [-Wunused-but-set-variable]
-drivers/scsi/bfa/bfa_ioc.c: In function bfa_ioc_download_fw:
-drivers/scsi/bfa/bfa_ioc.c:1874:13: warning: variable pgoff set but not used [-Wunused-but-set-variable]
-drivers/scsi/bfa/bfa_ioc.c: In function bfa_diag_memtest_done:
-drivers/scsi/bfa/bfa_ioc.c:4774:13: warning: variable pgoff set but not used [-Wunused-but-set-variable]
+drivers/scsi/arcmsr/arcmsr_hba.c: In function arcmsr_remap_pciregion:
+drivers/scsi/arcmsr/arcmsr_hba.c:286:30: warning: variable flags set but not used [-Wunused-but-set-variable]
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: zhengbin <zhengbin13@huawei.com>
 ---
- drivers/scsi/bfa/bfa_ioc.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/scsi/arcmsr/arcmsr_hba.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/bfa/bfa_ioc.c b/drivers/scsi/bfa/bfa_ioc.c
-index 93471d7..52d1624 100644
---- a/drivers/scsi/bfa/bfa_ioc.c
-+++ b/drivers/scsi/bfa/bfa_ioc.c
-@@ -701,7 +701,7 @@ static void
- bfa_iocpf_sm_fwcheck_entry(struct bfa_iocpf_s *iocpf)
- {
- 	struct bfi_ioc_image_hdr_s	fwhdr;
--	u32	r32, fwstate, pgnum, pgoff, loff = 0;
-+	u32	r32, fwstate, pgnum, loff = 0;
- 	int	i;
+diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
+index 88053b1..bdf352e 100644
+--- a/drivers/scsi/arcmsr/arcmsr_hba.c
++++ b/drivers/scsi/arcmsr/arcmsr_hba.c
+@@ -283,11 +283,10 @@ static bool arcmsr_remap_pciregion(struct AdapterControlBlock *acb)
+ 	}
+ 	case ACB_ADAPTER_TYPE_D: {
+ 		void __iomem *mem_base0;
+-		unsigned long addr, range, flags;
++		unsigned long addr, range;
 
- 	/*
-@@ -731,7 +731,6 @@ bfa_iocpf_sm_fwcheck_entry(struct bfa_iocpf_s *iocpf)
- 	 * Clear fwver hdr
- 	 */
- 	pgnum = PSS_SMEM_PGNUM(iocpf->ioc->ioc_regs.smem_pg0, loff);
--	pgoff = PSS_SMEM_PGOFF(loff);
- 	writel(pgnum, iocpf->ioc->ioc_regs.host_page_num_fn);
-
- 	for (i = 0; i < sizeof(struct bfi_ioc_image_hdr_s) / sizeof(u32); i++) {
-@@ -1440,13 +1439,12 @@ bfa_ioc_lpu_stop(struct bfa_ioc_s *ioc)
- void
- bfa_ioc_fwver_get(struct bfa_ioc_s *ioc, struct bfi_ioc_image_hdr_s *fwhdr)
- {
--	u32	pgnum, pgoff;
-+	u32	pgnum;
- 	u32	loff = 0;
- 	int		i;
- 	u32	*fwsig = (u32 *) fwhdr;
-
- 	pgnum = PSS_SMEM_PGNUM(ioc->ioc_regs.smem_pg0, loff);
--	pgoff = PSS_SMEM_PGOFF(loff);
- 	writel(pgnum, ioc->ioc_regs.host_page_num_fn);
-
- 	for (i = 0; i < (sizeof(struct bfi_ioc_image_hdr_s) / sizeof(u32));
-@@ -1661,8 +1659,7 @@ bfa_ioc_flash_fwver_cmp(struct bfa_ioc_s *ioc,
- bfa_status_t
- bfa_ioc_fwsig_invalidate(struct bfa_ioc_s *ioc)
- {
--
--	u32	pgnum, pgoff;
-+	u32	pgnum;
- 	u32	loff = 0;
- 	enum bfi_ioc_state ioc_fwstate;
-
-@@ -1671,7 +1668,6 @@ bfa_ioc_fwsig_invalidate(struct bfa_ioc_s *ioc)
- 		return BFA_STATUS_ADAPTER_ENABLED;
-
- 	pgnum = PSS_SMEM_PGNUM(ioc->ioc_regs.smem_pg0, loff);
--	pgoff = PSS_SMEM_PGOFF(loff);
- 	writel(pgnum, ioc->ioc_regs.host_page_num_fn);
- 	bfa_mem_write(ioc->ioc_regs.smem_page_start, loff, BFA_IOC_FW_INV_SIGN);
-
-@@ -1863,7 +1859,7 @@ bfa_ioc_download_fw(struct bfa_ioc_s *ioc, u32 boot_type,
- 		    u32 boot_env)
- {
- 	u32 *fwimg;
--	u32 pgnum, pgoff;
-+	u32 pgnum;
- 	u32 loff = 0;
- 	u32 chunkno = 0;
- 	u32 i;
-@@ -1892,7 +1888,6 @@ bfa_ioc_download_fw(struct bfa_ioc_s *ioc, u32 boot_type,
-
-
- 	pgnum = PSS_SMEM_PGNUM(ioc->ioc_regs.smem_pg0, loff);
--	pgoff = PSS_SMEM_PGOFF(loff);
-
- 	writel(pgnum, ioc->ioc_regs.host_page_num_fn);
-
-@@ -4763,10 +4758,9 @@ bfa_diag_memtest_done(void *cbarg)
- 	struct bfa_ioc_s  *ioc = diag->ioc;
- 	struct bfa_diag_memtest_result *res = diag->result;
- 	u32	loff = BFI_BOOT_MEMTEST_RES_ADDR;
--	u32	pgnum, pgoff, i;
-+	u32	pgnum, i;
-
- 	pgnum = PSS_SMEM_PGNUM(ioc->ioc_regs.smem_pg0, loff);
--	pgoff = PSS_SMEM_PGOFF(loff);
-
- 	writel(pgnum, ioc->ioc_regs.host_page_num_fn);
-
+ 		addr = (unsigned long)pci_resource_start(pdev, 0);
+ 		range = pci_resource_len(pdev, 0);
+-		flags = pci_resource_flags(pdev, 0);
+ 		mem_base0 = ioremap(addr, range);
+ 		if (!mem_base0) {
+ 			pr_notice("arcmsr%d: memory mapping region fail\n",
 --
 2.7.4
 
