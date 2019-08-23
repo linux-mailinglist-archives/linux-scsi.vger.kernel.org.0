@@ -2,28 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3DC9B091
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Aug 2019 15:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AF79B098
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Aug 2019 15:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387979AbfHWNQk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Aug 2019 09:16:40 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:5645 "EHLO huawei.com"
+        id S2389408AbfHWNRJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Aug 2019 09:17:09 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5646 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731783AbfHWNQj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 23 Aug 2019 09:16:39 -0400
+        id S2388055AbfHWNRI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 23 Aug 2019 09:17:08 -0400
 Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id C1DD0127EAAAA3D52496;
+        by Forcepoint Email with ESMTP id C68DDA000D629C65E82D;
         Fri, 23 Aug 2019 21:16:33 +0800 (CST)
 Received: from huawei.com (10.90.53.225) by DGGEMS405-HUB.china.huawei.com
  (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Fri, 23 Aug 2019
- 21:16:22 +0800
+ 21:16:23 +0800
 From:   zhengbin <zhengbin13@huawei.com>
 To:     <QLogic-Storage-Upstream@qlogic.com>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
 CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH 1/3] scsi: bnx2fc: remove set but not used variable 'fh'
-Date:   Fri, 23 Aug 2019 21:22:51 +0800
-Message-ID: <1566566573-49300-2-git-send-email-zhengbin13@huawei.com>
+Subject: [PATCH 2/3] scsi: bnx2fc: remove set but not used variables 'lport','host'
+Date:   Fri, 23 Aug 2019 21:22:52 +0800
+Message-ID: <1566566573-49300-3-git-send-email-zhengbin13@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1566566573-49300-1-git-send-email-zhengbin13@huawei.com>
 References: <1566566573-49300-1-git-send-email-zhengbin13@huawei.com>
@@ -38,35 +38,72 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes gcc '-Wunused-but-set-variable' warning:
 
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function bnx2fc_rcv:
-drivers/scsi/bnx2fc/bnx2fc_fcoe.c:431:26: warning: variable fh set but not used [-Wunused-but-set-variable]
+drivers/scsi/bnx2fc/bnx2fc_io.c: In function bnx2fc_initiate_seq_cleanup:
+drivers/scsi/bnx2fc/bnx2fc_io.c:932:19: warning: variable lport set but not used [-Wunused-but-set-variable]
+drivers/scsi/bnx2fc/bnx2fc_io.c: In function bnx2fc_initiate_cleanup:
+drivers/scsi/bnx2fc/bnx2fc_io.c:1001:19: warning: variable lport set but not used [-Wunused-but-set-variable]
+drivers/scsi/bnx2fc/bnx2fc_io.c: In function bnx2fc_process_scsi_cmd_compl:
+drivers/scsi/bnx2fc/bnx2fc_io.c:1882:20: warning: variable host set but not used [-Wunused-but-set-variable]
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: zhengbin <zhengbin13@huawei.com>
 ---
- drivers/scsi/bnx2fc/bnx2fc_fcoe.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/scsi/bnx2fc/bnx2fc_io.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-index 7796799..ab721ab 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_fcoe.c
-@@ -428,7 +428,6 @@ static int bnx2fc_rcv(struct sk_buff *skb, struct net_device *dev,
- 	struct fc_lport *lport;
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_io.c b/drivers/scsi/bnx2fc/bnx2fc_io.c
+index 9e50e5b..da00ca5 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_io.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_io.c
+@@ -930,7 +930,6 @@ int bnx2fc_initiate_abts(struct bnx2fc_cmd *io_req)
+ int bnx2fc_initiate_seq_cleanup(struct bnx2fc_cmd *orig_io_req, u32 offset,
+ 				enum fc_rctl r_ctl)
+ {
+-	struct fc_lport *lport;
+ 	struct bnx2fc_rport *tgt = orig_io_req->tgt;
  	struct bnx2fc_interface *interface;
- 	struct fcoe_ctlr *ctlr;
--	struct fc_frame_header *fh;
- 	struct fcoe_rcv_info *fr;
- 	struct fcoe_percpu_s *bg;
- 	struct sk_buff *tmp_skb;
-@@ -463,7 +462,6 @@ static int bnx2fc_rcv(struct sk_buff *skb, struct net_device *dev,
- 		goto err;
+ 	struct fcoe_port *port;
+@@ -948,7 +947,6 @@ int bnx2fc_initiate_seq_cleanup(struct bnx2fc_cmd *orig_io_req, u32 offset,
 
- 	skb_set_transport_header(skb, sizeof(struct fcoe_hdr));
--	fh = (struct fc_frame_header *) skb_transport_header(skb);
+ 	port = orig_io_req->port;
+ 	interface = port->priv;
+-	lport = port->lport;
 
- 	fr = fcoe_dev_from_skb(skb);
- 	fr->fr_dev = lport;
+ 	cb_arg = kzalloc(sizeof(struct bnx2fc_els_cb_arg), GFP_ATOMIC);
+ 	if (!cb_arg) {
+@@ -999,7 +997,6 @@ int bnx2fc_initiate_seq_cleanup(struct bnx2fc_cmd *orig_io_req, u32 offset,
+
+ int bnx2fc_initiate_cleanup(struct bnx2fc_cmd *io_req)
+ {
+-	struct fc_lport *lport;
+ 	struct bnx2fc_rport *tgt = io_req->tgt;
+ 	struct bnx2fc_interface *interface;
+ 	struct fcoe_port *port;
+@@ -1015,7 +1012,6 @@ int bnx2fc_initiate_cleanup(struct bnx2fc_cmd *io_req)
+
+ 	port = io_req->port;
+ 	interface = port->priv;
+-	lport = port->lport;
+
+ 	cleanup_io_req = bnx2fc_elstm_alloc(tgt, BNX2FC_CLEANUP);
+ 	if (!cleanup_io_req) {
+@@ -1927,8 +1923,6 @@ void bnx2fc_process_scsi_cmd_compl(struct bnx2fc_cmd *io_req,
+ 	struct fcoe_fcp_rsp_payload *fcp_rsp;
+ 	struct bnx2fc_rport *tgt = io_req->tgt;
+ 	struct scsi_cmnd *sc_cmd;
+-	struct Scsi_Host *host;
+-
+
+ 	/* scsi_cmd_cmpl is called with tgt lock held */
+
+@@ -1957,7 +1951,6 @@ void bnx2fc_process_scsi_cmd_compl(struct bnx2fc_cmd *io_req,
+ 	/* parse fcp_rsp and obtain sense data from RQ if available */
+ 	bnx2fc_parse_fcp_rsp(io_req, fcp_rsp, num_rq);
+
+-	host = sc_cmd->device->host;
+ 	if (!sc_cmd->SCp.ptr) {
+ 		printk(KERN_ERR PFX "SCp.ptr is NULL\n");
+ 		return;
 --
 2.7.4
 
