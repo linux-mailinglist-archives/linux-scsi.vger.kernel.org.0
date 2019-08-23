@@ -2,125 +2,127 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDAD9B092
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Aug 2019 15:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FED09B0D9
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Aug 2019 15:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388524AbfHWNQw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Aug 2019 09:16:52 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:5647 "EHLO huawei.com"
+        id S2393396AbfHWN1B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Aug 2019 09:27:01 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:4774 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388042AbfHWNQv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 23 Aug 2019 09:16:51 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 035A8D7C1A689CEC07D8;
-        Fri, 23 Aug 2019 21:16:34 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Fri, 23 Aug 2019
- 21:16:23 +0800
-From:   zhengbin <zhengbin13@huawei.com>
-To:     <QLogic-Storage-Upstream@qlogic.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
-CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH 3/3] scsi: bnx2fc: remove set but not used variables 'task','port','orig_task'
-Date:   Fri, 23 Aug 2019 21:22:53 +0800
-Message-ID: <1566566573-49300-4-git-send-email-zhengbin13@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1566566573-49300-1-git-send-email-zhengbin13@huawei.com>
-References: <1566566573-49300-1-git-send-email-zhengbin13@huawei.com>
+        id S2389211AbfHWN1B (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 23 Aug 2019 09:27:01 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 086BA3A92BF4100401B8;
+        Fri, 23 Aug 2019 21:26:33 +0800 (CST)
+Received: from [127.0.0.1] (10.202.227.238) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Fri, 23 Aug 2019
+ 21:26:31 +0800
+Subject: Re: [PATCH RFC 00/24] scsi: enable reserved commands for LLDDs
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <20190529132901.27645-1-hare@suse.de>
+CC:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        <linux-scsi@vger.kernel.org>, "Ming Lei" <ming.lei@redhat.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <e5c2b01a-71d9-ef94-3bf6-0830d866e4cf@huawei.com>
+Date:   Fri, 23 Aug 2019 14:26:27 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.3.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.90.53.225]
+In-Reply-To: <20190529132901.27645-1-hare@suse.de>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.238]
 X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fixes gcc '-Wunused-but-set-variable' warning:
+On 29/05/2019 14:28, Hannes Reinecke wrote:
+> Hi all,
+>
+> quite some drivers use internal commands for various purposes, most
+> commonly sending TMFs or querying the HBA status.
+> While these commands use the same submission mechanism than normal
+> I/O commands, they will not be counted as outstanding commands,
+> requiring those drivers to implement their own mechanism to figure
+> out outstanding commands.
+> This patchset enables the use of reserved tags for the SCSI midlayer,
+> enabling LLDDs to rely on the block layer for tracking outstanding
+> commands.
+> More importantly, it allows LLDD to request a valid tag from the block
+> layer without having to implement some tracking mechanism within the
+> driver. This removes quite some hacks which were required for some
+> drivers (eg. fnic or snic).
+>
+> As usual, comments and reviews are welcome.
+>
 
-drivers/scsi/bnx2fc/bnx2fc_hwi.c: In function bnx2fc_process_unsol_compl:
-drivers/scsi/bnx2fc/bnx2fc_hwi.c:636:30: warning: variable task set but not used [-Wunused-but-set-variable]
-drivers/scsi/bnx2fc/bnx2fc_hwi.c: In function bnx2fc_process_ofld_cmpl:
-drivers/scsi/bnx2fc/bnx2fc_hwi.c:1125:21: warning: variable port set but not used [-Wunused-but-set-variable]
-drivers/scsi/bnx2fc/bnx2fc_hwi.c: In function bnx2fc_init_seq_cleanup_task:
-drivers/scsi/bnx2fc/bnx2fc_hwi.c:1468:30: warning: variable orig_task set but not used [-Wunused-but-set-variable]
+Hi Hannes,
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: zhengbin <zhengbin13@huawei.com>
----
- drivers/scsi/bnx2fc/bnx2fc_hwi.c | 16 ----------------
- 1 file changed, 16 deletions(-)
+I was wondering if you have any plans to progress this series?
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_hwi.c b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
-index 747f019..f069e09 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
-@@ -633,7 +633,6 @@ static void bnx2fc_process_unsol_compl(struct bnx2fc_rport *tgt, u16 wqe)
- 	u16 xid;
- 	u32 frame_len, len;
- 	struct bnx2fc_cmd *io_req = NULL;
--	struct fcoe_task_ctx_entry *task, *task_page;
- 	struct bnx2fc_interface *interface = tgt->port->priv;
- 	struct bnx2fc_hba *hba = interface->hba;
- 	int task_idx, index;
-@@ -711,9 +710,6 @@ static void bnx2fc_process_unsol_compl(struct bnx2fc_rport *tgt, u16 wqe)
+I don't mind helping out...
 
- 		task_idx = xid / BNX2FC_TASKS_PER_PAGE;
- 		index = xid % BNX2FC_TASKS_PER_PAGE;
--		task_page = (struct fcoe_task_ctx_entry *)
--					hba->task_ctx[task_idx];
--		task = &(task_page[index]);
+Cheers,
+John
 
- 		io_req = (struct bnx2fc_cmd *)hba->cmd_mgr->cmds[xid];
- 		if (!io_req)
-@@ -839,9 +835,6 @@ static void bnx2fc_process_unsol_compl(struct bnx2fc_rport *tgt, u16 wqe)
+> Hannes Reinecke (24):
+>   block: disable elevator for reserved tags
+>   scsi: add scsi_{get,put}_reserved_cmd()
+>   scsi: add 'nr_reserved_cmds' field to the SCSI host template
+>   csiostor: use reserved command for LUN reset
+>   scsi: add scsi_cmd_from_priv()
+>   virtio_scsi: use reserved commands for TMF
+>   scsi: add host tagset busy iterator
+>   fnic: use reserved commands
+>   fnic: use scsi_host_tagset_busy_iter() to traverse commands
+>   scsi: allocate separate queue for reserved commands
+>   scsi: add scsi_host_get_reserved_cmd()
+>   hpsa: move hpsa_hba_inquiry after scsi_add_host()
+>   hpsa: use reserved commands
+>   hpsa: use blk_mq_tagset_busy_iter() to traverse outstanding commands
+>   hpsa: drop refcount field from CommandList
+>   snic: use reserved commands
+>   snic: use tagset iter for traversing commands
+>   scsi: Implement scsi_is_reserved_cmd()
+>   aacraid: move scsi_add_host()
+>   aacraid: use private commands
+>   aacraid: replace cmd_list with scsi_host_tagset_busy_iter()
+>   aacraid: use scsi_host_tagset_busy_iter() to traverse outstanding
+>     commands
+>   dpt_i2o: drop cmd_list usage
+>   scsi: drop scsi command list
+>
+>  block/blk-mq.c                    |  22 +-
+>  drivers/scsi/aacraid/aachba.c     | 125 +++---
+>  drivers/scsi/aacraid/aacraid.h    |   6 +-
+>  drivers/scsi/aacraid/comminit.c   |  28 +-
+>  drivers/scsi/aacraid/commsup.c    | 134 +++---
+>  drivers/scsi/aacraid/linit.c      | 302 +++++++------
+>  drivers/scsi/csiostor/csio_init.c |   3 +-
+>  drivers/scsi/csiostor/csio_scsi.c |  48 +-
+>  drivers/scsi/dpt_i2o.c            |  23 +-
+>  drivers/scsi/fnic/fnic_scsi.c     | 916 ++++++++++++++++----------------------
+>  drivers/scsi/hosts.c              |  27 ++
+>  drivers/scsi/hpsa.c               | 310 ++++++-------
+>  drivers/scsi/hpsa.h               |   1 -
+>  drivers/scsi/hpsa_cmd.h           |   1 -
+>  drivers/scsi/scsi.c               |   1 -
+>  drivers/scsi/scsi_lib.c           |  69 +--
+>  drivers/scsi/scsi_scan.c          |   1 -
+>  drivers/scsi/snic/snic.h          |   2 +-
+>  drivers/scsi/snic/snic_main.c     |   3 +
+>  drivers/scsi/snic/snic_scsi.c     | 502 ++++++++++-----------
+>  drivers/scsi/virtio_scsi.c        | 100 ++---
+>  include/linux/blk-mq.h            |   2 +
+>  include/scsi/scsi_cmnd.h          |  12 +-
+>  include/scsi/scsi_device.h        |   1 -
+>  include/scsi/scsi_host.h          |  17 +-
+>  include/scsi/scsi_tcq.h           |  30 ++
+>  26 files changed, 1311 insertions(+), 1375 deletions(-)
+>
 
- 		task_idx = xid / BNX2FC_TASKS_PER_PAGE;
- 		index = xid % BNX2FC_TASKS_PER_PAGE;
--		task_page = (struct fcoe_task_ctx_entry *)
--			     interface->hba->task_ctx[task_idx];
--		task = &(task_page[index]);
- 		io_req = (struct bnx2fc_cmd *)hba->cmd_mgr->cmds[xid];
- 		if (!io_req)
- 			goto ret_warn_rqe;
-@@ -1122,7 +1115,6 @@ static void bnx2fc_process_ofld_cmpl(struct bnx2fc_hba *hba,
- 					struct fcoe_kcqe *ofld_kcqe)
- {
- 	struct bnx2fc_rport		*tgt;
--	struct fcoe_port		*port;
- 	struct bnx2fc_interface		*interface;
- 	u32				conn_id;
- 	u32				context_id;
-@@ -1136,7 +1128,6 @@ static void bnx2fc_process_ofld_cmpl(struct bnx2fc_hba *hba,
- 	}
- 	BNX2FC_TGT_DBG(tgt, "Entered ofld compl - context_id = 0x%x\n",
- 		ofld_kcqe->fcoe_conn_context_id);
--	port = tgt->port;
- 	interface = tgt->port->priv;
- 	if (hba != interface->hba) {
- 		printk(KERN_ERR PFX "ERROR:ofld_cmpl: HBA mis-match\n");
-@@ -1463,10 +1454,7 @@ void bnx2fc_init_seq_cleanup_task(struct bnx2fc_cmd *seq_clnp_req,
- {
- 	struct scsi_cmnd *sc_cmd = orig_io_req->sc_cmd;
- 	struct bnx2fc_rport *tgt = seq_clnp_req->tgt;
--	struct bnx2fc_interface *interface = tgt->port->priv;
- 	struct fcoe_bd_ctx *bd = orig_io_req->bd_tbl->bd_tbl;
--	struct fcoe_task_ctx_entry *orig_task;
--	struct fcoe_task_ctx_entry *task_page;
- 	struct fcoe_ext_mul_sges_ctx *sgl;
- 	u8 task_type = FCOE_TASK_TYPE_SEQUENCE_CLEANUP;
- 	u8 orig_task_type;
-@@ -1528,10 +1516,6 @@ void bnx2fc_init_seq_cleanup_task(struct bnx2fc_cmd *seq_clnp_req,
- 		orig_task_idx = orig_xid / BNX2FC_TASKS_PER_PAGE;
- 		index = orig_xid % BNX2FC_TASKS_PER_PAGE;
-
--		task_page = (struct fcoe_task_ctx_entry *)
--			     interface->hba->task_ctx[orig_task_idx];
--		orig_task = &(task_page[index]);
--
- 		/* Multiple SGEs were used for this IO */
- 		sgl = &task->rxwr_only.union_ctx.read_info.sgl_ctx.sgl;
- 		sgl->mul_sgl.cur_sge_addr.lo = (u32)phys_addr;
---
-2.7.4
 
