@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AF79B098
-	for <lists+linux-scsi@lfdr.de>; Fri, 23 Aug 2019 15:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDAD9B092
+	for <lists+linux-scsi@lfdr.de>; Fri, 23 Aug 2019 15:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389408AbfHWNRJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 23 Aug 2019 09:17:09 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:5646 "EHLO huawei.com"
+        id S2388524AbfHWNQw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 23 Aug 2019 09:16:52 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5647 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388055AbfHWNRI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 23 Aug 2019 09:17:08 -0400
+        id S2388042AbfHWNQv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 23 Aug 2019 09:16:51 -0400
 Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id C68DDA000D629C65E82D;
-        Fri, 23 Aug 2019 21:16:33 +0800 (CST)
+        by Forcepoint Email with ESMTP id 035A8D7C1A689CEC07D8;
+        Fri, 23 Aug 2019 21:16:34 +0800 (CST)
 Received: from huawei.com (10.90.53.225) by DGGEMS405-HUB.china.huawei.com
  (10.3.19.205) with Microsoft SMTP Server id 14.3.439.0; Fri, 23 Aug 2019
  21:16:23 +0800
@@ -21,9 +21,9 @@ From:   zhengbin <zhengbin13@huawei.com>
 To:     <QLogic-Storage-Upstream@qlogic.com>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
 CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH 2/3] scsi: bnx2fc: remove set but not used variables 'lport','host'
-Date:   Fri, 23 Aug 2019 21:22:52 +0800
-Message-ID: <1566566573-49300-3-git-send-email-zhengbin13@huawei.com>
+Subject: [PATCH 3/3] scsi: bnx2fc: remove set but not used variables 'task','port','orig_task'
+Date:   Fri, 23 Aug 2019 21:22:53 +0800
+Message-ID: <1566566573-49300-4-git-send-email-zhengbin13@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1566566573-49300-1-git-send-email-zhengbin13@huawei.com>
 References: <1566566573-49300-1-git-send-email-zhengbin13@huawei.com>
@@ -38,72 +38,89 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fixes gcc '-Wunused-but-set-variable' warning:
 
-drivers/scsi/bnx2fc/bnx2fc_io.c: In function bnx2fc_initiate_seq_cleanup:
-drivers/scsi/bnx2fc/bnx2fc_io.c:932:19: warning: variable lport set but not used [-Wunused-but-set-variable]
-drivers/scsi/bnx2fc/bnx2fc_io.c: In function bnx2fc_initiate_cleanup:
-drivers/scsi/bnx2fc/bnx2fc_io.c:1001:19: warning: variable lport set but not used [-Wunused-but-set-variable]
-drivers/scsi/bnx2fc/bnx2fc_io.c: In function bnx2fc_process_scsi_cmd_compl:
-drivers/scsi/bnx2fc/bnx2fc_io.c:1882:20: warning: variable host set but not used [-Wunused-but-set-variable]
+drivers/scsi/bnx2fc/bnx2fc_hwi.c: In function bnx2fc_process_unsol_compl:
+drivers/scsi/bnx2fc/bnx2fc_hwi.c:636:30: warning: variable task set but not used [-Wunused-but-set-variable]
+drivers/scsi/bnx2fc/bnx2fc_hwi.c: In function bnx2fc_process_ofld_cmpl:
+drivers/scsi/bnx2fc/bnx2fc_hwi.c:1125:21: warning: variable port set but not used [-Wunused-but-set-variable]
+drivers/scsi/bnx2fc/bnx2fc_hwi.c: In function bnx2fc_init_seq_cleanup_task:
+drivers/scsi/bnx2fc/bnx2fc_hwi.c:1468:30: warning: variable orig_task set but not used [-Wunused-but-set-variable]
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: zhengbin <zhengbin13@huawei.com>
 ---
- drivers/scsi/bnx2fc/bnx2fc_io.c | 7 -------
- 1 file changed, 7 deletions(-)
+ drivers/scsi/bnx2fc/bnx2fc_hwi.c | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc_io.c b/drivers/scsi/bnx2fc/bnx2fc_io.c
-index 9e50e5b..da00ca5 100644
---- a/drivers/scsi/bnx2fc/bnx2fc_io.c
-+++ b/drivers/scsi/bnx2fc/bnx2fc_io.c
-@@ -930,7 +930,6 @@ int bnx2fc_initiate_abts(struct bnx2fc_cmd *io_req)
- int bnx2fc_initiate_seq_cleanup(struct bnx2fc_cmd *orig_io_req, u32 offset,
- 				enum fc_rctl r_ctl)
+diff --git a/drivers/scsi/bnx2fc/bnx2fc_hwi.c b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+index 747f019..f069e09 100644
+--- a/drivers/scsi/bnx2fc/bnx2fc_hwi.c
++++ b/drivers/scsi/bnx2fc/bnx2fc_hwi.c
+@@ -633,7 +633,6 @@ static void bnx2fc_process_unsol_compl(struct bnx2fc_rport *tgt, u16 wqe)
+ 	u16 xid;
+ 	u32 frame_len, len;
+ 	struct bnx2fc_cmd *io_req = NULL;
+-	struct fcoe_task_ctx_entry *task, *task_page;
+ 	struct bnx2fc_interface *interface = tgt->port->priv;
+ 	struct bnx2fc_hba *hba = interface->hba;
+ 	int task_idx, index;
+@@ -711,9 +710,6 @@ static void bnx2fc_process_unsol_compl(struct bnx2fc_rport *tgt, u16 wqe)
+
+ 		task_idx = xid / BNX2FC_TASKS_PER_PAGE;
+ 		index = xid % BNX2FC_TASKS_PER_PAGE;
+-		task_page = (struct fcoe_task_ctx_entry *)
+-					hba->task_ctx[task_idx];
+-		task = &(task_page[index]);
+
+ 		io_req = (struct bnx2fc_cmd *)hba->cmd_mgr->cmds[xid];
+ 		if (!io_req)
+@@ -839,9 +835,6 @@ static void bnx2fc_process_unsol_compl(struct bnx2fc_rport *tgt, u16 wqe)
+
+ 		task_idx = xid / BNX2FC_TASKS_PER_PAGE;
+ 		index = xid % BNX2FC_TASKS_PER_PAGE;
+-		task_page = (struct fcoe_task_ctx_entry *)
+-			     interface->hba->task_ctx[task_idx];
+-		task = &(task_page[index]);
+ 		io_req = (struct bnx2fc_cmd *)hba->cmd_mgr->cmds[xid];
+ 		if (!io_req)
+ 			goto ret_warn_rqe;
+@@ -1122,7 +1115,6 @@ static void bnx2fc_process_ofld_cmpl(struct bnx2fc_hba *hba,
+ 					struct fcoe_kcqe *ofld_kcqe)
  {
--	struct fc_lport *lport;
- 	struct bnx2fc_rport *tgt = orig_io_req->tgt;
- 	struct bnx2fc_interface *interface;
- 	struct fcoe_port *port;
-@@ -948,7 +947,6 @@ int bnx2fc_initiate_seq_cleanup(struct bnx2fc_cmd *orig_io_req, u32 offset,
-
- 	port = orig_io_req->port;
- 	interface = port->priv;
--	lport = port->lport;
-
- 	cb_arg = kzalloc(sizeof(struct bnx2fc_els_cb_arg), GFP_ATOMIC);
- 	if (!cb_arg) {
-@@ -999,7 +997,6 @@ int bnx2fc_initiate_seq_cleanup(struct bnx2fc_cmd *orig_io_req, u32 offset,
-
- int bnx2fc_initiate_cleanup(struct bnx2fc_cmd *io_req)
+ 	struct bnx2fc_rport		*tgt;
+-	struct fcoe_port		*port;
+ 	struct bnx2fc_interface		*interface;
+ 	u32				conn_id;
+ 	u32				context_id;
+@@ -1136,7 +1128,6 @@ static void bnx2fc_process_ofld_cmpl(struct bnx2fc_hba *hba,
+ 	}
+ 	BNX2FC_TGT_DBG(tgt, "Entered ofld compl - context_id = 0x%x\n",
+ 		ofld_kcqe->fcoe_conn_context_id);
+-	port = tgt->port;
+ 	interface = tgt->port->priv;
+ 	if (hba != interface->hba) {
+ 		printk(KERN_ERR PFX "ERROR:ofld_cmpl: HBA mis-match\n");
+@@ -1463,10 +1454,7 @@ void bnx2fc_init_seq_cleanup_task(struct bnx2fc_cmd *seq_clnp_req,
  {
--	struct fc_lport *lport;
- 	struct bnx2fc_rport *tgt = io_req->tgt;
- 	struct bnx2fc_interface *interface;
- 	struct fcoe_port *port;
-@@ -1015,7 +1012,6 @@ int bnx2fc_initiate_cleanup(struct bnx2fc_cmd *io_req)
+ 	struct scsi_cmnd *sc_cmd = orig_io_req->sc_cmd;
+ 	struct bnx2fc_rport *tgt = seq_clnp_req->tgt;
+-	struct bnx2fc_interface *interface = tgt->port->priv;
+ 	struct fcoe_bd_ctx *bd = orig_io_req->bd_tbl->bd_tbl;
+-	struct fcoe_task_ctx_entry *orig_task;
+-	struct fcoe_task_ctx_entry *task_page;
+ 	struct fcoe_ext_mul_sges_ctx *sgl;
+ 	u8 task_type = FCOE_TASK_TYPE_SEQUENCE_CLEANUP;
+ 	u8 orig_task_type;
+@@ -1528,10 +1516,6 @@ void bnx2fc_init_seq_cleanup_task(struct bnx2fc_cmd *seq_clnp_req,
+ 		orig_task_idx = orig_xid / BNX2FC_TASKS_PER_PAGE;
+ 		index = orig_xid % BNX2FC_TASKS_PER_PAGE;
 
- 	port = io_req->port;
- 	interface = port->priv;
--	lport = port->lport;
-
- 	cleanup_io_req = bnx2fc_elstm_alloc(tgt, BNX2FC_CLEANUP);
- 	if (!cleanup_io_req) {
-@@ -1927,8 +1923,6 @@ void bnx2fc_process_scsi_cmd_compl(struct bnx2fc_cmd *io_req,
- 	struct fcoe_fcp_rsp_payload *fcp_rsp;
- 	struct bnx2fc_rport *tgt = io_req->tgt;
- 	struct scsi_cmnd *sc_cmd;
--	struct Scsi_Host *host;
+-		task_page = (struct fcoe_task_ctx_entry *)
+-			     interface->hba->task_ctx[orig_task_idx];
+-		orig_task = &(task_page[index]);
 -
-
- 	/* scsi_cmd_cmpl is called with tgt lock held */
-
-@@ -1957,7 +1951,6 @@ void bnx2fc_process_scsi_cmd_compl(struct bnx2fc_cmd *io_req,
- 	/* parse fcp_rsp and obtain sense data from RQ if available */
- 	bnx2fc_parse_fcp_rsp(io_req, fcp_rsp, num_rq);
-
--	host = sc_cmd->device->host;
- 	if (!sc_cmd->SCp.ptr) {
- 		printk(KERN_ERR PFX "SCp.ptr is NULL\n");
- 		return;
+ 		/* Multiple SGEs were used for this IO */
+ 		sgl = &task->rxwr_only.union_ctx.read_info.sgl_ctx.sgl;
+ 		sgl->mul_sgl.cur_sge_addr.lo = (u32)phys_addr;
 --
 2.7.4
 
