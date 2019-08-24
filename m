@@ -2,54 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D724F9BF5B
-	for <lists+linux-scsi@lfdr.de>; Sat, 24 Aug 2019 20:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 421B29BFA4
+	for <lists+linux-scsi@lfdr.de>; Sat, 24 Aug 2019 21:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727950AbfHXSpJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 24 Aug 2019 14:45:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53876 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727912AbfHXSpI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 24 Aug 2019 14:45:08 -0400
-Subject: Re: [GIT PULL] SCSI fixes for 5.3-rc5
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566672308;
-        bh=0EifMnHF0dXWeVEJO39RSkX1igyuAB6qFQUFX/o3MXI=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=omEhZJXRsvCDidF32DXFfxtJynZQBrg7wdOD1lGao7ml4zpVJna7JXh9c4nbxgQcM
-         VWKI7AXy7EGDtbVJsakJKYF9B36O+fkZtkl48ymv7ugJRM9dl7ViROeAsOxSIz7zTK
-         72WDa+hz9Z/d4jhAT4Ou/eA3clHQudxzuObrjZ3c=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1566638608.2975.19.camel@HansenPartnership.com>
-References: <1566638608.2975.19.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1566638608.2975.19.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 77ffd3465ba837e9dc714e17b014e77b2eae765a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 17d0fbf47eb15ab7780cc77b28de070ec37e15c5
-Message-Id: <156667230804.2337.8948750981514850563.pr-tracker-bot@kernel.org>
-Date:   Sat, 24 Aug 2019 18:45:08 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1728169AbfHXTAm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Sat, 24 Aug 2019 15:00:42 -0400
+Received: from smtp2.osep.mendoza.gov.ar ([200.16.135.145]:52980 "HELO
+        smtp2.osep.mendoza.gov.ar" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727094AbfHXTAl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 24 Aug 2019 15:00:41 -0400
+X-Greylist: delayed 9990 seconds by postgrey-1.27 at vger.kernel.org; Sat, 24 Aug 2019 15:00:40 EDT
+Received: (qmail 402 invoked from network); 24 Aug 2019 14:14:38 -0000
+Received: from unknown (HELO zimbra.servers.dg.intranet) (10.10.195.224)
+  by smtp2.osep.mendoza.gov.ar with SMTP; 24 Aug 2019 14:14:38 -0000
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.servers.dg.intranet (Postfix) with ESMTP id DB8B3CF7CC66;
+        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
+Received: from zimbra.servers.dg.intranet ([127.0.0.1])
+        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id RViPrJdL95bg; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
+Received: from localhost (localhost [127.0.0.1])
+        by zimbra.servers.dg.intranet (Postfix) with ESMTP id 877BBCF7CC58;
+        Sat, 24 Aug 2019 11:14:37 -0300 (ART)
+X-Virus-Scanned: amavisd-new at osep.mendoza.gov.ar
+Received: from zimbra.servers.dg.intranet ([127.0.0.1])
+        by localhost (zimbra.servers.dg.intranet [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 9n2-6F1Dy9XD; Sat, 24 Aug 2019 11:14:37 -0300 (ART)
+Received: from zimbra.servers.dg.intranet (zimbra.servers.dg.intranet [10.10.195.224])
+        by zimbra.servers.dg.intranet (Postfix) with ESMTP id BAAEBCF7CC40;
+        Sat, 24 Aug 2019 11:14:36 -0300 (ART)
+Date:   Sat, 24 Aug 2019 11:14:36 -0300 (ART)
+From:   "Herr.Robert Jackson" <liliana.marinero@osep.mendoza.gov.ar>
+Reply-To: SKY GROUP FINANCIAL <skygroupfinancial0@gmail.com>
+Message-ID: <1268244548.24999093.1566656076742.JavaMail.zimbra@osep.mendoza.gov.ar>
+Subject: 
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [172.16.3.2]
+X-Mailer: Zimbra 8.6.0_GA_1153 (zclient/8.6.0_GA_1153)
+Thread-Topic: 
+Thread-Index: 9gdTMQJ8JBu8cvpzdFVmtKjzn0qahQ==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Sat, 24 Aug 2019 10:23:28 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/17d0fbf47eb15ab7780cc77b28de070ec37e15c5
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Wir sind zuverlässige, vertrauenswürdige Kreditgeber, leihen wir Unternehmen und Einzelpersonen zu einem niedrigen Zinssatz von 2%, Sind Sie auf der Suche nach einem Geschäftskredit, Privatkredite, Schuldenkonsolidierung, unbesicherte Kredite, Risikokapital, wenn ja Kontaktieren Sie uns jetzt für weitere Einzelheiten.
