@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B67AA24C0
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Aug 2019 20:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 314EEA25CC
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Aug 2019 20:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729625AbfH2SQL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 29 Aug 2019 14:16:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58172 "EHLO mail.kernel.org"
+        id S1728667AbfH2Sc0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 29 Aug 2019 14:32:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55744 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728236AbfH2SQL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:16:11 -0400
+        id S1728697AbfH2SOC (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:14:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6228F23404;
-        Thu, 29 Aug 2019 18:16:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5E89121874;
+        Thu, 29 Aug 2019 18:14:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567102570;
-        bh=YaV+f0950vjRD5TeumxAXpgg2lCSSecBsPFAdte19FQ=;
+        s=default; t=1567102441;
+        bh=Jh3vaT2aKc/EF6gk4cCrzt8r2KBPKvpZzdfcK2NepqQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RQPmj9J474XRAC57GsCmWTPer88hbCdzU0vS0+HGGCulwmEOUUsNwjsMvq5tcPfmF
-         hnNxwt2yQt5y2QVS2PvmLEmjIR6R6dr9TwKF5KIBo0bEZKGVBFb6TVvxVIVjyg2p7e
-         LELgrXkkyRX+8uMt0ffdhBjlUczJtYRMniD8vA2g=
+        b=cqWA/JAiUBQtJmMjH36Ipsivdj1V4qWnS4rulFY+F139JHkLkG5lFyLtjVRxQXgU/
+         clUuCIi7hk9oT4b2k8WubvczpKHVo3ORBpo/JlQRc3+FcR/LK/lPGGIcocVxyUPQSU
+         DYidsrQzHq4nYwj1AMDEK94sfenKQyKNbn+3Qm7k=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Bill Kuzeja <William.Kuzeja@stratus.com>,
@@ -30,12 +30,12 @@ Cc:     Bill Kuzeja <William.Kuzeja@stratus.com>,
         Himanshu Madhani <hmadhani@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 16/45] scsi: qla2xxx: Fix gnl.l memory leak on adapter init failure
-Date:   Thu, 29 Aug 2019 14:15:16 -0400
-Message-Id: <20190829181547.8280-16-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 29/76] scsi: qla2xxx: Fix gnl.l memory leak on adapter init failure
+Date:   Thu, 29 Aug 2019 14:12:24 -0400
+Message-Id: <20190829181311.7562-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829181547.8280-1-sashal@kernel.org>
-References: <20190829181547.8280-1-sashal@kernel.org>
+In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
+References: <20190829181311.7562-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,10 +64,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
-index f8f4d3ea67f3f..15d493f30810f 100644
+index 8d560c562e9c0..6b7b390b2e522 100644
 --- a/drivers/scsi/qla2xxx/qla_attr.c
 +++ b/drivers/scsi/qla2xxx/qla_attr.c
-@@ -2191,6 +2191,8 @@ qla24xx_vport_delete(struct fc_vport *fc_vport)
+@@ -2956,6 +2956,8 @@ qla24xx_vport_delete(struct fc_vport *fc_vport)
  	dma_free_coherent(&ha->pdev->dev, vha->gnl.size, vha->gnl.l,
  	    vha->gnl.ldma);
  
@@ -77,10 +77,10 @@ index f8f4d3ea67f3f..15d493f30810f 100644
  
  	if (vha->qpair && vha->qpair->vp_idx == vha->vp_idx) {
 diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 42b8f0d3e580d..02fa81f122c22 100644
+index d056f5e7cf930..794478e5f7ec8 100644
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -3395,6 +3395,12 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+@@ -3440,6 +3440,12 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
  	return 0;
  
  probe_failed:
@@ -93,7 +93,7 @@ index 42b8f0d3e580d..02fa81f122c22 100644
  	if (base_vha->timer_active)
  		qla2x00_stop_timer(base_vha);
  	base_vha->flags.online = 0;
-@@ -3624,7 +3630,7 @@ qla2x00_remove_one(struct pci_dev *pdev)
+@@ -3673,7 +3679,7 @@ qla2x00_remove_one(struct pci_dev *pdev)
  	if (!atomic_read(&pdev->enable_cnt)) {
  		dma_free_coherent(&ha->pdev->dev, base_vha->gnl.size,
  		    base_vha->gnl.l, base_vha->gnl.ldma);
@@ -102,7 +102,7 @@ index 42b8f0d3e580d..02fa81f122c22 100644
  		scsi_host_put(base_vha->host);
  		kfree(ha);
  		pci_set_drvdata(pdev, NULL);
-@@ -3663,6 +3669,8 @@ qla2x00_remove_one(struct pci_dev *pdev)
+@@ -3713,6 +3719,8 @@ qla2x00_remove_one(struct pci_dev *pdev)
  	dma_free_coherent(&ha->pdev->dev,
  		base_vha->gnl.size, base_vha->gnl.l, base_vha->gnl.ldma);
  
@@ -111,7 +111,7 @@ index 42b8f0d3e580d..02fa81f122c22 100644
  	vfree(base_vha->scan.l);
  
  	if (IS_QLAFX00(ha))
-@@ -4602,6 +4610,7 @@ struct scsi_qla_host *qla2x00_create_host(struct scsi_host_template *sht,
+@@ -4817,6 +4825,7 @@ struct scsi_qla_host *qla2x00_create_host(struct scsi_host_template *sht,
  		    "Alloc failed for scan database.\n");
  		dma_free_coherent(&ha->pdev->dev, vha->gnl.size,
  		    vha->gnl.l, vha->gnl.ldma);
