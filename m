@@ -2,147 +2,143 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F54A2785
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Aug 2019 22:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5685CA28F5
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Aug 2019 23:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728153AbfH2UAK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 29 Aug 2019 16:00:10 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:35013 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728121AbfH2UAJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 29 Aug 2019 16:00:09 -0400
-Received: by mail-pl1-f196.google.com with SMTP id gn20so2094497plb.2
-        for <linux-scsi@vger.kernel.org>; Thu, 29 Aug 2019 13:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=LnwOSHW+qkIfwX+CEo6pre2vAtIHSJHM7Ipb0uTKcN8=;
-        b=ljvhUTB5kgie6mZn/Katfok8X2WrFwgXFmGKAsJBCEExxJK+Nxf6/5JnDHhk1LxGzy
-         GYRAppVUeZ1sd1GoWZIlw7jgdNHty21ipU5Xwbsjv2pDu76zTUuu2M0TYKjBIGiG+5/U
-         z01+UGUU35QOWpFRzt7fPcfbQ99aFBb2fmxT0/oIwQsg9/ldDduJhzRqeDTeL/2cT+fn
-         xZEkAhbQh16HdO3N3dLit2heuBIRhD2aWB6bocU4JidBTKhPZUvGLVHHMbcSP5Om8Rkn
-         fjF4IfC7pe9zuVYT61BgDPYNoG1OUc1oLDYMoO1xaeTde3LKzueqjrs2vOyE7CXBh8Pc
-         jvRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=LnwOSHW+qkIfwX+CEo6pre2vAtIHSJHM7Ipb0uTKcN8=;
-        b=BFeYaqcO4n/MTfph7lbtNffZNzhgVggBbsMkk9PrSJDJ8TiXhWDTIDMg2Th7FYzQ7w
-         n9+I5GV7YlvJaWdkOTgahMip4z4BgCG9NvzHva4Z4G858SY96r/N5LewHSRzquXUJMit
-         PJL7n81AQ4vIcV1uFTFOKjm7YQjofbLRTT28+Ipxu0Sx5gkQnkuIN8+DKaUZgT8btw2K
-         kjqz57UdbFmpxKGvaYd1diCXs+aYvslUsEQeBiNzsCeo2YfB9xcJurh3TtuhCW3QbLr2
-         5rZZqgFRryZRHgzQrTu7Y9wOgsOondJeuAWh+eIPSAgytTPyIiAfuNqWzJPIH7O1pIzO
-         iBRA==
-X-Gm-Message-State: APjAAAV3bGAq7kdlyP7KigeczPIRkHOArBbwifS6C+DyfaRzDfky1KB5
-        MbbAZPqjNPvHaaZIaDOS6NNA8Q==
-X-Google-Smtp-Source: APXvYqwdxPRjNZXc7J371kYMqpuaaLwSfZc+tGFJrILbQTyvwMq61GQBgGE76g8xmKy3HX0ZAhYEFg==
-X-Received: by 2002:a17:902:9a07:: with SMTP id v7mr12015218plp.245.1567108808730;
-        Thu, 29 Aug 2019 13:00:08 -0700 (PDT)
-Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id u7sm3053766pgr.94.2019.08.29.13.00.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 13:00:08 -0700 (PDT)
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     stable@vger.kernel.org
-Cc:     architt@codeaurora.org, a.hajda@samsung.com,
-        Laurent.pinchart@ideasonboard.com, airlied@linux.ie, jsarha@ti.com,
-        tomi.valkeinen@ti.com, vinholikatti@gmail.com,
-        jejb@linux.vnet.ibm.com, martin.petersen@oracle.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: [BACKPORT 4.19.y 3/3] drm/tilcdc: Register cpufreq notifier after we have initialized crtc
-Date:   Thu, 29 Aug 2019 14:00:01 -0600
-Message-Id: <20190829200001.17092-4-mathieu.poirier@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190829200001.17092-1-mathieu.poirier@linaro.org>
-References: <20190829200001.17092-1-mathieu.poirier@linaro.org>
+        id S1727959AbfH2VbR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 29 Aug 2019 17:31:17 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12842 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727073AbfH2VbQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 29 Aug 2019 17:31:16 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7TLRmZE141627;
+        Thu, 29 Aug 2019 17:30:48 -0400
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2upnwp1gxx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Aug 2019 17:30:48 -0400
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7TLUEuc017314;
+        Thu, 29 Aug 2019 21:30:47 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma02wdc.us.ibm.com with ESMTP id 2ujvv6xssu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Aug 2019 21:30:47 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7TLUj2p46661926
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 21:30:45 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4022F6E056;
+        Thu, 29 Aug 2019 21:30:45 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8D8ED6E04C;
+        Thu, 29 Aug 2019 21:30:44 +0000 (GMT)
+Received: from [9.24.4.105] (unknown [9.24.4.105])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Thu, 29 Aug 2019 21:30:44 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH 1/3] scsi: cxlflash: Fix fallthrough warnings.
+From:   Uma Krishnan <ukrishn@linux.ibm.com>
+In-Reply-To: <279d33f05007e9f3e3fb4e6ea19634b2608ffbd3.1567081143.git.msuchanek@suse.de>
+Date:   Thu, 29 Aug 2019 16:30:43 -0500
+Cc:     linuxppc-dev@lists.ozlabs.org,
+        "Manoj N. Kumar" <manoj@linux.ibm.com>,
+        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <814EA905-2AD8-4451-AC1E-4439B64227E7@linux.ibm.com>
+References: <cover.1567081143.git.msuchanek@suse.de>
+ <279d33f05007e9f3e3fb4e6ea19634b2608ffbd3.1567081143.git.msuchanek@suse.de>
+To:     Michal Suchanek <msuchanek@suse.de>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-29_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908290215
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jyri Sarha <jsarha@ti.com>
+Below commit queued up for 5.4 includes these changes.
 
-commit 432973fd3a20102840d5f7e61af9f1a03c217a4c upstream
+commit 657bd277c162580674ddb86a90c4aeb62639bff5
+Author: Gustavo A. R. Silva <gustavo@embeddedor.com>
+Date:   Sun Jul 28 19:21:19 2019 -0500
 
-Register cpufreq notifier after we have initialized the crtc and
-unregister it before we remove the ctrc. Receiving a cpufreq notify
-without crtc causes a crash.
+Thanks,
+Uma Krishnan
 
-Reported-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Signed-off-by: Jyri Sarha <jsarha@ti.com>
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
----
- drivers/gpu/drm/tilcdc/tilcdc_drv.c | 34 ++++++++++++++---------------
- 1 file changed, 17 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/gpu/drm/tilcdc/tilcdc_drv.c b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-index 0fb300d41a09..e1868776da25 100644
---- a/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_drv.c
-@@ -184,6 +184,12 @@ static void tilcdc_fini(struct drm_device *dev)
- {
- 	struct tilcdc_drm_private *priv = dev->dev_private;
- 
-+#ifdef CONFIG_CPU_FREQ
-+	if (priv->freq_transition.notifier_call)
-+		cpufreq_unregister_notifier(&priv->freq_transition,
-+					    CPUFREQ_TRANSITION_NOTIFIER);
-+#endif
-+
- 	if (priv->crtc)
- 		tilcdc_crtc_shutdown(priv->crtc);
- 
-@@ -198,12 +204,6 @@ static void tilcdc_fini(struct drm_device *dev)
- 	drm_mode_config_cleanup(dev);
- 	tilcdc_remove_external_device(dev);
- 
--#ifdef CONFIG_CPU_FREQ
--	if (priv->freq_transition.notifier_call)
--		cpufreq_unregister_notifier(&priv->freq_transition,
--					    CPUFREQ_TRANSITION_NOTIFIER);
--#endif
--
- 	if (priv->clk)
- 		clk_put(priv->clk);
- 
-@@ -274,17 +274,6 @@ static int tilcdc_init(struct drm_driver *ddrv, struct device *dev)
- 		goto init_failed;
- 	}
- 
--#ifdef CONFIG_CPU_FREQ
--	priv->freq_transition.notifier_call = cpufreq_transition;
--	ret = cpufreq_register_notifier(&priv->freq_transition,
--			CPUFREQ_TRANSITION_NOTIFIER);
--	if (ret) {
--		dev_err(dev, "failed to register cpufreq notifier\n");
--		priv->freq_transition.notifier_call = NULL;
--		goto init_failed;
--	}
--#endif
--
- 	if (of_property_read_u32(node, "max-bandwidth", &priv->max_bandwidth))
- 		priv->max_bandwidth = TILCDC_DEFAULT_MAX_BANDWIDTH;
- 
-@@ -361,6 +350,17 @@ static int tilcdc_init(struct drm_driver *ddrv, struct device *dev)
- 	}
- 	modeset_init(ddev);
- 
-+#ifdef CONFIG_CPU_FREQ
-+	priv->freq_transition.notifier_call = cpufreq_transition;
-+	ret = cpufreq_register_notifier(&priv->freq_transition,
-+			CPUFREQ_TRANSITION_NOTIFIER);
-+	if (ret) {
-+		dev_err(dev, "failed to register cpufreq notifier\n");
-+		priv->freq_transition.notifier_call = NULL;
-+		goto init_failed;
-+	}
-+#endif
-+
- 	if (priv->is_componentized) {
- 		ret = component_bind_all(dev, ddev);
- 		if (ret < 0)
--- 
-2.17.1
+> On Aug 29, 2019, at 7:32 AM, Michal Suchanek <msuchanek@suse.de> wrote:
+> 
+> Add fallthrough comments where missing.
+> 
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+> drivers/scsi/cxlflash/main.c | 8 ++++++++
+> 1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/scsi/cxlflash/main.c b/drivers/scsi/cxlflash/main.c
+> index b1f4724efde2..f402fa9a7bec 100644
+> --- a/drivers/scsi/cxlflash/main.c
+> +++ b/drivers/scsi/cxlflash/main.c
+> @@ -753,10 +753,13 @@ static void term_intr(struct cxlflash_cfg *cfg, enum undo_level level,
+> 		/* SISL_MSI_ASYNC_ERROR is setup only for the primary HWQ */
+> 		if (index == PRIMARY_HWQ)
+> 			cfg->ops->unmap_afu_irq(hwq->ctx_cookie, 3, hwq);
+> +		/* fall through */
+> 	case UNMAP_TWO:
+> 		cfg->ops->unmap_afu_irq(hwq->ctx_cookie, 2, hwq);
+> +		/* fall through */
+> 	case UNMAP_ONE:
+> 		cfg->ops->unmap_afu_irq(hwq->ctx_cookie, 1, hwq);
+> +		/* fall through */
+> 	case FREE_IRQ:
+> 		cfg->ops->free_afu_irqs(hwq->ctx_cookie);
+> 		/* fall through */
+> @@ -973,14 +976,18 @@ static void cxlflash_remove(struct pci_dev *pdev)
+> 	switch (cfg->init_state) {
+> 	case INIT_STATE_CDEV:
+> 		cxlflash_release_chrdev(cfg);
+> +		/* fall through */
+> 	case INIT_STATE_SCSI:
+> 		cxlflash_term_local_luns(cfg);
+> 		scsi_remove_host(cfg->host);
+> +		/* fall through */
+> 	case INIT_STATE_AFU:
+> 		term_afu(cfg);
+> +		/* fall through */
+> 	case INIT_STATE_PCI:
+> 		cfg->ops->destroy_afu(cfg->afu_cookie);
+> 		pci_disable_device(pdev);
+> +		/* fall through */
+> 	case INIT_STATE_NONE:
+> 		free_mem(cfg);
+> 		scsi_host_put(cfg->host);
+> @@ -3017,6 +3024,7 @@ static ssize_t num_hwqs_store(struct device *dev,
+> 		wait_event(cfg->reset_waitq, cfg->state != STATE_RESET);
+> 		if (cfg->state == STATE_NORMAL)
+> 			goto retry;
+> +		/* fall through */
+> 	default:
+> 		/* Ideally should not happen */
+> 		dev_err(dev, "%s: Device is not ready, state=%d\n",
+> -- 
+> 2.12.3
+> 
 
