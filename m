@@ -2,73 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B2EA1A1B
-	for <lists+linux-scsi@lfdr.de>; Thu, 29 Aug 2019 14:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DD7FA1A4C
+	for <lists+linux-scsi@lfdr.de>; Thu, 29 Aug 2019 14:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727773AbfH2McM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 29 Aug 2019 08:32:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:36466 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727069AbfH2McH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 29 Aug 2019 08:32:07 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DBFB9AF77;
-        Thu, 29 Aug 2019 12:32:05 +0000 (UTC)
-From:   Michal Suchanek <msuchanek@suse.de>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     Michal Suchanek <msuchanek@suse.de>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Cyr <mikecyr@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [PATCH 3/3] scsi: ibmvscsi: tgt: Fix fallthrough warnings.
-Date:   Thu, 29 Aug 2019 14:32:02 +0200
-Message-Id: <7a621bd1a818c76c320cfd69ab13a17369e3c979.1567081143.git.msuchanek@suse.de>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <cover.1567081143.git.msuchanek@suse.de>
-References: <cover.1567081143.git.msuchanek@suse.de>
+        id S1726985AbfH2MlL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 29 Aug 2019 08:41:11 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:40400 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfH2MlL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 29 Aug 2019 08:41:11 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7TCdsJO020598;
+        Thu, 29 Aug 2019 12:41:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=qYQJUDqvbjCBd9qzJfrKsLJxoTShyvwgZpsn+07ywtM=;
+ b=AtN5/++rBFPnOKDQXeFn4Rpe0nj3WPKzHHQ+SpvIj0ie1fb5NCnZge5/94GFYT3UctWT
+ Mwm/m+Kxh8mTMxVT9S0BY+3gnNZsSoQ/NJZ3vBn7HJ8r4t70fLezHcNoee4GpEuU+Xnc
+ jVnLUkCQlMApqEI8WivC9GmlafuHk8X5qCAN8q08qQgVWweQMJlLMaTGMaLNrz7lxlDj
+ KaJ5FWfgSI0w01Sw5FZ8/QBmwr7wRxmHq5ABx6bafEGqnVwM+mmxBVbe4773hQ48jEXY
+ MPjQEKPerigZUQXysTmwcABwp+ZnVDkjSNymPfiMhOrX1My9ZfEduxfnzb1sV8VRyrJx VA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2upewc0084-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 12:41:08 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7TCbvtx162692;
+        Thu, 29 Aug 2019 12:41:07 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 2upc8un95k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 12:41:07 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7TCf72w030253;
+        Thu, 29 Aug 2019 12:41:07 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 29 Aug 2019 05:41:06 -0700
+Date:   Thu, 29 Aug 2019 15:41:00 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     jsmart2021@gmail.com
+Cc:     linux-scsi@vger.kernel.org
+Subject: [bug report] scsi: lpfc: Adding ability to reset chip via pci bus
+ reset
+Message-ID: <20190829124100.GB20116@mwanda>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9363 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=972
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908290139
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9363 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908290139
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add fallthrough comments where they are missing.
+Hello James Smart,
 
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
----
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 3 +++
- 1 file changed, 3 insertions(+)
+The patch 5021267af132: "scsi: lpfc: Adding ability to reset chip via
+pci bus reset" from Dec 13, 2018, leads to the following static
+checker warning:
 
-diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-index 7f9535392a93..57475dbcae0f 100644
---- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-+++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-@@ -1581,6 +1581,7 @@ static long ibmvscsis_adapter_info(struct scsi_info *vscsi,
- 	case H_PERMISSION:
- 		if (connection_broken(vscsi))
- 			flag_bits = (RESPONSE_Q_DOWN | CLIENT_FAILED);
-+		/* fallthrough */
- 	default:
- 		dev_err(&vscsi->dev, "adapter_info: h_copy_rdma to client failed, rc %ld\n",
- 			rc);
-@@ -2492,8 +2493,10 @@ static long ibmvscsis_ping_response(struct scsi_info *vscsi)
- 		break;
- 	case H_CLOSED:
- 		vscsi->flags |= CLIENT_FAILED;
-+		/* fallthrough */
- 	case H_DROPPED:
- 		vscsi->flags |= RESPONSE_Q_DOWN;
-+		/* fallthrough */
- 	case H_REMOTE_PARM:
- 		dev_err(&vscsi->dev, "ping_response: h_send_crq failed, rc %ld\n",
- 			rc);
--- 
-2.12.3
+	drivers/scsi/lpfc/lpfc_attr.c:1322 lpfc_reset_pci_bus()
+	warn: passing bogus address: '&(phba->pcidev)->dev' val = 176
 
+drivers/scsi/lpfc/lpfc_attr.c
+  1309  static int
+  1310  lpfc_reset_pci_bus(struct lpfc_hba *phba)
+  1311  {
+  1312          struct pci_dev *pdev = phba->pcidev;
+                                ^^^^^^^^^^^^^^^^^^^
+pdev and phba->pcidev are the same.
+
+  1313          struct Scsi_Host *shost = NULL;
+  1314          struct lpfc_hba *phba_other = NULL;
+  1315          struct pci_dev *ptr = NULL;
+  1316          int res;
+  1317  
+  1318          if (phba->cfg_enable_hba_reset != 2)
+  1319                  return -ENOTSUPP;
+  1320  
+  1321          if (!pdev) {
+                    ^^^^^
+They are both NULL.
+
+  1322                  lpfc_printf_log(phba, KERN_INFO, LOG_INIT, "8345 pdev NULL!\n");
+
+This passes "&(phba->pcidev)->dev" which is "(void *)176" to __dev_printk()
+which dereferences it.  Can it really be NULL?
+
+  1323                  return -ENODEV;
+  1324          }
+  1325  
+  1326          res = lpfc_check_pci_resettable(phba);
+  1327          if (res)
+  1328                  return res;
+
+regards,
+dan carpenter
