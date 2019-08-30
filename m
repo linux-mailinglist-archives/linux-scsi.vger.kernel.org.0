@@ -2,83 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B0CA4084
-	for <lists+linux-scsi@lfdr.de>; Sat, 31 Aug 2019 00:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A758DA41F4
+	for <lists+linux-scsi@lfdr.de>; Sat, 31 Aug 2019 05:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728306AbfH3WY1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 30 Aug 2019 18:24:27 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:53568 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728138AbfH3WY1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 30 Aug 2019 18:24:27 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7UMJjih006169;
-        Fri, 30 Aug 2019 15:24:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=Xp1jTREgtFS7wAN4cVQ+VeA3PaBDwU/7B/+bvqa2w2Y=;
- b=GIXdAsJjKp7VyFYMBvcnaO5kGRQ+Ecnzjn/jMuux+AZ68/ecEFfztaaH0P6lrpxJeZ15
- b4SSUGPW4MthGzeI/Ca8e/4bObUyeRAlgkOto8EgJKIuKIR5zsT+073eixxTD3D9x91g
- HQulFyHl2q7c6GZU+c8+pp9vh03ZS//jCztmFphc06w/RbOIFevlaZX3looKG2Q6modP
- Wu0o3ZFhizWWxMNAanaKeOjZFeiBjXKAYIFf75+6FQRHZlLMJRgVSKHTWuPEovtrR6U3
- hJrbexhVoHWwHwfvCJMNoU3U4bSLWABMju+V2POebMEHtgInSX5ww67Gt8FDa63FwnKg QQ== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2upmepn44s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 30 Aug 2019 15:24:24 -0700
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Fri, 30 Aug
- 2019 15:24:22 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Fri, 30 Aug 2019 15:24:22 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id B774F3F703F;
-        Fri, 30 Aug 2019 15:24:21 -0700 (PDT)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x7UMOLxQ023748;
-        Fri, 30 Aug 2019 15:24:21 -0700
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x7UMOL1J023746;
-        Fri, 30 Aug 2019 15:24:21 -0700
-From:   Himanshu Madhani <hmadhani@marvell.com>
-To:     <James.Bottomley@HansenPartnership.com>,
-        <martin.petersen@oracle.com>
-CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 6/6] qla2xxx: Update driver version to 10.01.00.19-k
-Date:   Fri, 30 Aug 2019 15:24:02 -0700
-Message-ID: <20190830222402.23688-7-hmadhani@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20190830222402.23688-1-hmadhani@marvell.com>
-References: <20190830222402.23688-1-hmadhani@marvell.com>
+        id S1728246AbfHaDp2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 30 Aug 2019 23:45:28 -0400
+Received: from de.agxlserv.eu ([89.163.224.118]:55212 "EHLO de.agxlserv.eu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726659AbfHaDp2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 30 Aug 2019 23:45:28 -0400
+X-Greylist: delayed 35544 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Aug 2019 23:45:27 EDT
+Received: from [102.176.65.183] (helo=User)
+        by de.agxlserv.eu with esmtpa (Exim 4.92.1)
+        (envelope-from <hosting.newsblog@agxl.site>)
+        id 1i3nNQ-00065b-Uc; Fri, 30 Aug 2019 22:20:09 +0200
+Reply-To: <brianchapman1808@gmail.com>
+From:   "Brian Chapman" <hosting.newsblog@agxl.site>
+Subject: re: still waiting for your reply
+Date:   Fri, 30 Aug 2019 19:52:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
- definitions=2019-08-30_09:2019-08-29,2019-08-30 signatures=0
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-Antivirus: Avast (VPS 190830-2, 30/08/2019), Outbound message
+X-Antivirus-Status: Clean
+Message-ID: <GENERATED-WASMISSING-1i3nNQ-00065b-Uc@de.agxlserv.eu>
+X-ACL-Warn: Adding Message-ID header because it is missing!
+X-Authenticated-Id: hosting.newsblog@agxl.site
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+still waiting for your reply
+Brian
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index 0833546a1b43..a8f2a953ceff 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -7,7 +7,7 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.01.00.18-k"
-+#define QLA2XXX_VERSION      "10.01.00.19-k"
- 
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	1
--- 
-2.12.0
+---
+This email has been checked for viruses by Avast antivirus software.
+https://www.avast.com/antivirus
 
