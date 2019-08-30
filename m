@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 491BCA4083
-	for <lists+linux-scsi@lfdr.de>; Sat, 31 Aug 2019 00:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7EBA4086
+	for <lists+linux-scsi@lfdr.de>; Sat, 31 Aug 2019 00:24:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728290AbfH3WYU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 30 Aug 2019 18:24:20 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:19668 "EHLO
+        id S1728373AbfH3WYa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 30 Aug 2019 18:24:30 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:57942 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728157AbfH3WYU (ORCPT
+        by vger.kernel.org with ESMTP id S1728157AbfH3WY2 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 30 Aug 2019 18:24:20 -0400
+        Fri, 30 Aug 2019 18:24:28 -0400
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7UMJoiQ001460;
-        Fri, 30 Aug 2019 15:24:18 -0700
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7UMOOO4005338;
+        Fri, 30 Aug 2019 15:24:24 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=hykvNowIUAw69cZ7F106ER9TV79DpZ4RoduIAMy6dXY=;
- b=cPpziDmgSMTa8dDgoN0rhEOV9g0G1t1Bh6f0juThuYWar1+adhTKh48eAqJOoVhaBPH5
- cRqC/+mjEI1tfbWJ+glgMtXNUJV2j3PWIVvauKCbfYHU6NdKgcW8QxvEsusHbjkrovy3
- KbsnO+3tDP+8CIs454nEakKZ6KWbx8tdBc+ZD4VgRpFMJGnyt1ciclmUtK08ByN1dqWR
- nIYKzTLK18hJHufCbEwgDDqCiPqRz1v6sLRMdapum1jh9fDlI0scdfwGPW5TAqKb1E8d
- W7Kb7ZsF9FpRkLxOL5sAOVHyF4Du3gWcBFs8BDQ3vPIjqpPIRupy0TycqddLwe3A/oEL 5A== 
+ content-type; s=pfpt0818; bh=fvn1UDPuFAOsz8HLEhqLFfD3HAU2At4ZSdJMotp+YL4=;
+ b=wtE1jnWyNJ+5EZaIWcRUVII9xTtB6Dty3xGTdoP+Oxwk26zTq82Q41LCwukpXz3AcKbE
+ AkSstkinA3ZL2OXKBax9nLVU2TXV0+kfWi5deRvk9kH6N+XEiv1VKMskp/nGbs3Dh106
+ 4Hjs4PnwjCXsRf4tBh/VK602UQZ+AZMj9tlG1plpOk38HRUf4G+d4SRjDYpbYMBE3F7z
+ VQlRs17McBReRUSJZutfJarB+iuDDm+vgEkVNK5RdEk3ioU/Z1hrcY84HNvyoJvwF8pE
+ IHRnL/rGMSELbRy9DU5YDdrZnTaYXWM3FnuBiNF2tMYGuhHG+pv4rwCw09ckZn4gul9X gQ== 
 Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2uk4rm2dat-1
+        by mx0b-0016f401.pphosted.com with ESMTP id 2uk4rm2dat-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 30 Aug 2019 15:24:17 -0700
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH01.marvell.com
+        Fri, 30 Aug 2019 15:24:24 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH01.marvell.com
  (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Fri, 30 Aug
- 2019 15:24:15 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Fri, 30 Aug 2019 15:24:15 -0700
+ 2019 15:24:18 -0700
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Fri, 30 Aug 2019 15:24:18 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 60F2D3F703F;
-        Fri, 30 Aug 2019 15:24:15 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 89DFE3F703F;
+        Fri, 30 Aug 2019 15:24:18 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x7UMOFU1023739;
-        Fri, 30 Aug 2019 15:24:15 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x7UMOIJ6023743;
+        Fri, 30 Aug 2019 15:24:18 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x7UMOF7U023738;
-        Fri, 30 Aug 2019 15:24:15 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x7UMOIfe023742;
+        Fri, 30 Aug 2019 15:24:18 -0700
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 4/6] qla2xxx: Fix stuck login session
-Date:   Fri, 30 Aug 2019 15:24:00 -0700
-Message-ID: <20190830222402.23688-5-hmadhani@marvell.com>
+Subject: [PATCH 5/6] qla2xxx: Fix stale session
+Date:   Fri, 30 Aug 2019 15:24:01 -0700
+Message-ID: <20190830222402.23688-6-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20190830222402.23688-1-hmadhani@marvell.com>
 References: <20190830222402.23688-1-hmadhani@marvell.com>
@@ -63,73 +63,44 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-Login session was stucked on cable pull. When FW is in the middle
-PRLI PENDING + driver is in Initiator mode, driver fail to
-check back with FW to see if the PRLI has completed. This patch
-would re-check with FW again to make sure PRLI would complete before
-pushing forward with relogin.
+On fast cable pull, where driver is unable to detect device
+has disappeared and came back based on switch info, qla2xxx
+would not re-login while remote port has already invalidate
+the session.  This cause IO timeout.  This patch would relogin
+to remote device for RSCN affected port.
 
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+ drivers/scsi/qla2xxx/qla_gs.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 8161f08f3a4d..2bbadcf60295 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -808,6 +808,15 @@ static void qla24xx_handle_gnl_done_event(scsi_qla_host_t *vha,
- 			fcport->fw_login_state = current_login_state;
- 			fcport->d_id = id;
- 			switch (current_login_state) {
-+			case DSC_LS_PRLI_PEND:
-+				/*
-+				 * In the middle of PRLI. Let it finish.
-+				 * Allow relogin code to recheck state again
-+				 * with GNL. Push disc_state back to DELETED
-+				 * so GNL can go out again
-+				 */
-+				fcport->disc_state = DSC_DELETED;
-+				break;
- 			case DSC_LS_PRLI_COMP:
- 				if ((e->prli_svc_param_word_3[0] & BIT_4) == 0)
- 					fcport->port_type = FCT_INITIATOR;
-@@ -1474,7 +1483,7 @@ int qla24xx_fcport_handle_login(struct scsi_qla_host *vha, fc_port_t *fcport)
- 	u64 wwn;
- 	u16 sec;
+diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
+index 03f94eb372b6..dc0e36676313 100644
+--- a/drivers/scsi/qla2xxx/qla_gs.c
++++ b/drivers/scsi/qla2xxx/qla_gs.c
+@@ -3628,7 +3628,6 @@ void qla24xx_async_gnnft_done(scsi_qla_host_t *vha, srb_t *sp)
+ 		list_for_each_entry(fcport, &vha->vp_fcports, list) {
+ 			if (memcmp(rp->port_name, fcport->port_name, WWN_SIZE))
+ 				continue;
+-			fcport->scan_needed = 0;
+ 			fcport->scan_state = QLA_FCPORT_FOUND;
+ 			found = true;
+ 			/*
+@@ -3637,10 +3636,12 @@ void qla24xx_async_gnnft_done(scsi_qla_host_t *vha, srb_t *sp)
+ 			if ((fcport->flags & FCF_FABRIC_DEVICE) == 0) {
+ 				qla2x00_clear_loop_id(fcport);
+ 				fcport->flags |= FCF_FABRIC_DEVICE;
+-			} else if (fcport->d_id.b24 != rp->id.b24) {
++			} else if (fcport->d_id.b24 != rp->id.b24 ||
++				fcport->scan_needed) {
+ 				qlt_schedule_sess_for_deletion(fcport);
+ 			}
+ 			fcport->d_id.b24 = rp->id.b24;
++			fcport->scan_needed = 0;
+ 			break;
+ 		}
  
--	ql_dbg(ql_dbg_disc + ql_dbg_verbose, vha, 0x20d8,
-+	ql_dbg(ql_dbg_disc, vha, 0x20d8,
- 	    "%s %8phC DS %d LS %d P %d fl %x confl %p rscn %d|%d login %d lid %d scan %d\n",
- 	    __func__, fcport->port_name, fcport->disc_state,
- 	    fcport->fw_login_state, fcport->login_pause, fcport->flags,
-@@ -1485,6 +1494,7 @@ int qla24xx_fcport_handle_login(struct scsi_qla_host *vha, fc_port_t *fcport)
- 		return 0;
- 
- 	if ((fcport->loop_id != FC_NO_LOOP_ID) &&
-+	    qla_dual_mode_enabled(vha) &&
- 	    ((fcport->fw_login_state == DSC_LS_PLOGI_PEND) ||
- 	     (fcport->fw_login_state == DSC_LS_PRLI_PEND)))
- 		return 0;
-@@ -1674,17 +1684,6 @@ void qla24xx_handle_relogin_event(scsi_qla_host_t *vha,
- 	    fcport->last_login_gen, fcport->login_gen,
- 	    fcport->flags);
- 
--	if ((fcport->fw_login_state == DSC_LS_PLOGI_PEND) ||
--	    (fcport->fw_login_state == DSC_LS_PRLI_PEND))
--		return;
--
--	if (fcport->fw_login_state == DSC_LS_PLOGI_COMP) {
--		if (time_before_eq(jiffies, fcport->plogi_nack_done_deadline)) {
--			set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
--			return;
--		}
--	}
--
- 	if (fcport->last_rscn_gen != fcport->rscn_gen) {
- 		ql_dbg(ql_dbg_disc, vha, 0x20e9, "%s %d %8phC post gnl\n",
- 		    __func__, __LINE__, fcport->port_name);
 -- 
 2.12.0
 
