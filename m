@@ -2,65 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B90A458D
-	for <lists+linux-scsi@lfdr.de>; Sat, 31 Aug 2019 19:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9099A45FB
+	for <lists+linux-scsi@lfdr.de>; Sat, 31 Aug 2019 21:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbfHaRST (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 31 Aug 2019 13:18:19 -0400
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:41576 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727836AbfHaRSS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 31 Aug 2019 13:18:18 -0400
-Received: by mail-vk1-f193.google.com with SMTP id w20so2153200vkd.8
-        for <linux-scsi@vger.kernel.org>; Sat, 31 Aug 2019 10:18:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=6U+AEylQu1eBN/8INvXRfvvTlDK+XXGyBEXy+DQjVkM=;
-        b=vePc6LKJgqJkQFIbKWXUiZHyRih27rVSbq7yt2OUI448OlBpaL6iwh9i9s1iw2dVgU
-         KJpAECv3PUMw00IuE0+FaseholLSDnmEPxTbcinbNJLxYcQMz1mYhqL7yucfxIeW7VuQ
-         RAubnsW6aJgmc4z3hcN1nvyJqOjDX5UwNyvI6HyPStXqubvyrxT76pbqhBEaysrkbiwW
-         JWtna9VFZIAZPK4DJuAW+WKfYXma3uefzLvlrQDTzP0OKzrOMlOjEirQiACZHDsvAUle
-         Z0g6GfF1RV/5TLe9BPEqESxil2ZAj8wmp8+f2t6SGs/klsT+LfmQtEVNe6LcrCGZnZSZ
-         g+wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=6U+AEylQu1eBN/8INvXRfvvTlDK+XXGyBEXy+DQjVkM=;
-        b=GgmYp83uqR2aFkc0+8y5kNMfrQ6L0lAnNCM/tOhOL3OLV93HFmmVPrEzk4UussFKR7
-         YMj8zozJAxuCyTpQWkYK4NKnV5oJy//+ml6OnfOrDNrBeaSstgahiCm/cAxxjOpEcJBA
-         bKSP84ZvB2WjE2uXB2/dbmqZMoBkrUCJazSVxbi90cdNiYp0cltdDXa6wTlt02Gprexc
-         nbnyKTba8L7gz+0DM4tMxi61qsy2r6gOqHAIQnLeFBmEdrvBqio3tLQEV/ZLJwtSLEQq
-         wwjDGJxkyW6RQkBrAdiIJ9DrVHbt2Tf+c5snploeU03SCfvFNC8DkXStktrspLa7dOMC
-         8qpA==
-X-Gm-Message-State: APjAAAVLA1qkatOY7R25hsRCAAx8XOU2Fz6lX+t1rWA/9YdorL6VFCUC
-        eJHRvD+QGBIElELcPQM44MWIfJWiSupP6caFUz15OTkr5Po=
-X-Google-Smtp-Source: APXvYqz4fq/uG4i7e8KJVOts3FE3ncle/73w9j1fSUbBw5HSPVIU/fFSM3fExdM5sLAG731mcIHDfn/uIgcRgyyRjV8=
-X-Received: by 2002:a1f:9309:: with SMTP id v9mr10866858vkd.15.1567271897548;
- Sat, 31 Aug 2019 10:18:17 -0700 (PDT)
+        id S1728512AbfHaThN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Sat, 31 Aug 2019 15:37:13 -0400
+Received: from mga01.intel.com ([192.55.52.88]:47493 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728481AbfHaThN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 31 Aug 2019 15:37:13 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Aug 2019 12:37:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,451,1559545200"; 
+   d="scan'208";a="193677253"
+Received: from fmsmsx107.amr.corp.intel.com ([10.18.124.205])
+  by orsmga002.jf.intel.com with ESMTP; 31 Aug 2019 12:37:11 -0700
+Received: from FMSMSX110.amr.corp.intel.com (10.18.116.10) by
+ fmsmsx107.amr.corp.intel.com (10.18.124.205) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Sat, 31 Aug 2019 12:37:11 -0700
+Received: from hasmsx114.ger.corp.intel.com (10.184.198.65) by
+ fmsmsx110.amr.corp.intel.com (10.18.116.10) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Sat, 31 Aug 2019 12:37:11 -0700
+Received: from hasmsx108.ger.corp.intel.com ([169.254.9.203]) by
+ HASMSX114.ger.corp.intel.com ([169.254.14.15]) with mapi id 14.03.0439.000;
+ Sat, 31 Aug 2019 22:37:08 +0300
+From:   "Winkler, Tomas" <tomas.winkler@intel.com>
+To:     YueHaibing <yuehaibing@huawei.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Subhash Jadavani <subhashj@codeaurora.org>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+Subject: RE: [PATCH -next] scsi: ufs: Use kmemdup in
+ ufshcd_read_string_desc()
+Thread-Topic: [PATCH -next] scsi: ufs: Use kmemdup in
+ ufshcd_read_string_desc()
+Thread-Index: AQHVX/llv2uTA5dhSUimOZqnT0VJc6cVpp5g
+Date:   Sat, 31 Aug 2019 19:37:07 +0000
+Message-ID: <5B8DA87D05A7694D9FA63FD143655C1B9DCA9308@hasmsx108.ger.corp.intel.com>
+References: <20190831124424.18642-1-yuehaibing@huawei.com>
+In-Reply-To: <20190831124424.18642-1-yuehaibing@huawei.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ctpclassification: CTP_NT
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiY2U5NTBmYzAtYjVjYS00NDNmLWIzYjctNTRkNDU3MjI3MzJlIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoiTlExUzdqYXVJN3pFXC9JemFkN3k5NDFUQjlTdHlHQ01RZmNuQTFSc1NtK28zM1dXejNWVWh0ektvTXI2K2dYREIifQ==
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-originating-ip: [10.184.70.10]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Received: by 2002:a67:ec4c:0:0:0:0:0 with HTTP; Sat, 31 Aug 2019 10:18:16
- -0700 (PDT)
-Reply-To: williamrobert416@gmail.com
-From:   "Mr. Robert William" <williamrobert416@gmail.com>
-Date:   Sat, 31 Aug 2019 18:18:16 +0100
-Message-ID: <CADAB3SC8t1ms-RPFeRz8XM6g3myj5vR=zR9grGZasP-hN1ZNRw@mail.gmail.com>
-Subject: What has actually kept you waiting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-What has actually kept you waiting to claim your funds since then?
 
-Hurry up and get back to me so that i can give you of the bank where
-your funds was deposited for security reasons.
 
-Your early response will be highly appreciated.
+> Use kmemdup rather than duplicating its implementation
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+LGTM, ACK.
+Tomas
+ 
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c index
+> acf298da054c..6d5e2f5d8468 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -3309,12 +3309,11 @@ int ufshcd_read_string_desc(struct ufs_hba *hba,
+> u8 desc_index,
+>  		str[ret++] = '\0';
+> 
+>  	} else {
+> -		str = kzalloc(uc_str->len, GFP_KERNEL);
+> +		str = kmemdup(uc_str, uc_str->len, GFP_KERNEL);
+>  		if (!str) {
+>  			ret = -ENOMEM;
+>  			goto out;
+>  		}
+> -		memcpy(str, uc_str, uc_str->len);
+>  		ret = uc_str->len;
+>  	}
+>  out:
+> 
+> 
 
-Regard;
-Mr. Robert William
-Foreign payment adviser
