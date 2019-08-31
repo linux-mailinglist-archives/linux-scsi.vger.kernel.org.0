@@ -2,65 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3258DA452E
-	for <lists+linux-scsi@lfdr.de>; Sat, 31 Aug 2019 17:58:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B90A458D
+	for <lists+linux-scsi@lfdr.de>; Sat, 31 Aug 2019 19:18:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727905AbfHaP6Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 31 Aug 2019 11:58:24 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:39996 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726354AbfHaP6X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 31 Aug 2019 11:58:23 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.1 #3 (Red Hat Linux))
-        id 1i45lb-0005xE-Vu; Sat, 31 Aug 2019 15:58:20 +0000
-Date:   Sat, 31 Aug 2019 16:58:19 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org,
-        Octavian Purdila <octavian.purdila@intel.com>,
-        Pantelis Antoniou <pantelis.antoniou@konsulko.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kai =?iso-8859-1?Q?M=E4kisara?= <Kai.Makisara@kolumbus.fi>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [RFC] Re: broken userland ABI in configfs binary attributes
-Message-ID: <20190831155819.GZ1131@ZenIV.linux.org.uk>
-References: <20190826024838.GN1131@ZenIV.linux.org.uk>
- <20190826162949.GA9980@ZenIV.linux.org.uk>
- <20190826182017.GE15933@bombadil.infradead.org>
- <20190826192819.GO1131@ZenIV.linux.org.uk>
- <20190831083241.GC28527@lst.de>
- <20190831133537.GX1131@ZenIV.linux.org.uk>
- <20190831144447.GA600@lst.de>
+        id S1728376AbfHaRST (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 31 Aug 2019 13:18:19 -0400
+Received: from mail-vk1-f193.google.com ([209.85.221.193]:41576 "EHLO
+        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727836AbfHaRSS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 31 Aug 2019 13:18:18 -0400
+Received: by mail-vk1-f193.google.com with SMTP id w20so2153200vkd.8
+        for <linux-scsi@vger.kernel.org>; Sat, 31 Aug 2019 10:18:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=6U+AEylQu1eBN/8INvXRfvvTlDK+XXGyBEXy+DQjVkM=;
+        b=vePc6LKJgqJkQFIbKWXUiZHyRih27rVSbq7yt2OUI448OlBpaL6iwh9i9s1iw2dVgU
+         KJpAECv3PUMw00IuE0+FaseholLSDnmEPxTbcinbNJLxYcQMz1mYhqL7yucfxIeW7VuQ
+         RAubnsW6aJgmc4z3hcN1nvyJqOjDX5UwNyvI6HyPStXqubvyrxT76pbqhBEaysrkbiwW
+         JWtna9VFZIAZPK4DJuAW+WKfYXma3uefzLvlrQDTzP0OKzrOMlOjEirQiACZHDsvAUle
+         Z0g6GfF1RV/5TLe9BPEqESxil2ZAj8wmp8+f2t6SGs/klsT+LfmQtEVNe6LcrCGZnZSZ
+         g+wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=6U+AEylQu1eBN/8INvXRfvvTlDK+XXGyBEXy+DQjVkM=;
+        b=GgmYp83uqR2aFkc0+8y5kNMfrQ6L0lAnNCM/tOhOL3OLV93HFmmVPrEzk4UussFKR7
+         YMj8zozJAxuCyTpQWkYK4NKnV5oJy//+ml6OnfOrDNrBeaSstgahiCm/cAxxjOpEcJBA
+         bKSP84ZvB2WjE2uXB2/dbmqZMoBkrUCJazSVxbi90cdNiYp0cltdDXa6wTlt02Gprexc
+         nbnyKTba8L7gz+0DM4tMxi61qsy2r6gOqHAIQnLeFBmEdrvBqio3tLQEV/ZLJwtSLEQq
+         wwjDGJxkyW6RQkBrAdiIJ9DrVHbt2Tf+c5snploeU03SCfvFNC8DkXStktrspLa7dOMC
+         8qpA==
+X-Gm-Message-State: APjAAAVLA1qkatOY7R25hsRCAAx8XOU2Fz6lX+t1rWA/9YdorL6VFCUC
+        eJHRvD+QGBIElELcPQM44MWIfJWiSupP6caFUz15OTkr5Po=
+X-Google-Smtp-Source: APXvYqz4fq/uG4i7e8KJVOts3FE3ncle/73w9j1fSUbBw5HSPVIU/fFSM3fExdM5sLAG731mcIHDfn/uIgcRgyyRjV8=
+X-Received: by 2002:a1f:9309:: with SMTP id v9mr10866858vkd.15.1567271897548;
+ Sat, 31 Aug 2019 10:18:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190831144447.GA600@lst.de>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+Received: by 2002:a67:ec4c:0:0:0:0:0 with HTTP; Sat, 31 Aug 2019 10:18:16
+ -0700 (PDT)
+Reply-To: williamrobert416@gmail.com
+From:   "Mr. Robert William" <williamrobert416@gmail.com>
+Date:   Sat, 31 Aug 2019 18:18:16 +0100
+Message-ID: <CADAB3SC8t1ms-RPFeRz8XM6g3myj5vR=zR9grGZasP-hN1ZNRw@mail.gmail.com>
+Subject: What has actually kept you waiting
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, Aug 31, 2019 at 04:44:48PM +0200, Christoph Hellwig wrote:
-> On Sat, Aug 31, 2019 at 02:35:37PM +0100, Al Viro wrote:
-> > > So for the one real life example of the configfs attribute life
-> > > actually is simpler.  acpi_table_aml_write verifies early on that
-> > > the size matches what it expects.  So if we document that any future
-> > > instance needs to be able to do that as well we should be able to
-> > > get away with just writing it from ->flush.
-> > 
-> > I'm not sure I understand what you mean...  Do you want them to recognize
-> > incomplete data and quietly bugger off when called on too early ->flush()?
-> 
-> That is what the only user does anyway, take a look at
-> acpi_table_aml_write.  So yes, change the documentation to say it
-> gets written on every close, and the implementation has to deal with
-> incomplete data by either returning an error or ignoring it.
+What has actually kept you waiting to claim your funds since then?
 
-That, or we could just let it have the sucker called on each write().
-As in "for such files writes are accumulated in a buffer, until the
-method finally decides it has enough to process"...
+Hurry up and get back to me so that i can give you of the bank where
+your funds was deposited for security reasons.
 
-In that case method should return something recognizable for "need more
-input", as opposed to "stop, it's already an unacceptable garbage".
+Your early response will be highly appreciated.
+
+Regard;
+Mr. Robert William
+Foreign payment adviser
