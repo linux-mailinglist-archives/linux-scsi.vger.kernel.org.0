@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB1AA6ED1
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2019 18:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD69DA7049
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2019 18:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731192AbfICQ2w (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Sep 2019 12:28:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51200 "EHLO mail.kernel.org"
+        id S1730791AbfICQhy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Sep 2019 12:37:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731178AbfICQ2v (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 3 Sep 2019 12:28:51 -0400
+        id S1730629AbfICQ00 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 3 Sep 2019 12:26:26 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 484A223431;
-        Tue,  3 Sep 2019 16:28:49 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 17E5D238CE;
+        Tue,  3 Sep 2019 16:26:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567528130;
-        bh=SQyxLkOf/O6d/Hq0r71pzE4mhrqkkJQ4k3Ezo+dnXf8=;
+        s=default; t=1567527985;
+        bh=FL0R0ieMlAqeFeTgj/WE4/2JzRGpRQvBCF/ziATjPCQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HkM0G6QgRKkAg2Co4fV7zfWiXzV5PGWWecY75fvaWTt0+9fAQt108wqMMTlq0/6aI
-         5NP65ZCAvOjRfm4LuPDo8NDee/78KjtUwPkWMP1H1kwiAgeB2/LFvxQZZbJy459ksD
-         G90h5aDqkHvbIZ84JgBvCGSonsfV70vRcmA5oBbo=
+        b=S+Xomodswd4lGFkf38Ki6LFPNFajUWNXPUyOZjrUnWvwy8DVDNs3MVYOmB9ceHE1b
+         zKHSnnoDYxvtN6uHD92x82RnXQl2bsoSa0YuAlBMR4fK4OwqouEu78/ZhQ/oFpGFjs
+         45x2GkcUQys1YBziSNze9wydujV29FGkZ0oDYfcA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Roman Bolshakov <r.bolshakov@yadro.com>,
-        Bart Van Assche <bvanassche@acm.org>,
+Cc:     Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 125/167] scsi: target/iblock: Fix overrun in WRITE SAME emulation
-Date:   Tue,  3 Sep 2019 12:24:37 -0400
-Message-Id: <20190903162519.7136-125-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 040/167] scsi: megaraid_sas: Fix combined reply queue mode detection
+Date:   Tue,  3 Sep 2019 12:23:12 -0400
+Message-Id: <20190903162519.7136-40-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190903162519.7136-1-sashal@kernel.org>
 References: <20190903162519.7136-1-sashal@kernel.org>
@@ -45,44 +45,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Roman Bolshakov <r.bolshakov@yadro.com>
+From: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
 
-[ Upstream commit 5676234f20fef02f6ca9bd66c63a8860fce62645 ]
+[ Upstream commit e29c322133472628c6de85efb99ccd3b3df5571e ]
 
-WRITE SAME corrupts data on the block device behind iblock if the command
-is emulated. The emulation code issues (M - 1) * N times more bios than
-requested, where M is the number of 512 blocks per real block size and N is
-the NUMBER OF LOGICAL BLOCKS specified in WRITE SAME command. So, for a
-device with 4k blocks, 7 * N more LBAs gets written after the requested
-range.
+For Invader series, if FW supports more than 8 MSI-x vectors, driver needs
+to enable combined reply queue mode. For Ventura series, driver enables
+combined reply queue mode in case of more than 16 MSI-x vectors.
 
-The issue happens because the number of 512 byte sectors to be written is
-decreased one by one while the real bios are typically from 1 to 8 512 byte
-sectors per bio.
-
-Fixes: c66ac9db8d4a ("[SCSI] target: Add LIO target core v4.0.0-rc6")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Sumit Saxena <sumit.saxena@broadcom.com>
+Signed-off-by: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/target_core_iblock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/megaraid/megaraid_sas_base.c | 23 ++++++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index 1bc9b14236d8b..854b2bcca7c1a 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -515,7 +515,7 @@ iblock_execute_write_same(struct se_cmd *cmd)
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index 806ceabcabc3f..b6fc7c6337610 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -5325,12 +5325,29 @@ static int megasas_init_fw(struct megasas_instance *instance)
+ 				instance->msix_vectors = (scratch_pad_2
+ 					& MR_MAX_REPLY_QUEUES_OFFSET) + 1;
+ 				fw_msix_count = instance->msix_vectors;
+-			} else { /* Invader series supports more than 8 MSI-x vectors*/
++			} else {
+ 				instance->msix_vectors = ((scratch_pad_2
+ 					& MR_MAX_REPLY_QUEUES_EXT_OFFSET)
+ 					>> MR_MAX_REPLY_QUEUES_EXT_OFFSET_SHIFT) + 1;
+-				if (instance->msix_vectors > 16)
+-					instance->msix_combined = true;
++
++				/*
++				 * For Invader series, > 8 MSI-x vectors
++				 * supported by FW/HW implies combined
++				 * reply queue mode is enabled.
++				 * For Ventura series, > 16 MSI-x vectors
++				 * supported by FW/HW implies combined
++				 * reply queue mode is enabled.
++				 */
++				switch (instance->adapter_type) {
++				case INVADER_SERIES:
++					if (instance->msix_vectors > 8)
++						instance->msix_combined = true;
++					break;
++				case VENTURA_SERIES:
++					if (instance->msix_vectors > 16)
++						instance->msix_combined = true;
++					break;
++				}
  
- 		/* Always in 512 byte units for Linux/Block */
- 		block_lba += sg->length >> SECTOR_SHIFT;
--		sectors -= 1;
-+		sectors -= sg->length >> SECTOR_SHIFT;
- 	}
- 
- 	iblock_submit_bios(&list);
+ 				if (rdpq_enable)
+ 					instance->is_rdpq = (scratch_pad_2 & MR_RDPQ_MODE_OFFSET) ?
 -- 
 2.20.1
 
