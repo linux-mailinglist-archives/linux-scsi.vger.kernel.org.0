@@ -2,187 +2,161 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E84B3A6F09
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2019 18:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2741A714B
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Sep 2019 19:04:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731096AbfICQ2U (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Sep 2019 12:28:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50206 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731088AbfICQ2T (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 3 Sep 2019 12:28:19 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 400DE238CE;
-        Tue,  3 Sep 2019 16:28:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567528098;
-        bh=C0os0u59lpcVwQNJ3fMkWbkaHLQ/ZyBoPdY1311WfMQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wRCEcicboszdO/yEAIB+ctiSjwCSKJEcaEC3mL0E0oIARwYnDi6xIxYeP+jO5FPv1
-         Bb0Y8pogScSIdChINCtmZyIrITj7T1PWVoGDE+GGwnrE9xjuMQ8lssfwB4LZYt2GSL
-         P1opxFqy8ZMDMoOSx8PhPcLeW9gVZn1uTXOf2kdY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        James Smart <james.smart@broadcom.com>,
-        Bart Van Assche <bart.vanassche@wdc.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        Hannes Reinecke <hare@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>, linux-block@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 106/167] blk-mq: free hw queue's resource in hctx's release handler
-Date:   Tue,  3 Sep 2019 12:24:18 -0400
-Message-Id: <20190903162519.7136-106-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190903162519.7136-1-sashal@kernel.org>
-References: <20190903162519.7136-1-sashal@kernel.org>
+        id S1729993AbfICREX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Sep 2019 13:04:23 -0400
+Received: from mail-eopbgr820047.outbound.protection.outlook.com ([40.107.82.47]:14198
+        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728571AbfICREW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 3 Sep 2019 13:04:22 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SEW3U1DrhnPq/q/gBkOWs/xb9KTcblgjxz1Xth7vc0LAA6vZLSCtvOInon/zzStnTfKQ+MYlhqaEVW9hGiZqX9sKE2SLGW9er/xrKYvcQdsUOOC2M+FDEG6SSew6A2khnGCrTrucSd3nmjDuUl07nWG/Q/O3z7uztSSlh1HT4xpBhEv5HtUcnZko6lw6r3TQNn1WK7xPCDG2HbsNPdPIeqZBRK7TG9f6NxzJ6Ou+y6pBBEOdT3/AF6wgqCXEIfPaaUXI4JPOYjrhuC49OwwXMe7Fx1nsL+Hb0B/4/TI6X+4+mJufNSPoP46EwwXYjTQR0CD7j9Ar/ZzrGusC2f1i5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FE1vkhZEcBTm/jJaftv+DejwqE1+7/QXcmbHN3bXq44=;
+ b=BxBIxDSyWngWgnAnu4zY5SnlMgQO+dp4wYAr3yyX60f16TzBQ1ZVh0Dp2Yoa00eHhDWzVIpyx0GzxN+rAUikxSgcjCEOgUGh45A2+yyT2I47Jxu84JZdQi6FSTr5BGjSE8dXwxywbA8HvAhhqB76UUPXcvRszhH34HB2nTD1oFrnRuWes0kx1veRQvHG8Qie1enNtdow7TUPOg8xUfT6vu/j0C4kM2YktH785IbmP3oYr9VsCE6g5E+HmhF2GNnBKahsMp7d4m2BaD5QCWUbdTtDZF/SF33vdg4tn+5DMS9eGqcVLi6uX87ySKckPBCKenVcK9RPFLei+v3vM0hHQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ddn.com; dmarc=pass action=none header.from=ddn.com; dkim=pass
+ header.d=ddn.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FE1vkhZEcBTm/jJaftv+DejwqE1+7/QXcmbHN3bXq44=;
+ b=Fh7/Pj/Tz6qTg6pwJFWwPoWjdGD4hjMuoFrrhuzUoGPXiWeVUI8YRCLfoNA+gLGOzhV/fZ2ATzYq486DYIL/HpIgdl2fE+6emFst9fUM+rLyRbDMS+qalTxEFacb6Y/GGpdENom0+juoWNAM6GSbUQk8Cma2Ysj4jJLNDvq0jXk=
+Received: from BY5PR19MB3176.namprd19.prod.outlook.com (10.255.160.21) by
+ BY5PR19MB3221.namprd19.prod.outlook.com (10.255.160.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.14; Tue, 3 Sep 2019 17:04:20 +0000
+Received: from BY5PR19MB3176.namprd19.prod.outlook.com
+ ([fe80::844f:102f:5181:c074]) by BY5PR19MB3176.namprd19.prod.outlook.com
+ ([fe80::844f:102f:5181:c074%3]) with mapi id 15.20.2220.022; Tue, 3 Sep 2019
+ 17:04:20 +0000
+From:   Matt Lupfer <mlupfer@ddn.com>
+To:     "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Matt Lupfer <mlupfer@ddn.com>
+Subject: [PATCH] scsi: virtio_scsi: unplug LUNs when events missed
+Thread-Topic: [PATCH] scsi: virtio_scsi: unplug LUNs when events missed
+Thread-Index: AQHVYnmgUCG1mM4ObEKGSGCIQ1xBzg==
+Date:   Tue, 3 Sep 2019 17:04:20 +0000
+Message-ID: <20190903170408.32286-1-mlupfer@ddn.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BN6PR03CA0002.namprd03.prod.outlook.com
+ (2603:10b6:404:23::12) To BY5PR19MB3176.namprd19.prod.outlook.com
+ (2603:10b6:a03:184::21)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=mlupfer@ddn.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.23.0
+x-originating-ip: [107.128.241.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: cc3df57e-7d38-49e1-eba6-08d73090c2ff
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BY5PR19MB3221;
+x-ms-traffictypediagnostic: BY5PR19MB3221:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BY5PR19MB322198CDECF53BC0BF569074AEB90@BY5PR19MB3221.namprd19.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 01494FA7F7
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39850400004)(376002)(136003)(366004)(346002)(396003)(189003)(199004)(36756003)(71190400001)(71200400001)(14454004)(25786009)(4326008)(256004)(478600001)(5024004)(66556008)(66476007)(66446008)(64756008)(66946007)(476003)(6486002)(2616005)(86362001)(486006)(8676002)(81156014)(102836004)(81166006)(8936002)(50226002)(386003)(7736002)(6506007)(305945005)(6116002)(3846002)(26005)(5660300002)(2906002)(316002)(186003)(110136005)(54906003)(1076003)(52116002)(99286004)(6512007)(66066001)(6436002)(53936002);DIR:OUT;SFP:1101;SCL:1;SRVR:BY5PR19MB3221;H:BY5PR19MB3176.namprd19.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: ddn.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: RUmvvb9EMpVdSOP5wT+r+RINhpPJNUTNk4b/DHOnu/M9IaKFyUuNdjjERa6bKk9Dlx7GAd/jpk+NfTC1NMisgz1/mRYDu88+JzI6xKs0bzTtIDN6z75g4F+4KINMOilhmac2lvQTI9JNkrG/AuJlorJQpAWs/VmufEgi+1MF7gm2PL8nKxRItYFYrAII8cjyZ63KzlJy7NrG7i+bnqZZ7jeyAMAjBQLAYopZwt58iONTQ8gzKDzdjEJz5rMgPePiTLnUErMmRrAQPHgZfOvTPblMYn+Ex9PjJ7pdsQliJTjN1cc7MX8Htfa9fXXFEm1Daa5eiQyLzn3roSXB/Ed9sHjYpOnbftguKWZalCSPcCGKgMuh1nG2vJWhClcL7Ex4iZ5sPeUhnsoe5mDBpc78zl0kfnlxDmUggZ3OQ5BzJR8=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: ddn.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc3df57e-7d38-49e1-eba6-08d73090c2ff
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2019 17:04:20.2709
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Vt/yFrolFeFtItMqa33m8bCgerKq3VBWspQM6MbtqDFP9VNcOVTyV6OM4vFl5w1v
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR19MB3221
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+The event handler calls scsi_scan_host() when events are missed, which
+will hotplug new LUNs.  However, this function won't remove any
+unplugged LUNs.  The result is that hotunplug doesn't work properly when
+the number of unplugged LUNs exceeds the event queue size (currently 8).
 
-[ Upstream commit c7e2d94b3d1634988a95ac4d77a72dc7487ece06 ]
+Scan existing LUNs when events are missed to check if they are still
+present.  If not, remove them.
 
-Once blk_cleanup_queue() returns, tags shouldn't be used any more,
-because blk_mq_free_tag_set() may be called. Commit 45a9c9d909b2
-("blk-mq: Fix a use-after-free") fixes this issue exactly.
-
-However, that commit introduces another issue. Before 45a9c9d909b2,
-we are allowed to run queue during cleaning up queue if the queue's
-kobj refcount is held. After that commit, queue can't be run during
-queue cleaning up, otherwise oops can be triggered easily because
-some fields of hctx are freed by blk_mq_free_queue() in blk_cleanup_queue().
-
-We have invented ways for addressing this kind of issue before, such as:
-
-	8dc765d438f1 ("SCSI: fix queue cleanup race before queue initialization is done")
-	c2856ae2f315 ("blk-mq: quiesce queue before freeing queue")
-
-But still can't cover all cases, recently James reports another such
-kind of issue:
-
-	https://marc.info/?l=linux-scsi&m=155389088124782&w=2
-
-This issue can be quite hard to address by previous way, given
-scsi_run_queue() may run requeues for other LUNs.
-
-Fixes the above issue by freeing hctx's resources in its release handler, and this
-way is safe becasue tags isn't needed for freeing such hctx resource.
-
-This approach follows typical design pattern wrt. kobject's release handler.
-
-Cc: Dongli Zhang <dongli.zhang@oracle.com>
-Cc: James Smart <james.smart@broadcom.com>
-Cc: Bart Van Assche <bart.vanassche@wdc.com>
-Cc: linux-scsi@vger.kernel.org,
-Cc: Martin K . Petersen <martin.petersen@oracle.com>,
-Cc: Christoph Hellwig <hch@lst.de>,
-Cc: James E . J . Bottomley <jejb@linux.vnet.ibm.com>,
-Reported-by: James Smart <james.smart@broadcom.com>
-Fixes: 45a9c9d909b2 ("blk-mq: Fix a use-after-free")
-Cc: stable@vger.kernel.org
-Reviewed-by: Hannes Reinecke <hare@suse.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Tested-by: James Smart <james.smart@broadcom.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Matt Lupfer <mlupfer@ddn.com>
 ---
- block/blk-core.c     | 3 ++-
- block/blk-mq-sysfs.c | 6 ++++++
- block/blk-mq.c       | 8 ++------
- block/blk-mq.h       | 2 +-
- 4 files changed, 11 insertions(+), 8 deletions(-)
+ drivers/scsi/virtio_scsi.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 4a3e1f4178804..af635f878f966 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -816,7 +816,8 @@ void blk_cleanup_queue(struct request_queue *q)
- 	blk_exit_queue(q);
- 
- 	if (q->mq_ops)
--		blk_mq_free_queue(q);
-+		blk_mq_exit_queue(q);
-+
- 	percpu_ref_exit(&q->q_usage_counter);
- 
- 	spin_lock_irq(lock);
-diff --git a/block/blk-mq-sysfs.c b/block/blk-mq-sysfs.c
-index aafb44224c896..0b7297a43ccd2 100644
---- a/block/blk-mq-sysfs.c
-+++ b/block/blk-mq-sysfs.c
-@@ -10,6 +10,7 @@
- #include <linux/smp.h>
- 
- #include <linux/blk-mq.h>
-+#include "blk.h"
- #include "blk-mq.h"
- #include "blk-mq-tag.h"
- 
-@@ -21,6 +22,11 @@ static void blk_mq_hw_sysfs_release(struct kobject *kobj)
- {
- 	struct blk_mq_hw_ctx *hctx = container_of(kobj, struct blk_mq_hw_ctx,
- 						  kobj);
-+
-+	if (hctx->flags & BLK_MQ_F_BLOCKING)
-+		cleanup_srcu_struct(hctx->srcu);
-+	blk_free_flush_queue(hctx->fq);
-+	sbitmap_free(&hctx->ctx_map);
- 	free_cpumask_var(hctx->cpumask);
- 	kfree(hctx->ctxs);
- 	kfree(hctx);
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 70d839b9c3b09..455fda99255a4 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -2157,12 +2157,7 @@ static void blk_mq_exit_hctx(struct request_queue *q,
- 	if (set->ops->exit_hctx)
- 		set->ops->exit_hctx(hctx, hctx_idx);
- 
--	if (hctx->flags & BLK_MQ_F_BLOCKING)
--		cleanup_srcu_struct(hctx->srcu);
--
- 	blk_mq_remove_cpuhp(hctx);
--	blk_free_flush_queue(hctx->fq);
--	sbitmap_free(&hctx->ctx_map);
+diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+index 297e1076e571..18df77bf371b 100644
+--- a/drivers/scsi/virtio_scsi.c
++++ b/drivers/scsi/virtio_scsi.c
+@@ -324,6 +324,36 @@ static void virtscsi_handle_param_change(struct virtio=
+_scsi *vscsi,
+ 	scsi_device_put(sdev);
  }
- 
- static void blk_mq_exit_hw_queues(struct request_queue *q,
-@@ -2662,7 +2657,8 @@ struct request_queue *blk_mq_init_allocated_queue(struct blk_mq_tag_set *set,
- }
- EXPORT_SYMBOL(blk_mq_init_allocated_queue);
- 
--void blk_mq_free_queue(struct request_queue *q)
-+/* tags can _not_ be used after returning from blk_mq_exit_queue */
-+void blk_mq_exit_queue(struct request_queue *q)
+=20
++static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
++{
++	struct scsi_device *sdev;
++	struct Scsi_Host *shost =3D virtio_scsi_host(vscsi->vdev);
++	unsigned char scsi_cmd[MAX_COMMAND_SIZE];
++	int result, inquiry_len, inq_result_len =3D 256;
++	char *inq_result =3D kmalloc(inq_result_len, GFP_KERNEL);
++
++	shost_for_each_device(sdev, shost) {
++		inquiry_len =3D sdev->inquiry_len ? sdev->inquiry_len : 36;
++
++		memset(scsi_cmd, 0, sizeof(scsi_cmd));
++		scsi_cmd[0] =3D INQUIRY;
++		scsi_cmd[4] =3D (unsigned char) inquiry_len;
++
++		memset(inq_result, 0, inq_result_len);
++
++		result =3D scsi_execute_req(sdev, scsi_cmd, DMA_FROM_DEVICE,
++					  inq_result, inquiry_len, NULL,
++					  2, 3, NULL);
++
++		if (result =3D=3D 0 && inq_result[0] >> 5) {
++			/* PQ indicates the LUN is not attached */
++			scsi_remove_device(sdev);
++		}
++	}
++
++	kfree(inq_result);
++}
++
+ static void virtscsi_handle_event(struct work_struct *work)
  {
- 	struct blk_mq_tag_set	*set = q->tag_set;
- 
-diff --git a/block/blk-mq.h b/block/blk-mq.h
-index 9497b47e2526c..5ad9251627f80 100644
---- a/block/blk-mq.h
-+++ b/block/blk-mq.h
-@@ -31,7 +31,7 @@ struct blk_mq_ctx {
- } ____cacheline_aligned_in_smp;
- 
- void blk_mq_freeze_queue(struct request_queue *q);
--void blk_mq_free_queue(struct request_queue *q);
-+void blk_mq_exit_queue(struct request_queue *q);
- int blk_mq_update_nr_requests(struct request_queue *q, unsigned int nr);
- void blk_mq_wake_waiters(struct request_queue *q);
- bool blk_mq_dispatch_rq_list(struct request_queue *, struct list_head *, bool);
--- 
-2.20.1
+ 	struct virtio_scsi_event_node *event_node =3D
+@@ -335,6 +365,7 @@ static void virtscsi_handle_event(struct work_struct *w=
+ork)
+ 	    cpu_to_virtio32(vscsi->vdev, VIRTIO_SCSI_T_EVENTS_MISSED)) {
+ 		event->event &=3D ~cpu_to_virtio32(vscsi->vdev,
+ 						   VIRTIO_SCSI_T_EVENTS_MISSED);
++		virtscsi_rescan_hotunplug(vscsi);
+ 		scsi_scan_host(virtio_scsi_host(vscsi->vdev));
+ 	}
+=20
+--=20
+2.23.0
 
