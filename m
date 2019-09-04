@@ -2,184 +2,159 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6787AA8DBA
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2019 21:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD14A8DC5
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2019 21:32:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732104AbfIDRby (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Sep 2019 13:31:54 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:40077 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729594AbfIDRby (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Sep 2019 13:31:54 -0400
-Received: by mail-wm1-f68.google.com with SMTP id t9so4753229wmi.5
-        for <linux-scsi@vger.kernel.org>; Wed, 04 Sep 2019 10:31:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=aYakpRRFoGVA9sz71v0r5VagfdiWC/MbZvxbHI4iRdc=;
-        b=m0M/vz9FuKn/AEie3GlNsun9iMNiGECSE03FKZ5BxZ1yL4FHXepYRZzyp3omLczBeO
-         EOoe5YBsNjD3HGxIcGjpeacQmr+xhXSSilxfQjWKo+jG4TOxXwbtdttpwR2w3vpLh4AV
-         R+0dcXaxcnV+B+CW9Vf8V97PwLnQ4FOdDb5KGSc/7FJwZYHKCZPVwxoxbAldNzbMGvcu
-         SG/M6rEZgJeg1HETuiJZttNcYNOTMEXlVeW7pZoMyZdfJg1YJz7/OuroXsz17hDwab/J
-         YXssZyVl+H+ZGXFpM5ITUdOpygpA6lGaJH+NJb6dDD50TpEuoJP6KwadehnHZTqIsoGv
-         XDFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=aYakpRRFoGVA9sz71v0r5VagfdiWC/MbZvxbHI4iRdc=;
-        b=CULPsv9Yf+yzhhO0kymLs1v+4o4D7RIWpoa3OEuCyXmA2HWNxqFBvpgJ1en5Qe7waE
-         8uLIsivL8mdvtclTe9ggxIVZu3hv+5TOM29MHviFg0B6twOmXCQf/pLUiwrfPTnmj43c
-         jXWjg0LPJSxUvRobx9dfz5Umu5Y2gDCi5hHwsflfqBr1ZRN1zf2+KBjzB/6qoNc/WmUo
-         VDqblvcu/MjyN7APxkV91WhNJ9jSCjvZlru9HJ4MGe8XilY3ya/n460BIhRQl4AzA7Th
-         99bjmfz1QT7bm5tmqmV4SQoXS6TAvTgvAQJvLMKRD0mG1mH6ZD9DdjXmBAGTP43nsnQL
-         STkA==
-X-Gm-Message-State: APjAAAXYzOkjSm4XnTA7roL6Y5Du/wq6/XWl0OjIsa5ALSqnX5Tu1oFw
-        InjTf0h9z7Curb5bUTMKLe/Hkg==
-X-Google-Smtp-Source: APXvYqylHSYmUd3XhHwzu+LdoP/iw+mi4BQK1D6uwYhqo6KtUdjLENo9yvztksqRrOgy+x2zLAvUGA==
-X-Received: by 2002:a1c:cf8c:: with SMTP id f134mr5573819wmg.174.1567618310825;
-        Wed, 04 Sep 2019 10:31:50 -0700 (PDT)
-Received: from ?IPv6:2a01:e34:ed2f:f020:794a:5c4d:16b4:31a6? ([2a01:e34:ed2f:f020:794a:5c4d:16b4:31a6])
-        by smtp.googlemail.com with ESMTPSA id q124sm5935819wma.5.2019.09.04.10.31.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Sep 2019 10:31:50 -0700 (PDT)
-Subject: Re: [PATCH 1/4] softirq: implement IRQ flood detection mechanism
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@fb.com>, Hannes Reinecke <hare@suse.com>,
-        Sagi Grimberg <sagi@grimberg.me>, linux-scsi@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Long Li <longli@microsoft.com>,
-        John Garry <john.garry@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org,
-        Keith Busch <keith.busch@intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>
-References: <20190827225827.GA5263@ming.t460p>
- <alpine.DEB.2.21.1908280104330.1939@nanos.tec.linutronix.de>
- <20190828110633.GC15524@ming.t460p>
- <alpine.DEB.2.21.1908281316230.1869@nanos.tec.linutronix.de>
- <20190828135054.GA23861@ming.t460p>
- <alpine.DEB.2.21.1908281605190.23149@nanos.tec.linutronix.de>
- <20190903033001.GB23861@ming.t460p>
- <299fb6b5-d414-2e71-1dd2-9d6e34ee1c79@linaro.org>
- <20190903063125.GA21022@ming.t460p>
- <6b88719c-782a-4a63-db9f-bf62734a7874@linaro.org>
- <20190903072848.GA22170@ming.t460p>
- <dd96def4-1121-afbe-2431-9e516a06850c@linaro.org>
- <6f3b6557-1767-8c80-f786-1ea667179b39@acm.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <2a8bd278-5384-d82f-c09b-4fce236d2d95@linaro.org>
-Date:   Wed, 4 Sep 2019 19:31:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <6f3b6557-1767-8c80-f786-1ea667179b39@acm.org>
-Content-Type: text/plain; charset=utf-8
+        id S1730195AbfIDRjj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Sep 2019 13:39:39 -0400
+Received: from mail-eopbgr740042.outbound.protection.outlook.com ([40.107.74.42]:53760
+        "EHLO NAM01-BN3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726495AbfIDRji (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 4 Sep 2019 13:39:38 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kINiszOohR4rxFJh2L/+RKF/maJ2Vy7Ej91vMYTWEZqafzRfQljeTcUwJLStxMgC/jwil8v1wGRiQ16KmQXSXJZitml9DYSIxF/z8C2wt+Ue7HvmvRmfLw+3fIIwHnF+tjg7z0rtMEFSA97Nd1IIGl4d6yor+y3IPlfGD1OHtrwYIlqwdDxWxvhfJ0/53INOm5+DkDqy2JBTDXg8D/KtsodWd6f0+w7yILp7DzF67A89R4WQTuV4Q/b6W5BfS1jBOc9Ct/gpcPPkYANntg7fltaB0Oj7Oa+RMfbbz1QJNe8BqVHePtnUMD4Zntb7yArO85g9LiYwee5KlT+O4Q2UDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e4SZnKkm+iwVgdPTz12B0Scz1ynBjcUNByi4NiB9+qE=;
+ b=dxr6XOIhW1BJJ4z/NxlmBS0ql5dOQfOtg5qIAgDImA7zyG1Bu4OzZhSWMrVyVygvzQ9Qt8fMZk/yuX3LXNmSJwqnqem8JNj2TWZqb44wWx3OnBOR15S/9kYin7LhtCCaoFTjn0hPDCEK8WM/+p4Go2Cl2SVCdMFgM228e0GFpCmUpMGH0G38y5dCORg2xWQ6fLkTdti/j50ujC6rGdC5QDx5fIllHVj1rMtxCL2wji8gy0KFXMapY7Bacl8NDbRrgTbXpRiyzuT5gqF3yejojU8MjIXZKqLv/fLmPWUHX2EbOQUyvSDys6BJLJO4YR0UAIDPCVhETPDnvyhes8BBDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ddn.com; dmarc=pass action=none header.from=ddn.com; dkim=pass
+ header.d=ddn.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ddn.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e4SZnKkm+iwVgdPTz12B0Scz1ynBjcUNByi4NiB9+qE=;
+ b=p60g+dYRGohkwhqonJ3ekX9Tv2bemzfAtTpxmio+a1E8P5HlUyBo+KwaFLno4adAUu1pDMzK9mhbAJVrTL8O7HhD9UzlEOC8zsnOiy2xQoJ4IQw783uCz13aoRyHdOruxAAxc2c+F2bd+28nbLKoXJ80F19cRV2DyOKzp5uW1EY=
+Received: from BY5PR19MB3176.namprd19.prod.outlook.com (10.255.160.21) by
+ BY5PR19MB3779.namprd19.prod.outlook.com (10.186.132.15) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.14; Wed, 4 Sep 2019 17:38:54 +0000
+Received: from BY5PR19MB3176.namprd19.prod.outlook.com
+ ([fe80::844f:102f:5181:c074]) by BY5PR19MB3176.namprd19.prod.outlook.com
+ ([fe80::844f:102f:5181:c074%3]) with mapi id 15.20.2220.022; Wed, 4 Sep 2019
+ 17:38:53 +0000
+From:   Matt Lupfer <mlupfer@ddn.com>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+CC:     Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "James E. J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] scsi: virtio_scsi: unplug LUNs when events missed
+Thread-Topic: [PATCH] scsi: virtio_scsi: unplug LUNs when events missed
+Thread-Index: AQHVYnmgUCG1mM4ObEKGSGCIQ1xBzg==
+Date:   Wed, 4 Sep 2019 17:38:53 +0000
+Message-ID: <20190904173848.GD4571@tesla>
+References: <20190903170408.32286-1-mlupfer@ddn.com>
+ <20190904051230-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20190904051230-mutt-send-email-mst@kernel.org>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BN6PR13CA0040.namprd13.prod.outlook.com
+ (2603:10b6:404:13e::26) To BY5PR19MB3176.namprd19.prod.outlook.com
+ (2603:10b6:a03:184::21)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=mlupfer@ddn.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [107.128.241.61]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3ccc882e-40fa-49ef-a448-08d7315ec139
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BY5PR19MB3779;
+x-ms-traffictypediagnostic: BY5PR19MB3779:
+x-microsoft-antispam-prvs: <BY5PR19MB3779C0203D12908CBD9DE7A7AEB80@BY5PR19MB3779.namprd19.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0150F3F97D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(366004)(136003)(376002)(39850400004)(396003)(346002)(189003)(199004)(54906003)(316002)(86362001)(71200400001)(3846002)(6246003)(53936002)(66066001)(6436002)(6512007)(9686003)(6116002)(4326008)(71190400001)(2906002)(33656002)(25786009)(5660300002)(1076003)(305945005)(66946007)(66476007)(66556008)(64756008)(66446008)(256004)(8676002)(14454004)(81156014)(81166006)(102836004)(186003)(6486002)(11346002)(7736002)(6506007)(386003)(99286004)(6916009)(26005)(33716001)(476003)(52116002)(446003)(486006)(478600001)(76176011)(229853002)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:BY5PR19MB3779;H:BY5PR19MB3176.namprd19.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: ddn.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: KgnNTKc7uxlITf7XjJn00W5d2uCT+DRLTIcxH/MRcruxX4gDU6a7VXiSB+94MlVh2x1YZghUucnOY9EAy56mZVWNxHA0eVJ/+rkOK5CWWdOkIHA61z4SDl+XIBNr6Pc9jhN9MKIkyiZQjsjg+xpE3LOl4MOFqro2BPpn/sZ8MouBIzeua5jroSPJqB8CiDzKx26DI8xhPZg2IMxIDeEZhMNLmpGZ8N56zJn+fkudDKjAmdI4rTLdYx0nQPq+bnDcOLj0y1mGtb/WtNa+4SSC4nEVyabzDKkwJ0wlAAMTM8rVmvQsYdxns651Z/j3ggPMLmq7J6/32HfKrehVJBt0dGw9TkpM7JhJ2uNFAC0XqrYNkokhsL/S5IYl5QQzVgbCwnib+P4pQNVUnP81pV9Kq7yQrewQ2tRi3TEhfYVR59Q=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <9E6EF2CD85D60640882F4949EBBE43CB@namprd19.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: ddn.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ccc882e-40fa-49ef-a448-08d7315ec139
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Sep 2019 17:38:53.8669
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 753b6e26-6fd3-43e6-8248-3f1735d59bb4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: y9gEUsjK3jKzRParRw274mw5ceHXydyv76bZjIEnhfec04QL205Swr6ees1Q1qPU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR19MB3779
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
-
-On 04/09/2019 19:07, Bart Van Assche wrote:
-> On 9/3/19 12:50 AM, Daniel Lezcano wrote:
->> On 03/09/2019 09:28, Ming Lei wrote:
->>> On Tue, Sep 03, 2019 at 08:40:35AM +0200, Daniel Lezcano wrote:
->>>> It is a scheduler problem then ?
->>>
->>> Scheduler can do nothing if the CPU is taken completely by handling
->>> interrupt & softirq, so seems not a scheduler problem, IMO.
+On Wed, Sep 04, 2019 at 05:14:33AM -0400, Michael S. Tsirkin wrote:
+> On Tue, Sep 03, 2019 at 05:04:20PM +0000, Matt Lupfer wrote:
+>> The event handler calls scsi_scan_host() when events are missed, which
+>> will hotplug new LUNs.  However, this function won't remove any
+>> unplugged LUNs.  The result is that hotunplug doesn't work properly when
+>> the number of unplugged LUNs exceeds the event queue size (currently 8).
 >>
->> Why? If there is a irq pressure on one CPU reducing its capacity, the
->> scheduler will balance the tasks on another CPU, no?
-> 
-> Only if CONFIG_IRQ_TIME_ACCOUNTING has been enabled. However, I don't
-> know any Linux distro that enables that option. That's probably because
-> that option introduces two rdtsc() calls in each interrupt. Given the
-> overhead introduced by this option, I don't think this is the solution
-> Ming is looking for.
+>> Scan existing LUNs when events are missed to check if they are still
+>> present.  If not, remove them.
+>>
+>> Signed-off-by: Matt Lupfer <mlupfer@ddn.com>
+>> ---
+>>  drivers/scsi/virtio_scsi.c | 31 +++++++++++++++++++++++++++++++
+>>  1 file changed, 31 insertions(+)
+>>
+>> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
+>> index 297e1076e571..18df77bf371b 100644
+>> --- a/drivers/scsi/virtio_scsi.c
+>> +++ b/drivers/scsi/virtio_scsi.c
+>> @@ -324,6 +324,36 @@ static void virtscsi_handle_param_change(struct vir=
+tio_scsi *vscsi,
+>>  	scsi_device_put(sdev);
+>>  }
+>>
+>> +static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
+>> +{
+>> +	struct scsi_device *sdev;
+>> +	struct Scsi_Host *shost =3D virtio_scsi_host(vscsi->vdev);
+>> +	unsigned char scsi_cmd[MAX_COMMAND_SIZE];
+>> +	int result, inquiry_len, inq_result_len =3D 256;
+>> +	char *inq_result =3D kmalloc(inq_result_len, GFP_KERNEL);
+>> +
+>> +	shost_for_each_device(sdev, shost) {
+>> +		inquiry_len =3D sdev->inquiry_len ? sdev->inquiry_len : 36;
+>> +
+>> +		memset(scsi_cmd, 0, sizeof(scsi_cmd));
+>> +		scsi_cmd[0] =3D INQUIRY;
+>> +		scsi_cmd[4] =3D (unsigned char) inquiry_len;
+>> +
+>> +		memset(inq_result, 0, inq_result_len);
+>> +
+>> +		result =3D scsi_execute_req(sdev, scsi_cmd, DMA_FROM_DEVICE,
+>> +					  inq_result, inquiry_len, NULL,
+>> +					  2, 3, NULL);
+>
+>
+> Where do the weird 2 and 3 values come from?
+>
+> Most callers seem to use SD_TIMEOUT, SD_MAX_RETRIES...
+>
 
-Was this overhead reported somewhere ?
+The value of 3 retries is from scsi_probe_lun() in scsi_scan.c.
 
-> See also irqtime_account_irq() in kernel/sched/cputime.c.
+The value of 2 seconds is arbitrary, but equals SCSI_TIMEOUT.
+scsi_inq_timeout in scsi_scan.c is complicated for reasons unknown to
+me, but is quite a bit longer, more in line with SD_TIMEOUT.
 
-From my POV, this framework could be interesting to detect this situation.
+I will send a V2 patch with the SD_TIMEOUT and SD_MAX_RETRIES macros
+from drivers/scsi/sd.h.
 
+Thanks for taking a look.
 
--- 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Matt
