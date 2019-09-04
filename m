@@ -2,85 +2,28 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD12A9361
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2019 22:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75E10A94D4
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Sep 2019 23:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730414AbfIDUWa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Sep 2019 16:22:30 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39063 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729626AbfIDUWa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Sep 2019 16:22:30 -0400
-Received: by mail-pg1-f195.google.com with SMTP id u17so38826pgi.6
-        for <linux-scsi@vger.kernel.org>; Wed, 04 Sep 2019 13:22:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=xVOtfa4FemHiS/Yp7atJtq7Zy87lPl7zBOB4z9A7MuY=;
-        b=Q+1hk21RFb1tZ0ePhKaz0FBP+F7xrChbtOjP47j0INYk22MckIk8FAVmUdnlduNLiY
-         vJUGbBajYhb8/8theSGrC63KxTjXhJjvmsEpUPvgpupBO36l5uZMwaw87S+8NHl54zZQ
-         Wq0wbDhaLvHhiTG6g1xXdzZAwbvn8n9Iph63c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=xVOtfa4FemHiS/Yp7atJtq7Zy87lPl7zBOB4z9A7MuY=;
-        b=eelWrp3iAv9apGHWOYcL9QHZUzcCp8oiIp242s+NdKaZQ1cbj2dc6p1pQk/nD3mNP9
-         WGCsNiFQyhD7yIJNmAekwgA+r5+if6+hp4UFT3fLlEs3iQcMBMFp3ObcY5eq6okBf5Ac
-         RfbcfB5OQHSYHJRrv6q++f8Cq4jdhUnTaSczSWjsXg90gTqBSeUP1SuZw3eeYMbtpzgP
-         Cl2agu0e/e0sfn+2kxFbnAQMSwrTwV6lDOxFqDlYkYrGOBfy1o1s1C/nsZqsMRdz1bp7
-         xjArJbI9sswYmXoHkLXIoI/L4MTOlmEgemvyiRC0u8bbQVm0brioxXWQ7k2zK7iXDSEN
-         /caQ==
-X-Gm-Message-State: APjAAAW++H7w1d/lQa0na6lzSecFB1E+emNCbclIs2OmuKAtHQCjGL8K
-        MXWazl4fxekJUfa2OXax4MZetg==
-X-Google-Smtp-Source: APXvYqwBzTEtSdnbNv4cKtzyBFFJzW885bb0y8aCjJz1dx+RCqXH5zFiSZ/xW+rVes78ygzURGS+fA==
-X-Received: by 2002:a63:3ec7:: with SMTP id l190mr4031pga.334.1567628549777;
-        Wed, 04 Sep 2019 13:22:29 -0700 (PDT)
-Received: from [10.69.45.46] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d20sm30053798pfq.88.2019.09.04.13.22.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Sep 2019 13:22:29 -0700 (PDT)
-Subject: Re: [PATCH 1/1] scsi: lpfc: Convert existing %pf users to %ps
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Cc:     linux-scsi@vger.kernel.org, Joe Perches <joe@perches.com>,
-        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
-        rafael@kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-References: <20190904160423.3865-1-sakari.ailus@linux.intel.com>
-From:   James Smart <james.smart@broadcom.com>
-Message-ID: <2899e50b-2984-c546-2d3e-450908eada88@broadcom.com>
-Date:   Wed, 4 Sep 2019 13:22:24 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190904160423.3865-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        id S1727722AbfIDVSu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Sep 2019 17:18:50 -0400
+Received: from [123.163.97.240] ([123.163.97.240]:46986 "EHLO
+        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726358AbfIDVSt (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Sep 2019 17:18:49 -0400
+X-Greylist: delayed 536 seconds by postgrey-1.27 at vger.kernel.org; Wed, 04 Sep 2019 17:18:49 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by localhost.localdomain (Postfix) with SMTP id 2F5E51073872
+        for <linux-scsi@vger.kernel.org>; Thu,  5 Sep 2019 05:09:47 +0800 (CST)
+From:   linux-scsi@vger.kernel.org
+Reply-To: prodawez@cuvox.de
+To:     linux-scsi@vger.kernel.org
+Subject: Zdravstvujte! Vas interesujut klientskie bazy dannyh?
+Message-Id: <20190904210948.2F5E51073872@localhost.localdomain>
+Date:   Thu,  5 Sep 2019 05:09:47 +0800 (CST)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 9/4/2019 9:04 AM, Sakari Ailus wrote:
-> Convert the remaining %pf users to %ps to prepare for the removal of the
-> old %pf conversion specifier support.
->
-> Fixes: 323506644972 ("scsi: lpfc: Migrate to %px and %pf in kernel print calls")
-> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->   drivers/scsi/lpfc/lpfc_hbadisc.c | 4 ++--
->   drivers/scsi/lpfc/lpfc_sli.c     | 2 +-
->   2 files changed, 3 insertions(+), 3 deletions(-)
->
->
-
-Reviewed by: James Smart <james.smart@broadcom.com>
-
--- james
-
-
+Zdravstvujte! Vas interesujut klientskie bazy dannyh?
