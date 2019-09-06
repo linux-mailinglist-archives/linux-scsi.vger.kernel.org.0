@@ -2,95 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B750AB46F
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Sep 2019 10:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E51FAB8A7
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Sep 2019 14:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392776AbfIFIyN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Sep 2019 04:54:13 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:60288 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726936AbfIFIyN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 6 Sep 2019 04:54:13 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6BCED308FBAC;
-        Fri,  6 Sep 2019 08:54:13 +0000 (UTC)
-Received: from localhost (ovpn-117-208.ams2.redhat.com [10.36.117.208])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 862C2600CC;
-        Fri,  6 Sep 2019 08:54:10 +0000 (UTC)
-Date:   Fri, 6 Sep 2019 09:54:09 +0100
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Matt Lupfer <mlupfer@ddn.com>
-Cc:     "mst@redhat.com" <mst@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] scsi: virtio_scsi: unplug LUNs when events missed
-Message-ID: <20190906085409.GC5900@stefanha-x1.localdomain>
-References: <20190905181903.29756-1-mlupfer@ddn.com>
+        id S2405034AbfIFM7F (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 Sep 2019 08:59:05 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6695 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2404861AbfIFM6O (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 6 Sep 2019 08:58:14 -0400
+Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id C1D5743A757ADCF7B11C;
+        Fri,  6 Sep 2019 20:58:10 +0800 (CST)
+Received: from localhost.localdomain (10.67.212.75) by
+ DGGEMS407-HUB.china.huawei.com (10.3.19.207) with Microsoft SMTP Server id
+ 14.3.439.0; Fri, 6 Sep 2019 20:58:00 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
+        <linux-kernel@vger.kernel.org>, John Garry <john.garry@huawei.com>
+Subject: [PATCH 00/13] hisi_sas: Some misc patches
+Date:   Fri, 6 Sep 2019 20:55:24 +0800
+Message-ID: <1567774537-20003-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WplhKdTI2c8ulnbP"
-Content-Disposition: inline
-In-Reply-To: <20190905181903.29756-1-mlupfer@ddn.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Fri, 06 Sep 2019 08:54:13 +0000 (UTC)
+Content-Type: text/plain
+X-Originating-IP: [10.67.212.75]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+This patchset includes support for some more minor features, a bit of
+tidying, and a few patches to make the driver a bit more robust.
 
---WplhKdTI2c8ulnbP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Notables:
+- BIST phy loopback support
+- Fix for NCQ tags
+- Correctly config registers after controller reset
 
-On Thu, Sep 05, 2019 at 06:19:28PM +0000, Matt Lupfer wrote:
-> The event handler calls scsi_scan_host() when events are missed, which
-> will hotplug new LUNs.  However, this function won't remove any
-> unplugged LUNs.  The result is that hotunplug doesn't work properly when
-> the number of unplugged LUNs exceeds the event queue size (currently 8).
->=20
-> Scan existing LUNs when events are missed to check if they are still
-> present.  If not, remove them.
->=20
-> Signed-off-by: Matt Lupfer <mlupfer@ddn.com>
-> ---
->  drivers/scsi/virtio_scsi.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
+Luo Jiaxing (7):
+  scsi: hisi_sas: add debugfs auto-trigger for internal abort time out
+  scsi: hisi_sas: Use true/false as input parameter of sas_phy_reset()
+  scsi: hisi_sas: Directly return when running I_T_nexus reset if phy
+    disabled
+  scsi: hisi_sas: Remove sleep after issue phy reset if
+    sas_smp_phy_control() fails
+  scsi: hisi_sas: Remove hisi_sas_hw.slot_complete
+  scsi: hisi_sas: Remove some unused function arguments
+  scsi: hisi_sas: Add hisi_sas_debugfs_alloc() to centralise allocation
 
-Please include a changelog in future patch revisions.  For example:
+Xiang Chen (6):
+  scsi: hisi_sas: Retry 3 times TMF IO for SAS disks when init device
+  scsi: hisi_sas: Update all the registers after suspend and resume
+  scsi: hisi_sas: Assign NCQ tag for all NCQ commands
+  scsi: hisi_sas: Remove redundant work declaration
+  scsi: hisi_sas: Add BIST support for phy loopback
+  scsi: hisi_sas: Fix the conflict between device gone and host reset
 
-  Signed-off-by: ...
-  ---
-  v2:
-    * Replaced magic constants with sd.h constants [Michael]
+ drivers/scsi/hisi_sas/hisi_sas.h       |  18 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 569 +++++++++++++++++++++----
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c |   1 -
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  17 +-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 159 ++++++-
+ 5 files changed, 661 insertions(+), 103 deletions(-)
 
-Just C and virtio code review, no SCSI specifics:
+-- 
+2.17.1
 
-Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
-
---WplhKdTI2c8ulnbP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAl1yHrEACgkQnKSrs4Gr
-c8gzzAgAuYSjHn9hrs1cMsy6ox6Yq6EuWDPA1QLCT8w5U0wDuEYZNyEcXwfjz9YX
-UTUP5SvIxTPY0h1xkG+xZBWzxeGSzO8+24810N6QeJJLbmXqLJT1YATxntwvp+wa
-Y0pP8RmHry+TLkuq7kH87eFrp5+kml6Cxq3mTAx8ELSpikGl8GGK6SQN958+5Tgv
-NfI9iko4E3c8hSbRthCUMt6ZQpJEpMIoh2DsIkFeY5OI+ZXs4uCUMqc8u9oVCDwf
-sj3CrN+r27WQ5oGlXrg3MA4w9Ng6+hvpPRbhbLli4v7NeFUyswz2qJDQWM2e87Pt
-vJ2fssWWXnh3m7u5LraZwstLo3ainA==
-=6rpq
------END PGP SIGNATURE-----
-
---WplhKdTI2c8ulnbP--
