@@ -2,82 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24012AF445
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2019 04:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3A0AF5D7
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2019 08:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbfIKCbr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 10 Sep 2019 22:31:47 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:57466 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbfIKCbr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Sep 2019 22:31:47 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8B2Supx134204;
-        Wed, 11 Sep 2019 02:31:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=qomVzkwZbo+ACBSCTS3Y2FRLpO/90hcekpEd1aiRTWs=;
- b=m/wwV3yqPBl6xsL1b4BP7R0+ir0e3Nj/oFaqV95ebr+/5XPoB8XUSVI167kTRJiyKF8q
- K9aksf2EpDhj68OIBSaGqV57OLbyqPJ4TTaUn38fG//rraU04FYwFJRdiludC+LUbEZH
- 3/oJXUelvxG9VYb4XtjBrzg5IbIT9xTI1wqKAvHSn78r33UL8ZvJnkcNripNRRb0VNzl
- JQYlBRHWexTaG/0n+KsIz43aCguR//OYV7SFh+9cnVo/DZ4tqXoxETS+CJok4s0E7Qfr
- kOdKsGTHCtdGzedkkq7MJWIsZ+qgLy8pGkym/YqXVQr8Goc4vnAoe/GtnU27+Iq+iBKI NQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2uw1jy6y3t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Sep 2019 02:31:29 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8B2SZ22143815;
-        Wed, 11 Sep 2019 02:29:28 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 2uxj3hwkbs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 11 Sep 2019 02:29:28 +0000
-Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x8B2TQN5001969;
-        Wed, 11 Sep 2019 02:29:26 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 10 Sep 2019 19:29:25 -0700
-To:     John Garry <john.garry@huawei.com>
-Cc:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 00/13] hisi_sas: Some misc patches
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <1567774537-20003-1-git-send-email-john.garry@huawei.com>
-Date:   Tue, 10 Sep 2019 22:29:23 -0400
-In-Reply-To: <1567774537-20003-1-git-send-email-john.garry@huawei.com> (John
-        Garry's message of "Fri, 6 Sep 2019 20:55:24 +0800")
-Message-ID: <yq1y2yvefb0.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1726891AbfIKGc4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Sep 2019 02:32:56 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:54018 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726838AbfIKGc4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Sep 2019 02:32:56 -0400
+X-UUID: 6f2aa10be2f24e81bca5c14ee9595d3a-20190911
+X-UUID: 6f2aa10be2f24e81bca5c14ee9595d3a-20190911
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 964923953; Wed, 11 Sep 2019 14:32:52 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 11 Sep 2019 14:32:46 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 11 Sep 2019 14:32:46 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <axboe@kernel.dk>,
+        <jejb@linux.ibm.com>, <matthias.bgg@gmail.com>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v1] fixup null q->dev checking in both block and scsi layer
+Date:   Wed, 11 Sep 2019 14:32:40 +0800
+Message-ID: <1568183562-18241-1-git-send-email-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9376 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=881
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1909110019
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9376 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=964 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1909110019
+X-TM-SNTS-SMTP: 132F359E13791AB27648D710E93C0462C44FA0D70584A38ED65C1DB61DF7ABA02000:8
+X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Some devices may skip blk_pm_runtime_init() and have null pointer
+in its request_queue->dev. For example, SCSI devices of UFS Well-Known
+LUNs.
 
-John,
+Currently the null pointer is checked by the user of
+blk_set_runtime_active(), i.e., scsi_dev_type_resume(). It is better to
+check it by blk_set_runtime_active() itself instead of by its users.
 
-> This patchset includes support for some more minor features, a bit of
-> tidying, and a few patches to make the driver a bit more robust.
+Stanley Chu (2):
+  block: bypass blk_set_runtime_active for uninitialized q->dev
+  scsi: core: remove dummy q->dev check
 
-Applied to 5.4/scsi-queue, thanks.
+ block/blk-pm.c         | 3 +++
+ drivers/scsi/scsi_pm.c | 3 +--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.18.0
+
