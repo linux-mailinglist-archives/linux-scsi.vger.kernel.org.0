@@ -2,72 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9533CAF5D3
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2019 08:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50489AF7B0
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2019 10:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbfIKGcy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Sep 2019 02:32:54 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:39509 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726838AbfIKGcy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Sep 2019 02:32:54 -0400
-X-UUID: 4e66592c783140c8bbda8526dd1f5ce8-20190911
-X-UUID: 4e66592c783140c8bbda8526dd1f5ce8-20190911
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1938147088; Wed, 11 Sep 2019 14:32:47 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 11 Sep 2019 14:32:46 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 11 Sep 2019 14:32:46 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <axboe@kernel.dk>,
-        <jejb@linux.ibm.com>, <matthias.bgg@gmail.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 2/2] scsi: core: remove dummy q->dev check
-Date:   Wed, 11 Sep 2019 14:32:42 +0800
-Message-ID: <1568183562-18241-3-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1568183562-18241-1-git-send-email-stanley.chu@mediatek.com>
-References: <1568183562-18241-1-git-send-email-stanley.chu@mediatek.com>
+        id S1727137AbfIKIXu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 11 Sep 2019 04:23:50 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:53360 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726018AbfIKIXu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Sep 2019 04:23:50 -0400
+Received: by mail-wm1-f66.google.com with SMTP id q18so2318168wmq.3;
+        Wed, 11 Sep 2019 01:23:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7iC288htQQShWEzvGgwOYDZwehD1Nka894QH5xX/9cI=;
+        b=bIbVJ5HE3gQwAEeK7mWeYFOcSozt87POGxCQbIw99379d/CS8fd7gOBXclZT7GirQs
+         LWdvwP9jjdSwcjKBhXSKSfzTwdG0Ish3sE8Lm92vmhEnm7uNMCyh9dXl+3redKxjB01O
+         GY2WhQdkZu8qo+ELm2+jWK8LRDHF8DKrYHPW0hMgmeOiktLLbNuKm5dH7x+KVpk/btU/
+         dHu5EqbspB4t5tN+XpuQKEAN6fi9EDPuIyS6G4BksWB+jDID3/jZ7SCb2bjcbw1t1/EO
+         TPrDdhPY9y1YqqJkAzhVTL23VNHkJFDXrUfS9yARhahPK1vzfRtNJSeWej33Iy6MhRDK
+         yDpQ==
+X-Gm-Message-State: APjAAAUn8vBYPcXEDyJzjyMm3dbVvFwmvuHlgaRfGKqU/9VTlUMZ4CPe
+        /1HNL/UhNgV1UZ1lTAh0WMmmCjWjc7c=
+X-Google-Smtp-Source: APXvYqzUwDcbcQE58BGg+dWRNRxA/vR89ms+O87wrc5oL3XiHLhR8v5MoMDUEg0gRuW1m/BiGRujoA==
+X-Received: by 2002:a1c:1d8d:: with SMTP id d135mr2959578wmd.7.1568190227313;
+        Wed, 11 Sep 2019 01:23:47 -0700 (PDT)
+Received: from [10.0.4.250] (195-23-252-147.net.novis.pt. [195.23.252.147])
+        by smtp.gmail.com with ESMTPSA id s1sm30205463wrg.80.2019.09.11.01.23.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Sep 2019 01:23:46 -0700 (PDT)
+Subject: Re: [RFC PATCH] Add proc interface to set PF_MEMALLOC flags
+To:     Mike Christie <mchristi@redhat.com>, axboe@kernel.dk,
+        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-block@vger.kernel.org
+References: <20190909162804.5694-1-mchristi@redhat.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <3e32b453-0350-0a09-9b1b-b0c49e2609df@acm.org>
+Date:   Wed, 11 Sep 2019 09:23:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20190909162804.5694-1-mchristi@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8BIT
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently blk_set_runtime_active() is checking if q->dev is null by
-itself, thus remove the same checking in its user: scsi_dev_type_resume().
+On 9/9/19 5:28 PM, Mike Christie wrote:
+> There are several storage drivers like dm-multipath, iscsi, and nbd that
+> have userspace components that can run in the IO path. For example,
+> iscsi and nbd's userspace deamons may need to recreate a socket and/or
+> send IO on it, and dm-multipath's daemon multipathd may need to send IO
+> to figure out the state of paths and re-set them up.
+> 
+> [ ... ]
 
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/scsi_pm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Should the linux-api mailing list be Cc-ed for a patch like this one?
+See also https://www.kernel.org/doc/man-pages/linux-api-ml.html.
 
-diff --git a/drivers/scsi/scsi_pm.c b/drivers/scsi/scsi_pm.c
-index 74ded5f3c236..3717eea37ecb 100644
---- a/drivers/scsi/scsi_pm.c
-+++ b/drivers/scsi/scsi_pm.c
-@@ -94,8 +94,7 @@ static int scsi_dev_type_resume(struct device *dev,
- 		if (!err && scsi_is_sdev_device(dev)) {
- 			struct scsi_device *sdev = to_scsi_device(dev);
- 
--			if (sdev->request_queue->dev)
--				blk_set_runtime_active(sdev->request_queue);
-+			blk_set_runtime_active(sdev->request_queue);
- 		}
- 	}
- 
--- 
-2.18.0
+Thanks,
+
+Bart.
 
