@@ -2,85 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94861AF934
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2019 11:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6618AAF9F3
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Sep 2019 12:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727497AbfIKJli (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Sep 2019 05:41:38 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:6277 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727167AbfIKJli (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Sep 2019 05:41:38 -0400
-X-UUID: dec408d3643a40adb286d2a6f237ab5b-20190911
-X-UUID: dec408d3643a40adb286d2a6f237ab5b-20190911
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1914987721; Wed, 11 Sep 2019 17:41:33 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 11 Sep 2019 17:41:32 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 11 Sep 2019 17:41:32 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>, <sthumma@codeaurora.org>,
-        <jejb@linux.ibm.com>, <bvanassche@acm.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <matthias.bgg@gmail.com>,
-        <evgreen@chromium.org>, <beanhuo@micron.com>,
-        <marc.w.gonzalez@free.fr>, <subhashj@codeaurora.org>,
-        <vivek.gautam@codeaurora.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 3/3] scsi: ufs-mediatek: enable auto suspend capability
-Date:   Wed, 11 Sep 2019 17:41:30 +0800
-Message-ID: <1568194890-24439-4-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1568194890-24439-1-git-send-email-stanley.chu@mediatek.com>
-References: <1568194890-24439-1-git-send-email-stanley.chu@mediatek.com>
+        id S1727436AbfIKKIC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Sep 2019 06:08:02 -0400
+Received: from www262.sakura.ne.jp ([202.181.97.72]:64208 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726928AbfIKKIC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Sep 2019 06:08:02 -0400
+Received: from fsav302.sakura.ne.jp (fsav302.sakura.ne.jp [153.120.85.133])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id x8BA7cIq048562;
+        Wed, 11 Sep 2019 19:07:38 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav302.sakura.ne.jp (F-Secure/fsigk_smtp/530/fsav302.sakura.ne.jp);
+ Wed, 11 Sep 2019 19:07:38 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/530/fsav302.sakura.ne.jp)
+Received: from [192.168.1.8] (softbank126227201116.bbtec.net [126.227.201.116])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id x8BA7YlU048512
+        (version=TLSv1.2 cipher=AES256-SHA bits=256 verify=NO);
+        Wed, 11 Sep 2019 19:07:38 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Subject: Re: [RFC PATCH] Add proc interface to set PF_MEMALLOC flags
+To:     Hillf Danton <hdanton@sina.com>,
+        Mike Christie <mchristi@redhat.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>, axboe@kernel.dk,
+        James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-block@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+References: <20190911031348.9648-1-hdanton@sina.com>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+Message-ID: <c48cd3d8-699d-a614-b12d-1ddef71691f3@I-love.SAKURA.ne.jp>
+Date:   Wed, 11 Sep 2019 19:07:34 +0900
+User-Agent: Mozilla/5.0 (Windows NT 6.3; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <20190911031348.9648-1-hdanton@sina.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Enable auto suspend capability in MediaTek UFS driver.
+On 2019/09/11 12:13, Hillf Danton wrote:
+> 
+> On Tue, 10 Sep 2019 11:06:03 -0500 From: Mike Christie <mchristi@redhat.com>
+>>
+>>> Really? Without any privilege check? So any random user can tap into
+>>> __GFP_NOIO allocations?
+>>
+>> That was a mistake on my part. I will add it in.
+>>
+> You may alternatively madvise a nutcracker as long as you would have
+> added a sledgehammer under /proc instead of a gavel.
+> 
+> --- a/include/uapi/asm-generic/mman-common.h
+> +++ b/include/uapi/asm-generic/mman-common.h
+> @@ -45,6 +45,7 @@
+>  #define MADV_SEQUENTIAL	2		/* expect sequential page references */
+>  #define MADV_WILLNEED	3		/* will need these pages */
+>  #define MADV_DONTNEED	4		/* don't need these pages */
+> +#define MADV_NOIO	5		/* set PF_MEMALLOC_NOIO */
+>  
+>  /* common parameters: try to keep these consistent across architectures */
+>  #define MADV_FREE	8		/* free pages only if memory pressure */
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -716,6 +716,7 @@ madvise_behavior_valid(int behavior)
+>  	case MADV_WILLNEED:
+>  	case MADV_DONTNEED:
+>  	case MADV_FREE:
+> +	case MADV_NOIO:
+>  #ifdef CONFIG_KSM
+>  	case MADV_MERGEABLE:
+>  	case MADV_UNMERGEABLE:
+> @@ -813,6 +814,11 @@ SYSCALL_DEFINE3(madvise, unsigned long,
+>  	if (!madvise_behavior_valid(behavior))
+>  		return error;
+>  
+> +	if (behavior == MADV_NOIO) {
+> +		current->flags |= PF_MEMALLOC_NOIO;
 
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/scsi/ufs/ufs-mediatek.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Yes, for "modifying p->flags when p != current" is not permitted.
 
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index 0f6ff33ce52e..b7b177c6194c 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -117,6 +117,11 @@ static int ufs_mtk_setup_clocks(struct ufs_hba *hba, bool on,
- 	return ret;
- }
- 
-+static void ufs_mtk_set_caps(struct ufs_hba *hba)
-+{
-+	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-+}
-+
- /**
-  * ufs_mtk_init - find other essential mmio bases
-  * @hba: host controller instance
-@@ -147,6 +152,8 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 	if (err)
- 		goto out_variant_clear;
- 
-+	ufs_mtk_set_caps(hba);
-+
- 	/*
- 	 * ufshcd_vops_init() is invoked after
- 	 * ufshcd_setup_clock(true) in ufshcd_hba_init() thus
--- 
-2.18.0
+But I guess that there is a problem. Setting PF_MEMALLOC_NOIO causes
+current_gfp_context() to mask __GFP_IO | __GFP_FS, but the OOM killer cannot
+be invoked when __GFP_FS is masked. As a result, any userspace thread which
+has PF_MEMALLOC_NOIO cannot invoke the OOM killer. If the userspace thread
+which uses PF_MEMALLOC_NOIO is involved in memory reclaiming activities,
+the memory reclaiming activities won't be able to make forward progress when
+the userspace thread triggered e.g. a page fault. Can the "userspace components
+that can run in the IO path" survive without any memory allocation?
+
+> +		return 0;
+> +	}
+> +
+>  	if (start & ~PAGE_MASK)
+>  		return error;
+>  	len = (len_in + ~PAGE_MASK) & PAGE_MASK;
 
