@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC474B08E1
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Sep 2019 08:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB48B08DE
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Sep 2019 08:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729049AbfILGfr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 Sep 2019 02:35:47 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:44387 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728876AbfILGfr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Sep 2019 02:35:47 -0400
-X-UUID: 120f723e30f64e88bac93360b62a798a-20190912
-X-UUID: 120f723e30f64e88bac93360b62a798a-20190912
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        id S1728931AbfILGfq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 Sep 2019 02:35:46 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42199 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725765AbfILGfq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Sep 2019 02:35:46 -0400
+X-UUID: 2723bbeb7112437788e1ad9f23d0bc59-20190912
+X-UUID: 2723bbeb7112437788e1ad9f23d0bc59-20190912
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1628552556; Thu, 12 Sep 2019 14:35:38 +0800
+        with ESMTP id 1763500170; Thu, 12 Sep 2019 14:35:38 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs01n2.mediatek.inc (172.21.101.79) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 12 Sep 2019 14:35:35 +0800
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 12 Sep 2019 14:35:36 +0800
 Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 12 Sep 2019 14:35:35 +0800
+ Transport; Thu, 12 Sep 2019 14:35:36 +0800
 From:   Stanley Chu <stanley.chu@mediatek.com>
 To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
         <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
@@ -35,18 +35,22 @@ CC:     <linux-mediatek@lists.infradead.org>,
         <vivek.gautam@codeaurora.org>, <kuohong.wang@mediatek.com>,
         <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2] scsi: allow auto suspend override by low-level driver
-Date:   Thu, 12 Sep 2019 14:35:32 +0800
-Message-ID: <1568270135-32442-1-git-send-email-stanley.chu@mediatek.com>
+Subject: [PATCH v2 1/3] scsi: core: allow auto suspend override by low-level driver
+Date:   Thu, 12 Sep 2019 14:35:33 +0800
+Message-ID: <1568270135-32442-2-git-send-email-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <1568270135-32442-1-git-send-email-stanley.chu@mediatek.com>
+References: <1568270135-32442-1-git-send-email-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-TM-SNTS-SMTP: 69DFC312C55A697E8114525BFA6A4A5DF700A0FEEAA883F214F7D392E1776FDE2000:8
 X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
+
+Rework from previous work by:
+Sujit Reddy Thumma <sthumma@codeaurora.org>
 
 Until now the scsi mid-layer forbids runtime suspend till userspace
 enables it. This is mainly to quarantine some disks with broken
@@ -57,29 +61,77 @@ any useful work and thus wasting power.
 
 Some low-level drivers for the controllers can efficiently use runtime
 power management to reduce power consumption and improve battery life.
+Allow runtime suspend parameters override within the LLD itself
+instead of waiting for userspace to control the power management.
 
-This patchset allows runtime suspend parameters override within the LLD itself
-instead of waiting for userspace to control the power management, and
-make UFS as the first user of this capability.
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+---
+ drivers/scsi/scsi_scan.c   | 6 ++++++
+ drivers/scsi/scsi_sysfs.c  | 3 ++-
+ drivers/scsi/sd.c          | 4 ++++
+ include/scsi/scsi_device.h | 2 +-
+ 4 files changed, 13 insertions(+), 2 deletions(-)
 
-v1 => v2:
-- Allow "zero" sdev->rpm_autosuspend_delay (Avri)
-- Fix format of some lines (Avri)
-
-Stanley Chu (3):
-  scsi: core: allow auto suspend override by low-level driver
-  scsi: ufs: override auto suspend tunables for ufs
-  scsi: ufs-mediatek: enable auto suspend capability
-
- drivers/scsi/scsi_scan.c        |  6 ++++++
- drivers/scsi/scsi_sysfs.c       |  3 ++-
- drivers/scsi/sd.c               |  4 ++++
- drivers/scsi/ufs/ufs-mediatek.c |  7 +++++++
- drivers/scsi/ufs/ufshcd.c       |  8 ++++++++
- drivers/scsi/ufs/ufshcd.h       | 10 ++++++++++
- include/scsi/scsi_device.h      |  2 +-
- 7 files changed, 38 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index 058079f915f1..caf700a6b7c8 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -280,6 +280,12 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
+ 	scsi_change_queue_depth(sdev, sdev->host->cmd_per_lun ?
+ 					sdev->host->cmd_per_lun : 1);
+ 
++	/*
++	 * Keep autosuspend disabled by default unless LLDD specifically
++	 * enables it in slave_configure.
++	 */
++	sdev->rpm_autosuspend_delay = -1;
++
+ 	scsi_sysfs_device_initialize(sdev);
+ 
+ 	if (shost->hostt->slave_alloc) {
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 64c96c7828ee..461aafadd208 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -1300,7 +1300,8 @@ int scsi_sysfs_add_sdev(struct scsi_device *sdev)
+ 	device_enable_async_suspend(&sdev->sdev_gendev);
+ 	scsi_autopm_get_target(starget);
+ 	pm_runtime_set_active(&sdev->sdev_gendev);
+-	pm_runtime_forbid(&sdev->sdev_gendev);
++	if (sdev->rpm_autosuspend_delay < 0)
++		pm_runtime_forbid(&sdev->sdev_gendev);
+ 	pm_runtime_enable(&sdev->sdev_gendev);
+ 	scsi_autopm_put_target(starget);
+ 
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index 149d406aacc9..de410b272158 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -3371,6 +3371,10 @@ static int sd_probe(struct device *dev)
+ 	}
+ 
+ 	blk_pm_runtime_init(sdp->request_queue, dev);
++	if (sdp->rpm_autosuspend_delay >= 0) {
++		pm_runtime_set_autosuspend_delay(dev,
++						 sdp->rpm_autosuspend_delay);
++	}
+ 	device_add_disk(dev, gd, NULL);
+ 	if (sdkp->capacity)
+ 		sd_dif_config_host(sdkp);
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index 202f4d6a4342..133b282fae5a 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -199,7 +199,7 @@ struct scsi_device {
+ 	unsigned broken_fua:1;		/* Don't set FUA bit */
+ 	unsigned lun_in_cdb:1;		/* Store LUN bits in CDB[1] */
+ 	unsigned unmap_limit_for_ws:1;	/* Use the UNMAP limit for WRITE SAME */
+-
++	int rpm_autosuspend_delay;
+ 	atomic_t disk_events_disable_depth; /* disable depth for disk events */
+ 
+ 	DECLARE_BITMAP(supported_events, SDEV_EVT_MAXBITS); /* supported events */
 -- 
 2.18.0
 
