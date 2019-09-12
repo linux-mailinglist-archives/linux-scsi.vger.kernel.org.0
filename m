@@ -2,83 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3088EB1453
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Sep 2019 20:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D342B14FC
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Sep 2019 21:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbfILSLK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 Sep 2019 14:11:10 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:27896 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726963AbfILSLK (ORCPT
+        id S1726681AbfILT7i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 Sep 2019 15:59:38 -0400
+Received: from [171.11.179.138] ([171.11.179.138]:40960 "EHLO
+        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725775AbfILT7h (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 12 Sep 2019 14:11:10 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8CI9Th2019956;
-        Thu, 12 Sep 2019 11:10:08 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=6npNO3G0R2nlJQgYnOrtJa1H56jGc580q2o7rqlwtgQ=;
- b=WdoYOPsKDIFNPAfC2NFejRBoQOYWdIHNzo18WFkyg0+fhO1RPIKugUHnbxEPX20Ra+lq
- WbjPx3VHFG5lgaQcUO4V2uBvPfi2O9oSe306o1zMk8p8EA/780MDcaeYNDne/H2N9QT6
- WNAN64A+hJsP6R9pvQmKYmZRuai6z1/qGmENJn0JzXwxb0+gogQF+3+4L3IUkVrGjHS1
- wBnQji+43uyOhPhNkMvW+47Q+4PcT+RG0sMOy8fp5klpxJK1sGJoTbr4NZG6pqZL9Fcb
- C+KQfj2vdcVHheXGNEHbAZUk9o93ATk7EZQslaf3p0sSsmJaPJulRED9vHkwpSV23b1J WQ== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2uytdfg5s5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 12 Sep 2019 11:10:08 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Thu, 12 Sep
- 2019 11:10:07 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Thu, 12 Sep 2019 11:10:07 -0700
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id EB0E83F7040;
-        Thu, 12 Sep 2019 11:10:06 -0700 (PDT)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x8CIA6Gc006592;
-        Thu, 12 Sep 2019 11:10:06 -0700
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x8CIA6kt006591;
-        Thu, 12 Sep 2019 11:10:06 -0700
-From:   Himanshu Madhani <hmadhani@marvell.com>
-To:     <James.Bottomley@HansenPartnership.com>,
-        <martin.petersen@oracle.com>
-CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH v2 14/14] qla2xxx: Update driver version to 10.01.00.20-k
-Date:   Thu, 12 Sep 2019 11:09:18 -0700
-Message-ID: <20190912180918.6436-15-hmadhani@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20190912180918.6436-1-hmadhani@marvell.com>
-References: <20190912180918.6436-1-hmadhani@marvell.com>
+        Thu, 12 Sep 2019 15:59:37 -0400
+X-Greylist: delayed 510 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Sep 2019 15:59:37 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by localhost.localdomain (Postfix) with SMTP id C2C04118BCF5
+        for <linux-scsi@vger.kernel.org>; Fri, 13 Sep 2019 03:49:38 +0800 (CST)
+From:   linux-scsi@vger.kernel.org
+Reply-To: prodawez@cuvox.de
+To:     linux-scsi@vger.kernel.org
+Subject: =?utf-8?B?0JfQtNGA0LDQstGB0YLQstGD0LnRgtC1ISDQktCw0YEg?=
+        =?utf-8?B?0LjQvdGC0LXRgNC10YHRg9GO0YIg0LrQu9C40LXQvdGC?=
+        =?utf-8?B?0YHQutC40LUg0LHQsNC30Ysg0LTQsNC90L3Ri9GFPw==?=
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
- definitions=2019-09-12_09:2019-09-11,2019-09-12 signatures=0
+Content-Type: text/plain; charset="utf-8";
+Content-Transfer-Encoding: base64
+Message-Id: <20190912194938.C2C04118BCF5@localhost.localdomain>
+Date:   Fri, 13 Sep 2019 03:49:38 +0800 (CST)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index a8f2a953ceff..225e401b62fa 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -7,7 +7,7 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.01.00.19-k"
-+#define QLA2XXX_VERSION      "10.01.00.20-k"
- 
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	1
--- 
-2.12.0
-
+0JfQtNGA0LDQstGB0YLQstGD0LnRgtC1ISDQktCw0YEg0LjQvdGC0LXRgNC10YHRg9GO0YIg0LrQ
+u9C40LXQvdGC0YHQutC40LUg0LHQsNC30Ysg0LTQsNC90L3Ri9GFPw0K
