@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8B6B1207
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Sep 2019 17:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5BFB1210
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Sep 2019 17:22:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733037AbfILPU2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 Sep 2019 11:20:28 -0400
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:20970 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732699AbfILPU2 (ORCPT
+        id S1733025AbfILPW2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 Sep 2019 11:22:28 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:10690 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732699AbfILPW2 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 12 Sep 2019 11:20:28 -0400
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8CFHIUZ011820;
-        Thu, 12 Sep 2019 08:20:25 -0700
+        Thu, 12 Sep 2019 11:22:28 -0400
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x8CFKPBu022303;
+        Thu, 12 Sep 2019 08:20:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=AWvSBSs+jyoGEpwcnERrRaJZv4NNeDB1/NbsHvNabYk=;
- b=FjLu8Ls2RRwitL8Tr43qu399XBUN3FVHrTsex5sIYCrhFfnHSY7farzQb+lXQWEsbBwB
- jPY2BPQ6TEk9Ute4kYZ4bUfLycBRvIB2m3SarLJhlctq8akH3PZYvp3Xxaif+0MvK7/6
- xdB7UcqS3U5TLMv+LQNQej+g5nHbiiJQX3ImqOs76+fPn1caGjwetQhFi7RvbRIIhpMF
- ZF4d/T3h7vZuU+CtRllIqECuQPzQK485i4/y+TcRXcAtjR7Y0KguVuPi0yPX154Yh09B
- L5Ahf7DZhnG03MWzMEwHNTQO/zEcbTf/czHEXtavUBzDAwZfYMDBNyAB2E9cs1hUgZtd Yw== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2uvc2jy5qx-6
+ content-type; s=pfpt0818; bh=kMFNLdiGUyhYGHSre0O9kNwJzHSOfTe2qNzJyoaOeJI=;
+ b=EWLh2utUDmmWjHLTZy9axy152yXk531f6CeiTfMhz12PE/UP/APdkOxu9ipDATfJFfmr
+ XXhSNSns9mC92CX/48IfztmChRQ/V1V4pkIPoGDf8jHSpaW0ohbyFGvtqDtyJofNJgQG
+ gX4mqQQNUyXpbLguZtb3xQSJvEScfcqWujBZm5rnBHkGUPnxy1FbzwwtZALhMaPfNRUa
+ BHNg6v6u1pj01hEr/jELrjl/8N04Ecme0l4rCJz6b0/oNtDIuANM2z62w2iEkXvtrhv3
+ o8r4Becr6ECTgOvO6BqXGVB9o4C2mEL3UKq283koB4XEGDHPyyYkNMAA8LlKF+szuaMn Tw== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2uxshkfypx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 12 Sep 2019 08:20:24 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Thu, 12 Sep
- 2019 08:20:23 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Thu, 12 Sep 2019 08:20:23 -0700
+        Thu, 12 Sep 2019 08:20:27 -0700
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Thu, 12 Sep
+ 2019 08:20:26 -0700
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Thu, 12 Sep 2019 08:20:26 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 37BED3F7040;
-        Thu, 12 Sep 2019 08:20:23 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 6529E3F7040;
+        Thu, 12 Sep 2019 08:20:26 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x8CFKNMh002654;
-        Thu, 12 Sep 2019 08:20:23 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x8CFKQv8002658;
+        Thu, 12 Sep 2019 08:20:26 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x8CFKNLr002653;
-        Thu, 12 Sep 2019 08:20:23 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x8CFKQ79002657;
+        Thu, 12 Sep 2019 08:20:26 -0700
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 11/14] qla2xxx: Check for MB timeout while capturing ISP27/28xx FW dump
-Date:   Thu, 12 Sep 2019 08:19:46 -0700
-Message-ID: <20190912151949.2348-12-hmadhani@marvell.com>
+Subject: [PATCH 12/14] qla2xxx: Capture FW dump on MPI heartbeat stop event
+Date:   Thu, 12 Sep 2019 08:19:47 -0700
+Message-ID: <20190912151949.2348-13-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20190912151949.2348-1-hmadhani@marvell.com>
 References: <20190912151949.2348-1-hmadhani@marvell.com>
@@ -63,92 +63,96 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-Add mailbox timeout checkout for ISP 27xx/28xx during FW dump
-procedure. Without the timeout check, hardware lock can
-be held for long period. This patch would shorten the dump
-procedure, if a timeout condition is encountered.
+For MPI heartbeat stop Async Event, this patch would capture
+MPI FW dump and chip reset. FW will tell which function to
+capture FW dump for.
 
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_tmpl.c | 25 +++++++++++++++++++++++--
- 1 file changed, 23 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_attr.c |  4 +++-
+ drivers/scsi/qla2xxx/qla_isr.c  | 31 ++++++++++++++++++++++++++-----
+ drivers/scsi/qla2xxx/qla_tmpl.c |  4 +++-
+ 3 files changed, 32 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
+index 6b5379c08f28..8540b5b13785 100644
+--- a/drivers/scsi/qla2xxx/qla_attr.c
++++ b/drivers/scsi/qla2xxx/qla_attr.c
+@@ -102,8 +102,10 @@ qla2x00_sysfs_write_fw_dump(struct file *filp, struct kobject *kobj,
+ 			qla8044_idc_lock(ha);
+ 			qla82xx_set_reset_owner(vha);
+ 			qla8044_idc_unlock(ha);
+-		} else
++		} else {
++			ha->fw_dump_mpi = 1;
+ 			qla2x00_system_error(vha);
++		}
+ 		break;
+ 	case 4:
+ 		if (IS_P3P_TYPE(ha)) {
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index e8ce57cb897e..8a4493984ebe 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -1228,11 +1228,32 @@ qla2x00_async_event(scsi_qla_host_t *vha, struct rsp_que *rsp, uint16_t *mb)
+ 		break;
+ 
+ 	case MBA_IDC_AEN:
+-		mb[4] = RD_REG_WORD(&reg24->mailbox4);
+-		mb[5] = RD_REG_WORD(&reg24->mailbox5);
+-		mb[6] = RD_REG_WORD(&reg24->mailbox6);
+-		mb[7] = RD_REG_WORD(&reg24->mailbox7);
+-		qla83xx_handle_8200_aen(vha, mb);
++		if (IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
++			ha->flags.fw_init_done = 0;
++			ql_log(ql_log_warn, vha, 0xffff,
++			    "MPI Heartbeat stop. Chip reset needed. MB0[%xh] MB1[%xh] MB2[%xh] MB3[%xh]\n",
++			    mb[0], mb[1], mb[2], mb[3]);
++
++			if ((mb[1] & BIT_8) ||
++			    (mb[2] & BIT_8)) {
++				ql_log(ql_log_warn, vha, 0xd013,
++				    "MPI Heartbeat stop. FW dump needed\n");
++				ha->fw_dump_mpi = 1;
++				ha->isp_ops->fw_dump(vha, 1);
++			}
++			set_bit(ISP_ABORT_NEEDED, &vha->dpc_flags);
++			qla2xxx_wake_dpc(vha);
++		} else if (IS_QLA83XX(ha)) {
++			mb[4] = RD_REG_WORD(&reg24->mailbox4);
++			mb[5] = RD_REG_WORD(&reg24->mailbox5);
++			mb[6] = RD_REG_WORD(&reg24->mailbox6);
++			mb[7] = RD_REG_WORD(&reg24->mailbox7);
++			qla83xx_handle_8200_aen(vha, mb);
++		} else {
++			ql_dbg(ql_dbg_async, vha, 0x5052,
++			    "skip Heartbeat processing mb0-3=[0x%04x] [0x%04x] [0x%04x] [0x%04x]\n",
++			    mb[0], mb[1], mb[2], mb[3]);
++		}
+ 		break;
+ 
+ 	case MBA_DPORT_DIAGNOSTICS:
 diff --git a/drivers/scsi/qla2xxx/qla_tmpl.c b/drivers/scsi/qla2xxx/qla_tmpl.c
-index de696a07532e..ad84a64dcb2a 100644
+index ad84a64dcb2a..7b70ab72c241 100644
 --- a/drivers/scsi/qla2xxx/qla_tmpl.c
 +++ b/drivers/scsi/qla2xxx/qla_tmpl.c
-@@ -10,6 +10,7 @@
- #define ISPREG(vha)	(&(vha)->hw->iobase->isp24)
- #define IOBAR(reg)	offsetof(typeof(*(reg)), iobase_addr)
- #define IOBASE(vha)	IOBAR(ISPREG(vha))
-+#define INVALID_ENTRY ((struct qla27xx_fwdt_entry *)0xffffffffffffffffUL)
+@@ -1016,8 +1016,9 @@ qla27xx_fwdump(scsi_qla_host_t *vha, int hardware_locked)
+ 		uint j;
+ 		ulong len;
+ 		void *buf = vha->hw->fw_dump;
++		uint count = vha->hw->fw_dump_mpi ? 2 : 1;
  
- static inline void
- qla27xx_insert16(uint16_t value, void *buf, ulong *len)
-@@ -261,6 +262,7 @@ qla27xx_fwdt_entry_t262(struct scsi_qla_host *vha,
- 	ulong start = le32_to_cpu(ent->t262.start_addr);
- 	ulong end = le32_to_cpu(ent->t262.end_addr);
- 	ulong dwords;
-+	int rc;
- 
- 	ql_dbg(ql_dbg_misc, vha, 0xd206,
- 	    "%s: rdram(%x) [%lx]\n", __func__, ent->t262.ram_area, *len);
-@@ -308,7 +310,13 @@ qla27xx_fwdt_entry_t262(struct scsi_qla_host *vha,
- 	dwords = end - start + 1;
- 	if (buf) {
- 		buf += *len;
--		qla24xx_dump_ram(vha->hw, start, buf, dwords, &buf);
-+		rc = qla24xx_dump_ram(vha->hw, start, buf, dwords, &buf);
-+		if (rc != QLA_SUCCESS) {
-+			ql_dbg(ql_dbg_async, vha, 0xffff,
-+			    "%s: dump ram MB failed. Area %xh start %lxh end %lxh\n",
-+			    __func__, area, start, end);
-+			return INVALID_ENTRY;
-+		}
- 	}
- 	*len += dwords * sizeof(uint32_t);
- done:
-@@ -838,6 +846,13 @@ qla27xx_walk_template(struct scsi_qla_host *vha,
- 		ent = qla27xx_find_entry(type)(vha, ent, buf, len);
- 		if (!ent)
- 			break;
-+
-+		if (ent == INVALID_ENTRY) {
-+			*len = 0;
-+			ql_dbg(ql_dbg_async, vha, 0xffff,
-+			    "Unable to capture FW dump");
-+			goto bailout;
-+		}
+-		for (j = 0; j < 2; j++, fwdt++, buf += len) {
++		for (j = 0; j < count; j++, fwdt++, buf += len) {
+ 			ql_log(ql_log_warn, vha, 0xd011,
+ 			    "-> fwdt%u running...\n", j);
+ 			if (!fwdt->template) {
+@@ -1045,6 +1046,7 @@ qla27xx_fwdump(scsi_qla_host_t *vha, int hardware_locked)
  	}
  
- 	if (tmp->count)
-@@ -847,6 +862,9 @@ qla27xx_walk_template(struct scsi_qla_host *vha,
- 	if (ent)
- 		ql_dbg(ql_dbg_misc, vha, 0xd019,
- 		    "%s: missing end entry\n", __func__);
-+
-+bailout:
-+	cpu_to_le32s(&tmp->count);	/* endianize residual count */
- }
- 
- static void
-@@ -1009,7 +1027,9 @@ qla27xx_fwdump(scsi_qla_host_t *vha, int hardware_locked)
- 			}
- 			len = qla27xx_execute_fwdt_template(vha,
- 			    fwdt->template, buf);
--			if (len != fwdt->dump_size) {
-+			if (len == 0) {
-+				goto bailout;
-+			} else if (len != fwdt->dump_size) {
- 				ql_log(ql_log_warn, vha, 0xd013,
- 				    "-> fwdt%u fwdump residual=%+ld\n",
- 				    j, fwdt->dump_size - len);
-@@ -1024,6 +1044,7 @@ qla27xx_fwdump(scsi_qla_host_t *vha, int hardware_locked)
- 		qla2x00_post_uevent_work(vha, QLA_UEVENT_CODE_FW_DUMP);
- 	}
- 
-+bailout:
+ bailout:
++	vha->hw->fw_dump_mpi = 0;
  #ifndef __CHECKER__
  	if (!hardware_locked)
  		spin_unlock_irqrestore(&vha->hw->hardware_lock, flags);
