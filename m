@@ -2,76 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF77B34D3
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Sep 2019 08:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DC5B36F7
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Sep 2019 11:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729473AbfIPGr0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Sep 2019 02:47:26 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:43534 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728139AbfIPGr0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Sep 2019 02:47:26 -0400
-X-UUID: 1104f380ee8c4455a7df92cc0da0291e-20190916
-X-UUID: 1104f380ee8c4455a7df92cc0da0291e-20190916
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 2001617802; Mon, 16 Sep 2019 14:47:20 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 16 Sep 2019 14:47:19 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 16 Sep 2019 14:47:19 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>, <sthumma@codeaurora.org>,
-        <jejb@linux.ibm.com>, <bvanassche@acm.org>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>, <kernel-team@android.com>,
-        <matthias.bgg@gmail.com>, <evgreen@chromium.org>,
-        <beanhuo@micron.com>, <marc.w.gonzalez@free.fr>,
-        <subhashj@codeaurora.org>, <vivek.gautam@codeaurora.org>,
-        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v3 3/3] scsi: ufs-mediatek: enable auto suspend capability
-Date:   Mon, 16 Sep 2019 14:47:17 +0800
-Message-ID: <1568616437-16271-4-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1568616437-16271-1-git-send-email-stanley.chu@mediatek.com>
-References: <1568616437-16271-1-git-send-email-stanley.chu@mediatek.com>
+        id S1731823AbfIPJRQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Sep 2019 05:17:16 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34545 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728176AbfIPJRQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Sep 2019 05:17:16 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1i9n86-0003ev-Iq; Mon, 16 Sep 2019 09:17:06 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     John Garry <john.garry@huawei.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] scsi: hisi_sas: fix spelling mistake "digial" -> "digital"
+Date:   Mon, 16 Sep 2019 10:17:06 +0100
+Message-Id: <20190916091706.32268-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Enable auto suspend capability in MediaTek UFS driver.
+From: Colin Ian King <colin.king@canonical.com>
 
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
+There is a spelling mistake in literal string. Fix it.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
 ---
- drivers/scsi/ufs/ufs-mediatek.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/hisi_sas/hisi_sas_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
-index 0f6ff33ce52e..83e28edc3ac5 100644
---- a/drivers/scsi/ufs/ufs-mediatek.c
-+++ b/drivers/scsi/ufs/ufs-mediatek.c
-@@ -147,6 +147,9 @@ static int ufs_mtk_init(struct ufs_hba *hba)
- 	if (err)
- 		goto out_variant_clear;
- 
-+	/* Enable runtime autosuspend */
-+	hba->caps |= UFSHCD_CAP_RPM_AUTOSUSPEND;
-+
- 	/*
- 	 * ufshcd_vops_init() is invoked after
- 	 * ufshcd_setup_clock(true) in ufshcd_hba_init() thus
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index d1513fdf1e00..e934d0b11745 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -3539,7 +3539,7 @@ static const struct {
+ 	int		value;
+ 	char		*name;
+ } hisi_sas_debugfs_loop_modes[] = {
+-	{ HISI_SAS_BIST_LOOPBACK_MODE_DIGITAL, "digial" },
++	{ HISI_SAS_BIST_LOOPBACK_MODE_DIGITAL, "digital" },
+ 	{ HISI_SAS_BIST_LOOPBACK_MODE_SERDES, "serdes" },
+ 	{ HISI_SAS_BIST_LOOPBACK_MODE_REMOTE, "remote" },
+ };
 -- 
-2.18.0
+2.20.1
 
