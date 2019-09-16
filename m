@@ -2,88 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C16C2B3E2E
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Sep 2019 17:55:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDD1B3E34
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Sep 2019 17:57:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729634AbfIPPzq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Sep 2019 11:55:46 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:15480 "EHLO
+        id S1731320AbfIPP5A (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Sep 2019 11:57:00 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:10129 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727666AbfIPPzq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Sep 2019 11:55:46 -0400
-X-UUID: 8621e6238e33419db293d603130736bd-20190916
-X-UUID: 8621e6238e33419db293d603130736bd-20190916
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        with ESMTP id S1730026AbfIPP5A (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Sep 2019 11:57:00 -0400
+X-UUID: fe07b6b160f148a5beca88715ba8ec04-20190916
+X-UUID: fe07b6b160f148a5beca88715ba8ec04-20190916
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 143584848; Mon, 16 Sep 2019 23:55:38 +0800
+        with ESMTP id 1024302266; Mon, 16 Sep 2019 23:56:53 +0800
 Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 16 Sep 2019 23:55:36 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 16 Sep 2019 23:56:52 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 16 Sep 2019 23:55:36 +0800
-Message-ID: <1568649336.16730.22.camel@mtkswgap22>
-Subject: Re: [PATCH v3 1/3] scsi: core: allow auto suspend override by
- low-level driver
+ Transport; Mon, 16 Sep 2019 23:56:51 +0800
 From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>,
-        "sthumma@codeaurora.org" <sthumma@codeaurora.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "evgreen@chromium.org" <evgreen@chromium.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
-        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
-        "vivek.gautam@codeaurora.org" <vivek.gautam@codeaurora.org>,
-        Kuohong Wang =?UTF-8?Q?=28=E7=8E=8B=E5=9C=8B=E9=B4=BB=29?= 
-        <kuohong.wang@mediatek.com>,
-        Peter Wang =?UTF-8?Q?=28=E7=8E=8B=E4=BF=A1=E5=8F=8B=29?= 
-        <peter.wang@mediatek.com>,
-        Chun-Hung Wu =?UTF-8?Q?=28=E5=B7=AB=E9=A7=BF=E5=AE=8F=29?= 
-        <Chun-hung.Wu@mediatek.com>,
-        Andy Teng =?UTF-8?Q?=28=E9=84=A7=E5=A6=82=E5=AE=8F=29?= 
-        <Andy.Teng@mediatek.com>
-Date:   Mon, 16 Sep 2019 23:55:36 +0800
-In-Reply-To: <bebea62f-8ab0-528f-5634-9b3c06f47ef7@acm.org>
-References: <1568616437-16271-1-git-send-email-stanley.chu@mediatek.com>
-         <1568616437-16271-2-git-send-email-stanley.chu@mediatek.com>
-         <bebea62f-8ab0-528f-5634-9b3c06f47ef7@acm.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-Content-Transfer-Encoding: 7bit
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <pedrom.sousa@synopsys.com>, <sthumma@codeaurora.org>,
+        <jejb@linux.ibm.com>, <bvanassche@acm.org>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>, <kernel-team@android.com>,
+        <matthias.bgg@gmail.com>, <evgreen@chromium.org>,
+        <beanhuo@micron.com>, <marc.w.gonzalez@free.fr>,
+        <subhashj@codeaurora.org>, <vivek.gautam@codeaurora.org>,
+        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v4 0/3] scsi: core: allow auto suspend override by low-level driver
+Date:   Mon, 16 Sep 2019 23:56:48 +0800
+Message-ID: <1568649411-5127-1-git-send-email-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 5F47E35CB09F565A53FE9C6AB70840EF796B39E9C06F1BF69DB3769F521CD1352000:8
+Content-Type: text/plain
 X-MTK:  N
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Bart,
+Until now the scsi mid-layer forbids runtime suspend till userspace enables it. This is mainly to quarantine some disks with broken runtime power management or have high latencies executing suspend resume callbacks. If the userspace doesn't enable the runtime suspend the underlying hardware will be always on even when it is not doing any useful work and thus wasting power.
 
-> > -
-> > +	unsigned rpm_autosuspend_on:1;	/* Runtime autosuspend */
-> >   	atomic_t disk_events_disable_depth; /* disable depth for disk events */
->     The "_on" part in the variable name "rpm_autosuspend_on" is probably 
-> redundant and the comment could have been more elaborate. Anyway:
+Some low-level drivers for the controllers can efficiently use runtime power management to reduce power consumption and improve battery life.
 
-OK! Thanks for suggestions. Will fix both in next version.
+This patchset allows runtime suspend parameters override within the LLD itself instead of waiting for userspace to control the power management, and make UFS as the first user of this capability.
 
-> 
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+v3 => v4:
+- Change scsi_device->rpm_autosuspend_on to scsi_device->rpm_autosuspend (Bart)
+- Make the comment of scsi_device->rpm_autosuspend more elaborate (Bart)
 
-Thanks,
-Stanley
+v2 => v3:
+- Create a member indicating autosuspend delay for the same SCSI host in SCSI host template (Bart)
+- Use separate variables to control different things, (Bart)
+    (a) Whether or not runtime suspend is enabled at device creation time
+    (b) The power management autosuspend delay
 
+v1 => v2:
+- Allow "zero" sdev->rpm_autosuspend_delay (Avri)
+- Fix format of some lines (Avri)
+
+Stanley Chu (3):
+  scsi: core: allow auto suspend override by low-level driver
+  scsi: ufs: override auto suspend tunables for ufs
+  scsi: ufs-mediatek: enable auto suspend capability
+
+ drivers/scsi/scsi_sysfs.c       |  3 ++-
+ drivers/scsi/sd.c               |  4 ++++
+ drivers/scsi/ufs/ufs-mediatek.c |  3 +++
+ drivers/scsi/ufs/ufshcd.c       |  9 +++++++++
+ drivers/scsi/ufs/ufshcd.h       | 10 ++++++++++
+ include/scsi/scsi_device.h      |  3 ++-
+ include/scsi/scsi_host.h        |  3 +++
+ 7 files changed, 33 insertions(+), 2 deletions(-)
+
+-- 
+2.18.0
 
