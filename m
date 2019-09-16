@@ -2,554 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2D2B3922
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Sep 2019 13:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB4EB3A5A
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Sep 2019 14:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726422AbfIPLKH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Sep 2019 07:10:07 -0400
-Received: from correo.registraduria.gov.co ([201.232.123.13]:16707 "EHLO
-        registraduria.gov.co" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726081AbfIPLKH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Sep 2019 07:10:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; d=registraduria.gov.co; s=registraduria.gov.co; c=relaxed/simple;
-        q=dns/txt; i=@registraduria.gov.co; t=1568631133; x=1571223133;
-        h=From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=/OafjFCAA8wFEUxDYpw+GAIskNUKJVM53VDlAb8TQT4=;
-        b=ecZrBjprmIn6L0kjacB/9B6oHHDHM5yfi0FJTntl4+w8I7rMGmj3I7XN6RM86Msj
-        ngbMnMvb58v6HkPO/Xj+WjpA2fJ/JLqkhNqhZ6h8f1THqZ4Rsq+uh0Lim6vnMbUh
-        vqP+wisULRk1KVWy10Xhxk86mniVDYm3K92l4eg2R50=;
-X-AuditID: c0a8e818-52fff7000001bab9-e2-5d7f695d0148
-Received: from RNEC-MSG-00.registraduria.gov.co (rnec-msg-01.registraduria.gov.co [172.20.60.178])
-        by registraduria.gov.co (Symantec Messaging Gateway) with SMTP id 99.6E.47801.D596F7D5; Mon, 16 Sep 2019 05:52:13 -0500 (-05)
-Received: from RNEC-MSG-00.registraduria.gov.co (172.20.60.177) by
- RNEC-MSG-01.registraduria.gov.co (172.20.60.178) with Microsoft SMTP Server
- (TLS) id 15.0.1395.4; Mon, 16 Sep 2019 05:57:04 -0500
-Received: from RNEC-MSG-00.registraduria.gov.co ([fe80::2c92:7fcd:a2d3:3ac5])
- by RNEC-MSG-00.registraduria.gov.co ([fe80::2c92:7fcd:a2d3:3ac5%20]) with
- mapi id 15.00.1395.000; Mon, 16 Sep 2019 05:53:31 -0500
-From:   Registraduria Municipal Caramanta - Antioquia 
-        <CaramantaAntioquia@registraduria.gov.co>
-To:     "NO-REPLY@MICROSOFT.NET" <NO-REPLY@MICROSOFT.NET>
-Subject: =?iso-8859-1?Q?Se_non_verifichi_il_tuo_account_entro_le_prossime_24_ore,_?=
- =?iso-8859-1?Q?il_tuo_account_verr=E0_sospeso?=
-Thread-Topic: =?iso-8859-1?Q?Se_non_verifichi_il_tuo_account_entro_le_prossime_24_ore,_?=
- =?iso-8859-1?Q?il_tuo_account_verr=E0_sospeso?=
-Thread-Index: AQHVbHwmPSCQBWknJU6qxvHkXkoYkw==
-Date:   Mon, 16 Sep 2019 10:53:31 +0000
-Message-ID: <1568660061467.24491@registraduria.gov.co>
-Accept-Language: es-ES, en-US
-Content-Language: es-ES
+        id S1727770AbfIPMdI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Sep 2019 08:33:08 -0400
+Received: from mail-eopbgr750077.outbound.protection.outlook.com ([40.107.75.77]:40654
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726696AbfIPMdI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 16 Sep 2019 08:33:08 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZtnY2kiQ0cxqKkVBSVaCE8OKB+G3x6M1mKRqXkid+YgJ3SYRZmdLCdHs7wDhF+nD5wYB3r7g6HqsLtpFzUJ1Y4qS4ZyT4xPdYvllLthosTdjdm0bdbgpMOBZWyob/8hHgjls0tn2NZOBG/2E495yproRuTNSEUWNERyGS12eRFMNz3an7Cj9UbfROt10FTpRCOGSc5CkfuCTw61eWPSaG0jiaig5GXtViDLDbt2Ck5h/bJbRmwKcgrWkIgZ8u3MqEJMn1ilqu06ASmK4GLpnCArTlPwFDJen5LuHUvKgVy/6E91MIlau00fZNH5S1hGjMviGCE3taCqQ4N6gieHdBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RJIQD4Fu92aqPD9b2OwvruL9ykrqcq+nJAPtGlDGvUs=;
+ b=DopK3xL8ZIOfbEyhpcFa+Cn5ZXfSGxgmsJT03so3iDkNAbmEJ6A6PSSII08GaXoFOFIee2aWofROokaiVHJ7pX7HMH0GtbTQCvuM9ZpZis+4hHcMfWcnhjgVx9FVgqlqFOWsiSM4STWETwYebIb82kA50VoaMe3KTlk0p5ZsI7tq9d4SYzHadNw3RDVX1rD4MOC3QLMsfRoRQjfi0K9J3g6TtBD/w0zUZY1zmazUk433im4EXR8Hc3ZVHhgvFNhqy0+xOpObZcLGxHX8hYnCaxOw2SLgSi+XrophikgSqZ0p7QAQN41JFSO6cQSlotFG7LWcCD0ohi88mwWyWhrz9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=micron.com; dmarc=pass action=none header.from=micron.com;
+ dkim=pass header.d=micron.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RJIQD4Fu92aqPD9b2OwvruL9ykrqcq+nJAPtGlDGvUs=;
+ b=hB4C0X6gn8TKBDCTj3MYkShQwkxtOG3ci6Wz/jqnnsUXIvGi/OjCN2QaW/ba0oC8z0uCOAHRsl0ukLPxy/vAT5QRu0NaLQiSxYNXKhRGQMcRslzAQGo18rUJH6+HgnF0qiPs5e63Zc4247LIMg+ERJznaJ/1Bv6tJOxRXmRcn0w=
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.179.87) by
+ BN7PR08MB4482.namprd08.prod.outlook.com (52.135.248.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2263.23; Mon, 16 Sep 2019 12:33:05 +0000
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::1c5f:b47c:d1c3:c30c]) by BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::1c5f:b47c:d1c3:c30c%7]) with mapi id 15.20.2263.023; Mon, 16 Sep 2019
+ 12:33:05 +0000
+From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
+To:     Stanley Chu <stanley.chu@mediatek.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "avri.altman@wdc.com" <avri.altman@wdc.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "pedrom.sousa@synopsys.com" <pedrom.sousa@synopsys.com>,
+        "sthumma@codeaurora.org" <sthumma@codeaurora.org>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>
+CC:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "evgreen@chromium.org" <evgreen@chromium.org>,
+        "marc.w.gonzalez@free.fr" <marc.w.gonzalez@free.fr>,
+        "subhashj@codeaurora.org" <subhashj@codeaurora.org>,
+        "vivek.gautam@codeaurora.org" <vivek.gautam@codeaurora.org>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>
+Subject: RE: [EXT] [PATCH v3 2/3] scsi: ufs: override auto suspend tunables
+ for ufs
+Thread-Topic: [EXT] [PATCH v3 2/3] scsi: ufs: override auto suspend tunables
+ for ufs
+Thread-Index: AQHVbFqa8oaq4Yk69ky4RtSVevqDnacuPMkg
+Date:   Mon, 16 Sep 2019 12:33:04 +0000
+Message-ID: <BN7PR08MB56847455A8B0C7D89FF8C6A1DB8C0@BN7PR08MB5684.namprd08.prod.outlook.com>
+References: <1568616437-16271-1-git-send-email-stanley.chu@mediatek.com>
+ <1568616437-16271-3-git-send-email-stanley.chu@mediatek.com>
+In-Reply-To: <1568616437-16271-3-git-send-email-stanley.chu@mediatek.com>
+Accept-Language: en-150, en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [192.168.5.43]
-Content-Type: text/plain; charset="iso-8859-1"
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=beanhuo@micron.com; 
+x-originating-ip: [165.225.81.111]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 85d4f1a9-90c5-4fbc-6f4e-08d73aa205a9
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4534185)(7168020)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:BN7PR08MB4482;
+x-ms-traffictypediagnostic: BN7PR08MB4482:|BN7PR08MB4482:|BN7PR08MB4482:
+x-microsoft-antispam-prvs: <BN7PR08MB4482369422C121B851BE1710DB8C0@BN7PR08MB4482.namprd08.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:400;
+x-forefront-prvs: 0162ACCC24
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(366004)(396003)(346002)(39860400002)(199004)(189003)(9686003)(66066001)(55016002)(446003)(99286004)(558084003)(110136005)(86362001)(316002)(7416002)(2906002)(6506007)(6246003)(476003)(102836004)(55236004)(186003)(11346002)(26005)(76176011)(7736002)(305945005)(74316002)(52536014)(76116006)(54906003)(66446008)(64756008)(66556008)(66476007)(66946007)(53936002)(7696005)(5660300002)(3846002)(6116002)(8676002)(486006)(81166006)(71190400001)(2501003)(81156014)(229853002)(256004)(6436002)(71200400001)(8936002)(2201001)(14454004)(33656002)(478600001)(25786009)(4326008);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB4482;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: micron.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: Hj1J/rjTnkIy0MkU5zEAZUgTPhcCdA53nu0OzgFGIA3dNrBcvSf6H+qprJ8gB5jPq1UkM//bF8bSkH30fFta4i7NbksqcHEyDQs+W0SZtYVSkHOzXvMzUnZuM3hVKmZGlYKSmLqJZptQlhcDu4VovjKOrpmUyeQBtI1hGrcCB6yvulrqkQ7y9GAxnmDWB/zsNZvJCpwCdnogS9BHrQ1Fi/WAsB+uDkvW8Eiu98WGr7SmWPp9Bei+xgaJ7GddbBS186hyLRPzSq5Bc0ZrQfKapI3vUBLCUd1AOKUBAm1U9GKGLsVlML7l4CIegK7xMg0nKTUnsEJaSRJI54aCkZoiBYqge5E6gsZsSqIvbMKWh1AD4vpz9ZmAjAWkeHloeC7Aosu4GVUNR9dtKJmSY+o3xeaT+mo8f4A3AZIrITxXnsA=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Brightmail-Tracker: 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
-        lJL/AQTRbz9lBwAA
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85d4f1a9-90c5-4fbc-6f4e-08d73aa205a9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2019 12:33:04.9048
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1LL98TBqr1xooJLv8PIjqlouIOEHaYN8Xta2UM46oNiyYc5LDVyLlwCy/zIcyfNmfPlJBeSizqhAK5/NgHpOlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB4482
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Aggiorna il tuo account
+>
+>Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+>Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
 
-
-Il nostro record indica che il tuo account non =E8 stato aggiornato, il che=
- potrebbe comportare la chiusura del tuo account. Se non aggiorni il tuo ac=
-count, non sarai pi=F9 in grado di inviare e ricevere e-mail e ti verr=E0 n=
-egato l'accesso a molte delle nostre ultime conversazioni, contatti e alleg=
-ati migliorati.
-
-
-Prenditi un minuto per aggiornare il tuo account per un'esperienza di maili=
-ng pi=F9 rapida e completa.
-
-
-Fai clic qui per aggiornare il tuo account?<http://gernaral0012.000webhosta=
-pp.com/>
-
-
-Nota: il mancato aggiornamento della propria casella di posta comporter=E0 =
-la cancellazione permanente del proprio account.
-
-
-Grazie molto,
-
-Il team di sicurezza
-
-
-Copyright =A9 2019 Webmail .Inc. Tutti i diritti riservati.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-?
-
-
-
-Confidencialidad: La informaci=F3n contenida en este mensaje de e-mail y su=
-s anexos, es confidencial y est=E1 reservada para el destinatario =FAnicame=
-nte. Si usted no es el destinatario o un empleado o agente responsable de e=
-nviar este mensaje al destinatario final, se le notifica que no est=E1 auto=
-rizado para revisar, retransmitir, imprimir, copiar, usar o distribuir este=
- e-mail o sus anexos. Si usted ha recibido este e-mail por error, por favor=
- comun=EDquelo inmediatamente v=EDa e-mail al remitente y tenga la amabilid=
-ad de borrarlo de su computadora o cualquier otro banco de datos. Muchas gr=
-acias.
-
-Confidentiality Notice: The information contained in this email message, in=
-cluding any attachment, is confidential and is intended only for the person=
- or entity to which it is addressed. If you are neither the intended recipi=
-ent nor the employee or agent responsible for delivering this message to th=
-e intended recipient, you are hereby notified that you may not review, retr=
-ansmit, convert to hard copy, copy, use or distribute this email message or=
- any attachments to it. If you have received this email in error, please co=
-ntact the sender immediately and delete this message from any computer or o=
-ther data bank. Thank you.
