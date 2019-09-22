@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4E7BA075
-	for <lists+linux-scsi@lfdr.de>; Sun, 22 Sep 2019 05:59:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C6ABA077
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Sep 2019 05:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727458AbfIVD7T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 21 Sep 2019 23:59:19 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:45254 "EHLO
+        id S1727464AbfIVD7V (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 21 Sep 2019 23:59:21 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39148 "EHLO
         mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727381AbfIVD7T (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Sep 2019 23:59:19 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 41so9363874oti.12
-        for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2019 20:59:19 -0700 (PDT)
+        with ESMTP id S1727459AbfIVD7V (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Sep 2019 23:59:21 -0400
+Received: by mail-ot1-f66.google.com with SMTP id s22so9403769otr.6
+        for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2019 20:59:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=ccV9R+hIxBMQB75eTPPzyT8GcdLB1MG1kODyo9DRWm4=;
-        b=kluOaUPZtMf6wzWpMvWrGPKPvaLVwdavJ6tgCKO3mABEThRiRIqXDHS1afocl040jv
-         cQovR4dX/zWsTdpE4ri7FSoYPUPfBgEFtqGIyuVYL/SaGy7sKLRatwwRpTQFl3UXCFrW
-         OjCsDWcZJxPjUPb8blmEw8VM3YCa1P3KcStjIVgjLXlUkMbQR17b1J+4Dw21PuI3ET2B
-         493f13K8QKeht1PBrGyq2cEOooXR//VfUM6Ez8QmYHOV2G7xSXu82tf/XDKJCMKEJRGm
-         PIHycifo568DYMxoiUmxQJvZdR6H8DZUTRCK5uqvPw/ILNm26EbP5TcT4VEjBQ7mnWKC
-         8MhQ==
+        bh=qGZM39KeQFMuPoTx2Bev/RkYQzHWgTjJYXRJdcjOY/M=;
+        b=NLZaElLOe6hkBAQHQQL8ry3Wm/eEZHVp84sChKyDJRKgXz31g3E+oeRehWhPwJHxYO
+         20UMnfUenxlwwOkwGj1LvG3hQO9u4d3AGVHdDMvmXKn+ClHKeDzPrwu3ZbGAQU53TBTN
+         GLtTKjloet5wnB1bE4onbZyK5bEEdSoSAloz09ykek1CfY0sQRMp034J1+M+h3fquPcP
+         m993JAqaDrY6zAKABbhgNLngPbWwlvfVvsRpyt9W7lvofzO/x0/d6XBJ1usaNVi7+KEt
+         jN3LPFoUaHfbiPhC+bDisGetM1k6wyJT5QUnSia8AhsY4knp7njCtkRE0oDWnKEzpHax
+         jTCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=ccV9R+hIxBMQB75eTPPzyT8GcdLB1MG1kODyo9DRWm4=;
-        b=NryaP9x0asO2kNLVU2+EHhZcgkw/3R5zOgQivGE1cULDLsaI+WLteyVU/Yt9cwuBS2
-         z2wPwEirv/n1tS21F3uZiXHettweUagv74WO0UCOLeijBsaMVeZ5slusG4EchkyNQIqD
-         xgN7eounoDB+i+G7Ir1xBIe9fQ6D1GbPF7KbdYHxkpK2JWj2YTc866Sc9+KRCtnP3Htf
-         1toKROaImI7Q6zdGtGFJSzI91Ex5Tk0Fwgtnslc5ckLCBto9IT068cIXXOJ7WJXqZB6R
-         jq2VJ6h/DflZKcmv00uLIQolcYRQOmHLCBxAiVFpX5s1fIEV1dbkne47I4HEAHr0oJcM
-         2rtg==
-X-Gm-Message-State: APjAAAVtHCzjPAtTdt/QW2or8pxXo5P2//QYKbziGZSUpEgFAdUflW+I
-        1z3NOj+nDSQ0zQ+ztM4j3pdWd951
-X-Google-Smtp-Source: APXvYqxu20lw0vsPzYgZIvy+yXZzyL+qZZcd31j9r/pC1n8ZLDqd0nCZwTQTaI4yjfymRXrtdlyhsQ==
-X-Received: by 2002:a9d:4615:: with SMTP id y21mr3432207ote.97.1569124758759;
-        Sat, 21 Sep 2019 20:59:18 -0700 (PDT)
+        bh=qGZM39KeQFMuPoTx2Bev/RkYQzHWgTjJYXRJdcjOY/M=;
+        b=Fg5I+JnOpHSYcep0r7DbxVe2taHFJ9ZKj+KJKVkznqhkt0cm2JyN6tCReuNXZYDSwb
+         TybqT7QK3gnZ+VUzSdtSQVADxf5ryUbYcRF0lfcgSqDCOOTMpDqDz+6Jjcb9UMqX7Izt
+         GQl+YIudNCQCZ6kGN42VjI6fpHP2pQ23WSb+2J/bJD0Ksn5OZZBApnwB/SIRSzkRPxx4
+         qgbF1sI2DRRYk3kFxhLXjvEj9q1tue9CfS3qbqOIiIEnnbCRl2Ffo91zLKfnQz9A6zre
+         u3QI6m36XEVd8A5IJpi/Zq0qyAhr7VKbrHPIfT013dgdY+cmOtlcDCsvgiReyq6ZlgeN
+         xPTw==
+X-Gm-Message-State: APjAAAVTB/8kGNvKCo0AjHzf+M/X7XQQKRwU7AbiRE6fbGAAOg1kcqi8
+        MwIZz4wUN2TQ0nS5DKl3rFLXd0NK
+X-Google-Smtp-Source: APXvYqwQ0TrRzEPk7qn4ZOPP0+xEYOcHdZ3cL4fxLN4mXk44Mvl/s9rIQJp65YuVLI9BQGCOZHspRw==
+X-Received: by 2002:a9d:4919:: with SMTP id e25mr18330663otf.267.1569124759911;
+        Sat, 21 Sep 2019 20:59:19 -0700 (PDT)
 Received: from os42.localdomain (ip68-5-145-143.oc.oc.cox.net. [68.5.145.143])
-        by smtp.gmail.com with ESMTPSA id a9sm2395889otc.75.2019.09.21.20.59.17
+        by smtp.gmail.com with ESMTPSA id a9sm2395889otc.75.2019.09.21.20.59.18
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sat, 21 Sep 2019 20:59:18 -0700 (PDT)
+        Sat, 21 Sep 2019 20:59:19 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 04/20] lpfc: Fix NVME io abort failures causing hangs
-Date:   Sat, 21 Sep 2019 20:58:50 -0700
-Message-Id: <20190922035906.10977-5-jsmart2021@gmail.com>
+Subject: [PATCH 05/20] lpfc: Fix rpi release when deleting vport
+Date:   Sat, 21 Sep 2019 20:58:51 -0700
+Message-Id: <20190922035906.10977-6-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20190922035906.10977-1-jsmart2021@gmail.com>
 References: <20190922035906.10977-1-jsmart2021@gmail.com>
@@ -58,141 +58,162 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The nvme-fc transport may call to abort an io on controller
-reset. If the driver is out of resources to issue an abort
-command, it just gives up and does nothing. The transport
-expects the lldd to always be able to terminate an io it
-has issued.  At that point, the controller hangs waiting for
-aborted ios to be returned.  Note: flaged by "6136" and
-"6176" error messages.
+A prior use-after-free mailbox fix solved it's problem by
+null'ing a ndlp pointer.  However, further testing has shown
+that this change causes a later state change to occasionally
+be skipped, which results in a reference count never being
+decremented thus the rpi is never released, which causes a
+vport delete to never succeed.
 
-Root issue was the adapter mis-allocated the number resources
-it allocated for command entries for the adapter.
+Revise the fix in the prior patch to no longer null the
+ndlp. Instead the RELEASE_RPI flag is set which will
+drive the release of the rpi.
 
-Convert the driver to allocate command resources based on the
-number of xris supported by the FC port - 1 resource for the
-original command and 1 resource for the abort request.
+Given the new code was added at a deep indentation level,
+refactor the code block using a new routine that avoids
+the indentation issues.
 
+Fixes: 	9b1640686470 ("scsi: lpfc: Fix use-after-free mailbox cmd completion")
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc.h      |  1 -
- drivers/scsi/lpfc/lpfc_attr.c |  5 -----
- drivers/scsi/lpfc/lpfc_init.c |  9 +++------
- drivers/scsi/lpfc/lpfc_sli.c  | 17 +++++++++++------
- 4 files changed, 14 insertions(+), 18 deletions(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 88 +++++++++++++++++++++++++++-------------
+ drivers/scsi/lpfc/lpfc_sli.c     |  2 +
+ 2 files changed, 61 insertions(+), 29 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
-index 691acbdcc46d..291335e16806 100644
---- a/drivers/scsi/lpfc/lpfc.h
-+++ b/drivers/scsi/lpfc/lpfc.h
-@@ -872,7 +872,6 @@ struct lpfc_hba {
- 	uint32_t cfg_aer_support;
- 	uint32_t cfg_sriov_nr_virtfn;
- 	uint32_t cfg_request_firmware_upgrade;
--	uint32_t cfg_iocb_cnt;
- 	uint32_t cfg_suppress_link_up;
- 	uint32_t cfg_rrq_xri_bitmap_sz;
- 	uint32_t cfg_delay_discovery;
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index 41cc91d3c77e..79a192479755 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -3582,9 +3582,6 @@ lpfc_txcmplq_hw_show(struct device *dev, struct device_attribute *attr,
- static DEVICE_ATTR(txcmplq_hw, S_IRUGO,
- 			 lpfc_txcmplq_hw_show, NULL);
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 749286acdc17..9df6f0cabab0 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -4841,6 +4841,44 @@ lpfc_nlp_logo_unreg(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
+ }
  
--LPFC_ATTR_R(iocb_cnt, 2, 1, 5,
--	"Number of IOCBs alloc for ELS, CT, and ABTS: 1k to 5k IOCBs");
--
  /*
- # lpfc_nodev_tmo: If set, it will hold all I/O errors on devices that disappear
- # until the timer expires. Value range is [0,255]. Default value is 30.
-@@ -6073,7 +6070,6 @@ struct device_attribute *lpfc_hba_attrs[] = {
- 	&dev_attr_lpfc_sriov_nr_virtfn,
- 	&dev_attr_lpfc_req_fw_upgrade,
- 	&dev_attr_lpfc_suppress_link_up,
--	&dev_attr_lpfc_iocb_cnt,
- 	&dev_attr_iocb_hw,
- 	&dev_attr_txq_hw,
- 	&dev_attr_txcmplq_hw,
-@@ -7212,7 +7208,6 @@ lpfc_get_cfgparam(struct lpfc_hba *phba)
- 	lpfc_sriov_nr_virtfn_init(phba, lpfc_sriov_nr_virtfn);
- 	lpfc_request_firmware_upgrade_init(phba, lpfc_req_fw_upgrade);
- 	lpfc_suppress_link_up_init(phba, lpfc_suppress_link_up);
--	lpfc_iocb_cnt_init(phba, lpfc_iocb_cnt);
- 	lpfc_delay_discovery_init(phba, lpfc_delay_discovery);
- 	lpfc_sli_mode_init(phba, lpfc_sli_mode);
- 	phba->cfg_enable_dss = 1;
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index e91377a4cafe..bb84d2a20e76 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -7126,7 +7126,7 @@ lpfc_init_iocb_list(struct lpfc_hba *phba, int iocb_count)
- 		if (iocbq_entry == NULL) {
- 			printk(KERN_ERR "%s: only allocated %d iocbs of "
- 				"expected %d count. Unloading driver.\n",
--				__func__, i, LPFC_IOCB_LIST_CNT);
-+				__func__, i, iocb_count);
- 			goto out_free_iocbq;
- 		}
++ * Sets the mailbox completion handler to be used for the
++ * unreg_rpi command. The handler varies based on the state of
++ * the port and what will be happening to the rpi next.
++ */
++static void
++lpfc_set_unreg_login_mbx_cmpl(struct lpfc_hba *phba, struct lpfc_vport *vport,
++	struct lpfc_nodelist *ndlp, LPFC_MBOXQ_t *mbox)
++{
++	unsigned long iflags;
++
++	if (ndlp->nlp_flag & NLP_ISSUE_LOGO) {
++		mbox->ctx_ndlp = ndlp;
++		mbox->mbox_cmpl = lpfc_nlp_logo_unreg;
++
++	} else if (phba->sli_rev == LPFC_SLI_REV4 &&
++		   (!(vport->load_flag & FC_UNLOADING)) &&
++		    (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) >=
++				      LPFC_SLI_INTF_IF_TYPE_2) &&
++		    (kref_read(&ndlp->kref) > 0)) {
++		mbox->ctx_ndlp = lpfc_nlp_get(ndlp);
++		mbox->mbox_cmpl = lpfc_sli4_unreg_rpi_cmpl_clr;
++	} else {
++		if (vport->load_flag & FC_UNLOADING) {
++			if (phba->sli_rev == LPFC_SLI_REV4) {
++				spin_lock_irqsave(&vport->phba->ndlp_lock,
++						  iflags);
++				ndlp->nlp_flag |= NLP_RELEASE_RPI;
++				spin_unlock_irqrestore(&vport->phba->ndlp_lock,
++						       iflags);
++			}
++			lpfc_nlp_get(ndlp);
++		}
++		mbox->ctx_ndlp = ndlp;
++		mbox->mbox_cmpl = lpfc_sli_def_mbox_cmpl;
++	}
++}
++
++/*
+  * Free rpi associated with LPFC_NODELIST entry.
+  * This routine is called from lpfc_freenode(), when we are removing
+  * a LPFC_NODELIST entry. It is also called if the driver initiates a
+@@ -4890,33 +4928,12 @@ lpfc_unreg_rpi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
  
-@@ -11591,13 +11591,10 @@ lpfc_get_sli4_parameters(struct lpfc_hba *phba, LPFC_MBOXQ_t *mboxq)
- 	}
+ 			lpfc_unreg_login(phba, vport->vpi, rpi, mbox);
+ 			mbox->vport = vport;
+-			if (ndlp->nlp_flag & NLP_ISSUE_LOGO) {
+-				mbox->ctx_ndlp = ndlp;
+-				mbox->mbox_cmpl = lpfc_nlp_logo_unreg;
+-			} else {
+-				if (phba->sli_rev == LPFC_SLI_REV4 &&
+-				    (!(vport->load_flag & FC_UNLOADING)) &&
+-				    (bf_get(lpfc_sli_intf_if_type,
+-				     &phba->sli4_hba.sli_intf) >=
+-				      LPFC_SLI_INTF_IF_TYPE_2) &&
+-				    (kref_read(&ndlp->kref) > 0)) {
+-					mbox->ctx_ndlp = lpfc_nlp_get(ndlp);
+-					mbox->mbox_cmpl =
+-						lpfc_sli4_unreg_rpi_cmpl_clr;
+-					/*
+-					 * accept PLOGIs after unreg_rpi_cmpl
+-					 */
+-					acc_plogi = 0;
+-				} else if (vport->load_flag & FC_UNLOADING) {
+-					mbox->ctx_ndlp = NULL;
+-					mbox->mbox_cmpl =
+-						lpfc_sli_def_mbox_cmpl;
+-				} else {
+-					mbox->ctx_ndlp = ndlp;
+-					mbox->mbox_cmpl =
+-						lpfc_sli_def_mbox_cmpl;
+-				}
+-			}
++			lpfc_set_unreg_login_mbx_cmpl(phba, vport, ndlp, mbox);
++			if (mbox->mbox_cmpl == lpfc_sli4_unreg_rpi_cmpl_clr)
++				/*
++				 * accept PLOGIs after unreg_rpi_cmpl
++				 */
++				acc_plogi = 0;
+ 			if (((ndlp->nlp_DID & Fabric_DID_MASK) !=
+ 			    Fabric_DID_MASK) &&
+ 			    (!(vport->fc_flag & FC_OFFLINE_MODE)))
+@@ -5057,6 +5074,7 @@ lpfc_cleanup_node(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 	struct lpfc_hba  *phba = vport->phba;
+ 	LPFC_MBOXQ_t *mb, *nextmb;
+ 	struct lpfc_dmabuf *mp;
++	unsigned long iflags;
  
- 	/* If the NVME FC4 type is enabled, scale the sg_seg_cnt to
--	 * accommodate 512K and 1M IOs in a single nvme buf and supply
--	 * enough NVME LS iocb buffers for larger connectivity counts.
-+	 * accommodate 512K and 1M IOs in a single nvme buf.
- 	 */
--	if (phba->cfg_enable_fc4_type & LPFC_ENABLE_NVME) {
-+	if (phba->cfg_enable_fc4_type & LPFC_ENABLE_NVME)
- 		phba->cfg_sg_seg_cnt = LPFC_MAX_NVME_SEG_CNT;
--		phba->cfg_iocb_cnt = 5;
--	}
+ 	/* Cleanup node for NPort <nlp_DID> */
+ 	lpfc_printf_vlog(vport, KERN_INFO, LOG_NODE,
+@@ -5138,8 +5156,20 @@ lpfc_cleanup_node(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
+ 	lpfc_cleanup_vports_rrqs(vport, ndlp);
+ 	if (phba->sli_rev == LPFC_SLI_REV4)
+ 		ndlp->nlp_flag |= NLP_RELEASE_RPI;
+-	lpfc_unreg_rpi(vport, ndlp);
+-
++	if (!lpfc_unreg_rpi(vport, ndlp)) {
++		/* Clean up unregistered and non freed rpis */
++		if ((ndlp->nlp_flag & NLP_RELEASE_RPI) &&
++		    !(ndlp->nlp_rpi == LPFC_RPI_ALLOC_ERROR)) {
++			lpfc_sli4_free_rpi(vport->phba,
++					   ndlp->nlp_rpi);
++			spin_lock_irqsave(&vport->phba->ndlp_lock,
++					  iflags);
++			ndlp->nlp_flag &= ~NLP_RELEASE_RPI;
++			ndlp->nlp_rpi = LPFC_RPI_ALLOC_ERROR;
++			spin_unlock_irqrestore(&vport->phba->ndlp_lock,
++					       iflags);
++		}
++	}
+ 	return 0;
+ }
  
- 	/* Only embed PBDE for if_type 6, PBDE support requires xib be set */
- 	if ((bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) !=
 diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 3b3ae2182e59..827406f58b1e 100644
+index 827406f58b1e..f764012ba0a6 100644
 --- a/drivers/scsi/lpfc/lpfc_sli.c
 +++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -7523,9 +7523,11 @@ lpfc_sli4_hba_setup(struct lpfc_hba *phba)
+@@ -2526,6 +2526,8 @@ lpfc_sli_def_mbox_cmpl(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
+ 			} else {
+ 				__lpfc_sli_rpi_release(vport, ndlp);
+ 			}
++			if (vport->load_flag & FC_UNLOADING)
++				lpfc_nlp_put(ndlp);
+ 			pmb->ctx_ndlp = NULL;
  		}
- 		phba->sli4_hba.nvmet_xri_cnt = rc;
- 
--		cnt = phba->cfg_iocb_cnt * 1024;
--		/* We need 1 iocbq for every SGL, for IO processing */
--		cnt += phba->sli4_hba.nvmet_xri_cnt;
-+		/* We allocate an iocbq for every receive context SGL.
-+		 * The additional allocation is for abort and ls handling.
-+		 */
-+		cnt = phba->sli4_hba.nvmet_xri_cnt +
-+			phba->sli4_hba.max_cfg_param.max_xri;
- 	} else {
- 		/* update host common xri-sgl sizes and mappings */
- 		rc = lpfc_sli4_io_sgl_update(phba);
-@@ -7547,14 +7549,17 @@ lpfc_sli4_hba_setup(struct lpfc_hba *phba)
- 			rc = -ENODEV;
- 			goto out_destroy_queue;
- 		}
--		cnt = phba->cfg_iocb_cnt * 1024;
-+		/* Each lpfc_io_buf job structure has an iocbq element.
-+		 * This cnt provides for abort, els, ct and ls requests.
-+		 */
-+		cnt = phba->sli4_hba.max_cfg_param.max_xri;
  	}
- 
- 	if (!phba->sli.iocbq_lookup) {
- 		/* Initialize and populate the iocb list per host */
- 		lpfc_printf_log(phba, KERN_INFO, LOG_INIT,
--				"2821 initialize iocb list %d total %d\n",
--				phba->cfg_iocb_cnt, cnt);
-+				"2821 initialize iocb list with %d entries\n",
-+				cnt);
- 		rc = lpfc_init_iocb_list(phba, cnt);
- 		if (rc) {
- 			lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
 -- 
 2.13.7
 
