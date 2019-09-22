@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9256ABA080
-	for <lists+linux-scsi@lfdr.de>; Sun, 22 Sep 2019 05:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D78BA082
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Sep 2019 05:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbfIVD7b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 21 Sep 2019 23:59:31 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:40017 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727482AbfIVD7b (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Sep 2019 23:59:31 -0400
-Received: by mail-oi1-f194.google.com with SMTP id k9so4987161oib.7
-        for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2019 20:59:31 -0700 (PDT)
+        id S1727506AbfIVD7f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 21 Sep 2019 23:59:35 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:46969 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727491AbfIVD7e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Sep 2019 23:59:34 -0400
+Received: by mail-ot1-f68.google.com with SMTP id f21so9360574otl.13
+        for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2019 20:59:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=PODCCYMxxLrgSWb8BaXykQR8NPa5pu1msdUczHRp/pA=;
-        b=EINpZfwmxGw7rQ3kvfQplOUZjZ6XkOY8iD2ikSg3KXMUMdLnTvtfMDLn/XrxdCDBZN
-         /ipBfwCfwtdbuXSbG1+Z3syzorNnAJ8s47Y9zmSGjLbxngFFTbXJDAYKVnd+rYgbPl/a
-         1pxWmWt6FjVAUqArf2IsjaHlimiHToWldDsabJgyvGZ/PTlJIMSb8rHN1kFCTZLdlYDA
-         nLy83JlosCp/0T48jWK3MlwZ2SE0LyFDgKkjK8aaNvnJ0RJntZ3t97G8qadAjUQQGJly
-         nuWAjqw+HvR/4hYIYO86R7spfpObBfq+5aVVt7+RomygeH65/ldYOHySRlZ3WQV3jSvn
-         SWgg==
+        bh=3K7++IeZpyrBG124O+pGw85sMPw3M/9Yzwc2BeSgE4Q=;
+        b=f322eH6wCosmM+0wA90QKhU+E6c2j5yKWHumQnhq6QVbiD1vunGZkW6o0gpsud9FDP
+         M4fi5t4rTmx2pCNTmqlbisZ10P1yj0M97DT7ePptK9EjeyprXF1aUEKQbMCDBf3g2gLZ
+         UXwygSZy2vtINzoPAeyjhAmiWabtO3YeVDYVrVXcw7CqiQv7KmfDUMT9GXf/B14saXAc
+         noobqd8zsU9piTwN+ArFXNyW2+Gzvc7HbQZ62g/lutE7iYNurJDwbzd8F20lVbjJH23g
+         zTrEqC0wowpD4TtFqKWzHBNAKeRfm2twGrW4w7qH4ihTcB/h/DFwhbRs2t9hQX4SHD/I
+         8UHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=PODCCYMxxLrgSWb8BaXykQR8NPa5pu1msdUczHRp/pA=;
-        b=iqTVtHXx+VB75xDpwPd+D5kWTp7CKqEEDlHYnlXtIgv8ePQsxSiXNOE/h0Enc8uLcR
-         8NSHCiI/jBO7czGDNjrQyk4hvTwQvHYEcqoS3QCB5TXdYXmb9sGsyi5QDRB1mtQJ4HVf
-         ULfXwVSi2AFfWBXOsw4hGq11ECI8h6L3y+NrsRQNPwnjiXhuzZ0AUTN1nGo8VF8YBxwt
-         xTUeJyiNCy3CVzPHFHaJF7J/Im+9QFq/bfLdh5umMCRJu+FWjK3AzZzsF1YZPe7U1aBV
-         SUbjfVTKNk2SxXm4QIWC5ZC67ZPuDT9oPmTmTRVxx6npn8K6nnzGZaOi7K9TOM8nzuvf
-         bVLA==
-X-Gm-Message-State: APjAAAUsZp3lKb2zQR1fYkCDQ+x5Os6N4hZOgS4CvhlDdfY85I3n3heN
-        GnXBor7OVDqMVKujzYceBQnK3i56
-X-Google-Smtp-Source: APXvYqxKt9QDEKKDDOc0PT0NuNFyK5DWWq6xzMlLcc4gu4w8flaELOOs/jqva6d1lMDleE/CXd44BA==
-X-Received: by 2002:aca:cfc9:: with SMTP id f192mr9403754oig.26.1569124770880;
-        Sat, 21 Sep 2019 20:59:30 -0700 (PDT)
+        bh=3K7++IeZpyrBG124O+pGw85sMPw3M/9Yzwc2BeSgE4Q=;
+        b=YDEelYoccPV494CTSfjvvg89fKLC038pIqzGuw7R+JOaHiLaEVI6R4qtEe0DpTDIbT
+         5iWvPvCDExDflJ2ungPmN5tAH4Rw2WLHI1/oLlBRXw36ASPfPFK41JyqVVsYTkcYYm6L
+         yi9zq7mIttMNStlWinN9Y9H7dn3seP++qpWmP9otSWPwUlBnpaM/U6JJO7K8I+eTNHPP
+         NYqAgOkxn+NDc/dTufpipD50v6pCFQXLtdKwJUSUney7pXycdnFPd5L3+Hyi+iYJ8rA2
+         Vk16TeCa+pL/560UjwB/O0mUn8UyMAxV6EIFuPzDm/E9qPTlFZcVfVtBjLUSSlibE7QM
+         wRyA==
+X-Gm-Message-State: APjAAAX4A27Btp8FCf/g3ZCji9bxfxCpfBbLtS5JYK1fv18YJiBoH1wl
+        /M5yIrMkrPRcxpEfISqsJAIX6Jh4
+X-Google-Smtp-Source: APXvYqyBEOKnBv4DTWDTQEh5LNkmf7QWsmR6EyxkditZrMnWvJ5pqt3iEjz9NeKJxp5CpOsXTQijoQ==
+X-Received: by 2002:a9d:664:: with SMTP id 91mr2257990otn.189.1569124771798;
+        Sat, 21 Sep 2019 20:59:31 -0700 (PDT)
 Received: from os42.localdomain (ip68-5-145-143.oc.oc.cox.net. [68.5.145.143])
-        by smtp.gmail.com with ESMTPSA id a9sm2395889otc.75.2019.09.21.20.59.29
+        by smtp.gmail.com with ESMTPSA id a9sm2395889otc.75.2019.09.21.20.59.30
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sat, 21 Sep 2019 20:59:30 -0700 (PDT)
+        Sat, 21 Sep 2019 20:59:31 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 14/20] lpfc: Fix spinlock_irq issues in lpfc_els_flush_cmd()
-Date:   Sat, 21 Sep 2019 20:59:00 -0700
-Message-Id: <20190922035906.10977-15-jsmart2021@gmail.com>
+Subject: [PATCH 15/20] lpfc: Fix hdwq sgl locks and irq handling
+Date:   Sat, 21 Sep 2019 20:59:01 -0700
+Message-Id: <20190922035906.10977-16-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20190922035906.10977-1-jsmart2021@gmail.com>
 References: <20190922035906.10977-1-jsmart2021@gmail.com>
@@ -58,82 +58,177 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-While reviewing the CT behavior, issues with spinlock_irq were
-seen. The driver should be using spinlock_irqsave/irqrestore in
-the els flush routine.
+Many of the sgl-per-hdwq paths are locking with spin_lock_irq()
+and spin_unlock_irq() and may unwittingly raising irq when it
+shouldn't. Hard deadlocks were seen around lpfc_scsi_prep_cmnd().
 
-Changed to spinlock_irqsave/irqrestore.
+Fix by converting the locks to irqsave/irqrestore.
 
+Fixes: d79c9e9d4b3d ("scsi: lpfc: Support dynamic unbounded SGL lists on G7 hardware.")
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_els.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/scsi/lpfc/lpfc_sli.c | 38 ++++++++++++++++++++++----------------
+ 1 file changed, 22 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index bd8109b2a083..da90c7bf2287 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -7991,20 +7991,22 @@ lpfc_els_flush_cmd(struct lpfc_vport *vport)
- 	struct lpfc_sli_ring *pring;
- 	struct lpfc_iocbq *tmp_iocb, *piocb;
- 	IOCB_t *cmd = NULL;
-+	unsigned long iflags = 0;
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index ff261c0c738a..6d89dd3dd532 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -20444,8 +20444,9 @@ lpfc_get_sgl_per_hdwq(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_buf)
+ 	struct sli4_hybrid_sgl *allocated_sgl = NULL;
+ 	struct lpfc_sli4_hdw_queue *hdwq = lpfc_buf->hdwq;
+ 	struct list_head *buf_list = &hdwq->sgl_list;
++	unsigned long iflags;
  
- 	lpfc_fabric_abort_vport(vport);
-+
- 	/*
- 	 * For SLI3, only the hbalock is required.  But SLI4 needs to coordinate
- 	 * with the ring insert operation.  Because lpfc_sli_issue_abort_iotag
- 	 * ultimately grabs the ring_lock, the driver must splice the list into
- 	 * a working list and release the locks before calling the abort.
- 	 */
--	spin_lock_irq(&phba->hbalock);
-+	spin_lock_irqsave(&phba->hbalock, iflags);
- 	pring = lpfc_phba_elsring(phba);
+-	spin_lock_irq(&hdwq->hdwq_lock);
++	spin_lock_irqsave(&hdwq->hdwq_lock, iflags);
  
- 	/* Bail out if we've no ELS wq, like in PCI error recovery case. */
- 	if (unlikely(!pring)) {
--		spin_unlock_irq(&phba->hbalock);
-+		spin_unlock_irqrestore(&phba->hbalock, iflags);
- 		return;
+ 	if (likely(!list_empty(buf_list))) {
+ 		/* break off 1 chunk from the sgl_list */
+@@ -20457,7 +20458,7 @@ lpfc_get_sgl_per_hdwq(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_buf)
+ 		}
+ 	} else {
+ 		/* allocate more */
+-		spin_unlock_irq(&hdwq->hdwq_lock);
++		spin_unlock_irqrestore(&hdwq->hdwq_lock, iflags);
+ 		tmp = kmalloc_node(sizeof(*tmp), GFP_ATOMIC,
+ 				   cpu_to_node(smp_processor_id()));
+ 		if (!tmp) {
+@@ -20479,7 +20480,7 @@ lpfc_get_sgl_per_hdwq(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_buf)
+ 			return NULL;
+ 		}
+ 
+-		spin_lock_irq(&hdwq->hdwq_lock);
++		spin_lock_irqsave(&hdwq->hdwq_lock, iflags);
+ 		list_add_tail(&tmp->list_node, &lpfc_buf->dma_sgl_xtra_list);
  	}
  
-@@ -8045,21 +8047,21 @@ lpfc_els_flush_cmd(struct lpfc_vport *vport)
+@@ -20487,7 +20488,7 @@ lpfc_get_sgl_per_hdwq(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_buf)
+ 					struct sli4_hybrid_sgl,
+ 					list_node);
  
- 	if (phba->sli_rev == LPFC_SLI_REV4)
- 		spin_unlock(&pring->ring_lock);
--	spin_unlock_irq(&phba->hbalock);
-+	spin_unlock_irqrestore(&phba->hbalock, iflags);
+-	spin_unlock_irq(&hdwq->hdwq_lock);
++	spin_unlock_irqrestore(&hdwq->hdwq_lock, iflags);
  
- 	/* Abort each txcmpl iocb on aborted list and remove the dlist links. */
- 	list_for_each_entry_safe(piocb, tmp_iocb, &abort_list, dlist) {
--		spin_lock_irq(&phba->hbalock);
-+		spin_lock_irqsave(&phba->hbalock, iflags);
- 		list_del_init(&piocb->dlist);
- 		lpfc_sli_issue_abort_iotag(phba, pring, piocb);
--		spin_unlock_irq(&phba->hbalock);
-+		spin_unlock_irqrestore(&phba->hbalock, iflags);
+ 	return allocated_sgl;
+ }
+@@ -20511,8 +20512,9 @@ lpfc_put_sgl_per_hdwq(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_buf)
+ 	struct sli4_hybrid_sgl *tmp = NULL;
+ 	struct lpfc_sli4_hdw_queue *hdwq = lpfc_buf->hdwq;
+ 	struct list_head *buf_list = &hdwq->sgl_list;
++	unsigned long iflags;
+ 
+-	spin_lock_irq(&hdwq->hdwq_lock);
++	spin_lock_irqsave(&hdwq->hdwq_lock, iflags);
+ 
+ 	if (likely(!list_empty(&lpfc_buf->dma_sgl_xtra_list))) {
+ 		list_for_each_entry_safe(list_entry, tmp,
+@@ -20525,7 +20527,7 @@ lpfc_put_sgl_per_hdwq(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_buf)
+ 		rc = -EINVAL;
  	}
- 	if (!list_empty(&abort_list))
- 		lpfc_printf_vlog(vport, KERN_ERR, LOG_ELS,
- 				 "3387 abort list for txq not empty\n");
- 	INIT_LIST_HEAD(&abort_list);
  
--	spin_lock_irq(&phba->hbalock);
-+	spin_lock_irqsave(&phba->hbalock, iflags);
- 	if (phba->sli_rev == LPFC_SLI_REV4)
- 		spin_lock(&pring->ring_lock);
+-	spin_unlock_irq(&hdwq->hdwq_lock);
++	spin_unlock_irqrestore(&hdwq->hdwq_lock, iflags);
+ 	return rc;
+ }
  
-@@ -8099,7 +8101,7 @@ lpfc_els_flush_cmd(struct lpfc_vport *vport)
+@@ -20546,8 +20548,9 @@ lpfc_free_sgl_per_hdwq(struct lpfc_hba *phba,
+ 	struct list_head *buf_list = &hdwq->sgl_list;
+ 	struct sli4_hybrid_sgl *list_entry = NULL;
+ 	struct sli4_hybrid_sgl *tmp = NULL;
++	unsigned long iflags;
  
- 	if (phba->sli_rev == LPFC_SLI_REV4)
- 		spin_unlock(&pring->ring_lock);
--	spin_unlock_irq(&phba->hbalock);
-+	spin_unlock_irqrestore(&phba->hbalock, iflags);
+-	spin_lock_irq(&hdwq->hdwq_lock);
++	spin_lock_irqsave(&hdwq->hdwq_lock, iflags);
  
- 	/* Cancel all the IOCBs from the completions list */
- 	lpfc_sli_cancel_iocbs(phba, &abort_list,
+ 	/* Free sgl pool */
+ 	list_for_each_entry_safe(list_entry, tmp,
+@@ -20559,7 +20562,7 @@ lpfc_free_sgl_per_hdwq(struct lpfc_hba *phba,
+ 		kfree(list_entry);
+ 	}
+ 
+-	spin_unlock_irq(&hdwq->hdwq_lock);
++	spin_unlock_irqrestore(&hdwq->hdwq_lock, iflags);
+ }
+ 
+ /**
+@@ -20583,8 +20586,9 @@ lpfc_get_cmd_rsp_buf_per_hdwq(struct lpfc_hba *phba,
+ 	struct fcp_cmd_rsp_buf *allocated_buf = NULL;
+ 	struct lpfc_sli4_hdw_queue *hdwq = lpfc_buf->hdwq;
+ 	struct list_head *buf_list = &hdwq->cmd_rsp_buf_list;
++	unsigned long iflags;
+ 
+-	spin_lock_irq(&hdwq->hdwq_lock);
++	spin_lock_irqsave(&hdwq->hdwq_lock, iflags);
+ 
+ 	if (likely(!list_empty(buf_list))) {
+ 		/* break off 1 chunk from the list */
+@@ -20597,7 +20601,7 @@ lpfc_get_cmd_rsp_buf_per_hdwq(struct lpfc_hba *phba,
+ 		}
+ 	} else {
+ 		/* allocate more */
+-		spin_unlock_irq(&hdwq->hdwq_lock);
++		spin_unlock_irqrestore(&hdwq->hdwq_lock, iflags);
+ 		tmp = kmalloc_node(sizeof(*tmp), GFP_ATOMIC,
+ 				   cpu_to_node(smp_processor_id()));
+ 		if (!tmp) {
+@@ -20624,7 +20628,7 @@ lpfc_get_cmd_rsp_buf_per_hdwq(struct lpfc_hba *phba,
+ 		tmp->fcp_rsp = (struct fcp_rsp *)((uint8_t *)tmp->fcp_cmnd +
+ 				sizeof(struct fcp_cmnd));
+ 
+-		spin_lock_irq(&hdwq->hdwq_lock);
++		spin_lock_irqsave(&hdwq->hdwq_lock, iflags);
+ 		list_add_tail(&tmp->list_node, &lpfc_buf->dma_cmd_rsp_list);
+ 	}
+ 
+@@ -20632,7 +20636,7 @@ lpfc_get_cmd_rsp_buf_per_hdwq(struct lpfc_hba *phba,
+ 					struct fcp_cmd_rsp_buf,
+ 					list_node);
+ 
+-	spin_unlock_irq(&hdwq->hdwq_lock);
++	spin_unlock_irqrestore(&hdwq->hdwq_lock, iflags);
+ 
+ 	return allocated_buf;
+ }
+@@ -20657,8 +20661,9 @@ lpfc_put_cmd_rsp_buf_per_hdwq(struct lpfc_hba *phba,
+ 	struct fcp_cmd_rsp_buf *tmp = NULL;
+ 	struct lpfc_sli4_hdw_queue *hdwq = lpfc_buf->hdwq;
+ 	struct list_head *buf_list = &hdwq->cmd_rsp_buf_list;
++	unsigned long iflags;
+ 
+-	spin_lock_irq(&hdwq->hdwq_lock);
++	spin_lock_irqsave(&hdwq->hdwq_lock, iflags);
+ 
+ 	if (likely(!list_empty(&lpfc_buf->dma_cmd_rsp_list))) {
+ 		list_for_each_entry_safe(list_entry, tmp,
+@@ -20671,7 +20676,7 @@ lpfc_put_cmd_rsp_buf_per_hdwq(struct lpfc_hba *phba,
+ 		rc = -EINVAL;
+ 	}
+ 
+-	spin_unlock_irq(&hdwq->hdwq_lock);
++	spin_unlock_irqrestore(&hdwq->hdwq_lock, iflags);
+ 	return rc;
+ }
+ 
+@@ -20692,8 +20697,9 @@ lpfc_free_cmd_rsp_buf_per_hdwq(struct lpfc_hba *phba,
+ 	struct list_head *buf_list = &hdwq->cmd_rsp_buf_list;
+ 	struct fcp_cmd_rsp_buf *list_entry = NULL;
+ 	struct fcp_cmd_rsp_buf *tmp = NULL;
++	unsigned long iflags;
+ 
+-	spin_lock_irq(&hdwq->hdwq_lock);
++	spin_lock_irqsave(&hdwq->hdwq_lock, iflags);
+ 
+ 	/* Free cmd_rsp buf pool */
+ 	list_for_each_entry_safe(list_entry, tmp,
+@@ -20706,5 +20712,5 @@ lpfc_free_cmd_rsp_buf_per_hdwq(struct lpfc_hba *phba,
+ 		kfree(list_entry);
+ 	}
+ 
+-	spin_unlock_irq(&hdwq->hdwq_lock);
++	spin_unlock_irqrestore(&hdwq->hdwq_lock, iflags);
+ }
 -- 
 2.13.7
 
