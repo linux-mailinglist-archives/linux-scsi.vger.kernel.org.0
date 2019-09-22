@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E245EBA081
-	for <lists+linux-scsi@lfdr.de>; Sun, 22 Sep 2019 05:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3CE8BA083
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Sep 2019 05:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727501AbfIVD7e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 21 Sep 2019 23:59:34 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:45715 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727482AbfIVD7d (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Sep 2019 23:59:33 -0400
-Received: by mail-oi1-f195.google.com with SMTP id o205so4975945oib.12
-        for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2019 20:59:33 -0700 (PDT)
+        id S1727508AbfIVD7f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 21 Sep 2019 23:59:35 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:37296 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727482AbfIVD7e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Sep 2019 23:59:34 -0400
+Received: by mail-oi1-f193.google.com with SMTP id i16so5004033oie.4
+        for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2019 20:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=hQsowzmgQxVF1VStR0cjXVeaa6Enj5dd81utoiTVYeM=;
-        b=TEcN3lYfDO5UIbK3rOlgjDhIWm1zJmpXdPZ0iWG+zVATDiXaEHIGm+h1Ne9EscojGP
-         7xTVdsn7q+DhHIBHh2mXGssdDjw+MsCrSA6AqhUvSrMMlCE6Iv7ltlA6v2liGcccIPc+
-         OodMP941ofCjfG+HcxeKUh1bvazbe4pncKhF9NqNcdGN4UuwKUf9OL/5kKXA8WwYEZml
-         6xthyNq/pe7LWxn52FNGTaIDyBs6nk/wM3vDppdW8Tdh7luTC9UhYM5nJScBYJjhEi5v
-         ycvEy5uR94fiwy/b6BP4NN91jsUtDQ8gok214vN295T3aMVJymvtM1FuDIm2L8E2QH9o
-         eqsw==
+        bh=z0VilPmibwA6x129JeLpiupcGkoeAavTxrlvnzm8m40=;
+        b=TG9z0vf99dkwEaoFW12TLFKfhkuzCmO9YpwrUmoTKfPFcOz7J27ACHnQOm6uW+4TjT
+         IsV19/qnYjHjFoGjVhoim1mgVNX9AgWVBavtoHOvFg7LJkxfuTNLoMuj24noSSj6BJjf
+         Z5KIhfnSFA18Xvbe+JicNZVwgTWBjsuiXDHt+doseOhG2XBl+vIBMstTNooi5m3M8RyU
+         yy2xPVelzznTWKV9iy8SqGwYKsOF8oVqqaON+iIcMKtfHBvA0pGp3UJYCks5lXH/Q77y
+         zerZQv5tNTIeckTVxaoRhXAsG5auk3iIuNqn3vJTfIFUJS4C1WyCmd751GZ46JuuIho8
+         HD5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=hQsowzmgQxVF1VStR0cjXVeaa6Enj5dd81utoiTVYeM=;
-        b=Aoa2Au+Zp/ns7XniS/Lg3U7++VRzINq9ODmnjvbdH9lIkniCBAPlHmRrBgdkoJdQK3
-         /TJBBj0P1b6PVqSBoG5eBczsl9SZViNIsay+vFgwGEHh7VebKFfRK6sn+D78yCy5wEKb
-         l5ZC5uEF2trhil12+PlIG4kjM9LPk1vk072VvhQxNz55NR78Q9LzQv7lAo6L93wh0ZKe
-         2UxVJGhbsWr7ostS33a6DdJM3Wdp9DrFvEfpjbJS702ofSeCaYGZYFht+9buCydQ5Ynp
-         4PQbq5ZWnwMmzlwTP+7dLq88bd5lSUTMDtCJMpxSylAV1yyfglvCFj+LmR/618TwoeAt
-         /Vuw==
-X-Gm-Message-State: APjAAAWPlL4Ha9oHyTzwBQemlcifl9D8S+hLr5Tj1+rXnAwlT/RUC6Re
-        7vFA5xNfgeSzY3o4HrUtUwbksl7G
-X-Google-Smtp-Source: APXvYqwbMHYZDV/+NyDSexlGepKJM91pJi7y0LrGNRFJ9S9Rh38R2lOyZjMDvzsjZXl2oVaotWyvBA==
-X-Received: by 2002:aca:db44:: with SMTP id s65mr9273196oig.103.1569124772858;
-        Sat, 21 Sep 2019 20:59:32 -0700 (PDT)
+        bh=z0VilPmibwA6x129JeLpiupcGkoeAavTxrlvnzm8m40=;
+        b=Nbjuw6mDu/tYbNZZQxUUzfokO9d9WJq2I1geobz+ERJswb+vMy83/UUi8/l7CtHEFw
+         GxHMgwXZROMhfiqe/m8hQ5zT4gGaRxrS0jZKJeJnnUQerAK2GuAbLyK7wFKqs9xZJ/tj
+         R8CV89mEuwaxGySi6fCREMGtvrhLICy5m/Q98ikQS+BgkAlPsLg9WoDw7uAntbfKFIKx
+         jgtqfXqpAXYJDDZlqrtVx34U5B+CikkxVCgcjtGIpX8AvJLrXJE6SjGoMQCtMLPdnlrd
+         Uh9MEHthHqKihHb7S96Ty/pASQML/AXf5Er3bFo9p1P9H1tuC6/8DfEb45wXtlK5AqzP
+         V0cg==
+X-Gm-Message-State: APjAAAWVrnTmn8EhmOL7EqNvnTQFXSzYahIkFh+NmdbW0SHFj2y34Amf
+        7I8ps1GB+Y5w3R/gnw1hG2+aLN1X
+X-Google-Smtp-Source: APXvYqxc2ovnNb+GEYz3v8vGytQJYMdZIpfH6Boyu2O5zEKx2GsSuB1aeBQJsJyLvulRN/LdnN290w==
+X-Received: by 2002:aca:f002:: with SMTP id o2mr9275770oih.62.1569124773870;
+        Sat, 21 Sep 2019 20:59:33 -0700 (PDT)
 Received: from os42.localdomain (ip68-5-145-143.oc.oc.cox.net. [68.5.145.143])
-        by smtp.gmail.com with ESMTPSA id a9sm2395889otc.75.2019.09.21.20.59.31
+        by smtp.gmail.com with ESMTPSA id a9sm2395889otc.75.2019.09.21.20.59.32
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sat, 21 Sep 2019 20:59:32 -0700 (PDT)
+        Sat, 21 Sep 2019 20:59:33 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 16/20] lpfc: Fix list corruption detected in lpfc_put_sgl_per_hdwq
-Date:   Sat, 21 Sep 2019 20:59:02 -0700
-Message-Id: <20190922035906.10977-17-jsmart2021@gmail.com>
+Subject: [PATCH 17/20] lpfc: Update async event logging
+Date:   Sat, 21 Sep 2019 20:59:03 -0700
+Message-Id: <20190922035906.10977-18-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20190922035906.10977-1-jsmart2021@gmail.com>
 References: <20190922035906.10977-1-jsmart2021@gmail.com>
@@ -58,55 +58,69 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In lpfc_release_io_buf, an lpfc_io_buf is returned to the
-'available' pool before any associated sgl or cmd and rsp
-buffers are returned via their respective 'put' routines.
-If xri rebalancing occurs and an lpfc_io_buf structure is
-reused quickly, there may be a race condition between release
-of old and association of new resources.
+This patch updates ACQE handling for:
+- a EEPROM failure error reported by the adapter
+- ensures that all data for any ACQE, recognized or not, is logged.
+- Given that all data is now logged unconditionally, the default
+  case (unrecognized) data can be reduced.
 
-Re-ordered lpfc_release_io_buf to release sgl and cmd/rsp
-buffer lists before releasing the lpfc_io_buf structure for re-use.
-
-Fixes: d79c9e9d4b3d ("scsi: lpfc: Support dynamic unbounded SGL lists on G7 hardware.")
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/scsi/lpfc/lpfc_hw4.h  |  1 +
+ drivers/scsi/lpfc/lpfc_init.c | 17 +++++++++++------
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 6d89dd3dd532..09e275e3bcd8 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -20138,6 +20138,13 @@ void lpfc_release_io_buf(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_ncmd,
- 	lpfc_ncmd->cur_iocbq.wqe_cmpl = NULL;
- 	lpfc_ncmd->cur_iocbq.iocb_cmpl = NULL;
+diff --git a/drivers/scsi/lpfc/lpfc_hw4.h b/drivers/scsi/lpfc/lpfc_hw4.h
+index f70fb7629c82..6095e3cfddd3 100644
+--- a/drivers/scsi/lpfc/lpfc_hw4.h
++++ b/drivers/scsi/lpfc/lpfc_hw4.h
+@@ -4261,6 +4261,7 @@ struct lpfc_acqe_sli {
+ #define LPFC_SLI_EVENT_TYPE_DIAG_DUMP		0x5
+ #define LPFC_SLI_EVENT_TYPE_MISCONFIGURED	0x9
+ #define LPFC_SLI_EVENT_TYPE_REMOTE_DPORT	0xA
++#define LPFC_SLI_EVENT_TYPE_EEPROM_FAILURE	0x10
+ };
  
-+	if (phba->cfg_xpsgl && !phba->nvmet_support &&
-+	    !list_empty(&lpfc_ncmd->dma_sgl_xtra_list))
-+		lpfc_put_sgl_per_hdwq(phba, lpfc_ncmd);
-+
-+	if (!list_empty(&lpfc_ncmd->dma_cmd_rsp_list))
-+		lpfc_put_cmd_rsp_buf_per_hdwq(phba, lpfc_ncmd);
-+
- 	if (phba->cfg_xri_rebalancing) {
- 		if (lpfc_ncmd->expedite) {
- 			/* Return to expedite pool */
-@@ -20202,13 +20209,6 @@ void lpfc_release_io_buf(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_ncmd,
- 		spin_unlock_irqrestore(&qp->io_buf_list_put_lock,
- 				       iflag);
+ /*
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 12885b01fa27..a0aa7a555811 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -5289,10 +5289,10 @@ lpfc_sli4_async_sli_evt(struct lpfc_hba *phba, struct lpfc_acqe_sli *acqe_sli)
+ 	evt_type = bf_get(lpfc_trailer_type, acqe_sli);
+ 
+ 	lpfc_printf_log(phba, KERN_INFO, LOG_SLI,
+-			"2901 Async SLI event - Event Data1:x%08x Event Data2:"
+-			"x%08x SLI Event Type:%d\n",
++			"2901 Async SLI event - Type:%d, Event Data: x%08x "
++			"x%08x x%08x x%08x\n", evt_type,
+ 			acqe_sli->event_data1, acqe_sli->event_data2,
+-			evt_type);
++			acqe_sli->reserved, acqe_sli->trailer);
+ 
+ 	port_name = phba->Port[0];
+ 	if (port_name == 0x00)
+@@ -5439,11 +5439,16 @@ lpfc_sli4_async_sli_evt(struct lpfc_hba *phba, struct lpfc_acqe_sli *acqe_sli)
+ 				"Event Data1:x%08x Event Data2: x%08x\n",
+ 				acqe_sli->event_data1, acqe_sli->event_data2);
+ 		break;
++	case LPFC_SLI_EVENT_TYPE_EEPROM_FAILURE:
++		/* EEPROM failure. No driver action is required */
++		lpfc_printf_log(phba, KERN_WARNING, LOG_SLI,
++			     "2518 EEPROM failure - "
++			     "Event Data1: x%08x Event Data2: x%08x\n",
++			     acqe_sli->event_data1, acqe_sli->event_data2);
++		break;
+ 	default:
+ 		lpfc_printf_log(phba, KERN_INFO, LOG_SLI,
+-				"3193 Async SLI event - Event Data1:x%08x Event Data2:"
+-				"x%08x SLI Event Type:%d\n",
+-				acqe_sli->event_data1, acqe_sli->event_data2,
++				"3193 Unrecognized SLI event, type: 0x%x",
+ 				evt_type);
+ 		break;
  	}
--
--	if (phba->cfg_xpsgl && !phba->nvmet_support &&
--	    !list_empty(&lpfc_ncmd->dma_sgl_xtra_list))
--		lpfc_put_sgl_per_hdwq(phba, lpfc_ncmd);
--
--	if (!list_empty(&lpfc_ncmd->dma_cmd_rsp_list))
--		lpfc_put_cmd_rsp_buf_per_hdwq(phba, lpfc_ncmd);
- }
- 
- /**
 -- 
 2.13.7
 
