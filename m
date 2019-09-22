@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BFCEBA078
-	for <lists+linux-scsi@lfdr.de>; Sun, 22 Sep 2019 05:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C2BBA07A
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Sep 2019 05:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727471AbfIVD7Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 21 Sep 2019 23:59:24 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:40010 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727466AbfIVD7Y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Sep 2019 23:59:24 -0400
-Received: by mail-oi1-f193.google.com with SMTP id k9so4987067oib.7
-        for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2019 20:59:23 -0700 (PDT)
+        id S1727477AbfIVD70 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 21 Sep 2019 23:59:26 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:40011 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727466AbfIVD7Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Sep 2019 23:59:25 -0400
+Received: by mail-oi1-f194.google.com with SMTP id k9so4987076oib.7
+        for <linux-scsi@vger.kernel.org>; Sat, 21 Sep 2019 20:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=5uByuQfmU72DILq8G8vM07e52H8+P40QlWgkMqYO8yA=;
-        b=kT7KvcgYUkutlSakex7cZzUy+ybICf3mHQSBfoYpUFrkPNMToGUjmeG0fm1K7uLsHK
-         V3ZEWq0wrsOWEbQfBLeFAYojzkANM4cixGFuf3nqpBuq8H6XDjrOhtglBvX+Pg+cing0
-         6FZWWhUauU6J2j/ZsBULLAFg5FuWbxhlVEFtN5fqOcNczXSuKyHSdMAZ9/qRQLkE0T54
-         8g0ogybvqv2jI9EuX2Rbst4bIJfB1jFESD6G2O3GkAgvqrMeMGhKUMYT8CzlaRwiHp9q
-         2S0gugREbJWjJ9O6fi+4mDRIBLxYb+nFp3SWypljFJnlRXmgPRyJhccgjp3KMpYJ2ZEf
-         HlXA==
+        bh=9Nb89LyclTMg36vUcNceBqrQPJUPXKDWm5s+MAebs2s=;
+        b=TM0lVvtdCs9phwz0oMSoCTBEygEko669zqs72AUcQ9yXN4ei/5Rc9yFc//ypXyDZCo
+         eJ5MV88gs2dzXOqemdrEeZaLpBb2TBMzuYR7Idg8QQN/DFAcohk9ZPPHJjfkYOeGwuXC
+         F2wfNwp3hoZYonhTp5WXoYb0Oz2mgHaytg8TbKKMDoUPZwDj5mynGKEeUYdaT745v+Op
+         YnM8CFRUSJybPJsnFIg4kqjt4I4lMtWkPPAYvQsugWFZGtWpcjXMn5QfAZaOl1FBizaI
+         j74R3y0+hdUXUEcHxJ9fKQB1JKAu9WWl7/2knhsV7yyDoIhmRCjOzUmgl1BCY2eWaSSL
+         ZpWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=5uByuQfmU72DILq8G8vM07e52H8+P40QlWgkMqYO8yA=;
-        b=UYNjpvlbXiepDW6WckdXpvcUoHHlOicmluiviX9Lq3UoPRAEuKLrUT9PqRStOs01aY
-         sD5aUmedW+lXN+i7vzZLRCqSFrfThcV80IIcJ4/m3zMf82vMIt7WQ068Ra53asp9tNdk
-         WdtwXjj+Q46Y0x1eORGH1KaUc+mDzSbZWDp56meylqK+AJQ4ixo++M6E4IxNvFeO87Qi
-         2CeN7zDism94Ih8/UqCm+PFmSeXbjmJdJcnxoDV2DvwlaAj8UwWugxSRq6qEVnVQCZjP
-         5tb3TNtQ9dj9nAMGYZrIAfcXhcGFPJf4yOaVpu2K7xUHpcIy5XjS7vQrbd/EDOVsMVkZ
-         0YGg==
-X-Gm-Message-State: APjAAAXpyrjyQiEbaNImNmvRDg7cDSqFBbCabnVgmcOEKviQ9dgZ2dDa
-        cHG4PfoL5/FbxmipGJzRnbyMGnAS
-X-Google-Smtp-Source: APXvYqxT770PQ9L07o6Yqxwl7RehreGIOBPga6tlPwvyZa9tTgwoZIH7QhoE3hCPfiVHUZbULzfT9Q==
-X-Received: by 2002:aca:eb09:: with SMTP id j9mr9483455oih.105.1569124762778;
-        Sat, 21 Sep 2019 20:59:22 -0700 (PDT)
+        bh=9Nb89LyclTMg36vUcNceBqrQPJUPXKDWm5s+MAebs2s=;
+        b=KMQobRp0Wt35y6yihCQnNd0QHeyOvOYIzMl9HUshfCqASvkKmJbO88lPZ76CSz2km6
+         ycWltCCbo9Pt+Mh0ZhmXsLTxKLDLR7T1SZFHLeDfCfs8iY5iL1hDHa3nfVLaf3OBfC05
+         VffM1TzQxOTb8r11Dmm/aKgwD9CyZWR77VvlMrWk2IqXz8rIinkJCARpiCUuosow202W
+         7/kzUd6OHdBfUNec+Gudd/iNi1Nw4nh4nsfwz+UQVJxA+INS/Eb4hPizVuKU/hJSpbxX
+         Gk+LUccrXMSiAovagtE/jRTKzredEcJBbQj8ks3/aVrCIS9ix33aAK/erESU8fQAdBlY
+         TF4A==
+X-Gm-Message-State: APjAAAUjr/SNGvsfn7AoGOTVRHPmwPxLp3aacJAhgYPFgDeCZis+lOVE
+        vUNtttoRoVMB57cT+M/EYVIORYVf
+X-Google-Smtp-Source: APXvYqxMKPbJ0a/t+u1v7G8Npy8RIp90otSWJGSOKmaxd+hnC9+iH4mCIuX0O+jU1XO4rHstVBllEA==
+X-Received: by 2002:aca:b342:: with SMTP id c63mr9135417oif.91.1569124764028;
+        Sat, 21 Sep 2019 20:59:24 -0700 (PDT)
 Received: from os42.localdomain (ip68-5-145-143.oc.oc.cox.net. [68.5.145.143])
-        by smtp.gmail.com with ESMTPSA id a9sm2395889otc.75.2019.09.21.20.59.21
+        by smtp.gmail.com with ESMTPSA id a9sm2395889otc.75.2019.09.21.20.59.22
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sat, 21 Sep 2019 20:59:22 -0700 (PDT)
+        Sat, 21 Sep 2019 20:59:23 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 07/20] lpfc: Fix locking on mailbox command completion
-Date:   Sat, 21 Sep 2019 20:58:53 -0700
-Message-Id: <20190922035906.10977-8-jsmart2021@gmail.com>
+Subject: [PATCH 08/20] lpfc: Fix GPF on scsi command completion
+Date:   Sat, 21 Sep 2019 20:58:54 -0700
+Message-Id: <20190922035906.10977-9-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20190922035906.10977-1-jsmart2021@gmail.com>
 References: <20190922035906.10977-1-jsmart2021@gmail.com>
@@ -58,58 +58,63 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Symptoms were seen of the driver not having valid data for
-mailbox commands. After debugging, the following sequence was
-found:
-The driver maintains a port-wide pointer of the mailbox command
-that is currently in execution. Once finished, the port-wide
-pointer is cleared (done in lpfc_sli4_mq_release()). The next
-mailbox command issued will set the next pointer and so on.
-The mailbox response data is only copied if there is a valid
-port-wide pointer.
-In the failing case, it was seen that a new mailbox command was
-being attempted in parallel with the completion.  The parallel
-path was seeing the mailbox no long in use (flag check under lock)
-and thus set the port pointer.  The completion path had cleared
-the active flag under lock, but had not touched the port pointer.
-The port pointer is cleared after the lock is released. In this
-case, the completion path cleared the just-set value by the
-parallel path.
+Faults are seen with RIP of lpfc_scsi_cmd_iocb_cmpl().
+The failure is when lpfc_update_status is being called as part
+of the completion.  After debugging, it was seen the issue was
+the shost pointer that the driver derived from the scsi cmd.
+The crash showed the cmd->device pointer being bogus, which is
+likely as the scsi devices were offlined prior. The bogus
+device pointer caused subsequent pointers derived from the
+location, specifically the vport, to be bogus.
 
-Fix by making the calls that clear mbox state/port pointer
-while under lock.  Also slightly cleaned up the error path.
+Fix by adjusting the calling sequence to pass in the vport
+rather than having to derive it from the cmd structure.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_scsi.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 24d6779a99f8..313441a3c4cf 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -13165,13 +13165,19 @@ lpfc_sli4_sp_handle_mbox_event(struct lpfc_hba *phba, struct lpfc_mcqe *mcqe)
- 	phba->sli.sli_flag &= ~LPFC_SLI_MBOX_ACTIVE;
- 	/* Setting active mailbox pointer need to be in sync to flag clear */
- 	phba->sli.mbox_active = NULL;
-+	if (bf_get(lpfc_trailer_consumed, mcqe))
-+		lpfc_sli4_mq_release(phba->sli4_hba.mbx_wq);
- 	spin_unlock_irqrestore(&phba->hbalock, iflags);
- 	/* Wake up worker thread to post the next pending mailbox command */
- 	lpfc_worker_wake_up(phba);
-+	return workposted;
-+
- out_no_mqe_complete:
-+	spin_lock_irqsave(&phba->hbalock, iflags);
- 	if (bf_get(lpfc_trailer_consumed, mcqe))
- 		lpfc_sli4_mq_release(phba->sli4_hba.mbx_wq);
--	return workposted;
-+	spin_unlock_irqrestore(&phba->hbalock, iflags);
-+	return false;
- }
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index fe1097666de4..c2773c07657d 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -134,21 +134,21 @@ lpfc_sli4_set_rsp_sgl_last(struct lpfc_hba *phba,
  
  /**
+  * lpfc_update_stats - Update statistical data for the command completion
+- * @phba: Pointer to HBA object.
++ * @vport: The virtual port on which this call is executing.
+  * @lpfc_cmd: lpfc scsi command object pointer.
+  *
+  * This function is called when there is a command completion and this
+  * function updates the statistical data for the command completion.
+  **/
+ static void
+-lpfc_update_stats(struct lpfc_hba *phba, struct lpfc_io_buf *lpfc_cmd)
++lpfc_update_stats(struct lpfc_vport *vport, struct lpfc_io_buf *lpfc_cmd)
+ {
++	struct lpfc_hba *phba = vport->phba;
+ 	struct lpfc_rport_data *rdata;
+ 	struct lpfc_nodelist *pnode;
+ 	struct scsi_cmnd *cmd = lpfc_cmd->pCmd;
+ 	unsigned long flags;
+-	struct Scsi_Host  *shost = cmd->device->host;
+-	struct lpfc_vport *vport = (struct lpfc_vport *) shost->hostdata;
++	struct Scsi_Host *shost = lpfc_shost_from_vport(vport);
+ 	unsigned long latency;
+ 	int i;
+ 
+@@ -4004,7 +4004,7 @@ lpfc_scsi_cmd_iocb_cmpl(struct lpfc_hba *phba, struct lpfc_iocbq *pIocbIn,
+ 				 scsi_get_resid(cmd));
+ 	}
+ 
+-	lpfc_update_stats(phba, lpfc_cmd);
++	lpfc_update_stats(vport, lpfc_cmd);
+ 	if (vport->cfg_max_scsicmpl_time &&
+ 	   time_after(jiffies, lpfc_cmd->start_time +
+ 		msecs_to_jiffies(vport->cfg_max_scsicmpl_time))) {
 -- 
 2.13.7
 
