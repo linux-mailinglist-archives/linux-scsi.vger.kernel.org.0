@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 651EDBCE8D
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Sep 2019 18:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C71BCFAB
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Sep 2019 19:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633377AbfIXQwt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 24 Sep 2019 12:52:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46598 "EHLO mail.kernel.org"
+        id S2392581AbfIXRAV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 24 Sep 2019 13:00:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35586 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2441767AbfIXQws (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:52:48 -0400
+        id S2410007AbfIXQpk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 24 Sep 2019 12:45:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E3CA222C2;
-        Tue, 24 Sep 2019 16:52:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 519C3217D9;
+        Tue, 24 Sep 2019 16:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343967;
-        bh=/wtT50R0UKvcqlogRMTdX1nI/luz4NZEppunw+LMaHs=;
+        s=default; t=1569343539;
+        bh=6A2J0Sovo7K25g67n+DgoXjOaF/bFbMsDKsHLCMcda8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2iibv+4OJZlRztBwd1+A3uLaG7vfCHvnGqHCViwQaXx+xxQfhcdFMxrV46IeQosX+
-         imwDp6qNn4AiWNNiArrGL1uaazlauBhmssrzhqK+HIg/X2KxV5xhK8mTLWsNdsqdmx
-         pixY3wd9wJErh0xLHpxNpsROUaZ2Ypm6yK6A+eig=
+        b=eHypmzRnNi3RyAdiTgtvMH9+/yQsDvjIHg+pivSU82hEREahmmYkFTRwfS+c5+3Cb
+         Pz081b0pNeDWvhsPo1i5bCJOS3zkak1GPZwKRbG6vQBwk6dbHcNUFqObOP/2ZvCwIT
+         QrRyJtD5zvddxmt2WXTDdApAh8bMLnHn/6MsY3K8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Bart Van Assche <bvanassche@acm.org>,
@@ -33,12 +33,12 @@ Cc:     Bart Van Assche <bvanassche@acm.org>,
         Ming Lei <ming.lei@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 14/14] scsi: core: Reduce memory required for SCSI logging
-Date:   Tue, 24 Sep 2019 12:52:12 -0400
-Message-Id: <20190924165214.28857-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 83/87] scsi: core: Reduce memory required for SCSI logging
+Date:   Tue, 24 Sep 2019 12:41:39 -0400
+Message-Id: <20190924164144.25591-83-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924165214.28857-1-sashal@kernel.org>
-References: <20190924165214.28857-1-sashal@kernel.org>
+In-Reply-To: <20190924164144.25591-1-sashal@kernel.org>
+References: <20190924164144.25591-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -74,10 +74,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 47 deletions(-)
 
 diff --git a/drivers/scsi/scsi_logging.c b/drivers/scsi/scsi_logging.c
-index bd70339c1242e..03d9855a6afd7 100644
+index 39b8cc4574b49..c6ed0b12e8071 100644
 --- a/drivers/scsi/scsi_logging.c
 +++ b/drivers/scsi/scsi_logging.c
-@@ -16,57 +16,15 @@
+@@ -15,57 +15,15 @@
  #include <scsi/scsi_eh.h>
  #include <scsi/scsi_dbg.h>
  
@@ -139,10 +139,10 @@ index bd70339c1242e..03d9855a6afd7 100644
  
  static inline const char *scmd_name(const struct scsi_cmnd *scmd)
 diff --git a/include/scsi/scsi_dbg.h b/include/scsi/scsi_dbg.h
-index f8170e90b49d2..bbe71a6361db9 100644
+index e03bd9d41fa8f..7b196d2346264 100644
 --- a/include/scsi/scsi_dbg.h
 +++ b/include/scsi/scsi_dbg.h
-@@ -5,8 +5,6 @@ struct scsi_cmnd;
+@@ -6,8 +6,6 @@ struct scsi_cmnd;
  struct scsi_device;
  struct scsi_sense_hdr;
  
