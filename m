@@ -2,68 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FD6BBFF4
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Sep 2019 04:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD110BBFF8
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Sep 2019 04:23:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404271AbfIXCUq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 23 Sep 2019 22:20:46 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:53380 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729139AbfIXCUq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 Sep 2019 22:20:46 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8O2IuYQ059462;
-        Tue, 24 Sep 2019 02:19:59 GMT
+        id S2405324AbfIXCXC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 23 Sep 2019 22:23:02 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:43646 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729193AbfIXCXB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 23 Sep 2019 22:23:01 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8O2JJok099740;
+        Tue, 24 Sep 2019 02:22:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2019-08-05;
- bh=x9Jb3TUiZn7b1gM7a4ycdi6IT2FKgxtzaWd5zh8dq8k=;
- b=gHvb5JZrjmcgIuM2w0+CgPQxWGRdGZMjZ8AVvJQUmxQYISXB/xSsTznHbjd2h7HcjROi
- EFyaAf6cfXM9yQSwsZBSVyaKczdDgG90XVaXyhyRY1vm661mUwuon5CnXZJY1sqFothk
- myCGVUmttzuwKOxUDJ4ZKlz6TVRNMrzAOGHUdVyq0QLAopexNd8wSBRTN7UXB+y7RBoF
- em+AUWrZfhhI0D2VxduZX8n6GQNtlKsbvQQahR2Tal9JK0Tnplm3pL1A3xrine0NQ0a7
- K0ld1Kp18ZncjfZ9xTApvyDtXctNUsvqTHp6NJa1y9BA0jV9I9Gf+y6riYM48dU44tUl Zw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2v5btpttu2-1
+ bh=10wtS4xet5XKlLZCQy/C6PImQNv1bpY8LtMkWI4eGA8=;
+ b=YIkidpJjC/N3UN+DN7L+93HGNpmn0eYw2A0KmeTlIvsUVaCTakS9WmzSV7fO3S3BRhmL
+ FF2jSnaIk3rVoU22OEdnobpuknPtcpba2bZt2LT6izL2VO/lMimVccL6uKd6/JQOnQOQ
+ PqYDvI2MO/frEqSFLnmkTp4+9iVhN/o2BGrVNDbSJZoFr8AINncGVTg+leVbPpEZ9s2q
+ TcfZa7tU1NKo2cQjFLW9or8P4AXuWjE188XSodwA+S5M7hIVd6SdibaUlo5IB22UL4T0
+ fW1Uz5MACaQ6uTB/w93Aid7YebzqJ7KuNX0qZ4HtkJhCkBbHQrHuInTNcnqIym28YIEs xA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2v5cgqtp0a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Sep 2019 02:19:58 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8O2I810021017;
-        Tue, 24 Sep 2019 02:19:58 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3030.oracle.com with ESMTP id 2v6yvp4485-1
+        Tue, 24 Sep 2019 02:22:50 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8O2IEe7182806;
+        Tue, 24 Sep 2019 02:22:50 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 2v6yvmdqgs-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Sep 2019 02:19:58 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x8O2JscP005095;
-        Tue, 24 Sep 2019 02:19:55 GMT
+        Tue, 24 Sep 2019 02:22:50 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x8O2Mjrf017801;
+        Tue, 24 Sep 2019 02:22:46 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 23 Sep 2019 19:19:53 -0700
-To:     Laurence Oberman <loberman@redhat.com>
-Cc:     djeffery@redhat.com, cdupuis1@gmail.com, lduncan@suse.com,
-        martin.petersen@oracle.com, QLogic-Storage-Upstream@qlogic.com,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH] bnx2fc: Handle scope bits when array returns BUSY or TASK_SET_FULL
+        with ESMTP ; Mon, 23 Sep 2019 19:22:44 -0700
+To:     Denis Efremov <efremov@linux.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Andrew Murray <andrew.murray@arm.com>,
+        linux-scsi@vger.kernel.org, Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>
+Subject: Re: [PATCH v3 18/26] scsi: pm80xx: Use PCI_STD_NUM_BARS
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <1568210202-12794-1-git-send-email-loberman@redhat.com>
-Date:   Mon, 23 Sep 2019 22:19:51 -0400
-In-Reply-To: <1568210202-12794-1-git-send-email-loberman@redhat.com> (Laurence
-        Oberman's message of "Wed, 11 Sep 2019 09:56:42 -0400")
-Message-ID: <yq11rw65tbs.fsf@oracle.com>
+References: <20190916204158.6889-1-efremov@linux.com>
+        <20190916204158.6889-19-efremov@linux.com>
+Date:   Mon, 23 Sep 2019 22:22:42 -0400
+In-Reply-To: <20190916204158.6889-19-efremov@linux.com> (Denis Efremov's
+        message of "Mon, 16 Sep 2019 23:41:50 +0300")
+Message-ID: <yq1wody4eml.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9389 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=691
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1908290000 definitions=main-1909240022
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9389 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
  suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=790 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
  definitions=main-1909240022
 Sender: linux-scsi-owner@vger.kernel.org
@@ -72,35 +74,12 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Laurence,
+Denis,
 
-> The qla2xxx driver had this issue as well when the newer array
-> firmware returned the retry_delay_timer in the fcp_rsp.
-> The bnx2fc is not handling the masking of the scope bits either
-> so the retry_delay_timestamp value lands up being a large value
-> added to the timer timestamp delaying I/O for up to 27 Minutes.
-> This patch adds similar code to handle this to the
-> bnx2fc driver to avoid the huge delay.
-> ---
-> V2. Fix Indent for comments (Chad)
-> V3. Kbuild robot reported uninitialized variable scope
->     Initialize scope to 0
->
-> Signed-off-by: Laurence Oberman <loberman@redhat.com>
-> Reported-by: David Jeffery <djeffery@redhat.com>
-> Reported-by: kbuild test robot <lkp@intel.com>
-> ---
->  drivers/scsi/bnx2fc/bnx2fc_io.c | 29 ++++++++++++++++++++++++-----
->  1 file changed, 24 insertions(+), 5 deletions(-)
+> Replace the magic constant (6) with define PCI_STD_NUM_BARS
+> representing the number of PCI BARs.
 
-Applied to 5.4/scsi-fixes.
-
-Please read Documentation/process/submitting-patches.rst. Your patch got
-all mangled since you put tags after the --- separator.
-
-Also, please use the -vN option when submitting updated patches.
-
-Thanks!
+Applied to 5.4/scsi-fixes. Thanks!
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
