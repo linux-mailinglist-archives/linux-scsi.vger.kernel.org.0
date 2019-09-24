@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06AC2BCEE0
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Sep 2019 19:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EEDBCF02
+	for <lists+linux-scsi@lfdr.de>; Tue, 24 Sep 2019 19:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410117AbfIXQsm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 24 Sep 2019 12:48:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40424 "EHLO mail.kernel.org"
+        id S2410768AbfIXQua (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 24 Sep 2019 12:50:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2410543AbfIXQsl (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:48:41 -0400
+        id S2410760AbfIXQu3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 24 Sep 2019 12:50:29 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 38253217D9;
-        Tue, 24 Sep 2019 16:48:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EE063222C3;
+        Tue, 24 Sep 2019 16:50:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343720;
-        bh=6A2J0Sovo7K25g67n+DgoXjOaF/bFbMsDKsHLCMcda8=;
+        s=default; t=1569343828;
+        bh=z73psTK34fbmksqrLT4/YfS8TjnQVVU5eQzrEgt7u9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HNALtdo4CfiAouAavAB18+s1Jd0OSsg4Dj+MT0EuA/V5/6Ta9GYOKsBTQG3AMmJCg
-         PW9a+OkYZZ6kbYY34q5bIV/MG3ZVBJhpFNF7tp4lvY5XNLE0Y+5MGTIlCKYzQ2OXYG
-         6TJDNZ681DSTmnLhKsC3N+my9+jsCNU/woNgStLY=
+        b=rMXRBx12ubTUkNGTcnDgWd8Xgjuw0b9JPFbH+sAqeh9zbtb4vzwH5qCo9BbUeHPKo
+         rhdHu25WQ5jUbSfAfxeJ52aTde+nchhB1qCUu7Or/Ta0ctDSxaG1VEfh2R87oZ6ZgY
+         fmnMGQKwI7LVhYkaTSmb8gHzkjodwfzla89w7CDo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Bart Van Assche <bvanassche@acm.org>,
@@ -33,12 +33,12 @@ Cc:     Bart Van Assche <bvanassche@acm.org>,
         Ming Lei <ming.lei@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 66/70] scsi: core: Reduce memory required for SCSI logging
-Date:   Tue, 24 Sep 2019 12:45:45 -0400
-Message-Id: <20190924164549.27058-66-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 48/50] scsi: core: Reduce memory required for SCSI logging
+Date:   Tue, 24 Sep 2019 12:48:45 -0400
+Message-Id: <20190924164847.27780-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924164549.27058-1-sashal@kernel.org>
-References: <20190924164549.27058-1-sashal@kernel.org>
+In-Reply-To: <20190924164847.27780-1-sashal@kernel.org>
+References: <20190924164847.27780-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -74,10 +74,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 3 insertions(+), 47 deletions(-)
 
 diff --git a/drivers/scsi/scsi_logging.c b/drivers/scsi/scsi_logging.c
-index 39b8cc4574b49..c6ed0b12e8071 100644
+index bd70339c1242e..03d9855a6afd7 100644
 --- a/drivers/scsi/scsi_logging.c
 +++ b/drivers/scsi/scsi_logging.c
-@@ -15,57 +15,15 @@
+@@ -16,57 +16,15 @@
  #include <scsi/scsi_eh.h>
  #include <scsi/scsi_dbg.h>
  
