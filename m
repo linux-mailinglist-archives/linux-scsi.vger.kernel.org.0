@@ -2,155 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F64BBCF24
-	for <lists+linux-scsi@lfdr.de>; Tue, 24 Sep 2019 19:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59136BDBEA
+	for <lists+linux-scsi@lfdr.de>; Wed, 25 Sep 2019 12:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441624AbfIXQwP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 24 Sep 2019 12:52:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45790 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2441616AbfIXQwN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:52:13 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F35E222C7;
-        Tue, 24 Sep 2019 16:52:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343932;
-        bh=dxLk9a93sLZR2vtiN9XBRjoI5HnSVSrWuGFCieEVcrY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oUrg4mYHe1Nfl0KEdTTSUcfTA60S513H1aMZtEVSjdI5T+qEpOccYFNfNdHY+22wx
-         V31zAvn4ORqQBaEo11RARd0gtXz/uyFWm6AzSFTz5bfyRryumoGhIq+OWS6obbIWeI
-         ca8IGUVnzAqcU015Izw40Ubhp8SEV92iWcFOlNGw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Jan Palus <jpalus@fastmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Hannes Reinecke <hare@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        Ming Lei <ming.lei@redhat.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 19/19] scsi: core: Reduce memory required for SCSI logging
-Date:   Tue, 24 Sep 2019 12:51:30 -0400
-Message-Id: <20190924165130.28625-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924165130.28625-1-sashal@kernel.org>
-References: <20190924165130.28625-1-sashal@kernel.org>
+        id S2388262AbfIYKOD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 Sep 2019 06:14:03 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:39898 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726276AbfIYKOD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Sep 2019 06:14:03 -0400
+Received: by mail-qt1-f196.google.com with SMTP id n7so5847225qtb.6;
+        Wed, 25 Sep 2019 03:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=5xfSt12DB7rzQoEf/QfKRzG2YSR3emsAMeE1VuPEUy0=;
+        b=gyX7D963InhuJNIvV4dOAXQEcwwgbRbpZRMdg7EyOJI9E5NvmjkqUagEoTyvSzblSC
+         HJz59Ypad/ILT/9/unz+x/G8DZIYclaxxsOSavqR5biHvDvqGyCM/gL39g59APxDG/da
+         9aSbT1kRibXt4rvkGQvOrClu2JRqX/wxYRwrMbR2al3wHAENKf8iTaS7SDSk0YE7zrJB
+         57Ic26ivmXOytavRAbk35fFe9C2HEKzhFSlkXc1zReh+xzGnSe1tLZprBiXOvcz5bipp
+         u5Y7gFYl7PJ+9t9fTwkLyoaCzg6qXgsQ4mL7bvbd2n7PWKijz12r3szW6ZNrPbhJ+MgR
+         3rZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=5xfSt12DB7rzQoEf/QfKRzG2YSR3emsAMeE1VuPEUy0=;
+        b=QzzvxT94bYjQWPMGKjNzg6nN+FnieuAs8932tWPc7o0CFTUm8zuMXSsyiX3TCBdEUk
+         aE40cLZqKhqclngKaFmCbyGBDIYFUcb469it30OP+zwZulXmM8PLkUkdIGVr7Dl1cRce
+         0hE6CqhvtIyAz2VoVdTcAqeOM2KhhxYNdxz02UQI+hoKSAo3rtJYnQ8p8Ho8g2fx4wf7
+         K1Ovw7K1mZDGn7SrwG2cAPlMxHGaWjnfx7wQmLECsaFPVUYsagd7GIpQdwl6LUeH5raz
+         s8mgge77Ft6WzerwRDnG7Gc9YmGZqOaiF2R5QIkuQVZHk41RoAeZKiboq1GkD+n/rEGh
+         cUfQ==
+X-Gm-Message-State: APjAAAUjx78Xm8fKStHx+xyeAaNrlADIHl7Jpj8P4OCNH63gZuMv7RQb
+        3ILhn/NVUoXSR/zCDsc8fgXfXobTRKgYNQJYfSld1o/8jZI=
+X-Google-Smtp-Source: APXvYqwmNKci8boFnyBJE+wlcKhLvqycB1RHdLQKL/HWhzNXo9OP/QBxwYRX7Re1wMGIBm9KBtxKrFmdb6mPOjs8onk=
+X-Received: by 2002:ac8:7310:: with SMTP id x16mr7744986qto.382.1569406442551;
+ Wed, 25 Sep 2019 03:14:02 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20190919075548.GA112801@LGEARND20B15> <yq1o8za4e9i.fsf@oracle.com>
+In-Reply-To: <yq1o8za4e9i.fsf@oracle.com>
+From:   Austin Kim <austindh.kim@gmail.com>
+Date:   Wed, 25 Sep 2019 19:13:57 +0900
+Message-ID: <CADLLry5mbHhF8-Z1VSbdaE8x+60ubEpv=hEQPU4UwXAnzfMv2A@mail.gmail.com>
+Subject: Re: [PATCH] scsi: qedf: Remove always false 'tmp_prio < 0' statement
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, QLogic-Storage-Upstream@cavium.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+2019=EB=85=84 9=EC=9B=94 24=EC=9D=BC (=ED=99=94) =EC=98=A4=EC=A0=84 11:32, =
+Martin K. Petersen <martin.petersen@oracle.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=
+=EC=84=B1:
+>
+>
+> Austin,
+[...]
+> > So remove 'always false' statement.
+>
+> Applied to 5.4/scsi-fixes, thanks!
+>
 
-[ Upstream commit dccc96abfb21dc19d69e707c38c8ba439bba7160 ]
+Good, thanks for information.
 
-The data structure used for log messages is so large that it can cause a
-boot failure. Since allocations from that data structure can fail anyway,
-use kmalloc() / kfree() instead of that data structure.
-
-See also https://bugzilla.kernel.org/show_bug.cgi?id=204119.
-See also commit ded85c193a39 ("scsi: Implement per-cpu logging buffer") # v4.0.
-
-Reported-by: Jan Palus <jpalus@fastmail.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Hannes Reinecke <hare@suse.com>
-Cc: Johannes Thumshirn <jthumshirn@suse.de>
-Cc: Ming Lei <ming.lei@redhat.com>
-Cc: Jan Palus <jpalus@fastmail.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/scsi_logging.c | 48 +++----------------------------------
- include/scsi/scsi_dbg.h     |  2 --
- 2 files changed, 3 insertions(+), 47 deletions(-)
-
-diff --git a/drivers/scsi/scsi_logging.c b/drivers/scsi/scsi_logging.c
-index bd70339c1242e..03d9855a6afd7 100644
---- a/drivers/scsi/scsi_logging.c
-+++ b/drivers/scsi/scsi_logging.c
-@@ -16,57 +16,15 @@
- #include <scsi/scsi_eh.h>
- #include <scsi/scsi_dbg.h>
- 
--#define SCSI_LOG_SPOOLSIZE 4096
--
--#if (SCSI_LOG_SPOOLSIZE / SCSI_LOG_BUFSIZE) > BITS_PER_LONG
--#warning SCSI logging bitmask too large
--#endif
--
--struct scsi_log_buf {
--	char buffer[SCSI_LOG_SPOOLSIZE];
--	unsigned long map;
--};
--
--static DEFINE_PER_CPU(struct scsi_log_buf, scsi_format_log);
--
- static char *scsi_log_reserve_buffer(size_t *len)
- {
--	struct scsi_log_buf *buf;
--	unsigned long map_bits = sizeof(buf->buffer) / SCSI_LOG_BUFSIZE;
--	unsigned long idx = 0;
--
--	preempt_disable();
--	buf = this_cpu_ptr(&scsi_format_log);
--	idx = find_first_zero_bit(&buf->map, map_bits);
--	if (likely(idx < map_bits)) {
--		while (test_and_set_bit(idx, &buf->map)) {
--			idx = find_next_zero_bit(&buf->map, map_bits, idx);
--			if (idx >= map_bits)
--				break;
--		}
--	}
--	if (WARN_ON(idx >= map_bits)) {
--		preempt_enable();
--		return NULL;
--	}
--	*len = SCSI_LOG_BUFSIZE;
--	return buf->buffer + idx * SCSI_LOG_BUFSIZE;
-+	*len = 128;
-+	return kmalloc(*len, GFP_ATOMIC);
- }
- 
- static void scsi_log_release_buffer(char *bufptr)
- {
--	struct scsi_log_buf *buf;
--	unsigned long idx;
--	int ret;
--
--	buf = this_cpu_ptr(&scsi_format_log);
--	if (bufptr >= buf->buffer &&
--	    bufptr < buf->buffer + SCSI_LOG_SPOOLSIZE) {
--		idx = (bufptr - buf->buffer) / SCSI_LOG_BUFSIZE;
--		ret = test_and_clear_bit(idx, &buf->map);
--		WARN_ON(!ret);
--	}
--	preempt_enable();
-+	kfree(bufptr);
- }
- 
- static inline const char *scmd_name(const struct scsi_cmnd *scmd)
-diff --git a/include/scsi/scsi_dbg.h b/include/scsi/scsi_dbg.h
-index 56710e03101c6..1fcf14aee28a8 100644
---- a/include/scsi/scsi_dbg.h
-+++ b/include/scsi/scsi_dbg.h
-@@ -5,8 +5,6 @@ struct scsi_cmnd;
- struct scsi_device;
- struct scsi_sense_hdr;
- 
--#define SCSI_LOG_BUFSIZE 128
--
- extern void scsi_print_command(struct scsi_cmnd *);
- extern size_t __scsi_format_command(char *, size_t,
- 				   const unsigned char *, size_t);
--- 
-2.20.1
-
+> --
+> Martin K. Petersen      Oracle Linux Engineering
