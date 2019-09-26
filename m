@@ -2,70 +2,452 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C78BFF27
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Sep 2019 08:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AF0BFFB5
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Sep 2019 09:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725808AbfI0GdP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Sep 2019 02:33:15 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54738 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725802AbfI0GdP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 27 Sep 2019 02:33:15 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A7F0CB11A;
-        Fri, 27 Sep 2019 06:33:13 +0000 (UTC)
-Message-ID: <08eb80bb23d057f6ba1cf44cf8d4e2d3e597a25e.camel@suse.de>
-Subject: Re: [EXT] Re: [PATCH v2 04/14] qla2xxx: Optimize NPIV tear down
- process
-From:   Martin Wilck <mwilck@suse.de>
-To:     Quinn Tran <qutran@marvell.com>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Date:   Fri, 27 Sep 2019 08:33:16 +0200
-In-Reply-To: <CFC8098F-46C2-49E6-9BC3-7E220F6F2535@marvell.com>
-References: <20190912180918.6436-1-hmadhani@marvell.com>
-         <20190912180918.6436-5-hmadhani@marvell.com>
-         <767fe8f1a50b10d430c30886031251c8f9e4c2dd.camel@suse.de>
-         <CFC8098F-46C2-49E6-9BC3-7E220F6F2535@marvell.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1726177AbfI0HFg convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 27 Sep 2019 03:05:36 -0400
+Received: from mail.ademama.com ([212.179.115.75]:40967 "EHLO
+        plesk.ademamahost.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725804AbfI0HFf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Sep 2019 03:05:35 -0400
+X-Greylist: delayed 44661 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Sep 2019 03:05:33 EDT
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+X-No-Relay: not in my network
+Received: from [84.38.129.125] (unknown [84.38.129.125])
+        by plesk.ademamahost.com (Postfix) with ESMTPA id AA2EC882A;
+        Thu, 26 Sep 2019 13:08:11 +0300 (IDT)
+Date:   Thu, 26 Sep 2019 13:07:48 +0300
+Mime-version: 1.0
+Subject: Compliments
+From:   Christopher Quinlan QC <cqukesq@posta.ro>
+To:     Undisclosed-Recipients:;
+Message-Id: <20190926130748.QNMOFIHMWEKLWN@posta.ro>
+Reply-To: cqesq@posta.ro
+Content-type: text/plain; charset="ISO-8859-1"; format=flowed
+Content-transfer-encoding: 8BIT
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2019-09-26 at 16:56 +0000, Quinn Tran wrote:
->     
->     Are you missing a negation in this last line?
->     Also, what's the point of adding this loop? 
-> 
-> QT:  good catch.  The idea is to not sleep the full 10Hz, if the
-> vref_count already reaches zero or reaches zero under
-> 10Hz.  Otherwise, loop/wait for 10Hz.   We're trying to get NPIV tear
-> down to go faster.
+Compliments,
 
-AFAIU, wait_event_timeout() returns before the timeout has elapsed, if
-the tested condition becomes true _and_ the wait queue is woken up. 
-Thus the loop shouldn't be necessary. Are you missing a wake_up() call
-to vref_waitq somewhere? 
+My name is Christopher Quinlan QC I am a solicitor at law / investment adviser to your late  relative. Your late relative left behind Cash deposit in capital and investment security  account along with properties, I will like to discuss with you regarding making this claim  since he is related to you going by the lineage, surname and country of origin.
 
-Perhaps you should replace all calls to 
+Once I receive your information and endorse same appropriately, I shall provide you with  all the privileged information/legal documents relating to the deceased and also will give  you guidelines on how to realize this goal without the breach of the law. I would  respectfully request that you treat the content of this letter as privileged and respect  the integrity of the information you come by as a result of this correspondence. Contact me  immediately for more information and to begin the legal process of redeeming your lawful  entitlement before the bank is compelled by law to hand over the money to the government.
+Please get back to me on my private email cqesq@posta.ro for further details.
 
-        atomic_dec(&X->vref_count);
+To facilitate the process of this transaction, urgently forward to me
+Your full names,
+Telephone and fax numbers,
+Address,
+Age,
+Marital status,
+Occupation
 
-with something like
+I will be expecting to hear from you.
 
-        if (atomic_dec_and_test(&X->vref_count))
-                wake_up(&X->vref_waitq);
+Regards
 
-??
-
-Martin
-
+Christopher Quinlan QC
+Private email cqesq@posta.ro
 
