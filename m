@@ -2,139 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76521C0DE0
-	for <lists+linux-scsi@lfdr.de>; Sat, 28 Sep 2019 00:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41566C0E8D
+	for <lists+linux-scsi@lfdr.de>; Sat, 28 Sep 2019 01:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728334AbfI0WQG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Sep 2019 18:16:06 -0400
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:24948 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725990AbfI0WQF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Sep 2019 18:16:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1569622565; x=1601158565;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0+RS/WQ72uYjuEOJgGNw9I8eOFw7oExgvMwrLdBMfrM=;
-  b=MiMu5vGaVs6uER205Kv449WeJC5hU6WFwOSBsQ7WwvKvg7GDAKztfNeg
-   9ah5AzfuEESkzVmw+f6eA+R8cGaczje8SOzyrDxD9JAZS4id2fDG9tD0m
-   rJ3kXsUPG1lmcFbGJebztOFIkCxzw5FUp3yIF3JjDPTqxygv1WqLnwDpF
-   XxvyJhXuz9sbm3jCoIGVXrgT102i8w6t9i6rW0E76bXA3U8CKDgeIGfTT
-   UU0WSDww3URvevuNM4W5WJ39Bwj4IlFgH86N/laAcFt0bph+Savf5UCQe
-   kvMAVccS/IIWg6NFKBbDmAFl5UUVhC/nM9G/la4Up7jbEXjdvCGub3x6s
-   w==;
-IronPort-SDR: v59weQC5YtCsiI7Y8s9hlkUZ7YOIqzBMIk9xHcyDBOo8pQzRC9i3W3Q/TzG6XX5EnjzAcy/4gm
- irLK0G7PAEPlfMQLNB1U0FLZoLbrtw5GA+j+YxllUxuBNCCsGYTUh/3QNKsBeWqis+fn2IfaE7
- X8m+NDH3mJ6oMpGHYpfN0KVGk7QknCtAkHTCQC/jUA/kFgm9kpnusd3249FZRsqjA0uiQeICrE
- tDPPC3cyii6toOaBxD+c14DbM9pF3ODWEU/0Udi0+QiWRJ7gE/G1xshtyIfryp2kkTJp93XRMC
- FXM=
-X-IronPort-AV: E=Sophos;i="5.64,557,1559491200"; 
-   d="scan'208";a="226192875"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 28 Sep 2019 06:16:05 +0800
-IronPort-SDR: pI4+ODXcV9r+uKCq1AearHABR0226SdXqKxjlijGO6tPANJQ3+XURt/rXAEygHoeqdEcMa9qzw
- Qj0JdDkqYAroiqVTAQEb+8ClUo5IrIY5iDGozI5tnWou300twIgyZRMSXLHwBb0C9H0lMUKnIJ
- oBLCfKy47pCMf9+CyNF3SnmpfpnNSTCQ8gGxuya0wVURXQiHpmIH36lP8FRqMd1lN7IX4rGAyA
- VfY/I8i1omjBeQJlkmgF0yThkmgYoNp1nFCJ1+fOgYfBl10iZahtpYpkWfLmm//tnH5b2iE0+7
- FWagZtnSr9Xnfj2z+106FUK2
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2019 15:12:23 -0700
-IronPort-SDR: tZdmX3bdUZlvjWOiFTNad9aNGZL0A5zV+zzeyCfY2O0S9QYZEuUhbSKv8slyrY2npbGOKRuTp3
- xd4FOF0O5B7SSbq6rd7DIAMl3ga4rkV9CNJa7Y/N7wLYS8Y8AhxGCOPP707ckJctwLX+EpXsZq
- GenmHR0riYJld8fS5PRl1S8v55QRoXb+cAhzU3VlHiSjCbLFx0d8uAJbjEQfuaZb08Ou3YNt4W
- 8jOWeL3vWhdWlOmn+6brOhbiD7Zuslbvs+rOP7/6e5m8CxsgpjzIN/UVkpIeYfLjfpL4fytZ9V
- /OY=
-WDCIronportException: Internal
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Sep 2019 15:16:03 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     linux-scsi@vger.kernel.org,
+        id S1728753AbfI0Xlm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Sep 2019 19:41:42 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:43646 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728527AbfI0Xll (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Sep 2019 19:41:41 -0400
+X-Greylist: delayed 466 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Sep 2019 19:41:40 EDT
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 6F79829F44;
+        Fri, 27 Sep 2019 19:33:51 -0400 (EDT)
+Date:   Sat, 28 Sep 2019 09:33:59 +1000 (AEST)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Alan Stern <stern@rowland.harvard.edu>
+cc:     Douglas Gilbert <dgilbert@interlog.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
-Subject: [PATCH V2] scsi: save/restore command resid for error handling
-Date:   Sat, 28 Sep 2019 07:16:02 +0900
-Message-Id: <20190927221602.27080-1-damien.lemoal@wdc.com>
-X-Mailer: git-send-email 2.21.0
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: Re: [PATCH 0/2] Fix SCSI & USB Storage CHECK CONDITION handling
+In-Reply-To: <Pine.LNX.4.44L0.1909271004470.1698-100000@iolanthe.rowland.org>
+Message-ID: <alpine.LNX.2.21.1909280906530.76@nippy.intranet>
+References: <Pine.LNX.4.44L0.1909271004470.1698-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When a non-passthrough command is terminated with CHECK CONDITION,
-request sense is executed by hijacking the command descriptor. Since
-scsi_eh_prep_cmnd() and scsi_eh_restore_cmnd() do not save/restore the
-original command resid, the value returned on failure of the original
-command is lost and replaced with the value set by the execution of the
-request sense command. This value may in many instances be unaligned to
-the device sector size, causing sd_done() to print a warning message
-about the incorrect unaligned resid before the command is retried or
-aborted.
+[snipped selective measurements of word usage]
 
-Fix this problem by saving the original command resid in struct
-scsi_eh_save using scsi_eh_prep_cmnd() and restoring it in
-scsi_eh_restore_cmnd(). In addition, to make sure that the request sense
-command is executed with a correctly initialized command structure, also
-reset resid to 0 in scsi_eh_prep_cmnd() after saving the original
-command resid value in struct scsi_eh_save.
+On Fri, 27 Sep 2019, Alan Stern wrote:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
----
+> 
+> So I guess this was never defined precisely.
+> 
 
-Changes from V1:
-* Dropped patch 2
-* Add resid reset in scsi_eh_prep_cmnd()
+The O.E.D. defines these terms:
 
- drivers/scsi/scsi_error.c | 3 +++
- include/scsi/scsi_eh.h    | 1 +
- 2 files changed, 4 insertions(+)
+	residual
+	a. [...]
+	n. 1. a quantity remaining after other things have been subtracted 
+	      or allowed for. [...]
+	   2. [...]
+	   3. [...]
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 1c470e31ae81..f53828bf7ad7 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -967,6 +967,7 @@ void scsi_eh_prep_cmnd(struct scsi_cmnd *scmd, struct scsi_eh_save *ses,
- 	ses->data_direction = scmd->sc_data_direction;
- 	ses->sdb = scmd->sdb;
- 	ses->result = scmd->result;
-+	ses->resid = scsi_get_resid(scmd);
- 	ses->underflow = scmd->underflow;
- 	ses->prot_op = scmd->prot_op;
- 	ses->eh_eflags = scmd->eh_eflags;
-@@ -977,6 +978,7 @@ void scsi_eh_prep_cmnd(struct scsi_cmnd *scmd, struct scsi_eh_save *ses,
- 	memset(scmd->cmnd, 0, BLK_MAX_CDB);
- 	memset(&scmd->sdb, 0, sizeof(scmd->sdb));
- 	scmd->result = 0;
-+	scsi_set_resid(scmd, 0);
- 
- 	if (sense_bytes) {
- 		scmd->sdb.length = min_t(unsigned, SCSI_SENSE_BUFFERSIZE,
-@@ -1029,6 +1031,7 @@ void scsi_eh_restore_cmnd(struct scsi_cmnd* scmd, struct scsi_eh_save *ses)
- 	scmd->sc_data_direction = ses->data_direction;
- 	scmd->sdb = ses->sdb;
- 	scmd->result = ses->result;
-+	scsi_set_resid(scmd, ses->resid);
- 	scmd->underflow = ses->underflow;
- 	scmd->prot_op = ses->prot_op;
- 	scmd->eh_eflags = ses->eh_eflags;
-diff --git a/include/scsi/scsi_eh.h b/include/scsi/scsi_eh.h
-index 3810b340551c..9caa9b262a32 100644
---- a/include/scsi/scsi_eh.h
-+++ b/include/scsi/scsi_eh.h
-@@ -32,6 +32,7 @@ extern int scsi_ioctl_reset(struct scsi_device *, int __user *);
- struct scsi_eh_save {
- 	/* saved state */
- 	int result;
-+	unsigned int resid;
- 	int eh_eflags;
- 	enum dma_data_direction data_direction;
- 	unsigned underflow;
+and
+
+	residue
+	n. a small amount of something that remains after the main part 
+	   has gone or been taken or used.
+
+
+So, writing "residue" could be misleading as the connotation is that the 
+remaining part is the lesser part.
+
+I think that's probably why the term "residual" gets used in finance (and 
+in SCSI transfers).
+
 -- 
-2.21.0
-
