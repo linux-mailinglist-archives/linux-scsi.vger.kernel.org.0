@@ -2,94 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E53DC088A
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Sep 2019 17:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65D1C08BB
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Sep 2019 17:39:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727784AbfI0P0o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Sep 2019 11:26:44 -0400
-Received: from mx2.suse.de ([195.135.220.15]:38580 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727319AbfI0P0o (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 27 Sep 2019 11:26:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 3D241AB7D;
-        Fri, 27 Sep 2019 15:26:42 +0000 (UTC)
-Message-ID: <471732f03049a1528df1d144013d723041f0a419.camel@suse.de>
-Subject: Re: [PATCH] scsi: core: Log SCSI command age with errors
-From:   Martin Wilck <mwilck@suse.de>
-To:     "Milan P. Gandhi" <mgandhi@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Date:   Fri, 27 Sep 2019 17:26:46 +0200
-In-Reply-To: <20190923060122.GA9603@machine1>
-References: <20190923060122.GA9603@machine1>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 
+        id S1727934AbfI0PjE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Sep 2019 11:39:04 -0400
+Received: from mail-wr1-f53.google.com ([209.85.221.53]:36802 "EHLO
+        mail-wr1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727207AbfI0PjE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Sep 2019 11:39:04 -0400
+Received: by mail-wr1-f53.google.com with SMTP id y19so3542143wrd.3;
+        Fri, 27 Sep 2019 08:39:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=57IhBJyef1fR/FRADa/1UwQsGQlMxqvGVBiiCpQwIqk=;
+        b=m7jFLR0Del8V/jHv+RvdbJmXMac0aO0Q0joIoDHiDG84oXYYEfhOoy/KVWHC5pxjOE
+         QYqp/AId6qBCgDMNVdWYVCY7P8PzxYJuxjASqCmthvRxyyVC3tlkxUR7CUVZS8AA6S9v
+         YM34EO8ubqKasw+PXhg2epK0kCtOHW8HvgnlIIjYrgo8O7pQZRVyZFwW7Me7uZIVITfJ
+         4d9fVTFkANNx9924ep7WK4TPlS2EmOr1p/mEEx4kyYHgVe7mNlz/qtmwmOHaB08CE7Ip
+         HRXiz67OxDLW6G0WsCozy7NcuELNpglsNfFlwyXdqmi5btXyeP6tc9tpoCkMyhyXXBfy
+         YEMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=57IhBJyef1fR/FRADa/1UwQsGQlMxqvGVBiiCpQwIqk=;
+        b=nCAEuocWA0oHpwoiefogpXPcFPSBWWnc48HA7CX8mB8wtlpDfkUuI+vTk+Iyw1RHHa
+         BkHY5hDQ4FmQdFIwyUxl5/eur+p8dMQvAwsWwThIkpbVmSaIdENbeLwL3aZc4a4EPo3I
+         X4dYplaCLoWw7D+opGl7XdHz4sn73GUKeiLvrb29CNch0dB8p74xW63djWrYeaiuowQ3
+         iKIHWtqrb6K7elBxyftaOItQLlsCdV8vY9gPHhBlbL61gE9NnJRGXgfQaLE4RvhBzeZr
+         btLwZZFoj73TDALqfe1tybgoU1CvIcmnieB3FZbLnXlsODFMEzpI7amKg7k+NG3XlMSH
+         1o8Q==
+X-Gm-Message-State: APjAAAWHnWuvUO897x+K0Jjf14CwJ6vvJZQDziW22+9KIxygueg7XGJ6
+        JSJPmjYiZ/iVvOktTbV3Iso4khAla3llgP/pBt2unKG4UmE=
+X-Google-Smtp-Source: APXvYqxDV8sMU5SQznT74ajo8QblefGao1hVZEK2w6azCI3vZmIw7UR3vijg/vNNHL+NjxsHb4skXmcfgqTwwSmT5Yw=
+X-Received: by 2002:a5d:5352:: with SMTP id t18mr3693775wrv.72.1569598741857;
+ Fri, 27 Sep 2019 08:39:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From:   Richard Weinberger <richard.weinberger@gmail.com>
+Date:   Fri, 27 Sep 2019 17:38:50 +0200
+Message-ID: <CAFLxGvw0HF9dxars5737Vgi+-ufXoBXgMmR_uqtVWyAs3vYyHg@mail.gmail.com>
+Subject: st: EIO upon almost full tape?
+To:     Kai.Makisara@kolumbus.fi
+Cc:     linux-scsi@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 2019-09-23 at 11:31 +0530,  Milan P. Gandhi wrote:
-> Couple of users had requested to print the SCSI command age along 
-> with command failure errors. This is a small change, but allows 
-> users to get more important information about the command that was 
-> failed, it would help the users in debugging the command failures:
-> 
-> Signed-off-by: Milan P. Gandhi <mgandhi@redhat.com>
-> ---
-> diff --git a/drivers/scsi/scsi_logging.c
-> b/drivers/scsi/scsi_logging.c
-> index ecc5918e372a..ca2182bc53c6 100644
-> --- a/drivers/scsi/scsi_logging.c
-> +++ b/drivers/scsi/scsi_logging.c
-> @@ -437,6 +437,7 @@ void scsi_print_result(const struct scsi_cmnd
-> *cmd, const char *msg,
->  	const char *mlret_string = scsi_mlreturn_string(disposition);
->  	const char *hb_string = scsi_hostbyte_string(cmd->result);
->  	const char *db_string = scsi_driverbyte_string(cmd->result);
-> +	unsigned long cmd_age = (jiffies - cmd->jiffies_at_alloc) / HZ;
+Hi!
 
-This comes down to pretty coarse time resolution, does it not? More
-often than not, the time difference shown will be 0. I'd recommend at
-least millisecond resolution.
+Recently I got access to a tape library and as a side project I try to
+turn it into something useful.
+First tests showed that it seems to work fine until it tried to fill a tape:
 
->  
->  	logbuf = scsi_log_reserve_buffer(&logbuf_len);
->  	if (!logbuf)
-> @@ -478,10 +479,15 @@ void scsi_print_result(const struct scsi_cmnd
-> *cmd, const char *msg,
->  
->  	if (db_string)
->  		off += scnprintf(logbuf + off, logbuf_len - off,
-> -				 "driverbyte=%s", db_string);
-> +				 "driverbyte=%s ", db_string);
->  	else
->  		off += scnprintf(logbuf + off, logbuf_len - off,
-> -				 "driverbyte=0x%02x", driver_byte(cmd-
-> >result));
-> +				 "driverbyte=0x%02x ",
-> +				 driver_byte(cmd->result));
-> +
-> +	off += scnprintf(logbuf + off, logbuf_len - off,
-> +			 "cmd-age=%lus", cmd_age);
+dd if=/dev/urandom of=/dev/st0 ibs=1M obs=512K
 
-This is certainly helpful in some situations. Yet I am unsure if it
-should *always* be printed. I wouldn't say it's as important as the 
-other stuff scsi_print_result() provides. After all, by activating
-MLQUEUE+MLCOMPLETE, the time on-wire can be extracted with better
-accuracy from currently available logs. 
+After around 1.8TiB dd terminates with EIO and in dmesg I see:
+[535116.858716] st 0:0:0:0: [st0] Sense Key : Medium Error [current]
+[535116.858720] st 0:0:0:0: [st0] Add. Sense: Write error
+[535116.874357] st 0:0:0:0: [st0] Sense Key : Medium Error [current]
+[535116.874370] st 0:0:0:0: [st0] Add. Sense: Write error
+[535116.874373] st 0:0:0:0: [st0] Error on write filemark.
 
-So perhaps make this depend on a module parameter?
+After a reinsert of the tape it works fine again. But any other attempt
+to fill it results into EIO. Every single time after ~1.8TiB (-/+
+10GiB) have been written.
 
-Also, we should carefully ponder if we want to put this on the same
-line as the driver byte, as users may have created scripts for parsing
-this output.
+I expected to terminate dd after around 2.5TiB with ENOSPC.
 
-Regards,
-Martin
+First I thought the tape is bad, but even with a new one I face the same issue.
+Tape is LTO-6 and drive a IBM ULTRIUM-HH6.
 
+Is my test wrong? There is a high chance that I'm doing something
+horrible wrong,
+I fear I'm a little too young for tape drives. ;-)
 
+Maybe the tape drive is faulty but why is it always failing after 1.8TiB?
+According to the tape library the drive is good and passes all self-tests.
+And yes, I have a cleaning tape in my library too.
+
+-- 
+Thanks,
+//richard
