@@ -2,42 +2,43 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA12BFD49
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Sep 2019 04:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C54BFD4A
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Sep 2019 04:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728464AbfI0Co7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Sep 2019 22:44:59 -0400
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:35339 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727796AbfI0Co7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Sep 2019 22:44:59 -0400
-Received: by mail-pg1-f177.google.com with SMTP id a24so2637279pgj.2
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Sep 2019 19:44:58 -0700 (PDT)
+        id S1727906AbfI0Cpx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Sep 2019 22:45:53 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40499 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727505AbfI0Cpx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Sep 2019 22:45:53 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x127so646229pfb.7;
+        Thu, 26 Sep 2019 19:45:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9Hfo84XzIQoP0EAgxuE2MtWmGGnencn8H3vrC8tnFv8=;
-        b=aGCH4cqy2tprXh58Z3uVAEq3+uUU6HO/NKfKhUbnvDT/NzRczAV4M6fmvdjbdHFE8z
-         mxFHZqX51P1GMJuATFmM6llIKBihVdB6OpUqixhAv7tVMgqoYaob4xhDWIlOkfyDlatK
-         aSVjIBjZ/4zX3avJCgT2jzE8FnIkfGNvYAnLJ7E2ZXFU8aGPD+CKIDBgX442PPlKz/AP
-         Ee2AXT04liFHhR6d+wRNJAU1xu29HgktyK/L5JPeL/dWWEgSB/hcOnOWG5t5VJNq6WQH
-         4W/DA2g/BB3W/TCu8wxOLvjZKYbT96Ln+HJPTBxKk6QpVOv9zekJLSSkJp2+P/pP69GC
-         FV0Q==
-X-Gm-Message-State: APjAAAVe6MzqN0hT3X3ZDxrtvupiG57Hm5sda9BumqzQVXNreJ1Colw4
-        g++tSnXRVAjf9w8QEFISF/dM0fU2KO4=
-X-Google-Smtp-Source: APXvYqykyby9ONwYV3mgfKW7WfuRqwHiiqT/GdUw456zWrlQVd2veeQN1k0MMZXVoaBwbxY8fj5M8A==
-X-Received: by 2002:a17:90a:3748:: with SMTP id u66mr7259577pjb.4.1569552297809;
-        Thu, 26 Sep 2019 19:44:57 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=a8QnptXlbNqNWh8h555NDUYz0htmZzCXZ6ahm6pCgL8=;
+        b=JQg3Fy0x+QaTUWq/mfE4UiLOfvxxS3fer6jWpBVYokE/IBMS1WItLqfB8iJ1E0+dAT
+         S3/6agpqvyODTd1TM660oImFqt4fN1WPvk4ePK4Fs28XmPkj2O9vVDQb3IxjsxTEGeqT
+         W0Jk0EVRIn5/i0d8CHprnZ9OEqBVZi0MgL6ijd8UwLAU+Oh+LMIByxJZRtgINqQMVfSS
+         ZuuIsSQTeU188HT7oT/qIJusV1spI6mMIyLSP1lTF5xjSND6wJlZouOLZpn0UTW+PEoT
+         fR8SkuPAogX7/IpbSLjzIeCp1qLayJf8rSisPRjoPg13ilwX/H6s9tg3Gip+svQ2IxBj
+         LtBg==
+X-Gm-Message-State: APjAAAUyWUKSZxXXFPE21RGSC8aPjIYYTq+CHKdCB5kE10fJugdQlrmn
+        5XWR4NdNkDvMG2f78R8wIbODsJtmsaQ=
+X-Google-Smtp-Source: APXvYqwPy+lTnAffuw77QUljt+n75IETbFV50p92KjAk70OVXhf4ffxDz2LlpiLrs3bRIWlHoL2F8A==
+X-Received: by 2002:a63:f5f:: with SMTP id 31mr6672160pgp.265.1569552352089;
+        Thu, 26 Sep 2019 19:45:52 -0700 (PDT)
 Received: from localhost.localdomain ([2601:647:4000:a9:2083:a241:50c7:8f37])
-        by smtp.gmail.com with ESMTPSA id m19sm3075434pjl.28.2019.09.26.19.44.56
+        by smtp.gmail.com with ESMTPSA id a17sm598301pfi.178.2019.09.26.19.45.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Sep 2019 19:44:56 -0700 (PDT)
-Subject: Re: [PATCH v2] scsi: Add sysfs attributes for VPD pages 0h and 89h
-To:     Ryan Attard <ryanattard@ryanattard.info>, jejb@linux.vnet.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-References: <20190926162216.56591-1-ryanattard@ryanattard.info>
+        Thu, 26 Sep 2019 19:45:51 -0700 (PDT)
+Subject: Re: [PATCH] scsi: qla2xxx: Remove WARN_ON_ONCE in
+ qla2x00_status_cont_entry()
+To:     Daniel Wagner <dwagner@suse.de>, qla2xxx-upstream@qlogic.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190926074637.77721-1-dwagner@suse.de>
 From:   Bart Van Assche <bvanassche@acm.org>
 Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
  mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
@@ -62,12 +63,12 @@ Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
  //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
  mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
  goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <8b20b48f-8a6c-e24e-4c7d-440dcaa732c0@acm.org>
-Date:   Thu, 26 Sep 2019 19:44:55 -0700
+Message-ID: <5d5931ef-7ffa-3f3f-bb5e-5379c1716d04@acm.org>
+Date:   Thu, 26 Sep 2019 19:45:50 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.0
 MIME-Version: 1.0
-In-Reply-To: <20190926162216.56591-1-ryanattard@ryanattard.info>
+In-Reply-To: <20190926074637.77721-1-dwagner@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -76,8 +77,38 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-09-26 09:22, Ryan Attard wrote:
-> Add sysfs attributes for the ATA information page and
-> Supported VPD Pages page.
+On 2019-09-26 00:46, Daniel Wagner wrote:
+> Commit 88263208dd23 ("scsi: qla2xxx: Complain if sp->done() is not
+> called from the completion path") introduced the WARN_ON_ONCE in
+> qla2x00_status_cont_entry(). The assumption was that there is only one
+> status continuations element. According to the firmware documentation
+> it is possible that multiple status continuations are emitted by the
+> firmware.
+> 
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
+>  drivers/scsi/qla2xxx/qla_isr.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+> index 4c26630c1c3e..009fd5a33fcd 100644
+> --- a/drivers/scsi/qla2xxx/qla_isr.c
+> +++ b/drivers/scsi/qla2xxx/qla_isr.c
+> @@ -2837,8 +2837,6 @@ qla2x00_status_cont_entry(struct rsp_que *rsp, sts_cont_entry_t *pkt)
+>  	if (sense_len == 0) {
+>  		rsp->status_srb = NULL;
+>  		sp->done(sp, cp->result);
+> -	} else {
+> -		WARN_ON_ONCE(true);
+>  	}
+>  }
+
+Should the following be added?
+
+Fixes: 88263208dd23 ("scsi: qla2xxx: Complain if sp->done() is not
+called from the completion path")
+
+Anyway:
 
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
