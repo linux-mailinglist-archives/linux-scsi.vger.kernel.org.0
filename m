@@ -2,65 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D01C1E59
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Sep 2019 11:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1D8C1E63
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Sep 2019 11:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729856AbfI3Jnk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Sep 2019 05:43:40 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3189 "EHLO huawei.com"
+        id S1727233AbfI3JqD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Sep 2019 05:46:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52566 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727884AbfI3Jnk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 30 Sep 2019 05:43:40 -0400
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 92904F81AE160CBAF173;
-        Mon, 30 Sep 2019 17:43:38 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS401-HUB.china.huawei.com
- (10.3.19.201) with Microsoft SMTP Server id 14.3.439.0; Mon, 30 Sep 2019
- 17:43:32 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <anil.gurumurthy@qlogic.com>, <sudarsana.kalluru@qlogic.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] bfa: Make restart_bfa static
-Date:   Mon, 30 Sep 2019 17:43:27 +0800
-Message-ID: <20190930094327.46836-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1726329AbfI3JqD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 30 Sep 2019 05:46:03 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 974A3AC11;
+        Mon, 30 Sep 2019 09:46:01 +0000 (UTC)
+Message-ID: <c0f30c298cd40dc3dee8d6963f60f72330e7de72.camel@suse.de>
+Subject: Re: [PATCH] scsi: core: Log SCSI command age with errors
+From:   Martin Wilck <mwilck@suse.de>
+To:     mgandhi@redhat.com, Laurence Oberman <loberman@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Date:   Mon, 30 Sep 2019 11:46:06 +0200
+In-Reply-To: <31eb5bb6-ca4e-1c6c-3013-7d94ff49623d@redhat.com>
+References: <20190923060122.GA9603@machine1>
+         <471732f03049a1528df1d144013d723041f0a419.camel@suse.de>
+         <3a8ee584f9846fba94d98d0e6941fefdcbed5d71.camel@redhat.com>
+         <f2c97e860f895613ba81b69c962660b0c712723a.camel@suse.de>
+         <31eb5bb6-ca4e-1c6c-3013-7d94ff49623d@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix sparse warning:
+Hello Milan,
 
-drivers/scsi/bfa/bfad.c:1491:1: warning:
- symbol 'restart_bfa' was not declared. Should it be static?
+On Mon, 2019-09-30 at 14:35 +0530, Milan P. Gandhi wrote:
+> On 9/30/19 2:12 PM, Martin Wilck wrote:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/scsi/bfa/bfad.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> > Wrt the enablement of the option on highly loaded systems, I'm not
+> > sure
+> > I understand. You need to enable SCSI logging anyway, don't you?
+> 
+> By default we keep the SCSI debug logging disabled or am I missing 
+> something?
+> 
+> > Is it an issue to have to set 2 sysfs values rather than just one?
+> 
+> The idea here is to capture the above debug data even without 
+> any user interventions to change any sysfs entries or to enable 
+> debug logging on busy, critical production systems.
 
-diff --git a/drivers/scsi/bfa/bfad.c b/drivers/scsi/bfa/bfad.c
-index 2f9213b..eb0c763 100644
---- a/drivers/scsi/bfa/bfad.c
-+++ b/drivers/scsi/bfa/bfad.c
-@@ -1487,8 +1487,7 @@ bfad_pci_error_detected(struct pci_dev *pdev, pci_channel_state_t state)
- 	return ret;
- }
- 
--int
--restart_bfa(struct bfad_s *bfad)
-+static int restart_bfa(struct bfad_s *bfad)
- {
- 	unsigned long flags;
- 	struct pci_dev *pdev = bfad->pcidev;
--- 
-2.7.4
+So, you're looking at the scsi_io_completion() code path. In my
+experience that isn't reliable for bug hunting because of the the
+message rate limiting. Therefore I prefer using SCSI logging
+MLCOMPLETE=1, where no rate limiting applies. But that's just a side
+note, it depends on the case what's more useful.
+
+Back to the cmd age output, IMO we're are on a thin line between
+capturing useful information and keeping the logs neat. As I already
+said, I'm not convinced that this information, as important it may be
+for the case(s) you're currently investigating, has the same generic
+degree of importance or usefulness as what's currently printed (the CDB
+and the sense data). But OTOH, that's just a gut feeling, and I can't
+claim to have the experience to make general statement on it. If noone
+else has issues with this being printed by default, I'm not going
+oppose it. 
+
+> Also, we are not changing the existing text in SCSI command error
+> log,
+> but we are only adding one single word at the end of message. Ideally
+> the user scripts are written to grep specific pattern from the logs.
+> Since we are not replacing any existing text from the logs, the 
+> scripts should still work with this change as well.
+
+You are certainly aware that such scripts don't necessarily conform to
+what kernel developers would consider "ideal" :-) But again, I just
+wanted to raise the issue; if noone else thinks it matters, fine with
+me.
+
+Thanks
+Martin
 
 
