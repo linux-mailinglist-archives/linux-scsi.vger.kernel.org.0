@@ -2,66 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCECC2C0D
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Oct 2019 04:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD705C2C06
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Oct 2019 04:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731558AbfJACsU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Sep 2019 22:48:20 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:34226 "EHLO
+        id S1731164AbfJACrJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Sep 2019 22:47:09 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:33186 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726504AbfJACsT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Sep 2019 22:48:19 -0400
+        with ESMTP id S1728133AbfJACrI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Sep 2019 22:47:08 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x912j9JD073543;
-        Tue, 1 Oct 2019 02:48:13 GMT
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x912ietS072998;
+        Tue, 1 Oct 2019 02:47:03 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2019-08-05;
- bh=YpRiIhlIid3LYOYkXp6iDEMgHa7do1U+KOrW141b9k4=;
- b=jECCMiz6EziGE9RJjLyYyJO4jOvmwIL6/s6CTk80yDnfDkFoUfkgsPA54VN7K8yAyYNO
- FoHKI1yBT2/0czbYXmbYtMDK9Ouewz46a7UQkVLt1v0QWaAAzrNow6lrnpNH8DzEHBB5
- m+TZGJOS5pyycvkSfh7olvKauW0cmf4rlbLLsLy4n18gN000FnWZNDnTLXQ3QQo68Y6Y
- zbsyg86M0Hj2n5zvSu0ODg2sYkW6a1hE1T5UYJJWTkbteMINuJZrjsTGMlNx3HMYopO/
- FJqTNDkgqjomV4t+R0D88yXyn45Zsa0J/M6DgyGhsyHog4JuS4ko19Op0F8Nuf/u9/uy UA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2v9yfq2ug7-1
+ bh=5ajElRluRaDKmT5qKWoKBEmQyom0UcLIBvK/0WLe5eg=;
+ b=V+DvV5F6+WlAFpiSjX6wI5RguXjWveujZ3MiVOzT0yon9e+I5ErgkoE0tgQiIgJCnbEK
+ tJ3sv+rUT18dCyvfhYSnuDeQ9jk178OrtUIFpg7YBI5IgtfNHlEVfSy6TxNTkm++e4My
+ ml/bvjE/vRpR/Q+2EJHIO2JX5nxJmbM0Uqe+sW6g/BP165RjvrhFaOHpUvm1t8q4gnUv
+ Q0v0UajJ87AaUT704wa1xnclF+SI9UrxcPqeMUfLJAvhe6DQ+Fh0JTulGiO4gzwV/2au
+ W8Fwe1KpDUOzmf69J1RNO465nFWVpuxPLqQnmd256J3CbTZ0RUgaWHNQ+6YRS3VbqMgX MA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2v9yfq2ue2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Oct 2019 02:48:13 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x912hhEh018158;
-        Tue, 1 Oct 2019 02:46:12 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 2vbmpxgr2m-1
+        Tue, 01 Oct 2019 02:47:03 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x912hoZw039376;
+        Tue, 1 Oct 2019 02:47:02 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2vbnqbv7v9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Oct 2019 02:46:12 +0000
-Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x912kAUh029370;
-        Tue, 1 Oct 2019 02:46:10 GMT
+        Tue, 01 Oct 2019 02:47:02 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x912l1WR023898;
+        Tue, 1 Oct 2019 02:47:01 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 30 Sep 2019 19:46:10 -0700
+        with ESMTP ; Mon, 30 Sep 2019 19:47:01 -0700
 To:     Colin King <colin.king@canonical.com>
-Cc:     Satish Kharat <satishkh@cisco.com>,
-        Sesidhar Baddela <sebaddel@cisco.com>,
-        Karan Tilak Kumar <kartilak@cisco.com>,
+Cc:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: fnic: make array dev_cmd_err static const, makes object smaller
+Subject: Re: [PATCH] scsi: ips: make array 'options' static const, makes object smaller
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <20190906163945.3889-1-colin.king@canonical.com>
-Date:   Mon, 30 Sep 2019 22:46:07 -0400
-In-Reply-To: <20190906163945.3889-1-colin.king@canonical.com> (Colin King's
-        message of "Fri, 6 Sep 2019 17:39:45 +0100")
-Message-ID: <yq1a7alyyhc.fsf@oracle.com>
+References: <20190906164522.5644-1-colin.king@canonical.com>
+Date:   Mon, 30 Sep 2019 22:46:59 -0400
+In-Reply-To: <20190906164522.5644-1-colin.king@canonical.com> (Colin King's
+        message of "Fri, 6 Sep 2019 17:45:22 +0100")
+Message-ID: <yq15zl9yyfw.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9396 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=901
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=945
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1908290000 definitions=main-1910010027
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9396 signatures=668685
@@ -78,8 +76,8 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Colin,
 
-> Don't populate the array dev_cmd_err on the stack but instead make it
-> static const. Makes the object code smaller by 80 bytes.
+> Don't populate the array 'options' on the stack but instead make it
+> static const. Makes the object code smaller by 143 bytes.
 
 Applied to 5.5/scsi-queue, thanks!
 
