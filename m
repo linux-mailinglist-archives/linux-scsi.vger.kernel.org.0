@@ -2,86 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A11D8C2C0A
-	for <lists+linux-scsi@lfdr.de>; Tue,  1 Oct 2019 04:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4728FC2C1A
+	for <lists+linux-scsi@lfdr.de>; Tue,  1 Oct 2019 04:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732004AbfJACru (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Sep 2019 22:47:50 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:33814 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731558AbfJACru (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Sep 2019 22:47:50 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x912ijX4073255;
-        Tue, 1 Oct 2019 02:47:43 GMT
+        id S1732167AbfJACzC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Sep 2019 22:55:02 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:48784 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727669AbfJACzC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Sep 2019 22:55:02 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x912sukG122995;
+        Tue, 1 Oct 2019 02:54:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2019-08-05;
- bh=C4Ynnx74PCoy+zfRT8x1ygaVH+/lbXXlT0ly8Rqw4hE=;
- b=IxMuifhmtds6qmd4htbThO61fudyJn7ESsvKLUETfEDb0htXzrDNz3JGoCBymr2vHa76
- 5gM4qUUKcaRn5LRVSigPb4XpkrDxlzC1HCBUBFr7leCTaVjTMbV65mo50WCqR9dfI8Oh
- JXa7djAlQ0GPR7E6ogRS67OnqLn8goI80vRPVDUf6H4B9/9ntemFOh2NVA1WZXC9IzkY
- FieLuhW7R0oNH2sIDZk4zsQuf++zv2Dg1YmwRvIaxMDcpFtYsotmu/NCEcG4N1tdyVNK
- qaY2OqchKS3E/OIx8YYkCxcow6Sn0ZC7ncjfkjedkZqxOHku2xUUyirpAAU1b/k3VICL AQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2v9yfq2ufu-1
+ bh=oUxaSTBomihR1YtYfZj38KE2aeIXjpEiC37YHJQvq0A=;
+ b=UwpO9R7waAYCH40YOILclnjcEGr5PHJqDNmWEEsmlXa1txsV5AIU53oF4uHonjKw1c6A
+ liAZVmkz9r+DOp8SmWfjXwCf2tjqgDGL/GpKu2a0L/k9xYsnpcZ+EPy5z8MPK/gTzNeE
+ /uNA7Bob74Zfrh9WD3/F82wOw/P+A2drAH3AyRwLe4v0hskJ3UnX/ZvMFtw4IwHLaCW7
+ VqS6b0AId7tQpK1NjOh6mHtpzEk8QpU/N9MerJWJhYnMiy1aDIG6LwUvAGoHLB6AAapQ
+ 2XfeMCwE5aT6BXhcDaKdb6EmB60CghKSnafIxdYoBk8+D1DzQNhvQM7iwvwWH9Bbx3Ow RQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2v9xxujvy6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Oct 2019 02:47:43 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x912hoSY091020;
-        Tue, 1 Oct 2019 02:47:43 GMT
+        Tue, 01 Oct 2019 02:54:56 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x912mw7x026439;
+        Tue, 1 Oct 2019 02:54:55 GMT
 Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 2vbqd01bp9-1
+        by userp3030.oracle.com with ESMTP id 2vbmpxh868-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Oct 2019 02:47:42 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x912lfwJ024165;
-        Tue, 1 Oct 2019 02:47:41 GMT
+        Tue, 01 Oct 2019 02:54:55 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x912sp8D028073;
+        Tue, 1 Oct 2019 02:54:54 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 30 Sep 2019 19:47:40 -0700
-To:     Colin King <colin.king@canonical.com>
-Cc:     Pedro Sousa <pedrom.sousa@synopsys.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: make array setup_attrs static const, makes object smaller
+        with ESMTP ; Mon, 30 Sep 2019 19:54:51 -0700
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>
+Cc:     emamd001@umn.edu, smccaman@umn.edu, kjlu@umn.edu,
+        Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: bfa: release allocated memory in case of error
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <20190906170104.10450-1-colin.king@canonical.com>
-Date:   Mon, 30 Sep 2019 22:47:38 -0400
-In-Reply-To: <20190906170104.10450-1-colin.king@canonical.com> (Colin King's
-        message of "Fri, 6 Sep 2019 18:01:04 +0100")
-Message-ID: <yq11rvxyyet.fsf@oracle.com>
+References: <20190910234417.22151-1-navid.emamdoost@gmail.com>
+Date:   Mon, 30 Sep 2019 22:54:48 -0400
+In-Reply-To: <20190910234417.22151-1-navid.emamdoost@gmail.com> (Navid
+        Emamdoost's message of "Tue, 10 Sep 2019 18:44:15 -0500")
+Message-ID: <yq1wodpxjif.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9396 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=895
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=931
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910010027
+ engine=8.0.1-1908290000 definitions=main-1910010028
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9396 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=998 adultscore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910010027
+ definitions=main-1910010029
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Colin,
+Navid,
 
-> Don't populate the array setup_attrs on the stack but instead make it
-> static const. Makes the object code smaller by 180 bytes.
+> In bfad_im_get_stats if bfa_port_get_stats fails, allocated memory
+> needs to be released.
 
-Applied to 5.5/scsi-queue. Thanks!
+Applied to 5.5/scsi-queue, thanks!
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
