@@ -2,108 +2,170 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E01C8CE3
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Oct 2019 17:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EA9C8D2D
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Oct 2019 17:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbfJBP3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 2 Oct 2019 11:29:36 -0400
-Received: from m4a0039g.houston.softwaregrp.com ([15.124.2.85]:56843 "EHLO
-        m4a0039g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725875AbfJBP3g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Oct 2019 11:29:36 -0400
-Received: FROM m4a0039g.houston.softwaregrp.com (15.120.17.147) BY m4a0039g.houston.softwaregrp.com WITH ESMTP;
- Wed,  2 Oct 2019 15:28:33 +0000
-Received: from M4W0334.microfocus.com (2002:f78:1192::f78:1192) by
+        id S1726178AbfJBPoh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 2 Oct 2019 11:44:37 -0400
+Received: from m4a0040g.houston.softwaregrp.com ([15.124.2.86]:55056 "EHLO
+        m4a0040g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725935AbfJBPoh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Oct 2019 11:44:37 -0400
+Received: FROM m4a0040g.houston.softwaregrp.com (15.120.17.147) BY m4a0040g.houston.softwaregrp.com WITH ESMTP;
+ Wed,  2 Oct 2019 15:43:28 +0000
+Received: from M9W0067.microfocus.com (2002:f79:be::f79:be) by
  M4W0335.microfocus.com (2002:f78:1193::f78:1193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10; Wed, 2 Oct 2019 15:25:18 +0000
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (15.124.8.13) by
- M4W0334.microfocus.com (15.120.17.146) with Microsoft SMTP Server
+ 15.1.1591.10; Wed, 2 Oct 2019 15:42:03 +0000
+Received: from NAM01-BY2-obe.outbound.protection.outlook.com (15.124.72.13) by
+ M9W0067.microfocus.com (15.121.0.190) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10 via Frontend Transport; Wed, 2 Oct 2019 15:25:15 +0000
+ 15.1.1591.10 via Frontend Transport; Wed, 2 Oct 2019 15:42:03 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JMyuLCj8h3+fyLT28ptCKS0fdDr0tcxNmAwyp3ITa2W3RHcj/8mWXV2OisseSRulQxy6ZiedVmMrTfoGCgzpMjCPKw6G8oxAr3gSg5Bn2riSBI39FwZ+BNHMMgpOZ+BL4mWYKgLilvxLK6ePfZ7Zk/Ygitw0KMHjadfuAKYhp1HYZz9U6fPJT1EwHl7wHgSSHC/nXXkjMmfo6tPlDrDtlZ9I/WRYUB1DaHiY/bfBJtSdOu6NrVl2DGxYOI3Q0UHYMpjofnovX4EImUkeqCnSchbII1VgfPVZ5qfQLYRiS7i2jMDnhhIN8KMYL+xsHye7ll/FWFX8fM5hcsQZe9SXUw==
+ b=SFlynEI0AsVhd3zgX+XV7Z055Z01nqm9n3DD1GoC2ePoEFhJJUiS7kgAGlBKr5zbcGM/706mD+aIFASBbjsC5NwMcFuGFicB78LUMent+dO0QOw7wV3gR37j50mSkD45NEudfqoVBFyrQBzgWOIy+++EBrbGz8jf0vNZj3dKc5wLHWSNVkIL6WeKEznSK43mD9bRwUzheoSZOXm9Hb5DUELA0j2ah3+d7NRP5L8B+mrYWrttqPp2y1e0qGNIBKcDKoP6c7/dFMHqdqYJntnlNmAd9Q4lLNvbJUTrJegO+5hmsw6RdkGZVu4UNf7rbQ//7nBBJN1Ip885cGKDUtf3nQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pXtOh4pwz2pAKYDD0WEQyr/IyXqtNyvYWRvNUc+9nzw=;
- b=jCuKfE+hqCgKzeLUfYxQ1ZEHjF6P16wIzYzpsHAuo/JOCedR5fqyrMniQyHpRH0F4c6DLwtk69KMW1t7G8MbCiO9maoZ1q9vIkz6GULwueG0wuhPFkvX1dSSldy0Iq5J0iH6QEFzWqipPLf08jQ+cevOd9f2p/9T/m1qFX0gez3TEvEweTSdU3evnQrGdi+ZIrPo+U0V3glSI1Cmg+HPND5IEewcEWwONJwDEPyIjoFudO9HgU5jGGv+u0yf1ZfkwZxX0lBJZM+piDk2lFhf29jZ28cAAM2LKpbiFxQh+zmph1AwOo56KZn6YN5ePhO6NGQqYBP2UfobWhy20729hA==
+ bh=f3YTcZf/ho+LU+EuLRriuZdqNHR4KcYr5FlRu/Q+bis=;
+ b=hs7ymZw32f2ztcC3iyPFtsdR8CY7lL0IXbIdyHA39tyxdUdWarA0noQqAm/EpWvC+pS0m56fqjDxuDJzGktyUYuMkyifUTmRnlf6JGmx1uUmN8lm7xRWixmXWFRz9KvSKqdK4ZGjEfWEOyNeLcmvUSall4kkblLUCxmy5QqT9pCsoWdldhJygsZbVwypbUflKtVCzwi6rTWLkW/RiIwK5mivtP21/1g+bkMpgiSmSrvLKcmPARqFG2OQS6mxlGCr3r8VNNp2ClvYg7hkyyvAOZ+M8hELW28bQgslZ3YKYjL2xr47iRIgSycoaXPN8qCeBJq/r5S6Z/d4Zm4Imw6NMw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
 Received: from CH2PR18MB3349.namprd18.prod.outlook.com (52.132.245.83) by
- CH2PR18MB3208.namprd18.prod.outlook.com (52.132.247.143) with Microsoft SMTP
+ CH2PR18MB3351.namprd18.prod.outlook.com (52.132.247.18) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Wed, 2 Oct 2019 15:25:12 +0000
+ 15.20.2305.17; Wed, 2 Oct 2019 15:41:56 +0000
 Received: from CH2PR18MB3349.namprd18.prod.outlook.com
  ([fe80::1075:2453:9278:e985]) by CH2PR18MB3349.namprd18.prod.outlook.com
  ([fe80::1075:2453:9278:e985%5]) with mapi id 15.20.2305.017; Wed, 2 Oct 2019
- 15:25:12 +0000
+ 15:41:56 +0000
 From:   Martin Wilck <Martin.Wilck@suse.com>
-To:     "qutran@marvell.com" <qutran@marvell.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Himanshu Madhani <hmadhani@marvell.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     "jejb@linux.vnet.ibm.com" <jejb@linux.vnet.ibm.com>,
-        "dwagner@suse.de" <dwagner@suse.de>,
+        Quinn Tran <qutran@marvell.com>,
+        Bart Van Assche <Bart.VanAssche@sandisk.com>
+CC:     Martin Wilck <Martin.Wilck@suse.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "hare@suse.de" <hare@suse.de>
-Subject: Re: [PATCH] fixup "qla2xxx: Optimize NPIV tear down process"
-Thread-Topic: [PATCH] fixup "qla2xxx: Optimize NPIV tear down process"
-Thread-Index: AQHVeS6tkAAP84/JtkK4/uhS49SL/w==
-Date:   Wed, 2 Oct 2019 15:25:12 +0000
-Message-ID: <adc7f755ef21b151fc555167117456038b95ac4c.camel@suse.com>
-References: <20191002143426.20123-1-martin.wilck@suse.com>
-         <e89e0963-e6ca-d67d-0402-1a22ed5c5d3e@acm.org>
-In-Reply-To: <e89e0963-e6ca-d67d-0402-1a22ed5c5d3e@acm.org>
+        Hannes Reinecke <hare@suse.de>,
+        James Bottomley <jejb@linux.vnet.ibm.com>,
+        Daniel Wagner <dwagner@suse.de>
+Subject: [PATCH v2] fixup "qla2xxx: Optimize NPIV tear down process"
+Thread-Topic: [PATCH v2] fixup "qla2xxx: Optimize NPIV tear down process"
+Thread-Index: AQHVeTfrfC+NT3H/1k+pr5kqIwaaNw==
+Date:   Wed, 2 Oct 2019 15:41:56 +0000
+Message-ID: <20191002154126.30847-1-martin.wilck@suse.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+x-clientproxiedby: AM3PR07CA0071.eurprd07.prod.outlook.com
+ (2603:10a6:207:4::29) To CH2PR18MB3349.namprd18.prod.outlook.com
+ (2603:10b6:610:28::19)
 authentication-results: spf=none (sender IP is )
  smtp.mailfrom=Martin.Wilck@suse.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-mailer: git-send-email 2.23.0
 x-originating-ip: [2.203.223.119]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 02ceb263-7426-4596-b846-08d7474cb7e4
-x-ms-traffictypediagnostic: CH2PR18MB3208:|CH2PR18MB3208:
+x-ms-office365-filtering-correlation-id: 56e909f9-2373-4b6f-f9cc-08d7474f0e2c
+x-ms-traffictypediagnostic: CH2PR18MB3351:|CH2PR18MB3351:
+x-ms-exchange-purlcount: 1
 x-ld-processed: 856b813c-16e5-49a5-85ec-6f081e13b527,ExtAddr
-x-microsoft-antispam-prvs: <CH2PR18MB3208DC618485BB0B8B09AB11FC9C0@CH2PR18MB3208.namprd18.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CH2PR18MB3351915C76D72C4BDD39148BFC9C0@CH2PR18MB3351.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4941;
 x-forefront-prvs: 0178184651
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(136003)(376002)(366004)(39860400002)(396003)(199004)(189003)(229853002)(14454004)(316002)(25786009)(478600001)(14444005)(86362001)(2501003)(99286004)(4326008)(76176011)(26005)(446003)(486006)(6486002)(2616005)(11346002)(6506007)(102836004)(36756003)(186003)(6512007)(6436002)(6246003)(71200400001)(81156014)(8936002)(305945005)(7736002)(54906003)(110136005)(476003)(81166006)(2906002)(8676002)(256004)(66066001)(6116002)(3846002)(118296001)(76116006)(66946007)(91956017)(66556008)(64756008)(66476007)(66446008)(5660300002)(71190400001)(4744005);DIR:OUT;SFP:1102;SCL:1;SRVR:CH2PR18MB3208;H:CH2PR18MB3349.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(366004)(396003)(136003)(376002)(39860400002)(346002)(189003)(199004)(66556008)(66946007)(66446008)(3846002)(102836004)(64756008)(2906002)(316002)(5660300002)(54906003)(7736002)(26005)(186003)(8676002)(25786009)(110136005)(14454004)(2616005)(44832011)(476003)(8936002)(6506007)(1691005)(36756003)(81166006)(81156014)(386003)(6116002)(52116002)(966005)(66476007)(478600001)(50226002)(486006)(4326008)(66066001)(99286004)(86362001)(1076003)(6436002)(6512007)(71200400001)(256004)(71190400001)(305945005)(6306002)(14444005)(6486002)(6606295002);DIR:OUT;SFP:1102;SCL:1;SRVR:CH2PR18MB3351;H:CH2PR18MB3349.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: suse.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: l8COkglI5PfAHnfoQfF1nwFXSn2q6GTib2bJrR0U/o9sf0ZtyszqZa7D/31qEywAuPKnxDPg4ud64zll3sJRP7aO8JBy4BEsTIRqIQDu7xwQjV26n/avAT63ZoKaq8pL3j/iPh8PBXeQ+lKRbO9Cml8l7FAGPPFDjxVB9Sk6vu7eeVba5U1TRrmtdP/bYRvyL+zzPk5fwAyhklJZXSfWHQ1yG7uwvHR3Oaddeu6PpztC+/fgVo7+Uye4fm9zeB4K2sIt6+woDTJ6N7FPiZq7nQbBFukIkTqU9OewtLpmbU6bkysW8AgkDa+KSw8cM5RMNWDhFZBAo7Ys/5s+L31a3+t91ZGt1AIMFUy5nhHGer2d3l5aJaSuNjIM/4BHMJZ7g9mCJtXcL9iyYOGR3QhIYXoPHtJgZEc7jfTgF0279go=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <60CA83060E59634F941C8AE00E94BC64@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: base64
+x-microsoft-antispam-message-info: qmA48l15xrAsd5g3PdWGCcn6b/U6Z86LmPt4TcFwrOMMxBvW8L0KOc09sN9xaUdikSf6oUeq4tBgeZCeUqf2I/XcVAfCFLrcrWdKxKQkjy50GGjrCQHkmGHKMPIhM7dM5v1Hg8J2+1UYVKn1wTexzjpS68hPJPIesBDG27ta3qH+zzOvJKINEaNkS6q8kUWpR5/cxY5xl/wIvDN49VqiS32kc91EODxQ4qgB923Fo962n4m3OYQgIlclB29UgBvhiFwIrqESSFsq7UmQEKX4+SuU/ILQ2JckHO/wvXXef9WSS5Tka6pJYlnQwuJzIOob5k1cQ2CKunBpVNw0Oq3d6JgVwoQqkutoH6i0DRxaXO0M6V5MywO/odfkePNzjasjmQvPG9nPtCHhJfTbncsT7V7r9n8QiV3vobKjNFEJx24K52Yui8jAKGSg4uo02nAJuNoMVyaP7YsMpxF9csNpUw==
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02ceb263-7426-4596-b846-08d7474cb7e4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 15:25:12.3861
+X-MS-Exchange-CrossTenant-Network-Message-Id: 56e909f9-2373-4b6f-f9cc-08d7474f0e2c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Oct 2019 15:41:56.4100
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 856b813c-16e5-49a5-85ec-6f081e13b527
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kQrw/I8DFxJ0kh7428TYosXc0RQFQNqQUfskT1wZ4XIUIRfTYFFHn+sEX3mhrNW1DxF2YIsThxjjVDPZxI2GxA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR18MB3208
+X-MS-Exchange-CrossTenant-userprincipalname: FaD3ujBU+9E1loMGVBLhvBc2gqMrN+Il6qyg+FwOXuhEvjIJQWRrvw1oHgGRpqGG/XElHOAaRlJzQL+WAxdxWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR18MB3351
 X-OriginatorOrg: suse.com
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-T24gV2VkLCAyMDE5LTEwLTAyIGF0IDA4OjE3IC0wNzAwLCBCYXJ0IFZhbiBBc3NjaGUgd3JvdGU6
-DQo+IA0KPiBCb3RoIGxvb3BzIGNoZWNrIHRoZSBsb29wIHRlcm1pbmF0aW9uIGNvbmRpdGlvbiB0
-d2ljZS4gSGFzIGl0IGJlZW4NCj4gY29uc2lkZXJlZCB0byB3cml0ZSB0aGVzZSBsb29wcyBzdWNo
-IHRoYXQgdGhlIGxvb3AgdGVybWluYXRpb24NCj4gY29uZGl0aW9uDQo+IGlzIG9ubHkgdGVzdGVk
-IG9uY2UsIGUuZy4gdXNpbmcgdGhlIGZvbGxvd2luZyBwYXR0ZXJuPw0KPiANCj4gZm9yIChpID0g
-MDsgaSA8IDEwOyBpKyspDQo+IAlpZiAod2FpdF9ldmVudF90aW1lb3V0KC4uLikgPiAwKQ0KPiAJ
-CWJyZWFrOw0KPiANCg0KUmlnaHQsIHRoYXQncyBwcm9iYWJseSBiZXR0ZXIuIFRoaXMgd2FzIGp1
-c3QgbWVhbnQgYXMgYSBtaW5pbWFsLA0KdGVtcG9yYXJ5IGZpeCBmb3IgdGhlIGFscmVhZHkgYXBw
-bGllZCBwYXRjaC4gSSBleHBlY3QgSGltYW5zaHUgb3IgUXVpbm4NCnRvIGZvbGxvdyB1cCBhbnl3
-YXkuDQoNCkkgYWxzbyBzdGlsbCB0aGluayB0aGF0IGl0J2QgYmUgYmV0dGVyIHRvIGdldCB0aGUg
-d2FrZV91cCgpIGNhbGxzDQpyaWdodCBhbmQgbm90IGhhdmUgdG8gbG9vcCBvdmVyIHdhaXRfZXZl
-bnRfdGltZW91dCgpIGF0IGFsbC4NCg0KVGhhbmtzLA0KTWFydGluDQoNCg==
+From: Martin Wilck <mwilck@suse.com>
+
+Hello Martin,
+
+this patch fixes two issues in patch 02/14 in Himanshu's latest
+qla2xxx series ("qla2xxx: Bug fixes for the driver") from
+Sept. 12th, which you applied onto 5.4/scsi-fixes already.
+See https://marc.info/?l=linux-scsi&m=156951704106671&w=2
+
+I'm assuming that Himanshu and Quinn are working on another
+series of fixes, in which case that should take precedence
+over this patch. I just wanted to provide this so that the
+already known problems are fixed in your tree.
+
+v2: check loop condition only once (Bart van Assche)
+
+Commit message follows:
+
+Fix two issues with the previously submitted patch
+"qla2xxx: Optimize NPIV tear down process": a missing negation
+in a wait_event_timeout() condition, and a missing loop end
+condition.
+
+Signed-off-by: Martin Wilck <mwilck@suse.com>
+Fixes: f5187b7d1ac6 ("scsi: qla2xxx: Optimize NPIV tear down process")
+---
+ drivers/scsi/qla2xxx/qla_mid.c | 8 +++++---
+ drivers/scsi/qla2xxx/qla_os.c  | 8 +++++---
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
+index 6afad68e5ba2..238240984bc1 100644
+--- a/drivers/scsi/qla2xxx/qla_mid.c
++++ b/drivers/scsi/qla2xxx/qla_mid.c
+@@ -76,9 +76,11 @@ qla24xx_deallocate_vp_id(scsi_qla_host_t *vha)
+ 	 * ensures no active vp_list traversal while the vport is removed
+ 	 * from the queue)
+ 	 */
+-	for (i = 0; i < 10 && atomic_read(&vha->vref_count); i++)
+-		wait_event_timeout(vha->vref_waitq,
+-		    atomic_read(&vha->vref_count), HZ);
++	for (i = 0; i < 10; i++) {
++		if (wait_event_timeout(vha->vref_waitq,
++		    !atomic_read(&vha->vref_count), HZ) > 0)
++			break;
++	}
+ 
+ 	spin_lock_irqsave(&ha->vport_slock, flags);
+ 	if (atomic_read(&vha->vref_count)) {
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 6e627e521562..ee5b6cba9872 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -1119,9 +1119,11 @@ qla2x00_wait_for_sess_deletion(scsi_qla_host_t *vha)
+ 
+ 	qla2x00_mark_all_devices_lost(vha, 0);
+ 
+-	for (i = 0; i < 10; i++)
+-		wait_event_timeout(vha->fcport_waitQ, test_fcport_count(vha),
+-		    HZ);
++	for (i = 0; i < 10; i++) {
++		if (wait_event_timeout(vha->fcport_waitQ,
++		    test_fcport_count(vha), HZ) > 0)
++			break;
++	}
+ 
+ 	flush_workqueue(vha->hw->wq);
+ }
+-- 
+2.12.3
+
