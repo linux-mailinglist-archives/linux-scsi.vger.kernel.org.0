@@ -2,96 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA50C8D20
-	for <lists+linux-scsi@lfdr.de>; Wed,  2 Oct 2019 17:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F5AC8F7D
+	for <lists+linux-scsi@lfdr.de>; Wed,  2 Oct 2019 19:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728199AbfJBPno convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 2 Oct 2019 11:43:44 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:46676 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725875AbfJBPno (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 2 Oct 2019 11:43:44 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q5so10533674pfg.13
-        for <linux-scsi@vger.kernel.org>; Wed, 02 Oct 2019 08:43:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HNgWT9WwJmcSloLxNg+3pwgGvlaFLpQ3a/35gsjSEco=;
-        b=U8aMFqNbpwowln44iClNL4kkj0MjR30XkJ0tsHpUFZDZxaB5/4wup0iFvX1SDu0tUu
-         aXd77BJOqUL7vx/IopbiZHcZob/lMTM0g3ENbGFK36KcfDPMcCw3OnsTMs4aOZrP6Dgj
-         tXFuwK09o1S1ZDN0RshJxQGBOGIb5Bbf9os5CS6E+pusb43fyy5HryCiSQY9mlN7exxM
-         f6yBEMCv1n6Cao9vJoP8BT0Nfe3pCcucIpUEIVVhaHuWFWGk7XF15LfkGY33GwqhNBey
-         Vztgtgta2fnvLMbeIBu04S1bOai6FHmp+Q83q93vbf44m2yp4kzx2lcENIWX0IKMne1y
-         tZfw==
-X-Gm-Message-State: APjAAAXqPcCNWnH5Hq+F3q+q+gR7hSpk3MoZm49tinUw2f1MjtSyfwn8
-        4L4IhH0/hOXmH+o83rVEDj4=
-X-Google-Smtp-Source: APXvYqxamCe+ISPDaTU49C6Kd9BcJIqpKBOArZiBCuF1GFwTtaGF6vSh7g+MBh1n59UHPFrDjqgoiQ==
-X-Received: by 2002:aa7:9a94:: with SMTP id w20mr5197954pfi.77.1570031023723;
-        Wed, 02 Oct 2019 08:43:43 -0700 (PDT)
-Received: from ?IPv6:2620:15c:2c1:200:fb9c:664d:d2ad:c9b5? ([2620:15c:2c1:200:fb9c:664d:d2ad:c9b5])
-        by smtp.gmail.com with ESMTPSA id e3sm5043633pjs.15.2019.10.02.08.43.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Oct 2019 08:43:42 -0700 (PDT)
-Subject: Re: [PATCH] fixup "qla2xxx: Optimize NPIV tear down process"
-To:     Martin Wilck <Martin.Wilck@suse.com>,
-        "qutran@marvell.com" <qutran@marvell.com>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Cc:     "jejb@linux.vnet.ibm.com" <jejb@linux.vnet.ibm.com>,
-        "dwagner@suse.de" <dwagner@suse.de>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "hare@suse.de" <hare@suse.de>
-References: <20191002143426.20123-1-martin.wilck@suse.com>
- <e89e0963-e6ca-d67d-0402-1a22ed5c5d3e@acm.org>
- <adc7f755ef21b151fc555167117456038b95ac4c.camel@suse.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <eedb09c4-a600-682a-30dd-577aa3173403@acm.org>
-Date:   Wed, 2 Oct 2019 08:43:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728332AbfJBRMv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 2 Oct 2019 13:12:51 -0400
+Received: from hn.kd.ny.adsl ([42.231.162.190]:1526 "HELO justrepair.net"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with SMTP
+        id S1728281AbfJBRMu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 2 Oct 2019 13:12:50 -0400
+X-Greylist: delayed 160172 seconds by postgrey-1.27 at vger.kernel.org; Wed, 02 Oct 2019 13:12:49 EDT
+Received: from unknown (185.47.94.148)
+        by rly04.hottestmile.com with SMTP; Wed, 02 Oct 2019 13:53:14 -0300
+Received: from unknown (61.210.56.44)
+        by mtu67.syds.piswix.net with QMQP; Wed, 02 Oct 2019 13:35:12 -0300
+Received: from [19.45.47.72] by group21.345mail.com with SMTP; Wed, 02 Oct 2019 13:22:23 -0300
+Message-ID: <2404111F.E60292BA@justrepair.net>
+Date:   Wed, 02 Oct 2019 12:59:52 -0300
+Reply-To: "Just Repair" <admin@justrepair.net>
+From:   "Just Repair" <admin@justrepair.net>
+User-Agent: Mozilla/5.0 (X11; U; SunOS sun4u; en-US; rv:1.8.1.4) Gecko/20070622 Thunderbird/2.0.0.4
 MIME-Version: 1.0
-In-Reply-To: <adc7f755ef21b151fc555167117456038b95ac4c.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
+To:     <linux-scsi@vger.kernel.org>, <linux-smp@vger.kernel.org>
+Subject: We bring your gadget back to life
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/2/19 8:25 AM, Martin Wilck wrote:
-> On Wed, 2019-10-02 at 08:17 -0700, Bart Van Assche wrote:
->>
->> Both loops check the loop termination condition twice. Has it been
->> considered to write these loops such that the loop termination
->> condition
->> is only tested once, e.g. using the following pattern?
->>
->> for (i = 0; i < 10; i++)
->> 	if (wait_event_timeout(...) > 0)
->> 		break;
->>
-> 
-> Right, that's probably better. This was just meant as a minimal,
-> temporary fix for the already applied patch. I expect Himanshu or Quinn
-> to follow up anyway.
-> 
-> I also still think that it'd be better to get the wake_up() calls
-> right and not have to loop over wait_event_timeout() at all.
+Hello, 
 
-Such a loop is most useful if some status information is reported during
-every iteration. An example from the SCSI target code:
+Let us repair your phone or gadget right on the spot
+visit us today
+https://www.justrepair.net
 
-do {
-	ret = wait_event_timeout(se_sess->cmd_list_wq,
-			percpu_ref_is_zero(&se_sess->cmd_count),
-			180 * HZ);
-	list_for_each_entry(cmd, &se_sess->sess_cmd_list, se_cmd_list)
-		target_show_cmd("session shutdown: still waiting for ",
-				cmd);
-} while (ret <= 0);
+or come into our location
+https://goo.gl/maps/k5iRbeJyggiXnZSG6
+Give us a nice review and we`ll make you a big discount
 
-Bart.
+
+Thank you,
+Ameer
+
 
