@@ -2,76 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2342CB345
-	for <lists+linux-scsi@lfdr.de>; Fri,  4 Oct 2019 04:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A065DCB354
+	for <lists+linux-scsi@lfdr.de>; Fri,  4 Oct 2019 04:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731665AbfJDC33 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 3 Oct 2019 22:29:29 -0400
-Received: from condef-06.nifty.com ([202.248.20.71]:50246 "EHLO
-        condef-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731522AbfJDC33 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 3 Oct 2019 22:29:29 -0400
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-06.nifty.com with ESMTP id x942LcCe026060
-        for <linux-scsi@vger.kernel.org>; Fri, 4 Oct 2019 11:21:38 +0900
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id x942LF7H020759;
-        Fri, 4 Oct 2019 11:21:16 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com x942LF7H020759
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1570155676;
-        bh=yQV8E+kYwQMqXpPK+bnNslq9E1FcMlOvqPOfvzXa82A=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rzFof5MN93kg6B9qyakuN+x8ondTZdGexUwDVqE8V7LBMlb2+vF1MbnJD/p2N3hqP
-         LaUZ5tlB1xX0HWD8N++M0eyCLVnEX4xvUhmSvtLil+HKfeOGmiL94W5mmfyRGsCO+c
-         E/iKLLO0m4SA19LgGbYf04X3Ardwp7eJe5iecnhkkDqiTN3SWT9zggyLHw2LmaHL/1
-         /K/uutfXMLM/kR0BESbIrWrmTJnRbjEULZVVx9aSs5ILirWs71XkEW6sX0OufbZI5u
-         jyWAruRqi09kD2MVdBwmLh4uCBtCRJ0CUWjn+EDGa1dSrVGgvQa7asiM3+hZAnj+jG
-         BCSGjyFuSXkiw==
-X-Nifty-SrcIP: [209.85.217.51]
-Received: by mail-vs1-f51.google.com with SMTP id p13so3136277vsr.4;
-        Thu, 03 Oct 2019 19:21:16 -0700 (PDT)
-X-Gm-Message-State: APjAAAWTEJ8k+Wn/nx57H+MrfcAueHa4+sAW302zLcCzILsDU4c/fdkE
-        jAgpVjvT5Gi3smPXkeBiMd2MKzf1gFPM4EIJKws=
-X-Google-Smtp-Source: APXvYqwfAPtBQ7UpkFqr3WbJqWqYxUja7ofO70RoTDKEQ6FFsmYA7fc6EDiVC3CKneNFLGfDT/wakBUsCJnqJjMrEfo=
-X-Received: by 2002:a67:ec09:: with SMTP id d9mr6793354vso.215.1570155675023;
- Thu, 03 Oct 2019 19:21:15 -0700 (PDT)
+        id S1732264AbfJDCmr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 3 Oct 2019 22:42:47 -0400
+Received: from hn.kd.ny.adsl ([42.231.162.190]:3240 "HELO justrepair.net"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with SMTP
+        id S1730823AbfJDCmr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 3 Oct 2019 22:42:47 -0400
+Received: from unknown (148.130.30.209)
+        by mxs.perenter.com with QMQP; Fri, 04 Oct 2019 00:30:41 -0200
+Received: from unknown (HELO relay.2yahoo.com) (Fri, 04 Oct 2019 00:12:40 -0200)
+        by smtp.mixedthings.net with SMTP; Fri, 04 Oct 2019 00:12:40 -0200
+Received: from smtp4.cyberemailings.com [15.218.60.244] by mailout.endmonthnow.com with NNFMP; Fri, 04 Oct 2019 00:02:30 -0200
+Received: from smtp.doneohx.com ([98.252.145.18]) by relay37.vosimerkam.net with LOCAL; Fri, 04 Oct 2019 00:00:49 -0200
+Received: from mtu23.bigping.com ([134.68.199.131]) by mx03.listsystemsf.net with SMTP; Thu, 03 Oct 2019 23:59:46 -0200
+Message-ID: <E7E12218.BC49A714@justrepair.net>
+Date:   Thu, 03 Oct 2019 23:49:13 -0200
+From:   "Just Repair" <admin@justrepair.net>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6) Gecko/20050317 Thunderbird/1.0.2
+X-Accept-Language: en-us
 MIME-Version: 1.0
-References: <20190728164643.16335-1-yamada.masahiro@socionext.com>
- <CAK7LNATbahbn4W_71F8dZynXNb7Kbr5ZHb7mTV2_4oZok5AK=w@mail.gmail.com> <yq18sq1s22t.fsf@oracle.com>
-In-Reply-To: <yq18sq1s22t.fsf@oracle.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Fri, 4 Oct 2019 11:20:38 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ2gkWNgLfsdkFzo1_ySq=0JN616vfLpvBc38kezCz+YQ@mail.gmail.com>
-Message-ID: <CAK7LNAQ2gkWNgLfsdkFzo1_ySq=0JN616vfLpvBc38kezCz+YQ@mail.gmail.com>
-Subject: Re: [PATCH] scsi: ch: add include guard to chio.h
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     <linux-assembly@vger.kernel.org>
+Subject: We bring your gadget back to life
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin,
+Hello, 
 
-On Fri, Oct 4, 2019 at 10:59 AM Martin K. Petersen
-<martin.petersen@oracle.com> wrote:
->
->
-> Masahiro,
->
-> >> Add a header include guard just in case.
->
-> Fine with me. Is it going through your tree or should I pick it up?
+Let us repair your phone or gadget right on the spot
+visit us today
+https://www.justrepair.net
+
+or come into our location
+https://goo.gl/maps/k5iRbeJyggiXnZSG6
+Give us a nice review and we`ll make you a big discount
 
 
+Thank you,
+Ameer
 
-Could you please apply it to your tree?
 
-Thanks.
-
--- 
-Best Regards
-Masahiro Yamada
