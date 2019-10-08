@@ -2,66 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5308CF8A7
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2019 13:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21055CFC1B
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2019 16:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730646AbfJHLjo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 8 Oct 2019 07:39:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51192 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730118AbfJHLjo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 8 Oct 2019 07:39:44 -0400
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-scsi@vger.kernel.org
-Subject: [Bug 197875] Processes hang on attempted access of WDC WD30-EZRX 3TB
- HDD on HP Z420 Workstation
-Date:   Tue, 08 Oct 2019 11:39:43 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: IO/Storage
-X-Bugzilla-Component: SCSI
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jerrysmith3592@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-scsi@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-197875-11613-tALi3bZDuN@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-197875-11613@https.bugzilla.kernel.org/>
-References: <bug-197875-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S1726248AbfJHOO0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Oct 2019 10:14:26 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46191 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726068AbfJHOO0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Oct 2019 10:14:26 -0400
+Received: by mail-pg1-f193.google.com with SMTP id b8so3960340pgm.13
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Oct 2019 07:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=LkUWTPfoooD1XSNq56mbNfReCjldm2MqgPX87Dfkhug=;
+        b=ZFcQmfyCUv8qUwTUgG4cYQIge7l6DS67TkaBj6xO6/jQm7bieSGooDWyq1S04WDxFh
+         m9MMgqCCAaCBAu3JfUxOVy1l8i1hkILDJgMEPr7M6JDb9/b+FjVsw/ThRZp36Foc4YbV
+         AfI/jqeV4aGEwH+YUQClQ6CqXfJbT5xm1v2ZQ6nq7wX+0IpVaPm8QJhpJc3n751c1pW/
+         5hapzRVqeMmTOlMcf0B7J8I/iD6cFXNbVde4HJyGJvJnNvqV60kCT82sF/TPedd3ieEm
+         Gpg8t39ShLy2Tx9NmEzvaFtBNAshWatFmIs4yJYoJNI3sQednaI5qa/xgWSeqjSnGv33
+         h/rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=LkUWTPfoooD1XSNq56mbNfReCjldm2MqgPX87Dfkhug=;
+        b=F0lQyHvYtKPJOKovwDr9ljp/9GxSHRfBbIEIBFLE4iSOYPT66rOWNh82aj8q1Hpfqd
+         wo2No52uubrVavo8/UyiNioV9lYwCJjyyFfRwjf0txUsB3oG83DY47rCyFFIzgMLm3Bo
+         Ce7+dn5g7/Sa6OY/KTk7WeKTYcxWx0HY4ALVMNtP9OVHPeil/pL1FLAcjaNRIfyc1kh0
+         M2T8Gwy5Y6LhVx6yISGGq3M+XU4borZ9HcdeEzmG6xNnAvykTPgEzAToON4WyqSNIhOI
+         fOYBhV4kDa/zDy89LveWeOZlfPDf9mumREy1cmru9kFa/n0CqbScsx8ingL/JvzuL5KC
+         G/MQ==
+X-Gm-Message-State: APjAAAUgqLbjv1ikhLNYZstUH5bnaOC4KEOuLE8haAZ0z0Qshs/jJZGd
+        +P+kAwOliWCuDCvg8z7Rg+GHnOsiTanLvdaKfhA=
+X-Google-Smtp-Source: APXvYqzIqMzb7wyPQqZj65WpEz0MoHgbKDOJKu3vDtqUmfUQlJWMSm+znIBk9tVG+aBc1gLf1oNB9H+StyhA+/4oxtQ=
+X-Received: by 2002:a17:90a:a408:: with SMTP id y8mr5959882pjp.91.1570544064503;
+ Tue, 08 Oct 2019 07:14:24 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a17:90a:8804:0:0:0:0 with HTTP; Tue, 8 Oct 2019 07:14:23
+ -0700 (PDT)
+Reply-To: nicolemalachowski098@gmail.com
+From:   Nicole Malachowski <nicolemalachowski1010@gmail.com>
+Date:   Tue, 8 Oct 2019 18:44:23 +0430
+Message-ID: <CADn3AM60nB_eYy9YTehjikp9K-0mJBz-MXEUrgyT7SdRKS-BSQ@mail.gmail.com>
+Subject: Re: hi
+To:     nicolemalachowski1010 <nicolemalachowski1010@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=197875
-
-Jerry Smith (jerrysmith3592@gmail.com) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |jerrysmith3592@gmail.com
-
---- Comment #24 from Jerry Smith (jerrysmith3592@gmail.com) ---
-All the blog which is provided by you is having valuable and useful content.
-Many bloggers learn many things from you and enhance their writting skills. As
-I also write blogs and in that blogs we provide information related to Canon
-Printer and also provide services to resolve problems of Canon Printer.  If you
-have any query or need any help you can use canon printer customer support or
-can contact to our experts or you can visit our site:-
-https://www.800customersupport24x7.com/canon-printer-support/
-
--- 
-You are receiving this mail because:
-You are the assignee for the bug.
+I am COLONEL NICOLE MALACHOWSKI from United State of America. I have a
+confidential geniue lucrative business of $23.500.000.00 million U.S
+dollars with mutaul interest.
