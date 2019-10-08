@@ -2,58 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21055CFC1B
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2019 16:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA9BCFE41
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2019 17:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbfJHOO0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Oct 2019 10:14:26 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:46191 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbfJHOO0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Oct 2019 10:14:26 -0400
-Received: by mail-pg1-f193.google.com with SMTP id b8so3960340pgm.13
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Oct 2019 07:14:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=LkUWTPfoooD1XSNq56mbNfReCjldm2MqgPX87Dfkhug=;
-        b=ZFcQmfyCUv8qUwTUgG4cYQIge7l6DS67TkaBj6xO6/jQm7bieSGooDWyq1S04WDxFh
-         m9MMgqCCAaCBAu3JfUxOVy1l8i1hkILDJgMEPr7M6JDb9/b+FjVsw/ThRZp36Foc4YbV
-         AfI/jqeV4aGEwH+YUQClQ6CqXfJbT5xm1v2ZQ6nq7wX+0IpVaPm8QJhpJc3n751c1pW/
-         5hapzRVqeMmTOlMcf0B7J8I/iD6cFXNbVde4HJyGJvJnNvqV60kCT82sF/TPedd3ieEm
-         Gpg8t39ShLy2Tx9NmEzvaFtBNAshWatFmIs4yJYoJNI3sQednaI5qa/xgWSeqjSnGv33
-         h/rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=LkUWTPfoooD1XSNq56mbNfReCjldm2MqgPX87Dfkhug=;
-        b=F0lQyHvYtKPJOKovwDr9ljp/9GxSHRfBbIEIBFLE4iSOYPT66rOWNh82aj8q1Hpfqd
-         wo2No52uubrVavo8/UyiNioV9lYwCJjyyFfRwjf0txUsB3oG83DY47rCyFFIzgMLm3Bo
-         Ce7+dn5g7/Sa6OY/KTk7WeKTYcxWx0HY4ALVMNtP9OVHPeil/pL1FLAcjaNRIfyc1kh0
-         M2T8Gwy5Y6LhVx6yISGGq3M+XU4borZ9HcdeEzmG6xNnAvykTPgEzAToON4WyqSNIhOI
-         fOYBhV4kDa/zDy89LveWeOZlfPDf9mumREy1cmru9kFa/n0CqbScsx8ingL/JvzuL5KC
-         G/MQ==
-X-Gm-Message-State: APjAAAUgqLbjv1ikhLNYZstUH5bnaOC4KEOuLE8haAZ0z0Qshs/jJZGd
-        +P+kAwOliWCuDCvg8z7Rg+GHnOsiTanLvdaKfhA=
-X-Google-Smtp-Source: APXvYqzIqMzb7wyPQqZj65WpEz0MoHgbKDOJKu3vDtqUmfUQlJWMSm+znIBk9tVG+aBc1gLf1oNB9H+StyhA+/4oxtQ=
-X-Received: by 2002:a17:90a:a408:: with SMTP id y8mr5959882pjp.91.1570544064503;
- Tue, 08 Oct 2019 07:14:24 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a17:90a:8804:0:0:0:0 with HTTP; Tue, 8 Oct 2019 07:14:23
- -0700 (PDT)
-Reply-To: nicolemalachowski098@gmail.com
-From:   Nicole Malachowski <nicolemalachowski1010@gmail.com>
-Date:   Tue, 8 Oct 2019 18:44:23 +0430
-Message-ID: <CADn3AM60nB_eYy9YTehjikp9K-0mJBz-MXEUrgyT7SdRKS-BSQ@mail.gmail.com>
-Subject: Re: hi
-To:     nicolemalachowski1010 <nicolemalachowski1010@gmail.com>
+        id S1726134AbfJHP6z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Oct 2019 11:58:55 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:50450 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725908AbfJHP6z (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 8 Oct 2019 11:58:55 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id D9A7130860B9;
+        Tue,  8 Oct 2019 15:58:54 +0000 (UTC)
+Received: from emilne (unknown [10.18.25.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 18C011001DE1;
+        Tue,  8 Oct 2019 15:58:54 +0000 (UTC)
+Message-ID: <279be0eb137c93f3d4010935cfa2922cabab8548.camel@redhat.com>
+Subject: Re: [PATCH] scsi_dh_alua: handle RTPG sense code correctly during
+ state transitions
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Martin Wilck <martin.wilck@suse.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+Date:   Tue, 08 Oct 2019 11:58:53 -0400
+In-Reply-To: <220f6ffe-1657-f95f-c948-219b45f9496f@suse.de>
+References: <20191007135701.32389-1-hare@suse.de>
+         <4ff5beeae5092d313d0e90a83f04a222400180f1.camel@redhat.com>
+         <220f6ffe-1657-f95f-c948-219b45f9496f@suse.de>
 Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Tue, 08 Oct 2019 15:58:54 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I am COLONEL NICOLE MALACHOWSKI from United State of America. I have a
-confidential geniue lucrative business of $23.500.000.00 million U.S
-dollars with mutaul interest.
+On Tue, 2019-10-08 at 08:21 +0200, Hannes Reinecke wrote:
+> On 10/7/19 10:45 PM, Ewan D. Milne wrote:
+> > 
+> > The patch itself looks OK, but I was wondering about a couple of things:
+> > 
+> >   - There are other places in scsi_dh_alua where the ASC/ASCQ 04 0A is checked
+> >     and we retry, I understand that this is a particular case you are solving
+> >     but is the changing of the state to -> transitioning (because that's what
+> >     the device said the state was) applicable in those other cases?
+> 
+> No. The original code was built around the assumption that RTPG would
+> return the status of the device; consequently we would have to retry
+> RTPG until we get a final status. But as mentioned, there are arrays
+> which cannot return RTPG data during transitioning, so the code would
+> never be able to detect a transitioning state.
+> With this patch we set the state directly once the said sense code is
+> received.
+> But this applies _only_ to the RTPG command, as this is required to move
+> the state machine along.
+> None of the other commands are affected.
+> 
+> >   - The code originally seems to have been under the assumption that the
+> >     transitioning state was a transient event, so the retry would pick up
+> >     the eventual state.  Now, some storage arrays spend a long time in the
+> >     transitioning state, but if we don't send another command are we going to
+> >     get the sense (or the UA) that triggers entry to the eventual ALUA state?
+> > 
+> 
+> Note, there are two types of retries.
+> The one is the 'normal' command retry, where we resend a command a given
+> number of times to retrieve the final status.
+> This is precisely the error which caused this patch.
+> 
+> And then there is a scheduled retry; here we essentially poll the array
+> with sending RTPG in regular intervals until the 'transitioning' state
+> is gone. (Check for 'alua_rtpg()' and the handling of the SCSI_DH_RETRY
+> return value). With the patch we continue to trigger that second type of
+> retries, which will eventually clear the transitioning state.
+> 
+> Cheers,
+> 
+> Hannes
+
+Thanks for the explanation.  The patch looks good.
+
+Reviewed-by: Ewan D. Milne <emilne@redhat.com>
+
