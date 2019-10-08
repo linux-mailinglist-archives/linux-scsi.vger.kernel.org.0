@@ -2,157 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA2ACF6C7
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2019 12:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301ABCF786
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2019 12:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730170AbfJHKKJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Oct 2019 06:10:09 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:57620 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730106AbfJHKKJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 8 Oct 2019 06:10:09 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id EFAF251EF1;
-        Tue,  8 Oct 2019 10:10:08 +0000 (UTC)
-Received: from localhost (ovpn-8-31.pek2.redhat.com [10.72.8.31])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 46D9C5C219;
-        Tue,  8 Oct 2019 10:10:02 +0000 (UTC)
-From:   Ming Lei <ming.lei@redhat.com>
-To:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Omar Sandoval <osandov@fb.com>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Laurence Oberman <loberman@redhat.com>,
-        Bart Van Assche <bart.vanassche@wdc.com>
-Subject: [RFC PATCH V3 2/2] scsi: core: don't limit per-LUN queue depth for SSD
-Date:   Tue,  8 Oct 2019 18:09:45 +0800
-Message-Id: <20191008100945.24951-3-ming.lei@redhat.com>
-In-Reply-To: <20191008100945.24951-1-ming.lei@redhat.com>
-References: <20191008100945.24951-1-ming.lei@redhat.com>
+        id S1730618AbfJHKxn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Oct 2019 06:53:43 -0400
+Received: from sonic311-13.consmr.mail.bf2.yahoo.com ([74.6.131.123]:45853
+        "EHLO sonic311-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730575AbfJHKxn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Oct 2019 06:53:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1570532022; bh=zPC9p8T5S06DA73PD5F75wViZ/EpBpeYylTS7OqjCU4=; h=Date:From:Reply-To:Subject:From:Subject; b=Xx862rLBFXSU57lKDjLNxjuVBwuGVMhoMsAz5FaYNmVy6by3FKn8mTLpvQC1/SKpkGqd+BqC2wko21zrC7E5K140RHvR5Td6iMoE+EY2W+zpSvBx9RpmTVb056cWlpVM0oKbeqq9avY6irVhued42QKcnm154t5kZVGz8hnIzIT8ZkpDR6pDeziO7pdQbP8lfQpTh3ZAprkzRMD57Mtwa+QGesxkkMw717XgI6APeps0FBxTZP/RtaCJ3RpkXoHMXSbPgh22HGyddqYRwlf08Oj6Q0RFCKs3L7yOwSPVM46YTP4o3LKmkxuC4QNtkiSB3Ysrd4rjBMrcasvAAYBtBg==
+X-YMail-OSG: wld7PHsVM1nxwOas3qgStdeyvVXNZnOUigfZQCsq.vJSzRLn.piynw3o7E2RSKw
+ EqyudJQbiNOo6r8lQLDgZm4i3M8ZtayHt9o9VTeuyOUZAOiDMxOML8m3O172VnKH19hZr2uK256h
+ _yLoXzQhq3zF0gDuJtWHXugUqG8Os4kkeiicT2LiJH8OMYoVKoKIaqFeDclIEWT8_zHCT10ZYybN
+ MSl4D4lwZM_nZLKGVBwMPYP3a4.spxWtX2k26PN_gukleAGFF5TaYINtQY_Au8x7CtGbB77tPW8Z
+ ftRPEQuYuC5UtomwqZIYP6.ZMFoT3Bge2u4L2PMjbwrsMPYC..QO1s9g_7CNCq6wKJAqp5K.PfL3
+ 7TanqdiU6IJLk42BMYkWpBTz3A1uCptwnNuIXg6gTEChr_QfE1BPC8H.N2GhzbIpVA1.j8F6hcLH
+ wULjKR.3oKNNv2AE4Np6_1ukTKwcFTz2cHAzIBZ26Oif1MAMwn5PF95LSpbvb4C6pNlbXBLf1mcE
+ Uqr48ULNQJnubZlx7YyVWviKeyTVsH8xZZxxOPKMGqjUJ9Xl0fynEpnqnhMfALpjKV0j80KPoA._
+ K9uJNDFyrt3Nyoa9LWaBaV81ljViS9.un6lbbOP6anKMUVZjunSXgUQE0ZW3UwXYBJ1mq8xEUSNZ
+ DHGq9tRj9lb1t557ocWZtvJuABtCuwz0g0gQDvtheyaDTBz8ajwMqUqG1hZ0HVRV4EuJ5NU9qnHl
+ HXZ_NK3vc9miRb2ECWWA6Tdeb.fGsi2.Vf3573z19d_lqj_EHffsybSdOPZ26_Z6Vh9BKAXR.Cqh
+ I_SMKIbXq4yhVIyBAf6FXlD2RVzdTe9O_gKpmEjt9qvHUML1wR9EasMjpzFy1fqThjAWQk5OMi4c
+ mN5M6YSuyENIUIKpDKTW4gmBf9XsuzVgpLKW6_7XwI_bE5vwTKWnExF75.VUuPNWfOuj0f7KxlXl
+ J0JWadKhpZ.HBCkib6dvxSZW9NYLdfpNwTQNld7.kwP2Usey9at3t3CP4JZWsCz4QMHflo1o63Sg
+ xmk.D0ONA84m1kWt_DKttDhKGCSOzk4k4o57zmSAEnAC1Lb.7z04HAFlseMH47B41ZlHYKsOGQzr
+ ae2b4Z.OsuWLNkBjNjNZwmXD.fPWA8TrvtA.kfmVqM3m62KgT3uorAUuAi9v922AF1sgrqRHV5O.
+ 7fdzjx.VA4X_xYdwrBMPUz.Rxy1K7gZt.SlRdb.2zpW1XohOgYlYEi5BjDjf2GfR9SH4.YPGGD6s
+ PCjfsANbpb3FPQwi8XERILrdmZ9sVRvrEFbQ7VW.LkmguDwmwEA--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.bf2.yahoo.com with HTTP; Tue, 8 Oct 2019 10:53:42 +0000
+Date:   Tue, 8 Oct 2019 10:53:37 +0000 (UTC)
+From:   Ms Lisa Hugh <lisa.hugh101@gmail.com>
+Reply-To: ms.lisahugh000@gmail.com
+Message-ID: <246021388.3343132.1570532017567@mail.yahoo.com>
+Subject: FROM MS LISA HUGH (BUSINESS).
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.30]); Tue, 08 Oct 2019 10:10:09 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SCSI core uses the atomic variable of sdev->device_busy to track
-in-flight IO requests dispatched to this scsi device. IO request may be
-submitted from any CPU, so the cost for maintaining the shared atomic
-counter can be very big on big NUMA machine with lots of CPU cores.
 
-sdev->queue_depth is usually used for two purposes: 1) improve IO merge;
-2) fair IO request scattered among all LUNs.
 
-blk-mq already provides fair request allocation among all active shared
-request queues(LUNs), see hctx_may_queue().
+Dear Friend,
 
-NVMe doesn't have such per-request-queue(namespace) queue depth, so it
-is reasonable to ignore the limit for SCSI SSD too. Also IO merge won't
-play big role for reaching top SSD performance.
+I am Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank(B.O.A).
 
-With this patch, big cost for tracking in-flight per-LUN requests via
-atomic variable can be saved.
+Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
 
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: Ewan D. Milne <emilne@redhat.com>
-Cc: Omar Sandoval <osandov@fb.com>,
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>,
-Cc: James Bottomley <james.bottomley@hansenpartnership.com>,
-Cc: Christoph Hellwig <hch@lst.de>,
-Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-Cc: Hannes Reinecke <hare@suse.de>
-Cc: Laurence Oberman <loberman@redhat.com>
-Cc: Bart Van Assche <bart.vanassche@wdc.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
----
- drivers/scsi/scsi_lib.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me forsuccess.
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index b6f66dcb15a5..0f8e7a522060 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -354,7 +354,8 @@ void scsi_device_unbusy(struct scsi_device *sdev, struct scsi_cmnd *cmd)
- 	if (starget->can_queue > 0)
- 		atomic_dec(&starget->target_busy);
- 
--	atomic_dec(&sdev->device_busy);
-+	if (!blk_queue_nonrot(sdev->request_queue))
-+		atomic_dec(&sdev->device_busy);
- }
- 
- static void scsi_kick_queue(struct request_queue *q)
-@@ -410,7 +411,8 @@ static void scsi_single_lun_run(struct scsi_device *current_sdev)
- 
- static inline bool scsi_device_is_busy(struct scsi_device *sdev)
- {
--	if (atomic_read(&sdev->device_busy) >= sdev->queue_depth)
-+	if (!blk_queue_nonrot(sdev->request_queue) &&
-+			atomic_read(&sdev->device_busy) >= sdev->queue_depth)
- 		return true;
- 	if (atomic_read(&sdev->device_blocked) > 0)
- 		return true;
-@@ -1283,8 +1285,10 @@ static inline int scsi_dev_queue_ready(struct request_queue *q,
- 				  struct scsi_device *sdev)
- {
- 	unsigned int busy;
-+	bool bypass = blk_queue_nonrot(sdev->request_queue);
- 
--	busy = atomic_inc_return(&sdev->device_busy) - 1;
-+	if (!bypass)
-+		busy = atomic_inc_return(&sdev->device_busy) - 1;
- 	if (atomic_read(&sdev->device_blocked)) {
- 		if (busy)
- 			goto out_dec;
-@@ -1298,12 +1302,16 @@ static inline int scsi_dev_queue_ready(struct request_queue *q,
- 				   "unblocking device at zero depth\n"));
- 	}
- 
-+	if (bypass)
-+		return 1;
-+
- 	if (busy >= sdev->queue_depth)
- 		goto out_dec;
- 
- 	return 1;
- out_dec:
--	atomic_dec(&sdev->device_busy);
-+	if (!bypass)
-+		atomic_dec(&sdev->device_busy);
- 	return 0;
- }
- 
-@@ -1624,7 +1632,8 @@ static void scsi_mq_put_budget(struct blk_mq_hw_ctx *hctx)
- 	struct request_queue *q = hctx->queue;
- 	struct scsi_device *sdev = q->queuedata;
- 
--	atomic_dec(&sdev->device_busy);
-+	if (!blk_queue_nonrot(sdev->request_queue))
-+		atomic_dec(&sdev->device_busy);
- }
- 
- static bool scsi_mq_get_budget(struct blk_mq_hw_ctx *hctx)
-@@ -1706,7 +1715,8 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
- 	case BLK_STS_OK:
- 		break;
- 	case BLK_STS_RESOURCE:
--		if (atomic_read(&sdev->device_busy) ||
-+		if ((!blk_queue_nonrot(sdev->request_queue) &&
-+		     atomic_read(&sdev->device_busy)) ||
- 		    scsi_device_blocked(sdev))
- 			ret = BLK_STS_DEV_RESOURCE;
- 		break;
--- 
-2.20.1
+Note/ 50% for you why 50% for me after success of the transfer to your bank
+account.
 
+Below information is what i need from you so will can be reaching each
+other
+
+1)Full name ...
+2)Private telephone number...
+3)Age...
+4)Nationality...
+5)Occupation ...
+
+
+Thanks.
+
+Ms Lisa Hugh
