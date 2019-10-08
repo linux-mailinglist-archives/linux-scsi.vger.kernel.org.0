@@ -2,130 +2,130 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C80D01A4
-	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2019 21:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6ACED020A
+	for <lists+linux-scsi@lfdr.de>; Tue,  8 Oct 2019 22:20:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730916AbfJHTz3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 8 Oct 2019 15:55:29 -0400
-Received: from mail-ed1-f54.google.com ([209.85.208.54]:44360 "EHLO
-        mail-ed1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730853AbfJHTzX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Oct 2019 15:55:23 -0400
-Received: by mail-ed1-f54.google.com with SMTP id r16so16775685edq.11
-        for <linux-scsi@vger.kernel.org>; Tue, 08 Oct 2019 12:55:22 -0700 (PDT)
+        id S1730764AbfJHUUI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 8 Oct 2019 16:20:08 -0400
+Received: from mail-qk1-f170.google.com ([209.85.222.170]:37230 "EHLO
+        mail-qk1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730523AbfJHUUI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 8 Oct 2019 16:20:08 -0400
+Received: by mail-qk1-f170.google.com with SMTP id u184so95344qkd.4
+        for <linux-scsi@vger.kernel.org>; Tue, 08 Oct 2019 13:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
-         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
-         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
-         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
-         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
-         wXZw==
+        d=linode-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:references:from:autocrypt:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=f4ipQHNAGC9kSKB7kvRMIPYYFB3N/TVwuQvR/m304Wg=;
+        b=10wWLf0Fnq4bZyPx6p9z6aSN/VYa53Yfue9gysAF2rPrd1u7ytP0rrTwjKr4bfVbzd
+         z8p99whsigEybRPp/+Ll2MkOW776AX8HY1uEFmegnbp0Qcq2D5ERHPGWjvktGXMe0T1h
+         Rqt8uVCYIkEjBCggpjbmrVDRhukOsPEF5rq27vm2fYPsc+2xDTET3vhiC7AajzUqMHkt
+         1WzkYA9v2dPqFKehEV8PtH7QinZBmfLJdgjjIGwSNZp+O2dtliiLfyErYa0F2aBvusRv
+         GylNZj8wEn3EnEJp2Ev+9vhmWGXP84NuS2Dsd3OkbvHIm2WwzVb6q0wJ/xYtyW1v/Ceo
+         a+eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=Yo40l0mP/b3Nq857ulTGDjmQXinBStQSgl46F+7e47Ena3PQ1WJTyNkdEeSAGY/GQ1
-         OrcAvHZzCAJUKgWeUKNeH4mhWrqvLzHUOvwLZMs3l7DH940u4sbbfWiI/N1B5Ip77IQ6
-         mBKU/Uy/MG60DB1Wk8ePo4jIzH1+F9X50QL65D/OgzV/c4OGchkA0rYNW0VL+uCGbBTF
-         RaetkiQevmuNphbIwWTapZerxl8RCvyANyTsF+miZ9e7IiPcqpHOMTgvlI+uZ8vJmHPW
-         u7YpkfHpAAjlEPpOy4xs/QUCEyMdsWlaGyS5hHPwjb0yADxSQAzTr8cDJkEtkjDAKm7t
-         lWzw==
-X-Gm-Message-State: APjAAAWtWzs0Qh54Dl0WuKoxEtLzgo4i9U7/yW0J+bayoOn7Z4ZMeL47
-        pratywMI0THcAA/ICto4Cms0NAYgdHXodwHMYRM=
-X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
-X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
- Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
+        h=x-gm-message-state:subject:to:references:from:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=f4ipQHNAGC9kSKB7kvRMIPYYFB3N/TVwuQvR/m304Wg=;
+        b=E5sHU2GXv6yJInlE3jXWrMAnntuUMAilEDUR6U3ikmFx9JXTe99p8FQl4rwQRMwdym
+         TGdUAx6P8hxFCbMQ6jVzAej8iq57YLQHWx+SPF7wP77DliAfSfkhIcBARufd2YH+ZoV6
+         t3UdtjjeYSc75Aq3wlQGhuRbdR6RsnoZSCLx30+vdCmIPLL1vfb9/TFvTy70PvLWxVZ3
+         nL6W3AIwoRmYEheEd6tNVrhtKUy+q9f+HvVvhzNNhpUr0aCmp2xI3Ty6BTiArYZjV8SP
+         3fxQboLHbOJdDokZ3ss1bBDTGUcpikErmFmzdd2fZ7LqarjcNCIvQk0+YzhOocVvzU7A
+         HQuQ==
+X-Gm-Message-State: APjAAAU/4czpgsNGF0a3A0TiRbvyZcnDb1nc5gl1kgWZbNPlzo6hPzdL
+        jz6RFPC1w7Oupmfs9HiPaVMwHt5ws+oOMdq7azWcZEY6gcuMcEEvy6kjP/yXkhqfOsLwb0RzsPJ
+        oOHkmpzTUTofwpVK1jW9lFuKqpSBcyY06bGyagnPYReoMdFbiiw6L2LzheuqeOE+baZkvOs7bsQ
+        ==
+X-Google-Smtp-Source: APXvYqwnx1l+WsAhu87u153FNSDzhgu9WPteyk67UxxCTnhVXsHsndfx353w1U9JmZyysved4muYMg==
+X-Received: by 2002:a37:4149:: with SMTP id o70mr28799641qka.283.1570566006883;
+        Tue, 08 Oct 2019 13:20:06 -0700 (PDT)
+Received: from [172.16.22.130] ([172.104.2.4])
+        by smtp.gmail.com with ESMTPSA id g31sm11843704qte.78.2019.10.08.13.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Oct 2019 13:20:06 -0700 (PDT)
+Subject: Re: SCSI device probing non-deterministic in 5.3
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        linux-kernel@vger.kernel.org,
+        linux-scsi <linux-scsi@vger.kernel.org>
+References: <d2ff27ce-67b0-735e-8652-0e925d5f756c@linode.com>
+ <f6d6622d-a9a0-d7de-b5af-b7a885ee1b61@infradead.org>
+ <59eedd28-25d4-7899-7c3c-89fe7fdd4b43@acm.org>
+From:   Bradley LaBoon <blaboon@linode.com>
+Autocrypt: addr=blaboon@linode.com; prefer-encrypt=mutual; keydata=
+ mQENBFnSOxYBCAC4hL/8AuiiKp/WamEAd5nf7JGVPHR5fZ2EmEgGtYOnypwaDY0uwFmTV4gR
+ nJ8CCsBX7AtVKVLob+zwxaTFniRnamvcuirE5+sVGIChb2GVLAxjqRRXkrKYgisCjIwCXQFu
+ FYKzpRksRaPZloLghlp36bAAPm7KIiACbb1W33PrxHHJPz99N5v3bJvc4/8cH1MoEOdnLHH1
+ 3zGzcyBeL3JIsRGS0jC3VT5qs9zO1DsL/X6vBYwYkjSve5vFCsTMmVKZFL8aeGDRt09/8EoM
+ YlmgI/fctO8jHiF2VCMWH3Dq5i7NH+jYQ4/SqeXCxqhWlxXf+FXFS3eW741h9P7LB9RJABEB
+ AAG0I0JyYWRsZXkgTGFCb29uIDxibGFib29uQGxpbm9kZS5jb20+iQFUBBMBCAA+AhsDBQsJ
+ CAcCBhUICQoLAgQWAgMBAh4BAheAFiEEbS4MuuHK2wr7CfjY2AcDUfXj3UAFAl1wERsFCQV/
+ CYUACgkQ2AcDUfXj3UAlqAf/UrwkrW4kITCiOaIykfVogTbJ54RBwy9Qmi9HbWMG/o+wNwhO
+ GDjD0l5362mXQVP2V/TQwrx/e1kGTTC5PFv/xN6vT1oXIwxzn1lezr5eBA53KgV2paBBZ4Qo
+ ALpoI4UJn6YYIhD14BUw3Fn2o15a/pvSz9vxx70NjEbT1Or0gxaRZuam62fMbsLM327ikhau
+ lWQSdVZs3rdMzFCz87F0CiwNtfKU730/JLeJGuIfXFDb8W/XLWc7JHaL8gIn+kS/0/Txgl8Q
+ pfXQ6E2vnQojlXDmo4WYhbDxwzw4R9Kv8E6S25CuoP+8tmbHdB8NRXdhZ4nMU1TON5tKd1BG
+ Sh+MobkBDQRZ0jsWAQgA5fxyts5E5WmgifFoVMfGmhPyGFE5KdYM2cREWypaTgRIWqxznDdM
+ 7ODabZzlWVrgW2o3DyzdRW6vXAW96lDB9Riug4kPTYOz8gkPuJG2SA1pGgkykLIVlpN28pFQ
+ O4s0C0Xe4LxfzjniWtbshm0+fQCMfaA7/7A0iZiP2N6ikr8cYJw/nsQsMCrml5oStEl1T8/2
+ oBzHz6VxsUuNlXxgurgDYJBRmlUMw3BV9aKgg7SgHhW19SmG3TfzydH5KXReLynCDMFnyXeW
+ yNuBnuqgYI8VKiOSz5v+OfqhPGHvUdqUgTagVgLaEORdZB6Z84qM3jnHvZVtxT9KVca98vCn
+ 7wARAQABiQE8BBgBCAAmAhsMFiEEbS4MuuHK2wr7CfjY2AcDUfXj3UAFAl1wETMFCQV/CZ0A
+ CgkQ2AcDUfXj3UBcQQf/YEjNvpWmsp3tMkECTl+Xaxsm5dyxn9+dM6VQ0vPeI5t/7tpevIJs
+ a0jLeiTz5qa2uDZVd+LhlXj8oMoOYYQWa/3OwXaKgigtFTXSSrXimKVqvgf5LVpw3g83x/99
+ mas/Kv+aJ9+6QA6dTYLEbMuzlt1TPF5go1watceQapxN09pkouoG5Yt/GhbX1OSg9WXiaOZ0
+ USJ3f3jifWWJ7NkRV2yzio6IMqbStJtuk097PiVv7r2BUuurrYkWTQbVemBx2qDTpQHWuIn7
+ nxR9YeutMRR02dm9249dQcA6GyF256HMQty/CDBiIX5xeth1OCgX8VL6SWcCSd0t/k3+zHw9 Ag==
+Organization: Linode, LLC
+Message-ID: <66c09da4-1041-ff8d-713a-5f67b87d1672@linode.com>
+Date:   Tue, 8 Oct 2019 16:20:04 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
- -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   MONEY GRAM <currency1000000@gmail.com>
-Date:   Tue, 8 Oct 2019 20:55:16 +0100
-Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
-Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <59eedd28-25d4-7899-7c3c-89fe7fdd4b43@acm.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
-M.T.C.N:78393135
 
-Attn: Beneficiary,
 
-This is to inform you that the America Embassy office was instructed
-to transfer your fund $980,000.00 U.S Dollars compensating all the
-SCAM VICTIMS and your email was found as one of the VICTIMS. by
-America security leading team and America representative officers so
-between today the 8th of October till 1ST Of December 2019 you will
-be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
-that we have already sent the $6,000 dollars this morning to avoid
-cancellation of your payment, remain the total sum of $980,000.00.
+On 10/4/19 11:39 AM, Bart Van Assche wrote:
+> Have you already had a look at the /dev/disk/by-path directory? An
+> example of the contents of that directory:
+> 
+> $ (cd /dev/disk/by-path && ls -l | grep /s)
+> lrwxrwxrwx 1 root root  9 Oct  3 16:49 pci-0000:00:02.0-ata-1 -> ../../sda
+> lrwxrwxrwx 1 root root  9 Oct  3 16:49 pci-0000:00:08.0-scsi-0:0:0:1 ->
+> ../../sr0
+> 
+> Have you considered to use these soft links in /etc/fstab?
+> 
+> In case using these links would be impractical: have you considered to
+> add a udev rule that creates H:C:I:L soft links under a subdirectory of
+> /dev, that makes these soft links point at the /dev/sd* device nodes and
+> to use these soft links in /etc/fstab? That's probably a much more
+> elegant solution than what has been proposed above.
+> 
+> As one can see the information that is needed to implement such a udev
+> rule is already available in sysfs:
+> 
+> $ (cd /sys/class/scsi_device && ls -ld */device/block/*)
+> drwxr-xr-x 9 root root 0 Oct  3 16:48 2:0:0:1/device/block/sr0
+> drwxr-xr-x 9 root root 0 Oct  3 16:48 3:0:0:0/device/block/sda
+> 
+> Bart.
 
-You have only six hours to call this office upon the receipt of this
-email the maximum amount you will be receiving per a day starting from
-today's $6,000 and the Money Transfer Control Number of today is
-below.
+Thanks for the reply! I wasn't aware that sysfs exposed the mapping that
+way. That is very useful, and we should be able to utilize that.
 
-NOTE; The sent $6,000 is on hold because of the instruction from IMF
-office, they asked us to place it on hold by requesting the (Clean
-Bill Record Certificate) which will cost you $25 in order to fulfill
-all the necessary obligation to avoid any hitches while sending you
-the payment through MONEY GRAM money transfer, the necessary
-obligation I mean here is to obtain the (Clean Bill Record
-Certificate)
-
-Below is the information of today track it in our
-
-websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
-to see is available to pick up by the receiver, but if we didn't here
-from you soon we'll pickup it up from line for security reason to
-avoid hackers stealing the money online.
-
-Money Transfer Control Number M.T.C.N)::78393135
-SENDERS FIRST NAME: John
-SENDERS LAST NAME: Chun
-SENDERS COUNTRY...BENIN REPUBLIC
-TEXT QUESTION: A
-ANSWER: B
-AMOUNT: $6,000
-
-We need the below details from you, to enable us place the payment to
-your name and transfer the fund to you.
-
-(Full Receivers name)...................
-(You're Country)................................
-(Address)......................................
-(Phone NuMBER-...............................
-(You're Age)............................
-(OCCUPATION)..REAL ESTATE..................
-(A Copy of Your ID CARD).SEE ATTACHMENTS.............
-
-HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
-AND THAT IS ALL YOU HAVE TO DO ASAP.
-
-The payment will be sending to below information, such as:
-
-Receiver.............. ALAN UDE
-Country................Benin Republic
-Amount: ....................$25
-Question: .....................A
-Answer:................... B
-Sender...............Name:
-MTCN :..............
-
-According to the instruction and order we received from IMF the their
-requested $25 must be made directly to the above info's.
-
-Furthermore you are advised to call us as the instruction was passed
-that within 6hours without hearing from you, Count your payment
-canceled. Number to call is below listed manager director office of
-release order:
-DR.ALAN UDE
-Director MONEY GRAM-Benin
+Regards,
+Bradley LaBoon
