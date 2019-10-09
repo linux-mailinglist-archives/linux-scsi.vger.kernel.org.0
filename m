@@ -2,87 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D397FD1685
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Oct 2019 19:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC80D16E3
+	for <lists+linux-scsi@lfdr.de>; Wed,  9 Oct 2019 19:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732119AbfJIRYG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Oct 2019 13:24:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48566 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732105AbfJIRYF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 9 Oct 2019 13:24:05 -0400
-Received: from sasha-vm.mshome.net (unknown [167.220.2.234])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E745E21D7D;
-        Wed,  9 Oct 2019 17:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570641845;
-        bh=KZRpUOb3mPBcUo8o24araf8SxsKewq/8Rl1F83Gkluk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XZiRyk+4HQuG/Njpo0YStNBvcM9VfKC98/ajyiK1Qasa1pcNZhthkkUxqmQwYrvAM
-         CcOe4CADxdHVY+zq5dizc3yIRJk02++OiPMbVY2zMDEIeQdGs59KSnj0rP7Ge9cEHF
-         u3qqrbE5QlpX3tRecI+eB43Ddi1VVOflHwWRISPM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Quinn Tran <qutran@marvell.com>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 05/26] scsi: qla2xxx: Fix unbound sleep in fcport delete path.
-Date:   Wed,  9 Oct 2019 13:05:37 -0400
-Message-Id: <20191009170558.32517-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191009170558.32517-1-sashal@kernel.org>
-References: <20191009170558.32517-1-sashal@kernel.org>
+        id S1731943AbfJIRfq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Oct 2019 13:35:46 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44872 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731145AbfJIRfq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Oct 2019 13:35:46 -0400
+Received: by mail-pg1-f196.google.com with SMTP id u12so1837081pgb.11;
+        Wed, 09 Oct 2019 10:35:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nj9rSb6+A9rvujRfiVZZzuEm43YQDU7Btaig5FdBlVs=;
+        b=p2naQpfKkUyVP/r5NFyocBbjnhvhMPF5uKg/TmLzNENbyRQacdtHkqs9NGbt3/y8jS
+         mfEeh2IfnCdEggqSHkgvLj6oQNAfjlNZS5V5sh5GLcP9ZAuAO7J3B042ax3MCWgywu/n
+         oDdicrt2Fn/77UkZb9yYKGciGardpeP4A/IaMF+iw0+CRmQ/cTkeNzoH57lhmHQhulZu
+         afNycQref9u0f9yqBIankmiWXYMglH1V0cUbItuy74Z6V+Ql7g5rmLNTFr5/+L7VKfQ+
+         2AFAxOMmvm+KgRvkEWdRZn1dSxjM6GODEKmLCk5ygMUnPVmQ8griVlsHMOQl9f7YISJt
+         JnMg==
+X-Gm-Message-State: APjAAAUElkOb4UnqilooKd9S0D7ftIa6aEjsmMWvEhOWiTHOSpAvBV4a
+        A2cy+avmpMTzrMLkomMbn0o=
+X-Google-Smtp-Source: APXvYqycBmCFvgBWin/59P0yH6yBKADVg4UJZBU0cr3asYVbdrEcEgsOycsuSlQ5QHrDbwNsFOPy9g==
+X-Received: by 2002:a63:231e:: with SMTP id j30mr5734299pgj.419.1570642544058;
+        Wed, 09 Oct 2019 10:35:44 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id c11sm4161190pfj.114.2019.10.09.10.35.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2019 10:35:43 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Rob Turk <robtu@rtist.nl>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.de>, stable@vger.kernel.org
+Subject: [PATCH] ch: Make it again possible to open a ch device two or more times
+Date:   Wed,  9 Oct 2019 10:35:36 -0700
+Message-Id: <20191009173536.247889-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.23.0.581.g78d2f28ef7-goog
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+Clearing ch->device in ch_release() is wrong because that pointer must
+remain valid until ch_remove() is called. This patch fixes the following
+crash the second time a ch device is opened:
 
-[ Upstream commit c3b6a1d397420a0fdd97af2f06abfb78adc370df ]
+BUG: kernel NULL pointer dereference, address: 0000000000000790
+RIP: 0010:scsi_device_get+0x5/0x60
+Call Trace:
+ ch_open+0x4c/0xa0 [ch]
+ chrdev_open+0xa2/0x1c0
+ do_dentry_open+0x13a/0x380
+ path_openat+0x591/0x1470
+ do_filp_open+0x91/0x100
+ do_sys_open+0x184/0x220
+ do_syscall_64+0x5f/0x1a0
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-There are instances, though rare, where a LOGO request cannot be sent out
-and the thread in free session done can wait indefinitely. Fix this by
-putting an upper bound to sleep.
-
-Link: https://lore.kernel.org/r/20190912180918.6436-3-hmadhani@marvell.com
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-by: Rob Turk <robtu@rtist.nl>
+Suggested-by: Rob Turk <robtu@rtist.nl>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: <stable@vger.kernel.org>
+Fixes: 085e56766f74 ("scsi: ch: add refcounting")
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/ch.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 7a1cc0b25e594..d6dc320f81a7a 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -1023,6 +1023,7 @@ void qlt_free_session_done(struct work_struct *work)
+diff --git a/drivers/scsi/ch.c b/drivers/scsi/ch.c
+index 5f8153c37f77..76751d6c7f0d 100644
+--- a/drivers/scsi/ch.c
++++ b/drivers/scsi/ch.c
+@@ -579,7 +579,6 @@ ch_release(struct inode *inode, struct file *file)
+ 	scsi_changer *ch = file->private_data;
  
- 	if (logout_started) {
- 		bool traced = false;
-+		u16 cnt = 0;
- 
- 		while (!READ_ONCE(sess->logout_completed)) {
- 			if (!traced) {
-@@ -1032,6 +1033,9 @@ void qlt_free_session_done(struct work_struct *work)
- 				traced = true;
- 			}
- 			msleep(100);
-+			cnt++;
-+			if (cnt > 200)
-+				break;
- 		}
- 
- 		ql_dbg(ql_dbg_disc, vha, 0xf087,
+ 	scsi_device_put(ch->device);
+-	ch->device = NULL;
+ 	file->private_data = NULL;
+ 	kref_put(&ch->ref, ch_destroy);
+ 	return 0;
 -- 
-2.20.1
+2.23.0.581.g78d2f28ef7-goog
 
