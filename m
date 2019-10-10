@@ -2,51 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB704D2ACE
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Oct 2019 15:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4330ED2DC8
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Oct 2019 17:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388334AbfJJNRp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Oct 2019 09:17:45 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:44695 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388308AbfJJNRp (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Oct 2019 09:17:45 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 21so4802996otj.11
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Oct 2019 06:17:44 -0700 (PDT)
+        id S1726478AbfJJPcs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Oct 2019 11:32:48 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:38406 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbfJJPcr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Oct 2019 11:32:47 -0400
+Received: by mail-wm1-f66.google.com with SMTP id 3so7273673wmi.3
+        for <linux-scsi@vger.kernel.org>; Thu, 10 Oct 2019 08:32:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=kbDD0ETnfb+9T5ky4afnuU19WL5B3TgSTtrvr8/78l52RfSJ/bD7cjcm8C45XsJ4wr
-         kY8zUv/ms1sLDr56E/0rqAcpldgbTirzVsO1TqrlTRt5AL5IhxusLfWbWkCQZqSDApog
-         xVZixZPZF5pv+wD9wYHHFszyBuRJ0Z0/71+2E/SGgHwnMzv66/86w9uplcX1z0grTv9p
-         1TYZ7MtIagYr+hnMPgyspL8CH18dkY1RexU6NSgr6L6/lGHi7jHNMmmGOoiBuh2azqNd
-         aWHFVXbx5cxjkbX5kJe7PAp4IU2wf06fogqa+YoO9ylF7jna+POCU+xNsHXT6R2wFQg9
-         YqYQ==
+        bh=sfUJysz1yNc32MDCXj7042wwWEQgx+uTrfo2ctnNrK4=;
+        b=c1PWJnZ7eWpUG7qw5t+IYwnnpWDMtRVGzO19FTGvWubqtyNfI6wONApHfnX4doOymB
+         Af2ipPh/CKgnzw810mOuibk0HuogSzVAQT6K/7nN7h80c3ioeGfmrGlRgQAEjUJkcAwP
+         Cow6KrGV5Px1rozY7JrRyXBrT4paK6ZlbaLJ9fRa4T7p6Q5vhJNIA/wS5k3ghpunKP9i
+         Qv12qCq8TQT19KZiQoukeYT17pLMR+fkxea0kZCdNAmzBYP60p9M5eDGum6Y5WwBwIEM
+         IcM51lTsgYpOB/tPu9pMRZJNor+WApKCUs49+gOofdqpNKQ+pM7IMr2OtPfrdRW5pXxV
+         FHTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=Qgbc+j/LdODJkNHQ0zoDewyGHxdjdiWa0z8UzD4mKw68wzTTkZYOmBFGJC6IHon0c8
-         mGyseRxkRspaL+uWm5jHsf7WydGzYQNxMHSYVHc8SjQfYpznJ0IM0SjAQHRhWal7FaCV
-         kJpJ8k1gocJosUqwPdZJ55U5/uz+Ef5XVPbj8ftXzciS3rXbmEW4d8wABExKhXhH/yrY
-         rhHwA68Z83MHnF0V2GWaD0+kyp3Dq9ZSRUfiorwPeiUV9D/uzozUN6bw1J6IlK1RA5pq
-         meaGh85I6+FvSJp/qd55SwVYcW14uj9IlZ2pteIq6Ib1xAuWCp4Pm/PQzYpbnsxndVu5
-         2I4A==
-X-Gm-Message-State: APjAAAXUtemMQ8WL8+ay0+tC6XYByDFX6voXeuUqKKtr3F6+xXKMVH6Q
-        nfixGTXhVwVt5WAiw1SxktED5fhcr5z/O5kYqdpt
-X-Google-Smtp-Source: APXvYqwe5B6z/3dUuNDQtQ0n2oQYOsdY3HQR3dkIin1gqVhu0NNteov05tKzv4DhJBBR4bjK2RG7Phnj6WUHoBrkRYc=
-X-Received: by 2002:a05:6830:1103:: with SMTP id w3mr7909437otq.312.1570713462861;
- Thu, 10 Oct 2019 06:17:42 -0700 (PDT)
+        bh=sfUJysz1yNc32MDCXj7042wwWEQgx+uTrfo2ctnNrK4=;
+        b=UykOvwRHXIaFEOdAMhE0++PLzs6YywBAqyw3b5CucoLyG8r8hJCzsLKBdGXDV2llSV
+         +zrNhknj1oJaX3grR4/8XD3A0fYB05vAcO8ftU26Csi6u/YC981PrLi7IXtffifFVzkm
+         nU0in4OyKzhaJh/YzRpF34E6Dk8Wi/+e0xSmDB3tWX5ce57aiLYD6qWn9c/H9QVUTJJ6
+         +Z1LCU3rDuA66YpS+AM+T5g4jFWAZZS6JO5Y12B0N3HPfvNDbQ9yaWm1PkUJaZH/nDSP
+         Cu7FepP1qgoI64RbtvJ2RWYANhyBr0TODKHI1fxakcDqsctwKiwTAJ9Yu7FrgtynEzsX
+         ucNw==
+X-Gm-Message-State: APjAAAVKEFyoKh7KHXvdaQ/6Mux68r/B3vm99FqKUT1kvTsIt7l1e7Db
+        Ile/G2dFL7WETMMwsBA5H1les6s/aRAgVr0qZyc=
+X-Google-Smtp-Source: APXvYqyP+lx/O3Vgw50pDWe8qSBYfVZLqPdZjSaq5Zx3hTJ5MpxHN01eGRQYQC8L/Z7+AjZSf88ma08Q8yFs4j6Q8Ho=
+X-Received: by 2002:a1c:99cd:: with SMTP id b196mr8233601wme.105.1570721566075;
+ Thu, 10 Oct 2019 08:32:46 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a4a:3346:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:17:41
+Received: by 2002:a5d:6b87:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 08:32:45
  -0700 (PDT)
-Reply-To: sunrisefundingltd50@gmail.com
-From:   Valentina Yurina <v_yurina@ub.ac.id>
-Date:   Thu, 10 Oct 2019 14:17:41 +0100
-Message-ID: <CAKoEkvu4vc5Yn9-hzxQ5dYmUL=oO69=GSP0FC7O+CGz9Jni8+Q@mail.gmail.com>
-Subject: Apply For Financial investment at a lower rate 2%
+Reply-To: talabmohamud@outlook.com
+From:   Talab Muhamudu <talabmohamud@gmail.com>
+Date:   Thu, 10 Oct 2019 16:32:45 +0100
+Message-ID: <CAEZ8=RHYnAB0JRg81oZ_ukQJQBmP6LRH91r+5ypq5aP95omV9Q@mail.gmail.com>
+Subject: hope
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
@@ -54,25 +54,16 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hello,
+Good day , i write to inform you as auditor onbehalf of ORABANK.
 
-We are private lenders based in UK.
+Transaction number 000399577OBK have been approved for release
+through VISA ELECTRON ATM Card.
 
-Do you need a loan (credit) as soon as possible. Are you in search of
-money to solve your personal needs or finance your business venture,
-then get Your desired loan today! Consult us at Sunrise Funding Ltd.
+Note that you are required to reconfirm your complete mailing address
+for delivery.
 
-* We offer personal loan & huge capital loan at 2% interest rate to
-the general public both locally and internationally.
-* Credit amount range from $5,000.00 -- $500,000.00 and above.
-* Special $10,000,000.00 Loan offer for huge project also available.
-* Loan period of 6 months -- 10 years.
-* Loan is granted 24 hours after approval and accredited, directly in
-hand or bank account.
+Reconfirm code 000399577OBK to the Director Mr. Patrick Masrellet on ( (
+atm.orabank@iname.com )) for further action.
 
-Please note that you are advised to contact us for more details via
-the following e-mail address below;
-
-EMAIL : sunrisefundingltd50@gmail.com
-FIRM : Sunrise Funding Ltd UK.
+Regards.
+Talab Mohamud( Esq)
