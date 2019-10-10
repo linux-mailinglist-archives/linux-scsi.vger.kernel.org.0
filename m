@@ -2,70 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F51BD2212
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Oct 2019 09:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501EAD22D3
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Oct 2019 10:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732671AbfJJHpv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Oct 2019 03:45:51 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:32962 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727080AbfJJHpv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Oct 2019 03:45:51 -0400
-Received: by mail-wr1-f65.google.com with SMTP id b9so6553160wrs.0
-        for <linux-scsi@vger.kernel.org>; Thu, 10 Oct 2019 00:45:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=PDzj5DdJxIMW27KMpgKFjuABvPj8FfuAsyioGA2u3S8=;
-        b=K3iw4jzPusRRH2uo07OURn2Ae+eS4GDGNnXu2DPiqNYOcA7wn8s6/t6vjSdYgxYEem
-         ygABnkQwxGS8JypSMzjKDXJTkmQRJAw6uBiEHW51bGbRYPqXaCx+FVKxgVpYhDy50YgE
-         jwMng4athEe9HgdSZCrimMrvA0QTCKpqyC2+rQwFUHbvyPBmIq4IDhLkhmVXEtSUDdMR
-         yg3tUbHK6tIFWNtfavTzUzVAbF19k5TMZSGgOh50cw1nUmNhFUOhEAJjkumIR3MTXdqb
-         3rJXeV6lXNWzsvyH+DPRH403hQ5Fyv3Sjl9jW3FnIUYZZSf6lKvxzhaMa3nejRvlMpP9
-         snWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=PDzj5DdJxIMW27KMpgKFjuABvPj8FfuAsyioGA2u3S8=;
-        b=Fe+oBWJVgxnS7cnDNKUKBXcBBJkzJrEgG9sr3L2ehkTLTBUpds3H+KsU+zyVKQW4ez
-         G1tKxRndxKcXZMPeU9v9y9/tq0HX17nNIrmlgdIMEY5Ovb4Gu/VzwG43iZFL3/Y8tBG1
-         DiuSHtwYoOWwW6qhgqQHLNpJXAJvehg26EO5iNPxezwcQuDS14a4T9ewpEN1ANhY54ws
-         sVv/5s0GT6jIDVO5/J4UDqLEWS2jtqyQKwhQRejr2H3wKrRjYbMxFHqVYkjfrGAKSPFI
-         etuDe8hFc8++ohJd8aPgY+dzJf6CPSf/CZkhQhkLV6U/e+z5G4gm4xZbg9iytfxY2bEl
-         Fu3A==
-X-Gm-Message-State: APjAAAWjOhft/FRK1HUxmiQPQQLgO5VrUGgBKrg4IUDRLU6Ti8rKOgWy
-        XmCqnfJEb28iRjGOWMyAKuWX9UO+4iSy1XZXDJE=
-X-Google-Smtp-Source: APXvYqy5GwWnyxlQwBFL/cqtrMWZ8wguIZt9eUKjFVhOTuhzn/qN1Z5bT85PyAalT0NpOW7fBumfTHusYd1q+PbWJqM=
-X-Received: by 2002:a5d:4142:: with SMTP id c2mr7718848wrq.74.1570693549923;
- Thu, 10 Oct 2019 00:45:49 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:600c:22c4:0:0:0:0 with HTTP; Thu, 10 Oct 2019 00:45:49
- -0700 (PDT)
-Reply-To: mrjerryjolender7@gmail.com
-From:   UNITED NATIONS ASSOCIATION <crystalwhitestone119@gmail.com>
-Date:   Thu, 10 Oct 2019 02:45:49 -0500
-Message-ID: <CAC1kwugBFwgjgxakr+G-3X+6BU0--sjOvWSPOAtej42=s_EQZA@mail.gmail.com>
-Subject: ATTN: APPROVED LETTER FROM THE UNITED NATIONS.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1733206AbfJJIcB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Oct 2019 04:32:01 -0400
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:62789 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729932AbfJJIcB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Oct 2019 04:32:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1570696320; x=1602232320;
+  h=from:to:cc:subject:date:message-id;
+  bh=8W9YAqRHao26ckZMHtY8ZQIxisHMTa8clE3FZOTy9bw=;
+  b=bYuLU9t8aSLIguo/DFFrr4KC6w5S5fn17hzVb+716MFbb7Pl2QfSEj0G
+   fg5SrEHpUlqFDckvw/nKbjv4LYZA0dPODzhXZZzL1CPGOEox2fr5o+wC/
+   L/1Xf5J0Igcp4ywJUFzo7dAxOHE6hnScHu1HkEyYxyqqVpvGjuvaYWnHq
+   hL/0JlR+7+zu3/9SF/XgBwOJkW4mRpG6MlPbnxb0VVKSysm6mKTHeAmH6
+   hLM+2bmnjUveDXInHkp0jVel3A7WwzrtWs2pIIq2AQ2QIhSIG9Ku10EXh
+   8GcHz1yqzTaw/bifsz/1H7MvJySFX6Qk95D2WuKp5N33bPS0azgk4V8pI
+   Q==;
+IronPort-SDR: 94sNE4nX6p87g2cS8k8/a66/E6F353brDST/PX09OsWlb/UBdZ4Cjg3HBCfcricISbGrmYXaUw
+ DZEDCuLmzTcHh/t67eAzYMomPlCyCTDWH6Pn3d91Qml36HBDfBnwobmfY5GZONho+65QipH0TM
+ nD10NCYGqAbD3gK2cMapsyHkDRmsF2L8M+2y0DzbygmIoe3ibuanWhmfzi9Q4Y9A73HZM8SOfa
+ Pxjqv8H/5ClR8sb3d/yqjtn4rYYkKkrABFt8GmVENSgXXgdXfMtSPRvmDkVrlPLbuHfmVmJjTx
+ CU8=
+X-IronPort-AV: E=Sophos;i="5.67,279,1566835200"; 
+   d="scan'208";a="121813444"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 10 Oct 2019 16:32:00 +0800
+IronPort-SDR: 8iv+4QwaUtZAGCG8TF7/iy32El7OuQLE7mvZHJQTn9TrnP/WEFy6wnw4Zf7PHmgpp2WdEhV0r0
+ nnbYC3coY4l/arMkuQ3jMfzHaWpbQjv04cc0lQIbZBBDiWPShBUueHxlE/eh5b+jPny1YgxKIF
+ fmyxUwmWoBRCzwKPIUHRKYPrgw5fMfkuA39buS5yYZuJp8+3l5ROqkaIRlRhqp6yRMtzQHqnQt
+ ZGS0rgirwrxOKDifTnqM/ogxKQnBM57xPoAB8xd48xcTygCMQkqKRDnveWs6qzW4Y4sBeCYQGM
+ ZIdIHdbwVdA11MJVXJm8l/Oh
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2019 01:27:58 -0700
+IronPort-SDR: YGGVg2A3ajXG5P9aGPKXcTXZAn58ZT5AoLObNX3/PN6xmuOwHmzJGFdhowC/UQ6CHlGx9mGRos
+ Bmup3igGRgjX5CcWsJliYp95BM4+8MTjnZoxmhPMEaOhgM4XoUGhRcUakx3Yixo83RcoZGoc6w
+ YLlbFp/cNR3YT0ypgLBWUhcWjFWsmx9Vki1tQmseAGximYW9N/WjlTWUAXRTj7tjuCiSgPVRiT
+ 7bsHgsf3RYVsNa9EMUfTRKwu0ucMR/KmUfUyVOBe6wQ6GDc84Q8FdzNmMtfSb9hTdU+p/DTNbB
+ EBc=
+WDCIronportException: Internal
+Received: from ile422988.sdcorp.global.sandisk.com ([10.0.231.246])
+  by uls-op-cesaip01.wdc.com with ESMTP; 10 Oct 2019 01:31:58 -0700
+From:   Avri Altman <avri.altman@wdc.com>
+To:     "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-scsi@vger.kernel.org
+Cc:     Avi Shchislowski <avi.shchislowski@wdc.com>,
+        Alex Lemberg <alex.lemberg@wdc.com>,
+        Avri Altman <avri.altman@wdc.com>
+Subject: [PATCH] scsi: ufs-bsg: Wake the device before sending raw upiu commands
+Date:   Thu, 10 Oct 2019 11:31:07 +0300
+Message-Id: <1570696267-8487-1-git-send-email-avri.altman@wdc.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Attn: Dear Beneficiary,
+The scsi async probe process is calling blk_pm_runtime_init for each
+lun, and then those request queues are monitored by the block layer pm
+engine (blk-pm.c).  This is however, not the case for scsi-passthrough
+queues, created by bsg_setup_queue().
 
-Your United Nations compensation-fund has been approved.
+So the ufs-bsg driver might send various commands, disregarding the pm
+status of the device. This is wrong, regardless if its request queue is
+pm-aware or not.
 
-Kindly contact us for more details.
+Fixes: df032bf27a41 (scsi: ufs: Add a bsg endpoint that supports UPIUs)
 
-Regards,
+Signed-off-by: Avri Altman <avri.altman@wdc.com>
+Reported-by:  Yuliy Izrailov <yuliy.izrailov@wdc.com>
+---
+ drivers/scsi/ufs/ufs_bsg.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Mr. Jerry J. Olender.
-(EU Head of Finance & Governance)
-International Monitoring Fund
+diff --git a/drivers/scsi/ufs/ufs_bsg.c b/drivers/scsi/ufs/ufs_bsg.c
+index a9344eb..dc2f6d2 100644
+--- a/drivers/scsi/ufs/ufs_bsg.c
++++ b/drivers/scsi/ufs/ufs_bsg.c
+@@ -98,6 +98,8 @@ static int ufs_bsg_request(struct bsg_job *job)
+ 
+ 	bsg_reply->reply_payload_rcv_len = 0;
+ 
++	pm_runtime_get_sync(hba->dev);
++
+ 	msgcode = bsg_request->msgcode;
+ 	switch (msgcode) {
+ 	case UPIU_TRANSACTION_QUERY_REQ:
+@@ -135,6 +137,8 @@ static int ufs_bsg_request(struct bsg_job *job)
+ 		break;
+ 	}
+ 
++	pm_runtime_put_sync(hba->dev);
++
+ 	if (!desc_buff)
+ 		goto out;
+ 
+-- 
+2.7.4
 
-NOTE: If you received this message in your SPAM/JUNK folder, that is
-because of the restrictions implemented by your Internet Service
-Provider, treat it genuinely.
