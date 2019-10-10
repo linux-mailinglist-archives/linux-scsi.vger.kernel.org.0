@@ -2,109 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0059AD1848
-	for <lists+linux-scsi@lfdr.de>; Wed,  9 Oct 2019 21:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B459ED1D8B
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Oct 2019 02:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732343AbfJITMv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Oct 2019 15:12:51 -0400
-Received: from mout.kundenserver.de ([212.227.126.131]:46385 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732044AbfJITLa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Oct 2019 15:11:30 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue011 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MofLl-1hleRX2T5V-00p7Pi; Wed, 09 Oct 2019 21:11:22 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-kernel@vger.kernel.org, y2038@lists.linaro.org,
-        linux-fsdevel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH v6 43/43] scsi: sd: enable compat ioctls for sed-opal
-Date:   Wed,  9 Oct 2019 21:10:44 +0200
-Message-Id: <20191009191044.308087-44-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
-In-Reply-To: <20191009190853.245077-1-arnd@arndb.de>
-References: <20191009190853.245077-1-arnd@arndb.de>
+        id S1732559AbfJJAno (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 9 Oct 2019 20:43:44 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:55144 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731542AbfJJAnn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 9 Oct 2019 20:43:43 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 42FC881F11;
+        Thu, 10 Oct 2019 00:43:43 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-22.pek2.redhat.com [10.72.8.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6507E19C69;
+        Thu, 10 Oct 2019 00:43:34 +0000 (UTC)
+Date:   Thu, 10 Oct 2019 08:43:29 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Omar Sandoval <osandov@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Laurence Oberman <loberman@redhat.com>,
+        Bart Van Assche <bart.vanassche@wdc.com>
+Subject: Re: [RFC PATCH V4 2/2] scsi: core: don't limit per-LUN queue depth
+ for SSD
+Message-ID: <20191010004328.GA23292@ming.t460p>
+References: <20191009093241.21481-1-ming.lei@redhat.com>
+ <20191009093241.21481-3-ming.lei@redhat.com>
+ <75fe51d7-714f-8a51-89b5-aeeb7d318fdc@acm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:zX1dBOxTNEIjEWC6S6Aboc9GLFenI7/73H9gQTcEXZJuXQOOPKQ
- m3Fd1C/SOXXiF/vgpisdbgSmCcJpi/8S/vO/qXr1qfrJIStRYB3s3dEawxyMSUMn+0NTfXy
- Ab9xMpMNOALYbbrUsRd2FLw0Ye7wS9Iq5k27P/7uitVAlIrvvypAqXWfA5vkc0tbPYZF+1m
- NIF5nP/JU3XKb21XnisJw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lFQ+r8yms6g=:sbWCiEgDC0Wd/x2FxEm0lO
- HIOHewpro6Y6RhDe6KbndIDg0JNlUin7WJAs+q2iO5twgzE03hJmvtw+q/+cNaD+grzoD4Oda
- gFzYZwLfS9Ef35ZuoxQBOuKAIMQZ7UrTAbC7A4HGnHBdrCJeuL+FAvMkx8d9Q3v8oDLoRK99G
- guyQ9i6W0+p2M2w3TlNGT+w7ZOCMJIl9i//enaD+YsHcY26KZ2FFZUau1fGlpuhXhAcqODDXX
- SIcsD74vNvgKtyEPxV9tc3Q2lfXhV6s74yPR+l6P2GlsQnPmu3EOvVNP8zyq8PBq4AP4/0PxD
- 8mt6NCkQTa6kLkw69qrXpOki8HjCDcvQ2jcGjludeml2Gae0+PG+4flcA4nJzyRMb5pG2bXde
- Gss218kuyh26mcuzvCMUzxMxLCoTBtDQiVx8PY3oe69kv15zMI+htD6Ocko1S9T0fX+4tn3KN
- g/dqGY4gdlj/BH/PsPlw7NfC3JvJtW5J8KgG0SAfphyamwOela5x8WVCzovCgjr4yuqFbGZXi
- /0zOytzYJdzQerNej9emCJzBg4g//n0fKkVR99ce+YbHmaRFLD0+QnF41NuB2SNqlkNEVDWLQ
- JkJ/iUs6UBYMGqIj35uk/P8skn4f3tiRIkaDlpRk4Rb8G8J9bl8MaT4JrR+dlNzyR1EswTS2M
- NFx1iku9lwAxHQrhCwDBbP+1xC3i60il2GQ0PiXA9ETGMcBWbWH3QQYqw3bkOQebzBgN1ezzI
- ucj68bPQaHNnBwPCpejCq7sFoYI8x1G2hI0OzAx8IWJrONDM4BrJghfQQvnMXkjO57YmRW3KR
- ppoc3ztmdrjMOaKOPqMKgvjeTkKkkZM5MPa/hI7eeaQeYRXyvd6rEK8MQdP/6fH4SgeGNu6Ru
- eU2kfW0Ze1W96JFfciaA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <75fe51d7-714f-8a51-89b5-aeeb7d318fdc@acm.org>
+User-Agent: Mutt/1.11.3 (2019-02-01)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.25]); Thu, 10 Oct 2019 00:43:43 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The sed_ioctl() function is written to be compatible between
-32-bit and 64-bit processes, however compat mode is only
-wired up for nvme, not for sd.
+On Wed, Oct 09, 2019 at 09:05:26AM -0700, Bart Van Assche wrote:
+> On 10/9/19 2:32 AM, Ming Lei wrote:
+> > @@ -354,7 +354,8 @@ void scsi_device_unbusy(struct scsi_device *sdev, struct scsi_cmnd *cmd)
+> >   	if (starget->can_queue > 0)
+> >   		atomic_dec(&starget->target_busy);
+> > -	atomic_dec(&sdev->device_busy);
+> > +	if (!blk_queue_nonrot(sdev->request_queue))
+> > +		atomic_dec(&sdev->device_busy);
+> >   }
+> 
+> Hi Ming,
+> 
+> Does this patch impact the meaning of the queue_depth sysfs attribute (see
+> also sdev_store_queue_depth()) and also the queue depth ramp up/down
+> mechanism (see also scsi_handle_queue_ramp_up())? Have you considered to
 
-Add the missing call to sed_ioctl() in sd_compat_ioctl().
+This patch only ignores to track inflight SCSI commands on each
+LUN, so it doesn't affect the meaning of sdev->queue_depth, which is
+just bypassed for SSD.
 
-Fixes: d80210f25ff0 ("sd: add support for TCG OPAL self encrypting disks")
-Cc: linux-scsi@vger.kernel.org
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/scsi/sd.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+> enable/disable busy tracking per LUN depending on whether or not
+> sdev->queue_depth < shost->can_queue?
 
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 50928bc266eb..5abdf03083ae 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -1692,20 +1692,30 @@ static void sd_rescan(struct device *dev)
- static int sd_compat_ioctl(struct block_device *bdev, fmode_t mode,
- 			   unsigned int cmd, unsigned long arg)
- {
--	struct scsi_device *sdev = scsi_disk(bdev->bd_disk)->device;
-+	struct gendisk *disk = bdev->bd_disk;
-+	struct scsi_disk *sdkp = scsi_disk(disk);
-+	struct scsi_device *sdev = sdkp->device;
-+	void __user *p = compat_ptr(arg);
- 	int error;
- 
-+	error = scsi_verify_blk_ioctl(bdev, cmd);
-+	if (error < 0)
-+		return error;
-+
- 	error = scsi_ioctl_block_when_processing_errors(sdev, cmd,
- 			(mode & FMODE_NDELAY) != 0);
- 	if (error)
- 		return error;
-+
-+	if (is_sed_ioctl(cmd))
-+		return sed_ioctl(sdkp->opal_dev, cmd, p);
- 	       
- 	/* 
- 	 * Let the static ioctl translation table take care of it.
- 	 */
- 	if (!sdev->host->hostt->compat_ioctl)
- 		return -ENOIOCTLCMD; 
--	return sdev->host->hostt->compat_ioctl(sdev, cmd, (void __user *)arg);
-+	return sdev->host->hostt->compat_ioctl(sdev, cmd, p);
- }
- #endif
- 
--- 
-2.20.0
+Yeah, we can do it, but that isn't contradictory with this patch, :-)
+And we can do it even though sdev->queue_depth < shost->can_queue.
 
+Usually sdev->queue_depth is used for the following reasons:
+
+1) this limit isn't a hard limit, which may improve IO merge with cost
+of IO latency.
+
+2) fair dispatch among LUNs.
+
+This patch just tries to not apply per-LUN queue depth for SSD, because:
+
+1) fair dispatch has been done by blk-mq in allocating driver tag
+
+2) IO merge doesn't play big role for SSD, and IO latency can be
+increased by applying per-LUN queue depth.
+
+3) NVMe doesn't apply per-ns queue depth
+
+> 
+> The megaraid and mpt3sas drivers read sdev->device_busy directly. Is the
+> current version of this patch compatible with these drivers?
+
+For megaraid, sdev->device_busy is checked for choosing reply queue,
+this way shouldn't be better than using default managed IRQ's mapping.
+Similar usage is done on _base_get_high_iops_msix_index().
+
+The only effect may be in scsih_dev_reset(), and 'SUCCESS' message
+is dumped even though there is in-flight command on this LUN, but it
+can be fixed easily.
+
+
+Thanks,
+Ming
