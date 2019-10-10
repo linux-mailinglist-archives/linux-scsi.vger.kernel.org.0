@@ -2,85 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CCCD1F02
-	for <lists+linux-scsi@lfdr.de>; Thu, 10 Oct 2019 05:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F51BD2212
+	for <lists+linux-scsi@lfdr.de>; Thu, 10 Oct 2019 09:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732858AbfJJDk5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 9 Oct 2019 23:40:57 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:41736 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726823AbfJJDkz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 9 Oct 2019 23:40:55 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9A3URs3086893;
-        Thu, 10 Oct 2019 03:40:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=rOzUSONeDV81oLc9GIPlFqdjJahMsRpOb2XTtkJaKQw=;
- b=BefK9p8dWi88hfb5QFn9qQGSODn6qphmInRJZ0dgMdv4Id1obcwn0qu9navgCcqppvuy
- aAR4G3aCNBiMQjuHRd1M+Lq7ANVw+kUxreIxqVyP9O6l+NF9ahYeVdAkgRZIToYGEhbM
- wV1sVqlpYwKZ8t5MgCiMVHEEjUdUEa6Iy+GcXA4SlK1/WoWI/Pj7BGsB5iOLDu7cjIwb
- CPzxDSk69AnH3LMIQj7TqxnpG9d71Y/n5xzvDjqSe6IhJdAGwRcOFy+jMv4U2mfoPheQ
- YqSPr06uDgi0MfbnpOanveXD+cglSKWE86yj2SbPR3hs65GexHYPpUimGXobuXxe/6Tz rA== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2vek4qrchw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Oct 2019 03:40:39 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9A3TEMC141019;
-        Thu, 10 Oct 2019 03:40:38 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 2vhrxcp3fb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 10 Oct 2019 03:40:38 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9A3eZsa029205;
-        Thu, 10 Oct 2019 03:40:35 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 09 Oct 2019 20:40:35 -0700
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Rob Turk <robtu@rtist.nl>, Hannes Reinecke <hare@suse.de>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] ch: Make it again possible to open a ch device two or more times
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20191009173536.247889-1-bvanassche@acm.org>
-Date:   Wed, 09 Oct 2019 23:40:32 -0400
-In-Reply-To: <20191009173536.247889-1-bvanassche@acm.org> (Bart Van Assche's
-        message of "Wed, 9 Oct 2019 10:35:36 -0700")
-Message-ID: <yq1d0f5i7yn.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1732671AbfJJHpv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 10 Oct 2019 03:45:51 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:32962 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727080AbfJJHpv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 10 Oct 2019 03:45:51 -0400
+Received: by mail-wr1-f65.google.com with SMTP id b9so6553160wrs.0
+        for <linux-scsi@vger.kernel.org>; Thu, 10 Oct 2019 00:45:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=PDzj5DdJxIMW27KMpgKFjuABvPj8FfuAsyioGA2u3S8=;
+        b=K3iw4jzPusRRH2uo07OURn2Ae+eS4GDGNnXu2DPiqNYOcA7wn8s6/t6vjSdYgxYEem
+         ygABnkQwxGS8JypSMzjKDXJTkmQRJAw6uBiEHW51bGbRYPqXaCx+FVKxgVpYhDy50YgE
+         jwMng4athEe9HgdSZCrimMrvA0QTCKpqyC2+rQwFUHbvyPBmIq4IDhLkhmVXEtSUDdMR
+         yg3tUbHK6tIFWNtfavTzUzVAbF19k5TMZSGgOh50cw1nUmNhFUOhEAJjkumIR3MTXdqb
+         3rJXeV6lXNWzsvyH+DPRH403hQ5Fyv3Sjl9jW3FnIUYZZSf6lKvxzhaMa3nejRvlMpP9
+         snWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=PDzj5DdJxIMW27KMpgKFjuABvPj8FfuAsyioGA2u3S8=;
+        b=Fe+oBWJVgxnS7cnDNKUKBXcBBJkzJrEgG9sr3L2ehkTLTBUpds3H+KsU+zyVKQW4ez
+         G1tKxRndxKcXZMPeU9v9y9/tq0HX17nNIrmlgdIMEY5Ovb4Gu/VzwG43iZFL3/Y8tBG1
+         DiuSHtwYoOWwW6qhgqQHLNpJXAJvehg26EO5iNPxezwcQuDS14a4T9ewpEN1ANhY54ws
+         sVv/5s0GT6jIDVO5/J4UDqLEWS2jtqyQKwhQRejr2H3wKrRjYbMxFHqVYkjfrGAKSPFI
+         etuDe8hFc8++ohJd8aPgY+dzJf6CPSf/CZkhQhkLV6U/e+z5G4gm4xZbg9iytfxY2bEl
+         Fu3A==
+X-Gm-Message-State: APjAAAWjOhft/FRK1HUxmiQPQQLgO5VrUGgBKrg4IUDRLU6Ti8rKOgWy
+        XmCqnfJEb28iRjGOWMyAKuWX9UO+4iSy1XZXDJE=
+X-Google-Smtp-Source: APXvYqy5GwWnyxlQwBFL/cqtrMWZ8wguIZt9eUKjFVhOTuhzn/qN1Z5bT85PyAalT0NpOW7fBumfTHusYd1q+PbWJqM=
+X-Received: by 2002:a5d:4142:: with SMTP id c2mr7718848wrq.74.1570693549923;
+ Thu, 10 Oct 2019 00:45:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9405 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=770
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910100031
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9405 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=873 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910100031
+Received: by 2002:a05:600c:22c4:0:0:0:0 with HTTP; Thu, 10 Oct 2019 00:45:49
+ -0700 (PDT)
+Reply-To: mrjerryjolender7@gmail.com
+From:   UNITED NATIONS ASSOCIATION <crystalwhitestone119@gmail.com>
+Date:   Thu, 10 Oct 2019 02:45:49 -0500
+Message-ID: <CAC1kwugBFwgjgxakr+G-3X+6BU0--sjOvWSPOAtej42=s_EQZA@mail.gmail.com>
+Subject: ATTN: APPROVED LETTER FROM THE UNITED NATIONS.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Attn: Dear Beneficiary,
 
-Bart,
+Your United Nations compensation-fund has been approved.
 
-> Clearing ch->device in ch_release() is wrong because that pointer must
-> remain valid until ch_remove() is called. This patch fixes the
-> following crash the second time a ch device is opened:
+Kindly contact us for more details.
 
-Applied to 5.4/scsi-fixes, thank you!
+Regards,
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Mr. Jerry J. Olender.
+(EU Head of Finance & Governance)
+International Monitoring Fund
+
+NOTE: If you received this message in your SPAM/JUNK folder, that is
+because of the restrictions implemented by your Internet Service
+Provider, treat it genuinely.
