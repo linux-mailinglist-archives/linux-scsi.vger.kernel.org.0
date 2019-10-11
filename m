@@ -2,115 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 698B3D37B7
-	for <lists+linux-scsi@lfdr.de>; Fri, 11 Oct 2019 05:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D005D39DF
+	for <lists+linux-scsi@lfdr.de>; Fri, 11 Oct 2019 09:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfJKDIZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 10 Oct 2019 23:08:25 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:3693 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726076AbfJKDIZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 10 Oct 2019 23:08:25 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id AF7A023E0C4A8E9E7193;
-        Fri, 11 Oct 2019 11:08:23 +0800 (CST)
-Received: from [127.0.0.1] (10.184.213.217) by DGGEMS403-HUB.china.huawei.com
- (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Fri, 11 Oct 2019
- 11:08:15 +0800
-Subject: Re: [PATCH] scsi: core: fix uninit-value access of variable sshdr
-To:     Bart Van Assche <bvanassche@acm.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
-CC:     <yi.zhang@huawei.com>
-References: <1570709143-147364-1-git-send-email-zhengbin13@huawei.com>
- <fe58cc1c-f15a-2b05-24b7-24d9ef6f4f34@acm.org>
-From:   "zhengbin (A)" <zhengbin13@huawei.com>
-Message-ID: <fd1239fd-96a9-1779-f5d4-5ce91d64819b@huawei.com>
-Date:   Fri, 11 Oct 2019 11:07:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.3.0
+        id S1726982AbfJKHOX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 11 Oct 2019 03:14:23 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:44450 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726679AbfJKHOX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 11 Oct 2019 03:14:23 -0400
+Received: by mail-qt1-f193.google.com with SMTP id u40so12435687qth.11
+        for <linux-scsi@vger.kernel.org>; Fri, 11 Oct 2019 00:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=oHZUqnxc/xl6PA2nReylgPj07gjZ1qiEnUxA83rem2o=;
+        b=l1FzVOsW2a5kBL7Narp5VKTN+a8Uf19QsILzT6hS9a7caS+yJOioyR6wweJIaz2EUf
+         2N0T4WwWk3IXlcYyaWgGbXUNq4AjrzKzFH301hFNkxsBorRoo8XreR8ycRJzMOJwer1u
+         qH021DUeB1cNvPNbr7EuKktPRmexxNQRnvhEWT8WtrEoagPfiF/gp0EyqgnLYimIx9g1
+         PoXQeXModuu6oSiRKuAOHr9e0qgbeKsUKQlEZrJGr+W9whQvO1TuERsKOrFyUJFQVkjB
+         D8l0lth+TnASnDTmHeKxBiUxPrgiez1/z6Lr3PIz9nRMfa1l6nMIavwGWOrJ1VV1vrxC
+         /0yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=oHZUqnxc/xl6PA2nReylgPj07gjZ1qiEnUxA83rem2o=;
+        b=KgphHfq+rnstpgqnTWJXFB9UFME/MtR++YB4YQu5eMC7CCUjJ+UOY6f4BMsim3O7kz
+         8AUmaN4CUtd86jsxH9LROIoI/x06E86P9EIfalZ/2pXGEg+uIQfjmQuak7WrFEtr66Yq
+         NPc/AW0ZvKdKfXjfFXt8cvsOGs7E73i4L2qTQ6idciDmESRGBeY4shTdgXfGMTRAnzNK
+         LB3UVyyAvMAYjLsrw8diYM5sEja6HJgMrn1oHfJS/mJBn1+h+2PFmjmBVYJF2B55MWSU
+         Z32o7QvLtIIdFG06QaPiHBouwI2ggLeJflefxycSXPRHbtXljVUVQSmYwtPcz8PKrkEZ
+         Y2ng==
+X-Gm-Message-State: APjAAAXwa/GpmD0yRUKAPAlTHPBgBYAp1icX5JYqvXzDuTLXjWkCgRId
+        CbV1paDI6dKfHfDQ0nqKcs5wiGcVf62X7qNY8h0=
+X-Google-Smtp-Source: APXvYqyDH90ur/rOMXm2Ppje9ntKbyJI/pHkP/ptx9dYUKlmi1h0857Dnei678HzUNU++OEaapn8zCi/fZeJtC0sY8A=
+X-Received: by 2002:ac8:2650:: with SMTP id v16mr15481091qtv.168.1570778060893;
+ Fri, 11 Oct 2019 00:14:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <fe58cc1c-f15a-2b05-24b7-24d9ef6f4f34@acm.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.184.213.217]
-X-CFilter-Loop: Reflected
+Received: by 2002:a0c:91a7:0:0:0:0:0 with HTTP; Fri, 11 Oct 2019 00:14:20
+ -0700 (PDT)
+Reply-To: moneygramtg.togo@gmail.com
+From:   Ofuonye Estha <ofuonyeestha9@gmail.com>
+Date:   Fri, 11 Oct 2019 00:14:20 -0700
+Message-ID: <CAKtVE2S0kF0h4RjjCz1+RNb4eLVvWc=NwvSinZWtQuu3a7XQ2A@mail.gmail.com>
+Subject: good day
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Attention dear   email owner
+welcome to  MoneyGram International Inc. we are contacting you regarding
+your winning fund $550,000.00 USD, your e-mail won $550,000.00 dollars
+through Internet contest, lottery bonus under the MoneyGram
+International Inc. Worldwide. The lottery bonus was contesting once in
+a year and we did it to promote this company MoneyGram International
+Inc. The last contest was made through internet by people=E2=80=99s email
+worldwide, for example. USA, CANADA, RUSSIAN, EUROPEAN, GERMANY, ASIA,
+AFRICAN, TOGO, ETC........................
 
-On 2019/10/11 1:03, Bart Van Assche wrote:
-> On 10/10/19 5:05 AM, zhengbin wrote:
->> kmsan report a warning in 5.1-rc4:
->>
->> BUG: KMSAN: uninit-value in sr_get_events drivers/scsi/sr.c:207 [inline]
->> BUG: KMSAN: uninit-value in sr_check_events+0x2cf/0x1090 drivers/scsi/sr.c:243
->> CPU: 1 PID: 13858 Comm: syz-executor.0 Tainted: G    B             5.1.0-rc4+ #8
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Ubuntu-1.8.2-1ubuntu1 04/01/2014
->> Call Trace:
->>   __dump_stack lib/dump_stack.c:77 [inline]
->>   dump_stack+0x173/0x1d0 lib/dump_stack.c:113
->>   kmsan_report+0x131/0x2a0 mm/kmsan/kmsan.c:619
->>   __msan_warning+0x7a/0xf0 mm/kmsan/kmsan_instr.c:310
->>   sr_get_events drivers/scsi/sr.c:207 [inline]
->>   sr_check_events+0x2cf/0x1090 drivers/scsi/sr.c:243
->>
->> The reason is as follows:
->> sr_get_events
->>    struct scsi_sense_hdr sshdr;  -->uninit
->>    scsi_execute_req              -->If fail, will not set sshdr
->>    scsi_sense_valid(&sshdr)      -->access sshdr
->>
->> We can init sshdr in sr_get_events, but there have many callers of
->> scsi_execute, scsi_execute_req, we have to troubleshoot all callers,
->> the simpler way is init sshdr in __scsi_execute.
->>
->> BTW: we can't just init sshdr->response_code, sr_do_ioctl use
->> sshdr->sense_key(Need to troubleshoot all callers)
->>
->> Signed-off-by: zhengbin <zhengbin13@huawei.com>
->> ---
->>   drivers/scsi/scsi_lib.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
->> index 5447738..037fb2a 100644
->> --- a/drivers/scsi/scsi_lib.c
->> +++ b/drivers/scsi/scsi_lib.c
->> @@ -255,6 +255,12 @@ int __scsi_execute(struct scsi_device *sdev, const unsigned char *cmd,
->>       struct scsi_request *rq;
->>       int ret = DRIVER_ERROR << 24;
->>
->> +    /*
->> +     * need to initial sshdr to avoid uninit-value access
->> +     */
->> +    if (sshdr)
->> +        memset(sshdr, 0, sizeof(struct scsi_sense_hdr));
->> +
->>       req = blk_get_request(sdev->request_queue,
->>               data_direction == DMA_TO_DEVICE ?
->>               REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN, BLK_MQ_REQ_PREEMPT);
->
-> From SAM-5: "Sense data shall be made available by the logical unit if a command terminates with CHECK CONDITION status or other conditions (e.g., the processing of a REQUEST SENSE command). The format, content, and conditions under which sense data shall be prepared by the logical unit are as defined in this standard, SPC-4, the applicable command standard, and the applicable SCSI transport protocol standard."
+We are contacting you because your  among the winning people we have
+in our system and your
+winning code is [HJMR07378]. You advised to contact our branch office
+in Togo, West Africa. Through MoneyGram Email:
+(moneygramtg.togo@gmail.com). Agent Mr. Nelson Agboko. Phone: +228
+984-617-61.
 
-Even this, I suggest we should still init sshdr first(this is hard to understand)
+You will contact us with your info, such as below.
+Full name:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6..
+Home address:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=
+=A6..
+Phone number:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=
+=A6
+Your additional phone number =E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
+=E2=80=A6=E2=80=A6..
+Your additional email address=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
+=E2=80=A6
+Occupation:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
+=E2=80=A6=E2=80=A6
+your copy of Passport:=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=
+=A6=E2=80=A6=E2=80=A6=E2=80=A6
+Your marital status=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
+=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
+Your gender=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
+=E2=80=A6=E2=80=A6..
 
->
-> Apparently sr_check_events() submits a GET EVENT STATUS NOTIFICATION command and it even evaluates the sense data if that command succeeded. I'm not aware of other scsi_execute() callers that do this. So I'm not sure that modifying __scsi_execute() is the best approach. I'm wondering whether the sr driver should be fixed instead of modifying __scsi_execute().
-
-I have troubleshoot callers, there are similar bug(scsi_report_opcode, cache_type_store, scsi_test_unit_ready, scsi_report_lun_scan, sd_spinup_disk, read_capacity_16,
-
-read_capacity_10, sr_get_events, alua_rtpg, alua_stpg, send_trespass_cmd, hp_sw_tur, hp_sw_start_stop, send_mode_select, sd_sync_cache, sd_start_stop_device, sr_do_ioctl).
-
-In __scsi_execute, if a command was executed, sshdr was set, so if failed, init sshdr should be ok too. Besides, scsi_sense_hdr is just 8 bytes, memset it to 0 will not affect performance
-
->
-> Thanks,
->
-> Bart.
->
-> .
->
-
+Regards
+CEO: W. Alexander Holmes
+MoneyGram International Inc.
+Headquarters: Dallas, Texas, United States.
