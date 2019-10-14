@@ -2,39 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB48D581D
-	for <lists+linux-scsi@lfdr.de>; Sun, 13 Oct 2019 22:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC966D5BD4
+	for <lists+linux-scsi@lfdr.de>; Mon, 14 Oct 2019 09:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728645AbfJMUfo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 13 Oct 2019 16:35:44 -0400
-Received: from [58.253.157.160] ([58.253.157.160]:47618 "EHLO
-        localhost.localdomain" rhost-flags-FAIL-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728293AbfJMUfo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 13 Oct 2019 16:35:44 -0400
-X-Greylist: delayed 449 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Oct 2019 16:35:43 EDT
-Received: from localhost (localhost [IPv6:::1])
-        by localhost.localdomain (Postfix) with SMTP id 5D35A11E42B6
-        for <linux-scsi@vger.kernel.org>; Mon, 14 Oct 2019 04:27:55 +0800 (CST)
-From:   linux-scsi@vger.kernel.org
-Reply-To: prodawez@teleworm.us
-To:     linux-scsi@vger.kernel.org,
-        =?utf-8?Q?=D0=97=D0=B4=D1=80=D0=B0=D0=B2=D1=81=D1=82=D0?=@localhost.localdomain,
-        _=D0=92=D0=B0=D1=81?=@=?utf-8?Q?=B2=D1=83=D0=B9=D1=82=D0=B5.localdomain,
-        =?utf-8?Q?_=D0=B8=D0=BD=D1=82=D0=B5=D1=80=D0=B5=D1=81=D1?=@localhost.localdomain,
-        =?utf-8?Q?=83=D1=8E=D1=82_=D0=BA=D0=BB=D0=B8=D0=B5=D0=BD?=@localhost.localdomain,
-        =?utf-8?Q?=D1=82=D1=81=D0=BA=D0=B8=D0=B5_=D0=B1=D0=B0=D0?=@localhost.localdomain,
-        =?utf-8?Q?=B7=D1=8B_=D0=B4=D0=B0=D0=BD=D0=BD=D1=8B=D1=85?=@localhost.localdomain,
-        =?utf-8?Q?=3F?=@localhost.localdomain
+        id S1730226AbfJNHEs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 14 Oct 2019 03:04:48 -0400
+Received: from smtp.taarnby.dk ([62.243.124.255]:49692 "EHLO smtp.taarnby.dk"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726500AbfJNHEs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 14 Oct 2019 03:04:48 -0400
+X-Greylist: delayed 902 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Oct 2019 03:04:47 EDT
+Received: from smtp.taarnby.dk (127.0.0.1) id hkgf0u0171sv; Mon, 14 Oct 2019 08:49:44 +0200 (envelope-from <mms.as@taarnby.dk>)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=taarnby.dk; s=myhappydkimselector1; i=@taarnby.dk; h=Received:
+        Received:Received:Received:From:To:Subject:Thread-Topic:
+        Thread-Index:Date:Message-ID:Accept-Language:Content-Language:
+        Content-Type:Content-Transfer-Encoding:MIME-Version; bh=SlSWe+bY
+        OiCZqEHrwNWVTPvgtUntih8PbGsTuVcDYl8=; b=yYFaXw5f8eOtX/+K3uPA9RhB
+        wErWKF6E4myeNCNOh2xLCQwOdr0xq4bz6HCmrP2ccUcCewjPIDweW7ewwYP3/GSK
+        P+G46MxYLcrDYpqFUyGHAI9YKPSYJnfmJcGSo1DIc7gPfOjOfpDrvLDbQzwgoS6M
+        YlbC5fVVXb4SSaxzWRU2G/Ols14XvccBzc18rAyaK/AmzDJBx3Bm7V1yLOOJpjd6
+        jo4GA6dcMmq7HV7X80TeUMafI7TH80wmpnoJAVZbQ6czTOAUgoJ12wVP6/i5M40M
+        TOYosIh8EKft/h9Wppd0xOHRxgjjnoqvm1hgkg1YUPSzRtTLigrGxWPKJxXN9g==
+Received: from myhappyseposerver ([10.2.2.48])
+        by smtp.taarnby.dk ([192.168.254.7]) (SonicWall 10.0.2.1713)
+        with ESMTP id o201910140649440068105-3; Mon, 14 Oct 2019 08:49:44 +0200
+Received: from tkmail03.taarnby.dk ([10.2.2.49])
+          by myhappyseposerver (JAMES SMTP Server 2.3.2-1) with SMTP ID 471;
+          Mon, 14 Oct 2019 08:49:41 +0200 (CEST)
+Received: from tkmail03.taarnby.dk (10.2.2.49) by tkmail03.taarnby.dk
+ (10.2.2.49) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1779.2; Mon, 14 Oct
+ 2019 08:49:41 +0200
+Received: from tkmail03.taarnby.dk ([fe80::a022:c900:dc8:d08a]) by
+ tkmail03.taarnby.dk ([fe80::a022:c900:dc8:d08a%3]) with mapi id
+ 15.01.1779.002; Mon, 14 Oct 2019 08:49:41 +0200
+From:   Marlene Stolle <mms.as@taarnby.dk>
+To:     "no-reply@Microsoft.net" <no-reply@Microsoft.net>
+Subject: =?iso-8859-1?Q?Beachten_Sie,_dass_Ihr_E-Mail-Postfachkonto_jetzt_dringend?=
+ =?iso-8859-1?Q?_=FCberpr=FCft_werden_muss?=
+Thread-Topic: =?iso-8859-1?Q?Beachten_Sie,_dass_Ihr_E-Mail-Postfachkonto_jetzt_dringend?=
+ =?iso-8859-1?Q?_=FCberpr=FCft_werden_muss?=
+Thread-Index: AQHVgltI2h/FxP+GZ0OJxstdlLJ4Tg==
+Date:   Mon, 14 Oct 2019 06:49:41 +0000
+Message-ID: <49a688fc86134bb4a7260d6ef8d4d6fa@taarnby.dk>
+Accept-Language: da-DK, en-US
+Content-Language: da-DK
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.254.46]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8";
-Content-Transfer-Encoding: 8bit
-Message-Id: <20191013202755.5D35A11E42B6@localhost.localdomain>
-Date:   Mon, 14 Oct 2019 04:27:55 +0800 (CST)
+X-Mlf-DSE-Version: 5781
+X-Mlf-Rules-Version: s20191003201001; ds20171117204456;
+        di20190815003105; ri20160318003319; fs20191009002405
+X-Mlf-Smartnet-Version: 20190423194748
+X-Mlf-Version: 10.0.2.1713
+X-Mlf-License: BSV_C_AP____
+X-Mlf-UniqueId: o201910140649440068105
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Здравствуйте! Вас интересуют клиентские базы данных?
+MICROSOFT DRINGENDE MITTEILUNG
 
+
+Beachten Sie, dass Ihr E-Mail-Postfachkonto jetzt dringend =FCberpr=FCft we=
+rden muss, damit etwa 20 Ihrer eingehenden Nachrichten freigegeben werden, =
+die derzeit ausgesetzt sind. Klicken Sie unten auf =DCberpr=FCfen, um Ihr K=
+onto jetzt zu =FCberpr=FCfen.
+
+
+=DCBERPR=DCFEN<http://2e3e.000webhostapp.com/>
+
+
+Microsoft Verification Team
+
+
+Copyright =A9 2019 Microsoft .Inc. Alle Rechte vorbehalten.
+
+
+
+________________________________
+G=F8r dig selv en online tjeneste - sig farvel til k=F8er, ventetoner og =
+=E5bningstider og goddag til digital selvbetjening.
+
+P=E5 www.borger.dk og www.taarnby.dk har du adgang til digital selvbetjenin=
+g og digital post d=F8gnet rundt - og n=F8glen er dit NemID.
