@@ -2,88 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79209D6F88
-	for <lists+linux-scsi@lfdr.de>; Tue, 15 Oct 2019 08:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C486BD7059
+	for <lists+linux-scsi@lfdr.de>; Tue, 15 Oct 2019 09:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727311AbfJOGSo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 15 Oct 2019 02:18:44 -0400
-Received: from esa2.microchip.iphmx.com ([68.232.149.84]:6149 "EHLO
-        esa2.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726044AbfJOGSo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Oct 2019 02:18:44 -0400
-Authentication-Results: esa2.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=balsundar.p@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com
-Received-SPF: Pass (esa2.microchip.iphmx.com: domain of
-  balsundar.p@microsemi.com designates 208.19.100.23 as
-  permitted sender) identity=mailfrom; client-ip=208.19.100.23;
-  receiver=esa2.microchip.iphmx.com;
-  envelope-from="balsundar.p@microsemi.com";
-  x-sender="balsundar.p@microsemi.com"; x-conformance=spf_only;
-  x-record-type="v=spf1"; x-record-text="v=spf1
-  ip4:208.19.100.20 ip4:208.19.100.21 ip4:208.19.100.22
-  ip4:208.19.100.23 ip4:208.19.99.221 ip4:208.19.99.222
-  ip4:208.19.99.223 ip4:208.19.99.225 -all"
-Received-SPF: None (esa2.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@smtp.microsemi.com) identity=helo;
-  client-ip=208.19.100.23; receiver=esa2.microchip.iphmx.com;
-  envelope-from="balsundar.p@microsemi.com";
-  x-sender="postmaster@smtp.microsemi.com";
-  x-conformance=spf_only
-X-Ironport-Dmarc-Check-Result: validskip
-IronPort-SDR: yWeK14Np1UcFFyK+vSQeVX3vWCUfVgUY5+tG2JhmyM6G6wMuqaDNGaM/rgAlvDUAzn5dD0m9ES
- +yRbW9Y2MZyJJDAswKtB5ShG/2LO4l1iq98P16VsP0+p8Aov0y55pGyfguxEfx8W+0O423hZ1U
- 16ze4pwVtv04RWgijHJV42v5euVK/RI18x/0LArdr6uH1XO/IcBkYmObevzRnVhVF5/l6aCGZe
- QDdJd7M60f2BaUK4ongPrZy01ZYkOaJAz7azKt6FyjbdHWpwyQVQQr+5xUVtl1M5xMC6fFjHDu
- b8A=
-X-IronPort-AV: E=Sophos;i="5.67,298,1566889200"; 
-   d="scan'208";a="52689217"
-Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.23])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Oct 2019 23:18:44 -0700
-Received: from AVMBX3.microsemi.net (10.100.34.33) by AVMBX3.microsemi.net
- (10.100.34.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 14 Oct
- 2019 23:18:43 -0700
-Received: from localhost (10.41.130.77) by avmbx3.microsemi.net (10.100.34.33)
- with Microsoft SMTP Server id 15.1.1713.5 via Frontend Transport; Mon, 14 Oct
- 2019 23:18:42 -0700
-From:   <balsundar.p@microsemi.com>
-To:     <linux-scsi@vger.kernel.org>, <jejb@linux.vnet.ibm.com>
-CC:     <aacraid@microsemi.com>
-Subject: [PATCH 7/7] scsi: aacraid: bump version
-Date:   Tue, 15 Oct 2019 11:52:04 +0530
-Message-ID: <1571120524-6037-8-git-send-email-balsundar.p@microsemi.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1571120524-6037-1-git-send-email-balsundar.p@microsemi.com>
-References: <1571120524-6037-1-git-send-email-balsundar.p@microsemi.com>
+        id S1727451AbfJOHoe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 15 Oct 2019 03:44:34 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:54204 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbfJOHoe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 15 Oct 2019 03:44:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=KGkVZgjDVrp5L3t6DBJT+MXjO2uFy5oiRc2Hxyh04do=; b=Y7WSZXefm0gZn15zSHsb+0ax8
+        sIf1ybVNZVEBpgVRbvpClloxR9i4MrIve0efTatqPWovqscvxYHhAcXUWgXx5PmN3YbIPJ5hVGVKZ
+        meHQzxLqSDejH3PBHp4JRATXgtLOA0sWt5q/71hDY7Wx11OJJKIl/8wey221L2dc+6GfigrNQ9KU4
+        0ax2mdeT+GSQWAgYr9v4ODdbxMkEbxy1bX0WQ2Re7mnMexruuuoPn23DdQ1l3+RjUPofQSVi6FLUh
+        tSbbDdwR6aLjSosZINxfNJnYs0tvq2sgvbpuvPH9mrHO29HMIgG04EJWnFnDj86F0F6GtwjS8qkkO
+        Dqhy6HtHw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iKHVK-0002T4-Ll; Tue, 15 Oct 2019 07:44:26 +0000
+Date:   Tue, 15 Oct 2019 00:44:26 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Colin King <colin.king@canonical.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Tomohiro Kusumi <kusumi.tomohiro@jp.fujitsu.com>,
+        Kei Tokunaga <tokunaga.keiich@jp.fujitsu.com>,
+        Xiao Guangrong <xiaoguangrong@cn.fujitsu.com>,
+        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: fix unintended sign extension on left shifts
+Message-ID: <20191015074426.GA8715@infradead.org>
+References: <20191014121613.21999-1-colin.king@canonical.com>
+ <0e2a6d4c-b346-cb1b-7941-e247a0d0f8b2@acm.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0e2a6d4c-b346-cb1b-7941-e247a0d0f8b2@acm.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Balsundar P <balsundar.p@microsemi.com>
+On Mon, Oct 14, 2019 at 08:58:03AM -0700, Bart Van Assche wrote:
+> On 10/14/19 5:16 AM, Colin King wrote:
+> >   	const char *ret = trace_seq_buffer_ptr(p);
+> >   	sector_t lba = 0, txlen = 0;
+> > -	lba |= (cdb[2] << 24);
+> > +	lba |= ((u64)cdb[2] << 24);
+> >   	lba |= (cdb[3] << 16);
+> >   	lba |= (cdb[4] << 8);
+> >   	lba |=  cdb[5];
+> 
+> Have you considered to use get/put_unaligned_be*() instead of making the
+> above change?
 
-bump version to 50877
-
-Signed-off-by: Balsundar P <balsundar.p@microsemi.com>
----
- drivers/scsi/aacraid/aacraid.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/aacraid/aacraid.h b/drivers/scsi/aacraid/aacraid.h
-index 17a4e8b8bd00..e3e4ecbea726 100644
---- a/drivers/scsi/aacraid/aacraid.h
-+++ b/drivers/scsi/aacraid/aacraid.h
-@@ -85,7 +85,7 @@ enum {
- #define	PMC_GLOBAL_INT_BIT0		0x00000001
- 
- #ifndef AAC_DRIVER_BUILD
--# define AAC_DRIVER_BUILD 50877
-+# define AAC_DRIVER_BUILD 50983
- # define AAC_DRIVER_BRANCH "-custom"
- #endif
- #define MAXIMUM_NUM_CONTAINERS	32
--- 
-2.18.1
-
+Agreed, that is the only sensible thing to do here.
