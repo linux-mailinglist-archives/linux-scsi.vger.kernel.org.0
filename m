@@ -2,77 +2,132 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7775DB79C
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Oct 2019 21:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C34DB7BB
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Oct 2019 21:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392579AbfJQThB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Oct 2019 15:37:01 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:44990 "EHLO
+        id S2438990AbfJQTjp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Oct 2019 15:39:45 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:45046 "EHLO
         ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728856AbfJQThA (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Oct 2019 15:37:00 -0400
+        with ESMTP id S1730180AbfJQTjp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Oct 2019 15:39:45 -0400
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iLBZz-0006VG-Aq; Thu, 17 Oct 2019 19:36:59 +0000
-Date:   Thu, 17 Oct 2019 20:36:59 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC][PATCHES] drivers/scsi/sg.c uaccess cleanups/fixes
-Message-ID: <20191017193659.GA18702@ZenIV.linux.org.uk>
-References: <CAHk-=wgOWxqwqCFuP_Bw=Hxxf9njeHJs0OLNGNc63peNd=kRqw@mail.gmail.com>
- <20191010195504.GI26530@ZenIV.linux.org.uk>
- <CAHk-=wgWRQo0m7TUCK4T_J-3Vqte+p-FWzvT3CB1jJHgX-KctA@mail.gmail.com>
- <20191011001104.GJ26530@ZenIV.linux.org.uk>
- <CAHk-=wgg3jzkk-jObm1FLVYGS8JCTiKppEnA00_QX7Wsm5ieLQ@mail.gmail.com>
- <20191013181333.GK26530@ZenIV.linux.org.uk>
- <CAHk-=wgrWGyACBM8N8KP7Pu_2VopuzM4A12yQz6Eo=X2Jpwzcw@mail.gmail.com>
- <20191013191050.GL26530@ZenIV.linux.org.uk>
- <CAHk-=wjJNE9hOKuatqh6SFf4nd65LG4ZR3gQSgg+rjSpVxe89w@mail.gmail.com>
- <20191016202540.GQ26530@ZenIV.linux.org.uk>
+        id 1iLBcc-0006ez-Se; Thu, 17 Oct 2019 19:39:43 +0000
+From:   Al Viro <viro@ZenIV.linux.org.uk>
+To:     linux-scsi@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
+Subject: [RFC PATCH 1/8] sg_ioctl(): fix copyout handling
+Date:   Thu, 17 Oct 2019 20:39:18 +0100
+Message-Id: <20191017193925.25539-1-viro@ZenIV.linux.org.uk>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191017193659.GA18702@ZenIV.linux.org.uk>
+References: <20191017193659.GA18702@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191016202540.GQ26530@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 09:25:40PM +0100, Al Viro wrote:
+From: Al Viro <viro@zeniv.linux.org.uk>
 
-> FWIW, callers of __copy_from_user() remaining in the generic code:
+First of all, __put_user() can fail with access_ok() succeeding.
+And access_ok() + __copy_to_user() is spelled copy_to_user()...
 
-> 6) drivers/scsi/sg.c nest: sg_read() ones are memdup_user() in disguise
-> (i.e. fold with immediately preceding kmalloc()s).  sg_new_write() -
-> fold with access_ok() into copy_from_user() (for both call sites).
-> sg_write() - lose access_ok(), use copy_from_user() (both call sites)
-> and get_user() (instead of the solitary __get_user() there).
+__put_user() *can* fail with access_ok() succeeding...
 
-Turns out that there'd been outright redundant access_ok() calls (not
-even warranted by __copy_...) *and* several __put_user()/__get_user()
-with no checking of return value (access_ok() was there, handling of
-unmapped addresses wasn't).  The latter go back at least to 2.1.early...
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+ drivers/scsi/sg.c | 43 ++++++++++++++++---------------------------
+ 1 file changed, 16 insertions(+), 27 deletions(-)
 
-I've got a series that presumably fixes and cleans the things up
-in that area; it didn't get any serious testing (the kernel builds
-and boots, smartctl works as well as it used to, but that's not
-worth much - all it says is that SG_IO doesn't fail terribly;
-I don't have any test setup for really working with /dev/sg*).
-
-IOW, it needs more review and testing - this is _not_ a pull request.
-It's in vfs.git#work.sg; individual patches are in followups.
-Shortlog/diffstat:
-Al Viro (8):
-      sg_ioctl(): fix copyout handling
-      sg_new_write(): replace access_ok() + __copy_from_user() with copy_from_user()
-      sg_write(): __get_user() can fail...
-      sg_read(): simplify reading ->pack_id of userland sg_io_hdr_t
-      sg_new_write(): don't bother with access_ok
-      sg_read(): get rid of access_ok()/__copy_..._user()
-      sg_write(): get rid of access_ok()/__copy_from_user()/__get_user()
-      SG_IO: get rid of access_ok()
-
- drivers/scsi/sg.c | 98 ++++++++++++++++++++++++++++++++----------------------------------------------------------------
- 1 file changed, 32 insertions(+), 66 deletions(-)
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index cce757506383..634460421ce4 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -963,26 +963,21 @@ sg_ioctl(struct file *filp, unsigned int cmd_in, unsigned long arg)
+ 	case SG_GET_LOW_DMA:
+ 		return put_user((int) sdp->device->host->unchecked_isa_dma, ip);
+ 	case SG_GET_SCSI_ID:
+-		if (!access_ok(p, sizeof (sg_scsi_id_t)))
+-			return -EFAULT;
+-		else {
+-			sg_scsi_id_t __user *sg_idp = p;
++		{
++			sg_scsi_id_t v;
+ 
+ 			if (atomic_read(&sdp->detaching))
+ 				return -ENODEV;
+-			__put_user((int) sdp->device->host->host_no,
+-				   &sg_idp->host_no);
+-			__put_user((int) sdp->device->channel,
+-				   &sg_idp->channel);
+-			__put_user((int) sdp->device->id, &sg_idp->scsi_id);
+-			__put_user((int) sdp->device->lun, &sg_idp->lun);
+-			__put_user((int) sdp->device->type, &sg_idp->scsi_type);
+-			__put_user((short) sdp->device->host->cmd_per_lun,
+-				   &sg_idp->h_cmd_per_lun);
+-			__put_user((short) sdp->device->queue_depth,
+-				   &sg_idp->d_queue_depth);
+-			__put_user(0, &sg_idp->unused[0]);
+-			__put_user(0, &sg_idp->unused[1]);
++			memset(&v, 0, sizeof(v));
++			v.host_no = sdp->device->host->host_no;
++			v.channel = sdp->device->channel;
++			v.scsi_id = sdp->device->id;
++			v.lun = sdp->device->lun;
++			v.scsi_type = sdp->device->type;
++			v.h_cmd_per_lun = sdp->device->host->cmd_per_lun;
++			v.d_queue_depth = sdp->device->queue_depth;
++			if (copy_to_user(p, &v, sizeof(sg_scsi_id_t)))
++				return -EFAULT;
+ 			return 0;
+ 		}
+ 	case SG_SET_FORCE_PACK_ID:
+@@ -992,20 +987,16 @@ sg_ioctl(struct file *filp, unsigned int cmd_in, unsigned long arg)
+ 		sfp->force_packid = val ? 1 : 0;
+ 		return 0;
+ 	case SG_GET_PACK_ID:
+-		if (!access_ok(ip, sizeof (int)))
+-			return -EFAULT;
+ 		read_lock_irqsave(&sfp->rq_list_lock, iflags);
+ 		list_for_each_entry(srp, &sfp->rq_list, entry) {
+ 			if ((1 == srp->done) && (!srp->sg_io_owned)) {
+ 				read_unlock_irqrestore(&sfp->rq_list_lock,
+ 						       iflags);
+-				__put_user(srp->header.pack_id, ip);
+-				return 0;
++				return put_user(srp->header.pack_id, ip);
+ 			}
+ 		}
+ 		read_unlock_irqrestore(&sfp->rq_list_lock, iflags);
+-		__put_user(-1, ip);
+-		return 0;
++		return put_user(-1, ip);
+ 	case SG_GET_NUM_WAITING:
+ 		read_lock_irqsave(&sfp->rq_list_lock, iflags);
+ 		val = 0;
+@@ -1073,9 +1064,7 @@ sg_ioctl(struct file *filp, unsigned int cmd_in, unsigned long arg)
+ 		val = (sdp->device ? 1 : 0);
+ 		return put_user(val, ip);
+ 	case SG_GET_REQUEST_TABLE:
+-		if (!access_ok(p, SZ_SG_REQ_INFO * SG_MAX_QUEUE))
+-			return -EFAULT;
+-		else {
++		{
+ 			sg_req_info_t *rinfo;
+ 
+ 			rinfo = kcalloc(SG_MAX_QUEUE, SZ_SG_REQ_INFO,
+@@ -1085,7 +1074,7 @@ sg_ioctl(struct file *filp, unsigned int cmd_in, unsigned long arg)
+ 			read_lock_irqsave(&sfp->rq_list_lock, iflags);
+ 			sg_fill_request_table(sfp, rinfo);
+ 			read_unlock_irqrestore(&sfp->rq_list_lock, iflags);
+-			result = __copy_to_user(p, rinfo,
++			result = copy_to_user(p, rinfo,
+ 						SZ_SG_REQ_INFO * SG_MAX_QUEUE);
+ 			result = result ? -EFAULT : 0;
+ 			kfree(rinfo);
+-- 
+2.11.0
 
