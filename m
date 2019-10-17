@@ -2,87 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADC4DA556
-	for <lists+linux-scsi@lfdr.de>; Thu, 17 Oct 2019 08:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D98DAB4F
+	for <lists+linux-scsi@lfdr.de>; Thu, 17 Oct 2019 13:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394580AbfJQGMi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Oct 2019 02:12:38 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4233 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390579AbfJQGMi (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Oct 2019 02:12:38 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id ED60EF72EFD8A04F1F1E;
-        Thu, 17 Oct 2019 14:12:36 +0800 (CST)
-Received: from huawei.com (10.90.53.225) by DGGEMS404-HUB.china.huawei.com
- (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Thu, 17 Oct 2019
- 14:12:28 +0800
-From:   zhengbin <zhengbin13@huawei.com>
-To:     <bvanassche@acm.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
-CC:     <yi.zhang@huawei.com>, <zhengbin13@huawei.com>
-Subject: [PATCH v4 2/2] scsi: core: fix uninit-value access of variable sshdr
-Date:   Thu, 17 Oct 2019 14:19:37 +0800
-Message-ID: <1571293177-117087-3-git-send-email-zhengbin13@huawei.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1571293177-117087-1-git-send-email-zhengbin13@huawei.com>
-References: <1571293177-117087-1-git-send-email-zhengbin13@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.90.53.225]
-X-CFilter-Loop: Reflected
+        id S2409212AbfJQLgx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Oct 2019 07:36:53 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:40197 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405493AbfJQLgx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Oct 2019 07:36:53 -0400
+Received: by mail-qk1-f193.google.com with SMTP id y144so1503453qkb.7
+        for <linux-scsi@vger.kernel.org>; Thu, 17 Oct 2019 04:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=8/Lz6l8sQ6PNj+KFicIECgEvYNy1usZIJng2CZIsbQg=;
+        b=inLSz4cPMI+GJ9z0YEfQf9RIV4d9DhKHvhpv9tRsAhG8lBPHCahDt7L4dZdCUDpNT3
+         V0qQsIIWtsi1zCvqA2zEvouImw2pz4PKQq7hNViCPYJJovM/WhPMwRFyY2ASg8xwBJ9e
+         3W7+KJNGsqtkQD7da4idydHyGxNm4S89TLBE1EO5Nsrb7rxQFLv7OHaNsX/MyjrqvoQf
+         sm4KR/GZnvc1LUVfYS7OZDzwz3t4PvX1fBGcOPD7sxVYWgEMvd2t+Q5JPWvhC3dGKSBs
+         ZmiLjM0dWcfgsG936+m01CkzNYi/KsWTeJ9XauEjKWmMjpkupFQQrtOUJwu1GXjwYO4O
+         E4Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=8/Lz6l8sQ6PNj+KFicIECgEvYNy1usZIJng2CZIsbQg=;
+        b=RkWiCIC+0CMUxxBIpX41sXvAcD+X0uBMmi4MUTSf5bBrqGwU6PaIZLkPTjqQcINTeL
+         idbgXtE9L3Kuqc1WBZ6wTjxAF/Qu+5v/utpSDxsHXlahUI3+xXYAex4BLuiVzQOLRton
+         c1xSQwaz1BXV4BMFBaa4VKnjaPh/Iv/bBDcUxyzR1NqLQskfnBBnH3QRZU8V+xT3WYQg
+         NOjlv/iliZQEnOID9eh0j71zA0DkFm3su4rc31fMJ05W0Kp4z8/XV65arxJ4czV5TtoS
+         hcbDWkN2BoSrsnJvRUi6Qde2cDxCLYWNrCgBjNndtThr6741ENG/zbgPG8lBxEcw35IN
+         TrQA==
+X-Gm-Message-State: APjAAAXG6ygaJBlFawdA6qnUHWA1x+gpeVEdsINUyM9W5r+Sj4ZLojSi
+        ITE7mBLAI2YFt85f8J/9sBkyZQ==
+X-Google-Smtp-Source: APXvYqxdX0AeuN/dq2A2s87VdUR+xtxVcyeC34SKMarZg2FnGvyBY3fPdW9PrLgHFt8PN82r/JKQvw==
+X-Received: by 2002:a37:68a:: with SMTP id 132mr2773971qkg.359.1571312212534;
+        Thu, 17 Oct 2019 04:36:52 -0700 (PDT)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id c6sm1631979qtc.83.2019.10.17.04.36.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Oct 2019 04:36:51 -0700 (PDT)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH -next] iommu/amd: fix a warning in increase_address_space
+Date:   Thu, 17 Oct 2019 07:36:51 -0400
+Message-Id: <577A2A6B-3012-4CDE-BE57-3E0D628572CB@lca.pw>
+References: <20191016225859.j3jq6pt73mn56chn@cantor>
+Cc:     jroedel@suse.de, don.brace@microsemi.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        jejb@linux.ibm.com, esc.storagedev@microsemi.com,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+In-Reply-To: <20191016225859.j3jq6pt73mn56chn@cantor>
+To:     Jerry Snitselaar <jsnitsel@redhat.com>
+X-Mailer: iPhone Mail (17A878)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-kmsan report a warning in 5.1-rc4:
 
-BUG: KMSAN: uninit-value in sr_get_events drivers/scsi/sr.c:207 [inline]
-BUG: KMSAN: uninit-value in sr_check_events+0x2cf/0x1090 drivers/scsi/sr.c:243
-CPU: 1 PID: 13858 Comm: syz-executor.0 Tainted: G    B             5.1.0-rc4+ #8
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Ubuntu-1.8.2-1ubuntu1 04/01/2014
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x173/0x1d0 lib/dump_stack.c:113
- kmsan_report+0x131/0x2a0 mm/kmsan/kmsan.c:619
- __msan_warning+0x7a/0xf0 mm/kmsan/kmsan_instr.c:310
- sr_get_events drivers/scsi/sr.c:207 [inline]
- sr_check_events+0x2cf/0x1090 drivers/scsi/sr.c:243
 
-The reason is as follows:
-sr_get_events
-  struct scsi_sense_hdr sshdr;  -->uninit
-  scsi_execute_req              -->If fail, will not set sshdr
-  scsi_sense_valid(&sshdr)      -->access sshdr
+> On Oct 16, 2019, at 6:59 PM, Jerry Snitselaar <jsnitsel@redhat.com> wrote:=
 
-We can init sshdr in sr_get_events, but there have many callers of
-scsi_execute, scsi_execute_req, we have to troubleshoot all callers,
-the simpler way is init sshdr in __scsi_execute.
+>=20
+> I guess the mode level 6 check is really for other potential callers
+> increase_address_space, none exist at the moment, and the condition
+> of the while loop in alloc_pte should fail if the mode level is 6.
 
-Signed-off-by: zhengbin <zhengbin13@huawei.com>
----
- drivers/scsi/scsi_lib.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 5447738..d5e29c5 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -255,6 +255,13 @@ int __scsi_execute(struct scsi_device *sdev, const unsigned char *cmd,
- 	struct scsi_request *rq;
- 	int ret = DRIVER_ERROR << 24;
-
-+	/*
-+	 * Zero-initialize sshdr for those callers that check the *sshdr
-+	 * contents even if no sense data is available.
-+	 */
-+	if (sshdr)
-+		memset(sshdr, 0, sizeof(struct scsi_sense_hdr));
-+
- 	req = blk_get_request(sdev->request_queue,
- 			data_direction == DMA_TO_DEVICE ?
- 			REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN, BLK_MQ_REQ_PREEMPT);
---
-2.7.4
-
+Because there is no locking around iommu_map_page(), if there are several co=
+ncurrent callers of it for the same domain, could it be that it silently cor=
+rupt data due to invalid access?=
