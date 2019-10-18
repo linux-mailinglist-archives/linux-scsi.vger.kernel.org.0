@@ -2,112 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A23BADD15A
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 23:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2578DD175
+	for <lists+linux-scsi@lfdr.de>; Sat, 19 Oct 2019 00:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505685AbfJRVpa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Oct 2019 17:45:30 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:45341 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503048AbfJRVpa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Oct 2019 17:45:30 -0400
-Received: by mail-pg1-f196.google.com with SMTP id r1so4035528pgj.12
-        for <linux-scsi@vger.kernel.org>; Fri, 18 Oct 2019 14:45:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=qcE5KhfpQ4NQbD/twtaTD/BxOHqJos9I+trErW0JNF4=;
-        b=QjZsYhpUxEaRSHj9jcHhoBzjjM3Mb7b9Ie94VssK0xtt6gci+Wp5FQWj4nc0ZGIi5x
-         hydrbUBrpMsnnNI11flAO99jX9lnyRLEaORGZtZ0gLdLcsg2tBVummd1ULTPRJ/JpYIo
-         DBriQJMtiM6jddHCsAObBmnABcXtTVvkyXGd8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=qcE5KhfpQ4NQbD/twtaTD/BxOHqJos9I+trErW0JNF4=;
-        b=f+dWTAh0QWTvngMPsw4/sV7+REG3z9jTYKmnL4gCgkq+8OfogEvo0/r4kvCy8QKCpH
-         IbmgBjRiTcTeP6wzXmWk6YyLWb+02pr9v1/dAiA8/oV78oWejlJNSn8ZgVn37EfooBk4
-         K81ZR+yA0DW1fSFXJrfSrWRuBSdBMH/awjs73iqwacN92jPaYHo7La63JkXKL20+/N2H
-         K7FfKiiC72nFq+ngDSyCKPOZHwyUknRWwIlOt2nQc2Ap6k283B67uCYjaIp6jjZX/0tK
-         EPFj3WtAXg/djgbudcTkyHFbdIhqUUNAo6iTHuFDbYND9e07AggpkklI85ol03OLLyW+
-         2npw==
-X-Gm-Message-State: APjAAAVjoyGhAe1oM8Z7d8+ypxcfA7A1Q45rtlZuYiQPQ1g9v8rrAMhw
-        p1E4qe4OI4XmoNMHlB8Waxq63kBEEAg=
-X-Google-Smtp-Source: APXvYqyNIzyN/twh3somuhGuev4cQL74ZCp+7iw2J8fRZidB0noAMVpwV5TxEMlTLr+jTVsUwPtXSA==
-X-Received: by 2002:a17:90a:234d:: with SMTP id f71mr13755557pje.134.1571435129769;
-        Fri, 18 Oct 2019 14:45:29 -0700 (PDT)
-Received: from [10.69.45.46] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id y144sm8065816pfb.188.2019.10.18.14.45.26
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 18 Oct 2019 14:45:28 -0700 (PDT)
-Subject: Re: [RFC PATCH 0/3] lpfc: nodelist pointer cleanup
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     Dick Kennedy <dick.kennedy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, James Smart <james.smart@broadcom.com>
-References: <20191018075010.55653-1-hare@suse.de>
-From:   James Smart <james.smart@broadcom.com>
-Message-ID: <ced4e239-40b2-508a-f52a-1b7baf674f04@broadcom.com>
-Date:   Fri, 18 Oct 2019 14:45:24 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726393AbfJRWAV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Oct 2019 18:00:21 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:55084 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726258AbfJRWAV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Oct 2019 18:00:21 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9ILsWTJ086675;
+        Fri, 18 Oct 2019 22:00:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=oIXMUgijEE7y4qWQFymThn8iY/Hvr2ojgKSft1IuDyY=;
+ b=piDmvKdxJ5TnfUlXn6c421JbfpL6LXLCDkdUf5X6UIJ8h32bLEazGQyPl+ZBiKKW7n1q
+ OxCBnnqvzIaM2P3p67D9ywIRIoBtUJjQtvsr2St3ldPSTbgTxUQmm6EasYVVg2XnP4Ep
+ o/EtcBSMFmPPjI2nRCQYxul+sQBrlVJxkqhctJWrfuhUVtnfKudLDvLQdcLM0GxVsiz5
+ TutkJKO5WJjA0/G0GknC93l8FF+T5sJC4BfqFmX0xp+/462zMzdhKD8ENBFt0HT8yCD6
+ eqbwkS+bvftUHl7ioXEIMCBiuu32ionniYpKPQsHUNI3ex0EBPYD9EOq1i9pSZSkul4R YQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2vq0q468rn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Oct 2019 22:00:15 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9ILt11n097336;
+        Fri, 18 Oct 2019 22:00:15 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 2vq0eexd3m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Oct 2019 22:00:14 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9IM0Bee021712;
+        Fri, 18 Oct 2019 22:00:11 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 18 Oct 2019 22:00:11 +0000
+To:     Daniel Wagner <dwagner@suse.de>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <jsmart2021@gmail.com>
+Subject: Re: [PATCH] scsi: lpfc: Check queue pointer before use
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20191018162111.8798-1-dwagner@suse.de>
+Date:   Fri, 18 Oct 2019 18:00:09 -0400
+In-Reply-To: <20191018162111.8798-1-dwagner@suse.de> (Daniel Wagner's message
+        of "Fri, 18 Oct 2019 18:21:11 +0200")
+Message-ID: <yq1imolhfyu.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20191018075010.55653-1-hare@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9414 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=500
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910180193
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9414 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=599 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910180193
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/18/2019 12:50 AM, Hannes Reinecke wrote:
-> Hi James,
->
-> trying to figure this annoying lpfc_set_rrq_active() bug
-> I've found the nodelist pointer handling in the lpfc io buffers
-> a bit strange; there's a 'ndlp' pointer, but for scsi the nodelist
-> is primarily accessed via the 'rdata' pointer (although not everywhere).
-> For NVMe it's primarily the 'ndlp' pointer, apparently, but the
-> usage is quite confusing.
-> So here's a patchset to straighten things up; it primarily moves
-> the anonymous protocol-specific structure in the io buffer to a named
-> one, and always accesses the nodelist through the protocol-specific
-> rport data structure.
->
-> It also has the nice side-effect that the protocol-specific areas are
-> aligned now, so clearing the 'rdata' pointer on the scsi side will
-> be equivalent to clearing the 'rport' pointer on the nvme side.
-> And it reduces the size of the io buffer.
->
-> Let me know what you think.
->
-> Hannes Reinecke (3):
->    lpfc: use named structure for combined I/O buffer
->    lpfc: access nodelist through scsi-specific rdata pointer
->    lpfc: access nvme nodelist through nvme rport structure
->
->   drivers/scsi/lpfc/lpfc_init.c |   2 +-
->   drivers/scsi/lpfc/lpfc_nvme.c |  56 ++++++------
->   drivers/scsi/lpfc/lpfc_scsi.c | 196 +++++++++++++++++++++---------------------
->   drivers/scsi/lpfc/lpfc_sli.c  |  26 +++---
->   drivers/scsi/lpfc/lpfc_sli.h  |   6 +-
->   5 files changed, 143 insertions(+), 143 deletions(-)
->
 
-Well, the problem I think you are trying to solve is ultimately the root 
-issue that is solved by this patch in the just-posted 12.6.0.0 patch set:
-[PATCH 05/16] lpfc: Fix bad ndlp ptr in xri aborted handling
+Daniel,
 
-As such, I'd like to see if the 12.6.0.0 patch resolves the issue before 
-going through all the shifting in your patches.
-Note: the failing routine can change as it's totally dependent on where 
-the bogus pointer value takes you.  The key is the 
-lpfc_sli4_sp_handle_abort_xri_wcqe() routine on the stack.
+> The queue pointer might not be valid. The rest of the code checks the
+> pointer before accessing it. lpfc_sli4_process_missed_mbox_completions
+> is the only place where the check is missing.
 
--- james
+Applied to 5.4/scsi-fixes, thanks!
 
+-- 
+Martin K. Petersen	Oracle Linux Engineering
