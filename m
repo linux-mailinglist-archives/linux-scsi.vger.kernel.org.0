@@ -2,57 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 559D5DD4F3
-	for <lists+linux-scsi@lfdr.de>; Sat, 19 Oct 2019 00:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC8EDD53F
+	for <lists+linux-scsi@lfdr.de>; Sat, 19 Oct 2019 01:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394937AbfJRW37 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Oct 2019 18:29:59 -0400
-Received: from [221.146.236.9] ([221.146.236.9]:38065 "EHLO theworld.email"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726008AbfJRW37 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:29:59 -0400
-Received: from [62.212.215.145] by 127.0.0.1 with ESMTP id E8ECC0F01FF; Thu, 17 Oct 2019 20:03:14 +0400
-Message-ID: <x5k-9-zl--v72s@h31.zt0m>
-From:   "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-Reply-To: "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-To:     ukinfo@cicc.com.cn
-Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
-Date:   Thu, 17 Oct 19 20:03:14 GMT
+        id S1731485AbfJRXRJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Oct 2019 19:17:09 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:36200 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731154AbfJRXRJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 18 Oct 2019 19:17:09 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 2FEE129F43;
+        Fri, 18 Oct 2019 19:17:06 -0400 (EDT)
+Date:   Sat, 19 Oct 2019 10:17:09 +1100 (AEDT)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+cc:     Hannes Reinecke <hare@suse.de>, zhengbin <zhengbin13@huawei.com>,
+        bvanassche@acm.org, jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
+        yi.zhang@huawei.com, yanaijie@huawei.com,
+        Johannes Thumshirn <jthumshirn@suse.de>
+Subject: [RFC] scsi: Avoid sign extension when setting command result bytes,
+ was Re: [PATCH v5 00/13] scsi: core: fix uninit-value access of variable
+ sshdr
+In-Reply-To: <yq1lftii2yi.fsf@oracle.com>
+Message-ID: <alpine.LNX.2.21.1910191007480.12@nippy.intranet>
+References: <1571387071-28853-1-git-send-email-zhengbin13@huawei.com>        <f9c663fe-6359-fc7b-e9f5-cf173f6fafbe@suse.de> <yq1lftii2yi.fsf@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="6F846_4C50CA1_7F0"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
---6F846_4C50CA1_7F0
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+On Fri, 18 Oct 2019, Martin K. Petersen wrote:
 
-Greetings
+>
+> (Sorry, zhengbin, you opened a can of worms. This is some of our oldest
+> and most arcane code in SCSI)
+>
 
-My name is Barrister Hans Erich.
+A call to set_host_byte(cmd, x) or set_msg_byte(cmd, x) when x & 0x80 is 
+set clobbers the most significant bytes in cmd->result.
 
-I have a client who is interested to invest in your country, she is a well=
- known politician in her country and deserve a lucrative investment partne=
-rship with you outside her country without any delay   Please can you mana=
-ge such investment please Kindly reply for further details.
+Avoid this implicit sign extension when shifting bits by using an
+unsigned formal parameter.
 
-Your full names ---------
+This is a theoretical bug, found by inspection, so I'm sending an untested 
+RFC patch.
 
+I didn't try to find possible callers that might pass a negative parameter
+and neither did I check whether the clobber might be intentional...
 
-Your urgent response will be appreciated
-
-Thank you and God bless you.
-
-Barrister Hans Erich
-
-Yours sincerely,
-Barrister Hans Erich
-
---6F846_4C50CA1_7F0--
-
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 76ed5e4acd38..ae814fa68bb8 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -306,17 +306,17 @@ static inline struct scsi_data_buffer *scsi_prot(struct scsi_cmnd *cmd)
+ #define scsi_for_each_prot_sg(cmd, sg, nseg, __i)		\
+ 	for_each_sg(scsi_prot_sglist(cmd), sg, nseg, __i)
+ 
+-static inline void set_msg_byte(struct scsi_cmnd *cmd, char status)
++static inline void set_msg_byte(struct scsi_cmnd *cmd, unsigned char status)
+ {
+ 	cmd->result = (cmd->result & 0xffff00ff) | (status << 8);
+ }
+ 
+-static inline void set_host_byte(struct scsi_cmnd *cmd, char status)
++static inline void set_host_byte(struct scsi_cmnd *cmd, unsigned char status)
+ {
+ 	cmd->result = (cmd->result & 0xff00ffff) | (status << 16);
+ }
+ 
+-static inline void set_driver_byte(struct scsi_cmnd *cmd, char status)
++static inline void set_driver_byte(struct scsi_cmnd *cmd, unsigned char status)
+ {
+ 	cmd->result = (cmd->result & 0x00ffffff) | (status << 24);
+ }
