@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F8BDBFAB
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 10:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4352BDBFA6
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 10:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442198AbfJRIRf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Oct 2019 04:17:35 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4726 "EHLO huawei.com"
+        id S2442178AbfJRIRd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Oct 2019 04:17:33 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:4721 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2404268AbfJRIRe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 18 Oct 2019 04:17:34 -0400
+        id S2395504AbfJRIRd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 18 Oct 2019 04:17:33 -0400
 Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id B038C8FFBA145C611A77;
+        by Forcepoint Email with ESMTP id 93AB94374CF1B545FD83;
         Fri, 18 Oct 2019 16:17:29 +0800 (CST)
 Received: from huawei.com (10.90.53.225) by DGGEMS411-HUB.china.huawei.com
  (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Fri, 18 Oct 2019
- 16:17:22 +0800
+ 16:17:23 +0800
 From:   zhengbin <zhengbin13@huawei.com>
 To:     <bvanassche@acm.org>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>
 CC:     <yi.zhang@huawei.com>, <yanaijie@huawei.com>,
         <zhengbin13@huawei.com>
-Subject: [PATCH v5 06/13] scsi: scsi_dh_emc: need to check the result of scsi_execute in send_trespass_cmd
-Date:   Fri, 18 Oct 2019 16:24:24 +0800
-Message-ID: <1571387071-28853-7-git-send-email-zhengbin13@huawei.com>
+Subject: [PATCH v5 07/13] scsi: scsi_dh_rdac: need to check the result of scsi_execute in send_mode_select
+Date:   Fri, 18 Oct 2019 16:24:25 +0800
+Message-ID: <1571387071-28853-8-git-send-email-zhengbin13@huawei.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1571387071-28853-1-git-send-email-zhengbin13@huawei.com>
 References: <1571387071-28853-1-git-send-email-zhengbin13@huawei.com>
@@ -42,23 +42,35 @@ of scsi_execute.
 
 Signed-off-by: zhengbin <zhengbin13@huawei.com>
 ---
- drivers/scsi/device_handler/scsi_dh_emc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/device_handler/scsi_dh_rdac.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/device_handler/scsi_dh_emc.c b/drivers/scsi/device_handler/scsi_dh_emc.c
-index caa685c..cf49378 100644
---- a/drivers/scsi/device_handler/scsi_dh_emc.c
-+++ b/drivers/scsi/device_handler/scsi_dh_emc.c
-@@ -267,7 +267,8 @@ static int send_trespass_cmd(struct scsi_device *sdev,
- 			&sshdr, CLARIION_TIMEOUT * HZ, CLARIION_RETRIES,
- 			req_flags, 0, NULL);
- 	if (err) {
--		if (scsi_sense_valid(&sshdr))
-+		if (driver_byte(err) == DRIVER_SENSE &&
-+		    scsi_sense_valid(&sshdr))
- 			res = trespass_endio(sdev, &sshdr);
- 		else {
- 			sdev_printk(KERN_INFO, sdev,
+diff --git a/drivers/scsi/device_handler/scsi_dh_rdac.c b/drivers/scsi/device_handler/scsi_dh_rdac.c
+index 5efc959..2a43985 100644
+--- a/drivers/scsi/device_handler/scsi_dh_rdac.c
++++ b/drivers/scsi/device_handler/scsi_dh_rdac.c
+@@ -531,6 +531,7 @@ static void send_mode_select(struct work_struct *work)
+ 	struct scsi_device *sdev = ctlr->ms_sdev;
+ 	struct rdac_dh_data *h = sdev->handler_data;
+ 	int err = SCSI_DH_OK, retry_cnt = RDAC_RETRY_COUNT;
++	int result;
+ 	struct rdac_queue_data *tmp, *qdata;
+ 	LIST_HEAD(list);
+ 	unsigned char cdb[MAX_COMMAND_SIZE];
+@@ -555,9 +556,10 @@ static void send_mode_select(struct work_struct *work)
+ 		(char *) h->ctlr->array_name, h->ctlr->index,
+ 		(retry_cnt == RDAC_RETRY_COUNT) ? "queueing" : "retrying");
+
+-	if (scsi_execute(sdev, cdb, DMA_TO_DEVICE, &h->ctlr->mode_select,
+-			data_size, NULL, &sshdr, RDAC_TIMEOUT * HZ,
+-			RDAC_RETRIES, req_flags, 0, NULL)) {
++	result = scsi_execute(sdev, cdb, DMA_TO_DEVICE, &h->ctlr->mode_select,
++			     data_size, NULL, &sshdr, RDAC_TIMEOUT * HZ,
++			     RDAC_RETRIES, req_flags, 0, NULL);
++	if (driver_byte(result) == DRIVER_SENSE) {
+ 		err = mode_select_handle_sense(sdev, &sshdr);
+ 		if (err == SCSI_DH_RETRY && retry_cnt--)
+ 			goto retry;
 --
 2.7.4
 
