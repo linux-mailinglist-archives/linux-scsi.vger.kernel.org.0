@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F9BDC2AB
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 12:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DDBDC2B4
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 12:22:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389953AbfJRKUn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Oct 2019 06:20:43 -0400
-Received: from mx2.suse.de ([195.135.220.15]:58820 "EHLO mx1.suse.de"
+        id S2405341AbfJRKWf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Oct 2019 06:22:35 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60636 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387890AbfJRKUn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 18 Oct 2019 06:20:43 -0400
+        id S1728989AbfJRKWf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 18 Oct 2019 06:22:35 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id EF997ACC3;
-        Fri, 18 Oct 2019 10:20:40 +0000 (UTC)
-Subject: Re: [PATCH v5 18/23] sg: replace sg_allow_access
+        by mx1.suse.de (Postfix) with ESMTP id 68781B277;
+        Fri, 18 Oct 2019 10:22:33 +0000 (UTC)
+Subject: Re: [PATCH v5 19/23] sg: rework scatter gather handling
 To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com
 References: <20191008075022.30055-1-dgilbert@interlog.com>
- <20191008075022.30055-19-dgilbert@interlog.com>
+ <20191008075022.30055-20-dgilbert@interlog.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -65,12 +65,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <672381d6-e511-a9b1-8b84-375a4280ec8d@suse.de>
-Date:   Fri, 18 Oct 2019 12:20:40 +0200
+Message-ID: <675d5804-1d0b-1d67-5352-8d4808db172e@suse.de>
+Date:   Fri, 18 Oct 2019 12:22:33 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20191008075022.30055-19-dgilbert@interlog.com>
+In-Reply-To: <20191008075022.30055-20-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -80,15 +80,15 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 10/8/19 9:50 AM, Douglas Gilbert wrote:
-> Replace the sg_allow_access() function with sg_fetch_cmnd()
-> which does a little more. Change sg_finish_scsi_blk_rq() from an
-> int to a void returning function. Rename sg_remove_request()
-> to sg_deact_request(). Other changes, mainly cosmetic.
+> Rename sg_build_indirect() to sg_mk_sgat() and sg_remove_scat()
+> to sg_remove_sgat(). Re-implement those functions. Add
+> sg_calc_sgat_param() to calculate various scatter gather
+> list parameters. Some other minor clean-ups.
 > 
 > Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 > ---
->  drivers/scsi/sg.c | 149 +++++++++++++++++++++++++---------------------
->  1 file changed, 80 insertions(+), 69 deletions(-)
+>  drivers/scsi/sg.c | 275 +++++++++++++++++++++++++---------------------
+>  1 file changed, 152 insertions(+), 123 deletions(-)
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.com>
 
