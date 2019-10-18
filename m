@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7C7DC22C
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 12:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11807DC233
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 12:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633267AbfJRKJ7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Oct 2019 06:09:59 -0400
-Received: from mx2.suse.de ([195.135.220.15]:50822 "EHLO mx1.suse.de"
+        id S2407944AbfJRKMM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Oct 2019 06:12:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52430 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2404942AbfJRKJ7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 18 Oct 2019 06:09:59 -0400
+        id S2404942AbfJRKMM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 18 Oct 2019 06:12:12 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 432DFB6C0;
-        Fri, 18 Oct 2019 10:09:56 +0000 (UTC)
-Subject: Re: [PATCH v5 12/23] sg: change rwlock to spinlock
+        by mx1.suse.de (Postfix) with ESMTP id 20570B2AB;
+        Fri, 18 Oct 2019 10:12:10 +0000 (UTC)
+Subject: Re: [PATCH v5 13/23] sg: ioctl handling
 To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com
 References: <20191008075022.30055-1-dgilbert@interlog.com>
- <20191008075022.30055-13-dgilbert@interlog.com>
+ <20191008075022.30055-14-dgilbert@interlog.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -65,12 +65,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <903fe759-c3be-6ac2-c492-c2f8821c10cb@suse.de>
-Date:   Fri, 18 Oct 2019 12:09:55 +0200
+Message-ID: <dbb1089b-dc56-7e6d-e969-6b0f8c9fd167@suse.de>
+Date:   Fri, 18 Oct 2019 12:12:09 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20191008075022.30055-13-dgilbert@interlog.com>
+In-Reply-To: <20191008075022.30055-14-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -80,19 +80,32 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 10/8/19 9:50 AM, Douglas Gilbert wrote:
-> A reviewer suggested that the extra overhead associated with a
-> rw lock compared to a spinlock was not worth it for short,
-> oft-used critcal sections.
-> 
-> So the rwlock on the request list/array is changed to a spinlock.
-> The head of that list is in the owning sf file descriptor object.
+> Shorten sg_ioctl() by adding some helper functions. sg_ioctl()
+> is the main entry point for ioctls used on this driver's
+> devices.
 > 
 > Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 > ---
->  drivers/scsi/sg.c | 52 +++++++++++++++++++++++------------------------
->  1 file changed, 26 insertions(+), 26 deletions(-)
+>  drivers/scsi/sg.c | 325 ++++++++++++++++++++++++++++------------------
+>  1 file changed, 200 insertions(+), 125 deletions(-)
 > 
-Reviewed-by: Hannes Reinecke <hare@suse.com>
+> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+> index 2796fef42837..90753f7759c7 100644
+> --- a/drivers/scsi/sg.c
+> +++ b/drivers/scsi/sg.c
+> @@ -72,6 +72,9 @@ static char *sg_version_date = "20190606";
+>   */
+>  #define SG_MAX_CDB_SIZE 252
+>  
+> +#define uptr64(val) ((void __user *)(uintptr_t)(val))
+> +#define cuptr64(val) ((const void __user *)(uintptr_t)(val))
+> +
+>  #define SG_DEFAULT_TIMEOUT mult_frac(SG_DEFAULT_TIMEOUT_USER, HZ, USER_HZ)
+>  
+>  /* Bit positions (flags) for sg_device::fdev_bm bitmask follow */
+
+These defines are used only once; I'd rather drop them and do the
+conversion in-place.
 
 Cheers,
 
