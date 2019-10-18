@@ -2,63 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A3FDF8BA
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 01:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1292DF972
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 02:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728819AbfJUXox (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Oct 2019 19:44:53 -0400
-Received: from kvm5.telegraphics.com.au ([98.124.60.144]:52798 "EHLO
-        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727264AbfJUXox (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Oct 2019 19:44:53 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 297D829E51;
-        Mon, 21 Oct 2019 19:44:49 -0400 (EDT)
-Date:   Tue, 22 Oct 2019 10:44:47 +1100 (AEDT)
-From:   Finn Thain <fthain@telegraphics.com.au>
-To:     Hannes Reinecke <hare@suse.de>
-cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 13/24] scsi: Kill DRIVER_SENSE
-In-Reply-To: <20191021095322.137969-14-hare@suse.de>
-Message-ID: <alpine.LNX.2.21.1910221034331.14@nippy.intranet>
-References: <20191021095322.137969-1-hare@suse.de> <20191021095322.137969-14-hare@suse.de>
+        id S1730065AbfJVA25 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Oct 2019 20:28:57 -0400
+Received: from mail.keramplus.com ([212.3.124.226]:39028 "EHLO
+        trixbox1.localdomain" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727953AbfJVA25 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Oct 2019 20:28:57 -0400
+Received: from 127.0.0.1 (trixbox1.localdomain [127.0.0.1])
+        by trixbox1.localdomain (Postfix) with SMTP id 0BB02ADC87F;
+        Fri, 18 Oct 2019 04:59:11 +0300 (EEST)
+Received: from [108.66.177.29]
+        by 127.0.0.1 with ESMTP id 6FEA15640BA;
+        Fri, 18 Oct 2019 04:56:32 +0200
+Message-ID: <z-x$$-128d-46@mc00741.8.nr>
+From:   "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
+Reply-To: "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
+To:     Aliabbasi42@yahoo.com
+Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
+Date:   Fri, 18 Oct 19 04:56:32 GMT
+X-Mailer: eGroups Message Poster
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/alternative;
+        boundary="E5E0BC6DA7E_4_8....A.03_"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-> diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-> index c40fbea06cc5..649f9610ca72 100644
-> --- a/drivers/scsi/megaraid/megaraid_sas_base.c
-> +++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-> @@ -1,3 +1,4 @@
-> +
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /*
->   *  Linux MegaRAID driver for SAS based RAID controllers
+--E5E0BC6DA7E_4_8....A.03_
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-Typo?
+Greetings
 
-> index 59443e0184fd..d6ecb773c512 100644
-> --- a/drivers/scsi/scsi.c
-> +++ b/drivers/scsi/scsi.c
-> @@ -203,8 +203,8 @@ void scsi_finish_command(struct scsi_cmnd *cmd)
->  	 * If we have valid sense information, then some kind of recovery
->  	 * must have taken place.  Make a note of this.
->  	 */
-> -	if (SCSI_SENSE_VALID(cmd))
-> -		cmd->result |= (DRIVER_SENSE << 24);
-> +	if (SCSI_SENSE_VALID(cmd) && status_byte(cmd->result) == SAM_STAT_GOOD)
-> +		set_status_byte(cmd, SAM_STAT_CHECK_CONDITION);
+My name is Barrister Hans Erich.
 
-This means that a REQUEST SENSE command can never result in SAM_STAT_GOOD, 
-right? Are there implications for higher layers?
+I have a client who is interested to invest in your country, she is a well=
+ known politician in her country and deserve a lucrative investment partne=
+rship with you outside her country without any delay   Please can you mana=
+ge such investment please Kindly reply for further details.
 
--- 
+Your full names ---------
+
+
+Your urgent response will be appreciated
+
+Thank you and God bless you.
+
+Barrister Hans Erich
+
+Yours sincerely,
+Barrister Hans Erich
+
+--E5E0BC6DA7E_4_8....A.03_--
+
