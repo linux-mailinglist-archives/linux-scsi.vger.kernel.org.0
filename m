@@ -2,88 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4760DFE25
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 09:21:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8FDDFF2E
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 10:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731180AbfJVHVQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Oct 2019 03:21:16 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33330 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726160AbfJVHVP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 22 Oct 2019 03:21:15 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 058C2B476;
-        Tue, 22 Oct 2019 07:21:13 +0000 (UTC)
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Daniel Wagner <dwagner@suse.de>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        James Smart <james.smart@broadcom.com>
-Subject: [PATCH v2] scsi: lpfc: Honor module parameter lpfc_use_adisc
-Date:   Tue, 22 Oct 2019 09:21:12 +0200
-Message-Id: <20191022072112.132268-1-dwagner@suse.de>
-X-Mailer: git-send-email 2.16.4
+        id S2388317AbfJVINF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Oct 2019 04:13:05 -0400
+Received: from mail.keramplus.com ([212.3.124.226]:6168 "EHLO
+        trixbox1.localdomain" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2388230AbfJVINF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Oct 2019 04:13:05 -0400
+Received: from 127.0.0.1 (trixbox1.localdomain [127.0.0.1])
+        by trixbox1.localdomain (Postfix) with SMTP id A896CF285E4;
+        Thu, 17 Oct 2019 23:11:24 +0300 (EEST)
+Received: from [125.186.20.13] by 127.0.0.1 SMTP id ND8n7DjN921ddL for <hotmail.comChalmers777@hotmail.comSvedin778>; Fri, 18 Oct 2019 02:04:48 +0500
+Message-ID: <6i-$p6-$om04i7-v87sou4-znb12@9zg.3.c9>
+From:   "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
+Reply-To: "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
+To:     hotmail.comChalmers777@hotmail.comSvedin778
+Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
+Date:   Fri, 18 Oct 19 02:04:48 GMT
+X-Mailer: MIME-tools 5.503 (Entity 5.501)
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+        boundary="E94AE35.BAB2EE.2"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The initial lpfc_desc_set_adisc implementation dea3101e0a5c ("lpfc:
-add Emulex FC driver version 8.0.28") enabled ADISC if
 
-	cfg_use_adisc && RSCN_MODE && FCP_2_DEVICE
+--E94AE35.BAB2EE.2
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-In commit 92d7f7b0cde3 ("[SCSI] lpfc: NPIV: add NPIV support on top of
-SLI-3") this changed to
+Greetings
 
-	(cfg_use_adisc && RSC_MODE) || FCP_2_DEVICE
+My name is Barrister Hans Erich.
 
-and later in ffc954936b13 ("[SCSI] lpfc 8.3.13: FC Discovery Fixes and
-enhancements.") to
+I have a client who is interested to invest in your country, she is a well=
+ known politician in her country and deserve a lucrative investment partne=
+rship with you outside her country without any delay   Please can you mana=
+ge such investment please Kindly reply for further details.
 
-	(cfg_use_adisc && RSC_MODE) || (FCP_2_DEVICE && FCP_TARGET)
-
-A customer reports that after a Devloss, an ADISC failure is logged. It
-turns out the ADISC flag is set even the user explicitly set
-lpfc_use_adisc = 0.
-
-[Sat Dec 22 22:55:58 2018] lpfc 0000:82:00.0: 2:(0):0203 Devloss timeout on WWPN 50:01:43:80:12:8e:40:20 NPort x05df00 Data: x82000000 x8 xa
-[Sat Dec 22 23:08:20 2018] lpfc 0000:82:00.0: 2:(0):2755 ADISC failure DID:05DF00 Status:x9/x70000
-
-Fixes: 92d7f7b0cde3 ("[SCSI] lpfc: NPIV: add NPIV support on top of SLI-3")
-Cc: Dick Kennedy <dick.kennedy@broadcom.com>
-Cc: James Smart <james.smart@broadcom.com>
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
-Reviewed-by: Hannes Reinecke <hare@sused.de>
-Reviewed-by: James Smart <james.smart@broadcom.com>
----
-
-v2:
-  - fixed a couple of typos
-  - fixed Cc email addresses
-  - added Reviewed-by
+Your full names ---------
 
 
- drivers/scsi/lpfc/lpfc_nportdisc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Your urgent response will be appreciated
 
-diff --git a/drivers/scsi/lpfc/lpfc_nportdisc.c b/drivers/scsi/lpfc/lpfc_nportdisc.c
-index cc6b1b0bae83..d27ae84326df 100644
---- a/drivers/scsi/lpfc/lpfc_nportdisc.c
-+++ b/drivers/scsi/lpfc/lpfc_nportdisc.c
-@@ -940,9 +940,9 @@ lpfc_disc_set_adisc(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
- 
- 	if (!(vport->fc_flag & FC_PT2PT)) {
- 		/* Check config parameter use-adisc or FCP-2 */
--		if ((vport->cfg_use_adisc && (vport->fc_flag & FC_RSCN_MODE)) ||
-+		if (vport->cfg_use_adisc && ((vport->fc_flag & FC_RSCN_MODE) ||
- 		    ((ndlp->nlp_fcp_info & NLP_FCP_2_DEVICE) &&
--		     (ndlp->nlp_type & NLP_FCP_TARGET))) {
-+		     (ndlp->nlp_type & NLP_FCP_TARGET)))) {
- 			spin_lock_irq(shost->host_lock);
- 			ndlp->nlp_flag |= NLP_NPR_ADISC;
- 			spin_unlock_irq(shost->host_lock);
--- 
-2.16.4
+Thank you and God bless you.
+
+Barrister Hans Erich
+
+Yours sincerely,
+Barrister Hans Erich
+
+--E94AE35.BAB2EE.2--
 
