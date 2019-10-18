@@ -2,58 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 499B1DC6A3
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 15:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B081DDC6E4
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 16:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633957AbfJRNzk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Oct 2019 09:55:40 -0400
-Received: from mx2.suse.de ([195.135.220.15]:47268 "EHLO mx1.suse.de"
+        id S2408322AbfJROGD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Oct 2019 10:06:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51560 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2633933AbfJRNzk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 18 Oct 2019 09:55:40 -0400
+        id S2390337AbfJROED (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 18 Oct 2019 10:04:03 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B8996B1E4;
-        Fri, 18 Oct 2019 13:55:38 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 269A3B250;
+        Fri, 18 Oct 2019 14:04:02 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
+        Martin Wilck <martin.wilck@suse.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH] scsi_dh_alua: Do not run STPG for implicit ALUA
-Date:   Fri, 18 Oct 2019 15:55:37 +0200
-Message-Id: <20191018135537.69462-1-hare@suse.de>
+Subject: [PATCH] scsi: fixup scsi_device_from_queue()
+Date:   Fri, 18 Oct 2019 16:03:55 +0200
+Message-Id: <20191018140355.108106-1-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If a target only supports implicit ALUA sending a SET TARGET PORT GROUPS
-command is not only pointless, but might actually cause issues.
-So don't.
+After commit 8930a6c20791 ("scsi: core: add support for request batching")
+scsi_device_from_queue() will not work for devices implementing the
+new scsi_mq_ops_no_commit template.
+Hence multipath is not able to detect the underlying scsi devices
+and multipath startup will fail.
 
+Fixes: 8930a6c20791 ("scsi: core: add support for request batching")
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/device_handler/scsi_dh_alua.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/scsi_lib.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-index 4971104b1817..0053277721d0 100644
---- a/drivers/scsi/device_handler/scsi_dh_alua.c
-+++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-@@ -832,6 +832,10 @@ static void alua_rtpg_work(struct work_struct *work)
- 		if (err != SCSI_DH_OK)
- 			pg->flags &= ~ALUA_PG_RUN_STPG;
- 	}
-+	/* Do not run STPG if only implicit ALUA is supported */
-+	if (scsi_device_tpgs(sdev) == TPGS_MODE_IMPLICIT)
-+		pg->flags &= ~ALUA_PG_RUN_STPG;
-+
- 	if (pg->flags & ALUA_PG_RUN_STPG) {
- 		pg->flags &= ~ALUA_PG_RUN_STPG;
- 		spin_unlock_irqrestore(&pg->lock, flags);
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index c1c2998297b2..cd3e21a0098c 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1924,7 +1924,8 @@ struct scsi_device *scsi_device_from_queue(struct request_queue *q)
+ {
+ 	struct scsi_device *sdev = NULL;
+ 
+-	if (q->mq_ops == &scsi_mq_ops)
++	if (q->mq_ops == &scsi_mq_ops ||
++	    q->mq_ops == &scsi_mq_ops_no_commit)
+ 		sdev = q->queuedata;
+ 	if (!sdev || !get_device(&sdev->sdev_gendev))
+ 		sdev = NULL;
 -- 
 2.16.4
 
