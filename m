@@ -2,74 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F05A1DBAA9
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 02:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27C0DBB65
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 03:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503955AbfJRAU2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 17 Oct 2019 20:20:28 -0400
-Received: from zaovasilisa.ru ([88.200.194.99]:49001 "EHLO usrv.lan"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2503926AbfJRAU1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 17 Oct 2019 20:20:27 -0400
-X-Greylist: delayed 22562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Oct 2019 20:20:19 EDT
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by usrv.lan (Postfix) with SMTP id E44FB186481;
-        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
-Received: from (HELO zlba) [49.155.13.191] by 127.0.0.1 id 08foBMeDLK33 for <linux-nvme@lists.infradead.org>; Thu, 17 Oct 2019 10:59:51 -0200
-Message-ID: <9$4n3z523f$d$rou@1wu6v8t.44r>
-From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
-To:     linux-nvme@lists.infradead.org
-Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
-Date:   Thu, 17 Oct 19 10:59:51 GMT
-X-Mailer: MIME-tools 5.503 (Entity 5.501)
+        id S2406929AbfJRBxp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 17 Oct 2019 21:53:45 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:49958 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727350AbfJRBxp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 17 Oct 2019 21:53:45 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9I1nAA4100776;
+        Fri, 18 Oct 2019 01:53:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=hHnqh6qyHEoayazyXNT5OE70o/N+c+h0wRrJAxYG2qg=;
+ b=hyqepSL4ZGxqV4HMgs4veVIKlwhPTAUIgA9Si3WEB1yVd2WVXlXPRGOgR1KAy1DwdaDk
+ GiTbYUafoaSJ13vO09eHK6e9AlwPon7tNfHum8PTDtiTYUfdwk23AAw0SRfnzHU1vDLt
+ oAwTTFIqjT1KTzUZ9XSWC4HXe1Dwyvedn51P3XHSNtmcpEOg9RoleLxDQaoE2N0m+K9t
+ 0tTApw7UzqY36xidh98ZGdRjeFK+q3JjHPs1Ht6QZmcIGBXG/F8VCOhkWU9dD1pglyYx
+ zTdjKayHac59p8IIQf/FpNXq9r4BYx2m+pSSzpAxRyjLcN9TPNuZvt2C+cetaghk9omr 0g== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2vq0q40q4m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Oct 2019 01:53:14 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9I1qxTO021211;
+        Fri, 18 Oct 2019 01:53:13 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 2vq0ev5a1y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Oct 2019 01:53:13 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9I1r4D3005559;
+        Fri, 18 Oct 2019 01:53:05 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 18 Oct 2019 01:53:03 +0000
+To:     Don Brace <don.brace@microsemi.com>
+Cc:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
+        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
+        <bader.alisaleh@microchip.com>, <gerry.morong@microchip.com>,
+        <mahesh.rajashekhara@microchip.com>, <hch@infradead.org>,
+        <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
+        <POSWALD@suse.com>, <shunyong.yang@hxt-semitech.com>,
+        <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH] hpsa: add missing hunks in reset-patch
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <157107623870.17997.11208813089704833029.stgit@brunhilda>
+Date:   Thu, 17 Oct 2019 21:52:59 -0400
+In-Reply-To: <157107623870.17997.11208813089704833029.stgit@brunhilda> (Don
+        Brace's message of "Mon, 14 Oct 2019 13:03:58 -0500")
+Message-ID: <yq1mudykef8.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="EFA7_FB09FAD2"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9413 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=971
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910180017
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9413 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910180016
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
---EFA7_FB09FAD2
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Don,
 
-Dear Sir / Madam
+> - correct returning from reset before outstanding
+>   commands are completed for the device.
 
+Applied to 5.4/scsi-fixes, thanks!
 
-
-Since ever we left your country back to Canada , we have gotten Government=
- approval and we have been busying planning for the less privilege Childre=
-n projects.
-
-We are planning to release first batch of the funds $2,990,000.00 within 1=
-4 days for building an estate for motherless children in your city.
-
-I want you to use my mother;s company name to register this charity projec=
-t in your country after receiving the project funds.
-
-It must be registered as { Bayraktar Group Homeless Children Ltd }.
-
-
-Can you handle and supervise this big project ?
-Can you manager all the workers as a senior supervisor ?
-We want to be sure you can handle it before we proceed with this project.
-
-
-Please call me if you want to hear from us + 1-917 580 4919.
-Please can you manage such project please Kindly reply for further details=
-.
-
-Your full names-----------
-
-
-
-Ekrem Bayraktar.
-Bayraktar Shipping Group
-
---EFA7_FB09FAD2--
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
