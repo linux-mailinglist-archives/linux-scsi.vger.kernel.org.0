@@ -2,129 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7F7DC6E2
-	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 16:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C910BDC745
+	for <lists+linux-scsi@lfdr.de>; Fri, 18 Oct 2019 16:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2501883AbfJROFy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 18 Oct 2019 10:05:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52436 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2405796AbfJROFy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 18 Oct 2019 10:05:54 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id C7F8AAD17;
-        Fri, 18 Oct 2019 14:05:51 +0000 (UTC)
-Subject: Re: [PATCH v5 00/13] scsi: core: fix uninit-value access of variable
- sshdr
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     zhengbin <zhengbin13@huawei.com>, bvanassche@acm.org,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        yi.zhang@huawei.com, yanaijie@huawei.com,
-        Johannes Thumshirn <jthumshirn@suse.de>
-References: <1571387071-28853-1-git-send-email-zhengbin13@huawei.com>
- <f9c663fe-6359-fc7b-e9f5-cf173f6fafbe@suse.de> <yq1lftii2yi.fsf@oracle.com>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- mQINBE6KyREBEACwRN6XKClPtxPiABx5GW+Yr1snfhjzExxkTYaINHsWHlsLg13kiemsS6o7
- qrc+XP8FmhcnCOts9e2jxZxtmpB652lxRB9jZE40mcSLvYLM7S6aH0WXKn8bOqpqOGJiY2bc
- 6qz6rJuqkOx3YNuUgiAxjuoYauEl8dg4bzex3KGkGRuxzRlC8APjHlwmsr+ETxOLBfUoRNuE
- b4nUtaseMPkNDwM4L9+n9cxpGbdwX0XwKFhlQMbG3rWA3YqQYWj1erKIPpgpfM64hwsdk9zZ
- QO1krgfULH4poPQFpl2+yVeEMXtsSou915jn/51rBelXeLq+cjuK5+B/JZUXPnNDoxOG3j3V
- VSZxkxLJ8RO1YamqZZbVP6jhDQ/bLcAI3EfjVbxhw9KWrh8MxTcmyJPn3QMMEp3wpVX9nSOQ
- tzG72Up/Py67VQe0x8fqmu7R4MmddSbyqgHrab/Nu+ak6g2RRn3QHXAQ7PQUq55BDtj85hd9
- W2iBiROhkZ/R+Q14cJkWhzaThN1sZ1zsfBNW0Im8OVn/J8bQUaS0a/NhpXJWv6J1ttkX3S0c
- QUratRfX4D1viAwNgoS0Joq7xIQD+CfJTax7pPn9rT////hSqJYUoMXkEz5IcO+hptCH1HF3
- qz77aA5njEBQrDRlslUBkCZ5P+QvZgJDy0C3xRGdg6ZVXEXJOQARAQABtCpIYW5uZXMgUmVp
- bmVja2UgKFN1U0UgTGFicykgPGhhcmVAc3VzZS5kZT6JAkEEEwECACsCGwMFCRLMAwAGCwkI
- BwMCBhUIAgkKCwQWAgMBAh4BAheABQJOisquAhkBAAoJEGz4yi9OyKjPOHoQAJLeLvr6JNHx
- GPcHXaJLHQiinz2QP0/wtsT8+hE26dLzxb7hgxLafj9XlAXOG3FhGd+ySlQ5wSbbjdxNjgsq
- FIjqQ88/Lk1NfnqG5aUTPmhEF+PzkPogEV7Pm5Q17ap22VK623MPaltEba+ly6/pGOODbKBH
- ak3gqa7Gro5YCQzNU0QVtMpWyeGF7xQK76DY/atvAtuVPBJHER+RPIF7iv5J3/GFIfdrM+wS
- BubFVDOibgM7UBnpa7aohZ9RgPkzJpzECsbmbttxYaiv8+EOwark4VjvOne8dRaj50qeyJH6
- HLpBXZDJH5ZcYJPMgunghSqghgfuUsd5fHmjFr3hDb5EoqAfgiRMSDom7wLZ9TGtT6viDldv
- hfWaIOD5UhpNYxfNgH6Y102gtMmN4o2P6g3UbZK1diH13s9DA5vI2mO2krGz2c5BOBmcctE5
- iS+JWiCizOqia5Op+B/tUNye/YIXSC4oMR++Fgt30OEafB8twxydMAE3HmY+foawCpGq06yM
- vAguLzvm7f6wAPesDAO9vxRNC5y7JeN4Kytl561ciTICmBR80Pdgs/Obj2DwM6dvHquQbQrU
- Op4XtD3eGUW4qgD99DrMXqCcSXX/uay9kOG+fQBfK39jkPKZEuEV2QdpE4Pry36SUGfohSNq
- xXW+bMc6P+irTT39VWFUJMcSuQINBE6KyREBEACvEJggkGC42huFAqJcOcLqnjK83t4TVwEn
- JRisbY/VdeZIHTGtcGLqsALDzk+bEAcZapguzfp7cySzvuR6Hyq7hKEjEHAZmI/3IDc9nbdh
- EgdCiFatah0XZ/p4vp7KAelYqbv8YF/ORLylAdLh9rzLR6yHFqVaR4WL4pl4kEWwFhNSHLxe
- 55G56/dxBuoj4RrFoX3ynerXfbp4dH2KArPc0NfoamqebuGNfEQmDbtnCGE5zKcR0zvmXsRp
- qU7+caufueZyLwjTU+y5p34U4PlOO2Q7/bdaPEdXfpgvSpWk1o3H36LvkPV/PGGDCLzaNn04
- BdiiiPEHwoIjCXOAcR+4+eqM4TSwVpTn6SNgbHLjAhCwCDyggK+3qEGJph+WNtNU7uFfscSP
- k4jqlxc8P+hn9IqaMWaeX9nBEaiKffR7OKjMdtFFnBRSXiW/kOKuuRdeDjL5gWJjY+IpdafP
- KhjvUFtfSwGdrDUh3SvB5knSixE3qbxbhbNxmqDVzyzMwunFANujyyVizS31DnWC6tKzANkC
- k15CyeFC6sFFu+WpRxvC6fzQTLI5CRGAB6FAxz8Hu5rpNNZHsbYs9Vfr/BJuSUfRI/12eOCL
- IvxRPpmMOlcI4WDW3EDkzqNAXn5Onx/b0rFGFpM4GmSPriEJdBb4M4pSD6fN6Y/Jrng/Bdwk
- SQARAQABiQIlBBgBAgAPBQJOiskRAhsMBQkSzAMAAAoJEGz4yi9OyKjPgEwQAIP/gy/Xqc1q
- OpzfFScswk3CEoZWSqHxn/fZasa4IzkwhTUmukuIvRew+BzwvrTxhHcz9qQ8hX7iDPTZBcUt
- ovWPxz+3XfbGqE+q0JunlIsP4N+K/I10nyoGdoFpMFMfDnAiMUiUatHRf9Wsif/nT6oRiPNJ
- T0EbbeSyIYe+ZOMFfZBVGPqBCbe8YMI+JiZeez8L9JtegxQ6O3EMQ//1eoPJ5mv5lWXLFQfx
- f4rAcKseM8DE6xs1+1AIsSIG6H+EE3tVm+GdCkBaVAZo2VMVapx9k8RMSlW7vlGEQsHtI0FT
- c1XNOCGjaP4ITYUiOpfkh+N0nUZVRTxWnJqVPGZ2Nt7xCk7eoJWTSMWmodFlsKSgfblXVfdM
- 9qoNScM3u0b9iYYuw/ijZ7VtYXFuQdh0XMM/V6zFrLnnhNmg0pnK6hO1LUgZlrxHwLZk5X8F
- uD/0MCbPmsYUMHPuJd5dSLUFTlejVXIbKTSAMd0tDSP5Ms8Ds84z5eHreiy1ijatqRFWFJRp
- ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
- PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <053798e1-a06a-b870-a1bc-ac8561240504@suse.de>
-Date:   Fri, 18 Oct 2019 16:05:51 +0200
+        id S2634011AbfJROYm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 18 Oct 2019 10:24:42 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35420 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731923AbfJROYm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 18 Oct 2019 10:24:42 -0400
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9IEJ9Ko006828
+        for <linux-scsi@vger.kernel.org>; Fri, 18 Oct 2019 10:24:41 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vq0hab37c-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Fri, 18 Oct 2019 10:24:37 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <maier@linux.ibm.com>;
+        Fri, 18 Oct 2019 15:24:33 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 18 Oct 2019 15:24:29 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9IEOSTX43188264
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 18 Oct 2019 14:24:28 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 52B88A4055;
+        Fri, 18 Oct 2019 14:24:28 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14C06A404D;
+        Fri, 18 Oct 2019 14:24:28 +0000 (GMT)
+Received: from oc4120165700.ibm.com (unknown [9.152.98.163])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 18 Oct 2019 14:24:28 +0000 (GMT)
+Subject: Re: [PATCH] scsi: fixup scsi_device_from_queue()
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Martin Wilck <martin.wilck@suse.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+References: <20191018140355.108106-1-hare@suse.de>
+From:   Steffen Maier <maier@linux.ibm.com>
+Date:   Fri, 18 Oct 2019 16:24:27 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <yq1lftii2yi.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20191018140355.108106-1-hare@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19101814-0008-0000-0000-000003234E35
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19101814-0009-0000-0000-00004A427052
+Message-Id: <a77b6501-3ce8-69f7-9f30-2c4d9de3175e@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-18_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910180134
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/18/19 3:43 PM, Martin K. Petersen wrote:
-> 
-> Hannes,
-> 
->> The one thing which I patently don't like is the ambivalence between
->> DRIVER_SENSE and scsi_sense_valid().  What shall we do if only _one_
->> of them is set?  IE what would be the correct way of action if
->> DRIVER_SENSE is not set, but we have a valid sense code?  Or the other
->> way around?
-> 
-> I agree, it's a mess.
-> 
-> (Sorry, zhengbin, you opened a can of worms. This is some of our oldest
-> and most arcane code in SCSI)
-> 
->> But more important, from a quick glance not all drivers set the
->> DRIVER_SENSE bit; so for things like hpsa or smartpqi the sense code is
->> never evaluated after this patchset.
-> 
-> And yet we appear to have several code paths where sense evaluation is
-> contingent on DRIVER_SENSE. So no matter what, behavior might
-> change if we enforce consistent semantics. *sigh*
-> 
->> I _really_ would prefer to ditch the 'DRIVER_SENSE' bit, and rely on
->> scsi_sense_valid() only.
-> 
-> I would really like to get rid of DRIVER_* completely. Except for
-> DRIVER_SENSE, few are actually in use:
-> 
-> DRIVER_OK: 	0
-> DRIVER_BUSY:	0
-> DRIVER_SOFT:	0
-> DRIVER_MEDIA:	0
-> DRIVER_ERROR:	6
+Hannes, this is already in 
+https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/log/?h=5.4/scsi-postmerge 
+from 
+https://lore.kernel.org/linux-block/20190807144948.28265-1-maier@linux.ibm.com/T/ 
+and Martin just sent a pull request to Linus 
+https://lore.kernel.org/linux-scsi/yq1pniui429.fsf@oracle.com/T/#m91f5b9098c369dc0d9bfef84aa53ee35533a31be
 
-Three less now :-)
+On 10/18/19 4:03 PM, Hannes Reinecke wrote:
+> After commit 8930a6c20791 ("scsi: core: add support for request batching")
+> scsi_device_from_queue() will not work for devices implementing the
+> new scsi_mq_ops_no_commit template.
+> Hence multipath is not able to detect the underlying scsi devices
+> and multipath startup will fail.
+> 
+> Fixes: 8930a6c20791 ("scsi: core: add support for request batching")
+> Signed-off-by: Hannes Reinecke <hare@suse.com>
+> ---
+>   drivers/scsi/scsi_lib.c | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index c1c2998297b2..cd3e21a0098c 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -1924,7 +1924,8 @@ struct scsi_device *scsi_device_from_queue(struct request_queue *q)
+>   {
+>   	struct scsi_device *sdev = NULL;
+> 
+> -	if (q->mq_ops == &scsi_mq_ops)
+> +	if (q->mq_ops == &scsi_mq_ops ||
+> +	    q->mq_ops == &scsi_mq_ops_no_commit)
+>   		sdev = q->queuedata;
+>   	if (!sdev || !get_device(&sdev->sdev_gendev))
+>   		sdev = NULL;
+> 
 
-Cheers,
 
-Hannes
 -- 
-Dr. Hannes Reinecke		      Teamlead Storage & Networking
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 247165 (AG München), GF: Felix Imendörffer
+Mit freundlichen Gruessen / Kind regards
+Steffen Maier
+
+Linux on IBM Z Development
+
+https://www.ibm.com/privacy/us/en/
+IBM Deutschland Research & Development GmbH
+Vorsitzender des Aufsichtsrats: Matthias Hartmann
+Geschaeftsfuehrung: Dirk Wittkopp
+Sitz der Gesellschaft: Boeblingen
+Registergericht: Amtsgericht Stuttgart, HRB 243294
+
