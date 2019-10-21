@@ -2,61 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 065ADDDE99
-	for <lists+linux-scsi@lfdr.de>; Sun, 20 Oct 2019 15:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CFADE1D4
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Oct 2019 03:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbfJTNWC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 20 Oct 2019 09:22:02 -0400
-Received: from [185.116.42.18] ([185.116.42.18]:2605 "EHLO swnlsrv_1"
-        rhost-flags-FAIL-FAIL-FAIL-FAIL) by vger.kernel.org with ESMTP
-        id S1726301AbfJTNWC (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 20 Oct 2019 09:22:02 -0400
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by swnlsrv_1 (Postfix) with SMTP id 522EACA6418;
-        Sat, 19 Oct 2019 00:44:38 +0200 (CEST)
-Received: from [195.58.67.193] by 127.0.0.1 SMTP id LL9odd9r8E4mtR; Fri, 18 Oct 2019 20:42:52 -0200
-Message-ID: <sl$-f$x2w1-7fc@5unie0up.5zbh>
-From:   "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-Reply-To: "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-To:     rainnie@usa.com
-Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
-Date:   Fri, 18 Oct 19 20:42:52 GMT
-X-Mailer: Microsoft Outlook Express 6.00.2462.0000
+        id S1726718AbfJUBuU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 20 Oct 2019 21:50:20 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:48662 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726696AbfJUBuU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 20 Oct 2019 21:50:20 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 8FE927B08909C3ACA811;
+        Mon, 21 Oct 2019 09:50:17 +0800 (CST)
+Received: from [127.0.0.1] (10.184.213.217) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.439.0; Mon, 21 Oct 2019
+ 09:50:07 +0800
+Subject: Re: [PATCH v5 00/13] scsi: core: fix uninit-value access of variable
+ sshdr
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Hannes Reinecke <hare@suse.de>
+CC:     <bvanassche@acm.org>, <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yanaijie@huawei.com>, Johannes Thumshirn <jthumshirn@suse.de>
+References: <1571387071-28853-1-git-send-email-zhengbin13@huawei.com>
+ <f9c663fe-6359-fc7b-e9f5-cf173f6fafbe@suse.de> <yq1lftii2yi.fsf@oracle.com>
+From:   "zhengbin (A)" <zhengbin13@huawei.com>
+Message-ID: <b09013a1-648e-7cfc-9751-fc955161aba4@huawei.com>
+Date:   Mon, 21 Oct 2019 09:49:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="4.F8E2EF0B_96D_"
-X-Priority: 3
-X-MSMail-Priority: Normal
+In-Reply-To: <yq1lftii2yi.fsf@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.184.213.217]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
---4.F8E2EF0B_96D_
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+On 2019/10/18 21:43, Martin K. Petersen wrote:
+> Hannes,
+>
+>> The one thing which I patently don't like is the ambivalence between
+>> DRIVER_SENSE and scsi_sense_valid().  What shall we do if only _one_
+>> of them is set?  IE what would be the correct way of action if
+>> DRIVER_SENSE is not set, but we have a valid sense code?  Or the other
+>> way around?
+> I agree, it's a mess.
+>
+> (Sorry, zhengbin, you opened a can of worms. This is some of our oldest
+> and most arcane code in SCSI)
+>
+>> But more important, from a quick glance not all drivers set the
+>> DRIVER_SENSE bit; so for things like hpsa or smartpqi the sense code is
+>> never evaluated after this patchset.
+> And yet we appear to have several code paths where sense evaluation is
+> contingent on DRIVER_SENSE. So no matter what, behavior might
+> change if we enforce consistent semantics. *sigh*
 
-Greetings
+So what should we do to prevent unit-value access of sshdr?
 
-My name is Barrister Hans Erich.
+1. still init sshdr in __scsi_execute?
 
-I have a client who is interested to invest in your country, she is a well=
- known politician in her country and deserve a lucrative investment partne=
-rship with you outside her country without any delay   Please can you mana=
-ge such investment please Kindly reply for further details.
+@@ -255,6 +255,13 @@ int __scsi_execute(struct scsi_device *sdev, const unsigned char *cmd,
+ 	struct scsi_request *rq;
+ 	int ret = DRIVER_ERROR << 24;
 
-Your full names ---------
++	/*
++	 * Zero-initialize sshdr for those callers that check the *sshdr
++	 * contents even if no sense data is available.
++	 */
++	if (sshdr)
++		memset(sshdr, 0, sizeof(struct scsi_sense_hdr));
++
+ 	req = blk_get_request(sdev->request_queue,
+ 			data_direction == DMA_TO_DEVICE ?
+ 			REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN, BLK_MQ_REQ_PREEMPT);
+
+2. init sshdr in callers of scsi_execute, instead of check the result of scsi_execute and check
+whether sshdr is valid? for example:
+@@ -506,6 +506,7 @@ int scsi_report_opcode(struct scsi_device *sdev, unsigned char *buffer,
+        put_unaligned_be32(len, &cmd[6]);
+        memset(buffer, 0, len);
+
++       memset(&sshdr, 0 ,sizeof(sshdr));
+        result = scsi_execute_req(sdev, cmd, DMA_FROM_DEVICE, buffer, len,
+                                  &sshdr, 30 * HZ, 3, NULL)
+
+Besides, should sd_pr_command init sshdr?? cause sd_pr_command  have checked the result of scsi_execute 
+and check whether sshdr is valid.
 
 
-Your urgent response will be appreciated
+3. get rid of DRIVER_* completely? even this, we should init sshdr first. 
 
-Thank you and God bless you.
 
-Barrister Hans Erich
+sshdr is just 8 bytes, init it does not affect performance
 
-Yours sincerely,
-Barrister Hans Erich
+My advice is 2.
 
---4.F8E2EF0B_96D_--
+>
+>> I _really_ would prefer to ditch the 'DRIVER_SENSE' bit, and rely on
+>> scsi_sense_valid() only.
+> I would really like to get rid of DRIVER_* completely. Except for
+> DRIVER_SENSE, few are actually in use:
+>
+> DRIVER_OK: 	0
+> DRIVER_BUSY:	0
+> DRIVER_SOFT:	0
+> DRIVER_MEDIA:	0
+> DRIVER_ERROR:	6
+> DRIVER_INVALID:	4
+> DRIVER_TIMEOUT:	1
+> DRIVER_SENSE:	58
+>
+> Johannes: Whatever happened to your efforts at cleaning all this up? Do
+> you have a patch series or a working tree we could use as starting
+> point?
+>
 
