@@ -2,173 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A68BDF2FA
-	for <lists+linux-scsi@lfdr.de>; Mon, 21 Oct 2019 18:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE78DF348
+	for <lists+linux-scsi@lfdr.de>; Mon, 21 Oct 2019 18:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729918AbfJUQZi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Oct 2019 12:25:38 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:36570 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729657AbfJUQZi (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 21 Oct 2019 12:25:38 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id 2150780B1938B0A8656D;
-        Tue, 22 Oct 2019 00:25:30 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.439.0; Tue, 22 Oct 2019 00:25:21 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>,
-        Luo Jiaxing <luojiaxing@huawei.com>,
-        "John Garry" <john.garry@huawei.com>
-Subject: [PATCH 18/18] scsi: hisi_sas: Record the phy down event in debugfs
-Date:   Tue, 22 Oct 2019 00:22:15 +0800
-Message-ID: <1571674935-108326-19-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1571674935-108326-1-git-send-email-john.garry@huawei.com>
-References: <1571674935-108326-1-git-send-email-john.garry@huawei.com>
+        id S1727211AbfJUQhw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Oct 2019 12:37:52 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:34973 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726289AbfJUQhw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Oct 2019 12:37:52 -0400
+Received: by mail-pg1-f193.google.com with SMTP id c8so3318994pgb.2
+        for <linux-scsi@vger.kernel.org>; Mon, 21 Oct 2019 09:37:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gOutXIxd6gu3qApLn7/xvZyJ82D/0dOXSVxtFVuHrsI=;
+        b=Ykjyi1FCVhB18LuoYmxT7MmplXQ5Ma3ABqo3G3cv6adf9gp04LvpofnuOcb7+3oDu1
+         2KDd813ginEoEDguryxhVoophHSWNO2h4sAMjviJ3/aQBkJTmNXheB8QpH1qU+5nPpf/
+         AiCDZeRGEHWm87LbPUyZMb5Tqkme2huQhz3gpWnmmyA0rX7ME3hjEF5mz79bHlhqJGz6
+         IPm2Ov7jZx8ftXSs8Is2jDm5BW2Y6oYZekIa1I1okTBAomBtyTUIi1TaMWoiMbcs3wZb
+         fXvl8N1nSKSqJ0pJk0NEOHTSscIwM7hnNl6YS/FyamGTrHAtL5ri5lhzUD8DPdnpoQBS
+         JLeA==
+X-Gm-Message-State: APjAAAXtczqWfbloiu/gIEtIYcn0ApFcGeMfpfk9iatdzN8qd0Yonfkc
+        mmijj4GwBaejsGiS36JgM6nTVS/p/0I=
+X-Google-Smtp-Source: APXvYqyR0NCz9jD3Rci3BuKIjQG+YP/ypU6W8xmAACE43eWk4YRCwVrMFQKm6M2EEhmUKUdo4WKriA==
+X-Received: by 2002:a63:5b1d:: with SMTP id p29mr11525932pgb.209.1571675870936;
+        Mon, 21 Oct 2019 09:37:50 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id p9sm15964727pfn.115.2019.10.21.09.37.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Oct 2019 09:37:50 -0700 (PDT)
+Subject: Re: [PATCH 11/24] advansys: kill driver_defined status byte accessors
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        linux-scsi@vger.kernel.org
+References: <20191021095322.137969-1-hare@suse.de>
+ <20191021095322.137969-12-hare@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <6e710e3c-1812-4a4d-f9d5-671161db261a@acm.org>
+Date:   Mon, 21 Oct 2019 09:37:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20191021095322.137969-12-hare@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Luo Jiaxing <luojiaxing@huawei.com>
+On 10/21/19 2:53 AM, Hannes Reinecke wrote:
+> @@ -6021,43 +6015,28 @@ static void adv_isr_callback(ADV_DVC_VAR *adv_dvc_varp, ADV_SCSI_REQ_Q *scsiqp)
+>   				ASC_DBG(2, "SAM_STAT_CHECK_CONDITION\n");
+>   				ASC_DBG_PRT_SENSE(2, scp->sense_buffer,
+>   						  SCSI_SENSE_BUFFERSIZE);
+> -				/*
+> -				 * Note: The 'status_byte()' macro used by
+> -				 * target drivers defined in scsi.h shifts the
+> -				 * status byte returned by host drivers right
+> -				 * by 1 bit.  This is why target drivers also
+> -				 * use right shifted status byte definitions.
+> -				 * For instance target drivers use
+> -				 * CHECK_CONDITION, defined to 0x1, instead of
+> -				 * the SCSI defined check condition value of
+> -				 * 0x2. Host drivers are supposed to return
+> -				 * the status byte as it is defined by SCSI.
+> -				 */
+> -				scp->result = DRIVER_BYTE(DRIVER_SENSE) |
+> -				    STATUS_BYTE(scsiqp->scsi_status);
+> -			} else {
+> -				scp->result = STATUS_BYTE(scsiqp->scsi_status);
+>   			}
+> +			scp->result = status_byte(scsiqp->scsi_status);
+>   			break;
 
-The number of phy down reflects the quality of the link between SAS
-controller and disk. In order to allow the user to confirm the link quality
-of the system, we record the number of phy down for each phy.
+Did you really want to delete the code that sets DRIVER_SENSE?
 
-The user can check the current phy down count by reading the debugfs file
-corresponding to the specific phy, or clear the phy down count by writing 0
-to the debugfs file.
+> @@ -6789,47 +6768,30 @@ static void asc_isr_callback(ASC_DVC_VAR *asc_dvc_varp, ASC_QDONE_INFO *qdonep)
+>   				ASC_DBG(2, "SAM_STAT_CHECK_CONDITION\n");
+>   				ASC_DBG_PRT_SENSE(2, scp->sense_buffer,
+>   						  SCSI_SENSE_BUFFERSIZE);
+> -				/*
+> -				 * Note: The 'status_byte()' macro used by
+> -				 * target drivers defined in scsi.h shifts the
+> -				 * status byte returned by host drivers right
+> -				 * by 1 bit.  This is why target drivers also
+> -				 * use right shifted status byte definitions.
+> -				 * For instance target drivers use
+> -				 * CHECK_CONDITION, defined to 0x1, instead of
+> -				 * the SCSI defined check condition value of
+> -				 * 0x2. Host drivers are supposed to return
+> -				 * the status byte as it is defined by SCSI.
+> -				 */
+> -				scp->result = DRIVER_BYTE(DRIVER_SENSE) |
+> -				    STATUS_BYTE(qdonep->d3.scsi_stat);
+> -			} else {
+> -				scp->result = STATUS_BYTE(qdonep->d3.scsi_stat);
+>   			}
+> +			scp->result = status_byte(qdonep->d3.scsi_stat);
+>   			break;
 
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas.h       |  1 +
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 63 ++++++++++++++++++++++++++
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  2 +
- 3 files changed, 66 insertions(+)
+Same comment here: did you really want to delete the code that sets DRIVER_SENSE?
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index 72823222e08f..233c73e01246 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -169,6 +169,7 @@ struct hisi_sas_phy {
- 	enum sas_linkrate	minimum_linkrate;
- 	enum sas_linkrate	maximum_linkrate;
- 	int enable;
-+	atomic_t down_cnt;
- };
- 
- struct hisi_sas_port {
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index a225f885b708..ed777b9e80b8 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -3705,6 +3705,52 @@ static const struct file_operations hisi_sas_debugfs_bist_enable_ops = {
- 	.owner = THIS_MODULE,
- };
- 
-+static ssize_t hisi_sas_debugfs_phy_down_cnt_write(struct file *filp,
-+						   const char __user *buf,
-+						   size_t count, loff_t *ppos)
-+{
-+	struct seq_file *s = filp->private_data;
-+	struct hisi_sas_phy *phy = s->private;
-+	unsigned int set_val;
-+	int res;
-+
-+	res = kstrtouint_from_user(buf, count, 0, &set_val);
-+	if (res)
-+		return res;
-+
-+	if (set_val > 0)
-+		return -EINVAL;
-+
-+	atomic_set(&phy->down_cnt, 0);
-+
-+	return count;
-+}
-+
-+static int hisi_sas_debugfs_phy_down_cnt_show(struct seq_file *s, void *p)
-+{
-+	struct hisi_sas_phy *phy = s->private;
-+
-+	seq_printf(s, "%d\n", atomic_read(&phy->down_cnt));
-+
-+	return 0;
-+}
-+
-+static int hisi_sas_debugfs_phy_down_cnt_open(struct inode *inode,
-+					      struct file *filp)
-+{
-+	return single_open(filp, hisi_sas_debugfs_phy_down_cnt_show,
-+			   inode->i_private);
-+}
-+
-+static const struct file_operations hisi_sas_debugfs_phy_down_cnt_ops = {
-+	.open = hisi_sas_debugfs_phy_down_cnt_open,
-+	.read = seq_read,
-+	.write = hisi_sas_debugfs_phy_down_cnt_write,
-+	.llseek = seq_lseek,
-+	.release = single_release,
-+	.owner = THIS_MODULE,
-+};
-+
- void hisi_sas_debugfs_work_handler(struct work_struct *work)
- {
- 	struct hisi_hba *hisi_hba =
-@@ -3837,6 +3883,21 @@ static int hisi_sas_debugfs_alloc(struct hisi_hba *hisi_hba, int dump_index)
- 	return -ENOMEM;
- }
- 
-+static void hisi_sas_debugfs_phy_down_cnt_init(struct hisi_hba *hisi_hba)
-+{
-+	struct dentry *dir = debugfs_create_dir("phy_down_cnt",
-+						hisi_hba->debugfs_dir);
-+	char name[16];
-+	int phy_no;
-+
-+	for (phy_no = 0; phy_no < hisi_hba->n_phy; phy_no++) {
-+		snprintf(name, 16, "%d", phy_no);
-+		debugfs_create_file(name, 0600, dir,
-+				    &hisi_hba->phy[phy_no],
-+				    &hisi_sas_debugfs_phy_down_cnt_ops);
-+	}
-+}
-+
- static void hisi_sas_debugfs_bist_init(struct hisi_hba *hisi_hba)
- {
- 	hisi_hba->debugfs_bist_dentry =
-@@ -3883,6 +3944,8 @@ void hisi_sas_debugfs_init(struct hisi_hba *hisi_hba)
- 	hisi_hba->debugfs_dump_dentry =
- 			debugfs_create_dir("dump", hisi_hba->debugfs_dir);
- 
-+	hisi_sas_debugfs_phy_down_cnt_init(hisi_hba);
-+
- 	for (i = 0; i < hisi_sas_debugfs_dump_count; i++) {
- 		if (hisi_sas_debugfs_alloc(hisi_hba, i)) {
- 			debugfs_remove_recursive(hisi_hba->debugfs_dir);
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index e4da309009c0..2ae7070db41a 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -1549,6 +1549,8 @@ static irqreturn_t phy_down_v3_hw(int phy_no, struct hisi_hba *hisi_hba)
- 	u32 phy_state, sl_ctrl, txid_auto;
- 	struct device *dev = hisi_hba->dev;
- 
-+	atomic_inc(&phy->down_cnt);
-+
- 	del_timer(&phy->timer);
- 	hisi_sas_phy_write32(hisi_hba, phy_no, PHYCTRL_NOT_RDY_MSK, 1);
- 
--- 
-2.17.1
+Thanks,
 
+Bart.
