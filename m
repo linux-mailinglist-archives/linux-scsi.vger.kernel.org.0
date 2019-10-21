@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C4EDE88D
+	by mail.lfdr.de (Postfix) with ESMTP id 18D09DE88B
 	for <lists+linux-scsi@lfdr.de>; Mon, 21 Oct 2019 11:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727919AbfJUJxd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1727915AbfJUJxd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 21 Oct 2019 05:53:33 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48840 "EHLO mx1.suse.de"
+Received: from mx2.suse.de ([195.135.220.15]:48814 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727885AbfJUJxc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 21 Oct 2019 05:53:32 -0400
+        id S1727850AbfJUJxb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 21 Oct 2019 05:53:31 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D75E8BABB;
+        by mx1.suse.de (Postfix) with ESMTP id D57D7BAB9;
         Mon, 21 Oct 2019 09:53:28 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         Johannes Thumshirn <jthumshirn@suse.de>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 08/24] sg: use SAM status definitions and avoid using masked_status
-Date:   Mon, 21 Oct 2019 11:53:06 +0200
-Message-Id: <20191021095322.137969-9-hare@suse.de>
+Subject: [PATCH 09/24] scsi: Kill obsolete linux-specific status codes
+Date:   Mon, 21 Oct 2019 11:53:07 +0200
+Message-Id: <20191021095322.137969-10-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191021095322.137969-1-hare@suse.de>
 References: <20191021095322.137969-1-hare@suse.de>
@@ -32,74 +32,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use standard SAM status definitions and avoid using masked status
-values.
+After several years it's time to finally kill them.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/sg.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ include/scsi/scsi_proto.h | 19 -------------------
+ 1 file changed, 19 deletions(-)
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index e88fb3daebcc..60ff388d04b9 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -503,7 +503,7 @@ sg_read(struct file *filp, char __user *buf, size_t count, loff_t * ppos)
- 	old_hdr->target_status = hp->masked_status;
- 	old_hdr->host_status = hp->host_status;
- 	old_hdr->driver_status = hp->driver_status;
--	if ((CHECK_CONDITION & hp->masked_status) ||
-+	if ((SAM_STAT_CHECK_CONDITION & hp->status) ||
- 	    (DRIVER_SENSE & hp->driver_status))
- 		memcpy(old_hdr->sense_buffer, srp->sense_b,
- 		       sizeof (old_hdr->sense_buffer));
-@@ -529,7 +529,7 @@ sg_read(struct file *filp, char __user *buf, size_t count, loff_t * ppos)
- 		break;
- 	case DID_ERROR:
- 		old_hdr->result = (srp->sense_b[0] == 0 && 
--				  hp->masked_status == GOOD) ? 0 : EIO;
-+				  hp->status == SAM_STAT_GOOD) ? 0 : EIO;
- 		break;
- 	default:
- 		old_hdr->result = EIO;
-@@ -574,7 +574,7 @@ sg_new_read(Sg_fd * sfp, char __user *buf, size_t count, Sg_request * srp)
- 	}
- 	hp->sb_len_wr = 0;
- 	if ((hp->mx_sb_len > 0) && hp->sbp) {
--		if ((CHECK_CONDITION & hp->masked_status) ||
-+		if ((SAM_STAT_CHECK_CONDITION & hp->status) ||
- 		    (DRIVER_SENSE & hp->driver_status)) {
- 			int sb_len = SCSI_SENSE_BUFFERSIZE;
- 			sb_len = (hp->mx_sb_len > sb_len) ? sb_len : hp->mx_sb_len;
-@@ -587,7 +587,7 @@ sg_new_read(Sg_fd * sfp, char __user *buf, size_t count, Sg_request * srp)
- 			hp->sb_len_wr = len;
- 		}
- 	}
--	if (hp->masked_status || hp->host_status || hp->driver_status)
-+	if (hp->status || hp->host_status || hp->driver_status)
- 		hp->info |= SG_INFO_CHECK;
- 	if (copy_to_user(buf, hp, SZ_SG_IO_HDR)) {
- 		err = -EFAULT;
-@@ -873,7 +873,7 @@ sg_fill_request_table(Sg_fd *sfp, sg_req_info_t *rinfo)
- 			break;
- 		rinfo[val].req_state = srp->done + 1;
- 		rinfo[val].problem =
--			srp->header.masked_status &
-+			srp->header.status &
- 			srp->header.host_status &
- 			srp->header.driver_status;
- 		if (srp->done)
-@@ -1355,8 +1355,8 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
- 		srp->header.host_status = host_byte(result);
- 		srp->header.driver_status = driver_byte(result);
- 		if ((sdp->sgdebug > 0) &&
--		    ((CHECK_CONDITION == srp->header.masked_status) ||
--		     (COMMAND_TERMINATED == srp->header.masked_status)))
-+		    ((SAM_STAT_CHECK_CONDITION == srp->header.status) ||
-+		     (SAM_STAT_COMMAND_TERMINATED == srp->header.status)))
- 			__scsi_print_sense(sdp->device, __func__, sense,
- 					   SCSI_SENSE_BUFFERSIZE);
+diff --git a/include/scsi/scsi_proto.h b/include/scsi/scsi_proto.h
+index c36860111932..660f37ce8721 100644
+--- a/include/scsi/scsi_proto.h
++++ b/include/scsi/scsi_proto.h
+@@ -202,25 +202,6 @@ struct scsi_varlen_cdb_hdr {
+ #define SAM_STAT_ACA_ACTIVE      0x30
+ #define SAM_STAT_TASK_ABORTED    0x40
  
+-/*
+- *  Status codes. These are deprecated as they are shifted 1 bit right
+- *  from those found in the SCSI standards. This causes confusion for
+- *  applications that are ported to several OSes. Prefer SAM Status codes
+- *  above.
+- */
+-
+-#define GOOD                 0x00
+-#define CHECK_CONDITION      0x01
+-#define CONDITION_GOOD       0x02
+-#define BUSY                 0x04
+-#define INTERMEDIATE_GOOD    0x08
+-#define INTERMEDIATE_C_GOOD  0x0a
+-#define RESERVATION_CONFLICT 0x0c
+-#define COMMAND_TERMINATED   0x11
+-#define QUEUE_FULL           0x14
+-#define ACA_ACTIVE           0x18
+-#define TASK_ABORTED         0x20
+-
+ #define STATUS_MASK          0xfe
+ 
+ /*
 -- 
 2.16.4
 
