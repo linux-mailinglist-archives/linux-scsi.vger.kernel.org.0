@@ -2,61 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C8FDDFF2E
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 10:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F819E01FD
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 12:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388317AbfJVINF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Oct 2019 04:13:05 -0400
-Received: from mail.keramplus.com ([212.3.124.226]:6168 "EHLO
-        trixbox1.localdomain" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2388230AbfJVINF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Oct 2019 04:13:05 -0400
-Received: from 127.0.0.1 (trixbox1.localdomain [127.0.0.1])
-        by trixbox1.localdomain (Postfix) with SMTP id A896CF285E4;
-        Thu, 17 Oct 2019 23:11:24 +0300 (EEST)
-Received: from [125.186.20.13] by 127.0.0.1 SMTP id ND8n7DjN921ddL for <hotmail.comChalmers777@hotmail.comSvedin778>; Fri, 18 Oct 2019 02:04:48 +0500
-Message-ID: <6i-$p6-$om04i7-v87sou4-znb12@9zg.3.c9>
-From:   "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-Reply-To: "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-To:     hotmail.comChalmers777@hotmail.comSvedin778
-Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
-Date:   Fri, 18 Oct 19 02:04:48 GMT
-X-Mailer: MIME-tools 5.503 (Entity 5.501)
+        id S1731806AbfJVKZT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Oct 2019 06:25:19 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:40456 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727101AbfJVKZT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 22 Oct 2019 06:25:19 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9MADOuK036193;
+        Tue, 22 Oct 2019 10:23:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=uLCjLsoZs+or6hFhBZCz+RZJZNAnAAiAx/wXBjU68bo=;
+ b=mSl+cMVqCfx57gymLMW5HYnrw4j+XPvG6RdEbT1hmJMh1z2gur2Mp1SaqbJuS8ASxvNF
+ D2GaD9gzL+Dh5sYhXsRhbXg3KNKv/iomrKi4o++mKjK4tDlwg2t24jfEFfDwntIiCwqt
+ bcaZfns9fp0E9os1Gavn2U/ST+FGUA7nvEHRkBLmKWM/Z97gba7o09ldIIqaV1X9MysY
+ VBDaZQCJDMEr13OB/02s2f4yvEpT4eoWgGoh1VDANx915xg+Q5C+VAEpPq71NMCVl0K6
+ IMAiDO3tySQzLSLwuVDXgo6A5RMBDbcjGJKWKXhu72ENwJUzFcQKFy1C7by7IW92mioN 5w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2vqswtdrpp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Oct 2019 10:23:34 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9MANHkx018269;
+        Tue, 22 Oct 2019 10:23:34 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2vsx2qfwge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 22 Oct 2019 10:23:34 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9MANWZS029232;
+        Tue, 22 Oct 2019 10:23:32 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 22 Oct 2019 03:23:31 -0700
+Date:   Tue, 22 Oct 2019 13:23:24 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Bradley Grove <linuxdrivers@attotech.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] [SCSI] esas2r: unlock on error in esas2r_nvram_read_direct()
+Message-ID: <20191022102324.GA27540@mwanda>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="E94AE35.BAB2EE.2"
-X-Priority: 3
-X-MSMail-Priority: Normal
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9417 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910220094
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9417 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910220093
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+This error path is missing an unlock.
 
---E94AE35.BAB2EE.2
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Fixes: 26780d9e12ed ("[SCSI] esas2r: ATTO Technology ExpressSAS 6G SAS/SATA RAID Adapter Driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/scsi/esas2r/esas2r_flash.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Greetings
-
-My name is Barrister Hans Erich.
-
-I have a client who is interested to invest in your country, she is a well=
- known politician in her country and deserve a lucrative investment partne=
-rship with you outside her country without any delay   Please can you mana=
-ge such investment please Kindly reply for further details.
-
-Your full names ---------
-
-
-Your urgent response will be appreciated
-
-Thank you and God bless you.
-
-Barrister Hans Erich
-
-Yours sincerely,
-Barrister Hans Erich
-
---E94AE35.BAB2EE.2--
+diff --git a/drivers/scsi/esas2r/esas2r_flash.c b/drivers/scsi/esas2r/esas2r_flash.c
+index 7bd376d95ed5..b02ac389e6c6 100644
+--- a/drivers/scsi/esas2r/esas2r_flash.c
++++ b/drivers/scsi/esas2r/esas2r_flash.c
+@@ -1197,6 +1197,7 @@ bool esas2r_nvram_read_direct(struct esas2r_adapter *a)
+ 	if (!esas2r_read_flash_block(a, a->nvram, FLS_OFFSET_NVR,
+ 				     sizeof(struct esas2r_sas_nvram))) {
+ 		esas2r_hdebug("NVRAM read failed, using defaults");
++		up(&a->nvram_semaphore);
+ 		return false;
+ 	}
+ 
+-- 
+2.20.1
 
