@@ -2,20 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE47FDFDB1
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 08:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF98DFDBB
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 08:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728842AbfJVG2y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Oct 2019 02:28:54 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41360 "EHLO mx1.suse.de"
+        id S1730635AbfJVGcb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Oct 2019 02:32:31 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42030 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725788AbfJVG2y (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 22 Oct 2019 02:28:54 -0400
+        id S1729573AbfJVGca (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 22 Oct 2019 02:32:30 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id CBD2AAD69;
-        Tue, 22 Oct 2019 06:28:51 +0000 (UTC)
-Subject: Re: [PATCH 18/24] st: return error code in st_scsi_execute()
+        by mx1.suse.de (Postfix) with ESMTP id 9FF31B349;
+        Tue, 22 Oct 2019 06:32:28 +0000 (UTC)
+Subject: Re: [PATCH 19/24] scsi_ioctl: return error code when blk_map_user()
+ fails
 To:     Bart Van Assche <bvanassche@acm.org>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
@@ -23,8 +24,8 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Johannes Thumshirn <jthumshirn@suse.de>,
         linux-scsi@vger.kernel.org
 References: <20191021095322.137969-1-hare@suse.de>
- <20191021095322.137969-19-hare@suse.de>
- <3a5ac65a-b765-df88-0613-455f3d4cab46@acm.org>
+ <20191021095322.137969-20-hare@suse.de>
+ <f636567d-9152-c05c-ccb8-7d4df806a2b7@acm.org>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -70,12 +71,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <a74e0dce-76c1-75b1-1ac7-5c758e096094@suse.de>
-Date:   Tue, 22 Oct 2019 08:28:51 +0200
+Message-ID: <1347f556-8ed0-e4d3-158d-5034c2263d85@suse.de>
+Date:   Tue, 22 Oct 2019 08:32:28 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <3a5ac65a-b765-df88-0613-455f3d4cab46@acm.org>
+In-Reply-To: <f636567d-9152-c05c-ccb8-7d4df806a2b7@acm.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -84,54 +85,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/21/19 6:41 PM, Bart Van Assche wrote:
+On 10/21/19 6:44 PM, Bart Van Assche wrote:
 > On 10/21/19 2:53 AM, Hannes Reinecke wrote:
->> We should return the actual error code in st_scsi_execute(),
->> avoiding the need to use DRIVER_ERROR.
+>> When failing to map the user buffer we should return the actual
+>> error code, avoiding the usage of DRIVER_ERROR.
 >>
 >> Signed-off-by: Hannes Reinecke <hare@suse.de>
 >> ---
->>   drivers/scsi/st.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>   block/scsi_ioctl.c | 7 ++++---
+>>   1 file changed, 4 insertions(+), 3 deletions(-)
 >>
->> diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
->> index e3266a64a477..5f38369cc62f 100644
->> --- a/drivers/scsi/st.c
->> +++ b/drivers/scsi/st.c
->> @@ -549,7 +549,7 @@ static int st_scsi_execute(struct st_request
->> *SRpnt, const unsigned char *cmd,
->>               data_direction == DMA_TO_DEVICE ?
->>               REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN, 0);
->>       if (IS_ERR(req))
->> -        return DRIVER_ERROR << 24;
->> +        return PTR_ERR(req);
->>       rq = scsi_req(req);
->>       req->rq_flags |= RQF_QUIET;
->>   @@ -560,7 +560,7 @@ static int st_scsi_execute(struct st_request
->> *SRpnt, const unsigned char *cmd,
->>                         GFP_KERNEL);
->>           if (err) {
->>               blk_put_request(req);
->> -            return DRIVER_ERROR << 24;
->> +            return err;
->>           }
+>> diff --git a/block/scsi_ioctl.c b/block/scsi_ioctl.c
+>> index f5e0ad65e86a..1ab1b8d9641c 100644
+>> --- a/block/scsi_ioctl.c
+>> +++ b/block/scsi_ioctl.c
+>> @@ -485,9 +485,10 @@ int sg_scsi_ioctl(struct request_queue *q, struct
+>> gendisk *disk, fmode_t mode,
+>>           break;
 >>       }
+>>   -    if (bytes && blk_rq_map_kern(q, rq, buffer, bytes, GFP_NOIO)) {
+>> -        err = DRIVER_ERROR << 24;
+>> -        goto error;
+>> +    if (bytes) {
+>> +        err = blk_rq_map_kern(q, rq, buffer, bytes, GFP_NOIO);
+>> +        if (err)
+>> +            goto error;
+>>       }
+>>         blk_execute_rq(q, disk, rq, 0);
 > 
-> The patch description looks confusing to me. Is it perhaps because the
-> caller compares the st_scsi_execute() return value with zero and doesn't
-> use the return value in any other way that it is fine to return an
-> integer error code instead of a SCSI status?
+> Since sg_scsi_ioctl() is used to implement SCSI_IOCTL_SEND_COMMAND, does
+> this patch change the ABI between user space and kernel in a
+> backwards-incompatible way?
 > 
-Yes. The caller does:
-
-	ret = st_scsi_execute(SRpnt, cmd, direction, NULL, bytes, timeout,
-			      retries);
-	if (ret) {
-		/* could not allocate the buffer or request was too large */
-		(STp->buffer)->syscall_result = (-EBUSY);
-		(STp->buffer)->last_SRpnt = NULL;
-
-So it's immaterial _what_ we return here as long as it's non-zero.
+Not really. We do change the return code, but sg_scsi_ioctl() already
+returns negative POSIX error numbers on failure. And, in fact, this
+position is the _only_ possible case where we return something else than
+either an errno or a SCSI status. Which arguably is an error even in the
+current code.
 
 Cheers,
 
