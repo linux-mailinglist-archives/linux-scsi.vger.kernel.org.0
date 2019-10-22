@@ -2,63 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1292DF972
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 02:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64CCDFA84
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 04:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730065AbfJVA25 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 21 Oct 2019 20:28:57 -0400
-Received: from mail.keramplus.com ([212.3.124.226]:39028 "EHLO
-        trixbox1.localdomain" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727953AbfJVA25 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 21 Oct 2019 20:28:57 -0400
-Received: from 127.0.0.1 (trixbox1.localdomain [127.0.0.1])
-        by trixbox1.localdomain (Postfix) with SMTP id 0BB02ADC87F;
-        Fri, 18 Oct 2019 04:59:11 +0300 (EEST)
-Received: from [108.66.177.29]
-        by 127.0.0.1 with ESMTP id 6FEA15640BA;
-        Fri, 18 Oct 2019 04:56:32 +0200
-Message-ID: <z-x$$-128d-46@mc00741.8.nr>
-From:   "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-Reply-To: "Mr Barrister Hans Erich" <Barrister_Hans@stationlibraryjhelum.com>
-To:     Aliabbasi42@yahoo.com
-Subject: RE:PERSONAL LETTER FROM MRS RASHIA AMIRA
-Date:   Fri, 18 Oct 19 04:56:32 GMT
-X-Mailer: eGroups Message Poster
+        id S2387670AbfJVB75 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 21 Oct 2019 21:59:57 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:36060 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387651AbfJVB74 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 21 Oct 2019 21:59:56 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 814A59BA869A78E425DB;
+        Tue, 22 Oct 2019 09:59:53 +0800 (CST)
+Received: from [127.0.0.1] (10.184.213.217) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Tue, 22 Oct 2019
+ 09:59:45 +0800
+Subject: Re: [PATCH v5 00/13] scsi: core: fix uninit-value access of variable
+ sshdr
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     <bvanassche@acm.org>, <jejb@linux.ibm.com>,
+        <linux-scsi@vger.kernel.org>, <yi.zhang@huawei.com>,
+        <yanaijie@huawei.com>, Johannes Thumshirn <jthumshirn@suse.de>
+References: <1571387071-28853-1-git-send-email-zhengbin13@huawei.com>
+ <f9c663fe-6359-fc7b-e9f5-cf173f6fafbe@suse.de> <yq1lftii2yi.fsf@oracle.com>
+ <b09013a1-648e-7cfc-9751-fc955161aba4@huawei.com>
+ <75974004-7216-b035-123b-b1d88e6561e4@suse.de>
+From:   "zhengbin (A)" <zhengbin13@huawei.com>
+Message-ID: <f3c9b935-07a5-6055-e60b-e2b86eb54c80@huawei.com>
+Date:   Tue, 22 Oct 2019 09:59:08 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.3.0
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="E5E0BC6DA7E_4_8....A.03_"
-X-Priority: 3
-X-MSMail-Priority: Normal
+In-Reply-To: <75974004-7216-b035-123b-b1d88e6561e4@suse.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.184.213.217]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
---E5E0BC6DA7E_4_8....A.03_
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+On 2019/10/21 21:06, Hannes Reinecke wrote:
+> On 10/21/19 3:49 AM, zhengbin (A) wrote:
+>> On 2019/10/18 21:43, Martin K. Petersen wrote:
+>>> Hannes,
+>>>
+>>>> The one thing which I patently don't like is the ambivalence between
+>>>> DRIVER_SENSE and scsi_sense_valid().  What shall we do if only _one_
+>>>> of them is set?  IE what would be the correct way of action if
+>>>> DRIVER_SENSE is not set, but we have a valid sense code?  Or the other
+>>>> way around?
+>>> I agree, it's a mess.
+>>>
+>>> (Sorry, zhengbin, you opened a can of worms. This is some of our oldest
+>>> and most arcane code in SCSI)
+>>>
+>>>> But more important, from a quick glance not all drivers set the
+>>>> DRIVER_SENSE bit; so for things like hpsa or smartpqi the sense code is
+>>>> never evaluated after this patchset.
+>>> And yet we appear to have several code paths where sense evaluation is
+>>> contingent on DRIVER_SENSE. So no matter what, behavior might
+>>> change if we enforce consistent semantics. *sigh*
+>> So what should we do to prevent unit-value access of sshdr?
+>>
+> Where do you see it?
+> >From my reading, __scsi_execute() is clearing sshdr by way of
+>
+> __scsi_execute()
+> -> scsi_normalize_sense()
+>     -> memset(sshdr)
 
-Greetings
+__scsi_execute
 
-My name is Barrister Hans Erich.
+      req = blk_get_request(sdev->request_queue,
+            data_direction == DMA_TO_DEVICE ?
+            REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN, BLK_MQ_REQ_PREEMPT);
+    if (IS_ERR(req))
+        return ret;   -->just return
+    rq = scsi_req(req);
 
-I have a client who is interested to invest in your country, she is a well=
- known politician in her country and deserve a lucrative investment partne=
-rship with you outside her country without any delay   Please can you mana=
-ge such investment please Kindly reply for further details.
+    if (bufflen &&    blk_rq_map_kern(sdev->request_queue, req,
+                    buffer, bufflen, GFP_NOIO))
+        goto out;  -->just goto out
 
-Your full names ---------
-
-
-Your urgent response will be appreciated
-
-Thank you and God bless you.
-
-Barrister Hans Erich
-
-Yours sincerely,
-Barrister Hans Erich
-
---E5E0BC6DA7E_4_8....A.03_--
+>
+> Cheers,
+>
+> Hannes
 
