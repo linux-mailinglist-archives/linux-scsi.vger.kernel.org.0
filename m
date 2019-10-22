@@ -2,54 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA45E0CA6
-	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 21:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89EF4E0CA8
+	for <lists+linux-scsi@lfdr.de>; Tue, 22 Oct 2019 21:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387871AbfJVTgu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 22 Oct 2019 15:36:50 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:34488 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731806AbfJVTgu (ORCPT
+        id S2388136AbfJVTgz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 22 Oct 2019 15:36:55 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:55906 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732623AbfJVTgz (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 22 Oct 2019 15:36:50 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9MJXSf6027747;
-        Tue, 22 Oct 2019 12:36:45 -0700
+        Tue, 22 Oct 2019 15:36:55 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9MJZe1B007872;
+        Tue, 22 Oct 2019 12:36:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=pfpt0818;
- bh=dcNHuFf1eXT+uPXYkZNKbblXUsxqFkvddHRMJ3bzar8=;
- b=nKxi6FfJBjEEsFQt3lWYCsRB1bw8yAZbibgf0Yrp1Ss1V6h3h7hxyVo4dFiDAAt75gc3
- mju6o1hSmnxjs7muqgbZWQqTP1c2AZiFnuJrmBdy0eV0o42cCBautEs5mMCyZcnbx83i
- ldatvBeKSAggqzYcybOfmYRZbG9tpFs0srT8ib6oThS2andZzchc6mD/S+yMlw+WKlQ8
- k2vz46FuFo3eUHH+tj48dR9mZ1Vs8kYrvj7b4oPUxRuGPtqA9WQuOQAWihiOFNV6EqiZ
- L1OWTrBT3r8YTeZbMHSlf8qK8xANIs9ZoNJALBT7Lg+kDD5FJ0q/ikQ4A6pK3SgjfcIp eg== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2vsyjha146-1
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=pfpt0818; bh=WeF2NDmeJM35579Gy7dFq6s67RlMX/UKTbJQDpqcBRI=;
+ b=aTeko+Z6HG3tummM4wA3cf6YtmU/QcjXXCBGiA31E7swAwPdIK3YNjUU0T3GuISMMJla
+ E1LWAUVBxWS07KXs1W48ad/Tg59E72BnvsgwB5LiHWWxVnUvVhMXx/S5jlO30N6YRjvj
+ C3n6ZwrRy6ZQKLZt1Tk8xhg9J8ok/AMKZXhyxVFBbyyTilADxgVcgpxwjRBG4WNcTapF
+ 7lL+Mcuv2qXbepX0R8veNERpPFF/iHg9EJQZB0/toaBYwHtxHUGkrBjKvhPHOmyDQ6Ua
+ LsgEEcYqihtHzETM3Q1syVd3pGpY/a8hfCauRh3iTu25+5D6DeDiiKZNQ2TPZD4nukwM 6A== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2vsw612f9q-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 22 Oct 2019 12:36:45 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 22 Oct
- 2019 12:36:44 -0700
+        Tue, 22 Oct 2019 12:36:49 -0700
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 22 Oct
+ 2019 12:36:47 -0700
 Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
  (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Tue, 22 Oct 2019 12:36:44 -0700
+ Transport; Tue, 22 Oct 2019 12:36:47 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 467FF3F703F;
-        Tue, 22 Oct 2019 12:36:44 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id 752783F7040;
+        Tue, 22 Oct 2019 12:36:47 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x9MJai2e007111;
-        Tue, 22 Oct 2019 12:36:44 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id x9MJalJO007115;
+        Tue, 22 Oct 2019 12:36:47 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x9MJah6G007110;
-        Tue, 22 Oct 2019 12:36:43 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id x9MJalW0007114;
+        Tue, 22 Oct 2019 12:36:47 -0700
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 0/2] qla2xxx: Fixes for the driver
-Date:   Tue, 22 Oct 2019 12:36:41 -0700
-Message-ID: <20191022193643.7076-1-hmadhani@marvell.com>
+Subject: [PATCH 1/2] qla2xxx: Initialized mailbox to prevent driver load failure
+Date:   Tue, 22 Oct 2019 12:36:42 -0700
+Message-ID: <20191022193643.7076-2-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
+In-Reply-To: <20191022193643.7076-1-hmadhani@marvell.com>
+References: <20191022193643.7076-1-hmadhani@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
@@ -59,30 +61,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin, 
+This patch fixes issue with Gen7 adapter in a blade enviornment,
+where one of the port will not be detected by driver. Firmware
+expectes mailbox 11 to be set or clear by driver for newer ISP.
 
-This series has couple bug fixes for the driver. 
+Following message is seen in the log file
 
-First patch addresses initialization error with the newer adapter on a 
-blade systems. 
+[   18.810892] qla2xxx [0000:d8:00.0]-1820:1: **** Failed=102 mb[0]=4005 mb[1]=37 mb[2]=20 mb[3]=8
+[   18.819596]  cmd=2 ****
 
-Second patch adds protection for accidental flash corruption using SysFS path. 
+Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
+---
+ drivers/scsi/qla2xxx/qla_mbx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Please apply them to 5.4/scsi-fixes branch for inclusion in 5.4-rc5.
-
-Thanks,
-Himanshu
-
-Himanshu Madhani (1):
-  qla2xxx: Initialized mailbox to prevent driver load failure
-
-Quinn Tran (1):
-  qla2xxx: Fix partial flash write of MBI
-
- drivers/scsi/qla2xxx/qla_attr.c | 7 +++----
- drivers/scsi/qla2xxx/qla_mbx.c  | 3 ++-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
+index 1cc6913f76c4..4a1f21c11758 100644
+--- a/drivers/scsi/qla2xxx/qla_mbx.c
++++ b/drivers/scsi/qla2xxx/qla_mbx.c
+@@ -702,6 +702,7 @@ qla2x00_execute_fw(scsi_qla_host_t *vha, uint32_t risc_addr)
+ 		mcp->mb[2] = LSW(risc_addr);
+ 		mcp->mb[3] = 0;
+ 		mcp->mb[4] = 0;
++		mcp->mb[11] = 0;
+ 		ha->flags.using_lr_setting = 0;
+ 		if (IS_QLA25XX(ha) || IS_QLA81XX(ha) || IS_QLA83XX(ha) ||
+ 		    IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
+@@ -746,7 +747,7 @@ qla2x00_execute_fw(scsi_qla_host_t *vha, uint32_t risc_addr)
+ 		if (ha->flags.exchoffld_enabled)
+ 			mcp->mb[4] |= ENABLE_EXCHANGE_OFFLD;
+ 
+-		mcp->out_mb |= MBX_4|MBX_3|MBX_2|MBX_1;
++		mcp->out_mb |= MBX_4 | MBX_3 | MBX_2 | MBX_1 | MBX_11;
+ 		mcp->in_mb |= MBX_3 | MBX_2 | MBX_1;
+ 	} else {
+ 		mcp->mb[1] = LSW(risc_addr);
 -- 
 2.12.0
 
