@@ -2,130 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6B7E25F1
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 23:57:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFCEE25F3
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 23:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406008AbfJWV5B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Oct 2019 17:57:01 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:39249 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436631AbfJWV5A (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Oct 2019 17:57:00 -0400
-Received: by mail-wm1-f65.google.com with SMTP id r141so453690wme.4
-        for <linux-scsi@vger.kernel.org>; Wed, 23 Oct 2019 14:56:59 -0700 (PDT)
+        id S2436646AbfJWV5E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Oct 2019 17:57:04 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:33911 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405980AbfJWV5C (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Oct 2019 17:57:02 -0400
+Received: by mail-wm1-f67.google.com with SMTP id v3so605653wmh.1
+        for <linux-scsi@vger.kernel.org>; Wed, 23 Oct 2019 14:57:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9/kCSM3ac65LJdRx5ThoMi30zGJwuBOAuIpc9ny5c7Q=;
-        b=h3XJshm+k5KjhrH12v196QqSRPIV1s3ZUbejJ+QyFDp9KYleG/BR50oDM4tgbxdaQu
-         2SmKZv/Se1+/ac+iZc027hdccMowfgLEiDD+TwcTQxxI/vW8fpt1SkprHoAmutzdUa8C
-         /GyeqH3EvJ+zBdlarB/UnvNl+GfQ7YxRZhzPapi9xWeGmCPDwMgH+ndAetVeMawUCr2Z
-         xUsYRhJlt659P6H2T8NeXqv6wKVPhOe7yTGp5xC2yQeFF60iL1jH6OoL0T8GeE9ZR89I
-         JKq2xXjonkn0JqDAh57roXFBp4tSFVmxKDYgTxKUfSPXy2v030DzY3HIvHlNu1x5VgXO
-         Wetw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=+IDRIjyVoyAmLj293uUkTe7BXgOI1AVX7xDEcsaoklw=;
+        b=opHjs0Bb/J1eM2y1XUaSlrhhJkeKo6cQmWyfgO4iipV6ZYlbUeS1FnpST5eGLh06Xl
+         Kbi6dbrsHipYStme031Ns9NCXflO9/B4SxmE+WmouKPaxkS8AEGXnF5Qs63JYOrlX+kE
+         at6BXglA/MGg3zwVm40OKul1l8VEJs4G4IQhxwRgbcLZM8blJT0/k06qHz+xKLOINUWC
+         ZZINJU2gZA1pmHvmdOE5cMoZnlIR1x4IKrppxnoaE7s89po7681pDmj63OtDp7/qGndP
+         nJYh+jQrLdqFKKUYvwQCBZeBJMota5Hj6Yki109y8JfEYJ9E/LhV73+9OdvTShQHJsm/
+         kfaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9/kCSM3ac65LJdRx5ThoMi30zGJwuBOAuIpc9ny5c7Q=;
-        b=krxdX3K17ycW2DGlw8elc2ItJ9bOGNRF5kzR0b1mlTQNjiU6L/xB/UPrE/V2JMx7gr
-         McW6nTEAh3BFHiWy9hb0UwaZcgyHu+bWEcFsrDRgMkoaNLRiq3UJKw0GIyTV6QpbO0Fv
-         9YS4H4e9aeXt2Or6Llpe6VGcu47IpIZd8/W3GpWo6/2miZfoAUzKV9z6ucGRVh2BqrmP
-         5iXMxXv8cBwNLOfg3JBNuq6KRXWREpZyA6PHoUz9CYq/ZhUlyUUE4GnMZyEJbiOM23X+
-         motPWj4Xhj7HIr6bUppNoT6WZ2W7QeVFeaOQhaWz4T0ouyoOejKvMiEWQcdJSPyaL4BU
-         P9NA==
-X-Gm-Message-State: APjAAAW5wnOHNjf74k+oE3nubj/CkFBIAwTyM3cu1X8+H2wH3XUDo8HY
-        I7Wnqrd+z70W/fcEiF0Zi28bkkPi
-X-Google-Smtp-Source: APXvYqxuMqgcymVriFMaRP5SRSN/flRGFi6d6sQ/+28DyKrftZzz4v1GTCPST/1IVYDC6ly/Y2FPaA==
-X-Received: by 2002:a1c:610b:: with SMTP id v11mr1789254wmb.156.1571867818596;
-        Wed, 23 Oct 2019 14:56:58 -0700 (PDT)
+         :references;
+        bh=+IDRIjyVoyAmLj293uUkTe7BXgOI1AVX7xDEcsaoklw=;
+        b=rwwn229cKapr2dn0YgCTV6QtVU+fggiJWwK01aP9EY+ejNe76uPnXsrjAyUpifwEa5
+         K1J1YgA8SINFsIQg/Jj5Fi1JGcElg8wF1pDNP61cndMwJ3xNXwPG4ubzgixW9IPIBszx
+         FXGn4LwsnnDWsdgyB66+gvU3rOgP653J7l8AG6K/8JreuGQou2M3W5gQ0oLW0QF5dLUE
+         JiLV5zsELUuplVSHB81vsanhWw5tIrrnleK0sFkWnixS1zE4LP1H9XDdoWYHDhu30DH2
+         d1s79/laLApt8WgzGZNUBLlH5/5QyYn9Bc5NK1p5WyKagFPnk91BwdVXK8nATrVXALov
+         3p7w==
+X-Gm-Message-State: APjAAAXiUzQHhUqh//SCaZO6o7cIwy7Wn5IGqwNjPFScmq6UYsUnpZsF
+        jVMa9E/iX1tOd9KGuo1DDO6/30Ls
+X-Google-Smtp-Source: APXvYqyx7NH+CxIy1iYs51Gj/pZPCPfsJPFa4LPaUilje0t9tS8DkHBrFJc/eyGLl5Es3WZY/jnHFg==
+X-Received: by 2002:a1c:48c4:: with SMTP id v187mr1867522wma.27.1571867820090;
+        Wed, 23 Oct 2019 14:57:00 -0700 (PDT)
 Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h17sm796775wme.6.2019.10.23.14.56.57
+        by smtp.gmail.com with ESMTPSA id h17sm796775wme.6.2019.10.23.14.56.58
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 23 Oct 2019 14:56:58 -0700 (PDT)
+        Wed, 23 Oct 2019 14:56:59 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH 31/32] elx: efct: Add Makefile and Kconfig for efct driver
-Date:   Wed, 23 Oct 2019 14:55:56 -0700
-Message-Id: <20191023215557.12581-32-jsmart2021@gmail.com>
+Subject: [PATCH 32/32] elx: efct: Tie into kernel Kconfig and build process
+Date:   Wed, 23 Oct 2019 14:55:57 -0700
+Message-Id: <20191023215557.12581-33-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20191023215557.12581-1-jsmart2021@gmail.com>
 References: <20191023215557.12581-1-jsmart2021@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch completes the efct driver population.
-
-This patch adds driver definitions for:
-Adds the efct driver Kconfig and Makefiles
+This final patch ties the efct driver into the kernel Kconfig
+and build linkages in the drivers/scsi directory.
 
 Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/elx/Kconfig  |  8 ++++++++
- drivers/scsi/elx/Makefile | 30 ++++++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
- create mode 100644 drivers/scsi/elx/Kconfig
- create mode 100644 drivers/scsi/elx/Makefile
+ drivers/scsi/Kconfig  | 2 ++
+ drivers/scsi/Makefile | 1 +
+ 2 files changed, 3 insertions(+)
 
-diff --git a/drivers/scsi/elx/Kconfig b/drivers/scsi/elx/Kconfig
-new file mode 100644
-index 000000000000..3d25d8463c48
---- /dev/null
-+++ b/drivers/scsi/elx/Kconfig
-@@ -0,0 +1,8 @@
-+config SCSI_EFCT
-+	tristate "Emulex Fibre Channel Target"
-+	depends on PCI && SCSI
-+	depends on SCSI_FC_ATTRS
-+	select CRC_T10DIF
-+	help
-+          The efct driver provides enhanced SCSI Target Mode
-+	  support for specific SLI-4 adapters.
-diff --git a/drivers/scsi/elx/Makefile b/drivers/scsi/elx/Makefile
-new file mode 100644
-index 000000000000..79cc4e57676e
---- /dev/null
-+++ b/drivers/scsi/elx/Makefile
-@@ -0,0 +1,30 @@
-+#/*******************************************************************
-+# * This file is part of the Emulex Linux Device Driver for         *
-+# * Fibre Channel Host Bus Adapters.                                *
-+# * Copyright (C) 2018 Broadcom. All Rights Reserved. The term	   *
-+# * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
-+# *                                                                 *
-+# * This program is free software; you can redistribute it and/or   *
-+# * modify it under the terms of version 2 of the GNU General       *
-+# * Public License as published by the Free Software Foundation.    *
-+# * This program is distributed in the hope that it will be useful. *
-+# * ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND          *
-+# * WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,  *
-+# * FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT, ARE      *
-+# * DISCLAIMED, EXCEPT TO THE EXTENT THAT SUCH DISCLAIMERS ARE HELD *
-+# * TO BE LEGALLY INVALID.  See the GNU General Public License for  *
-+# * more details, a copy of which can be found in the file COPYING  *
-+# * included with this package.                                     *
-+# ********************************************************************/
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index 1b92f3c19ff3..f8f4529d327e 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -1176,6 +1176,8 @@ config SCSI_LPFC_DEBUG_FS
+ 	  This makes debugging information from the lpfc driver
+ 	  available via the debugfs filesystem.
+ 
++source "drivers/scsi/elx/Kconfig"
 +
-+obj-$(CONFIG_SCSI_EFCT) := efct.o
-+
-+efct-objs := efct/efct_driver.o efct/efct_io.o efct/efct_scsi.o efct/efct_els.o \
-+	     efct/efct_xport.o efct/efct_hw.o efct/efct_hw_queues.o \
-+	     efct/efct_utils.o efct/efct_lio.o efct/efct_unsol.o
-+
-+efct-objs += libefc/efc_domain.o libefc/efc_fabric.o libefc/efc_node.o \
-+	     libefc/efc_sport.o libefc/efc_device.o \
-+	     libefc/efc_lib.o libefc/efc_sm.o
-+
-+efct-objs += libefc_sli/sli4.o
+ config SCSI_SIM710
+ 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
+ 	depends on EISA && SCSI
+diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
+index c00e3dd57990..844db573283c 100644
+--- a/drivers/scsi/Makefile
++++ b/drivers/scsi/Makefile
+@@ -86,6 +86,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
+ obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
+ obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
+ obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
++obj-$(CONFIG_SCSI_EFCT)		+= elx/
+ obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
+ obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
+ obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
 -- 
 2.13.7
 
