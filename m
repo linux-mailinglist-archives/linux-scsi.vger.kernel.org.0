@@ -2,97 +2,83 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFCEE25F3
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 23:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395B5E2729
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Oct 2019 01:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436646AbfJWV5E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Oct 2019 17:57:04 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:33911 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405980AbfJWV5C (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Oct 2019 17:57:02 -0400
-Received: by mail-wm1-f67.google.com with SMTP id v3so605653wmh.1
-        for <linux-scsi@vger.kernel.org>; Wed, 23 Oct 2019 14:57:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=+IDRIjyVoyAmLj293uUkTe7BXgOI1AVX7xDEcsaoklw=;
-        b=opHjs0Bb/J1eM2y1XUaSlrhhJkeKo6cQmWyfgO4iipV6ZYlbUeS1FnpST5eGLh06Xl
-         Kbi6dbrsHipYStme031Ns9NCXflO9/B4SxmE+WmouKPaxkS8AEGXnF5Qs63JYOrlX+kE
-         at6BXglA/MGg3zwVm40OKul1l8VEJs4G4IQhxwRgbcLZM8blJT0/k06qHz+xKLOINUWC
-         ZZINJU2gZA1pmHvmdOE5cMoZnlIR1x4IKrppxnoaE7s89po7681pDmj63OtDp7/qGndP
-         nJYh+jQrLdqFKKUYvwQCBZeBJMota5Hj6Yki109y8JfEYJ9E/LhV73+9OdvTShQHJsm/
-         kfaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=+IDRIjyVoyAmLj293uUkTe7BXgOI1AVX7xDEcsaoklw=;
-        b=rwwn229cKapr2dn0YgCTV6QtVU+fggiJWwK01aP9EY+ejNe76uPnXsrjAyUpifwEa5
-         K1J1YgA8SINFsIQg/Jj5Fi1JGcElg8wF1pDNP61cndMwJ3xNXwPG4ubzgixW9IPIBszx
-         FXGn4LwsnnDWsdgyB66+gvU3rOgP653J7l8AG6K/8JreuGQou2M3W5gQ0oLW0QF5dLUE
-         JiLV5zsELUuplVSHB81vsanhWw5tIrrnleK0sFkWnixS1zE4LP1H9XDdoWYHDhu30DH2
-         d1s79/laLApt8WgzGZNUBLlH5/5QyYn9Bc5NK1p5WyKagFPnk91BwdVXK8nATrVXALov
-         3p7w==
-X-Gm-Message-State: APjAAAXiUzQHhUqh//SCaZO6o7cIwy7Wn5IGqwNjPFScmq6UYsUnpZsF
-        jVMa9E/iX1tOd9KGuo1DDO6/30Ls
-X-Google-Smtp-Source: APXvYqyx7NH+CxIy1iYs51Gj/pZPCPfsJPFa4LPaUilje0t9tS8DkHBrFJc/eyGLl5Es3WZY/jnHFg==
-X-Received: by 2002:a1c:48c4:: with SMTP id v187mr1867522wma.27.1571867820090;
-        Wed, 23 Oct 2019 14:57:00 -0700 (PDT)
-Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h17sm796775wme.6.2019.10.23.14.56.58
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 23 Oct 2019 14:56:59 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
+        id S2392800AbfJWXvg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Oct 2019 19:51:36 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:33930 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389801AbfJWXvg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Oct 2019 19:51:36 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id B2B4D60FA9; Wed, 23 Oct 2019 23:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1571874695;
+        bh=RQzk63vXXXNk90usgWk/wx+IVC7KwqQNIfrdUilq1wg=;
+        h=Date:From:To:Subject:From;
+        b=Sebe89sfJjKrrsOpcmAaEqYI3PDqiWvMcyY7coEc46lE/XhSI9beT9UrgkD11F/2O
+         olpeY8getbGV/VCx1tUz3gmOthzOdlre+La++LrpxP1G8h07RFPr6dL1YqTw9q6gGT
+         /kJ9TlmfiYSmwQKNxvpOHMExBeJkKvaFmo4Z1Igc=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED autolearn=no autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.codeaurora.org (Postfix) with ESMTP id 6A1C160F5F
+        for <linux-scsi@vger.kernel.org>; Wed, 23 Oct 2019 23:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1571874695;
+        bh=RQzk63vXXXNk90usgWk/wx+IVC7KwqQNIfrdUilq1wg=;
+        h=Date:From:To:Subject:From;
+        b=Sebe89sfJjKrrsOpcmAaEqYI3PDqiWvMcyY7coEc46lE/XhSI9beT9UrgkD11F/2O
+         olpeY8getbGV/VCx1tUz3gmOthzOdlre+La++LrpxP1G8h07RFPr6dL1YqTw9q6gGT
+         /kJ9TlmfiYSmwQKNxvpOHMExBeJkKvaFmo4Z1Igc=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 23 Oct 2019 16:51:35 -0700
+From:   asutoshd@codeaurora.org
 To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH 32/32] elx: efct: Tie into kernel Kconfig and build process
-Date:   Wed, 23 Oct 2019 14:55:57 -0700
-Message-Id: <20191023215557.12581-33-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20191023215557.12581-1-jsmart2021@gmail.com>
-References: <20191023215557.12581-1-jsmart2021@gmail.com>
+Subject: Query: SCSI Device node creation when UFS is loaded as a module
+Message-ID: <468eb805fa69da76c88a0a37aa209c7f@codeaurora.org>
+X-Sender: asutoshd@codeaurora.org
+User-Agent: Roundcube Webmail/1.2.5
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This final patch ties the efct driver into the kernel Kconfig
-and build linkages in the drivers/scsi directory.
+Hi
+I'm loading the ufs-qcom driver as a module but am not seeing the 
+/dev/sda* device nodes.
+Looks like it's not being created.
 
-Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/Kconfig  | 2 ++
- drivers/scsi/Makefile | 1 +
- 2 files changed, 3 insertions(+)
+I find the sda nodes in other paths being enumerated though:
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 1b92f3c19ff3..f8f4529d327e 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1176,6 +1176,8 @@ config SCSI_LPFC_DEBUG_FS
- 	  This makes debugging information from the lpfc driver
- 	  available via the debugfs filesystem.
- 
-+source "drivers/scsi/elx/Kconfig"
-+
- config SCSI_SIM710
- 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
- 	depends on EISA && SCSI
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index c00e3dd57990..844db573283c 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
- obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
- obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
- obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
-+obj-$(CONFIG_SCSI_EFCT)		+= elx/
- obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
- obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
- obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
--- 
-2.13.7
+/ # find /sys -name sda
+/sys/kernel/debug/block/sda
+/sys/class/block/sda
+/sys/devices/platform/<...>/<xxx>.ufshc/host0/target0:0:0/0:0:0:0/block/sda
+/sys/block/sda
 
+All Luns are detected and I see sda is detected and prints for all the 
+Luns as below -:
+sd 0:0:0:0: [sda] .... ....-byte logical blocks:
+
+... so on ...
+
+But if I link it statically instead of a module, it works fine. All 
+device nodes are created.
+
+I'm trying to figure out where/how in SCSI does it create these device 
+nodes - /dev/sd<a/b/c/d> ?
+I've looked into sd.c but I couldn't figure out the exact place yet.
+
+Any pointers please?
+
+TIA
+
+-asd
