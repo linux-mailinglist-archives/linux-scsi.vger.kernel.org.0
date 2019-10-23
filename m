@@ -2,146 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF29E2077
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 18:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B76D7E20D0
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 18:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407220AbfJWQXS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Oct 2019 12:23:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44266 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2407111AbfJWQXS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 23 Oct 2019 12:23:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A4BC9B4AA;
-        Wed, 23 Oct 2019 16:23:15 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 18:23:13 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     linux-scsi@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Jens Axboe <axboe@kernel.dk>,
+        id S2392546AbfJWQjy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Oct 2019 12:39:54 -0400
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:34133 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732359AbfJWQjy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 23 Oct 2019 12:39:54 -0400
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 23 Oct 2019 09:39:52 -0700
+IronPort-SDR: M3iuOL4eGpUFYcFjLzrb+bYBg/KCRcLevKQnJ3+PYFf+Bs94thfVRpJIq3Kkc5JGH80Yag7XH6
+ y2yOaa3AvAkhHtje1lweRvIJXfWIJq5gy6qF1omaCf04mvO4rWmUq6Jd8Os8uInwCz7sYqo6ha
+ L6P8O95cegIhs6D5NcC9TnrxD0G/aqZAcobyj03UVbprdpdUgK6pmR2vYb/No7/sYufbAWX/X7
+ 9Ln/TLU2EJPJnk1vEyWAJtkDKn5xm3lCqy3dta/qESvDcLG1CEfDMmDMXQMo78h9oOVegFYsdN
+ lbrI2TY3h0fqcT1UcH/50k8L
+Received: from asutoshd-linux1.qualcomm.com ([10.46.160.39])
+  by ironmsg02-sd.qualcomm.com with ESMTP; 23 Oct 2019 09:39:52 -0700
+Received: by asutoshd-linux1.qualcomm.com (Postfix, from userid 92687)
+        id 75EDA2135A; Wed, 23 Oct 2019 09:39:52 -0700 (PDT)
+From:   Asutosh Das <asutoshd@codeaurora.org>
+To:     cang@codeaurora.org, rnayak@codeaurora.org, vinholikatti@gmail.com,
+        jejb@linux.vnet.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Eric Biggers <ebiggers@google.com>,
-        "J. Bruce Fields" <bfields@redhat.com>,
-        Benjamin Coddington <bcodding@redhat.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>, Ming Lei <ming.lei@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Tejun Heo <tj@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 7/8] scsi: sr: workaround VMware ESXi cdrom emulation
- bug
-Message-ID: <20191023162313.GE938@kitsune.suse.cz>
-References: <cover.1571834862.git.msuchanek@suse.de>
- <abf81ec4f8b6139fffc609df519856ff8dc01d0d.1571834862.git.msuchanek@suse.de>
- <08f1e291-0196-2402-1947-c0cdaaf534da@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <08f1e291-0196-2402-1947-c0cdaaf534da@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Subhash Jadavani <subhashj@codeaurora.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2 1/2] scsi: ufs: export hibern8 entry and exit
+Date:   Wed, 23 Oct 2019 09:39:41 -0700
+Message-Id: <1571848785-27698-1-git-send-email-asutoshd@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 04:13:15PM +0200, Hannes Reinecke wrote:
-> On 10/23/19 2:52 PM, Michal Suchanek wrote:
-> > The WMware ESXi cdrom identifies itself as:
-> > sr 0:0:0:0: [sr0] scsi3-mmc drive: vendor: "NECVMWarVMware SATA CD001.00"
-> > model: "VMware SATA CD001.00"
-> > with the following get_capabilities print in sr.c:
-> >         sr_printk(KERN_INFO, cd,
-> >                   "scsi3-mmc drive: vendor: \"%s\" model: \"%s\"\n",
-> >                   cd->device->vendor, cd->device->model);
-> > 
-> > So the model looks like reliable identification while vendor does not.
-> > 
-> > The drive claims to have a tray and claims to be able to close it.
-> > However, the UI has no notion of a tray - when medium is ejected it is
-> > dropped in the floor and the user must select a medium again before the
-> > drive can be re-loaded.  On the kernel side the tray_move call to close
-> > the tray succeeds but the drive state does not change as a result of the
-> > call.
-> > 
-> > The drive does not in fact emulate the tray state. There are two ways to
-> > get the medium state. One is the SCSI status:
-> > 
-> > Physical drive:
-> > 
-> > Fixed format, current; Sense key: Not Ready
-> > Additional sense: Medium not present - tray open
-> > Raw sense data (in hex):
-> >         70 00 02 00 00 00 00 0a  00 00 00 00 3a 02 00 00
-> >         00 00
-> > 
-> > Fixed format, current; Sense key: Not Ready
-> > Additional sense: Medium not present - tray closed
-> >  Raw sense data (in hex):
-> >         70 00 02 00 00 00 00 0a  00 00 00 00 3a 01 00 00
-> >         00 00
-> > 
-> > VMware ESXi:
-> > 
-> > Fixed format, current; Sense key: Not Ready
-> > Additional sense: Medium not present
-> >   Info fld=0x0 [0]
-> >  Raw sense data (in hex):
-> >         f0 00 02 00 00 00 00 0a  00 00 00 00 3a 00 00 00
-> >         00 00
-> > 
-> > So the tray state is not reported here. Other is medium status which the
-> > kernel prefers if available. Adding a print here gives:
-> > 
-> > cdrom: get_media_event success: code = 0, door_open = 1, medium_present = 0
-> > 
-> > door_open is interpreted as open tray. This is fine so long as tray_move
-> > would close the tray when requested or report an error which never
-> > happens on VMware ESXi servers (5.5 and 6.5 tested).
-> > 
-> > This is a popular virtualization platform so a workaround is worthwhile.
-> > 
-> > Signed-off-by: Michal Suchanek <msuchanek@suse.de>
-> > ---
-> >  drivers/scsi/sr.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> > 
-> > diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-> > index 4664fdf75c0f..8090c5bdec09 100644
-> > --- a/drivers/scsi/sr.c
-> > +++ b/drivers/scsi/sr.c
-> > @@ -867,6 +867,7 @@ static void get_capabilities(struct scsi_cd *cd)
-> >  	unsigned int ms_len = 128;
-> >  	int rc, n;
-> >  
-> > +	static const char *model_vmware = "VMware";
-> >  	static const char *loadmech[] =
-> >  	{
-> >  		"caddy",
-> > @@ -922,6 +923,11 @@ static void get_capabilities(struct scsi_cd *cd)
-> >  		  buffer[n + 4] & 0x20 ? "xa/form2 " : "",	/* can read xa/from2 */
-> >  		  buffer[n + 5] & 0x01 ? "cdda " : "", /* can read audio data */
-> >  		  loadmech[buffer[n + 6] >> 5]);
-> > +	if (!strncmp(cd->device->model, model_vmware, strlen(model_vmware))) {
-> > +		buffer[n + 6] &= ~(0xff << 5);
-> > +		sr_printk(KERN_INFO, cd,
-> > +			  "VMware ESXi bug workaround: tray -> caddy\n");
-> > +	}
-> >  	if ((buffer[n + 6] >> 5) == 0)
-> >  		/* caddy drives can't close tray... */
-> >  		cd->cdi.mask |= CDC_CLOSE_TRAY;
-> > 
-> This looks something which should be handled via a blacklist flag, not
-> some inline hack which everyone forgets about it...
+Qualcomm controllers need to be in hibern8 before scaling up
+or down the clocks. Hence, export the hibern8 entry and exit
+functions.
 
-AFAIK we used to have a blacklist but don't have anymore. So either it
-has to be resurrected for this one flag or an inline hack should be good
-enough.
+Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 8 ++++----
+ drivers/scsi/ufs/ufshcd.h | 3 ++-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-Thanks
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index c28c144..57d9315 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -250,8 +250,6 @@ static int ufshcd_probe_hba(struct ufs_hba *hba);
+ static int __ufshcd_setup_clocks(struct ufs_hba *hba, bool on,
+ 				 bool skip_ref_clk);
+ static int ufshcd_setup_clocks(struct ufs_hba *hba, bool on);
+-static int ufshcd_uic_hibern8_exit(struct ufs_hba *hba);
+-static int ufshcd_uic_hibern8_enter(struct ufs_hba *hba);
+ static inline void ufshcd_add_delay_before_dme_cmd(struct ufs_hba *hba);
+ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba);
+ static void ufshcd_resume_clkscaling(struct ufs_hba *hba);
+@@ -3904,7 +3902,7 @@ static int __ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
+ 	return ret;
+ }
+ 
+-static int ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
++int ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
+ {
+ 	int ret = 0, retries;
+ 
+@@ -3916,8 +3914,9 @@ static int ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
+ out:
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(ufshcd_uic_hibern8_enter);
+ 
+-static int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
++int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
+ {
+ 	struct uic_command uic_cmd = {0};
+ 	int ret;
+@@ -3943,6 +3942,7 @@ static int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
+ 
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(ufshcd_uic_hibern8_exit);
+ 
+ static void ufshcd_auto_hibern8_enable(struct ufs_hba *hba)
+ {
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index e0fe247..1e3daf5 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -1107,5 +1107,6 @@ static inline u8 ufshcd_scsi_to_upiu_lun(unsigned int scsi_lun)
+ 
+ int ufshcd_dump_regs(struct ufs_hba *hba, size_t offset, size_t len,
+ 		     const char *prefix);
+-
++int ufshcd_uic_hibern8_enter(struct ufs_hba *hba);
++int ufshcd_uic_hibern8_exit(struct ufs_hba *hba);
+ #endif /* End of Header */
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
-Michal
