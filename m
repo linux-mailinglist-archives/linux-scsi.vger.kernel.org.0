@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB66CE25E7
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 23:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF807E25E4
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 23:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436627AbfJWV4p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Oct 2019 17:56:45 -0400
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:52080 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436619AbfJWV4o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Oct 2019 17:56:44 -0400
-Received: by mail-wm1-f51.google.com with SMTP id q70so527581wme.1
-        for <linux-scsi@vger.kernel.org>; Wed, 23 Oct 2019 14:56:37 -0700 (PDT)
+        id S2436622AbfJWV4k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Oct 2019 17:56:40 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:40695 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436618AbfJWV4k (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Oct 2019 17:56:40 -0400
+Received: by mail-wr1-f67.google.com with SMTP id o28so23698469wro.7
+        for <linux-scsi@vger.kernel.org>; Wed, 23 Oct 2019 14:56:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8AgmvOO8eO2HxDj/Fl/SkISa7wOIdGTMxCWeJCf27ck=;
-        b=CnZHPezblyl7FIbTaDjjI3wjedcTMt7N7xZSDU/1ZDfYnQVDNsPe0M6kF1H45IgC0M
-         2e614AxvebcBzsTo+IeimRm1XYNSdbLkP1VEITJkF0ZA2UOr0e8ytoX3QF9XGMm3XSYf
-         dLe+W6H/U2q5kb2ml3LCPkgq7g38MmMLfSoMTrwqA3pOXae12euLEEgoeKv82hqUFZzU
-         CtsxJGJRNCVA1XBaKqbJfJ1kYZP6WShSWgo5xhkp9n3QY+Nut5VLYUwVeSdQg0Js9jcV
-         IcxdJLyDzZVkvRS5+Xst2mTXUdtI1t7bNu/A0NrXjfdotme5AmjsHLs5xNqiIiqi6hQN
-         0xCg==
+        bh=Nn+f/P6KWd9+LIWXW6ztvkeWul84qk3yM+DlJ3wTr80=;
+        b=o44BTAU0Hudp2iDk51aG+tIrvXOHcvw7GnvQ1PWXpMRG/HDnOUWVU2yFO6F+jO3y1s
+         q5t9EceCGdktay07PgcuQa8m5rdVLFW6Ch6BTOO9Tvg3hO0Vf0xnBOBKvAliAvyHyjnG
+         pILLCYf7uT6AlsFJrX+EMZYTznf3hFGEdjgk9Z8PHFeSsVlsQtnM0tBDK7srrf6e+1Z0
+         L/UpDeB1exktkJgULP94PSJ4WYQvOoU13QD8oudJ2RSQlMyzktst6GdiebzHeqSuEFr6
+         ROi1VgqkfV8A9qlPC004SuWm5bAmC5W1ICZYgAfTYpIwsC6hPY/+04eMImpzkvI5tNDP
+         QhYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8AgmvOO8eO2HxDj/Fl/SkISa7wOIdGTMxCWeJCf27ck=;
-        b=c1j/9EevtROwj6Y3nFgb+3VdGBfTTvaME+kgxMy/R0mSiExy6UaZ3AayccOR+f0dM8
-         pDcvoLC/Ht3IrF4/8zPPEqLesM5nV+MRed/jaGtzJCSsbixCViY1/vnz4zDUyasN21x0
-         3eyHN/3ucWNgVPbJnzbr2NkIUQcyhExAlzBkn16Ok3+3dgts5VgRP2/3/VfDxNUGgSji
-         r2vM8bufStvqQgvU1kboIDJ09ZFutenj0iZC0uMAkTl5H279TvUeWwsgYzsrIZpIQnh4
-         IoW9fjg/3sFmnSovRKIKYnncUaprBKk7XIv1KAgbvilAxsMewK8+oGef/Aoj2CEXO5TZ
-         gr9w==
-X-Gm-Message-State: APjAAAUskG9rIB0ymLOzqv2Wrx4gon87WJ0W2+bweYHtp3s94Z5udUgk
-        Q00VSeOlrbz3a91UR14SwpNguQpw
-X-Google-Smtp-Source: APXvYqwKUwZMSOfipUO4nS2+gyLgW5ImwINguUowvDGprHN0DFg3z4kwd6n0iGiMzlgzg/lhGlHRKg==
-X-Received: by 2002:a1c:d8:: with SMTP id 207mr1772943wma.65.1571867795065;
-        Wed, 23 Oct 2019 14:56:35 -0700 (PDT)
+        bh=Nn+f/P6KWd9+LIWXW6ztvkeWul84qk3yM+DlJ3wTr80=;
+        b=Q7XZYO6GbArNok8onuqC3RLzxVmcz6mylW8ujcRfFlxPjh+FHYwaE6+q8h/Eap5+qH
+         ElNgLRXnRP/CJfGiWluqLaFiHYwXLdLCKWlmk89UOPgs+pCAus6pSNE+nUx6RRVEnhx5
+         L2yQQ+9SBeuQwkLqvoR5bi5kkfO+nF7BLQoqh0Un2upVZ189lg84bfdgjUMUCcuycMZ2
+         /4OJkQltgwB6gMTCZK6vM5LJSynj6MLaoJJrxE/2Hy1vgymNi0/+eZMWAO/EDZzOY3gY
+         SsS7Hkn/tkjNIn2pcKg/BPJF+30Fed0DnvqyJbPcU9I+v7LeKfjybnVgs3DC+74ZzmZf
+         JHdw==
+X-Gm-Message-State: APjAAAWyXJcp3CdaA4L8vWBZgRnEuUG+ikrxCIKbneKbqsiMC5MwVJ6l
+        avAhdPKkfBOH7CGyD3gS2UGEAXd5
+X-Google-Smtp-Source: APXvYqwpkbdD6aVPb9V/V/Ai53rvkfqms+Z6tG46eQ/f7nYZglJwgxJpJW/X9w6oL6Y6AjQBB0dtVQ==
+X-Received: by 2002:adf:9486:: with SMTP id 6mr751273wrr.28.1571867796633;
+        Wed, 23 Oct 2019 14:56:36 -0700 (PDT)
 Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h17sm796775wme.6.2019.10.23.14.56.33
+        by smtp.gmail.com with ESMTPSA id h17sm796775wme.6.2019.10.23.14.56.35
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 23 Oct 2019 14:56:34 -0700 (PDT)
+        Wed, 23 Oct 2019 14:56:36 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH 17/32] elx: efct: Hardware queues creation and deletion
-Date:   Wed, 23 Oct 2019 14:55:42 -0700
-Message-Id: <20191023215557.12581-18-jsmart2021@gmail.com>
+Subject: [PATCH 18/32] elx: efct: RQ buffer, memory pool allocation and deallocation APIs
+Date:   Wed, 23 Oct 2019 14:55:43 -0700
+Message-Id: <20191023215557.12581-19-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20191023215557.12581-1-jsmart2021@gmail.com>
 References: <20191023215557.12581-1-jsmart2021@gmail.com>
@@ -65,25 +65,505 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 This patch continues the efct driver population.
 
 This patch adds driver definitions for:
-Routines for queue creation, deletion, and configuration.
-Driven by strings describing configuration topology with
-parsers for the strings.
+RQ data buffer allocation and deallocate.
+Memory pool allocation and deallocation APIs.
+Mailbox command submission and completion routines.
 
 Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/elx/efct/efct_hw_queues.c | 1717 ++++++++++++++++++++++++++++++++
- drivers/scsi/elx/efct/efct_hw_queues.h |   66 ++
- 2 files changed, 1783 insertions(+)
- create mode 100644 drivers/scsi/elx/efct/efct_hw_queues.c
- create mode 100644 drivers/scsi/elx/efct/efct_hw_queues.h
+ drivers/scsi/elx/efct/efct_hw.c    | 447 +++++++++++++++++++++++++
+ drivers/scsi/elx/efct/efct_hw.h    |   7 +
+ drivers/scsi/elx/efct/efct_utils.c | 662 +++++++++++++++++++++++++++++++++++++
+ drivers/scsi/elx/efct/efct_utils.h | 113 +++++++
+ 4 files changed, 1229 insertions(+)
+ create mode 100644 drivers/scsi/elx/efct/efct_utils.c
+ create mode 100644 drivers/scsi/elx/efct/efct_utils.h
 
-diff --git a/drivers/scsi/elx/efct/efct_hw_queues.c b/drivers/scsi/elx/efct/efct_hw_queues.c
+diff --git a/drivers/scsi/elx/efct/efct_hw.c b/drivers/scsi/elx/efct/efct_hw.c
+index ecb3ccbf7c4c..ea23bb33e11d 100644
+--- a/drivers/scsi/elx/efct/efct_hw.c
++++ b/drivers/scsi/elx/efct/efct_hw.c
+@@ -23,6 +23,14 @@ target_wqe_timer_cb(struct timer_list *);
+ static void
+ shutdown_target_wqe_timer(struct efct_hw_s *hw);
+ 
++static int
++efct_hw_command_process(struct efct_hw_s *, int, u8 *, size_t);
++static int
++efct_hw_command_cancel(struct efct_hw_s *);
++static int
++efct_hw_mq_process(struct efct_hw_s *, int, struct sli4_queue_s *);
++
++
+ static enum efct_hw_rtn_e
+ efct_hw_link_event_init(struct efct_hw_s *hw)
+ {
+@@ -1296,3 +1304,442 @@ efct_get_wwn(struct efct_hw_s *hw, enum efct_hw_property_e prop)
+ 
+ 	return value;
+ }
++
++/**
++ * @brief Allocate an efct_hw_rx_buffer_t array.
++ *
++ * @par Description
++ * An efct_hw_rx_buffer_t array is allocated, along with the required DMA mem.
++ *
++ * @param hw Pointer to HW object.
++ * @param rqindex RQ index for this buffer.
++ * @param count Count of buffers in array.
++ * @param size Size of buffer.
++ *
++ * @return Returns the pointer to the allocated efc_hw_rq_buffer_s array.
++ */
++static struct efc_hw_rq_buffer_s *
++efct_hw_rx_buffer_alloc(struct efct_hw_s *hw, u32 rqindex, u32 count,
++			u32 size)
++{
++	struct efct_s *efct = hw->os;
++	struct efc_hw_rq_buffer_s *rq_buf = NULL;
++	struct efc_hw_rq_buffer_s *prq;
++	u32 i;
++
++	if (count != 0) {
++		rq_buf = kmalloc_array(count, sizeof(*rq_buf), GFP_ATOMIC);
++		if (!rq_buf)
++			return NULL;
++		memset(rq_buf, 0, sizeof(*rq_buf) * count);
++
++		for (i = 0, prq = rq_buf; i < count; i ++, prq++) {
++			prq->rqindex = rqindex;
++			prq->dma.size = size;
++			prq->dma.virt = dma_alloc_coherent(&efct->pcidev->dev,
++							   prq->dma.size,
++							   &prq->dma.phys,
++							   GFP_DMA);
++			if (!prq->dma.virt) {
++				efc_log_err(hw->os, "DMA allocation failed\n");
++				kfree(rq_buf);
++				rq_buf = NULL;
++				break;
++			}
++		}
++	}
++	return rq_buf;
++}
++
++/**
++ * @brief Free an efct_hw_rx_buffer_t array.
++ *
++ * @par Description
++ * The efct_hw_rx_buffer_t array is freed, along with allocated DMA memory.
++ *
++ * @param hw Pointer to HW object.
++ * @param rq_buf Pointer to efct_hw_rx_buffer_t array.
++ * @param count Count of buffers in array.
++ *
++ * @return None.
++ */
++static void
++efct_hw_rx_buffer_free(struct efct_hw_s *hw,
++		       struct efc_hw_rq_buffer_s *rq_buf,
++			u32 count)
++{
++	struct efct_s *efct = hw->os;
++	u32 i;
++	struct efc_hw_rq_buffer_s *prq;
++
++	if (rq_buf) {
++		for (i = 0, prq = rq_buf; i < count; i++, prq++) {
++			dma_free_coherent(&efct->pcidev->dev,
++					  prq->dma.size, prq->dma.virt,
++					  prq->dma.phys);
++			memset(&prq->dma, 0, sizeof(struct efc_dma_s));
++		}
++
++		kfree(rq_buf);
++	}
++}
++
++/**
++ * @brief Allocate the RQ data buffers.
++ *
++ * @param hw Pointer to HW object.
++ *
++ * @return Returns 0 on success, or a non-zero value on failure.
++ */
++enum efct_hw_rtn_e
++efct_hw_rx_allocate(struct efct_hw_s *hw)
++{
++	struct efct_s *efct = hw->os;
++	u32 i;
++	int rc = EFCT_HW_RTN_SUCCESS;
++	u32 rqindex = 0;
++	struct hw_rq_s *rq;
++	u32 hdr_size = EFCT_HW_RQ_SIZE_HDR;
++	u32 payload_size = hw->config.rq_default_buffer_size;
++
++	rqindex = 0;
++
++	for (i = 0; i < hw->hw_rq_count; i++) {
++		rq = hw->hw_rq[i];
++
++		/* Allocate header buffers */
++		rq->hdr_buf = efct_hw_rx_buffer_alloc(hw, rqindex,
++						      rq->entry_count,
++						      hdr_size);
++		if (!rq->hdr_buf) {
++			efc_log_err(efct,
++				     "efct_hw_rx_buffer_alloc hdr_buf failed\n");
++			rc = EFCT_HW_RTN_ERROR;
++			break;
++		}
++
++		efc_log_debug(hw->os,
++			       "rq[%2d] rq_id %02d header  %4d by %4d bytes\n",
++			      i, rq->hdr->id, rq->entry_count, hdr_size);
++
++		rqindex++;
++
++		/* Allocate payload buffers */
++		rq->payload_buf = efct_hw_rx_buffer_alloc(hw, rqindex,
++							  rq->entry_count,
++							  payload_size);
++		if (!rq->payload_buf) {
++			efc_log_err(efct,
++				     "efct_hw_rx_buffer_alloc fb_buf failed\n");
++			rc = EFCT_HW_RTN_ERROR;
++			break;
++		}
++		efc_log_debug(hw->os,
++			       "rq[%2d] rq_id %02d default %4d by %4d bytes\n",
++			      i, rq->data->id, rq->entry_count, payload_size);
++		rqindex++;
++	}
++
++	return rc ? EFCT_HW_RTN_ERROR : EFCT_HW_RTN_SUCCESS;
++}
++
++/**
++ * @brief Post the RQ data buffers to the chip.
++ *
++ * @param hw Pointer to HW object.
++ *
++ * @return Returns 0 on success, or a non-zero value on failure.
++ */
++enum efct_hw_rtn_e
++efct_hw_rx_post(struct efct_hw_s *hw)
++{
++	u32 i;
++	u32 idx;
++	u32 rq_idx;
++	int rc = 0;
++
++	/*
++	 * In RQ pair mode, we MUST post the header and payload buffer at the
++	 * same time.
++	 */
++	for (rq_idx = 0, idx = 0; rq_idx < hw->hw_rq_count; rq_idx++) {
++		struct hw_rq_s *rq = hw->hw_rq[rq_idx];
++
++		for (i = 0; i < rq->entry_count - 1; i++) {
++			struct efc_hw_sequence_s *seq;
++
++			seq = efct_array_get(hw->seq_pool, idx++);
++			if (!seq) {
++				rc = -1;
++				break;
++			}
++			seq->header = &rq->hdr_buf[i];
++			seq->payload = &rq->payload_buf[i];
++			rc = efct_hw_sequence_free(hw, seq);
++			if (rc)
++				break;
++		}
++		if (rc)
++			break;
++	}
++
++	return rc;
++}
++
++/**
++ * @brief Free the RQ data buffers.
++ *
++ * @param hw Pointer to HW object.
++ *
++ */
++void
++efct_hw_rx_free(struct efct_hw_s *hw)
++{
++	struct hw_rq_s *rq;
++	u32 i;
++
++	/* Free hw_rq buffers */
++	for (i = 0; i < hw->hw_rq_count; i++) {
++		rq = hw->hw_rq[i];
++		if (rq) {
++			efct_hw_rx_buffer_free(hw, rq->hdr_buf,
++					       rq->entry_count);
++			rq->hdr_buf = NULL;
++			efct_hw_rx_buffer_free(hw, rq->payload_buf,
++					       rq->entry_count);
++			rq->payload_buf = NULL;
++		}
++	}
++}
++
++/**
++ * @brief Submit queued (pending) mbx commands.
++ *
++ * @par Description
++ * Submit queued mailbox commands.
++ * --- Assumes that hw->cmd_lock is held ---
++ *
++ * @param hw Hardware context.
++ *
++ * @return Returns 0 on success, or a negative error code value on failure.
++ */
++static int
++efct_hw_cmd_submit_pending(struct efct_hw_s *hw)
++{
++	struct efct_command_ctx_s *ctx = NULL;
++	int rc = 0;
++
++	/* Assumes lock held */
++
++	/* Only submit MQE if there's room */
++	while (hw->cmd_head_count < (EFCT_HW_MQ_DEPTH - 1) &&
++	       !list_empty(&hw->cmd_pending)) {
++		ctx = list_first_entry(&hw->cmd_pending,
++				       struct efct_command_ctx_s, list_entry);
++		if (!ctx)
++			break;
++
++		list_del(&ctx->list_entry);
++
++		INIT_LIST_HEAD(&ctx->list_entry);
++		list_add_tail(&ctx->list_entry, &hw->cmd_head);
++		hw->cmd_head_count++;
++		if (sli_mq_write(&hw->sli, hw->mq, ctx->buf) < 0) {
++			efc_log_test(hw->os,
++				      "sli_queue_write failed: %d\n", rc);
++			rc = -1;
++			break;
++		}
++	}
++	return rc;
++}
++
++/**
++ * @ingroup io
++ * @brief Issue a SLI command.
++ *
++ * @par Description
++ * Send a mailbox command to the hardware, and either wait for a completion
++ * (EFCT_CMD_POLL) or get an optional asynchronous completion (EFCT_CMD_NOWAIT).
++ *
++ * @param hw Hardware context.
++ * @param cmd Buffer containing a formatted command and results.
++ * @param opts Command options:
++ *  - EFCT_CMD_POLL - Cmd executes synchronously &
++ *		      busy-waits for the completion.
++ *  - EFCT_CMD_NOWAIT - Cmd executes asynchronously. Uses callback.
++ * @param cb Function callback used for asynchronous mode. May be NULL.
++ * @n Prototype is <tt>(*cb)(void *arg, u8 *cmd)</tt>.
++ * @n @n @b Note: If the
++ * callback function pointer is NULL, the results of the command are silently
++ * discarded, allowing this pointer to exist solely on the stack.
++ * @param arg Argument passed to an asynchronous callback.
++ *
++ * @return Returns 0 on success, or a non-zero value on failure.
++ */
++enum efct_hw_rtn_e
++efct_hw_command(struct efct_hw_s *hw, u8 *cmd, u32 opts, void *cb,
++		void *arg)
++{
++	enum efct_hw_rtn_e rc = EFCT_HW_RTN_ERROR;
++	unsigned long flags = 0;
++	void *bmbx = NULL;
++
++	/*
++	 * If the chip is in an error state (UE'd) then reject this mailbox
++	 *  command.
++	 */
++	if (sli_fw_error_status(&hw->sli) > 0) {
++		efc_log_crit(hw->os,
++			      "Chip is in an error state - reset needed\n");
++		efc_log_crit(hw->os,
++			      "status=%#x error1=%#x error2=%#x\n",
++			sli_reg_read_status(&hw->sli),
++			sli_reg_read_err1(&hw->sli),
++			sli_reg_read_err2(&hw->sli));
++
++		return EFCT_HW_RTN_ERROR;
++	}
++
++	if (opts == EFCT_CMD_POLL) {
++		spin_lock_irqsave(&hw->cmd_lock, flags);
++		bmbx = hw->sli.bmbx.virt;
++
++		memset(bmbx, 0, SLI4_BMBX_SIZE);
++		memcpy(bmbx, cmd, SLI4_BMBX_SIZE);
++
++		if (sli_bmbx_command(&hw->sli) == 0) {
++			rc = EFCT_HW_RTN_SUCCESS;
++			memcpy(cmd, bmbx, SLI4_BMBX_SIZE);
++		}
++		spin_unlock_irqrestore(&hw->cmd_lock, flags);
++	} else if (opts == EFCT_CMD_NOWAIT) {
++		struct efct_command_ctx_s	*ctx = NULL;
++
++		ctx = kmalloc(sizeof(*ctx), GFP_ATOMIC);
++		if (!ctx)
++			return EFCT_HW_RTN_NO_RESOURCES;
++
++		memset(ctx, 0, sizeof(struct efct_command_ctx_s));
++
++		if (hw->state != EFCT_HW_STATE_ACTIVE) {
++			efc_log_err(hw->os,
++				     "Can't send command, HW state=%d\n",
++				    hw->state);
++			kfree(ctx);
++			return EFCT_HW_RTN_ERROR;
++		}
++
++		if (cb) {
++			ctx->cb = cb;
++			ctx->arg = arg;
++		}
++		ctx->buf = cmd;
++		ctx->ctx = hw;
++
++		spin_lock_irqsave(&hw->cmd_lock, flags);
++
++			/* Add to pending list */
++			INIT_LIST_HEAD(&ctx->list_entry);
++			list_add_tail(&ctx->list_entry, &hw->cmd_pending);
++
++			/* Submit as much of the pending list as we can */
++			if (efct_hw_cmd_submit_pending(hw) == 0)
++				rc = EFCT_HW_RTN_SUCCESS;
++
++		spin_unlock_irqrestore(&hw->cmd_lock, flags);
++	}
++
++	return rc;
++}
++
++static int
++efct_hw_command_process(struct efct_hw_s *hw, int status, u8 *mqe,
++			size_t size)
++{
++	struct efct_command_ctx_s *ctx = NULL;
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&hw->cmd_lock, flags);
++	if (!list_empty(&hw->cmd_head)) {
++		ctx = list_first_entry(&hw->cmd_head,
++				       struct efct_command_ctx_s, list_entry);
++		list_del(&ctx->list_entry);
++	}
++	if (!ctx) {
++		efc_log_err(hw->os, "no command context?!?\n");
++		spin_unlock_irqrestore(&hw->cmd_lock, flags);
++		return -1;
++	}
++
++	hw->cmd_head_count--;
++
++	/* Post any pending requests */
++	efct_hw_cmd_submit_pending(hw);
++
++	spin_unlock_irqrestore(&hw->cmd_lock, flags);
++
++	if (ctx->cb) {
++		if (ctx->buf)
++			memcpy(ctx->buf, mqe, size);
++
++		ctx->cb(hw, status, ctx->buf, ctx->arg);
++	}
++
++	memset(ctx, 0, sizeof(struct efct_command_ctx_s));
++	kfree(ctx);
++
++	return 0;
++}
++
++/**
++ * @brief Process entries on the given mailbox queue.
++ *
++ * @param hw Hardware context.
++ * @param status CQE status.
++ * @param mq Pointer to the mailbox queue object.
++ *
++ * @return Returns 0 on success, or a non-zero value on failure.
++ */
++static int
++efct_hw_mq_process(struct efct_hw_s *hw,
++		   int status, struct sli4_queue_s *mq)
++{
++	u8		mqe[SLI4_BMBX_SIZE];
++
++	if (!sli_mq_read(&hw->sli, mq, mqe))
++		efct_hw_command_process(hw, status, mqe, mq->size);
++
++	return 0;
++}
++
++static int
++efct_hw_command_cancel(struct efct_hw_s *hw)
++{
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&hw->cmd_lock, flags);
++
++	/*
++	 * Manually clean up remaining commands. Note: since this calls
++	 * efct_hw_command_process(), we'll also process the cmd_pending
++	 * list, so no need to manually clean that out.
++	 */
++	while (!list_empty(&hw->cmd_head)) {
++		u8		mqe[SLI4_BMBX_SIZE] = { 0 };
++		struct efct_command_ctx_s *ctx =
++	list_first_entry(&hw->cmd_head, struct efct_command_ctx_s, list_entry);
++
++		efc_log_test(hw->os, "hung command %08x\n",
++			      !ctx ? U32_MAX :
++			      (!ctx->buf ? U32_MAX :
++			       *((u32 *)ctx->buf)));
++		spin_unlock_irqrestore(&hw->cmd_lock, flags);
++		efct_hw_command_process(hw, -1, mqe, SLI4_BMBX_SIZE);
++		spin_lock_irqsave(&hw->cmd_lock, flags);
++	}
++
++	spin_unlock_irqrestore(&hw->cmd_lock, flags);
++
++	return 0;
++}
+diff --git a/drivers/scsi/elx/efct/efct_hw.h b/drivers/scsi/elx/efct/efct_hw.h
+index 9636e6dbe259..161f9001a5c6 100644
+--- a/drivers/scsi/elx/efct/efct_hw.h
++++ b/drivers/scsi/elx/efct/efct_hw.h
+@@ -1023,4 +1023,11 @@ efct_hw_set_ptr(struct efct_hw_s *hw, enum efct_hw_property_e prop,
+ extern uint64_t
+ efct_get_wwn(struct efct_hw_s *hw, enum efct_hw_property_e prop);
+ 
++enum efct_hw_rtn_e efct_hw_rx_allocate(struct efct_hw_s *hw);
++enum efct_hw_rtn_e efct_hw_rx_post(struct efct_hw_s *hw);
++void efct_hw_rx_free(struct efct_hw_s *hw);
++extern enum efct_hw_rtn_e
++efct_hw_command(struct efct_hw_s *hw, u8 *cmd, u32 opts, void *cb,
++		void *arg);
++
+ #endif /* __EFCT_H__ */
+diff --git a/drivers/scsi/elx/efct/efct_utils.c b/drivers/scsi/elx/efct/efct_utils.c
 new file mode 100644
-index 000000000000..5196aa75553c
+index 000000000000..3c2deca23420
 --- /dev/null
-+++ b/drivers/scsi/elx/efct/efct_hw_queues.c
-@@ -0,0 +1,1717 @@
++++ b/drivers/scsi/elx/efct/efct_utils.c
+@@ -0,0 +1,662 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
@@ -91,1788 +571,780 @@ index 000000000000..5196aa75553c
 + */
 +
 +#include "efct_driver.h"
-+#include "efct_hw.h"
-+#include "efct_hw_queues.h"
-+#include "efct_unsol.h"
++#include "efct_utils.h"
 +
-+static int
-+efct_hw_rqpair_find(struct efct_hw_s *hw, u16 rq_id);
-+static struct efc_hw_sequence_s *
-+efct_hw_rqpair_get(struct efct_hw_s *hw, u16 rqindex, u16 bufindex);
-+static int
-+efct_hw_rqpair_put(struct efct_hw_s *hw, struct efc_hw_sequence_s *seq);
++#define DEFAULT_SLAB_LEN		(64 * 1024)
++
++struct pool_hdr_s {
++	struct list_head list_entry;
++};
++
++struct efct_array_s {
++	void *os;
++
++	u32 size;
++	u32 count;
++
++	u32 n_rows;
++	u32 elems_per_row;
++	u32 bytes_per_row;
++
++	void **array_rows;
++	u32 array_rows_len;
++};
++
++static u32 slab_len = DEFAULT_SLAB_LEN;
++
 +/**
-+ * @brief Initialize queues
++ * @brief Void pointer array structure
 + *
-+ * Given the parsed queue topology spec, the SLI queues are created and
-+ * initialized
++ * This structure describes an object consisting of an array of void
++ * pointers.   The object is allocated with a maximum array size, entries
++ * are then added to the array with while maintaining an entry count.   A set of
++ * iterator APIs are included to allow facilitate cycling through the array
++ * entries in a circular fashion.
 + *
-+ * @param hw pointer to HW object
-+ * @param qtop pointer to queue topology
-+ *
-+ * @return returns 0 for success, an error code value for failure.
 + */
-+enum efct_hw_rtn_e
-+efct_hw_init_queues(struct efct_hw_s *hw, struct efct_hw_qtop_s *qtop)
-+{
-+	u32 i, j, k;
-+	u32 default_lengths[QTOP_LAST], len;
-+	u32 rqset_len = 0, rqset_count = 0;
-+	u8 rqset_filter_mask = 0;
-+	struct hw_eq_s *eqs[EFCT_HW_MAX_MRQS];
-+	struct hw_cq_s *cqs[EFCT_HW_MAX_MRQS];
-+	struct hw_rq_s *rqs[EFCT_HW_MAX_MRQS];
-+	struct efct_hw_qtop_entry_s *qt, *next_qt;
-+	struct efct_hw_mrq_s mrq;
-+	bool use_mrq = false;
-+
-+	struct hw_eq_s *eq = NULL;
-+	struct hw_cq_s *cq = NULL;
-+	struct hw_wq_s *wq = NULL;
-+	struct hw_rq_s *rq = NULL;
-+	struct hw_mq_s *mq = NULL;
-+
-+	mrq.num_pairs = 0;
-+	default_lengths[QTOP_EQ] = 1024;
-+	default_lengths[QTOP_CQ] = hw->num_qentries[SLI_QTYPE_CQ];
-+	default_lengths[QTOP_WQ] = hw->num_qentries[SLI_QTYPE_WQ];
-+	default_lengths[QTOP_RQ] = hw->num_qentries[SLI_QTYPE_RQ];
-+	default_lengths[QTOP_MQ] = EFCT_HW_MQ_DEPTH;
-+
-+	hw->eq_count = 0;
-+	hw->cq_count = 0;
-+	hw->mq_count = 0;
-+	hw->wq_count = 0;
-+	hw->rq_count = 0;
-+	hw->hw_rq_count = 0;
-+	INIT_LIST_HEAD(&hw->eq_list);
-+
-+	/* If MRQ is requested, Check if it is supported by SLI. */
-+	if (hw->config.n_rq > 1 &&
-+	    !(hw->sli.features & SLI4_REQFEAT_MRQP)) {
-+		efc_log_err(hw->os, "MRQ topology not supported by SLI4.\n");
-+		return EFCT_HW_RTN_ERROR;
-+	}
-+
-+	if (hw->config.n_rq > 1)
-+		use_mrq = true;
-+
-+	/* Allocate class WQ pools */
-+	for (i = 0; i < ARRAY_SIZE(hw->wq_class_array); i++) {
-+		hw->wq_class_array[i] = efct_varray_alloc(hw->os,
-+							  EFCT_HW_MAX_NUM_WQ);
-+		if (!hw->wq_class_array[i]) {
-+			efc_log_err(hw->os,
-+				     "efct_varray_alloc for wq_class failed\n");
-+			return EFCT_HW_RTN_NO_MEMORY;
-+		}
-+	}
-+
-+	/* Allocate per CPU WQ pools */
-+	for (i = 0; i < ARRAY_SIZE(hw->wq_cpu_array); i++) {
-+		hw->wq_cpu_array[i] = efct_varray_alloc(hw->os,
-+							EFCT_HW_MAX_NUM_WQ);
-+		if (!hw->wq_cpu_array[i]) {
-+			efc_log_err(hw->os,
-+				     "efct_varray_alloc for wq_class failed\n");
-+			return EFCT_HW_RTN_NO_MEMORY;
-+		}
-+	}
-+
-+	for (i = 0, qt = qtop->entries; i < qtop->inuse_count; i++, qt++) {
-+		if (i == qtop->inuse_count - 1)
-+			next_qt = NULL;
-+		else
-+			next_qt = qt + 1;
-+
-+		switch (qt->entry) {
-+		case QTOP_EQ:
-+			len = (qt->len) ? qt->len : default_lengths[QTOP_EQ];
-+
-+			if (qt->set_default) {
-+				default_lengths[QTOP_EQ] = len;
-+				break;
-+			}
-+
-+			eq = efct_hw_new_eq(hw, len);
-+			if (!eq) {
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_NO_MEMORY;
-+			}
-+			break;
-+
-+		case QTOP_CQ:
-+			len = (qt->len) ? qt->len : default_lengths[QTOP_CQ];
-+
-+			if (qt->set_default) {
-+				default_lengths[QTOP_CQ] = len;
-+				break;
-+			}
-+
-+			/* If this CQ is for MRQ, then delay the creation */
-+			if (!use_mrq || next_qt->entry != QTOP_RQ) {
-+				if (!eq)
-+					return EFCT_HW_RTN_NO_MEMORY;
-+
-+				cq = efct_hw_new_cq(eq, len);
-+				if (!cq) {
-+					efct_hw_queue_teardown(hw);
-+					return EFCT_HW_RTN_NO_MEMORY;
-+				}
-+			}
-+			break;
-+
-+		case QTOP_WQ: {
-+			len = (qt->len) ? qt->len : default_lengths[QTOP_WQ];
-+			if (qt->set_default) {
-+				default_lengths[QTOP_WQ] = len;
-+				break;
-+			}
-+
-+			if ((hw->ulp_start + qt->ulp) > hw->ulp_max) {
-+				efc_log_err(hw->os,
-+					     "invalid ULP %d WQ\n", qt->ulp);
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_NO_MEMORY;
-+			}
-+
-+			wq = efct_hw_new_wq(cq, len,
-+					    qt->class, hw->ulp_start + qt->ulp);
-+			if (!wq) {
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_NO_MEMORY;
-+			}
-+
-+			/* Place this WQ on the EQ WQ array */
-+			if (efct_varray_add(eq->wq_array, wq)) {
-+				efc_log_err(hw->os,
-+					     "QTOP_WQ:EQ efct_varray_add fail\n");
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_ERROR;
-+			}
-+
-+			/* Place this WQ on the HW class array */
-+			if (qt->class < ARRAY_SIZE(hw->wq_class_array)) {
-+				if (efct_varray_add
-+					(hw->wq_class_array[qt->class], wq)) {
-+					efc_log_err(hw->os,
-+						     "HW wq_class_array efct_varray_add failed\n");
-+					efct_hw_queue_teardown(hw);
-+					return EFCT_HW_RTN_ERROR;
-+				}
-+			} else {
-+				efc_log_err(hw->os,
-+					     "Invalid class value: %d\n",
-+					    qt->class);
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_ERROR;
-+			}
-+
-+			/*
-+			 * Place this WQ on the per CPU list, asumming that EQs
-+			 * are mapped to cpu given by the EQ instance modulo
-+			 * number of CPUs
-+			 */
-+			if (efct_varray_add(hw->wq_cpu_array[eq->instance %
-+					   num_online_cpus()], wq)) {
-+				efc_log_err(hw->os,
-+					     "HW wq_cpu_array efct_varray_add failed\n");
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_ERROR;
-+			}
-+
-+			break;
-+		}
-+		case QTOP_RQ: {
-+			len = (qt->len) ? qt->len : EFCT_HW_RQ_ENTRIES_DEF;
-+
-+			/*
-+			 * Use the max supported queue length
-+			 * if qtop rq len is not a valid value
-+			 */
-+			if (len > default_lengths[QTOP_RQ] ||
-+			    (len % EFCT_HW_RQ_ENTRIES_MIN)) {
-+				efc_log_info(hw->os,
-+					      "QTOP RQ len %d is invalid. Using max supported RQ len %d\n",
-+					len, default_lengths[QTOP_RQ]);
-+				len = default_lengths[QTOP_RQ];
-+			}
-+
-+			if (qt->set_default) {
-+				default_lengths[QTOP_RQ] = len;
-+				break;
-+			}
-+
-+			if ((hw->ulp_start + qt->ulp) > hw->ulp_max) {
-+				efc_log_err(hw->os,
-+					     "invalid ULP %d RQ\n", qt->ulp);
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_NO_MEMORY;
-+			}
-+
-+			if (use_mrq) {
-+				k = mrq.num_pairs;
-+				mrq.rq_cfg[k].len = len;
-+				mrq.rq_cfg[k].ulp = hw->ulp_start + qt->ulp;
-+				mrq.rq_cfg[k].filter_mask = qt->filter_mask;
-+				mrq.rq_cfg[k].eq = eq;
-+				mrq.num_pairs++;
-+			} else {
-+				rq = efct_hw_new_rq(cq, len,
-+						    hw->ulp_start + qt->ulp);
-+				if (!rq) {
-+					efct_hw_queue_teardown(hw);
-+					return EFCT_HW_RTN_NO_MEMORY;
-+				}
-+				rq->filter_mask = qt->filter_mask;
-+			}
-+			break;
-+		}
-+
-+		case QTOP_MQ:
-+			len = (qt->len) ? qt->len : default_lengths[QTOP_MQ];
-+			if (qt->set_default) {
-+				default_lengths[QTOP_MQ] = len;
-+				break;
-+			}
-+
-+			if (!cq)
-+				return EFCT_HW_RTN_NO_MEMORY;
-+
-+			mq = efct_hw_new_mq(cq, len);
-+			if (!mq) {
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_NO_MEMORY;
-+			}
-+			break;
-+
-+		default:
-+			efc_log_crit(hw->os, "Unknown Queue\n");
-+			break;
-+		}
-+	}
-+
-+	if (mrq.num_pairs) {
-+		/* First create normal RQs. */
-+		for (i = 0; i < mrq.num_pairs; i++) {
-+			for (j = 0; j < mrq.num_pairs; j++) {
-+				if (i != j &&
-+				    mrq.rq_cfg[i].filter_mask ==
-+				     mrq.rq_cfg[j].filter_mask) {
-+					/* This should be created using set */
-+					if (rqset_filter_mask &&
-+					    rqset_filter_mask !=
-+					     mrq.rq_cfg[i].filter_mask) {
-+						efc_log_crit(hw->os,
-+							      "Cant create > 1 RQ Set\n");
-+						efct_hw_queue_teardown(hw);
-+						return EFCT_HW_RTN_ERROR;
-+					} else if (!rqset_filter_mask) {
-+						rqset_filter_mask =
-+						      mrq.rq_cfg[i].filter_mask;
-+						rqset_len = mrq.rq_cfg[i].len;
-+					}
-+					eqs[rqset_count] = mrq.rq_cfg[i].eq;
-+					rqset_count++;
-+					break;
-+				}
-+			}
-+			if (j == mrq.num_pairs) {
-+				/* Normal RQ */
-+				cq = efct_hw_new_cq(mrq.rq_cfg[i].eq,
-+						    default_lengths[QTOP_CQ]);
-+				if (!cq) {
-+					efct_hw_queue_teardown(hw);
-+					return EFCT_HW_RTN_NO_MEMORY;
-+				}
-+
-+				rq = efct_hw_new_rq(cq, mrq.rq_cfg[i].len,
-+						    mrq.rq_cfg[i].ulp);
-+				if (!rq) {
-+					efct_hw_queue_teardown(hw);
-+					return EFCT_HW_RTN_NO_MEMORY;
-+				}
-+				rq->filter_mask = mrq.rq_cfg[i].filter_mask;
-+			}
-+		}
-+
-+		/* Now create RQ Set */
-+		if (rqset_count) {
-+			/* Create CQ set */
-+			if (efct_hw_new_cq_set(eqs, cqs, rqset_count,
-+					       default_lengths[QTOP_CQ])) {
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_ERROR;
-+			}
-+
-+			/* Create RQ set */
-+			if (efct_hw_new_rq_set(cqs, rqs, rqset_count,
-+					       rqset_len)) {
-+				efct_hw_queue_teardown(hw);
-+				return EFCT_HW_RTN_ERROR;
-+			}
-+
-+			for (i = 0; i < rqset_count ; i++) {
-+				rqs[i]->filter_mask = rqset_filter_mask;
-+				rqs[i]->is_mrq = true;
-+				rqs[i]->base_mrq_id = rqs[0]->hdr->id;
-+			}
-+
-+			hw->hw_mrq_count = rqset_count;
-+		}
-+	}
-+
-+	return EFCT_HW_RTN_SUCCESS;
-+}
++struct efct_varray_s {
++	void *os;
++	u32 array_count;	/*>> maximum entry count in array */
++	void **array;		/*>> pointer to allocated array memory */
++	u32 entry_count;	/*>> number of entries added to the array */
++	uint next_index;	/*>> iterator next index */
++	spinlock_t lock;	/*>> iterator lock */
++};
 +
 +/**
-+ * @brief Allocate a new EQ object
++ * @brief Set array slab allocation length
 + *
-+ * A new EQ object is instantiated
++ * The slab length is the maximum allocation length that the array uses.
++ * The default 64k slab length may be overridden using this function.
 + *
-+ * @param hw pointer to HW object
-+ * @param entry_count number of entries in the EQ
-+ *
-+ * @return pointer to allocated EQ object
-+ */
-+struct hw_eq_s *
-+efct_hw_new_eq(struct efct_hw_s *hw, u32 entry_count)
-+{
-+	struct hw_eq_s *eq = kmalloc(sizeof(*eq), GFP_KERNEL);
-+
-+	if (eq) {
-+		memset(eq, 0, sizeof(*eq));
-+		eq->type = SLI_QTYPE_EQ;
-+		eq->hw = hw;
-+		eq->entry_count = entry_count;
-+		eq->instance = hw->eq_count++;
-+		eq->queue = &hw->eq[eq->instance];
-+		INIT_LIST_HEAD(&eq->cq_list);
-+
-+		eq->wq_array = efct_varray_alloc(hw->os, EFCT_HW_MAX_NUM_WQ);
-+		if (!eq->wq_array) {
-+			kfree(eq);
-+			eq = NULL;
-+		} else {
-+			if (sli_queue_alloc(&hw->sli, SLI_QTYPE_EQ,
-+					    eq->queue,
-+					    entry_count, NULL)) {
-+				efc_log_err(hw->os,
-+					     "EQ[%d] allocation failure\n",
-+					    eq->instance);
-+				kfree(eq);
-+				eq = NULL;
-+			} else {
-+				sli_eq_modify_delay(&hw->sli, eq->queue,
-+						    1, 0, 8);
-+				hw->hw_eq[eq->instance] = eq;
-+				INIT_LIST_HEAD(&eq->list_entry);
-+				list_add_tail(&eq->list_entry, &hw->eq_list);
-+				efc_log_debug(hw->os,
-+					       "create eq[%2d] id %3d len %4d\n",
-+					      eq->instance, eq->queue->id,
-+					      eq->entry_count);
-+			}
-+		}
-+	}
-+	return eq;
-+}
-+
-+/**
-+ * @brief Allocate a new CQ object
-+ *
-+ * A new CQ object is instantiated
-+ *
-+ * @param eq pointer to parent EQ object
-+ * @param entry_count number of entries in the CQ
-+ *
-+ * @return pointer to allocated CQ object
-+ */
-+struct hw_cq_s *
-+efct_hw_new_cq(struct hw_eq_s *eq, u32 entry_count)
-+{
-+	struct efct_hw_s *hw = eq->hw;
-+	struct hw_cq_s *cq = kmalloc(sizeof(*cq), GFP_KERNEL);
-+
-+	if (cq) {
-+		memset(cq, 0, sizeof(*cq));
-+		cq->eq = eq;
-+		cq->type = SLI_QTYPE_CQ;
-+		cq->instance = eq->hw->cq_count++;
-+		cq->entry_count = entry_count;
-+		cq->queue = &hw->cq[cq->instance];
-+
-+		INIT_LIST_HEAD(&cq->q_list);
-+
-+		if (sli_queue_alloc(&hw->sli, SLI_QTYPE_CQ, cq->queue,
-+				    cq->entry_count, eq->queue)) {
-+			efc_log_err(hw->os,
-+				     "CQ[%d] allocation failure len=%d\n",
-+				    eq->instance,
-+				    eq->entry_count);
-+			kfree(cq);
-+			cq = NULL;
-+		} else {
-+			hw->hw_cq[cq->instance] = cq;
-+			INIT_LIST_HEAD(&cq->list_entry);
-+			list_add_tail(&cq->list_entry, &eq->cq_list);
-+			efc_log_debug(hw->os,
-+				       "create cq[%2d] id %3d len %4d\n",
-+				      cq->instance, cq->queue->id,
-+				      cq->entry_count);
-+		}
-+	}
-+	return cq;
-+}
-+
-+/**
-+ * @brief Allocate a new CQ Set of objects.
-+ *
-+ * @param eqs pointer to a set of EQ objects.
-+ * @param cqs pointer to a set of CQ objects to be returned.
-+ * @param num_cqs number of CQ queues in the set.
-+ * @param entry_count number of entries in the CQ.
-+ *
-+ * @return 0 on success and -1 on failure.
-+ */
-+u32
-+efct_hw_new_cq_set(struct hw_eq_s *eqs[], struct hw_cq_s *cqs[],
-+		   u32 num_cqs, u32 entry_count)
-+{
-+	u32 i;
-+	struct efct_hw_s *hw = eqs[0]->hw;
-+	struct sli4_s *sli4 = &hw->sli;
-+	struct hw_cq_s *cq = NULL;
-+	struct sli4_queue_s *qs[SLI_MAX_CQ_SET_COUNT];
-+	struct sli4_queue_s *assefct[SLI_MAX_CQ_SET_COUNT];
-+
-+	/* Initialise CQS pointers to NULL */
-+	for (i = 0; i < num_cqs; i++)
-+		cqs[i] = NULL;
-+
-+	for (i = 0; i < num_cqs; i++) {
-+		cq = kmalloc(sizeof(*cq), GFP_KERNEL);
-+		if (!cq)
-+			goto error;
-+
-+		memset(cq, 0, sizeof(*cq));
-+		cqs[i]          = cq;
-+		cq->eq          = eqs[i];
-+		cq->type        = SLI_QTYPE_CQ;
-+		cq->instance    = hw->cq_count++;
-+		cq->entry_count = entry_count;
-+		cq->queue       = &hw->cq[cq->instance];
-+		qs[i]           = cq->queue;
-+		assefct[i]       = eqs[i]->queue;
-+		INIT_LIST_HEAD(&cq->q_list);
-+	}
-+
-+	if (!sli_cq_alloc_set(sli4, qs, num_cqs, entry_count, assefct)) {
-+		efc_log_err(hw->os, "Failed to create CQ Set.\n");
-+		goto error;
-+	}
-+
-+	for (i = 0; i < num_cqs; i++) {
-+		hw->hw_cq[cqs[i]->instance] = cqs[i];
-+		INIT_LIST_HEAD(&cqs[i]->list_entry);
-+		list_add_tail(&cqs[i]->list_entry, &cqs[i]->eq->cq_list);
-+	}
-+
-+	return 0;
-+
-+error:
-+	for (i = 0; i < num_cqs; i++) {
-+		kfree(cqs[i]);
-+		cqs[i] = NULL;
-+	}
-+	return -1;
-+}
-+
-+/**
-+ * @brief Allocate a new MQ object
-+ *
-+ * A new MQ object is instantiated
-+ *
-+ * @param cq pointer to parent CQ object
-+ * @param entry_count number of entries in the MQ
-+ *
-+ * @return pointer to allocated MQ object
-+ */
-+struct hw_mq_s *
-+efct_hw_new_mq(struct hw_cq_s *cq, u32 entry_count)
-+{
-+	struct efct_hw_s *hw = cq->eq->hw;
-+	struct hw_mq_s *mq = kmalloc(sizeof(*mq), GFP_KERNEL);
-+
-+	if (mq) {
-+		memset(mq, 0, sizeof(*mq));
-+		mq->cq = cq;
-+		mq->type = SLI_QTYPE_MQ;
-+		mq->instance = cq->eq->hw->mq_count++;
-+		mq->entry_count = entry_count;
-+		mq->entry_size = EFCT_HW_MQ_DEPTH;
-+		mq->queue = &hw->mq[mq->instance];
-+
-+		if (sli_queue_alloc(&hw->sli, SLI_QTYPE_MQ,
-+				    mq->queue,
-+				    mq->entry_size,
-+				    cq->queue)) {
-+			efc_log_err(hw->os, "MQ allocation failure\n");
-+			kfree(mq);
-+			mq = NULL;
-+		} else {
-+			hw->hw_mq[mq->instance] = mq;
-+			INIT_LIST_HEAD(&mq->list_entry);
-+			list_add_tail(&mq->list_entry, &cq->q_list);
-+			efc_log_debug(hw->os,
-+				       "create mq[%2d] id %3d len %4d\n",
-+				      mq->instance, mq->queue->id,
-+				      mq->entry_count);
-+		}
-+	}
-+	return mq;
-+}
-+
-+/**
-+ * @brief Allocate a new WQ object
-+ *
-+ * A new WQ object is instantiated
-+ *
-+ * @param cq pointer to parent CQ object
-+ * @param entry_count number of entries in the WQ
-+ * @param class WQ class
-+ * @param ulp index of chute
-+ *
-+ * @return pointer to allocated WQ object
-+ */
-+struct hw_wq_s *
-+efct_hw_new_wq(struct hw_cq_s *cq, u32 entry_count,
-+	       u32 class, u32 ulp)
-+{
-+	struct efct_hw_s *hw = cq->eq->hw;
-+	struct hw_wq_s *wq = kmalloc(sizeof(*wq), GFP_KERNEL);
-+
-+	if (wq) {
-+		memset(wq, 0, sizeof(*wq));
-+		wq->hw = cq->eq->hw;
-+		wq->cq = cq;
-+		wq->type = SLI_QTYPE_WQ;
-+		wq->instance = cq->eq->hw->wq_count++;
-+		wq->entry_count = entry_count;
-+		wq->queue = &hw->wq[wq->instance];
-+		wq->ulp = ulp;
-+		wq->wqec_set_count = EFCT_HW_WQEC_SET_COUNT;
-+		wq->wqec_count = wq->wqec_set_count;
-+		wq->free_count = wq->entry_count - 1;
-+		wq->class = class;
-+		INIT_LIST_HEAD(&wq->pending_list);
-+
-+		if (sli_queue_alloc(&hw->sli, SLI_QTYPE_WQ, wq->queue,
-+				    wq->entry_count, cq->queue)) {
-+			efc_log_err(hw->os, "WQ allocation failure\n");
-+			kfree(wq);
-+			wq = NULL;
-+		} else {
-+			hw->hw_wq[wq->instance] = wq;
-+			INIT_LIST_HEAD(&wq->list_entry);
-+			list_add_tail(&wq->list_entry, &cq->q_list);
-+			efc_log_debug(hw->os,
-+				       "create wq[%2d] id %3d len %4d cls %d ulp %d\n",
-+				wq->instance, wq->queue->id,
-+				wq->entry_count, wq->class, wq->ulp);
-+		}
-+	}
-+	return wq;
-+}
-+
-+/**
-+ * @brief Allocate a struct hw_rq_s object
-+ *
-+ * Allocate an RQ object, which encapsulates 2 SLI queues (for rq pair)
-+ *
-+ * @param cq pointer to parent CQ object
-+ * @param entry_count number of entries in the RQs
-+ * @param ulp ULP index for this RQ
-+ *
-+ * @return pointer to newly allocated hw_rq_t
-+ */
-+struct hw_rq_s *
-+efct_hw_new_rq(struct hw_cq_s *cq, u32 entry_count, u32 ulp)
-+{
-+	struct efct_hw_s *hw = cq->eq->hw;
-+	struct hw_rq_s *rq = kmalloc(sizeof(*rq), GFP_KERNEL);
-+
-+	if (rq) {
-+		memset(rq, 0, sizeof(*rq));
-+		rq->instance = hw->hw_rq_count++;
-+		rq->cq = cq;
-+		rq->type = SLI_QTYPE_RQ;
-+		rq->entry_count = entry_count;
-+
-+		/* Create the header RQ */
-+		rq->hdr = &hw->rq[hw->rq_count];
-+		rq->hdr_entry_size = EFCT_HW_RQ_HEADER_SIZE;
-+
-+		if (sli_fc_rq_alloc(&hw->sli, rq->hdr,
-+				    rq->entry_count,
-+				    rq->hdr_entry_size,
-+				    cq->queue,
-+				    true)) {
-+			efc_log_err(hw->os,
-+				     "RQ allocation failure - header\n");
-+			kfree(rq);
-+			return NULL;
-+		}
-+		/* Update hw_rq_lookup[] */
-+		hw->hw_rq_lookup[hw->rq_count] = rq->instance;
-+		hw->rq_count++;
-+		efc_log_debug(hw->os,
-+			      "create rq[%2d] id %3d len %4d hdr  size %4d\n",
-+			      rq->instance, rq->hdr->id, rq->entry_count,
-+			      rq->hdr_entry_size);
-+
-+		/* Create the default data RQ */
-+		rq->data = &hw->rq[hw->rq_count];
-+		rq->data_entry_size = hw->config.rq_default_buffer_size;
-+
-+		if (sli_fc_rq_alloc(&hw->sli, rq->data,
-+				    rq->entry_count,
-+				    rq->data_entry_size,
-+				    cq->queue,
-+				    false)) {
-+			efc_log_err(hw->os,
-+				     "RQ allocation failure - first burst\n");
-+			kfree(rq);
-+			return NULL;
-+		}
-+		/* Update hw_rq_lookup[] */
-+		hw->hw_rq_lookup[hw->rq_count] = rq->instance;
-+		hw->rq_count++;
-+		efc_log_debug(hw->os,
-+			       "create rq[%2d] id %3d len %4d data size %4d\n",
-+			 rq->instance, rq->data->id, rq->entry_count,
-+			 rq->data_entry_size);
-+
-+		hw->hw_rq[rq->instance] = rq;
-+		INIT_LIST_HEAD(&rq->list_entry);
-+		list_add_tail(&rq->list_entry, &cq->q_list);
-+
-+		rq->rq_tracker = kmalloc_array(rq->entry_count,
-+					sizeof(struct efc_hw_sequence_s *),
-+					GFP_ATOMIC);
-+		if (!rq->rq_tracker)
-+			return NULL;
-+
-+		memset(rq->rq_tracker, 0,
-+		       rq->entry_count * sizeof(struct efc_hw_sequence_s *));
-+	}
-+	return rq;
-+}
-+
-+/**
-+ * @brief Allocate a struct hw_rq_s object SET
-+ *
-+ * Allocate an RQ object SET, where each element in set
-+ * encapsulates 2 SLI queues (for rq pair)
-+ *
-+ * @param cqs pointers to be associated with RQs.
-+ * @param rqs RQ pointers to be returned on success.
-+ * @param num_rq_pairs number of rq pairs in the Set.
-+ * @param entry_count number of entries in the RQs
-+ * @param ulp ULP index for this RQ
-+ *
-+ * @return 0 in success and -1 on failure.
-+ */
-+u32
-+efct_hw_new_rq_set(struct hw_cq_s *cqs[], struct hw_rq_s *rqs[],
-+		   u32 num_rq_pairs, u32 entry_count)
-+{
-+	struct efct_hw_s *hw = cqs[0]->eq->hw;
-+	struct hw_rq_s *rq = NULL;
-+	struct sli4_queue_s *qs[SLI_MAX_RQ_SET_COUNT * 2] = { NULL };
-+	u32 i, q_count, size;
-+
-+	/* Initialise RQS pointers */
-+	for (i = 0; i < num_rq_pairs; i++)
-+		rqs[i] = NULL;
-+
-+	for (i = 0, q_count = 0; i < num_rq_pairs; i++, q_count += 2) {
-+		rq = kmalloc(sizeof(*rq), GFP_KERNEL);
-+		if (!rq)
-+			goto error;
-+
-+		memset(rq, 0, sizeof(*rq));
-+		rqs[i] = rq;
-+		rq->instance = hw->hw_rq_count++;
-+		rq->cq = cqs[i];
-+		rq->type = SLI_QTYPE_RQ;
-+		rq->entry_count = entry_count;
-+
-+		/* Header RQ */
-+		rq->hdr = &hw->rq[hw->rq_count];
-+		rq->hdr_entry_size = EFCT_HW_RQ_HEADER_SIZE;
-+		hw->hw_rq_lookup[hw->rq_count] = rq->instance;
-+		hw->rq_count++;
-+		qs[q_count] = rq->hdr;
-+
-+		/* Data RQ */
-+		rq->data = &hw->rq[hw->rq_count];
-+		rq->data_entry_size = hw->config.rq_default_buffer_size;
-+		hw->hw_rq_lookup[hw->rq_count] = rq->instance;
-+		hw->rq_count++;
-+		qs[q_count + 1] = rq->data;
-+
-+		rq->rq_tracker = NULL;
-+	}
-+
-+	if (!sli_fc_rq_set_alloc(&hw->sli, num_rq_pairs, qs,
-+				cqs[0]->queue->id,
-+			    rqs[0]->entry_count,
-+			    rqs[0]->hdr_entry_size,
-+			    rqs[0]->data_entry_size)) {
-+		efc_log_err(hw->os,
-+			     "RQ Set allocation failure for base CQ=%d\n",
-+			    cqs[0]->queue->id);
-+		goto error;
-+	}
-+
-+	for (i = 0; i < num_rq_pairs; i++) {
-+		hw->hw_rq[rqs[i]->instance] = rqs[i];
-+		INIT_LIST_HEAD(&rqs[i]->list_entry);
-+		list_add_tail(&rqs[i]->list_entry, &cqs[i]->q_list);
-+		size = sizeof(struct efc_hw_sequence_s *) * rqs[i]->entry_count;
-+		rqs[i]->rq_tracker = kmalloc(size, GFP_KERNEL);
-+		if (!rqs[i]->rq_tracker)
-+			goto error;
-+	}
-+
-+	return 0;
-+
-+error:
-+	for (i = 0; i < num_rq_pairs; i++) {
-+		if (rqs[i]) {
-+			kfree(rqs[i]->rq_tracker);
-+			kfree(rqs[i]);
-+		}
-+	}
-+
-+	return -1;
-+}
-+
-+/**
-+ * @brief Free an EQ object
-+ *
-+ * The EQ object and any child queue objects are freed
-+ *
-+ * @param eq pointer to EQ object
++ * @param len new slab length.
 + *
 + * @return none
 + */
 +void
-+efct_hw_del_eq(struct hw_eq_s *eq)
++efct_array_set_slablen(u32 len)
 +{
-+	if (eq) {
-+		struct hw_cq_s *cq;
-+		struct hw_cq_s *cq_next;
-+
-+		list_for_each_entry_safe(cq, cq_next, &eq->cq_list, list_entry)
-+			efct_hw_del_cq(cq);
-+		efct_varray_free(eq->wq_array);
-+		list_del(&eq->list_entry);
-+		eq->hw->hw_eq[eq->instance] = NULL;
-+		kfree(eq);
-+	}
++	slab_len = len;
 +}
 +
 +/**
-+ * @brief Free a CQ object
++ * @brief Allocate an array object
 + *
-+ * The CQ object and any child queue objects are freed
++ * An array object of size and number of elements is allocated
 + *
-+ * @param cq pointer to CQ object
++ * @param os OS handle
++ * @param size size of array elements in bytes
++ * @param count number of elements in array
 + *
-+ * @return none
++ * @return pointer to array object or NULL
 + */
-+void
-+efct_hw_del_cq(struct hw_cq_s *cq)
++struct efct_array_s *
++efct_array_alloc(void *os, u32 size, u32 count)
 +{
-+	if (cq) {
-+		struct hw_q_s *q;
-+		struct hw_q_s *q_next;
-+
-+		list_for_each_entry_safe(q, q_next, &cq->q_list, list_entry) {
-+			switch (q->type) {
-+			case SLI_QTYPE_MQ:
-+				efct_hw_del_mq((struct hw_mq_s *)q);
-+				break;
-+			case SLI_QTYPE_WQ:
-+				efct_hw_del_wq((struct hw_wq_s *)q);
-+				break;
-+			case SLI_QTYPE_RQ:
-+				efct_hw_del_rq((struct hw_rq_s *)q);
-+				break;
-+			default:
-+				break;
-+			}
-+		}
-+		list_del(&cq->list_entry);
-+		cq->eq->hw->hw_cq[cq->instance] = NULL;
-+		kfree(cq);
-+	}
-+}
-+
-+/**
-+ * @brief Free a MQ object
-+ *
-+ * The MQ object is freed
-+ *
-+ * @param mq pointer to MQ object
-+ *
-+ * @return none
-+ */
-+void
-+efct_hw_del_mq(struct hw_mq_s *mq)
-+{
-+	if (mq) {
-+		list_del(&mq->list_entry);
-+		mq->cq->eq->hw->hw_mq[mq->instance] = NULL;
-+		kfree(mq);
-+	}
-+}
-+
-+/**
-+ * @brief Free a WQ object
-+ *
-+ * The WQ object is freed
-+ *
-+ * @param wq pointer to WQ object
-+ *
-+ * @return none
-+ */
-+void
-+efct_hw_del_wq(struct hw_wq_s *wq)
-+{
-+	if (wq) {
-+		list_del(&wq->list_entry);
-+		wq->cq->eq->hw->hw_wq[wq->instance] = NULL;
-+		kfree(wq);
-+	}
-+}
-+
-+/**
-+ * @brief Free an RQ object
-+ *
-+ * The RQ object is freed
-+ *
-+ * @param rq pointer to RQ object
-+ *
-+ * @return none
-+ */
-+void
-+efct_hw_del_rq(struct hw_rq_s *rq)
-+{
-+	struct efct_hw_s *hw = NULL;
-+
-+	if (rq) {
-+		/* Free RQ tracker */
-+		kfree(rq->rq_tracker);
-+		rq->rq_tracker = NULL;
-+		list_del(&rq->list_entry);
-+		hw = rq->cq->eq->hw;
-+		hw->hw_rq[rq->instance] = NULL;
-+		kfree(rq);
-+	}
-+}
-+
-+/**
-+ * @brief Display HW queue objects
-+ *
-+ * The HW queue objects are displayed using efct_log
-+ *
-+ * @param hw pointer to HW object
-+ *
-+ * @return none
-+ */
-+void
-+efct_hw_queue_dump(struct efct_hw_s *hw)
-+{
-+	struct hw_eq_s *eq;
-+	struct hw_cq_s *cq;
-+	struct hw_q_s *q;
-+	struct hw_mq_s *mq;
-+	struct hw_wq_s *wq;
-+	struct hw_rq_s *rq;
-+
-+	list_for_each_entry(eq, &hw->eq_list, list_entry) {
-+		efc_log_debug(hw->os, "eq[%d] id %2d\n",
-+			       eq->instance, eq->queue->id);
-+		list_for_each_entry(cq, &eq->cq_list, list_entry) {
-+			efc_log_debug(hw->os, "cq[%d] id %2d current\n",
-+				       cq->instance, cq->queue->id);
-+			list_for_each_entry(q, &cq->q_list, list_entry) {
-+				switch (q->type) {
-+				case SLI_QTYPE_MQ:
-+					mq = (struct hw_mq_s *)q;
-+					efc_log_debug(hw->os,
-+						       "    mq[%d] id %2d\n",
-+					       mq->instance, mq->queue->id);
-+					break;
-+				case SLI_QTYPE_WQ:
-+					wq = (struct hw_wq_s *)q;
-+					efc_log_debug(hw->os,
-+						       "    wq[%d] id %2d\n",
-+						wq->instance, wq->queue->id);
-+					break;
-+				case SLI_QTYPE_RQ:
-+					rq = (struct hw_rq_s *)q;
-+					efc_log_debug(hw->os,
-+						       "    rq[%d] hdr id %2d\n",
-+					       rq->instance, rq->hdr->id);
-+					break;
-+				default:
-+					break;
-+				}
-+			}
-+		}
-+	}
-+}
-+
-+/**
-+ * @brief Teardown HW queue objects
-+ *
-+ * The HW queue objects are freed
-+ *
-+ * @param hw pointer to HW object
-+ *
-+ * @return none
-+ */
-+void
-+efct_hw_queue_teardown(struct efct_hw_s *hw)
-+{
-+	u32 i;
-+	struct hw_eq_s *eq;
-+	struct hw_eq_s *eq_next;
-+
-+	if (hw->eq_list.next) {
-+		list_for_each_entry_safe(eq, eq_next, &hw->eq_list,
-+					 list_entry) {
-+			efct_hw_del_eq(eq);
-+		}
-+	}
-+	for (i = 0; i < ARRAY_SIZE(hw->wq_cpu_array); i++) {
-+		efct_varray_free(hw->wq_cpu_array[i]);
-+		hw->wq_cpu_array[i] = NULL;
-+	}
-+	for (i = 0; i < ARRAY_SIZE(hw->wq_class_array); i++) {
-+		efct_varray_free(hw->wq_class_array[i]);
-+		hw->wq_class_array[i] = NULL;
-+	}
-+}
-+
-+/**
-+ * @brief Allocate a WQ to an IO object
-+ *
-+ * The next work queue index is used to assign a WQ to an IO.
-+ *
-+ * If wq_steering is EFCT_HW_WQ_STEERING_CLASS, a WQ from io->wq_class is
-+ * selected.
-+ *
-+ * If wq_steering is EFCT_HW_WQ_STEERING_REQUEST, then a WQ from the EQ that
-+ * the IO request came in on is selected.
-+ *
-+ * If wq_steering is EFCT_HW_WQ_STEERING_CPU, then a WQ associted with the
-+ * CPU the request is made on is selected.
-+ *
-+ * @param hw pointer to HW object
-+ * @param io pointer to IO object
-+ *
-+ * @return Return pointer to next WQ
-+ */
-+struct hw_wq_s *
-+efct_hw_queue_next_wq(struct efct_hw_s *hw, struct efct_hw_io_s *io)
-+{
-+	struct hw_eq_s *eq;
-+	struct hw_wq_s *wq = NULL;
-+	u32 cpuidx;
-+
-+	switch (io->wq_steering) {
-+	case EFCT_HW_WQ_STEERING_CLASS:
-+		if (unlikely(io->wq_class >= ARRAY_SIZE(hw->wq_class_array)))
-+			break;
-+
-+		wq = efct_varray_iter_next(hw->wq_class_array[io->wq_class]);
-+		break;
-+	case EFCT_HW_WQ_STEERING_REQUEST:
-+		eq = io->eq;
-+		if (likely(eq))
-+			wq = efct_varray_iter_next(eq->wq_array);
-+		break;
-+	case EFCT_HW_WQ_STEERING_CPU:
-+		cpuidx = in_interrupt() ?
-+			raw_smp_processor_id() : task_cpu(current);
-+
-+		if (likely(cpuidx < ARRAY_SIZE(hw->wq_cpu_array)))
-+			wq = efct_varray_iter_next(hw->wq_cpu_array[cpuidx]);
-+		break;
-+	}
-+
-+	if (unlikely(!wq))
-+		wq = hw->hw_wq[0];
-+
-+	return wq;
-+}
-+
-+/**
-+ * @brief Return count of EQs for a queue topology object
-+ *
-+ * The EQ count for in the HWs queue topology (hw->qtop) object is returned
-+ *
-+ * @param hw pointer to HW object
-+ *
-+ * @return count of EQs
-+ */
-+u32
-+efct_hw_qtop_eq_count(struct efct_hw_s *hw)
-+{
-+	return hw->qtop->entry_counts[QTOP_EQ];
-+}
-+
-+#define TOKEN_LEN		32
-+
-+/**
-+ * @brief Declare token types
-+ */
-+enum tok_type_e {
-+	TOK_LPAREN = 1,
-+	TOK_RPAREN,
-+	TOK_COLON,
-+	TOK_EQUALS,
-+	TOK_QUEUE,
-+	TOK_ATTR_NAME,
-+	TOK_NUMBER,
-+	TOK_NUMBER_VALUE,
-+	TOK_NUMBER_LIST,
-+};
-+
-+/**
-+ * @brief Declare token sub-types
-+ */
-+enum tok_subtype_e {
-+	TOK_SUB_EQ = 100,
-+	TOK_SUB_CQ,
-+	TOK_SUB_RQ,
-+	TOK_SUB_MQ,
-+	TOK_SUB_WQ,
-+	TOK_SUB_LEN,
-+	TOK_SUB_CLASS,
-+	TOK_SUB_ULP,
-+	TOK_SUB_FILTER,
-+};
-+
-+/**
-+ * @brief convert queue subtype to QTOP entry
-+ *
-+ * @param q queue subtype
-+ *
-+ * @return QTOP entry or 0
-+ */
-+static enum efct_hw_qtop_entry_e
-+subtype2qtop(enum tok_subtype_e q)
-+{
-+	switch (q) {
-+	case TOK_SUB_EQ:	return QTOP_EQ;
-+	case TOK_SUB_CQ:	return QTOP_CQ;
-+	case TOK_SUB_RQ:	return QTOP_RQ;
-+	case TOK_SUB_MQ:	return QTOP_MQ;
-+	case TOK_SUB_WQ:	return QTOP_WQ;
-+	default:
-+		break;
-+	}
-+	return 0;
-+}
-+
-+/**
-+ * @brief Declare token object
-+ */
-+struct tok_s {
-+	enum tok_type_e type;
-+	enum tok_subtype_e subtype;
-+	char string[TOKEN_LEN];
-+};
-+
-+/**
-+ * @brief Declare token array object
-+ */
-+struct tokarray_s {
-+	struct tok_s *tokens;		/* Pointer to array of tokens */
-+	u32 alloc_count;		/* Number of tokens in the array */
-+	u32 inuse_count;		/* Number of tokens posted to array */
-+	u32 iter_idx;		/* Iterator index */
-+};
-+
-+/**
-+ * @brief Declare token match structure
-+ */
-+struct tokmatch_s {
-+	char *s;
-+	enum tok_type_e type;
-+	enum tok_subtype_e subtype;
-+};
-+
-+/**
-+ * @brief test if character is ID start character
-+ *
-+ * @param c character to test
-+ *
-+ * @return TRUE if character is an ID start character
-+ */
-+static int
-+idstart(int c)
-+{
-+	return	isalpha(c) || (c == '_') || (c == '$');
-+}
-+
-+/**
-+ * @brief test if character is an ID character
-+ *
-+ * @param c character to test
-+ *
-+ * @return TRUE if character is an ID character
-+ */
-+static int
-+idchar(int c)
-+{
-+	return idstart(c) || isdigit(c);
-+}
-+
-+/**
-+ * @brief Declare single character matches
-+ */
-+static struct tokmatch_s cmatches[] = {
-+	{"(", TOK_LPAREN},
-+	{")", TOK_RPAREN},
-+	{":", TOK_COLON},
-+	{"=", TOK_EQUALS},
-+};
-+
-+/**
-+ * @brief Declare identifier match strings
-+ */
-+static struct tokmatch_s smatches[] = {
-+	{"eq", TOK_QUEUE, TOK_SUB_EQ},
-+	{"cq", TOK_QUEUE, TOK_SUB_CQ},
-+	{"rq", TOK_QUEUE, TOK_SUB_RQ},
-+	{"mq", TOK_QUEUE, TOK_SUB_MQ},
-+	{"wq", TOK_QUEUE, TOK_SUB_WQ},
-+	{"len", TOK_ATTR_NAME, TOK_SUB_LEN},
-+	{"class", TOK_ATTR_NAME, TOK_SUB_CLASS},
-+	{"ulp", TOK_ATTR_NAME, TOK_SUB_ULP},
-+	{"filter", TOK_ATTR_NAME, TOK_SUB_FILTER},
-+};
-+
-+/**
-+ * @brief Scan string and return next token
-+ *
-+ * The string is scanned and the next token is returned
-+ *
-+ * @param s input string to scan
-+ * @param tok pointer to place scanned token
-+ *
-+ * @return pointer to input string following scanned token, or NULL
-+ */
-+static const char *
-+tokenize(const char *s, struct tok_s *tok)
-+{
++	struct efct_array_s *array = NULL;
 +	u32 i;
 +
-+	memset(tok, 0, sizeof(*tok));
++	/* Fail if the item size exceeds slab_len - caller should increase
++	 * slab_size, or not use this API.
++	 */
++	if (size > slab_len) {
++		pr_err("Error: size exceeds slab length\n");
++		return NULL;
++	}
 +
-+	/* Skip over whitespace */
-+	while (*s && isspace(*s))
-+		s++;
-+
-+	/* Return if nothing left in this string */
-+	if (*s == 0)
++	array = kmalloc(sizeof(*array), GFP_KERNEL);
++	if (!array)
 +		return NULL;
 +
-+	/* Look for single character matches */
-+	for (i = 0; i < ARRAY_SIZE(cmatches); i++) {
-+		if (cmatches[i].s[0] == *s) {
-+			tok->type = cmatches[i].type;
-+			tok->subtype = cmatches[i].subtype;
-+			tok->string[0] = *s++;
-+			return s;
++	memset(array, 0, sizeof(*array));
++	array->os = os;
++	array->size = size;
++	array->count = count;
++	array->elems_per_row = slab_len / size;
++	array->n_rows = (count + array->elems_per_row - 1) /
++			array->elems_per_row;
++	array->bytes_per_row = array->elems_per_row * array->size;
++
++	array->array_rows_len = array->n_rows * sizeof(*array->array_rows);
++	array->array_rows = kmalloc(array->array_rows_len, GFP_ATOMIC);
++	if (!array->array_rows) {
++		efct_array_free(array);
++		return NULL;
++	}
++	memset(array->array_rows, 0, array->array_rows_len);
++	for (i = 0; i < array->n_rows; i++) {
++		array->array_rows[i] = kmalloc(array->bytes_per_row,
++					       GFP_KERNEL);
++		if (!array->array_rows[i]) {
++			efct_array_free(array);
++			return NULL;
 +		}
++		memset(array->array_rows[i], 0, array->bytes_per_row);
 +	}
 +
-+	/* Scan for a hex number or decimal */
-+	if ((s[0] == '0') && ((s[1] == 'x') || (s[1] == 'X'))) {
-+		char *p = tok->string;
-+
-+		tok->type = TOK_NUMBER;
-+
-+		*p++ = *s++;
-+		*p++ = *s++;
-+		while ((*s == '.') || isxdigit(*s)) {
-+			if ((p - tok->string) < (int)sizeof(tok->string))
-+				*p++ = *s;
-+			if (*s == ',')
-+				tok->type = TOK_NUMBER_LIST;
-+			s++;
-+		}
-+		*p = 0;
-+		return s;
-+	} else if (isdigit(*s)) {
-+		char *p = tok->string;
-+
-+		tok->type = TOK_NUMBER;
-+		while ((*s == ',') || isdigit(*s)) {
-+			if ((p - tok->string) < (int)sizeof(tok->string))
-+				*p++ = *s;
-+			if (*s == ',')
-+				tok->type = TOK_NUMBER_LIST;
-+			s++;
-+		}
-+		*p = 0;
-+		return s;
-+	}
-+
-+	/* Scan for an ID */
-+	if (idstart(*s)) {
-+		char *p = tok->string;
-+
-+		for (*p++ = *s++; idchar(*s); s++) {
-+			if ((p - tok->string) < TOKEN_LEN)
-+				*p++ = *s;
-+		}
-+
-+		/* See if this is a $ number value */
-+		if (tok->string[0] == '$') {
-+			tok->type = TOK_NUMBER_VALUE;
-+		} else {
-+			/* Look for a string match */
-+			for (i = 0; i < ARRAY_SIZE(smatches); i++) {
-+				if (strcmp(smatches[i].s, tok->string) == 0) {
-+					tok->type = smatches[i].type;
-+					tok->subtype = smatches[i].subtype;
-+					return s;
-+				}
-+			}
-+		}
-+	}
-+	return s;
++	return array;
 +}
 +
 +/**
-+ * @brief convert token type to string
++ * @brief Free an array object
 + *
-+ * @param type token type
++ * Frees a prevously allocated array object
 + *
-+ * @return string, or "unknown"
-+ */
-+static const char *
-+token_type2s(enum tok_type_e type)
-+{
-+	switch (type) {
-+	case TOK_LPAREN:
-+		return "TOK_LPAREN";
-+	case TOK_RPAREN:
-+		return "TOK_RPAREN";
-+	case TOK_COLON:
-+		return "TOK_COLON";
-+	case TOK_EQUALS:
-+		return "TOK_EQUALS";
-+	case TOK_QUEUE:
-+		return "TOK_QUEUE";
-+	case TOK_ATTR_NAME:
-+		return "TOK_ATTR_NAME";
-+	case TOK_NUMBER:
-+		return "TOK_NUMBER";
-+	case TOK_NUMBER_VALUE:
-+		return "TOK_NUMBER_VALUE";
-+	case TOK_NUMBER_LIST:
-+		return "TOK_NUMBER_LIST";
-+	}
-+	return "unknown";
-+}
-+
-+/**
-+ * @brief convert token sub-type to string
-+ *
-+ * @param subtype token sub-type
-+ *
-+ * @return string, or "unknown"
-+ */
-+static const char *
-+token_subtype2s(enum tok_subtype_e subtype)
-+{
-+	switch (subtype) {
-+	case TOK_SUB_EQ:
-+		return "TOK_SUB_EQ";
-+	case TOK_SUB_CQ:
-+		return "TOK_SUB_CQ";
-+	case TOK_SUB_RQ:
-+		return "TOK_SUB_RQ";
-+	case TOK_SUB_MQ:
-+		return "TOK_SUB_MQ";
-+	case TOK_SUB_WQ:
-+		return "TOK_SUB_WQ";
-+	case TOK_SUB_LEN:
-+		return "TOK_SUB_LEN";
-+	case TOK_SUB_CLASS:
-+		return "TOK_SUB_CLASS";
-+	case TOK_SUB_ULP:
-+		return "TOK_SUB_ULP";
-+	case TOK_SUB_FILTER:
-+		return "TOK_SUB_FILTER";
-+	}
-+	return "";
-+}
-+
-+/**
-+ * @brief Generate syntax error message
-+ *
-+ * A syntax error message is found, the input tokens are dumped up to and
-+ * including the token that failed as indicated by the current iterator index.
-+ *
-+ * @param hw pointer to HW object
-+ * @param tokarray pointer to token array object
++ * @param array pointer to array object
 + *
 + * @return none
 + */
-+static void
-+tok_syntax(struct efct_hw_s *hw, struct tokarray_s *tokarray)
++void
++efct_array_free(struct efct_array_s *array)
 +{
 +	u32 i;
-+	struct tok_s *tok;
 +
-+	efc_log_test(hw->os, "Syntax error:\n");
++	if (array) {
++		if (array->array_rows) {
++			for (i = 0; i < array->n_rows; i++)
++				kfree(array->array_rows[i]);
 +
-+	for (i = 0, tok = tokarray->tokens; (i <= tokarray->inuse_count);
-+	     i++, tok++) {
-+		efc_log_test(hw->os, "%s [%2d]    %-16s %-16s %s\n",
-+			      (i == tokarray->iter_idx) ? ">>>" : "   ", i,
-+			     token_type2s(tok->type),
-+			     token_subtype2s(tok->subtype), tok->string);
++			kfree(array->array_rows);
++		}
++		kfree(array);
 +	}
 +}
 +
 +/**
-+ * @brief parse a number
++ * @brief Return reference to an element of an array object
 + *
-+ * Parses tokens of type TOK_NUMBER and TOK_NUMBER_VALUE, returning a numeric
-+ * value
++ * Return the address of an array element given an index
 + *
-+ * @param hw pointer to HW object
-+ * @param qtop pointer to QTOP object
-+ * @param tok pointer to token to parse
++ * @param array pointer to array object
++ * @param idx array element index
 + *
-+ * @return numeric value
++ * @return rointer to array element, or NULL if index out of range
 + */
-+static u32
-+tok_getnumber(struct efct_hw_s *hw, struct efct_hw_qtop_s *qtop,
-+	      struct tok_s *tok)
++void *efct_array_get(struct efct_array_s *array, u32 idx)
 +{
-+	u32 rval = 0;
-+	u32 num_cpus = num_online_cpus();
++	void *entry = NULL;
 +
-+	switch (tok->type) {
-+	case TOK_NUMBER_VALUE:
-+		if (strcmp(tok->string, "$ncpu") == 0)
-+			rval = num_cpus;
-+		else if (strcmp(tok->string, "$ncpu1") == 0)
-+			rval = num_cpus - 1;
-+		else if (strcmp(tok->string, "$nwq") == 0)
-+			rval = (hw) ? hw->config.n_wq : 0;
-+		else if (strcmp(tok->string, "$maxmrq") == 0)
-+			rval = (num_cpus < EFCT_HW_MAX_MRQS)
-+				? num_cpus : EFCT_HW_MAX_MRQS;
-+		else if (strcmp(tok->string, "$nulp") == 0)
-+			rval = hw->ulp_max - hw->ulp_start + 1;
-+		else if ((qtop->rptcount_idx > 0) &&
-+			 strcmp(tok->string, "$rpt0") == 0)
-+			rval = qtop->rptcount[qtop->rptcount_idx - 1];
-+		else if ((qtop->rptcount_idx > 1) &&
-+			 strcmp(tok->string, "$rpt1") == 0)
-+			rval = qtop->rptcount[qtop->rptcount_idx - 2];
-+		else if ((qtop->rptcount_idx > 2) &&
-+			 strcmp(tok->string, "$rpt2") == 0)
-+			rval = qtop->rptcount[qtop->rptcount_idx - 3];
-+		else if ((qtop->rptcount_idx > 3) &&
-+			 strcmp(tok->string, "$rpt3") == 0)
-+			rval = qtop->rptcount[qtop->rptcount_idx - 4];
-+		else if (kstrtou32(tok->string, 0, &rval))
-+			efc_log_debug(hw->os, "kstrtou32 failed\n");
++	if (idx < array->count) {
++		u32 row = idx / array->elems_per_row;
++		u32 offset = idx % array->elems_per_row;
 +
-+		break;
-+	case TOK_NUMBER:
-+		if (kstrtou32(tok->string, 0, &rval))
-+			efc_log_debug(hw->os, "kstrtou32 failed\n");
-+		break;
-+	default:
-+		break;
++		entry = ((u8 *)array->array_rows[row]) +
++			 (offset * array->size);
++	}
++	return entry;
++}
++
++/**
++ * @brief Return number of elements in an array
++ *
++ * Return the number of elements in an array
++ *
++ * @param array pointer to array object
++ *
++ * @return returns count of elements in an array
++ */
++u32
++efct_array_get_count(struct efct_array_s *array)
++{
++	return array->count;
++}
++
++/**
++ * @brief Return size of array elements in bytes
++ *
++ * Returns the size in bytes of each array element
++ *
++ * @param array pointer to array object
++ *
++ * @return size of array element
++ */
++u32
++efct_array_get_size(struct efct_array_s *array)
++{
++	return array->size;
++}
++
++/**
++ * @brief Allocate a void pointer array
++ *
++ * A void pointer array of given length is allocated.
++ *
++ * @param os OS handle
++ * @param array_count Array size
++ *
++ * @return returns a pointer to the efct_varray_s object, other NULL on error
++ */
++struct efct_varray_s *
++efct_varray_alloc(void *os, u32 array_count)
++{
++	struct efct_varray_s *va;
++
++	va = kmalloc(sizeof(*va), GFP_ATOMIC);
++	if (va) {
++		memset(va, 0, sizeof(*va));
++		va->os = os;
++		va->array_count = array_count;
++		va->array = kmalloc_array(va->array_count, sizeof(*va->array),
++					  GFP_KERNEL);
++		if (va->array) {
++			va->next_index = 0;
++			spin_lock_init(&va->lock);
++		} else {
++			kfree(va);
++			va = NULL;
++		}
++	}
++	return va;
++}
++
++/**
++ * @brief Free a void pointer array
++ *
++ * The void pointer array object is free'd
++ *
++ * @param va Pointer to void pointer array
++ *
++ * @return none
++ */
++void
++efct_varray_free(struct efct_varray_s *va)
++{
++	if (va) {
++		kfree(va->array);
++		kfree(va);
++	}
++}
++
++/**
++ * @brief Add an entry to a void pointer array
++ *
++ * An entry is added to the void pointer array
++ *
++ * @param va Pointer to void pointer array
++ * @param entry Pointer to entry to add
++ *
++ * @return returns 0 if entry was added, -1 if there is no more space in the
++ * array
++ */
++int
++efct_varray_add(struct efct_varray_s *va, void *entry)
++{
++	u32 rc = -1;
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&va->lock, flags);
++		if (va->entry_count < va->array_count) {
++			va->array[va->entry_count++] = entry;
++			rc = 0;
++		}
++	spin_unlock_irqrestore(&va->lock, flags);
++
++	return rc;
++}
++
++/**
++ * @brief Reset the void pointer array iterator
++ *
++ * The next index value of the void pointer array iterator is cleared.
++ *
++ * @param va Pointer to void pointer array
++ *
++ * @return none
++ */
++void
++efct_varray_iter_reset(struct efct_varray_s *va)
++{
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&va->lock, flags);
++		va->next_index = 0;
++	spin_unlock_irqrestore(&va->lock, flags);
++}
++
++/**
++ * @brief Return next entry from a void pointer array
++ *
++ * The next entry in the void pointer array is returned.
++ *
++ * @param va Pointer to void point array
++ *
++ * Note: takes the void pointer array lock
++ *
++ * @return returns next void pointer entry
++ */
++void *
++efct_varray_iter_next(struct efct_varray_s *va)
++{
++	void *rval = NULL;
++	unsigned long flags = 0;
++
++	if (va) {
++		spin_lock_irqsave(&va->lock, flags);
++			rval = _efct_varray_iter_next(va);
++		spin_unlock_irqrestore(&va->lock, flags);
 +	}
 +	return rval;
 +}
 +
 +/**
-+ * @brief parse subfilter of a token
++ * @brief Return next entry from a void pointer array
 + *
-+ * The tokens are semantically parsed, to generate QTOP entries.
++ * The next entry in the void pointer array is returned.
 + *
-+ * @param pointer queue type
-+ * @param token
-+ * @param qtop ouptut QTOP object
++ * @param va Pointer to void point array
 + *
-+ * @return Nothing.
++ * Note: doesn't take the void pointer array lock
++ *
++ * @return returns next void pointer entry
 + */
-+static void
-+parse_sub_filter(struct efct_hw_s *hw, struct efct_hw_qtop_entry_s *qt,
-+		 struct tok_s *tok, struct efct_hw_qtop_s *qtop)
++void *
++_efct_varray_iter_next(struct efct_varray_s *va)
 +{
-+	u32 mask = 0;
-+	char *p;
-+	u32 v;
++	void *rval;
 +
-+	if (tok[3].type == TOK_NUMBER_LIST) {
-+		mask = 0;
-+		p = tok[3].string;
-+
-+		while ((p) && *p) {
-+			if (kstrtou32(p, 0, &v))
-+				efc_log_debug(hw->os, "kstrtou32 failed\n");
-+			if (v < 32)
-+				mask |= (1U << v);
-+
-+			p = strchr(p, ',');
-+			if (p)
-+				p++;
-+		}
-+		qt->filter_mask = mask;
-+	} else {
-+		qt->filter_mask = (1U << tok_getnumber(hw, qtop, &tok[3]));
-+	}
++	rval = va->array[va->next_index];
++	if (++va->next_index >= va->entry_count)
++		va->next_index = 0;
++	return rval;
 +}
 +
 +/**
-+ * @brief parse an array of tokens
++ * @brief Return entry count for a void pointer array
 + *
-+ * The tokens are semantically parsed, to generate QTOP entries.
++ * The entry count for a void pointer array is returned
 + *
-+ * @param hw pointer to HW object
-+ * @param tokarray array array of tokens
-+ * @param qtop ouptut QTOP object
++ * @param va Pointer to void pointer array
 + *
-+ * @return returns 0 for success, a negative error code value for failure.
++ * @return returns entry count
 + */
-+static int
-+parse_topology(struct efct_hw_s *hw, struct tokarray_s *tokarray,
-+	       struct efct_hw_qtop_s *qtop)
++u32
++efct_varray_get_count(struct efct_varray_s *va)
 +{
-+	struct efct_hw_qtop_entry_s *qt = qtop->entries + qtop->inuse_count;
-+	struct tok_s *tok;
-+	u32 num = 0;
++	u32 rc;
++	unsigned long flags = 0;
 +
-+	for (; (tokarray->iter_idx < tokarray->inuse_count) &&
-+	     ((tok = &tokarray->tokens[tokarray->iter_idx]) != NULL);) {
-+		if (qtop->inuse_count >= qtop->alloc_count)
-+			return -1;
-+
-+		qt = qtop->entries + qtop->inuse_count;
-+
-+		switch (tok[0].type) {
-+		case TOK_QUEUE:
-+			qt->entry = subtype2qtop(tok[0].subtype);
-+			qt->set_default = false;
-+			qt->len = 0;
-+			qt->class = 0;
-+			qtop->inuse_count++;
-+
-+			/* Advance current token index */
-+			tokarray->iter_idx++;
-+
-+			/*
-+			 * Parse for queue attributes, possibly multiple
-+			 * instances
-+			 */
-+			while ((tokarray->iter_idx + 4) <=
-+				tokarray->inuse_count) {
-+				tok = &tokarray->tokens[tokarray->iter_idx];
-+				if (tok[0].type == TOK_COLON &&
-+				    tok[1].type == TOK_ATTR_NAME &&
-+					tok[2].type == TOK_EQUALS &&
-+					(tok[3].type == TOK_NUMBER ||
-+					 tok[3].type == TOK_NUMBER_VALUE ||
-+					 tok[3].type == TOK_NUMBER_LIST)) {
-+					num = tok_getnumber(hw, qtop, &tok[3]);
-+
-+					switch (tok[1].subtype) {
-+					case TOK_SUB_LEN:
-+						qt->len = num;
-+						break;
-+					case TOK_SUB_CLASS:
-+						qt->class = num;
-+						break;
-+					case TOK_SUB_ULP:
-+						qt->ulp = num;
-+						break;
-+					case TOK_SUB_FILTER:
-+						parse_sub_filter(hw, qt, tok,
-+								 qtop);
-+						break;
-+					default:
-+						break;
-+					}
-+					/* Advance current token index */
-+					tokarray->iter_idx += 4;
-+				} else {
-+					break;
-+				}
-+				num = 0;
-+			}
-+			qtop->entry_counts[qt->entry]++;
-+			break;
-+
-+		case TOK_ATTR_NAME:
-+			if (((tokarray->iter_idx + 5) <=
-+			      tokarray->inuse_count) &&
-+			      tok[1].type == TOK_COLON &&
-+			      tok[2].type == TOK_QUEUE &&
-+			      tok[3].type == TOK_EQUALS &&
-+			      (tok[4].type == TOK_NUMBER ||
-+			      tok[4].type == TOK_NUMBER_VALUE)) {
-+				qt->entry = subtype2qtop(tok[2].subtype);
-+				qt->set_default = true;
-+				switch (tok[0].subtype) {
-+				case TOK_SUB_LEN:
-+					qt->len = tok_getnumber(hw, qtop,
-+								&tok[4]);
-+					break;
-+				case TOK_SUB_CLASS:
-+					qt->class = tok_getnumber(hw, qtop,
-+								  &tok[4]);
-+					break;
-+				case TOK_SUB_ULP:
-+					qt->ulp = tok_getnumber(hw, qtop,
-+								&tok[4]);
-+					break;
-+				default:
-+					break;
-+				}
-+				qtop->inuse_count++;
-+				tokarray->iter_idx += 5;
-+			} else {
-+				tok_syntax(hw, tokarray);
-+				return -1;
-+			}
-+			break;
-+
-+		case TOK_NUMBER:
-+		case TOK_NUMBER_VALUE: {
-+			u32 rpt_count = 1;
-+			u32 i;
-+			u32 rpt_idx;
-+
-+			rpt_count = tok_getnumber(hw, qtop, tok);
-+
-+			if (tok[1].type == TOK_LPAREN) {
-+				u32 iter_idx_save;
-+
-+				tokarray->iter_idx += 2;
-+
-+				/* save token array iteration index */
-+				iter_idx_save = tokarray->iter_idx;
-+
-+				for (i = 0; i < rpt_count; i++) {
-+					rpt_idx = qtop->rptcount_idx;
-+
-+					if (qtop->rptcount_idx <
-+					    ARRAY_SIZE(qtop->rptcount)) {
-+						qtop->rptcount[rpt_idx + 1] = i;
-+					}
-+
-+					/* restore token array iteration idx */
-+					tokarray->iter_idx = iter_idx_save;
-+
-+					/* parse, append to qtop */
-+					parse_topology(hw, tokarray, qtop);
-+
-+					qtop->rptcount_idx = rpt_idx;
-+				}
-+			}
-+			break;
-+		}
-+
-+		case TOK_RPAREN:
-+			tokarray->iter_idx++;
-+			return 0;
-+
-+		default:
-+			tok_syntax(hw, tokarray);
-+			return -1;
-+		}
-+	}
-+	return 0;
++	spin_lock_irqsave(&va->lock, flags);
++		rc = va->entry_count;
++	spin_unlock_irqrestore(&va->lock, flags);
++	return rc;
 +}
 +
 +/**
-+ * @brief Parse queue topology string
++ * The efct_pool_s data structure consists of:
 + *
-+ * The queue topology object is allocated, and filled with the results of
-+ * parsing the passed in queue topology string
++ *	pool->a		An efct_array_s.
++ *	pool->freelist	A linked list of free items.
 + *
-+ * @param hw pointer to HW object
-+ * @param qtop_string input queue topology string
++ *	When a pool is allocated using efct_pool_alloc(), the caller
++ *	provides the size in bytes of each memory pool item (size), and
++ *	a count of items (count). Since efct_pool_alloc() has no visibility
++ *	into the object the caller is allocating, a link for the linked list
++ *	is "pre-pended".  Thus when allocating the efct_array_s, the size used
++ *	is the size of the pool_hdr_s plus the requestedmemory pool item size.
 + *
-+ * @return pointer to allocated QTOP object, or NULL if there was an error
++ *	array item layout:
++ *
++ *		pool_hdr_s
++ *		pool data[size]
++ *
++ *	The address of the pool data is returned when allocated (using
++ *	efct_pool_get(), or efct_pool_get_instance()), and received when being
++ *	freed (using efct_pool_put(). So the address returned by the array item
++ *	(efct_array_get()) must be offset by the size of pool_hdr_s.
 + */
-+struct efct_hw_qtop_s *
-+efct_hw_qtop_parse(struct efct_hw_s *hw, const char *qtop_string)
++
++/**
++ * @brief Allocate a memory pool.
++ *
++ * A memory pool of given size and item count is allocated.
++ *
++ * @param os OS handle.
++ * @param size Size in bytes of item.
++ * @param count Number of items in a memory pool.
++ *
++ * @return Returns pointer to allocated memory pool, or NULL.
++ */
++struct efct_pool_s *
++efct_pool_alloc(void *os, u32 size, u32 count)
 +{
-+	struct efct_hw_qtop_s *qtop;
-+	struct tokarray_s tokarray;
-+	const char *s;
++	struct efct_pool_s *pool;
++	struct pool_hdr_s *pool_entry;
++	u32 i;
 +
-+	efc_log_debug(hw->os, "queue topology: %s\n", qtop_string);
-+
-+	/* Allocate a token array */
-+	tokarray.tokens = kmalloc_array(MAX_TOKENS, sizeof(*tokarray.tokens),
-+					GFP_KERNEL);
-+	if (!tokarray.tokens)
++	pool = kmalloc(sizeof(*pool), GFP_KERNEL);
++	if (!pool)
 +		return NULL;
-+	memset(tokarray.tokens, 0, MAX_TOKENS * sizeof(*tokarray.tokens));
-+	tokarray.alloc_count = MAX_TOKENS;
-+	tokarray.inuse_count = 0;
-+	tokarray.iter_idx = 0;
 +
-+	/* Parse the tokens */
-+	for (s = qtop_string; (tokarray.inuse_count < tokarray.alloc_count) &&
-+	     ((s = tokenize(s, &tokarray.tokens[tokarray.inuse_count]))) !=
-+	       NULL;)
-+		tokarray.inuse_count++;
++	memset(pool, 0, sizeof(*pool));
++	pool->os = os;
 +
-+	/* Allocate a queue topology structure */
-+	qtop = kmalloc(sizeof(*qtop), GFP_KERNEL);
-+	if (!qtop) {
-+		kfree(tokarray.tokens);
-+		efc_log_err(hw->os, "malloc qtop failed\n");
-+		return NULL;
-+	}
-+	memset(qtop, 0, sizeof(*qtop));
-+	qtop->os = hw->os;
-+
-+	/* Allocate queue topology entries */
-+	qtop->entries = kzalloc((EFCT_HW_MAX_QTOP_ENTRIES *
-+				sizeof(*qtop->entries)), GFP_ATOMIC);
-+	if (!qtop->entries) {
-+		kfree(qtop);
-+		kfree(tokarray.tokens);
-+		return NULL;
-+	}
-+	qtop->alloc_count = EFCT_HW_MAX_QTOP_ENTRIES;
-+	qtop->inuse_count = 0;
-+
-+	/* Parse the tokens */
-+	if (parse_topology(hw, &tokarray, qtop)) {
-+		efc_log_err(hw->os, "failed to parse tokens\n");
-+		efct_hw_qtop_free(qtop);
-+		kfree(tokarray.tokens);
++	/* Allocate an array where each array item is the size of a pool_hdr_s
++	 * plus the requested memory item size (size)
++	 */
++	pool->a = efct_array_alloc(os, size + sizeof(struct pool_hdr_s),
++				   count);
++	if (!pool->a) {
++		efct_pool_free(pool);
 +		return NULL;
 +	}
 +
-+	/* Free the tokens array */
-+	kfree(tokarray.tokens);
++	INIT_LIST_HEAD(&pool->freelist);
++	for (i = 0; i < count; i++) {
++		pool_entry = (struct pool_hdr_s *)efct_array_get(pool->a, i);
++		INIT_LIST_HEAD(&pool_entry->list_entry);
++		list_add_tail(&pool_entry->list_entry, &pool->freelist);
++	}
 +
-+	return qtop;
++	spin_lock_init(&pool->lock);
++
++	return pool;
 +}
 +
 +/**
-+ * @brief free queue topology object
++ * @brief Reset a memory pool.
 + *
-+ * @param qtop pointer to QTOP object
++ * Place all pool elements on the free list, and zero them.
 + *
-+ * @return none
++ * @param pool Pointer to the pool object.
++ *
++ * @return None.
 + */
 +void
-+efct_hw_qtop_free(struct efct_hw_qtop_s *qtop)
++efct_pool_reset(struct efct_pool_s *pool)
 +{
-+	if (qtop) {
-+		kfree(qtop->entries);
-+		kfree(qtop);
++	u32 i;
++	u32 count = efct_array_get_count(pool->a);
++	u32 size = efct_array_get_size(pool->a);
++	unsigned long flags = 0;
++	struct pool_hdr_s *pool_entry;
++
++	spin_lock_irqsave(&pool->lock, flags);
++
++	/*
++	 * Remove all the entries from the free list, otherwise we will
++	 * encountered linked list asserts when they are re-added.
++	 */
++	while (!list_empty(&pool->freelist)) {
++		pool_entry = list_first_entry(&pool->freelist,
++					      struct pool_hdr_s, list_entry);
++		list_del(&pool_entry->list_entry);
++	}
++
++	/* Reset the free list */
++	INIT_LIST_HEAD(&pool->freelist);
++
++	/* Return all elements to the free list and zero the elements */
++	for (i = 0; i < count; i++) {
++		pool_entry = (struct pool_hdr_s *)efct_array_get(pool->a, i);
++		memset(pool_entry, 0, size - sizeof(struct pool_hdr_s));
++		INIT_LIST_HEAD(&pool_entry->list_entry);
++		list_add_tail(&pool_entry->list_entry, &pool->freelist);
++	}
++	spin_unlock_irqrestore(&pool->lock, flags);
++}
++
++/**
++ * @brief Free a previously allocated memory pool.
++ *
++ * The memory pool is freed.
++ *
++ * @param pool Pointer to memory pool.
++ *
++ * @return None.
++ */
++void
++efct_pool_free(struct efct_pool_s *pool)
++{
++	if (pool) {
++		if (pool->a)
++			efct_array_free(pool->a);
++		kfree(pool);
 +	}
 +}
-diff --git a/drivers/scsi/elx/efct/efct_hw_queues.h b/drivers/scsi/elx/efct/efct_hw_queues.h
++
++/**
++ * @brief Allocate a memory pool item
++ *
++ * A memory pool item is taken from the free list and returned.
++ *
++ * @param pool Pointer to memory pool.
++ *
++ * @return Pointer to allocated item, otherwise NULL if there are
++ * no unallocated items.
++ */
++void *
++efct_pool_get(struct efct_pool_s *pool)
++{
++	struct pool_hdr_s *h = NULL;
++	void *item = NULL;
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&pool->lock, flags);
++
++	if (!list_empty(&pool->freelist)) {
++		h = list_first_entry(&pool->freelist, struct pool_hdr_s,
++				     list_entry);
++	}
++
++	if (h) {
++		list_del(&h->list_entry);
++		/*
++		 * Return the array item address offset by the size of
++		 * pool_hdr_s
++		 */
++		item = &h[1];
++	}
++
++	spin_unlock_irqrestore(&pool->lock, flags);
++	return item;
++}
++
++/**
++ * @brief free memory pool item
++ *
++ * A memory pool item is freed.
++ *
++ * @param pool Pointer to memory pool.
++ * @param item Pointer to item to free.
++ *
++ * @return None.
++ */
++void
++efct_pool_put(struct efct_pool_s *pool, void *item)
++{
++	struct pool_hdr_s *h;
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&pool->lock, flags);
++
++	/* Fetch the address of the array item, which is the item address
++	 * negatively offset by size of pool_hdr_s (note the index of [-1]
++	 */
++	h = &((struct pool_hdr_s *)item)[-1];
++
++	INIT_LIST_HEAD(&h->list_entry);
++	list_add_tail(&h->list_entry, &pool->freelist);
++
++	spin_unlock_irqrestore(&pool->lock, flags);
++}
++
++/**
++ * @brief free memory pool item
++ *
++ * A memory pool item is freed to head of list.
++ *
++ * @param pool Pointer to memory pool.
++ * @param item Pointer to item to free.
++ *
++ * @return None.
++ */
++void
++efct_pool_put_head(struct efct_pool_s *pool, void *item)
++{
++	struct pool_hdr_s *h;
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&pool->lock, flags);
++
++	/* Fetch the address of the array item, which is the item address
++	 * negatively offset by size of pool_hdr_s (note the index of [-1]
++	 */
++	h = &((struct pool_hdr_s *)item)[-1];
++
++	INIT_LIST_HEAD(&h->list_entry);
++	list_add(&h->list_entry, &pool->freelist);
++
++	spin_unlock_irqrestore(&pool->lock, flags);
++}
++
++/**
++ * @brief Return memory pool item count.
++ *
++ * Returns the allocated number of items.
++ *
++ * @param pool Pointer to memory pool.
++ *
++ * @return Returns count of allocated items.
++ */
++u32
++efct_pool_get_count(struct efct_pool_s *pool)
++{
++	u32 count;
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&pool->lock, flags);
++	count = efct_array_get_count(pool->a);
++	spin_unlock_irqrestore(&pool->lock, flags);
++	return count;
++}
++
++/**
++ * @brief Return item given an index.
++ *
++ * A pointer to a memory pool item is returned given an index.
++ *
++ * @param pool Pointer to memory pool.
++ * @param idx Index.
++ *
++ * @return Returns pointer to item, or NULL if index is invalid.
++ */
++void *
++efct_pool_get_instance(struct efct_pool_s *pool, u32 idx)
++{
++	struct pool_hdr_s *h = efct_array_get(pool->a, idx);
++
++	if (!h)
++		return NULL;
++	return &h[1];
++}
++
++/**
++ * @brief Return count of free objects in a pool.
++ *
++ * The number of objects on a pool's free list.
++ *
++ * @param pool Pointer to memory pool.
++ *
++ * @return Returns count of objects on free list.
++ */
++u32
++efct_pool_get_freelist_count(struct efct_pool_s *pool)
++{
++	u32 count = 0;
++	struct pool_hdr_s *item;
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&pool->lock, flags);
++
++	list_for_each_entry(item, &pool->freelist, list_entry) {
++		count++;
++	}
++
++	spin_unlock_irqrestore(&pool->lock, flags);
++	return count;
++}
+diff --git a/drivers/scsi/elx/efct/efct_utils.h b/drivers/scsi/elx/efct/efct_utils.h
 new file mode 100644
-index 000000000000..363d48906670
+index 000000000000..c9743ed37b9b
 --- /dev/null
-+++ b/drivers/scsi/elx/efct/efct_hw_queues.h
-@@ -0,0 +1,66 @@
++++ b/drivers/scsi/elx/efct/efct_utils.h
+@@ -0,0 +1,113 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
 + * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
 + */
 +
-+#ifndef __EFCT_HW_QUEUES_H__
-+#define __EFCT_HW_QUEUES_H__
++#ifndef __EFCT_UTILS_H__
++#define __EFCT_UTILS_H__
 +
-+#define EFCT_HW_MQ_DEPTH	128
-+#include "efct_hw.h"
-+
-+enum efct_hw_qtop_entry_e {
-+	QTOP_EQ = 0,
-+	QTOP_CQ,
-+	QTOP_WQ,
-+	QTOP_RQ,
-+	QTOP_MQ,
-+	QTOP_LAST,
-+};
-+
-+struct efct_hw_qtop_entry_s {
-+	enum efct_hw_qtop_entry_e entry;
-+	bool set_default;
-+	u32 len;
-+	u8 class;
-+	u8 ulp;
-+	u8 filter_mask;
-+};
-+
-+struct efct_hw_mrq_s {
-+	struct rq_config {
-+		struct hw_eq_s *eq;
-+		u32 len;
-+		u8 class;
-+		u8 ulp;
-+		u8 filter_mask;
-+	} rq_cfg[16];
-+	u32 num_pairs;
-+};
-+
-+#define MAX_TOKENS			256
-+#define EFCT_HW_MAX_QTOP_ENTRIES	200
-+
-+struct efct_hw_qtop_s {
++/* Sparse vector structure. */
++struct sparse_vector_s {
 +	void *os;
-+	struct efct_hw_qtop_entry_s *entries;
-+	u32 alloc_count;
-+	u32 inuse_count;
-+	u32 entry_counts[QTOP_LAST];
-+	u32 rptcount[10];
-+	u32 rptcount_idx;
++	u32 max_idx;		/**< maximum index value */
++	void **array;		/**< pointer to 3D array */
 +};
 +
-+struct efct_hw_qtop_s *
-+efct_hw_qtop_parse(struct efct_hw_s *hw, const char *qtop_string);
-+void efct_hw_qtop_free(struct efct_hw_qtop_s *qtop);
-+const char *efct_hw_qtop_entry_name(enum efct_hw_qtop_entry_e entry);
-+u32 efct_hw_qtop_eq_count(struct efct_hw_s *hw);
++#define EFCT_LOG_ENABLE_SCSI_TRACE(efct)                \
++		(((efct) != NULL) ? (((efct)->logmask & (1U << 2)) != 0) : 0)
++#define EFCT_LOG_ENABLE_ELS_TRACE(efct)		\
++		(((efct) != NULL) ? (((efct)->logmask & (1U << 1)) != 0) : 0)
++#define EFCT_LOG_ENABLE_IO_ERRORS(efct)		\
++		(((efct) != NULL) ? (((efct)->logmask & (1U << 6)) != 0) : 0)
++#define EFCT_LOG_ENABLE_LIO_IO_TRACE(efct)	\
++		(((efct) != NULL) ? (((efct)->logmask & (1U << 7)) != 0) : 0)
++#define EFCT_LOG_ENABLE_LIO_TRACE(efct)		\
++		(((efct) != NULL) ? (((efct)->logmask & (1U << 8)) != 0) : 0)
 +
-+enum efct_hw_rtn_e
-+efct_hw_init_queues(struct efct_hw_s *hw, struct efct_hw_qtop_s *qtop);
-+extern  struct hw_wq_s
-+*efct_hw_queue_next_wq(struct efct_hw_s *hw, struct efct_hw_io_s *io);
++#define SPV_ROWLEN	256
++#define SPV_DIM		3
 +
-+#endif /* __EFCT_HW_QUEUES_H__ */
++struct efct_pool_s {
++	void *os;
++	struct efct_array_s *a;
++	struct list_head freelist;
++	/* Protects freelist */
++	spinlock_t lock;
++};
++
++extern void
++efct_array_set_slablen(u32 len);
++extern struct efct_array_s *
++efct_array_alloc(void *os, u32 size, u32 count);
++extern void
++efct_array_free(struct efct_array_s *array);
++extern void *
++efct_array_get(struct efct_array_s *array, u32 idx);
++extern u32
++efct_array_get_count(struct efct_array_s *array);
++extern u32
++efct_array_get_size(struct efct_array_s *array);
++
++extern struct efct_varray_s *
++efct_varray_alloc(void *os, u32 entry_count);
++extern void
++efct_varray_free(struct efct_varray_s *ai);
++extern int
++efct_varray_add(struct efct_varray_s *ai, void *entry);
++extern void
++efct_varray_iter_reset(struct efct_varray_s *ai);
++extern void *
++efct_varray_iter_next(struct efct_varray_s *ai);
++extern void *
++_efct_varray_iter_next(struct efct_varray_s *ai);
++extern void
++efct_varray_unlock(struct efct_varray_s *ai);
++extern u32
++efct_varray_get_count(struct efct_varray_s *ai);
++
++/**
++ * @brief Sparse Vector API
++ *
++ * This is a trimmed down sparse vector implementation tuned to the problem of
++ * 24-bit FC_IDs. In this case, the 24-bit index value is broken down in three
++ * 8-bit values. These values are used to index up to three 256 element arrays.
++ * Arrays are allocated, only when needed. @n @n
++ * The lookup can complete in constant time (3 indexed array references). @n @n
++ * A typical use case would be that the fabric/directory FC_IDs would cause two
++ * rows to be allocated, and the fabric assigned remote nodes would cause two
++ * rows to be allocated, with the root row always allocated. This gives five
++ * rows of 256 x sizeof(void*), resulting in 10k.
++ */
++/*!
++ * @defgroup spv Sparse Vector
++ */
++
++void efct_spv_del(struct sparse_vector_s *spv);
++struct sparse_vector_s *efct_spv_new(void *os);
++void efct_spv_set(struct sparse_vector_s *sv, u32 idx, void *value);
++void *efct_spv_get(struct sparse_vector_s *sv, u32 idx);
++
++/**
++ * @POOL
++ *
++ */
++extern struct efct_pool_s *
++efct_pool_alloc(void *os, u32 size, u32 count);
++extern void
++efct_pool_reset(struct efct_pool_s *pool);
++extern void
++efct_pool_free(struct efct_pool_s *pool);
++extern void *
++efct_pool_get(struct efct_pool_s *pool);
++extern void
++efct_pool_put(struct efct_pool_s *pool, void *arg);
++extern void
++efct_pool_put_head(struct efct_pool_s *pool, void *arg);
++extern u32
++efct_pool_get_count(struct efct_pool_s *pool);
++extern void *
++efct_pool_get_instance(struct efct_pool_s *pool, u32 instance);
++extern u32
++efct_pool_get_freelist_count(struct efct_pool_s *pool);
++#endif /* __EFCT_UTILS_H__ */
 -- 
 2.13.7
 
