@@ -2,55 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F5AE25E9
-	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 23:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3329E25EA
+	for <lists+linux-scsi@lfdr.de>; Wed, 23 Oct 2019 23:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436630AbfJWV4r (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 23 Oct 2019 17:56:47 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54948 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436617AbfJWV4q (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Oct 2019 17:56:46 -0400
-Received: by mail-wm1-f65.google.com with SMTP id g7so507438wmk.4
-        for <linux-scsi@vger.kernel.org>; Wed, 23 Oct 2019 14:56:43 -0700 (PDT)
+        id S2436634AbfJWV4v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 23 Oct 2019 17:56:51 -0400
+Received: from mail-wm1-f52.google.com ([209.85.128.52]:53965 "EHLO
+        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2436618AbfJWV4u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 23 Oct 2019 17:56:50 -0400
+Received: by mail-wm1-f52.google.com with SMTP id i13so516450wmd.3
+        for <linux-scsi@vger.kernel.org>; Wed, 23 Oct 2019 14:56:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=eCIGpIoQZY6FJ7KbTTt7P9PgfAguKgJqGMO/0TYJj54=;
-        b=kN5iaucSRSQjX12ycoidGM/TlKdwOrAlI6+syLH/CRUEmrExPaCzJkI549SZzWL6ee
-         DrtIuRHfu3kx2q44+w1mdHhOH/MfMVUIcEFcdzRtI6POuyWol6LFxv2MdAnGsbd73MeS
-         UCBQgukPeLb+ZL7bDMo0eBfvH8DDpZM9MIj2QpLHXpMSybAuJEOzVWVcc06OgyVvxba4
-         rAjwuOxljoVAnv/W/zZWuTbrzj9TTZZMU7dEbGXFWqoJMmIkwDie98DYQv0q5/RIqp4+
-         ujyB1T4Tk1mzU2XIolTHgfxOCEUeMv2Byto/uMAi8dfpQtv0AFgY/1p7leuh1axLKJqH
-         tt0w==
+        bh=Az706PzEP/INEHjQzZ0XripR5q2NTi06E/gKsY65dyM=;
+        b=DJfz/mXucPIJ2lnAn931Ytg/2l8zIv7vMNIOaAxaGMhbjLZVYyetrwy/u2ptidl0Ro
+         RDthBcg2fNTXQEOb3v0VId7KXoSDhULXybmeoHRz5C3ZX2m/6jghzauaKXOdA4WGAPWa
+         TqSQ2hSnIQXCiVSlbn6gDBWCywTEvujwkyZdSFwDPHfUGADORjPXJ67scKbFLtO2Lytx
+         tASxARs7F30i9tZ5hIdfZ4oqPYB9/zJ6QtaG6oWZn6AfMw+RRUfJJUPFLjMH3GhCUCX2
+         ptXFvGBpw8ljMifxwg3mGs0uumMtHIO/hPFM64Mx0JBaXYTDW/lAjC1EKwsyG/yrcGrH
+         wkhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=eCIGpIoQZY6FJ7KbTTt7P9PgfAguKgJqGMO/0TYJj54=;
-        b=LxBJi2fiPzEtG8V9P0pF1DXKNoiDhsVxqjhKACmA5JIr9l+4zIjZjKFS0YZd1G8Tcy
-         wbL2DKOHzol1UAj3TmGDqnH+ApRSAwj4KazivULBf2OGPR/HVyj9jKWqg62a0X/tUha6
-         8XD9j1NR3ZsJhIKRsLr63MqoS9fFZcxRWqxXxnnzrWbeyCwJ60xm1atfxVdJrPCSVdh6
-         5913skau0x7LzQ6dVBEKU9LttQXFqVQzKx/8BvHbTUq7SqJUIAThEAxqN7qU0JcJGKbN
-         RvPlmwbhZmEzsQG84kp2pjnu0zSGRBuLxcUuAcFraJhCbRT6kMLMM4Ts4V2pxQ0YtVOg
-         3IQg==
-X-Gm-Message-State: APjAAAVxsKFChe4FB3Xph4h97Z+yfloBGfA08maMWGJd+vLtHnITLeKo
-        AdC/U3mvUYxB4St0ZA3MfWc9r3J8
-X-Google-Smtp-Source: APXvYqy1kM0Lvt97lWGwaBLWZnl/j+Pkzg5wMbHx7d6IKjqNnL4Gxuioa+rZqZWoqrprwYQDUbu/jw==
-X-Received: by 2002:a1c:9a8d:: with SMTP id c135mr1801713wme.82.1571867801538;
-        Wed, 23 Oct 2019 14:56:41 -0700 (PDT)
+        bh=Az706PzEP/INEHjQzZ0XripR5q2NTi06E/gKsY65dyM=;
+        b=hPUJksHVvGZUevwxMwHgFECmruPHcn91iHWwZ2/QEGGWwdD2xtIUGYrirJ/zHgPS1j
+         lWoXoMKwd8DgZiCri2y/WGZvUYFnH3Nqc9ZAOkWxjOiZCc7in9GWDWbtZfcIfvpeKiIK
+         19z697IKnHyZpBt0f/0RPvyLe/mdO3bRJcQRZRkuyrMWSpKn7Zb2uFtu1EmxH6cBLtWT
+         IWgejH96CIKKm+LSar6baV5MYXEWfe48HBBzLEDdObVQOVEnkBEMBdeMt26LMkOnzPIJ
+         l7xx4nfGoFDpP/dT260d6Mzo7/A6Wr92V3ydxnWx9bwLtyoMZf7y2b3hw+cFJHWEMmur
+         aQjg==
+X-Gm-Message-State: APjAAAXkZPQcYOucVl0g4/5mJ32ku/8XmSz3VEZQl1pJcZXsetawb3o7
+        Wx8zhi1qOBrjDUVSlDlh5iG98A5a
+X-Google-Smtp-Source: APXvYqx9ewy0a3V6Srs1MYbScnYXMNTIpeWRCPhGdywN+c50CEp1ZXPhXKdE3qwI84E6hwSV2PMBhg==
+X-Received: by 2002:a05:600c:490:: with SMTP id d16mr1832871wme.7.1571867803445;
+        Wed, 23 Oct 2019 14:56:43 -0700 (PDT)
 Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id h17sm796775wme.6.2019.10.23.14.56.40
+        by smtp.gmail.com with ESMTPSA id h17sm796775wme.6.2019.10.23.14.56.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 23 Oct 2019 14:56:41 -0700 (PDT)
+        Wed, 23 Oct 2019 14:56:42 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH 21/32] elx: efct: Unsolicited FC frame processing routines
-Date:   Wed, 23 Oct 2019 14:55:46 -0700
-Message-Id: <20191023215557.12581-22-jsmart2021@gmail.com>
+Subject: [PATCH 22/32] elx: efct: Extended link Service IO handling
+Date:   Wed, 23 Oct 2019 14:55:47 -0700
+Message-Id: <20191023215557.12581-23-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20191023215557.12581-1-jsmart2021@gmail.com>
 References: <20191023215557.12581-1-jsmart2021@gmail.com>
@@ -65,1248 +65,2844 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 This patch continues the efct driver population.
 
 This patch adds driver definitions for:
-Routines to handle unsolicited FC frames.
+Functions to build and send ELS/CT/BLS commands and responses.
 
 Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 ---
- drivers/scsi/elx/efct/efct_hw.c    |    2 +
- drivers/scsi/elx/efct/efct_unsol.c | 1156 ++++++++++++++++++++++++++++++++++++
- drivers/scsi/elx/efct/efct_unsol.h |   49 ++
- 3 files changed, 1207 insertions(+)
- create mode 100644 drivers/scsi/elx/efct/efct_unsol.c
- create mode 100644 drivers/scsi/elx/efct/efct_unsol.h
+ drivers/scsi/elx/efct/efct_els.c | 2676 ++++++++++++++++++++++++++++++++++++++
+ drivers/scsi/elx/efct/efct_els.h |  139 ++
+ 2 files changed, 2815 insertions(+)
+ create mode 100644 drivers/scsi/elx/efct/efct_els.c
+ create mode 100644 drivers/scsi/elx/efct/efct_els.h
 
-diff --git a/drivers/scsi/elx/efct/efct_hw.c b/drivers/scsi/elx/efct/efct_hw.c
-index aab66f5d7908..9ce31326ce38 100644
---- a/drivers/scsi/elx/efct/efct_hw.c
-+++ b/drivers/scsi/elx/efct/efct_hw.c
-@@ -6,6 +6,8 @@
- 
- #include "efct_driver.h"
- #include "efct_hw.h"
-+#include "efct_hw_queues.h"
-+#include "efct_unsol.h"
- 
- #define EFCT_HW_MQ_DEPTH		128
- #define EFCT_HW_WQ_TIMER_PERIOD_MS	500
-diff --git a/drivers/scsi/elx/efct/efct_unsol.c b/drivers/scsi/elx/efct/efct_unsol.c
+diff --git a/drivers/scsi/elx/efct/efct_els.c b/drivers/scsi/elx/efct/efct_els.c
 new file mode 100644
-index 000000000000..3b711f2d526e
+index 000000000000..5aef991712c2
 --- /dev/null
-+++ b/drivers/scsi/elx/efct/efct_unsol.c
-@@ -0,0 +1,1156 @@
++++ b/drivers/scsi/elx/efct/efct_els.c
+@@ -0,0 +1,2676 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
 + * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
 + */
 +
++/*
++ * Functions to build and send ELS/CT/BLS commands and responses.
++ */
++
 +#include "efct_driver.h"
 +#include "efct_els.h"
-+#include "efct_unsol.h"
 +
-+#define frame_printf(efct, hdr, fmt, ...) \
++#define ELS_IOFMT "[i:%04x t:%04x h:%04x]"
++
++#define node_els_trace()  \
 +	do { \
-+		char s_id_text[16]; \
-+		efc_node_fcid_display(ntoh24((hdr)->fh_s_id), \
-+			s_id_text, sizeof(s_id_text)); \
-+		efc_log_debug(efct, "[%06x.%s] %02x/%04x/%04x: " fmt, \
-+			ntoh24((hdr)->fh_d_id), s_id_text, \
-+			(hdr)->fh_r_ctl, be16_to_cpu((hdr)->fh_ox_id), \
-+			be16_to_cpu((hdr)->fh_rx_id), ##__VA_ARGS__); \
++		if (EFCT_LOG_ENABLE_ELS_TRACE(efct)) \
++			efc_log_info(efct, "[%s] %-20s\n", \
++				node->display_name, __func__); \
 +	} while (0)
 +
++#define els_io_printf(els, fmt, ...) \
++	efc_log_debug((struct efct_s *)els->node->efc->base,\
++		      "[%s]" ELS_IOFMT " %-8s " fmt, \
++		      els->node->display_name,\
++		      els->init_task_tag, els->tgt_task_tag, els->hw_tag,\
++		      els->display_name, ##__VA_ARGS__)
++
 +static int
-+efct_unsol_process(struct efct_s *efct, struct efc_hw_sequence_s *seq);
++efct_els_send(struct efct_io_s *els,
++	      u32 reqlen, u32 timeout_sec,
++	efct_hw_srrs_cb_t cb);
 +static int
-+efct_fc_tmf_rejected_cb(struct efct_io_s *io,
-+			enum efct_scsi_io_status_e scsi_status,
-+		       u32 flags, void *arg);
-+static struct efc_hw_sequence_s *
-+efct_frame_next(struct list_head *pend_list, spinlock_t *list_lock);
-+static bool efct_node_frames_held(void *arg);
-+static bool efct_domain_frames_held(void *arg);
++efct_els_send_rsp(struct efct_io_s *els, u32 rsplen);
 +static int
-+efct_purge_pending(struct efct_s *efct,
-+		   struct list_head *pend_list, spinlock_t *list_lock);
-+static int efct_sframe_send_task_set_full_or_busy(struct efc_node_s *node,
-+						  struct efc_hw_sequence_s *s);
++efct_els_acc_cb(struct efct_hw_io_s *hio, struct efc_remote_node_s *rnode,
++		u32 length, int status,
++		u32 ext_status, void *arg);
++static struct efct_io_s *
++efct_bls_send_acc(struct efct_io_s *, u32 s_id,
++		  u16 ox_id, u16 rx_id);
++static int
++efct_bls_send_acc_cb(struct efct_hw_io_s *, struct efc_remote_node_s *rnode,
++		     u32 length, int status,
++		u32 ext_status, void *app);
++static struct efct_io_s *
++efct_bls_send_rjt(struct efct_io_s *, u32 s_id,
++		  u16 ox_id, u16 rx_id);
++static int
++efct_bls_send_rjt_cb(struct efct_hw_io_s *, struct efc_remote_node_s *rnode,
++		     u32 length, int status,
++		u32 ext_status, void *app);
++
++static int
++efct_els_req_cb(struct efct_hw_io_s *hio, struct efc_remote_node_s *rnode,
++		u32 length, int status, u32 ext_status, void *arg);
++static struct efct_io_s *
++efct_els_abort_io(struct efct_io_s *els, bool send_abts);
++static void
++efct_els_delay_timer_cb(struct timer_list *t);
++
++static void
++efct_els_retry(struct efct_io_s *els);
++
++static void
++efct_els_abort_cleanup(struct efct_io_s *els);
++
++#define EFCT_ELS_RSP_LEN		1024
++#define EFCT_ELS_GID_PT_RSP_LEN	8096 /* Enough for 2K remote target nodes */
++
++void *
++efct_els_req_send(struct efc_lport *efc, struct efc_node_s *node, u32 cmd,
++		  u32 timeout_sec, u32 retries)
++{
++	struct efct_s *efct = efc->base;
++
++	switch (cmd) {
++	case ELS_PLOGI:
++		efc_log_debug(efct, "send efct_send_plogi\n");
++		efct_send_plogi(node, timeout_sec, retries, NULL, NULL);
++		break;
++	case ELS_FLOGI:
++		efc_log_debug(efct, "send efct_send_flogi\n");
++		efct_send_flogi(node, timeout_sec, retries, NULL, NULL);
++		break;
++	case ELS_LOGO:
++		efc_log_debug(efct, "send efct_send_logo\n");
++		efct_send_logo(node, timeout_sec, retries, NULL, NULL);
++		break;
++	case ELS_PRLI:
++		efc_log_debug(efct, "send efct_send_prli\n");
++		efct_send_prli(node, timeout_sec, retries, NULL, NULL);
++		break;
++	case ELS_ADISC:
++		efc_log_debug(efct, "send efct_send_prli\n");
++		efct_send_adisc(node, timeout_sec, retries, NULL, NULL);
++		break;
++	case ELS_SCR:
++		efc_log_debug(efct, "send efct_send_scr\n");
++		efct_send_scr(node, timeout_sec, retries, NULL, NULL);
++		break;
++	default:
++		efc_log_debug(efct, "Unhandled command cmd: %x\n", cmd);
++	}
++
++	return NULL;
++}
++
++void *
++efct_els_resp_send(struct efc_lport *efc, struct efc_node_s *node,
++		   u32 cmd, u16 ox_id)
++{
++	struct efct_s *efct = efc->base;
++
++	switch (cmd) {
++	case ELS_PLOGI:
++		efct_send_plogi_acc(node, ox_id, NULL, NULL);
++		break;
++	case ELS_FLOGI:
++		efct_send_flogi_acc(node, ox_id, 0, NULL, NULL);
++		break;
++	case ELS_LOGO:
++		efct_send_logo_acc(node, ox_id, NULL, NULL);
++		break;
++	case ELS_PRLI:
++		efct_send_prli_acc(node, ox_id, NULL, NULL);
++		break;
++	case ELS_PRLO:
++		efct_send_prlo_acc(node, ox_id, NULL, NULL);
++		break;
++	case ELS_ADISC:
++		efct_send_adisc_acc(node, ox_id, NULL, NULL);
++		break;
++	case ELS_LS_ACC:
++		efct_send_ls_acc(node, ox_id, NULL, NULL);
++		break;
++	case ELS_PDISC:
++	case ELS_FDISC:
++	case ELS_RSCN:
++	case ELS_SCR:
++		efct_send_ls_rjt(efc, node, ox_id, ELS_RJT_UNAB,
++				 ELS_EXPL_NONE, 0);
++		break;
++	default:
++		efc_log_err(efct, "Unhandled command cmd: %x\n", cmd);
++	}
++
++	return NULL;
++}
 +
 +/**
-+ * @ingroup unsol
-+ * @brief Handle unsolicited FC frames.
++ * @ingroup els_api
++ * @brief Allocate an IO structure for an ELS IO context.
 + *
 + * <h3 class="desc">Description</h3>
-+ * This function is called from the HW with unsolicited FC
-+ * frames (FCP, ELS, BLS, etc.).
++ * Allocate an IO for an ELS context.
++ * Uses EFCT_ELS_RSP_LEN as response size.
 + *
-+ * @param arg Application-specified callback data.
-+ * @param seq Header/payload sequence buffers.
++ * @param node node to associate ELS IO with
++ * @param reqlen Length of ELS request
++ * @param role Role of ELS (originator/responder)
++ *
++ * @return pointer to IO structure allocated
++ */
++
++struct efct_io_s *
++efct_els_io_alloc(struct efc_node_s *node, u32 reqlen,
++		  enum efct_els_role_e role)
++{
++	return efct_els_io_alloc_size(node, reqlen, EFCT_ELS_RSP_LEN, role);
++}
++
++/**
++ * @ingroup els_api
++ * @brief Allocate an IO structure for an ELS IO context.
++ *
++ * <h3 class="desc">Description</h3>
++ * Allocate an IO for an ELS context, allowing the
++ * caller to specify the size of the response.
++ *
++ * @param node node to associate ELS IO with
++ * @param reqlen Length of ELS request
++ * @param rsplen Length of ELS response
++ * @param role Role of ELS (originator/responder)
++ *
++ * @return pointer to IO structure allocated
++ */
++
++struct efct_io_s *
++efct_els_io_alloc_size(struct efc_node_s *node, u32 reqlen,
++		       u32 rsplen, enum efct_els_role_e role)
++{
++	struct efct_s *efct;
++	struct efct_xport_s *xport;
++	struct efct_io_s *els;
++	unsigned long flags = 0;
++
++	efct = node->efc->base;
++
++	xport = efct->xport;
++
++	spin_lock_irqsave(&node->active_ios_lock, flags);
++
++	if (!node->io_alloc_enabled) {
++		efc_log_debug(efct,
++			       "called with io_alloc_enabled = FALSE\n");
++		spin_unlock_irqrestore(&node->active_ios_lock, flags);
++		return NULL;
++	}
++
++	els = efct_io_pool_io_alloc(efct->xport->io_pool);
++	if (!els) {
++		atomic_add_return(1, &xport->io_alloc_failed_count);
++		spin_unlock_irqrestore(&node->active_ios_lock, flags);
++		return NULL;
++	}
++
++	/* initialize refcount */
++	kref_init(&els->ref);
++	els->release = _efct_els_io_free;
++
++	switch (role) {
++	case EFCT_ELS_ROLE_ORIGINATOR:
++		els->cmd_ini = true;
++		els->cmd_tgt = false;
++		break;
++	case EFCT_ELS_ROLE_RESPONDER:
++		els->cmd_ini = false;
++		els->cmd_tgt = true;
++		break;
++	}
++
++	/* IO should not have an associated HW IO yet.
++	 * Assigned below.
++	 */
++	if (els->hio) {
++		efc_log_err(efct,
++			     "assertion failed.  HIO is not null\n");
++		efct_io_pool_io_free(efct->xport->io_pool, els);
++		spin_unlock_irqrestore(&node->active_ios_lock, flags);
++		return NULL;
++	}
++
++	/* populate generic io fields */
++	els->efct = efct;
++	els->node = node;
++
++	/* set type and ELS-specific fields */
++	els->io_type = EFCT_IO_TYPE_ELS;
++	els->display_name = "pending";
++
++	/* now allocate DMA for request and response */
++	els->els_req.size = reqlen;
++	els->els_req.virt = dma_alloc_coherent(&efct->pcidev->dev,
++					       els->els_req.size,
++					       &els->els_req.phys,
++					       GFP_DMA);
++	if (els->els_req.virt) {
++		els->els_rsp.size = rsplen;
++		els->els_rsp.virt = dma_alloc_coherent(&efct->pcidev->dev,
++						       els->els_rsp.size,
++						       &els->els_rsp.phys,
++						       GFP_DMA);
++		if (!els->els_rsp.virt) {
++			efc_log_err(efct, "dma_alloc rsp\n");
++			dma_free_coherent(&efct->pcidev->dev,
++					  els->els_req.size,
++				els->els_req.virt, els->els_req.phys);
++			efct_io_pool_io_free(efct->xport->io_pool, els);
++			els = NULL;
++		}
++	} else {
++		efc_log_err(efct, "dma_alloc req\n");
++		efct_io_pool_io_free(efct->xport->io_pool, els);
++		els = NULL;
++	}
++
++	if (els) {
++		/* initialize fields */
++		els->els_retries_remaining =
++					EFCT_FC_ELS_DEFAULT_RETRIES;
++		els->els_pend = false;
++		els->els_active = false;
++
++		/* add els structure to ELS IO list */
++		INIT_LIST_HEAD(&els->list_entry);
++		list_add_tail(&els->list_entry,
++			      &node->els_io_pend_list);
++		els->els_pend = true;
++	}
++
++	spin_unlock_irqrestore(&node->active_ios_lock, flags);
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Free IO structure for an ELS IO context.
++ *
++ * <h3 class="desc">Description</h3> Free IO for an ELS
++ * IO context
++ *
++ * @param els ELS IO structure for which IO is allocated
++ *
++ * @return None
++ */
++
++void
++efct_els_io_free(struct efct_io_s *els)
++{
++	kref_put(&els->ref, els->release);
++}
++
++/**
++ * @ingroup els_api
++ * @brief Free IO structure for an ELS IO context.
++ *
++ * <h3 class="desc">Description</h3> Free IO for an ELS
++ * IO context
++ *
++ * @param arg ELS IO structure for which IO is allocated
++ *
++ * @return None
++ */
++
++void
++_efct_els_io_free(struct kref *arg)
++{
++	struct efct_io_s *els = container_of(arg, struct efct_io_s, ref);
++	struct efct_s *efct;
++	struct efc_node_s *node;
++	int send_empty_event = false;
++	unsigned long flags = 0;
++
++	node = els->node;
++	efct = node->efc->base;
++
++	spin_lock_irqsave(&node->active_ios_lock, flags);
++		if (els->els_active) {
++			/* if active, remove from active list and check empty */
++			list_del(&els->list_entry);
++			/* Send list empty event if the IO allocator
++			 * is disabled, and the list is empty
++			 * If node->io_alloc_enabled was not checked,
++			 * the event would be posted continually
++			 */
++			send_empty_event = (!node->io_alloc_enabled) &&
++				list_empty(&node->els_io_active_list);
++			els->els_active = false;
++		} else if (els->els_pend) {
++			/* if pending, remove from pending list;
++			 * node shutdown isn't gated off the
++			 * pending list (only the active list),
++			 * so no need to check if pending list is empty
++			 */
++			list_del(&els->list_entry);
++			els->els_pend = 0;
++		} else {
++			efc_log_err(efct,
++				     "assertion fail: niether els_pend nor active set\n");
++			spin_unlock_irqrestore(&node->active_ios_lock, flags);
++			return;
++		}
++
++	spin_unlock_irqrestore(&node->active_ios_lock, flags);
++
++	/* free ELS request and response buffers */
++	dma_free_coherent(&efct->pcidev->dev, els->els_rsp.size,
++			  els->els_rsp.virt, els->els_rsp.phys);
++	dma_free_coherent(&efct->pcidev->dev, els->els_req.size,
++			  els->els_req.virt, els->els_req.phys);
++
++	efct_io_pool_io_free(efct->xport->io_pool, els);
++
++	if (send_empty_event)
++		efc_scsi_io_list_empty(node->efc, node);
++
++	efct_scsi_check_pending(efct);
++}
++
++/**
++ * @ingroup els_api
++ * @brief Make ELS IO active
++ *
++ * @param els Pointer to the IO context to make active.
++ *
++ * @return Returns 0 on success; or a negative error code value on failure.
++ */
++
++static void
++efct_els_make_active(struct efct_io_s *els)
++{
++	struct efc_node_s *node = els->node;
++	unsigned long flags = 0;
++
++	/* move ELS from pending list to active list */
++	spin_lock_irqsave(&node->active_ios_lock, flags);
++		if (els->els_pend) {
++			if (els->els_active) {
++				efc_log_err(node->efc,
++					     "assertion fail:both els_pend and active set\n");
++				spin_unlock_irqrestore(&node->active_ios_lock,
++						       flags);
++				return;
++			}
++			/* remove from pending list */
++			list_del(&els->list_entry);
++			els->els_pend = false;
++
++			/* add els structure to ELS IO list */
++			INIT_LIST_HEAD(&els->list_entry);
++			list_add_tail(&els->list_entry,
++				      &node->els_io_active_list);
++			els->els_active = true;
++		} else {
++			/* must be retrying; make sure it's already active */
++			if (!els->els_active) {
++				efc_log_err(node->efc,
++					     "assertion fail: niether els_pend nor active set\n");
++			}
++		}
++	spin_unlock_irqrestore(&node->active_ios_lock, flags);
++}
++
++static void efct_els_send_req(struct efc_node_s *node, struct efct_io_s *els)
++{
++	int rc = 0;
++	struct efct_s *efct;
++
++	efct = node->efc->base;
++	rc = efct_els_send(els, els->els_req.size,
++			   els->els_timeout_sec, efct_els_req_cb);
++
++	if (rc) {
++		struct efc_node_cb_s cbdata;
++
++		cbdata.status = INT_MAX;
++		cbdata.ext_status = INT_MAX;
++		cbdata.els_rsp = els->els_rsp;
++		efc_log_err(efct, "efct_els_send failed: %d\n", rc);
++		efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_FAIL,
++				    &cbdata);
++	}
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send the ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * The command, given by the \c els IO context,
++ * is sent to the node that the IO was
++ * configured with, using efct_hw_srrs_send().
++ * Upon completion,the \c cb callback is invoked,
++ * with the application-specific argument set to
++ * the \c els IO context.
++ *
++ * @param els Pointer to the IO context.
++ * @param reqlen Byte count in the payload to send.
++ * @param timeout_sec Command timeout, in seconds (0 -> 2*R_A_TOV).
++ * @param cb Completion callback.
++ *
++ * @return Returns 0 on success; or a negative error code value on failure.
++ */
++
++static int efct_els_send(struct efct_io_s *els, u32 reqlen,
++			 u32 timeout_sec, efct_hw_srrs_cb_t cb)
++{
++	struct efc_node_s *node = els->node;
++
++	/* update ELS request counter */
++	node->els_req_cnt++;
++
++	/* move ELS from pending list to active list */
++	efct_els_make_active(els);
++
++	els->wire_len = reqlen;
++	return efct_scsi_io_dispatch(els, cb);
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send the ELS response.
++ *
++ * <h3 class="desc">Description</h3>
++ * The ELS response, given by the \c els IO context, is sent to the node
++ * that the IO was configured with, using efct_hw_srrs_send().
++ *
++ * @param els Pointer to the IO context.
++ * @param rsplen Byte count in the payload to send.
 + *
 + * @return Returns 0 on success; or a negative error value on failure.
 + */
 +
-+int
-+efct_unsolicited_cb(void *arg, struct efc_hw_sequence_s *seq)
++static int
++efct_els_send_rsp(struct efct_io_s *els, u32 rsplen)
 +{
-+	struct efct_s *efct = arg;
-+	int rc;
++	struct efc_node_s *node = els->node;
 +
-+	rc = efct_unsol_process(efct, seq);
++	/* increment ELS completion counter */
++	node->els_cmpl_cnt++;
 +
-+	if (rc)
-+		efct_hw_sequence_free(&efct->hw, seq);
++	/* move ELS from pending list to active list */
++	efct_els_make_active(els);
 +
-+	return 0;
++	els->wire_len = rsplen;
++	return efct_scsi_io_dispatch(els, efct_els_acc_cb);
 +}
 +
 +/**
-+ * @ingroup unsol
-+ * @brief Handle unsolicited FC frames.
++ * @ingroup els_api
++ * @brief Handle ELS IO request completions.
 + *
 + * <h3 class="desc">Description</h3>
-+ * This function is called from efct_unsolicited_cb()
++ * This callback is used for several ELS send operations.
 + *
-+ * @param efct Pointer to the efct structure.
-+ * @param seq Header/payload sequence buffers.
++ * @param hio Pointer to the HW IO context that completed.
++ * @param rnode Pointer to the remote node.
++ * @param length Length of the returned payload data.
++ * @param status Status of the completion.
++ * @param ext_status Extended status of the completion.
++ * @param arg Application-specific argument
++ * (generally a pointer to the ELS IO context).
 + *
-+ * @return Returns 0 on success, or a negative error value on failure.
++ * @return Returns 0 on success; or a negative error value on failure.
 + */
++
 +static int
-+efct_unsol_process(struct efct_s *efct, struct efc_hw_sequence_s *seq)
++efct_els_req_cb(struct efct_hw_io_s *hio, struct efc_remote_node_s *rnode,
++		u32 length, int status, u32 ext_status, void *arg)
 +{
-+	struct efct_xport_fcfi_s *xport_fcfi = NULL;
-+	struct efc_domain_s *domain;
-+	struct efct_hw_s *hw = &efct->hw;
-+	unsigned long flags = 0;
++	struct efct_io_s *els;
++	struct efc_node_s *node;
++	struct efct_s *efct;
++	struct efc_node_cb_s cbdata;
++	u32 reason_code;
 +
-+	xport_fcfi = &efct->xport->fcfi;
++	els = arg;
++	node = els->node;
++	efct = node->efc->base;
 +
-+	/* If the transport FCFI entry is NULL, then drop the frame */
-+	if (!xport_fcfi) {
-+		efc_log_test(efct,
-+			      "FCFI %d is not valid, dropping frame\n",
-+			seq->fcfi);
++	if (status != 0)
++		els_io_printf(els, "status x%x ext x%x\n", status, ext_status);
 +
-+		efct_hw_sequence_free(&efct->hw, seq);
++	/* set the response len element of els->rsp */
++	els->els_rsp.len = length;
++
++	cbdata.status = status;
++	cbdata.ext_status = ext_status;
++	cbdata.header = NULL;
++	cbdata.els_rsp = els->els_rsp;
++
++	/* FW returns the number of bytes received on the link in
++	 * the WCQE, not the amount placed in the buffer; use this info to
++	 * check if there was an overrun.
++	 */
++	if (length > els->els_rsp.size) {
++		efc_log_warn(efct,
++			      "ELS response returned len=%d > buflen=%zu\n",
++			     length, els->els_rsp.size);
++		efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_FAIL, &cbdata);
 +		return 0;
 +	}
 +
-+	domain = hw->domain;
++	/* Post event to ELS IO object */
++	switch (status) {
++	case SLI4_FC_WCQE_STATUS_SUCCESS:
++		efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_OK, &cbdata);
++		break;
 +
-+	/*
-+	 * If we are holding frames or the domain is not yet registered or
-+	 * there's already frames on the pending list,
-+	 * then add the new frame to pending list
-+	 */
-+	if (!domain ||
-+	    xport_fcfi->hold_frames ||
-+	    !list_empty(&xport_fcfi->pend_frames)) {
-+		spin_lock_irqsave(&xport_fcfi->pend_frames_lock, flags);
-+		INIT_LIST_HEAD(&seq->list_entry);
-+		list_add_tail(&seq->list_entry, &xport_fcfi->pend_frames);
-+		spin_unlock_irqrestore(&xport_fcfi->pend_frames_lock, flags);
++	case SLI4_FC_WCQE_STATUS_LS_RJT:
++		reason_code = (ext_status >> 16) & 0xff;
 +
-+		if (domain) {
-+			/* immediately process pending frames */
-+			efct_domain_process_pending(domain);
++		/* delay and retry if reason code is Logical Busy */
++		switch (reason_code) {
++		case ELS_RJT_BUSY:
++			els->node->els_req_cnt--;
++			els_io_printf(els,
++				      "LS_RJT Logical Busy response,delay and retry\n");
++			timer_setup(&els->delay_timer,
++				    efct_els_delay_timer_cb, 0);
++			mod_timer(&els->delay_timer,
++				  jiffies + msecs_to_jiffies(5000));
++			els->state = EFCT_ELS_REQUEST_DELAYED;
++			break;
++		default:
++			efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_RJT,
++					    &cbdata);
++			break;
 +		}
-+	} else {
-+		/*
-+		 * We are not holding frames and pending list is empty,
-+		 * just process frame. A non-zero return means the frame
-+		 * was not handled - so cleanup
-+		 */
-+		if (efc_domain_dispatch_frame(domain, seq))
-+			efct_hw_sequence_free(&efct->hw, seq);
-+	}
-+	return 0;
-+}
++		break;
 +
-+/**
-+ * @ingroup unsol
-+ * @brief Process pending frames queued to the given node.
-+ *
-+ * <h3 class="desc">Description</h3>
-+ * Frames that are queued for the \c node are dispatched and returned
-+ * to the RQ.
-+ *
-+ * @param node Node of the queued frames that are to be dispatched.
-+ *
-+ * @return Returns 0 on success, or a negative error value on failure.
-+ */
-+
-+int
-+efct_process_node_pending(struct efc_node_s *node)
-+{
-+	struct efct_s *efct = node->efc->base;
-+	struct efc_hw_sequence_s *seq = NULL;
-+	u32 pend_frames_processed = 0;
-+	unsigned long flags = 0;
-+
-+	for (;;) {
-+		/* need to check for hold frames condition after each frame
-+		 * processed because any given frame could cause a transition
-+		 * to a state that holds frames
-+		 */
-+		if (efct_node_frames_held(node))
++	case SLI4_FC_WCQE_STATUS_LOCAL_REJECT:
++		switch (ext_status) {
++		case SLI4_FC_LOCAL_REJECT_SEQUENCE_TIMEOUT:
++			efct_els_retry(els);
 +			break;
 +
-+		/* Get next frame/sequence */
-+		spin_lock_irqsave(&node->pend_frames_lock, flags);
-+			if (!list_empty(&node->pend_frames)) {
-+				seq = list_first_entry(&node->pend_frames,
-+						       struct efc_hw_sequence_s,
-+						       list_entry);
-+				list_del(&seq->list_entry);
++		case SLI4_FC_LOCAL_REJECT_ABORT_REQUESTED:
++			if (els->state == EFCT_ELS_ABORT_IO_COMPL) {
++				/* completion for ELS that was aborted */
++				efct_els_abort_cleanup(els);
++			} else {
++				/* completion for ELS received first,
++				 * transition to wait for abort cmpl
++				 */
++				els->state = EFCT_ELS_REQ_ABORTED;
 +			}
-+			if (!seq) {
-+				pend_frames_processed =
-+					node->pend_frames_processed;
-+				node->pend_frames_processed = 0;
-+				spin_unlock_irqrestore(&node->pend_frames_lock,
-+						       flags);
-+				break;
-+			}
-+			node->pend_frames_processed++;
-+		spin_unlock_irqrestore(&node->pend_frames_lock, flags);
 +
-+		/* now dispatch frame(s) to dispatch function */
-+		if (efc_node_dispatch_frame(node, seq))
-+			efct_hw_sequence_free(&efct->hw, seq);
-+	}
-+
-+	if (pend_frames_processed != 0)
-+		efc_log_debug(efct, "%u node frames held and processed\n",
-+			       pend_frames_processed);
-+
-+	return 0;
-+}
-+
-+/**
-+ * @ingroup unsol
-+ * @brief Process pending frames queued to the given domain.
-+ *
-+ * <h3 class="desc">Description</h3>
-+ * Frames that are queued for the \c domain are dispatched and
-+ * returned to the RQ.
-+ *
-+ * @param domain Domain of the queued frames that are to be
-+ *		 dispatched.
-+ *
-+ * @return Returns 0 on success, or a negative error value on failure.
-+ */
-+
-+int
-+efct_domain_process_pending(struct efc_domain_s *domain)
-+{
-+	struct efct_s *efct = domain->efc->base;
-+	struct efct_xport_fcfi_s *xport_fcfi;
-+	struct efc_hw_sequence_s *seq = NULL;
-+	u32 pend_frames_processed = 0;
-+	unsigned long flags = 0;
-+
-+	xport_fcfi = &efct->xport->fcfi;
-+
-+	for (;;) {
-+		/* need to check for hold frames condition after each frame
-+		 * processed because any given frame could cause a transition
-+		 * to a state that holds frames
-+		 */
-+		if (efct_domain_frames_held(domain))
 +			break;
-+
-+		/* Get next frame/sequence */
-+		spin_lock_irqsave(&xport_fcfi->pend_frames_lock, flags);
-+			if (!list_empty(&xport_fcfi->pend_frames)) {
-+				seq = list_first_entry(&xport_fcfi->pend_frames,
-+						       struct efc_hw_sequence_s,
-+						       list_entry);
-+				list_del(&seq->list_entry);
-+			}
-+			if (!seq) {
-+				pend_frames_processed =
-+					xport_fcfi->pend_frames_processed;
-+				xport_fcfi->pend_frames_processed = 0;
-+				spin_unlock_irqrestore(&
-+						xport_fcfi->pend_frames_lock,
-+						flags);
-+				break;
-+			}
-+			xport_fcfi->pend_frames_processed++;
-+		spin_unlock_irqrestore(&xport_fcfi->pend_frames_lock, flags);
-+
-+		/* now dispatch frame(s) to dispatch function */
-+		if (efc_domain_dispatch_frame(domain, seq))
-+			efct_hw_sequence_free(&efct->hw, seq);
-+
-+		seq = NULL;
-+	}
-+	if (pend_frames_processed != 0)
-+		efc_log_debug(efct, "%u domain frames held and processed\n",
-+			       pend_frames_processed);
-+	return 0;
-+}
-+
-+/**
-+ * @ingroup unsol
-+ * @brief Purge given pending list
-+ *
-+ * <h3 class="desc">Description</h3>
-+ * Frames that are queued on the given pending list are
-+ * discarded and returned to the RQ.
-+ *
-+ * @param efct Pointer to efct object.
-+ * @param pend_list Pending list to be purged.
-+ * @param list_lock Lock that protects pending list.
-+ *
-+ * @return Returns 0 on success, or a negative error value on failure.
-+ */
-+
-+static int
-+efct_purge_pending(struct efct_s *efct, struct list_head *pend_list,
-+		   spinlock_t *list_lock)
-+{
-+	struct efc_hw_sequence_s *frame;
-+
-+	for (;;) {
-+		frame = efct_frame_next(pend_list, list_lock);
-+		if (!frame)
++		default:
++			efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_FAIL,
++					    &cbdata);
 +			break;
-+
-+		frame_printf(efct,
-+			     (struct fc_frame_header *)frame->header->dma.virt,
-+			     "Discarding held frame\n");
-+		efct_hw_sequence_free(&efct->hw, frame);
++		}
++		break;
++	default:	/* Other error */
++		efc_log_warn(efct,
++			      "els req failed status x%x, ext_status, x%x\n",
++					status, ext_status);
++		efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_FAIL, &cbdata);
++		break;
 +	}
 +
 +	return 0;
 +}
 +
-+/**
-+ * @ingroup unsol
-+ * @brief Purge node's pending (queued) frames.
-+ *
-+ * <h3 class="desc">Description</h3>
-+ * Frames that are queued for the \c node are discarded and returned
-+ * to the RQ.
-+ *
-+ * @param node Node of the queued frames that are to be discarded.
-+ *
-+ * @return Returns 0 on success, or a negative error value on failure.
-+ */
-+
-+int
-+efct_node_purge_pending(struct efc_lport *efc, struct efc_node_s *node)
++void
++efct_els_abort(struct efct_io_s *els, struct efc_node_cb_s *arg)
 +{
-+	struct efct_s *efct = efc->base;
++	struct efct_io_s *io = NULL;
++	struct efc_node_s *node;
++	struct efct_s *efct;
 +
-+	return efct_purge_pending(efct, &node->pend_frames,
-+				&node->pend_frames_lock);
++	node = els->node;
++	efct = node->efc->base;
++
++	/* request to abort this ELS without an ABTS */
++	els_io_printf(els, "ELS abort requested\n");
++	/* Set retries to zero,we are done */
++	els->els_retries_remaining = 0;
++	if (els->state == EFCT_ELS_REQUEST) {
++		els->state = EFCT_ELS_REQ_ABORT;
++		io = efct_els_abort_io(els, false);
++		if (!io) {
++			efc_log_err(efct, "efct_els_abort_io failed\n");
++			efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_FAIL,
++					    arg);
++		}
++
++	} else if (els->state == EFCT_ELS_REQUEST_DELAYED) {
++		/* mod/resched the timer for a short duration */
++		mod_timer(&els->delay_timer,
++			  jiffies + msecs_to_jiffies(1));
++
++		els->state = EFCT_ELS_REQUEST_DELAY_ABORT;
++	}
 +}
 +
 +/**
-+ * @ingroup unsol
-+ * @brief Purge xport's pending (queued) frames.
++ * @ingroup els_api
++ * @brief Handle ELS IO accept/response completions.
 + *
 + * <h3 class="desc">Description</h3>
-+ * Frames that are queued for the \c xport are discarded and
-+ * returned to the RQ.
++ * This callback is used for several ELS send operations.
 + *
-+ * @param domain Pointer to domain object.
++ * @param hio Pointer to the HW IO context that completed.
++ * @param rnode Pointer to the remote node.
++ * @param length Length of the returned payload data.
++ * @param status Status of the completion.
++ * @param ext_status Extended status of the completion.
++ * @param arg Application-specific argument
++ *	(generally a pointer to the ELS IO context).
 + *
 + * @return Returns 0 on success; or a negative error value on failure.
 + */
 +
-+int
-+efct_domain_purge_pending(struct efc_domain_s *domain)
-+{
-+	struct efct_s *efct = domain->efc->base;
-+	struct efct_xport_fcfi_s *xport_fcfi;
-+
-+	xport_fcfi = &efct->xport->fcfi;
-+	return efct_purge_pending(efct,
-+				 &xport_fcfi->pend_frames,
-+				 &xport_fcfi->pend_frames_lock);
-+}
-+
-+/**
-+ * @ingroup unsol
-+ * @brief Check if node's pending frames are held.
-+ *
-+ * @param arg Node for which the pending frame hold condition is
-+ * checked.
-+ *
-+ * @return Returns 1 if node is holding pending frames, or 0
-+ * if not.
-+ */
-+
-+static bool efct_node_frames_held(void *arg)
-+{
-+	struct efc_node_s *node = (struct efc_node_s *)arg;
-+
-+	return node->hold_frames;
-+}
-+
-+/**
-+ * @ingroup unsol
-+ * @brief Check if domain's pending frames are held.
-+ *
-+ * @param arg Domain for which the pending frame hold condition is
-+ * checked.
-+ *
-+ * @return Returns 1 if domain is holding pending frames, or 0
-+ * if not.
-+ */
-+
-+static bool efct_domain_frames_held(void *arg)
-+{
-+	struct efc_domain_s *domain = (struct efc_domain_s *)arg;
-+	struct efct_s *efct = domain->efc->base;
-+	struct efct_xport_fcfi_s *xport_fcfi;
-+
-+	xport_fcfi = &efct->xport->fcfi;
-+	return xport_fcfi->hold_frames;
-+}
-+
-+/**
-+ * @ingroup unsol
-+ * @brief Globally (at xport level) hold unsolicited frames.
-+ *
-+ * <h3 class="desc">Description</h3>
-+ * This function places a hold on processing unsolicited FC
-+ * frames queued to the xport pending list.
-+ *
-+ * @param domain Pointer to domain object.
-+ *
-+ * @return Returns None.
-+ */
-+
-+void
-+efct_domain_hold_frames(struct efc_lport *efc, struct efc_domain_s *domain)
-+{
-+	struct efct_s *efct = domain->efc->base;
-+	struct efct_xport_fcfi_s *xport_fcfi;
-+
-+	xport_fcfi = &efct->xport->fcfi;
-+	if (!xport_fcfi->hold_frames) {
-+		efc_log_debug(efct, "hold frames set for FCFI %d\n",
-+			       domain->fcf_indicator);
-+		xport_fcfi->hold_frames = true;
-+	}
-+}
-+
-+/**
-+ * @ingroup unsol
-+ * @brief Clear hold on unsolicited frames.
-+ *
-+ * <h3 class="desc">Description</h3>
-+ * This function clears the hold on processing unsolicited FC
-+ * frames queued to the domain pending list.
-+ *
-+ * @param domain Pointer to domain object.
-+ *
-+ * @return Returns None.
-+ */
-+
-+void
-+efct_domain_accept_frames(struct efc_lport *efc, struct efc_domain_s *domain)
-+{
-+	struct efct_s *efct = domain->efc->base;
-+	struct efct_xport_fcfi_s *xport_fcfi;
-+
-+	xport_fcfi = &efct->xport->fcfi;
-+	if (xport_fcfi->hold_frames) {
-+		efc_log_debug(efct, "hold frames cleared for FCFI %d\n",
-+			       domain->fcf_indicator);
-+	}
-+	xport_fcfi->hold_frames = false;
-+	efct_domain_process_pending(domain);
-+}
-+
-+/**
-+ * @ingroup unsol
-+ * @brief Dispatch unsolicited FCP frames (RQ Pair).
-+ *
-+ * <h3 class="desc">Description</h3>
-+ * Dispatch unsolicited FCP frames (called from the device node state machine).
-+ *
-+ * @param io Pointer to the IO context.
-+ * @param task_management_flags Task management flags from the FCP_CMND frame.
-+ * @param node Node that originated the frame.
-+ * @param lun 32-bit LUN from FCP_CMND frame.
-+ *
-+ * @return Returns None.
-+ */
-+
-+static void
-+efct_dispatch_unsolicited_tmf(struct efct_io_s *io,
-+			      u8 task_management_flags,
-+			      struct efc_node_s *node, u32 lun)
-+{
-+	u32 i;
-+	struct {
-+		u32 mask;
-+		enum efct_scsi_tmf_cmd_e cmd;
-+	} tmflist[] = {
-+	{FCP_TMF_ABT_TASK_SET, EFCT_SCSI_TMF_ABORT_TASK_SET},
-+	{FCP_TMF_CLR_TASK_SET, EFCT_SCSI_TMF_CLEAR_TASK_SET},
-+	{FCP_TMF_LUN_RESET, EFCT_SCSI_TMF_LOGICAL_UNIT_RESET},
-+	{FCP_TMF_TGT_RESET, EFCT_SCSI_TMF_TARGET_RESET},
-+	{FCP_TMF_CLR_ACA, EFCT_SCSI_TMF_CLEAR_ACA} };
-+
-+	io->exp_xfer_len = 0; /* BUG 32235 */
-+
-+	for (i = 0; i < ARRAY_SIZE(tmflist); i++) {
-+		if (tmflist[i].mask & task_management_flags) {
-+			io->tmf_cmd = tmflist[i].cmd;
-+			efct_scsi_recv_tmf(io, lun, tmflist[i].cmd, NULL, 0);
-+			break;
-+		}
-+	}
-+	if (i == ARRAY_SIZE(tmflist)) {
-+		/* Not handled */
-+		node_printf(node, "TMF x%x rejected\n", task_management_flags);
-+		efct_scsi_send_tmf_resp(io, EFCT_SCSI_TMF_FUNCTION_REJECTED,
-+					NULL, efct_fc_tmf_rejected_cb, NULL);
-+	}
-+}
-+
 +static int
-+efct_validate_fcp_cmd(struct efct_s *efct, struct efc_hw_sequence_s *seq)
++efct_els_acc_cb(struct efct_hw_io_s *hio, struct efc_remote_node_s *rnode,
++		u32 length, int status, u32 ext_status, void *arg)
 +{
-+	/*
-+	 * If we received less than FCP_CMND_IU bytes, assume that the frame is
-+	 * corrupted in some way and drop it.
-+	 * This was seen when jamming the FCTL
-+	 * fill bytes field.
-+	 */
-+	if (seq->payload->dma.len < sizeof(struct fcp_cmnd)) {
-+		struct fc_frame_header	*fchdr = seq->header->dma.virt;
++	struct efct_io_s *els;
++	struct efc_node_s *node;
++	struct efct_s *efct;
++	struct efc_node_cb_s cbdata;
 +
-+		efc_log_debug(efct,
-+			"drop ox_id %04x with payload (%zd) less than (%zd)\n",
-+				    be16_to_cpu(fchdr->fh_ox_id),
-+				    seq->payload->dma.len,
-+				    sizeof(struct fcp_cmnd));
-+		return -1;
++	els = arg;
++	node = els->node;
++	efct = node->efc->base;
++
++	cbdata.status = status;
++	cbdata.ext_status = ext_status;
++	cbdata.header = NULL;
++	cbdata.els_rsp = els->els_rsp;
++
++	/* Post node event */
++	switch (status) {
++	case SLI4_FC_WCQE_STATUS_SUCCESS:
++		efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_CMPL_OK, &cbdata);
++		break;
++
++	default:	/* Other error */
++		efc_log_warn(efct,
++			      "[%s] %-8s failed status x%x, ext_status x%x\n",
++			    node->display_name, els->display_name,
++			    status, ext_status);
++		efc_log_warn(efct,
++			      "els acc complete: failed status x%x, ext_status, x%x\n",
++		     status, ext_status);
++		efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_CMPL_FAIL, &cbdata);
++		break;
 +	}
++
 +	return 0;
 +}
 +
-+static void
-+efct_populate_io_fcp_cmd(struct efct_io_s *io, struct fcp_cmnd *cmnd,
-+			 struct fc_frame_header *fchdr, bool sit)
-+{
-+	io->init_task_tag = be16_to_cpu(fchdr->fh_ox_id);
-+	/* note, tgt_task_tag, hw_tag  set when HW io is allocated */
-+	io->exp_xfer_len = be32_to_cpu(cmnd->fc_dl);
-+	io->transferred = 0;
-+
-+	/* The upper 7 bits of CS_CTL is the frame priority thru the SAN.
-+	 * Our assertion here is, the priority given to a frame containing
-+	 * the FCP cmd should be the priority given to ALL frames contained
-+	 * in that IO. Thus we need to save the incoming CS_CTL here.
-+	 */
-+	if (ntoh24(fchdr->fh_f_ctl) & FC_FC_RES_B17)
-+		io->cs_ctl = fchdr->fh_cs_ctl;
-+	else
-+		io->cs_ctl = 0;
-+
-+	io->seq_init = sit;
-+}
-+
-+static u32
-+efct_get_flags_fcp_cmd(struct fcp_cmnd *cmnd)
-+{
-+	u32 flags = 0;
-+
-+	switch (cmnd->fc_pri_ta & FCP_PTA_MASK) {
-+	case FCP_PTA_SIMPLE:
-+		flags |= EFCT_SCSI_CMD_SIMPLE;
-+		break;
-+	case FCP_PTA_HEADQ:
-+		flags |= EFCT_SCSI_CMD_HEAD_OF_QUEUE;
-+		break;
-+	case FCP_PTA_ORDERED:
-+		flags |= EFCT_SCSI_CMD_ORDERED;
-+		break;
-+	case FCP_PTA_ACA:
-+		flags |= EFCT_SCSI_CMD_ACA;
-+		break;
-+	}
-+	if (cmnd->fc_flags & FCP_CFL_WRDATA)
-+		flags |= EFCT_SCSI_CMD_DIR_IN;
-+	if (cmnd->fc_flags & FCP_CFL_RDDATA)
-+		flags |= EFCT_SCSI_CMD_DIR_OUT;
-+
-+	return flags;
-+}
-+
 +/**
-+ * @ingroup unsol
-+ * @brief Dispatch unsolicited FCP_CMND frame.
++ * @ingroup els_api
++ * @brief Format and send a PLOGI ELS command.
 + *
 + * <h3 class="desc">Description</h3>
-+ * Dispatch unsolicited FCP_CMND frame. RQ Pair mode - always
-+ * used for RQ Pair mode since first burst is not supported.
++ * Construct a PLOGI payload using the domain SLI port service parameters,
++ * and send to the \c node.
 + *
-+ * @param node Node that originated the frame.
-+ * @param seq Header/payload sequence buffers.
++ * @param node Node to which the PLOGI is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
 + *
-+ * @return Returns 0 if frame processed and RX buffers cleaned
-+ * up appropriately, -1 if frame not handled and RX buffers need
-+ * to be returned.
++ * @return Returns pointer to IO object, or NULL if error.
 + */
-+int
-+efct_dispatch_fcp_cmd(struct efc_node_s *node, struct efc_hw_sequence_s *seq)
++
++struct efct_io_s *
++efct_send_plogi(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries,
++	      void (*cb)(struct efc_node_s *node,
++			 struct efc_node_cb_s *cbdata, void *arg), void *cbarg)
 +{
-+	struct efc_lport *efc = node->efc;
-+	struct efct_s *efct = efc->base;
-+	struct fc_frame_header *fchdr = seq->header->dma.virt;
-+	struct fcp_cmnd	*cmnd = NULL;
-+	struct efct_io_s *io = NULL;
-+	u32 lun = U32_MAX;
-+	int rc = 0;
++	struct efct_io_s *els;
++	struct efct_s *efct = node->efc->base;
++	struct fc_els_flogi  *plogi;
 +
-+	if (!seq->payload) {
-+		efc_log_err(efct, "Sequence payload is NULL.\n");
-+		return -1;
-+	}
++	node_els_trace();
 +
-+	cmnd = seq->payload->dma.virt;
-+
-+	/* perform FCP_CMND validation check(s) */
-+	if (efct_validate_fcp_cmd(efct, seq))
-+		return -1;
-+
-+	lun = scsilun_to_int(&cmnd->fc_lun);
-+	if (lun == U32_MAX)
-+		return -1;
-+
-+	io = efct_scsi_io_alloc(node, EFCT_SCSI_IO_ROLE_RESPONDER);
-+	if (!io) {
-+		u32 send_frame_capable;
-+
-+		/* If we have SEND_FRAME capability, then use it to send
-+		 * task set full or busy
-+		 */
-+		rc = efct_hw_get(&efct->hw, EFCT_HW_SEND_FRAME_CAPABLE,
-+				 &send_frame_capable);
-+		if (!rc && send_frame_capable) {
-+			rc = efct_sframe_send_task_set_full_or_busy(node, seq);
-+			if (rc)
-+				efc_log_test(efct,
-+					      "efct_sframe_task_full_or_busy failed: %d\n",
-+					rc);
-+			return rc;
-+		}
-+
-+		efc_log_err(efct, "IO allocation failed ox_id %04x\n",
-+			     be16_to_cpu(fchdr->fh_ox_id));
-+		return -1;
-+	}
-+	io->hw_priv = seq->hw_priv;
-+
-+	io->app_id = 0;
-+
-+	/* RQ pair, if we got here, SIT=1 */
-+	efct_populate_io_fcp_cmd(io, cmnd, fchdr, true);
-+
-+	if (cmnd->fc_tm_flags) {
-+		efct_dispatch_unsolicited_tmf(io,
-+					      cmnd->fc_tm_flags,
-+					      node, lun);
++	els = efct_els_io_alloc(node, sizeof(*plogi), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
 +	} else {
-+		u32 flags = efct_get_flags_fcp_cmd(cmnd);
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "plogi";
 +
-+		if (cmnd->fc_flags & FCP_CFL_LEN_MASK) {
-+			efc_log_err(efct, "Additional CDB not supported\n");
-+			return -1;
-+		}
-+		/*
-+		 * Can return failure for things like task set full and UAs,
-+		 * no need to treat as a dropped frame if rc != 0
-+		 */
-+		efct_scsi_recv_cmd(io, lun, cmnd->fc_cdb,
-+				   sizeof(cmnd->fc_cdb), flags);
++		/* Build PLOGI request */
++		plogi = els->els_req.virt;
++
++		memcpy(plogi, node->sport->service_params, sizeof(*plogi));
++
++		plogi->fl_cmd = ELS_PLOGI;
++		memset(plogi->_fl_resvd, 0, sizeof(plogi->_fl_resvd));
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
 +	}
-+
-+	/* successfully processed, now return RX buffer to the chip */
-+	efct_hw_sequence_free(&efct->hw, seq);
-+	return 0;
++	return els;
 +}
 +
 +/**
-+ * @ingroup unsol
-+ * @brief Handle the callback for the TMF FUNCTION_REJECTED response.
++ * @ingroup els_api
++ * @brief Format and send a FLOGI ELS command.
 + *
 + * <h3 class="desc">Description</h3>
-+ * Handle the callback of a send TMF FUNCTION_REJECTED response request.
++ * Construct an FLOGI payload, and send to the \c node.
 + *
-+ * @param io Pointer to the IO context.
-+ * @param scsi_status Status of the response.
-+ * @param flags Callback flags.
-+ * @param arg Callback argument.
++ * @param node Node to which the FLOGI is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before
++ * reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
 + *
-+ * @return Returns 0 on success, or a negative error value on failure.
++ * @return Returns pointer to IO object, or NULL if error.
 + */
 +
-+static int
-+efct_fc_tmf_rejected_cb(struct efct_io_s *io,
-+			enum efct_scsi_io_status_e scsi_status,
-+		       u32 flags, void *arg)
++struct efct_io_s *
++efct_send_flogi(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg)
 +{
++	struct efct_io_s *els;
++	struct efct_s *efct;
++	struct fc_els_flogi  *flogi;
++
++	efct = node->efc->base;
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, sizeof(*flogi), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "flogi";
++
++		/* Build FLOGI request */
++		flogi = els->els_req.virt;
++
++		memcpy(flogi, node->sport->service_params, sizeof(*flogi));
++		flogi->fl_cmd = ELS_FLOGI;
++		memset(flogi->_fl_resvd, 0, sizeof(flogi->_fl_resvd));
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Format and send a FDISC ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct an FDISC payload, and send to the \c node.
++ *
++ * @param node Node to which the FDISC is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_fdisc(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct;
++	struct fc_els_flogi *fdisc;
++
++	efct = node->efc->base;
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, sizeof(*fdisc), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "fdisc";
++
++		/* Build FDISC request */
++		fdisc = els->els_req.virt;
++
++		memcpy(fdisc, node->sport->service_params, sizeof(*fdisc));
++		fdisc->fl_cmd = ELS_FDISC;
++		memset(fdisc->_fl_resvd, 0, sizeof(fdisc->_fl_resvd));
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a PRLI ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a PRLI ELS command, and send to the \c node.
++ *
++ * @param node Node to which the PRLI is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_prli(struct efc_node_s *node, u32 timeout_sec, u32 retries,
++	       els_cb_t cb, void *cbarg)
++{
++	struct efct_s *efct = node->efc->base;
++	struct efct_io_s *els;
++	struct {
++		struct fc_els_prli prli;
++		struct fc_els_spp spp;
++	} *pp;
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, sizeof(*pp), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "prli";
++
++		/* Build PRLI request */
++		pp = els->els_req.virt;
++
++		memset(pp, 0, sizeof(*pp));
++
++		pp->prli.prli_cmd = ELS_PRLI;
++		pp->prli.prli_spp_len = 16;
++		pp->prli.prli_len = cpu_to_be16(sizeof(*pp));
++		pp->spp.spp_type = FC_TYPE_FCP;
++		pp->spp.spp_type_ext = 0;
++		pp->spp.spp_flags = FC_SPP_EST_IMG_PAIR;
++		pp->spp.spp_params = cpu_to_be32(FCP_SPPF_RD_XRDY_DIS |
++				       (node->sport->enable_ini ?
++				       FCP_SPPF_INIT_FCN : 0) |
++				       (node->sport->enable_tgt ?
++				       FCP_SPPF_TARG_FCN : 0));
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a PRLO ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a PRLO ELS command, and send to the \c node.
++ *
++ * @param node Node to which the PRLO is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_prlo(struct efc_node_s *node, u32 timeout_sec, u32 retries,
++	       els_cb_t cb, void *cbarg)
++{
++	struct efct_s *efct = node->efc->base;
++	struct efct_io_s *els;
++	struct {
++		struct fc_els_prlo prlo;
++		struct fc_els_spp spp;
++	} *pp;
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, sizeof(*pp), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "prlo";
++
++		/* Build PRLO request */
++		pp = els->els_req.virt;
++
++		memset(pp, 0, sizeof(*pp));
++		pp->prlo.prlo_cmd = ELS_PRLO;
++		pp->prlo.prlo_obs = 0x10;
++		pp->prlo.prlo_len = cpu_to_be16(sizeof(*pp));
++
++		pp->spp.spp_type = FC_TYPE_FCP;
++		pp->spp.spp_type_ext = 0;
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a LOGO ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Format a LOGO, and send to the \c node.
++ *
++ * @param node Node to which the LOGO is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_logo(struct efc_node_s *node, u32 timeout_sec, u32 retries,
++	       els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct;
++	struct fc_els_logo *logo;
++	struct fc_els_flogi  *sparams;
++
++	efct = node->efc->base;
++
++	node_els_trace();
++
++	sparams = (struct fc_els_flogi *)node->sport->service_params;
++
++	els = efct_els_io_alloc(node, sizeof(*logo), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "logo";
++
++		/* Build LOGO request */
++
++		logo = els->els_req.virt;
++
++		memset(logo, 0, sizeof(*logo));
++		logo->fl_cmd = ELS_LOGO;
++		hton24(logo->fl_n_port_id, node->rnode.sport->fc_id);
++		logo->fl_n_port_wwn = sparams->fl_wwpn;
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send an ADISC ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct an ADISC ELS command, and send to the \c node.
++ *
++ * @param node Node to which the ADISC is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_adisc(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct;
++	struct fc_els_adisc *adisc;
++	struct fc_els_flogi  *sparams;
++	struct efc_sli_port_s *sport = node->sport;
++
++	efct = node->efc->base;
++
++	node_els_trace();
++
++	sparams = (struct fc_els_flogi *)node->sport->service_params;
++
++	els = efct_els_io_alloc(node, sizeof(*adisc), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "adisc";
++
++		/* Build ADISC request */
++
++		adisc = els->els_req.virt;
++
++		memset(adisc, 0, sizeof(*adisc));
++		adisc->adisc_cmd = ELS_ADISC;
++		hton24(adisc->adisc_hard_addr, sport->fc_id);
++		adisc->adisc_wwpn = sparams->fl_wwpn;
++		adisc->adisc_wwnn = sparams->fl_wwnn;
++		hton24(adisc->adisc_port_id, node->rnode.sport->fc_id);
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a PDISC ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a PDISC ELS command, and send to the \c node.
++ *
++ * @param node Node to which the PDISC is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_pdisc(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct = node->efc->base;
++	struct fc_els_flogi  *pdisc;
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, sizeof(*pdisc), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "pdisc";
++
++		pdisc = els->els_req.virt;
++
++		memcpy(pdisc, node->sport->service_params, sizeof(*pdisc));
++
++		pdisc->fl_cmd = ELS_PDISC;
++		memset(pdisc->_fl_resvd, 0, sizeof(pdisc->_fl_resvd));
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send an SCR ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Format an SCR, and send to the \c node.
++ *
++ * @param node Node to which the SCR is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function
++ * @param cbarg Callback function arg
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_scr(struct efc_node_s *node, u32 timeout_sec, u32 retries,
++	      els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct = node->efc->base;
++	struct fc_els_scr *req;
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, sizeof(*req), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "scr";
++
++		req = els->els_req.virt;
++
++		memset(req, 0, sizeof(*req));
++		req->scr_cmd = ELS_SCR;
++		req->scr_reg_func = ELS_SCRF_FULL;
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send an RRQ ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Format an RRQ, and send to the \c node.
++ *
++ * @param node Node to which the RRQ is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function
++ * @param cbarg Callback function arg
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_rrq(struct efc_node_s *node, u32 timeout_sec, u32 retries,
++	      els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct = node->efc->base;
++	struct fc_els_scr *req;
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, sizeof(*req), EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "scr";
++
++		req = els->els_req.virt;
++
++		memset(req, 0, sizeof(*req));
++		req->scr_cmd = ELS_RRQ;
++		req->scr_reg_func = ELS_SCRF_FULL;
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send an RSCN ELS command.
++ *
++ * <h3 class="desc">Description</h3>
++ * Format an RSCN, and send to the \c node.
++ *
++ * @param node Node to which the RRQ is sent.
++ * @param timeout_sec Command timeout, in seconds.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param port_ids Pointer to port IDs
++ * @param port_ids_count Count of port IDs
++ * @param cb Callback function
++ * @param cbarg Callback function arg
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++struct efct_io_s *
++efct_send_rscn(struct efc_node_s *node, u32 timeout_sec, u32 retries,
++	       void *port_ids, u32 port_ids_count, els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct = node->efc->base;
++	struct fc_els_rscn *req;
++	struct fc_els_rscn_page *rscn_page;
++	u32 length = sizeof(*rscn_page) * port_ids_count;
++
++	length += sizeof(*req);
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, length, EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->els_timeout_sec = timeout_sec;
++		els->els_retries_remaining = retries;
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "rscn";
++
++		req = els->els_req.virt;
++
++		req->rscn_cmd = ELS_RSCN;
++		req->rscn_page_len = sizeof(struct fc_els_rscn_page);
++		req->rscn_plen = cpu_to_be16(length);
++
++		els->hio_type = EFCT_HW_ELS_REQ;
++		els->iparam.els.timeout = timeout_sec;
++
++		/* copy in the payload */
++		rscn_page = els->els_req.virt + sizeof(*req);
++		memcpy(rscn_page, port_ids,
++		       port_ids_count * sizeof(*rscn_page));
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @brief Send an LS_RJT ELS response.
++ *
++ * <h3 class="desc">Description</h3>
++ * Send an LS_RJT ELS response.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param ox_id Originator exchange ID being responded to.
++ * @param reason_code Reason code value for LS_RJT.
++ * @param reason_code_expl Reason code explanation value for LS_RJT.
++ * @param vendor_unique Vendor-unique value for LS_RJT.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++void *
++efct_send_ls_rjt(struct efc_lport *efc, struct efc_node_s *node,
++		 u32 ox_id, u32 reason_code,
++		u32 reason_code_expl, u32 vendor_unique)
++{
++	struct efct_io_s *io = NULL;
++	int rc;
++	struct efct_s *efct = node->efc->base;
++	struct fc_els_ls_rjt *rjt;
++
++	io = efct_els_io_alloc(node, sizeof(*rjt), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++
++	node_els_trace();
++
++	io->els_callback = NULL;
++	io->els_callback_arg = NULL;
++	io->display_name = "ls_rjt";
++	io->init_task_tag = ox_id;
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els.ox_id = ox_id;
++
++	rjt = io->els_req.virt;
++	memset(rjt, 0, sizeof(*rjt));
++
++	rjt->er_cmd = ELS_LS_RJT;
++	rjt->er_reason = reason_code;
++	rjt->er_explan = reason_code_expl;
++
++	io->hio_type = EFCT_HW_ELS_RSP;
++	rc = efct_els_send_rsp(io, sizeof(*rjt));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++
++	return io;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a PLOGI accept response.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a PLOGI LS_ACC, and send to the \c node,
++ * using the originator exchange ID ox_id.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param ox_id Originator exchange ID being responsed to.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++struct efct_io_s *
++efct_send_plogi_acc(struct efc_node_s *node, u32 ox_id,
++		    els_cb_t cb, void *cbarg)
++{
++	int rc;
++	struct efct_s *efct = node->efc->base;
++	struct efct_io_s *io = NULL;
++	struct fc_els_flogi  *plogi;
++	struct fc_els_flogi  *req = (struct fc_els_flogi *)node->service_params;
++
++	node_els_trace();
++
++	io = efct_els_io_alloc(node, sizeof(*plogi), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++
++	io->els_callback = cb;
++	io->els_callback_arg = cbarg;
++	io->display_name = "plog_acc";
++	io->init_task_tag = ox_id;
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els.ox_id = ox_id;
++
++	plogi = io->els_req.virt;
++
++	/* copy our port's service parameters to payload */
++	memcpy(plogi, node->sport->service_params, sizeof(*plogi));
++	plogi->fl_cmd = ELS_LS_ACC;
++	memset(plogi->_fl_resvd, 0, sizeof(plogi->_fl_resvd));
++
++	/* Set Application header support bit if requested */
++	if (req->fl_csp.sp_features & cpu_to_be16(FC_SP_FT_BCAST))
++		plogi->fl_csp.sp_features |= cpu_to_be32(FC_SP_FT_BCAST);
++
++	io->hio_type = EFCT_HW_ELS_RSP;
++	rc = efct_els_send_rsp(io, sizeof(*plogi));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++	return io;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send an FLOGI accept response for point-to-point negotiation.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct an FLOGI accept response, and send to the \c node using
++ * the originator exchange id \c ox_id. The \c s_id is used for the
++ * response frame source FC ID.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param ox_id Originator exchange ID for the response.
++ * @param s_id Source FC ID to be used in the response frame.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++void *
++efct_send_flogi_p2p_acc(struct efc_lport *efc, struct efc_node_s *node,
++			u32 ox_id, u32 s_id)
++{
++	struct efct_io_s *io = NULL;
++	int rc;
++	struct efct_s *efct = node->efc->base;
++	struct fc_els_flogi  *flogi;
++
++	node_els_trace();
++
++	io = efct_els_io_alloc(node, sizeof(*flogi), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++
++	io->els_callback = NULL;
++	io->els_callback_arg = NULL;
++	io->display_name = "flogi_p2p_acc";
++	io->init_task_tag = ox_id;
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els_sid.ox_id = ox_id;
++	io->iparam.els_sid.s_id = s_id;
++
++	flogi = io->els_req.virt;
++
++	/* copy our port's service parameters to payload */
++	memcpy(flogi, node->sport->service_params, sizeof(*flogi));
++	flogi->fl_cmd = ELS_LS_ACC;
++	memset(flogi->_fl_resvd, 0, sizeof(flogi->_fl_resvd));
++
++	memset(flogi->fl_cssp, 0, sizeof(flogi->fl_cssp));
++
++	io->hio_type = EFCT_HW_ELS_RSP_SID;
++	rc = efct_els_send_rsp(io, sizeof(*flogi));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++
++	return io;
++}
++
++struct efct_io_s *
++efct_send_flogi_acc(struct efc_node_s *node, u32 ox_id, u32 is_fport,
++		    els_cb_t cb, void *cbarg)
++{
++	int rc;
++	struct efct_s *efct = node->efc->base;
++	struct efct_io_s *io = NULL;
++	struct fc_els_flogi  *flogi;
++
++	node_els_trace();
++
++	io = efct_els_io_alloc(node, sizeof(*flogi), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++	io->els_callback = cb;
++	io->els_callback_arg = cbarg;
++	io->display_name = "flogi_acc";
++	io->init_task_tag = ox_id;
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els_sid.ox_id = ox_id;
++	io->iparam.els_sid.s_id = io->node->sport->fc_id;
++
++	flogi = io->els_req.virt;
++
++	/* copy our port's service parameters to payload */
++	memcpy(flogi, node->sport->service_params, sizeof(*flogi));
++
++	/* Set F_port */
++	if (is_fport) {
++		/* Set F_PORT and Multiple N_PORT_ID Assignment */
++		flogi->fl_csp.sp_r_a_tov |=  be32_to_cpu(3U << 28);
++	}
++
++	flogi->fl_cmd = ELS_LS_ACC;
++	memset(flogi->_fl_resvd, 0, sizeof(flogi->_fl_resvd));
++
++	memset(flogi->fl_cssp, 0, sizeof(flogi->fl_cssp));
++
++	io->hio_type = EFCT_HW_ELS_RSP_SID;
++	rc = efct_els_send_rsp(io, sizeof(*flogi));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++
++	return io;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a PRLI accept response
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a PRLI LS_ACC response, and send to the \c node,
++ * using the originator ox_id exchange ID.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param ox_id Originator exchange ID.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *efct_send_prli_acc(struct efc_node_s *node,
++				     u32 ox_id, els_cb_t cb, void *cbarg)
++{
++	int rc;
++	struct efct_s *efct = node->efc->base;
++	struct efct_io_s *io = NULL;
++	struct {
++		struct fc_els_prli prli;
++		struct fc_els_spp spp;
++	} *pp;
++
++	node_els_trace();
++
++	io = efct_els_io_alloc(node, sizeof(*pp), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++
++	io->els_callback = cb;
++	io->els_callback_arg = cbarg;
++	io->display_name = "prli_acc";
++	io->init_task_tag = ox_id;
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els.ox_id = ox_id;
++
++	pp = io->els_req.virt;
++	memset(pp, 0, sizeof(*pp));
++
++	pp->prli.prli_cmd = ELS_LS_ACC;
++	pp->prli.prli_spp_len = 0x10;
++	pp->prli.prli_len = cpu_to_be16(sizeof(*pp));
++	pp->spp.spp_type = FC_TYPE_FCP;
++	pp->spp.spp_type_ext = 0;
++	pp->spp.spp_flags = FC_SPP_EST_IMG_PAIR | FC_SPP_RESP_ACK;
++
++	pp->spp.spp_params = cpu_to_be32(FCP_SPPF_RD_XRDY_DIS |
++					(node->sport->enable_ini ?
++					 FCP_SPPF_INIT_FCN : 0) |
++					(node->sport->enable_tgt ?
++					 FCP_SPPF_TARG_FCN : 0));
++
++	io->hio_type = EFCT_HW_ELS_RSP;
++	rc = efct_els_send_rsp(io, sizeof(*pp));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++
++	return io;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a PRLO accept response.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a PRLO LS_ACC response, and send to the \c node,
++ * using the originator exchange ID \c ox_id.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param ox_id Originator exchange ID.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_prlo_acc(struct efc_node_s *node, u32 ox_id,
++		   els_cb_t cb, void *cbarg)
++{
++	int rc;
++	struct efct_s *efct = node->efc->base;
++	struct efct_io_s *io = NULL;
++	struct {
++		struct fc_els_prlo prlo;
++		struct fc_els_spp spp;
++	} *pp;
++
++	node_els_trace();
++
++	io = efct_els_io_alloc(node, sizeof(*pp), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++
++	io->els_callback = cb;
++	io->els_callback_arg = cbarg;
++	io->display_name = "prlo_acc";
++	io->init_task_tag = ox_id;
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els.ox_id = ox_id;
++
++	pp = io->els_req.virt;
++	memset(pp, 0, sizeof(*pp));
++	pp->prlo.prlo_cmd = ELS_LS_ACC;
++	pp->prlo.prlo_obs = 0x10;
++	pp->prlo.prlo_len = cpu_to_be16(sizeof(*pp));
++
++	pp->spp.spp_type = FC_TYPE_FCP;
++	pp->spp.spp_type_ext = 0;
++	pp->spp.spp_flags = FC_SPP_RESP_ACK;
++
++	io->hio_type = EFCT_HW_ELS_RSP;
++	rc = efct_els_send_rsp(io, sizeof(*pp));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++
++	return io;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a generic LS_ACC response without a payload.
++ *
++ * <h3 class="desc">Description</h3>
++ * A generic LS_ACC response is sent to the \c node using the
++ * originator exchange ID ox_id.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param ox_id Originator exchange id.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++struct efct_io_s *
++efct_send_ls_acc(struct efc_node_s *node, u32 ox_id, els_cb_t cb,
++		 void *cbarg)
++{
++	int rc;
++	struct efct_s *efct = node->efc->base;
++	struct efct_io_s *io = NULL;
++	struct fc_els_ls_acc *acc;
++
++	node_els_trace();
++
++	io = efct_els_io_alloc(node, sizeof(*acc), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++
++	io->els_callback = cb;
++	io->els_callback_arg = cbarg;
++	io->display_name = "ls_acc";
++	io->init_task_tag = ox_id;
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els.ox_id = ox_id;
++
++	acc = io->els_req.virt;
++	memset(acc, 0, sizeof(*acc));
++
++	acc->la_cmd = ELS_LS_ACC;
++
++	io->hio_type = EFCT_HW_ELS_RSP;
++	rc = efct_els_send_rsp(io, sizeof(*acc));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++
++	return io;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a LOGO accept response.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a LOGO LS_ACC response, and send to the \c node,
++ * using the originator exchange ID \c ox_id.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param ox_id Originator exchange ID.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++struct efct_io_s *
++efct_send_logo_acc(struct efc_node_s *node, u32 ox_id,
++		   els_cb_t cb, void *cbarg)
++{
++	int rc;
++	struct efct_io_s *io = NULL;
++	struct efct_s *efct = node->efc->base;
++	struct fc_els_ls_acc *logo;
++
++	node_els_trace();
++
++	io = efct_els_io_alloc(node, sizeof(*logo), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++
++	io->els_callback = cb;
++	io->els_callback_arg = cbarg;
++	io->display_name = "logo_acc";
++	io->init_task_tag = ox_id;
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els.ox_id = ox_id;
++
++	logo = io->els_req.virt;
++	memset(logo, 0, sizeof(*logo));
++
++	logo->la_cmd = ELS_LS_ACC;
++
++	io->hio_type = EFCT_HW_ELS_RSP;
++	rc = efct_els_send_rsp(io, sizeof(*logo));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++
++	return io;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send an ADISC accept response.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct an ADISC LS__ACC, and send to the \c node, using the originator
++ * exchange id \c ox_id.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param ox_id Originator exchange ID.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_send_adisc_acc(struct efc_node_s *node, u32 ox_id,
++		    els_cb_t cb, void *cbarg)
++{
++	int rc;
++	struct efct_io_s *io = NULL;
++	struct fc_els_adisc *adisc;
++	struct fc_els_flogi  *sparams;
++	struct efct_s *efct;
++
++	efct = node->efc->base;
++
++	node_els_trace();
++
++	io = efct_els_io_alloc(node, sizeof(*adisc), EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efct, "els IO alloc failed\n");
++		return io;
++	}
++
++	io->els_callback = cb;
++	io->els_callback_arg = cbarg;
++	io->display_name = "adisc_acc";
++	io->init_task_tag = ox_id;
++
++	/* Go ahead and send the ELS_ACC */
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.els.ox_id = ox_id;
++
++	sparams = (struct fc_els_flogi  *)node->sport->service_params;
++	adisc = io->els_req.virt;
++	memset(adisc, 0, sizeof(*adisc));
++	adisc->adisc_cmd = ELS_LS_ACC;
++	adisc->adisc_wwpn = sparams->fl_wwpn;
++	adisc->adisc_wwnn = sparams->fl_wwnn;
++	hton24(adisc->adisc_port_id, node->rnode.sport->fc_id);
++
++	io->hio_type = EFCT_HW_ELS_RSP;
++	rc = efct_els_send_rsp(io, sizeof(*adisc));
++	if (rc) {
++		efct_els_io_free(io);
++		io = NULL;
++	}
++
++	return io;
++}
++
++void *
++efct_els_send_ct(struct efc_lport *efc, struct efc_node_s *node, u32 cmd,
++		 u32 timeout_sec, u32 retries)
++{
++	struct efct_s *efct = efc->base;
++
++	switch (cmd) {
++	case FC_RCTL_ELS_REQ:
++		efc_log_err(efct, "send efct_ns_send_rftid\n");
++		efct_ns_send_rftid(node, timeout_sec, retries, NULL, NULL);
++		break;
++	case FC_NS_RFF_ID:
++		efc_log_err(efct, "send efct_ns_send_rffid\n");
++		efct_ns_send_rffid(node, timeout_sec, retries, NULL, NULL);
++		break;
++	case FC_NS_GID_PT:
++		efc_log_err(efct, "send efct_ns_send_gidpt\n");
++		efct_ns_send_gidpt(node, timeout_sec, retries, NULL, NULL);
++		break;
++	default:
++		efc_log_err(efct, "Unhandled command cmd: %x\n", cmd);
++	}
++
++	return NULL;
++}
++
++static inline void fcct_build_req_header(struct fc_ct_hdr  *hdr,
++					 u16 cmd, u16 max_size)
++{
++	hdr->ct_rev = FC_CT_REV;
++	hdr->ct_fs_type = FC_FST_DIR;
++	hdr->ct_fs_subtype = FC_NS_SUBTYPE;
++	hdr->ct_options = 0;
++	hdr->ct_cmd = cpu_to_be16(cmd);
++	/* words */
++	hdr->ct_mr_size = cpu_to_be16(max_size / (sizeof(u32)));
++	hdr->ct_reason = 0;
++	hdr->ct_explan = 0;
++	hdr->ct_vendor = 0;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a RFTID CT request.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct an RFTID CT request, and send to the \c node.
++ *
++ * @param node Node to which the RFTID request is sent.
++ * @param timeout_sec Time, in seconds, to wait before timing out the ELS.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++struct efct_io_s *
++efct_ns_send_rftid(struct efc_node_s *node, u32 timeout_sec,
++		   u32 retries, els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct = node->efc->base;
++	struct fc_ct_hdr *ct;
++	struct fc_ns_rft_id *rftid;
++
++	node_els_trace();
++
++	els = efct_els_io_alloc(node, sizeof(*ct) + sizeof(*rftid),
++				EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->iparam.fc_ct.r_ctl = FC_RCTL_ELS_REQ;
++		els->iparam.fc_ct.type = FC_TYPE_CT;
++		els->iparam.fc_ct.df_ctl = 0;
++		els->iparam.fc_ct.timeout = timeout_sec;
++
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "rftid";
++
++		ct = els->els_req.virt;
++		memset(ct, 0, sizeof(*ct));
++		fcct_build_req_header(ct, FC_NS_RFT_ID, sizeof(*rftid));
++
++		rftid = els->els_req.virt + sizeof(*ct);
++		memset(rftid, 0, sizeof(*rftid));
++		hton24(rftid->fr_fid.fp_fid, node->rnode.sport->fc_id);
++		rftid->fr_fts.ff_type_map[FC_TYPE_FCP / FC_NS_BPW] =
++			cpu_to_be32(1 << (FC_TYPE_FCP % FC_NS_BPW));
++
++		els->hio_type = EFCT_HW_FC_CT;
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a RFFID CT request.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct an RFFID CT request, and send to the \c node.
++ *
++ * @param node Node to which the RFFID request is sent.
++ * @param timeout_sec Time, in seconds, to wait before timing out the ELS.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++struct efct_io_s *
++efct_ns_send_rffid(struct efc_node_s *node, u32 timeout_sec,
++		   u32 retries, els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els;
++	struct efct_s *efct = node->efc->base;
++	struct fc_ct_hdr *ct;
++	struct fc_ns_rff_id *rffid;
++	u32 size = 0;
++
++	node_els_trace();
++
++	size = sizeof(*ct) + sizeof(*rffid);
++
++	els = efct_els_io_alloc(node, size, EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++	} else {
++		els->iparam.fc_ct.r_ctl = FC_RCTL_ELS_REQ;
++		els->iparam.fc_ct.type = FC_TYPE_CT;
++		els->iparam.fc_ct.df_ctl = 0;
++		els->iparam.fc_ct.timeout = timeout_sec;
++
++		els->els_callback = cb;
++		els->els_callback_arg = cbarg;
++		els->display_name = "rffid";
++		ct = els->els_req.virt;
++
++		memset(ct, 0, sizeof(*ct));
++		fcct_build_req_header(ct, FC_NS_RFF_ID, sizeof(*rffid));
++
++		rffid = els->els_req.virt + sizeof(*ct);
++		memset(rffid, 0, sizeof(*rffid));
++
++		hton24(rffid->fr_fid.fp_fid, node->rnode.sport->fc_id);
++		if (node->sport->enable_ini)
++			rffid->fr_feat |= FCP_FEAT_INIT;
++		if (node->sport->enable_tgt)
++			rffid->fr_feat |= FCP_FEAT_TARG;
++		rffid->fr_type = FC_TYPE_FCP;
++
++		els->hio_type = EFCT_HW_FC_CT;
++
++		efct_els_send_req(node, els);
++	}
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a GIDPT CT request.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a GIDPT CT request, and send to the \c node.
++ *
++ * @param node Node to which the GIDPT request is sent.
++ * @param timeout_sec Time, in seconds, to wait before timing out the ELS.
++ * @param retries Number of times to retry errors before reporting a failure.
++ * @param cb Callback function.
++ * @param cbarg Callback function argument.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_ns_send_gidpt(struct efc_node_s *node, u32 timeout_sec,
++		   u32 retries, els_cb_t cb, void *cbarg)
++{
++	struct efct_io_s *els = NULL;
++	struct efct_s *efct = node->efc->base;
++	struct fc_ct_hdr *ct;
++	struct fc_ns_gid_pt *gidpt;
++	u32 size = 0;
++
++	node_els_trace();
++
++	size = sizeof(*ct) + sizeof(*gidpt);
++	els = efct_els_io_alloc_size(node, size,
++				     EFCT_ELS_GID_PT_RSP_LEN,
++				   EFCT_ELS_ROLE_ORIGINATOR);
++	if (!els) {
++		efc_log_err(efct, "IO alloc failed\n");
++		return els;
++	}
++
++	els->iparam.fc_ct.r_ctl = FC_RCTL_ELS_REQ;
++	els->iparam.fc_ct.type = FC_TYPE_CT;
++	els->iparam.fc_ct.df_ctl = 0;
++	els->iparam.fc_ct.timeout = timeout_sec;
++
++	els->els_callback = cb;
++	els->els_callback_arg = cbarg;
++	els->display_name = "gidpt";
++
++	ct = els->els_req.virt;
++
++	memset(ct, 0, sizeof(*ct));
++	fcct_build_req_header(ct, FC_NS_GID_PT, sizeof(*gidpt));
++
++	gidpt = els->els_req.virt + sizeof(*ct);
++	memset(gidpt, 0, sizeof(*gidpt));
++	gidpt->fn_pt_type = FC_TYPE_FCP;
++
++	els->hio_type = EFCT_HW_FC_CT;
++
++	efct_els_send_req(node, els);
++
++	return els;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a BA_ACC given the request's FC header
++ *
++ * <h3 class="desc">Description</h3>
++ * Using the S_ID/D_ID from the request's FC header, generate a BA_ACC.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param hdr Pointer to the FC header.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++//struct efct_io_s *
++void *
++efct_bls_send_acc_hdr(struct efc_lport *efc, struct efc_node_s *node,
++		      struct fc_frame_header *hdr)
++{
++	struct efct_io_s *io = NULL;
++	u16 ox_id = be16_to_cpu(hdr->fh_ox_id);
++	u16 rx_id = be16_to_cpu(hdr->fh_rx_id);
++	u32 d_id = ntoh24(hdr->fh_d_id);
++
++	io = efct_scsi_io_alloc(node, EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efc, "els IO alloc failed\n");
++		return io;
++	}
++
++	return efct_bls_send_acc(io, d_id, ox_id, rx_id);
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a BA_RJT given the request's FC header
++ *
++ * <h3 class="desc">Description</h3>
++ * Using the S_ID/D_ID from the request's FC header, generate a BA_ACC.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param hdr Pointer to the FC header.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++struct efct_io_s *
++efct_bls_send_rjt_hdr(struct efct_io_s *io, struct fc_frame_header *hdr)
++{
++	u16 ox_id = be16_to_cpu(hdr->fh_ox_id);
++	u16 rx_id = be16_to_cpu(hdr->fh_rx_id);
++	u32 d_id = ntoh24(hdr->fh_d_id);
++
++	return efct_bls_send_rjt(io, d_id, ox_id, rx_id);
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a BLS BA_RJT response.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a BLS BA_RJT response, and send to the \c node.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param s_id S_ID to use for the response.
++ * If U32_MAX, then use our SLI port (sport) S_ID.
++ * @param ox_id Originator exchange ID.
++ * @param rx_id Responder exchange ID.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++static struct efct_io_s *
++efct_bls_send_rjt(struct efct_io_s *io, u32 s_id,
++		  u16 ox_id, u16 rx_id)
++{
++	struct efc_node_s *node = io->node;
++	int rc;
++	struct fc_ba_rjt *acc;
++	struct efct_s *efct;
++
++	efct = node->efc->base;
++
++	if (node->rnode.sport->fc_id == s_id)
++		s_id = U32_MAX;
++
++	/* fill out generic fields */
++	io->efct = efct;
++	io->node = node;
++	io->cmd_tgt = true;
++
++	/* fill out BLS Response-specific fields */
++	io->io_type = EFCT_IO_TYPE_BLS_RESP;
++	io->display_name = "ba_rjt";
++	io->hio_type = EFCT_HW_BLS_RJT;
++	io->init_task_tag = ox_id;
++
++	/* fill out iparam fields */
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.bls_sid.ox_id = ox_id;
++	io->iparam.bls_sid.rx_id = rx_id;
++
++	acc = (void *)io->iparam.bls_sid.payload;
++
++	memset(io->iparam.bls_sid.payload, 0,
++	       sizeof(io->iparam.bls_sid.payload));
++	acc->br_reason = ELS_RJT_UNAB;
++	acc->br_explan = ELS_EXPL_NONE;
++
++	rc = efct_scsi_io_dispatch(io, efct_bls_send_rjt_cb);
++	if (rc) {
++		efc_log_err(efct, "efct_scsi_io_dispatch() failed: %d\n", rc);
++		efct_scsi_io_free(io);
++		io = NULL;
++	}
++	return io;
++}
++
++/**
++ * @ingroup els_api
++ * @brief Send a BLS BA_ACC response.
++ *
++ * <h3 class="desc">Description</h3>
++ * Construct a BLS BA_ACC response, and send to the \c node.
++ *
++ * @param io Pointer to a SCSI IO object.
++ * @param s_id S_ID to use for the response.
++ * If U32_MAX, then use our SLI port (sport) S_ID.
++ * @param ox_id Originator exchange ID.
++ * @param rx_id Responder exchange ID.
++ *
++ * @return Returns pointer to IO object, or NULL if error.
++ */
++
++static struct efct_io_s *
++efct_bls_send_acc(struct efct_io_s *io, u32 s_id,
++		  u16 ox_id, u16 rx_id)
++{
++	struct efc_node_s *node = io->node;
++	int rc;
++	struct fc_ba_acc *acc;
++	struct efct_s *efct;
++
++	efct = node->efc->base;
++
++	if (node->rnode.sport->fc_id == s_id)
++		s_id = U32_MAX;
++
++	/* fill out generic fields */
++	io->efct = efct;
++	io->node = node;
++	io->cmd_tgt = true;
++
++	/* fill out BLS Response-specific fields */
++	io->io_type = EFCT_IO_TYPE_BLS_RESP;
++	io->display_name = "ba_acc";
++	io->hio_type = EFCT_HW_BLS_ACC_SID;
++	io->init_task_tag = ox_id;
++
++	/* fill out iparam fields */
++	memset(&io->iparam, 0, sizeof(io->iparam));
++	io->iparam.bls_sid.s_id = s_id;
++	io->iparam.bls_sid.ox_id = ox_id;
++	io->iparam.bls_sid.rx_id = rx_id;
++
++	acc = (void *)io->iparam.bls_sid.payload;
++
++	memset(io->iparam.bls_sid.payload, 0,
++	       sizeof(io->iparam.bls_sid.payload));
++	acc->ba_ox_id = io->iparam.bls_sid.ox_id;
++	acc->ba_rx_id = io->iparam.bls_sid.rx_id;
++	acc->ba_high_seq_cnt = U16_MAX;
++
++	rc = efct_scsi_io_dispatch(io, efct_bls_send_acc_cb);
++	if (rc) {
++		efc_log_err(efct, "efct_scsi_io_dispatch() failed: %d\n", rc);
++		efct_scsi_io_free(io);
++		io = NULL;
++	}
++	return io;
++}
++
++/**
++ * @brief Handle the BLS accept completion.
++ *
++ * <h3 class="desc">Description</h3>
++ * Upon completion of sending a BA_ACC, this callback is invoked by the HW.
++ *
++ * @param hio Pointer to the HW IO object.
++ * @param rnode Pointer to the HW remote node.
++ * @param length Length of the response payload, in bytes.
++ * @param status Completion status.
++ * @param ext_status Extended completion status.
++ * @param app Callback private argument.
++ *
++ * @return Returns 0 on success; or a negative error value on failure.
++ */
++
++static int efct_bls_send_acc_cb(struct efct_hw_io_s *hio,
++				struct efc_remote_node_s *rnode, u32 length,
++		int status, u32 ext_status, void *app)
++{
++	struct efct_io_s *io = app;
++
 +	efct_scsi_io_free(io);
 +	return 0;
 +}
 +
 +/**
-+ * @brief Return next FC frame on node->pend_frames list
++ * @brief Handle the BLS reject completion.
 + *
-+ * The next FC frame on the node->pend_frames list is returned, or NULL
-+ * if the list is empty.
++ * <h3 class="desc">Description</h3>
++ * Upon completion of sending a BA_RJT, this callback is invoked by the HW.
 + *
-+ * @param pend_list Pending list to be purged.
-+ * @param list_lock Lock that protects pending list.
++ * @param hio Pointer to the HW IO object.
++ * @param rnode Pointer to the HW remote node.
++ * @param length Length of the response payload, in bytes.
++ * @param status Completion status.
++ * @param ext_status Extended completion status.
++ * @param app Callback private argument.
 + *
-+ * @return Returns pointer to the next FC frame, or
-+ * NULL if the pending frame list
-+ * is empty.
++ * @return Returns 0 on success; or a negative error value on failure.
 + */
-+static struct efc_hw_sequence_s *
-+efct_frame_next(struct list_head *pend_list, spinlock_t *list_lock)
++
++static int efct_bls_send_rjt_cb(struct efct_hw_io_s *hio,
++				struct efc_remote_node_s *rnode, u32 length,
++		int status, u32 ext_status, void *app)
 +{
-+	struct efc_hw_sequence_s *frame = NULL;
-+	unsigned long flags = 0;
++	struct efct_io_s *io = app;
 +
-+	spin_lock_irqsave(list_lock, flags);
-+
-+	if (!list_empty(pend_list)) {
-+		frame = list_first_entry(pend_list,
-+					 struct efc_hw_sequence_s, list_entry);
-+		list_del(&frame->list_entry);
-+	}
-+
-+	spin_unlock_irqrestore(list_lock, flags);
-+	return frame;
++	efct_scsi_io_free(io);
++	return 0;
 +}
 +
 +/**
-+ * @brief Process send fcp response frame callback
++ * @brief ELS abort callback.
 + *
-+ * The function is called when the send FCP
-+ * response posting has completed. Regardless
-+ * of the outcome, the sequence is freed.
++ * <h3 class="desc">Description</h3>
++ * This callback is invoked by the HW when an ELS IO is aborted.
 + *
-+ * @param arg Pointer to originator frame sequence.
-+ * @param cqe Pointer to completion queue entry.
-+ * @param status Status of operation.
++ * @param hio Pointer to the HW IO object.
++ * @param rnode Pointer to the HW remote node.
++ * @param length Length of the response payload, in bytes.
++ * @param status Completion status.
++ * @param ext_status Extended completion status.
++ * @param app Callback private argument.
++ *
++ * @return Returns 0 on success; or a negative error value on failure.
++ */
++
++static int
++efct_els_abort_cb(struct efct_hw_io_s *hio, struct efc_remote_node_s *rnode,
++		  u32 length, int status, u32 ext_status,
++		 void *app)
++{
++	struct efct_io_s *els;
++	struct efct_io_s *abort_io = NULL; /* IO structure used to abort ELS */
++	struct efct_s *efct;
++
++	abort_io = app;
++	els = abort_io->io_to_abort;
++
++	if (!els || !els->node || !els->node->efc)
++		return -1;
++
++	efct = els->node->efc->base;
++
++	if (status != 0)
++		efc_log_warn(efct, "status x%x ext x%x\n", status, ext_status);
++
++	/* now free the abort IO */
++	efct_io_pool_io_free(efct->xport->io_pool, abort_io);
++
++	/* send completion event to indicate abort process is complete
++	 * Note: The ELS SM will already be receiving
++	 * ELS_REQ_OK/FAIL/RJT/ABORTED
++	 */
++	if (els->state == EFCT_ELS_REQ_ABORTED) {
++		/* completion for ELS that was aborted */
++		efct_els_abort_cleanup(els);
++	} else {
++		/* completion for abort was received first,
++		 * transition to wait for req cmpl
++		 */
++		els->state = EFCT_ELS_ABORT_IO_COMPL;
++	}
++
++	/* done with ELS IO to abort */
++	kref_put(&els->ref, els->release);
++	return 0;
++}
++
++/**
++ * @brief Abort an ELS IO.
++ *
++ * <h3 class="desc">Description</h3>
++ * The ELS IO is aborted by making a HW abort IO request,
++ * optionally requesting that an ABTS is sent.
++ *
++ * \b Note: This function allocates a HW IO, and associates the HW IO
++ * with the ELS IO that it is aborting. It does not associate
++ * the HW IO with the node directly, like for ELS requests. The
++ * abort completion is propagated up to the node once the
++ * original WQE and the abort WQE are complete (the original WQE
++ * completion is not propagated up to node).
++ *
++ * @param els Pointer to the ELS IO.
++ * @param send_abts Boolean to indicate if hardware will
++ *	automatically generate an ABTS.
++ *
++ * @return Returns pointer to Abort IO object, or NULL if error.
++ */
++
++static struct efct_io_s *
++efct_els_abort_io(struct efct_io_s *els, bool send_abts)
++{
++	struct efct_s *efct;
++	struct efct_xport_s *xport;
++	int rc;
++	struct efct_io_s *abort_io = NULL;
++
++	efct = els->node->efc->base;
++	xport = efct->xport;
++
++	/* take a reference on IO being aborted */
++	if ((kref_get_unless_zero(&els->ref) == 0)) {
++		/* command no longer active */
++		efc_log_debug(efct, "els no longer active\n");
++		return NULL;
++	}
++
++	/* allocate IO structure to send abort */
++	abort_io = efct_io_pool_io_alloc(efct->xport->io_pool);
++	if (!abort_io) {
++		atomic_add_return(1, &xport->io_alloc_failed_count);
++	} else {
++		/* set generic fields */
++		abort_io->efct = efct;
++		abort_io->node = els->node;
++		abort_io->cmd_ini = true;
++
++		/* set type and ABORT-specific fields */
++		abort_io->io_type = EFCT_IO_TYPE_ABORT;
++		abort_io->display_name = "abort_els";
++		abort_io->io_to_abort = els;
++		abort_io->send_abts = send_abts;
++
++		/* now dispatch IO */
++		rc = efct_scsi_io_dispatch_abort(abort_io, efct_els_abort_cb);
++		if (rc) {
++			efc_log_err(efct,
++				     "efct_scsi_io_dispatch failed: %d\n", rc);
++			efct_io_pool_io_free(efct->xport->io_pool, abort_io);
++			abort_io = NULL;
++		}
++	}
++
++	/* if something failed, put reference on ELS to abort */
++	if (!abort_io)
++		kref_put(&els->ref, els->release);
++	return abort_io;
++}
++
++/**
++ * @brief Cleanup an ELS IO
++ *
++ * <h3 class="desc">Description</h3>
++ * Cleans up an ELS IO by posting the requested event to the
++ * owning node object; invoking the callback, if one is
++ * provided; and then freeing the ELS IO object.
++ *
++ * @param els Pointer to the ELS IO.
++ * @param node_evt Node SM event to post.
++ * @param arg Node SM event argument.
 + *
 + * @return None.
 + */
-+static void
-+efct_sframe_common_send_cb(void *arg, u8 *cqe, int status)
++
++void
++efct_els_io_cleanup(struct efct_io_s *els,
++		    enum efc_hw_node_els_event_e node_evt, void *arg)
 +{
-+	struct efct_hw_send_frame_context_s *ctx = arg;
-+	struct efct_hw_s *hw = ctx->hw;
-+
-+	/* Free WQ completion callback */
-+	efct_hw_reqtag_free(hw, ctx->wqcb);
-+
-+	/* Free sequence */
-+	efct_hw_sequence_free(hw, ctx->seq);
-+}
-+
-+/**
-+ * @brief Send a frame, common code
-+ *
-+ * A frame is sent using SEND_FRAME, the R_CTL/F_CTL/TYPE may be specified,
-+ * the payload is sent as a single frame.
-+ *
-+ * Memory resources are allocated from RQ buffers contained in the
-+ * passed in sequence data.
-+ *
-+ * @param node Pointer to node object.
-+ * @param seq Pointer to sequence object.
-+ * @param r_ctl R_CTL value to place in FC header.
-+ * @param info INFO value to place in FC header.
-+ * @param f_ctl F_CTL value to place in FC header.
-+ * @param type TYPE value to place in FC header.
-+ * @param payload Pointer to payload data
-+ * @param payload_len Length of payload in bytes.
-+ *
-+ * @return Returns 0 on success, or a negative error code value on failure.
-+ */
-+static int
-+efct_sframe_common_send(struct efc_node_s *node,
-+			struct efc_hw_sequence_s *seq,
-+			enum fc_rctl r_ctl, u32 f_ctl,
-+			u8 type, void *payload, u32 payload_len)
-+{
-+	struct efct_s *efct = node->efc->base;
-+	struct efct_hw_s *hw = &efct->hw;
-+	enum efct_hw_rtn_e rc = 0;
-+	struct fc_frame_header *req_hdr = seq->header->dma.virt;
-+	struct fc_frame_header hdr;
-+	struct efct_hw_send_frame_context_s *ctx;
-+
-+	u32 heap_size = seq->payload->dma.size;
-+	uintptr_t heap_phys_base = seq->payload->dma.phys;
-+	u8 *heap_virt_base = seq->payload->dma.virt;
-+	u32 heap_offset = 0;
-+
-+	/* Build the FC header reusing the RQ header DMA buffer */
-+	memset(&hdr, 0, sizeof(hdr));
-+	hdr.fh_r_ctl = r_ctl;
-+	/* send it back to whomever sent it to us */
-+	memcpy(hdr.fh_d_id, req_hdr->fh_s_id, sizeof(hdr.fh_d_id));
-+	memcpy(hdr.fh_s_id, req_hdr->fh_d_id, sizeof(hdr.fh_s_id));
-+	hdr.fh_type = type;
-+	hton24(hdr.fh_f_ctl, f_ctl);
-+	hdr.fh_ox_id = req_hdr->fh_ox_id;
-+	hdr.fh_rx_id = req_hdr->fh_rx_id;
-+	hdr.fh_cs_ctl = 0;
-+	hdr.fh_df_ctl = 0;
-+	hdr.fh_seq_cnt = 0;
-+	hdr.fh_parm_offset = 0;
-+
-+	/*
-+	 * send_frame_seq_id is an atomic, we just let it increment,
-+	 * while storing only the low 8 bits to hdr->seq_id
++	/* don't want further events that could come; e.g. abort requests
++	 * from the node state machine; thus, disable state machine
 +	 */
-+	hdr.fh_seq_id = (u8)atomic_add_return(1, &hw->send_frame_seq_id);
-+	hdr.fh_seq_id--;
++	els->els_req_free = true;
++	efc_node_post_els_resp(els->node, node_evt, arg);
 +
-+	/* Allocate and fill in the send frame request context */
-+	ctx = (void *)(heap_virt_base + heap_offset);
-+	heap_offset += sizeof(*ctx);
-+	if (heap_offset > heap_size) {
-+		efc_log_err(efct, "Fill send frame failed offset %d size %d\n",
-+				heap_offset, heap_size);
-+		return -1;
++	/* If this IO has a callback, invoke it */
++	if (els->els_callback) {
++		(*els->els_callback)(els->node, arg,
++				    els->els_callback_arg);
 +	}
-+
-+
-+	memset(ctx, 0, sizeof(*ctx));
-+
-+	/* Save sequence */
-+	ctx->seq = seq;
-+
-+	/* Allocate a response payload DMA buffer from the heap */
-+	ctx->payload.phys = heap_phys_base + heap_offset;
-+	ctx->payload.virt = heap_virt_base + heap_offset;
-+	ctx->payload.size = payload_len;
-+	ctx->payload.len = payload_len;
-+	heap_offset += payload_len;
-+	if (heap_offset > heap_size) {
-+		efc_log_err(efct, "Fill send frame failed offset %d size %d\n",
-+				heap_offset, heap_size);
-+		return -1;
-+	}
-+
-+	/* Copy the payload in */
-+	memcpy(ctx->payload.virt, payload, payload_len);
-+
-+	/* Send */
-+	rc = efct_hw_send_frame(&efct->hw, (void *)&hdr, FC_SOF_N3,
-+				FC_EOF_T, &ctx->payload, ctx,
-+				efct_sframe_common_send_cb, ctx);
-+	if (rc)
-+		efc_log_test(efct, "efct_hw_send_frame failed: %d\n", rc);
-+
-+	return rc ? -1 : 0;
++	efct_els_io_free(els);
 +}
 +
 +/**
-+ * @brief Send FCP response using SEND_FRAME
++ * @brief cleanup ELS after abort
 + *
-+ * The FCP response is send using the SEND_FRAME function.
++ * @param els ELS IO to cleanup
 + *
-+ * @param node Pointer to node object.
-+ * @param seq Pointer to inbound sequence.
-+ * @param rsp Pointer to response data.
-+ * @param rsp_len Length of response data, in bytes.
-+ *
-+ * @return Returns 0 on success, or a negative error code value on failure.
++ * @return Returns None.
 + */
-+static int
-+efct_sframe_send_fcp_rsp(struct efc_node_s *node,
-+			 struct efc_hw_sequence_s *seq,
-+			 void *rsp, u32 rsp_len)
++
++static void
++efct_els_abort_cleanup(struct efct_io_s *els)
 +{
-+	return efct_sframe_common_send(node, seq,
-+				      FC_RCTL_DD_CMD_STATUS,
-+				      FC_FC_EX_CTX |
-+				      FC_FC_LAST_SEQ |
-+				      FC_FC_END_SEQ |
-+				      FC_FC_SEQ_INIT,
-+				      FC_TYPE_FCP,
-+				      rsp, rsp_len);
-+}
-+
-+/**
-+ * @brief Send task set full response
-+ *
-+ * Return a task set full or busy response using send frame.
-+ *
-+ * @param node Pointer to node object.
-+ * @param seq Pointer to originator frame sequence.
-+ *
-+ * @return Returns 0 on success, or a negative error code value on failure.
-+ */
-+static int
-+efct_sframe_send_task_set_full_or_busy(struct efc_node_s *node,
-+				       struct efc_hw_sequence_s *seq)
-+{
-+	struct fcp_resp_with_ext fcprsp;
-+	struct fcp_cmnd *fcpcmd = seq->payload->dma.virt;
-+	int rc = 0;
-+	unsigned long flags = 0;
-+	struct efct_s *efct = node->efc->base;
-+
-+	/* construct task set full or busy response */
-+	memset(&fcprsp, 0, sizeof(fcprsp));
-+	spin_lock_irqsave(&node->active_ios_lock, flags);
-+		fcprsp.resp.fr_status = list_empty(&node->active_ios) ?
-+				SAM_STAT_BUSY : SAM_STAT_TASK_SET_FULL;
-+	spin_unlock_irqrestore(&node->active_ios_lock, flags);
-+	*((u32 *)&fcprsp.ext.fr_resid) = be32_to_cpu(fcpcmd->fc_dl);
-+
-+	/* send it using send_frame */
-+	rc = efct_sframe_send_fcp_rsp(node, seq, &fcprsp, sizeof(fcprsp));
-+	if (rc)
-+		efc_log_test(efct,
-+			      "efct_sframe_send_fcp_rsp failed: %d\n",
-+			rc);
-+
-+	return rc;
-+}
-+
-+/**
-+ * @brief Send BA_ACC using sent frame
-+ *
-+ * A BA_ACC is sent using SEND_FRAME
-+ *
-+ * @param node Pointer to node object.
-+ * @param seq Pointer to originator frame sequence.
-+ *
-+ * @return Returns 0 on success, or a negative error code value on failure.
-+ */
-+int
-+efct_sframe_send_bls_acc(struct efc_node_s *node,
-+			 struct efc_hw_sequence_s *seq)
-+{
-+	struct fc_frame_header *behdr = seq->header->dma.virt;
-+	u16 ox_id = be16_to_cpu(behdr->fh_ox_id);
-+	u16 rx_id = be16_to_cpu(behdr->fh_rx_id);
-+	struct fc_ba_acc acc = {0};
-+
-+	acc.ba_ox_id = cpu_to_be16(ox_id);
-+	acc.ba_rx_id = cpu_to_be16(rx_id);
-+	acc.ba_low_seq_cnt = U16_MAX;
-+	acc.ba_high_seq_cnt = U16_MAX;
-+
-+	return efct_sframe_common_send(node, seq,
-+				      FC_RCTL_BA_ACC,
-+				      FC_FC_EX_CTX |
-+				      FC_FC_LAST_SEQ |
-+				      FC_FC_END_SEQ,
-+				      FC_TYPE_BLS,
-+				      &acc, sizeof(acc));
-+}
-+
-+void
-+efct_node_io_cleanup(struct efc_lport *efc, struct efc_node_s *node, bool force)
-+{
-+	struct efct_io_s *io;
-+	struct efct_io_s *next;
-+	unsigned long flags = 0;
-+	struct efct_s *efct = efc->base;
-+
-+	spin_lock_irqsave(&node->active_ios_lock, flags);
-+	list_for_each_entry_safe(io, next, &node->active_ios, list_entry) {
-+		list_del(&io->list_entry);
-+		efct_io_pool_io_free(efct->xport->io_pool, io);
-+	}
-+	spin_unlock_irqrestore(&node->active_ios_lock, flags);
-+}
-+
-+void
-+efct_node_els_cleanup(struct efc_lport *efc, struct efc_node_s *node,
-+		      bool force)
-+{
-+	struct efct_io_s *els;
-+	struct efct_io_s *els_next;
-+	struct efct_io_s *ls_acc_io;
-+	unsigned long flags = 0;
-+	struct efct_s *efct = efc->base;
-+
-+	/* first cleanup ELS's that are pending (not yet active) */
-+	spin_lock_irqsave(&node->active_ios_lock, flags);
-+	list_for_each_entry_safe(els, els_next, &node->els_io_pend_list,
-+				 list_entry) {
-+		/*
-+		 * skip the ELS IO for which a response
-+		 * will be sent after shutdown
-+		 */
-+		if (node->send_ls_acc != EFC_NODE_SEND_LS_ACC_NONE &&
-+		    els == node->ls_acc_io) {
-+			continue;
-+		}
-+		/*
-+		 * can't call efct_els_io_free()
-+		 * because lock is held; cleanup manually
-+		 */
-+		node_printf(node, "Freeing pending els %s\n",
-+			    els->display_name);
-+		list_del(&els->list_entry);
-+
-+		dma_free_coherent(&efct->pcidev->dev,
-+				  els->els_rsp.size, els->els_rsp.virt,
-+				  els->els_rsp.phys);
-+		dma_free_coherent(&efct->pcidev->dev,
-+				  els->els_req.size, els->els_req.virt,
-+				  els->els_req.phys);
-+
-+		efct_io_pool_io_free(efct->xport->io_pool, els);
-+	}
-+	spin_unlock_irqrestore(&node->active_ios_lock, flags);
-+
-+	ls_acc_io = node->ls_acc_io;
-+
-+	if (node->ls_acc_io && ls_acc_io->hio) {
-+		/*
-+		 * if there's an IO that will result in an LS_ACC after
-+		 * shutdown and its HW IO is non-NULL, it better be an
-+		 * implicit logout in vanilla sequence coalescing. In this
-+		 * case, force the LS_ACC to go out on another XRI (hio)
-+		 * since the previous will have been aborted by the UNREG_RPI
-+		 */
-+		node_printf(node,
-+			    "invalidating ls_acc_io due to implicit logo\n");
-+
-+		/*
-+		 * No need to abort because the unreg_rpi
-+		 * takes care of it, just free
-+		 */
-+		efct_hw_io_free(&efct->hw, ls_acc_io->hio);
-+
-+		/* NULL out hio to force the LS_ACC to grab a new XRI */
-+		ls_acc_io->hio = NULL;
-+	}
-+}
-+
-+void
-+efct_node_abort_all_els(struct efc_lport *efc, struct efc_node_s *node)
-+{
-+	struct efct_io_s *els;
-+	struct efct_io_s *els_next;
++	/* handle event for ABORT_WQE
++	 * whatever state ELS happened to be in, propagate aborted even
++	 * up to node state machine in lieu of EFC_HW_SRRS_ELS_* event
++	 */
 +	struct efc_node_cb_s cbdata;
-+	struct efct_s *efct = efc->base;
-+	unsigned long flags = 0;
 +
-+	memset(&cbdata, 0, sizeof(struct efc_node_cb_s));
-+	spin_lock_irqsave(&node->active_ios_lock, flags);
-+	list_for_each_entry_safe(els, els_next, &node->els_io_active_list,
-+				 list_entry) {
-+		if (els->els_req_free)
-+			continue;
-+		efc_log_debug(efct, "[%s] initiate ELS abort %s\n",
-+			       node->display_name, els->display_name);
-+		spin_unlock_irqrestore(&node->active_ios_lock, flags);
-+		efct_els_abort(els, &cbdata);
-+		spin_lock_irqsave(&node->active_ios_lock, flags);
-+	}
-+	spin_unlock_irqrestore(&node->active_ios_lock, flags);
++	cbdata.status = 0;
++	cbdata.ext_status = 0;
++	cbdata.els_rsp = els->els_rsp;
++	els_io_printf(els, "Request aborted\n");
++	efct_els_io_cleanup(els, EFC_HW_ELS_REQ_ABORTED, &cbdata);
 +}
 +
 +/**
-+ * @brief Process the ABTS.
++ * @brief return TRUE if given ELS list is empty (while taking proper locks)
 + *
-+ * <h3 class="desc">Description</h3>
-+ * Common code to process a received ABTS. If an active IO can be found
-+ * that matches the OX_ID of the ABTS request, a call is made to the
-+ * backend. Otherwise, a BA_RJT is returned to the initiator.
++ * Test if given ELS list is empty while holding the node->active_ios_lock.
 + *
-+ * @param io Pointer to a SCSI IO object.
-+ * @param hdr Pointer to the FC header.
-+ * @param lun Pointer from FCP_CMND frame.
++ * @param node pointer to node object
++ * @param list pointer to list
 + *
-+ * @return Returns 0 on success, or a negative error value on failure.
-+ */
-+
-+static int
-+efct_process_abts(struct efct_io_s *io, struct fc_frame_header *hdr)
-+{
-+	struct efc_node_s *node = io->node;
-+	struct efct_s *efct = io->efct;
-+	u16 ox_id = be16_to_cpu(hdr->fh_ox_id);
-+	u16 rx_id = be16_to_cpu(hdr->fh_rx_id);
-+	struct efct_io_s *abortio;
-+
-+	/* Find IO and attempt to take a reference on it */
-+	abortio = efct_io_find_tgt_io(efct, node, ox_id, rx_id);
-+
-+	if (abortio) {
-+		/* Got a reference on the IO. Hold it until backend
-+		 * is notified below
-+		 */
-+		node_printf(node, "Abort request: ox_id [%04x] rx_id [%04x]\n",
-+			    ox_id, rx_id);
-+
-+		/*
-+		 * Save the ox_id for the ABTS as the init_task_tag in our
-+		 * manufactured
-+		 * TMF IO object
-+		 */
-+		io->display_name = "abts";
-+		io->init_task_tag = ox_id;
-+		/* don't set tgt_task_tag, don't want to confuse with XRI */
-+
-+		/*
-+		 * Save the rx_id from the ABTS as it is
-+		 * needed for the BLS response,
-+		 * regardless of the IO context's rx_id
-+		 */
-+		io->abort_rx_id = rx_id;
-+
-+		/* Call target server command abort */
-+		io->tmf_cmd = EFCT_SCSI_TMF_ABORT_TASK;
-+		efct_scsi_recv_tmf(io, abortio->tgt_io.lun,
-+				   EFCT_SCSI_TMF_ABORT_TASK, abortio, 0);
-+
-+		/*
-+		 * Backend will have taken an additional
-+		 * reference on the IO if needed;
-+		 * done with current reference.
-+		 */
-+		kref_put(&abortio->ref, abortio->release);
-+	} else {
-+		/*
-+		 * Either IO was not found or it has been
-+		 * freed between finding it
-+		 * and attempting to get the reference,
-+		 */
-+		node_printf(node,
-+			    "Abort request: ox_id [%04x], IO not found (exists=%d)\n",
-+			    ox_id, (abortio != NULL));
-+
-+		/* Send a BA_RJT */
-+		efct_bls_send_rjt_hdr(io, hdr);
-+	}
-+	return 0;
-+}
-+
-+/**
-+ * @ingroup node_common
-+ * @brief Dispatch a ABTS frame (RQ Pair/sequence coalescing).
-+ *
-+ * <h3 class="desc">Description</h3>
-+ * An ABTS frame is dispatched to the node state machine. This
-+ * function is used for both RQ Pair and sequence coalescing.
-+ *
-+ * @param node Node that originated the frame.
-+ * @param seq Header/payload sequence buffers
-+ *
-+ * @return Returns 0 if frame processed and RX buffers cleaned
-+ * up appropriately, -1 if frame not handled and RX buffers need
-+ * to be returned.
++ * @return TRUE if els_io_list is empty
 + */
 +
 +int
-+efct_node_recv_abts_frame(struct efc_lport *efc, struct efc_node_s *node,
-+			  struct efc_hw_sequence_s *seq)
++efct_els_io_list_empty(struct efc_node_s *node, struct list_head *list)
 +{
-+	struct efct_s *efct = efc->base;
-+	struct fc_frame_header *hdr = seq->header->dma.virt;
-+	struct efct_io_s *io = NULL;
++	int empty;
++	unsigned long flags = 0;
 +
-+	node->abort_cnt++;
++	spin_lock_irqsave(&node->active_ios_lock, flags);
++		empty = list_empty(list);
++	spin_unlock_irqrestore(&node->active_ios_lock, flags);
++	return empty;
++}
 +
-+	io = efct_scsi_io_alloc(node, EFCT_SCSI_IO_ROLE_RESPONDER);
-+	if (io) {
-+		io->hw_priv = seq->hw_priv;
-+		/* If we got this far, SIT=1 */
-+		io->seq_init = 1;
++/**
++ * @brief Handle CT send response completion
++ *
++ * Called when CT response completes, free IO
++ *
++ * @param hio Pointer to the HW IO context that completed.
++ * @param rnode Pointer to the remote node.
++ * @param length Length of the returned payload data.
++ * @param status Status of the completion.
++ * @param ext_status Extended status of the completion.
++ * @param arg Application-specific argument (generally a
++ * pointer to the ELS IO context).
++ *
++ * @return returns 0
++ */
++static int
++efct_ct_acc_cb(struct efct_hw_io_s *hio, struct efc_remote_node_s *rnode,
++	       u32 length, int status, u32 ext_status,
++	      void *arg)
++{
++	struct efct_io_s *io = arg;
 +
-+		/* fill out generic fields */
-+		io->efct = efct;
-+		io->node = node;
-+		io->cmd_tgt = true;
++	efct_els_io_free(io);
 +
-+		efct_process_abts(io, seq->header->dma.virt);
-+	} else {
-+		node_printf(node,
-+			    "SCSI IO allocation failed for ABTS received ");
-+		node_printf(node,
-+			    "s_id %06x d_id %06x ox_id %04x rx_id %04x\n",
-+			ntoh24(hdr->fh_s_id),
-+			ntoh24(hdr->fh_d_id),
-+			be16_to_cpu(hdr->fh_ox_id),
-+			be16_to_cpu(hdr->fh_rx_id));
-+	}
-+
-+	/* ABTS processed, return RX buffer to the chip */
-+	efct_hw_sequence_free(&efct->hw, seq->header->dma.virt);
 +	return 0;
 +}
-diff --git a/drivers/scsi/elx/efct/efct_unsol.h b/drivers/scsi/elx/efct/efct_unsol.h
++
++/**
++ * @brief Send CT response
++ *
++ * Sends a CT response frame with payload
++ *
++ * @param io Pointer to the IO context.
++ * @param ox_id Originator exchange ID
++ * @param ct_hdr Pointer to the CT IU
++ * @param cmd_rsp_code CT response code
++ * @param reason_code Reason code
++ * @param reason_code_explanation Reason code explanation
++ *
++ * @return returns 0 for success, a negative error code value for failure.
++ */
++int
++efct_send_ct_rsp(struct efc_lport *efc, struct efc_node_s *node, __be16 ox_id,
++		 struct fc_ct_hdr  *ct_hdr, u32 cmd_rsp_code,
++		u32 reason_code, u32 reason_code_explanation)
++{
++	struct efct_io_s *io = NULL;
++	struct fc_ct_hdr  *rsp = NULL;
++
++	io = efct_els_io_alloc(node, 256, EFCT_ELS_ROLE_RESPONDER);
++	if (!io) {
++		efc_log_err(efc, "IO alloc failed\n");
++		return -1;
++	}
++
++	rsp = io->els_rsp.virt;
++	io->io_type = EFCT_IO_TYPE_CT_RESP;
++
++	*rsp = *ct_hdr;
++
++	fcct_build_req_header(rsp, cmd_rsp_code, 0);
++	rsp->ct_reason = reason_code;
++	rsp->ct_explan = reason_code_explanation;
++
++	io->display_name = "ct response";
++	io->init_task_tag = ox_id;
++	io->wire_len += sizeof(*rsp);
++
++	memset(&io->iparam, 0, sizeof(io->iparam));
++
++	io->io_type = EFCT_IO_TYPE_CT_RESP;
++	io->hio_type = EFCT_HW_FC_CT_RSP;
++	io->iparam.fc_ct_rsp.ox_id = cpu_to_be16(ox_id);
++	io->iparam.fc_ct_rsp.r_ctl = 3;
++	io->iparam.fc_ct_rsp.type = FC_TYPE_CT;
++	io->iparam.fc_ct_rsp.df_ctl = 0;
++	io->iparam.fc_ct_rsp.timeout = 5;
++
++	if (efct_scsi_io_dispatch(io, efct_ct_acc_cb) < 0) {
++		efct_els_io_free(io);
++		return -1;
++	}
++	return 0;
++}
++
++static void
++efct_els_retry(struct efct_io_s *els)
++{
++	struct efct_s *efct;
++	struct efc_node_cb_s cbdata;
++
++	efct = els->node->efc->base;
++	cbdata.status = INT_MAX;
++	cbdata.ext_status = INT_MAX;
++	cbdata.els_rsp = els->els_rsp;
++
++	if (!els->els_retries_remaining) {
++		efc_log_err(efct, "ELS retries exhausted\n");
++		efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_FAIL,
++				    &cbdata);
++		return;
++	}
++
++	els->els_retries_remaining--;
++	 /* Free the HW IO so that a new oxid is used.*/
++	if (els->hio) {
++		efct_hw_io_free(&efct->hw, els->hio);
++		els->hio = NULL;
++	}
++
++	efct_els_send_req(els->node, els);
++}
++
++/**
++ * @brief Handle delay retry timeout
++ *
++ * Callback is invoked when the delay retry timer expires.
++ *
++ * @param arg pointer to the ELS IO object
++ *
++ * @return none
++ */
++static void
++efct_els_delay_timer_cb(struct timer_list *t)
++{
++	struct efct_io_s *els = from_timer(els, t, delay_timer);
++	struct efc_node_s *node = els->node;
++
++	/* Retry delay timer expired, retry the ELS request,
++	 * Free the HW IO so that a new oxid is used.
++	 */
++	if (els->state == EFCT_ELS_REQUEST_DELAY_ABORT) {
++		node->els_req_cnt++;
++		efct_els_io_cleanup(els, EFC_HW_SRRS_ELS_REQ_FAIL,
++					    NULL);
++	} else {
++		efct_els_retry(els);
++	}
++
++}
+diff --git a/drivers/scsi/elx/efct/efct_els.h b/drivers/scsi/elx/efct/efct_els.h
 new file mode 100644
-index 000000000000..5c2cba9e4a47
+index 000000000000..19fbfcb77f78
 --- /dev/null
-+++ b/drivers/scsi/elx/efct/efct_unsol.h
-@@ -0,0 +1,49 @@
++++ b/drivers/scsi/elx/efct/efct_els.h
+@@ -0,0 +1,139 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
 + * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
 + */
 +
-+#if !defined(__OSC_UNSOL_H__)
-+#define __OSC_UNSOL_H__
++#if !defined(__EFCT_ELS_H__)
++#define __EFCT_ELS_H__
 +
-+extern int
-+efct_unsolicited_cb(void *arg, struct efc_hw_sequence_s *seq);
-+extern int
-+efct_node_purge_pending(struct efc_lport *efc, struct efc_node_s *node);
-+extern int
-+efct_process_node_pending(struct efc_node_s *domain);
-+extern int
-+efct_domain_process_pending(struct efc_domain_s *domain);
-+extern int
-+efct_domain_purge_pending(struct efc_domain_s *domain);
-+extern int
-+efct_dispatch_unsolicited_bls(struct efc_node_s *node,
-+			      struct efc_hw_sequence_s *seq);
-+extern void
-+efct_domain_hold_frames(struct efc_lport *efc, struct efc_domain_s *domain);
-+extern void
-+efct_domain_accept_frames(struct efc_lport *efc, struct efc_domain_s *domain);
-+extern void
-+efct_seq_coalesce_cleanup(struct efct_hw_io_s *io, u8 count);
-+extern int
-+efct_sframe_send_bls_acc(struct efc_node_s *node,
-+			 struct efc_hw_sequence_s *seq);
-+extern int
-+efct_dispatch_fcp_cmd(struct efc_node_s *node, struct efc_hw_sequence_s *seq);
++enum efct_els_role_e {
++	EFCT_ELS_ROLE_ORIGINATOR,
++	EFCT_ELS_ROLE_RESPONDER,
++};
 +
-+extern int
-+efct_node_recv_abts_frame(struct efc_lport *efc, struct efc_node_s *node,
-+			  struct efc_hw_sequence_s *seq);
-+extern void
-+efct_node_els_cleanup(struct efc_lport *efc, struct efc_node_s *node,
-+		      bool force);
++void _efct_els_io_free(struct kref *arg);
++extern struct efct_io_s *
++efct_els_io_alloc(struct efc_node_s *node, u32 reqlen,
++		  enum efct_els_role_e role);
++extern struct efct_io_s *
++efct_els_io_alloc_size(struct efc_node_s *node, u32 reqlen,
++		       u32 rsplen,
++				       enum efct_els_role_e role);
++void efct_els_io_free(struct efct_io_s *els);
 +
-+extern void
-+efct_node_io_cleanup(struct efc_lport *efc, struct efc_node_s *node,
-+		     bool force);
-+
++extern void *
++efct_els_req_send(struct efc_lport *efc, struct efc_node_s *node,
++		  u32 cmd, u32 timeout_sec, u32 retries);
++extern void *
++efct_els_send_ct(struct efc_lport *efc, struct efc_node_s *node,
++		 u32 cmd, u32 timeout_sec, u32 retries);
++extern void *
++efct_els_resp_send(struct efc_lport *efc, struct efc_node_s *node,
++		   u32 cmd, u16 ox_id);
 +void
-+efct_node_abort_all_els(struct efc_lport *efc, struct efc_node_s *node);
++efct_els_abort(struct efct_io_s *els, struct efc_node_cb_s *arg);
++/* ELS command send */
++typedef void (*els_cb_t)(struct efc_node_s *node,
++			 struct efc_node_cb_s *cbdata, void *arg);
++extern struct efct_io_s *
++efct_send_plogi(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_flogi(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_fdisc(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_prli(struct efc_node_s *node, u32 timeout_sec,
++	       u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_prlo(struct efc_node_s *node, u32 timeout_sec,
++	       u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_logo(struct efc_node_s *node, u32 timeout_sec,
++	       u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_adisc(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_pdisc(struct efc_node_s *node, u32 timeout_sec,
++		u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_scr(struct efc_node_s *node, u32 timeout_sec,
++	      u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_rrq(struct efc_node_s *node, u32 timeout_sec,
++	      u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_ns_send_rftid(struct efc_node_s *node,
++		   u32 timeout_sec,
++		  u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_ns_send_rffid(struct efc_node_s *node,
++		   u32 timeout_sec,
++		  u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_ns_send_gidpt(struct efc_node_s *node, u32 timeout_sec,
++		   u32 retries, els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_rscn(struct efc_node_s *node, u32 timeout_sec,
++	       u32 retries, void *port_ids,
++	      u32 port_ids_count, els_cb_t cb, void *cbarg);
++extern void
++efct_els_io_cleanup(struct efct_io_s *els, enum efc_hw_node_els_event_e,
++		    void *arg);
 +
-+#endif /* __OSC_UNSOL_H__ */
++/* ELS acc send */
++extern struct efct_io_s *
++efct_send_ls_acc(struct efc_node_s *node, u32 ox_id,
++		 els_cb_t cb, void *cbarg);
++
++extern void *
++efct_send_ls_rjt(struct efc_lport *efc, struct efc_node_s *node, u32 ox_id,
++		 u32 reason_cod, u32 reason_code_expl,
++		u32 vendor_unique);
++extern void *
++efct_send_flogi_p2p_acc(struct efc_lport *efc, struct efc_node_s *node,
++			u32 ox_id, u32 s_id);
++extern struct efct_io_s *
++efct_send_flogi_acc(struct efc_node_s *node, u32 ox_id,
++		    u32 is_fport, els_cb_t cb,
++		   void *cbarg);
++extern struct efct_io_s *
++efct_send_plogi_acc(struct efc_node_s *node, u32 ox_id,
++		    els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_prli_acc(struct efc_node_s *node, u32 ox_id,
++		   els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_logo_acc(struct efc_node_s *node, u32 ox_id,
++		   els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_prlo_acc(struct efc_node_s *node, u32 ox_id,
++		   els_cb_t cb, void *cbarg);
++extern struct efct_io_s *
++efct_send_adisc_acc(struct efc_node_s *node, u32 ox_id,
++		    els_cb_t cb, void *cbarg);
++
++/* BLS acc send */
++extern void *
++efct_bls_send_acc_hdr(struct efc_lport *efc, struct efc_node_s *node,
++		      struct fc_frame_header *hdr);
++/* BLS rjt send */
++extern struct efct_io_s *
++efct_bls_send_rjt_hdr(struct efct_io_s *io, struct fc_frame_header *hdr);
++
++/* Misc */
++extern int
++efct_els_io_list_empty(struct efc_node_s *node, struct list_head *list);
++
++/* CT */
++extern int
++efct_send_ct_rsp(struct efc_lport *efc, struct efc_node_s *node, __be16 ox_id,
++		 struct fc_ct_hdr *ct_hdr,
++		u32 cmd_rsp_code, u32 reason_code,
++		u32 reason_code_explanation);
++
++#endif /* __EFCT_ELS_H__ */
 -- 
 2.13.7
 
