@@ -2,74 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B8FE33E1
-	for <lists+linux-scsi@lfdr.de>; Thu, 24 Oct 2019 15:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E28BE3543
+	for <lists+linux-scsi@lfdr.de>; Thu, 24 Oct 2019 16:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502524AbfJXNXP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 24 Oct 2019 09:23:15 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:46586 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502515AbfJXNXP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 24 Oct 2019 09:23:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=gcU9exE6Bvro/lea/dgeXKEnFVXdIrFpf/E5Hgk7fI4=; b=OQCC9foswnxnaiFBJw3Vkn25h
-        EYAPQY1qAspChDW7b9MiGr3xvZzEnkoJFlItmOqqQMuKR/ZYbKaWpl0U9RQ6lloZL7osMS1qn6Ow6
-        aWk1g63FvYQPN6aNWq8gvaLOVZyaCumFoludpul3tgKhob/nbDJjq4uR8cgUloPmSKzZOdRHtfHyc
-        1UEDbFuUYEkAqqinWPFaWz9z9C38x6reQS3b0Xysu8mwc3wpIZ2RSFOLNGZBxKZ2r2GPE5LpIDBIU
-        vujiXu4n4Pz9PYh+gTk9i8t8xxMcbqb4UwrxGsXaSU391MPAxVU6XeAr3dY8/2Ul4JmJa15oFEhnX
-        0/GSrw+7Q==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iNd58-0000Lv-KB; Thu, 24 Oct 2019 13:23:14 +0000
-Date:   Thu, 24 Oct 2019 06:23:14 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Michal Suchanek <msuchanek@suse.de>, linux-scsi@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Eric Biggers <ebiggers@google.com>,
-        "J. Bruce Fields" <bfields@redhat.com>,
-        Benjamin Coddington <bcodding@redhat.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>, Ming Lei <ming.lei@redhat.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Tejun Heo <tj@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] cdrom: factor out common open_for_* code
-Message-ID: <20191024132314.GG2963@bombadil.infradead.org>
-References: <cover.1571834862.git.msuchanek@suse.de>
- <da032629db4a770a5f98ff400b91b44873cbdf46.1571834862.git.msuchanek@suse.de>
- <20191024021958.GA11485@infradead.org>
+        id S2391069AbfJXOLg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 24 Oct 2019 10:11:36 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5156 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2390869AbfJXOLg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 24 Oct 2019 10:11:36 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 4F47F56D21EF97D0B288;
+        Thu, 24 Oct 2019 22:11:30 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
+ 14.3.439.0; Thu, 24 Oct 2019 22:11:23 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
+        <linux-kernel@vger.kernel.org>, John Garry <john.garry@huawei.com>
+Subject: [PATCH v2 00/18] hisi_sas: Misc patches, mostly debugfs
+Date:   Thu, 24 Oct 2019 22:08:07 +0800
+Message-ID: <1571926105-74636-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191024021958.GA11485@infradead.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 07:19:58PM -0700, Christoph Hellwig wrote:
-> >  static
-> > -int open_for_data(struct cdrom_device_info *cdi)
-> > +int open_for_common(struct cdrom_device_info *cdi, tracktype *tracks)
-> 
-> Please fix the coding style.  static never should be on a line of its
-> own..
+This series introduces a couple of minor improvements in the main driver,
+and mostly changes in the driver debugfs support.
 
-It's OK to have the static on a line by itself; it's having 'static int'
-on a line by itself that Linus gets unhappy about because he can't use
-grep to see the return type.
+The main change in the driver debugfs support is the ability to take
+multiple memory dumps, which was not available previously. And the bulk
+of the changes here is to create new structures for this purpose.
 
-But there's no need for it to be on a line by itself here, it all fits fine
-in 80 columns.
+We also add a new debugfs feature to report PHY down events, which seem
+to be useful to some people.
+
+Difference from v1:
+ - fix compile error for 64b div on i386
+
+Luo Jiaxing (14):
+  scsi: hisi_sas: Add timestamp for a debugfs dump
+  scsi: hisi_sas: Add debugfs file structure for CQ
+  scsi: hisi_sas: Add debugfs file structure for DQ
+  scsi: hisi_sas: Add debugfs file structure for registers
+  scsi: hisi_sas: Add debugfs file structure for port
+  scsi: hisi_sas: Add debugfs file structure for IOST
+  scsi: hisi_sas: Add debugfs file structure for ITCT
+  scsi: hisi_sas: Add debugfs file structure for IOST cache
+  scsi: hisi_sas: Add debugfs file structure for ITCT cache
+  scsi: hisi_sas: Allocate memory for multiple dumps of debugfs
+  scsi: hisi_sas: Add module parameter for debugfs dump count
+  scsi: hisi_sas: Add ability to have multiple debugfs dumps
+  scsi: hisi_sas: Delete the debugfs folder of hisi_sas when the probe
+    fails
+  scsi: hisi_sas: Record the phy down event in debugfs
+
+Xiang Chen (4):
+  scsi: hisi_sas: Don't create debugfs dump folder twice
+  scsi: hisi_sas: Set the BIST init value before enabling BIST
+  scsi: hisi_sas: use wait_for_completion_timeout() when clearing ITCT
+  scsi: hisi_sas: Replace in_softirq() check in hisi_sas_task_exec()
+
+ drivers/scsi/hisi_sas/hisi_sas.h       |  67 ++++-
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 369 ++++++++++++++++---------
+ drivers/scsi/hisi_sas/hisi_sas_v1_hw.c |   6 +-
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c |  13 +-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  26 +-
+ 5 files changed, 333 insertions(+), 148 deletions(-)
+
+-- 
+2.17.1
 
