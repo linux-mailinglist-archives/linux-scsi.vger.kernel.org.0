@@ -2,133 +2,839 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DAAE4DC7
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 16:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC91E5036
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 17:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505324AbfJYN53 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Oct 2019 09:57:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52182 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394825AbfJYN5Z (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 25 Oct 2019 09:57:25 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A1DF21E6F;
-        Fri, 25 Oct 2019 13:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572011844;
-        bh=s2yQoOMO/7vJo00zrg4wbCZ/eAiOz/CEpJ75Q9s+nw0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VSzZUcm3j3FHuQ9FkU/G9r3NYPktT1wuBRhdQaMe8ctPuhg/H7DQ2BBqcA09TpcJD
-         kV0W77409VWfYRHFVgMncaEuYAMthq2IIjHQVUm+jaoBIQnZhXpHsF5rqEokfyc5z8
-         eMHCU2A+ppmbyN7LW0XPanblwwa4h5NSrAcEG+as=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Chad Dupuis <cdupuis@marvell.com>,
-        Saurav Kashyap <skashyap@marvell.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 06/25] scsi: qedf: Do not retry ELS request if qedf_alloc_cmd fails
-Date:   Fri, 25 Oct 2019 09:56:54 -0400
-Message-Id: <20191025135715.25468-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191025135715.25468-1-sashal@kernel.org>
-References: <20191025135715.25468-1-sashal@kernel.org>
+        id S1730410AbfJYPfZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Oct 2019 11:35:25 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42114 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727068AbfJYPfZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 25 Oct 2019 11:35:25 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id C8B9EB126;
+        Fri, 25 Oct 2019 15:35:20 +0000 (UTC)
+Date:   Fri, 25 Oct 2019 17:35:20 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     James Smart <jsmart2021@gmail.com>
+Cc:     linux-scsi@vger.kernel.org, Ram Vegesna <ram.vegesna@broadcom.com>
+Subject: Re: [PATCH 04/32] elx: libefc_sli: queue create/destroy/parse
+ routines
+Message-ID: <20191025153520.w3rppjka4jpcqfvl@beryllium.lan>
+References: <20191023215557.12581-1-jsmart2021@gmail.com>
+ <20191023215557.12581-5-jsmart2021@gmail.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191023215557.12581-5-jsmart2021@gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Chad Dupuis <cdupuis@marvell.com>
+Hi James,
 
-[ Upstream commit f1c43590365bac054d753d808dbbd207d09e088d ]
+On Wed, Oct 23, 2019 at 02:55:29PM -0700, James Smart wrote:
+> This patch continues the libefc_sli SLI-4 library population.
+> 
+> This patch adds service routines to create mailbox commands
+> and adds APIs to create/destroy/parse SLI-4 EQ, CQ, RQ and MQ queues.
+> 
+> Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
+> Signed-off-by: James Smart <jsmart2021@gmail.com>
+> ---
+>  drivers/scsi/elx/include/efc_common.h |   18 +
+>  drivers/scsi/elx/libefc_sli/sli4.c    | 2155 +++++++++++++++++++++++++++++++++
+>  2 files changed, 2173 insertions(+)
+> 
+> diff --git a/drivers/scsi/elx/include/efc_common.h b/drivers/scsi/elx/include/efc_common.h
+> index dbabc4f6ee5e..62d0f3b3f936 100644
+> --- a/drivers/scsi/elx/include/efc_common.h
+> +++ b/drivers/scsi/elx/include/efc_common.h
+> @@ -23,4 +23,22 @@ struct efc_dma_s {
+>  	struct pci_dev	*pdev;
+>  };
+>  
+> +#define efc_log_crit(efc, fmt, args...) \
+> +		dev_crit(&((efc)->pcidev)->dev, fmt, ##args)
+> +
+> +#define efc_log_err(efc, fmt, args...) \
+> +		dev_err(&((efc)->pcidev)->dev, fmt, ##args)
+> +
+> +#define efc_log_warn(efc, fmt, args...) \
+> +		dev_warn(&((efc)->pcidev)->dev, fmt, ##args)
+> +
+> +#define efc_log_info(efc, fmt, args...) \
+> +		dev_info(&((efc)->pcidev)->dev, fmt, ##args)
+> +
+> +#define efc_log_test(efc, fmt, args...) \
+> +		dev_dbg(&((efc)->pcidev)->dev, fmt, ##args)
+> +
+> +#define efc_log_debug(efc, fmt, args...) \
+> +		dev_dbg(&((efc)->pcidev)->dev, fmt, ##args)
+> +
+>  #endif /* __EFC_COMMON_H__ */
+> diff --git a/drivers/scsi/elx/libefc_sli/sli4.c b/drivers/scsi/elx/libefc_sli/sli4.c
+> index 68ccd3ad8ac8..6b62b7d8b5a4 100644
+> --- a/drivers/scsi/elx/libefc_sli/sli4.c
+> +++ b/drivers/scsi/elx/libefc_sli/sli4.c
+> @@ -24,3 +24,2158 @@ static struct sli4_asic_entry_t sli4_asic_table[] = {
+>  	{ SLI4_ASIC_REV_A3, SLI4_ASIC_GEN_6},
+>  	{ SLI4_ASIC_REV_A1, SLI4_ASIC_GEN_7},
+>  };
+> +
+> +/*
+> + * @brief Convert queue type enum (SLI_QTYPE_*) into a string.
+> + */
+> +static char *SLI_QNAME[] = {
+> +	"Event Queue",
+> +	"Completion Queue",
+> +	"Mailbox Queue",
+> +	"Work Queue",
+> +	"Receive Queue",
+> +	"Undefined"
+> +};
+> +
+> +/**
+> + * @ingroup sli
+> + * @brief Write a SLI_CONFIG command to the provided buffer.
+> + *
 
-If we cannot allocate an ELS middlepath request, simply fail instead of
-trying to delay and then reallocate.  This delay logic is causing soft
-lockup messages:
+Could add some additional comments about the size and dma parameter...
 
-NMI watchdog: BUG: soft lockup - CPU#2 stuck for 22s! [kworker/2:1:7639]
-Modules linked in: xt_CHECKSUM ipt_MASQUERADE nf_nat_masquerade_ipv4 tun devlink ip6t_rpfilter ipt_REJECT nf_reject_ipv4 ip6t_REJECT nf_reject_ipv6 xt_conntrack ip_set nfnetlink ebtable_nat ebtable_broute bridge stp llc ip6table_nat nf_conntrack_ipv6 nf_defrag_ipv6 nf_nat_ipv6 ip6table_mangle ip6table_security ip6table_raw iptable_nat nf_conntrack_ipv4 nf_defrag_ipv4 nf_nat_ipv4 nf_nat nf_conntrack iptable_mangle iptable_security iptable_raw ebtable_filter ebtables ip6table_filter ip6_tables iptable_filter dm_service_time vfat fat rpcrdma sunrpc ib_isert iscsi_target_mod ib_iser libiscsi scsi_transport_iscsi ib_srpt target_core_mod ib_srp scsi_transport_srp ib_ipoib rdma_ucm ib_ucm ib_uverbs ib_umad rdma_cm ib_cm iw_cm sb_edac intel_powerclamp coretemp intel_rapl iosf_mbi kvm_intel kvm
-irqbypass crc32_pclmul ghash_clmulni_intel aesni_intel lrw gf128mul glue_helper ablk_helper cryptd iTCO_wdt iTCO_vendor_support qedr(OE) ib_core joydev ipmi_ssif pcspkr hpilo hpwdt sg ipmi_si ipmi_devintf ipmi_msghandler ioatdma shpchp lpc_ich wmi dca acpi_power_meter dm_multipath ip_tables xfs libcrc32c sd_mod crc_t10dif crct10dif_generic qedf(OE) libfcoe mgag200 libfc i2c_algo_bit drm_kms_helper scsi_transport_fc qede(OE) syscopyarea sysfillrect sysimgblt fb_sys_fops ttm qed(OE) drm crct10dif_pclmul e1000e crct10dif_common crc32c_intel scsi_tgt hpsa i2c_core ptp scsi_transport_sas pps_core dm_mirror dm_region_hash dm_log dm_mod
-CPU: 2 PID: 7639 Comm: kworker/2:1 Kdump: loaded Tainted: G           OEL ------------   3.10.0-861.el7.x86_64 #1
-Hardware name: HP ProLiant DL580 Gen9/ProLiant DL580 Gen9, BIOS U17 07/21/2016
-Workqueue: qedf_2_dpc qedf_handle_rrq [qedf]
-task: ffff959edd628fd0 ti: ffff959ed6f08000 task.ti: ffff959ed6f08000
-RIP: 0010:[<ffffffff8355913a>]  [<ffffffff8355913a>] delay_tsc+0x3a/0x60
-RSP: 0018:ffff959ed6f0bd30  EFLAGS: 00000246
-RAX: 000000008ef5f791 RBX: 5f646d635f666465 RCX: 0000025b8ededa2f
-RDX: 000000000000025b RSI: 0000000000000002 RDI: 0000000000217d1e
-RBP: ffff959ed6f0bd30 R08: ffffffffc079aae8 R09: 0000000000000200
-R10: ffffffffc07952c6 R11: 0000000000000000 R12: 6c6c615f66646571
-R13: ffff959ed6f0bcc8 R14: ffff959ed6f0bd08 R15: ffff959e00000028
-FS:  0000000000000000(0000) GS:ffff959eff480000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4117fa1eb0 CR3: 0000002039e66000 CR4: 00000000003607e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-[<ffffffff8355907d>] __const_udelay+0x2d/0x30
-[<ffffffffc079444a>] qedf_initiate_els+0x13a/0x450 [qedf]
-[<ffffffffc0794210>] ? qedf_srr_compl+0x2a0/0x2a0 [qedf]
-[<ffffffffc0795337>] qedf_send_rrq+0x127/0x230 [qedf]
-[<ffffffffc078ed55>] qedf_handle_rrq+0x15/0x20 [qedf]
-[<ffffffff832b2dff>] process_one_work+0x17f/0x440
-[<ffffffff832b3ac6>] worker_thread+0x126/0x3c0
-[<ffffffff832b39a0>] ? manage_workers.isra.24+0x2a0/0x2a0
-[<ffffffff832bae31>] kthread+0xd1/0xe0
-[<ffffffff832bad60>] ? insert_kthread_work+0x40/0x40
-[<ffffffff8391f637>] ret_from_fork_nospec_begin+0x21/0x21
-[<ffffffff832bad60>] ? insert_kthread_work+0x40/0x40
+> + * @param sli4 SLI context pointer.
+> + * @param buf Virtual pointer to the destination buffer.
+> + * @param size Buffer size, in bytes.
+> + * @param length Length in bytes of attached command.
+> + * @param dma DMA buffer for non-embedded commands.
+> + *
+> + * @return Returns the number of bytes written.
+> + */
+> +static void *
+> +sli_config_cmd_init(struct sli4_s *sli4, void *buf,
+> +		    size_t size, u32 length,
+> +		    struct efc_dma_s *dma)
+> +{
+> +	struct sli4_cmd_sli_config_s *sli_config = NULL;
+> +	u32 flags = 0;
+> +
+> +	if (length > sizeof(sli_config->payload.embed) && !dma) {
+> +		efc_log_info(sli4, "length(%d) > payload(%ld)\n",
+> +			length, sizeof(sli_config->payload.embed));
+> +		return NULL;
+> +	}
 
-Signed-off-by: Chad Dupuis <cdupuis@marvell.com>
-Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/qedf/qedf_els.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+...this logs something but what does it tell? I suppose it has
+something to do if a data are embedded or not.
 
-diff --git a/drivers/scsi/qedf/qedf_els.c b/drivers/scsi/qedf/qedf_els.c
-index 59c18ca4cda98..e5927a09f7bce 100644
---- a/drivers/scsi/qedf/qedf_els.c
-+++ b/drivers/scsi/qedf/qedf_els.c
-@@ -23,8 +23,6 @@ static int qedf_initiate_els(struct qedf_rport *fcport, unsigned int op,
- 	int rc = 0;
- 	uint32_t did, sid;
- 	uint16_t xid;
--	uint32_t start_time = jiffies / HZ;
--	uint32_t current_time;
- 	struct fcoe_wqe *sqe;
- 	unsigned long flags;
- 	u16 sqe_idx;
-@@ -50,18 +48,12 @@ static int qedf_initiate_els(struct qedf_rport *fcport, unsigned int op,
- 		goto els_err;
- 	}
- 
--retry_els:
- 	els_req = qedf_alloc_cmd(fcport, QEDF_ELS);
- 	if (!els_req) {
--		current_time = jiffies / HZ;
--		if ((current_time - start_time) > 10) {
--			QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_ELS,
--				   "els: Failed els 0x%x\n", op);
--			rc = -ENOMEM;
--			goto els_err;
--		}
--		mdelay(20 * USEC_PER_MSEC);
--		goto retry_els;
-+		QEDF_INFO(&qedf->dbg_ctx, QEDF_LOG_ELS,
-+			  "Failed to alloc ELS request 0x%x\n", op);
-+		rc = -ENOMEM;
-+		goto els_err;
- 	}
- 
- 	QEDF_INFO(&(qedf->dbg_ctx), QEDF_LOG_ELS, "initiate_els els_req = "
--- 
-2.20.1
+> +	sli_config = buf;
+> +
+> +	memset(buf, 0, size);
+> +
+> +	sli_config->hdr.command = MBX_CMD_SLI_CONFIG;
+> +	if (!dma) {
+> +		flags |= SLI4_SLICONF_EMB;
+> +		sli_config->dw1_flags = cpu_to_le32(flags);
+> +		sli_config->payload_len = cpu_to_le32(length);
 
+Could you move the last return here ...
+
+> +	} else {
+
+... and get rid of this else here? Easier to read in my opinion
+because the control flow is not splittet over the else part.
+
+> +		flags = SLI4_SLICONF_PMDCMD_VAL_1;	/* pmd_count = 1 */
+> +		flags &= ~SLI4_SLICONF_EMB;
+> +		sli_config->dw1_flags = cpu_to_le32(flags);
+> +
+> +		sli_config->payload.mem.addr.low =
+> +			cpu_to_le32(lower_32_bits(dma->phys));
+> +		sli_config->payload.mem.addr.high =
+> +			cpu_to_le32(upper_32_bits(dma->phys));
+> +		sli_config->payload.mem.length =
+> +			cpu_to_le32(dma->size & SLI4_SLICONFIG_PMD_LEN);
+> +		sli_config->payload_len = cpu_to_le32(dma->size);
+> +		/* save pointer to DMA for BMBX dumping purposes */
+> +		sli4->bmbx_non_emb_pmd = dma;
+> +		return dma->virt;
+> +	}
+> +
+> +	return buf + offsetof(struct sli4_cmd_sli_config_s, payload.embed);
+> +}
+> +
+> +/**
+> + * @brief Write a COMMON_CREATE_CQ command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param qmem DMA memory for the queue.
+> + * @param eq_id Associated EQ_ID
+> + * @param ignored This parameter carries the ULP
+> + * which is only used for WQ and RQs
+> + *
+> + * @note This creates a Version 0 message.
+
+I wonder if this should be encoded into the function name?
+
+> + *
+> + * @return Returns 0 on success, or non-zero otherwise.
+> + */
+> +static int
+> +sli_cmd_common_create_cq(struct sli4_s *sli4, void *buf, size_t size,
+> +			 struct efc_dma_s *qmem,
+> +			 u16 eq_id)
+> +{
+> +	struct sli4_rqst_cmn_create_cq_v2_s	*cqv2 = NULL;
+
+too many spaces between the type and the variable name.
+
+> +	u32 p;
+> +	uintptr_t addr;
+> +	u32 page_bytes = 0;
+> +	u32 num_pages = 0;
+> +	size_t cmd_size = 0;
+> +	u32 page_size = 0;
+> +	u32 n_cqe = 0;
+> +	u32 dw5_flags = 0;
+> +	u16 dw6w1_arm = 0;
+> +
+> +	/* First calculate number of pages and the mailbox cmd length */
+> +	n_cqe = qmem->size / SLI4_CQE_BYTES;
+> +	switch (n_cqe) {
+> +	case 256:
+> +	case 512:
+> +	case 1024:
+> +	case 2048:
+> +		page_size = 1;
+> +		break;
+> +	case 4096:
+> +		page_size = 2;
+> +		break;
+> +	default:
+> +		return EFC_FAIL;
+
+If it's an error code it should probably be an negative value.
+
+I would also go with something like
+
+	if (n_cqe <= 2048)
+		page_size = 1;
+	else if (n_cqe == 4096)
+		page_size = 2;
+	else
+		return -EFC_FAIL;
+
+since this results into a smaller code and I find simpler to read. It
+is not completely equivalent since your version limits the values to
+256, 512, 1024, 2048 and 4096. My version tolerates all values below
+2048. Since the same switch pattern is repeated below (see
+sli_cmd_wq_create_v1) am not utterly sure if my idea is good.
+
+> +	}
+> +	page_bytes = page_size * SLI_PAGE_SIZE;
+> +	num_pages = sli_page_count(qmem->size, page_bytes);
+> +
+> +	cmd_size = CFG_RQST_CMDSZ(cmn_create_cq_v2) + SZ_DMAADDR * num_pages;
+> +
+> +	cqv2 = sli_config_cmd_init(sli4, buf, size, cmd_size, NULL);
+> +	if (!cqv2)
+> +		return EFC_FAIL;
+> +
+> +	cqv2->hdr.opcode = CMN_CREATE_CQ;
+> +	cqv2->hdr.subsystem = SLI4_SUBSYSTEM_COMMON;
+> +	cqv2->hdr.dw3_version = cpu_to_le32(CMD_V2);
+
+Is this now a the command version? Shouldn't it be V0 as the
+documentation writes?
+
+> +	cmd_size = CFG_RQST_PYLD_LEN_VAR(cmn_create_cq_v2,
+> +					 SZ_DMAADDR * num_pages);
+> +	cqv2->hdr.request_length = cmd_size;
+> +	cqv2->page_size = page_size;
+> +
+> +	/* valid values for number of pages: 1, 2, 4, 8 (sec 4.4.3) */
+> +	cqv2->num_pages = cpu_to_le16(num_pages);
+> +	if (!num_pages ||
+> +	    num_pages > SLI4_COMMON_CREATE_CQ_V2_MAX_PAGES) {
+
+I would write the condition on one line. There is still enough space left on the line.
+
+> +		return EFC_FAIL;
+> +	}
+> +
+> +	switch (num_pages) {
+> +	case 1:
+> +		dw5_flags |= CQ_CNT_VAL(256);
+> +		break;
+> +	case 2:
+> +		dw5_flags |= CQ_CNT_VAL(512);
+> +		break;
+> +	case 4:
+> +		dw5_flags |= CQ_CNT_VAL(1024);
+> +		break;
+> +	case 8:
+> +		dw5_flags |= CQ_CNT_VAL(LARGE);
+> +		cqv2->cqe_count = cpu_to_le16(n_cqe);
+> +		break;
+> +	default:
+> +		efc_log_info(sli4, "num_pages %d not valid\n", num_pages);
+> +		return -1;
+
+return -EFC_FAIL; ?
+
+> +	}
+> +
+> +	if (sli4->if_type == SLI4_INTF_IF_TYPE_6)
+> +		dw5_flags |= CREATE_CQV2_AUTOVALID;
+> +
+> +	dw5_flags |= CREATE_CQV2_EVT;
+> +	dw5_flags |= CREATE_CQV2_VALID;
+> +
+> +	cqv2->dw5_flags = cpu_to_le32(dw5_flags);
+> +	cqv2->dw6w1_arm = cpu_to_le16(dw6w1_arm);
+> +	cqv2->eq_id = cpu_to_le16(eq_id);
+> +
+> +	for (p = 0, addr = qmem->phys; p < num_pages;
+> +	     p++, addr += page_bytes) {
+
+This fits on one line, exact 80 chars :)
+
+> +		cqv2->page_phys_addr[p].low =
+> +			cpu_to_le32(lower_32_bits(addr));
+> +		cqv2->page_phys_addr[p].high =
+> +			cpu_to_le32(upper_32_bits(addr));
+> +	}
+
+Also these two assignment fit into 80 chars.
+
+> +
+> +	return EFC_SUCCESS;
+> +}
+> +
+> +/**
+> + * @brief Write a COMMON_DESTROY_CQ command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param cq_id CQ ID
+> + *
+> + * @note This creates a Version 0 message.
+> + *
+> + * @return Returns 0 on success, or non-zero otherwise.
+> + */
+> +static int
+> +sli_cmd_common_destroy_cq(struct sli4_s *sli4, void *buf,
+> +			  size_t size, u16 cq_id)
+> +{
+> +	struct sli4_rqst_cmn_destroy_cq_s *cq = NULL;
+> +
+> +	/* Payload length must accommodate both request and response */
+
+Is this common? Is this true for all commands? If so maybe have this
+kind of information at the beginning of the file explaining some of
+the inner workings of the code would certainly help.
+
+> +	cq = sli_config_cmd_init(sli4, buf, size,
+> +				 SLI_CONFIG_PYLD_LENGTH(cmn_destroy_cq), NULL);
+> +	if (!cq)
+> +		return EFC_FAIL;
+
+return -EFC_FAIL ?
+
+(I stop report this one now)
+
+> +
+> +	cq->hdr.opcode = CMN_DESTROY_CQ;
+> +	cq->hdr.subsystem = SLI4_SUBSYSTEM_COMMON;
+> +	cq->hdr.request_length = CFG_RQST_PYLD_LEN(cmn_destroy_cq);
+> +	cq->cq_id = cpu_to_le16(cq_id);
+> +
+> +	return EFC_SUCCESS;
+> +}
+> +
+> +/**
+> + * @brief Write a COMMON_CREATE_EQ command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param qmem DMA memory for the queue.
+> + * @param ignored1 Ignored
+> + * (used for consistency among queue creation functions).
+> + * @param ignored2 Ignored
+> + * (used for consistency among queue creation functions).
+
+There is no ignored2 in the function declarations.
+
+> + *
+> + * @note Other queue creation routines use the last parameter to pass in
+> + * the associated Q_ID and ULP. EQ doesn't have an associated queue or ULP,
+> + * so these parameters are ignored
+> + *
+> + * @note This creates a Version 0 message
+> + *
+> + * @return Returns 0 on success, or non-zero otherwise.
+> + */
+> +static int
+> +sli_cmd_common_create_eq(struct sli4_s *sli4, void *buf, size_t size,
+> +			 struct efc_dma_s *qmem,
+> +			 u16 ignored1)
+
+If you want to be consistent with the other function declarations,
+ignored1 should go on the same line as qmem.
+
+> +{
+> +	struct sli4_rqst_cmn_create_eq_s *eq = NULL;
+
+No need to set eq to NULL because it will set as first thing in the function
+
+> +	u32 p;
+> +	uintptr_t addr;
+> +	u16 num_pages;
+> +	u32 dw5_flags = 0;
+> +	u32 dw6_flags = 0;
+> +
+> +	eq = sli_config_cmd_init(sli4, buf, size,
+> +				 SLI_CONFIG_PYLD_LENGTH(cmn_create_eq), NULL);
+
+You should test for NULL since sli_config_cmd_init() can return NULL.
+
+> +
+> +	eq->hdr.opcode = CMN_CREATE_EQ;
+> +	eq->hdr.subsystem = SLI4_SUBSYSTEM_COMMON;
+> +	if (sli4->if_type == SLI4_INTF_IF_TYPE_6)
+> +		eq->hdr.dw3_version = cpu_to_le32(CMD_V2);
+
+Same question on the command version number as above.
+
+> +
+> +	eq->hdr.request_length = CFG_RQST_PYLD_LEN(cmn_create_eq);
+> +
+> +	/* valid values for number of pages: 1, 2, 4 (sec 4.4.3) */
+> +	num_pages = qmem->size / SLI_PAGE_SIZE;
+> +	eq->num_pages = cpu_to_le16(num_pages);
+> +
+> +	switch (num_pages) {
+> +	case 1:
+> +		dw5_flags |= SLI4_EQE_SIZE_4;
+> +		dw6_flags |= EQ_CNT_VAL(1024);
+> +		break;
+> +	case 2:
+> +		dw5_flags |= SLI4_EQE_SIZE_4;
+> +		dw6_flags |= EQ_CNT_VAL(2048);
+> +		break;
+> +	case 4:
+> +		dw5_flags |= SLI4_EQE_SIZE_4;
+> +		dw6_flags |= EQ_CNT_VAL(4096);
+> +		break;
+> +	default:
+> +		efc_log_info(sli4, "num_pages %d not valid\n", num_pages);
+> +		return EFC_FAIL;
+> +	}
+> +
+> +	if (sli4->if_type == SLI4_INTF_IF_TYPE_6)
+> +		dw5_flags |= CREATE_EQ_AUTOVALID;
+> +
+> +	dw5_flags |= CREATE_EQ_VALID;
+> +	dw6_flags &= (~CREATE_EQ_ARM);
+> +	eq->dw5_flags = cpu_to_le32(dw5_flags);
+> +	eq->dw6_flags = cpu_to_le32(dw6_flags);
+> +	eq->dw7_delaymulti = cpu_to_le32(CREATE_EQ_DELAYMULTI);
+> +
+> +	for (p = 0, addr = qmem->phys; p < num_pages;
+> +	     p++, addr += SLI_PAGE_SIZE) {
+
+One line?
+
+> +		eq->page_address[p].low = cpu_to_le32(lower_32_bits(addr));
+> +		eq->page_address[p].high = cpu_to_le32(upper_32_bits(addr));
+> +	}
+> +
+> +	return EFC_SUCCESS;
+> +}
+> +
+> +/**
+> + * @brief Write a COMMON_DESTROY_EQ command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param eq_id Queue ID to destroy.
+> + *
+> + * @note Other queue creation routines use the last parameter to pass in
+> + * the associated Q_ID. EQ doesn't have an associated queue so this
+> + * parameter is ignored.
+
+Too much copy paste?
+
+> + *
+> + * @note This creates a Version 0 message.
+> + *
+> + * @return Returns zero for success and non-zero for failure.
+> + */
+> +static int
+> +sli_md_common_destroy_eq(struct sli4_s *sli4, void *buf, size_t size,
+> +			  u16 eq_id)
+> +{
+> +	struct sli4_rqst_cmn_destroy_eq_s *eq = NULL;
+
+No need to initialized eq
+
+> +
+> +	eq = sli_config_cmd_init(sli4, buf, size,
+> +				 SLI_CONFIG_PYLD_LENGTH(cmn_destroy_eq), NULL);
+> +	if (!eq)
+> +		return EFC_FAIL;
+> +
+> +	eq->hdr.opcode = CMN_DESTROY_EQ;
+> +	eq->hdr.subsystem = SLI4_SUBSYSTEM_COMMON;
+> +	eq->hdr.request_length = CFG_RQST_PYLD_LEN(cmn_destroy_eq);
+> +
+> +	eq->eq_id = cpu_to_le16(eq_id);
+> +
+> +	return EFC_SUCCESS;
+> +}
+> +
+> +/**
+> + * @brief Write a COMMON_CREATE_MQ_EXT command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param qmem DMA memory for the queue.
+> + * @param cq_id Associated CQ_ID.
+> + * @param ignored This parameter carries the ULP
+> + * which is only used for WQ and RQs
+> + *
+> + * @note This creates a Version 0 message.
+> + *
+> + * @return Returns zero for success and non-zero for failure.
+> + */
+> +static int
+> +sli_cmd_common_create_mq_ext(struct sli4_s *sli4, void *buf, size_t size,
+> +			     struct efc_dma_s *qmem,
+> +			     u16 cq_id)
+> +{
+> +	struct sli4_rqst_cmn_create_mq_ext_s	*mq = NULL;
+
+Too many spaces between type and variable.
+
+> +	u32 p;
+> +	uintptr_t addr;
+> +	u32 num_pages;
+> +	u16 dw6w1_flags = 0;
+> +
+> +	mq = sli_config_cmd_init(sli4, buf, size,
+> +				 SLI_CONFIG_PYLD_LENGTH(cmn_create_mq_ext),
+> +				 NULL);
+> +	if (!mq)
+> +		return EFC_FAIL;
+> +
+> +	mq->hdr.opcode = CMN_CREATE_MQ_EXT;
+> +	mq->hdr.subsystem = SLI4_SUBSYSTEM_COMMON;
+> +	mq->hdr.request_length = CFG_RQST_PYLD_LEN(cmn_create_mq_ext);
+> +
+> +	/* valid values for number of pages: 1, 2, 4, 8 (sec 4.4.12) */
+> +	num_pages = qmem->size / SLI_PAGE_SIZE;
+> +	mq->num_pages = cpu_to_le16(num_pages);
+> +	switch (num_pages) {
+> +	case 1:
+> +		dw6w1_flags |= SLI4_MQE_SIZE_16;
+> +		break;
+> +	case 2:
+> +		dw6w1_flags |= SLI4_MQE_SIZE_32;
+> +		break;
+> +	case 4:
+> +		dw6w1_flags |= SLI4_MQE_SIZE_64;
+> +		break;
+> +	case 8:
+> +		dw6w1_flags |= SLI4_MQE_SIZE_128;
+> +		break;
+> +	default:
+> +		efc_log_info(sli4, "num_pages %d not valid\n", num_pages);
+> +		return EFC_FAIL;
+> +	}
+> +
+> +	mq->async_event_bitmap = cpu_to_le32(SLI4_ASYNC_EVT_FC_ALL);
+> +
+> +	if (sli4->mq_create_version) {
+> +		mq->cq_id_v1 = cpu_to_le16(cq_id);
+> +		mq->hdr.dw3_version = cpu_to_le32(CMD_V1);
+> +	} else {
+> +		dw6w1_flags |= (cq_id << CREATE_MQEXT_CQID_SHIFT);
+> +	}
+> +	mq->dw7_val = cpu_to_le32(CREATE_MQEXT_VAL);
+> +
+> +	mq->dw6w1_flags = cpu_to_le16(dw6w1_flags);
+> +	for (p = 0, addr = qmem->phys; p < num_pages;
+> +	     p++, addr += SLI_PAGE_SIZE) {
+
+On one line?
+
+> +		mq->page_phys_addr[p].low =
+> +			cpu_to_le32(lower_32_bits(addr));
+> +		mq->page_phys_addr[p].high =
+> +			cpu_to_le32(upper_32_bits(addr));
+
+And these as well?
+
+> +	}
+> +
+> +	return EFC_SUCCESS;
+> +}
+> +
+> +/**
+> + * @brief Write a COMMON_DESTROY_MQ command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param mq_id MQ ID
+> + *
+> + * @note This creates a Version 0 message.
+> + *
+> + * @return Returns zero for success and non-zero for failure.
+> + */
+> +static int
+> +sli_cmd_common_destroy_mq(struct sli4_s *sli4, void *buf, size_t size,
+> +			  u16 mq_id)
+> +{
+> +	struct sli4_rqst_cmn_destroy_mq_s *mq = NULL;
+> +
+> +	mq = sli_config_cmd_init(sli4, buf, size,
+> +				 SLI_CONFIG_PYLD_LENGTH(cmn_destroy_mq), NULL);
+> +	if (!mq)
+> +		return EFC_FAIL;
+> +
+> +	mq->hdr.opcode = CMN_DESTROY_MQ;
+> +	mq->hdr.subsystem = SLI4_SUBSYSTEM_COMMON;
+> +	mq->hdr.request_length = CFG_RQST_PYLD_LEN(cmn_destroy_mq);
+> +
+> +	mq->mq_id = cpu_to_le16(mq_id);
+> +
+> +	return EFC_SUCCESS;
+> +}
+
+sli_cmd_common_destroy_eq(), sli_cmd_common_destroy_cq() and
+sli_cmd_common_destroy_mq() look almost identically. Could those
+function be unified?
+
+> +
+> +/**
+> + * @ingroup sli_fc
+> + * @brief Write an WQ_CREATE command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param qmem DMA memory for the queue.
+> + * @param cq_id Associated CQ_ID.
+> + *
+> + * @note This creates a Version 0 message.
+> + *
+> + * @return Returns zero for success and non-zero for failure.
+> + */
+> +int
+> +sli_cmd_wq_create(struct sli4_s *sli4, void *buf, size_t size,
+> +		  struct efc_dma_s *qmem, u16 cq_id)
+> +{
+> +	struct sli4_rqst_wq_create_s	*wq = NULL;
+
+Too many spaces between type and variable.
+
+> +	u32 p;
+> +	uintptr_t addr;
+> +
+> +	wq = sli_config_cmd_init(sli4, buf, size,
+> +				 SLI_CONFIG_PYLD_LENGTH(wq_create), NULL);
+> +	if (!wq)
+> +		return EFC_FAIL;
+> +
+> +	wq->hdr.opcode = SLI4_OPC_WQ_CREATE;
+> +	wq->hdr.subsystem = SLI4_SUBSYSTEM_FC;
+> +	wq->hdr.request_length = CFG_RQST_PYLD_LEN(wq_create);
+> +
+> +	/* valid values for number of pages: 1-4 (sec 4.5.1) */
+> +	wq->num_pages = sli_page_count(qmem->size, SLI_PAGE_SIZE);
+> +	if (!wq->num_pages ||
+> +	    wq->num_pages > SLI4_WQ_CREATE_V0_MAX_PAGES)
+
+On one line
+
+> +		return EFC_FAIL;
+> +
+> +	wq->cq_id = cpu_to_le16(cq_id);
+> +
+> +	for (p = 0, addr = qmem->phys;
+> +			p < wq->num_pages;
+> +			p++, addr += SLI_PAGE_SIZE) {
+> +		wq->page_phys_addr[p].low  =
+> +				cpu_to_le32(lower_32_bits(addr));
+> +		wq->page_phys_addr[p].high =
+> +				cpu_to_le32(upper_32_bits(addr));
+
+At least the last two assignments fit on one line.
+
+> +	}
+> +
+> +	return EFC_SUCCESS;
+> +}
+> +
+> +/**
+> + * @ingroup sli_fc
+> + * @brief Write an WQ_CREATE_V1 command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param qmem DMA memory for the queue.
+> + * @param cq_id Associated CQ_ID.
+> + *
+> + * @return Returns zero for success and non-zero for failure.
+> + */
+> +int
+> +sli_cmd_wq_create_v1(struct sli4_s *sli4, void *buf, size_t size,
+> +		     struct efc_dma_s *qmem,
+> +		     u16 cq_id)
+
+cq_id on the same line as qmem?
+
+> +{
+> +	struct sli4_rqst_wq_create_v1_s *wq = NULL;
+> +	u32 p;
+> +	uintptr_t addr;
+> +	u32 page_size = 0;
+> +	u32 page_bytes = 0;
+> +	u32 n_wqe = 0;
+> +	u16 num_pages;
+> +
+> +	wq = sli_config_cmd_init(sli4, buf, size,
+> +				 SLI_CONFIG_PYLD_LENGTH(wq_create_v1), NULL);
+> +	if (!wq)
+> +		return EFC_FAIL;
+> +
+> +	wq->hdr.opcode = SLI4_OPC_WQ_CREATE;
+> +	wq->hdr.subsystem = SLI4_SUBSYSTEM_FC;
+> +	wq->hdr.request_length = CFG_RQST_PYLD_LEN(wq_create_v1);
+> +	wq->hdr.dw3_version = cpu_to_le32(CMD_V1);
+> +
+> +	n_wqe = qmem->size / sli4->wqe_size;
+> +
+> +	/*
+> +	 * This heuristic to determine the page size is simplistic but could
+> +	 * be made more sophisticated
+
+Okay, but what is too simple?
+
+> +	 */
+> +	switch (qmem->size) {
+> +	case 4096:
+> +	case 8192:
+> +	case 16384:
+> +	case 32768:
+> +		page_size = 1;
+> +		break;
+> +	case 65536:
+> +		page_size = 2;
+> +		break;
+> +	case 131072:
+> +		page_size = 4;
+> +		break;
+> +	case 262144:
+> +		page_size = 8;
+> +		break;
+> +	case 524288:
+> +		page_size = 10;
+> +		break;
+> +	default:
+> +		return 0;
+
+Isn't this an error?
+
+> +	}
+> +	page_bytes = page_size * SLI_PAGE_SIZE;
+> +
+> +	/* valid values for number of pages: 1-8 */
+
+This comment is for num_pages, right? If so maybe it helps to add the
+variable name to the comment "... number of pages (num_pages): 1.8". I
+got slightly distracted by page_size :)
+
+> +	num_pages = sli_page_count(qmem->size, page_bytes);
+> +	wq->num_pages = cpu_to_le16(num_pages);
+> +	if (!num_pages ||
+> +	    num_pages > SLI4_WQ_CREATE_V1_MAX_PAGES)
+
+On one line?
+
+> +		return EFC_FAIL;
+> +
+> +	wq->cq_id = cpu_to_le16(cq_id);
+> +
+> +	wq->page_size = page_size;
+> +
+> +	if (sli4->wqe_size == SLI4_WQE_EXT_BYTES)
+> +		wq->wqe_size_byte |= SLI4_WQE_EXT_SIZE;
+> +	else
+> +		wq->wqe_size_byte |= SLI4_WQE_SIZE;
+> +
+> +	wq->wqe_count = cpu_to_le16(n_wqe);
+> +
+> +	for (p = 0, addr = qmem->phys;
+> +			p < num_pages;
+> +			p++, addr += page_bytes) {
+> +		wq->page_phys_addr[p].low  =
+> +					cpu_to_le32(lower_32_bits(addr));
+> +		wq->page_phys_addr[p].high =
+> +					cpu_to_le32(upper_32_bits(addr));
+
+These assignments fit on one line
+
+> +	}
+> +
+> +	return EFC_SUCCESS;
+> +}
+> +
+> +/**
+> + * @ingroup sli_fc
+> + * @brief Write an WQ_DESTROY command.
+> + *
+> + * @param sli4 SLI context.
+> + * @param buf Destination buffer for the command.
+> + * @param size Buffer size, in bytes.
+> + * @param wq_id WQ_ID.
+> + *
+> + * @return Returns zero for success and non-zero for failure.
+> + */
+> +int
+> +sli_cmd_wq_destroy(struct sli4_s *sli4, void *buf, size_t size,
+> +		   u16 wq_id)
+> +{
+> +	struct sli4_rqst_wq_destroy_s *wq = NULL;
+> +
+> +	wq = sli_config_cmd_init(sli4, buf, size,
+> +				 SLI_CONFIG_PYLD_LENGTH(wq_destroy), NULL);
+> +	if (!wq)
+> +		return EFC_FAIL;
+> +
+> +	wq->hdr.opcode = SLI4_OPC_WQ_DESTROY;
+> +	wq->hdr.subsystem = SLI4_SUBSYSTEM_FC;
+> +	wq->hdr.request_length = CFG_RQST_PYLD_LEN(wq_destroy);
+> +
+> +	wq->wq_id = cpu_to_le16(wq_id);
+> +
+> +	return EFC_SUCCESS;
+> +}
+
+So many function look almost identical. Is there no better way to
+create the commands? Or is something like a generic command creation
+function worse to maintain? There is so much copy paste... I stop now
+pointing out the same issues again.
+
+Thanks,
+Daniel
