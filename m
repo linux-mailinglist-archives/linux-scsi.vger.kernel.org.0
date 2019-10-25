@@ -2,99 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 036AFE53DA
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 20:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197F6E557E
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 22:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfJYSn4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Oct 2019 14:43:56 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46339 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726030AbfJYSn4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Oct 2019 14:43:56 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n15so3438281wrw.13
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 11:43:53 -0700 (PDT)
+        id S1726297AbfJYUxd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Oct 2019 16:53:33 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:39253 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725801AbfJYUxd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Oct 2019 16:53:33 -0400
+Received: by mail-io1-f67.google.com with SMTP id y12so3937532ioa.6
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 13:53:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=TAg41ZA0+Me5EM0LPx+WZLx/D5vJfgnJOEsn+VEIEYg=;
-        b=sR3UVFTrlOsQXFZtcmpMfL5SOA3IOnBfbSFeCflUU1hEFQCy9DDckUDH6TKcwkpEfO
-         PrqmiTOvk5kzbCJa4HVsS0tBqlMw0mO9oeR0iT4RsFgS4pr6lUZ+xDNHzgFUyOUjrADD
-         uwzB3avVfdM23pwHnLi+SEw8tlXyTURnVI5CkGiPoUieQkWI5HZeCbDh+y1cEeD9/JSl
-         utuz567vdYKyrcM/jlZTtT+eETenEA7EDmhifXUiD8ebfOlpuTmFn2xLkTfiuc7mL30b
-         BguxAE5QnIxp0jLgmrxcTg8ruBXJXyE+Y65QsotpAzI4OMe1Rn6KMBtPMei4zlfVQlV1
-         6sbQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=okI+WKXZnivApTS1Oqi6dD5Ms0rFCprYxF1H61WduWk=;
+        b=pBdVSvpGD3cKFPy1nV9vJxH1zPRHltOE8yTd8stZv3CMkIZVhDFHjChyqCU4zCmAJ1
+         jb1HaLc7BuwQJ8O1u+aqxi2ZrtJ4ZbKZDIKnuH4vVNMF94Wj03ZrN5LyAlG1fG9IyllC
+         tm86X9gC7zPfJFutJuM3iirYroC83syoQwC4lYTccXRBKtABzFod/H69OtLjYjIDPKBo
+         TF7EPIvDSf77z7GUslK9gbQufN0z5zRutk7WUFGdj62nFzK8gHwLCSmx4ahaTs73224G
+         aMXu2HKabOYbHLevz9b4p8sN4IgYUyOp9wMTwdWxqWHT17x14cNmKYtMT1TDidaxnnyW
+         DySw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=TAg41ZA0+Me5EM0LPx+WZLx/D5vJfgnJOEsn+VEIEYg=;
-        b=p0B/wBuh750nJc0wKc1XMHqfYzEchxUezA993QRuqhNZVcuF31mJQ4yeL/7HhOJ/1a
-         c7XtPcGEfBJ3ANX/wYs/73WgPJ1vbNF9Vf6VsFY9VQuSUK9K0DdxNoKtRrDmd4gTLZ2L
-         /ErKgCvtCmZC7cGWI5j8ODhr5kQV5I0jFzz14E1PhT7W4FsnxJqoqBbmasdEBLhZKvM5
-         uPb/vXTWukgV3D55OVyopyFrpVCm/R+isKHMcrTYAk+rSbeKQ1MGCmvIXi42xZXIoIo0
-         Ksl4Stcz7rChqB/3wQWRJi8dgj/tSCdM54iJ6pa8jD4hY3u/ptPbx2XHy70/ZpyeOJah
-         cZWA==
-X-Gm-Message-State: APjAAAWSP4p5MaATGRIOZaQ+3PDWZHHPV9jbKBUOPSwfmFGBaREzlec7
-        TPJBRLrhiSKJpm9Ln+bGaq7X+d0X
-X-Google-Smtp-Source: APXvYqyM+06n6hNXNJl0VxA1CIv8hzx6qyae3ACJkjyELZJ03+S7IoA3+GPlAPSDW8B8C0HV38dCuQ==
-X-Received: by 2002:a5d:4a82:: with SMTP id o2mr4284989wrq.186.1572029032341;
-        Fri, 25 Oct 2019 11:43:52 -0700 (PDT)
-Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id r1sm2906807wmh.41.2019.10.25.11.43.50
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 25 Oct 2019 11:43:51 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH] lpfc: fix spelling error in MAGIC_NUMER_xxx
-Date:   Fri, 25 Oct 2019 11:43:42 -0700
-Message-Id: <20191025184342.6623-1-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.13.7
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=okI+WKXZnivApTS1Oqi6dD5Ms0rFCprYxF1H61WduWk=;
+        b=onZTraIePpsyAC4PoJdPXoyj60+QW6lggZiBf9ZEz9RT2V2qrZ5USJS+hseRozsnlM
+         Ug8SVpx8+Kxcl1APERVm4BEJLkhEzX6zfdsszUe+492reXqofZZ2qtHbUUIzjo5dZM7s
+         BnKgrgt1dGsWRE58h2lYWp37JM67TvpsVkRXtlVJfccdQUCwnOiL1FBhK4to9UEVxDgr
+         gDAIJYTNodSpgkmKhqqy3heOYhe4yl0X5NcnAxKmbS8p2eTg2gcpfcZc3ATTLTsYKY+B
+         ZIQxpdaSTB4u5TLFdOoIywWDikjLwLe8PEUz8ZXGUBvRkiId93brp0zhbSMQ+lC2PQl+
+         sNUA==
+X-Gm-Message-State: APjAAAVoopHcHl9rYtx/wWsTZxA+xL1NjtdqUKeSUQ7MrbEK9BOXkSVI
+        +IAtY7oSHeBKBBkVzfXABaYRx/AQwxBnk8l/37c=
+X-Google-Smtp-Source: APXvYqx/1ShWUMWxytuqgC0OSGFOotbGy4N6gXgu89as0qN47FVCykMOvYfRVTz7LfXvjg7sP7B4AXr6zAMNFKNSbmU=
+X-Received: by 2002:a5d:928a:: with SMTP id s10mr5698857iom.10.1572036811078;
+ Fri, 25 Oct 2019 13:53:31 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a02:940b:0:0:0:0:0 with HTTP; Fri, 25 Oct 2019 13:53:30
+ -0700 (PDT)
+Reply-To: eddywilliam0002@gmail.com
+From:   eddy william <greogebrown@gmail.com>
+Date:   Fri, 25 Oct 2019 22:53:30 +0200
+Message-ID: <CAH0Hv2gm91SgiNVRQ8i+1Qi-CPusYrYK_0urpn3aSOSBAOzbWA@mail.gmail.com>
+Subject: hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-convert MAGIC_NUMER_xxx to MAGIC_NUMBER_xxx
+Hallo
 
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc_hw4.h  | 4 ++--
- drivers/scsi/lpfc/lpfc_init.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Mein Name ist Eddy William. Ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
+Ihnen anbieten
+die n=C3=A4chsten Verwandten zu meinem Klienten. Sie erben die Summe von
+($8,5 Millionen US-Dollar)
+Dollar, die mein Kunde vor seinem Tod in der Bank gelassen hat.
 
-diff --git a/drivers/scsi/lpfc/lpfc_hw4.h b/drivers/scsi/lpfc/lpfc_hw4.h
-index d40bfe5aa21f..9daa2b494b5c 100644
---- a/drivers/scsi/lpfc/lpfc_hw4.h
-+++ b/drivers/scsi/lpfc/lpfc_hw4.h
-@@ -4822,8 +4822,8 @@ union lpfc_wqe128 {
- 	struct send_frame_wqe send_frame;
- };
- 
--#define MAGIC_NUMER_G6 0xFEAA0003
--#define MAGIC_NUMER_G7 0xFEAA0005
-+#define MAGIC_NUMBER_G6 0xFEAA0003
-+#define MAGIC_NUMBER_G7 0xFEAA0005
- 
- struct lpfc_grp_hdr {
- 	uint32_t size;
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 686677dd52a4..9536ad3cc4ee 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -12418,9 +12418,9 @@ lpfc_log_write_firmware_error(struct lpfc_hba *phba, uint32_t offset,
- 	 */
- 	if (offset == ADD_STATUS_FW_NOT_SUPPORTED ||
- 	    (phba->pcidev->device == PCI_DEVICE_ID_LANCER_G6_FC &&
--	     magic_number != MAGIC_NUMER_G6) ||
-+	     magic_number != MAGIC_NUMBER_G6) ||
- 	    (phba->pcidev->device == PCI_DEVICE_ID_LANCER_G7_FC &&
--	     magic_number != MAGIC_NUMER_G7)) {
-+	     magic_number != MAGIC_NUMBER_G7)) {
- 		lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
- 				"3030 This firmware version is not supported on"
- 				" this HBA model. Device:%x Magic:%x Type:%x "
--- 
-2.13.7
+Mein Mandant ist ein Staatsb=C3=BCrger Ihres Landes, der mit seiner Frau
+bei einem Autounfall ums Leben gekommen ist
+und nur Sohn. Ich werde mit 50% des Gesamtfonds berechtigt sein, w=C3=A4hre=
+nd 50%
+sein f=C3=BCr dich.
+Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
+Informationen: eddywilliam0002gmail.com
 
+Vielen Dank im Voraus,
+Mr. Eddy William,
+
+
+
+Hello
+
+My name is Eddy William I am a lawyer by profession. I wish to offer you
+the next of kin to my client. You will inherit the sum of ($8.5 Million)
+dollars my client left in the bank before his death.
+
+My client is a citizen of your country who died in auto crash with his wife
+and only son. I will be entitled with 50% of the total fund while 50% will
+be for you.
+Please contact my private email here for more details:eddywilliam0002gmail.=
+com
+
+Many thanks in advance,
+Mr.Eddy William,
