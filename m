@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B0FE4E72
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 16:07:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11422E4E5E
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 16:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440430AbfJYOHN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Oct 2019 10:07:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49474 "EHLO mail.kernel.org"
+        id S2436631AbfJYOG4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Oct 2019 10:06:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2502362AbfJYNzc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 25 Oct 2019 09:55:32 -0400
+        id S2632718AbfJYNzj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 25 Oct 2019 09:55:39 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 47CC821D81;
-        Fri, 25 Oct 2019 13:55:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9B36B222CB;
+        Fri, 25 Oct 2019 13:55:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572011732;
-        bh=0meya3MA2lOI1CtkbdB1xT+Fow3FlBRZRoOpoYC2tGg=;
+        s=default; t=1572011739;
+        bh=SrB6elDN24ZFvsjcyWtUFkgwdAXQ28zARkeICx883oY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pvImXxN/rEO3FEDo4W2/oXdgjFoX8LhWLhE7EmK1oGGrwqrxV/D2ztznAi7vAowmq
-         MYETiI02tmxffPSlUmF8fJUPzw/iKh99dZ9v8JlBFRFugGAHKg9JXH3Rsm8beU0Fmf
-         eXYTQIbp6QLiTFGjyVnLN0vWHi90/SJU617ZVI4Y=
+        b=VcyitPiTcT9C9hH1tXCKKGJiAA1ZzV+rVXGiFvFCiVZmHNZ85HfGt7q/paBycuCZG
+         1U0ecvnGwHTMu5dwBYspXLFgeqTTZ1vWlCAGQB9tMhN73wv4N94psNsEIamKa/noib
+         h/vj4CEe6/khSS2VVhHdUSi1cD0DXUglOrsLtvGM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Quinn Tran <qutran@marvell.com>,
-        Himanshu Madhani <hmadhani@marvell.com>,
+Cc:     Arun Easi <aeasi@marvell.com>,
+        Saurav Kashyap <skashyap@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 14/33] scsi: qla2xxx: Fix different size DMA Alloc/Unmap
-Date:   Fri, 25 Oct 2019 09:54:46 -0400
-Message-Id: <20191025135505.24762-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 20/33] scsi: qedf: Fix crash during sg_reset
+Date:   Fri, 25 Oct 2019 09:54:52 -0400
+Message-Id: <20191025135505.24762-20-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191025135505.24762-1-sashal@kernel.org>
 References: <20191025135505.24762-1-sashal@kernel.org>
@@ -44,43 +44,44 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Arun Easi <aeasi@marvell.com>
 
-[ Upstream commit d376dbda187317d06d3a2d495b43a7983e4a3250 ]
+[ Upstream commit 47aeee5549cf9326656a8f9190960dfd35c101e2 ]
 
-[   17.177276] qla2xxx 0000:05:00.0: DMA-API: device driver frees DMA memory
-    with different size [device address=0x00000006198b0000] [map size=32784 bytes]
-    [unmap size=8208 bytes]
-[   17.177390] RIP: 0010:check_unmap+0x7a2/0x1750
-[   17.177425] Call Trace:
-[   17.177438]  debug_dma_free_coherent+0x1b5/0x2d5
-[   17.177470]  dma_free_attrs+0x7f/0x140
-[   17.177489]  qla24xx_sp_unmap+0x1e2/0x610 [qla2xxx]
-[   17.177509]  qla24xx_async_gnnft_done+0x9c6/0x17d0 [qla2xxx]
-[   17.177535]  qla2x00_do_work+0x514/0x2200 [qla2xxx]
+Driver was attempting to print cdb[0], which is not set for resets coming
+from SCSI ioctls. Check for cmd_len before accessing cmnd.
 
-Fixes: b5f3bc39a0e8 ("scsi: qla2xxx: Fix inconsistent DMA mem alloc/free")
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
+Crash info:
+[84790.864747] BUG: unable to handle kernel NULL pointer dereference at (null)
+[84790.864783] IP: qedf_initiate_tmf+0x7a/0x6e0 [qedf]
+[84790.865204] Call Trace:
+[84790.865246]  scsi_try_target_reset+0x2b/0x90 [scsi_mod]
+[84790.865266]  scsi_ioctl_reset+0x20f/0x2a0 [scsi_mod]
+[84790.865284]  scsi_ioctl+0x131/0x3a0 [scsi_mod]
+
+Signed-off-by: Arun Easi <aeasi@marvell.com>
+Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_gs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qedf/qedf_io.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index 9f58e591666da..ebf223cfebbc5 100644
---- a/drivers/scsi/qla2xxx/qla_gs.c
-+++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -4152,7 +4152,7 @@ int qla24xx_async_gpnft(scsi_qla_host_t *vha, u8 fc4_type, srb_t *sp)
- 								rspsz,
- 								&sp->u.iocb_cmd.u.ctarg.rsp_dma,
- 								GFP_KERNEL);
--		sp->u.iocb_cmd.u.ctarg.rsp_allocated_size = sizeof(struct ct_sns_pkt);
-+		sp->u.iocb_cmd.u.ctarg.rsp_allocated_size = rspsz;
- 		if (!sp->u.iocb_cmd.u.ctarg.rsp) {
- 			ql_log(ql_log_warn, vha, 0xffff,
- 			    "Failed to allocate ct_sns request.\n");
+diff --git a/drivers/scsi/qedf/qedf_io.c b/drivers/scsi/qedf/qedf_io.c
+index d881e822f92cf..56756a5700867 100644
+--- a/drivers/scsi/qedf/qedf_io.c
++++ b/drivers/scsi/qedf/qedf_io.c
+@@ -2363,8 +2363,8 @@ int qedf_initiate_tmf(struct scsi_cmnd *sc_cmd, u8 tm_flags)
+ 
+ 	QEDF_ERR(NULL,
+ 		 "tm_flags 0x%x sc_cmd %p op = 0x%02x target_id = 0x%x lun=%d\n",
+-		 tm_flags, sc_cmd, sc_cmd->cmnd[0], rport->scsi_target_id,
+-		 (int)sc_cmd->device->lun);
++		 tm_flags, sc_cmd, sc_cmd->cmd_len ? sc_cmd->cmnd[0] : 0xff,
++		 rport->scsi_target_id, (int)sc_cmd->device->lun);
+ 
+ 	if (!rdata || !kref_get_unless_zero(&rdata->kref)) {
+ 		QEDF_ERR(NULL, "stale rport\n");
 -- 
 2.20.1
 
