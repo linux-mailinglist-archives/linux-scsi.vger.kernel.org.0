@@ -2,47 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E968E50DC
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 18:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28CCDE50E3
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 18:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504588AbfJYQNB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Oct 2019 12:13:01 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:6862 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728051AbfJYQNA (ORCPT
+        id S2505167AbfJYQNE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Oct 2019 12:13:04 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54980 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2505176AbfJYQND (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 25 Oct 2019 12:13:00 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9PG92r1066060
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 12:12:59 -0400
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vv1ycwsjb-1
+        Fri, 25 Oct 2019 12:13:03 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9PG8xTW073464
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 12:13:02 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vv20ap5nu-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 12:12:59 -0400
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 12:13:02 -0400
 Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-scsi@vger.kernel.org> from <bblock@linux.ibm.com>;
-        Fri, 25 Oct 2019 17:12:57 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Fri, 25 Oct 2019 17:13:00 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
         Fri, 25 Oct 2019 17:12:56 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9PGCs2851183738
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9PGCs4q51380416
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 25 Oct 2019 16:12:54 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6730311C064;
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 78FD74204F;
         Fri, 25 Oct 2019 16:12:54 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5234911C050;
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6560442049;
         Fri, 25 Oct 2019 16:12:54 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.152.212.148])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
         Fri, 25 Oct 2019 16:12:54 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92.3)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1iO2Cs-00074u-2N; Fri, 25 Oct 2019 18:12:54 +0200
+        id 1iO2Cs-00074z-3R; Fri, 25 Oct 2019 18:12:54 +0200
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>
@@ -54,25 +54,26 @@ Cc:     Benjamin Block <bblock@linux.ibm.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH v2 10/11] zfcp: proper indentation to reduce confusion in zfcp_erp_required_act
-Date:   Fri, 25 Oct 2019 18:12:52 +0200
+        linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH v2 11/11] zfcp: trace channel log even for FCP command responses
+Date:   Fri, 25 Oct 2019 18:12:53 +0200
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1571934247.git.bblock@linux.ibm.com>
 References: <cover.1571934247.git.bblock@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 19102516-0020-0000-0000-0000037E9B76
+x-cbid: 19102516-0008-0000-0000-0000032795E9
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102516-0021-0000-0000-000021D4E94C
-Message-Id: <df4f897f6e83eaa528465d0858d5a22daac47a2f.1572018132.git.bblock@linux.ibm.com>
+x-cbparentid: 19102516-0009-0000-0000-00004A46CDE6
+Message-Id: <e37597b5c4ae123aaa85fd86c23a9f71e994e4a9.1572018132.git.bblock@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-25_08:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=804 adultscore=0 classifier=spam adjust=0 reason=mlx
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1908290000 definitions=main-1910250148
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
@@ -81,41 +82,42 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Steffen Maier <maier@linux.ibm.com>
 
-No functional change.
-
-The unary not operator only applies to the sub expression before
-the logical or. So we return early if (not running) or failed.
+While v2.6.26 commit b75db73159cc
+("[SCSI] zfcp: Add qtcb dump to hba debug trace")
+is right that we don't want to flood the (payload) trace ring buffer,
+we don't trace successful FCP command responses by default.
+So we can include the channel log for problem determination
+with failed responses of any FSF request type.
 
 Signed-off-by: Steffen Maier <maier@linux.ibm.com>
-Reviewed-by: Jens Remus <jremus@linux.ibm.com>
 Reviewed-by: Benjamin Block <bblock@linux.ibm.com>
+Fixes: b75db73159cc ("[SCSI] zfcp: Add qtcb dump to hba debug trace")
+Fixes: a54ca0f62f95 ("[SCSI] zfcp: Redesign of the debug tracing for HBA records.")
+Cc: <stable@vger.kernel.org> #2.6.38+
 Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
 ---
- drivers/s390/scsi/zfcp_erp.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/s390/scsi/zfcp_dbf.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/s390/scsi/zfcp_erp.c b/drivers/s390/scsi/zfcp_erp.c
-index 96f0d34e9459..93655b85b73f 100644
---- a/drivers/s390/scsi/zfcp_erp.c
-+++ b/drivers/s390/scsi/zfcp_erp.c
-@@ -174,7 +174,7 @@ static enum zfcp_erp_act_type zfcp_erp_required_act(enum zfcp_erp_act_type want,
- 			return 0;
- 		p_status = atomic_read(&port->status);
- 		if (!(p_status & ZFCP_STATUS_COMMON_RUNNING) ||
--		      p_status & ZFCP_STATUS_COMMON_ERP_FAILED)
-+		    p_status & ZFCP_STATUS_COMMON_ERP_FAILED)
- 			return 0;
- 		if (!(p_status & ZFCP_STATUS_COMMON_UNBLOCKED))
- 			need = ZFCP_ERP_ACTION_REOPEN_PORT;
-@@ -190,7 +190,7 @@ static enum zfcp_erp_act_type zfcp_erp_required_act(enum zfcp_erp_act_type want,
- 			return 0;
- 		a_status = atomic_read(&adapter->status);
- 		if (!(a_status & ZFCP_STATUS_COMMON_RUNNING) ||
--		      a_status & ZFCP_STATUS_COMMON_ERP_FAILED)
-+		    a_status & ZFCP_STATUS_COMMON_ERP_FAILED)
- 			return 0;
- 		if (p_status & ZFCP_STATUS_COMMON_NOESC)
- 			return need;
+diff --git a/drivers/s390/scsi/zfcp_dbf.c b/drivers/s390/scsi/zfcp_dbf.c
+index dccdb41bed8c..1234294700c4 100644
+--- a/drivers/s390/scsi/zfcp_dbf.c
++++ b/drivers/s390/scsi/zfcp_dbf.c
+@@ -95,11 +95,9 @@ void zfcp_dbf_hba_fsf_res(char *tag, int level, struct zfcp_fsf_req *req)
+ 	memcpy(rec->u.res.fsf_status_qual, &q_head->fsf_status_qual,
+ 	       FSF_STATUS_QUALIFIER_SIZE);
+ 
+-	if (q_head->fsf_command != FSF_QTCB_FCP_CMND) {
+-		rec->pl_len = q_head->log_length;
+-		zfcp_dbf_pl_write(dbf, (char *)q_pref + q_head->log_start,
+-				  rec->pl_len, "fsf_res", req->req_id);
+-	}
++	rec->pl_len = q_head->log_length;
++	zfcp_dbf_pl_write(dbf, (char *)q_pref + q_head->log_start,
++			  rec->pl_len, "fsf_res", req->req_id);
+ 
+ 	debug_event(dbf->hba, level, rec, sizeof(*rec));
+ 	spin_unlock_irqrestore(&dbf->hba_lock, flags);
 -- 
 2.21.0
 
