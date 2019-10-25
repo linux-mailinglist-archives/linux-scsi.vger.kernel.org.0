@@ -2,47 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 025A3E50DD
-	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 18:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7D8E50F6
+	for <lists+linux-scsi@lfdr.de>; Fri, 25 Oct 2019 18:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504990AbfJYQNB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Oct 2019 12:13:01 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:35490 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2502277AbfJYQNB (ORCPT
+        id S2505255AbfJYQNK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 25 Oct 2019 12:13:10 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:59246 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2503806AbfJYQNB (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 25 Oct 2019 12:13:01 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9PG9251066047
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9PG8woB083588
         for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 12:13:00 -0400
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2vv1ycwsjh-1
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vv3avajde-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 12:12:59 -0400
+        for <linux-scsi@vger.kernel.org>; Fri, 25 Oct 2019 12:13:00 -0400
 Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-scsi@vger.kernel.org> from <bblock@linux.ibm.com>;
         Fri, 25 Oct 2019 17:12:58 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
         Fri, 25 Oct 2019 17:12:56 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9PGCsWL31588468
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9PGCsEC43909152
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 25 Oct 2019 16:12:54 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4249AA4059;
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4ED7FA405F;
         Fri, 25 Oct 2019 16:12:54 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E33CA4055;
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3A7CFA405B;
         Fri, 25 Oct 2019 16:12:54 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.152.212.148])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
         Fri, 25 Oct 2019 16:12:54 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92.3)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1iO2Cr-00074L-TX; Fri, 25 Oct 2019 18:12:53 +0200
+        id 1iO2Cr-00074Q-UF; Fri, 25 Oct 2019 18:12:53 +0200
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>
@@ -55,18 +55,18 @@ Cc:     Benjamin Block <bblock@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH v2 03/11] zfcp: add diagnostics buffer for exchange config data
-Date:   Fri, 25 Oct 2019 18:12:45 +0200
+Subject: [PATCH v2 04/11] zfcp: support retrieval of SFP Data via Exchange Port Data
+Date:   Fri, 25 Oct 2019 18:12:46 +0200
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1571934247.git.bblock@linux.ibm.com>
 References: <cover.1571934247.git.bblock@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-x-cbid: 19102516-0028-0000-0000-000003AF90D2
+x-cbid: 19102516-4275-0000-0000-00000377A273
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19102516-0029-0000-0000-00002471C7A8
-Message-Id: <7d8ac0a6cad403fa8f8b888693476a84e80a277b.1572018131.git.bblock@linux.ibm.com>
+x-cbparentid: 19102516-4276-0000-0000-0000388AD0E3
+Message-Id: <ee1eba4de71eb06b4d82207ad4f428429346156f.1572018132.git.bblock@linux.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-25_08:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
@@ -79,107 +79,88 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In the same vein as the previous patch, add diagnostic data capture for
-the Exchange Config Data command.
+A new FCP channel feature allows us to read the diagnostics from our
+local SFP transceivers. To make use of that add a flag
+(FSF_FEATURE_REQUEST_SFP_DATA) to the feature-set we request from the
+FCP channel. Whether the channel actually implements this can be
+determined via an other new flag (FSF_FEATURE_REPORT_SFP_DATA), that is
+set in the adapter_features field of the adapter structure after
+Exchange Config Data finished.
+
+Also add the corresponding definitions in the QTCB Bottom for Exchange
+Port Data. These new definitions are only valid, if
+FSF_FEATURE_REPORT_SFP_DATA is set.
 
 Reviewed-by: Steffen Maier <maier@linux.ibm.com>
 Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
 ---
- drivers/s390/scsi/zfcp_diag.c | 14 ++++++++++++--
- drivers/s390/scsi/zfcp_diag.h |  7 +++++++
- drivers/s390/scsi/zfcp_fsf.c  |  9 +++++++++
- 3 files changed, 28 insertions(+), 2 deletions(-)
+ drivers/s390/scsi/zfcp_fsf.c |  6 ++++--
+ drivers/s390/scsi/zfcp_fsf.h | 21 ++++++++++++++++++++-
+ 2 files changed, 24 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/s390/scsi/zfcp_diag.c b/drivers/s390/scsi/zfcp_diag.c
-index fa1b25f3ec3c..d7d2db85b32e 100644
---- a/drivers/s390/scsi/zfcp_diag.c
-+++ b/drivers/s390/scsi/zfcp_diag.c
-@@ -34,6 +34,9 @@
-  */
- int zfcp_diag_adapter_setup(struct zfcp_adapter *const adapter)
- {
-+	/* set the timestamp so that the first test on age will always fail */
-+	const unsigned long initial_timestamp =
-+		jiffies - msecs_to_jiffies(ZFCP_DIAG_MAX_AGE);
- 	struct zfcp_diag_adapter *diag;
- 	struct zfcp_diag_header *hdr;
- 
-@@ -47,8 +50,15 @@ int zfcp_diag_adapter_setup(struct zfcp_adapter *const adapter)
- 	spin_lock_init(&hdr->access_lock);
- 	hdr->buffer = &diag->port_data.data;
- 	hdr->buffer_size = sizeof(diag->port_data.data);
--	/* set the timestamp so that the first test on age will always fail */
--	hdr->timestamp = jiffies - msecs_to_jiffies(ZFCP_DIAG_MAX_AGE);
-+	hdr->timestamp = initial_timestamp;
-+
-+	/* setup header for config_data */
-+	hdr = &diag->config_data.header;
-+
-+	spin_lock_init(&hdr->access_lock);
-+	hdr->buffer = &diag->config_data.data;
-+	hdr->buffer_size = sizeof(diag->config_data.data);
-+	hdr->timestamp = initial_timestamp;
- 
- 	adapter->diagnostics = diag;
- 	return 0;
-diff --git a/drivers/s390/scsi/zfcp_diag.h b/drivers/s390/scsi/zfcp_diag.h
-index 2a933326b6e4..a3eb21cc201d 100644
---- a/drivers/s390/scsi/zfcp_diag.h
-+++ b/drivers/s390/scsi/zfcp_diag.h
-@@ -43,12 +43,19 @@ struct zfcp_diag_header {
-  * @port_data: data retrieved using exchange port data.
-  * @port_data.header: header with metadata for the cache in @port_data.data.
-  * @port_data.data: cached QTCB Bottom of command exchange port data.
-+ * @config_data: data retrieved using exchange config data.
-+ * @config_data.header: header with metadata for the cache in @config_data.data.
-+ * @config_data.data: cached QTCB Bottom of command exchange config data.
-  */
- struct zfcp_diag_adapter {
- 	struct {
- 		struct zfcp_diag_header		header;
- 		struct fsf_qtcb_bottom_port	data;
- 	} port_data;
-+	struct {
-+		struct zfcp_diag_header		header;
-+		struct fsf_qtcb_bottom_config	data;
-+	} config_data;
- };
- 
- int zfcp_diag_adapter_setup(struct zfcp_adapter *const adapter);
 diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
-index 883bbfd67a62..0fff060de5ac 100644
+index 0fff060de5ac..223a805f0b0b 100644
 --- a/drivers/s390/scsi/zfcp_fsf.c
 +++ b/drivers/s390/scsi/zfcp_fsf.c
-@@ -556,6 +556,8 @@ static int zfcp_fsf_exchange_config_evaluate(struct zfcp_fsf_req *req)
- static void zfcp_fsf_exchange_config_data_handler(struct zfcp_fsf_req *req)
- {
- 	struct zfcp_adapter *adapter = req->adapter;
-+	struct zfcp_diag_header *const diag_hdr =
-+		&adapter->diagnostics->config_data.header;
- 	struct fsf_qtcb *qtcb = req->qtcb;
- 	struct fsf_qtcb_bottom_config *bottom = &qtcb->bottom.config;
- 	struct Scsi_Host *shost = adapter->scsi_host;
-@@ -572,6 +574,12 @@ static void zfcp_fsf_exchange_config_data_handler(struct zfcp_fsf_req *req)
+@@ -1286,7 +1286,8 @@ int zfcp_fsf_exchange_config_data(struct zfcp_erp_action *erp_action)
  
- 	switch (qtcb->header.fsf_status) {
- 	case FSF_GOOD:
-+		/*
-+		 * usually we wait with an update till the cache is too old,
-+		 * but because we have the data available, update it anyway
-+		 */
-+		zfcp_diag_update_xdata(diag_hdr, bottom, false);
-+
- 		if (zfcp_fsf_exchange_config_evaluate(req))
- 			return;
+ 	req->qtcb->bottom.config.feature_selection =
+ 			FSF_FEATURE_NOTIFICATION_LOST |
+-			FSF_FEATURE_UPDATE_ALERT;
++			FSF_FEATURE_UPDATE_ALERT |
++			FSF_FEATURE_REQUEST_SFP_DATA;
+ 	req->erp_action = erp_action;
+ 	req->handler = zfcp_fsf_exchange_config_data_handler;
+ 	erp_action->fsf_req_id = req->req_id;
+@@ -1339,7 +1340,8 @@ int zfcp_fsf_exchange_config_data_sync(struct zfcp_qdio *qdio,
  
-@@ -587,6 +595,7 @@ static void zfcp_fsf_exchange_config_data_handler(struct zfcp_fsf_req *req)
- 				&adapter->status);
- 		break;
- 	case FSF_EXCHANGE_CONFIG_DATA_INCOMPLETE:
-+		zfcp_diag_update_xdata(diag_hdr, bottom, true);
- 		req->status |= ZFCP_STATUS_FSFREQ_XDATAINCOMPLETE;
+ 	req->qtcb->bottom.config.feature_selection =
+ 			FSF_FEATURE_NOTIFICATION_LOST |
+-			FSF_FEATURE_UPDATE_ALERT;
++			FSF_FEATURE_UPDATE_ALERT |
++			FSF_FEATURE_REQUEST_SFP_DATA;
  
- 		fc_host_node_name(shost) = 0;
+ 	if (data)
+ 		req->data = data;
+diff --git a/drivers/s390/scsi/zfcp_fsf.h b/drivers/s390/scsi/zfcp_fsf.h
+index 2c658b66318c..2b1e4da1944f 100644
+--- a/drivers/s390/scsi/zfcp_fsf.h
++++ b/drivers/s390/scsi/zfcp_fsf.h
+@@ -163,6 +163,8 @@
+ #define FSF_FEATURE_ELS_CT_CHAINED_SBALS	0x00000020
+ #define FSF_FEATURE_UPDATE_ALERT		0x00000100
+ #define FSF_FEATURE_MEASUREMENT_DATA		0x00000200
++#define FSF_FEATURE_REQUEST_SFP_DATA		0x00000200
++#define FSF_FEATURE_REPORT_SFP_DATA		0x00000800
+ #define FSF_FEATURE_DIF_PROT_TYPE1		0x00010000
+ #define FSF_FEATURE_DIX_PROT_TCPIP		0x00020000
+ 
+@@ -407,7 +409,24 @@ struct fsf_qtcb_bottom_port {
+ 	u8 cp_util;
+ 	u8 cb_util;
+ 	u8 a_util;
+-	u8 res2[253];
++	u8 res2;
++	u16 temperature;
++	u16 vcc;
++	u16 tx_bias;
++	u16 tx_power;
++	u16 rx_power;
++	union {
++		u16 raw;
++		struct {
++			u16 fec_active		:1;
++			u16:7;
++			u16 connector_type	:2;
++			u16 sfp_invalid		:1;
++			u16 optical_port	:1;
++			u16 port_tx_type	:4;
++		};
++	} sfp_flags;
++	u8 res3[240];
+ } __attribute__ ((packed));
+ 
+ union fsf_qtcb_bottom {
 -- 
 2.21.0
 
