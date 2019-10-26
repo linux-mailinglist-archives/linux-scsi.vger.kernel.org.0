@@ -2,161 +2,307 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0EFE594C
-	for <lists+linux-scsi@lfdr.de>; Sat, 26 Oct 2019 10:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991A1E5D9C
+	for <lists+linux-scsi@lfdr.de>; Sat, 26 Oct 2019 16:13:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726086AbfJZI4A convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Sat, 26 Oct 2019 04:56:00 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:2441 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726010AbfJZI4A (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 26 Oct 2019 04:56:00 -0400
-Received: from DGGEML404-HUB.china.huawei.com (unknown [172.30.72.57])
-        by Forcepoint Email with ESMTP id 9E6AC9D3645079E50F1F;
-        Sat, 26 Oct 2019 16:55:57 +0800 (CST)
-Received: from DGGEML424-HUB.china.huawei.com (10.1.199.41) by
- DGGEML404-HUB.china.huawei.com (10.3.17.39) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Sat, 26 Oct 2019 16:55:56 +0800
-Received: from DGGEML525-MBS.china.huawei.com ([169.254.4.36]) by
- dggeml424-hub.china.huawei.com ([10.1.199.41]) with mapi id 14.03.0439.000;
- Sat, 26 Oct 2019 16:55:50 +0800
-From:   "wubo (T)" <wubo40@huawei.com>
-To:     "lduncan@suse.com" <lduncan@suse.com>,
-        "cleech@redhat.com" <cleech@redhat.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Mingfangsen <mingfangsen@huawei.com>,
-        "liuzhiqiang (I)" <liuzhiqiang26@huawei.com>
-Subject: [PATCH] scsi: avoid potential deadloop in iscsi_if_rx func
-Thread-Topic: [PATCH] scsi: avoid potential deadloop in iscsi_if_rx func
-Thread-Index: AdWL2reJ1uh470cQT+idNsWy+95OAQ==
-Date:   Sat, 26 Oct 2019 08:55:49 +0000
-Message-ID: <EDBAAA0BBBA2AC4E9C8B6B81DEEE1D6915DE9E71@DGGEML525-MBS.china.huawei.com>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.173.221.252]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1726428AbfJZON3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 26 Oct 2019 10:13:29 -0400
+Received: from mga02.intel.com ([134.134.136.20]:30076 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726404AbfJZON3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 26 Oct 2019 10:13:29 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Oct 2019 07:13:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,232,1569308400"; 
+   d="scan'208";a="192822482"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 26 Oct 2019 07:13:24 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iOMom-0000hm-9Q; Sat, 26 Oct 2019 22:13:24 +0800
+Date:   Sat, 26 Oct 2019 22:13:01 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     James Smart <jsmart2021@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
+        James Smart <jsmart2021@gmail.com>,
+        Ram Vegesna <ram.vegesna@broadcom.com>
+Subject: Re: [PATCH 32/32] elx: efct: Tie into kernel Kconfig and build
+ process
+Message-ID: <201910262236.pFVb5hph%lkp@intel.com>
+References: <20191023215557.12581-33-jsmart2021@gmail.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191023215557.12581-33-jsmart2021@gmail.com>
+X-Patchwork-Hint: ignore
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bo Wu <wubo40@huawei.com>
+Hi James,
 
-In iscsi_if_rx func, after receiving one request through iscsi_if_recv_msg
-func,iscsi_if_send_reply will be called to try to reply the request in 
-do-loop. If the return of iscsi_if_send_reply func fails all the time, one
-deadloop will occur.
- 
-For example, a client only send msg without calling recvmsg func, then it
-will result in the watchdog soft lockup. The details are given as follows,
+I love your patch! Perhaps something to improve:
 
-Details of the special case which can cause deadloop:
-sock_fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_ISCSI); 
-... 
-retval = bind(sock_fd, (struct sock addr*) & src_addr, sizeof (src_addr); 
-... 
-while (1) { 
-	state_smg = sendmsg(sock_fd, &msg, 0); 
-} 
-// Note: recvmsg (sock_fd, & msg, 0) is not processed here. 
-close(sock_fd); 
+[auto build test WARNING on mkp-scsi/for-next]
+[cannot apply to v5.4-rc4 next-20191025]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-watchdog: BUG: soft lockup - CPU#7 stuck for 22s! [netlink_test:253305]
-Sample time: 4000897528 ns(HZ: 250)
-Sample stat: 
-curr: user: 675503481560, nice: 321724050, sys: 448689506750, idle: 4654054240530, iowait: 40885550700, irq: 14161174020, softirq: 8104324140, st: 0
-deta: user: 0, nice: 0, sys: 3998210100, idle: 0, iowait: 0, irq: 1547170, softirq: 242870, st: 0
-Sample softirq:
-	TIMER:        992
-	SCHED:          8
-Sample irqstat:
- irq    2: delta       1003, curr:    3103802, arch_timer
-CPU: 7 PID: 253305 Comm: netlink_test Kdump: loaded Tainted: G           OE     
-Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
-pstate: 40400005 (nZcv daif +PAN -UAO)
-pc : __alloc_skb+0x104/0x1b0
-lr : __alloc_skb+0x9c/0x1b0
-sp : ffff000033603a30
-x29: ffff000033603a30 x28: 00000000000002dd 
-x27: ffff800b34ced810 x26: ffff800ba7569f00 
-x25: 00000000ffffffff x24: 0000000000000000 
-x23: ffff800f7c43f600 x22: 0000000000480020 
-x21: ffff0000091d9000 x20: ffff800b34eff200 
-x19: ffff800ba7569f00 x18: 0000000000000000 
-x17: 0000000000000000 x16: 0000000000000000 
-x15: 0000000000000000 x14: 0001000101000100 
-x13: 0000000101010000 x12: 0101000001010100 
-x11: 0001010101010001 x10: 00000000000002dd 
-x9 : ffff000033603d58 x8 : ffff800b34eff400 
-x7 : ffff800ba7569200 x6 : ffff800b34eff400 
-x5 : 0000000000000000 x4 : 00000000ffffffff 
-x3 : 0000000000000000 x2 : 0000000000000001 
-x1 : ffff800b34eff2c0 x0 : 0000000000000300 
-Call trace:
-__alloc_skb+0x104/0x1b0
-iscsi_if_rx+0x144/0x12bc [scsi_transport_iscsi]
-netlink_unicast+0x1e0/0x258
-netlink_sendmsg+0x310/0x378
-sock_sendmsg+0x4c/0x70
-sock_write_iter+0x90/0xf0
-__vfs_write+0x11c/0x190
-vfs_write+0xac/0x1c0
-ksys_write+0x6c/0xd8
-__arm64_sys_write+0x24/0x30
-el0_svc_common+0x78/0x130
-el0_svc_handler+0x38/0x78
-el0_svc+0x8/0xc
+url:    https://github.com/0day-ci/linux/commits/James-Smart/efct-Broadcom-Emulex-FC-Target-driver/20191026-050814
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-dirty
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
-Here, we add one limit of retry times in do-loop to avoid the deadloop.
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-Signed-off-by: Bo Wu <wubo40@huawei.com>
-Reviewed-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+
+sparse warnings: (new ones prefixed by >>)
+
+>> drivers/scsi/elx/efct/efct_driver.c:49:33: sparse: sparse: symbol 'efct_libefc_templ' was not declared. Should it be static?
+--
+>> drivers/scsi/elx/efct/efct_scsi.c:1839:30: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __be16 [usertype] ox_id @@    got icted __be16 [usertype] ox_id @@
+>> drivers/scsi/elx/efct/efct_scsi.c:1839:30: sparse:    expected restricted __be16 [usertype] ox_id
+>> drivers/scsi/elx/efct/efct_scsi.c:1839:30: sparse:    got unsigned int [usertype] init_task_tag
+>> drivers/scsi/elx/efct/efct_scsi.c:1840:30: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __be16 [usertype] rx_id @@    got tricted __be16 [usertype] rx_id @@
+>> drivers/scsi/elx/efct/efct_scsi.c:1840:30: sparse:    expected restricted __be16 [usertype] rx_id
+>> drivers/scsi/elx/efct/efct_scsi.c:1840:30: sparse:    got unsigned short [usertype] abort_rx_id
+>> drivers/scsi/elx/efct/efct_scsi.c:1848:30: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __be16 [usertype] ba_high_seq_cnt @@    got tricted __be16 [usertype] ba_high_seq_cnt @@
+>> drivers/scsi/elx/efct/efct_scsi.c:1848:30: sparse:    expected restricted __be16 [usertype] ba_high_seq_cnt
+>> drivers/scsi/elx/efct/efct_scsi.c:1848:30: sparse:    got unsigned short [usertype]
+--
+>> drivers/scsi/elx/efct/efct_els.c:2263:23: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __be16 [usertype] ba_ox_id @@    got tricted __be16 [usertype] ba_ox_id @@
+>> drivers/scsi/elx/efct/efct_els.c:2263:23: sparse:    expected restricted __be16 [usertype] ba_ox_id
+>> drivers/scsi/elx/efct/efct_els.c:2263:23: sparse:    got unsigned short [usertype] ox_id
+>> drivers/scsi/elx/efct/efct_els.c:2264:23: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __be16 [usertype] ba_rx_id @@    got tricted __be16 [usertype] ba_rx_id @@
+>> drivers/scsi/elx/efct/efct_els.c:2264:23: sparse:    expected restricted __be16 [usertype] ba_rx_id
+>> drivers/scsi/elx/efct/efct_els.c:2264:23: sparse:    got unsigned short [usertype] rx_id
+>> drivers/scsi/elx/efct/efct_els.c:2265:30: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __be16 [usertype] ba_high_seq_cnt @@    got tricted __be16 [usertype] ba_high_seq_cnt @@
+>> drivers/scsi/elx/efct/efct_els.c:2265:30: sparse:    expected restricted __be16 [usertype] ba_high_seq_cnt
+>> drivers/scsi/elx/efct/efct_els.c:2265:30: sparse:    got unsigned short [usertype]
+>> drivers/scsi/elx/efct/efct_els.c:1443:43: sparse: sparse: invalid assignment: |=
+>> drivers/scsi/elx/efct/efct_els.c:1443:43: sparse:    left side has type restricted __be16
+>> drivers/scsi/elx/efct/efct_els.c:1443:43: sparse:    right side has type restricted __be32
+>> drivers/scsi/elx/efct/efct_els.c:1549:46: sparse: sparse: cast to restricted __be32
+>> drivers/scsi/elx/efct/efct_els.c:1549:46: sparse: sparse: cast to restricted __be32
+>> drivers/scsi/elx/efct/efct_els.c:1549:46: sparse: sparse: cast to restricted __be32
+>> drivers/scsi/elx/efct/efct_els.c:1549:46: sparse: sparse: cast to restricted __be32
+>> drivers/scsi/elx/efct/efct_els.c:1549:46: sparse: sparse: cast to restricted __be32
+>> drivers/scsi/elx/efct/efct_els.c:1549:46: sparse: sparse: cast to restricted __be32
+   drivers/scsi/elx/efct/efct_els.c:1549:42: sparse: sparse: invalid assignment: |=
+>> drivers/scsi/elx/efct/efct_els.c:1549:42: sparse:    left side has type restricted __be32
+>> drivers/scsi/elx/efct/efct_els.c:1549:42: sparse:    right side has type unsigned int
+>> drivers/scsi/elx/efct/efct_els.c:2602:27: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] init_task_tag @@    got restrunsigned int [usertype] init_task_tag @@
+>> drivers/scsi/elx/efct/efct_els.c:2602:27: sparse:    expected unsigned int [usertype] init_task_tag
+>> drivers/scsi/elx/efct/efct_els.c:2602:27: sparse:    got restricted __be16 [usertype] ox_id
+>> drivers/scsi/elx/efct/efct_els.c:2609:38: sparse: sparse: cast from restricted __be16
+>> drivers/scsi/elx/efct/efct_els.c:2609:38: sparse: sparse: incorrect type in argument 1 (different base types) @@    expected unsigned short [usertype] val @@    got resunsigned short [usertype] val @@
+>> drivers/scsi/elx/efct/efct_els.c:2609:38: sparse:    expected unsigned short [usertype] val
+   drivers/scsi/elx/efct/efct_els.c:2609:38: sparse:    got restricted __be16 [usertype] ox_id
+>> drivers/scsi/elx/efct/efct_els.c:2609:38: sparse: sparse: cast from restricted __be16
+>> drivers/scsi/elx/efct/efct_els.c:2609:38: sparse: sparse: cast from restricted __be16
+>> drivers/scsi/elx/efct/efct_els.c:2609:36: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned short [usertype] ox_id @@    got resunsigned short [usertype] ox_id @@
+>> drivers/scsi/elx/efct/efct_els.c:2609:36: sparse:    expected unsigned short [usertype] ox_id
+>> drivers/scsi/elx/efct/efct_els.c:2609:36: sparse:    got restricted __be16 [usertype]
+--
+>> drivers/scsi/elx/efct/efct_hw.c:4748:59: sparse: sparse: incorrect type in argument 3 (different base types) @@    expected unsigned int [usertype] *data @@    got ed int [usertype] *data @@
+>> drivers/scsi/elx/efct/efct_hw.c:4748:59: sparse:    expected unsigned int [usertype] *data
+>> drivers/scsi/elx/efct/efct_hw.c:4748:59: sparse:    got restricted __le32 *
+>> drivers/scsi/elx/efct/efct_hw.c:921:36: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] rq_id @@    got e] rq_id @@
+>> drivers/scsi/elx/efct/efct_hw.c:921:36: sparse:    expected restricted __le16 [usertype] rq_id
+>> drivers/scsi/elx/efct/efct_hw.c:921:36: sparse:    got int
+>> drivers/scsi/elx/efct/efct_hw.c:937:49: sparse: sparse: restricted __le16 degrades to integer
+   drivers/scsi/elx/efct/efct_hw.c:943:57: sparse: sparse: restricted __le16 degrades to integer
+>> drivers/scsi/elx/efct/efct_hw.c:953:60: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] rq_id @@    got icted __le16 [usertype] rq_id @@
+   drivers/scsi/elx/efct/efct_hw.c:953:60: sparse:    expected restricted __le16 [usertype] rq_id
+>> drivers/scsi/elx/efct/efct_hw.c:953:60: sparse:    got unsigned int [usertype] base_mrq_id
+>> drivers/scsi/elx/efct/efct_hw.c:956:60: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] rq_id @@    got tricted __le16 [usertype] rq_id @@
+   drivers/scsi/elx/efct/efct_hw.c:956:60: sparse:    expected restricted __le16 [usertype] rq_id
+>> drivers/scsi/elx/efct/efct_hw.c:956:60: sparse:    got unsigned short [usertype] id
+   drivers/scsi/elx/efct/efct_hw.c:733:41: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] rq_id @@    got e] rq_id @@
+   drivers/scsi/elx/efct/efct_hw.c:733:41: sparse:    expected restricted __le16 [usertype] rq_id
+   drivers/scsi/elx/efct/efct_hw.c:733:41: sparse:    got int
+   drivers/scsi/elx/efct/efct_hw.c:766:57: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] rq_id @@    got tricted __le16 [usertype] rq_id @@
+   drivers/scsi/elx/efct/efct_hw.c:766:57: sparse:    expected restricted __le16 [usertype] rq_id
+   drivers/scsi/elx/efct/efct_hw.c:766:57: sparse:    got unsigned short [usertype] id
+>> drivers/scsi/elx/efct/efct_hw.c:2496:27: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] sge_flags @@    got restrunsigned int [usertype] sge_flags @@
+>> drivers/scsi/elx/efct/efct_hw.c:2496:27: sparse:    expected unsigned int [usertype] sge_flags
+>> drivers/scsi/elx/efct/efct_hw.c:2496:27: sparse:    got restricted __le32 [usertype] dw2_flags
+>> drivers/scsi/elx/efct/efct_hw.c:2532:27: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [assigned] [usertype] sge_flags @@    got ed int [assigned] [usertype] sge_flags @@
+>> drivers/scsi/elx/efct/efct_hw.c:2532:27: sparse:    expected unsigned int [assigned] [usertype] sge_flags
+   drivers/scsi/elx/efct/efct_hw.c:2532:27: sparse:    got restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/efct/efct_hw.c:2544:19: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [assigned] [usertype] sge_flags @@    got ed int [assigned] [usertype] sge_flags @@
+   drivers/scsi/elx/efct/efct_hw.c:2544:19: sparse:    expected unsigned int [assigned] [usertype] sge_flags
+   drivers/scsi/elx/efct/efct_hw.c:2544:19: sparse:    got restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/efct/efct_hw.c:2676:19: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] sge_flags @@    got restrunsigned int [usertype] sge_flags @@
+   drivers/scsi/elx/efct/efct_hw.c:2676:19: sparse:    expected unsigned int [usertype] sge_flags
+   drivers/scsi/elx/efct/efct_hw.c:2676:19: sparse:    got restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/efct/efct_hw.c:2680:27: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [assigned] [usertype] sge_flags @@    got ed int [assigned] [usertype] sge_flags @@
+   drivers/scsi/elx/efct/efct_hw.c:2680:27: sparse:    expected unsigned int [assigned] [usertype] sge_flags
+   drivers/scsi/elx/efct/efct_hw.c:2680:27: sparse:    got restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/efct/efct_hw.c:2778:19: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] sge_flags @@    got restrunsigned int [usertype] sge_flags @@
+   drivers/scsi/elx/efct/efct_hw.c:2778:19: sparse:    expected unsigned int [usertype] sge_flags
+   drivers/scsi/elx/efct/efct_hw.c:2778:19: sparse:    got restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/efct/efct_hw.c:2797:27: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [assigned] [usertype] sge_flags @@    got ed int [assigned] [usertype] sge_flags @@
+   drivers/scsi/elx/efct/efct_hw.c:2797:27: sparse:    expected unsigned int [assigned] [usertype] sge_flags
+   drivers/scsi/elx/efct/efct_hw.c:2797:27: sparse:    got restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/efct/efct_hw.c:2854:19: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] sge_flags @@    got restrunsigned int [usertype] sge_flags @@
+   drivers/scsi/elx/efct/efct_hw.c:2854:19: sparse:    expected unsigned int [usertype] sge_flags
+   drivers/scsi/elx/efct/efct_hw.c:2854:19: sparse:    got restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/efct/efct_hw.c:2875:27: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [assigned] [usertype] sge_flags @@    got ed int [assigned] [usertype] sge_flags @@
+   drivers/scsi/elx/efct/efct_hw.c:2875:27: sparse:    expected unsigned int [assigned] [usertype] sge_flags
+   drivers/scsi/elx/efct/efct_hw.c:2875:27: sparse:    got restricted __le32 [usertype] dw2_flags
+>> drivers/scsi/elx/efct/efct_hw.c:4213:20: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] sge0_flags @@    got restrunsigned int [usertype] sge0_flags @@
+>> drivers/scsi/elx/efct/efct_hw.c:4213:20: sparse:    expected unsigned int [usertype] sge0_flags
+   drivers/scsi/elx/efct/efct_hw.c:4213:20: sparse:    got restricted __le32 [usertype] dw2_flags
+>> drivers/scsi/elx/efct/efct_hw.c:4214:20: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] sge1_flags @@    got restrunsigned int [usertype] sge1_flags @@
+>> drivers/scsi/elx/efct/efct_hw.c:4214:20: sparse:    expected unsigned int [usertype] sge1_flags
+   drivers/scsi/elx/efct/efct_hw.c:4214:20: sparse:    got restricted __le32 [usertype] dw2_flags
+>> drivers/scsi/elx/efct/efct_hw.c:4338:29: sparse: sparse: cast from restricted __be16
+   drivers/scsi/elx/efct/efct_hw.c:4339:29: sparse: sparse: cast from restricted __be16
+--
+>> drivers/scsi/elx/efct/efct_unsol.c:910:28: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __be16 [assigned] [usertype] ba_low_seq_cnt @@    got e16 [assigned] [usertype] ba_low_seq_cnt @@
+>> drivers/scsi/elx/efct/efct_unsol.c:910:28: sparse:    expected restricted __be16 [assigned] [usertype] ba_low_seq_cnt
+>> drivers/scsi/elx/efct/efct_unsol.c:910:28: sparse:    got unsigned short [usertype]
+>> drivers/scsi/elx/efct/efct_unsol.c:911:29: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __be16 [assigned] [usertype] ba_high_seq_cnt @@    got e16 [assigned] [usertype] ba_high_seq_cnt @@
+>> drivers/scsi/elx/efct/efct_unsol.c:911:29: sparse:    expected restricted __be16 [assigned] [usertype] ba_high_seq_cnt
+   drivers/scsi/elx/efct/efct_unsol.c:911:29: sparse:    got unsigned short [usertype]
+--
+>> drivers/scsi/elx/libefc_sli/sli4.c:152:31: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] dw3_version @@    got restrunsigned int [usertype] dw3_version @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:152:31: sparse:    expected unsigned int [usertype] dw3_version
+>> drivers/scsi/elx/libefc_sli/sli4.c:152:31: sparse:    got restricted __le32 [usertype]
+>> drivers/scsi/elx/libefc_sli/sli4.c:153:18: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned long [assigned] [usertype] cmd_size @@    got d long [assigned] [usertype] cmd_size @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:153:18: sparse:    expected unsigned long [assigned] [usertype] cmd_size
+   drivers/scsi/elx/libefc_sli/sli4.c:153:18: sparse:    got restricted __le32 [usertype]
+>> drivers/scsi/elx/libefc_sli/sli4.c:155:34: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] request_length @@    got unsignerestricted __le32 [usertype] request_length @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:155:34: sparse:    expected restricted __le32 [usertype] request_length
+>> drivers/scsi/elx/libefc_sli/sli4.c:155:34: sparse:    got unsigned long [assigned] [usertype] cmd_size
+   drivers/scsi/elx/libefc_sli/sli4.c:275:37: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] dw3_version @@    got restrunsigned int [usertype] dw3_version @@
+   drivers/scsi/elx/libefc_sli/sli4.c:275:37: sparse:    expected unsigned int [usertype] dw3_version
+   drivers/scsi/elx/libefc_sli/sli4.c:275:37: sparse:    got restricted __le32 [usertype]
+   drivers/scsi/elx/libefc_sli/sli4.c:416:37: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] dw3_version @@    got restrunsigned int [usertype] dw3_version @@
+   drivers/scsi/elx/libefc_sli/sli4.c:416:37: sparse:    expected unsigned int [usertype] dw3_version
+   drivers/scsi/elx/libefc_sli/sli4.c:416:37: sparse:    got restricted __le32 [usertype]
+   drivers/scsi/elx/libefc_sli/sli4.c:550:29: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] dw3_version @@    got restrunsigned int [usertype] dw3_version @@
+   drivers/scsi/elx/libefc_sli/sli4.c:550:29: sparse:    expected unsigned int [usertype] dw3_version
+   drivers/scsi/elx/libefc_sli/sli4.c:550:29: sparse:    got restricted __le32 [usertype]
+   drivers/scsi/elx/libefc_sli/sli4.c:748:29: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] dw3_version @@    got restrunsigned int [usertype] dw3_version @@
+   drivers/scsi/elx/libefc_sli/sli4.c:748:29: sparse:    expected unsigned int [usertype] dw3_version
+   drivers/scsi/elx/libefc_sli/sli4.c:748:29: sparse:    got restricted __le32 [usertype]
+   drivers/scsi/elx/libefc_sli/sli4.c:846:32: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] dw3_version @@    got restrunsigned int [usertype] dw3_version @@
+   drivers/scsi/elx/libefc_sli/sli4.c:846:32: sparse:    expected unsigned int [usertype] dw3_version
+   drivers/scsi/elx/libefc_sli/sli4.c:846:32: sparse:    got restricted __le32 [usertype]
+>> drivers/scsi/elx/libefc_sli/sli4.c:1078:33: sparse: sparse: Using plain integer as NULL pointer
+   drivers/scsi/elx/libefc_sli/sli4.c:1526:33: sparse: sparse: Using plain integer as NULL pointer
+>> drivers/scsi/elx/libefc_sli/sli4.h:3029:17: sparse: sparse: invalid assignment: &=
+>> drivers/scsi/elx/libefc_sli/sli4.h:3029:17: sparse:    left side has type unsigned int
+>> drivers/scsi/elx/libefc_sli/sli4.h:3029:17: sparse:    right side has type restricted __le32
+   drivers/scsi/elx/libefc_sli/sli4.h:3030:17: sparse: sparse: invalid assignment: |=
+   drivers/scsi/elx/libefc_sli/sli4.h:3030:17: sparse:    left side has type unsigned int
+>> drivers/scsi/elx/libefc_sli/sli4.h:3030:17: sparse:    right side has type restricted __le16
+>> drivers/scsi/elx/libefc_sli/sli4.c:2486:47: sparse: sparse: restricted __le32 degrades to integer
+   drivers/scsi/elx/libefc_sli/sli4.c:2487:48: sparse: sparse: restricted __le32 degrades to integer
+>> drivers/scsi/elx/libefc_sli/sli4.c:2486:38: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] payload_offset_length @@    got  [usertype] payload_offset_length @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:2486:38: sparse:    expected restricted __le16 [usertype] payload_offset_length
+>> drivers/scsi/elx/libefc_sli/sli4.c:2486:38: sparse:    got unsigned int
+>> drivers/scsi/elx/libefc_sli/sli4.c:2589:41: sparse: sparse: cast from restricted __le32
+>> drivers/scsi/elx/libefc_sli/sli4.c:2591:27: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] sge_flags @@    got restrunsigned int [usertype] sge_flags @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:2591:27: sparse:    expected unsigned int [usertype] sge_flags
+>> drivers/scsi/elx/libefc_sli/sli4.c:2591:27: sparse:    got restricted __le32 [usertype] dw2_flags
+>> drivers/scsi/elx/libefc_sli/sli4.c:2594:34: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] dw2_flags @@    got unsignrestricted __le32 [usertype] dw2_flags @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:2594:34: sparse:    expected restricted __le32 [usertype] dw2_flags
+>> drivers/scsi/elx/libefc_sli/sli4.c:2594:34: sparse:    got unsigned int [assigned] [usertype] sge_flags
+   drivers/scsi/elx/libefc_sli/sli4.c:2597:47: sparse: sparse: restricted __le32 degrades to integer
+   drivers/scsi/elx/libefc_sli/sli4.c:2598:48: sparse: sparse: restricted __le32 degrades to integer
+   drivers/scsi/elx/libefc_sli/sli4.c:2597:38: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] payload_offset_length @@    got  [usertype] payload_offset_length @@
+   drivers/scsi/elx/libefc_sli/sli4.c:2597:38: sparse:    expected restricted __le16 [usertype] payload_offset_length
+   drivers/scsi/elx/libefc_sli/sli4.c:2597:38: sparse:    got unsigned int
+   drivers/scsi/elx/libefc_sli/sli4.c:2719:41: sparse: sparse: cast from restricted __le32
+   drivers/scsi/elx/libefc_sli/sli4.c:2720:27: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] sge_flags @@    got restrunsigned int [usertype] sge_flags @@
+   drivers/scsi/elx/libefc_sli/sli4.c:2720:27: sparse:    expected unsigned int [usertype] sge_flags
+   drivers/scsi/elx/libefc_sli/sli4.c:2720:27: sparse:    got restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/libefc_sli/sli4.c:2723:34: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] dw2_flags @@    got unsignrestricted __le32 [usertype] dw2_flags @@
+   drivers/scsi/elx/libefc_sli/sli4.c:2723:34: sparse:    expected restricted __le32 [usertype] dw2_flags
+   drivers/scsi/elx/libefc_sli/sli4.c:2723:34: sparse:    got unsigned int [assigned] [usertype] sge_flags
+   drivers/scsi/elx/libefc_sli/sli4.c:2726:48: sparse: sparse: restricted __le32 degrades to integer
+   drivers/scsi/elx/libefc_sli/sli4.c:2727:48: sparse: sparse: restricted __le32 degrades to integer
+   drivers/scsi/elx/libefc_sli/sli4.c:2726:39: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] payload_offset_length @@    got  [usertype] payload_offset_length @@
+   drivers/scsi/elx/libefc_sli/sli4.c:2726:39: sparse:    expected restricted __le16 [usertype] payload_offset_length
+   drivers/scsi/elx/libefc_sli/sli4.c:2726:39: sparse:    got unsigned int
+>> drivers/scsi/elx/libefc_sli/sli4.c:2930:35: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int @@    got restricted __le32unsigned int @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:2930:35: sparse:    expected unsigned int
+   drivers/scsi/elx/libefc_sli/sli4.c:2930:35: sparse:    got restricted __le32 [usertype]
+   drivers/scsi/elx/libefc_sli/sli4.c:3083:34: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int @@    got restricted __le32unsigned int @@
+   drivers/scsi/elx/libefc_sli/sli4.c:3083:34: sparse:    expected unsigned int
+   drivers/scsi/elx/libefc_sli/sli4.c:3083:34: sparse:    got restricted __le32 [usertype]
+   drivers/scsi/elx/libefc_sli/sli4.c:3159:47: sparse: sparse: restricted __le32 degrades to integer
+   drivers/scsi/elx/libefc_sli/sli4.c:3245:35: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int @@    got restricted __le32unsigned int @@
+   drivers/scsi/elx/libefc_sli/sli4.c:3245:35: sparse:    expected unsigned int
+   drivers/scsi/elx/libefc_sli/sli4.c:3245:35: sparse:    got restricted __le32 [usertype]
+>> drivers/scsi/elx/libefc_sli/sli4.c:3423:19: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le16 [usertype] cq_id @@    got e] cq_id @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:3423:19: sparse:    expected restricted __le16 [usertype] cq_id
+>> drivers/scsi/elx/libefc_sli/sli4.c:3423:19: sparse:    got int
+>> drivers/scsi/elx/libefc_sli/sli4.c:3471:37: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:3472:36: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:3482:22: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:3483:22: sparse: sparse: cast from restricted __le16
+>> drivers/scsi/elx/libefc_sli/sli4.c:3577:42: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] els_response_payload_length @@    got icted __le32 [usertype] els_response_payload_length @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:3577:42: sparse:    expected restricted __le32 [usertype] els_response_payload_length
+>> drivers/scsi/elx/libefc_sli/sli4.c:3577:42: sparse:    got unsigned int [usertype] rsp_len
+>> drivers/scsi/elx/libefc_sli/sli4.c:3681:38: sparse: sparse: invalid assignment: |=
+>> drivers/scsi/elx/libefc_sli/sli4.c:3681:38: sparse:    left side has type restricted __le32
+>> drivers/scsi/elx/libefc_sli/sli4.c:3681:38: sparse:    right side has type unsigned int
+   drivers/scsi/elx/libefc_sli/sli4.c:3718:46: sparse: sparse: invalid assignment: |=
+   drivers/scsi/elx/libefc_sli/sli4.c:3718:46: sparse:    left side has type restricted __le32
+   drivers/scsi/elx/libefc_sli/sli4.c:3718:46: sparse:    right side has type unsigned int
+   drivers/scsi/elx/libefc_sli/sli4.c:3754:25: sparse: sparse: invalid assignment: |=
+>> drivers/scsi/elx/libefc_sli/sli4.c:3754:25: sparse:    left side has type restricted __le16
+>> drivers/scsi/elx/libefc_sli/sli4.c:3754:25: sparse:    right side has type int
+   drivers/scsi/elx/libefc_sli/sli4.c:3755:25: sparse: sparse: invalid assignment: |=
+   drivers/scsi/elx/libefc_sli/sli4.c:3755:25: sparse:    left side has type restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:3755:25: sparse:    right side has type int
+>> drivers/scsi/elx/libefc_sli/sli4.c:4001:23: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned short [usertype] @@    got resunsigned short [usertype] @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:4001:23: sparse:    expected unsigned short [usertype]
+>> drivers/scsi/elx/libefc_sli/sli4.c:4001:23: sparse:    got restricted __le16 [usertype] rq_id
+>> drivers/scsi/elx/libefc_sli/sli4.c:4863:50: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] available_length_dword @@    got restricted __le32 [usertype] available_length_dword @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:4863:50: sparse:    expected restricted __le32 [usertype] available_length_dword
+>> drivers/scsi/elx/libefc_sli/sli4.c:4863:50: sparse:    got restricted __le16 [usertype]
+   drivers/scsi/elx/libefc_sli/sli4.c:4993:43: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:4996:43: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:4999:43: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:5002:43: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:5056:47: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:5059:47: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:5062:47: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:5065:47: sparse: sparse: cast from restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:5176:30: sparse: sparse: invalid assignment: |=
+   drivers/scsi/elx/libefc_sli/sli4.c:5176:30: sparse:    left side has type restricted __le16
+   drivers/scsi/elx/libefc_sli/sli4.c:5176:30: sparse:    right side has type int
+   drivers/scsi/elx/libefc_sli/sli4.c:5663:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] dw3_version @@    got restrunsigned int [usertype] dw3_version @@
+   drivers/scsi/elx/libefc_sli/sli4.c:5663:33: sparse:    expected unsigned int [usertype] dw3_version
+   drivers/scsi/elx/libefc_sli/sli4.c:5663:33: sparse:    got restricted __le32 [usertype]
+>> drivers/scsi/elx/libefc_sli/sli4.c:7366:53: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] page1_low @@    got icted __le32 [usertype] page1_low @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:7366:53: sparse:    expected restricted __le32 [usertype] page1_low
+>> drivers/scsi/elx/libefc_sli/sli4.c:7366:53: sparse:    got unsigned int [usertype]
+>> drivers/scsi/elx/libefc_sli/sli4.c:7368:54: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] page1_high @@    got icted __le32 [usertype] page1_high @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:7368:54: sparse:    expected restricted __le32 [usertype] page1_high
+   drivers/scsi/elx/libefc_sli/sli4.c:7368:54: sparse:    got unsigned int [usertype]
+>> drivers/scsi/elx/libefc_sli/sli4.c:7404:22: sparse: sparse: incorrect type in assignment (different base types) @@    expected unsigned int [usertype] payload_size @@    got restrunsigned int [usertype] payload_size @@
+>> drivers/scsi/elx/libefc_sli/sli4.c:7404:22: sparse:    expected unsigned int [usertype] payload_size
+   drivers/scsi/elx/libefc_sli/sli4.c:7404:22: sparse:    got restricted __le32 [usertype]
+
+Please review and possibly fold the followup patch.
+
 ---
- drivers/scsi/scsi_transport_iscsi.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 417b868d8735..f377bfed6b0c 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -24,6 +24,8 @@
- 
- #define ISCSI_TRANSPORT_VERSION "2.0-870"
- 
-+#define ISCSI_SEND_MAX_ALLOWED     10
-+
- #define CREATE_TRACE_POINTS
- #include <trace/events/iscsi.h>
- 
-@@ -3682,6 +3684,7 @@ iscsi_if_rx(struct sk_buff *skb)
- 		struct nlmsghdr	*nlh;
- 		struct iscsi_uevent *ev;
- 		uint32_t group;
-+		int retries = ISCSI_SEND_MAX_ALLOWED;
- 
- 		nlh = nlmsg_hdr(skb);
- 		if (nlh->nlmsg_len < sizeof(*nlh) + sizeof(*ev) ||
-@@ -3710,8 +3713,11 @@ iscsi_if_rx(struct sk_buff *skb)
- 				break;
- 			if (ev->type == ISCSI_UEVENT_GET_CHAP && !err)
- 				break;
-+			if (retries <= 0)
-+				break;
- 			err = iscsi_if_send_reply(portid, nlh->nlmsg_type,
- 						  ev, sizeof(*ev));
-+			retries--;
- 		} while (err < 0 && err != -ECONNREFUSED && err != -ESRCH);
- 		skb_pull(skb, rlen);
- 	}
--- 
-1.8.3.1
-
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
