@@ -2,88 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 085BAE579D
-	for <lists+linux-scsi@lfdr.de>; Sat, 26 Oct 2019 02:39:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A1DE58D4
+	for <lists+linux-scsi@lfdr.de>; Sat, 26 Oct 2019 08:15:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725899AbfJZAjj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 25 Oct 2019 20:39:39 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:39366 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725865AbfJZAjj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 25 Oct 2019 20:39:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=PY2ifMzsUHES99tnuXwNKBR7kXj8m7j/uX2jyvu+b+k=; b=TUhKTWEzIVS/qjMS53rpwksuq
-        GtnO5CqrhoDYNUmJqaUyG47KimgW1SAoq0BekCXB3aAT8VHBJ1RDN40VpZk3jrs1Y76GXMEgY600k
-        MaO2CNJBHjCcRgpdLJM8r7/yKtARrLqHj1Gh7HiHjxktumqI46nkKL5bvba9q9iKj6rz5OgAVBgmC
-        ZIlF/hlPcdyFkFe/T3dhHURs0MwZnmjTG9jqBzOhu5Bo08rWpg5Xt7kIMTDpJRt1BZ5RVoojTnEYX
-        BcWMwtq8BpLVEJmyCmJJKcWNP/Scyi7K7UoeO0OMxivfFkP4/j1ywWwjgH+U52yWvqa8EA0dsuc1u
-        S4WwHQSrg==;
-Received: from [2601:1c0:6280:3f0::9ef4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iOA7G-0004GQ-JM; Sat, 26 Oct 2019 00:39:38 +0000
-Subject: Re: [PATCH 32/32] elx: efct: Tie into kernel Kconfig and build
- process
-To:     kbuild test robot <lkp@intel.com>,
-        James Smart <jsmart2021@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
-        Ram Vegesna <ram.vegesna@broadcom.com>
-References: <20191023215557.12581-33-jsmart2021@gmail.com>
- <201910260807.ud4c6FJP%lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <71048ade-35fb-2eed-e69c-eb65daa09c74@infradead.org>
-Date:   Fri, 25 Oct 2019 17:39:37 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1726010AbfJZGPL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 26 Oct 2019 02:15:11 -0400
+Received: from [222.92.45.126] ([222.92.45.126]:54129 "EHLO
+        mail.chinasinye.com" rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1725939AbfJZGPL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 26 Oct 2019 02:15:11 -0400
+X-Greylist: delayed 6308 seconds by postgrey-1.27 at vger.kernel.org; Sat, 26 Oct 2019 02:15:04 EDT
+Authenticated-By: backup
+X-SpamFilter-By: BOX Solutions SpamTrap 5.63 with qID x9Q4NLt7006490, This message is accepted by code: ctauth0007
+Received: from User (chui.telkom.co.ke[197.156.190.135](maybeforged))
+        (authenticated bits=0)
+        by mail.chinasinye.com (8.15.2/2.61/5.82) with ESMTPA id x9Q4NLt7006490;
+        Sat, 26 Oct 2019 12:23:27 +0800
+Message-Id: <201910260423.x9Q4NLt7006490@mail.chinasinye.com>
+X-Authentication-Warning: mail.chinasinye.com: Host chui.telkom.co.ke [197.156.190.135] (may be forged) claimed to be User
+Reply-To: <abey.wliton2019@gmail.com>
+From:   "Abey Wilton" <backup@chinasinye.com>
+Subject: REPLY.
+Date:   Sat, 26 Oct 2019 07:25:17 +0300
 MIME-Version: 1.0
-In-Reply-To: <201910260807.ud4c6FJP%lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+Content-Type: text/plain;
+        charset="Windows-1251"
 Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+X-Antivirus: AVG (VPS 191023-2, 10/23/2019), Outbound message
+X-Antivirus-Status: Clean
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi James,
+Hi,
+
+My name is Abey Wilton, I head the Accounts Department of L. F. H. London, United Kingdom. I am also in charge of the Audit and Financial Records Unit of the above establishment.
+
+I urgently need someone who can work with me to carry out a proposal that will be of financial benefit to the both of us and I believe you are well placed to partner with me. I assure you that everything will work out well with me on this other side doing my own part of it.
 
 
-On 10/25/19 5:34 PM, kbuild test robot wrote:
-> vim +/offset +818 drivers/scsi/elx/libefc_sli/sli4.c
-> 
-> 8994bfd36daa33 James Smart 2019-10-23  795  
-> 8994bfd36daa33 James Smart 2019-10-23  796  /**
-> 8994bfd36daa33 James Smart 2019-10-23  797   * @ingroup sli_fc
-> 8994bfd36daa33 James Smart 2019-10-23  798   * @brief Write an RQ_CREATE_V2 command.
-> 8994bfd36daa33 James Smart 2019-10-23  799   *
-> 8994bfd36daa33 James Smart 2019-10-23  800   * @param sli4 SLI context.
-> 8994bfd36daa33 James Smart 2019-10-23  801   * @param buf Destination buffer for the command.
-> 8994bfd36daa33 James Smart 2019-10-23  802   * @param size Buffer size, in bytes.
-> 8994bfd36daa33 James Smart 2019-10-23  803   * @param qmem DMA memory for the queue.
-> 8994bfd36daa33 James Smart 2019-10-23  804   * @param cq_id Associated CQ_ID.
-> 8994bfd36daa33 James Smart 2019-10-23  805   * @param buffer_size Buffer size pointed to by each RQE.
-> 8994bfd36daa33 James Smart 2019-10-23  806   *
-> 8994bfd36daa33 James Smart 2019-10-23  807   * @note This creates a Version 0 message
-> 8994bfd36daa33 James Smart 2019-10-23  808   *
-> 8994bfd36daa33 James Smart 2019-10-23  809   * @return Returns zero for success and non-zero for failure.
-> 8994bfd36daa33 James Smart 2019-10-23  810   */
+Kindly write back to me if you are interested and want more details on how we can proceed.
 
-BTW, what is that notation?  It's not kernel-doc. Please use kernel-doc notation
-for documentation in the kernel.
+Abey Wilton
 
-> 8994bfd36daa33 James Smart 2019-10-23  811  static int
-> 8994bfd36daa33 James Smart 2019-10-23  812  sli_cmd_rq_create_v2(struct sli4_s *sli4, u32 num_rqs,
-> 8994bfd36daa33 James Smart 2019-10-23  813  		     struct sli4_queue_s *qs[], u32 base_cq_id,
-> 8994bfd36daa33 James Smart 2019-10-23  814  		     u32 header_buffer_size,
-> 8994bfd36daa33 James Smart 2019-10-23  815  		     u32 payload_buffer_size, struct efc_dma_s *dma)
-> 8994bfd36daa33 James Smart 2019-10-23  816  {
+L. F. H. London, UK.
 
-
-thanks.
 -- 
-~Randy
+This email has been checked for viruses by AVG.
+https://www.avg.com
 
