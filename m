@@ -2,58 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A1DE58D4
-	for <lists+linux-scsi@lfdr.de>; Sat, 26 Oct 2019 08:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E099E58DF
+	for <lists+linux-scsi@lfdr.de>; Sat, 26 Oct 2019 08:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726010AbfJZGPL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 26 Oct 2019 02:15:11 -0400
-Received: from [222.92.45.126] ([222.92.45.126]:54129 "EHLO
-        mail.chinasinye.com" rhost-flags-FAIL-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1725939AbfJZGPL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 26 Oct 2019 02:15:11 -0400
-X-Greylist: delayed 6308 seconds by postgrey-1.27 at vger.kernel.org; Sat, 26 Oct 2019 02:15:04 EDT
-Authenticated-By: backup
-X-SpamFilter-By: BOX Solutions SpamTrap 5.63 with qID x9Q4NLt7006490, This message is accepted by code: ctauth0007
-Received: from User (chui.telkom.co.ke[197.156.190.135](maybeforged))
-        (authenticated bits=0)
-        by mail.chinasinye.com (8.15.2/2.61/5.82) with ESMTPA id x9Q4NLt7006490;
-        Sat, 26 Oct 2019 12:23:27 +0800
-Message-Id: <201910260423.x9Q4NLt7006490@mail.chinasinye.com>
-X-Authentication-Warning: mail.chinasinye.com: Host chui.telkom.co.ke [197.156.190.135] (may be forged) claimed to be User
-Reply-To: <abey.wliton2019@gmail.com>
-From:   "Abey Wilton" <backup@chinasinye.com>
-Subject: REPLY.
-Date:   Sat, 26 Oct 2019 07:25:17 +0300
+        id S1726137AbfJZGqQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 26 Oct 2019 02:46:16 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:58602 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726010AbfJZGqQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 26 Oct 2019 02:46:16 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id E98AF2A49A;
+        Sat, 26 Oct 2019 02:46:09 -0400 (EDT)
+Date:   Sat, 26 Oct 2019 17:46:08 +1100 (AEDT)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     =?ISO-8859-15?Q?Michal_Such=E1nek?= <msuchanek@suse.de>
+cc:     Christoph Hellwig <hch@infradead.org>, linux-scsi@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        "J. Bruce Fields" <bfields@redhat.com>,
+        Benjamin Coddington <bcodding@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>, Ming Lei <ming.lei@redhat.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Tejun Heo <tj@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 2/8] cdrom: factor out common open_for_* code
+In-Reply-To: <20191025104230.GN938@kitsune.suse.cz>
+Message-ID: <alpine.LNX.2.21.1910261652580.8@nippy.intranet>
+References: <cover.1571834862.git.msuchanek@suse.de> <da032629db4a770a5f98ff400b91b44873cbdf46.1571834862.git.msuchanek@suse.de> <20191024021958.GA11485@infradead.org> <20191024085014.GF938@kitsune.suse.cz> <20191025023908.GB14108@infradead.org>
+ <20191025104230.GN938@kitsune.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-X-Antivirus: AVG (VPS 191023-2, 10/23/2019), Outbound message
-X-Antivirus-Status: Clean
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+On Fri, 25 Oct 2019, Michal Such?nek wrote:
 
-My name is Abey Wilton, I head the Accounts Department of L. F. H. London, United Kingdom. I am also in charge of the Audit and Financial Records Unit of the above establishment.
+> On Thu, Oct 24, 2019 at 07:39:08PM -0700, Christoph Hellwig wrote:
+> > On Thu, Oct 24, 2019 at 10:50:14AM +0200, Michal Such?nek wrote:
+> > > Then I will get complaints I do unrelated changes and it's hard to
+> > > review. The code gets removed later anyway.
+> > 
+> > If you refactor you you pretty much have a card blanche for the
+> > refactored code and the direct surroundings.
+> 
+> This is different from what other reviewers say:
+> 
+> https://lore.kernel.org/lkml/1517245320.2687.14.camel@wdc.com/
+> 
 
-I urgently need someone who can work with me to carry out a proposal that will be of financial benefit to the both of us and I believe you are well placed to partner with me. I assure you that everything will work out well with me on this other side doing my own part of it.
+I don't see any inconsistency there. Both reviews are valuable.
 
+In general, different reviewers may give contradictory advice. Reviewers 
+probably even contradict themselves eventually. Yet it rarely happens that 
+the same patch gets contradictory reviews. If it did, you might well 
+complain.
 
-Kindly write back to me if you are interested and want more details on how we can proceed.
+> Either way, this code is removed in a later patch so this discussion is
+> moot.
+> 
+> It makes sense to have a bisection point here in case something
+> goes wrong but it is pointless to argue about the code structure
+> inherited from the previous revision.
 
-Abey Wilton
+A patch may refactor some code only to have the next patch remove that 
+code. This doesn't generally mean that the former patch is redundant.
 
-L. F. H. London, UK.
+The latter patch may end up committed and subsequently reverted. The 
+latter patch may become easier to review because of the former. The former 
+patch may be eligible for -stable. The former patch may be the result of 
+an automatic process. And so on.
+
+I don't know what Christoph had in mind here but he's usually right, so 
+it's worth asking.
 
 -- 
-This email has been checked for viruses by AVG.
-https://www.avg.com
 
+> 
+> Thanks
+> 
+> Michal
+> 
