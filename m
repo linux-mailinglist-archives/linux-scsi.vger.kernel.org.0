@@ -2,155 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F3FE62E6
-	for <lists+linux-scsi@lfdr.de>; Sun, 27 Oct 2019 15:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDDDE688C
+	for <lists+linux-scsi@lfdr.de>; Sun, 27 Oct 2019 22:30:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726750AbfJ0OGV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 27 Oct 2019 10:06:21 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:31361 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726541AbfJ0OGV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 27 Oct 2019 10:06:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1572185266; x=1603721266;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zw9z2raQuJBiKBUSRP4kpCIHnthdBqRSj5UzBl54Qzo=;
-  b=Bx0Sr2iOJmk7RrCi+JOd7bosI+7IgGQGA4P91chd1NBT+4z7TFDVkKVo
-   Pmtyo8GefKI57QC9J7imBwTcs9CGJsIsEdvTr0+gdoRrsOIWlDJ7zAOnN
-   aiwhhedJ0MDcQjA9BNLuZLCaSc9xcQ9lqqksRkUAsaRU4XnX88QtraRrj
-   z+rFVLz5znrsxjJa1SORDtC+h+h/BMXDahW5i6vg8fm4EH8APFhMGUyQ/
-   GteU/BhK8SGfqpCtDfRBnECl3/oMTkBioaSw1JcS0cooqiOSs8nTs19Gv
-   4TsP4Ilu22AzXqRBsz1iP8+KHIRobnVQ/2AYzmxBNm5ZE3LOUWZGwbS1S
-   w==;
-IronPort-SDR: Um91AUHhOhbBJ0EAP0xnFyy115b29tqYqMdM8DWPeCV85TUdgFU8TeBJW1rBDOAxOapusQv2N8
- WxWzWlwmsaP1qeFae+uzLUdLQfNODF0S4HQ+860vEhC1MH3SYJlfXswMhp+bL23x8mypXU/rdx
- v2YBpZy/MObuVVOrl0FNXfR1T5Jy8yW+77iagruSjf53Eaf2v8lYZy32xcCd7LuFIs/n04885z
- I0ma89geAkOdfvVC02atTxndQPh1O0nVY5bkWaqcDjbgGZY2bkpyS0gjFGNjuV++UZ22aCVIC/
- xFY=
-X-IronPort-AV: E=Sophos;i="5.68,236,1569254400"; 
-   d="scan'208";a="222578557"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Oct 2019 22:07:25 +0800
-IronPort-SDR: 71DSbeXtrpxxrFb8Kn/5rCwOAvxQpKgJ4yjHsJ0UFtvFBggBmDoFhZThNjFL+tXkXo4Knku4xb
- SOGpS2RU32Jh8g8SQXkrUqbIuv3G8BagLK9sL7x9peVMJhJbfG4aupDuu28K4FVJrvy1ljikJm
- okVhsLgmCSyFio8/YpBWWaZDOvt+vgXS+pZM1S+WvOda6aW6PAEffuhpjgJaM5kBqhzihiZ6fE
- CkrRh3vUVTpK1RgOCtkyRJVQKL6znJVSMhVH8DE6cMw29H/uMFMmIP21C16tVeyp+YevzS/9jy
- shboSCco6PPVwEc/3BJL9Eqk
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2019 07:01:30 -0700
-IronPort-SDR: zsGaibo1ct/ZMz0zQXZesnRk7H+7gE+bmgCZApkHVlYevcV1Tj2tEfX4GZWHh4cHMc+lsEGY15
- 1JeVUeUxd6loyv6BRrQCQeD7KfeJPKYfOa51yRBlnM0AjUg/I/XmlXWdtglPlwwiE5G+8MeCv/
- i4Nq0R2+bmrCWrtZP1jHkuLL7HYDrJeabtnPfmel/ZHXPWsOPowTQnyTUeOcJfrlocDneS2fcP
- niK5oQ6QT5CvPknM1cPDuGGq5pl4msjHPlYBX1D4TUTwmPr5pO0+ertG6KTqbhDP/IQis9GTNA
- mMU=
-WDCIronportException: Internal
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip01.wdc.com with ESMTP; 27 Oct 2019 07:06:05 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        dm-devel@redhat.com, Mike Snitzer <snitzer@redhat.com>
-Cc:     Ajay Joshi <ajay.joshi@wdc.com>,
-        Matias Bjorling <matias.bjorling@wdc.com>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Dmitry Fomichev <dmitry.fomichev@wdc.com>,
-        Keith Busch <kbusch@kernel.org>
-Subject: [PATCH 8/8] null_blk: add zone open, close, and finish support
-Date:   Sun, 27 Oct 2019 23:05:49 +0900
-Message-Id: <20191027140549.26272-9-damien.lemoal@wdc.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20191027140549.26272-1-damien.lemoal@wdc.com>
-References: <20191027140549.26272-1-damien.lemoal@wdc.com>
+        id S1732507AbfJ0VaU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 27 Oct 2019 17:30:20 -0400
+Received: from zmail.pkvoda.ru ([91.189.238.58]:33162 "EHLO zmail.pkvoda.ru"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730460AbfJ0VaP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 27 Oct 2019 17:30:15 -0400
+X-Greylist: delayed 53125 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Oct 2019 17:30:13 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by zmail.pkvoda.ru (Postfix) with ESMTP id 2D820E1F787;
+        Sun, 27 Oct 2019 13:56:09 +1200 (+12)
+Received: from zmail.pkvoda.ru ([127.0.0.1])
+        by localhost (zmail.pkvoda.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id A2MVi7Vm-LHG; Sun, 27 Oct 2019 13:56:08 +1200 (+12)
+Received: from localhost (localhost [127.0.0.1])
+        by zmail.pkvoda.ru (Postfix) with ESMTP id 55439E0D4D3;
+        Sun, 27 Oct 2019 12:22:56 +1200 (+12)
+DKIM-Filter: OpenDKIM Filter v2.10.3 zmail.pkvoda.ru 55439E0D4D3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pkvoda.ru;
+        s=F51A4050-3C61-11E8-8A04-BD5F65F0F8F4; t=1572135776;
+        bh=ev891qVfpxn5QFYVE8lqa2IqoInrQG7gyaHRfGW0BDg=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=tEg4asjqELkf/f+kJE8rBImjkFH8ojdSFXB6eRVAoztlan/r2zWwP4JI/Iz6L8Uqq
+         NQsPblCR9Wxfu2a6/UN2OZDp9+kdTVaYS0BuFj2V7ga1nt6qnDqLqfKHwJzyaOnFXr
+         I0eT7UnQ5pJlgGl5dlnDerxyyTrD+m6nCiE9HhC8=
+X-Virus-Scanned: amavisd-new at pkvoda.ru
+Received: from zmail.pkvoda.ru ([127.0.0.1])
+        by localhost (zmail.pkvoda.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id A0M8amofJHDB; Sun, 27 Oct 2019 12:22:56 +1200 (+12)
+Received: from [169.254.77.56] (unknown [184.70.118.146])
+        by zmail.pkvoda.ru (Postfix) with ESMTPSA id 789EEDFFBF8;
+        Sun, 27 Oct 2019 11:10:45 +1200 (+12)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Re: Partnership
+To:     Recipients <vsmirnov@pkvoda.ru>
+From:   "VIKTOR SMIRNOV" <vsmirnov@pkvoda.ru>
+Date:   Sat, 26 Oct 2019 17:10:36 -0600
+Reply-To: pesmirnov1@yandex.com
+Message-Id: <20191026231045.789EEDFFBF8@zmail.pkvoda.ru>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Ajay Joshi <ajay.joshi@wdc.com>
+Hello, I sent you an email previously, maybe it didn't delivered. I am Vikt=
+or Smirnov, i am sorry for contacting you directly via your email, i will l=
+ike to discuss with you about a business deal that is very important.
 
-Implement REQ_OP_ZONE_OPEN, REQ_OP_ZONE_CLOSE and REQ_OP_ZONE_FINISH
-support to allow explicit control of zone states.
+Please acknowledge receipt of this email to enable me provide you with furt=
+her details.
 
-Contains contributions from Matias Bjorling, Hans Holmberg,
-Keith Busch and Damien Le Moal.
-
-Signed-off-by: Ajay Joshi <ajay.joshi@wdc.com>
-Signed-off-by: Matias Bjorling <matias.bjorling@wdc.com>
-Signed-off-by: Hans Holmberg <hans.holmberg@wdc.com>
-Signed-off-by: Keith Busch <kbusch@kernel.org>
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
----
- drivers/block/null_blk_zoned.c | 33 ++++++++++++++++++++++++++++++---
- 1 file changed, 30 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/block/null_blk_zoned.c b/drivers/block/null_blk_zoned.c
-index 4e56b17ed3ef..02f41a3bc4cb 100644
---- a/drivers/block/null_blk_zoned.c
-+++ b/drivers/block/null_blk_zoned.c
-@@ -136,13 +136,14 @@ static blk_status_t null_zone_write(struct nullb_cmd *cmd, sector_t sector,
- 	return BLK_STS_OK;
- }
- 
--static blk_status_t null_zone_reset(struct nullb_cmd *cmd, sector_t sector)
-+static blk_status_t null_zone_mgmt(struct nullb_cmd *cmd, enum req_opf op,
-+				   sector_t sector)
- {
- 	struct nullb_device *dev = cmd->nq->dev;
- 	struct blk_zone *zone = &dev->zones[null_zone_no(dev, sector)];
- 	size_t i;
- 
--	switch (req_op(cmd->rq)) {
-+	switch (op) {
- 	case REQ_OP_ZONE_RESET_ALL:
- 		for (i = 0; i < dev->nr_zones; i++) {
- 			if (zone[i].type == BLK_ZONE_TYPE_CONVENTIONAL)
-@@ -158,6 +159,29 @@ static blk_status_t null_zone_reset(struct nullb_cmd *cmd, sector_t sector)
- 		zone->cond = BLK_ZONE_COND_EMPTY;
- 		zone->wp = zone->start;
- 		break;
-+	case REQ_OP_ZONE_OPEN:
-+		if (zone->type == BLK_ZONE_TYPE_CONVENTIONAL)
-+			return BLK_STS_IOERR;
-+		if (zone->cond == BLK_ZONE_COND_FULL)
-+			return BLK_STS_IOERR;
-+
-+		zone->cond = BLK_ZONE_COND_EXP_OPEN;
-+		break;
-+	case REQ_OP_ZONE_CLOSE:
-+		if (zone->type == BLK_ZONE_TYPE_CONVENTIONAL)
-+			return BLK_STS_IOERR;
-+		if (zone->cond == BLK_ZONE_COND_FULL)
-+			return BLK_STS_IOERR;
-+
-+		zone->cond = BLK_ZONE_COND_CLOSED;
-+		break;
-+	case REQ_OP_ZONE_FINISH:
-+		if (zone->type == BLK_ZONE_TYPE_CONVENTIONAL)
-+			return BLK_STS_IOERR;
-+
-+		zone->cond = BLK_ZONE_COND_FULL;
-+		zone->wp = zone->start + zone->len;
-+		break;
- 	default:
- 		return BLK_STS_NOTSUPP;
- 	}
-@@ -172,7 +196,10 @@ blk_status_t null_handle_zoned(struct nullb_cmd *cmd, enum req_opf op,
- 		return null_zone_write(cmd, sector, nr_sectors);
- 	case REQ_OP_ZONE_RESET:
- 	case REQ_OP_ZONE_RESET_ALL:
--		return null_zone_reset(cmd, sector);
-+	case REQ_OP_ZONE_OPEN:
-+	case REQ_OP_ZONE_CLOSE:
-+	case REQ_OP_ZONE_FINISH:
-+		return null_zone_mgmt(cmd, op, sector);
- 	default:
- 		return BLK_STS_OK;
- 	}
--- 
-2.21.0
-
+Best Regards,
+Viktor Smirnov.
