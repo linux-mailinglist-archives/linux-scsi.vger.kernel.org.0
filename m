@@ -2,93 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94ECCE797C
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 20:58:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DA1E79A5
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 21:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbfJ1T6y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Oct 2019 15:58:54 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44493 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725776AbfJ1T6y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Oct 2019 15:58:54 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q26so3999177pfn.11;
-        Mon, 28 Oct 2019 12:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=mUUwYm2J4X9AJ/m0x6sMLtjI+0msH+IroBSGwyonZQg=;
-        b=Kr+58qlwc2ermSgdCkMendRK93dGnsQ9/wcP+2QXe/ZhgaKwKYBHjpXqbKD0s+/i49
-         wqCOQIRuPqk4i1wpLLZlD6DdrUqRixVQyNe/4u9QVfCwiAZ/jTFaM6AC+XBVTn7+FYW1
-         oWSX46ptaB74p2i76Z1aB/q396JNSy4hfgOJYPy+fsUuyfzJwffFI/AQVuFGzucvIyOV
-         hEOIfIIpoRDnDxAyLt6A6UmJImPw+FDV8xPUPAzDCTXb5YZ9/6Z9fW+HbZtPm3hZdanV
-         zEdkG7sk4etqQXxYYM7wDTIxHwWeUSPd6x+em0hFXw+3BjvTWI8oZG/fcoWIiuOmo0Gr
-         sNFA==
+        id S1731085AbfJ1UHJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Oct 2019 16:07:09 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43216 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730671AbfJ1UHJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Oct 2019 16:07:09 -0400
+Received: by mail-pl1-f193.google.com with SMTP id v5so6193445ply.10;
+        Mon, 28 Oct 2019 13:07:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=mUUwYm2J4X9AJ/m0x6sMLtjI+0msH+IroBSGwyonZQg=;
-        b=j1A3hBxyI7WiaQY/2pUFOSlxjn8B1OQUj6VSk0doXLX9aNi5akxe4NiBQhsNXIRTWT
-         r4ldGptQmSD2ToxMib4z3LyB+OpkDjB5JStiQffb01JdONV3ZwoOB3uWBHPeUH08/uBp
-         LfFsfLUmt9I9GVibAEPAAzhNAv7oQuKL8qPMOK2K2Q9XhTxNicUhewycc/nqrNgfKaPx
-         EEv9+2Z5H/50zlAxyu9wHOTtGKi/4SjaxvIP4bsUzAhYRh6tS226kcP32n7B6QAdckbl
-         AcbyiBtunaLSIIiaLDI1uBA2cmrmQ54sZdmV/PfmuoGRS/vG1zfi0Zmv0kKj3b1z+x7H
-         gyxQ==
-X-Gm-Message-State: APjAAAXni5ZzTqU0dsGDD4Ev1uFqFjZVfq/pk7ZFnt1Ot+fsL7eRVwtZ
-        RGfTYAmOdyrqMgW+XXxVUgY=
-X-Google-Smtp-Source: APXvYqxmNOlFl+8UCIExMbtEghL6rJkdU+mbae+gk/jlG2s6cpuUnqbwShlRdqMyzSqgb7CMfJzAig==
-X-Received: by 2002:a17:90a:9201:: with SMTP id m1mr1376390pjo.74.1572292731971;
-        Mon, 28 Oct 2019 12:58:51 -0700 (PDT)
-Received: from saurav ([27.62.167.137])
-        by smtp.gmail.com with ESMTPSA id x192sm12472924pfc.109.2019.10.28.12.58.49
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dmwIjzOj9mNCZOPZyIeIixZhUclJq2tBR5bVlHulNYw=;
+        b=Lss5J0ie9VKT8eTIok+xKJMyscENjhLtvbr6DaL1kcoYu2Kpj+HMa7Hm+SRB60GI88
+         ORpjwcD5iQpf0m+9CRQ7mRp4+aWKXuXoienDy99NM4yiI/DjN0snWjXiSYUhkXVvGW3z
+         fx7iFrlm5Mv+4yMszw+Pdgxt8P2VeKPtYjB4A80deEgbo5y02Leh8EsJqWvfofODO7Gx
+         Oj0w8ZzKotKWkwsF99yEDNzFoQziTh+oQ8cNOoeutUxzXgL7wRJVe4LohTIzNXqMKL8T
+         1DkMlkSYRsQhHHaTGT9DJWYppsmYmrHjmUGrdniBOAyZquC7MfXu1KrY9dambZyt0F9r
+         SDEQ==
+X-Gm-Message-State: APjAAAVIfVVsZqvlrj11vM842CmvCmDtuwhOg3lbThWQyqyJUtmsrss3
+        eoO6g2Xw2cfNGb1FQ18k90A=
+X-Google-Smtp-Source: APXvYqyOysLJXAL+XlfjbcadaI0f8aO/j+RFejYaBsQDSxIhUiYXDMqSX0W/hzI2SZG6R8ql/fHJGg==
+X-Received: by 2002:a17:902:fe95:: with SMTP id x21mr20014417plm.53.1572293228122;
+        Mon, 28 Oct 2019 13:07:08 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id p3sm11084218pgp.41.2019.10.28.13.07.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 12:58:51 -0700 (PDT)
-Date:   Tue, 29 Oct 2019 01:28:44 +0530
-From:   Saurav Girepunje <saurav.girepunje@gmail.com>
-To:     QLogic-Storage-Upstream@qlogic.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     saurav.girepunje@hotmail.com
-Subject: [PATCH] scsi: qla4xxx: ql4_init.c: Remove Unneeded variable status
-Message-ID: <20191028195844.GA28740@saurav>
+        Mon, 28 Oct 2019 13:07:07 -0700 (PDT)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Christoph Hellwig <hch@lst.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>
+Subject: [PATCH 0/9] Consolidate {get,put}_unaligned_[bl]e24() definitions
+Date:   Mon, 28 Oct 2019 13:06:51 -0700
+Message-Id: <20191028200700.213753-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.24.0.rc0.303.g954a862665-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove unneeded variable status in qla4xxx_process_ddb_changed()
+Hi Peter,
 
-Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
----
- drivers/scsi/qla4xxx/ql4_init.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+This patch series moves the existing {get,put}_unaligned_[bl]e24() definitions
+into include/linux/unaligned/generic.h. This patch series also introduces a function
+for sign-extending 24-bit into 32-bit integers and introduces users for all new
+functions and macros. Please consider this patch series for kernel version v5.5.
 
-diff --git a/drivers/scsi/qla4xxx/ql4_init.c b/drivers/scsi/qla4xxx/ql4_init.c
-index 2bf5e3e639e1..8942c48740cb 100644
---- a/drivers/scsi/qla4xxx/ql4_init.c
-+++ b/drivers/scsi/qla4xxx/ql4_init.c
-@@ -1167,7 +1167,6 @@ int qla4xxx_process_ddb_changed(struct scsi_qla_host *ha,
- 				uint32_t state, uint32_t conn_err)
- {
- 	struct ddb_entry *ddb_entry;
--	int status = QLA_ERROR;
- 
- 	/* check for out of range index */
- 	if (fw_ddb_index >= MAX_DDB_ENTRIES)
-@@ -1189,7 +1188,7 @@ int qla4xxx_process_ddb_changed(struct scsi_qla_host *ha,
- 	ddb_entry->ddb_change(ha, fw_ddb_index, ddb_entry, state);
- 
- exit_ddb_event:
--	return status;
-+	return QLA_ERROR;
- }
- 
- /**
--- 
-2.20.1
+Thanks,
 
+Bart.
+
+Bart Van Assche (9):
+  linux/unaligned/byteshift.h: Remove superfluous casts
+  c6x: Include <linux/unaligned/generic.h> instead of duplicating it
+  treewide: Consolidate {get,put}_unaligned_[bl]e24() definitions
+  drivers/iio: Sign extend without triggering implementation-defined
+    behavior
+  scsi/st: Use get_unaligned_signed_be24()
+  scsi/trace: Use get_unaligned_be*()
+  arm/ecard: Use get_unaligned_le{16,24}()
+  IB/qib: Sign extend without triggering implementation-defined behavior
+  ASoC/fsl_spdif: Use put_unaligned_be24() instead of open-coding it
+
+ arch/arm/mach-rpc/ecard.c                     |  18 +--
+ arch/c6x/include/asm/unaligned.h              |  65 +--------
+ .../iio/common/st_sensors/st_sensors_core.c   |   7 +-
+ drivers/infiniband/hw/qib/qib_rc.c            |   2 +-
+ drivers/nvme/host/rdma.c                      |   8 --
+ drivers/nvme/target/rdma.c                    |   6 -
+ drivers/scsi/scsi_trace.c                     | 128 ++++++------------
+ drivers/scsi/st.c                             |   4 +-
+ drivers/usb/gadget/function/f_mass_storage.c  |   1 +
+ drivers/usb/gadget/function/storage_common.h  |   5 -
+ include/linux/unaligned/be_byteshift.h        |   6 +-
+ include/linux/unaligned/generic.h             |  44 ++++++
+ include/linux/unaligned/le_byteshift.h        |   6 +-
+ include/target/target_core_backend.h          |   6 -
+ sound/soc/fsl/fsl_spdif.c                     |   5 +-
+ 15 files changed, 103 insertions(+), 208 deletions(-)
