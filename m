@@ -2,61 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDDDE688C
-	for <lists+linux-scsi@lfdr.de>; Sun, 27 Oct 2019 22:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0E3E6B85
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 04:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732507AbfJ0VaU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 27 Oct 2019 17:30:20 -0400
-Received: from zmail.pkvoda.ru ([91.189.238.58]:33162 "EHLO zmail.pkvoda.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730460AbfJ0VaP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 27 Oct 2019 17:30:15 -0400
-X-Greylist: delayed 53125 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Oct 2019 17:30:13 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by zmail.pkvoda.ru (Postfix) with ESMTP id 2D820E1F787;
-        Sun, 27 Oct 2019 13:56:09 +1200 (+12)
-Received: from zmail.pkvoda.ru ([127.0.0.1])
-        by localhost (zmail.pkvoda.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id A2MVi7Vm-LHG; Sun, 27 Oct 2019 13:56:08 +1200 (+12)
-Received: from localhost (localhost [127.0.0.1])
-        by zmail.pkvoda.ru (Postfix) with ESMTP id 55439E0D4D3;
-        Sun, 27 Oct 2019 12:22:56 +1200 (+12)
-DKIM-Filter: OpenDKIM Filter v2.10.3 zmail.pkvoda.ru 55439E0D4D3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pkvoda.ru;
-        s=F51A4050-3C61-11E8-8A04-BD5F65F0F8F4; t=1572135776;
-        bh=ev891qVfpxn5QFYVE8lqa2IqoInrQG7gyaHRfGW0BDg=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=tEg4asjqELkf/f+kJE8rBImjkFH8ojdSFXB6eRVAoztlan/r2zWwP4JI/Iz6L8Uqq
-         NQsPblCR9Wxfu2a6/UN2OZDp9+kdTVaYS0BuFj2V7ga1nt6qnDqLqfKHwJzyaOnFXr
-         I0eT7UnQ5pJlgGl5dlnDerxyyTrD+m6nCiE9HhC8=
-X-Virus-Scanned: amavisd-new at pkvoda.ru
-Received: from zmail.pkvoda.ru ([127.0.0.1])
-        by localhost (zmail.pkvoda.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id A0M8amofJHDB; Sun, 27 Oct 2019 12:22:56 +1200 (+12)
-Received: from [169.254.77.56] (unknown [184.70.118.146])
-        by zmail.pkvoda.ru (Postfix) with ESMTPSA id 789EEDFFBF8;
-        Sun, 27 Oct 2019 11:10:45 +1200 (+12)
-Content-Type: text/plain; charset="iso-8859-1"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Re: Partnership
-To:     Recipients <vsmirnov@pkvoda.ru>
-From:   "VIKTOR SMIRNOV" <vsmirnov@pkvoda.ru>
-Date:   Sat, 26 Oct 2019 17:10:36 -0600
-Reply-To: pesmirnov1@yandex.com
-Message-Id: <20191026231045.789EEDFFBF8@zmail.pkvoda.ru>
+        id S1731176AbfJ1DuV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 27 Oct 2019 23:50:21 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:44390 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729328AbfJ1DuV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 27 Oct 2019 23:50:21 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id DA202602DA; Mon, 28 Oct 2019 03:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1572234620;
+        bh=e0uArYXdDZWeGRc+cJGiToLSA7CtyoLNwy6P75PAJSI=;
+        h=From:To:Subject:Date:From;
+        b=MvSxeWPItMT1rzQFD+Nwsy6oLtIrhM6SuhXycZFFqAWiXgM8p/mNI6g1S36l/hx91
+         LmQmcqFw8H38QnirT5SS3Q413JKSPnVOH91ChnuSvsF5f59cKclRcxTsP1HMyly7PQ
+         W/BmIBZvHPuuGC//lXa6LXi945+XTbygVivmzXEY=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from pacamara-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5EE96602DA;
+        Mon, 28 Oct 2019 03:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1572234619;
+        bh=e0uArYXdDZWeGRc+cJGiToLSA7CtyoLNwy6P75PAJSI=;
+        h=From:To:Subject:Date:From;
+        b=dueduqZ1ubocaSeq9LCD54+avwSlFUsN9MLu2JNosv9dXzUYEWK1G3rAyLNEktWXx
+         xP1zmEBZd+y/FShk+SR28xqkGx10W6scMXYlkhVfwJ0PGjp1d/MXx+EjQFihSdk4mm
+         OqelSS0vyKtsECzEFWG0lZx5j93zPaTbidfhXhS8=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 5EE96602DA
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=cang@codeaurora.org
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
+        cang@codeaurora.org
+Subject: [PATCH v1 0/5] UFS driver general fixes bundle 1
+Date:   Sun, 27 Oct 2019 20:50:02 -0700
+Message-Id: <1572234608-32654-1-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello, I sent you an email previously, maybe it didn't delivered. I am Vikt=
-or Smirnov, i am sorry for contacting you directly via your email, i will l=
-ike to discuss with you about a business deal that is very important.
+This bundle includes 5 general fixes for UFS driver.
 
-Please acknowledge receipt of this email to enable me provide you with furt=
-her details.
+Can Guo (5):
+  scsi: Adjust DBD setting in mode sense for caching mode page per LLD
+  scsi: ufs: Set DBD setting in mode sense for caching mode page
+  scsi: ufs: Release clock if DMA map fails
+  scsi: ufs: Do not clear the DL layer timers
+  scsi: ufs: Do not free irq in suspend
 
-Best Regards,
-Viktor Smirnov.
+ drivers/scsi/sd.c         |  6 +++++-
+ drivers/scsi/ufs/ufshcd.c | 40 ++++++++++++++++++++++++++--------------
+ drivers/scsi/ufs/unipro.h | 11 +++++++++++
+ include/scsi/scsi_host.h  |  6 ++++++
+ 4 files changed, 48 insertions(+), 15 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
