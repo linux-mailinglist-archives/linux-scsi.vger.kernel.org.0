@@ -2,297 +2,130 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B49E6D11
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 08:21:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D00E6D83
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 08:49:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732838AbfJ1HVG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Oct 2019 03:21:06 -0400
-Received: from mail-pf1-f201.google.com ([209.85.210.201]:44435 "EHLO
-        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731201AbfJ1HVC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Oct 2019 03:21:02 -0400
-Received: by mail-pf1-f201.google.com with SMTP id m185so7895186pfb.11
-        for <linux-scsi@vger.kernel.org>; Mon, 28 Oct 2019 00:21:01 -0700 (PDT)
+        id S1733050AbfJ1HtX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Oct 2019 03:49:23 -0400
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:38606 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729695AbfJ1HtX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Oct 2019 03:49:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1572248963; x=1603784963;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=LYCQoOw5DhwW5Z79fqWtlxnacucitA+yEKP46BfeOr4=;
+  b=mXbTohgRipDxjxT1B+Z4iqWUD/wZVJuW5hBaPAPHPYkdrUc2KsgIVy5I
+   c38MRoW8fZmJVXMY1QnaKm2vOr6k+SMS2WwU121wF53IM4HAmdozIFOFM
+   g99XgidSvX1v+razwQ5TffzlwggDBWnWtX0nnKso5QIFXv8+Y5wYzmDIh
+   l3n4588PczUa4hdVc3GkSDj9kGAJhrS6g3XljtddNw9vYetKzbzEzMBHh
+   BhQ7CcmMYQyP2IUgTJ7yml2AmvZK0m49RxERKKWxPiDeRqQt2XXV5nlfm
+   9VhgqYlRjAkEwaRp2Ksb4LANYepchuboMgEuTNMcVf8jHL9m8QBJd1fb6
+   w==;
+IronPort-SDR: spCGvcWF4pJTfSXV7c73+uU0+uW2Rs9upAJj3Q5HsGG1N/W0Jep8kx2rZDx71TLag7vQujx0CH
+ jvcc42qVI9RBLVBasX8TgSm/gM8qDxL2xZ/wiLCZlyfruVwNngWQJBF98Ef53KXK4pmYPkKGMB
+ XyDWm66KAvTMYKTgfLj+5eKF9G7h8b3xSnptunpkwA2Ldeq/OheFzdgntRPgw78xDIH88OrVcC
+ bFURBdSJYHEdMUc2n/dPSnhA8RNk5CYooQSuP9RCT6ycIJ2995VKIfG0fDq7wSJlRGqalJcuSJ
+ +2g=
+X-IronPort-AV: E=Sophos;i="5.68,239,1569254400"; 
+   d="scan'208";a="125882894"
+Received: from mail-bl2nam02lp2057.outbound.protection.outlook.com (HELO NAM02-BL2-obe.outbound.protection.outlook.com) ([104.47.38.57])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Oct 2019 15:49:22 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DWCeNEYU9FoSouJwcvsjK3a6a7Qt/0+fiQiLcOI0g6fxQNVASqpaLNBsuVNwvzcXvDWT50r9mfR7crnj6gxnhU5CAVk9WrpQhYcv5tQeFLMkR/gDGyVnphr234paNi3K+ZxRYnH1Alohi3FnbGi+PYsC4qxQBFajuUOFimKt1bvlDyDnOLmNysFirFx/HlsID5iso6MJ14hKZHkxWyXiEiHAfv3wepEnjOqgNuEW4slLQdSpL6gH+y0yi/93OqgJeKZlnyxJt7VQNfJZ08UwrmoAxPRpQsJ+XtbFfA+V0ySdtOk4FHH/+/Dz6t5uatItYFKxo7z8KXrzKIi4owbzFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LYCQoOw5DhwW5Z79fqWtlxnacucitA+yEKP46BfeOr4=;
+ b=IN2N7KIqTcWkJc4pdD09G96Bk6XS5JvSN5bXWyMKb46ogAyJXcq7A6dTmTmpeOLARbBK7NE+eu28SCdfTtphjrJVn2MUrcWtm6hYUAikb93nQep7YjEA7RIbM3Gp8PYKi5ljYWj/CYSmUHoXm9ra2RjbIoMBAieZuT1fPC6DLDR4TeIf1IGkPV5cLiTiLGZ0+Wky1gf0vJXE680ppyIj3JxuRETQm6W/xiKdc70N1qIy+fZ6EAeKaE6kU1+M5GmGT8cZ/Do7eDutZFT/Pr2in5QcjFAXQa5bQ6TiDWlx8MtteyIzcXtvQQom4DNqHTj3cjhhpBTzTxKb3l76MAyddA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=YaUYxJIU8QNjs4DnqY9qxnn9mg2HqCmU7dCcxj1yfsw=;
-        b=aZpymRW91e2sm8Ex06DslpYKHKd+KQ6IO7BqB6qcudx1iMtuxWF4vHlLHvUbnln/Gf
-         UOrMbTCDEL04H/p1n7Rh1mIzWJ48GJErFdUzemJlLarsRMGOmdw27/TJ3C83uCcKeGfg
-         WHL1c4xZVsn/RU5JncLHCTWHF+IRP77RCU/y6sqPuvZiP+FOWRho7/0uzKFkV2E5i/Ps
-         ZsphWxzFIFhiZFAPDX+IwTaIfpdR3v5MGyZ9+umV0S3ddi7fc/NPgDvSYmbeO8GboJil
-         /XlRHZYPB1i6cwKa2uTUAJCrfbGmQPY+DVGK1SiUYWUx7GIW4K3kahcw59J4ru4BK+rs
-         4wjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=YaUYxJIU8QNjs4DnqY9qxnn9mg2HqCmU7dCcxj1yfsw=;
-        b=JOAJCPSWqpQV0HXkNt8obZAh2DwxNoxGnSYq2k8oBq6ynq+jTHi3yMG67e0CY8OuKB
-         NpwoJ0BsobOAXzuZgMh2mzcVxC4qxuxUjsP3Ha58GzOUVCUlaEXk860VfyAaVGEX2zKA
-         3a2U2eRt6xI5C9M3oEDt0KiQKFK0MeDYXwzHMzdRXys4aA0Sx0yb+ca5YRKUvXqnGlEi
-         CTQQxRd/IPgpEwvdddBDwRrpX9pN6yJnMKbXa4kLG1JXsDQL3OGWllYHXu2p5VNf71Mf
-         4vo1uHa957yKr1nnY3lylmauOV/KA6nDgkfhF8SMUlO/dxFgi7uQdRMelvzeyISkNMJ/
-         ovgw==
-X-Gm-Message-State: APjAAAX6X88U8HAyuv2b0CYCzvYYg+PF0OSMtReelFw90TJKJJXrrrjg
-        L53mKiBFbKBHletvZuI3yIaQtDJMOU0=
-X-Google-Smtp-Source: APXvYqy3c/B/X4NYWwSXvNvZ0ZB6ZtWW4GfuuPKJh6nOOCXn8f0RoTWdJF68RmsTmVSY/kkgxvO1m7zp4mI=
-X-Received: by 2002:a63:3104:: with SMTP id x4mr18785655pgx.135.1572247261348;
- Mon, 28 Oct 2019 00:21:01 -0700 (PDT)
-Date:   Mon, 28 Oct 2019 00:20:32 -0700
-In-Reply-To: <20191028072032.6911-1-satyat@google.com>
-Message-Id: <20191028072032.6911-10-satyat@google.com>
-Mime-Version: 1.0
-References: <20191028072032.6911-1-satyat@google.com>
-X-Mailer: git-send-email 2.24.0.rc0.303.g954a862665-goog
-Subject: [PATCH v5 9/9] ext4: add inline encryption support
-From:   Satya Tangirala <satyat@google.com>
-To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>,
-        Kim Boojin <boojin.kim@samsung.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Satya Tangirala <satyat@google.com>
-Content-Type: text/plain; charset="UTF-8"
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LYCQoOw5DhwW5Z79fqWtlxnacucitA+yEKP46BfeOr4=;
+ b=jVXKc6qYyojvqJp26VlD28fzonzWTZSSZYMrM4aW/36bALAZnS6ejD+ZQRWe8sCCiFB03n1LsyvXO7A3/xamKsnD7AnoM9SvpZ5paLvXRyXSx2+/7aNzHMrAjDXCYgYOyxQm7iCluprEdQFnN4rzBhsqyZXeOlY8krGTUvraRlA=
+Received: from BYAPR04MB5749.namprd04.prod.outlook.com (20.179.57.21) by
+ BYAPR04MB4728.namprd04.prod.outlook.com (52.135.239.222) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.23; Mon, 28 Oct 2019 07:49:20 +0000
+Received: from BYAPR04MB5749.namprd04.prod.outlook.com
+ ([fe80::34a1:afd2:e5c1:77c7]) by BYAPR04MB5749.namprd04.prod.outlook.com
+ ([fe80::34a1:afd2:e5c1:77c7%6]) with mapi id 15.20.2387.023; Mon, 28 Oct 2019
+ 07:49:20 +0000
+From:   Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>
+CC:     Ajay Joshi <Ajay.Joshi@wdc.com>,
+        Matias Bjorling <Matias.Bjorling@wdc.com>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Dmitry Fomichev <Dmitry.Fomichev@wdc.com>,
+        Keith Busch <kbusch@kernel.org>
+Subject: Re: [PATCH 2/8] block: Simplify REQ_OP_ZONE_RESET_ALL handling
+Thread-Topic: [PATCH 2/8] block: Simplify REQ_OP_ZONE_RESET_ALL handling
+Thread-Index: AQHVjM+qshxVC7ah2EOUEKAVKMXumA==
+Date:   Mon, 28 Oct 2019 07:49:19 +0000
+Message-ID: <BYAPR04MB5749C25A8558C0ED9AB3EA6786660@BYAPR04MB5749.namprd04.prod.outlook.com>
+References: <20191027140549.26272-1-damien.lemoal@wdc.com>
+ <20191027140549.26272-3-damien.lemoal@wdc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Chaitanya.Kulkarni@wdc.com; 
+x-originating-ip: [199.255.44.172]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 6ea6f626-76af-48a5-937d-08d75b7b576e
+x-ms-traffictypediagnostic: BYAPR04MB4728:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR04MB4728BAD2B681C6FEE1B2943986660@BYAPR04MB4728.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:4502;
+x-forefront-prvs: 0204F0BDE2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(39860400002)(396003)(346002)(366004)(136003)(199004)(189003)(71190400001)(71200400001)(99286004)(186003)(7696005)(53546011)(2906002)(74316002)(256004)(476003)(5660300002)(86362001)(6506007)(486006)(8936002)(4744005)(66066001)(76176011)(8676002)(52536014)(81166006)(76116006)(81156014)(102836004)(9686003)(4326008)(66946007)(446003)(6436002)(6246003)(2501003)(66556008)(66476007)(55016002)(26005)(64756008)(316002)(54906003)(229853002)(110136005)(305945005)(7736002)(14454004)(25786009)(66446008)(3846002)(6116002)(478600001)(33656002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4728;H:BYAPR04MB5749.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rP2RhoK8CdyPLZWnrmCUUdknJXYeZ8JxI+uVPjnL/9BbPW6gRhU0yW7q2VAV4AWzrM5ujyA3mKPxjHnP+HXaNLaWF5uhmfeDoHL0+Kfs8H0zZgjBVCkXTC4wCDxIZaqPd7YxP0Vb/0EEhGbGVlKWugb48coUwxKLwfuGEIEZAcieruqqBI+0KaQSUW1TCNsf0x840JE2UA2S/iXnun6Gmdov5DKPnSEG8S4iXRm4RxfdabKt/v38jdbIdjwTJT/MvNfrw7R8oxEV9djtsqz7ecId6v5gDZiqFyW7SAV8gQMZMwZpONNWMEMg1Df9okM2xAYHEtb6UggxlHojg+y8BQzNgjyG6ZQGeAq+89LN2uvEzedA8bF+m8Q/qEFpbIpoby9Y3sox9gYMJIos2HRo4d6cvv063004CVuFatDXQuZetXEDSFmX+q9lwCexDVE6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6ea6f626-76af-48a5-937d-08d75b7b576e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2019 07:49:19.9685
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XPc2A87OAkaGZCLOOY9YC4fhe8oohf3V5qJgSLFRTl1at/61XLFVix0e9UKPjem6TLsbPx/hVFes+UvFwdoMnP9SlL6aJ8JfVMNTWBGTTAI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4728
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
-
-Wire up ext4 to support inline encryption via the helper functions which
-fs/crypto/ now provides.  This includes:
-
-- Adding a mount option 'inlinecrypt' which enables inline encryption
-  on encrypted files where it can be used.
-
-- Setting the bio_crypt_ctx on bios that will be submitted to an
-  inline-encrypted file.
-
-  Note: submit_bh_wbc() in fs/buffer.c also needed to be patched for
-  this part, since ext4 sometimes uses ll_rw_block() on file data.
-
-- Not adding logically discontiguous data to bios that will be submitted
-  to an inline-encrypted file.
-
-- Not doing filesystem-layer crypto on inline-encrypted files.
-
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Signed-off-by: Satya Tangirala <satyat@google.com>
----
- fs/buffer.c        |  3 +++
- fs/ext4/ext4.h     |  1 +
- fs/ext4/inode.c    |  4 ++--
- fs/ext4/page-io.c  | 11 +++++++++--
- fs/ext4/readpage.c | 15 ++++++++++++---
- fs/ext4/super.c    | 13 +++++++++++++
- 6 files changed, 40 insertions(+), 7 deletions(-)
-
-diff --git a/fs/buffer.c b/fs/buffer.c
-index 86a38b979323..5d1f420de95b 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -47,6 +47,7 @@
- #include <linux/pagevec.h>
- #include <linux/sched/mm.h>
- #include <trace/events/block.h>
-+#include <linux/fscrypt.h>
- 
- static int fsync_buffers_list(spinlock_t *lock, struct list_head *list);
- static int submit_bh_wbc(int op, int op_flags, struct buffer_head *bh,
-@@ -3068,6 +3069,8 @@ static int submit_bh_wbc(int op, int op_flags, struct buffer_head *bh,
- 	 */
- 	bio = bio_alloc(GFP_NOIO, 1);
- 
-+	fscrypt_set_bio_crypt_ctx_bh(bio, bh, GFP_NOIO | __GFP_NOFAIL);
-+
- 	bio->bi_iter.bi_sector = bh->b_blocknr * (bh->b_size >> 9);
- 	bio_set_dev(bio, bh->b_bdev);
- 	bio->bi_write_hint = write_hint;
-diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
-index b3a2cc7c0252..ce493e360814 100644
---- a/fs/ext4/ext4.h
-+++ b/fs/ext4/ext4.h
-@@ -1148,6 +1148,7 @@ struct ext4_inode_info {
- #define EXT4_MOUNT_JOURNAL_CHECKSUM	0x800000 /* Journal checksums */
- #define EXT4_MOUNT_JOURNAL_ASYNC_COMMIT	0x1000000 /* Journal Async Commit */
- #define EXT4_MOUNT_WARN_ON_ERROR	0x2000000 /* Trigger WARN_ON on error */
-+#define EXT4_MOUNT_INLINECRYPT		0x4000000 /* Inline encryption support */
- #define EXT4_MOUNT_DELALLOC		0x8000000 /* Delalloc support */
- #define EXT4_MOUNT_DATA_ERR_ABORT	0x10000000 /* Abort on file data write */
- #define EXT4_MOUNT_BLOCK_VALIDITY	0x20000000 /* Block validity checking */
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 516faa280ced..43a844affc57 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1237,7 +1237,7 @@ static int ext4_block_write_begin(struct page *page, loff_t pos, unsigned len,
- 	}
- 	if (unlikely(err)) {
- 		page_zero_new_buffers(page, from, to);
--	} else if (IS_ENCRYPTED(inode) && S_ISREG(inode->i_mode)) {
-+	} else if (fscrypt_inode_uses_fs_layer_crypto(inode)) {
- 		for (i = 0; i < nr_wait; i++) {
- 			int err2;
- 
-@@ -4034,7 +4034,7 @@ static int __ext4_block_zero_page_range(handle_t *handle,
- 		/* Uhhuh. Read error. Complain and punt. */
- 		if (!buffer_uptodate(bh))
- 			goto unlock;
--		if (S_ISREG(inode->i_mode) && IS_ENCRYPTED(inode)) {
-+		if (fscrypt_inode_uses_fs_layer_crypto(inode)) {
- 			/* We expect the key to be set. */
- 			BUG_ON(!fscrypt_has_encryption_key(inode));
- 			WARN_ON_ONCE(fscrypt_decrypt_pagecache_blocks(
-diff --git a/fs/ext4/page-io.c b/fs/ext4/page-io.c
-index 12ceadef32c5..46a4aeef8275 100644
---- a/fs/ext4/page-io.c
-+++ b/fs/ext4/page-io.c
-@@ -362,10 +362,16 @@ static int io_submit_init_bio(struct ext4_io_submit *io,
- 			      struct buffer_head *bh)
- {
- 	struct bio *bio;
-+	int err;
- 
- 	bio = bio_alloc(GFP_NOIO, BIO_MAX_PAGES);
- 	if (!bio)
- 		return -ENOMEM;
-+	err = fscrypt_set_bio_crypt_ctx_bh(bio, bh, GFP_NOIO);
-+	if (err) {
-+		bio_put(bio);
-+		return err;
-+	}
- 	bio->bi_iter.bi_sector = bh->b_blocknr * (bh->b_size >> 9);
- 	bio_set_dev(bio, bh->b_bdev);
- 	bio->bi_end_io = ext4_end_bio;
-@@ -383,7 +389,8 @@ static int io_submit_add_bh(struct ext4_io_submit *io,
- {
- 	int ret;
- 
--	if (io->io_bio && bh->b_blocknr != io->io_next_block) {
-+	if (io->io_bio && (bh->b_blocknr != io->io_next_block ||
-+			   !fscrypt_mergeable_bio_bh(io->io_bio, bh))) {
- submit_and_retry:
- 		ext4_io_submit(io);
- 	}
-@@ -474,7 +481,7 @@ int ext4_bio_write_page(struct ext4_io_submit *io,
- 	 * (e.g. holes) to be unnecessarily encrypted, but this is rare and
- 	 * can't happen in the common case of blocksize == PAGE_SIZE.
- 	 */
--	if (IS_ENCRYPTED(inode) && S_ISREG(inode->i_mode) && nr_to_submit) {
-+	if (fscrypt_inode_uses_fs_layer_crypto(inode) && nr_to_submit) {
- 		gfp_t gfp_flags = GFP_NOFS;
- 		unsigned int enc_bytes = round_up(len, i_blocksize(inode));
- 
-diff --git a/fs/ext4/readpage.c b/fs/ext4/readpage.c
-index a30b203fa461..643f271b0b8e 100644
---- a/fs/ext4/readpage.c
-+++ b/fs/ext4/readpage.c
-@@ -183,7 +183,7 @@ static struct bio_post_read_ctx *get_bio_post_read_ctx(struct inode *inode,
- 	unsigned int post_read_steps = 0;
- 	struct bio_post_read_ctx *ctx = NULL;
- 
--	if (IS_ENCRYPTED(inode) && S_ISREG(inode->i_mode))
-+	if (fscrypt_inode_uses_fs_layer_crypto(inode))
- 		post_read_steps |= 1 << STEP_DECRYPT;
- 
- 	if (ext4_need_verity(inode, first_idx))
-@@ -220,6 +220,7 @@ int ext4_mpage_readpages(struct address_space *mapping,
- 	const unsigned blkbits = inode->i_blkbits;
- 	const unsigned blocks_per_page = PAGE_SIZE >> blkbits;
- 	const unsigned blocksize = 1 << blkbits;
-+	sector_t next_block;
- 	sector_t block_in_file;
- 	sector_t last_block;
- 	sector_t last_block_in_file;
-@@ -252,7 +253,8 @@ int ext4_mpage_readpages(struct address_space *mapping,
- 		if (page_has_buffers(page))
- 			goto confused;
- 
--		block_in_file = (sector_t)page->index << (PAGE_SHIFT - blkbits);
-+		block_in_file = next_block =
-+			(sector_t)page->index << (PAGE_SHIFT - blkbits);
- 		last_block = block_in_file + nr_pages * blocks_per_page;
- 		last_block_in_file = (ext4_readpage_limit(inode) +
- 				      blocksize - 1) >> blkbits;
-@@ -352,7 +354,8 @@ int ext4_mpage_readpages(struct address_space *mapping,
- 		 * This page will go to BIO.  Do we need to send this
- 		 * BIO off first?
- 		 */
--		if (bio && (last_block_in_bio != blocks[0] - 1)) {
-+		if (bio && (last_block_in_bio != blocks[0] - 1 ||
-+			    !fscrypt_mergeable_bio(bio, inode, next_block))) {
- 		submit_and_realloc:
- 			submit_bio(bio);
- 			bio = NULL;
-@@ -364,6 +367,12 @@ int ext4_mpage_readpages(struct address_space *mapping,
- 				min_t(int, nr_pages, BIO_MAX_PAGES));
- 			if (!bio)
- 				goto set_error_page;
-+			if (fscrypt_set_bio_crypt_ctx(bio, inode, next_block,
-+						      GFP_KERNEL) != 0) {
-+				bio_put(bio);
-+				bio = NULL;
-+				goto set_error_page;
-+			}
- 			ctx = get_bio_post_read_ctx(inode, bio, page->index);
- 			if (IS_ERR(ctx)) {
- 				bio_put(bio);
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index b3cbf8622eab..3415bce51a36 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1357,6 +1357,11 @@ static void ext4_get_ino_and_lblk_bits(struct super_block *sb,
- 	*lblk_bits_ret = 8 * sizeof(ext4_lblk_t);
- }
- 
-+static bool ext4_inline_crypt_enabled(struct super_block *sb)
-+{
-+	return test_opt(sb, INLINECRYPT);
-+}
-+
- static const struct fscrypt_operations ext4_cryptops = {
- 	.key_prefix		= "ext4:",
- 	.get_context		= ext4_get_context,
-@@ -1366,6 +1371,7 @@ static const struct fscrypt_operations ext4_cryptops = {
- 	.max_namelen		= EXT4_NAME_LEN,
- 	.has_stable_inodes	= ext4_has_stable_inodes,
- 	.get_ino_and_lblk_bits	= ext4_get_ino_and_lblk_bits,
-+	.inline_crypt_enabled	= ext4_inline_crypt_enabled,
- };
- #endif
- 
-@@ -1461,6 +1467,7 @@ enum {
- 	Opt_journal_path, Opt_journal_checksum, Opt_journal_async_commit,
- 	Opt_abort, Opt_data_journal, Opt_data_ordered, Opt_data_writeback,
- 	Opt_data_err_abort, Opt_data_err_ignore, Opt_test_dummy_encryption,
-+	Opt_inlinecrypt,
- 	Opt_usrjquota, Opt_grpjquota, Opt_offusrjquota, Opt_offgrpjquota,
- 	Opt_jqfmt_vfsold, Opt_jqfmt_vfsv0, Opt_jqfmt_vfsv1, Opt_quota,
- 	Opt_noquota, Opt_barrier, Opt_nobarrier, Opt_err,
-@@ -1557,6 +1564,7 @@ static const match_table_t tokens = {
- 	{Opt_noinit_itable, "noinit_itable"},
- 	{Opt_max_dir_size_kb, "max_dir_size_kb=%u"},
- 	{Opt_test_dummy_encryption, "test_dummy_encryption"},
-+	{Opt_inlinecrypt, "inlinecrypt"},
- 	{Opt_nombcache, "nombcache"},
- 	{Opt_nombcache, "no_mbcache"},	/* for backward compatibility */
- 	{Opt_removed, "check=none"},	/* mount option from ext2/3 */
-@@ -1768,6 +1776,11 @@ static const struct mount_opts {
- 	{Opt_jqfmt_vfsv1, QFMT_VFS_V1, MOPT_QFMT},
- 	{Opt_max_dir_size_kb, 0, MOPT_GTE0},
- 	{Opt_test_dummy_encryption, 0, MOPT_GTE0},
-+#ifdef CONFIG_FS_ENCRYPTION_INLINE_CRYPT
-+	{Opt_inlinecrypt, EXT4_MOUNT_INLINECRYPT, MOPT_SET},
-+#else
-+	{Opt_inlinecrypt, EXT4_MOUNT_INLINECRYPT, MOPT_NOSUPPORT},
-+#endif
- 	{Opt_nombcache, EXT4_MOUNT_NO_MBCACHE, MOPT_SET},
- 	{Opt_err, 0, 0}
- };
--- 
-2.24.0.rc0.303.g954a862665-goog
-
+The reason code for REQ_OP_RESET_ALL is kept in a different function so=0A=
+we can clearly differentiate between REQ_OP_RESET and REQ_OP_RESET_ALL=0A=
+when we add new tracepoints with blktrace framework.=0A=
+=0A=
+But if that is acceptable, then,=0A=
+=0A=
+Reviewed-by: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>=0A=
+=0A=
+On 10/27/19 7:06 AM, Damien Le Moal wrote:=0A=
+> There is no need for the function __blkdev_reset_all_zones() as=0A=
+> REQ_OP_ZONE_RESET_ALL can be handled directly in blkdev_reset_zones()=0A=
+> bio loop with an early break from the loop. This patch removes this=0A=
+> function and modifies blkdev_reset_zones(), simplifying the code.=0A=
+> =0A=
+> Signed-off-by: Damien Le Moal<damien.lemoal@wdc.com>=0A=
+=0A=
