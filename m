@@ -2,103 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BEA9E7998
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 21:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AE4E7A0C
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 21:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732474AbfJ1UHX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Oct 2019 16:07:23 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:46263 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732442AbfJ1UHW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Oct 2019 16:07:22 -0400
-Received: by mail-pl1-f196.google.com with SMTP id q21so6178984plr.13;
-        Mon, 28 Oct 2019 13:07:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Xu2MsrFJD4eUUY87eX5Fz+Z25LNa6DOvv39jkp2X8H4=;
-        b=mBwcN7PJhZOGf7VCBwtRqLL2lXMzTeQEwbRajQbkAUkBQDYEl8Tn0wj8LQJRFE6j+A
-         DbzT/7oKMrDR6+57cqMoGhjwYvbuyp9Wmm7LcqIiOE1/N7aoeidESBHTdbMRZbJlIYLd
-         LT+7QOW+HzOEg2s4HnjjxaR4Pr4b7SLqcafGTLa6yCd7Ht9qZ/cy69HEjvtuemDJG/R4
-         Yetmyabt6eFNztD7cAGOT49gHE/2hY1kyGtaEGhclRfh8xuVmOpW3/lz5jwMqamuECXy
-         aAZNhcdbFAvSYdbLmTgr8hbtNYCklyUuyqytZbPCqKbs8ns01SvoSjhQLMiF+5mM1Ax5
-         Emzg==
-X-Gm-Message-State: APjAAAXDsjbnM1mRMpMBPf+O9bt0I5LXpaJHLqjn81E+Lh/r+qk0ImfB
-        btAqJ4Dg8DRSzNDOsaO6UYE=
-X-Google-Smtp-Source: APXvYqxIHZsZXZMeazBK/X4tBg4jFwOvVK/Om3IES/q2EQZzHIDQR/guTFvrwm0mKoYnzsFB+m/u8w==
-X-Received: by 2002:a17:902:9a49:: with SMTP id x9mr20916371plv.330.1572293241873;
-        Mon, 28 Oct 2019 13:07:21 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id p3sm11084218pgp.41.2019.10.28.13.07.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 13:07:21 -0700 (PDT)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
+        id S1733166AbfJ1UY4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Oct 2019 16:24:56 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54800 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727802AbfJ1UYz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Oct 2019 16:24:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=yPE0SEZPz8Tc+OMS4kFqOGsFj5A2ktZo+Yyz/KZ1TQE=; b=ILqfyNeJxEWgr49oAyTomKf5U
+        ZB9SUmnCLyq3+XdiArCsYn43E/7kA1ds75Is/qGUZOtd0NYLSAOrTJ4Pjhq7nXGq4b5kjg4ZTAzFb
+        qafGcD0CH0klR5B0GktMCkCvpC/ywNHI+CfXlSCYYbw3l8Et5KvYNMcgS4JxWgBNV/d4c=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iPBYl-0000aR-7O; Mon, 28 Oct 2019 20:24:15 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id B2C9527403EE; Mon, 28 Oct 2019 20:24:14 +0000 (GMT)
+Date:   Mon, 28 Oct 2019 20:24:14 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Christoph Hellwig <hch@lst.de>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        Bart Van Assche <bvanassche@acm.org>,
         Timur Tabi <timur@kernel.org>,
         Nicolin Chen <nicoleotsuka@gmail.com>,
         Xiubo Li <Xiubo.Lee@gmail.com>,
         Fabio Estevam <festevam@gmail.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH 9/9] ASoC/fsl_spdif: Use put_unaligned_be24() instead of open-coding it
-Date:   Mon, 28 Oct 2019 13:07:00 -0700
-Message-Id: <20191028200700.213753-10-bvanassche@acm.org>
-X-Mailer: git-send-email 2.24.0.rc0.303.g954a862665-goog
-In-Reply-To: <20191028200700.213753-1-bvanassche@acm.org>
+Subject: Re: [PATCH 9/9] ASoC/fsl_spdif: Use put_unaligned_be24() instead of
+ open-coding it
+Message-ID: <20191028202414.GK5015@sirena.co.uk>
 References: <20191028200700.213753-1-bvanassche@acm.org>
+ <20191028200700.213753-10-bvanassche@acm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8tUgZ4IE8L4vmMyh"
+Content-Disposition: inline
+In-Reply-To: <20191028200700.213753-10-bvanassche@acm.org>
+X-Cookie: The Moral Majority is neither.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch makes the code easier to read.
 
-Cc: Timur Tabi <timur@kernel.org>
-Cc: Nicolin Chen <nicoleotsuka@gmail.com>
-Cc: Xiubo Li <Xiubo.Lee@gmail.com>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- sound/soc/fsl/fsl_spdif.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+--8tUgZ4IE8L4vmMyh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/sound/soc/fsl/fsl_spdif.c b/sound/soc/fsl/fsl_spdif.c
-index 7858a5499ac5..8e80ae16f566 100644
---- a/sound/soc/fsl/fsl_spdif.c
-+++ b/sound/soc/fsl/fsl_spdif.c
-@@ -16,6 +16,7 @@
- #include <linux/of_device.h>
- #include <linux/of_irq.h>
- #include <linux/regmap.h>
-+#include <asm/unaligned.h>
- 
- #include <sound/asoundef.h>
- #include <sound/dmaengine_pcm.h>
-@@ -173,9 +174,7 @@ static void spdif_irq_uqrx_full(struct fsl_spdif_priv *spdif_priv, char name)
- 	}
- 
- 	regmap_read(regmap, reg, &val);
--	ctrl->subcode[*pos++] = val >> 16;
--	ctrl->subcode[*pos++] = val >> 8;
--	ctrl->subcode[*pos++] = val;
-+	put_unaligned_be24(val, &ctrl->subcode[*pos]);
- }
- 
- /* U/Q Channel sync found */
--- 
-2.24.0.rc0.303.g954a862665-goog
+On Mon, Oct 28, 2019 at 01:07:00PM -0700, Bart Van Assche wrote:
+> This patch makes the code easier to read.
 
+I only have this patch from the series but no cover letter, what's the
+story with dependencies?
+
+--8tUgZ4IE8L4vmMyh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl23Tm0ACgkQJNaLcl1U
+h9C0bQf/dKHPtMdfD3BnbaQDGmpdXBeC3ulHsdo6am7obLNTi3STvqJQub0n+xvl
+0qwhNlf7hP6A2S5amw7CHIhgZMaxiedFnckBA6lRfEeIBfsM724qWgEk9DX8csXG
+XyPbE35qiNCulfilLLbu7kgZn+jQrzur9qDJjI0c8L7nqhws/aShY2g/nOWu770z
++7KeMdWAPXyeTjXIiERD52wrk0XzOQe0b3vzplWRLeKBY/g7TILWzAEDU5woe1J7
+jXew9M8Eob3+GiW2vCXslP0eSrnVcibOVZ+0HIIhb+EPiyqUYn3i3TmSAXV8H7Rd
+EA2uR23tqoeMhbbUjytGXEtrrdDTkw==
+=38LL
+-----END PGP SIGNATURE-----
+
+--8tUgZ4IE8L4vmMyh--
