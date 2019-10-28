@@ -2,55 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1294E78B4
-	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 19:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D6CE7870
+	for <lists+linux-scsi@lfdr.de>; Mon, 28 Oct 2019 19:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728485AbfJ1SpO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 28 Oct 2019 14:45:14 -0400
-Received: from hn.kd.ny.adsl ([42.231.162.229]:3273 "HELO zoosbook.com"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with SMTP
-        id S1728006AbfJ1SpO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 28 Oct 2019 14:45:14 -0400
-Received: from unknown (HELO qnx.mdrost.com) (Tue, 29 Oct 2019 05:41:31 +1100)
-        by asx121.turbo-inline.com with SMTP; Tue, 29 Oct 2019 05:41:31 +1100
-Received: from unknown (50.83.3.97)
-        by webmail.halftomorrow.com with LOCAL; Tue, 29 Oct 2019 05:40:23 +1100
-Received: from smtp.endend.nl ([208.57.44.86]) by snmp.otwaloow.com with ESMTP; Tue, 29 Oct 2019 05:31:58 +1100
-Message-ID: <961d01d58e17$d077ecd0$9bf3f661@admin>
-Reply-To: "zoosbook.com" <admin@zoosbook.com>
-From:   "zoosbook.com" <admin@zoosbook.com>
-To:     <linux-raid@vger.kernel.org>
-Subject: FREE Bestiality Social Network
-Date:   Tue, 29 Oct 2019 05:15:01 +1100
+        id S2391136AbfJ1ScB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 28 Oct 2019 14:32:01 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36344 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387407AbfJ1ScB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 28 Oct 2019 14:32:01 -0400
+Received: by mail-pg1-f194.google.com with SMTP id j22so1436249pgh.3
+        for <linux-scsi@vger.kernel.org>; Mon, 28 Oct 2019 11:31:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3DmiAj9QVXXHkx/wEoVuxYRMXAh+RROS1QX3culjYsg=;
+        b=SYzaZx7RaW98F2jkLsisXvNd+m48uIh71dbm49w8x2Xr4ZlwYL+CDfIgX3e8iygU4X
+         QoEeZgl/rTMWWwspCvvUvRWmyoiDKvY5yMog3N/HFhUg8xNW3tpPAsWFTwjOrGrQTc5j
+         wL2mKCPiiC2RYk1GK+dylgmwwRG+7Ak8c+thXYfM6KiYz8/c2rn18tYNcr3D1dkHu4RL
+         Seaygs78VD/e5Foi7BV6lMD09VicfH9ZKKnyBvxvoDh0uHy1OgMnWyLmRhWcik2QhbHI
+         tDuCBgKHRRycjMMXER9Il/Kew5+GFToOYk5G/vF0SSrbn58ii93ULf8aYrBHWeWYzXxo
+         hQXg==
+X-Gm-Message-State: APjAAAUsyCLWm2Pjn+VwVEAQSvB7l57rhWels6otxQ5JxFEpBYbNwywo
+        rysvyelbBZaDWtpji2VfFyc=
+X-Google-Smtp-Source: APXvYqzqFrBZ8BpOoo+/UVSUl9vShZStnqHSgV3novncfNmAgAkAfAaOf18oqR48xsSxr1Yr58xGqA==
+X-Received: by 2002:a63:595:: with SMTP id 143mr14100936pgf.45.1572287518761;
+        Mon, 28 Oct 2019 11:31:58 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id l23sm207378pjy.12.2019.10.28.11.31.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Oct 2019 11:31:57 -0700 (PDT)
+Subject: Re: [PATCH 24/32] elx: efct: LIO backend interface routines
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+Cc:     Ram Vegesna <ram.vegesna@broadcom.com>,
+        Mike Christie <mchristi@redhat.com>
+References: <20191023215557.12581-1-jsmart2021@gmail.com>
+ <20191023215557.12581-25-jsmart2021@gmail.com>
+ <5eae53c2-daee-f1f3-8586-e92fd61a5544@acm.org>
+ <2120064f-cc31-e759-9b49-9acc73d7ef91@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <5d62ab63-8a7f-2e2f-6b92-80cb3d252b55@acm.org>
+Date:   Mon, 28 Oct 2019 11:31:56 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Office Outlook 12.0
-X-MimeOLE: Produced By Microsoft MimeOLE V12.0
+In-Reply-To: <2120064f-cc31-e759-9b49-9acc73d7ef91@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello, 
+On 10/28/19 10:49 AM, James Smart wrote:
+>> On 10/24/2019 3:27 PM, Bart Van Assche wrote:
+>>> +static const struct file_operations efct_debugfs_session_fops = {
+>>> +    .owner        = THIS_MODULE,
+>>> +    .open        = efct_debugfs_session_open,
+>>> +    .release    = efct_debugfs_session_close,
+>>> +    .read        = efct_debugfs_session_read,
+>>> +    .write        = efct_debugfs_session_write,
+>>> +    .llseek        = default_llseek,
+>>> +};
+>>> +
+>>> +static const struct file_operations efct_npiv_debugfs_session_fops = {
+>>> +    .owner        = THIS_MODULE,
+>>> +    .open        = efct_npiv_debugfs_session_open,
+>>> +    .release    = efct_debugfs_session_close,
+>>> +    .read        = efct_debugfs_session_read,
+>>> +    .write        = efct_debugfs_session_write,
+>>> +    .llseek        = default_llseek,
+>>> +};
+>>
+>> Since the information that is exported through debugfs (logged in 
+>> initiators) is information that is also useful for other target 
+>> drivers, I think this functionality should be implemented in the 
+>> target core instead of in this target driver.
+> 
+> Can you expand further on what you'd like to see and the format of the 
+> data to be displayed ?
 
-Bestiality Social Networking Platform. With pictures, videos and friend
-about bestiality and zoophilia porn. 
-Here you can meet and talk with people that love zoo sex.
+(+Mike)
 
-Register for a free account with us today
-https://www.zoosbook.com/register
+Mike, can you comment on the status of your patch "target: add session 
+dir in configfs" (https://patchwork.kernel.org/patch/10525321/)?
 
-Let your animalic thoughts get alive.
+Thanks,
 
-After you`ll get a feeling of the things inside, please give us a nice
-review here
-https://www.scamadviser.com/check-website/zoosbook.com
-
-
-See you inside
-
-
+Bart.
