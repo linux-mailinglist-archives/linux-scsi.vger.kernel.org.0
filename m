@@ -2,35 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C87F2EA14C
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Oct 2019 17:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 792B5EA142
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Oct 2019 17:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728576AbfJ3QA5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 30 Oct 2019 12:00:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56368 "EHLO mail.kernel.org"
+        id S1728354AbfJ3QAe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 30 Oct 2019 12:00:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727862AbfJ3Pyu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:54:50 -0400
+        id S1728563AbfJ3PzU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:55:20 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E1E12173E;
-        Wed, 30 Oct 2019 15:54:48 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 55CB0208C0;
+        Wed, 30 Oct 2019 15:55:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572450889;
-        bh=X39QoiUNcdlxe6a7mbnH/4RYg5FRPgmaxjD8Yo95tP0=;
+        s=default; t=1572450920;
+        bh=3zR5LJ09aUw6Xp7NTfJ2jsB8JLyk4o3y5+Lz4rXqc+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bsvL9ldCpr87VcF0s/5MiUTSPDMS1U61ofwdwrGS+6jdzylbtMxq3zN4Knozp1GDJ
-         feVcmyZrfx0nkVKP9hCF6cipHKP9LMG/Sg0P2jkj2HeVcCRUpG3mMXlSfjbRz7f+xz
-         VbI1vaV8pqff8WwSviGIuzZsQXGAb/TgF9auhbsE=
+        b=MR5eks3tImq8P/XQStCM57kVKLR4XXtoy/eXMLVpdaz+96hI1D+hsswdvHlMkScKi
+         WGLPHhmhWqoWN2QPaEih3zq6QZxu8PO7T6BkZAppNNx7PSQ+AflWCptSiFTPSwbQ4n
+         bDXYdH93y+FeAwjj27UtBQIOj05c6Jl+tAbKD/WI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 17/38] scsi: fix kconfig dependency warning related to 53C700_LE_ON_BE
-Date:   Wed, 30 Oct 2019 11:53:45 -0400
-Message-Id: <20191030155406.10109-17-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 26/38] scsi: target: core: Do not overwrite CDB byte 1
+Date:   Wed, 30 Oct 2019 11:53:54 -0400
+Message-Id: <20191030155406.10109-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
 References: <20191030155406.10109-1-sashal@kernel.org>
@@ -43,40 +46,59 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+From: Bodo Stroesser <bstroesser@ts.fujitsu.com>
 
-[ Upstream commit 8cbf0c173aa096dda526d1ccd66fc751c31da346 ]
+[ Upstream commit 27e84243cb63601a10e366afe3e2d05bb03c1cb5 ]
 
-When building a kernel with SCSI_SNI_53C710 enabled, Kconfig warns:
+passthrough_parse_cdb() - used by TCMU and PSCSI - attepts to reset the LUN
+field of SCSI-2 CDBs (bits 5,6,7 of byte 1).  The current code is wrong as
+for newer commands not having the LUN field it overwrites relevant command
+bits (e.g. for SECURITY PROTOCOL IN / OUT). We think this code was
+unnecessary from the beginning or at least it is no longer useful. So we
+remove it entirely.
 
-WARNING: unmet direct dependencies detected for 53C700_LE_ON_BE
-  Depends on [n]: SCSI_LOWLEVEL [=y] && SCSI [=y] && SCSI_LASI700 [=n]
-  Selected by [y]:
-  - SCSI_SNI_53C710 [=y] && SCSI_LOWLEVEL [=y] && SNI_RM [=y] && SCSI [=y]
-
-Add the missing depends SCSI_SNI_53C710 to 53C700_LE_ON_BE to fix it.
-
-Link: https://lore.kernel.org/r/20191009151128.32411-1-tbogendoerfer@suse.de
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
+Link: https://lore.kernel.org/r/12498eab-76fd-eaad-1316-c2827badb76a@ts.fujitsu.com
+Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Hannes Reinecke <hare@suse.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/target/target_core_device.c | 21 ---------------------
+ 1 file changed, 21 deletions(-)
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 7c097006c54db..a8ac480276323 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -862,7 +862,7 @@ config SCSI_SNI_53C710
+diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+index 47b5ef153135c..e9ff2a7c0c0e6 100644
+--- a/drivers/target/target_core_device.c
++++ b/drivers/target/target_core_device.c
+@@ -1128,27 +1128,6 @@ passthrough_parse_cdb(struct se_cmd *cmd,
+ 	struct se_device *dev = cmd->se_dev;
+ 	unsigned int size;
  
- config 53C700_LE_ON_BE
- 	bool
--	depends on SCSI_LASI700
-+	depends on SCSI_LASI700 || SCSI_SNI_53C710
- 	default y
- 
- config SCSI_STEX
+-	/*
+-	 * Clear a lun set in the cdb if the initiator talking to use spoke
+-	 * and old standards version, as we can't assume the underlying device
+-	 * won't choke up on it.
+-	 */
+-	switch (cdb[0]) {
+-	case READ_10: /* SBC - RDProtect */
+-	case READ_12: /* SBC - RDProtect */
+-	case READ_16: /* SBC - RDProtect */
+-	case SEND_DIAGNOSTIC: /* SPC - SELF-TEST Code */
+-	case VERIFY: /* SBC - VRProtect */
+-	case VERIFY_16: /* SBC - VRProtect */
+-	case WRITE_VERIFY: /* SBC - VRProtect */
+-	case WRITE_VERIFY_12: /* SBC - VRProtect */
+-	case MAINTENANCE_IN: /* SPC - Parameter Data Format for SA RTPG */
+-		break;
+-	default:
+-		cdb[1] &= 0x1f; /* clear logical unit number */
+-		break;
+-	}
+-
+ 	/*
+ 	 * For REPORT LUNS we always need to emulate the response, for everything
+ 	 * else, pass it up.
 -- 
 2.20.1
 
