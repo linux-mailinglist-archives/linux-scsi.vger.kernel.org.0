@@ -2,41 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA92CEA01D
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Oct 2019 16:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6CDEA06A
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Oct 2019 16:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728225AbfJ3Pxj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 30 Oct 2019 11:53:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54946 "EHLO mail.kernel.org"
+        id S1728815AbfJ3P4Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 30 Oct 2019 11:56:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58012 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728216AbfJ3Pxi (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:53:38 -0400
+        id S1727816AbfJ3P4X (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:56:23 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 01829208C0;
-        Wed, 30 Oct 2019 15:53:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C4F172087E;
+        Wed, 30 Oct 2019 15:56:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572450817;
-        bh=H+SBg5nFP1mEIy+aYH89VCOepatSi1ui+bvRd8UdPKA=;
+        s=default; t=1572450983;
+        bh=E5gqELBNn3Mrz8PD/wFz6BQkHwOrJ6WTw7LuhJX3Xn0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C/oKUNcxVQ/GCb/WvRAsEPt55TFjxTMIm4hz7wrYYg1G8vaLE8LLJ7JblQio2ii3H
-         dPd9aqZSizHuxVpmgvnsKQa75S/LfQKkF33PoXPTtkB06d+63NoMePYuWGDHD3Jj5G
-         zFbBKx6tcuY+AFcd/BnT2ru0o9Cr0b0Q+Vs9Hxyw=
+        b=Mn/+PjgpFGJxl9scGOZa4RE8t5ytnLvdyPtcTh7T6VcmlHIpijBJVdZnoNI3iHMpg
+         PJb4sA4IJrSe8jOgfViyj+nr58M/gWA8G9GNAft1Zl38EM0OvQRN6Np8p/7h13C1SK
+         YCkrOwpN8HJWZtPovCNF2a2za1Zzjxp8Zhu5oKTk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Don Brace <don.brace@microsemi.com>,
-        Scott Benesh <scott.benesh@microsemi.com>,
-        Kevin Barnett <kevin.barnett@microsemi.com>,
+Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, esc.storagedev@microsemi.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 58/81] scsi: hpsa: add missing hunks in reset-patch
-Date:   Wed, 30 Oct 2019 11:49:04 -0400
-Message-Id: <20191030154928.9432-58-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 11/24] scsi: fix kconfig dependency warning related to 53C700_LE_ON_BE
+Date:   Wed, 30 Oct 2019 11:55:42 -0400
+Message-Id: <20191030155555.10494-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030154928.9432-1-sashal@kernel.org>
-References: <20191030154928.9432-1-sashal@kernel.org>
+In-Reply-To: <20191030155555.10494-1-sashal@kernel.org>
+References: <20191030155555.10494-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,52 +43,40 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Don Brace <don.brace@microsemi.com>
+From: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 
-[ Upstream commit 134993456c28c2ae14bd953236eb0742fe23d577 ]
+[ Upstream commit 8cbf0c173aa096dda526d1ccd66fc751c31da346 ]
 
-Correct returning from reset before outstanding commands are completed
-for the device.
+When building a kernel with SCSI_SNI_53C710 enabled, Kconfig warns:
 
-Link: https://lore.kernel.org/r/157107623870.17997.11208813089704833029.stgit@brunhilda
-Reviewed-by: Scott Benesh <scott.benesh@microsemi.com>
-Reviewed-by: Kevin Barnett <kevin.barnett@microsemi.com>
-Signed-off-by: Don Brace <don.brace@microsemi.com>
+WARNING: unmet direct dependencies detected for 53C700_LE_ON_BE
+  Depends on [n]: SCSI_LOWLEVEL [=y] && SCSI [=y] && SCSI_LASI700 [=n]
+  Selected by [y]:
+  - SCSI_SNI_53C710 [=y] && SCSI_LOWLEVEL [=y] && SNI_RM [=y] && SCSI [=y]
+
+Add the missing depends SCSI_SNI_53C710 to 53C700_LE_ON_BE to fix it.
+
+Link: https://lore.kernel.org/r/20191009151128.32411-1-tbogendoerfer@suse.de
+Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/hpsa.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index 1bb6aada93fab..a4519710b3fcf 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -5478,6 +5478,8 @@ static int hpsa_ciss_submit(struct ctlr_info *h,
- 		return SCSI_MLQUEUE_HOST_BUSY;
- 	}
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index 41366339b9501..881906dc33b83 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -966,7 +966,7 @@ config SCSI_SNI_53C710
  
-+	c->device = dev;
-+
- 	enqueue_cmd_and_start_io(h, c);
- 	/* the cmd'll come back via intr handler in complete_scsi_command()  */
- 	return 0;
-@@ -5549,6 +5551,7 @@ static int hpsa_ioaccel_submit(struct ctlr_info *h,
- 		hpsa_cmd_init(h, c->cmdindex, c);
- 		c->cmd_type = CMD_SCSI;
- 		c->scsi_cmd = cmd;
-+		c->device = dev;
- 		rc = hpsa_scsi_ioaccel_raid_map(h, c);
- 		if (rc < 0)     /* scsi_dma_map failed. */
- 			rc = SCSI_MLQUEUE_HOST_BUSY;
-@@ -5556,6 +5559,7 @@ static int hpsa_ioaccel_submit(struct ctlr_info *h,
- 		hpsa_cmd_init(h, c->cmdindex, c);
- 		c->cmd_type = CMD_SCSI;
- 		c->scsi_cmd = cmd;
-+		c->device = dev;
- 		rc = hpsa_scsi_ioaccel_direct_map(h, c);
- 		if (rc < 0)     /* scsi_dma_map failed. */
- 			rc = SCSI_MLQUEUE_HOST_BUSY;
+ config 53C700_LE_ON_BE
+ 	bool
+-	depends on SCSI_LASI700
++	depends on SCSI_LASI700 || SCSI_SNI_53C710
+ 	default y
+ 
+ config SCSI_STEX
 -- 
 2.20.1
 
