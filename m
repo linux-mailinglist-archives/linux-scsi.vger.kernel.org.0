@@ -2,41 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8B74EA09F
-	for <lists+linux-scsi@lfdr.de>; Wed, 30 Oct 2019 16:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0368AEA158
+	for <lists+linux-scsi@lfdr.de>; Wed, 30 Oct 2019 17:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729278AbfJ3P6T (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 30 Oct 2019 11:58:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60098 "EHLO mail.kernel.org"
+        id S1727461AbfJ3QB2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 30 Oct 2019 12:01:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56142 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729274AbfJ3P6R (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:58:17 -0400
+        id S1727792AbfJ3Pym (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:54:42 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF2C121906;
-        Wed, 30 Oct 2019 15:58:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1C62B2087E;
+        Wed, 30 Oct 2019 15:54:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572451096;
-        bh=JFFwixxiEsokXIStsm47zGSngsWatKm5/5jagaqWF60=;
+        s=default; t=1572450881;
+        bh=NOlrqPWGx4Qt4ThG2zHhGh6kwXDfKzJEe1B4BQNVwPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S+i5PRvduKwHIdaKDkm80+MVQHY1esYaMgOgMlCn/56ZP+dP3OR602bXH7xfe3vXe
-         z5N20XTAJS+/2IL73o0vxJO6Tho4hlv6xDKpdxCgDj7n9fqTlsievF/wzP7/Tvk9QH
-         sHw3FB6meWwVil+yIIYCUgZhLRXXpMc0Q1MT8zhw=
+        b=PV7a+xwNTJi2esfNZ3KPP8i/zinPg9uVxLJckPc5mSL3gCZHVwW+ITNyNHhynyodN
+         i4f2LYHInk3HCjbcXaRcGYolAsSGpuyW0IT5Gd7XY/3gUFMZOVz6xEPnm1BKVErXgA
+         vw1Tbp+JeVmETwRfj3jahSOzUQB3SVvoInjDarvc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>,
+Cc:     Allen Pais <allen.pais@oracle.com>, Martin Wilck <mwilck@suse.com>,
+        Himanshu Madhani <hmadhani@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 10/13] scsi: target: core: Do not overwrite CDB byte 1
-Date:   Wed, 30 Oct 2019 11:57:48 -0400
-Message-Id: <20191030155751.10960-10-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 14/38] scsi: qla2xxx: fix a potential NULL pointer dereference
+Date:   Wed, 30 Oct 2019 11:53:42 -0400
+Message-Id: <20191030155406.10109-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030155751.10960-1-sashal@kernel.org>
-References: <20191030155751.10960-1-sashal@kernel.org>
+In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
+References: <20191030155406.10109-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,59 +44,38 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bodo Stroesser <bstroesser@ts.fujitsu.com>
+From: Allen Pais <allen.pais@oracle.com>
 
-[ Upstream commit 27e84243cb63601a10e366afe3e2d05bb03c1cb5 ]
+[ Upstream commit 35a79a63517981a8aea395497c548776347deda8 ]
 
-passthrough_parse_cdb() - used by TCMU and PSCSI - attepts to reset the LUN
-field of SCSI-2 CDBs (bits 5,6,7 of byte 1).  The current code is wrong as
-for newer commands not having the LUN field it overwrites relevant command
-bits (e.g. for SECURITY PROTOCOL IN / OUT). We think this code was
-unnecessary from the beginning or at least it is no longer useful. So we
-remove it entirely.
+alloc_workqueue is not checked for errors and as a result a potential
+NULL dereference could occur.
 
-Link: https://lore.kernel.org/r/12498eab-76fd-eaad-1316-c2827badb76a@ts.fujitsu.com
-Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Hannes Reinecke <hare@suse.com>
+Link: https://lore.kernel.org/r/1568824618-4366-1-git-send-email-allen.pais@oracle.com
+Signed-off-by: Allen Pais <allen.pais@oracle.com>
+Reviewed-by: Martin Wilck <mwilck@suse.com>
+Acked-by: Himanshu Madhani <hmadhani@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/target/target_core_device.c | 21 ---------------------
- 1 file changed, 21 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
-index bb6a6c35324ae..4198ed4ac6073 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -1056,27 +1056,6 @@ passthrough_parse_cdb(struct se_cmd *cmd,
- {
- 	unsigned char *cdb = cmd->t_task_cdb;
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 60b6019a2fcae..856a7ceb9a041 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -3186,6 +3186,10 @@ qla2x00_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	    req->req_q_in, req->req_q_out, rsp->rsp_q_in, rsp->rsp_q_out);
  
--	/*
--	 * Clear a lun set in the cdb if the initiator talking to use spoke
--	 * and old standards version, as we can't assume the underlying device
--	 * won't choke up on it.
--	 */
--	switch (cdb[0]) {
--	case READ_10: /* SBC - RDProtect */
--	case READ_12: /* SBC - RDProtect */
--	case READ_16: /* SBC - RDProtect */
--	case SEND_DIAGNOSTIC: /* SPC - SELF-TEST Code */
--	case VERIFY: /* SBC - VRProtect */
--	case VERIFY_16: /* SBC - VRProtect */
--	case WRITE_VERIFY: /* SBC - VRProtect */
--	case WRITE_VERIFY_12: /* SBC - VRProtect */
--	case MAINTENANCE_IN: /* SPC - Parameter Data Format for SA RTPG */
--		break;
--	default:
--		cdb[1] &= 0x1f; /* clear logical unit number */
--		break;
--	}
--
- 	/*
- 	 * For REPORT LUNS we always need to emulate the response, for everything
- 	 * else, pass it up.
+ 	ha->wq = alloc_workqueue("qla2xxx_wq", 0, 0);
++	if (unlikely(!ha->wq)) {
++		ret = -ENOMEM;
++		goto probe_failed;
++	}
+ 
+ 	if (ha->isp_ops->initialize_adapter(base_vha)) {
+ 		ql_log(ql_log_fatal, base_vha, 0x00d6,
 -- 
 2.20.1
 
