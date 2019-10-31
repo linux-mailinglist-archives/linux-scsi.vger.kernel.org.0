@@ -2,76 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8981EAAD5
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Oct 2019 08:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB582EAB1D
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Oct 2019 08:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726892AbfJaHEa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 31 Oct 2019 03:04:30 -0400
-Received: from mga03.intel.com ([134.134.136.65]:51601 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726535AbfJaHEa (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 31 Oct 2019 03:04:30 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Oct 2019 00:04:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,250,1569308400"; 
-   d="scan'208";a="401784432"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Oct 2019 00:04:26 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1iQ4VN-000Hkd-LK; Thu, 31 Oct 2019 15:04:25 +0800
-Date:   Thu, 31 Oct 2019 15:04:16 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Can Guo <cang@codeaurora.org>
-Cc:     kbuild-all@lists.01.org, asutoshd@codeaurora.org,
-        nguyenb@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org,
-        Subhash Jadavani <subhashj@codeaurora.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH] scsi: ufs: ufshcd_scale_clks() can be static
-Message-ID: <20191031070416.7gfgfkqyln2qcuk4@4978f4969bb8>
-References: <1572351831-30373-2-git-send-email-cang@codeaurora.org>
+        id S1726874AbfJaHvR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 31 Oct 2019 03:51:17 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53232 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726698AbfJaHvR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 31 Oct 2019 03:51:17 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id A10FBABCE;
+        Thu, 31 Oct 2019 07:51:11 +0000 (UTC)
+Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
+To:     dgilbert@interlog.com, Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
+References: <20191028105732.29913-1-damien.lemoal@wdc.com>
+ <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
+ <4ee551d0-27a6-b516-ade0-d477fd93bad8@suse.de>
+ <d0899d02-ecb2-7f0b-3d0a-c818a0ec6ceb@acm.org>
+ <571b5f9a-f151-30fb-5720-d7d47a4ef1d7@suse.de>
+ <8b2fbab6-b787-470a-f9ed-46622733881c@interlog.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <7ba0414d-7989-31ee-4044-90f541db379f@suse.de>
+Date:   Thu, 31 Oct 2019 08:51:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1572351831-30373-2-git-send-email-cang@codeaurora.org>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <8b2fbab6-b787-470a-f9ed-46622733881c@interlog.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 10/30/19 5:18 PM, Douglas Gilbert wrote:
+> On 2019-10-30 11:18 a.m., Hannes Reinecke wrote:
+>> On 10/30/19 4:12 PM, Bart Van Assche wrote:
+>>> On 10/30/19 1:30 AM, Hannes Reinecke wrote:
+>>>> On 10/28/19 9:38 PM, Bart Van Assche wrote:
+>>>>> If the residual is changed from signed into unsigned, how is a SCSI 
+>>>>> LLD expected to report the difference between residual overflow and 
+>>>>> residual underflow to the SCSI core?
+>>>>
+>>>> You don't have to. To quote RFC 3720 page 122:
+>>>>
+>>>>       bit 5 - (O) set for Residual Overflow.  In this case, the 
+>>>> Residual
+>>>>         Count indicates the number of bytes that were not transferred
+>>>>         because the initiator's Expected Data Transfer Length was not
+>>>>         sufficient.  For a bidirectional operation, the Residual Count
+>>>>         contains the residual for the write operation.
+>>>>
+>>>> IE the 'overflow' setting in the iSCSI command response is an 
+>>>> indicator that there _would_ be more data if the command request 
+>>>> _would_ have specified a larger buffer.
+>>>> But as it didn't, the entire buffer was filled, and the overflow 
+>>>> counter is set.
+>>>> Which, of course, is then ignored by the linux SCSI stack as the 
+>>>> request got all data, and the residual is set to zero.
+>>>> Then it's left to the caller to re-send with a larger buffer if 
+>>>> required. But it's nothing the SCSI stack can nor should be 
+>>>> attempting on its own.
+>>>
+>>> Hi Hannes,
+>>>
+>>> I do not agree that reporting a residual overflow by calling 
+>>> scsi_set_resid(..., 0) is acceptable. For reads a residual overflow 
+>>> means that the length specified in the CDB (scsi_bufflen()) exceeds 
+>>> the data buffer size (length of scsi_sglist()). I think it's 
+>>> dangerous to report to the block layer that such requests completed 
+>>> successfully and with residual zero.
+>>>
+>> But that is an error on submission, and should be aborted before it 
+>> even got send to the drive.
+>>
+>> However, this does not relate to the residual, which is handled after 
+>> the command completes (and which sparked this entire thread ...).
+> 
+> Seen from a pass-through perspective, the resid is just about the near-end
+> data transfer between the HBA and pass-through, or as cam3r03 says:
+> 
+> − cam_resid;
+>      The data residual length member contains the difference in twos 
+> complement
+>      form of the number of data bytes transferred by the HA for the SCSI
+>      command compared with the number of bytes requested by the CCB
+>      cam_dxfer_len member. This is calculated by the total number of bytes
+>      requested to be transferred by the CCB minus the actual number of 
+> bytes
+>      transferred by the HA.
+> 
+> [where "HA" is HBA (or the initiator)]
+> 
+> That makes overflow (negative resid) a bit interesting as it is only
+> reasonable that the pass-though user allocated a buffer big enough to
+> receive dxfer_len bytes. One would hope that in the READ case of overflow,
+> the HBA would have sent the residual bytes to the bit bucket (i.e.
+> /dev/null) rather than overfill the data buffer provided by the 
+> pass-through.
+> 
+Yes. But my point here is that any residual values are handled (and 
+defined) at the protocol level. Any SCSI midlayer protocol like SPC or, 
+indeed, SAM have no concept of residuals.
 
-Fixes: 9136e6afe1e7 ("scsi: ufs: Fix up clock scaling")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- ufshcd.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+THe SCSI midlayer chose to add a residual value to document the number 
+of bytes _not_ being handled from hardware.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 3a0b99b624829..54ae6433452f2 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -974,7 +974,7 @@ static int ufshcd_set_clk_freq(struct ufs_hba *hba, bool scale_up)
-  * Returns 0 if successful
-  * Returns < 0 for any other errors
-  */
--int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
-+static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
- {
- 	int ret = 0;
- 
+> Handling discrepancies between page length (e.g. of VPD, LOG and MODE 
+> pages) and the ALLOCATION LENGTH field are defined in the SCSI standards.
+> 
+> That leaves the difficult cases: when there is a discrepancy between 
+> what the
+> SCSI command (and the storage device) implied as a data length and the
+> dxfer_len allocated at the near-end. In some, but not all, cases that is
+> detectable before the command is issued.
+> 
+As mentioned, this needs to be handled in the submission path, and the 
+command should be aborted before being sent to the drive.
+
+> Overflow can happen, for example if the RDPROTECT field in a READ(10) is
+> accidentally set (e.g. because it uses bits previously used for a SPI
+> LUN) and the storage device has protection information. That will result
+> in an extra 8 bytes per logical block being returned.
+> 
+
+See above. We should intercept such a command, and simply abort it with 
+an appropriate error.
+That goes for internal commands, of course; I know it doesn't work for 
+things like sg_raw, but one could argue that this was precisely the 
+point of that command ...
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                              +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
