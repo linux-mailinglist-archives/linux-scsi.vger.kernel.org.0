@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C136FEAA0F
-	for <lists+linux-scsi@lfdr.de>; Thu, 31 Oct 2019 06:12:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 786B4EAA15
+	for <lists+linux-scsi@lfdr.de>; Thu, 31 Oct 2019 06:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbfJaFMG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 31 Oct 2019 01:12:06 -0400
-Received: from esa1.microchip.iphmx.com ([68.232.147.91]:58667 "EHLO
-        esa1.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726312AbfJaFMG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 31 Oct 2019 01:12:06 -0400
-Received-SPF: Pass (esa1.microchip.iphmx.com: domain of
-  viswas.g@microsemi.com designates 208.19.100.22 as permitted
-  sender) identity=mailfrom; client-ip=208.19.100.22;
-  receiver=esa1.microchip.iphmx.com;
+        id S1726747AbfJaFMZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 31 Oct 2019 01:12:25 -0400
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:29216 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726596AbfJaFMZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 31 Oct 2019 01:12:25 -0400
+Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
+  viswas.g@microsemi.com designates 208.19.100.23 as permitted
+  sender) identity=mailfrom; client-ip=208.19.100.23;
+  receiver=esa6.microchip.iphmx.com;
   envelope-from="viswas.g@microsemi.com";
   x-sender="viswas.g@microsemi.com"; x-conformance=spf_only;
   x-record-type="v=spf1"; x-record-text="v=spf1
   ip4:208.19.100.20 ip4:208.19.100.21 ip4:208.19.100.22
   ip4:208.19.100.23 ip4:208.19.99.221 ip4:208.19.99.222
   ip4:208.19.99.223 ip4:208.19.99.225 -all"
-Received-SPF: None (esa1.microchip.iphmx.com: no sender
+Received-SPF: None (esa6.microchip.iphmx.com: no sender
   authenticity information available from domain of
   postmaster@smtp.microsemi.com) identity=helo;
-  client-ip=208.19.100.22; receiver=esa1.microchip.iphmx.com;
+  client-ip=208.19.100.23; receiver=esa6.microchip.iphmx.com;
   envelope-from="viswas.g@microsemi.com";
   x-sender="postmaster@smtp.microsemi.com";
   x-conformance=spf_only
-Authentication-Results: esa1.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=viswas.g@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com; dmarc=fail (p=none dis=none) d=microchip.com
-IronPort-SDR: m2EDUJ7xQ6ynFdiYyXZU/y35ZkS/L+OaH0AB6Z9BNpAPlNcUspnM8J0XIMWtJnLt+gd4a+e/Dp
- nLt6u/rBa7fK4h0FveQT+HoE6/AzB3s4qdp6QLAVLW6OcYWCPUa41cNMldINihW0w+5pBLOie5
- cUpMxJAgNWQodtdWgzIWbrVXjtjmcErks4opmtpjbW6uzyjK9LD7CzKcafP01yEVaADFuMN/jZ
- 8CrcuUMvjvwPom0CmN4ptLAj9J2/SOjcCcMXAyueO+leIXXTCiifS1HB5E03HZcV66hD1OIML9
- T/M=
+Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=viswas.g@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com; dmarc=fail (p=none dis=none) d=microchip.com
+IronPort-SDR: iOTDVgKopHp256IlrGFyqxw+Hxv746knQIxOSlBlB+iDjGdsWbFnHPjIpS4XNJQiOMPQvnGEcx
+ vMOgzIvt3pqGaTfJQff6j+udA5FGQ1PeQQerFLHxLIbvvIAXaAeLTgPStgnhzbk3UsIdqhO6J4
+ Wdo+ymurjc8ED3k8Xx9ZmNymUCqOGCygjbW8S0xY/RWOEB11Q8hzRYzU20mpKqixGDtgmprlZg
+ hb+3/XIMMUvXdn7i1PEPdQFTTcEGdtxDEIr7QEu5Ppt5pB/hY+WO1Nw9llT28MShSQa/E4DJRN
+ X94=
 X-IronPort-AV: E=Sophos;i="5.68,250,1569308400"; 
-   d="scan'208";a="56409350"
-Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.22])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Oct 2019 22:12:05 -0700
-Received: from AVMBX3.microsemi.net (10.100.34.33) by AVMBX2.microsemi.net
- (10.100.34.32) with Microsoft SMTP Server (version=TLS1_2,
+   d="scan'208";a="52279643"
+Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.23])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Oct 2019 22:12:09 -0700
+Received: from AVMBX1.microsemi.net (10.100.34.31) by AVMBX3.microsemi.net
+ (10.100.34.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3; Wed, 30 Oct
- 2019 22:12:05 -0700
-Received: from localhost (10.41.130.49) by avmbx3.microsemi.net (10.100.34.33)
+ 2019 22:12:06 -0700
+Received: from localhost (10.41.130.49) by avmbx1.microsemi.net (10.100.34.31)
  with Microsoft SMTP Server id 15.1.1847.3 via Frontend Transport; Wed, 30 Oct
- 2019 22:12:04 -0700
+ 2019 22:12:06 -0700
 From:   Deepak Ukey <deepak.ukey@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -52,9 +52,9 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <jinpu.wang@profitbricks.com>, <martin.petersen@oracle.com>,
         <dpf@google.com>, <jsperbeck@google.com>, <auradkar@google.com>,
         <ianyar@google.com>
-Subject: [PATCH 02/12] pm80xx : Initialize variable used as return status.
-Date:   Thu, 31 Oct 2019 10:42:31 +0530
-Message-ID: <20191031051241.6762-3-deepak.ukey@microchip.com>
+Subject: [PATCH 03/12] pm80xx : Convert 'long' mdelay to msleep.
+Date:   Thu, 31 Oct 2019 10:42:32 +0530
+Message-ID: <20191031051241.6762-4-deepak.ukey@microchip.com>
 X-Mailer: git-send-email 2.19.0-rc1
 In-Reply-To: <20191031051241.6762-1-deepak.ukey@microchip.com>
 References: <20191031051241.6762-1-deepak.ukey@microchip.com>
@@ -66,31 +66,44 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: John Sperbeck <jsperbeck@google.com>
+From: Vikram Auradkar <auradkar@google.com>
 
-In pm8001_task_exec(), if the PHY is down, then we return the
-current value of 'rc'. We need to make sure it's initialized.
+For delays longer than 20ms [um]delay isn't recommended.
+pm80xx_chip_soft_rst starts off with a 500ms delay before it even
+gets around to checking for the results of the reset. As long as
+it's at least 500ms it doesn't matter what the scheduler is doing.
+The delay in the pm8001_exec_internal_task_abort does nothing, and
+theory is this is a delay to avoid a double-free.
 
-Signed-off-by: John Sperbeck <jsperbeck@google.com>
+Signed-off-by: Vikram Auradkar <auradkar@google.com>
 Signed-off-by: Deepak Ukey <deepak.ukey@microchip.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
 ---
- drivers/scsi/pm8001/pm8001_sas.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_sas.c b/drivers/scsi/pm8001/pm8001_sas.c
-index 7e48154e11c3..81160e99c75e 100644
---- a/drivers/scsi/pm8001/pm8001_sas.c
-+++ b/drivers/scsi/pm8001/pm8001_sas.c
-@@ -384,7 +384,7 @@ static int pm8001_task_exec(struct sas_task *task,
- 	struct pm8001_port *port = NULL;
- 	struct sas_task *t = task;
- 	struct pm8001_ccb_info *ccb;
--	u32 tag = 0xdeadbeef, rc, n_elem = 0;
-+	u32 tag = 0xdeadbeef, rc = 0, n_elem = 0;
- 	unsigned long flags = 0;
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index ee9c187d8caa..1a1adda15db8 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1241,7 +1241,7 @@ pm80xx_chip_soft_rst(struct pm8001_hba_info *pm8001_ha)
+ 		pm8001_printk("reset register before write : 0x%x\n", regval));
  
- 	if (!dev->port) {
+ 	pm8001_cw32(pm8001_ha, 0, SPC_REG_SOFT_RESET, SPCv_NORMAL_RESET_VALUE);
+-	mdelay(500);
++	msleep(500);
+ 
+ 	regval = pm8001_cr32(pm8001_ha, 0, SPC_REG_SOFT_RESET);
+ 	PM8001_INIT_DBG(pm8001_ha,
+@@ -2986,7 +2986,7 @@ hw_event_sas_phy_up(struct pm8001_hba_info *pm8001_ha, void *piomb)
+ 	pm8001_get_attached_sas_addr(phy, phy->sas_phy.attached_sas_addr);
+ 	spin_unlock_irqrestore(&phy->sas_phy.frame_rcvd_lock, flags);
+ 	if (pm8001_ha->flags == PM8001F_RUN_TIME)
+-		mdelay(200);/*delay a moment to wait disk to spinup*/
++		msleep(200);/*delay a moment to wait disk to spinup*/
+ 	pm8001_bytes_dmaed(pm8001_ha, phy_id);
+ }
+ 
 -- 
 2.16.3
 
