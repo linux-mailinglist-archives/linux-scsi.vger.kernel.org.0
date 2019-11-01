@@ -2,115 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E890EC4EA
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 15:44:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C40EC54B
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 16:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727313AbfKAOoW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Nov 2019 10:44:22 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:46870 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727194AbfKAOoV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Nov 2019 10:44:21 -0400
-Received: by mail-io1-f67.google.com with SMTP id c6so11106585ioo.13
-        for <linux-scsi@vger.kernel.org>; Fri, 01 Nov 2019 07:44:21 -0700 (PDT)
+        id S1728069AbfKAPIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Nov 2019 11:08:11 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:45093 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727283AbfKAPIL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Nov 2019 11:08:11 -0400
+Received: by mail-ot1-f65.google.com with SMTP id 77so4163470oti.12
+        for <linux-scsi@vger.kernel.org>; Fri, 01 Nov 2019 08:08:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fyVmGEPjp+fgA3qIeOSHV1kDIyaUUqkTBrMuu4zrLLE=;
-        b=ZEOnLqUqapOP5Is+422A+JSIWBJwJoRkL+EkjyMEm0QMun+X2cMhREuo/EO+Kp9sjQ
-         JMbr4KQ/mtATq5cBqlr7kkry5vsX1+/bIwIa2NvdNJ0joB8F0p1ZpQ+WNRnMWJH28gwx
-         z1Rm3kst/Z7YwUL7lyALdvnuyfNFtMX7v5P496kdgpp744thPh8q9OG134ibUJJdbL0t
-         vYPy2uk2qnf4nX52TNFizTTZp3HX2JWA74PDSFpPSBy/BxbF0FZ7atPUvLuqMgI4iP7p
-         nn15EOkGE8gRATqwFk3limk/mwvlzIzSCajHF69noir1TCESft/hCrB6FGfZ/EJGCabB
-         FjPA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=bd5dUBB7zD6KP1inBjogMIIKemUAQjQyCQJ5qlKzGNg=;
+        b=u0mZ6f3e0aFz/YbOINBN2ESFA6BXVCwLGbZWu6K/FnbC7UDaqOxAIjmqZAEwSlFvOI
+         eMoxOJotyIOQQbsrAxjxn0q4YQnfLAbVSLIMU66U2fEWV18QnIEOGZmVwrH+GxfgQ7ev
+         oXW7T2nPyuP6MALCwoGgKDtTidVkSEfb28QC7A2FL8Nmcvd84Dnwtu9Ku+9rgZbXS0cg
+         YOcV5g2a0Jzh1vpMGKkSDqAtCMTMJ4lzggl/LSzu8Mw0qcjvRiaj1PLBQfC35SAfRUhm
+         QZ1CarWEX8+AfkbDaP4y1LE/V/6tLdjfrhSRpSI9rhIDUMzG6v8DBkfoqpYw9XcXZYbP
+         CaIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fyVmGEPjp+fgA3qIeOSHV1kDIyaUUqkTBrMuu4zrLLE=;
-        b=qiBOYwUkQFrJCpF5053spi7Wg2dKCCXM+7CZ1ArWwDReuBKdrtxIUL4ixM2clhGh5e
-         bCAfknP9Bk6qWnOx7NGwBRujdUorxPrPyLKULAMhXlQ1PFjMCzYa6b64T7Z28O4NaQdl
-         3GOpmmD/KQmXbWJ+itt+P87eL5vL5dGQSVYtwF74lCHk57KW5Rny1D2p5qavt2LjRJTd
-         SQI7iEFxzMwAlWSImJv/oixj2OP0nGAHRn+TOmdb1e3jjLo6PHzgx46PszIp5+D6cwN0
-         e/8pGHyBcaAsh5h2nmbAfIFhXMnXb2UYDOT9ntK9r8r6srJUh9i2sqGKqh3+sUKlcN8Q
-         r/ig==
-X-Gm-Message-State: APjAAAUiktSJuYpT9RjdYqSeysk6nG6mwIV9xceY5AbX3SEtHnXU+5Sh
-        ttKl7gt+5WLTIiaWpdHSEwPUpw==
-X-Google-Smtp-Source: APXvYqzmW6Y0vTK9db5s0OR58kvKovi2zogB/x9ftACnuLqJOWjKgzTDrDyoW44evB6RGd0uUhMvZQ==
-X-Received: by 2002:a02:9f0f:: with SMTP id z15mr2031621jal.91.1572619460516;
-        Fri, 01 Nov 2019 07:44:20 -0700 (PDT)
-Received: from [192.168.1.159] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id f25sm1121364ila.71.2019.11.01.07.44.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 01 Nov 2019 07:44:19 -0700 (PDT)
-Subject: Re: [PATCH V5] scsi: core: avoid host-wide host_busy counter for
- scsi_mq
-To:     Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Omar Sandoval <osandov@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Laurence Oberman <loberman@redhat.com>,
-        Bart Van Assche <bart.vanassche@wdc.com>
-References: <20191025065855.6309-1-ming.lei@redhat.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <9d1e41fa-12d5-df2a-6c8e-1f9d299a6dbf@kernel.dk>
-Date:   Fri, 1 Nov 2019 08:44:18 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=bd5dUBB7zD6KP1inBjogMIIKemUAQjQyCQJ5qlKzGNg=;
+        b=hm02G4tUqhi5YRZVD73tdJmFtIJBV8LggHqhB2AUdm3HjD3/M2iydI+Jsdr4amXfnz
+         BZNifEs1y3BK/oTtZj6ypQBFnLllbefI0hA25ZE4VU/3EJB8v6vkgUEJ3kkZRl2W4hCV
+         u7i1iRU2v1GrL44ue1hW3nastMh4qbNwiEG6B6FGNEFoKYL5cqOGZmeE9kC2H/pC8m2t
+         CSKB3N+iWxCvGY1o1LxxS3saUbLhfKh4NAXuxwMYqwWrrwVBJXInoq/JqzAsWE5BjQGY
+         7ru5qdsCB1x7Fcv0AAUihYuKB6QneU7r/KyYqR/8/4gbczNrB6FRGYMgWcBwml0e3CgX
+         Tdng==
+X-Gm-Message-State: APjAAAWiGA2TdLky3tAss1R42P4GGrkZL3BPATcFLOOKaSnJMDybgoEe
+        82mv3Cj/Y8tigvRsYtffG4OAYWJNHhHMhKe9+Jc=
+X-Google-Smtp-Source: APXvYqxWzZHg0A6ET5rUZSGBZ8zDEydMzLYrOcaRDg1aRoq3jmRYncjE0RZxlceVMUqV3z9BsVf8BjQIS1lrdMLiLhk=
+X-Received: by 2002:a05:6830:4c8:: with SMTP id s8mr5580398otd.257.1572620890773;
+ Fri, 01 Nov 2019 08:08:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191025065855.6309-1-ming.lei@redhat.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a9d:3c9:0:0:0:0:0 with HTTP; Fri, 1 Nov 2019 08:08:10 -0700 (PDT)
+Reply-To: nicolemalachowski098@gmail.com
+From:   Colonel Nicole Malachowski <nm6922232@gmail.com>
+Date:   Fri, 1 Nov 2019 19:38:10 +0430
+Message-ID: <CANmBFZDj+oF+OhDiV2VsMh_mSMWEXtT-s3j+-5P8wk+M9sWOGg@mail.gmail.com>
+Subject: Re: hi
+To:     nm6922232 <nm6922232@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 10/25/19 12:58 AM, Ming Lei wrote:
-> It isn't necessary to check the host depth in scsi_queue_rq() any more
-> since it has been respected by blk-mq before calling scsi_queue_rq() via
-> getting driver tag.
-> 
-> Lots of LUNs may attach to same host and per-host IOPS may reach millions,
-> so we should avoid expensive atomic operations on the host-wide counter in
-> the IO path.
-> 
-> This patch implements scsi_host_busy() via blk_mq_tagset_busy_iter()
-> with one scsi command state for reading the count of busy IOs for scsi_mq.
-> 
-> It is observed that IOPS is increased by 15% in IO test on scsi_debug (32
-> LUNs, 32 submit queues, 1024 can_queue, libaio/dio) in a dual-socket
-> system.
-> 
-> V5:
-> 	- fix document on .can_queue, no code change
-> 
-> V4:
->          - fix one build waring, just a line change in scsi_dev_queue_ready()
-> 
-> V3:
->          - use non-atomic set/clear bit operations as suggested by Bart
->          - kill single field struct for storing count of in-flight requests
->          - add patch to bypass the atomic LUN-wide counter of device_busy
->          for fast SSD device
-> 
-> V2:
-> 	- introduce SCMD_STATE_INFLIGHT for getting accurate host busy
-> 	via blk_mq_tagset_busy_iter()
-> 	- verified that original Jens's report[1] is fixed
-> 	- verified that SCSI timeout/abort works fine
-> 
-> [1] https://www.spinics.net/lists/linux-scsi/msg122867.html
-> [2] V1 & its revert:
-
-Reviewed-by: Jens Axboe <axboe@kernel.dk>
-
--- 
-Jens Axboe
-
+I am COLONEL NICOLE MALACHOWSKI. I have a confidential geniue
+lucrative business of $23.500.000.00 million U.S dollars with mutaul
+interest.
