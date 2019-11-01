@@ -2,57 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03C40EC54B
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 16:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED727EC59A
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 16:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728069AbfKAPIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Nov 2019 11:08:11 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:45093 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727283AbfKAPIL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Nov 2019 11:08:11 -0400
-Received: by mail-ot1-f65.google.com with SMTP id 77so4163470oti.12
-        for <linux-scsi@vger.kernel.org>; Fri, 01 Nov 2019 08:08:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=bd5dUBB7zD6KP1inBjogMIIKemUAQjQyCQJ5qlKzGNg=;
-        b=u0mZ6f3e0aFz/YbOINBN2ESFA6BXVCwLGbZWu6K/FnbC7UDaqOxAIjmqZAEwSlFvOI
-         eMoxOJotyIOQQbsrAxjxn0q4YQnfLAbVSLIMU66U2fEWV18QnIEOGZmVwrH+GxfgQ7ev
-         oXW7T2nPyuP6MALCwoGgKDtTidVkSEfb28QC7A2FL8Nmcvd84Dnwtu9Ku+9rgZbXS0cg
-         YOcV5g2a0Jzh1vpMGKkSDqAtCMTMJ4lzggl/LSzu8Mw0qcjvRiaj1PLBQfC35SAfRUhm
-         QZ1CarWEX8+AfkbDaP4y1LE/V/6tLdjfrhSRpSI9rhIDUMzG6v8DBkfoqpYw9XcXZYbP
-         CaIg==
+        id S1727928AbfKAP2Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Nov 2019 11:28:25 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:45403 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727308AbfKAP2Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Nov 2019 11:28:25 -0400
+Received: by mail-pg1-f196.google.com with SMTP id r1so6680952pgj.12
+        for <linux-scsi@vger.kernel.org>; Fri, 01 Nov 2019 08:28:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=bd5dUBB7zD6KP1inBjogMIIKemUAQjQyCQJ5qlKzGNg=;
-        b=hm02G4tUqhi5YRZVD73tdJmFtIJBV8LggHqhB2AUdm3HjD3/M2iydI+Jsdr4amXfnz
-         BZNifEs1y3BK/oTtZj6ypQBFnLllbefI0hA25ZE4VU/3EJB8v6vkgUEJ3kkZRl2W4hCV
-         u7i1iRU2v1GrL44ue1hW3nastMh4qbNwiEG6B6FGNEFoKYL5cqOGZmeE9kC2H/pC8m2t
-         CSKB3N+iWxCvGY1o1LxxS3saUbLhfKh4NAXuxwMYqwWrrwVBJXInoq/JqzAsWE5BjQGY
-         7ru5qdsCB1x7Fcv0AAUihYuKB6QneU7r/KyYqR/8/4gbczNrB6FRGYMgWcBwml0e3CgX
-         Tdng==
-X-Gm-Message-State: APjAAAWiGA2TdLky3tAss1R42P4GGrkZL3BPATcFLOOKaSnJMDybgoEe
-        82mv3Cj/Y8tigvRsYtffG4OAYWJNHhHMhKe9+Jc=
-X-Google-Smtp-Source: APXvYqxWzZHg0A6ET5rUZSGBZ8zDEydMzLYrOcaRDg1aRoq3jmRYncjE0RZxlceVMUqV3z9BsVf8BjQIS1lrdMLiLhk=
-X-Received: by 2002:a05:6830:4c8:: with SMTP id s8mr5580398otd.257.1572620890773;
- Fri, 01 Nov 2019 08:08:10 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Q7kWBpOlJ1UDJbzwrLke+k2urAFg6xV3cf81FWxWsCI=;
+        b=VAyAS6JfW/CYo8tUQOPP1UasEAQjBTi8L2fPEZyO+9NuKHVszPshyAgmuCW5watsZQ
+         F8H1AXmlyftNMn05OnasFtU2LiPmobt+CU0PHA9qAHseg1N6oYaKJLXj1ZHNuTUY1Qv/
+         xpt/C//0S/cVJV99Fw7sIxRV9aahj5S6fLWfgNHRTRs/r0O76AoAC70kFdcCuztvR1ef
+         3usDOn7TxMu8QlEk7EgyyT+aytDDqtQXzae26v7xs1bnd0AjIv54SBvUb48B6p2Vs+pi
+         vWMRf40cxOMNOJ95w2xpOtfQFlqG4n9rRujp0U8JHEODrZohGYkqDUZIpXcbNqt9YPxv
+         vkJA==
+X-Gm-Message-State: APjAAAVvi1zSDNiyCU6q23iDiU3pP755Llm6eCnOwm0rpeFP8riN+BOE
+        mK6phP7PoQHJwa06tO/+3tbPdOOr
+X-Google-Smtp-Source: APXvYqwKQNeqDYR2nDD7pGY64FEN4ongPlj/SYIsZ6twpV8wrBp/bwj4r7ZyqDUniTqnfRwaT89Q6A==
+X-Received: by 2002:aa7:9482:: with SMTP id z2mr13901521pfk.98.1572622102899;
+        Fri, 01 Nov 2019 08:28:22 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id f185sm7921082pfb.183.2019.11.01.08.28.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Nov 2019 08:28:22 -0700 (PDT)
+Subject: Re: [PATCH 4/4] scsi: Remove cmd_list functionality
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org
+References: <20191101111838.140027-1-hare@suse.de>
+ <20191101111838.140027-5-hare@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <54aca76d-a2dd-5dfb-6118-b576e329f8a6@acm.org>
+Date:   Fri, 1 Nov 2019 08:28:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Received: by 2002:a9d:3c9:0:0:0:0:0 with HTTP; Fri, 1 Nov 2019 08:08:10 -0700 (PDT)
-Reply-To: nicolemalachowski098@gmail.com
-From:   Colonel Nicole Malachowski <nm6922232@gmail.com>
-Date:   Fri, 1 Nov 2019 19:38:10 +0430
-Message-ID: <CANmBFZDj+oF+OhDiV2VsMh_mSMWEXtT-s3j+-5P8wk+M9sWOGg@mail.gmail.com>
-Subject: Re: hi
-To:     nm6922232 <nm6922232@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191101111838.140027-5-hare@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I am COLONEL NICOLE MALACHOWSKI. I have a confidential geniue
-lucrative business of $23.500.000.00 million U.S dollars with mutaul
-interest.
+On 11/1/19 4:18 AM, Hannes Reinecke wrote:
+> Remove cmd_list functionality; no users left.
+> With that the scsi_put_command() becomes empty,
+> so remove that one, too.
+
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
