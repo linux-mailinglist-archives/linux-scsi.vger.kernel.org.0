@@ -2,74 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 797B5EBBEB
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 03:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A719DEBBF0
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 03:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727570AbfKACOy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 31 Oct 2019 22:14:54 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:35632 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727492AbfKACOy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 31 Oct 2019 22:14:54 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA12E46p155908;
-        Fri, 1 Nov 2019 02:14:34 GMT
+        id S1728559AbfKACSJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 31 Oct 2019 22:18:09 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:43324 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726540AbfKACSJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 31 Oct 2019 22:18:09 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA12DqWC169861;
+        Fri, 1 Nov 2019 02:17:48 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2019-08-05;
- bh=8ZteHVtFSBKHelPZ2up4MemamaBu1QtExLweCtfz82E=;
- b=PHt4oBZXCCy3QZMYC65htF/TOs7rDCRpIQ38UXoBqs/+Ra6ZWAlVkrZsNCeDW4frVnEA
- j3UKIWMOgsyuXyUyarW++aeNqLvTpxcS5UqRK3lc+libLdwMCv7Sag1Z2qFQ0oczDQTv
- orKDp9+A6zQnRvSruT4GlJrjirylrR2qres/ZQ8Zu6EqUjE5RDdnaovEQ6rjRxS7BxBt
- 8lyCKM6V0yOZResaQA/nYMMmnE9EDPId/zaA8pFFtwIMhZYtwkDCO1485UHGc4JRXYTJ
- fP+KLIJ9bdaPjw2SqbLQ8wucp0NkNhEFSD//TqzyMDB1H80jOtvG+tXjeiU1CLVDwaob wA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2vxwhfq096-1
+ bh=6rP8Vk0p4YHITodlZ6FD5T+hqAudKIaOiGlj0aK2i5A=;
+ b=A4MlLCoARbYPT1+RbefZzVfzvIzVHPP9khDJ8YV0qEQHHLg+5zGyeaMCZIpUoHk9y45Y
+ Euw5heKPIMFYon7NdYqbJ+ak6OtedysL7L8QQbJy6rRQyClY3QSF8BDpEg4PyIPmycOB
+ 9kH3DmvkG25xGYbKuOsp+kJEhlPMMTZ/bHDcUKyEoxg86nJL5felLUy/mnEeTUFhQQDB
+ AZMwQgnh8h9j7sNQhTbSPd5LL/KpiMzlozFwsPICI4USaiemCXzYRytS8ap0tyQtdT5X
+ gOw54LaNn4jiaeGWJeoPWoAydkaQhAMScZfwsijX+bJJXhxDa6BBLADlh/ouaHmCOzNv VA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2vxwhfxwyc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 01 Nov 2019 02:14:34 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA12EJNr076521;
-        Fri, 1 Nov 2019 02:14:34 GMT
+        Fri, 01 Nov 2019 02:17:48 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA12E1g7161243;
+        Fri, 1 Nov 2019 02:15:47 GMT
 Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2vysbvyavb-1
+        by aserp3030.oracle.com with ESMTP id 2vykw2fqne-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 01 Nov 2019 02:14:33 +0000
+        Fri, 01 Nov 2019 02:15:47 +0000
 Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA12EHa2023451;
-        Fri, 1 Nov 2019 02:14:17 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA12Ff9H024243;
+        Fri, 1 Nov 2019 02:15:41 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 31 Oct 2019 19:14:16 -0700
-To:     "Bean Huo \(beanhuo\)" <beanhuo@micron.com>
-Cc:     "'Alim Akhtar'" <alim.akhtar@samsung.com>,
-        "'Avri Altman'" <avri.altman@wdc.com>,
-        "'Pedro Sousa'" <pedrom.sousa@synopsys.com>,
-        "'Martin K. Petersen'" <martin.petersen@oracle.com>,
-        "'James E.J. Bottomley'" <jejb@linux.ibm.com>,
-        "'Evan Green'" <evgreen@chromium.org>,
-        "'Stanley Chu'" <stanley.chu@mediatek.com>,
-        "'linux-kernel\@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
-        "'linux-scsi\@vger.kernel.org'" <linux-scsi@vger.kernel.org>,
-        Can Guo <cang@codeaurora.org>
-Subject: Re: [PATCH v1] scsi: ufs: delete redundant function ufshcd_def_desc_sizes()
+        with ESMTP ; Thu, 31 Oct 2019 19:15:41 -0700
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Yaniv Gardi <ygardi@codeaurora.org>,
+        Subhash Jadavani <subhashj@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: Re: [PATCH 1/3] ufs: Fix kernel-doc warnings
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <BN7PR08MB5684A3ACE214C3D4792CE729DB610@BN7PR08MB5684.namprd08.prod.outlook.com>
-Date:   Thu, 31 Oct 2019 22:14:13 -0400
-In-Reply-To: <BN7PR08MB5684A3ACE214C3D4792CE729DB610@BN7PR08MB5684.namprd08.prod.outlook.com>
-        (Bean Huo's message of "Tue, 29 Oct 2019 14:22:45 +0000")
-Message-ID: <yq1imo45one.fsf@oracle.com>
+References: <20191029230710.211926-1-bvanassche@acm.org>
+        <20191029230710.211926-2-bvanassche@acm.org>
+Date:   Thu, 31 Oct 2019 22:15:38 -0400
+In-Reply-To: <20191029230710.211926-2-bvanassche@acm.org> (Bart Van Assche's
+        message of "Tue, 29 Oct 2019 16:07:08 -0700")
+Message-ID: <yq1eeys5ol1.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9427 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=948
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1908290000 definitions=main-1911010020
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9427 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
  lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
  definitions=main-1911010020
@@ -79,11 +78,13 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Bean,
+Bart,
 
-> There is no need to call ufshcd_def_desc_sizes() in ufshcd_init(),
-> since descriptor lengths will be checked and initialized later in
-> ufshcd_init_desc_sizes().
+> Fix the following three kernel-doc warnings:
+>
+> drivers/scsi/ufs/ufs_bsg.c:165: warning: Function parameter or member 'hba' not described in 'ufs_bsg_remove'
+> drivers/scsi/ufs/ufshcd.c:5789: warning: Function parameter or member 'cmd_type' not described in 'ufshcd_issue_devman_upiu_cmd'
+> drivers/scsi/ufs/ufshcd.c:5789: warning: Excess function parameter 'msgcode' description in 'ufshcd_issue_devman_upiu_cmd'
 
 Applied to 5.5/scsi-queue, thanks!
 
