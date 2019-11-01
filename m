@@ -2,62 +2,58 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8E5AEC426
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 15:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9144EC4CB
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 15:34:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbfKAOBO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Nov 2019 10:01:14 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:44216 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727728AbfKAOBO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 1 Nov 2019 10:01:14 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 1E6788A8061615E898D9;
-        Fri,  1 Nov 2019 22:01:12 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Fri, 1 Nov 2019
- 22:01:01 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <pedrom.sousa@synopsys.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <stanley.chu@mediatek.com>,
-        <yuehaibing@huawei.com>, <arnd@arndb.de>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] scsi: ufshcd: Remove dev_err() on platform_get_irq() failure
-Date:   Fri, 1 Nov 2019 22:00:58 +0800
-Message-ID: <20191101140058.23212-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1726840AbfKAOed (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Nov 2019 10:34:33 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:35911 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726658AbfKAOec (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Nov 2019 10:34:32 -0400
+Received: by mail-pg1-f194.google.com with SMTP id j22so6623747pgh.3
+        for <linux-scsi@vger.kernel.org>; Fri, 01 Nov 2019 07:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=bd5dUBB7zD6KP1inBjogMIIKemUAQjQyCQJ5qlKzGNg=;
+        b=R0SGYu7tUSVMR87uBchJ/bbULDUHaKEcfwUgw6PbvCEQkm4cWIqBdaRQO4UzYecs/f
+         NeayEr0iXhnxe/qVdFtQuKQb5ioNebiQ+QE3zrk8jr8trTvQ7ayT01DrG1WB0Tig1QGs
+         IlUT79DNxVJ2P3IiMVIT+qA4Dxw91PNBhDF5POaJILCe744ByqOk+qlYVcsb1QWCxtjz
+         cRSFritTbFKCyTkA8Z3SVjNZvp+QEZwQwXpOZdApeYutQWVkTufuc4vzHeO8a+AWCVET
+         tza30HicxIdGuP35P2nOr+B5Us7oeOeHyTXsHPhBotQvWbcSjfA4ndLbQ14XEHBJDqX9
+         puZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=bd5dUBB7zD6KP1inBjogMIIKemUAQjQyCQJ5qlKzGNg=;
+        b=JugUXzt6SIfsh5YXfuA12QpelVZJATe+8gC+reec98KN9XcBvMThK2Yk86coVnRyRh
+         uzofo6ZVsMK31ErZULhSCgXdAGlYdYhR624C3GBbdgtss8UPRfTZj/Y8IUEoBdrCcfr3
+         F1wR7A4u3k2OI/FrjxEFDCZRsCCeCgZw4Hczuaq7UOFg+Vf8s9aRsSs+i+TKEqqk9HpZ
+         9O5rQIznpmFDcN6acvDS7odg4mIbno1QTJ/BfAUwg/dEmSSID3uQD2ER8GfzQpPwdXGO
+         kbIWy6MMFROfBgrxSMVCTVXBL9E0UuJxEYaN5n+26q59rY8VL3Z1DF6z5SXAgDcYr031
+         0g9Q==
+X-Gm-Message-State: APjAAAVV3CH+qdmfpLwkGaTraevm5FPZNEQWeXA8fiRpqP0QV3WAbdh/
+        09kvq1JPX+xBMYZ/CwZ+FXx8SYNjrCZc3XgCDNk=
+X-Google-Smtp-Source: APXvYqwW6j1gzCIUqTfGJnS/oDU27iHaI32tYvHyo9xetwLRPA/LbSyoadkodnJz8SbncnPAn5ew7IynUW85UNqcfcY=
+X-Received: by 2002:a63:1d24:: with SMTP id d36mr13512288pgd.415.1572618872159;
+ Fri, 01 Nov 2019 07:34:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+Received: by 2002:a17:90a:8804:0:0:0:0 with HTTP; Fri, 1 Nov 2019 07:34:31
+ -0700 (PDT)
+Reply-To: nicolemalachowski098@gmail.com
+From:   Colonel Nicole Malachowski <nicolemalachowski1010@gmail.com>
+Date:   Fri, 1 Nov 2019 19:04:31 +0430
+Message-ID: <CADn3AM7wsO3BRW=G0VH-Dtha-VNCNL=02g6NJWDTRnmMgSMV7A@mail.gmail.com>
+Subject: hello
+To:     nicolemalachowski1010 <nicolemalachowski1010@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-platform_get_irq() will call dev_err() itself on failure,
-so there is no need for the driver to also do this.
-This is detected by coccinelle.
-
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/scsi/ufs/ufshcd-pltfrm.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
-index 8d40dc9..76f9be7 100644
---- a/drivers/scsi/ufs/ufshcd-pltfrm.c
-+++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
-@@ -402,7 +402,6 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0) {
--		dev_err(dev, "IRQ resource not available\n");
- 		err = -ENODEV;
- 		goto out;
- 	}
--- 
-2.7.4
-
-
+I am COLONEL NICOLE MALACHOWSKI. I have a confidential geniue
+lucrative business of $23.500.000.00 million U.S dollars with mutaul
+interest.
