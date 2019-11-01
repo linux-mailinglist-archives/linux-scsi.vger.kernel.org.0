@@ -2,36 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E6CEC3DA
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 14:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E5AEC426
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 15:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727355AbfKANjm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Nov 2019 09:39:42 -0400
-Received: from smtp3web.tin.it ([212.216.176.237]:44020 "EHLO smtp3web.tin.it"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726792AbfKANjm (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 1 Nov 2019 09:39:42 -0400
-X-Greylist: delayed 377 seconds by postgrey-1.27 at vger.kernel.org; Fri, 01 Nov 2019 09:39:40 EDT
-Received: from feu5 (10.192.64.15) by smtp3web.tin.it (8.6.060.43)
-        id 5DB140D0001985C8; Fri, 1 Nov 2019 14:29:19 +0100
-Received: from (156.0.214.43) by wmlighttin.pc.tim.it;  Fri, 1 Nov 2019 14:29:19 +0100
-Message-ID: <16e2727f225.m.belloni1@tin.it>
-Date:   Fri, 1 Nov 2019 14:29:19 +0100 (CET)
-From:   "Mr. Aquilino Jomar" <m.belloni1@tin.it>
-Reply-To: aquilinojomar@gmail.com
-Subject: CAN WE HAVE A DEAL?
-Mime-Version: 1.0
-Content-Type: text/plain;charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: 156.0.214.43
-To:     unlisted-recipients:; (no To-header on input)
+        id S1727867AbfKAOBO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Nov 2019 10:01:14 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:44216 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727728AbfKAOBO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 1 Nov 2019 10:01:14 -0400
+Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 1E6788A8061615E898D9;
+        Fri,  1 Nov 2019 22:01:12 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS402-HUB.china.huawei.com
+ (10.3.19.202) with Microsoft SMTP Server id 14.3.439.0; Fri, 1 Nov 2019
+ 22:01:01 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <pedrom.sousa@synopsys.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <stanley.chu@mediatek.com>,
+        <yuehaibing@huawei.com>, <arnd@arndb.de>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] scsi: ufshcd: Remove dev_err() on platform_get_irq() failure
+Date:   Fri, 1 Nov 2019 22:00:58 +0800
+Message-ID: <20191101140058.23212-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Attention Friend,
-Can we do a deal? it is %100 Legit and risk free and a lifetime
-changing opportunity.
-I will give you the details if you respond to this
-email
+platform_get_irq() will call dev_err() itself on failure,
+so there is no need for the driver to also do this.
+This is detected by coccinelle.
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/scsi/ufs/ufshcd-pltfrm.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+index 8d40dc9..76f9be7 100644
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.c
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+@@ -402,7 +402,6 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ 
+ 	irq = platform_get_irq(pdev, 0);
+ 	if (irq < 0) {
+-		dev_err(dev, "IRQ resource not available\n");
+ 		err = -ENODEV;
+ 		goto out;
+ 	}
+-- 
+2.7.4
+
+
