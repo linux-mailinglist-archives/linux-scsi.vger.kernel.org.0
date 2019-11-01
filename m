@@ -2,115 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D99DEEC5AE
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 16:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD201EC618
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 Nov 2019 16:56:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbfKAPep (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 Nov 2019 11:34:45 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:41917 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727100AbfKAPep (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Nov 2019 11:34:45 -0400
-Received: by mail-pf1-f195.google.com with SMTP id p26so7312288pfq.8
-        for <linux-scsi@vger.kernel.org>; Fri, 01 Nov 2019 08:34:44 -0700 (PDT)
+        id S1729307AbfKAP4L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 Nov 2019 11:56:11 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:34008 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729309AbfKAP4K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 Nov 2019 11:56:10 -0400
+Received: by mail-il1-f195.google.com with SMTP id a13so9103963ilp.1
+        for <linux-scsi@vger.kernel.org>; Fri, 01 Nov 2019 08:56:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
+        b=jkikiuxKNQxBjumG32R/xAOzBpTQzIQOGlQ9PlZMzROUxuROhIRW7LOTcmmKqgHbY3
+         GOAi1JnMWEnE/cHrGKrepuphWKFno/pbedjX9XbUWfuIb71+aWSjlL5ZBdl2tkqhPPKE
+         upGJ5iT/1C19qe7FISRldhXG8lpP7RchXgCPpOby1LewLJ9oB1SrBH33yMLjEi7ivjNF
+         o703S5ww1Ql1WeM1aVK41ldtWwBkirNy1eGYI9RnsPVvXaYfqhEH77U0dn8RQUxe2Nnp
+         f+7QOSjXXt7VdhDDkepSvRzDGCUBO3iHq8K6k3uKK4gkq+wr+4nHyD89dMwGRy4pl6Pa
+         lYoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vLcSnKYtUhn8UQ7TOxaQkVNPZ/CUBgLJ7sFnXY3rcI0=;
-        b=pSmu79MBUjHkm7S7UqgyVsCIW9VIf4vA2BkYnu2xepNIO24nzpohNTsWn+2B/p8PmR
-         w4UuRX2HusfbM9+5knl/rpDin+usYMIaRWMWzryR3gvzMUp6qS7hdj9WqzFQQdLWEn0m
-         tb3qOsrKUMmQl+SG+pHm8UR290SZMWhOPQv+gQZiAshjlYGlEws7boBwYfTsJQvCoMSw
-         rL2KnA6erfS7pCLfRASL2xorv/5EYnEDqetZrlwv4dqxiPxLqQfZC57VWRxEGIzAy/Br
-         Zv5GKzkbWSW826cYjicUyHPtmoCBgASa7DoHnAkil6UKt7SqW88rkRGCvgS5fIYiEa8N
-         c8sg==
-X-Gm-Message-State: APjAAAUDKA2BPDE7O8AYFV81guVyjUbxXlNwoXEGCPk5sGzTrTIAr1K2
-        Wx7ASYp+eYzm9eBbl+7AUF+/3f+i
-X-Google-Smtp-Source: APXvYqzfdX6Nr0UQaN1zBOiZOewHimaxR1Qiwg/YBN515XAFnaGsWFHpaGnvxDxpDgStPoXRKAaUrg==
-X-Received: by 2002:a62:be0c:: with SMTP id l12mr3391968pff.256.1572622483833;
-        Fri, 01 Nov 2019 08:34:43 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id a29sm10531303pfr.49.2019.11.01.08.34.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Nov 2019 08:34:42 -0700 (PDT)
-Subject: Re: [PATCH 3/4] aacraid: use blk_mq_rq_busy_iter() for traversing
- outstanding commands
-To:     Hannes Reinecke <hare@suse.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org
-References: <20191101111838.140027-1-hare@suse.de>
- <20191101111838.140027-4-hare@suse.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <6c70be12-cc58-1c69-beed-f9cd8ef65269@acm.org>
-Date:   Fri, 1 Nov 2019 08:34:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
+        b=QpQjrW+nwcGsub4SvCHzfMFAu6jVSN6s5AaJV9MBuVh9dereJIx5OkI6kV0AMDkHV4
+         1Tj+GYqThlbkO76IegkRWyg6Al9TH0s4AOaixbCKW4FXkPfHSzvRZTUfyxXv84BkFA2d
+         bQjTnkcO86ltZFrWaD1NPBn8UjF9rpmJy5gnT7O0NELy+NEmpgVIOi8fACJECw+0R9og
+         650S/V4pfNdd2sxs4073hV0XXimqTKjrpUmg4txpOTjJY8rk7PQ79HxbTMS6mms8CYCW
+         gQUt1gX6duNn2mDmsGnyssGKGA8GKk5kvAi6dSkRb1OAVJcgX2GoM9ZM4eaAwq3vy7cc
+         YIVw==
+X-Gm-Message-State: APjAAAXq5Up20c1XX+ZHmVdxDk3VoLTNlU+NBM8IE55fiOG8SEhUVKzY
+        670gPPVxR0dnbdiZLXUhdv9KSrBmM1So9l5uTw==
+X-Google-Smtp-Source: APXvYqykJV+0/JwFtVH+nsMp7ykNvWlhcV0rRy9Az9oSoBx/tmbFcQXrrs+n9sPNEOpMU4VQknLk5nY+7hLQNduMfzM=
+X-Received: by 2002:a92:9ac2:: with SMTP id c63mr13404416ill.8.1572623769676;
+ Fri, 01 Nov 2019 08:56:09 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191101111838.140027-4-hare@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a02:7749:0:0:0:0:0 with HTTP; Fri, 1 Nov 2019 08:56:08 -0700 (PDT)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Mary Coster, I.M.F director-Benin" 
+        <info.zennitbankplcnigerian@gmail.com>
+Date:   Fri, 1 Nov 2019 16:56:08 +0100
+Message-ID: <CABHzvrmbRd3tt-E2+9AO2XvrMQFKQcn+kao_7DN4rb=grxZAcA@mail.gmail.com>
+Subject: Contact Money Gram international service-Benin to receive your
+ payment funds US$2.500,000 Million
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/1/19 4:18 AM, Hannes Reinecke wrote:
-> +static bool synchronize_busy_iter(struct request *req, void *data, bool reserved)
-> +{
-> +	struct scsi_cmnd *cmd = blk_mq_rq_to_pdu(req);
-> +	struct synchronize_busy_data *busy_data = data;
-> +
-> +	if (busy_data->sdev == cmd->device &&
-> +	    cmd->SCp.phase == AAC_OWNER_FIRMWARE) {
-> +		u64 cmnd_lba;
-> +		u32 cmnd_count;
-> +
-> +		if (cmd->cmnd[0] == WRITE_6) {
-> +			cmnd_lba = ((cmd->cmnd[1] & 0x1F) << 16) |
-> +				(cmd->cmnd[2] << 8) |
-> +				cmd->cmnd[3];
-> +			cmnd_count = cmd->cmnd[4];
-> +			if (cmnd_count == 0)
-> +				cmnd_count = 256;
-> +		} else if (cmd->cmnd[0] == WRITE_16) {
-> +			cmnd_lba = ((u64)cmd->cmnd[2] << 56) |
-> +				((u64)cmd->cmnd[3] << 48) |
-> +				((u64)cmd->cmnd[4] << 40) |
-> +				((u64)cmd->cmnd[5] << 32) |
-> +				((u64)cmd->cmnd[6] << 24) |
-> +				(cmd->cmnd[7] << 16) |
-> +				(cmd->cmnd[8] << 8) |
-> +				cmd->cmnd[9];
-> +			cmnd_count = (cmd->cmnd[10] << 24) |
-> +				(cmd->cmnd[11] << 16) |
-> +				(cmd->cmnd[12] << 8) |
-> +				cmd->cmnd[13];
-> +		} else if (cmd->cmnd[0] == WRITE_12) {
-> +			cmnd_lba = ((u64)cmd->cmnd[2] << 24) |
-> +				(cmd->cmnd[3] << 16) |
-> +				(cmd->cmnd[4] << 8) |
-> +				cmd->cmnd[5];
-> +			cmnd_count = (cmd->cmnd[6] << 24) |
-> +				(cmd->cmnd[7] << 16) |
-> +				(cmd->cmnd[8] << 8) |
-> +				cmd->cmnd[9];
-> +		} else if (cmd->cmnd[0] == WRITE_10) {
-> +			cmnd_lba = ((u64)cmd->cmnd[2] << 24) |
-> +				(cmd->cmnd[3] << 16) |
-> +				(cmd->cmnd[4] << 8) |
-> +				cmd->cmnd[5];
-> +			cmnd_count = (cmd->cmnd[7] << 8) |
-> +				cmd->cmnd[8];
-> +		} else
-> +			return true;
-
-The above code looks very similar to the code in scsi_trace.c. Although 
-SCSI LLDs shouldn't parse CDBs, there are a few SCSI LLDs that do this. 
-Would it be worth it to introduce a function in the SCSI core that 
-extracts the most important fields from a CDB (LBA, data buffer size, ...)?
-
-Bart.
+Attn Dear,Funds Beneficiary.
+Contact Money Gram international service-Benin to receive your payment
+funds US$2.500,000 Million approved this morning through the UN
+payment settlement organization.
+Contact Person, Mr. John Dave.
+Official Director.Money Gram-Benin
+Email: moneygram.1820@outlook.fr
+Telephone +229 62619517
+Once you get intouch with Mr. John Dave, Money Gram Director, send to
+him your address including your phone numbers. He will be sending the
+transfer to you  $5000.00 USD daily until you received your complete
+payment $2.5m from the office.
+Note,I have paid the whole service fees for you but only small money
+you been required to send to this office is $23.00 only via Money Gram
+transfer.
+God bless
+Mary Coster, I.M.F director-Benin
+m.coster@aol.com
