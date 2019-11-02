@@ -2,24 +2,24 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A01ECD28
-	for <lists+linux-scsi@lfdr.de>; Sat,  2 Nov 2019 06:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D622ECD2A
+	for <lists+linux-scsi@lfdr.de>; Sat,  2 Nov 2019 06:01:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726080AbfKBFBs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 2 Nov 2019 01:01:48 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:49886 "EHLO
+        id S1726999AbfKBFBv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 2 Nov 2019 01:01:51 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:49948 "EHLO
         smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbfKBFBs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Nov 2019 01:01:48 -0400
+        with ESMTP id S1725842AbfKBFBu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 2 Nov 2019 01:01:50 -0400
 Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id DDCBE614E6; Sat,  2 Nov 2019 05:01:45 +0000 (UTC)
+        id 0233860FBB; Sat,  2 Nov 2019 05:01:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1572670905;
-        bh=V2XXMW38kUhdfX3PiI9di8Zsl+Mv2fzek+ewvx/P0Ok=;
-        h=From:To:Subject:Date:From;
-        b=HiFd7Q7lmqS9gnN2M4YNyUeiflkruRFlwJMkzKL+9qPweA5RnL7OCq2HVLRPaBpnE
-         1ZNXFzWPCOgOavYMx6qoEYwboUPMulhqKI4O5M3qoHZnTWthmjy/BoMw3jHvU+aUyh
-         Ku+/oxuWgxHAd1Cg9l/AdlyNkhhJ7fvJTSW/Pe3A=
+        s=default; t=1572670908;
+        bh=3jrpzDJ3un/OnOp4reXw1SVjx+Aq9j/kB2TL+7OU6WU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PL0wqpXRehSrxIoUNFs+oMSNxcwqF1htCO70LuD1PcxuiwMgZvNOq/jTYDTFzi2sk
+         OjUaMKXfN4Zrp8f2nBQbs0LN0T6vv8qBY3nmjOSHdz0+5aZkwnCpSZUeUV1Iod/WZO
+         Nwhm0P/C2m3tzPcPTEEyxSAHNtE3OGAhNiq6k/TY=
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         pdx-caf-mail.web.codeaurora.org
 X-Spam-Level: 
@@ -30,16 +30,16 @@ Received: from pacamara-linux.qualcomm.com (i-global254.qualcomm.com [199.106.10
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: cang@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id F1AAB60FBB;
-        Sat,  2 Nov 2019 05:01:44 +0000 (UTC)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DB756614A3;
+        Sat,  2 Nov 2019 05:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1572670905;
-        bh=V2XXMW38kUhdfX3PiI9di8Zsl+Mv2fzek+ewvx/P0Ok=;
-        h=From:To:Subject:Date:From;
-        b=HiFd7Q7lmqS9gnN2M4YNyUeiflkruRFlwJMkzKL+9qPweA5RnL7OCq2HVLRPaBpnE
-         1ZNXFzWPCOgOavYMx6qoEYwboUPMulhqKI4O5M3qoHZnTWthmjy/BoMw3jHvU+aUyh
-         Ku+/oxuWgxHAd1Cg9l/AdlyNkhhJ7fvJTSW/Pe3A=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F1AAB60FBB
+        s=default; t=1572670907;
+        bh=3jrpzDJ3un/OnOp4reXw1SVjx+Aq9j/kB2TL+7OU6WU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iRMzXg58P/yMnLCb1FmT+AgGyUgzZoO+iHQmKWkHVkvklOMYNspST3jisHq2GQWaE
+         bw6I4FkToKB0uGTBi6QnS4YmArFTE56NyaXS9hhNbWU36dCgTVXXOWJ4WbvGGVdT9V
+         zAAEIEnIVGoNNn49H/yC0giQllO2K7fsU7pMyz3s=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DB756614A3
 Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=cang@codeaurora.org
 From:   Can Guo <cang@codeaurora.org>
@@ -47,36 +47,62 @@ To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
         rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
         kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
         cang@codeaurora.org
-Subject: [PATCH v3 0/5] UFS driver general fixes bundle 1
-Date:   Fri,  1 Nov 2019 22:01:33 -0700
-Message-Id: <1572670898-750-1-git-send-email-cang@codeaurora.org>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 1/5] scsi: Adjust DBD setting in mode sense for caching mode page per LLD
+Date:   Fri,  1 Nov 2019 22:01:34 -0700
+Message-Id: <1572670898-750-2-git-send-email-cang@codeaurora.org>
 X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1572670898-750-1-git-send-email-cang@codeaurora.org>
+References: <1572670898-750-1-git-send-email-cang@codeaurora.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This bundle includes 5 general fixes for UFS driver.
+Host sends MODE_SENSE_10 with caching mode page, to check if the device
+supports the cache feature.
+UFS JEDEC standards require DBD field to be set to 1.
 
-Changes since v2:
-- Incorporated review comments from Mark Salyzyn
+This patch allows LLD to define the setting of DBD if required.
 
-Changes since v1:
-- Incorporated review comments from Bart Van Assche.
+Signed-off-by: Can Guo <cang@codeaurora.org>
+---
+ drivers/scsi/sd.c        | 2 +-
+ include/scsi/scsi_host.h | 6 ++++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-Can Guo (5):
-  scsi: Adjust DBD setting in mode sense for caching mode page per LLD
-  scsi: ufs: Set DBD setting in mode sense for caching mode page
-  scsi: ufs: Release clock if DMA map fails
-  scsi: ufs: Do not clear the DL layer timers
-  scsi: ufs: Do not free irq in suspend
-
- drivers/scsi/sd.c         |  2 +-
- drivers/scsi/ufs/ufshcd.c | 40 ++++++++++++++++++++++++++--------------
- drivers/scsi/ufs/unipro.h | 11 +++++++++++
- include/scsi/scsi_host.h  |  6 ++++++
- 4 files changed, 44 insertions(+), 15 deletions(-)
-
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index aab4ed8..a9cca2f 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -2660,7 +2660,7 @@ static int sd_try_rc16_first(struct scsi_device *sdp)
+ 		dbd = 8;
+ 	} else {
+ 		modepage = 8;
+-		dbd = 0;
++		dbd = sdp->host->set_dbd_for_caching ? 8 : 0;
+ 	}
+ 
+ 	/* cautiously ask */
+diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
+index 2c3f0c5..3900987 100644
+--- a/include/scsi/scsi_host.h
++++ b/include/scsi/scsi_host.h
+@@ -650,6 +650,12 @@ struct Scsi_Host {
+ 	unsigned no_scsi2_lun_in_cdb:1;
+ 
+ 	/*
++	 * Set "DBD" field in mode_sense caching mode page in case it is
++	 * mandatory by LLD standard.
++	 */
++	unsigned set_dbd_for_caching:1;
++
++	/*
+ 	 * Optional work queue to be utilized by the transport
+ 	 */
+ 	char work_q_name[20];
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 a Linux Foundation Collaborative Project
