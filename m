@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F129EDB00
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EAFEDB1B
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728344AbfKDJCS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 04:02:18 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57258 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728097AbfKDJCP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1728200AbfKDJCP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Mon, 4 Nov 2019 04:02:15 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57164 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727880AbfKDJCO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 4 Nov 2019 04:02:14 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id C2F4AB4A4;
+        by mx1.suse.de (Postfix) with ESMTP id 69CFAB30D;
         Mon,  4 Nov 2019 09:02:10 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 11/52] megaraid_mboxi: use standard SAM status codes
-Date:   Mon,  4 Nov 2019 10:01:10 +0100
-Message-Id: <20191104090151.129140-12-hare@suse.de>
+Subject: [PATCH 12/52] gdth: use standard SAM status codes
+Date:   Mon,  4 Nov 2019 10:01:11 +0100
+Message-Id: <20191104090151.129140-13-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191104090151.129140-1-hare@suse.de>
 References: <20191104090151.129140-1-hare@suse.de>
@@ -37,63 +37,63 @@ from linux-specific ones.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/megaraid/megaraid_mbox.c | 12 ++++++------
+ drivers/scsi/gdth.c | 12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
-index f6ac819e6e96..dc58c5ff31e4 100644
---- a/drivers/scsi/megaraid/megaraid_mbox.c
-+++ b/drivers/scsi/megaraid/megaraid_mbox.c
-@@ -1577,7 +1577,7 @@ megaraid_mbox_build_cmd(adapter_t *adapter, struct scsi_cmnd *scp, int *busy)
- 				scp->sense_buffer[0] = 0x70;
- 				scp->sense_buffer[2] = ILLEGAL_REQUEST;
- 				scp->sense_buffer[12] = MEGA_INVALID_FIELD_IN_CDB;
--				scp->result = CHECK_CONDITION << 1;
-+				scp->result = SAM_STAT_CHECK_CONDITION;
- 				return NULL;
- 			}
- 
-@@ -2302,7 +2302,7 @@ megaraid_mbox_dpc(unsigned long devp)
- 						14);
- 
- 				scp->result = DRIVER_SENSE << 24 |
--					DID_OK << 16 | CHECK_CONDITION << 1;
-+					DID_OK << 16 | SAM_STAT_CHECK_CONDITION;
- 			}
- 			else {
- 				if (mbox->cmd == MBOXCMD_EXTPTHRU) {
-@@ -2312,11 +2312,11 @@ megaraid_mbox_dpc(unsigned long devp)
- 
- 					scp->result = DRIVER_SENSE << 24 |
- 						DID_OK << 16 |
--						CHECK_CONDITION << 1;
-+						SAM_STAT_CHECK_CONDITION;
- 				} else {
- 					scp->sense_buffer[0] = 0x70;
- 					scp->sense_buffer[2] = ABORTED_COMMAND;
--					scp->result = CHECK_CONDITION << 1;
-+					scp->result = SAM_STAT_CHECK_CONDITION;
- 				}
- 			}
- 			break;
-@@ -2334,7 +2334,7 @@ megaraid_mbox_dpc(unsigned long devp)
- 			 */
- 			if (scp->cmnd[0] == TEST_UNIT_READY) {
- 				scp->result = DID_ERROR << 16 |
--					RESERVATION_CONFLICT << 1;
-+					SAM_STAT_RESERVATION_CONFLICT;
- 			}
- 			else
- 			/*
-@@ -2345,7 +2345,7 @@ megaraid_mbox_dpc(unsigned long devp)
- 					 scp->cmnd[0] == RELEASE)) {
- 
- 				scp->result = DID_ERROR << 16 |
--					RESERVATION_CONFLICT << 1;
-+					SAM_STAT_RESERVATION_CONFLICT;
- 			}
- 			else {
- 				scp->result = DID_BAD_TARGET << 16 | status;
+diff --git a/drivers/scsi/gdth.c b/drivers/scsi/gdth.c
+index fe03410268e6..d23e277c1b85 100644
+--- a/drivers/scsi/gdth.c
++++ b/drivers/scsi/gdth.c
+@@ -1677,7 +1677,7 @@ static void gdth_next(gdth_ha_str *ha)
+                 memset((char*)nscp->sense_buffer,0,16);
+                 nscp->sense_buffer[0] = 0x70;
+                 nscp->sense_buffer[2] = NOT_READY;
+-                nscp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++		nscp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+                 if (!nscp_cmndinfo->wait_for_completion)
+                     nscp_cmndinfo->wait_for_completion++;
+                 else
+@@ -1722,7 +1722,7 @@ static void gdth_next(gdth_ha_str *ha)
+                     memset((char*)nscp->sense_buffer,0,16);
+                     nscp->sense_buffer[0] = 0x70;
+                     nscp->sense_buffer[2] = UNIT_ATTENTION;
+-                    nscp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++		    nscp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+                     if (!nscp_cmndinfo->wait_for_completion)
+                         nscp_cmndinfo->wait_for_completion++;
+                     else
+@@ -1774,7 +1774,7 @@ static void gdth_next(gdth_ha_str *ha)
+                     memset((char*)nscp->sense_buffer,0,16);
+                     nscp->sense_buffer[0] = 0x70;
+                     nscp->sense_buffer[2] = UNIT_ATTENTION;
+-                    nscp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++		    nscp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+                     if (!nscp_cmndinfo->wait_for_completion)
+                         nscp_cmndinfo->wait_for_completion++;
+                     else
+@@ -2802,7 +2802,7 @@ static int gdth_sync_event(gdth_ha_str *ha, int service, u8 index,
+                 memset((char*)scp->sense_buffer,0,16);
+                 scp->sense_buffer[0] = 0x70;
+                 scp->sense_buffer[2] = NOT_READY;
+-                scp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++		scp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+             } else if (service == CACHESERVICE) {
+                 if (ha->status == S_CACHE_UNKNOWN &&
+                     (ha->hdr[t].cluster_type & 
+@@ -2812,11 +2812,11 @@ static int gdth_sync_event(gdth_ha_str *ha, int service, u8 index,
+                 }
+                 memset((char*)scp->sense_buffer,0,16);
+                 if (ha->status == (u16)S_CACHE_RESERV) {
+-                    scp->result = (DID_OK << 16) | (RESERVATION_CONFLICT << 1);
++                    scp->result = (DID_OK << 16) | SAM_STAT_RESERVATION_CONFLICT;
+                 } else {
+                     scp->sense_buffer[0] = 0x70;
+                     scp->sense_buffer[2] = NOT_READY;
+-                    scp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
++                    scp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
+                 }
+                 if (!cmndinfo->internal_command) {
+                     ha->dvr.size = sizeof(ha->dvr.eu.sync);
 -- 
 2.16.4
 
