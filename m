@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE16EDB27
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF36EDAFF
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726441AbfKDJCh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 04:02:37 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57240 "EHLO mx1.suse.de"
+        id S1728343AbfKDJCR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Nov 2019 04:02:17 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57280 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728004AbfKDJCO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 4 Nov 2019 04:02:14 -0500
+        id S1726100AbfKDJCP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 4 Nov 2019 04:02:15 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 81115B441;
+        by mx1.suse.de (Postfix) with ESMTP id E7C76B4AD;
         Mon,  4 Nov 2019 09:02:10 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 20/52] sg: use SAM status definitions and avoid using masked_status
-Date:   Mon,  4 Nov 2019 10:01:19 +0100
-Message-Id: <20191104090151.129140-21-hare@suse.de>
+Subject: [PATCH 21/52] initio: use standard SAM status definitions
+Date:   Mon,  4 Nov 2019 10:01:20 +0100
+Message-Id: <20191104090151.129140-22-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191104090151.129140-1-hare@suse.de>
 References: <20191104090151.129140-1-hare@suse.de>
@@ -32,74 +32,44 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use standard SAM status definitions and avoid using masked status
-values.
+Use standard SAM status definitions and drop the
+driver-defined ones.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/sg.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ drivers/scsi/initio.c | 2 +-
+ drivers/scsi/initio.h | 5 -----
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index e88fb3daebcc..60ff388d04b9 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -503,7 +503,7 @@ sg_read(struct file *filp, char __user *buf, size_t count, loff_t * ppos)
- 	old_hdr->target_status = hp->masked_status;
- 	old_hdr->host_status = hp->host_status;
- 	old_hdr->driver_status = hp->driver_status;
--	if ((CHECK_CONDITION & hp->masked_status) ||
-+	if ((SAM_STAT_CHECK_CONDITION & hp->status) ||
- 	    (DRIVER_SENSE & hp->driver_status))
- 		memcpy(old_hdr->sense_buffer, srp->sense_b,
- 		       sizeof (old_hdr->sense_buffer));
-@@ -529,7 +529,7 @@ sg_read(struct file *filp, char __user *buf, size_t count, loff_t * ppos)
- 		break;
- 	case DID_ERROR:
- 		old_hdr->result = (srp->sense_b[0] == 0 && 
--				  hp->masked_status == GOOD) ? 0 : EIO;
-+				  hp->status == SAM_STAT_GOOD) ? 0 : EIO;
- 		break;
- 	default:
- 		old_hdr->result = EIO;
-@@ -574,7 +574,7 @@ sg_new_read(Sg_fd * sfp, char __user *buf, size_t count, Sg_request * srp)
- 	}
- 	hp->sb_len_wr = 0;
- 	if ((hp->mx_sb_len > 0) && hp->sbp) {
--		if ((CHECK_CONDITION & hp->masked_status) ||
-+		if ((SAM_STAT_CHECK_CONDITION & hp->status) ||
- 		    (DRIVER_SENSE & hp->driver_status)) {
- 			int sb_len = SCSI_SENSE_BUFFERSIZE;
- 			sb_len = (hp->mx_sb_len > sb_len) ? sb_len : hp->mx_sb_len;
-@@ -587,7 +587,7 @@ sg_new_read(Sg_fd * sfp, char __user *buf, size_t count, Sg_request * srp)
- 			hp->sb_len_wr = len;
- 		}
- 	}
--	if (hp->masked_status || hp->host_status || hp->driver_status)
-+	if (hp->status || hp->host_status || hp->driver_status)
- 		hp->info |= SG_INFO_CHECK;
- 	if (copy_to_user(buf, hp, SZ_SG_IO_HDR)) {
- 		err = -EFAULT;
-@@ -873,7 +873,7 @@ sg_fill_request_table(Sg_fd *sfp, sg_req_info_t *rinfo)
- 			break;
- 		rinfo[val].req_state = srp->done + 1;
- 		rinfo[val].problem =
--			srp->header.masked_status &
-+			srp->header.status &
- 			srp->header.host_status &
- 			srp->header.driver_status;
- 		if (srp->done)
-@@ -1355,8 +1355,8 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
- 		srp->header.host_status = host_byte(result);
- 		srp->header.driver_status = driver_byte(result);
- 		if ((sdp->sgdebug > 0) &&
--		    ((CHECK_CONDITION == srp->header.masked_status) ||
--		     (COMMAND_TERMINATED == srp->header.masked_status)))
-+		    ((SAM_STAT_CHECK_CONDITION == srp->header.status) ||
-+		     (SAM_STAT_COMMAND_TERMINATED == srp->header.status)))
- 			__scsi_print_sense(sdp->device, __func__, sense,
- 					   SCSI_SENSE_BUFFERSIZE);
+diff --git a/drivers/scsi/initio.c b/drivers/scsi/initio.c
+index 41fd64c9c8e9..d1430a39fe46 100644
+--- a/drivers/scsi/initio.c
++++ b/drivers/scsi/initio.c
+@@ -1077,7 +1077,7 @@ static int tulip_main(struct initio_host * host)
  
+ 		/* Walk the list of completed SCBs */
+ 		while ((scb = initio_find_done_scb(host)) != NULL) {	/* find done entry */
+-			if (scb->tastat == INI_QUEUE_FULL) {
++			if (scb->tastat == SAM_STAT_TASK_SET_FULL) {
+ 				host->max_tags[scb->target] =
+ 				    host->act_tags[scb->target] - 1;
+ 				scb->tastat = 0;
+diff --git a/drivers/scsi/initio.h b/drivers/scsi/initio.h
+index 219b901bdc25..61bae14fee9e 100644
+--- a/drivers/scsi/initio.h
++++ b/drivers/scsi/initio.h
+@@ -428,11 +428,6 @@ struct scsi_ctrl_blk {
+ #define HOST_SCSI_RST   0x1B
+ #define HOST_DEV_RST    0x1C
+ 
+-/* Error Codes for SCB_TaStat */
+-#define TARGET_CHKCOND  0x02
+-#define TARGET_BUSY     0x08
+-#define INI_QUEUE_FULL	0x28
+-
+ /* SCSI MESSAGE */
+ #define MSG_COMP        0x00
+ #define MSG_EXTEND      0x01
 -- 
 2.16.4
 
