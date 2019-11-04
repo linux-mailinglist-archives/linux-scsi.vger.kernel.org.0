@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4799EEDB0D
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD47EDB07
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728287AbfKDJCZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 04:02:25 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57246 "EHLO mx1.suse.de"
+        id S1728365AbfKDJCW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Nov 2019 04:02:22 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57164 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728248AbfKDJCS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 4 Nov 2019 04:02:18 -0500
+        id S1728307AbfKDJCR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 4 Nov 2019 04:02:17 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 3D4C2B4B8;
+        by mx1.suse.de (Postfix) with ESMTP id 8E47DB4C3;
         Mon,  4 Nov 2019 09:02:11 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 24/52] advansys: kill driver_defined status byte accessors
-Date:   Mon,  4 Nov 2019 10:01:23 +0100
-Message-Id: <20191104090151.129140-25-hare@suse.de>
+Subject: [PATCH 25/52] scsi: introduce scsi_build_sense()
+Date:   Mon,  4 Nov 2019 10:01:24 +0100
+Message-Id: <20191104090151.129140-26-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191104090151.129140-1-hare@suse.de>
 References: <20191104090151.129140-1-hare@suse.de>
@@ -32,189 +32,54 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Replace the driver-defined status byte accessors by the
-mid-layer defined ones.
+Introduce scsi_build_sense() as a wrapper around
+scsi_build_sense_buffer() to format the buffer and set
+the correct SCSI status.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/advansys.c | 78 +++++++++++++------------------------------------
- 1 file changed, 20 insertions(+), 58 deletions(-)
+ drivers/scsi/scsi_lib.c  | 18 ++++++++++++++++++
+ include/scsi/scsi_cmnd.h |  3 +++
+ 2 files changed, 21 insertions(+)
 
-diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
-index a242a62caaa1..5268b4b92e43 100644
---- a/drivers/scsi/advansys.c
-+++ b/drivers/scsi/advansys.c
-@@ -2085,12 +2085,6 @@ do { \
- #define ASC_BUSY        0
- #define ASC_ERROR       (-1)
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index a0db8d8766a8..2babf6df8066 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -3117,3 +3117,21 @@ int scsi_vpd_tpg_id(struct scsi_device *sdev, int *rel_id)
+ 	return group_id;
+ }
+ EXPORT_SYMBOL(scsi_vpd_tpg_id);
++
++/**
++ * scsi_build_sense - build sense data for a command
++ * @scmd:	scsi command for which the sense should be formatted
++ * @desc:	Sense format (non-zero == descriptor format,
++ *              0 == fixed format)
++ * @key:	Sense key
++ * @asc:	Additional sense code
++ * @ascq:	Additional sense code qualifier
++ *
++ **/
++void scsi_build_sense(struct scsi_cmnd *scmd, int desc, u8 key, u8 asc, u8 ascq)
++{
++	scsi_build_sense_buffer(desc, scmd->sense_buffer, key, asc, ascq);
++	scmd->result = (DRIVER_SENSE << 24) | (DID_OK << 16) |
++		SAM_STAT_CHECK_CONDITION;
++}
++EXPORT_SYMBOL_GPL(scsi_build_sense);
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 6932d91472d5..9b9ca629097d 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -338,4 +338,7 @@ static inline unsigned scsi_transfer_length(struct scsi_cmnd *scmd)
+ 	return xfer_len;
+ }
  
--/* struct scsi_cmnd function return codes */
--#define STATUS_BYTE(byte)   (byte)
--#define MSG_BYTE(byte)      ((byte) << 8)
--#define HOST_BYTE(byte)     ((byte) << 16)
--#define DRIVER_BYTE(byte)   ((byte) << 24)
--
- #define ASC_STATS(shost, counter) ASC_STATS_ADD(shost, counter, 1)
- #ifndef ADVANSYS_STATS
- #define ASC_STATS_ADD(shost, counter, count)
-@@ -6021,43 +6015,28 @@ static void adv_isr_callback(ADV_DVC_VAR *adv_dvc_varp, ADV_SCSI_REQ_Q *scsiqp)
- 				ASC_DBG(2, "SAM_STAT_CHECK_CONDITION\n");
- 				ASC_DBG_PRT_SENSE(2, scp->sense_buffer,
- 						  SCSI_SENSE_BUFFERSIZE);
--				/*
--				 * Note: The 'status_byte()' macro used by
--				 * target drivers defined in scsi.h shifts the
--				 * status byte returned by host drivers right
--				 * by 1 bit.  This is why target drivers also
--				 * use right shifted status byte definitions.
--				 * For instance target drivers use
--				 * CHECK_CONDITION, defined to 0x1, instead of
--				 * the SCSI defined check condition value of
--				 * 0x2. Host drivers are supposed to return
--				 * the status byte as it is defined by SCSI.
--				 */
--				scp->result = DRIVER_BYTE(DRIVER_SENSE) |
--				    STATUS_BYTE(scsiqp->scsi_status);
--			} else {
--				scp->result = STATUS_BYTE(scsiqp->scsi_status);
- 			}
-+			scp->result = status_byte(scsiqp->scsi_status);
- 			break;
- 
- 		default:
- 			/* Some other QHSTA error occurred. */
- 			ASC_DBG(1, "host_status 0x%x\n", scsiqp->host_status);
--			scp->result = HOST_BYTE(DID_BAD_TARGET);
-+			scp->result = host_byte(DID_BAD_TARGET);
- 			break;
- 		}
- 		break;
- 
- 	case QD_ABORTED_BY_HOST:
- 		ASC_DBG(1, "QD_ABORTED_BY_HOST\n");
--		scp->result =
--		    HOST_BYTE(DID_ABORT) | STATUS_BYTE(scsiqp->scsi_status);
-+		scp->result = host_byte(DID_ABORT);
-+		set_status_byte(scp, scsiqp->scsi_status);
- 		break;
- 
- 	default:
- 		ASC_DBG(1, "done_status 0x%x\n", scsiqp->done_status);
--		scp->result =
--		    HOST_BYTE(DID_ERROR) | STATUS_BYTE(scsiqp->scsi_status);
-+		scp->result = host_byte(DID_ERROR);
-+		set_status_byte(scp, scsiqp->scsi_status);
- 		break;
- 	}
- 
-@@ -6789,47 +6768,30 @@ static void asc_isr_callback(ASC_DVC_VAR *asc_dvc_varp, ASC_QDONE_INFO *qdonep)
- 				ASC_DBG(2, "SAM_STAT_CHECK_CONDITION\n");
- 				ASC_DBG_PRT_SENSE(2, scp->sense_buffer,
- 						  SCSI_SENSE_BUFFERSIZE);
--				/*
--				 * Note: The 'status_byte()' macro used by
--				 * target drivers defined in scsi.h shifts the
--				 * status byte returned by host drivers right
--				 * by 1 bit.  This is why target drivers also
--				 * use right shifted status byte definitions.
--				 * For instance target drivers use
--				 * CHECK_CONDITION, defined to 0x1, instead of
--				 * the SCSI defined check condition value of
--				 * 0x2. Host drivers are supposed to return
--				 * the status byte as it is defined by SCSI.
--				 */
--				scp->result = DRIVER_BYTE(DRIVER_SENSE) |
--				    STATUS_BYTE(qdonep->d3.scsi_stat);
--			} else {
--				scp->result = STATUS_BYTE(qdonep->d3.scsi_stat);
- 			}
-+			scp->result = status_byte(qdonep->d3.scsi_stat);
- 			break;
- 
- 		default:
- 			/* QHSTA error occurred */
- 			ASC_DBG(1, "host_stat 0x%x\n", qdonep->d3.host_stat);
--			scp->result = HOST_BYTE(DID_BAD_TARGET);
-+			scp->result = host_byte(DID_BAD_TARGET);
- 			break;
- 		}
- 		break;
- 
- 	case QD_ABORTED_BY_HOST:
- 		ASC_DBG(1, "QD_ABORTED_BY_HOST\n");
--		scp->result =
--		    HOST_BYTE(DID_ABORT) | MSG_BYTE(qdonep->d3.
--						    scsi_msg) |
--		    STATUS_BYTE(qdonep->d3.scsi_stat);
-+		scp->result = host_byte(DID_ABORT);
-+		set_msg_byte(scp, qdonep->d3.scsi_msg);
-+		set_status_byte(scp, qdonep->d3.scsi_stat);
- 		break;
- 
- 	default:
- 		ASC_DBG(1, "done_stat 0x%x\n", qdonep->d3.done_stat);
--		scp->result =
--		    HOST_BYTE(DID_ERROR) | MSG_BYTE(qdonep->d3.
--						    scsi_msg) |
--		    STATUS_BYTE(qdonep->d3.scsi_stat);
-+		scp->result = host_byte(DID_ERROR);
-+		set_msg_byte(scp, qdonep->d3.scsi_msg);
-+		set_status_byte(scp, qdonep->d3.scsi_stat);
- 		break;
- 	}
- 
-@@ -7568,7 +7530,7 @@ static int asc_build_req(struct asc_board *boardp, struct scsi_cmnd *scp,
- 				"sg_tablesize %d\n", use_sg,
- 				scp->device->host->sg_tablesize);
- 			scsi_dma_unmap(scp);
--			scp->result = HOST_BYTE(DID_ERROR);
-+			scp->result = host_byte(DID_ERROR);
- 			return ASC_ERROR;
- 		}
- 
-@@ -7576,7 +7538,7 @@ static int asc_build_req(struct asc_board *boardp, struct scsi_cmnd *scp,
- 			use_sg * sizeof(struct asc_sg_list), GFP_ATOMIC);
- 		if (!asc_sg_head) {
- 			scsi_dma_unmap(scp);
--			scp->result = HOST_BYTE(DID_SOFT_ERROR);
-+			scp->result = host_byte(DID_SOFT_ERROR);
- 			return ASC_ERROR;
- 		}
- 
-@@ -7819,7 +7781,7 @@ adv_build_req(struct asc_board *boardp, struct scsi_cmnd *scp,
- 				   "ADV_MAX_SG_LIST %d\n", use_sg,
- 				   scp->device->host->sg_tablesize);
- 			scsi_dma_unmap(scp);
--			scp->result = HOST_BYTE(DID_ERROR);
-+			scp->result = host_byte(DID_ERROR);
- 			reqp->cmndp = NULL;
- 			scp->host_scribble = NULL;
- 
-@@ -7831,7 +7793,7 @@ adv_build_req(struct asc_board *boardp, struct scsi_cmnd *scp,
- 		ret = adv_get_sglist(boardp, reqp, scsiqp, scp, use_sg);
- 		if (ret != ADV_SUCCESS) {
- 			scsi_dma_unmap(scp);
--			scp->result = HOST_BYTE(DID_ERROR);
-+			scp->result = host_byte(DID_ERROR);
- 			reqp->cmndp = NULL;
- 			scp->host_scribble = NULL;
- 
-@@ -8528,13 +8490,13 @@ static int asc_execute_scsi_cmnd(struct scsi_cmnd *scp)
- 		scmd_printk(KERN_ERR, scp, "ExeScsiQueue() ASC_ERROR, "
- 			"err_code 0x%x\n", err_code);
- 		ASC_STATS(scp->device->host, exe_error);
--		scp->result = HOST_BYTE(DID_ERROR);
-+		scp->result = host_byte(DID_ERROR);
- 		break;
- 	default:
- 		scmd_printk(KERN_ERR, scp, "ExeScsiQueue() unknown, "
- 			"err_code 0x%x\n", err_code);
- 		ASC_STATS(scp->device->host, exe_unknown);
--		scp->result = HOST_BYTE(DID_ERROR);
-+		scp->result = host_byte(DID_ERROR);
- 		break;
- 	}
- 
++extern void scsi_build_sense(struct scsi_cmnd *scmd, int desc,
++			     u8 key, u8 asc, u8 ascq);
++
+ #endif /* _SCSI_SCSI_CMND_H */
 -- 
 2.16.4
 
