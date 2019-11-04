@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EAFEDB1B
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA13EDB1E
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728200AbfKDJCP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 04:02:15 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57164 "EHLO mx1.suse.de"
+        id S1728420AbfKDJCe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Nov 2019 04:02:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57256 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727880AbfKDJCO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1728078AbfKDJCO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Mon, 4 Nov 2019 04:02:14 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 69CFAB30D;
+        by mx1.suse.de (Postfix) with ESMTP id CE373B4A9;
         Mon,  4 Nov 2019 09:02:10 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 12/52] gdth: use standard SAM status codes
-Date:   Mon,  4 Nov 2019 10:01:11 +0100
-Message-Id: <20191104090151.129140-13-hare@suse.de>
+Subject: [PATCH 13/52] dpt_i2o: use standard SAM status codes
+Date:   Mon,  4 Nov 2019 10:01:12 +0100
+Message-Id: <20191104090151.129140-14-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191104090151.129140-1-hare@suse.de>
 References: <20191104090151.129140-1-hare@suse.de>
@@ -37,63 +37,22 @@ from linux-specific ones.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/gdth.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/scsi/dpt_i2o.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/gdth.c b/drivers/scsi/gdth.c
-index fe03410268e6..d23e277c1b85 100644
---- a/drivers/scsi/gdth.c
-+++ b/drivers/scsi/gdth.c
-@@ -1677,7 +1677,7 @@ static void gdth_next(gdth_ha_str *ha)
-                 memset((char*)nscp->sense_buffer,0,16);
-                 nscp->sense_buffer[0] = 0x70;
-                 nscp->sense_buffer[2] = NOT_READY;
--                nscp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
-+		nscp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
-                 if (!nscp_cmndinfo->wait_for_completion)
-                     nscp_cmndinfo->wait_for_completion++;
-                 else
-@@ -1722,7 +1722,7 @@ static void gdth_next(gdth_ha_str *ha)
-                     memset((char*)nscp->sense_buffer,0,16);
-                     nscp->sense_buffer[0] = 0x70;
-                     nscp->sense_buffer[2] = UNIT_ATTENTION;
--                    nscp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
-+		    nscp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
-                     if (!nscp_cmndinfo->wait_for_completion)
-                         nscp_cmndinfo->wait_for_completion++;
-                     else
-@@ -1774,7 +1774,7 @@ static void gdth_next(gdth_ha_str *ha)
-                     memset((char*)nscp->sense_buffer,0,16);
-                     nscp->sense_buffer[0] = 0x70;
-                     nscp->sense_buffer[2] = UNIT_ATTENTION;
--                    nscp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
-+		    nscp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
-                     if (!nscp_cmndinfo->wait_for_completion)
-                         nscp_cmndinfo->wait_for_completion++;
-                     else
-@@ -2802,7 +2802,7 @@ static int gdth_sync_event(gdth_ha_str *ha, int service, u8 index,
-                 memset((char*)scp->sense_buffer,0,16);
-                 scp->sense_buffer[0] = 0x70;
-                 scp->sense_buffer[2] = NOT_READY;
--                scp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
-+		scp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
-             } else if (service == CACHESERVICE) {
-                 if (ha->status == S_CACHE_UNKNOWN &&
-                     (ha->hdr[t].cluster_type & 
-@@ -2812,11 +2812,11 @@ static int gdth_sync_event(gdth_ha_str *ha, int service, u8 index,
-                 }
-                 memset((char*)scp->sense_buffer,0,16);
-                 if (ha->status == (u16)S_CACHE_RESERV) {
--                    scp->result = (DID_OK << 16) | (RESERVATION_CONFLICT << 1);
-+                    scp->result = (DID_OK << 16) | SAM_STAT_RESERVATION_CONFLICT;
-                 } else {
-                     scp->sense_buffer[0] = 0x70;
-                     scp->sense_buffer[2] = NOT_READY;
--                    scp->result = (DID_OK << 16) | (CHECK_CONDITION << 1);
-+                    scp->result = (DID_OK << 16) | SAM_STAT_CHECK_CONDITION;
-                 }
-                 if (!cmndinfo->internal_command) {
-                     ha->dvr.size = sizeof(ha->dvr.eu.sync);
+diff --git a/drivers/scsi/dpt_i2o.c b/drivers/scsi/dpt_i2o.c
+index abc74fd474dc..83576fd694c4 100644
+--- a/drivers/scsi/dpt_i2o.c
++++ b/drivers/scsi/dpt_i2o.c
+@@ -2656,7 +2656,7 @@ static void adpt_fail_posted_scbs(adpt_hba* pHba)
+ 		unsigned long flags;
+ 		spin_lock_irqsave(&d->list_lock, flags);
+ 		list_for_each_entry(cmd, &d->cmd_list, list) {
+-			cmd->result = (DID_OK << 16) | (QUEUE_FULL <<1);
++			cmd->result = (DID_OK << 16) | SAM_STAT_TASK_SET_FULL;
+ 			cmd->scsi_done(cmd);
+ 		}
+ 		spin_unlock_irqrestore(&d->list_lock, flags);
 -- 
 2.16.4
 
