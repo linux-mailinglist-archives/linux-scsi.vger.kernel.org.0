@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED3AEDB18
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F96EDB14
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728413AbfKDJCc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 04:02:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57198 "EHLO mx1.suse.de"
+        id S1728396AbfKDJC3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Nov 2019 04:02:29 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57302 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728227AbfKDJCR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1728277AbfKDJCR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Mon, 4 Nov 2019 04:02:17 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 261A3B4B4;
+        by mx1.suse.de (Postfix) with ESMTP id 18F2CB278;
         Mon,  4 Nov 2019 09:02:11 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 22/52] scsi: Kill obsolete linux-specific status codes
-Date:   Mon,  4 Nov 2019 10:01:21 +0100
-Message-Id: <20191104090151.129140-23-hare@suse.de>
+Subject: [PATCH 23/52] scsi: introduce set_status_byte()
+Date:   Mon,  4 Nov 2019 10:01:22 +0100
+Message-Id: <20191104090151.129140-24-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191104090151.129140-1-hare@suse.de>
 References: <20191104090151.129140-1-hare@suse.de>
@@ -32,43 +32,30 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-After several years it's time to finally kill them.
+To be in-line with the other set_XX_byte() functions.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Bart van Assche <bvanassche@acm.org>
 ---
- include/scsi/scsi_proto.h | 19 -------------------
- 1 file changed, 19 deletions(-)
+ include/scsi/scsi_cmnd.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/scsi/scsi_proto.h b/include/scsi/scsi_proto.h
-index c36860111932..660f37ce8721 100644
---- a/include/scsi/scsi_proto.h
-+++ b/include/scsi/scsi_proto.h
-@@ -202,25 +202,6 @@ struct scsi_varlen_cdb_hdr {
- #define SAM_STAT_ACA_ACTIVE      0x30
- #define SAM_STAT_TASK_ABORTED    0x40
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 91bd749a02f7..6932d91472d5 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -307,6 +307,11 @@ static inline struct scsi_data_buffer *scsi_prot(struct scsi_cmnd *cmd)
+ #define scsi_for_each_prot_sg(cmd, sg, nseg, __i)		\
+ 	for_each_sg(scsi_prot_sglist(cmd), sg, nseg, __i)
  
--/*
-- *  Status codes. These are deprecated as they are shifted 1 bit right
-- *  from those found in the SCSI standards. This causes confusion for
-- *  applications that are ported to several OSes. Prefer SAM Status codes
-- *  above.
-- */
--
--#define GOOD                 0x00
--#define CHECK_CONDITION      0x01
--#define CONDITION_GOOD       0x02
--#define BUSY                 0x04
--#define INTERMEDIATE_GOOD    0x08
--#define INTERMEDIATE_C_GOOD  0x0a
--#define RESERVATION_CONFLICT 0x0c
--#define COMMAND_TERMINATED   0x11
--#define QUEUE_FULL           0x14
--#define ACA_ACTIVE           0x18
--#define TASK_ABORTED         0x20
--
- #define STATUS_MASK          0xfe
- 
- /*
++static inline void set_status_byte(struct scsi_cmnd *cmd, char status)
++{
++	cmd->result = (cmd->result & 0xffffff00) | status;
++}
++
+ static inline void set_msg_byte(struct scsi_cmnd *cmd, char status)
+ {
+ 	cmd->result = (cmd->result & 0xffff00ff) | (status << 8);
 -- 
 2.16.4
 
