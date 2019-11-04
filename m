@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52355EDAFE
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE16EDB27
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728342AbfKDJCR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 04:02:17 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57164 "EHLO mx1.suse.de"
+        id S1726441AbfKDJCh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Nov 2019 04:02:37 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57240 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728168AbfKDJCP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 4 Nov 2019 04:02:15 -0500
+        id S1728004AbfKDJCO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 4 Nov 2019 04:02:14 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id F0D31B4AE;
+        by mx1.suse.de (Postfix) with ESMTP id 81115B441;
         Mon,  4 Nov 2019 09:02:10 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 19/52] target_core: Fixup target_complete_cmd() usage
-Date:   Mon,  4 Nov 2019 10:01:18 +0100
-Message-Id: <20191104090151.129140-20-hare@suse.de>
+Subject: [PATCH 20/52] sg: use SAM status definitions and avoid using masked_status
+Date:   Mon,  4 Nov 2019 10:01:19 +0100
+Message-Id: <20191104090151.129140-21-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191104090151.129140-1-hare@suse.de>
 References: <20191104090151.129140-1-hare@suse.de>
@@ -32,232 +32,74 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-target_complete_cmd() occasionally still uses the linux-specific
-SCSI result values; fix it up to use SAM result values throughout.
+Use standard SAM status definitions and avoid using masked status
+values.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Bart van Assche <bvanassche@acm.org>
 ---
- drivers/target/target_core_alua.c   |  6 +++---
- drivers/target/target_core_iblock.c |  2 +-
- drivers/target/target_core_pr.c     |  8 ++++----
- drivers/target/target_core_sbc.c    | 10 +++++-----
- drivers/target/target_core_spc.c    | 14 +++++++-------
- drivers/target/target_core_xcopy.c  |  2 +-
- 6 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/scsi/sg.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/target/target_core_alua.c b/drivers/target/target_core_alua.c
-index 385e4cf9cfa6..b53b6d7f173e 100644
---- a/drivers/target/target_core_alua.c
-+++ b/drivers/target/target_core_alua.c
-@@ -123,7 +123,7 @@ target_emulate_report_referrals(struct se_cmd *cmd)
- 
- 	transport_kunmap_data_sg(cmd);
- 
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-@@ -255,7 +255,7 @@ target_emulate_report_target_port_groups(struct se_cmd *cmd)
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index e88fb3daebcc..60ff388d04b9 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -503,7 +503,7 @@ sg_read(struct file *filp, char __user *buf, size_t count, loff_t * ppos)
+ 	old_hdr->target_status = hp->masked_status;
+ 	old_hdr->host_status = hp->host_status;
+ 	old_hdr->driver_status = hp->driver_status;
+-	if ((CHECK_CONDITION & hp->masked_status) ||
++	if ((SAM_STAT_CHECK_CONDITION & hp->status) ||
+ 	    (DRIVER_SENSE & hp->driver_status))
+ 		memcpy(old_hdr->sense_buffer, srp->sense_b,
+ 		       sizeof (old_hdr->sense_buffer));
+@@ -529,7 +529,7 @@ sg_read(struct file *filp, char __user *buf, size_t count, loff_t * ppos)
+ 		break;
+ 	case DID_ERROR:
+ 		old_hdr->result = (srp->sense_b[0] == 0 && 
+-				  hp->masked_status == GOOD) ? 0 : EIO;
++				  hp->status == SAM_STAT_GOOD) ? 0 : EIO;
+ 		break;
+ 	default:
+ 		old_hdr->result = EIO;
+@@ -574,7 +574,7 @@ sg_new_read(Sg_fd * sfp, char __user *buf, size_t count, Sg_request * srp)
  	}
- 	transport_kunmap_data_sg(cmd);
- 
--	target_complete_cmd_with_length(cmd, GOOD, rd_len + 4);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, rd_len + 4);
- 	return 0;
- }
- 
-@@ -424,7 +424,7 @@ target_emulate_set_target_port_groups(struct se_cmd *cmd)
- out:
- 	transport_kunmap_data_sg(cmd);
- 	if (!rc)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return rc;
- }
- 
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index 6949ea8bc387..bbafa984226e 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -436,7 +436,7 @@ iblock_execute_zero_out(struct block_device *bdev, struct se_cmd *cmd)
- 	if (ret)
- 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
- 
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
-index 5e931690e697..4fef561b201c 100644
---- a/drivers/target/target_core_pr.c
-+++ b/drivers/target/target_core_pr.c
-@@ -234,7 +234,7 @@ target_scsi2_reservation_release(struct se_cmd *cmd)
- out_unlock:
- 	spin_unlock(&dev->dev_reservation_lock);
- out:
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-@@ -297,7 +297,7 @@ target_scsi2_reservation_reserve(struct se_cmd *cmd)
- 	spin_unlock(&dev->dev_reservation_lock);
- out:
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
- 
-@@ -3680,7 +3680,7 @@ target_scsi3_emulate_pr_out(struct se_cmd *cmd)
+ 	hp->sb_len_wr = 0;
+ 	if ((hp->mx_sb_len > 0) && hp->sbp) {
+-		if ((CHECK_CONDITION & hp->masked_status) ||
++		if ((SAM_STAT_CHECK_CONDITION & hp->status) ||
+ 		    (DRIVER_SENSE & hp->driver_status)) {
+ 			int sb_len = SCSI_SENSE_BUFFERSIZE;
+ 			sb_len = (hp->mx_sb_len > sb_len) ? sb_len : hp->mx_sb_len;
+@@ -587,7 +587,7 @@ sg_new_read(Sg_fd * sfp, char __user *buf, size_t count, Sg_request * srp)
+ 			hp->sb_len_wr = len;
+ 		}
  	}
+-	if (hp->masked_status || hp->host_status || hp->driver_status)
++	if (hp->status || hp->host_status || hp->driver_status)
+ 		hp->info |= SG_INFO_CHECK;
+ 	if (copy_to_user(buf, hp, SZ_SG_IO_HDR)) {
+ 		err = -EFAULT;
+@@ -873,7 +873,7 @@ sg_fill_request_table(Sg_fd *sfp, sg_req_info_t *rinfo)
+ 			break;
+ 		rinfo[val].req_state = srp->done + 1;
+ 		rinfo[val].problem =
+-			srp->header.masked_status &
++			srp->header.status &
+ 			srp->header.host_status &
+ 			srp->header.driver_status;
+ 		if (srp->done)
+@@ -1355,8 +1355,8 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
+ 		srp->header.host_status = host_byte(result);
+ 		srp->header.driver_status = driver_byte(result);
+ 		if ((sdp->sgdebug > 0) &&
+-		    ((CHECK_CONDITION == srp->header.masked_status) ||
+-		     (COMMAND_TERMINATED == srp->header.masked_status)))
++		    ((SAM_STAT_CHECK_CONDITION == srp->header.status) ||
++		     (SAM_STAT_COMMAND_TERMINATED == srp->header.status)))
+ 			__scsi_print_sense(sdp->device, __func__, sense,
+ 					   SCSI_SENSE_BUFFERSIZE);
  
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
- 
-@@ -4070,7 +4070,7 @@ target_scsi3_emulate_pr_in(struct se_cmd *cmd)
- 	}
- 
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
- 
-diff --git a/drivers/target/target_core_sbc.c b/drivers/target/target_core_sbc.c
-index f1e81886122d..6e45924fb3da 100644
---- a/drivers/target/target_core_sbc.c
-+++ b/drivers/target/target_core_sbc.c
-@@ -67,7 +67,7 @@ sbc_emulate_readcapacity(struct se_cmd *cmd)
- 		transport_kunmap_data_sg(cmd);
- 	}
- 
--	target_complete_cmd_with_length(cmd, GOOD, 8);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 8);
- 	return 0;
- }
- 
-@@ -130,7 +130,7 @@ sbc_emulate_readcapacity_16(struct se_cmd *cmd)
- 		transport_kunmap_data_sg(cmd);
- 	}
- 
--	target_complete_cmd_with_length(cmd, GOOD, 32);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 32);
- 	return 0;
- }
- 
-@@ -202,14 +202,14 @@ sbc_execute_write_same_unmap(struct se_cmd *cmd)
- 			return ret;
- 	}
- 
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
- static sense_reason_t
- sbc_emulate_noop(struct se_cmd *cmd)
- {
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-@@ -1214,7 +1214,7 @@ sbc_execute_unmap(struct se_cmd *cmd)
- err:
- 	transport_kunmap_data_sg(cmd);
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
- 
-diff --git a/drivers/target/target_core_spc.c b/drivers/target/target_core_spc.c
-index 6d4cf2643c0a..84f7fefc2998 100644
---- a/drivers/target/target_core_spc.c
-+++ b/drivers/target/target_core_spc.c
-@@ -754,7 +754,7 @@ spc_emulate_inquiry(struct se_cmd *cmd)
- 	kfree(buf);
- 
- 	if (!ret)
--		target_complete_cmd_with_length(cmd, GOOD, len);
-+		target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, len);
- 	return ret;
- }
- 
-@@ -1099,7 +1099,7 @@ static sense_reason_t spc_emulate_modesense(struct se_cmd *cmd)
- 		transport_kunmap_data_sg(cmd);
- 	}
- 
--	target_complete_cmd_with_length(cmd, GOOD, length);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, length);
- 	return 0;
- }
- 
-@@ -1117,7 +1117,7 @@ static sense_reason_t spc_emulate_modeselect(struct se_cmd *cmd)
- 	int i;
- 
- 	if (!cmd->data_length) {
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 		return 0;
- 	}
- 
-@@ -1160,7 +1160,7 @@ static sense_reason_t spc_emulate_modeselect(struct se_cmd *cmd)
- 	transport_kunmap_data_sg(cmd);
- 
- 	if (!ret)
--		target_complete_cmd(cmd, GOOD);
-+		target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return ret;
- }
- 
-@@ -1193,7 +1193,7 @@ static sense_reason_t spc_emulate_request_sense(struct se_cmd *cmd)
- 	memcpy(rbuf, buf, min_t(u32, sizeof(buf), cmd->data_length));
- 	transport_kunmap_data_sg(cmd);
- 
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-@@ -1260,7 +1260,7 @@ sense_reason_t spc_emulate_report_luns(struct se_cmd *cmd)
- 		transport_kunmap_data_sg(cmd);
- 	}
- 
--	target_complete_cmd_with_length(cmd, GOOD, 8 + lun_count * 8);
-+	target_complete_cmd_with_length(cmd, SAM_STAT_GOOD, 8 + lun_count * 8);
- 	return 0;
- }
- EXPORT_SYMBOL(spc_emulate_report_luns);
-@@ -1268,7 +1268,7 @@ EXPORT_SYMBOL(spc_emulate_report_luns);
- static sense_reason_t
- spc_emulate_testunitready(struct se_cmd *cmd)
- {
--	target_complete_cmd(cmd, GOOD);
-+	target_complete_cmd(cmd, SAM_STAT_GOOD);
- 	return 0;
- }
- 
-diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
-index 425c1070de08..30475bf73faf 100644
---- a/drivers/target/target_core_xcopy.c
-+++ b/drivers/target/target_core_xcopy.c
-@@ -1043,7 +1043,7 @@ static sense_reason_t target_rcr_operating_parameters(struct se_cmd *se_cmd)
- 	put_unaligned_be32(42, &p[0]);
- 
- 	transport_kunmap_data_sg(se_cmd);
--	target_complete_cmd(se_cmd, GOOD);
-+	target_complete_cmd(se_cmd, SAM_STAT_GOOD);
- 
- 	return TCM_NO_SENSE;
- }
 -- 
 2.16.4
 
