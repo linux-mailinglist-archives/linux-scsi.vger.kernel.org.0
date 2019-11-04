@@ -2,341 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF83EDB12
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF9EEDB41
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728388AbfKDJC1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 04:02:27 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57254 "EHLO mx1.suse.de"
+        id S1727444AbfKDJHL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Nov 2019 04:07:11 -0500
+Received: from mail-eopbgr770050.outbound.protection.outlook.com ([40.107.77.50]:61760
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728314AbfKDJCR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 4 Nov 2019 04:02:17 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id AAC1EB4C8;
-        Mon,  4 Nov 2019 09:02:11 +0000 (UTC)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Bart van Assche <bvanassche@acm.org>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 52/52] scsi: Drop the now obsolete driver_byte definitions
-Date:   Mon,  4 Nov 2019 10:01:51 +0100
-Message-Id: <20191104090151.129140-53-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191104090151.129140-1-hare@suse.de>
-References: <20191104090151.129140-1-hare@suse.de>
+        id S1726100AbfKDJHL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 4 Nov 2019 04:07:11 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NfP9IEvedfRANtZ1r6zmH35SdBekBtuvrNK5cTm58ebNnwv2tfW2TN8UFKH/W+d64x2YGJhANM8m+qT+w4hj4ZxoOi3KV2dOzKVgTvckXPzv8YKlV7AJZjoYcKFieWqAG8wcn2rFcLn2iIbrzIXoQ7GtlRxkkYZ+FP910noy5TbmL9ROKvh/wpmblyDuN/7x90hmAEOdOncf6GJM4ZfgJhoSVOdXw+eIZ7qzpNvVYNzwA9pKZJN/eMTEccKK3mzq7HirlD6jyter+6gyK5cAVy55/4CEeSzZPJTFIZIPJ2k/1bM0ry5yWc5S2KxVzQt8/mm0sK0bttwMnGPWW65xUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QqVh948d8MxhHofM2DwcqeKoJgTKDhqL2D2PTCguBZU=;
+ b=OFM/qOJ5kj4MrbYx+OTRsdWSX1axi6tjaK/F8YmXkL0rIB9SIvPlc/hbaN1h8aXg9iVQhU7mW7JEnf2KGkbYirXXZwMhWnyJaTb9Np6NHnrQ/gUQzb0igYyGNV25GtB1dTgcpbvTJ+dd0sx6eO8o1Lt8K5v/mfOiGBs4dqY96caRzxvNKDZum5lrV0qRYoDQ3wkJ7WU9lhUtZCco5qYQJqEeeeGG1h7nhmuh+f2oFv+pon/ZO8uznTvaSlPDEItQwESCXiJnoqB8AzfKaDVMmUPkKreSKkf0XbmezuSlkTb0TPjUk/4aj+x2rIZOjAHC90yC/KmRE8cY25IPiQ5qBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=micron.com; dmarc=pass action=none header.from=micron.com;
+ dkim=pass header.d=micron.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QqVh948d8MxhHofM2DwcqeKoJgTKDhqL2D2PTCguBZU=;
+ b=1DFvQoJU6Eo4mje41/4nay5WMNb9q1viUifvLO6prKe+3N1J9xcrVP4g8JJ4g0rSZqLnnKTnvBpyYS1QJ3N8w5UEbOKX5mYi5E1sJW1TsPL49V38E3gra7Wurrvy5BjATJ5bedF9iYOmyVz5bCGShEAh8ZTveYC8h6b7M1JIMgI=
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.179.87) by
+ BN7PR08MB4385.namprd08.prod.outlook.com (52.133.220.138) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2408.24; Mon, 4 Nov 2019 09:07:08 +0000
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::a91a:c2f5:c557:4285]) by BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::a91a:c2f5:c557:4285%6]) with mapi id 15.20.2408.024; Mon, 4 Nov 2019
+ 09:07:08 +0000
+From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
+To:     Can Guo <cang@codeaurora.org>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "nguyenb@codeaurora.org" <nguyenb@codeaurora.org>,
+        "rnayak@codeaurora.org" <rnayak@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "salyzyn@google.com" <salyzyn@google.com>
+CC:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
+        Subhash Jadavani <subhashj@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [EXT] [PATCH v2 1/7] scsi: ufs: Add device reset in link recovery
+ path
+Thread-Topic: [EXT] [PATCH v2 1/7] scsi: ufs: Add device reset in link
+ recovery path
+Thread-Index: AQHVkrBBOZcq0OUUjUKroVOu3na/Dqd6uOXA
+Date:   Mon, 4 Nov 2019 09:07:08 +0000
+Message-ID: <BN7PR08MB5684C7D3614C7AD052AE9F45DB7F0@BN7PR08MB5684.namprd08.prod.outlook.com>
+References: <1572831362-22779-1-git-send-email-cang@codeaurora.org>
+ <1572831362-22779-2-git-send-email-cang@codeaurora.org>
+In-Reply-To: <1572831362-22779-2-git-send-email-cang@codeaurora.org>
+Accept-Language: en-150, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcYmVhbmh1b1xhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJhMjllMzViXG1zZ3NcbXNnLTc4NjlkNjI4LWZlZTItMTFlOS04Yjg1LWRjNzE5NjFmOWRkM1xhbWUtdGVzdFw3ODY5ZDYyYS1mZWUyLTExZTktOGI4NS1kYzcxOTYxZjlkZDNib2R5LnR4dCIgc3o9IjIwMiIgdD0iMTMyMTczMzIwMjU4MTEwNjc4IiBoPSJFSno1cHNIT3NjRnEyeHNLRVIwWjkxTTY1YVE9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=beanhuo@micron.com; 
+x-originating-ip: [165.225.81.21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e2101e14-6fc7-4eaf-8084-08d761065efa
+x-ms-traffictypediagnostic: BN7PR08MB4385:|BN7PR08MB4385:|BN7PR08MB4385:
+x-microsoft-antispam-prvs: <BN7PR08MB438501775CE0338BD1E1B060DB7F0@BN7PR08MB4385.namprd08.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:400;
+x-forefront-prvs: 0211965D06
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(346002)(396003)(136003)(39860400002)(376002)(189003)(199004)(14454004)(76176011)(66066001)(305945005)(7736002)(7416002)(74316002)(33656002)(186003)(86362001)(2201001)(446003)(11346002)(6436002)(55016002)(55236004)(102836004)(9686003)(476003)(486006)(229853002)(316002)(478600001)(8676002)(4326008)(8936002)(6116002)(81166006)(81156014)(110136005)(99286004)(54906003)(25786009)(6506007)(26005)(6246003)(7696005)(256004)(66446008)(76116006)(64756008)(66556008)(66946007)(52536014)(558084003)(66476007)(5660300002)(2501003)(2906002)(71200400001)(71190400001)(3846002);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB4385;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: micron.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ti5zDPdd3dLb0RhhVal+wAB6jwAQ4cqyACOpHtqewXo6OL3ByAgW5CYDC+2DZ4qIQOOjPAEeb6uBLe1ZDVFIPu35cI2m5MEelekipvhSb31HTKOo6diBZwE4VUuAFfcnyQG1n+UsDx0WVWtci3ZtAhPlxWXqypXbnQbyd1qIvDSABQZjdhtWz6QB6ZpDes1Wadw4yUz3KZM1WWzicW2vrWM/cT/42/tZu6dzIqYxOzAiEfNTHyiQh4+Qjy3mfQeJiey1IWCbBe9bvy+k1ujT7NKWS/31szBUdrxr/Y4ZVciwu4yPkd2FjY5Bhn9heqtTa3hCDaQc2fL4H5ZqyDh7M2rQAvs+WIoAFcfmOTky/fbPHY4s+g0pgUmwrvELy5/xsdvaTTPdtbZIvi/XOoKx2bByWy1w1i8LQsLVq7DaRTrqUMTG3I1tc5ovpqEps5IH
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2101e14-6fc7-4eaf-8084-08d761065efa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2019 09:07:08.5328
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: U2zPebLI8Esj8yZP/AieawzFpcLqzFecMnWVecfdR0gHhUmFTUlLLXPW8Lno7R0MevoEoBDKHRUfDDOYGBSJyA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB4385
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The driver_byte field in the result is now unused, so we can drop
-the definitions.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- Documentation/scsi/scsi_mid_low_api.txt |  3 +--
- block/bsg-lib.c                         |  2 +-
- block/bsg.c                             |  2 +-
- block/scsi_ioctl.c                      |  2 +-
- drivers/scsi/constants.c                | 14 --------------
- drivers/scsi/scsi_logging.c             | 10 ++--------
- drivers/scsi/sd.c                       |  9 ++++-----
- drivers/scsi/sd_zbc.c                   |  4 ++--
- drivers/scsi/sg.c                       |  5 ++---
- drivers/scsi/sr.c                       |  2 +-
- drivers/scsi/sr_ioctl.c                 |  2 +-
- drivers/scsi/st.c                       |  4 ++--
- include/scsi/scsi.h                     |  3 ---
- include/scsi/scsi_cmnd.h                |  4 ----
- include/trace/events/scsi.h             |  7 +------
- 15 files changed, 19 insertions(+), 54 deletions(-)
-
-diff --git a/Documentation/scsi/scsi_mid_low_api.txt b/Documentation/scsi/scsi_mid_low_api.txt
-index c1dd4939f4ae..ab072fff5fb8 100644
---- a/Documentation/scsi/scsi_mid_low_api.txt
-+++ b/Documentation/scsi/scsi_mid_low_api.txt
-@@ -1160,8 +1160,7 @@ Members of interest:
-                    target device). 'result' is a 32 bit unsigned integer that
-                    can be viewed as 4 related bytes. The SCSI status value is
-                    in the LSB. See include/scsi/scsi.h status_byte(),
--                   msg_byte(), host_byte() and driver_byte() macros and
--                   related constants.
-+                   msg_byte() and host_byte() macros and related constants.
-     sense_buffer - an array (maximum size: SCSI_SENSE_BUFFERSIZE bytes) that
-                    should be written when the SCSI status (LSB of 'result')
-                    is set to CHECK_CONDITION (2). When CHECK_CONDITION is
-diff --git a/block/bsg-lib.c b/block/bsg-lib.c
-index 347dda16c2f4..bc0c813b3a99 100644
---- a/block/bsg-lib.c
-+++ b/block/bsg-lib.c
-@@ -84,7 +84,7 @@ static int bsg_transport_complete_rq(struct request *rq, struct sg_io_v4 *hdr)
- 	 */
- 	hdr->device_status = job->result & 0xff;
- 	hdr->transport_status = host_byte(job->result);
--	hdr->driver_status = driver_byte(job->result);
-+	hdr->driver_status = 0;
- 	hdr->info = 0;
- 	if (hdr->device_status || hdr->transport_status || hdr->driver_status)
- 		hdr->info |= SG_INFO_CHECK;
-diff --git a/block/bsg.c b/block/bsg.c
-index 833c44b3d458..dcde05348a48 100644
---- a/block/bsg.c
-+++ b/block/bsg.c
-@@ -96,7 +96,7 @@ static int bsg_scsi_complete_rq(struct request *rq, struct sg_io_v4 *hdr)
- 	 */
- 	hdr->device_status = sreq->result & 0xff;
- 	hdr->transport_status = host_byte(sreq->result);
--	hdr->driver_status = driver_byte(sreq->result);
-+	hdr->driver_status = 0;
- 	hdr->info = 0;
- 	if (hdr->device_status || hdr->transport_status || hdr->driver_status)
- 		hdr->info |= SG_INFO_CHECK;
-diff --git a/block/scsi_ioctl.c b/block/scsi_ioctl.c
-index 1ab1b8d9641c..b8b9b72fab2a 100644
---- a/block/scsi_ioctl.c
-+++ b/block/scsi_ioctl.c
-@@ -252,7 +252,7 @@ static int blk_complete_sghdr_rq(struct request *rq, struct sg_io_hdr *hdr,
- 	hdr->masked_status = status_byte(req->result);
- 	hdr->msg_status = msg_byte(req->result);
- 	hdr->host_status = host_byte(req->result);
--	hdr->driver_status = driver_byte(req->result);
-+	hdr->driver_status = 0;
- 	hdr->info = 0;
- 	if (hdr->masked_status || hdr->host_status || hdr->driver_status)
- 		hdr->info |= SG_INFO_CHECK;
-diff --git a/drivers/scsi/constants.c b/drivers/scsi/constants.c
-index be7eacb67841..924131ea0b11 100644
---- a/drivers/scsi/constants.c
-+++ b/drivers/scsi/constants.c
-@@ -406,9 +406,6 @@ static const char * const hostbyte_table[]={
- "DID_TRANSPORT_DISRUPTED", "DID_TRANSPORT_FAILFAST", "DID_TARGET_FAILURE",
- "DID_NEXUS_FAILURE" };
- 
--static const char * const driverbyte_table[]={
--"DRIVER_OK"};
--
- const char *scsi_hostbyte_string(int result)
- {
- 	const char *hb_string = NULL;
-@@ -420,17 +417,6 @@ const char *scsi_hostbyte_string(int result)
- }
- EXPORT_SYMBOL(scsi_hostbyte_string);
- 
--const char *scsi_driverbyte_string(int result)
--{
--	const char *db_string = NULL;
--	int db = driver_byte(result);
--
--	if (db < ARRAY_SIZE(driverbyte_table))
--		db_string = driverbyte_table[db];
--	return db_string;
--}
--EXPORT_SYMBOL(scsi_driverbyte_string);
--
- #define scsi_mlreturn_name(result)	{ result, #result }
- static const struct value_name_pair scsi_mlreturn_arr[] = {
- 	scsi_mlreturn_name(NEEDS_RETRY),
-diff --git a/drivers/scsi/scsi_logging.c b/drivers/scsi/scsi_logging.c
-index c91fa3feb930..d0b646430375 100644
---- a/drivers/scsi/scsi_logging.c
-+++ b/drivers/scsi/scsi_logging.c
-@@ -389,7 +389,6 @@ void scsi_print_result(const struct scsi_cmnd *cmd, const char *msg,
- 	size_t off, logbuf_len;
- 	const char *mlret_string = scsi_mlreturn_string(disposition);
- 	const char *hb_string = scsi_hostbyte_string(cmd->result);
--	const char *db_string = scsi_driverbyte_string(cmd->result);
- 	unsigned long cmd_age = (jiffies - cmd->jiffies_at_alloc) / HZ;
- 
- 	logbuf = scsi_log_reserve_buffer(&logbuf_len);
-@@ -430,13 +429,8 @@ void scsi_print_result(const struct scsi_cmnd *cmd, const char *msg,
- 	if (WARN_ON(off >= logbuf_len))
- 		goto out_printk;
- 
--	if (db_string)
--		off += scnprintf(logbuf + off, logbuf_len - off,
--				 "driverbyte=%s ", db_string);
--	else
--		off += scnprintf(logbuf + off, logbuf_len - off,
--				 "driverbyte=0x%02x ",
--				 driver_byte(cmd->result));
-+	off += scnprintf(logbuf + off, logbuf_len - off,
-+			 "driverbyte=DRIVER_OK ");
- 
- 	off += scnprintf(logbuf + off, logbuf_len - off,
- 			 "cmd_age=%lus", cmd_age);
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index 220990183b6b..4599954b7bb0 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -3716,16 +3716,15 @@ static void sd_print_result(const struct scsi_disk *sdkp, const char *msg,
- 			    int result)
- {
- 	const char *hb_string = scsi_hostbyte_string(result);
--	const char *db_string = scsi_driverbyte_string(result);
- 
--	if (hb_string || db_string)
-+	if (hb_string)
- 		sd_printk(KERN_INFO, sdkp,
- 			  "%s: Result: hostbyte=%s driverbyte=%s\n", msg,
- 			  hb_string ? hb_string : "invalid",
--			  db_string ? db_string : "invalid");
-+			  "DRIVER_OK");
- 	else
- 		sd_printk(KERN_INFO, sdkp,
--			  "%s: Result: hostbyte=0x%02x driverbyte=0x%02x\n",
--			  msg, host_byte(result), driver_byte(result));
-+			  "%s: Result: hostbyte=0x%02x driverbyte=%s\n",
-+			  msg, host_byte(result), "DRIVER_OK");
- }
- 
-diff --git a/drivers/scsi/sd_zbc.c b/drivers/scsi/sd_zbc.c
-index de4019dc0f0b..d96a2506d965 100644
---- a/drivers/scsi/sd_zbc.c
-+++ b/drivers/scsi/sd_zbc.c
-@@ -87,9 +87,9 @@ static int sd_zbc_do_report_zones(struct scsi_disk *sdkp, unsigned char *buf,
- 				  timeout, SD_MAX_RETRIES, NULL);
- 	if (result) {
- 		sd_printk(KERN_ERR, sdkp,
--			  "REPORT ZONES lba %llu failed with %d/%d\n",
-+			  "REPORT ZONES lba %llu failed with %d/0\n",
- 			  (unsigned long long)lba,
--			  host_byte(result), driver_byte(result));
-+			  host_byte(result));
- 		return -EIO;
- 	}
- 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index c6f5e0a8d271..7c5d3c25ccea 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -1354,7 +1354,7 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
- 		srp->header.masked_status = status_byte(result) >> 1;
- 		srp->header.msg_status = msg_byte(result);
- 		srp->header.host_status = host_byte(result);
--		srp->header.driver_status = driver_byte(result);
-+		srp->header.driver_status = 0;
- 		if ((sdp->sgdebug > 0) &&
- 		    ((SAM_STAT_CHECK_CONDITION == srp->header.status) ||
- 		     (SAM_STAT_COMMAND_TERMINATED == srp->header.status)))
-@@ -1362,8 +1362,7 @@ sg_rq_end_io(struct request *rq, blk_status_t status)
- 					   SCSI_SENSE_BUFFERSIZE);
- 
- 		/* Following if statement is a patch supplied by Eric Youngdale */
--		if (driver_byte(result) != 0
--		    && scsi_normalize_sense(sense, SCSI_SENSE_BUFFERSIZE, &sshdr)
-+		if (scsi_normalize_sense(sense, SCSI_SENSE_BUFFERSIZE, &sshdr)
- 		    && !scsi_sense_is_deferred(&sshdr)
- 		    && sshdr.sense_key == UNIT_ATTENTION
- 		    && sdp->device->removable) {
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 4664fdf75c0f..05969bb1860c 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -336,7 +336,7 @@ static int sr_done(struct scsi_cmnd *SCpnt)
- 	 * care is taken to avoid unnecessary additional work such as
- 	 * memcpy's that could be avoided.
- 	 */
--	if (driver_byte(result) != 0 &&		/* An error occurred */
-+	if (status_byte(result) == SAM_STAT_CHECK_CONDITION &&
- 	    (SCpnt->sense_buffer[0] & 0x7f) == 0x70) { /* Sense current */
- 		switch (SCpnt->sense_buffer[2]) {
- 		case MEDIUM_ERROR:
-diff --git a/drivers/scsi/sr_ioctl.c b/drivers/scsi/sr_ioctl.c
-index ffcf902da390..02bfbbfb6f03 100644
---- a/drivers/scsi/sr_ioctl.c
-+++ b/drivers/scsi/sr_ioctl.c
-@@ -205,7 +205,7 @@ int sr_do_ioctl(Scsi_CD *cd, struct packet_command *cgc)
- 			      cgc->timeout, IOCTL_RETRIES, 0, 0, NULL);
- 
- 	/* Minimal error checking.  Ignore cases we know about, and report the rest. */
--	if (driver_byte(result) != 0) {
-+	if (status_byte(result) == SAM_STAT_CHECK_CONDITION) {
- 		switch (sshdr->sense_key) {
- 		case UNIT_ATTENTION:
- 			SDev->changed = 1;
-diff --git a/drivers/scsi/st.c b/drivers/scsi/st.c
-index 5f38369cc62f..9ac262d6ccab 100644
---- a/drivers/scsi/st.c
-+++ b/drivers/scsi/st.c
-@@ -388,8 +388,8 @@ static int st_chk_result(struct scsi_tape *STp, struct st_request * SRpnt)
- 	if (!debugging) { /* Abnormal conditions for tape */
- 		if (!cmdstatp->have_sense)
- 			st_printk(KERN_WARNING, STp,
--			       "Error %x (driver bt 0x%x, host bt 0x%x).\n",
--			       result, driver_byte(result), host_byte(result));
-+			       "Error %x (driver bt 0, host bt 0x%x).\n",
-+			       result, host_byte(result));
- 		else if (cmdstatp->have_sense &&
- 			 scode != NO_SENSE &&
- 			 scode != RECOVERED_ERROR &&
-diff --git a/include/scsi/scsi.h b/include/scsi/scsi.h
-index acd0b2182db1..39ae398d98a9 100644
---- a/include/scsi/scsi.h
-+++ b/include/scsi/scsi.h
-@@ -159,7 +159,6 @@ static inline int scsi_is_wlun(u64 lun)
- 				 * paths might yield different results */
- #define DID_ALLOC_FAILURE 0x12  /* Space allocation on the device failed */
- #define DID_MEDIUM_ERROR  0x13  /* Medium error */
--#define DRIVER_OK       0x00	/* Driver status                           */
- 
- /*
-  * Internal return values.
-@@ -191,12 +190,10 @@ static inline int scsi_is_wlun(u64 lun)
-  *      status byte = set from target device
-  *      msg_byte    = return status from host adapter itself.
-  *      host_byte   = set by low-level driver to indicate status.
-- *      driver_byte = set by mid-level.
-  */
- #define status_byte(result) ((result) & 0xff)
- #define msg_byte(result)    (((result) >> 8) & 0xff)
- #define host_byte(result)   (((result) >> 16) & 0xff)
--#define driver_byte(result) (((result) >> 24) & 0xff)
- 
- #define sense_class(sense)  (((sense) >> 4) & 0x7)
- #define sense_error(sense)  ((sense) & 0xf)
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index 9b9ca629097d..fe1ac844c114 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -322,10 +322,6 @@ static inline void set_host_byte(struct scsi_cmnd *cmd, char status)
- 	cmd->result = (cmd->result & 0xff00ffff) | (status << 16);
- }
- 
--static inline void set_driver_byte(struct scsi_cmnd *cmd, char status)
--{
--	cmd->result = (cmd->result & 0x00ffffff) | (status << 24);
--}
- 
- static inline unsigned scsi_transfer_length(struct scsi_cmnd *scmd)
- {
-diff --git a/include/trace/events/scsi.h b/include/trace/events/scsi.h
-index 5984db6996bb..428cca71c2ba 100644
---- a/include/trace/events/scsi.h
-+++ b/include/trace/events/scsi.h
-@@ -124,11 +124,6 @@
- 		scsi_hostbyte_name(DID_TRANSPORT_DISRUPTED),	\
- 		scsi_hostbyte_name(DID_TRANSPORT_FAILFAST))
- 
--#define scsi_driverbyte_name(result)	{ result, #result }
--#define show_driverbyte_name(val)				\
--	__print_symbolic(val,					\
--		scsi_driverbyte_name(DRIVER_OK))
--
- #define scsi_msgbyte_name(result)	{ result, #result }
- #define show_msgbyte_name(val)					\
- 	__print_symbolic(val,					\
-@@ -319,7 +314,7 @@ DECLARE_EVENT_CLASS(scsi_cmd_done_timeout_template,
- 		  show_opcode_name(__entry->opcode),
- 		  __parse_cdb(__get_dynamic_array(cmnd), __entry->cmd_len),
- 		  __print_hex(__get_dynamic_array(cmnd), __entry->cmd_len),
--		  show_driverbyte_name(((__entry->result) >> 24) & 0xff),
-+		  "DRIVER_OK",
- 		  show_hostbyte_name(((__entry->result) >> 16) & 0xff),
- 		  show_msgbyte_name(((__entry->result) >> 8) & 0xff),
- 		  show_statusbyte_name(__entry->result & 0xff))
--- 
-2.16.4
-
+>=20
+> Signed-off-by: Can Guo <cang@codeaurora.org>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
