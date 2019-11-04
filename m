@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D02EDAF5
-	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6F9EDAF7
+	for <lists+linux-scsi@lfdr.de>; Mon,  4 Nov 2019 10:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727500AbfKDJCL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 04:02:11 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56966 "EHLO mx1.suse.de"
+        id S1727913AbfKDJCM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Nov 2019 04:02:12 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57062 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727332AbfKDJCL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 4 Nov 2019 04:02:11 -0500
+        id S1726100AbfKDJCM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 4 Nov 2019 04:02:12 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 18237B27D;
+        by mx1.suse.de (Postfix) with ESMTP id 185DFB296;
         Mon,  4 Nov 2019 09:02:10 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 03/52] wd33c93: use SCSI status
-Date:   Mon,  4 Nov 2019 10:01:02 +0100
-Message-Id: <20191104090151.129140-4-hare@suse.de>
+Subject: [PATCH 04/52] acornscsi: use standard defines
+Date:   Mon,  4 Nov 2019 10:01:03 +0100
+Message-Id: <20191104090151.129140-5-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191104090151.129140-1-hare@suse.de>
 References: <20191104090151.129140-1-hare@suse.de>
@@ -32,45 +32,54 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use standard SCSI status and drop usage of the linux-specific ones.
+Use midlayer-defined values and drop the non-existing QUEUE_FULL
+case; we are checking the SCSI messages in the switch statement,
+and QUEUE_FULL is a SCSI status hence it can never occur here.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/wd33c93.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/arm/acornscsi.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/wd33c93.c b/drivers/scsi/wd33c93.c
-index f81046f0e68a..76143a68f55c 100644
---- a/drivers/scsi/wd33c93.c
-+++ b/drivers/scsi/wd33c93.c
-@@ -1176,7 +1176,7 @@ wd33c93_intr(struct Scsi_Host *instance)
- 			if (cmd->SCp.Status == ILLEGAL_STATUS_BYTE)
- 				cmd->SCp.Status = lun;
- 			if (cmd->cmnd[0] == REQUEST_SENSE
--			    && cmd->SCp.Status != GOOD)
-+			    && cmd->SCp.Status != SAM_STAT_GOOD)
- 				cmd->result =
- 				    (cmd->
- 				     result & 0x00ffff) | (DID_ERROR << 16);
-@@ -1262,7 +1262,7 @@ wd33c93_intr(struct Scsi_Host *instance)
- 		    hostdata->connected = NULL;
- 		hostdata->busy[cmd->device->id] &= ~(1 << (cmd->device->lun & 0xff));
- 		hostdata->state = S_UNCONNECTED;
--		if (cmd->cmnd[0] == REQUEST_SENSE && cmd->SCp.Status != GOOD)
-+		if (cmd->cmnd[0] == REQUEST_SENSE && cmd->SCp.Status != SAM_STAT_GOOD)
- 			cmd->result =
- 			    (cmd->result & 0x00ffff) | (DID_ERROR << 16);
- 		else
-@@ -1296,7 +1296,7 @@ wd33c93_intr(struct Scsi_Host *instance)
- 			hostdata->state = S_UNCONNECTED;
- 			DB(DB_INTR, printk(":%d", cmd->SCp.Status))
- 			    if (cmd->cmnd[0] == REQUEST_SENSE
--				&& cmd->SCp.Status != GOOD)
-+				&& cmd->SCp.Status != SAM_STAT_GOOD)
- 				cmd->result =
- 				    (cmd->
- 				     result & 0x00ffff) | (DID_ERROR << 16);
+diff --git a/drivers/scsi/arm/acornscsi.c b/drivers/scsi/arm/acornscsi.c
+index ddb52e7ba622..8ceb1663bdb5 100644
+--- a/drivers/scsi/arm/acornscsi.c
++++ b/drivers/scsi/arm/acornscsi.c
+@@ -144,12 +144,6 @@
+ #define VER_MINOR 0
+ #define VER_PATCH 6
+ 
+-#ifndef ABORT_TAG
+-#define ABORT_TAG 0xd
+-#else
+-#error "Yippee!  ABORT TAG is now defined!  Remove this error!"
+-#endif
+-
+ #ifdef USE_DMAC
+ /*
+  * DMAC setup parameters
+@@ -1490,8 +1484,8 @@ void acornscsi_message(AS_Host *host)
+     }
+ 
+     switch (message[0]) {
+-    case ABORT:
+-    case ABORT_TAG:
++    case ABORT_TASK_SET:
++    case ABORT_TASK:
+     case COMMAND_COMPLETE:
+ 	if (host->scsi.phase != PHASE_STATUSIN) {
+ 	    printk(KERN_ERR "scsi%d.%c: command complete following non-status in phase?\n",
+@@ -1596,10 +1590,6 @@ void acornscsi_message(AS_Host *host)
+ 	}
+ 	break;
+ 
+-    case QUEUE_FULL:
+-	/* TODO: target queue is full */
+-	break;
+-
+     case SIMPLE_QUEUE_TAG:
+ 	/* tag queue reconnect... message[1] = queue tag.  Print something to indicate something happened! */
+ 	printk("scsi%d.%c: reconnect queue tag %02X\n",
 -- 
 2.16.4
 
