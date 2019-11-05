@@ -2,83 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA710EF25C
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2019 01:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A174AEF257
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2019 01:57:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387440AbfKEA5l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 4 Nov 2019 19:57:41 -0500
-Received: from mail-wr1-f52.google.com ([209.85.221.52]:36028 "EHLO
-        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387416AbfKEA5l (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 4 Nov 2019 19:57:41 -0500
-Received: by mail-wr1-f52.google.com with SMTP id w18so19306276wrt.3
-        for <linux-scsi@vger.kernel.org>; Mon, 04 Nov 2019 16:57:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=qqles78biMtDTvw3ZZsxhMt1WAgRxcSEo7VOFsJ5sho=;
-        b=owqziVk6NiRA+yqWB8n1xdYH7SoUfi4RT3sau+bGpInmqG/n6ajJKXH3GcfE+0PfgZ
-         /j8HNZVfevThe4VkC7hGu7dzThZVa/BgJLuzwUhMWf/gOcV3WtIBINKQd2++eq6Kuvbb
-         kmKf1McfCb0pZTWgNgb6Es3JIaflPIhld/btOw1aMPnIkMBCR6PzWkZG/ds85vVjhk0a
-         EM/6uApwJzGVp6cC4nv0x4id56BzjWgPYdSMYW62DE5C2C2sXsl2Z25Q1IQ5zwWJzgUS
-         JE5IgwBs+Juws0c9MA2b9GIeqPnpLu6exh1wj9fb8wBhRcgCFlyHqSkp0jYf+gMM0n1p
-         i/4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=qqles78biMtDTvw3ZZsxhMt1WAgRxcSEo7VOFsJ5sho=;
-        b=DAQydKkJ4ziHDxm65BQ9z1phapPvMKqG1WtcbwHWELsYo2NXEStGPe6qHWLAOW0bp7
-         NI2iU77gfqA5/VWOw6gPpYxSXR9IdLTSQo/9Mczh9mzPfqvmn6rdsGflIzNH/dv1jUIj
-         HYzgM2nv/poxi/SubwRywHISV4yHr4Cyf5fDtR/kjBl4HClen5mZ3T/c6Vk1ndJjrox3
-         XNUs0Spp9GOskXuVhVk1T9KSyabUsmcRDv4oSsve5DuY0PdRUEdd2DxI4bg9CYdFFsOc
-         KtXqOl1v1fIIeKp6Lj54yLjjbfWzDi7hti4b+EHLc/nwAsJ+kgyYvk+BNplzTg2pmgaS
-         aj2Q==
-X-Gm-Message-State: APjAAAW48ikxPgI48TMrKE6i9kCe2RiOJKOeCymviTw6Qck+UthfmnqA
-        jt7K3hXHA18IE8+ALYhjk0aFtCPw0vo=
-X-Google-Smtp-Source: APXvYqyONZ1oMR78df7/qKS7+VsJ1a0T5XTEQBxNlEi2UaaTeUxwX63oc6r3HW4k8EN3eaMoBac3PQ==
-X-Received: by 2002:adf:9e92:: with SMTP id a18mr24990342wrf.34.1572915459185;
-        Mon, 04 Nov 2019 16:57:39 -0800 (PST)
-Received: from pallmd1.broadcom.com ([192.19.224.250])
-        by smtp.gmail.com with ESMTPSA id g5sm16920991wma.43.2019.11.04.16.57.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 04 Nov 2019 16:57:38 -0800 (PST)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 11/11] lpfc: Update lpfc version to 12.6.0.1
-Date:   Mon,  4 Nov 2019 16:57:08 -0800
-Message-Id: <20191105005708.7399-12-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20191105005708.7399-1-jsmart2021@gmail.com>
-References: <20191105005708.7399-1-jsmart2021@gmail.com>
+        id S1730203AbfKEA5d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 4 Nov 2019 19:57:33 -0500
+Received: from verein.lst.de ([213.95.11.211]:42272 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730066AbfKEA5c (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 4 Nov 2019 19:57:32 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id A9B7268BE1; Tue,  5 Nov 2019 01:57:29 +0100 (CET)
+Date:   Tue, 5 Nov 2019 01:57:29 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Avri Altman <avri.altman@wdc.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Yaniv Gardi <ygardi@codeaurora.org>,
+        Subhash Jadavani <subhashj@codeaurora.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: Re: [PATCH RFC v2 2/5] ufs: Use reserved tags for TMFs
+Message-ID: <20191105005729.GA29695@lst.de>
+References: <20191105004226.232635-1-bvanassche@acm.org> <20191105004226.232635-3-bvanassche@acm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191105004226.232635-3-bvanassche@acm.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc version to 12.6.0.1
+On Mon, Nov 04, 2019 at 04:42:23PM -0800, Bart Van Assche wrote:
+> Reserved tags are numerically lower than non-reserved tags. Compensate the
+> change caused by reserving tags by subtracting the number of reserved tags
+> from the tag number assigned by the block layer.
 
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Why would you do that?  Do we really care about the exact tag number?
+If so would it make sense to reverse in the block layer how we allocate
+private vs normal tags?
 
-diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
-index ed1b10b0161e..1532390770f5 100644
---- a/drivers/scsi/lpfc/lpfc_version.h
-+++ b/drivers/scsi/lpfc/lpfc_version.h
-@@ -20,7 +20,7 @@
-  * included with this package.                                     *
-  *******************************************************************/
- 
--#define LPFC_DRIVER_VERSION "12.6.0.0"
-+#define LPFC_DRIVER_VERSION "12.6.0.1"
- #define LPFC_DRIVER_NAME		"lpfc"
- 
- /* Used for SLI 2/3 */
--- 
-2.13.7
-
+Also this change should probably merged into the patch that actually
+starts using the private tags by actually allocating requests using
+them.
