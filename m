@@ -2,80 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A88F0315
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2019 17:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1389F038C
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2019 17:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390165AbfKEQe3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Nov 2019 11:34:29 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:26748 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390153AbfKEQe2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 11:34:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1572971667;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jGQmqLeCoIMOYixwDK5EhAaP0PYA9BAL3PEV/L6zzKs=;
-        b=D+VxWYoKyIv1NzgDFk1SgCxn3529AscrGtrg/hIKE0afZTzR4danuL9iuBF5W3TGwj6oXE
-        bVoxkZ3JOBPwgAhorcZblp8bcw3OvFb2vY3hORwpIWkrZhZfJlvxiBeVYpKyyxuNRGrVPp
-        ZpRnYM3RfwzVMsPZpinPTnmJ0uioNWE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-318-SmT2toR1OVufYcXOGEJNbw-1; Tue, 05 Nov 2019 11:34:24 -0500
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CE1901005500;
-        Tue,  5 Nov 2019 16:34:22 +0000 (UTC)
-Received: from localhost (unknown [10.18.25.174])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7E37460CC0;
-        Tue,  5 Nov 2019 16:34:22 +0000 (UTC)
-Date:   Tue, 5 Nov 2019 11:34:21 -0500
-From:   Mike Snitzer <snitzer@redhat.com>
-To:     Damien Le Moal <damien.lemoal@wdc.com>
-Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        dm-devel@redhat.com, Ajay Joshi <ajay.joshi@wdc.com>,
-        Matias Bjorling <matias.bjorling@wdc.com>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Dmitry Fomichev <dmitry.fomichev@wdc.com>,
-        Keith Busch <kbusch@kernel.org>
-Subject: Re: [PATCH 7/8] dm: add zone open, close and finish support
-Message-ID: <20191105163421.GA22009@redhat.com>
-References: <20191027140549.26272-1-damien.lemoal@wdc.com>
- <20191027140549.26272-8-damien.lemoal@wdc.com>
-MIME-Version: 1.0
-In-Reply-To: <20191027140549.26272-8-damien.lemoal@wdc.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-MC-Unique: SmT2toR1OVufYcXOGEJNbw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+        id S2390258AbfKEQ54 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Nov 2019 11:57:56 -0500
+Received: from [167.71.13.249] ([167.71.13.249]:36104 "EHLO TEST.localdomain"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388836AbfKEQ54 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 5 Nov 2019 11:57:56 -0500
+X-Greylist: delayed 615 seconds by postgrey-1.27 at vger.kernel.org; Tue, 05 Nov 2019 11:57:56 EST
+Received: from 127.0.0.1 (TEST [127.0.0.1])
+        by TEST.localdomain (Postfix) with SMTP id C999012270
+        for <linux-scsi@vger.kernel.org>; Tue,  5 Nov 2019 16:47:36 +0000 (UTC)
+From:   linux-scsi@vger.kernel.org
+To:     linux-scsi@vger.kernel.org
+Reply-To: prodawez@teleworm.us
+Subject: BAZY DANNYH! email: prodawez@teleworm.us UZNAJTE PODROBNEE
+Message-Id: <20191105164736.C999012270@TEST.localdomain>
+Date:   Tue,  5 Nov 2019 16:47:36 +0000 (UTC)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, Oct 27 2019 at 10:05am -0400,
-Damien Le Moal <damien.lemoal@wdc.com> wrote:
-
-> From: Ajay Joshi <ajay.joshi@wdc.com>
->=20
-> Implement REQ_OP_ZONE_OPEN, REQ_OP_ZONE_CLOSE and REQ_OP_ZONE_FINISH
-> support to allow explicit control of zone states.
->=20
-> Contains contributions from Matias Bjorling, Hans Holmberg and
-> Damien Le Moal.
->=20
-> Signed-off-by: Ajay Joshi <ajay.joshi@wdc.com>
-> Signed-off-by: Matias Bjorling <matias.bjorling@wdc.com>
-> Signed-off-by: Hans Holmberg <hans.holmberg@wdc.com>
-> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
-
-Acked-by: Mike Snitzer <snitzer@redhat.com>
+BAZY DANNYH! email: prodawez@teleworm.us UZNAJTE PODROBNEE
 
