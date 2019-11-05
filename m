@@ -2,102 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 593C5EF9A7
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2019 10:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BACEFA7D
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2019 11:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730889AbfKEJjG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Nov 2019 04:39:06 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:60730 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730769AbfKEJjG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 04:39:06 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA59crKN105088;
-        Tue, 5 Nov 2019 09:38:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=co+w0k79G3ndnVT1tw2oC6b5nHyZtabUCQzvllnx4dg=;
- b=Vl8wn86Z7TBfVgmOyWLrsHJVhFqfpWZA68lrnLDuEW4JBiN/O9rCX+UPVZPg4JGHwx7/
- ASYCraCunqDPyfllA5+UbogKpN/WF3P9tno3BAzmzDcA+g9RgCZdUwr0pev0kySL8+YV
- 5h1g0CCWiSHxQlInsE+di4F5JqXarlWoxQLFMQ+qCDDF5ulVLBH31PBX+1vm5EmUb6/W
- p06lXZOUSeWf4ZVhm8JxSFumyI1QEooQz0bVMiQjSZYTocDZllRJaHnVj65sYK+aDN3q
- To8SUomhvgChIlJOqnw8Wxi8NXoRWRs1qAEt144F4wFaSpsrAqjCA8gAxiSF1cCuiV8H jw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2w12er4t9n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Nov 2019 09:38:53 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA59XTs4052977;
-        Tue, 5 Nov 2019 09:36:53 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2w3160yr75-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Nov 2019 09:36:52 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA59apol018864;
-        Tue, 5 Nov 2019 09:36:51 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 05 Nov 2019 01:36:50 -0800
-Date:   Tue, 5 Nov 2019 12:36:41 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Sumit Saxena <sumit.saxena@broadcom.com>
-Cc:     Markus Elfring <Markus.Elfring@web.de>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>,
-        "James E. J. Bottomley" <jejb@linux.ibm.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: Re: [PATCH] scsi: megaraid_sas: Use common error handling code in
- megasas_mgmt_ioctl_fw()
-Message-ID: <20191105093641.GE10409@kadam>
-References: <d5c12f05-5a07-b698-ae60-2728330dd378@web.de>
- <CAL2rwxrdOVeO3RT_Y3mk3p-076eMMWm6VVF0C4yiYEWJ0TO5DQ@mail.gmail.com>
+        id S2387917AbfKEKIp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Nov 2019 05:08:45 -0500
+Received: from m4a0040g.houston.softwaregrp.com ([15.124.2.86]:40366 "EHLO
+        m4a0040g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387702AbfKEKIp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 05:08:45 -0500
+Received: FROM m4a0040g.houston.softwaregrp.com (15.120.17.146) BY m4a0040g.houston.softwaregrp.com WITH ESMTP;
+ Tue,  5 Nov 2019 10:07:02 +0000
+Received: from M9W0068.microfocus.com (2002:f79:bf::f79:bf) by
+ M4W0334.microfocus.com (2002:f78:1192::f78:1192) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10; Tue, 5 Nov 2019 10:06:27 +0000
+Received: from NAM05-DM3-obe.outbound.protection.outlook.com (15.124.72.10) by
+ M9W0068.microfocus.com (15.121.0.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10 via Frontend Transport; Tue, 5 Nov 2019 10:06:27 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OmGffjXkSGt/lJ/zOjJcEkCWTnwJLfAt+MPTQBSRnY2IWPDY/UszmG1zmFI+zzr00CaReqspiIWwkPtWgNLcF/TfKWWc6w5XBBhq5hfPrJtJhoRmBetyWE5FL5pEKXpc7T/gpaitOcQq2RTFBzVb/Ad/zhS60JCtqCF+YtFzehl1dwoFaKcL+3pyNz4XvkThuoEeduFp+BOhbx3DSFi6v0BY3ccWyR9V40BGNoS4VyEG8vRghB1jJN4H8fdUsatpBO0K8A5pEcmg1dW0Ec6iAQD5c4RcWZQS1pUDUrm5wkgTSrTbtgvwIO5UjznEdfKFzxJIiwYX2quZ9TZeiiq1RQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qxIniIxzFfn2/4gyJ8qwyKR/qJnoCgtM8xi2fIv5tbw=;
+ b=DOsP2ahEtSQQ8k7WFkWQL2ocB4fdiQPGDbBpy6A8ro3ykz/RNXqZ9iHRWIGoCpy1kiAami1sdJAi5VQnD7js2MF9GwDnO/3SRB0KnxgEoqY21ffek4J+1fCo5U2g2cpPpJmuVUCFXCnWre+SIpNF8ckdO0CAS/7l2ZUxg1DLy2iMxAErYVnYUvRhbt1/v6jUq3l2jAnVefRvFcmDyhTXAIWr6LkEDig5HFtR3a4nODyTr6+HoncliejlIJKPMxPLy0oSda+FiCfHzj/hgRzpZs6HcU8QtllSDjktKwxuvkIf0sbx64REx2E9nstK89s5odjaRO8vgQ9nChrk1tg5iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Received: from CH2PR18MB3349.namprd18.prod.outlook.com (52.132.245.83) by
+ CH2PR18MB3271.namprd18.prod.outlook.com (52.132.245.149) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2408.24; Tue, 5 Nov 2019 10:06:26 +0000
+Received: from CH2PR18MB3349.namprd18.prod.outlook.com
+ ([fe80::9917:1509:5d1:6f89]) by CH2PR18MB3349.namprd18.prod.outlook.com
+ ([fe80::9917:1509:5d1:6f89%6]) with mapi id 15.20.2408.024; Tue, 5 Nov 2019
+ 10:06:26 +0000
+From:   Martin Wilck <Martin.Wilck@suse.com>
+To:     "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "Himanshu Madhani" <hmadhani@marvell.com>
+CC:     "jejb@linux.vnet.ibm.com" <jejb@linux.vnet.ibm.com>,
+        "Bart.VanAssche@sandisk.com" <Bart.VanAssche@sandisk.com>,
+        "qutran@marvell.com" <qutran@marvell.com>,
+        "dwagner@suse.de" <dwagner@suse.de>, "hare@suse.de" <hare@suse.de>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH v2] fixup "qla2xxx: Optimize NPIV tear down process"
+Thread-Topic: [PATCH v2] fixup "qla2xxx: Optimize NPIV tear down process"
+Thread-Index: AQHVeTfrfC+NT3H/1k+pr5kqIwaaNw==
+Date:   Tue, 5 Nov 2019 10:06:26 +0000
+Message-ID: <f9f8ea39ef86f53f4f247f90b6961eb13463c903.camel@suse.com>
+References: <20191002154126.30847-1-martin.wilck@suse.com>
+        <20191002154126.30847-1-martin.wilck@suse.com>   (Martin Wilck's message of
+ "Wed, 2 Oct 2019 15:41:56 +0000") <yq1d0fds25c.fsf@oracle.com>
+In-Reply-To: <yq1d0fds25c.fsf@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Martin.Wilck@suse.com; 
+x-originating-ip: [2.206.153.8]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 75f9d362-8f9c-4edf-d9e6-08d761d7d211
+x-ms-traffictypediagnostic: CH2PR18MB3271:|CH2PR18MB3271:
+x-ms-exchange-purlcount: 1
+x-ld-processed: 856b813c-16e5-49a5-85ec-6f081e13b527,ExtAddr
+x-microsoft-antispam-prvs: <CH2PR18MB3271664BB2CF811A520244D7FC7E0@CH2PR18MB3271.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0212BDE3BE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(376002)(136003)(346002)(366004)(396003)(199004)(189003)(6246003)(446003)(11346002)(66446008)(229853002)(476003)(2616005)(14454004)(6486002)(966005)(110136005)(316002)(186003)(86362001)(76116006)(486006)(6306002)(91956017)(66556008)(64756008)(66476007)(66946007)(4326008)(102836004)(6506007)(3846002)(2501003)(36756003)(54906003)(76176011)(6116002)(26005)(4744005)(8676002)(256004)(66066001)(14444005)(5660300002)(71190400001)(81156014)(99286004)(71200400001)(7736002)(305945005)(118296001)(6512007)(478600001)(6436002)(2906002)(8936002)(81166006)(25786009)(6606295002);DIR:OUT;SFP:1102;SCL:1;SRVR:CH2PR18MB3271;H:CH2PR18MB3349.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: suse.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ewW1KTWbTXl7wsC3hqhd6stUsl6igrYD8dGgz6YCHLwZEXypvIIDCkqrYgX8SISncm35eQOHqytqAh23DfZPAEp42hfmOGJ5knJTTaA9NAcnGDD1y7WEfLQPAY40tJByOt3I1vywtY3tq44U/dBvWkpoepz+H9oL/FsByiffgDlIa7E1zkIepMnopKWrLunpJsQTMQhQGPJKK20ixqAaYFPmylqkXNiex6mNr2zFt/sQvRnnGJizU2Lr7pqg+eInRJLrJEuSxolcIWfm3PmtkVqJibCVLf70gQa8kDVTVmxhOR7PvXYns5bQJmbZe8EcGe7JKVdnm+xZ4KVJudjp8jwk1f8ZEl8ulJae4df8sMHCf9wZdowl18WFKCJdgrItMu8k6llfpI6XC9PZxrCPPZBQLrRE5LrAOkSR55JKduNalyfFrpef03PpgzyFoTPPwHi5ismHbRzDyXUKm+X07KCODeumV91e98kndbNDcyc=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A954561639ACA740B70C7798C9BC4435@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL2rwxrdOVeO3RT_Y3mk3p-076eMMWm6VVF0C4yiYEWJ0TO5DQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9431 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1911050082
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9431 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1911050083
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75f9d362-8f9c-4edf-d9e6-08d761d7d211
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2019 10:06:26.4643
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 856b813c-16e5-49a5-85ec-6f081e13b527
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /tNBb6LOZfKTAPQ6LSn4XjbYLjLZDMe9GSb+h8lYR4LpDgZAxthZaOUi6n9zP+guJUsx5JBn0zl/ay1fb6j99Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR18MB3271
+X-OriginatorOrg: suse.com
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Nov 05, 2019 at 02:58:35PM +0530, Sumit Saxena wrote:
-> On Fri, Nov 1, 2019 at 3:06 AM Markus Elfring <Markus.Elfring@web.de> wrote:
-> >
-> > From: Markus Elfring <elfring@users.sourceforge.net>
-> > Date: Thu, 31 Oct 2019 22:23:02 +0100
-> >
-> > Move the same error code assignments so that such exception handling
-> > can be better reused at the end of this function.
-> >
-> > This issue was detected by using the Coccinelle software.
-> >
-> > Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-> 
-> Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
-> 
-
-The code was a lot better originally...  :(
-
-regards,
-dan carpenter
-
+TWFydGluLCBIaW1hbnNodSwNCg0KT24gVGh1LCAyMDE5LTEwLTAzIGF0IDIxOjU3IC0wNDAwLCAg
+TWFydGluIEsuIFBldGVyc2VuIHdyb3RlOg0KPiA+IHRoaXMgcGF0Y2ggZml4ZXMgdHdvIGlzc3Vl
+cyBpbiBwYXRjaCAwMi8xNCBpbiBIaW1hbnNodSdzIGxhdGVzdA0KPiA+IHFsYTJ4eHggc2VyaWVz
+ICgicWxhMnh4eDogQnVnIGZpeGVzIGZvciB0aGUgZHJpdmVyIikgZnJvbSBTZXB0Lg0KPiA+IDEy
+dGgsDQo+ID4gd2hpY2ggeW91IGFwcGxpZWQgb250byA1LjQvc2NzaS1maXhlcyBhbHJlYWR5LiAg
+U2VlDQo+ID4gaHR0cHM6Ly9tYXJjLmluZm8vP2w9bGludXgtc2NzaSZtPTE1Njk1MTcwNDEwNjY3
+MSZ3PTINCj4gPiANCj4gPiBJJ20gYXNzdW1pbmcgdGhhdCBIaW1hbnNodSBhbmQgUXVpbm4gYXJl
+IHdvcmtpbmcgb24gYW5vdGhlcg0KPiA+IHNlcmllcyBvZiBmaXhlcywgaW4gd2hpY2ggY2FzZSB0
+aGF0IHNob3VsZCB0YWtlIHByZWNlZGVuY2UNCj4gPiBvdmVyIHRoaXMgcGF0Y2guIEkganVzdCB3
+YW50ZWQgdG8gcHJvdmlkZSB0aGlzIHNvIHRoYXQgdGhlDQo+ID4gYWxyZWFkeSBrbm93biBwcm9i
+bGVtcyBhcmUgZml4ZWQgaW4geW91ciB0cmVlLg0KPiANCj4gSGltYW5zaHU6IFBsZWFzZSByZXZp
+ZXcuIFRoYW5rcyENCj4gDQoNCnRoaXMgcGF0Y2ggaXMgc3RpbGwgbm90IG1lcmdlZCBzaW5jZSBh
+IG1vbnRoIGFsdGhvdWdoIFF1aW5uIGhhZA0KYmFzaWNhbGx5IGFjaydkIHRoZSBwcm9wc2VkIGNo
+YW5nZSANCihodHRwczovL21hcmMuaW5mby8/bD1saW51eC1zY3NpJm09MTU2OTUxNzA0MTA2Njcx
+Jnc9MikuDQoNCkRvIHlvdSB3YW50IG1lIHRvIHJlc3VibWl0LCBhbmQgaWYgeWVzLCBkbyB5b3Ug
+cmVxdWVzdCBjaGFuZ2VzPw0KDQpSZWdhcmRzLA0KTWFydGluIFdpbGNrDQoNCg==
