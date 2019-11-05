@@ -2,52 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA0CF00C3
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2019 16:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52435F00C5
+	for <lists+linux-scsi@lfdr.de>; Tue,  5 Nov 2019 16:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731127AbfKEPHJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Nov 2019 10:07:09 -0500
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:45102 "EHLO
+        id S1731131AbfKEPHO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Nov 2019 10:07:14 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:27934 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730939AbfKEPHJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 10:07:09 -0500
+        by vger.kernel.org with ESMTP id S1730939AbfKEPHN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 10:07:13 -0500
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA5ExrDL009715;
-        Tue, 5 Nov 2019 07:07:08 -0800
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA5ExrDP009715;
+        Tue, 5 Nov 2019 07:07:12 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=T3exIOUAVw99DVYXYe9OsHwr5tWK39Ff6zm+uTZFoDY=;
- b=AzEsG8qRHts+vg4w3qrq4M7AA5hf+4w/mIxqpkkqHZfaKLQ2xoVxN7wh6ZpazVIKtAFf
- /OmTcuYCo2TTl5WOfwCUskF2fLkIx1vxtI3t6ViCMputMuqF0rX4YjxXnM8TRYfk7tWt
- TAsvQ0gAb8an1+epoJj0wL94yPLeVEseHTavPAhwPl51glgebZk1F3+4Bg1cDlCS//Bm
- bQwQj5Zd8cfSfTM1Wauaek08FxUPfbh+jlpTtDBBPBrEBB62G/kz71GlExL67xkfMYxq
- cBirZwhoILctbIdrXlBmIQLncDq1xHpIHQ/2VJ12ZEN2Bsfk957DheaI8v6HsyNa9w+e Ew== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2w17n93cm2-1
+ content-type; s=pfpt0818; bh=VmsXVF/xIEV1oGVL9l1r1yF2kqr9GrynI/5S6DGFAYA=;
+ b=FI1MlbxjV7Pfv6FO6p6vPnOl3BepPrWKXrvkOUk1hly/KEkWCEF0peZhuhbga1RvXZr0
+ dblC21ggky0Buv6YR+p9fOfFWiPa8ycWjFPNYbYDnbB07fr4MTI1aOgbX+EoMePPkDna
+ 40zsYBkM5epuxbSPed82l/B3YP5Q998hjlOxt9e/gCB1cEuKcfA3sYpa5Z0315e2Kd5y
+ m/qQzvx6AQ8QH4xWaeKNQetIiEhwqwa3TEgn2uIZPv9FZEh0U9FRReIZjQcvRcV8FX9C
+ LU9b4lHGKzjfGLI7/t1/iPxHyOR7RHFb5hao/R+gfv0cDgtFuVOAIvkTL7JK8XXIwwVU 9A== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2w17n93cmg-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 05 Nov 2019 07:07:08 -0800
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 5 Nov
- 2019 07:07:07 -0800
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
- Transport; Tue, 5 Nov 2019 07:07:07 -0800
+        Tue, 05 Nov 2019 07:07:12 -0800
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1367.3; Tue, 5 Nov
+ 2019 07:07:10 -0800
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server id 15.0.1367.3 via Frontend
+ Transport; Tue, 5 Nov 2019 07:07:10 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id E0C353F703F;
-        Tue,  5 Nov 2019 07:07:06 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id 17D873F7040;
+        Tue,  5 Nov 2019 07:07:10 -0800 (PST)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id xA5F76u4008147;
-        Tue, 5 Nov 2019 07:07:06 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id xA5F79Qu008151;
+        Tue, 5 Nov 2019 07:07:09 -0800
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id xA5F76bd008146;
-        Tue, 5 Nov 2019 07:07:06 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id xA5F79un008150;
+        Tue, 5 Nov 2019 07:07:09 -0800
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 3/8] qla2xxx: Fix SRB leak on switch command timeout
-Date:   Tue, 5 Nov 2019 07:06:52 -0800
-Message-ID: <20191105150657.8092-4-hmadhani@marvell.com>
+Subject: [PATCH 4/8] qla2xxx: Fix driver unload hang
+Date:   Tue, 5 Nov 2019 07:06:53 -0800
+Message-ID: <20191105150657.8092-5-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20191105150657.8092-1-hmadhani@marvell.com>
 References: <20191105150657.8092-1-hmadhani@marvell.com>
@@ -62,150 +62,29 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-when GPSC/GPDB switch command fails, driver just returns
-without doing a proper cleanup. This patch fixes this memory
-leak by calling sp->free() in the error path.
+This patch fixes driver unload hang by removing msleep()
 
+Fixes: d74595278f4ab ("scsi: qla2xxx: Add multiple queue pair functionality.")
+Cc: stable@vger.kernel.org
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_gs.c   |  2 +-
- drivers/scsi/qla2xxx/qla_init.c | 11 +++++------
- drivers/scsi/qla2xxx/qla_mbx.c  |  4 ----
- drivers/scsi/qla2xxx/qla_mid.c  | 11 ++++-------
- drivers/scsi/qla2xxx/qla_os.c   |  7 ++++++-
- 5 files changed, 16 insertions(+), 19 deletions(-)
+ drivers/scsi/qla2xxx/qla_init.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index 7a00272ca380..67230688b05e 100644
---- a/drivers/scsi/qla2xxx/qla_gs.c
-+++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -3010,7 +3010,7 @@ static void qla24xx_async_gpsc_sp_done(srb_t *sp, int res)
- 	fcport->flags &= ~(FCF_ASYNC_SENT | FCF_ASYNC_ACTIVE);
- 
- 	if (res == QLA_FUNCTION_TIMEOUT)
--		return;
-+		goto done;
- 
- 	if (res == (DID_ERROR << 16)) {
- 		/* entry status error */
 diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 7fdbe041cc19..bddb26baedd2 100644
+index bddb26baedd2..ff4528702b4e 100644
 --- a/drivers/scsi/qla2xxx/qla_init.c
 +++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -1151,19 +1151,18 @@ static void qla24xx_async_gpdb_sp_done(srb_t *sp, int res)
- 	    "Async done-%s res %x, WWPN %8phC mb[1]=%x mb[2]=%x \n",
- 	    sp->name, res, fcport->port_name, mb[1], mb[2]);
+@@ -9009,8 +9009,6 @@ int qla2xxx_delete_qpair(struct scsi_qla_host *vha, struct qla_qpair *qpair)
+ 	struct qla_hw_data *ha = qpair->hw;
  
--	if (res == QLA_FUNCTION_TIMEOUT) {
--		dma_pool_free(sp->vha->hw->s_dma_pool, sp->u.iocb_cmd.u.mbx.in,
--			sp->u.iocb_cmd.u.mbx.in_dma);
--		return;
--	}
--
- 	fcport->flags &= ~(FCF_ASYNC_SENT | FCF_ASYNC_ACTIVE);
-+
-+	if (res == QLA_FUNCTION_TIMEOUT)
-+		goto done;
-+
- 	memset(&ea, 0, sizeof(ea));
- 	ea.fcport = fcport;
- 	ea.sp = sp;
+ 	qpair->delete_in_progress = 1;
+-	while (atomic_read(&qpair->ref_count))
+-		msleep(500);
  
- 	qla24xx_handle_gpdb_event(vha, &ea);
- 
-+done:
- 	dma_pool_free(ha->s_dma_pool, sp->u.iocb_cmd.u.mbx.in,
- 		sp->u.iocb_cmd.u.mbx.in_dma);
- 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 04175c91af0e..0cf94f05f008 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -6288,17 +6288,13 @@ int qla24xx_send_mb_cmd(struct scsi_qla_host *vha, mbx_cmd_t *mcp)
- 	case  QLA_SUCCESS:
- 		ql_dbg(ql_dbg_mbx, vha, 0x119d, "%s: %s done.\n",
- 		    __func__, sp->name);
--		sp->free(sp);
- 		break;
- 	default:
- 		ql_dbg(ql_dbg_mbx, vha, 0x119e, "%s: %s Failed. %x.\n",
- 		    __func__, sp->name, rval);
--		sp->free(sp);
- 		break;
- 	}
- 
--	return rval;
--
- done_free_sp:
- 	sp->free(sp);
- done:
-diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
-index 6afad68e5ba2..bd62c4595b73 100644
---- a/drivers/scsi/qla2xxx/qla_mid.c
-+++ b/drivers/scsi/qla2xxx/qla_mid.c
-@@ -944,7 +944,7 @@ int qla24xx_control_vp(scsi_qla_host_t *vha, int cmd)
- 
- 	sp = qla2x00_get_sp(base_vha, NULL, GFP_KERNEL);
- 	if (!sp)
--		goto done;
-+		return rval;
- 
- 	sp->type = SRB_CTRL_VP;
- 	sp->name = "ctrl_vp";
-@@ -960,7 +960,7 @@ int qla24xx_control_vp(scsi_qla_host_t *vha, int cmd)
- 		ql_dbg(ql_dbg_async, vha, 0xffff,
- 		    "%s: %s Failed submission. %x.\n",
- 		    __func__, sp->name, rval);
--		goto done_free_sp;
-+		goto done;
- 	}
- 
- 	ql_dbg(ql_dbg_vport, vha, 0x113f, "%s hndl %x submitted\n",
-@@ -978,16 +978,13 @@ int qla24xx_control_vp(scsi_qla_host_t *vha, int cmd)
- 	case QLA_SUCCESS:
- 		ql_dbg(ql_dbg_vport, vha, 0xffff, "%s: %s done.\n",
- 		    __func__, sp->name);
--		goto done_free_sp;
-+		break;
- 	default:
- 		ql_dbg(ql_dbg_vport, vha, 0xffff, "%s: %s Failed. %x.\n",
- 		    __func__, sp->name, rval);
--		goto done_free_sp;
-+		break;
- 	}
- done:
--	return rval;
--
--done_free_sp:
- 	sp->free(sp);
- 	return rval;
- }
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 588e0d27f151..2e7a4a2d6c5a 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -996,7 +996,7 @@ qla2xxx_mqueuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd,
- 		ql_dbg(ql_dbg_io + ql_dbg_verbose, vha, 0x3078,
- 		    "Start scsi failed rval=%d for cmd=%p.\n", rval, cmd);
- 		if (rval == QLA_INTERFACE_ERROR)
--			goto qc24_fail_command;
-+			goto qc24_free_sp_fail_command;
- 		goto qc24_host_busy_free_sp;
- 	}
- 
-@@ -1008,6 +1008,11 @@ qla2xxx_mqueuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd,
- qc24_target_busy:
- 	return SCSI_MLQUEUE_TARGET_BUSY;
- 
-+qc24_free_sp_fail_command:
-+	sp->free(sp);
-+	CMD_SP(cmd) = NULL;
-+	qla2xxx_rel_qpair_sp(sp->qpair, sp);
-+
- qc24_fail_command:
- 	cmd->scsi_done(cmd);
- 
+ 	ret = qla25xx_delete_req_que(vha, qpair->req);
+ 	if (ret != QLA_SUCCESS)
 -- 
 2.12.0
 
