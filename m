@@ -2,45 +2,48 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BD97F0DE9
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2019 05:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E71F0DEB
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2019 05:42:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731250AbfKFEme (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Nov 2019 23:42:34 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44043 "EHLO
+        id S1731264AbfKFEmh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Nov 2019 23:42:37 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:32921 "EHLO
         mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729784AbfKFEme (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 23:42:34 -0500
-Received: by mail-pg1-f195.google.com with SMTP id f19so7153634pgk.11
-        for <linux-scsi@vger.kernel.org>; Tue, 05 Nov 2019 20:42:34 -0800 (PST)
+        with ESMTP id S1729784AbfKFEmg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 23:42:36 -0500
+Received: by mail-pg1-f195.google.com with SMTP id u23so16277855pgo.0
+        for <linux-scsi@vger.kernel.org>; Tue, 05 Nov 2019 20:42:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=itI465xaKW+nl5ZeGkYAhg1+FghCLTPODNZkZ4uEbBg=;
-        b=UWzvdzxurd+lEXk4v7WnFh7Y3iVJZof1Qq/mcvy1mxE85wIfLBG26bvF9REVRs2NlY
-         jJ9odXXYQyprvd11AJVh6p7TwONA/O1S/yhf51z7v8EJk1qQp57RonAyW3rWZyKTn48I
-         Bn5vyd1elRQKl7EAhtpfxLnIBR5UuFOM7KNyBz8qp3j4jDuMf/SXggahHE8DE1s0Lq9l
-         n3/ylF5lWsTm3K4qpYnqoUQQqDUdeOHpV9W9WLOgCP+ro4i8BBjR0HbnOkv/1HEr7nrj
-         66ba05ntc836vjI8ue++36YVg6bJlCMPyrIEdVdk1XqPEnjO9+pD/6KALQAdurxfiwTU
-         1ySQ==
-X-Gm-Message-State: APjAAAXFBAb6lyRCHssOW7PvLcB+x0wSZhejXco0fkGZcvDAw8KxNSv2
-        c12mk66DqzwshlRrNQrzNag=
-X-Google-Smtp-Source: APXvYqy+xcS31lD8QeTl84BmV7luT/QHUzNKx49/Q+YQi1lhxzsPjiqwSmm6AflTnUaXLGsRbieUeg==
-X-Received: by 2002:a17:90a:33ce:: with SMTP id n72mr1070975pjb.17.1573015353503;
-        Tue, 05 Nov 2019 20:42:33 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=SQ9oM0QF6lMXsy/WycLkPXzM32zey87RAjzy8hYB4cE=;
+        b=T3rQx67jRhujRTw1DTnOsQXgs+aEhaAhuGK8i1XehRNyzYSb4hhi/2PtfbTjRenaG8
+         rs41cSlvW+FtmuonHn1cqzt0YZF5hqdXqlOiNfzXjdbmGeZPzTUaLs295dZOaAgvWy9l
+         kfkRcMr0+nffYjGw4TdtLX9CuAIaxsi7CQ7cyPugKfcbgEve0c6uhGPbbtJwidMLF91B
+         q7HZ0mfF4HqsvCvT4y6onp5/mU6k3vHBTEGAFekLJVz4rzCbkWfOonIP5kiBZfsHiEDs
+         XeVdsDyCZDvQlNy0Ud/IaW7R5cc0F35KN2dAq+Bmrbe7m6vYI7yQj6/5Gfox/oB/55jo
+         +hqQ==
+X-Gm-Message-State: APjAAAUlQHwWB6omeS/4/8rxtrXiRu+P9i+BUIPR5yXNJbX+0tlXC09K
+        mptK+jlilAOfnZddM4nJY5c=
+X-Google-Smtp-Source: APXvYqxl1w9OKiDIJvvERLSuk3SOaFktacquIn9g8fwDzU8X8Q3nKXDCYX6uNOIJXpYI51fdKUdA+A==
+X-Received: by 2002:a62:ceca:: with SMTP id y193mr791925pfg.219.1573015354733;
+        Tue, 05 Nov 2019 20:42:34 -0800 (PST)
 Received: from localhost.net ([2601:647:4000:1075:a0dc:7f54:c925:d679])
-        by smtp.gmail.com with ESMTPSA id m15sm10262501pfh.19.2019.11.05.20.42.32
+        by smtp.gmail.com with ESMTPSA id m15sm10262501pfh.19.2019.11.05.20.42.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 20:42:32 -0800 (PST)
+        Tue, 05 Nov 2019 20:42:33 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 0/2] Two qla2xxx fixes
-Date:   Tue,  5 Nov 2019 20:42:24 -0800
-Message-Id: <20191106044226.5207-1-bvanassche@acm.org>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Himanshu Madhani <hmadhani@marvell.com>
+Subject: [PATCH 1/2] qla2xxx: Remove an include directive
+Date:   Tue,  5 Nov 2019 20:42:25 -0800
+Message-Id: <20191106044226.5207-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191106044226.5207-1-bvanassche@acm.org>
+References: <20191106044226.5207-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -48,22 +51,27 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin,
+Since the code in qla_init.c is initiator code, remove the SCSI target
+core include directive.
 
-Please consider the two patches in this series for kernel version v5.5.
-
-Thanks,
-
-Bart.
-
-Bart Van Assche (2):
-  qla2xxx: Remove an include directive
-  qla2xxx: Fix a dma_pool_free() call
-
+Cc: Himanshu Madhani <hmadhani@marvell.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
  drivers/scsi/qla2xxx/qla_init.c | 1 -
- drivers/scsi/qla2xxx/qla_os.c   | 3 ++-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 deletion(-)
 
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index 7cb7545de962..c1004d47514c 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -17,7 +17,6 @@
+ #include <asm/prom.h>
+ #endif
+ 
+-#include <target/target_core_base.h>
+ #include "qla_target.h"
+ 
+ /*
 -- 
 2.23.0
 
