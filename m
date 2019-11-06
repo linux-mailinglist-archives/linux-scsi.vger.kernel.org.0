@@ -2,89 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF1AF0E83
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2019 06:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02E1F0EF0
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2019 07:33:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725882AbfKFFsx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Nov 2019 00:48:53 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:51174 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725812AbfKFFsx (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Nov 2019 00:48:53 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA65htkD146321;
-        Wed, 6 Nov 2019 05:48:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=1s/WOj1D/65zsf2ks9jwORllF6wIRnqXsJmRtiDBg1c=;
- b=EztTRunrq6F4WCBaegG73E+fulbC3InsIkBWNtpaWMg7edlMrIIYQua3T833qLIM+zox
- u5ZAhsDK31NncfYJ+pEsqVJ4pN9ib7aJwjRW7ABliKxuozxA7T+tm+grdXI8/k5cMl8Y
- yfgqME26uRAnrdZxEv5xNGgg+PxQv8jyvq5RXTJL1Fk7NX0JNj6XfHA39Ci/P89EPOZ4
- tCz1npYqmzIb/WK/JzYFdbuCCx8QRs0rpsQNTUdathRq8A1oNN5PXMLZ/LjDqf5zGZsX
- xJFCqzJW1iusQBnwEaAqb07sN0F9B3NmEErtZApaL21JDBljrdqrmHCD7dKLlVrCaYdj +A== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2w117u3c6c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Nov 2019 05:48:42 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA65hvkA041395;
-        Wed, 6 Nov 2019 05:46:42 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2w333wmkx7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Nov 2019 05:46:41 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA65kecJ000998;
-        Wed, 6 Nov 2019 05:46:40 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 06 Nov 2019 05:46:39 +0000
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, schmitz@debian.org,
-        Finn Thain <fthain@telegraphics.com.au>
-Subject: Re: [PATCH] scsi: scsi-lib.c: increase cmd_size by sizeof(struct scatterlist)
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <cover.1572656814.git.fthain@telegraphics.com.au>
-        <1572922150-4358-1-git-send-email-schmitzmic@gmail.com>
-Date:   Wed, 06 Nov 2019 00:46:37 -0500
-In-Reply-To: <1572922150-4358-1-git-send-email-schmitzmic@gmail.com> (Michael
-        Schmitz's message of "Tue, 5 Nov 2019 15:49:10 +1300")
-Message-ID: <yq1h83h1rr6.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1729716AbfKFGc7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Nov 2019 01:32:59 -0500
+Received: from werkudoro.jatengprov.go.id ([103.9.227.34]:37156 "EHLO
+        werkudoro.jatengprov.go.id" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725806AbfKFGc6 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Nov 2019 01:32:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=jatengprov.go.id; s=default; h=Message-ID:Reply-To:To:From:Date:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Subject:Cc:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=G4HwPqwiZuWN6wUEqWP4L79JnOMRowOKtgX0r1xdE78=; b=t6PALyRRMrYtJ5aYHg4y8tXEq
+        xBlZ4Z8m9w2GNoKZe1ArA7FLjaOaYi2bTmOPP6IFNPGItD12Quw3O1/fFLT+yC1Ll+4FXKH9tal3e
+        +7so3X3ueYwSUHdIOqeV4Br7VpfrUlHhxxJmQYA70TigMGhz3JgE1IkF8tDQvkd6qEODLgN/NOYZh
+        4fB7WNlrxv4xMDWf69faRRHsl1vCnba7SgTuF7SJyi3TujqiZ3U60Bue8ZfjLNA+nj+IGIyYrRGQU
+        dSkluqXbfHnE60/riYpZYfsDF2+qe4XwtCmINnvPAke+zZmue6cavvxg6ZCKLEeEFfRKJolljzXB0
+        5Ora02rNw==;
+Received: from localhost ([127.0.0.1]:42104 helo=werkudoro.jatengprov.go.id)
+        by werkudoro.jatengprov.go.id with esmtpa (Exim 4.92)
+        (envelope-from <bpsdmd@jatengprov.go.id>)
+        id 1iSErM-0002Il-9G; Wed, 06 Nov 2019 13:32:05 +0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9432 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=800
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1911060059
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9432 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=903 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1911060059
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Wed, 06 Nov 2019 13:32:04 +0700
+From:   =?UTF-8?Q?=D0=B0=D0=B4=D0=BC=D0=B8=D0=BD=D0=B8=D1=81=D1=82=D1=80?=
+         =?UTF-8?Q?=D0=B0=D1=82=D0=BE=D1=80?= <bpsdmd@jatengprov.go.id>
+To:     undisclosed-recipients:;
+Reply-To: mailsss@mail2world.com
+Mail-Reply-To: mailsss@mail2world.com
+Message-ID: <5f0a114cf8c80f5eee855c6264b6d747@jatengprov.go.id>
+X-Sender: bpsdmd@jatengprov.go.id
+User-Agent: Roundcube Webmail/1.3.8
+X-OutGoing-Spam-Status: No, score=3.3
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - werkudoro.jatengprov.go.id
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - jatengprov.go.id
+X-Get-Message-Sender-Via: werkudoro.jatengprov.go.id: authenticated_id: bpsdmd@jatengprov.go.id
+X-Authenticated-Sender: werkudoro.jatengprov.go.id: bpsdmd@jatengprov.go.id
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Michael,
-
-> In scsi_mq_setup_tags(), cmd_size is calculated based on zero size
-> for the scatter-gather list in case the low level driver uses SG_NONE
-> in its host template.
-
-Applied to 5.4/scsi-fixes. I picked your version since it is small.
-
-I still intend to queue Finn's SG_NONE cleanups for 5.5. In a way these
-are orthogonal.
-
-Thanks!
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+внимания;
+
+Ваши сообщения превысил лимит памяти, который составляет 5 Гб, 
+определенных администратором, который в настоящее время работает на 
+10.9GB, Вы не сможете отправить или получить новую почту, пока вы 
+повторно не проверить ваш почтовый ящик почты. Чтобы восстановить 
+работоспособность Вашего почтового ящика, отправьте следующую информацию 
+ниже:
+
+имя:
+Имя пользователя:
+пароль:
+Подтверждение пароля:
+Адрес электронной почты:
+телефон:
+
+Если вы не в состоянии перепроверить сообщения, ваш почтовый ящик будет 
+отключен!
+
+Приносим извинения за неудобства.
+Проверочный код: EN: Ru...776774990..2019
+Почты технической поддержки ©2019
+
+спасибо
+системы администратор
