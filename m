@@ -2,85 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F02E1F0EF0
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2019 07:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 061A2F1023
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2019 08:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729716AbfKFGc7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 6 Nov 2019 01:32:59 -0500
-Received: from werkudoro.jatengprov.go.id ([103.9.227.34]:37156 "EHLO
-        werkudoro.jatengprov.go.id" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725806AbfKFGc6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Nov 2019 01:32:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=jatengprov.go.id; s=default; h=Message-ID:Reply-To:To:From:Date:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Subject:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=G4HwPqwiZuWN6wUEqWP4L79JnOMRowOKtgX0r1xdE78=; b=t6PALyRRMrYtJ5aYHg4y8tXEq
-        xBlZ4Z8m9w2GNoKZe1ArA7FLjaOaYi2bTmOPP6IFNPGItD12Quw3O1/fFLT+yC1Ll+4FXKH9tal3e
-        +7so3X3ueYwSUHdIOqeV4Br7VpfrUlHhxxJmQYA70TigMGhz3JgE1IkF8tDQvkd6qEODLgN/NOYZh
-        4fB7WNlrxv4xMDWf69faRRHsl1vCnba7SgTuF7SJyi3TujqiZ3U60Bue8ZfjLNA+nj+IGIyYrRGQU
-        dSkluqXbfHnE60/riYpZYfsDF2+qe4XwtCmINnvPAke+zZmue6cavvxg6ZCKLEeEFfRKJolljzXB0
-        5Ora02rNw==;
-Received: from localhost ([127.0.0.1]:42104 helo=werkudoro.jatengprov.go.id)
-        by werkudoro.jatengprov.go.id with esmtpa (Exim 4.92)
-        (envelope-from <bpsdmd@jatengprov.go.id>)
-        id 1iSErM-0002Il-9G; Wed, 06 Nov 2019 13:32:05 +0700
+        id S1730088AbfKFHVy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 6 Nov 2019 02:21:54 -0500
+Received: from mail-pf1-f174.google.com ([209.85.210.174]:40962 "EHLO
+        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726772AbfKFHVy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 6 Nov 2019 02:21:54 -0500
+Received: by mail-pf1-f174.google.com with SMTP id p26so18158664pfq.8
+        for <linux-scsi@vger.kernel.org>; Tue, 05 Nov 2019 23:21:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding;
+        bh=q9xiyOz8nisyvsxRr+molaDdatyxI6EGvsQaqBiFwK8=;
+        b=hwsnDf6w4S8L+w0LGIiLLS0lhRxfyG+FdWTGFmtSFg4KFa3XOHJZvHeZm3NUOQujOL
+         I0Jlt9sgTEmt5mUzX5ynkscFvD1Ia9sb6ZxUqr16XxijfoxTO/vBzqZlARUpcD3gxmgf
+         aRdNa8mNxSutjaQ9nGRhl4QSkO5gDfzjX3JrugN4vV5VW+n+5qlQYDjbSjiDQN74djqD
+         vGZuS6TG8tuPrX2po19E9n8qnFzF/yJ1GbgWd2cI+FUIyOF+dQzp3IaWzSG1BfGKkFI7
+         H31mxcw5sAOMTeC9/KgjKBa/+gBtC1tTlrKa8gu/EmIXhg606g3cL3+7FEMDgOkxT0kn
+         XOAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding;
+        bh=q9xiyOz8nisyvsxRr+molaDdatyxI6EGvsQaqBiFwK8=;
+        b=OMfTn9HpgJfP4h5rdHHS6ev7n2bq21Dpb5Y+Dk+t1psxIXGQ0qRlngSLGuPChY3BRv
+         yL5NIw1cnTAsWlLsQSPpQ/+puYFtatJ3wramX1JBBsoct9wZ7Ckv0cM1qypLD7qQ4Egp
+         gS+Mtx6Twc3Cgqs248ncSnVFCWzezABn70ZmuU7tfjoEljdgwsbHaiiDq8T1yOJZS95J
+         +PZJZGhWhBeWQLkv09v1OldbN30Q8Y9kOwAwaLMRFhQ2OMZr+dxeLCspTpQaIoh4xN7Z
+         hBsjk5uYOeNW5ekyTqBdvChWrSupCL4ziBSCWPVc3lxDU0pqSMs0lkFEI+lKeHVcLfio
+         +qAg==
+X-Gm-Message-State: APjAAAXQLH3C4tDVe6Eh7fPScUgUw16y8aayYuoazoxmyBb+fikSG8Ap
+        wsFTpxn1MmYdwgrTr7ZNY1vkyMfQ
+X-Google-Smtp-Source: APXvYqxayhsIwhAWSLntusWEPh/0tXBOuUJBdJMiHPn860cXfVEhDuYVMS3uC3qChh74DitW2ojlEA==
+X-Received: by 2002:a62:ac06:: with SMTP id v6mr1515955pfe.210.1573024913531;
+        Tue, 05 Nov 2019 23:21:53 -0800 (PST)
+Received: from [192.168.1.101] (122-58-182-39-adsl.sparkbb.co.nz. [122.58.182.39])
+        by smtp.gmail.com with ESMTPSA id s18sm5275692pfm.27.2019.11.05.23.21.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 05 Nov 2019 23:21:52 -0800 (PST)
+Subject: Re: [PATCH] scsi: scsi-lib.c: increase cmd_size by sizeof(struct
+ scatterlist)
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <cover.1572656814.git.fthain@telegraphics.com.au>
+ <1572922150-4358-1-git-send-email-schmitzmic@gmail.com>
+ <yq1h83h1rr6.fsf@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
+        Finn Thain <fthain@telegraphics.com.au>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <fd48a151-ee0f-248c-22a3-abfffc2e1880@gmail.com>
+Date:   Wed, 6 Nov 2019 20:21:48 +1300
+User-Agent: Mozilla/5.0 (X11; Linux ppc; rv:45.0) Gecko/20100101
+ Icedove/45.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 06 Nov 2019 13:32:04 +0700
-From:   =?UTF-8?Q?=D0=B0=D0=B4=D0=BC=D0=B8=D0=BD=D0=B8=D1=81=D1=82=D1=80?=
-         =?UTF-8?Q?=D0=B0=D1=82=D0=BE=D1=80?= <bpsdmd@jatengprov.go.id>
-To:     undisclosed-recipients:;
-Reply-To: mailsss@mail2world.com
-Mail-Reply-To: mailsss@mail2world.com
-Message-ID: <5f0a114cf8c80f5eee855c6264b6d747@jatengprov.go.id>
-X-Sender: bpsdmd@jatengprov.go.id
-User-Agent: Roundcube Webmail/1.3.8
-X-OutGoing-Spam-Status: No, score=3.3
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - werkudoro.jatengprov.go.id
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - jatengprov.go.id
-X-Get-Message-Sender-Via: werkudoro.jatengprov.go.id: authenticated_id: bpsdmd@jatengprov.go.id
-X-Authenticated-Sender: werkudoro.jatengprov.go.id: bpsdmd@jatengprov.go.id
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+In-Reply-To: <yq1h83h1rr6.fsf@oracle.com>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Thanks Martin,
 
+Am 06.11.2019 um 18:46 schrieb Martin K. Petersen:
+>
+> Michael,
+>
+>> In scsi_mq_setup_tags(), cmd_size is calculated based on zero size
+>> for the scatter-gather list in case the low level driver uses SG_NONE
+>> in its host template.
+>
+> Applied to 5.4/scsi-fixes. I picked your version since it is small.
 
--- 
-внимания;
+I realize it's more of a band-aid and doesn't address the real issue 
+perhaps. Maybe it gives someone with a better clue about the block layer 
+some idea though (I got out of my depth rather quickly).
 
-Ваши сообщения превысил лимит памяти, который составляет 5 Гб, 
-определенных администратором, который в настоящее время работает на 
-10.9GB, Вы не сможете отправить или получить новую почту, пока вы 
-повторно не проверить ваш почтовый ящик почты. Чтобы восстановить 
-работоспособность Вашего почтового ящика, отправьте следующую информацию 
-ниже:
+> I still intend to queue Finn's SG_NONE cleanups for 5.5. In a way these
+> are orthogonal.
 
-имя:
-Имя пользователя:
-пароль:
-Подтверждение пароля:
-Адрес электронной почты:
-телефон:
+Either zero or one work for sg_tablesize in my case, so that's perfectly 
+fine by me.
 
-Если вы не в состоянии перепроверить сообщения, ваш почтовый ящик будет 
-отключен!
+Cheers,
 
-Приносим извинения за неудобства.
-Проверочный код: EN: Ru...776774990..2019
-Почты технической поддержки ©2019
+	Michael
 
-спасибо
-системы администратор
+>
+> Thanks!
+>
