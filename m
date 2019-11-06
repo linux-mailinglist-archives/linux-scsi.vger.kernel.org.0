@@ -2,101 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 537AFF0DEA
-	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2019 05:42:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0325DF0DF1
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 Nov 2019 05:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731263AbfKFEmh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 Nov 2019 23:42:37 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:44470 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731251AbfKFEmg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 23:42:36 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q26so17862059pfn.11
-        for <linux-scsi@vger.kernel.org>; Tue, 05 Nov 2019 20:42:36 -0800 (PST)
+        id S1731027AbfKFEpE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 Nov 2019 23:45:04 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:38448 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729303AbfKFEpE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 Nov 2019 23:45:04 -0500
+Received: by mail-pl1-f196.google.com with SMTP id w8so10826907plq.5
+        for <linux-scsi@vger.kernel.org>; Tue, 05 Nov 2019 20:45:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/4TDgepIcZah/edYZGWrYSThpdVjhMFKqnUflESnRcE=;
-        b=j0xwGC0etbxhamvGRCOEECg/uR5QaMGz46h1aKEdWSw2FroV0YJupIeNs5ABAvmB8U
-         Dm/yGTFao8YQFz81z5VifoOvwq1MA1853uNutL/NbWZVBh2Qlp14pIzZI53u1SmO6zDC
-         QabxpVgmxMImbrb/EBR2lC2IN+kLjV2y6JRQJ6x7bfbFdJTGcPx6ii28qbA0uAh3ylYN
-         vT0XuOGHfgSC7wV7lpX0QY3pLNCNeS22bp3fSfGvmtQqKBNPd2i5qoMFLWxF5VViTq3P
-         98Caoc2Mz3rvMQ8z+OlTmzfep/+jxwztug00PZYM1ZF2XsvxDmEzihEjIJoluzOzlIrS
-         XhRg==
-X-Gm-Message-State: APjAAAWbO9i8VZKVqtF4amOrKtRClT6XEleFNzQU/x8Yo/I2opLToPWF
-        9FBTgD+R7oifPFPZ12FlMWpasfCN
-X-Google-Smtp-Source: APXvYqyQjbOFh5KzTiQHeiLkaUlTtTPH+ZpII1VUV1gykjVzLsIfvng69BIGn8wqPq6b+NCSXKC4Ew==
-X-Received: by 2002:a17:90a:174a:: with SMTP id 10mr1078812pjm.104.1573015356180;
-        Tue, 05 Nov 2019 20:42:36 -0800 (PST)
-Received: from localhost.net ([2601:647:4000:1075:a0dc:7f54:c925:d679])
-        by smtp.gmail.com with ESMTPSA id m15sm10262501pfh.19.2019.11.05.20.42.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 20:42:35 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=VysNGy0l57FLnFmconh8GUd5jTgkVePfjTshUj5TtUs=;
+        b=jf+BTCvx6lfUtGpyMMT5IV6H8W02tcH78UiEO+kTQYdB3HhuLcBlve0LvHwqOTfwVb
+         Ku/1DgYbT4VCEScDTGR6/5aZtizIC41AdxkKcJz0Y6IlfadxIbJv9TJ/nPlQ2yVsllv9
+         cB3Sw2L0zW2Tjd16OWmjS+YGBiLdZPbriTobS2hTVgLldW3QakVrf75gyXSYo+YgcNhM
+         P1fwgBVXVE9/cN0bkufGkjEVrKk2TX5LIxJYlHwHqj8ecf6H5/Bvw2ZUizOZZQimmBWt
+         7IPGdR4Kec84IvXH8WgY3lvR86CLQsPiDMRnOJsTXKrnpGjS/+CYHuaqinQUf23CKbU0
+         +kow==
+X-Gm-Message-State: APjAAAXB/3kdjP363emrWIRKMur0/PUZ8oF1riplZMpVu0hri+J30wk+
+        A3ASZjr51UtRhYYwwSDmUG1LNr7G
+X-Google-Smtp-Source: APXvYqxXJKPGKsJ+F3NGT+q3N1t+O8noEZy7efDDpkaY+A6s54q1qdjW7jfcqBkLcrBDqAWEWkmOIA==
+X-Received: by 2002:a17:902:a70f:: with SMTP id w15mr510311plq.263.1573015503611;
+        Tue, 05 Nov 2019 20:45:03 -0800 (PST)
+Received: from localhost.localdomain ([2601:647:4000:1075:a0dc:7f54:c925:d679])
+        by smtp.gmail.com with ESMTPSA id q22sm10508968pgb.81.2019.11.05.20.45.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 05 Nov 2019 20:45:02 -0800 (PST)
+Subject: Re: [PATCH 3/3] ufs: Remove .setup_xfer_req()
+To:     Alim Akhtar <alim.akhtar@gmail.com>,
+        Avri Altman <Avri.Altman@wdc.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+References: <20191029230710.211926-1-bvanassche@acm.org>
+ <20191029230710.211926-4-bvanassche@acm.org>
+ <MN2PR04MB69914B9FA252E1B0A05493BAFC600@MN2PR04MB6991.namprd04.prod.outlook.com>
+ <MN2PR04MB6991FD5665C0C1E7DEF7854BFC7F0@MN2PR04MB6991.namprd04.prod.outlook.com>
+ <CAGOxZ51AHByBFsMiKG_-pGjVe4=1ijQnUipS=Gjq1pYPsCKQGA@mail.gmail.com>
+ <CAGOxZ53xoaFrs09KfPFHfR69-n9SnRrZ0uESE65e+Wgwe3Pr7A@mail.gmail.com>
 From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Michael Hernandez <mhernandez@marvell.com>,
-        Himanshu Madhani <hmadhani@marvell.com>
-Subject: [PATCH 2/2] qla2xxx: Fix a dma_pool_free() call
-Date:   Tue,  5 Nov 2019 20:42:26 -0800
-Message-Id: <20191106044226.5207-3-bvanassche@acm.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191106044226.5207-1-bvanassche@acm.org>
-References: <20191106044226.5207-1-bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <5dd9deb7-77c7-332c-6001-c6d232fa7f0d@acm.org>
+Date:   Tue, 5 Nov 2019 20:45:01 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGOxZ53xoaFrs09KfPFHfR69-n9SnRrZ0uESE65e+Wgwe3Pr7A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This patch fixes the following kernel warning:
+On 2019-11-05 20:09, Alim Akhtar wrote:
+> I checked the brief history of this adding  "setup_xfer_req" to
+> support Samsung UFSHCI (this was the ground work done)
+> We need this to support vendor specific NEXUS_TYPE settings.
+> The Samsung UFSHCI driver will be up for review in near future
+> For usecase of the function pointer please see an older version of the
+> patch https://patchwork.kernel.org/patch/7306321/
 
-DMA-API: qla2xxx 0000:00:0a.0: device driver frees DMA memory with different size [device address=0x00000000c7b60000] [map size=4088 bytes] [unmap size=512 bytes]
-WARNING: CPU: 3 PID: 1122 at kernel/dma/debug.c:1021 check_unmap+0x4d0/0xbd0
-CPU: 3 PID: 1122 Comm: rmmod Tainted: G           O      5.4.0-rc1-dbg+ #1
-RIP: 0010:check_unmap+0x4d0/0xbd0
-Call Trace:
- debug_dma_free_coherent+0x123/0x173
- dma_free_attrs+0x76/0xe0
- qla2x00_mem_free+0x329/0xc40 [qla2xxx_scst]
- qla2x00_free_device+0x170/0x1c0 [qla2xxx_scst]
- qla2x00_remove_one+0x4f0/0x6d0 [qla2xxx_scst]
- pci_device_remove+0xd5/0x1f0
- device_release_driver_internal+0x159/0x280
- driver_detach+0x8b/0xf2
- bus_remove_driver+0x9a/0x15a
- driver_unregister+0x51/0x70
- pci_unregister_driver+0x2d/0x130
- qla2x00_module_exit+0x1c/0xbc [qla2xxx_scst]
- __x64_sys_delete_module+0x22a/0x300
- do_syscall_64+0x6f/0x2e0
- entry_SYSCALL_64_after_hwframe+0x49/0xbe
+Thanks Alim for having looked up this information. Let's drop this patch.
 
-Cc: Michael Hernandez <mhernandez@marvell.com>
-Cc: Himanshu Madhani <hmadhani@marvell.com>
-Fixes: 3f006ac342c0 ("scsi: qla2xxx: Secure flash update support for ISP28XX") # v5.2-rc1~130^2~270.
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/qla2xxx/qla_os.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 16f9b6ed574a..05fba5c2c926 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -4676,7 +4676,8 @@ qla2x00_mem_free(struct qla_hw_data *ha)
- 	ha->sfp_data = NULL;
- 
- 	if (ha->flt)
--		dma_free_coherent(&ha->pdev->dev, SFP_DEV_SIZE,
-+		dma_free_coherent(&ha->pdev->dev,
-+		    sizeof(struct qla_flt_header) + FLT_REGIONS_SIZE,
- 		    ha->flt, ha->flt_dma);
- 	ha->flt = NULL;
- 	ha->flt_dma = 0;
--- 
-2.23.0
+Bart.
 
