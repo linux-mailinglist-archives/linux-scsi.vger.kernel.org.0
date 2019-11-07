@@ -2,131 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB868F37BA
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 Nov 2019 20:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1FEF3A14
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 Nov 2019 22:07:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbfKGTAk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 Nov 2019 14:00:40 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:52974 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725883AbfKGTAj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 7 Nov 2019 14:00:39 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 940B941240;
-        Thu,  7 Nov 2019 19:00:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        user-agent:in-reply-to:content-transfer-encoding
-        :content-disposition:content-type:content-type:mime-version
-        :references:message-id:subject:subject:from:from:date:date
-        :received:received:received; s=mta-01; t=1573153236; x=
-        1574967637; bh=uQxe4Kx4+vxlnYs+1PqEhLZ8nZ2bRn+OplnwjkLe0YI=; b=i
-        PBWj/fju6lpBRKhC7SbWxcAUoa9oOUGJ7xQMONH57JDabrqBzMk3UKhWEasnfh8S
-        2TRrS9E72ERwsoC4A/1rLppJw9F254xsz/mpUMfvfqbatvNMSa8Odgwls1NLNDJq
-        tPJpRf+jx3uStoZaqU0mxBWGS2rDG0+U7oNm/k3pA8=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QC7XTYk9BAnV; Thu,  7 Nov 2019 22:00:36 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id B3EC0411FF;
-        Thu,  7 Nov 2019 22:00:35 +0300 (MSK)
-Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
- (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 7 Nov
- 2019 22:00:34 +0300
-Date:   Thu, 7 Nov 2019 22:00:32 +0300
-From:   Roman Bolshakov <r.bolshakov@yadro.com>
-To:     Himanshu Madhani <hmadhani@marvell.com>
-CC:     Bart Van Assche <bvanassche@acm.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        Quinn Tran <qutran@marvell.com>
-Subject: Re: [PATCH 0/4] scsi: qla2xxx: Bug fixes
-Message-ID: <20191107190032.idvubxehqtzbe3ah@SPB-NB-133.local>
-References: <20190912003919.8488-1-r.bolshakov@yadro.com>
- <8774334a-b1e7-1a5e-0da3-82db68f963b6@acm.org>
- <20190912133605.age2zo7jxdbe4jiq@SPB-NB-133.local>
- <B39B0F4F-3439-4313-A808-578047F1B93A@marvell.com>
-MIME-Version: 1.0
+        id S1726770AbfKGVHk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 Nov 2019 16:07:40 -0500
+Received: from m9a0002g.houston.softwaregrp.com ([15.124.64.67]:48758 "EHLO
+        m9a0002g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725870AbfKGVHk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 Nov 2019 16:07:40 -0500
+Received: FROM m9a0002g.houston.softwaregrp.com (15.121.0.190) BY m9a0002g.houston.softwaregrp.com WITH ESMTP;
+ Thu,  7 Nov 2019 21:07:00 +0000
+Received: from M4W0334.microfocus.com (2002:f78:1192::f78:1192) by
+ M9W0067.microfocus.com (2002:f79:be::f79:be) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10; Thu, 7 Nov 2019 21:04:59 +0000
+Received: from NAM03-DM3-obe.outbound.protection.outlook.com (15.124.8.11) by
+ M4W0334.microfocus.com (15.120.17.146) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10 via Frontend Transport; Thu, 7 Nov 2019 21:04:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YlqFiJRxRCtuxt/+o0YflkqDfbqvNm9x1V3pzbKlbRoOsXyp7Fe87zxcrSzLf+BjZNZQqhjVdMDFcJykLyAnsfTrlwc1OWuDczepHHXmhotDq69pNNrL+4Br12Ykc22HcNOTOHjBPtyR5iyUBxlQjRsdtqkjDD+KFxaGlDkkGblZLB8ckqMgj9pstdYD3AxPTH31O/NLLWpcgmvgQw8eJ0X8bxVfRhpTnPePI2APGPqE9ebQmbtEmVpQkElTVxqo294wrqtXEMR3dhvv9WJqaoGTdwJEceM6JwiGgzVPt13WEX9/O/7bJOFkaVV1v5gClcSkgKjEEpAigzKqf3QGug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PGuou6Zmsq19aCTRhPpwZz2R+COVvvzZSGazzfZ/Dec=;
+ b=csEsT0I5K8073RpCnv4iu9V7/QQPoy4my3QtbDOG+er7DlVP9uB/3BzKFcWw+dpGhaIprD9OeO+Jskd1De5LR9w6/pFNJIu4jwA8/83glnN1XokqcI7S9QJjkumonR0tQsiMDCB0p0R+7sGuWIcJXHXT3V1765Fwijkd3djdQVgRFVHP/9h+V9eXp0KsP2IRLJfUjmHR3XCHA5ep0ax9glx534Xij4MMt9PYIclwGU0qVMWgfd7DRHnkhxKEOoIbVN92zm1QXNrHX+4F3OcVHRv0p8wQZMv+CZ2Locdw72e/1AE5QRCE7399NrMQk6RpqpsaFT43H3l9ob6wq3U3vA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+Received: from DM5PR18MB1355.namprd18.prod.outlook.com (10.175.223.16) by
+ DM5PR18MB1402.namprd18.prod.outlook.com (10.173.212.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2408.24; Thu, 7 Nov 2019 21:04:59 +0000
+Received: from DM5PR18MB1355.namprd18.prod.outlook.com
+ ([fe80::d1db:c70a:b831:8150]) by DM5PR18MB1355.namprd18.prod.outlook.com
+ ([fe80::d1db:c70a:b831:8150%5]) with mapi id 15.20.2408.024; Thu, 7 Nov 2019
+ 21:04:59 +0000
+From:   Martin Wilck <Martin.Wilck@suse.com>
+To:     "Bart.VanAssche@sandisk.com" <Bart.VanAssche@sandisk.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        David Bond <DBond@suse.com>,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        "mhernandez@marvell.com" <mhernandez@marvell.com>
+CC:     "jejb@linux.vnet.ibm.com" <jejb@linux.vnet.ibm.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 1/2] scsi: qla2xxx: initialize fc4_type_priority
+Thread-Topic: [PATCH 1/2] scsi: qla2xxx: initialize fc4_type_priority
+Thread-Index: AQHVlYtKGAtbuPovK0S3qRD6fzlmP6eAMxMA
+Date:   Thu, 7 Nov 2019 21:04:58 +0000
+Message-ID: <bdc94dafc5dc9c9c15cb42c5380e6c37e78f20fd.camel@suse.com>
+References: <20191107164848.31837-1-martin.wilck@suse.com>
+In-Reply-To: <20191107164848.31837-1-martin.wilck@suse.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Martin.Wilck@suse.com; 
+x-originating-ip: [2.206.153.8]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 983d4d02-df3c-4801-2d1c-08d763c62620
+x-ms-traffictypediagnostic: DM5PR18MB1402:|DM5PR18MB1402:
+x-ld-processed: 856b813c-16e5-49a5-85ec-6f081e13b527,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM5PR18MB140271F03FF4240B80F3C881FC780@DM5PR18MB1402.namprd18.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-forefront-prvs: 0214EB3F68
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(366004)(346002)(39860400002)(396003)(136003)(199004)(189003)(66066001)(26005)(81166006)(6486002)(2906002)(76176011)(99286004)(71190400001)(102836004)(478600001)(6436002)(2501003)(6246003)(118296001)(71200400001)(229853002)(54906003)(110136005)(14454004)(86362001)(6512007)(66556008)(5660300002)(3846002)(7736002)(8676002)(305945005)(316002)(486006)(6506007)(4744005)(91956017)(25786009)(6116002)(81156014)(446003)(8936002)(66446008)(1691005)(76116006)(66946007)(256004)(66476007)(11346002)(64756008)(476003)(186003)(4326008)(36756003)(2616005);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR18MB1402;H:DM5PR18MB1355.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: suse.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XbdEpshdTTFancxiNA/nCzRant6bqBtoAljsPxCJmhSiC6sYp4ka7EIVFruC/7ZrCgzTkC9ru1nDFozUd9kVFYtdIFX9tJep7XOiykJX1rNdrMxWrJtxu0cd2x+rF0kjK8xrzsiIj7Awn4/5uEHagZ1MioJ//Q1qHeUMnerDZjk/jvpqnSvph5wdusrfqI6SyDrDi31zuwxIh7DlHtHnJoktOvxW8mjuVuwRFMo2ZJAXd963mG4em90/dZCguPc2RyLA+12Ry8CQiXxkZYjzT7AwAbP694sjCqG1rYI9UluAJOOieNQQWvtXYpIQ6zGeoexyGS0u5aItnaZazGDtF3eP8safMoUP9K7I/BzwFQWXbqX+Nak7GQAbHpUynwi3FXMGrniiMI981l4lRE8C6Lz765S4tVWZ38XsxfcfkFYIpjDGD4VvCPFNd8dwn0Hx
 Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <B39B0F4F-3439-4313-A808-578047F1B93A@marvell.com>
-User-Agent: NeoMutt/20180716
-X-Originating-IP: [172.17.128.60]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
+Content-ID: <10CD57CCBCE5CE4DA21E0F67BF4F9C79@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 983d4d02-df3c-4801-2d1c-08d763c62620
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2019 21:04:59.0062
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 856b813c-16e5-49a5-85ec-6f081e13b527
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZfDEWMBJ5G0iemm2mJQE/fjm2bKwf7ovEtOixzqQ83TOeS5faYpb+vGB/AFq1XVNiIX59+t8vxLUBEq4TT8Kow==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR18MB1402
+X-OriginatorOrg: suse.com
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Himanshu,
-
-Could you please take a look at the series and anwser if we should stop
-doing BA_RJT as a response on ABTS when there's no session?
-
-Thank you,
-Roman
-
-On Thu, Sep 12, 2019 at 01:53:03PM +0000, Himanshu Madhani wrote:
-> Adding Correct Quinn. Please use "qutran@mavell.com"
-> 
-> We'll take a look at the series
-> 
-> ﻿On 9/12/19, 8:49 AM, "linux-scsi-owner@vger.kernel.org on behalf of Roman Bolshakov" <linux-scsi-owner@vger.kernel.org on behalf of r.bolshakov@yadro.com> wrote:
-> 
->     On Thu, Sep 12, 2019 at 06:37:22AM +0100, Bart Van Assche wrote:
->     > On 9/12/19 1:39 AM, Roman Bolshakov wrote:
->     > > This series has a few bug fixes for the driver.
->     > > 
->     > > Note, #1 only fixes the crash in the kernel. The complete fix for clean
->     > > ACL deletion from initiator side is in works and requires a discussion.
->     > > 
->     > > As of now initiator is not aware that target no longer wants talking to
->     > > it, that implies unneeded timeout. It might be fixed by making LOGO
->     > > explicit on session deletion but it's an issue I want to raise first
->     > > before making the change. Whether we need implicit LOGO in qla2xxx,
->     > > explicit or use both.
->     > > 
->     > > Also, an unsolicited ABTS from a port without session would still result
->     > > in BA_RJT response instead of frame discard and LOGO ELS, as specified
->     > > in FCP (12.3.3 Target FCP_Port response to Exchange termination):
->     > > 
->     > >    When an ABTS-LS is received at the target FCP_Port, it shall abort
->     > >    the designated Exchange and return one of the following responses:
->     > > 
->     > >    a) the target FCP_Port shall discard the ABTS-LS and transmit a LOGO
->     > >       ELS if the Nx_Port issuing the ABTS-LS is not currently logged in
->     > >       (i.e., no N_Port Login exists);
->     > > 
->     > > FWIW, the target driver can receive ABTS as part of ABORT TASK/LUN
->     > > RESET/CLEAR TASK SET TMFs and in case of failed sequence retransmission
->     > > requests, exchange or sequence errors. IIRC, some initiators requeue
->     > > SCSI commands if BA_RJT is received. Therefore, a timely LOGO will
->     > > prevent a perceived session freeze on the initiators.
->     > 
->     > Hi Roman,
->     > 
->     > Has this patch series been prepared against Linus' master branch,
->     > against Martin's 5.3/scsi-fixes or against Martin's 5.4/scsi-queue
->     > branch? I'm asking this because some patches in this series look similar
->     > to patches that are already present in the 5.4/scsi-queue branch.
->     > 
->     > Thanks,
->     > 
->     > Bart.
->     > 
->     
->     Hi Bart,
->     
->     To be honest it was prepared against next-20190904 but it applies to
->     5.4/scsi-queue cleanly. The fixes made two weeks ago look promising but
->     are related to stuck PRLI and unhandled RSCN while #4 is related to
->     stuck PLOGI after qla_post_els_plogi_work.
->     
->     Thank you,
->     Roman
->     
-> 
+T24gVGh1LCAyMDE5LTExLTA3IGF0IDE2OjQ5ICswMDAwLCBNYXJ0aW4gV2lsY2sgd3JvdGU6DQo+
+IEZyb206IE1hcnRpbiBXaWxjayA8bXdpbGNrQHN1c2UuY29tPg0KPiANCj4gaGEtPmZjNF90eXBl
+X3ByaW9yaXR5IGlzIGN1cnJlbnRseSBpbml0aWFsaXplZCBvbmx5IGluDQo+IHFsYTgxeHhfbnZy
+YW1fY29uZmlnKCkuIFRoYXQgbWFrZXMgaXQgZGVmYXVsdCB0byBOVk1lIGZvciBvdGhlcg0KPiBh
+ZGFwdGVycy4NCj4gRml4IGl0Lg0KPiANCj4gRml4ZXM6IDg0ZWQzNjJhYzQwYyAoInNjc2k6IHFs
+YTJ4eHg6IER1YWwgRkNQLU5WTWUgdGFyZ2V0IHBvcnQNCj4gc3VwcG9ydCIpDQo+IFNpZ25lZC1v
+ZmYtYnk6IE1hcnRpbiBXaWxjayA8bXdpbGNrQHN1c2UuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMv
+c2NzaS9xbGEyeHh4L3FsYV9pbml0LmMgfCAxMiArKysrKysrKysrLS0NCj4gIDEgZmlsZSBjaGFu
+Z2VkLCAxMCBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQ0KDQpUZXN0ZWQtYnk6IERhdmlk
+IEJvbmQgPGRib25kQHN1c2UuY29tPg0KDQo=
