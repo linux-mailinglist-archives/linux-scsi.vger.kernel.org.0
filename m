@@ -2,65 +2,139 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C818BF4B53
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2019 13:19:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB162F4E2A
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2019 15:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731794AbfKHMT2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Nov 2019 07:19:28 -0500
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:35791 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731312AbfKHMT1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Nov 2019 07:19:27 -0500
-Received: by mail-vs1-f67.google.com with SMTP id k15so3642626vsp.2
-        for <linux-scsi@vger.kernel.org>; Fri, 08 Nov 2019 04:19:27 -0800 (PST)
+        id S1726768AbfKHOdw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Nov 2019 09:33:52 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:37100 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726036AbfKHOdv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Nov 2019 09:33:51 -0500
+Received: by mail-il1-f193.google.com with SMTP id s5so5312354iln.4
+        for <linux-scsi@vger.kernel.org>; Fri, 08 Nov 2019 06:33:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=uzkBPRXvCt/DLxmv4J4lMqCgFgNyDxmGoOdWkPBD3nk=;
-        b=XYuw8KZ+t5rMMN7ZnEAcKfmi4FJBjvq+w1CW27MxJ1IBSihw3f6NMB0kz9hNNOKSA9
-         J2Trm5E0Ke7EUM4wqiHmS0TmekryN+dkLvu9mqY2s4zcYsANB3HeeovgFfmzqal7t/kZ
-         3QQVxz0eUXNY5tdL//FLTevuTexH/U++q0QA5MbV4X1gSdWj5rKxPvst3vKDveC/46MI
-         6AKiRdit4PuUSecnX6BNCxQB0CGxTf1yC7PJvQwssN7AkypzbcKaZIXxLHKDcy/Hk7Y4
-         tm2ACH5tX2n7J8sN3FpjF/3zXK+9RFrUwUfGwqj75kSB0fjF3kPpNJqQMdQDi2pOqLIa
-         jz+Q==
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vjFrtw/BFflYelHD8o98Hq690NNXJ7cJs1titEez/pc=;
+        b=Uc+0XKXhH2reTQzfsdxC5OYZZJp4hWzSccHyFmJI7DDzk7v3gjlNR3eF/0VSskkxIP
+         ojav5IUWz5RjyQ8qtY66iOtKU5hC3q4xVHRIKwKhj56Q8bTWS1AgPQT4RkXea8OHT5oP
+         7vaHluDTMa1pyv+LyC92ZjWHp5Web55G/lHle/LBSJf8KPLx6Q8LA5xwNFs+IQkqkWbT
+         D+cksZX1ery1wFdfcWBA3bN02uh2G2r7yXszcUx172QxTGOEEXDEiGzi2rwtT936e4q9
+         Xsc6WQcyGkgXXPFPtunNfQe8G0RW29QJT+fNFvRFZpuRozyTopfnJ72T16EbpCJzsQL3
+         g6/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=uzkBPRXvCt/DLxmv4J4lMqCgFgNyDxmGoOdWkPBD3nk=;
-        b=cTBAPxr2VQ2PFLoB65noTRuctGrjPH2SNeK+x9ySYhauJbQod/Cyl8Lif5ZEtxT4ND
-         kbGleGu9gPddsQqf+ROJstWvx4jh6cSJnv1sHdzPZJ52l4JVDmtSyghwPtW67zkxnMnD
-         FQX2qeRs6r2PxyXiT+dCSEiDcV3+ETFfq+5LxrhkBldIlT4QhXefgn1YC2XSjw0KRu7g
-         S5Se2YZdWJIwGCdUsG+Jl3VdKfc8PTBarOAnpMCVmpUqvRSXUNup5o7cYxI/d5m3mjM7
-         LPfYxnzxAUVJzol7Cl3Y1ff8FU1MhSYQxeTsUbEg0IUz0Glt04gMOuTQ/yfKZWspexYe
-         Nn+Q==
-X-Gm-Message-State: APjAAAU7l/CIb4iLleHHNLRj92Hs6wTw+DjYl8Lnlb9kqqtrPT0Jpske
-        9AuDfn3R3+cco8smVw/mXvqwHWtSOAUIKsAT7Ps=
-X-Google-Smtp-Source: APXvYqw8COZPu8g8jYizrANupLDvzdHkKFmM0bfTn9lm7CpQlNF1U0geWswsuIk7loJ6xO4eRv2MGqO+JMDt+NIu4+8=
-X-Received: by 2002:a05:6102:117c:: with SMTP id k28mr7746622vsg.168.1573215566805;
- Fri, 08 Nov 2019 04:19:26 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vjFrtw/BFflYelHD8o98Hq690NNXJ7cJs1titEez/pc=;
+        b=bTIL/Dbs+K4eV8ryVTwNBFukLtrMmLpsyG/zzPkWMRdTM2SPxCWlPaY5XjrNL20HEZ
+         FwvskQU5SLuLhCAQfKj0kCD9WkPIa50RiHT+RR/pKDyGgvCyyvXh9VOeR0ym6wk+YglL
+         DJAKCorRtuQvnx8WeoG1BgVluJS6YCZkgTqC6cuzgalohkicCN2dIr9hQtoLlhVnh0sE
+         z91c2RjyyUpS+62JHQVXpL48ccSZJtH8zUFjWqnEPowSnWHokxJgQXZkcjlhgrI3p3Km
+         x3mq867/SX91fUoHMEZ/eikx0Y1dXsZxSj6vgRTVqVDawMZjXoK+bibD8cXiU0IOWLBd
+         CGSQ==
+X-Gm-Message-State: APjAAAX6tt4ZtKSIGJCny5m3wd5PKwhzRYhWP0hsEmBdMfhj28+bn0bk
+        P725B8Gd/axzV2Wv159TX8ccKfElwXg=
+X-Google-Smtp-Source: APXvYqzzo8tZh5qGUiRxpACPRILKqdIaMAMNe1+mjb9Boab7B6GRuyqZ5VZjLbkvu6RjAf6QsrNOsQ==
+X-Received: by 2002:a92:8c0a:: with SMTP id o10mr11008361ild.249.1573223629218;
+        Fri, 08 Nov 2019 06:33:49 -0800 (PST)
+Received: from [192.168.1.159] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id d21sm488497ioe.86.2019.11.08.06.33.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Nov 2019 06:33:48 -0800 (PST)
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Andrea Vai <andrea.vai@unipv.it>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
+ <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
+ <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
+ <BYAPR04MB5816ECD4302AD94338CB9072E77B0@BYAPR04MB5816.namprd04.prod.outlook.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <72fc7fd1-cf86-969c-d1ed-36201cf9510a@kernel.dk>
+Date:   Fri, 8 Nov 2019 07:33:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Received: by 2002:ab0:5929:0:0:0:0:0 with HTTP; Fri, 8 Nov 2019 04:19:26 -0800 (PST)
-From:   Kelani Alfasasi <alfasasikelani1@gmail.com>
-Date:   Fri, 8 Nov 2019 12:19:26 +0000
-Message-ID: <CAC22Kig4iQ2Fxn+gp5RCPkmegqjA-Ed7hd68Sd1F5Bez6jm7aw@mail.gmail.com>
-Subject: hope
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <BYAPR04MB5816ECD4302AD94338CB9072E77B0@BYAPR04MB5816.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Good day , i write to inform you as auditor onbehalf of ORABANK.
+On 11/8/19 1:42 AM, Damien Le Moal wrote:
+> On 2019/11/08 4:00, Andrea Vai wrote:
+>> [Sorry for the duplicate message, it didn't reach the lists due to
+>> html formatting]
+>> Il giorno gio 7 nov 2019 alle ore 08:54 Damien Le Moal
+>> <Damien.LeMoal@wdc.com> ha scritto:
+>>>
+>>> On 2019/11/07 16:04, Andrea Vai wrote:
+>>>> Il giorno mer, 06/11/2019 alle 22.13 +0000, Damien Le Moal ha scritto:
+>>>>>
+>>>>>
+>>>>> Please simply try your write tests after doing this:
+>>>>>
+>>>>> echo mq-deadline > /sys/block/<name of your USB
+>>>>> disk>/queue/scheduler
+>>>>>
+>>>>> And confirm that mq-deadline is selected with:
+>>>>>
+>>>>> cat /sys/block/<name of your USB disk>/queue/scheduler
+>>>>> [mq-deadline] kyber bfq none
+>>>>
+>>>> ok, which kernel should I test with this: the fresh git cloned, or the
+>>>> one just patched with Alan's patch, or doesn't matter which one?
+>>>
+>>> Probably all of them to see if there are any differences.
+>>
+>> with both kernels, the output of
+>> cat /sys/block/sdh/queue/schedule
+>>
+>> already contains [mq-deadline]: is it correct to assume that the echo
+>> command and the subsequent testing is useless? What to do now?
+> 
+> Probably, yes. Have you obtained a blktrace of the workload during these
+> tests ? Any significant difference in the IO pattern (IO size and
+> randomness) and IO timing (any device idle time where the device has no
+> command to process) ? Asking because the problem may be above the block
+> layer, with the file system for instance.
 
-Transaction number 000399577OBK have been approved for release
-through VISA ELECTRON ATM Card.
+blktrace would indeed be super useful, especially if you can do that
+with a kernel that's fast for you, and one with the current kernel
+where it's slow.
 
-Note that you are required to reconfirm your complete mailing address
-for delivery.
+Given that your device is sdh, you simply do:
 
-Reconfirm code 000399577OBK to the Director Mr. Patrick Masrellet on ( (
-atm.orabank@iname.com )) for further action.
+# blktrace /dev/sdh
 
-Regards.
-Kelani Alfasasi( Esq)
+and then run the test, then ctrl-c the blktrace. Then do:
+
+# blkparse sdh > output
+
+and save that output file. Do both runs, and bzip2 them up. The shorter
+the run you can reproduce with the better, to cut down on the size of
+the traces.
+
+-- 
+Jens Axboe
+
