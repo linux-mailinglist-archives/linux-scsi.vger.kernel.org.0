@@ -2,60 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 241B0F420F
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2019 09:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53760F4211
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2019 09:29:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbfKHI1i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Nov 2019 03:27:38 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:26024 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725975AbfKHI1i (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Nov 2019 03:27:38 -0500
+        id S1727421AbfKHI3E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Nov 2019 03:29:04 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:21333 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725975AbfKHI3E (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Nov 2019 03:29:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1573201657; x=1604737657;
+  t=1573201804; x=1604737804;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=5LJPWNDx95mKmDt2bUpL3y3YI3JwCPruxNIjbgkV8iw=;
-  b=UkZqOefBwSPnVsmNa44SzYqAwp+B11wix8gbpUhFp4mfqAHN2adMfAoD
-   pX1ZYCsv/qVVF6oZ3Li5vOpgDFUVC6o1OZPepHZO9fqyxX1CNEWGmm/5A
-   JNL1AUYw7ZpLvBo7rKuIdpQZWi0KMVzRu6QE3fL5ofArG/dvzkFzdYAs1
-   Frf93ABv5BnJ+JuHH5RdTtkPQIQJgup8CGLYTqB1mbUxdx8HGBLRPUCFq
-   2p2jw2AlwwhiS755+7qcgdM1O957hCfMboeUZOQ3q4qr+p8y5N4YbkVqV
-   82EImqeIYa0nuqXTeLQjCEkfZNhQ1VUj1D3H+hI+FVYBLH1oNCRQisvLj
-   A==;
-IronPort-SDR: BV3aVY+8HZICkSEm8J3AHScQakfKd6TivPx8hqSmGB66fZUenBEf1lR9w8QhEMkpBxgOhupf5M
- cQUG03PH4AKU6PExlIAc1qKzt0mxNbfpbjoJUTvQVvN0J0WS42HVhk2IRmK59F/lloijax+WK6
- tSrOJC2U4s7trjRVqBJhty5KlL6FhBGiitAYk5RCXz/P1uwltZtUfOtH3pjczmujuMHpN4rjml
- DhxluJUZ8IcfoFNKj1+TR4jxI5DcrEhlYRQjR2cJZnonYnz2+byecKD7US5uTLRJ8ZgbwwceLF
- UHA=
+  bh=a9NTSHio6xx22Fyu71wO2ofDUyx3CgnJo/lvLDxRkmw=;
+  b=m42Dt3Pl6OFaSTPQbATnCvQCHBoahraf25W9Wm/ptbLdAH4lvbDktgai
+   C0Q7QRvb+btGYD9ceclq/3QmlqxtvnTirqs3G80epMubJoQX2bDB9lGTV
+   m+F52VeUBLjHLhE4ziAPjyCS29pOfxq5NlgaO1/Fir++FK6z0RuxcAm4D
+   q8p8Zdv2nc68xLqLnV0kwVjWuyjoeUdqu0BAzzwYS0ZdQrGvEPtjSoZYc
+   vbynbYhAG4O75iqgCJBisKntXZSUS+VzkCPPS5tQDNeAIxWp7x+XuusA4
+   IVRORl0OpoRoPqXxRlACr4+zHItG8Cxfitb9z4SLaIGFKf4NrgItFivLm
+   w==;
+IronPort-SDR: CCh+pFyexuxs/FhmjQG6Q9clG9NHW3CLz7P2HIizRrbKYLgS2g/n1zAmERJ0NC6dy9dhJyEy4j
+ wnv1Eu+cu+/LwE+9Qdhx0O0myWhQqp/Fze3vXv0o1y4UMNHVuUlp9cmPmlIEDefjq+zHHA5vZU
+ vwLuZPN7jIxTfUvhZGFtQthTK/bfzBBsEgJO4Qh1r+STSl8uhw6KRe6Vg2aojeXN2o5enrfWNz
+ DJe4CDVJRpckj08jkb7s8VP4aunaMkUvCLrNe+HFYckbJ+b1J4sAwpixDcJ0EViajK7TlU+AVK
+ oSg=
 X-IronPort-AV: E=Sophos;i="5.68,280,1569254400"; 
-   d="scan'208";a="122457964"
+   d="scan'208";a="223680323"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Nov 2019 16:27:37 +0800
-IronPort-SDR: C8XWGOV8nV+J5gyO52vRtNs5l+QXCq5vyqchdHxnRldIXyomUFvELtK6C8gGpP2Kwu40LmZQGv
- WhHMwYhkZ/oZuii/V3paM9LwIH3fb+lxqogUbDc25uWOCpZYfKgLq2835tDQY4HC5sav6Pn2UV
- +lzFfXVuj7SVBLyYJcFe1wdH6CX8HMHpXM3bylZMEwdK/Lpu0Zhm39yXojR9f7SjjSXBfvRxuY
- /6Bi6k3AOZHMjRaG9pSsZxtuV7J7l6CjstH3l7luElSmM//ZXdb2WqeSD5/EFpxdZTWqRa5jkl
- 3nNpNusnbvQcpTBhV6vfZq5P
+  by ob1.hgst.iphmx.com with ESMTP; 08 Nov 2019 16:30:04 +0800
+IronPort-SDR: tyQRd5goDw0Fhn/F+YXTja95S4aARrT3ZelRKgVFf8Hex1VBHy0BCJDYYlg6R9iddLl2XKsR5K
+ kVP+ipinbjbJSX5jTSqMpWpcuR/Yn8mwL7OsoiUfBPQABaBYBERi+ADOjM85WSyhyJWgY1fzih
+ 0mE40ODSj+yYD9JOOUlhm7adQjHqO8OkOuHbkedgosPHDxGPj1ViRY3lxZaCTUF4SOo2wFpOds
+ lHMZAPPG6PKSyMlimjJ2qVdMs7qRWOFBXjNohCPovy7Ss2tAIJYATg1TG0DemESOj5E/lmg5TN
+ iU2Cwl2Da/PWqkmZkcJ4PHsT
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2019 00:22:46 -0800
-IronPort-SDR: 3B3eEmUEzLERhHLabpnl9v2eMZNf/lHl/TO3AQ+TWORX1QDSR/DbpDLDTTgWrUL/fVTRXz1+Rp
- t48bhqpwrLw4MwUG/4HkgxBa0y1Wz5hKPCSyAwfDQSLcQm7atU/qXGp+jYY1Lew/ifT0lGzki3
- zSQ3U0mG9bJTymTw0wmSl1ZRKlciZAFSfyk0qhGEM4IDHmz5XnPJDKivb8uEskrvLYv0A4zmsl
- oUC5ZIlPKAKOAC3L9lQc9NdiqG002dbp3zZXj99wYf6UU+a7LkTBfcKlj7x4en3i7Fz/Cbf9Rz
- 4Ys=
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2019 00:24:12 -0800
+IronPort-SDR: GSEOgYsfhsaFpSxnUsaBvZXGo5mPlKs5aFU22Lj/gQHdvZ0XA3REmMkT6Yy9ESs9tgi10n0+vh
+ HmWmi1Jbxv4r30VRvadZp7g6pvrWDo3VH8qCZgxKKqTwRtPA6SrH1QbA2cU+YG6t0l65jln9Zj
+ djgbvsRNfptLdiHYd/ivLWQ9ihFnfDeO3Uy+jBN7q9u0Ya4c25IZghcpb1mEDX81JGe3bNIGJr
+ /kr/UvxkqKiCTaIIEn1OUFa+dq8qBbvC2fsonLCUmQUfQoNQaUN4ZXKLW9BuzMSvo2239qmgs/
+ RsQ=
 WDCIronportException: Internal
 Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip01.wdc.com with ESMTP; 08 Nov 2019 00:27:36 -0800
+  by uls-op-cesaip01.wdc.com with ESMTP; 08 Nov 2019 00:29:02 -0800
 From:   Damien Le Moal <damien.lemoal@wdc.com>
 To:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         target-devel@vger.kernel.org
 Cc:     Mike Christie <mchristi@redhat.com>
-Subject: [PATCH] target: core: Prevent memory reclaim recursion
-Date:   Fri,  8 Nov 2019 17:27:35 +0900
-Message-Id: <20191108082735.417876-1-damien.lemoal@wdc.com>
+Subject: [PATCH v2] target: core: Prevent memory reclaim recursion
+Date:   Fri,  8 Nov 2019 17:29:01 +0900
+Message-Id: <20191108082901.417950-1-damien.lemoal@wdc.com>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -68,8 +68,13 @@ Prevent recursion into the IO path under low memory conditions by using
 GFP_NOIO in place of GFP_KERNEL when allocating a new command with
 tcmu_alloc_cmd() and user ring space with tcmu_get_empty_block().
 
+Reported-by: Masato Suzuki <masato.suzuki@wdc.com>
 Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 ---
+
+Changes from v1:
+* Added reported-by tag
+
  drivers/target/target_core_user.c | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
