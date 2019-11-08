@@ -2,93 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5E1F5137
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2019 17:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B64F51A9
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2019 17:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbfKHQe3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Nov 2019 11:34:29 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:21752 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726039AbfKHQe2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Nov 2019 11:34:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573230867;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MswkzqSTgztzY8rIctB3nvZ7tTFuK81EkDbQodyjE2k=;
-        b=FVSRnp/rq5HswGy0zsc2HoPGQIexpYvfIjMnc0sczZPnrPEslioaHn9DgGM5Ebzpd6mN8V
-        mJLbOzKhkVJpIyo+5RytCpGHjtK+9qqCf3WQGuRLyDGvia/8Qob1LfxHsbDSYbnTUU6Sxo
-        Oinj2Bi5oFWMqL8jeKwVmolqocWh0CE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-292-hWr799ELOo2eZxLUvrdC3g-1; Fri, 08 Nov 2019 11:34:24 -0500
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 28D6B107ACC4;
-        Fri,  8 Nov 2019 16:34:23 +0000 (UTC)
-Received: from [10.10.125.42] (ovpn-125-42.rdu2.redhat.com [10.10.125.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6F18260BE1;
-        Fri,  8 Nov 2019 16:34:22 +0000 (UTC)
-Subject: Re: [PATCH v2] target: core: Prevent memory reclaim recursion
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        target-devel@vger.kernel.org
-References: <20191108082901.417950-1-damien.lemoal@wdc.com>
- <cefdcca4-e839-829e-54aa-b95e77825d1d@acm.org>
-From:   Mike Christie <mchristi@redhat.com>
-Message-ID: <5DC59908.5010600@redhat.com>
-Date:   Fri, 8 Nov 2019 10:34:16 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:38.0) Gecko/20100101
- Thunderbird/38.6.0
+        id S1727794AbfKHQyi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Nov 2019 11:54:38 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:50264 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726231AbfKHQyh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Nov 2019 11:54:37 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA8GmRRQ052691;
+        Fri, 8 Nov 2019 10:48:27 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573231707;
+        bh=4A4O5I7pwI/p0i8/yVVFwm2hJ5HkTiFhKi6/rXJSUUw=;
+        h=From:To:CC:Subject:Date;
+        b=QtANlRoK8Wi271mYRcJwNxC0JxEQigLC2P2SuVnOWIZuOpcnrJdUjUd2Tj8L5S52h
+         qPQBUiwbgUD2KtDqp1aHgLr0jeOTDliBvnBClxLgFmAm6XF5QHxY/i9DhMaikAJKdJ
+         dasuGsg35kyMrlephdT//rLLE4nvFAo2Y7uJKeLo=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xA8GmRGp106711
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 8 Nov 2019 10:48:27 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 8 Nov
+ 2019 10:48:11 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Fri, 8 Nov 2019 10:48:11 -0600
+Received: from a0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA8GmNLW117597;
+        Fri, 8 Nov 2019 10:48:24 -0600
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Janek Kotas <jank@cadence.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
+Subject: [PATCH v3 0/2] scsi: ufs: Add driver for TI wrapper for Cadence UFS IP
+Date:   Fri, 8 Nov 2019 22:18:55 +0530
+Message-ID: <20191108164857.11466-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <cefdcca4-e839-829e-54aa-b95e77825d1d@acm.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-MC-Unique: hWr799ELOo2eZxLUvrdC3g-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/08/2019 10:22 AM, Bart Van Assche wrote:
-> On 11/8/19 12:29 AM, Damien Le Moal wrote:
->> Prevent recursion into the IO path under low memory conditions by using
->> GFP_NOIO in place of GFP_KERNEL when allocating a new command with
->> tcmu_alloc_cmd() and user ring space with tcmu_get_empty_block().
->>
->> Reported-by: Masato Suzuki <masato.suzuki@wdc.com>
->> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
->> ---
->>
->> Changes from v1:
->> * Added reported-by tag
->>
->>   drivers/target/target_core_user.c | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> The patch subject is weird. Shouldn't the patch subject start with
-> "tcmu" instead of "target: core"?
->=20
-> Has the recursion mentioned in the patch description been observed or is
-> this a theoretical issue? I'm asking this because GFP_NOIO only prevents
+This series add DT bindings and driver for TI wrapper for Cadence UFS
+IP that is present on TI's J721e SoC
 
-Observed.
+Vignesh Raghavendra (2):
+  dt-bindings: ufs: ti,j721e-ufs.yaml: Add binding for TI UFS wrapper
+  scsi: ufs: Add driver for TI wrapper for Cadence UFS IP
 
-> recursion if it is used inside a block driver or filesystem. The tcmu
-> driver is neither - it submits block I/O or filesystem I/O instead of
-> implementing a block driver or filesystem. Should we really disallow
-> tcmu to use the swap subsystem?
+ .../devicetree/bindings/ufs/ti,j721e-ufs.yaml | 68 ++++++++++++++
+ drivers/scsi/ufs/Kconfig                      | 10 +++
+ drivers/scsi/ufs/Makefile                     |  1 +
+ drivers/scsi/ufs/ti-j721e-ufs.c               | 90 +++++++++++++++++++
+ 4 files changed, 169 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/ufs/ti,j721e-ufs.yaml
+ create mode 100644 drivers/scsi/ufs/ti-j721e-ufs.c
 
-A common use is tcm loop on the frontend and tcmu on the backend. You
-see this with virt and containers, where some app is used to interacting
-SCSI devices, but then the storage is backed by something that people
-didn't want to put in the kernel. It's similar to nbd when you use
-AF_UNIX sockets with a local running daemon.
+-- 
+2.24.0
 
