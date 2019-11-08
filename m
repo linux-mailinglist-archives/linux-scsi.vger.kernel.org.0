@@ -2,183 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8F6F648D
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 04:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8085BF67D2
+	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 07:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729153AbfKJDAn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Nov 2019 22:00:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47212 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729188AbfKJC4q (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:56:46 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8ABBE22501;
-        Sun, 10 Nov 2019 02:48:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573354109;
-        bh=D9BMxha0RO46131/kkwWGslWAShKLwmYASEHjQQUC7w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ogBsKBSaKivmTLLUbl7g9cGoxhLnGcSyn38j/nbwICrTkcmVgMi8zxBN8gs6rvKi6
-         m16gZlguEZqhZnY6day0JUFIQl0dOb97Qa0CrMjwf24UstomyUxEFiJgodvJBC43xI
-         c+z9CGmtfp8ybBVczr/dlgLZCWKEml5lFbTF2HNY=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 099/109] scsi: NCR5380: Check for bus reset
-Date:   Sat,  9 Nov 2019 21:45:31 -0500
-Message-Id: <20191110024541.31567-99-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110024541.31567-1-sashal@kernel.org>
-References: <20191110024541.31567-1-sashal@kernel.org>
+        id S1726582AbfKJGyu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 10 Nov 2019 01:54:50 -0500
+Received: from static-dsl-170.87-197-152.telecom.sk ([87.197.152.170]:47564
+        "EHLO sldom.sldom" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725789AbfKJGyu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 10 Nov 2019 01:54:50 -0500
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by sldom.sldom (Postfix) with SMTP id 2DC2620D6B6;
+        Fri,  8 Nov 2019 15:32:17 +0100 (CET)
+Received: from (HELO ncuwd) [92.181.89.184] by 127.0.0.1; Fri, 08 Nov 2019 14:23:23 +0000
+Message-ID: <94a$-o4-x$fm-7459ho$r@1k7hr27qui.pz>
+From:   "Simon Oliver" <olivia_simon@lihat.dds-akaun.com>
+Reply-To: "Simon Oliver" <olivia_simon@lihat.dds-akaun.com>
+To:     jobs@launch-techs.com
+Subject: Seeking Investment Opportunities
+Date:   Fri, 08 Nov 19 14:23:23 GMT
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/alternative;
+        boundary="77E3.4E8_1BD0BDC_"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Finn Thain <fthain@telegraphics.com.au>
 
-[ Upstream commit 6b0e87a6aafe12d75c2bea6fc8e49e88b98b3083 ]
+--77E3.4E8_1BD0BDC_
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-The SR_RST bit isn't latched. Hence, detecting a bus reset isn't reliable.
-When it is detected, the right thing to do is to drop all connected and
-disconnected commands. The code for that is already present so refactor it and
-call it when SR_RST is set.
+I consider it very important to introduce to you my client who is interest=
+ed to invest $250 million to $500 million dollars in a reputable project  =
+investment, She is well known in her country holding a political office .
 
-Tested-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/NCR5380.c | 74 +++++++++++++++++++++++++-----------------
- 1 file changed, 45 insertions(+), 29 deletions(-)
+She deserve a secret investment outside her country without direct involve=
+ment.  she needs an experience individual or company that can profitably i=
+nvestment and manage the above funds for the period of 15 years or more.
 
-diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
-index a85c5155fcf40..21377ac71168c 100644
---- a/drivers/scsi/NCR5380.c
-+++ b/drivers/scsi/NCR5380.c
-@@ -131,6 +131,7 @@
- 
- static int do_abort(struct Scsi_Host *);
- static void do_reset(struct Scsi_Host *);
-+static void bus_reset_cleanup(struct Scsi_Host *);
- 
- /**
-  * initialize_SCp - init the scsi pointer field
-@@ -885,7 +886,14 @@ static irqreturn_t __maybe_unused NCR5380_intr(int irq, void *dev_id)
- 			/* Probably Bus Reset */
- 			NCR5380_read(RESET_PARITY_INTERRUPT_REG);
- 
--			dsprintk(NDEBUG_INTR, instance, "unknown interrupt\n");
-+			if (sr & SR_RST) {
-+				/* Certainly Bus Reset */
-+				shost_printk(KERN_WARNING, instance,
-+					     "bus reset interrupt\n");
-+				bus_reset_cleanup(instance);
-+			} else {
-+				dsprintk(NDEBUG_INTR, instance, "unknown interrupt\n");
-+			}
- #ifdef SUN3_SCSI_VME
- 			dregs->csr |= CSR_DMA_ENABLE;
- #endif
-@@ -2303,31 +2311,12 @@ static int NCR5380_abort(struct scsi_cmnd *cmd)
- }
- 
- 
--/**
-- * NCR5380_host_reset - reset the SCSI host
-- * @cmd: SCSI command undergoing EH
-- *
-- * Returns SUCCESS
-- */
--
--static int NCR5380_host_reset(struct scsi_cmnd *cmd)
-+static void bus_reset_cleanup(struct Scsi_Host *instance)
- {
--	struct Scsi_Host *instance = cmd->device->host;
- 	struct NCR5380_hostdata *hostdata = shost_priv(instance);
- 	int i;
--	unsigned long flags;
- 	struct NCR5380_cmd *ncmd;
- 
--	spin_lock_irqsave(&hostdata->lock, flags);
--
--#if (NDEBUG & NDEBUG_ANY)
--	shost_printk(KERN_INFO, instance, __func__);
--#endif
--	NCR5380_dprint(NDEBUG_ANY, instance);
--	NCR5380_dprint_phase(NDEBUG_ANY, instance);
--
--	do_reset(instance);
--
- 	/* reset NCR registers */
- 	NCR5380_write(MODE_REG, MR_BASE);
- 	NCR5380_write(TARGET_COMMAND_REG, 0);
-@@ -2339,14 +2328,6 @@ static int NCR5380_host_reset(struct scsi_cmnd *cmd)
- 	 * commands!
- 	 */
- 
--	list_for_each_entry(ncmd, &hostdata->unissued, list) {
--		struct scsi_cmnd *cmd = NCR5380_to_scmd(ncmd);
--
--		cmd->result = DID_RESET << 16;
--		cmd->scsi_done(cmd);
--	}
--	INIT_LIST_HEAD(&hostdata->unissued);
--
- 	if (hostdata->selecting) {
- 		hostdata->selecting->result = DID_RESET << 16;
- 		complete_cmd(instance, hostdata->selecting);
-@@ -2380,6 +2361,41 @@ static int NCR5380_host_reset(struct scsi_cmnd *cmd)
- 
- 	queue_work(hostdata->work_q, &hostdata->main_task);
- 	maybe_release_dma_irq(instance);
-+}
-+
-+/**
-+ * NCR5380_host_reset - reset the SCSI host
-+ * @cmd: SCSI command undergoing EH
-+ *
-+ * Returns SUCCESS
-+ */
-+
-+static int NCR5380_host_reset(struct scsi_cmnd *cmd)
-+{
-+	struct Scsi_Host *instance = cmd->device->host;
-+	struct NCR5380_hostdata *hostdata = shost_priv(instance);
-+	unsigned long flags;
-+	struct NCR5380_cmd *ncmd;
-+
-+	spin_lock_irqsave(&hostdata->lock, flags);
-+
-+#if (NDEBUG & NDEBUG_ANY)
-+	shost_printk(KERN_INFO, instance, __func__);
-+#endif
-+	NCR5380_dprint(NDEBUG_ANY, instance);
-+	NCR5380_dprint_phase(NDEBUG_ANY, instance);
-+
-+	list_for_each_entry(ncmd, &hostdata->unissued, list) {
-+		struct scsi_cmnd *scmd = NCR5380_to_scmd(ncmd);
-+
-+		scmd->result = DID_RESET << 16;
-+		scmd->scsi_done(scmd);
-+	}
-+	INIT_LIST_HEAD(&hostdata->unissued);
-+
-+	do_reset(instance);
-+	bus_reset_cleanup(instance);
-+
- 	spin_unlock_irqrestore(&hostdata->lock, flags);
- 
- 	return SUCCESS;
--- 
-2.20.1
+Forward your details to me for further discussion (e.g)  Your name, Teleph=
+one number and Occupation.
+
+Thank you
+Oliver Simon
+
+--77E3.4E8_1BD0BDC_--
 
