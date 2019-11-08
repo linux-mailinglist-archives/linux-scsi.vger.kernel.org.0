@@ -2,56 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1507AF5610
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2019 21:03:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ABAFF5AF5
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 Nov 2019 23:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391299AbfKHTGg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 Nov 2019 14:06:36 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:41481 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731267AbfKHTGf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Nov 2019 14:06:35 -0500
-Received: by mail-pl1-f196.google.com with SMTP id d29so4490342plj.8;
-        Fri, 08 Nov 2019 11:06:34 -0800 (PST)
+        id S1728080AbfKHWgx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 Nov 2019 17:36:53 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36984 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727794AbfKHWgx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 Nov 2019 17:36:53 -0500
+Received: by mail-wr1-f68.google.com with SMTP id t1so8753753wrv.4
+        for <linux-scsi@vger.kernel.org>; Fri, 08 Nov 2019 14:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qc6CfW6p5miBbAUa0RGWy4g9EUQnbZw6jUICSmg+D24=;
+        b=kgPh4G9BQIho8sscqW+2FfM2954AFGx6D/tSFxftIZI3/nDQR89NmeotvFbG5GUjgX
+         9qSELGByoScz7hm7aSvXM4Wo43NBCRNR4OWkZYwB+MCGzicdvMy2fLe10lVq5cds6AvX
+         69iaJkLtqbJxlOvNxSj64Hi5QqpRF1YxAZ5LyH2vS/96QqqHhBdyIwFB4hB+Xfwv0L6O
+         OJ98P7ux+9ugNp7A+3BCQJjhV67xPalRHhR2G/r5LnFwirxUXJYQc85rSIRCuV8YQnzQ
+         m/B0z5yV84l6YUTRDkXilzKsNBsxONeVnk1DQ22fPDd6R2JXi6Cn04Za6TquCxE1uR9C
+         IEDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=KUO65dsRHtTENunurXMA0yCDuIh5HnQm2qnH0n9rKZk=;
-        b=o9dz5Qe4M6sM7FUyCfmWKW6PtMw70ob8dVxhyfKKr8WfAVsb2UdIs+ohwTKAOsgOT/
-         Dx1kot1lxaKT/JhxcJonAXzP+7Y0zwT2D3NPEHIYzycxNC0sYO7p23d0wBUoiylKmDdt
-         1+dklEw2jO9yd+qGvzEPbXyOVtJacYrOVd8VDQ7KhEe0zto8m6A+UMUdu+iVKKOPFHTh
-         MWqbccoL4nvgkgecbZBNJSycctqJgyFMHkPH2na3Z38+g9UdmmTVbInhzh0iuf1Zy5nW
-         ET29e0M/p0l9uu7ZAXlQNlDn2WJ19VKVXkWfZyzuz3XspIIYC9PlF+XKE+4hcLy0Weww
-         G6LA==
-X-Gm-Message-State: APjAAAUJ+HZYjrnprm3SwMNbx6w/e5sDAAxY6/xAJdhzicaicZ4ljXe3
-        xq3H715X0mn7iHU82E5tq2A=
-X-Google-Smtp-Source: APXvYqyIA6IZIhFAL8yKUMxwryNfWoTyBGgHonMtuaTj6pITXvKw5p2xICH26JJvC0HNVp5O2BuxpQ==
-X-Received: by 2002:a17:902:d217:: with SMTP id t23mr12191406ply.287.1573239994227;
-        Fri, 08 Nov 2019 11:06:34 -0800 (PST)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id a16sm7196444pfc.56.2019.11.08.11.06.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Nov 2019 11:06:33 -0800 (PST)
-Subject: Re: [dm-devel] [PATCH 8/9] scsi: sd_zbc: Cleanup
- sd_zbc_alloc_report_buffer()
-To:     Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-scsi@vger.kernel.org,
+        bh=qc6CfW6p5miBbAUa0RGWy4g9EUQnbZw6jUICSmg+D24=;
+        b=exGk1z7BDLjK9xZfdSIsgxoKgj5RlGo91eTfBp6Oe3M7wYBlNV91BwCD2Yql8oShoP
+         Ct2xNgoh/0DrHu2fLZs41/W4XyRPn6LEZUFf5+o8jec3sU6zgPaJRVCZtj31+oD4J4xz
+         x+2P7sJQahm4sW9nLw4E6VYPcqTRhMPG1s9flA1xVk6XY3y4zcg9Ic+Gg84eJoyna0Fi
+         C65dEkhlshO3jS8HgXQ3l69oTtrjbW6BjNYP5tMy2XhCIZfjOopD0nGMiPLLsOT4adzx
+         Ip7MIS1M1+zUfmJpnp04kO8XZMR7C5JCiNRoAj34co05g4EXODkV9Pj1jPZf+UpuNMlE
+         ADQQ==
+X-Gm-Message-State: APjAAAXFSs1sXpF415kHBdbyNdFRks4OeUB/3qcuP4bak6tw5gqdxu5v
+        BgSPBSHNX4dNtJFBej67rSIA4p+3
+X-Google-Smtp-Source: APXvYqwcgfFQoaE3FG7CIvGKI1UxFyBWxRn+OZMLHa3/mdme01Cs4gy1cJh8o5ab+dxOeTv5gGjoDg==
+X-Received: by 2002:a5d:4c4e:: with SMTP id n14mr11595184wrt.260.1573252611286;
+        Fri, 08 Nov 2019 14:36:51 -0800 (PST)
+Received: from [10.230.29.90] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id w18sm7809890wrp.31.2019.11.08.14.36.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Nov 2019 14:36:50 -0800 (PST)
+Subject: Re: [PATCH 1/3] lpfc: Fix a kernel warning triggered by
+ lpfc_get_sgl_per_hdwq()
+To:     Bart Van Assche <bvanassche@acm.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        dm-devel@redhat.com, Mike Snitzer <snitzer@redhat.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <yuchao0@huawei.com>
-References: <20191108015702.233102-1-damien.lemoal@wdc.com>
- <20191108015702.233102-9-damien.lemoal@wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <6a1e0a08-d65c-b075-9bac-23519e9e91c3@acm.org>
-Date:   Fri, 8 Nov 2019 11:06:31 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org
+References: <20191107052158.25788-1-bvanassche@acm.org>
+ <20191107052158.25788-2-bvanassche@acm.org>
+From:   James Smart <jsmart2021@gmail.com>
+Message-ID: <fbbf0fc4-2d29-8268-90b1-8b7a5b1e6d2f@gmail.com>
+Date:   Fri, 8 Nov 2019 14:36:47 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191108015702.233102-9-damien.lemoal@wdc.com>
+In-Reply-To: <20191107052158.25788-2-bvanassche@acm.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -60,24 +68,18 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/7/19 5:57 PM, Damien Le Moal wrote:
-> -	buf = vzalloc(bufsize);
-> -	if (buf)
-> -		*buflen = bufsize;
-> +	while (bufsize >= SECTOR_SIZE) {
-> +		buf = vzalloc(bufsize);
-> +		if (buf) {
-> +			*buflen = bufsize;
-> +			return buf;
-> +		}
-> +		bufsize >>= 1;
-> +	}
+On 11/6/2019 9:21 PM, Bart Van Assche wrote:
+> Fix the following kernel bug report:
+> 
+> BUG: using smp_processor_id() in preemptible [00000000] code: systemd-udevd/954
+> 
+> Fixes: d79c9e9d4b3d ("scsi: lpfc: Support dynamic unbounded SGL lists on G7 hardware.")
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 
-Hi Damien,
 
-Has it been considered to pass the __GFP_NORETRY flag to this vzalloc() 
-call?
+Looks good - thanks Bart
 
-Thanks,
+Reviewed-by: James Smart <james.smart@broadcom.com>
 
-Bart.
+-- james
+
