@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74BCEF6379
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 03:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC3B9F6600
+	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 04:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728164AbfKJCwl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Nov 2019 21:52:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36402 "EHLO mail.kernel.org"
+        id S1728744AbfKJDKd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 9 Nov 2019 22:10:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42754 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727829AbfKJCvf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:51:35 -0500
+        id S1728458AbfKJCn6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:43:58 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D3F522594;
-        Sun, 10 Nov 2019 02:51:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CAEF7214E0;
+        Sun, 10 Nov 2019 02:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573354294;
-        bh=RN5s4WwjmeKO7kh5V7ierCiAzxj8M84zs8kaJC64wO4=;
+        s=default; t=1573353838;
+        bh=ul0/bGo88jsuhWbKBfwSPapUDoW1WVyc6cHpoRR2Asw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q7Ml2J5kKlYaUNioANv+Ppg7Vv7P2db63OAI2otb69MGRzYP12vM42j9/XxwGNNvH
-         G9lUZkyIEOAQ6vhs7URLjWCkMIiLYvVlB+Gca9boVppsN8vYAF4Dc7w3VFIAhlxcXS
-         sZjNpkV0WDNLvEPFqGdakAKFCWc+HGu6BiuWZsQ8=
+        b=PNlOIDX0nyCs0CNv6ptsVQHXdoRY5jmT35wQmD8MQwcDB1rJ5wPQieOs81SMWl4ih
+         gLqpqtQKz/L69DcZYgEOpESOP6TMAXmD3pjQtDFbT5btDWzgHJ87pVMlGRN3JYCgSu
+         aZf4s8DIuX3IgemVLJsmdr0YN/93udgnyQPfCQvw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jason Yan <yanaijie@huawei.com>,
@@ -35,12 +35,12 @@ Cc:     Jason Yan <yanaijie@huawei.com>,
         Hannes Reinecke <hare@suse.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 33/40] scsi: libsas: always unregister the old device if going to discover new
-Date:   Sat,  9 Nov 2019 21:50:25 -0500
-Message-Id: <20191110025032.827-33-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 127/191] scsi: libsas: always unregister the old device if going to discover new
+Date:   Sat,  9 Nov 2019 21:39:09 -0500
+Message-Id: <20191110024013.29782-127-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110025032.827-1-sashal@kernel.org>
-References: <20191110025032.827-1-sashal@kernel.org>
+In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
+References: <20191110024013.29782-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -79,10 +79,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index 400eee9d77832..d44f18f773c0f 100644
+index b141d1061f38e..2ee9c4ec7a541 100644
 --- a/drivers/scsi/libsas/sas_expander.c
 +++ b/drivers/scsi/libsas/sas_expander.c
-@@ -2049,14 +2049,11 @@ static int sas_rediscover_dev(struct domain_device *dev, int phy_id, bool last)
+@@ -2062,14 +2062,11 @@ static int sas_rediscover_dev(struct domain_device *dev, int phy_id, bool last)
  		return res;
  	}
  
