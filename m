@@ -2,56 +2,128 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C87F6AE2
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 19:47:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 014A6F6B19
+	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 20:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbfKJSrb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 10 Nov 2019 13:47:31 -0500
-Received: from hn.kd.ny.adsl ([42.231.162.229]:2692 "HELO zoosbook.com"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with SMTP
-        id S1726800AbfKJSra (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 10 Nov 2019 13:47:30 -0500
-Received: from qnx.mdrost.com ([Sun, 10 Nov 2019 11:33:43 -0700])
-        by mtu67.syds.piswix.net with SMTP; Sun, 10 Nov 2019 11:33:43 -0700
-Received: from asx121.turbo-inline.com [54.56.249.186] by public.micromail.com.au with NNFMP; Sun, 10 Nov 2019 11:20:56 -0700
-Received: from mtu23.bigping.com ([Sun, 10 Nov 2019 11:19:09 -0700])
-        by nntp.pinxodet.net with QMQP; Sun, 10 Nov 2019 11:19:09 -0700
-Received: from unknown (147.240.79.160)
-        by group21.345mail.com with NNFMP; Sun, 10 Nov 2019 11:10:42 -0700
-Received: from unknown (167.208.121.100)
-        by mail.webhostings4u.com with LOCAL; Sun, 10 Nov 2019 11:07:22 -0700
-Message-ID: <DFDF92D4.51EA1647@zoosbook.com>
-Date:   Sun, 10 Nov 2019 10:37:24 -0700
-From:   "zoosbook.com" <admin@zoosbook.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.2.7) Gecko/20100713 Lightning/1.0b2 Thunderbird/3.1.1
-X-Accept-Language: en-us
+        id S1726935AbfKJT0k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 10 Nov 2019 14:26:40 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41715 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726832AbfKJT0j (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 10 Nov 2019 14:26:39 -0500
+Received: by mail-pg1-f196.google.com with SMTP id h4so7849559pgv.8;
+        Sun, 10 Nov 2019 11:26:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=A1UK+CF1nyrj5jaHjk/tJnwBpEDeuyBk/YtvjUZpIv4=;
+        b=Siv/CpPf7oQvCb6Z4v7KLya3vyubsYIwCa8aEV4CRhbHy0ZbFWFCraERJ6eJSzSUTW
+         wSF2zVxfJ0euDLkXgjK3uIXQo34YQOTWqugsIDNJ5drQSJHFpO2lBwsFQrbxILWHSFCB
+         adxn97yP9o8J8bnS9DlvalnJYbvoqCr/vKF7cAjoPLCNdRV6wUA4wVdsONYwzWRR1gHO
+         J80xl2sorezvuv0JXByhvBWiMWVC6fK5wmROZL+tWGYkMsmS90kcMDUG44bJ9EPQIoQk
+         fzE3fJnW5McM21ZrUNkmTwY0Jm7b+58JZxgWumbbMlO1Qssl6NQY7f7n+XgDX+emtRdS
+         pflg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=A1UK+CF1nyrj5jaHjk/tJnwBpEDeuyBk/YtvjUZpIv4=;
+        b=luUtUkRTz9z6k1tAAGCmlMDe/ZiRFI/HVEnJNjAzOdkevFSQG7qm/Y7KbT1t/QTLfO
+         /0rvaA/A1YZ5rDi1zDP1iJ9YlL03pNcYUKaDFi2nSfebJIGd0fP4Yp46RiKDnYAMKyrT
+         UtoIE4cmjvhNYBrziiYuyFGJEq61TZtJpbila9Dibqd7pDZgv9575/slFAUoxdlBbO0x
+         zQgLQFqDtWkVdC8CkdmS/12ki7pGNZsiucx0ZWGgr1HQow/oGz9wiFVZUUQ+Q72Gx91E
+         aC416Ew65jvPXyD8I4NjCcF6OFgpsXdqKrefFyXyfOkoIsQM1WU09KtZTY9mNbDDW70t
+         OvBw==
+X-Gm-Message-State: APjAAAVQYam2F+jY3hEtpHjV5KL68aoHVUN5iTLTAhw3Xv03PCP+05g/
+        AkzbMLtsOcJgv/TDWTT48bXWzZ5a
+X-Google-Smtp-Source: APXvYqxHB+Skst3JzlbqpMVe41GWzKHnbS3TYF5gfotf/8BVo/scwdX1GRzLCGEO5gfnowBJVZWfAw==
+X-Received: by 2002:a17:90a:22a6:: with SMTP id s35mr28307287pjc.3.1573413999039;
+        Sun, 10 Nov 2019 11:26:39 -0800 (PST)
+Received: from ?IPv6:2001:df0:0:200c:c850:272b:f208:39af? ([2001:df0:0:200c:c850:272b:f208:39af])
+        by smtp.gmail.com with ESMTPSA id w2sm12311031pgm.18.2019.11.10.11.26.36
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 10 Nov 2019 11:26:38 -0800 (PST)
+Subject: Re: [PATCH] zorro_esp: increase maximum dma length to 65536 bytes
+To:     Kars de Jong <jongk@linux-m68k.org>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-m68k@vger.kernel.org
+References: <CACz-3rh9ZCyU1825yU8xxty5BGrwFhpbjKNoWnn0mGiv_h2Kag@mail.gmail.com>
+ <20191109191400.8999-1-jongk@linux-m68k.org>
+ <1573330351.3650.4.camel@linux.ibm.com>
+ <6b914b12-cbc7-6fe6-7cba-3e89b2f6f19b@gmail.com>
+ <CACz-3rjUh8tcShX5OPi+37JvF8PqG-8AEf5uMQHjMynSaVa1gw@mail.gmail.com>
+From:   Michael Schmitz <schmitzmic@gmail.com>
+Message-ID: <8c356175-e490-68c0-6114-5192eedc3a4f@gmail.com>
+Date:   Mon, 11 Nov 2019 08:26:32 +1300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-To:     <linux-raid@vger.kernel.org>
-Subject: FREE Bestiality Social Network
-Content-Type: text/plain;
-        charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <CACz-3rjUh8tcShX5OPi+37JvF8PqG-8AEf5uMQHjMynSaVa1gw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello, 
+Hi Kars,
 
-Bestiality Social Networking Platform. With pictures, videos and friend
-about bestiality and zoophilia porn. 
-Here you can meet and talk with people that love zoo sex.
+thanks for your patch!
 
-Register for a free account with us today
-https://www.zoosbook.com/register
+On 10/11/19 10:01 PM, Kars de Jong wrote:
+> Hi Michael,
+>
+> Op zo 10 nov. 2019 om 03:36 schreef Michael Schmitz <schmitzmic@gmail.com>:
+>> All of the old board-specific drivers used a max transfer length of
+>> 0x1000000, only the fastlane driver used 0xfffc.
+> Yes, I also found this when checking the old drivers.
+>
+>> That lower limit might
+>> be due to a DMA limitation on the fastlane board. We could accommodate
+>> the different limit for this board by using a board-specific
+>> dma_length_limit() callback...
+> Yes, I think that's the best idea for now. Oktagon also used to have a
+> different limit but that was never ported to the new ESP core.
 
-Let your animalic thoughts get alive.
+I can't remember the details, but as far as I recall it, the Oktagon 
+used pseudo-DMA rather than hardware DMA. At the time I started porting 
+Zorro ESP drivers to the new core, pseudo-DMA code was available for Mac 
+only, and no PIO transfer for data phases at all, so I decided to leave 
+that out altogether.
 
-Help us build a good reputation, remember all that we offer is free, be
-fair to us
-https://www.trustpilot.com/review/zoosbook.com
+Might be a lot easier now that Finn has moved the PIO support code into 
+the core driver. Someone could start with a PIO mode driver and add PDMA 
+later.
 
+>>> case for any of the cards the zorro_esp drives, it might be better to
+>>> lower the max length to 61440 (64k-4k) so the residual is a page.
+>> For the benefit of keeping the code simple, and avoid retesting the
+>> fastlane board, that might indeed be the better solution.
+> But it's slower... :-P
+I wonder what max. transfer size had been used so far, in the majority 
+of cases. I hadn't observed this bug in my tests of the ESP driver on 
+elgar. So it might not matter so much in practice.
+> Also, I may be adding another board-specific version for the Blizzard
+> 12x0 IV to enable 24-bit transfers, like the am53c974 driver does, in
+> a later patch.
 
-See you inside
+If we can differentiate between the Mark IV board and the Mark II board 
+in a reliable way, fine. I can't remember whether I've had a report on 
+that ever.
 
+I'd suggest to change the transfer size limit to 60k in the first 
+instance, and add board-specific tweaks as needed when you add 24 bit 
+DMA support for the Mark IV.
 
+Cheers,
+
+     Michael
+
+>
+> Kind regards,
+>
+> Kars.
