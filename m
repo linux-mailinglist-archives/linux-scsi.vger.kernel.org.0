@@ -2,84 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9A8F682D
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 10:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C87F6AE2
+	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 19:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726657AbfKJJ3c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 10 Nov 2019 04:29:32 -0500
-Received: from smtpq3.tb.mail.iss.as9143.net ([212.54.42.166]:48738 "EHLO
-        smtpq3.tb.mail.iss.as9143.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726641AbfKJJ3b (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 10 Nov 2019 04:29:31 -0500
-Received: from [212.54.42.110] (helo=smtp7.tb.mail.iss.as9143.net)
-        by smtpq3.tb.mail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <jongk@linux-m68k.org>)
-        id 1iTjAg-0000NX-6F; Sun, 10 Nov 2019 10:06:10 +0100
-Received: from mail-wr1-f53.google.com ([209.85.221.53])
-        by smtp7.tb.mail.iss.as9143.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <jongk@linux-m68k.org>)
-        id 1iTjAg-00033v-1z; Sun, 10 Nov 2019 10:06:10 +0100
-Received: by mail-wr1-f53.google.com with SMTP id i12so4518836wro.5;
-        Sun, 10 Nov 2019 01:06:09 -0800 (PST)
-X-Gm-Message-State: APjAAAVF43xfiJbW5aVgiFDRKvG73Lo4iO13lL8KExIpXTPYwH9JyyZ8
-        3caV5UvI69A4VBiY398dVYA/7TDWGXo0Uv4Z6Nc=
-X-Google-Smtp-Source: APXvYqxPoz4E/tuTgkF3wppXFGa/kyDMrvgCNKgjwljO6CQjqsKC1PWJfHiMI4Trv2xHE0Ga44ze/skOMHq5mTYOEMk=
-X-Received: by 2002:a05:6000:14a:: with SMTP id r10mr15337939wrx.310.1573376769850;
- Sun, 10 Nov 2019 01:06:09 -0800 (PST)
+        id S1727108AbfKJSrb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 10 Nov 2019 13:47:31 -0500
+Received: from hn.kd.ny.adsl ([42.231.162.229]:2692 "HELO zoosbook.com"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with SMTP
+        id S1726800AbfKJSra (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 10 Nov 2019 13:47:30 -0500
+Received: from qnx.mdrost.com ([Sun, 10 Nov 2019 11:33:43 -0700])
+        by mtu67.syds.piswix.net with SMTP; Sun, 10 Nov 2019 11:33:43 -0700
+Received: from asx121.turbo-inline.com [54.56.249.186] by public.micromail.com.au with NNFMP; Sun, 10 Nov 2019 11:20:56 -0700
+Received: from mtu23.bigping.com ([Sun, 10 Nov 2019 11:19:09 -0700])
+        by nntp.pinxodet.net with QMQP; Sun, 10 Nov 2019 11:19:09 -0700
+Received: from unknown (147.240.79.160)
+        by group21.345mail.com with NNFMP; Sun, 10 Nov 2019 11:10:42 -0700
+Received: from unknown (167.208.121.100)
+        by mail.webhostings4u.com with LOCAL; Sun, 10 Nov 2019 11:07:22 -0700
+Message-ID: <DFDF92D4.51EA1647@zoosbook.com>
+Date:   Sun, 10 Nov 2019 10:37:24 -0700
+From:   "zoosbook.com" <admin@zoosbook.com>
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.2.7) Gecko/20100713 Lightning/1.0b2 Thunderbird/3.1.1
+X-Accept-Language: en-us
 MIME-Version: 1.0
-References: <CACz-3rh9ZCyU1825yU8xxty5BGrwFhpbjKNoWnn0mGiv_h2Kag@mail.gmail.com>
- <20191109191400.8999-1-jongk@linux-m68k.org> <alpine.LNX.2.21.1.1911100936080.8@nippy.intranet>
-In-Reply-To: <alpine.LNX.2.21.1.1911100936080.8@nippy.intranet>
-From:   Kars de Jong <jongk@linux-m68k.org>
-Date:   Sun, 10 Nov 2019 10:06:22 +0100
-X-Gmail-Original-Message-ID: <CACz-3rjCWu9Xq86cjiAR4c=5ybHHWej=J1sUmX1zkbL_C_Nsmw@mail.gmail.com>
-Message-ID: <CACz-3rjCWu9Xq86cjiAR4c=5ybHHWej=J1sUmX1zkbL_C_Nsmw@mail.gmail.com>
-Subject: Re: [PATCH] zorro_esp: increase maximum dma length to 65536 bytes
-To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-m68k@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-SourceIP: 209.85.221.53
-X-Authenticated-Sender: karsdejong@home.nl (via SMTP)
-X-Ziggo-spambar: /
-X-Ziggo-spamscore: 0.0
-X-Ziggo-spamreport: CMAE Analysis: v=2.3 cv=cPSeTWWN c=1 sm=1 tr=0 a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=IkcTkHD0fZMA:10 a=MeAgGD-zjQ4A:10 a=8981fWPbAAAA:8 a=O8UfT5bJTs0MqBNrrnsA:9 a=aloc2OoSEsq5W06C:21 a=7xY41GCLvj8WFtek:21 a=QEXdDO2ut3YA:10 a=o72u2rHnfW5qNJ_4I8LD:22
-X-Ziggo-Spam-Status: No
-X-Spam-Status: No
-X-Spam-Flag: No
+To:     <linux-raid@vger.kernel.org>
+Subject: FREE Bestiality Social Network
+Content-Type: text/plain;
+        charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Finn,
+Hello, 
 
-Op za 9 nov. 2019 om 23:53 schreef Finn Thain <fthain@telegraphics.com.au>:
-> On Sat, 9 Nov 2019, Kars de Jong wrote:
-> > diff --git a/drivers/scsi/zorro_esp.c b/drivers/scsi/zorro_esp.c
-> > index ca8e3abeb2c7..4448567c495d 100644
-> > --- a/drivers/scsi/zorro_esp.c
-> > +++ b/drivers/scsi/zorro_esp.c
-> > @@ -218,7 +218,7 @@ static int fastlane_esp_irq_pending(struct esp *esp)
-> >  static u32 zorro_esp_dma_length_limit(struct esp *esp, u32 dma_addr,
-> >                                       u32 dma_len)
-> >  {
-> > -     return dma_len > 0xFFFF ? 0xFFFF : dma_len;
-> > +     return dma_len > (1U << 16) ? (1U << 16) : dma_len;
-> >  }
-> >
->
-> Would it be safer to simply remove this code and leave
-> esp_driver_ops.dma_length_limit == NULL for all board types?
+Bestiality Social Networking Platform. With pictures, videos and friend
+about bestiality and zoophilia porn. 
+Here you can meet and talk with people that love zoo sex.
 
-I have considered that, but that version also imposes unneeded limits
-on crossing a 24-bit address boundary. The Zorro boards don't seem to
-need this.
+Register for a free account with us today
+https://www.zoosbook.com/register
 
-Kind regards,
+Let your animalic thoughts get alive.
 
-Kars.
+Help us build a good reputation, remember all that we offer is free, be
+fair to us
+https://www.trustpilot.com/review/zoosbook.com
+
+
+See you inside
+
+
