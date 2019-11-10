@@ -2,54 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8085BF67D2
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 07:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBDDF681F
+	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 10:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbfKJGyu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 10 Nov 2019 01:54:50 -0500
-Received: from static-dsl-170.87-197-152.telecom.sk ([87.197.152.170]:47564
-        "EHLO sldom.sldom" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725789AbfKJGyu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 10 Nov 2019 01:54:50 -0500
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by sldom.sldom (Postfix) with SMTP id 2DC2620D6B6;
-        Fri,  8 Nov 2019 15:32:17 +0100 (CET)
-Received: from (HELO ncuwd) [92.181.89.184] by 127.0.0.1; Fri, 08 Nov 2019 14:23:23 +0000
-Message-ID: <94a$-o4-x$fm-7459ho$r@1k7hr27qui.pz>
-From:   "Simon Oliver" <olivia_simon@lihat.dds-akaun.com>
-Reply-To: "Simon Oliver" <olivia_simon@lihat.dds-akaun.com>
-To:     jobs@launch-techs.com
-Subject: Seeking Investment Opportunities
-Date:   Fri, 08 Nov 19 14:23:23 GMT
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+        id S1726681AbfKJJZg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 10 Nov 2019 04:25:36 -0500
+Received: from smtpq3.tb.mail.iss.as9143.net ([212.54.42.166]:46728 "EHLO
+        smtpq3.tb.mail.iss.as9143.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726617AbfKJJZg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 10 Nov 2019 04:25:36 -0500
+X-Greylist: delayed 1428 seconds by postgrey-1.27 at vger.kernel.org; Sun, 10 Nov 2019 04:25:35 EST
+Received: from [212.54.42.110] (helo=smtp7.tb.mail.iss.as9143.net)
+        by smtpq3.tb.mail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <jongk@linux-m68k.org>)
+        id 1iTj6Q-0007eX-7D; Sun, 10 Nov 2019 10:01:46 +0100
+Received: from mail-wm1-f47.google.com ([209.85.128.47])
+        by smtp7.tb.mail.iss.as9143.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.90_1)
+        (envelope-from <jongk@linux-m68k.org>)
+        id 1iTj6Q-0001M6-3L; Sun, 10 Nov 2019 10:01:46 +0100
+Received: by mail-wm1-f47.google.com with SMTP id c17so10280096wmk.2;
+        Sun, 10 Nov 2019 01:01:45 -0800 (PST)
+X-Gm-Message-State: APjAAAVTeSzHmryaI+wLoepgkrvQggIuUMLM2Zfh4+5eZqFDoimnZ7nD
+        h5wuqq07u+sJbhnczDvR13KChMiwAGw+yP+vzSQ=
+X-Google-Smtp-Source: APXvYqwuC6GaN6ATcqRAZjZ70igl0t9NjQ0rLMv5v8s70pHp/vIDO18KiEYxFjaudcG3+bQNsnQ6XF4FCIXpcpWZf+k=
+X-Received: by 2002:a7b:c84b:: with SMTP id c11mr14347252wml.158.1573376505832;
+ Sun, 10 Nov 2019 01:01:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="77E3.4E8_1BD0BDC_"
-X-Priority: 3
-X-MSMail-Priority: Normal
+References: <CACz-3rh9ZCyU1825yU8xxty5BGrwFhpbjKNoWnn0mGiv_h2Kag@mail.gmail.com>
+ <20191109191400.8999-1-jongk@linux-m68k.org> <1573330351.3650.4.camel@linux.ibm.com>
+ <6b914b12-cbc7-6fe6-7cba-3e89b2f6f19b@gmail.com>
+In-Reply-To: <6b914b12-cbc7-6fe6-7cba-3e89b2f6f19b@gmail.com>
+From:   Kars de Jong <jongk@linux-m68k.org>
+Date:   Sun, 10 Nov 2019 10:01:58 +0100
+X-Gmail-Original-Message-ID: <CACz-3rjUh8tcShX5OPi+37JvF8PqG-8AEf5uMQHjMynSaVa1gw@mail.gmail.com>
+Message-ID: <CACz-3rjUh8tcShX5OPi+37JvF8PqG-8AEf5uMQHjMynSaVa1gw@mail.gmail.com>
+Subject: Re: [PATCH] zorro_esp: increase maximum dma length to 65536 bytes
+To:     Michael Schmitz <schmitzmic@gmail.com>
+Cc:     James Bottomley <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-m68k@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-SourceIP: 209.85.128.47
+X-Authenticated-Sender: karsdejong@home.nl (via SMTP)
+X-Ziggo-spambar: /
+X-Ziggo-spamscore: 0.0
+X-Ziggo-spamreport: CMAE Analysis: v=2.3 cv=cPSeTWWN c=1 sm=1 tr=0 a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=IkcTkHD0fZMA:10 a=MeAgGD-zjQ4A:10 a=pGLkceISAAAA:8 a=JbkMkhRZQ_9swjeIGgcA:9 a=W5WeqUbvGoA5kzlh:21 a=4r4QAPJ9YRGA_bOO:21 a=QEXdDO2ut3YA:10
+X-Ziggo-Spam-Status: No
+X-Spam-Status: No
+X-Spam-Flag: No
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi Michael,
 
---77E3.4E8_1BD0BDC_
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Op zo 10 nov. 2019 om 03:36 schreef Michael Schmitz <schmitzmic@gmail.com>:
+> All of the old board-specific drivers used a max transfer length of
+> 0x1000000, only the fastlane driver used 0xfffc.
 
-I consider it very important to introduce to you my client who is interest=
-ed to invest $250 million to $500 million dollars in a reputable project  =
-investment, She is well known in her country holding a political office .
+Yes, I also found this when checking the old drivers.
 
-She deserve a secret investment outside her country without direct involve=
-ment.  she needs an experience individual or company that can profitably i=
-nvestment and manage the above funds for the period of 15 years or more.
+> That lower limit might
+> be due to a DMA limitation on the fastlane board. We could accommodate
+> the different limit for this board by using a board-specific
+> dma_length_limit() callback...
 
-Forward your details to me for further discussion (e.g)  Your name, Teleph=
-one number and Occupation.
+Yes, I think that's the best idea for now. Oktagon also used to have a
+different limit but that was never ported to the new ESP core.
 
-Thank you
-Oliver Simon
+> > case for any of the cards the zorro_esp drives, it might be better to
+> > lower the max length to 61440 (64k-4k) so the residual is a page.
+>
+> For the benefit of keeping the code simple, and avoid retesting the
+> fastlane board, that might indeed be the better solution.
 
---77E3.4E8_1BD0BDC_--
+But it's slower... :-P
 
+Also, I may be adding another board-specific version for the Blizzard
+12x0 IV to enable 24-bit transfers, like the am53c974 driver does, in
+a later patch.
+
+Kind regards,
+
+Kars.
