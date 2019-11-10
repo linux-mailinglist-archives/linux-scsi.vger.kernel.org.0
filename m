@@ -2,42 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CF40F6482
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 04:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A11EDF6478
+	for <lists+linux-scsi@lfdr.de>; Sun, 10 Nov 2019 04:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729256AbfKJC4q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 9 Nov 2019 21:56:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47172 "EHLO mail.kernel.org"
+        id S1728590AbfKJDAA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 9 Nov 2019 22:00:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47264 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728943AbfKJC4p (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:56:45 -0500
+        id S1729270AbfKJC4r (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:56:47 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 064962247A;
-        Sun, 10 Nov 2019 02:47:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 54C32224D7;
+        Sun, 10 Nov 2019 02:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573354067;
-        bh=l2juZTLHselRSV+UkyHgPIziKlXPN/x9vhH96gkWGgo=;
+        s=default; t=1573354100;
+        bh=ElvsYt0MM69cxFu8JeKl5tePwzNqdMnAb3PJ5Cr7Nt8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zmkq+J9uk8XBtf+yasAvBbbDeiDxRfgAGomp+KEEOMuXclEB5GyccTQ4M10GVEdft
-         I/slpvWtN/Xx9XS/xqlHrFkSLFYPocI7NSe0BdZhmm8oQtjdr8xjIT6thR8FHOPm9m
-         XjFz65H39Fjy0VQRXnIrqvA1ZJQPRJfW1vWxm61c=
+        b=Ve/OVUuNaM+TTVqXHKndq2ufCuj2/Oc1mlzPlbyf9CYqsDmrL+tDUWcfqDBWlw3s2
+         v00mjUOSGadpGuZjrQ20bKo2Mu5no2hrT8AZkzuf2YOL+HfBjRrxjbqGHkksdTAKli
+         dxND5e0U8XeQFxcV6RlkWTxJ7JyUrHnHk42aOztA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jason Yan <yanaijie@huawei.com>,
-        chenxiang <chenxiang66@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
+Cc:     Hannes Reinecke <hare@suse.com>,
         Johannes Thumshirn <jthumshirn@suse.de>,
-        Ewan Milne <emilne@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        Tomas Henzl <thenzl@redhat.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Hannes Reinecke <hare@suse.com>,
+        Ondrey Zary <linux@rainbow-software.org>,
+        Finn Thain <fthain@telegraphics.com.au>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 071/109] scsi: libsas: always unregister the old device if going to discover new
-Date:   Sat,  9 Nov 2019 21:45:03 -0500
-Message-Id: <20191110024541.31567-71-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 091/109] scsi: NCR5380: Clear all unissued commands on host reset
+Date:   Sat,  9 Nov 2019 21:45:23 -0500
+Message-Id: <20191110024541.31567-91-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191110024541.31567-1-sashal@kernel.org>
 References: <20191110024541.31567-1-sashal@kernel.org>
@@ -50,58 +46,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jason Yan <yanaijie@huawei.com>
+From: Hannes Reinecke <hare@suse.com>
 
-[ Upstream commit 32c850bf587f993b2620b91e5af8a64a7813f504 ]
+[ Upstream commit 1aeeeed7f03c576f096eede7b0384f99a98f588c ]
 
-If we went into sas_rediscover_dev() the attached_sas_addr was already insured
-not to be zero. So it's unnecessary to check if the attached_sas_addr is zero.
+When doing a host reset we should be clearing all outstanding commands, not
+just the command triggering the reset.
 
-And although if the sas address is not changed, we always have to unregister
-the old device when we are going to register a new one. We cannot just leave
-the device there and bring up the new.
+[mkp: adjusted Hannes' SoB address]
 
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
-CC: chenxiang <chenxiang66@hisilicon.com>
-CC: John Garry <john.garry@huawei.com>
-CC: Johannes Thumshirn <jthumshirn@suse.de>
-CC: Ewan Milne <emilne@redhat.com>
-CC: Christoph Hellwig <hch@lst.de>
-CC: Tomas Henzl <thenzl@redhat.com>
-CC: Dan Williams <dan.j.williams@intel.com>
-CC: Hannes Reinecke <hare@suse.com>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
 Reviewed-by: Johannes Thumshirn <jthumshirn@suse.de>
-Reviewed-by: Hannes Reinecke <hare@suse.com>
+Cc: Ondrey Zary <linux@rainbow-software.org>
+Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/libsas/sas_expander.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/scsi/NCR5380.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index 259ee0d3c3e61..7f2d00354a850 100644
---- a/drivers/scsi/libsas/sas_expander.c
-+++ b/drivers/scsi/libsas/sas_expander.c
-@@ -2060,14 +2060,11 @@ static int sas_rediscover_dev(struct domain_device *dev, int phy_id, bool last)
- 		return res;
+diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+index 8caa51797511e..9131d30b2da75 100644
+--- a/drivers/scsi/NCR5380.c
++++ b/drivers/scsi/NCR5380.c
+@@ -2309,7 +2309,7 @@ static int NCR5380_host_reset(struct scsi_cmnd *cmd)
+ 	spin_lock_irqsave(&hostdata->lock, flags);
+ 
+ #if (NDEBUG & NDEBUG_ANY)
+-	scmd_printk(KERN_INFO, cmd, __func__);
++	shost_printk(KERN_INFO, instance, __func__);
+ #endif
+ 	NCR5380_dprint(NDEBUG_ANY, instance);
+ 	NCR5380_dprint_phase(NDEBUG_ANY, instance);
+@@ -2327,10 +2327,13 @@ static int NCR5380_host_reset(struct scsi_cmnd *cmd)
+ 	 * commands!
+ 	 */
+ 
+-	if (list_del_cmd(&hostdata->unissued, cmd)) {
++	list_for_each_entry(ncmd, &hostdata->unissued, list) {
++		struct scsi_cmnd *cmd = NCR5380_to_scmd(ncmd);
++
+ 		cmd->result = DID_RESET << 16;
+ 		cmd->scsi_done(cmd);
  	}
++	INIT_LIST_HEAD(&hostdata->unissued);
  
--	/* delete the old link */
--	if (SAS_ADDR(phy->attached_sas_addr) &&
--	    SAS_ADDR(sas_addr) != SAS_ADDR(phy->attached_sas_addr)) {
--		SAS_DPRINTK("ex %016llx phy 0x%x replace %016llx\n",
--			    SAS_ADDR(dev->sas_addr), phy_id,
--			    SAS_ADDR(phy->attached_sas_addr));
--		sas_unregister_devs_sas_addr(dev, phy_id, last);
--	}
-+	/* we always have to delete the old device when we went here */
-+	SAS_DPRINTK("ex %016llx phy 0x%x replace %016llx\n",
-+		    SAS_ADDR(dev->sas_addr), phy_id,
-+		    SAS_ADDR(phy->attached_sas_addr));
-+	sas_unregister_devs_sas_addr(dev, phy_id, last);
- 
- 	return sas_discover_new(dev, phy_id);
- }
+ 	if (hostdata->selecting) {
+ 		hostdata->selecting->result = DID_RESET << 16;
 -- 
 2.20.1
 
