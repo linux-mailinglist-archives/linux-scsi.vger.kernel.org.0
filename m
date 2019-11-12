@@ -2,76 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A057F8BE7
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2019 10:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B662F8BF3
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 Nov 2019 10:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727352AbfKLJem (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Nov 2019 04:34:42 -0500
-Received: from smtpq3.tb.mail.iss.as9143.net ([212.54.42.166]:48802 "EHLO
-        smtpq3.tb.mail.iss.as9143.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725899AbfKLJem (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 12 Nov 2019 04:34:42 -0500
-Received: from [212.54.42.137] (helo=smtp6.tb.mail.iss.as9143.net)
-        by smtpq3.tb.mail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <jongk@linux-m68k.org>)
-        id 1iUSZL-0004OE-LD; Tue, 12 Nov 2019 10:34:39 +0100
-Received: from mail-wm1-f44.google.com ([209.85.128.44])
-        by smtp6.tb.mail.iss.as9143.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <jongk@linux-m68k.org>)
-        id 1iUSZL-00073o-GZ; Tue, 12 Nov 2019 10:34:39 +0100
-Received: by mail-wm1-f44.google.com with SMTP id t26so2140487wmi.4;
-        Tue, 12 Nov 2019 01:34:39 -0800 (PST)
-X-Gm-Message-State: APjAAAWPl1M6P3Ho1wxbFoRTuSoOncpry6Mv+sGamUe8Hj+IcfoDEFJv
-        VGbeRvkz9debmcKKtVaFdwUDmSAVd1M3Zfouono=
-X-Google-Smtp-Source: APXvYqzdttmBjRlX1gAWVSosaygJJWgRFNozXjRXYPOGlvyv5xsLCvnbLoHljnkAnbGSASAQxrEcuoDngPBviisl+ZA=
-X-Received: by 2002:a1c:720b:: with SMTP id n11mr2774106wmc.60.1573551279260;
- Tue, 12 Nov 2019 01:34:39 -0800 (PST)
+        id S1727001AbfKLJgQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Nov 2019 04:36:16 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2084 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725834AbfKLJgQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 12 Nov 2019 04:36:16 -0500
+Received: from LHREML710-CAH.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id DF8CDE109FAE75250132;
+        Tue, 12 Nov 2019 09:36:14 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ LHREML710-CAH.china.huawei.com (10.201.108.33) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 12 Nov 2019 09:36:14 +0000
+Received: from [127.0.0.1] (10.202.226.46) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 12 Nov
+ 2019 09:36:14 +0000
+Subject: Re: [PATCH 2/4] scsi: hisi_sas: Return directly if init hardware
+ failed
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
+        <linux-kernel@vger.kernel.org>,
+        Xiang Chen <chenxiang66@hisilicon.com>
+References: <1573551059-107873-1-git-send-email-john.garry@huawei.com>
+ <1573551059-107873-3-git-send-email-john.garry@huawei.com>
+Message-ID: <fc7c92a8-fd18-ae61-2ec5-0ad79f4e4fac@huawei.com>
+Date:   Tue, 12 Nov 2019 09:36:13 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-References: <CACz-3rh9ZCyU1825yU8xxty5BGrwFhpbjKNoWnn0mGiv_h2Kag@mail.gmail.com>
- <20191109191400.8999-1-jongk@linux-m68k.org> <1573330351.3650.4.camel@linux.ibm.com>
- <6b914b12-cbc7-6fe6-7cba-3e89b2f6f19b@gmail.com>
-In-Reply-To: <6b914b12-cbc7-6fe6-7cba-3e89b2f6f19b@gmail.com>
-From:   Kars de Jong <jongk@linux-m68k.org>
-Date:   Tue, 12 Nov 2019 10:34:28 +0100
-X-Gmail-Original-Message-ID: <CACz-3rgkdiFxTPd9gJ6Sebmuv7gG23wgZ6v9Fx4p_xg-_emr_g@mail.gmail.com>
-Message-ID: <CACz-3rgkdiFxTPd9gJ6Sebmuv7gG23wgZ6v9Fx4p_xg-_emr_g@mail.gmail.com>
-Subject: Re: [PATCH] zorro_esp: increase maximum dma length to 65536 bytes
-To:     Michael Schmitz <schmitzmic@gmail.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-m68k@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-SourceIP: 209.85.128.44
-X-Authenticated-Sender: karsdejong@home.nl (via SMTP)
-X-Ziggo-spambar: /
-X-Ziggo-spamscore: 0.0
-X-Ziggo-spamreport: CMAE Analysis: v=2.3 cv=WMwBoUkR c=1 sm=1 tr=0 a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=IkcTkHD0fZMA:10 a=MeAgGD-zjQ4A:10 a=pGLkceISAAAA:8 a=1UFXjjYtAAAA:8 a=G3ydgQW_W0eQeUwnF44A:9 a=QEXdDO2ut3YA:10 a=vgRaD6Luq-vJqV3RfsKp:22
-X-Ziggo-Spam-Status: No
-X-Spam-Status: No
-X-Spam-Flag: No
+In-Reply-To: <1573551059-107873-3-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.46]
+X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Michael,
+On 12/11/2019 09:30, John Garry wrote:
+> From: Xiang Chen <chenxiang66@hisilicon.com>
+> 
+> Need to return directly if init hardware failed.
+> 
+> Fixes: 73a4925d154c ("scsi: hisi_sas: Update all the registers after suspend and resume")
+> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
 
-Op zo 10 nov. 2019 om 03:36 schreef Michael Schmitz <schmitzmic@gmail.com>:
-> I need to confirm this from a data book of the older (pre-fast)
-> revisions of this chip family. but since as Kars also states, the core
-> driver default for the 16 bit transfer size is 64k as well, I very much
-> suspect the same behaviour for the older revisions.
+I missed my tag here:
+Signed-off-by: John Garry <john.garry@huawei.com>
 
-According to ftp://bitsavers.informatik.uni-stuttgart.de/components/ncr/scsi/NCR53C90ab.pdf,
-on the NCR 53C90A programming the transfer counter to 0 also means
-64k. That's the oldest data book I could find.
-But the Zorro driver assumes a fast variant of the chip anyway (the
-clock frequency is hard coded to 40 MHz), so this point is a little
-moot.
+> ---
+>   drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> index 2ae7070db41a..b7836406debe 100644
+> --- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> +++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+> @@ -3432,6 +3432,7 @@ static int hisi_sas_v3_resume(struct pci_dev *pdev)
+>   	if (rc) {
+>   		scsi_remove_host(shost);
+>   		pci_disable_device(pdev);
+> +		return rc;
+>   	}
+>   	hisi_hba->hw->phys_init(hisi_hba);
+>   	sas_resume_ha(sha);
+> 
 
-Kind regards,
-
-Kars.
