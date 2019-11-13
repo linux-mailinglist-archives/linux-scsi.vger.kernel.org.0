@@ -2,81 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD61FA70C
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 04:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C284FA7CF
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 05:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727438AbfKMDJJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Nov 2019 22:09:09 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:45796 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727153AbfKMDJJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Nov 2019 22:09:09 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAD34FXO093145;
-        Wed, 13 Nov 2019 03:07:13 GMT
+        id S1727170AbfKMEH1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Nov 2019 23:07:27 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:41116 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727032AbfKMEH0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Nov 2019 23:07:26 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAD39E4j105913;
+        Wed, 13 Nov 2019 03:12:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2019-08-05;
- bh=kQPUHp28mZSCANckys01a+OkgTW2WIhmzat0lXN2ydI=;
- b=QTdX0++vkHxdowb+G3vMnYMi1zQYfmwHAG6U5Hc42SUm8IoxeehnsMCn1LDQZ3yGJ1IF
- zsoafoK0xaeka5tlc8fQHRUkBp2TzYJ49pd7nhsMe3EM5othCRl8bvMQoSCyFrBaoR+8
- tImNuungObSWb1QqRhzhmblXH7n/chy0f4XD+yO5kpLRjx/XT6lVg2uHL5YwHfI80NnX
- 6jPc3rBGdYNGIOuqEzlz2gnk8Q8lv1KQxdzsqhvCVQ5Tn9JF616vQb8Q+CltWkTtrMl1
- Cd8kHEE5/tO/oCFxaS6FN6pfR/fVsprMVBYGjEtTdIbjl85i5Pbo8+f2TZgQFlbuypJo gw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2w5ndq95sa-1
+ bh=0uycHj1hnQzwFGbzXvkxe6k9HMxfe6ttpDQFwoIQ6ig=;
+ b=oyrnK84K2lFalULpBohYNELqp5uWFq4H4bNYTd5O+HL+HohkNKKn4yBkDhRIexvWhkBP
+ h6pM/s7KHtwVZNSb7WJJgWpip1ghFTmIuUd3u7Jg3GVcz1S0HPbOMJNLGmzUzcAsEUOo
+ 7g1tqS0T9Qi8pfq07LO1MfU6HLaMsJxugqI3ynla/s0535IVhPiadUt+miRPYdLy+otF
+ o+z8VKq8/v6b7er0P9YcYd3Q/YfVO4ex1Hrt4d9KJRW3b/8PremoFZ2Trk/xYooHqPy4
+ 38a034x/8XZRbQcuMryqoQxIYmQELbakQIPTs12hFAR9DRL8wh5IJ+2LXWr7brPGxp6y Sw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2w5mvts7kj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Nov 2019 03:07:12 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAD34DWq170512;
-        Wed, 13 Nov 2019 03:07:12 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2w7vbc1hmr-1
+        Wed, 13 Nov 2019 03:12:35 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAD399jU167983;
+        Wed, 13 Nov 2019 03:12:34 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2w7vpnfw09-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Nov 2019 03:07:11 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xAD37AFL029187;
-        Wed, 13 Nov 2019 03:07:10 GMT
+        Wed, 13 Nov 2019 03:12:34 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xAD3CUEJ031961;
+        Wed, 13 Nov 2019 03:12:30 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 12 Nov 2019 19:07:09 -0800
-To:     Johan Hovold <johan@kernel.org>
+        with ESMTP ; Tue, 12 Nov 2019 19:12:29 -0800
+To:     Finn Thain <fthain@telegraphics.com.au>
 Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] scsi: nsp_cs: MODULE_LICENSE clean up and compile test
+        "Michael Schmitz" <schmitzmic@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, "Jonathan Corbet" <corbet@lwn.net>,
+        "Bartlomiej Zolnierkiewicz" <b.zolnierkie@samsung.com>,
+        "Jens Axboe" <axboe@kernel.dk>,
+        "Viresh Kumar" <vireshk@kernel.org>,
+        "Oliver Neukum" <oneukum@suse.com>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        usb-storage@lists.one-eyed-alien.net, linux-doc@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/2] SG_NONE fix and cleanup
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <20191105085609.2338-1-johan@kernel.org>
-Date:   Tue, 12 Nov 2019 22:07:07 -0500
-In-Reply-To: <20191105085609.2338-1-johan@kernel.org> (Johan Hovold's message
-        of "Tue, 5 Nov 2019 09:56:07 +0100")
-Message-ID: <yq1pnhwpj8k.fsf@oracle.com>
+References: <cover.1572656814.git.fthain@telegraphics.com.au>
+Date:   Tue, 12 Nov 2019 22:12:25 -0500
+In-Reply-To: <cover.1572656814.git.fthain@telegraphics.com.au> (Finn Thain's
+        message of "Sat, 02 Nov 2019 12:06:54 +1100")
+Message-ID: <yq1lfskpizq.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9439 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=946
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1910280000 definitions=main-1911130025
+ engine=8.0.1-1910280000 definitions=main-1911130026
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9439 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
  suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
  lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
- definitions=main-1911130025
+ definitions=main-1911130026
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Johan,
+Finn,
 
-> We had two drivers in the tree needlessly checking whether
-> MODULE_LICENSE was defined, this fixes the second one.
+> These two patches address some issues stemming from scsi-mq conversion.
 
 Applied to 5.5/scsi-queue, thanks!
 
