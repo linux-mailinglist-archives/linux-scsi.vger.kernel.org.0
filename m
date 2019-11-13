@@ -2,122 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0DEFB4DF
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 17:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F153FB507
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 17:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728274AbfKMQVY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Nov 2019 11:21:24 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2095 "EHLO huawei.com"
+        id S1728338AbfKMQ1B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Nov 2019 11:27:01 -0500
+Received: from mail-eopbgr770041.outbound.protection.outlook.com ([40.107.77.41]:9955
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726098AbfKMQVX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 13 Nov 2019 11:21:23 -0500
-Received: from LHREML711-CAH.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 3C5CE5A3F24822F087FD;
-        Wed, 13 Nov 2019 16:21:22 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- LHREML711-CAH.china.huawei.com (10.201.108.34) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Wed, 13 Nov 2019 16:21:21 +0000
-Received: from [127.0.0.1] (10.202.226.46) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Wed, 13 Nov
- 2019 16:21:21 +0000
-Subject: Re: [PATCH RFC 3/5] blk-mq: Facilitate a shared tags per tagset
-To:     Hannes Reinecke <hare@suse.de>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S1727221AbfKMQ1B (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 13 Nov 2019 11:27:01 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IQHcBRdbcqEQtn81u5su9YA0uqPfOByv/lSNEuhnzgQ1QkyjDsH/+j+bjh+NlEOeyXCzsGRZ0ni4Iy0gSXWjKYv+c50gt7Qwe0FZPy7OHgMjdgwKfpf8lQcLAReAjIF2ugVsntJa2lt76oaQgcltAShpho2kjBjFiMoNJ58jOE70ijFfPSbnmV1rQG5ir04xyJmjA29Im8YxuqGWIuHaoeAjZ9nr7HLq5lgkZm+sfOr1ZWCNaKvBkrgby4Jqf8zsmdLChnKr4MMquB3XcEJDLCsw7eucbMK/LAA2nmM1DCn900RIuTwCOROtAo9/T8A43AUOpSc/Dw7sjQBtsyYNdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5UJc7jMgR5YiYX1Z9f//voCfIJP50JZs1fKrdDss4nQ=;
+ b=dkyLZwx+LFcDUr3ASBa482dui/wpTHGDeI/aCil2YPmBoV9fdGZY9AaZDzOtsf+h0qPgWHUPm862qPVNRIe6grIOyXJUDBn1EH2fqhS/lI/pIY95ocpEsnU6/AVSWRJ74Emai4uEQmohSJI+3b0P9J0g3l0IK+9oJgVPxy7OzfF39/zPJT6V7wVnMOHk6M/yLDsRcqJ9lHCmbiepH3ZEANZF3NlGQdKfCwlW5zhwS3eFcWMJeAwbp+gHpMotCemi2P9PJLIvXyE2Y+05yAj5qRWz6Vy+CAzcTkn8pC2LtNaUTYjOMk6/q5YGxy5fX5lzRq5n69Bppkbqf4tP8s01fA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=micron.com; dmarc=pass action=none header.from=micron.com;
+ dkim=pass header.d=micron.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5UJc7jMgR5YiYX1Z9f//voCfIJP50JZs1fKrdDss4nQ=;
+ b=NgUoM1hWZqXanM/zyxRQPec+MyQjVnqLWtwzSouiL2uqkGkpckd4T+gUEOi0tivGE5QlBRfnrJIW60p46jCkq4F8fe2iKO5HBVRezk0xASmcYD3A4MYWffHg/fzUH/LTYaWSvv2ktMx596Ya2STL+5gHXXVmnSgCQyJc3NbdJyI=
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.179.87) by
+ BN7PR08MB5683.namprd08.prod.outlook.com (20.176.30.81) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2430.20; Wed, 13 Nov 2019 16:26:59 +0000
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::a91a:c2f5:c557:4285]) by BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::a91a:c2f5:c557:4285%6]) with mapi id 15.20.2430.028; Wed, 13 Nov 2019
+ 16:26:59 +0000
+From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
+To:     Can Guo <cang@codeaurora.org>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "nguyenb@codeaurora.org" <nguyenb@codeaurora.org>,
+        "rnayak@codeaurora.org" <rnayak@codeaurora.org>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "ming.lei@redhat.com" <ming.lei@redhat.com>,
-        "hare@suse.com" <hare@suse.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>
-References: <1573652209-163505-1-git-send-email-john.garry@huawei.com>
- <1573652209-163505-4-git-send-email-john.garry@huawei.com>
- <32880159-86e8-5c48-1532-181fdea0df96@suse.de>
- <2cbf591c-8284-8499-7804-e7078cf274d2@huawei.com>
- <02056612-a958-7b05-3c54-bb2fa69bc493@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <ace95bc5-7b89-9ed3-be89-8139f977984b@huawei.com>
-Date:   Wed, 13 Nov 2019 16:21:20 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
-MIME-Version: 1.0
-In-Reply-To: <02056612-a958-7b05-3c54-bb2fa69bc493@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "saravanak@google.com" <saravanak@google.com>,
+        "salyzyn@google.com" <salyzyn@google.com>
+CC:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [EXT] [PATCH v4 3/5] scsi: ufs: Release clock if DMA map fails
+Thread-Topic: [EXT] [PATCH v4 3/5] scsi: ufs: Release clock if DMA map fails
+Thread-Index: AQHVmeeyXKBE/XJKZkuVruGGiYn+vaeJSkLw
+Date:   Wed, 13 Nov 2019 16:26:58 +0000
+Message-ID: <BN7PR08MB5684B3516E362FD79B80AA44DB760@BN7PR08MB5684.namprd08.prod.outlook.com>
+References: <1573624824-671-1-git-send-email-cang@codeaurora.org>
+ <1573624824-671-4-git-send-email-cang@codeaurora.org>
+In-Reply-To: <1573624824-671-4-git-send-email-cang@codeaurora.org>
+Accept-Language: en-150, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.226.46]
-X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcYmVhbmh1b1xhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJhMjllMzViXG1zZ3NcbXNnLTY4NDFiMWExLTA2MzItMTFlYS04Yjg1LWRjNzE5NjFmOWRkM1xhbWUtdGVzdFw2ODQxYjFhMy0wNjMyLTExZWEtOGI4NS1kYzcxOTYxZjlkZDNib2R5LnR4dCIgc3o9IjMzMiIgdD0iMTMyMTgxMzYwMTY1Njc4ODgwIiBoPSJNOUpJWGZxdmRyZ01mMmp6N2lvN1Z5cjVUcEk9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-rorf: true
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=beanhuo@micron.com; 
+x-originating-ip: [195.89.176.137]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 42dfa3a1-377b-4731-298d-08d768564e99
+x-ms-traffictypediagnostic: BN7PR08MB5683:|BN7PR08MB5683:|BN7PR08MB5683:
+x-microsoft-antispam-prvs: <BN7PR08MB56832B5BDF29EBE87C22A855DB760@BN7PR08MB5683.namprd08.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:1332;
+x-forefront-prvs: 0220D4B98D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(366004)(136003)(39860400002)(376002)(396003)(199004)(189003)(476003)(11346002)(110136005)(478600001)(66066001)(8676002)(54906003)(6116002)(25786009)(3846002)(55016002)(6436002)(486006)(446003)(9686003)(71200400001)(71190400001)(7696005)(5660300002)(305945005)(74316002)(76116006)(7736002)(2201001)(81156014)(26005)(6246003)(52536014)(2501003)(8936002)(186003)(7416002)(86362001)(14454004)(229853002)(256004)(66476007)(66446008)(64756008)(66556008)(316002)(2906002)(81166006)(102836004)(99286004)(66946007)(4326008)(558084003)(33656002)(6506007)(76176011);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB5683;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: micron.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 077VHQdVAUsw1XZk0/UpfVpnqVEfz5XCLLuoz8IYWFhPTgZDzVmQYNLeTV1GS5YN3HYBWpyGlV2Yl97MVyrO+q8EAQ2rKAoZ29hoSNcbUC2prONtowbHgcb6H84Y/UsLRxjrynAKZK8xJFRzKvtgUouOAqDfdkG3HnhzPMKEycLPo30yrL+e/0qU+47lzirov/fHrMjITJFDzn0/rQtxz/wNV9yadAcNKZYukG1RihaDBvbfBWL42XvWGvvtxNDxsxslk7mVtaPk7RqP2byor/o6CUZeJon4QwzsO8MJhl79xx4UJLG3KD/MXTuwONSGnpSYqic70QqCZAbpdwr4T8thBoloJWVtNdZbRAl3f/y8rew61KSriVUADnhfsAG160Re/tCFYFWHC6hYnk7mlywaExQa39mgsksHjY++r5u3YjbSEkImurVkFBy3V/pz
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 42dfa3a1-377b-4731-298d-08d768564e99
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2019 16:26:58.8681
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6elZNJ5bce8E65jDomF+/79O46sxWGVsU0LrgPK2CewXpmtl19vInJmFf1G40tb5oIbMVo0BwElOt1VXVpqdVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB5683
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 13/11/2019 15:38, Hannes Reinecke wrote:
->>>> -        if (clear_ctx_on_error)
->>>> -            data->ctx = NULL;
->>>> -        blk_queue_exit(q);
->>>> -        return NULL;
->>>> +    if (data->hctx->shared_tags) {
->>>> +        shared_tag = blk_mq_get_shared_tag(data);
->>>> +        if (shared_tag == BLK_MQ_TAG_FAIL)
->>>> +            goto err_shared_tag;
->>>>        }
->>>>    -    rq = blk_mq_rq_ctx_init(data, tag, data->cmd_flags,
->>>> alloc_time_ns);
->>>> +    tag = blk_mq_get_tag(data);
->>>> +    if (tag == BLK_MQ_TAG_FAIL)
->>>> +        goto err_tag;
->>>> +
->>>> +    rq = blk_mq_rq_ctx_init(data, tag, shared_tag, data->cmd_flags,
->>>> alloc_time_ns);
->>>>        if (!op_is_flush(data->cmd_flags)) {
->>>>            rq->elv.icq = NULL;
->>>>            if (e && e->type->ops.prepare_request) {
->> Hi Hannes,
->>
->>> Why do you need to keep a parallel tag accounting between 'normal' and
->>> 'shared' tags here?
->>> Isn't is sufficient to get a shared tag only, and us that in lieo of the
->>> 'real' one?
->> In theory, yes. Just the 'shared' tag should be adequate.
->>
->> A problem I see with this approach is that we lose the identity of which
->> tags are allocated for each hctx. As an example for this, consider
->> blk_mq_queue_tag_busy_iter(), which iterates the bits for each hctx.
->> Now, if you're just using shared tags only, that wouldn't work.
->>
->> Consider blk_mq_can_queue() as another example - this tells us if a hctx
->> has any bits unset, while with only using shared tags it would tell if
->> any bits unset over all queues, and this change in semantics could break
->> things. At a glance, function __blk_mq_tag_idle() looks problematic also.
->>
->> And this is where it becomes messy to implement.
->>
+>=20
+> In queuecommand path, if DMA map fails, it bails out with clock held.
+> In this case, release the clock to keep its usage paired.
+>=20
+> Signed-off-by: Can Guo <cang@codeaurora.org>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
 
-Hi Hannes,
-
-> Oh, my. Indeed, that's correct.
-
-The tags could be kept in sync like this:
-
-shared_tag = blk_mq_get_tag(shared_tagset);
-if (shared_tag != -1)
-	sbitmap_set(hctx->tags, shared_tag);
-
-But that's obviously not ideal.
-
-> 
-> But then we don't really care _which_ shared tag is assigned; so
-> wouldn't be we better off by just having an atomic counter here?
-> Cache locality will be blown anyway ...
-The atomic counter would solve the issuing more than Scsi_host.can_queue 
-to the LLDD, but we still need a unique tag, which is what the shared 
-tag is.
-
-Thanks,
-John
