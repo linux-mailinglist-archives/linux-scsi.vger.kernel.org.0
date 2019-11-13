@@ -2,94 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 251FAFA073
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 02:48:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6B9FA4A6
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 03:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbfKMBsg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Nov 2019 20:48:36 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:49028 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726958AbfKMBsg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Nov 2019 20:48:36 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAD1jUxi010736;
-        Wed, 13 Nov 2019 01:48:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=3YrFERbsr0dX0JOQWz/1uKzLQS6DAn/XlnRevr39op0=;
- b=ixDJXdjzvKV7mWJdrgXv+tqaBIgjLvGjT2AuuY/uWMeuPyNBYXWZ0NpHLD+7UElXHYE6
- 1j38dPKL0ge5dzPCaQHo+wYfjpIqtCy3RqnY1CYMce9Rkq62UVH/bPDxQC8xR+N9AT7K
- sGY9sbV9L51N8+beWW/PhAEVth3hS1hlcsJxHBVZ3eTgNgzY104nFFL1cFBT4A3yaiea
- 5rAFN2iwMryr5TPo4cQsf8AKq35A9ACRzGuRrDPsFUiMAi2WxoS1NrQmzykAinymF1TX
- 6sYX7BGSezWtnaTArDZOOpAWy39mGlij63npGDjXgxa+GnO4sdC1WlZBJs34Hcf2RYp3 7g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2w5p3qrqu5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Nov 2019 01:48:12 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAD1cJue070559;
-        Wed, 13 Nov 2019 01:46:12 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 2w7j046fan-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Nov 2019 01:46:12 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xAD1k9Vu012008;
-        Wed, 13 Nov 2019 01:46:09 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 12 Nov 2019 17:46:09 -0800
-To:     Damien Le Moal <damien.lemoal@wdc.com>
-Cc:     linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-scsi@vger.kernel.org,
+        id S1729213AbfKMBzm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Nov 2019 20:55:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47394 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729159AbfKMBzl (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 12 Nov 2019 20:55:41 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 070D622467;
+        Wed, 13 Nov 2019 01:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573610140;
+        bh=0KIFf+yZ8C/VuVjVmiu3e3orCWGVm8Ohdi7wNMRPvMw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nH/4MsQP9iPsxr401Z0CGTsHrKNXAaaGuKuWkwT2WMJu5nJz9pievVHqKzmunT1U4
+         tboidR6AQ0xEMnfPaE/yH7TPaRb38F5jc1nk8cO1Ebwt99d4JKq+4ZjHtelGekYObx
+         Sm5QdH+PormihcK0KzNjb7dXXmTFZsZA9bvq9RQ0=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Ching Huang <ching2048@areca.com.tw>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        dm-devel@redhat.com, Mike Snitzer <snitzer@redhat.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <yuchao0@huawei.com>
-Subject: Re: [PATCH v2 8/9] scsi: sd_zbc: Cleanup sd_zbc_alloc_report_buffer()
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20191111023930.638129-1-damien.lemoal@wdc.com>
-        <20191111023930.638129-9-damien.lemoal@wdc.com>
-Date:   Tue, 12 Nov 2019 20:46:06 -0500
-In-Reply-To: <20191111023930.638129-9-damien.lemoal@wdc.com> (Damien Le Moal's
-        message of "Mon, 11 Nov 2019 11:39:29 +0900")
-Message-ID: <yq1woc4r1k1.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.19 187/209] scsi: arcmsr: clean up clang warning on extraneous parentheses
+Date:   Tue, 12 Nov 2019 20:50:03 -0500
+Message-Id: <20191113015025.9685-187-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
+References: <20191113015025.9685-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9439 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=932
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1910280000 definitions=main-1911130009
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9439 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=998 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
- definitions=main-1911130010
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+From: Colin Ian King <colin.king@canonical.com>
 
-Damien,
+[ Upstream commit ca2ade24157693b4e533ccec69df00ef719d4aad ]
 
-> There is no need to arbitrarily limit the size of a report zone to the
-> number of zones defined by SD_ZBC_REPORT_MAX_ZONES. Rather, simply
-> calculate the report buffer size needed for the requested number of
-> zones without exceeding the device total number of zones. This buffer
-> size limitation to the hardware maximum transfer size and page mapping
-> capabilities is kept unchanged. Starting with this initial buffer size,
-> the allocation is optimized by iterating over decreasing buffer size
-> until the allocation succeeds (each iteration is allowed to fail fast
-> using the __GFP_NORETRY flag). This ensures forward progress for zone
-> reports and avoids failures of zones revalidation under memory pressure.
+There are extraneous parantheses that are causing clang to produce a
+warning so remove these.
 
-Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
+Clean up 3 clang warnings:
+equality comparison with extraneous parentheses [-Wparentheses-equality]
 
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Acked-by: Ching Huang <ching2048@areca.com.tw>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/arcmsr/arcmsr_hba.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
+index 12316ef4c8931..c75d4695f9828 100644
+--- a/drivers/scsi/arcmsr/arcmsr_hba.c
++++ b/drivers/scsi/arcmsr/arcmsr_hba.c
+@@ -4135,9 +4135,9 @@ static void arcmsr_hardware_reset(struct AdapterControlBlock *acb)
+ 		pci_read_config_byte(acb->pdev, i, &value[i]);
+ 	}
+ 	/* hardware reset signal */
+-	if ((acb->dev_id == 0x1680)) {
++	if (acb->dev_id == 0x1680) {
+ 		writel(ARCMSR_ARC1680_BUS_RESET, &pmuA->reserved1[0]);
+-	} else if ((acb->dev_id == 0x1880)) {
++	} else if (acb->dev_id == 0x1880) {
+ 		do {
+ 			count++;
+ 			writel(0xF, &pmuC->write_sequence);
+@@ -4161,7 +4161,7 @@ static void arcmsr_hardware_reset(struct AdapterControlBlock *acb)
+ 		} while (((readl(&pmuE->host_diagnostic_3xxx) &
+ 			ARCMSR_ARC1884_DiagWrite_ENABLE) == 0) && (count < 5));
+ 		writel(ARCMSR_ARC188X_RESET_ADAPTER, &pmuE->host_diagnostic_3xxx);
+-	} else if ((acb->dev_id == 0x1214)) {
++	} else if (acb->dev_id == 0x1214) {
+ 		writel(0x20, pmuD->reset_request);
+ 	} else {
+ 		pci_write_config_byte(acb->pdev, 0x84, 0x20);
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.20.1
+
