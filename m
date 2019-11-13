@@ -2,107 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1078FACFA
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 10:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED49FB188
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 14:40:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727421AbfKMJaW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Nov 2019 04:30:22 -0500
-Received: from smtpq3.tb.mail.iss.as9143.net ([212.54.42.166]:41640 "EHLO
-        smtpq3.tb.mail.iss.as9143.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725996AbfKMJaW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 13 Nov 2019 04:30:22 -0500
-Received: from [212.54.42.110] (helo=smtp7.tb.mail.iss.as9143.net)
-        by smtpq3.tb.mail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <jongk@linux-m68k.org>)
-        id 1iUoyg-0005Jo-82; Wed, 13 Nov 2019 10:30:18 +0100
-Received: from mail-wr1-f49.google.com ([209.85.221.49])
-        by smtp7.tb.mail.iss.as9143.net with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.90_1)
-        (envelope-from <jongk@linux-m68k.org>)
-        id 1iUoyg-0006DW-4A; Wed, 13 Nov 2019 10:30:18 +0100
-Received: by mail-wr1-f49.google.com with SMTP id n1so1458549wra.10;
-        Wed, 13 Nov 2019 01:30:18 -0800 (PST)
-X-Gm-Message-State: APjAAAUT7MW5nZw7kFmTlgJV+9a/Kt0qlm2OMmI45cLGtNFQcOwky7s4
-        RExJGQzFtrjv3AuC+/0j7mKTfNBPBX0aYatqVrA=
-X-Google-Smtp-Source: APXvYqxtA6Ix/hxUo+R0qYpuGFiNpdq2j2kYAiHjwtHRtyhSMuzyAHvDeA1uUEoiwTsfjwGOrqia1CDDJhD7YxxtqDA=
-X-Received: by 2002:adf:ea8d:: with SMTP id s13mr1836387wrm.366.1573637417871;
- Wed, 13 Nov 2019 01:30:17 -0800 (PST)
+        id S1727401AbfKMNk3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Nov 2019 08:40:29 -0500
+Received: from szxga07-in.huawei.com ([45.249.212.35]:40766 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727129AbfKMNk3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 13 Nov 2019 08:40:29 -0500
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 226C13C6C4E38D3107F6;
+        Wed, 13 Nov 2019 21:40:24 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS404-HUB.china.huawei.com (10.3.19.204) with Microsoft SMTP Server id
+ 14.3.439.0; Wed, 13 Nov 2019 21:40:14 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <ming.lei@redhat.com>,
+        <hare@suse.com>, <bvanassche@acm.org>, <chenxiang66@hisilicon.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH RFC 0/5] blk-mq/scsi: Provide hostwide shared tags for SCSI HBAs
+Date:   Wed, 13 Nov 2019 21:36:44 +0800
+Message-ID: <1573652209-163505-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-References: <20191029220503.7553-1-jongk@linux-m68k.org> <20191112185710.23988-1-jongk@linux-m68k.org>
- <20191112185710.23988-3-jongk@linux-m68k.org> <alpine.LNX.2.21.1.1911131007110.13@nippy.intranet>
-In-Reply-To: <alpine.LNX.2.21.1.1911131007110.13@nippy.intranet>
-From:   Kars de Jong <jongk@linux-m68k.org>
-Date:   Wed, 13 Nov 2019 10:30:06 +0100
-X-Gmail-Original-Message-ID: <CACz-3rhP9pfg4tVe5GikX-7MWC2sGtE0AsoPeuUBR-a07YxQFA@mail.gmail.com>
-Message-ID: <CACz-3rhP9pfg4tVe5GikX-7MWC2sGtE0AsoPeuUBR-a07YxQFA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] esp_scsi: Add support for FSC chip
-To:     Finn Thain <fthain@telegraphics.com.au>
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.com>, linux-scsi@vger.kernel.org,
-        linux-m68k@vger.kernel.org, schmitzmic@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-SourceIP: 209.85.221.49
-X-Authenticated-Sender: karsdejong@home.nl (via SMTP)
-X-Ziggo-spambar: /
-X-Ziggo-spamscore: 0.0
-X-Ziggo-spamreport: CMAE Analysis: v=2.3 cv=cPSeTWWN c=1 sm=1 tr=0 a=9+rZDBEiDlHhcck0kWbJtElFXBc=:19 a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=IkcTkHD0fZMA:10 a=MeAgGD-zjQ4A:10 a=8981fWPbAAAA:8 a=5gkSXQyuQpC8iqEFKKcA:9 a=QEXdDO2ut3YA:10 a=o72u2rHnfW5qNJ_4I8LD:22
-X-Ziggo-Spam-Status: No
-X-Spam-Status: No
-X-Spam-Flag: No
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Finn,
+This is a 2nd stab at solving the problem of hostwide shared tags for SCSI
+HBAs.
 
-Thanks for your review!
+As discussed previously, Ming Lei's most recent series in [0] to use
+hctx[0] tags for all hctx for a host was a bit messy and intrusive, so seen
+as a no go. Indeed, blk-mq is designed for separate tags per hctx.
 
-Op wo 13 nov. 2019 om 00:18 schreef Finn Thain <fthain@telegraphics.com.au>:
->
-> On Tue, 12 Nov 2019, Kars de Jong wrote:
-> > +#define ESP_UID_REV           0x07     /* ESP revision bitmask */
->
-> This is unused.
+This series introduces a different approach to solve that problem, in
+keeping the per-hctx tags but introducing a new separate shared set of
+tags, which SCSI HBAs can use for a hostwide tags.
 
-Yes, but it was already there, I just moved it. I prefer to leave it
-in, since it describes the register layout.
+Adding support for shared tags should not have a significant performance
+impact for when shared tags are not requested.
 
-> > +#define ESP_UID_FAM           0xf8     /* ESP family bitmask */
-> > +
-> > +#define ESP_FAMILY(uid) (((uid) & ESP_UID_FAM) >> 3)
-> > +
->
-> The ESP_UID_FAM symbol only appears here. I don't think it adds value.
+Currently I just fixed up the hisi_sas driver to use the shared tags,
+but should not be much trouble to change others over.
 
-OK, I can just change the macro to:
+Patch #3 is quite experimental at this point. I also threw in a minor
+tidy-up patch.
 
-#define ESP_FAMILY(uid) (((uid) & 0xf8) >> 3)
+[0] https://lore.kernel.org/linux-block/20190531022801.10003-1-ming.lei@redhat.com/
 
-> > +/* Values for the ESP family */
->
-> I would omit that comment.
+Hannes Reinecke (1):
+  scsi: Add template flag 'host_tagset'
 
-I will change it to "Values for the ESP family bits" as you suggested
-in the next mail.
+John Garry (3):
+  blk-mq: Remove some unused function arguments
+  blk-mq: Facilitate a shared tags per tagset
+  scsi: hisi_sas: Switch v3 hw to MQ
 
-> >  #define ESP_UID_F100A         0x00     /* ESP FAS100A  */
-> >  #define ESP_UID_F236          0x02     /* ESP FAS236   */
-> > -#define ESP_UID_REV           0x07     /* ESP revision */
-> > -#define ESP_UID_FAM           0xf8     /* ESP family   */
-> > +#define ESP_UID_HME           0x0a     /* FAS HME      */
-> > +#define ESP_UID_FSC           0x14     /* NCR/Symbios Logic FSC */
-> >
->
-> Is there a distinction between the chip's uid and the chip's family?
+Ming Lei (1):
+  blk-mq: rename BLK_MQ_F_TAG_SHARED as BLK_MQ_F_TAG_QUEUE_SHARED
 
-Yes, the complete UID also includes the revision. The old driver had
-cases where the family code was the same but the revision was
-different.
+ block/blk-core.c                       |  1 +
+ block/blk-flush.c                      |  2 +
+ block/blk-mq-debugfs.c                 |  4 +-
+ block/blk-mq-tag.c                     | 91 +++++++++++++++++++++++++-
+ block/blk-mq-tag.h                     |  8 +--
+ block/blk-mq.c                         | 91 +++++++++++++++++++-------
+ block/blk-mq.h                         | 11 +++-
+ drivers/scsi/hisi_sas/hisi_sas.h       |  3 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 43 ++++++------
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 85 ++++++++++--------------
+ drivers/scsi/scsi_lib.c                |  2 +
+ include/linux/blk-mq.h                 |  5 +-
+ include/linux/blkdev.h                 |  1 +
+ include/scsi/scsi_host.h               |  3 +
+ 14 files changed, 242 insertions(+), 108 deletions(-)
 
-Kind regards,
+-- 
+2.17.1
 
-Kars.
