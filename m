@@ -2,219 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C272FB3D1
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 16:38:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C610FB491
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 17:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbfKMPi1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 Nov 2019 10:38:27 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60096 "EHLO mx1.suse.de"
+        id S1727528AbfKMQDR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 Nov 2019 11:03:17 -0500
+Received: from mail-eopbgr790080.outbound.protection.outlook.com ([40.107.79.80]:35200
+        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726335AbfKMPi1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 13 Nov 2019 10:38:27 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BC271B49B;
-        Wed, 13 Nov 2019 15:38:23 +0000 (UTC)
-Subject: Re: [PATCH RFC 3/5] blk-mq: Facilitate a shared tags per tagset
-To:     John Garry <john.garry@huawei.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        id S1726074AbfKMQDR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 13 Nov 2019 11:03:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=N5Mlx09zs4huDh9ndwwtNOUa4mN34DXKt0dqB+rLwZMTZIfjzmVREWj5V/qt6PlOWJO7ZeG7va9rmb0a9w8LxJAfRhNbuYdKCDe0dkvWpLwpBz4fTFqVD3NAdpPSUdC1yMTxxW2mNVsyu2caWYcPTwBWIhNwnmK/0u1we2wdYSZ+8tqbWl9ca/pDLVIiPRv07t7Bvb5tXpnG7p55UhL0YxZB/ZhWCP8X8EnsNKlNIo2WkRsPj+jM9PAO6LZjSf8ghQqF8r/5zcGf+z/Iy0u+a5merRAoZQ1KBj4VBUswFICq4ZAMUXeUaeLwRNreP2nJrvvmHTMq8resW5xm0EFSUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m6csCuIyWvmebRlAySy4NLHUw3M+IlJ3vy+40zbRbm8=;
+ b=CLNEBVU2zHwBKiPpudRy7R9LBWZ/n1lH+9e2fL/2rqavCKd6fhw+uT33kXTxgYMCorf1qxfwGdVFmjmuY3WtR25swG77hYgwuiAnK2Qyy2x5hyym8DhXXmHd4gHez66PJ/uWobex5CWozkh+IekA4QDXv3vDd07Uq3e5kndtC2FDrzzmmNZxTn5lod3pHBXYvG05lKysT4vdDUpiGwft78YX5x4q1vzIurtWUxNCoeFMRkBpCYV14TA+huws3GSKJs25IwUdFnHFMExeW8VTnQYlZzsOoAa+7EZl0aGVCFavXnK1Ts6yRitz+sQ/zA7u2qrwanEckkUlXgHON80h/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=micron.com; dmarc=pass action=none header.from=micron.com;
+ dkim=pass header.d=micron.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m6csCuIyWvmebRlAySy4NLHUw3M+IlJ3vy+40zbRbm8=;
+ b=lsw2BZl1tBfUILvvzUibDPZtmPBzEfWC21xM+fSwK2dhqq6qJ9sNLEa4r+gZSygs0dhrqWKFTMpGsWySIQ4CqrnZNqNYQJotlJ4PhvSfUbANGjIPya5AOLYjXZQIccsw4G/7p6gAHdDU028yAcR5aqW3jRxiyu/oyyfQNGmRe6Y=
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com (20.176.179.87) by
+ BN7PR08MB4370.namprd08.prod.outlook.com (52.133.222.22) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.22; Wed, 13 Nov 2019 16:03:14 +0000
+Received: from BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::a91a:c2f5:c557:4285]) by BN7PR08MB5684.namprd08.prod.outlook.com
+ ([fe80::a91a:c2f5:c557:4285%6]) with mapi id 15.20.2430.028; Wed, 13 Nov 2019
+ 16:03:14 +0000
+From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "cang@codeaurora.org" <cang@codeaurora.org>
+CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "ming.lei@redhat.com" <ming.lei@redhat.com>,
-        "hare@suse.com" <hare@suse.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>
-References: <1573652209-163505-1-git-send-email-john.garry@huawei.com>
- <1573652209-163505-4-git-send-email-john.garry@huawei.com>
- <32880159-86e8-5c48-1532-181fdea0df96@suse.de>
- <2cbf591c-8284-8499-7804-e7078cf274d2@huawei.com>
-From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <02056612-a958-7b05-3c54-bb2fa69bc493@suse.de>
-Date:   Wed, 13 Nov 2019 16:38:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <2cbf591c-8284-8499-7804-e7078cf274d2@huawei.com>
-Content-Type: text/plain; charset=utf-8
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: RE: [EXT] Re: [PATCH v5 4/4] ufs: Simplify the clock scaling
+ mechanism implementation
+Thread-Topic: [EXT] Re: [PATCH v5 4/4] ufs: Simplify the clock scaling
+ mechanism implementation
+Thread-Index: AQHVmbbq0caA6FeHLU2T21+Cm3JzCqeIRsoAgADnnbA=
+Date:   Wed, 13 Nov 2019 16:03:14 +0000
+Message-ID: <BN7PR08MB56843E1941F42BEF8239B895DB760@BN7PR08MB5684.namprd08.prod.outlook.com>
+References: <20191112173743.141503-1-bvanassche@acm.org>
+ <20191112173743.141503-5-bvanassche@acm.org>
+ <a26c719466edfd2c41eea789a6c908ab@codeaurora.org>
+ <8acd9237-7414-5dce-5285-69ed3ce6f28c@acm.org>
+In-Reply-To: <8acd9237-7414-5dce-5285-69ed3ce6f28c@acm.org>
+Accept-Language: en-150, en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcYmVhbmh1b1xhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJhMjllMzViXG1zZ3NcbXNnLTE2YmNhZTRlLTA2MmYtMTFlYS04Yjg1LWRjNzE5NjFmOWRkM1xhbWUtdGVzdFwxNmJjYWU0Zi0wNjJmLTExZWEtOGI4NS1kYzcxOTYxZjlkZDNib2R5LnR4dCIgc3o9IjIwMzkiIHQ9IjEzMjE4MTM0NTkxMzY0NTQzMyIgaD0iMHNXVWhmN2d1eThESG1FaDZzcVhuL1hCYTdrPSIgaWQ9IiIgYmw9IjAiIGJvPSIxIi8+PC9tZXRhPg==
+x-dg-rorf: true
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=beanhuo@micron.com; 
+x-originating-ip: [195.89.176.137]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d4964514-1f6c-431f-413b-08d76852fd59
+x-ms-traffictypediagnostic: BN7PR08MB4370:|BN7PR08MB4370:|BN7PR08MB4370:
+x-microsoft-antispam-prvs: <BN7PR08MB43709689BA7CF8A7A66C2413DB760@BN7PR08MB4370.namprd08.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:3968;
+x-forefront-prvs: 0220D4B98D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(39860400002)(366004)(346002)(396003)(13464003)(199004)(189003)(110136005)(5660300002)(2501003)(71200400001)(5024004)(486006)(2906002)(14444005)(6506007)(102836004)(26005)(53546011)(446003)(256004)(7416002)(71190400001)(6116002)(476003)(76176011)(74316002)(25786009)(11346002)(3846002)(7696005)(229853002)(54906003)(7736002)(305945005)(8936002)(316002)(81156014)(81166006)(76116006)(8676002)(33656002)(86362001)(66476007)(66556008)(478600001)(14454004)(99286004)(55016002)(66946007)(66446008)(64756008)(4001150100001)(9686003)(66066001)(6436002)(52536014)(6246003)(4326008)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR08MB4370;H:BN7PR08MB5684.namprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: micron.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WgxBz+AYQ4HKLnDmL8txHazZyctPmHsOUbKHRXQHodRC4vz8/BE8xG3Bl1Kz1SNqHsQfQWDeZ2Bk/RisGsj5xGnqMPOmNuEug8nqHNSSAc/xju0XOUqCVXmFMDto9m+2bg9/WkuZemsl2v3j+yaOhgO2IQQPTzKwImxm5hv9HkBegOiLuPaYq1OPmoGDQm2KaEDkPjXhv6jlp+jsK8cbDPIJpzcluYQ1+9aVy3eFeod29tqoRYMixkk5xbxJXuYhaPL43drzWSh9a5dRZYFjcH4ZXmi8/mDPGNy1zTgQv60eFpMrZn6hwAGh0wyndsQF6202apW+POSJuO+5gFZpJG01gj6L0JdKECgTfcxH5wqc4Bk2HGEO3FbUXh5jqpsSflilmQ6lrwauHG6OuSbd1x9idbdYlk4PUlggXEQiL6BlUMmu89EBA+0eCxOpD6FL
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4964514-1f6c-431f-413b-08d76852fd59
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2019 16:03:14.0796
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: x7H5kfuVKUeXwBiJVXSlLTx35UYXu9gXpSNyhWSGRmlb4WAEWgyAiD3/rkdDhGAq7ORaWzs9vHOEjPk7Dh66jg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR08MB4370
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/13/19 3:57 PM, John Garry wrote:
-> On 13/11/2019 14:06, Hannes Reinecke wrote:
->> On 11/13/19 2:36 PM, John Garry wrote:
->>> Some SCSI HBAs (such as HPSA, megaraid, mpt3sas, hisi_sas_v3 ..) support
->>> multiple reply queues with single hostwide tags.
->>>
->>> In addition, these drivers want to use interrupt assignment in
->>> pci_alloc_irq_vectors(PCI_IRQ_AFFINITY). However, as discussed in [0],
->>> CPU hotplug may cause in-flight IO completion to not be serviced when an
->>> interrupt is shutdown.
->>>
->>> To solve that problem, Ming's patchset to drain hctx's should ensure no
->>> IOs are missed in-flight [1].
->>>
->>> However, to take advantage of that patchset, we need to map the HBA HW
->>> queues to blk mq hctx's; to do that, we need to expose the HBA HW
->>> queues.
->>>
->>> In making that transition, the per-SCSI command request tags are no
->>> longer unique per Scsi host - they are just unique per hctx. As such,
->>> the
->>> HBA LLDD would have to generate this tag internally, which has a certain
->>> performance overhead.
->>>
->>> However another problem is that blk mq assumes the host may accept
->>> (Scsi_host.can_queue * #hw queue) commands. In [2], we removed the Scsi
->>> host busy counter, which would stop the LLDD being sent more than
->>> .can_queue commands; however, we should still ensure that the block
->>> layer
->>> does not issue more than .can_queue commands to the Scsi host.
->>>
->>> To solve this problem, introduce a shared tags per blk_mq_tag_set, which
->>> may be requested when allocating the tagset.
->>>
->>> New flag BLK_MQ_F_TAG_HCTX_SHARED should be set when requesting the
->>> tagset.
->>>
->>> This is based on work originally from Ming Lei in [3].
->>>
->>> [0]
->>> https://lore.kernel.org/linux-block/alpine.DEB.2.21.1904051331270.1802@nanos.tec.linutronix.de/
->>>
->>> [1]
->>> https://lore.kernel.org/linux-block/20191014015043.25029-1-ming.lei@redhat.com/
->>>
->>> [2]
->>> https://lore.kernel.org/linux-scsi/20191025065855.6309-1-ming.lei@redhat.com/
->>>
->>> [3]
->>> https://lore.kernel.org/linux-block/20190531022801.10003-1-ming.lei@redhat.com/
->>>
->>>
->>> Signed-off-by: John Garry <john.garry@huawei.com>
->>> ---
->>>   block/blk-core.c       |  1 +
->>>   block/blk-flush.c      |  2 +
->>>   block/blk-mq-debugfs.c |  2 +-
->>>   block/blk-mq-tag.c     | 85 ++++++++++++++++++++++++++++++++++++++++++
->>>   block/blk-mq-tag.h     |  1 +
->>>   block/blk-mq.c         | 61 +++++++++++++++++++++++++-----
->>>   block/blk-mq.h         |  9 +++++
->>>   include/linux/blk-mq.h |  3 ++
->>>   include/linux/blkdev.h |  1 +
->>>   9 files changed, 155 insertions(+), 10 deletions(-)
->>>
->> [ .. ]
->>> @@ -396,15 +398,17 @@ static struct request
->>> *blk_mq_get_request(struct request_queue *q,
->>>           blk_mq_tag_busy(data->hctx);
->>>       }
->>>   -    tag = blk_mq_get_tag(data);
->>> -    if (tag == BLK_MQ_TAG_FAIL) {
->>> -        if (clear_ctx_on_error)
->>> -            data->ctx = NULL;
->>> -        blk_queue_exit(q);
->>> -        return NULL;
->>> +    if (data->hctx->shared_tags) {
->>> +        shared_tag = blk_mq_get_shared_tag(data);
->>> +        if (shared_tag == BLK_MQ_TAG_FAIL)
->>> +            goto err_shared_tag;
->>>       }
->>>   -    rq = blk_mq_rq_ctx_init(data, tag, data->cmd_flags,
->>> alloc_time_ns);
->>> +    tag = blk_mq_get_tag(data);
->>> +    if (tag == BLK_MQ_TAG_FAIL)
->>> +        goto err_tag;
->>> +
->>> +    rq = blk_mq_rq_ctx_init(data, tag, shared_tag, data->cmd_flags,
->>> alloc_time_ns);
->>>       if (!op_is_flush(data->cmd_flags)) {
->>>           rq->elv.icq = NULL;
->>>           if (e && e->type->ops.prepare_request) {
-> 
-> Hi Hannes,
-> 
->> Why do you need to keep a parallel tag accounting between 'normal' and
->> 'shared' tags here?
->> Isn't is sufficient to get a shared tag only, and us that in lieo of the
->> 'real' one?
-> 
-> In theory, yes. Just the 'shared' tag should be adequate.
-> 
-> A problem I see with this approach is that we lose the identity of which
-> tags are allocated for each hctx. As an example for this, consider
-> blk_mq_queue_tag_busy_iter(), which iterates the bits for each hctx.
-> Now, if you're just using shared tags only, that wouldn't work.
-> 
-> Consider blk_mq_can_queue() as another example - this tells us if a hctx
-> has any bits unset, while with only using shared tags it would tell if
-> any bits unset over all queues, and this change in semantics could break
-> things. At a glance, function __blk_mq_tag_idle() looks problematic also.
-> 
-> And this is where it becomes messy to implement.
-> 
-Oh, my. Indeed, that's correct.
-
-But then we don't really care _which_ shared tag is assigned; so
-wouldn't be we better off by just having an atomic counter here?
-Cache locality will be blown anyway ...
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke		      Teamlead Storage & Networking
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 247165 (AG München), GF: Felix Imendörffer
+SGksIEJhcnQNCg0KSSB0aGluaywgeW91IGFyZSBhc2tpbmcgZm9yIGNvbW1lbnQgZnJvbSBDYW4u
+ICBBcyBmb3IgbWUsIGF0dGFjaGVkIHBhdGNoIGlzIGJldHRlci4gDQpSZW1vdmluZyB1ZnNoY2Rf
+d2FpdF9mb3JfZG9vcmJlbGxfY2xyKCksIGluc3RlYWQgb2YgcmVhZGluZyBkb29yYmVsbCByZWdp
+c3RlciwgTm93DQp1c2luZyBibG9jayBsYXllciBibGtfbXFfe3VuLH1mcmVlemVfcXVldWUoKSwg
+bG9va3MgZ29vZC4gSSB0ZXN0ZWQgeW91ciBWNSBwYXRjaGVzLA0KZGlkbid0IGZpbmQgcHJvYmxl
+bSB5ZXQuDQoNClNpbmNlIG15IGF2YWlsYWJsZSBwbGF0Zm9ybSBkb2Vzbid0IHN1cHBvcnQgZHlu
+YW1pYyBjbGsgc2NhbGluZywgSSB0aGluaywgbm93IHNlZW1zIG9ubHkNClFjb20gVUZTIGNvbnRy
+b2xsZXJzIHN1cHBvcnQgdGhpcyBmZWF0dXJlLiBTbyB3ZSBuZWVkIENhbiBHdW8gdG8gZmluYWxs
+eSBjb25maXJtIGl0Lg0KDQpUaGFua3MsDQoNCi8vQmVhbg0KDQogICAgDQoNCj4gLS0tLS1Pcmln
+aW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQmFydCBWYW4gQXNzY2hlIDxidmFuYXNzY2hlQGFj
+bS5vcmc+DQo+IFNlbnQ6IFdlZG5lc2RheSwgTm92ZW1iZXIgMTMsIDIwMTkgMTo1NiBBTQ0KPiBU
+bzogY2FuZ0Bjb2RlYXVyb3JhLm9yZw0KPiBDYzogTWFydGluIEsgLiBQZXRlcnNlbiA8bWFydGlu
+LnBldGVyc2VuQG9yYWNsZS5jb20+OyBKYW1lcyBFIC4gSiAuIEJvdHRvbWxleQ0KPiA8amVqYkBs
+aW51eC52bmV0LmlibS5jb20+OyBCZWFuIEh1byAoYmVhbmh1bykgPGJlYW5odW9AbWljcm9uLmNv
+bT47IEF2cmkNCj4gQWx0bWFuIDxhdnJpLmFsdG1hbkB3ZGMuY29tPjsgQXN1dG9zaCBEYXMgPGFz
+dXRvc2hkQGNvZGVhdXJvcmEub3JnPjsNCj4gVmlnbmVzaCBSYWdoYXZlbmRyYSA8dmlnbmVzaHJA
+dGkuY29tPjsgbGludXgtc2NzaUB2Z2VyLmtlcm5lbC5vcmc7IFN0YW5sZXkNCj4gQ2h1IDxzdGFu
+bGV5LmNodUBtZWRpYXRlay5jb20+OyBUb21hcyBXaW5rbGVyIDx0b21hcy53aW5rbGVyQGludGVs
+LmNvbT4NCj4gU3ViamVjdDogW0VYVF0gUmU6IFtQQVRDSCB2NSA0LzRdIHVmczogU2ltcGxpZnkg
+dGhlIGNsb2NrIHNjYWxpbmcgbWVjaGFuaXNtDQo+IGltcGxlbWVudGF0aW9uDQo+IA0KPiBPbiAx
+MS8xMi8xOSA0OjExIFBNLCBjYW5nQGNvZGVhdXJvcmEub3JnIHdyb3RlOg0KPiA+IE9uIDIwMTkt
+MTEtMTMgMDE6MzcsIEJhcnQgVmFuIEFzc2NoZSB3cm90ZToNCj4gPj4gQEAgLTE1MjgsNyArMTQ5
+Miw3IEBAIGludCB1ZnNoY2RfaG9sZChzdHJ1Y3QgdWZzX2hiYSAqaGJhLCBib29sDQo+ID4+IGFz
+eW5jKQ0KPiA+PiDCoMKgwqDCoMKgwqDCoMKgwqAgKi8NCj4gPj4gwqDCoMKgwqDCoMKgwqDCoCAv
+KiBmYWxsdGhyb3VnaCAqLw0KPiA+PiDCoMKgwqDCoCBjYXNlIENMS1NfT0ZGOg0KPiA+PiAtwqDC
+oMKgwqDCoMKgwqAgdWZzaGNkX3Njc2lfYmxvY2tfcmVxdWVzdHMoaGJhKTsNCj4gPj4gK8KgwqDC
+oMKgwqDCoMKgIHVmc2hjZF9ibG9ja19yZXF1ZXN0cyhoYmEsIFVMT05HX01BWCk7DQo+ID4NCj4g
+PiB1ZnNoY2RfaG9sZChhc3luYyA9PSB0cnVlKSBpcyB1c2VkIGluIHVmc2hjZF9xdWV1ZWNvbW1h
+bmQoKSBwYXRoDQo+ID4gYmVjYXVzZQ0KPiA+IHVmc2hjZF9xdWV1ZWNvbW1hbmQoKSBjYW4gYmUg
+ZW50ZXJlZCB1bmRlciBhdG9taWMgY29udGV4dHMuDQo+ID4gVGh1cyB1ZnNoY2RfYmxvY2tfcmVx
+dWVzdHMoKSBoZXJlIGhhcyB0aGUgc2FtZSByaXNrIGNhdXNpbmcgc2NoZWR1bGluZw0KPiA+IHdo
+aWxlIGF0b21pYy4NCj4gPiBGWUksIGl0IGlzIG5vdCBlYXN5IHRvIGhpdCBhYm92ZSBzY2VuYXJp
+byBpbiBzbWFsbCBzY2FsZSBvZiB0ZXN0Lg0KPiANCj4gSGkgQmVhbiwNCj4gDQo+IEhvdyBhYm91
+dCByZXBsYWNpbmcgcGF0Y2ggNC80IHdpdGggdGhlIGF0dGFjaGVkIHBhdGNoPw0KPiANCj4gVGhh
+bmtzLA0KPiANCj4gQmFydC4NCg0K
