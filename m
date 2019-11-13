@@ -2,115 +2,158 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CD9FA461
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 03:17:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F87FA5D2
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 Nov 2019 03:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727725AbfKMCQq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 Nov 2019 21:16:46 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44126 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730185AbfKMCQo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Nov 2019 21:16:44 -0500
-Received: by mail-pg1-f193.google.com with SMTP id f19so302450pgk.11
-        for <linux-scsi@vger.kernel.org>; Tue, 12 Nov 2019 18:16:43 -0800 (PST)
+        id S1728909AbfKMCZH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 Nov 2019 21:25:07 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:33206 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727723AbfKMCZG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 Nov 2019 21:25:06 -0500
+Received: by mail-io1-f67.google.com with SMTP id j13so810150ioe.0;
+        Tue, 12 Nov 2019 18:25:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=c7pgGUOErKCone57ckbGDS/eeyPemc6EIW0Fbaye1l4=;
-        b=J1GKzxf5D4PNxbYKxDELs3k7YlYHe/IgHvU8Etzan0v3SuwtZ62rEm1vWFQAXFTWqg
-         q5GbIvG6C/Bi2hnba2PXWn2pywiaPhAqj19zLVeHVpUB/w+bJn62gzb9mmaePzydVmxv
-         XAYZZFMdQ6jMS+xxsqXiz430ptjXzzatWh97FtCiIUx8TWg2NGykQo3WcHtCfcJrMFcr
-         eqAqztK9aojc6IvhkKDL8UM7ckfiwhqjgW7yUs9sNKNCQts2WY/qf/Y56U6wCuW8N3t0
-         HTWIy5X+Nktu52sYBB0Vz/LfvTjVsXzxChLk+jf8NXDEItN26y685XWjFOthOBTTeLzq
-         6W0Q==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=67vt+2/hcnur/stdYuxW6KOlEarE4FFpvwMXouje6z0=;
+        b=C5zJXaoWqhirA5JCzRzQxV6NeESF2nnVYyWxW3GPmZgA3s9X0SjSG7oOgw7GKTeKd6
+         4UMme8ZH+Z5d040MLiivvMDkk7mV7Y4M2lyRmLy02gcoA8HavuwI81OkKq19KHVvuISM
+         hjpF56QT9rMyiN0DCZtYVVuUNz7msCut/xpm3zLFDL1WDZ8NFnvqwFVEoP9LDdYxl4HC
+         7v0eBMSBZ7Vt111I1M9fKgU4pcE60ZmLtIm6VPz9tIT3zYHjysYcSRbFSGiowSFh5AN3
+         CnyJ3cSirM+W+u0JslaNlQCyGu+b4dFHpV/7oHaHD036f2WdS3cVE3qnoFwCo7vW+1VH
+         9Mrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=c7pgGUOErKCone57ckbGDS/eeyPemc6EIW0Fbaye1l4=;
-        b=MBHmqu4L8KvaAjrMGlS+bg0Pr5CPTruLUjjERAuownwi+ozuLb6VGx1luM4FMHLLYr
-         rt0kWZjYiWl06kQtxqw0TIXGS8V42eTH2ArYzzYhzVCRCbtWxgJnSwHtH41QcuD/g5E3
-         bBoB0XXy5DgD545dZ8/tvNrMsCCUB7fgcYB6X2sYzXkfyT/Wv+s2spAGI1O52cQ3MBTD
-         1oaFKaLu+quUyKviBxEABdrKYdItgYWkIz61S0jtmSizHorikuC5FwKZBfs898mFlCXg
-         bB2D8pxsEXPwBkYWQTCifVwbzHY/3NVNTpiUJT/dZeWNIaiYfV8WBT1xVOfKAE6HaSSL
-         tUCg==
-X-Gm-Message-State: APjAAAX2HmN0rLxPKQN3TEe/YS8vcVs+jnEo4TlOlR0Bi7aLUDPLPOOs
-        Te9gqdPXtRjjKhN45wNEGwLLEg==
-X-Google-Smtp-Source: APXvYqycpY+BSOLB53HT4o8SEWzgzYFea+fu4bX8JbhALJ60LxNdAWEQSjGNGVeVl5dehnnO9BWleQ==
-X-Received: by 2002:a17:90a:a114:: with SMTP id s20mr1410230pjp.44.1573611402828;
-        Tue, 12 Nov 2019 18:16:42 -0800 (PST)
-Received: from [192.168.1.182] ([66.219.217.79])
-        by smtp.gmail.com with ESMTPSA id e17sm303534pfh.121.2019.11.12.18.16.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 12 Nov 2019 18:16:41 -0800 (PST)
-Subject: Re: [PATCH v2 0/9] Zoned block device enhancements and zone report
- rework
-To:     Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        dm-devel@redhat.com, Mike Snitzer <snitzer@redhat.com>,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <yuchao0@huawei.com>
-References: <20191111023930.638129-1-damien.lemoal@wdc.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <a0c1c1bf-d6e5-8be1-ed99-6bfed3483d1d@kernel.dk>
-Date:   Tue, 12 Nov 2019 19:16:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=67vt+2/hcnur/stdYuxW6KOlEarE4FFpvwMXouje6z0=;
+        b=HQKMcBq0T/O/1gWQTv8tE8zmv0TB1gyNACAArdnVzqyESW4FsIFo44+g3+cJpBYRnN
+         81pN8Ty5odZ/Xr65goevoQoRhXjMu9fVrY3YbuCqI/CZElwjJhXNMCLm7S6O6+K+SeP/
+         FZjQuOfpZESsG0fGYsOisMJMnsgo89vvHXQJ1/qmKJVkIQm8kwcfdEjW8M48tCAfdJt5
+         5MqBzgsR+NWHpNpSJb8nfCmp/R+QrF/oYKVR7jvyOVpgEXoWZaRgtrztM/CUHO85kz3Q
+         31a5ROspV3P62kFaxUEO0/DRd83cidyxiQoYdP9N33djomPSw8UihuL0VTJIUgJ81CdD
+         tWRA==
+X-Gm-Message-State: APjAAAV4eijhwgggWfsz/fFGyej1/BNO7QjS6UVoMzAepWZuaT+daUKz
+        9Gn2gn9EJ/h4pN6UxzA7H7lPipwdFPRk3R090iM=
+X-Google-Smtp-Source: APXvYqwuo2tTbYTMNeWbnMR8FQ9nl/VAo3S2+IdE0xI195BER3D+h0bQM0h+rgl2KyG1yFAZxh1xzwjq174E8KUeDCI=
+X-Received: by 2002:a6b:b987:: with SMTP id j129mr1093188iof.105.1573611904929;
+ Tue, 12 Nov 2019 18:25:04 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191111023930.638129-1-damien.lemoal@wdc.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1573200932-384-1-git-send-email-cang@codeaurora.org> <1573200932-384-6-git-send-email-cang@codeaurora.org>
+In-Reply-To: <1573200932-384-6-git-send-email-cang@codeaurora.org>
+From:   Alim Akhtar <alim.akhtar@gmail.com>
+Date:   Wed, 13 Nov 2019 07:54:28 +0530
+Message-ID: <CAGOxZ502wp17UFEk67Qno9DQ0dFPfwMRTLNTCvOXibQDhOw4SA@mail.gmail.com>
+Subject: Re: [PATCH v1 5/5] scsi: ufs: Complete pending requests in host reset
+ and restore path
+To:     Can Guo <cang@codeaurora.org>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Subhash Jadavani <subhashj@codeaurora.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/10/19 6:39 PM, Damien Le Moal wrote:
-> This series of patches introduces changes to zoned block device handling
-> code with the intent to simplify the code while optimizing run-time
-> operation, particularly in the area of zone reporting.
-> 
-> The first patch lifts the device zone check code out of the sd driver
-> and reimplements these zone checks generically as part of
-> blk_revalidate_disk_zones(). This avoids zoned block device drivers to
-> have to implement these checks. The second patch simplifies this
-> function code for the !zoned case.
-> 
-> The third patch is a small cleanup of zone report processing in
-> preparation for the fourth patch which removes support for partitions
-> on zoned block devices. As mentioned in that patch commit message, none
-> of the known partitioning tools support zoned devices and there are no
-> known use case in the field of SMR disks being used with partitions.
-> Dropping partition supports allows to significantly simplify the code
-> for zone report as zone sector values remapping becomes unnecessary.
-> 
-> Patch 5 to 6 are small cleanups and fixes of the null_blk driver zoned
-> mode.
-> 
-> The prep patch 7 optimizes zone report buffer allocation for the SCSI
-> sd driver. Finally, patch 8 introduces a new interface for report zones
-> handling using a callback function executed per zone reported by the
-> device. This allows avoiding the need to allocate large arrays of
-> blk_zone structures for the execution of zone reports. This can
-> significantly reduce memory usage and pressure on the memory management
-> system while significantly simplify the code all over.
-> 
-> Overall, this series not only reduces significantly the code size, it
-> also improves run-time memory usage for zone report execution.
-> 
-> This series applies cleanly on the for-next block tree on top of the
-> zone management operation series. It may however create a conflict with
-> Christoph's reqork of disk size revalidation. Please consider this
-> series for inclusion in the 5.5 kernel.
+Hi Can,
 
-We're taking branching to new levels... I created for-5.5/zoned for this,
-which is for-5.5/block + for-5.5/drivers + for-5.5/drivers-post combined.
-The latter is a branch with the SCSI dependencies from Martin pulled in.
+On Fri, Nov 8, 2019 at 1:50 PM Can Guo <cang@codeaurora.org> wrote:
+>
+> In UFS host reset and restore path, before probe, we stop and start the
+> host controller once. After host controller is stopped, the pending
+> requests, if any, are cleared from the doorbell, but no completion IRQ
+> would be raised due to the hba is stopped.
+> These pending requests shall be completed along with the first NOP_OUT
+> command(as it is the first command which can raise a transfer completion
+> IRQ) sent during probe.
+> Since the OCSs of these pending requests are not SUCCESS(because they are
+> not yet literally finished), their UPIUs shall be dumped. When there are
+> multiple pending requests, the UPIU dump can be overwhelming and may lead
+> to stability issues because it is in atomic context.
+> Therefore, before probe, complete these pending requests right after host
+> controller is stopped.
+>
+> Signed-off-by: Can Guo <cang@codeaurora.org>
+> ---
+Looks good, I hope this is tested on your platform.
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+>  drivers/scsi/ufs/ufshcd.c | 20 +++++++-------------
+>  1 file changed, 7 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 5950a7c..4df4136 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -5404,8 +5404,8 @@ static void ufshcd_err_handler(struct work_struct *work)
+>
+>         /*
+>          * if host reset is required then skip clearing the pending
+> -        * transfers forcefully because they will automatically get
+> -        * cleared after link startup.
+> +        * transfers forcefully because they will get cleared during
+> +        * host reset and restore
+>          */
+>         if (needs_reset)
+>                 goto skip_pending_xfer_clear;
+> @@ -6333,9 +6333,13 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
+>         int err;
+>         unsigned long flags;
+>
+> -       /* Reset the host controller */
+> +       /*
+> +        * Stop the host controller and complete the requests
+> +        * cleared by h/w
+> +        */
+>         spin_lock_irqsave(hba->host->host_lock, flags);
+>         ufshcd_hba_stop(hba, false);
+> +       ufshcd_complete_requests(hba);
+>         spin_unlock_irqrestore(hba->host->host_lock, flags);
+>
+>         /* scale up clocks to max frequency before full reinitialization */
+> @@ -6369,7 +6373,6 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
+>  static int ufshcd_reset_and_restore(struct ufs_hba *hba)
+>  {
+>         int err = 0;
+> -       unsigned long flags;
+>         int retries = MAX_HOST_RESET_RETRIES;
+>
+>         do {
+> @@ -6379,15 +6382,6 @@ static int ufshcd_reset_and_restore(struct ufs_hba *hba)
+>                 err = ufshcd_host_reset_and_restore(hba);
+>         } while (err && --retries);
+>
+> -       /*
+> -        * After reset the door-bell might be cleared, complete
+> -        * outstanding requests in s/w here.
+> -        */
+> -       spin_lock_irqsave(hba->host->host_lock, flags);
+> -       ufshcd_transfer_req_compl(hba);
+> -       ufshcd_tmc_handler(hba);
+> -       spin_unlock_irqrestore(hba->host->host_lock, flags);
+> -
+>         return err;
+>  }
+>
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
+
 
 -- 
-Jens Axboe
-
+Regards,
+Alim
