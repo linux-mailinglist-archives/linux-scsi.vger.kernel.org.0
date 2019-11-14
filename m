@@ -2,100 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83431FC2D1
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2019 10:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13FDFC3A3
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 Nov 2019 11:08:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbfKNJlz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 14 Nov 2019 04:41:55 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2098 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726106AbfKNJlz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 14 Nov 2019 04:41:55 -0500
-Received: from lhreml703-cah.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 8836451502569967E717;
-        Thu, 14 Nov 2019 09:41:53 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml703-cah.china.huawei.com (10.201.108.44) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 14 Nov 2019 09:41:53 +0000
-Received: from [127.0.0.1] (10.202.226.46) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Thu, 14 Nov
- 2019 09:41:53 +0000
-Subject: Re: [PATCH RFC 3/5] blk-mq: Facilitate a shared tags per tagset
-To:     Hannes Reinecke <hare@suse.de>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>
-CC:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "ming.lei@redhat.com" <ming.lei@redhat.com>,
-        "hare@suse.com" <hare@suse.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>
-References: <1573652209-163505-1-git-send-email-john.garry@huawei.com>
- <1573652209-163505-4-git-send-email-john.garry@huawei.com>
- <32880159-86e8-5c48-1532-181fdea0df96@suse.de>
- <2cbf591c-8284-8499-7804-e7078cf274d2@huawei.com>
- <02056612-a958-7b05-3c54-bb2fa69bc493@suse.de>
- <ace95bc5-7b89-9ed3-be89-8139f977984b@huawei.com>
- <42b0bcd9-f147-76eb-dfce-270f77bca818@suse.de>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <89cd1985-39c7-2965-d25b-2ee2c183d057@huawei.com>
-Date:   Thu, 14 Nov 2019 09:41:51 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1726369AbfKNKIf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 14 Nov 2019 05:08:35 -0500
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:36976 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726339AbfKNKIf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 Nov 2019 05:08:35 -0500
+Received-SPF: Pass (esa5.microchip.iphmx.com: domain of
+  viswas.g@microsemi.com designates 208.19.100.23 as permitted
+  sender) identity=mailfrom; client-ip=208.19.100.23;
+  receiver=esa5.microchip.iphmx.com;
+  envelope-from="viswas.g@microsemi.com";
+  x-sender="viswas.g@microsemi.com"; x-conformance=spf_only;
+  x-record-type="v=spf1"; x-record-text="v=spf1
+  ip4:208.19.100.20 ip4:208.19.100.21 ip4:208.19.100.22
+  ip4:208.19.100.23 ip4:208.19.99.221 ip4:208.19.99.222
+  ip4:208.19.99.223 ip4:208.19.99.225 -all"
+Received-SPF: None (esa5.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@smtp.microsemi.com) identity=helo;
+  client-ip=208.19.100.23; receiver=esa5.microchip.iphmx.com;
+  envelope-from="viswas.g@microsemi.com";
+  x-sender="postmaster@smtp.microsemi.com";
+  x-conformance=spf_only
+Authentication-Results: esa5.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=viswas.g@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com; dmarc=fail (p=none dis=none) d=microchip.com
+IronPort-SDR: D5U4isC9GiIq44RP/shB+f8pOc1+5JB/pTGRkDzd/HBtqrmisYCh16qp0fbsVpSXgoKpnUTmtp
+ Cj8HyZKVpgVEkGGUUcttwM0Cw/RngJYEN+gYYx8+YtEZW50+JRfEegSS4Uk4U3s8AXg515//ax
+ X9yGAT5RyuaRCXkhOzPVZX6yhPTWa7iS8QKmtbe7/e9cprfvggs9yBmpp5ORzDhvH/uyZeTgAo
+ UDpFnRLq6AhDX8CwiBwuiTKQtYRyoYU2AM1SJQ6KsETAVaXCFXtZbDOGb1+JZqdDymS2RQVpnn
+ lZA=
+X-IronPort-AV: E=Sophos;i="5.68,304,1569308400"; 
+   d="scan'208";a="55582441"
+Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.23])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Nov 2019 03:08:27 -0700
+Received: from AVMBX1.microsemi.net (10.100.34.31) by AVMBX3.microsemi.net
+ (10.100.34.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3; Thu, 14 Nov
+ 2019 02:08:26 -0800
+Received: from localhost (10.41.130.49) by avmbx1.microsemi.net (10.100.34.31)
+ with Microsoft SMTP Server id 15.1.1847.3 via Frontend Transport; Thu, 14 Nov
+ 2019 02:08:25 -0800
+From:   Deepak Ukey <deepak.ukey@microchip.com>
+To:     <linux-scsi@vger.kernel.org>
+CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
+        <Viswas.G@microchip.com>, <deepak.ukey@microchip.com>,
+        <jinpu.wang@profitbricks.com>, <martin.petersen@oracle.com>,
+        <dpf@google.com>, <jsperbeck@google.com>, <auradkar@google.com>,
+        <ianyar@google.com>
+Subject: [PATCH V2 00/13] pm80xx : Updates for the driver version 0.1.39.
+Date:   Thu, 14 Nov 2019 15:38:57 +0530
+Message-ID: <20191114100910.6153-1-deepak.ukey@microchip.com>
+X-Mailer: git-send-email 2.19.0-rc1
 MIME-Version: 1.0
-In-Reply-To: <42b0bcd9-f147-76eb-dfce-270f77bca818@suse.de>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.226.46]
-X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 13/11/2019 18:38, Hannes Reinecke wrote:
->> Hi Hannes,
->>
->>> Oh, my. Indeed, that's correct.
->>
->> The tags could be kept in sync like this:
->>
->> shared_tag = blk_mq_get_tag(shared_tagset);
->> if (shared_tag != -1)
->>      sbitmap_set(hctx->tags, shared_tag);
->>
->> But that's obviously not ideal.
->>
-> Actually, I _do_ prefer keeping both in sync.
-> We might want to check if the 'normal' tag is set (typically it would 
-> not, but then, who knows ...)
-> The beauty here is that both 'shared' and 'normal' tag are in sync, so 
-> if a driver would be wanting to use the tag as index into a command 
-> array it can do so without any surprises.
-> 
-> Why do you think it's not ideal?
+From: Deepak Ukey <Deepak.Ukey@microchip.com>
 
-A few points:
-- Getting a bit from one tagset and then setting it in another tagset is 
-a bit clunky.
-- There may be an atomicity of the getting the shared tag bit and 
-setting the hctx tag bit - I don't think that there is.
-- Consider that sometimes we may want to check if there is space on a hw 
-queue - checking the hctx tags is not really proper any longer, as 
-typically there would always be space on hctx, but not always the shared 
-tags. We did delete blk_mq_can_queue() yesterday, which would be an 
-example of that. Need to check if there are others.
+This patch set includes some bug fixes and features for pm80xx driver.
 
-Having said all that, the obvious advantage is performance gain, can 
-still use request.tag and so maybe less intrusive changes.
+Changes from V1:
+	For "Fix for SATA device discovery" patch.
+		- Spilt the patch in two different patches
+		that is "Fix for SATA device discovery" and
+		"Make phy enable completion as NULL"
+	For "Cleanup command when a reset times out" patch.
+		- Fix the typo mistake.
+	For "Controller fatal error through sysfs" patch.
+		- Updated the function name in comment section.
+	For " Modified the logic to collect fatal dump" patch.
+		- Fixed the compiler warning for mips and i386
+		  architecture.
 
-I'll have a look at the implementation. The devil is mostly in the detail...
+Deepak Ukey (2):
+  pm80xx : Controller fatal error through sysfs.
+  pm80xx : Modified the logic to collect fatal dump.
 
-Thanks,
-John
+John Sperbeck (1):
+  pm80xx : Initialize variable used as return status.
+
+Vikram Auradkar (3):
+  pm80xx : Convert 'long' mdelay to msleep.
+  pm80xx : Fix dereferencing dangling pointer.
+  pm80xx : Tie the interrupt name to the module instance.
+
+ianyar (1):
+  pm80xx : Increase timeout for pm80xx mpi_uninit_check.
+
+peter chang (6):
+  pm80xx : Fix for SATA device discovery.
+  pm80xx : Make phy enable completion as NULL.
+  pm80xx : Squashed logging cleanup changes.
+  pm80xx : Fix command issue sizing.
+  pm80xx : Cleanup command when a reset times out.
+  pm80xx : Do not request 12G sas speeds.
+
+ drivers/scsi/pm8001/pm8001_ctl.c  |  20 ++
+ drivers/scsi/pm8001/pm8001_hwi.c  | 131 +++++++----
+ drivers/scsi/pm8001/pm8001_init.c |  34 ++-
+ drivers/scsi/pm8001/pm8001_sas.c  |  70 ++++--
+ drivers/scsi/pm8001/pm8001_sas.h  |  24 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c  | 451 ++++++++++++++++++++++++++++----------
+ drivers/scsi/pm8001/pm80xx_hwi.h  |   3 +
+ 7 files changed, 550 insertions(+), 183 deletions(-)
+
+-- 
+2.16.3
+
