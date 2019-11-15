@@ -2,32 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC11FD669
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2019 07:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69B40FD67B
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 Nov 2019 07:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727509AbfKOGZX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Nov 2019 01:25:23 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:52210 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727362AbfKOGZX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Nov 2019 01:25:23 -0500
-X-UUID: 27f6db6e91664045828506e2071bf9d3-20191115
+        id S1726986AbfKOGg0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Nov 2019 01:36:26 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:56494 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725774AbfKOGfn (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Nov 2019 01:35:43 -0500
+X-UUID: 4fd331558b9d414794818d6513d7117a-20191115
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=SLNrxh6JD/1mHEyfTiNySmTmbTYyNOt5EvaG5WpUSaE=;
-        b=eecwD5o88RLww6oY4RunnEsNuVNVx3v/rbgMnGk7L1+NVwSZ3BoqTuiWUaAchk5LZ3ZfPFGHyJRGumjK5aC3MUXouLU1PsvGplPg3zGGda5aJiPbsuXeslL2MnFD+h0l0J0eMaFRB73TxmzWzmdfoVGsfCDXArodn8IsJfgiqjY=;
-X-UUID: 27f6db6e91664045828506e2071bf9d3-20191115
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=rk57yqGMmLCWAiKj3bUDvcywvFJ3T7OqD7JZ6VwhDU4=;
+        b=UB0SWHg95dooa4dydC6ecVveeXLMd9W9mOHNDhRUkv8P01rDr/YjQmJbZHIjAyts+4GsTaRZmHhL23GLl/M6J6/xIelgranoUFGDbxLiAQFxfRh+08Dc/d/59XRq+ZXEEO4xHXL5sCGx24TlBPGdzCVoVIXk6+2kLkGIzSJCiuU=;
+X-UUID: 4fd331558b9d414794818d6513d7117a-20191115
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1876485587; Fri, 15 Nov 2019 14:25:16 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 15 Nov 2019 14:25:14 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
+        with ESMTP id 254854927; Fri, 15 Nov 2019 14:35:36 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 15 Nov 2019 14:35:27 +0800
+Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 15 Nov 2019 14:25:12 +0800
-Message-ID: <1573799114.4956.0.camel@mtkswgap22>
-Subject: Re: [PATCH v5 1/7] scsi: ufs: Add device reset in link recovery path
+ Transport; Fri, 15 Nov 2019 14:35:27 +0800
+Message-ID: <1573799728.4956.5.camel@mtkswgap22>
+Subject: Re: [PATCH v5 3/7] scsi: ufs: Fix up auto hibern8 enablement
 From:   Stanley Chu <stanley.chu@mediatek.com>
 To:     Can Guo <cang@codeaurora.org>
 CC:     <asutoshd@codeaurora.org>, <nguyenb@codeaurora.org>,
@@ -41,15 +41,16 @@ CC:     <asutoshd@codeaurora.org>, <nguyenb@codeaurora.org>,
         Bean Huo <beanhuo@micron.com>,
         Tomas Winkler <tomas.winkler@intel.com>,
         Venkat Gopalakrishnan <venkatg@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         open list <linux-kernel@vger.kernel.org>
-Date:   Fri, 15 Nov 2019 14:25:14 +0800
-In-Reply-To: <1573798172-20534-2-git-send-email-cang@codeaurora.org>
+Date:   Fri, 15 Nov 2019 14:35:28 +0800
+In-Reply-To: <1573798172-20534-4-git-send-email-cang@codeaurora.org>
 References: <1573798172-20534-1-git-send-email-cang@codeaurora.org>
-         <1573798172-20534-2-git-send-email-cang@codeaurora.org>
+         <1573798172-20534-4-git-send-email-cang@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 6D3359264B6CB738D29D543A3333E14F23629DF003DDE3A284AE955E724C7D612000:8
 X-MTK:  N
 Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
@@ -58,20 +59,13 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 SGkgQ2FuLA0KDQpPbiBUaHUsIDIwMTktMTEtMTQgYXQgMjI6MDkgLTA4MDAsIENhbiBHdW8gd3Jv
-dGU6DQo+IEluIG9yZGVyIHRvIHJlY292ZXIgZnJvbSBoaWJlcm44IGV4aXQgZmFpbHVyZSwgcGVy
-Zm9ybSBhIHJlc2V0IGluDQo+IGxpbmsgcmVjb3ZlcnkgcGF0aCBiZWZvcmUgaXNzdWluZyBsaW5r
-IHN0YXJ0LXVwLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogQ2FuIEd1byA8Y2FuZ0Bjb2RlYXVyb3Jh
-Lm9yZz4NCj4gUmV2aWV3ZWQtYnk6IEJlYW4gSHVvIDxiZWFuaHVvQG1pY3Jvbi5jb20+DQo+IC0t
-LQ0KPiAgZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYyB8IDMgKysrDQo+ICAxIGZpbGUgY2hhbmdl
-ZCwgMyBpbnNlcnRpb25zKCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9zY3NpL3Vmcy91
-ZnNoY2QuYyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMNCj4gaW5kZXggYzI4YzE0NC4uNTI1
-ZjhlNiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYw0KPiArKysgYi9k
-cml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQo+IEBAIC0zODU5LDYgKzM4NTksOSBAQCBzdGF0aWMg
-aW50IHVmc2hjZF9saW5rX3JlY292ZXJ5KHN0cnVjdCB1ZnNfaGJhICpoYmEpDQo+ICAJdWZzaGNk
-X3NldF9laF9pbl9wcm9ncmVzcyhoYmEpOw0KPiAgCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoaGJh
-LT5ob3N0LT5ob3N0X2xvY2ssIGZsYWdzKTsNCj4gIA0KPiArCS8qIFJlc2V0IHRoZSBhdHRhY2hl
-ZCBkZXZpY2UgKi8NCj4gKwl1ZnNoY2Rfdm9wc19kZXZpY2VfcmVzZXQoaGJhKTsNCj4gKw0KPiAg
-CXJldCA9IHVmc2hjZF9ob3N0X3Jlc2V0X2FuZF9yZXN0b3JlKGhiYSk7DQo+ICANCj4gIAlzcGlu
-X2xvY2tfaXJxc2F2ZShoYmEtPmhvc3QtPmhvc3RfbG9jaywgZmxhZ3MpOw0KDQpSZXZpZXdlZC1i
-eTogU3RhbmxleSBDaHUgPHN0YW5sZXkuY2h1QG1lZGlhdGVrLmNvbT4NCg0K
+dGU6DQo+ICsJaWYgKGhiYS0+YWhpdCAhPSBhaGl0KQ0KPiArCQloYmEtPmFoaXQgPSBhaGl0Ow0K
+PiAgCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoaGJhLT5ob3N0LT5ob3N0X2xvY2ssIGZsYWdzKTsN
+Cj4gKwlpZiAoIXBtX3J1bnRpbWVfc3VzcGVuZGVkKGhiYS0+ZGV2KSkgew0KDQpBbHdheXMgZG8g
+cG1fcnVudGltZV9nZXRfc3luYygpIGhlcmUgY291bGQgYXZvaWQgcG9zc2libGUgcmFjaW5nPw0K
+DQpBbmQgdGh1cyBBSDggY291bGQgYmUgZW5hYmxlZCByZWdhcmRsZXNzIG9mIHJ1bnRpbWUgc3Rh
+dHVzLg0KDQo+ICsJCXBtX3J1bnRpbWVfZ2V0X3N5bmMoaGJhLT5kZXYpOw0KPiArCQl1ZnNoY2Rf
+aG9sZChoYmEsIGZhbHNlKTsNCj4gKwkJdWZzaGNkX2F1dG9faGliZXJuOF9lbmFibGUoaGJhKTsN
+Cj4gKwkJdWZzaGNkX3JlbGVhc2UoaGJhKTsNCj4gKwkJcG1fcnVudGltZV9wdXQoaGJhLT5kZXYp
+Ow0KPiArCX0NCj4gIH0NCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo=
 
