@@ -2,36 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8050AFF34B
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2019 17:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B02FF227
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2019 17:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728937AbfKPQYh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 16 Nov 2019 11:24:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45942 "EHLO mail.kernel.org"
+        id S1729501AbfKPPqq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 16 Nov 2019 10:46:46 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53242 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728218AbfKPPmX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:42:23 -0500
+        id S1729486AbfKPPqp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:46:45 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94E4F2083E;
-        Sat, 16 Nov 2019 15:42:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2233E20891;
+        Sat, 16 Nov 2019 15:46:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573918943;
-        bh=/ZJI/4gyijIuk0UAleXk9pAGE4qXIMVC+2rzUpbTqLg=;
+        s=default; t=1573919204;
+        bh=PBdKjAcHh0/xYmzKeZZ8qeouI77njMrZJRvV4742/wA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tzJmfi2CzG2CktobJc+doFAUM/LtYcNj23X+2DrMgVT2kJaL78fv1SCrrQpQrInC0
-         hS565mRugBtpJmYGmlPxRhKEqwvuGSNZYPIkmbUxCTGCesGQdXEEW451j7uIZ3Hztf
-         BukeDzOL2xM2ZOagaZAHHDh4fUBK6HUTYXzwWTNI=
+        b=0QkpbPys4DyDwA1k5+xcMW1XeBKKd1Irk7dAW+xenkNb/LabV8XEW3UDfsCw6JQLr
+         hdm0BTyDoh4pbIrs2lhjjlMw/nYbv3aSJJ8te6mto1WHuCiGVGaAm3fQ2GRMZj8xTb
+         rCbILEpiprPciTMjzSzYZowYoR4ZBJ5xKCgdRotg=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Finn Thain <fthain@telegraphics.com.au>,
-        Michael Schmitz <schmitzmic@gmail.com>,
+Cc:     Suganath Prabu <suganath-prabu.subramani@broadcom.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 065/237] scsi: zorro_esp: Limit DMA transfers to 65535 bytes
-Date:   Sat, 16 Nov 2019 10:38:20 -0500
-Message-Id: <20191116154113.7417-65-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 207/237] scsi: mpt3sas: Fix Sync cache command failure during driver unload
+Date:   Sat, 16 Nov 2019 10:40:42 -0500
+Message-Id: <20191116154113.7417-207-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
@@ -44,87 +46,85 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Finn Thain <fthain@telegraphics.com.au>
+From: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 
-[ Upstream commit b7ded0e8b0d11b6df1c4e5aa23a26e6629c21985 ]
+[ Upstream commit 9029a72500b95578a35877a43473b82cb0386c53 ]
 
-The core driver, esp_scsi, does not use the ESP_CONFIG2_FENAB bit, so the
-chip's Transfer Counter register is only 16 bits wide (not 24).  A larger
-transfer cannot work and will theoretically result in a failed command
-and a "DMA length is zero" error.
+This is to fix SYNC CACHE and START STOP command failures with
+DID_NO_CONNECT during driver unload.
 
-Fixes: 3109e5ae0311 ("scsi: zorro_esp: New driver for Amiga Zorro NCR53C9x boards")
-Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
-Cc: Michael Schmitz <schmitzmic@gmail.com>
-Tested-by: Michael Schmitz <schmitzmic@gmail.com>
-Reviewed-by: Michael Schmitz <schmitzmic@gmail.com>
+In driver's IO submission patch (i.e. in driver's .queuecommand()) driver
+won't allow any SCSI commands to the IOC when ioc->remove_host flag is set
+and hence SYNC CACHE commands which are issued to the target drives (where
+write cache is enabled) during driver unload time is failed with
+DID_NO_CONNECT status.
+
+Now modified the driver to allow SYNC CACHE and START STOP commands to IOC,
+even when remove_host flag is set.
+
+Signed-off-by: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
+Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/zorro_esp.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 36 +++++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/zorro_esp.c b/drivers/scsi/zorro_esp.c
-index bb70882e6b56e..be79127db5946 100644
---- a/drivers/scsi/zorro_esp.c
-+++ b/drivers/scsi/zorro_esp.c
-@@ -245,7 +245,7 @@ static int fastlane_esp_irq_pending(struct esp *esp)
- static u32 zorro_esp_dma_length_limit(struct esp *esp, u32 dma_addr,
- 					u32 dma_len)
- {
--	return dma_len > 0xFFFFFF ? 0xFFFFFF : dma_len;
-+	return dma_len > 0xFFFF ? 0xFFFF : dma_len;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index 73d661a0ecbb9..d3c944d997039 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -3791,6 +3791,40 @@ _scsih_tm_tr_complete(struct MPT3SAS_ADAPTER *ioc, u16 smid, u8 msix_index,
+ 	return _scsih_check_for_pending_tm(ioc, smid);
  }
  
- static void zorro_esp_reset_dma(struct esp *esp)
-@@ -484,7 +484,6 @@ static void zorro_esp_send_blz1230_dma_cmd(struct esp *esp, u32 addr,
- 	scsi_esp_cmd(esp, ESP_CMD_DMA);
- 	zorro_esp_write8(esp, (esp_count >> 0) & 0xff, ESP_TCLOW);
- 	zorro_esp_write8(esp, (esp_count >> 8) & 0xff, ESP_TCMED);
--	zorro_esp_write8(esp, (esp_count >> 16) & 0xff, ESP_TCHI);
++/** _scsih_allow_scmd_to_device - check whether scmd needs to
++ *				 issue to IOC or not.
++ * @ioc: per adapter object
++ * @scmd: pointer to scsi command object
++ *
++ * Returns true if scmd can be issued to IOC otherwise returns false.
++ */
++inline bool _scsih_allow_scmd_to_device(struct MPT3SAS_ADAPTER *ioc,
++	struct scsi_cmnd *scmd)
++{
++
++	if (ioc->pci_error_recovery)
++		return false;
++
++	if (ioc->hba_mpi_version_belonged == MPI2_VERSION) {
++		if (ioc->remove_host)
++			return false;
++
++		return true;
++	}
++
++	if (ioc->remove_host) {
++
++		switch (scmd->cmnd[0]) {
++		case SYNCHRONIZE_CACHE:
++		case START_STOP:
++			return true;
++		default:
++			return false;
++		}
++	}
++
++	return true;
++}
  
- 	scsi_esp_cmd(esp, cmd);
- }
-@@ -529,7 +528,6 @@ static void zorro_esp_send_blz1230II_dma_cmd(struct esp *esp, u32 addr,
- 	scsi_esp_cmd(esp, ESP_CMD_DMA);
- 	zorro_esp_write8(esp, (esp_count >> 0) & 0xff, ESP_TCLOW);
- 	zorro_esp_write8(esp, (esp_count >> 8) & 0xff, ESP_TCMED);
--	zorro_esp_write8(esp, (esp_count >> 16) & 0xff, ESP_TCHI);
+ /**
+  * _scsih_sas_control_complete - completion routine
+@@ -4623,7 +4657,7 @@ scsih_qcmd(struct Scsi_Host *shost, struct scsi_cmnd *scmd)
+ 		return 0;
+ 	}
  
- 	scsi_esp_cmd(esp, cmd);
- }
-@@ -574,7 +572,6 @@ static void zorro_esp_send_blz2060_dma_cmd(struct esp *esp, u32 addr,
- 	scsi_esp_cmd(esp, ESP_CMD_DMA);
- 	zorro_esp_write8(esp, (esp_count >> 0) & 0xff, ESP_TCLOW);
- 	zorro_esp_write8(esp, (esp_count >> 8) & 0xff, ESP_TCMED);
--	zorro_esp_write8(esp, (esp_count >> 16) & 0xff, ESP_TCHI);
- 
- 	scsi_esp_cmd(esp, cmd);
- }
-@@ -599,7 +596,6 @@ static void zorro_esp_send_cyber_dma_cmd(struct esp *esp, u32 addr,
- 
- 	zorro_esp_write8(esp, (esp_count >> 0) & 0xff, ESP_TCLOW);
- 	zorro_esp_write8(esp, (esp_count >> 8) & 0xff, ESP_TCMED);
--	zorro_esp_write8(esp, (esp_count >> 16) & 0xff, ESP_TCHI);
- 
- 	if (write) {
- 		/* DMA receive */
-@@ -649,7 +645,6 @@ static void zorro_esp_send_cyberII_dma_cmd(struct esp *esp, u32 addr,
- 
- 	zorro_esp_write8(esp, (esp_count >> 0) & 0xff, ESP_TCLOW);
- 	zorro_esp_write8(esp, (esp_count >> 8) & 0xff, ESP_TCMED);
--	zorro_esp_write8(esp, (esp_count >> 16) & 0xff, ESP_TCHI);
- 
- 	if (write) {
- 		/* DMA receive */
-@@ -691,7 +686,6 @@ static void zorro_esp_send_fastlane_dma_cmd(struct esp *esp, u32 addr,
- 
- 	zorro_esp_write8(esp, (esp_count >> 0) & 0xff, ESP_TCLOW);
- 	zorro_esp_write8(esp, (esp_count >> 8) & 0xff, ESP_TCMED);
--	zorro_esp_write8(esp, (esp_count >> 16) & 0xff, ESP_TCHI);
- 
- 	if (write) {
- 		/* DMA receive */
+-	if (ioc->pci_error_recovery || ioc->remove_host) {
++	if (!(_scsih_allow_scmd_to_device(ioc, scmd))) {
+ 		scmd->result = DID_NO_CONNECT << 16;
+ 		scmd->scsi_done(scmd);
+ 		return 0;
 -- 
 2.20.1
 
