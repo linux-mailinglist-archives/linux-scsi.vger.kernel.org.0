@@ -2,36 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 142B7FEEC3
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2019 16:54:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA036FEF19
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2019 16:56:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731385AbfKPPyD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 16 Nov 2019 10:54:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35428 "EHLO mail.kernel.org"
+        id S1730663AbfKPP4e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 16 Nov 2019 10:56:34 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731373AbfKPPyC (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:54:02 -0500
+        id S1731562AbfKPPz0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:55:26 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C72220B7C;
-        Sat, 16 Nov 2019 15:54:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AAD032192D;
+        Sat, 16 Nov 2019 15:55:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919641;
-        bh=+MSac9lGQ3g4tukeHIJJKFOOP18cM1X5Kz249xwJKOY=;
+        s=default; t=1573919726;
+        bh=Ya4z3h/D1ptB65uMeIAiGYXdMxZBBFenfL6jQ59dGu8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ud9eQNW5TP1X106S7MpeAC+VwsFMVR7DIO4oZxtsmt8Urc92Cn/KX9I9rbgwsnkZn
-         yBgtOUZAxrhAXzJ79qPJ50yFeKupja2jfFRlmtIZQI2Ek8+7slKe/Rm20k9KRrW7IC
-         PZPmivlilhBFxvzcgl9QdeDCHQdTdSwUYgbQ9IJM=
+        b=zobJt+1NTk9N7q0Zsvi+/pQyxmDRC04mIsIU2GjnCxUhGJ2RPB0ZrIB8PRC2HQhLy
+         WsN2AHg5LQcicObk/KhjsphtMuzsi//WQGzy0DlG+cmOPGJk08VGjqrq5dbNkQlNmf
+         Rj7DsllcJmFm9YgObUeOU76uvJOEYelEpzBlaK48=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>,
+Cc:     Suganath Prabu <suganath-prabu.subramani@broadcom.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, dc395x@twibble.org,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 21/77] scsi: dc395x: fix DMA API usage in sg_update_list
-Date:   Sat, 16 Nov 2019 10:52:43 -0500
-Message-Id: <20191116155339.11909-21-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 66/77] scsi: mpt3sas: Fix Sync cache command failure during driver unload
+Date:   Sat, 16 Nov 2019 10:53:28 -0500
+Message-Id: <20191116155339.11909-66-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116155339.11909-1-sashal@kernel.org>
 References: <20191116155339.11909-1-sashal@kernel.org>
@@ -44,36 +46,85 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
 
-[ Upstream commit 6c404a68bf83b4135a8a9aa1c388ebdf98e8ba7f ]
+[ Upstream commit 9029a72500b95578a35877a43473b82cb0386c53 ]
 
-We need to transfer device ownership to the CPU before we can manipulate
-the mapped data.
+This is to fix SYNC CACHE and START STOP command failures with
+DID_NO_CONNECT during driver unload.
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
+In driver's IO submission patch (i.e. in driver's .queuecommand()) driver
+won't allow any SCSI commands to the IOC when ioc->remove_host flag is set
+and hence SYNC CACHE commands which are issued to the target drives (where
+write cache is enabled) during driver unload time is failed with
+DID_NO_CONNECT status.
+
+Now modified the driver to allow SYNC CACHE and START STOP commands to IOC,
+even when remove_host flag is set.
+
+Signed-off-by: Suganath Prabu <suganath-prabu.subramani@broadcom.com>
+Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/dc395x.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 36 +++++++++++++++++++++++++++-
+ 1 file changed, 35 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
-index 9da0ac360848f..830b2d2dcf206 100644
---- a/drivers/scsi/dc395x.c
-+++ b/drivers/scsi/dc395x.c
-@@ -1972,6 +1972,11 @@ static void sg_update_list(struct ScsiReqBlk *srb, u32 left)
- 			xferred -= psge->length;
- 		} else {
- 			/* Partial SG entry done */
-+			pci_dma_sync_single_for_cpu(srb->dcb->
-+					    acb->dev,
-+					    srb->sg_bus_addr,
-+					    SEGMENTX_LEN,
-+					    PCI_DMA_TODEVICE);
- 			psge->length -= xferred;
- 			psge->address += xferred;
- 			srb->sg_index = idx;
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index 7d67a68bcc624..8735e4257028a 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -3254,6 +3254,40 @@ _scsih_tm_tr_complete(struct MPT3SAS_ADAPTER *ioc, u16 smid, u8 msix_index,
+ 	return _scsih_check_for_pending_tm(ioc, smid);
+ }
+ 
++/** _scsih_allow_scmd_to_device - check whether scmd needs to
++ *				 issue to IOC or not.
++ * @ioc: per adapter object
++ * @scmd: pointer to scsi command object
++ *
++ * Returns true if scmd can be issued to IOC otherwise returns false.
++ */
++inline bool _scsih_allow_scmd_to_device(struct MPT3SAS_ADAPTER *ioc,
++	struct scsi_cmnd *scmd)
++{
++
++	if (ioc->pci_error_recovery)
++		return false;
++
++	if (ioc->hba_mpi_version_belonged == MPI2_VERSION) {
++		if (ioc->remove_host)
++			return false;
++
++		return true;
++	}
++
++	if (ioc->remove_host) {
++
++		switch (scmd->cmnd[0]) {
++		case SYNCHRONIZE_CACHE:
++		case START_STOP:
++			return true;
++		default:
++			return false;
++		}
++	}
++
++	return true;
++}
+ 
+ /**
+  * _scsih_sas_control_complete - completion routine
+@@ -3880,7 +3914,7 @@ scsih_qcmd(struct Scsi_Host *shost, struct scsi_cmnd *scmd)
+ 		return 0;
+ 	}
+ 
+-	if (ioc->pci_error_recovery || ioc->remove_host) {
++	if (!(_scsih_allow_scmd_to_device(ioc, scmd))) {
+ 		scmd->result = DID_NO_CONNECT << 16;
+ 		scmd->scsi_done(scmd);
+ 		return 0;
 -- 
 2.20.1
 
