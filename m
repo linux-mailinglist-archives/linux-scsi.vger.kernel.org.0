@@ -2,74 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E36FFEA6C
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2019 04:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B56D7FEA77
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2019 04:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727341AbfKPDbM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 Nov 2019 22:31:12 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:49934 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727323AbfKPDbL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 15 Nov 2019 22:31:11 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id E43DA204191;
-        Sat, 16 Nov 2019 04:31:09 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Ur7A6L6K-T6h; Sat, 16 Nov 2019 04:31:03 +0100 (CET)
-Received: from [192.168.0.207] (unknown [110.150.152.53])
-        by smtp.infotech.no (Postfix) with ESMTPA id 2812F204162;
-        Sat, 16 Nov 2019 04:31:01 +0100 (CET)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH] scsi_debug: num_tgts must be >= 0
-To:     Maurizio Lombardi <mlombard@redhat.com>, jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org
-References: <20191115163727.24626-1-mlombard@redhat.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <a52b6464-c710-3477-a79d-dca0b9915bf6@interlog.com>
-Date:   Sat, 16 Nov 2019 14:30:57 +1100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191115163727.24626-1-mlombard@redhat.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+        id S1727524AbfKPDrq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 Nov 2019 22:47:46 -0500
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:35238 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727399AbfKPDrk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 15 Nov 2019 22:47:40 -0500
+Received: by kvm5.telegraphics.com.au (Postfix, from userid 502)
+        id 6FCFE2A71E; Fri, 15 Nov 2019 22:47:39 -0500 (EST)
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     "Michael Schmitz" <schmitzmic@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <993b17545990f31f9fa5a98202b51102a68e7594.1573875417.git.fthain@telegraphics.com.au>
+From:   Finn Thain <fthain@telegraphics.com.au>
+Subject: [PATCH] NCR5380: Add disconnect_mask module parameter
+Date:   Sat, 16 Nov 2019 14:36:57 +1100
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-11-16 3:37 a.m., Maurizio Lombardi wrote:
-> Passing the parameter "num_tgts=-1" will start
-> an infinite loop that exhausts the system memory
+Add a module parameter to inhibit disconnect/reselect for individual
+targets. This gains compatibility with Aztec PowerMonster SCSI/SATA
+adapters with buggy firmware. (No fix is available from the vendor.)
 
-Ouch.
+Apparently these adapters pass-through the product/vendor of the
+attached SATA device. Since they can't be identified from the response
+to an INQUIRY command, a device blacklist flag won't work.
 
-> Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
+Cc: Michael Schmitz <schmitzmic@gmail.com>
+Reviewed-and-tested-by: Michael Schmitz <schmitzmic@gmail.com>
+Signed-off-by: Finn Thain <fthain@telegraphics.com.au>
+---
+This should be a per-host or per-bus setting and not per-driver
+(though in the case of atari_scsi there is only one host).
+Is there a better way?
+---
+ drivers/scsi/NCR5380.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
-
-> ---
->   drivers/scsi/scsi_debug.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-> index d323523f5f9d..32965ec76965 100644
-> --- a/drivers/scsi/scsi_debug.c
-> +++ b/drivers/scsi/scsi_debug.c
-> @@ -5263,6 +5263,11 @@ static int __init scsi_debug_init(void)
->   		return -EINVAL;
->   	}
->   
-> +	if (sdebug_num_tgts < 0) {
-> +		pr_err("num_tgts must be >= 0\n");
-> +		return -EINVAL;
-> +	}
-> +
->   	if (sdebug_guard > 1) {
->   		pr_err("guard must be 0 or 1\n");
->   		return -EINVAL;
-> 
+diff --git a/drivers/scsi/NCR5380.c b/drivers/scsi/NCR5380.c
+index 536426f25e86..d4401c768a0c 100644
+--- a/drivers/scsi/NCR5380.c
++++ b/drivers/scsi/NCR5380.c
+@@ -129,6 +129,9 @@
+ #define NCR5380_release_dma_irq(x)
+ #endif
+ 
++static unsigned int disconnect_mask = ~0;
++module_param(disconnect_mask, int, 0444);
++
+ static int do_abort(struct Scsi_Host *);
+ static void do_reset(struct Scsi_Host *);
+ static void bus_reset_cleanup(struct Scsi_Host *);
+@@ -954,7 +957,8 @@ static bool NCR5380_select(struct Scsi_Host *instance, struct scsi_cmnd *cmd)
+ 	int err;
+ 	bool ret = true;
+ 	bool can_disconnect = instance->irq != NO_IRQ &&
+-			      cmd->cmnd[0] != REQUEST_SENSE;
++			      cmd->cmnd[0] != REQUEST_SENSE &&
++			      (disconnect_mask & BIT(scmd_id(cmd)));
+ 
+ 	NCR5380_dprint(NDEBUG_ARBITRATION, instance);
+ 	dsprintk(NDEBUG_ARBITRATION, instance, "starting arbitration, id = %d\n",
+-- 
+2.23.0
 
