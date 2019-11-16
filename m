@@ -2,37 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D01FF355
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2019 17:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 906BBFF347
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 Nov 2019 17:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728183AbfKPPmI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 16 Nov 2019 10:42:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45626 "EHLO mail.kernel.org"
+        id S1729629AbfKPQYh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 16 Nov 2019 11:24:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45914 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728168AbfKPPmI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:42:08 -0500
+        id S1727812AbfKPPmV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:42:21 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 425A520815;
-        Sat, 16 Nov 2019 15:42:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A424C2075E;
+        Sat, 16 Nov 2019 15:42:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573918927;
-        bh=0kjC/bhYkd5uVA3EYta0Z8i5/4EmS3pkzPHQm41NAXU=;
+        s=default; t=1573918941;
+        bh=qsqvoLnvkm9r6o6e3Zo90Z9m4WCmoNPo7yyWUXtRSf4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hX0PBoM8HJQK/5/49MCl7WJmMYSs8fzuljEdJvtlVuWvnugttNdEXcDQYq+iGeCtu
-         RiJqFfVogwb7fQ9EySFyoa939O1jj5EIv+i8LnmbsiEbVlCiTMAh0ov6NyUJ3Rd6HL
-         0Y2OqNy9evgVwnWwUnUTmDq1F5wM6nmMowNXC42s=
+        b=iO0Fiazwy0Hg8GGtY/N6W60KGmr12j1KUKuGyL/IMkP+P7ZKzOksYajZT45VrE1SD
+         QuJqVYg9WVMp8Y9Gt/2rONnkHYiIgtrx6lXE6sTj83NKqO8KyRs8UoI7RHOJPem3gR
+         YpVq1G8a4BrJmzOGbF/jnYmlHb/qXCd+ByVWjxcs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+Cc:     Christoph Hellwig <hch@lst.de>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.19 054/237] scsi: iscsi_tcp: Explicitly cast param in iscsi_sw_tcp_host_get_param
-Date:   Sat, 16 Nov 2019 10:38:09 -0500
-Message-Id: <20191116154113.7417-54-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, dc395x@twibble.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 063/237] scsi: dc395x: fix dma API usage in srb_done
+Date:   Sat, 16 Nov 2019 10:38:18 -0500
+Message-Id: <20191116154113.7417-63-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
@@ -45,46 +44,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Nathan Chancellor <natechancellor@gmail.com>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 20054597f169090109fc3f0dfa1a48583f4178a4 ]
+[ Upstream commit 3a5bd7021184dec2946f2a4d7a8943f8a5713e52 ]
 
-Clang warns when one enumerated type is implicitly converted to another.
+We can't just transfer ownership to the CPU and then unmap, as this will
+break with swiotlb.
 
-drivers/scsi/iscsi_tcp.c:803:15: warning: implicit conversion from
-enumeration type 'enum iscsi_host_param' to different enumeration type
-'enum iscsi_param' [-Wenum-conversion]
-                                                 &addr, param, buf);
-                                                        ^~~~~
-1 warning generated.
+Instead unmap the command and sense buffer a little earlier in the I/O
+completion handler and get rid of the pci_dma_sync_sg_for_cpu call
+entirely.
 
-iscsi_conn_get_addr_param handles ISCSI_HOST_PARAM_IPADDRESS just fine
-so add an explicit cast to iscsi_param to make it clear to Clang that
-this is expected behavior.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/153
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/iscsi_tcp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/dc395x.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index b025a0b743417..23354f206533b 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -800,7 +800,8 @@ static int iscsi_sw_tcp_host_get_param(struct Scsi_Host *shost,
- 			return rc;
- 
- 		return iscsi_conn_get_addr_param((struct sockaddr_storage *)
--						 &addr, param, buf);
-+						 &addr,
-+						 (enum iscsi_param)param, buf);
- 	default:
- 		return iscsi_host_get_param(shost, param, buf);
+diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
+index 1ed2cd82129d2..08161df64ead5 100644
+--- a/drivers/scsi/dc395x.c
++++ b/drivers/scsi/dc395x.c
+@@ -3447,14 +3447,12 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+ 		}
  	}
+ 
+-	if (dir != PCI_DMA_NONE && scsi_sg_count(cmd))
+-		pci_dma_sync_sg_for_cpu(acb->dev, scsi_sglist(cmd),
+-					scsi_sg_count(cmd), dir);
+-
+ 	ckc_only = 0;
+ /* Check Error Conditions */
+       ckc_e:
+ 
++	pci_unmap_srb(acb, srb);
++
+ 	if (cmd->cmnd[0] == INQUIRY) {
+ 		unsigned char *base = NULL;
+ 		struct ScsiInqData *ptr;
+@@ -3507,7 +3505,6 @@ static void srb_done(struct AdapterCtlBlk *acb, struct DeviceCtlBlk *dcb,
+ 			cmd, cmd->result);
+ 		srb_free_insert(acb, srb);
+ 	}
+-	pci_unmap_srb(acb, srb);
+ 
+ 	cmd->scsi_done(cmd);
+ 	waiting_process_next(acb);
 -- 
 2.20.1
 
