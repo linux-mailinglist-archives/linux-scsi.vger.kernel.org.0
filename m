@@ -2,28 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7DF10011D
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 Nov 2019 10:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B539E100120
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 Nov 2019 10:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbfKRJWc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Nov 2019 04:22:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54574 "EHLO mx1.suse.de"
+        id S1726855AbfKRJWe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Nov 2019 04:22:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:54664 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726775AbfKRJWc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 18 Nov 2019 04:22:32 -0500
+        id S1726795AbfKRJWd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 18 Nov 2019 04:22:33 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4F8D6B13A;
-        Mon, 18 Nov 2019 09:22:30 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 4073BB1E5;
+        Mon, 18 Nov 2019 09:22:31 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Hannes Reinecke <hare@suse.com>
-Subject: [PATCH 6/9] scsi: add scsi_host_busy_iter()
-Date:   Mon, 18 Nov 2019 10:22:05 +0100
-Message-Id: <20191118092208.54521-7-hare@suse.de>
+        Balsundar P <balsundar.p@microsemi.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Subject: [PATCH 7/9] aacraid: use scsi_host_busy_iter() in aac_wait_for_io_completion()
+Date:   Mon, 18 Nov 2019 10:22:06 +0100
+Message-Id: <20191118092208.54521-8-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191118092208.54521-1-hare@suse.de>
 References: <20191118092208.54521-1-hare@suse.de>
@@ -32,73 +33,62 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add an iterator scsi_host_busy_iter() to traverse all busy commands.
-If locking against concurrent command completions is required it
-has to be provided by the caller.
+Use the midlayer helper function to traverse outstanding commands.
 
-Signed-off-by: Hannes Reinecke <hare@suse.com>
+Cc: Balsundar P <balsundar.p@microsemi.com>
+Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/hosts.c     | 33 +++++++++++++++++++++++++++++++++
- include/scsi/scsi_host.h |  5 +++++
- 2 files changed, 38 insertions(+)
+ drivers/scsi/aacraid/comminit.c | 30 +++++++++++++-----------------
+ 1 file changed, 13 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index da1df48ef27c..a0a660b50929 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -674,3 +674,36 @@ void scsi_host_flush_commands(struct Scsi_Host *shost, int status)
- 	blk_mq_tagset_busy_iter(&shost->tag_set, flush_cmds_iter, &status);
+diff --git a/drivers/scsi/aacraid/comminit.c b/drivers/scsi/aacraid/comminit.c
+index f75878d773cf..89c0ca339ef5 100644
+--- a/drivers/scsi/aacraid/comminit.c
++++ b/drivers/scsi/aacraid/comminit.c
+@@ -272,29 +272,25 @@ static void aac_queue_init(struct aac_dev * dev, struct aac_queue * q, u32 *mem,
+ 	q->entries = qsize;
  }
- EXPORT_SYMBOL_GPL(scsi_host_flush_commands);
-+
-+struct scsi_host_busy_iter_data {
-+	scsi_host_busy_iter_fn *fn;
-+	void *priv;
-+};
-+
-+static bool __scsi_host_busy_iter_fn(struct request *req, void *priv,
-+				   bool reserved)
+ 
++static bool wait_for_io_iter(struct scsi_cmnd *cmd, void *data, bool reserved)
 +{
-+	struct scsi_host_busy_iter_data *iter_data = priv;
-+	struct scsi_cmnd *sc = blk_mq_rq_to_pdu(req);
++	int *active = data;
 +
-+	return iter_data->fn(sc, iter_data->priv, reserved);
++	if (cmd->SCp.phase == AAC_OWNER_FIRMWARE)
++		*active = 1;
++	return true;
 +}
 +
-+/**
-+ * scsi_host_busy_iter - Iterate over all busy commands
-+ * @shost:	Pointer to Scsi_Host.
-+ * @fn:		Function to call on each busy command
-+ * @priv:	Data pointer passed to @fn
-+ **/
-+void scsi_host_busy_iter(struct Scsi_Host *shost,
-+			 scsi_host_busy_iter_fn *fn, void *priv)
-+{
-+	struct scsi_host_busy_iter_data iter_data = {
-+		.fn = fn,
-+		.priv = priv,
-+	};
-+
-+	blk_mq_tagset_busy_iter(&shost->tag_set, __scsi_host_busy_iter_fn,
-+				&iter_data);
-+}
-+EXPORT_SYMBOL_GPL(scsi_host_busy_iter);
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index cb9a6fe9ad5b..1293d9686115 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -761,6 +761,11 @@ static inline int scsi_host_scan_allowed(struct Scsi_Host *shost)
- extern void scsi_unblock_requests(struct Scsi_Host *);
- extern void scsi_block_requests(struct Scsi_Host *);
++/* scsi_block_requests() has been called, so no new request can be issued */
+ static void aac_wait_for_io_completion(struct aac_dev *aac)
+ {
+-	unsigned long flagv = 0;
+-	int i = 0;
++	int i;
  
-+typedef bool (scsi_host_busy_iter_fn)(struct scsi_cmnd *, void *, bool);
-+
-+void scsi_host_busy_iter(struct Scsi_Host *,
-+			 scsi_host_busy_iter_fn *fn, void *priv);
-+
- struct class_container;
+ 	for (i = 60; i; --i) {
+-		struct scsi_device *dev;
+-		struct scsi_cmnd *command;
+ 		int active = 0;
  
- /*
+-		__shost_for_each_device(dev, aac->scsi_host_ptr) {
+-			spin_lock_irqsave(&dev->list_lock, flagv);
+-			list_for_each_entry(command, &dev->cmd_list, list) {
+-				if (command->SCp.phase == AAC_OWNER_FIRMWARE) {
+-					active++;
+-					break;
+-				}
+-			}
+-			spin_unlock_irqrestore(&dev->list_lock, flagv);
+-			if (active)
+-				break;
+-
+-		}
++		scsi_host_busy_iter(aac->scsi_host_ptr,
++				    wait_for_io_iter, &active);
+ 		/*
+ 		 * We can exit If all the commands are complete
+ 		 */
 -- 
 2.16.4
 
