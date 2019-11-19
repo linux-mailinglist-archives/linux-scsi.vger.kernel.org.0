@@ -2,271 +2,124 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41D571026C2
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Nov 2019 15:31:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A364102845
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Nov 2019 16:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728191AbfKSObW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Nov 2019 09:31:22 -0500
-Received: from szxga04-in.huawei.com ([45.249.212.190]:7146 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728069AbfKSObU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 19 Nov 2019 09:31:20 -0500
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id B12EEB9056EC0E69E3D3;
-        Tue, 19 Nov 2019 22:31:08 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS402-HUB.china.huawei.com (10.3.19.202) with Microsoft SMTP Server id
- 14.3.439.0; Tue, 19 Nov 2019 22:31:00 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <ming.lei@redhat.com>,
-        <hare@suse.com>, <bvanassche@acm.org>, <chenxiang66@hisilicon.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH RFC V2 5/5] scsi: hisi_sas: Switch v3 hw to MQ
-Date:   Tue, 19 Nov 2019 22:27:38 +0800
-Message-ID: <1574173658-76818-6-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1574173658-76818-1-git-send-email-john.garry@huawei.com>
-References: <1574173658-76818-1-git-send-email-john.garry@huawei.com>
+        id S1727991AbfKSPlI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Nov 2019 10:41:08 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:33330 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727805AbfKSPlI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 19 Nov 2019 10:41:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574178067;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=VXha/U7dFW92tD/+5KwRI9V8OS/lwbb4CbzbqxCKjM0=;
+        b=cuJva7/etOenES770nzf1QmdTfy70xYBR2bc2/Id9wfWXxgOR68ChbK4tr3HkYTQzwMGRx
+        smTqLBeAPanE1Ehz1Xlu/FGhXJUvkyN9HKs2tbCUZa2CWB6AO6feIUa2x/RIScDszBzRhE
+        +iYbE4Oq1ahZwmLDXF981XmhsNj8pvA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-97-a5dhx_99Or-ZLvEJjTEt5g-1; Tue, 19 Nov 2019 10:41:03 -0500
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 17688477;
+        Tue, 19 Nov 2019 15:41:02 +0000 (UTC)
+Received: from manaslu.redhat.com (ovpn-204-211.brq.redhat.com [10.40.204.211])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 908C510027A5;
+        Tue, 19 Nov 2019 15:41:00 +0000 (UTC)
+From:   Maurizio Lombardi <mlombard@redhat.com>
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
+        dgilbert@interlog.com
+Subject: [PATCH] scsi_debug: check if the max_queue parameter is valid
+Date:   Tue, 19 Nov 2019 16:40:59 +0100
+Message-Id: <20191119154059.9440-1-mlombard@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-MC-Unique: a5dhx_99Or-ZLvEJjTEt5g-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that the block layer provides a shared tag, we can switch the driver
-to expose all HW queues.
+Passing an invalid value to max_queue may cause memory corruption
+or kernel freeze.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
+E.g.
+
+[ 1841.074356] INFO: task rmmod:18774 blocked for more than 120 seconds.
+[ 1841.074400]       Not tainted 4.18.0-151.el8.ppc64le #1
+[ 1841.074435] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables =
+this message.
+[ 1841.074486] rmmod           D    0 18774  17507 0x00040080
+[ 1841.074549] Call Trace:
+[ 1841.074569] [c0000001eae2b380] [c00000018ae47600] 0xc00000018ae47600 (un=
+reliable)
+[ 1841.074622] [c0000001eae2b550] [c00000000001f9a0] __switch_to+0x2e0/0x4e=
+0
+[ 1841.074666] [c0000001eae2b5b0] [c000000000d716b4] __schedule+0x2c4/0x8e0
+[ 1841.074712] [c0000001eae2b680] [c000000000d71d28] schedule+0x58/0x120
+[ 1841.074755] [c0000001eae2b6b0] [c000000000188a44] async_synchronize_cook=
+ie_domain+0x174/0x360
+[ 1841.074848] [c0000001eae2b780] [d000000002e228b0] sd_remove+0x78/0x120 [=
+sd_mod]
+[ 1841.074908] [c0000001eae2b7c0] [c0000000008af084] device_release_driver_=
+internal+0x2d4/0x3f0
+[ 1841.074971] [c0000001eae2b810] [c0000000008ac368] bus_remove_device+0x12=
+8/0x270
+[ 1841.075025] [c0000001eae2b890] [c0000000008a6828] device_del+0x298/0x590
+[ 1841.075074] [c0000001eae2b940] [c00000000091dfe0] __scsi_remove_device+0=
+x190/0x1f0
+[ 1841.075127] [c0000001eae2b980] [c000000000919bb4] scsi_forget_host+0xa4/=
+0xb0
+[ 1841.075180] [c0000001eae2b9b0] [c000000000907a8c] scsi_remove_host+0xac/=
+0x3a0
+[ 1841.075241] [c0000001eae2ba40] [d000000002624d9c] sdebug_driver_remove+0=
+x44/0x150 [scsi_debug]
+[ 1841.075302] [c0000001eae2bad0] [c0000000008af084] device_release_driver_=
+internal+0x2d4/0x3f0
+[ 1841.075364] [c0000001eae2bb20] [c0000000008ac368] bus_remove_device+0x12=
+8/0x270
+[ 1841.075417] [c0000001eae2bba0] [c0000000008a6828] device_del+0x298/0x590
+[ 1841.075461] [c0000001eae2bc50] [c0000000008a6b50] device_unregister+0x30=
+/0xa0
+[ 1841.075515] [c0000001eae2bcc0] [d000000002623a8c] sdebug_remove_adapter+=
+0xe4/0x130 [scsi_debug]
+[ 1841.075599] [c0000001eae2bd00] [d00000000262eeb8] scsi_debug_exit+0x50/0=
+x1348 [scsi_debug]
+[ 1841.075652] [c0000001eae2bd60] [c0000000002453f0] sys_delete_module+0x21=
+0/0x380
+[ 1841.075706] [c0000001eae2be30] [c00000000000b388] system_call+0x5c/0x70
+
+Signed-off-by: Maurizio Lombardi <mlombard@redhat.com>
 ---
- drivers/scsi/hisi_sas/hisi_sas.h       |  3 +-
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 36 ++++++-----
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 86 +++++++++++---------------
- 3 files changed, 56 insertions(+), 69 deletions(-)
+ drivers/scsi/scsi_debug.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index 720c4d6be939..5dbc59084f63 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -8,6 +8,8 @@
- #define _HISI_SAS_H_
- 
- #include <linux/acpi.h>
-+#include <linux/blk-mq.h>
-+#include <linux/blk-mq-pci.h>
- #include <linux/clk.h>
- #include <linux/debugfs.h>
- #include <linux/dmapool.h>
-@@ -390,7 +392,6 @@ struct hisi_hba {
- 	u32 intr_coal_count;	/* Interrupt count to coalesce */
- 
- 	int cq_nvecs;
--	unsigned int *reply_map;
- 
- 	/* bist */
- 	enum sas_linkrate debugfs_bist_linkrate;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 0847e682797b..48d6f1c7f9c2 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -421,6 +421,7 @@ static int hisi_sas_task_prep(struct sas_task *task,
- 	struct device *dev = hisi_hba->dev;
- 	int dlvry_queue_slot, dlvry_queue, rc, slot_idx;
- 	int n_elem = 0, n_elem_dif = 0, n_elem_req = 0;
-+	struct scsi_cmnd *scmd = NULL;
- 	struct hisi_sas_dq *dq;
- 	unsigned long flags;
- 	int wr_q_index;
-@@ -436,10 +437,23 @@ static int hisi_sas_task_prep(struct sas_task *task,
- 		return -ECOMM;
- 	}
- 
--	if (hisi_hba->reply_map) {
--		int cpu = raw_smp_processor_id();
--		unsigned int dq_index = hisi_hba->reply_map[cpu];
-+	if (task->uldd_task) {
-+		struct ata_queued_cmd *qc;
- 
-+		if (dev_is_sata(device)) {
-+			qc = task->uldd_task;
-+			scmd = qc->scsicmd;
-+		} else {
-+			scmd = task->uldd_task;
-+		}
-+	}
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 44cb054d5e66..c2779012d968 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -5268,6 +5268,11 @@ static int __init scsi_debug_init(void)
+ =09=09return -EINVAL;
+ =09}
+=20
++=09if (sdebug_max_queue <=3D 0 || sdebug_max_queue > SDEBUG_CANQUEUE) {
++=09=09pr_err("max_queue must be > 0 and <=3D %d\n", SDEBUG_CANQUEUE);
++=09=09return -EINVAL;
++=09}
 +
-+	if (scmd) {
-+		unsigned int dq_index;
-+		u32 blk_tag;
-+
-+		blk_tag = blk_mq_unique_tag(scmd->request);
-+		dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
- 		*dq_pointer = dq = &hisi_hba->dq[dq_index];
- 	} else {
- 		*dq_pointer = dq = sas_dev->dq;
-@@ -468,21 +482,9 @@ static int hisi_sas_task_prep(struct sas_task *task,
- 
- 	if (hisi_hba->hw->slot_index_alloc)
- 		rc = hisi_hba->hw->slot_index_alloc(hisi_hba, device);
--	else {
--		struct scsi_cmnd *scsi_cmnd = NULL;
--
--		if (task->uldd_task) {
--			struct ata_queued_cmd *qc;
-+	else
-+		rc = hisi_sas_slot_index_alloc(hisi_hba, scmd);
- 
--			if (dev_is_sata(device)) {
--				qc = task->uldd_task;
--				scsi_cmnd = qc->scsicmd;
--			} else {
--				scsi_cmnd = task->uldd_task;
--			}
--		}
--		rc  = hisi_sas_slot_index_alloc(hisi_hba, scsi_cmnd);
--	}
- 	if (rc < 0)
- 		goto err_out_dif_dma_unmap;
- 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index cb8d087762db..5180360482eb 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2344,66 +2344,35 @@ static irqreturn_t cq_interrupt_v3_hw(int irq_no, void *p)
- 	return IRQ_HANDLED;
- }
- 
--static void setup_reply_map_v3_hw(struct hisi_hba *hisi_hba, int nvecs)
-+static int interrupt_preinit_v3_hw(struct hisi_hba *hisi_hba)
- {
--	const struct cpumask *mask;
--	int queue, cpu;
--
--	for (queue = 0; queue < nvecs; queue++) {
--		struct hisi_sas_cq *cq = &hisi_hba->cq[queue];
-+	int vectors;
-+	int max_msi = HISI_SAS_MSI_COUNT_V3_HW, min_msi;
-+	struct Scsi_Host *shost = hisi_hba->shost;
-+	struct irq_affinity desc = {
-+		.pre_vectors = BASE_VECTORS_V3_HW,
-+	};
-+
-+	min_msi = MIN_AFFINE_VECTORS_V3_HW;
-+	vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
-+						 min_msi, max_msi,
-+						 PCI_IRQ_MSI |
-+						 PCI_IRQ_AFFINITY,
-+						 &desc);
-+	if (vectors < 0)
-+		return -ENOENT;
- 
--		mask = pci_irq_get_affinity(hisi_hba->pci_dev, queue +
--					    BASE_VECTORS_V3_HW);
--		if (!mask)
--			goto fallback;
--		cq->pci_irq_mask = mask;
--		for_each_cpu(cpu, mask)
--			hisi_hba->reply_map[cpu] = queue;
--	}
--	return;
-+	hisi_hba->cq_nvecs = vectors - BASE_VECTORS_V3_HW;
-+	shost->nr_hw_queues = hisi_hba->cq_nvecs;
- 
--fallback:
--	for_each_possible_cpu(cpu)
--		hisi_hba->reply_map[cpu] = cpu % hisi_hba->queue_count;
--	/* Don't clean all CQ masks */
-+	return 0;
- }
- 
- static int interrupt_init_v3_hw(struct hisi_hba *hisi_hba)
- {
- 	struct device *dev = hisi_hba->dev;
- 	struct pci_dev *pdev = hisi_hba->pci_dev;
--	int vectors, rc, i;
--	int max_msi = HISI_SAS_MSI_COUNT_V3_HW, min_msi;
--
--	if (auto_affine_msi_experimental) {
--		struct irq_affinity desc = {
--			.pre_vectors = BASE_VECTORS_V3_HW,
--		};
--
--		min_msi = MIN_AFFINE_VECTORS_V3_HW;
--
--		hisi_hba->reply_map = devm_kcalloc(dev, nr_cpu_ids,
--						   sizeof(unsigned int),
--						   GFP_KERNEL);
--		if (!hisi_hba->reply_map)
--			return -ENOMEM;
--		vectors = pci_alloc_irq_vectors_affinity(hisi_hba->pci_dev,
--							 min_msi, max_msi,
--							 PCI_IRQ_MSI |
--							 PCI_IRQ_AFFINITY,
--							 &desc);
--		if (vectors < 0)
--			return -ENOENT;
--		setup_reply_map_v3_hw(hisi_hba, vectors - BASE_VECTORS_V3_HW);
--	} else {
--		min_msi = max_msi;
--		vectors = pci_alloc_irq_vectors(hisi_hba->pci_dev, min_msi,
--						max_msi, PCI_IRQ_MSI);
--		if (vectors < 0)
--			return vectors;
--	}
--
--	hisi_hba->cq_nvecs = vectors - BASE_VECTORS_V3_HW;
-+	int rc, i;
- 
- 	rc = devm_request_irq(dev, pci_irq_vector(pdev, 1),
- 			      int_phy_up_down_bcast_v3_hw, 0,
-@@ -3048,6 +3017,15 @@ static int debugfs_set_bist_v3_hw(struct hisi_hba *hisi_hba, bool enable)
- 	return 0;
- }
- 
-+static int hisi_sas_map_queues(struct Scsi_Host *shost)
-+{
-+	struct hisi_hba *hisi_hba = shost_priv(shost);
-+	struct blk_mq_queue_map *qmap = &shost->tag_set.map[HCTX_TYPE_DEFAULT];
-+
-+	return blk_mq_pci_map_queues(qmap, hisi_hba->pci_dev,
-+					     BASE_VECTORS_V3_HW);
-+}
-+
- static struct scsi_host_template sht_v3_hw = {
- 	.name			= DRV_NAME,
- 	.module			= THIS_MODULE,
-@@ -3056,6 +3034,7 @@ static struct scsi_host_template sht_v3_hw = {
- 	.slave_configure	= hisi_sas_slave_configure,
- 	.scan_finished		= hisi_sas_scan_finished,
- 	.scan_start		= hisi_sas_scan_start,
-+	.map_queues		= hisi_sas_map_queues,
- 	.change_queue_depth	= sas_change_queue_depth,
- 	.bios_param		= sas_bios_param,
- 	.this_id		= -1,
-@@ -3069,6 +3048,7 @@ static struct scsi_host_template sht_v3_hw = {
- 	.shost_attrs		= host_attrs_v3_hw,
- 	.tag_alloc_policy	= BLK_TAG_ALLOC_RR,
- 	.host_reset             = hisi_sas_host_reset,
-+	.host_tagset		= 1,
- };
- 
- static const struct hisi_sas_hw hisi_sas_v3_hw = {
-@@ -3240,6 +3220,10 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	if (hisi_sas_debugfs_enable)
- 		hisi_sas_debugfs_init(hisi_hba);
- 
-+	rc = interrupt_preinit_v3_hw(hisi_hba);
-+	if (rc)
-+		goto err_out_ha;
-+	dev_err(dev, "%d hw qeues\n", shost->nr_hw_queues);
- 	rc = scsi_add_host(shost, dev);
- 	if (rc)
- 		goto err_out_ha;
--- 
-2.17.1
+ =09if (sdebug_guard > 1) {
+ =09=09pr_err("guard must be 0 or 1\n");
+ =09=09return -EINVAL;
+--=20
+Maurizio Lombardi
 
