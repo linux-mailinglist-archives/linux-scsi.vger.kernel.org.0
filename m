@@ -2,281 +2,165 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F291019FE
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Nov 2019 08:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8E11019FA
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Nov 2019 08:05:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727351AbfKSHF5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Nov 2019 02:05:57 -0500
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:52212 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727145AbfKSHF4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 19 Nov 2019 02:05:56 -0500
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAJ73hYn009047;
-        Mon, 18 Nov 2019 23:05:30 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=proofpoint;
- bh=qI6V5date5LOpgUANTAHpyiGkFplUbk4ChWLOvlSdmA=;
- b=iGiGCmUj2uUjcqzfkg7YiVPZukTBVpsZIFaIXjCkvjgSZyMIawX761pmrwlPST6natBC
- xkLV8ae7sfsZeAuvi0Sk7ev2egcB2aNuZbM+1oyWehMTy/4k6NiP6LYjb4pB3pggvWxk
- +IyiHIaoZkUVpOpBOObERjJvBZTqRckSP2a4D7cgt2jNYCf5uHadeOFe706JOW0hf/Ap
- /pjbEuG9iEzopGaP6JNY/TLu2XDyEF8pyDYPB8cad1PIhMm19vv9+rNMDsGb46b5pdUb
- JzA/cTUi8eEYwBdaWzv5LvgTEknh9ePCANHkzkX+jyzotXxRbWAWc0Q4cZRlQVt4tXWT Tg== 
-Received: from nam03-co1-obe.outbound.protection.outlook.com (mail-co1nam03lp2051.outbound.protection.outlook.com [104.47.40.51])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 2wadjy9hhq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Nov 2019 23:05:29 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=deFm+XWE/9KpxY7Nq7fywyV0l3+ScXO5rVxqle0NWolar+LYHQRxHEY5GWWu1FSzCQA22uC9OZa1bZGzXGmkZl0N8Tkw20jJlHLuz+DzZePOSK32jjgRtxHASCbFHTriXVQSqvP1/f+g6XoLN7r8xASibQuMkSQID5Utc4/NETrpvTrxccDsSFMz+lXe/hQMwoj6sqIkiBmFNq37BIX3RmDuy2x31wNSxieSIHFbfq6tN5/7/5pOxwvtJGlzPI8HEBHkaRu9QVBBh2XANKHGq8FRJXGhK4KC0asu77Lst+Mun413uatPFvjRESjCo1vq+cpvYVFOHvXhZMUTvPAt9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qI6V5date5LOpgUANTAHpyiGkFplUbk4ChWLOvlSdmA=;
- b=lOe+KpsiQa8WsMKHxca6eibrso5wEQBy7rew8RTHkWN7V/0awBjEDXgMtDTPeeRO/q1t3bjUpvrlUTbU6NAavXpJBaDBzDkhusRb3arx1mP+a9cUGqVi12JBOAeR6AP1QxhQzTvv9hqYau8/oxNjOhh/yJP9f0LnWuNDX9WiPuwH3XFsBNTIOc/h2+vXTJ2DxxgJ1HOjFNjptGXhgf9bocna5zzKv0V3RVMYvdPbUk78WDCkcH/qm1E1wL1vbZtMaFMJ+7tzEPb8BwSnLo5OUIKf5jesiLoA+F8kgBpMxwOCAP5ABYHaDUEfOJXJ2b68y/h931a3X2Kk0tlfA56UdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 158.140.1.28) smtp.rcpttodomain=linux.ibm.com smtp.mailfrom=cadence.com;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qI6V5date5LOpgUANTAHpyiGkFplUbk4ChWLOvlSdmA=;
- b=1MnMJmOAFfVLx5g0XMEsvThknnQh8t9LHy3cdXUYeb50JHU3HPxSP6qehE/HaPhumbJ/eeSVvqELxNmZOZv5yV27aun0RdVMuR9KN9WLleCsnMRdar2gb9Up0bf16sF5GwBd/mG0e+NKit5trbMpJ7zH+fos9Lq3hUXzA5Bvww4=
-Received: from BYAPR07CA0057.namprd07.prod.outlook.com (2603:10b6:a03:60::34)
- by CY1PR07MB2587.namprd07.prod.outlook.com (2a01:111:e400:c60e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2451.27; Tue, 19 Nov
- 2019 07:05:26 +0000
-Received: from MW2NAM12FT015.eop-nam12.prod.protection.outlook.com
- (2a01:111:f400:fe5a::206) by BYAPR07CA0057.outlook.office365.com
- (2603:10b6:a03:60::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2451.23 via Frontend
- Transport; Tue, 19 Nov 2019 07:05:26 +0000
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- cadence.com discourages use of 158.140.1.28 as permitted sender)
-Received: from sjmaillnx2.cadence.com (158.140.1.28) by
- MW2NAM12FT015.mail.protection.outlook.com (10.13.180.82) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2451.23 via Frontend Transport; Tue, 19 Nov 2019 07:05:25 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id xAJ75LMB023874
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Mon, 18 Nov 2019 23:05:24 -0800
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3; Tue, 19 Nov 2019 08:05:20 +0100
-Received: from vleu-orange.cadence.com (10.160.88.83) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Tue, 19 Nov 2019 08:05:20 +0100
-Received: from vleu-orange.cadence.com (localhost.localdomain [127.0.0.1])
-        by vleu-orange.cadence.com (8.14.4/8.14.4) with ESMTP id xAJ75KYc024629;
-        Tue, 19 Nov 2019 08:05:20 +0100
-Received: (from sheebab@localhost)
-        by vleu-orange.cadence.com (8.14.4/8.14.4/Submit) id xAJ75Kks024628;
-        Tue, 19 Nov 2019 08:05:20 +0100
-From:   sheebab <sheebab@cadence.com>
-To:     <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
-        <pedrom.sousa@synopsys.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <stanley.chu@mediatek.com>,
-        <beanhuo@micron.com>, <yuehaibing@huawei.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <vigneshr@ti.com>, <linux-block@vger.kernel.org>
-CC:     <rafalc@cadence.com>, <mparab@cadence.com>,
-        sheebab <sheebab@cadence.com>
-Subject: [PATCH RESEND 2/2] scsi: ufs: Update L4 attributes on manual hibern8 exit in Cadence UFS.
-Date:   Tue, 19 Nov 2019 08:04:42 +0100
-Message-ID: <1574147082-22725-3-git-send-email-sheebab@cadence.com>
-X-Mailer: git-send-email 2.4.5
-In-Reply-To: <1574147082-22725-1-git-send-email-sheebab@cadence.com>
-References: <1574147082-22725-1-git-send-email-sheebab@cadence.com>
+        id S1726023AbfKSHFQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Nov 2019 02:05:16 -0500
+Received: from mx2.suse.de ([195.135.220.15]:44756 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725784AbfKSHFQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 19 Nov 2019 02:05:16 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id C915EAD4A;
+        Tue, 19 Nov 2019 07:05:12 +0000 (UTC)
+Subject: Re: [PATCH 7/9] aacraid: use scsi_host_busy_iter() in
+ aac_wait_for_io_completion()
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org,
+        Balsundar P <balsundar.p@microsemi.com>,
+        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+References: <20191118092208.54521-1-hare@suse.de>
+ <20191118092208.54521-8-hare@suse.de>
+ <d1fa932b-0134-cd8e-3ac1-dd03ec0a8e6f@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+Openpgp: preference=signencrypt
+Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
+ 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
+ azzYF4VRJsdl+d0MCaSy8mUh
+Message-ID: <7f47c2e5-fa61-4584-8e9c-b4c3a11041c2@suse.de>
+Date:   Tue, 19 Nov 2019 08:05:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-Forefront-Antispam-Report: CIP:158.140.1.28;IPV:CAL;SCL:-1;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(396003)(136003)(346002)(39860400002)(376002)(36092001)(189003)(199004)(107886003)(76176011)(51416003)(478600001)(8676002)(26826003)(50226002)(36756003)(47776003)(4326008)(16586007)(42186006)(54906003)(316002)(14444005)(7636002)(5660300002)(7416002)(6666004)(86362001)(126002)(356004)(426003)(50466002)(76130400001)(186003)(26005)(87636003)(110136005)(2906002)(2616005)(8936002)(246002)(336012)(11346002)(305945005)(2201001)(70586007)(486006)(70206006)(48376002)(476003)(446003)(921003)(1121003)(83996005)(2101003);DIR:OUT;SFP:1101;SCL:1;SRVR:CY1PR07MB2587;H:sjmaillnx2.cadence.com;FPR:;SPF:SoftFail;LANG:en;PTR:corp.Cadence.COM;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 015bca00-b35e-493b-79bc-08d76cbeda63
-X-MS-TrafficTypeDiagnostic: CY1PR07MB2587:
-X-Microsoft-Antispam-PRVS: <CY1PR07MB2587E6B19E9FCAD176B8B3E0A44C0@CY1PR07MB2587.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4941;
-X-Forefront-PRVS: 022649CC2C
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X/QFX0xrSda+crQPYtcg2+eVNP9XjjaUMqtItpSqnTApibSw4axrTKOolTzJxmjSjO4vv6GY4UvmexWpJlcTitusG9MeHbDVtjG/46edoJm3kyyIbKoJIngtAVbW9PK4pHj5BmBYAHKqE3xFZWPGi4h1NEJUqnB6H8Sj6wK9zewWETgMCrUv2H7MOkyIh5EKp0nalnWvWWI40RHGFmu/QZxds2hNoWwk/EHnn6xNDlPRjWuiOuHgxV1U7OHjK5QI/o91Ks0LWGabVh286UDL9zaCQJ+bBAYpO+2c5PU7J1KeaEbxtrpDiO9EOcSRtJ7VeYRXwi39Lm4j27y/4vcaNq+HAhY88gigMR+YhY/Adhi3UEwXntQlYKX/P1JIOLU9JSorAYRt+8fMxK2bGQDf6u8kBVJ6K5Zuvrtqea6m9qFOPcn7202V4oMiTI7dcvk1
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2019 07:05:25.9182
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 015bca00-b35e-493b-79bc-08d76cbeda63
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.28];Helo=[sjmaillnx2.cadence.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1PR07MB2587
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-19_01:2019-11-15,2019-11-19 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 spamscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999
- clxscore=1015 phishscore=0 adultscore=0 mlxscore=0 priorityscore=1501
- impostorscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1911190065
+In-Reply-To: <d1fa932b-0134-cd8e-3ac1-dd03ec0a8e6f@acm.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Backup L4 attributes duirng manual hibern8 entry
-and restore the L4 attributes on manual hibern8 exit as per JESD220C.
+On 11/19/19 12:05 AM, Bart Van Assche wrote:
+> On 11/18/19 1:22 AM, Hannes Reinecke wrote:
+>> Use the midlayer helper function to traverse outstanding commands.
+>>
+>> Cc: Balsundar P <balsundar.p@microsemi.com>
+>> Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
+>> Signed-off-by: Hannes Reinecke <hare@suse.de>
+>> ---
+>>   drivers/scsi/aacraid/comminit.c | 30 +++++++++++++-----------------
+>>   1 file changed, 13 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/scsi/aacraid/comminit.c
+>> b/drivers/scsi/aacraid/comminit.c
+>> index f75878d773cf..89c0ca339ef5 100644
+>> --- a/drivers/scsi/aacraid/comminit.c
+>> +++ b/drivers/scsi/aacraid/comminit.c
+>> @@ -272,29 +272,25 @@ static void aac_queue_init(struct aac_dev * dev,
+>> struct aac_queue * q, u32 *mem,
+>>       q->entries = qsize;
+>>   }
+>>   +static bool wait_for_io_iter(struct scsi_cmnd *cmd, void *data,
+>> bool reserved)
+>> +{
+>> +    int *active = data;
+>> +
+>> +    if (cmd->SCp.phase == AAC_OWNER_FIRMWARE)
+>> +        *active = 1;
+>> +    return true;
+>> +}
+>> +
+>> +/* scsi_block_requests() has been called, so no new request can be
+>> issued */
+>>   static void aac_wait_for_io_completion(struct aac_dev *aac)
+>>   {
+>> -    unsigned long flagv = 0;
+>> -    int i = 0;
+>> +    int i;
+>>         for (i = 60; i; --i) {
+>> -        struct scsi_device *dev;
+>> -        struct scsi_cmnd *command;
+>>           int active = 0;
+>>   -        __shost_for_each_device(dev, aac->scsi_host_ptr) {
+>> -            spin_lock_irqsave(&dev->list_lock, flagv);
+>> -            list_for_each_entry(command, &dev->cmd_list, list) {
+>> -                if (command->SCp.phase == AAC_OWNER_FIRMWARE) {
+>> -                    active++;
+>> -                    break;
+>> -                }
+>> -            }
+>> -            spin_unlock_irqrestore(&dev->list_lock, flagv);
+>> -            if (active)
+>> -                break;
+>> -
+>> -        }
+>> +        scsi_host_busy_iter(aac->scsi_host_ptr,
+>> +                    wait_for_io_iter, &active);
+>>           /*
+>>            * We can exit If all the commands are complete
+>>            */
+> 
+> Would using scsi_device_quiesce() and scsi_device_resume() allow to
+> eliminate the busy-waiting loop from the aacraid driver?
+> 
+I've actually looked into it, but then figured that it'll be more
+cumbersome as I'd have to iterate across all devices here, calling
+scsi_device_quiesce() on each one.
+But looking closer into it, we could have a helper scsi_host_quiesce()
+and scsi_host_resume() ... yes, indeed.
+Will be updating the patchset.
 
-Signed-off-by: sheebab <sheebab@cadence.com>
----
- drivers/scsi/ufs/cdns-pltfrm.c | 97 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 95 insertions(+), 2 deletions(-)
+Cheers,
 
-diff --git a/drivers/scsi/ufs/cdns-pltfrm.c b/drivers/scsi/ufs/cdns-pltfrm.c
-index adbbd60..5510567 100644
---- a/drivers/scsi/ufs/cdns-pltfrm.c
-+++ b/drivers/scsi/ufs/cdns-pltfrm.c
-@@ -19,6 +19,14 @@
- 
- #define CDNS_UFS_REG_HCLKDIV	0xFC
- #define CDNS_UFS_REG_PHY_XCFGD1	0x113C
-+#define CDNS_UFS_MAX 12
-+
-+struct cdns_ufs_host {
-+	/**
-+	 * cdns_ufs_dme_attr_val - for storing L4 attributes
-+	 */
-+	u32 cdns_ufs_dme_attr_val[CDNS_UFS_MAX];
-+};
- 
- /**
-  * cdns_ufs_enable_intr - enable interrupts
-@@ -47,6 +55,77 @@ static void cdns_ufs_disable_intr(struct ufs_hba *hba, u32 intrs)
- }
- 
- /**
-+ * cdns_ufs_get_l4_attr - get L4 attributes on local side
-+ * @hba: per adapter instance
-+ *
-+ */
-+static void cdns_ufs_get_l4_attr(struct ufs_hba *hba)
-+{
-+	struct cdns_ufs_host *host = ufshcd_get_variant(hba);
-+
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_PEERDEVICEID),
-+		       &host->cdns_ufs_dme_attr_val[0]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_PEERCPORTID),
-+		       &host->cdns_ufs_dme_attr_val[1]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_TRAFFICCLASS),
-+		       &host->cdns_ufs_dme_attr_val[2]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_PROTOCOLID),
-+		       &host->cdns_ufs_dme_attr_val[3]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_CPORTFLAGS),
-+		       &host->cdns_ufs_dme_attr_val[4]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_TXTOKENVALUE),
-+		       &host->cdns_ufs_dme_attr_val[5]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_RXTOKENVALUE),
-+		       &host->cdns_ufs_dme_attr_val[6]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_LOCALBUFFERSPACE),
-+		       &host->cdns_ufs_dme_attr_val[7]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_PEERBUFFERSPACE),
-+		       &host->cdns_ufs_dme_attr_val[8]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_CREDITSTOSEND),
-+		       &host->cdns_ufs_dme_attr_val[9]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_CPORTMODE),
-+		       &host->cdns_ufs_dme_attr_val[10]);
-+	ufshcd_dme_get(hba, UIC_ARG_MIB(T_CONNECTIONSTATE),
-+		       &host->cdns_ufs_dme_attr_val[11]);
-+}
-+
-+/**
-+ * cdns_ufs_set_l4_attr - set L4 attributes on local side
-+ * @hba: per adapter instance
-+ *
-+ */
-+static void cdns_ufs_set_l4_attr(struct ufs_hba *hba)
-+{
-+	struct cdns_ufs_host *host = ufshcd_get_variant(hba);
-+
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_CONNECTIONSTATE), 0);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_PEERDEVICEID),
-+		       host->cdns_ufs_dme_attr_val[0]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_PEERCPORTID),
-+		       host->cdns_ufs_dme_attr_val[1]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_TRAFFICCLASS),
-+		       host->cdns_ufs_dme_attr_val[2]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_PROTOCOLID),
-+		       host->cdns_ufs_dme_attr_val[3]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_CPORTFLAGS),
-+		       host->cdns_ufs_dme_attr_val[4]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_TXTOKENVALUE),
-+		       host->cdns_ufs_dme_attr_val[5]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_RXTOKENVALUE),
-+		       host->cdns_ufs_dme_attr_val[6]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_LOCALBUFFERSPACE),
-+		       host->cdns_ufs_dme_attr_val[7]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_PEERBUFFERSPACE),
-+		       host->cdns_ufs_dme_attr_val[8]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_CREDITSTOSEND),
-+		       host->cdns_ufs_dme_attr_val[9]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_CPORTMODE),
-+		       host->cdns_ufs_dme_attr_val[10]);
-+	ufshcd_dme_set(hba, UIC_ARG_MIB(T_CONNECTIONSTATE),
-+		       host->cdns_ufs_dme_attr_val[11]);
-+}
-+
-+/**
-  * Sets HCLKDIV register value based on the core_clk
-  * @hba: host controller instance
-  *
-@@ -134,6 +213,7 @@ static void cdns_ufs_hibern8_notify(struct ufs_hba *hba, enum uic_cmd_dme cmd,
- 		 * before manual hibernate entry.
- 		 */
- 		cdns_ufs_enable_intr(hba, UFSHCD_UIC_HIBERN8_MASK);
-+		cdns_ufs_get_l4_attr(hba);
- 	}
- 	if (status == POST_CHANGE && cmd == UIC_CMD_DME_HIBER_EXIT) {
- 		/**
-@@ -141,6 +221,7 @@ static void cdns_ufs_hibern8_notify(struct ufs_hba *hba, enum uic_cmd_dme cmd,
- 		 * after manual hibern8 exit.
- 		 */
- 		cdns_ufs_disable_intr(hba, UFSHCD_UIC_HIBERN8_MASK);
-+		cdns_ufs_set_l4_attr(hba);
- 	}
- }
- 
-@@ -245,15 +326,27 @@ static int cdns_ufs_pltfrm_probe(struct platform_device *pdev)
- 	const struct of_device_id *of_id;
- 	struct ufs_hba_variant_ops *vops;
- 	struct device *dev = &pdev->dev;
-+	struct cdns_ufs_host *host;
-+	struct ufs_hba *hba;
- 
- 	of_id = of_match_node(cdns_ufs_of_match, dev->of_node);
- 	vops = (struct ufs_hba_variant_ops *)of_id->data;
- 
- 	/* Perform generic probe */
- 	err = ufshcd_pltfrm_init(pdev, vops);
--	if (err)
-+	if (err) {
- 		dev_err(dev, "ufshcd_pltfrm_init() failed %d\n", err);
--
-+		goto out;
-+	}
-+	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
-+	if (!host) {
-+		err = -ENOMEM;
-+		dev_err(dev, "%s: no memory for cdns host\n", __func__);
-+		goto out;
-+	}
-+	hba =  platform_get_drvdata(pdev);
-+	ufshcd_set_variant(hba, host);
-+out:
- 	return err;
- }
- 
+Hannes
 -- 
-2.7.4
-
+Dr. Hannes Reinecke		      Teamlead Storage & Networking
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 247165 (AG München), GF: Felix Imendörffer
