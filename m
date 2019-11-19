@@ -2,21 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D8E11019FA
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Nov 2019 08:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2313101A04
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Nov 2019 08:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726023AbfKSHFQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 19 Nov 2019 02:05:16 -0500
-Received: from mx2.suse.de ([195.135.220.15]:44756 "EHLO mx1.suse.de"
+        id S1727099AbfKSHGl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 19 Nov 2019 02:06:41 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45276 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725784AbfKSHFQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 19 Nov 2019 02:05:16 -0500
+        id S1725784AbfKSHGk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 19 Nov 2019 02:06:40 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id C915EAD4A;
-        Tue, 19 Nov 2019 07:05:12 +0000 (UTC)
-Subject: Re: [PATCH 7/9] aacraid: use scsi_host_busy_iter() in
- aac_wait_for_io_completion()
+        by mx1.suse.de (Postfix) with ESMTP id D2212AD4A;
+        Tue, 19 Nov 2019 07:06:37 +0000 (UTC)
+Subject: Re: [PATCH 8/9] aacraid: use scsi_host_busy_iter() in
+ get_num_of_incomplete_fibs()
 To:     Bart Van Assche <bvanassche@acm.org>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
@@ -25,8 +25,8 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Balsundar P <balsundar.p@microsemi.com>,
         Adaptec OEM Raid Solutions <aacraid@microsemi.com>
 References: <20191118092208.54521-1-hare@suse.de>
- <20191118092208.54521-8-hare@suse.de>
- <d1fa932b-0134-cd8e-3ac1-dd03ec0a8e6f@acm.org>
+ <20191118092208.54521-9-hare@suse.de>
+ <bcf68366-cb44-b846-1348-d646555f98ba@acm.org>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -72,12 +72,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <7f47c2e5-fa61-4584-8e9c-b4c3a11041c2@suse.de>
-Date:   Tue, 19 Nov 2019 08:05:12 +0100
+Message-ID: <f9f0ee84-10fd-33ac-81bb-e57b35973304@suse.de>
+Date:   Tue, 19 Nov 2019 08:06:37 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <d1fa932b-0134-cd8e-3ac1-dd03ec0a8e6f@acm.org>
+In-Reply-To: <bcf68366-cb44-b846-1348-d646555f98ba@acm.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -86,75 +86,131 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/19/19 12:05 AM, Bart Van Assche wrote:
+On 11/19/19 12:06 AM, Bart Van Assche wrote:
 > On 11/18/19 1:22 AM, Hannes Reinecke wrote:
->> Use the midlayer helper function to traverse outstanding commands.
+>> Use the scsi midlayer helper to traverse the number of outstanding
+>> commands. This also eliminates the last usage for the cmd_list
+>> functionality so we can drop it.
 >>
 >> Cc: Balsundar P <balsundar.p@microsemi.com>
 >> Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
 >> Signed-off-by: Hannes Reinecke <hare@suse.de>
 >> ---
->>   drivers/scsi/aacraid/comminit.c | 30 +++++++++++++-----------------
->>   1 file changed, 13 insertions(+), 17 deletions(-)
+>>   drivers/scsi/aacraid/linit.c | 81
+>> ++++++++++++++++++++++----------------------
+>>   1 file changed, 41 insertions(+), 40 deletions(-)
 >>
->> diff --git a/drivers/scsi/aacraid/comminit.c
->> b/drivers/scsi/aacraid/comminit.c
->> index f75878d773cf..89c0ca339ef5 100644
->> --- a/drivers/scsi/aacraid/comminit.c
->> +++ b/drivers/scsi/aacraid/comminit.c
->> @@ -272,29 +272,25 @@ static void aac_queue_init(struct aac_dev * dev,
->> struct aac_queue * q, u32 *mem,
->>       q->entries = qsize;
+>> diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
+>> index ee6bc2f9b80a..db96482c4fdc 100644
+>> --- a/drivers/scsi/aacraid/linit.c
+>> +++ b/drivers/scsi/aacraid/linit.c
+>> @@ -622,54 +622,56 @@ static int aac_ioctl(struct scsi_device *sdev,
+>> unsigned int cmd,
+>>       return aac_do_ioctl(dev, cmd, arg);
 >>   }
->>   +static bool wait_for_io_iter(struct scsi_cmnd *cmd, void *data,
->> bool reserved)
->> +{
->> +    int *active = data;
+>>   -static int get_num_of_incomplete_fibs(struct aac_dev *aac)
+>> +struct fib_count_data {
+>> +    int mlcnt;
+>> +    int llcnt;
+>> +    int ehcnt;
+>> +    int fwcnt;
+>> +    int krlcnt;
+>> +};
 >> +
->> +    if (cmd->SCp.phase == AAC_OWNER_FIRMWARE)
->> +        *active = 1;
+>> +static bool fib_count_iter(struct scsi_cmnd *scmnd, void *data, bool
+>> reserved)
+>>   {
+>> +    struct fib_count_data *fib_count = data;
+>>   -    unsigned long flags;
+>> -    struct scsi_device *sdev = NULL;
+>> +    switch (scmnd->SCp.phase) {
+>> +    case AAC_OWNER_FIRMWARE:
+>> +        fib_count->fwcnt++;
+>> +        break;
+>> +    case AAC_OWNER_ERROR_HANDLER:
+>> +        fib_count->ehcnt++;
+>> +        break;
+>> +    case AAC_OWNER_LOWLEVEL:
+>> +        fib_count->llcnt++;
+>> +        break;
+>> +    case AAC_OWNER_MIDLEVEL:
+>> +        fib_count->mlcnt++;
+>> +        break;
+>> +    default:
+>> +        fib_count->krlcnt++;
+>> +        break;
+>> +    }
 >> +    return true;
 >> +}
 >> +
->> +/* scsi_block_requests() has been called, so no new request can be
->> issued */
->>   static void aac_wait_for_io_completion(struct aac_dev *aac)
->>   {
->> -    unsigned long flagv = 0;
->> -    int i = 0;
->> +    int i;
->>         for (i = 60; i; --i) {
->> -        struct scsi_device *dev;
->> -        struct scsi_cmnd *command;
->>           int active = 0;
->>   -        __shost_for_each_device(dev, aac->scsi_host_ptr) {
->> -            spin_lock_irqsave(&dev->list_lock, flagv);
->> -            list_for_each_entry(command, &dev->cmd_list, list) {
->> -                if (command->SCp.phase == AAC_OWNER_FIRMWARE) {
->> -                    active++;
->> -                    break;
->> -                }
->> -            }
->> -            spin_unlock_irqrestore(&dev->list_lock, flagv);
->> -            if (active)
->> -                break;
+>> +/* Called during SCSI EH, so we don't need to block requests */
+>> +static int get_num_of_incomplete_fibs(struct aac_dev *aac)
+>> +{
+>>       struct Scsi_Host *shost = aac->scsi_host_ptr;
+>> -    struct scsi_cmnd *scmnd = NULL;
+>>       struct device *ctrl_dev;
+>> +    struct fib_count_data fcnt = { };
+>>   -    int mlcnt  = 0;
+>> -    int llcnt  = 0;
+>> -    int ehcnt  = 0;
+>> -    int fwcnt  = 0;
+>> -    int krlcnt = 0;
 >> -
+>> -    __shost_for_each_device(sdev, shost) {
+>> -        spin_lock_irqsave(&sdev->list_lock, flags);
+>> -        list_for_each_entry(scmnd, &sdev->cmd_list, list) {
+>> -            switch (scmnd->SCp.phase) {
+>> -            case AAC_OWNER_FIRMWARE:
+>> -                fwcnt++;
+>> -                break;
+>> -            case AAC_OWNER_ERROR_HANDLER:
+>> -                ehcnt++;
+>> -                break;
+>> -            case AAC_OWNER_LOWLEVEL:
+>> -                llcnt++;
+>> -                break;
+>> -            case AAC_OWNER_MIDLEVEL:
+>> -                mlcnt++;
+>> -                break;
+>> -            default:
+>> -                krlcnt++;
+>> -                break;
+>> -            }
 >> -        }
->> +        scsi_host_busy_iter(aac->scsi_host_ptr,
->> +                    wait_for_io_iter, &active);
->>           /*
->>            * We can exit If all the commands are complete
->>            */
+>> -        spin_unlock_irqrestore(&sdev->list_lock, flags);
+>> -    }
+>> +    scsi_host_busy_iter(shost, fib_count_iter, &fcnt);
+>>         ctrl_dev = &aac->pdev->dev;
+>>   -    dev_info(ctrl_dev, "outstanding cmd: midlevel-%d\n", mlcnt);
+>> -    dev_info(ctrl_dev, "outstanding cmd: lowlevel-%d\n", llcnt);
+>> -    dev_info(ctrl_dev, "outstanding cmd: error handler-%d\n", ehcnt);
+>> -    dev_info(ctrl_dev, "outstanding cmd: firmware-%d\n", fwcnt);
+>> -    dev_info(ctrl_dev, "outstanding cmd: kernel-%d\n", krlcnt);
+>> +    dev_info(ctrl_dev, "outstanding cmd: midlevel-%d\n", fcnt.mlcnt);
+>> +    dev_info(ctrl_dev, "outstanding cmd: lowlevel-%d\n", fcnt.llcnt);
+>> +    dev_info(ctrl_dev, "outstanding cmd: error handler-%d\n",
+>> fcnt.ehcnt);
+>> +    dev_info(ctrl_dev, "outstanding cmd: firmware-%d\n", fcnt.fwcnt);
+>> +    dev_info(ctrl_dev, "outstanding cmd: kernel-%d\n", fcnt.krlcnt);
+>>   -    return mlcnt + llcnt + ehcnt + fwcnt;
+>> +    return fcnt.mlcnt + fcnt.llcnt + fcnt.ehcnt + fcnt.fwcnt;
+>>   }
+>>     static int aac_eh_abort(struct scsi_cmnd* cmd)
+>> @@ -1675,7 +1677,6 @@ static int aac_probe_one(struct pci_dev *pdev,
+>> const struct pci_device_id *id)
+>>       shost->irq = pdev->irq;
+>>       shost->unique_id = unique_id;
+>>       shost->max_cmd_len = 16;
+>> -    shost->use_cmd_list = 1;
+>>         if (aac_cfg_major == AAC_CHARDEV_NEEDS_REINIT)
+>>           aac_init_char();
 > 
-> Would using scsi_device_quiesce() and scsi_device_resume() allow to
-> eliminate the busy-waiting loop from the aacraid driver?
+> Same comment here: could scsi_device_quiesce() and scsi_device_resume()
+> have been used instead?
 > 
-I've actually looked into it, but then figured that it'll be more
-cumbersome as I'd have to iterate across all devices here, calling
-scsi_device_quiesce() on each one.
-But looking closer into it, we could have a helper scsi_host_quiesce()
-and scsi_host_resume() ... yes, indeed.
-Will be updating the patchset.
+We don't need to.
+This function is called during SCSI EH when the host is quiesced anyway.
+That's what I tried to imply with the added comment on top.
 
 Cheers,
 
