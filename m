@@ -2,70 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CED9010126E
-	for <lists+linux-scsi@lfdr.de>; Tue, 19 Nov 2019 05:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1B1710127C
+	for <lists+linux-scsi@lfdr.de>; Tue, 19 Nov 2019 05:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbfKSE3h (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 Nov 2019 23:29:37 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:58164 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727343AbfKSE3g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Nov 2019 23:29:36 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAJ4O3mW064115;
-        Tue, 19 Nov 2019 04:29:30 GMT
+        id S1727617AbfKSEcv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 Nov 2019 23:32:51 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:49530 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727217AbfKSEcu (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 Nov 2019 23:32:50 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAJ4ODF7090371;
+        Tue, 19 Nov 2019 04:32:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2019-08-05;
- bh=Y4On+uC6z3UDUenay4Rcl9J9ixlECSs+4lxOTScJiEM=;
- b=NEsrpS3dmJQi2RkRw+BeNgATlCRMZRYNHxV61LIF38aaRJ/dQa3CQ5pb9WXLDYHAEVCH
- x7SqRgkgvnAv+hhNpbj/TAN6fim7FMvwkpWgjOXuuawUEXRXE/WXNeuz5kSzOaclxWCH
- XAar2yN0D4g3od20qExSxefAyeH0JfbKvQm0IBsC6KmmYpLaNLSSULHDG8VMMJofPjGo
- agtp7YFhletr/jTNwx5fZrL7UqEKykUzLFcqPOsOp5Zl7LDCOVN/IRHHOb9IxUiWMNbl
- TucejsqmgjPzfRmBWq1j8dG20GREIbKb6Qa8s+pE3MM4RDu5F4sunJi1Phi1nmQn7Hgg 7Q== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2wa9rqc9b6-1
+ bh=mI7i+8fMH9XzWsU8aUL2eoc7knC5XOFnHhg7fkCXrOg=;
+ b=ck/uq3no02yLim/AgdHB8tMmHHTRae+M4hPhzD/3BBaKo9fGqsM+33oKvrr8xKUefn1h
+ ZDwx3BYn5J0DuoSi3DUYmD8/+7WQQRz2OuofoygLID5HkHMTOdu0mnIUhBoAqWCvZSWa
+ fD3w6QI0VL0ySwU8oUOqfswdwZrDj0Xzs3/lrcxw8sbsRgsOt8mzM8TlbGzCn9CxUkbA
+ dz4QT45y0zJeHfHgrqro2K00q0rcwzLQZ8xBbNRWDZ9WXU1GOibnoSmf4BwJMN9SXKXr
+ 3LwXElyMWQdfQ9xv0EX9uaeE/POS0GnPVxxwMOElxj1nV69DVusJtpB6uXS+OXExuWqH hg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2wa8htmdnt-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Nov 2019 04:29:30 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAJ4SD0l107344;
-        Tue, 19 Nov 2019 04:29:30 GMT
+        Tue, 19 Nov 2019 04:32:43 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAJ4SuHJ190376;
+        Tue, 19 Nov 2019 04:30:43 GMT
 Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2wbxm3kuwr-1
+        by userp3020.oracle.com with ESMTP id 2wc09wq26r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Nov 2019 04:29:29 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xAJ4TO08021566;
-        Tue, 19 Nov 2019 04:29:24 GMT
+        Tue, 19 Nov 2019 04:30:43 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xAJ4UdKC022160;
+        Tue, 19 Nov 2019 04:30:42 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 18 Nov 2019 20:29:24 -0800
-To:     Deepak Ukey <deepak.ukey@microchip.com>
-Cc:     <linux-scsi@vger.kernel.org>,
-        <Vasanthalakshmi.Tharmarajan@microchip.com>,
-        <Viswas.G@microchip.com>, <jinpu.wang@profitbricks.com>,
-        <martin.petersen@oracle.com>, <dpf@google.com>,
-        <jsperbeck@google.com>, <auradkar@google.com>, <ianyar@google.com>
-Subject: Re: [PATCH V2 00/13] pm80xx : Updates for the driver version 0.1.39.
+        with ESMTP ; Mon, 18 Nov 2019 20:30:39 -0800
+To:     Pan Bian <bianpan2016@163.com>
+Cc:     QLogic-Storage-Upstream@qlogic.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] SCSI: qla4xxx: fix double free bug
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
-References: <20191114100910.6153-1-deepak.ukey@microchip.com>
-Date:   Mon, 18 Nov 2019 23:29:21 -0500
-In-Reply-To: <20191114100910.6153-1-deepak.ukey@microchip.com> (Deepak Ukey's
-        message of "Thu, 14 Nov 2019 15:38:57 +0530")
-Message-ID: <yq1r224jxpa.fsf@oracle.com>
+References: <1572945927-27796-1-git-send-email-bianpan2016@163.com>
+Date:   Mon, 18 Nov 2019 23:30:37 -0500
+In-Reply-To: <1572945927-27796-1-git-send-email-bianpan2016@163.com> (Pan
+        Bian's message of "Tue, 5 Nov 2019 17:25:27 +0800")
+Message-ID: <yq1mucsjxn6.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9445 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=638
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=823
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1911140001 definitions=main-1911190039
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9445 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=723 adultscore=0
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=908 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
  definitions=main-1911190039
 Sender: linux-scsi-owner@vger.kernel.org
@@ -74,9 +73,11 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Deepak,
+Pan,
 
-> This patch set includes some bug fixes and features for pm80xx driver.
+> The variable init_fw_cb is released twice, resulting in a double free
+> bug. The call to the function dma_free_coherent() before goto is
+> removed to get rid of potential double free.
 
 Applied to 5.5/scsi-queue, thanks!
 
