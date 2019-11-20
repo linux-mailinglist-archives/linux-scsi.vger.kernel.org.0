@@ -2,207 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59651103795
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 11:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91249103B58
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 14:26:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728716AbfKTKbc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Nov 2019 05:31:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49218 "EHLO mx1.suse.de"
+        id S1729504AbfKTN0j convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 20 Nov 2019 08:26:39 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:2090 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728308AbfKTKb3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Nov 2019 05:31:29 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A0697B2F0;
-        Wed, 20 Nov 2019 10:31:26 +0000 (UTC)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 11/11] scsi: Remove cmd_list functionality
-Date:   Wed, 20 Nov 2019 11:31:14 +0100
-Message-Id: <20191120103114.24723-12-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191120103114.24723-1-hare@suse.de>
-References: <20191120103114.24723-1-hare@suse.de>
+        id S1727798AbfKTN0j (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 20 Nov 2019 08:26:39 -0500
+Received: from DGGEML404-HUB.china.huawei.com (unknown [172.30.72.53])
+        by Forcepoint Email with ESMTP id 4738F8727DE762286877;
+        Wed, 20 Nov 2019 21:26:28 +0800 (CST)
+Received: from DGGEML505-MBX.china.huawei.com ([169.254.12.31]) by
+ DGGEML404-HUB.china.huawei.com ([fe80::b177:a243:7a69:5ab8%31]) with mapi id
+ 14.03.0439.000; Wed, 20 Nov 2019 21:26:18 +0800
+From:   "wubo (T)" <wubo40@huawei.com>
+To:     Lee Duncan <LDuncan@suse.com>,
+        "cleech@redhat.com" <cleech@redhat.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "open-iscsi@googlegroups.com" <open-iscsi@googlegroups.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ulrich Windl <Ulrich.Windl@rz.uni-regensburg.de>
+CC:     Mingfangsen <mingfangsen@huawei.com>,
+        "liuzhiqiang (I)" <liuzhiqiang26@huawei.com>
+Subject: [PATCH V4] scsi: avoid potential deadlock in iscsi_if_rx func
+Thread-Topic: [PATCH V4] scsi: avoid potential deadlock in iscsi_if_rx func
+Thread-Index: AdWfpPEqf8P620ByTC6DVQFqYQ7mDQ==
+Date:   Wed, 20 Nov 2019 13:26:17 +0000
+Message-ID: <EDBAAA0BBBA2AC4E9C8B6B81DEEE1D6915E3D4D2@dggeml505-mbx.china.huawei.com>
+Accept-Language: en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.173.221.252]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove cmd_list functionality; no users left.
-With that the scsi_put_command() becomes empty,
-so remove that one, too.
+In iscsi_if_rx func, after receiving one request through iscsi_if_recv_msg func,
+iscsi_if_send_reply will be called to try to reply the request in do-loop. 
+If the return of iscsi_if_send_reply func return -EAGAIN all the time, one deadlock will occur.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Bart van Assche <bvanassche@acm.org>
+For example, a client only send msg without calling recvmsg func, then it will result in the watchdog soft lockup. 
+The details are given as follows,
+
+Details of the special case which can cause deadlock:
+
+sock_fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_ISCSI); 
+retval = bind(sock_fd, (struct sock addr*) & src_addr, sizeof(src_addr);
+while (1) { 
+         state_msg = sendmsg(sock_fd, &msg, 0); 
+         //Note: recvmsg(sock_fd, &msg, 0) is not processed here.
+}        
+close(sock_fd); 
+
+watchdog: BUG: soft lockup - CPU#7 stuck for 22s! [netlink_test:253305] Sample time: 4000897528 ns(HZ: 250) Sample stat: 
+curr: user: 675503481560, nice: 321724050, sys: 448689506750, idle: 4654054240530, iowait: 40885550700, irq: 14161174020, softirq: 8104324140, st: 0
+deta: user: 0, nice: 0, sys: 3998210100, idle: 0, iowait: 0, irq: 1547170, softirq: 242870, st: 0 Sample softirq:
+         TIMER:        992
+         SCHED:          8
+Sample irqstat:
+         irq    2: delta       1003, curr:    3103802, arch_timer
+CPU: 7 PID: 253305 Comm: netlink_test Kdump: loaded Tainted: G           OE     
+Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
+pstate: 40400005 (nZcv daif +PAN -UAO)
+pc : __alloc_skb+0x104/0x1b0
+lr : __alloc_skb+0x9c/0x1b0
+sp : ffff000033603a30
+x29: ffff000033603a30 x28: 00000000000002dd
+x27: ffff800b34ced810 x26: ffff800ba7569f00
+x25: 00000000ffffffff x24: 0000000000000000
+x23: ffff800f7c43f600 x22: 0000000000480020
+x21: ffff0000091d9000 x20: ffff800b34eff200
+x19: ffff800ba7569f00 x18: 0000000000000000
+x17: 0000000000000000 x16: 0000000000000000
+x15: 0000000000000000 x14: 0001000101000100
+x13: 0000000101010000 x12: 0101000001010100
+x11: 0001010101010001 x10: 00000000000002dd
+x9 : ffff000033603d58 x8 : ffff800b34eff400
+x7 : ffff800ba7569200 x6 : ffff800b34eff400
+x5 : 0000000000000000 x4 : 00000000ffffffff
+x3 : 0000000000000000 x2 : 0000000000000001
+x1 : ffff800b34eff2c0 x0 : 0000000000000300 Call trace:
+__alloc_skb+0x104/0x1b0
+iscsi_if_rx+0x144/0x12bc [scsi_transport_iscsi]
+netlink_unicast+0x1e0/0x258
+netlink_sendmsg+0x310/0x378
+sock_sendmsg+0x4c/0x70
+sock_write_iter+0x90/0xf0
+__vfs_write+0x11c/0x190
+vfs_write+0xac/0x1c0
+ksys_write+0x6c/0xd8
+__arm64_sys_write+0x24/0x30
+el0_svc_common+0x78/0x130
+el0_svc_handler+0x38/0x78
+el0_svc+0x8/0xc
+
+Here, we add one limit of retry times in do-loop to avoid the deadlock.
+
+V4: 
+	- modify the patch subject, no code change.
+
+V3:  
+	- replace the error with warning as suggested by Ulrich 
+
+V2:  
+	- add some debug kernel message as suggested by Lee Duncan
+
+Signed-off-by: Bo Wu <wubo40@huawei.com>
+Reviewed-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Reviewed-by: Lee Duncan <LDuncan@suse.com>
 ---
- drivers/scsi/scsi.c        | 14 --------------
- drivers/scsi/scsi_error.c  |  1 -
- drivers/scsi/scsi_lib.c    | 31 -------------------------------
- drivers/scsi/scsi_priv.h   |  2 --
- drivers/scsi/scsi_scan.c   |  1 -
- include/scsi/scsi_cmnd.h   |  1 -
- include/scsi/scsi_device.h |  1 -
- include/scsi/scsi_host.h   |  2 --
- 8 files changed, 53 deletions(-)
+drivers/scsi/scsi_transport_iscsi.c | 7 +++++++
+1 file changed, 7 insertions(+)
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index adfe8b3693d5..ed533b6e1fd0 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -94,20 +94,6 @@ EXPORT_SYMBOL(scsi_logging_level);
- ASYNC_DOMAIN_EXCLUSIVE(scsi_sd_pm_domain);
- EXPORT_SYMBOL(scsi_sd_pm_domain);
- 
--/**
-- * scsi_put_command - Free a scsi command block
-- * @cmd: command block to free
-- *
-- * Returns:	Nothing.
-- *
-- * Notes:	The command must not belong to any lists.
-- */
--void scsi_put_command(struct scsi_cmnd *cmd)
--{
--	scsi_del_cmd_from_list(cmd);
--	BUG_ON(delayed_work_pending(&cmd->abort_work));
--}
--
- #ifdef CONFIG_SCSI_LOGGING
- void scsi_log_send(struct scsi_cmnd *cmd)
- {
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index ae2fa170f6ad..978be1602f71 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -2412,7 +2412,6 @@ scsi_ioctl_reset(struct scsi_device *dev, int __user *arg)
- 	wake_up(&shost->host_wait);
- 	scsi_run_host_queues(shost);
- 
--	scsi_put_command(scmd);
- 	kfree(rq);
- 
- out_put_autopm_host:
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 771a8352d3e8..c942245fc6aa 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -562,7 +562,6 @@ static void scsi_mq_uninit_cmd(struct scsi_cmnd *cmd)
- {
- 	scsi_mq_free_sgtables(cmd);
- 	scsi_uninit_cmd(cmd);
--	scsi_del_cmd_from_list(cmd);
- }
- 
- /* Returns false when no more bytes to process, true if there are more */
-@@ -1098,35 +1097,6 @@ static void scsi_cleanup_rq(struct request *rq)
- 	}
- }
- 
--/* Add a command to the list used by the aacraid and dpt_i2o drivers */
--void scsi_add_cmd_to_list(struct scsi_cmnd *cmd)
--{
--	struct scsi_device *sdev = cmd->device;
--	struct Scsi_Host *shost = sdev->host;
--	unsigned long flags;
--
--	if (shost->use_cmd_list) {
--		spin_lock_irqsave(&sdev->list_lock, flags);
--		list_add_tail(&cmd->list, &sdev->cmd_list);
--		spin_unlock_irqrestore(&sdev->list_lock, flags);
--	}
--}
--
--/* Remove a command from the list used by the aacraid and dpt_i2o drivers */
--void scsi_del_cmd_from_list(struct scsi_cmnd *cmd)
--{
--	struct scsi_device *sdev = cmd->device;
--	struct Scsi_Host *shost = sdev->host;
--	unsigned long flags;
--
--	if (shost->use_cmd_list) {
--		spin_lock_irqsave(&sdev->list_lock, flags);
--		BUG_ON(list_empty(&cmd->list));
--		list_del_init(&cmd->list);
--		spin_unlock_irqrestore(&sdev->list_lock, flags);
--	}
--}
--
- /* Called after a request has been started. */
- void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd)
- {
-@@ -1160,7 +1130,6 @@ void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd)
- 	if (in_flight)
- 		__set_bit(SCMD_STATE_INFLIGHT, &cmd->state);
- 
--	scsi_add_cmd_to_list(cmd);
- }
- 
- static blk_status_t scsi_setup_scsi_cmnd(struct scsi_device *sdev,
-diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
-index 3bff9f7aa684..5eab5da4efe7 100644
---- a/drivers/scsi/scsi_priv.h
-+++ b/drivers/scsi/scsi_priv.h
-@@ -84,8 +84,6 @@ int scsi_eh_get_sense(struct list_head *work_q,
- int scsi_noretry_cmd(struct scsi_cmnd *scmd);
- 
- /* scsi_lib.c */
--extern void scsi_add_cmd_to_list(struct scsi_cmnd *cmd);
--extern void scsi_del_cmd_from_list(struct scsi_cmnd *cmd);
- extern int scsi_maybe_unblock_host(struct scsi_device *sdev);
- extern void scsi_device_unbusy(struct scsi_device *sdev, struct scsi_cmnd *cmd);
- extern void scsi_queue_insert(struct scsi_cmnd *cmd, int reason);
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 058079f915f1..f2437a7570ce 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -236,7 +236,6 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
- 	sdev->sdev_state = SDEV_CREATED;
- 	INIT_LIST_HEAD(&sdev->siblings);
- 	INIT_LIST_HEAD(&sdev->same_target_siblings);
--	INIT_LIST_HEAD(&sdev->cmd_list);
- 	INIT_LIST_HEAD(&sdev->starved_entry);
- 	INIT_LIST_HEAD(&sdev->event_list);
- 	spin_lock_init(&sdev->list_lock);
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index a2849bb9cd19..80ac89e47b47 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -159,7 +159,6 @@ static inline struct scsi_driver *scsi_cmd_to_driver(struct scsi_cmnd *cmd)
- 	return *(struct scsi_driver **)cmd->request->rq_disk->private_data;
- }
- 
--extern void scsi_put_command(struct scsi_cmnd *);
- extern void scsi_finish_command(struct scsi_cmnd *cmd);
- 
- extern void *scsi_kmap_atomic_sg(struct scatterlist *sg, int sg_count,
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 2185068ce955..59074f6ec4ae 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -110,7 +110,6 @@ struct scsi_device {
- 	atomic_t device_blocked;	/* Device returned QUEUE_FULL. */
- 
- 	spinlock_t list_lock;
--	struct list_head cmd_list;	/* queue of in use SCSI Command structures */
- 	struct list_head starved_entry;
- 	unsigned short queue_depth;	/* How deep of a queue we want */
- 	unsigned short max_queue_depth;	/* max queue depth */
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 1293d9686115..ee43db94a479 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -627,8 +627,6 @@ struct Scsi_Host {
- 	/* The controller does not support WRITE SAME */
- 	unsigned no_write_same:1;
- 
--	unsigned use_cmd_list:1;
--
- 	/* Host responded with short (<36 bytes) INQUIRY result */
- 	unsigned short_inquiry:1;
- 
--- 
-2.16.4
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 417b868d8735..ed8d9709b9b9 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -24,6 +24,8 @@
+
+ #define ISCSI_TRANSPORT_VERSION "2.0-870"
+
++#define ISCSI_SEND_MAX_ALLOWED  10
++
+#define CREATE_TRACE_POINTS
+#include <trace/events/iscsi.h>
+
+@@ -3682,6 +3684,7 @@ iscsi_if_rx(struct sk_buff *skb)
+                struct nlmsghdr       *nlh;
+                struct iscsi_uevent *ev;
+                uint32_t group;
++                int retries = ISCSI_SEND_MAX_ALLOWED;
+
+                 nlh = nlmsg_hdr(skb);
+                if (nlh->nlmsg_len < sizeof(*nlh) + sizeof(*ev) ||
+@@ -3712,6 +3715,10 @@ iscsi_if_rx(struct sk_buff *skb)
+                                   break;
+                          err = iscsi_if_send_reply(portid, nlh->nlmsg_type,
+                                                        ev, sizeof(*ev));
++                          if (err == -EAGAIN && --retries < 0) {
++                                   printk(KERN_WARNING "Send reply failed, error %d\n", err);
++                                   break;
++                          }
+                } while (err < 0 && err != -ECONNREFUSED && err != -ESRCH);
+                skb_pull(skb, rlen);
+       }
+--
+1.8.3.1
 
