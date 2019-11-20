@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B0C10468C
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6530E10467C
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726757AbfKTW1t (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Nov 2019 17:27:49 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:51280 "EHLO mta-01.yadro.com"
+        id S1726705AbfKTW1n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Nov 2019 17:27:43 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:51252 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726554AbfKTW1k (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Nov 2019 17:27:40 -0500
+        id S1726574AbfKTW1l (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 20 Nov 2019 17:27:41 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 1F88643B0D;
+        by mta-01.yadro.com (Postfix) with ESMTP id F3D1943D79;
         Wed, 20 Nov 2019 22:27:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received; s=mta-01; t=
-        1574288858; x=1576103259; bh=AoW3kTas39MbUxlrFQ89zzmfOPycLEZixrm
-        itxLfY7k=; b=oH7dRNOmXmzHODTgBxoD9id1MfSuQAs03iNjKGlYKG35VvUEzCi
-        rEp74BGDgdrYEymtO9/p/tD2VYdaEfWCtbzh4UYToCRgsKdYOc1a07SXCPOENTqk
-        VDWfqi8CAW3KNc1cAGYvALaZRZ5SWz4UMOrZEf9IWjfZ8Bym7GG7tt5o=
+        1574288859; x=1576103260; bh=rSnJTzuxkzVlpvhu14/MVeJvHTaJrfQHCMa
+        qfaTBCio=; b=dhXhkrDVyza3x43c9hphqqOxb4z4TtdcVkHGt/iRAjLwJRTtJW+
+        IBEr4N0S5jQLtZJ8H2V7LkvkV0kXB8oGvP2INiNiCo/bo781iglWqxCNxlfwiKZP
+        erGf67QEkbEZFQsHKU+l208CmPsiq82WKZDRiI8U/oaJeneapTw7TLvk=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5DvocU4BwFvS; Thu, 21 Nov 2019 01:27:38 +0300 (MSK)
+        with ESMTP id jHdJxb6qvwOL; Thu, 21 Nov 2019 01:27:39 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 9CD9842F12;
-        Thu, 21 Nov 2019 01:27:35 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 3597F42F13;
+        Thu, 21 Nov 2019 01:27:36 +0300 (MSK)
 Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
  (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 21
@@ -39,10 +39,12 @@ From:   Roman Bolshakov <r.bolshakov@yadro.com>
 To:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
 CC:     <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>,
         Quinn Tran <qutran@marvell.com>,
-        Himanshu Madhani <hmadhani@marvell.com>
-Subject: [PATCH v2 08/15] scsi: qla2xxx: Configure local loop for N2N target
-Date:   Thu, 21 Nov 2019 01:27:16 +0300
-Message-ID: <20191120222723.27779-9-r.bolshakov@yadro.com>
+        Himanshu Madhani <hmadhani@marvell.com>,
+        Krishna Kant <krishna.kant@purestorage.com>,
+        Alexei Potashnik <alexei@purestorage.com>
+Subject: [PATCH v2 09/15] scsi: qla2xxx: Send Notify ACK after N2N PLOGI
+Date:   Thu, 21 Nov 2019 01:27:17 +0300
+Message-ID: <20191120222723.27779-10-r.bolshakov@yadro.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191120222723.27779-1-r.bolshakov@yadro.com>
 References: <20191120222723.27779-1-r.bolshakov@yadro.com>
@@ -57,46 +59,35 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-qla2x00_configure_local_loop initializes PLOGI payload for PLOGI ELS
-using Get Parameters mailbox command.
+qlt_handle_login schedules session for deletion even if a login is in
+progress. That causes login bouncing, i.e. a few logins are made before
+it settles down.
 
-In the case when the driver is running in target mode, the topology is
-N2N and the target port has higher WWPN, LOCAL_LOOP_UPDATE bit is
-cleared too early and PLOGI payload is not initialized by the Get
-Parameters command. That causes a failure of ELS IOCB carrying the
-PLOGI with 0x15 aka Data Underrun error.
+Complete the first login by sending Notify Acknowledge IOCB via
+qlt_plogi_ack_unref if the session is pending login completion.
 
-LOCAL_LOOP_UPDATE has to be set to initialize PLOGI payload.
-
-Fixes: 48acad099074 ("scsi: qla2xxx: Fix N2N link re-connect")
+Fixes: 9cd883f07a54 ("scsi: qla2xxx: Fix session cleanup for N2N")
 Cc: Quinn Tran <qutran@marvell.com>
 Cc: Himanshu Madhani <hmadhani@marvell.com>
+Cc: Krishna Kant <krishna.kant@purestorage.com>
+Cc: Alexei Potashnik <alexei@purestorage.com>
 Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
+ drivers/scsi/qla2xxx/qla_target.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 12391815be06..096f41fe17d2 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -4932,14 +4932,8 @@ qla2x00_configure_loop(scsi_qla_host_t *vha)
- 		set_bit(RSCN_UPDATE, &flags);
- 		clear_bit(LOCAL_LOOP_UPDATE, &flags);
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index ab62fcba8ab3..853fa187d827 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -4802,6 +4802,7 @@ static int qlt_handle_login(struct scsi_qla_host *vha,
  
--	} else if (ha->current_topology == ISP_CFG_N) {
--		clear_bit(RSCN_UPDATE, &flags);
--		if (qla_tgt_mode_enabled(vha)) {
--			/* allow the other side to start the login */
--			clear_bit(LOCAL_LOOP_UPDATE, &flags);
--			set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
--		}
--	} else if (ha->current_topology == ISP_CFG_NL) {
-+	} else if (ha->current_topology == ISP_CFG_NL ||
-+		   ha->current_topology == ISP_CFG_N) {
- 		clear_bit(RSCN_UPDATE, &flags);
- 		set_bit(LOCAL_LOOP_UPDATE, &flags);
- 	} else if (!vha->flags.online ||
+ 	switch (sess->disc_state) {
+ 	case DSC_DELETED:
++	case DSC_LOGIN_PEND:
+ 		qlt_plogi_ack_unref(vha, pla);
+ 		break;
+ 
 -- 
 2.24.0
 
