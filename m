@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50FA310467E
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8286B104683
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726729AbfKTW1o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Nov 2019 17:27:44 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:51276 "EHLO mta-01.yadro.com"
+        id S1726739AbfKTW1p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Nov 2019 17:27:45 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:51262 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726698AbfKTW1n (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Nov 2019 17:27:43 -0500
+        id S1726574AbfKTW1p (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 20 Nov 2019 17:27:45 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 26E7A43E03;
-        Wed, 20 Nov 2019 22:27:42 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 4C80943D79;
+        Wed, 20 Nov 2019 22:27:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received; s=mta-01; t=
-        1574288861; x=1576103262; bh=hRumHpSG5+clEN/Z+HJCUlpkwIoz6mPtowh
-        upPpAb4s=; b=ldmS6EvBtVHhBdiV5COHN+bBdOfKgXF/BeMjjolo3LqFe4LBwmn
-        F1jZsg//h2fZhzeowoIAfeFos2wU0Ti4JjgeYz3tIOeioph7CNj5FuxeXjvftFgh
-        wxIu9X0XGFRkTvM1f+QfQpgrE7v7bXU/RgrcOEKjhvfQmqS2oEPChdoM=
+        1574288862; x=1576103263; bh=eaUqDliENYFOZMUWYYPEKBMKd5OpCyqmsnp
+        TQQ+LTpQ=; b=k5y/XGk2uE+B5dMVKZRAMzISIp8T2WQX7LgVFnuV6FZZczVsuRq
+        PgZKjenREYpTO6ac1RyPnFUVvwIWgywHnVJPDaH/rKpiWuq1wEU4DMV8gE90j9YL
+        dFUvmWJImc6mx5yVoY5KqzaOblb35KaiWU2uPfHI8N85wWgylC/I1vro=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EVRsVwlOmfqa; Thu, 21 Nov 2019 01:27:41 +0300 (MSK)
+        with ESMTP id aggEqA3O9LeL; Thu, 21 Nov 2019 01:27:42 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id A2FB643E04;
-        Thu, 21 Nov 2019 01:27:38 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 313DA42F12;
+        Thu, 21 Nov 2019 01:27:39 +0300 (MSK)
 Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
  (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 21
@@ -40,9 +40,9 @@ To:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
 CC:     <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>,
         Quinn Tran <qutran@marvell.com>,
         Himanshu Madhani <hmadhani@marvell.com>
-Subject: [PATCH v2 14/15] scsi: qla2xxx: Add debug dump of LOGO payload and ELS IOCB
-Date:   Thu, 21 Nov 2019 01:27:22 +0300
-Message-ID: <20191120222723.27779-15-r.bolshakov@yadro.com>
+Subject: [PATCH v2 15/15] scsi: qla2xxx: Handle ABTS according to FCP spec for logged out ports
+Date:   Thu, 21 Nov 2019 01:27:23 +0300
+Message-ID: <20191120222723.27779-16-r.bolshakov@yadro.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191120222723.27779-1-r.bolshakov@yadro.com>
 References: <20191120222723.27779-1-r.bolshakov@yadro.com>
@@ -57,42 +57,133 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The change adds a way to debug LOGO ELS, likewise PLOGI.
+Fibre Channel Protocol for SCSI, Fourth Version (FCP-4) 12.3.3, "Target
+FCP_Port response to Exchange termination" states:
 
+  When an ABTS-LS is received at the target FCP_Port, it shall abort the
+  designated Exchange and return one of the following responses:
+
+    a) the target FCP_Port shall discard the ABTS-LS and transmit a LOGO ELS if
+       the Nx_Port issuing the ABTS-LS is not currently logged in (i.e., no
+       N_Port Login exists);
+
+However, current implementation tries to send a real BA_RJT in response to ABTS
+from logged-out ports. The oparation fails because N_Port handle was freed
+shortly after logout and ABTS Recieved IOCB contains 0xFFFF N_Port handle.
+Existing implementation doesn't send LOGO at all.
+
+The correct way to discard ABTS-LS frame when N_Port handle wasn't found is to
+set Terminate ABTS Exchange bit in control flags of ABTS Response IOCB.
+LOGO is sent after that.
+
+To avoid a deadlock in qla2x00_start_sp(), hardware_lock should be released.
+The unlocking should be safe because ABTS Recieved IOCB is not needed after
+s_id is saved on the stack and qlt_24xx_send_abts_resp() is invoked.
+
+Fixes: 2d70c103fd2a ("[SCSI] qla2xxx: Add LLD target-mode infrastructure for >= 24xx series")
 Cc: Quinn Tran <qutran@marvell.com>
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
 ---
- drivers/scsi/qla2xxx/qla_iocb.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/scsi/qla2xxx/qla_target.c | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index 12b37b711ae8..cd2e0f89e9b5 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -2627,6 +2627,10 @@ qla24xx_els_dcmd_iocb(scsi_qla_host_t *vha, int els_opcode,
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 0f2bc4cd562f..331e7adf4b15 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -1800,7 +1800,7 @@ static int qlt_build_abts_resp_iocb(struct qla_tgt_mgmt_cmd *mcmd)
+  */
+ static void qlt_24xx_send_abts_resp(struct qla_qpair *qpair,
+ 	struct abts_recv_from_24xx *abts, uint32_t status,
+-	bool ids_reversed)
++	bool ids_reversed, bool term_exchange)
+ {
+ 	struct scsi_qla_host *vha = qpair->vha;
+ 	struct qla_hw_data *ha = vha->hw;
+@@ -1825,6 +1825,10 @@ static void qlt_24xx_send_abts_resp(struct qla_qpair *qpair,
+ 	resp->handle = QLA_TGT_SKIP_HANDLE;
+ 	resp->entry_count = 1;
+ 	resp->nport_handle = abts->nport_handle;
++	if (term_exchange)
++		resp->control_flags = cpu_to_le16(ABTS_CONTR_FLG_TERM_EXCHG);
++	else
++		resp->control_flags = 0;
+ 	resp->vp_index = vha->vp_idx;
+ 	resp->sof_type = abts->sof_type;
+ 	resp->exchange_address = abts->exchange_address;
+@@ -1940,7 +1944,7 @@ static void qlt_24xx_retry_term_exchange(struct scsi_qla_host *vha,
+ 		qlt_build_abts_resp_iocb(mcmd);
+ 	else
+ 		qlt_24xx_send_abts_resp(qpair,
+-		    (struct abts_recv_from_24xx *)entry, FCP_TMF_CMPL, true);
++		    (struct abts_recv_from_24xx *)entry, FCP_TMF_CMPL, true, false);
  
- 	memcpy(elsio->u.els_logo.els_logo_pyld, &logo_pyld,
- 	    sizeof(struct els_logo_payload));
-+	ql_dbg(ql_dbg_disc + ql_dbg_buffer, vha, 0x3075, "LOGO buffer:");
-+	ql_dump_buffer(ql_dbg_disc + ql_dbg_buffer, vha, 0x010a,
-+		       elsio->u.els_logo.els_logo_pyld,
-+		       sizeof(*elsio->u.els_logo.els_logo_pyld));
+ }
  
- 	rval = qla2x00_start_sp(sp);
- 	if (rval != QLA_SUCCESS) {
-@@ -2704,6 +2708,11 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
- 		els_iocb->rx_byte_count = 0;
- 		els_iocb->rx_address = 0;
- 		els_iocb->rx_len = 0;
-+		ql_dbg(ql_dbg_io + ql_dbg_buffer, vha, 0x3076,
-+		       "LOGO ELS IOCB:");
-+		ql_dump_buffer(ql_log_info, vha, 0x010b,
-+			       els_iocb,
-+			       sizeof(*els_iocb));
+@@ -2134,7 +2138,7 @@ static void qlt_24xx_handle_abts(struct scsi_qla_host *vha,
+ 		    "qla_target(%d): ABTS: Abort Sequence not "
+ 		    "supported\n", vha->vp_idx);
+ 		qlt_24xx_send_abts_resp(ha->base_qpair, abts, FCP_TMF_REJECTED,
+-		    false);
++		    false, false);
+ 		return;
  	}
  
- 	sp->vha->qla_stats.control_requests++;
+@@ -2143,7 +2147,7 @@ static void qlt_24xx_handle_abts(struct scsi_qla_host *vha,
+ 		    "qla_target(%d): ABTS: Unknown Exchange "
+ 		    "Address received\n", vha->vp_idx);
+ 		qlt_24xx_send_abts_resp(ha->base_qpair, abts, FCP_TMF_REJECTED,
+-		    false);
++		    false, false);
+ 		return;
+ 	}
+ 
+@@ -2163,8 +2167,16 @@ static void qlt_24xx_handle_abts(struct scsi_qla_host *vha,
+ 		    vha->vp_idx);
+ 		spin_unlock_irqrestore(&ha->tgt.sess_lock, flags);
+ 
++		/*
++		 * According to FCP-4 12.3.3,
++		 * ABTS-LS frame shall be discarded
++		 */
+ 		qlt_24xx_send_abts_resp(ha->base_qpair, abts, FCP_TMF_REJECTED,
+-			    false);
++			    false, true);
++		spin_unlock_irqrestore(&ha->hardware_lock, flags);
++		/* and LOGO ELS transmitted */
++		qla24xx_els_dcmd_iocb(vha, ELS_DCMD_LOGO, be_to_port_id(s_id), false);
++		spin_lock_irqsave(&ha->hardware_lock, flags);
+ 		return;
+ 	}
+ 	spin_unlock_irqrestore(&ha->tgt.sess_lock, flags);
+@@ -2172,7 +2184,7 @@ static void qlt_24xx_handle_abts(struct scsi_qla_host *vha,
+ 
+ 	if (sess->deleted) {
+ 		qlt_24xx_send_abts_resp(ha->base_qpair, abts, FCP_TMF_REJECTED,
+-		    false);
++		    false, false);
+ 		return;
+ 	}
+ 
+@@ -2182,7 +2194,7 @@ static void qlt_24xx_handle_abts(struct scsi_qla_host *vha,
+ 		    "qla_target(%d): __qlt_24xx_handle_abts() failed: %d\n",
+ 		    vha->vp_idx, rc);
+ 		qlt_24xx_send_abts_resp(ha->base_qpair, abts, FCP_TMF_REJECTED,
+-		    false);
++		    false, false);
+ 		return;
+ 	}
+ }
+@@ -6213,7 +6225,7 @@ static void qlt_abort_work(struct qla_tgt *tgt,
+ out_term:
+ 	spin_lock_irqsave(&ha->hardware_lock, flags);
+ 	qlt_24xx_send_abts_resp(ha->base_qpair, &prm->abts,
+-	    FCP_TMF_REJECTED, false);
++	    FCP_TMF_REJECTED, false, false);
+ 	spin_unlock_irqrestore(&ha->hardware_lock, flags);
+ }
+ 
 -- 
 2.24.0
 
