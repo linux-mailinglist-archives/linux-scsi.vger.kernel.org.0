@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 569C0104677
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 648EF10467A
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfKTW1k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Nov 2019 17:27:40 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:51266 "EHLO mta-01.yadro.com"
+        id S1726701AbfKTW1m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Nov 2019 17:27:42 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:51276 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726454AbfKTW1j (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Nov 2019 17:27:39 -0500
+        id S1726536AbfKTW1l (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 20 Nov 2019 17:27:41 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 23E4942F10;
+        by mta-01.yadro.com (Postfix) with ESMTP id F325543E07;
         Wed, 20 Nov 2019 22:27:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received; s=mta-01; t=
-        1574288857; x=1576103258; bh=Sq70+y2s2skbF9xcugbCIin3cT80GZmW4Cl
-        HUd8/nUw=; b=FR+oUiNfvRy337nS9DdraG1yBe1nnoamMhHY7Zkrv92Vc2T6AqE
-        aNF+p72NiKjIwfQzno2HAM2ch/kPvd3SCqGef6+lS4CzG6NrQFREdr07DSofWrGF
-        r1hr8KK+RfLmdOWzYwvcGHhmE4pn2+P4JSLe4zwqNGbN7X9FOyh7UAdQ=
+        1574288858; x=1576103259; bh=FJaTLojVV5xO0HBNOT++1T1b7T1o7HKRwl3
+        0Rk4VK5U=; b=nLXXl2JFZb5xKGvvowbYiuBWNyxRwFpEryGk7tB66lwbtWD3AN0
+        Ptxe1WYpTbEgAIRjq+d6+wXiOzANg4uEst4Pk9fJnz0F8Njx2DLY833ZIZf3Qh6L
+        UkLMpCfnP5kc62iohz55glozyDjwRLmLTqJ0dkZZajUOW3szMPKAraG8=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id K9Lp-AMPaDlQ; Thu, 21 Nov 2019 01:27:37 +0300 (MSK)
+        with ESMTP id FjDiiJsRsJ4x; Thu, 21 Nov 2019 01:27:38 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 8FD95438D1;
-        Thu, 21 Nov 2019 01:27:34 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 1A98943B0D;
+        Thu, 21 Nov 2019 01:27:35 +0300 (MSK)
 Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
  (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 21
@@ -40,9 +40,9 @@ To:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
 CC:     <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>,
         Quinn Tran <qutran@marvell.com>,
         Himanshu Madhani <hmadhani@marvell.com>
-Subject: [PATCH v2 06/15] scsi: qla2xxx: Don't call qlt_async_event twice
-Date:   Thu, 21 Nov 2019 01:27:14 +0300
-Message-ID: <20191120222723.27779-7-r.bolshakov@yadro.com>
+Subject: [PATCH v2 07/15] scsi: qla2xxx: Fix PLOGI payload and ELS IOCB dump length
+Date:   Thu, 21 Nov 2019 01:27:15 +0300
+Message-ID: <20191120222723.27779-8-r.bolshakov@yadro.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191120222723.27779-1-r.bolshakov@yadro.com>
 References: <20191120222723.27779-1-r.bolshakov@yadro.com>
@@ -57,39 +57,41 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-MBA_PORT_UPDATE generates duplicate log lines in target mode because
-qlt_async_event is called twice. Drop the calls within the case as
-the function will be called right after the switch statement.
+The size of the buffer is hardcoded as 0x70 or 112 bytes, while the
+size of ELS IOCB is 0x40 and the size of PLOGI payload returned by
+Get Parameters command is 0x74.
 
 Cc: Quinn Tran <qutran@marvell.com>
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
 ---
- drivers/scsi/qla2xxx/qla_isr.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/scsi/qla2xxx/qla_iocb.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 1b8f297449cf..c6274178b0b0 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -1061,8 +1061,6 @@ qla2x00_async_event(scsi_qla_host_t *vha, struct rsp_que *rsp, uint16_t *mb)
- 			ql_dbg(ql_dbg_async, vha, 0x5011,
- 			    "Asynchronous PORT UPDATE ignored %04x/%04x/%04x.\n",
- 			    mb[1], mb[2], mb[3]);
--
--			qlt_async_event(mb[0], vha, mb);
- 			break;
- 		}
+diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
+index b25f87ff8cde..bd8160fddcd3 100644
+--- a/drivers/scsi/qla2xxx/qla_iocb.c
++++ b/drivers/scsi/qla2xxx/qla_iocb.c
+@@ -2676,7 +2676,8 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
+ 		ql_dbg(ql_dbg_io + ql_dbg_buffer, vha, 0x3073,
+ 		    "PLOGI ELS IOCB:\n");
+ 		ql_dump_buffer(ql_log_info, vha, 0x0109,
+-		    (uint8_t *)els_iocb, 0x70);
++		    (uint8_t *)els_iocb,
++		    sizeof(*els_iocb));
+ 	} else {
+ 		els_iocb->control_flags = 1 << 13;
+ 		els_iocb->tx_byte_count =
+@@ -2934,7 +2935,8 @@ qla24xx_els_dcmd2_iocb(scsi_qla_host_t *vha, int els_opcode,
  
-@@ -1079,8 +1077,6 @@ qla2x00_async_event(scsi_qla_host_t *vha, struct rsp_que *rsp, uint16_t *mb)
- 		set_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags);
- 		set_bit(LOCAL_LOOP_UPDATE, &vha->dpc_flags);
- 		set_bit(VP_CONFIG_OK, &vha->vp_flags);
--
--		qlt_async_event(mb[0], vha, mb);
- 		break;
+ 	ql_dbg(ql_dbg_disc + ql_dbg_buffer, vha, 0x3073, "PLOGI buffer:\n");
+ 	ql_dump_buffer(ql_dbg_disc + ql_dbg_buffer, vha, 0x0109,
+-	    (uint8_t *)elsio->u.els_plogi.els_plogi_pyld, 0x70);
++	    (uint8_t *)elsio->u.els_plogi.els_plogi_pyld,
++	    sizeof(*elsio->u.els_plogi.els_plogi_pyld));
  
- 	case MBA_RSCN_UPDATE:		/* State Change Registration */
+ 	rval = qla2x00_start_sp(sp);
+ 	if (rval != QLA_SUCCESS) {
 -- 
 2.24.0
 
