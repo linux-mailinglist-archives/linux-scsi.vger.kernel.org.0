@@ -2,29 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 56E30103792
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 11:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AF510378E
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 11:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728712AbfKTKbb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Nov 2019 05:31:31 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49324 "EHLO mx1.suse.de"
+        id S1728573AbfKTKb2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Nov 2019 05:31:28 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49212 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728708AbfKTKba (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Nov 2019 05:31:30 -0500
+        id S1728251AbfKTKb2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 20 Nov 2019 05:31:28 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BD294AF87;
-        Wed, 20 Nov 2019 10:31:28 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 6FD0CB234;
+        Wed, 20 Nov 2019 10:31:26 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Balsundar P <balsundar.p@microsemi.com>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Subject: [PATCH 06/11] aacraid: replace aac_flush_ios() with midlayer helper
-Date:   Wed, 20 Nov 2019 11:31:09 +0100
-Message-Id: <20191120103114.24723-7-hare@suse.de>
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH 07/11] scsi: add scsi_host_quiesce()/scsi_host_resume() helper
+Date:   Wed, 20 Nov 2019 11:31:10 +0100
+Message-Id: <20191120103114.24723-8-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191120103114.24723-1-hare@suse.de>
 References: <20191120103114.24723-1-hare@suse.de>
@@ -33,65 +31,57 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the midlayer helper scsi_host_flush_commands() to flush all
-outstanding commands.
+Add helper functions for quiescing/resuming all devices on a
+given scsi host.
 
-Cc: Balsundar P <balsundar.p@microsemi.com>
-Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/aacraid/linit.c | 24 ++----------------------
- 1 file changed, 2 insertions(+), 22 deletions(-)
+ drivers/scsi/scsi_lib.c    | 18 ++++++++++++++++++
+ include/scsi/scsi_device.h |  2 ++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
-index ee6bc2f9b80a..847dac80defa 100644
---- a/drivers/scsi/aacraid/linit.c
-+++ b/drivers/scsi/aacraid/linit.c
-@@ -1977,26 +1977,6 @@ static void aac_remove_one(struct pci_dev *pdev)
- 	}
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 2563b061f56b..771a8352d3e8 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -2630,6 +2630,24 @@ scsi_target_resume(struct scsi_target *starget)
  }
+ EXPORT_SYMBOL(scsi_target_resume);
  
--static void aac_flush_ios(struct aac_dev *aac)
--{
--	int i;
--	struct scsi_cmnd *cmd;
--
--	for (i = 0; i < aac->scsi_host_ptr->can_queue; i++) {
--		cmd = (struct scsi_cmnd *)aac->fibs[i].callback_data;
--		if (cmd && (cmd->SCp.phase == AAC_OWNER_FIRMWARE)) {
--			scsi_dma_unmap(cmd);
--
--			if (aac->handle_pci_error)
--				cmd->result = DID_NO_CONNECT << 16;
--			else
--				cmd->result = DID_RESET << 16;
--
--			cmd->scsi_done(cmd);
--		}
--	}
--}
--
- static pci_ers_result_t aac_pci_error_detected(struct pci_dev *pdev,
- 					enum pci_channel_state error)
- {
-@@ -2013,7 +1993,7 @@ static pci_ers_result_t aac_pci_error_detected(struct pci_dev *pdev,
- 
- 		scsi_block_requests(aac->scsi_host_ptr);
- 		aac_cancel_rescan_worker(aac);
--		aac_flush_ios(aac);
-+		scsi_host_flush_commands(aac->scsi_host_ptr, DID_NO_CONNECT);
- 		aac_release_resources(aac);
- 
- 		pci_disable_pcie_error_reporting(pdev);
-@@ -2023,7 +2003,7 @@ static pci_ers_result_t aac_pci_error_detected(struct pci_dev *pdev,
- 	case pci_channel_io_perm_failure:
- 		aac->handle_pci_error = 1;
- 
--		aac_flush_ios(aac);
-+		scsi_host_flush_commands(aac->scsi_host_ptr, DID_NO_CONNECT);
- 		return PCI_ERS_RESULT_DISCONNECT;
- 	}
- 
++void scsi_host_quiesce(struct Scsi_Host *shost)
++{
++	struct scsi_device *sdev;
++
++	shost_for_each_device(sdev, shost)
++		scsi_device_quiesce(sdev);
++}
++EXPORT_SYMBOL(scsi_host_quiesce);
++
++void scsi_host_resume(struct Scsi_Host *shost)
++{
++	struct scsi_device *sdev;
++
++	shost_for_each_device(sdev, shost)
++		scsi_device_resume(sdev);
++}
++EXPORT_SYMBOL(scsi_host_resume);
++
+ /**
+  * scsi_internal_device_block_nowait - try to transition to the SDEV_BLOCK state
+  * @sdev: device to block
+diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+index 3ed836db5306..2185068ce955 100644
+--- a/include/scsi/scsi_device.h
++++ b/include/scsi/scsi_device.h
+@@ -420,6 +420,8 @@ extern int scsi_device_quiesce(struct scsi_device *sdev);
+ extern void scsi_device_resume(struct scsi_device *sdev);
+ extern void scsi_target_quiesce(struct scsi_target *);
+ extern void scsi_target_resume(struct scsi_target *);
++extern void scsi_host_quiesce(struct Scsi_Host *);
++extern void scsi_host_resume(struct Scsi_Host *);
+ extern void scsi_scan_target(struct device *parent, unsigned int channel,
+ 			     unsigned int id, u64 lun,
+ 			     enum scsi_scan_mode rescan);
 -- 
 2.16.4
 
