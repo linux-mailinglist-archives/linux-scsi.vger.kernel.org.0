@@ -2,48 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D594104671
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4994C10468A
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726358AbfKTW1i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Nov 2019 17:27:38 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:51244 "EHLO mta-01.yadro.com"
+        id S1726548AbfKTW1j (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 Nov 2019 17:27:39 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:51252 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726170AbfKTW1h (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 Nov 2019 17:27:37 -0500
+        id S1726346AbfKTW1i (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 20 Nov 2019 17:27:38 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 2EAC243C28;
-        Wed, 20 Nov 2019 22:27:36 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 2F10643D79;
+        Wed, 20 Nov 2019 22:27:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received; s=mta-01; t=
-        1574288855; x=1576103256; bh=5xqnCLbcYErwmr1sSEDE0GD4w2qgfE9byGK
-        cCcbpPJM=; b=FqePgKZq4bBFd1fX7iRRtEu8LbmA6yl/ATljgHA10VAkK5VvImA
-        SPxzeSd0a7RS7NUN3nr5HxAjSKQNPZLpe2TJyB/CKiJTtPY1olPweA6Hg/Vkxnh8
-        OHEj1v0uM8uQdMMIIOfN5lnMoVjCpjx/ZLXIwJFXlNPk5ShaxDC61WFk=
+        1574288856; x=1576103257; bh=bukIwQHWOI0oe/Kwe6RNHTVy/xzfD1g7Tzr
+        Im4yeQc8=; b=XumyDsq4dKFGr5jfWSbRy41kfAngfcHK43Z1QE9gYH024CsvsB1
+        F4QsaoVTNxeDaV9nWyruUOSckb/o8NrB/PnKYsbniJqI31MYzet6OTi1zIaviAJx
+        nCjz7wqgfSjFBJ6oksmRMfki69ySGM81AJPTn4+QwXmWEhYrer18C4ho=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8ZJce0FGBAOv; Thu, 21 Nov 2019 01:27:35 +0300 (MSK)
+        with ESMTP id YYtdjL79dd2y; Thu, 21 Nov 2019 01:27:36 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 0414F42F13;
+        by mta-01.yadro.com (Postfix) with ESMTPS id 8483D43597;
         Thu, 21 Nov 2019 01:27:33 +0300 (MSK)
 Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
  (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 21
- Nov 2019 01:27:32 +0300
+ Nov 2019 01:27:33 +0300
 From:   Roman Bolshakov <r.bolshakov@yadro.com>
 To:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
 CC:     <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Hannes Reinecke <hare@suse.com>,
+        Quinn Tran <qutran@marvell.com>, <stable@vger.kernel.org>,
         Himanshu Madhani <hmadhani@marvell.com>
-Subject: [PATCH v2 03/15] scsi: qla2xxx: Drop superfluous INIT_WORK of del_work
-Date:   Thu, 21 Nov 2019 01:27:11 +0300
-Message-ID: <20191120222723.27779-4-r.bolshakov@yadro.com>
+Subject: [PATCH v2 04/15] scsi: qla2xxx: Change discovery state before PLOGI
+Date:   Thu, 21 Nov 2019 01:27:12 +0300
+Message-ID: <20191120222723.27779-5-r.bolshakov@yadro.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191120222723.27779-1-r.bolshakov@yadro.com>
 References: <20191120222723.27779-1-r.bolshakov@yadro.com>
@@ -58,29 +57,31 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-del_work is already initialized inside qla2x00_alloc_fcport, there's no
-need to overwrite it. Indeed, it might prevent complete traversal of
-workqueue list.
+When a port sends PLOGI, discovery state should be changed to login
+pending, otherwise RELOGIN_NEEDED bit is set in
+qla24xx_handle_plogi_done_event(). RELOGIN_NEEDED triggers another
+PLOGI, and it never goes out of the loop until login timer expires.
 
-Fixes: a01c77d2cbc45 ("scsi: qla2xxx: Move session delete to driver work queue")
+Fixes: 8777e4314d397 ("scsi: qla2xxx: Migrate NVME N2N handling into state machine")
+Fixes: 8b5292bcfcacf ("scsi: qla2xxx: Fix Relogin to prevent modifying scan_state flag")
 Cc: Quinn Tran <qutran@marvell.com>
-Cc: Hannes Reinecke <hare@suse.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
 Acked-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_target.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-index 7f470a314b1a..ab62fcba8ab3 100644
---- a/drivers/scsi/qla2xxx/qla_target.c
-+++ b/drivers/scsi/qla2xxx/qla_target.c
-@@ -1264,7 +1264,6 @@ void qlt_schedule_sess_for_deletion(struct fc_port *sess)
- 	    "Scheduling sess %p for deletion %8phC\n",
- 	    sess, sess->port_name);
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index 4f3da968163e..fcb309be50d9 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -533,6 +533,7 @@ static int qla_post_els_plogi_work(struct scsi_qla_host *vha, fc_port_t *fcport)
  
--	INIT_WORK(&sess->del_work, qla24xx_delete_sess_fn);
- 	WARN_ON(!queue_work(sess->vha->hw->wq, &sess->del_work));
+ 	e->u.fcport.fcport = fcport;
+ 	fcport->flags |= FCF_ASYNC_ACTIVE;
++	fcport->disc_state = DSC_LOGIN_PEND;
+ 	return qla2x00_post_work(vha, e);
  }
  
 -- 
