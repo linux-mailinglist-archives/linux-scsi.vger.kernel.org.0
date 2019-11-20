@@ -2,47 +2,47 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE67104687
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569C0104677
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 Nov 2019 23:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbfKTW1l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 Nov 2019 17:27:41 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:51262 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725842AbfKTW1k (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1726568AbfKTW1k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Wed, 20 Nov 2019 17:27:40 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:51266 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726454AbfKTW1j (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 20 Nov 2019 17:27:39 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 06C9443B4E;
+        by mta-01.yadro.com (Postfix) with ESMTP id 23E4942F10;
         Wed, 20 Nov 2019 22:27:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received; s=mta-01; t=
-        1574288856; x=1576103257; bh=Ni0NC50v8cLQ+ef77rJzWipKfOYzhZwnm3V
-        jCC/GSAE=; b=amsHgQszU9ikOym1/8a81sQiWHxC1pHDzD+4XoAOF9dfyCD9iyK
-        tZYmJRPffG+za3KD5/sxJpoNetY92DjJdShJ7icAyDJkgdV1zrVF+xYR2Bh4oxpX
-        7AHCR4W/SKyg5ISwpTh7LV4+dRXd8D/WF9GfR86ERdrXt0SDKNL2ul1w=
+        1574288857; x=1576103258; bh=Sq70+y2s2skbF9xcugbCIin3cT80GZmW4Cl
+        HUd8/nUw=; b=FR+oUiNfvRy337nS9DdraG1yBe1nnoamMhHY7Zkrv92Vc2T6AqE
+        aNF+p72NiKjIwfQzno2HAM2ch/kPvd3SCqGef6+lS4CzG6NrQFREdr07DSofWrGF
+        r1hr8KK+RfLmdOWzYwvcGHhmE4pn2+P4JSLe4zwqNGbN7X9FOyh7UAdQ=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id WTbId02nmtiC; Thu, 21 Nov 2019 01:27:36 +0300 (MSK)
+        with ESMTP id K9Lp-AMPaDlQ; Thu, 21 Nov 2019 01:27:37 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 1BA5C42F10;
+        by mta-01.yadro.com (Postfix) with ESMTPS id 8FD95438D1;
         Thu, 21 Nov 2019 01:27:34 +0300 (MSK)
 Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
  (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Thu, 21
- Nov 2019 01:27:33 +0300
+ Nov 2019 01:27:34 +0300
 From:   Roman Bolshakov <r.bolshakov@yadro.com>
 To:     <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>
 CC:     <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>,
         Quinn Tran <qutran@marvell.com>,
         Himanshu Madhani <hmadhani@marvell.com>
-Subject: [PATCH v2 05/15] scsi: qla2xxx: Allow PLOGI in target mode
-Date:   Thu, 21 Nov 2019 01:27:13 +0300
-Message-ID: <20191120222723.27779-6-r.bolshakov@yadro.com>
+Subject: [PATCH v2 06/15] scsi: qla2xxx: Don't call qlt_async_event twice
+Date:   Thu, 21 Nov 2019 01:27:14 +0300
+Message-ID: <20191120222723.27779-7-r.bolshakov@yadro.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191120222723.27779-1-r.bolshakov@yadro.com>
 References: <20191120222723.27779-1-r.bolshakov@yadro.com>
@@ -57,52 +57,39 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-According to FC-LS-3 (Fibre Channel Link Services) 6.3.2.4
-"N_Port Login - No Fabric present", if both parties in the point-to-point
-connection know N_Port_Names of each other, Nx_Port with the highest
-N_Port_name shall transmit PLOGI. The specification sets no restrictions
-on the port role that should send PLOGI.
-
-However, FCP-4 (Fibre Channel Protocol for SCSI, Fourth Version) 6.2
-"Overview of Process Login and Process Logout", instructs that in
-point-to-point topology, initiator shall send explicit PRLI ELS.
-
-The change fixes stuck P2P login, when target WWPN is higher than
-initiator WWPN.
+MBA_PORT_UPDATE generates duplicate log lines in target mode because
+qlt_async_event is called twice. Drop the calls within the case as
+the function will be called right after the switch statement.
 
 Cc: Quinn Tran <qutran@marvell.com>
 Cc: Himanshu Madhani <hmadhani@marvell.com>
 Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
 ---
- drivers/scsi/qla2xxx/qla_init.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/scsi/qla2xxx/qla_isr.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index fcb309be50d9..12391815be06 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -1527,10 +1527,6 @@ int qla24xx_fcport_handle_login(struct scsi_qla_host *vha, fc_port_t *fcport)
- 		}
- 	}
- 
--	/* for pure Target Mode. Login will not be initiated */
--	if (vha->host->active_mode == MODE_TARGET)
--		return 0;
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index 1b8f297449cf..c6274178b0b0 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -1061,8 +1061,6 @@ qla2x00_async_event(scsi_qla_host_t *vha, struct rsp_que *rsp, uint16_t *mb)
+ 			ql_dbg(ql_dbg_async, vha, 0x5011,
+ 			    "Asynchronous PORT UPDATE ignored %04x/%04x/%04x.\n",
+ 			    mb[1], mb[2], mb[3]);
 -
- 	if (fcport->flags & FCF_ASYNC_SENT) {
- 		set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
- 		return 0;
-@@ -1720,6 +1716,10 @@ void qla24xx_handle_relogin_event(scsi_qla_host_t *vha,
- void qla_handle_els_plogi_done(scsi_qla_host_t *vha,
- 				      struct event_arg *ea)
- {
-+	/* for pure Target Mode, PRLI will not be initiated */
-+	if (vha->host->active_mode == MODE_TARGET)
-+		return;
-+
- 	ql_dbg(ql_dbg_disc, vha, 0x2118,
- 	    "%s %d %8phC post PRLI\n",
- 	    __func__, __LINE__, ea->fcport->port_name);
+-			qlt_async_event(mb[0], vha, mb);
+ 			break;
+ 		}
+ 
+@@ -1079,8 +1077,6 @@ qla2x00_async_event(scsi_qla_host_t *vha, struct rsp_que *rsp, uint16_t *mb)
+ 		set_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags);
+ 		set_bit(LOCAL_LOOP_UPDATE, &vha->dpc_flags);
+ 		set_bit(VP_CONFIG_OK, &vha->vp_flags);
+-
+-		qlt_async_event(mb[0], vha, mb);
+ 		break;
+ 
+ 	case MBA_RSCN_UPDATE:		/* State Change Registration */
 -- 
 2.24.0
 
