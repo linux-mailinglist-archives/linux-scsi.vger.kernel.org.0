@@ -2,113 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9067E105201
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Nov 2019 13:02:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5071610554A
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Nov 2019 16:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbfKUMBs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Nov 2019 07:01:48 -0500
-Received: from ste-pvt-msa2.bahnhof.se ([213.80.101.71]:61503 "EHLO
-        ste-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbfKUMBr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Nov 2019 07:01:47 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by ste-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 173E53F5A2;
-        Thu, 21 Nov 2019 12:52:43 +0100 (CET)
-Authentication-Results: ste-pvt-msa2.bahnhof.se;
-        dkim=pass (1024-bit key; unprotected) header.d=shipmail.org header.i=@shipmail.org header.b=DhQtwEVk;
-        dkim-atps=neutral
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -2.099
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.099 tagged_above=-999 required=6.31
-        tests=[BAYES_00=-1.9, DKIM_SIGNED=0.1, DKIM_VALID=-0.1,
-        DKIM_VALID_AU=-0.1, DKIM_VALID_EF=-0.1, URIBL_BLOCKED=0.001]
-        autolearn=ham autolearn_force=no
-Authentication-Results: ste-ftg-msa2.bahnhof.se (amavisd-new);
-        dkim=pass (1024-bit key) header.d=shipmail.org
-Received: from ste-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (ste-ftg-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 5QL1eylg0w_I; Thu, 21 Nov 2019 12:52:42 +0100 (CET)
-Received: from mail1.shipmail.org (h-205-35.A357.priv.bahnhof.se [155.4.205.35])
-        (Authenticated sender: mb878879)
-        by ste-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 6611E3F59D;
-        Thu, 21 Nov 2019 12:52:41 +0100 (CET)
-Received: from localhost.localdomain.localdomain (h-205-35.A357.priv.bahnhof.se [155.4.205.35])
-        by mail1.shipmail.org (Postfix) with ESMTPSA id DFFD13601A3;
-        Thu, 21 Nov 2019 12:52:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=shipmail.org; s=mail;
-        t=1574337160; bh=GgpXsnJVZPKyPe+h+0gIt+VQkmGTuW5nmRdMrtnMCT8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DhQtwEVknumPNenH6P8RzVcvRF39BpRQFFa59wO9swleFk3W+XhR0GqFSLUA7zvvP
-         GGTeCmX3cbDSVDGuZd11NrWNJLaNpuOAtUFKqydn2H4bEEiHpxF4j8zvsA04ORBiYt
-         qHAElm5tKUqVNMazxruCP8mFnCmf1RFSLXHybl5o=
-From:   =?UTF-8?q?Thomas=20Hellstr=C3=B6m=20=28VMware=29?= 
-        <thomas_os@shipmail.org>
-To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pv-drivers@vmware.com
-Cc:     Thomas Hellstrom <thellstrom@vmware.com>,
+        id S1727254AbfKUPVl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Nov 2019 10:21:41 -0500
+Received: from mx2.suse.de ([195.135.220.15]:52032 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726279AbfKUPVl (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 21 Nov 2019 10:21:41 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id EBC91B127;
+        Thu, 21 Nov 2019 15:21:38 +0000 (UTC)
+Date:   Thu, 21 Nov 2019 16:21:36 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-scsi@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Jens Axboe <axboe@kernel.dk>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jim Gill <jgill@vmware.com>
-Subject: [PATCH 2/2] scsi: vmw_pvscsi: Silence dma mapping errors
-Date:   Thu, 21 Nov 2019 12:52:04 +0100
-Message-Id: <20191121115204.53060-2-thomas_os@shipmail.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20191121115204.53060-1-thomas_os@shipmail.org>
-References: <20191121115204.53060-1-thomas_os@shipmail.org>
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        "J. Bruce Fields" <bfields@redhat.com>,
+        Benjamin Coddington <bcodding@redhat.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>, Ming Lei <ming.lei@redhat.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Tejun Heo <tj@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v2 7/8] scsi: sr: workaround VMware ESXi cdrom emulation
+ bug
+Message-ID: <20191121152136.GK11661@kitsune.suse.cz>
+References: <cover.1571834862.git.msuchanek@suse.de>
+ <abf81ec4f8b6139fffc609df519856ff8dc01d0d.1571834862.git.msuchanek@suse.de>
+ <20191024022307.GC11485@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191024022307.GC11485@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Thomas Hellstrom <thellstrom@vmware.com>
+On Wed, Oct 23, 2019 at 07:23:07PM -0700, Christoph Hellwig wrote:
+> On Wed, Oct 23, 2019 at 02:52:46PM +0200, Michal Suchanek wrote:
+> > 
+> > The drive claims to have a tray and claims to be able to close it.
+> > However, the UI has no notion of a tray - when medium is ejected it is
+> > dropped in the floor and the user must select a medium again before the
+> > drive can be re-loaded.  On the kernel side the tray_move call to close
+> > the tray succeeds but the drive state does not change as a result of the
+> > call.
+> > 
+> > The drive does not in fact emulate the tray state. There are two ways to
+> > get the medium state. One is the SCSI status:
+> 
+> Given that this is a buggy software emulation we should not add more
+> than 100 lines of kernel code to work around it.  Ask VMware to fix
+> their mess instead.
 
-These errors typically occur with swiotlb when the swiotlb buffer is full.
-But they are transient and would typically unnecessarily worry a user.
-Instead of errors, print debug messages.
+Where do you see 100 lines of code?
 
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Signed-off-by: Thomas Hellstrom <thellstrom@vmware.com>
-Acked-by: Jim Gill <jgill@vmware.com>
----
- drivers/scsi/vmw_pvscsi.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The patch has exactly 4.
 
-diff --git a/drivers/scsi/vmw_pvscsi.c b/drivers/scsi/vmw_pvscsi.c
-index 8a09d184a320..c3f010df641e 100644
---- a/drivers/scsi/vmw_pvscsi.c
-+++ b/drivers/scsi/vmw_pvscsi.c
-@@ -365,7 +365,7 @@ static int pvscsi_map_buffers(struct pvscsi_adapter *adapter,
- 		int segs = scsi_dma_map(cmd);
- 
- 		if (segs == -ENOMEM) {
--			scmd_printk(KERN_ERR, cmd,
-+			scmd_printk(KERN_DEBUG, cmd,
- 				    "vmw_pvscsi: Failed to map cmd sglist for DMA.\n");
- 			return -ENOMEM;
- 		} else if (segs > 1) {
-@@ -392,7 +392,7 @@ static int pvscsi_map_buffers(struct pvscsi_adapter *adapter,
- 		ctx->dataPA = dma_map_single(&adapter->dev->dev, sg, bufflen,
- 					     cmd->sc_data_direction);
- 		if (dma_mapping_error(&adapter->dev->dev, ctx->dataPA)) {
--			scmd_printk(KERN_ERR, cmd,
-+			scmd_printk(KERN_DEBUG, cmd,
- 				    "vmw_pvscsi: Failed to map direct data buffer for DMA.\n");
- 			return -ENOMEM;
- 		}
-@@ -725,7 +725,7 @@ static int pvscsi_queue_ring(struct pvscsi_adapter *adapter,
- 				cmd->sense_buffer, SCSI_SENSE_BUFFERSIZE,
- 				DMA_FROM_DEVICE);
- 		if (dma_mapping_error(&adapter->dev->dev, ctx->sensePA)) {
--			scmd_printk(KERN_ERR, cmd,
-+			scmd_printk(KERN_DEBUG, cmd,
- 				    "vmw_pvscsi: Failed to map sense buffer for DMA.\n");
- 			ctx->sensePA = 0;
- 			return -ENOMEM;
--- 
-2.21.0
+Thanks
 
+Michal
