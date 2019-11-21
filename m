@@ -2,149 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC0B105831
-	for <lists+linux-scsi@lfdr.de>; Thu, 21 Nov 2019 18:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B338F1058E9
+	for <lists+linux-scsi@lfdr.de>; Thu, 21 Nov 2019 18:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727277AbfKURNw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 Nov 2019 12:13:52 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54298 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727197AbfKURNp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 21 Nov 2019 12:13:45 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 11510B2A1;
-        Thu, 21 Nov 2019 17:13:44 +0000 (UTC)
-From:   Michal Suchanek <msuchanek@suse.de>
-To:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org
-Cc:     Michal Suchanek <msuchanek@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Eric Biggers <ebiggers@google.com>,
-        "J. Bruce Fields" <bfields@redhat.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Benjamin Coddington <bcodding@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Hou Tao <houtao1@huawei.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jan Kara <jack@suse.cz>, Hannes Reinecke <hare@suse.com>,
-        "Ewan D. Milne" <emilne@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH v4 10/10] scsi: sr: wait for the medium to become ready
-Date:   Thu, 21 Nov 2019 18:13:17 +0100
-Message-Id: <c0c769f470be6a91b80fbd92658a3012a7225455.1574355709.git.msuchanek@suse.de>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <cover.1574355709.git.msuchanek@suse.de>
-References: <cover.1574355709.git.msuchanek@suse.de>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726655AbfKUR4I (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 Nov 2019 12:56:08 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:32948 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726379AbfKUR4I (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 Nov 2019 12:56:08 -0500
+Received: by mail-wr1-f68.google.com with SMTP id w9so5601515wrr.0
+        for <linux-scsi@vger.kernel.org>; Thu, 21 Nov 2019 09:56:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=GEzoZ1oSPFXtUIC55vSd6kEd6DXXzKK6wZJNa2hGXfw=;
+        b=TAJ8Bc9bpn4MY6AkRn+tL0Ipyi6NtheQ7pVhiWW+5C20pKEPo/zAhgsU4WB/i8vgtG
+         96SJb26pi1m+I2R/lO5sQvK/luBMP4sneO9sU/OuGRM0bRxUaPhEQAf9vey/b6NIkm4S
+         LtHg+0TXisycrKBSUKfccFrKj2WqcSsyq7fDjw1tC3fPgXmfff/8Ipic2veS4Y6bEtNe
+         Xchrdiy1MIb6IfW52pwh8gXGP9Q1sO0wJSW7UpWKCJxkQz+dlsBPLS/WvGilOOVziVIi
+         zcx8ZZa1UjUTn9ApXu44GcRlUlvZVJAmrTecCSvlmoS37F2qPzmVG5/uWd06lKRdSV69
+         s/3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=GEzoZ1oSPFXtUIC55vSd6kEd6DXXzKK6wZJNa2hGXfw=;
+        b=g8aV6jnfG2XrYr961ebVaOJ0nd0eKl9V9oD0665MBn/EQls7bsqizrcNscJ4zQVWlK
+         7mQz98vitju92hawFaga42ni9GN374lQW25BRefyOlAT1rcIzM1PZZ4d2asZ3MnMkIHV
+         PJ6sfAe937PHCChtlQpJji8jRxy4weowVIfyd0tXsKoZAPlyZxgMLlZE/ocP1I2yUGhj
+         FIjI8RtMIXOf2aXWtlj5KHA9ARLAMvC8M1DVGuAw9eyPGf8MbqzTD3LnspE+OdLy0CfL
+         SnUuIjytIH0H4RQzAJm/DN3hRGzg0gnftAGn7SO+qjgvRt2oxdW5GlnTH7B/PmbMK+tS
+         TKEA==
+X-Gm-Message-State: APjAAAVXIgDvO5ixhXhCLSOsjDT2OeEwra4dlmHYPXNUm7dmb7XvGrGd
+        cfR11Ccz0c1kr2joL9nDqLitX7Lj
+X-Google-Smtp-Source: APXvYqwtYktuITbQAU62vFAWxzrua3HjXLzO47Z6CfictjWFLfWkCpDp/SeyLqEG3j4uHV/d2tH/cQ==
+X-Received: by 2002:a5d:53c1:: with SMTP id a1mr3939231wrw.373.1574358965869;
+        Thu, 21 Nov 2019 09:56:05 -0800 (PST)
+Received: from os42.localdomain ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id a26sm399076wmm.14.2019.11.21.09.56.03
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Thu, 21 Nov 2019 09:56:05 -0800 (PST)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Subject: [PATCH] lpfc: size cpu map by last cpu id set
+Date:   Thu, 21 Nov 2019 09:55:56 -0800
+Message-Id: <20191121175556.18953-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.13.7
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the autoclose function provided by cdrom driver to wait for drive to
-close in open_finish, and attempt to open once more after the door
-closes.
+Currently the lpfc driver sizes its cpu_map array based on
+num_possible_cpus(). However, that can be a value that is less
+than the highest cpu id bit that is set. As such, if a thread
+runs on a cpu with a larger cpu id, or for_each_possible_cpu()
+is used, the driver could index off the end of the array and
+return garbage or GPF.
 
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
----
-v3: use function call rather than IOCTL
-v4: fix reference leak on -ENXIO
----
- drivers/scsi/sr.c | 54 ++++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 42 insertions(+), 12 deletions(-)
+The driver maintains it's own internal copy of the "num_possible"
+cpu value and sizes arrays by it.
 
-diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-index 07c319494bf4..41ddf08b4c7b 100644
---- a/drivers/scsi/sr.c
-+++ b/drivers/scsi/sr.c
-@@ -522,29 +522,58 @@ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt)
- 	return ret;
- }
+Fix by setting the driver's value to the value of the last cpu id
+bit set in the possible_mask - plus 1. Thus cpu_map will be sized
+to allow access by any cpu id possible.
+
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index e9323889f199..cd83617354a1 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -6460,7 +6460,7 @@ lpfc_sli4_driver_resource_setup(struct lpfc_hba *phba)
+ 	u32 if_fam;
  
--static int sr_block_open(struct block_device *bdev, fmode_t mode)
-+static int __sr_block_open(struct block_device *bdev, fmode_t mode)
- {
--	struct scsi_cd *cd;
--	struct scsi_device *sdev;
--	int ret = -ENXIO;
--
--	cd = scsi_cd_get(bdev->bd_disk);
--	if (!cd)
--		goto out;
-+	struct scsi_cd *cd = scsi_cd(bdev->bd_disk);
-+	int ret;
+ 	phba->sli4_hba.num_present_cpu = lpfc_present_cpu;
+-	phba->sli4_hba.num_possible_cpu = num_possible_cpus();
++	phba->sli4_hba.num_possible_cpu = cpumask_last(cpu_possible_mask) + 1;
+ 	phba->sli4_hba.curr_disp_cpu = 0;
+ 	lpfc_cpumask_of_node_init(phba);
  
--	sdev = cd->device;
--	scsi_autopm_get_device(sdev);
- 	check_disk_change(bdev);
- 
- 	mutex_lock(&sr_mutex);
- 	ret = cdrom_open(&cd->cdi, bdev, mode);
- 	mutex_unlock(&sr_mutex);
- 
-+	return ret;
-+}
-+
-+static int sr_block_open(struct block_device *bdev, fmode_t mode)
-+{
-+	struct scsi_cd *cd = scsi_cd_get(bdev->bd_disk);
-+	struct scsi_device *sdev;
-+	int ret;
-+
-+	if (!cd)
-+		return -ENXIO;
-+
-+	sdev = cd->device;
-+	scsi_autopm_get_device(sdev);
-+	ret = __sr_block_open(bdev, mode);
- 	scsi_autopm_put_device(sdev);
--	if (ret)
-+
-+	if ((ret == -ERESTARTSYS) || (ret == -ENXIO))
- 		scsi_cd_put(cd);
- 
--out:
-+	return ret;
-+}
-+
-+static int sr_block_open_finish(struct block_device *bdev, fmode_t mode,
-+				int ret)
-+{
-+	struct scsi_cd *cd = scsi_cd(bdev->bd_disk);
-+
-+	/* wait for drive to get ready */
-+	if ((ret == -ENOMEDIUM) && !(mode & FMODE_NDELAY)) {
-+		struct scsi_device *sdev = cd->device;
-+		/*
-+		 * Cannot use sr_block_ioctl because it locks sr_mutex blocking
-+		 * out any processes trying to access the drive
-+		 */
-+		scsi_autopm_get_device(sdev);
-+		cdrom_autoclose(&cd->cdi);
-+		ret = __sr_block_open(bdev, mode);
-+		scsi_autopm_put_device(sdev);
-+	}
-+
- 	return ret;
- }
- 
-@@ -640,6 +669,7 @@ static const struct block_device_operations sr_bdops =
- {
- 	.owner		= THIS_MODULE,
- 	.open		= sr_block_open,
-+	.open_finish	= sr_block_open_finish,
- 	.release	= sr_block_release,
- 	.ioctl		= sr_block_ioctl,
- 	.check_events	= sr_block_check_events,
 -- 
-2.23.0
+2.13.7
 
