@@ -2,125 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6EB31071AD
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2019 12:45:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7AD10754F
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2019 17:01:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727479AbfKVLpX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 Nov 2019 06:45:23 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:56622 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726676AbfKVLpX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 Nov 2019 06:45:23 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAMBhpKa102645;
-        Fri, 22 Nov 2019 05:43:51 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1574423031;
-        bh=5rJlm63UVTkhCHrw2W6wXofUd19jkVn8cXok6W3vCrE=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=MmAtDb/SuOxLg/cMSBaFOuAFsMfYfo61hHvQprDVlsUUkX7UyoEZe39J+XDu4FTTh
-         QiegjFzEu0YXUrQa6GBwC3UJ3d2FC1ME0Cx42j7162Ey3RkQme+DWa8vrAya0TpLT0
-         YGPXzNwUJ1UN/FYXmgUFq5L6uvRlsLjtwAiEMQW0=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAMBhpOu066881;
-        Fri, 22 Nov 2019 05:43:51 -0600
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Fri, 22
- Nov 2019 05:43:51 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Fri, 22 Nov 2019 05:43:51 -0600
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAMBhkWD086656;
-        Fri, 22 Nov 2019 05:43:47 -0600
-Subject: Re: [PATCH RESEND 0/2] scsi: ufs: hibern8 fixes
-To:     sheebab <sheebab@cadence.com>, <alim.akhtar@samsung.com>,
-        <avri.altman@wdc.com>, <pedrom.sousa@synopsys.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <stanley.chu@mediatek.com>, <beanhuo@micron.com>,
-        <yuehaibing@huawei.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-block@vger.kernel.org>
-CC:     <rafalc@cadence.com>, <mparab@cadence.com>
-References: <1574147082-22725-1-git-send-email-sheebab@cadence.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <ae8a7e7e-f60c-0ba3-4a98-78c4c962ae4d@ti.com>
-Date:   Fri, 22 Nov 2019 17:14:18 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726942AbfKVQBV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 Nov 2019 11:01:21 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:37606 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726760AbfKVQBV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 Nov 2019 11:01:21 -0500
+Received: by mail-qt1-f196.google.com with SMTP id w47so4251469qtk.4;
+        Fri, 22 Nov 2019 08:01:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:subject:to:cc:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=CdX7ZQEUe/cRH9WC2wubBDri/lMHrSGbYedbb2yw4Hc=;
+        b=VBSZIm/NitEgFgAiYMVXY43lq5XjFUUTjaYCUvPZMFM3pP+4Wn/Ra81LvNCG2B/dqJ
+         O6+C4i5V5lsX27m/EGX/IIARNSgTmUZiXI5PQoF97enNrvv6/mJebzS5Yj5OAR21DDoX
+         s4zlKfGVcczc06smz2ulDrS/Zl297SC6dcC64rH1OZ+gai2JvhSrKRBitBBnrTvQMaQg
+         H+pzisp2xLarzHpVCLA2fOqxxjrKKkgP66m1mHkoy0m5a431z/fWNSOG/vzQ15Hs2ESN
+         fXgp914i6/lDpaaL4j27zwbYHltwdJIRFp1dKQkcR6jleKZgd7L9hxRDjngn325S4xzk
+         woCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=CdX7ZQEUe/cRH9WC2wubBDri/lMHrSGbYedbb2yw4Hc=;
+        b=mRzhnBuqbjcrG48mEUpz1t54cXbTGjjIFQsr9kYhRRHL99DUNvn67LNFWNvKwayxav
+         +U1eXMv3C9Kh4g4hDiMB1ZrveUf9lf/oQb1alZbE4AEJTF4WcNnQ/KqkK01GVL05GgRG
+         Jj4Br20wVbYM2LgiOd4GevD8xXexUY+nll3LPBmBx3ImxBr5Qr4lD1WNWo8Tes/4EOos
+         CBWhdQ1oDQm+SMFH7wDBF/ukBf2+9MBShwRwiZflzsw12ihRK7j5TOn0/0IsxMEim/0k
+         9pKuhHUVotOxWm1Sfkrtxw9ZCSC5b5SB3em8ZGacPkYNyaENvvc+gVlxMXPV7pGKXKFB
+         2vrQ==
+X-Gm-Message-State: APjAAAWwlBR/BYOStCtQ8RZuUENEeFZo14gbLanQSE3ZU7LbaF2RO03V
+        91zEx5pBQZsUzj1TaUPlMWNQJt2AgTJA4w==
+X-Google-Smtp-Source: APXvYqxWtITWMvEHpWI203D+raKApDrbUfvSAVn8EvwssACZseFHVbt5V5RSqvf9csq4q2LiWohHOQ==
+X-Received: by 2002:ac8:1415:: with SMTP id k21mr4959630qtj.80.1574438477243;
+        Fri, 22 Nov 2019 08:01:17 -0800 (PST)
+Received: from [192.168.1.164] (pool-108-20-37-130.bstnma.fios.verizon.net. [108.20.37.130])
+        by smtp.gmail.com with ESMTPSA id m27sm2196315qta.21.2019.11.22.08.01.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Nov 2019 08:01:15 -0800 (PST)
+From:   Ric Wheeler <ricwheeler@gmail.com>
+Subject: USENIX Vault - open source storage call for talks - CFP deadline
+ extended
+To:     Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-block@vger.kernel.org
+Cc:     Vault '20 Program Co-Chairs <vault20chairs@usenix.org>
+Message-ID: <727e2a7a-eab7-9ba7-e1b8-d75eb853245a@gmail.com>
+Date:   Fri, 22 Nov 2019 11:01:14 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-In-Reply-To: <1574147082-22725-1-git-send-email-sheebab@cadence.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+Hi all,
 
-On 19/11/19 12:34 PM, sheebab wrote:
-> Hi,
-> 
-> Resending this patch to include mailing list and miss out patches.
-> 
-> This patch set contains following patches
-> for Cadence UFS controller driver.
-> 
-> 1. 0001-scsi-ufs-Enable-hibern8-interrupt-only-during-manual.patch
->    This patch is to fix false interrupt assertion during auto hibernation.
->    In this patch, hibern8 interrupt is Disabled during initialization
->    and later the interrupt is Enabled/Disabled during manual hibern8
->    Entry/Exit.
-> 2. 0002-scsi-ufs-Update-L4-attributes-on-manual-hibern8-exit.patch
->    This patch is to update L4 attributes during manual hibern8 exit.
->    As per JESD220C spec, L4 attributes will be reset to their reset value 
->    during DME_HIBERNATION_EXIT. This patch will take backup of the L4 
->    parameters before DME_HIBERNATION_ENTER and restores the L4 parameters
->    after DME_HIBERNATION_EXIT
->  
+We decided to push the CFP deadline for USENIX Vault back until Dec 3rd given 
+the holiday and some slowness we had in opening the CFP site. We already have a 
+good set of submissions, so please do submit any talk ideas as soon as possible.
 
-While I don't see flood of hibernate related interrupts anymore, I
-occasionally see "Unhandled Interrupt dump"[1] when using rootfs out of
-UFS. I haven't be able to find a way to trigger the issue. But seems to
-happen randomly while trying to input and execute something from console.
+See here for more information on how to submit your talk proposals:
 
+https://www.usenix.org/conference/vault20
 
-[1]
-j7-evm login: root
-[   55.300495] cdns-ufshcd 4e84000.ufs: ufshcd_intr: Unhandled interrupt
-0x00000000
-[   55.307884] host_regs: 00000000: 1587031f 00000000 00000210 00000000
-[   55.314217] host_regs: 00000010: 00000000 00000000 00000c96 00000000
-[   55.320551] host_regs: 00000020: 00000014 00030e15 00000000 00000000
-[   55.326884] host_regs: 00000030: 0000010f 00000001 00000000 80000002
-[   55.333217] host_regs: 00000040: 00000000 00000000 00000000 00000000
-[   55.339551] host_regs: 00000050: c1ee0000 00000008 00008000 00000000
-[   55.345884] host_regs: 00000060: 00000001 ffffffff 00000000 00000000
-[   55.352217] host_regs: 00000070: c1ef0000 00000008 00000000 00000000
-[   55.358550] host_regs: 00000080: 00000001 00000000 00000000 00000000
-[   55.364884] host_regs: 00000090: 00000002 15710000 00000000 00000000
-
-More such occurrence: https://pastebin.ubuntu.com/p/Df4dykkTmB/
+Hope to see you all there!
 
 
 
-> 
-> Thanks,
-> Sheeba B
-> 
-> sheebab (2):
->   scsi: ufs: Enable hibern8 interrupt only during manual hibern8 in
->     Cadence UFS.
->   scsi: ufs: Update L4 attributes on manual hibern8 exit in Cadence UFS.
-> 
->  drivers/scsi/ufs/cdns-pltfrm.c | 172 +++++++++++++++++++++++++++++++++--
->  1 file changed, 167 insertions(+), 5 deletions(-)
-> 
-
--- 
-Regards
-Vignesh
