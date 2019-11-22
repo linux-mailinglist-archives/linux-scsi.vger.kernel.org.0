@@ -2,37 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9CC1064A9
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2019 07:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2B6106365
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2019 07:10:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728453AbfKVGS6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 Nov 2019 01:18:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33750 "EHLO mail.kernel.org"
+        id S1728882AbfKVGKS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 Nov 2019 01:10:18 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34806 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728982AbfKVF4D (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:56:03 -0500
+        id S1729279AbfKVF4x (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 22 Nov 2019 00:56:53 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B84A92071F;
-        Fri, 22 Nov 2019 05:56:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A4DCD2071B;
+        Fri, 22 Nov 2019 05:56:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574402161;
-        bh=dBCcP/53ztF0HqHH8Txv7gIliGk08AtsfO2k9ZmOry8=;
+        s=default; t=1574402212;
+        bh=RW7bwmdzHleJQLSbNditI9A7eUXwuSN4dTehAe8Fghw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lhrZhRb5MLNCRo2N7IVgDAMm+8kbaQ4ItpZO6iUEMYEknE922vy9yiqBHcUF2hs41
-         c4i+rxg5veiuSEpRsr5niZVhA4iAjb7oLD2IQOeFDi5fSZqIbYC+f82bsUp4OiaFtP
-         N3eDBk/Dh1CU539XkAkSFYuMF/r3YlSrJdRDvb6E=
+        b=hsTvOMXHNLK45te9OEbZAD8xS1G+kJeF2FURjPO3a48Pb/IruTC6xfSoKoKPBh1Sg
+         wfV9owMC+OtctlFT6wu1WDdutcXea1gLvBOcRXJ+mLHtAlDJwdQUMsqm9kkZkHaKF6
+         Ik4aIvFawEo2Di6Zi/USrbOfsWGKzeL2rUN64aqk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
+Cc:     Anatoliy Glagolev <glagolig@gmail.com>,
+        Himanshu Madhani <hmadhani@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 015/127] scsi: lpfc: Enable Management features for IF_TYPE=6
-Date:   Fri, 22 Nov 2019 00:53:53 -0500
-Message-Id: <20191122055544.3299-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 060/127] scsi: qla2xxx: deadlock by configfs_depend_item
+Date:   Fri, 22 Nov 2019 00:54:38 -0500
+Message-Id: <20191122055544.3299-59-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191122055544.3299-1-sashal@kernel.org>
 References: <20191122055544.3299-1-sashal@kernel.org>
@@ -45,108 +44,125 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Anatoliy Glagolev <glagolig@gmail.com>
 
-[ Upstream commit 719162bd5bb968203397b9b1d0dd30a9797bbd09 ]
+[ Upstream commit 17b18eaa6f59044a5172db7d07149e31ede0f920 ]
 
-Addition of support for if_type=6 missed several checks for interface type,
-resulting in the failure of several key management features such as
-firmware dump and loopback testing.
+The intent of invoking configfs_depend_item in commit 7474f52a82d51
+("tcm_qla2xxx: Perform configfs depend/undepend for base_tpg")
+was to prevent a physical Fibre Channel port removal when
+virtual (NPIV) ports announced through that physical port are active.
+The change does not work as expected: it makes enabled physical port
+dependent on target configfs subsystem (the port's parent), something
+the configfs guarantees anyway.
 
-Correct the checks on the if_type so that both SLI4 IF_TYPE's 2 and 6 are
-supported.
+Besides, scheduling work in a worker thread and waiting for the work's
+completion is not really a valid workaround for the requirement not to call
+configfs_depend_item from a configfs callback: the call occasionally
+deadlocks.
 
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Reviewed-by: Ewan D. Milne <emilne@redhat.com>
+Thus, removing configfs_depend_item calls does not break anything and fixes
+the deadlock problem.
+
+Signed-off-by: Anatoliy Glagolev <glagolig@gmail.com>
+Acked-by: Himanshu Madhani <hmadhani@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_attr.c    | 4 ++--
- drivers/scsi/lpfc/lpfc_bsg.c     | 6 +++---
- drivers/scsi/lpfc/lpfc_els.c     | 2 +-
- drivers/scsi/lpfc/lpfc_hbadisc.c | 2 +-
- 4 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c | 48 +++++-------------------------
+ drivers/scsi/qla2xxx/tcm_qla2xxx.h |  3 --
+ 2 files changed, 8 insertions(+), 43 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index 3da242201cb45..82ce5d1930189 100644
---- a/drivers/scsi/lpfc/lpfc_attr.c
-+++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -1178,7 +1178,7 @@ lpfc_sli4_pdev_reg_request(struct lpfc_hba *phba, uint32_t opcode)
- 		return -EACCES;
+diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+index 2fcdaadd10fa5..e08ac431bc496 100644
+--- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
++++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+@@ -903,38 +903,14 @@ static ssize_t tcm_qla2xxx_tpg_enable_show(struct config_item *item,
+ 			atomic_read(&tpg->lport_tpg_enabled));
+ }
  
- 	if ((phba->sli_rev < LPFC_SLI_REV4) ||
--	    (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) !=
-+	    (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) <
- 	     LPFC_SLI_INTF_IF_TYPE_2))
- 		return -EPERM;
+-static void tcm_qla2xxx_depend_tpg(struct work_struct *work)
+-{
+-	struct tcm_qla2xxx_tpg *base_tpg = container_of(work,
+-				struct tcm_qla2xxx_tpg, tpg_base_work);
+-	struct se_portal_group *se_tpg = &base_tpg->se_tpg;
+-	struct scsi_qla_host *base_vha = base_tpg->lport->qla_vha;
+-
+-	if (!target_depend_item(&se_tpg->tpg_group.cg_item)) {
+-		atomic_set(&base_tpg->lport_tpg_enabled, 1);
+-		qlt_enable_vha(base_vha);
+-	}
+-	complete(&base_tpg->tpg_base_comp);
+-}
+-
+-static void tcm_qla2xxx_undepend_tpg(struct work_struct *work)
+-{
+-	struct tcm_qla2xxx_tpg *base_tpg = container_of(work,
+-				struct tcm_qla2xxx_tpg, tpg_base_work);
+-	struct se_portal_group *se_tpg = &base_tpg->se_tpg;
+-	struct scsi_qla_host *base_vha = base_tpg->lport->qla_vha;
+-
+-	if (!qlt_stop_phase1(base_vha->vha_tgt.qla_tgt)) {
+-		atomic_set(&base_tpg->lport_tpg_enabled, 0);
+-		target_undepend_item(&se_tpg->tpg_group.cg_item);
+-	}
+-	complete(&base_tpg->tpg_base_comp);
+-}
+-
+ static ssize_t tcm_qla2xxx_tpg_enable_store(struct config_item *item,
+ 		const char *page, size_t count)
+ {
+ 	struct se_portal_group *se_tpg = to_tpg(item);
++	struct se_wwn *se_wwn = se_tpg->se_tpg_wwn;
++	struct tcm_qla2xxx_lport *lport = container_of(se_wwn,
++			struct tcm_qla2xxx_lport, lport_wwn);
++	struct scsi_qla_host *vha = lport->qla_vha;
+ 	struct tcm_qla2xxx_tpg *tpg = container_of(se_tpg,
+ 			struct tcm_qla2xxx_tpg, se_tpg);
+ 	unsigned long op;
+@@ -953,24 +929,16 @@ static ssize_t tcm_qla2xxx_tpg_enable_store(struct config_item *item,
+ 		if (atomic_read(&tpg->lport_tpg_enabled))
+ 			return -EEXIST;
  
-@@ -4056,7 +4056,7 @@ lpfc_link_speed_store(struct device *dev, struct device_attribute *attr,
- 	uint32_t prev_val, if_type;
+-		INIT_WORK(&tpg->tpg_base_work, tcm_qla2xxx_depend_tpg);
++		atomic_set(&tpg->lport_tpg_enabled, 1);
++		qlt_enable_vha(vha);
+ 	} else {
+ 		if (!atomic_read(&tpg->lport_tpg_enabled))
+ 			return count;
  
- 	if_type = bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf);
--	if (if_type == LPFC_SLI_INTF_IF_TYPE_2 &&
-+	if (if_type >= LPFC_SLI_INTF_IF_TYPE_2 &&
- 	    phba->hba_flag & HBA_FORCED_LINK_SPEED)
- 		return -EPERM;
- 
-diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
-index d89816222b230..6dde21dc82a3c 100644
---- a/drivers/scsi/lpfc/lpfc_bsg.c
-+++ b/drivers/scsi/lpfc/lpfc_bsg.c
-@@ -2221,7 +2221,7 @@ lpfc_bsg_diag_loopback_mode(struct bsg_job *job)
- 
- 	if (phba->sli_rev < LPFC_SLI_REV4)
- 		rc = lpfc_sli3_bsg_diag_loopback_mode(phba, job);
--	else if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) ==
-+	else if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) >=
- 		 LPFC_SLI_INTF_IF_TYPE_2)
- 		rc = lpfc_sli4_bsg_diag_loopback_mode(phba, job);
- 	else
-@@ -2261,7 +2261,7 @@ lpfc_sli4_bsg_diag_mode_end(struct bsg_job *job)
- 
- 	if (phba->sli_rev < LPFC_SLI_REV4)
- 		return -ENODEV;
--	if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) !=
-+	if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) <
- 	    LPFC_SLI_INTF_IF_TYPE_2)
- 		return -ENODEV;
- 
-@@ -2353,7 +2353,7 @@ lpfc_sli4_bsg_link_diag_test(struct bsg_job *job)
- 		rc = -ENODEV;
- 		goto job_error;
+-		INIT_WORK(&tpg->tpg_base_work, tcm_qla2xxx_undepend_tpg);
++		atomic_set(&tpg->lport_tpg_enabled, 0);
++		qlt_stop_phase1(vha->vha_tgt.qla_tgt);
  	}
--	if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) !=
-+	if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) <
- 	    LPFC_SLI_INTF_IF_TYPE_2) {
- 		rc = -ENODEV;
- 		goto job_error;
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 0032465d1b630..63c1a81005e52 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -5528,7 +5528,7 @@ lpfc_els_rcv_rdp(struct lpfc_vport *vport, struct lpfc_iocbq *cmdiocb,
- 	struct ls_rjt stat;
+-	init_completion(&tpg->tpg_base_comp);
+-	schedule_work(&tpg->tpg_base_work);
+-	wait_for_completion(&tpg->tpg_base_comp);
  
- 	if (phba->sli_rev < LPFC_SLI_REV4 ||
--	    bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) !=
-+	    bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) <
- 						LPFC_SLI_INTF_IF_TYPE_2) {
- 		rjt_err = LSRJT_UNABLE_TPC;
- 		rjt_expl = LSEXP_REQ_UNSUPPORTED;
-diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
-index b970933a218d5..424e870676046 100644
---- a/drivers/scsi/lpfc/lpfc_hbadisc.c
-+++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
-@@ -4749,7 +4749,7 @@ lpfc_unreg_rpi(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp)
- 				if (phba->sli_rev == LPFC_SLI_REV4 &&
- 				    (!(vport->load_flag & FC_UNLOADING)) &&
- 				    (bf_get(lpfc_sli_intf_if_type,
--				     &phba->sli4_hba.sli_intf) ==
-+				     &phba->sli4_hba.sli_intf) >=
- 				      LPFC_SLI_INTF_IF_TYPE_2) &&
- 				    (kref_read(&ndlp->kref) > 0)) {
- 					mbox->context1 = lpfc_nlp_get(ndlp);
+-	if (op) {
+-		if (!atomic_read(&tpg->lport_tpg_enabled))
+-			return -ENODEV;
+-	} else {
+-		if (atomic_read(&tpg->lport_tpg_enabled))
+-			return -EPERM;
+-	}
+ 	return count;
+ }
+ 
+diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.h b/drivers/scsi/qla2xxx/tcm_qla2xxx.h
+index 7550ba2831c36..147cf6c903666 100644
+--- a/drivers/scsi/qla2xxx/tcm_qla2xxx.h
++++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.h
+@@ -48,9 +48,6 @@ struct tcm_qla2xxx_tpg {
+ 	struct tcm_qla2xxx_tpg_attrib tpg_attrib;
+ 	/* Returned by tcm_qla2xxx_make_tpg() */
+ 	struct se_portal_group se_tpg;
+-	/* Items for dealing with configfs_depend_item */
+-	struct completion tpg_base_comp;
+-	struct work_struct tpg_base_work;
+ };
+ 
+ struct tcm_qla2xxx_fc_loopid {
 -- 
 2.20.1
 
