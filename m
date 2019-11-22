@@ -2,38 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0771106259
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2019 07:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C1A10649A
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 Nov 2019 07:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727996AbfKVGDW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 Nov 2019 01:03:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42114 "EHLO mail.kernel.org"
+        id S1728012AbfKVGNF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 Nov 2019 01:13:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729860AbfKVGDJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 22 Nov 2019 01:03:09 -0500
+        id S1726248AbfKVGNE (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 22 Nov 2019 01:13:04 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 11D7C2070A;
-        Fri, 22 Nov 2019 06:03:07 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 22D422068E;
+        Fri, 22 Nov 2019 06:13:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574402588;
-        bh=yA/ALcMI77WBmSZhAk6X8hHB8Qj7j6gisXQdnHK9arI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BToK4S4pFgQRtSbj7InDolPFaaOnOI2HtcPyBtxuo7ULI6aD19FV5dWWCqp1AiHTI
-         3zWO3uup7X6Z7zNpd8WBX8Z3IgnZ39CPcQpUOPzUsqVqgd6rZaf4w9dpwFXjcve7xG
-         Bs2USGeT1JX+kTjds/Zjn15TuIJ9+GDMkz9Ixbg0=
+        s=default; t=1574403183;
+        bh=vqEKwBQUFxSHbtDnx/1d4SRZdBCRaEyfWfJl7WNX7OY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=0BjpDP9Yy8KzQn5iTTVuoZy7c2ZQ+eXIdtS+sPFWPVlfpzF9ApW22+EEZ6YQildOI
+         R9+qTLaq7C89jNpPb+EU5grfa9y3tmfD8jOf+me3lZHZ9jTL7F6G+EjTeXvzVMMCeN
+         6X8ptOH6+ZrmsISZDjeLlyY6QzeQwNg2e9lH7yMo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Garry <john.garry@huawei.com>, Jian Luo <luojian5@huawei.com>,
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 89/91] scsi: libsas: Check SMP PHY control function result
-Date:   Fri, 22 Nov 2019 01:01:27 -0500
-Message-Id: <20191122060129.4239-88-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 01/68] scsi: lpfc: Fix dif and first burst use in write commands
+Date:   Fri, 22 Nov 2019 01:11:55 -0500
+Message-Id: <20191122061301.4947-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122060129.4239-1-sashal@kernel.org>
-References: <20191122060129.4239-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,48 +42,75 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: John Garry <john.garry@huawei.com>
+From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit 01929a65dfa13e18d89264ab1378854a91857e59 ]
+[ Upstream commit 7c4042a4d0b7532cfbc90478fd3084b2dab5849e ]
 
-Currently the SMP PHY control execution result is checked, however the
-function result for the command is not.
+When dif and first burst is used in a write command wqe, the driver was not
+properly setting fields in the io command request. This resulted in no dif
+bytes being sent and invalid xfer_rdy's, resulting in the io being aborted
+by the hardware.
 
-As such, we may be missing all potential errors, like SMP FUNCTION FAILED,
-INVALID REQUEST FRAME LENGTH, etc., meaning the PHY control request has
-failed.
+Correct the wqe initializaton when both dif and first burst are used.
 
-In some scenarios we need to ensure the function result is accepted, so add
-a check for this.
-
-Tested-by: Jian Luo <luojian5@huawei.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/libsas/sas_expander.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_scsi.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index ba16231665a5e..091af5c1cf50f 100644
---- a/drivers/scsi/libsas/sas_expander.c
-+++ b/drivers/scsi/libsas/sas_expander.c
-@@ -603,7 +603,14 @@ int sas_smp_phy_control(struct domain_device *dev, int phy_id,
- 	}
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index bae36cc3740b6..ab6bff60478f9 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -2707,6 +2707,7 @@ lpfc_bg_scsi_prep_dma_buf_s3(struct lpfc_hba *phba,
+ 	int datasegcnt, protsegcnt, datadir = scsi_cmnd->sc_data_direction;
+ 	int prot_group_type = 0;
+ 	int fcpdl;
++	struct lpfc_vport *vport = phba->pport;
  
- 	res = smp_execute_task(dev, pc_req, PC_REQ_SIZE, pc_resp,PC_RESP_SIZE);
--
-+	if (res) {
-+		pr_err("ex %016llx phy%02d PHY control failed: %d\n",
-+		       SAS_ADDR(dev->sas_addr), phy_id, res);
-+	} else if (pc_resp[2] != SMP_RESP_FUNC_ACC) {
-+		pr_err("ex %016llx phy%02d PHY control failed: function result 0x%x\n",
-+		       SAS_ADDR(dev->sas_addr), phy_id, pc_resp[2]);
-+		res = pc_resp[2];
-+	}
- 	kfree(pc_resp);
- 	kfree(pc_req);
- 	return res;
+ 	/*
+ 	 * Start the lpfc command prep by bumping the bpl beyond fcp_cmnd
+@@ -2812,6 +2813,14 @@ lpfc_bg_scsi_prep_dma_buf_s3(struct lpfc_hba *phba,
+ 	 */
+ 	iocb_cmd->un.fcpi.fcpi_parm = fcpdl;
+ 
++	/*
++	 * For First burst, we may need to adjust the initial transfer
++	 * length for DIF
++	 */
++	if (iocb_cmd->un.fcpi.fcpi_XRdy &&
++	    (fcpdl < vport->cfg_first_burst_size))
++		iocb_cmd->un.fcpi.fcpi_XRdy = fcpdl;
++
+ 	return 0;
+ err:
+ 	if (lpfc_cmd->seg_cnt)
+@@ -3361,6 +3370,7 @@ lpfc_bg_scsi_prep_dma_buf_s4(struct lpfc_hba *phba,
+ 	int datasegcnt, protsegcnt, datadir = scsi_cmnd->sc_data_direction;
+ 	int prot_group_type = 0;
+ 	int fcpdl;
++	struct lpfc_vport *vport = phba->pport;
+ 
+ 	/*
+ 	 * Start the lpfc command prep by bumping the sgl beyond fcp_cmnd
+@@ -3476,6 +3486,14 @@ lpfc_bg_scsi_prep_dma_buf_s4(struct lpfc_hba *phba,
+ 	 */
+ 	iocb_cmd->un.fcpi.fcpi_parm = fcpdl;
+ 
++	/*
++	 * For First burst, we may need to adjust the initial transfer
++	 * length for DIF
++	 */
++	if (iocb_cmd->un.fcpi.fcpi_XRdy &&
++	    (fcpdl < vport->cfg_first_burst_size))
++		iocb_cmd->un.fcpi.fcpi_XRdy = fcpdl;
++
+ 	/*
+ 	 * If the OAS driver feature is enabled and the lun is enabled for
+ 	 * OAS, set the oas iocb related flags.
 -- 
 2.20.1
 
