@@ -2,89 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B59C210847C
-	for <lists+linux-scsi@lfdr.de>; Sun, 24 Nov 2019 19:32:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5422108484
+	for <lists+linux-scsi@lfdr.de>; Sun, 24 Nov 2019 19:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726907AbfKXSbI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 24 Nov 2019 13:31:08 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:35018 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726833AbfKXSbI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 24 Nov 2019 13:31:08 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 9F05043D12;
-        Sun, 24 Nov 2019 18:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received; s=mta-01; t=1574620265;
-         x=1576434666; bh=IBoJjYQPCNxLu3SR1IcVDBO8FAOPRF6HJJDI9hzTB30=; b=
-        WdF5q4l4Q6Qy38Cb7O0/0+fVIfCdZ34vfxrCLjsiy+XamhsGVBFzUkptTmXiuTjG
-        FZo+oIENGpz4zaxm+ccWqFhheNv2E/vof+KYbSnSR0qZbehcefaFlmcCQvSfXbcy
-        5iM/VUWcgCw2Oj24xb57OhhBfMmrC0FUfrMpaLCHTUk=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9eQG2q7G4o6e; Sun, 24 Nov 2019 21:31:05 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id A847A41240;
-        Sun, 24 Nov 2019 21:31:05 +0300 (MSK)
-Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
- (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Sun, 24
- Nov 2019 21:31:05 +0300
-Date:   Sun, 24 Nov 2019 21:31:04 +0300
-From:   Roman Bolshakov <r.bolshakov@yadro.com>
-To:     Martin Wilck <mwilck@suse.de>
-CC:     Hannes Reinecke <hare@suse.de>, <linux-scsi@vger.kernel.org>,
-        <target-devel@vger.kernel.org>, <linux@yadro.com>
-Subject: Re: [PATCH v2 00/15] scsi: qla2xxx: Bug fixes
-Message-ID: <20191124183104.fg364dol5rol3xfh@SPB-NB-133.local>
-References: <20191120222723.27779-1-r.bolshakov@yadro.com>
- <b84e274f-c20e-9351-27de-4cf1b34916d9@suse.de>
- <139c4a1040a9077fff39486f47134960d543ca53.camel@suse.de>
+        id S1726944AbfKXSg5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 24 Nov 2019 13:36:57 -0500
+Received: from mail-il1-f195.google.com ([209.85.166.195]:40062 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbfKXSg5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 24 Nov 2019 13:36:57 -0500
+Received: by mail-il1-f195.google.com with SMTP id v17so8205965ilg.7
+        for <linux-scsi@vger.kernel.org>; Sun, 24 Nov 2019 10:36:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=LalpRjCzklUHb+d8yg6StCgBYUgFeAOrmf1VN5Ahg2g=;
+        b=Bp4XWue3FZRZ8aGEo8d7LdT+ghqC9zGj/gczb2hhniOkKHR9imldYvM6paLRGGMCZP
+         aagxdEqdhmQOxitfpZF015vfT575pHngcRE9/nYU8NB30e44G9k54QIDaqKuKFTYaZTb
+         qT8pHGFvT0joOqEt7drX+F12lrdGlCR3Ui1U1flh1kv0ot2I9zsz4MJMXGswOEmnBJpB
+         X8CNJBPKOrL2n6oRdIjZU8qLpd4+jd+BufoKLXCj/9+uqxWw0B8adpphlJ48VQLmyBcP
+         gyFTAfaqZvsvKvFKGEiQ+qx895kZQ7n2t9D7VHDxMIFEIF6f2shxfIX3TS1XoxXcKx7+
+         8+Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=LalpRjCzklUHb+d8yg6StCgBYUgFeAOrmf1VN5Ahg2g=;
+        b=INRdm60nbJigOSkxwgusU+4i0CoA1fgZR2mE0P1z+QEKqlxWJ4gD08Vi7THLcqMRK/
+         1TtEjX9ijW0IZcv40TL6Ql+ykC0Q/1tbe0iMcDBTS/e7rEBz/Y9wd119NiJTlSmoNy0N
+         cZjOur7RnzF1tG8dR1wAEa0OYjmvWS7EA77w+ZDaCjgrw5NJz0d95vql5RVZ2W9ABVT4
+         z5OjEFl6LMh2IRwAKHUlICnElhBfGUkNGMXfiJNMHZfXFKeodR1gaDhBxHNUipCjAbh8
+         H59xzJQE1x6jRMZc6JqGTaDIICFV8luB65eGvh6miwSDChT0PyFwRFeIvc9ComyiQhZ3
+         lgFw==
+X-Gm-Message-State: APjAAAXJ1kIDtZDZjzezMrP65Zw1E4QOVPJBbC06On+eA8ZblVvWc+O6
+        A9j4xyZ1BVsUMqdT4dmtl1VAbkg/VtVKBmrwdrY=
+X-Google-Smtp-Source: APXvYqy83bmVXYxVjQsg52rd/jx2GRUbsy4+DSLqa7hj3tlBq9gucxGNIkYG8R0eQEZYkrqfXhRlnJX7Y9FInfGzlRs=
+X-Received: by 2002:a92:5c5d:: with SMTP id q90mr30123888ilb.22.1574620616805;
+ Sun, 24 Nov 2019 10:36:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <139c4a1040a9077fff39486f47134960d543ca53.camel@suse.de>
-X-Originating-IP: [172.17.128.60]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
+Received: by 2002:a92:afd7:0:0:0:0:0 with HTTP; Sun, 24 Nov 2019 10:36:56
+ -0800 (PST)
+From:   Ernest Groth <bpatrick799@gmail.com>
+Date:   Sun, 24 Nov 2019 10:36:56 -0800
+Message-ID: <CADUzNO=C+ay7+5syYnkQEe9rCrwbMBk7iT8JF=HxH=bveMFegw@mail.gmail.com>
+Subject: Good day Psyborg,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Nov 22, 2019 at 10:36:06PM +0100, Martin Wilck wrote:
-> On Fri, 2019-11-22 at 10:14 +0100, Hannes Reinecke wrote:
-> > This patchset has the nice benefit that it has fixed the crashes on
-> > rmmod we had been seeing.
-> 
-> Well, I investigated two distinct crash-at-rmmod cases, and one was
-> already fixed by the earlier commit f45bca8c5052 ("scsi: qla2xxx: Fix
-> double scsi_done for abort path"), whereas the other is still present,
-> even after applying this series.
-> 
-> Not to say the series is bad - we just shouldn't raise expectations
-> too high.
-> 
+Good day Psyborg,
 
-Hi Martin,
+I am Mr. Ernest F.Groth from United States of America and a lawyer by
+profession.i want to use this opportunity to inform you about my late
+client whom have the same surname with you died in auto accident here
+in United States with his entire family dated 24th of June 2018 and
+this my client deposited the sum of Eighty Eight Million, Six Hundred
+Thousand Dollars (88,600,000.00 USD) in one of the bank in USA since
+his demise, none of his family members are come to claim this funds
+and i searched his relatives through CNN, VOA and other international
+media and no avail.
 
-This patch series only fixes a crash when there's active I/O and ACL of
-the initiator is getting deleted. The issue can be reproduced quite
-easily:
+I will like you to claims this fund and will back you up with the
+documents. Contact me now for more details.
 
-  1. Configure a target with 1 LUN and 1 ACL (and 1 Mapped LUN inside)
-  2. Run I/O from initiator
-  3. Delete ACL while running the I/O
-
-The crash happens ~30s after the ACL is deleted when the initiator
-starts sending ABORT TASK TMF to abort timed out I/O. It might happen at
-rmmod time but that's just coincidence of ABORT TASK being processed. It
-might not happen if a rig shuts off in less than 30 seconds.
-
-Thanks,
-Roman
+Barrister Ernest.
