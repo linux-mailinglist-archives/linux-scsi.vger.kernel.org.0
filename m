@@ -2,80 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC051083C8
-	for <lists+linux-scsi@lfdr.de>; Sun, 24 Nov 2019 15:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B59C210847C
+	for <lists+linux-scsi@lfdr.de>; Sun, 24 Nov 2019 19:32:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbfKXOPv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Sun, 24 Nov 2019 09:15:51 -0500
-Received: from customer-187-141-72-141-sta.uninet-ide.com.mx ([187.141.72.141]:40802
-        "EHLO correo.opb.gob.mx" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1726779AbfKXOPv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 24 Nov 2019 09:15:51 -0500
-X-Greylist: delayed 4888 seconds by postgrey-1.27 at vger.kernel.org; Sun, 24 Nov 2019 09:15:49 EST
-Received: from localhost (localhost [127.0.0.1])
-        by correo.opb.gob.mx (Postfix) with ESMTP id E583C1A322D;
-        Sun, 24 Nov 2019 06:57:37 -0500 (EST)
-Received: from correo.opb.gob.mx ([127.0.0.1])
-        by localhost (correo.opb.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id dNCeQ6LoFeWR; Sun, 24 Nov 2019 06:57:37 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.opb.gob.mx (Postfix) with ESMTP id 1BCE41A3223;
-        Sun, 24 Nov 2019 06:57:35 -0500 (EST)
-X-Virus-Scanned: amavisd-new at opb.gob.mx
-Received: from correo.opb.gob.mx ([127.0.0.1])
-        by localhost (correo.opb.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id odZvaJKm3JFG; Sun, 24 Nov 2019 06:57:34 -0500 (EST)
-Received: from correo.opb.gob.mx (correo.opb.gob.mx [172.16.254.57])
-        by correo.opb.gob.mx (Postfix) with ESMTP id 476171A3205;
-        Sun, 24 Nov 2019 06:57:30 -0500 (EST)
-Date:   Sun, 24 Nov 2019 05:57:30 -0600 (CST)
-From:   "Mr.WEHNER DAVID M." <jesus.valencia@opb.gob.mx>
-Reply-To: "Mr.WEHNER DAVID M." <info@zbukgroupltd.info>
-Message-ID: <1105698182.24559.1574596650210.JavaMail.zimbra@opb.gob.mx>
-In-Reply-To: <1063337394.24307.1574596445839.JavaMail.zimbra@opb.gob.mx>
-Subject: =?utf-8?Q?Pengar_=C3=B6verf=C3=B6rs?=
+        id S1726907AbfKXSbI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 24 Nov 2019 13:31:08 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:35018 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726833AbfKXSbI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 24 Nov 2019 13:31:08 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 9F05043D12;
+        Sun, 24 Nov 2019 18:31:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received; s=mta-01; t=1574620265;
+         x=1576434666; bh=IBoJjYQPCNxLu3SR1IcVDBO8FAOPRF6HJJDI9hzTB30=; b=
+        WdF5q4l4Q6Qy38Cb7O0/0+fVIfCdZ34vfxrCLjsiy+XamhsGVBFzUkptTmXiuTjG
+        FZo+oIENGpz4zaxm+ccWqFhheNv2E/vof+KYbSnSR0qZbehcefaFlmcCQvSfXbcy
+        5iM/VUWcgCw2Oj24xb57OhhBfMmrC0FUfrMpaLCHTUk=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9eQG2q7G4o6e; Sun, 24 Nov 2019 21:31:05 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id A847A41240;
+        Sun, 24 Nov 2019 21:31:05 +0300 (MSK)
+Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
+ (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Sun, 24
+ Nov 2019 21:31:05 +0300
+Date:   Sun, 24 Nov 2019 21:31:04 +0300
+From:   Roman Bolshakov <r.bolshakov@yadro.com>
+To:     Martin Wilck <mwilck@suse.de>
+CC:     Hannes Reinecke <hare@suse.de>, <linux-scsi@vger.kernel.org>,
+        <target-devel@vger.kernel.org>, <linux@yadro.com>
+Subject: Re: [PATCH v2 00/15] scsi: qla2xxx: Bug fixes
+Message-ID: <20191124183104.fg364dol5rol3xfh@SPB-NB-133.local>
+References: <20191120222723.27779-1-r.bolshakov@yadro.com>
+ <b84e274f-c20e-9351-27de-4cf1b34916d9@suse.de>
+ <139c4a1040a9077fff39486f47134960d543ca53.camel@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [198.199.76.158]
-X-Mailer: Zimbra 8.0.7_GA_6021 (ZimbraWebClient - GC75 (Win)/8.0.7_GA_6021)
-Thread-Topic: Pengar =?utf-8?B?w7Z2ZXJmw7Zycw==?=
-Thread-Index: Wlue1ObLHW28G6QK4CR7qvueCy2AHA==
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <139c4a1040a9077fff39486f47134960d543ca53.camel@suse.de>
+X-Originating-IP: [172.17.128.60]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Office Of The Head
-Internationell överföring
-Operation Zenith Bank
-(UK) Ltd LONDON United
-Storbritannien och Irland
-Tel: +44 203 389 5674
-Fax: +44 704 307 1539
+On Fri, Nov 22, 2019 at 10:36:06PM +0100, Martin Wilck wrote:
+> On Fri, 2019-11-22 at 10:14 +0100, Hannes Reinecke wrote:
+> > This patchset has the nice benefit that it has fixed the crashes on
+> > rmmod we had been seeing.
+> 
+> Well, I investigated two distinct crash-at-rmmod cases, and one was
+> already fixed by the earlier commit f45bca8c5052 ("scsi: qla2xxx: Fix
+> double scsi_done for abort path"), whereas the other is still present,
+> even after applying this series.
+> 
+> Not to say the series is bad - we just shouldn't raise expectations
+> too high.
+> 
 
-Hälsning,
+Hi Martin,
 
-Din e-postadress kom upp i ett slumpmässigt drag som genomfördes i Zenith Banks huvudkontor, International Transfer Operation i London, Storbritannien.
+This patch series only fixes a crash when there's active I/O and ACL of
+the initiator is getting deleted. The issue can be reproduced quite
+easily:
 
-Jag är Mr.WEHNER DAVID M.A personlig bokföring till avdöd Michael Blair som arbetade med Shell British Petroleum. Mr.Michael Blair, en välkänd filantropist, innan han dog, gjorde en testamente i ett advokatbyrå om att 12,5 miljoner US dollar (tolv miljoner femhundra tusen amerikanska dollar) bör doneras till någon lycklig individuell filantrop eller välgörenhetsorganisation utomlands.
+  1. Configure a target with 1 LUN and 1 ACL (and 1 Mapped LUN inside)
+  2. Run I/O from initiator
+  3. Delete ACL while running the I/O
 
-Zenith Bank Abp är en överenskommelse med sena Michael Blair om att donera fonden till alla lyckliga individer i Amerika, Europa, Asien och Afrika i andra för att förbättra liv och företag
+The crash happens ~30s after the ACL is deleted when the initiator
+starts sending ABORT TASK TMF to abort timed out I/O. It might happen at
+rmmod time but that's just coincidence of ABORT TASK being processed. It
+might not happen if a rig shuts off in less than 30 seconds.
 
-Vi har gjort vårt slumpmässiga drag och din e-postadress valdes för att ta emot denna fond som mottagare av hans testament. Vänligen snälla tillbaka till mig
-så snart du har fått vårt e-postmeddelande för att aktivera överföringen
-Operationen riktar dig till vad du ska göra för att få denna fond lagligen.
-
-Du rekommenderas att ta med följande nedan:
-
-FULLSTÄNDIGA NAMN:
-
-FULL KONTAKTADRESS:
-
-TELEFON- OCH FAXNUMMER:
-
-Med vänliga hälsningar,
-Mr.WEHNER DAVID M.
-Chef, internationell överföringsoperation
-Zenith Bank (UK) Abp
+Thanks,
+Roman
