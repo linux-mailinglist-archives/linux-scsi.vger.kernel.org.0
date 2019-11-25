@@ -2,35 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35300109259
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 Nov 2019 17:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6BB109253
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 Nov 2019 17:57:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728988AbfKYQ5Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 25 Nov 2019 11:57:25 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:39618 "EHLO mta-01.yadro.com"
+        id S1728980AbfKYQ5Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 25 Nov 2019 11:57:24 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:39624 "EHLO mta-01.yadro.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728962AbfKYQ5T (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 25 Nov 2019 11:57:19 -0500
+        id S1728972AbfKYQ5U (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 25 Nov 2019 11:57:20 -0500
 Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 569D243E20;
-        Mon, 25 Nov 2019 16:57:18 +0000 (UTC)
+        by mta-01.yadro.com (Postfix) with ESMTP id 37A2843E27;
+        Mon, 25 Nov 2019 16:57:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
         content-type:content-type:content-transfer-encoding:mime-version
         :references:in-reply-to:x-mailer:message-id:date:date:subject
         :subject:from:from:received:received:received; s=mta-01; t=
-        1574701037; x=1576515438; bh=lpGxjIOl3eZ0Udn1AneDM5fucx9r1HvEc9S
-        2fLtwCYc=; b=qiI3aUUNS8YiT0UmYZ2wfB322VRvnSUHh3WsXZ23lD3kKj9I1hy
-        Fy4KxSdUennJief3SqHdiQWG5slbmrlTfbgb7aEEcQDYOOB8SMfVlBfh6QPafwuO
-        HVMh6C5OODxeHtd+X8JIiRuNUMo5vbrYmS3tE0zTtVjQbOjjZY5PpZsE=
+        1574701038; x=1576515439; bh=XwSLDcd7ekkyt1mP1MUM3lz+WR6VazucQf5
+        rPCNWITE=; b=d2usSX7KnfwV6Hvg+ldP5khjyjGdYAb30tttvF5TMezk2BQP4BH
+        RBIk/MM+78xvgSy4bBm1jIBFVDYIUwL6PoLsCSOldNRprlmMPlrbW/ZCW35hzJa8
+        mASFNeL6FpMeZjW11lC/P45laIIyaCNa8JXfra6pQAi0+U8tNnDV027I=
 X-Virus-Scanned: amavisd-new at yadro.com
 Received: from mta-01.yadro.com ([127.0.0.1])
         by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Pch-XajINWgy; Mon, 25 Nov 2019 19:57:17 +0300 (MSK)
+        with ESMTP id Ii8n2dwzoerT; Mon, 25 Nov 2019 19:57:18 +0300 (MSK)
 Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 703E743E08;
-        Mon, 25 Nov 2019 19:57:16 +0300 (MSK)
+        by mta-01.yadro.com (Postfix) with ESMTPS id 3052143E0E;
+        Mon, 25 Nov 2019 19:57:17 +0300 (MSK)
 Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
  (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Mon, 25
@@ -41,9 +41,9 @@ CC:     <linux@yadro.com>, Roman Bolshakov <r.bolshakov@yadro.com>,
         Quinn Tran <qutran@marvell.com>,
         Himanshu Madhani <hmadhani@marvell.com>,
         Hannes Reinecke <hare@suse.de>
-Subject: [PATCH v3 08/13] scsi: qla2xxx: Fix PLOGI payload and ELS IOCB dump length
-Date:   Mon, 25 Nov 2019 19:56:57 +0300
-Message-ID: <20191125165702.1013-9-r.bolshakov@yadro.com>
+Subject: [PATCH v3 09/13] scsi: qla2xxx: Configure local loop for N2N target
+Date:   Mon, 25 Nov 2019 19:56:58 +0300
+Message-ID: <20191125165702.1013-10-r.bolshakov@yadro.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191125165702.1013-1-r.bolshakov@yadro.com>
 References: <20191125165702.1013-1-r.bolshakov@yadro.com>
@@ -58,43 +58,48 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The size of the buffer is hardcoded as 0x70 or 112 bytes, while the
-size of ELS IOCB is 0x40 and the size of PLOGI payload returned by
-Get Parameters command is 0x74.
+qla2x00_configure_local_loop initializes PLOGI payload for PLOGI ELS
+using Get Parameters mailbox command.
 
-Cc: Quinn Tran <qutran@marvell.com>
+In the case when the driver is running in target mode, the topology is
+N2N and the target port has higher WWPN, LOCAL_LOOP_UPDATE bit is
+cleared too early and PLOGI payload is not initialized by the Get
+Parameters command. That causes a failure of ELS IOCB carrying the
+PLOGI with 0x15 aka Data Underrun error.
+
+LOCAL_LOOP_UPDATE has to be set to initialize PLOGI payload.
+
+Fixes: 48acad099074 ("scsi: qla2xxx: Fix N2N link re-connect")
+Acked-by: Quinn Tran <qutran@marvell.com>
 Acked-by: Himanshu Madhani <hmadhani@marvell.com>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Tested-by: Hannes Reinecke <hare@suse.de>
 Signed-off-by: Roman Bolshakov <r.bolshakov@yadro.com>
 ---
- drivers/scsi/qla2xxx/qla_iocb.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_init.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index c5a7736c45be..53ccbd6b71ed 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -2684,7 +2684,8 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
- 		ql_dbg(ql_dbg_io + ql_dbg_buffer, vha, 0x3073,
- 		    "PLOGI ELS IOCB:\n");
- 		ql_dump_buffer(ql_log_info, vha, 0x0109,
--		    (uint8_t *)els_iocb, 0x70);
-+		    (uint8_t *)els_iocb,
-+		    sizeof(*els_iocb));
- 	} else {
- 		els_iocb->control_flags = 1 << 13;
- 		els_iocb->tx_byte_count =
-@@ -2942,7 +2943,8 @@ qla24xx_els_dcmd2_iocb(scsi_qla_host_t *vha, int els_opcode,
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index b4283a3126d0..bc3695dc9b9e 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -4936,14 +4936,8 @@ qla2x00_configure_loop(scsi_qla_host_t *vha)
+ 		set_bit(RSCN_UPDATE, &flags);
+ 		clear_bit(LOCAL_LOOP_UPDATE, &flags);
  
- 	ql_dbg(ql_dbg_disc + ql_dbg_buffer, vha, 0x3073, "PLOGI buffer:\n");
- 	ql_dump_buffer(ql_dbg_disc + ql_dbg_buffer, vha, 0x0109,
--	    (uint8_t *)elsio->u.els_plogi.els_plogi_pyld, 0x70);
-+	    (uint8_t *)elsio->u.els_plogi.els_plogi_pyld,
-+	    sizeof(*elsio->u.els_plogi.els_plogi_pyld));
- 
- 	rval = qla2x00_start_sp(sp);
- 	if (rval != QLA_SUCCESS) {
+-	} else if (ha->current_topology == ISP_CFG_N) {
+-		clear_bit(RSCN_UPDATE, &flags);
+-		if (qla_tgt_mode_enabled(vha)) {
+-			/* allow the other side to start the login */
+-			clear_bit(LOCAL_LOOP_UPDATE, &flags);
+-			set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
+-		}
+-	} else if (ha->current_topology == ISP_CFG_NL) {
++	} else if (ha->current_topology == ISP_CFG_NL ||
++		   ha->current_topology == ISP_CFG_N) {
+ 		clear_bit(RSCN_UPDATE, &flags);
+ 		set_bit(LOCAL_LOOP_UPDATE, &flags);
+ 	} else if (!vha->flags.online ||
 -- 
 2.24.0
 
