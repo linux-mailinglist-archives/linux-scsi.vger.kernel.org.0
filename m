@@ -2,167 +2,102 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1E0109D4B
-	for <lists+linux-scsi@lfdr.de>; Tue, 26 Nov 2019 12:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7944C109E85
+	for <lists+linux-scsi@lfdr.de>; Tue, 26 Nov 2019 14:10:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727566AbfKZLvp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 Nov 2019 06:51:45 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50308 "EHLO mx1.suse.de"
+        id S1727430AbfKZNK3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 Nov 2019 08:10:29 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36542 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727501AbfKZLvp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 26 Nov 2019 06:51:45 -0500
+        id S1726231AbfKZNK1 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 26 Nov 2019 08:10:27 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A8238BDC5;
-        Tue, 26 Nov 2019 11:51:42 +0000 (UTC)
-Subject: Re: [PATCH v6 2/4] ufs: Avoid busy-waiting by eliminating tag
- conflicts
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Cc:     Bean Huo <beanhuo@micron.com>, Avri Altman <avri.altman@wdc.com>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Can Guo <cang@codeaurora.org>, linux-scsi@vger.kernel.org,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Tomas Winkler <tomas.winkler@intel.com>
-References: <20191121220850.16195-1-bvanassche@acm.org>
- <20191121220850.16195-3-bvanassche@acm.org>
+        by mx1.suse.de (Postfix) with ESMTP id 2B893B327;
+        Tue, 26 Nov 2019 13:10:25 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
- 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
- azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <42f44ffb-15c2-ce99-ec4e-4f012fee4831@suse.de>
-Date:   Tue, 26 Nov 2019 12:51:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20191121220850.16195-3-bvanassche@acm.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Bart van Assche <bvanassche@acm.org>,
+        John Garry <john.garry@huawei.com>, linux-scsi@vger.kernel.org,
+        linux-block@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH RFC v4 0/8] blk-mq/scsi: Provide hostwide shared tags for SCSI HBAs
+Date:   Tue, 26 Nov 2019 14:10:01 +0100
+Message-Id: <20191126131009.71726-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/21/19 11:08 PM, Bart Van Assche wrote:
-> Instead of tracking which tags are in use in the ufs_hba.lrb_in_use
-> bitmask, rely on the block layer tag allocation mechanism. This patch
-> removes the following busy-waiting loop if ufshcd_issue_devman_upiu_cmd()
-> and the block layer accidentally allocate the same tag for a SCSI request:
-> * ufshcd_queuecommand() returns SCSI_MLQUEUE_HOST_BUSY.
-> * The SCSI core requeues the SCSI command.
-> 
-> Tested-by: Bean Huo <beanhuo@micron.com>
-> Reviewed-by: Avri Altman <avri.altman@wdc.com>
-> Cc: Can Guo <cang@codeaurora.org>
-> Cc: Stanley Chu <stanley.chu@mediatek.com>
-> Cc: Avri Altman <avri.altman@wdc.com>
-> Cc: Tomas Winkler <tomas.winkler@intel.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/ufs/ufshcd.c | 121 +++++++++++++++-----------------------
->  drivers/scsi/ufs/ufshcd.h |   6 +-
->  2 files changed, 50 insertions(+), 77 deletions(-)
-> 
-[ .. ]
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 2740f6941ec6..56b9da6db1cc 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -212,13 +212,11 @@ struct ufs_query {
->   * @type: device management command type - Query, NOP OUT
->   * @lock: lock to allow one command at a time
->   * @complete: internal commands completion
-> - * @tag_wq: wait queue until free command slot is available
->   */
->  struct ufs_dev_cmd {
->  	enum dev_cmd_type type;
->  	struct mutex lock;
->  	struct completion *complete;
-> -	wait_queue_head_t tag_wq;
->  	struct ufs_query query;
->  };
->  
-> @@ -483,7 +481,7 @@ struct ufs_stats {
->   * @host: Scsi_Host instance of the driver
->   * @dev: device handle
->   * @lrb: local reference block
-> - * @lrb_in_use: lrb in use
-> + * @cmd_queue: Used to allocate command tags from hba->host->tag_set.
->   * @outstanding_tasks: Bits representing outstanding task requests
->   * @outstanding_reqs: Bits representing outstanding transfer requests
->   * @capabilities: UFS Controller Capabilities
-> @@ -541,6 +539,7 @@ struct ufs_hba {
->  
->  	struct Scsi_Host *host;
->  	struct device *dev;
-> +	struct request_queue *cmd_queue;
->  	/*
->  	 * This field is to keep a reference to "scsi_device" corresponding to
->  	 * "UFS device" W-LU.
-> @@ -561,7 +560,6 @@ struct ufs_hba {
->  	u32 ahit;
->  
->  	struct ufshcd_lrb *lrb;
-> -	unsigned long lrb_in_use;
->  
->  	unsigned long outstanding_tasks;
->  	unsigned long outstanding_reqs;
-> 
-This is pretty similar to the 'reserved tags' patchset I send as a
-proposal a while ago (cf 'scsi: enable reserved commands for LLDDs').
+Hi all,
 
-Shouldn't we resurrect this? Once the shared host_tags have gone in we
-can leverage this from other dreivers, too ...
+here now is an updated version of the v2 patchset from John Garry,
+including the suggestions and reviews from the mailing list.
+John, apologies for hijacking your work :-)
 
-Cheers,
+The main diffence is that I've changed the bitmaps to be allocated
+separately in all cases, and just set the pointer to the shared bitmap
+for the hostwide tags case.
+I've also modified smartpqi and hpsa to take advantage of host_tags.
 
-Hannes
+I did audit the iterators, and I _think_ they do the correct thing even
+in the shared bitmap case. But then I might have overlooked things,
+so feedback and reviews are welcome.
+
+The one thing I'm not happy with is the debugfs interface; for shared
+bitmaps all will be displaying essentially the same information, which
+could be moved to a top-level directory. But that would change the
+layout and I'm not sure if that buys us anything.
+
+Differences to v3:
+- Include reviews from Ming Lei
+
+Differences to v2:
+- Drop embedded tag bitmaps
+- Do not share scheduling tags
+- Add patches for hpsa and smartpqi
+
+Differences to v1:
+- Use a shared sbitmap, and not a separate shared tags (a big change!)
+	- Drop request.shared_tag
+- Add RB tags
+
+Hannes Reinecke (4):
+  blk-mq: Use a pointer for sbitmap
+  scsi: Add template flag 'host_tagset'
+  smartpqi: enable host tagset
+  hpsa: switch to using blk-mq
+
+John Garry (3):
+  blk-mq: Remove some unused function arguments
+  blk-mq: Facilitate a shared sbitmap per tagset
+  scsi: hisi_sas: Switch v3 hw to MQ
+
+Ming Lei (1):
+  blk-mq: rename BLK_MQ_F_TAG_SHARED as BLK_MQ_F_TAG_QUEUE_SHARED
+
+ block/bfq-iosched.c                    |   4 +-
+ block/blk-mq-debugfs.c                 |  10 +--
+ block/blk-mq-sched.c                   |   7 +-
+ block/blk-mq-tag.c                     | 119 +++++++++++++++++++++++----------
+ block/blk-mq-tag.h                     |  25 ++++---
+ block/blk-mq.c                         | 102 ++++++++++++++++++----------
+ block/blk-mq.h                         |  12 +++-
+ block/kyber-iosched.c                  |   4 +-
+ drivers/scsi/hisi_sas/hisi_sas.h       |   3 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c  |  36 +++++-----
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  86 ++++++++++--------------
+ drivers/scsi/hpsa.c                    |  44 ++----------
+ drivers/scsi/hpsa.h                    |   1 -
+ drivers/scsi/scsi_lib.c                |   2 +
+ drivers/scsi/smartpqi/smartpqi_init.c  |  38 ++++++++---
+ include/linux/blk-mq.h                 |   6 +-
+ include/scsi/scsi_host.h               |   3 +
+ 17 files changed, 289 insertions(+), 213 deletions(-)
+
 -- 
-Dr. Hannes Reinecke		      Teamlead Storage & Networking
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+2.16.4
+
