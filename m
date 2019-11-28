@@ -2,42 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5A510C5CC
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 Nov 2019 10:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2280110C81A
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 Nov 2019 12:40:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726716AbfK1JRi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 Nov 2019 04:17:38 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:27507 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726092AbfK1JRh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 28 Nov 2019 04:17:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574932657;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i0SBG/w7iwc1VC5pdiCftNu6+szwsgUJz8hkCGOzsEs=;
-        b=BI8clD1tWsyNwOgGl6gFUy1Xn6kW/iyWhWDmPFKcx4JMIgZUTw7QDiVztFANjr+TuMulUG
-        SBeo4UmjBQk3hrVs33nbYALV4xU41PTtU/K51/WVRlNmOHN8LLlFGETZ7SqOMMdDQ6wrmB
-        SONswyVcPg19wDl9Bg+fbEquqsUGD2Y=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-23-ylZ3XNEdMrS6uXP-I6wdZg-1; Thu, 28 Nov 2019 04:17:32 -0500
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9102810054E3;
-        Thu, 28 Nov 2019 09:17:29 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-17.pek2.redhat.com [10.72.8.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1E92B600C8;
-        Thu, 28 Nov 2019 09:17:18 +0000 (UTC)
-Date:   Thu, 28 Nov 2019 17:17:12 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
+        id S1726699AbfK1LkR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 Nov 2019 06:40:17 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:45044 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726296AbfK1LkR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 Nov 2019 06:40:17 -0500
+Received: by mail-wr1-f48.google.com with SMTP id i12so30623001wrn.11
+        for <linux-scsi@vger.kernel.org>; Thu, 28 Nov 2019 03:40:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=GcaV7TSgPi16GI1scwVAVOuBQ2pZxQwhgEx6hTrOkns=;
+        b=WExpWIl8B8mTd7QDNWiNnXNoTCMETcR94FWgcoGbGKbcGVIEioeu6sorw0ZZwkEiCX
+         JVeAuKrT4RA+TX/KomUnci2tzbFQLHobalFPZyYMN3wXLEKOFDJ+/iHE4StbMGKorpPp
+         GLzuCcNiK18hAB8AOYGF3JxRuq4p+9DsyEz6Cn2VeC1l/p/R6mD6QiSsxJib9Bem3/2o
+         jRV1/OJIRlnUp5pldlPZLRAMVLeHQ1nvx5P7UnXfjGv34mmXEKc7fi2Un6BQUQrIeboM
+         HEsZieuixSP6Od0SKNAd7Z+AXyktouVnMwhQgWsu/aZSobFdEzKJT2qq80jXDDEJCYe2
+         zcIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=GcaV7TSgPi16GI1scwVAVOuBQ2pZxQwhgEx6hTrOkns=;
+        b=GXUvnfZMD9IAVupMVOwq1rTGTLHH9iaBiopfhX/mIqDrnb+DxmfDio1xInIFdPI9It
+         c79hNPFzZ7+Gr2FRD5ZjxXFr/PAkeMIotd+CYuOBLsY+l4BDhPrC35cwNKYRSdNb9oH1
+         sUN0UgoxTZQKebZHL6O5y0IXXJtlV9q+mxnYASqYoXY0tY1tVoKEgNc3nkLlcEZJgymP
+         9AN5ZSfhWm62/fRRXgKIpPgOIM/pd5hilMKV7A6P6ufzoCNuMSgNFtb2cN/xVfubQXRP
+         cTjdRD9EUW+2Js7Aee/vJISqYPPZlCD3KN1TqwBtoQu/uMHh3RCNfCdN5BYwiq+elYfE
+         1iXg==
+X-Gm-Message-State: APjAAAVMgxAwI7AJt3nYXx5PnxABM5+MSBkFy5A4j4DpsgtcyA80SOze
+        D9oPVW1OveELEh4VjS/b3NInNA==
+X-Google-Smtp-Source: APXvYqzJoJ36WVXfKX0byebk+wUH2f5FUSX/9U7e2SD/NjLo+igkMeM0znDoPQjo8YplBf0zzGssHA==
+X-Received: by 2002:adf:fa08:: with SMTP id m8mr50371389wrr.276.1574941215165;
+        Thu, 28 Nov 2019 03:40:15 -0800 (PST)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id l7sm3963426wrq.61.2019.11.28.03.40.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Nov 2019 03:40:14 -0800 (PST)
+Message-ID: <d12d516dea813f8c603b6fcd43afb3aeec1957f5.camel@unipv.it>
+Subject: Re: AW: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>
+Cc:     Ming Lei <ming.lei@redhat.com>,
         Damien Le Moal <Damien.LeMoal@wdc.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Jens Axboe <axboe@kernel.dk>,
@@ -51,81 +64,49 @@ Cc:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
         Greg KH <gregkh@linuxfoundation.org>,
         Hans Holmberg <Hans.Holmberg@wdc.com>,
         Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: AW: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20191128091712.GD15549@ming.t460p>
-References: <bf47a6c620b847fa9e27f8542eb761529f3e0381.camel@unipv.it>
- <20191125102928.GA20489@ming.t460p>
- <e5093535c60fd5dff8f92b76dcd52a1030938f62.camel@unipv.it>
- <20191125151535.GA8044@ming.t460p>
- <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>
- <20191126023253.GA24501@ming.t460p>
- <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
- <alpine.LNX.2.21.1.1911271055200.8@nippy.intranet>
- <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
- <c1358b840b3a4971aa35a25d8495c2c8953403ea.camel@unipv.it>
+Date:   Thu, 28 Nov 2019 12:40:11 +0100
+In-Reply-To: <fa9566db62474d7aa5473cf7a1f0da8d@SVR-IES-MBX-03.mgc.mentorg.com>
+References: <20191109222828.GA30568@ming.t460p>
+         <fa3b0cf1f88e42e1200101bccbc797e4e7778d58.camel@unipv.it>
+         <20191123072726.GC25356@ming.t460p>
+         <a9ffcca93657cbbb56819fd883c474a702423b41.camel@unipv.it>
+         <20191125035437.GA3806@ming.t460p>
+         <bf47a6c620b847fa9e27f8542eb761529f3e0381.camel@unipv.it>
+         <20191125102928.GA20489@ming.t460p>
+         <e5093535c60fd5dff8f92b76dcd52a1030938f62.camel@unipv.it>
+         <20191125151535.GA8044@ming.t460p>
+         <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>
+         <20191126023253.GA24501@ming.t460p>
+         <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
+         <alpine.LNX.2.21.1.1911271055200.8@nippy.intranet>
+         <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
+         <c1358b840b3a4971aa35a25d8495c2c8953403ea.camel@unipv.it>
+         <fa9566db62474d7aa5473cf7a1f0da8d@SVR-IES-MBX-03.mgc.mentorg.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-In-Reply-To: <c1358b840b3a4971aa35a25d8495c2c8953403ea.camel@unipv.it>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-MC-Unique: ylZ3XNEdMrS6uXP-I6wdZg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Nov 28, 2019 at 08:46:57AM +0100, Andrea Vai wrote:
-> Il giorno mer, 27/11/2019 alle 08.14 +0000, Schmid, Carsten ha
-> scritto:
-> > >=20
-> > > > Then I started another set of 100 trials and let them run
-> > tonight, and
-> > > > the first 10 trials were around 1000s, then gradually decreased
-> > to
-> > > > ~300s, and finally settled around 200s with some trials below
-> > 70-80s.
-> > > > This to say, times are extremely variable and for the first time
-> > I
-> > > > noticed a sort of "performance increase" with time.
-> > > >
-> > >=20
-> > > The sheer volume of testing (probably some terabytes by now) would
-> > > exercise the wear leveling algorithm in the FTL.
-> > >=20
-> > But with "old kernel" the copy operation still is "fast", as far as
-> > i understood.
-> > If FTL (e.g. wear leveling) would slow down, we would see that also
-> > in
-> > the old kernel, right?
-> >=20
-> > Andrea, can you confirm that the same device used with the old fast
-> > kernel is still fast today?
->=20
-> Yes, it is still fast. Just ran a 100 trials test and got an average
-> of 70 seconds with standard deviation =3D 6 seconds, aligned with the
-> past values of the same kernel.
+Il giorno gio, 28/11/2019 alle 08.12 +0000, Schmid, Carsten ha
+scritto:
+> 
+> [...]
+> 
+> I assume the only thing that you change between the benchmarks
+> is the kernel (and the modules, of course), right, Andrea?
+> 
 
-Then can you collect trace on the old kernel via the previous script?
-
-#!/bin/sh
-
-MAJ=3D$1
-MIN=3D$2
-MAJ=3D$(( $MAJ << 20 ))
-DEV=3D$(( $MAJ | $MIN ))
-
-/usr/share/bcc/tools/trace -t -C \
-    't:block:block_rq_issue (args->dev =3D=3D '$DEV') "%s %d %d", args->rwb=
-s, args->sector, args->nr_sector' \
-    't:block:block_rq_insert (args->dev =3D=3D '$DEV') "%s %d %d", args->rw=
-bs, args->sector, args->nr_sector'
-
-Both the two trace points and bcc should be available on the old kernel.
+It's my production machine, so apart from the changes involved in a
+"normal use of a PC" I can say that there are no changes I am aware of
+(apart from the kernel, and other changes you told me to do, such as
+changing the IO scheduler, etc)... but please remember I am not an
+expert, so feel free to ask me what other kind of changes I can tell
+you about.
 
 Thanks,
-Ming
+Andrea
 
