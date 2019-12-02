@@ -2,175 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE42B10EC7C
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2019 16:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9861510ED56
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Dec 2019 17:40:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727590AbfLBPjc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Dec 2019 10:39:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:44840 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727547AbfLBPjb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 2 Dec 2019 10:39:31 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 3460FC1AE;
-        Mon,  2 Dec 2019 15:39:26 +0000 (UTC)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        John Garry <john.garry@huawei.com>,
-        Ming Lei <ming.lei@redhat.com>, linux-scsi@vger.kernel.org,
-        linux-block@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 11/11] hpsa: enable host_tagset and switch to MQ
-Date:   Mon,  2 Dec 2019 16:39:14 +0100
-Message-Id: <20191202153914.84722-12-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20191202153914.84722-1-hare@suse.de>
-References: <20191202153914.84722-1-hare@suse.de>
+        id S1727460AbfLBQkV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Dec 2019 11:40:21 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:46892 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727418AbfLBQkV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Dec 2019 11:40:21 -0500
+Received: by mail-pf1-f194.google.com with SMTP id y10so2804323pfm.13
+        for <linux-scsi@vger.kernel.org>; Mon, 02 Dec 2019 08:40:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jOokgaHgNJdP0RFw/VCxJO7+KI6ztoXvjZjFxc+/eb8=;
+        b=kkgVIdKr23G24mWXMRb2ijsJ/IUOwCfkz5DR0pxh70KbgqJavT6gXk8BaLwqdF8oFi
+         9bmlH050ZKIem1Gn3HJ8pD5hNcAAk4SUhHV+yLbcmWLwKA/yxTieDuwO3DEmIGOpZ6qi
+         iB987ujuT85S4rvXxdFr63goFAODyeaXGjOa7FnNuzlffrM3rDX5c390b6+WOv92GgRt
+         F4ydb+dYMf1aGAEDAiDxLmNCiIr0bwguJEN7GclgpNLpNtNnqywIWkFfTXXKk0lHivSb
+         o71Ci+I4p0/ff5iHn3GVvswihpsSdnN6WeHDGvheFqlAbfcXGNG4I/MKCDNiEX4iyPnH
+         tMsg==
+X-Gm-Message-State: APjAAAVgdLBZf33qy8XyYOD670FWwI3NT1cFAWNCYZE46XwBZ8jl6/gL
+        9TyyF7I0t0urhNsctzERNDU=
+X-Google-Smtp-Source: APXvYqzH2vOQ1mxti1OeJK289CESCdMMa47dW1KmjgnPNWt7BPnkxwFpCxLjD50wJBCHmM0rY5UCJA==
+X-Received: by 2002:aa7:9d9c:: with SMTP id f28mr52118254pfq.20.1575304820568;
+        Mon, 02 Dec 2019 08:40:20 -0800 (PST)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id 9sm26097885pfx.177.2019.12.02.08.40.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Dec 2019 08:40:18 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH] Revert "qla2xxx: Fix Nport ID display value"
+To:     Roman Bolshakov <r.bolshakov@yadro.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, Quinn Tran <qutran@marvell.com>,
+        Himanshu Madhani <hmadhani@marvell.com>
+References: <20191109042135.12125-1-bvanassche@acm.org>
+ <20191111112804.nycfzaddewlz6yzl@SPB-NB-133.local>
+Message-ID: <af903206-ce02-ef50-567f-d647efe0476a@acm.org>
+Date:   Mon, 2 Dec 2019 08:40:17 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191111112804.nycfzaddewlz6yzl@SPB-NB-133.local>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The smart array HBAs can steer interrupt completion, so this
-patch switches the implementation to use multiqueue and enables
-'host_tagset' as the HBA has a shared host-wide tagset.
+On 11/11/19 3:28 AM, Roman Bolshakov wrote:
+> On Fri, Nov 08, 2019 at 08:21:35PM -0800, Bart Van Assche wrote:
+>> The commit mentioned in the subject breaks point-to-point mode for at least
+>> the QLE2562 HBA. Restore point-to-point support by reverting that commit.
+>>
+>> Cc: Roman Bolshakov <r.bolshakov@yadro.com>
+>> Cc: Quinn Tran <qutran@marvell.com>
+>> Cc: Himanshu Madhani <hmadhani@marvell.com>
+>> Fixes: 0aabb6b699f7 ("scsi: qla2xxx: Fix Nport ID display value") > Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+>> ---
+>>   drivers/scsi/qla2xxx/qla_iocb.c | 7 +++----
+>>   1 file changed, 3 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
+>> index b25f87ff8cde..cfd686fab1b1 100644
+>> --- a/drivers/scsi/qla2xxx/qla_iocb.c
+>> +++ b/drivers/scsi/qla2xxx/qla_iocb.c
+>> @@ -2656,10 +2656,9 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
+>>   	els_iocb->port_id[0] = sp->fcport->d_id.b.al_pa;
+>>   	els_iocb->port_id[1] = sp->fcport->d_id.b.area;
+>>   	els_iocb->port_id[2] = sp->fcport->d_id.b.domain;
+>> -	/* For SID the byte order is different than DID */
+>> -	els_iocb->s_id[1] = vha->d_id.b.al_pa;
+>> -	els_iocb->s_id[2] = vha->d_id.b.area;
+>> -	els_iocb->s_id[0] = vha->d_id.b.domain;
+>> +	els_iocb->s_id[0] = vha->d_id.b.al_pa;
+>> +	els_iocb->s_id[1] = vha->d_id.b.area;
+>> +	els_iocb->s_id[2] = vha->d_id.b.domain;
+>>   
+>>   	if (elsio->u.els_logo.els_cmd == ELS_DCMD_PLOGI) {
+>>   		els_iocb->control_flags = 0;
+> 
+> The original commit definitely fixes P2P mode for QLE2700, the lowest
+> byte is domain, followed by AL_PA, followed by area. However the
+> fields are reserved in ELS IOCB for QLE2500, according to FW spec.
+> 
+> Perhaps we should have a switch here for 2500 and the other one for
+> 2600/2700? Or, we should only set the fields only for QLE2700, to comply
+> with both specs.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/hpsa.c | 44 +++++++-------------------------------------
- drivers/scsi/hpsa.h |  1 -
- 2 files changed, 7 insertions(+), 38 deletions(-)
+Hi Roman,
 
-diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
-index ac39ed79ccaa..2b811c981b43 100644
---- a/drivers/scsi/hpsa.c
-+++ b/drivers/scsi/hpsa.c
-@@ -974,6 +974,7 @@ static struct scsi_host_template hpsa_driver_template = {
- 	.shost_attrs = hpsa_shost_attrs,
- 	.max_sectors = 2048,
- 	.no_write_same = 1,
-+	.host_tagset = 1,
- };
- 
- static inline u32 next_command(struct ctlr_info *h, u8 q)
-@@ -1138,12 +1139,14 @@ static void dial_up_lockup_detection_on_fw_flash_complete(struct ctlr_info *h,
- static void __enqueue_cmd_and_start_io(struct ctlr_info *h,
- 	struct CommandList *c, int reply_queue)
- {
-+	u32 blk_tag = blk_mq_unique_tag(c->scsi_cmd->request);
-+
- 	dial_down_lockup_detection_during_fw_flash(h, c);
- 	atomic_inc(&h->commands_outstanding);
- 	if (c->device)
- 		atomic_inc(&c->device->commands_outstanding);
- 
--	reply_queue = h->reply_map[raw_smp_processor_id()];
-+	reply_queue = blk_mq_unique_tag_to_hwq(blk_tag);
- 	switch (c->cmd_type) {
- 	case CMD_IOACCEL1:
- 		set_ioaccel1_performant_mode(h, c, reply_queue);
-@@ -5628,8 +5631,6 @@ static int hpsa_scsi_queue_command(struct Scsi_Host *sh, struct scsi_cmnd *cmd)
- 	/* Get the ptr to our adapter structure out of cmd->host. */
- 	h = sdev_to_hba(cmd->device);
- 
--	BUG_ON(cmd->request->tag < 0);
--
- 	dev = cmd->device->hostdata;
- 	if (!dev) {
- 		cmd->result = DID_NO_CONNECT << 16;
-@@ -5805,7 +5806,7 @@ static int hpsa_scsi_host_alloc(struct ctlr_info *h)
- 	sh->hostdata[0] = (unsigned long) h;
- 	sh->irq = pci_irq_vector(h->pdev, 0);
- 	sh->unique_id = sh->irq;
--
-+	sh->nr_hw_queues = h->msix_vectors > 0 ? h->msix_vectors : 1;
- 	h->scsi_host = sh;
- 	return 0;
- }
-@@ -5831,7 +5832,8 @@ static int hpsa_scsi_add_host(struct ctlr_info *h)
-  */
- static int hpsa_get_cmd_index(struct scsi_cmnd *scmd)
- {
--	int idx = scmd->request->tag;
-+	u32 blk_tag = blk_mq_unique_tag(scmd->request);
-+	int idx = blk_mq_unique_tag_to_tag(blk_tag);
- 
- 	if (idx < 0)
- 		return idx;
-@@ -7431,26 +7433,6 @@ static void hpsa_disable_interrupt_mode(struct ctlr_info *h)
- 	h->msix_vectors = 0;
- }
- 
--static void hpsa_setup_reply_map(struct ctlr_info *h)
--{
--	const struct cpumask *mask;
--	unsigned int queue, cpu;
--
--	for (queue = 0; queue < h->msix_vectors; queue++) {
--		mask = pci_irq_get_affinity(h->pdev, queue);
--		if (!mask)
--			goto fallback;
--
--		for_each_cpu(cpu, mask)
--			h->reply_map[cpu] = queue;
--	}
--	return;
--
--fallback:
--	for_each_possible_cpu(cpu)
--		h->reply_map[cpu] = 0;
--}
--
- /* If MSI/MSI-X is supported by the kernel we will try to enable it on
-  * controllers that are capable. If not, we use legacy INTx mode.
-  */
-@@ -7847,9 +7829,6 @@ static int hpsa_pci_init(struct ctlr_info *h)
- 	if (err)
- 		goto clean1;
- 
--	/* setup mapping between CPU and reply queue */
--	hpsa_setup_reply_map(h);
--
- 	err = hpsa_pci_find_memory_BAR(h->pdev, &h->paddr);
- 	if (err)
- 		goto clean2;	/* intmode+region, pci */
-@@ -8575,7 +8554,6 @@ static struct workqueue_struct *hpsa_create_controller_wq(struct ctlr_info *h,
- 
- static void hpda_free_ctlr_info(struct ctlr_info *h)
- {
--	kfree(h->reply_map);
- 	kfree(h);
- }
- 
-@@ -8584,14 +8562,6 @@ static struct ctlr_info *hpda_alloc_ctlr_info(void)
- 	struct ctlr_info *h;
- 
- 	h = kzalloc(sizeof(*h), GFP_KERNEL);
--	if (!h)
--		return NULL;
--
--	h->reply_map = kcalloc(nr_cpu_ids, sizeof(*h->reply_map), GFP_KERNEL);
--	if (!h->reply_map) {
--		kfree(h);
--		return NULL;
--	}
- 	return h;
- }
- 
-diff --git a/drivers/scsi/hpsa.h b/drivers/scsi/hpsa.h
-index f8c88fc7b80a..ea4a609e3eb7 100644
---- a/drivers/scsi/hpsa.h
-+++ b/drivers/scsi/hpsa.h
-@@ -161,7 +161,6 @@ struct bmic_controller_parameters {
- #pragma pack()
- 
- struct ctlr_info {
--	unsigned int *reply_map;
- 	int	ctlr;
- 	char	devname[8];
- 	char    *product_name;
--- 
-2.16.4
+How about the patch below? Leaving out the els_iocb->s_id[] initialization
+is not sufficient on 2500 series adapters to restore point-to-point mode.
+The patch below works fine on my setup.
 
+Thanks,
+
+Bart.
+
+diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
+index b25f87ff8cde..e2e91b3f2e65 100644
+--- a/drivers/scsi/qla2xxx/qla_iocb.c
++++ b/drivers/scsi/qla2xxx/qla_iocb.c
+@@ -2656,10 +2656,16 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
+  	els_iocb->port_id[0] = sp->fcport->d_id.b.al_pa;
+  	els_iocb->port_id[1] = sp->fcport->d_id.b.area;
+  	els_iocb->port_id[2] = sp->fcport->d_id.b.domain;
+-	/* For SID the byte order is different than DID */
+-	els_iocb->s_id[1] = vha->d_id.b.al_pa;
+-	els_iocb->s_id[2] = vha->d_id.b.area;
+-	els_iocb->s_id[0] = vha->d_id.b.domain;
++	if (IS_QLA23XX(vha->hw) || IS_QLA24XX(vha->hw) || IS_QLA25XX(vha->hw)) {
++		els_iocb->s_id[0] = vha->d_id.b.al_pa;
++		els_iocb->s_id[1] = vha->d_id.b.area;
++		els_iocb->s_id[2] = vha->d_id.b.domain;
++	} else {
++		/* For SID the byte order is different than DID */
++		els_iocb->s_id[1] = vha->d_id.b.al_pa;
++		els_iocb->s_id[2] = vha->d_id.b.area;
++		els_iocb->s_id[0] = vha->d_id.b.domain;
++	}
+
+  	if (elsio->u.els_logo.els_cmd == ELS_DCMD_PLOGI) {
+  		els_iocb->control_flags = 0;
