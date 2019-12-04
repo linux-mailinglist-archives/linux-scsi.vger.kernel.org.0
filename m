@@ -2,19 +2,19 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C7D112DE4
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2019 15:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8611D112DEB
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2019 15:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728124AbfLDO72 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Dec 2019 09:59:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36336 "EHLO mx1.suse.de"
+        id S1728135AbfLDO7c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Dec 2019 09:59:32 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36382 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728120AbfLDO71 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 4 Dec 2019 09:59:27 -0500
+        id S1728068AbfLDO72 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 4 Dec 2019 09:59:28 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id BF449AF7A;
-        Wed,  4 Dec 2019 14:59:25 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 449B0AF81;
+        Wed,  4 Dec 2019 14:59:26 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
@@ -22,10 +22,11 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Balsundar P <balsundar.p@microchip.com>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Balsundar P <balsundar.p@microsemi.com>,
         Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Subject: [PATCH 06/13] aacraid: replace aac_flush_ios() with midlayer helper
-Date:   Wed,  4 Dec 2019 15:59:11 +0100
-Message-Id: <20191204145918.143134-7-hare@suse.de>
+Subject: [PATCH 07/13] aacraid: move scsi_(block,unblock)_requests out of _aac_reset_adapter()
+Date:   Wed,  4 Dec 2019 15:59:12 +0100
+Message-Id: <20191204145918.143134-8-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191204145918.143134-1-hare@suse.de>
 References: <20191204145918.143134-1-hare@suse.de>
@@ -34,66 +35,73 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the midlayer helper scsi_host_complete_all_commands() to flush all
-outstanding commands.
+_aac_reset_adapter() only has one caller, and that one already calls
+scsi_block_requests(). So move the calls out of _aac_reset_adapter()
+to avoid calling scsi_block_requests() twice.
 
+Cc: Balsundar P <balsundar.p@microsemi.com>
 Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Acked-by: Balsundar P <balsundar.p@microchip.com>
 ---
- drivers/scsi/aacraid/linit.c | 24 ++----------------------
- 1 file changed, 2 insertions(+), 22 deletions(-)
+ drivers/scsi/aacraid/commsup.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
-index ee6bc2f9b80a..4d5b34e0d3a9 100644
---- a/drivers/scsi/aacraid/linit.c
-+++ b/drivers/scsi/aacraid/linit.c
-@@ -1977,26 +1977,6 @@ static void aac_remove_one(struct pci_dev *pdev)
- 	}
- }
- 
--static void aac_flush_ios(struct aac_dev *aac)
--{
--	int i;
--	struct scsi_cmnd *cmd;
--
--	for (i = 0; i < aac->scsi_host_ptr->can_queue; i++) {
--		cmd = (struct scsi_cmnd *)aac->fibs[i].callback_data;
--		if (cmd && (cmd->SCp.phase == AAC_OWNER_FIRMWARE)) {
--			scsi_dma_unmap(cmd);
--
--			if (aac->handle_pci_error)
--				cmd->result = DID_NO_CONNECT << 16;
--			else
--				cmd->result = DID_RESET << 16;
--
--			cmd->scsi_done(cmd);
--		}
--	}
--}
--
- static pci_ers_result_t aac_pci_error_detected(struct pci_dev *pdev,
- 					enum pci_channel_state error)
+diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
+index 8736a540a048..0d8c1ee40759 100644
+--- a/drivers/scsi/aacraid/commsup.c
++++ b/drivers/scsi/aacraid/commsup.c
+@@ -1476,7 +1476,7 @@ static int _aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
  {
-@@ -2013,7 +1993,7 @@ static pci_ers_result_t aac_pci_error_detected(struct pci_dev *pdev,
+ 	int index, quirks;
+ 	int retval;
+-	struct Scsi_Host *host;
++	struct Scsi_Host *host = aac->scsi_host_ptr;
+ 	struct scsi_device *dev;
+ 	int jafo = 0;
+ 	int bled;
+@@ -1493,8 +1493,6 @@ static int _aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
+ 	 *	- The card is dead, or will be very shortly ;-/ so no new
+ 	 *	  commands are completing in the interrupt service.
+ 	 */
+-	host = aac->scsi_host_ptr;
+-	scsi_block_requests(host);
+ 	aac_adapter_disable_int(aac);
+ 	if (aac->thread && aac->thread->pid != current->pid) {
+ 		spin_unlock_irq(host->host_lock);
+@@ -1619,7 +1617,6 @@ static int _aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
  
- 		scsi_block_requests(aac->scsi_host_ptr);
- 		aac_cancel_rescan_worker(aac);
--		aac_flush_ios(aac);
-+		scsi_host_complete_all_commands(shost, DID_NO_CONNECT);
- 		aac_release_resources(aac);
+ out:
+ 	aac->in_reset = 0;
+-	scsi_unblock_requests(host);
  
- 		pci_disable_pcie_error_reporting(pdev);
-@@ -2023,7 +2003,7 @@ static pci_ers_result_t aac_pci_error_detected(struct pci_dev *pdev,
- 	case pci_channel_io_perm_failure:
- 		aac->handle_pci_error = 1;
+ 	/*
+ 	 * Issue bus rescan to catch any configuration that might have
+@@ -1640,7 +1637,7 @@ int aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
+ {
+ 	unsigned long flagv = 0;
+ 	int retval;
+-	struct Scsi_Host * host;
++	struct Scsi_Host * host = aac->scsi_host_ptr;
+ 	int bled;
  
--		aac_flush_ios(aac);
-+		scsi_host_complete_all_commands(shost, DID_NO_CONNECT);
- 		return PCI_ERS_RESULT_DISCONNECT;
- 	}
+ 	if (spin_trylock_irqsave(&aac->fib_lock, flagv) == 0)
+@@ -1658,7 +1655,6 @@ int aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
+ 	 * target (block maximum 60 seconds). Although not necessary,
+ 	 * it does make us a good storage citizen.
+ 	 */
+-	host = aac->scsi_host_ptr;
+ 	scsi_block_requests(host);
  
+ 	/* Quiesce build, flush cache, write through mode */
+@@ -1670,6 +1666,8 @@ int aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
+ 	retval = _aac_reset_adapter(aac, bled, reset_type);
+ 	spin_unlock_irqrestore(host->host_lock, flagv);
+ 
++	scsi_unblock_requests(host);
++
+ 	if ((forced < 2) && (retval == -ENODEV)) {
+ 		/* Unwind aac_send_shutdown() IOP_RESET unsupported/disabled */
+ 		struct fib * fibctx = aac_fib_alloc(aac);
 -- 
 2.16.4
 
