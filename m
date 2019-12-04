@@ -2,68 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79002112C40
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2019 14:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE642112CB7
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2019 14:36:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727911AbfLDNFK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Dec 2019 08:05:10 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:39018 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727820AbfLDNFJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Dec 2019 08:05:09 -0500
-Received: by mail-ed1-f65.google.com with SMTP id v16so6564980edy.6
-        for <linux-scsi@vger.kernel.org>; Wed, 04 Dec 2019 05:05:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=I81Ynm6LU0TBIF3mobw3f+g2sB4hxBuSkk1bFBlc9Og=;
-        b=arWhuG/K8e9O4YNuHuNwncVrHo44P47PDbbpazf/VAkApTjmWDg+2konfAHAw/JRZ1
-         q8qZk6FzWHwrGg0cNxP90m3kdnR/5Zw5FETXh1FmAIUYUu7Kso20rKEPFOFTatEdgufd
-         qjizgmMI/9zWzR59POBeafbZhJ4jUW9OAiDL0RvVFUxOGiFwrfSItfaVOPg09NkOuzhU
-         D/32JnDruCtLqLUnNuYgnrjrBk+9bHdP66yjZoiDctjL4XmHxYmQ0/wD4AKSpdtFlqyy
-         ADy8SglWatXi5NALO45ce+qKmntC4fc7FCNqUlaG0stYO8GJQMDFdYtBcz5QkFKZNGJy
-         qjfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=I81Ynm6LU0TBIF3mobw3f+g2sB4hxBuSkk1bFBlc9Og=;
-        b=bs/nQRcIJeCVG0JfAseiDJqM/ep5n00e+fkQZ2xrq8iBQwB2PZlHbM608vy4RNKlT7
-         53NKphrGlOwaTtcWeWel0LRntQblVPCjzCHpPDjD+vj1yAQJz8ybsXY0egkkgXAFwfuU
-         QO/BZWBdYQAwAp8JwkTKkmK+bmYkOGyGW/xPdDnDpd9jXtXj2UMZUIjO+4dEY7oqMaJU
-         glJpRlrjqKDq3TZf+QhlH7RCIXziBXNF6r+3F/Tieod9RKn6VhqT9+KYcSRxSsrBXoRb
-         3HfeK4kn6gLHmwRoj5OfkrLk/I5IyqyuFmefKH39neeB7ImFWs1RFpuRX9/2e/pi2021
-         qqpQ==
-X-Gm-Message-State: APjAAAUwm06TJcojlfE8W1nn8uC/miMJvow2NTqBgSyQ3WaHRaWkLvh5
-        e2n0QonM6YCQ2b6JVzskQ4NRggmhL+n6OifO7X4=
-X-Google-Smtp-Source: APXvYqzlrhLEKHg1Y3m0fQqBP3mUlVTAfs+qto2r/FlNB1jyjHLLpa3xR7wMRnM8P+C0VfKCbUoj6jUjG2v6cjQJ98Y=
-X-Received: by 2002:a17:906:b6c8:: with SMTP id ec8mr2942708ejb.64.1575464707687;
- Wed, 04 Dec 2019 05:05:07 -0800 (PST)
+        id S1727965AbfLDNgV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Dec 2019 08:36:21 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:53522 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727530AbfLDNgU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Dec 2019 08:36:20 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB4DZgfg076462;
+        Wed, 4 Dec 2019 07:35:42 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1575466542;
+        bh=xCS1lfwtIPofr9BfV2xLTa/QhcNCHCI0ym0C/edSDAw=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Le1QT0gfKf0J1Zmr9pgZT9X4k12QhPopGG8dlQQnQX17lGcjpYaQEaHQIDQIuB5SZ
+         Nau+DeyJIwhRkh8TnJxm2B8csKx1i7fkqPQeKFe6wB/yfcqY/zD+yUO53XMcrzdyz6
+         FvNdmCsdCiPdp3KBEcryhCKib2EYO0TMAtA5OIg4=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB4DZg7J115194;
+        Wed, 4 Dec 2019 07:35:42 -0600
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 4 Dec
+ 2019 07:35:42 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 4 Dec 2019 07:35:42 -0600
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB4DZcZa084113;
+        Wed, 4 Dec 2019 07:35:38 -0600
+Subject: Re: [PATCH] scsi: ufs: Disable autohibern8 feature in Cadence UFS
+To:     sheebab <sheebab@cadence.com>, <alim.akhtar@samsung.com>,
+        <avri.altman@wdc.com>, <pedrom.sousa@synopsys.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <stanley.chu@mediatek.com>, <beanhuo@micron.com>,
+        <yuehaibing@huawei.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <mparab@cadence.com>, <rafalc@cadence.com>
+References: <1575367635-22662-1-git-send-email-sheebab@cadence.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <38cfe842-c07a-410f-97f1-f2bf13fd2655@ti.com>
+Date:   Wed, 4 Dec 2019 19:06:09 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Reply-To: kabiruwahid1117@gmail.com
-Received: by 2002:a05:6402:1585:0:0:0:0 with HTTP; Wed, 4 Dec 2019 05:05:07
- -0800 (PST)
-From:   Mr Kabiru Wahid <kabiruwahid1117@gmail.com>
-Date:   Wed, 4 Dec 2019 09:05:07 -0400
-X-Google-Sender-Auth: -UIQ0VbQyfRucrYrFfbgChPtPd4
-Message-ID: <CAOTe9ZpC+AidXJM4Mv=w_8sQwTSgCWmS0QHD2W_V_GX5q+c1dA@mail.gmail.com>
-Subject: Business Relationship!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1575367635-22662-1-git-send-email-sheebab@cadence.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend
 
-I am Kabiru Wahid,  I am contacting you in respect of my late client
-fund $15.5 Million Dollars deposited with a bank here in Burkina which
-is about to be confiscated by his bank after many years unclaimed,
-Kindly indicate your interest by sending me your full data, You will
-be entitle to 50%;40% for me and 10% to defray all cost You should be
-rest assured that this is 100% risk-free also free from any
-scam/fraudulent act.
 
-Yours Sincerely
-Mr Kabiru Wahid
+On 03/12/19 3:37 pm, sheebab wrote:
+> This patch disables autohibern8 feature in Cadence UFS. 
+> The autohibern8 feature has issues due to which unexpected interrupt
+> trigger is happening. After the interrupt issue is sorted out autohibern8
+> feature will be re-enabled
+> 
+> Signed-off-by: sheebab <sheebab@cadence.com>
+> ---
+
+Tested-by: Vignesh Raghavendra <vigneshr@ti.com>
+
+You will have to repost patch 2/2[1] of your previous series as that
+patch no longer applies cleanly anymore given that we no longer want 1/2
+to be merged.
+
+[1]
+https://lore.kernel.org/linux-scsi/1574147082-22725-3-git-send-email-sheebab@cadence.com/
+
+
+>  drivers/scsi/ufs/cdns-pltfrm.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/scsi/ufs/cdns-pltfrm.c b/drivers/scsi/ufs/cdns-pltfrm.c
+> index b2af04c57a39..882425d1166b 100644
+> --- a/drivers/scsi/ufs/cdns-pltfrm.c
+> +++ b/drivers/scsi/ufs/cdns-pltfrm.c
+> @@ -98,6 +98,12 @@ static int cdns_ufs_link_startup_notify(struct ufs_hba *hba,
+>  	 * completed.
+>  	 */
+>  	ufshcd_dme_set(hba, UIC_ARG_MIB(PA_LOCAL_TX_LCC_ENABLE), 0);
+> +
+> +	/*
+> +	 * Disabling Autohibern8 feature in cadence UFS
+> +	 * to mask unexpected interrupt trigger.
+> +	 */
+> +	hba->ahit = 0;
+>  
+>  	return 0;
+>  }
+> 
+
+-- 
+Regards
+Vignesh
