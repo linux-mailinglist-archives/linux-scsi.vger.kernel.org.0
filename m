@@ -2,19 +2,19 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBF0112DE8
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2019 15:59:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157EE112DE2
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2019 15:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728133AbfLDO7b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Dec 2019 09:59:31 -0500
-Received: from mx2.suse.de ([195.135.220.15]:36376 "EHLO mx1.suse.de"
+        id S1728122AbfLDO70 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Dec 2019 09:59:26 -0500
+Received: from mx2.suse.de ([195.135.220.15]:36208 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728123AbfLDO72 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 4 Dec 2019 09:59:28 -0500
+        id S1728068AbfLDO7Z (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 4 Dec 2019 09:59:25 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 44C16AF92;
-        Wed,  4 Dec 2019 14:59:26 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 08368AE89;
+        Wed,  4 Dec 2019 14:59:24 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
@@ -22,11 +22,10 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Balsundar P <balsundar.p@microchip.com>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
-        Balsundar P <balsundar.p@microsemi.com>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Subject: [PATCH 09/13] aacraid: use scsi_host_(block,unblock) to block I/O
-Date:   Wed,  4 Dec 2019 15:59:14 +0100
-Message-Id: <20191204145918.143134-10-hare@suse.de>
+        Hannes Reinecke <hare@suse.com>
+Subject: [PATCH 10/13] scsi: add scsi_host_busy_iter()
+Date:   Wed,  4 Dec 2019 15:59:15 +0100
+Message-Id: <20191204145918.143134-11-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20191204145918.143134-1-hare@suse.de>
 References: <20191204145918.143134-1-hare@suse.de>
@@ -35,128 +34,73 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use scsi_host_block() and scsi_host_unblock() instead of
-scsi_block_requests()/scsi_unblock_requests() to block and unblock I/O.
-This has the advantage that the block layer will stop sending I/O
-to the adapter instead of having the SCSI midlayer requeueing I/O
-internally.
+Add an iterator scsi_host_busy_iter() to traverse all busy commands.
+If locking against concurrent command completions is required it
+has to be provided by the caller.
 
-Cc: Balsundar P <balsundar.p@microsemi.com>
-Cc: Adaptec OEM Raid Solutions <aacraid@microsemi.com>
-Signed-off-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/aacraid/commsup.c | 14 ++------------
- drivers/scsi/aacraid/linit.c   | 15 ++++++---------
- 2 files changed, 8 insertions(+), 21 deletions(-)
+ drivers/scsi/hosts.c     | 33 +++++++++++++++++++++++++++++++++
+ include/scsi/scsi_host.h |  5 +++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
-index 0d8c1ee40759..9c227eefd14c 100644
---- a/drivers/scsi/aacraid/commsup.c
-+++ b/drivers/scsi/aacraid/commsup.c
-@@ -1477,7 +1477,6 @@ static int _aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- 	int index, quirks;
- 	int retval;
- 	struct Scsi_Host *host = aac->scsi_host_ptr;
--	struct scsi_device *dev;
- 	int jafo = 0;
- 	int bled;
- 	u64 dmamask;
-@@ -1605,16 +1604,7 @@ static int _aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- 	 */
- 	scsi_host_complete_all_commands(host, DID_RESET);
- 
--	/*
--	 * Any Device that was already marked offline needs to be marked
--	 * running
--	 */
--	__shost_for_each_device(dev, host) {
--		if (!scsi_device_online(dev))
--			scsi_device_set_state(dev, SDEV_RUNNING);
--	}
- 	retval = 0;
--
- out:
- 	aac->in_reset = 0;
- 
-@@ -1655,7 +1645,7 @@ int aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- 	 * target (block maximum 60 seconds). Although not necessary,
- 	 * it does make us a good storage citizen.
- 	 */
--	scsi_block_requests(host);
-+	scsi_host_block(host);
- 
- 	/* Quiesce build, flush cache, write through mode */
- 	if (forced < 2)
-@@ -1666,7 +1656,7 @@ int aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- 	retval = _aac_reset_adapter(aac, bled, reset_type);
- 	spin_unlock_irqrestore(host->host_lock, flagv);
- 
--	scsi_unblock_requests(host);
-+	retval = scsi_host_unblock(host, SDEV_RUNNING);
- 
- 	if ((forced < 2) && (retval == -ENODEV)) {
- 		/* Unwind aac_send_shutdown() IOP_RESET unsupported/disabled */
-diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
-index 4d5b34e0d3a9..877464e9d520 100644
---- a/drivers/scsi/aacraid/linit.c
-+++ b/drivers/scsi/aacraid/linit.c
-@@ -1894,7 +1894,7 @@ static int aac_suspend(struct pci_dev *pdev, pm_message_t state)
- 	struct Scsi_Host *shost = pci_get_drvdata(pdev);
- 	struct aac_dev *aac = (struct aac_dev *)shost->hostdata;
- 
--	scsi_block_requests(shost);
-+	scsi_host_block(shost);
- 	aac_cancel_rescan_worker(aac);
- 	aac_send_shutdown(aac);
- 
-@@ -1930,7 +1930,7 @@ static int aac_resume(struct pci_dev *pdev)
- 	* aac_send_shutdown() to block ioctls from upperlayer
- 	*/
- 	aac->adapter_shutdown = 0;
--	scsi_unblock_requests(shost);
-+	scsi_host_unblock(shost, SDEV_RUNNING);
- 
- 	return 0;
- 
-@@ -1945,7 +1945,8 @@ static int aac_resume(struct pci_dev *pdev)
- static void aac_shutdown(struct pci_dev *dev)
- {
- 	struct Scsi_Host *shost = pci_get_drvdata(dev);
--	scsi_block_requests(shost);
-+
-+	scsi_host_block(shost);
- 	__aac_shutdown((struct aac_dev *)shost->hostdata);
+diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+index 00ae9d43ce9f..91987b9fb45f 100644
+--- a/drivers/scsi/hosts.c
++++ b/drivers/scsi/hosts.c
+@@ -678,3 +678,36 @@ void scsi_host_complete_all_commands(struct Scsi_Host *shost, int status)
+ 				&status);
  }
+ EXPORT_SYMBOL_GPL(scsi_host_complete_all_commands);
++
++struct scsi_host_busy_iter_data {
++	scsi_host_busy_iter_fn *fn;
++	void *priv;
++};
++
++static bool __scsi_host_busy_iter_fn(struct request *req, void *priv,
++				   bool reserved)
++{
++	struct scsi_host_busy_iter_data *iter_data = priv;
++	struct scsi_cmnd *sc = blk_mq_rq_to_pdu(req);
++
++	return iter_data->fn(sc, iter_data->priv, reserved);
++}
++
++/**
++ * scsi_host_busy_iter - Iterate over all busy commands
++ * @shost:	Pointer to Scsi_Host.
++ * @fn:		Function to call on each busy command
++ * @priv:	Data pointer passed to @fn
++ **/
++void scsi_host_busy_iter(struct Scsi_Host *shost,
++			 scsi_host_busy_iter_fn *fn, void *priv)
++{
++	struct scsi_host_busy_iter_data iter_data = {
++		.fn = fn,
++		.priv = priv,
++	};
++
++	blk_mq_tagset_busy_iter(&shost->tag_set, __scsi_host_busy_iter_fn,
++				&iter_data);
++}
++EXPORT_SYMBOL_GPL(scsi_host_busy_iter);
+diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
+index 71472eace583..02ac2c61b5af 100644
+--- a/include/scsi/scsi_host.h
++++ b/include/scsi/scsi_host.h
+@@ -763,6 +763,11 @@ extern void scsi_block_requests(struct Scsi_Host *);
+ extern int scsi_host_block(struct Scsi_Host *shost);
+ extern int scsi_host_unblock(struct Scsi_Host *shost, int new_state);
  
-@@ -1991,7 +1992,7 @@ static pci_ers_result_t aac_pci_error_detected(struct pci_dev *pdev,
- 	case pci_channel_io_frozen:
- 		aac->handle_pci_error = 1;
++typedef bool (scsi_host_busy_iter_fn)(struct scsi_cmnd *, void *, bool);
++
++void scsi_host_busy_iter(struct Scsi_Host *,
++			 scsi_host_busy_iter_fn *fn, void *priv);
++
+ struct class_container;
  
--		scsi_block_requests(aac->scsi_host_ptr);
-+		scsi_host_block(shost);
- 		aac_cancel_rescan_worker(aac);
- 		scsi_host_complete_all_commands(shost, DID_NO_CONNECT);
- 		aac_release_resources(aac);
-@@ -2044,7 +2045,6 @@ static pci_ers_result_t aac_pci_slot_reset(struct pci_dev *pdev)
- static void aac_pci_resume(struct pci_dev *pdev)
- {
- 	struct Scsi_Host *shost = pci_get_drvdata(pdev);
--	struct scsi_device *sdev = NULL;
- 	struct aac_dev *aac = (struct aac_dev *)shost_priv(shost);
- 
- 	if (aac_adapter_ioremap(aac, aac->base_size)) {
-@@ -2071,10 +2071,7 @@ static void aac_pci_resume(struct pci_dev *pdev)
- 	aac->adapter_shutdown = 0;
- 	aac->handle_pci_error = 0;
- 
--	shost_for_each_device(sdev, shost)
--		if (sdev->sdev_state == SDEV_OFFLINE)
--			sdev->sdev_state = SDEV_RUNNING;
--	scsi_unblock_requests(aac->scsi_host_ptr);
-+	scsi_host_unblock(shost, SDEV_RUNNING);
- 	aac_scan_host(aac);
- 	pci_save_state(pdev);
- 
+ /*
 -- 
 2.16.4
 
