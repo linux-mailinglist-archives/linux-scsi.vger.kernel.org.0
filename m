@@ -2,135 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A32112AFA
-	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2019 13:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72402112B53
+	for <lists+linux-scsi@lfdr.de>; Wed,  4 Dec 2019 13:22:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727469AbfLDMHT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 4 Dec 2019 07:07:19 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:34034 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727445AbfLDMHT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 4 Dec 2019 07:07:19 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 1BC49439EC;
-        Wed,  4 Dec 2019 12:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received; s=mta-01; t=1575461236;
-         x=1577275637; bh=oDwI7/KbktXqyroHAQEgk4iRwnK5ayog4DCgaHlwp5Q=; b=
-        sMBn4FtELEBgf62bjn3U2ijsnPuU+UIUatovvaC8juX1jJGxwZ0J+fbLPt54KiJ6
-        KzL/Psx8Jguqsf5Y9meclO3rbw+/2V6uVAsjCKZwjPBiEO2dpThHYa3hJS3MJgJO
-        9Msq1JU3+OLTTS6SJSrkGfIPWBrZyZERhkkNYnzheDs=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id nA3IOX8cKVCL; Wed,  4 Dec 2019 15:07:16 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 120FF411FD;
-        Wed,  4 Dec 2019 15:07:16 +0300 (MSK)
-Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
- (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Wed, 4 Dec
- 2019 15:07:15 +0300
-Date:   Wed, 4 Dec 2019 15:07:15 +0300
-From:   Roman Bolshakov <r.bolshakov@yadro.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        <linux-scsi@vger.kernel.org>, Quinn Tran <qutran@marvell.com>,
-        Himanshu Madhani <hmadhani@marvell.com>
-Subject: Re: [PATCH] Revert "qla2xxx: Fix Nport ID display value"
-Message-ID: <20191204120715.dgpr6xcdcckkae4q@SPB-NB-133.local>
-References: <20191109042135.12125-1-bvanassche@acm.org>
- <20191111112804.nycfzaddewlz6yzl@SPB-NB-133.local>
- <af903206-ce02-ef50-567f-d647efe0476a@acm.org>
- <20191202205554.5p77fyot6bc2ij6t@SPB-NB-133.local>
- <10e0c0c1-f3ad-7233-995d-59f1b748e39f@acm.org>
+        id S1727552AbfLDMWY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 4 Dec 2019 07:22:24 -0500
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:46518 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727779AbfLDMWS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 4 Dec 2019 07:22:18 -0500
+Received: by mail-ed1-f67.google.com with SMTP id m8so6399825edi.13
+        for <linux-scsi@vger.kernel.org>; Wed, 04 Dec 2019 04:22:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
+         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
+         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
+         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
+         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
+         4SHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=Ku6nkd7hWJei16QvVASZoGjhoytXMte9XHVTab/VQIZcH3xdzMlUS+Q+EoyVhkEQWq
+         YYsOjzuWo/w2rtp1/M18MRQUgwDkkb6IVFnPCWYQpZBhSqVFnfUuFvtusbzlfF98N6Yl
+         X3RmuBbm4HBU/TihyK8Jght4RMnmLwgRoJjLW5lS17M32gISOdTjrY80kcKDk7Zm8yrn
+         MC89OoadtJEe1SlRqOUOaVj28SXF4DDZ5V38JTLeB0B3O2EUbFiM50wBi41Ro9ARLT4H
+         ZxAs/OUeDQWl1ba5i1Myd9nomzZatfDgUnqEo1w6DOnW9MFvp/t0TXuFC4ejA3ZTwNU7
+         oeAA==
+X-Gm-Message-State: APjAAAWPJqCbQ0So49Ps/LNsdXLR5KoAmZ1qBDvjkNOeZN83NXtFlwIB
+        yczN12fznOIVtvB155lKFnHdPf3nsrbPBx67aWo=
+X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
+X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
+ Wed, 04 Dec 2019 04:22:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <10e0c0c1-f3ad-7233-995d-59f1b748e39f@acm.org>
-X-Originating-IP: [172.17.128.60]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
+ -0800 (PST)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
+Date:   Wed, 4 Dec 2019 13:22:15 +0100
+Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
+Subject: God has remembered your prayers I have already sent you Money Gram
+ payment of $5000.00 today, MG 1029-8096
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Dec 02, 2019 at 06:34:43PM -0800, Bart Van Assche wrote:
-> On 2019-12-02 12:55, Roman Bolshakov wrote:
-> > On Mon, Dec 02, 2019 at 08:40:17AM -0800, Bart Van Assche wrote:
-> >> diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-> >> index b25f87ff8cde..e2e91b3f2e65 100644
-> >> --- a/drivers/scsi/qla2xxx/qla_iocb.c
-> >> +++ b/drivers/scsi/qla2xxx/qla_iocb.c
-> >> @@ -2656,10 +2656,16 @@ qla24xx_els_logo_iocb(srb_t *sp, struct els_entry_24xx *els_iocb)
-> >>  	els_iocb->port_id[0] = sp->fcport->d_id.b.al_pa;
-> >>  	els_iocb->port_id[1] = sp->fcport->d_id.b.area;
-> >>  	els_iocb->port_id[2] = sp->fcport->d_id.b.domain;
-> >> -	/* For SID the byte order is different than DID */
-> >> -	els_iocb->s_id[1] = vha->d_id.b.al_pa;
-> >> -	els_iocb->s_id[2] = vha->d_id.b.area;
-> >> -	els_iocb->s_id[0] = vha->d_id.b.domain;
-> >> +	if (IS_QLA23XX(vha->hw) || IS_QLA24XX(vha->hw) || IS_QLA25XX(vha->hw)) {
-> >> +		els_iocb->s_id[0] = vha->d_id.b.al_pa;
-> >> +		els_iocb->s_id[1] = vha->d_id.b.area;
-> >> +		els_iocb->s_id[2] = vha->d_id.b.domain;
-> >> +	} else {
-> >> +		/* For SID the byte order is different than DID */
-> >> +		els_iocb->s_id[1] = vha->d_id.b.al_pa;
-> >> +		els_iocb->s_id[2] = vha->d_id.b.area;
-> >> +		els_iocb->s_id[0] = vha->d_id.b.domain;
-> >> +	}
-> >>
-> >>  	if (elsio->u.els_logo.els_cmd == ELS_DCMD_PLOGI) {
-> >>  		els_iocb->control_flags = 0;
-> > 
-> > Hi Bart,
-> > 
-> > I'm fine as long as it works for old and new HBAs. I don't have docs to
-> > 2300/2400 series and the HBAs. Are you sure it follows the same S_ID
-> > order as 2500?
-> > 
-> > Regardless of that, it should work for the last 4 series of the HBAs,
-> > Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
-> 
-> Hi Roman,
-> 
-> Thanks for the review. In my copy of the 25xx firmware manual the s_id[]
-> field has been marked as RESERVED. I have tried not to write into s_id[]
-> but that was not sufficient to restore point-to-point mode.
-> 
+Attn, dear Beneficiary.
 
-Hi Bart,
+God has remembered your prayers
+I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
+This is because we have finally concluded to effect your transfer
+funds of $4.8,000.000usd
+through MONEY GRAM International Fund transfer Service
+Each payment will be sending to you by $5000.00 daily until the
+($4.8,000.000usd) is completely transferred
+we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
+So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
 
-IMO that means the field is undocumented rather than RESERVED on 2500
-series chips.
+Contact person Mrs. Alan Ude
+Dir. MONEY GRAM Service,Benin
+Phone number: +229 98856728
+E-mail: moneygram.1820@outlook.fr
 
-> Older versions of the qla2xxx driver did not initialize s_id[]. I think
-> that commit edd05de19759 ("scsi: qla2xxx: Changes to support N2N
-> logins") is the commit that introduced initialization of s_id[]. Is that
-> value passed to the target port? Did that commit perhaps introduce code
-> that checks the value received by the target?
-> 
+Ask him to give you the complete mtcn, sender name, question and
+answer to enable you
+pick up the $5000.00 sent today,
+Also you are instructed to re-confirm your information's
+to Mrs.Alan Ude as listed below to avoid wrong transactions.
 
-Firmware can do implicit login, and this is how it worked for a while.
+(1Your Full name:............................................
+(2 Phone number.....................................................
+(3 Contact address:.....................................
+(4 Age:..................................................................
+(5 Country..............................................
+(6) Sex .................................................................
+(7) your occupation...........................................
 
-Then explicit login was introduced in the commit you referenced by
-setting bit 8 in IFCB fimwrare options 3 for 2600/2700 series and
-issuing ELS IOCB. However, for 2500 series, bit 7 should be set to
-disable implicit logins.
+(8)Passport/By Attach or Drivers License Number:
+Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
+Note please: I have paid service fees for you but the only money you
+are required
+to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
+pick up your transfer today.
 
-The latest commits that touches the bit is 8777e4314d397 ("scsi: qla2xxx:
-Migrate NVME N2N handling into state machine"). It sets the bit in
-qla24xx_nvram_config regadless of chip.
+Send it to via Money Gram
+Receiver's Name-----Alan Ude
+Country----------Benin
+Address-----------Cotonou
+Quest--------Honest
+Ans-----------Trust
 
-Does it help to set bit 7 in IFCB, firmware options 3 for 2500 series
-and leave the RESERVED S_ID field untouched?
+I done all my best for you to receive your transfer now ok.
+We need your urgent reply
+Best Regards
+Rev.Dr Emmanuel Okoye
+CEO Ecobank-benin
 
-Thanks,
-Roman
+If we did not receive it urgent from you today,
+I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
+representative.
