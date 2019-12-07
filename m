@@ -2,61 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A03115A37
-	for <lists+linux-scsi@lfdr.de>; Sat,  7 Dec 2019 01:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DBE5115AD4
+	for <lists+linux-scsi@lfdr.de>; Sat,  7 Dec 2019 04:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726691AbfLGA34 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Dec 2019 19:29:56 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40504 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726627AbfLGA3z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Dec 2019 19:29:55 -0500
-Received: by mail-wr1-f66.google.com with SMTP id c14so9628729wrn.7
-        for <linux-scsi@vger.kernel.org>; Fri, 06 Dec 2019 16:29:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=LXxoS6Ed7of6jWaofmDfQc8/u3Mg9Maolmr3Vpf9Rmy6M9EqjFAuvGQ8h9p7LhnwAL
-         J2FbblgdkGgZHafRFxx28eRdV2u28AyUlEZcVvHuYvVm3rtf1quwzUCMSvqmMRhzvXWg
-         Lr2BVgHFftpJuxoM6FIG7HwvD6NJoH8mvEjpjvV8POe7OxPQSgcaMvRkWz9Uiu2DLDQI
-         zLbCM6eF/2UqhYCC9SzqWLAqDFWNhNPH2Mzqdx7SMOIQYQVzi+r4mUYfVbZ4zkg6G/Rf
-         GMyYZz2zxEAODyOdyEtKF6h6LvlYj6nQy3cPNK/qqQ+yOafhqpdxqfrrNrKMk4+XdZU4
-         ueNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=MKweiyiGT9JlqEcZneDn/rzQoW9YYPn9wuCkWwd7OAvUNeiJuc2ot/NAF9+797qtGV
-         KO+dRZ7x9RUFkS9ZvzMFDBVayzFaDCzcM9copr6ZrI1UiKZ/j+i0tzXwKJt3oC4LyQPs
-         pVrSaKAPVthZHh0+tWr+FPwISaLEJe7tVNMtN48x4I/rjf2/0x25UtrrxDfQzVj2mRjg
-         ZlRIptNSLS5kgl6ebLX+6tTbg2t2DQMTQ/5abmpK+rZUsrfTZanT4IDKqu1oKzROnkhQ
-         mqCUeNhid97hKUXbQ2eUFtD0SiV1LCFJoeeqlHtkqtPootJDB7A21RMpyY1DHeDje8TF
-         kSsQ==
-X-Gm-Message-State: APjAAAWIq6ctdts8zrjptdyDGIRmok6yu/+2sTiuyIwbydku/Y8gDmOR
-        Rtuux3bW7bv7Tc+/XKa9HJxCl15EEdxlQBEpZeo=
-X-Google-Smtp-Source: APXvYqwrh3pZjAB0r+TmXxbhmAM/apODdHlIT+82DMPTCRz8CUTTqPzcZB7T3FAp1SOvDrWQKKNsT0CStxod+O7hBLs=
-X-Received: by 2002:adf:e591:: with SMTP id l17mr16654604wrm.139.1575678594023;
- Fri, 06 Dec 2019 16:29:54 -0800 (PST)
+        id S1726490AbfLGDXA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 6 Dec 2019 22:23:00 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:51206 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726375AbfLGDXA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 6 Dec 2019 22:23:00 -0500
+Received: from DGGEML402-HUB.china.huawei.com (unknown [172.30.72.54])
+        by Forcepoint Email with ESMTP id ED74ECD816885C6273E8;
+        Sat,  7 Dec 2019 11:22:57 +0800 (CST)
+Received: from DGGEML525-MBS.china.huawei.com ([169.254.4.251]) by
+ DGGEML402-HUB.china.huawei.com ([fe80::fca6:7568:4ee3:c776%31]) with mapi id
+ 14.03.0439.000; Sat, 7 Dec 2019 11:22:47 +0800
+From:   "wubo (T)" <wubo40@huawei.com>
+To:     "james.smart@broadcom.com" <james.smart@broadcom.com>,
+        "dick.kennedy@broadcom.com" <dick.kennedy@broadcom.com>,
+        "jejb@linux.vnet.ibm.com" <jejb@linux.vnet.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "liuzhiqiang (I)" <liuzhiqiang26@huawei.com>,
+        Mingfangsen <mingfangsen@huawei.com>
+Subject: [PATCH] scsi:lpfc:Fix memory leak on lpfc_bsg_write_ebuf_set func
+Thread-Topic: [PATCH] scsi:lpfc:Fix memory leak on lpfc_bsg_write_ebuf_set
+ func
+Thread-Index: AdWsrSWHywN8OEO0QwWyn3DtmiXZsw==
+Date:   Sat, 7 Dec 2019 03:22:46 +0000
+Message-ID: <EDBAAA0BBBA2AC4E9C8B6B81DEEE1D6915E7A966@DGGEML525-MBS.china.huawei.com>
+Accept-Language: en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.173.221.252]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Received: by 2002:a5d:678e:0:0:0:0:0 with HTTP; Fri, 6 Dec 2019 16:29:53 -0800 (PST)
-Reply-To: mrs.aalia.ahmed@gmail.com
-From:   "Mrs.Aalia.Ahmed" <adamhana1907@gmail.com>
-Date:   Sat, 7 Dec 2019 00:29:53 +0000
-Message-ID: <CAOGreO=8t36s1Mau26bRqTQErHsnOf5ki10AJ6EA4tNedNUo8g@mail.gmail.com>
-Subject: OK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings My Dearest One.
+When phba->mbox_ext_buf_ctx.seqNum != phba->mbox_ext_buf_ctx.numBuf, 
+dd_data should be freed before return SLI_CONFIG_HANDLED.
 
-My name is Mrs.Aalia.Ahmed, i saw your profile and became interested
-in you, please contact me through my email address
-(mrs.aalia.ahmed@gmail.com) to know each other and i have something
-very important to tell you, i wait for your response to my email ID.
-(mrs.aalia.ahmed@gmail.com
+When lpfc_sli_issue_mbox func return fails, pmboxq should be also freed in job_error tag.
+
+
+Signed-off-by:Bo wu <wubo40@huawei.com>
+Reviewed-by:Zhiqiang Liu <liuzhiqiang26@huawei.com>
+---
+ drivers/scsi/lpfc/lpfc_bsg.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
+index 39a736b887b1..6c2b03415a2c 100644
+--- a/drivers/scsi/lpfc/lpfc_bsg.c
++++ b/drivers/scsi/lpfc/lpfc_bsg.c
+@@ -4489,12 +4489,6 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct bsg_job *job,
+ 	phba->mbox_ext_buf_ctx.seqNum++;
+ 	nemb_tp = phba->mbox_ext_buf_ctx.nembType;
+ 
+-	dd_data = kmalloc(sizeof(struct bsg_job_data), GFP_KERNEL);
+-	if (!dd_data) {
+-		rc = -ENOMEM;
+-		goto job_error;
+-	}
+-
+ 	pbuf = (uint8_t *)dmabuf->virt;
+ 	size = job->request_payload.payload_len;
+ 	sg_copy_to_buffer(job->request_payload.sg_list,
+@@ -4531,6 +4525,13 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct bsg_job *job,
+ 				"2968 SLI_CONFIG ext-buffer wr all %d "
+ 				"ebuffers received\n",
+ 				phba->mbox_ext_buf_ctx.numBuf);
++
++		dd_data = kmalloc(sizeof(struct bsg_job_data), GFP_KERNEL);
++		if (!dd_data) {
++			rc = -ENOMEM;
++			goto job_error;
++		}
++
+ 		/* mailbox command structure for base driver */
+ 		pmboxq = mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
+ 		if (!pmboxq) {
+@@ -4579,6 +4580,8 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct bsg_job *job,
+ 	return SLI_CONFIG_HANDLED;
+ 
+ job_error:
++	if (pmboxq)
++		mempool_free(pmboxq, phba->mbox_mem_pool);
+ 	lpfc_bsg_dma_page_free(phba, dmabuf);
+ 	kfree(dd_data);
+ 
+-- 
+2.19.1
