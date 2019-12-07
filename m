@@ -2,101 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBE5115AD4
-	for <lists+linux-scsi@lfdr.de>; Sat,  7 Dec 2019 04:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C8F115B59
+	for <lists+linux-scsi@lfdr.de>; Sat,  7 Dec 2019 07:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726490AbfLGDXA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 6 Dec 2019 22:23:00 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:51206 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726375AbfLGDXA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 6 Dec 2019 22:23:00 -0500
-Received: from DGGEML402-HUB.china.huawei.com (unknown [172.30.72.54])
-        by Forcepoint Email with ESMTP id ED74ECD816885C6273E8;
-        Sat,  7 Dec 2019 11:22:57 +0800 (CST)
-Received: from DGGEML525-MBS.china.huawei.com ([169.254.4.251]) by
- DGGEML402-HUB.china.huawei.com ([fe80::fca6:7568:4ee3:c776%31]) with mapi id
- 14.03.0439.000; Sat, 7 Dec 2019 11:22:47 +0800
-From:   "wubo (T)" <wubo40@huawei.com>
-To:     "james.smart@broadcom.com" <james.smart@broadcom.com>,
-        "dick.kennedy@broadcom.com" <dick.kennedy@broadcom.com>,
-        "jejb@linux.vnet.ibm.com" <jejb@linux.vnet.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "liuzhiqiang (I)" <liuzhiqiang26@huawei.com>,
-        Mingfangsen <mingfangsen@huawei.com>
-Subject: [PATCH] scsi:lpfc:Fix memory leak on lpfc_bsg_write_ebuf_set func
-Thread-Topic: [PATCH] scsi:lpfc:Fix memory leak on lpfc_bsg_write_ebuf_set
- func
-Thread-Index: AdWsrSWHywN8OEO0QwWyn3DtmiXZsw==
-Date:   Sat, 7 Dec 2019 03:22:46 +0000
-Message-ID: <EDBAAA0BBBA2AC4E9C8B6B81DEEE1D6915E7A966@DGGEML525-MBS.china.huawei.com>
-Accept-Language: en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.173.221.252]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S1726538AbfLGGjV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 7 Dec 2019 01:39:21 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:47499 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725869AbfLGGjV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 7 Dec 2019 01:39:21 -0500
+X-UUID: 5b9c889c68c34ae0902856daa7cedd21-20191207
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=6pTSCSjrn28TvfGT/brokgQkzDrJ7jz09v0SGNUY0AI=;
+        b=fBX50hsnMPczBvupi1NhxT48AhunHc2O6GhTyioaEmvB5LtGWVkfK2C6hBbs3snjqKWbirSe3AHtVXUlctFT1wlcOTA7p70/m421P1KgW4HW1Acwe3U13cDA/oHuw/ERj/pFPblHcDyH2OmDuHHVk/UBbgPJZ6Du74wnqVOOUzA=;
+X-UUID: 5b9c889c68c34ae0902856daa7cedd21-20191207
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 819517392; Sat, 07 Dec 2019 14:39:12 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sat, 7 Dec 2019 14:38:47 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sat, 7 Dec 2019 14:38:43 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <pedrom.sousa@synopsys.com>, <jejb@linux.ibm.com>,
+        <matthias.bgg@gmail.com>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <beanhuo@micron.com>,
+        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
+        <leon.chen@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v1 0/2] scsi: ufs-mediatek: add device reset implementation
+Date:   Sat, 7 Dec 2019 14:39:06 +0800
+Message-ID: <1575700748-28191-1-git-send-email-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 6A5321628A49D3B31F32B5F0218FA327838C542E2A65577B39D2A68EC24ADD6F2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When phba->mbox_ext_buf_ctx.seqNum != phba->mbox_ext_buf_ctx.numBuf, 
-dd_data should be freed before return SLI_CONFIG_HANDLED.
+VGhpcyBwYXRjaHNldCBhZGQgaW1wbGVtZW50YXRpb24gb2YgVUZTIGRldmljZSByZXNldCB2b3Bz
+IGluIE1lZGlhVGVrIFVGUyBkcml2ZXIuDQoNClN0YW5sZXkgQ2h1ICgyKToNCiAgc29jOiBtZWRp
+YXRlazogYWRkIGhlYWRlciBmb3IgU2lQIHNlcnZpY2UgaW50ZXJmYWNlDQogIHNjc2k6IHVmcy1t
+ZWRpYXRlazogYWRkIGRldmljZSByZXNldCBpbXBsZW1lbnRhdGlvbg0KDQogZHJpdmVycy9zY3Np
+L3Vmcy91ZnMtbWVkaWF0ZWsuYyAgICAgICAgICB8IDI3ICsrKysrKysrKysrKysrKysrKysrKysr
+Kw0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmggICAgICAgICAgfCAgNyArKysrKysN
+CiBpbmNsdWRlL2xpbnV4L3NvYy9tZWRpYXRlay9tdGtfc2lwX3N2Yy5oIHwgMjYgKysrKysrKysr
+KysrKysrKysrKysrKysNCiAzIGZpbGVzIGNoYW5nZWQsIDYwIGluc2VydGlvbnMoKykNCiBjcmVh
+dGUgbW9kZSAxMDA2NDQgaW5jbHVkZS9saW51eC9zb2MvbWVkaWF0ZWsvbXRrX3NpcF9zdmMuaA0K
+DQotLSANCjIuMTguMA0K
 
-When lpfc_sli_issue_mbox func return fails, pmboxq should be also freed in job_error tag.
-
-
-Signed-off-by:Bo wu <wubo40@huawei.com>
-Reviewed-by:Zhiqiang Liu <liuzhiqiang26@huawei.com>
----
- drivers/scsi/lpfc/lpfc_bsg.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
-index 39a736b887b1..6c2b03415a2c 100644
---- a/drivers/scsi/lpfc/lpfc_bsg.c
-+++ b/drivers/scsi/lpfc/lpfc_bsg.c
-@@ -4489,12 +4489,6 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct bsg_job *job,
- 	phba->mbox_ext_buf_ctx.seqNum++;
- 	nemb_tp = phba->mbox_ext_buf_ctx.nembType;
- 
--	dd_data = kmalloc(sizeof(struct bsg_job_data), GFP_KERNEL);
--	if (!dd_data) {
--		rc = -ENOMEM;
--		goto job_error;
--	}
--
- 	pbuf = (uint8_t *)dmabuf->virt;
- 	size = job->request_payload.payload_len;
- 	sg_copy_to_buffer(job->request_payload.sg_list,
-@@ -4531,6 +4525,13 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct bsg_job *job,
- 				"2968 SLI_CONFIG ext-buffer wr all %d "
- 				"ebuffers received\n",
- 				phba->mbox_ext_buf_ctx.numBuf);
-+
-+		dd_data = kmalloc(sizeof(struct bsg_job_data), GFP_KERNEL);
-+		if (!dd_data) {
-+			rc = -ENOMEM;
-+			goto job_error;
-+		}
-+
- 		/* mailbox command structure for base driver */
- 		pmboxq = mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
- 		if (!pmboxq) {
-@@ -4579,6 +4580,8 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct bsg_job *job,
- 	return SLI_CONFIG_HANDLED;
- 
- job_error:
-+	if (pmboxq)
-+		mempool_free(pmboxq, phba->mbox_mem_pool);
- 	lpfc_bsg_dma_page_free(phba, dmabuf);
- 	kfree(dd_data);
- 
--- 
-2.19.1
