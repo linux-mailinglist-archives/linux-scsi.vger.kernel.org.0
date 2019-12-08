@@ -2,67 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EF0511618B
-	for <lists+linux-scsi@lfdr.de>; Sun,  8 Dec 2019 13:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68811163E9
+	for <lists+linux-scsi@lfdr.de>; Sun,  8 Dec 2019 22:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbfLHMk6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 8 Dec 2019 07:40:58 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:9531 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726163AbfLHMk6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 8 Dec 2019 07:40:58 -0500
-X-UUID: 10fe5277c2ca45248ef3fb16e4980491-20191208
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=2WSGfiTkWDpT/mYBDWoIjtdi+bzFTArXnMsQV1RVFoI=;
-        b=S+oiPd63IANu67fS3XpDkKJSDxINQKHAYRoQEe6u0D5+4YVz10yFhKIjsYPT6wlBhChCSIhxxbkhBgdOqGnieZNheIhY4UtVVHcID3PGMEQ4wcEdpllSqoFtHBJDS7Fn0nswIXFzd/Ewu1zAZSzTFqOV88HvikxrnQW4m0LBLso=;
-X-UUID: 10fe5277c2ca45248ef3fb16e4980491-20191208
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 841033995; Sun, 08 Dec 2019 20:40:52 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Sun, 8 Dec 2019 20:39:59 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Sun, 8 Dec 2019 20:40:21 +0800
-Message-ID: <1575808849.12066.3.camel@mtkswgap22>
-Subject: Re: [PATCH v6 5/5] scsi: ufs: Do not free irq in suspend
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Can Guo <cang@codeaurora.org>
-CC:     <asutoshd@codeaurora.org>, <nguyenb@codeaurora.org>,
-        <rnayak@codeaurora.org>, <linux-scsi@vger.kernel.org>,
-        <kernel-team@android.com>, <saravanak@google.com>,
-        <salyzyn@google.com>, Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Date:   Sun, 8 Dec 2019 20:40:49 +0800
-In-Reply-To: <0101016ed3d69793-22918f99-23bf-495d-8a36-a9c108d1cbce-000000@us-west-2.amazonses.com>
-References: <1575512052-15999-1-git-send-email-cang@codeaurora.org>
-         <0101016ed3d69793-22918f99-23bf-495d-8a36-a9c108d1cbce-000000@us-west-2.amazonses.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-MIME-Version: 1.0
-X-TM-SNTS-SMTP: E6395AF04C83190C41F2F37EC7EB2F06A7D53DB6B5AA8BFFBFBB2EEAD866D8202000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1726956AbfLHVk2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 8 Dec 2019 16:40:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57446 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726951AbfLHVk2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 8 Dec 2019 16:40:28 -0500
+Subject: Re: [GIT PULL] final round of SCSI updates for the 5.4+ merge window
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1575841227;
+        bh=VFdLGvUEJlFx3BfpBrV+NXc5ubZKGBWPK6idiiHlAYA=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=0y3IKCCINFRqJTUTq91P4K9B/Sc7VoW9abxKKFeDZaLa1sKdDOF2Bg2ucK6RmbOAB
+         l9P8Jle29CsRBWnhp9EfjNO/Ayb/UNEWC1uigBE4WopIkugFJSybcQbKY7MY1gcO37
+         PClc4wIcWwIr04euHGxlGDbURhrlNgj+tfPi4Ow4=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1575781191.14069.3.camel@HansenPartnership.com>
+References: <1575781191.14069.3.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1575781191.14069.3.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+X-PR-Tracked-Commit-Id: 1eb9151eb7c58c2a4b995918271e13037ae278b9
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 138f371ddf4ff50207dbe33ebfc237e756cd6222
+Message-Id: <157584122757.22418.13844672043621103927.pr-tracker-bot@kernel.org>
+Date:   Sun, 08 Dec 2019 21:40:27 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgQ2FuLA0KDQpPbiBUaHUsIDIwMTktMTItMDUgYXQgMDI6MTQgKzAwMDAsIENhbiBHdW8gd3Jv
-dGU6DQo+IFNpbmNlIHVmc2hjZCBpcnEgcmVzb3VyY2UgaXMgYWxsb2NhdGVkIHdpdGggdGhlIGRl
-dmljZSByZXNvdXJjZSBtYW5hZ2VtZW50DQo+IGF3YXJlIElSUSByZXF1ZXN0IGltcGxlbWVudGF0
-aW9uLCB3ZSBkb24ndCByZWFsbHkgbmVlZCB0byBmcmVlIHVwIGlycQ0KPiBkdXJpbmcgc3VzcGVu
-ZCwgZGlzYWJsaW5nIGl0IGR1cmluZyBzdXNwZW5kIGFuZCByZWVuYWJsaW5nIGl0IGR1cmluZyBy
-ZXN1bWUNCj4gc2hvdWxkIGJlIGdvb2QgZW5vdWdoLg0KDQpUaGlzIGlzIGdvb2QgaW4gY29uc2lk
-ZXJhdGlvbiBvZiBwZXJmb3JtYW5jZTogZW5hYmxlX2lycS9kaXNhYmxlX2lycQ0KcGVyZm9ybWFu
-Y2UgaXMgbXVjaCBiZXR0ZXIgdGhhbiByZXF1ZXN0X2lycS9mcmVlX2lycS4NCg0KUmV2aWV3ZWQt
-Ynk6IFN0YW5sZXkgQ2h1IDxzdGFubGV5LmNodUBtZWRpYXRlay5jb20+DQoNCg0KDQo=
+The pull request you sent on Sat, 07 Dec 2019 20:59:51 -0800:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/138f371ddf4ff50207dbe33ebfc237e756cd6222
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
