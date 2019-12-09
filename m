@@ -2,100 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26568116820
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Dec 2019 09:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48903116AA7
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Dec 2019 11:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727188AbfLII3Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Dec 2019 03:29:25 -0500
-Received: from mailgw01.mediatek.com ([210.61.82.183]:26427 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727044AbfLII3Z (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Dec 2019 03:29:25 -0500
-X-UUID: ac42b9fa683e41efaf49f0db4b7012f4-20191209
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=FsOPpGNcvyN3hqCpKWKad5Cxcn0GwUWSQI3FseIG2Rg=;
-        b=JJ+JXQZhVK2zvQGAqUuXloTBIHvnoLksjCyLgRgouq0Uif5uTIfVV9NwyVSv4mjvLPGrrEvtygZHfCvrr1o3b1B8KnuFICqOSMO/RJLPZqXx7tUrgKgKuBEdWKHGQx8oVTmvfvvmm+wS/IvlUtRWYGO3a3Skhut3fq80GaFBnAI=;
-X-UUID: ac42b9fa683e41efaf49f0db4b7012f4-20191209
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 2035563348; Mon, 09 Dec 2019 16:29:17 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 9 Dec 2019 16:28:55 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 9 Dec 2019 16:29:01 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>, <jejb@linux.ibm.com>,
-        <matthias.bgg@gmail.com>, <f.fainelli@gmail.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <beanhuo@micron.com>,
-        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
-        <leon.chen@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 2/2] scsi: ufs-mediatek: add device reset implementation
-Date:   Mon, 9 Dec 2019 16:29:14 +0800
-Message-ID: <1575880154-6099-3-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1575880154-6099-1-git-send-email-stanley.chu@mediatek.com>
-References: <1575880154-6099-1-git-send-email-stanley.chu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1727074AbfLIKPB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Dec 2019 05:15:01 -0500
+Received: from authsmtp44.register.it ([81.88.55.107]:36323 "EHLO
+        authsmtp.register.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726279AbfLIKPB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Dec 2019 05:15:01 -0500
+X-Greylist: delayed 338 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Dec 2019 05:15:00 EST
+Received: from [192.168.1.1] ([93.41.32.9])
+        by cmsmtp with ESMTPSA
+        id eFwHidjUzRIgteFwHisCIW; Mon, 09 Dec 2019 11:06:50 +0100
+X-Rid:  guido@trentalancia.com@93.41.32.9
+Message-ID: <1575886009.5344.17.camel@trentalancia.com>
+Subject: [PATCH v2] scsi: ignore Synchronize Cache command failures to keep
+ using drives not supporting it
+From:   Guido Trentalancia <guido@trentalancia.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     drew@colorado.edu, linux-kernel@vger.kernel.org
+Date:   Mon, 09 Dec 2019 11:06:49 +0100
+X-Priority: 1
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfPdHbJXj2Dh+hR6D3iWJA9SqLmvvYMfvd3NxBZs+adXa33U2fMEX+s0reVw7wu4hMRTjURDbaqwlk2lPOVMoDp3r2fkAGMWPjLJP96Qc69vQqkRSqK7K
+ qv4Mw84x504BjqSE9xGtFnnGnRE4pI1z5v4rPvOSHwCbp51H2NKhaDDg6J45EQr117CaGujz+RUae0astppuV8zcBPNHQ9g5TDOKvNYN1fTKpiCWa6jmki0S
+ RtZ90dDh5beeCFjGwsukRMUQ2QI2aIBv7ZLjeaRf5FU=
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-QWRkIGRldmljZSByZXNldCB2b3BzIGltcGxlbWVudGF0aW9uIGluIE1lZGlhVGVrIFVGUyBkcml2
-ZXIuDQoNClNpZ25lZC1vZmYtYnk6IFN0YW5sZXkgQ2h1IDxzdGFubGV5LmNodUBtZWRpYXRlay5j
-b20+DQotLS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jIHwgMjcgKysrKysrKysr
-KysrKysrKysrKysrKysrKysrDQogZHJpdmVycy9zY3NpL3Vmcy91ZnMtbWVkaWF0ZWsuaCB8ICA3
-ICsrKysrKysNCiAyIGZpbGVzIGNoYW5nZWQsIDM0IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMgYi9kcml2ZXJzL3Njc2kvdWZzL3Vm
-cy1tZWRpYXRlay5jDQppbmRleCA4M2UyOGVkYzNhYzUuLjZhM2VjMTFiMTZkYiAxMDA2NDQNCi0t
-LSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMNCisrKyBiL2RyaXZlcnMvc2NzaS91
-ZnMvdWZzLW1lZGlhdGVrLmMNCkBAIC02LDEwICs2LDEyIEBADQogICoJUGV0ZXIgV2FuZyA8cGV0
-ZXIud2FuZ0BtZWRpYXRlay5jb20+DQogICovDQogDQorI2luY2x1ZGUgPGxpbnV4L2FybS1zbWNj
-Yy5oPg0KICNpbmNsdWRlIDxsaW51eC9vZi5oPg0KICNpbmNsdWRlIDxsaW51eC9vZl9hZGRyZXNz
-Lmg+DQogI2luY2x1ZGUgPGxpbnV4L3BoeS9waHkuaD4NCiAjaW5jbHVkZSA8bGludXgvcGxhdGZv
-cm1fZGV2aWNlLmg+DQorI2luY2x1ZGUgPGxpbnV4L3NvYy9tZWRpYXRlay9tdGtfc2lwX3N2Yy5o
-Pg0KIA0KICNpbmNsdWRlICJ1ZnNoY2QuaCINCiAjaW5jbHVkZSAidWZzaGNkLXBsdGZybS5oIg0K
-QEAgLTI2OSw2ICsyNzEsMzAgQEAgc3RhdGljIGludCB1ZnNfbXRrX2xpbmtfc3RhcnR1cF9ub3Rp
-Znkoc3RydWN0IHVmc19oYmEgKmhiYSwNCiAJcmV0dXJuIHJldDsNCiB9DQogDQorc3RhdGljIHZv
-aWQgdWZzX210a19kZXZpY2VfcmVzZXQoc3RydWN0IHVmc19oYmEgKmhiYSkNCit7DQorCXN0cnVj
-dCBhcm1fc21jY2NfcmVzIHJlczsNCisNCisJYXJtX3NtY2NjX3NtYyhNVEtfU0lQX1VGU19DT05U
-Uk9MLCBVRlNfTVRLX1NJUF9ERVZJQ0VfUkVTRVQsDQorCQkgICAgICAwLCAwLCAwLCAwLCAwLCAw
-LCAmcmVzKTsNCisJLyoNCisJICogVGhlIHJlc2V0IHNpZ25hbCBpcyBhY3RpdmUgbG93LiBVRlMg
-ZGV2aWNlcyBzaGFsbCBkZXRlY3QNCisJICogbW9yZSB0aGFuIG9yIGVxdWFsIHRvIDF1cyBvZiBw
-b3NpdGl2ZSBvciBuZWdhdGl2ZSBSU1Rfbg0KKwkgKiBwdWxzZSB3aWR0aC4NCisJICoNCisJICog
-VG8gYmUgb24gc2FmZSBzaWRlLCBrZWVwIHRoZSByZXNldCBsb3cgZm9yIGF0IGxlYXN0IDEwdXMu
-DQorCSAqLw0KKwl1c2xlZXBfcmFuZ2UoMTAsIDE1KTsNCisNCisJYXJtX3NtY2NjX3NtYyhNVEtf
-U0lQX1VGU19DT05UUk9MLCBVRlNfTVRLX1NJUF9ERVZJQ0VfUkVTRVQsDQorCQkgICAgICAxLCAw
-LCAwLCAwLCAwLCAwLCAmcmVzKTsNCisNCisJLyogU29tZSBkZXZpY2VzIG1heSBuZWVkIHRpbWUg
-dG8gcmVzcG9uZCB0byByc3RfbiAqLw0KKwl1c2xlZXBfcmFuZ2UoMTAwMDAsIDE1MDAwKTsNCisN
-CisJZGV2X2luZm8oaGJhLT5kZXYsICJkZXZpY2UgcmVzZXQgZG9uZVxuIik7DQorfQ0KKw0KIHN0
-YXRpYyBpbnQgdWZzX210a19zdXNwZW5kKHN0cnVjdCB1ZnNfaGJhICpoYmEsIGVudW0gdWZzX3Bt
-X29wIHBtX29wKQ0KIHsNCiAJc3RydWN0IHVmc19tdGtfaG9zdCAqaG9zdCA9IHVmc2hjZF9nZXRf
-dmFyaWFudChoYmEpOw0KQEAgLTMwMyw2ICszMjksNyBAQCBzdGF0aWMgc3RydWN0IHVmc19oYmFf
-dmFyaWFudF9vcHMgdWZzX2hiYV9tdGtfdm9wcyA9IHsNCiAJLnB3cl9jaGFuZ2Vfbm90aWZ5ICAg
-PSB1ZnNfbXRrX3B3cl9jaGFuZ2Vfbm90aWZ5LA0KIAkuc3VzcGVuZCAgICAgICAgICAgICA9IHVm
-c19tdGtfc3VzcGVuZCwNCiAJLnJlc3VtZSAgICAgICAgICAgICAgPSB1ZnNfbXRrX3Jlc3VtZSwN
-CisJLmRldmljZV9yZXNldCAgICAgICAgPSB1ZnNfbXRrX2RldmljZV9yZXNldCwNCiB9Ow0KIA0K
-IC8qKg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmggYi9kcml2
-ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5oDQppbmRleCAxOWY4YzQyZmUwNmYuLmIwM2Y2MDFk
-M2E5ZSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmgNCisrKyBi
-L2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmgNCkBAIC02LDYgKzYsOCBAQA0KICNpZm5k
-ZWYgX1VGU19NRURJQVRFS19IDQogI2RlZmluZSBfVUZTX01FRElBVEVLX0gNCiANCisjaW5jbHVk
-ZSA8bGludXgvYml0b3BzLmg+DQorDQogLyoNCiAgKiBWZW5kb3Igc3BlY2lmaWMgcHJlLWRlZmlu
-ZWQgcGFyYW1ldGVycw0KICAqLw0KQEAgLTI5LDYgKzMxLDExIEBADQogI2RlZmluZSBWU19TQVZF
-UE9XRVJDT05UUk9MICAgICAgICAgMHhEMEE2DQogI2RlZmluZSBWU19VTklQUk9QT1dFUkRPV05D
-T05UUk9MICAgMHhEMEE4DQogDQorLyoNCisgKiBTaVAgY29tbWFuZHMNCisgKi8NCisjZGVmaW5l
-IFVGU19NVEtfU0lQX0RFVklDRV9SRVNFVCAgICBCSVQoMSkNCisNCiAvKg0KICAqIFZTX0RFQlVH
-Q0xPQ0tFTkFCTEUNCiAgKi8NCi0tIA0KMi4xOC4wDQo=
+Many obsolete hard drives do not support the Synchronize Cache SCSI
+command. Such command is generally issued during fsync() calls which
+at the moment therefore fail with the ILLEGAL_REQUEST sense key.
 
+Since this failure is currently treated as critical in the kernel SCSI
+disk driver, such obsolete hard drives cannot be used anymore (at least
+since kernel 4.10, maybe even earlier): they cannot be formatted,
+mounted and/or checked using tools such as e2fsprogs.
+
+Because there is nothing which can be done if the drive does not support
+such command, such ILLEGAL_REQUEST should be treated as non-critical so
+that the underlying operation does not fail and the obsolete hard drive
+can be used normally.
+
+This second version of the patch (v2) disables the Write Cache feature
+as a precaution on hard drives which do not support the Synchronize Cache
+command and therefore the cache flushing functionality.
+
+Although the Write Cache is disabled (v2) when using such hard drives
+which do not feature the Synchronize Cache SCSI command, there is still
+some risk of data loss in case of power cuts, USB cable disconnects and
+so on, which depend on the drive itself and not on this patch or the
+rest of the kernel code: YOU HAVE BEEN WARNED - THE DRIVE MANIFACTURER
+SHOULD HAVE BEEN WARNED YOU IN THE FIRST PLACE - IN DOUBT, UPGRADE TO A
+NEWER HARD DRIVE !!
+
+Tested on a Maxtor OneTouch USB 200Gb External Hard Drive.
+
+Signed-off-by: Guido Trentalancia <guido@trentalancia.com>
+---
+ drivers/scsi/sd.c |   29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+
+diff -pru a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+--- a/drivers/scsi/sd.c	2019-03-17 18:22:04.822720851 +0100
++++ b/drivers/scsi/sd.c	2019-03-20 17:41:44.526957307 +0100
+@@ -22,6 +22,10 @@
+  *	 - Badari Pulavarty <pbadari@us.ibm.com>, Matthew Wilcox 
+  *	   <willy@debian.org>, Kurt Garloff <garloff@suse.de>: 
+  *	   Support 32k/1M disks.
++ *	 - Guido Trentalancia <guido@trentalancia.com> ignore Synchronize
++ *	   Cache command failures on hard-drives that do not support it
++ *	   and disable the Write Cache functionality on such devices as a
++ *	   precaution: this allows to keep using several obsolete drives.
+  *
+  *	Logging policy (needs CONFIG_SCSI_LOGGING defined):
+  *	 - setting up transfer: SCSI_LOG_HLQUEUE levels 1 and 2
+@@ -1633,6 +1637,20 @@ static int sd_sync_cache(struct scsi_dis
+ 	}
+ 
+ 	if (res) {
++		/*
++		 * sshdr.sense_key == ILLEGAL_REQUEST means this drive
++		 * doesn't support sync. There's not much to do and
++		 * sync shouldn't fail.
++		 */
++		if (sshdr->sense_key == ILLEGAL_REQUEST && sshdr->asc == 0x20) {
++			if (sdkp->WCE) {
++				sdkp->WCE = 0;
++				sd_printk(KERN_NOTICE, sdkp, "Drive does not support Synchronize Cache(10) command: disabling write cache.\n");
++				sd_set_flush_flag(sdkp);
++			}
++			return 0;
++		}
++
+ 		sd_print_result(sdkp, "Synchronize Cache(10) failed", res);
+ 
+ 		if (driver_byte(res) == DRIVER_SENSE)
+@@ -2022,6 +2040,17 @@ static int sd_done(struct scsi_cmnd *SCp
+ 					req->rq_flags |= RQF_QUIET;
+ 				}
+ 				break;
++			case SYNCHRONIZE_CACHE:
++				if (sshdr.asc == 0x20) {
++					if (sdkp->WCE) {
++						sdkp->WCE = 0;
++						sd_printk(KERN_NOTICE, sdkp, "Drive does not support Synchronize Cache(10) command: disabling write cache.\n");
++						sd_set_flush_flag(sdkp);
++					}
++					SCpnt->result = 0;
++					good_bytes = scsi_bufflen(SCpnt);
++				}
++				break;
+ 			}
+ 		}
+ 		break;
