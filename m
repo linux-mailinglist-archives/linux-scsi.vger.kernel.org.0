@@ -2,100 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA77A118D48
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Dec 2019 17:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3CD118E7D
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Dec 2019 18:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbfLJQKh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 10 Dec 2019 11:10:37 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:44877 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727178AbfLJQKh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Dec 2019 11:10:37 -0500
-Received: by mail-qk1-f195.google.com with SMTP id w127so5053472qkb.11;
-        Tue, 10 Dec 2019 08:10:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lZE47SpvmWbaZCLW9SF04UfyFA5hnwe7EynLuzbBXEU=;
-        b=QE1w6CNXmkuHy57MqPqKfNMMXwOwNrbJirtcE9psbiCsDc6rzaAfRnk8ihzFMEoaVL
-         MImPsc1IFDFfKNxvxw8FxBdVGma5DsAA/P544nWiJluscH2NGd1C53wzVzi+UFpTj7yK
-         dyu0I8QvSK1WhUrYVr4q56xtAfcsy5twl0EB4L82q/T4zwzZ00+LAtX3xTC8L8RzQ50r
-         wc/+Xihw//FIWXVdWaO816ZvrsRu+BOWxYtNTfg9lj9Y7CuBBxcLo5lsaE7IvFZaYTVr
-         clwDAtMvG6ICFJ1X0o9+TLqYM+9rNgOa6gw3xRdQCu0eaQaKP9V/zgO5PY9HYCwYVShP
-         DRAw==
-X-Gm-Message-State: APjAAAUooKSLt5k1s4hUaWz+H4SeKft+JsmyGLB1vmXbUQbrlZmD0ZYE
-        jRIt16oL8eCTwJGEKHL4GBw=
-X-Google-Smtp-Source: APXvYqwtb+bh5ogy/mgbL/ALEUxzw0JUumrhq01yBDoTtXEUY99U0X4eCKZqwQE7q8Md9k5/c1fofg==
-X-Received: by 2002:a37:6d47:: with SMTP id i68mr20525610qkc.228.1575994235780;
-        Tue, 10 Dec 2019 08:10:35 -0800 (PST)
-Received: from ?IPv6:2620:0:1003:512:62e9:2658:28c:bd76? ([2620:0:1003:512:62e9:2658:28c:bd76])
-        by smtp.gmail.com with ESMTPSA id g9sm1052744qkm.9.2019.12.10.08.10.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Dec 2019 08:10:34 -0800 (PST)
-Subject: Re: [PATCH 1/1] hwmon: Driver for temperature sensors on SATA drives
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Chris Healy <cphealy@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-References: <20191209052119.32072-1-linux@roeck-us.net>
- <20191209052119.32072-2-linux@roeck-us.net>
- <c87ca545-d8f1-bf1e-2474-b98a6eb60422@acm.org>
- <20191209192048.GA3940@roeck-us.net>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <ad33d8cb-5247-0bf8-d0cb-87073a41e3ff@acm.org>
-Date:   Tue, 10 Dec 2019 11:10:33 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1727685AbfLJREs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 10 Dec 2019 12:04:48 -0500
+Received: from esa2.hc3370-68.iphmx.com ([216.71.145.153]:39689 "EHLO
+        esa2.hc3370-68.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727505AbfLJREq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Dec 2019 12:04:46 -0500
+X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Tue, 10 Dec 2019 12:04:43 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=citrix.com; s=securemail; t=1575997485;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=bh4wBGVIIt6FwYzD2A/GCbI85tJhoANufsWXt/nPgfs=;
+  b=dJ6qC0dzd3sy7FgfUVdWgwu2PU2g/r5iYfDJitlG0KyQzkMqLwM2ZhIH
+   dqza47hjisGWHvxkvntPmpt4h/QItNzNbD+arxUXABbmbrEppufmDNOzB
+   CbxwnTGLlrHRjgweSVu0PBraKwMP3/tR8r/4z8yLwoF5aM3MfnktozeDB
+   Q=;
+Authentication-Results: esa2.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none; spf=None smtp.pra=igor.druzhinin@citrix.com; spf=Pass smtp.mailfrom=igor.druzhinin@citrix.com; spf=None smtp.helo=postmaster@mail.citrix.com
+Received-SPF: None (esa2.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  igor.druzhinin@citrix.com) identity=pra;
+  client-ip=162.221.158.21; receiver=esa2.hc3370-68.iphmx.com;
+  envelope-from="igor.druzhinin@citrix.com";
+  x-sender="igor.druzhinin@citrix.com";
+  x-conformance=sidf_compatible
+Received-SPF: Pass (esa2.hc3370-68.iphmx.com: domain of
+  igor.druzhinin@citrix.com designates 162.221.158.21 as
+  permitted sender) identity=mailfrom;
+  client-ip=162.221.158.21; receiver=esa2.hc3370-68.iphmx.com;
+  envelope-from="igor.druzhinin@citrix.com";
+  x-sender="igor.druzhinin@citrix.com";
+  x-conformance=sidf_compatible; x-record-type="v=spf1";
+  x-record-text="v=spf1 ip4:209.167.231.154 ip4:178.63.86.133
+  ip4:195.66.111.40/30 ip4:85.115.9.32/28 ip4:199.102.83.4
+  ip4:192.28.146.160 ip4:192.28.146.107 ip4:216.52.6.88
+  ip4:216.52.6.188 ip4:162.221.158.21 ip4:162.221.156.83
+  ip4:168.245.78.127 ~all"
+Received-SPF: None (esa2.hc3370-68.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@mail.citrix.com) identity=helo;
+  client-ip=162.221.158.21; receiver=esa2.hc3370-68.iphmx.com;
+  envelope-from="igor.druzhinin@citrix.com";
+  x-sender="postmaster@mail.citrix.com";
+  x-conformance=sidf_compatible
+IronPort-SDR: o+qsGJbNa3suDdEcZu3nxCsTb15rCj2BGw6qcWZoYcN6ZNwdvNzo9iPbYScjv/dWg3bTyQy/dW
+ lL0Pgg9ICBe9RRalAw1H2Scp9tLgd9T2JfWJ1sQYaH0XJl9qF3y5fM1GSKWMJ0vjBhUJx4C0yV
+ v+xzNE/uKuQmNRxZrOzGsDkBAiSub/ZMnJTgSOVxLnWnywbp25NOEuE8jw71mx7OiUwe2SrsqR
+ QXbDUSexpKbuQOE+iC03alye8by3UapYVcHxnjhItCdHmp+Q0LTCK9491OjvbgpO1Gn929uAhy
+ 5wk=
+X-SBRS: 2.7
+X-MesageID: 9479236
+X-Ironport-Server: esa2.hc3370-68.iphmx.com
+X-Remote-IP: 162.221.158.21
+X-Policy: $RELAYED
+X-IronPort-AV: E=Sophos;i="5.69,300,1571716800"; 
+   d="scan'208";a="9479236"
+From:   Igor Druzhinin <igor.druzhinin@citrix.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <hare@suse.de>, <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        "Igor Druzhinin" <igor.druzhinin@citrix.com>
+Subject: [PATCH 0/2] Fixing libfc memory leaks
+Date:   Tue, 10 Dec 2019 16:57:28 +0000
+Message-ID: <1575997050-12959-1-git-send-email-igor.druzhinin@citrix.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-In-Reply-To: <20191209192048.GA3940@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 12/9/19 2:20 PM, Guenter Roeck wrote:
-> On Mon, Dec 09, 2019 at 09:08:13AM -0800, Bart Van Assche wrote:
->> How much does synchronously submitting SCSI commands from inside the
->> device probing call back slow down SCSI device discovery? What is the
->> impact of this code on systems with a large number of ATA devices?
-> 
-> Interesting question. In general, any SCSI commands would only be executed
-> for SATA drives since the very first check in satatemp_identify() uses
-> sdev->inquiriy and aborts if the drive in question is not an ATA drive.
-> When connected to SATA drives, I measured the execution time of
-> satatemp_identify() to be between ~900 uS and 1,700 uS on a system with
-> Ryzen 3900 CPU.
-> 
-> In more detail:
-> - Time to read VPD page: ~10-20 uS
-> - Time to execute SMART_READ_LOG/SCT_STATUS_REQ_ADDR: ~140-150 uS
-> - Time to execute SMART_WRITE_LOG/SCT_STATUS_REQ_ADDR: ~600-1,500 uS
-> - Time to execute SMART_READ_LOG/SCT_READ_LOG_ADDR: ~100-130 uS
-> 
-> Does that answer your question ?
-> 
-> Please note that I think that this is irrelevant in this context.
-> The driver is only instantiated if loaded explicitly, so whoever uses it
-> will be in a position to decide if the benefit of using it will outweigh
-> its cost.
-> 
-> If instantiation time ever becomes a real problem, for example if someone
-> with a large number of SATA drives in a system wants to use the driver
-> and is concerned about instantiation time, we can make the second part
-> of its registration (ie everything after identifying SATA drives)
-> asynchronous. That would, however, add a substantial amount of complexity
-> to the driver, and we should only do it if it is really warranted.
+Igor Druzhinin (2):
+  scsi: libfc: free response frame from GPN_ID
+  scsi: libfc: drop extra rport reference in fc_rport_create()
 
-Hi Guenter,
+ drivers/scsi/libfc/fc_disc.c  | 2 ++
+ drivers/scsi/libfc/fc_rport.c | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-Thank you for having answered my question in great detail. I think this
-overhead is low enough to be acceptable.
+-- 
+2.7.4
 
-Bart.
