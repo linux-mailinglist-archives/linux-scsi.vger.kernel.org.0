@@ -2,36 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A156511B326
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE2C11B323
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388352AbfLKPiR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Dec 2019 10:38:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48604 "EHLO mail.kernel.org"
+        id S2388535AbfLKPlA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Dec 2019 10:41:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48714 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388267AbfLKPiQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:38:16 -0500
+        id S2388228AbfLKPiU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:38:20 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 803D12077B;
-        Wed, 11 Dec 2019 15:38:15 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9AD2C2077B;
+        Wed, 11 Dec 2019 15:38:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576078696;
-        bh=ys9FpzFo0o8D1xty71NRiow1xBrNJTDXhBCms8rNtE0=;
+        s=default; t=1576078699;
+        bh=dGre9w7qz8sedtvBmpAAZfZ49ZNF7hQmcKjamEcfsFo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=K7qNMyrj25/OPa+BRZPQAF1wmoNcJC4rfInAcwrndf8M26daQJZJf5C3LpI3TTcI9
-         Gp008Au4vQoX7a6yQh6C8kaBo7zoIXX1GqymRHF2tYZRX1AXJhMZ/EH/3TQ4mCMk29
-         iNx4lYlnJU+qjHfOA+5NFT6JtM+sb9gCn5G8zGBs=
+        b=ioJIAG85ELk7t2nXsKB6GzPiPlKBAyO8Ktq6gA3C5S/6wUTvGhTYRG+A3yOXh55sY
+         PutoGmNEdD6lt73n95iNJ2IGr97oSsAIjIttOrq9H2LEsNLkZl2Fcg44DZpcDxUOKg
+         d6Dx7Vg49QO2lp1YwzmoWhdMw6qDUCQdVB/neCQM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
+Cc:     David Disseldorp <ddiss@suse.de>, Lee Duncan <lduncan@suse.com>,
+        Mike Christie <mchristi@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 02/37] scsi: lpfc: Fix locking on mailbox command completion
-Date:   Wed, 11 Dec 2019 10:37:38 -0500
-Message-Id: <20191211153813.24126-2-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 05/37] scsi: target: compare full CHAP_A Algorithm strings
+Date:   Wed, 11 Dec 2019 10:37:41 -0500
+Message-Id: <20191211153813.24126-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191211153813.24126-1-sashal@kernel.org>
 References: <20191211153813.24126-1-sashal@kernel.org>
@@ -44,66 +45,51 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: David Disseldorp <ddiss@suse.de>
 
-[ Upstream commit 07b8582430370097238b589f4e24da7613ca6dd3 ]
+[ Upstream commit 9cef2a7955f2754257a7cddedec16edae7b587d0 ]
 
-Symptoms were seen of the driver not having valid data for mailbox
-commands. After debugging, the following sequence was found:
+RFC 2307 states:
 
-The driver maintains a port-wide pointer of the mailbox command that is
-currently in execution. Once finished, the port-wide pointer is cleared
-(done in lpfc_sli4_mq_release()). The next mailbox command issued will set
-the next pointer and so on.
+  For CHAP [RFC1994], in the first step, the initiator MUST send:
 
-The mailbox response data is only copied if there is a valid port-wide
-pointer.
+      CHAP_A=<A1,A2...>
 
-In the failing case, it was seen that a new mailbox command was being
-attempted in parallel with the completion.  The parallel path was seeing
-the mailbox no long in use (flag check under lock) and thus set the port
-pointer.  The completion path had cleared the active flag under lock, but
-had not touched the port pointer.  The port pointer is cleared after the
-lock is released. In this case, the completion path cleared the just-set
-value by the parallel path.
+   Where A1,A2... are proposed algorithms, in order of preference.
+...
+   For the Algorithm, as stated in [RFC1994], one value is required to
+   be implemented:
 
-Fix by making the calls that clear mbox state/port pointer while under
-lock.  Also slightly cleaned up the error path.
+       5     (CHAP with MD5)
 
-Link: https://lore.kernel.org/r/20190922035906.10977-8-jsmart2021@gmail.com
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
+LIO currently checks for this value by only comparing a single byte in
+the tokenized Algorithm string, which means that any value starting with
+a '5' (e.g. "55") is interpreted as "CHAP with MD5". Fix this by
+comparing the entire tokenized string.
+
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Mike Christie <mchristi@redhat.com>
+Signed-off-by: David Disseldorp <ddiss@suse.de>
+Link: https://lore.kernel.org/r/20190912095547.22427-2-ddiss@suse.de
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/target/iscsi/iscsi_target_auth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index 523a1058078a5..9b8867c023b93 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -11759,13 +11759,19 @@ send_current_mbox:
- 	phba->sli.sli_flag &= ~LPFC_SLI_MBOX_ACTIVE;
- 	/* Setting active mailbox pointer need to be in sync to flag clear */
- 	phba->sli.mbox_active = NULL;
-+	if (bf_get(lpfc_trailer_consumed, mcqe))
-+		lpfc_sli4_mq_release(phba->sli4_hba.mbx_wq);
- 	spin_unlock_irqrestore(&phba->hbalock, iflags);
- 	/* Wake up worker thread to post the next pending mailbox command */
- 	lpfc_worker_wake_up(phba);
-+	return workposted;
-+
- out_no_mqe_complete:
-+	spin_lock_irqsave(&phba->hbalock, iflags);
- 	if (bf_get(lpfc_trailer_consumed, mcqe))
- 		lpfc_sli4_mq_release(phba->sli4_hba.mbx_wq);
--	return workposted;
-+	spin_unlock_irqrestore(&phba->hbalock, iflags);
-+	return false;
- }
+diff --git a/drivers/target/iscsi/iscsi_target_auth.c b/drivers/target/iscsi/iscsi_target_auth.c
+index 3184e023a0529..1dd6028eccb99 100644
+--- a/drivers/target/iscsi/iscsi_target_auth.c
++++ b/drivers/target/iscsi/iscsi_target_auth.c
+@@ -74,7 +74,7 @@ static int chap_check_algorithm(const char *a_str)
+ 		if (!token)
+ 			goto out;
  
- /**
+-		if (!strncmp(token, "5", 1)) {
++		if (!strcmp(token, "5")) {
+ 			pr_debug("Selected MD5 Algorithm\n");
+ 			kfree(orig);
+ 			return CHAP_DIGEST_MD5;
 -- 
 2.20.1
 
