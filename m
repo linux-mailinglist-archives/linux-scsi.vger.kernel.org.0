@@ -2,36 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A0211B779
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 17:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 459B011B73F
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 17:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731077AbfLKPMR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Dec 2019 10:12:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33544 "EHLO mail.kernel.org"
+        id S1731835AbfLKQGd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Dec 2019 11:06:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731075AbfLKPMP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:12:15 -0500
+        id S1731191AbfLKPMj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:12:39 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 696F624654;
-        Wed, 11 Dec 2019 15:12:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 85BEB222C4;
+        Wed, 11 Dec 2019 15:12:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576077135;
-        bh=fWIUNSbPleNggmA6BWe/9j6tT59UNH1kNlCk7NEguWg=;
+        s=default; t=1576077158;
+        bh=/smzVxQI60i2p8rqZW5npyc1NOFErmUZYkcaCGjFXQs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1w8YoSA1G/WhB7FfPy7NV/S46HrVDqELwus4GzE/TMLBOU4Ksy6h2ZYV4rNwJlazN
-         AuaytO9BcNOR5oRZGhf5SrEmEIAl2yiVAItW9Hf0+z7AMZA99FmDuuPH9UbKN15YW3
-         vq/RdnPZ4DvsaFcxENcjvNnWsK+X3D0V4nUtARFM=
+        b=YMOBACORzF9Ks30ssMWhXKoictxxvu8jke8gy13f5CoNcA3qHgn13UYZkG78xYL/z
+         YL/YlX0ViqyCwM5YJZAHsON4QYktaWlG5THORW1WI+3cftPB+Z5lwZJxv8i1JNJJES
+         6wcbCeZbT04VnJjRiuDrJf3SJna06GlDUrEcqOyQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Luo Jiaxing <luojiaxing@huawei.com>,
-        John Garry <john.garry@huawei.com>,
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 022/134] scsi: hisi_sas: Delete the debugfs folder of hisi_sas when the probe fails
-Date:   Wed, 11 Dec 2019 10:09:58 -0500
-Message-Id: <20191211151150.19073-22-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 044/134] scsi: tracing: Fix handling of TRANSFER LENGTH == 0 for READ(6) and WRITE(6)
+Date:   Wed, 11 Dec 2019 10:10:20 -0500
+Message-Id: <20191211151150.19073-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191211151150.19073-1-sashal@kernel.org>
 References: <20191211151150.19073-1-sashal@kernel.org>
@@ -44,51 +46,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Luo Jiaxing <luojiaxing@huawei.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit cabe7c10c97a0857a9fb14b6c772ab784947995d ]
+[ Upstream commit f6b8540f40201bff91062dd64db8e29e4ddaaa9d ]
 
-Although if the debugfs initialization fails, we will delete the debugfs
-folder of hisi_sas, but we did not consider the scenario where debugfs was
-successfully initialized, but the probe failed for other reasons. We found
-out that hisi_sas folder is still remain after the probe failed.
+According to SBC-2 a TRANSFER LENGTH field of zero means that 256 logical
+blocks must be transferred. Make the SCSI tracing code follow SBC-2.
 
-When probe fail, we should delete debugfs folder to avoid the above issue.
-
-Link: https://lore.kernel.org/r/1571926105-74636-18-git-send-email-john.garry@huawei.com
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
+Fixes: bf8162354233 ("[SCSI] add scsi trace core functions and put trace points")
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Hannes Reinecke <hare@suse.com>
+Cc: Douglas Gilbert <dgilbert@interlog.com>
+Link: https://lore.kernel.org/r/20191105215553.185018-1-bvanassche@acm.org
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c  | 1 +
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 1 +
- 2 files changed, 2 insertions(+)
+ drivers/scsi/scsi_trace.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index 20f0cb4698b7f..633effb09c9cc 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -2682,6 +2682,7 @@ int hisi_sas_probe(struct platform_device *pdev,
- err_out_register_ha:
- 	scsi_remove_host(shost);
- err_out_ha:
-+	hisi_sas_debugfs_exit(hisi_hba);
- 	hisi_sas_free(hisi_hba);
- 	scsi_host_put(shost);
- 	return rc;
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index cb8d087762dbd..ef32ee12f6065 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -3259,6 +3259,7 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- err_out_register_ha:
- 	scsi_remove_host(shost);
- err_out_ha:
-+	hisi_sas_debugfs_exit(hisi_hba);
- 	scsi_host_put(shost);
- err_out_regions:
- 	pci_release_regions(pdev);
+diff --git a/drivers/scsi/scsi_trace.c b/drivers/scsi/scsi_trace.c
+index 0f17e7dac1b08..07a2425ffa2c2 100644
+--- a/drivers/scsi/scsi_trace.c
++++ b/drivers/scsi/scsi_trace.c
+@@ -18,15 +18,18 @@ static const char *
+ scsi_trace_rw6(struct trace_seq *p, unsigned char *cdb, int len)
+ {
+ 	const char *ret = trace_seq_buffer_ptr(p);
+-	sector_t lba = 0, txlen = 0;
++	u32 lba = 0, txlen;
+ 
+ 	lba |= ((cdb[1] & 0x1F) << 16);
+ 	lba |=  (cdb[2] << 8);
+ 	lba |=   cdb[3];
+-	txlen = cdb[4];
++	/*
++	 * From SBC-2: a TRANSFER LENGTH field set to zero specifies that 256
++	 * logical blocks shall be read (READ(6)) or written (WRITE(6)).
++	 */
++	txlen = cdb[4] ? cdb[4] : 256;
+ 
+-	trace_seq_printf(p, "lba=%llu txlen=%llu",
+-			 (unsigned long long)lba, (unsigned long long)txlen);
++	trace_seq_printf(p, "lba=%u txlen=%u", lba, txlen);
+ 	trace_seq_putc(p, 0);
+ 
+ 	return ret;
 -- 
 2.20.1
 
