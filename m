@@ -2,35 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C3911B31C
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AF211B315
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388381AbfLKPiW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Dec 2019 10:38:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48766 "EHLO mail.kernel.org"
+        id S2388415AbfLKPkg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Dec 2019 10:40:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48914 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388291AbfLKPiW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:38:22 -0500
+        id S1733115AbfLKPi2 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:38:28 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE6F02467F;
-        Wed, 11 Dec 2019 15:38:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A9AE42077B;
+        Wed, 11 Dec 2019 15:38:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576078701;
-        bh=PUapq7A9/OUb4u2QU0C4bn2vpupibtTpKF043A5SH50=;
+        s=default; t=1576078707;
+        bh=YDTVD4QiSfF95CsPZAPYB9nF6X4QVRMAdw/4MY99k9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=szvpHOJxmrBLvCJZ7iKBh9vugLahmXFSH/QF+qFIiuAAUkvkdeJ8JLkZxDSV+r/F8
-         3TbtuF1gxROe54U89PC3MEccff6jy9zWA+IOd5MhVwMypaGiFaFQVvuMz5qnR3nrzw
-         Xxd1pKjMzLKaVClfu8vVUb9IeaaWSv0DXb5lsS4k=
+        b=gZtFsLfgc7z3Elm6wnbxJX/2N+c5kUhb388t6jE35oRgK7xXDuE3OtKtuUJ9Uwnrz
+         r+2ZcNHDmq4DWHkqttdNhGAvLnvCl6faeKJTXhwxFEEy8/iMfNB7FCeMu9SVpfossh
+         gEXJZQxnb18ebtpygk7SddYlyoQy+pRlZ5l6FcO0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 07/37] scsi: csiostor: Don't enable IRQs too early
-Date:   Wed, 11 Dec 2019 10:37:43 -0500
-Message-Id: <20191211153813.24126-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 13/37] scsi: tracing: Fix handling of TRANSFER LENGTH == 0 for READ(6) and WRITE(6)
+Date:   Wed, 11 Dec 2019 10:37:49 -0500
+Message-Id: <20191211153813.24126-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191211153813.24126-1-sashal@kernel.org>
 References: <20191211153813.24126-1-sashal@kernel.org>
@@ -43,98 +46,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit d6c9b31ac3064fbedf8961f120a4c117daa59932 ]
+[ Upstream commit f6b8540f40201bff91062dd64db8e29e4ddaaa9d ]
 
-These are called with IRQs disabled from csio_mgmt_tmo_handler() so we
-can't call spin_unlock_irq() or it will enable IRQs prematurely.
+According to SBC-2 a TRANSFER LENGTH field of zero means that 256 logical
+blocks must be transferred. Make the SCSI tracing code follow SBC-2.
 
-Fixes: a3667aaed569 ("[SCSI] csiostor: Chelsio FCoE offload driver")
-Link: https://lore.kernel.org/r/20191019085913.GA14245@mwanda
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: bf8162354233 ("[SCSI] add scsi trace core functions and put trace points")
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Hannes Reinecke <hare@suse.com>
+Cc: Douglas Gilbert <dgilbert@interlog.com>
+Link: https://lore.kernel.org/r/20191105215553.185018-1-bvanassche@acm.org
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/csiostor/csio_lnode.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/scsi/scsi_trace.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/csiostor/csio_lnode.c b/drivers/scsi/csiostor/csio_lnode.c
-index be5ee2d378155..957767d383610 100644
---- a/drivers/scsi/csiostor/csio_lnode.c
-+++ b/drivers/scsi/csiostor/csio_lnode.c
-@@ -301,6 +301,7 @@ csio_ln_fdmi_rhba_cbfn(struct csio_hw *hw, struct csio_ioreq *fdmi_req)
- 	struct fc_fdmi_port_name *port_name;
- 	uint8_t buf[64];
- 	uint8_t *fc4_type;
-+	unsigned long flags;
+diff --git a/drivers/scsi/scsi_trace.c b/drivers/scsi/scsi_trace.c
+index 08bb47b53bc3e..551fd0329bca8 100644
+--- a/drivers/scsi/scsi_trace.c
++++ b/drivers/scsi/scsi_trace.c
+@@ -29,15 +29,18 @@ static const char *
+ scsi_trace_rw6(struct trace_seq *p, unsigned char *cdb, int len)
+ {
+ 	const char *ret = trace_seq_buffer_ptr(p);
+-	sector_t lba = 0, txlen = 0;
++	u32 lba = 0, txlen;
  
- 	if (fdmi_req->wr_status != FW_SUCCESS) {
- 		csio_ln_dbg(ln, "WR error:%x in processing fdmi rhba cmd\n",
-@@ -377,13 +378,13 @@ csio_ln_fdmi_rhba_cbfn(struct csio_hw *hw, struct csio_ioreq *fdmi_req)
- 	len = (uint32_t)(pld - (uint8_t *)cmd);
+ 	lba |= ((cdb[1] & 0x1F) << 16);
+ 	lba |=  (cdb[2] << 8);
+ 	lba |=   cdb[3];
+-	txlen = cdb[4];
++	/*
++	 * From SBC-2: a TRANSFER LENGTH field set to zero specifies that 256
++	 * logical blocks shall be read (READ(6)) or written (WRITE(6)).
++	 */
++	txlen = cdb[4] ? cdb[4] : 256;
  
- 	/* Submit FDMI RPA request */
--	spin_lock_irq(&hw->lock);
-+	spin_lock_irqsave(&hw->lock, flags);
- 	if (csio_ln_mgmt_submit_req(fdmi_req, csio_ln_fdmi_done,
- 				FCOE_CT, &fdmi_req->dma_buf, len)) {
- 		CSIO_INC_STATS(ln, n_fdmi_err);
- 		csio_ln_dbg(ln, "Failed to issue fdmi rpa req\n");
- 	}
--	spin_unlock_irq(&hw->lock);
-+	spin_unlock_irqrestore(&hw->lock, flags);
- }
+-	trace_seq_printf(p, "lba=%llu txlen=%llu",
+-			 (unsigned long long)lba, (unsigned long long)txlen);
++	trace_seq_printf(p, "lba=%u txlen=%u", lba, txlen);
+ 	trace_seq_putc(p, 0);
  
- /*
-@@ -404,6 +405,7 @@ csio_ln_fdmi_dprt_cbfn(struct csio_hw *hw, struct csio_ioreq *fdmi_req)
- 	struct fc_fdmi_rpl *reg_pl;
- 	struct fs_fdmi_attrs *attrib_blk;
- 	uint8_t buf[64];
-+	unsigned long flags;
- 
- 	if (fdmi_req->wr_status != FW_SUCCESS) {
- 		csio_ln_dbg(ln, "WR error:%x in processing fdmi dprt cmd\n",
-@@ -483,13 +485,13 @@ csio_ln_fdmi_dprt_cbfn(struct csio_hw *hw, struct csio_ioreq *fdmi_req)
- 	attrib_blk->numattrs = htonl(numattrs);
- 
- 	/* Submit FDMI RHBA request */
--	spin_lock_irq(&hw->lock);
-+	spin_lock_irqsave(&hw->lock, flags);
- 	if (csio_ln_mgmt_submit_req(fdmi_req, csio_ln_fdmi_rhba_cbfn,
- 				FCOE_CT, &fdmi_req->dma_buf, len)) {
- 		CSIO_INC_STATS(ln, n_fdmi_err);
- 		csio_ln_dbg(ln, "Failed to issue fdmi rhba req\n");
- 	}
--	spin_unlock_irq(&hw->lock);
-+	spin_unlock_irqrestore(&hw->lock, flags);
- }
- 
- /*
-@@ -504,6 +506,7 @@ csio_ln_fdmi_dhba_cbfn(struct csio_hw *hw, struct csio_ioreq *fdmi_req)
- 	void *cmd;
- 	struct fc_fdmi_port_name *port_name;
- 	uint32_t len;
-+	unsigned long flags;
- 
- 	if (fdmi_req->wr_status != FW_SUCCESS) {
- 		csio_ln_dbg(ln, "WR error:%x in processing fdmi dhba cmd\n",
-@@ -534,13 +537,13 @@ csio_ln_fdmi_dhba_cbfn(struct csio_hw *hw, struct csio_ioreq *fdmi_req)
- 	len += sizeof(*port_name);
- 
- 	/* Submit FDMI request */
--	spin_lock_irq(&hw->lock);
-+	spin_lock_irqsave(&hw->lock, flags);
- 	if (csio_ln_mgmt_submit_req(fdmi_req, csio_ln_fdmi_dprt_cbfn,
- 				FCOE_CT, &fdmi_req->dma_buf, len)) {
- 		CSIO_INC_STATS(ln, n_fdmi_err);
- 		csio_ln_dbg(ln, "Failed to issue fdmi dprt req\n");
- 	}
--	spin_unlock_irq(&hw->lock);
-+	spin_unlock_irqrestore(&hw->lock, flags);
- }
- 
- /**
+ 	return ret;
 -- 
 2.20.1
 
