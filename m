@@ -2,40 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C25B11B340
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:41:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8785811B210
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:34:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387844AbfLKPfM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Dec 2019 10:35:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33906 "EHLO mail.kernel.org"
+        id S2387662AbfLKP2g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Dec 2019 10:28:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34750 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733014AbfLKP17 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:27:59 -0500
+        id S2387647AbfLKP2e (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:28:34 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0B7BC2467F;
-        Wed, 11 Dec 2019 15:27:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CD927208C3;
+        Wed, 11 Dec 2019 15:28:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576078078;
-        bh=MZsrq9kkQXCkYz6GWktLYGpue3EYTn3MVXewmYPrJN0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1rJBjVU0GA3qi2QFmch5HLgefkvHKSFGacAeype7nANfzSlKmbDlPS1tuw7yxwD/d
-         LKTMImWoNgB03QAkmtbxyZv4xl0E14w6SOz0nEwfhgHkotq5uYB0f7kGtQFyki1U1M
-         AAhrT8D1obqB1Q0vupTsM/VVEyCygtW/Mb3EH5o4=
+        s=default; t=1576078113;
+        bh=H5RpH0KTP1WdEsC1g1b1nuAgCQ4XbfyZBBfrmrBOQkY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SCVA1nIonX5TlWgto0IeKh0YWjmIzyW58EIu7R5zm9GobDjz/mrb4SfwmKQM2rFpa
+         1xgdcWqRcX5QjbwuSLa8cVVhgl89x3hhA01CdR5qo/epeUzDsBrpPobmm4egx3H9aS
+         XWhEZUCJNYvG2gQG86j4w1xUHdz3uviYZANAal5E=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>,
-        linux-scsi@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.19 69/79] cdrom: respect device capabilities during opening action
-Date:   Wed, 11 Dec 2019 10:26:33 -0500
-Message-Id: <20191211152643.23056-69-sashal@kernel.org>
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 01/58] scsi: lpfc: Fix discovery failures when target device connectivity bounces
+Date:   Wed, 11 Dec 2019 10:27:34 -0500
+Message-Id: <20191211152831.23507-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191211152643.23056-1-sashal@kernel.org>
-References: <20191211152643.23056-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -44,64 +42,57 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Diego Elio Pettenò <flameeyes@flameeyes.com>
+From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit 366ba7c71ef77c08d06b18ad61b26e2df7352338 ]
+[ Upstream commit 3f97aed6117c7677eb16756c4ec8b86000fd5822 ]
 
-Reading the TOC only works if the device can play audio, otherwise
-these commands fail (and possibly bring the device to an unhealthy
-state.)
+An issue was seen discovering all SCSI Luns when a target device undergoes
+link bounce.
 
-Similarly, cdrom_mmc3_profile() should only be called if the device
-supports generic packet commands.
+The driver currently does not qualify the FC4 support on the target.
+Therefore it will send a SCSI PRLI and an NVMe PRLI. The expectation is
+that the target will reject the PRLI if it is not supported. If a PRLI
+times out, the driver will retry. The driver will not proceed with the
+device until both SCSI and NVMe PRLIs are resolved.  In the failure case,
+the device is FCP only and does not respond to the NVMe PRLI, thus
+initiating the wait/retry loop in the driver.  During that time, a RSCN is
+received (device bounced) causing the driver to issue a GID_FT.  The GID_FT
+response comes back before the PRLI mess is resolved and it prematurely
+cancels the PRLI retry logic and leaves the device in a STE_PRLI_ISSUE
+state. Discovery with the target never completes or resets.
 
-To: Jens Axboe <axboe@kernel.dk>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-scsi@vger.kernel.org
-Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fix by resetting the node state back to STE_NPR_NODE when GID_FT completes,
+thereby restarting the discovery process for the node.
+
+Link: https://lore.kernel.org/r/20190922035906.10977-10-jsmart2021@gmail.com
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/cdrom/cdrom.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/scsi/lpfc/lpfc_hbadisc.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-index 933268b8d6a54..d3947388a3ef3 100644
---- a/drivers/cdrom/cdrom.c
-+++ b/drivers/cdrom/cdrom.c
-@@ -996,6 +996,12 @@ static void cdrom_count_tracks(struct cdrom_device_info *cdi, tracktype *tracks)
- 	tracks->xa = 0;
- 	tracks->error = 0;
- 	cd_dbg(CD_COUNT_TRACKS, "entering cdrom_count_tracks\n");
+diff --git a/drivers/scsi/lpfc/lpfc_hbadisc.c b/drivers/scsi/lpfc/lpfc_hbadisc.c
+index 3f88f3d796227..4a0889dd4c1d0 100644
+--- a/drivers/scsi/lpfc/lpfc_hbadisc.c
++++ b/drivers/scsi/lpfc/lpfc_hbadisc.c
+@@ -5220,9 +5220,14 @@ lpfc_setup_disc_node(struct lpfc_vport *vport, uint32_t did)
+ 			/* If we've already received a PLOGI from this NPort
+ 			 * we don't need to try to discover it again.
+ 			 */
+-			if (ndlp->nlp_flag & NLP_RCV_PLOGI)
++			if (ndlp->nlp_flag & NLP_RCV_PLOGI &&
++			    !(ndlp->nlp_type &
++			     (NLP_FCP_TARGET | NLP_NVME_TARGET)))
+ 				return NULL;
+ 
++			ndlp->nlp_prev_state = ndlp->nlp_state;
++			lpfc_nlp_set_state(vport, ndlp, NLP_STE_NPR_NODE);
 +
-+	if (!CDROM_CAN(CDC_PLAY_AUDIO)) {
-+		tracks->error = CDS_NO_INFO;
-+		return;
-+	}
-+
- 	/* Grab the TOC header so we can see how many tracks there are */
- 	ret = cdi->ops->audio_ioctl(cdi, CDROMREADTOCHDR, &header);
- 	if (ret) {
-@@ -1162,7 +1168,8 @@ int cdrom_open(struct cdrom_device_info *cdi, struct block_device *bdev,
- 		ret = open_for_data(cdi);
- 		if (ret)
- 			goto err;
--		cdrom_mmc3_profile(cdi);
-+		if (CDROM_CAN(CDC_GENERIC_PACKET))
-+			cdrom_mmc3_profile(cdi);
- 		if (mode & FMODE_WRITE) {
- 			ret = -EROFS;
- 			if (cdrom_open_write(cdi))
-@@ -2882,6 +2889,9 @@ int cdrom_get_last_written(struct cdrom_device_info *cdi, long *last_written)
- 	   it doesn't give enough information or fails. then we return
- 	   the toc contents. */
- use_toc:
-+	if (!CDROM_CAN(CDC_PLAY_AUDIO))
-+		return -ENOSYS;
-+
- 	toc.cdte_format = CDROM_MSF;
- 	toc.cdte_track = CDROM_LEADOUT;
- 	if ((ret = cdi->ops->audio_ioctl(cdi, CDROMREADTOCENTRY, &toc)))
+ 			spin_lock_irq(shost->host_lock);
+ 			ndlp->nlp_flag |= NLP_NPR_2B_DISC;
+ 			spin_unlock_irq(shost->host_lock);
 -- 
 2.20.1
 
