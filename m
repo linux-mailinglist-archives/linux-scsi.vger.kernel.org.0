@@ -2,106 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3980011B273
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4176411B31A
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388237AbfLKPfv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Dec 2019 10:35:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45130 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387831AbfLKPfu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:35:50 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D37C24656;
-        Wed, 11 Dec 2019 15:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576078550;
-        bh=/+6g7v4r3IpGywefIv8ZdFwib2PrWscyPGU9R1Zcsw8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O55GThCb8BrUm2PHe3V6Y5+gWlkvaYwICoo9/OmEgLhymN0KnaEsM+0e26KSTNTy8
-         sfXtouxpCrs2J5g6gSq4j0DIV4P4OlqsM316b5vXaNRffWeRrB0pDje0k2ETzt8S/l
-         oSDyWifvg9swnW/rRZxSZPVrJUQdS6Ha+59cSQZg=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>,
-        linux-scsi@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.9 37/42] cdrom: respect device capabilities during opening action
-Date:   Wed, 11 Dec 2019 10:35:05 -0500
-Message-Id: <20191211153510.23861-37-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191211153510.23861-1-sashal@kernel.org>
-References: <20191211153510.23861-1-sashal@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S2388056AbfLKPkw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Dec 2019 10:40:52 -0500
+Received: from mail-il-dmz.mellanox.com ([193.47.165.129]:43341 "EHLO
+        mellanox.co.il" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2388535AbfLKPkv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Dec 2019 10:40:51 -0500
+Received: from Internal Mail-Server by MTLPINE1 (envelope-from israelr@mellanox.com)
+        with ESMTPS (AES256-SHA encrypted); 11 Dec 2019 17:40:44 +0200
+Received: from rsws50.mtr.labs.mlnx (rsws50.mtr.labs.mlnx [10.209.40.61])
+        by labmailer.mlnx (8.13.8/8.13.8) with ESMTP id xBBFeiBC013485;
+        Wed, 11 Dec 2019 17:40:44 +0200
+From:   Israel Rukshin <israelr@mellanox.com>
+To:     Target-devel <target-devel@vger.kernel.org>,
+        Linux-scsi <linux-scsi@vger.kernel.org>
+Cc:     Israel Rukshin <israelr@mellanox.com>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH] scsi: target/iblock: Fix protection error with sectors greater than 512B
+Date:   Wed, 11 Dec 2019 17:36:02 +0200
+Message-Id: <1576078562-15240-1-git-send-email-israelr@mellanox.com>
+X-Mailer: git-send-email 1.8.4.3
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Diego Elio Pettenò <flameeyes@flameeyes.com>
+The sector size of the block layer is 512 bytes, but integrity interval
+size might be different (in case of 4K block size of the media). At the
+initiator side the virtual start sector is the one that was originally
+submitted by the block layer (512 bytes) for the Reftag usage. The
+initiator converts the Reftag to integrity interval units and sends it to
+the target. So the target virtual start sector should be calculated at
+integrity interval units. prepare_fn() and complete_fn() don't remap
+correctly the Reftag when using incorrect units of the virtual start
+sector, which leads to the following protection error at the device:
 
-[ Upstream commit 366ba7c71ef77c08d06b18ad61b26e2df7352338 ]
+"blk_update_request: protection error, dev sdb, sector 2048 op 0x0:(READ)
+flags 0x10000 phys_seg 1 prio class 0"
 
-Reading the TOC only works if the device can play audio, otherwise
-these commands fail (and possibly bring the device to an unhealthy
-state.)
+To fix that, set the seed in integrity interval units.
 
-Similarly, cdrom_mmc3_profile() should only be called if the device
-supports generic packet commands.
-
-To: Jens Axboe <axboe@kernel.dk>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-scsi@vger.kernel.org
-Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Israel Rukshin <israelr@mellanox.com>
+Reviewed-by: Max Gurtovoy <maxg@mellanox.com>
 ---
- drivers/cdrom/cdrom.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/target/target_core_iblock.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
-index a46f188f679e7..782dbab5ad56a 100644
---- a/drivers/cdrom/cdrom.c
-+++ b/drivers/cdrom/cdrom.c
-@@ -998,6 +998,12 @@ static void cdrom_count_tracks(struct cdrom_device_info *cdi, tracktype *tracks)
- 	tracks->xa = 0;
- 	tracks->error = 0;
- 	cd_dbg(CD_COUNT_TRACKS, "entering cdrom_count_tracks\n");
-+
-+	if (!CDROM_CAN(CDC_PLAY_AUDIO)) {
-+		tracks->error = CDS_NO_INFO;
-+		return;
-+	}
-+
- 	/* Grab the TOC header so we can see how many tracks there are */
- 	ret = cdi->ops->audio_ioctl(cdi, CDROMREADTOCHDR, &header);
- 	if (ret) {
-@@ -1164,7 +1170,8 @@ int cdrom_open(struct cdrom_device_info *cdi, struct block_device *bdev,
- 		ret = open_for_data(cdi);
- 		if (ret)
- 			goto err;
--		cdrom_mmc3_profile(cdi);
-+		if (CDROM_CAN(CDC_GENERIC_PACKET))
-+			cdrom_mmc3_profile(cdi);
- 		if (mode & FMODE_WRITE) {
- 			ret = -EROFS;
- 			if (cdrom_open_write(cdi))
-@@ -2873,6 +2880,9 @@ int cdrom_get_last_written(struct cdrom_device_info *cdi, long *last_written)
- 	   it doesn't give enough information or fails. then we return
- 	   the toc contents. */
- use_toc:
-+	if (!CDROM_CAN(CDC_PLAY_AUDIO))
-+		return -ENOSYS;
-+
- 	toc.cdte_format = CDROM_MSF;
- 	toc.cdte_track = CDROM_LEADOUT;
- 	if ((ret = cdi->ops->audio_ioctl(cdi, CDROMREADTOCENTRY, &toc)))
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index 6949ea8..51ffd5c 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -646,7 +646,9 @@ static ssize_t iblock_show_configfs_dev_params(struct se_device *dev, char *b)
+ 	}
+ 
+ 	bip->bip_iter.bi_size = bio_integrity_bytes(bi, bio_sectors(bio));
+-	bip_set_seed(bip, bio->bi_iter.bi_sector);
++	/* virtual start sector must be in integrity interval units */
++	bip_set_seed(bip, bio->bi_iter.bi_sector >>
++				  (bi->interval_exp - SECTOR_SHIFT));
+ 
+ 	pr_debug("IBLOCK BIP Size: %u Sector: %llu\n", bip->bip_iter.bi_size,
+ 		 (unsigned long long)bip->bip_iter.bi_sector);
 -- 
-2.20.1
+1.8.3.1
 
