@@ -2,36 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF6D11B417
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C5A511B3E9
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:45:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388430AbfLKPp6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Dec 2019 10:45:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60542 "EHLO mail.kernel.org"
+        id S1733269AbfLKP1N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Dec 2019 10:27:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733193AbfLKP06 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:26:58 -0500
+        id S1732764AbfLKP1M (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:27:12 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F0EFF22527;
-        Wed, 11 Dec 2019 15:26:56 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E9A624679;
+        Wed, 11 Dec 2019 15:27:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576078017;
-        bh=/oRw1hHn/HqEoOg2oBQIHsidAuwkS4CZnGiO4urvvmU=;
+        s=default; t=1576078032;
+        bh=Jviwh3vJgi74E19q35hueu7i1yLk6agFMCkrNyCram8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iby9bL6eqz5gyAsbDk2XNd8tBXrp+yVPLZP5oX3F8YEsNKvWwHNN7zdnBn0SZqTPW
-         aW/4w6q9Txqb6TQmtMiw5932o4DAMpsAsB1QI2YwnV+6QdUb3akqOno3GsOmqRHXjo
-         52+L+fBPK3BCVi33k/t16JmHmrTUcnxUpug9Exd0=
+        b=zLRiNA45b2Xzf6EV+nRkCgj8HXukKAr0GexYttDJtR1MfM3/hOrlo9xeFeoTFf93g
+         wwFZuV6COlzopC/mWfFoensWU1AMWUP6xuTt7LwQuqRyKPEUhuTpzbp2jeJ/4Dt+a3
+         Tg2pLXNbNngmD+4z4aGOwOkyMrDhvZfLAmilIoVI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xiang Chen <chenxiang66@hisilicon.com>,
-        John Garry <john.garry@huawei.com>,
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Hannes Reinecke <hare@suse.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 12/79] scsi: hisi_sas: Replace in_softirq() check in hisi_sas_task_exec()
-Date:   Wed, 11 Dec 2019 10:25:36 -0500
-Message-Id: <20191211152643.23056-12-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 26/79] scsi: tracing: Fix handling of TRANSFER LENGTH == 0 for READ(6) and WRITE(6)
+Date:   Wed, 11 Dec 2019 10:25:50 -0500
+Message-Id: <20191211152643.23056-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191211152643.23056-1-sashal@kernel.org>
 References: <20191211152643.23056-1-sashal@kernel.org>
@@ -44,83 +46,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Xiang Chen <chenxiang66@hisilicon.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit 550c0d89d52d3bec5c299f69b4ed5d2ee6b8a9a6 ]
+[ Upstream commit f6b8540f40201bff91062dd64db8e29e4ddaaa9d ]
 
-For IOs from upper layer, preemption may be disabled as it may be called by
-function __blk_mq_delay_run_hw_queue which will call get_cpu() (it disables
-preemption). So if flags HISI_SAS_REJECT_CMD_BIT is set in function
-hisi_sas_task_exec(), it may disable preempt twice after down() and up()
-which will cause following call trace:
+According to SBC-2 a TRANSFER LENGTH field of zero means that 256 logical
+blocks must be transferred. Make the SCSI tracing code follow SBC-2.
 
-BUG: scheduling while atomic: fio/60373/0x00000002
-Call trace:
-dump_backtrace+0x0/0x150
-show_stack+0x24/0x30
-dump_stack+0xa0/0xc4
-__schedule_bug+0x68/0x88
-__schedule+0x4b8/0x548
-schedule+0x40/0xd0
-schedule_timeout+0x200/0x378
-__down+0x78/0xc8
-down+0x54/0x70
-hisi_sas_task_exec.isra.10+0x598/0x8d8 [hisi_sas_main]
-hisi_sas_queue_command+0x28/0x38 [hisi_sas_main]
-sas_queuecommand+0x168/0x1b0 [libsas]
-scsi_queue_rq+0x2ac/0x980
-blk_mq_dispatch_rq_list+0xb0/0x550
-blk_mq_do_dispatch_sched+0x6c/0x110
-blk_mq_sched_dispatch_requests+0x114/0x1d8
-__blk_mq_run_hw_queue+0xb8/0x130
-__blk_mq_delay_run_hw_queue+0x1c0/0x220
-blk_mq_run_hw_queue+0xb0/0x128
-blk_mq_sched_insert_requests+0xdc/0x208
-blk_mq_flush_plug_list+0x1b4/0x3a0
-blk_flush_plug_list+0xdc/0x110
-blk_finish_plug+0x3c/0x50
-blkdev_direct_IO+0x404/0x550
-generic_file_read_iter+0x9c/0x848
-blkdev_read_iter+0x50/0x78
-aio_read+0xc8/0x170
-io_submit_one+0x1fc/0x8d8
-__arm64_sys_io_submit+0xdc/0x280
-el0_svc_common.constprop.0+0xe0/0x1e0
-el0_svc_handler+0x34/0x90
-el0_svc+0x10/0x14
-...
-
-To solve the issue, check preemptible() to avoid disabling preempt multiple
-when flag HISI_SAS_REJECT_CMD_BIT is set.
-
-Link: https://lore.kernel.org/r/1571926105-74636-5-git-send-email-john.garry@huawei.com
-Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
+Fixes: bf8162354233 ("[SCSI] add scsi trace core functions and put trace points")
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Hannes Reinecke <hare@suse.com>
+Cc: Douglas Gilbert <dgilbert@interlog.com>
+Link: https://lore.kernel.org/r/20191105215553.185018-1-bvanassche@acm.org
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/hisi_sas/hisi_sas_main.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/scsi/scsi_trace.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
-index f478d1f50dfc0..ea4882f12c50e 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_main.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
-@@ -485,7 +485,13 @@ static int hisi_sas_task_exec(struct sas_task *task, gfp_t gfp_flags,
- 	struct hisi_sas_dq *dq = NULL;
+diff --git a/drivers/scsi/scsi_trace.c b/drivers/scsi/scsi_trace.c
+index 0ff083bbf5b1f..617a607375908 100644
+--- a/drivers/scsi/scsi_trace.c
++++ b/drivers/scsi/scsi_trace.c
+@@ -30,15 +30,18 @@ static const char *
+ scsi_trace_rw6(struct trace_seq *p, unsigned char *cdb, int len)
+ {
+ 	const char *ret = trace_seq_buffer_ptr(p);
+-	sector_t lba = 0, txlen = 0;
++	u32 lba = 0, txlen;
  
- 	if (unlikely(test_bit(HISI_SAS_REJECT_CMD_BIT, &hisi_hba->flags))) {
--		if (in_softirq())
-+		/*
-+		 * For IOs from upper layer, it may already disable preempt
-+		 * in the IO path, if disable preempt again in down(),
-+		 * function schedule() will report schedule_bug(), so check
-+		 * preemptible() before goto down().
-+		 */
-+		if (!preemptible())
- 			return -EINVAL;
+ 	lba |= ((cdb[1] & 0x1F) << 16);
+ 	lba |=  (cdb[2] << 8);
+ 	lba |=   cdb[3];
+-	txlen = cdb[4];
++	/*
++	 * From SBC-2: a TRANSFER LENGTH field set to zero specifies that 256
++	 * logical blocks shall be read (READ(6)) or written (WRITE(6)).
++	 */
++	txlen = cdb[4] ? cdb[4] : 256;
  
- 		down(&hisi_hba->sem);
+-	trace_seq_printf(p, "lba=%llu txlen=%llu",
+-			 (unsigned long long)lba, (unsigned long long)txlen);
++	trace_seq_printf(p, "lba=%u txlen=%u", lba, txlen);
+ 	trace_seq_putc(p, 0);
+ 
+ 	return ret;
 -- 
 2.20.1
 
