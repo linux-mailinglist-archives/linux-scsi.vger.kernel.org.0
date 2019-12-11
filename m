@@ -2,40 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1476211B12F
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 16:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E87AB11B644
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Dec 2019 17:00:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387843AbfLKP3R (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Dec 2019 10:29:17 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35886 "EHLO mail.kernel.org"
+        id S1731664AbfLKP7k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Dec 2019 10:59:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38444 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387831AbfLKP3Q (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:29:16 -0500
+        id S1730946AbfLKPOA (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:14:00 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E541D208C3;
-        Wed, 11 Dec 2019 15:29:13 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F20224682;
+        Wed, 11 Dec 2019 15:13:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576078154;
-        bh=fBn5ruKtjyqtQ3AqrWeGYxb7+yos4GPULqN2GTJVOfY=;
+        s=default; t=1576077239;
+        bh=XUmbsPkZBUep6WkzCfrL1lHhh1NcPsaKVvKEEK7EqIE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oUtYP2XgVvkFBx6tbsieuA7LDVksDjDEpt2ayBmV2x7V0Ms1enfvjfPjytjNKXhBq
-         BvWj3DmMrix1GPN5b1/+w6g3uAvqitP+aUe3junBt3VL5lQdV3XFBmujmzUS4LPq6p
-         oprJwZXwlK7LXrnfPjyj5AYtMSCmgLaDNOwpiPGg=
+        b=zPzP2W5kUO/kAvpMex1Q14EEGtaoiBKmySn569pveD/wAzKDvgXiDXmqBYHX+CLhu
+         P3Ah0CwuRBWlQrMYAIggCkjv0QkO4S6P1cxWnw54vdn1quXeQQUD/vKo6iggCGWu4w
+         Ea18rKUrR1YDm+k2EIKTtb71BA2VDC5jqEumeGvc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Subhash Jadavani <subhashj@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 40/58] scsi: ufs: Fix error handing during hibern8 enter
-Date:   Wed, 11 Dec 2019 10:28:13 -0500
-Message-Id: <20191211152831.23507-40-sashal@kernel.org>
+Cc:     =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>,
+        linux-scsi@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 117/134] cdrom: respect device capabilities during opening action
+Date:   Wed, 11 Dec 2019 10:11:33 -0500
+Message-Id: <20191211151150.19073-117-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191211152831.23507-1-sashal@kernel.org>
-References: <20191211152831.23507-1-sashal@kernel.org>
+In-Reply-To: <20191211151150.19073-1-sashal@kernel.org>
+References: <20191211151150.19073-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
@@ -46,81 +44,64 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Subhash Jadavani <subhashj@codeaurora.org>
+From: Diego Elio Pettenò <flameeyes@flameeyes.com>
 
-[ Upstream commit 6d303e4b19d694cdbebf76bcdb51ada664ee953d ]
+[ Upstream commit 366ba7c71ef77c08d06b18ad61b26e2df7352338 ]
 
-During clock gating (ufshcd_gate_work()), we first put the link hibern8 by
-calling ufshcd_uic_hibern8_enter() and if ufshcd_uic_hibern8_enter()
-returns success (0) then we gate all the clocks.  Now let’s zoom in to what
-ufshcd_uic_hibern8_enter() does internally: It calls
-__ufshcd_uic_hibern8_enter() and if failure is encountered, link recovery
-shall put the link back to the highest HS gear and returns success (0) to
-ufshcd_uic_hibern8_enter() which is the issue as link is still in active
-state due to recovery!  Now ufshcd_uic_hibern8_enter() returns success to
-ufshcd_gate_work() and hence it goes ahead with gating the UFS clock while
-link is still in active state hence I believe controller would raise UIC
-error interrupts. But when we service the interrupt, clocks might have
-already been disabled!
+Reading the TOC only works if the device can play audio, otherwise
+these commands fail (and possibly bring the device to an unhealthy
+state.)
 
-This change fixes for this by returning failure from
-__ufshcd_uic_hibern8_enter() if recovery succeeds as link is still not in
-hibern8, upon receiving the error ufshcd_hibern8_enter() would initiate
-retry to put the link state back into hibern8.
+Similarly, cdrom_mmc3_profile() should only be called if the device
+supports generic packet commands.
 
-Link: https://lore.kernel.org/r/1573798172-20534-8-git-send-email-cang@codeaurora.org
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
-Reviewed-by: Bean Huo <beanhuo@micron.com>
-Signed-off-by: Subhash Jadavani <subhashj@codeaurora.org>
-Signed-off-by: Can Guo <cang@codeaurora.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+ drivers/cdrom/cdrom.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 9feae23bfd097..d25082e573e0a 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -3684,15 +3684,24 @@ static int __ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
- 			     ktime_to_us(ktime_sub(ktime_get(), start)), ret);
- 
- 	if (ret) {
-+		int err;
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index ac42ae4651ce7..eebdcbef0578f 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -996,6 +996,12 @@ static void cdrom_count_tracks(struct cdrom_device_info *cdi, tracktype *tracks)
+ 	tracks->xa = 0;
+ 	tracks->error = 0;
+ 	cd_dbg(CD_COUNT_TRACKS, "entering cdrom_count_tracks\n");
 +
- 		dev_err(hba->dev, "%s: hibern8 enter failed. ret = %d\n",
- 			__func__, ret);
- 
- 		/*
--		 * If link recovery fails then return error so that caller
--		 * don't retry the hibern8 enter again.
-+		 * If link recovery fails then return error code returned from
-+		 * ufshcd_link_recovery().
-+		 * If link recovery succeeds then return -EAGAIN to attempt
-+		 * hibern8 enter retry again.
- 		 */
--		if (ufshcd_link_recovery(hba))
--			ret = -ENOLINK;
-+		err = ufshcd_link_recovery(hba);
-+		if (err) {
-+			dev_err(hba->dev, "%s: link recovery failed", __func__);
-+			ret = err;
-+		} else {
-+			ret = -EAGAIN;
-+		}
- 	} else
- 		ufshcd_vops_hibern8_notify(hba, UIC_CMD_DME_HIBER_ENTER,
- 								POST_CHANGE);
-@@ -3706,7 +3715,7 @@ static int ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
- 
- 	for (retries = UIC_HIBERN8_ENTER_RETRIES; retries > 0; retries--) {
- 		ret = __ufshcd_uic_hibern8_enter(hba);
--		if (!ret || ret == -ENOLINK)
-+		if (!ret)
- 			goto out;
- 	}
- out:
++	if (!CDROM_CAN(CDC_PLAY_AUDIO)) {
++		tracks->error = CDS_NO_INFO;
++		return;
++	}
++
+ 	/* Grab the TOC header so we can see how many tracks there are */
+ 	ret = cdi->ops->audio_ioctl(cdi, CDROMREADTOCHDR, &header);
+ 	if (ret) {
+@@ -1162,7 +1168,8 @@ int cdrom_open(struct cdrom_device_info *cdi, struct block_device *bdev,
+ 		ret = open_for_data(cdi);
+ 		if (ret)
+ 			goto err;
+-		cdrom_mmc3_profile(cdi);
++		if (CDROM_CAN(CDC_GENERIC_PACKET))
++			cdrom_mmc3_profile(cdi);
+ 		if (mode & FMODE_WRITE) {
+ 			ret = -EROFS;
+ 			if (cdrom_open_write(cdi))
+@@ -2882,6 +2889,9 @@ int cdrom_get_last_written(struct cdrom_device_info *cdi, long *last_written)
+ 	   it doesn't give enough information or fails. then we return
+ 	   the toc contents. */
+ use_toc:
++	if (!CDROM_CAN(CDC_PLAY_AUDIO))
++		return -ENOSYS;
++
+ 	toc.cdte_format = CDROM_MSF;
+ 	toc.cdte_track = CDROM_LEADOUT;
+ 	if ((ret = cdi->ops->audio_ioctl(cdi, CDROMREADTOCENTRY, &toc)))
 -- 
 2.20.1
 
