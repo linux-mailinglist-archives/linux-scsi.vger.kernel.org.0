@@ -2,104 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DB0011E25E
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Dec 2019 11:52:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEEF11E918
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Dec 2019 18:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfLMKwU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Dec 2019 05:52:20 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:46744 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbfLMKwT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Dec 2019 05:52:19 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBDAfth0185257;
-        Fri, 13 Dec 2019 10:51:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2019-08-05; bh=iwPt1RqCBgAXsSjvs3vWx+TgsOQ3Q6SerEOhz6a8myk=;
- b=YapY4qErkMRKaRV2bvN53F2naze/iWIyJCUmE3k4fBoWw+heLgrSlngbGapC4ydMaNw8
- UFZLuTO4bXn9GHuUbm/bE3DMxmccxExG1aBt0j0oTAv8Romv9WG/UqEFeN6T+MUOhRX1
- BaRU7XTHS7zg4m72OGmlbnotaqzwwzT4vDlUId6biMCfGO4Tu8o67GyqUi15RsODpxCt
- K6y3aFlgxXzXexekFO5K/bPdlL/tlK/zFyR9qa5hxLtjANPMCkWgjYs4MKn3X4LjKb7h
- zHpXIrNWYYHTjnJpCgCG99ZGMXHI3hyzjGR4dz4ht0/dRTVHN/IpUlbS1hKcijkX0c8+ mA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2wr4qs0b2q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Dec 2019 10:51:48 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBDAk7pu135014;
-        Fri, 13 Dec 2019 10:49:47 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2wumw5wftd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Dec 2019 10:49:47 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xBDAnjmD001932;
-        Fri, 13 Dec 2019 10:49:45 GMT
-Received: from kili.mountain (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 13 Dec 2019 02:49:45 -0800
-Date:   Fri, 13 Dec 2019 13:49:35 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Subhash Jadavani <subhashj@codeaurora.org>
-Cc:     Avri Altman <avri.altman@wdc.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH 2/2] scsi: ufs: Simplify a condition
-Message-ID: <20191213104935.wgpq2epaz6zh5zus@kili.mountain>
+        id S1728436AbfLMRTQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 13 Dec 2019 12:19:16 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:33951 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728398AbfLMRTQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Dec 2019 12:19:16 -0500
+Received: by mail-io1-f68.google.com with SMTP id z193so175770iof.1
+        for <linux-scsi@vger.kernel.org>; Fri, 13 Dec 2019 09:19:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=v22s079b1/PCQVvjYaJVnvPe7dodfTNIlqfza3My9qI=;
+        b=kzU5liOrKtptkjx5x2sjWnVxsZydaMamS6cHjGfMw76GNEp7MunNFWyOXwtxtKeFeF
+         Gi99lb0OR71KOWwyT66A3+uNgepTDuYc22J06lPHJ6KOTSlLJgeed+ZvziIllSZASdc8
+         rj0ta8s1QGr6aQ8WhPHYsJGT5ZpUCBc/A3HBm4TV7l40/jKrqOxfN6+gQ9+3/uTFqTKY
+         cZnPXrw7avm6vKVYeunk9NQrcRj8jf6h5fAdlinjAN9SjIvlQVCIWlfJvKxqJDQb88Oi
+         brtiJxtTStEzTmC1bK4W5s2zxNHUECyHjISNyn3AjAlBdbUu9BIXEGF92/LcHCdRI67u
+         Ve4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=v22s079b1/PCQVvjYaJVnvPe7dodfTNIlqfza3My9qI=;
+        b=ByC6492foxq7+d3wwv85zjd7WVhqnkRw8knMmOhwW08jB1Ett+ENCcKGqHQMnaNyJY
+         lTD698uHId5BTWOdMTtYwIZKDWUpFrlJusL1banYA1onCjLrYrzmJLF01ZT66C02uw6q
+         R/m2MSK5XMQRYNTj3TjqCpfjas4FIIc99Umhbu58+BCnDq8Met89Qg5GBLl3dDCvP5XE
+         2NPNeimP+nCuCI3cDCaxO13AdQ+6PXNx5SspWKM/Go0+xx3eY02spWkcCu8j6pq8GBvo
+         qh0+BoFivyFd2WCjSxS2CUIyRPeZcwKTt2Kg2VAZQB5LldC3t1yntnUv0IRIzTkCPqfw
+         M/cw==
+X-Gm-Message-State: APjAAAVjt8JmGxTBCy/DyDSHOGY9P+hb1rnOX1XiYvJHVmJdzjMQKzML
+        OVVWEdaEsjQJs2IQk5OmKZpvXkzVvCRw5Q4Bq4Q=
+X-Google-Smtp-Source: APXvYqwy3cxn2qPvC7By+NR2vA11bCpwsd9r0t12AqSJiPkR1m0JdGNHs34bPM7V8vtzdHYlwAJViYTZwiH6ND0fpcM=
+X-Received: by 2002:a5d:9753:: with SMTP id c19mr6563319ioo.199.1576257555652;
+ Fri, 13 Dec 2019 09:19:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191213104828.7i64cpoof26rc4fw@kili.mountain>
-X-Mailer: git-send-email haha only kidding
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9469 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1912130086
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9469 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1912130086
+Received: by 2002:a4f:d4a8:0:0:0:0:0 with HTTP; Fri, 13 Dec 2019 09:19:13
+ -0800 (PST)
+From:   Stephen Nelson <stephenn936@gmail.com>
+Date:   Fri, 13 Dec 2019 09:19:13 -0800
+Message-ID: <CABuNpSuC0TFJDbF+wNC8EjBWU73YuGyi+NZ5o6149xGAYXHCMw@mail.gmail.com>
+Subject: Contact the verification officer incharge of the delivery:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We know that "check_for_bkops" is non-zero on this side of the ||
-because it was checked on the other side.
+Dear Beneficiary,
 
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/scsi/ufs/ufshcd.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+This is to officially inform you that we have written to you before
+without getting respond from you and we believe that our previous mail
+did not get to you therefore we write you again. We are contacting you
+concerning the release of your inheritance fund / Draft /Cheque /ATM
+Card which have been delayed for transfer by some officials who claim
+to be in position of your fund thereby extorting money from you in one
+way or the other.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index bf981f0ea74c..c299c5feaf1a 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -7684,8 +7684,7 @@ static int ufshcd_link_state_transition(struct ufs_hba *hba,
- 	 * turning off the link would also turn off the device.
- 	 */
- 	else if ((req_link_state == UIC_LINK_OFF_STATE) &&
--		   (!check_for_bkops || (check_for_bkops &&
--		    !hba->auto_bkops_enabled))) {
-+		 (!check_for_bkops || !hba->auto_bkops_enabled)) {
- 		/*
- 		 * Let's make sure that link is in low power mode, we are doing
- 		 * this currently by putting the link in Hibern8. Otherway to
--- 
-2.11.0
+Your Fund has finally been approved for transfer by the West Africa
+Fund Monitoring Unit. Your fund will be transfer to you via MasterCard
+ATM which is cashable in any ATM machine or Bank anywhere in the
+world.
 
+We hereby inform you that the ATM card worth US$4.5, 000.000.00 has
+been credited in your favour as the first part payment of your
+inheritance fund which has been delayed by these officers who claim to
+be in position of your fund.
+
+Therefore you are warned to stop any further communication with
+anybody concerning your inheritance fund.
+
+Your fund to be released via MasterCard ATM in act to uphold the rule
+of law which we represent.You have to reconfirm the informations below
+for security reasons. The only money you are obliged to pay is the
+delivery charges only .
+
+Contact the verification officer incharge of the delivery:
+
+Name: Barr.Charles Gado.
+E-mail: atmcardd14@gmail.com
+TEL: +2348174981061
+
+Send them the following informations of yours for the conclusion of
+your ATM Card:
+
+Full Name:__________
+Delivery Address:____
+Country:_______
+Occupation:_____
+Phone Number:____
+Age:______
+sex:______
+
+Regards,
+Mr. Stephen Nelson.
