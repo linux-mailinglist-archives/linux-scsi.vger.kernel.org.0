@@ -2,94 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECA811F02F
-	for <lists+linux-scsi@lfdr.de>; Sat, 14 Dec 2019 05:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25FD11F032
+	for <lists+linux-scsi@lfdr.de>; Sat, 14 Dec 2019 05:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726590AbfLNE3g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Dec 2019 23:29:36 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:51022 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726334AbfLNE3g (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Dec 2019 23:29:36 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBE4T1Zg181825;
-        Sat, 14 Dec 2019 04:29:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=KjgBjEiIi9MVL1bnPhiBy3+wluKQdQn3q4PuVYYr8Vg=;
- b=FeyU4OLOoj+kBZe2qOrXyDYIoR6VB890xEYqim0HvbSi+CKQWvqK6XpzkHCtyH6gC/de
- qobTbppK+wcU6eWnWSS+ZNTkEaHFo+mhdPc7ohwDvkjxi9aPX9UTOqliLiFpQ6viqcKO
- kxrq9GzIlOAI3EJm1t7YAnMwdootzLaYDK7x9CN78knztXWT6Q+fut4UFfPTJCdxk4nY
- F76slaK0QHtZggFN76N90+sK6uavbIVyI3UYUtzZpNHpHmEcfbs9nf9bAdiFGq/3lFT9
- rjrp86ibu6k2kcAqhNQPY6z3ZKZoCMK1TbRCXK89AbrmJcaxjmCRVE5Wi3egxxqrJFF7 vA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2wvqppr3vb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 14 Dec 2019 04:29:01 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBE4SKbP039686;
-        Sat, 14 Dec 2019 04:29:01 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2wvnsxm5j9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 14 Dec 2019 04:29:00 +0000
-Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xBE4SuD7020830;
-        Sat, 14 Dec 2019 04:28:56 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 13 Dec 2019 20:28:55 -0800
-Date:   Sat, 14 Dec 2019 07:28:46 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Subhash Jadavani <subhashj@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Can Guo <cang@codeaurora.org>,
-        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH 2/2] scsi: ufs: Simplify a condition
-Message-ID: <20191214042846.GA19868@kadam>
-References: <20191213104935.wgpq2epaz6zh5zus@kili.mountain>
- <b08b7848-c0da-4438-258c-19ce18fa798c@acm.org>
+        id S1726637AbfLNEaa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 13 Dec 2019 23:30:30 -0500
+Received: from delivery.mailspamprotection.com ([108.178.24.172]:53729 "EHLO
+        delivery.mailspamprotection.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726334AbfLNEaa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 13 Dec 2019 23:30:30 -0500
+X-Greylist: delayed 1979 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Dec 2019 23:30:29 EST
+Received: from ns1.sgp65.siteground.asia ([77.104.150.195] helo=sgp65.siteground.asia)
+        by se3.mailspamprotection.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <fantasie@fantasiechocolate.com>)
+        id 1ifxrQ-0000q1-OW; Fri, 13 Dec 2019 21:12:56 -0600
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=fantasiechocolate.com; s=default; h=Reply-To:Date:From:To:Subject:
+        Content-Description:Content-Transfer-Encoding:MIME-Version:Content-Type:
+        Sender:Message-ID:Cc:Content-ID:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=G9LTS5QPxJ/s89LVw4V0N76a9Lg4GJG1FaRG84gTZKM=; b=iye+3iz+tTGMsFiHtVKl1YNuZ
+        ucjTp1KH5BUudS9z5ly5Mt450ORFH1+qgCtSjFst6iJK+xd5BIgqGtuHDKzUl+1RZ5IgBwxMtH9EK
+        Lpyh5xbM0nlLSA8wH9YrYt6yEK3x7T7qbvuoKweQ5fOk2sQ7v2RGCyl84z58NZiT5L8qGVYtbvB8g
+        fgNLtdsszYKG7zWg5FBwxem3+b6K87kFhBDC58hZmT8uShpouocmrJvcUkSReQ1pgluEyz+6NyLHA
+        bef0tLIDFZlKsJnHobJ/ItUngaKlHAxkU/UicU8jWvOuD/+/F8EC8cq48N2tqU1gvW2L1KiacWQPE
+        /9n3z5Pcw==;
+Received: from [41.215.171.102] (port=57237 helo=[192.168.1.2])
+        by sgp65.siteground.asia with esmtpa (Exim 4.90devstart-1178-b07e68e5-XX)
+        (envelope-from <fantasie@fantasiechocolate.com>)
+        id 1ifxWD-0001M6-QZ; Sat, 14 Dec 2019 10:50:58 +0800
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b08b7848-c0da-4438-258c-19ce18fa798c@acm.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9470 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=944
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1912140031
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9470 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1912140031
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Hello
+To:     Recipients <fantasie@fantasiechocolate.com>
+From:   fantasie@fantasiechocolate.com
+Date:   Fri, 13 Dec 2019 21:50:30 -0500
+Reply-To: jackharg231@gmail.com
+Message-ID: <E1ifxrQ-0000q1-OW@se3.mailspamprotection.com>
+X-Originating-IP: 77.104.150.195
+X-SpamExperts-Domain: sgp65.siteground.asia
+X-SpamExperts-Username: 77.104.150.195
+Authentication-Results: mailspamprotection.com; auth=pass smtp.auth=77.104.150.195@sgp65.siteground.asia
+X-SpamExperts-Outgoing-Class: unsure
+X-SpamExperts-Outgoing-Evidence: Combined (0.60)
+X-Recommended-Action: accept
+X-Filter-ID: Mvzo4OR0dZXEDF/gcnlw0fi3oD8HEy9ysrsB6Ile+oipSDasLI4SayDByyq9LIhVvIOQ/BkreIJt
+ pJikbcIs0kTNWdUk1Ol2OGx3IfrIJKyP9eGNFz9TW9u+Jt8z2T3KduaafvbgG+Io20dOws7uxquy
+ 8HwVkO17r/7FifbOclsG+1ls7IfY0t6yqfWxTgq9lF2PogyrEWW33pyZ2J35ejUT9RUtu82CIFNv
+ cQ2tm5FWJ4KoFob+Ik2D7UV0TE1kAeBLi9TmkSGzVF7gj79q41ATKKOvrV27YkiE2Ud5IbiEzBID
+ P1n0XxiFVnXvKRDUwy/qbXXxUtiy6lVUGYuo6Kc80rPrS2q1GFdq5NuioxAlwhS7vEDP48hs3a8c
+ wvVyIvMYfGLpvS3jbAVzM/Yd66U5QEG7FriuQT6zOFkNV702wBSrBay58X02UkNHMOYWz20nyvkA
+ BBOF7CIJ0P4NEa0MVfWO89fBHFjAjqGF5YGEXgVxv9Klp88SJAPxog2IqEL+fpLmxSuv0eUZbv0P
+ giI3bZrStTuaivrSsTp6gKkHOQxUjrO1XWlwsRo8LPrO02hVjN28X/iCmueUgiyhVzqNEbCT5lFZ
+ aLyV6ehRUGzOW0IRPXlDEL949U2nBTnhwzFzJzX3pBNfVisdwDuR9rg4VFF5hTsNkQLnL6NOV/Iv
+ BNK2au+oBdNWpgTxpgQ61hAgEi9B8qu60I/Na+X8q84eEQa0tciHYXPDgLhYsz9pkQTcnvqPqs09
+ qKNL6abvfDBczjLFed40qruimRJGkZQ/+oaMObhOc6N0/UwKUfKZQo4viV6DZHwf9zdpEi6QYb+5
+ 4UzuQE973EVJKYt+XDe0mKpYRjQ8byeNri1ricQWo1wwegDTuSnf/0UA5oP4zXbN3FvA3JMphioV
+ KyKxQ+zJ7bkJFtzBESTIzVqakfivvu/ID51BvCO1YZID2TbKEYqkLOLZv2WEroMh5jNfbHwxMu8e
+ AQAPWHdgwUkydxaceXZNG0EUbELA0uv9YhdOwF43sCaXstEuNOECO0tnJwnalYy8O6Q05bHAbVVv
+ fYETknyProQhJAnFm9SejeALBxg4lBnxsuI7WPdQxMr/PrvwjRxaZAd2wJZIDBh7wCrS8rKp0Vif
+ CodAlCkRoHLcvyKXKixi6i6IqAugTKe4Hcqoax47JpuXFo3ZUsaCGkYgWv+5Dvi6jZTOEtXNGFNA
+ YN4ThektAhJU8gMjEyggqtviSbgr1aNP2Wf2y4G+9f+0iY8zeXvFRZRI5qkeK871FyrtVW4KaRSU
+ RqFyxA+5h6S9PU+X5dzR/uMRJ1TxC8bltRI8KgDKjKewKzOknFKgM/Ri4pnmq4UuVF1EVN4nuk0X
+ ZjECm5LJWc9ZiWVRjoItoXcRDxEiiXhmVFyL7v/68tguCv3SzCuyjU4x4V9B7lNbuw/fp9Ndj0+x
+ QrINZM7n0/NyKnZSfcMqYPZon7eUYAqPgS/pPg/UjICGCzoz+FmXdpN1W727lnG3UnZUiJSm6GmH
+ SkoSjCBx1DE3zV+OSNl+KnBlQlbX0LDJaTAIkVFF7vCF5HBlU5mxBFeVjQy3g5BZzNS0lvBIrVIi
+ 3K7nLijGhgqy82Gfc7IRFd6+75JjPEZQIfxGNbtgCe/G2iUBI5jgy5Cky5wadhWPTF2+W3C1tl/T
+ 81CHYryhRFAy/TVI/K95WsACB3TjwX6+ZntI4r5keeQor5E+H5iZ2zirnBsNbiuwty3Zvm32lHIv
+ tUfVaxoYA7Jgbd9maoZfKEyJnqGlvO9uIvxqwos+wMOiKRfEYaxQgGPvexbZaIpnseB6S176HZWN
+ ha0sVbL2pdQX5fZ6s8j+X2bsnQfn2F9U
+X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Dec 13, 2019 at 01:05:55PM -0700, Bart Van Assche wrote:
-> On 12/13/19 5:49 AM, Dan Carpenter wrote:
-> > We know that "check_for_bkops" is non-zero on this side of the ||
-> > because it was checked on the other side.
-> 
-> How about also removing the superfluous parentheses? Anyway:
-> 
+Are you available?
 
-Around "(req_link_state == UIC_LINK_OFF_STATE)"?  I considered it but
-some people like them...
 
-regards,
-dan carpenter
+Regards
+Jack Hargreaves
+Broker/Financial consortium
