@@ -2,116 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 560A611F1D6
-	for <lists+linux-scsi@lfdr.de>; Sat, 14 Dec 2019 13:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D568C11F1E3
+	for <lists+linux-scsi@lfdr.de>; Sat, 14 Dec 2019 14:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725943AbfLNMda (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 14 Dec 2019 07:33:30 -0500
-Received: from mta-02.yadro.com ([89.207.88.252]:36710 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725872AbfLNMda (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 14 Dec 2019 07:33:30 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 5F91A41200;
-        Sat, 14 Dec 2019 12:33:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received; s=mta-01; t=1576326807;
-         x=1578141208; bh=94OA89nMXIsmf+XkNB5AlmMLpSaErqIqZEBUPf3v4GI=; b=
-        MYHrXh5q908hjx/tOyMcL0bvM83DbKu5XNB/gSiBUkRQzfxpUl7sWYLr6XCnJFm3
-        aL57hjks0qqoeJxMSfNJoDw/F1w3QYFsom9Q+E6hqo6IxrrosPCaAWJHZybYo1M8
-        nirl4tnsKlbitzNdYaOwUBtPwCLyGKaF9pJogU1msbY=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zCNllUKENg8F; Sat, 14 Dec 2019 15:33:27 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        id S1725924AbfLNNDs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 14 Dec 2019 08:03:48 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:31466 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725884AbfLNNDr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 14 Dec 2019 08:03:47 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1576328627; h=Message-Id: Date: Subject: To: From: Sender;
+ bh=0nMjZqP1RVMs/cLN5lWIWPWRavc01SWpcuT2GLWUXq0=; b=AoT9OYSgyg5uMxBav6ctBNEOhF+Ndt1E/sdKdJBiBKNN0xVFnU03aba2K8HBhSA3oO6hbPmf
+ RBs1slJh+3mohYosNEKQyrxtGokkMCEY6rvnqiAJihpDC6cne6N6N7xI0gVxMzhSteYOwtnZ
+ 9g0pxEamQdKqKdQTFRSM3ak4yDo=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5df4ddb1.7fcd698a5538-smtp-out-n01;
+ Sat, 14 Dec 2019 13:03:45 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 40636C43383; Sat, 14 Dec 2019 13:03:45 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from pacamara-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 6514C411F8;
-        Sat, 14 Dec 2019 15:33:26 +0300 (MSK)
-Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
- (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Sat, 14
- Dec 2019 15:33:26 +0300
-Date:   Sat, 14 Dec 2019 15:33:25 +0300
-From:   Roman Bolshakov <r.bolshakov@yadro.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        <linux-scsi@vger.kernel.org>, Quinn Tran <qutran@marvell.com>,
-        Martin Wilck <mwilck@suse.com>, Daniel Wagner <dwagner@suse.de>
-Subject: Re: [PATCH 4/4] qla2xxx: Micro-optimize
- qla2x00_configure_local_loop()
-Message-ID: <20191214123325.q6mvmke5htwit3l7@SPB-NB-133.local>
-References: <20191209180223.194959-1-bvanassche@acm.org>
- <20191209180223.194959-5-bvanassche@acm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191209180223.194959-5-bvanassche@acm.org>
-X-Originating-IP: [172.17.128.60]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7D1A4C433CB;
+        Sat, 14 Dec 2019 13:03:44 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7D1A4C433CB
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=cang@codeaurora.org
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
+        cang@codeaurora.org
+Subject: [PATCH v3 0/2] Modularize ufs-bsg
+Date:   Sat, 14 Dec 2019 05:03:33 -0800
+Message-Id: <1576328616-30404-1-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Dec 09, 2019 at 10:02:23AM -0800, Bart Van Assche wrote:
-> Instead of changing endianness in-place and copying the data in two steps,
-> do this in one step. This patch makes is a preparation step for fixing the
-> endianness warnings reported by 'sparse' for the qla2xxx driver.
-> 
-> Cc: Quinn Tran <qutran@marvell.com>
-> Cc: Martin Wilck <mwilck@suse.com>
-> Cc: Daniel Wagner <dwagner@suse.de>
-> Cc: Roman Bolshakov <r.bolshakov@yadro.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/qla2xxx/qla_def.h  | 2 +-
->  drivers/scsi/qla2xxx/qla_init.c | 9 ++++-----
->  2 files changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-> index ab7424318ee8..cf23f10d27fe 100644
-> --- a/drivers/scsi/qla2xxx/qla_def.h
-> +++ b/drivers/scsi/qla2xxx/qla_def.h
-> @@ -414,7 +414,7 @@ struct els_logo_payload {
->  struct els_plogi_payload {
->  	uint8_t opcode;
->  	uint8_t rsvd[3];
-> -	uint8_t data[112];
-> +	__be32	data[112 / 4];
->  };
->  
->  struct ct_arg {
-> diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-> index 6c28f38f8021..ddd8bf7997a8 100644
-> --- a/drivers/scsi/qla2xxx/qla_init.c
-> +++ b/drivers/scsi/qla2xxx/qla_init.c
-> @@ -5047,13 +5047,12 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
->  			rval = qla24xx_get_port_login_templ(vha,
->  			    ha->init_cb_dma, (void *)ha->init_cb, sz);
->  			if (rval == QLA_SUCCESS) {
-> +				__be32 *q = &ha->plogi_els_payld.data[0];
-> +
->  				bp = (uint32_t *)ha->init_cb;
-> -				for (i = 0; i < sz/4 ; i++, bp++)
-> -					*bp = cpu_to_be32(*bp);
-> +				for (i = 0; i < sz/4 ; i++, bp++, q++)
-> +					*q = cpu_to_be32(*bp);
->  
+In order to improve the flexibility of ufs-bsg, modularizing it is a good
+choice. Introduce tri-state to ufs-bsg to allow users compile it as an
+external module.
 
-How about cpu_to_be32_array() instead of the hand-written loop?
+Changes since v2:
+- Incoperate comments from Avri Altman, Bjorn Andersson and Bart Van Assche.
+- Updated the main change to use platform_device_register_data() to create
+  a platform device ufs-bsg in ufshcd_platform_init(). Also added the ufs-bsg
+  platform driver. In the driver probe routine, create the ufs-bsg char dev
+  under /dev/bsg/, the ufs-bsg platform device is the parent of the created
+  ufs-bsg char dev.
+- Modified commit message.
+- Removed defconfig change.
 
-> -				memcpy(&ha->plogi_els_payld.data,
-> -				    (void *)ha->init_cb,
-> -				    sizeof(ha->plogi_els_payld.data));
->  				set_bit(RELOGIN_NEEDED, &vha->dpc_flags);
->  			} else {
->  				ql_dbg(ql_dbg_init, vha, 0x00d1,
+Changes since v1:
+- Included one more defconfig change.
 
-Thanks,
-Roman
+Can Guo (2):
+  scsi: ufs: Put SCSI host after remove it
+  scsi: ufs: Modularize ufs-bsg
+
+ drivers/scsi/ufs/Kconfig         |  2 +-
+ drivers/scsi/ufs/Makefile        |  2 +-
+ drivers/scsi/ufs/ufs_bsg.c       | 67 +++++++++++++++++++++-------------------
+ drivers/scsi/ufs/ufs_bsg.h       |  8 -----
+ drivers/scsi/ufs/ufshcd-pltfrm.c | 12 +++++++
+ drivers/scsi/ufs/ufshcd.c        |  8 ++---
+ drivers/scsi/ufs/ufshcd.h        |  2 +-
+ 7 files changed, 55 insertions(+), 46 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
