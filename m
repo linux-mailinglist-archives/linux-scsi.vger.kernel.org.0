@@ -2,89 +2,125 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F25FD11F032
-	for <lists+linux-scsi@lfdr.de>; Sat, 14 Dec 2019 05:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4B411F1D8
+	for <lists+linux-scsi@lfdr.de>; Sat, 14 Dec 2019 13:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726637AbfLNEaa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Dec 2019 23:30:30 -0500
-Received: from delivery.mailspamprotection.com ([108.178.24.172]:53729 "EHLO
-        delivery.mailspamprotection.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726334AbfLNEaa (ORCPT
+        id S1725895AbfLNMfw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 14 Dec 2019 07:35:52 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:30895 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725872AbfLNMfw (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 13 Dec 2019 23:30:30 -0500
-X-Greylist: delayed 1979 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Dec 2019 23:30:29 EST
-Received: from ns1.sgp65.siteground.asia ([77.104.150.195] helo=sgp65.siteground.asia)
-        by se3.mailspamprotection.com with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <fantasie@fantasiechocolate.com>)
-        id 1ifxrQ-0000q1-OW; Fri, 13 Dec 2019 21:12:56 -0600
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=fantasiechocolate.com; s=default; h=Reply-To:Date:From:To:Subject:
-        Content-Description:Content-Transfer-Encoding:MIME-Version:Content-Type:
-        Sender:Message-ID:Cc:Content-ID:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=G9LTS5QPxJ/s89LVw4V0N76a9Lg4GJG1FaRG84gTZKM=; b=iye+3iz+tTGMsFiHtVKl1YNuZ
-        ucjTp1KH5BUudS9z5ly5Mt450ORFH1+qgCtSjFst6iJK+xd5BIgqGtuHDKzUl+1RZ5IgBwxMtH9EK
-        Lpyh5xbM0nlLSA8wH9YrYt6yEK3x7T7qbvuoKweQ5fOk2sQ7v2RGCyl84z58NZiT5L8qGVYtbvB8g
-        fgNLtdsszYKG7zWg5FBwxem3+b6K87kFhBDC58hZmT8uShpouocmrJvcUkSReQ1pgluEyz+6NyLHA
-        bef0tLIDFZlKsJnHobJ/ItUngaKlHAxkU/UicU8jWvOuD/+/F8EC8cq48N2tqU1gvW2L1KiacWQPE
-        /9n3z5Pcw==;
-Received: from [41.215.171.102] (port=57237 helo=[192.168.1.2])
-        by sgp65.siteground.asia with esmtpa (Exim 4.90devstart-1178-b07e68e5-XX)
-        (envelope-from <fantasie@fantasiechocolate.com>)
-        id 1ifxWD-0001M6-QZ; Sat, 14 Dec 2019 10:50:58 +0800
-Content-Type: text/plain; charset="iso-8859-1"
+        Sat, 14 Dec 2019 07:35:52 -0500
+X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Sat, 14 Dec 2019 07:35:50 EST
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1576326951; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=nEhgWqsCxMZod3X8xArRbg45hp9WJhR8VXPah4HQGdA=;
+ b=AI4YD0ijHVwyUmJkiJJixE6XL1hVK175UUXMkH0mWntCpv88ZPh/DZpf8X9jPTornCE8z1fd
+ pm/Cywl/22wEwhpSNwXemJWLD7tCkpSqnubBbzNBOlomC9Y1FhAfpVVjfC/s9TdSySY56cIQ
+ qChmPitbd1iLdVs5weawHuo0n0c=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5df4d5f5.7f0a44f89a08-smtp-out-n02;
+ Sat, 14 Dec 2019 12:30:45 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A22C1C447A3; Sat, 14 Dec 2019 12:30:45 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9749DC433CB;
+        Sat, 14 Dec 2019 12:30:44 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Hello
-To:     Recipients <fantasie@fantasiechocolate.com>
-From:   fantasie@fantasiechocolate.com
-Date:   Fri, 13 Dec 2019 21:50:30 -0500
-Reply-To: jackharg231@gmail.com
-Message-ID: <E1ifxrQ-0000q1-OW@se3.mailspamprotection.com>
-X-Originating-IP: 77.104.150.195
-X-SpamExperts-Domain: sgp65.siteground.asia
-X-SpamExperts-Username: 77.104.150.195
-Authentication-Results: mailspamprotection.com; auth=pass smtp.auth=77.104.150.195@sgp65.siteground.asia
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.60)
-X-Recommended-Action: accept
-X-Filter-ID: Mvzo4OR0dZXEDF/gcnlw0fi3oD8HEy9ysrsB6Ile+oipSDasLI4SayDByyq9LIhVvIOQ/BkreIJt
- pJikbcIs0kTNWdUk1Ol2OGx3IfrIJKyP9eGNFz9TW9u+Jt8z2T3KduaafvbgG+Io20dOws7uxquy
- 8HwVkO17r/7FifbOclsG+1ls7IfY0t6yqfWxTgq9lF2PogyrEWW33pyZ2J35ejUT9RUtu82CIFNv
- cQ2tm5FWJ4KoFob+Ik2D7UV0TE1kAeBLi9TmkSGzVF7gj79q41ATKKOvrV27YkiE2Ud5IbiEzBID
- P1n0XxiFVnXvKRDUwy/qbXXxUtiy6lVUGYuo6Kc80rPrS2q1GFdq5NuioxAlwhS7vEDP48hs3a8c
- wvVyIvMYfGLpvS3jbAVzM/Yd66U5QEG7FriuQT6zOFkNV702wBSrBay58X02UkNHMOYWz20nyvkA
- BBOF7CIJ0P4NEa0MVfWO89fBHFjAjqGF5YGEXgVxv9Klp88SJAPxog2IqEL+fpLmxSuv0eUZbv0P
- giI3bZrStTuaivrSsTp6gKkHOQxUjrO1XWlwsRo8LPrO02hVjN28X/iCmueUgiyhVzqNEbCT5lFZ
- aLyV6ehRUGzOW0IRPXlDEL949U2nBTnhwzFzJzX3pBNfVisdwDuR9rg4VFF5hTsNkQLnL6NOV/Iv
- BNK2au+oBdNWpgTxpgQ61hAgEi9B8qu60I/Na+X8q84eEQa0tciHYXPDgLhYsz9pkQTcnvqPqs09
- qKNL6abvfDBczjLFed40qruimRJGkZQ/+oaMObhOc6N0/UwKUfKZQo4viV6DZHwf9zdpEi6QYb+5
- 4UzuQE973EVJKYt+XDe0mKpYRjQ8byeNri1ricQWo1wwegDTuSnf/0UA5oP4zXbN3FvA3JMphioV
- KyKxQ+zJ7bkJFtzBESTIzVqakfivvu/ID51BvCO1YZID2TbKEYqkLOLZv2WEroMh5jNfbHwxMu8e
- AQAPWHdgwUkydxaceXZNG0EUbELA0uv9YhdOwF43sCaXstEuNOECO0tnJwnalYy8O6Q05bHAbVVv
- fYETknyProQhJAnFm9SejeALBxg4lBnxsuI7WPdQxMr/PrvwjRxaZAd2wJZIDBh7wCrS8rKp0Vif
- CodAlCkRoHLcvyKXKixi6i6IqAugTKe4Hcqoax47JpuXFo3ZUsaCGkYgWv+5Dvi6jZTOEtXNGFNA
- YN4ThektAhJU8gMjEyggqtviSbgr1aNP2Wf2y4G+9f+0iY8zeXvFRZRI5qkeK871FyrtVW4KaRSU
- RqFyxA+5h6S9PU+X5dzR/uMRJ1TxC8bltRI8KgDKjKewKzOknFKgM/Ri4pnmq4UuVF1EVN4nuk0X
- ZjECm5LJWc9ZiWVRjoItoXcRDxEiiXhmVFyL7v/68tguCv3SzCuyjU4x4V9B7lNbuw/fp9Ndj0+x
- QrINZM7n0/NyKnZSfcMqYPZon7eUYAqPgS/pPg/UjICGCzoz+FmXdpN1W727lnG3UnZUiJSm6GmH
- SkoSjCBx1DE3zV+OSNl+KnBlQlbX0LDJaTAIkVFF7vCF5HBlU5mxBFeVjQy3g5BZzNS0lvBIrVIi
- 3K7nLijGhgqy82Gfc7IRFd6+75JjPEZQIfxGNbtgCe/G2iUBI5jgy5Cky5wadhWPTF2+W3C1tl/T
- 81CHYryhRFAy/TVI/K95WsACB3TjwX6+ZntI4r5keeQor5E+H5iZ2zirnBsNbiuwty3Zvm32lHIv
- tUfVaxoYA7Jgbd9maoZfKEyJnqGlvO9uIvxqwos+wMOiKRfEYaxQgGPvexbZaIpnseB6S176HZWN
- ha0sVbL2pdQX5fZ6s8j+X2bsnQfn2F9U
-X-Report-Abuse-To: spam@quarantine1.mailspamprotection.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Sat, 14 Dec 2019 20:30:44 +0800
+From:   cang@codeaurora.org
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Avri Altman <Avri.Altman@wdc.com>, asutoshd@codeaurora.org,
+        nguyenb@codeaurora.org, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Evan Green <evgreen@chromium.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] scsi: ufs: Modulize ufs-bsg
+In-Reply-To: <20191212182411.GE415177@yoga>
+References: <1576054123-16417-1-git-send-email-cang@codeaurora.org>
+ <0101016ef425ef65-5c4508cc-5e76-4107-bb27-270f66acaa9a-000000@us-west-2.amazonses.com>
+ <20191212045357.GA415177@yoga>
+ <0101016ef8b2e2f8-72260b08-e6ad-42fc-bd4b-4a0a72c5c9b3-000000@us-west-2.amazonses.com>
+ <20191212063703.GC415177@yoga>
+ <MN2PR04MB69919AA0C345E7D6620C3ADFFC550@MN2PR04MB6991.namprd04.prod.outlook.com>
+ <0101016efb07efac-32cf270a-68dd-455a-b037-9fac2f3834cd-000000@us-west-2.amazonses.com>
+ <20191212182411.GE415177@yoga>
+Message-ID: <0baa9d993cf9cb3e6c94f4c4440e9f95@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Are you available?
+On 2019-12-13 02:24, Bjorn Andersson wrote:
+> On Thu 12 Dec 08:53 PST 2019, cang@codeaurora.org wrote:
+> 
+>> On 2019-12-12 15:00, Avri Altman wrote:
+>> > > On Wed 11 Dec 22:01 PST 2019, cang@codeaurora.org wrote:
+>> > > > On 2019-12-12 12:53, Bjorn Andersson wrote:
+>> > > > > On Wed 11 Dec 00:49 PST 2019, Can Guo wrote:
+> [..]
+>> > > > And in real cases, as the UFS is the boot device, UFS driver will always
+>> > > > be probed during bootup.
+>> > > >
+>> > >
+>> > > The UFS driver will load and probe because it's mentioned in the
+>> > > devicetree, but if either the ufs drivers or any of its dependencies
+>> > > (phy, resets, clocks, etc) are built as modules it might very well
+>> > > finish probing after lateinitcall.
+>> > >
+>> > > So in the even that the bsg is =y and any of these drivers are =m,
+>> > > or if
+>> > > you're having bad luck with your timing, the list will be empty.
+>> > >
+>> > > As described below, if bsg=m, then there's nothing that will load the
+>> > > module and the bsg will not probe...
+>> > Right.
+>> > bsg=y and ufshcd=m is a bad idea, and should be avoided.
+>> >
+>> 
+>> Yeah, I will get it addressed in the next patchset.
+>> 
+> 
+> If you build this around platform_device_register_data() from ufshcd I
+> don't see a reason to add additional restrictions on this combination
+> (even though it might not make much sense for people to use this
+> combination).
+> 
+> Regards,
+> Bjorn
 
+Agree, thanks.
 
-Regards
-Jack Hargreaves
-Broker/Financial consortium
+Regards,
+Can Guo.
