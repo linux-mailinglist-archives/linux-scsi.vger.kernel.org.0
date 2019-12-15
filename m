@@ -2,184 +2,160 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A35411F6CE
-	for <lists+linux-scsi@lfdr.de>; Sun, 15 Dec 2019 08:38:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4861911F9D5
+	for <lists+linux-scsi@lfdr.de>; Sun, 15 Dec 2019 18:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726019AbfLOHil (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 15 Dec 2019 02:38:41 -0500
-Received: from esa1.hgst.iphmx.com ([68.232.141.245]:50204 "EHLO
-        esa1.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbfLOHil (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Dec 2019 02:38:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1576395520; x=1607931520;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=WD2ZxqTXqKQeq3uAJSRxOpuZSx5zdtnBAKzWn9EO/AU=;
-  b=Lbsyc7IuFO4+gEVeM9gbGeWIAFGeisldv+1XRWvC+jD/25MeS1shUVff
-   H4C4mlpUsRoqFadUxj8okqeqQp45iwn5XPKvx/l+C/JR+KpbWYDSWgQ5B
-   Uy3fH/6jhtDyV/q6iXegbVDtb3y5mPplxaSgSmzamgxms04UswKWzA0cJ
-   eyLfKEz7+Cxww+ypbj6gfq1Z4V5oAAFcyxVTp+rwh3uOguMtFrBCDEtno
-   ZHZbiwOVAIt+lcfo3qkoWoa4gCKZgpoXVKwkjdLxNG3xtpliPvuUxWNBW
-   9tKoalRCmceBPv7MjR7bE/LJ1iY43f37UaeAoIT+6iVEPdBTqq+gTqei3
-   Q==;
-IronPort-SDR: CYbv4IeHR3zOXVsEd5oFh94N+HTvGoAWV/yUrOcVKwQa52f/jxG48VhgtRbcQl2ADEkgenV4km
- 3denafP4e4khS7DZJqnRVgW/sYrHfAxNBX5DMwKxtETjlrcW7mGBGx9rAvKjYOZNbMguju5lzi
- F27pm0GDQjmCN8fFI9upPmmNIL60OEHKEMCcsaBQhed8knGWR09LcAmfasFZXv9PbgAo2A1/eL
- ZLBii/0myZL9UBfGedF651cSz5CuJHDKVvGJ0BZiIAOFAtotIOTZedWti+TdhYW1vvSXpnH9wx
- Pxs=
-X-IronPort-AV: E=Sophos;i="5.69,316,1571673600"; 
-   d="scan'208";a="232952008"
-Received: from mail-cys01nam02lp2056.outbound.protection.outlook.com (HELO NAM02-CY1-obe.outbound.protection.outlook.com) ([104.47.37.56])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Dec 2019 15:38:23 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nC/vgi8Uxa0kzyHpwi1s4hP6RZlmFmymj4C40t5qdEezrGNo6IfTvaHe5+ZR/HJ535W6uK3hnJzpuwTEMUgSQg45gaWnC0PmAA61+IZBmAEAqEWpMnFMWLomIl9fIBLFywKoiKD3evJ3wYh5dd0Lu9xpYHiHS9dZnAMnhcO4CDx8KUDxKIG7nz9FeCRqNG7FCh2vC4TocK6NBsyqUEAwOnS90YfFu3smOCWdXeednKmfiq5DlEOC+BlE93BnVWVxPWmnAzxzMnfdnuGDtMxAdCoI1K9IvOaUK7Ez2ulhNqLIXzlc3a3gYcC0qUBrb6UTNWQZvRyGiLzp/a9ZJWvq4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WD2ZxqTXqKQeq3uAJSRxOpuZSx5zdtnBAKzWn9EO/AU=;
- b=MCWe5NqcvqzX4NjfNiC910p92uRigLm1WDNhb751tiVbhWx66oL6I218c00+0ou9/AJb0BX3/H9QbzFV6Ezuwe/VB/oRQZXHjHJJIIyc6Qj8iH8vCAjEIgIRtl5VpJkG1j7D8myAfmqB6AJoc5jm0I2sF4EOEn1+VBZfWI0eD9Y78UjsJw3PMW1Tjmk7tHoLsG30Cip7vy6hzEapB6oZdYgEPSg+cC657EKuEtY8+DdVU5ILvmAsCUCHJiq0hu4fWWJzKjNQHC4z25fcJrD4F2EXnWsrhKYskwfiyC/brIqOqIL2q1NyoCtReE9Z82s8hq0D7e6qY74uZM6a3g/bvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        id S1726299AbfLORpc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 15 Dec 2019 12:45:32 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38136 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726136AbfLORpc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Dec 2019 12:45:32 -0500
+Received: by mail-pg1-f194.google.com with SMTP id a33so2327573pgm.5;
+        Sun, 15 Dec 2019 09:45:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WD2ZxqTXqKQeq3uAJSRxOpuZSx5zdtnBAKzWn9EO/AU=;
- b=E9OlW6lppdcgnrb1XrIf6JEFts1K1d2+/vLuiKWz2QKivaMEMuP3xjYxSI4MnTHcyiWhQy2sEENlbJl+s+QydeMNC7nXYlMpJN3A4H6XwxKZ3HMgo5qkkAdw5aGFYlgfv0RdF08g1qEXteasyanQ1cBVn7h5Tpu/BMkQBSqkxcw=
-Received: from MN2PR04MB6991.namprd04.prod.outlook.com (10.186.144.209) by
- MN2PR04MB5677.namprd04.prod.outlook.com (20.179.21.96) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2538.18; Sun, 15 Dec 2019 07:38:21 +0000
-Received: from MN2PR04MB6991.namprd04.prod.outlook.com
- ([fe80::9447:fa71:53df:f866]) by MN2PR04MB6991.namprd04.prod.outlook.com
- ([fe80::9447:fa71:53df:f866%3]) with mapi id 15.20.2538.019; Sun, 15 Dec 2019
- 07:38:21 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     "cang@codeaurora.org" <cang@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "nguyenb@codeaurora.org" <nguyenb@codeaurora.org>,
-        "rnayak@codeaurora.org" <rnayak@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "salyzyn@google.com" <salyzyn@google.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Evan Green <evgreen@chromium.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Bean Huo <beanhuo@micron.com>,
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id;
+        bh=Q2WwaFCyRQa/w8Apj3A/MtAf1w2f53OCqsqyZSE7hvI=;
+        b=UPR1bcxPy9Vjxp9/EG7tvaBtkGYkH8V33DwNjpuuBrBYihO6kXOTNdFc7uu8WzNBJo
+         iXzJa5jV5DOkYYrxDgU2Hxocxq2RPziX5w4ffiiclSOMXuE5dxkKJB5dYiCTpBkXKcAI
+         uqXjz9c2kjSF7QUqT3NP8XZWsuEwq7ik0vVC/yfWpj29k9l0IyzcHeLh6LoSpqIHgeMG
+         cYsyjgNnFgUUnCh2jOqjxusVM8fISB2k1s7znnzdCqgsBLM+92ij3mJwdmS2seNWd+JT
+         P03JYYrdmS6dD3g+J3s4WGB6OFJd2WLBr0O/aFyGLmq/Bd/C+0DWI5LIwdKyLoQ2Yglw
+         r1sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
+        bh=Q2WwaFCyRQa/w8Apj3A/MtAf1w2f53OCqsqyZSE7hvI=;
+        b=s/eUA99AhPQGkmgjF2tKkzbcXGGpqKwhg1+d69IALtkEakuqeE7txhs1PKIbEwB43r
+         OiU6nQojk+VkSEA7jYS2KSE8eZ6O2Fms2F+zIk4B1SAWSyiS/WPmuHEwCC5JFFDAvp4M
+         lOxCBtwCaQ9zzqjlz1qVV2vhTXfF1IBhudpeny0VwaC087cOd9aLnzz+W+BeMSEmJ9MU
+         n4y86QTiUjhy64GkgpabhX0V2cSsTJA2zdXYO6bwHQcKLHK3ThQ/WU7IZ1VXef5JoMwD
+         RL5vbQavricPg7h7ebtnZu48XUqPg4dBEByG78kVJ1e7RUpXxJnva6pFzWLCztsjviql
+         KWag==
+X-Gm-Message-State: APjAAAUWmghPVQC0QikWKfFoNbK0NCPgVJZ05iAgXfO47chMPjHKC0ua
+        OEdKqzHHMxrsoW2Ke9EgL0gJjk7R
+X-Google-Smtp-Source: APXvYqxFiGWefbEIVcCYPhTCh7gewfvdKWTZpN6PJaI72C82uKc+6+kT+IXgGZB8J1d7lmkA1bTqhw==
+X-Received: by 2002:a63:4503:: with SMTP id s3mr13240195pga.311.1576431930324;
+        Sun, 15 Dec 2019 09:45:30 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i3sm19335361pfg.94.2019.12.15.09.45.28
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 15 Dec 2019 09:45:29 -0800 (PST)
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     linux-hwmon@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Bart Van Assche <bvanassche@acm.org>,
-        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/3] scsi: ufs: Modulize ufs-bsg
-Thread-Topic: [PATCH v2 2/3] scsi: ufs: Modulize ufs-bsg
-Thread-Index: AQHVr//eTRAsaCi7o0KCA+PFpTUx1Ke18FKAgAAc25KAAAI5UIAAw1gEgALB3gCAAT/UoA==
-Date:   Sun, 15 Dec 2019 07:38:21 +0000
-Message-ID: <MN2PR04MB6991D105DAA299ABF0A904F0FC560@MN2PR04MB6991.namprd04.prod.outlook.com>
-References: <1576054123-16417-1-git-send-email-cang@codeaurora.org>
- <0101016ef425ef65-5c4508cc-5e76-4107-bb27-270f66acaa9a-000000@us-west-2.amazonses.com>
- <20191212045357.GA415177@yoga>
- <0101016ef8b2e2f8-72260b08-e6ad-42fc-bd4b-4a0a72c5c9b3-000000@us-west-2.amazonses.com>
- <20191212063703.GC415177@yoga>
- <MN2PR04MB69919AA0C345E7D6620C3ADFFC550@MN2PR04MB6991.namprd04.prod.outlook.com>
- <0101016efb07efac-32cf270a-68dd-455a-b037-9fac2f3834cd-000000@us-west-2.amazonses.com>
- <20191212182411.GE415177@yoga>
- <0baa9d993cf9cb3e6c94f4c4440e9f95@codeaurora.org>
-In-Reply-To: <0baa9d993cf9cb3e6c94f4c4440e9f95@codeaurora.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [212.25.79.133]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: a0864a03-7a5e-4d70-3ab5-08d78131c2d7
-x-ms-traffictypediagnostic: MN2PR04MB5677:
-x-microsoft-antispam-prvs: <MN2PR04MB56777D15B9B63D7AA0706D0DFC560@MN2PR04MB5677.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 02524402D6
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(376002)(136003)(396003)(366004)(39860400002)(199004)(189003)(186003)(6506007)(53546011)(316002)(55016002)(9686003)(52536014)(66556008)(64756008)(66476007)(66446008)(4001150100001)(7696005)(86362001)(26005)(33656002)(5660300002)(2906002)(81166006)(8676002)(8936002)(81156014)(66946007)(76116006)(71200400001)(478600001)(7416002)(54906003)(110136005)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR04MB5677;H:MN2PR04MB6991.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CNiY+S7eygHLmzjHHCtQouG145okQpMGWDpbtwq9iKmwxnEJjUXICgXi5BAdmLb7ZoYf6AwqOdJY/VHC7MN0dXIdDQZ2f2NbsxQ6D+YoYdzLqnBIfggyCzi0JsoF6s8p607BPUdflGxK0vD4SXvk0qylLcjMnrSlWiiwQoJRjU/f7ns9An6DRqP6NXWVvKYpSasovWvd9BuBy6IgyrG4y29plBFuAGbJsFSXdRGmXaJsRSqsBg6PB6zX7iyMvQE8M0LweCl1AuIZJJILZPpEAeLvkIZRBigXLSPoG+c9V7CgfKz7gSkFyxBL2WcbBoECNgjMIUpDRBd8PjdoEWNRcx4c5wVkiXKIahZFli7zc5N+ooCUDGjiw1TuU9nCzLxnGP2GY51/AbUiZ7O1JkK93vrjlQB53N/KH6mVaeb/efwJcvoSNBzl8JZ38dt+52px
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a0864a03-7a5e-4d70-3ab5-08d78131c2d7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Dec 2019 07:38:21.6887
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: My0FNCVfdwH4RFX+3+/NAsyuaX2Ml2Z0J58FJj38t5Mc5OhntQwEsrvRcoESlo0nc/g8bTZTLQbRnXWhjY1rsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5677
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: [PATCH v2 0/1] Summary: hwmon driver for temperature sensors on SATA drives
+Date:   Sun, 15 Dec 2019 09:45:08 -0800
+Message-Id: <20191215174509.1847-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+In the past, several attempts have been made to add support for reporting
+SCSI/[S]ATA drive temperatures to the Linux kernel. This is desirable to
+have a means to report drive temperatures to userspace without root
+privileges and in a standard format, but also to be able to tie reported
+temperatures with the thermal subsystem.
 
+The most recent attempt was [1] by Linus Walleij. It went through a total
+of seven iterations. At the end, it was rejected for a number of reasons;
+see the provided link for details. This implementation resides in the
+SCSI core. It originally resided in libata but was moved to SCSI per
+maintainer request, where it was ultimately rejected.
 
-=20
->=20
-> On 2019-12-13 02:24, Bjorn Andersson wrote:
-> > On Thu 12 Dec 08:53 PST 2019, cang@codeaurora.org wrote:
-> >
-> >> On 2019-12-12 15:00, Avri Altman wrote:
-> >> > > On Wed 11 Dec 22:01 PST 2019, cang@codeaurora.org wrote:
-> >> > > > On 2019-12-12 12:53, Bjorn Andersson wrote:
-> >> > > > > On Wed 11 Dec 00:49 PST 2019, Can Guo wrote:
-> > [..]
-> >> > > > And in real cases, as the UFS is the boot device, UFS driver
-> >> > > > will always be probed during bootup.
-> >> > > >
-> >> > >
-> >> > > The UFS driver will load and probe because it's mentioned in the
-> >> > > devicetree, but if either the ufs drivers or any of its
-> >> > > dependencies (phy, resets, clocks, etc) are built as modules it
-> >> > > might very well finish probing after lateinitcall.
-> >> > >
-> >> > > So in the even that the bsg is =3Dy and any of these drivers are
-> >> > > =3Dm, or if you're having bad luck with your timing, the list will
-> >> > > be empty.
-> >> > >
-> >> > > As described below, if bsg=3Dm, then there's nothing that will loa=
-d
-> >> > > the module and the bsg will not probe...
-> >> > Right.
-> >> > bsg=3Dy and ufshcd=3Dm is a bad idea, and should be avoided.
-> >> >
-> >>
-> >> Yeah, I will get it addressed in the next patchset.
-> >>
-> >
-> > If you build this around platform_device_register_data() from ufshcd I
-> > don't see a reason to add additional restrictions on this combination
-> > (even though it might not make much sense for people to use this
-> > combination).
-> >
-> > Regards,
-> > Bjorn
->=20
-> Agree, thanks.
-While at it, maybe you can add few words in the "BSG Support" paragraph,
-In Documentation/scsi/ufs.txt.
+The feedback on this approach suggests to use the SCSI Temperature log page
+[0x0d] as means to access drive temperature information. It is unknown
+if this is implemented in any real SCSI drive. The feedback also suggests to
+obtain temperature from ATA drives, convert it into the SCSI temperature log
+page in libata-scsi, and to use that information in a hardware monitoring
+driver. The format and method to do this is documented in [3]. This is not
+currently implemented in the Linux kernel.
 
-Thanks,
-Avri
+An earlier submission of a driver to report SCSI/SATA drive temperatures
+was made back in 2009 by Constantin Baranov [2]. This submission resides
+in the hardware monitoring subsystem. It does not rely on changes in the
+SCSI subsystem or in libata-scsi. Instead, it registers itself with the
+SCSI subsystem using scsi_register_interface(). It was rejected primarily
+because it executes ATA passthrough commands without verification that it
+is actually connected to an ATA drive.
 
+Both submissions use SMART attributes to read drive temperature information.
+[1] also tries to identify temperature limits from those attributes.
+Unfortunately, SMART attributes are not well defined, resulting in relative
+complex code trying to identify the exact format of the reported data.
+
+With the available information and feedback, we can make a number of
+observations and conclusions.
+a) Using available (S)ATA drive temperature information and convert it to
+   a SCSI log page is an interesting idea. On the downside, it would add a
+   substantial amount of complexity to libata-scsi. The code would either
+   have to be optional, or it would have to be built into the kernel even
+   if it is never used on a given system. Without access to SCSI drives
+   supporting this feature, it would be all but impossible to test the code
+   against such a drive. It would neither be possible to test correctness
+   of the code in libata-scsi nor in the driver using that information.
+   Overall it would be much easier and much less risky to implement such
+   code on the receiving side (ie in a driver reporting the temperatures)
+   instead of trying to convert the information from one format to another
+   first. In summary, it is neither practical nor feasible. On top of that,
+   there is no guarantee that code implementing this functionality would
+   ever be accepted into the kernel for this very reason.
+b) The code needed to read and analyze SCSI temperature log pages is quite
+   complex (see smartmontools [5]). There is no existing support code
+   in the Linux kernel; such code would have to be written. This makes
+   the approach discussed in a) even more risky and less practical.
+c) Overall, any attempt to report temperature information for anything
+   but SATA drives in the kernel is not practical due to the complexity
+   involved, and due to the inability to test the resulting code with
+   non-SATA drives.
+d) Using SMART data for anything but basic temperature reporting is not
+   really feasible due to the lack of standardization. Any attempt to do
+   this would add a substantial amount of code, ambiguity, and risk.
+
+This submission implements a driver to report the temperature of SATA
+drives through the hardware monitoring subsystem. It is implemented as
+stand-alone driver in the hardware monitoring subsystem. The driver uses
+the mechanism from submission [1] to register with the SCSI subsystem.
+By using this mechanism, changes in the SCSI or ATA subsystems are not
+required.  To reduce risk and complexity, it only instantiates after
+reliably validating that it is connected to a SATA drive. It does not
+attempt to report the temperature of non-SATA drives.
+
+The driver uses the SCT Command Transport feature set as specified in
+ATA8-ACS [4] to read and report the temperature as well as temperature
+limits and lowest/highest temperature information (if available) for
+SATA drives. If a drive does not support SCT Command Transport, the driver
+attempts to access a limited set of well known SMART attributes to read
+the drive temperature. In that case, only the current drive temperature
+is reported.
+
+---
+v2: scsi_cmd variable is no longer static
+    Fixed drive name in Kconfig 
+    Describe heuristics used to select SCT or SMART in commit message
+    Added Reviewed-by: from Linus Walleij
+
+Note:
+    I thought about waiting for more feedback, but maybe improvements
+    can be made with follow-up patches.
+
+---
+References:
+[1] https://patchwork.kernel.org/patch/10688021/
+[2] https://lore.kernel.org/lkml/20090913040104.ab1d0b69.const@mimas.ru/
+[3] http://www.t10.org/cgi-bin/ac.pl?t=f&f=sat5r02.pdf
+    Information technology - SCSI / ATA Translation - 5 (SAT-5),
+    section 10.3.8 (Temperature log page).
+[4] http://www.t13.org/documents/uploadeddocuments/docs2008/d1699r6a-ata8-acs.pdf
+    ANS T13/1699-D "Information technology - AT Attachment 8 - ATA/ATAPI Command
+    Set (ATA8-ACS)"
+[5] https://github.com/mirror/smartmontools.git
