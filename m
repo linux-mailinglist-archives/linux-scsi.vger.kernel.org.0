@@ -2,123 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2F0211FD28
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2019 04:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8491C11FD50
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Dec 2019 04:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbfLPDM5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 15 Dec 2019 22:12:57 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:28636 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726437AbfLPDM5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 15 Dec 2019 22:12:57 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1576465976; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=ZiprUrxn1OzSYakAwRmYe3AjoV9ggkxRRD81sZxogTQ=;
- b=hkeePl87UKhIWyDQQNCqyXYnMGM2hOl6teDIFNCh+/1PQCLG81PihfVHDx5NPudibDDsFZKH
- hjm6wvR8Qkxxk+APCTbhluxVMKhp8ndx6+DSk2XzrKcncl7ryuUkU5/tw5MozBvNEHq5Dnpl
- wy3q+hm54MKwKmvy1Bk92h9OUwU=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5df6f638.7f6cfb1b88b8-smtp-out-n03;
- Mon, 16 Dec 2019 03:12:56 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 38C39C447A5; Mon, 16 Dec 2019 03:12:54 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 287DEC433CB;
-        Mon, 16 Dec 2019 03:12:53 +0000 (UTC)
+        id S1726794AbfLPDtF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 15 Dec 2019 22:49:05 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:61038 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726783AbfLPDtF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Dec 2019 22:49:05 -0500
+X-UUID: f651b5b6c15647d3be346867cb716180-20191216
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0oTM8ec49riGzkXqbh5sFdhXmjjCrTrpNmENYdE7F7s=;
+        b=M6/3IUhkmECZ4Xvqmv88gWoAUjact28Lub1Z3ZJBDYZZaEKvj5rgW9rxFYTj+oPkv0AGVoJtv4s4m6U10FMtsATlU4dzgQ8dpUetHlnCmAdD3loID7HEAtjhKXmJbTT6KfdB62o6f8MNBskVQUDPdoYzZbYFTMVpq+aJC/BHgZQ=;
+X-UUID: f651b5b6c15647d3be346867cb716180-20191216
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 461382696; Mon, 16 Dec 2019 11:49:00 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 16 Dec 2019 11:48:28 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 16 Dec 2019 11:48:58 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <pedrom.sousa@synopsys.com>, <jejb@linux.ibm.com>,
+        <matthias.bgg@gmail.com>, <f.fainelli@gmail.com>
+CC:     <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <beanhuo@micron.com>,
+        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
+        <leon.chen@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v2 0/2 RESEND] scsi: ufs-mediatek: add device reset implementation
+Date:   Mon, 16 Dec 2019 11:48:55 +0800
+Message-ID: <1576468137-17220-1-git-send-email-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 16 Dec 2019 11:12:53 +0800
-From:   cang@codeaurora.org
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Pedro Sousa <pedrom.sousa@synopsys.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] scsi: ufs: Put SCSI host after remove it
-In-Reply-To: <5b77c25f-3cc7-f90b-fcd7-dd4c1e2f46d2@acm.org>
-References: <1576328616-30404-1-git-send-email-cang@codeaurora.org>
- <1576328616-30404-2-git-send-email-cang@codeaurora.org>
- <85475247-efd5-732e-ae74-6d9a11e1bdf2@acm.org>
- <5aa3a266e3db3403e663b36ddfdc4d60@codeaurora.org>
- <2956b9c7-b019-e2b3-7a1b-7b796b724add@acm.org>
- <3afbe71cc9f0626edf66f7bc13b331f4@codeaurora.org>
- <5b77c25f-3cc7-f90b-fcd7-dd4c1e2f46d2@acm.org>
-Message-ID: <0419d33a1ea98a2da9263131aba2ca71@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 2C63DA52B94AD84F64F4F77477A7075DBF46997BA5D1D4C0C62BC6CC6F9402E72000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2019-12-16 10:39, Bart Van Assche wrote:
-> On 2019-12-15 17:34, cang@codeaurora.org wrote:
->> This is applied to 5.5/scsi-queue. The two changes I patsed from you 
->> are
->> not merged yet, I am still doing code review to them, so there is no
->> blk_cleanup_queue() calls in my code base. I am just saying you may 
->> move
->> your blk_cleanup_queue() calls below cancel_work_sync(&hba->eh_work) 
->> if
->> my change applies. How do you think?
->> 
->> scsi_host_put() was there before but explicitly removed by
->> afa3dfd42d205b106787476647735aa1de1a5d02. I agree with you, without 
->> this
->> change, there is memory leak.
-> 
-> Hi Can,
-> 
-> Since your patch restores a call that was removed earlier, please
-> consider adding a Fixes: tag to your patch.
-> 
-> Please also have a look at
-> https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git/log/?h=5.6/scsi-queue.
-> As one can see my patches that introduce blk_cleanup_queue() and
-> blk_mq_free_tag_set() calls have already been queued on Martin's
-> 5.6/scsi-queue branch.
-> 
-> Bart.
+VGhpcyBwYXRjaHNldCBhZGQgaW1wbGVtZW50YXRpb24gb2YgVUZTIGRldmljZSByZXNldCB2b3Bz
+IGluIE1lZGlhVGVrIFVGUyBkcml2ZXIuDQoNCnYyOg0KIC0gVXNlIGRlZmluaXRpb24gZGVmaW5l
+ZCBpbiBpbmNsdWRlL2xpbnV4L2FybS1zbWNjYy5oIGluc3RlYWQgb2YgIm1hZ2ljIGRlZmluaXRp
+b24iIChGbG9yaWFuIEZhaW5lbGxpKQ0KDQpTdGFubGV5IENodSAoMik6DQogIHNvYzogbWVkaWF0
+ZWs6IGFkZCBoZWFkZXIgZm9yIFNpUCBzZXJ2aWNlIGludGVyZmFjZQ0KICBzY3NpOiB1ZnMtbWVk
+aWF0ZWs6IGFkZCBkZXZpY2UgcmVzZXQgaW1wbGVtZW50YXRpb24NCg0KIGRyaXZlcnMvc2NzaS91
+ZnMvdWZzLW1lZGlhdGVrLmMgICAgICAgICAgfCAyNyArKysrKysrKysrKysrKysrKysrKysNCiBk
+cml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5oICAgICAgICAgIHwgIDcgKysrKysrDQogaW5j
+bHVkZS9saW51eC9zb2MvbWVkaWF0ZWsvbXRrX3NpcF9zdmMuaCB8IDMwICsrKysrKysrKysrKysr
+KysrKysrKysrKw0KIDMgZmlsZXMgY2hhbmdlZCwgNjQgaW5zZXJ0aW9ucygrKQ0KIGNyZWF0ZSBt
+b2RlIDEwMDY0NCBpbmNsdWRlL2xpbnV4L3NvYy9tZWRpYXRlay9tdGtfc2lwX3N2Yy5oDQoNCi0t
+IA0KMi4xOC4wDQo=
 
-Hi Bart,
-
-Sure, I will add the Fixes tag and rebase my changes. How about the 
-logic
-part of this change? Does it look good to you?
-
-Sorry I was not aware of that your changes have been applied to 
-5.6/scsi-queue.
-I am still trying to get it tested on my setups...
-Anyways, aside of hba->cmd_queue, tearing down hba->tmf_queue before
-scsi_remove_host() may be problem too. Requests can still be
-sent before and during scsi_remove_host(). If a request timed out,
-task abort will be invoked to abort the request, during which
-hba->tmf_queue is expected to be present. Please correct me if I am 
-wrong.
-
-Thanks,
-
-Can Guo.
