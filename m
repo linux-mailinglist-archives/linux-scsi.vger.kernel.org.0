@@ -2,73 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5D2124E5A
-	for <lists+linux-scsi@lfdr.de>; Wed, 18 Dec 2019 17:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DDC124F31
+	for <lists+linux-scsi@lfdr.de>; Wed, 18 Dec 2019 18:25:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727334AbfLRQvt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 18 Dec 2019 11:51:49 -0500
-Received: from h4.fbrelay.privateemail.com ([131.153.2.45]:48311 "EHLO
-        h4.fbrelay.privateemail.com." rhost-flags-OK-OK-FAIL-FAIL)
-        by vger.kernel.org with ESMTP id S1726955AbfLRQvs (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 18 Dec 2019 11:51:48 -0500
-X-Greylist: delayed 681 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Dec 2019 11:51:48 EST
-Received: from MTA-06-3.privateemail.com (mta-06.privateemail.com [68.65.122.16])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by h3.fbrelay.privateemail.com (Postfix) with ESMTPS id 312D3807B9
-        for <linux-scsi@vger.kernel.org>; Wed, 18 Dec 2019 11:40:37 -0500 (EST)
-Received: from MTA-06.privateemail.com (localhost [127.0.0.1])
-        by MTA-06.privateemail.com (Postfix) with ESMTP id 6946F6004D;
-        Wed, 18 Dec 2019 11:40:36 -0500 (EST)
-Received: from localhost.localdomain (unknown [10.20.151.206])
-        by MTA-06.privateemail.com (Postfix) with ESMTPA id 76AA860043;
-        Wed, 18 Dec 2019 16:40:35 +0000 (UTC)
-From:   rattard@ryanattard.info
-To:     axboe@kernel.dk, linux-scsi@vger.kernel.org, dgilbert@interlog.com,
-        JBottomley@parallels.com
-Cc:     Ryan Attard <ryanattard@ryanattard.info>
-Subject: [PATCH 1/1] Allow non-root users to perform ZBC commands.
-Date:   Wed, 18 Dec 2019 10:40:09 -0600
-Message-Id: <20191218164008.99155-2-rattard@ryanattard.info>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191218164008.99155-1-rattard@ryanattard.info>
-References: <20191218164008.99155-1-rattard@ryanattard.info>
+        id S1727505AbfLRRYw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 18 Dec 2019 12:24:52 -0500
+Received: from mout.kundenserver.de ([217.72.192.75]:56179 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727421AbfLRRYw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 18 Dec 2019 12:24:52 -0500
+Received: from mail-qk1-f178.google.com ([209.85.222.178]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1M9Ezx-1ie4xy3w9P-006OkQ; Wed, 18 Dec 2019 18:24:50 +0100
+Received: by mail-qk1-f178.google.com with SMTP id x1so2188813qkl.12;
+        Wed, 18 Dec 2019 09:24:49 -0800 (PST)
+X-Gm-Message-State: APjAAAVXfTLNz8CslELgOfx/whf7bJynMYr+1RoXR7XgH0b/wBmABeaa
+        K5S/8uy/H00fG/L6wYmbH856Lhm56mOcPG7rTOs=
+X-Google-Smtp-Source: APXvYqyNJEBloZ1YqNMcwCEEBSPalbN1+SGYcbTZM7WF7GsOI/WVULRZC6cWixz2rQbuIblJbLHmDbv7N0/KEb50vz0=
+X-Received: by 2002:a37:b283:: with SMTP id b125mr3790918qkf.352.1576689888424;
+ Wed, 18 Dec 2019 09:24:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
+References: <20191217221708.3730997-1-arnd@arndb.de>
+In-Reply-To: <20191217221708.3730997-1-arnd@arndb.de>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 18 Dec 2019 18:24:32 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3fsDRsZh--vn4SWA-NfeeSpzueqGDvjF5jDSZ91P9+Hw@mail.gmail.com>
+Message-ID: <CAK8P3a3fsDRsZh--vn4SWA-NfeeSpzueqGDvjF5jDSZ91P9+Hw@mail.gmail.com>
+Subject: Re: [GIT PULL v2 00/27] block, scsi: final compat_ioctl cleanup
+To:     Jens Axboe <axboe@kernel.dk>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        y2038 Mailman List <y2038@lists.linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Ben Hutchings <ben.hutchings@codethink.co.uk>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:2yS9E+h3iiHLMSpr5Oh8QkPIqh/ADGCowjCUJa4BCmSJZisJXDU
+ 9FQQIivHcX6CjxWkchwJ5jtwZ78lyJnp7HGjOWtGkQM7R6W2haa9g/EWb8BARbQxEafXQjd
+ cHFBF68pN/FQPhSJ8d2u6zzngsRMJih9uhI501zg4jSLvB1Mdfd9ZiRvnuP1WjMogC0fW8n
+ PCKXpGfe6dIy3kLQ+NtkQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Nsc1mGgJPC8=:l98U0iLtPWXLaCrol5kh8i
+ 5jxpqkJxR8p/2dDN9RZuOgt+RItYvjwTnYFTqwScAIbHbkjDAPuZvWZEmCQoAM2e1v495lZda
+ CSrsVs8izEjV6eVvWFGcV0z3dIU49G5DrhyFonUiuiI4260okE8wXfvcgPWVeR4O58UkoPvmg
+ VS9KgIz7snMm5W9F27h9nXnjLSmUHgG+UcVPsQq7uuKgDyTomltqfmfmzreN8amH8B1Xf9f1b
+ CnpJj+pHKeZDwwpSALnHU6rkwmoWJGwY2zrgVvlbhwAr6ow5+RfOEMcUj0Qy8PnhnkiHiS2Q/
+ xFTHkWN8u5jvNSwKSP4O2Le+pAl/LmowS6mCqRjPrXsRei4k90YEqyyZkoRXzqf1pJ5pWc4o4
+ oM2mEJb1kRL+w4mscgkEVMFuFv2hsZExn/HqIfp5qHzURkBkPT6FKoNALuCOZ7k/fR5MlR8F3
+ eJ6k66mnlvVQ3ZTZ7iWuA+EbVjfyt6tdaFtyoFgfrkId7L/f1HoTsx3XcUzHza5UrtfhPk54m
+ ZRc77vl9b/HRWBIeNGWTP/7C4JoIBHImj9LyHk25mkWybdac2fDvPOgUBRPj3f5RaLFyhFAFX
+ c7JgaZpsuuEwniRmBeUZHmQunx48BiGNf7M2XugatqoyD3gLZEWB37cuYoEMmCjHT7pUE2+Na
+ g+m49nPBcGpRonpFEA/3eKtTFaD9OxRC7T4giRBioFpL/5YnmCEsf40Ev68OSo6Hzu04NGvKg
+ B9iMjyQlhQBIgtKBGvYa+MnTiI8qylh5IwW4AtXAWsTtPo89C/EhTAZhzzMQK0IXhlL4IvU6S
+ nTQE60gykztYji474VdaTc0t5K02c3sJazbA2bA3R8s80EGme8CqkMbhkPdFp0F8s6WL2DQhV
+ qOIqjWjFptnMpgjs5BKw==
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Ryan Attard <ryanattard@ryanattard.info>
+On Tue, Dec 17, 2019 at 11:17 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> My plan was originally to keep the SCSI and block parts separate.
+> This did not work easily because of interdependencies: I cannot
+> do the final SCSI cleanup in a good way without first addressing the
+> CDROM ioctls, so this is one series that I hope could be merged through
+> either the block or the scsi git trees, or possibly both if you can
+> pull in the same branch.
 
-Allow users with read permissions to issue REPORT ZONE commands and
-users with write permissions to manage zones on devices supporting the
-ZBC specification.
+I have included the branch in my y2038 branch now, it should show up
+in the following linux-next snapshots, but I'm still hoping for the block
+or scsi maintainers to merge the pull request into their trees for v5.6
 
-Signed-off-by: Ryan Attard <ryanattard@ryanattard.info>
----
- block/scsi_ioctl.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Jens, James, Martin:
 
-diff --git a/block/scsi_ioctl.c b/block/scsi_ioctl.c
-index 260fa80ef575..005a84b2ecdb 100644
---- a/block/scsi_ioctl.c
-+++ b/block/scsi_ioctl.c
-@@ -194,6 +194,11 @@ static void blk_set_cmd_filter_defaults(struct blk_cmd_filter *filter)
- 	__set_bit(GPCMD_LOAD_UNLOAD, filter->write_ok);
- 	__set_bit(GPCMD_SET_STREAMING, filter->write_ok);
- 	__set_bit(GPCMD_SET_READ_AHEAD, filter->write_ok);
-+
-+	/* ZBC Commands */
-+	__set_bit(ZBC_OUT, filter->write_ok);
-+	__set_bit(ZBC_IN, filter->read_ok);
-+
- }
- 
- int blk_verify_command(unsigned char *cmd, fmode_t has_write_perm)
--- 
-2.24.0
+Any suggestion for how this should be merged?
 
+        Arnd
