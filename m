@@ -2,98 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53910128510
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 23:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 180BB128574
+	for <lists+linux-scsi@lfdr.de>; Sat, 21 Dec 2019 00:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727567AbfLTWiK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Dec 2019 17:38:10 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:40115 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727564AbfLTWiJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Dec 2019 17:38:09 -0500
-Received: by mail-pj1-f68.google.com with SMTP id bg7so4258295pjb.5
-        for <linux-scsi@vger.kernel.org>; Fri, 20 Dec 2019 14:38:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=v9WLJAusi+ckdcVMchBQM2THHFHQuR3FgkbR/+SiknM=;
-        b=AXal6gR+N05mFbYoLvjdddJkuQr4XEFzFAsCl97sAePuYIN6oMM+FbibIp/ATXltZx
-         fwPEuswFlDYRss8OVtzsz1uC00suGJZ8XskZWUJQ5FlxriaR4Y6TSTP1OSXViI8cuK0Y
-         Rwrrxhoegwsr6UBWICWKmk+sJIkoGGNX7olhJ0B6LXk9D+lxadu8p7LdM9RlvH/mmfWK
-         tjfZv0dt4EQPwsMFXLGqjnKVVJDMzcdxxgPdwEP9bPK/qAktho1UMSLgOBq4/NjwcZC8
-         OveFWZIj5cIda6fhgje7t0zhEq1vI11HubhaeYF6Txm3RSqyytaFgyjO/VLqmRhgwfKw
-         MfDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=v9WLJAusi+ckdcVMchBQM2THHFHQuR3FgkbR/+SiknM=;
-        b=KE/E/11p/eGHCNfWcP4NwB9uHZUEK1TVFiguijlwJouAgtCuZ97dB5KZY/tY/6Im9q
-         0hlRPWaIM7KmqQTy1h6A7ovQHxsaItXdqLiNIv/zEqlKMQxRuBpKSSrtCVoU8MXFDSrz
-         g3LSkemNUtpCqSKHFXeQFL4Mr4RhYksqD8rw3+HJEytmnlJDROuCfQB9W4SudXABYOIg
-         emGFf2XQ7BQ6QcnVDb7EYX4NFhZx3oa1P7hXgLSKqOI55Y7ywdGVmM/eJnNnjferY+No
-         WzhvPz1CM8uWJY7UnFB9kCx/cnqW8jcxXj7eI4JbSTSfmhQEEQj6C6lZDVBtxaNF8Gpn
-         wfqA==
-X-Gm-Message-State: APjAAAUMwxRMOnNYhgkQIDNt/o1UcxuvcxK85Y1iAcvSegV0Yu/EwXGC
-        8L+7qkF9Nqj531yM7UjW41Xxge1i
-X-Google-Smtp-Source: APXvYqyIXFgwAWCTjTe7lGv8MEM32/7rECpMNediNplXH2raREytIsWONMZnYg/WxKPvrWMc72m7AA==
-X-Received: by 2002:a17:902:934a:: with SMTP id g10mr16468293plp.99.1576881488346;
-        Fri, 20 Dec 2019 14:38:08 -0800 (PST)
-Received: from os42.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j28sm12219877pgb.36.2019.12.20.14.38.07
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 20 Dec 2019 14:38:07 -0800 (PST)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
+        id S1726530AbfLTXRU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Dec 2019 18:17:20 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:33368 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726470AbfLTXRU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Dec 2019 18:17:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ElIL1z77XbbIvi9sWMvIxoQjHMDg1lfERWRslYE+TPY=; b=SAI8ANVdTvznlGRCQcJ8rwJhb
+        CjMyUcpcocNdDCbefTULwPX6/pZ9Mf4w8UrNUZ53rp4mblQVw66bVm1OYzaGZ7bmBRtUcV2tAAMBm
+        if+kzvk8jqXT4E41WbyduL+4kbDj80WOJt65hCoyJtboH2CGlpxYhfoqeGeJWJgvbuCL6aj1Vxp3U
+        KY5WA+iRIRqwrlZ+HMNgfAJIzwSRsMzOPAC9KY+G/iAueId/92iBwTISz+Kl50RrDGQM2B96AbN7x
+        /L8MWREpwWxv2jVgrDOQEjae1pGLgqhL9o7cK5gHvGgyJxvchZfcndhaqg9mMUUpVQGBAdAIyyEGG
+        PkQbf/rrg==;
+Received: from [2601:1c0:6280:3f0::fee9]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iiRWG-0003w0-LB; Fri, 20 Dec 2019 23:17:16 +0000
+Subject: Re: [PATCH v2 31/32] elx: efct: Add Makefile and Kconfig for efct
+ driver
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
 Cc:     maier@linux.ibm.com, dwagner@suse.de, bvanassche@acm.org,
-        James Smart <jsmart2021@gmail.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH v2 32/32] elx: efct: Tie into kernel Kconfig and build process
-Date:   Fri, 20 Dec 2019 14:37:23 -0800
-Message-Id: <20191220223723.26563-33-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20191220223723.26563-1-jsmart2021@gmail.com>
 References: <20191220223723.26563-1-jsmart2021@gmail.com>
+ <20191220223723.26563-32-jsmart2021@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <9cc2c2b2-8d59-accd-b7d2-dcb433a27345@infradead.org>
+Date:   Fri, 20 Dec 2019 15:17:15 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
+MIME-Version: 1.0
+In-Reply-To: <20191220223723.26563-32-jsmart2021@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This final patch ties the efct driver into the kernel Kconfig
-and build linkages in the drivers/scsi directory.
+On 12/20/19 2:37 PM, James Smart wrote:
+> diff --git a/drivers/scsi/elx/Kconfig b/drivers/scsi/elx/Kconfig
+> new file mode 100644
+> index 000000000000..ec710ade44f3
+> --- /dev/null
+> +++ b/drivers/scsi/elx/Kconfig
+> @@ -0,0 +1,9 @@
+> +config SCSI_EFCT
+> +	tristate "Emulex Fibre Channel Target"
+> +	depends on PCI && SCSI
+> +	depends on TARGET_CORE
+> +	depends on SCSI_FC_ATTRS
+> +	select CRC_T10DIF
+> +	help
+> +          The efct driver provides enhanced SCSI Target Mode
 
-Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/Kconfig  | 2 ++
- drivers/scsi/Makefile | 1 +
- 2 files changed, 3 insertions(+)
+Use tab + 2 spaces above, instead of all spaces, please.
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 90cf4691b8c3..78822ae45457 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1176,6 +1176,8 @@ config SCSI_LPFC_DEBUG_FS
- 	  This makes debugging information from the lpfc driver
- 	  available via the debugfs filesystem.
- 
-+source "drivers/scsi/elx/Kconfig"
-+
- config SCSI_SIM710
- 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
- 	depends on EISA && SCSI
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index c00e3dd57990..844db573283c 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
- obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
- obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
- obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
-+obj-$(CONFIG_SCSI_EFCT)		+= elx/
- obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
- obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
- obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
+> +	  support for specific SLI-4 adapters.
+
+
 -- 
-2.13.7
+~Randy
 
