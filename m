@@ -2,40 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41364127D46
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 15:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A6C127D7A
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 15:37:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727842AbfLTOan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Dec 2019 09:30:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34464 "EHLO mail.kernel.org"
+        id S1728116AbfLTOei (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Dec 2019 09:34:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727816AbfLTOam (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 20 Dec 2019 09:30:42 -0500
+        id S1727580AbfLTOeh (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 20 Dec 2019 09:34:37 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 737C624684;
-        Fri, 20 Dec 2019 14:30:40 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 70D2421D7D;
+        Fri, 20 Dec 2019 14:34:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576852241;
-        bh=/MS10nszUwF6I5dV/Ux6RGz0tsPDlASNy6iNfgudSc4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LCpCmCeguItGmOq5zVSc9K5ChO8Vd/YAWRxOf4Eo7RCQlogR0WXXm8lX5gbi1U0r1
-         Am12DPMZxDHem/lF6UAkwxeORM7YYV7b6VshC0Lbfi/lI38wTW8ofLBb+tKk10mtTR
-         OKkdmaKBBry550Q/9k6A9xvIfw80zFUVrcd5Ys7s=
+        s=default; t=1576852475;
+        bh=E3M3Rk+EtBVG5nA2dJqBGAMJi8GXyVnnEdorwCIOzTI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EOogzwtg/6H9jSoJ7BmQI1EXt7baaBmVqzt3ajOCOlT/10tvDNhlV8uMVwuZ5Xl/U
+         PQ2wZkbzIvxyR7BafhZZCeBTTpDTAts2zpB3c7Fi86cx8PEyqykKgzUhdq+Ll7nTRK
+         7x0l9HowfbvsywIR3vyMMPVMqcDFnCY8CcLGzPlA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bo Wu <wubo40@huawei.com>, Zhiqiang Liu <liuzhiqiang26@huawei.com>,
-        Lee Duncan <lduncan@suse.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 34/52] scsi: iscsi: Avoid potential deadlock in iscsi_if_rx func
-Date:   Fri, 20 Dec 2019 09:29:36 -0500
-Message-Id: <20191220142954.9500-34-sashal@kernel.org>
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Keith Busch <kbusch@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 01/34] nvme_fc: add module to ops template to allow module references
+Date:   Fri, 20 Dec 2019 09:34:00 -0500
+Message-Id: <20191220143433.9922-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191220142954.9500-1-sashal@kernel.org>
-References: <20191220142954.9500-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,111 +44,152 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bo Wu <wubo40@huawei.com>
+From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit bba340c79bfe3644829db5c852fdfa9e33837d6d ]
+[ Upstream commit 863fbae929c7a5b64e96b8a3ffb34a29eefb9f8f ]
 
-In iscsi_if_rx func, after receiving one request through
-iscsi_if_recv_msg func, iscsi_if_send_reply will be called to try to
-reply to the request in a do-while loop.  If the iscsi_if_send_reply
-function keeps returning -EAGAIN, a deadlock will occur.
+In nvme-fc: it's possible to have connected active controllers
+and as no references are taken on the LLDD, the LLDD can be
+unloaded.  The controller would enter a reconnect state and as
+long as the LLDD resumed within the reconnect timeout, the
+controller would resume.  But if a namespace on the controller
+is the root device, allowing the driver to unload can be problematic.
+To reload the driver, it may require new io to the boot device,
+and as it's no longer connected we get into a catch-22 that
+eventually fails, and the system locks up.
 
-For example, a client only send msg without calling recvmsg func, then
-it will result in the watchdog soft lockup.  The details are given as
-follows:
+Fix this issue by taking a module reference for every connected
+controller (which is what the core layer did to the transport
+module). Reference is cleared when the controller is removed.
 
-	sock_fd = socket(AF_NETLINK, SOCK_RAW, NETLINK_ISCSI);
-	retval = bind(sock_fd, (struct sock addr*) & src_addr, sizeof(src_addr);
-	while (1) {
-		state_msg = sendmsg(sock_fd, &msg, 0);
-		//Note: recvmsg(sock_fd, &msg, 0) is not processed here.
-	}
-	close(sock_fd);
-
-watchdog: BUG: soft lockup - CPU#7 stuck for 22s! [netlink_test:253305] Sample time: 4000897528 ns(HZ: 250) Sample stat:
-curr: user: 675503481560, nice: 321724050, sys: 448689506750, idle: 4654054240530, iowait: 40885550700, irq: 14161174020, softirq: 8104324140, st: 0
-deta: user: 0, nice: 0, sys: 3998210100, idle: 0, iowait: 0, irq: 1547170, softirq: 242870, st: 0 Sample softirq:
-         TIMER:        992
-         SCHED:          8
-Sample irqstat:
-         irq    2: delta       1003, curr:    3103802, arch_timer
-CPU: 7 PID: 253305 Comm: netlink_test Kdump: loaded Tainted: G           OE
-Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
-pstate: 40400005 (nZcv daif +PAN -UAO)
-pc : __alloc_skb+0x104/0x1b0
-lr : __alloc_skb+0x9c/0x1b0
-sp : ffff000033603a30
-x29: ffff000033603a30 x28: 00000000000002dd
-x27: ffff800b34ced810 x26: ffff800ba7569f00
-x25: 00000000ffffffff x24: 0000000000000000
-x23: ffff800f7c43f600 x22: 0000000000480020
-x21: ffff0000091d9000 x20: ffff800b34eff200
-x19: ffff800ba7569f00 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000
-x15: 0000000000000000 x14: 0001000101000100
-x13: 0000000101010000 x12: 0101000001010100
-x11: 0001010101010001 x10: 00000000000002dd
-x9 : ffff000033603d58 x8 : ffff800b34eff400
-x7 : ffff800ba7569200 x6 : ffff800b34eff400
-x5 : 0000000000000000 x4 : 00000000ffffffff
-x3 : 0000000000000000 x2 : 0000000000000001
-x1 : ffff800b34eff2c0 x0 : 0000000000000300 Call trace:
-__alloc_skb+0x104/0x1b0
-iscsi_if_rx+0x144/0x12bc [scsi_transport_iscsi]
-netlink_unicast+0x1e0/0x258
-netlink_sendmsg+0x310/0x378
-sock_sendmsg+0x4c/0x70
-sock_write_iter+0x90/0xf0
-__vfs_write+0x11c/0x190
-vfs_write+0xac/0x1c0
-ksys_write+0x6c/0xd8
-__arm64_sys_write+0x24/0x30
-el0_svc_common+0x78/0x130
-el0_svc_handler+0x38/0x78
-el0_svc+0x8/0xc
-
-Link: https://lore.kernel.org/r/EDBAAA0BBBA2AC4E9C8B6B81DEEE1D6915E3D4D2@dggeml505-mbx.china.huawei.com
-Signed-off-by: Bo Wu <wubo40@huawei.com>
-Reviewed-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Acked-by: Himanshu Madhani <hmadhani@marvell.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Keith Busch <kbusch@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/nvme/host/fc.c          | 14 ++++++++++++--
+ drivers/nvme/target/fcloop.c    |  1 +
+ drivers/scsi/lpfc/lpfc_nvme.c   |  2 ++
+ drivers/scsi/qla2xxx/qla_nvme.c |  1 +
+ include/linux/nvme-fc-driver.h  |  4 ++++
+ 5 files changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 417b868d8735e..ed8d9709b9b96 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -24,6 +24,8 @@
- 
- #define ISCSI_TRANSPORT_VERSION "2.0-870"
- 
-+#define ISCSI_SEND_MAX_ALLOWED  10
-+
- #define CREATE_TRACE_POINTS
- #include <trace/events/iscsi.h>
- 
-@@ -3682,6 +3684,7 @@ iscsi_if_rx(struct sk_buff *skb)
- 		struct nlmsghdr	*nlh;
- 		struct iscsi_uevent *ev;
- 		uint32_t group;
-+		int retries = ISCSI_SEND_MAX_ALLOWED;
- 
- 		nlh = nlmsg_hdr(skb);
- 		if (nlh->nlmsg_len < sizeof(*nlh) + sizeof(*ev) ||
-@@ -3712,6 +3715,10 @@ iscsi_if_rx(struct sk_buff *skb)
- 				break;
- 			err = iscsi_if_send_reply(portid, nlh->nlmsg_type,
- 						  ev, sizeof(*ev));
-+			if (err == -EAGAIN && --retries < 0) {
-+				printk(KERN_WARNING "Send reply failed, error %d\n", err);
-+				break;
-+			}
- 		} while (err < 0 && err != -ECONNREFUSED && err != -ESRCH);
- 		skb_pull(skb, rlen);
+diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
+index 565bddcfd130d..d567035571bf2 100644
+--- a/drivers/nvme/host/fc.c
++++ b/drivers/nvme/host/fc.c
+@@ -342,7 +342,8 @@ nvme_fc_register_localport(struct nvme_fc_port_info *pinfo,
+ 	    !template->ls_req || !template->fcp_io ||
+ 	    !template->ls_abort || !template->fcp_abort ||
+ 	    !template->max_hw_queues || !template->max_sgl_segments ||
+-	    !template->max_dif_sgl_segments || !template->dma_boundary) {
++	    !template->max_dif_sgl_segments || !template->dma_boundary ||
++	    !template->module) {
+ 		ret = -EINVAL;
+ 		goto out_reghost_failed;
  	}
+@@ -1986,6 +1987,7 @@ nvme_fc_ctrl_free(struct kref *ref)
+ {
+ 	struct nvme_fc_ctrl *ctrl =
+ 		container_of(ref, struct nvme_fc_ctrl, ref);
++	struct nvme_fc_lport *lport = ctrl->lport;
+ 	unsigned long flags;
+ 
+ 	if (ctrl->ctrl.tagset) {
+@@ -2011,6 +2013,7 @@ nvme_fc_ctrl_free(struct kref *ref)
+ 	if (ctrl->ctrl.opts)
+ 		nvmf_free_options(ctrl->ctrl.opts);
+ 	kfree(ctrl);
++	module_put(lport->ops->module);
+ }
+ 
+ static void
+@@ -3040,10 +3043,15 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
+ 		goto out_fail;
+ 	}
+ 
++	if (!try_module_get(lport->ops->module)) {
++		ret = -EUNATCH;
++		goto out_free_ctrl;
++	}
++
+ 	idx = ida_simple_get(&nvme_fc_ctrl_cnt, 0, 0, GFP_KERNEL);
+ 	if (idx < 0) {
+ 		ret = -ENOSPC;
+-		goto out_free_ctrl;
++		goto out_mod_put;
+ 	}
+ 
+ 	ctrl->ctrl.opts = opts;
+@@ -3185,6 +3193,8 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
+ out_free_ida:
+ 	put_device(ctrl->dev);
+ 	ida_simple_remove(&nvme_fc_ctrl_cnt, ctrl->cnum);
++out_mod_put:
++	module_put(lport->ops->module);
+ out_free_ctrl:
+ 	kfree(ctrl);
+ out_fail:
+diff --git a/drivers/nvme/target/fcloop.c b/drivers/nvme/target/fcloop.c
+index 291f4121f516a..f0536d341f2f2 100644
+--- a/drivers/nvme/target/fcloop.c
++++ b/drivers/nvme/target/fcloop.c
+@@ -825,6 +825,7 @@ fcloop_targetport_delete(struct nvmet_fc_target_port *targetport)
+ #define FCLOOP_DMABOUND_4G		0xFFFFFFFF
+ 
+ static struct nvme_fc_port_template fctemplate = {
++	.module			= THIS_MODULE,
+ 	.localport_delete	= fcloop_localport_delete,
+ 	.remoteport_delete	= fcloop_remoteport_delete,
+ 	.create_queue		= fcloop_create_queue,
+diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
+index f73726e55e44d..6c355d87c709d 100644
+--- a/drivers/scsi/lpfc/lpfc_nvme.c
++++ b/drivers/scsi/lpfc/lpfc_nvme.c
+@@ -1903,6 +1903,8 @@ lpfc_nvme_fcp_abort(struct nvme_fc_local_port *pnvme_lport,
+ 
+ /* Declare and initialization an instance of the FC NVME template. */
+ static struct nvme_fc_port_template lpfc_nvme_template = {
++	.module	= THIS_MODULE,
++
+ 	/* initiator-based functions */
+ 	.localport_delete  = lpfc_nvme_localport_delete,
+ 	.remoteport_delete = lpfc_nvme_remoteport_delete,
+diff --git a/drivers/scsi/qla2xxx/qla_nvme.c b/drivers/scsi/qla2xxx/qla_nvme.c
+index 5590d6e8b5762..db367e428095d 100644
+--- a/drivers/scsi/qla2xxx/qla_nvme.c
++++ b/drivers/scsi/qla2xxx/qla_nvme.c
+@@ -560,6 +560,7 @@ static void qla_nvme_remoteport_delete(struct nvme_fc_remote_port *rport)
+ }
+ 
+ static struct nvme_fc_port_template qla_nvme_fc_transport = {
++	.module	= THIS_MODULE,
+ 	.localport_delete = qla_nvme_localport_delete,
+ 	.remoteport_delete = qla_nvme_remoteport_delete,
+ 	.create_queue   = qla_nvme_alloc_queue,
+diff --git a/include/linux/nvme-fc-driver.h b/include/linux/nvme-fc-driver.h
+index 496ff759f84c6..2f3ae41c212dc 100644
+--- a/include/linux/nvme-fc-driver.h
++++ b/include/linux/nvme-fc-driver.h
+@@ -282,6 +282,8 @@ struct nvme_fc_remote_port {
+  *
+  * Host/Initiator Transport Entrypoints/Parameters:
+  *
++ * @module:  The LLDD module using the interface
++ *
+  * @localport_delete:  The LLDD initiates deletion of a localport via
+  *       nvme_fc_deregister_localport(). However, the teardown is
+  *       asynchronous. This routine is called upon the completion of the
+@@ -395,6 +397,8 @@ struct nvme_fc_remote_port {
+  *       Value is Mandatory. Allowed to be zero.
+  */
+ struct nvme_fc_port_template {
++	struct module	*module;
++
+ 	/* initiator-based functions */
+ 	void	(*localport_delete)(struct nvme_fc_local_port *);
+ 	void	(*remoteport_delete)(struct nvme_fc_remote_port *);
 -- 
 2.20.1
 
