@@ -2,85 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9763312773D
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 09:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66911277A1
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 09:56:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727400AbfLTIg4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Dec 2019 03:36:56 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:24362 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727110AbfLTIgn (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Dec 2019 03:36:43 -0500
-X-UUID: 6c24fab80c6e472fbeb1bf0d8a61d88b-20191220
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=1dTM/x2XgEndTdXRTGoeD0Ozp3L9tzAYcN6PciDyt3c=;
-        b=dClNCxXhNVqDx8r6BXkfQwB5V9UU2+rjpa+fKc1h9T+wAcDpIniTtvT4Iu6Q4VJNu5U0OBOYuQRUwXR3NhoGyY1cqEpQIF/SZpwoZhaoZCpSZL7rw31YuPNY6kN1af9odjvCNWb9jS6eJDrLC7EyST4u1/eUQ0bLzMQp6xk5w20=;
-X-UUID: 6c24fab80c6e472fbeb1bf0d8a61d88b-20191220
-Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 452913011; Fri, 20 Dec 2019 16:36:36 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 20 Dec 2019 16:35:59 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 20 Dec 2019 16:35:39 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <pedrom.sousa@synopsys.com>, <jejb@linux.ibm.com>,
-        <matthias.bgg@gmail.com>, <f.fainelli@gmail.com>
-CC:     <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <beanhuo@micron.com>,
-        <kuohong.wang@mediatek.com>, <peter.wang@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <andy.teng@mediatek.com>,
-        <leon.chen@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 6/6] scsi: ufs-mediatek: configure and enable clk-gating
-Date:   Fri, 20 Dec 2019 16:36:28 +0800
-Message-ID: <1576830988-22435-7-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1576830988-22435-1-git-send-email-stanley.chu@mediatek.com>
-References: <1576830988-22435-1-git-send-email-stanley.chu@mediatek.com>
+        id S1727180AbfLTI4S (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Dec 2019 03:56:18 -0500
+Received: from mail-eopbgr750058.outbound.protection.outlook.com ([40.107.75.58]:18499
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727174AbfLTI4R (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 20 Dec 2019 03:56:17 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kXXDyt5CCVoxyEPGd/tRuTUjMAYGdk61RGSGKvS+nUzAMAu7uCjFRp3zXMh+59voJ1U9zeHdloFQgEtVSMLGeRtPm3fyEbN3FUzeR1F5gTHoRWYvIWApiBP25C7BzmWA1BkKjZetu+96h+vTZI3bql5P/tkKc3z9aZ1PGghaVt1yo9cccKUrLtqW/Zu0CaSmtWc4M3YfaFYKFI6aDEFhyXAGaExu7AOL+zvgIauJUrZERZZKR8q0ULH/+WwxHfuBoQlw/bD2ZuWcdhQilPW33nxUef/oBUXqnKLUZKhAZHoGq5sBAoquqUEP+9hhfYazJMAVq1IFC0wTV4lMM8CNsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1Mwd/Z+9Mmp3hoR9xUXyrOgJ8/kIUSshjLuQmZUa7zE=;
+ b=mZxXSFbe0RRxDWo3XWMg/utxgBbIjDjjGg7xYrAzSwx1bO3uGAXsd+8Jl+/h3dO2yISdC6GroBW4OwZMjmPLNS4GNmJz/6UMxZ/H+snjzw5myfv0z77gHuZ3gBiZUFXc2nMVkffZxXtmUZbtf+aQx/3bUNMFdnyuRYgTEzSGLKUnVtEsciJMQci0dTQ9dfi1jvz0yAmPH/2wMvV2gJcMIIfRlwerGRX92gH+2yknthWsUs3FZBxGOA0Xhds6Lq66jsq1WJ3GMsfj0C99llVe9vwGLkj/s3xdukN5VIoxKeiFRBWEfjL7Fikn0ag2VhYdx0o0l3mhgXzyIay2P5Ol4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1Mwd/Z+9Mmp3hoR9xUXyrOgJ8/kIUSshjLuQmZUa7zE=;
+ b=iYRMy9x7CfHK6x2r7EcOZ6yXimW8KyBkOd3snPJEwZvnUCuxBOnnJ+epjkqstT9fifbsC8G7+PHlTZn5jyd7obJSU2iswVJvF3+zd9FlKNGGNuxKu4WPa2H2k9zEV7lt6yJrjDuJSy6ckaBgdQMAfn6gvXTu9LYIOV8Q/n+C1E0=
+Received: from MN2PR05MB6141.namprd05.prod.outlook.com (20.178.241.217) by
+ MN2PR05MB6784.namprd05.prod.outlook.com (10.255.7.81) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2559.9; Fri, 20 Dec 2019 08:56:12 +0000
+Received: from MN2PR05MB6141.namprd05.prod.outlook.com
+ ([fe80::75e5:6ff0:553e:7401]) by MN2PR05MB6141.namprd05.prod.outlook.com
+ ([fe80::75e5:6ff0:553e:7401%6]) with mapi id 15.20.2581.007; Fri, 20 Dec 2019
+ 08:56:12 +0000
+From:   Thomas Hellstrom <thellstrom@vmware.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        =?iso-8859-1?Q?Thomas_Hellstr=F6m_=28VMware=29?= 
+        <thomas_os@shipmail.org>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pv-drivers <Pv-drivers@vmware.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Vishal Bhakta <vbhakta@vmware.com>, Jim Gill <jgill@vmware.com>
+Subject: Re: [PATCH RESEND 1/2] scsi: vmw_pvscsi: Fix swiotlb operation
+Thread-Topic: [PATCH RESEND 1/2] scsi: vmw_pvscsi: Fix swiotlb operation
+Thread-Index: AQHVqhA88VALO66GgU+znrgwAg1BSA==
+Date:   Fri, 20 Dec 2019 08:56:12 +0000
+Message-ID: <MN2PR05MB61418001C0180C55D4D72B45A12D0@MN2PR05MB6141.namprd05.prod.outlook.com>
+References: <20191203193052.7583-1-thomas_os@shipmail.org>
+ <yq1sglf8xv0.fsf@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=thellstrom@vmware.com; 
+x-originating-ip: [155.4.205.35]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ce1ed8f8-46b4-448a-431e-08d7852a76dc
+x-ms-traffictypediagnostic: MN2PR05MB6784:|MN2PR05MB6784:
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR05MB67843547EB66F0117A1AA9A1A12D0@MN2PR05MB6784.namprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5236;
+x-forefront-prvs: 025796F161
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(366004)(376002)(396003)(39860400002)(136003)(189003)(199004)(2906002)(5660300002)(52536014)(53546011)(33656002)(4744005)(54906003)(26005)(66476007)(66556008)(86362001)(9686003)(7696005)(55016002)(186003)(4326008)(107886003)(76116006)(6506007)(478600001)(71200400001)(66446008)(81166006)(8676002)(81156014)(316002)(110136005)(66946007)(91956017)(64756008)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR05MB6784;H:MN2PR05MB6141.namprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: vmware.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: y/QPFFoZyuIwsT46XUv0Fah9DDcUlQsiwmckPyWYJpnh9PecA1YY4LL9BpnclGaiM76vdNZjT0k312Ur2SJs9ADOgJXcYLcjJPDTnKytetvHxzVMYtkXiMt88F3jU5phAf4yCfT3YqlifLETUabvw8ly0a6SG/9J/KRrXCxpp3BFB3d3IBGb/eSpZ3AnsujKQuMNqDwA24Jlk/Mw3ls3uch12ZRDmuXzVGTfklQi+a7Wo4javc7c656WA4YoYDGE1d7cfbLh3BWJpJn5nF8PW9JkpdSm8XlRVgv48iWb3PxenjR8BWu7Aq8P3vzV9BrdgRmNxWMo5a5vc0Q0lQr8m3KTZHa558ZrT5dWoyNIsQ2aDmnm80SHe0oAEyeVGDrWlWvprVwD1Y3lPDtFrBMM/qHxqcELwXyvDukt+Qlu0sa/x/hl3CF31/w8Iv7wJgAe
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 367E02E7C7D61D709754BA5D29E13B252DAD17ECDB3D2FE27103CD478EB3C1812000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ce1ed8f8-46b4-448a-431e-08d7852a76dc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Dec 2019 08:56:12.3952
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oYQOGx7nA8VVlre/2FjTYPcNykOjFCe7rdgY2vHrkrbR2YmpZ/J7YVZHcm9F0keUX+6Awqrb5OFAczA/SXGYSw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR05MB6784
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-RW5hYmxlIGNsay1nYXRpbmcgd2l0aCBjdXN0b21pemVkIGRlbGF5ZWQgdGltZXIgdmFsdWUgaW4N
-Ck1lZGlhVGVrIENoaXBzZXRzLg0KDQpTaWduZWQtb2ZmLWJ5OiBTdGFubGV5IENodSA8c3Rhbmxl
-eS5jaHVAbWVkaWF0ZWsuY29tPg0KUmV2aWV3ZWQtYnk6IEFsaW0gQWtodGFyIDxhbGltLmFraHRh
-ckBzYW1zdW5nLmNvbT4NCi0tLQ0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMgfCAy
-MiArKysrKysrKysrKysrKysrKysrKysrDQogMSBmaWxlIGNoYW5nZWQsIDIyIGluc2VydGlvbnMo
-KykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMgYi9kcml2
-ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jDQppbmRleCA3MWUyZTBlNGVhMTEuLjI4MmFkMDZl
-Yzg0NiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMNCisrKyBi
-L2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMNCkBAIC0yMDUsNiArMjA1LDkgQEAgc3Rh
-dGljIGludCB1ZnNfbXRrX2luaXQoc3RydWN0IHVmc19oYmEgKmhiYSkNCiAJLyogRW5hYmxlIHJ1
-bnRpbWUgYXV0b3N1c3BlbmQgKi8NCiAJaGJhLT5jYXBzIHw9IFVGU0hDRF9DQVBfUlBNX0FVVE9T
-VVNQRU5EOw0KIA0KKwkvKiBFbmFibGUgY2xvY2stZ2F0aW5nICovDQorCWhiYS0+Y2FwcyB8PSBV
-RlNIQ0RfQ0FQX0NMS19HQVRJTkc7DQorDQogCS8qDQogCSAqIHVmc2hjZF92b3BzX2luaXQoKSBp
-cyBpbnZva2VkIGFmdGVyDQogCSAqIHVmc2hjZF9zZXR1cF9jbG9jayh0cnVlKSBpbiB1ZnNoY2Rf
-aGJhX2luaXQoKSB0aHVzDQpAQCAtMjkzLDYgKzI5NiwyMyBAQCBzdGF0aWMgaW50IHVmc19tdGtf
-cHJlX2xpbmsoc3RydWN0IHVmc19oYmEgKmhiYSkNCiAJcmV0dXJuIHJldDsNCiB9DQogDQorc3Rh
-dGljIHZvaWQgdWZzX210a19zZXR1cF9jbGtfZ2F0aW5nKHN0cnVjdCB1ZnNfaGJhICpoYmEpDQor
-ew0KKwl1bnNpZ25lZCBsb25nIGZsYWdzOw0KKwl1MzIgYWhfbXM7DQorDQorCWlmICh1ZnNoY2Rf
-aXNfY2xrZ2F0aW5nX2FsbG93ZWQoaGJhKSkgew0KKwkJaWYgKHVmc2hjZF9pc19hdXRvX2hpYmVy
-bjhfc3VwcG9ydGVkKGhiYSkgJiYgaGJhLT5haGl0KQ0KKwkJCWFoX21zID0gRklFTERfR0VUKFVG
-U0hDSV9BSElCRVJOOF9USU1FUl9NQVNLLA0KKwkJCQkJICBoYmEtPmFoaXQpOw0KKwkJZWxzZQ0K
-KwkJCWFoX21zID0gMTA7DQorCQlzcGluX2xvY2tfaXJxc2F2ZShoYmEtPmhvc3QtPmhvc3RfbG9j
-aywgZmxhZ3MpOw0KKwkJaGJhLT5jbGtfZ2F0aW5nLmRlbGF5X21zID0gYWhfbXMgKyA1Ow0KKwkJ
-c3Bpbl91bmxvY2tfaXJxcmVzdG9yZShoYmEtPmhvc3QtPmhvc3RfbG9jaywgZmxhZ3MpOw0KKwl9
-DQorfQ0KKw0KIHN0YXRpYyBpbnQgdWZzX210a19wb3N0X2xpbmsoc3RydWN0IHVmc19oYmEgKmhi
-YSkNCiB7DQogCS8qIGRpc2FibGUgZGV2aWNlIExDQyAqLw0KQEAgLTMwOCw2ICszMjgsOCBAQCBz
-dGF0aWMgaW50IHVmc19tdGtfcG9zdF9saW5rKHN0cnVjdCB1ZnNfaGJhICpoYmEpDQogCQkJRklF
-TERfUFJFUChVRlNIQ0lfQUhJQkVSTjhfU0NBTEVfTUFTSywgMykpOw0KIAl9DQogDQorCXVmc19t
-dGtfc2V0dXBfY2xrX2dhdGluZyhoYmEpOw0KKw0KIAlyZXR1cm4gMDsNCiB9DQogDQotLSANCjIu
-MTguMA0K
-
+On 12/20/19 4:44 AM, Martin K. Petersen wrote:=0A=
+> Thomas,=0A=
+>=0A=
+>> With swiotlb, the first byte of the sense buffer may in some cases be=0A=
+>> uninitialized since we use DMA_FROM_DEVICE, and the device incorrectly=
+=0A=
+>> doesn't clear it. In those cases, clear it after DMA unmapping.=0A=
+> Applied 1+2 to 5.6/scsi-queue, thanks!=0A=
+>=0A=
+Thanks!=0A=
+=0A=
+Thomas=0A=
+=0A=
+=0A=
