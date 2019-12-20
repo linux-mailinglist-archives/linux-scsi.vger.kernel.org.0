@@ -2,187 +2,341 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FC5127E91
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 15:48:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8CE128243
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 19:34:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727880AbfLTOry (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Dec 2019 09:47:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727861AbfLTOrx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 20 Dec 2019 09:47:53 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 451BA2468C;
-        Fri, 20 Dec 2019 14:47:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576853272;
-        bh=Kqn0D6G3j4uFEBm6j3z6Sdq9qM2GpDQSnC3DlTOF2O8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wsGqfYZYwgSiFPv2vIY0t+IXLV/T7AtxN5V+SFXRN89TywyuOjsullAKLJVfDetrF
-         ps+f2+cvulhFCugywf0Q+BtKI95AbkAuruJZsNzkiyxIFAbKHfORN7bGBIOTuWR5CT
-         /EKN0LIFbeJwOv7fN4QzdC1Be+Wr46jdn0GLGjJI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jason Yan <yanaijie@huawei.com>, Gao Chuan <gaochuan4@huawei.com>,
-        John Garry <john.garry@huawei.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 06/11] scsi: libsas: stop discovering if oob mode is disconnected
-Date:   Fri, 20 Dec 2019 09:47:38 -0500
-Message-Id: <20191220144744.10565-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191220144744.10565-1-sashal@kernel.org>
-References: <20191220144744.10565-1-sashal@kernel.org>
+        id S1727406AbfLTSeF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Dec 2019 13:34:05 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:34382 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727390AbfLTSeF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Dec 2019 13:34:05 -0500
+Received: by mail-pl1-f196.google.com with SMTP id x17so4461334pln.1
+        for <linux-scsi@vger.kernel.org>; Fri, 20 Dec 2019 10:34:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=av2+YJt7uNI8QRRaJ85KIaMuQslU0hZ9T2AxL4GTcEc=;
+        b=t87B107Eip9xDRkgmOSmNF0nG+Rg+w52bBpX/McrvijK+caqnSEhhrE7sv1nS9N9nw
+         eDwkqWF6Y33aRz72ghPp0sHW/Nj2iDjuefGe3+4H5cWGNpchypzaLGUtFJhPOY01tJuy
+         qtjGtfLZAOJcZAGPAWf7pH75aPnaiNSx7/p4Ly77pANcrELT0Bqx3yPwUCHedEYzVVKc
+         U3kLPd6xc2ly4QGixGiZwkmzvYusrbssFibUycAB4omvl+3DFszP1gWLveIcrsTpfju/
+         isvh4Rzl5VgYcEEG3I/t+QPOFMPBfzIId6n6zMeVWvqVem5a1+H+m/DDXbgeBrrcpZe8
+         g0aA==
+X-Gm-Message-State: APjAAAWGPqnRW5EmkRbTC1hRV4damZU2CaKDsPKzeYUqonuJK6KTg6sF
+        j+tKc1G2U2PZ2a/X0Z96moc=
+X-Google-Smtp-Source: APXvYqzWezBOlgzEN0c21aqiYkWs22WeWHU8VGDXsSFy0EeyvBpmKml0fo1XU/Ntjr7IAMDVoL0ZNg==
+X-Received: by 2002:a17:902:8f98:: with SMTP id z24mr12753740plo.51.1576866844254;
+        Fri, 20 Dec 2019 10:34:04 -0800 (PST)
+Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:1108:4dee:e16c:e52f:356])
+        by smtp.gmail.com with ESMTPSA id z16sm13562535pff.125.2019.12.20.10.34.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2019 10:34:03 -0800 (PST)
+From:   Bart Van Assche <bvanassche@acm.org>
+To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Martin Wilck <mwilck@suse.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+Subject: [PATCH] qla2xxx: Fix the code that reads from mailbox registers
+Date:   Fri, 20 Dec 2019 10:33:57 -0800
+Message-Id: <20191220183357.16655-1-bvanassche@acm.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Jason Yan <yanaijie@huawei.com>
+Make the MMIO accessors stronly typed such that the compiler checks whether
+the accessor function is used that matches the register width. Fix those
+MMIO reads where another number of bits was read or written than the size
+of the register.
 
-[ Upstream commit f70267f379b5e5e11bdc5d72a56bf17e5feed01f ]
-
-The discovering of sas port is driven by workqueue in libsas. When libsas
-is processing port events or phy events in workqueue, new events may rise
-up and change the state of some structures such as asd_sas_phy.  This may
-cause some problems such as follows:
-
-==>thread 1                       ==>thread 2
-
-                                  ==>phy up
-                                  ==>phy_up_v3_hw()
-                                    ==>oob_mode = SATA_OOB_MODE;
-                                  ==>phy down quickly
-                                  ==>hisi_sas_phy_down()
-                                    ==>sas_ha->notify_phy_event()
-                                    ==>sas_phy_disconnected()
-                                      ==>oob_mode = OOB_NOT_CONNECTED
-==>workqueue wakeup
-==>sas_form_port()
-  ==>sas_discover_domain()
-    ==>sas_get_port_device()
-      ==>oob_mode is OOB_NOT_CONNECTED and device
-         is wrongly taken as expander
-
-This at last lead to the panic when libsas trying to issue a command to
-discover the device.
-
-[183047.614035] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000058
-[183047.622896] Mem abort info:
-[183047.625762]   ESR = 0x96000004
-[183047.628893]   Exception class = DABT (current EL), IL = 32 bits
-[183047.634888]   SET = 0, FnV = 0
-[183047.638015]   EA = 0, S1PTW = 0
-[183047.641232] Data abort info:
-[183047.644189]   ISV = 0, ISS = 0x00000004
-[183047.648100]   CM = 0, WnR = 0
-[183047.651145] user pgtable: 4k pages, 48-bit VAs, pgdp =
-00000000b7df67be
-[183047.657834] [0000000000000058] pgd=0000000000000000
-[183047.662789] Internal error: Oops: 96000004 [#1] SMP
-[183047.667740] Process kworker/u16:2 (pid: 31291, stack limit =
-0x00000000417c4974)
-[183047.675208] CPU: 0 PID: 3291 Comm: kworker/u16:2 Tainted: G
-W  OE 4.19.36-vhulk1907.1.0.h410.eulerosv2r8.aarch64 #1
-[183047.687015] Hardware name: N/A N/A/Kunpeng Desktop Board D920S10,
-BIOS 0.15 10/22/2019
-[183047.695007] Workqueue: 0000:74:02.0_disco_q sas_discover_domain
-[183047.700999] pstate: 20c00009 (nzCv daif +PAN +UAO)
-[183047.705864] pc : prep_ata_v3_hw+0xf8/0x230 [hisi_sas_v3_hw]
-[183047.711510] lr : prep_ata_v3_hw+0xb0/0x230 [hisi_sas_v3_hw]
-[183047.717153] sp : ffff00000f28ba60
-[183047.720541] x29: ffff00000f28ba60 x28: ffff8026852d7228
-[183047.725925] x27: ffff8027dba3e0a8 x26: ffff8027c05fc200
-[183047.731310] x25: 0000000000000000 x24: ffff8026bafa8dc0
-[183047.736695] x23: ffff8027c05fc218 x22: ffff8026852d7228
-[183047.742079] x21: ffff80007c2f2940 x20: ffff8027c05fc200
-[183047.747464] x19: 0000000000f80800 x18: 0000000000000010
-[183047.752848] x17: 0000000000000000 x16: 0000000000000000
-[183047.758232] x15: ffff000089a5a4ff x14: 0000000000000005
-[183047.763617] x13: ffff000009a5a50e x12: ffff8026bafa1e20
-[183047.769001] x11: ffff0000087453b8 x10: ffff00000f28b870
-[183047.774385] x9 : 0000000000000000 x8 : ffff80007e58f9b0
-[183047.779770] x7 : 0000000000000000 x6 : 000000000000003f
-[183047.785154] x5 : 0000000000000040 x4 : ffffffffffffffe0
-[183047.790538] x3 : 00000000000000f8 x2 : 0000000002000007
-[183047.795922] x1 : 0000000000000008 x0 : 0000000000000000
-[183047.801307] Call trace:
-[183047.803827]  prep_ata_v3_hw+0xf8/0x230 [hisi_sas_v3_hw]
-[183047.809127]  hisi_sas_task_prep+0x750/0x888 [hisi_sas_main]
-[183047.814773]  hisi_sas_task_exec.isra.7+0x88/0x1f0 [hisi_sas_main]
-[183047.820939]  hisi_sas_queue_command+0x28/0x38 [hisi_sas_main]
-[183047.826757]  smp_execute_task_sg+0xec/0x218
-[183047.831013]  smp_execute_task+0x74/0xa0
-[183047.834921]  sas_discover_expander.part.7+0x9c/0x5f8
-[183047.839959]  sas_discover_root_expander+0x90/0x160
-[183047.844822]  sas_discover_domain+0x1b8/0x1e8
-[183047.849164]  process_one_work+0x1b4/0x3f8
-[183047.853246]  worker_thread+0x54/0x470
-[183047.856981]  kthread+0x134/0x138
-[183047.860283]  ret_from_fork+0x10/0x18
-[183047.863931] Code: f9407a80 528000e2 39409281 72a04002 (b9405800)
-[183047.870097] kernel fault(0x1) notification starting on CPU 0
-[183047.875828] kernel fault(0x1) notification finished on CPU 0
-[183047.881559] Modules linked in: unibsp(OE) hns3(OE) hclge(OE)
-hnae3(OE) mem_drv(OE) hisi_sas_v3_hw(OE) hisi_sas_main(OE)
-[183047.892418] ---[ end trace 4cc26083fc11b783  ]---
-[183047.897107] Kernel panic - not syncing: Fatal exception
-[183047.902403] kernel fault(0x5) notification starting on CPU 0
-[183047.908134] kernel fault(0x5) notification finished on CPU 0
-[183047.913865] SMP: stopping secondary CPUs
-[183047.917861] Kernel Offset: disabled
-[183047.921422] CPU features: 0x2,a2a00a38
-[183047.925243] Memory Limit: none
-[183047.928372] kernel reboot(0x2) notification starting on CPU 0
-[183047.934190] kernel reboot(0x2) notification finished on CPU 0
-[183047.940008] ---[ end Kernel panic - not syncing: Fatal exception
-]---
-
-Fixes: 2908d778ab3e ("[SCSI] aic94xx: new driver")
-Link: https://lore.kernel.org/r/20191206011118.46909-1-yanaijie@huawei.com
-Reported-by: Gao Chuan <gaochuan4@huawei.com>
-Reviewed-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: Himanshu Madhani <hmadhani@marvell.com>
+Cc: Quinn Tran <qutran@marvell.com>
+Cc: Martin Wilck <mwilck@suse.com>
+Cc: Daniel Wagner <dwagner@suse.de>
+Cc: Roman Bolshakov <r.bolshakov@yadro.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/libsas/sas_discover.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_def.h    | 53 +++++++++++++++++++++++++------
+ drivers/scsi/qla2xxx/qla_init.c   |  6 ++--
+ drivers/scsi/qla2xxx/qla_inline.h |  2 +-
+ drivers/scsi/qla2xxx/qla_iocb.c   |  2 +-
+ drivers/scsi/qla2xxx/qla_isr.c    |  4 +--
+ drivers/scsi/qla2xxx/qla_mbx.c    |  2 +-
+ drivers/scsi/qla2xxx/qla_mr.c     | 26 +++++++--------
+ drivers/scsi/qla2xxx/qla_nx.c     |  4 +--
+ drivers/scsi/qla2xxx/qla_os.c     |  2 +-
+ 9 files changed, 68 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_discover.c b/drivers/scsi/libsas/sas_discover.c
-index 60de66252fa2b..b200edc665a58 100644
---- a/drivers/scsi/libsas/sas_discover.c
-+++ b/drivers/scsi/libsas/sas_discover.c
-@@ -97,12 +97,21 @@ static int sas_get_port_device(struct asd_sas_port *port)
- 		else
- 			dev->dev_type = SAS_SATA_DEV;
- 		dev->tproto = SAS_PROTOCOL_SATA;
--	} else {
-+	} else if (port->oob_mode == SAS_OOB_MODE) {
- 		struct sas_identify_frame *id =
- 			(struct sas_identify_frame *) dev->frame_rcvd;
- 		dev->dev_type = id->dev_type;
- 		dev->iproto = id->initiator_bits;
- 		dev->tproto = id->target_bits;
-+	} else {
-+		/* If the oob mode is OOB_NOT_CONNECTED, the port is
-+		 * disconnected due to race with PHY down. We cannot
-+		 * continue to discover this port
-+		 */
-+		sas_put_device(dev);
-+		pr_warn("Port %016llx is disconnected when discovering\n",
-+			SAS_ADDR(port->attached_sas_addr));
-+		return -ENODEV;
+diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
+index fb8b355b20fc..0e5b1a6b59cc 100644
+--- a/drivers/scsi/qla2xxx/qla_def.h
++++ b/drivers/scsi/qla2xxx/qla_def.h
+@@ -125,15 +125,50 @@ typedef struct {
+  * I/O register
+ */
+ 
+-#define RD_REG_BYTE(addr)		readb(addr)
+-#define RD_REG_WORD(addr)		readw(addr)
+-#define RD_REG_DWORD(addr)		readl(addr)
+-#define RD_REG_BYTE_RELAXED(addr)	readb_relaxed(addr)
+-#define RD_REG_WORD_RELAXED(addr)	readw_relaxed(addr)
+-#define RD_REG_DWORD_RELAXED(addr)	readl_relaxed(addr)
+-#define WRT_REG_BYTE(addr, data)	writeb(data, addr)
+-#define WRT_REG_WORD(addr, data)	writew(data, addr)
+-#define WRT_REG_DWORD(addr, data)	writel(data, addr)
++static inline u8 RD_REG_BYTE(const volatile u8 __iomem *addr)
++{
++	return readb(addr);
++}
++
++static inline u16 RD_REG_WORD(const volatile __le16 __iomem *addr)
++{
++	return readw(addr);
++}
++
++static inline u32 RD_REG_DWORD(const volatile __le32 __iomem *addr)
++{
++	return readl(addr);
++}
++
++static inline u8 RD_REG_BYTE_RELAXED(const volatile u8 __iomem *addr)
++{
++	return readb_relaxed(addr);
++}
++
++static inline u16 RD_REG_WORD_RELAXED(const volatile __le16 __iomem *addr)
++{
++	return readw_relaxed(addr);
++}
++
++static inline u32 RD_REG_DWORD_RELAXED(const volatile __le32 __iomem *addr)
++{
++	return readl_relaxed(addr);
++}
++
++static inline void WRT_REG_BYTE(volatile u8 __iomem *addr, u8 data)
++{
++	return writeb(data, addr);
++}
++
++static inline void WRT_REG_WORD(volatile __le16 __iomem *addr, u16 data)
++{
++	return writew(data, addr);
++}
++
++static inline void WRT_REG_DWORD(volatile __le32 __iomem *addr, u32 data)
++{
++	return writel(data, addr);
++}
+ 
+ /*
+  * ISP83XX specific remote register addresses
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index 563312f0ca7c..c0ab00db15b3 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -2219,7 +2219,7 @@ qla2x00_initialize_adapter(scsi_qla_host_t *vha)
+ 
+ 	/* Check for secure flash support */
+ 	if (IS_QLA28XX(ha)) {
+-		if (RD_REG_DWORD(&reg->mailbox12) & BIT_0) {
++		if (RD_REG_WORD(&reg->mailbox12) & BIT_0) {
+ 			ql_log(ql_log_info, vha, 0xffff, "Adapter is Secure\n");
+ 			ha->flags.secure_adapter = 1;
+ 		}
+@@ -2774,7 +2774,7 @@ qla24xx_reset_risc(scsi_qla_host_t *vha)
+ 	ql_dbg(ql_dbg_init + ql_dbg_verbose, vha, 0x017f,
+ 	    "HCCR: 0x%x, MailBox0 Status 0x%x\n",
+ 	    RD_REG_DWORD(&reg->hccr),
+-	    RD_REG_DWORD(&reg->mailbox0));
++	    RD_REG_WORD(&reg->mailbox0));
+ 
+ 	/* Wait for soft-reset to complete. */
+ 	RD_REG_DWORD(&reg->ctrl_status);
+@@ -4045,7 +4045,7 @@ qla24xx_config_rings(struct scsi_qla_host *vha)
  	}
  
- 	sas_init_dev(dev);
--- 
-2.20.1
-
+ 	/* PCI posting */
+-	RD_REG_DWORD(&ioreg->hccr);
++	RD_REG_WORD(&ioreg->hccr);
+ }
+ 
+ /**
+diff --git a/drivers/scsi/qla2xxx/qla_inline.h b/drivers/scsi/qla2xxx/qla_inline.h
+index 364b3db8b2dc..77f97552fe74 100644
+--- a/drivers/scsi/qla2xxx/qla_inline.h
++++ b/drivers/scsi/qla2xxx/qla_inline.h
+@@ -40,7 +40,7 @@ qla24xx_calc_iocbs(scsi_qla_host_t *vha, uint16_t dsds)
+  *      register value.
+  */
+ static __inline__ uint16_t
+-qla2x00_debounce_register(volatile uint16_t __iomem *addr)
++qla2x00_debounce_register(volatile __le16 __iomem *addr)
+ {
+ 	volatile uint16_t first;
+ 	volatile uint16_t second;
+diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
+index 75a102e0815f..624178d9dc99 100644
+--- a/drivers/scsi/qla2xxx/qla_iocb.c
++++ b/drivers/scsi/qla2xxx/qla_iocb.c
+@@ -2268,7 +2268,7 @@ __qla2x00_alloc_iocbs(struct qla_qpair *qpair, srb_t *sp)
+ 		    IS_QLA28XX(ha))
+ 			cnt = RD_REG_DWORD(&reg->isp25mq.req_q_out);
+ 		else if (IS_P3P_TYPE(ha))
+-			cnt = RD_REG_DWORD(&reg->isp82.req_q_out);
++			cnt = RD_REG_DWORD(reg->isp82.req_q_out);
+ 		else if (IS_FWI2_CAPABLE(ha))
+ 			cnt = RD_REG_DWORD(&reg->isp24.req_q_out);
+ 		else if (IS_QLAFX00(ha))
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index 2a9803b2261b..90091f3fb9b6 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -314,7 +314,7 @@ qla81xx_idc_event(scsi_qla_host_t *vha, uint16_t aen, uint16_t descr)
+ 	int rval;
+ 	struct device_reg_24xx __iomem *reg24 = &vha->hw->iobase->isp24;
+ 	struct device_reg_82xx __iomem *reg82 = &vha->hw->iobase->isp82;
+-	uint16_t __iomem *wptr;
++	__le16 __iomem *wptr;
+ 	uint16_t cnt, timeout, mb[QLA_IDC_ACK_REGS];
+ 
+ 	/* Seed data -- mailbox1 -> mailbox7. */
+@@ -2947,7 +2947,7 @@ qla24xx_mbx_completion(scsi_qla_host_t *vha, uint16_t mb0)
+ {
+ 	uint16_t	cnt;
+ 	uint32_t	mboxes;
+-	uint16_t __iomem *wptr;
++	__le16 __iomem *wptr;
+ 	struct qla_hw_data *ha = vha->hw;
+ 	struct device_reg_24xx __iomem *reg = &ha->iobase->isp24;
+ 
+diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
+index 7df5f33e9282..cf66a983f953 100644
+--- a/drivers/scsi/qla2xxx/qla_mbx.c
++++ b/drivers/scsi/qla2xxx/qla_mbx.c
+@@ -106,7 +106,7 @@ qla2x00_mailbox_command(scsi_qla_host_t *vha, mbx_cmd_t *mcp)
+ 	uint8_t		io_lock_on;
+ 	uint16_t	command = 0;
+ 	uint16_t	*iptr;
+-	uint16_t __iomem *optr;
++	__le16 __iomem  *optr;
+ 	uint32_t	cnt;
+ 	uint32_t	mboxes;
+ 	unsigned long	wait_time;
+diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
+index 33161af2c16a..bb02ec0f8ceb 100644
+--- a/drivers/scsi/qla2xxx/qla_mr.c
++++ b/drivers/scsi/qla2xxx/qla_mr.c
+@@ -46,7 +46,7 @@ qlafx00_mailbox_command(scsi_qla_host_t *vha, struct mbx_cmd_32 *mcp)
+ 	uint8_t		io_lock_on;
+ 	uint16_t	command = 0;
+ 	uint32_t	*iptr;
+-	uint32_t __iomem *optr;
++	__le32 __iomem *optr;
+ 	uint32_t	cnt;
+ 	uint32_t	mboxes;
+ 	unsigned long	wait_time;
+@@ -109,7 +109,7 @@ qlafx00_mailbox_command(scsi_qla_host_t *vha, struct mbx_cmd_32 *mcp)
+ 	spin_lock_irqsave(&ha->hardware_lock, flags);
+ 
+ 	/* Load mailbox registers. */
+-	optr = (uint32_t __iomem *)&reg->ispfx00.mailbox0;
++	optr = &reg->ispfx00.mailbox0;
+ 
+ 	iptr = mcp->mb;
+ 	command = mcp->mb[0];
+@@ -2846,13 +2846,13 @@ qlafx00_async_event(scsi_qla_host_t *vha)
+ 		break;
+ 
+ 	default:
+-		ha->aenmb[1] = RD_REG_WORD(&reg->aenmailbox1);
+-		ha->aenmb[2] = RD_REG_WORD(&reg->aenmailbox2);
+-		ha->aenmb[3] = RD_REG_WORD(&reg->aenmailbox3);
+-		ha->aenmb[4] = RD_REG_WORD(&reg->aenmailbox4);
+-		ha->aenmb[5] = RD_REG_WORD(&reg->aenmailbox5);
+-		ha->aenmb[6] = RD_REG_WORD(&reg->aenmailbox6);
+-		ha->aenmb[7] = RD_REG_WORD(&reg->aenmailbox7);
++		ha->aenmb[1] = RD_REG_DWORD(&reg->aenmailbox1);
++		ha->aenmb[2] = RD_REG_DWORD(&reg->aenmailbox2);
++		ha->aenmb[3] = RD_REG_DWORD(&reg->aenmailbox3);
++		ha->aenmb[4] = RD_REG_DWORD(&reg->aenmailbox4);
++		ha->aenmb[5] = RD_REG_DWORD(&reg->aenmailbox5);
++		ha->aenmb[6] = RD_REG_DWORD(&reg->aenmailbox6);
++		ha->aenmb[7] = RD_REG_DWORD(&reg->aenmailbox7);
+ 		ql_dbg(ql_dbg_async, vha, 0x5078,
+ 		    "AEN:%04x %04x %04x %04x :%04x %04x %04x %04x\n",
+ 		    ha->aenmb[0], ha->aenmb[1], ha->aenmb[2], ha->aenmb[3],
+@@ -2872,7 +2872,7 @@ static void
+ qlafx00_mbx_completion(scsi_qla_host_t *vha, uint32_t mb0)
+ {
+ 	uint16_t	cnt;
+-	uint32_t __iomem *wptr;
++	__le32 __iomem *wptr;
+ 	struct qla_hw_data *ha = vha->hw;
+ 	struct device_reg_fx00 __iomem *reg = &ha->iobase->ispfx00;
+ 
+@@ -2882,7 +2882,7 @@ qlafx00_mbx_completion(scsi_qla_host_t *vha, uint32_t mb0)
+ 	/* Load return mailbox registers. */
+ 	ha->flags.mbox_int = 1;
+ 	ha->mailbox_out32[0] = mb0;
+-	wptr = (uint32_t __iomem *)&reg->mailbox17;
++	wptr = &reg->mailbox17;
+ 
+ 	for (cnt = 1; cnt < ha->mbx_count; cnt++) {
+ 		ha->mailbox_out32[cnt] = RD_REG_DWORD(wptr);
+@@ -2939,13 +2939,13 @@ qlafx00_intr_handler(int irq, void *dev_id)
+ 			break;
+ 
+ 		if (stat & QLAFX00_INTR_MB_CMPLT) {
+-			mb[0] = RD_REG_WORD(&reg->mailbox16);
++			mb[0] = RD_REG_DWORD(&reg->mailbox16);
+ 			qlafx00_mbx_completion(vha, mb[0]);
+ 			status |= MBX_INTERRUPT;
+ 			clr_intr |= QLAFX00_INTR_MB_CMPLT;
+ 		}
+ 		if (intr_stat & QLAFX00_INTR_ASYNC_CMPLT) {
+-			ha->aenmb[0] = RD_REG_WORD(&reg->aenmailbox0);
++			ha->aenmb[0] = RD_REG_DWORD(&reg->aenmailbox0);
+ 			qlafx00_async_event(vha);
+ 			clr_intr |= QLAFX00_INTR_ASYNC_CMPLT;
+ 		}
+diff --git a/drivers/scsi/qla2xxx/qla_nx.c b/drivers/scsi/qla2xxx/qla_nx.c
+index 185c5f34d4c1..a1d462b13a4b 100644
+--- a/drivers/scsi/qla2xxx/qla_nx.c
++++ b/drivers/scsi/qla2xxx/qla_nx.c
+@@ -1996,11 +1996,11 @@ void
+ qla82xx_mbx_completion(scsi_qla_host_t *vha, uint16_t mb0)
+ {
+ 	uint16_t	cnt;
+-	uint16_t __iomem *wptr;
++	__le16 __iomem *wptr;
+ 	struct qla_hw_data *ha = vha->hw;
+ 	struct device_reg_82xx __iomem *reg = &ha->iobase->isp82;
+ 
+-	wptr = (uint16_t __iomem *)&reg->mailbox_out[1];
++	wptr = &reg->mailbox_out[1];
+ 
+ 	/* Load return mailbox registers. */
+ 	ha->flags.mbox_int = 1;
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index a34f27b2d602..f7bbd13555ba 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -6958,7 +6958,7 @@ qla2xxx_pci_mmio_enabled(struct pci_dev *pdev)
+ 
+ 	spin_lock_irqsave(&ha->hardware_lock, flags);
+ 	if (IS_QLA2100(ha) || IS_QLA2200(ha)){
+-		stat = RD_REG_DWORD(&reg->hccr);
++		stat = RD_REG_WORD(&reg->hccr);
+ 		if (stat & HCCR_RISC_PAUSE)
+ 			risc_paused = 1;
+ 	} else if (IS_QLA23XX(ha)) {
