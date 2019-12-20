@@ -2,70 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E93127E42
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 15:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D466127EB2
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Dec 2019 15:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728132AbfLTOj3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Dec 2019 09:39:29 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39186 "EHLO mx2.suse.de"
+        id S1727527AbfLTOrE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Dec 2019 09:47:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45222 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727525AbfLTOj0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 20 Dec 2019 09:39:26 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 16D27ADFE;
-        Fri, 20 Dec 2019 14:39:24 +0000 (UTC)
-Date:   Fri, 20 Dec 2019 15:39:22 +0100
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH] scsi: blacklist: add VMware ESXi cdrom - broken tray
- emulation
-Message-ID: <20191220143922.GM4113@kitsune.suse.cz>
-References: <20191217180840.9414-1-msuchanek@suse.de>
- <yq1bls6h9ir.fsf@oracle.com>
- <20191219143422.GJ4113@kitsune.suse.cz>
- <yq1pngjc2pr.fsf@oracle.com>
+        id S1727512AbfLTOrD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 20 Dec 2019 09:47:03 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 62C8E2467F;
+        Fri, 20 Dec 2019 14:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576853223;
+        bh=qy2Hj8Jihh6UUPtMjnlHVDEeTiIdr5Obn/PPl+H6i/g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=V+dELQhq1JHLNCQuMjAd16IOcBkLU0x42JQM/7kqCu4xI9yahr0kOa5+IhWBpxOdJ
+         NRwOkcnLLrHu8DbadMGF9+K6LyS0VsP7lWYMjMmbkkkJp/mgfSrbQf2OMcMioeyO20
+         hZZ124CIkq5fuSjRtrVgk4kWmhDGMbpCgR7o/5OU=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Bo Wu <wubo40@huawei.com>, Zhiqiang Liu <liuzhiqiang26@huawei.com>,
+        James Smart <james.smart@broadcom.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 03/14] scsi: lpfc: Fix memory leak on lpfc_bsg_write_ebuf_set func
+Date:   Fri, 20 Dec 2019 09:46:47 -0500
+Message-Id: <20191220144658.10414-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191220144658.10414-1-sashal@kernel.org>
+References: <20191220144658.10414-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <yq1pngjc2pr.fsf@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Dec 19, 2019 at 06:31:12PM -0500, Martin K. Petersen wrote:
-> 
-> Michal,
-> 
-> >> Please don't introduce a blist flag to work around deficiencies in the
-> >> matching interface. I suggest you tweak the matching functions so they
-> >> handle a NULL vendor string correctly.
-> >
-> > I don't think that will work with the interface for dynamically adding
-> > entries through sysfs.
-> 
-> Please make it work :)
-> 
-> There's nothing conceptually wrong with being able to do:
-> 
->         echo ":Model:Flags" > /proc/scsi/device_info
-> 
-> We keep running into issues where the same device needs to be listed
-> many times because it gets branded by different vendors.
-> 
-Is there any description of what the format is supposed to be?
+From: Bo Wu <wubo40@huawei.com>
 
-From the current code it looks like comma separated list of blacklist
-entries that may be optionally quoted in some way.
+[ Upstream commit 9a1b0b9a6dab452fb0e39fe96880c4faf3878369 ]
 
-The quoting is basically ignored but it is not clear if the inidividual
-entries are supposed to be quoted or the whole thing.
+When phba->mbox_ext_buf_ctx.seqNum != phba->mbox_ext_buf_ctx.numBuf,
+dd_data should be freed before return SLI_CONFIG_HANDLED.
 
-Thanks
+When lpfc_sli_issue_mbox func return fails, pmboxq should be also freed in
+job_error tag.
 
-Michal
+Link: https://lore.kernel.org/r/EDBAAA0BBBA2AC4E9C8B6B81DEEE1D6915E7A966@DGGEML525-MBS.china.huawei.com
+Signed-off-by: Bo Wu <wubo40@huawei.com>
+Reviewed-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
+Reviewed-by: James Smart <james.smart@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/lpfc/lpfc_bsg.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_bsg.c b/drivers/scsi/lpfc/lpfc_bsg.c
+index 05dcc2abd541a..99f06ac7bf4c5 100644
+--- a/drivers/scsi/lpfc/lpfc_bsg.c
++++ b/drivers/scsi/lpfc/lpfc_bsg.c
+@@ -4352,12 +4352,6 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct fc_bsg_job *job,
+ 	phba->mbox_ext_buf_ctx.seqNum++;
+ 	nemb_tp = phba->mbox_ext_buf_ctx.nembType;
+ 
+-	dd_data = kmalloc(sizeof(struct bsg_job_data), GFP_KERNEL);
+-	if (!dd_data) {
+-		rc = -ENOMEM;
+-		goto job_error;
+-	}
+-
+ 	pbuf = (uint8_t *)dmabuf->virt;
+ 	size = job->request_payload.payload_len;
+ 	sg_copy_to_buffer(job->request_payload.sg_list,
+@@ -4394,6 +4388,13 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct fc_bsg_job *job,
+ 				"2968 SLI_CONFIG ext-buffer wr all %d "
+ 				"ebuffers received\n",
+ 				phba->mbox_ext_buf_ctx.numBuf);
++
++		dd_data = kmalloc(sizeof(struct bsg_job_data), GFP_KERNEL);
++		if (!dd_data) {
++			rc = -ENOMEM;
++			goto job_error;
++		}
++
+ 		/* mailbox command structure for base driver */
+ 		pmboxq = mempool_alloc(phba->mbox_mem_pool, GFP_KERNEL);
+ 		if (!pmboxq) {
+@@ -4441,6 +4442,8 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, struct fc_bsg_job *job,
+ 	return SLI_CONFIG_HANDLED;
+ 
+ job_error:
++	if (pmboxq)
++		mempool_free(pmboxq, phba->mbox_mem_pool);
+ 	lpfc_bsg_dma_page_free(phba, dmabuf);
+ 	kfree(dd_data);
+ 
+-- 
+2.20.1
+
