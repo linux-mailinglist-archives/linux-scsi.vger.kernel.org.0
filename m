@@ -2,81 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB3A128C14
-	for <lists+linux-scsi@lfdr.de>; Sun, 22 Dec 2019 01:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE25B128C80
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Dec 2019 05:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbfLVAQM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 21 Dec 2019 19:16:12 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52390 "EHLO mail.kernel.org"
+        id S1726680AbfLVD77 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 21 Dec 2019 22:59:59 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:39869 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726024AbfLVAQM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 21 Dec 2019 19:16:12 -0500
-Received: from zzz.localdomain (h75-100-12-111.burkwi.broadband.dynamic.tds.net [75.100.12.111])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B0C0A206B7;
-        Sun, 22 Dec 2019 00:16:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576973771;
-        bh=zi2nezPZMF4U5iDzHEZMniOW0jiKQ3XbzvQhTGVXih0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PmEfdcFEm4iZEYixgfnC/uRgDEvX64zJcJZxYGNrmnC0RXjmgUCwRq2bvJHzcfEd7
-         cD8IWH5mszK2iHiQeuHCMd4zK8J0IDMhr8Utv4MZmvn41dMIQwyBIhGe4pZDLiqNMR
-         HajyfoOLGjhfi6UBWGo831W+/NFlYI1SyH8S+KUA=
-Date:   Sat, 21 Dec 2019 18:16:08 -0600
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Satya Tangirala <satyat@google.com>
-Cc:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>,
-        Kim Boojin <boojin.kim@samsung.com>
-Subject: Re: [PATCH v6 9/9] ext4: add inline encryption support
-Message-ID: <20191222001608.GB551@zzz.localdomain>
-References: <20191218145136.172774-1-satyat@google.com>
- <20191218145136.172774-10-satyat@google.com>
+        id S1726339AbfLVD77 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 21 Dec 2019 22:59:59 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id 176D8204193;
+        Sun, 22 Dec 2019 04:59:54 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wJrc9Ejmv2vA; Sun, 22 Dec 2019 04:59:52 +0100 (CET)
+Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 686FE204190;
+        Sun, 22 Dec 2019 04:59:51 +0100 (CET)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
+Subject: [RFC 0/6] scsi_debug: random doublestore verify
+Date:   Sat, 21 Dec 2019 22:59:42 -0500
+Message-Id: <20191222035948.30447-1-dgilbert@interlog.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191218145136.172774-10-satyat@google.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 06:51:36AM -0800, Satya Tangirala wrote:
-> @@ -1460,6 +1466,7 @@ enum {
->  	Opt_journal_path, Opt_journal_checksum, Opt_journal_async_commit,
->  	Opt_abort, Opt_data_journal, Opt_data_ordered, Opt_data_writeback,
->  	Opt_data_err_abort, Opt_data_err_ignore, Opt_test_dummy_encryption,
-> +	Opt_inlinecrypt,
->  	Opt_usrjquota, Opt_grpjquota, Opt_offusrjquota, Opt_offgrpjquota,
->  	Opt_jqfmt_vfsold, Opt_jqfmt_vfsv0, Opt_jqfmt_vfsv1, Opt_quota,
->  	Opt_noquota, Opt_barrier, Opt_nobarrier, Opt_err,
-> @@ -1556,6 +1563,7 @@ static const match_table_t tokens = {
->  	{Opt_noinit_itable, "noinit_itable"},
->  	{Opt_max_dir_size_kb, "max_dir_size_kb=%u"},
->  	{Opt_test_dummy_encryption, "test_dummy_encryption"},
-> +	{Opt_inlinecrypt, "inlinecrypt"},
->  	{Opt_nombcache, "nombcache"},
->  	{Opt_nombcache, "no_mbcache"},	/* for backward compatibility */
->  	{Opt_removed, "check=none"},	/* mount option from ext2/3 */
-> @@ -1767,6 +1775,11 @@ static const struct mount_opts {
->  	{Opt_jqfmt_vfsv1, QFMT_VFS_V1, MOPT_QFMT},
->  	{Opt_max_dir_size_kb, 0, MOPT_GTE0},
->  	{Opt_test_dummy_encryption, 0, MOPT_GTE0},
-> +#ifdef CONFIG_FS_ENCRYPTION_INLINE_CRYPT
-> +	{Opt_inlinecrypt, EXT4_MOUNT_INLINECRYPT, MOPT_SET},
-> +#else
-> +	{Opt_inlinecrypt, EXT4_MOUNT_INLINECRYPT, MOPT_NOSUPPORT},
-> +#endif
->  	{Opt_nombcache, EXT4_MOUNT_NO_MBCACHE, MOPT_SET},
->  	{Opt_err, 0, 0}
->  };
+This patchset contains various measures to improve the speed and
+usefulness of this driver. It has been used to test the rewrite
+of the SCSI generic (sg) driver which is still underway.
 
-This mount option will need to be documented in
-Documentation/admin-guide/ext4.rst for ext4 and
-Documentation/filesystems/f2fs.txt for f2fs.
+Disk to disk copies are the test of choice by the author. Some
+testing has been done using real hard disks and SSDs but the
+bulk of the testing has been done using this driver as both the
+source and destination of the copy. SSDs have two shortcomings:
+they are not as fast as the manufacturers would like users to
+believe with an average latency to READ at around 100
+microseconds; the second problem is "endurance". Endurance is
+a wear-out factor based on the number of WRITEs to the SSD.
+One would hope both these measures will improve in the future.
 
-- Eric
+The author found that precise command duration timing gave a
+false impression of how "bulletproof" the sg driver state
+machines and locking was. The first patch involving randomizing
+the command durations and it did expose various issues in the
+driver under test (sg). The next issue was the correctness of
+the bulk copies being done. The doublestore and verify patches
+allow the copies to be verified and it demonstrated at least
+one area of concern for the sg driver.
+
+Since all scsi_debug memory stores accesses are done in the
+context of queuecommand() call, the *_irqsave() and
+*_irqrestore() variants of the associated locks have been
+removed.  That could be a problem if queuecommand() can ever
+be called form an interrupt or related context.
+
+Finally to address the discrepancy between command duration
+times seen by the sg driver compared to what was set with
+this driver's ndelay option, this driver's timekeeping for
+short durations was made more accurate.
+
+This patchset is against Martin Petersen's git repository
+and its 5.6/scsi-queue branch.
+
+---
+
+One shortcoming of the doublestore approach is that both
+stores share all the other module settings that are
+held at file scope in the driver. With a little extra hacking
+it is possible to have multiple scsi_debug (like) drivers
+in a single kernel. That may be one way around this
+shortcoming.
+
+Douglas Gilbert (6):
+  scsi_debug: randomize command completion time
+  scsi_debug: add doublestore option
+  scsi_debug: implement verify(10), add verify(16)
+  scsi_debug: weaken rwlock around ramdisk access
+  scsi_debug: improve command duration calculation
+  scsi_debug: bump to version 1.89
+
+ drivers/scsi/scsi_debug.c | 444 +++++++++++++++++++++++++++++---------
+ 1 file changed, 343 insertions(+), 101 deletions(-)
+
+-- 
+2.24.1
+
