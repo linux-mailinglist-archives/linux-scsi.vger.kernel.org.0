@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D652128C83
-	for <lists+linux-scsi@lfdr.de>; Sun, 22 Dec 2019 05:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8DD128C85
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Dec 2019 05:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726705AbfLVEAA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 21 Dec 2019 23:00:00 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:39885 "EHLO smtp.infotech.no"
+        id S1726733AbfLVEAC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 21 Dec 2019 23:00:02 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:39904 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726549AbfLVD77 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 21 Dec 2019 22:59:59 -0500
+        id S1726549AbfLVEAC (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 21 Dec 2019 23:00:02 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 9F96F20419B;
-        Sun, 22 Dec 2019 04:59:57 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTP id D218C204195;
+        Sun, 22 Dec 2019 04:59:59 +0100 (CET)
 X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
 Received: from smtp.infotech.no ([127.0.0.1])
         by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id f8bcO2YuKpdu; Sun, 22 Dec 2019 04:59:55 +0100 (CET)
+        with ESMTP id cNbpgjyveH4q; Sun, 22 Dec 2019 04:59:57 +0100 (CET)
 Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 91FFC204190;
-        Sun, 22 Dec 2019 04:59:54 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTPA id 96067204191;
+        Sun, 22 Dec 2019 04:59:55 +0100 (CET)
 From:   Douglas Gilbert <dgilbert@interlog.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
-Subject: [RFC 3/6] scsi_debug: implement verify(10), add verify(16)
-Date:   Sat, 21 Dec 2019 22:59:45 -0500
-Message-Id: <20191222035948.30447-4-dgilbert@interlog.com>
+Subject: [RFC 4/6] scsi_debug: weaken rwlock around ramdisk access
+Date:   Sat, 21 Dec 2019 22:59:46 -0500
+Message-Id: <20191222035948.30447-5-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191222035948.30447-1-dgilbert@interlog.com>
 References: <20191222035948.30447-1-dgilbert@interlog.com>
@@ -37,218 +37,284 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-With the addition of the doublestore option, the ability to check
-whether the two different ramdisk images are the same or not
-becomes useful. Prior to this patch VERIFY(10) always returned
-true (i.e. the SCSI GOOD status) without checking. This option
-adds support for BYTCHK equal to 1 and 3 . If the comparison
-fails then a sense key of MISCOMPARE is returned as per the
-T10 standards. Add support for the VERIFY(16).
+The design of this driver is to do any ramdisk access on the
+same thread that invoked the queuecommand() call. That is
+assumed to be user space context. The command
+duration is implemented by setting the delay with a high
+resolution timer. The hr timer's callback may well be in
+interrupt context, but it doesn't touch the ramdisk. So try
+removing the _irqsave()/_irqrestore() portion on the read-
+write lock that protects ramdisk access.
 
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 ---
- drivers/scsi/scsi_debug.c | 118 ++++++++++++++++++++++++++++++++++----
- 1 file changed, 107 insertions(+), 11 deletions(-)
+ drivers/scsi/scsi_debug.c | 59 +++++++++++++++------------------------
+ 1 file changed, 22 insertions(+), 37 deletions(-)
 
 diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 45934dae8617..5d9dc9bdd1a7 100644
+index 5d9dc9bdd1a7..a3cb0bc29f81 100644
 --- a/drivers/scsi/scsi_debug.c
 +++ b/drivers/scsi/scsi_debug.c
-@@ -342,7 +342,7 @@ enum sdeb_opcode_index {
- 	SDEB_I_SERV_ACT_OUT_16 = 13,	/* add ...SERV_ACT_OUT_12 if needed */
- 	SDEB_I_MAINT_IN = 14,
- 	SDEB_I_MAINT_OUT = 15,
--	SDEB_I_VERIFY = 16,		/* 10 only */
-+	SDEB_I_VERIFY = 16,		/* VERIFY(10), VERIFY(16) */
- 	SDEB_I_VARIABLE_LEN = 17,	/* READ(32), WRITE(32), WR_SCAT(32) */
- 	SDEB_I_RESERVE = 18,		/* 6, 10 */
- 	SDEB_I_RELEASE = 19,		/* 6, 10 */
-@@ -385,7 +385,8 @@ static const unsigned char opcode_ind_arr[256] = {
- 	0, SDEB_I_VARIABLE_LEN,
- /* 0x80; 0x80->0x9f: 16 byte cdbs */
- 	0, 0, 0, 0, 0, SDEB_I_ATA_PT, 0, 0,
--	SDEB_I_READ, SDEB_I_COMP_WRITE, SDEB_I_WRITE, 0, 0, 0, 0, 0,
-+	SDEB_I_READ, SDEB_I_COMP_WRITE, SDEB_I_WRITE, 0,
-+	0, 0, 0, SDEB_I_VERIFY,
- 	0, SDEB_I_SYNC_CACHE, 0, SDEB_I_WRITE_SAME, 0, 0, 0, 0,
- 	0, 0, 0, 0, 0, 0, SDEB_I_SERV_ACT_IN_16, SDEB_I_SERV_ACT_OUT_16,
- /* 0xa0; 0xa0->0xbf: 12 byte cdbs */
-@@ -427,6 +428,7 @@ static int resp_report_tgtpgs(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_unmap(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_rsup_opcodes(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_rsup_tmfs(struct scsi_cmnd *, struct sdebug_dev_info *);
-+static int resp_verify(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_write_same_10(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_write_same_16(struct scsi_cmnd *, struct sdebug_dev_info *);
- static int resp_comp_write(struct scsi_cmnd *, struct sdebug_dev_info *);
-@@ -471,6 +473,12 @@ static const struct opcode_info_t write_iarr[] = {
- 		   0xbf, 0xc7, 0, 0, 0, 0} },
- };
- 
-+static const struct opcode_info_t verify_iarr[] = {
-+	{0, 0x2f, 0, F_D_OUT_MAYBE | FF_MEDIA_IO, resp_verify,/* VERIFY(10) */
-+	    NULL, {10,  0xf7, 0xff, 0xff, 0xff, 0xff, 0xbf, 0xff, 0xff, 0xc7,
-+		   0, 0, 0, 0, 0, 0} },
-+};
-+
- static const struct opcode_info_t sa_in_16_iarr[] = {
- 	{0, 0x9e, 0x12, F_SA_LOW | F_D_IN, resp_get_lba_status, NULL,
- 	    {16,  0x12, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-@@ -571,9 +579,10 @@ static const struct opcode_info_t opcode_info_arr[SDEB_I_LAST_ELEMENT + 1] = {
- /* 15 */
- 	{0, 0, 0, F_INV_OP | FF_RESPOND, NULL, NULL, /* MAINT OUT */
- 	    {0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
--	{0, 0x2f, 0, F_D_OUT_MAYBE | FF_MEDIA_IO, NULL, NULL, /* VERIFY(10) */
--	    {10,  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc7,
--	     0, 0, 0, 0, 0, 0} },
-+	{ARRAY_SIZE(verify_iarr), 0x8f, 0,
-+	    F_D_OUT_MAYBE | FF_MEDIA_IO, resp_verify,	/* VERIFY(16) */
-+	    verify_iarr, {16,  0xf6, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-+			  0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0xc7} },
- 	{ARRAY_SIZE(vl_iarr), 0x7f, 0x9, F_SA_HIGH | F_D_IN | FF_MEDIA_IO,
- 	    resp_read_dt0, vl_iarr,	/* VARIABLE LENGTH, READ(32) */
- 	    {32,  0xc7, 0, 0, 0, 0, 0x3f, 0x18, 0x0, 0x9, 0xfe, 0, 0xff, 0xff,
-@@ -2543,7 +2552,8 @@ static int do_device_access(struct scsi_cmnd *scmd, u32 sg_skip, u64 lba,
- /* If lba2fake_store(lba,num) compares equal to arr(num), then copy top half of
-  * arr into lba2fake_store(lba,num) and return true. If comparison fails then
-  * return false. */
--static bool comp_write_worker(u64 lba, u32 num, const u8 *arr, int acc_num)
-+static bool comp_write_worker(u64 lba, u32 num, const u8 *arr, int acc_num,
-+			      bool compare_only)
- {
- 	bool res;
- 	u64 block, rest = 0;
-@@ -2565,6 +2575,8 @@ static bool comp_write_worker(u64 lba, u32 num, const u8 *arr, int acc_num)
- 			     rest * lb_size);
- 	if (!res)
- 		return res;
-+	if (compare_only)
-+		return true;
- 	arr += num * lb_size;
- 	memcpy(fsp + (block * lb_size), arr, (num - rest) * lb_size);
- 	if (rest)
-@@ -3472,9 +3484,11 @@ static int resp_comp_write(struct scsi_cmnd *scp,
- 
- 	write_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
- 
--	/* trick do_device_access() to fetch both compare and write buffers
--	 * from data-in into arr. Safe (atomic) since write_lock held. */
--	fspp = &fake_store_a[scp2acc_num(scp) % 2];
-+	/*
-+	 * Trick do_device_access() to fetch both compare and write buffers
-+	 * from data-out into arr. Safe (atomic) since write_lock held.
-+	 */
-+	fspp = &fake_store_a[acc_num % 2];
- 	fsp_hold = *fspp;
- 	*fspp = arr;
- 	ret = do_device_access(scp, 0, 0, dnum, true);
-@@ -3486,7 +3500,7 @@ static int resp_comp_write(struct scsi_cmnd *scp,
- 		sdev_printk(KERN_INFO, scp->device, "%s: compare_write: cdb "
- 			    "indicated=%u, IO sent=%d bytes\n", my_name,
- 			    dnum * lb_size, ret);
--	if (!comp_write_worker(lba, num, arr, scp2acc_num(scp))) {
-+	if (!comp_write_worker(lba, num, arr, acc_num, false)) {
- 		mk_sense_buffer(scp, MISCOMPARE, MISCOMPARE_VERIFY_ASC, 0);
- 		retval = check_condition_result;
- 		goto cleanup;
-@@ -3550,7 +3564,7 @@ static int resp_unmap(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
- 		if (ret)
- 			goto out;
- 
--		unmap_region(lba, num, scp2acc_num(scp));
-+		unmap_region(lba, num, acc_num);
+@@ -2703,7 +2703,6 @@ static int resp_read_dt0(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	u32 num;
+ 	u32 ei_lba;
+ 	int acc_num = scp2acc_num(scp);
+-	unsigned long iflags;
+ 	u64 lba;
+ 	int ret;
+ 	bool check_prot;
+@@ -2788,22 +2787,21 @@ static int resp_read_dt0(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 		return check_condition_result;
  	}
  
- 	ret = 0;
-@@ -3731,6 +3745,88 @@ static int resp_report_luns(struct scsi_cmnd *scp,
- 	return res;
- }
+-	read_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
++	read_lock(ramdisk_lck_a[acc_num % 2]);
  
-+static int resp_verify(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
-+{
-+	bool is_bytchk3 = false;
-+	u8 bytchk;
-+	int ret, j;
-+	int acc_num = scp2acc_num(scp);
-+	u32 vnum, a_num, off;
-+	const u32 lb_size = sdebug_sector_size;
-+	unsigned long iflags;
-+	u64 lba;
-+	u8 *arr;
-+	u8 **fspp;
-+	u8 *fsp_hold;
-+	u8 *cmd = scp->cmnd;
-+
-+	bytchk = (cmd[1] >> 1) & 0x3;
-+	if (bytchk == 0) {
-+		return 0;	/* always claim internal verify okay */
-+	} else if (bytchk == 2) {
-+		mk_sense_invalid_fld(scp, SDEB_IN_CDB, 2, 2);
-+		return check_condition_result;
-+	} else if (bytchk == 3) {
-+		is_bytchk3 = true;	/* 1 block sent, compared repeatedly */
-+	}
-+	switch (cmd[0]) {
-+	case VERIFY_16:
-+		lba = get_unaligned_be64(cmd + 2);
-+		vnum = get_unaligned_be32(cmd + 10);
-+		break;
-+	case VERIFY:		/* is VERIFY(10) */
-+		lba = get_unaligned_be32(cmd + 2);
-+		vnum = get_unaligned_be16(cmd + 7);
-+		break;
-+	default:
-+		mk_sense_invalid_opcode(scp);
-+		return check_condition_result;
-+	}
-+	a_num = is_bytchk3 ? 1 : vnum;
-+	/* Treat following check like one for read (i.e. no write) access */
-+	ret = check_device_access_params(scp, lba, a_num, false);
-+	if (ret)
-+		return ret;
-+
-+	arr = kcalloc(lb_size, vnum, GFP_ATOMIC);
-+	if (!arr) {
-+		mk_sense_buffer(scp, ILLEGAL_REQUEST, INSUFF_RES_ASC,
-+				INSUFF_RES_ASCQ);
-+		return check_condition_result;
-+	}
-+	/* Not changing store, so only need read access */
-+	read_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
-+
-+	/* trick do_device_access() to fetch data-out into arr. */
-+	fspp = &fake_store_a[acc_num % 2];
-+	fsp_hold = *fspp;
-+	*fspp = arr;
-+	ret = do_device_access(scp, 0, 0, a_num, true);
-+	*fspp = fsp_hold;
-+	if (ret == -1) {
-+		ret = DID_ERROR << 16;
-+		goto cleanup;
-+	} else if (sdebug_verbose && (ret < (a_num * lb_size))) {
-+		sdev_printk(KERN_INFO, scp->device,
-+			    "%s: %s: cdb indicated=%u, IO sent=%d bytes\n",
-+			    my_name, __func__, a_num * lb_size, ret);
-+	}
-+	if (is_bytchk3) {
-+		for (j = 1, off = lb_size; j < vnum; ++j, off += lb_size)
-+			memcpy(arr + off, arr, lb_size);
-+	}
-+	ret = 0;
-+	if (!comp_write_worker(lba, vnum, arr, acc_num, true)) {
-+		mk_sense_buffer(scp, MISCOMPARE, MISCOMPARE_VERIFY_ASC, 0);
-+		ret = check_condition_result;
-+		goto cleanup;
-+	}
-+cleanup:
-+	read_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
-+	kfree(arr);
-+	return ret;
-+}
-+
- static struct sdebug_queue *get_queue(struct scsi_cmnd *cmnd)
+ 	/* DIX + T10 DIF */
+ 	if (unlikely(sdebug_dix && scsi_prot_sg_count(scp))) {
+ 		int prot_ret = prot_verify_read(scp, lba, num, ei_lba);
+ 
+ 		if (prot_ret) {
+-			read_unlock_irqrestore(ramdisk_lck_a[acc_num % 2],
+-					       iflags);
++			read_unlock(ramdisk_lck_a[acc_num % 2]);
+ 			mk_sense_buffer(scp, ABORTED_COMMAND, 0x10, prot_ret);
+ 			return illegal_condition_result;
+ 		}
+ 	}
+ 
+ 	ret = do_device_access(scp, 0, lba, num, false);
+-	read_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
++	read_unlock(ramdisk_lck_a[acc_num % 2]);
+ 	if (unlikely(ret == -1))
+ 		return DID_ERROR << 16;
+ 
+@@ -3010,7 +3008,6 @@ static int resp_write_dt0(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	u32 ei_lba;
+ 	int acc_num = scp2acc_num(scp);
+ 	int ret;
+-	unsigned long iflags;
+ 	u64 lba;
+ 	u8 *cmd = scp->cmnd;
+ 
+@@ -3068,15 +3065,14 @@ static int resp_write_dt0(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	ret = check_device_access_params(scp, lba, num, true);
+ 	if (ret)
+ 		return ret;
+-	write_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
++	write_lock(ramdisk_lck_a[acc_num % 2]);
+ 
+ 	/* DIX + T10 DIF */
+ 	if (unlikely(sdebug_dix && scsi_prot_sg_count(scp))) {
+ 		int prot_ret = prot_verify_write(scp, lba, num, ei_lba);
+ 
+ 		if (prot_ret) {
+-			write_unlock_irqrestore(ramdisk_lck_a[acc_num % 2],
+-						iflags);
++			write_unlock(ramdisk_lck_a[acc_num % 2]);
+ 			mk_sense_buffer(scp, ILLEGAL_REQUEST, 0x10, prot_ret);
+ 			return illegal_condition_result;
+ 		}
+@@ -3085,7 +3081,7 @@ static int resp_write_dt0(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	ret = do_device_access(scp, 0, lba, num, true);
+ 	if (unlikely(scsi_debug_lbp()))
+ 		map_region(lba, num);
+-	write_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
++	write_unlock(ramdisk_lck_a[acc_num % 2]);
+ 	if (unlikely(-1 == ret))
+ 		return DID_ERROR << 16;
+ 	else if (unlikely(sdebug_verbose &&
+@@ -3133,7 +3129,6 @@ static int resp_write_scat(struct scsi_cmnd *scp,
+ 	u32 ei_lba;
+ 	int acc_num = scp2acc_num(scp);
+ 	u64 lba;
+-	unsigned long iflags;
+ 	int ret, res;
+ 	bool is_16;
+ 	static const u32 lrd_size = 32; /* + parameter list header size */
+@@ -3195,7 +3190,7 @@ static int resp_write_scat(struct scsi_cmnd *scp,
+ 		goto err_out;
+ 	}
+ 
+-	write_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
++	write_lock(ramdisk_lck_a[acc_num % 2]);
+ 	sg_off = lbdof_blen;
+ 	/* Spec says Buffer xfer Length field in number of LBs in dout */
+ 	cum_lb = 0;
+@@ -3278,7 +3273,7 @@ static int resp_write_scat(struct scsi_cmnd *scp,
+ 	}
+ 	ret = 0;
+ err_out_unlock:
+-	write_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
++	write_unlock(ramdisk_lck_a[acc_num % 2]);
+ err_out:
+ 	kfree(lrdp);
+ 	return ret;
+@@ -3287,7 +3282,6 @@ static int resp_write_scat(struct scsi_cmnd *scp,
+ static int resp_write_same(struct scsi_cmnd *scp, u64 lba, u32 num,
+ 			   u32 ei_lba, bool unmap, bool ndob)
  {
- 	u32 tag = blk_mq_unique_tag(cmnd->request);
+-	unsigned long iflags;
+ 	unsigned long long i;
+ 	u64 block, lbaa;
+ 	u32 lb_size = sdebug_sector_size;
+@@ -3300,7 +3294,7 @@ static int resp_write_same(struct scsi_cmnd *scp, u64 lba, u32 num,
+ 	if (ret)
+ 		return ret;
+ 
+-	write_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
++	write_lock(ramdisk_lck_a[acc_num % 2]);
+ 
+ 	if (unmap && scsi_debug_lbp()) {
+ 		unmap_region(lba, num, acc_num);
+@@ -3318,7 +3312,7 @@ static int resp_write_same(struct scsi_cmnd *scp, u64 lba, u32 num,
+ 		ret = fetch_to_dev_buffer(scp, fs1p, lb_size);
+ 
+ 	if (-1 == ret) {
+-		write_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
++		write_unlock(ramdisk_lck_a[acc_num % 2]);
+ 		return DID_ERROR << 16;
+ 	} else if (sdebug_verbose && !ndob && (ret < lb_size))
+ 		sdev_printk(KERN_INFO, scp->device,
+@@ -3334,7 +3328,7 @@ static int resp_write_same(struct scsi_cmnd *scp, u64 lba, u32 num,
+ 	if (scsi_debug_lbp())
+ 		map_region(lba, num);
+ out:
+-	write_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
++	write_unlock(ramdisk_lck_a[acc_num % 2]);
+ 
+ 	return 0;
+ }
+@@ -3452,7 +3446,6 @@ static int resp_comp_write(struct scsi_cmnd *scp,
+ 	u32 dnum;
+ 	u32 lb_size = sdebug_sector_size;
+ 	u8 num;
+-	unsigned long iflags;
+ 	int ret;
+ 	int retval = 0;
+ 	int acc_num = scp2acc_num(scp);
+@@ -3482,7 +3475,7 @@ static int resp_comp_write(struct scsi_cmnd *scp,
+ 		return check_condition_result;
+ 	}
+ 
+-	write_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
++	write_lock(ramdisk_lck_a[acc_num % 2]);
+ 
+ 	/*
+ 	 * Trick do_device_access() to fetch both compare and write buffers
+@@ -3508,7 +3501,7 @@ static int resp_comp_write(struct scsi_cmnd *scp,
+ 	if (scsi_debug_lbp())
+ 		map_region(lba, num);
+ cleanup:
+-	write_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
++	write_unlock(ramdisk_lck_a[acc_num % 2]);
+ 	kfree(arr);
+ 	return retval;
+ }
+@@ -3526,8 +3519,6 @@ static int resp_unmap(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	unsigned int i, payload_len, descriptors;
+ 	int ret;
+ 	int acc_num = scp2acc_num(scp);
+-	unsigned long iflags;
+-
+ 
+ 	if (!scsi_debug_lbp())
+ 		return 0;	/* fib and say its done */
+@@ -3554,7 +3545,7 @@ static int resp_unmap(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 
+ 	desc = (void *)&buf[8];
+ 
+-	write_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
++	write_lock(ramdisk_lck_a[acc_num % 2]);
+ 
+ 	for (i = 0 ; i < descriptors ; i++) {
+ 		unsigned long long lba = get_unaligned_be64(&desc[i].lba);
+@@ -3570,7 +3561,7 @@ static int resp_unmap(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	ret = 0;
+ 
+ out:
+-	write_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
++	write_unlock(ramdisk_lck_a[acc_num % 2]);
+ 	kfree(buf);
+ 
+ 	return ret;
+@@ -3753,7 +3744,6 @@ static int resp_verify(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 	int acc_num = scp2acc_num(scp);
+ 	u32 vnum, a_num, off;
+ 	const u32 lb_size = sdebug_sector_size;
+-	unsigned long iflags;
+ 	u64 lba;
+ 	u8 *arr;
+ 	u8 **fspp;
+@@ -3795,7 +3785,7 @@ static int resp_verify(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 		return check_condition_result;
+ 	}
+ 	/* Not changing store, so only need read access */
+-	read_lock_irqsave(ramdisk_lck_a[acc_num % 2], iflags);
++	read_lock(ramdisk_lck_a[acc_num % 2]);
+ 
+ 	/* trick do_device_access() to fetch data-out into arr. */
+ 	fspp = &fake_store_a[acc_num % 2];
+@@ -3822,7 +3812,7 @@ static int resp_verify(struct scsi_cmnd *scp, struct sdebug_dev_info *devip)
+ 		goto cleanup;
+ 	}
+ cleanup:
+-	read_unlock_irqrestore(ramdisk_lck_a[acc_num % 2], iflags);
++	read_unlock(ramdisk_lck_a[acc_num % 2]);
+ 	kfree(arr);
+ 	return ret;
+ }
+@@ -4471,9 +4461,6 @@ static int schedule_resp(struct scsi_cmnd *cmnd, struct sdebug_dev_info *devip,
+ 
+ 	cmnd->result = pfp != NULL ? pfp(cmnd, devip) : 0;
+ 	if (cmnd->result & SDEG_RES_IMMED_MASK) {
+-		/*
+-		 * This is the F_DELAY_OVERR case. No delay.
+-		 */
+ 		cmnd->result &= ~SDEG_RES_IMMED_MASK;
+ 		delta_jiff = ndelay = 0;
+ 	}
+@@ -4998,16 +4985,14 @@ static ssize_t doublestore_store(struct device_driver *ddp, const char *buf,
+ 	int n;
+ 
+ 	if (count > 0 && kstrtoint(buf, 10, &n) == 0 && n >= 0) {
+-		unsigned long iflags;
+-
+ 		if (sdebug_doublestore == (n > 0))
+ 			return count;	/* no state change */
+ 		if (n <= 0) {
+-			write_lock_irqsave(ramdisk_lck_a[1], iflags);
++			write_lock(ramdisk_lck_a[1]);
+ 			sdebug_doublestore = false;
+ 			vfree(fake_store_a[1]);
+ 			fake_store_a[1] = NULL;
+-			write_unlock_irqrestore(ramdisk_lck_a[1], iflags);
++			write_unlock(ramdisk_lck_a[1]);
+ 		} else {
+ 			unsigned long sz = (unsigned long)sdebug_dev_size_mb *
+ 					   1048576;
+@@ -5017,10 +5002,10 @@ static ssize_t doublestore_store(struct device_driver *ddp, const char *buf,
+ 				return -ENOMEM;
+ 			if (sdebug_num_parts > 0)
+ 				sdebug_build_parts(fsp, sz);
+-			write_lock_irqsave(ramdisk_lck_a[1], iflags);
++			write_lock(ramdisk_lck_a[1]);
+ 			fake_store_a[1] = fsp;
+ 			sdebug_doublestore = true;
+-			write_unlock_irqrestore(ramdisk_lck_a[1], iflags);
++			write_unlock(ramdisk_lck_a[1]);
+ 		}
+ 		return count;
+ 	}
+@@ -5953,7 +5938,7 @@ static int scsi_debug_queuecommand(struct Scsi_Host *shost,
+ 		pfp = r_pfp;    /* if leaf function ptr NULL, try the root's */
+ 
+ fini:
+-	if (F_DELAY_OVERR & flags)
++	if (F_DELAY_OVERR & flags)	/* cmds like INQUIRY respond asap */
+ 		return schedule_resp(scp, devip, errsts, pfp, 0, 0);
+ 	else if ((flags & F_LONG_DELAY) && (sdebug_jdelay > 0 ||
+ 					    sdebug_ndelay > 10000)) {
 -- 
 2.24.1
 
