@@ -2,829 +2,165 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB60812ADB8
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Dec 2019 18:51:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0944312AE7D
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Dec 2019 21:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726827AbfLZRvC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Dec 2019 12:51:02 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:39829 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726475AbfLZRvB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Dec 2019 12:51:01 -0500
-Received: by mail-pf1-f193.google.com with SMTP id q10so13475656pfs.6;
-        Thu, 26 Dec 2019 09:51:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZgCgO40g/StfJDNuVYNHi/PDteQG4vyrAha6uk2aSpk=;
-        b=WKzEykrpBvTbMsY7TSb7Qf+wkT4WuPCoNCmMEz4iaBmzM2tx+khT7GGdx4rGHKPdj4
-         w5swwBhPaE0bhJXkP1QGnkN2hhclI3rP/4i/SkQoGxWI2uJ9Y1xLbiJUl7QkM/VfXp66
-         CBKQAjvYcua3PIfHMsubdaa0vzJpcfU2GgZN8zjN4c3vHpJUU71bzEuxgx8xHgNZLGMY
-         3uYRM9HAqJMJjoU7JccdHrRt1waN5vBtsBvmECuBsFF7ymNHjKdoogMGhNpFeeCYAVyb
-         S2JkidH61zJ78NkEkPxLFTz5XFPjfUx6XkdEln8fklS/7ntcF7n6Wt0rNilceh93i7L5
-         tTWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=ZgCgO40g/StfJDNuVYNHi/PDteQG4vyrAha6uk2aSpk=;
-        b=kmt69+q5lPWepw1wFxlK2r4Z7kr+t7LrRdDMmZOLh3rSfdm93llJ1ZEoSUwp2+0Pf/
-         xNYKxfrvlqa/2I41EsGiVlJ0sgqx1+At/XLMby5Lnj3Dw/m5vOM2IkKcXlV7YJZ1uJEW
-         Q+QNOzddVPyStDLfkpy+kplw7k+7prAZju5J9nABDMej75shbBwXvcvicfvL2KNO/S0f
-         QosJu8mCOhYD8wYKoCnUfe0A5tfOVNblseAvj6k4B6R5SYEwvmIBka1cA7V2OpcKuqBQ
-         r0JAlD89sKrn3PJnWu+RVCnZNTrZlUhATRax5LZ/SA/q4CGg2p5PmL12NvB8HC75FDcn
-         m5NQ==
-X-Gm-Message-State: APjAAAXl/cnM1f+4zu5FmNnsbxWvXXeSDs+Bkx9S0SwBaNK33lflihsQ
-        Aas6AQD2SHr0GxXZE6X0SQXWfsER
-X-Google-Smtp-Source: APXvYqxqkw/uTKALkZS+C+mbYJD80uP9sYNQB1fGTx8dFpH1QnC3kLvXK/Cml7F6o8LJeRH+jVrV+Q==
-X-Received: by 2002:aa7:800e:: with SMTP id j14mr24787975pfi.174.1577382659701;
-        Thu, 26 Dec 2019 09:50:59 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l2sm11281373pjt.31.2019.12.26.09.50.58
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 26 Dec 2019 09:50:59 -0800 (PST)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-hwmon@vger.kernel.org
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Chris Healy <cphealy@gmail.com>
-Subject: [RFT PATCH v3 1/1] hwmon: Driver for disk and solid state drives with temperature sensors
-Date:   Thu, 26 Dec 2019 09:50:51 -0800
-Message-Id: <20191226175051.31664-2-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191226175051.31664-1-linux@roeck-us.net>
-References: <20191226175051.31664-1-linux@roeck-us.net>
+        id S1726831AbfLZUbz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Dec 2019 15:31:55 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:37184 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726653AbfLZUbz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Dec 2019 15:31:55 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id 6BF1A27FDC0
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     lduncan@suse.com
+Cc:     cleech@redhat.com, martin.petersen@oracle.com,
+        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH RESEND] iscsi: Don't destroy session if there are outstanding connections
+Date:   Thu, 26 Dec 2019 15:31:48 -0500
+Message-Id: <20191226203148.2172200-1-krisman@collabora.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Reading the temperature of ATA drives has been supported for years
-by userspace tools such as smarttools or hddtemp. The downside of
-such tools is that they need to run with super-user privilege, that
-the temperatures are not reported by standard tools such as 'sensors'
-or 'libsensors', and that drive temperatures are not available for use
-in the kernel's thermal subsystem.
+From: Nick Black <nlb@google.com>
 
-This driver solves this problem by adding support for reading the
-temperature of ATA drives from the kernel using the hwmon API and
-by adding a temperature zone for each drive.
+Hi,
 
-With this driver, the hard disk temperature can be read using the
-unprivileged 'sensors' application:
+I thought this was already committed for some reason, until it bit me
+again today.  Any opposition to this one?
 
-$ sensors satatemp-scsi-1-0
-satatemp-scsi-1-0
-Adapter: SCSI adapter
-temp1:        +23.0°C
+>8
 
-or directly from sysfs:
+A faulty userspace that calls destroy_session() before destroying the
+connections can trigger the failure.  This patch prevents the
+issue by refusing to destroy the session if there are outstanding
+connections.
 
-$ grep . /sys/class/hwmon/hwmon9/{name,temp1_input}
-/sys/class/hwmon/hwmon9/name:satatemp
-/sys/class/hwmon/hwmon9/temp1_input:23000
+------------[ cut here ]------------
+kernel BUG at mm/slub.c:306!
+invalid opcode: 0000 [#1] SMP PTI
+CPU: 1 PID: 1224 Comm: iscsid Not tainted 5.4.0-rc2.iscsi+ #7
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
+RIP: 0010:__slab_free+0x181/0x350
+[...]
+[ 1209.686056] RSP: 0018:ffffa93d4074fae0 EFLAGS: 00010246
+[ 1209.686694] RAX: ffff934efa5ad800 RBX: 000000008010000a RCX: ffff934efa5ad800
+[ 1209.687651] RDX: ffff934efa5ad800 RSI: ffffeb4041e96b00 RDI: ffff934efd402c40
+[ 1209.688582] RBP: ffffa93d4074fb80 R08: 0000000000000001 R09: ffffffffbb5dfa26
+[ 1209.689425] R10: ffff934efa5ad800 R11: 0000000000000001 R12: ffffeb4041e96b00
+[ 1209.690285] R13: ffff934efa5ad800 R14: ffff934efd402c40 R15: 0000000000000000
+[ 1209.691213] FS:  00007f7945dfb540(0000) GS:ffff934efda80000(0000) knlGS:0000000000000000
+[ 1209.692316] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1209.693013] CR2: 000055877fd3da80 CR3: 0000000077384000 CR4: 00000000000006e0
+[ 1209.693897] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1209.694773] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1209.695631] Call Trace:
+[ 1209.695957]  ? __wake_up_common_lock+0x8a/0xc0
+[ 1209.696712]  iscsi_pool_free+0x26/0x40
+[ 1209.697263]  iscsi_session_teardown+0x2f/0xf0
+[ 1209.698117]  iscsi_sw_tcp_session_destroy+0x45/0x60
+[ 1209.698831]  iscsi_if_rx+0xd88/0x14e0
+[ 1209.699370]  netlink_unicast+0x16f/0x200
+[ 1209.699932]  netlink_sendmsg+0x21a/0x3e0
+[ 1209.700446]  sock_sendmsg+0x4f/0x60
+[ 1209.700902]  ___sys_sendmsg+0x2ae/0x320
+[ 1209.701451]  ? cp_new_stat+0x150/0x180
+[ 1209.701922]  __sys_sendmsg+0x59/0xa0
+[ 1209.702357]  do_syscall_64+0x52/0x160
+[ 1209.702812]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[ 1209.703419] RIP: 0033:0x7f7946433914
+[...]
+[ 1209.706084] RSP: 002b:00007fffb99f2378 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+[ 1209.706994] RAX: ffffffffffffffda RBX: 000055bc869eac20 RCX: 00007f7946433914
+[ 1209.708082] RDX: 0000000000000000 RSI: 00007fffb99f2390 RDI: 0000000000000005
+[ 1209.709120] RBP: 00007fffb99f2390 R08: 000055bc84fe9320 R09: 00007fffb99f1f07
+[ 1209.710110] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000038
+[ 1209.711085] R13: 000055bc8502306e R14: 0000000000000000 R15: 0000000000000000
+ Modules linked in:
+ ---[ end trace a2d933ede7f730d8 ]---
 
-If the drive supports SCT transport and reports temperature limits,
-those are reported as well.
-
-satatemp-scsi-0-0
-Adapter: SCSI adapter
-temp1:        +27.0°C  (low  =  +0.0°C, high = +60.0°C)
-                       (crit low = -41.0°C, crit = +85.0°C)
-                       (lowest = +23.0°C, highest = +34.0°C)
-
-The driver attempts to use SCT Command Transport to read the drive
-temperature. If the SCT Command Transport feature set is not available,
-or if it does not report the drive temperature, drive temperatures may
-be readable through SMART attributes. Since SMART attributes are not well
-defined, this method is only used as fallback mechanism.
-
-Cc: Chris Healy <cphealy@gmail.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Co-developed-by: Salman Qazi <sqazi@google.com>
+Signed-off-by: Salman Qazi <sqazi@google.com>
+Co-developed-by: Junho Ryu <jayr@google.com>
+Signed-off-by: Junho Ryu <jayr@google.com>
+Co-developed-by: Khazhismel Kumykov <khazhy@google.com>
+Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+Signed-off-by: Nick Black <nlb@google.com>
+Co-developed-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
 ---
-v3: Rename satatemp -> drivetemp
-    Use cached VPD page 89 data (available with v5.5 and later kernels)
-    Relax ATA drive detection; still check if inquiry data is
-    present, but don't use it for access detection.
-    Modify VPD data analysis following guidance from Martin K. Petersen
-    Separate SATA drive detection into separate function
-    Marked as RFT. Martin K. Petersen reports:
-    "I get a crash in the driver core during probe if the drivetemp module
-     is loaded prior to loading ahci or a SCSI HBA driver. This crash is
-     unrelated to my changes. Haven't had time to debug."
-    This will require further testing before the patch is applied.
+ drivers/scsi/iscsi_tcp.c            |  4 ++++
+ drivers/scsi/scsi_transport_iscsi.c | 26 +++++++++++++++++++++++---
+ 2 files changed, 27 insertions(+), 3 deletions(-)
 
-v2: scsi_cmd variable is no longer static
-    Fixed drive name in Kconfig 
-    Describe heuristics used to select SCT or SMART in commit message
-    Added Reviewed-by: from Linus Walleij
-
----
- Documentation/hwmon/drivetemp.rst |  52 +++
- Documentation/hwmon/index.rst     |   1 +
- drivers/hwmon/Kconfig             |  10 +
- drivers/hwmon/Makefile            |   1 +
- drivers/hwmon/drivetemp.c         | 574 ++++++++++++++++++++++++++++++
- 5 files changed, 638 insertions(+)
- create mode 100644 Documentation/hwmon/drivetemp.rst
- create mode 100644 drivers/hwmon/drivetemp.c
-
-diff --git a/Documentation/hwmon/drivetemp.rst b/Documentation/hwmon/drivetemp.rst
-new file mode 100644
-index 000000000000..2d37d049247f
---- /dev/null
-+++ b/Documentation/hwmon/drivetemp.rst
-@@ -0,0 +1,52 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
+index 0bc63a7ab41c..b5dd1caae5e9 100644
+--- a/drivers/scsi/iscsi_tcp.c
++++ b/drivers/scsi/iscsi_tcp.c
+@@ -887,6 +887,10 @@ iscsi_sw_tcp_session_create(struct iscsi_endpoint *ep, uint16_t cmds_max,
+ static void iscsi_sw_tcp_session_destroy(struct iscsi_cls_session *cls_session)
+ {
+ 	struct Scsi_Host *shost = iscsi_session_to_shost(cls_session);
++	struct iscsi_session *session = cls_session->dd_data;
 +
-+Kernel driver drivetemp
-+=======================
-+
-+
-+References
-+----------
-+
-+ANS T13/1699-D
-+Information technology - AT Attachment 8 - ATA/ATAPI Command Set (ATA8-ACS)
-+
-+ANS Project T10/BSR INCITS 513
-+Information technology - SCSI Primary Commands - 4 (SPC-4)
-+
-+ANS Project INCITS 557
-+Information technology - SCSI / ATA Translation - 5 (SAT-5)
-+
-+
-+Description
-+-----------
-+
-+This driver supports reporting the temperature of disk and solid state
-+drives with temperature sensors.
-+
-+If supported, it uses the ATA SCT Command Transport feature to read
-+the current drive temperature and, if available, temperature limits
-+as well as historic minimum and maximum temperatures. If SCT Command
-+Transport is not supported, the driver uses SMART attributes to read
-+the drive temperature.
-+
-+
-+Sysfs entries
-+-------------
-+
-+Only the temp1_input attribute is always available. Other attributes are
-+available only if reported by the drive. All temperatures are reported in
-+milli-degrees Celsius.
-+
-+=======================	=====================================================
-+temp1_input		Current drive temperature
-+temp1_lcrit		Minimum temperature limit. Operating the device below
-+			this temperature may cause physical damage to the
-+			device.
-+temp1_min		Minimum recommended continuous operating limit
-+temp1_max		Maximum recommended continuous operating temperature
-+temp1_crit		Maximum temperature limit. Operating the device above
-+			this temperature may cause physical damage to the
-+			device.
-+temp1_lowest		Minimum temperature seen this power cycle
-+temp1_highest		Maximum temperature seen this power cycle
-+=======================	=====================================================
-diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
-index 43cc605741ea..a730b2a619fa 100644
---- a/Documentation/hwmon/index.rst
-+++ b/Documentation/hwmon/index.rst
-@@ -47,6 +47,7 @@ Hardware Monitoring Kernel Drivers
-    da9055
-    dell-smm-hwmon
-    dme1737
-+   drivetemp
-    ds1621
-    ds620
-    emc1403
-diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-index 23dfe848979a..5ad41c2a0ea1 100644
---- a/drivers/hwmon/Kconfig
-+++ b/drivers/hwmon/Kconfig
-@@ -385,6 +385,16 @@ config SENSORS_ATXP1
- 	  This driver can also be built as a module. If so, the module
- 	  will be called atxp1.
++	if (WARN_ON_ONCE(session->leadconn))
++		return;
  
-+config SENSORS_DRIVETEMP
-+	tristate "Hard disk drives with temperature sensors"
-+	depends on SCSI && ATA
-+	help
-+	  If you say yes you get support for the temperature sensor on
-+	  hard disk drives.
-+
-+	  This driver can also be built as a module. If so, the module
-+	  will be called satatemp.
-+
- config SENSORS_DS620
- 	tristate "Dallas Semiconductor DS620"
- 	depends on I2C
-diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-index 6db5db9cdc29..b32b4415bfad 100644
---- a/drivers/hwmon/Makefile
-+++ b/drivers/hwmon/Makefile
-@@ -56,6 +56,7 @@ obj-$(CONFIG_SENSORS_DA9052_ADC)+= da9052-hwmon.o
- obj-$(CONFIG_SENSORS_DA9055)+= da9055-hwmon.o
- obj-$(CONFIG_SENSORS_DELL_SMM)	+= dell-smm-hwmon.o
- obj-$(CONFIG_SENSORS_DME1737)	+= dme1737.o
-+obj-$(CONFIG_SENSORS_DRIVETEMP)	+= drivetemp.o
- obj-$(CONFIG_SENSORS_DS620)	+= ds620.o
- obj-$(CONFIG_SENSORS_DS1621)	+= ds1621.o
- obj-$(CONFIG_SENSORS_EMC1403)	+= emc1403.o
-diff --git a/drivers/hwmon/drivetemp.c b/drivers/hwmon/drivetemp.c
-new file mode 100644
-index 000000000000..370d0c74eb01
---- /dev/null
-+++ b/drivers/hwmon/drivetemp.c
-@@ -0,0 +1,574 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hwmon client for disk and solid state drives with temperature sensors
-+ * Copyright (C) 2019 Zodiac Inflight Innovations
-+ *
-+ * With input from:
-+ *    Hwmon client for S.M.A.R.T. hard disk drives with temperature sensors.
-+ *    (C) 2018 Linus Walleij
-+ *
-+ *    hwmon: Driver for SCSI/ATA temperature sensors
-+ *    by Constantin Baranov <const@mimas.ru>, submitted September 2009
-+ *
-+ * This drive supports reporting the temperatire of SATA drives. It can be
-+ * easily extended to report the temperature of SCSI drives.
-+ *
-+ * The primary means to read drive temperatures and temperature limits
-+ * for ATA drives is the SCT Command Transport feature set as specified in
-+ * ATA8-ACS.
-+ * It can be used to read the current drive temperature, temperature limits,
-+ * and historic minimum and maximum temperatures. The SCT Command Transport
-+ * feature set is documented in "AT Attachment 8 - ATA/ATAPI Command Set
-+ * (ATA8-ACS)".
-+ *
-+ * If the SCT Command Transport feature set is not available, drive temperatures
-+ * may be readable through SMART attributes. Since SMART attributes are not well
-+ * defined, this method is only used as fallback mechanism.
-+ *
-+ * There are three SMART attributes which may report drive temperatures.
-+ * Those are defined as follows (from
-+ * http://www.cropel.com/library/smart-attribute-list.aspx).
-+ *
-+ * 190	Temperature	Temperature, monitored by a sensor somewhere inside
-+ *			the drive. Raw value typicaly holds the actual
-+ *			temperature (hexadecimal) in its rightmost two digits.
-+ *
-+ * 194	Temperature	Temperature, monitored by a sensor somewhere inside
-+ *			the drive. Raw value typicaly holds the actual
-+ *			temperature (hexadecimal) in its rightmost two digits.
-+ *
-+ * 231	Temperature	Temperature, monitored by a sensor somewhere inside
-+ *			the drive. Raw value typicaly holds the actual
-+ *			temperature (hexadecimal) in its rightmost two digits.
-+ *
-+ * Wikipedia defines attributes a bit differently.
-+ *
-+ * 190	Temperature	Value is equal to (100-temp. °C), allowing manufacturer
-+ *	Difference or	to set a minimum threshold which corresponds to a
-+ *	Airflow		maximum temperature. This also follows the convention of
-+ *	Temperature	100 being a best-case value and lower values being
-+ *			undesirable. However, some older drives may instead
-+ *			report raw Temperature (identical to 0xC2) or
-+ *			Temperature minus 50 here.
-+ * 194	Temperature or	Indicates the device temperature, if the appropriate
-+ *	Temperature	sensor is fitted. Lowest byte of the raw value contains
-+ *	Celsius		the exact temperature value (Celsius degrees).
-+ * 231	Life Left	Indicates the approximate SSD life left, in terms of
-+ *	(SSDs) or	program/erase cycles or available reserved blocks.
-+ *	Temperature	A normalized value of 100 represents a new drive, with
-+ *			a threshold value at 10 indicating a need for
-+ *			replacement. A value of 0 may mean that the drive is
-+ *			operating in read-only mode to allow data recovery.
-+ *			Previously (pre-2010) occasionally used for Drive
-+ *			Temperature (more typically reported at 0xC2).
-+ *
-+ * Common denominator is that the first raw byte reports the temperature
-+ * in degrees C on almost all drives. Some drives may report a fractional
-+ * temperature in the second raw byte.
-+ *
-+ * Known exceptions (from libatasmart):
-+ * - SAMSUNG SV0412H and SAMSUNG SV1204H) report the temperature in 10th
-+ *   degrees C in the first two raw bytes.
-+ * - A few Maxtor drives report an unknown or bad value in attribute 194.
-+ * - Certain Apple SSD drives report an unknown value in attribute 190.
-+ *   Only certain firmware versions are affected.
-+ *
-+ * Those exceptions affect older ATA drives and are currently ignored.
-+ * Also, the second raw byte (possibly reporting the fractional temperature)
-+ * is currently ignored.
-+ *
-+ * Many drives also report temperature limits in additional SMART data raw
-+ * bytes. The format of those is not well defined and varies widely.
-+ * The driver does not currently attempt to report those limits.
-+ *
-+ * According to data in smartmontools, attribute 231 is rarely used to report
-+ * drive temperatures. At the same time, several drives report SSD life left
-+ * in attribute 231, but do not support temperature sensors. For this reason,
-+ * attribute 231 is currently ignored.
-+ *
-+ * Following above definitions, temperatures are reported as follows.
-+ *   If SCT Command Transport is supported, it is used to read the
-+ *   temperature and, if available, temperature limits.
-+ * - Otherwise, if SMART attribute 194 is supported, it is used to read
-+ *   the temperature.
-+ * - Otherwise, if SMART attribute 190 is supported, it is used to read
-+ *   the temperature.
-+ */
-+
-+#include <linux/ata.h>
-+#include <linux/bits.h>
-+#include <linux/device.h>
-+#include <linux/hwmon.h>
-+#include <linux/kernel.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <scsi/scsi_cmnd.h>
-+#include <scsi/scsi_device.h>
-+#include <scsi/scsi_driver.h>
-+#include <scsi/scsi_proto.h>
-+
-+struct drivetemp_data {
-+	struct list_head list;		/* list of instantiated devices */
-+	struct mutex lock;		/* protect data buffer accesses */
-+	struct scsi_device *sdev;	/* SCSI device */
-+	struct device *dev;		/* instantiating device */
-+	struct device *hwdev;		/* hardware monitoring device */
-+	u8 smartdata[ATA_SECT_SIZE];	/* local buffer */
-+	int (*get_temp)(struct drivetemp_data *st, u32 attr, long *val);
-+	bool have_temp_lowest;		/* lowest temp in SCT status */
-+	bool have_temp_highest;		/* highest temp in SCT status */
-+	bool have_temp_min;		/* have min temp */
-+	bool have_temp_max;		/* have max temp */
-+	bool have_temp_lcrit;		/* have lower critical limit */
-+	bool have_temp_crit;		/* have critical limit */
-+	int temp_min;			/* min temp */
-+	int temp_max;			/* max temp */
-+	int temp_lcrit;			/* lower critical limit */
-+	int temp_crit;			/* critical limit */
-+};
-+
-+static LIST_HEAD(drivetemp_devlist);
-+
-+#define ATA_MAX_SMART_ATTRS	30
-+#define SMART_TEMP_PROP_190	190
-+#define SMART_TEMP_PROP_194	194
-+
-+#define SCT_STATUS_REQ_ADDR	0xe0
-+#define  SCT_STATUS_VERSION_LOW		0	/* log byte offsets */
-+#define  SCT_STATUS_VERSION_HIGH	1
-+#define  SCT_STATUS_TEMP		200
-+#define  SCT_STATUS_TEMP_LOWEST		201
-+#define  SCT_STATUS_TEMP_HIGHEST	202
-+#define SCT_READ_LOG_ADDR	0xe1
-+#define  SMART_READ_LOG			0xd5
-+#define  SMART_WRITE_LOG		0xd6
-+
-+#define INVALID_TEMP		0x80
-+
-+#define temp_is_valid(temp)	((temp) != INVALID_TEMP)
-+#define temp_from_sct(temp)	(((s8)(temp)) * 1000)
-+
-+static inline bool ata_id_smart_supported(u16 *id)
+ 	iscsi_tcp_r2tpool_free(cls_session->dd_data);
+ 	iscsi_session_teardown(cls_session);
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index ed8d9709b9b9..271afea654e2 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2947,6 +2947,24 @@ iscsi_set_path(struct iscsi_transport *transport, struct iscsi_uevent *ev)
+ 	return err;
+ }
+ 
++static int iscsi_session_has_conns(int sid)
 +{
-+	return id[ATA_ID_COMMAND_SET_1] & BIT(0);
-+}
++	struct iscsi_cls_conn *conn;
++	unsigned long flags;
++	int found = 0;
 +
-+static inline bool ata_id_smart_enabled(u16 *id)
-+{
-+	return id[ATA_ID_CFS_ENABLE_1] & BIT(0);
-+}
-+
-+static int drivetemp_scsi_command(struct drivetemp_data *st,
-+				 u8 ata_command, u8 feature,
-+				 u8 lba_low, u8 lba_mid, u8 lba_high)
-+{
-+	u8 scsi_cmd[MAX_COMMAND_SIZE];
-+	int data_dir;
-+
-+	memset(scsi_cmd, 0, sizeof(scsi_cmd));
-+	scsi_cmd[0] = ATA_16;
-+	if (ata_command == ATA_CMD_SMART && feature == SMART_WRITE_LOG) {
-+		scsi_cmd[1] = (5 << 1);	/* PIO Data-out */
-+		/*
-+		 * No off.line or cc, write to dev, block count in sector count
-+		 * field.
-+		 */
-+		scsi_cmd[2] = 0x06;
-+		data_dir = DMA_TO_DEVICE;
-+	} else {
-+		scsi_cmd[1] = (4 << 1);	/* PIO Data-in */
-+		/*
-+		 * No off.line or cc, read from dev, block count in sector count
-+		 * field.
-+		 */
-+		scsi_cmd[2] = 0x0e;
-+		data_dir = DMA_FROM_DEVICE;
-+	}
-+	scsi_cmd[4] = feature;
-+	scsi_cmd[6] = 1;	/* 1 sector */
-+	scsi_cmd[8] = lba_low;
-+	scsi_cmd[10] = lba_mid;
-+	scsi_cmd[12] = lba_high;
-+	scsi_cmd[14] = ata_command;
-+
-+	return scsi_execute_req(st->sdev, scsi_cmd, data_dir,
-+				st->smartdata, ATA_SECT_SIZE, NULL, HZ, 5,
-+				NULL);
-+}
-+
-+static int drivetemp_ata_command(struct drivetemp_data *st, u8 feature,
-+				 u8 select)
-+{
-+	return drivetemp_scsi_command(st, ATA_CMD_SMART, feature, select,
-+				     ATA_SMART_LBAM_PASS, ATA_SMART_LBAH_PASS);
-+}
-+
-+static int drivetemp_get_smarttemp(struct drivetemp_data *st, u32 attr,
-+				  long *temp)
-+{
-+	u8 *buf = st->smartdata;
-+	bool have_temp = false;
-+	u8 temp_raw;
-+	u8 csum;
-+	int err;
-+	int i;
-+
-+	err = drivetemp_ata_command(st, ATA_SMART_READ_VALUES, 0);
-+	if (err)
-+		return err;
-+
-+	/* Checksum the read value table */
-+	csum = 0;
-+	for (i = 0; i < ATA_SECT_SIZE; i++)
-+		csum += buf[i];
-+	if (csum) {
-+		dev_dbg(&st->sdev->sdev_gendev,
-+			"checksum error reading SMART values\n");
-+		return -EIO;
-+	}
-+
-+	for (i = 0; i < ATA_MAX_SMART_ATTRS; i++) {
-+		u8 *attr = buf + i * 12;
-+		int id = attr[2];
-+
-+		if (!id)
-+			continue;
-+
-+		if (id == SMART_TEMP_PROP_190) {
-+			temp_raw = attr[7];
-+			have_temp = true;
-+		}
-+		if (id == SMART_TEMP_PROP_194) {
-+			temp_raw = attr[7];
-+			have_temp = true;
++	spin_lock_irqsave(&connlock, flags);
++	list_for_each_entry(conn, &connlist, conn_list) {
++		if (iscsi_conn_get_sid(conn) == sid) {
++			found = 1;
 +			break;
 +		}
 +	}
++	spin_unlock_irqrestore(&connlock, flags);
 +
-+	if (have_temp) {
-+		*temp = temp_raw * 1000;
-+		return 0;
-+	}
-+
-+	return -ENXIO;
++	return found;
 +}
 +
-+static int drivetemp_get_scttemp(struct drivetemp_data *st, u32 attr, long *val)
-+{
-+	u8 *buf = st->smartdata;
-+	int err;
-+
-+	err = drivetemp_ata_command(st, SMART_READ_LOG, SCT_STATUS_REQ_ADDR);
-+	if (err)
-+		return err;
-+	switch (attr) {
-+	case hwmon_temp_input:
-+		*val = temp_from_sct(buf[SCT_STATUS_TEMP]);
-+		break;
-+	case hwmon_temp_lowest:
-+		*val = temp_from_sct(buf[SCT_STATUS_TEMP_LOWEST]);
-+		break;
-+	case hwmon_temp_highest:
-+		*val = temp_from_sct(buf[SCT_STATUS_TEMP_HIGHEST]);
-+		break;
-+	default:
-+		err = -EINVAL;
-+		break;
-+	}
-+	return err;
-+}
-+
-+static int drivetemp_identify_sata(struct drivetemp_data *st)
-+{
-+	struct scsi_device *sdev = st->sdev;
-+	u8 *buf = st->smartdata;
-+	struct scsi_vpd *vpd;
-+	bool is_ata, is_sata;
-+	bool have_sct_data_table;
-+	bool have_sct_temp;
-+	bool have_smart;
-+	bool have_sct;
-+	u16 *ata_id;
-+	u16 version;
-+	long temp;
-+	int err;
-+
-+	/* SCSI-ATA Translation present? */
-+	rcu_read_lock();
-+	vpd = rcu_dereference(sdev->vpd_pg89);
-+
-+	/*
-+	 * Verify that ATA IDENTIFY DEVICE data is included in ATA Information
-+	 * VPD and that the drive implements the SATA protocol.
-+	 */
-+	if (!vpd || vpd->len < 572 || vpd->data[56] != ATA_CMD_ID_ATA ||
-+	    vpd->data[36] != 0x34) {
-+		rcu_read_unlock();
-+		return -ENODEV;
-+	}
-+	ata_id = (u16 *)&vpd->data[60];
-+	is_ata = ata_id_is_ata(ata_id);
-+	is_sata = ata_id_is_sata(ata_id);
-+	have_sct = ata_id_sct_supported(ata_id);
-+	have_sct_data_table = ata_id_sct_data_tables(ata_id);
-+	have_smart = ata_id_smart_supported(ata_id) &&
-+				ata_id_smart_enabled(ata_id);
-+
-+	rcu_read_unlock();
-+
-+	/* bail out if this is not a SATA device */
-+	if (!is_ata || !is_sata)
-+		return -ENODEV;
-+	if (!have_sct)
-+		goto skip_sct;
-+
-+	err = drivetemp_ata_command(st, SMART_READ_LOG, SCT_STATUS_REQ_ADDR);
-+	if (err)
-+		goto skip_sct;
-+
-+	version = (buf[SCT_STATUS_VERSION_HIGH] << 8) |
-+		  buf[SCT_STATUS_VERSION_LOW];
-+	if (version != 2 && version != 3)
-+		goto skip_sct;
-+
-+	have_sct_temp = temp_is_valid(buf[SCT_STATUS_TEMP]);
-+	if (!have_sct_temp)
-+		goto skip_sct;
-+
-+	st->have_temp_lowest = temp_is_valid(buf[SCT_STATUS_TEMP_LOWEST]);
-+	st->have_temp_highest = temp_is_valid(buf[SCT_STATUS_TEMP_HIGHEST]);
-+
-+	if (!have_sct_data_table)
-+		goto skip_sct;
-+
-+	/* Request and read temperature history table */
-+	memset(buf, '\0', sizeof(st->smartdata));
-+	buf[0] = 5;	/* data table command */
-+	buf[2] = 1;	/* read table */
-+	buf[4] = 2;	/* temperature history table */
-+
-+	err = drivetemp_ata_command(st, SMART_WRITE_LOG, SCT_STATUS_REQ_ADDR);
-+	if (err)
-+		goto skip_sct_data;
-+
-+	err = drivetemp_ata_command(st, SMART_READ_LOG, SCT_READ_LOG_ADDR);
-+	if (err)
-+		goto skip_sct_data;
-+
-+	/*
-+	 * Temperature limits per AT Attachment 8 -
-+	 * ATA/ATAPI Command Set (ATA8-ACS)
-+	 */
-+	st->have_temp_max = temp_is_valid(buf[6]);
-+	st->have_temp_crit = temp_is_valid(buf[7]);
-+	st->have_temp_min = temp_is_valid(buf[8]);
-+	st->have_temp_lcrit = temp_is_valid(buf[9]);
-+
-+	st->temp_max = temp_from_sct(buf[6]);
-+	st->temp_crit = temp_from_sct(buf[7]);
-+	st->temp_min = temp_from_sct(buf[8]);
-+	st->temp_lcrit = temp_from_sct(buf[9]);
-+
-+skip_sct_data:
-+	if (have_sct_temp) {
-+		st->get_temp = drivetemp_get_scttemp;
-+		return 0;
-+	}
-+skip_sct:
-+	if (!have_smart)
-+		return -ENODEV;
-+	st->get_temp = drivetemp_get_smarttemp;
-+	return drivetemp_get_smarttemp(st, hwmon_temp_input, &temp);
-+}
-+
-+static int drivetemp_identify(struct drivetemp_data *st)
-+{
-+	struct scsi_device *sdev = st->sdev;
-+
-+	/* Bail out immediately if there is no inquiry data */
-+	if (!sdev->inquiry || sdev->inquiry_len < 16)
-+		return -ENODEV;
-+
-+	/* Disk device? */
-+	if (sdev->type != TYPE_DISK && sdev->type != TYPE_ZBC)
-+		return -ENODEV;
-+
-+	return drivetemp_identify_sata(st);
-+}
-+
-+static int drivetemp_read(struct device *dev, enum hwmon_sensor_types type,
-+			 u32 attr, int channel, long *val)
-+{
-+	struct drivetemp_data *st = dev_get_drvdata(dev);
-+	int err = 0;
-+
-+	if (type != hwmon_temp)
-+		return -EINVAL;
-+
-+	switch (attr) {
-+	case hwmon_temp_input:
-+	case hwmon_temp_lowest:
-+	case hwmon_temp_highest:
-+		mutex_lock(&st->lock);
-+		err = st->get_temp(st, attr, val);
-+		mutex_unlock(&st->lock);
-+		break;
-+	case hwmon_temp_lcrit:
-+		*val = st->temp_lcrit;
-+		break;
-+	case hwmon_temp_min:
-+		*val = st->temp_min;
-+		break;
-+	case hwmon_temp_max:
-+		*val = st->temp_max;
-+		break;
-+	case hwmon_temp_crit:
-+		*val = st->temp_crit;
-+		break;
-+	default:
-+		err = -EINVAL;
-+		break;
-+	}
-+	return err;
-+}
-+
-+static umode_t drivetemp_is_visible(const void *data,
-+				   enum hwmon_sensor_types type,
-+				   u32 attr, int channel)
-+{
-+	const struct drivetemp_data *st = data;
-+
-+	switch (type) {
-+	case hwmon_temp:
-+		switch (attr) {
-+		case hwmon_temp_input:
-+			return 0444;
-+		case hwmon_temp_lowest:
-+			if (st->have_temp_lowest)
-+				return 0444;
-+			break;
-+		case hwmon_temp_highest:
-+			if (st->have_temp_highest)
-+				return 0444;
-+			break;
-+		case hwmon_temp_min:
-+			if (st->have_temp_min)
-+				return 0444;
-+			break;
-+		case hwmon_temp_max:
-+			if (st->have_temp_max)
-+				return 0444;
-+			break;
-+		case hwmon_temp_lcrit:
-+			if (st->have_temp_lcrit)
-+				return 0444;
-+			break;
-+		case hwmon_temp_crit:
-+			if (st->have_temp_crit)
-+				return 0444;
-+			break;
-+		default:
-+			break;
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+	return 0;
-+}
-+
-+static const struct hwmon_channel_info *drivetemp_info[] = {
-+	HWMON_CHANNEL_INFO(chip,
-+			   HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(temp, HWMON_T_INPUT |
-+			   HWMON_T_LOWEST | HWMON_T_HIGHEST |
-+			   HWMON_T_MIN | HWMON_T_MAX |
-+			   HWMON_T_LCRIT | HWMON_T_CRIT),
-+	NULL
-+};
-+
-+static const struct hwmon_ops drivetemp_ops = {
-+	.is_visible = drivetemp_is_visible,
-+	.read = drivetemp_read,
-+};
-+
-+static const struct hwmon_chip_info drivetemp_chip_info = {
-+	.ops = &drivetemp_ops,
-+	.info = drivetemp_info,
-+};
-+
-+/*
-+ * The device argument points to sdev->sdev_dev. Its parent is
-+ * sdev->sdev_gendev, which we can use to get the scsi_device pointer.
-+ */
-+static int drivetemp_add(struct device *dev, struct class_interface *intf)
-+{
-+	struct scsi_device *sdev = to_scsi_device(dev->parent);
-+	struct drivetemp_data *st;
-+	int err;
-+
-+	st = kzalloc(sizeof(*st), GFP_KERNEL);
-+	if (!st)
-+		return -ENOMEM;
-+
-+	st->sdev = sdev;
-+	st->dev = dev;
-+	mutex_init(&st->lock);
-+
-+	if (drivetemp_identify(st)) {
-+		err = -ENODEV;
-+		goto abort;
-+	}
-+
-+	st->hwdev = hwmon_device_register_with_info(dev->parent, "drivetemp",
-+						    st, &drivetemp_chip_info,
-+						    NULL);
-+	if (IS_ERR(st->hwdev)) {
-+		err = PTR_ERR(st->hwdev);
-+		goto abort;
-+	}
-+
-+	list_add(&st->list, &drivetemp_devlist);
-+	return 0;
-+
-+abort:
-+	kfree(st);
-+	return err;
-+}
-+
-+static void drivetemp_remove(struct device *dev, struct class_interface *intf)
-+{
-+	struct drivetemp_data *st, *tmp;
-+
-+	list_for_each_entry_safe(st, tmp, &drivetemp_devlist, list) {
-+		if (st->dev == dev) {
-+			list_del(&st->list);
-+			hwmon_device_unregister(st->hwdev);
-+			kfree(st);
-+			break;
-+		}
-+	}
-+}
-+
-+static struct class_interface drivetemp_interface = {
-+	.add_dev = drivetemp_add,
-+	.remove_dev = drivetemp_remove,
-+};
-+
-+static int __init drivetemp_init(void)
-+{
-+	return scsi_register_interface(&drivetemp_interface);
-+}
-+
-+static void __exit drivetemp_exit(void)
-+{
-+	scsi_unregister_interface(&drivetemp_interface);
-+}
-+
-+module_init(drivetemp_init);
-+module_exit(drivetemp_exit);
-+
-+MODULE_AUTHOR("Guenter Roeck <linus@roeck-us.net>");
-+MODULE_DESCRIPTION("Hard drive temperature monitor");
-+MODULE_LICENSE("GPL");
+ static int
+ iscsi_set_iface_params(struct iscsi_transport *transport,
+ 		       struct iscsi_uevent *ev, uint32_t len)
+@@ -3524,10 +3542,12 @@ iscsi_if_recv_msg(struct sk_buff *skb, struct nlmsghdr *nlh, uint32_t *group)
+ 		break;
+ 	case ISCSI_UEVENT_DESTROY_SESSION:
+ 		session = iscsi_session_lookup(ev->u.d_session.sid);
+-		if (session)
+-			transport->destroy_session(session);
+-		else
++		if (!session)
+ 			err = -EINVAL;
++		else if (iscsi_session_has_conns(ev->u.d_session.sid))
++			err = -EBUSY;
++		else
++			transport->destroy_session(session);
+ 		break;
+ 	case ISCSI_UEVENT_UNBIND_SESSION:
+ 		session = iscsi_session_lookup(ev->u.d_session.sid);
 -- 
-2.17.1
+2.24.1
 
