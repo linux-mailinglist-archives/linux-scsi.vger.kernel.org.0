@@ -2,73 +2,215 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5959312BAB1
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Dec 2019 19:52:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAE912BBB5
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Dec 2019 23:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726527AbfL0SwW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Dec 2019 13:52:22 -0500
-Received: from sonic311-14.consmr.mail.bf2.yahoo.com ([74.6.131.124]:39864
-        "EHLO sonic311-14.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726379AbfL0SwW (ORCPT
+        id S1725957AbfL0W5K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Dec 2019 17:57:10 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:36010 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725306AbfL0W5K (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 27 Dec 2019 13:52:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1577472740; bh=HQ3z5tGds5I8UDOuzw6gLX/0GqSgFm6dnAgm9mfhuxA=; h=Date:From:Reply-To:Subject:References:From:Subject; b=XKCxZMN/24u4om5nwm68z+gRhlqjv4otxLKJkDpEsM5QT5Fz7Na1/t/2oT9MNs7CCRyL2zfrfyHfT7SUpNPzDWEAS6J3mqnBFcTSOz8Q828Cz72VcXffeCXv0G3SaaVKguYTxyAnXKsQf+ptg1cc4/F59SqOKTALN9CD1jHueTwq3wtyaphY7ohXykaX0Q5bEFci+vBrDWLh+B2ZtnUX/0QO/moxB8V/EJLvOTdtSBKr3pFtdW8au5K9EjMN+zwNlPhgfGXJaUmxdudfEhU6tSucg7hTscHnVI6vRhZkigZg0vpO/q78q1AMNkPudXgushLcWYG2AbMzcW7kN7zZGg==
-X-YMail-OSG: OHJTgRYVM1mgGyNGgLuUq2Wl2d_CoWQU7E0IqQTZHJigVUapPycqRF63ezHvaX.
- UmIzXSRn9zptqZEaHbTEVdNtSVJmgrG3wx2c_Qj_r25O.oK9PW8n.wV8L4aLVr24Y6qk8d_zUrZx
- RGW_TBC2eKdFYnChNJqRcLAcBsVVi8X1gQ1EKr5S_UV03_fmsn.jUT4vpnDB2KzQtEvW08oPBSop
- syYF_WGdnhB7Qa_KZuQa.oYKerhgz4zkD5jYJ_0CPSWiBcMEK..0xdDruIpS83qb8JNzJBmUjmlY
- stnEQ5MfPidkg0u3Z.B.cZlvbPL58rjFxL394z9iv1VfpnEGeb4nBqp60icB_CGoocVYjto3eibr
- NVCO_AghWmGeVlSWUvGgMogw_rqwqmd1IJz0_.O3N591g2lbWyC1tK228rkk1LiZQ2.h0gzSAUlv
- U9v9ZHzNgDW5RDE1KxCjXnCkJ5MpgSz8IW3Utp5dnCOGIEnZ4TpA_FoowTGNAkfBAVjfhwTWPseq
- P77PF8nEJH1WCUca7Dd9eLsilbu0JmIv85PfVr_h5eVYItinJSHsmmijY4sgDsU2D9ZdgSBM0ZDA
- 2Tt1o7yZs_m4xA8CdX0FrwIpmbTH1zqmj4k.U1FczmpefYFINJ7P9FXrUq3KIncvJTKr5cZcGTvV
- .bX63XHPwdAZ80hnaifaHNDYOpzndRWuQDmMbLINLyoJcSUZ28SqKFHA98A4kjEeSl7ZQfPZ4Epi
- VyUFa4vzoRF5hZQzN.m_gQqAOas6pHJBAFjSpsi43RAqEI4Imb5EAbROM6r.fxx2.jaMJJRGcSIi
- SeKlOiMsCeICNyLXAk3JwA1Kbdk367Fj81Aucp68Mrl0xc11jE83w0Cj1KRoBAbIiqsLWerElnMX
- pXDimfe8aUnRAe5573_9GEdb2C6Lemk0txhV6IgpsMz9HH36ktzVw6tD__fcmlJL8ku8EBhYE6iT
- GySt1P.ouceMJa_o7QdFFApXTB5NL4e2f0xPCXWNeGoitSDcdIqCZUwiRghcjdvQw97WCi8hdlym
- kRQc5.SmgS.PBG6XPJ9e2BzAlSLj6ZAP2hskd3r27BS8pj3aXQ57GdNqUIHar8wcQr_7s5Jr4Nyb
- SIZSIOjo5.NSZOvtPc4dtxQ3HBvgJ_loHrsNep8m_ab7K6MGQHJTaqIaOZwHckNw8yhMGupX1qzx
- wpHI3R7_YJSA_gVA3w0PMvQlnDzccpFHX4pE.KApIK0xjM5I_A3Zv8PTm.P3FntAybz7iRK63kvu
- Hvw5sl990hYf8BbambZ1gvYvcl6ELXj3RrpCZW_LJw_vSp4XcI6xIE2p5Gbvx6mW80.gYuGLuJlb
- TwppPg_1_AWpB4qfnNTgO8KQ4V5_nAqVmSuEG0A--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.bf2.yahoo.com with HTTP; Fri, 27 Dec 2019 18:52:20 +0000
-Date:   Fri, 27 Dec 2019 18:52:15 +0000 (UTC)
-From:   Rebecca Williams <reb.williamsfamily@gmail.com>
-Reply-To: rebeccawiliams505@gmail.com
-Message-ID: <973272801.2684845.1577472735507@mail.yahoo.com>
-Subject: RE: Greetings from Mrs. Rebecca Williams.
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <973272801.2684845.1577472735507.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.14873 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0
-To:     unlisted-recipients:; (no To-header on input)
+        Fri, 27 Dec 2019 17:57:10 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 38B718EE10C;
+        Fri, 27 Dec 2019 14:57:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1577487430;
+        bh=K+tf+8cWkcZ4RMhGp2HRRSr87o8eRXh1u1OgW1IKsdM=;
+        h=Subject:From:To:Cc:Date:From;
+        b=ccim0X8MD/TuGqEwu5dhTt2HJ8RKOLNBI766A6L+eSa/aRxY3MV4ltdzzlfMl9lZA
+         K0aYPp7F1i+grf6gu7eHzpl2TjnPrEwpvEj3P3CbsGCgSNc+IBoymCHZFHEjnKkkEL
+         AUZcTXMCZo9Dzj0HNut34IJ2eexOF14AVQII4294=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 49W62Kp4joOS; Fri, 27 Dec 2019 14:57:10 -0800 (PST)
+Received: from jarvis.lan (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id B31A58EE0E9;
+        Fri, 27 Dec 2019 14:57:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1577487429;
+        bh=K+tf+8cWkcZ4RMhGp2HRRSr87o8eRXh1u1OgW1IKsdM=;
+        h=Subject:From:To:Cc:Date:From;
+        b=ADWlHYhPbI2UtW58EuEceEALpxnFX2bzDH6jYLZm2Xtgyymv4vRuFETfdiLAxb10O
+         Mla/Aa/AJlWyEMWnW2HwbXjvljzL+7NSJVMvIBrGbma/p3iA4dki/fu7QxFOcmQbgx
+         MyeQ5hpfCSXCBgNNflWRn1ykzJ8vdRLuqvDwigkg=
+Message-ID: <1577487428.3225.6.camel@HansenPartnership.com>
+Subject: [GIT PULL] SCSI fixes for 5.5-rc3
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Fri, 27 Dec 2019 14:57:08 -0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Greetings from Mrs. Rebecca Williams.
-Please excuse this humble email if it offends your sensibilities, but I hav=
-e no other means to contact you. I cannot talk on the telephone, so I did a=
- search for your email address, which I found on the international business=
- directorate email data search. I am Mrs. Rebecca Williams,59 years old wom=
-an, A Christian widow who is dying of Esophageal Cancers. Recently, My Doct=
-or told me that I would not last for the period of Seven Months due to canc=
-er problem, Yes I have been touched by God to donate an amount of money Inh=
-erited from my late husband Mr.David Williams to you for the good work of G=
-od on Charity" People in the Street and Helping the Orphanage which my husb=
-and derived this money from his vast Estates and Investment in capital mark=
-et, I decided to WILL/donate the sum of USD$3.2 Million United States Dolla=
-rs to you, 30 Percent of the total money is for your personal use While 70%=
- of the money will go to charity" people in the street and helping the orph=
-anage. I will give you the contact of the Bank Manager where my late husban=
-d deposited the funds for the releasing of the specific amount, I will appr=
-eciate your utmost honest in this matter until the task is accomplished as =
-I don't want anything that will jeopardize my last wish.I nedd your urgent =
-response from you as soon you received this message for more informations. =
-Please contact me in this email address:  rebeccawiliams505@gmail.com
-With Regards,
-Mrs Rebecca Williams.
+Four fixes and one spelling update, all in drivers: 2 in lpfc and the
+rest in mp3sas, cxgbi and target.
 
+The patch is available here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+
+The short changelog is:
+
+Arnd Bergmann (1):
+      scsi: lpfc: fix build failure with DEBUGFS disabled
+
+Colin Ian King (1):
+      scsi: lpfc: fix spelling mistakes of asynchronous
+
+Dan Carpenter (1):
+      scsi: mpt3sas: Fix double free in attach error handling
+
+Israel Rukshin (1):
+      scsi: target/iblock: Fix protection error with blocks greater than 512B
+
+Varun Prakash (1):
+      scsi: libcxgbi: fix NULL pointer dereference in cxgbi_device_destroy()
+
+And the diffstat:
+
+ drivers/scsi/cxgbi/libcxgbi.c       |  3 ++-
+ drivers/scsi/lpfc/lpfc_debugfs.c    |  3 +--
+ drivers/scsi/lpfc/lpfc_init.c       |  2 +-
+ drivers/scsi/lpfc/lpfc_sli.c        | 10 +++++-----
+ drivers/scsi/mpt3sas/mpt3sas_base.c |  1 -
+ drivers/target/target_core_iblock.c |  4 +++-
+ 6 files changed, 12 insertions(+), 11 deletions(-)
+
+With full diff below.
+
+James
+
+---
+
+diff --git a/drivers/scsi/cxgbi/libcxgbi.c b/drivers/scsi/cxgbi/libcxgbi.c
+index 0d044c165960..dc9320f37ebf 100644
+--- a/drivers/scsi/cxgbi/libcxgbi.c
++++ b/drivers/scsi/cxgbi/libcxgbi.c
+@@ -121,7 +121,8 @@ static inline void cxgbi_device_destroy(struct cxgbi_device *cdev)
+ 		"cdev 0x%p, p# %u.\n", cdev, cdev->nports);
+ 	cxgbi_hbas_remove(cdev);
+ 	cxgbi_device_portmap_cleanup(cdev);
+-	cxgbi_ppm_release(cdev->cdev2ppm(cdev));
++	if (cdev->cdev2ppm)
++		cxgbi_ppm_release(cdev->cdev2ppm(cdev));
+ 	if (cdev->pmap.max_connect)
+ 		cxgbi_free_big_mem(cdev->pmap.port_csk);
+ 	kfree(cdev);
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index 2e6a68d9ea4f..a5ecbce4eda2 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -5385,7 +5385,6 @@ static const struct file_operations lpfc_debugfs_ras_log = {
+ 	.read =         lpfc_debugfs_read,
+ 	.release =      lpfc_debugfs_ras_log_release,
+ };
+-#endif
+ 
+ #undef lpfc_debugfs_op_dumpHBASlim
+ static const struct file_operations lpfc_debugfs_op_dumpHBASlim = {
+@@ -5557,7 +5556,7 @@ static const struct file_operations lpfc_idiag_op_extAcc = {
+ 	.write =        lpfc_idiag_extacc_write,
+ 	.release =      lpfc_idiag_cmd_release,
+ };
+-
++#endif
+ 
+ /* lpfc_idiag_mbxacc_dump_bsg_mbox - idiag debugfs dump bsg mailbox command
+  * @phba: Pointer to HBA context object.
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 6298b1729098..6a04fdb3fbf2 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -5883,7 +5883,7 @@ void lpfc_sli4_async_event_proc(struct lpfc_hba *phba)
+ 			break;
+ 		default:
+ 			lpfc_printf_log(phba, KERN_ERR, LOG_SLI,
+-					"1804 Invalid asynchrous event code: "
++					"1804 Invalid asynchronous event code: "
+ 					"x%x\n", bf_get(lpfc_trailer_code,
+ 					&cq_event->cqe.mcqe_cmpl));
+ 			break;
+diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
+index c82b5792da98..625c046ac4ef 100644
+--- a/drivers/scsi/lpfc/lpfc_sli.c
++++ b/drivers/scsi/lpfc/lpfc_sli.c
+@@ -8555,7 +8555,7 @@ lpfc_sli4_async_mbox_unblock(struct lpfc_hba *phba)
+ 	psli->sli_flag &= ~LPFC_SLI_ASYNC_MBX_BLK;
+ 	spin_unlock_irq(&phba->hbalock);
+ 
+-	/* wake up worker thread to post asynchronlous mailbox command */
++	/* wake up worker thread to post asynchronous mailbox command */
+ 	lpfc_worker_wake_up(phba);
+ }
+ 
+@@ -8823,7 +8823,7 @@ lpfc_sli_issue_mbox_s4(struct lpfc_hba *phba, LPFC_MBOXQ_t *mboxq,
+ 		return rc;
+ 	}
+ 
+-	/* Now, interrupt mode asynchrous mailbox command */
++	/* Now, interrupt mode asynchronous mailbox command */
+ 	rc = lpfc_mbox_cmd_check(phba, mboxq);
+ 	if (rc) {
+ 		lpfc_printf_log(phba, KERN_ERR, LOG_MBOX | LOG_SLI,
+@@ -13112,11 +13112,11 @@ lpfc_cq_event_setup(struct lpfc_hba *phba, void *entry, int size)
+ }
+ 
+ /**
+- * lpfc_sli4_sp_handle_async_event - Handle an asynchroous event
++ * lpfc_sli4_sp_handle_async_event - Handle an asynchronous event
+  * @phba: Pointer to HBA context object.
+  * @cqe: Pointer to mailbox completion queue entry.
+  *
+- * This routine process a mailbox completion queue entry with asynchrous
++ * This routine process a mailbox completion queue entry with asynchronous
+  * event.
+  *
+  * Return: true if work posted to worker thread, otherwise false.
+@@ -13270,7 +13270,7 @@ lpfc_sli4_sp_handle_mbox_event(struct lpfc_hba *phba, struct lpfc_mcqe *mcqe)
+  * @cqe: Pointer to mailbox completion queue entry.
+  *
+  * This routine process a mailbox completion queue entry, it invokes the
+- * proper mailbox complete handling or asynchrous event handling routine
++ * proper mailbox complete handling or asynchronous event handling routine
+  * according to the MCQE's async bit.
+  *
+  * Return: true if work posted to worker thread, otherwise false.
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index 848fbec7bda6..45fd8dfb7c40 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -5248,7 +5248,6 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 					&ct->chain_buffer_dma);
+ 			if (!ct->chain_buffer) {
+ 				ioc_err(ioc, "chain_lookup: pci_pool_alloc failed\n");
+-				_base_release_memory_pools(ioc);
+ 				goto out;
+ 			}
+ 		}
+diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
+index 6949ea8bc387..51ffd5c002de 100644
+--- a/drivers/target/target_core_iblock.c
++++ b/drivers/target/target_core_iblock.c
+@@ -646,7 +646,9 @@ iblock_alloc_bip(struct se_cmd *cmd, struct bio *bio,
+ 	}
+ 
+ 	bip->bip_iter.bi_size = bio_integrity_bytes(bi, bio_sectors(bio));
+-	bip_set_seed(bip, bio->bi_iter.bi_sector);
++	/* virtual start sector must be in integrity interval units */
++	bip_set_seed(bip, bio->bi_iter.bi_sector >>
++				  (bi->interval_exp - SECTOR_SHIFT));
+ 
+ 	pr_debug("IBLOCK BIP Size: %u Sector: %llu\n", bip->bip_iter.bi_size,
+ 		 (unsigned long long)bip->bip_iter.bi_sector);
