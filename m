@@ -2,112 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0ECC12F152
-	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2020 23:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A83B12F101
+	for <lists+linux-scsi@lfdr.de>; Thu,  2 Jan 2020 23:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727557AbgABW7k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Jan 2020 17:59:40 -0500
-Received: from authsmtp03.register.it ([81.88.48.53]:39121 "EHLO
-        authsmtp.register.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727409AbgABWN5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Jan 2020 17:13:57 -0500
-X-Greylist: delayed 339 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Jan 2020 17:13:55 EST
-Received: from [192.168.1.1] ([93.41.32.9])
-        by cmsmtp with ESMTPSA
-        id n8b9ir9UONsF7n8b9iIhju; Thu, 02 Jan 2020 23:05:43 +0100
-X-Rid:  guido@trentalancia.com@93.41.32.9
-Message-ID: <1578002742.5239.0.camel@trentalancia.com>
-Subject: [PATCH RESEND v2] scsi: ignore Synchronize Cache command failures
- to keep using drives not supporting it
-From:   Guido Trentalancia <guido@trentalancia.com>
-To:     linux-scsi@vger.kernel.org
-Date:   Thu, 02 Jan 2020 23:05:42 +0100
-X-Priority: 1
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfPgX4JmffzOxSPLNZSjriTpfYy85Mj9vtPFI/FL/a90X78EhvTYpbE+O5cCCA7AcF3UKvsZ/uA9nvCIhGsIhQo3ArL6KH4rYsCPAkfogEtwuK3DPk3rM
- EyJW3QxLATAMTpj+GPaFw6ALQE5reIQtpRGraLnuIXip0IUbQmz+jvWC75xdS5fbIz869MXtanGcSg==
+        id S1728299AbgABWQu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 2 Jan 2020 17:16:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58970 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727855AbgABWQt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 2 Jan 2020 17:16:49 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6085121582;
+        Thu,  2 Jan 2020 22:16:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578003408;
+        bh=MNcuXEyCbjztZ2qWkMTmKBA0rIqCPpkE3egEzRxg+qg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=y24eNYt/4z3e7EMpUGmLPWD8hOjw2L79tES5wyQcKjC8OEtey34qV1HTq1k2L4fqX
+         Cnk80PIwcblA6rtK9wKrzvxtXZNEDRVVRLBxx+xom9xoJPKkjvyVVU3FUPZVG09CWs
+         WE005wOib51XhKiIlqS23WlnoC1afWCdLkymP1Uc=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-scsi@vger.kernel.org,
+        =?UTF-8?q?Diego=20Elio=20Petten=C3=B2?= <flameeyes@flameeyes.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 113/191] cdrom: respect device capabilities during opening action
+Date:   Thu,  2 Jan 2020 23:06:35 +0100
+Message-Id: <20200102215841.968726810@linuxfoundation.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200102215829.911231638@linuxfoundation.org>
+References: <20200102215829.911231638@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Many obsolete hard drives do not support the Synchronize Cache SCSI
-command. Such command is generally issued during fsync() calls which
-at the moment therefore fail with the ILLEGAL_REQUEST sense key.
+From: Diego Elio Pettenò <flameeyes@flameeyes.com>
 
-Since this failure is currently treated as critical in the kernel SCSI
-disk driver, such obsolete hard drives cannot be used anymore: they
-cannot be formatted, mounted and/or checked using tools such as e2fsprogs.
+[ Upstream commit 366ba7c71ef77c08d06b18ad61b26e2df7352338 ]
 
-Because there is nothing which can be done if the drive does not support
-such command, such ILLEGAL_REQUEST should be treated as non-critical so
-that the underlying operation does not fail and the obsolete hard drive
-can be used normally.
+Reading the TOC only works if the device can play audio, otherwise
+these commands fail (and possibly bring the device to an unhealthy
+state.)
 
-This patch disables the Write Cache feature as a precaution on hard
-drives which do not support the Synchronize Cache command and therefore
-the cache flushing functionality.
+Similarly, cdrom_mmc3_profile() should only be called if the device
+supports generic packet commands.
 
-Fixes bug: https://bugzilla.kernel.org/show_bug.cgi?id=203635
-
-Signed-off-by: Guido Trentalancia <guido@trentalancia.com>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Signed-off-by: Diego Elio Pettenò <flameeyes@flameeyes.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/sd.c |   29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/cdrom/cdrom.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff -pru a/drivers/scsi/sd.c b/drivers/scsi/sd.c
---- a/drivers/scsi/sd.c	2019-03-17 18:22:04.822720851 +0100
-+++ b/drivers/scsi/sd.c	2019-03-20 17:41:44.526957307 +0100
-@@ -22,6 +22,10 @@
-  *	 - Badari Pulavarty <pbadari@us.ibm.com>, Matthew Wilcox 
-  *	   <willy@debian.org>, Kurt Garloff <garloff@suse.de>: 
-  *	   Support 32k/1M disks.
-+ *	 - Guido Trentalancia <guido@trentalancia.com> ignore Synchronize
-+ *	   Cache command failures on hard-drives that do not support it
-+ *	   and disable the Write Cache functionality on such devices as a
-+ *	   precaution: this allows to keep using several obsolete drives.
-  *
-  *	Logging policy (needs CONFIG_SCSI_LOGGING defined):
-  *	 - setting up transfer: SCSI_LOG_HLQUEUE levels 1 and 2
-@@ -1633,6 +1637,20 @@ static int sd_sync_cache(struct scsi_dis
- 	}
- 
- 	if (res) {
-+		/*
-+		 * sshdr.sense_key == ILLEGAL_REQUEST means this drive
-+		 * doesn't support sync. There's not much to do and
-+		 * sync shouldn't fail.
-+		 */
-+		if (sshdr->sense_key == ILLEGAL_REQUEST && sshdr->asc == 0x20) {
-+			if (sdkp->WCE) {
-+				sdkp->WCE = 0;
-+				sd_printk(KERN_NOTICE, sdkp, "Drive does not support Synchronize Cache(10) command: disabling write cache.\n");
-+				sd_set_flush_flag(sdkp);
-+			}
-+			return 0;
-+		}
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index ac42ae4651ce..eebdcbef0578 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -996,6 +996,12 @@ static void cdrom_count_tracks(struct cdrom_device_info *cdi, tracktype *tracks)
+ 	tracks->xa = 0;
+ 	tracks->error = 0;
+ 	cd_dbg(CD_COUNT_TRACKS, "entering cdrom_count_tracks\n");
 +
- 		sd_print_result(sdkp, "Synchronize Cache(10) failed", res);
- 
- 		if (driver_byte(res) == DRIVER_SENSE)
-@@ -2022,6 +2040,17 @@ static int sd_done(struct scsi_cmnd *SCp
- 					req->rq_flags |= RQF_QUIET;
- 				}
- 				break;
-+			case SYNCHRONIZE_CACHE:
-+				if (sshdr.asc == 0x20) {
-+					if (sdkp->WCE) {
-+						sdkp->WCE = 0;
-+						sd_printk(KERN_NOTICE, sdkp, "Drive does not support Synchronize Cache(10) command: disabling write cache.\n");
-+						sd_set_flush_flag(sdkp);
-+					}
-+					SCpnt->result = 0;
-+					good_bytes = scsi_bufflen(SCpnt);
-+				}
-+				break;
- 			}
- 		}
- 		break;
++	if (!CDROM_CAN(CDC_PLAY_AUDIO)) {
++		tracks->error = CDS_NO_INFO;
++		return;
++	}
++
+ 	/* Grab the TOC header so we can see how many tracks there are */
+ 	ret = cdi->ops->audio_ioctl(cdi, CDROMREADTOCHDR, &header);
+ 	if (ret) {
+@@ -1162,7 +1168,8 @@ int cdrom_open(struct cdrom_device_info *cdi, struct block_device *bdev,
+ 		ret = open_for_data(cdi);
+ 		if (ret)
+ 			goto err;
+-		cdrom_mmc3_profile(cdi);
++		if (CDROM_CAN(CDC_GENERIC_PACKET))
++			cdrom_mmc3_profile(cdi);
+ 		if (mode & FMODE_WRITE) {
+ 			ret = -EROFS;
+ 			if (cdrom_open_write(cdi))
+@@ -2882,6 +2889,9 @@ int cdrom_get_last_written(struct cdrom_device_info *cdi, long *last_written)
+ 	   it doesn't give enough information or fails. then we return
+ 	   the toc contents. */
+ use_toc:
++	if (!CDROM_CAN(CDC_PLAY_AUDIO))
++		return -ENOSYS;
++
+ 	toc.cdte_format = CDROM_MSF;
+ 	toc.cdte_track = CDROM_LEADOUT;
+ 	if ((ret = cdi->ops->audio_ioctl(cdi, CDROMREADTOCENTRY, &toc)))
+-- 
+2.20.1
+
+
+
