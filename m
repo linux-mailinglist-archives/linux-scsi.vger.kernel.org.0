@@ -2,100 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E26FC12FDB2
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2020 21:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814FE12FE1A
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Jan 2020 21:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728778AbgACUUK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jan 2020 15:20:10 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:37856 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728762AbgACUUJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jan 2020 15:20:09 -0500
-Received: by mail-qk1-f194.google.com with SMTP id 21so34758091qky.4
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Jan 2020 12:20:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=JHYDNcOHsw5Vg59sFwNh4MhnXNKJfQKDhV3JhQemZ8O0wjy4NOClQJHVO9/XZY1B2e
-         7N2r8FlVbF9YCIZf1O8PJKqvP+J732CrXrgkZLQFQD6r8xa5PmtrOPXurr4eE1D10/dY
-         mFNu91hy8xJJRta6mrMYIQyNs0OE0ozgPWJvUT4Jmr91vUmPG9p04hCqKp3daJ6nspkN
-         ZTnUyt7jeaXiRVZmI5OCw3hnhqJr3CafoKv3hfbaHkDpeu4215n4LA4JUWv5RDO6VsPp
-         wo4bmuxUPsJ+VBxSxq4NIVVGqRtUU4TTV0YA8c6/GhqTjpJxCcyOyITBnIawjrG3MRiM
-         hUyw==
+        id S1728610AbgACUpd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jan 2020 15:45:33 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:35975 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727848AbgACUpd (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jan 2020 15:45:33 -0500
+Received: by mail-pl1-f193.google.com with SMTP id a6so18700212plm.3
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Jan 2020 12:45:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=GKF0ONQe7c1VrQ3qNn0AyFP2T7JAxbtUlmoDrhs1QrV7Oj0h6Tn1Nk95UCvC5UEJoN
-         qkpfKD1tVSLzrOnslAoqXHBT/nDi7xoCrbCCbmbeujpfhLB86Xy2viiVMNF9CIg6CUwV
-         GVlYKhhAjbEI9FiA3lvkzGwDhPrDjzcwK4HXN/NQmlmASev7oN4wKwqCWOAQDV25BP39
-         j0r7kOvi9cu3c7l3GBaWwTYyqP9WmdnZM43gZC3jo7Lg0EFAJIrQOw9wQ64WuCGfgup5
-         TKkDU3bXQBOEReR960/KsLmiWhoKrCCXRVrJF+FoSyNPDw1xBfj3yHNdyGPJcJXJ4MDY
-         G7yg==
-X-Gm-Message-State: APjAAAUJSVB495v7IZH5zO/i/RLc31Up9mZ5NcwOWKdVP75DTr5OijNQ
-        DacP3BiMBaQJcDvNc9fj/AV5rJDBxz/7XTJFKmw=
-X-Google-Smtp-Source: APXvYqzazOZ1eDGwLjA5b5joJwHBsXYUc3xk3mwbut9BpsYKwbpZffl6B/gnfGOg4rASQDOizOWq9gQ5QJjCh6l6GTs=
-X-Received: by 2002:a37:4141:: with SMTP id o62mr70745354qka.282.1578082808591;
- Fri, 03 Jan 2020 12:20:08 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KswqLj9n+63iTTN+tAb52pHlE/Z5/lUqgi0JGdp7Ip8=;
+        b=EtmvDniOF89O1k7aSJL9YxiDqQQwT6RtZZa9FP1xwQalP7aRTIgbTlFm1lgarie0CE
+         Bn3DyCTAKF3k4sxGAMskRmOYTIzTtKIQvudeZ8SudeSPX9pxHot1gCdFbaa3u1vHA6E6
+         WI+Bq5pRF41crv9nPbFV6XcoDbwg1QaoE/XGYUmq//No4bt985kmv8MwhA1nwy2nf4tZ
+         H68j8zOV37YxgosGf0dIMJNp2R1XtWZaTB2thOBSDpoUeAqfqyWrSxPFZkRRH1hBFxSS
+         /a8dMNMlSOLr1/zWRG7n+A093YBltEk0SWWHtM1fHAhhzWa+2qD9ORtIy/xQRjCrZhgG
+         /oEQ==
+X-Gm-Message-State: APjAAAXH9AgW1E49QZWLfv2jywG79g47QihyR+susnG8+KJ0cCyDKfmW
+        ppYHJu2TRuvV1hcBfGmIcw4=
+X-Google-Smtp-Source: APXvYqyozGyxcxeMg+9oQ6zYKy8i0GWwGetaNvs17Ig32VPlhbrGgZ66eLWMt1hAUgOztl0oLW2snQ==
+X-Received: by 2002:a17:902:bd46:: with SMTP id b6mr93533429plx.239.1578084332754;
+        Fri, 03 Jan 2020 12:45:32 -0800 (PST)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id z30sm70349825pff.131.2020.01.03.12.45.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Jan 2020 12:45:31 -0800 (PST)
+Subject: Re: [scsi:misc 58/85] drivers/scsi/qla2xxx/qla_target.c:5326:35:
+ sparse: sparse: cast from restricted __be16
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+References: <202001040422.6EbHYDMc%lkp@intel.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <351dc718-68cb-99e7-1056-778af8be5c9b@acm.org>
+Date:   Fri, 3 Jan 2020 12:45:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:20:08 -0800 (PST)
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 3 Jan 2020 21:20:08 +0100
-Message-ID: <CAP=nHBJWiJ9KpSSbF4jP9u5UiU5d_kGjSUyPYDmdB2x1uiJFMw@mail.gmail.com>
-Subject: I promise you must be happy today, God has uplifted you and your
- family ok
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <202001040422.6EbHYDMc%lkp@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend
+On 1/3/20 12:18 PM, kbuild test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git misc
+> head:   c53cf10ef6d9faeee9baa1fab824139c6f10a134
+> commit: a9c4ae108610716140bdec56ae0bebbe1c5cbe49 [58/85] scsi: qla2xxx: Use get_unaligned_*() instead of open-coding these functions
+> reproduce:
+>          # apt-get install sparse
+>          # sparse version: v0.6.1-129-g341daf20-dirty
+>          git checkout a9c4ae108610716140bdec56ae0bebbe1c5cbe49
+>          make ARCH=x86_64 allmodconfig
+>          make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+> 
+> 
+> sparse warnings: (new ones prefixed by >>)
+> [ ... ]
+Because I think that I don't have introduced any new endianness issues 
+with the mentioned patch, please ignore this kernel test robot report. 
+I'm working on patches that make the qla2xxx driver endianness clean.
 
-i hope all is well with you,if so, glory be to God almighty. I'm very
-happy to inform you, about my success in getting payment funds under
-the cooperation of a new partner from United States of
-America.Presently I am in uk for investment projects with my own share
-of the total sum. I didn't forget your past efforts. IMF finally
-approved your compensation payment funds this morning by prepaid (ATM)
-Debit card of US$12,500.000.00Million Dollars, Since you not received
-this payment yet, I was not certified
-but it is not your fault and not my fault, I hold nothing against
-you.than bank official whom has been detaining the transfer in the
-bank, trying to claim your funds by themselves.
-
-Therefore, in appreciation of your effort I have raised an
-International prepaid (ATM) Debit card of US$12,500.000.00 in your
-favor as compensation to you.
-
-Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
-on His  e-mail Address (mikebenz550@aol.com
-
-ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
-the money is in Prepaid (ATM) Debit card, not cash, so you need to
-send to him,
-your full name
-address  where the prepaid (ATM) Debit card will be delivered to you,
-including your cell phone number. Finally, I left explicit
-instructions with him, on how to send the (ATM CARD) to you.
-
-The Prepaid (ATM) Debit card, will be send to you through my
-Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
-my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
-Below is his contact information:
-
-NAME : MIKE BENZ
-EMAIL ADDRESS: mikebenz550@aol.com
-Text Him, (256) 284-4886
-
-Request for Delivery of the Prepaid (ATM) Debit card  to you today.
-Note, please I have paid for the whole service fees for you, so the
-only money you will send to my Diplomatic Agent Mr. Mike Benz is
-$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
-ok.
-Let me know once you receive this Card at your address.
-Best regards,
-Rev.Dr, George Adadar
+Bart.
