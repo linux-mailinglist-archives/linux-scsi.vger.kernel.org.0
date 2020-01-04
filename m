@@ -2,105 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62607130053
-	for <lists+linux-scsi@lfdr.de>; Sat,  4 Jan 2020 03:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6465513008A
+	for <lists+linux-scsi@lfdr.de>; Sat,  4 Jan 2020 04:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727275AbgADC4Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Jan 2020 21:56:24 -0500
-Received: from mail104.syd.optusnet.com.au ([211.29.132.246]:53417 "EHLO
-        mail104.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727255AbgADC4Y (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Jan 2020 21:56:24 -0500
-Received: from dread.disaster.area (pa49-180-68-255.pa.nsw.optusnet.com.au [49.180.68.255])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 33E4043ED89;
-        Sat,  4 Jan 2020 13:56:22 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1inZbw-00084l-N0; Sat, 04 Jan 2020 13:56:20 +1100
-Date:   Sat, 4 Jan 2020 13:56:20 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Tony Asleson <tasleson@redhat.com>
-Cc:     linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [RFC 9/9] __xfs_printk: Add durable name to output
-Message-ID: <20200104025620.GC23195@dread.disaster.area>
-References: <20191223225558.19242-1-tasleson@redhat.com>
- <20191223225558.19242-10-tasleson@redhat.com>
+        id S1727389AbgADDgZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Jan 2020 22:36:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37018 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727374AbgADDgZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 3 Jan 2020 22:36:25 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A4A822464B;
+        Sat,  4 Jan 2020 03:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578108984;
+        bh=pVmR2uthoKLDfspvx7wxCvETNXMl8k1lcP38v1hsNyA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Ugaewn/ga/wy0JgMKCiFq9mbZdoaLqBA0tEMC4pOPAUzPTXRNBxGcoHWtkRiegSju
+         iwQSFORGonr6o6G6HaRPkBSupUbOfP3OND+zA5SDBK2uq8IdanFVK5KqBwYx+FqUHi
+         rsK/O2cerswzoAyWI5AURB+gBytAxxk81ahGdjTM=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 03/10] scsi: mpt3sas: Fix double free in attach error handling
+Date:   Fri,  3 Jan 2020 22:36:12 -0500
+Message-Id: <20200104033620.10977-3-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200104033620.10977-1-sashal@kernel.org>
+References: <20200104033620.10977-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191223225558.19242-10-tasleson@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=X6os11be c=1 sm=1 tr=0
-        a=sbdTpStuSq8iNQE8viVliQ==:117 a=sbdTpStuSq8iNQE8viVliQ==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=Jdjhy38mL1oA:10
-        a=20KFwNOVAAAA:8 a=7-415B0cAAAA:8 a=Y1q_LsDJlNF9FywMdSwA:9
-        a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Dec 23, 2019 at 04:55:58PM -0600, Tony Asleson wrote:
-> Add persistent durable name to xfs messages so we can
-> correlate them with other messages for the same block
-> device.
-> 
-> Signed-off-by: Tony Asleson <tasleson@redhat.com>
-> ---
->  fs/xfs/xfs_message.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/fs/xfs/xfs_message.c b/fs/xfs/xfs_message.c
-> index 9804efe525a9..8447cdd985b4 100644
-> --- a/fs/xfs/xfs_message.c
-> +++ b/fs/xfs/xfs_message.c
-> @@ -20,6 +20,23 @@ __xfs_printk(
->  	const struct xfs_mount	*mp,
->  	struct va_format	*vaf)
->  {
-> +	char dict[128];
-> +	int dict_len = 0;
-> +
-> +	if (mp && mp->m_super && mp->m_super->s_bdev &&
-> +		mp->m_super->s_bdev->bd_disk) {
-> +		dict_len = dev_durable_name(
-> +			disk_to_dev(mp->m_super->s_bdev->bd_disk)->parent,
-> +			dict,
-> +			sizeof(dict));
-> +		if (dict_len) {
-> +			printk_emit(
-> +				0, level[1] - '0', dict, dict_len,
-> +				"XFS (%s): %pV\n",  mp->m_fsname, vaf);
-> +			return;
-> +		}
-> +	}
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-NACK on the ground this is a gross hack.
+[ Upstream commit ee560e7bbab0c10cf3f0e71997fbc354ab2ee5cb ]
 
-> +
->  	if (mp && mp->m_fsname) {
+The caller also calls _base_release_memory_pools() on error so it leads to
+a number of double frees:
 
-mp->m_fsname is the name of the device we use everywhere for log
-messages, it's set up at mount time so we don't have to do runtime
-evaulation of the device name every time we need to emit the device
-name in a log message.
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->chain_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->hpr_lookup' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->internal_lookup' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->pcie_sgl_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->reply_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->reply_free_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->reply_post_free_array_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->reply_post_free_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->sense_dma_pool' double freed
 
-So, if you have some sooper speshial new device naming scheme, it
-needs to be stored into the struct xfs_mount to replace mp->m_fsname.
+Fixes: 74522a92bbf0 ("scsi: mpt3sas: Optimize I/O memory consumption in driver.")
+Link: https://lore.kernel.org/r/20191203093652.gyntgvnkw2udatyc@kili.mountain
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-And if you have some sooper spehsial new printk API that uses this
-new device name, everything XFS emits needs to use it
-unconditionally as we do with mp->m_fsname now.
-
-IOWs, this isn't conditional code - it either works for the entire
-life of the mount for every message we have to emit with a single
-setup call, or the API is broken and needs to be rethought.
-
-Cheers,
-
-Dave.
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index fea3cb6a090b..752b71cfbe12 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -5234,7 +5234,6 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 					&ct->chain_buffer_dma);
+ 			if (!ct->chain_buffer) {
+ 				ioc_err(ioc, "chain_lookup: pci_pool_alloc failed\n");
+-				_base_release_memory_pools(ioc);
+ 				goto out;
+ 			}
+ 		}
 -- 
-Dave Chinner
-david@fromorbit.com
+2.20.1
+
