@@ -2,86 +2,178 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7260C1305B8
-	for <lists+linux-scsi@lfdr.de>; Sun,  5 Jan 2020 05:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23050130645
+	for <lists+linux-scsi@lfdr.de>; Sun,  5 Jan 2020 06:51:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbgAEEze (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 4 Jan 2020 23:55:34 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:28455 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726260AbgAEEzd (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 4 Jan 2020 23:55:33 -0500
-X-UUID: 00cdef5c43364984a046f3ec38dddc59-20200105
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=YGh3xGeqTpgiFQjArHGM6gr1I1wCDGexssGbJbNSies=;
-        b=sxFDcAXdur18XAQ9CUx9A09JQmNrVZNeQpSjIEj9mSwxFczZHzMxfjJ/7g4tDkaelf6G6FzDxrNUMYe2cWmEhxXgy6Bz5ZQrx9aKetiLYDpT4S/+QcUOW3u7U4DvR4h9cvO9mwgdsCf7u2UbuXLwEfFIXAsStK3sYSCn0ANapWc=;
-X-UUID: 00cdef5c43364984a046f3ec38dddc59-20200105
-Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 822484944; Sun, 05 Jan 2020 12:55:28 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Sun, 5 Jan 2020 12:54:38 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Sun, 5 Jan 2020 12:53:59 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        id S1725828AbgAEFvT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 5 Jan 2020 00:51:19 -0500
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:56260 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725785AbgAEFvT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 5 Jan 2020 00:51:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1578203479; x=1609739479;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=sUi6wqPs0k5OylI8see6LJEBZgAlUFkPWvvnsOXUXCg=;
+  b=BPVma7bzPtSS+WxrOQ6gWSfGNXyzDVbsX7cyU91d2Zpdf1LeCSEx0mSD
+   VsMdY1fkIEqh3bLg0uG/eoI4ifVV4ktSI9BJOxx7eTFFP34Hqc2woD6+u
+   sa97nH85rOO/2CHUcVMhO9vVexSiPzpr+SkuUtP3ThHu0AE3MImNsLJzG
+   wogtkMjUEjZgwh8/25pbzcEUamD2VT3X9G9Sfu3hN4zBHpJT4KxCktzTK
+   EBxKL+vrndmHg9MlBQyb5uuFfbnKamlGLr/zBfsUzu9jMjNFdnxY7C0Iu
+   34DUGpBUkDTTYeYSY62Qizdpg69Ol6DJW2QAI3vTBr2F1Ac3X/Dt8HCWp
+   g==;
+IronPort-SDR: /13JGtN/SW/pw/adJNi177onl1MVcztl6kR2y/z/A/SwR/9w/v7a22Vz2aWPqhcmQvV1JmEzcu
+ iN/RCraTOsQVVs/xp+7O32NQBQKfQCzYIh+hdDgcL5n561INN16AHpbcggXMngDd09rmhSyEVL
+ 0KW8yHMwvbl2vX2LXKWXd4tVYo0K9ae8WgFhbKqTBdgAuULCo2tUZiWEYkZdQSKtWFm2PYwEdS
+ SUvu2EFhyh2G8eaFXxLvroDmspQoyY98yq3hKSRoKLuWxoxz/rEVAt2avXYPGuddyEiczgx2kv
+ sIQ=
+X-IronPort-AV: E=Sophos;i="5.69,397,1571673600"; 
+   d="scan'208";a="131203882"
+Received: from mail-bn8nam12lp2175.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.175])
+  by ob1.hgst.iphmx.com with ESMTP; 05 Jan 2020 13:51:17 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RZ/h5++j6Sfe+82LBbKrEd+w/RrHsAwxlz7OvE8UPj4bkDNYob2pR9P9tgtE7bp18Ad4qsVhG3u8rZNUo1mdIFeQwKz+5EocJzUyONSwNfmqQeFWsXa2LS4KPWi7pGWieD9Vr65kP6x17GHRr+UV3JLXhbaQd+nwDCRM7UmrXEvfMsxusbrKBkIxRBhlBvrLbN9YuJvK0A5/sbGDt2Vr6yx/6p/63874D2AfhDuAaJfoDANGh2zmEIfKfXmEBgzJs0ScPcj6pgXL0deau9tTueS6GiKvae/M4ubrJiF7B1Sj5R4ThBWUFYmaInl/PuxHI3aani/g/qioOJMh5Mn2gA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LDSICHiA4AGENjnEKDQBWkghDmxnzSI6AoxJ9CmWG38=;
+ b=X80A4i/GQ/4scB44S+yDoMmJyb9usaQDA0c2iEUXuVLL4+LuZI4xUAt17yZRLc+MAMWdo9QVza7F3N1OkIWhe5tnVtxiwm76cMFXEhrJWk6cP0e0VwhuZIZ1PAg/UCxAczdD+zGYCWOszMrtqS7sguqXah4wTzVSCpgi8UKL2WUR9Bzk91DL5nA9DX8ZrRqRNjVK/bsdFE6sLBu4jSGM1ovaFVFFf1QprcJ59vVEWUi37t16ayCtGpfj4UNIbTkA7cwgiKydAocwIVYKohiJMCckgBvntA4r1t5Ts720vCxwwSxkkLoJIcRbkryQRvmk5UTm3seeGU3nvgmRpG2VhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LDSICHiA4AGENjnEKDQBWkghDmxnzSI6AoxJ9CmWG38=;
+ b=vXHysYslCli3dd2oj1jq6DZqD1r7iQwrnXvar4ZMsHhpKnscdZrr/mJO8fUIZfdnLpr95QHxdkMRqzqPuf6m5vSVXeZ4zTtJqkfMj075yNPrG489jx/VTeN8bvGx2AVVNHMpE5w852w3dVhI/dzg6ue8M8TxM9Ya54Sfo+xJcb0=
+Received: from MN2PR04MB6991.namprd04.prod.outlook.com (10.186.144.209) by
+ MN2PR04MB5935.namprd04.prod.outlook.com (20.178.255.145) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2602.13; Sun, 5 Jan 2020 05:51:15 +0000
+Received: from MN2PR04MB6991.namprd04.prod.outlook.com
+ ([fe80::460:1c02:5953:6b45]) by MN2PR04MB6991.namprd04.prod.outlook.com
+ ([fe80::460:1c02:5953:6b45%4]) with mapi id 15.20.2602.015; Sun, 5 Jan 2020
+ 05:51:15 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Stanley Chu <stanley.chu@mediatek.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>
+CC:     "beanhuo@micron.com" <beanhuo@micron.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 3/3] scsi: ufs-mediatek: add apply_dev_quirks variant operation
-Date:   Sun, 5 Jan 2020 12:55:18 +0800
-Message-ID: <1578200118-29547-4-git-send-email-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <1578200118-29547-1-git-send-email-stanley.chu@mediatek.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
+        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
+        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
+        "andy.teng@mediatek.com" <andy.teng@mediatek.com>
+Subject: Re: [PATCH v1 0/3] scsi: ufs: pass device information to
+ apply_dev_quirks
+Thread-Topic: [PATCH v1 0/3] scsi: ufs: pass device information to
+ apply_dev_quirks
+Thread-Index: AQHVw4RnKOmg85o31Eufk/ca9N3SIafbkG15
+Date:   Sun, 5 Jan 2020 05:51:14 +0000
+Message-ID: <MN2PR04MB69913F0B671032A388747CF7FC3D0@MN2PR04MB6991.namprd04.prod.outlook.com>
 References: <1578200118-29547-1-git-send-email-stanley.chu@mediatek.com>
+In-Reply-To: <1578200118-29547-1-git-send-email-stanley.chu@mediatek.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Avri.Altman@wdc.com; 
+x-originating-ip: [2a00:a040:19b:4327:8ce4:162b:4d1a:a5c4]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 74e89c91-07e5-47ef-08ce-08d791a346d4
+x-ms-traffictypediagnostic: MN2PR04MB5935:
+x-microsoft-antispam-prvs: <MN2PR04MB593536076E2F47BB7B3C27E3FC3D0@MN2PR04MB5935.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-forefront-prvs: 027367F73D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(366004)(396003)(39850400004)(136003)(346002)(189003)(199004)(33656002)(86362001)(4326008)(5660300002)(9686003)(52536014)(55016002)(110136005)(54906003)(316002)(7416002)(186003)(478600001)(66946007)(53546011)(6506007)(7696005)(81156014)(76116006)(81166006)(91956017)(8676002)(8936002)(66476007)(71200400001)(66556008)(2906002)(66446008)(64756008);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR04MB5935;H:MN2PR04MB6991.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OAxoApTYCf9zIMe5rRCaDTQDZ3z8VzjA01UxIne1th02OWsG1eBPznrT51AWfqgRuqTMoazeqdgDXVPC6NEZ/7/9tdX3OxeBNmOci3DwTwwC00MVGQmttax/mcgoe8mTFi7mKAByGXfVmRD4ewDZ9mSdKey5ElJtGLrYTBtIvwUqc5JKx0FB3YAofjYRhz4Wh3wCFRSlPQBEXynQqse8wvQ1uslPsHTpzglmrR+T0W/f/dYng+KAawGJE1Zv01EHtB2v/fita80CJEQtHpS+zqH07/1FXkEdmFlr2lMEdrN1nE1VDxmPD6mU6i+iscZF1B4qjCSr7AcvKUbOL3Bxsl0gfVnxF51bYptp2Kjh6RwdoiZEqat03VIZPPOHZ8BvojqZxE980hrJq81d5sanmBu0SoFqFupRosOHMkNvUAqwBYi7nKP/Udgmw84ygeVG
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: B9DC6888F24F8BFE6100FFBAB54341996EE2D2938860AB7865CCA8ECF7A19D6A2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 74e89c91-07e5-47ef-08ce-08d791a346d4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Jan 2020 05:51:14.8908
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: VDv9xT4o0CzRiZjH0fngfu4XF/bFBUDvh7T3fIXBqb08ToobuO5HZJ5sTEwaHfe1ZGtFxZWGDnuO3d0mXqLA6A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB5935
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-QWRkIHZlbmRvci1zcGVjaWZpYyB2YXJpYW50IGNhbGxiYWNrICJhcHBseV9kZXZfcXVpcmtzIg0K
-aW4gTWVkaWFUZWsgVUZTIGRyaXZlci4NCg0KQ2M6IEFsaW0gQWtodGFyIDxhbGltLmFraHRhckBz
-YW1zdW5nLmNvbT4NCkNjOiBBc3V0b3NoIERhcyA8YXN1dG9zaGRAY29kZWF1cm9yYS5vcmc+DQpD
-YzogQXZyaSBBbHRtYW4gPGF2cmkuYWx0bWFuQHdkYy5jb20+DQpDYzogQmFydCBWYW4gQXNzY2hl
-IDxidmFuYXNzY2hlQGFjbS5vcmc+DQpDYzogQmVhbiBIdW8gPGJlYW5odW9AbWljcm9uLmNvbT4N
-CkNjOiBDYW4gR3VvIDxjYW5nQGNvZGVhdXJvcmEub3JnPg0KQ2M6IE1hdHRoaWFzIEJydWdnZXIg
-PG1hdHRoaWFzLmJnZ0BnbWFpbC5jb20+DQpTaWduZWQtb2ZmLWJ5OiBTdGFubGV5IENodSA8c3Rh
-bmxleS5jaHVAbWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnMtbWVkaWF0
-ZWsuYyB8IDExICsrKysrKysrKysrDQogMSBmaWxlIGNoYW5nZWQsIDExIGluc2VydGlvbnMoKykN
-Cg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMgYi9kcml2ZXJz
-L3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jDQppbmRleCA0MWY4MGVlYWRhNDYuLjhkOTk5YzBlNjBm
-ZSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMNCisrKyBiL2Ry
-aXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMNCkBAIC0xNiw2ICsxNiw3IEBADQogDQogI2lu
-Y2x1ZGUgInVmc2hjZC5oIg0KICNpbmNsdWRlICJ1ZnNoY2QtcGx0ZnJtLmgiDQorI2luY2x1ZGUg
-InVmc19xdWlya3MuaCINCiAjaW5jbHVkZSAidW5pcHJvLmgiDQogI2luY2x1ZGUgInVmcy1tZWRp
-YXRlay5oIg0KIA0KQEAgLTQwNSw2ICs0MDYsMTUgQEAgc3RhdGljIGludCB1ZnNfbXRrX3Jlc3Vt
-ZShzdHJ1Y3QgdWZzX2hiYSAqaGJhLCBlbnVtIHVmc19wbV9vcCBwbV9vcCkNCiAJcmV0dXJuIDA7
-DQogfQ0KIA0KK3N0YXRpYyBpbnQgdWZzX210a19hcHBseV9kZXZfcXVpcmtzKHN0cnVjdCB1ZnNf
-aGJhICpoYmEsDQorCQkJCSAgICBzdHJ1Y3QgdWZzX2Rldl9kZXNjICpjYXJkKQ0KK3sNCisJaWYg
-KGNhcmQtPndtYW51ZmFjdHVyZXJpZCA9PSBVRlNfVkVORE9SX1NBTVNVTkcpDQorCQl1ZnNoY2Rf
-ZG1lX3NldChoYmEsIFVJQ19BUkdfTUlCKFBBX1RBQ1RJVkFURSksIDYpOw0KKw0KKwlyZXR1cm4g
-MDsNCit9DQorDQogLyoqDQogICogc3RydWN0IHVmc19oYmFfbXRrX3ZvcHMgLSBVRlMgTVRLIHNw
-ZWNpZmljIHZhcmlhbnQgb3BlcmF0aW9ucw0KICAqDQpAQCAtNDE3LDYgKzQyNyw3IEBAIHN0YXRp
-YyBzdHJ1Y3QgdWZzX2hiYV92YXJpYW50X29wcyB1ZnNfaGJhX210a192b3BzID0gew0KIAkuc2V0
-dXBfY2xvY2tzICAgICAgICA9IHVmc19tdGtfc2V0dXBfY2xvY2tzLA0KIAkubGlua19zdGFydHVw
-X25vdGlmeSA9IHVmc19tdGtfbGlua19zdGFydHVwX25vdGlmeSwNCiAJLnB3cl9jaGFuZ2Vfbm90
-aWZ5ICAgPSB1ZnNfbXRrX3B3cl9jaGFuZ2Vfbm90aWZ5LA0KKwkuYXBwbHlfZGV2X3F1aXJrcyAg
-ICA9IHVmc19tdGtfYXBwbHlfZGV2X3F1aXJrcywNCiAJLnN1c3BlbmQgICAgICAgICAgICAgPSB1
-ZnNfbXRrX3N1c3BlbmQsDQogCS5yZXN1bWUgICAgICAgICAgICAgID0gdWZzX210a19yZXN1bWUs
-DQogCS5kZXZpY2VfcmVzZXQgICAgICAgID0gdWZzX210a19kZXZpY2VfcmVzZXQsDQotLSANCjIu
-MTguMA0K
+You have to squash patch 1 & 2, otherwise your patch 1 won't compile.
+Other than that: looks good to me.
+Thanks,
+Avri
 
+
+
+________________________________________
+From: Stanley Chu <stanley.chu@mediatek.com>
+Sent: Sunday, January 5, 2020 6:55:15 AM
+To: linux-scsi@vger.kernel.org; martin.petersen@oracle.com; Avri Altman; al=
+im.akhtar@samsung.com; jejb@linux.ibm.com
+Cc: beanhuo@micron.com; asutoshd@codeaurora.org; cang@codeaurora.org; matth=
+ias.bgg@gmail.com; bvanassche@acm.org; linux-mediatek@lists.infradead.org; =
+linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org; kuohong=
+.wang@mediatek.com; peter.wang@mediatek.com; chun-hung.wu@mediatek.com; and=
+y.teng@mediatek.com; Stanley Chu
+Subject: [PATCH v1 0/3] scsi: ufs: pass device information to apply_dev_qui=
+rks
+
+CAUTION: This email originated from outside of Western Digital. Do not clic=
+k on links or open attachments unless you recognize the sender and know tha=
+t the content is safe.
+
+
+Currently UFS driver has "global" device quirk scheme to allow driver apply=
+ing
+special handling for certain UFS devive models.
+
+However some special device handlings are required for specific UFS hosts o=
+nly
+so it is better to make it happen in vendor's callbacks only to not "pollut=
+e"
+common driver and common device quirks.
+
+We already have apply_dev_quirks variant callback for vendors but lack of d=
+evice
+information for handling specific UFS device models. This series provides s=
+uch
+information to apply_dev_quirks callbacks, and applies related modification=
+s.
+
+Stanley Chu (3):
+  scsi: ufs: pass device information to apply_dev_quirks
+  scsi: ufs-qcom: modify apply_dev_quirks interface
+  scsi: ufs-mediatek: add apply_dev_quirks variant operation
+
+ drivers/scsi/ufs/ufs-mediatek.c | 11 +++++++++++
+ drivers/scsi/ufs/ufs-qcom.c     |  3 ++-
+ drivers/scsi/ufs/ufshcd.c       |  5 +++--
+ drivers/scsi/ufs/ufshcd.h       |  7 ++++---
+ 4 files changed, 20 insertions(+), 6 deletions(-)
+
+--
+2.18.0
