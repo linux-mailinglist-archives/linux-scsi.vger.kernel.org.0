@@ -2,21 +2,21 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 347021317FF
+	by mail.lfdr.de (Postfix) with ESMTP id B15F8131800
 	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2020 19:58:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbgAFS6c (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Jan 2020 13:58:32 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:35916 "EHLO
+        id S1726893AbgAFS6g (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Jan 2020 13:58:36 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:35924 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726657AbgAFS6b (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jan 2020 13:58:31 -0500
+        with ESMTP id S1726657AbgAFS6e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jan 2020 13:58:34 -0500
 Received: from localhost (unknown [IPv6:2610:98:8005::147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
         (Authenticated sender: krisman)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 09F3029196A;
-        Mon,  6 Jan 2020 18:58:28 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 6AD4429166F;
+        Mon,  6 Jan 2020 18:58:32 +0000 (GMT)
 From:   Gabriel Krisman Bertazi <krisman@collabora.com>
 To:     gregkh@linuxfoundation.org
 Cc:     rafael@kernel.org, lduncan@suse.com, cleech@redhat.com,
@@ -25,9 +25,9 @@ Cc:     rafael@kernel.org, lduncan@suse.com, cleech@redhat.com,
         linux-scsi@vger.kernel.org,
         Gabriel Krisman Bertazi <krisman@collabora.com>,
         kernel@collabora.com
-Subject: [PATCH 1/3] drivers: base: Support atomic version of attribute_container_device_trigger
-Date:   Mon,  6 Jan 2020 13:58:15 -0500
-Message-Id: <20200106185817.640331-2-krisman@collabora.com>
+Subject: [PATCH 2/3] drivers: base: Propagate errors through the transport component
+Date:   Mon,  6 Jan 2020 13:58:16 -0500
+Message-Id: <20200106185817.640331-3-krisman@collabora.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200106185817.640331-1-krisman@collabora.com>
 References: <20200106185817.640331-1-krisman@collabora.com>
@@ -38,154 +38,69 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-attribute_container_device_trigger invokes callbacks that may fail for
-one or more classdev's, for instance, the transport_add_class_device
-callback, called during transport creation, does memory allocation.
-This information, though, is not propagated to upper layers, and any
-driver using the attribute_container_device_trigger API will not know
-whether any, some, or all callbacks succeeded.
-
-This patch implements a safe version of this dispatcher, to either
-succeed all the callbacks or revert to the original state.
+The transport registration may fail.  Make sure the errors are
+propagated to the callers.
 
 Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
 ---
- drivers/base/attribute_container.c  | 103 ++++++++++++++++++++++++++++
- include/linux/attribute_container.h |   7 ++
- 2 files changed, 110 insertions(+)
+ drivers/base/transport_class.c  | 11 ++++++++---
+ include/linux/transport_class.h |  6 +++---
+ 2 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/base/attribute_container.c b/drivers/base/attribute_container.c
-index 20736aaa0e69..f7bd0f4db13d 100644
---- a/drivers/base/attribute_container.c
-+++ b/drivers/base/attribute_container.c
-@@ -236,6 +236,109 @@ attribute_container_remove_device(struct device *dev,
- 	mutex_unlock(&attribute_container_mutex);
- }
+diff --git a/drivers/base/transport_class.c b/drivers/base/transport_class.c
+index 5ed86ded6e6b..ccc86206e508 100644
+--- a/drivers/base/transport_class.c
++++ b/drivers/base/transport_class.c
+@@ -30,6 +30,10 @@
+ #include <linux/attribute_container.h>
+ #include <linux/transport_class.h>
  
-+static int
-+do_attribute_container_device_trigger_safe(struct device *dev,
-+					   struct attribute_container *cont,
-+					   int (*fn)(struct attribute_container *,
-+						     struct device *, struct device *),
-+					   int (*undo)(struct attribute_container *,
-+						       struct device *, struct device *))
-+{
-+	int ret;
-+	struct internal_container *ic, *failed;
-+	struct klist_iter iter;
-+
-+	if (attribute_container_no_classdevs(cont))
-+		return fn(cont, dev, NULL);
-+
-+	klist_for_each_entry(ic, &cont->containers, node, &iter) {
-+		if (dev == ic->classdev.parent) {
-+			ret = fn(cont, dev, &ic->classdev);
-+			if (ret) {
-+				failed = ic;
-+				klist_iter_exit(&iter);
-+				goto fail;
-+			}
-+		}
-+	}
-+	return 0;
-+
-+fail:
-+	if (!undo)
-+		return ret;
-+
-+	/* Attempt to undo the work partially done. */
-+	klist_for_each_entry(ic, &cont->containers, node, &iter) {
-+		if (ic == failed) {
-+			klist_iter_exit(&iter);
-+			break;
-+		}
-+		if (dev == ic->classdev.parent)
-+			undo(cont, dev, &ic->classdev);
-+	}
-+	return ret;
-+}
-+
-+/**
-+ * attribute_container_device_trigger_safe - execute a trigger for each
-+ * matching classdev or fail all of them.
-+ *
-+ * @dev:  The generic device to run the trigger for
-+ * @fn	  the function to execute for each classdev.
-+ * @undo  A function to undo the work previously done in case of error
-+ *
-+ * This function is a safe version of
-+ * attribute_container_device_trigger. It stops on the first error and
-+ * undo the partial work that has been done, on previous classdev.  It
-+ * is guaranteed that either they all succeeded, or none of them
-+ * succeeded.
-+ */
-+int
-+attribute_container_device_trigger_safe(struct device *dev,
-+					int (*fn)(struct attribute_container *,
-+						  struct device *,
-+						  struct device *),
-+					int (*undo)(struct attribute_container *,
-+						    struct device *,
-+						    struct device *))
-+{
-+	struct attribute_container *cont, *failed = NULL;
-+	int ret = 0;
-+
-+	mutex_lock(&attribute_container_mutex);
-+
-+	list_for_each_entry(cont, &attribute_container_list, node) {
-+
-+		if (!cont->match(cont, dev))
-+			continue;
-+
-+		ret = do_attribute_container_device_trigger_safe(dev, cont,
-+								 fn, undo);
-+		if (ret) {
-+			failed = cont;
-+			break;
-+		}
-+	}
-+
-+	if (ret && !WARN_ON(!undo)) {
-+		list_for_each_entry(cont, &attribute_container_list, node) {
-+
-+			if (failed == cont)
-+				break;
-+
-+			if (!cont->match(cont, dev))
-+				continue;
-+
-+			do_attribute_container_device_trigger_safe(dev, cont,
-+								   undo, NULL);
-+		}
-+	}
-+
-+	mutex_unlock(&attribute_container_mutex);
-+	return ret;
-+
-+}
++static int transport_remove_classdev(struct attribute_container *cont,
++				     struct device *dev,
++				     struct device *classdev);
 +
  /**
-  * attribute_container_device_trigger - execute a trigger for each matching classdev
+  * transport_class_register - register an initial transport class
   *
-diff --git a/include/linux/attribute_container.h b/include/linux/attribute_container.h
-index d12bb2153cd6..e4004d1e6725 100644
---- a/include/linux/attribute_container.h
-+++ b/include/linux/attribute_container.h
-@@ -54,6 +54,13 @@ void attribute_container_device_trigger(struct device *dev,
- 					int (*fn)(struct attribute_container *,
- 						  struct device *,
- 						  struct device *));
-+int attribute_container_device_trigger_safe(struct device *dev,
-+					    int (*fn)(struct attribute_container *,
-+						      struct device *,
-+						      struct device *),
-+					    int (*undo)(struct attribute_container *,
-+							struct device *,
-+							struct device *));
- void attribute_container_trigger(struct device *dev, 
- 				 int (*fn)(struct attribute_container *,
- 					   struct device *));
+@@ -172,10 +176,11 @@ static int transport_add_class_device(struct attribute_container *cont,
+  * routine is simply a trigger point used to add the device to the
+  * system and register attributes for it.
+  */
+-
+-void transport_add_device(struct device *dev)
++int transport_add_device(struct device *dev)
+ {
+-	attribute_container_device_trigger(dev, transport_add_class_device);
++	return attribute_container_device_trigger_safe(dev,
++					transport_add_class_device,
++					transport_remove_classdev);
+ }
+ EXPORT_SYMBOL_GPL(transport_add_device);
+ 
+diff --git a/include/linux/transport_class.h b/include/linux/transport_class.h
+index a9c59761927b..63076fb835e3 100644
+--- a/include/linux/transport_class.h
++++ b/include/linux/transport_class.h
+@@ -62,16 +62,16 @@ struct transport_container {
+ 	container_of(x, struct transport_container, ac)
+ 
+ void transport_remove_device(struct device *);
+-void transport_add_device(struct device *);
++int transport_add_device(struct device *);
+ void transport_setup_device(struct device *);
+ void transport_configure_device(struct device *);
+ void transport_destroy_device(struct device *);
+ 
+-static inline void
++static inline int
+ transport_register_device(struct device *dev)
+ {
+ 	transport_setup_device(dev);
+-	transport_add_device(dev);
++	return transport_add_device(dev);
+ }
+ 
+ static inline void
 -- 
 2.24.1
 
