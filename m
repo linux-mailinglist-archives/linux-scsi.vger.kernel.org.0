@@ -2,104 +2,136 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D8C5131360
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2020 15:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C21541313F7
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2020 15:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbgAFOLu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Jan 2020 09:11:50 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:46566 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbgAFOLu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jan 2020 09:11:50 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1ioT6f-0003XB-65; Mon, 06 Jan 2020 14:11:45 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Himanshu Madhani <hmadhani@marvell.com>,
+        id S1726478AbgAFOpj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Jan 2020 09:45:39 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:58656 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726303AbgAFOpj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jan 2020 09:45:39 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 006Egre7060448;
+        Mon, 6 Jan 2020 14:45:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=y6Yf0Tj3nApnNA9jMdUffxaonp7W12V1dGrGOMpEJEs=;
+ b=KZAS/9jgYbJYUWelkrCfBVA1iF8Tduijy60JmFC/xnanGW+4BeeONdNUxaIMVgED8aCM
+ NUKzOXUkv/ECMSb4WnnarCme0Rdnyf8Pn/NgBy3zSBuvrAchPlJoGarYHK8EDod2TAwU
+ /m7SsNOgVO3rq2D5irEcsgPOoWhRmA2We5YdmI/r24SLbIxtmr3sk9RuaNVNR6gH/n/v
+ PNuUL3R346pgeGuXJky4+E5iPfuVxKan5Ka3dNXM+KMe5JoHj8ylw46upFEw3YY1IkN6
+ tTBweIYqtJA/L8Os7RCUWdvobxfgEz2JoiDLoofsEsbqgacLSEqCGAKptvMl9oDn5U75 tQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2xaj4tqqk7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Jan 2020 14:45:32 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 006EipJi181815;
+        Mon, 6 Jan 2020 14:45:31 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2xb4v12q70-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 06 Jan 2020 14:45:31 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 006EjUAT027182;
+        Mon, 6 Jan 2020 14:45:30 GMT
+Received: from kadam (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 06 Jan 2020 06:45:29 -0800
+Date:   Mon, 6 Jan 2020 17:45:22 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Himanshu Madhani <hmadhani@marvell.com>,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Quinn Tran <qutran@marvell.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org
-Subject: [PATCH][next] scsi: qla2xxx: fix null pointer dereference on null_fcport
-Date:   Mon,  6 Jan 2020 14:11:44 +0000
-Message-Id: <20200106141144.52888-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.24.0
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH][next] scsi: qla2xxx: fix null pointer dereference on
+ null_fcport
+Message-ID: <20200106144522.GL3911@kadam>
+References: <20200106141144.52888-1-colin.king@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200106141144.52888-1-colin.king@canonical.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9491 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2001060134
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9491 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2001060134
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Mon, Jan 06, 2020 at 02:11:44PM +0000, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
+> 
+> Currently several error exit return paths end up passing a null
+> new_fcport pointer to function qla2x00_free_fcport and this causes
+> a null pointer dereference.  Fix this by moving and renaming the
+> exit path label to be after the call to qla2x00_free_fcport to avoid
+> the errorneous and unnecessary call to qla2x00_free_fcport.
+> 
+> Addresses-Coverity: ("Dereference after null check")
+> Fixes: 3dae220595ba ("scsi: qla2xxx: Use common routine to free fcport struct")
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  drivers/scsi/qla2xxx/qla_init.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+> index a5076f43edea..ed056626d7a3 100644
+> --- a/drivers/scsi/qla2xxx/qla_init.c
+> +++ b/drivers/scsi/qla2xxx/qla_init.c
+> @@ -5108,7 +5108,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+>  	rval = qla2x00_get_id_list(vha, ha->gid_list, ha->gid_list_dma,
+>  	    &entries);
+>  	if (rval != QLA_SUCCESS)
+> -		goto cleanup_allocation;
+> +		goto exit;
+>  
+>  	ql_dbg(ql_dbg_disc, vha, 0x2011,
+>  	    "Entries in ID list (%d).\n", entries);
+> @@ -5138,7 +5138,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+>  		ql_log(ql_log_warn, vha, 0x2012,
+>  		    "Memory allocation failed for fcport.\n");
+>  		rval = QLA_MEMORY_ALLOC_FAILED;
+> -		goto cleanup_allocation;
+> +		goto exit;
+>  	}
+>  	new_fcport->flags &= ~FCF_FABRIC_DEVICE;
+>  
+> @@ -5228,7 +5228,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+>  				ql_log(ql_log_warn, vha, 0xd031,
+>  				    "Failed to allocate memory for fcport.\n");
+>  				rval = QLA_MEMORY_ALLOC_FAILED;
+> -				goto cleanup_allocation;
+> +				goto exit;
 
-Currently several error exit return paths end up passing a null
-new_fcport pointer to function qla2x00_free_fcport and this causes
-a null pointer dereference.  Fix this by moving and renaming the
-exit path label to be after the call to qla2x00_free_fcport to avoid
-the errorneous and unnecessary call to qla2x00_free_fcport.
+This leaks now.
 
-Addresses-Coverity: ("Dereference after null check")
-Fixes: 3dae220595ba ("scsi: qla2xxx: Use common routine to free fcport struct")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/scsi/qla2xxx/qla_init.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+>  			}
+>  			spin_lock_irqsave(&vha->hw->tgt.sess_lock, flags);
+>  			new_fcport->flags &= ~FCF_FABRIC_DEVICE;
+> @@ -5239,7 +5239,6 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+>  		/* Base iIDMA settings on HBA port speed. */
+>  		fcport->fp_speed = ha->link_data_rate;
+>  
+> -		found_devs++;
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index a5076f43edea..ed056626d7a3 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -5108,7 +5108,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 	rval = qla2x00_get_id_list(vha, ha->gid_list, ha->gid_list_dma,
- 	    &entries);
- 	if (rval != QLA_SUCCESS)
--		goto cleanup_allocation;
-+		goto exit;
- 
- 	ql_dbg(ql_dbg_disc, vha, 0x2011,
- 	    "Entries in ID list (%d).\n", entries);
-@@ -5138,7 +5138,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 		ql_log(ql_log_warn, vha, 0x2012,
- 		    "Memory allocation failed for fcport.\n");
- 		rval = QLA_MEMORY_ALLOC_FAILED;
--		goto cleanup_allocation;
-+		goto exit;
- 	}
- 	new_fcport->flags &= ~FCF_FABRIC_DEVICE;
- 
-@@ -5228,7 +5228,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 				ql_log(ql_log_warn, vha, 0xd031,
- 				    "Failed to allocate memory for fcport.\n");
- 				rval = QLA_MEMORY_ALLOC_FAILED;
--				goto cleanup_allocation;
-+				goto exit;
- 			}
- 			spin_lock_irqsave(&vha->hw->tgt.sess_lock, flags);
- 			new_fcport->flags &= ~FCF_FABRIC_DEVICE;
-@@ -5239,7 +5239,6 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 		/* Base iIDMA settings on HBA port speed. */
- 		fcport->fp_speed = ha->link_data_rate;
- 
--		found_devs++;
- 	}
- 
- 	list_for_each_entry(fcport, &vha->vp_fcports, list) {
-@@ -5271,9 +5270,9 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 			qla24xx_fcport_handle_login(vha, fcport);
- 	}
- 
--cleanup_allocation:
- 	qla2x00_free_fcport(new_fcport);
- 
-+exit:
- 	if (rval != QLA_SUCCESS) {
- 		ql_dbg(ql_dbg_disc, vha, 0x2098,
- 		    "Configure local loop error exit: rval=%x.\n", rval);
--- 
-2.24.0
+Delete "found_devs" completely.  Also remove the "new_fcport = NULL;"
+line because that's not required any more.
+
+regards,
+dan carpenter
 
