@@ -2,57 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CBEE131447
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2020 16:02:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E51C21315FC
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2020 17:25:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgAFPCH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Jan 2020 10:02:07 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:37183 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726296AbgAFPCH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jan 2020 10:02:07 -0500
-Received: by mail-pl1-f196.google.com with SMTP id c23so21960910plz.4
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Jan 2020 07:02:07 -0800 (PST)
+        id S1726608AbgAFQZb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Jan 2020 11:25:31 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:37289 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgAFQZa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jan 2020 11:25:30 -0500
+Received: by mail-io1-f67.google.com with SMTP id k24so18839541ioc.4
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Jan 2020 08:25:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=iWBJ9etiBm/hh818InyCY7sxm3rRSJTmMlNUHIhyA9c=;
-        b=i22omh7lCXhrbAjUC2Sr1dWntYvMDwEu9NTbJSAWS/PY/3RJRm1y3gkK3dhyyknZbr
-         CDPNbVa0Au7RjmWjkRrO7HPqsjEq4ZdEc1bLUhOmjrvNt+zE4I8x/kYqXZU0DKfA6eLm
-         7LsWNlN/Oy9FklOiCU65AYHjA2YMp5WnBez/RzL/IbhaDDxP26+t7V7UzKKr10Sz5Mvi
-         Ir1F42rC8h6fn1jfGnqcYGNiwJMVi6cN7gKFdjYPyaP2AADRB9BTXFDJ4Y9Cq6WfZjUO
-         w6eOXgxvniQWrtv4GKRIfs9wKbu2NaiFLcbqoN5wPikCckM+T6p9yJBd3EODDYckdw2B
-         JL0w==
+        d=cloud.ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JQWLANc4WOoFGEzefMvi7nCheJcbXElxmNDS3b9Y34I=;
+        b=dUvHnQfrRF5b8XzCtB12RkvZB5sme7YoF4JWJxhjOy4t57DMbMgamr/xz7hqMkDmCn
+         MDFsiMEdaUap98imvi6RTwQNHl78DReLowKgW3VzWwL1aDC/b0NCthFMew9ZVtLQp0pJ
+         Fzx0yMbj95A7zCWuvcEQlQjlOQjf+gSeWqMWQNssuldiPSgtpGesqwYydRi/CfDweWIq
+         QKrdAwOw7obdL7Ia2+NlisfoqI2r34i5Eqv2iki3XeBMxGkUwAnxKn3ATRBsQO4xjT1n
+         Y1bWH3LultcRKVCLhn+pYQDOufjpfdSXRAi/3qQ6f+W7qZwzl/ddISWVi7xhJMkuuTPL
+         ckfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=iWBJ9etiBm/hh818InyCY7sxm3rRSJTmMlNUHIhyA9c=;
-        b=cxl89LNzuIRwGTRNJS2KaFkBnF5jcIvQmG9ryG/CxS9KVp+3nNtdc7NE7SR0Kw0JpO
-         L18v/cSkeE90eK2F1snAfcNyMViWni5JKgCLl4hjMiS3dNNo2gc5+g6d/0lanPr3Zvts
-         ezvchVPAJB1fibcfJPoccO2ErQAlsqBcR+Nm/u1LPNNLIvQBzkJMafZpSVMFOVTBMDQ+
-         fQ39CsOaSb7dRzAITMRHt3Mx8f2pXa7jBLPRrSybZKWHHajfZLu5iTvmTfCypewx/InA
-         sfi5Zfny2UVFu3FPJjbcqfA9R/cjG2cy5VDA5MSnHOG85rw0Ag+i0KEC8sWpdUKuu53A
-         yWTA==
-X-Gm-Message-State: APjAAAW2SasiZYnPEfhrqESkiarzn4QRJ8dvQDqFI/2+Mq4paYXAWX3j
-        Bfhd5y9L2CgDq7VnYmgBV2hAtD0ugpi02hwCiaI=
-X-Google-Smtp-Source: APXvYqxWLR2TfjfLI44+0jMSBEzfbWdoAb37Ppez3uAU9ayLkbqXjrj59sLR95hORh/ZKQ1kQ80zIwIDbDPeu685FRM=
-X-Received: by 2002:a17:90a:bd10:: with SMTP id y16mr43439864pjr.108.1578322926995;
- Mon, 06 Jan 2020 07:02:06 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JQWLANc4WOoFGEzefMvi7nCheJcbXElxmNDS3b9Y34I=;
+        b=gmDMScJD0PDw+A9I1rVcxq6WrIdlFgSQVaBbrsUuqUIWc5rkT+y0dIPDeX/wRnbst8
+         g8SVVlvldTL+iZOucNqgTzuo0GDwOa7eB7pAo/M/D9WCiXvgcpmVh30b+j7ahPz3CThq
+         R8KKL0j813O5jCyM6o8CQFT0rfnh6iIPvgi6EEjbvY1c7MKzMmiV28u8f6Jo9evDzs8B
+         u1zUEcnApVMLyXexj2kuCBQ/2nGE61X9oRhHEQBM472pBq/o8V3NQGMg1ROf8gBoK8ZG
+         s6P00jibpLfXSEET1vK7TQMeXJZY/L2PXZVZsbT7+nt0qGODm+7bx2UZfjCkb9orzZh+
+         3/xw==
+X-Gm-Message-State: APjAAAVL3QoBNgDNElc0WsfM2fzMVu06mQaR5jXO4KBJWNylzV/f1EWA
+        sV42c6zgpRipMiHS1w7iU0RDrcZlG2gpHnAwrNOEkw==
+X-Google-Smtp-Source: APXvYqxwaE4hlcgERGGToiNLuvoCt1D2p41icQ4UN+ynWO/8l7Wbg+Af3w5/DjnC3EcvcGiJrPqBM1GJOFtKaLUZVFY=
+X-Received: by 2002:a6b:6e02:: with SMTP id d2mr70774902ioh.22.1578327930210;
+ Mon, 06 Jan 2020 08:25:30 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a17:90a:2748:0:0:0:0 with HTTP; Mon, 6 Jan 2020 07:02:06
- -0800 (PST)
-Reply-To: cfffdfd8brahim4@yandex.com
-From:   Salah Ibrahim <mr.moussa.ahmed888@gmail.com>
-Date:   Mon, 6 Jan 2020 07:02:06 -0800
-Message-ID: <CAK56hS+U6ZGvrhHVSwuPU4athOiv_0Ux6MHBpz_WBXgQMOqvAQ@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
+References: <20191224044143.8178-1-deepak.ukey@microchip.com> <20191224044143.8178-9-deepak.ukey@microchip.com>
+In-Reply-To: <20191224044143.8178-9-deepak.ukey@microchip.com>
+From:   Jinpu Wang <jinpu.wang@cloud.ionos.com>
+Date:   Mon, 6 Jan 2020 17:25:19 +0100
+Message-ID: <CAMGffEk6SpVkqCGSMUJwdscmbLTFVt_3g0-YD4MxB9d5_+i9iA@mail.gmail.com>
+Subject: Re: [PATCH 08/12] pm80xx : IOCTL functionality for GPIO.
+To:     Deepak Ukey <deepak.ukey@microchip.com>
+Cc:     Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
+        Vasanthalakshmi.Tharmarajan@microchip.com,
+        Viswas G <Viswas.G@microchip.com>,
+        Jack Wang <jinpu.wang@profitbricks.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>, dpf@google.com,
+        yuuzheng@google.com, Vikram Auradkar <auradkar@google.com>,
+        vishakhavc@google.com, bjashnani@google.com,
+        Radha Ramachandran <radha@google.com>, akshatzen@google.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend. I have a business proposal of  $35 Million USD which i want to
-transact with you  get back for more details.Best Regards From Salah Ibrahim
+On Tue, Dec 24, 2019 at 5:41 AM Deepak Ukey <deepak.ukey@microchip.com> wrote:
+>
+> From: Deepak Ukey <Deepak.Ukey@microchip.com>
+>
+> Added IOCTL functionality for GPIO.
+> The SPCv controller provides 24 GPIO signals. The first 12 signals
+> [11:0] and the last 4 signals [23:20] are for customer use. Eight
+> signals [19:12] are reserved for the SPCv controller firmware.
+> Whenever the host performs GPIO setup or a read/write operation
+> using the GPIO command the host needs to make sure that it does
+> not disturb the GPIO configuration for the bits [19:12].
+> Each signal can be configured either as an input or as an output.
+> When configured as an output, the host can use the GPIO Command to
+> set the desired level. GPIO inputs can also be configured so that
+> the SPCv controller sends the GPIO Event notification when specific
+> GPIO events occur.
+> Different GPIO features implemented:
+> 1) GPIO Pin Setup
+> 2) GPIO Event Setup
+> 3) GPIO Read
+> 4) GPIO Write
+>
+
+I think you can also implement lldd_write_gpio callback, so smp_utils
+can also control gpio, right?
