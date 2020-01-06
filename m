@@ -2,136 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C21541313F7
-	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2020 15:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBB95131448
+	for <lists+linux-scsi@lfdr.de>; Mon,  6 Jan 2020 16:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgAFOpj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Jan 2020 09:45:39 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:58656 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726303AbgAFOpj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jan 2020 09:45:39 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 006Egre7060448;
-        Mon, 6 Jan 2020 14:45:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=y6Yf0Tj3nApnNA9jMdUffxaonp7W12V1dGrGOMpEJEs=;
- b=KZAS/9jgYbJYUWelkrCfBVA1iF8Tduijy60JmFC/xnanGW+4BeeONdNUxaIMVgED8aCM
- NUKzOXUkv/ECMSb4WnnarCme0Rdnyf8Pn/NgBy3zSBuvrAchPlJoGarYHK8EDod2TAwU
- /m7SsNOgVO3rq2D5irEcsgPOoWhRmA2We5YdmI/r24SLbIxtmr3sk9RuaNVNR6gH/n/v
- PNuUL3R346pgeGuXJky4+E5iPfuVxKan5Ka3dNXM+KMe5JoHj8ylw46upFEw3YY1IkN6
- tTBweIYqtJA/L8Os7RCUWdvobxfgEz2JoiDLoofsEsbqgacLSEqCGAKptvMl9oDn5U75 tQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2xaj4tqqk7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jan 2020 14:45:32 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 006EipJi181815;
-        Mon, 6 Jan 2020 14:45:31 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2xb4v12q70-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jan 2020 14:45:31 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 006EjUAT027182;
-        Mon, 6 Jan 2020 14:45:30 GMT
-Received: from kadam (/129.205.23.165)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 06 Jan 2020 06:45:29 -0800
-Date:   Mon, 6 Jan 2020 17:45:22 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Himanshu Madhani <hmadhani@marvell.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Quinn Tran <qutran@marvell.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH][next] scsi: qla2xxx: fix null pointer dereference on
- null_fcport
-Message-ID: <20200106144522.GL3911@kadam>
-References: <20200106141144.52888-1-colin.king@canonical.com>
+        id S1726478AbgAFPCH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Jan 2020 10:02:07 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:38248 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726303AbgAFPCH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Jan 2020 10:02:07 -0500
+Received: by mail-pg1-f194.google.com with SMTP id a33so26999019pgm.5
+        for <linux-scsi@vger.kernel.org>; Mon, 06 Jan 2020 07:02:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=iWBJ9etiBm/hh818InyCY7sxm3rRSJTmMlNUHIhyA9c=;
+        b=chjKRXcMG1Vj8FXpUt1nXjb7EE4NRAGt3xE9irZZ2TmXDzQcAvUotOX360Q5KzoCEs
+         ZXs4kdiFyasmZuLymCHHVwJ2J36RhbF5yRAw0Y8xUd7jviYqCpJOVqup9Xn+wcNm4eGi
+         VlHPtbicdCc4R18Sip9nZSyWhSjBGC9KlyoDTxrw+02pdo/O7L1FmnmBRceLwAPvsTCe
+         YoqnFVyQOWkiXqugsGuLcxd2Sq1OEDFDN7J/dzo7+koFo3erLJwJ3UrgKXoaezlkALtE
+         s1DQ9x9sBWhTpJZsjy9l16NzBbDMR5m01dvcUD9N6mg7KB0aYPqNiIMx+fOL4UN/doAD
+         VF6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=iWBJ9etiBm/hh818InyCY7sxm3rRSJTmMlNUHIhyA9c=;
+        b=sdmL3xJkmevYoq1s4Rvfq0JWP/ojKPD4MYFuNCt8s6RuNgHn9oliF7PvObHRa/2K01
+         gJEhGCaKIo6e3QJNPI2Ouf2CD2s9FcZAeQtJzbkDqh7sDbNkP6/ffNTglrNyVsx3YpXY
+         k1l7z7UTPJnZfqa0DgoyxvgfYYLmJ3hd3fg6nN7ZGnAz94cAVgKDpySXaQuBg2CSotSR
+         TDNTwrVZd0SttfdGrGN1ch6ATBrnD2IpCk+h+vLh4+3fbgeig70eLbQP9MfUBE4DWIdI
+         6AUKBxouPPkggcWnSvZVab3VgO2ElZ/wwBM2xTiQx7khH0j/Nupge0eiEQViPTqq2rOb
+         cifQ==
+X-Gm-Message-State: APjAAAUy6aySFpti6/0/zEP0QC84iPL2AnK3vYx/gVT/sER9DO0u3jxe
+        RlRtbgPsCggCf0i+4kYsKlRmDtSuKz9AGzgwNZE=
+X-Google-Smtp-Source: APXvYqzG0DVlBkbUNzZTObVS/xbzkvkAWqSXL/KBOuF+ND0VQFkNc5g7n7zWTuRxOtHwnrY/Q4dfxkiT0l6bnU4cGOU=
+X-Received: by 2002:a63:ed48:: with SMTP id m8mr109122278pgk.399.1578322926969;
+ Mon, 06 Jan 2020 07:02:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200106141144.52888-1-colin.king@canonical.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9491 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001060134
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9491 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001060134
+Received: by 2002:a17:90a:2748:0:0:0:0 with HTTP; Mon, 6 Jan 2020 07:02:05
+ -0800 (PST)
+Reply-To: cfffdfd8brahim4@yandex.com
+From:   Salah Ibrahim <mr.moussa.ahmed888@gmail.com>
+Date:   Mon, 6 Jan 2020 07:02:05 -0800
+Message-ID: <CAK56hS+Lq47fymigk6BkHAbG-d4h6DNie47MZwWM0uHG+5O-8g@mail.gmail.com>
+Subject: Greetings
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Jan 06, 2020 at 02:11:44PM +0000, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> Currently several error exit return paths end up passing a null
-> new_fcport pointer to function qla2x00_free_fcport and this causes
-> a null pointer dereference.  Fix this by moving and renaming the
-> exit path label to be after the call to qla2x00_free_fcport to avoid
-> the errorneous and unnecessary call to qla2x00_free_fcport.
-> 
-> Addresses-Coverity: ("Dereference after null check")
-> Fixes: 3dae220595ba ("scsi: qla2xxx: Use common routine to free fcport struct")
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/scsi/qla2xxx/qla_init.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-> index a5076f43edea..ed056626d7a3 100644
-> --- a/drivers/scsi/qla2xxx/qla_init.c
-> +++ b/drivers/scsi/qla2xxx/qla_init.c
-> @@ -5108,7 +5108,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
->  	rval = qla2x00_get_id_list(vha, ha->gid_list, ha->gid_list_dma,
->  	    &entries);
->  	if (rval != QLA_SUCCESS)
-> -		goto cleanup_allocation;
-> +		goto exit;
->  
->  	ql_dbg(ql_dbg_disc, vha, 0x2011,
->  	    "Entries in ID list (%d).\n", entries);
-> @@ -5138,7 +5138,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
->  		ql_log(ql_log_warn, vha, 0x2012,
->  		    "Memory allocation failed for fcport.\n");
->  		rval = QLA_MEMORY_ALLOC_FAILED;
-> -		goto cleanup_allocation;
-> +		goto exit;
->  	}
->  	new_fcport->flags &= ~FCF_FABRIC_DEVICE;
->  
-> @@ -5228,7 +5228,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
->  				ql_log(ql_log_warn, vha, 0xd031,
->  				    "Failed to allocate memory for fcport.\n");
->  				rval = QLA_MEMORY_ALLOC_FAILED;
-> -				goto cleanup_allocation;
-> +				goto exit;
-
-This leaks now.
-
->  			}
->  			spin_lock_irqsave(&vha->hw->tgt.sess_lock, flags);
->  			new_fcport->flags &= ~FCF_FABRIC_DEVICE;
-> @@ -5239,7 +5239,6 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
->  		/* Base iIDMA settings on HBA port speed. */
->  		fcport->fp_speed = ha->link_data_rate;
->  
-> -		found_devs++;
-
-Delete "found_devs" completely.  Also remove the "new_fcport = NULL;"
-line because that's not required any more.
-
-regards,
-dan carpenter
-
+Dear Friend. I have a business proposal of  $35 Million USD which i want to
+transact with you  get back for more details.Best Regards From Salah Ibrahim
