@@ -2,102 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30DE71326E5
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jan 2020 14:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90054132928
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jan 2020 15:44:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728057AbgAGNAn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jan 2020 08:00:43 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41572 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727722AbgAGNAm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jan 2020 08:00:42 -0500
-Received: by mail-pg1-f194.google.com with SMTP id x8so28474583pgk.8;
-        Tue, 07 Jan 2020 05:00:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lvbtfIt25K3V9bkjoOOm4QAQQ2RLXWTWl1KKBEvQFkY=;
-        b=USaN/sz2xKuxGlMgjZHB/wUWQ/8RghB5BDQntO5KHxNVHiYUNlXljkZOc+xBwlotWi
-         iR0vr+2KKITG8AilRUMRJvatthQT/2UFg7eTxjT+LRAErQVgfryuIsKryfhO5LuNbdx/
-         wSUFMCEdFIi99eFmxcmYny8U12L3h2jEPieIrMDf2rLBo7G0Nb2Y2jTw5rWt9QlWT4BT
-         W/zAB5JN0aalf1nmGYQukNVY1UsCh6sT/VjlGjg0/ixeKb71W/s7Hxwy8RKU9Dx/b2Yo
-         bE9f/bqLta8M7ohdj39m1HB4K2lvkAzwuPFkw+WH09pDEATD0mwOWflkmzVF2tsG6tUT
-         9ZjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lvbtfIt25K3V9bkjoOOm4QAQQ2RLXWTWl1KKBEvQFkY=;
-        b=GaZCja/Vdy6t7deyL9MlQH2w/9DdE52ZazACF0FreDMe0pgrLmiQvYN4ucoiz5Vo3u
-         gF2hplvmOlAn8fzD/XXYgP4ZSwaZ306WZHesIQ6IRSMPU+23E8oMktBk/+A1jrnZBjNJ
-         BCEnfexur18gxdWRgAafnzpAhTCWdSdgq47yGfU59SH4hJyIWCiVc7Px/HFGHPL5UDVv
-         KK6nJH2mJewyHnsLKvZIfnfjQ0lfuFBYrhhBtkIYfLZ2Gow8dEmuak9mHXXhNb59PoPO
-         rbE1yH917RSAzGcHooLMztDbB4kTKnNKsug2m9Gqf4CEHB0+WjHeSoyyNQi4hl+UiFn9
-         wj/A==
-X-Gm-Message-State: APjAAAVO40ydyDahA7IrUZE4sTApXjpcCNGn8k7KrnZRzj7KdtPzNesd
-        7QpzVojUtpyoEODtykzZWRs=
-X-Google-Smtp-Source: APXvYqz9WKLmVN/nRjjHtNkoSm6v+LC6l/HWdccIHNtmRotZJu3YefPowp/baIagDwVd/ryHNTbl6w==
-X-Received: by 2002:a62:ac03:: with SMTP id v3mr113535234pfe.17.1578402041672;
-        Tue, 07 Jan 2020 05:00:41 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j10sm28590800pjb.14.2020.01.07.05.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Jan 2020 05:00:40 -0800 (PST)
-Subject: Re: [PATCH v2] hwmon: Driver for temperature sensors on SATA drives
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        Chris Healy <cphealy@gmail.com>
-References: <20191215174509.1847-1-linux@roeck-us.net>
- <20191215174509.1847-2-linux@roeck-us.net> <yq1r211dvck.fsf@oracle.com>
- <20191219003256.GA28144@roeck-us.net> <yq17e233o0o.fsf@oracle.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d42990af-78e4-e6c4-37ae-8043d27e565a@roeck-us.net>
-Date:   Tue, 7 Jan 2020 05:00:39 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1728020AbgAGOoa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jan 2020 09:44:30 -0500
+Received: from sonic309-13.consmr.mail.bf2.yahoo.com ([74.6.129.123]:41921
+        "EHLO sonic309-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726937AbgAGOoa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jan 2020 09:44:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1578408268; bh=E+ks7AydzaUb4ISZTuxin7s0E6gVmk5020fTLYVYB5E=; h=Date:From:Reply-To:Subject:References:From:Subject; b=UA2ED7nwSCDJ5+pZ/2hzvGogPSTx64IJYWPmlWykRKnWeH7mJQ0SfXcIGEY1ZHBOuvt1s3LFhhphIVusPuHPYg5Fj2gJkKca+J8AuHRj0U9k9vZYphbkaq5kA7/5HiMaPZ7xNHNMHMrUxA8MU1zB/nQ8G6BCbksXfosWiUOp6kVjcfSw894aI4NPYb4Oi4Eu6g7x4Bu4m783mB1q7kAbULFT36C4lBk04aqDBD0K8j1CSZvOLFKAQMOKVjxGtXGYDG4OYkPc9NJqQ4jRLWsNcjW4qu6jJBOcQD1D3gxIzYXDtm2AKzwUF6pU+1oZ9tmx5/fo+ORqJOvZ+71zCycidg==
+X-YMail-OSG: vL7sdEwVM1mrebXaZBKKqokVl0661s5_J3g3j0XHRJX648nCgkYRHRi89H9C05e
+ 4CjN68ch5Cifg5Ub6DccLzmX5wtE__ThKxDxjXIMd1ERbKulxdK3GCiZu8z8hM_MaPAm_Yvn0pa9
+ GHtnsgAiI36R0Y9HM7kcpSEF4LXUSpf6o1kKEQu.X8yPv.kV51PNUsf6OjXZiWM_COJf3jSB0ZfL
+ YSNlcF2H3VFfa5uP1T2mSpEzTm5WK5743eo2ioUctF2OzT88DzTKe0Nn8flB2jFVrE3tIgwBenOf
+ RMxA2eNx2Td73CqxP0Js4gKshV35YrjgLWpT6nuCJLHxFZqOb75qxucNNYNDdpD.XCCudegRVcx2
+ eD6Sa0.FcpGuyr_IUQnbfuGo_p3bB9bGnmo8TEi.U3ApfevISMF0Up0vBDBBGs1828GuyGMDDbnP
+ y11JGj9mUF5YdEO7OR80rLRS8Wkr2tpwvPXayqp857E9oTpTMLawUhRhGGKFHjmxDt_MJfWbSCmM
+ TQUjkDFyotVAlSBl7PQ0IxI5MB5rfxl_hzQpMJ99De058FDAfpBb5j0BLucVHqillBOn8SUW3DtX
+ QVp1WRV1rYdoE38Qtp3OSawZlV1GwDdQ7f6HNq4HqMZdzwfmv_r4C7IGusFVqhMKaMG10VPNqjC.
+ it07SR0M2yl8Hire6LwOxdz4WWeyvplbIRiZtCvU.VDdLwFIqEF4sAWUNlPt6__MR_G6qxnZyoDQ
+ OKx5tuCuwoG4sZGyMoXYke2Tln0OZ4bZgI0uS1VxgH3uItHaMDCkxMEQPAwLkvwQG4fpNZKQy4xp
+ TRDeQXKC0JhL9OZjyg.8PxZ1JiqTsCULfGi13w.SKzPA_iR.aXMAeZVvwyKcEn3ZPVeikK.VBAXU
+ aFjh_uC.VFVf_7NnEZ9CASrkjt_TvBpzELrWp6hEFt.x7qIx1b1vD1eOj3bjQg8jvYKSSJRWCwPT
+ LT26Lt947_lCTDbkfLsjLCnd5wSVLFV6TCsoqjJc5yIwitFlEc1PAs9SzKpat8M9qf3c36b0bSRL
+ SbWw3ClKzBDg_XnBwievk8ysLOgBWuOT9TYRHfkctTGnaEdm6yUtR_Rgnr7ZmDay5ihuJRAPn3wg
+ 0DFWtzU8HUBR53TvA4LYDJqJMEJvF7vQyh34LeslARrEvEawipP.zyCNebDHgdfmlH.dCpTdEUgC
+ bkRXbP5tUP21ktDEjEBkgRxaU_q8N0yXZp9De6j.UQe5wRVYmqW5DqQ27fhuzPpKVJIP88MUZ5wY
+ 3YodygTbJTlA4kcqXEKRkU8DdyBRWjdqAKKnF5W5Hy9SKTv1hCCstn4tomAXexIbnBHWvUrPW4uE
+ ._f0dCj6eX4aAsuHX.3wdgQigiQ--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.bf2.yahoo.com with HTTP; Tue, 7 Jan 2020 14:44:28 +0000
+Date:   Tue, 7 Jan 2020 14:44:24 +0000 (UTC)
+From:   Aisha Gaddafi <gaisha983@gmail.com>
+Reply-To: gaddafia504@gmail.com
+Message-ID: <286698621.5177103.1578408264683@mail.yahoo.com>
+Subject: Dear Friend,
 MIME-Version: 1.0
-In-Reply-To: <yq17e233o0o.fsf@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+References: <286698621.5177103.1578408264683.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.14873 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:71.0) Gecko/20100101 Firefox/71.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/6/20 8:10 PM, Martin K. Petersen wrote:
-> 
-> Hi Guenter!
-> 
->>>   - I still think sensor naming needs work. How and where are the
->>>     "drivetemp-scsi-8-140" names generated?
->>>
->> Quick one: In libsensors, outside the kernel. The naming is generic,
->> along the line of <driver name>-<bus name>-<bus index>-<slot>.
-> 
-> I understand that there are sensors that may not have an obvious
-> associated topology and therefore necessitate coming up with a suitable
-> naming or enumeration scheme. But in this case we already have a
-> well-defined SCSI device name. Any particular reason you don't shift the
-> chip.addr back and print the H:C:T:L format that you used as input?
-> 
-> However arcane H:C:T:L may seem, I think that predictable naming would
-> make things a lot easier for users that need to identify which device
-> matches which sensor...
-> 
+Dear Friend,
 
-Not sure I understand. Do you mean to add "H:C:T:L" to "drivetemp" ?
-That would make it something like "drivetemp:H:C:T:L-scsi-8-140".
-Not sure if that is really useful, and it would at least be partially
-redundant.
+I came across your e-mail contact prior a private search while in need of 
+your assistance. My name is Aisha  Gaddafi a single Mother and a Widow with 
+three Children. I am the only biological Daughter of late Libyan President 
+(Late Colonel Muammar Gaddafi).
 
-"scsi-8-140" is created by libsensors, so any change in that would
-have to be made there, not in the kernel driver.
+I have investment funds worth Twenty Seven Million Five Hundred Thousand 
+United State Dollar ($27.500.000.00 ) and i need a trusted investment 
+Manager/Partner because of my current refugee status, however, I am 
+interested in you for investment project assistance in your country, may be 
+from there, we can build business relationship in the nearest future.
 
-Guenter
+I am willing to negotiate investment/business profit sharing ratio with you 
+base on the future investment earning profits.
+
+If you are willing to handle this project on my behalf kindly reply urgent 
+to enable me provide you more information about the investment funds.
+
+Your Urgent Reply Will Be Appreciated.
+
+Best Regards
+Mrs Aisha Gaddafi
+(gaddafia504@gmail.com)
