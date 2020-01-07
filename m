@@ -2,73 +2,176 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90054132928
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jan 2020 15:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFA30132C64
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Jan 2020 18:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728020AbgAGOoa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Jan 2020 09:44:30 -0500
-Received: from sonic309-13.consmr.mail.bf2.yahoo.com ([74.6.129.123]:41921
-        "EHLO sonic309-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726937AbgAGOoa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jan 2020 09:44:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1578408268; bh=E+ks7AydzaUb4ISZTuxin7s0E6gVmk5020fTLYVYB5E=; h=Date:From:Reply-To:Subject:References:From:Subject; b=UA2ED7nwSCDJ5+pZ/2hzvGogPSTx64IJYWPmlWykRKnWeH7mJQ0SfXcIGEY1ZHBOuvt1s3LFhhphIVusPuHPYg5Fj2gJkKca+J8AuHRj0U9k9vZYphbkaq5kA7/5HiMaPZ7xNHNMHMrUxA8MU1zB/nQ8G6BCbksXfosWiUOp6kVjcfSw894aI4NPYb4Oi4Eu6g7x4Bu4m783mB1q7kAbULFT36C4lBk04aqDBD0K8j1CSZvOLFKAQMOKVjxGtXGYDG4OYkPc9NJqQ4jRLWsNcjW4qu6jJBOcQD1D3gxIzYXDtm2AKzwUF6pU+1oZ9tmx5/fo+ORqJOvZ+71zCycidg==
-X-YMail-OSG: vL7sdEwVM1mrebXaZBKKqokVl0661s5_J3g3j0XHRJX648nCgkYRHRi89H9C05e
- 4CjN68ch5Cifg5Ub6DccLzmX5wtE__ThKxDxjXIMd1ERbKulxdK3GCiZu8z8hM_MaPAm_Yvn0pa9
- GHtnsgAiI36R0Y9HM7kcpSEF4LXUSpf6o1kKEQu.X8yPv.kV51PNUsf6OjXZiWM_COJf3jSB0ZfL
- YSNlcF2H3VFfa5uP1T2mSpEzTm5WK5743eo2ioUctF2OzT88DzTKe0Nn8flB2jFVrE3tIgwBenOf
- RMxA2eNx2Td73CqxP0Js4gKshV35YrjgLWpT6nuCJLHxFZqOb75qxucNNYNDdpD.XCCudegRVcx2
- eD6Sa0.FcpGuyr_IUQnbfuGo_p3bB9bGnmo8TEi.U3ApfevISMF0Up0vBDBBGs1828GuyGMDDbnP
- y11JGj9mUF5YdEO7OR80rLRS8Wkr2tpwvPXayqp857E9oTpTMLawUhRhGGKFHjmxDt_MJfWbSCmM
- TQUjkDFyotVAlSBl7PQ0IxI5MB5rfxl_hzQpMJ99De058FDAfpBb5j0BLucVHqillBOn8SUW3DtX
- QVp1WRV1rYdoE38Qtp3OSawZlV1GwDdQ7f6HNq4HqMZdzwfmv_r4C7IGusFVqhMKaMG10VPNqjC.
- it07SR0M2yl8Hire6LwOxdz4WWeyvplbIRiZtCvU.VDdLwFIqEF4sAWUNlPt6__MR_G6qxnZyoDQ
- OKx5tuCuwoG4sZGyMoXYke2Tln0OZ4bZgI0uS1VxgH3uItHaMDCkxMEQPAwLkvwQG4fpNZKQy4xp
- TRDeQXKC0JhL9OZjyg.8PxZ1JiqTsCULfGi13w.SKzPA_iR.aXMAeZVvwyKcEn3ZPVeikK.VBAXU
- aFjh_uC.VFVf_7NnEZ9CASrkjt_TvBpzELrWp6hEFt.x7qIx1b1vD1eOj3bjQg8jvYKSSJRWCwPT
- LT26Lt947_lCTDbkfLsjLCnd5wSVLFV6TCsoqjJc5yIwitFlEc1PAs9SzKpat8M9qf3c36b0bSRL
- SbWw3ClKzBDg_XnBwievk8ysLOgBWuOT9TYRHfkctTGnaEdm6yUtR_Rgnr7ZmDay5ihuJRAPn3wg
- 0DFWtzU8HUBR53TvA4LYDJqJMEJvF7vQyh34LeslARrEvEawipP.zyCNebDHgdfmlH.dCpTdEUgC
- bkRXbP5tUP21ktDEjEBkgRxaU_q8N0yXZp9De6j.UQe5wRVYmqW5DqQ27fhuzPpKVJIP88MUZ5wY
- 3YodygTbJTlA4kcqXEKRkU8DdyBRWjdqAKKnF5W5Hy9SKTv1hCCstn4tomAXexIbnBHWvUrPW4uE
- ._f0dCj6eX4aAsuHX.3wdgQigiQ--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.bf2.yahoo.com with HTTP; Tue, 7 Jan 2020 14:44:28 +0000
-Date:   Tue, 7 Jan 2020 14:44:24 +0000 (UTC)
-From:   Aisha Gaddafi <gaisha983@gmail.com>
-Reply-To: gaddafia504@gmail.com
-Message-ID: <286698621.5177103.1578408264683@mail.yahoo.com>
-Subject: Dear Friend,
+        id S1728421AbgAGRB5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Jan 2020 12:01:57 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45822 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728384AbgAGRB4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 7 Jan 2020 12:01:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1578416515;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D5OPPwIHTy22Wkt/OsS1YGH1EyOGhN2nFXTBHl/JscE=;
+        b=bGb3ZgDRN+xx2qoP41r17k+3sGs/nScNuY9fcuL91bUd9HMNc2f/TPStLK42CwA3LgIG/3
+        yw7YYSSnSa4PBXiSEKsfE1CjmM6Sd9o+QI0Wt6blkv7gxk+wrVD53UC8mUsgdwoLZCnWTy
+        bZFKeeG3LnD/gmIDfGQLZ3MbBEePpqQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-58-ALH5CqgFNGWBGWYC2wATTA-1; Tue, 07 Jan 2020 12:01:54 -0500
+X-MC-Unique: ALH5CqgFNGWBGWYC2wATTA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0B1848024CC;
+        Tue,  7 Jan 2020 17:01:53 +0000 (UTC)
+Received: from [10.3.112.12] (ovpn-112-12.phx2.redhat.com [10.3.112.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0AE2486C48;
+        Tue,  7 Jan 2020 17:01:49 +0000 (UTC)
+Reply-To: tasleson@redhat.com
+Subject: Re: [RFC 9/9] __xfs_printk: Add durable name to output
+To:     Dave Chinner <david@fromorbit.com>,
+        Sweet Tea Dorminy <sweettea@redhat.com>
+Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+References: <20191223225558.19242-1-tasleson@redhat.com>
+ <20191223225558.19242-10-tasleson@redhat.com>
+ <20200104025620.GC23195@dread.disaster.area>
+ <5ad7cf7b-e261-102c-afdc-fa34bed98921@redhat.com>
+ <20200106220233.GK23195@dread.disaster.area>
+ <CAMeeMh-zr309TzbC3ayKUKRniat+rzurgzmeM5LJYMFVDj7bLA@mail.gmail.com>
+ <20200107012353.GO23195@dread.disaster.area>
+From:   Tony Asleson <tasleson@redhat.com>
+Organization: Red Hat
+Message-ID: <4ce83a0e-13e1-6245-33a3-5c109aec4bf1@redhat.com>
+Date:   Tue, 7 Jan 2020 11:01:47 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20200107012353.GO23195@dread.disaster.area>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-References: <286698621.5177103.1578408264683.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.14873 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:71.0) Gecko/20100101 Firefox/71.0
-To:     unlisted-recipients:; (no To-header on input)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+On 1/6/20 7:23 PM, Dave Chinner wrote:
+> On Mon, Jan 06, 2020 at 07:19:07PM -0500, Sweet Tea Dorminy wrote:
+>>>>>> +
+>>>>>>    if (mp && mp->m_fsname) {
+>>>>>
+>>>>> mp->m_fsname is the name of the device we use everywhere for log
+>>>>> messages, it's set up at mount time so we don't have to do runtime
+>>>>> evaulation of the device name every time we need to emit the device
+>>>>> name in a log message.
+>>>>>
+>>>>> So, if you have some sooper speshial new device naming scheme, it
+>>>>> needs to be stored into the struct xfs_mount to replace mp->m_fsname.
+>>>>
+>>>> I don't think we want to replace mp->m_fsname with the vpd 0x83 device
+>>>> identifier.  This proposed change is adding a key/value structured data
+>>>> to the log message for non-ambiguous device identification over time,
+>>>> not to place the ID in the human readable portion of the message.  The
+>>>> existing name is useful too, especially when it involves a partition.
+>>>
+>>> Oh, if that's all you want to do, then why is this identifier needed
+>>> in every log message? 
 
-I came across your e-mail contact prior a private search while in need of 
-your assistance. My name is Aisha  Gaddafi a single Mother and a Widow with 
-three Children. I am the only biological Daughter of late Libyan President 
-(Late Colonel Muammar Gaddafi).
+The value is we can filter all the messages by the id as they are all
+individually identifiable.
 
-I have investment funds worth Twenty Seven Million Five Hundred Thousand 
-United State Dollar ($27.500.000.00 ) and i need a trusted investment 
-Manager/Partner because of my current refugee status, however, I am 
-interested in you for investment project assistance in your country, may be 
-from there, we can build business relationship in the nearest future.
+The structured data id that the patch series adds is not outputted by
+default by journalctl.  Please look at cover letter in patch series for
+example filter use.  You can see all the data in the journal entries by
+using journalctl -o json-pretty.
 
-I am willing to negotiate investment/business profit sharing ratio with you 
-base on the future investment earning profits.
+One can argue that we are adding a lot of data to each log message as
+the VPD data isn't trivial.  This could be mitigated by hashing the VPD
+and storing the hash as the ID, but that makes it less user friendly.
+However, maybe it should be considered.
 
-If you are willing to handle this project on my behalf kindly reply urgent 
-to enable me provide you more information about the investment funds.
+>>> It does not change over the life of the
+>>> filesystem, so it the persistent identifier only needs to >>> be
+emitted to the log once at filesystem mount time. i.e.  >>> instead of:
+>>>
+>>> [    2.716841] XFS (dm-0): Mounting V5 Filesystem
+>>>
+>>> It just needs to be:
+>>>
+>>> [    2.716841] XFS (dm-0): Mounting V5 Filesystem on device <persistent dev id>
+>>>
+>>> If you need to do any sort of special "is this the right device"
+>>> checking, it needs to be done immediately at mount time so action
+>>> can be taken to shutdown the filesystem and unmount the device
+>>> immediately before further damage is done....
+>>>
+>>> i.e. once the filesystem is mounted, you've already got a unique and
+>>> persistent identifier in the log for the life of the filesystem (the
+>>> m_fsname string), so I'm struggling to understand exactly what
+>>> problem you are trying to solve by adding redundant information
+>>> to every log message.....
 
-Your Urgent Reply Will Be Appreciated.
+m_fsname is only valid for the life of the mount, not the life of the
+FS.  Each and every time we reboot, remove/reattach a device the
+attachment point may change and thus the m_fsname changes too.  Then the
+user or script writer has to figure out what messages go with what
+device.  This is true for all the different storage layer messages.
+Some layers use sda, sata1.00 or sd 0:0:0:0 and they all refer to the
+same device.
 
-Best Regards
-Mrs Aisha Gaddafi
-(gaddafia504@gmail.com)
+We have no unambiguous way today to identify which messages go with what
+storage device across reboots and dynamic device re-configuration across
+the storage stack.
+
+>>
+>> Log rotation loses that identifier though; there are plenty of setups
+>> where a mount-time message has been rotated out of all logs by the
+>> time something goes wrong after a month or two.
+> 
+> At what point months after you've mounted the filesystem do you care
+> about whether the correct device was mounted or not?
+
+This isn't a question about if the correct device was mounted or not.
+It's the question of what actual storage hardware was associated with
+the message(s), an association that doesn't change across reboots or
+dynamic device reconfiguration or if you move the physical device to
+another system.
+
+The cover letter example shows filtered output of one specific device
+encountering errors that has an XFS FS.  Without this added ID it would
+not be so easy to determine that these messages all belong to the same
+device.  In this case the attachment isn't changing, it's the simple
+case.  When it does change over time it gets even more difficult.
+
+> And, for the log rotation case, the filesystem log output already
+> has a unique, persistent identifier for the life of the mount - the
+> fsname ("dm-0" in the above example). We don't need to add a new
+> device identifier to the XFS log messages to solve that problem
+> because *we've already got a device identifier in the log messages*.
+
+It's very useful to have an ID that persists and identifies across
+mounts.  The existing id logging scheme tells you where something is
+attached, not what is attached.
+
+> Again - the "is this the right device" information only makes sense
+> to be checked at mount time. If it was the right device at mount
+> time, then after months of uptime how would it suddenly become "the
+> wrong device"? And if it's the wrong device at mount time, then you
+> need to take action *immediately*, not after using the filesysetms
+> on the device for months...
+> 
+> Cheers,
+> 
+> Dave.
+> 
+
