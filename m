@@ -2,84 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF9A1350D2
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jan 2020 02:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2121350EA
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jan 2020 02:16:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbgAIBFD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Jan 2020 20:05:03 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46847 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727082AbgAIBFD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Jan 2020 20:05:03 -0500
-Received: by mail-wr1-f66.google.com with SMTP id z7so5446269wrl.13
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Jan 2020 17:05:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fb5H5gwJSDD3CTCXaikaG+SZK4yp6FZFPV85mtJUNW8=;
-        b=c8fdERrTm0V3smao2VFAT0wAmQcaCX22ckpS1iVEV0BHgKaFLCK9ZrFthogpGfLGSl
-         7Tk5aMhkgRAQYqim3BaEjLQJt9f4a3GR7qcoMm493Oq4BA4KFuzLFyGy+SFlGU2DUHrd
-         uqHItu/Uff9DT0L6y0eJF39/aV7O986n1DfjkIx0SmivwKogC1RWyBQYFZKcf5z4cScI
-         0t2NvxAgSTHfaDW7nYzul+A7R1SeOvLwgPHiwF/buKp1kZsadsOFGwCM8G4u0wJr9xKn
-         /yVH/7E+xA1sq39ZksvUgwkx4M1lMlp81HEB7/3q/sbJziVrZHD/wF7vkzak8rKFHuQx
-         wNqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fb5H5gwJSDD3CTCXaikaG+SZK4yp6FZFPV85mtJUNW8=;
-        b=JypNWKPTh3LkL8eaC1QRRqYz+qHTDqmMNJGJfNXSD29UdS3IopyMTFtqC4xzn1BbPh
-         I/88RQ/p66FeZYiXF6gWO7obKZPq3iL+PeDvI0HzOnFM6+l2B5g0KSlWSXPhIFq/jgkK
-         rsBUzPunOILxKuZCm7O6H5wRlxcSzM+f22qcVXUKF+lL9bV6GjDl/tbmTyIaTE8Y4z7J
-         HFS9IYxav2Id9Nc2gYakl5Vv5XxKMswETtDC/igrALoGivCtBePvy9A3Ee6qf+DyHYP4
-         fTXK9ORrYvaVhRPNLFMV0+PLvrux2v5rMz5sv4nHGjsGop2daIGetUApzZtmmbhuYDDw
-         DM7g==
-X-Gm-Message-State: APjAAAWGxelWNkDeHxiiwKLdAIRlhzIooXZSoBf3W+FM8nby9F9iXlt3
-        x1bC4osqkRwHBBJAFPwYlMU=
-X-Google-Smtp-Source: APXvYqz2m+MNbLxx9O1jK2vjEcgjk3TFIS9TAnSBql9nsWSTmNl18GyMCR2Mk8T/NT9VIG1ezyJAcg==
-X-Received: by 2002:adf:f80b:: with SMTP id s11mr7231406wrp.12.1578531901877;
-        Wed, 08 Jan 2020 17:05:01 -0800 (PST)
-Received: from [10.69.45.46] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id x14sm924737wmj.42.2020.01.08.17.05.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jan 2020 17:05:01 -0800 (PST)
-Subject: Re: [PATCH v2 05/32] elx: libefc_sli: Populate and post different
- WQEs
-To:     Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org
-Cc:     maier@linux.ibm.com, dwagner@suse.de, bvanassche@acm.org,
-        Ram Vegesna <ram.vegesna@broadcom.com>
-References: <20191220223723.26563-1-jsmart2021@gmail.com>
- <20191220223723.26563-6-jsmart2021@gmail.com>
- <e643b215-133b-5740-9e41-9f59129d6ac4@suse.de>
-From:   James Smart <jsmart2021@gmail.com>
-Message-ID: <e6aa2ea7-53d2-935b-2c95-43b1ba231565@gmail.com>
-Date:   Wed, 8 Jan 2020 17:04:58 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1726930AbgAIBQO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Jan 2020 20:16:14 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:40678 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726654AbgAIBQO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 8 Jan 2020 20:16:14 -0500
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 1A07780C708DD0E74F7B;
+        Thu,  9 Jan 2020 09:16:13 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.439.0; Thu, 9 Jan 2020 09:16:07 +0800
+From:   chenxiang <chenxiang66@hisilicon.com>
+To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linuxarm@huawei.com>, <linux-scsi@vger.kernel.org>,
+        <john.garry@huawei.com>, Xiang Chen <chenxiang66@hisilicon.com>
+Subject: [PATCH] scsi: sd: Clear sdkp->protection_type when the disk isn't DIF in sd_read_protection_type()
+Date:   Thu, 9 Jan 2020 09:12:24 +0800
+Message-ID: <1578532344-101668-1-git-send-email-chenxiang66@hisilicon.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-In-Reply-To: <e643b215-133b-5740-9e41-9f59129d6ac4@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/7/2020 11:54 PM, Hannes Reinecke wrote:
-> You seem to have given up using EFC_SUCCESS / EFC_FAIL for the next few
-> functions.
-> Please be consistent here.
-> 
-> Cheers,
-> 
-> Hannes
-> 
+From: Xiang Chen <chenxiang66@hisilicon.com>
 
-We will covert over to EFC_xxx status's
+For a SAS disk, format it as a SAS DIF disk, then if re-format SAS DIF disk to normal
+SAS disk,it will report errors as follows:
+...
+[root@localhost ~]# [77380.678276] sd 4:0:0:0: [sda] tag#67 UNKNOWN(0x2003) Result:
+hostbyte=0x07 driverbyte=0x00
+[77380.686511] sd 4:0:0:0: [sda] tag#67 CDB: opcode=0x28 28 20 00 00 00 00 00 00 08 00
+[77380.694139] blk_update_request: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0
+phys_seg 1 prio class 0
+[77380.703929] Buffer I/O error on dev sda, logical block 0, async page read
+[77380.790267] sd 4:0:0:0: [sda] tag#72 UNKNOWN(0x2003) Result: hostbyte=0x07
+driverbyte=0x00
+[77380.798496] sd 4:0:0:0: [sda] tag#72 CDB: opcode=0x28 28 20 00 00 00 00 00 00 08 00
+[77380.806123] blk_update_request: I/O error, dev sda, sector 0 op 0x0:(READ) flags 0x0
+phys_seg 1 prio class 0
+[77380.815907] Buffer I/O error on dev sda, logical block 0, async page read
+[77380.822676]  sda: unable to read partition table
+...
 
-Thanks
+When re-format SAS disk to normal SAS disk, it will send command READ_CAPACITY to get
+protection info. In function sd_read_protection_type(), it checks whether the disk is
+DIF from protection info, if not directly return. But if the disk was DIF disk, so
+sdkp->protection_type of the disk is still be set. So the system will mistake the normal
+disk as DIF disk(from CDB log 0x20 indicates there is DIF info with data).)
+To avoid the issue, clear sdkp->protection_type when the disk is not DIF disk in
+function sd_read_protection_type().
 
--- james
+Fixes: fe542396da73 ("[SCSI] sd: Ensure we correctly disable devices with unknown protection type")
+Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+---
+ drivers/scsi/sd.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index cea6259..65ce10c 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -2211,8 +2211,10 @@ static int sd_read_protection_type(struct scsi_disk *sdkp, unsigned char *buffer
+ 	u8 type;
+ 	int ret = 0;
+ 
+-	if (scsi_device_protection(sdp) == 0 || (buffer[12] & 1) == 0)
++	if (scsi_device_protection(sdp) == 0 || (buffer[12] & 1) == 0) {
++		sdkp->protection_type = 0;
+ 		return ret;
++	}
+ 
+ 	type = ((buffer[12] >> 1) & 7) + 1; /* P_TYPE 0 = Type 1 */
+ 
+-- 
+2.8.1
+
