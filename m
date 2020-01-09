@@ -2,26 +2,26 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E406B135859
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jan 2020 12:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F20D213585B
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jan 2020 12:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728881AbgAILqo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Jan 2020 06:46:44 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50954 "EHLO mx2.suse.de"
+        id S1728913AbgAILrP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Jan 2020 06:47:15 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51064 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728656AbgAILqn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 9 Jan 2020 06:46:43 -0500
+        id S1728656AbgAILrP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 Jan 2020 06:47:15 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8802EB1D70;
-        Thu,  9 Jan 2020 11:46:41 +0000 (UTC)
-Subject: Re: [PATCH v2 30/32] elx: efct: scsi_transport_fc host interface
- support
+        by mx2.suse.de (Postfix) with ESMTP id 78E55B1D76;
+        Thu,  9 Jan 2020 11:47:12 +0000 (UTC)
+Subject: Re: [PATCH v2 31/32] elx: efct: Add Makefile and Kconfig for efct
+ driver
 To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
 Cc:     maier@linux.ibm.com, dwagner@suse.de, bvanassche@acm.org,
         Ram Vegesna <ram.vegesna@broadcom.com>
 References: <20191220223723.26563-1-jsmart2021@gmail.com>
- <20191220223723.26563-31-jsmart2021@gmail.com>
+ <20191220223723.26563-32-jsmart2021@gmail.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -67,12 +67,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <4744577b-4b2e-3aff-15fc-4bef025cdc3b@suse.de>
-Date:   Thu, 9 Jan 2020 12:46:41 +0100
+Message-ID: <bc57009a-4f5a-3595-8c57-0289a2e1dc03@suse.de>
+Date:   Thu, 9 Jan 2020 12:47:12 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20191220223723.26563-31-jsmart2021@gmail.com>
+In-Reply-To: <20191220223723.26563-32-jsmart2021@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -82,18 +82,75 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 12/20/19 11:37 PM, James Smart wrote:
-> This patch continues the efct driver population.
+> This patch completes the efct driver population.
 > 
 > This patch adds driver definitions for:
-> Integration with the scsi_fc_transport host interfaces
+> Adds the efct driver Kconfig and Makefiles
 > 
 > Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 > Signed-off-by: James Smart <jsmart2021@gmail.com>
 > ---
->  drivers/scsi/elx/efct/efct_xport.c | 496 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 496 insertions(+)
-> Reviewed-by: Hannes Reinecke <hare@suse.de>
+>  drivers/scsi/elx/Kconfig  |  9 +++++++++
+>  drivers/scsi/elx/Makefile | 30 ++++++++++++++++++++++++++++++
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 drivers/scsi/elx/Kconfig
+>  create mode 100644 drivers/scsi/elx/Makefile
+> 
+> diff --git a/drivers/scsi/elx/Kconfig b/drivers/scsi/elx/Kconfig
+> new file mode 100644
+> index 000000000000..ec710ade44f3
+> --- /dev/null
+> +++ b/drivers/scsi/elx/Kconfig
+> @@ -0,0 +1,9 @@
+> +config SCSI_EFCT
+> +	tristate "Emulex Fibre Channel Target"
+> +	depends on PCI && SCSI
+> +	depends on TARGET_CORE
+> +	depends on SCSI_FC_ATTRS
+> +	select CRC_T10DIF
+> +	help
+> +          The efct driver provides enhanced SCSI Target Mode
+> +	  support for specific SLI-4 adapters.
+> diff --git a/drivers/scsi/elx/Makefile b/drivers/scsi/elx/Makefile
+> new file mode 100644
+> index 000000000000..79cc4e57676e
+> --- /dev/null
+> +++ b/drivers/scsi/elx/Makefile
+> @@ -0,0 +1,30 @@
+> +#/*******************************************************************
+> +# * This file is part of the Emulex Linux Device Driver for         *
+> +# * Fibre Channel Host Bus Adapters.                                *
+> +# * Copyright (C) 2018 Broadcom. All Rights Reserved. The term	   *
+> +# * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.     *
+> +# *                                                                 *
+> +# * This program is free software; you can redistribute it and/or   *
+> +# * modify it under the terms of version 2 of the GNU General       *
+> +# * Public License as published by the Free Software Foundation.    *
+> +# * This program is distributed in the hope that it will be useful. *
+> +# * ALL EXPRESS OR IMPLIED CONDITIONS, REPRESENTATIONS AND          *
+> +# * WARRANTIES, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY,  *
+> +# * FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT, ARE      *
+> +# * DISCLAIMED, EXCEPT TO THE EXTENT THAT SUCH DISCLAIMERS ARE HELD *
+> +# * TO BE LEGALLY INVALID.  See the GNU General Public License for  *
+> +# * more details, a copy of which can be found in the file COPYING  *
+> +# * included with this package.                                     *
+> +# ********************************************************************/
+> +
 
+Use SPDX identifier here.
+
+> +obj-$(CONFIG_SCSI_EFCT) := efct.o
+> +
+> +efct-objs := efct/efct_driver.o efct/efct_io.o efct/efct_scsi.o efct/efct_els.o \
+> +	     efct/efct_xport.o efct/efct_hw.o efct/efct_hw_queues.o \
+> +	     efct/efct_utils.o efct/efct_lio.o efct/efct_unsol.o
+> +
+> +efct-objs += libefc/efc_domain.o libefc/efc_fabric.o libefc/efc_node.o \
+> +	     libefc/efc_sport.o libefc/efc_device.o \
+> +	     libefc/efc_lib.o libefc/efc_sm.o
+> +
+> +efct-objs += libefc_sli/sli4.o
+> 
 Cheers,
 
 Hannes
