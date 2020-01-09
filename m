@@ -2,25 +2,26 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF771355BB
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jan 2020 10:24:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE2A1355BF
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jan 2020 10:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729421AbgAIJYq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Jan 2020 04:24:46 -0500
-Received: from mx2.suse.de ([195.135.220.15]:52856 "EHLO mx2.suse.de"
+        id S1729427AbgAIJ0k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Jan 2020 04:26:40 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53240 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729269AbgAIJYq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 9 Jan 2020 04:24:46 -0500
+        id S1729269AbgAIJ0j (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 Jan 2020 04:26:39 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8BA5ABCB2;
-        Thu,  9 Jan 2020 09:24:33 +0000 (UTC)
-Subject: Re: [PATCH v2 20/32] elx: efct: Hardware queues processing
+        by mx2.suse.de (Postfix) with ESMTP id A0788BCD4;
+        Thu,  9 Jan 2020 09:26:37 +0000 (UTC)
+Subject: Re: [PATCH v2 21/32] elx: efct: Unsolicited FC frame processing
+ routines
 To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
 Cc:     maier@linux.ibm.com, dwagner@suse.de, bvanassche@acm.org,
         Ram Vegesna <ram.vegesna@broadcom.com>
 References: <20191220223723.26563-1-jsmart2021@gmail.com>
- <20191220223723.26563-21-jsmart2021@gmail.com>
+ <20191220223723.26563-22-jsmart2021@gmail.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -66,12 +67,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <c48d12be-0bea-0b0d-9f7a-9d5a5333529c@suse.de>
-Date:   Thu, 9 Jan 2020 10:24:26 +0100
+Message-ID: <1c4cdc8c-f404-01a9-d74a-9f025a596e58@suse.de>
+Date:   Thu, 9 Jan 2020 10:26:37 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20191220223723.26563-21-jsmart2021@gmail.com>
+In-Reply-To: <20191220223723.26563-22-jsmart2021@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -84,20 +85,17 @@ On 12/20/19 11:37 PM, James Smart wrote:
 > This patch continues the efct driver population.
 > 
 > This patch adds driver definitions for:
-> Routines for EQ, CQ, WQ and RQ processing.
-> Routines for IO object pool allocation and deallocation.
+> Routines to handle unsolicited FC frames.
 > 
 > Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 > Signed-off-by: James Smart <jsmart2021@gmail.com>
 > ---
->  drivers/scsi/elx/efct/efct_hw.c        | 531 +++++++++++++++++++++++++++++++++
->  drivers/scsi/elx/efct/efct_hw.h        |  36 +++
->  drivers/scsi/elx/efct/efct_hw_queues.c | 192 ++++++++++++
->  drivers/scsi/elx/efct/efct_io.c        | 203 +++++++++++++
->  drivers/scsi/elx/efct/efct_io.h        | 196 ++++++++++++
->  5 files changed, 1158 insertions(+)
->  create mode 100644 drivers/scsi/elx/efct/efct_io.c
->  create mode 100644 drivers/scsi/elx/efct/efct_io.h
+>  drivers/scsi/elx/efct/efct_hw.c    |   2 +
+>  drivers/scsi/elx/efct/efct_unsol.c | 835 +++++++++++++++++++++++++++++++++++++
+>  drivers/scsi/elx/efct/efct_unsol.h |  49 +++
+>  3 files changed, 886 insertions(+)
+>  create mode 100644 drivers/scsi/elx/efct/efct_unsol.c
+>  create mode 100644 drivers/scsi/elx/efct/efct_unsol.h
 > 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 
