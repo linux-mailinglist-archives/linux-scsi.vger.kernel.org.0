@@ -2,26 +2,25 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B37B613561C
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jan 2020 10:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93426135654
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Jan 2020 10:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729824AbgAIJr5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Jan 2020 04:47:57 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34166 "EHLO mx2.suse.de"
+        id S1729959AbgAIJ5v (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Jan 2020 04:57:51 -0500
+Received: from mx2.suse.de ([195.135.220.15]:38028 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728755AbgAIJr5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 9 Jan 2020 04:47:57 -0500
+        id S1729831AbgAIJ5v (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 Jan 2020 04:57:51 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id BF409C11A;
-        Thu,  9 Jan 2020 09:47:49 +0000 (UTC)
-Subject: Re: [PATCH v2 12/32] elx: libefc: Remote node state machine
- interfaces
+        by mx2.suse.de (Postfix) with ESMTP id 4A7B1C27B;
+        Thu,  9 Jan 2020 09:57:49 +0000 (UTC)
+Subject: Re: [PATCH v2 14/32] elx: libefc: FC node ELS and state handling
 To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
 Cc:     maier@linux.ibm.com, dwagner@suse.de, bvanassche@acm.org,
         Ram Vegesna <ram.vegesna@broadcom.com>
 References: <20191220223723.26563-1-jsmart2021@gmail.com>
- <20191220223723.26563-13-jsmart2021@gmail.com>
+ <20191220223723.26563-15-jsmart2021@gmail.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -67,12 +66,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <8b0c5225-a3bd-66e3-a39d-b44c9c06bba8@suse.de>
-Date:   Thu, 9 Jan 2020 09:31:50 +0100
+Message-ID: <429c2f07-b61a-dfa1-a83a-d6a93f9e7518@suse.de>
+Date:   Thu, 9 Jan 2020 09:39:05 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20191220223723.26563-13-jsmart2021@gmail.com>
+In-Reply-To: <20191220223723.26563-15-jsmart2021@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -85,171 +84,50 @@ On 12/20/19 11:37 PM, James Smart wrote:
 > This patch continues the libefc library population.
 > 
 > This patch adds library interface definitions for:
-> - Remote node (aka remote port) allocation, initializaion and
->   destroy routines.
+> - FC node PRLI handling and state management
 > 
 > Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 > Signed-off-by: James Smart <jsmart2021@gmail.com>
 > ---
->  drivers/scsi/elx/libefc/efc_node.c | 1343 ++++++++++++++++++++++++++++++++++++
->  drivers/scsi/elx/libefc/efc_node.h |  188 +++++
->  2 files changed, 1531 insertions(+)
->  create mode 100644 drivers/scsi/elx/libefc/efc_node.c
->  create mode 100644 drivers/scsi/elx/libefc/efc_node.h
+>  drivers/scsi/elx/libefc/efc_device.c | 1658 ++++++++++++++++++++++++++++++++++
+>  drivers/scsi/elx/libefc/efc_device.h |   72 ++
+>  2 files changed, 1730 insertions(+)
+>  create mode 100644 drivers/scsi/elx/libefc/efc_device.c
+>  create mode 100644 drivers/scsi/elx/libefc/efc_device.h
 > 
-> diff --git a/drivers/scsi/elx/libefc/efc_node.c b/drivers/scsi/elx/libefc/efc_node.c
+> diff --git a/drivers/scsi/elx/libefc/efc_device.c b/drivers/scsi/elx/libefc/efc_device.c
 > new file mode 100644
-> index 000000000000..57bf25a5d76a
+> index 000000000000..f87525f65b72
 > --- /dev/null
-> +++ b/drivers/scsi/elx/libefc/efc_node.c
-> @@ -0,0 +1,1343 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
-> + * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
-> + */
-> +
-> +#include "efc.h"
-> +
-> +/* HW node callback events from the user driver */
-> +int
-> +efc_remote_node_cb(void *arg, int event,
-> +		   void *data)
-> +{
-> +	struct efc *efc = arg;
-> +	enum efc_sm_event sm_event = EFC_EVT_LAST;
-> +	struct efc_remote_node *rnode = data;
-> +	struct efc_node *node = rnode->node;
-> +	unsigned long flags = 0;
-> +
-> +	switch (event) {
-> +	case EFC_HW_NODE_ATTACH_OK:
-> +		sm_event = EFC_EVT_NODE_ATTACH_OK;
-> +		break;
-> +
-> +	case EFC_HW_NODE_ATTACH_FAIL:
-> +		sm_event = EFC_EVT_NODE_ATTACH_FAIL;
-> +		break;
-> +
-> +	case EFC_HW_NODE_FREE_OK:
-> +		sm_event = EFC_EVT_NODE_FREE_OK;
-> +		break;
-> +
-> +	case EFC_HW_NODE_FREE_FAIL:
-> +		sm_event = EFC_EVT_NOD> +	default:
-> +		efc_log_test(efc, "unhandled event %#x\n", event);
-> +		return -1;
-> +	}
-> +
-> +	spin_lock_irqsave(&efc->lock, flags);
-> +	efc_node_post_event(node, sm_event, NULL);
-> +	spin_unlock_irqrestore(&efc->lock, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +/* Find an FC node structure given the FC port ID */
-> +struct efc_node *
-> +efc_node_find(struct efc_sli_port *sport, u32 port_id)
-> +{
-> +	struct efc_node *node;
-> +
-> +	node = efc_spv_get(sport->lookup, port_id);
-> +	return node;
-> +}
-> +
-> +int
-> +efc_node_create_pool(struct efc *efc, u32 node_count)
-> +{
-> +	u32 i;
-> +	struct efc_node *node;
-> +	u64 max_xfer_size;
-> +	struct efc_dma *dma;
-> +
-> +	efc->nodes_count = node_count;
-> +
-> +	efc->nodes = kmalloc_array(node_count, sizeof(struct efc_node *),
-> +				   GFP_ATOMIC);
-> +	if (!efc->nodes)
-> +		return -1;
-> +
-> +	memset(efc->nodes, 0, node_count * sizeof(struct efc_node *));
-> +
-> +	if (efc->max_xfer_size)
-> +		max_xfer_size = efc->max_xfer_size;
-> +	else
-> +		max_xfer_size = 65536;
-> +
-> +	INIT_LIST_HEAD(&efc->nodes_free_list);
-> +
-> +	for (i = 0; i < node_count; i++) {
-> +		dma = NULL;
-> +		node = kzalloc(sizeof(*node), GFP_ATOMIC);
-> +		if (!node) {
-> +			efc_log_err(efc, "node allocation failed");
-> +			goto error;
-> +		}
-> +		/* Assign any persistent field values */
-> +		node->instance_index = i;
-> +		node->max_wr_xfer_size = max_xfer_size;
-> +		node->rnode.indicator = U32_MAX;
-> +
-> +		dma = &node->sparm_dma_buf;
-> +		dma->size = 256;
-> +		dma->virt = dma_alloc_coherent(&efc->pcidev->dev, dma->size,
-> +					       &dma->phys, GFP_DMA);
-> +		if (!dma->virt) {
-> +			kfree(node);
-> +			efc_log_err(efc, "efc_dma_alloc failed");
-> +			goto error;
-> +		}
-> +
-> +		efc->nodes[i] = node;
-> +		INIT_LIST_HEAD(&node->list_entry);
-> +		list_add_tail(&node->list_entry, &efc->nodes_free_list);
-> +	}
-> +	return 0;
-> +
-> +error:
-> +	efc_node_free_pool(efc);
-> +	return -1;
-> +}
-> +
-
-Can't you use a normal mempool here, and allocate the dma region when
-required? I guess the node pool is used only infrequently, so
-performance shouldn't be impacted ...
-But it would reduce the pressure on the IOMMU, no?
-
+> +++ b/drivers/scsi/elx/libefc/efc_device.c
 [ .. ]
-> +void efc_node_post_els_resp(struct efc_node *node,
-> +			    enum efc_hw_node_els_event evt, void *arg)
-> +{
-> +	enum efc_sm_event sm_event = EFC_EVT_LAST;
-> +	struct efc *efc = node->efc;
-> +	unsigned long flags = 0;
+> +	case EFC_EVT_LOGO_RCVD: {
+> +		struct fc_frame_header *hdr = cbdata->header->dma.virt;
 > +
-> +	switch (evt) {
-> +	case EFC_HW_SRRS_ELS_REQ_OK:
-> +		sm_event = EFC_EVT_SRRS_ELS_REQ_OK;
+> +		node_printf(node, "%s received attached=%d\n",
+> +			    efc_sm_event_name(evt), node->attached);
+> +		/* sm: / send LOGO acc */
+> +		efc->tt.els_send_resp(efc, node, ELS_LOGO,
+> +					be16_to_cpu(hdr->fh_ox_id));
+> +		efc_node_transition(node, __efc_d_wait_logo_acc_cmpl, NULL);
 > +		break;
-> +	case EFC_HW_SRRS_ELS_CMPL_OK:
-> +		sm_event = EFC_EVT_SRRS_ELS_CMPL_OK;
+> +	}
+> +
+> +	case EFC_EVT_ADISC_RCVD: {
+> +		struct fc_frame_header *hdr = cbdata->header->dma.virt;
+> +		/* sm: / send ADISC acc */
+> +		efc->tt.els_send_resp(efc, node, ELS_ADISC,
+> +					be16_to_cpu(hdr->fh_ox_id));
 > +		break;
-> +	case EFC_HW_SRRS_ELS_REQ_FAIL:
-> +		sm_event = EFC_EVT_SRRS_ELS_REQ_FAIL;
-> +		break;
-> +	case EFC_HW_SRRS_ELS_CMPL_FAIL:
-> +		sm_event = EFC_EVT_SRRS_ELS_CMPL_FAIL;
-> +		break;
-> +	case EFC_HW_SRRS_ELS_REQ_RJT:
-> +		sm_event = EFC_EVT_SRRS_ELS_REQ_RJT;
-> +		break;
-> +	case EFC_HW_ELS_REQ_ABORTED:
-> +		sm_event = EFC_EVT_ELS_REQ_ABORTED;
-> +		break;
+> +	}
+> +
+> +	case EFC_EVT_ABTS_RCVD:
+> +		/* sm: / process ABTS */
+> +		// This should not happpen
 
-Please collapse.
+... then I would expect a logging message, not a C++ style comment.
+Please fix.
+
 
 Cheers,
 
