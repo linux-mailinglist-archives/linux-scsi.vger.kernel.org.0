@@ -2,91 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E8E613670D
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jan 2020 07:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290F713673E
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jan 2020 07:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731331AbgAJGEE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Jan 2020 01:04:04 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:42810 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727086AbgAJGED (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Jan 2020 01:04:03 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00A63RCJ087414;
-        Fri, 10 Jan 2020 06:04:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=q3VxyJTOy9ZHQGP5KSRVM4PO0ylUd4m6r2Z4mGx30b8=;
- b=aFkngOfjKzacVvzLFynXdsQA1KbgvHKsvEoYG4Jr5+c7cR0YgtLFl6S1a+PlN+7ZM5sC
- UdLtaBmtgzeD/g0H55gwbMxSsuwUk6ZHZ4O6xhru2/VopruhQLGYMFErKqLQ4bOtVGyy
- Gsg6UZaPiOdJPYSGCRf4hrcRwEq6VYJfO0eB1N8jpt3flaIbJHJ4w58SiPT6C6djOSoJ
- oaxUSmxgUwdEOTLeiOAogAqNe/MA9SCBLhKsNYomMFDB+YNFr2gCvySbwQWA7TGCeZks
- zYxj2Q375GLir0AAI03XIK1gwcFwsvOTSJjvjcGsEJb9ZLTnp6iHHfLI61O9OdC3QFTg GA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2xaj4ug0t5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jan 2020 06:04:00 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00A63s1n002902;
-        Fri, 10 Jan 2020 06:03:59 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2xdrxf89pe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jan 2020 06:03:56 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00A63gXY017273;
-        Fri, 10 Jan 2020 06:03:42 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 09 Jan 2020 22:03:41 -0800
-To:     Anand Lodnoor <anand.lodnoor@broadcom.com>
-Cc:     linux-scsi@vger.kernel.org, kashyap.desai@broadcom.com,
-        sumit.saxena@broadcom.com, kiran-kumar.kasturi@broadcom.com,
-        Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-Subject: Re: [PATCH 03/11] megaraid_sas: Update queue_depth of SAS and NVMe devices
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <1578051155-14716-1-git-send-email-anand.lodnoor@broadcom.com>
-        <1578051155-14716-4-git-send-email-anand.lodnoor@broadcom.com>
-Date:   Fri, 10 Jan 2020 01:03:39 -0500
-In-Reply-To: <1578051155-14716-4-git-send-email-anand.lodnoor@broadcom.com>
-        (Anand Lodnoor's message of "Fri, 3 Jan 2020 17:02:27 +0530")
-Message-ID: <yq17e1zx2ys.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1731451AbgAJGS0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Jan 2020 01:18:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52690 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725797AbgAJGS0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 10 Jan 2020 01:18:26 -0500
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 67DDD20673;
+        Fri, 10 Jan 2020 06:18:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578637104;
+        bh=E83v9s/velUj5ZMKMl2BVwEb+LgFHUZZtzb8Bqy9gU4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xyN7PM3sGWyQc+Q3C57MHsA5e3wjktENkcTqPjjN48EhTVMfLAOcEH7WXcehyQGC6
+         CqtX3KktH3VHkouuRDRBfqb+OHlpZenFzzhBLqVYkQH/7WfrzKZ0q/vtCiat2KM09/
+         /73s9E3NXSaD1yHiJUh5GvaXRcpQoPXGGxrOfGV8=
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-scsi@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     linux-block@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Pedro Sousa <pedrom.sousa@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
+        Can Guo <cang@codeaurora.org>,
+        Satya Tangirala <satyat@google.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>
+Subject: [RFC PATCH 0/5] Inline crypto support on DragonBoard 845c
+Date:   Thu,  9 Jan 2020 22:16:29 -0800
+Message-Id: <20200110061634.46742-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9495 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=882
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001100051
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9495 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=948 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001100051
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hello,
 
-Anand,
+This patchset implements UFS inline crypto support on the DragonBoard
+845c, using the Qualcomm Inline Crypto Engine (ICE) that's present on
+the Snapdragon 845 SoC.
 
->  /* JBOD Queue depth definitions */
->  #define MEGASAS_SATA_QD	32
-> -#define MEGASAS_SAS_QD	64
-> +#define MEGASAS_SAS_QD 256
->  #define MEGASAS_DEFAULT_PD_QD	64
-> -#define MEGASAS_NVME_QD		32
-> +#define MEGASAS_NVME_QD        64
->  
->  #define MR_DEFAULT_NVME_PAGE_SIZE	4096
->  #define MR_DEFAULT_NVME_PAGE_SHIFT	12
+This is based on top of the patchset "[PATCH v6 0/9] Inline Encryption
+Support" by Satya Tangirala, which adds support for the UFS standard
+inline crypto, the block layer changes needed to use inline crypto, and
+support for inline crypto in fscrypt (ext4 and f2fs encryption).  Link:
+https://lkml.kernel.org/r/20191218145136.172774-1-satyat@google.com
 
-Please justify this change.
+This new patchset is mostly a RFC showing hardware inline crypto working
+on a publicly available development board that runs the mainline Linux
+kernel.  While patches 1-2 could be applied now, patches 3-5 depend on
+the main "Inline Encryption Support" patchset being merged first.
+
+Most of the logic needed to use ICE is already handled by ufshcd-crypto
+and the blk-crypto framework, which are introduced by the "Inline
+Encryption Support" patchset.  Therefore, this new patchset just adds
+the vendor-specific parts.  I also only implemented support for version
+3 of the ICE hardware, which seems to be easier to use than older
+versions; and for now I only implemented UFS support, not eMMC.
+
+Due to these factors, I was able to greatly simplify the driver from the
+vendor's original.  It seems to work fine in some preliminary testing
+with fscrypt, and with a blk-crypto self-test I'm also working on.  But
+I'd appreciate feedback from anyone who may be more familiar with this
+hardware as to whether I might have missed anything important.
+
+This patchset is also available in git at
+https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/tag/?h=db845c-crypto-v1
+
+Eric Biggers (5):
+  firmware: qcom_scm: Add support for programming inline crypto keys
+  arm64: dts: sdm845: add Inline Crypto Engine registers and clock
+  scsi: ufs: add quirk to disable inline crypto support
+  scsi: ufs: add program_key() variant op
+  scsi: ufs-qcom: add Inline Crypto Engine support
+
+ MAINTAINERS                          |   2 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi |  13 +-
+ drivers/firmware/qcom_scm-32.c       |  14 ++
+ drivers/firmware/qcom_scm-64.c       |  31 ++++
+ drivers/firmware/qcom_scm.c          |  78 +++++++++
+ drivers/firmware/qcom_scm.h          |   9 +
+ drivers/scsi/ufs/Kconfig             |   1 +
+ drivers/scsi/ufs/Makefile            |   4 +-
+ drivers/scsi/ufs/ufs-qcom-ice.c      | 247 +++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufs-qcom.c          |  14 +-
+ drivers/scsi/ufs/ufs-qcom.h          |  35 ++++
+ drivers/scsi/ufs/ufshcd-crypto.c     |  27 ++-
+ drivers/scsi/ufs/ufshcd.h            |  12 ++
+ include/linux/qcom_scm.h             |  17 ++
+ 14 files changed, 490 insertions(+), 14 deletions(-)
+ create mode 100644 drivers/scsi/ufs/ufs-qcom-ice.c
 
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.24.1
+
