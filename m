@@ -2,95 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACDB1137495
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jan 2020 18:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE4AC137624
+	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jan 2020 19:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727574AbgAJRRc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Jan 2020 12:17:32 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:51069 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726751AbgAJRRc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 10 Jan 2020 12:17:32 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1578676651; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=xBPYgJDEwJiK3m8b7fV9s9qyj5id/MbB23qfyHS3psY=;
- b=GTMe4FPl0OVcIoJpwCwMZXWZUTjgeTI3wfw9Dx7gZRXq3I3xlo13Q5uO8dlap5QQ85pGUcyK
- LorubXs/V380lj9TSlB8pvkftUmsAbNXBO3e3DPUbQR36c9noUMFwR3g+cJjjuOeLmswOYrd
- +L35gJex2o3AMAE+YAmLnJhQE2U=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e18b1aa.7f207cabbf10-smtp-out-n03;
- Fri, 10 Jan 2020 17:17:30 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E41C5C4479F; Fri, 10 Jan 2020 17:17:29 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: asutoshd)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 90A9DC4479C;
-        Fri, 10 Jan 2020 17:17:28 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 10 Jan 2020 09:17:28 -0800
-From:   asutoshd@codeaurora.org
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        linux-scsi-owner@vger.kernel.org
-Subject: Re: [PATCH 3/4] ufs: Simplify two tests
-In-Reply-To: <20200107192531.73802-4-bvanassche@acm.org>
-References: <20200107192531.73802-1-bvanassche@acm.org>
- <20200107192531.73802-4-bvanassche@acm.org>
-Message-ID: <3d2d62d9e3bf8524fdf14fbd820bdbf3@codeaurora.org>
-X-Sender: asutoshd@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        id S1728576AbgAJSgk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Jan 2020 13:36:40 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39051 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728400AbgAJSgk (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Jan 2020 13:36:40 -0500
+Received: by mail-wm1-f66.google.com with SMTP id 20so2998195wmj.4;
+        Fri, 10 Jan 2020 10:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=2Yc37HGhbVglWg9H9TpyhPlGXyZBP+fZVz5l0vOH44g=;
+        b=SVsPQ5UjMsyR76PLPc/tBgMUJDvso/g/fjRT+1oSH4L4pgZ1yt03xJ/sqNyB/ksxKG
+         HlgKgswZHJWRqcwYP1hJGdI+waecOkAAayPF2BBkUlaR4yytijqlr/YPeV1q2zdgfR9n
+         0f/BzG0Mu9BpXl2f0fXBPy9Z88U+oTC6b8c2UkAijkVWZEsEKE/0i8sjg1lCgPD9O/Pp
+         PFt5vhTxPFUfGnuQEvOF8vLIyGZUkLsIyn+aCctFSxCqa9CjLbHYWaa36EBS9UYLqDiP
+         8GOtTmnw6ta1oCc6B83qYRKB8Nj/b+JH8YhXcbFuERYx+N++ww6sHOLsg2PP21HuqEBQ
+         G90w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=2Yc37HGhbVglWg9H9TpyhPlGXyZBP+fZVz5l0vOH44g=;
+        b=j/eoUZlEy88gaCuHkEBYzcb4RD062ILqiAkQQHT/t/cy9ZtoI5LPPOqgVzuUo0O/Az
+         IS+UcgFRTj8L0MqI8mxUk3dmcqiZLXhJPCBKqEnpJ8mmjaANR4omhMp3rC0egXlXY7Ut
+         Bcuod84ZaJbd2KGfEy6YTGBojpTSTwi00+QJ+7fy5LSfvqENNP+QGJtQt0en48HQHvOv
+         bNdDSsCDAsmfvQhU5SYxHWuOjXAbV2oCvSKXKFlzrEd4FH2DnFhnO4eJAYWNmZDaYJsq
+         D0qwp+9WQdV0QcrBMnXYylikzosVkPM9/3kME3UJ3UsS6kTfpylkyxe5kJVYQU/bZxex
+         7dsQ==
+X-Gm-Message-State: APjAAAX3JuAnCQ0wPfm0S783jBk8p7jEKDz5q03CKb7Fp7jb4AW8QsVi
+        d929mjEdnX/aWGzKXXXWjAk=
+X-Google-Smtp-Source: APXvYqwq2dX4d91vOXSbVX8gmUC4UrZCcNWdt58mjN3ivM5n725gVZp5CFelg37U0cexfntafwYyHQ==
+X-Received: by 2002:a1c:407:: with SMTP id 7mr5618354wme.29.1578681398505;
+        Fri, 10 Jan 2020 10:36:38 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bee3c.dynamic.kabel-deutschland.de. [95.91.238.60])
+        by smtp.gmail.com with ESMTPSA id x11sm3182825wre.68.2020.01.10.10.36.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2020 10:36:37 -0800 (PST)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        pedrom.sousa@synopsys.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean Huo <huobean@gmail.com>
+Subject: [PATCH v1 0/3] use UFS device indicated maximum LU number
+Date:   Fri, 10 Jan 2020 19:36:03 +0100
+Message-Id: <20200110183606.10102-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-01-07 11:25, Bart Van Assche wrote:
-> lrbp->cmd is set only for SCSI commands. Use this knowledge to simplify
-> two boolean expressions.
-> 
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/ufs/ufshcd.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 6f55d72e7fdd..15e65248597d 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -2474,7 +2474,7 @@ static int ufshcd_queuecommand(struct Scsi_Host
-> *host, struct scsi_cmnd *cmd)
-> 
->  	/* issue command to the controller */
->  	spin_lock_irqsave(hba->host->host_lock, flags);
-> -	ufshcd_vops_setup_xfer_req(hba, tag, (lrbp->cmd ? true : false));
-> +	ufshcd_vops_setup_xfer_req(hba, tag, true);
->  	ufshcd_send_command(hba, tag);
->  out_unlock:
->  	spin_unlock_irqrestore(hba->host->host_lock, flags);
-> @@ -2661,7 +2661,7 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba 
-> *hba,
->  	/* Make sure descriptors are ready before ringing the doorbell */
->  	wmb();
->  	spin_lock_irqsave(hba->host->host_lock, flags);
-> -	ufshcd_vops_setup_xfer_req(hba, tag, (lrbp->cmd ? true : false));
-> +	ufshcd_vops_setup_xfer_req(hba, tag, false);
->  	ufshcd_send_command(hba, tag);
->  	spin_unlock_irqrestore(hba->host->host_lock, flags);
+According to Jedec standard UFS 3.0 and UFS 2.1 Spec, Maximum
+number of logical units supported by the UFS device is specified
+by parameter bMaxNumberLU in Geometry Descriptor. This series
+of patches is to delete macro definition UFS_UPIU_MAX_GENERAL_LUN,
+and switch to use indicated value in descriptor instead.
 
-Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
+
+Bean Huo (3):
+  scsi: ufs: add max_lu_supported in struct ufs_dev_info
+  scsi: ufs: initialize max_lu_supported while booting
+  scsi: ufs: use UFS device indicated maximum LU number
+
+ drivers/scsi/ufs/ufs-sysfs.c |  2 +-
+ drivers/scsi/ufs/ufs.h       | 14 +++++++---
+ drivers/scsi/ufs/ufshcd.c    | 51 +++++++++++++++++++++++++++++++++---
+ 3 files changed, 60 insertions(+), 7 deletions(-)
+
+-- 
+2.17.1
+
