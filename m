@@ -2,148 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE947137622
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Jan 2020 19:36:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEF7137BF6
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Jan 2020 08:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728695AbgAJSgp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Jan 2020 13:36:45 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:38912 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728650AbgAJSgo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Jan 2020 13:36:44 -0500
-Received: by mail-wr1-f68.google.com with SMTP id y11so2757357wrt.6;
-        Fri, 10 Jan 2020 10:36:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=UXJ0984uNLCZWdtiVqvMGUgerEXFIAg/QOnqL6st/Yc=;
-        b=J6QNPXjiDIbeROuPF40FlaKOCsPWz/Hp5miGsAzvdZHMMzZ4YM/fZhNpnYsZAVyit+
-         KY5LmV5+4EuP260rUO+OK+hFncFcJpbo58Ru747SE0RZLxTVoL6FrQBrLvhSXhoS93r9
-         09vKJU5f1m045AYtv0OV22IuUdqgBx8tTAneLeNjiO3xB6G4y4W6GE2KNzW47Xv0gmtv
-         rAT418APTztNaIRKdrmxVmxIxSj0N9dn0PN2LkALSwjsjlKZ/DXy/4YRnDGMXi9KidLB
-         9GK//AMXHIx40Cyf1ioU9cDozHS9wZsFAkgDXz0i5ZJsQSLQYHXKiIGkyVe+PsjBiv1I
-         4+rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=UXJ0984uNLCZWdtiVqvMGUgerEXFIAg/QOnqL6st/Yc=;
-        b=ZPyzc3FXsCDOiWDEYXM5qwm8JBjRZXdCvsvaRib9QHe9RxhI5m9uG9Vr23IAGMFLdV
-         NfpwtVFUuOjx3SZKFKlf6axrdvVOGm96Da78OFoHyPTE5IwRJWcZhqXo/KQDVvvapU9H
-         wM9H9aZBt/Mzvz3WaNnjQAiapGw9bZeTm9pAFqM2HWdIPBuC2GPo5XVzwb4XmjFtw3VT
-         TujKAJEt9PKf/KvzSsjYqYgMzF6xDjYd3f2Q6fI1WppHBH1NSg3bi3UOq+xItqGUnNhQ
-         tjhoWKN5OGTnpCIO1DbEZX3gPbG2uHzH+1ir3/qX5u2LbVfIjFXjBP0UD8AOCKldy3II
-         /dpg==
-X-Gm-Message-State: APjAAAXI7Ru9jQn8qngwWH2zaBsAdGmMjvdkCEXhWUm+ldP2pHVYav0g
-        5V8EX/7N/BtR2Him3ZAe2oQ=
-X-Google-Smtp-Source: APXvYqx7KXO/xXinQdF5sICKA1kVrAQNdZxc2mrAPKuyywfPlaCEl0uTtJkEuJDdsopR2UYeeWb1nw==
-X-Received: by 2002:a5d:538e:: with SMTP id d14mr4995494wrv.358.1578681402813;
-        Fri, 10 Jan 2020 10:36:42 -0800 (PST)
-Received: from localhost.localdomain (ip5f5bee3c.dynamic.kabel-deutschland.de. [95.91.238.60])
-        by smtp.gmail.com with ESMTPSA id x11sm3182825wre.68.2020.01.10.10.36.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2020 10:36:42 -0800 (PST)
-From:   Bean Huo <huobean@gmail.com>
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        pedrom.sousa@synopsys.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] scsi: ufs: use UFS device indicated maximum LU number
-Date:   Fri, 10 Jan 2020 19:36:06 +0100
-Message-Id: <20200110183606.10102-4-huobean@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200110183606.10102-1-huobean@gmail.com>
-References: <20200110183606.10102-1-huobean@gmail.com>
+        id S1728571AbgAKHMF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 11 Jan 2020 02:12:05 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:11762 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728447AbgAKHMF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Jan 2020 02:12:05 -0500
+X-UUID: 2359de1797fd4004852ee6399b0fe6dc-20200111
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9mo99xIvkfScUshABg5R+2UHB6H3sxJILIKNOtsoiKk=;
+        b=A4tXQFid6+6alC3FPA7e+ahoHXHoVpynmgTpuqCgwqnxGxISFxEWFm54ES3r3D68vgfztmPCFWc1a+uVRXjhfoC2EIX5tGbXds0UXHegfbZAAe5J/4gfJ0AzCxkPf/gs+mLDXOclNqjPncFKf2NEhyz4CfbsyGtGUtxcqFfkmrg=;
+X-UUID: 2359de1797fd4004852ee6399b0fe6dc-20200111
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1432143684; Sat, 11 Jan 2020 15:11:59 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sat, 11 Jan 2020 15:11:03 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sat, 11 Jan 2020 15:12:37 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v3 0/2] scsi: ufs: pass device information to apply_dev_quirks
+Date:   Sat, 11 Jan 2020 15:11:45 +0800
+Message-ID: <1578726707-6596-1-git-send-email-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-SNTS-SMTP: F766C1091C1913520CE1D9691BC16BBDA3D7AF20A07BA51859A15704091991D62000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
-
-According to Jedec standard UFS 3.0 and UFS 2.1 Spec, Maximum number of logical
-units supported by the UFS device is indicated by parameter bMaxNumberLU in
-Geometry Descriptor. This patch is to delete current hard code macro definition
-of UFS_UPIU_MAX_GENERAL_LUN, and switch to use device indicated number instead.
-
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/ufs/ufs-sysfs.c |  2 +-
- drivers/scsi/ufs/ufs.h       | 12 +++++++++---
- drivers/scsi/ufs/ufshcd.c    |  4 ++--
- 3 files changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index 720be3f64be7..dbdf8b01abed 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -713,7 +713,7 @@ static ssize_t _pname##_show(struct device *dev,			\
- 	struct scsi_device *sdev = to_scsi_device(dev);			\
- 	struct ufs_hba *hba = shost_priv(sdev->host);			\
- 	u8 lun = ufshcd_scsi_to_upiu_lun(sdev->lun);			\
--	if (!ufs_is_valid_unit_desc_lun(lun))				\
-+	if (!ufs_is_valid_unit_desc_lun(&hba->dev_info, lun))		\
- 		return -EINVAL;						\
- 	return ufs_sysfs_read_desc_param(hba, QUERY_DESC_IDN_##_duname,	\
- 		lun, _duname##_DESC_PARAM##_puname, buf, _size);	\
-diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-index 5ca7ea4f223e..810eeca0de63 100644
---- a/drivers/scsi/ufs/ufs.h
-+++ b/drivers/scsi/ufs/ufs.h
-@@ -63,7 +63,6 @@
- #define UFS_UPIU_MAX_UNIT_NUM_ID	0x7F
- #define UFS_MAX_LUNS		(SCSI_W_LUN_BASE + UFS_UPIU_MAX_UNIT_NUM_ID)
- #define UFS_UPIU_WLUN_ID	(1 << 7)
--#define UFS_UPIU_MAX_GENERAL_LUN	8
- 
- /* Well known logical unit id in LUN field of UPIU */
- enum {
-@@ -548,12 +547,19 @@ struct ufs_dev_desc {
- 
- /**
-  * ufs_is_valid_unit_desc_lun - checks if the given LUN has a unit descriptor
-+ * @dev_info: pointer of instance of struct ufs_dev_info
-  * @lun: LU number to check
-  * @return: true if the lun has a matching unit descriptor, false otherwise
-  */
--static inline bool ufs_is_valid_unit_desc_lun(u8 lun)
-+static inline bool ufs_is_valid_unit_desc_lun(struct ufs_dev_info *dev_info,
-+		u8 lun)
- {
--	return lun == UFS_UPIU_RPMB_WLUN || (lun < UFS_UPIU_MAX_GENERAL_LUN);
-+	if (!dev_info || !dev_info->max_lu_supported) {
-+		pr_err("Max General LU supported by UFS isn't initilized\n");
-+		return false;
-+	}
-+
-+	return lun == UFS_UPIU_RPMB_WLUN || (lun < dev_info->max_lu_supported);
- }
- 
- #endif /* End of Header */
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index a297fe55e36a..c6ea5d88222d 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -3286,7 +3286,7 @@ static inline int ufshcd_read_unit_desc_param(struct ufs_hba *hba,
- 	 * Unit descriptors are only available for general purpose LUs (LUN id
- 	 * from 0 to 7) and RPMB Well known LU.
- 	 */
--	if (!ufs_is_valid_unit_desc_lun(lun))
-+	if (!ufs_is_valid_unit_desc_lun(&hba->dev_info, lun))
- 		return -EOPNOTSUPP;
- 
- 	return ufshcd_read_desc_param(hba, QUERY_DESC_IDN_UNIT, lun,
-@@ -4540,7 +4540,7 @@ static int ufshcd_get_lu_wp(struct ufs_hba *hba,
- 	 * protected so skip reading bLUWriteProtect parameter for
- 	 * it. For other W-LUs, UNIT DESCRIPTOR is not available.
- 	 */
--	else if (lun >= UFS_UPIU_MAX_GENERAL_LUN)
-+	else if (lun >= hba->dev_info.max_lu_supported)
- 		ret = -ENOTSUPP;
- 	else
- 		ret = ufshcd_read_unit_desc_param(hba,
--- 
-2.17.1
+Q3VycmVudGx5IFVGUyBkcml2ZXIgaGFzICJnbG9iYWwiIGRldmljZSBxdWlyayBzY2hlbWUgdG8g
+YWxsb3cgZHJpdmVyIGFwcGx5aW5nDQpzcGVjaWFsIGhhbmRsaW5nIGZvciBjZXJ0YWluIFVGUyBk
+ZXZpdmUgbW9kZWxzLg0KDQpIb3dldmVyIHNvbWUgc3BlY2lhbCBkZXZpY2UgaGFuZGxpbmdzIGFy
+ZSByZXF1aXJlZCBmb3Igc3BlY2lmaWMgVUZTIGhvc3RzIG9ubHkNCnNvIGl0IGlzIGJldHRlciB0
+byBtYWtlIGl0IGhhcHBlbiBpbiB2ZW5kb3IncyBjYWxsYmFja3Mgb25seSB0byBub3QgInBvbGx1
+dGUiDQpjb21tb24gZHJpdmVyIGFuZCBjb21tb24gZGV2aWNlIHF1aXJrcy4NCg0KV2UgYWxyZWFk
+eSBoYXZlIGFwcGx5X2Rldl9xdWlya3MgdmFyaWFudCBjYWxsYmFjayBmb3IgdmVuZG9ycyBidXQg
+bGFjayBvZiBkZXZpY2UNCmluZm9ybWF0aW9uIGZvciBoYW5kbGluZyBzcGVjaWZpYyBVRlMgZGV2
+aWNlIG1vZGVscy4gVGhpcyBzZXJpZXMgcHJvdmlkZXMgc3VjaA0KaW5mb3JtYXRpb24gdG8gYXBw
+bHlfZGV2X3F1aXJrcyBjYWxsYmFja3MsIGFuZCBhcHBsaWVzIHJlbGF0ZWQgbW9kaWZpY2F0aW9u
+cy4NCg0KSW4gcGF0Y2ggMSwgc2luY2UgUUNPTSB2ZW5kb3IgZHJpdmVyIHdpbGwgYmUgYnVpbHQg
+YnkgZGVmYXVsdCBhcyBhIG1vZHVsZSwgVUZTDQpjb3JlIGRyaXZlciBhbmQgdmVuZG9yIGRyaXZl
+ciBjYW4gbm90IGJlIHNwbGl0IHRvIGRpZmZlcmVudCBwYXRjaGVzLCBvdGhlcndpc2UNCnNlcGFy
+YXRlZCBwYXRjaGVzIHdpbGwgbm90IGJlIGJ1aWx0IHNpbmdseS4NCg0KdjIgLT4gdjMNCiAgICAt
+IEZpeCB1ZnNoY2RfdHVuZV91bmlwcm9fcGFyYW1zKCkncyB1c2VycyB0byBoYXZlIGNvcnJlY3Qg
+cGFyYW1ldGVycyBmb3IgaW52b2tpbmcuDQogICAgLSBSZWJhc2UgdG8gTWFydGluJ3MgbGF0ZXN0
+IHF1ZXVlIGJyYW5jaC4NCg0KdjEgLT4gdjINCiAgICAtIFNxdWFzaCBwYXRjaCAxICJzY3NpOiB1
+ZnM6IHBhc3MgZGV2aWNlIGluZm9ybWF0aW9uIHRvIGFwcGx5X2Rldl9xdWlya3MiIGFuZCBwYXRj
+aCAyICJzY3NpOiB1ZnMtcWNvbTogbW9kaWZ5IGFwcGx5X2Rldl9xdWlya3MgaW50ZXJmYWNlIiB0
+byByZXNvbHZlIGJ1aWxkIGlzc3VlLg0KDQpTdGFubGV5IENodSAoMik6DQogIHNjc2k6IHVmczog
+cGFzcyBkZXZpY2UgaW5mb3JtYXRpb24gdG8gYXBwbHlfZGV2X3F1aXJrcw0KICBzY3NpOiB1ZnMt
+bWVkaWF0ZWs6IGFkZCBhcHBseV9kZXZfcXVpcmtzIHZhcmlhbnQgb3BlcmF0aW9uDQoNCiBkcml2
+ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jIHwgMTEgKysrKysrKysrKysNCiBkcml2ZXJzL3Nj
+c2kvdWZzL3Vmcy1xY29tLmMgICAgIHwgIDMgKystDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2Qu
+YyAgICAgICB8ICA4ICsrKystLS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuaCAgICAgICB8
+ICA3ICsrKystLS0NCiA0IGZpbGVzIGNoYW5nZWQsIDIxIGluc2VydGlvbnMoKyksIDggZGVsZXRp
+b25zKC0pDQoNCi0tIA0KMi4xOC4wDQo=
 
