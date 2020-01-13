@@ -2,72 +2,169 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF67138B55
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jan 2020 06:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB01C138CCA
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Jan 2020 09:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733238AbgAMFwg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Jan 2020 00:52:36 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:41614 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733201AbgAMFw0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Jan 2020 00:52:26 -0500
-Received: by mail-oi1-f194.google.com with SMTP id i1so7189908oie.8
-        for <linux-scsi@vger.kernel.org>; Sun, 12 Jan 2020 21:52:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=El5YZgtDEXJCHEtZrRB1ujEJT5GnrR9nqQvx3oNXkD1KXWKAy5lE4fahagwXmNRBuY
-         Z373bCStdjZZAvrcMmyjZhqXNYKD7qS8gpQ1uKt4Zm/CJYofbOmd6y2KCfdaIf8lu4gx
-         e04Qq2Wd5k0QzXhgODgXLh9+BTAbr7mIJG1kvrHD2cB5892G2QaMtoQjZ8YbwAsn/v/R
-         qN1ulSwy8kLJzDOOwwvDkEa6g0paOaNUUW6lO8NcaOsOsQMTh2eV34LXY/bnRxfyDcL+
-         OFIAYoYpyWTxvo4nB11oXa8J2BNLiFXnr18VfN4DCPOmpXqWPT8f/9GzmZX8VWLxs4VK
-         s+8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
-        b=jRvNbFCuMnwZ4zsLcl82bqd6/H5OlEg3HOxw4vPmUZetLtGJMbza9NyYhFPSOp7/92
-         3pRhU6lI3Gqxu0FEqVHFByPEwK++O7LE29TKWIZ5GhD5g+w7So+pzNFjK8A/2FQ85AWU
-         Op/BKhrqcQ0bdICq05GyBwAexqDz3UHPcU0FYEscOzeNWEx7z3TTZ0TJ6Od2Aj/4mgIo
-         G/XUzwMX8SOVq4P1BMJoUe1jJsA0OtT1cLAbt2PmSEN7CQASwyPD+ZoR1NLzMitlyFGx
-         m2IBlZxDdsVSttdyuSp/db9wCMExPoDSuR+DW2hlVp4gAHi9cQyCpMZuGvTveIhVGadx
-         kADQ==
-X-Gm-Message-State: APjAAAU9mQMGBs2ov67vYXoBgF01Adpsj7/83qnzdl6HIN/j7OnN0x1S
-        7oq2NW9+HgtSLmrB5eSZI20HZ35kbcuVdGuH3Rs=
-X-Google-Smtp-Source: APXvYqy7JhGBt0ZjJ/1t4CT74GIhTuvbOMnCynReBbsGRcTAfZPwoiLBCe9XiPA9xaK1JAPmy14eucUMWI9DLkbKsUo=
-X-Received: by 2002:a54:4713:: with SMTP id k19mr11513430oik.113.1578894745174;
- Sun, 12 Jan 2020 21:52:25 -0800 (PST)
+        id S1728783AbgAMI3D (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Jan 2020 03:29:03 -0500
+Received: from mga04.intel.com ([192.55.52.120]:15698 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728680AbgAMI3C (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 Jan 2020 03:29:02 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Jan 2020 00:29:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,428,1571727600"; 
+   d="scan'208";a="217342928"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 13 Jan 2020 00:29:01 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iqv5o-000FZK-JF; Mon, 13 Jan 2020 16:29:00 +0800
+Date:   Mon, 13 Jan 2020 16:28:32 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
+Subject: Re: [PATCH v6 27/37] sg: add sg v4 interface support
+Message-ID: <202001131604.C85gbLUO%lkp@intel.com>
+References: <20200112235755.14197-28-dgilbert@interlog.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:24
- -0800 (PST)
-Reply-To: rickschaech@gmail.com
-From:   Rick Schaech <cathben72@gmail.com>
-Date:   Mon, 13 Jan 2020 01:52:24 -0400
-Message-ID: <CAEcBxO=TAnFn5LzizHa22hUC0Db5FuiZJF28m=yX3_9m--jRqg@mail.gmail.com>
-Subject: I wait for your swift response,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200112235755.14197-28-dgilbert@interlog.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
-know we have not meet each other before but sometimes in life God have
-a reason of bringing two people from two different countries together
-as business partners or life partners.
+Hi Douglas,
 
-My dear friend, I have the sum of 15.7 Million USD i wish to put in
-your name due to the death of my late client who died several years
-ago as his next of kin column still remain blank. Though the internet
-medium is highly abuse these days but am assuring you that this
-transaction is legitimate and I am contacting you that we may have a
-deal, note for your cooperation and collaboration 40% of the sum will
-be for you while the other 60% will be for me as well. I wait for your
-swift response for more details. please forward your response to my
-personal E-mail: rickschaech@gmail.com
+Thank you for the patch! Perhaps something to improve:
 
-Yours sincerely,
-Rick Schaech.
+[auto build test WARNING on scsi/for-next]
+[also build test WARNING on linus/master v5.5-rc6]
+[cannot apply to mkp-scsi/for-next next-20200110]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+
+url:    https://github.com/0day-ci/linux/commits/Douglas-Gilbert/sg-add-v4-interface/20200113-080059
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+
+New smatch warnings:
+drivers/scsi/sg.c:504 sg_open() error: potential null dereference 'sfp'.  (sg_add_sfp returns null)
+
+Old smatch warnings:
+drivers/scsi/sg.c:3238 sg_find_srp_by_id() warn: statement has no effect 3
+
+vim +/sfp +504 drivers/scsi/sg.c
+
+   433	
+   434	/*
+   435	 * Corresponds to the open() system call on sg devices. Implements O_EXCL on
+   436	 * a per device basis using 'open_cnt'. If O_EXCL and O_NONBLOCK and there is
+   437	 * already a sg handle open on this device then it fails with an errno of
+   438	 * EBUSY. Without the O_NONBLOCK flag then this thread enters an interruptible
+   439	 * wait until the other handle(s) are closed.
+   440	 */
+   441	static int
+   442	sg_open(struct inode *inode, struct file *filp)
+   443	{
+   444		bool o_excl, non_block;
+   445		int min_dev = iminor(inode);
+   446		int op_flags = filp->f_flags;
+   447		int res;
+   448		__maybe_unused int o_count;
+   449		struct sg_device *sdp;
+   450		struct sg_fd *sfp;
+   451	
+   452		nonseekable_open(inode, filp);
+   453		o_excl = !!(op_flags & O_EXCL);
+   454		non_block = !!(op_flags & O_NONBLOCK);
+   455		if (o_excl && ((op_flags & O_ACCMODE) == O_RDONLY))
+   456			return -EPERM;/* not permitted, need write access for O_EXCL */
+   457		sdp = sg_get_dev(min_dev);	/* increments sdp->d_ref */
+   458		if (IS_ERR(sdp))
+   459			return PTR_ERR(sdp);
+   460	
+   461		/* Prevent the device driver from vanishing while we sleep */
+   462		res = scsi_device_get(sdp->device);
+   463		if (res)
+   464			goto sg_put;
+   465		res = scsi_autopm_get_device(sdp->device);
+   466		if (res)
+   467			goto sdp_put;
+   468		res = sg_allow_if_err_recovery(sdp, non_block);
+   469		if (res)
+   470			goto error_out;
+   471	
+   472		mutex_lock(&sdp->open_rel_lock);
+   473		if (op_flags & O_NONBLOCK) {
+   474			if (o_excl) {
+   475				if (atomic_read(&sdp->open_cnt) > 0) {
+   476					res = -EBUSY;
+   477					goto error_mutex_locked;
+   478				}
+   479			} else {
+   480				if (SG_HAVE_EXCLUDE(sdp)) {
+   481					res = -EBUSY;
+   482					goto error_mutex_locked;
+   483				}
+   484			}
+   485		} else {
+   486			res = sg_wait_open_event(sdp, o_excl);
+   487			if (res) /* -ERESTARTSYS or -ENODEV */
+   488				goto error_mutex_locked;
+   489		}
+   490	
+   491		/* N.B. at this point we are holding the open_rel_lock */
+   492		if (o_excl)
+   493			set_bit(SG_FDEV_EXCLUDE, sdp->fdev_bm);
+   494	
+   495		o_count = atomic_inc_return(&sdp->open_cnt);
+   496		sfp = sg_add_sfp(sdp);		/* increments sdp->d_ref */
+   497		if (IS_ERR(sfp)) {
+   498			atomic_dec(&sdp->open_cnt);
+   499			res = PTR_ERR(sfp);
+   500			goto out_undo;
+   501		}
+   502	
+   503		filp->private_data = sfp;
+ > 504		sfp->tid = (current ? current->pid : -1);
+   505		mutex_unlock(&sdp->open_rel_lock);
+   506		SG_LOG(3, sfp, "%s: minor=%d, op_flags=0x%x; %s count after=%d%s\n",
+   507		       __func__, min_dev, op_flags, "device open", o_count,
+   508		       ((op_flags & O_NONBLOCK) ? " O_NONBLOCK" : ""));
+   509	
+   510		res = 0;
+   511	sg_put:
+   512		kref_put(&sdp->d_ref, sg_device_destroy);
+   513		/* if success, sdp->d_ref is incremented twice, decremented once */
+   514		return res;
+   515	
+   516	out_undo:
+   517		if (o_excl) {		/* undo if error */
+   518			clear_bit(SG_FDEV_EXCLUDE, sdp->fdev_bm);
+   519			wake_up_interruptible(&sdp->open_wait);
+   520		}
+   521	error_mutex_locked:
+   522		mutex_unlock(&sdp->open_rel_lock);
+   523	error_out:
+   524		scsi_autopm_put_device(sdp->device);
+   525	sdp_put:
+   526		scsi_device_put(sdp->device);
+   527		goto sg_put;
+   528	}
+   529	
+
+---
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
