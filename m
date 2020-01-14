@@ -2,165 +2,185 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE07D13A6DB
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2020 11:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E816613A733
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2020 11:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732762AbgANKOa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jan 2020 05:14:30 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2266 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731618AbgANKO3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 Jan 2020 05:14:29 -0500
-Received: from LHREML710-CAH.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 5E4C7F05A0FF8FF6253B;
-        Tue, 14 Jan 2020 10:14:28 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- LHREML710-CAH.china.huawei.com (10.201.108.33) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Tue, 14 Jan 2020 10:14:27 +0000
-Received: from [127.0.0.1] (10.202.226.43) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 14 Jan
- 2020 10:14:27 +0000
-Subject: Re: How to reset HBA when using libsas/mvsas
-To:     =?UTF-8?B?RMSBdmlzIE1vc8SBbnM=?= <davispuh@gmail.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-References: <CAOE4rSyVSfRRc9vFK_EM9SJMPoZD6PAmiA+2LqyFx2C26ht-6A@mail.gmail.com>
- <60f0fed7-43c7-c979-c375-d2ab4c21e141@huawei.com>
- <CAOE4rSxb9q565HLScxxWJiJ+ei8U1Fgh4XQvJuL2+VVhvqVhKg@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <716f9346-a1bb-d934-246a-5566a39a8be9@huawei.com>
-Date:   Tue, 14 Jan 2020 10:14:26 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1729112AbgANKVj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jan 2020 05:21:39 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:58916 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727285AbgANKVj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 14 Jan 2020 05:21:39 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id DE9CF2041C0;
+        Tue, 14 Jan 2020 11:21:36 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id t7YZbYgG2OxT; Tue, 14 Jan 2020 11:21:36 +0100 (CET)
+Received: from [82.134.31.177] (unknown [82.134.31.177])
+        by smtp.infotech.no (Postfix) with ESMTPA id BD49E204188;
+        Tue, 14 Jan 2020 11:21:36 +0100 (CET)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH v6 27/37] sg: add sg v4 interface support
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
+References: <20200112235755.14197-28-dgilbert@interlog.com>
+ <202001131604.C85gbLUO%lkp@intel.com>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <6132474f-0f08-e3da-14b3-16bab23f2a5c@interlog.com>
+Date:   Tue, 14 Jan 2020 11:21:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <CAOE4rSxb9q565HLScxxWJiJ+ei8U1Fgh4XQvJuL2+VVhvqVhKg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.226.43]
-X-ClientProxiedBy: lhreml729-chm.china.huawei.com (10.201.108.80) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+In-Reply-To: <202001131604.C85gbLUO%lkp@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 13/01/2020 23:57, Dāvis Mosāns wrote:
-> pirmd., 2020. g. 13. janv., plkst. 11:51 — lietotājs John Garry
-> (<john.garry@huawei.com>) rakstīja:
->> If you just want to rest the disk, you can reset the PHY to which the
->> disk is attached through sysfs, which is essentially is same as ejecting
->> and reinserting the disk:
->> 2. Go to PHY sysfs folder and disable+enable the PHY:
+On 2020-01-13 9:28 a.m., kbuild test robot wrote:
+> Hi Douglas,
 > 
-> Awesome, this works great for me.
-> Thanks!
+> Thank you for the patch! Perhaps something to improve:
 > 
+> [auto build test WARNING on scsi/for-next]
+> [also build test WARNING on linus/master v5.5-rc6]
+> [cannot apply to mkp-scsi/for-next next-20200110]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 > 
->>> I have tried:
->>> $ echo 1 > /sys/block/sdf/device/delete
->>> $ echo '- - -' > /sys/class/scsi_host/host0/scan
->>>
->>> but it doesn't work as it doesn't detect any new drives.
->>
->> I'm not sure if this is the correct method.
+> url:    https://github.com/0day-ci/linux/commits/Douglas-Gilbert/sg-add-v4-interface/20200113-080059
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
 > 
-> Searching on internet it's most common suggestion and I didn't saw
-> anything else.
-> https://unix.stackexchange.com/a/404408/51019
-> .
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+> 
+> New smatch warnings:
+> drivers/scsi/sg.c:504 sg_open() error: potential null dereference 'sfp'.  (sg_add_sfp returns null)
+> 
+> Old smatch warnings:
+> drivers/scsi/sg.c:3238 sg_find_srp_by_id() warn: statement has no effect 3
+
+__attribute__((nonnull(<n>))) only applies to function arguments, not its
+return value. So there seems no way to tell the compiler: this function,
+that returns a pointer, should/will never return the NULL pointer; feel
+free to check that.
+
+sg_add_sfp() is such a function, if it fails its retval is either a valid
+pointer _or_ IS_ERR(retval) is true. It follows that sfp->tid on line 504
+can never be a null dereference.
+
+Doug Gilbert
+
+> 
+> vim +/sfp +504 drivers/scsi/sg.c
+> 
+>     433	
+>     434	/*
+>     435	 * Corresponds to the open() system call on sg devices. Implements O_EXCL on
+>     436	 * a per device basis using 'open_cnt'. If O_EXCL and O_NONBLOCK and there is
+>     437	 * already a sg handle open on this device then it fails with an errno of
+>     438	 * EBUSY. Without the O_NONBLOCK flag then this thread enters an interruptible
+>     439	 * wait until the other handle(s) are closed.
+>     440	 */
+>     441	static int
+>     442	sg_open(struct inode *inode, struct file *filp)
+>     443	{
+>     444		bool o_excl, non_block;
+>     445		int min_dev = iminor(inode);
+>     446		int op_flags = filp->f_flags;
+>     447		int res;
+>     448		__maybe_unused int o_count;
+>     449		struct sg_device *sdp;
+>     450		struct sg_fd *sfp;
+>     451	
+>     452		nonseekable_open(inode, filp);
+>     453		o_excl = !!(op_flags & O_EXCL);
+>     454		non_block = !!(op_flags & O_NONBLOCK);
+>     455		if (o_excl && ((op_flags & O_ACCMODE) == O_RDONLY))
+>     456			return -EPERM;/* not permitted, need write access for O_EXCL */
+>     457		sdp = sg_get_dev(min_dev);	/* increments sdp->d_ref */
+>     458		if (IS_ERR(sdp))
+>     459			return PTR_ERR(sdp);
+>     460	
+>     461		/* Prevent the device driver from vanishing while we sleep */
+>     462		res = scsi_device_get(sdp->device);
+>     463		if (res)
+>     464			goto sg_put;
+>     465		res = scsi_autopm_get_device(sdp->device);
+>     466		if (res)
+>     467			goto sdp_put;
+>     468		res = sg_allow_if_err_recovery(sdp, non_block);
+>     469		if (res)
+>     470			goto error_out;
+>     471	
+>     472		mutex_lock(&sdp->open_rel_lock);
+>     473		if (op_flags & O_NONBLOCK) {
+>     474			if (o_excl) {
+>     475				if (atomic_read(&sdp->open_cnt) > 0) {
+>     476					res = -EBUSY;
+>     477					goto error_mutex_locked;
+>     478				}
+>     479			} else {
+>     480				if (SG_HAVE_EXCLUDE(sdp)) {
+>     481					res = -EBUSY;
+>     482					goto error_mutex_locked;
+>     483				}
+>     484			}
+>     485		} else {
+>     486			res = sg_wait_open_event(sdp, o_excl);
+>     487			if (res) /* -ERESTARTSYS or -ENODEV */
+>     488				goto error_mutex_locked;
+>     489		}
+>     490	
+>     491		/* N.B. at this point we are holding the open_rel_lock */
+>     492		if (o_excl)
+>     493			set_bit(SG_FDEV_EXCLUDE, sdp->fdev_bm);
+>     494	
+>     495		o_count = atomic_inc_return(&sdp->open_cnt);
+>     496		sfp = sg_add_sfp(sdp);		/* increments sdp->d_ref */
+>     497		if (IS_ERR(sfp)) {
+>     498			atomic_dec(&sdp->open_cnt);
+>     499			res = PTR_ERR(sfp);
+>     500			goto out_undo;
+>     501		}
+>     502	
+>     503		filp->private_data = sfp;
+>   > 504		sfp->tid = (current ? current->pid : -1);
+>     505		mutex_unlock(&sdp->open_rel_lock);
+>     506		SG_LOG(3, sfp, "%s: minor=%d, op_flags=0x%x; %s count after=%d%s\n",
+>     507		       __func__, min_dev, op_flags, "device open", o_count,
+>     508		       ((op_flags & O_NONBLOCK) ? " O_NONBLOCK" : ""));
+>     509	
+>     510		res = 0;
+>     511	sg_put:
+>     512		kref_put(&sdp->d_ref, sg_device_destroy);
+>     513		/* if success, sdp->d_ref is incremented twice, decremented once */
+>     514		return res;
+>     515	
+>     516	out_undo:
+>     517		if (o_excl) {		/* undo if error */
+>     518			clear_bit(SG_FDEV_EXCLUDE, sdp->fdev_bm);
+>     519			wake_up_interruptible(&sdp->open_wait);
+>     520		}
+>     521	error_mutex_locked:
+>     522		mutex_unlock(&sdp->open_rel_lock);
+>     523	error_out:
+>     524		scsi_autopm_put_device(sdp->device);
+>     525	sdp_put:
+>     526		scsi_device_put(sdp->device);
+>     527		goto sg_put;
+>     528	}
+>     529	
+> 
+> ---
+> 0-DAY kernel test infrastructure                 Open Source Technology Center
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
 > 
 
-So this works on my HBA which uses libsas:
-
-root@ubuntu:~# echo 1 > /sys/block/sdf/device/delete
-root@ubuntu:~# fdisk -l
-Disk /dev/sdb: 3.7 TiB, 4000787030016 bytes, 7814037168 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: gpt
-Disk identifier: 3875281E-32EA-404B-B0AD-FCAC27BDE061
-
-Device         Start        End    Sectors   Size Type
-/dev/sdb1       2048   14037134   14035087   6.7G Linux filesystem
-/dev/sdb2   14039040  781403713  767364674 365.9G Linux filesystem
-/dev/sdb3  781404160 7814037134 7032632975   3.3T Linux filesystem
-
-
-Disk /dev/sdd: 279.5 GiB, 300069052416 bytes, 586072368 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-
-
-Disk /dev/sda: 186.3 GiB, 200049647616 bytes, 390721968 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 131072 bytes
-Disklabel type: gpt
-Disk identifier: EAFDDE26-1C4A-408E-922E-B87F73F144AE
-
-Device       Start       End   Sectors   Size Type
-/dev/sda1     2048   1050623   1048576   512M EFI System
-/dev/sda2  1050624 390721535 389670912 185.8G Linux filesystem
-
-
-Disk /dev/sdc: 186.3 GiB, 200049647616 bytes, 390721968 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 131072 bytes
-Disklabel type: gpt
-Disk identifier: 300604F0-7782-FF48-A2E8-7358D80434C8
-
-Device       Start       End   Sectors   Size Type
-/dev/sdc1     2048   1000000    997953 487.3M EFI System
-/dev/sdc2  1001472   2000000    998529 487.6M Linux RAID
-/dev/sdc3  2000896 390721934 388721039 185.4G Linux RAID
-
-
-Disk /dev/sde: 186.3 GiB, 200049647616 bytes, 390721968 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 131072 bytes
-Disklabel type: gpt
-Disk identifier: 0C412946-1EFE-FD44-8EF3-246E6DCC64E6
-
-Device       Start       End   Sectors   Size Type
-/dev/sde1     2048   1000000    997953 487.3M EFI System
-/dev/sde2  1001472   2000000    998529 487.6M Linux RAID
-/dev/sde3  2000896 390721934 388721039 185.4G Linux RAID
-
-
-Disk /dev/sdh: 186.3 GiB, 200049647616 bytes, 390721968 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 131072 bytes
-
-
-Disk /dev/sdg: 186.3 GiB, 200049647616 bytes, 390721968 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 131072 bytes
-root@ubuntu:~# echo '- - -' > /sys/class/scsi_host/host0/scan
-[321323.142794] scsi 0:0:5:0: Direct-Access     SanDisk  LT0200MO 
-  P404 PQ: 0 ANSI: 6
-root@ubuntu:~# [321323.654846] sd 0:0:5:0: [sdf] 390721968 512-byte 
-logical blocks: (200 GB/186 GiB)
-[321323.696872] sd 0:0:5:0: [sdf] Write Protect is off
-[321323.701776] sd 0:0:5:0: [sdf] Mode Sense: cf 00 10 08
-[321323.778903] sd 0:0:5:0: [sdf] Write cache: disabled, read cache: 
-disabled, supports DPO and FUA
-[321323.901542] sd 0:0:5:0: [sdf] Optimal transfer size 131072 bytes
-[321324.441562]  sdf: sdf1 sdf2 sdf3
-[321325.122283] sd 0:0:5:0: [sdf] Attached SCSI disk
-
-root@ubuntu:~#
-
-
-I'm not sure what's going wrong with mvsas. The actual code for 
-triggering the scan is generic.
-
-Cheers,
-John
