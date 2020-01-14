@@ -2,118 +2,100 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9868813AEFF
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2020 17:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E44CA13B1C1
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2020 19:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727092AbgANQPy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jan 2020 11:15:54 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:49062 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726495AbgANQPy (ORCPT
+        id S1726669AbgANSNM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jan 2020 13:13:12 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:20091 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726450AbgANSNL (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 Jan 2020 11:15:54 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id AB6638EE24E;
-        Tue, 14 Jan 2020 08:15:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1579018553;
-        bh=02Zx84XMsoxh7GzrzKK9m0tPh6L4+QOXtmWVHzMsKtw=;
-        h=Subject:From:To:Cc:Date:From;
-        b=kOTtIyG0qEwPYFG8te35hTmv5Fut53abcZsDMENe4IlPYLWaJx7MGQVtTZNGSrZ0B
-         q6eHsGvRWfU3yf7ES9I/LRUSVpfB2WkgzMzqqS+PWDPSbVyeLuvB8rdiaA1L8TUdwQ
-         SfvpSNyjQ6LjxhwHRUq1ICMAJbYyrsJyVxrWP5xo=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id tEzRh7KVHe4h; Tue, 14 Jan 2020 08:15:53 -0800 (PST)
-Received: from jarvis.lan (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Jan 2020 13:13:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579025590;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=llgkamWBgOzQ4okqqZYQrjZITNl9Tjy/xx/bhr3JEbs=;
+        b=TWyJei7HtXtrNLGJVu6fMf4jW4tCoNwq8fu4DzfwGcVuJ2T6oiTsOBTxJo0tBWrefUHmN5
+        Tz4hZpo9jpw/ZtAywJsDf7wdZm27Yymwf62RWk0GGhrqVd3COZrUz58HaVGGKijLS+Tbdx
+        5lnzJHNVjeHf/w+TToaWm6eS5gpxEOI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-392-Hd3T0vvIPZODXrwJw5X9uw-1; Tue, 14 Jan 2020 13:13:06 -0500
+X-MC-Unique: Hd3T0vvIPZODXrwJw5X9uw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id E35808EE056;
-        Tue, 14 Jan 2020 08:15:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1579018553;
-        bh=02Zx84XMsoxh7GzrzKK9m0tPh6L4+QOXtmWVHzMsKtw=;
-        h=Subject:From:To:Cc:Date:From;
-        b=kOTtIyG0qEwPYFG8te35hTmv5Fut53abcZsDMENe4IlPYLWaJx7MGQVtTZNGSrZ0B
-         q6eHsGvRWfU3yf7ES9I/LRUSVpfB2WkgzMzqqS+PWDPSbVyeLuvB8rdiaA1L8TUdwQ
-         SfvpSNyjQ6LjxhwHRUq1ICMAJbYyrsJyVxrWP5xo=
-Message-ID: <1579018551.3390.13.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.5-rc6
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Tue, 14 Jan 2020 08:15:51 -0800
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 56916801E72;
+        Tue, 14 Jan 2020 18:13:05 +0000 (UTC)
+Received: from emilne (unknown [10.18.25.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6116160BF4;
+        Tue, 14 Jan 2020 18:13:04 +0000 (UTC)
+Message-ID: <c2baf21f60daf91593bc4a7088427257434e2040.camel@redhat.com>
+Subject: Re: [PATCH] qla2xxx: Fix a NULL pointer dereference in an error path
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Martin Wilck <mwilck@suse.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+Date:   Tue, 14 Jan 2020 13:13:03 -0500
+In-Reply-To: <086f02b8-b8d8-5336-bf2c-031293d95890@acm.org>
+References: <20200112210846.13421-1-bvanassche@acm.org>
+         <0e0883b1a887cbd7b67f85be61aca270107441ef.camel@redhat.com>
+         <086f02b8-b8d8-5336-bf2c-031293d95890@acm.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Two simple fixes in the upper drivers (so both fairly core), one in
-enclosures, which fixes replugging a device into an enclosure slot and
-one in the disk driver which fixes revalidating a drive with protection
-information (PI) to make it a non-PI drive ... previously we were still
-remembering the old PI state.  Both fixed issues are quite rare in the
-field.
+On Mon, 2020-01-13 at 08:11 -0800, Bart Van Assche wrote:
+> On 1/13/20 7:29 AM, Ewan D. Milne wrote:
+> > On Sun, 2020-01-12 at 13:08 -0800, Bart Van Assche wrote:
+> > > diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+> > > index c4e087217484..6560908ed50e 100644
+> > > --- a/drivers/scsi/qla2xxx/qla_init.c
+> > > +++ b/drivers/scsi/qla2xxx/qla_init.c
+> > > @@ -4895,6 +4895,8 @@ qla2x00_alloc_fcport(scsi_qla_host_t *vha, gfp_t flags)
+> > >   void
+> > >   qla2x00_free_fcport(fc_port_t *fcport)
+> > >   {
+> > > +	if (!fcport)
+> > > +		return;
+> > >   	if (fcport->ct_desc.ct_sns) {
+> > >   		dma_free_coherent(&fcport->vha->hw->pdev->dev,
+> > >   			sizeof(struct ct_sns_pkt), fcport->ct_desc.ct_sns,
+> > > 
+> > 
+> > I would have fixed this by moving the label to be after the qla2x00_free_fcport()
+> > call in qla2x00_configure_local_loop(), which Coverity complained about.  And
+> > called it something different.  (The code could probably be simplified by only
+> > making a call to qla2x00_alloc_fcport() in one place, something to think about...)
+> 
+> Hi Ewan,
+> 
+> I have considered the solution that you proposed. The solution shown 
+> above was chosen because I did not want to introduce any memory leaks in 
+> qla2x00_configure_local_loop(). There is a "goto cleanup_allocation" 
+> statement in that function that occurs after the "new_fcport = 
+> qla2x00_alloc_fcport(vha, GFP_KERNEL)" assignment. That is hard to 
+> notice because the qla2x00_configure_local_loop() function is so long.
+> 
 
-The patch is available here:
+Yes, but isn't that after "if (new_fcport == NULL)" where the code has
+put the previously allocated fcport into the &vha->vp_fcports list and
+was unable to allocate another one?
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+-Ewan
 
-The short changelog is:
-
-James Bottomley (1):
-      scsi: enclosure: Fix stale device oops with hot replug
-
-Xiang Chen (1):
-      scsi: sd: Clear sdkp->protection_type if disk is reformatted without PI
-
-And the diffstat:
-
- drivers/misc/enclosure.c | 3 +--
- drivers/scsi/sd.c        | 4 +++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/misc/enclosure.c b/drivers/misc/enclosure.c
-index 6d27ccfe0680..3c2d405bc79b 100644
---- a/drivers/misc/enclosure.c
-+++ b/drivers/misc/enclosure.c
-@@ -406,10 +406,9 @@ int enclosure_remove_device(struct enclosure_device *edev, struct device *dev)
- 		cdev = &edev->component[i];
- 		if (cdev->dev == dev) {
- 			enclosure_remove_links(cdev);
--			device_del(&cdev->cdev);
- 			put_device(dev);
- 			cdev->dev = NULL;
--			return device_add(&cdev->cdev);
-+			return 0;
- 		}
- 	}
- 	return -ENODEV;
-diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-index cea625906440..65ce10c7989c 100644
---- a/drivers/scsi/sd.c
-+++ b/drivers/scsi/sd.c
-@@ -2211,8 +2211,10 @@ static int sd_read_protection_type(struct scsi_disk *sdkp, unsigned char *buffer
- 	u8 type;
- 	int ret = 0;
- 
--	if (scsi_device_protection(sdp) == 0 || (buffer[12] & 1) == 0)
-+	if (scsi_device_protection(sdp) == 0 || (buffer[12] & 1) == 0) {
-+		sdkp->protection_type = 0;
- 		return ret;
-+	}
- 
- 	type = ((buffer[12] >> 1) & 7) + 1; /* P_TYPE 0 = Type 1 */
- 
