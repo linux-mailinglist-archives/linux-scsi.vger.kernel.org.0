@@ -2,96 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9C713A395
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2020 10:16:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0EF213A61D
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Jan 2020 11:24:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728882AbgANJQa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Jan 2020 04:16:30 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:58755 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbgANJQ3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 14 Jan 2020 04:16:29 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 4A4DC2041C0;
-        Tue, 14 Jan 2020 10:16:27 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id oDhR2PIkz+Yy; Tue, 14 Jan 2020 10:16:27 +0100 (CET)
-Received: from [82.134.31.177] (unknown [82.134.31.177])
-        by smtp.infotech.no (Postfix) with ESMTPA id 29DF7204188;
-        Tue, 14 Jan 2020 10:16:27 +0100 (CET)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v6 07/37] sg: move header to uapi section
-To:     kbuild test robot <lkp@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        Hannes Reinecke <hare@suse.com>
-References: <20200112235755.14197-8-dgilbert@interlog.com>
- <202001131301.p9xuUbaz%lkp@intel.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <a83b4b1b-ff1d-d3b0-46bf-cdc012d369d6@interlog.com>
-Date:   Tue, 14 Jan 2020 10:16:26 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1731295AbgANKJP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Jan 2020 05:09:15 -0500
+Received: from mta-02.yadro.com ([89.207.88.252]:40146 "EHLO mta-01.yadro.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729040AbgANKJN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 14 Jan 2020 05:09:13 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-01.yadro.com (Postfix) with ESMTP id 5890543F93;
+        Tue, 14 Jan 2020 10:09:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
+        in-reply-to:content-disposition:content-type:content-type
+        :mime-version:references:message-id:subject:subject:from:from
+        :date:date:received:received:received; s=mta-01; t=1578996551;
+         x=1580810952; bh=VB+rgJ1BdMDBSaf1j+lbIMdpNwaBY7N28XPCN7g8oo0=; b=
+        CIvEP5kqZT4rk/DzR4x9L3Sz0fdyawC0i2sJah+EwHa1naVsXz5JXiVsoJBzG5zK
+        CXIIMaicFUQuKNGs824iTA7PiTBGWciDBnYqGezPI4lrT2DmQ3OHY32sKmpFhB5q
+        9g/wS3rXyHpf7THTGUvgow8OrQDw9qS4j1NYpHsxGzM=
+X-Virus-Scanned: amavisd-new at yadro.com
+Received: from mta-01.yadro.com ([127.0.0.1])
+        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id ZPbrj2Ij0E-F; Tue, 14 Jan 2020 13:09:11 +0300 (MSK)
+Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mta-01.yadro.com (Postfix) with ESMTPS id DAEFD42001;
+        Tue, 14 Jan 2020 13:09:09 +0300 (MSK)
+Received: from localhost (172.17.128.60) by T-EXCH-02.corp.yadro.com
+ (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Tue, 14
+ Jan 2020 13:09:09 +0300
+Date:   Tue, 14 Jan 2020 13:09:08 +0300
+From:   Roman Bolshakov <r.bolshakov@yadro.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Martin Wilck <mwilck@suse.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Colin Ian King <colin.king@canonical.com>
+Subject: Re: [PATCH] qla2xxx: Fix a NULL pointer dereference in an error path
+Message-ID: <20200114100908.d6ch4u7krhvixaqa@SPB-NB-133.local>
+References: <20200112210846.13421-1-bvanassche@acm.org>
 MIME-Version: 1.0
-In-Reply-To: <202001131301.p9xuUbaz%lkp@intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20200112210846.13421-1-bvanassche@acm.org>
+X-Originating-IP: [172.17.128.60]
+X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
+ T-EXCH-02.corp.yadro.com (172.17.10.102)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-01-13 6:34 a.m., kbuild test robot wrote:
-> Hi Douglas,
+On Sun, Jan 12, 2020 at 01:08:46PM -0800, Bart Van Assche wrote:
+> This patch fixes the following Coverity complaint:
 > 
-> Thank you for the patch! Yet something to improve:
+> FORWARD_NULL
 > 
-> [auto build test ERROR on scsi/for-next]
-> [also build test ERROR on linus/master v5.5-rc5]
-> [cannot apply to mkp-scsi/for-next next-20200110]
-> [if your patch is applied to the wrong git tree, please drop us a note to help
-> improve the system. BTW, we also suggest to use '--base' option to specify the
-> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+> qla_init.c: 5275 in qla2x00_configure_local_loop()
+> 5269
+> 5270     		if (fcport->scan_state == QLA_FCPORT_FOUND)
+> 5271     			qla24xx_fcport_handle_login(vha, fcport);
+> 5272     	}
+> 5273
+> 5274     cleanup_allocation:
+> >>>     CID 353340:    (FORWARD_NULL)
+> >>>     Passing null pointer "new_fcport" to "qla2x00_free_fcport", which dereferences it.
+> 5275     	qla2x00_free_fcport(new_fcport);
+> 5276
+> 5277     	if (rval != QLA_SUCCESS) {
+> 5278     		ql_dbg(ql_dbg_disc, vha, 0x2098,
+> 5279     		    "Configure local loop error exit: rval=%x.\n", rval);
+> 5280     	}
 > 
-> url:    https://github.com/0day-ci/linux/commits/Douglas-Gilbert/sg-add-v4-interface/20200113-080059
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-> config: x86_64-randconfig-d003-20200112 (attached as .config)
-> compiler: gcc-7 (Debian 7.5.0-3) 7.5.0
-> reproduce:
->          # save the attached .config to linux build tree
->          make ARCH=x86_64
+> ---
+>  drivers/scsi/qla2xxx/qla_init.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->     In file included from <command-line>:32:0:
->>> ./usr/include/scsi/sg.h:44:2: error: unknown type name 'size_t'
->       size_t iov_len;  /* Length in bytes */
->       ^~~~~~
+> diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+> index c4e087217484..6560908ed50e 100644
+> --- a/drivers/scsi/qla2xxx/qla_init.c
+> +++ b/drivers/scsi/qla2xxx/qla_init.c
+> @@ -4895,6 +4895,8 @@ qla2x00_alloc_fcport(scsi_qla_host_t *vha, gfp_t flags)
+>  void
+>  qla2x00_free_fcport(fc_port_t *fcport)
+>  {
+> +	if (!fcport)
+> +		return;
+>  	if (fcport->ct_desc.ct_sns) {
+>  		dma_free_coherent(&fcport->vha->hw->pdev->dev,
+>  			sizeof(struct ct_sns_pkt), fcport->ct_desc.ct_sns,
 
-That patch never touched "./usr/include/scsi/sg.h" but the error line
-does correspond with include/uapi/scsi/sg.h . That file does include
-<linux/types.h> on line 31 which should take care of defining size_t
-within the kernel.
+Hi Bart,
 
-But is this a user space compilation check? According to cppreference.com
-for C size_t is defined in:
-   Defined in header <stddef.h>
-   Defined in header <stdio.h>
-   Defined in header <stdlib.h>
-   Defined in header <string.h>
-   Defined in header <time.h>
-   Defined in header <uchar.h>  (since C11)
-   Defined in header <wchar.h>  (since C95)
+Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
 
-So is a solution to include <stddef.h> ? Or should <linux/types.h> do
-that if it only conditionally defines size_t ? Or am I on the wrong
-track?
+There was another attempt to fix the issue a week ago:
+https://patchwork.kernel.org/patch/11319315/
 
-Doug Gilbert
+CC'ing Colin.
 
+Thanks,
+Roman
