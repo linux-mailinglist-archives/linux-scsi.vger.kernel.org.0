@@ -2,71 +2,186 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4CC13BAB8
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jan 2020 09:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B985613C8D3
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Jan 2020 17:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726248AbgAOINc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Jan 2020 03:13:32 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:42850 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726187AbgAOINc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Jan 2020 03:13:32 -0500
-Received: by mail-io1-f68.google.com with SMTP id n11so16822768iom.9
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jan 2020 00:13:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=nxQTUYaPyYmmjJtU1hMZaAGDuqO28C8d5aWhKgSB/Bg=;
-        b=AJep+Rg9HIz0B1PWYNu8RlMzwQXrT3ZhbJQBqybQPyd4iAT06TP1uhZa35SFobQ8JZ
-         PaJuPZfcTu6aU9oklLH0ooPZ4pYfxasXWYbIobES9feJnZSwE214LVbz2Yncx2JfRy+l
-         IuMWtlFgZ6qUyHSa0L35N/waXqTPiFupya4oDGNoFdelbJHAkiL7qF4SUMDdtZsNN0Ts
-         pGSMbFjLl3t9O8OGXaZ4DF31Zeeok4XNhbSr/jw/vnxV2sDoGQny7fRvc6/WMmCeJevp
-         afIxqOXC4qFl3cX5h4gGaH6bBZv1MUzXdb4K6atoPKg5NQRiPgeprJvokNYbQkqjG4w0
-         HxBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=nxQTUYaPyYmmjJtU1hMZaAGDuqO28C8d5aWhKgSB/Bg=;
-        b=Cn+UAzmtlHtTnMe1mMZ59kjuT8RElZZnBqU5lXEbxd4LfC1hWtiiLucFZUaPOcwkZ5
-         kCD8z0XnIYtJAnDV30IBw7DEDJE/i12370bk8qOJRhyaxjRWGbKJJQEZToLoygA8dNyL
-         7PMonYaUnpu3jB4v4/cXTPIh2b6clwvhO43ZGQ+vkuANVy0LqRiaKutJeyPRgCdAMD9P
-         T8xOciVrgVpXQs2ZWbPMn8Rktn9E6QibeheXgikH2P+yHzhHqHJi5OrUF7sI8cxltUzA
-         DSkHNJ6XlC56rEqFFam7PA9Cd6M5i1NeJBQtrxv8g4e0vgPJnFBqUcM9iDV9xfwpIsNU
-         7Xgg==
-X-Gm-Message-State: APjAAAUkqrBcwLvw8a2fqTIaTwE69u+83S0/jMF/QUaQJ4NXRhns9M2D
-        /A5IIVLdszLXGmTw7UOKXIZkSZz/uJNozfeERTY=
-X-Google-Smtp-Source: APXvYqyTgOx3rSZXyJCoyHpgQDl9sAkiAmcrD+oBEqWB45mQOQyq11Txz1qZpznQnmB2yBhoEWHMXz9ExzCPILkUQr0=
-X-Received: by 2002:a6b:6712:: with SMTP id b18mr21341282ioc.256.1579076011498;
- Wed, 15 Jan 2020 00:13:31 -0800 (PST)
-MIME-Version: 1.0
-Reply-To: mohamedmusa1962@gmail.com
-Received: by 2002:a02:ca52:0:0:0:0:0 with HTTP; Wed, 15 Jan 2020 00:13:30
- -0800 (PST)
-From:   "Mr.Mohamed Musa" <mohamedmusa1962@gmail.com>
-Date:   Wed, 15 Jan 2020 08:13:30 +0000
-X-Google-Sender-Auth: 7Ek-SnaHjqELbyh6VIt_J-nCm1Q
-Message-ID: <CAJpnYxyyfQP_rY3BN563TMPK9HL6rTJS49gAD=m37ML19cQR-g@mail.gmail.com>
-Subject: CONTACT ME WITH MY PRIVATE EMAIL ADDRESS
-To:     undisclosed-recipients:;
+        id S1726483AbgAOQJB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Jan 2020 11:09:01 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:37564 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726132AbgAOQJB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Jan 2020 11:09:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579104540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=34KrPuJhSpABWmACd7lnUMtN40WHMToLq6uEajza/1M=;
+        b=AjwdAYzU82jBqstFvxaq6oefpGX1/Yt7luPbjNunC3bn0/pwZZMcCYP9HLrvzpA2ZppTlg
+        BQ501WYRTl9cymGDwaJuZCv/AyPJ6ScZN0P89y0xIQ4CF2F5kljZio9HeDB1xrsjdd8L9h
+        v8ro5SBBNLOXw6KSxkdUCMDzJXxPknc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-13-MUNzfKqxMECq7_8YSWkulA-1; Wed, 15 Jan 2020 11:08:57 -0500
+X-MC-Unique: MUNzfKqxMECq7_8YSWkulA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BE2F718552D7;
+        Wed, 15 Jan 2020 16:08:55 +0000 (UTC)
+Received: from emilne (unknown [10.18.25.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C82008432B;
+        Wed, 15 Jan 2020 16:08:54 +0000 (UTC)
+Message-ID: <a6db9ede34fe62f849004801b5603179c7d6aa23.camel@redhat.com>
+Subject: Re: [PATCH] qla2xxx: Fix a NULL pointer dereference in an error path
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Martin Wilck <mwilck@suse.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+Date:   Wed, 15 Jan 2020 11:08:54 -0500
+In-Reply-To: <feb96690-cedb-586b-d040-127c9c6262c2@acm.org>
+References: <20200112210846.13421-1-bvanassche@acm.org>
+         <0e0883b1a887cbd7b67f85be61aca270107441ef.camel@redhat.com>
+         <086f02b8-b8d8-5336-bf2c-031293d95890@acm.org>
+         <c2baf21f60daf91593bc4a7088427257434e2040.camel@redhat.com>
+         <feb96690-cedb-586b-d040-127c9c6262c2@acm.org>
 Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Attention please
+On Tue, 2020-01-14 at 18:56 -0800, Bart Van Assche wrote:
+> On 2020-01-14 10:13, Ewan D. Milne wrote:
+> > Yes, but isn't that after "if (new_fcport == NULL)" where the code has
+> > put the previously allocated fcport into the &vha->vp_fcports list and
+> > was unable to allocate another one?
+> 
+> How about the (untested) patch below?
+> 
+> Thanks,
+> 
+> Bart.
+> 
+> 
+> From 436e1552f79b3a3b7d3f3b1dea1df27c33bd0d49 Mon Sep 17 00:00:00 2001
+> From: Bart Van Assche <bvanassche@acm.org>
+> Date: Sun, 12 Jan 2020 09:17:37 -0800
+> Subject: [PATCH v2] qla2xxx: Fix a NULL pointer dereference in an error path
+> 
+> This patch fixes the following Coverity complaint:
+> 
+> FORWARD_NULL
+> 
+> qla_init.c: 5275 in qla2x00_configure_local_loop()
+> 5269
+> 5270     		if (fcport->scan_state == QLA_FCPORT_FOUND)
+> 5271     			qla24xx_fcport_handle_login(vha, fcport);
+> 5272     	}
+> 5273
+> 5274     cleanup_allocation:
+> > > >     CID 353340:    (FORWARD_NULL)
+> > > >     Passing null pointer "new_fcport" to "qla2x00_free_fcport", which dereferences it.
+> 
+> 5275     	qla2x00_free_fcport(new_fcport);
+> 5276
+> 5277     	if (rval != QLA_SUCCESS) {
+> 5278     		ql_dbg(ql_dbg_disc, vha, 0x2098,
+> 5279     		    "Configure local loop error exit: rval=%x.\n", rval);
+> 5280     	}
+> qla_init.c: 5275 in qla2x00_configure_local_loop()
+> 5269
+> 5270     		if (fcport->scan_state == QLA_FCPORT_FOUND)
+> 5271     			qla24xx_fcport_handle_login(vha, fcport);
+> 5272     	}
+> 5273
+> 5274     cleanup_allocation:
+> > > >     CID 353340:    (FORWARD_NULL)
+> > > >     Passing null pointer "new_fcport" to "qla2x00_free_fcport", which dereferences it.
+> 
+> 5275     	qla2x00_free_fcport(new_fcport);
+> 5276
+> 5277     	if (rval != QLA_SUCCESS) {
+> 5278     		ql_dbg(ql_dbg_disc, vha, 0x2098,
+> 5279     		    "Configure local loop error exit: rval=%x.\n", rval);
+> 5280     	}
+> 
+> Cc: Himanshu Madhani <hmadhani@marvell.com>
+> Cc: Quinn Tran <qutran@marvell.com>
+> Cc: Martin Wilck <mwilck@suse.com>
+> Cc: Daniel Wagner <dwagner@suse.de>
+> Cc: Roman Bolshakov <r.bolshakov@yadro.com>
+> Fixes: 3dae220595ba ("scsi: qla2xxx: Use common routine to free fcport struct")
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>  drivers/scsi/qla2xxx/qla_init.c | 17 ++++++++---------
+>  1 file changed, 8 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+> index c4e087217484..62df78258269 100644
+> --- a/drivers/scsi/qla2xxx/qla_init.c
+> +++ b/drivers/scsi/qla2xxx/qla_init.c
+> @@ -5109,7 +5109,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+>  	rval = qla2x00_get_id_list(vha, ha->gid_list, ha->gid_list_dma,
+>  	    &entries);
+>  	if (rval != QLA_SUCCESS)
+> -		goto cleanup_allocation;
+> +		goto err;
+> 
+>  	ql_dbg(ql_dbg_disc, vha, 0x2011,
+>  	    "Entries in ID list (%d).\n", entries);
+> @@ -5139,7 +5139,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+>  		ql_log(ql_log_warn, vha, 0x2012,
+>  		    "Memory allocation failed for fcport.\n");
+>  		rval = QLA_MEMORY_ALLOC_FAILED;
+> -		goto cleanup_allocation;
+> +		goto err;
+>  	}
+>  	new_fcport->flags &= ~FCF_FABRIC_DEVICE;
+> 
+> @@ -5229,7 +5229,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+>  				ql_log(ql_log_warn, vha, 0xd031,
+>  				    "Failed to allocate memory for fcport.\n");
+>  				rval = QLA_MEMORY_ALLOC_FAILED;
+> -				goto cleanup_allocation;
+> +				goto err;
+>  			}
+>  			spin_lock_irqsave(&vha->hw->tgt.sess_lock, flags);
+>  			new_fcport->flags &= ~FCF_FABRIC_DEVICE;
+> @@ -5272,15 +5272,14 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+>  			qla24xx_fcport_handle_login(vha, fcport);
+>  	}
+> 
+> -cleanup_allocation:
+>  	qla2x00_free_fcport(new_fcport);
+> 
+> -	if (rval != QLA_SUCCESS) {
+> -		ql_dbg(ql_dbg_disc, vha, 0x2098,
+> -		    "Configure local loop error exit: rval=%x.\n", rval);
+> -	}
+> +	return rval;
+> 
+> -	return (rval);
+> +err:
+> +	ql_dbg(ql_dbg_disc, vha, 0x2098,
+> +	       "Configure local loop error exit: rval=%x.\n", rval);
+> +	return rval;
+>  }
+> 
+>  static void
+> 
 
-My name is Mr. Mohamed Musa, I am a staff working with the African
-Development Bank here in Ouagadougou,Burkina Faso.
+That looks fine.  Thanks.
 
-I want you to help me in receiving the sum of Ten Million Five Hundred
-thousand Dollars ($10,500,000) into your Bank Account. This fund was
-deposited in the bank here by a foreign customer who died accidentally
-alongside with his entire family members many years ago.
+Reviewed-by: Ewan D. Milne <emilne@redhat.com>
 
-Nobody had asked for this fund till now please contact me through my
-private email
-address: (mohamedmusa1962@gmail.com) for more details.
-
-Mr. Mohamed Musa.
