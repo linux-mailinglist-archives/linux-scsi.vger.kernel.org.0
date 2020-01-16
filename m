@@ -2,227 +2,213 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE3913EBD0
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8733513EC0B
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404792AbgAPRwr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 12:52:47 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:44320 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406142AbgAPRpP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jan 2020 12:45:15 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00GHhjD9015177;
-        Thu, 16 Jan 2020 17:45:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=g8JweAN4UuIU4RsGapSvTfes1SvP5NI0odYNg/+NuFA=;
- b=S5utsg87IzuVPXQ1mMJHduQf6RGdO0agkJSUA9VV89pQLzGkFrI5d984g+BZfe0WAXHI
- Bk7wfytlFGo1AFM0+295FKiPg9kDMPv4PRTQiWq4I2VhKZmkhrEHEtp0cnp0XQUddzuH
- L2Fmtizgk/4ni/a1Hef7yBLGr0+oBolMbV3G0abnFdMggQu+cDQEEzwp8uaoQfv9JwL1
- N8KKMU+eRB4iMFyIqK9uczD922UHZFHaxcYwBaqvLsZUiXk074nw0JugKpaX4ZsZ+Kd0
- WSmeluMvd/PbKls8yUSjwjUCNs/4rhtnhUVUKqhKj27a1ekV/fQBetoG23b1JSMt3T6H mg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2xf73yv2x7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Jan 2020 17:45:12 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00GHiF0Y047004;
-        Thu, 16 Jan 2020 17:45:12 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2xj61mygbr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Jan 2020 17:45:11 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00GHjBeX028205;
-        Thu, 16 Jan 2020 17:45:11 GMT
-Received: from viboo.us.oracle.com (/10.132.94.91)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 16 Jan 2020 09:45:11 -0800
-From:   Rajan Shanmugavelu <rajan.shanmugavelu@oracle.com>
-To:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        srinivas.eeda@oracle.com, joe.jin@oracle.com,
-        dick.kennedy@broadcom.com, laurie.barry@broadcom.com,
-        james.smart@broadcom.com
-Subject: [PATCH] lpfc: Gather lpfc debug logs using tracefs ringbuffer
-Date:   Thu, 16 Jan 2020 09:44:25 -0800
-Message-Id: <1579196665-13504-2-git-send-email-rajan.shanmugavelu@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1579196665-13504-1-git-send-email-rajan.shanmugavelu@oracle.com>
-References: <1579196665-13504-1-git-send-email-rajan.shanmugavelu@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9502 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001160143
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9502 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001160143
+        id S2405975AbgAPRyc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 12:54:32 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:55714 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405940AbgAPRoo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jan 2020 12:44:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=P0ujeKY7h/62OJnX1PYjinltna+YaYSFTchSZ0TA9WA=; b=RD6amf3ZQL/0bf9oJtita8Ly6
+        TRFI18VJHo5iLj3eHVWnW3bzCtvUy3ZaMrBgZqe4HHNjdbOQho2cOpOEhA/J08NuQTm0cDZGNJM3Z
+        tqG6d7ehcMYo5AK62JDM/ckapAVXsaBKVOXCM597TByf7ftJnrJpni3irARG6fW6GuHErCp5FZljt
+        c7hJO95yMx8vpb4Sz9d86xkoGDrUFRtxvNXm71sajTsOQEVuHNfABj161iMm5cxLNLZNmeJi2bR4S
+        ZdQ6QqcSDkNrRrNvu689AwFl6X4ZZt7Hm1spbvrgBEsnNXP9Dp92VmvrmdSmnCIj/To+U6OxZxv2r
+        lYIZYOsDw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1is9CF-0004c6-7v; Thu, 16 Jan 2020 17:44:43 +0000
+Date:   Thu, 16 Jan 2020 09:44:43 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sachinp <sachinp@linux.vnet.ibm.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>, jcmvbkbc@gmail.com,
+        linux-next <linux-next@vger.kernel.org>,
+        Oliver <oohall@gmail.com>,
+        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>,
+        Brian King <brking@linux.vnet.ibm.com>,
+        manvanth <manvanth@linux.vnet.ibm.com>,
+        iommu@lists.linux-foundation.org,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com
+Subject: Re: [linux-next/mainline][bisected 3acac06][ppc] Oops when unloading
+ mpt3sas driver
+Message-ID: <20200116174443.GA30158@infradead.org>
+References: <1578489498.29952.11.camel@abdul>
+ <1578560245.30409.0.camel@abdul.in.ibm.com>
+ <20200109142218.GA16477@infradead.org>
+ <1578980874.11996.3.camel@abdul.in.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1578980874.11996.3.camel@abdul.in.ibm.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Having this log in a ringbuffer helps to diagnose lpfc driver and
-firmware issues instead of having it run again with lpfc_verbose_log
-enabled saving cycles and hard to reproduce problem.
+Hi Abdul,
 
-Signed-off-by: Rajan Shanmugavelu <rajan.shanmugavelu@oracle.com>
-Signed-off-by: Joe Jin <joe.jin@oracle.com>
+I think the problem is that mpt3sas has some convoluted logic to do
+some DMA allocations with a 32-bit coherent mask, and then switches
+to a 63 or 64 bit mask, which is not supported by the DMA API.
+
+Can you try the patch below?
+
 ---
- drivers/scsi/lpfc/lpfc_logmsg.h | 44 ++++++++++++++++++++++++++++-------------
- drivers/scsi/lpfc/lpfc_scsi.c   | 20 +++++++++++++++++++
- include/trace/events/lpfc.h     | 41 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 91 insertions(+), 14 deletions(-)
- create mode 100644 include/trace/events/lpfc.h
+From 0738b1704ed528497b41b0408325f6828a8e51f6 Mon Sep 17 00:00:00 2001
+From: Christoph Hellwig <hch@lst.de>
+Date: Thu, 16 Jan 2020 18:31:38 +0100
+Subject: mpt3sas: don't change the dma coherent mask after allocations
 
-diff --git a/drivers/scsi/lpfc/lpfc_logmsg.h b/drivers/scsi/lpfc/lpfc_logmsg.h
-index ea10f03..676ebe4 100644
---- a/drivers/scsi/lpfc/lpfc_logmsg.h
-+++ b/drivers/scsi/lpfc/lpfc_logmsg.h
-@@ -46,20 +46,36 @@
- #define LOG_NVME_IOERR  0x00800000      /* NVME IO Error events. */
- #define LOG_ALL_MSG	0xffffffff	/* LOG all messages */
+The DMA layer does not allow changing the DMA coherent mask after
+there are outstanding allocations.  Stop doing that and always
+use a 32-bit coherent DMA mask in mpt3sas.
+
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 67 ++++++++---------------------
+ drivers/scsi/mpt3sas/mpt3sas_base.h |  2 -
+ 2 files changed, 19 insertions(+), 50 deletions(-)
+
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index fea3cb6a090b..3b51bed05008 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -2706,58 +2706,38 @@ _base_build_sg_ieee(struct MPT3SAS_ADAPTER *ioc, void *psge,
+ static int
+ _base_config_dma_addressing(struct MPT3SAS_ADAPTER *ioc, struct pci_dev *pdev)
+ {
+-	u64 required_mask, coherent_mask;
+ 	struct sysinfo s;
+-	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
+-	int dma_mask = (ioc->hba_mpi_version_belonged > MPI2_VERSION) ? 63 : 64;
+-
+-	if (ioc->is_mcpu_endpoint)
+-		goto try_32bit;
++	int dma_mask;
  
--#define lpfc_printf_vlog(vport, level, mask, fmt, arg...) \
--do { \
--	{ if (((mask) & (vport)->cfg_log_verbose) || (level[1] <= '3')) \
--		dev_printk(level, &((vport)->phba->pcidev)->dev, "%d:(%d):" \
--			   fmt, (vport)->phba->brd_no, vport->vpi, ##arg); } \
-+void lpfc_log_ringbuf(struct device *dev, const char *fmt, ...);
-+
-+#define lpfc_printf_vlog(vport, level, mask, fmt, arg...)		\
-+do {									\
-+	{								\
-+	if (((mask) & (vport)->cfg_log_verbose) || (level[1] <= '3')) { \
-+		dev_printk(level, &((vport)->phba->pcidev)->dev,	\
-+			"%d:(%d):" fmt, (vport)->phba->brd_no,		\
-+			vport->vpi, ##arg);				\
-+	} else {							\
-+		lpfc_log_ringbuf(&((vport)->phba->pcidev)->dev,		\
-+			"%d:(%d):" fmt, (vport)->phba->brd_no,		\
-+			vport->vpi, ##arg);				\
-+	}								\
-+	}								\
- } while (0)
+-	required_mask = dma_get_required_mask(&pdev->dev);
+-	if (sizeof(dma_addr_t) == 4 || required_mask == 32)
+-		goto try_32bit;
+-
+-	if (ioc->dma_mask)
+-		coherent_mask = DMA_BIT_MASK(dma_mask);
++	if (ioc->is_mcpu_endpoint ||
++	    sizeof(dma_addr_t) == 4 ||
++	    dma_get_required_mask(&pdev->dev) <= 32)
++		dma_mask = 32;
++	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
++	else if (ioc->hba_mpi_version_belonged > MPI2_VERSION)
++		dma_mask = 63;
+ 	else
+-		coherent_mask = DMA_BIT_MASK(32);
++		dma_mask = 64;
  
--#define lpfc_printf_log(phba, level, mask, fmt, arg...) \
--do { \
--	{ uint32_t log_verbose = (phba)->pport ? \
--				 (phba)->pport->cfg_log_verbose : \
--				 (phba)->cfg_log_verbose; \
--	  if (((mask) & log_verbose) || (level[1] <= '3')) \
--		dev_printk(level, &((phba)->pcidev)->dev, "%d:" \
--			   fmt, phba->brd_no, ##arg); \
--	} \
-+#define lpfc_printf_log(phba, level, mask, fmt, arg...)			\
-+do {									\
-+	{								\
-+	uint32_t log_verbose = (phba)->pport ?				\
-+		(phba)->pport->cfg_log_verbose :			\
-+		(phba)->cfg_log_verbose;				\
-+	if (((mask) & log_verbose) || (level[1] <= '3')) {		\
-+		dev_printk(level, &((phba)->pcidev)->dev, "%d:"		\
-+			fmt, phba->brd_no, ##arg);			\
-+	} else {							\
-+		lpfc_log_ringbuf(&((phba)->pcidev)->dev, "%d:"		\
-+			fmt, phba->brd_no, ##arg);			\
-+	}								\
-+	}								\
- } while (0)
-+
-diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
-index 6ba4a74..d8256e6 100644
---- a/drivers/scsi/lpfc/lpfc_scsi.c
-+++ b/drivers/scsi/lpfc/lpfc_scsi.c
-@@ -37,6 +37,7 @@
- #include <scsi/scsi_tcq.h>
- #include <scsi/scsi_transport_fc.h>
+ 	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(dma_mask)) ||
+-	    dma_set_coherent_mask(&pdev->dev, coherent_mask))
+-		goto try_32bit;
+-
+-	ioc->base_add_sg_single = &_base_add_sg_single_64;
+-	ioc->sge_size = sizeof(Mpi2SGESimple64_t);
+-	ioc->dma_mask = dma_mask;
+-	goto out;
+-
+- try_32bit:
+-	if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)))
++	    dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32)))
+ 		return -ENODEV;
  
+-	ioc->base_add_sg_single = &_base_add_sg_single_32;
+-	ioc->sge_size = sizeof(Mpi2SGESimple32_t);
+-	ioc->dma_mask = 32;
+- out:
++	if (dma_mask > 32) {
++		ioc->base_add_sg_single = &_base_add_sg_single_64;
++		ioc->sge_size = sizeof(Mpi2SGESimple64_t);
++	} else {
++		ioc->base_add_sg_single = &_base_add_sg_single_32;
++		ioc->sge_size = sizeof(Mpi2SGESimple32_t);
++	}
 +
- #include "lpfc_version.h"
- #include "lpfc_hw4.h"
- #include "lpfc_hw.h"
-@@ -52,6 +53,8 @@
+ 	si_meminfo(&s);
+ 	ioc_info(ioc, "%d BIT PCI BUS DMA ADDRESSING SUPPORTED, total mem (%ld kB)\n",
+-		 ioc->dma_mask, convert_to_kb(s.totalram));
++		 dma_mask, convert_to_kb(s.totalram));
  
- #define LPFC_RESET_WAIT  2
- #define LPFC_ABORT_WAIT  2
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/lpfc.h>
+ 	return 0;
+ }
  
- int _dump_buf_done = 1;
+-static int
+-_base_change_consistent_dma_mask(struct MPT3SAS_ADAPTER *ioc,
+-				      struct pci_dev *pdev)
+-{
+-	if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(ioc->dma_mask))) {
+-		if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(32)))
+-			return -ENODEV;
+-	}
+-	return 0;
+-}
+-
+ /**
+  * _base_check_enable_msix - checks MSIX capabable.
+  * @ioc: per adapter object
+@@ -5030,14 +5010,6 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 		total_sz += sz;
+ 	} while (ioc->rdpq_array_enable && (++i < ioc->reply_queue_count));
  
-@@ -5927,3 +5930,20 @@ struct scsi_host_template lpfc_vport_template = {
- 	.change_queue_depth	= scsi_change_queue_depth,
- 	.track_queue_depth	= 1,
- };
-+
-+
-+/*
-+ * Helper function declaration.
-+ */
-+void lpfc_log_ringbuf(struct device *dev, const char *fmt, ...)
-+{
-+	struct va_format vaf;
-+	va_list args;
-+
-+	va_start(args, fmt);
-+	vaf.fmt = fmt;
-+	vaf.va = &args;
-+
-+	trace_lpfc_dbg_log(dev, &vaf);
-+	va_end(args);
-+}
-diff --git a/include/trace/events/lpfc.h b/include/trace/events/lpfc.h
-new file mode 100644
-index 00000000..4cba505
---- /dev/null
-+++ b/include/trace/events/lpfc.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM lpfc
-+
-+#if !defined(_TRACE_LPFC_H_) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_LPFC_H_
-+
-+#include <linux/tracepoint.h>
-+
-+/* Max debug message length */
-+#define LPFC_MSG_MAX 256
-+
-+DECLARE_EVENT_CLASS(lpfc_log_event,
-+	TP_PROTO(struct device *dev, struct va_format *vaf),
-+
-+	TP_ARGS(dev, vaf),
-+
-+	TP_STRUCT__entry(
-+		__string(dname, dev_name(dev))
-+		__dynamic_array(char, msg, LPFC_MSG_MAX)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(dname, dev_name(dev));
-+		vsnprintf(__get_str(msg), LPFC_MSG_MAX,
-+			vaf->fmt, *vaf->va);
-+	),
-+
-+	TP_printk("%s: %s", __get_str(dname), __get_str(msg))
-+);
-+
-+DEFINE_EVENT(lpfc_log_event, lpfc_dbg_log,
-+	TP_PROTO(struct device *dev, struct va_format *vaf),
-+	TP_ARGS(dev, vaf)
-+);
-+
-+#endif /* _TRACE_LPFC_H */
-+
-+#define TRACE_INCLUDE_FILE lpfc
-+
-+#include <trace/define_trace.h>
+-	if (ioc->dma_mask > 32) {
+-		if (_base_change_consistent_dma_mask(ioc, ioc->pdev) != 0) {
+-			ioc_warn(ioc, "no suitable consistent DMA mask for %s\n",
+-				 pci_name(ioc->pdev));
+-			goto out;
+-		}
+-	}
+-
+ 	ioc->scsiio_depth = ioc->hba_queue_depth -
+ 	    ioc->hi_priority_depth - ioc->internal_depth;
+ 
+@@ -6965,7 +6937,6 @@ mpt3sas_base_attach(struct MPT3SAS_ADAPTER *ioc)
+ 	ioc->smp_affinity_enable = smp_affinity_enable;
+ 
+ 	ioc->rdpq_array_enable_assigned = 0;
+-	ioc->dma_mask = 0;
+ 	if (ioc->is_aero_ioc)
+ 		ioc->base_readl = &_base_readl_aero;
+ 	else
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index faca0a5e71f8..e57cade1155c 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -1011,7 +1011,6 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct MPT3SAS_ADAPTER *ioc);
+  * @ir_firmware: IR firmware present
+  * @bars: bitmask of BAR's that must be configured
+  * @mask_interrupts: ignore interrupt
+- * @dma_mask: used to set the consistent dma mask
+  * @pci_access_mutex: Mutex to synchronize ioctl, sysfs show path and
+  *			pci resource handling
+  * @fault_reset_work_q_name: fw fault work queue
+@@ -1185,7 +1184,6 @@ struct MPT3SAS_ADAPTER {
+ 	u8		ir_firmware;
+ 	int		bars;
+ 	u8		mask_interrupts;
+-	int		dma_mask;
+ 
+ 	/* fw fault handler */
+ 	char		fault_reset_work_q_name[20];
 -- 
-1.8.3.1
+2.24.1
 
