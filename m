@@ -2,37 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 962AE13EA7C
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 715DD13EBBA
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405902AbgAPRof (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 12:44:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35584 "EHLO mail.kernel.org"
+        id S2406206AbgAPRwQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 12:52:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37110 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405823AbgAPRoe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:44:34 -0500
+        id S2406188AbgAPRpZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:45:25 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 91D572474D;
-        Thu, 16 Jan 2020 17:44:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7E0D52477A;
+        Thu, 16 Jan 2020 17:45:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196673;
-        bh=c3ZG/5qWqwG2BVgKAWARfygrxw58Z6v2wDO+fEzRY00=;
+        s=default; t=1579196725;
+        bh=wCWvTwy7+lNxDWwzm1AyIA6v/IHLDstadwUxirEZ5fc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fxjelLjRMTYRZ2Pze3QZYTG/EuvOxqufQzffD85IYPwSWy8j52HIt2tR8ponuSvMG
-         e5OQd1QxtJjcKjAjBANOz7J3a9QlEWrMfKm5KqebCPXU5i8UK7Jbn1qlo2aa8zST+p
-         Jd3VfwWiqZ8ZLvTOoJZp5AE2HNpubtEShs1w9hgc=
+        b=o/GkB627mg3mQCVZdGKdVykEToC+L/1bVuYfGwkd+YaonmtauH0SnbfZNeNWw5Fwb
+         +bKcwrrKEGHxmYN3cs/G7UQExjml+f3puRTb/sfhEsDcKk/mmi5N6Lz2fjytgZL3or
+         SotGM6KDvPJtzr1L1rsXIAbPdTrJ0lJgAZJ6zryA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        Giridhar Malavali <giridhar.malavali@qlogic.com>,
+Cc:     Colin Ian King <colin.king@canonical.com>,
+        Hannes Reinecke <hare@suse.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 073/174] scsi: qla2xxx: Unregister chrdev if module initialization fails
-Date:   Thu, 16 Jan 2020 12:41:10 -0500
-Message-Id: <20200116174251.24326-73-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 110/174] scsi: libfc: fix null pointer dereference on a null lport
+Date:   Thu, 16 Jan 2020 12:41:47 -0500
+Message-Id: <20200116174251.24326-110-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
 References: <20200116174251.24326-1-sashal@kernel.org>
@@ -45,98 +44,37 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+From: Colin Ian King <colin.king@canonical.com>
 
-[ Upstream commit c794d24ec9eb6658909955772e70f34bef5b5b91 ]
+[ Upstream commit 41a6bf6529edd10a6def42e3b2c34a7474bcc2f5 ]
 
-If module initialization fails after the character device has been
-registered, unregister the character device. Additionally, avoid
-duplicating error path code.
+Currently if lport is null then the null lport pointer is dereference when
+printing out debug via the FC_LPORT_DB macro. Fix this by using the more
+generic FC_LIBFC_DBG debug macro instead that does not use lport.
 
-Cc: Himanshu Madhani <hmadhani@marvell.com>
-Cc: Giridhar Malavali <giridhar.malavali@qlogic.com>
-Fixes: 6a03b4cd78f3 ("[SCSI] qla2xxx: Add char device to increase driver use count") # v2.6.35.
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+Addresses-Coverity: ("Dereference after null check")
+Fixes: 7414705ea4ae ("libfc: Add runtime debugging with debug_logging module parameter")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Reviewed-by: Hannes Reinecke <hare@suse.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 34 +++++++++++++++++++++-------------
- 1 file changed, 21 insertions(+), 13 deletions(-)
+ drivers/scsi/libfc/fc_exch.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 611a127f08d8..8975baab73e5 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -5780,8 +5780,7 @@ qla2x00_module_init(void)
- 	/* Initialize target kmem_cache and mem_pools */
- 	ret = qlt_init();
- 	if (ret < 0) {
--		kmem_cache_destroy(srb_cachep);
--		return ret;
-+		goto destroy_cache;
- 	} else if (ret > 0) {
- 		/*
- 		 * If initiator mode is explictly disabled by qlt_init(),
-@@ -5800,11 +5799,10 @@ qla2x00_module_init(void)
- 	qla2xxx_transport_template =
- 	    fc_attach_transport(&qla2xxx_transport_functions);
- 	if (!qla2xxx_transport_template) {
--		kmem_cache_destroy(srb_cachep);
- 		ql_log(ql_log_fatal, NULL, 0x0002,
- 		    "fc_attach_transport failed...Failing load!.\n");
--		qlt_exit();
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto qlt_exit;
- 	}
+diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
+index 30f9ef0c0d4f..b20c575564e4 100644
+--- a/drivers/scsi/libfc/fc_exch.c
++++ b/drivers/scsi/libfc/fc_exch.c
+@@ -2499,7 +2499,7 @@ void fc_exch_recv(struct fc_lport *lport, struct fc_frame *fp)
  
- 	apidev_major = register_chrdev(0, QLA2XXX_APIDEV, &apidev_fops);
-@@ -5816,27 +5814,37 @@ qla2x00_module_init(void)
- 	qla2xxx_transport_vport_template =
- 	    fc_attach_transport(&qla2xxx_transport_vport_functions);
- 	if (!qla2xxx_transport_vport_template) {
--		kmem_cache_destroy(srb_cachep);
--		qlt_exit();
--		fc_release_transport(qla2xxx_transport_template);
- 		ql_log(ql_log_fatal, NULL, 0x0004,
- 		    "fc_attach_transport vport failed...Failing load!.\n");
--		return -ENODEV;
-+		ret = -ENODEV;
-+		goto unreg_chrdev;
- 	}
- 	ql_log(ql_log_info, NULL, 0x0005,
- 	    "QLogic Fibre Channel HBA Driver: %s.\n",
- 	    qla2x00_version_str);
- 	ret = pci_register_driver(&qla2xxx_pci_driver);
- 	if (ret) {
--		kmem_cache_destroy(srb_cachep);
--		qlt_exit();
--		fc_release_transport(qla2xxx_transport_template);
--		fc_release_transport(qla2xxx_transport_vport_template);
- 		ql_log(ql_log_fatal, NULL, 0x0006,
- 		    "pci_register_driver failed...ret=%d Failing load!.\n",
- 		    ret);
-+		goto release_vport_transport;
- 	}
- 	return ret;
-+
-+release_vport_transport:
-+	fc_release_transport(qla2xxx_transport_vport_template);
-+
-+unreg_chrdev:
-+	if (apidev_major >= 0)
-+		unregister_chrdev(apidev_major, QLA2XXX_APIDEV);
-+	fc_release_transport(qla2xxx_transport_template);
-+
-+qlt_exit:
-+	qlt_exit();
-+
-+destroy_cache:
-+	kmem_cache_destroy(srb_cachep);
-+	return ret;
- }
- 
- /**
+ 	/* lport lock ? */
+ 	if (!lport || lport->state == LPORT_ST_DISABLED) {
+-		FC_LPORT_DBG(lport, "Receiving frames for an lport that "
++		FC_LIBFC_DBG("Receiving frames for an lport that "
+ 			     "has not been initialized correctly\n");
+ 		fc_frame_free(fp);
+ 		return;
 -- 
 2.20.1
 
