@@ -2,213 +2,190 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8733513EC0B
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178EE13EAAC
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405975AbgAPRyc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 12:54:32 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:55714 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405940AbgAPRoo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jan 2020 12:44:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=P0ujeKY7h/62OJnX1PYjinltna+YaYSFTchSZ0TA9WA=; b=RD6amf3ZQL/0bf9oJtita8Ly6
-        TRFI18VJHo5iLj3eHVWnW3bzCtvUy3ZaMrBgZqe4HHNjdbOQho2cOpOEhA/J08NuQTm0cDZGNJM3Z
-        tqG6d7ehcMYo5AK62JDM/ckapAVXsaBKVOXCM597TByf7ftJnrJpni3irARG6fW6GuHErCp5FZljt
-        c7hJO95yMx8vpb4Sz9d86xkoGDrUFRtxvNXm71sajTsOQEVuHNfABj161iMm5cxLNLZNmeJi2bR4S
-        ZdQ6QqcSDkNrRrNvu689AwFl6X4ZZt7Hm1spbvrgBEsnNXP9Dp92VmvrmdSmnCIj/To+U6OxZxv2r
-        lYIZYOsDw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1is9CF-0004c6-7v; Thu, 16 Jan 2020 17:44:43 +0000
-Date:   Thu, 16 Jan 2020 09:44:43 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sachinp <sachinp@linux.vnet.ibm.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>, jcmvbkbc@gmail.com,
-        linux-next <linux-next@vger.kernel.org>,
-        Oliver <oohall@gmail.com>,
-        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>,
-        Brian King <brking@linux.vnet.ibm.com>,
-        manvanth <manvanth@linux.vnet.ibm.com>,
-        iommu@lists.linux-foundation.org,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Chaitra P B <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com
-Subject: Re: [linux-next/mainline][bisected 3acac06][ppc] Oops when unloading
- mpt3sas driver
-Message-ID: <20200116174443.GA30158@infradead.org>
-References: <1578489498.29952.11.camel@abdul>
- <1578560245.30409.0.camel@abdul.in.ibm.com>
- <20200109142218.GA16477@infradead.org>
- <1578980874.11996.3.camel@abdul.in.ibm.com>
+        id S2406190AbgAPRpZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 12:45:25 -0500
+Received: from mx2.suse.de ([195.135.220.15]:40788 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729991AbgAPRpZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:45:25 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id CBBC9AF2C;
+        Thu, 16 Jan 2020 17:45:21 +0000 (UTC)
+Subject: Re: [PATCH 09/11] megaraid_sas: switch fusion adapters to MQ
+To:     John Garry <john.garry@huawei.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        linux-block@vger.kernel.org, Hannes Reinecke <hare@suse.com>
+References: <20191202153914.84722-1-hare@suse.de>
+ <20191202153914.84722-10-hare@suse.de>
+ <CAL2rwxqjiRTuZ0ntfaHHzG7z-VmxRQCXYyxZeX9eDMrmX+dbGg@mail.gmail.com>
+ <efe9c1e7-fa10-3bae-eacd-58d43295d6da@suse.de>
+ <CAL2rwxotoWakFS4DPe85hZ4VAgd_zw8pL+B5ckHR9NwEf+-L=g@mail.gmail.com>
+ <11034edd-732a-3dd5-0bdc-891b9de05e56@huawei.com>
+ <661fd3db-0254-c209-8fb3-f3aa35bac431@suse.de>
+ <f3102e65-4201-bf4f-7127-a1e85b18ab59@huawei.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <6684b87d-a8e0-3524-b381-6bc26b5456f8@suse.de>
+Date:   Thu, 16 Jan 2020 18:45:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1578980874.11996.3.camel@abdul.in.ibm.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <f3102e65-4201-bf4f-7127-a1e85b18ab59@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Abdul,
+On 1/16/20 4:47 PM, John Garry wrote:
+> 
+>>>>
+>>>> Hi Hannes,
+>>>>
+>>>> Sorry for the delay in replying, I observed a few issues with this
+>>>> patchset:
+>>>>
+>>>> 1. "blk_mq_unique_tag_to_hwq(tag)" does not return MSI-x vector to
+>>>> which IO submitter CPU is affined with. Due to this IO submission and
+>>>> completion CPUs are different which causes performance drop for low
+>>>> latency workloads.
+>>>
+>>> Hi Sumit,
+>>>
+>>> So the new code has:
+>>>
+>>> megasas_build_ldio_fusion()
+>>> {
+>>>
+>>> cmd->request_desc->SCSIIO.MSIxIndex =
+>>> blk_mq_unique_tag_to_hwq(tag);
+>>>
+>>> }
+>>>
+>>> So the value here is hw queue index from blk-mq point of view, and not
+>>> megaraid_sas msix index, as you alluded to.
+>>>
+>>> So we get 80 msix, 8 are reserved for low_latency_index_start (that's
+>>> how it seems to me), and we report other 72 as #hw queues = 72 to SCSI
+>>> midlayer.
+>>>
+>>> So I think that this should be:
+>>>
+>>> cmd->request_desc->SCSIIO.MSIxIndex =
+>>> blk_mq_unique_tag_to_hwq(tag) + low_latency_index_start;
+>>>
+>>>
+>> Indeed, that sounds reasonable.
+>> (The whole queue mapping stuff isn't exactly well documented :-( )
+>>
+> 
+> Yeah, there's certainly lots of knobs and levers in this driver.
+> 
+>> I'll be updating the patch.
+> 
+> About this one:
+> 
+>  > 2. Seeing below stack traces/messages in dmesg during driver unload –
+>  >
+>  > [2565601.054366] Call Trace:
+>  > [2565601.054368]  blk_mq_free_map_and_requests+0x28/0x50
+>  > [2565601.054369]  blk_mq_free_tag_set+0x1d/0x90
+>  > [2565601.054370]  scsi_host_dev_release+0x8a/0xf0
+>  > [2565601.054370]  device_release+0x27/0x80
+>  > [2565601.054371]  kobject_cleanup+0x61/0x190
+>  > [2565601.054373]  megasas_detach_one+0x4c1/0x650 [megaraid_sas]
+>  > [2565601.054374]  pci_device_remove+0x3b/0xc0
+>  > [2565601.054375]  device_release_driver_internal+0xec/0x1b0
+>  > [2565601.054376]  driver_detach+0x46/0x90
+>  > [2565601.054377]  bus_remove_driver+0x58/0xd0
+>  > [2565601.054378]  pci_unregister_driver+0x26/0xa0
+>  > [2565601.054379]  megasas_exit+0x91/0x882 [megaraid_sas]
+>  > [2565601.054381]  __x64_sys_delete_module+0x16c/0x250
+>  > [2565601.054382]  do_syscall_64+0x5b/0x1b0
+>  > [2565601.054383]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+>  > [2565601.054383] RIP: 0033:0x7f7212a82837
+>  > [2565601.054384] RSP: 002b:00007ffdfa2dcea8 EFLAGS: 00000202 ORIG_RAX:
+>  > 00000000000000b0
+>  > [2565601.054385] RAX: ffffffffffffffda RBX: 0000000000b6e2e0 RCX:
+>  > 00007f7212a82837
+>  > [2565601.054385] RDX: 00007f7212af3ac0 RSI: 0000000000000800 RDI:
+>  > 0000000000b6e348
+>  > [2565601.054386] RBP: 0000000000000000 R08: 00007f7212d47060 R09:
+>  > 00007f7212af3ac0
+>  > [2565601.054386] R10: 00007ffdfa2dcbc0 R11: 0000000000000202 R12:
+>  > 00007ffdfa2dd71c
+>  > [2565601.054387] R13: 0000000000000000 R14: 0000000000b6e2e0 R15:
+>  > 0000000000b6e010
+>  > [2565601.054387] ---[ end trace 38899303bd85e838 ]---
+> 
+> 
+> I see it also for hisi_sas_v3_hw.
+> 
+> And so I don't understand the code change here, specifically where the 
+> WARN is generated:
+> 
+> void blk_mq_free_rqs(struct blk_mq_tag_set *set, struct blk_mq_tags *tags,
+>               unsigned int hctx_idx)
+> {
+>      struct page *page;
+>      int i;
+> 
+>      if (tags->rqs) {
+>          for (i = 0; i < tags->nr_tags; i++)
+>              if (WARN_ON(tags->rqs[i]))
+>                  tags->rqs[i] = NULL; <--- here
+>      }
+> 
+> 
+> I thought that tags->rqs[i] was just a holder for a pointer to a static 
+> tag, like assigned here:
+> 
+> static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
+> unsigned int tag, unsigned int op, u64 alloc_time_ns)
+> {
+>      struct blk_mq_tags *tags = blk_mq_tags_from_data(data);
+>      struct request *rq = tags->static_rqs[tag];
+> 
+>      ...
+> 
+>      rq->tag = tag;
+>      rq->internal_tag = -1;
+>      data->hctx->tags->rqs[rq->tag] = rq;
+> 
+>      ...
+> }
+> 
+> So I don't know why we need to WARN if unset, and then also clear it. 
+> The memory is freed pretty soon after this anyway.
+> 
+Indeed, ->rqs is a holder, referencing an entry in ->static_rqs.
+Point here is that ->rqs is set when allocating a request, and should be 
+zeroed when freeing the request.
+And then this above patch would warn us if there's an imbalance, ie an 
+allocated request didn't get freed.
+But apparently the latter part didn't happen, leaving us with stale 
+entries in ->rqs.
+Either we fix that, or we drop the WARN_ON.
+Personally I like clearing of the ->rqs pointer (as then it's easier to 
+track use-after-free issues), but then this might have performance 
+implications, and Jens might have some views about it.
+So I'm fine with dropping it.
 
-I think the problem is that mpt3sas has some convoluted logic to do
-some DMA allocations with a 32-bit coherent mask, and then switches
-to a 63 or 64 bit mask, which is not supported by the DMA API.
+Cheers,
 
-Can you try the patch below?
-
----
-From 0738b1704ed528497b41b0408325f6828a8e51f6 Mon Sep 17 00:00:00 2001
-From: Christoph Hellwig <hch@lst.de>
-Date: Thu, 16 Jan 2020 18:31:38 +0100
-Subject: mpt3sas: don't change the dma coherent mask after allocations
-
-The DMA layer does not allow changing the DMA coherent mask after
-there are outstanding allocations.  Stop doing that and always
-use a 32-bit coherent DMA mask in mpt3sas.
-
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/scsi/mpt3sas/mpt3sas_base.c | 67 ++++++++---------------------
- drivers/scsi/mpt3sas/mpt3sas_base.h |  2 -
- 2 files changed, 19 insertions(+), 50 deletions(-)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index fea3cb6a090b..3b51bed05008 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -2706,58 +2706,38 @@ _base_build_sg_ieee(struct MPT3SAS_ADAPTER *ioc, void *psge,
- static int
- _base_config_dma_addressing(struct MPT3SAS_ADAPTER *ioc, struct pci_dev *pdev)
- {
--	u64 required_mask, coherent_mask;
- 	struct sysinfo s;
--	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
--	int dma_mask = (ioc->hba_mpi_version_belonged > MPI2_VERSION) ? 63 : 64;
--
--	if (ioc->is_mcpu_endpoint)
--		goto try_32bit;
-+	int dma_mask;
- 
--	required_mask = dma_get_required_mask(&pdev->dev);
--	if (sizeof(dma_addr_t) == 4 || required_mask == 32)
--		goto try_32bit;
--
--	if (ioc->dma_mask)
--		coherent_mask = DMA_BIT_MASK(dma_mask);
-+	if (ioc->is_mcpu_endpoint ||
-+	    sizeof(dma_addr_t) == 4 ||
-+	    dma_get_required_mask(&pdev->dev) <= 32)
-+		dma_mask = 32;
-+	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
-+	else if (ioc->hba_mpi_version_belonged > MPI2_VERSION)
-+		dma_mask = 63;
- 	else
--		coherent_mask = DMA_BIT_MASK(32);
-+		dma_mask = 64;
- 
- 	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(dma_mask)) ||
--	    dma_set_coherent_mask(&pdev->dev, coherent_mask))
--		goto try_32bit;
--
--	ioc->base_add_sg_single = &_base_add_sg_single_64;
--	ioc->sge_size = sizeof(Mpi2SGESimple64_t);
--	ioc->dma_mask = dma_mask;
--	goto out;
--
-- try_32bit:
--	if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)))
-+	    dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32)))
- 		return -ENODEV;
- 
--	ioc->base_add_sg_single = &_base_add_sg_single_32;
--	ioc->sge_size = sizeof(Mpi2SGESimple32_t);
--	ioc->dma_mask = 32;
-- out:
-+	if (dma_mask > 32) {
-+		ioc->base_add_sg_single = &_base_add_sg_single_64;
-+		ioc->sge_size = sizeof(Mpi2SGESimple64_t);
-+	} else {
-+		ioc->base_add_sg_single = &_base_add_sg_single_32;
-+		ioc->sge_size = sizeof(Mpi2SGESimple32_t);
-+	}
-+
- 	si_meminfo(&s);
- 	ioc_info(ioc, "%d BIT PCI BUS DMA ADDRESSING SUPPORTED, total mem (%ld kB)\n",
--		 ioc->dma_mask, convert_to_kb(s.totalram));
-+		 dma_mask, convert_to_kb(s.totalram));
- 
- 	return 0;
- }
- 
--static int
--_base_change_consistent_dma_mask(struct MPT3SAS_ADAPTER *ioc,
--				      struct pci_dev *pdev)
--{
--	if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(ioc->dma_mask))) {
--		if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(32)))
--			return -ENODEV;
--	}
--	return 0;
--}
--
- /**
-  * _base_check_enable_msix - checks MSIX capabable.
-  * @ioc: per adapter object
-@@ -5030,14 +5010,6 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
- 		total_sz += sz;
- 	} while (ioc->rdpq_array_enable && (++i < ioc->reply_queue_count));
- 
--	if (ioc->dma_mask > 32) {
--		if (_base_change_consistent_dma_mask(ioc, ioc->pdev) != 0) {
--			ioc_warn(ioc, "no suitable consistent DMA mask for %s\n",
--				 pci_name(ioc->pdev));
--			goto out;
--		}
--	}
--
- 	ioc->scsiio_depth = ioc->hba_queue_depth -
- 	    ioc->hi_priority_depth - ioc->internal_depth;
- 
-@@ -6965,7 +6937,6 @@ mpt3sas_base_attach(struct MPT3SAS_ADAPTER *ioc)
- 	ioc->smp_affinity_enable = smp_affinity_enable;
- 
- 	ioc->rdpq_array_enable_assigned = 0;
--	ioc->dma_mask = 0;
- 	if (ioc->is_aero_ioc)
- 		ioc->base_readl = &_base_readl_aero;
- 	else
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
-index faca0a5e71f8..e57cade1155c 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.h
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
-@@ -1011,7 +1011,6 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct MPT3SAS_ADAPTER *ioc);
-  * @ir_firmware: IR firmware present
-  * @bars: bitmask of BAR's that must be configured
-  * @mask_interrupts: ignore interrupt
-- * @dma_mask: used to set the consistent dma mask
-  * @pci_access_mutex: Mutex to synchronize ioctl, sysfs show path and
-  *			pci resource handling
-  * @fault_reset_work_q_name: fw fault work queue
-@@ -1185,7 +1184,6 @@ struct MPT3SAS_ADAPTER {
- 	u8		ir_firmware;
- 	int		bars;
- 	u8		mask_interrupts;
--	int		dma_mask;
- 
- 	/* fw fault handler */
- 	char		fault_reset_work_q_name[20];
+Hannes
 -- 
-2.24.1
-
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                               +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
