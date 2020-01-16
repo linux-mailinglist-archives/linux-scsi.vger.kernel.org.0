@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3927613FECF
-	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jan 2020 00:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85ABE13FE6B
+	for <lists+linux-scsi@lfdr.de>; Fri, 17 Jan 2020 00:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391259AbgAPX3W (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 18:29:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34862 "EHLO mail.kernel.org"
+        id S2403814AbgAPXcd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 18:32:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41988 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391256AbgAPX3U (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 18:29:20 -0500
+        id S2391571AbgAPXcb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 18:32:31 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EB96620684;
-        Thu, 16 Jan 2020 23:29:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9036D20684;
+        Thu, 16 Jan 2020 23:32:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579217359;
-        bh=zHD7mt4VoObRY4neNvHEq27BL84g2X3hkWMwzQYHW34=;
+        s=default; t=1579217551;
+        bh=ZtOLED+HzresPEo2yXdyGD4jaScfbyJgvGIZpJddPBo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=USx5oAauixdOhgXQEGi0JERra6o9Og2LynvDHNr2Rj2QPy1JiYvbxEnD4PNwur66P
-         kYUA21UHXwT4TH/UpxAsaMxGXboV8jf/o6L7yoc3cJ65r9VVxmf919kkOXSJsI74XF
-         0RyMjJyw4LMI+wXYbXD8VKlyRcAc582/IpzxrtGY=
+        b=EPLgUOrwaYmKSaLJPylJg8j09lO9oYdg/Cqt7j9sONZxtHvBjSv6Cxv3iX3Hc2Dd7
+         NQgfe9Z0pQizHE0Hjp11JNyJNP3wfmbBHLFeD6KflRDtgrfJIewO+IgFb5bG5VAfX3
+         AsbRFAcpx0pFZax7SBbWSiww7mhHzrbSsZtL3nEU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 4.19 50/84] scsi: sd: enable compat ioctls for sed-opal
-Date:   Fri, 17 Jan 2020 00:18:24 +0100
-Message-Id: <20200116231719.690181556@linuxfoundation.org>
+Subject: [PATCH 4.14 44/71] scsi: sd: enable compat ioctls for sed-opal
+Date:   Fri, 17 Jan 2020 00:18:42 +0100
+Message-Id: <20200116231715.862762618@linuxfoundation.org>
 X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200116231713.087649517@linuxfoundation.org>
-References: <20200116231713.087649517@linuxfoundation.org>
+In-Reply-To: <20200116231709.377772748@linuxfoundation.org>
+References: <20200116231709.377772748@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -68,7 +68,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/scsi/sd.c
 +++ b/drivers/scsi/sd.c
-@@ -1685,20 +1685,30 @@ static void sd_rescan(struct device *dev
+@@ -1697,20 +1697,30 @@ static void sd_rescan(struct device *dev
  static int sd_compat_ioctl(struct block_device *bdev, fmode_t mode,
  			   unsigned int cmd, unsigned long arg)
  {
