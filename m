@@ -2,190 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 178EE13EAAC
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:45:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E1813EAF1
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406190AbgAPRpZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 12:45:25 -0500
-Received: from mx2.suse.de ([195.135.220.15]:40788 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729991AbgAPRpZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:45:25 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id CBBC9AF2C;
-        Thu, 16 Jan 2020 17:45:21 +0000 (UTC)
-Subject: Re: [PATCH 09/11] megaraid_sas: switch fusion adapters to MQ
-To:     John Garry <john.garry@huawei.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        linux-block@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-References: <20191202153914.84722-1-hare@suse.de>
- <20191202153914.84722-10-hare@suse.de>
- <CAL2rwxqjiRTuZ0ntfaHHzG7z-VmxRQCXYyxZeX9eDMrmX+dbGg@mail.gmail.com>
- <efe9c1e7-fa10-3bae-eacd-58d43295d6da@suse.de>
- <CAL2rwxotoWakFS4DPe85hZ4VAgd_zw8pL+B5ckHR9NwEf+-L=g@mail.gmail.com>
- <11034edd-732a-3dd5-0bdc-891b9de05e56@huawei.com>
- <661fd3db-0254-c209-8fb3-f3aa35bac431@suse.de>
- <f3102e65-4201-bf4f-7127-a1e85b18ab59@huawei.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <6684b87d-a8e0-3524-b381-6bc26b5456f8@suse.de>
-Date:   Thu, 16 Jan 2020 18:45:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S2406349AbgAPRrG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 12:47:06 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:34466 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393883AbgAPRrG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jan 2020 12:47:06 -0500
+Received: by mail-pl1-f195.google.com with SMTP id c9so3339538plo.1;
+        Thu, 16 Jan 2020 09:47:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xUvWD2Y2DQW8StOa7xN9BwMTpDofp4EnC5k0h+mCkts=;
+        b=egYriVhI2i26MRTmQsTVLvXzjcVpGy85W2S65p23KZFcaaLwjlDRvq7SkwPmSuey3p
+         WtRlydA7HaBl+3JPPVcNt6LPXniz3kw88Of7Y4SrtpvNfizwCKk7cMwDJJcBXONARMpv
+         0LWWQpug0h6qM6bwWjcrTeAfp+sJD5YW2smNLJvVvwwgcQFtkzB241nyGUEyX597qhp6
+         t4Zb6hJzyYSMDbNtGlFPIJnhA+cYcYmy84hvWFob6lG0r9IhLDex9lLabVL5k9mQkpO/
+         rMAOYo5NuIRVTtvxU6sATFcYgp+l1DmV+sxqC3D0gpYKDHUS94NloFaRZ2v4kLFwT4dW
+         p5Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xUvWD2Y2DQW8StOa7xN9BwMTpDofp4EnC5k0h+mCkts=;
+        b=aAmLurokl9XIP0lPmpy8NlTu+KQ/nW7o8Tp54yQA0VwMVC3iydG7hzUytiVX58rHLg
+         Go6iG8dcVsMGD+eeg2UJnCH2JYJQYysh9jwadkyN1gnCVhhY+3sWyU1D6evy3kjptyGo
+         zQ3M+HXWh6xw7RwERtQvS2wk4HRwAMeNtlg22aLujcq5oFHcXj6KH/mEnixLZrx8CX+2
+         CCnmsqvbEcTwzLEf6vctcZCuCTBxpL5rKR9vKz2VZ2vkxeimDyLUwIcv/6Hen4HoUG0V
+         dUdNxGrdFGVRTFwrzXhhPGeQ/s/78pdquWZBSUjDBlbB8tuQ20/vSb1uq7izAYUxj41F
+         FMIA==
+X-Gm-Message-State: APjAAAXJnSaIFV4zOK9Ee6TBnHupN4bq75zSlJyYz0MMErghTJ8XsWGo
+        MgWjq2G6/GjQL3dW0SZzBSA=
+X-Google-Smtp-Source: APXvYqzTZocSoLTAjLkcHDaAQa2HCpnjxr8eJMORO7tRY3XWsND94JU6MUEHDbALJMqPpPFeATo9Vw==
+X-Received: by 2002:a17:90a:a596:: with SMTP id b22mr342176pjq.28.1579196825226;
+        Thu, 16 Jan 2020 09:47:05 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u26sm25167784pfn.46.2020.01.16.09.47.03
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 16 Jan 2020 09:47:04 -0800 (PST)
+Date:   Thu, 16 Jan 2020 09:47:03 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-hwmon@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
+        Chris Healy <cphealy@gmail.com>
+Subject: Re: [PATCH v2] hwmon: Driver for temperature sensors on SATA drives
+Message-ID: <20200116174703.GA7850@roeck-us.net>
+References: <20191215174509.1847-1-linux@roeck-us.net>
+ <20191215174509.1847-2-linux@roeck-us.net>
+ <yq1r211dvck.fsf@oracle.com>
+ <b22a519c-8f26-e731-345f-9deca1b2150e@roeck-us.net>
+ <yq1sgkq21ll.fsf@oracle.com>
+ <20200108153341.GB28530@roeck-us.net>
+ <38af9fda-9edf-1b54-bd8d-92f712ae4cda@roeck-us.net>
+ <yq1r202spr9.fsf@oracle.com>
+ <403cfbf8-79da-94f1-509f-e90d1a165722@roeck-us.net>
+ <yq14kwwnioo.fsf@oracle.com>
 MIME-Version: 1.0
-In-Reply-To: <f3102e65-4201-bf4f-7127-a1e85b18ab59@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yq14kwwnioo.fsf@oracle.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 1/16/20 4:47 PM, John Garry wrote:
+On Wed, Jan 15, 2020 at 11:12:23PM -0500, Martin K. Petersen wrote:
 > 
->>>>
->>>> Hi Hannes,
->>>>
->>>> Sorry for the delay in replying, I observed a few issues with this
->>>> patchset:
->>>>
->>>> 1. "blk_mq_unique_tag_to_hwq(tag)" does not return MSI-x vector to
->>>> which IO submitter CPU is affined with. Due to this IO submission and
->>>> completion CPUs are different which causes performance drop for low
->>>> latency workloads.
->>>
->>> Hi Sumit,
->>>
->>> So the new code has:
->>>
->>> megasas_build_ldio_fusion()
->>> {
->>>
->>> cmd->request_desc->SCSIIO.MSIxIndex =
->>> blk_mq_unique_tag_to_hwq(tag);
->>>
->>> }
->>>
->>> So the value here is hw queue index from blk-mq point of view, and not
->>> megaraid_sas msix index, as you alluded to.
->>>
->>> So we get 80 msix, 8 are reserved for low_latency_index_start (that's
->>> how it seems to me), and we report other 72 as #hw queues = 72 to SCSI
->>> midlayer.
->>>
->>> So I think that this should be:
->>>
->>> cmd->request_desc->SCSIIO.MSIxIndex =
->>> blk_mq_unique_tag_to_hwq(tag) + low_latency_index_start;
->>>
->>>
->> Indeed, that sounds reasonable.
->> (The whole queue mapping stuff isn't exactly well documented :-( )
->>
+> Guenter,
 > 
-> Yeah, there's certainly lots of knobs and levers in this driver.
+> > The hwmon-next branch is based on v5.5-rc1. It might be better to
+> > either merge hwmon-next into mainline, or to apply the drivetemp patch
+> > to mainline, and test the result. I have seen some (unrelated) weird
+> > tracebacks in the driver core with v5.5-rc1, so that may not be the
+> > best baseline for a test.
 > 
->> I'll be updating the patch.
+> I'm afraid the warnings still happen with hwmon-next on top of
+> linus/master.
 > 
-> About this one:
-> 
->  > 2. Seeing below stack traces/messages in dmesg during driver unload –
->  >
->  > [2565601.054366] Call Trace:
->  > [2565601.054368]  blk_mq_free_map_and_requests+0x28/0x50
->  > [2565601.054369]  blk_mq_free_tag_set+0x1d/0x90
->  > [2565601.054370]  scsi_host_dev_release+0x8a/0xf0
->  > [2565601.054370]  device_release+0x27/0x80
->  > [2565601.054371]  kobject_cleanup+0x61/0x190
->  > [2565601.054373]  megasas_detach_one+0x4c1/0x650 [megaraid_sas]
->  > [2565601.054374]  pci_device_remove+0x3b/0xc0
->  > [2565601.054375]  device_release_driver_internal+0xec/0x1b0
->  > [2565601.054376]  driver_detach+0x46/0x90
->  > [2565601.054377]  bus_remove_driver+0x58/0xd0
->  > [2565601.054378]  pci_unregister_driver+0x26/0xa0
->  > [2565601.054379]  megasas_exit+0x91/0x882 [megaraid_sas]
->  > [2565601.054381]  __x64_sys_delete_module+0x16c/0x250
->  > [2565601.054382]  do_syscall_64+0x5b/0x1b0
->  > [2565601.054383]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
->  > [2565601.054383] RIP: 0033:0x7f7212a82837
->  > [2565601.054384] RSP: 002b:00007ffdfa2dcea8 EFLAGS: 00000202 ORIG_RAX:
->  > 00000000000000b0
->  > [2565601.054385] RAX: ffffffffffffffda RBX: 0000000000b6e2e0 RCX:
->  > 00007f7212a82837
->  > [2565601.054385] RDX: 00007f7212af3ac0 RSI: 0000000000000800 RDI:
->  > 0000000000b6e348
->  > [2565601.054386] RBP: 0000000000000000 R08: 00007f7212d47060 R09:
->  > 00007f7212af3ac0
->  > [2565601.054386] R10: 00007ffdfa2dcbc0 R11: 0000000000000202 R12:
->  > 00007ffdfa2dd71c
->  > [2565601.054387] R13: 0000000000000000 R14: 0000000000b6e2e0 R15:
->  > 0000000000b6e010
->  > [2565601.054387] ---[ end trace 38899303bd85e838 ]---
-> 
-> 
-> I see it also for hisi_sas_v3_hw.
-> 
-> And so I don't understand the code change here, specifically where the 
-> WARN is generated:
-> 
-> void blk_mq_free_rqs(struct blk_mq_tag_set *set, struct blk_mq_tags *tags,
->               unsigned int hctx_idx)
-> {
->      struct page *page;
->      int i;
-> 
->      if (tags->rqs) {
->          for (i = 0; i < tags->nr_tags; i++)
->              if (WARN_ON(tags->rqs[i]))
->                  tags->rqs[i] = NULL; <--- here
->      }
-> 
-> 
-> I thought that tags->rqs[i] was just a holder for a pointer to a static 
-> tag, like assigned here:
-> 
-> static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
-> unsigned int tag, unsigned int op, u64 alloc_time_ns)
-> {
->      struct blk_mq_tags *tags = blk_mq_tags_from_data(data);
->      struct request *rq = tags->static_rqs[tag];
-> 
->      ...
-> 
->      rq->tag = tag;
->      rq->internal_tag = -1;
->      data->hctx->tags->rqs[rq->tag] = rq;
-> 
->      ...
-> }
-> 
-> So I don't know why we need to WARN if unset, and then also clear it. 
-> The memory is freed pretty soon after this anyway.
-> 
-Indeed, ->rqs is a holder, referencing an entry in ->static_rqs.
-Point here is that ->rqs is set when allocating a request, and should be 
-zeroed when freeing the request.
-And then this above patch would warn us if there's an imbalance, ie an 
-allocated request didn't get freed.
-But apparently the latter part didn't happen, leaving us with stale 
-entries in ->rqs.
-Either we fix that, or we drop the WARN_ON.
-Personally I like clearing of the ->rqs pointer (as then it's easier to 
-track use-after-free issues), but then this might have performance 
-implications, and Jens might have some views about it.
-So I'm fine with dropping it.
+Can you by any chance provide a full traceback ?
 
-Cheers,
+The warning you reported suggests that a devm_ function was called on a
+device pointer prior to a device registration. I don't immediately see
+how that happens. A full traceback might give us an idea.
 
-Hannes
--- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                               +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+I suspect that the underlying problem is in hwmon_device_register_with_info(),
+which uses devm_ functions to allocate memory associated with the device
+pointer passed to it, in this case the SCSI device. This is inherently
+wrong (independent of this driver), since the lifetime of the hardware
+monitoring device does not necessarily match the lifetime of its parent.
+The impact here is that we may get a memory leak under some circumstances.
+I'll have to fix that in the hardware monitoring core.
+
+Either case, I would like to track down how the warning happens, so any
+information you can provide that lets me reproduce the problem would be
+very helpful.
+
+Thanks,
+Guenter
