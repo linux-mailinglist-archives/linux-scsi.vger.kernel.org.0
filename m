@@ -2,62 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF59413D569
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 08:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3025F13D7D0
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 11:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730260AbgAPHyc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 02:54:32 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:39179 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729138AbgAPHyc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jan 2020 02:54:32 -0500
-Received: by mail-qt1-f193.google.com with SMTP id e5so18153197qtm.6
-        for <linux-scsi@vger.kernel.org>; Wed, 15 Jan 2020 23:54:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=aempEEEjQYesosjqji6vEsgtizhKHStva/XUb02NRJ0=;
-        b=ZkyyisgVT9kha3/55BNkPuviRlvNKU4yQufJYg5yAt2UK+mdzkKiyt/o/PeoQFTGWL
-         izjIa8O7qgQ/O45TwVlPCTSCx70vGV0/8XdSAHWVZSBMGrdP/2cEQWq4OXtrphNIk73v
-         CXl/dKZeObqykqoYZK5jSxEVSwBM+lWb/1aah/CjvMlE/uacG7SDgWYmPqLM1vhg60gO
-         sS9dAB2j2Utx7m7PMlnLH4eiZbIYZqA2sTessT899LcqjwfMVTc1GjlMO7Z3grrFtUrc
-         x+XkKSkncwWd5QuS2so7dN8iRRgHxMqbaYifmxW+TBxvcNOlm8rKKghXhRByImZ/dnYU
-         lKbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=aempEEEjQYesosjqji6vEsgtizhKHStva/XUb02NRJ0=;
-        b=YSdty0sBU4fMnRAdHBTiRmCs1orklxr0Vj8w7IW4LyATIbGhlffBs5YPvL4c6Etk6J
-         lSekM/e8xbTRgRltqqzQJpaZEw11BWfI4b7BasSEppiXWsEpazLsztaCiENRUaliL2E3
-         TsNCrtNbj9V6//G1hT1sLh4deq6N1OWGgm3YsY0uhaiNopE32Axygd5kBmRKgAUyYrhq
-         3Tjag7FreoUHleXoJrZA38hpqQJXDk3Zt+PZJYmpUb5BmQg2fNbPRb6nI/ACYaAmHKks
-         DRUuRBPa39LQlCIbjJw9k9Gb3v7E9er6s4B8HJ9Z9xc1QjgaWZ6Wdbdizes+cqE2WOh6
-         oUJg==
-X-Gm-Message-State: APjAAAXPx+fqoPM1pcSOWl228Ka3Y8l2lgKTwmVimftniPsUXqbj4OLV
-        XhAgqCphNwmc6t93LHElmIbhbpfW7GMIOGZVoiM=
-X-Google-Smtp-Source: APXvYqzbffHCrVNuHQnJj1Pi6CNC8hwkUGEaUCac+3kXRNR9ldo2lYMB0aT+oMcSL9GvuHHlC4PWIxv79/8VJImBxX4=
-X-Received: by 2002:aed:2050:: with SMTP id 74mr1169710qta.217.1579161271295;
- Wed, 15 Jan 2020 23:54:31 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a0c:d812:0:0:0:0:0 with HTTP; Wed, 15 Jan 2020 23:54:30
- -0800 (PST)
-Reply-To: offficcemuo@gmail.com
-From:   "Mr. Blake Arnold" <agbolawservcess@gmail.com>
-Date:   Thu, 16 Jan 2020 08:54:30 +0100
-Message-ID: <CAGngUW8SPkCv0n_UFTMjT554GuEmRLpOzW5H1Tsrbc+bgpz=yw@mail.gmail.com>
-Subject: Hello...
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1726527AbgAPKU4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 05:20:56 -0500
+Received: from mx2.suse.de ([195.135.220.15]:33998 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725800AbgAPKU4 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 05:20:56 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 5C4F4AD8E;
+        Thu, 16 Jan 2020 10:20:55 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     Satish Kharat <satishkh@cisco.com>
+Cc:     Sesidhar Baddela <sebaddel@cisco.com>,
+        Karan Tilak Kumar <kartilak@cisco.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH] fnic: do not queue commands during fwreset
+Date:   Thu, 16 Jan 2020 11:20:53 +0100
+Message-Id: <20200116102053.62755-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello
+When a link is going down the driver will be calling fnic_cleanup_io(),
+which will traverse all commands and calling 'done' for each found command.
+While the traversal is handled under the host_lock, calling 'done' happens
+after the host_lock is being dropped.
 
-Can I please talk to you? It's important, If yes please get back to
-me.
+As fnic_queuecommand_lck() is being called with the host_lock held, it might
+well be that it will pick the command being selected for abortion from the
+above routine and enqueue it for sending, but then 'done' is being called
+on that very command from the above routine.
 
-Thank you.
-Mr.Blake Arnold
+Which of course confuses the hell out of the scsi midlayer.
+
+So fix this by not queueing commands when fnic_cleanup_io is active.
+
+Signed-off-by: Hannes Reinecke <hare@suse.de>
+---
+ drivers/scsi/fnic/fnic_scsi.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/scsi/fnic/fnic_scsi.c b/drivers/scsi/fnic/fnic_scsi.c
+index 8ef150dfb6f7..b60795893994 100644
+--- a/drivers/scsi/fnic/fnic_scsi.c
++++ b/drivers/scsi/fnic/fnic_scsi.c
+@@ -439,6 +439,9 @@ static int fnic_queuecommand_lck(struct scsi_cmnd *sc, void (*done)(struct scsi_
+ 	if (unlikely(fnic_chk_state_flags_locked(fnic, FNIC_FLAGS_IO_BLOCKED)))
+ 		return SCSI_MLQUEUE_HOST_BUSY;
+ 
++	if (unlikely(fnic_chk_state_flags_locked(fnic, FNIC_FLAGS_FWRESET)))
++		return SCSI_MLQUEUE_HOST_BUSY;
++
+ 	rport = starget_to_rport(scsi_target(sc->device));
+ 	if (!rport) {
+ 		FNIC_SCSI_DBG(KERN_DEBUG, fnic->lport->host,
+-- 
+2.16.4
+
