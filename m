@@ -2,36 +2,35 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4783C13EDF0
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 19:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116ED13ED41
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 19:01:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394891AbgAPSGK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 13:06:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56382 "EHLO mail.kernel.org"
+        id S2394951AbgAPSBh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 13:01:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59062 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393529AbgAPRjr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:39:47 -0500
+        id S2405653AbgAPRl0 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:41:26 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F0961246EF;
-        Thu, 16 Jan 2020 17:39:45 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AFA3B246CF;
+        Thu, 16 Jan 2020 17:41:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196387;
-        bh=PXQFvQNyrDPH2CKZiiPjTiE2R+ts7o1QbdbLstCsITE=;
+        s=default; t=1579196485;
+        bh=W5GsXPgetj+H1lgqnH7m0kOe+yhVb2jMSSzjWLFHHfI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BI7ciwC2fMLYojhPNFWKpsK65m9uk1v0LCbv/MHiiTJIRZoobOVcskVe3/I1V4Lmh
-         oMXGMCCZeAW7KqrTeFav7qaj5w6wxzUo8IKLEJvYDxunwKz7cPfz72tqDjuNRuqfom
-         0xYopUWiGEkJFIurCGVasayCLYEUu02RGH4K462k=
+        b=FFmsvvnwHOJMuhJrQqYLWXtz1ymLaZx4NSNChg39DiL7WFTGR/Rde7SoKAQ7MKPsH
+         ndRt2nbFV5x+nHohP9toVvLgDgbc7PGyJnEOUS4YNpLY/bpmKS1myx1iO49sMW19Jc
+         6Gku5LWdVgSZzZvfro82X+0gXX63ebTR9nxKjC4U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Colin Ian King <colin.king@canonical.com>,
-        Hannes Reinecke <hare@suse.com>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 168/251] scsi: libfc: fix null pointer dereference on a null lport
-Date:   Thu, 16 Jan 2020 12:35:17 -0500
-Message-Id: <20200116173641.22137-128-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 231/251] scsi: esas2r: unlock on error in esas2r_nvram_read_direct()
+Date:   Thu, 16 Jan 2020 12:36:20 -0500
+Message-Id: <20200116173641.22137-191-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
 References: <20200116173641.22137-1-sashal@kernel.org>
@@ -44,37 +43,33 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 41a6bf6529edd10a6def42e3b2c34a7474bcc2f5 ]
+[ Upstream commit 906ca6353ac09696c1bf0892513c8edffff5e0a6 ]
 
-Currently if lport is null then the null lport pointer is dereference when
-printing out debug via the FC_LPORT_DB macro. Fix this by using the more
-generic FC_LIBFC_DBG debug macro instead that does not use lport.
+This error path is missing an unlock.
 
-Addresses-Coverity: ("Dereference after null check")
-Fixes: 7414705ea4ae ("libfc: Add runtime debugging with debug_logging module parameter")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
-Reviewed-by: Hannes Reinecke <hare@suse.com>
+Fixes: 26780d9e12ed ("[SCSI] esas2r: ATTO Technology ExpressSAS 6G SAS/SATA RAID Adapter Driver")
+Link: https://lore.kernel.org/r/20191022102324.GA27540@mwanda
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/libfc/fc_exch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/esas2r/esas2r_flash.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
-index 16ca31ad5ec0..d0a86ef80652 100644
---- a/drivers/scsi/libfc/fc_exch.c
-+++ b/drivers/scsi/libfc/fc_exch.c
-@@ -2506,7 +2506,7 @@ void fc_exch_recv(struct fc_lport *lport, struct fc_frame *fp)
+diff --git a/drivers/scsi/esas2r/esas2r_flash.c b/drivers/scsi/esas2r/esas2r_flash.c
+index 7bd376d95ed5..b02ac389e6c6 100644
+--- a/drivers/scsi/esas2r/esas2r_flash.c
++++ b/drivers/scsi/esas2r/esas2r_flash.c
+@@ -1197,6 +1197,7 @@ bool esas2r_nvram_read_direct(struct esas2r_adapter *a)
+ 	if (!esas2r_read_flash_block(a, a->nvram, FLS_OFFSET_NVR,
+ 				     sizeof(struct esas2r_sas_nvram))) {
+ 		esas2r_hdebug("NVRAM read failed, using defaults");
++		up(&a->nvram_semaphore);
+ 		return false;
+ 	}
  
- 	/* lport lock ? */
- 	if (!lport || lport->state == LPORT_ST_DISABLED) {
--		FC_LPORT_DBG(lport, "Receiving frames for an lport that "
-+		FC_LIBFC_DBG("Receiving frames for an lport that "
- 			     "has not been initialized correctly\n");
- 		fc_frame_free(fp);
- 		return;
 -- 
 2.20.1
 
