@@ -2,96 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F8213F621
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 20:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33AC913FBDA
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 22:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388807AbgAPTBm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 14:01:42 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35190 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388740AbgAPRFt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:05:49 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7CAEA2077B;
-        Thu, 16 Jan 2020 17:05:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579194348;
-        bh=sDHeSNFZTFf/Qdc7mGgk87AI8Jz5FOfYbi9yfRQ7+BY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZMRRmtPIFv3FVd3yDU6e+moqLMh2HfJp/4wPkENpj5O0zV8RHBzSxXZjahVIPqDza
-         gXbYi1n7DvqsAj5AlNIYca+x6FJhBhDYmCzH00iO1rMZxOGMnKa1nyi/BUarJ9WvKA
-         Kurc9zcEQyJ4pYyJys/ElZuD13X/6MgvX5Wtptt4=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Mike Christie <mchristi@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Hannes Reinecke <hare@suse.com>,
-        Nicholas Bellinger <nab@linux-iscsi.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 289/671] scsi: target/core: Fix a race condition in the LUN lookup code
-Date:   Thu, 16 Jan 2020 11:58:47 -0500
-Message-Id: <20200116170509.12787-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
-References: <20200116170509.12787-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S2388582AbgAPV7e (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 16:59:34 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:42659 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729380AbgAPV7e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 16 Jan 2020 16:59:34 -0500
+Received: by mail-wr1-f65.google.com with SMTP id q6so20630465wro.9;
+        Thu, 16 Jan 2020 13:59:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=t83N3+9WJqUvuIBAC7zFFsBQFwJFpSx4DUQ61Zxbb/Y=;
+        b=Og3iD9d+pnKWaSzeQZ/qk/DMnlyCLuT9irX9znmG9X1bn7IzzPRvRnNjOy22ygSJty
+         5brqnyYtklz5XRuZw9O6zrFBdbjlaLgzqcP33kTGjIDGADl8tiPd1wiHLyq/aqaasnmp
+         yzCyOnf9EmApUVK3NIrfKguNj3GIdxVb0Jj4jxlUm7FYij6M6XoxJSiJZ9j17pdm3CMD
+         MFo6ectD3e3gc+IfYfUAKh8wb4BivutGEiYNrgbm4531uMwAILq6RXgROZzuvMRqTdy3
+         LYI0mT2iFPx7e5g1rEheJeekUu1sIU5dlpUAbw3LLVKDBO/8LhbhCX8WKuGcNdhj+rX7
+         Hv5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=t83N3+9WJqUvuIBAC7zFFsBQFwJFpSx4DUQ61Zxbb/Y=;
+        b=mt9Ztpx91Hz4IdO8VMM/v0J+s+xvQyt9TtO+prcw3iVzt4snzUDH0beoD+2yXi4CbY
+         cxtXIWuTW41+Uctv0jZvC4HnPu15vU4NHNGcRwrSaPfzuEVwrKeYXnjn+KWgXJoLXr8m
+         LU8r5CAo0hJ/eZi7WsD2Iv7wdlZsC9KzTH0oWwzTdZsp39K0lga0o57/vjr8zR0tKCBG
+         eUg4hkTRCEmcPhsM92cDvU2VJEyP9vNYlRxDqxRWDRLQiTXEeHqoWZ4QGDWg31nKRYzz
+         0QDtcSw1Shv1TcAWLZADHQDBFmQoPduwSmf1z36hw6IQKizgrRj9OjOzJVFBOuJOFduZ
+         I62A==
+X-Gm-Message-State: APjAAAVv/okErlJuqBeVrE4Wmj69a0B8hSx9a8lBZp80lFZ++IoVyNmQ
+        jl9IEcCwiIgmJeH1NJ24UYU=
+X-Google-Smtp-Source: APXvYqxz68Xmtig5svF9YDXSouqQLFnlrLN65cxiMQ6A+0uM4PExZM4eR9hs167eIgx0Ms0OxTEynQ==
+X-Received: by 2002:adf:e6d2:: with SMTP id y18mr5633294wrm.262.1579211972414;
+        Thu, 16 Jan 2020 13:59:32 -0800 (PST)
+Received: from localhost.localdomain (ip5f5bee3c.dynamic.kabel-deutschland.de. [95.91.238.60])
+        by smtp.gmail.com with ESMTPSA id a14sm32418131wrx.81.2020.01.16.13.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jan 2020 13:59:31 -0800 (PST)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean Huo <huobean@gmail.com>
+Subject: [PATCH v2 0/9] Use UFS device indicated maximum LU number
+Date:   Thu, 16 Jan 2020 22:59:05 +0100
+Message-Id: <20200116215914.16015-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bart Van Assche <bvanassche@acm.org>
+This series of patches is to simplify UFS driver initialization flow
+and add a new parameter max_lu_supported used to specify how many LUs
+supported by the UFS device.
 
-[ Upstream commit 63f7479439c95bcd49b7dd4af809862c316c71a3 ]
+v1-v2:
+    1. Split ufshcd_probe_hba() based on its called flow
+    2. Delete two unnecessary functions
+    3. Add a fixup patch
 
-The rcu_dereference(deve->se_lun) expression occurs twice in the LUN lookup
-functions. Since these expressions are not serialized against deve->se_lun
-assignments each of these expressions may yield a different result. Avoid
-that the wrong LUN pointer is stored in se_cmd by reading deve->se_lun only
-once.
+Bean Huo (9):
+  scsi: ufs: goto with returned value while failed to add WL
+  scsi: ufs: Delete struct ufs_dev_desc
+  scsi: ufs: Split ufshcd_probe_hba() based on its called flow
+  scsi: ufs: Move ufshcd_get_max_pwr_mode() to ufs_init_params()
+  scsi: ufs: Delete two unnecessary functions
+  scsi: ufs: Delete is_init_prefetch from struct ufs_hba
+  scsi: ufs: Add max_lu_supported in struct ufs_dev_info
+  scsi: ufs: Initialize max_lu_supported
+  scsi: ufs: Use UFS device indicated maximum LU number
 
-Cc: Mike Christie <mchristi@redhat.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Hannes Reinecke <hare@suse.com>
-Cc: Nicholas Bellinger <nab@linux-iscsi.org>
-Fixes: 29a05deebf6c ("target: Convert se_node_acl->device_list[] to RCU hlist") # v4.10
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/target/target_core_device.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/ufs/ufs-mediatek.c |   7 +-
+ drivers/scsi/ufs/ufs-qcom.c     |   6 +-
+ drivers/scsi/ufs/ufs-sysfs.c    |   2 +-
+ drivers/scsi/ufs/ufs.h          |  25 ++-
+ drivers/scsi/ufs/ufs_quirks.h   |   9 +-
+ drivers/scsi/ufs/ufshcd.c       | 276 +++++++++++++++++++-------------
+ drivers/scsi/ufs/ufshcd.h       |   9 +-
+ 7 files changed, 196 insertions(+), 138 deletions(-)
 
-diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
-index e9ff2a7c0c0e..22e97a93728d 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -85,7 +85,7 @@ transport_lookup_cmd_lun(struct se_cmd *se_cmd, u64 unpacked_lun)
- 			goto out_unlock;
- 		}
- 
--		se_cmd->se_lun = rcu_dereference(deve->se_lun);
-+		se_cmd->se_lun = se_lun;
- 		se_cmd->pr_res_key = deve->pr_res_key;
- 		se_cmd->orig_fe_lun = unpacked_lun;
- 		se_cmd->se_cmd_flags |= SCF_SE_LUN_CMD;
-@@ -176,7 +176,7 @@ int transport_lookup_tmr_lun(struct se_cmd *se_cmd, u64 unpacked_lun)
- 			goto out_unlock;
- 		}
- 
--		se_cmd->se_lun = rcu_dereference(deve->se_lun);
-+		se_cmd->se_lun = se_lun;
- 		se_cmd->pr_res_key = deve->pr_res_key;
- 		se_cmd->orig_fe_lun = unpacked_lun;
- 		se_cmd->se_cmd_flags |= SCF_SE_LUN_CMD;
 -- 
-2.20.1
+2.17.1
 
