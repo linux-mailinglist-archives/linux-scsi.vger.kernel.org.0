@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC79513EC4E
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 962AE13EA7C
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394513AbgAPR4H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 12:56:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34804 "EHLO mail.kernel.org"
+        id S2405902AbgAPRof (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 12:44:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35584 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394060AbgAPRoH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:44:07 -0500
+        id S2405823AbgAPRoe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:44:34 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BA43224754;
-        Thu, 16 Jan 2020 17:44:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 91D572474D;
+        Thu, 16 Jan 2020 17:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196646;
-        bh=8tKu9aY8lqaLZzkhyKGvOPmvsQ468ZEdJIMNNfvE7TQ=;
+        s=default; t=1579196673;
+        bh=c3ZG/5qWqwG2BVgKAWARfygrxw58Z6v2wDO+fEzRY00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aWaSthBHZbBe71qIb6JtZEpNDk5+S2sx0sIqvyK6dBv5dxo+OuM0lvQpreYt6LwFF
-         3nIJ/icMPuo23+BhrXtZHxs5E1xvqcirukgy7to1RJHMVE8ct4vYc0h0KkSOK3i8T3
-         b2H5IO0oPZan5/wGJMcjn/HkRVjz7C9NLYKNOIpc=
+        b=fxjelLjRMTYRZ2Pze3QZYTG/EuvOxqufQzffD85IYPwSWy8j52HIt2tR8ponuSvMG
+         e5OQd1QxtJjcKjAjBANOz7J3a9QlEWrMfKm5KqebCPXU5i8UK7Jbn1qlo2aa8zST+p
+         Jd3VfwWiqZ8ZLvTOoJZp5AE2HNpubtEShs1w9hgc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Steve Sistare <steven.sistare@oracle.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Himanshu Madhani <hmadhani@marvell.com>,
+        Giridhar Malavali <giridhar.malavali@qlogic.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>,
-        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 056/174] scsi: megaraid_sas: reduce module load time
-Date:   Thu, 16 Jan 2020 12:40:53 -0500
-Message-Id: <20200116174251.24326-56-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 073/174] scsi: qla2xxx: Unregister chrdev if module initialization fails
+Date:   Thu, 16 Jan 2020 12:41:10 -0500
+Message-Id: <20200116174251.24326-73-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
 References: <20200116174251.24326-1-sashal@kernel.org>
@@ -45,65 +45,98 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Steve Sistare <steven.sistare@oracle.com>
+From: Bart Van Assche <bvanassche@acm.org>
 
-[ Upstream commit 31b6a05f86e690e1818116fd23c3be915cc9d9ed ]
+[ Upstream commit c794d24ec9eb6658909955772e70f34bef5b5b91 ]
 
-megaraid_sas takes 1+ seconds to load while waiting for firmware:
+If module initialization fails after the character device has been
+registered, unregister the character device. Additionally, avoid
+duplicating error path code.
 
-[2.822603] megaraid_sas 0000:03:00.0: Waiting for FW to come to ready state
-[3.871003] megaraid_sas 0000:03:00.0: FW now in Ready state
-
-This is due to the following loop in megasas_transition_to_ready(), which
-waits a minimum of 1 second, even though the FW becomes ready in tens of
-millisecs:
-
-        /*
-         * The cur_state should not last for more than max_wait secs
-         */
-        for (i = 0; i < max_wait; i++) {
-                ...
-                msleep(1000);
-        ...
-        dev_info(&instance->pdev->dev, "FW now in Ready state\n");
-
-This is a regression, caused by a change of the msleep granularity from 1
-to 1000 due to concern about waiting too long on systems with coarse
-jiffies.
-
-To fix, increase iterations and use msleep(20), which results in:
-
-[2.670627] megaraid_sas 0000:03:00.0: Waiting for FW to come to ready state
-[2.739386] megaraid_sas 0000:03:00.0: FW now in Ready state
-
-Fixes: fb2f3e96d80f ("scsi: megaraid_sas: Fix msleep granularity")
-Signed-off-by: Steve Sistare <steven.sistare@oracle.com>
-Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
+Cc: Himanshu Madhani <hmadhani@marvell.com>
+Cc: Giridhar Malavali <giridhar.malavali@qlogic.com>
+Fixes: 6a03b4cd78f3 ("[SCSI] qla2xxx: Add char device to increase driver use count") # v2.6.35.
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/megaraid/megaraid_sas_base.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_os.c | 34 +++++++++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 7be968f60b59..1efd876f0728 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -3585,12 +3585,12 @@ megasas_transition_to_ready(struct megasas_instance *instance, int ocr)
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index 611a127f08d8..8975baab73e5 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -5780,8 +5780,7 @@ qla2x00_module_init(void)
+ 	/* Initialize target kmem_cache and mem_pools */
+ 	ret = qlt_init();
+ 	if (ret < 0) {
+-		kmem_cache_destroy(srb_cachep);
+-		return ret;
++		goto destroy_cache;
+ 	} else if (ret > 0) {
  		/*
- 		 * The cur_state should not last for more than max_wait secs
- 		 */
--		for (i = 0; i < max_wait; i++) {
-+		for (i = 0; i < max_wait * 50; i++) {
- 			curr_abs_state = instance->instancet->
- 				read_fw_status_reg(instance->reg_set);
+ 		 * If initiator mode is explictly disabled by qlt_init(),
+@@ -5800,11 +5799,10 @@ qla2x00_module_init(void)
+ 	qla2xxx_transport_template =
+ 	    fc_attach_transport(&qla2xxx_transport_functions);
+ 	if (!qla2xxx_transport_template) {
+-		kmem_cache_destroy(srb_cachep);
+ 		ql_log(ql_log_fatal, NULL, 0x0002,
+ 		    "fc_attach_transport failed...Failing load!.\n");
+-		qlt_exit();
+-		return -ENODEV;
++		ret = -ENODEV;
++		goto qlt_exit;
+ 	}
  
- 			if (abs_state == curr_abs_state) {
--				msleep(1000);
-+				msleep(20);
- 			} else
- 				break;
- 		}
+ 	apidev_major = register_chrdev(0, QLA2XXX_APIDEV, &apidev_fops);
+@@ -5816,27 +5814,37 @@ qla2x00_module_init(void)
+ 	qla2xxx_transport_vport_template =
+ 	    fc_attach_transport(&qla2xxx_transport_vport_functions);
+ 	if (!qla2xxx_transport_vport_template) {
+-		kmem_cache_destroy(srb_cachep);
+-		qlt_exit();
+-		fc_release_transport(qla2xxx_transport_template);
+ 		ql_log(ql_log_fatal, NULL, 0x0004,
+ 		    "fc_attach_transport vport failed...Failing load!.\n");
+-		return -ENODEV;
++		ret = -ENODEV;
++		goto unreg_chrdev;
+ 	}
+ 	ql_log(ql_log_info, NULL, 0x0005,
+ 	    "QLogic Fibre Channel HBA Driver: %s.\n",
+ 	    qla2x00_version_str);
+ 	ret = pci_register_driver(&qla2xxx_pci_driver);
+ 	if (ret) {
+-		kmem_cache_destroy(srb_cachep);
+-		qlt_exit();
+-		fc_release_transport(qla2xxx_transport_template);
+-		fc_release_transport(qla2xxx_transport_vport_template);
+ 		ql_log(ql_log_fatal, NULL, 0x0006,
+ 		    "pci_register_driver failed...ret=%d Failing load!.\n",
+ 		    ret);
++		goto release_vport_transport;
+ 	}
+ 	return ret;
++
++release_vport_transport:
++	fc_release_transport(qla2xxx_transport_vport_template);
++
++unreg_chrdev:
++	if (apidev_major >= 0)
++		unregister_chrdev(apidev_major, QLA2XXX_APIDEV);
++	fc_release_transport(qla2xxx_transport_template);
++
++qlt_exit:
++	qlt_exit();
++
++destroy_cache:
++	kmem_cache_destroy(srb_cachep);
++	return ret;
+ }
+ 
+ /**
 -- 
 2.20.1
 
