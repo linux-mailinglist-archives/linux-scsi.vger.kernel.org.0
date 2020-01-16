@@ -2,54 +2,52 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7920413D938
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 12:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D8613D964
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 12:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgAPLni convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Thu, 16 Jan 2020 06:43:38 -0500
-Received: from mx2.suse.de ([195.135.220.15]:42808 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725999AbgAPLni (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 06:43:38 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 83B01AFF6;
-        Thu, 16 Jan 2020 11:43:36 +0000 (UTC)
-Date:   Thu, 16 Jan 2020 12:43:35 +0100
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Michael Reed <mdr@sgi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: qla1280: Fix dma firmware download, if dma
- address is 64bit
-Message-Id: <20200116124335.43a679198f514cbdf7a929c4@suse.de>
-In-Reply-To: <yq18sm8nitd.fsf@oracle.com>
-References: <20200114160936.1517-1-tbogendoerfer@suse.de>
-        <yq18sm8nitd.fsf@oracle.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8BIT
+        id S1726362AbgAPL47 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 06:56:59 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:40200 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726160AbgAPL46 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 06:56:58 -0500
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 9050EF3DCA9D96FE3224;
+        Thu, 16 Jan 2020 19:56:55 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS403-HUB.china.huawei.com
+ (10.3.19.203) with Microsoft SMTP Server id 14.3.439.0; Thu, 16 Jan 2020
+ 19:56:47 +0800
+From:   yu kuai <yukuai3@huawei.com>
+To:     <hare@suse.com>, <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yukuai3@huawei.com>, <zhengbin13@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH 0/3] cleanup patches for unused variables
+Date:   Thu, 16 Jan 2020 19:56:00 +0800
+Message-ID: <20200116115603.25386-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.17.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.124.28]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 15 Jan 2020 23:09:34 -0500
-"Martin K. Petersen" <martin.petersen@oracle.com> wrote:
- 
-> > Do firmware download with 64bit LOAD_RAM command, if driver is using
-> > 64bit addressing.
-> 
-> Applied to 5.6/scsi-queue, thanks!
+Remove three set but not used variables in
+drivers/scsi/aic7xxx/aic7xxx_osm.c
 
-kbuild robot found an issue in the patch. Do you want a new version of
-the patch or an incremental patch ?
+yu kuai (3):
+  scsi: aic7xxx: remove set but not used variable 'tinfo'
+  scsi: aic7xxx: remove set but not used variable 'ahc'
+  scsi: aic7xxx: remove set but not used variable 'targ'
 
-Thomas.
+ drivers/scsi/aic7xxx/aic7xxx_osm.c | 10 ----------
+ include/scsi/scsi_transport.h      | 10 +---------
+ 2 files changed, 1 insertion(+), 19 deletions(-)
 
 -- 
-SUSE Software Solutions Germany GmbH
-HRB 36809 (AG Nürnberg)
-Geschäftsführer: Felix Imendörffer
+2.17.2
+
