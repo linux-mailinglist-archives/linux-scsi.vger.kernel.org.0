@@ -2,36 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BCA13F86D
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 20:18:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D4B13F864
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 20:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732311AbgAPQyg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 11:54:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39262 "EHLO mail.kernel.org"
+        id S1730667AbgAPQym (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 11:54:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39384 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732274AbgAPQyg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:54:36 -0500
+        id S1730776AbgAPQyl (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 11:54:41 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EF57A2192A;
-        Thu, 16 Jan 2020 16:54:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id F095C2176D;
+        Thu, 16 Jan 2020 16:54:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193675;
-        bh=dahKvLZdNJjC4GxaMJR7cqCS8Yq9xqQmKrKzt7UrVV0=;
+        s=default; t=1579193680;
+        bh=pVmR2uthoKLDfspvx7wxCvETNXMl8k1lcP38v1hsNyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ObwTGaUlXFQQc6iLBcKZvsPzwB7H0PM4bLYQi6KAK+adn7RCEu4FNG9bsArW+QWTr
-         7nfFwXRH4xZ9YW5YHKXdxfGZLp3Uh7LO4BWlZuHzmaIVqcY26qEVK2sx1yR/pEadXz
-         6aKgIAPIfbn++x96Y0L1Qw4rsenvp7P9ejE9mraQ=
+        b=YNVK5fRUJA4cT/CqhYY6CGJeWP8PRjN15R7rJhEdSn2qZp0svvM9bW8Z5vqTf14Bi
+         9HSUsi+PCbiaTSoIa8/DPfaCHwTJzhZn9wRqeiS0belC2Jcj50e2nCiD5u3ztJnfjY
+         OE5rZWww+6XZU/FOkazHAZiYPkGuSOupm6o+Mg7o=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Can Guo <cang@codeaurora.org>, Avri Altman <avri.altman@wdc.com>,
-        Christoph Hellwig <hch@lst.de>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 200/205] scsi: ufs: Give an unique ID to each ufs-bsg
-Date:   Thu, 16 Jan 2020 11:42:55 -0500
-Message-Id: <20200116164300.6705-200-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 204/205] scsi: mpt3sas: Fix double free in attach error handling
+Date:   Thu, 16 Jan 2020 11:42:59 -0500
+Message-Id: <20200116164300.6705-204-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
 References: <20200116164300.6705-1-sashal@kernel.org>
@@ -44,37 +45,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Can Guo <cang@codeaurora.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 8c850a0296004409e7bcb9464712fb2807da656a ]
+[ Upstream commit ee560e7bbab0c10cf3f0e71997fbc354ab2ee5cb ]
 
-Considering there can be multiple UFS hosts in SoC, give each ufs-bsg an
-unique ID by appending the scsi host number to its device name.
+The caller also calls _base_release_memory_pools() on error so it leads to
+a number of double frees:
 
-Link: https://lore.kernel.org/r/0101016eca8dc9d7-d24468d3-04d2-4ef3-a906-abe8b8cbcd3d-000000@us-west-2.amazonses.com
-Fixes: df032bf27a41 ("scsi: ufs: Add a bsg endpoint that supports UPIUs")
-Signed-off-by: Can Guo <cang@codeaurora.org>
-Reviewed-by: Avri Altman <avri.altman@wdc.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->chain_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->hpr_lookup' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->internal_lookup' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->pcie_sgl_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->reply_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->reply_free_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->reply_post_free_array_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->reply_post_free_dma_pool' double freed
+drivers/scsi/mpt3sas/mpt3sas_base.c:7207 mpt3sas_base_attach() warn: 'ioc->sense_dma_pool' double freed
+
+Fixes: 74522a92bbf0 ("scsi: mpt3sas: Optimize I/O memory consumption in driver.")
+Link: https://lore.kernel.org/r/20191203093652.gyntgvnkw2udatyc@kili.mountain
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufs_bsg.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufs_bsg.c b/drivers/scsi/ufs/ufs_bsg.c
-index dc2f6d2b46ed..d2197a31abe5 100644
---- a/drivers/scsi/ufs/ufs_bsg.c
-+++ b/drivers/scsi/ufs/ufs_bsg.c
-@@ -202,7 +202,7 @@ int ufs_bsg_probe(struct ufs_hba *hba)
- 	bsg_dev->parent = get_device(parent);
- 	bsg_dev->release = ufs_bsg_node_release;
- 
--	dev_set_name(bsg_dev, "ufs-bsg");
-+	dev_set_name(bsg_dev, "ufs-bsg%u", shost->host_no);
- 
- 	ret = device_add(bsg_dev);
- 	if (ret)
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index fea3cb6a090b..752b71cfbe12 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -5234,7 +5234,6 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 					&ct->chain_buffer_dma);
+ 			if (!ct->chain_buffer) {
+ 				ioc_err(ioc, "chain_lookup: pci_pool_alloc failed\n");
+-				_base_release_memory_pools(ioc);
+ 				goto out;
+ 			}
+ 		}
 -- 
 2.20.1
 
