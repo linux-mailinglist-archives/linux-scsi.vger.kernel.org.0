@@ -2,38 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7392A13EA0A
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC79513EC4E
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Jan 2020 18:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405775AbgAPRlp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Jan 2020 12:41:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59458 "EHLO mail.kernel.org"
+        id S2394513AbgAPR4H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Jan 2020 12:56:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34804 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393681AbgAPRln (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Jan 2020 12:41:43 -0500
+        id S2394060AbgAPRoH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:44:07 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F170246B5;
-        Thu, 16 Jan 2020 17:41:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA43224754;
+        Thu, 16 Jan 2020 17:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579196502;
-        bh=yIJkJxmik4IXSliExkB5nxxRKUuXaE04cSZDwEwRw6E=;
+        s=default; t=1579196646;
+        bh=8tKu9aY8lqaLZzkhyKGvOPmvsQ468ZEdJIMNNfvE7TQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rDbXVS2/0HJ1zQiSm/hu7FxRYeJgDSz6M63tg/2SslcLH7+vJpNd6xonPVsv/641y
-         aQt6ePZA2oRTc8N2RqYT63dumr3WWs8EtUuZzV67ukAwmUgO1V3OFsBl4vxJlQFCNh
-         x7hOnTh88QWSTGZWHNfyXV3PU2DaGUN02EqpqGos=
+        b=aWaSthBHZbBe71qIb6JtZEpNDk5+S2sx0sIqvyK6dBv5dxo+OuM0lvQpreYt6LwFF
+         3nIJ/icMPuo23+BhrXtZHxs5E1xvqcirukgy7to1RJHMVE8ct4vYc0h0KkSOK3i8T3
+         b2H5IO0oPZan5/wGJMcjn/HkRVjz7C9NLYKNOIpc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pan Bian <bianpan2016@163.com>,
+Cc:     Steve Sistare <steven.sistare@oracle.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 244/251] scsi: bnx2i: fix potential use after free
-Date:   Thu, 16 Jan 2020 12:36:33 -0500
-Message-Id: <20200116173641.22137-204-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 056/174] scsi: megaraid_sas: reduce module load time
+Date:   Thu, 16 Jan 2020 12:40:53 -0500
+Message-Id: <20200116174251.24326-56-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116173641.22137-1-sashal@kernel.org>
-References: <20200116173641.22137-1-sashal@kernel.org>
+In-Reply-To: <20200116174251.24326-1-sashal@kernel.org>
+References: <20200116174251.24326-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,41 +45,65 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Pan Bian <bianpan2016@163.com>
+From: Steve Sistare <steven.sistare@oracle.com>
 
-[ Upstream commit 29d28f2b8d3736ac61c28ef7e20fda63795b74d9 ]
+[ Upstream commit 31b6a05f86e690e1818116fd23c3be915cc9d9ed ]
 
-The member hba->pcidev may be used after its reference is dropped. Move the
-put function to where it is never used to avoid potential use after free
-issues.
+megaraid_sas takes 1+ seconds to load while waiting for firmware:
 
-Fixes: a77171806515 ("[SCSI] bnx2i: Removed the reference to the netdev->base_addr")
-Link: https://lore.kernel.org/r/1573043541-19126-1-git-send-email-bianpan2016@163.com
-Signed-off-by: Pan Bian <bianpan2016@163.com>
+[2.822603] megaraid_sas 0000:03:00.0: Waiting for FW to come to ready state
+[3.871003] megaraid_sas 0000:03:00.0: FW now in Ready state
+
+This is due to the following loop in megasas_transition_to_ready(), which
+waits a minimum of 1 second, even though the FW becomes ready in tens of
+millisecs:
+
+        /*
+         * The cur_state should not last for more than max_wait secs
+         */
+        for (i = 0; i < max_wait; i++) {
+                ...
+                msleep(1000);
+        ...
+        dev_info(&instance->pdev->dev, "FW now in Ready state\n");
+
+This is a regression, caused by a change of the msleep granularity from 1
+to 1000 due to concern about waiting too long on systems with coarse
+jiffies.
+
+To fix, increase iterations and use msleep(20), which results in:
+
+[2.670627] megaraid_sas 0000:03:00.0: Waiting for FW to come to ready state
+[2.739386] megaraid_sas 0000:03:00.0: FW now in Ready state
+
+Fixes: fb2f3e96d80f ("scsi: megaraid_sas: Fix msleep granularity")
+Signed-off-by: Steve Sistare <steven.sistare@oracle.com>
+Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/bnx2i/bnx2i_iscsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/megaraid/megaraid_sas_base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/bnx2i/bnx2i_iscsi.c b/drivers/scsi/bnx2i/bnx2i_iscsi.c
-index 133901fd3e35..6d1f8b22bd83 100644
---- a/drivers/scsi/bnx2i/bnx2i_iscsi.c
-+++ b/drivers/scsi/bnx2i/bnx2i_iscsi.c
-@@ -915,12 +915,12 @@ void bnx2i_free_hba(struct bnx2i_hba *hba)
- 	INIT_LIST_HEAD(&hba->ep_ofld_list);
- 	INIT_LIST_HEAD(&hba->ep_active_list);
- 	INIT_LIST_HEAD(&hba->ep_destroy_list);
--	pci_dev_put(hba->pcidev);
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index 7be968f60b59..1efd876f0728 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -3585,12 +3585,12 @@ megasas_transition_to_ready(struct megasas_instance *instance, int ocr)
+ 		/*
+ 		 * The cur_state should not last for more than max_wait secs
+ 		 */
+-		for (i = 0; i < max_wait; i++) {
++		for (i = 0; i < max_wait * 50; i++) {
+ 			curr_abs_state = instance->instancet->
+ 				read_fw_status_reg(instance->reg_set);
  
- 	if (hba->regview) {
- 		pci_iounmap(hba->pcidev, hba->regview);
- 		hba->regview = NULL;
- 	}
-+	pci_dev_put(hba->pcidev);
- 	bnx2i_free_mp_bdt(hba);
- 	bnx2i_release_free_cid_que(hba);
- 	iscsi_host_free(shost);
+ 			if (abs_state == curr_abs_state) {
+-				msleep(1000);
++				msleep(20);
+ 			} else
+ 				break;
+ 		}
 -- 
 2.20.1
 
