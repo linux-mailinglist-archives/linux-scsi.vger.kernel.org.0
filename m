@@ -2,62 +2,138 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C1B5141F66
-	for <lists+linux-scsi@lfdr.de>; Sun, 19 Jan 2020 19:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25569141FCB
+	for <lists+linux-scsi@lfdr.de>; Sun, 19 Jan 2020 20:36:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728760AbgASSoW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 Jan 2020 13:44:22 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:40379 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727740AbgASSoT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Jan 2020 13:44:19 -0500
-Received: by mail-il1-f196.google.com with SMTP id c4so25520283ilo.7
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Jan 2020 10:44:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
-         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
-         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
-         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
-         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
-         Gp1A==
+        id S1728516AbgASTgU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 19 Jan 2020 14:36:20 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:38744 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727138AbgASTgU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Jan 2020 14:36:20 -0500
+Received: by mail-pf1-f193.google.com with SMTP id x185so14678667pfc.5
+        for <linux-scsi@vger.kernel.org>; Sun, 19 Jan 2020 11:36:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=Zi5v7p34NvnJK1eFeNP8kpjny5LqGr3FQ95IuVzc3H6EMdDup0ZxhX8BciF4lpFtwm
-         jzBH4ujNurwO/IASiBxh59ABxEWfHo2bkDa5ahAgRc5s23S6M4dO0YF2HQQirZt3LVZW
-         ylBaIIiy5k/pgXVt/ECes8dC1M/O6Eq8s6l3GmCYkwmDpTXHMyJtDhbZOpDlSpigyXWK
-         nPs6V1MKqFd6AyL9IRIE3DHZzox6q2966GU6PD5eHWGUcd7IVwqPIJD9zoHM+niurQ0/
-         2VSBTri+XU32Mn+qIFzkpTvIs5SZq6Rd72px3pQfyk0N0mVCm8AALrgcs2Kcq0bN7nlf
-         762g==
-X-Gm-Message-State: APjAAAXiAug443vLxXQZwZ7i5nRv+WD9OYy0Qk1hbbaSJ+I1g/JKJD+b
-        S8bXywZbac+7LP1UwnnsDIkysC336m5zOihWvOY=
-X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
-X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
- Sun, 19 Jan 2020 10:44:19 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=SzNS8Sfc9xhwTWlvA1n3EuNN/8i20MFOYEn4FJAOPac=;
+        b=K3FYF0SAhWHicm/DsY8Cht2ybhS1Fqw7AdteFKu039IL5mj7H0LPO4zw59Q1mrLN+S
+         e6m5Xo+LPaj/kAEnVuiNMhVr8e8IP2gR35U2xJ3aKyZOytgmMJ0FKNjMxikVAn2v9lNy
+         BthlvQB1BGxaTniFD7j7E3zeIbKLwojicyRZsKhwJjzWgYD3opU429/lNkzYGTkO2K0l
+         EpYpKqmvu3X8End9lVphQ24bN4hER95+S22q+DqIZqY9BJXINq0aj5g9e04+BcZu0f2+
+         DzkIoXPTteAOaRegV2tidApKerRD9qZhCi1tgucPf91WS4EEIsRu44Qzy9s2QGqATX4X
+         BfHg==
+X-Gm-Message-State: APjAAAXUaDUtDLQ9v22x0njgxSkdeJ4u0Lug3H2QcAYByQi90dGvy1iJ
+        Ww+4KDgm2maUUGMbYd3838M=
+X-Google-Smtp-Source: APXvYqzCKW3uxMTqyr5n78HZoTYHIifqfAKuCl9db0ccmTJQ1YoqDI3jpK2WZ9Jvv1Gb2eSMfD1Hjg==
+X-Received: by 2002:a63:5807:: with SMTP id m7mr52589251pgb.83.1579462579986;
+        Sun, 19 Jan 2020 11:36:19 -0800 (PST)
+Received: from ?IPv6:2601:647:4000:d7:781f:ca33:6085:f83a? ([2601:647:4000:d7:781f:ca33:6085:f83a])
+        by smtp.gmail.com with ESMTPSA id y6sm35182249pgc.10.2020.01.19.11.36.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 19 Jan 2020 11:36:18 -0800 (PST)
+Subject: Re: [PATCH] scsi: sd: provide a new module parameter to set whether
+ SCSI disks support WRITE_SAME_16 by default
+To:     AlexChen <alex.chen@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, zhengchuan@huawei.com,
+        jiangyiwen@huawei.com, robin.yb@huawei.com
+References: <5E246413.8010408@huawei.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <c3c8c949-b557-1e34-5143-7a0b348a609e@acm.org>
+Date:   Sun, 19 Jan 2020 11:36:17 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
- -0800 (PST)
-Reply-To: favordens@email.com
-From:   Favor Desmond <contecindy5@gmail.com>
-Date:   Sun, 19 Jan 2020 18:44:18 +0000
-Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <5E246413.8010408@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello Dear
-Greetings to you,I am Favor Desmond from Ivory coast currently living
-in  Togo Republic,I would like to know you more, so that i can tell
-you little amount myself and my photo, email address is
-favordens@email.com
-Thanks
-Favor
+On 2020-01-19 06:13, AlexChen wrote:
+> When the SCSI device is initialized, check whether it supports
+> WRITE_SAME_16 or WRITE_SAME_10 in the sd_read_write_same(). If
+> the back-end storage device does not support queries, it will not set
+> sdkp->ws16 as 1.
+> 
+> When the WRITE_SAME io is issued through the blkdev_issue_write_same(),
+> the WRITE_SAME type is set to WRITE_SAME_10 by default in the
+> sd_setup_write_same_cmnd() since of "sdkp->ws16=0". If the storage device
+> does not support WRITE_SAME_10, then the SCSI device is set to not support
+> WRITE_SAME.
+> 
+> Currently, some storage devices do not provide queries for
+> WRITE_SAME_16/WRITE_SAME_10 support, but they do support WRITE_SAME_16 and
+> do not support WRITE_SAME_10. So in order for these devices to use
+> WRITE_SAME, we need a new module parameter to set whether SCSI disks
+> support WRITE_SAME_16 by default.
+> 
+> Signed-off-by: AlexChen <alex.chen@huawei.com>
+> ---
+>  drivers/scsi/sd.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+> index 4f7e7b607..ff368701d 100644
+> --- a/drivers/scsi/sd.c
+> +++ b/drivers/scsi/sd.c
+> @@ -104,6 +104,9 @@ MODULE_ALIAS_SCSI_DEVICE(TYPE_ZBC);
+>  #define SD_MINORS	0
+>  #endif
+> 
+> +static int sd_default_support_ws16;
+> +module_param(sd_default_support_ws16, int, 0644);
+> +
+>  static void sd_config_discard(struct scsi_disk *, unsigned int);
+>  static void sd_config_write_same(struct scsi_disk *);
+>  static int  sd_revalidate_disk(struct gendisk *);
+> @@ -3014,7 +3017,8 @@ static void sd_read_write_same(struct scsi_disk *sdkp, unsigned char *buffer)
+>  			sdev->no_write_same = 1;
+>  	}
+> 
+> -	if (scsi_report_opcode(sdev, buffer, SD_BUF_SIZE, WRITE_SAME_16) == 1)
+> +	if (scsi_report_opcode(sdev, buffer, SD_BUF_SIZE, WRITE_SAME_16) == 1 ||
+> +			sd_default_support_ws16)
+>  		sdkp->ws16 = 1;
+> 
+>  	if (scsi_report_opcode(sdev, buffer, SD_BUF_SIZE, WRITE_SAME) == 1)
+
+Should this be fixed using the quirk mechanism instead of introducing a
+new kernel module parameter? Kernel module parameters apply to all SCSI
+disk devices irrespective of their vendor and model. The quirk mechanism
+can be used to introduce special behavior for certain disk models and
+types. See also the output of the following grep command:
+
+$ git grep -nH '& BLIST'
+
+Bart.
+
