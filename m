@@ -2,160 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33ACB141E96
-	for <lists+linux-scsi@lfdr.de>; Sun, 19 Jan 2020 15:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1B5141F66
+	for <lists+linux-scsi@lfdr.de>; Sun, 19 Jan 2020 19:44:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726956AbgASOjN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 Jan 2020 09:39:13 -0500
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:42283 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726778AbgASOjN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Jan 2020 09:39:13 -0500
-Received: by mail-ua1-f68.google.com with SMTP id u17so10614112uap.9
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Jan 2020 06:39:12 -0800 (PST)
+        id S1728760AbgASSoW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 19 Jan 2020 13:44:22 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:40379 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727740AbgASSoT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 19 Jan 2020 13:44:19 -0500
+Received: by mail-il1-f196.google.com with SMTP id c4so25520283ilo.7
+        for <linux-scsi@vger.kernel.org>; Sun, 19 Jan 2020 10:44:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j8keUpOCp3VWJ4TU0kbq3GzP9kgMSYkjFPyvwNMsufM=;
-        b=pmjnazB7VaFTaGbsc65Tj7VBBA3qJfGyoAYN1qyO+z4xVzynINVD9D9E7lCWM6VYIV
-         MnQYgDPK3xo3BxWnkzcvv4+jCZ2bD5zciMRx6glyofHhwHVooRkojE+8fJ8ZB1kBCC2B
-         8bvCqBYQL8gMXpjQgVoLb+yRIfcRgoRdmyg4YwXwubfHliDEwYxTeytky6CYVlaj+Jor
-         wDCMkSu9zgxYJxgtLUROxsDldtbC63K6CrPZMVgn0LmsS1XmaX4lX5qnsZxELfZKiDRv
-         C2lTPLXtKGTkBraHI++I+uoag0YZbhg2kAjP8fZ13SUctTvFjj9fpoFlgX2B4dzkiHWb
-         xEZw==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=MveYcniUJUB532f0dlOoihdmkjAHV60cDj8LBHI8M4h+3H+egt8ZCsWSnQoG7CEhld
+         h286H+k74rDzfRQOoY/f9M81WRQr88YRuubiH3HanhIDyXki4cyulA7bNdgdh/npcklQ
+         CvJo43u8PBPBkMgEH5HatRsI+u5tlB3wEJ1Th3FBUvpApZQxsvg7pL4HfvgLhjM/SAbt
+         Wln7BJPpvNYZtoiRQX3zkLZKrm4kgBMldFao5RktgQ8gLQFv0TsxI7xopop5Q61lnjsD
+         O+Nqof9tzp5qXVHsDImBQ0OOhN8D0ZvK4JC9Zw+KV08LpajVcASte5dFUKOIeqnCFHwC
+         Gp1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j8keUpOCp3VWJ4TU0kbq3GzP9kgMSYkjFPyvwNMsufM=;
-        b=HycT7Fy/AwErbrhRvOVR3hBM+f0hH/bUV/ShHkrnu7hdReFWOM1UA/ZiQIhRySL3//
-         JSXaD6f79F6cYFGGtBY8G8J2EG8MtQ13FlmfL0taSN2JGjM3RuXrRrPkYMemvrrXHHcW
-         gFsoDc+g0rPYV5TJAMHLeNyquw7jZ/mcfaZgqyd7ej7XvWkcz/XVXRCxGvWVX9KcHo8c
-         2pfPlWHqf21o1t6wVnGcPenZ91Q3aNdUlv6xNxH+c58rqrr4n8VgdYKVIFKGN2GDQGke
-         AJT5GhvMFg/JWkgb5l+KXJPrF/JNODlJACoi/FDlNG5SPzI/Fvl0p9DwhB+iBSHo72Cr
-         BVIw==
-X-Gm-Message-State: APjAAAVvfqBkNiYQnrrwqIAqBnS5+bl885K+miMOsjCCrF162NCOKurp
-        3ifdvdcw8oVqOkgZCZRNJjBtupxVtpAcB1By7Tc=
-X-Google-Smtp-Source: APXvYqxvT7hLLTJztdehlDyNPdGu6Z5QZfCuwd7LzdY2QgezWsDYtyDMGxQeurPhaVW+hE7bTzvQTX6ogyddl8GUmkg=
-X-Received: by 2002:ab0:30c2:: with SMTP id c2mr29569059uam.8.1579444752075;
- Sun, 19 Jan 2020 06:39:12 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
+        b=Zi5v7p34NvnJK1eFeNP8kpjny5LqGr3FQ95IuVzc3H6EMdDup0ZxhX8BciF4lpFtwm
+         jzBH4ujNurwO/IASiBxh59ABxEWfHo2bkDa5ahAgRc5s23S6M4dO0YF2HQQirZt3LVZW
+         ylBaIIiy5k/pgXVt/ECes8dC1M/O6Eq8s6l3GmCYkwmDpTXHMyJtDhbZOpDlSpigyXWK
+         nPs6V1MKqFd6AyL9IRIE3DHZzox6q2966GU6PD5eHWGUcd7IVwqPIJD9zoHM+niurQ0/
+         2VSBTri+XU32Mn+qIFzkpTvIs5SZq6Rd72px3pQfyk0N0mVCm8AALrgcs2Kcq0bN7nlf
+         762g==
+X-Gm-Message-State: APjAAAXiAug443vLxXQZwZ7i5nRv+WD9OYy0Qk1hbbaSJ+I1g/JKJD+b
+        S8bXywZbac+7LP1UwnnsDIkysC336m5zOihWvOY=
+X-Google-Smtp-Source: APXvYqzrfoOpFYdPx6ke6uIX585SnMDBN6pXKvD7iN8x9MT//+KimK2aFC33ps3ZC6gjq3Pi1pIlacgfKiFCQZrpYZA=
+X-Received: by 2002:a92:d1c1:: with SMTP id u1mr7477573ilg.66.1579459459106;
+ Sun, 19 Jan 2020 10:44:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20200107192531.73802-1-bvanassche@acm.org> <20200107192531.73802-3-bvanassche@acm.org>
-In-Reply-To: <20200107192531.73802-3-bvanassche@acm.org>
-From:   Alim Akhtar <alim.akhtar@gmail.com>
-Date:   Sun, 19 Jan 2020 20:08:35 +0530
-Message-ID: <CAGOxZ531tcv7aVzTWXH0k0=vKy9LbL=h7sSXnwXem+kr5_MbUw@mail.gmail.com>
-Subject: Re: [PATCH 2/4] ufs: Introduce ufshcd_init_lrb()
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Can Guo <cang@codeaurora.org>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>
+Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:18
+ -0800 (PST)
+Reply-To: favordens@email.com
+From:   Favor Desmond <contecindy5@gmail.com>
+Date:   Sun, 19 Jan 2020 18:44:18 +0000
+Message-ID: <CAOfCPNxgSoAU_ns0j9jYL-ArKfcD=i8NkJvHsR4-OGvFBVDMZg@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Bart
-
-On Wed, Jan 8, 2020 at 12:57 AM Bart Van Assche <bvanassche@acm.org> wrote:
->
-> This patch does not change any functionality but makes the next patch in
-> this series easier to read.
->
-> Cc: Can Guo <cang@codeaurora.org>
-> Cc: Avri Altman <avri.altman@wdc.com>
-> Cc: Bean Huo <beanhuo@micron.com>
-> Cc: Stanley Chu <stanley.chu@mediatek.com>
-> Cc: Tomas Winkler <tomas.winkler@intel.com>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
-
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-
->  drivers/scsi/ufs/ufshcd.c | 38 ++++++++++++++++++++++----------------
->  1 file changed, 22 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 1b97f2dc0b63..6f55d72e7fdd 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -2364,6 +2364,27 @@ static inline u16 ufshcd_upiu_wlun_to_scsi_wlun(u8 upiu_wlun_id)
->         return (upiu_wlun_id & ~UFS_UPIU_WLUN_ID) | SCSI_W_LUN_BASE;
->  }
->
-> +static void ufshcd_init_lrb(struct ufs_hba *hba, struct ufshcd_lrb *lrb, int i)
-> +{
-> +       struct utp_transfer_cmd_desc *cmd_descp = hba->ucdl_base_addr;
-> +       struct utp_transfer_req_desc *utrdlp = hba->utrdl_base_addr;
-> +       dma_addr_t cmd_desc_element_addr = hba->ucdl_dma_addr +
-> +               i * sizeof(struct utp_transfer_cmd_desc);
-> +       u16 response_offset = offsetof(struct utp_transfer_cmd_desc,
-> +                                      response_upiu);
-> +       u16 prdt_offset = offsetof(struct utp_transfer_cmd_desc, prd_table);
-> +
-> +       lrb->utr_descriptor_ptr = utrdlp + i;
-> +       lrb->utrd_dma_addr = hba->utrdl_dma_addr +
-> +               i * sizeof(struct utp_transfer_req_desc);
-> +       lrb->ucd_req_ptr = (struct utp_upiu_req *)(cmd_descp + i);
-> +       lrb->ucd_req_dma_addr = cmd_desc_element_addr;
-> +       lrb->ucd_rsp_ptr = (struct utp_upiu_rsp *)cmd_descp[i].response_upiu;
-> +       lrb->ucd_rsp_dma_addr = cmd_desc_element_addr + response_offset;
-> +       lrb->ucd_prdt_ptr = (struct ufshcd_sg_entry *)cmd_descp[i].prd_table;
-> +       lrb->ucd_prdt_dma_addr = cmd_desc_element_addr + prdt_offset;
-> +}
-> +
->  /**
->   * ufshcd_queuecommand - main entry point for SCSI requests
->   * @host: SCSI host pointer
-> @@ -3385,7 +3406,6 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
->   */
->  static void ufshcd_host_memory_configure(struct ufs_hba *hba)
->  {
-> -       struct utp_transfer_cmd_desc *cmd_descp;
->         struct utp_transfer_req_desc *utrdlp;
->         dma_addr_t cmd_desc_dma_addr;
->         dma_addr_t cmd_desc_element_addr;
-> @@ -3395,7 +3415,6 @@ static void ufshcd_host_memory_configure(struct ufs_hba *hba)
->         int i;
->
->         utrdlp = hba->utrdl_base_addr;
-> -       cmd_descp = hba->ucdl_base_addr;
->
->         response_offset =
->                 offsetof(struct utp_transfer_cmd_desc, response_upiu);
-> @@ -3431,20 +3450,7 @@ static void ufshcd_host_memory_configure(struct ufs_hba *hba)
->                                 cpu_to_le16(ALIGNED_UPIU_SIZE >> 2);
->                 }
->
-> -               hba->lrb[i].utr_descriptor_ptr = (utrdlp + i);
-> -               hba->lrb[i].utrd_dma_addr = hba->utrdl_dma_addr +
-> -                               (i * sizeof(struct utp_transfer_req_desc));
-> -               hba->lrb[i].ucd_req_ptr =
-> -                       (struct utp_upiu_req *)(cmd_descp + i);
-> -               hba->lrb[i].ucd_req_dma_addr = cmd_desc_element_addr;
-> -               hba->lrb[i].ucd_rsp_ptr =
-> -                       (struct utp_upiu_rsp *)cmd_descp[i].response_upiu;
-> -               hba->lrb[i].ucd_rsp_dma_addr = cmd_desc_element_addr +
-> -                               response_offset;
-> -               hba->lrb[i].ucd_prdt_ptr =
-> -                       (struct ufshcd_sg_entry *)cmd_descp[i].prd_table;
-> -               hba->lrb[i].ucd_prdt_dma_addr = cmd_desc_element_addr +
-> -                               prdt_offset;
-> +               ufshcd_init_lrb(hba, &hba->lrb[i], i);
->         }
->  }
->
-
-
--- 
-Regards,
-Alim
+Hello Dear
+Greetings to you,I am Favor Desmond from Ivory coast currently living
+in  Togo Republic,I would like to know you more, so that i can tell
+you little amount myself and my photo, email address is
+favordens@email.com
+Thanks
+Favor
