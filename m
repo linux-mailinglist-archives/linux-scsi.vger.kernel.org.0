@@ -2,178 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2017A142ABA
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jan 2020 13:27:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59702142BC4
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jan 2020 14:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728600AbgATM1G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Jan 2020 07:27:06 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:9219 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728901AbgATM06 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 20 Jan 2020 07:26:58 -0500
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id B989B718139A8316F1D3;
-        Mon, 20 Jan 2020 20:26:53 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
- 14.3.439.0; Mon, 20 Jan 2020 20:26:45 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 7/7] scsi: hisi_sas: Use reply map for v2 hw
-Date:   Mon, 20 Jan 2020 20:22:37 +0800
-Message-ID: <1579522957-4393-8-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1579522957-4393-1-git-send-email-john.garry@huawei.com>
-References: <1579522957-4393-1-git-send-email-john.garry@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+        id S1728776AbgATNIo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Jan 2020 08:08:44 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:45134 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726798AbgATNIo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jan 2020 08:08:44 -0500
+Received: by mail-wr1-f67.google.com with SMTP id j42so29454404wrj.12;
+        Mon, 20 Jan 2020 05:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=z0UrFTfKrgLfX01/rLl/IRCgo7e5VdzQ1WnFgxsg8f4=;
+        b=aW+jYWBiw3d/3RR6GlTjxdSJhejziaCQfj5civ8JE3jtjVDgVQO/NmoJcXeP1EfiTa
+         6mGAnFURVF6Qs2xy/JugSFjQMGmgh7igyxCIvFkJXulZWi7zvtk36NGY3kytHfW6uJ/P
+         l3YPCWJzYG679ds52lFFnSzJynedJi2/ULee0b4aLgRNdM7Duw8WDpSmG34QOcjC6Ucc
+         vULKWM+q4qoyqjY1rGzxZTIyVwF+r+e0pDfgHYDe/TNWE7LsxUU7NHhKrGRzjkCqOHF3
+         ZFipCEYXKzbSR9e+vNB8SeHWzQSvqyv6HhVZLplY6Na+1m81P1OMfFkfY5hG8i1GR5Z2
+         htaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=z0UrFTfKrgLfX01/rLl/IRCgo7e5VdzQ1WnFgxsg8f4=;
+        b=qR6s6TYslMIFb5psEEC9dykgZMAZF/V0nzb2JtZ2lZ8dAEnBt2xohMktdzxPd3HPev
+         tiMKzVE8mDnc6D7AnQ8wpkt97PumHaru3HuMG5vklYlKbAMSvSuH0yiBBDMekOLsoRjM
+         bENIGtqmcZv3/qN9RkP9f7H0aRKDdtbz5SL9i7aKpjiXyhT+Gl17HPc+QRbtiW6VDHX1
+         /CiynPIscei9XOKvzLxzccuhUpkDSwKdEyO1OeX9WJoC/qaL6uz8qUKFbbfusDfSPNBF
+         msJVPfuQ4HpwumU4ruXf83nwOf3oSBpFvJIAzejtBXKpWOBKzqOWK+MDRnynn5iWthtB
+         vZpw==
+X-Gm-Message-State: APjAAAUCbAw7woiV1/Bl8IAgAEVn87VaMcrCjTJqAq5yYB+w7ua94inw
+        Be7mmrF/JRH6g2D9ohvHcpA=
+X-Google-Smtp-Source: APXvYqygYO3cV2Q0MtXBT4CpNDLJTR1uHtIFoGURV2gMgh7rpueobPHTMQMvM6cwl2Pfet1vTxHNTg==
+X-Received: by 2002:adf:ec41:: with SMTP id w1mr17925790wrn.212.1579525722126;
+        Mon, 20 Jan 2020 05:08:42 -0800 (PST)
+Received: from ubuntu-G3.micron.com ([165.225.86.138])
+        by smtp.gmail.com with ESMTPSA id p18sm23065386wmb.8.2020.01.20.05.08.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jan 2020 05:08:41 -0800 (PST)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bean Huo <huobean@gmail.com>
+Subject: [PATCH v4 0/8] Use UFS device indicated maximum LU number
+Date:   Mon, 20 Jan 2020 14:08:12 +0100
+Message-Id: <20200120130820.1737-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-With the aim of boosting performance, switch v2 hw to using reply map, i.e.
-pseudo blk-mq.
+This series of patches is to simplify UFS driver initialization flow
+and add a new parameter max_lu_supported used to specify how many LUs
+supported by the UFS device.
+This series of patches being tested on my two platforms, Qualcomm SOC
+based and Hisilicon SOC based platforms.                                                                                                                                                                   
+v1-v2:
+    1. Split ufshcd_probe_hba() based on its called flow
+    2. Delete two unnecessary functions
+    3. Add a fixup patch
 
-This really when we're running a distro with irqbalance running. The reason
-being that the irqbalance can fiddle with the completion queue affinity,
-such that we random cpus servicing the CQs. It's not much better without
-irqbalance, where it is always cpu0.
+v2-v3:
+    1. Combine patches 7/9 and 8/9 of v2 to patch 7/8 of v3
+    2. Change patches 1/8 and 5/8 subject
+    3. Change the name of two functions in patch 7/8
 
-Distro read fio performance for 6x SAS SSDs goes from ~450K IOPS ->
-650K IOPS.
+v3-v4:
+    1. Change patch 4/8 subject
+    2. Change new added function name from ufshcd_init_params() to
+       ufshcd_device_params_init()
+    3. Change new added function name from ufshcd_init_device_geo_params()
+       to ufshcd_device_geo_params_init()
+    4. Fix two compilation errors in patch 2/8:
+       1) Missed an operator "&" in function ufs_mtk_apply_dev_quirks()
+          when getting address of the dev_info.
+       2) Incorrectly changed hba->dev_quirks to dev_info->dev_quirks in
+          function ufs_qcom_apply_dev_quirks().
 
-To continuing support manually setting the irq affinity, introduce module
-parameter auto_affine_interrupts, which is default off.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas.h       |  3 ++
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 54 +++++++++++++++++++++++++-
- 2 files changed, 56 insertions(+), 1 deletion(-)
+Bean Huo (8):
+  scsi: ufs: Fix ufshcd_probe_hba() reture value in case
+    ufshcd_scsi_add_wlus() fails
+  scsi: ufs: Delete struct ufs_dev_desc
+  scsi: ufs: Split ufshcd_probe_hba() based on its called flow
+  scsi: ufs: Move ufshcd_get_max_pwr_mode() to
+    ufshcd_device_params_init()
+  scsi: ufs: Inline two functions into their callers
+  scsi: ufs: Delete is_init_prefetch from struct ufs_hba
+  scsi: ufs: Add max_lu_supported in struct ufs_dev_info
+  scsi: ufs: Use UFS device indicated maximum LU number
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas.h b/drivers/scsi/hisi_sas/hisi_sas.h
-index 2bdd64648ef0..0612fc929a2d 100644
---- a/drivers/scsi/hisi_sas/hisi_sas.h
-+++ b/drivers/scsi/hisi_sas/hisi_sas.h
-@@ -10,6 +10,7 @@
- #include <linux/acpi.h>
- #include <linux/clk.h>
- #include <linux/debugfs.h>
-+#include <linux/device.h>
- #include <linux/dmapool.h>
- #include <linux/iopoll.h>
- #include <linux/lcm.h>
-@@ -385,6 +386,8 @@ struct hisi_hba {
- 	spinlock_t lock;
- 	struct semaphore sem;
- 
-+	struct irq_affinity_desc affinity_masks[HISI_SAS_MAX_QUEUES];
-+
- 	struct timer_list timer;
- 	struct workqueue_struct *wq;
- 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index e05faf315dcd..533515e85f64 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -417,6 +417,11 @@ struct sig_atten_lu_s {
- 	u32 sas_phy_ctrl;
- };
- 
-+static bool auto_affine_interrupts;
-+module_param(auto_affine_interrupts, bool, 0444);
-+MODULE_PARM_DESC(auto_affine_interrupts, "Enable auto-affinity of completion queue interrupts:\n"
-+		 "default is off");
-+
- static const struct hisi_sas_hw_error one_bit_ecc_errors[] = {
- 	{
- 		.irq_msk = BIT(SAS_ECC_INTR_DQE_ECC_1B_OFF),
-@@ -3304,6 +3309,24 @@ static irq_handler_t fatal_interrupts[HISI_SAS_FATAL_INT_NR] = {
- 	fatal_axi_int_v2_hw
- };
- 
-+static void setup_reply_map_v2_hw(struct hisi_hba *hisi_hba)
-+{
-+	int queue, cpu;
-+
-+	for (queue = 0; queue < hisi_hba->queue_count; queue++) {
-+		struct hisi_sas_cq *cq = &hisi_hba->cq[queue];
-+		struct irq_affinity_desc *mask;
-+		struct cpumask *cpumask;
-+
-+		mask = &hisi_hba->affinity_masks[queue];
-+		cpumask = &mask->mask;
-+
-+		cq->irq_mask = cpumask;
-+		for_each_cpu(cpu, cpumask)
-+			hisi_hba->reply_map[cpu] = queue;
-+	}
-+}
-+
- /**
-  * There is a limitation in the hip06 chipset that we need
-  * to map in all mbigen interrupts, even if they are not used.
-@@ -3315,6 +3338,27 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 	int irq, rc = 0, irq_map[128];
- 	int i, phy_no, fatal_no, queue_no;
- 
-+	if (auto_affine_interrupts) {
-+		struct irq_affinity_desc *masks;
-+		struct irq_affinity desc = {};
-+		int nvec;
-+
-+		nvec = hisi_hba->queue_count;
-+		masks = irq_create_affinity_masks(nvec, &desc);
-+		if (!masks)
-+			return -ENOMEM;
-+
-+		memcpy(hisi_hba->affinity_masks, masks, nvec * sizeof(*masks));
-+		kfree(masks);
-+
-+		hisi_hba->reply_map = devm_kcalloc(dev, nr_cpu_ids,
-+						   sizeof(unsigned int),
-+						   GFP_KERNEL);
-+		if (!hisi_hba->reply_map)
-+			return -ENOMEM;
-+		setup_reply_map_v2_hw(hisi_hba);
-+	}
-+
- 	for (i = 0; i < 128; i++)
- 		irq_map[i] = platform_get_irq(pdev, i);
- 
-@@ -3358,11 +3402,16 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 
- 	for (queue_no = 0; queue_no < hisi_hba->queue_count; queue_no++) {
- 		struct hisi_sas_cq *cq = &hisi_hba->cq[queue_no];
-+		unsigned long irqflags = IRQF_ONESHOT;
-+
-+		if (auto_affine_interrupts)
-+			irqflags |= IRQF_NOBALANCING;
- 
- 		cq->irq_no = irq_map[queue_no + 96];
-+
- 		rc = devm_request_threaded_irq(dev, cq->irq_no,
- 					       cq_interrupt_v2_hw,
--					       cq_thread_v2_hw, IRQF_ONESHOT,
-+					       cq_thread_v2_hw, irqflags,
- 					       DRV_NAME " cq", cq);
- 		if (rc) {
- 			dev_err(dev, "irq init: could not request cq interrupt %d, rc=%d\n",
-@@ -3370,6 +3419,9 @@ static int interrupt_init_v2_hw(struct hisi_hba *hisi_hba)
- 			rc = -ENOENT;
- 			goto err_out;
- 		}
-+
-+		if (auto_affine_interrupts)
-+			irq_set_affinity(cq->irq_no, cq->irq_mask);
- 	}
- 
- 	hisi_hba->cq_nvecs = hisi_hba->queue_count;
+ drivers/scsi/ufs/ufs-mediatek.c |   7 +-
+ drivers/scsi/ufs/ufs-qcom.c     |   3 +-
+ drivers/scsi/ufs/ufs-sysfs.c    |   2 +-
+ drivers/scsi/ufs/ufs.h          |  25 ++-
+ drivers/scsi/ufs/ufs_quirks.h   |   9 +-
+ drivers/scsi/ufs/ufshcd.c       | 276 +++++++++++++++++++-------------
+ drivers/scsi/ufs/ufshcd.h       |   9 +-
+ 7 files changed, 194 insertions(+), 137 deletions(-)
+
 -- 
 2.17.1
 
