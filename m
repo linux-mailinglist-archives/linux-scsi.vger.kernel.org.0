@@ -2,115 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0935C142813
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jan 2020 11:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0065142ABD
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jan 2020 13:27:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727144AbgATKRp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Jan 2020 05:17:45 -0500
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2284 "EHLO huawei.com"
+        id S1726889AbgATM04 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Jan 2020 07:26:56 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:9213 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726621AbgATKRp (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 20 Jan 2020 05:17:45 -0500
-Received: from lhreml705-cah.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id 430547EA414141BA4666;
-        Mon, 20 Jan 2020 10:17:43 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml705-cah.china.huawei.com (10.201.108.46) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 20 Jan 2020 10:17:42 +0000
-Received: from [127.0.0.1] (10.202.226.43) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 20 Jan
- 2020 10:17:42 +0000
-Subject: Re: [PATCH 2/6] scsi: remove .for_blk_mq
-To:     Ming Lei <ming.lei@redhat.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-CC:     <linux-block@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        "Sathya Prakash" <sathya.prakash@broadcom.com>,
-        Chaitra P B <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        Bart Van Assche <bart.vanassche@wdc.com>,
-        Jason Yan <yanaijie@huawei.com>
-References: <20200119071432.18558-1-ming.lei@redhat.com>
- <20200119071432.18558-3-ming.lei@redhat.com>
+        id S1726642AbgATM04 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 20 Jan 2020 07:26:56 -0500
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id B5353EF6A50EE0610B56;
+        Mon, 20 Jan 2020 20:26:53 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS405-HUB.china.huawei.com (10.3.19.205) with Microsoft SMTP Server id
+ 14.3.439.0; Mon, 20 Jan 2020 20:26:43 +0800
 From:   John Garry <john.garry@huawei.com>
-Message-ID: <95a902c4-287a-eb23-dc5f-d3a66dff2289@huawei.com>
-Date:   Mon, 20 Jan 2020 10:17:41 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linuxarm@huawei.com>,
+        <linux-kernel@vger.kernel.org>, John Garry <john.garry@huawei.com>
+Subject: [PATCH 0/7] hisi_sas: Misc patches
+Date:   Mon, 20 Jan 2020 20:22:30 +0800
+Message-ID: <1579522957-4393-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-In-Reply-To: <20200119071432.18558-3-ming.lei@redhat.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.43]
-X-ClientProxiedBy: lhreml718-chm.china.huawei.com (10.201.108.69) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
 X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 19/01/2020 07:14, Ming Lei wrote:
-> No one use it any more, so remove the flag.
-> 
-> Cc: Sathya Prakash <sathya.prakash@broadcom.com>
-> Cc: Chaitra P B <chaitra.basappa@broadcom.com>
-> Cc: Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>
-> Cc: Kashyap Desai <kashyap.desai@broadcom.com>
-> Cc: Sumit Saxena <sumit.saxena@broadcom.com>
-> Cc: Shivasharan S <shivasharan.srikanteshwara@broadcom.com>
-> Cc: Ewan D. Milne <emilne@redhat.com>
-> Cc: Christoph Hellwig <hch@lst.de>,
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: Bart Van Assche <bart.vanassche@wdc.com>
-> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+This series introduces some misc patches for the driver for the v5.6
+cycle.
 
-I think that we can also delete drivers/scsi/scsi.c:scsi_use_blk_mq.
+Nothing especially interesting, but maybe the change to switch the v2
+driver to use reply map also, which improves performance.
 
-IIRC, a patch was already sent for that but never picked up.
+There is also a change to switch the driver to use threaded interrupt
+handling over tasklets.
 
-Thanks,
-John
+John Garry (2):
+  scsi: hisi_sas: Rename hisi_sas_cq.pci_irq_mask
+  scsi: hisi_sas: Use reply map for v2 hw
 
-> ---
->   drivers/scsi/virtio_scsi.c | 1 -
->   include/scsi/scsi_host.h   | 3 ---
->   2 files changed, 4 deletions(-)
-> 
-> diff --git a/drivers/scsi/virtio_scsi.c b/drivers/scsi/virtio_scsi.c
-> index bfec84aacd90..0e0910c5b942 100644
-> --- a/drivers/scsi/virtio_scsi.c
-> +++ b/drivers/scsi/virtio_scsi.c
-> @@ -742,7 +742,6 @@ static struct scsi_host_template virtscsi_host_template = {
->   	.dma_boundary = UINT_MAX,
->   	.map_queues = virtscsi_map_queues,
->   	.track_queue_depth = 1,
-> -	.force_blk_mq = 1,
->   };
->   
->   #define virtscsi_config_get(vdev, fld) \
-> diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-> index f577647bf5f2..7a97fb8104cf 100644
-> --- a/include/scsi/scsi_host.h
-> +++ b/include/scsi/scsi_host.h
-> @@ -426,9 +426,6 @@ struct scsi_host_template {
->   	/* True if the controller does not support WRITE SAME */
->   	unsigned no_write_same:1;
->   
-> -	/* True if the low-level driver supports blk-mq only */
-> -	unsigned force_blk_mq:1;
-> -
->   	/*
->   	 * Countdown for host blocking with no commands outstanding.
->   	 */
-> 
+Luo Jiaxing (3):
+  scsi: hisi_sas: Replace magic number when handle channel interrupt
+  scsi: hisi_sas: Modify the file permissions of trigger_dump to write
+    only
+  scsi: hisi_sas: Add prints for v3 hw interrupt converge and automatic
+    affinity
+
+Xiang Chen (2):
+  scsi: hisi_sas: use threaded irq to process CQ interrupts
+  scsi: hisi_sas: replace spin_lock_irqsave/spin_unlock_restore with
+    spin_lock/spin_unlock
+
+ drivers/scsi/hisi_sas/hisi_sas.h       |  9 ++-
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 74 ++++++++++-----------
+ drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 90 +++++++++++++++++++-------
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 54 +++++++++-------
+ 4 files changed, 139 insertions(+), 88 deletions(-)
+
+-- 
+2.17.1
 
