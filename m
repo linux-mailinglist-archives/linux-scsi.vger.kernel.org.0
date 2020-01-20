@@ -2,99 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68C7D1431E3
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jan 2020 20:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C16143262
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Jan 2020 20:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726798AbgATTAw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Jan 2020 14:00:52 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:46112 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726112AbgATTAv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jan 2020 14:00:51 -0500
-Received: by mail-ot1-f66.google.com with SMTP id r9so651627otp.13;
-        Mon, 20 Jan 2020 11:00:51 -0800 (PST)
+        id S1726991AbgATTcn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Jan 2020 14:32:43 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:38984 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726899AbgATTcm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 20 Jan 2020 14:32:42 -0500
+Received: by mail-ed1-f65.google.com with SMTP id t17so597677eds.6
+        for <linux-scsi@vger.kernel.org>; Mon, 20 Jan 2020 11:32:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PDpQAF+i2pq2uHsVICQDd7TG2O7Wyb3VR4zR7cxgZZ4=;
-        b=PgYpMeXtihwo3UHMOxBKlsQe4971PvToO4dB2O8HWjcXfBeadRdQP8crFLAWI+0PCQ
-         o02RAX0zyIbXaAdopDWAKJyXJQR2vYqqaJd0A/Rf3bbGLs3/FYkMFAsqb8AxQKeVVVe8
-         uBAE/jMhmnENlSb1cCQxZvs6FkloOy9uTWY12LNUPRioi1g10aVBc8utX4QuC/coPuxr
-         qA+1VW6ttoiAvKLAenNTDP5Vz/KbxHjr3wC4S74iuzEypKQJIqWRdNAiZJ2tFuYCOcpm
-         JydHWn0HCmXBtNKBdyT31Y9DJ+TT6zXWMStdzNskgLJTtqb1EmaNVAZDZD1lXFQ+v3Ne
-         LpIg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=I1roYPqxBJzWtUK/EbeI6Kt4sZi+JdSJm6qJbGHrPRZYvHUSh5jIrCeNC6L/G/f0o1
+         SOUBr7y32ZptFoyqXLV46mqkCVXIPksz6dHNenBfKH5ZmZaxgtbXfnD4DPiQngFU9XCO
+         yyR3xavKr41v/xLWwuSw91WJb2uX+wjZFxyyrAuDZ+hvXvCheAMdiLqD+HrlaysRfXCL
+         GNNQRcxyOsqzXo4wRH2J/upuPpeDO5ZRhzNY4HfuYgHfElCshp5fZYHSWkrBX0jAzQvX
+         wM9NfRj8QHz6JxUFOI+rZ3wcUi7Ikp+pHr28kaxr4n7py/KC1H5pYclpR4JTvoTIZ7Jv
+         h8rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PDpQAF+i2pq2uHsVICQDd7TG2O7Wyb3VR4zR7cxgZZ4=;
-        b=nWVJF9L91U2pVbtYlp7XzvU2NJD3Jte/JEp8WKwPU2RstuvnmsRPn9EW6FeMxAGXmk
-         MhxLlVdqiZHF88E5ZcQSENuZT+4ZyYzrP0e/nGbAPJBW5f8QQ6znwkNkgFHY1i6JZuy5
-         j+a1BmFlpimWkDmyCUAt8TPBErQiayXRrLmNiFuxodsz+92VSgsNJchwZf+cwtkUJh9S
-         G93IINsZbPa8qOvNHgHr9V9caj2EhVN5/B1d4tDqA2HgYpZkIDZEy4E2Ipa5HO0cBIyG
-         MFCMtcIX0UmfzwzvcDH/FXeUwJ7Qp1E1rOr5lJMu3BSRs7QQRDzF26YSbvYumGx31ksu
-         2ZVQ==
-X-Gm-Message-State: APjAAAWKV6IXUoGXQnwFzyzy7LnUtX7xrOisc1HH6kgR3rPxJeX7pITF
-        Eli+dooWdAlG1Kp/6EqO+V4=
-X-Google-Smtp-Source: APXvYqxxGUypQRdE6ZNJl9t7UwurrtKJL2Fgml/ADb4BkoE3IFa3lbxtMrMqIvSjt9gGAfKpMuu2RQ==
-X-Received: by 2002:a9d:7b4a:: with SMTP id f10mr747171oto.4.1579546850655;
-        Mon, 20 Jan 2020 11:00:50 -0800 (PST)
-Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id i20sm12641352otp.14.2020.01.20.11.00.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2020 11:00:50 -0800 (PST)
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Michael Reed <mdr@sgi.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Thomas Bogendoerfer <tbogendoerfer@suse.de>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: [PATCH] scsi: qla1280: Fix a use of QLA_64BIT_PTR
-Date:   Mon, 20 Jan 2020 12:00:21 -0700
-Message-Id: <20200120190021.26460-1-natechancellor@gmail.com>
-X-Mailer: git-send-email 2.25.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=kTfC590fsND4OF2KAB0YUAW/7CFdSY3FxIc7FdSL4lrjXrVwxeTx4YlP/YeEIgLLFF
+         hNXcLmzYqbbDok1Ln/NYYmraQMc2j/NMTe49LUjDDdq662/SOPS8tnrX7jyM72b96Fr4
+         kGXboYmaobSdeToP8UtIDRyv0+gyhX9voYLmyB6+1lmqmMsqFIZ55bJ2RIzMclCl50L3
+         NvfKCPCGQusNJUzqd/8qyJtFBGSJYRCrBcBsKdOuQ6Ik2JtFPCRgh4R+cQE5Wz5iCgDJ
+         tRXnwfqdzPwac+jKVbBqLPZq+ZbaSPaq+iU4Eg9Lgpvl2L4iscGQaH2ick19iZm+F9oA
+         hA3g==
+X-Gm-Message-State: APjAAAWXiiFEBx/9VRL2BEs2BC9q1sr9Ty+YOhOeQHwqvo0K3Q7v+ifU
+        3dmj9G2Ja61twV1g6d/JVyK/+2yOQRCE5yWWE9E=
+X-Google-Smtp-Source: APXvYqwKjCT5QnfvXWtJkO29cRmoOGR1uhIhw9Ol6eYz9VuYzVaqX/o8Ejt2WLDxZ+bl2CebXLO8AWZ4Emn93SBTQws=
+X-Received: by 2002:a17:906:1fcd:: with SMTP id e13mr898516ejt.333.1579548761316;
+ Mon, 20 Jan 2020 11:32:41 -0800 (PST)
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:32:40
+ -0800 (PST)
+Reply-To: mcclainejohn.13@gmail.com
+From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
+Date:   Mon, 20 Jan 2020 20:32:40 +0100
+Message-ID: <CAOE+jABpcHQWZWhtskhDFbtTqfBe7h065WE2kC1G+jQD+tQiTA@mail.gmail.com>
+Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
+ valued the sum of $12.8Million United States Dollars
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Clang warns:
+Attn: Dear Beneficiary,
 
-../drivers/scsi/qla1280.c:1702:5: warning: 'QLA_64BIT_PTR' is not
-defined, evaluates to 0 [-Wundef]
-if QLA_64BIT_PTR
-    ^
-1 warning generated.
+I wish to inform you that the diplomatic agent conveying your ATM CARD
+valued the sum of $12.8Million United States Dollars has misplaced
+your address and he is currently stranded at (George Bush
+International Airport) Houston Texas USA now
+We required you to reconfirm the following information's below to him
+so that he can deliver your Payment CARD to you today or tomorrow
+morning as information provided with open communications via email and
+telephone for security reasons.
+HERE IS THE DETAILS  HE NEED FROM YOU URGENT
+YOUR FULL NAME:========
+ADDRESS:========
+MOBILE NO:========
+NAME OF YOUR NEAREST AIRPORT:========
+A COPY OF YOUR IDENTIFICATION :========
 
-The rest of this driver uses #ifdef QLA_64BIT_PTR, do the same thing at
-this site to remove this warning.
+Note; do contact the diplomatic agent immediately through the
+information's listed below
+Contact Person: Diplomatic Agent, Mr. Mcclaine John
+EMAIL: mcclainejohn.13@gmail.com
+Tel:(223) 777-7518
 
-Fixes: ba304e5b4498 ("scsi: qla1280: Fix dma firmware download, if dma address is 64bit")
-Link: https://github.com/ClangBuiltLinux/linux/issues/843
-Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
----
- drivers/scsi/qla1280.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Contact the diplomatic agent immediately
+because he is waiting to hear from you today with the needed information's.
 
-diff --git a/drivers/scsi/qla1280.c b/drivers/scsi/qla1280.c
-index 607cbddcdd14..3337cd341d21 100644
---- a/drivers/scsi/qla1280.c
-+++ b/drivers/scsi/qla1280.c
-@@ -1699,7 +1699,7 @@ qla1280_load_firmware_pio(struct scsi_qla_host *ha)
- 	return err;
- }
- 
--#if QLA_64BIT_PTR
-+#ifdef QLA_64BIT_PTR
- #define LOAD_CMD	MBC_LOAD_RAM_A64_ROM
- #define DUMP_CMD	MBC_DUMP_RAM_A64_ROM
- #define CMD_ARGS	(BIT_7 | BIT_6 | BIT_4 | BIT_3 | BIT_2 | BIT_1 | BIT_0)
--- 
-2.25.0
+NOTE: The Diplomatic agent does not know that the content of the
+consignment box is $12.800,000,00 Million United States Dollars and on
+no circumstances should you let him know the content. The consignment
+was moved from here as family treasures, so never allow him to open
+the box. Please I have paid delivery fees for you but the only money
+you must send to Mcclaine John is your ATM CARD delivery fee $25.00
+only. text Him as you contact Him Immediately
 
+Thanks,
+with Regards.
+Prof, William Roberts
+Director DHL COURIER SERVICES-Benin
