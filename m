@@ -2,132 +2,149 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BA08146128
-	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jan 2020 05:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D545146130
+	for <lists+linux-scsi@lfdr.de>; Thu, 23 Jan 2020 05:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726227AbgAWEYC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Jan 2020 23:24:02 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36437 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbgAWEYC (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jan 2020 23:24:02 -0500
-Received: by mail-pg1-f195.google.com with SMTP id k3so704631pgc.3
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Jan 2020 20:24:01 -0800 (PST)
+        id S1726054AbgAWEoP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Jan 2020 23:44:15 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46278 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726004AbgAWEoP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Jan 2020 23:44:15 -0500
+Received: by mail-pl1-f196.google.com with SMTP id y8so785212pll.13
+        for <linux-scsi@vger.kernel.org>; Wed, 22 Jan 2020 20:44:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gHUpc4aIhYZMfKp3dMo0ZA46Tg26g1TgLcTwggGP2GE=;
-        b=CEpZ5b3nWG9RmSmAW1TKPAcXlvarxSkR4yFpBy07fwethxzfnM8OFHuZgKUvZMQ8gx
-         VgMRHxPYrR8KL6urmcO/8R1lYoehVW2mDbnxzDirWEoIHOaUO0eThXw0RU7Rs8kfijfY
-         fqziNn7aOiVShv+RSQqQmcOQ/G65N/PqZyDYoBtnDp1YgbQl+meaPhhj7a87HvUxLVEG
-         G3TtP2cOwcyCxRH5Vj6WhjykZwiYPDE8ym9iemKeMwt2c9esXgfi8otaWybAi22GdSTr
-         YpaUfWIh9gxhxoyFLzYut5289uNkK1E2nboL3Gzo381ajbs+7vFoMBW7DY/jE56pyJyS
-         8lTg==
-X-Gm-Message-State: APjAAAU6O8QziSBz6Tod2MmlKtgIQUcQAji5ZZerl9drWJqN/SPWV09I
-        FM8YZF8Juav9mzr2BGT4pVU=
-X-Google-Smtp-Source: APXvYqzaXZjLUt1h6bFULom9d/aEBhE3LqvutIhWfJuWfRASzsmv7H2qxIygNV3OG0JHlteSkbj9sw==
-X-Received: by 2002:aa7:8115:: with SMTP id b21mr5864604pfi.80.1579753441431;
-        Wed, 22 Jan 2020 20:24:01 -0800 (PST)
-Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:d957:4568:237a:bc62])
-        by smtp.gmail.com with ESMTPSA id p16sm492879pfq.184.2020.01.22.20.24.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2020 20:24:00 -0800 (PST)
+        h=x-gm-message-state:subject:to:references:from:autocrypt:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/ZxgDylF718HoB+bPvw6qTbg2lWPho/gJhdVKa/DlYc=;
+        b=DBltVOSB7Q6ojZ2qngUfzewPvV1zXxWNGV6K6JipRq3v4mYsrL+hf+An7E6tGf4kgx
+         uaUWqbrgR3pbMQRPkBF6AS6WYkSra0hmMgO2rKmqlMjkNnh7Xpiu6zS/g9wt0XZcHDv5
+         koIiF3h875JpRbhEVZ2XumPUSPNAk2UXA55faTOAFnWBcYpKEXE9uD4+PA0NutIIbDrL
+         Civ3sfbFAaY7ybUc3erd4igGw3NRZkJpBRK+Ax80OgF7JUaiNOfuwvIlrRb0f4/J1ywy
+         kGkCGlYggIoUiDl0U/61BCWiLs0LlfIA6MnxP8wA057fZrKYKGCCcmQrmKXV6nxOrSAy
+         Kk9w==
+X-Gm-Message-State: APjAAAVzqF16ps9a4pC8rsJHUgWIeNIwH7UVFmTs9SzpRou9ma7myTnD
+        QRj6JV7b9F0uhuvuskBjvcSnBQmV
+X-Google-Smtp-Source: APXvYqyXi7oT2JBIz9hGjXz6xRcRSecvF1sGpPqN5HqhqAF7zStg+CbugMavprmX6/GErRtJyx5ArA==
+X-Received: by 2002:a17:90a:8042:: with SMTP id e2mr2415528pjw.16.1579754653969;
+        Wed, 22 Jan 2020 20:44:13 -0800 (PST)
+Received: from ?IPv6:2601:647:4000:d7:d957:4568:237a:bc62? ([2601:647:4000:d7:d957:4568:237a:bc62])
+        by smtp.gmail.com with ESMTPSA id c14sm585556pfn.8.2020.01.22.20.44.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jan 2020 20:44:13 -0800 (PST)
+Subject: Re: [PATCH] scsi: add attribute to set lun queue depth on all luns on
+ shost
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+References: <20200121235302.9955-1-jsmart2021@gmail.com>
 From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Quinn Tran <qutran@marvell.com>,
-        Martin Wilck <mwilck@suse.com>,
-        Daniel Wagner <dwagner@suse.de>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: [PATCH v2 6/6] qla2xxx: Fix the endianness annotations for the port attribute max_frame_size member
-Date:   Wed, 22 Jan 2020 20:23:45 -0800
-Message-Id: <20200123042345.23886-7-bvanassche@acm.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200123042345.23886-1-bvanassche@acm.org>
-References: <20200123042345.23886-1-bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <eba0f027-f2d0-7209-c34d-78b0b93a9a78@acm.org>
+Date:   Wed, 22 Jan 2020 20:44:12 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200121235302.9955-1-jsmart2021@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make sure that sparse doesn't complain about the statements that load or
-store the port attribute max_frame_size member. The port attribute data
-structures represent FC protocol data and hence use big endian format.
-This patch only changes the meaning of two ql_dbg() statements.
+On 2020-01-21 15:53, James Smart wrote:
+> +static int
+> +sdev_set_queue_depth(struct scsi_device *sdev, int depth)
+> +{
+> +	struct scsi_host_template *sht = sdev->host->hostt;
+> +	int retval;
+> +
+> +	retval = sht->change_queue_depth(sdev, depth);
+> +	if (retval < 0)
+> +		return retval;
+> +
+> +	sdev->max_queue_depth = sdev->queue_depth;
+> +
+> +	return 0;
+> +}
 
-Cc: Quinn Tran <qutran@marvell.com>
-Cc: Martin Wilck <mwilck@suse.com>
-Cc: Daniel Wagner <dwagner@suse.de>
-Cc: Roman Bolshakov <r.bolshakov@yadro.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/qla2xxx/qla_def.h |  4 ++--
- drivers/scsi/qla2xxx/qla_gs.c  | 14 ++++++--------
- 2 files changed, 8 insertions(+), 10 deletions(-)
+'sht' is only used once, so I'm not sure whether it is worth it to keep
+that local variable.
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index 968f19995063..5c6bae116b58 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -2741,7 +2741,7 @@ struct ct_fdmiv2_port_attr {
- 		uint8_t fc4_types[32];
- 		uint32_t sup_speed;
- 		uint32_t cur_speed;
--		uint32_t max_frame_size;
-+		__be32	max_frame_size;
- 		uint8_t os_dev_name[32];
- 		uint8_t host_name[256];
- 		uint8_t node_name[WWN_SIZE];
-@@ -2772,7 +2772,7 @@ struct ct_fdmi_port_attr {
- 		uint8_t fc4_types[32];
- 		uint32_t sup_speed;
- 		uint32_t cur_speed;
--		uint32_t max_frame_size;
-+		__be32	max_frame_size;
- 		uint8_t os_dev_name[32];
- 		uint8_t host_name[256];
- 	} a;
-diff --git a/drivers/scsi/qla2xxx/qla_gs.c b/drivers/scsi/qla2xxx/qla_gs.c
-index aaa4a5bbf2ff..594b366db0ef 100644
---- a/drivers/scsi/qla2xxx/qla_gs.c
-+++ b/drivers/scsi/qla2xxx/qla_gs.c
-@@ -1848,14 +1848,13 @@ qla2x00_fdmi_rpa(scsi_qla_host_t *vha)
- 	eiter = entries + size;
- 	eiter->type = cpu_to_be16(FDMI_PORT_MAX_FRAME_SIZE);
- 	eiter->len = cpu_to_be16(4 + 4);
--	eiter->a.max_frame_size = IS_FWI2_CAPABLE(ha) ?
-+	eiter->a.max_frame_size = cpu_to_be32(IS_FWI2_CAPABLE(ha) ?
- 	    le16_to_cpu(icb24->frame_payload_size) :
--	    le16_to_cpu(ha->init_cb->frame_payload_size);
--	eiter->a.max_frame_size = cpu_to_be32(eiter->a.max_frame_size);
-+	    le16_to_cpu(ha->init_cb->frame_payload_size));
- 	size += 4 + 4;
- 
- 	ql_dbg(ql_dbg_disc, vha, 0x203c,
--	    "Max_Frame_Size=%x.\n", eiter->a.max_frame_size);
-+	       "Max_Frame_Size=%x.\n", be32_to_cpu(eiter->a.max_frame_size));
- 
- 	/* OS device name. */
- 	eiter = entries + size;
-@@ -2419,14 +2418,13 @@ qla2x00_fdmiv2_rpa(scsi_qla_host_t *vha)
- 	eiter = entries + size;
- 	eiter->type = cpu_to_be16(FDMI_PORT_MAX_FRAME_SIZE);
- 	eiter->len = cpu_to_be16(4 + 4);
--	eiter->a.max_frame_size = IS_FWI2_CAPABLE(ha) ?
-+	eiter->a.max_frame_size = cpu_to_be32(IS_FWI2_CAPABLE(ha) ?
- 	    le16_to_cpu(icb24->frame_payload_size) :
--	    le16_to_cpu(ha->init_cb->frame_payload_size);
--	eiter->a.max_frame_size = cpu_to_be32(eiter->a.max_frame_size);
-+	    le16_to_cpu(ha->init_cb->frame_payload_size));
- 	size += 4 + 4;
- 
- 	ql_dbg(ql_dbg_disc, vha, 0x20bc,
--	    "Max_Frame_Size = %x.\n", eiter->a.max_frame_size);
-+	       "Max_Frame_Size = %x.\n", be32_to_cpu(eiter->a.max_frame_size));
- 
- 	/* OS device name. */
- 	eiter = entries + size;
+> +static ssize_t
+> +store_host_lun_queue_depth(struct device *dev, struct device_attribute *attr,
+> +		const char *buf, size_t count)
+> +{
+> +	struct Scsi_Host *shost = class_to_shost(dev);
+> +	struct scsi_host_template *sht = shost->hostt;
+> +	struct scsi_device *sdev;
+> +	int depth, retval;
+> +
+> +	if (!sht->change_queue_depth)
+> +		return -EINVAL;
+> +
+> +	depth = simple_strtoul(buf, NULL, 0);
+> +	if (depth < 1 || depth > shost->can_queue)
+> +		return -EINVAL;
+> +
+> +	shost_for_each_device(sdev, shost) {
+> +		retval = sdev_set_queue_depth(sdev, depth);
+> +		if (retval != 0)
+> +			sdev_printk(KERN_INFO, sdev,
+> +				"failed to set queue depth to %d (err %d)",
+> +				depth, retval);
+> +	}
+> +
+> +	return count;
+> +}
+
+Returning -EINVAL from all error paths makes it impossible to tell the
+difference between a value that is out of range and queue depth changes
+not being supported. Should another error code be returned if
+sht->change_queue_depth == NULL?
+
+> @@ -992,12 +1037,10 @@ sdev_store_queue_depth(struct device *dev, struct device_attribute *attr,
+>  	if (depth < 1 || depth > sdev->host->can_queue)
+>  		return -EINVAL;
+>  
+> -	retval = sht->change_queue_depth(sdev, depth);
+> +	retval = sdev_set_queue_depth(sdev, depth);
+>  	if (retval < 0)
+>  		return retval;
+>  
+> -	sdev->max_queue_depth = sdev->queue_depth;
+> -
+>  	return count;
+>  }
+
+How about splitting this patch into two patches: one that introduces the
+function sdev_set_queue_depth() and a second patch that introduces the
+lun_queue_depth sysfs attribute?
+
+Thanks,
+
+Bart.
