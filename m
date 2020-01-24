@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9D414878D
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Jan 2020 15:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8004B14876C
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Jan 2020 15:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730320AbgAXOXV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Jan 2020 09:23:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44430 "EHLO mail.kernel.org"
+        id S2388530AbgAXOWz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Jan 2020 09:22:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44712 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392356AbgAXOWW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 24 Jan 2020 09:22:22 -0500
+        id S2392397AbgAXOWd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 24 Jan 2020 09:22:33 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7915F2072C;
-        Fri, 24 Jan 2020 14:22:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BAEB122527;
+        Fri, 24 Jan 2020 14:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579875740;
+        s=default; t=1579875752;
         bh=LwzExljeYI2evYxgrBuUsCwPgYYVMotkGukuDrg8DSM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vlZPWuHpR2QPGVrVp0MkUeTerTYNCi5loivboIrxixRMJwrmyoSl36N3PCvOOC2tI
-         UZqjytONi5tCUWDCQewa1cY5eO5UCj2qqp/1iE+h5tsydyh7Me/ft28+cY3ZXmAoM8
-         xgIqOxCMgq3TYoiiE5Mathhnckzf5PffiqE7W9P8=
+        b=zlw5quaqEPz8yn8Iahg48ZAkrwejqDQ6xHvcPp+ePyT81+uFwfv7GZKFVkskUg7aR
+         4vqKlQaCt0lBKqy75TBnwPpz0hzY2p7ukq+aAr41OLawpKH0AKqYdE3tW3sXpJmBFv
+         cs6xj8CtHHwIK+v8J/GeBffGvzFcIa6Uyyq3ZwI8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
@@ -31,12 +31,12 @@ Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>,
         MPT-FusionLinux.pdl@avagotech.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 18/18] scsi: mptfusion: Fix double fetch bug in ioctl
-Date:   Fri, 24 Jan 2020 09:21:57 -0500
-Message-Id: <20200124142157.30931-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 9/9] scsi: mptfusion: Fix double fetch bug in ioctl
+Date:   Fri, 24 Jan 2020 09:22:21 -0500
+Message-Id: <20200124142221.31201-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200124142157.30931-1-sashal@kernel.org>
-References: <20200124142157.30931-1-sashal@kernel.org>
+In-Reply-To: <20200124142221.31201-1-sashal@kernel.org>
+References: <20200124142221.31201-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
