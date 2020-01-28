@@ -2,54 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7889D14AD28
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2020 01:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF3714AD2A
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Jan 2020 01:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbgA1AXn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Jan 2020 19:23:43 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34141 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726650AbgA1AXm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jan 2020 19:23:42 -0500
-Received: by mail-wr1-f65.google.com with SMTP id t2so13953407wrr.1
-        for <linux-scsi@vger.kernel.org>; Mon, 27 Jan 2020 16:23:41 -0800 (PST)
+        id S1726758AbgA1AXp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Jan 2020 19:23:45 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:33600 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726444AbgA1AXo (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Jan 2020 19:23:44 -0500
+Received: by mail-wm1-f65.google.com with SMTP id m10so590896wmc.0
+        for <linux-scsi@vger.kernel.org>; Mon, 27 Jan 2020 16:23:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yyiLLX3m4GUX9ztZjmhcH8UsEIEDJx3bTlpiA/cJkpc=;
-        b=TIavXPmzviVcVqbvuAXgtXrnn37+Zja+8jGmxqYfyrcB9zkMwt6W46GAZ1TELXEjHs
-         6kxdxFYjTrmQfnolcvGRnkyIgQnbx8wGpmuI2G9ibt3ye/k627Le06b7t7LZEAg3Y3pU
-         h/hPJ91947g2c50VchNPm6ym50yNFB0Oa4+49zG94qON7ZqKPO/gWGJa4GSLP6H2pUeh
-         kKXVe68h8mJXT2jEmJ9oPNpZNnKxUYNn3t0Lmcj74MdvgeGOqeOEeyR3xwxb4PSi3eRL
-         n9adZWrYglde934JdsPTAQktaTMulPp2gFyiwRUqVQjYHUfwLhau9YKe54DiuzALwciJ
-         slvg==
+        bh=Hvp5VjDvnqbZv6jI96DotywfNWxeovCkVGmlBUZyW6Q=;
+        b=CIG7QHV9EpaZ1t38AhSVVL3qFMMn5+WQXdiybt74LCex9MTofHx1LQJfRvkysPLZ8e
+         R03nOGLkrAtwJ96mguQB1M+REY1jK9GqZJlv1CkfUsp+j/WTjg7jU+fGaIb4lqL4ciKR
+         5XS2+O53pDC7J8STw7URQHjmbTerrauB8wOdnBTXNNC6V8l+eynloEGMSJrHXCDSZJbh
+         Ddu+S4QWWAmIqMfhmgKxJ0MfdFuPb8bZSVwPUVWl7wesIbqUQMyAd7IOM8wZp460pUNJ
+         wmxHIvdFMMYcT6LOv89zko4mrHG5CZCKpK+Uq1+GIm7hJAt3NlWx9BRuPX7Ho8gKryh5
+         AQzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=yyiLLX3m4GUX9ztZjmhcH8UsEIEDJx3bTlpiA/cJkpc=;
-        b=kWB+zIEQnBDd7qX5JoYHz+rgkJ/lnqpxJASRw8SYVghCP6lY6iMiB8bzBDqy37WDPb
-         YTHwredEjIwYHApc9WghCX7HcgEOop9Js3UPCWl/5osWcMse9QEipkjINUDfoyyefS7m
-         PcxIhvIqW9pgwuvTf6LOoRxBxORrIlUDOYzTGe0MrWC/P927WxePUiFrx2l6tr+w0fgn
-         Wouu9SPaMGLhFrrEfZMfUA8bjfxdkGr+f9ZXofyDzUmhGHC6ujwFf4QxtWLrnI2o9xt6
-         ROkPiuBWr21bsbcBhwb6vD8Jircj0dq54+d/rkmJgN+k06VIiP97hzYjcIQhun4hJrun
-         XIWQ==
-X-Gm-Message-State: APjAAAUstI7GrIgwHJeuNN8kUa4MXucIz/F0CYjpwobVUEncERLr6vAY
-        RoR+eLrH18/KnWbCflzmeYQwJ/7H
-X-Google-Smtp-Source: APXvYqxMIFmXUgRIytLEREeb7xcKrSi48PYWKW9WnciKV1ls1Vzbu9YjNzJR2e8rVQnFyGLc2TjUoQ==
-X-Received: by 2002:a5d:528e:: with SMTP id c14mr25073777wrv.308.1580171020042;
-        Mon, 27 Jan 2020 16:23:40 -0800 (PST)
+        bh=Hvp5VjDvnqbZv6jI96DotywfNWxeovCkVGmlBUZyW6Q=;
+        b=S8VvLHaskSQYcF0NXGTsvyJAgtLlL7ZZ8m4rYQ9HbIrImd6z9ltOGzNOqj/8EfkOTU
+         37WpzqLsV0uk7SXIkPRaoSIAVUoqdfUL8fvve1y01gs6FTRyqLmsRbqYR7RGy35ZPmTL
+         ORfhmYz5atmnyg+gRnnDQWZWfSQIpjuL3hnsFoKDXx7OYKTFzri0GHxPROerBuoted/j
+         9lifTVtACPgUXV2sgNS4zMef2Lkyqn4eYdDVAfAN6dW+pTB0qgz1Tau0n56lcvy5Q3yR
+         kLrlGEU8OX07XLGJBDHOxQmxFeftIfuFDhqN00qfKQjzilyUypfDHybBJAQZaPi5xnST
+         ZHTw==
+X-Gm-Message-State: APjAAAVZul/r3AQ4oJ3S+HWaJpYde21IzhUfq4IRnolubQ0wv8We9NNz
+        0N9L1prShvTnM9kwdWOYYGcGk8GY
+X-Google-Smtp-Source: APXvYqxbPsJ0150z6Aex0bXxI/2luVFbj0OI8bEPvaRYqIHlsUb0KVRsq9uJLKYoM8mnucvtoBfZqQ==
+X-Received: by 2002:a05:600c:218a:: with SMTP id e10mr1260571wme.6.1580171021806;
+        Mon, 27 Jan 2020 16:23:41 -0800 (PST)
 Received: from os42.localdomain ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z19sm583769wmi.43.2020.01.27.16.23.38
+        by smtp.gmail.com with ESMTPSA id z19sm583769wmi.43.2020.01.27.16.23.40
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 27 Jan 2020 16:23:39 -0800 (PST)
+        Mon, 27 Jan 2020 16:23:41 -0800 (PST)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 09/12] lpfc: Clean up hba max_lun_queue_depth checks
-Date:   Mon, 27 Jan 2020 16:23:09 -0800
-Message-Id: <20200128002312.16346-10-jsmart2021@gmail.com>
+Subject: [PATCH 10/12] lpfc: Change lpfc_lun_queue_depth attribute to writable
+Date:   Mon, 27 Jan 2020 16:23:10 -0800
+Message-Id: <20200128002312.16346-11-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.13.7
 In-Reply-To: <20200128002312.16346-1-jsmart2021@gmail.com>
 References: <20200128002312.16346-1-jsmart2021@gmail.com>
@@ -58,84 +58,107 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The current code does some odd +1 over maximum xri count checks and
-requires that the lun_queue_count can't be bigger than maximum xri
-count divided by 8. These items are bogus.
-
-Clean the code up to cap lun_queue_count to maximum xri count.
+Change the lpfc_lun_queue_depth attribute to be writable. When written,
+will change the driver's value and calls the new scsi service routine
+shost_change_max_queue_depths() to set the maximum and queue depth of
+the luns on the shost to the new value.
 
 Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc_attr.c |  3 ---
- drivers/scsi/lpfc/lpfc_init.c | 17 ++++-------------
- drivers/scsi/lpfc/lpfc_sli.c  |  9 ---------
- 3 files changed, 4 insertions(+), 25 deletions(-)
 
+---
+This patch is dependent upon this series, which adds the new
+scsi service routine shost_change_max_queue_depths():
+https://www.spinics.net/lists/linux-scsi/msg137981.html
+---
+ drivers/scsi/lpfc/lpfc.h      |  3 +++
+ drivers/scsi/lpfc/lpfc_attr.c | 59 +++++++++++++++++++++++++++++++++++++++++--
+ 2 files changed, 60 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc.h b/drivers/scsi/lpfc/lpfc.h
+index cebbad1b3e55..d26ae94e6f1e 100644
+--- a/drivers/scsi/lpfc/lpfc.h
++++ b/drivers/scsi/lpfc/lpfc.h
+@@ -69,6 +69,9 @@ struct lpfc_sli2_slim;
+ #define LPFC_TGTQ_RAMPUP_PCENT	5	/* Target queue rampup in percentage */
+ #define LPFC_MIN_TGT_QDEPTH	10
+ #define LPFC_MAX_TGT_QDEPTH	0xFFFF
++#define LPFC_MIN_LUN_QDEPTH	1
++#define LPFC_DEF_LUN_QDEPTH	30
++#define LPFC_MAX_LUN_QDEPTH	512
+ 
+ #define  LPFC_MAX_BUCKET_COUNT 20	/* Maximum no. of buckets for stat data
+ 					   collection. */
 diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-index 46f56f30f77e..48b6c98ec922 100644
+index 48b6c98ec922..127484061f18 100644
 --- a/drivers/scsi/lpfc/lpfc_attr.c
 +++ b/drivers/scsi/lpfc/lpfc_attr.c
-@@ -3869,9 +3869,6 @@ LPFC_VPORT_ATTR_R(enable_da_id, 1, 0, 1,
- /*
+@@ -3870,8 +3870,63 @@ LPFC_VPORT_ATTR_R(enable_da_id, 1, 0, 1,
  # lun_queue_depth:  This parameter is used to limit the number of outstanding
  # commands per FCP LUN. Value range is [1,512]. Default value is 30.
--# If this parameter value is greater than 1/8th the maximum number of exchanges
--# supported by the HBA port, then the lun queue depth will be reduced to
--# 1/8th the maximum number of exchanges.
  */
- LPFC_VPORT_ATTR_R(lun_queue_depth, 30, 1, 512,
- 		  "Max number of FCP commands we can queue to a specific LUN");
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 9a6191818a23..6d571e0b74f0 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -512,21 +512,12 @@ lpfc_config_port_post(struct lpfc_hba *phba)
- 	lpfc_sli_read_link_ste(phba);
+-LPFC_VPORT_ATTR_R(lun_queue_depth, 30, 1, 512,
+-		  "Max number of FCP commands we can queue to a specific LUN");
++static u16 lpfc_lun_queue_depth = LPFC_DEF_LUN_QDEPTH;
++module_param(lpfc_lun_queue_depth, ushort, 0644);
++MODULE_PARM_DESC(lpfc_lun_queue_depth,
++		 "Max number of FCP commands we can queue to a specific LUN");
++lpfc_vport_param_show(lun_queue_depth);
++lpfc_vport_param_init(lun_queue_depth, LPFC_DEF_LUN_QDEPTH, LPFC_MIN_LUN_QDEPTH,
++		      LPFC_MAX_LUN_QDEPTH);
++
++static ssize_t
++lpfc_lun_queue_depth_store(struct device *dev, struct device_attribute *attr,
++			   const char *buf, size_t count)
++{
++	struct Scsi_Host  *shost = class_to_shost(dev);
++	struct lpfc_vport *vport = (struct lpfc_vport *)shost->hostdata;
++	struct lpfc_hba   *phba = vport->phba;
++	u16 new_queue_depth;
++	int rc;
++
++	rc = kstrtou16(buf, 0, &new_queue_depth);
++	if (rc) {
++		lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
++				"4385 lpfc_lun_queue_depth: failed to convert "
++				"\"%s\" to u16 (%d)\n",
++				buf, rc);
++		return -EINVAL;
++	}
++
++	/* Check allowed range */
++	if (new_queue_depth < LPFC_MIN_LUN_QDEPTH ||
++	    new_queue_depth > LPFC_MAX_LUN_QDEPTH) {
++		lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
++				"4386 lpfc_lun_queue_depth: %d outside of "
++				"allowed range [%u, %u]\n",
++				new_queue_depth, LPFC_MIN_LUN_QDEPTH,
++				LPFC_MAX_LUN_QDEPTH);
++		return -EINVAL;
++	}
++
++	/* Check if previously set same value */
++	if (new_queue_depth == vport->cfg_lun_queue_depth)
++		goto buffer_done;
++
++	/* Store for future calls to slave_configure */
++	vport->cfg_lun_queue_depth = new_queue_depth;
++
++	/* Change all the current LUNs' queue depths */
++	rc = shost_change_max_queue_depths(shost, new_queue_depth);
++	if (rc)
++		lpfc_printf_log(phba, KERN_ERR, LOG_INIT,
++				"4387 lpfc_lun_queue_depth: error setting lun "
++				"max queue depths (%d)\n",
++				rc);
++
++buffer_done:
++	return strlen(buf);
++}
++static DEVICE_ATTR_RW(lpfc_lun_queue_depth);
  
- 	/* Reset the DFT_HBA_Q_DEPTH to the max xri  */
--	i = (mb->un.varRdConfig.max_xri + 1);
--	if (phba->cfg_hba_queue_depth > i) {
-+	if (phba->cfg_hba_queue_depth > mb->un.varRdConfig.max_xri) {
- 		lpfc_printf_log(phba, KERN_WARNING, LOG_INIT,
- 				"3359 HBA queue depth changed from %d to %d\n",
--				phba->cfg_hba_queue_depth, i);
--		phba->cfg_hba_queue_depth = i;
--	}
--
--	/* Reset the DFT_LUN_Q_DEPTH to (max xri >> 3)  */
--	i = (mb->un.varRdConfig.max_xri >> 3);
--	if (phba->pport->cfg_lun_queue_depth > i) {
--		lpfc_printf_log(phba, KERN_WARNING, LOG_INIT,
--				"3360 LUN queue depth changed from %d to %d\n",
--				phba->pport->cfg_lun_queue_depth, i);
--		phba->pport->cfg_lun_queue_depth = i;
-+				phba->cfg_hba_queue_depth,
-+				mb->un.varRdConfig.max_xri);
-+		phba->cfg_hba_queue_depth = mb->un.varRdConfig.max_xri;
- 	}
- 
- 	phba->lmt = mb->un.varRdConfig.lmt;
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index ab6f58bc80a4..a5fd043e9be4 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -7371,15 +7371,6 @@ lpfc_sli4_hba_setup(struct lpfc_hba *phba)
- 			phba->vpd.rev.fcphHigh, phba->vpd.rev.fcphLow,
- 			phba->vpd.rev.feaLevelHigh, phba->vpd.rev.feaLevelLow);
- 
--	/* Reset the DFT_LUN_Q_DEPTH to (max xri >> 3)  */
--	rc = (phba->sli4_hba.max_cfg_param.max_xri >> 3);
--	if (phba->pport->cfg_lun_queue_depth > rc) {
--		lpfc_printf_log(phba, KERN_WARNING, LOG_INIT,
--				"3362 LUN queue depth changed from %d to %d\n",
--				phba->pport->cfg_lun_queue_depth, rc);
--		phba->pport->cfg_lun_queue_depth = rc;
--	}
--
- 	if (bf_get(lpfc_sli_intf_if_type, &phba->sli4_hba.sli_intf) ==
- 	    LPFC_SLI_INTF_IF_TYPE_0) {
- 		lpfc_set_features(phba, mboxq, LPFC_SET_UE_RECOVERY);
+ /*
+ # tgt_queue_depth:  This parameter is used to limit the number of outstanding
 -- 
 2.13.7
 
