@@ -2,110 +2,133 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5159814C907
-	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jan 2020 11:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A309B14D04F
+	for <lists+linux-scsi@lfdr.de>; Wed, 29 Jan 2020 19:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726677AbgA2KxE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 29 Jan 2020 05:53:04 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:41405 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726339AbgA2KxE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 29 Jan 2020 05:53:04 -0500
-X-UUID: 6dc9189c1cab48e58716733ed2186b3c-20200129
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ihJg6nDDfiwxmrOIMOxnedl2OexPLbIqUMUcg8QFLQA=;
-        b=LIVUqA5rsg6BwvqJkFRLpEKQS21AfjCybP1q4Z49omySD9eTdninREET9XUR+EBdm1Z73qijaf0e7C98FXLOZxeQghRT+d5vdGq7bigq35gZ4pGPebgvpRv1fwknlrv7QVzSr0o9l0tlVI9ZicWHOYASWkGo/lLMOHjXuzmNqMk=;
-X-UUID: 6dc9189c1cab48e58716733ed2186b3c-20200129
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 261555422; Wed, 29 Jan 2020 18:52:54 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Wed, 29 Jan 2020 18:52:09 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 29 Jan 2020 18:53:00 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>, <beanhuo@micron.com>
-CC:     <asutoshd@codeaurora.org>, <cang@codeaurora.org>,
-        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH RESEND v3 4/4] scsi: ufs-mediatek: gate ref-clk during Auto-Hibern8
-Date:   Wed, 29 Jan 2020 18:52:51 +0800
-Message-ID: <20200129105251.12466-5-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200129105251.12466-1-stanley.chu@mediatek.com>
+        id S1727299AbgA2STE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 29 Jan 2020 13:19:04 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:55194 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727283AbgA2STC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 29 Jan 2020 13:19:02 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1580321942; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=rNueugt7+ShJvXDNSBQmIyNMaj5LO03LUNGcC7CqzMg=; b=Ha7xLkXiUCTx+KRU8S2afdYItBzzfKZGfJFeH3kTkJAFsIHjO3zi8E3SScpW6kjlbw4KnF/9
+ EtlSzMloO8jhAASg3f9Qm/UgKPN4uO/bSLTnBY3qnvudMP58nOmCC3kihFOt4ctkzWonLB47
+ ld+5U9VmhVgeUtXkSeZdVElvKss=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e31cc8f.7f3013566688-smtp-out-n03;
+ Wed, 29 Jan 2020 18:18:55 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 916C1C447A4; Wed, 29 Jan 2020 18:18:55 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.71.154.194] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: asutoshd)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 37EFCC43383;
+        Wed, 29 Jan 2020 18:18:53 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 37EFCC43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=asutoshd@codeaurora.org
+Subject: Re: [PATCH RESEND v3 3/4] scsi: ufs: fix Auto-Hibern8 error detection
+To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, avri.altman@wdc.com,
+        alim.akhtar@samsung.com, jejb@linux.ibm.com, beanhuo@micron.com
+Cc:     cang@codeaurora.org, matthias.bgg@gmail.com, bvanassche@acm.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kuohong.wang@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, andy.teng@mediatek.com,
+        stable@vger.kernel.org
 References: <20200129105251.12466-1-stanley.chu@mediatek.com>
+ <20200129105251.12466-4-stanley.chu@mediatek.com>
+From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
+Message-ID: <daaf442c-1fad-b6dc-8206-beb535c21ec3@codeaurora.org>
+Date:   Wed, 29 Jan 2020 10:18:52 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <20200129105251.12466-4-stanley.chu@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SW4gY3VycmVudCBVRlMgZHJpdmVyIGRlc2lnbiwgaGJhLT51aWNfbGlua19zdGF0ZSB3aWxsIG5v
-dA0KYmUgY2hhbmdlZCBhZnRlciBsaW5rIGVudGVycyBIaWJlcm44IHN0YXRlIGJ5IEF1dG8tSGli
-ZXJuOCBtZWNoYW5pc20uDQpJbiB0aGlzIGNhc2UsIHJlZmVyZW5jZSBjbG9jayBnYXRpbmcgd2ls
-bCBiZSBza2lwcGVkIHVubGVzcyBzcGVjaWFsDQpoYW5kbGluZyBpcyBpbXBsZW1lbnRlZCBpbiB2
-ZW5kb3IncyBjYWxsYmFja3MuDQoNClN1cHBvcnQgcmVmZXJlbmNlIGNsb2NrIGdhdGluZyBkdXJp
-bmcgQXV0by1IaWJlcm44IHBlcmlvZCBpbg0KTWVkaWFUZWsgQ2hpcHNldHM6IElmIGxpbmsgc3Rh
-dGUgaXMgYWxyZWFkeSBpbiBIaWJlcm44IHdoaWxlDQpBdXRvLUhpYmVybjggZmVhdHVyZSBpcyBl
-bmFibGVkLCBnYXRlIHJlZmVyZW5jZSBjbG9jayBpbg0Kc2V0dXBfY2xvY2tzIGNhbGxiYWNrLg0K
-DQpTaWduZWQtb2ZmLWJ5OiBTdGFubGV5IENodSA8c3RhbmxleS5jaHVAbWVkaWF0ZWsuY29tPg0K
-LS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnMtbWVkaWF0ZWsuYyB8IDM4ICsrKysrKysrKysrKysr
-KysrKysrKysrLS0tLS0tLS0tLQ0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmggfCAx
-MiArKysrKysrKysrKw0KIDIgZmlsZXMgY2hhbmdlZCwgMzkgaW5zZXJ0aW9ucygrKSwgMTEgZGVs
-ZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5j
-IGIvZHJpdmVycy9zY3NpL3Vmcy91ZnMtbWVkaWF0ZWsuYw0KaW5kZXggZDc4ODk3YTE0OTA1Li4w
-Y2UwODg3MmQ2NzEgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5j
-DQorKysgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jDQpAQCAtMTQzLDYgKzE0Mywx
-NyBAQCBzdGF0aWMgaW50IHVmc19tdGtfc2V0dXBfcmVmX2NsayhzdHJ1Y3QgdWZzX2hiYSAqaGJh
-LCBib29sIG9uKQ0KIAlyZXR1cm4gMDsNCiB9DQogDQorc3RhdGljIHUzMiB1ZnNfbXRrX2xpbmtf
-Z2V0X3N0YXRlKHN0cnVjdCB1ZnNfaGJhICpoYmEpDQorew0KKwl1MzIgdmFsOw0KKw0KKwl1ZnNo
-Y2Rfd3JpdGVsKGhiYSwgMHgyMCwgUkVHX1VGU19ERUJVR19TRUwpOw0KKwl2YWwgPSB1ZnNoY2Rf
-cmVhZGwoaGJhLCBSRUdfVUZTX1BST0JFKTsNCisJdmFsID0gdmFsID4+IDI4Ow0KKw0KKwlyZXR1
-cm4gdmFsOw0KK30NCisNCiAvKioNCiAgKiB1ZnNfbXRrX3NldHVwX2Nsb2NrcyAtIGVuYWJsZXMv
-ZGlzYWJsZSBjbG9ja3MNCiAgKiBAaGJhOiBob3N0IGNvbnRyb2xsZXIgaW5zdGFuY2UNCkBAIC0x
-NTUsNyArMTY2LDcgQEAgc3RhdGljIGludCB1ZnNfbXRrX3NldHVwX2Nsb2NrcyhzdHJ1Y3QgdWZz
-X2hiYSAqaGJhLCBib29sIG9uLA0KIAkJCQllbnVtIHVmc19ub3RpZnlfY2hhbmdlX3N0YXR1cyBz
-dGF0dXMpDQogew0KIAlzdHJ1Y3QgdWZzX210a19ob3N0ICpob3N0ID0gdWZzaGNkX2dldF92YXJp
-YW50KGhiYSk7DQotCWludCByZXQgPSAtRUlOVkFMOw0KKwlpbnQgcmV0ID0gMDsNCiANCiAJLyoN
-CiAJICogSW4gY2FzZSB1ZnNfbXRrX2luaXQoKSBpcyBub3QgeWV0IGRvbmUsIHNpbXBseSBpZ25v
-cmUuDQpAQCAtMTY1LDE5ICsxNzYsMjQgQEAgc3RhdGljIGludCB1ZnNfbXRrX3NldHVwX2Nsb2Nr
-cyhzdHJ1Y3QgdWZzX2hiYSAqaGJhLCBib29sIG9uLA0KIAlpZiAoIWhvc3QpDQogCQlyZXR1cm4g
-MDsNCiANCi0Jc3dpdGNoIChzdGF0dXMpIHsNCi0JY2FzZSBQUkVfQ0hBTkdFOg0KLQkJaWYgKCFv
-biAmJiAhdWZzaGNkX2lzX2xpbmtfYWN0aXZlKGhiYSkpIHsNCisJaWYgKCFvbiAmJiBzdGF0dXMg
-PT0gUFJFX0NIQU5HRSkgew0KKwkJaWYgKCF1ZnNoY2RfaXNfbGlua19hY3RpdmUoaGJhKSkgew0K
-IAkJCXVmc19tdGtfc2V0dXBfcmVmX2NsayhoYmEsIG9uKTsNCiAJCQlyZXQgPSBwaHlfcG93ZXJf
-b2ZmKGhvc3QtPm1waHkpOw0KKwkJfSBlbHNlIHsNCisJCQkvKg0KKwkJCSAqIEdhdGUgcmVmLWNs
-ayBpZiBsaW5rIHN0YXRlIGlzIGluIEhpYmVybjgNCisJCQkgKiB0cmlnZ2VyZWQgYnkgQXV0by1I
-aWJlcm44Lg0KKwkJCSAqLw0KKwkJCWlmICghdWZzaGNkX2Nhbl9oaWJlcm44X2R1cmluZ19nYXRp
-bmcoaGJhKSAmJg0KKwkJCSAgICB1ZnNoY2RfaXNfYXV0b19oaWJlcm44X2VuYWJsZWQoaGJhKSAm
-Jg0KKwkJCSAgICB1ZnNfbXRrX2xpbmtfZ2V0X3N0YXRlKGhiYSkgPT0NCisJCQkgICAgVlNfTElO
-S19ISUJFUk44KQ0KKwkJCQl1ZnNfbXRrX3NldHVwX3JlZl9jbGsoaGJhLCBvbik7DQogCQl9DQot
-CQlicmVhazsNCi0JY2FzZSBQT1NUX0NIQU5HRToNCi0JCWlmIChvbikgew0KLQkJCXJldCA9IHBo
-eV9wb3dlcl9vbihob3N0LT5tcGh5KTsNCi0JCQl1ZnNfbXRrX3NldHVwX3JlZl9jbGsoaGJhLCBv
-bik7DQotCQl9DQotCQlicmVhazsNCisJfSBlbHNlIGlmIChvbiAmJiBzdGF0dXMgPT0gUE9TVF9D
-SEFOR0UpIHsNCisJCXJldCA9IHBoeV9wb3dlcl9vbihob3N0LT5tcGh5KTsNCisJCXVmc19tdGtf
-c2V0dXBfcmVmX2NsayhoYmEsIG9uKTsNCiAJfQ0KIA0KIAlyZXR1cm4gcmV0Ow0KZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmggYi9kcml2ZXJzL3Njc2kvdWZzL3Vm
-cy1tZWRpYXRlay5oDQppbmRleCBmY2NkZDk3OWQ2ZmIuLjQ5MjQxNGU1ZjQ4MSAxMDA2NDQNCi0t
-LSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmgNCisrKyBiL2RyaXZlcnMvc2NzaS91
-ZnMvdWZzLW1lZGlhdGVrLmgNCkBAIC01Myw2ICs1MywxOCBAQA0KICNkZWZpbmUgVlNfU0FWRVBP
-V0VSQ09OVFJPTCAgICAgICAgIDB4RDBBNg0KICNkZWZpbmUgVlNfVU5JUFJPUE9XRVJET1dOQ09O
-VFJPTCAgIDB4RDBBOA0KIA0KKy8qDQorICogVmVuZG9yIHNwZWNpZmljIGxpbmsgc3RhdGUNCisg
-Ki8NCitlbnVtIHsNCisJVlNfTElOS19ESVNBQkxFRCAgICAgICAgICAgID0gMCwNCisJVlNfTElO
-S19ET1dOICAgICAgICAgICAgICAgID0gMSwNCisJVlNfTElOS19VUCAgICAgICAgICAgICAgICAg
-ID0gMiwNCisJVlNfTElOS19ISUJFUk44ICAgICAgICAgICAgID0gMywNCisJVlNfTElOS19MT1NU
-ICAgICAgICAgICAgICAgID0gNCwNCisJVlNfTElOS19DRkcgICAgICAgICAgICAgICAgID0gNSwN
-Cit9Ow0KKw0KIC8qDQogICogU2lQIGNvbW1hbmRzDQogICovDQotLSANCjIuMTguMA0K
+On 1/29/2020 2:52 AM, Stanley Chu wrote:
+> Auto-Hibern8 may be disabled by some vendors or sysfs
+> in runtime even if Auto-Hibern8 capability is supported
+> by host. If Auto-Hibern8 capability is supported by host
+> but not actually enabled, Auto-Hibern8 error shall not happen.
+> 
+> To fix this, provide a way to detect if Auto-Hibern8 is
+> actually enabled first, and bypass Auto-Hibern8 disabling
+> case in ufshcd_is_auto_hibern8_error().
+> 
+> Fixes: 821744403913 ("scsi: ufs: Add error-handling of Auto-Hibernate")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+> Reviewed-by: Bean Huo <beanhuo@micron.com>
+> ---
 
+Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
+
+>   drivers/scsi/ufs/ufshcd.c | 3 ++-
+>   drivers/scsi/ufs/ufshcd.h | 6 ++++++
+>   2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index abd0e6b05f79..214a3f373dd8 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -5479,7 +5479,8 @@ static irqreturn_t ufshcd_update_uic_error(struct ufs_hba *hba)
+>   static bool ufshcd_is_auto_hibern8_error(struct ufs_hba *hba,
+>   					 u32 intr_mask)
+>   {
+> -	if (!ufshcd_is_auto_hibern8_supported(hba))
+> +	if (!ufshcd_is_auto_hibern8_supported(hba) ||
+> +	    !ufshcd_is_auto_hibern8_enabled(hba))
+>   		return false;
+>   
+>   	if (!(intr_mask & UFSHCD_UIC_HIBERN8_MASK))
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> index 2ae6c7c8528c..81c71a3e3474 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -55,6 +55,7 @@
+>   #include <linux/clk.h>
+>   #include <linux/completion.h>
+>   #include <linux/regulator/consumer.h>
+> +#include <linux/bitfield.h>
+>   #include "unipro.h"
+>   
+>   #include <asm/irq.h>
+> @@ -773,6 +774,11 @@ static inline bool ufshcd_is_auto_hibern8_supported(struct ufs_hba *hba)
+>   	return (hba->capabilities & MASK_AUTO_HIBERN8_SUPPORT);
+>   }
+>   
+> +static inline bool ufshcd_is_auto_hibern8_enabled(struct ufs_hba *hba)
+> +{
+> +	return FIELD_GET(UFSHCI_AHIBERN8_TIMER_MASK, hba->ahit) ? true : false;
+> +}
+> +
+>   #define ufshcd_writel(hba, val, reg)	\
+>   	writel((val), (hba)->mmio_base + (reg))
+>   #define ufshcd_readl(hba, reg)	\
+> 
+
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+Linux Foundation Collaborative Project
