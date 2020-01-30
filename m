@@ -2,57 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 834CA14D8F0
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2020 11:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136C414DC75
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2020 15:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726996AbgA3KaK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Jan 2020 05:30:10 -0500
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:46903 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726963AbgA3KaJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Jan 2020 05:30:09 -0500
-Received: by mail-ua1-f66.google.com with SMTP id l6so945986uap.13
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2020 02:30:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=WBFtkoXKzCGu8CR8DRKenURQamdfStsf5DLlbMSWX/Q=;
-        b=vHV+oty3hJm68+EeLqKwdedbaTLJkq2vEKqhEapzZjtKTL4wyh4Ly0BLckdDbp9XNX
-         7qWO8O4J4gg7IXuRIT0aGXoc0n24U+p4FVDL0E1B+44YG8Qk4qdMRWPVst0/KGWuE76s
-         rAs9w8rfmn2SOvlzQfp/xkBRj9fzXOl9j8T5SE6qtYJTU4sKKwNX3WU/kxhusAf8OIGX
-         5hm5Q1kWQVCyr8AR9F60PmYyuuKkxhs5pgH31UtoO5bmRqAC3euDqtnFVlUnzuLcnvIp
-         otFS6d+1R8je8Iaxw7fvLvjUa42vFC0nSkelZTJBMwmMvc/PX+LXVPa6cLSWr0wUiXu2
-         AKRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=WBFtkoXKzCGu8CR8DRKenURQamdfStsf5DLlbMSWX/Q=;
-        b=Sja00tKguuXnxy28i7UhRsVC/rFiMrj8/1PmpoSSDBR7o+7IR8uMmk7WpWFDTrkA0N
-         I3CZGM77Pg9GhwYNgbVwllWhReXDCqCN4gs3TVdkaHzUwkCJdJvEeOS3g3WMow+jXQiy
-         mXUFdnLeT+UUI9a+ncF4ZPyTRt8XN4iLSBjcXIAtv9M6qBCorvQYIayvw3bogypI9aVR
-         Q8jhszqJs3rY+gxA1H47hg0JCWnUP39X+7nkBX7Jv9oB9L+QbXYoJmLBm3YXPXZEVJnl
-         c2aIJm8f391qTQMdyMtwzLQj7QtAHZ4Iw3QPFu0GzmzB80lv42ZvWs1HZfddnt0imUIS
-         2UeA==
-X-Gm-Message-State: APjAAAXZ2zrTemlbmkr7Pz/Bd00eI81UpjVs4SBEuIRcuFuNW/Ojkr3g
-        8yoFGXcL7Il9xu3hNeGwRkLvh+xZyBkMKWyNxFo=
-X-Google-Smtp-Source: APXvYqyaYTKoUqGLIdNKTREoi15HfpGDUNTnsZ7reeC4C4cfOEnNRYjw/ep8rFMmSeJeBhXHF40TsCgUw6EdKJKf1hU=
-X-Received: by 2002:ab0:94:: with SMTP id 20mr2049661uaj.71.1580380208886;
- Thu, 30 Jan 2020 02:30:08 -0800 (PST)
+        id S1727125AbgA3OIp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Jan 2020 09:08:45 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:59472 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726902AbgA3OIp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Jan 2020 09:08:45 -0500
+Received: from [109.134.33.162] (helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1ixAUo-0007pq-GF; Thu, 30 Jan 2020 14:08:38 +0000
+Date:   Thu, 30 Jan 2020 15:08:38 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Dave Chinner <david@fromorbit.com>,
+        Mike Christie <mchristi@redhat.com>,
+        Michal Hocko <mhocko@kernel.org>
+Cc:     Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-api@vger.kernel.org, idryomov@gmail.com,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-scsi@vger.kernel.org,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-block@vger.kernel.org, martin@urbackup.org,
+        Damien.LeMoal@wdc.com, Michal Hocko <mhocko@suse.com>,
+        Masato Suzuki <masato.suzuki@wdc.com>
+Subject: Re: [PATCH] Add prctl support for controlling mem reclaim V4
+Message-ID: <20200130140838.mfl2p3zb5f26kej6@wittgenstein>
+References: <20191112001900.9206-1-mchristi@redhat.com>
+ <CALvZod47XyD2x8TuZcb9PgeVY14JBwNhsUpN3RAeAt+RJJC=hg@mail.gmail.com>
+ <5E2B19C9.6080907@redhat.com>
+ <20200124211642.GB7216@dread.disaster.area>
+ <20200127130258.2bknkl3mwpkfyml4@wittgenstein>
 MIME-Version: 1.0
-Received: by 2002:a1f:9852:0:0:0:0:0 with HTTP; Thu, 30 Jan 2020 02:30:08
- -0800 (PST)
-Reply-To: andrewcnwaogu@gmail.com
-From:   goodnews john <johngoodnews50@gmail.com>
-Date:   Thu, 30 Jan 2020 11:30:08 +0100
-Message-ID: <CAKK1Mv0mqjaNA35eL5On7iG=BiKipT6GAguo9KdB29JmfAcDcw@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200127130258.2bknkl3mwpkfyml4@wittgenstein>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I emailed you earlier without a response, Haven't you received it?
-Please update me urgently for more clarification on time.
+On Mon, Jan 27, 2020 at 02:02:59PM +0100, Christian Brauner wrote:
+> On Sat, Jan 25, 2020 at 08:16:42AM +1100, Dave Chinner wrote:
+> > On Fri, Jan 24, 2020 at 10:22:33AM -0600, Mike Christie wrote:
+> > > On 12/05/2019 04:43 PM, Shakeel Butt wrote:
+> > > > On Mon, Nov 11, 2019 at 4:19 PM Mike Christie <mchristi@redhat.com> wrote:
+> > > >> This patch adds a new prctl command that daemons can use after they have
+> > > >> done their initial setup, and before they start to do allocations that
+> > > >> are in the IO path. It sets the PF_MEMALLOC_NOIO and PF_LESS_THROTTLE
+> > > >> flags so both userspace block and FS threads can use it to avoid the
+> > > >> allocation recursion and try to prevent from being throttled while
+> > > >> writing out data to free up memory.
+> > > >>
+> > > >> Signed-off-by: Mike Christie <mchristi@redhat.com>
+> > > >> Acked-by: Michal Hocko <mhocko@suse.com>
+> > > >> Tested-by: Masato Suzuki <masato.suzuki@wdc.com>
+> > > >> Reviewed-by: Damien Le Moal <damien.lemoal@wdc.com>
+> > > > 
+> > > > I suppose this patch should be routed through MM tree, so, CCing Andrew.
+> > > >
+> > > 
+> > > Andrew and other mm/storage developers,
+> > > 
+> > > Do I need to handle anything else for this patch, or are there any other
+> > > concerns? Is this maybe something we want to talk about at a quick LSF
+> > > session?
+> > > 
+> > > I have retested it with Linus's current tree. It still applies cleanly
+> > > (just some offsets), and fixes the problem described above we have been
+> > > hitting.
+> > 
+> > I must have missed this version being posted (just looked it up on
+> > lore.kernel.org). As far as I'm concerned this is good to go and it
+> > is absolutely necessary for userspace IO stacks to function
+> > correctly.
+> > 
+> > Reviewed-by: Dave Chinner <dchinner@redhat.com>
+> > 
+> > If no manintainer picks it up before the next merge window, then I
+> 
+> Since prctl() is thread-management and fs people seem to be happy and
+> have acked it I can pick this up too if noone objects and send this
+> along with the rest of process management.
+
+This is upstream now
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8d19f1c8e1937baf74e1962aae9f90fa3aeab463
+
+Christian
