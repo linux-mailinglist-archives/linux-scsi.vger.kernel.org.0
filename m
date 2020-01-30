@@ -2,65 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4545B14D726
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2020 08:56:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 834CA14D8F0
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2020 11:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbgA3H4D (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Jan 2020 02:56:03 -0500
-Received: from verein.lst.de ([213.95.11.211]:39318 "EHLO verein.lst.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726464AbgA3H4D (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 Jan 2020 02:56:03 -0500
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 2BD0768B05; Thu, 30 Jan 2020 08:56:01 +0100 (CET)
-Date:   Thu, 30 Jan 2020 08:56:00 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Chaitra Basappa <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        abdhalee@linux.vnet.ibm.com
-Subject: Re: [PATCH] mpt3sas: don't change the dma coherent mask after
- allocations
-Message-ID: <20200130075600.GB30735@lst.de>
-References: <20200117134506.633586-1-hch@lst.de> <CAK=zhgpVDti+qRwnj=Jg+RtmO_b3Bu00q_TvrNWGCjTU=4humg@mail.gmail.com>
+        id S1726996AbgA3KaK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Jan 2020 05:30:10 -0500
+Received: from mail-ua1-f66.google.com ([209.85.222.66]:46903 "EHLO
+        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726963AbgA3KaJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Jan 2020 05:30:09 -0500
+Received: by mail-ua1-f66.google.com with SMTP id l6so945986uap.13
+        for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2020 02:30:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=WBFtkoXKzCGu8CR8DRKenURQamdfStsf5DLlbMSWX/Q=;
+        b=vHV+oty3hJm68+EeLqKwdedbaTLJkq2vEKqhEapzZjtKTL4wyh4Ly0BLckdDbp9XNX
+         7qWO8O4J4gg7IXuRIT0aGXoc0n24U+p4FVDL0E1B+44YG8Qk4qdMRWPVst0/KGWuE76s
+         rAs9w8rfmn2SOvlzQfp/xkBRj9fzXOl9j8T5SE6qtYJTU4sKKwNX3WU/kxhusAf8OIGX
+         5hm5Q1kWQVCyr8AR9F60PmYyuuKkxhs5pgH31UtoO5bmRqAC3euDqtnFVlUnzuLcnvIp
+         otFS6d+1R8je8Iaxw7fvLvjUa42vFC0nSkelZTJBMwmMvc/PX+LXVPa6cLSWr0wUiXu2
+         AKRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=WBFtkoXKzCGu8CR8DRKenURQamdfStsf5DLlbMSWX/Q=;
+        b=Sja00tKguuXnxy28i7UhRsVC/rFiMrj8/1PmpoSSDBR7o+7IR8uMmk7WpWFDTrkA0N
+         I3CZGM77Pg9GhwYNgbVwllWhReXDCqCN4gs3TVdkaHzUwkCJdJvEeOS3g3WMow+jXQiy
+         mXUFdnLeT+UUI9a+ncF4ZPyTRt8XN4iLSBjcXIAtv9M6qBCorvQYIayvw3bogypI9aVR
+         Q8jhszqJs3rY+gxA1H47hg0JCWnUP39X+7nkBX7Jv9oB9L+QbXYoJmLBm3YXPXZEVJnl
+         c2aIJm8f391qTQMdyMtwzLQj7QtAHZ4Iw3QPFu0GzmzB80lv42ZvWs1HZfddnt0imUIS
+         2UeA==
+X-Gm-Message-State: APjAAAXZ2zrTemlbmkr7Pz/Bd00eI81UpjVs4SBEuIRcuFuNW/Ojkr3g
+        8yoFGXcL7Il9xu3hNeGwRkLvh+xZyBkMKWyNxFo=
+X-Google-Smtp-Source: APXvYqyaYTKoUqGLIdNKTREoi15HfpGDUNTnsZ7reeC4C4cfOEnNRYjw/ep8rFMmSeJeBhXHF40TsCgUw6EdKJKf1hU=
+X-Received: by 2002:ab0:94:: with SMTP id 20mr2049661uaj.71.1580380208886;
+ Thu, 30 Jan 2020 02:30:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK=zhgpVDti+qRwnj=Jg+RtmO_b3Bu00q_TvrNWGCjTU=4humg@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Received: by 2002:a1f:9852:0:0:0:0:0 with HTTP; Thu, 30 Jan 2020 02:30:08
+ -0800 (PST)
+Reply-To: andrewcnwaogu@gmail.com
+From:   goodnews john <johngoodnews50@gmail.com>
+Date:   Thu, 30 Jan 2020 11:30:08 +0100
+Message-ID: <CAKK1Mv0mqjaNA35eL5On7iG=BiKipT6GAguo9KdB29JmfAcDcw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 04:16:47PM +0530, Sreekanth Reddy wrote:
-> Our HBA hardware has a requirement that each set of RDPQ reply
-> descriptor pools should be within the 4gb region. so to accommodate
-> this requirement driver is first setting the DMA coherent mask to 32
-> bit then allocating the RDPQ pools
-
-So far the requirement makes sense.
-
-> and then resetting the DMA coherent
-> make to 64 and allocating the remaining pools.
-
-And this is where the trouble start.  You simply can't reset the mask
-with outstanding allocations.  This breaks various implementations that
-change the allocator based on the mask.
-
-> if we completely set the DMA coherent mask to 32 bit then there are
-> chances that sometimes driver may not get requested memory within the
-> first 4gb region and HBA initialization may fail. So instead of
-> setting the DMA coherent mask to 32 bit, we follow the same below
-> logic which megaraid_sas driver is doing now. i.e we first allocate
-> set of rdpq pools at once and check this allocated block is within the
-> 4gb region, if not then free this block and allocate a new block from
-> aligned pci pool.
-
-Which is completely broken.
+I emailed you earlier without a response, Haven't you received it?
+Please update me urgently for more clarification on time.
