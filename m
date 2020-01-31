@@ -2,95 +2,110 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBE014EB6A
-	for <lists+linux-scsi@lfdr.de>; Fri, 31 Jan 2020 12:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 322ED14EBD1
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 Jan 2020 12:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728414AbgAaLFm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 31 Jan 2020 06:05:42 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:46113 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728268AbgAaLFm (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Jan 2020 06:05:42 -0500
-Received: by mail-io1-f65.google.com with SMTP id t26so7638145ioi.13
-        for <linux-scsi@vger.kernel.org>; Fri, 31 Jan 2020 03:05:42 -0800 (PST)
+        id S1728454AbgAaLjw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 Jan 2020 06:39:52 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:38982 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728387AbgAaLjw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 31 Jan 2020 06:39:52 -0500
+Received: by mail-wr1-f68.google.com with SMTP id y11so8216906wrt.6;
+        Fri, 31 Jan 2020 03:39:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=qLCJ4hAwI+ZPm+mWZVhU/VYIdbcvrJ6z1bSQoVA5eG0=;
-        b=D5uKUAd+6ao0frhzv9YTXyYG94K6pVbedvC7605fRH8Le24uafnlJ1vqiS6aWJU9Uc
-         ZJNDuXbDl6vpIQRhcXuY9Ldq3DH6S9/SqElivaAz8cEMsrQj4KnGjSj/Kjx4GUHW78nU
-         ACaDYz5PEb3zzjHbmEiQ+2MHN+kK1Z+OQHegim9u3vi/kAnt8VS9WgJSAJqaKTSkeXNy
-         EqaIWsq3kxtzeie6nvwi10eemITDxeJrpiRRWR2nBX2r18Kl2pKS6Zb7+AQelKhvLiHY
-         qqicuvtXYtEvVZxy8vf4zhIxs0LXLSctrSmxIb2TvgkbQDMnteTT29FWy3+wmsrYi76e
-         rpQw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QhYC5mE6RR4tjYtuK2g5HsZYuZDvuJqptbcVBacA2Zo=;
+        b=UoDJlWRe6Fo86qb57CA6MOgUqvlRupLe1BhKKcte3rFM+IeHG7VJr/NUc4CA3vlJBa
+         trPkHPRhOHa0yNmkJ58MN+kyrFGkQp9PpOfr5YBV39DRaxSxOn7j/InxE/Sm3iWm3INF
+         PxuAard+utG//saqLnHU527taOKKgrkxy9xMamqpn5DSNINsCazFM7Ea+p4h7WmssLdg
+         Zj/M6fxqoxBnVqomdvLeRBDrbYKGzHl4GZd31frHFpJbwTviw3hBQn4rslwhc+4NBpb3
+         khGeZEnEih4CBDQUPrABpvf+kGka72hDrh0DQql8iVXVhv86jNN+dAxY7ArIYE/yWmUe
+         7K9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=qLCJ4hAwI+ZPm+mWZVhU/VYIdbcvrJ6z1bSQoVA5eG0=;
-        b=D37DpiXx5UdKFW99sWUg8j+xPxSdoAJGUm7CZ1jlC/w1YjOD4FUbR0NoMWH7syHlII
-         Rgd99czaUR9sGv3i3gyLMR8DNr7l2vtSFmdmdutj8niOHGQ60Ugyo599B0a6TNTuMIzi
-         XkxuVuI/I+YUWkLMTv3EDRMkP3Tx5utJVLV50dkWEQLgb/8zOeYFp09NI7W9RW1nXpkM
-         cW24uruM1s+EXcCOhPWA3ohBhQIXrwn0qN7aWTCgiwhuJKAPWc8x8K8jud34WiloJPYL
-         yu4y22htnu0n13p4pqzsIocwZ11B2HRfRlO9SZopCLlDi2i/R561vAZWpK0IgUnkVcP6
-         MrkQ==
-X-Gm-Message-State: APjAAAX840jItp4zYLBpBiulSBhWdK8MrF8uQquZmMeF/jTfiSiaYYoA
-        B+xWOyh5CxYCJfhvJXIzSYHKeZg0RnS1SgE9eCw=
-X-Google-Smtp-Source: APXvYqyamcUFYRXLGlX1GuRD3aBOO9eL3uVTf6p84YJGknz1CU2qahIuZArAXVosG834OFbnxYs0v7LwtoTJg5kBGj4=
-X-Received: by 2002:a6b:6e02:: with SMTP id d2mr8422100ioh.22.1580468741649;
- Fri, 31 Jan 2020 03:05:41 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QhYC5mE6RR4tjYtuK2g5HsZYuZDvuJqptbcVBacA2Zo=;
+        b=q0TQAQzK/+NirrvZl7EKXRDPHKV+mFNJYGe9b4EMLmXKB2PrPSRGlyTbihH1nDWBB2
+         E7egSgHdDY/jc2ZvZGeUcIkW+iDtn7nmJ+zn3FaFQBcduOl29Ib1XFHanxdfLEIZqVAO
+         bLzs+3hgfTyDkTGWoW3MxvRbQeVZ9iidDOkF4+z4c8PGfZoCPKYqneMBdfYAjt17uKmE
+         U4yyw77dqEG8O2ARIvQYjRIYt40Tv6d8h88ND2bQb1MSwEFsxUe/DFfYWPEMAOuD19OS
+         iiVYjtq0IUmeQytlWpJTbfJWxzxF/oklcDpXMlOBZzL3g8KXnJd5Cw4S9T2CkNG1AGYb
+         45cw==
+X-Gm-Message-State: APjAAAVDV86f64Y8YY4rcQkuDFy0UXPWOzrrOLFOdJGxg+TOviaKWClF
+        xvkg2urJISPvCz5s/cqOFRrfb6CdsbF7QPmRJ3Q=
+X-Google-Smtp-Source: APXvYqzMxePQypAgwHTbVgQ5HeLXvX5i5zPNY8LRrRphYS8c31b9NqkQM92SZ2saOi6vydlHHZKSSuHkkm8kjV+ZbEM=
+X-Received: by 2002:adf:db84:: with SMTP id u4mr11889498wri.317.1580470790057;
+ Fri, 31 Jan 2020 03:39:50 -0800 (PST)
 MIME-Version: 1.0
-Reply-To: mrsnicolemarois94@gmail.com
-Received: by 2002:a02:cc72:0:0:0:0:0 with HTTP; Fri, 31 Jan 2020 03:05:41
- -0800 (PST)
-From:   "Mrs. Nicole Marois " <maroismrsnicole2@gmail.com>
-Date:   Fri, 31 Jan 2020 10:05:41 -0100
-X-Google-Sender-Auth: TwuwiZcweP8iw4MDJtqGzRVZHIg
-Message-ID: <CAOXb1y7Ft1BT6CPFb09NktrECk_PHGNo-+D5zc5bSqiUH2unjg@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
+References: <20200119071432.18558-1-ming.lei@redhat.com> <20200119071432.18558-6-ming.lei@redhat.com>
+ <yq1y2u1if7t.fsf@oracle.com> <ab676c4c-03fb-7eb9-6212-129eb83d0ee8@broadcom.com>
+ <yq1iml1ehtl.fsf@oracle.com> <f4f06cf8459c21749335c6b7a4cfe729@mail.gmail.com>
+ <yq1blqo9plo.fsf@oracle.com>
+In-Reply-To: <yq1blqo9plo.fsf@oracle.com>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Fri, 31 Jan 2020 19:39:38 +0800
+Message-ID: <CACVXFVMqejMZaOT0ynnMehQF4rJf32eTW2ahoYz6oE9p+GwWEg@mail.gmail.com>
+Subject: Re: [PATCH 5/6] scsi: core: don't limit per-LUN queue depth for SSD
+ when HBA needs
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bart.vanassche@wdc.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        Sumit Saxena <sumit.saxena@broadcom.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-Hello Dear,
+Hi Martin,
 
-Please forgive me for stressing you with my predicaments as I know
-that this letter may come to you as big surprise. Actually, I came
-across your E-mail from my personal search afterward I decided to
-email you directly believing that you will be honest to fulfill my
-final wish before i die.
+On Tue, Jan 28, 2020 at 12:24 PM Martin K. Petersen
+<martin.petersen@oracle.com> wrote:
+>
+>
+> Sumanesh,
+>
+> > Instead of relying on QUEUE_FULL and some complex heuristics of when
+> > to start tracking device_busy, why can't we simply use "
+> > track_queue_depth" ( along with the other flag that Ming added) to
+> > decide which devices need queue depth tracking, and track device_busy
+> > only for them?
+>
+> Because I am interested in addressing the device_busy contention problem
+> for all of our non-legacy drivers. I.e. not just for controllers that
+> happen to queue internally.
 
-Meanwhile, I am Mrs.  Nicole Marois 62 years old, from France, and I
-am suffering from a long time cancer and from all indication my
-condition is really deteriorating as my doctors have confirmed and
-courageously advised me that I may not live beyond two months from now
-for the reason that my tumor has reached a critical stage which has
-defiled all forms of medical treatment. As a matter of fact,
-registered nurse by profession while my husband was dealing on Gold
-Dust and Gold Dory Bars till his sudden death the year 2016 then I
-took over his business till date.
+Can we just do it for controllers without 'track_queue_depth' and SSD now?
 
-In fact, at this moment I have a deposit sum of four million five
-hundred thousand US dollars ($4,500,000.00) with one bank but
-unfortunately I cannot visit the bank since I m critically sick and
-powerless to do anything myself but my bank account officer advised me
-to assign any of my trustworthy relative, friends or partner with
-authorization letter to stand as the recipient of my money but
-sorrowfully I dont have any reliable relative and no child.
+>
+> > I am not sure how we can suddenly start tracking device_busy on the fly,
+> > if we do not know how many IO are already pending for that device?
+>
+> We know that from the tags. It's just not hot path material.
 
-Therefore, I want you to receive the money and take 50% to take care
-of yourself and family while 50% should be use basically on
-humanitarian purposes mostly to orphanages home, Motherless babies
-home, less privileged and disable citizens and widows around the
-world. and as soon as I receive your I shall send you my pictures,
-banking records and with full contacts of my banking institution to
-communicate them on the matter. Please contact me with these email
-address.(mrsnicolemarois94@gmail.com)
+In case of 'track_queue_depth', cost for tracking queue depth has to be paid,
+which can be too big to get expected perf on high end HBA.
 
-Hope to hear from you soon.
-Yours Faithfully,
-Mrs.  Nicole Marois
+sbitmap might be used for this purpose, but not sure if it can scale well enough
+for this purpose.
+
+
+Thanks,
+Ming Lei
