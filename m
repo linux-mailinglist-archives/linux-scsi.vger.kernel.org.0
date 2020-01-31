@@ -2,58 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4AEA14E558
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Jan 2020 23:07:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C14EB14E8D0
+	for <lists+linux-scsi@lfdr.de>; Fri, 31 Jan 2020 07:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgA3WHV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Jan 2020 17:07:21 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:37282 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725958AbgA3WHU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Jan 2020 17:07:20 -0500
-Received: by mail-oi1-f196.google.com with SMTP id q84so5263990oic.4
-        for <linux-scsi@vger.kernel.org>; Thu, 30 Jan 2020 14:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=nLHHJR/f2FNOWY32dezFklufEGi2pRB5LTP4mIqeAO4=;
-        b=K7EIHL1t3ELnPDCoRfza2yKiwz2qDLEEr1LGIaTvUknXo1qv8LSE1Ak9TtANG0BeIo
-         ZXlQnBe8BF9b6niGXal6P/L0mhbGqB/eBSyLmc36Q9WGhUa81SjdjIVagyh+lN9g/cjf
-         1AA3NZ7LfdaYu5BZnHwzE/pR0d0bKaAp9J39j4rpW8lV/ab5jiTBXofWIG16FXe45B4Q
-         Mv8FWTkQM881A3Dh28skzBshqE+z4OV2//MoNt5hw69cnYJkJqZmV01cVyL19cmZTTEQ
-         tLEhT8OvElkTPZXkhz72OkHAuMI2mLQW3XvRQGubVx1ugzsIG5bWh7/kWFEISaL2Vq8s
-         kmKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=nLHHJR/f2FNOWY32dezFklufEGi2pRB5LTP4mIqeAO4=;
-        b=H/hRKkQPYGc2hCIHfbMTXKbR+2d6McJdfwLaBvq7w+/Qu1wP+yfuhzQ3Qvfq5aJkD9
-         zcnR7yyaQJn4fOZXpuHFHKlCCf2yicO9T9QyKOrFO2mrOSiH2LENZISm5XW3TX9j1piX
-         PkWGinGUDJDhnVd2vP4JTYSc+SIN0JEGu2whZHdh9v/4XfQHxH26kkGLsD+2hxNN34yw
-         Th9ULLEdeZmDgwLtk25dB6iqov3cH2CSn4ZuH+DJYQH9u2j5BxBt/YpIoT/RwgB+dD0I
-         xHXxTqVJ1/NKT7p1EDaMGlF0ELLx7nzrAM7qdoI+T+ZTowBIK6Sz4Al8xoc5xZjPaPUm
-         mNwg==
-X-Gm-Message-State: APjAAAXUqHsfv9FyWT4fC8XdsK4coyHzjASqsWKP3Mw+CEv0BXOhmeUQ
-        S0PglhngRRhupGJFPtHV076tFQp2D6wLGiVBn5E=
-X-Google-Smtp-Source: APXvYqwPwVyTK3cysTzhqBCyyPdcAeWQ0LiKUJrIf8E67JGVlGoEZjSHHcT55GLSrU2/cUOzlkxgMVcejmbnxN75YU0=
-X-Received: by 2002:a05:6808:50:: with SMTP id v16mr4234723oic.133.1580422040315;
- Thu, 30 Jan 2020 14:07:20 -0800 (PST)
+        id S1726023AbgAaGaj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 31 Jan 2020 01:30:39 -0500
+Received: from verein.lst.de ([213.95.11.211]:43178 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725815AbgAaGaj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 31 Jan 2020 01:30:39 -0500
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id E5F4868B20; Fri, 31 Jan 2020 07:30:35 +0100 (CET)
+Date:   Fri, 31 Jan 2020 07:30:35 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-block@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bart.vanassche@wdc.com>
+Subject: Re: [PATCH 2/6] scsi: remove .for_blk_mq
+Message-ID: <20200131063035.GA18385@lst.de>
+References: <20200119071432.18558-1-ming.lei@redhat.com> <20200119071432.18558-3-ming.lei@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:d021:0:0:0:0:0 with HTTP; Thu, 30 Jan 2020 14:07:19
- -0800 (PST)
-Reply-To: Millersophia434@gmail.com
-From:   Sophia Miller <ogechithompson1@gmail.com>
-Date:   Thu, 30 Jan 2020 22:07:19 +0000
-Message-ID: <CADTAFDMRQxyZfuAtWdrrjKeo3k_CFimJ0XnBPwSq=SXUtdgNNg@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200119071432.18558-3-ming.lei@redhat.com>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-I'm Sophia a military personnel,i will like to know more about you and
-also share ideas with you my dear......
+On Sun, Jan 19, 2020 at 03:14:28PM +0800, Ming Lei wrote:
+> No one use it any more, so remove the flag.
+
+Looks good modulo the subject typo, lets get this in ASAP even with
+outstanding issue on the rest of the series:
+
+Reviewed-by: Christoph Hellwig <hch@lst.de>
