@@ -2,104 +2,150 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F03E14FCAC
-	for <lists+linux-scsi@lfdr.de>; Sun,  2 Feb 2020 11:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFBBA14FD91
+	for <lists+linux-scsi@lfdr.de>; Sun,  2 Feb 2020 15:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgBBKrZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 2 Feb 2020 05:47:25 -0500
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:8763 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727034AbgBBKrX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Feb 2020 05:47:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1580640443; x=1612176443;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=L4nAHFKokWMKbsmdb2ayPfvOB5mMFhDgRN9aEfo+7Pk=;
-  b=BvDdVHUMrTolEoYuxCjFwtBuAIt/kqNjt0mcIQ1NTet3epRQ0xli1lcV
-   0LWxqshpn91ycBuWu2/ayl+/zJCFRjT3MFP7p+NSs+n5FcqkIPaVUOO+C
-   hK3xDpTJyKhp/5lnkTwruzjvrD7PKaNpnkWTlDK1p2Fgq94wtH1YZMqxs
-   TwFroUwTceI5q3/FT510Q6IttaqmImICGFBOwcOFNGfKBmP7B2UYNRwD4
-   ykHJKuULz1+B26WzQC4ywkbt2tjj6Mjcj/+V83OTntYbx4BPBcIH9PNOr
-   gIwZdq+3y+jedvOLhC4YSysrTx+dr/MguSpvr5/rskhsytZeXVMVpkFKQ
-   w==;
-IronPort-SDR: qDSOw3JcaXxn21mJEceTM+MjOfYbvY7bLZUXvuBN/SH5qW7XZzS0OBxZVNh28N2iFZpWjc5sgb
- C6l3ngAxwyDUltg8z0KqdhlsNsNkBp8ZYVP9q9zOqNMg+lKcHHS7HcOO1oFlyA/yyY+uuzjtqt
- uV0OitUImLIk4UiXrX4JFHUcmT4m8+H+qxJjZR9UBnAtg3AGEC5A5bL/NYBJwzhrJU/dej+Ff5
- hUy3dUkJ0vv9mTmzt+3w1hz3L0IfIS+lokGl0yK1G0Zr/9AzrYV7ufExOMfdaOeDf5Ctwf3S2i
- 58o=
-X-IronPort-AV: E=Sophos;i="5.70,393,1574092800"; 
-   d="scan'208";a="128925975"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Feb 2020 18:47:23 +0800
-IronPort-SDR: TlAOPE+RWUw3Uh8SbQhreOBfF8GKvc3K8Di7cMB6tZVeLQClNPzVhV2KNoHup71vOfB5C56H0y
- +npCWMKHXi37THqu+gIzHWlOzSAz725WB5jduv2oZP4V673yPk4evRtas3RrhtJ4hxbfsMeEZj
- FpqkjUUAkn+PVvCNu5lxENmSJn794ZyInycam0ft7pZS6yboUuEvdFnN6foudmDF5o94JvmwKw
- nWxqffyb1fumgJWUk9hmY8peBczfraTbIOkBpTGDRkHPKOpVJwfSKs23KDYpPwA32XHXLOAiZm
- 6RGPVDsfmCrxljYAbdwfs1uY
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2020 02:40:29 -0800
-IronPort-SDR: Hc51kDLCNGUTtubZS79q+bfxzteXY0gCd4WUdkyFsyegZbNfIKWWcoYpb7ehaZCxM4jeAonfet
- 3Ra6faP15GbG6QYH5dHb8g575pUGmZ/bDY9vPU9rLVXCwsbF+vTqynjxVVPbshNt/x3SzA1Lvo
- qmJ53tdFOjPW4FZKbkZHBudMbGIIMCO7izXStMLkC4IzHDP1Nd+Xy6wyYAhBAOIo38uqrAuAnF
- QDU69SlSaAbmwcOVlviW8XELM1H+oOc2KJJ8JsubdV081KvzsBUIuP4xyETzEvHOCtQCMpfJzI
- P+s=
-WDCIronportException: Internal
-Received: from kfae419068.sdcorp.global.sandisk.com ([10.0.231.195])
-  by uls-op-cesaip01.wdc.com with ESMTP; 02 Feb 2020 02:47:20 -0800
-From:   Avi Shchislowski <avi.shchislowski@wdc.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        id S1726907AbgBBOfd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 2 Feb 2020 09:35:33 -0500
+Received: from mail-vs1-f68.google.com ([209.85.217.68]:43148 "EHLO
+        mail-vs1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726679AbgBBOfc (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 2 Feb 2020 09:35:32 -0500
+Received: by mail-vs1-f68.google.com with SMTP id 7so7291040vsr.10;
+        Sun, 02 Feb 2020 06:35:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LZE+Xo98zuPfEJJYc3IqeQRPxedI7zj+vekRKI0XAyw=;
+        b=mcWFcyryu3pb908p8t2ntneOZGWX637x+66nF8J6woHFUe8Nfw26wsxiSbrLieqQZf
+         u/B7Bv73fme8G/rf4KYLbrJdYkXrq2F1DFiOQciq9P+SRlDN6F4Ry/ySeWMERU3Di0v5
+         BYEXlSRbilubviP4KoXvTS4c8ImwmqWC9iYOk9dMsGuAieWURS09EtY8wnhgxXJnwrqq
+         HNbQgKsucidqfbOEY+4aseWUiC1tCiurI3vguTqqAGHLRIdAPkBHUUpFDD+FlWH0UiU9
+         1IYJywc/l7rmVPf5EyMcK4xM+GfQZl2ru89QJc12JfJJDGo3ZClbJl2OBviUKn1Z9pKG
+         jdvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LZE+Xo98zuPfEJJYc3IqeQRPxedI7zj+vekRKI0XAyw=;
+        b=LsgnU8bZ9JIEk2xc/37jNEyYs25uJPCvJw+pYSIz4nHFVyrenJxTMjpliVm9UytzjA
+         ugi+B+oMSl06T2ru2EBdz29qthQW+B+AqHMmKzeJX8W/jvjSaift8keVfbvhxk5BYsB7
+         0D5z5bZidlNbwLHVV9bYJMSdjfOr43o2+fRGRFWj4GR1bX+JVWzC+dxpT1GjsTprlU/T
+         xR2GWXHEBZAcU4kNXTaXRM9kBCN8ecqZzJAsUD8PmUlbsyL7EGBnoQfETV+7AVbkhCCU
+         Z13X43NauAJ+BoyJYaqV9EIEid9QVZPc50f6YAMZuQSALi7uIS71UXqubfR38WAs81+T
+         yrqg==
+X-Gm-Message-State: APjAAAWWwAGCapkUEqkUnFMDsm45iK4Zzvior7ItjgbvTyHPgcso2nER
+        9N3eyz6xleQhzqFZE3406Mwxv3J/WT4C10KLOrw=
+X-Google-Smtp-Source: APXvYqxZNyOg7XGNhoutzokbnVc5nQbhtV3AlWk76sEbJJ8d09qRGIpzB/q7iLwEM4Rkk0nO84vGVSnjlYvqgh9b+S8=
+X-Received: by 2002:a67:fb14:: with SMTP id d20mr11886738vsr.136.1580654131573;
+ Sun, 02 Feb 2020 06:35:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20200129073902.5786-1-stanley.chu@mediatek.com> <20200129073902.5786-2-stanley.chu@mediatek.com>
+In-Reply-To: <20200129073902.5786-2-stanley.chu@mediatek.com>
+From:   Alim Akhtar <alim.akhtar@gmail.com>
+Date:   Sun, 2 Feb 2020 20:04:55 +0530
+Message-ID: <CAGOxZ521Vz4EcmWApZLqcDwkwa-XHLFLDx2n1HRht0Pf0fFkmw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] scsi: ufs-mediatek: ensure UniPro is not powered
+ down before linkup
+To:     Stanley Chu <stanley.chu@mediatek.com>
+Cc:     linux-scsi@vger.kernel.org,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     Avi Shchislowski <avi.shchislowski@swdc.com>,
-        Uri Yanai <uri.yanai@wdc.com>,
-        Avi Shchislowski <avi.shchislowski@wdc.com>
-Subject: [PATCH 5/5] scsi: ufs: temperature atrributes add to ufs_sysfs
-Date:   Sun,  2 Feb 2020 12:46:59 +0200
-Message-Id: <1580640419-6703-6-git-send-email-avi.shchislowski@wdc.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1580640419-6703-1-git-send-email-avi.shchislowski@wdc.com>
-References: <1580640419-6703-1-git-send-email-avi.shchislowski@wdc.com>
+        Avri Altman <avri.altman@wdc.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Bean Huo (beanhuo)" <beanhuo@micron.com>, asutoshd@codeaurora.org,
+        Can Guo <cang@codeaurora.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Kuohong Wang <kuohong.wang@mediatek.com>,
+        peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
+        andy.teng@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Avi Shchislowski <avi.shchislowski@swdc.com>
+HI Stanley
 
-Signed-off-by: Uri Yanai <uri.yanai@wdc.com>
-Signed-off-by: Avi Shchislowski <avi.shchislowski@wdc.com>
----
- drivers/scsi/ufs/ufs-sysfs.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+On Wed, Jan 29, 2020 at 1:09 PM Stanley Chu <stanley.chu@mediatek.com> wrote:
+>
+> MediaTek Chipsets can enter proprietary UniPro low-power mode during
+> suspend while link is in hibern8 state. Make sure leaving low-power
+> mode before every link startup to prevent lockup in any possible error recovery
+> path.
+>
+> In the same time, re-factor related funcitons to improve code readability.
+>
+> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 
-diff --git a/drivers/scsi/ufs/ufs-sysfs.c b/drivers/scsi/ufs/ufs-sysfs.c
-index dbdf8b0..180f4db 100644
---- a/drivers/scsi/ufs/ufs-sysfs.c
-+++ b/drivers/scsi/ufs/ufs-sysfs.c
-@@ -667,6 +667,9 @@ static DEVICE_ATTR_RO(_name)
- UFS_ATTRIBUTE(ffu_status, _FFU_STATUS);
- UFS_ATTRIBUTE(psa_state, _PSA_STATE);
- UFS_ATTRIBUTE(psa_data_size, _PSA_DATA_SIZE);
-+UFS_ATTRIBUTE(rough_temp, _ROUGH_TEMP);
-+UFS_ATTRIBUTE(too_high_temp, _TOO_HIGH_TEMP);
-+UFS_ATTRIBUTE(too_low_temp, _TOO_LOW_TEMP);
- 
- static struct attribute *ufs_sysfs_attributes[] = {
- 	&dev_attr_boot_lun_enabled.attr,
-@@ -685,6 +688,9 @@ static DEVICE_ATTR_RO(_name)
- 	&dev_attr_ffu_status.attr,
- 	&dev_attr_psa_state.attr,
- 	&dev_attr_psa_data_size.attr,
-+	&dev_attr_rough_temp.attr,
-+	&dev_attr_too_high_temp.attr,
-+	&dev_attr_too_low_temp.attr,
- 	NULL,
- };
- 
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  drivers/scsi/ufs/ufs-mediatek.c | 19 ++++++++++---------
+>  1 file changed, 10 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+> index 53eae5fe2ade..7ac838cc15d1 100644
+> --- a/drivers/scsi/ufs/ufs-mediatek.c
+> +++ b/drivers/scsi/ufs/ufs-mediatek.c
+> @@ -30,6 +30,11 @@
+>  #define ufs_mtk_device_reset_ctrl(high, res) \
+>         ufs_mtk_smc(UFS_MTK_SIP_DEVICE_RESET, high, res)
+>
+> +#define ufs_mtk_unipro_powerdown(hba, powerdown) \
+> +       ufshcd_dme_set(hba, \
+> +                      UIC_ARG_MIB_SEL(VS_UNIPROPOWERDOWNCONTROL, 0), \
+> +                      powerdown)
+> +
+>  static void ufs_mtk_cfg_unipro_cg(struct ufs_hba *hba, bool enable)
+>  {
+>         u32 tmp;
+> @@ -290,6 +295,8 @@ static int ufs_mtk_pre_link(struct ufs_hba *hba)
+>         int ret;
+>         u32 tmp;
+>
+> +       ufs_mtk_unipro_powerdown(hba, 0);
+> +
+>         /* disable deep stall */
+>         ret = ufshcd_dme_get(hba, UIC_ARG_MIB(VS_SAVEPOWERCONTROL), &tmp);
+>         if (ret)
+> @@ -390,9 +397,7 @@ static int ufs_mtk_link_set_hpm(struct ufs_hba *hba)
+>         if (err)
+>                 return err;
+>
+> -       err = ufshcd_dme_set(hba,
+> -                            UIC_ARG_MIB_SEL(VS_UNIPROPOWERDOWNCONTROL, 0),
+> -                            0);
+> +       err = ufs_mtk_unipro_powerdown(hba, 0);
+>         if (err)
+>                 return err;
+>
+> @@ -413,14 +418,10 @@ static int ufs_mtk_link_set_lpm(struct ufs_hba *hba)
+>  {
+>         int err;
+>
+> -       err = ufshcd_dme_set(hba,
+> -                            UIC_ARG_MIB_SEL(VS_UNIPROPOWERDOWNCONTROL, 0),
+> -                            1);
+> +       err = ufs_mtk_unipro_powerdown(hba, 1);
+>         if (err) {
+>                 /* Resume UniPro state for following error recovery */
+> -               ufshcd_dme_set(hba,
+> -                              UIC_ARG_MIB_SEL(VS_UNIPROPOWERDOWNCONTROL, 0),
+> -                              0);
+> +               ufs_mtk_unipro_powerdown(hba, 0);
+>                 return err;
+>         }
+>
+> --
+> 2.18.0
+
+
+
 -- 
-1.9.1
-
+Regards,
+Alim
