@@ -2,180 +2,65 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66DD7150BBF
-	for <lists+linux-scsi@lfdr.de>; Mon,  3 Feb 2020 17:31:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE829150E3D
+	for <lists+linux-scsi@lfdr.de>; Mon,  3 Feb 2020 17:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729925AbgBCQaI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 3 Feb 2020 11:30:08 -0500
-Received: from m4a0072g.houston.softwaregrp.com ([15.124.2.130]:45532 "EHLO
-        m4a0072g.houston.softwaregrp.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729418AbgBCQaH (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Feb 2020 11:30:07 -0500
-Received: FROM m4a0072g.houston.softwaregrp.com (15.120.17.146) BY m4a0072g.houston.softwaregrp.com WITH ESMTP;
- Mon,  3 Feb 2020 16:28:36 +0000
-Received: from M9W0068.microfocus.com (2002:f79:bf::f79:bf) by
- M4W0334.microfocus.com (2002:f78:1192::f78:1192) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10; Mon, 3 Feb 2020 16:29:19 +0000
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (15.124.72.12) by
- M9W0068.microfocus.com (15.121.0.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10 via Frontend Transport; Mon, 3 Feb 2020 16:29:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OW7lZb0FMGlO2K5HbYUk5tyGLIBesnYexX7Eu71UbpRtuiksagLTo7srlaxQn0+kV7GPMjB0wzvynSm8yfaFkl3OTnHOKgvXIO79vVyn/hh82GXihKFPSpdiw+bnYCgfPZSuX79VYBV49qxNvuwg1sU2XboDzLG2dwFKIwlWXzgAYyhpMajjJTVYkjqs8VdLSshdIBtbcKU5RvrYe1z41bSrQB1Xd6yS7d9IvRAF0ltmmJVdVTJ1IBhqHLgenxmrPdvhAgILqC2smYgj/DVKdupmCy+mOjUoIDll9MYl/mNRZyPJBNutEPGZdep5lsc+uT1YPj/3TiAy9ID6p928fA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XbvrxZsUTex/uaFtba2/6ycgPtDfDa/xhpeIyTXxzHU=;
- b=LN1x0IbGlcen3xdhLvBMre5bByfTPK4jyfluaQF71ZbuUJW6gvbKg5ndxzyJLnsS4I52ORRAT9mXDDgT0KZv/TOUHDHz6XynmeL/b4b9AhG5Y90UxnQ71b4XxexqrfRxYRWLTb9i6BAafGEDCJNNA4lTc+65WtH+9toSbaIM61qCHIKbB4ceYvGMprqrn+j0neMdgTOUnv9OWSEUT0qnt66Usf7dBuKS8rSVdNa6RBuC/qjSQ7Fdpza2vtpxbjwVAL5XQNGlnDjJLpm4NxaUotGe8tg+F6jmRHtf/2L/pStnh1gNSfEYXcGbtb0TSB+DN8vB9zoH72mFknIRTAKvDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=LDuncan@suse.com; 
-Received: from MN2PR18MB3278.namprd18.prod.outlook.com (10.255.237.204) by
- MN2PR18MB2592.namprd18.prod.outlook.com (20.179.83.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2686.30; Mon, 3 Feb 2020 16:29:17 +0000
-Received: from MN2PR18MB3278.namprd18.prod.outlook.com
- ([fe80::3050:6182:4666:6784]) by MN2PR18MB3278.namprd18.prod.outlook.com
- ([fe80::3050:6182:4666:6784%5]) with mapi id 15.20.2686.031; Mon, 3 Feb 2020
- 16:29:17 +0000
-Subject: Re: [PATCH] megaraid_sas: silence a warning
-To:     Tomas Henzl <thenzl@redhat.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>
-CC:     Linux SCSI List <linux-scsi@vger.kernel.org>,
-        Shivasharan Srikanteshwara 
-        <shivasharan.srikanteshwara@broadcom.com>
-References: <20200131132350.31840-1-thenzl@redhat.com>
- <ff50f95a-1885-9fce-946c-f31861c06486@suse.com>
- <CAL2rwxqDTRmmk_RUEHQpf6MUu5CBaKKBu8W0D3o=y0Yygo6unw@mail.gmail.com>
- <4fac061b-a026-4b5d-b420-787733b961b5@redhat.com>
-From:   Lee Duncan <lduncan@suse.com>
-Message-ID: <92ecd372-7798-98ec-cfa2-ae1d7532028a@suse.com>
-Date:   Mon, 3 Feb 2020 08:29:10 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-In-Reply-To: <4fac061b-a026-4b5d-b420-787733b961b5@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LNXP265CA0001.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:5e::13) To MN2PR18MB3278.namprd18.prod.outlook.com
- (2603:10b6:208:168::12)
+        id S1728732AbgBCQ6X (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 3 Feb 2020 11:58:23 -0500
+Received: from sonic315-20.consmr.mail.ne1.yahoo.com ([66.163.190.146]:40994
+        "EHLO sonic315-20.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727540AbgBCQ6X (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 3 Feb 2020 11:58:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1580749101; bh=ccCAWoSF5BLfDOatu3qpU6l9KI5KeJz6QggOEqZVG6E=; h=Date:From:Reply-To:Subject:References:From:Subject; b=JtVKuED9onImVsVf3lH6o3T+5GRS9+iWnsDq0tWDHVHqYrLoxu5R9ZcpkuVG5MGiEOM9RhAgOnK82VjLMEiLCgE6PtoeHoG4ToftO4oYjVVNuM+NfYl8FASliHb0/xZsrp9Z9/Z5299WLoXNSy76YoJl/HexleAqVGiCMyVSRX4jmal51l+qZ7JjN18hryGfPzGDns5ApPSWI8KChVNXcHNYLNVsqaGPXspMvI7LpZdZHCUdm4Wb1AHtoG6mhO9BkThlxjhn0KQuxJnCOoVPRXFCM//3Pf1dW3iu+TOy5yjXCyFvh+4GgYYXe53mQ25sCV4yg7iMBh8Ryv60+NTJbw==
+X-YMail-OSG: bvkeNRkVM1n1sVEcEPLKY0nrNxWPSJspmWPpnUPhFLoDz4nKKdVg_9Xtk_KzJbB
+ Qd_VC2yYlCAwE4zPOhToAkeWuFwfWZ7A7aaQ18nhn1RiyEISAgknia_RI4c5UJ4E6vdOfpI17TjI
+ mtXzEvqwgLt0LWJpzffo0id4m5aAnhZff15AC7gvBenn5JDzVEHsy8GIS6B8VusIClnEdH_Vkyb6
+ _g_3eINtyO5GHSB2amxn3uAKuUhwFF_M5bkmG7BJzkE3x0FFmWMQpMsvdbg.aMhUHfvhOY1hAPaN
+ QANdB367bmNO5tPU8EYrxxv6JAUnITsYcmzFqLKwOi4lWqUaRQc.9naXSc2sjflyhKbf0JRPmBnH
+ IlhDo.6_LmVFRh8gYY2GLJNkDv4fGCiiK31Vpm00to8FrzMBwesEh5CsTBgXtlZmXwKaW8C8nc1o
+ MH8dzvUIJRg5LFY4hN4TiJ2YL60xww49HKDR8CcgOUq8v9_ljU8ebP4s7ZgLIkLlPQrOf5nMGbvz
+ sas9QGqODoG161szivF5U1nYjoE.cUXoaULN6yi9CrfFDxOL8_rn6TDZ.ltazZ6f7qPJdp10Novh
+ T.SIqPIUPat03ExBcO1qCLFRmY3AmWpZ_N2rlsp7.lFtfmaps7DzSPFz8gILwvXQe390PB2MF4cz
+ HyA.WS8ArzactN_C4KQ6XwfXgDATTbEcP_vjKCL_7pP275eL0UzmW646PH5Hkuzd3FgG5zylIdYO
+ uV.EU2kLg5FQvVf.AnPZmNejsRe_Oj5abHXeCezl2OW.pz3KaZSSczEXnKy7KisL47qy1b_RM0T2
+ RRUwI_3yTwx9DMVRuKO4AW9pZHe0.9EGPaI9cHVMerRSEaibU8iPdKDSHBXHsYGkn27H7CDyAxGb
+ idakrJCGHaIMf935g2C4DG60uPnYFLiQlh76whS8yHqrUYuTaUoHaLiVl8_jUzvOXIbvLnSIAuYt
+ HfsInhE1d3JtjgAyPHFGHsdxwj8SxnzgxyvCAZV__I7WZao5YQa1_A5T2aHMD7BAZQFEsQb_8u1w
+ Hjqg6CDNxnWqnn.b_4dPKmwDgb3orpt2m8EbtimY.JCAWU15kVtFpa27.fvm8m.dZP2t_763v2OC
+ DhDl.mND8enViL3LHxtBDn_zbffx_AmBLm1LmbL5H0UYB9KByi9ITA9t26bIf6Q2lpDk7fQKkqn1
+ PICQUshFXMniN6TuP2xYmSyjvHWVt8enB3AAqNGenJB9SgisG.HSAHNob3FS4E8W7goTRz0Cdtv2
+ RcxyDPtSYTnMpH9bJy7MNWafeMHt4Bv7QhxQYJMgCW2En30jy1S2wLE0lRmmMQgDAHC5iy4YU1Ko
+ 7Fyv.1tYYEgAyUlFPZ0rAE5Hi
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic315.consmr.mail.ne1.yahoo.com with HTTP; Mon, 3 Feb 2020 16:58:21 +0000
+Date:   Mon, 3 Feb 2020 16:58:16 +0000 (UTC)
+From:   MRS SABAH IBRAHIM <absa50602@gmail.com>
+Reply-To: mrs2018sabahibrahim1@gmail.com
+Message-ID: <1367039307.1016336.1580749096809@mail.yahoo.com>
+Subject: Compensation for your effort
 MIME-Version: 1.0
-Received: from [192.168.20.3] (73.25.22.216) by LNXP265CA0001.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:5e::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2686.29 via Frontend Transport; Mon, 3 Feb 2020 16:29:16 +0000
-X-Originating-IP: [73.25.22.216]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4868dc67-9914-40ca-9152-08d7a8c63700
-X-MS-TrafficTypeDiagnostic: MN2PR18MB2592:
-X-Microsoft-Antispam-PRVS: <MN2PR18MB2592CD1548CD267A0F597692DA000@MN2PR18MB2592.namprd18.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-Forefront-PRVS: 0302D4F392
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(366004)(396003)(376002)(346002)(39860400002)(189003)(199004)(6486002)(31686004)(478600001)(26005)(53546011)(81156014)(81166006)(16576012)(8676002)(8936002)(6666004)(86362001)(2906002)(4326008)(31696002)(66476007)(66556008)(66946007)(316002)(54906003)(110136005)(186003)(36756003)(16526019)(52116002)(2616005)(956004)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR18MB2592;H:MN2PR18MB3278.namprd18.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-Received-SPF: None (protection.outlook.com: suse.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /kFcH9FdwVaG+XZxPjrYZ69SQ5ofJP3XZ0u3Oi8LCx2y3nf9+bMBdIyVzDU3VspjZ2JbmYPu4rHpgrHE3/PhHfGxqWNjLfKqeVabrSPoJk74FclIkZcg9j1Xav8szsT+6A5tbFBPL+6CLTIO90v8MYHtEHApYjN9FolHVxXseIweWyjAS4ERoFcFhSuxHZma4VVn7PQDoGTwFs5HUoLfRFw4zr7HhTSNLHNYXFsaGKo0nPR6MipvSMZUDvfanvDeoLe51yRFfCVeB6C1SjlRCC0GSCNagfvV0DKNcA4Amb/EiUx7LqXScTspNuCGH5luGXhsorIGdjuP4plmp7OAgyrXJf5J7+v0OcOzts3idaluvajyoDsbBAuUiwyrNGoefEGWAx3d06nlzn3spgHMMwx4kwnwPBzs4tJiWdqkpgBQ1xMHiH2+ltvcMTrCQF+Y
-X-MS-Exchange-AntiSpam-MessageData: KRCadjmJhjxpuDqDBGdKUQDVn6E1dTHJGoQPH4JXHQuYFQnMmgcSxla+eByeAvzBgLPUb9f91JYHtrdeGuratNNyOCXHJZpCFuOq2MwrEJmKOuEUTBjDApsA1EvZHKvqL4G3t1DcWOJmin2U5XAdvw==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4868dc67-9914-40ca-9152-08d7a8c63700
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2020 16:29:17.8358
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 856b813c-16e5-49a5-85ec-6f081e13b527
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4c+LzPWXtVTsOSagWZh0t3onUJWsbfKb2VHPbQSa0ZKFac2loWLoNNTlUsFdmW7xbVpi7PfTpnlJwT9crAry+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR18MB2592
-X-OriginatorOrg: suse.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1367039307.1016336.1580749096809.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15149 YMailNodin Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/3/20 4:20 AM, Tomas Henzl wrote:
-> On 2/3/20 10:16 AM, Sumit Saxena wrote:
->> On Sat, Feb 1, 2020 at 10:57 PM Lee Duncan <lduncan@suse.com> wrote:
->>>
->>> On 1/31/20 5:23 AM, Tomas Henzl wrote:
->>>> Add a flag to dma mem allocation to silence a warning.
->>>>
->>>> Signed-off-by: Tomas Henzl <thenzl@redhat.com>
->>>> ---
->>>>  drivers/scsi/megaraid/megaraid_sas_fusion.c | 5 +++--
->>>>  1 file changed, 3 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
->>>> index 0f5399b3e..1fa2d1449 100644
->>>> --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
->>>> +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
->>>> @@ -606,7 +606,8 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
->>>>
->>>>       fusion->io_request_frames =
->>>>                       dma_pool_alloc(fusion->io_request_frames_pool,
->>>> -                             GFP_KERNEL, &fusion->io_request_frames_phys);
->>>> +                             GFP_KERNEL | __GFP_NOWARN,
->>>> +                             &fusion->io_request_frames_phys);
->>>>       if (!fusion->io_request_frames) {
->>>>               if (instance->max_fw_cmds >= (MEGASAS_REDUCE_QD_COUNT * 2)) {
->>>>                       instance->max_fw_cmds -= MEGASAS_REDUCE_QD_COUNT;
->>>> @@ -644,7 +645,7 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
->>>>  open-isns-updates.diff.bz2
->>>>               fusion->io_request_frames =
->>>>                       dma_pool_alloc(fusion->io_request_frames_pool,
->>>> -                                    GFP_KERNEL,
->>>> +                                    GFP_KERNEL | __GFP_NOWARN,
->>>>                                      &fusion->io_request_frames_phys);
->>>>
->>>>               if (!fusion->io_request_frames) {
->>>>
->>>
->>> I'm fairly sure this is a good fix, but I'd appreciate more information
->>> in the comment, such as what warning was silenced, and why it's okay to
->>> silence it rather than "fix" it. I know from experience that, when
->>> choosing which commits to backport, more information is better than less.
->> This code allocates DMA memory for driver's IO frames which may exceed
->> MAX_ORDER pages for few
->> megaraid_sas controllers(controllers with High Queue Depth). So there
->> is logic to keep on reducing controller
->> Queue Depth until DMA memory required for IO frames fits within
->> MAX_ORDER. So or impacted megaraid_sas controllers,
->> there would be multiple DMA allocation failure until driver settles
->> down to Controller Queue Depth which has memory requirement
->> within MAX_ORDER. These failed DMA allocation requests causes stack
->> traces in system logs which is not harmful and this patch
->> would silence those warnings/stack traces.
->>
->> With CMA (Contiguous Memory Allocator) enabled, it's possible  to
->> allocate DMA memory exceeding MAX_ORDER.
->> And that is the reason of keeping this retry logic with less
->> controller Queue Depth instead of calculating controller Queue depth
->> at first hand which has memory requirement less than MAX_ORDER.
-> 
-> Thank you Sumit for writing it down.
-> An over-sized allocation failure is sanitized in a proper way. The
-> warning may hide other allocation warnings in other parts of kernel as
-> it is printed only once.
-> 
-> I could have written more vecasue I've underestimated it and I'm sorry
-> for that.
-> 
-> Tomas
+Dear Friend,
 
-No problem! Thank you for adding this. Can you resubmit with this info?
+How are you I hope you are very fine with your entire family? If so glory be to  Almighty God.
+I'm happy to inform you about my success in getting those funds transferred under the cooperation of a new partner from  GREECE, Presently i'm in GREECE for a better treatment  and building of the orphanage home projects with the total  money.
 
-If you're not familiar with submitting a 2nd version (V2), please look
-at the mailing list archives (or email me directly for advice).
+Meanwhile, I didn't forget your past efforts and attempts to assist me in transferring those funds and use it for the building of the orphanage home and helping the less privilege.
 
-I'd be glad to add my reviewed tag once the patch is updated.
+Please contact my nurse in Burkina Faso, her  name is Mrs. Manal Yusuf , ask her to send you the compensation of $600,000.00USD which i have credited with  the ECOBANK bank into an ATM card before i traveled for my treatment, you will indicate your contact as my else's business associate that tried to help me, but it could not work out for us, and I appreciated your good efforts at that time very much. so feel free and get in touched with the nurse Mrs. Manal Yusuf (email:
+mrs1manalyusuf@gmail.com ) and instruct her the address where to send the ATM card to you.
 
-> 
-> 
->> Thanks,
->> Sumit
->>>
->>> --
->>> Lee Duncan
->>
-> 
+Please i am in the hospital here, i would not have much time to check emails or  respond to you, but in case you have any important message do send me as an update, i might instruct the doctor to check it and respond to you, meanwhile, once you received the ATM CARD,  do not delay to inform me.
 
+Finally, remember that I had forwarded an instruction to the nurse on your behalf to deliver the ATM  card to you, so feel free to get in touch with her by email  she will send the ATM card to you without any delay.
+
+Thank you and God bless you.
+MRS SABAH IBRAHIM
