@@ -2,147 +2,114 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF4115270F
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Feb 2020 08:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005BE152717
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Feb 2020 08:38:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728005AbgBEHgE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Feb 2020 02:36:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37584 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727930AbgBEHgE (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 5 Feb 2020 02:36:04 -0500
-Received: from sol.localdomain (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4F9942082E;
-        Wed,  5 Feb 2020 07:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580888163;
-        bh=n6o7wWQTA4s8aqk96q3w/6anRogQN4od5Sii5HmNmSg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Asok7CXnwefCnjUsDtKL6rcUulerYyKIjohfoE0MCopRF1A4GrSwSs5y+JyF4Ah2P
-         V9SjZve6qKHIGzgLbIhDt/82c9hLVDEizHOQVJiIaiGPjJz2uS3Ht3WY825qSoVhSv
-         7vKWVVkT1QAEhsFN750aTQYD44YttZKasa9HwnC0=
-Date:   Tue, 4 Feb 2020 23:36:01 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Satya Tangirala <satyat@google.com>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>,
-        Kim Boojin <boojin.kim@samsung.com>
-Subject: Re: [PATCH v6 0/9] Inline Encryption Support
-Message-ID: <20200205073601.GA191054@sol.localdomain>
-References: <20191218145136.172774-1-satyat@google.com>
- <20200108140556.GB2896@infradead.org>
- <20200108184305.GA173657@google.com>
- <20200117085210.GA5473@infradead.org>
- <20200201005341.GA134917@google.com>
- <20200203091558.GA28527@infradead.org>
- <20200204033915.GA122248@google.com>
- <20200204145832.GA28393@infradead.org>
- <20200204212110.GA122850@gmail.com>
+        id S1725980AbgBEHi0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Feb 2020 02:38:26 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:42856 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727070AbgBEHi0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 5 Feb 2020 02:38:26 -0500
+Received: by mail-oi1-f193.google.com with SMTP id j132so1010113oih.9
+        for <linux-scsi@vger.kernel.org>; Tue, 04 Feb 2020 23:38:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VHCHejlb0Njoieb9nIgel05KYyor/lBS9JeYUsC9YKc=;
+        b=UofL/umRod0QO8lZgg6CRjbmkNjWZkVwn3r1XBMKE0TfWNPeXK0LgiOZrrzbXDO+eb
+         FHzCaeprjwOblMPI09gaU1lHK54R6RJgXVTiWO6N4KyNuPq6WGVG4Y0G4YVsNDk4RuH6
+         RmyzFU+fB/98HPIFgYN+6M+EfQtPluehACWpk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VHCHejlb0Njoieb9nIgel05KYyor/lBS9JeYUsC9YKc=;
+        b=JjZsz+lrrqFQRnYmFkWsuLICbsXdSZslwZ0G2nwjHHgr81ne899B38EMDZnu0IpZMs
+         XZ9kTeYoFfJGy/0apnnHufz7zk618rbzdwMP96a9oGJ3U5cHyC19IvDobiIc7+up0Xps
+         hG+kG30o6elz1HAsGGms32JlDkio9+QZmiW+UN9JbdhODE/m1lJIh9gSALojhQ32n/NT
+         p8rOGvHYtnIDXNC9goUIxWh6Z0i0UUebICbdY7XYsozC3I/qyyCS5tweF3U+fmGVSiaF
+         5bcv5EDG5YZIm02EWyQWTrjN9xwPHvv7a3SU7+fXpe6HVuxa/nDnhwhDN8IjBiMQz1RE
+         mxHg==
+X-Gm-Message-State: APjAAAXzwMcxSUM5H8IiSyAP2uNsQ1TBpfUiBkgHOGOWP5EDk6/YCp4i
+        KEGtpaLRF9DpWGHrA46Ro6WuNA/W5zkmHool2RVl2Ys9KMU=
+X-Google-Smtp-Source: APXvYqwzHVbXlWGAWzWx8faj8LMSaLw8KP+x9ejAOO6s+JUAycHG2U+8Lbt0Ovxq8Z0VTrF2/+/qa/LHXCLM8IOA33Y=
+X-Received: by 2002:a05:6808:4c2:: with SMTP id a2mr1945500oie.118.1580888305224;
+ Tue, 04 Feb 2020 23:38:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200204212110.GA122850@gmail.com>
+References: <20200204152413.7107-1-thenzl@redhat.com>
+In-Reply-To: <20200204152413.7107-1-thenzl@redhat.com>
+From:   Sumit Saxena <sumit.saxena@broadcom.com>
+Date:   Wed, 5 Feb 2020 13:07:58 +0530
+Message-ID: <CAL2rwxoPTTZsZQC_Razw7eEnudrcpGCFgPbp73Z9rEG+cQ7-GA@mail.gmail.com>
+Subject: Re: [PATCH V2] megaraid_sas: silence a warning
+To:     Tomas Henzl <thenzl@redhat.com>
+Cc:     Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>,
+        Lee Duncan <lduncan@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Feb 04, 2020 at 01:21:11PM -0800, Eric Biggers wrote:
-> On Tue, Feb 04, 2020 at 06:58:32AM -0800, Christoph Hellwig wrote:
-> > On Mon, Feb 03, 2020 at 07:39:15PM -0800, Satya Tangirala wrote:
-> > > Wouldn't that mean that all the other requests in the queue, even ones that
-> > > don't even need any inline encryption, also don't get processed until the
-> > > queue is woken up again?
-> > 
-> > For the basic implementation yes.
-> > 
-> > > And if so, are we really ok with that?
-> > 
-> > That depends on the use cases.  With the fscrypt setup are we still
-> > going to see unencrypted I/O to the device as well?  If so we'll need
-> > to refine the setup and only queue up unencrypted requests.  But I'd
-> > still try to dumb version first and then refine it.
-> 
-> Definitely, for several reasons:
-> 
-> - Not all files on the filesystem are necessarily encrypted.
-> - Filesystem metadata is not encrypted (except for filenames, but those don't
->   use inline encryption).
-> - Encryption isn't necessarily being used on all partitions on the disk.
-> 
-> It's also not just about unencrypted vs. encrypted, since just because someone
-> is waiting for one keyslot doesn't mean we should pause all encrypted I/O to the
-> device for all keyslots.
-> 
-> > 
-> > > As you said, we'd need the queue to wake up once a keyslot is available.
-> > > It's possible that only some hardware queues and not others get blocked
-> > > because of keyslot programming, so ideally, we could somehow make the
-> > > correct hardware queue(s) wake up once a keyslot is freed. But the keyslot
-> > > manager can't assume that it's actually blk-mq that's being used
-> > > underneath,
-> > 
-> > Why?  The legacy requet code is long gone.
-> > 
-> > > Also I forgot to mention this in my previous mail, but there may be some
-> > > drivers/devices whose keyslots cannot be programmed from an atomic context,
-> > > so this approach which might make things difficult in those situations (the
-> > > UFS v2.1 spec, which I followed while implementing support for inline
-> > > crypto for UFS, does not care whether we're in an atomic context or not,
-> > > but there might be specifications for other drivers, or even some
-> > > particular UFS inline encryption hardware that do).
-> > 
-> > We have an option to never call ->queue_rq from atomic context
-> > (BLK_MQ_F_BLOCKING).  But do you know of existing hardware that behaves
-> > like this or is it just hypothetical?
-> 
-> Maybe -- check the Qualcomm ICE (Inline Crypto Engine) driver I posted at
-> https://lkml.kernel.org/linux-block/20200110061634.46742-1-ebiggers@kernel.org/.
-> The hardware requires vendor-specific SMC calls to program keys, rather than the
-> UFS standard way.  It's currently blocking, since the code to make the SMC calls
-> in drivers/firmware/qcom_scm*.c uses GFP_KERNEL and mutex_lock().
-> 
-> I'll test whether it can work in atomic context by using GFP_ATOMIC and
-> qcom_scm_call_atomic() instead.  (Adding a spinlock might be needed too.)
-> 
+On Tue, Feb 4, 2020 at 8:54 PM Tomas Henzl <thenzl@redhat.com> wrote:
+>
+> Add a flag to dma mem allocation to silence a warning.
+>
+> This code allocates DMA memory for driver's IO frames which may exceed
+> MAX_ORDER pages for few megaraid_sas controllers(controllers
+> with High Queue Depth). So there is logic to keep on reducing controller
+> Queue Depth until DMA memory required for IO frames fits within
+> MAX_ORDER. So or impacted megaraid_sas controllers,
+> there would be multiple DMA allocation failure until driver settles
+> down to Controller Queue Depth which has memory requirement
+> within MAX_ORDER. These failed DMA allocation requests causes stack
+> traces in system logs which is not harmful and this patch
+> would silence those warnings/stack traces.
+>
+> With CMA (Contiguous Memory Allocator) enabled, it's possible  to
+> allocate DMA memory exceeding MAX_ORDER.
+> And that is the reason of keeping this retry logic with less
+> controller Queue Depth instead of calculating controller Queue depth
+> at first hand which has memory requirement less than MAX_ORDER.
+>
+> Signed-off-by: Tomas Henzl <thenzl@redhat.com>
 
-The vendor-specific SMC calls do seem to work in atomic context, at least on
-SDA845.  However, in ufshcd_program_key(), the calls to pm_runtime_get_sync()
-and ufshcd_hold() can also sleep.
+Acked-by: Sumit Saxena <sumit.saxena@broadcom.com>
 
-I think we can move the pm_runtime_get_sync() to ufshcd_crypto_keyslot_evict(),
-since the block layer already ensures the device is not runtime-suspended while
-requests are being processed (see blk_queue_enter()).  I.e., keyslots can be
-evicted independently of any bio, but that's not the case for programming them.
-
-That still leaves ufshcd_hold(), which is still needed to ungate the UFS clocks.
-It does accept an 'async' argument, which is used by ufshcd_queuecommand() to
-schedule work to ungate the clocks and return SCSI_MLQUEUE_HOST_BUSY.
-
-So in blk_mq_dispatch_rq_list(), we could potentially try to acquire the
-keyslot, and if it can't be done because either none are available or because
-something else needs to be waited for, we can put the request back on the
-dispatch list -- similar to how failure to get a driver tag is handled.
-
-However, if I understand correctly, that would mean that all requests to the
-same hardware queue would be blocked whenever someone is waiting for a keyslot
--- even unencrypted requests and requests for unrelated keyslots.
-
-It's possible that would still be fine for the Android use case, as vendors tend
-to add enough keyslots to work with Android, provided that they choose the
-fscrypt format that uses one key per encryption policy rather than one key per
-file.  I.e., it might be the case that no one waits for keyslots in practice
-anyway.  But, it seems it would be undesirable for a general Linux kernel
-framework, which could potentially be used with per-file keys or with hardware
-that only has a *very* small number of keyslots.
-
-Another option would be to allocate the keyslot in blk_mq_get_request(), where
-sleeping is still allowed, but some merging was already done.
-
-- Eric
+> ---
+> V2: A change in the description, additional information is added,
+> kindly written by Sumit.
+>
+>  drivers/scsi/megaraid/megaraid_sas_fusion.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> index 0f5399b3e..1fa2d1449 100644
+> --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+> @@ -606,7 +606,8 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
+>
+>         fusion->io_request_frames =
+>                         dma_pool_alloc(fusion->io_request_frames_pool,
+> -                               GFP_KERNEL, &fusion->io_request_frames_phys);
+> +                               GFP_KERNEL | __GFP_NOWARN,
+> +                               &fusion->io_request_frames_phys);
+>         if (!fusion->io_request_frames) {
+>                 if (instance->max_fw_cmds >= (MEGASAS_REDUCE_QD_COUNT * 2)) {
+>                         instance->max_fw_cmds -= MEGASAS_REDUCE_QD_COUNT;
+> @@ -644,7 +645,7 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
+>
+>                 fusion->io_request_frames =
+>                         dma_pool_alloc(fusion->io_request_frames_pool,
+> -                                      GFP_KERNEL,
+> +                                      GFP_KERNEL | __GFP_NOWARN,
+>                                        &fusion->io_request_frames_phys);
+>
+>                 if (!fusion->io_request_frames) {
+> --
+> 2.21.1
+>
