@@ -2,19 +2,19 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A8E153A66
-	for <lists+linux-scsi@lfdr.de>; Wed,  5 Feb 2020 22:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5D7153A64
+	for <lists+linux-scsi@lfdr.de>; Wed,  5 Feb 2020 22:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727279AbgBEVnZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 5 Feb 2020 16:43:25 -0500
-Received: from mx2.suse.de ([195.135.220.15]:52404 "EHLO mx2.suse.de"
+        id S1727234AbgBEVnY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 5 Feb 2020 16:43:24 -0500
+Received: from mx2.suse.de ([195.135.220.15]:52424 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727033AbgBEVnY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1727170AbgBEVnY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Wed, 5 Feb 2020 16:43:24 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id DB6DAACAE;
-        Wed,  5 Feb 2020 21:43:22 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 37A2EACD0;
+        Wed,  5 Feb 2020 21:43:23 +0000 (UTC)
 From:   mwilck@suse.com
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Himanshu Madhani <hmadhani@marvell.com>,
@@ -26,9 +26,9 @@ Cc:     Bart Van Assche <Bart.VanAssche@sandisk.com>,
         Daniel Wagner <dwagner@suse.de>,
         James Bottomley <jejb@linux.vnet.ibm.com>,
         linux-scsi@vger.kernel.org
-Subject: [PATCH v2 1/3] scsi: qla2xxx: avoid sending mailbox commands if firmware is stopped
-Date:   Wed,  5 Feb 2020 22:44:20 +0100
-Message-Id: <20200205214422.3657-2-mwilck@suse.com>
+Subject: [PATCH v2 2/3] scsi: qla2xxx: don't shut down firmware before closing sessions
+Date:   Wed,  5 Feb 2020 22:44:21 +0100
+Message-Id: <20200205214422.3657-3-mwilck@suse.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200205214422.3657-1-mwilck@suse.com>
 References: <20200205214422.3657-1-mwilck@suse.com>
@@ -41,48 +41,56 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Martin Wilck <mwilck@suse.com>
 
-Since commit 45235022da99 ("scsi: qla2xxx: Fix driver unload by shutting down chip"),
-it is possible that FC commands are scheduled after the adapter firmware
-has been shut down. IO sent to the firmware in this situation hangs
-indefinitely. Avoid this for the LOGO code path that is typically taken
-when adapters are shut down.
+Since 45235022da99, the firmware is shut down early in the controller
+shutdown process. This causes commands sent to the firmware (such as LOGO)
+to hang forever. Eventually one or more timeouts will be triggered.
+Move the stopping of the firmware until after sessions have terminated.
 
 Fixes: 45235022da99 ("scsi: qla2xxx: Fix driver unload by shutting down chip")
 Signed-off-by: Martin Wilck <mwilck@suse.com>
-Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
 ---
- drivers/scsi/qla2xxx/qla_mbx.c | 3 +++
- drivers/scsi/qla2xxx/qla_os.c  | 3 +++
- 2 files changed, 6 insertions(+)
+ drivers/scsi/qla2xxx/qla_os.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 9e09964..53129f2 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -2644,6 +2644,9 @@ qla24xx_fabric_logout(scsi_qla_host_t *vha, uint16_t loop_id, uint8_t domain,
- 	ql_dbg(ql_dbg_mbx + ql_dbg_verbose, vha, 0x106d,
- 	    "Entered %s.\n", __func__);
- 
-+	if (!ha->flags.fw_started)
-+		return QLA_FUNCTION_FAILED;
-+
- 	lg = dma_pool_zalloc(ha->s_dma_pool, GFP_KERNEL, &lg_dma);
- 	if (lg == NULL) {
- 		ql_log(ql_log_warn, vha, 0x106e,
 diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index b520a98..2dafb46 100644
+index 2dafb46..e81080d 100644
 --- a/drivers/scsi/qla2xxx/qla_os.c
 +++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -4878,6 +4878,9 @@ qla2x00_post_work(struct scsi_qla_host *vha, struct qla_work_evt *e)
- 	unsigned long flags;
- 	bool q = false;
+@@ -3720,6 +3720,16 @@ qla2x00_remove_one(struct pci_dev *pdev)
+ 	}
+ 	qla2x00_wait_for_hba_ready(base_vha);
  
-+	if (!vha->hw->flags.fw_started)
-+		return QLA_FUNCTION_FAILED;
++	qla2x00_wait_for_sess_deletion(base_vha);
 +
- 	spin_lock_irqsave(&vha->work_lock, flags);
- 	list_add_tail(&e->list, &vha->work_list);
++	/*
++	 * if UNLOAD flag is already set, then continue unload,
++	 * where it was set first.
++	 */
++	if (test_bit(UNLOADING, &base_vha->dpc_flags))
++		return;
++
++	set_bit(UNLOADING, &base_vha->dpc_flags);
+ 	if (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) ||
+ 	    IS_QLA28XX(ha)) {
+ 		if (ha->flags.fw_started)
+@@ -3736,17 +3746,6 @@ qla2x00_remove_one(struct pci_dev *pdev)
+ 		qla2x00_try_to_stop_firmware(base_vha);
+ 	}
  
+-	qla2x00_wait_for_sess_deletion(base_vha);
+-
+-	/*
+-	 * if UNLOAD flag is already set, then continue unload,
+-	 * where it was set first.
+-	 */
+-	if (test_bit(UNLOADING, &base_vha->dpc_flags))
+-		return;
+-
+-	set_bit(UNLOADING, &base_vha->dpc_flags);
+-
+ 	qla_nvme_delete(base_vha);
+ 
+ 	dma_free_coherent(&ha->pdev->dev,
 -- 
 2.25.0
 
