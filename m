@@ -2,134 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFF11551B7
-	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2020 06:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF971552AE
+	for <lists+linux-scsi@lfdr.de>; Fri,  7 Feb 2020 08:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726674AbgBGFKk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Feb 2020 00:10:40 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:27822 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726130AbgBGFKj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Feb 2020 00:10:39 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1581052239; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=p+IeH4SGi1r0YN2Gbqakkkdvr0f2lVt6cKftto4BSS0=;
- b=a8V5yyNDG924DsMGM8MLlsE8J+pBLKVsseLp98fSCdlzvy26K9N+01Uv47C0IU67Llp1EACq
- KwaNS2RkpzwwtPzn4lzXhXUlpGCoWhrsgtob5NCpoCj0X+nv37PjlE7O2m/pjrngzed/2sLl
- 7SYaBTQpbpnTuCDoh4mn7eNFBcE=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e3cf14e.7fa315918c38-smtp-out-n03;
- Fri, 07 Feb 2020 05:10:38 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 994F3C447A3; Fri,  7 Feb 2020 05:10:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AF1EDC433CB;
-        Fri,  7 Feb 2020 05:10:35 +0000 (UTC)
+        id S1726607AbgBGHEG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 7 Feb 2020 02:04:06 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:59065 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726130AbgBGHEF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Feb 2020 02:04:05 -0500
+X-UUID: 54507557b7ae47d7a22bcb86bc5b5fbb-20200207
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0FyZvLAm8VgVJ2/OueWbRbVIynhvPgRH9QI8GSdUKEk=;
+        b=Slbo06+6Dug2P4nauEaQ8uC6OaDKspaRoYF5u9uelez2nmeF48sXZtotYg64U68V89s1g21EfoU4p+FKlfZhPZ9g0SArr2KH2191MlWbAAjDWldgOfYWbOgm6GaC93f2XF0KKFVZqwHBXIkO5T6dqB4+UDvFiJBkbVWgbRpktks=;
+X-UUID: 54507557b7ae47d7a22bcb86bc5b5fbb-20200207
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1791150247; Fri, 07 Feb 2020 15:03:59 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 7 Feb 2020 15:02:27 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 7 Feb 2020 15:04:27 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <beanhuo@micron.com>
+CC:     <asutoshd@codeaurora.org>, <cang@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v1 0/2] scsi: ufs: introduce common function to disable host TX LCC
+Date:   Fri, 7 Feb 2020 15:03:55 +0800
+Message-ID: <20200207070357.17169-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 07 Feb 2020 13:10:35 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Avri Altman <Avri.Altman@wdc.com>
-Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Pedro Sousa <sousa@synopsys.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 8/8] scsi: ufs: Select INITIAL adapt for HS Gear4
-In-Reply-To: <08101e2924d6262579beec488fcbd93f@codeaurora.org>
-References: <1580978008-9327-1-git-send-email-cang@codeaurora.org>
- <1580978008-9327-9-git-send-email-cang@codeaurora.org>
- <MN2PR04MB6991EA027BB31FA58EEBDA81FC1D0@MN2PR04MB6991.namprd04.prod.outlook.com>
- <08101e2924d6262579beec488fcbd93f@codeaurora.org>
-Message-ID: <ebbaf825f4a78b1a21da347e8c6d5531@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-02-07 10:56, Can Guo wrote:
-> On 2020-02-06 21:20, Avri Altman wrote:
->> Hi Can,
->> 
->> 
->>> ADAPT is added specifically for HS Gear4 mode only, select INITIAL 
->>> adapt
->>> before do power mode change to G4 and select no adapt before switch 
->>> to
->>> non-G4 modes.
->> 
->> UFSHCI 3.0 says:
->> 7.4.1 Adapt
->> The use of Adapt isn't mandatory but the specification provides some
->> guidelines on its use.
->> The HCI should perform an Initial Adapt in the following cases if the
->> link is running at HS-G4
->> speed:
->>  - If DME_RESET is initiated.
->>  - If an unused line is activated for HS-G4.
->>  - If UECDME.EC is triggered with bit 3 set to '1'.
->>  - If a change between Rate A and Rate B in HS-G4 is performed.
->> 
->> If it's not mandatory - why are we setting this for all vendors on all
->> platforms?
->> Or am I miss-reading the spec?
->> 
->> Thanks,
->> Avri
-> 
-> Hi Avri,
-> 
-> Yes, it is not mandatory, but I don't know a flash vendor that
-> refuses to use ADAPT so far, it is even recommended by flash vendors.
-> So there is no meaning of adding a specific quirk for it, as all flash
-> vendors need this quirk. Otherwise, we would need to add another vops
-> to allow platform vendors to control it before send PMC.
-> 
-> Any other suggestions?
-> 
-> FYI, ADAPT sequence is used to train an M-RX equalizer. It gives both
-> sides better signal integrity against the influence caused by
-> temperature and voltage variations. ADAPT is also used by Quality of
-> Service Monitoring for HS-G4.
-> 
-> As for the usage of it, here is just setting the type of it before
-> PMC to HS-G4, HW will use ADAPT, only if both sides support ADAPT,
-> when it is required as what the spec is saying.
-> 
-> Thanks,
-> 
-> Can Guo.
+SGksDQoNClRoaXMgcGF0Y2hzZXQgaW50cm9kdWNlcyBhIGNvbW1vbiBmdW5jdGlvbiB0byBkaXNh
+YmxlIGhvc3QgVFggTENDIGZvciBhbGwgdmVuZG9ycyBhbmQgZml4ZXMgYSBUWCBMQ0MgaXNzdWUg
+aW4gTWVkaWFUZWsgVUZTIGRyaXZlci4NCg0KU3RhbmxleSBDaHUgKDIpOg0KICBzY3NpOiB1ZnM6
+IHVmcy1tZWRpYXRlazogZml4IFRYIExDQyBkaXNhYmxpbmcgdGltaW5nDQogIHNjc2k6IHVmczog
+aW50cm9kdWNlIGNvbW1vbiBmdW5jdGlvbiB0byBkaXNhYmxlIGhvc3QgVFggTENDDQoNCiBkcml2
+ZXJzL3Njc2kvdWZzL2NkbnMtcGx0ZnJtLmMgIHwgIDIgKy0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vm
+cy1oaXNpLmMgICAgIHwgIDIgKy0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jIHwg
+MTIgKysrKysrKysrLS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnMtcWNvbS5jICAgICB8ICA0ICst
+LS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC1wY2kuYyAgIHwgIDIgKy0NCiBkcml2ZXJzL3Nj
+c2kvdWZzL3Vmc2hjZC5oICAgICAgIHwgIDUgKysrKysNCiA2IGZpbGVzIGNoYW5nZWQsIDE4IGlu
+c2VydGlvbnMoKyksIDkgZGVsZXRpb25zKC0pDQoNCi0tIA0KMi4xOC4wDQo=
 
-Hi Avri,
-
-I will drop this one for now as it may take some time to nail down it.
-I will come back with a separate patch series for it later.
-
-Thanks for the review.
-
-Can Guo.
