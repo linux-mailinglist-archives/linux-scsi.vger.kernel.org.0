@@ -2,105 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 275BB1562C9
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Feb 2020 04:17:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0402156322
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Feb 2020 06:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727076AbgBHDRV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 7 Feb 2020 22:17:21 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:55462 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726995AbgBHDRV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 7 Feb 2020 22:17:21 -0500
-Received: by mail-pj1-f65.google.com with SMTP id d5so1712920pjz.5
-        for <linux-scsi@vger.kernel.org>; Fri, 07 Feb 2020 19:17:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=byhBZzoWFfwGTDH0WFpdeqjyck11jKKD2PxRgiJNnoE=;
-        b=Ne4OaxdQeRQLMWVzzP0EYYpnzh24217TdELc/zSpmb7/IlTpQV5OsRKnX/rFjyERT2
-         p2B6L2NMhIIw3oaWLjxLNFJwS43Gw3dZcN8j2EWKoq1yPNVO9ts4d8yBOzMe9FT33XMW
-         11I1yH3yzv1FJFsivctmeaTdRzJZtLVQAa2bUzd2IVywkj+uH/lKn8kF4POC8mCpWXcD
-         3m1oiFqrXHLfcf+1Hl+OIG0Coa2BUqOdZ5QnWzHaa7DKKMl8VL4Hfd5SKXaYMYPcruPJ
-         DbygtXgWOczaQJfLh9mVYsOLm0doDl0albgVOzySb4Cc76vp+1dMuTtmKfCbNsk+hdTO
-         J9kQ==
-X-Gm-Message-State: APjAAAUWtEFffMAeYOSAlp0W2ecOiCVAut1xciXcSXJUPJxtCAClZXtI
-        hOlCqnc+YNdjAU0o2S591cg=
-X-Google-Smtp-Source: APXvYqwpR5KdV3lzHF64cKOBqmMn45+YfXkfgrtjqxEcHlkd8D8v+PPAKBnS0ulmmZBcR5N2L4qxTA==
-X-Received: by 2002:a17:90a:858a:: with SMTP id m10mr7530448pjn.117.1581131840376;
-        Fri, 07 Feb 2020 19:17:20 -0800 (PST)
-Received: from ?IPv6:2601:647:4000:d7:81e7:2f8f:8d7f:e4b7? ([2601:647:4000:d7:81e7:2f8f:8d7f:e4b7])
-        by smtp.gmail.com with ESMTPSA id j8sm4009836pjb.4.2020.02.07.19.17.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Feb 2020 19:17:19 -0800 (PST)
-Subject: Re: [PATCH 0/4] qla2xxx patches for kernel v5.6
-To:     Martin Wilck <mwilck@suse.com>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        Quinn Tran <qutran@marvell.com>
-Cc:     linux-scsi@vger.kernel.org, "dwagner@suse.de" <dwagner@suse.de>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-References: <20191209180223.194959-1-bvanassche@acm.org>
- <bb273446a0f294e37dc0afb2c450fb761e345260.camel@suse.com>
- <559ee60f-43e8-b228-f14b-7453d62e7780@acm.org>
- <cb2ad8b48a412ad164ebbe809bc80b238b16a0b4.camel@suse.com>
- <4478372c-7e34-c35f-6ccc-dff1422b6256@acm.org>
- <44e8e2cad35ea91f4b4a8fceb2e12930c62760b1.camel@suse.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <f4c4a95d-7d93-9989-2bf7-097102618e01@acm.org>
-Date:   Fri, 7 Feb 2020 19:17:18 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726918AbgBHF7K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 8 Feb 2020 00:59:10 -0500
+Received: from sonic311-15.consmr.mail.bf2.yahoo.com ([74.6.131.125]:36680
+        "EHLO sonic311-15.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725789AbgBHF7J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Feb 2020 00:59:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1581141548; bh=pa1o5VRYWWG3WgDVzwpWeoz/bqhPAQKm9h7htHGAd9k=; h=Date:From:Reply-To:Subject:References:From:Subject; b=msGp8xFmHfm71OTooC/OxL1lBTswqrmhV0qEHElrfcR6MJo3rQx2uqwEoi+GXIRk/TzreQVCoYwC9GoMj36BEfxBaV+y22Lvgn+CRtCyGD2QWbSiBPlEmo96qD4upV6fpNZI8qehBgk6kxUOPbZpo+a2XH08ASFLqLloFvVP8IgmlxBMOu2RzEVil/RUnolR/O5zljbLKLP572Y84vZmP7yKoBuyaTnKq1KUNTGLHgVdEm3PKh/H9+Rnci0v8sy63y93IWKKQdle80vfRvdKQmRLkp8H3KUL4Gifcm4w7Q2/3L0HIkpm2HOpkqefeGwMAhbk1T7DwUWyJvHRe6ROaw==
+X-YMail-OSG: njbACL4VM1lU2Rwq9T.bIUyYJeitlHIRMyNlTeJ2VSjJFNg7WcKA3Nw_ZliynWx
+ 9gd9ot3Dj_TmsDf78tbrgmBDyv83SnhmdNBl5FCQ3tWkuWyZ7TscFs0fYc1YSRqzvjb0LbMkJdUg
+ cUxRubEWn8KqBpVEivBGSBOSjKzQva2f4mvom4xV5cPKkF_8uD54h4fRwBgD2T2BW79tWLObUOjX
+ z5SU.OtCBugrsA5XaGmaEV3n0d4.vwT.QhH8uzD8U1kcwEpS3SVib7C_q7HKbNcLfx5fo97hnth7
+ RrJh5CYGScIxbr5uVqMVT_lrPxs0ehCQD9MPdBzLqe1nJSQlQVDqA8HFqeTExdvBkXx0BvoEURuJ
+ DCk6aEEGIu4oVNB.2HI19lJwA9eaNoLjngnQ5Fte8a6l_tWl2guJhuh4wKDMu1mPEy28VgUZRNDK
+ BB7KrkjvMybwbWLrBRHArVFHHWWF91BEqBwvOd1QNdkWa2vGSDUv1_DMohIGCb0FTwtYvIp29ywk
+ qc0i.3iX1Viryiepx7Xb.8fCAS5FEhrJRG4i9Njrx0VFiA.dtbNezgkgcvwKAKym74cpIuNWcLZD
+ kO0cEoD9CK1mf9fquX75rLyzgQpGMntIZYJ5I2D467n3FAiQgqA.GpIQdEu2zwa48SO8d9Gz81wj
+ PHzy8UvbKbEAPjjnQTUwzZcyHgLxGtH.MtCo2n9JL_Tixf2loatYJqs8S9ScjwxdhcxvxA7cz2aF
+ la5G25PIIak8J44p5088JQv2YZiMflb9VeXLZqpsESpK7hd8S4KPECk5NPqYescMVl47nKLTrWu9
+ L0V_xzksIry_1aws07fixhjHq0qYAKq4UhDxob2wiZo0IFMkNKvXQKrN.FOWQ4BZ4tTfgo7jhXah
+ kqniLTmVN90B35vnFVKQxsoZr1ZGiJprH3viww5.E_zug_kt.3ad0ezI.U3arxf3Lc_rL1UzydaR
+ 0b3fL4s7Y5hIqYr2ACChM1n_5l3Mid.O.A_6TTcMWeFeOWfKAJ7W6tm8Eik3rbHDb5_eKF45vRMV
+ fMMIQfe_NVOERicgB.Vnu0UpPvPxR_ePGeBoaNz5PKyma9sCn3GZo16ZX8phNDJg0TIuWpUOzqQG
+ r1uVPBpEE._v_75IS6TXO6wIbg7_6.SwXeIYoCXQr5tFBS7qqeEhlk0F.ZuT6aEIUrh7S_Jn2G.4
+ cx9zyqy6cPab9UKNF77OOUkMXYZTa0HD9MrnbVms3SComcAI5W1mSBdavvar85JnqUdzASSEAKAg
+ LTzh38XAbZZbahlX6JcHsVf0rxFpM4xiQsxFWkojoVwfERgM8n3D9aiw1gJKmZD.8t9hprStNSw-
+ -
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.bf2.yahoo.com with HTTP; Sat, 8 Feb 2020 05:59:08 +0000
+Date:   Sat, 8 Feb 2020 05:59:06 +0000 (UTC)
+From:   "D.H.L HASSAIN" <mrsrajoysmrsrajoyshassain@gmail.com>
+Reply-To: rejoy_hassain_2020@mail.ru
+Message-ID: <506063762.70146.1581141546770@mail.yahoo.com>
+Subject: =?UTF-8?Q?Greetings=C2=A0to=C2=A0you.?=
 MIME-Version: 1.0
-In-Reply-To: <44e8e2cad35ea91f4b4a8fceb2e12930c62760b1.camel@suse.com>
-Content-Type: text/plain; charset=iso-8859-15
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+References: <506063762.70146.1581141546770.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 5.1; rv:52.0) Gecko/20100101 Firefox/52.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-02-07 01:09, Martin Wilck wrote:
-> Sorry for insisting - in your original submission "Revert "qla2xxx: Fix
-> Nport ID display value" from 11/09/2019, you'd identified this as a
-> regression caused by 0aabb6b699f7 ("scsi: qla2xxx: Fix Nport ID display
-> value"). Are you saying that that wasn't the whole truth? Had N2N been
-> broken before already? Did N2N with "old" adapters ever work with
-> previous versions of the driver? Which ones?
+ATTENTION: DEAR BENEFICIARY CONGRATULATIONS TO YOU DEAR GOOD DAY I AM SORRY IF YOU RECEIVED THIS LETTER IN YOUR SPAM OR JUNK MAIL IT IS DUE TO A RECENT CONNECTION HERE IN MY COUNTRY.
 
-Hi Martin,
+DEAR FRIEND.
 
-My conclusion is indeed that N2N is broken since a long time for at
-least the 8 Gb/s QLogic FC adapter. The test I run is to set the
-qlini_mode kernel module parameter to dual, to connect two ports of a
-dual port adapter to each other and to make both ports log in to each
-other. If I run this test against a 32 Gb/s dual port adapter then I
-always see that both ports log in to each other. If I run this test
-against an 8 Gb/s dual port adapter then I see that most of the time
-only one port logs in to another port. Sometimes no login happens at all.
+YOU MAY BE WONDERING WHYI CONTACT YOU BUT SOMEONE LUCKY HAS TO BE CHOSEN WHICH IS YOU. I WANT YOU TO HANDLE THIS BUSINESS TRASACTION WITH ME IF CHANCE YOU TO DO INTERNATION BUSINESS I GO YOUR CONTACT FROM A RELIABLE WEB DIRECTORY.
 
-Bart.
+I RECEIVE YOUR CONTENT OF YOUR EMAIL FROM THIS DHL MASTER CARD OFFICES FUND OF $10.5 USD MILLION AFTER THE BOARD OF DIRECTORS MEETINGS, THE UNITED NATIONS GOVERNMENT HAVE DECIDED TO ISSUE YOU YOUR (ATM) VALUED AT 10.5 MILLION UNITED STATES DOLLAR.THIS IS TO BRING TO YOUR NOTICE THAT YOUR VALUED SUM OF 10.5 MILLION DOLLAR HAS BEING TODAY CREDITED INTO (ATM) MASTER CARD AND HAS BEEN HANDLE TO THE FOREIGN REMITTANCE DEPARTMENT TO SEND IT TO YOU TODAY IN YOUR FAVOR.
+
+WITH YOUR (ATM) YOU WILL HAVE ACCESS TO MAKE DAILY WITHDRAWALS OF $5000,00 UNITED STATE DOLLARS DAILIES AS ALREADY PROGRAMMED UNTIL YOU WITHDRAW YOUR TOTAL SUM IN YOUR (ATM) CARD WHICH HAS REGISTERED IN OUR SYSTEM FOR PAYMENT RECORD, AS SOON AS WE RECEIVE YOUR INFORMATIONS AND YOUR HOME ADDRESS OF YOUR COUNTRY AS ALREADY PROGRAMMED, WE WILL SEND YOUR (ATM) CARD THROUGH DHL COURIER SERVICE, WE HAVE RECEIVED A SIGNAL FROM THE SWISS WORLD BANK TO INFECT YOUR TRANSFER TO YOU WITHIN ONE WEEK,
+
+WE HAVE JUST FINISHED OUR ANNUAL GENERAL MEETING WITH THE CENTRAL BANK OF AMERICA (BOA). AT THE END OF THE BOARD OF DIRECTORS MEETING TODAY, WE HAVE CONCLUDED TO IMMEDIATELY ISSUE YOU AS SOON AS POSSIBLE,
+
+AND YOUR VALUE SUM HAS BEEN CREDITED INTO YOUR (ATM) VISA CARD
+ACCOUNT. WHICH YOU WILL USE TO WITHDRAW YOUR FUND IN ANY PART OF THE WORLD, WE HAVE ISSUED AND CREDITED YOUR (ATM) CARD IN YOUR NAME TODAY,
+
+YOUR (ATM) WILL BE INSURE BY THE INSURANCE COMPANY AND SEND TO YOU
+THROUGH ANY AVAILABLE COURIER COMPANY OF OUR CHOICE.
+
+ONCE AGAIN CONGRATULATIONS TO YOU,
+
+DIRECTOR DHL SERVICE,
+THANKS,
+SINCERELY.
+MRS. RAJOYS HASSAIN,
