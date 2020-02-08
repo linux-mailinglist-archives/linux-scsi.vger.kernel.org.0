@@ -2,73 +2,91 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0402156322
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Feb 2020 06:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EA3156795
+	for <lists+linux-scsi@lfdr.de>; Sat,  8 Feb 2020 20:39:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726918AbgBHF7K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 8 Feb 2020 00:59:10 -0500
-Received: from sonic311-15.consmr.mail.bf2.yahoo.com ([74.6.131.125]:36680
-        "EHLO sonic311-15.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725789AbgBHF7J (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Feb 2020 00:59:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1581141548; bh=pa1o5VRYWWG3WgDVzwpWeoz/bqhPAQKm9h7htHGAd9k=; h=Date:From:Reply-To:Subject:References:From:Subject; b=msGp8xFmHfm71OTooC/OxL1lBTswqrmhV0qEHElrfcR6MJo3rQx2uqwEoi+GXIRk/TzreQVCoYwC9GoMj36BEfxBaV+y22Lvgn+CRtCyGD2QWbSiBPlEmo96qD4upV6fpNZI8qehBgk6kxUOPbZpo+a2XH08ASFLqLloFvVP8IgmlxBMOu2RzEVil/RUnolR/O5zljbLKLP572Y84vZmP7yKoBuyaTnKq1KUNTGLHgVdEm3PKh/H9+Rnci0v8sy63y93IWKKQdle80vfRvdKQmRLkp8H3KUL4Gifcm4w7Q2/3L0HIkpm2HOpkqefeGwMAhbk1T7DwUWyJvHRe6ROaw==
-X-YMail-OSG: njbACL4VM1lU2Rwq9T.bIUyYJeitlHIRMyNlTeJ2VSjJFNg7WcKA3Nw_ZliynWx
- 9gd9ot3Dj_TmsDf78tbrgmBDyv83SnhmdNBl5FCQ3tWkuWyZ7TscFs0fYc1YSRqzvjb0LbMkJdUg
- cUxRubEWn8KqBpVEivBGSBOSjKzQva2f4mvom4xV5cPKkF_8uD54h4fRwBgD2T2BW79tWLObUOjX
- z5SU.OtCBugrsA5XaGmaEV3n0d4.vwT.QhH8uzD8U1kcwEpS3SVib7C_q7HKbNcLfx5fo97hnth7
- RrJh5CYGScIxbr5uVqMVT_lrPxs0ehCQD9MPdBzLqe1nJSQlQVDqA8HFqeTExdvBkXx0BvoEURuJ
- DCk6aEEGIu4oVNB.2HI19lJwA9eaNoLjngnQ5Fte8a6l_tWl2guJhuh4wKDMu1mPEy28VgUZRNDK
- BB7KrkjvMybwbWLrBRHArVFHHWWF91BEqBwvOd1QNdkWa2vGSDUv1_DMohIGCb0FTwtYvIp29ywk
- qc0i.3iX1Viryiepx7Xb.8fCAS5FEhrJRG4i9Njrx0VFiA.dtbNezgkgcvwKAKym74cpIuNWcLZD
- kO0cEoD9CK1mf9fquX75rLyzgQpGMntIZYJ5I2D467n3FAiQgqA.GpIQdEu2zwa48SO8d9Gz81wj
- PHzy8UvbKbEAPjjnQTUwzZcyHgLxGtH.MtCo2n9JL_Tixf2loatYJqs8S9ScjwxdhcxvxA7cz2aF
- la5G25PIIak8J44p5088JQv2YZiMflb9VeXLZqpsESpK7hd8S4KPECk5NPqYescMVl47nKLTrWu9
- L0V_xzksIry_1aws07fixhjHq0qYAKq4UhDxob2wiZo0IFMkNKvXQKrN.FOWQ4BZ4tTfgo7jhXah
- kqniLTmVN90B35vnFVKQxsoZr1ZGiJprH3viww5.E_zug_kt.3ad0ezI.U3arxf3Lc_rL1UzydaR
- 0b3fL4s7Y5hIqYr2ACChM1n_5l3Mid.O.A_6TTcMWeFeOWfKAJ7W6tm8Eik3rbHDb5_eKF45vRMV
- fMMIQfe_NVOERicgB.Vnu0UpPvPxR_ePGeBoaNz5PKyma9sCn3GZo16ZX8phNDJg0TIuWpUOzqQG
- r1uVPBpEE._v_75IS6TXO6wIbg7_6.SwXeIYoCXQr5tFBS7qqeEhlk0F.ZuT6aEIUrh7S_Jn2G.4
- cx9zyqy6cPab9UKNF77OOUkMXYZTa0HD9MrnbVms3SComcAI5W1mSBdavvar85JnqUdzASSEAKAg
- LTzh38XAbZZbahlX6JcHsVf0rxFpM4xiQsxFWkojoVwfERgM8n3D9aiw1gJKmZD.8t9hprStNSw-
- -
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.bf2.yahoo.com with HTTP; Sat, 8 Feb 2020 05:59:08 +0000
-Date:   Sat, 8 Feb 2020 05:59:06 +0000 (UTC)
-From:   "D.H.L HASSAIN" <mrsrajoysmrsrajoyshassain@gmail.com>
-Reply-To: rejoy_hassain_2020@mail.ru
-Message-ID: <506063762.70146.1581141546770@mail.yahoo.com>
-Subject: =?UTF-8?Q?Greetings=C2=A0to=C2=A0you.?=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        id S1727490AbgBHTjf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 8 Feb 2020 14:39:35 -0500
+Received: from bedivere.hansenpartnership.com ([66.63.167.143]:44578 "EHLO
+        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727471AbgBHTjf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Feb 2020 14:39:35 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 8F8EC8EE07B;
+        Sat,  8 Feb 2020 11:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1581190774;
+        bh=jKK0QTtjZCZO5mlfdM04hkHTfc78SwOLsTEq3kqfgiE=;
+        h=Subject:From:To:Cc:Date:From;
+        b=CC/EzITliRqvuhQsFnB5HcncxwC5Zg4ODfkbqYVa17xb8WpyEzALxT1fHVFqel8du
+         6FzBOlX5WU+mpnlcvU7L8JCU7AtK0bwvdb1VxVO2fbYF69hd91cOC/B6Do7J1L+pbB
+         5aQI44tmDJxYrPNcyBj2zRy/aRbiQfx0jOsRC2b0=
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id gbZUqiU6eH4C; Sat,  8 Feb 2020 11:39:34 -0800 (PST)
+Received: from [153.66.254.194] (unknown [50.35.76.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 24ED28EE079;
+        Sat,  8 Feb 2020 11:39:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
+        s=20151216; t=1581190774;
+        bh=jKK0QTtjZCZO5mlfdM04hkHTfc78SwOLsTEq3kqfgiE=;
+        h=Subject:From:To:Cc:Date:From;
+        b=CC/EzITliRqvuhQsFnB5HcncxwC5Zg4ODfkbqYVa17xb8WpyEzALxT1fHVFqel8du
+         6FzBOlX5WU+mpnlcvU7L8JCU7AtK0bwvdb1VxVO2fbYF69hd91cOC/B6Do7J1L+pbB
+         5aQI44tmDJxYrPNcyBj2zRy/aRbiQfx0jOsRC2b0=
+Message-ID: <1581190772.31918.4.camel@HansenPartnership.com>
+Subject: [GIT PULL] final round of SCSI updates for the 5.5+ merge window
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Sat, 08 Feb 2020 11:39:32 -0800
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-References: <506063762.70146.1581141546770.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 5.1; rv:52.0) Gecko/20100101 Firefox/52.0
-To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ATTENTION: DEAR BENEFICIARY CONGRATULATIONS TO YOU DEAR GOOD DAY I AM SORRY IF YOU RECEIVED THIS LETTER IN YOUR SPAM OR JUNK MAIL IT IS DUE TO A RECENT CONNECTION HERE IN MY COUNTRY.
+Five small patches, all in drivers or doc, which missed the initial
+pull request. The qla2xxx and megaraid_sas are actual fixes and the
+rest are spelling and doc changes.
 
-DEAR FRIEND.
+The patch is available here:
 
-YOU MAY BE WONDERING WHYI CONTACT YOU BUT SOMEONE LUCKY HAS TO BE CHOSEN WHICH IS YOU. I WANT YOU TO HANDLE THIS BUSINESS TRASACTION WITH ME IF CHANCE YOU TO DO INTERNATION BUSINESS I GO YOUR CONTACT FROM A RELIABLE WEB DIRECTORY.
+git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
 
-I RECEIVE YOUR CONTENT OF YOUR EMAIL FROM THIS DHL MASTER CARD OFFICES FUND OF $10.5 USD MILLION AFTER THE BOARD OF DIRECTORS MEETINGS, THE UNITED NATIONS GOVERNMENT HAVE DECIDED TO ISSUE YOU YOUR (ATM) VALUED AT 10.5 MILLION UNITED STATES DOLLAR.THIS IS TO BRING TO YOUR NOTICE THAT YOUR VALUED SUM OF 10.5 MILLION DOLLAR HAS BEING TODAY CREDITED INTO (ATM) MASTER CARD AND HAS BEEN HANDLE TO THE FOREIGN REMITTANCE DEPARTMENT TO SEND IT TO YOU TODAY IN YOUR FAVOR.
+The short changelog is:
 
-WITH YOUR (ATM) YOU WILL HAVE ACCESS TO MAKE DAILY WITHDRAWALS OF $5000,00 UNITED STATE DOLLARS DAILIES AS ALREADY PROGRAMMED UNTIL YOU WITHDRAW YOUR TOTAL SUM IN YOUR (ATM) CARD WHICH HAS REGISTERED IN OUR SYSTEM FOR PAYMENT RECORD, AS SOON AS WE RECEIVE YOUR INFORMATIONS AND YOUR HOME ADDRESS OF YOUR COUNTRY AS ALREADY PROGRAMMED, WE WILL SEND YOUR (ATM) CARD THROUGH DHL COURIER SERVICE, WE HAVE RECEIVED A SIGNAL FROM THE SWISS WORLD BANK TO INFECT YOUR TRANSFER TO YOU WITHIN ONE WEEK,
+Arun Easi (1):
+      scsi: qla2xxx: Fix unbound NVME response length
 
-WE HAVE JUST FINISHED OUR ANNUAL GENERAL MEETING WITH THE CENTRAL BANK OF AMERICA (BOA). AT THE END OF THE BOARD OF DIRECTORS MEETING TODAY, WE HAVE CONCLUDED TO IMMEDIATELY ISSUE YOU AS SOON AS POSSIBLE,
+Bean Huo (1):
+      scsi: MAINTAINERS: ufs: remove pedrom.sousa@synopsys.com
 
-AND YOUR VALUE SUM HAS BEEN CREDITED INTO YOUR (ATM) VISA CARD
-ACCOUNT. WHICH YOU WILL USE TO WITHDRAW YOUR FUND IN ANY PART OF THE WORLD, WE HAVE ISSUED AND CREDITED YOUR (ATM) CARD IN YOUR NAME TODAY,
+Colin Ian King (2):
+      scsi: ufs: fix spelling mistake "initilized" -> "initialized"
+      scsi: pm80xx: fix spelling mistake "to" -> "too"
 
-YOUR (ATM) WILL BE INSURE BY THE INSURANCE COMPANY AND SEND TO YOU
-THROUGH ANY AVAILABLE COURIER COMPANY OF OUR CHOICE.
+Hannes Reinecke (1):
+      scsi: megaraid_sas: fixup MSIx interrupt setup during resume
 
-ONCE AGAIN CONGRATULATIONS TO YOU,
 
-DIRECTOR DHL SERVICE,
-THANKS,
-SINCERELY.
-MRS. RAJOYS HASSAIN,
+And the diffstat:
+
+ MAINTAINERS                               |  1 -
+ drivers/scsi/megaraid/megaraid_sas_base.c | 20 +++++++++-----------
+ drivers/scsi/pm8001/pm80xx_hwi.c          |  2 +-
+ drivers/scsi/qla2xxx/qla_dbg.c            |  6 ------
+ drivers/scsi/qla2xxx/qla_dbg.h            |  6 ++++++
+ drivers/scsi/qla2xxx/qla_isr.c            | 12 ++++++++++++
+ drivers/scsi/ufs/ufs.h                    |  2 +-
+ 7 files changed, 29 insertions(+), 20 deletions(-)
+
+James
+
