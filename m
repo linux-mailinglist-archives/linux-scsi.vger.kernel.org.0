@@ -2,91 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EA3156795
-	for <lists+linux-scsi@lfdr.de>; Sat,  8 Feb 2020 20:39:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95ED156854
+	for <lists+linux-scsi@lfdr.de>; Sun,  9 Feb 2020 02:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727490AbgBHTjf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 8 Feb 2020 14:39:35 -0500
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:44578 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727471AbgBHTjf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 8 Feb 2020 14:39:35 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 8F8EC8EE07B;
-        Sat,  8 Feb 2020 11:39:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1581190774;
-        bh=jKK0QTtjZCZO5mlfdM04hkHTfc78SwOLsTEq3kqfgiE=;
-        h=Subject:From:To:Cc:Date:From;
-        b=CC/EzITliRqvuhQsFnB5HcncxwC5Zg4ODfkbqYVa17xb8WpyEzALxT1fHVFqel8du
-         6FzBOlX5WU+mpnlcvU7L8JCU7AtK0bwvdb1VxVO2fbYF69hd91cOC/B6Do7J1L+pbB
-         5aQI44tmDJxYrPNcyBj2zRy/aRbiQfx0jOsRC2b0=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id gbZUqiU6eH4C; Sat,  8 Feb 2020 11:39:34 -0800 (PST)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 24ED28EE079;
-        Sat,  8 Feb 2020 11:39:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1581190774;
-        bh=jKK0QTtjZCZO5mlfdM04hkHTfc78SwOLsTEq3kqfgiE=;
-        h=Subject:From:To:Cc:Date:From;
-        b=CC/EzITliRqvuhQsFnB5HcncxwC5Zg4ODfkbqYVa17xb8WpyEzALxT1fHVFqel8du
-         6FzBOlX5WU+mpnlcvU7L8JCU7AtK0bwvdb1VxVO2fbYF69hd91cOC/B6Do7J1L+pbB
-         5aQI44tmDJxYrPNcyBj2zRy/aRbiQfx0jOsRC2b0=
-Message-ID: <1581190772.31918.4.camel@HansenPartnership.com>
-Subject: [GIT PULL] final round of SCSI updates for the 5.5+ merge window
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
+        id S1727559AbgBIBaY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 8 Feb 2020 20:30:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36204 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726474AbgBIBaY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 8 Feb 2020 20:30:24 -0500
+Subject: Re: [GIT PULL] final round of SCSI updates for the 5.5+ merge window
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581211823;
+        bh=b7vBT9asDr4BsLpdUim/Gp1ihdxpO2V3HbaZUMHOYKY=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=xsPy/8rJbmCLRsbLGaQV/3SWEYAkN6nZwGv6/ccwuHU3Fg68oqaj9km6Og8bIjjrq
+         4PobTwU7Xass7Lg5arxcTXjmA6gH5h0RIVSUFfLEng1mGR6dY1SfYI5UAJUcdMEzxV
+         JhofeqGt634kmOQpqZvyaEl6+14kGvhMd+mA8qK8=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <1581190772.31918.4.camel@HansenPartnership.com>
+References: <1581190772.31918.4.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <1581190772.31918.4.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+X-PR-Tracked-Commit-Id: e0a514259378718e0deea1def03b7025a0daaf42
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: fdfa3a6778b194974df77b384cc71eb2e503639a
+Message-Id: <158121182343.19605.12872491706966217069.pr-tracker-bot@kernel.org>
+Date:   Sun, 09 Feb 2020 01:30:23 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Sat, 08 Feb 2020 11:39:32 -0800
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Five small patches, all in drivers or doc, which missed the initial
-pull request. The qla2xxx and megaraid_sas are actual fixes and the
-rest are spelling and doc changes.
+The pull request you sent on Sat, 08 Feb 2020 11:39:32 -0800:
 
-The patch is available here:
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/fdfa3a6778b194974df77b384cc71eb2e503639a
 
-The short changelog is:
+Thank you!
 
-Arun Easi (1):
-      scsi: qla2xxx: Fix unbound NVME response length
-
-Bean Huo (1):
-      scsi: MAINTAINERS: ufs: remove pedrom.sousa@synopsys.com
-
-Colin Ian King (2):
-      scsi: ufs: fix spelling mistake "initilized" -> "initialized"
-      scsi: pm80xx: fix spelling mistake "to" -> "too"
-
-Hannes Reinecke (1):
-      scsi: megaraid_sas: fixup MSIx interrupt setup during resume
-
-
-And the diffstat:
-
- MAINTAINERS                               |  1 -
- drivers/scsi/megaraid/megaraid_sas_base.c | 20 +++++++++-----------
- drivers/scsi/pm8001/pm80xx_hwi.c          |  2 +-
- drivers/scsi/qla2xxx/qla_dbg.c            |  6 ------
- drivers/scsi/qla2xxx/qla_dbg.h            |  6 ++++++
- drivers/scsi/qla2xxx/qla_isr.c            | 12 ++++++++++++
- drivers/scsi/ufs/ufs.h                    |  2 +-
- 7 files changed, 29 insertions(+), 20 deletions(-)
-
-James
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
