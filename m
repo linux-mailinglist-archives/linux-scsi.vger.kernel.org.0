@@ -2,72 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F395F158543
-	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2020 22:52:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42BFC158576
+	for <lists+linux-scsi@lfdr.de>; Mon, 10 Feb 2020 23:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727431AbgBJVwZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 Feb 2020 16:52:25 -0500
-Received: from mail104.syd.optusnet.com.au ([211.29.132.246]:35364 "EHLO
-        mail104.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727254AbgBJVwZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 10 Feb 2020 16:52:25 -0500
-Received: from dread.disaster.area (pa49-179-138-28.pa.nsw.optusnet.com.au [49.179.138.28])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id A60EE7EB6F2;
-        Tue, 11 Feb 2020 08:52:23 +1100 (AEDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1j1Gyc-0003E9-Qv; Tue, 11 Feb 2020 08:52:22 +1100
-Date:   Tue, 11 Feb 2020 08:52:22 +1100
-From:   Dave Chinner <david@fromorbit.com>
-To:     Muhammad Ahmad <muhammad.ahmad@seagate.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, Tim Walker <tim.t.walker@seagate.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Multi-actuator HDDs
-Message-ID: <20200210215222.GB10776@dread.disaster.area>
-References: <CAPNbX4RxaZLi9F=ShVb85GZo_nMFaMhMuqhK50d5CLaarVDCeg@mail.gmail.com>
+        id S1727434AbgBJW0B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 10 Feb 2020 17:26:01 -0500
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:33440 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727422AbgBJW0B (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 Feb 2020 17:26:01 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 1B613283A7;
+        Mon, 10 Feb 2020 17:25:57 -0500 (EST)
+Date:   Tue, 11 Feb 2020 09:25:59 +1100 (AEDT)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Keith Busch <kbusch@kernel.org>
+cc:     Tim Walker <tim.t.walker@seagate.com>, linux-block@vger.kernel.org,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-nvme@lists.infradead.org
+Subject: Re: [LSF/MM/BPF TOPIC] NVMe HDD
+In-Reply-To: <20200210204313.GA3736@dhcp-10-100-145-180.wdl.wdc.com>
+Message-ID: <alpine.LNX.2.22.394.2002110914510.9@nippy.intranet>
+References: <CANo=J14resJ4U1nufoiDq+ULd0k-orRCsYah8Dve-y8uCjA62Q@mail.gmail.com> <20200210204313.GA3736@dhcp-10-100-145-180.wdl.wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPNbX4RxaZLi9F=ShVb85GZo_nMFaMhMuqhK50d5CLaarVDCeg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.3 cv=W5xGqiek c=1 sm=1 tr=0
-        a=zAxSp4fFY/GQY8/esVNjqw==:117 a=zAxSp4fFY/GQY8/esVNjqw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=IkcTkHD0fZMA:10 a=l697ptgUJYAA:10
-        a=07d9gI8wAAAA:8 a=7-415B0cAAAA:8 a=q5T8XEN1vGXhI3tkvFYA:9
-        a=QEXdDO2ut3YA:10 a=e2CUPOnPG4QKp8I52DXD:22 a=biEYGPWJfzWAr4FL6Ov7:22
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Feb 10, 2020 at 12:01:13PM -0600, Muhammad Ahmad wrote:
-> Background:
-> As the capacity of HDDs increases so is the need to increase
-> performance to efficiently utilize this increase in capacity. The
-> current school of thought is to use Multi-Actuators to increase
-> spinning disk performance. Seagate has already announced it’s SAS
-> Dual-Lun, Dual-Actuator device. [1]
-> 
-> Discussion Proposal:
-> What impacts multi-actuator HDDs has on the linux storage stack?
-> 
-> A discussion on the pros & cons of accessing the actuators through a
-> single combined LUN or multiple individual LUNs? In the single LUN
-> scenario, how should the device communicate it’s LBA to actuator
-> mapping? In the case of multi-lun, how should we manage commands that
-> affect both actuators?
+On Mon, 10 Feb 2020, Keith Busch wrote:
 
-What ground does this cover that wasn't discussed a couple of years
-ago at LSFMM?
+> Right now the nvme driver unconditionally sets QUEUE_FLAG_NONROT 
+> (non-rational, i.e. ssd), on all nvme namespace's request_queue flags. 
 
-https://lwn.net/Articles/753652/
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+I agree -- the standard nomenclature is not rational ;-) Air-cooled is not 
+"solid state". Any round-robin algorithm is "rotational". No expensive 
+array is a "R.A.I.D.". There's no "S.C.S.I." on a large system...
