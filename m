@@ -2,113 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A981588F6
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Feb 2020 04:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5105B158B19
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Feb 2020 09:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728120AbgBKDle (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 Feb 2020 22:41:34 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:27781 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728114AbgBKDlc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 10 Feb 2020 22:41:32 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1581392492; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=c6+KThHyJTaUW7p9HtxxGeAiZNKSUAk916YtKObcJ8w=; b=M1SwIRt1/d/7fjxz72j9kQrW0VV4Ckwbh6cHs9lwydkOX/ss+rwIpeDI/frnXDJd87E7tig2
- QKDYoJGNOiPYy3TVDm8MGSAjo812boOUjqxC5oa7c4yQ1QQXq6EKfUUIPkW0GTY3WgpKTEb4
- N+AMeJBypP8LmcKuf3YxmjJdiaQ=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e42226b.7fa0ed5bad50-smtp-out-n02;
- Tue, 11 Feb 2020 03:41:31 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A16B1C447B9; Tue, 11 Feb 2020 03:41:29 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from pacamara-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 94629C447A5;
-        Tue, 11 Feb 2020 03:41:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 94629C447A5
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=cang@codeaurora.org
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v10 7/7] scsi: ufs-qcom: Delay specific time before gate ref clk
-Date:   Mon, 10 Feb 2020 19:40:50 -0800
-Message-Id: <1581392451-28743-8-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1581392451-28743-1-git-send-email-cang@codeaurora.org>
-References: <1581392451-28743-1-git-send-email-cang@codeaurora.org>
+        id S1727835AbgBKINH convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 11 Feb 2020 03:13:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53862 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727637AbgBKINH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 11 Feb 2020 03:13:07 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-scsi@vger.kernel.org
+Subject: [Bug 206491] New: SG_SET_RESERVED_SIZE ioctl failed: Bad address
+Date:   Tue, 11 Feb 2020 08:13:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Product: SCSI Drivers
+X-Bugzilla-Component: Other
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: crvisqr@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-206491-11613@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-After enter hibern8, as UFS JEDEC ver 3.0 requires, a specific gating wait
-time is required before disable the device reference clock. If it is not
-specified, use the old delay.
+https://bugzilla.kernel.org/show_bug.cgi?id=206491
 
-Signed-off-by: Can Guo <cang@codeaurora.org>
-Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
-Reviewed-by: Hongwu Su <hongwus@codeaurora.org>
----
- drivers/scsi/ufs/ufs-qcom.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+            Bug ID: 206491
+           Summary: SG_SET_RESERVED_SIZE ioctl failed: Bad address
+           Product: SCSI Drivers
+           Version: 2.5
+    Kernel Version: 5.6.0-0.rc0.git5.1
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: Other
+          Assignee: scsi_drivers-other@kernel-bugs.osdl.org
+          Reporter: crvisqr@gmail.com
+        Regression: No
 
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index 4ce293f..d593523 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -845,11 +845,27 @@ static void ufs_qcom_dev_ref_clk_ctrl(struct ufs_qcom_host *host, bool enable)
- 		/*
- 		 * If we are here to disable this clock it might be immediately
- 		 * after entering into hibern8 in which case we need to make
--		 * sure that device ref_clk is active at least 1us after the
-+		 * sure that device ref_clk is active for specific time after
- 		 * hibern8 enter.
- 		 */
--		if (!enable)
--			udelay(1);
-+		if (!enable) {
-+			unsigned long gating_wait;
-+
-+			gating_wait = host->hba->dev_info.clk_gating_wait_us;
-+			if (!gating_wait) {
-+				udelay(1);
-+			} else {
-+				/*
-+				 * bRefClkGatingWaitTime defines the minimum
-+				 * time for which the reference clock is
-+				 * required by device during transition from
-+				 * HS-MODE to LS-MODE or HIBERN8 state. Give it
-+				 * more delay to be on the safe side.
-+				 */
-+				gating_wait += 10;
-+				usleep_range(gating_wait, gating_wait + 10);
-+			}
-+		}
- 
- 		writel_relaxed(temp, host->dev_ref_clk_ctrl_mmio);
- 
+[rok@vm-fedora-rawhide ~]$ cdrdao read-toc --device /dev/sr1 toc.toc
+Cdrdao version 1.2.4 - (C) Andreas Mueller <andreas@daneb.de>
+ERROR: SG_SET_RESERVED_SIZE ioctl failed: Bad address
+ERROR: /dev/sr1: SCSI command Inquiry (0x12) failed: Bad address.
+ERROR: Inquiry command failed on "/dev/sr1"
+/dev/sr1: �&~4�U        Rev: 
+ERROR: Inquiry failed and no driver id is specified.
+ERROR: Please use option --driver to specify a driver id.
+ERROR: Cannot setup device /dev/sr1.
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+You are receiving this mail because:
+You are watching the assignee of the bug.
