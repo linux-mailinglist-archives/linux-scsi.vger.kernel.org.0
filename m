@@ -2,55 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E646B158B1E
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Feb 2020 09:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23540158C83
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Feb 2020 11:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727688AbgBKIOs convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Tue, 11 Feb 2020 03:14:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54782 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725787AbgBKIOs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 11 Feb 2020 03:14:48 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+        id S1728228AbgBKKSg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 11 Feb 2020 05:18:36 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:36440 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727937AbgBKKSg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 11 Feb 2020 05:18:36 -0500
+Received: by mail-wr1-f68.google.com with SMTP id z3so11573220wru.3
+        for <linux-scsi@vger.kernel.org>; Tue, 11 Feb 2020 02:18:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=obzJ6U/NuyMHmBAx2PzD7kviiylkm8kDpSK0BE0zA/A=;
+        b=KDYTznqYS0cdbJQs/X832+RZtkjRyq1Bl6DJHk5cjAAmvmbW9M1yRpEBWXXmDK7cVH
+         U5C8OF7B/JFZKSK+g0ddtF+PXj+jqZ81Rj0gGGpo1+e12kDSpYPDGnfGa2n/65zfaHK5
+         SSs5OF4R673wALaqr7iqnclu58p+tSUSAdYOE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=obzJ6U/NuyMHmBAx2PzD7kviiylkm8kDpSK0BE0zA/A=;
+        b=qCNvbMG6d5n0DZmETnKN/PHBRkyorm9JRwO9pU1RRGvABVdJwTLyCoSkl+Tx/MLw7v
+         0Jguv9o/vJcZieLDl/G6h9XzqpsKNvYRQk1hIA9pnUje1BqKYkLDabl9MVMs1gCLY0G5
+         fuDxvsI2IO50nhMqigc8cdl20VvryQcScqhBhHDsoINk/O1EPUHbMHV4u6XcL1ovCa2h
+         DqSQwYlkh9JDyQ6dargBfNNC1iSUpCjRMPS/zY1BTk74joLmAqsYbNQBZjaW2XTnRpH+
+         yrq4pQtG3FW6L4WAwOEwpEEl44JILysjgqR6jWtm04nw4YCF6IqOoxd61fMjmD5nXWDM
+         UA3w==
+X-Gm-Message-State: APjAAAVU3eVg7nE5gvJEJx/5Eu9cmeW9bE8MwqY8CidZ8cgisGrssLP6
+        /s89RfadYQazHHZ0BKOE1JXTF0ub4iWTo2wspsI0RRyBor5k8eiIXA6GQJiOBbmrh4Weq+Pp7eu
+        7v/dp+nEfXVGr7NZsYG106DC/PQ8Yftinen8VV8sfBFpgJH4Q2K2s0P+ui9+PxgGhnZmxWyANW3
+        GyVPh0gWOsHkkL6QPBu83hCWI=
+X-Google-Smtp-Source: APXvYqwbYD9FJ9aOaH1ccqfTTkKyqhkuh2QDihvFBulqz0sJjkGN2taly/p+5oXPjqI2QdvETrVPcA==
+X-Received: by 2002:adf:a746:: with SMTP id e6mr7710233wrd.329.1581416314315;
+        Tue, 11 Feb 2020 02:18:34 -0800 (PST)
+Received: from dhcp-10-123-20-55.dhcp.broadcom.net ([192.19.234.250])
+        by smtp.gmail.com with ESMTPSA id f65sm3058895wmf.29.2020.02.11.02.18.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 11 Feb 2020 02:18:33 -0800 (PST)
+From:   suganath-prabu.subramani@broadcom.com
 To:     linux-scsi@vger.kernel.org
-Subject: [Bug 206491] SG_SET_RESERVED_SIZE ioctl failed: Bad address
-Date:   Tue, 11 Feb 2020 08:14:47 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Product: SCSI Drivers
-X-Bugzilla-Component: Other
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: crvisqr@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: scsi_drivers-other@kernel-bugs.osdl.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-206491-11613-CymgblXvzZ@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-206491-11613@https.bugzilla.kernel.org/>
-References: <bug-206491-11613@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+Cc:     sreekanth.reddy@broadcom.com, kashyap.desai@broadcom.com,
+        sathya.prakash@broadcom.com, martin.petersen@oracle.com,
+        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+Subject: [PATCH 0/5] mpt3sas: Fix changing coherent mask after allocation.
+Date:   Tue, 11 Feb 2020 05:18:08 -0500
+Message-Id: <1581416293-41610-1-git-send-email-suganath-prabu.subramani@broadcom.com>
+X-Mailer: git-send-email 1.8.3.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=206491
+From: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 
---- Comment #1 from crvi (crvisqr@gmail.com) ---
-Please refer: https://github.com/cdemu/cdemu/issues/3#issuecomment-583894259
+* Enables 64-bit dma for RDPQ and memory allocation 
+within same 4gb region.
+* With this there is no need to change DMA coherent
+mask when there are outstanding allocations in mpt3sas.
+* Code-Refactoring
 
-This issue was not there in kernel 5.5.0-0.rc4.git2.1
+Suganath Prabu S (5):
+  mpt3sas: Don't change the dma coherent mask after      allocations
+  mpt3sas: Rename function name is_MSB_are_same
+  mpt3sas: Code Refactoring.
+  mpt3sas: Handle RDPQ DMA allocation in same 4g region
+  mpt3sas: Update version to 33.101.00.00
+
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 287 ++++++++++++++++++++++--------------
+ drivers/scsi/mpt3sas/mpt3sas_base.h |   9 +-
+ 2 files changed, 181 insertions(+), 115 deletions(-)
 
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+1.8.3.1
+
