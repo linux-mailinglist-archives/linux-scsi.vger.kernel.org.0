@@ -2,78 +2,104 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C909615861B
-	for <lists+linux-scsi@lfdr.de>; Tue, 11 Feb 2020 00:19:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06497158840
+	for <lists+linux-scsi@lfdr.de>; Tue, 11 Feb 2020 03:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727452AbgBJXTu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 10 Feb 2020 18:19:50 -0500
-Received: from mail-yb1-f196.google.com ([209.85.219.196]:32784 "EHLO
-        mail-yb1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727431AbgBJXTt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 10 Feb 2020 18:19:49 -0500
-Received: by mail-yb1-f196.google.com with SMTP id s35so4466391ybi.0
-        for <linux-scsi@vger.kernel.org>; Mon, 10 Feb 2020 15:19:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=CZOZ6zJl7K+CX7mG44VkFRrQ+i68m5YSb/XRoNfw+DM=;
-        b=vCtdruf+CDabsQqsi3RHwzOgVsfcApJtGC+uolS2Z1IY41RiPOYczORJne6YDKZOyF
-         xXmQUbYSAIkfHiHLF/v0VvaKwX9Q2ldZsxE2MHx6rKNcxjwTO+vY4IaNdGcytYQmgorS
-         m/IAbNRXk6zemY8R/SUw75vxiiKZ8FpWtBsZnMlQMnPs1U+XaQoXnQOFWKj0MWvFmdoZ
-         ql+ThejhjANpiWKeVavCdEPrQS0Nx4ar4UdDUzcq3pRImCCP+OL4IzJsl3PFHCUSAYSS
-         q3m8PYts17OBV3GC0URpA5YStt1n56UCULQJB7YGt+VdaPTONOIHFmWOXDW5i2HNlmCf
-         3Gog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=CZOZ6zJl7K+CX7mG44VkFRrQ+i68m5YSb/XRoNfw+DM=;
-        b=JHJC+NInFnsA3OnTnj94JaHgUqQcxerUnRNXOd4e1hUP4f43qgXCSIuH+ZQxLVqe/j
-         agXIvaYg3GBIbEG1znfSYQly9QdFUXy+GQ4ThWhf+J2Uw+CEUS3Ba+00r9MTE+DEBMb9
-         3v2WAqOSs/1spfXG1RDtPk/efNRAUq7q0EHVmAd0gL89kp/SQqMXoXENXdq8uTHPBIo3
-         IRbgHShP0QAu2yfH1a/DOtQtuOvLjBW3LbkS3SsN1NDAIrKt3sL2xjGlq6A7KSnMvosS
-         TE5q/yHRBNui/mkMtQY2ZoPWE7cn/+9IQ2qk1WWWfqfR/ry3fHbYUAIa/JFzQ/BwMO0I
-         kT6g==
-X-Gm-Message-State: APjAAAW/B+GeLrDE5MH9qSlk36DxHxITazseK+5SaxZPakRDmvImZU5Y
-        T7nWAQiQTTnI+dM5rjf+vr5i8kn6NI8hKJKPRfI=
-X-Google-Smtp-Source: APXvYqy0f/XVZm7IJpiO8V1M1H82IlCAjk2THehqhVt5uXVMJcsGRLLlPDG25EwCsVd84pFAuvPYanY2A7rwQEIR/JQ=
-X-Received: by 2002:a25:2e0b:: with SMTP id u11mr3371068ybu.393.1581376788952;
- Mon, 10 Feb 2020 15:19:48 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a25:c7c8:0:0:0:0:0 with HTTP; Mon, 10 Feb 2020 15:19:48
- -0800 (PST)
-Reply-To: azizdake0@gmail.com
-From:   Aziz Dake <legalwaaboki@gmail.com>
-Date:   Mon, 10 Feb 2020 15:19:48 -0800
-Message-ID: <CAAiMQBDTQ-TfGXjA8jXV9VMOjtqksQo8pG227GvdecWXJ__X6g@mail.gmail.com>
-Subject: From Honourable Barrister Aziz Dake,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1727762AbgBKCiD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 10 Feb 2020 21:38:03 -0500
+Received: from mail26.static.mailgun.info ([104.130.122.26]:32233 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727493AbgBKCiC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 10 Feb 2020 21:38:02 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1581388682; h=Message-Id: Date: Subject: To: From: Sender;
+ bh=tBC+m8s0rVpFYRrBuBubgvwm4Vs+KVoMsl7i2UK/6O8=; b=jKN/nRRaynvVLHH8jpDakZyPAElsGgPLOLC21eoKa5Hsxf8BQhQD1k6BD3E7vqxdwPZOd9el
+ kgxpUu1zh0i502FwFBKNWIKLM8iqBE4suLkzKp9ssvSZi3L5fboA4xxFgZvzzj6jKm8FMMuf
+ ffGtJ+ReuN2Bg1Iz0tJo62Cklus=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e421388.7f99b5bb1458-smtp-out-n03;
+ Tue, 11 Feb 2020 02:38:00 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7BB15C4479D; Tue, 11 Feb 2020 02:37:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from pacamara-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9D884C43383;
+        Tue, 11 Feb 2020 02:37:58 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9D884C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=cang@codeaurora.org
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
+Subject: [PATCH v9 0/7] UFS driver general fixes bundle 4
+Date:   Mon, 10 Feb 2020 18:37:42 -0800
+Message-Id: <1581388671-18078-1-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Attn: Sir/Madam
+This bundle includes 7 general fixes for UFS driver.
 
-I am Honourable Barrister Aziz the personal resident Attorney here in
-Burkina Faso to Late Mr. Muammar Muhammad Abu Minyar al-Gaddafi of
-Libya c. 1942 =E2=80=93 20 October 2011.
+Changes since v8:
+- Incoperated comments from Arvi to add "Fixes" to commit message of patch #4
+- Switched the order of patch #2 and #3 to reflect the dependency.
 
-My client Late Mr. Muammar Muhammad Abu Minyar al-Gaddafi c. 1942 =E2=80=93=
- 20
-October 2011, was having a deposit sum of {thirty million four Hundred
-thousand united state dollars} only ($30.4M USD) with a security
-finance firm affiliated with African development bank here in Burkina
-Faso.
+Changes since v7:
+- Incoperated comments from Bjorn and Arvi.
+- Removed patch #8.
 
-With the above explanation=E2=80=99s I want to move this money from Burkina
-Faso to your country, affidavit on your name, but note that this is a
-deal between me and you and should not be related to anybody until the
-deal is over for security reasons, please if interested reply as soon
-as possible.
+Changes since v6:
+- Incoperated Avri's comment.
 
-Thanks,
-Honourable Barrister Aziz Dake.
+Changes since v5:
+- Incoperated Stanley's suggestions to make the extra delay added up to bRefClkGatingWaitTime as vendor specific
+
+Changes since v4:
+- Rebased this series
+
+Changes since v3:
+- Fixed patch #8
+
+Changes since v2:
+- Move the ref clk gating wait delay to ufs-qcom.c
+- Added one more change to select INITIAL adapt for HS G4
+
+Changes since v1:
+- Fixed minor typo
+
+
+Asutosh Das (1):
+  scsi: ufs: set load before setting voltage in regulators
+
+Can Guo (5):
+  scsi: ufs-qcom: Adjust bus bandwidth voting and unvoting
+  scsi: ufs: Remove the check before call setup clock notify vops
+  scsi: ufs: Fix ufshcd_hold() caused scheduling while atomic
+  scsi: ufs: Add dev ref clock gating wait time support
+  scsi: ufs-qcom: Delay specific time before gate ref clk
+
+Sayali Lokhande (1):
+  scsi: ufs: Flush exception event before suspend
+
+ drivers/scsi/ufs/ufs-qcom.c | 100 +++++++++++++++++++++++++++++++-------------
+ drivers/scsi/ufs/ufs.h      |   3 ++
+ drivers/scsi/ufs/ufshcd.c   |  96 +++++++++++++++++++++++++++++-------------
+ 3 files changed, 143 insertions(+), 56 deletions(-)
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
