@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BF3715B2F8
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Feb 2020 22:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C9D15B2F6
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Feb 2020 22:45:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728185AbgBLVqp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Feb 2020 16:46:45 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:64818 "EHLO
+        id S1728674AbgBLVpp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Feb 2020 16:45:45 -0500
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:44910 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727564AbgBLVqp (ORCPT
+        by vger.kernel.org with ESMTP id S1728447AbgBLVpp (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 12 Feb 2020 16:46:45 -0500
+        Wed, 12 Feb 2020 16:45:45 -0500
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01CLeuJq001683;
-        Wed, 12 Feb 2020 13:45:36 -0800
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01CLejnq001672;
+        Wed, 12 Feb 2020 13:45:39 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=PFbXBW3ssNfdeTApurVvYV1ChkjUDaukOPGds+9dHI8=;
- b=RToMCx7PWGahGPFKqnmUSODAvbF1yZQ70+TVQZmBMJChXFu2/cNe0i2q5JZJAJK8Rvgi
- qPcED4SC5tdTUlXgMrc6BYNL5G5fj8LI0kTqmY7pPOCoFuPgyVOs1U344n21ZPF9RSLq
- 0DO02CnXeYqxV6nBz7CT3L9IaxnUXo2nQivyKSAlkgj9mqi02MugZ0hxnCE2S5GUJHIt
- DFgtE/Phqw0sWrL3Wz1FAfARB2yKXmKJqTXlPcqvmIfc/SLYlvfUk9aoztd/Cj8PZvuM
- 8GzXOFnsQipqnZbelUL5gtsNj2KFbk+wDOdQ8H7zieSaZA+QhAcSMFr4+D86QBniMT8/ 7w== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2y4j5jt51b-1
+ content-type; s=pfpt0818; bh=HC2XW18kYlNCpaKZk4fmYesFer5nFonqVSgpeRQcBqk=;
+ b=g5WqYUUgeAZVxhGSU+DFA8keNXSjVXXV4LGitmOwc2rPdJ7j4nqWuNO/YiGnAGxACntK
+ pYEiqGybwLwSn1ekcSXDwGdUIf0kwY2VcGeGYj8Ix2Z7miTMwZ+gn6+MW7cmmHT+eUwA
+ JzZ5vr5nOZYbq7adBrHcdw1j0WcWUcRf5KghTlX+CnM/OG1+SiBoA8VM+1+Hv3RRI4+R
+ lyrEcacChF8SDTecRMGVkDYRNKxCnvnYR+Gv0RQrLM4/dYUva6JGBP4khUv15nv83ZdW
+ m753txzMGMug76Yf0d0cvduh6eyaFjeAJQXGTU7hoKTzt/EMv9Vqb3q7h4Q9p+9YJLcB 4A== 
+Received: from sc-exch04.marvell.com ([199.233.58.184])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2y4j5jt51g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 12 Feb 2020 13:45:36 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Feb
- 2020 13:45:34 -0800
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Feb 2020 13:45:34 -0800
+        Wed, 12 Feb 2020 13:45:39 -0800
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH04.marvell.com
+ (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Feb
+ 2020 13:45:37 -0800
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 12 Feb 2020 13:45:37 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 9BF453F7040;
-        Wed, 12 Feb 2020 13:45:34 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id C54403F7045;
+        Wed, 12 Feb 2020 13:45:37 -0800 (PST)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01CLjYMp025652;
-        Wed, 12 Feb 2020 13:45:34 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01CLjbus025656;
+        Wed, 12 Feb 2020 13:45:37 -0800
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01CLjYN4025651;
-        Wed, 12 Feb 2020 13:45:34 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01CLjb52025655;
+        Wed, 12 Feb 2020 13:45:37 -0800
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 19/25] qla2xxx: Print portname for logging in qla24xx_logio_entry()
-Date:   Wed, 12 Feb 2020 13:44:30 -0800
-Message-ID: <20200212214436.25532-20-hmadhani@marvell.com>
+Subject: [PATCH 20/25] qla2xxx: Use correct ISP28xx active FW region
+Date:   Wed, 12 Feb 2020 13:44:31 -0800
+Message-ID: <20200212214436.25532-21-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20200212214436.25532-1-hmadhani@marvell.com>
 References: <20200212214436.25532-1-hmadhani@marvell.com>
@@ -61,51 +61,29 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Joe Carnuccio <joe.carnuccio@cavium.com>
+From: Quinn Tran <qutran@marvell.com>
 
-Add port name in the messages file to help debugging of
-Login/Logout IOCBs
+For ISP28xx, use 28xx call to retrieve active FW region.
 
-Signed-off-by: Joe Carnuccio <joe.carnuccio@cavium.com>
+Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_isr.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/scsi/qla2xxx/qla_bsg.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 1089db774bd1..d03dd16ce1ea 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -1899,11 +1899,9 @@ qla24xx_logio_entry(scsi_qla_host_t *vha, struct req_que *req,
- 	}
+diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
+index 34fa200900fc..714bcf5e6e53 100644
+--- a/drivers/scsi/qla2xxx/qla_bsg.c
++++ b/drivers/scsi/qla2xxx/qla_bsg.c
+@@ -2415,7 +2415,7 @@ qla2x00_get_flash_image_status(struct bsg_job *bsg_job)
+ 	regions.global_image = active_regions.global;
  
- 	if (le16_to_cpu(logio->comp_status) == CS_COMPLETE) {
--		ql_dbg(ql_dbg_async, fcport->vha, 0x5036,
--		    "Async-%s complete - %8phC hdl=%x portid=%02x%02x%02x "
--		    "iop0=%x.\n", type, fcport->port_name, sp->handle,
--		    fcport->d_id.b.domain,
--		    fcport->d_id.b.area, fcport->d_id.b.al_pa,
-+		ql_dbg(ql_dbg_async, sp->vha, 0x5036,
-+		    "Async-%s complete: handle=%x pid=%06x wwpn=%8phC iop0=%x\n",
-+		    type, sp->handle, fcport->d_id.b24, fcport->port_name,
- 		    le32_to_cpu(logio->io_parameter[0]));
- 
- 		vha->hw->exch_starvation = 0;
-@@ -1982,11 +1980,9 @@ qla24xx_logio_entry(scsi_qla_host_t *vha, struct req_que *req,
- 		break;
- 	}
- 
--	ql_dbg(ql_dbg_async, fcport->vha, 0x5037,
--	    "Async-%s failed - %8phC hdl=%x portid=%02x%02x%02x comp=%x "
--	    "iop0=%x iop1=%x.\n", type, fcport->port_name,
--		sp->handle, fcport->d_id.b.domain,
--	    fcport->d_id.b.area, fcport->d_id.b.al_pa,
-+	ql_dbg(ql_dbg_async, sp->vha, 0x5037,
-+	    "Async-%s failed: handle=%x pid=%06x wwpn=%8phC comp_status=%x iop0=%x iop1=%x\n",
-+	    type, sp->handle, fcport->d_id.b24, fcport->port_name,
- 	    le16_to_cpu(logio->comp_status),
- 	    le32_to_cpu(logio->io_parameter[0]),
- 	    le32_to_cpu(logio->io_parameter[1]));
+ 	if (IS_QLA28XX(ha)) {
+-		qla27xx_get_active_image(vha, &active_regions);
++		qla28xx_get_aux_images(vha, &active_regions);
+ 		regions.board_config = active_regions.aux.board_config;
+ 		regions.vpd_nvram = active_regions.aux.vpd_nvram;
+ 		regions.npiv_config_0_1 = active_regions.aux.npiv_config_0_1;
 -- 
 2.12.0
 
