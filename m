@@ -2,53 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACB815B304
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Feb 2020 22:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF3715B2F8
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Feb 2020 22:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729128AbgBLVre (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Feb 2020 16:47:34 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:30186 "EHLO
+        id S1728185AbgBLVqp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Feb 2020 16:46:45 -0500
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:64818 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728185AbgBLVre (ORCPT
+        by vger.kernel.org with ESMTP id S1727564AbgBLVqp (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 12 Feb 2020 16:47:34 -0500
+        Wed, 12 Feb 2020 16:46:45 -0500
 Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01CLeuJp001683;
-        Wed, 12 Feb 2020 13:45:33 -0800
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01CLeuJq001683;
+        Wed, 12 Feb 2020 13:45:36 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=M98g8ufdykvz7Drx04xMl1EjmzfFGfjWgpjXQ/IEd30=;
- b=dfvi/aHsw+uZ+p88bmjuN8NZ60VAHOmpU7to2EgFpQCF/aCM0Tw34KWZ+tNrEFmw/A15
- KOCuiZh6B8gJN9wpnGI1Zhbafa19QLjA1vDcmNAabnaw6JMpCJ0cNFYWT0f2bB0ijBEz
- l5TqnRlzPjmBnz4GGJTd8Et0hNrth8zS515ysRZo8r64uZc7npSXXmMDuNqadXRzuwWp
- P7cRJEzXqLGTA2qSXTT56B6H+6g6/TVOLi91VYG37su190aOVsARWen+ikecWdREpGJ0
- Ba1vVqyAHg7AqBhxk/gzXYH6eh5gOSZoJ95kku6vjM2NpjxO/eUJHMVjwBRaB4mOLewd Gg== 
-Received: from sc-exch04.marvell.com ([199.233.58.184])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2y4j5jt50x-1
+ content-type; s=pfpt0818; bh=PFbXBW3ssNfdeTApurVvYV1ChkjUDaukOPGds+9dHI8=;
+ b=RToMCx7PWGahGPFKqnmUSODAvbF1yZQ70+TVQZmBMJChXFu2/cNe0i2q5JZJAJK8Rvgi
+ qPcED4SC5tdTUlXgMrc6BYNL5G5fj8LI0kTqmY7pPOCoFuPgyVOs1U344n21ZPF9RSLq
+ 0DO02CnXeYqxV6nBz7CT3L9IaxnUXo2nQivyKSAlkgj9mqi02MugZ0hxnCE2S5GUJHIt
+ DFgtE/Phqw0sWrL3Wz1FAfARB2yKXmKJqTXlPcqvmIfc/SLYlvfUk9aoztd/Cj8PZvuM
+ 8GzXOFnsQipqnZbelUL5gtsNj2KFbk+wDOdQ8H7zieSaZA+QhAcSMFr4+D86QBniMT8/ 7w== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2y4j5jt51b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 12 Feb 2020 13:45:33 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH04.marvell.com
- (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Feb
- 2020 13:45:31 -0800
+        Wed, 12 Feb 2020 13:45:36 -0800
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 12 Feb
+ 2020 13:45:34 -0800
 Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
  (10.93.176.81) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 12 Feb 2020 13:45:31 -0800
+ Transport; Wed, 12 Feb 2020 13:45:34 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 6E7A33F703F;
-        Wed, 12 Feb 2020 13:45:31 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id 9BF453F7040;
+        Wed, 12 Feb 2020 13:45:34 -0800 (PST)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01CLjVfG025648;
-        Wed, 12 Feb 2020 13:45:31 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01CLjYMp025652;
+        Wed, 12 Feb 2020 13:45:34 -0800
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01CLjVDt025647;
-        Wed, 12 Feb 2020 13:45:31 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01CLjYN4025651;
+        Wed, 12 Feb 2020 13:45:34 -0800
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 18/25] qla2xxx: Fix qla2x00_echo_test() based on ISP type
-Date:   Wed, 12 Feb 2020 13:44:29 -0800
-Message-ID: <20200212214436.25532-19-hmadhani@marvell.com>
+Subject: [PATCH 19/25] qla2xxx: Print portname for logging in qla24xx_logio_entry()
+Date:   Wed, 12 Feb 2020 13:44:30 -0800
+Message-ID: <20200212214436.25532-20-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20200212214436.25532-1-hmadhani@marvell.com>
 References: <20200212214436.25532-1-hmadhani@marvell.com>
@@ -63,34 +63,49 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Joe Carnuccio <joe.carnuccio@cavium.com>
 
-Ths patch fixes MBX in-direction for setting right
-bits for qla2x00_echo_test()
+Add port name in the messages file to help debugging of
+Login/Logout IOCBs
 
 Signed-off-by: Joe Carnuccio <joe.carnuccio@cavium.com>
 Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_mbx.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/scsi/qla2xxx/qla_isr.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 9d73ae165a98..c81081c3d9b8 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -5317,10 +5317,11 @@ qla2x00_echo_test(scsi_qla_host_t *vha, struct msg_echo_lb *mreq,
- 		mcp->out_mb |= MBX_2;
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index 1089db774bd1..d03dd16ce1ea 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -1899,11 +1899,9 @@ qla24xx_logio_entry(scsi_qla_host_t *vha, struct req_que *req,
+ 	}
  
- 	mcp->in_mb = MBX_0;
--	if (IS_QLA24XX_TYPE(ha) || IS_QLA25XX(ha) ||
--	    IS_CNA_CAPABLE(ha) || IS_QLA2031(ha))
-+	if (IS_CNA_CAPABLE(ha) || IS_QLA24XX_TYPE(ha) || IS_QLA25XX(ha) ||
-+	    IS_QLA2031(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
- 		mcp->in_mb |= MBX_1;
--	if (IS_CNA_CAPABLE(ha) || IS_QLA2031(ha))
-+	if (IS_CNA_CAPABLE(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) ||
-+	    IS_QLA28XX(ha))
- 		mcp->in_mb |= MBX_3;
+ 	if (le16_to_cpu(logio->comp_status) == CS_COMPLETE) {
+-		ql_dbg(ql_dbg_async, fcport->vha, 0x5036,
+-		    "Async-%s complete - %8phC hdl=%x portid=%02x%02x%02x "
+-		    "iop0=%x.\n", type, fcport->port_name, sp->handle,
+-		    fcport->d_id.b.domain,
+-		    fcport->d_id.b.area, fcport->d_id.b.al_pa,
++		ql_dbg(ql_dbg_async, sp->vha, 0x5036,
++		    "Async-%s complete: handle=%x pid=%06x wwpn=%8phC iop0=%x\n",
++		    type, sp->handle, fcport->d_id.b24, fcport->port_name,
+ 		    le32_to_cpu(logio->io_parameter[0]));
  
- 	mcp->tov = MBX_TOV_SECONDS;
+ 		vha->hw->exch_starvation = 0;
+@@ -1982,11 +1980,9 @@ qla24xx_logio_entry(scsi_qla_host_t *vha, struct req_que *req,
+ 		break;
+ 	}
+ 
+-	ql_dbg(ql_dbg_async, fcport->vha, 0x5037,
+-	    "Async-%s failed - %8phC hdl=%x portid=%02x%02x%02x comp=%x "
+-	    "iop0=%x iop1=%x.\n", type, fcport->port_name,
+-		sp->handle, fcport->d_id.b.domain,
+-	    fcport->d_id.b.area, fcport->d_id.b.al_pa,
++	ql_dbg(ql_dbg_async, sp->vha, 0x5037,
++	    "Async-%s failed: handle=%x pid=%06x wwpn=%8phC comp_status=%x iop0=%x iop1=%x\n",
++	    type, sp->handle, fcport->d_id.b24, fcport->port_name,
+ 	    le16_to_cpu(logio->comp_status),
+ 	    le32_to_cpu(logio->io_parameter[0]),
+ 	    le32_to_cpu(logio->io_parameter[1]));
 -- 
 2.12.0
 
