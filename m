@@ -2,137 +2,116 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 137E815AE01
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Feb 2020 18:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D973E15B2AB
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Feb 2020 22:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728842AbgBLREo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Feb 2020 12:04:44 -0500
-Received: from mail27.static.mailgun.info ([104.130.122.27]:11605 "EHLO
-        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727111AbgBLREj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 12 Feb 2020 12:04:39 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1581527078; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=1db+ymtXm5ZOsHNHHCA3Y5/L6QAZrcF4lOpLSvkECPQ=;
- b=DQ6cVU1HXKqUq6+78bWcBvMFOYM2k9HDj5D2XkC1Tfeyuxut7uFzR2WdOrCaRbxdmbp/8DKZ
- eMK0+cC5+PXZu5kiFXjRo0rlpXRxy2s9QyH9EdJeZLSuhKGGcmsCM0OyuNcBo6jkwXZFANjZ
- 4O7McJPjwyMVLcTfo3azV2UC814=
-X-Mailgun-Sending-Ip: 104.130.122.27
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e443022.7f6c02d759d0-smtp-out-n02;
- Wed, 12 Feb 2020 17:04:34 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 8A793C433A2; Wed, 12 Feb 2020 17:04:33 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        id S1728977AbgBLVVa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Feb 2020 16:21:30 -0500
+Received: from freki.datenkhaos.de ([81.7.17.101]:38118 "EHLO
+        freki.datenkhaos.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727548AbgBLVV3 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Feb 2020 16:21:29 -0500
+X-Greylist: delayed 385 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Feb 2020 16:21:27 EST
+Received: from localhost (localhost [127.0.0.1])
+        by freki.datenkhaos.de (Postfix) with ESMTP id 7666A22882CB;
+        Wed, 12 Feb 2020 22:15:01 +0100 (CET)
+Received: from freki.datenkhaos.de ([127.0.0.1])
+        by localhost (freki.datenkhaos.de [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id bCFkDBKXADtd; Wed, 12 Feb 2020 22:14:57 +0100 (CET)
+Received: from latitude (x4e367a0e.dyn.telefonica.de [78.54.122.14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: asutoshd)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5402BC43383;
-        Wed, 12 Feb 2020 17:04:31 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Wed, 12 Feb 2020 09:04:31 -0800
-From:   asutoshd@codeaurora.org
-To:     Can Guo <cang@codeaurora.org>
-Cc:     nguyenb@codeaurora.org, hongwus@codeaurora.org,
-        rnayak@codeaurora.org, linux-scsi@vger.kernel.org,
-        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        by freki.datenkhaos.de (Postfix) with ESMTPSA;
+        Wed, 12 Feb 2020 22:14:57 +0100 (CET)
+Date:   Wed, 12 Feb 2020 22:14:52 +0100
+From:   Johannes Hirte <johannes.hirte@datenkhaos.de>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pedro Sousa <sousa@synopsys.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        Kai =?utf-8?B?TcOka2lzYXJh?= <Kai.Makisara@kolumbus.fi>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-scsi-owner@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] scsi: ufs: Select INITIAL ADAPT type for HS Gear4
-In-Reply-To: <1581485910-8307-3-git-send-email-cang@codeaurora.org>
-References: <1581485910-8307-1-git-send-email-cang@codeaurora.org>
- <1581485910-8307-3-git-send-email-cang@codeaurora.org>
-Message-ID: <ac3f68fa7f0dd3de567cc321eb5c5026@codeaurora.org>
-X-Sender: asutoshd@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        John Garry <john.garry@huawei.com>,
+        Martin Wilck <mwilck@suse.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Ira Weiny <ira.weiny@intel.com>, Iustin Pop <iustin@k1024.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 13/22] compat_ioctl: scsi: move ioctl handling into
+ drivers
+Message-ID: <20200212211452.GA5726@latitude>
+References: <20200102145552.1853992-1-arnd@arndb.de>
+ <20200102145552.1853992-14-arnd@arndb.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200102145552.1853992-14-arnd@arndb.de>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-02-11 21:38, Can Guo wrote:
-> ADAPT is added specifically for HS Gear4 mode only, select INITIAL 
-> ADAPT
-> before do power mode change to G4 and select NO ADAPT before switch to
-> non-G4 modes.
+On 2020 Jan 02, Arnd Bergmann wrote:
+> Each driver calling scsi_ioctl() gets an equivalent compat_ioctl()
+> handler that implements the same commands by calling scsi_compat_ioctl().
 > 
-> Signed-off-by: Can Guo <cang@codeaurora.org>
+> The scsi_cmd_ioctl() and scsi_cmd_blk_ioctl() functions are compatible
+> at this point, so any driver that calls those can do so for both native
+> and compat mode, with the argument passed through compat_ptr().
+> 
+> With this, we can remove the entries from fs/compat_ioctl.c.  The new
+> code is larger, but should be easier to maintain and keep updated with
+> newly added commands.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
+>  drivers/block/virtio_blk.c |   3 +
+>  drivers/scsi/ch.c          |   9 ++-
+>  drivers/scsi/sd.c          |  50 ++++++--------
+>  drivers/scsi/sg.c          |  44 ++++++++-----
+>  drivers/scsi/sr.c          |  57 ++++++++++++++--
+>  drivers/scsi/st.c          |  51 ++++++++------
+>  fs/compat_ioctl.c          | 132 +------------------------------------
+>  7 files changed, 142 insertions(+), 204 deletions(-)
+> 
 
-Reviewed-by:  Asutosh Das <asutoshd@codeaurora.org>
+This breaks libcdio. cd-info now results in:
 
->  drivers/scsi/ufs/ufs-qcom.c | 14 ++++++++++++++
->  drivers/scsi/ufs/unipro.h   |  7 +++++++
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-> index d593523..6a905bb 100644
-> --- a/drivers/scsi/ufs/ufs-qcom.c
-> +++ b/drivers/scsi/ufs/ufs-qcom.c
-> @@ -942,6 +942,20 @@ static int ufs_qcom_pwr_change_notify(struct 
-> ufs_hba *hba,
->  		if (!ufshcd_is_hs_mode(&hba->pwr_info) &&
->  			ufshcd_is_hs_mode(dev_req_params))
->  			ufs_qcom_dev_ref_clk_ctrl(host, true);
-> +
-> +		if (host->hw_ver.major >= 0x4) {
-> +			if (dev_req_params->gear_tx == UFS_HS_G4) {
-> +				/* INITIAL ADAPT */
-> +				ufshcd_dme_set(hba,
-> +					       UIC_ARG_MIB(PA_TXHSADAPTTYPE),
-> +					       PA_INITIAL_ADAPT);
-> +			} else {
-> +				/* NO ADAPT */
-> +				ufshcd_dme_set(hba,
-> +					       UIC_ARG_MIB(PA_TXHSADAPTTYPE),
-> +					       PA_NO_ADAPT);
-> +			}
-> +		}
->  		break;
->  	case POST_CHANGE:
->  		if (ufs_qcom_cfg_timers(hba, dev_req_params->gear_rx,
-> diff --git a/drivers/scsi/ufs/unipro.h b/drivers/scsi/ufs/unipro.h
-> index 3dc4d8b..766d551 100644
-> --- a/drivers/scsi/ufs/unipro.h
-> +++ b/drivers/scsi/ufs/unipro.h
-> @@ -146,6 +146,12 @@
->  #define PA_SLEEPNOCONFIGTIME	0x15A2
->  #define PA_STALLNOCONFIGTIME	0x15A3
->  #define PA_SAVECONFIGTIME	0x15A4
-> +#define PA_TXHSADAPTTYPE       0x15D4
-> +
-> +/* Adpat type for PA_TXHSADAPTTYPE attribute */
-> +#define PA_REFRESH_ADAPT       0x00
-> +#define PA_INITIAL_ADAPT       0x01
-> +#define PA_NO_ADAPT            0x03
-> 
->  #define PA_TACTIVATE_TIME_UNIT_US	10
->  #define PA_HIBERN8_TIME_UNIT_US		100
-> @@ -203,6 +209,7 @@ enum ufs_hs_gear_tag {
->  	UFS_HS_G1,		/* HS Gear 1 (default for reset) */
->  	UFS_HS_G2,		/* HS Gear 2 */
->  	UFS_HS_G3,		/* HS Gear 3 */
-> +	UFS_HS_G4,		/* HS Gear 4 */
->  };
-> 
->  enum ufs_unipro_ver {
+cd-info version 2.1.0 x86_64-pc-linux-gnu
+Copyright (c) 2003-2005, 2007-2008, 2011-2015, 2017 R. Bernstein
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE.
+CD location   : /dev/cdrom
+CD driver name: GNU/Linux
+   access mode: IOCTL
+
+Error in getting drive hardware properties
+Error in getting drive reading properties
+Error in getting drive writing properties
+__________________________________
+
+Disc mode is listed as: CD-DA
+++ WARN: error in ioctl CDROMREADTOCHDR: Bad address
+
+cd-info: Can't get first track number. I give up.
+
+
+-- 
+Regards,
+  Johannes Hirte
+
