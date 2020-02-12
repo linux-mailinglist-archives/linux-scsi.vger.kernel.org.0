@@ -2,100 +2,167 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1167815ACDC
-	for <lists+linux-scsi@lfdr.de>; Wed, 12 Feb 2020 17:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F3615AE83
+	for <lists+linux-scsi@lfdr.de>; Wed, 12 Feb 2020 18:14:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728595AbgBLQKw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Feb 2020 11:10:52 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:26639 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728575AbgBLQKw (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 12 Feb 2020 11:10:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581523851;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SVVq6qjRCsdQwLjJ3Pl2oKorAivzLQr7S00rXFIKNVM=;
-        b=Hh/9JA8ckC15wtm2NIqgxhL5Dzdqu2WOyQKpRyusIpH+T2NIsD7j8zE/ECnD1GXWUlIWVY
-        3sKN/bJitoPm2KpyiP/KMCM3fpuwEAFdYduhjnLw23xlTQfT8k81dO04wjoJLtf9edfYyw
-        4GRZ0IympuO9am3MK8Ks1Ak7ryiU8S0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-166-y1KLSIPVOpe_iMVvs1g-Og-1; Wed, 12 Feb 2020 11:10:47 -0500
-X-MC-Unique: y1KLSIPVOpe_iMVvs1g-Og-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7DA7D107ACCC;
-        Wed, 12 Feb 2020 16:10:45 +0000 (UTC)
-Received: from emilne (unknown [10.18.25.205])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C5AF45C100;
-        Wed, 12 Feb 2020 16:10:44 +0000 (UTC)
-Message-ID: <eac106d0fd30e20b6df4287f8bc01844191d29c6.camel@redhat.com>
-Subject: Re: [PATCH] scsi: Delete scsi_use_blk_mq
-From:   "Ewan D. Milne" <emilne@redhat.com>
-To:     John Garry <john.garry@huawei.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        jejb@linux.vnet.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 12 Feb 2020 11:10:44 -0500
-In-Reply-To: <2e2ead7d-503e-3881-b837-7c689a4d44c6@huawei.com>
-References: <1581355992-139274-1-git-send-email-john.garry@huawei.com>
-         <3795ab1d-5282-458b-6199-91e3def32463@acm.org>
-         <2e2ead7d-503e-3881-b837-7c689a4d44c6@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        id S1728728AbgBLRN4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Feb 2020 12:13:56 -0500
+Received: from a80-127-99-228.adsl.xs4all.nl ([80.127.99.228]:37756 "EHLO
+        hetgrotebos.org" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726728AbgBLRNz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Feb 2020 12:13:55 -0500
+X-Greylist: delayed 1723 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Feb 2020 12:13:54 EST
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
+         s=mail; h=Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:MIME-Version:
+        Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=ZrFv79XmQN2t/hZYh19DmJQWLHJ5TcEW4pzIc6Gdimk=; b=X6IaEaPT6V8oEPKYGhmzZ6bZ4N
+        y49T9nnJzEaOmmXPy6ksXVy42j2NK1otan9Q6MGvFbKnllnhQ46fxmZQrjwZdT8Fh3G9wdNWpKQV2
+        uRDVh+UhBNwGL4U5aiUqz6ZdM52x8jYEASZ8/0GRAVecz2T+QAFa00ykA+KALT+cGmr7kpwy3kB0/
+        B1iDGwepDU9iOnenBbs+0f0QT2fe0kBvvHmAWFzSomNp+obhbirp5lBBGxXMh+sJM+2QROQm2o9qX
+        A4TK9+Jfns2Vm8f79zDUgKEdjAqitAWQVEsidkbPP0V3oYwM1rq3/ZmM/cGDNM2Tb3LwCiUIlxWdt
+        QDcK3Q5A==;
+Received: from archivecd-merlijn-development-nuc-1.fritz.box ([192.168.178.36])
+        by hetgrotebos.org with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <merlijn@wizzup.org>)
+        id 1j1v8P-0001jl-8M; Wed, 12 Feb 2020 16:45:09 +0000
+From:   Merlijn Wajer <merlijn@wizzup.org>
+To:     merlijn@wizzup.org, linux-scsi@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] scsi: sr: get rid of sr global mutex
+Date:   Wed, 12 Feb 2020 17:44:45 +0100
+Message-Id: <20200212164445.1171-1-merlijn@wizzup.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2020-02-11 at 11:50 +0000, John Garry wrote:
-> On 10/02/2020 22:37, Bart Van Assche wrote:
-> > On 2/10/20 9:33 AM, John Garry wrote:
-> > > -module_param_named(use_blk_mq, scsi_use_blk_mq, bool, S_IWUSR | 
-> > > S_IRUGO);
-> 
-> Hi Bart,
-> 
-> > Will this change cause trouble to shell scripts that set or read this 
-> > parameter (/sys/module/scsi_mod/parameters/use_blk_mq)? 
-> 
-> The entry in Documentation/admin-guide/kernel-parameters.txt is gone for 
-> 2 years now.
-> 
-> And it is not an archaic module param, it was introduced 6 years ago. As 
-> such, I'd say that if a shell script was setup to access this parameter, 
-> then it would prob also pre-check if it exists and gracefully accept 
-> that it may not.
-> 
-> I will also note that there is still scsi_sysfs.c:show_use_blk_mq(), 
-> which would stay.
-> 
-> What will the
-> > impact be on systems where scsi_mod.use_blk_mq=Y is passed by GRUB to 
-> > the kernel at boot time, e.g. because it has been set in the 
-> > GRUB_CMDLINE_LINUX variable in /etc/default/grub?
-> 
-> The kernel should any params that does not recognize.
-> 
-> 
-> Having said all that, I don't feel too strongly about deleting this - 
-> it's only some tidy-up.
-> 
-> Thanks,
-> John
-> 
+When replacing the Big Kernel Lock in commit:
+<2a48fc0ab24241755dc93bfd4f01d68efab47f5a> ("block: autoconvert trivial BKL
+users to private mutex") , the lock was replaced with a sr-wide lock.
 
-I think we should remove it.  It is not good to have a kernel parameter
-that people used to be able to set to "N" that no longer does that.
+This causes very poor performance when using multiple sr devices, as the
+sr driver was not able to execute more than one command to one drive at
+any given time, even when there were many CD drives available.
 
--Ewan
+Replace the global mutex with per-sr-device mutex.
 
+Someone tried this patch at the time, but it never made it
+upstream, due to possible concerns with race conditions, but it's not
+clear the patch actually caused those:
+
+https://www.spinics.net/lists/linux-scsi/msg63706.html
+https://www.spinics.net/lists/linux-scsi/msg63750.html
+
+Also see
+
+http://lists.xiph.org/pipermail/paranoia/2019-December/001647.html
+
+Signed-off-by: Merlijn Wajer <merlijn@wizzup.org>
+---
+ drivers/scsi/sr.c | 16 +++++++++-------
+ drivers/scsi/sr.h |  2 ++
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
+index 38ddbbfe5..6809fdcfd 100644
+--- a/drivers/scsi/sr.c
++++ b/drivers/scsi/sr.c
+@@ -77,7 +77,6 @@ MODULE_ALIAS_SCSI_DEVICE(TYPE_WORM);
+ 	 CDC_CD_R|CDC_CD_RW|CDC_DVD|CDC_DVD_R|CDC_DVD_RAM|CDC_GENERIC_PACKET| \
+ 	 CDC_MRW|CDC_MRW_W|CDC_RAM)
+ 
+-static DEFINE_MUTEX(sr_mutex);
+ static int sr_probe(struct device *);
+ static int sr_remove(struct device *);
+ static blk_status_t sr_init_command(struct scsi_cmnd *SCpnt);
+@@ -535,9 +534,9 @@ static int sr_block_open(struct block_device *bdev, fmode_t mode)
+ 	scsi_autopm_get_device(sdev);
+ 	check_disk_change(bdev);
+ 
+-	mutex_lock(&sr_mutex);
++	mutex_lock(&cd->lock);
+ 	ret = cdrom_open(&cd->cdi, bdev, mode);
+-	mutex_unlock(&sr_mutex);
++	mutex_unlock(&cd->lock);
+ 
+ 	scsi_autopm_put_device(sdev);
+ 	if (ret)
+@@ -550,10 +549,10 @@ static int sr_block_open(struct block_device *bdev, fmode_t mode)
+ static void sr_block_release(struct gendisk *disk, fmode_t mode)
+ {
+ 	struct scsi_cd *cd = scsi_cd(disk);
+-	mutex_lock(&sr_mutex);
++	mutex_lock(&cd->lock);
+ 	cdrom_release(&cd->cdi, mode);
+ 	scsi_cd_put(cd);
+-	mutex_unlock(&sr_mutex);
++	mutex_unlock(&cd->lock);
+ }
+ 
+ static int sr_block_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
+@@ -564,7 +563,7 @@ static int sr_block_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
+ 	void __user *argp = (void __user *)arg;
+ 	int ret;
+ 
+-	mutex_lock(&sr_mutex);
++	mutex_lock(&cd->lock);
+ 
+ 	ret = scsi_ioctl_block_when_processing_errors(sdev, cmd,
+ 			(mode & FMODE_NDELAY) != 0);
+@@ -594,7 +593,7 @@ static int sr_block_ioctl(struct block_device *bdev, fmode_t mode, unsigned cmd,
+ 	scsi_autopm_put_device(sdev);
+ 
+ out:
+-	mutex_unlock(&sr_mutex);
++	mutex_unlock(&cd->lock);
+ 	return ret;
+ }
+ 
+@@ -700,6 +699,7 @@ static int sr_probe(struct device *dev)
+ 	disk = alloc_disk(1);
+ 	if (!disk)
+ 		goto fail_free;
++	mutex_init(&cd->lock);
+ 
+ 	spin_lock(&sr_index_lock);
+ 	minor = find_first_zero_bit(sr_index_bits, SR_DISKS);
+@@ -1009,6 +1009,8 @@ static void sr_kref_release(struct kref *kref)
+ 
+ 	put_disk(disk);
+ 
++	mutex_destroy(&cd->lock);
++
+ 	kfree(cd);
+ }
+ 
+diff --git a/drivers/scsi/sr.h b/drivers/scsi/sr.h
+index a2bb7b8ba..339c624e0 100644
+--- a/drivers/scsi/sr.h
++++ b/drivers/scsi/sr.h
+@@ -20,6 +20,7 @@
+ 
+ #include <linux/genhd.h>
+ #include <linux/kref.h>
++#include <linux/mutex.h>
+ 
+ #define MAX_RETRIES	3
+ #define SR_TIMEOUT	(30 * HZ)
+@@ -51,6 +52,7 @@ typedef struct scsi_cd {
+ 	bool ignore_get_event:1;	/* GET_EVENT is unreliable, use TUR */
+ 
+ 	struct cdrom_device_info cdi;
++	struct mutex lock;
+ 	/* We hold gendisk and scsi_device references on probe and use
+ 	 * the refs on this kref to decide when to release them */
+ 	struct kref kref;
+-- 
+2.17.1
 
