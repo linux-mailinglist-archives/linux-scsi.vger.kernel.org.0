@@ -2,80 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD89B15B5B8
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2020 01:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F8A15B60B
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2020 01:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729119AbgBMAPb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Feb 2020 19:15:31 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:45238 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727032AbgBMAPa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Feb 2020 19:15:30 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01D09YXl187442;
-        Thu, 13 Feb 2020 00:15:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2020-01-29;
- bh=0/wAiVs5rIqYMtN2Y8pQBb7RROimmiBeLoaZ/+BRUck=;
- b=AUToGZgv1vZodxK/jkK2tbS58OpWoQZp3Rbt50oMtwwrYte1WX24dw1JhUjj8835xRCs
- oxvyaSYimpxElp1GWgo0AdbB4dBa3vjbciGEHJqmAUZ/m+84i7nPCR7X5Nk2ZJedP6+J
- Tz4Wpisr3tN+tS/Nm29L2e6h6bkNsOsWOSI9vzs5Upxe4XnSi1krGDxdX7ROTaGnJr5o
- R1krdao+PuUPZLLCXLnv3q0/Q9XcnCbxIuxCNQWbkHJf9m4BiELmAmHZ4mpU2hqDEluC
- 8ZARXHDSgd9GzhJ0R415/lTgFfUxTmtIys5S++My2BewEbAcnDXvtKSpEeIcfW2PajaJ +A== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2y2p3sp6uw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 13 Feb 2020 00:15:24 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01D0786O086806;
-        Thu, 13 Feb 2020 00:15:23 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 2y4k331h8w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Feb 2020 00:15:23 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 01D0FKWH008703;
-        Thu, 13 Feb 2020 00:15:21 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 12 Feb 2020 16:15:20 -0800
-To:     Tomas Henzl <thenzl@redhat.com>
-Cc:     linux-scsi@vger.kernel.org, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, lduncan@suse.com
-Subject: Re: [PATCH V2] megaraid_sas: silence a warning
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20200204152413.7107-1-thenzl@redhat.com>
-Date:   Wed, 12 Feb 2020 19:15:18 -0500
-In-Reply-To: <20200204152413.7107-1-thenzl@redhat.com> (Tomas Henzl's message
-        of "Tue, 4 Feb 2020 16:24:13 +0100")
-Message-ID: <yq1sgjfs5pl.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1729190AbgBMArT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Feb 2020 19:47:19 -0500
+Received: from gateway22.websitewelcome.com ([192.185.46.224]:35819 "EHLO
+        gateway22.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729103AbgBMArS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 12 Feb 2020 19:47:18 -0500
+Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
+        by gateway22.websitewelcome.com (Postfix) with ESMTP id 9782835E97
+        for <linux-scsi@vger.kernel.org>; Wed, 12 Feb 2020 18:02:16 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id 21xQjBZepAGTX21xQjNioO; Wed, 12 Feb 2020 18:02:16 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=nXaq/PXqZxbU7kVjiYvodNDl1FBevhWEOS3v4Dhk6FQ=; b=zJi4CweLC22QHfduKolYIS+PUI
+        gJHby1BicXV0UJAuUN2C8m1qt4e5XoIR0oAng6BaGivWnOO+zsbubFdTQOS+Xxx2FAP+0JEgPBB12
+        XIckDGb6BWwaD9HQ3LEd0yxWrfDvMZgTPgREjW+Ab9VM5Uxyh6Cpo31w0zs0TB6dWvzqy90NOAKPA
+        G80Rw7JDi4nY5iIVHnqAH7VmibDutp0WQFZEH5A3bM4JzrZQTf9isZfvfvD2BNMHkTGYyy6LizTjD
+        B9p6nE0Xt6jvJ4g8rG0icA2BLdQKwg+HUieE1KlTGCcBUHD5Kh4sVors6fv7PKCA4bAFg3xjW9Jyh
+        wopYkkhg==;
+Received: from [200.68.141.42] (port=17871 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1j21xN-003P9t-Ih; Wed, 12 Feb 2020 18:02:14 -0600
+Date:   Wed, 12 Feb 2020 18:02:11 -0600
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] scsi: advansys: Replace zero-length array with
+ flexible-array member
+Message-ID: <20200213000211.GA23171@embeddedor.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9529 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=766 adultscore=0
- bulkscore=0 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002120168
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9529 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=831 priorityscore=1501 clxscore=1011
- impostorscore=0 lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002120168
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 200.68.141.42
+X-Source-L: No
+X-Exim-ID: 1j21xN-003P9t-Ih
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [200.68.141.42]:17871
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 5
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+The current codebase makes use of the zero-length array language
+extension to the C90 standard, but the preferred mechanism to declare
+variable-length types such as these ones is a flexible array member[1][2],
+introduced in C99:
 
-Tomas,
+struct foo {
+        int stuff;
+        struct boo array[];
+};
 
-> Add a flag to dma mem allocation to silence a warning.
+By making use of the mechanism above, we will get a compiler warning
+in case the flexible array does not occur last in the structure, which
+will help us prevent some kind of undefined behavior bugs from being
+inadvertently introduced[3] to the codebase from now on.
 
-Applied to 5.6/scsi-fixes, thank you!
+Also, notice that, dynamic memory allocations won't be affected by
+this change:
 
+"Flexible array members have incomplete type, and so the sizeof operator
+may not be applied. As a quirk of the original implementation of
+zero-length arrays, sizeof evaluates to zero."[1]
+
+This issue was found with the help of Coccinelle.
+
+[1] https://gcc.gnu.org/onlinedocs/gcc/Zero-Length.html
+[2] https://github.com/KSPP/linux/issues/21
+[3] commit 76497732932f ("cxgb3/l2t: Fix undefined behaviour")
+
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/scsi/advansys.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
+index a242a62caaa1..c2c7850ff7b4 100644
+--- a/drivers/scsi/advansys.c
++++ b/drivers/scsi/advansys.c
+@@ -316,7 +316,7 @@ typedef struct asc_sg_head {
+ 	ushort queue_cnt;
+ 	ushort entry_to_copy;
+ 	ushort res;
+-	ASC_SG_LIST sg_list[0];
++	ASC_SG_LIST sg_list[];
+ } ASC_SG_HEAD;
+ 
+ typedef struct asc_scsi_q {
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+2.23.0
+
