@@ -2,83 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1B915C293
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2020 16:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E15B15C6A7
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2020 17:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728383AbgBMPfD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Feb 2020 10:35:03 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37680 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388140AbgBMPcL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Feb 2020 10:32:11 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 1CBEDB12D;
-        Thu, 13 Feb 2020 15:32:09 +0000 (UTC)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Bart van Assche <bvanassche@acm.org>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 3/3] ch: remove ch_mutex()
-Date:   Thu, 13 Feb 2020 16:32:07 +0100
-Message-Id: <20200213153207.123357-4-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200213153207.123357-1-hare@suse.de>
-References: <20200213153207.123357-1-hare@suse.de>
+        id S2388294AbgBMQC2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Feb 2020 11:02:28 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:40557 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388287AbgBMQC1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 13 Feb 2020 11:02:27 -0500
+Received: by mail-pj1-f65.google.com with SMTP id 12so2599015pjb.5
+        for <linux-scsi@vger.kernel.org>; Thu, 13 Feb 2020 08:02:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hVrsdnuvDqO8d5RxwZITUcgpQUZuGnOUAkOJjAWAeSc=;
+        b=bqymz4bbnz/uGooKU++Gci42BVLC7ER6w5ypkEU/bnOQE4aLMaB/b3aDJwVKMwukzd
+         fV6zOhyo5GnBTZs9VaDX+xKVzdyo18dUX6JVEJ92WNNy3QZ9zqKT2NM/aJhrDKkWqz97
+         1iDBFKBr+ZSCEFUYuKQEu+VWhf1C3iNFDo22MnqyW5ZRbBqpwrVCrKpAACl3LcmnZlkg
+         0HYAQaQj9WkyWR0MXg1qJ0az3Sli+tiGKRZix0b657WTYFt/twVjhdPuEdcYLBV4SPXa
+         F6LlKb85xlzhwMwtH5Q+CIeHMBtQlL+pyQF4pfWOYqdcZcsFd9p/MGr488d3gfhVbD5/
+         F/6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=hVrsdnuvDqO8d5RxwZITUcgpQUZuGnOUAkOJjAWAeSc=;
+        b=Xux9cQ4ICCw8Y5t5HWpaONu6a/O2Oo7J+HK6XFLJS1rdieyIi0FpYL3XLjz3GfGoCa
+         jO/q78aLsX8PVNuVw7qg/9o2lxMX8ePLOflI/O7m6rzMoDyQyc0bc05Wj2vgn0rGuHH/
+         +/hBtc0x136OITEib671kLpHM9O+kFrWgype68sG0YKQLN0XcWF9nwTMSw58p9CaH66X
+         LyPpj0GZ/v8hj5/te15THkwVrRoFCSWnSMYZa2t1/teqBKx/pKkLJFtvgZD4/DdVgrQ0
+         PLFCwqSdL4RrxzLV7j6OInl4y4+sS+Ay3xbTHKaPsNjUSYmmq+8K2JPUQEG0e5Muy8Zr
+         6OKg==
+X-Gm-Message-State: APjAAAUE4eBX5hmKRyOmxhtpOs+kdLQAHhP3P7qVgfDGyS+Xd5YHYGCn
+        4UbHzuC0e2XlmNr+kjWwg5em9May
+X-Google-Smtp-Source: APXvYqymo4t6yus5lA4ARRP92do9uNCgs2FfdZcsXcYrS8KXnPV1WNFgmpmvw2ZHZHCYQsz6V8dw5A==
+X-Received: by 2002:a17:90a:de05:: with SMTP id m5mr6000239pjv.10.1581609745934;
+        Thu, 13 Feb 2020 08:02:25 -0800 (PST)
+Received: from [10.230.31.62] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id t16sm3875302pgo.80.2020.02.13.08.02.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Feb 2020 08:02:25 -0800 (PST)
+Subject: Re: [PATCH v2 1/2] fc: Update Descriptor definition and add RDF and
+ Link Integrity FPINs
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org
+References: <20200210173155.547-2-jsmart2021@gmail.com>
+ <202002131725.WpnYjjEN%lkp@intel.com>
+From:   James Smart <jsmart2021@gmail.com>
+Message-ID: <4b1a9f43-7d1a-ed12-8c49-bac9517a2e1a@gmail.com>
+Date:   Thu, 13 Feb 2020 08:02:23 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <202002131725.WpnYjjEN%lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ch_mutex() was introduced with a mechanical conversion, but as we
-now have correct locking we can remove it altogether.
+On 2/13/2020 2:00 AM, kbuild test robot wrote:
+> Hi James,
+> 
+> I love your patch! Yet something to improve:
+> 
+> [auto build test ERROR on scsi/for-next]
+> [also build test ERROR on mkp-scsi/for-next linus/master v5.6-rc1 next-20200213]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+> 
+> url:    https://github.com/0day-ci/linux/commits/James-Smart/lpfc-Add-Link-Integrity-FPIN-registration-and-logging/20200213-051448
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+> config: i386-randconfig-g002-20200213 (attached as .config)
+> compiler: gcc-7 (Debian 7.5.0-4) 7.5.0
+> reproduce:
+>          # save the attached .config to linux build tree
+>          make ARCH=i386
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+> 
+> All error/warnings (new ones prefixed by >>):
+> 
+>     In file included from <command-line>:32:0:
+>     ./usr/include/scsi/fc/fc_els.h: In function 'fc_tlv_next_desc':
+>>> ./usr/include/scsi/fc/fc_els.h:274:4: error: implicit declaration of function 'be32_to_cpu'; did you mean '__be32_to_cpu'? [-Werror=implicit-function-declaration]
+>        (be32_to_cpu((tlv)->desc_len) + FC_TLV_DESC_HDR_SZ)
+>         ^
+>>> ./usr/include/scsi/fc/fc_els.h:286:17: note: in expansion of macro 'FC_TLV_DESC_SZ_FROM_LENGTH'
+>       return (desc + FC_TLV_DESC_SZ_FROM_LENGTH(tlv));
+>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>     cc1: some warnings being treated as errors
+> 
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> 
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/ch.c | 5 -----
- 1 file changed, 5 deletions(-)
+Can you tell me what it was that was built that failed.
+This should have been addressed by the "#include <asm/byteorder.h>" at 
+the top of the header.
 
-diff --git a/drivers/scsi/ch.c b/drivers/scsi/ch.c
-index 9cbfb00ab950..4ea3b61f275f 100644
---- a/drivers/scsi/ch.c
-+++ b/drivers/scsi/ch.c
-@@ -44,7 +44,6 @@ MODULE_LICENSE("GPL");
- MODULE_ALIAS_CHARDEV_MAJOR(SCSI_CHANGER_MAJOR);
- MODULE_ALIAS_SCSI_DEVICE(TYPE_MEDIUM_CHANGER);
- 
--static DEFINE_MUTEX(ch_mutex);
- static int init = 1;
- module_param(init, int, 0444);
- MODULE_PARM_DESC(init, \
-@@ -591,26 +590,22 @@ ch_open(struct inode *inode, struct file *file)
- 	scsi_changer *ch;
- 	int minor = iminor(inode);
- 
--	mutex_lock(&ch_mutex);
- 	spin_lock(&ch_index_lock);
- 	ch = idr_find(&ch_index_idr, minor);
- 
- 	if (NULL == ch || !kref_get_unless_zero(&ch->ref)) {
- 		spin_unlock(&ch_index_lock);
--		mutex_unlock(&ch_mutex);
- 		return -ENXIO;
- 	}
- 	spin_unlock(&ch_index_lock);
- 	if (scsi_device_get(ch->device)) {
- 		kref_put(&ch->ref, ch_destroy);
--		mutex_unlock(&ch_mutex);
- 		return -ENXIO;
- 	}
- 	/* Synchronize with ch_probe() */
- 	mutex_lock(&ch->lock);
- 	file->private_data = ch;
- 	mutex_unlock(&ch->lock);
--	mutex_unlock(&ch_mutex);
- 	return 0;
- }
- 
--- 
-2.16.4
+I'm suspecting it's a non-kernel entity, so the header didn't resolve as 
+it should (perhaps the suggestion should be used instead).
+
+-- james
 
