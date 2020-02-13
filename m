@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F56B15C294
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2020 16:35:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1B915C293
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2020 16:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728869AbgBMPfF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 13 Feb 2020 10:35:05 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37682 "EHLO mx2.suse.de"
+        id S1728383AbgBMPfD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 13 Feb 2020 10:35:03 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37680 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388141AbgBMPcK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 13 Feb 2020 10:32:10 -0500
+        id S2388140AbgBMPcL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 13 Feb 2020 10:32:11 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 1D1E3B137;
+        by mx2.suse.de (Postfix) with ESMTP id 1CBEDB12D;
         Thu, 13 Feb 2020 15:32:09 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -21,9 +21,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 2/3] ch: synchronize ch_probe() and ch_open()
-Date:   Thu, 13 Feb 2020 16:32:06 +0100
-Message-Id: <20200213153207.123357-3-hare@suse.de>
+Subject: [PATCH 3/3] ch: remove ch_mutex()
+Date:   Thu, 13 Feb 2020 16:32:07 +0100
+Message-Id: <20200213153207.123357-4-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200213153207.123357-1-hare@suse.de>
 References: <20200213153207.123357-1-hare@suse.de>
@@ -32,63 +32,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The 'ch' device node is created before the configuration is
-being read in, which leads to a race window when ch_open() is called
-before that.
-To avoid any races we should be taking the device mutex during
-ch_readconfig() and ch_init_elem(), and also during ch_open().
-That ensures ch_probe is finished before ch_open() completes.
+ch_mutex() was introduced with a mechanical conversion, but as we
+now have correct locking we can remove it altogether.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/ch.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+ drivers/scsi/ch.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
 diff --git a/drivers/scsi/ch.c b/drivers/scsi/ch.c
-index 974afb4bd5fe..9cbfb00ab950 100644
+index 9cbfb00ab950..4ea3b61f275f 100644
 --- a/drivers/scsi/ch.c
 +++ b/drivers/scsi/ch.c
-@@ -606,7 +606,10 @@ ch_open(struct inode *inode, struct file *file)
- 		mutex_unlock(&ch_mutex);
+@@ -44,7 +44,6 @@ MODULE_LICENSE("GPL");
+ MODULE_ALIAS_CHARDEV_MAJOR(SCSI_CHANGER_MAJOR);
+ MODULE_ALIAS_SCSI_DEVICE(TYPE_MEDIUM_CHANGER);
+ 
+-static DEFINE_MUTEX(ch_mutex);
+ static int init = 1;
+ module_param(init, int, 0444);
+ MODULE_PARM_DESC(init, \
+@@ -591,26 +590,22 @@ ch_open(struct inode *inode, struct file *file)
+ 	scsi_changer *ch;
+ 	int minor = iminor(inode);
+ 
+-	mutex_lock(&ch_mutex);
+ 	spin_lock(&ch_index_lock);
+ 	ch = idr_find(&ch_index_idr, minor);
+ 
+ 	if (NULL == ch || !kref_get_unless_zero(&ch->ref)) {
+ 		spin_unlock(&ch_index_lock);
+-		mutex_unlock(&ch_mutex);
  		return -ENXIO;
  	}
-+	/* Synchronize with ch_probe() */
-+	mutex_lock(&ch->lock);
+ 	spin_unlock(&ch_index_lock);
+ 	if (scsi_device_get(ch->device)) {
+ 		kref_put(&ch->ref, ch_destroy);
+-		mutex_unlock(&ch_mutex);
+ 		return -ENXIO;
+ 	}
+ 	/* Synchronize with ch_probe() */
+ 	mutex_lock(&ch->lock);
  	file->private_data = ch;
-+	mutex_unlock(&ch->lock);
- 	mutex_unlock(&ch_mutex);
+ 	mutex_unlock(&ch->lock);
+-	mutex_unlock(&ch_mutex);
  	return 0;
  }
-@@ -949,6 +952,9 @@ static int ch_probe(struct device *dev)
- 		goto remove_idr;
- 	}
- 
-+	mutex_init(&ch->lock);
-+	kref_init(&ch->ref);
-+	ch->device = sd;
- 	class_dev = device_create(ch_sysfs_class, dev,
- 				  MKDEV(SCSI_CHANGER_MAJOR, ch->minor), ch,
- 				  "s%s", ch->name);
-@@ -959,15 +965,16 @@ static int ch_probe(struct device *dev)
- 		goto put_device;
- 	}
- 
--	mutex_init(&ch->lock);
--	kref_init(&ch->ref);
--	ch->device = sd;
-+	mutex_lock(&ch->lock);
- 	ret = ch_readconfig(ch);
--	if (ret)
-+	if (ret) {
-+		mutex_unlock(&ch->lock);
- 		goto destroy_dev;
-+	}
- 	if (init)
- 		ch_init_elem(ch);
- 
-+	mutex_unlock(&ch->lock);
- 	dev_set_drvdata(dev, ch);
- 	sdev_printk(KERN_INFO, sd, "Attached scsi changer %s\n", ch->name);
  
 -- 
 2.16.4
