@@ -2,96 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8ED15B5EA
-	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2020 01:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5F815B66F
+	for <lists+linux-scsi@lfdr.de>; Thu, 13 Feb 2020 02:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729333AbgBMAgs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 12 Feb 2020 19:36:48 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:57024 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729190AbgBMAgr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Feb 2020 19:36:47 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01D0WdCG162252;
-        Thu, 13 Feb 2020 00:36:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2020-01-29;
- bh=lOJCfJT2udTX7MkccrkOVv4P5oDuCzc4Q2DUeaZKbrE=;
- b=Dlpe4f+H1r69N2rHehey7P0mPaXk15GrcsiDJG8KtBhrwPkNR/gwBuqms/rlhA9BH8Di
- MiMf8gAZ1BI+KuVATAeoHT9oZdnO7dIgCifpFmoNHfIuqzMIYdyUdaUcftZo8/ex2DeG
- kkAg/vdDYwie3Ik8Z/+5qMF4rk5kZQAZs6ZmJlLvvo0qE+EOARETZ7iI7yaLx4TS74Li
- bWk1jWtJBWaLKdTtK5y0cpcKqK3H1Hlalulh2K2O+eqN/6zynqqDI3MBsOpvCXLrRoHU
- RZyr1AiYWimZPCDsP7+g5xCZn0gPTpoG42P8r+fxM7PM1zXmaRsnUkwNBljOOKRceFJp BQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2y2k88eg7q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 13 Feb 2020 00:36:26 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01D0X9n8114293;
-        Thu, 13 Feb 2020 00:36:26 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 2y4kah7bbs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 13 Feb 2020 00:36:26 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 01D0aLRc024911;
-        Thu, 13 Feb 2020 00:36:23 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 12 Feb 2020 16:36:21 -0800
-To:     Can Guo <cang@codeaurora.org>
-Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
+        id S1729302AbgBMBOS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 12 Feb 2020 20:14:18 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:60294 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729185AbgBMBOS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 12 Feb 2020 20:14:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=40jqweQ0+u8pWGs2sdI8o9uT1jQxm85/IXkuAtgtunw=; b=QjvWVM1qZ/x/JEEUG2pL57qNTo
+        Vm16OcSWQFsgTWE7GZBtv6918KJGUZHTrodCRERy0oJbPGMbJLt0YdVl3+39ECVz84fVeM9dizjPD
+        wFGUZuU2fGGhcbsmaJ1ZdTW3/25sCg+C+TwNlqitZ6NZvrtBT+Rxow4+q2EJ1u92X87umBI6VxfKO
+        K3uF34Otz32Swt+xQUX9n58RV6hrpeSAshymyz8XvNSN4d9d/z5l5mnA3syylQsVMAs/HympjxQoU
+        tzX43QmNP/UlaSz7UU2g/O7yhI64SFPd9YNC1F9DT1Df3D4W7mkC7dlF7zSGxFUp9UyYXBcJoyNQl
+        RmyGooZw==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j234w-0004vu-8o; Thu, 13 Feb 2020 01:14:06 +0000
+Date:   Wed, 12 Feb 2020 17:14:06 -0800
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Hannes Reinecke <hare@suse.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pedro Sousa <sousa@synopsys.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-msm@vger.kernel.org (open list:ARM/QUALCOMM SUPPORT),
-        linux-kernel@vger.kernel.org (open list)
-Subject: Re: [PATCH v1 2/2] scsi: ufs: Select INITIAL ADAPT type for HS Gear4
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <1581485910-8307-1-git-send-email-cang@codeaurora.org>
-        <1581485910-8307-3-git-send-email-cang@codeaurora.org>
-Date:   Wed, 12 Feb 2020 19:36:16 -0500
-In-Reply-To: <1581485910-8307-3-git-send-email-cang@codeaurora.org> (Can Guo's
-        message of "Tue, 11 Feb 2020 21:38:29 -0800")
-Message-ID: <yq1k14rs4qn.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: advansys: Replace zero-length array with
+ flexible-array member
+Message-ID: <20200213011406.GI7778@bombadil.infradead.org>
+References: <20200213000211.GA23171@embeddedor.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9529 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 spamscore=0 bulkscore=0
- suspectscore=0 mlxscore=0 malwarescore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002130003
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9529 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 impostorscore=0 clxscore=1011 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002130003
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200213000211.GA23171@embeddedor.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Wed, Feb 12, 2020 at 06:02:11PM -0600, Gustavo A. R. Silva wrote:
+> Also, notice that, dynamic memory allocations won't be affected by
+> this change:
 
-Can,
+Shouldn't you also convert this:
+                asc_sg_head = kzalloc(sizeof(asc_scsi_q->sg_head) +
+                        use_sg * sizeof(struct asc_sg_list), GFP_ATOMIC);
+to use struct_size()?
 
-> ADAPT is added specifically for HS Gear4 mode only, select INITIAL
-> ADAPT before do power mode change to G4 and select NO ADAPT before
-> switch to non-G4 modes.
-
-Applied to 5.7/scsi-queue, thanks!
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
