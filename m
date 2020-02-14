@@ -2,105 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FBA815E931
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2020 18:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B3C15F0CC
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2020 18:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405099AbgBNRFX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Feb 2020 12:05:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48112 "EHLO mail.kernel.org"
+        id S2388094AbgBNP5E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Feb 2020 10:57:04 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39348 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404190AbgBNRFW (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 14 Feb 2020 12:05:22 -0500
-Received: from redsun51.ssa.fujisawa.hgst.com (unknown [199.255.47.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2388082AbgBNP5C (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:57:02 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 45A0920656;
-        Fri, 14 Feb 2020 17:05:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF79A2467B;
+        Fri, 14 Feb 2020 15:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581699921;
-        bh=cWM9G1+pZU3ZZCBvu3fIWh4fzIRXlhjZcJ8EV4CjiQ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DAqU7RRXAEyU1EJAwzZGw0BmErbfj4k3CaDJbiUIDvJYLuPB0JyLiv0MnAGJgFX0B
-         Cb13B6mBmLGphZRZDHyDvsQQ4EkKhDNaR+02nQn+OJGsvPnzmzr0zNZLuSrUNlDTIH
-         H9Gun0tLntYG+Npjsw5EEBdjqksgTqKXqXL9kYJA=
-Date:   Sat, 15 Feb 2020 02:05:14 +0900
-From:   Keith Busch <kbusch@kernel.org>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Tim Walker <tim.t.walker@seagate.com>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
-Subject: Re: [LSF/MM/BPF TOPIC] NVMe HDD
-Message-ID: <20200214170514.GA10757@redsun51.ssa.fujisawa.hgst.com>
-References: <CANo=J14resJ4U1nufoiDq+ULd0k-orRCsYah8Dve-y8uCjA62Q@mail.gmail.com>
- <20200211122821.GA29811@ming.t460p>
- <CANo=J14iRK8K3bc1g3rLBp=QTLZQak0DcHkvgZS2f=xO_HFgxQ@mail.gmail.com>
- <BYAPR04MB5816AA843E63FFE2EA1D5D23E71B0@BYAPR04MB5816.namprd04.prod.outlook.com>
- <yq1blq3rxzj.fsf@oracle.com>
- <CANo=J16cDBUDWdV7tdY33UO0UT0t-g7jRfMVTxZpePvLew7Mxg@mail.gmail.com>
- <yq1r1yzqfyb.fsf@oracle.com>
- <2d66bb0b-29ca-6888-79ce-9e3518ee4b61@suse.de>
- <20200214144007.GD9819@redsun51.ssa.fujisawa.hgst.com>
- <d043a58d-6584-1792-4433-ac2cc39526ca@suse.de>
+        s=default; t=1581695821;
+        bh=5tGjCaR0U/4Sbp7vkRaZfh3f9+5qvqqeBO9WpmTPe1E=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=w382Nb2CUFypLogObseDTlAjvN0pGYzb6eGIuRfvtTe0is6iGVaBPNtRnjkBvfIa/
+         L7uTSmLpswgLNuxcydAQqaTrUd3UtpMeogAsGo56k+jLwWTtpGgT8gFnNMcCis3q9o
+         iourcNuhA6qk0H68RbU32zOVgcnYZJaWE1dioXno=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Stanley Chu <stanley.chu@mediatek.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.5 376/542] scsi: ufs-mediatek: add apply_dev_quirks variant operation
+Date:   Fri, 14 Feb 2020 10:46:08 -0500
+Message-Id: <20200214154854.6746-376-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d043a58d-6584-1792-4433-ac2cc39526ca@suse.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 05:04:25PM +0100, Hannes Reinecke wrote:
-> On 2/14/20 3:40 PM, Keith Busch wrote:
-> > On Fri, Feb 14, 2020 at 08:32:57AM +0100, Hannes Reinecke wrote:
-> > > On 2/13/20 5:17 AM, Martin K. Petersen wrote:
-> > > > People often artificially lower the queue depth to avoid timeouts. The
-> > > > default timeout is 30 seconds from an I/O is queued. However, many
-> > > > enterprise applications set the timeout to 3-5 seconds. Which means that
-> > > > with deep queues you'll quickly start seeing timeouts if a drive
-> > > > temporarily is having issues keeping up (media errors, excessive spare
-> > > > track seeks, etc.).
-> > > > 
-> > > > Well-behaved devices will return QF/TSF if they have transient resource
-> > > > starvation or exceed internal QoS limits. QF will cause the SCSI stack
-> > > > to reduce the number of I/Os in flight. This allows the drive to recover
-> > > > from its congested state and reduces the potential of application and
-> > > > filesystem timeouts.
-> > > > 
-> > > This may even be a chance to revisit QoS / queue busy handling.
-> > > NVMe has this SQ head pointer mechanism which was supposed to handle
-> > > this kind of situations, but to my knowledge no-one has been
-> > > implementing it.
-> > > Might be worthwhile revisiting it; guess NVMe HDDs would profit from that.
-> > 
-> > We don't need that because we don't allocate enough tags to potentially
-> > wrap the tail past the head. If you can allocate a tag, the queue is not
-> > full. And convesely, no tag == queue full.
-> > 
-> It's not a problem on our side.
-> It's a problem on the target/controller side.
-> The target/controller might have a need to throttle I/O (due to QoS settings
-> or competing resources from other hosts), but currently no means of
-> signalling that to the host.
-> Which, incidentally, is the underlying reason for the DNR handling
-> discussion we had; NetApp tried to model QoS by sending "Namespace not
-> ready" without the DNR bit set, which of course is a totally different
-> use-case as the typical 'Namespace not ready' response we get (with the DNR
-> bit set) when a namespace was unmapped.
-> 
-> And that is where SQ head pointer updates comes in; it would allow the
-> controller to signal back to the host that it should hold off sending I/O
-> for a bit.
-> So this could / might be used for NVMe HDDs, too, which also might have a
-> need to signal back to the host that I/Os should be throttled...
+From: Stanley Chu <stanley.chu@mediatek.com>
 
-Okay, I see. I think this needs a new nvme AER notice as Martin
-suggested. The desired host behavior is simiilar to what we do with a
-"firmware activation notice" where we temporarily quiesce new requests
-and reset IO timeouts for previously dispatched requests. Perhaps tie
-this to the CSTS.PP register as well.
+[ Upstream commit ea92c32bd336efba89c5b09cf609e6e26e963796 ]
+
+Add vendor-specific variant callback "apply_dev_quirks" to MediaTek UFS
+driver.
+
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Asutosh Das <asutoshd@codeaurora.org>
+Cc: Avri Altman <avri.altman@wdc.com>
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Bean Huo <beanhuo@micron.com>
+Cc: Can Guo <cang@codeaurora.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Link: https://lore.kernel.org/r/1578726707-6596-3-git-send-email-stanley.chu@mediatek.com
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/ufs/ufs-mediatek.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/scsi/ufs/ufs-mediatek.c b/drivers/scsi/ufs/ufs-mediatek.c
+index 83e28edc3ac5b..8a21f49caf0d9 100644
+--- a/drivers/scsi/ufs/ufs-mediatek.c
++++ b/drivers/scsi/ufs/ufs-mediatek.c
+@@ -13,6 +13,7 @@
+ 
+ #include "ufshcd.h"
+ #include "ufshcd-pltfrm.h"
++#include "ufs_quirks.h"
+ #include "unipro.h"
+ #include "ufs-mediatek.h"
+ 
+@@ -289,6 +290,15 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 	return 0;
+ }
+ 
++static int ufs_mtk_apply_dev_quirks(struct ufs_hba *hba,
++				    struct ufs_dev_desc *card)
++{
++	if (card->wmanufacturerid == UFS_VENDOR_SAMSUNG)
++		ufshcd_dme_set(hba, UIC_ARG_MIB(PA_TACTIVATE), 6);
++
++	return 0;
++}
++
+ /**
+  * struct ufs_hba_mtk_vops - UFS MTK specific variant operations
+  *
+@@ -301,6 +311,7 @@ static struct ufs_hba_variant_ops ufs_hba_mtk_vops = {
+ 	.setup_clocks        = ufs_mtk_setup_clocks,
+ 	.link_startup_notify = ufs_mtk_link_startup_notify,
+ 	.pwr_change_notify   = ufs_mtk_pwr_change_notify,
++	.apply_dev_quirks    = ufs_mtk_apply_dev_quirks,
+ 	.suspend             = ufs_mtk_suspend,
+ 	.resume              = ufs_mtk_resume,
+ };
+-- 
+2.20.1
+
