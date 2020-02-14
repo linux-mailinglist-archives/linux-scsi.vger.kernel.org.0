@@ -2,43 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D3315E3AA
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2020 17:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A8115EC35
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2020 18:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406260AbgBNQZ6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Feb 2020 11:25:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35946 "EHLO mail.kernel.org"
+        id S2389726AbgBNRZn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Feb 2020 12:25:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32818 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405712AbgBNQZ5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:25:57 -0500
+        id S2391068AbgBNQIt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:08:49 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 02125247DB;
-        Fri, 14 Feb 2020 16:25:54 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 349372467E;
+        Fri, 14 Feb 2020 16:08:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697556;
-        bh=CB0F8aCPLhPs8qvnqAR7Y1CnayOQkzXYicU29pEo2GE=;
+        s=default; t=1581696528;
+        bh=q4EdpRHX6qN+pRnRnD2WAQZKAT7OGxsqDKUeGBk3ws0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v04QVEK25+4RYlqnbLvfnhDKT2SXPrjaAJrRvKwBod/t7N4u3Q+bJIANP6G0o4Ytt
-         zxgI6bkOYtBDVC0ocjzOOP5Tpu770Rmud2kHq2mEKiFUlNrGTXdjZXTCQx+lJ9GOHZ
-         MyyHn0+G+a8HKMR6WnzEUK5P4bZmEBjZK5sgLg6Q=
+        b=ItwQnqwimK1ImTYAB4urye8Ht8J9JyGGasn1lRe1lOIxM4h5vU8JsuYzseQWuKKtg
+         e7jbj0U7iuGTmwxuO82gUIIiIWOcksjPqYnI+yeCNIMJKLg/siy2XOj772IFSr0Jg1
+         PaDUjlw9BntwxWO5P+S/b9kP+wr0KN09RC+nfyCM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nick Black <nlb@google.com>, Salman Qazi <sqazi@google.com>,
-        Junho Ryu <jayr@google.com>,
-        Khazhismel Kumykov <khazhy@google.com>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Lee Duncan <lduncan@suse.com>,
+Cc:     Stanley Chu <stanley.chu@mediatek.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bean Huo <beanhuo@micron.com>, Can Guo <cang@codeaurora.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 073/100] scsi: iscsi: Don't destroy session if there are outstanding connections
-Date:   Fri, 14 Feb 2020 11:23:57 -0500
-Message-Id: <20200214162425.21071-73-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.4 327/459] scsi: ufs: pass device information to apply_dev_quirks
+Date:   Fri, 14 Feb 2020 10:59:37 -0500
+Message-Id: <20200214160149.11681-327-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214162425.21071-1-sashal@kernel.org>
-References: <20200214162425.21071-1-sashal@kernel.org>
+In-Reply-To: <20200214160149.11681-1-sashal@kernel.org>
+References: <20200214160149.11681-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -48,135 +51,115 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Nick Black <nlb@google.com>
+From: Stanley Chu <stanley.chu@mediatek.com>
 
-[ Upstream commit 54155ed4199c7aa3fd20866648024ab63c96d579 ]
+[ Upstream commit c40ad6b7fcd35bc4d36db820c7737e1aa18d5d41 ]
 
-A faulty userspace that calls destroy_session() before destroying the
-connections can trigger the failure.  This patch prevents the issue by
-refusing to destroy the session if there are outstanding connections.
+Pass UFS device information to vendor-specific variant callback
+"apply_dev_quirks" because some platform vendors need to know such
+information to apply special handling or quirks in specific devices.
 
-------------[ cut here ]------------
-kernel BUG at mm/slub.c:306!
-invalid opcode: 0000 [#1] SMP PTI
-CPU: 1 PID: 1224 Comm: iscsid Not tainted 5.4.0-rc2.iscsi+ #7
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.12.0-1 04/01/2014
-RIP: 0010:__slab_free+0x181/0x350
-[...]
-[ 1209.686056] RSP: 0018:ffffa93d4074fae0 EFLAGS: 00010246
-[ 1209.686694] RAX: ffff934efa5ad800 RBX: 000000008010000a RCX: ffff934efa5ad800
-[ 1209.687651] RDX: ffff934efa5ad800 RSI: ffffeb4041e96b00 RDI: ffff934efd402c40
-[ 1209.688582] RBP: ffffa93d4074fb80 R08: 0000000000000001 R09: ffffffffbb5dfa26
-[ 1209.689425] R10: ffff934efa5ad800 R11: 0000000000000001 R12: ffffeb4041e96b00
-[ 1209.690285] R13: ffff934efa5ad800 R14: ffff934efd402c40 R15: 0000000000000000
-[ 1209.691213] FS:  00007f7945dfb540(0000) GS:ffff934efda80000(0000) knlGS:0000000000000000
-[ 1209.692316] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 1209.693013] CR2: 000055877fd3da80 CR3: 0000000077384000 CR4: 00000000000006e0
-[ 1209.693897] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 1209.694773] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ 1209.695631] Call Trace:
-[ 1209.695957]  ? __wake_up_common_lock+0x8a/0xc0
-[ 1209.696712]  iscsi_pool_free+0x26/0x40
-[ 1209.697263]  iscsi_session_teardown+0x2f/0xf0
-[ 1209.698117]  iscsi_sw_tcp_session_destroy+0x45/0x60
-[ 1209.698831]  iscsi_if_rx+0xd88/0x14e0
-[ 1209.699370]  netlink_unicast+0x16f/0x200
-[ 1209.699932]  netlink_sendmsg+0x21a/0x3e0
-[ 1209.700446]  sock_sendmsg+0x4f/0x60
-[ 1209.700902]  ___sys_sendmsg+0x2ae/0x320
-[ 1209.701451]  ? cp_new_stat+0x150/0x180
-[ 1209.701922]  __sys_sendmsg+0x59/0xa0
-[ 1209.702357]  do_syscall_64+0x52/0x160
-[ 1209.702812]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-[ 1209.703419] RIP: 0033:0x7f7946433914
-[...]
-[ 1209.706084] RSP: 002b:00007fffb99f2378 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-[ 1209.706994] RAX: ffffffffffffffda RBX: 000055bc869eac20 RCX: 00007f7946433914
-[ 1209.708082] RDX: 0000000000000000 RSI: 00007fffb99f2390 RDI: 0000000000000005
-[ 1209.709120] RBP: 00007fffb99f2390 R08: 000055bc84fe9320 R09: 00007fffb99f1f07
-[ 1209.710110] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000038
-[ 1209.711085] R13: 000055bc8502306e R14: 0000000000000000 R15: 0000000000000000
- Modules linked in:
- ---[ end trace a2d933ede7f730d8 ]---
+At the same time, modify existing vendor implementations according to the
+new interface for those vendor drivers which will be built-in or built as a
+module alone with UFS core driver.
 
-Link: https://lore.kernel.org/r/20191226203148.2172200-1-krisman@collabora.com
-Signed-off-by: Nick Black <nlb@google.com>
-Co-developed-by: Salman Qazi <sqazi@google.com>
-Signed-off-by: Salman Qazi <sqazi@google.com>
-Co-developed-by: Junho Ryu <jayr@google.com>
-Signed-off-by: Junho Ryu <jayr@google.com>
-Co-developed-by: Khazhismel Kumykov <khazhy@google.com>
-Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
-Co-developed-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
+[mkp: clarified commit desc]
+
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Asutosh Das <asutoshd@codeaurora.org>
+Cc: Avri Altman <avri.altman@wdc.com>
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Bean Huo <beanhuo@micron.com>
+Cc: Can Guo <cang@codeaurora.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Link: https://lore.kernel.org/r/1578726707-6596-2-git-send-email-stanley.chu@mediatek.com
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
+Reviewed-by: Bean Huo <beanhuo@micron.com>
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/iscsi_tcp.c            |  4 ++++
- drivers/scsi/scsi_transport_iscsi.c | 26 +++++++++++++++++++++++---
- 2 files changed, 27 insertions(+), 3 deletions(-)
+ drivers/scsi/ufs/ufs-qcom.c | 3 ++-
+ drivers/scsi/ufs/ufshcd.c   | 8 ++++----
+ drivers/scsi/ufs/ufshcd.h   | 7 ++++---
+ 3 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/iscsi_tcp.c b/drivers/scsi/iscsi_tcp.c
-index fccb8991bd5b7..64a49dccb0b63 100644
---- a/drivers/scsi/iscsi_tcp.c
-+++ b/drivers/scsi/iscsi_tcp.c
-@@ -872,6 +872,10 @@ iscsi_sw_tcp_session_create(struct iscsi_endpoint *ep, uint16_t cmds_max,
- static void iscsi_sw_tcp_session_destroy(struct iscsi_cls_session *cls_session)
- {
- 	struct Scsi_Host *shost = iscsi_session_to_shost(cls_session);
-+	struct iscsi_session *session = cls_session->dd_data;
-+
-+	if (WARN_ON_ONCE(session->leadconn))
-+		return;
- 
- 	iscsi_tcp_r2tpool_free(cls_session->dd_data);
- 	iscsi_session_teardown(cls_session);
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index ab32e60736424..20cf01d6ded7e 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -2965,6 +2965,24 @@ iscsi_set_path(struct iscsi_transport *transport, struct iscsi_uevent *ev)
+diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+index a5b71487a2065..411ef60b2c145 100644
+--- a/drivers/scsi/ufs/ufs-qcom.c
++++ b/drivers/scsi/ufs/ufs-qcom.c
+@@ -905,7 +905,8 @@ static int ufs_qcom_quirk_host_pa_saveconfigtime(struct ufs_hba *hba)
  	return err;
  }
  
-+static int iscsi_session_has_conns(int sid)
-+{
-+	struct iscsi_cls_conn *conn;
-+	unsigned long flags;
-+	int found = 0;
-+
-+	spin_lock_irqsave(&connlock, flags);
-+	list_for_each_entry(conn, &connlist, conn_list) {
-+		if (iscsi_conn_get_sid(conn) == sid) {
-+			found = 1;
-+			break;
-+		}
-+	}
-+	spin_unlock_irqrestore(&connlock, flags);
-+
-+	return found;
-+}
-+
- static int
- iscsi_set_iface_params(struct iscsi_transport *transport,
- 		       struct iscsi_uevent *ev, uint32_t len)
-@@ -3539,10 +3557,12 @@ iscsi_if_recv_msg(struct sk_buff *skb, struct nlmsghdr *nlh, uint32_t *group)
- 		break;
- 	case ISCSI_UEVENT_DESTROY_SESSION:
- 		session = iscsi_session_lookup(ev->u.d_session.sid);
--		if (session)
--			transport->destroy_session(session);
--		else
-+		if (!session)
- 			err = -EINVAL;
-+		else if (iscsi_session_has_conns(ev->u.d_session.sid))
-+			err = -EBUSY;
-+		else
-+			transport->destroy_session(session);
- 		break;
- 	case ISCSI_UEVENT_UNBIND_SESSION:
- 		session = iscsi_session_lookup(ev->u.d_session.sid);
+-static int ufs_qcom_apply_dev_quirks(struct ufs_hba *hba)
++static int ufs_qcom_apply_dev_quirks(struct ufs_hba *hba,
++				     struct ufs_dev_desc *card)
+ {
+ 	int err = 0;
+ 
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 6b5ec4bbcdb02..d9ea0ae4f374f 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6721,7 +6721,8 @@ static int ufshcd_quirk_tune_host_pa_tactivate(struct ufs_hba *hba)
+ 	return ret;
+ }
+ 
+-static void ufshcd_tune_unipro_params(struct ufs_hba *hba)
++static void ufshcd_tune_unipro_params(struct ufs_hba *hba,
++				      struct ufs_dev_desc *card)
+ {
+ 	if (ufshcd_is_unipro_pa_params_tuning_req(hba)) {
+ 		ufshcd_tune_pa_tactivate(hba);
+@@ -6735,7 +6736,7 @@ static void ufshcd_tune_unipro_params(struct ufs_hba *hba)
+ 	if (hba->dev_quirks & UFS_DEVICE_QUIRK_HOST_PA_TACTIVATE)
+ 		ufshcd_quirk_tune_host_pa_tactivate(hba);
+ 
+-	ufshcd_vops_apply_dev_quirks(hba);
++	ufshcd_vops_apply_dev_quirks(hba, card);
+ }
+ 
+ static void ufshcd_clear_dbg_ufs_stats(struct ufs_hba *hba)
+@@ -6898,10 +6899,9 @@ static int ufshcd_probe_hba(struct ufs_hba *hba)
+ 	}
+ 
+ 	ufs_fixup_device_setup(hba, &card);
++	ufshcd_tune_unipro_params(hba, &card);
+ 	ufs_put_device_desc(&card);
+ 
+-	ufshcd_tune_unipro_params(hba);
+-
+ 	/* UFS device is also active now */
+ 	ufshcd_set_ufs_dev_active(hba);
+ 	ufshcd_force_reset_auto_bkops(hba);
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 089013b758a19..5260e594e0b95 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -322,7 +322,7 @@ struct ufs_hba_variant_ops {
+ 	void	(*setup_task_mgmt)(struct ufs_hba *, int, u8);
+ 	void    (*hibern8_notify)(struct ufs_hba *, enum uic_cmd_dme,
+ 					enum ufs_notify_change_status);
+-	int	(*apply_dev_quirks)(struct ufs_hba *);
++	int	(*apply_dev_quirks)(struct ufs_hba *, struct ufs_dev_desc *);
+ 	int     (*suspend)(struct ufs_hba *, enum ufs_pm_op);
+ 	int     (*resume)(struct ufs_hba *, enum ufs_pm_op);
+ 	void	(*dbg_register_dump)(struct ufs_hba *hba);
+@@ -1047,10 +1047,11 @@ static inline void ufshcd_vops_hibern8_notify(struct ufs_hba *hba,
+ 		return hba->vops->hibern8_notify(hba, cmd, status);
+ }
+ 
+-static inline int ufshcd_vops_apply_dev_quirks(struct ufs_hba *hba)
++static inline int ufshcd_vops_apply_dev_quirks(struct ufs_hba *hba,
++					       struct ufs_dev_desc *card)
+ {
+ 	if (hba->vops && hba->vops->apply_dev_quirks)
+-		return hba->vops->apply_dev_quirks(hba);
++		return hba->vops->apply_dev_quirks(hba, card);
+ 	return 0;
+ }
+ 
 -- 
 2.20.1
 
