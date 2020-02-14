@@ -2,40 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9716B15E5AD
-	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2020 17:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AE515E525
+	for <lists+linux-scsi@lfdr.de>; Fri, 14 Feb 2020 17:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393130AbgBNQVz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 14 Feb 2020 11:21:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56842 "EHLO mail.kernel.org"
+        id S2405121AbgBNQWv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 14 Feb 2020 11:22:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58682 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393123AbgBNQVy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:21:54 -0500
+        id S2393247AbgBNQWt (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:22:49 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5141A246B8;
-        Fri, 14 Feb 2020 16:21:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6FF592473E;
+        Fri, 14 Feb 2020 16:22:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697313;
-        bh=qekGi7wU7YSQhUWkPVpoPPNnb+45FMbtrtnohbHSl10=;
+        s=default; t=1581697369;
+        bh=BAiSBRFdJMN3ZHL/w78o+PZyV1AC1701XX/Z2jnkgC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P9sTUIwW4hprUN7Qsg7a4Cm+oQ5Q+vT7TWiUatm0ZijXfYA5XZS3G6GVOnXNip8yh
-         CfPTEUugBaIUeShiSR1cqHpsdZAUd2O+0PRL5bP1Z11rEDTF/vOXWXWunBzeTgg9KS
-         dQ95768XB6BoPWtqjDyPJ0bBUW9JWX5RMhbevOuA=
+        b=WSMZMWq0MxTu3hDwAo2IQl51T3o8M/dpCs75iysSQ7qpGCXvAbTG4QZGh4m5e6UQW
+         U++Y1D291ghjX7me2JQscbkwDVyFF5eiL/M7N0Hj6O1Z/0BwX2CRsO/8MN7zcV6YPQ
+         50HzWUFGey3HPZFava40hs1J7udhH6m81va4UK/0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bean Huo <beanhuo@micron.com>,
-        Asutosh Das <asutoshd@codeaurora.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
+Cc:     Nathan Chancellor <natechancellor@gmail.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.9 024/141] scsi: ufs: Fix ufshcd_probe_hba() reture value in case ufshcd_scsi_add_wlus() fails
-Date:   Fri, 14 Feb 2020 11:19:24 -0500
-Message-Id: <20200214162122.19794-24-sashal@kernel.org>
+        clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.9 068/141] scsi: aic7xxx: Adjust indentation in ahc_find_syncrate
+Date:   Fri, 14 Feb 2020 11:20:08 -0500
+Message-Id: <20200214162122.19794-68-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214162122.19794-1-sashal@kernel.org>
 References: <20200214162122.19794-1-sashal@kernel.org>
@@ -48,41 +44,52 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+From: Nathan Chancellor <natechancellor@gmail.com>
 
-[ Upstream commit b9fc5320212efdfb4e08b825aaa007815fd11d16 ]
+[ Upstream commit 4dbc96ad65c45cdd4e895ed7ae4c151b780790c5 ]
 
-A non-zero error value likely being returned by ufshcd_scsi_add_wlus() in
-case of failure of adding the WLs, but ufshcd_probe_hba() doesn't use this
-value, and doesn't report this failure to upper caller.  This patch is to
-fix this issue.
+Clang warns:
 
-Fixes: 2a8fa600445c ("ufs: manually add well known logical units")
-Link: https://lore.kernel.org/r/20200120130820.1737-2-huobean@gmail.com
-Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
-Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Bean Huo <beanhuo@micron.com>
+../drivers/scsi/aic7xxx/aic7xxx_core.c:2317:5: warning: misleading
+indentation; statement is not part of the previous 'if'
+[-Wmisleading-indentation]
+                        if ((syncrate->sxfr_u2 & ST_SXFR) != 0)
+                        ^
+../drivers/scsi/aic7xxx/aic7xxx_core.c:2310:4: note: previous statement
+is here
+                        if (syncrate == &ahc_syncrates[maxsync])
+                        ^
+1 warning generated.
+
+This warning occurs because there is a space amongst the tabs on this
+line. Remove it so that the indentation is consistent with the Linux kernel
+coding style and clang no longer warns.
+
+This has been a problem since the beginning of git history hence no fixes
+tag.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/817
+Link: https://lore.kernel.org/r/20191218014220.52746-1-natechancellor@gmail.com
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/aic7xxx/aic7xxx_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 094e879af1213..394df57894e6b 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -5347,7 +5347,8 @@ static int ufshcd_probe_hba(struct ufs_hba *hba)
- 			ufshcd_init_icc_levels(hba);
- 
- 		/* Add required well known logical units to scsi mid layer */
--		if (ufshcd_scsi_add_wlus(hba))
-+		ret = ufshcd_scsi_add_wlus(hba);
-+		if (ret)
- 			goto out;
- 
- 		scsi_scan_host(hba->host);
+diff --git a/drivers/scsi/aic7xxx/aic7xxx_core.c b/drivers/scsi/aic7xxx/aic7xxx_core.c
+index 64ab9eaec428c..def3208dd2905 100644
+--- a/drivers/scsi/aic7xxx/aic7xxx_core.c
++++ b/drivers/scsi/aic7xxx/aic7xxx_core.c
+@@ -2321,7 +2321,7 @@ ahc_find_syncrate(struct ahc_softc *ahc, u_int *period,
+ 			 * At some speeds, we only support
+ 			 * ST transfers.
+ 			 */
+-		 	if ((syncrate->sxfr_u2 & ST_SXFR) != 0)
++			if ((syncrate->sxfr_u2 & ST_SXFR) != 0)
+ 				*ppr_options &= ~MSG_EXT_PPR_DT_REQ;
+ 			break;
+ 		}
 -- 
 2.20.1
 
