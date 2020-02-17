@@ -2,71 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6848116017E
-	for <lists+linux-scsi@lfdr.de>; Sun, 16 Feb 2020 04:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0137160EB4
+	for <lists+linux-scsi@lfdr.de>; Mon, 17 Feb 2020 10:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727640AbgBPDMM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 15 Feb 2020 22:12:12 -0500
-Received: from sonic311-32.consmr.mail.ir2.yahoo.com ([77.238.176.164]:40530
-        "EHLO sonic311-32.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726634AbgBPDML (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 15 Feb 2020 22:12:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1581822730; bh=SZahDY+pPbNZZakhohq2fC6Fas1X+CpLLzNU8DNKAp0=; h=Date:From:Reply-To:Subject:References:From:Subject; b=WhDLhTMeerMRbmaQaV3biLziU3rwLGmclBS7OvPP6kZXxtDT9B9utxQY2Y0zVlaV03//mjs+FShAQ+sZTqlbdoYMptgeAxkujfaox9XgYhFbkIdpApPBUwfgQbGDg0fy+QIN7Bv+K9/V8Rkgh3tYM7ZnI4VmgIA/7/rxGih3YFWZ3N4SZVWK1T8CQ90yG4uHWaBt33pf5YmSBu+npNjPIYDJdYy1hkYgXeicME4hcl/PanwD0iC8ZZHVKvcoCX90ddyAPhsRVA8gL6Fc8uIGD+Nc+2xwfN5oYjQjalAu3zWCkIxxhmFParQhVe51nPmuBmvT3EOWuLoVRrRxjo91qQ==
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ir2.yahoo.com with HTTP; Sun, 16 Feb 2020 03:12:10 +0000
-Date:   Sun, 16 Feb 2020 03:02:00 +0000 (UTC)
-From:   "Mrs. Judith Compola" <dhhddjj@aol.com>
-Reply-To: mrsjd06@gmail.com
-Message-ID: <559193885.5940015.1581822120282@mail.yahoo.com>
-Subject: Dear Friend,
+        id S1728932AbgBQJgG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 17 Feb 2020 04:36:06 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:64865 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728302AbgBQJgG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 17 Feb 2020 04:36:06 -0500
+X-UUID: 70bfc36711714ab68d6215de8a4a836d-20200217
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ljyj3t+P8mA3ctjT5z3KXMuu7eotiYxj4ZmDblGxdoI=;
+        b=Qguyf5gw67dF/SHcQVRKUEqe7tcboBTZOYRFdeon+YPn05W7tenjDxCaTkIx7sgvpWEiMprqL4A0LojdueSgkxVJyswQwyQa7DsVYg6EiBACKJlabc+ydphIRCWTTfN1Zt0wW23R2A79LqoZAOp5qEprJmM9GigTVS6Jf/1LC7g=;
+X-UUID: 70bfc36711714ab68d6215de8a4a836d-20200217
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1482416248; Mon, 17 Feb 2020 17:36:01 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 17 Feb 2020 17:34:17 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 17 Feb 2020 17:35:36 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v1 0/2] scsi: ufs: fix waiting time for reference clock
+Date:   Mon, 17 Feb 2020 17:35:57 +0800
+Message-ID: <20200217093559.16830-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <559193885.5940015.1581822120282.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36 OPR/66.0.3515.72
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
-         =20
-Hope All Is Well With You And Your Family.
-=20
-I Am Mrs judith Compola, Accountant By Profession, I'm 34yrs Old, Working A=
-t The Office Of Auditing And Accounting Department Of Africa Development Ba=
-nk (adb).i Is Married With 1 Kids. My Residence Addresses No: 18 Avenue De =
-La Charles Degaulle Sects: 21. Box Postal: 01 Bp 5256 Ouagadougou Burkina F=
-aso. I Want You To Handle This Business Transaction With Me If Chance To Do=
- International Business.
-=20
-I Got Your Mail From Google Search. We Are Imposition To Reclaim And Inheri=
-t The Sum Of (us$5.5millions Dollar=E2=80=99s) Without Any Trouble, From A =
-Dormant Account Which Remains Unclaimed Since 11 Years The Owner Died.  Thi=
-s Is A U.s Dollar=E2=80=99s Account And The Beneficiary Died Without Trace =
-Of His Family To Claim The Fund And No Next Of Kin. I Want You To Stand As =
-His Business Associate And I Will Guild You Without Any Risk Involve.
-=20
-If Interested To Do This Business With Me Without Betray Contact Me Through=
- My Private Email Address mrsjd06@gmail.com With Your Full Details As  Bell=
-ow, I Will Immediately Give You More Details Of The Transfer.
-=20
-(1) Full Name: ............................................. (2) Country: .=
-...................................................... (3) Direct Telephone=
- Number:
-=20
-............................................... (4) Age: ..................=
-................................................ (5) Occupation And Positio=
-n:
-=20
-............................................... (6) Marriage Status: ......=
-................................................. (7) Gender:
-=20
-................................................................
-=20
-Best Regard, Mrs.judith Compola, E-mail Address: mrsjd06@gmail.com
-=20
-Am Waiting For Your Urgent Reply So That We Will Start Immediately, Sorry I=
-f You Received This Letter In Your Spam, Due To Recent Connection Error Her=
-e In My Country.  May Almighty God Bless You!
+SGksDQoNClRoaXMgcGF0Y2hzZXQgYWRkcyB3YWl0aW5nIHRpbWUgZm9yIHJlZmVyZW5jZSBjbG9j
+ayBpbiBib3RoIGNvbW1vbiBwYXRoIGFuZCBNZWRpYVRlayBVRlMgaW1wbGVtZW50aW9ucy4NCg0K
+U3RhbmxleSBDaHUgKDIpOg0KICBzY3NpOiB1ZnM6IGFkZCByZXF1aXJlZCBkZWxheSBhZnRlciBn
+YXRpbmcgcmVmZXJlbmNlIGNsb2NrDQogIHNjc2k6IHVmczogdWZzLW1lZGlhdGVrOiBhZGQgd2Fp
+dGluZyB0aW1lIGZvciByZWZlcmVuY2UgY2xvY2sNCg0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzLW1l
+ZGlhdGVrLmMgfCA0NiArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0NCiBkcml2ZXJz
+L3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5oIHwgIDIgKysNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hj
+ZC5jICAgICAgIHwgIDggKysrKystDQogMyBmaWxlcyBjaGFuZ2VkLCA1MyBpbnNlcnRpb25zKCsp
+LCAzIGRlbGV0aW9ucygtKQ0KDQotLSANCjIuMTguMA0K
+
