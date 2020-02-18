@@ -2,171 +2,192 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1492F1628AE
-	for <lists+linux-scsi@lfdr.de>; Tue, 18 Feb 2020 15:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C204C1629EF
+	for <lists+linux-scsi@lfdr.de>; Tue, 18 Feb 2020 16:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726442AbgBROkO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Feb 2020 09:40:14 -0500
-Received: from a80-127-99-228.adsl.xs4all.nl ([80.127.99.228]:51262 "EHLO
-        hetgrotebos.org" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726116AbgBROkO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Feb 2020 09:40:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=wizzup.org;
-         s=mail; h=Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:
-        References:Cc:To:Subject:Sender:Reply-To:Content-Transfer-Encoding:Content-ID
-        :Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:
-        Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe
-        :List-Post:List-Owner:List-Archive;
-        bh=hllLoCyM9RmK7u/rPo0DwB939Hm+Eyw+3efkMrghnmY=; b=pVxiJO6d9ZEI422RObEcVc8TMW
-        dDURo5BgGRHeVFnVGBzv2seORa+1r1KstBytKEMeHO9z1nHMY9VDcIHs6RR1A9aG6HDUu8Pku0WA/
-        ByW+AUxZUG1Jwl1PuzNA6rpQamOH5xfCy/Ao/p8m0FSyu6QPVKr6vEZN+jX0dMA48yBMCRVObYRCd
-        rRl/4oUBgXIzik98UXKO0IGRWFoihqGykX9OfuYf+v9ew8Npw+rH3NWoy4XH1zaX5CiQ30hazCL4L
-        Y0XUE6BSC/6l5DWpOx3S+FARkvvfO2iZCXf/VPjFeMhHtfRWRbh5EfwgfDP2F7wFOW7gF6IcNEa7D
-        CRaZJ82g==;
-Received: from deepwater.fritz.box ([192.168.178.25] helo=[0.0.0.0])
-        by hetgrotebos.org with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <merlijn@wizzup.org>)
-        id 1j442l-0004Bt-LR; Tue, 18 Feb 2020 14:40:11 +0000
-Subject: Re: [PATCH] scsi: sr: get rid of sr global mutex
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, Merlijn Wajer <merlijn@archive.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-References: <20200214135433.29448-1-merlijn@wizzup.org>
- <yq1a75gmpsv.fsf@oracle.com> <yq11rqsmp2s.fsf@oracle.com>
-From:   Merlijn Wajer <merlijn@wizzup.org>
-Autocrypt: addr=merlijn@wizzup.org; prefer-encrypt=mutual; keydata=
- mQINBFESzAkBEACuLy46KxYl4IfKuNhz3UWXSlA1GqMwgOhGUJw/ineKS6T1FiRqcbhO/Zj8
- oWobO5Mu743AY8PQtH9eo28jnz6Pg0vQLC2y6+3mtO4Ud+z+l06RadvgCH5F/6ibUqAdU2Eu
- CoyN6dk01zCyh5VRWqoWQsNkN9n5jdcbq9ZNhpOsUIYTIX/JVqMiZuwYS/YodDCbuBRk7isT
- frXHfbrXRzb/Fm6RfoFNcfL+wlqX62S55uWJdmjgwFd5sK4D/n68wjrFObi2Ar8Q2AYgi5Ib
- Qh6GNS7jHyDm5rT5EdMmU54ZoHvm7Xme5piaI68u8P8Zye/A7KV6+21OKVOaY+htlAtdwQNX
- ING4hp2vOsHA5u5CAzJXlgg76H5N2u5I0UWjWiOBHIFdXTnKOeFal7vXn19bgr/0ENlrGC3w
- GKVXLRJ5awDOe/oCaNeLqsR5Gjx0KFbChAP81lQwBqeBBTgvI1PVxALlqI7gCIovX1zn9LOb
- g+3dufkhlHI2pZBskDgDe9BC6HGiGqnzmpU1W/XElkhAHM7SdUK3Y8G2/uB/NpilFAAfrnVV
- pu758l16EZK3u3IlrKqDxEc/SUQVCw1d1+TW0j578Y3dAQeORRW4xyq/cAEqlBG+bMOZIzIV
- a0U6ZhGtHus8rEjKDzNDNRHciucMWzOelo+gcDzglxCsxDktrwARAQABtCJNZXJsaWpuIFdh
- amVyIDxtZXJsaWpuQHdpenp1cC5vcmc+iQJWBBMBAgBAAhsDAh4BAheABQsJCAcCBhUICQoL
- AgMWAgECGQEWIQQYcKqLCwGZwniBFjU5zBw8bxLkyAUCXEN38gUJDvMS6QAKCRA5zBw8bxLk
- yA3lD/9gptHeZ64HBHBG/BFrsyOAfYBRr3CEK3hIAooXlmgyQlK3AK1TZCfS+u1P8ZoIGHT6
- mEFVoVfj1hHnpMv1TYaQOu7ZbmOpX+J96nP/35OOnAkbWorKuIppK/EF63Rujxe4NEMBlPdf
- Eh/bxGmsYfZYsq1pa53oLGGT52urRnfABVDqZYhAN00Mx64cmn+FI8QyC0qD9VzgyZClAB5R
- WH9DdBqoaOJanVYZPon8LRUkCKjKeoj4KvBO+f3VCz7yrLSxKdMAP6OcsanVBqMMOwLMvsy7
- n/ykI9HsWwJANStpZQyjlwMLK6i/HFZ8giQlw6p3x4O8oAZWvi9gh5RrD77Eqv014unGhu1H
- OKNNLSb1SgiJtowPYeTjRynvUV0awXrfUQQ2mB2msLzN0rF7qDJWdh+/UypKAQX6/AbI3Uz3
- ny5Dlb8ImM3rN2Ee/W/9g4A3OPGlg3aWw8A/av115ORRCkiraPRrW3i+0pyfIrddbTNMXH9q
- QLgWpxh8OVxpIHNJi9riis9JS7tMSHg2XWESGdJOCUvTPqosW+d6bwUtVQkzwBB3R5yXUihq
- nCRT9cCr1RL59zTTX8YDEet/j8oYNdjSTEuS5hcwYpZtm0eXJ1EocIBWM2AZ3k8dvcSmuF7O
- N5VVaWzo9rChWfBtLu18xTXJkM6yDntPTcRvHgMX4bQtTWVybGlqbiBCb3JpcyBXb2xmIFdh
- amVyIDxtZXJsaWpuQHdpenp1cC5vcmc+iQJTBBMBAgA9AhsDAh4BAheABQsJCAcCBhUICQoL
- AgMWAgEWIQQYcKqLCwGZwniBFjU5zBw8bxLkyAUCXEN39wUJDvMS6QAKCRA5zBw8bxLkyLWV
- D/0XiNlVgrZtXd7os1DQdbh0ruGCMDnr0GP8/ZI9tQgL5oxAaWnFMrTXTDfHj6jaV8wtCz59
- U7f78IzOR2RgbqrpEOpCCCPsLj1RHl19XNFb4oa/GeUBwWgUqhAyOsjfxVLleeZOIcNKItJI
- b8fOKAZLhxCom7jTMcEjgMy29+6zemZ5jLTN3zZYnaYtHNQpagqZI3AGY1Suhfs8Pqtne1Of
- ASgnZcR2/ZyAhKo3OQwjEE9pJQExl2hvyZiY+xUtNloHm5pqKHuW5C/9MdRuFf0QBSYYlXoK
- K11AS7fVRMDEWGFB0N4lKiTM+dFM1Zqxg4kDjVlLXoXUPTmTwcgen+ESFbXL98FR+br16Fay
- akDEYvsWrZIYIz3RVg+mc/3OqW3PzCClbYwN2oP2nTL3m6EzX2PuBib2s3NXB9zyyL8rtWkJ
- ESS9dRGRj/WSk81RSlN16Oe2mPpWj3kc/mhcH0dIjnM6MEyOMzmbWihfLR+zsmVt/tgk0aj8
- XGsCFGqIZUgqgL7JWr82iX4ybIgBQlX3gm8vJlOn3ABT1z6Y4sTKZmE4K+k06IJzN2Behcrz
- y57eXkBfYbVBwnLWDa8SSquT3e3D32IToSN6Jth1JLKpQyI0MKyQj9m9b/q3Z9zGjAdtNx2I
- ceJqThHa49uu+FmmAzhpxEr8XTGDm9ymCYS3dLg4BFpzJ4ESCisGAQQBl1UBBQEBB0BcvCMW
- Llc6uYCg7rFkzsdhJ9gZ3jGYsvmv/hbAaNbeZwMBCAeJAjwEGAEIACYWIQQYcKqLCwGZwniB
- FjU5zBw8bxLkyAUCWnMngQIbDAUJCWYBgAAKCRA5zBw8bxLkyEfVD/42KdrEd03e7FL4uDBJ
- AqCd+UT+KrzDR0bJ/swceoLscY/kaTVKeMARkRZXoQzoII8cuVPSp7Rby8TJfajpEALnJYZ6
- GeHo/39y9RXcrREymOhO60GN4vCcf6FE6/FSMLtJHCwmHf/9gqq+m6NfYb46zZZrKZHQHrim
- fisodLUo0YB4XEKoUmm3jSfV8U5QnjomD0c047yukgW0bhMSSXXebobwFHH9Wvp03v6wBWB0
- zCaJv8CsbeXaWU9qBZEFZBU+FOMWrKOzSQ+9928Tf4bBCK96lamt6OVkWlIlMg7wVtCZSs7V
- 2iup9pCYbZmnqIaQ5Z4KsGOBmXcPcWg6Gg2zIZDZtJEndQQrYEN7Z1X2Fv3dfJdtTi4ASMR6
- jhOqCX16HdD6Le9XOpQQFwHp/lZ1W5Tu39qopYV0xdJ6Nf04LNRqPsDqRt0fFhHoWU7Etp1n
- 9DaAlmrAZTXep1ykICbaTjzsVl1+8AV1X04is77FDYuszi3t3626AGDd1t9Wv5kVUzGyn09u
- CiROFNA1FxYtf+2/rk2FH31fs1GIpXHQiIzur1bsGixuCG69Mcg6vvaS6MmNUHNqu1y8+NVs
- aHpboQ7rwi7Wa1FFo7fOPpx3DYk97g7wer5LXYeiV0+YqWciORS0YGvEDau7s7fUAwg2jW2d
- CfeKkLdnxQmAjT6Ly7gzBFpzGIUWCSsGAQQB2kcPAQEHQHk/Nn/GlVbuKElETzabljAL7xwY
- KLyw2Y+kvYdtoU7yiQKzBBgBCAAmFiEEGHCqiwsBmcJ4gRY1OcwcPG8S5MgFAlpzGIUCGwIF
- CQlmAYAAgQkQOcwcPG8S5Mh2IAQZFggAHRYhBEzktPs1ssX3Jvpr9QY3T2vKcrxaBQJacxiF
- AAoJEAY3T2vKcrxaE/MA/iQqG4FEijC14eFos9H+c1spHnceXAa8navXJRCShbz9AQDeleOk
- zXwcuoJMF9/3NKPFmMnYqCmqcMqftnD1xzOID0pnD/0UeS7mT41dxzKMsacFqaSbraj3s7dg
- pZ3ApopOcgXZTS5DI3x7jCDj/jhltuAhZf7Vsz3PBLgNs0Ay9eYtBUbzUND165B7jjDKATfb
- vm/LJohftKYpLVMn/fWsH5XxzsjUHMHrmFQGcb3hwADeCmRM/1NUykdwI07pWwddyAI2wbqS
- HqyI2bHHZMPkuSnj5X/9zmWRYJPkYX4EWWK5Vyv3ynQdPZSn+fukNSVILV/ku7jtZ+NvsbdV
- YimlSKtxQL4Y+xcC2YKf9nhWDMn5ouckoTu9mHW30/da8Ta2sISmP28BzO1F+RJYcQ1L5Qmq
- heKFOvKG5phFgmuspZaJvB+0PZAJUA3hm9Zo0mSG+Hxf0U9Wc10dAKe4QnuPUedPPK7FeIlR
- Ahxr7uokP2QIjS6ZYbdVauSUop5w4nQvMp65NvvejeGnOTR4SDkwovQKSzvbyUpoulNPgkVO
- +q2smvVAO0X1gAu0TI13r/s0TUk0shKmPtjGxUocyNoX53FCOXyrqFFzfF0RR/kZyHqNvNun
- auuXY5GfVPDcxjPwzm4Yjj4YvbfRLpAiQOOciMgiJlbn4A+BhvSSS54scJMln1Jh7KkDgeqz
- aP0nj9EfQy1vMXGp1i0sYzhMKaM9nsmV/q1Iisqc8ojjpmR00jVnz/aSX3eHexXOlB3Y6Qs+
- /XslHw==
-Message-ID: <02f9ad3c-632a-dbfe-8cca-3a8c61d77923@wizzup.org>
-Date:   Tue, 18 Feb 2020 15:41:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        id S1726647AbgBRPzx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Feb 2020 10:55:53 -0500
+Received: from mx0a-00003501.pphosted.com ([67.231.144.15]:40140 "EHLO
+        mx0a-00003501.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726403AbgBRPzw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 18 Feb 2020 10:55:52 -0500
+Received: from pps.filterd (m0075552.ppops.net [127.0.0.1])
+        by mx0a-00003501.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01IFtpT0027302
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Feb 2020 10:55:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seagate.com; h=mime-version :
+ references : in-reply-to : from : date : message-id : subject : to : cc :
+ content-type; s=proofpoint;
+ bh=kSDqbBAaWJOPcd7RVa5GGBLqUbqCfZEQDaf8+NwB1Nc=;
+ b=Pd8TlXxrRMOfmLTHuJsp2iJVyPTeke5+u0mwVxNXf+bKYpNlKQ2PwniZy8NOzupiV7dq
+ tNzJLOM5TnpewPQNA/ttBAuowmjz8MqhaUS3CUr4I4W/W/3LgXRkMr/iHH92HcuVbF9T
+ xIHqI03bScVyktpfGp1E902Koz1iK4e8rDzw/xga1pnGnxqiAIXl83UZltbxxPaGo+tV
+ Zm19QrO4PLKa4xg3hmYxFEy7Q9fW/aX0MTNx0PnmBAhTL2E812PkXNYiMuHY3lzyxD0C
+ neP1cfO/meSy1IjFye62pA+O1Wx0LMkIa3pKYE27evlXwBo3B2gKZXEE/dzyPt6ObHnp YA== 
+Authentication-Results: seagate.com;
+        dkim=pass header.d=seagate.com header.s=google
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
+        by mx0a-00003501.pphosted.com with ESMTP id 2y6xxhbv1s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Feb 2020 10:55:51 -0500
+Received: by mail-wm1-f71.google.com with SMTP id b205so245636wmh.2
+        for <linux-scsi@vger.kernel.org>; Tue, 18 Feb 2020 07:55:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=seagate.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kSDqbBAaWJOPcd7RVa5GGBLqUbqCfZEQDaf8+NwB1Nc=;
+        b=Ona4IlGEcWZfh6ckDkpNYiNAcM2nQ7bwfAeS48H8KPa2P0iukl4xAXOENVc/XNfbrn
+         afmuQNGns01izKW0uYNYYIfCtdkYzZxwtAbcUBQzl3HjMoJxZ7jm7BEKW+DILBxfTLpT
+         w0h07QcLENsXoz3Omv9EeIxaHIThy3KPJzWqPXj1BHhrRCV18cn8LhgZs8WRT428OUt2
+         3JXrKNcIAWrUp1YAN1a5QG/0xKYJkyYVSsp5d7FM50esKgIk0gmnKrj77yAKYjgUqKzT
+         fuXxdo0J7ApMUdMGmiL8JXHuVHddwvPhzf6yobCQtWTQzVrQzvjwmGDiQkIt2O/PRWcM
+         tB8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kSDqbBAaWJOPcd7RVa5GGBLqUbqCfZEQDaf8+NwB1Nc=;
+        b=doVmBA81/kpE1zGoPohe+ri+OxaHPLJeixXvbj5oL9qNBtG8IrPoa04KJrQpEgJXPn
+         ni05TYLb/qUBg7JaWrAVRUFLSxCi9Es750XOVnn0FdbvEmY7igQHPpH+utRbBH8AXNQF
+         830uqVbc1cqrJMwSM/b2Y0DSihBKwndS+vaY5su53n7hb6b4s2yMIlRTWDXaM1ER+IGy
+         sRnnVqkfs6THhWmjE1paIirPLBbKERBlkVmHTTM1U8JjYrW1Ayuh2dD5W/TakpMtZlK6
+         hW4nGpFMSQg7fVGDWY8yGEovMl+nVeZ6NBudlPtPjuBjzrz10Knb1CywsARWbRw4VPPN
+         uWPA==
+X-Gm-Message-State: APjAAAW5d8kM+yDKaodtJKTsgaq0g2/6tUWvjhdpBtO+U14uLmkvvBtV
+        /p9f2Sr/XEJL7Q24oE9DLfwOR/JOW+orFRDVM+H3KXSLM6xn/jz4yHbVQcFop8eeQBVqRivGDvY
+        C4LlV+HJQB2xFFd/DsoXvLeRmYz6mDYGoT9IZy6QUdFBm5r66TLlcPXRW6b9nF/g=
+X-Received: by 2002:a7b:c152:: with SMTP id z18mr3848786wmi.70.1582041306535;
+        Tue, 18 Feb 2020 07:55:06 -0800 (PST)
+X-Google-Smtp-Source: APXvYqx7kjtcwQBU6hxW2ktpZzuRb16b7GW1dpbZK+0FbadMiM6j4qD6QT740JsUZrXMIpAxofZZ3R6I5bUS+Tr8rZ8=
+X-Received: by 2002:a7b:c152:: with SMTP id z18mr3848736wmi.70.1582041306110;
+ Tue, 18 Feb 2020 07:55:06 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <yq11rqsmp2s.fsf@oracle.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="ss2PJczctqRhK1AxEE5q8BDZsVzTIB80u"
+References: <CANo=J14resJ4U1nufoiDq+ULd0k-orRCsYah8Dve-y8uCjA62Q@mail.gmail.com>
+ <20200211122821.GA29811@ming.t460p> <CANo=J14iRK8K3bc1g3rLBp=QTLZQak0DcHkvgZS2f=xO_HFgxQ@mail.gmail.com>
+ <BYAPR04MB5816AA843E63FFE2EA1D5D23E71B0@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <yq1blq3rxzj.fsf@oracle.com> <CANo=J16cDBUDWdV7tdY33UO0UT0t-g7jRfMVTxZpePvLew7Mxg@mail.gmail.com>
+ <yq1r1yzqfyb.fsf@oracle.com> <2d66bb0b-29ca-6888-79ce-9e3518ee4b61@suse.de>
+ <20200214144007.GD9819@redsun51.ssa.fujisawa.hgst.com> <d043a58d-6584-1792-4433-ac2cc39526ca@suse.de>
+ <20200214170514.GA10757@redsun51.ssa.fujisawa.hgst.com>
+In-Reply-To: <20200214170514.GA10757@redsun51.ssa.fujisawa.hgst.com>
+From:   Tim Walker <tim.t.walker@seagate.com>
+Date:   Tue, 18 Feb 2020 10:54:54 -0500
+Message-ID: <CANo=J17Rve2mMLb_yJNFK5m8wt5Wi4c+b=-a5BJ5kW3RaWuQVg@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] NVMe HDD
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-PolicyRoute: Outbound
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-18_04:2020-02-18,2020-02-18 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
+ mlxscore=0 phishscore=0 suspectscore=1 malwarescore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2002180120
+X-Proofpoint-Spam-Policy: Default Domain Policy
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---ss2PJczctqRhK1AxEE5q8BDZsVzTIB80u
-Content-Type: multipart/mixed; boundary="1h7b2dFr87mLIl72K3vSp02SDsmxUDEhG"
+On Fri, Feb 14, 2020 at 12:05 PM Keith Busch <kbusch@kernel.org> wrote:
+>
+> On Fri, Feb 14, 2020 at 05:04:25PM +0100, Hannes Reinecke wrote:
+> > On 2/14/20 3:40 PM, Keith Busch wrote:
+> > > On Fri, Feb 14, 2020 at 08:32:57AM +0100, Hannes Reinecke wrote:
+> > > > On 2/13/20 5:17 AM, Martin K. Petersen wrote:
+> > > > > People often artificially lower the queue depth to avoid timeouts. The
+> > > > > default timeout is 30 seconds from an I/O is queued. However, many
+> > > > > enterprise applications set the timeout to 3-5 seconds. Which means that
+> > > > > with deep queues you'll quickly start seeing timeouts if a drive
+> > > > > temporarily is having issues keeping up (media errors, excessive spare
+> > > > > track seeks, etc.).
+> > > > >
+> > > > > Well-behaved devices will return QF/TSF if they have transient resource
+> > > > > starvation or exceed internal QoS limits. QF will cause the SCSI stack
+> > > > > to reduce the number of I/Os in flight. This allows the drive to recover
+> > > > > from its congested state and reduces the potential of application and
+> > > > > filesystem timeouts.
+> > > > >
+> > > > This may even be a chance to revisit QoS / queue busy handling.
+> > > > NVMe has this SQ head pointer mechanism which was supposed to handle
+> > > > this kind of situations, but to my knowledge no-one has been
+> > > > implementing it.
+> > > > Might be worthwhile revisiting it; guess NVMe HDDs would profit from that.
+> > >
+> > > We don't need that because we don't allocate enough tags to potentially
+> > > wrap the tail past the head. If you can allocate a tag, the queue is not
+> > > full. And convesely, no tag == queue full.
+> > >
+> > It's not a problem on our side.
+> > It's a problem on the target/controller side.
+> > The target/controller might have a need to throttle I/O (due to QoS settings
+> > or competing resources from other hosts), but currently no means of
+> > signalling that to the host.
+> > Which, incidentally, is the underlying reason for the DNR handling
+> > discussion we had; NetApp tried to model QoS by sending "Namespace not
+> > ready" without the DNR bit set, which of course is a totally different
+> > use-case as the typical 'Namespace not ready' response we get (with the DNR
+> > bit set) when a namespace was unmapped.
+> >
+> > And that is where SQ head pointer updates comes in; it would allow the
+> > controller to signal back to the host that it should hold off sending I/O
+> > for a bit.
+> > So this could / might be used for NVMe HDDs, too, which also might have a
+> > need to signal back to the host that I/Os should be throttled...
+>
+> Okay, I see. I think this needs a new nvme AER notice as Martin
+> suggested. The desired host behavior is simiilar to what we do with a
+> "firmware activation notice" where we temporarily quiesce new requests
+> and reset IO timeouts for previously dispatched requests. Perhaps tie
+> this to the CSTS.PP register as well.
+Hi all-
 
---1h7b2dFr87mLIl72K3vSp02SDsmxUDEhG
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: quoted-printable
+With regards to our discussion on queue depths, it's common knowledge
+that an HDD choses commands from its internal command queue to
+optimize performance. The HDD looks at things like the current
+actuator position, current media rotational position, power
+constraints, command age, etc to choose the best next command to
+service. A large number of commands in the queue gives the HDD a
+better selection of commands from which to choose to maximize
+throughput/IOPS/etc but at the expense of the added latency due to
+commands sitting in the queue.
 
-Hi Martin,
+NVMe doesn't allow us to pull commands randomly from the SQ, so the
+HDD should attempt to fill its internal queue from the various SQs,
+according to the SQ servicing policy, so it can have a large number of
+commands to choose from for its internal command processing
+optimization.
 
-On 18/02/2020 06:39, Martin K. Petersen wrote:
->=20
-> Merlijn,
->=20
->>> When replacing the Big Kernel Lock in commit
->>> 2a48fc0ab24241755dc93bfd4f01d68efab47f5a ("block: autoconvert trivial=
+It seems to me that the host would want to limit the total number of
+outstanding commands to an NVMe HDD for the same latency reasons they
+are frequently limited today. If we assume the HDD would have a
+relatively deep (perhaps 256) internal queue (which is deeper than
+most latency-sensitive customers would want to run) then the SQ would
+be empty most of the time. To me it seems that only when the host's
+number of outstanding commands fell below the threshold should the
+host add commands to the SQ. Since the drive internal command queue
+would not be full, the HDD would immediately pull the commands from
+the SQ and put them into its internal command queue.
 
->>> BKL users to private mutex"), the lock was replaced with a sr-wide
->>> lock.
->>
->> Applied to 5.7/scsi-queue, thanks!
->=20
-> Doesn't build. Please rebase on top of 5.7/scsi-queue and
-> resubmit. Thanks!
+I can't think of any advantage to running a deep SQ in this scenario.
 
-I've sent out a new (v2) patch, based on `5.7/scsi-queue`. I've sent it
-out using my work-email for proper attribution, and now it also matches
-the Signed-off-by.
+When the host requests to delete a SQ the HDD should abort the
+commands it is holding in its internal queue that came from the SQ to
+be deleted, then delete the SQ.
 
-Sorry for the hassle.
+Best regards,
+-Tim
 
-One question -- I would like to put in some extra work to get this patch
-(or some version of it) sent out to stable trees as well. Is there any
-additional work I can do to get that going, or is it a matter of
-emailing the right person/list?
-
-Thanks,
-Cheers,
-Merlijn
-
-
---1h7b2dFr87mLIl72K3vSp02SDsmxUDEhG--
-
---ss2PJczctqRhK1AxEE5q8BDZsVzTIB80u
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQRM5LT7NbLF9yb6a/UGN09rynK8WgUCXkv3kwAKCRAGN09rynK8
-WmkGAQCtv8Y4royWjK/XfgIlc/0h6WlkrndRw5oZvuvkLG4AvgEAt+7wpCd0l3eu
-DyO1931vuvVNAJxk6XpDeCsINWeKSgs=
-=0JI0
------END PGP SIGNATURE-----
-
---ss2PJczctqRhK1AxEE5q8BDZsVzTIB80u--
+-- 
+Tim Walker
+Product Design Systems Engineering, Seagate Technology
+(303) 775-3770
