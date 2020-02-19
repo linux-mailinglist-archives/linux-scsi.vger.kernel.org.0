@@ -2,70 +2,130 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB62D163AAA
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Feb 2020 04:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C81F163D17
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Feb 2020 07:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbgBSDCj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Feb 2020 22:02:39 -0500
-Received: from sonic317-27.consmr.mail.bf2.yahoo.com ([74.6.129.82]:37383 "EHLO
-        sonic317-27.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728196AbgBSDCi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 18 Feb 2020 22:02:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1582081356; bh=EoSOra7a2saN4Rx9MPg7CnNKAW+5S8RlMnV+0g1PH1E=; h=Date:From:Reply-To:Subject:References:From:Subject; b=BiX8ahnRmPK8cadSBG4tyrkSqwjZIfiWj1w4JR/hsmkTKps+9OmJSjrH/V0LY+iE3fxfbk2VOpYJM6FejXAPGTsX2M9ARxC4ZiGXdiIw9bjXK23iHmj3Kng8KNa+31FeDQl16AxyzmPEKiLCpyU6XxfBVCnfTl3OAh/k411DaI6V6NiBNvHnCnvSYwDbjDfyXy7ZRpzh3d6s1coUERcq0cXNe5zLpv8gAlwuMg3Y6e5JDoQfvV3OQ7iEEd3VGTkmdvh6sTZg9QBvNEAzYQH5ifnEY4iShw8WyCNNSPe/VkuEqVeVkjGQW6nhUuhwgSJJzyBGRIWjMqgIgpWQEe4EUA==
-X-YMail-OSG: ZvaGY5UVM1kc0cLLk9X6svFfqeg_QIRz2JZUFUmz1NE5kW5BQhe6mdBmuW427V2
- HQkkLBbwVl.egNdkkruWa9pAlNmrxUV1G210kH0QwbQDdz22G.lCJavXFq7zxonLlCZDc60JOj3G
- enT68L8bhEIo.KBufvmIzreSIt6O5kB1le_MnhlA1XkWy_sLg7N55eJWTrXlKlLp0yrc5z8k9k60
- TySS2_h2FqOzXDu_IBOe6ux2_zNZQ0yv_P943GgcImXe4vVq3MGOWqklvFzS.bJLlPyLvM_q5jrx
- LA35s_DgR1NfReVySVqD9q.yDiz0vhtzFbnJwtVTPqVq3Grqhyooe.atlNB4yd223MCCPPMBSGNC
- eQY0waG5L3ASs38qSBE6_hc7MkujbMHP1BjHQNAsKuDIswOBPYaBhZo3yfrEdBvBUHbZylJo4sgx
- 4CF1JQPubQwG11CPx37ZDcqLl9v2H_0qQAlGHs3IGVetCRoXmm7eVz11Tup8EWco6DVx6_IQRiwj
- KTEzQqRkQwBdX2S7.ge575iOwdn8Ol0WxD.LgIMP6eOPNLAIAfdoWhY4QFgmqthetMul6njnm5yb
- ZZCMs3ZOtBzLnmgwWQ3LVjilUm7HLiirqyMaSm1iT6MZr84MNhmXJhj97JVUBIEXGqx1f.8LPvVw
- JY6WBCZB9mIdSVNwGfhyUYUdTMsjDyKRrdnyiv1L617D6jeYuSLbfszuEME1XxSoi7LfhnB3BhfS
- Mvx1sP.OXGB6EAXuw9jWuMn82dW26D0VDEqA0R4T5jWFKfsgwZFIpXyD.MX9Ru3RvY2aC4y2Q98u
- XNnEjv8Il7Elh_iLpl7f7e6YvgL2W1.QSsuzJcGoiQH3q7ADaQE0gEZx24tmL0HPfUOC0UxWKs1w
- _kfiu.hRE6.sSxF_pDUpuMobIoLEi1WGUCx.L0MhB.hUn6A8YAklsuG6cwj_cfaNK09IWkmHKgrC
- 2F2wYtCfI8MhYYHxr7V6xwHYcrSGq8KwRBpo_uFd8teWG45rRVJVTQQoXPD1Bm5Kp_uJTxUnsCrj
- .UG.hE4.o50IQNTMVpbNtSOWH0nKpmncvRPJOFjhFkmpjeX5N_JQQLfrqR6vrDD9aO3i0z15W.gh
- 2BS6ukDs05IXJM1V1ntQk4PR3arsVbM2vHntJRCgP3.O45u3k2o4l1hyZeXb65zw50byv19F8r_5
- zK92Fd2xQpETQaPUXTby0Fw72k.YEotyG8w.IIN2ESSX8wG65UQ5bns2PgQ3Gb4URE0Haec7HR4w
- qVkjh40nl405oAtwSWuAN82O8NvYmR_fqG2YbSTKJFPXR9sqUpW92Z.OYl2u.NgqZur0C0ClbKgi
- 0
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.bf2.yahoo.com with HTTP; Wed, 19 Feb 2020 03:02:36 +0000
-Date:   Wed, 19 Feb 2020 03:02:32 +0000 (UTC)
-From:   Mohaiyani Binti <mohaiyanibintis100@gmail.com>
-Reply-To: mohaiyanibintis100@gmail.com
-Message-ID: <1132317950.3564766.1582081352266@mail.yahoo.com>
-Subject: Dear Sir or Madam
+        id S1726156AbgBSGiD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Feb 2020 01:38:03 -0500
+Received: from esa5.hgst.iphmx.com ([216.71.153.144]:36923 "EHLO
+        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726106AbgBSGiD (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Feb 2020 01:38:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1582094283; x=1613630283;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=c+I+TDP9jK+0KGWQwetdfzzSxOmBCdAV7+qo9+XlbkM=;
+  b=aZal/8jw0XMWHQMtlKkuDR/RD8Hszmr7t71ctrnM8WgYsUhkd7lBz1Ii
+   0lK2AhqK5HESyzmGwPk83l4hjxgsjuNYCMwia9/Ldzt2ns2STcm/q8QR0
+   EjqkxM9QirO9x81vvp581j3noFZwUzG0WuYnm3ufSGau7usKzayKGljrU
+   eEZZ6Ahz5zEi8CjEmX84e+ZFlvfZBZ6tSgzyrUNNjnctJjzzSqxLAV4rB
+   ku6ABFGXROn6mluPLUcqdg6QP3j8odIU8dD6XiVvQyIBhYDjvi+5eml5K
+   g515PUYzor8FemDfOWFCY2STGQD234xOtXl84L6Ppks3HnjRPbjkEXKDd
+   g==;
+IronPort-SDR: YKN/O0atSSd0lmMLCpwv2+ALYu1YSg5rFGuxquVLihUEaYtgNci5ESaasp+7XMb1TlAZTuymMv
+ 7zkSGsRkODCq4vmO+sdtGBkY0iwARRarY987IJvHvmCRevhRVoVCp1oHJOPC7ZxU1cILBnIL4b
+ KusNVwLAZKMabWlu1q3UTzHl1pDZbJXMM/wtXK6FNxSSiBkjrYd5XtZoVuMXkxMrSNg+kJwSaD
+ 55+ecGqAVPkEnGmArj9diYy9tHE972r8uxjWt9nC6o3xtGYwohPTMxIPqy0td5URtsGGbwmweT
+ ycA=
+X-IronPort-AV: E=Sophos;i="5.70,459,1574092800"; 
+   d="scan'208";a="130687642"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 19 Feb 2020 14:38:02 +0800
+IronPort-SDR: HDFFMLWFnLXuVQx1iRhxu+BIQtiWjGsJmikJiClhYSYcxxq6GxRpi/s+7pjRVLHVY5nSR7tE8J
+ 44xUbGSNCLN84tV62dzxYSZjOSsJ2e8of96d8jhMDV+DphPe3FXUI7xF18uRbf5VG/160oH225
+ J5TyMxx3C7ryfg0Zr6Ok01HyK5JA8gbCRtUlZP6FU4imeygu97udLQmzqfpqJFv9V04NZ/CvTF
+ qVgByT/E/Vk53ziyrunG8WBPOjMaJNSdB2mE5AOY2VvUoRCmDyLyjnApAU4pkqyYZPwXu5VNTS
+ 2TtsOq08czzrTbxnnFUe9qQl
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2020 22:30:39 -0800
+IronPort-SDR: Ll5KS+d5mRZqhgrHRyXjFumXMVkIRay4Pe2/8gF++IY1WVHCr4aOzOIts5bKTQdh9gpiOIpqKS
+ dv/qTlUaDBKXUhfQfEyxSG1WbeRvlDDPS+iHHtNipiuLna7elWVs6CE+Zy0muRifFga7CAipce
+ azmnt8dWVDK3Xdl5bR9HviS7AxxBNpOQyKqGvVHdISglYyiBPNrIa7IC62MtBLvdIft25YAt+o
+ WdDIfnAjcW0EtfJCPWwClC+6bSQInoqYokigO1I5+1B+/gYfuAc3RhVzQZs+P3myNiQV2jsHkD
+ j5o=
+WDCIronportException: Internal
+Received: from washi.fujisawa.hgst.com ([10.149.53.254])
+  by uls-op-cesaip01.wdc.com with ESMTP; 18 Feb 2020 22:38:00 -0800
+From:   Damien Le Moal <damien.lemoal@wdc.com>
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH] scsi: sd_sbc: Fix sd_zbc_report_zones()
+Date:   Wed, 19 Feb 2020 15:38:00 +0900
+Message-Id: <20200219063800.880834-1-damien.lemoal@wdc.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1132317950.3564766.1582081352266.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:73.0) Gecko/20100101 Firefox/73.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Sir or Madam
+The block layer generic blk_revalidate_disk_zones() checks the validity
+of zone descriptors reported by a disk using the
+blk_revalidate_zone_cb() callback function executed for each zone
+descriptor. If a ZBC disk reports invalid zone descriptors,
+blk_revalidate_disk_zones() returns an error and sd_zbc_read_zones()
+changes the disk capacity to 0, which in turn results in the gendisk
+structure capacity to be set to 0. This all works well for the first
+revalidate pass on a disk and the block layer detects the capactiy
+change.
 
-I am Mohaiyani binti Shamsudin, who works in ADB (BURKINA FASO) as a non-independent non-executive Director and President of AFRICAN DEVELOPMENT BANK.
-During our last banking audits, we discovered that an account abandoned belongs to one of our deceased foreign clients, the Mr. Wang Jian, co-founder and co-chair of the HNA Group, a conglomerate Chinese with important real estate properties throughout the US UU. in a accident during a business trip in France on Tuesday.
+On the second revalidate pass, blk_revalidate_disk_zones() is called
+again and sd_zbc_report_zones() executed to check the zones a second
+time. However, for this second pass, the gendisk capacity is now 0,
+which results in sd_zbc_report_zones() to do nothing and to report
+success and no zones. blk_revalidate_disk_zones() in turn returns
+success and sets the disk queue chunk_sectors limit with zero as
+no zones were checked, causing a oops to trigger on the
+BUG_ON(!is_power_of_2(chunk_sectors)) in blk_queue_chunk_sectors().
 
-Go to this link: https://observer.com/2018/07/wang-jian-hna-founder-dies-tragic-fall/
+Fix this by using the sdkp capacity field rather than the gendisk
+capacity for the report zones loop in sd_zbc_report_zones(). Also add a
+check to return immediately an error if the sdkp capacity is 0.
+With this fix, invalid/buggy ZBC disk scan does not trigger a oops and
+are exposed with a 0 capacity. This change also preserve the chance for
+the disk to be correctly revalidated on the second revalidate pass as
+the scsi disk structure capacity field is always set to the disk
+reported value when sd_zbc_report_zones() is called.
 
-I am writing to request your assistance to transfer the sum of $ 15,000,000.00 (fifteen million United States dollars) at its counts as Wang Jian's last foreign business partner, which I plan use the fund to invest in public benefit as follows
+Fixes: d41003513e61 ("block: rework zone reporting")
+Cc: Cc: <stable@vger.kernel.org> # v5.5
+Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+---
+ drivers/scsi/sd_zbc.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-1. Establish an orphanage home to help orphaned children.
-2. Build a hospital to help the poor.
-3. Build an asylum for the elderly and homeless.
+diff --git a/drivers/scsi/sd_zbc.c b/drivers/scsi/sd_zbc.c
+index e4282bce5834..f45c22b09726 100644
+--- a/drivers/scsi/sd_zbc.c
++++ b/drivers/scsi/sd_zbc.c
+@@ -161,6 +161,7 @@ int sd_zbc_report_zones(struct gendisk *disk, sector_t sector,
+ 			unsigned int nr_zones, report_zones_cb cb, void *data)
+ {
+ 	struct scsi_disk *sdkp = scsi_disk(disk);
++	sector_t capacity = logical_to_sectors(sdkp->device, sdkp->capacity);
+ 	unsigned int nr, i;
+ 	unsigned char *buf;
+ 	size_t offset, buflen = 0;
+@@ -171,11 +172,15 @@ int sd_zbc_report_zones(struct gendisk *disk, sector_t sector,
+ 		/* Not a zoned device */
+ 		return -EOPNOTSUPP;
+ 
++	if (!capacity)
++		/* Device gone or invalid */
++		return -ENODEV;
++
+ 	buf = sd_zbc_alloc_report_buffer(sdkp, nr_zones, &buflen);
+ 	if (!buf)
+ 		return -ENOMEM;
+ 
+-	while (zone_idx < nr_zones && sector < get_capacity(disk)) {
++	while (zone_idx < nr_zones && sector < capacity) {
+ 		ret = sd_zbc_do_report_zones(sdkp, buf, buflen,
+ 				sectors_to_logical(sdkp->device, sector), true);
+ 		if (ret)
+-- 
+2.24.1
 
-Meanwhile, before contacting you, I did an investigation staff to locate one of the relatives of the late Mr. Wang Jian who knows the account, but I didn't succeed. However, I took this decision to support orphans and less privileged children with this fund, because I don't want this fund transferred to our Account of Government treasury as unclaimed fund. I am willing to offer you the 40% of the fund for your support and assistant to transfer the fund to your account.
-
-More detailed information will be sent to the disaggregation explaining how The fund will be transferred to you. Please continue to achieve the purpose.
-
-Waiting for your urgent response.
-Attentively
-Mohaiyani Binti Shamsudin.
