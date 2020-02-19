@@ -2,70 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB8B163839
-	for <lists+linux-scsi@lfdr.de>; Wed, 19 Feb 2020 01:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0111F16388B
+	for <lists+linux-scsi@lfdr.de>; Wed, 19 Feb 2020 01:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726567AbgBSALB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 18 Feb 2020 19:11:01 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:55852 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgBSALB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 18 Feb 2020 19:11:01 -0500
-Received: by mail-pj1-f68.google.com with SMTP id d5so1773330pjz.5
-        for <linux-scsi@vger.kernel.org>; Tue, 18 Feb 2020 16:11:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=X86+WKwwZJ0Er/Fgvp7/5f171Hl/1DZsr4zBAjqp64c=;
-        b=l3QiBgn2NBrXj60W8cfjekki+VxZDSFqX7mD1HQ+6R/a/l1C1EMVwq1eFjOuK4Y72E
-         wCqbaOqTlCabVLiL7sPZzywgitmrOwmvmpYUaoPZEb1pR2wPcR/44fVNQWvUpjQNeH7b
-         4FpPeKbDeYAN6yNnd9P2YZFKjcqRKn8mt0PeS3Th7d9gba+m9POMpIOf9BwBamQWSDwC
-         2aLRcUt2e8HYtWRyTmbH2yKviJStldtZetSqM8i/ux0B3TOxIPSKOHBdaFF7r37CSvI0
-         NFhzX9otJL7EMvy6iZdl7lDzjDp4/ptx74vun1UFIuxnRYoNW2CeBJ7ofCuq67EiyCst
-         uohA==
-X-Gm-Message-State: APjAAAWGcx6Vn0TNNDjB+3RgTbOEnd4fdzLrF3Dw1TE/qwGwVQj9h1mL
-        yfDQYDfi3mgY3rucNmx+/+I=
-X-Google-Smtp-Source: APXvYqzLEyP7zHMa5dpJ34vHBs2T+34V0AQpRvoLV7GfoVcFTqICFL7CaS7f53NE285JuarB3jkXOg==
-X-Received: by 2002:a17:90b:4396:: with SMTP id in22mr5553863pjb.83.1582071060068;
-        Tue, 18 Feb 2020 16:11:00 -0800 (PST)
-Received: from ?IPv6:2620:15c:2c1:200:fb9c:664d:d2ad:c9b5? ([2620:15c:2c1:200:fb9c:664d:d2ad:c9b5])
-        by smtp.gmail.com with ESMTPSA id y76sm144834pfc.87.2020.02.18.16.10.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2020 16:10:59 -0800 (PST)
-Subject: Re: [PATCH 2/2] ufshcd: use an enum for quirks
-To:     Christoph Hellwig <hch@lst.de>, linux-scsi@vger.kernel.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        id S1727285AbgBSAa7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 18 Feb 2020 19:30:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726595AbgBSAa7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 18 Feb 2020 19:30:59 -0500
+Received: from gmail.com (unknown [104.132.1.77])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5F408208E4;
+        Wed, 19 Feb 2020 00:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582072258;
+        bh=W1a+IDLaN2nytfbvEVTu4WyrSJz2y/Uqxre6CxMrSvA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2DaS8hd5nd/2jLp/mbXEq76iOCZiHMUJm9aDW83YLAqB6v1j7Nq8xWEq3K/nw9pbT
+         Ylu60sleckEJwfbuB1EdkG0goAe9XbHnGk8mgfxL+wBXNdozMN46S7D579sA4incpy
+         W6gcAigOyXPTtFN+Re3egEjQceZA2H6MCzjoWtg0=
+Date:   Tue, 18 Feb 2020 16:30:56 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
         Avri Altman <avri.altman@wdc.com>
+Subject: Re: [PATCH 1/2] ufshcd: remove unused quirks
+Message-ID: <20200219003056.GA213946@gmail.com>
 References: <20200218234450.69412-1-hch@lst.de>
- <20200218234450.69412-3-hch@lst.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <b4c75415-347a-48e6-ddc7-d419d7774f22@acm.org>
-Date:   Tue, 18 Feb 2020 16:10:57 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+ <20200218234450.69412-2-hch@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <20200218234450.69412-3-hch@lst.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200218234450.69412-2-hch@lst.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/18/20 3:44 PM, Christoph Hellwig wrote:
-> Use an enum to specify the various quirks instead of #defines inside
-> the structure definition.
+On Tue, Feb 18, 2020 at 03:44:49PM -0800, Christoph Hellwig wrote:
+>  static inline void ufshcd_utrl_clear(struct ufs_hba *hba, u32 pos)
+>  {
+> -	if (hba->quirks & UFSHCI_QUIRK_BROKEN_REQ_LIST_CLR)
+> -		ufshcd_writel(hba, (1 << pos), REG_UTP_TRANSFER_REQ_LIST_CLEAR);
+> -	else
+> -		ufshcd_writel(hba, ~(1 << pos),
+> -				REG_UTP_TRANSFER_REQ_LIST_CLEAR);
+> +	ufshcd_writel(hba, (1 << pos), REG_UTP_TRANSFER_REQ_LIST_CLEAR);
+>  }
 
-Hi Christoph,
+This part is keeping the quirk version.  It needs to be other way around.
 
-Although this patch looks like a significant improvement to me: has it 
-been considered to change 'quirks' from an unsigned int into a bitfield 
-with one bit per quirk? I think that would allow to remove multiple 
-explicit bit manipulations from the UFS driver.
-
-Thanks,
-
-Bart.
+- Eric
