@@ -2,70 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFBA165EEB
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Feb 2020 14:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 297A9165F25
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Feb 2020 14:49:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728145AbgBTNgL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 20 Feb 2020 08:36:11 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:40023 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728117AbgBTNgK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Feb 2020 08:36:10 -0500
-Received: by mail-io1-f67.google.com with SMTP id x1so4661716iop.7
-        for <linux-scsi@vger.kernel.org>; Thu, 20 Feb 2020 05:36:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=AqJjL0i98nG1HVHXwCo4WJU0JfdKU7urCdkm8HkFJJQ=;
-        b=EG7GuRdidCVFCgr6WpHn4QmYlYqwm3+UiGQxx77qYG9/sRowZXdOc5ZwL3wIzKwHqh
-         M8DSUMZz6//SIgDzTtK10XCUec3msrZOxfWzwNSrZ54ioVjh6QMYTFsYGr+vcrlNi02M
-         qJL153ququJ91UlYEHTKVmy5C2Vj/O/3KBQQlw+FDSRXpPS0PEH5Aq8fbzN27cteGVY1
-         fjiwfDT5WQMCv59p8W+I7BaYOSB7f8RQkreVdWVmFOew5Nca7LXXbz5oQl1pImRkL4u3
-         RpRNL0MBcUBbz+juQ6SmkU8F76l1hyXj8qVtPc8Ot7TN2ALi4DZOe//Mk9kT/jWh/EwI
-         u9pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=AqJjL0i98nG1HVHXwCo4WJU0JfdKU7urCdkm8HkFJJQ=;
-        b=uU6UYjrBQZI7QfKZaiuFNJZkeAcFiryjN92i0hYABN2g0SBu+DW5y0No73XIbA9Rzf
-         7yaiH9m3XVxxBJArlgs6UCmQiEfomd6NJkcLS8pkyROVhQwu2Nf5xaQlFToGdsO8uH7k
-         z+U80mj0UPa3+Xq3iRvInpPkzbTvUa6TR6cX6vbfl/edvVbSK/C0o/YIWa8Z1N2Gq417
-         wHQPZEuMnOpcpwSoZFZwwVvOX/GUV/adnUgZVj0u81fCcmlfEqi6gLB/WaxjC8U2TTi2
-         +byf+i4kB4/EyMR2gSQVy4atvhiO33fVRI9ntawKAJ6yJoPwKqfZUN28q+wr0C37woOs
-         5G1w==
-X-Gm-Message-State: APjAAAX0sR3PgmGGGVMcxXjPDUabfyQmTAkqWfv0iWGft6hc6nGLUnh/
-        lKc8fj2SqDy/s2kqyjCR0SSpjKhz47k6nDQT4WU=
-X-Google-Smtp-Source: APXvYqw8ys+th32hHcRC+gkKrFuC9gw9aZCD3l2XHYFMXwWB+5zQOIvWTs41eXUUyqPQvQtEzja6M41YF75p13ZhdAk=
-X-Received: by 2002:a6b:7d01:: with SMTP id c1mr23862938ioq.172.1582205770042;
- Thu, 20 Feb 2020 05:36:10 -0800 (PST)
+        id S1728295AbgBTNtB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 20 Feb 2020 08:49:01 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:47267 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728274AbgBTNs7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Feb 2020 08:48:59 -0500
+X-UUID: 9beae6d5bf81424f9dcd559ed15d96f6-20200220
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=KmAGgXrlCHQ77cMErepngIlOvfaHprPW+G8GQkksoF0=;
+        b=A6pnecmcTdlSi1ZSgE1r/8Gm8+b1CfJzrHrXI21KMXpVQMUtbnR1ULeFJ5AMSoHys3Pjl7hI6Rxh8O7MCrqkIjRaulrYyqJRvk7CfJ/pcv2NsaswXNjIh4pGgufYFJR29yC54BJwHQ0axPehVdk1nLjddVq+ODX8qB2IzFd0tuE=;
+X-UUID: 9beae6d5bf81424f9dcd559ed15d96f6-20200220
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1777121287; Thu, 20 Feb 2020 21:48:51 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 20 Feb 2020 21:46:20 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 20 Feb 2020 21:46:45 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v2 0/1] scsi: ufs: fix waiting time for reference clock
+Date:   Thu, 20 Feb 2020 21:48:47 +0800
+Message-ID: <20200220134848.8807-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Received: by 2002:a05:6622:89:0:0:0:0 with HTTP; Thu, 20 Feb 2020 05:36:09
- -0800 (PST)
-From:   tony greg <tonygreg0000@gmail.com>
-Date:   Thu, 20 Feb 2020 05:36:09 -0800
-Message-ID: <CAMoNUY2F=J_xttMCJUrCs7uQLRJGjwdj8D4v0xUUEuvmq-rnwg@mail.gmail.com>
-Subject: URGENT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-TM-SNTS-SMTP: A530EFBDC78C0C129A69103C87BA3A3A8647BB6446C1DE1CFF13CD807CE25A6D2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear   FRIEND
+SGksDQoNClRoaXMgcGF0Y2hzZXQgYWRkcyB3YWl0aW5nIHRpbWUgZm9yIHJlZmVyZW5jZSBjbG9j
+ayBwcm92aWRlZCB0byBVRlMgZGV2aWNlIGluIE1lZGlhVGVrIFVGUyBpbXBsZW1lbnRhdGlvbi4N
+Cg0KdjEgLT4gdjI6DQogIC0gRHJvcCBwYXRjaCAjMSAic2NzaTogdWZzOiBhZGQgcmVxdWlyZWQg
+ZGVsYXkgYWZ0ZXIgZ2F0aW5nIHJlZmVyZW5jZSBjbG9jayIgc2luY2UgaXQgd2lsbCBpbXBhY3Qg
+dWZzLXFjb20gZmxvdyB3aXRob3V0IHNvbGlkIGNvbmNsdXNpb24geWV0Lg0KDQpTdGFubGV5IENo
+dSAoMSk6DQogIHNjc2k6IHVmczogdWZzLW1lZGlhdGVrOiBhZGQgd2FpdGluZyB0aW1lIGZvciBy
+ZWZlcmVuY2UgY2xvY2sNCg0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMgfCA0NiAr
+KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1t
+ZWRpYXRlay5oIHwgIDIgKysNCiAyIGZpbGVzIGNoYW5nZWQsIDQ2IGluc2VydGlvbnMoKyksIDIg
+ZGVsZXRpb25zKC0pDQoNCi0tIA0KMi4xOC4wDQo=
 
-             How are you doing today,i will be very happy to hear from you once
-             again, I am looking for a serious foreign business partner who will
-             help me to invest my late father funds in his country.
-
-             The amount involve sum of $ 15,5. million United States Dollars
-             This funds were acquired legitimately, and there are
-              documents to this effect.
-
-              Upon the receipt of a favorable response from you, i
-              will furnish you with more details on proof of funds.
-              For more details.
-
-              Please kindle get back as soon as possible
-             I am waiting to hear from you
-             Thank TONY GREG
