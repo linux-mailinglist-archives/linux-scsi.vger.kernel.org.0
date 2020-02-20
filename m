@@ -2,37 +2,37 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 470D5165651
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Feb 2020 05:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8C9165653
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Feb 2020 05:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728115AbgBTEew (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 19 Feb 2020 23:34:52 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46459 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727476AbgBTEev (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Feb 2020 23:34:51 -0500
-Received: by mail-pl1-f193.google.com with SMTP id y8so1016164pll.13
-        for <linux-scsi@vger.kernel.org>; Wed, 19 Feb 2020 20:34:51 -0800 (PST)
+        id S1728122AbgBTEez (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 19 Feb 2020 23:34:55 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:39000 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728010AbgBTEey (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 19 Feb 2020 23:34:54 -0500
+Received: by mail-pl1-f195.google.com with SMTP id g6so1031901plp.6
+        for <linux-scsi@vger.kernel.org>; Wed, 19 Feb 2020 20:34:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bA448XM4j4t7KPtHcJFYyb+0pYGIOHGOZgEY7Y01aMI=;
-        b=hwvk3eDsZZm6vpWTicz+Ig+ofgXpvpQDc3uj4Doq6n+ZNXV4SRN9e8J0ioxFSZiTmr
-         PHqMLRVIxeeLFu+nuddflZv14t5JN2qWUaZRerZ5O47pnFddj3DfOCyGM2hIKh6nfcIe
-         E8vABTZbHZG0AN5piGW/yobR0nbXD5fqFTeSBCMmdBRmDNJm91j5sMWAhyasAG5uboOx
-         3CIiXexhz2ZxTAjwQVW0B//7N4aaacXO/1Mo4tIcqVwPjyj0SixE/e828M/eTPx7JARE
-         RMfA4a2q+QBoFgGQxtOOB36FzCnXZhc0o1uhiktUNiOj9/r9KaSbACNPmhtFGSAGYysF
-         F/6w==
-X-Gm-Message-State: APjAAAUGYJFVoIYwH/ee+Cq3kfeZ1ZUcdeaNK3wMkvS9hVpVhOD3E5rU
-        f75IqOMt8kQfwmHDp0SuJ90=
-X-Google-Smtp-Source: APXvYqxHi7hKFbRX4dNLz+uH1zZXFrKuttCu+CpvtDnWrYTjGLda2roqgBQFDfeA88j3qgf5Cu/QPA==
-X-Received: by 2002:a17:902:6b48:: with SMTP id g8mr19418825plt.149.1582173291135;
-        Wed, 19 Feb 2020 20:34:51 -0800 (PST)
+        bh=+IZXfLOeb7cen8x8dsCzQHprKaq9WvC73vzMGNpMDIU=;
+        b=ZgOLR0cx2lHG6CcYGBerFoNN/JeSTF22KWVNgNseM/B1S+EIKBQUDIbzEunDd8Owwo
+         bsE+pZ38+4odJA9i8sbAMVBkLzxYJA/K03DKSBFhxG3vBZ3Uyz3yoBwcP8ykB26Ce9xk
+         oXtC0mwGwGyuQXqi57nrF4UY+pHL7fsQhXNtNHY6k1xk5Zsl60wHP41HWqxK/nFeQ7Be
+         xvHgYNuMtkTMyT7MqbWWo7t/1RFB8Oke7mIJEX4rIccFNjtc99AtN72bEFapAJXiKSx5
+         BamC3UMBTTFeYgsimcJczWfxHd11PrqAHTSPTr6c9RnT8kGvXEGFbRdl49HuihnTsKrB
+         P7zQ==
+X-Gm-Message-State: APjAAAWQj8nRC/7xjPSXYQKUvMJP0sCbG9wfDR9bmqQgMpseE4rrLgzc
+        U3JPVHDh5ULXpewVNFMj6aA=
+X-Google-Smtp-Source: APXvYqz/xDmGUEzjSZRQ7M/nlU2hT8r9BsMyK+SlHgrvmOG4+f+V3yrheevpJtwKxNdnY2keD8aGEw==
+X-Received: by 2002:a17:902:59da:: with SMTP id d26mr29004479plj.287.1582173292665;
+        Wed, 19 Feb 2020 20:34:52 -0800 (PST)
 Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:29a7:b1bb:5b40:3d61])
-        by smtp.gmail.com with ESMTPSA id b5sm1236263pfb.179.2020.02.19.20.34.49
+        by smtp.gmail.com with ESMTPSA id b5sm1236263pfb.179.2020.02.19.20.34.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2020 20:34:50 -0800 (PST)
+        Wed, 19 Feb 2020 20:34:51 -0800 (PST)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
@@ -41,9 +41,9 @@ Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
         Quinn Tran <qutran@marvell.com>,
         Martin Wilck <mwilck@suse.com>,
         Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: [PATCH v3 2/5] qla2xxx: Suppress endianness complaints in qla2x00_configure_local_loop()
-Date:   Wed, 19 Feb 2020 20:34:38 -0800
-Message-Id: <20200220043441.20504-3-bvanassche@acm.org>
+Subject: [PATCH v3 3/5] qla2xxx: Fix sparse warnings triggered by the PCI state checking code
+Date:   Wed, 19 Feb 2020 20:34:39 -0800
+Message-Id: <20200220043441.20504-4-bvanassche@acm.org>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <20200220043441.20504-1-bvanassche@acm.org>
 References: <20200220043441.20504-1-bvanassche@acm.org>
@@ -54,9 +54,23 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Instead of changing endianness in-place, write the data in CPU endian format
-in another buffer and copy that buffer back. This patch does not change any
-functionality but silences some sparse endianness warnings.
+This patch fixes the following sparse warnings:
+
+drivers/scsi/qla2xxx/qla_mbx.c:120:21: warning: restricted pci_channel_state_t degrades to integer
+drivers/scsi/qla2xxx/qla_mbx.c:120:37: warning: restricted pci_channel_state_t degrades to integer
+
+From include/linux/pci.h:
+
+enum pci_channel_state {
+	/* I/O channel is in normal state */
+	pci_channel_io_normal = (__force pci_channel_state_t) 1,
+
+	/* I/O to channel is blocked */
+	pci_channel_io_frozen = (__force pci_channel_state_t) 2,
+
+	/* PCI card is dead */
+	pci_channel_io_perm_failure = (__force pci_channel_state_t) 3,
+};
 
 Reviewed-by: Daniel Wagner <dwagner@suse.de>
 Cc: Quinn Tran <qutran@marvell.com>
@@ -64,51 +78,41 @@ Cc: Martin Wilck <mwilck@suse.com>
 Cc: Roman Bolshakov <r.bolshakov@yadro.com>
 Signed-off-by: Bart Van Assche <bvanassche@acm.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h  |  2 +-
- drivers/scsi/qla2xxx/qla_init.c | 11 +++++------
- 2 files changed, 6 insertions(+), 7 deletions(-)
+ drivers/scsi/qla2xxx/qla_mbx.c | 5 ++---
+ drivers/scsi/qla2xxx/qla_mr.c  | 5 ++---
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index c5a067f45005..b04d334933ef 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -414,7 +414,7 @@ struct els_logo_payload {
- struct els_plogi_payload {
- 	uint8_t opcode;
- 	uint8_t rsvd[3];
--	uint8_t data[112];
-+	__be32	data[112 / 4];
- };
+diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
+index 9e09964f5c0e..ff945d35ba8e 100644
+--- a/drivers/scsi/qla2xxx/qla_mbx.c
++++ b/drivers/scsi/qla2xxx/qla_mbx.c
+@@ -117,10 +117,9 @@ qla2x00_mailbox_command(scsi_qla_host_t *vha, mbx_cmd_t *mcp)
  
- struct ct_arg {
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index 9e6b56527b25..880f2be062a9 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -5060,7 +5060,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 	if (N2N_TOPO(ha)) {
- 		if (test_and_clear_bit(N2N_LOGIN_NEEDED, &vha->dpc_flags)) {
- 			/* borrowing */
--			u32 *bp, i, sz;
-+			u32 *bp, sz;
+ 	ql_dbg(ql_dbg_mbx, vha, 0x1000, "Entered %s.\n", __func__);
  
- 			memset(ha->init_cb, 0, ha->init_cb_size);
- 			sz = min_t(int, sizeof(struct els_plogi_payload),
-@@ -5068,13 +5068,12 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 			rval = qla24xx_get_port_login_templ(vha,
- 			    ha->init_cb_dma, (void *)ha->init_cb, sz);
- 			if (rval == QLA_SUCCESS) {
-+				__be32 *q = &ha->plogi_els_payld.data[0];
-+
- 				bp = (uint32_t *)ha->init_cb;
--				for (i = 0; i < sz/4 ; i++, bp++)
--					*bp = cpu_to_be32(*bp);
-+				cpu_to_be32_array(q, bp, sz / 4);
+-	if (ha->pdev->error_state > pci_channel_io_frozen) {
++	if (ha->pdev->error_state == pci_channel_io_perm_failure) {
+ 		ql_log(ql_log_warn, vha, 0x1001,
+-		    "error_state is greater than pci_channel_io_frozen, "
+-		    "exiting.\n");
++		    "PCI channel failed permanently, exiting.\n");
+ 		return QLA_FUNCTION_TIMEOUT;
+ 	}
  
--				memcpy(&ha->plogi_els_payld.data,
--				    (void *)ha->init_cb,
--				    sizeof(ha->plogi_els_payld.data));
-+				memcpy(bp, q, sizeof(ha->plogi_els_payld.data));
- 			} else {
- 				ql_dbg(ql_dbg_init, vha, 0x00d1,
- 				    "PLOGI ELS param read fail.\n");
+diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
+index cad1fc2a1b28..6d120457478e 100644
+--- a/drivers/scsi/qla2xxx/qla_mr.c
++++ b/drivers/scsi/qla2xxx/qla_mr.c
+@@ -53,10 +53,9 @@ qlafx00_mailbox_command(scsi_qla_host_t *vha, struct mbx_cmd_32 *mcp)
+ 	struct qla_hw_data *ha = vha->hw;
+ 	scsi_qla_host_t *base_vha = pci_get_drvdata(ha->pdev);
+ 
+-	if (ha->pdev->error_state > pci_channel_io_frozen) {
++	if (ha->pdev->error_state == pci_channel_io_perm_failure) {
+ 		ql_log(ql_log_warn, vha, 0x115c,
+-		    "error_state is greater than pci_channel_io_frozen, "
+-		    "exiting.\n");
++		    "PCI channel failed permanently, exiting.\n");
+ 		return QLA_FUNCTION_TIMEOUT;
+ 	}
+ 
