@@ -2,66 +2,80 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BF416590C
-	for <lists+linux-scsi@lfdr.de>; Thu, 20 Feb 2020 09:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EA2165A88
+	for <lists+linux-scsi@lfdr.de>; Thu, 20 Feb 2020 10:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726799AbgBTIV5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 20 Feb 2020 03:21:57 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57440 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726637AbgBTIV5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 20 Feb 2020 03:21:57 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 1F6F7AC8F;
-        Thu, 20 Feb 2020 08:21:56 +0000 (UTC)
-Date:   Thu, 20 Feb 2020 09:21:55 +0100
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, Quinn Tran <qutran@marvell.com>,
-        Martin Wilck <mwilck@suse.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: Re: [PATCH v3 4/5] qla2xxx: Convert MAKE_HANDLE() from a define into
- an inline function
-Message-ID: <20200220082155.c2dwknz2hcvwhwcg@beryllium.lan>
-References: <20200220043441.20504-1-bvanassche@acm.org>
- <20200220043441.20504-5-bvanassche@acm.org>
+        id S1727034AbgBTJyX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 20 Feb 2020 04:54:23 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39890 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726976AbgBTJyX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 20 Feb 2020 04:54:23 -0500
+Received: by mail-pl1-f194.google.com with SMTP id g6so1356446plp.6
+        for <linux-scsi@vger.kernel.org>; Thu, 20 Feb 2020 01:54:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
+        b=FQYqm4ClQd+PHf0sI7GHwcX+GBAuzLiacz0v6tBHlAXb/53+sW+d5YwjsSgua4nOzk
+         kXUU/S/uxNBjQ+Uyqzm0k88mdcv0LcD+JJcgQp1FuT1RpajFC8wI27FeUtD/DqFuWi3K
+         wjiVIfP49Ig4fO4KdjYefo8AgdBG5Brh7G2chODswA2MCck2LXGtoDz2QfPOpEcFq4W0
+         LNA7djdW8wCGoNP6MAzyrmCJQI41aVBLwvKMkBApZWyzdKp1SsBwayGnQ/fLo41/o85o
+         lYISRjByIPNZP/dqvZKpmFL1UwavYbq9PjD/fnTSLTysY75lhv4fHORkoRbVgb7c9PZE
+         7Oag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
+        b=OBzGLga3SUhNke7LH16qBJJfLRqvvDIkGcDf0n+nJnaQ8NAUwUtVBxWI/4czMYUzN2
+         hIu5SL/YdnPAZhjnedZI6r6oOa+sNDXCtTrQTNsm07fbs/eyB2rrRP2YhVOgeN2GWDoj
+         jPejzLlcEaB54ygX09AfDOgtxNeZK3Bjc7U9N564qsH3UHLq+NqNbm0ndzPpSF8+cd+r
+         tftcv16r/p+PvHJOJnIpSyw5XldleAy2ABujMbP69F1dcGI/LO5fb4Zi4PJ3K/kQ9Qg9
+         OFPtCSTEPgM0VKUTd4NHLc2XHfZIDg3gx9ic0KoKBb1btviIs/QTTMyvz57jfNbEANEW
+         DA2Q==
+X-Gm-Message-State: APjAAAWKgiN/zw60KXZ/5gPU9YvB0YAqimpNSoP/TsxsOJYzPk9yJbFK
+        O7PfY7jk7l8uFff9MVQSPcMLwaVvfw+GRY/ry/M=
+X-Google-Smtp-Source: APXvYqw/kS57OSadQMMyscGObYo5L06dFBRGe1HomyyCdvuRSLuoDw7MejaOsUrAMhK603eYaa1aI1ut8THxiD4QKRg=
+X-Received: by 2002:a17:90a:2545:: with SMTP id j63mr2693312pje.128.1582192461717;
+ Thu, 20 Feb 2020 01:54:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200220043441.20504-5-bvanassche@acm.org>
+Received: by 2002:a17:90a:90f:0:0:0:0 with HTTP; Thu, 20 Feb 2020 01:54:21
+ -0800 (PST)
+Reply-To: cagesusan199@gmail.com
+From:   "Mrs. Susan S. Cage" <drgoodluckebelejonathan061@gmail.com>
+Date:   Thu, 20 Feb 2020 01:54:21 -0800
+Message-ID: <CALjo5=_T0PdA7MiLnQT0zsSVwaG7ocW0YhDhbNR8YeTBuyVeLQ@mail.gmail.com>
+Subject: Attention:Beneficiary
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Bart,
+-- 
+Dearest Friend,
 
-On Wed, Feb 19, 2020 at 08:34:40PM -0800, Bart Van Assche wrote:
-> -#define MAKE_HANDLE(x, y) ((uint32_t)((((uint32_t)(x)) << 16) | (uint32_t)(y)))
-> +static inline uint32_t make_handle(uint16_t x, uint16_t y)
-> +{
-> +	return ((uint32_t)x << 16) | y;
-> +}
->  
->  /*
->   * I/O register
-> diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-> index 47bf60a9490a..1816660768da 100644
-> --- a/drivers/scsi/qla2xxx/qla_iocb.c
-> +++ b/drivers/scsi/qla2xxx/qla_iocb.c
-> @@ -530,7 +530,7 @@ __qla2x00_marker(struct scsi_qla_host *vha, struct qla_qpair *qpair,
->  			int_to_scsilun(lun, (struct scsi_lun *)&mrk24->lun);
->  			host_to_fcp_swap(mrk24->lun, sizeof(mrk24->lun));
->  			mrk24->vp_index = vha->vp_idx;
-> -			mrk24->handle = MAKE_HANDLE(req->id, mrk24->handle);
-> +			mrk24->handle = make_handle(req->id, mrk24->handle);
+Sorry for invading your privacy, my name is Susan S. Cage I am 81
+years, citizen of United States and presently in hospital undergoing
+chromatography for bronchogenic carcinomas (Lung cancer) which
+affected both Lungs. The doctors said I have few days to live because
+the cancer has now affected my brain.
 
-The type of mrk24->handle is uint32_t and make_handle() is using type
-uint16_t. Shouldn't the argument type for the y argument be uint32_t
-as well?
+My late husband left Fifteen Million, Five Hundred British Pounds
+Sterling in my account, I want to transfer the money to you and I want
+you to use it as a donate for charitable and help the needy,
+motherless, less privileged and widows within your location.
 
-Thanks,
-Daniel
+I need your assurance that you will use the fund for charity, once I a
+favorable reply from you, will inform my Bank through my lawyer to
+transfer the fund to you as my Next of Kin and Sole Beneficiary. Once
+I receive your response, I will inform my bank in writing through my
+lawyer.
+
+
+
+Thank you and God bless you.
+
+Mrs. Susan S. Cage
