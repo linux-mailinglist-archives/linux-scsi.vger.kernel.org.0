@@ -2,25 +2,25 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB8D1679A4
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2020 10:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E47B71679AE
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2020 10:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727142AbgBUJpN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Feb 2020 04:45:13 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39166 "EHLO mx2.suse.de"
+        id S1727906AbgBUJqx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Feb 2020 04:46:53 -0500
+Received: from mx2.suse.de ([195.135.220.15]:41134 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727036AbgBUJpN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 21 Feb 2020 04:45:13 -0500
+        id S1727697AbgBUJqw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 21 Feb 2020 04:46:52 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 0747BAAC2;
-        Fri, 21 Feb 2020 09:45:10 +0000 (UTC)
-Subject: Re: [PATCH v3 01/15] scsi_debug: randomize command completion time
+        by mx2.suse.de (Postfix) with ESMTP id 88BF5AE72;
+        Fri, 21 Feb 2020 09:46:50 +0000 (UTC)
+Subject: Re: [PATCH v3 02/15] scsi_debug: add doublestore option
 To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com,
         Damien.LeMoal@wdc.com
 References: <20200220200838.15809-1-dgilbert@interlog.com>
- <20200220200838.15809-2-dgilbert@interlog.com>
+ <20200220200838.15809-3-dgilbert@interlog.com>
 From:   Hannes Reinecke <hare@suse.de>
 Openpgp: preference=signencrypt
 Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
@@ -66,12 +66,12 @@ Autocrypt: addr=hare@suse.de; prefer-encrypt=mutual; keydata=
  ZtWlhGRERnDH17PUXDglsOA08HCls0PHx8itYsjYCAyETlxlLApXWdVl9YVwbQpQ+i693t/Y
  PGu8jotn0++P19d3JwXW8t6TVvBIQ1dRZHx1IxGLMn+CkDJMOmHAUMWTAXX2rf5tUjas8/v2
  azzYF4VRJsdl+d0MCaSy8mUh
-Message-ID: <0d239951-5c9a-8b3d-fa61-a958e3ce2e42@suse.de>
-Date:   Fri, 21 Feb 2020 10:45:10 +0100
+Message-ID: <d1d70477-aa64-5ad4-3b35-531504e71ead@suse.de>
+Date:   Fri, 21 Feb 2020 10:46:50 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200220200838.15809-2-dgilbert@interlog.com>
+In-Reply-To: <20200220200838.15809-3-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -81,31 +81,38 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 2/20/20 9:08 PM, Douglas Gilbert wrote:
-> Add a new command line option (e.g. random=1) and sysfs attribute
-> that causes subsequent command completion times to be between the
-> current command delay setting and 0. A unformily distributed 32
-> bit, kernel provided integer is used for this purpose.
+> The scsi_debug driver has always been restricted to using one
+> (or none) ramdisk image for its storage. This means that thousands
+> of scsi_debug devices can be created without exhausting the host
+> machine's RAM. The downside is that all scsi_debug devices share
+> the same ramdisk image. This option doubles the amount of ramdisk
+> storage space with the first, third, fifth (etc) created
+> scsi_debug devices using the first ramdisk image while the second,
+> fourth, sixth (etc) created scsi_debug devices using the second
+> ramdisk image.
 > 
-> Since the existing 'delay' whose units are jiffies (typically
-> milliseconds) and 'ndelay' (units: nanoseconds) options (and sysfs
-> attributes) span a range greater than 32 bits, some scaling is
-> required.
+> The reason for doing this is to check that (partial) disk to disk
+> copies based on scsi_debug devices have actually worked properly.
+> As an example: assume /dev/sdb and /dev/sg1 are the same
+> scsi_debug device, while /dev/sdc and /dev/sg2 are also the
+> same scsi_debug device. With doublestore=1 they will have
+> different ramdisk images. Then the following pseudocode could
+> be executed to check the if sgh_dd copy worked:
+>     dd if=/dev/urandom of=/dev/sdb
+>     sgh_dd if=/dev/sg1 of=/dev/sg2 [plus option(s) to test]
+>     cmp /dev/sdb /dev/sdc
 > 
-> The purpose of this patch is to widen the range of testing cases
-> that are visited in long running tests. Put simply: rarely struct
-> race conditions are more likely to be found when this facility is
-> used.
-> 
-> The default is the previous case in which all command completions
-> were roughly equal to (if not, slightly longer) than the value
-> given by the 'delay' or 'ndelay' settings (or their defaults).
-> This option's default is equivalent to setting 'random=0' .
+> If the cmp fails then the copy has failed (or some other
+> mechanism wrote to /dev/sdb or /dev/sdc in the interim).
 > 
 > Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 > ---
->  drivers/scsi/scsi_debug.c | 42 ++++++++++++++++++++++++++++++++++++---
->  1 file changed, 39 insertions(+), 3 deletions(-)
+>  drivers/scsi/scsi_debug.c | 264 +++++++++++++++++++++++++++-----------
+>  1 file changed, 186 insertions(+), 78 deletions(-)
 > 
+Nice use-case, but really should be documented somewhere.
+Otherwise:
+
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 
 Cheers,
