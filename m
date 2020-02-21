@@ -2,154 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D94167FA6
-	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2020 15:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03CE8167FFB
+	for <lists+linux-scsi@lfdr.de>; Fri, 21 Feb 2020 15:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728571AbgBUOIT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 21 Feb 2020 09:08:19 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:59186 "EHLO
+        id S1728646AbgBUOUU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 21 Feb 2020 09:20:20 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:36952 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728455AbgBUOIS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Feb 2020 09:08:18 -0500
+        with ESMTP id S1728081AbgBUOUT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 21 Feb 2020 09:20:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=IHUJYItcDDU/OeAN1gGr74TVCKMfi4duJPgNqccaa9k=; b=MsVgniursCM4BQRNJl863xgBMd
-        bUHImFScTeOeXEyzlihPgWcAqO6elrdZlvs1Ipd41XE94VIvRgrJG7fWPsPr6eRPL4pXVRzKY7kP7
-        xG6rkY82ssyI8SrCc0zGxI3495OjOhARNZtimI8afCf+90ansEd+wl/sHbWFkxHODbUL4NYc4Qzn+
-        tfpYrRWavBYJy5TNpAW0xA063H341wb6M9BfTzOUFXhgDRrxcvtX5Sm8EZmZp2Bwgsy0+6EdJS8Nt
-        DfNkYnCxFkuzJ70i7Za0znK5o+BbTasC6yYMWcJyTeO+HVzzRpQZUEDyX6vji3a1BR0NkxqTL2AzD
-        yH4qoftA==;
-Received: from [38.126.112.138] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j58yT-00078K-I7; Fri, 21 Feb 2020 14:08:13 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     linux-scsi@vger.kernel.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>
-Subject: [PATCH 2/2] ufshcd: use an enum for quirks
-Date:   Fri, 21 Feb 2020 06:08:12 -0800
-Message-Id: <20200221140812.476338-3-hch@lst.de>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200221140812.476338-1-hch@lst.de>
-References: <20200221140812.476338-1-hch@lst.de>
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=LytBCHQtySSQHC//YYsk3cTp1SDQnnhLtWFiulJBZy8=; b=DZyV9UxLlQ1dXSvWlM5ACgoz8S
+        66UCzAs+/vDp19vCMf/XiGjrgq/QpQ5MSmVm/cq7+gbhKX2cMIX1taXRr/28lPIKdmzmh69nv04Ah
+        jwc9CKCejXv0Yp4mbSM/q3/tDIhqtMMSmNl9pu3s8tg24ZdjHzYMMgLs+rc7QJw5HNC07Z3yyMc8F
+        LrWSlmph5HCQzhVD6l+1jhZTBzUgoCltUXUStnxF/6+NXmWhqg6fe/7W9ZhC1tQlUPJRTzQ06pK5k
+        wVCnFwUDhQ7pTnQaf3ggXDyfYcZZNw61QTbu1cIlLeHfVXYoXnrImvysZ5JDQhd9ynz72vOhOetCJ
+        eJPdKzew==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j59AA-0005Lk-DL; Fri, 21 Feb 2020 14:20:18 +0000
+Date:   Fri, 21 Feb 2020 06:20:18 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Satya Tangirala <satyat@google.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
+        Kuohong Wang <kuohong.wang@mediatek.com>,
+        Kim Boojin <boojin.kim@samsung.com>
+Subject: Re: [PATCH v6 0/9] Inline Encryption Support
+Message-ID: <20200221142018.GA27636@infradead.org>
+References: <20200108184305.GA173657@google.com>
+ <20200117085210.GA5473@infradead.org>
+ <20200201005341.GA134917@google.com>
+ <20200203091558.GA28527@infradead.org>
+ <20200204033915.GA122248@google.com>
+ <20200204145832.GA28393@infradead.org>
+ <20200204212110.GA122850@gmail.com>
+ <20200205073601.GA191054@sol.localdomain>
+ <20200205180541.GA32041@infradead.org>
+ <20200221123030.GA253045@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200221123030.GA253045@google.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use an enum to specify the various quirks instead of #defines inside
-the structure definition.
+On Fri, Feb 21, 2020 at 04:30:30AM -0800, Satya Tangirala wrote:
+> Hi Christoph,
+> 
+> I sent out v7 of the patch series. It's at
+> https://lore.kernel.org/linux-fscrypt/20200221115050.238976-1-satyat@google.com/T/#t
+> 
+> It manages keyslots on a per-request basis now - I made it get keyslots
+> in blk_mq_get_request, because that way I wouldn't have to worry about
+> programming keys in an atomic context. What do you think of the new
+> approach?
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- drivers/scsi/ufs/ufshcd.h | 82 ++++++++++++++++++++-------------------
- 1 file changed, 42 insertions(+), 40 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-index 9c2b80f87b9f..f68b3cd2e465 100644
---- a/drivers/scsi/ufs/ufshcd.h
-+++ b/drivers/scsi/ufs/ufshcd.h
-@@ -469,6 +469,48 @@ struct ufs_stats {
- 	struct ufs_err_reg_hist task_abort;
- };
- 
-+enum ufshcd_quirks {
-+	/* Interrupt aggregation support is broken */
-+	UFSHCD_QUIRK_BROKEN_INTR_AGGR			= 1 << 0,
-+
-+	/*
-+	 * delay before each dme command is required as the unipro
-+	 * layer has shown instabilities
-+	 */
-+	UFSHCD_QUIRK_DELAY_BEFORE_DME_CMDS		= 1 << 1,
-+
-+	/*
-+	 * If UFS host controller is having issue in processing LCC (Line
-+	 * Control Command) coming from device then enable this quirk.
-+	 * When this quirk is enabled, host controller driver should disable
-+	 * the LCC transmission on UFS device (by clearing TX_LCC_ENABLE
-+	 * attribute of device to 0).
-+	 */
-+	UFSHCD_QUIRK_BROKEN_LCC				= 1 << 2,
-+
-+	/*
-+	 * The attribute PA_RXHSUNTERMCAP specifies whether or not the
-+	 * inbound Link supports unterminated line in HS mode. Setting this
-+	 * attribute to 1 fixes moving to HS gear.
-+	 */
-+	UFSHCD_QUIRK_BROKEN_PA_RXHSUNTERMCAP		= 1 << 3,
-+
-+	/*
-+	 * This quirk needs to be enabled if the host contoller only allows
-+	 * accessing the peer dme attributes in AUTO mode (FAST AUTO or
-+	 * SLOW AUTO).
-+	 */
-+	UFSHCD_QUIRK_DME_PEER_ACCESS_AUTO_MODE		= 1 << 4,
-+
-+	/*
-+	 * This quirk needs to be enabled if the host contoller doesn't
-+	 * advertise the correct version in UFS_VER register. If this quirk
-+	 * is enabled, standard UFS host driver will call the vendor specific
-+	 * ops (get_ufs_hci_version) to get the correct version.
-+	 */
-+	UFSHCD_QUIRK_BROKEN_UFS_HCI_VERSION		= 1 << 5,
-+};
-+
- /**
-  * struct ufs_hba - per adapter private structure
-  * @mmio_base: UFSHCI base register address
-@@ -572,46 +614,6 @@ struct ufs_hba {
- 	bool is_irq_enabled;
- 	enum ufs_ref_clk_freq dev_ref_clk_freq;
- 
--	/* Interrupt aggregation support is broken */
--	#define UFSHCD_QUIRK_BROKEN_INTR_AGGR			0x1
--
--	/*
--	 * delay before each dme command is required as the unipro
--	 * layer has shown instabilities
--	 */
--	#define UFSHCD_QUIRK_DELAY_BEFORE_DME_CMDS		0x2
--
--	/*
--	 * If UFS host controller is having issue in processing LCC (Line
--	 * Control Command) coming from device then enable this quirk.
--	 * When this quirk is enabled, host controller driver should disable
--	 * the LCC transmission on UFS device (by clearing TX_LCC_ENABLE
--	 * attribute of device to 0).
--	 */
--	#define UFSHCD_QUIRK_BROKEN_LCC				0x4
--
--	/*
--	 * The attribute PA_RXHSUNTERMCAP specifies whether or not the
--	 * inbound Link supports unterminated line in HS mode. Setting this
--	 * attribute to 1 fixes moving to HS gear.
--	 */
--	#define UFSHCD_QUIRK_BROKEN_PA_RXHSUNTERMCAP		0x8
--
--	/*
--	 * This quirk needs to be enabled if the host contoller only allows
--	 * accessing the peer dme attributes in AUTO mode (FAST AUTO or
--	 * SLOW AUTO).
--	 */
--	#define UFSHCD_QUIRK_DME_PEER_ACCESS_AUTO_MODE		0x10
--
--	/*
--	 * This quirk needs to be enabled if the host contoller doesn't
--	 * advertise the correct version in UFS_VER register. If this quirk
--	 * is enabled, standard UFS host driver will call the vendor specific
--	 * ops (get_ufs_hci_version) to get the correct version.
--	 */
--	#define UFSHCD_QUIRK_BROKEN_UFS_HCI_VERSION		0x20
--
- 	unsigned int quirks;	/* Deviations from standard UFSHCI spec. */
- 
- 	/* Device deviations from standard UFS device spec. */
--- 
-2.24.1
-
+I'll try to review it soon, thanks!
