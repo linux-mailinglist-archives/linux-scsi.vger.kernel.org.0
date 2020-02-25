@@ -2,54 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A41716BC32
-	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2020 09:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2963916BE34
+	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2020 11:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729648AbgBYIty (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Feb 2020 03:49:54 -0500
-Received: from rs133.mailgun.us ([209.61.151.133]:17473 "EHLO rs133.mailgun.us"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729205AbgBYIty (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Feb 2020 03:49:54 -0500
-X-Greylist: delayed 301 seconds by postgrey-1.27 at vger.kernel.org; Tue, 25 Feb 2020 03:49:54 EST
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=a.atomicsites.net; q=dns/txt;
- s=krs; t=1582620594; h=Content-Transfer-Encoding: Content-Type:
- MIME-Version: Message-ID: Subject: Reply-To: From: To: Date: Sender;
- bh=RT/wUz4ag2kA4e678npexFQkuzR4J5Q9Jldjbs/kL74=; b=I2RdHuQxErlduiCQobmAnVo2Gk+xC8KW0FNl7WP0ns3HK+ITNfc1K9ucrdBz8nuJ5pfNcCRV
- DD5FuZX2Ouk8B2BwGgqQVJOCfqsjMC7J/9jr88cdF8HRCPX7sTzf2RBXZffVLf5hkDDBNjFY
- 6aPMhDrLyqVY2ZD1GKKIbqJLn8s=
-X-Mailgun-Sending-Ip: 209.61.151.133
-X-Mailgun-Sid: WyI5MjJkNiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJmOWVmNSJd
-Received: from pool18-307-26.bur.atomicsites.net (Unknown [103.115.8.12])
- by mxa.mailgun.org with ESMTP id 5e54de84.7fc98b354f60-smtp-out-n02;
- Tue, 25 Feb 2020 08:44:52 -0000 (UTC)
-Received: from wictmw.org (localhost.localdomain [127.0.0.1])
-        (Authenticated sender: wictmw.org)
-        by pool18-307-26.bur.atomicsites.net (Postfix) with ESMTPA id 7A54DC80070
-        for <linux-scsi@vger.kernel.org>; Tue, 25 Feb 2020 08:44:51 +0000 (UTC)
-Date:   Tue, 25 Feb 2020 08:44:51 +0000
-To:     linux-scsi@vger.kernel.org
-From:   WICT Midwest <wordpress@wictmw.org>
-Reply-To: linux-scsi@vger.kernel.org
-Subject: =?UTF-8?Q?WICT_Midwest_"B=D0=B5st_New_Onlin=D0=B5_=D0=A1asin=D0=BE_-_$875?=
- =?UTF-8?Q?_B=D0=BEnus_+_425_Free_S=D1=80=D0=B5=D0=B5ns:_http://wegraj.you?=
- =?UTF-8?Q?rbizbuilder.org/17e45f9e4"?=
-Message-ID: <29e4ef1aed13fdc194ad55afaa507de8@wictmw.org>
-X-Mailer: PHPMailer 5.2.27 (https://github.com/PHPMailer/PHPMailer)
-X-Atomic-Tracking: 149276179:V1BDRjdfTWFpbC0+Y29tcG9zZQ==:1:0:0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1729698AbgBYKE2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Feb 2020 05:04:28 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33784 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727016AbgBYKE2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 25 Feb 2020 05:04:28 -0500
+Received: by mail-pl1-f196.google.com with SMTP id ay11so5297715plb.0;
+        Tue, 25 Feb 2020 02:04:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=Q1TTBZmS5hI2KOUyiQtNES1cxUuECkupynSXNPqJhto=;
+        b=IfMioKOEb4ZGX4URyCr39nDMmmuVD98Q0qIp9+PE2+ehmkIG0Oh8yhQ4HK31B34j8y
+         ya1EA1uK64SnW09YA4XJ96uEB1iFRh/nBBZ97NEAPZMIUEwazKYuQOwK8e19HHNg4lQs
+         vL1ddR7+31PUBBBLovKlEOfNY8wl0ChJdBNubKX4N1uD+RZurVKMhezCLU8xyQLRHq4c
+         1d3qHjbftOktkOTInmKyq+RydeVADbvN4pJvrYP3PB7Wf761F+dKmlbg72RR+BvM3LuT
+         UYjWC6wN6OxrJE4cvjGR2d/BELfi9K1kl7/3ScyqPoWRXxX36U7LoWoLmE6VuFa18td9
+         pFZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=Q1TTBZmS5hI2KOUyiQtNES1cxUuECkupynSXNPqJhto=;
+        b=L0/MCxA4xHXeT+1CpnGO0MwOJNqwsajdAzUS2I1QWg3u+DYpC5uuIz+RXXN98tUcMQ
+         LBKTU7Z+soMTFMTQyuNwND2HuNKoANtpdJTeIjf/PhvDlgi7TgmcsgfophhaDSNDBP29
+         P4ghS6yeSfOPJwIRFTm5TGEH2kfCUkpujhSJQLwqXe/ubYETBMRihIMNiLgJ6A/RWJ2w
+         TVHHYmRmWxRCgTCBbcKTHiW3kJLjAFNlZBOyxbvn8sg92E8vGybbsGrAv+4a+GKZrFQ/
+         LuKDzYqu/BSy3Pg0e0cKYyCbmEXSNC8az98FTVWHF/n3I67NnarUFxytodaj6jllqYJg
+         4Qfw==
+X-Gm-Message-State: APjAAAWb1zEuK/znH7ab7Hs5xYhPf6PHiqdjIqWagna5rDzgivyD4lQ6
+        9+bWyTIzgrGyG+vu3rKfKU4=
+X-Google-Smtp-Source: APXvYqwyKcwx0OfZ2G3eLBjW2d/FUQ74r0ivbu0yGG0sOiBjxUPnVeq3OCbhlIEl0ihomfzutmeD3g==
+X-Received: by 2002:a17:90b:34b:: with SMTP id fh11mr4377690pjb.8.1582625067907;
+        Tue, 25 Feb 2020 02:04:27 -0800 (PST)
+Received: from localhost ([43.224.245.180])
+        by smtp.gmail.com with ESMTPSA id w18sm16172365pge.4.2020.02.25.02.04.26
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 25 Feb 2020 02:04:27 -0800 (PST)
+From:   guosongsu@gmail.com
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guosong Su <suguosong@xiaomi.com>
+Subject: [PATCH] SCSI: use kobj_to_dev
+Date:   Tue, 25 Feb 2020 18:04:11 +0800
+Message-Id: <20200225100411.10250-1-guosongsu@gmail.com>
+X-Mailer: git-send-email 2.14.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Тop Online Casinо Sitе - $978 Bonus + 544 Free Sрeеns: http://twzqrj.justinlist.org/c55 <linux-scsi@vger.kernel.org>
-Subject: Bеst New Onlinе Сasinо - $875 Bоnus + 425 Free Sрееns: http://wegraj.yourbizbuilder.org/17e45f9e4
+From: Guosong Su <suguosong@xiaomi.com>
 
-Message Body:
-Bеst Onlinе Casinо in Еurоpe - $985 Bоnus + 425 Freе Sрeеns: http://mcknzcd.timetravelnerd.com/eb39f
+Use kobj_to_dev to instead of open-coding it.
 
+Signed-off-by: Guosong Su <suguosong@xiaomi.com>
+---
+ drivers/scsi/scsi_sysfs.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 677b5c5403d2..c3a30ba4ae08 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -856,7 +856,7 @@ show_vpd_##_page(struct file *filp, struct kobject *kobj,	\
+ 		 struct bin_attribute *bin_attr,			\
+ 		 char *buf, loff_t off, size_t count)			\
+ {									\
+-	struct device *dev = container_of(kobj, struct device, kobj);	\
++	struct device *dev = kobj_to_dev(kobj);				\
+ 	struct scsi_device *sdev = to_scsi_device(dev);			\
+ 	struct scsi_vpd *vpd_page;					\
+ 	int ret = -EINVAL;						\
+@@ -884,7 +884,7 @@ static ssize_t show_inquiry(struct file *filep, struct kobject *kobj,
+ 			    struct bin_attribute *bin_attr,
+ 			    char *buf, loff_t off, size_t count)
+ {
+-	struct device *dev = container_of(kobj, struct device, kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct scsi_device *sdev = to_scsi_device(dev);
+ 
+ 	if (!sdev->inquiry)
+@@ -1181,7 +1181,7 @@ static DEVICE_ATTR(queue_ramp_up_period, S_IRUGO | S_IWUSR,
+ static umode_t scsi_sdev_attr_is_visible(struct kobject *kobj,
+ 					 struct attribute *attr, int i)
+ {
+-	struct device *dev = container_of(kobj, struct device, kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct scsi_device *sdev = to_scsi_device(dev);
+ 
+ 
+@@ -1207,7 +1207,7 @@ static umode_t scsi_sdev_attr_is_visible(struct kobject *kobj,
+ static umode_t scsi_sdev_bin_attr_is_visible(struct kobject *kobj,
+ 					     struct bin_attribute *attr, int i)
+ {
+-	struct device *dev = container_of(kobj, struct device, kobj);
++	struct device *dev = kobj_to_dev(kobj);
+ 	struct scsi_device *sdev = to_scsi_device(dev);
+ 
+ 
 -- 
-This e-mail was sent from a contact form on WICT Midwest (https://wictmw.org)
+2.14.1
+
