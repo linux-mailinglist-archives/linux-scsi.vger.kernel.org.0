@@ -2,32 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7911016B9B2
+	by mail.lfdr.de (Postfix) with ESMTP id 502FC16B9B0
 	for <lists+linux-scsi@lfdr.de>; Tue, 25 Feb 2020 07:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729079AbgBYGYT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 25 Feb 2020 01:24:19 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:36129 "EHLO smtp.infotech.no"
+        id S1729112AbgBYGYS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 25 Feb 2020 01:24:18 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:36169 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729111AbgBYGYQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 25 Feb 2020 01:24:16 -0500
+        id S1729117AbgBYGYS (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 25 Feb 2020 01:24:18 -0500
 Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 7098A2041E3;
-        Tue, 25 Feb 2020 07:24:15 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTP id C27EC2041F1;
+        Tue, 25 Feb 2020 07:24:16 +0100 (CET)
 X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
 Received: from smtp.infotech.no ([127.0.0.1])
         by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id fle6VeI0iqoc; Tue, 25 Feb 2020 07:24:13 +0100 (CET)
+        with ESMTP id HC4he9-KD8nr; Tue, 25 Feb 2020 07:24:15 +0100 (CET)
 Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id A4B9B2041F1;
-        Tue, 25 Feb 2020 07:24:12 +0100 (CET)
+        by smtp.infotech.no (Postfix) with ESMTPA id 0C168204269;
+        Tue, 25 Feb 2020 07:24:13 +0100 (CET)
 From:   Douglas Gilbert <dgilbert@interlog.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        Damien.LeMoal@wdc.com, Damien Le Moal <damien.lemoal@wdc.com>
-Subject: [PATCH v4 13/14] scsi_debug: zone_size_mb module parameter
-Date:   Tue, 25 Feb 2020 01:23:50 -0500
-Message-Id: <20200225062351.21267-14-dgilbert@interlog.com>
+        Damien.LeMoal@wdc.com
+Subject: [PATCH v4 14/14] scsi_debug: bump to version 1.89
+Date:   Tue, 25 Feb 2020 01:23:51 -0500
+Message-Id: <20200225062351.21267-15-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200225062351.21267-1-dgilbert@interlog.com>
 References: <20200225062351.21267-1-dgilbert@interlog.com>
@@ -38,72 +38,42 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@wdc.com>
+The scsi_debug driver version is visible in:
+   /sys/modules/scsi_debug/version
+and can thus be used by user space programs to alter the
+features they try to use. Since the doublestore option is
+a significant addition, bump the version number which
+will appear as 0189 when the above file is read.
 
-Add the zone_size_mb module parameters to control the zone size of a
-ZBC device. If the zone size specified is not a divisor of the device
-capacity, the last zone of the device will be created as a smaller
-"runt" zone. This parameter is ignored for device types other than
-0x14 (zbc=2 case).
-
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
 Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 ---
- drivers/scsi/scsi_debug.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ drivers/scsi/scsi_debug.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 16f6358403f9..8530bc54b575 100644
+index 8530bc54b575..2e7837a86682 100644
 --- a/drivers/scsi/scsi_debug.c
 +++ b/drivers/scsi/scsi_debug.c
-@@ -800,7 +800,7 @@ static int dif_errors;
+@@ -7,7 +7,7 @@
+  *  anything out of the ordinary is seen.
+  * ^^^^^^^^^^^^^^^^^^^^^^^ Original ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  *
+- * Copyright (C) 2001 - 2018 Douglas Gilbert
++ * Copyright (C) 2001 - 2020 Douglas Gilbert
+  *
+  *  For documentation see http://sg.danny.cz/sg/sdebug26.html
+  */
+@@ -58,8 +58,8 @@
+ #include "scsi_logging.h"
  
- /* ZBC global data */
- static bool sdeb_zbc_in_use;		/* true when ptype=TYPE_ZBC [0x14] */
--static const int zbc_zone_size_mb;
-+static int sdeb_zbc_zone_size_mb;
- static int sdeb_zbc_max_open = DEF_ZBC_MAX_OPEN_ZONES;
- static int sdeb_zbc_nr_conv = DEF_ZBC_NR_CONV_ZONES;
+ /* make sure inq_product_rev string corresponds to this version */
+-#define SDEBUG_VERSION "0188"	/* format to fit INQUIRY revision field */
+-static const char *sdebug_version_date = "20190125";
++#define SDEBUG_VERSION "0189"	/* format to fit INQUIRY revision field */
++static const char *sdebug_version_date = "20200225";
  
-@@ -4678,10 +4678,10 @@ static int sdebug_device_create_zones(struct sdebug_dev_info *devip)
- 	unsigned int i;
+ #define MY_NAME "scsi_debug"
  
- 	/*
--	 * Set zone size: if zbc_zone_size_mb was not set, figure out a zone
--	 * size allowing for at least 4 zones on the device.
-+	 * Set zone size: if sdeb_zbc_zone_size_mb was not set, figure out
-+	 * a zone size allowing for at least 4 zones on the device.
- 	 */
--	if (!zbc_zone_size_mb) {
-+	if (!sdeb_zbc_zone_size_mb) {
- 		devip->zsize = (DEF_ZBC_ZONE_SIZE_MB * SZ_1M)
- 			>> ilog2(sdebug_sector_size);
- 		while (capacity < devip->zsize * 4 && devip->zsize >= 2)
-@@ -4691,7 +4691,7 @@ static int sdebug_device_create_zones(struct sdebug_dev_info *devip)
- 			return -EINVAL;
- 		}
- 	} else {
--		devip->zsize = (zbc_zone_size_mb * SZ_1M)
-+		devip->zsize = (sdeb_zbc_zone_size_mb * SZ_1M)
- 			>> ilog2(sdebug_sector_size);
- 		if (devip->zsize >= capacity) {
- 			pr_err("Zone size too large for device capacity\n");
-@@ -5464,6 +5464,7 @@ module_param_named(write_same_length, sdebug_write_same_length, int,
- module_param_named(zbc, sdeb_zbc_model_s, charp, S_IRUGO);
- module_param_named(zone_max_open, sdeb_zbc_max_open, int, S_IRUGO);
- module_param_named(zone_nr_conv, sdeb_zbc_nr_conv, int, S_IRUGO);
-+module_param_named(zone_size_mb, sdeb_zbc_zone_size_mb, int, S_IRUGO);
- 
- MODULE_AUTHOR("Eric Youngdale + Douglas Gilbert");
- MODULE_DESCRIPTION("SCSI debug adapter driver");
-@@ -5528,6 +5529,7 @@ MODULE_PARM_DESC(write_same_length, "Maximum blocks per WRITE SAME cmd (def=0xff
- MODULE_PARM_DESC(zbc, "'none' [0]; 'aware' [1]; 'managed' [2] (def=0). Can have 'host_' prefix");
- MODULE_PARM_DESC(zone_max_open, "Maximum number of open zones; [0] for no limit (def=auto)");
- MODULE_PARM_DESC(zone_nr_conv, "Number of conventional zones (def=1)");
-+MODULE_PARM_DESC(zone_size_mb, "Zone size in MiB (def=auto)");
- 
- #define SDEBUG_INFO_LEN 256
- static char sdebug_info[SDEBUG_INFO_LEN];
 -- 
 2.25.1
 
