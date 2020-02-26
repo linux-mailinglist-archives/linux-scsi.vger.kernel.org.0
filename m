@@ -2,86 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FE6170BBE
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2020 23:41:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A13170C09
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2020 23:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbgBZWla (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Feb 2020 17:41:30 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:50262 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727802AbgBZWl3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 26 Feb 2020 17:41:29 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01QMeN64006111;
-        Wed, 26 Feb 2020 14:41:20 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=1+h9shHLcSF0M9J53an0unPEAuGsn33WmdnyR4mI/EA=;
- b=mDW29/IFhAuDMpJYZK984VgkVEWeWerzdOWzC34ZE2N/11kRR6ZNw2Ldoyo66u469EJg
- U65TwgQclmyLYi7tMqkRjKIMCVjSXPASXOzsDy2h7IUCbLgD9tWf/d9/jy4wpbsogaSl
- HUZOiTL+FZ0552J1ZI4p5xKwt2ofKsHYC3eN9GSDpSEfnAKbYdGjtAf92FhStrlJvtOO
- bJJzdyiHSgZnMm2JNcZEy4+wbt9BqLZxVCdAq6CFivpCPKhupGFphOPNBTcnnhthLugj
- bthMhjUFRLH/islW2q9sTYrWn9pa/7JT3LPDaMQunbkTMwGPUiARKitXcdUQerf/SU2C pA== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2ydchtd6p8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 26 Feb 2020 14:41:20 -0800
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Feb
- 2020 14:41:18 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Feb
- 2020 14:41:18 -0800
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 Feb 2020 14:41:17 -0800
-Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id DAA4D3F7048;
-        Wed, 26 Feb 2020 14:41:17 -0800 (PST)
-Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01QMfHlg024633;
-        Wed, 26 Feb 2020 14:41:17 -0800
-Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01QMfHeG024632;
-        Wed, 26 Feb 2020 14:41:17 -0800
-From:   Himanshu Madhani <hmadhani@marvell.com>
-To:     <James.Bottomley@HansenPartnership.com>,
-        <martin.petersen@oracle.com>
-CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 18/18] qla2xxx: Update driver version to 10.01.00.25-k
-Date:   Wed, 26 Feb 2020 14:40:22 -0800
-Message-ID: <20200226224022.24518-19-hmadhani@marvell.com>
-X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20200226224022.24518-1-hmadhani@marvell.com>
-References: <20200226224022.24518-1-hmadhani@marvell.com>
+        id S1727181AbgBZW61 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Feb 2020 17:58:27 -0500
+Received: from mx2.suse.de ([195.135.220.15]:57576 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726046AbgBZW61 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 26 Feb 2020 17:58:27 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 932DAAD94;
+        Wed, 26 Feb 2020 22:58:25 +0000 (UTC)
+Subject: Re: [PATCH 02/13] scsi: add scsi_host_complete_all_commands() helper
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org
+References: <20200213140422.128382-1-hare@suse.de>
+ <20200213140422.128382-3-hare@suse.de> <20200226173952.GA23141@lst.de>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <ad993d68-cfba-8267-bd48-c33b0df3daeb@suse.de>
+Date:   Wed, 26 Feb 2020 23:58:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-26_09:2020-02-26,2020-02-26 signatures=0
+In-Reply-To: <20200226173952.GA23141@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
----
- drivers/scsi/qla2xxx/qla_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2/26/20 6:39 PM, Christoph Hellwig wrote:
+> On Thu, Feb 13, 2020 at 03:04:11PM +0100, Hannes Reinecke wrote:
+>>   extern void scsi_host_put(struct Scsi_Host *t);
+>>   extern struct Scsi_Host *scsi_host_lookup(unsigned short);
+>>   extern const char *scsi_host_state_name(enum scsi_host_state);
+>> +extern void scsi_host_complete_all_commands(struct Scsi_Host *shost, int status);
+> 
+> This adds an > 80 char line.  And externs on function declarations in
+> headers are never needed anyway.
+> 
+As for the "extern": I'm just following what all the other function 
+declarations in the header file do.
 
-diff --git a/drivers/scsi/qla2xxx/qla_version.h b/drivers/scsi/qla2xxx/qla_version.h
-index 6b4ca3ed8f22..8ccd9ba1ddef 100644
---- a/drivers/scsi/qla2xxx/qla_version.h
-+++ b/drivers/scsi/qla2xxx/qla_version.h
-@@ -7,7 +7,7 @@
- /*
-  * Driver version
-  */
--#define QLA2XXX_VERSION      "10.01.00.24-k"
-+#define QLA2XXX_VERSION      "10.01.00.25-k"
- 
- #define QLA_DRIVER_MAJOR_VER	10
- #define QLA_DRIVER_MINOR_VER	1
+If your argument is valid it would apply to all declarations in this 
+file, not just this one.
+And that would be a separate patch.
+
+Cheers,
+
+Hannes
 -- 
-2.12.0
-
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                               +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
