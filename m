@@ -2,53 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AC10170BBC
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2020 23:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD859170BC5
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2020 23:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727932AbgBZWlF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Feb 2020 17:41:05 -0500
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:16878 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727887AbgBZWlF (ORCPT
+        id S1727857AbgBZWnJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Feb 2020 17:43:09 -0500
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:61704 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727761AbgBZWnJ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 26 Feb 2020 17:41:05 -0500
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01QMVS63003759;
-        Wed, 26 Feb 2020 14:41:03 -0800
+        Wed, 26 Feb 2020 17:43:09 -0500
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01QMeZXO006185;
+        Wed, 26 Feb 2020 14:41:07 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=zvmclC3GnNbMV4NaGakMZKGzUm5O9RIGuzHln/SWj4A=;
- b=cgdDNaFURImGPLhnzxWIhKwKLhVO2HmFIgqIaJZMxLVuTCD42FUvTw0lDua144fMrPed
- 1VCXmPh2f0lU1fJv5qWDb0lZMmeayTkTUXU+9YA/c6OKNb1F6H1eB3rDb59bJruu8tgb
- f5Z5tlnFIslAplKLuK7dt4m17dOVDs/4c1uChzxQ7+BjEtIdJ5SIrYQ0SjqK+d8huQtE
- wafmHYmKe4uKLjSEA2aXctpMWcBbAYg2mRwcaJPhVxnhTPm/nEvBOdG03DtZGlolwFsR
- MxhLTJHuURf6Mffu8YUnlLU5gIRWwNyGDiOYy85GGNhueP8FHvjSV401UgOHHyJsImS7 oQ== 
-Received: from sc-exch02.marvell.com ([199.233.58.182])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2ydcm15b97-2
+ content-type; s=pfpt0818; bh=ZBa2o7VanPiSYTjpBO9TVHMViJwrxEEosZykuMsVV8A=;
+ b=b2g+5FhIRuE7UfFwA87nPGbJ34Zt09sFjtrZaSKNsZslmIr+mhvWcB30XoERg9q6OzdN
+ fZedHWhu4YZmZR+utiWp8HnutDib41xc6wnpNzxtiLcnuf7BNt26tfzZwkQns5rigmTT
+ 7HjmzWnYUxm1YRfKvbLMWIM0a/3iAiei+iRGlrQNZUlBjFjXCdbFgHoSV+sE4T6io8o1
+ 08ZWIv+AcgdIsqU9hhvn/OjcKNSR39SR8ka378blVVBQibYpklNPApHID0OAMm/h5x8C
+ e5uywmNf6cc30djE6W91MTHK2stXpaRNwDONSK207R/Sn9GNddF5XQ2Ml6uT1SyqhA3f VQ== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 2ydchtd6nk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 26 Feb 2020 14:41:03 -0800
-Received: from SC-EXCH03.marvell.com (10.93.176.83) by SC-EXCH02.marvell.com
- (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Feb
- 2020 14:41:02 -0800
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 Feb 2020 14:41:01 -0800
+        Wed, 26 Feb 2020 14:41:07 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Feb
+ 2020 14:41:05 -0800
+Received: from SC-EXCH01.marvell.com (10.93.176.81) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Feb
+ 2020 14:41:05 -0800
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Feb 2020 14:41:04 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id EAD4C3F7041;
-        Wed, 26 Feb 2020 14:41:01 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id 233173F703F;
+        Wed, 26 Feb 2020 14:41:05 -0800 (PST)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01QMf1fM024613;
-        Wed, 26 Feb 2020 14:41:01 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01QMf4Db024617;
+        Wed, 26 Feb 2020 14:41:05 -0800
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01QMf17p024612;
-        Wed, 26 Feb 2020 14:41:01 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01QMf4nq024616;
+        Wed, 26 Feb 2020 14:41:04 -0800
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 13/18] qla2xxx: Fix NPIV instantiation after FW dump
-Date:   Wed, 26 Feb 2020 14:40:17 -0800
-Message-ID: <20200226224022.24518-14-hmadhani@marvell.com>
+Subject: [PATCH 14/18] qla2xxx: Serialize fc_port alloc in N2N
+Date:   Wed, 26 Feb 2020 14:40:18 -0800
+Message-ID: <20200226224022.24518-15-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20200226224022.24518-1-hmadhani@marvell.com>
 References: <20200226224022.24518-1-hmadhani@marvell.com>
@@ -63,29 +66,48 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Quinn Tran <qutran@marvell.com>
 
-NPIV re-enable code was block after FW has been initialized.
-The blocking check was too broad. The patch reduce the check
-down to make sure if FW is initialized or not.
+For N2N, fc_port struct is created during report id acquistion.
+At later time, the loop resync (fabric, n2n, loop) would trigger
+the rest of the login using the created fc_port struct.  The loop
+resync logic can trigger another fc_port allocation if the 1st
+allocation was not able to execute.  This patch prevents the 2nd
+allocation trigger.
 
 Signed-off-by: Quinn Tran <qutran@marvell.com>
 Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_mbx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/qla2xxx/qla_init.c | 1 +
+ drivers/scsi/qla2xxx/qla_os.c   | 5 ++---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index ca5eb518927b..bd13b0d3cfea 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -1388,7 +1388,7 @@ qla2x00_issue_iocb_timeout(scsi_qla_host_t *vha, void *buffer,
- 	mbx_cmd_t	mc;
- 	mbx_cmd_t	*mcp = &mc;
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index 453b47006a59..3815f5321b3b 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -5148,6 +5148,7 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+ 			set_bit(LOCAL_LOOP_UPDATE, &vha->dpc_flags);
+ 			set_bit(LOOP_RESYNC_NEEDED, &vha->dpc_flags);
+ 		}
++		return QLA_FUNCTION_FAILED;
+ 	}
  
--	if (qla2x00_chip_is_down(vha))
-+	if (!vha->hw->flags.fw_started)
- 		return QLA_INVALID_COMMAND;
- 
- 	ql_dbg(ql_dbg_mbx + ql_dbg_verbose, vha, 0x1038,
+ 	found_devs = 0;
+diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
+index ede4529c4718..80c5c7b16150 100644
+--- a/drivers/scsi/qla2xxx/qla_os.c
++++ b/drivers/scsi/qla2xxx/qla_os.c
+@@ -5202,9 +5202,8 @@ void qla24xx_create_new_sess(struct scsi_qla_host *vha, struct qla_work_evt *e)
+ 					fcport->n2n_flag = 1;
+ 				}
+ 				fcport->fw_login_state = 0;
+-				/*
+-				 * wait link init done before sending login
+-				 */
++
++				schedule_delayed_work(&vha->scan.scan_work, 5);
+ 			} else {
+ 				qla24xx_fcport_handle_login(vha, fcport);
+ 			}
 -- 
 2.12.0
 
