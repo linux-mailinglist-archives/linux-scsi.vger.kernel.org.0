@@ -2,53 +2,56 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE5D170BC6
-	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2020 23:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D455170BBD
+	for <lists+linux-scsi@lfdr.de>; Wed, 26 Feb 2020 23:41:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727877AbgBZWnL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 26 Feb 2020 17:43:11 -0500
-Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:25482 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727761AbgBZWnL (ORCPT
+        id S1727877AbgBZWlQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 26 Feb 2020 17:41:16 -0500
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:2522 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727802AbgBZWlQ (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 26 Feb 2020 17:43:11 -0500
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01QMeNj7006110;
-        Wed, 26 Feb 2020 14:41:10 -0800
+        Wed, 26 Feb 2020 17:41:16 -0500
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01QMVSLh003745;
+        Wed, 26 Feb 2020 14:41:15 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=zLQ3/8PmJEq8wcSG/mrPn3mOx2leQyUdPNux7EESj80=;
- b=IEkM9X/zawxNUIDRzCtO0l+gatc7S4W04U3nhEi9jAXgKLfeMAGUqypgQdeKQzQMw3aK
- DXUycKMHSZZ+HgUw1JPbdJMgAG9RSY9TVcNrI3EtHsNydYfw3ECO36uc7Hfk7ey8l0jA
- sPtbfvdGpCZIxEa1D/jmCDjLtIEWjEz4vVP08axlFTtyKdb65Yi+bwWqabM3paYmgch+
- 9R732AO0fmQ7YJw6GP93c3hQS0t3/2je2ZNQi9Ur6GfGZv0Jbpl8Tbg5+kouq9mlwfGd
- w0LHPM5WhQ1P8RduucBwqIPiY8Hj2unaTgfT5v98fIZqp80MpXS8J7EpzL4U2/X1LWWX 0Q== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0b-0016f401.pphosted.com with ESMTP id 2ydchtd6nr-1
+ content-type; s=pfpt0818; bh=XlGs0N2HTsNUaQf5WAoeEQeJBnsTcZEEd/IQAw0U50M=;
+ b=unDVa8mMBnLN07lpB0p2gYvSor7ZNpz4QMv8wCA7bj2L1WBm5iu1BNvJbcana2QNFw/0
+ wfge6FiQBZ38NDEyRhGtqZQYkxfIbuxBbhdMQjj7OGJB5KJXsqXJsnOOb0qM106DYB5o
+ ERBe4f3oi0V4INh4rTYen8pMfC1RA0s3vvVNZxgO8a7HvrVrvkCypIOVXNKYmPc1pPwF
+ GDatEsfFsIGoEMKZG0kWQpo+ylhNDtGiJE7Wc2MWP4wxtgBXDj3JyjdB37HCqSji9L8U
+ pMeYZH3As9nApphO75YKqiWsclyemIeBvy71GaMW0m8X5QMnXPmJOlSL4jm9LiOFWgQD TQ== 
+Received: from sc-exch02.marvell.com ([199.233.58.182])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2ydcm15b9t-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 26 Feb 2020 14:41:10 -0800
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Feb
- 2020 14:41:08 -0800
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 Feb 2020 14:41:08 -0800
+        Wed, 26 Feb 2020 14:41:15 -0800
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH02.marvell.com
+ (10.93.176.82) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Feb
+ 2020 14:41:12 -0800
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 Feb
+ 2020 14:41:11 -0800
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 26 Feb 2020 14:41:11 -0800
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 4F1533F703F;
-        Wed, 26 Feb 2020 14:41:08 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id 8603E3F703F;
+        Wed, 26 Feb 2020 14:41:11 -0800 (PST)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01QMf8Ih024621;
-        Wed, 26 Feb 2020 14:41:08 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 01QMfBGW024625;
+        Wed, 26 Feb 2020 14:41:11 -0800
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01QMf8O2024620;
-        Wed, 26 Feb 2020 14:41:08 -0800
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 01QMfBB8024624;
+        Wed, 26 Feb 2020 14:41:11 -0800
 From:   Himanshu Madhani <hmadhani@marvell.com>
 To:     <James.Bottomley@HansenPartnership.com>,
         <martin.petersen@oracle.com>
 CC:     <hmadhani@marvell.com>, <linux-scsi@vger.kernel.org>
-Subject: [PATCH 15/18] qla2xxx: Remove restriction of FC T10-PI and FC-NVMe
-Date:   Wed, 26 Feb 2020 14:40:19 -0800
-Message-ID: <20200226224022.24518-16-hmadhani@marvell.com>
+Subject: [PATCH 16/18] qla2xxx: Handle NVME status iocb correctly
+Date:   Wed, 26 Feb 2020 14:40:20 -0800
+Message-ID: <20200226224022.24518-17-hmadhani@marvell.com>
 X-Mailer: git-send-email 2.12.0
 In-Reply-To: <20200226224022.24518-1-hmadhani@marvell.com>
 References: <20200226224022.24518-1-hmadhani@marvell.com>
@@ -61,34 +64,101 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Arun Easi <aeasi@marvell.com>
 
-T10-PI and FC-NVMe are not mutually exclusive of each
-other. This patch removes restrictions where if FC-NVMe
-is enabled T10-PI defaults to disabled.
+Certain state flags bit combinations are not checked
+and not handled correctly. Plus, do not log a normal
+underrun situation, where there is no frame drop.
 
-Signed-off-by: Quinn Tran <qutran@marvell.com>
+Signed-off-by: Arun Easi <aeasi@marvell.com>
 Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/scsi/qla2xxx/qla_isr.c | 47 +++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 80c5c7b16150..6973fe400ce4 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -123,11 +123,7 @@ MODULE_PARM_DESC(ql2xmaxqdepth,
- 		"Maximum queue depth to set for each LUN. "
- 		"Default is 64.");
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index 0217a3456705..3699d3a29135 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -2064,6 +2064,7 @@ static void qla24xx_nvme_iocb_entry(scsi_qla_host_t *vha, struct req_que *req,
+ 	struct nvmefc_fcp_req *fd;
+ 	uint16_t        ret = QLA_SUCCESS;
+ 	uint16_t	comp_status = le16_to_cpu(sts->comp_status);
++	int		logit = 0;
  
--#if (IS_ENABLED(CONFIG_NVME_FC))
--int ql2xenabledif;
--#else
- int ql2xenabledif = 2;
--#endif
- module_param(ql2xenabledif, int, S_IRUGO);
- MODULE_PARM_DESC(ql2xenabledif,
- 		" Enable T10-CRC-DIF:\n"
+ 	iocb = &sp->u.iocb_cmd;
+ 	fcport = sp->fcport;
+@@ -2074,6 +2075,12 @@ static void qla24xx_nvme_iocb_entry(scsi_qla_host_t *vha, struct req_que *req,
+ 	if (unlikely(iocb->u.nvme.aen_op))
+ 		atomic_dec(&sp->vha->hw->nvme_active_aen_cnt);
+ 
++	if (unlikely(comp_status != CS_COMPLETE))
++		logit = 1;
++
++	fd->transferred_length = fd->payload_length -
++	    le32_to_cpu(sts->residual_len);
++
+ 	/*
+ 	 * State flags: Bit 6 and 0.
+ 	 * If 0 is set, we don't care about 6.
+@@ -2084,8 +2091,20 @@ static void qla24xx_nvme_iocb_entry(scsi_qla_host_t *vha, struct req_que *req,
+ 	 */
+ 	if (!(state_flags & (SF_FCP_RSP_DMA | SF_NVME_ERSP))) {
+ 		iocb->u.nvme.rsp_pyld_len = 0;
+-	} else if ((state_flags & SF_FCP_RSP_DMA)) {
++	} else if ((state_flags & (SF_FCP_RSP_DMA | SF_NVME_ERSP)) ==
++			(SF_FCP_RSP_DMA | SF_NVME_ERSP)) {
++		/* Response already DMA'd to fd->rspaddr. */
+ 		iocb->u.nvme.rsp_pyld_len = le16_to_cpu(sts->nvme_rsp_pyld_len);
++	} else if ((state_flags & SF_FCP_RSP_DMA)) {
++		/*
++		 * Non-zero value in first 12 bytes of NVMe_RSP IU, treat this
++		 * as an error.
++		 */
++		iocb->u.nvme.rsp_pyld_len = 0;
++		fd->transferred_length = 0;
++		ql_dbg(ql_dbg_io, fcport->vha, 0x307a,
++			"Unexpected values in NVMe_RSP IU.\n");
++		logit = 1;
+ 	} else if (state_flags & SF_NVME_ERSP) {
+ 		uint32_t *inbuf, *outbuf;
+ 		uint16_t iter;
+@@ -2108,16 +2127,28 @@ static void qla24xx_nvme_iocb_entry(scsi_qla_host_t *vha, struct req_que *req,
+ 		iter = iocb->u.nvme.rsp_pyld_len >> 2;
+ 		for (; iter; iter--)
+ 			*outbuf++ = swab32(*inbuf++);
+-	} else { /* unhandled case */
+-	    ql_log(ql_log_warn, fcport->vha, 0x503a,
+-		"NVME-%s error. Unhandled state_flags of %x\n",
+-		sp->name, state_flags);
+ 	}
+ 
+-	fd->transferred_length = fd->payload_length -
+-	    le32_to_cpu(sts->residual_len);
++	if (state_flags & SF_NVME_ERSP) {
++		struct nvme_fc_ersp_iu *rsp_iu = fd->rspaddr;
++		u32 tgt_xfer_len;
+ 
+-	if (unlikely(comp_status != CS_COMPLETE))
++		tgt_xfer_len = be32_to_cpu(rsp_iu->xfrd_len);
++		if (fd->transferred_length != tgt_xfer_len) {
++			ql_dbg(ql_dbg_io, fcport->vha, 0x3079,
++				"Dropped frame(s) detected (sent/rcvd=%u/%u).\n",
++				tgt_xfer_len, fd->transferred_length);
++			logit = 1;
++		} else if (comp_status == CS_DATA_UNDERRUN) {
++			/*
++			 * Do not log if this is just an underflow and there
++			 * is no data loss.
++			 */
++			logit = 0;
++		}
++	}
++
++	if (unlikely(logit))
+ 		ql_log(ql_log_warn, fcport->vha, 0x5060,
+ 		   "NVME-%s ERR Handling - hdl=%x status(%x) tr_len:%x resid=%x  ox_id=%x\n",
+ 		   sp->name, sp->handle, comp_status,
 -- 
 2.12.0
 
