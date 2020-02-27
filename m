@@ -2,102 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78627172450
-	for <lists+linux-scsi@lfdr.de>; Thu, 27 Feb 2020 18:00:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D11D1724AE
+	for <lists+linux-scsi@lfdr.de>; Thu, 27 Feb 2020 18:11:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729861AbgB0RAE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 27 Feb 2020 12:00:04 -0500
-Received: from smtp.infotech.no ([82.134.31.41]:47335 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729811AbgB0RAE (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 27 Feb 2020 12:00:04 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 5D9F120416A;
-        Thu, 27 Feb 2020 18:00:02 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jRETvg1c65WO; Thu, 27 Feb 2020 18:00:00 +0100 (CET)
-Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 8DF8320419B;
-        Thu, 27 Feb 2020 17:59:53 +0100 (CET)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
-Subject: [PATCH v7 38/38] sg: bump version to 4.0.08
-Date:   Thu, 27 Feb 2020 11:59:02 -0500
-Message-Id: <20200227165902.11861-39-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200227165902.11861-1-dgilbert@interlog.com>
-References: <20200227165902.11861-1-dgilbert@interlog.com>
+        id S1729500AbgB0RJO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 27 Feb 2020 12:09:14 -0500
+Received: from hosting.gsystem.sk ([212.5.213.30]:58530 "EHLO
+        hosting.gsystem.sk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbgB0RJN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 27 Feb 2020 12:09:13 -0500
+Received: from [192.168.0.2] (188-167-68-178.dynamic.chello.sk [188.167.68.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id 256C87A0123;
+        Thu, 27 Feb 2020 18:09:12 +0100 (CET)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Bart Van Assche <bvanassche@acm.org>
+Subject: Re: NULL pointer dereference in qla24xx_abort_command, kernel 4.19.98 (Debian)
+Date:   Thu, 27 Feb 2020 18:09:07 +0100
+User-Agent: KMail/1.9.10
+Cc:     qla2xxx-upstream@qlogic.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202002231929.01662.linux@zary.sk> <202002240920.17691.linux@zary.sk> <1fbad673-1b8c-0813-c60e-a4f56330a972@acm.org>
+In-Reply-To: <1fbad673-1b8c-0813-c60e-a4f56330a972@acm.org>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202002271809.07717.linux@zary.sk>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that the sg version 4 interface is supported:
-  - with ioctl(SG_IO) for synchronous/blocking use
-  - with ioctl(SG_IOSUBMIT) and ioctl(SG_IORECEIVE) for
-    async/non-blocking use
-Plus new ioctl(SG_IOSUBMIT_V3) and ioctl(SG_IORECEIVE_V3)
-potentially replace write() and read() for the sg
-version 3 interface. Bump major driver version number
-from 3 to 4.
 
-The main new feature is the removal of the fixed 16 element
-array of requests per file descriptor. It is replaced by
-a xarray (eXtensible array) in their parent which is a
-sg_fd object (i.e. a file descriptor). The sg_request
-objects are not freed until the owning file descriptor is
-closed; instead these objects are re-used when multiple
-commands are sent to the same file descriptor.
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
----
- drivers/scsi/sg.c      | 8 ++++----
- include/uapi/scsi/sg.h | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+On Tuesday 25 February 2020 04:41:48 Bart Van Assche wrote:
+> On 2020-02-24 00:20, Ondrej Zary wrote:
+> > Looks like it's in some inlined function.
+> > 
+> > /usr/src/linux-source-4.19# gdb /lib/modules/4.19.0-8-amd64/kernel/drivers/scsi/qla2xxx/qla2xxx.ko
+> > GNU gdb (Debian 8.2.1-2+b3) 8.2.1
+> > ...
+> > Reading symbols from /lib/modules/4.19.0-8-amd64/kernel/drivers/scsi/qla2xxx/qla2xxx.ko...Reading symbols 
+> > from /usr/lib/debug//lib/modules/4.19.0-8-amd64/kernel/drivers/scsi/qla2xxx/qla2xxx.ko...done.
+> > done.
+> > 
+> > (gdb) list *(qla24xx_async_abort_cmd+0x1b)
+> > 0xf88b is in qla24xx_async_abort_cmd (./arch/x86/include/asm/atomic.h:97).
+> > 92       *
+> > 93       * Atomically increments @v by 1.
+> > 94       */
+> > 95      static __always_inline void arch_atomic_inc(atomic_t *v)
+> > 96      {
+> > 97              asm volatile(LOCK_PREFIX "incl %0"
+> > 98                           : "+m" (v->counter) :: "memory");
+> > 99      }
+> > 100     #define arch_atomic_inc arch_atomic_inc
+> >
+> > [ ... ]
+> > 
+> > (gdb) disassemble qla24xx_async_abort_cmd
+> > Dump of assembler code for function qla24xx_async_abort_cmd:
+> >    0x000000000000f870 <+0>:     callq  0xf875 <qla24xx_async_abort_cmd+5>
+> >    0x000000000000f875 <+5>:     push   %r15
+> >    0x000000000000f877 <+7>:     push   %r14
+> >    0x000000000000f879 <+9>:     push   %r13
+> >    0x000000000000f87b <+11>:    push   %r12
+> >    0x000000000000f87d <+13>:    push   %rbp
+> >    0x000000000000f87e <+14>:    push   %rbx
+> >    0x000000000000f87f <+15>:    mov    0x28(%rdi),%r13
+> >    0x000000000000f883 <+19>:    mov    0x20(%rdi),%r15
+> >    0x000000000000f887 <+23>:    mov    0x48(%rdi),%r14
+> >    0x000000000000f88b <+27>:    lock incl 0x4(%r14)
+> >    0x000000000000f890 <+32>:    mfence
+> 
+> Thanks, this is very helpful. I think the above means that the crash is
+> triggered by the following code:
+> 
+> 	sp = qla2xxx_get_qpair_sp(cmd_sp->qpair, cmd_sp->fcport,
+> 		GFP_KERNEL);
+> 
+> From the start of qla2xxx_get_qpair_sp():
+> 
+> 	QLA_QPAIR_MARK_BUSY(qpair, bail);
+> 
+> From qla_def.h:
+> 
+> #define QLA_QPAIR_MARK_BUSY(__qpair, __bail) do {	\
+> 	atomic_inc(&__qpair->ref_count);		\
+> 	mb();						\
+> 	if (__qpair->delete_in_progress) {		\
+> 		atomic_dec(&__qpair->ref_count);	\
+> 		__bail = 1;				\
+> 	} else {					\
+> 	       __bail = 0;				\
+> 	}						\
+> } while (0)
+> 
+> One of the changes between kernel version v4.9.210 and v4.19.98 is the
+> following: "qla2xxx: Add multiple queue pair functionality". I think the
+>  above information means that the cmd_sp->qpair pointer is NULL. I will
+> let QLogic recommend a solution.
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 24c4a539eae0..9ab70ec2a9ef 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -8,13 +8,13 @@
-  * Original driver (sg.c):
-  *        Copyright (C) 1992 Lawrence Foard
-  * Version 2, 3 and 4 extensions to driver:
-- *        Copyright (C) 1998 - 2019 Douglas Gilbert
-+ *        Copyright (C) 1998 - 2020 Douglas Gilbert
-  *
-  */
- 
--static int sg_version_num = 30901;  /* [x]xyyzz where [x] empty when x=0 */
--#define SG_VERSION_STR "3.9.01"		/* [x]x.[y]y.zz */
--static char *sg_version_date = "20190606";
-+static int sg_version_num = 40008;  /* [x]xyyzz where [x] empty when x=0 */
-+#define SG_VERSION_STR "4.0.08"		/* [x]x.[y]y.zz */
-+static char *sg_version_date = "20200227";
- 
- #include <linux/module.h>
- 
-diff --git a/include/uapi/scsi/sg.h b/include/uapi/scsi/sg.h
-index cbade2870355..947073ef26dc 100644
---- a/include/uapi/scsi/sg.h
-+++ b/include/uapi/scsi/sg.h
-@@ -12,9 +12,9 @@
-  *   Copyright (C) 1992 Lawrence Foard
-  *
-  * Later extensions (versions 2, 3 and 4) to driver:
-- *   Copyright (C) 1998 - 2018 Douglas Gilbert
-+ *   Copyright (C) 1998 - 2020 Douglas Gilbert
-  *
-- * Version 4.0.11 (20190502)
-+ * Version 4.0.11 (20200124)
-  *  This version is for Linux 4 and 5 series kernels.
-  *
-  * Documentation
+Thank you very much for the analysis.
+Unfortunately, QLogic does not seem to care...
+
 -- 
-2.25.1
-
+Ondrej Zary
