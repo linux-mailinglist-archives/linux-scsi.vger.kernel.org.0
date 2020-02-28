@@ -2,60 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D34617334D
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 09:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2BF173329
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 09:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbgB1Ivo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Feb 2020 03:51:44 -0500
-Received: from forward100j.mail.yandex.net ([5.45.198.240]:53268 "EHLO
-        forward100j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726005AbgB1Ivo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 28 Feb 2020 03:51:44 -0500
-X-Greylist: delayed 409 seconds by postgrey-1.27 at vger.kernel.org; Fri, 28 Feb 2020 03:51:43 EST
-Received: from mxback28j.mail.yandex.net (mxback28j.mail.yandex.net [IPv6:2a02:6b8:0:1619::228])
-        by forward100j.mail.yandex.net (Yandex) with ESMTP id 9983250E1C13;
-        Fri, 28 Feb 2020 11:44:51 +0300 (MSK)
-Received: from iva4-bca95d3b11b1.qloud-c.yandex.net (iva4-bca95d3b11b1.qloud-c.yandex.net [2a02:6b8:c0c:4e8e:0:640:bca9:5d3b])
-        by mxback28j.mail.yandex.net (mxback/Yandex) with ESMTP id Buqt4zYrVR-ipVi96iI;
-        Fri, 28 Feb 2020 11:44:51 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1582879491;
-        bh=mESbkvWILcImHEm8xIwzzKeiloKl2fwjAucF+6JCRAw=;
-        h=In-Reply-To:From:To:Subject:Cc:Date:References:Message-ID;
-        b=psui6TuHOyo5bzjoTKoWupdqiTvHJ/byuxOYq5FcRf6ZoDmRaJJB4yOlYjFZTyMN3
-         dit0IbjXovmtt/ATw+U0uuHh+ItdKpoTNprnSAKf0B7Oz3Xn0jI+6HQRDu6REA952V
-         h9R1F7ku8NK82Bub8fRVEnIjuoyQsGOe20u3sdP4=
-Authentication-Results: mxback28j.mail.yandex.net; dkim=pass header.i=@yandex.ru
-Received: by iva4-bca95d3b11b1.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id aWPNzKpAAh-ioVis1wX;
-        Fri, 28 Feb 2020 11:44:50 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-Subject: Re: Linux / mpt3sas support for PCI 1000:0014 (weird device?)
-To:     Sumit Saxena <sumit.saxena@broadcom.com>
-Cc:     MPT-FusionLinux.pdl@broadcom.com,
-        Linux SCSI List <linux-scsi@vger.kernel.org>
-References: <49751508-48b0-eab4-a371-1b9eded12a19@yandex.ru>
- <CAL2rwxpw+bPg24O4V71dqpyW3aCsOYEGycm0=skBgg8pyBzncQ@mail.gmail.com>
-From:   Dmitry Antipov <dmantipov@yandex.ru>
-Message-ID: <483f502a-f8c6-79a7-86ba-6e544731b6b3@yandex.ru>
-Date:   Fri, 28 Feb 2020 11:44:50 +0300
+        id S1726359AbgB1IpN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Feb 2020 03:45:13 -0500
+Received: from mx2.suse.de ([195.135.220.15]:60418 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725877AbgB1IpN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 28 Feb 2020 03:45:13 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id A5479ABF4;
+        Fri, 28 Feb 2020 08:45:11 +0000 (UTC)
+Subject: Re: [PATCH v7 20/38] sg: sg_find_srp_by_id
+To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com
+References: <20200227165902.11861-1-dgilbert@interlog.com>
+ <20200227165902.11861-21-dgilbert@interlog.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <f6277717-dd6f-dce6-9f20-1c4e0fc4b90b@suse.de>
+Date:   Fri, 28 Feb 2020 09:45:10 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <CAL2rwxpw+bPg24O4V71dqpyW3aCsOYEGycm0=skBgg8pyBzncQ@mail.gmail.com>
+In-Reply-To: <20200227165902.11861-21-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2/27/20 8:42 PM, Sumit Saxena wrote:
+On 2/27/20 5:58 PM, Douglas Gilbert wrote:
+> Replace sg_get_rq_mark() with sg_find_srp_by_id() and
+> sg_get_ready_srp(). Add sg_chk_mmap() to check flags and
+> reserve buffer available for mmap() based requests. Add
+> sg_copy_sense() and sg_rec_state_v3() which is just
+> refactoring. Add sg_calc_rq_dur() and sg_get_dur() in
+> preparation for optional nanosecond duration timing.
+> 
+> Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+> ---
+>   drivers/scsi/sg.c | 286 +++++++++++++++++++++++++++++++---------------
+>   1 file changed, 197 insertions(+), 89 deletions(-)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-> 1000:0014 is LSI/Broadcom MegaRAID controller and supported by
-> megaraid_sas driver (drivers/scsi/megaraid).
+Cheers,
 
-Thanks. But lsiutil isn't expected to work with megaraid_sas, right?
-
-Dmitry
+Hannes
+-- 
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                               +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
