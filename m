@@ -2,101 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B311A173149
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 07:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B30AB173218
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 08:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbgB1Gqj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Feb 2020 01:46:39 -0500
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:40019 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725862AbgB1Gqi (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 28 Feb 2020 01:46:38 -0500
-Received: by mail-ua1-f65.google.com with SMTP id t20so602568uao.7
-        for <linux-scsi@vger.kernel.org>; Thu, 27 Feb 2020 22:46:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sPJ2OvRxOCmEPKIxeEp6m+UO5YYbHEl1NGnXOdz3GOc=;
-        b=MGFfkxsit/DPkZmPZOjFO6NBpVO57ycjoKQUSv7jQj14fcYOkrwzJha//tF5sJe2SV
-         rF6/JutXvVt2AOglHZVx9Ai2EwW+iLiXVM732Q9nhPogw+H9zadQ4AIx3HXzrnYnYyCG
-         GeT5N73h22uMiC9bkUxDGXcYQ1cLePWqdGJLaP7LKHsyT7ze61fSD0SKDxuQhR8E4RnX
-         /RSJFJS1e91CvXGgeZORmjefHV7XvbOV+8hdgirz7uSZ0s2nH9AVFE8iBNRaouL0bthe
-         Y5bIxyTZbHjwwgE+Tc+hOireM9WHpfbKxx+oh9YKw6gQSUvlA2Pf7Ou/l2YSMIR0P8l/
-         ZKTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sPJ2OvRxOCmEPKIxeEp6m+UO5YYbHEl1NGnXOdz3GOc=;
-        b=sAQRLkGDVPfRlq6x5dYRwaleAUicDhfj3zJdOkviq94P+vmjQUgNaCKjKRefQUfC/f
-         6cfs2pUYMDWT4fmtSpfzymvf3ELocVe8rKjNliXQB5p08cLwzYG2ib36a89QfE9+N4xz
-         yXivW0df3ivc7X5MU20PUVDzJyxHhmjzcAkmpjRxsz6ykJF786cwP0LlLbu5XEYxTeVN
-         sOPeFOo2af/hT1O5y1DgV4u+c58dkHdirP1NCDnBnQsumb/SNhgien1IGiygfa6BIdcc
-         yvmI2X8l2wtI0efXx2pKbsUxk80iTRRJ6C5WgTHE8ilJXk3l0UFKIF/bN025YjaEeggT
-         qqwQ==
-X-Gm-Message-State: ANhLgQ1wvo6RTtboJY5YXRZx/bUyV5/WtO9KGhHSBdM4XCLuKBJlTqNT
-        xESdXB8//wz2pXQZO+lWQKQe8kPd6PfObv6elmyCdAeB
-X-Google-Smtp-Source: ADFU+vvpOsoBDpUk5r/gx8ycA0CjgosW3O8Yiua7BRgqnWzXr4ld+qyf42jXy3BVL1pBAmWF2tn0rIv6kueQhwavvmg=
-X-Received: by 2002:a9f:3046:: with SMTP id i6mr1323024uab.15.1582872397671;
- Thu, 27 Feb 2020 22:46:37 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1582839544.git.nguyenb@codeaurora.org> <b328b981a785525b8424b4ab2197dc1ec54417d1.1582839544.git.nguyenb@codeaurora.org>
-In-Reply-To: <b328b981a785525b8424b4ab2197dc1ec54417d1.1582839544.git.nguyenb@codeaurora.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 28 Feb 2020 07:46:01 +0100
-Message-ID: <CAPDyKFrGmXj8HWNz2irUd7i8Cb77U8rLM=V91vcrWE+r7Pqeyg@mail.gmail.com>
-Subject: Re: [<PATCH v1> 1/4] mmc: core: Add check for NULL pointer access
-To:     "Bao D. Nguyen" <nguyenb@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Asutosh Das <asutoshd@codeaurora.org>, cang@codeaurora.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726994AbgB1HxX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Feb 2020 02:53:23 -0500
+Received: from mx2.suse.de ([195.135.220.15]:59746 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726671AbgB1HxX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 28 Feb 2020 02:53:23 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 1AE0CAF22;
+        Fri, 28 Feb 2020 07:53:20 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCHv8 00/13] scsi: remove legacy cmd_list implementation
+Date:   Fri, 28 Feb 2020 08:53:05 +0100
+Message-Id: <20200228075318.91255-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 27 Feb 2020 at 23:06, Bao D. Nguyen <nguyenb@codeaurora.org> wrote:
->
-> If the SD card is removed, the mmc_card pointer can be set to NULL
-> by the mmc_sd_remove() function. Check mmc_card pointer to avoid NULL
-> pointer access.
->
-> Signed-off-by: Bao D. Nguyen <nguyenb@codeaurora.org>
-> Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
-> ---
->  drivers/mmc/core/bus.c  | 5 +++++
->  drivers/mmc/core/core.c | 3 +++
->  2 files changed, 8 insertions(+)
->
-> diff --git a/drivers/mmc/core/bus.c b/drivers/mmc/core/bus.c
-> index 74de3f2..4558f51 100644
-> --- a/drivers/mmc/core/bus.c
-> +++ b/drivers/mmc/core/bus.c
-> @@ -131,6 +131,11 @@ static void mmc_bus_shutdown(struct device *dev)
->         struct mmc_host *host = card->host;
->         int ret;
+Hi all,
 
-This obviously doesn't solve anything as we have already dereferenced
-the card->host above. In other words we should hit a NULL pointer
-dereference bug then.
+with the switch to blk-mq we have an efficient way of looking up
+outstanding commands via blk_mq_rq_busy_iter().
+In this patchset the dpt_i2o and aacraid drivers are switched over
+to using that function, and the now obsolete cmd_list implemantation
+in the SCSI midlayer is removed.
 
-More exactly, how do you trigger this problem?
+As usual, comments and reviews are welcome.
 
->
-> +       if (!card) {
-> +               dev_dbg(dev, "%s: %s: card is NULL\n", dev_name(dev), __func__);
-> +               return;
-> +       }
-> +
->         if (dev->driver && drv->shutdown)
->                 drv->shutdown(card);
->
+Changes to v1:
+- Fixup kbuild warning
 
-[...]
+Changes to v2:
+- Add scsi_host_busy_iter()
+- Include reviews from Christoph
 
-Kind regards
-Uffe
+Changes to v3:
+- Include reviews from Christoph
+- Add midlayer helper to terminate outstanding commands
+- Split off aacraid modifcations into several patches
+
+Changes to v4:
+- Include reviews from Bart
+- Add new midlayer helper scsi_host_quiesce()/scsi_host_resume()
+- Improve comments
+
+Changes to v5:
+- Add reviews from Balsundar P.
+- Rename scsi_host_flush_commands()
+- Replace patch using scsi_host_quiesce() by using busy iterator
+
+Changes to v6:
+- Add reviews from Balsundar P.
+
+Changes to v7:
+- Add reviews from Christoph
+
+Hannes Reinecke (13):
+  dpt_i2o: rename adpt_i2o_to_scsi() to adpt_i2o_scsi_complete()
+  scsi: add scsi_host_complete_all_commands() helper
+  dpt_i2o: use scsi_host_complete_all_commands() to abort outstanding
+    commands
+  aacraid: Do not wait for outstanding write commands on
+    synchronize_cache
+  aacraid: use scsi_host_complete_all_commands() to terminate
+    outstanding commands
+  aacraid: replace aac_flush_ios() with midlayer helper
+  aacraid: move scsi_(block,unblock)_requests out of
+    _aac_reset_adapter()
+  scsi: add scsi_host_(block,unblock) helper function
+  aacraid: use scsi_host_(block,unblock) to block I/O
+  scsi: add scsi_host_busy_iter()
+  aacraid: use scsi_host_busy_iter() to wait for outstanding commands
+  aacraid: use scsi_host_busy_iter() in get_num_of_incomplete_fibs()
+  scsi: Remove cmd_list functionality
+
+ drivers/scsi/aacraid/aachba.c   |  76 +------------------------
+ drivers/scsi/aacraid/comminit.c |  35 ++++++------
+ drivers/scsi/aacraid/commsup.c  |  46 +++------------
+ drivers/scsi/aacraid/linit.c    | 120 ++++++++++++++++------------------------
+ drivers/scsi/dpt_i2o.c          |  25 +--------
+ drivers/scsi/dpti.h             |   3 +-
+ drivers/scsi/hosts.c            |  65 ++++++++++++++++++++++
+ drivers/scsi/scsi.c             |  14 -----
+ drivers/scsi/scsi_error.c       |   1 -
+ drivers/scsi/scsi_lib.c         |  61 ++++++++++----------
+ drivers/scsi/scsi_priv.h        |   2 -
+ drivers/scsi/scsi_scan.c        |   1 -
+ include/scsi/scsi_cmnd.h        |   1 -
+ include/scsi/scsi_device.h      |   1 -
+ include/scsi/scsi_host.h        |   9 ++-
+ 15 files changed, 181 insertions(+), 279 deletions(-)
+
+-- 
+2.16.4
+
