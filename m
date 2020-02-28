@@ -2,207 +2,109 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78302173222
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 08:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C35F1732E5
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 09:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbgB1Hx1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Feb 2020 02:53:27 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59832 "EHLO mx2.suse.de"
+        id S1726413AbgB1I2B (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Feb 2020 03:28:01 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49580 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727009AbgB1HxZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 28 Feb 2020 02:53:25 -0500
+        id S1726151AbgB1I2A (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 28 Feb 2020 03:28:00 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 61695B21F;
-        Fri, 28 Feb 2020 07:53:21 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 6D4DAAC65;
+        Fri, 28 Feb 2020 08:27:58 +0000 (UTC)
+Subject: Re: [PATCH v7 10/38] sg: improve naming
+To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com
+References: <20200227165902.11861-1-dgilbert@interlog.com>
+ <20200227165902.11861-11-dgilbert@interlog.com>
 From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 13/13] scsi: Remove cmd_list functionality
-Date:   Fri, 28 Feb 2020 08:53:18 +0100
-Message-Id: <20200228075318.91255-14-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200228075318.91255-1-hare@suse.de>
-References: <20200228075318.91255-1-hare@suse.de>
+Message-ID: <11e41b41-8569-173a-3ce0-a6013e57f7da@suse.de>
+Date:   Fri, 28 Feb 2020 09:27:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
+MIME-Version: 1.0
+In-Reply-To: <20200227165902.11861-11-dgilbert@interlog.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Remove cmd_list functionality; no users left.  With that the scsi_put_command()
-becomes empty, so remove that one, too.
+On 2/27/20 5:58 PM, Douglas Gilbert wrote:
+> Remove use of typedef sg_io_hdr_t and replace with struct
+> sg_io_hdr. Change some names on driver wide structure fields
+> and comment them. Rename sg_alloc() to sg_add_device_helper()
+> to reflect its current role.
+> 
+> Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
+> ---
+>   drivers/scsi/sg.c | 240 ++++++++++++++++++++++++----------------------
+>   1 file changed, 127 insertions(+), 113 deletions(-)
+> 
+> diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+> index 246c630d3523..eb3b333ea30b 100644
+> --- a/drivers/scsi/sg.c
+> +++ b/drivers/scsi/sg.c
+> @@ -92,7 +92,7 @@ static int sg_allow_dio = SG_ALLOW_DIO_DEF;
+>   static int scatter_elem_sz = SG_SCATTER_SZ;
+>   static int scatter_elem_sz_prev = SG_SCATTER_SZ;
+>   
+> -#define SG_SECTOR_SZ 512
+> +#define SG_DEF_SECTOR_SZ 512
+>   
+>   static int sg_add_device(struct device *, struct class_interface *);
+>   static void sg_remove_device(struct device *, struct class_interface *);
+> @@ -105,12 +105,13 @@ static struct class_interface sg_interface = {
+>   	.remove_dev     = sg_remove_device,
+>   };
+>   
+> -struct sg_scatter_hold { /* holding area for scsi scatter gather info */
+> -	u16 k_use_sg; /* Count of kernel scatter-gather pieces */
+> +struct sg_scatter_hold {     /* holding area for scsi scatter gather info */
+> +	struct page **pages;	/* num_sgat element array of struct page* */
+> +	int buflen;		/* capacity in bytes (dlen<=buflen) */
+> +	int dlen;		/* current valid data length of this req */
+> +	u16 page_order;		/* byte_len = (page_size*(2**page_order)) */
+> +	u16 num_sgat;		/* actual number of scatter-gather segments */
+>   	unsigned int sglist_len; /* size of malloc'd scatter-gather list ++ */
+> -	unsigned int bufflen;	/* Size of (aggregate) data buffer */
+> -	struct page **pages;
+> -	int page_order;
+>   	char dio_in_use;	/* 0->indirect IO (or mmap), 1->dio */
+>   	u8 cmd_opcode;		/* first byte of command */
+>   };
+While you're at it, it might be worthwhile to exchange the order of the 
+last two fields.
+Having a 'char' before the 'u8' guarantees either a misaligned structure 
+or implicit padding by the compiler, neither of which is a good thing.
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Bart van Assche <bvanassche@acm.org>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
----
- drivers/scsi/scsi.c        | 14 --------------
- drivers/scsi/scsi_error.c  |  1 -
- drivers/scsi/scsi_lib.c    | 31 -------------------------------
- drivers/scsi/scsi_priv.h   |  2 --
- drivers/scsi/scsi_scan.c   |  1 -
- include/scsi/scsi_cmnd.h   |  1 -
- include/scsi/scsi_device.h |  1 -
- include/scsi/scsi_host.h   |  2 --
- 8 files changed, 53 deletions(-)
+> @@ -122,20 +123,20 @@ struct sg_request {	/* SG_MAX_QUEUE requests outstanding per file */
+>   	struct list_head entry;	/* list entry */
+>   	struct sg_fd *parentfp;	/* NULL -> not in use */
+>   	struct sg_scatter_hold data;	/* hold buffer, perhaps scatter list */
+> -	sg_io_hdr_t header;	/* scsi command+info, see <scsi/sg.h> */
+> +	struct sg_io_hdr header;  /* scsi command+info, see <scsi/sg.h> */
+>   	u8 sense_b[SCSI_SENSE_BUFFERSIZE];
+>   	char res_used;		/* 1 -> using reserve buffer, 0 -> not ... */
+>   	char orphan;		/* 1 -> drop on sight, 0 -> normal */
+>   	char sg_io_owned;	/* 1 -> packet belongs to SG_IO */
+>   	/* done protected by rq_list_lock */
+>   	char done;		/* 0->before bh, 1->before read, 2->read */
 
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index 4b9fdfab77d9..56c24a73e0c7 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -94,20 +94,6 @@ EXPORT_SYMBOL(scsi_logging_level);
- ASYNC_DOMAIN_EXCLUSIVE(scsi_sd_pm_domain);
- EXPORT_SYMBOL(scsi_sd_pm_domain);
- 
--/**
-- * scsi_put_command - Free a scsi command block
-- * @cmd: command block to free
-- *
-- * Returns:	Nothing.
-- *
-- * Notes:	The command must not belong to any lists.
-- */
--void scsi_put_command(struct scsi_cmnd *cmd)
--{
--	scsi_del_cmd_from_list(cmd);
--	BUG_ON(delayed_work_pending(&cmd->abort_work));
--}
--
- #ifdef CONFIG_SCSI_LOGGING
- void scsi_log_send(struct scsi_cmnd *cmd)
- {
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index ae2fa170f6ad..978be1602f71 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -2412,7 +2412,6 @@ scsi_ioctl_reset(struct scsi_device *dev, int __user *arg)
- 	wake_up(&shost->host_wait);
- 	scsi_run_host_queues(shost);
- 
--	scsi_put_command(scmd);
- 	kfree(rq);
- 
- out_put_autopm_host:
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index a48a5727831b..258a428a0a3f 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -562,7 +562,6 @@ static void scsi_mq_uninit_cmd(struct scsi_cmnd *cmd)
- {
- 	scsi_mq_free_sgtables(cmd);
- 	scsi_uninit_cmd(cmd);
--	scsi_del_cmd_from_list(cmd);
- }
- 
- /* Returns false when no more bytes to process, true if there are more */
-@@ -1098,35 +1097,6 @@ static void scsi_cleanup_rq(struct request *rq)
- 	}
- }
- 
--/* Add a command to the list used by the aacraid and dpt_i2o drivers */
--void scsi_add_cmd_to_list(struct scsi_cmnd *cmd)
--{
--	struct scsi_device *sdev = cmd->device;
--	struct Scsi_Host *shost = sdev->host;
--	unsigned long flags;
--
--	if (shost->use_cmd_list) {
--		spin_lock_irqsave(&sdev->list_lock, flags);
--		list_add_tail(&cmd->list, &sdev->cmd_list);
--		spin_unlock_irqrestore(&sdev->list_lock, flags);
--	}
--}
--
--/* Remove a command from the list used by the aacraid and dpt_i2o drivers */
--void scsi_del_cmd_from_list(struct scsi_cmnd *cmd)
--{
--	struct scsi_device *sdev = cmd->device;
--	struct Scsi_Host *shost = sdev->host;
--	unsigned long flags;
--
--	if (shost->use_cmd_list) {
--		spin_lock_irqsave(&sdev->list_lock, flags);
--		BUG_ON(list_empty(&cmd->list));
--		list_del_init(&cmd->list);
--		spin_unlock_irqrestore(&sdev->list_lock, flags);
--	}
--}
--
- /* Called after a request has been started. */
- void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd)
- {
-@@ -1160,7 +1130,6 @@ void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd)
- 	if (in_flight)
- 		__set_bit(SCMD_STATE_INFLIGHT, &cmd->state);
- 
--	scsi_add_cmd_to_list(cmd);
- }
- 
- static blk_status_t scsi_setup_scsi_cmnd(struct scsi_device *sdev,
-diff --git a/drivers/scsi/scsi_priv.h b/drivers/scsi/scsi_priv.h
-index 25b0aaaf5ae8..22b6585e28b4 100644
---- a/drivers/scsi/scsi_priv.h
-+++ b/drivers/scsi/scsi_priv.h
-@@ -83,8 +83,6 @@ int scsi_eh_get_sense(struct list_head *work_q,
- int scsi_noretry_cmd(struct scsi_cmnd *scmd);
- 
- /* scsi_lib.c */
--extern void scsi_add_cmd_to_list(struct scsi_cmnd *cmd);
--extern void scsi_del_cmd_from_list(struct scsi_cmnd *cmd);
- extern int scsi_maybe_unblock_host(struct scsi_device *sdev);
- extern void scsi_device_unbusy(struct scsi_device *sdev, struct scsi_cmnd *cmd);
- extern void scsi_queue_insert(struct scsi_cmnd *cmd, int reason);
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index 058079f915f1..f2437a7570ce 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -236,7 +236,6 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
- 	sdev->sdev_state = SDEV_CREATED;
- 	INIT_LIST_HEAD(&sdev->siblings);
- 	INIT_LIST_HEAD(&sdev->same_target_siblings);
--	INIT_LIST_HEAD(&sdev->cmd_list);
- 	INIT_LIST_HEAD(&sdev->starved_entry);
- 	INIT_LIST_HEAD(&sdev->event_list);
- 	spin_lock_init(&sdev->list_lock);
-diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
-index a2849bb9cd19..80ac89e47b47 100644
---- a/include/scsi/scsi_cmnd.h
-+++ b/include/scsi/scsi_cmnd.h
-@@ -159,7 +159,6 @@ static inline struct scsi_driver *scsi_cmd_to_driver(struct scsi_cmnd *cmd)
- 	return *(struct scsi_driver **)cmd->request->rq_disk->private_data;
- }
- 
--extern void scsi_put_command(struct scsi_cmnd *);
- extern void scsi_finish_command(struct scsi_cmnd *cmd);
- 
- extern void *scsi_kmap_atomic_sg(struct scatterlist *sg, int sg_count,
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index f8312a3e5b42..f146a4557787 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -110,7 +110,6 @@ struct scsi_device {
- 	atomic_t device_blocked;	/* Device returned QUEUE_FULL. */
- 
- 	spinlock_t list_lock;
--	struct list_head cmd_list;	/* queue of in use SCSI Command structures */
- 	struct list_head starved_entry;
- 	unsigned short queue_depth;	/* How deep of a queue we want */
- 	unsigned short max_queue_depth;	/* max queue depth */
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index eff12445b823..74dc7d4f2a96 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -624,8 +624,6 @@ struct Scsi_Host {
- 	/* The controller does not support WRITE SAME */
- 	unsigned no_write_same:1;
- 
--	unsigned use_cmd_list:1;
--
- 	/* Host responded with short (<36 bytes) INQUIRY result */
- 	unsigned short_inquiry:1;
- 
+And here a bitfield might be a good idea, as otherwise you might run 
+into alignment / padding issues again ...
+
+Cheers,
+
+Hannes
+
 -- 
-2.16.4
-
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                               +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
