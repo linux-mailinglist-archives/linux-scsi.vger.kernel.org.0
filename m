@@ -2,31 +2,31 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D471733B5
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 10:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203D21733BB
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 10:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbgB1JVC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Feb 2020 04:21:02 -0500
-Received: from mx2.suse.de ([195.135.220.15]:51534 "EHLO mx2.suse.de"
+        id S1726766AbgB1JVk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Feb 2020 04:21:40 -0500
+Received: from mx2.suse.de ([195.135.220.15]:51748 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726148AbgB1JVC (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 28 Feb 2020 04:21:02 -0500
+        id S1726476AbgB1JVk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 28 Feb 2020 04:21:40 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 810F4AC92;
-        Fri, 28 Feb 2020 09:21:00 +0000 (UTC)
-Subject: Re: [PATCH v7 37/38] sg: warn v3 write system call users
+        by mx2.suse.de (Postfix) with ESMTP id E3E3CAC92;
+        Fri, 28 Feb 2020 09:21:38 +0000 (UTC)
+Subject: Re: [PATCH v7 38/38] sg: bump version to 4.0.08
 To:     Douglas Gilbert <dgilbert@interlog.com>, linux-scsi@vger.kernel.org
 Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com
 References: <20200227165902.11861-1-dgilbert@interlog.com>
- <20200227165902.11861-38-dgilbert@interlog.com>
+ <20200227165902.11861-39-dgilbert@interlog.com>
 From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <5129f3d1-add2-29e5-3431-1e7675e7061d@suse.de>
-Date:   Fri, 28 Feb 2020 10:20:59 +0100
+Message-ID: <4ca88b56-79c5-4c6e-32d2-da035712f2af@suse.de>
+Date:   Fri, 28 Feb 2020 10:21:37 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200227165902.11861-38-dgilbert@interlog.com>
+In-Reply-To: <20200227165902.11861-39-dgilbert@interlog.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -36,23 +36,29 @@ List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 On 2/27/20 5:59 PM, Douglas Gilbert wrote:
-> Should generate one log message per kernel run when the write()
-> system call is used with the sg interface version 3. Due to
-> security concerns suggest that they use ioctl(SG_SUBMIT_v3)
-> instead.
+> Now that the sg version 4 interface is supported:
+>    - with ioctl(SG_IO) for synchronous/blocking use
+>    - with ioctl(SG_IOSUBMIT) and ioctl(SG_IORECEIVE) for
+>      async/non-blocking use
+> Plus new ioctl(SG_IOSUBMIT_V3) and ioctl(SG_IORECEIVE_V3)
+> potentially replace write() and read() for the sg
+> version 3 interface. Bump major driver version number
+> from 3 to 4.
 > 
-> Sg interface version 1 or 2 based code may also be calling
-> write() in this context. There is no easy solution for them
-> (short of upgrading their interface to version 3 or 4), so
-> don't produce a warning suggesting the conversion will be
-> simple.
+> The main new feature is the removal of the fixed 16 element
+> array of requests per file descriptor. It is replaced by
+> a xarray (eXtensible array) in their parent which is a
+> sg_fd object (i.e. a file descriptor). The sg_request
+> objects are not freed until the owning file descriptor is
+> closed; instead these objects are re-used when multiple
+> commands are sent to the same file descriptor.
 > 
 > Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
 > ---
->   drivers/scsi/sg.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+>   drivers/scsi/sg.c      | 8 ++++----
+>   include/uapi/scsi/sg.h | 4 ++--
+>   2 files changed, 6 insertions(+), 6 deletions(-)
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
 
 Cheers,
 
