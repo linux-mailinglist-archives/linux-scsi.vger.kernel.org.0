@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A3C3173221
-	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 08:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFF917321C
+	for <lists+linux-scsi@lfdr.de>; Fri, 28 Feb 2020 08:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727009AbgB1Hx2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 28 Feb 2020 02:53:28 -0500
-Received: from mx2.suse.de ([195.135.220.15]:59826 "EHLO mx2.suse.de"
+        id S1727027AbgB1Hx0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 28 Feb 2020 02:53:26 -0500
+Received: from mx2.suse.de ([195.135.220.15]:59836 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726998AbgB1HxZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1727023AbgB1HxZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 28 Feb 2020 02:53:25 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 5FFD5B1FE;
+        by mx2.suse.de (Postfix) with ESMTP id 5BF3DB1AD;
         Fri, 28 Feb 2020 07:53:21 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 07/13] aacraid: move scsi_(block,unblock)_requests out of _aac_reset_adapter()
-Date:   Fri, 28 Feb 2020 08:53:12 +0100
-Message-Id: <20200228075318.91255-8-hare@suse.de>
+Subject: [PATCH 08/13] scsi: add scsi_host_(block,unblock) helper function
+Date:   Fri, 28 Feb 2020 08:53:13 +0100
+Message-Id: <20200228075318.91255-9-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200228075318.91255-1-hare@suse.de>
 References: <20200228075318.91255-1-hare@suse.de>
@@ -31,73 +31,72 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-_aac_reset_adapter() only has one caller, and that one already calls
-scsi_block_requests(). So move the calls out of _aac_reset_adapter()
-to avoid calling scsi_block_requests() twice.
+Add helper functions to call scsi_internal_device_block()/
+scsi_internal_device_unblock() for all attached devices on a
+scsi host.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
-Acked-by: Balsundar P < Balsundar.P@microchip.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 Reviewed-by: Christoph Hellwig <hch@lst.de>
 ---
- drivers/scsi/aacraid/commsup.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ drivers/scsi/scsi_lib.c  | 30 ++++++++++++++++++++++++++++++
+ include/scsi/scsi_host.h |  2 ++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
-index 8736a540a048..0d8c1ee40759 100644
---- a/drivers/scsi/aacraid/commsup.c
-+++ b/drivers/scsi/aacraid/commsup.c
-@@ -1476,7 +1476,7 @@ static int _aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- {
- 	int index, quirks;
- 	int retval;
--	struct Scsi_Host *host;
-+	struct Scsi_Host *host = aac->scsi_host_ptr;
- 	struct scsi_device *dev;
- 	int jafo = 0;
- 	int bled;
-@@ -1493,8 +1493,6 @@ static int _aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- 	 *	- The card is dead, or will be very shortly ;-/ so no new
- 	 *	  commands are completing in the interrupt service.
- 	 */
--	host = aac->scsi_host_ptr;
--	scsi_block_requests(host);
- 	aac_adapter_disable_int(aac);
- 	if (aac->thread && aac->thread->pid != current->pid) {
- 		spin_unlock_irq(host->host_lock);
-@@ -1619,7 +1617,6 @@ static int _aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 610ee41fa54c..a48a5727831b 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -2845,6 +2845,36 @@ scsi_target_unblock(struct device *dev, enum scsi_device_state new_state)
+ }
+ EXPORT_SYMBOL_GPL(scsi_target_unblock);
  
- out:
- 	aac->in_reset = 0;
--	scsi_unblock_requests(host);
- 
- 	/*
- 	 * Issue bus rescan to catch any configuration that might have
-@@ -1640,7 +1637,7 @@ int aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- {
- 	unsigned long flagv = 0;
- 	int retval;
--	struct Scsi_Host * host;
-+	struct Scsi_Host * host = aac->scsi_host_ptr;
- 	int bled;
- 
- 	if (spin_trylock_irqsave(&aac->fib_lock, flagv) == 0)
-@@ -1658,7 +1655,6 @@ int aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- 	 * target (block maximum 60 seconds). Although not necessary,
- 	 * it does make us a good storage citizen.
- 	 */
--	host = aac->scsi_host_ptr;
- 	scsi_block_requests(host);
- 
- 	/* Quiesce build, flush cache, write through mode */
-@@ -1670,6 +1666,8 @@ int aac_reset_adapter(struct aac_dev *aac, int forced, u8 reset_type)
- 	retval = _aac_reset_adapter(aac, bled, reset_type);
- 	spin_unlock_irqrestore(host->host_lock, flagv);
- 
-+	scsi_unblock_requests(host);
++int
++scsi_host_block(struct Scsi_Host *shost)
++{
++	struct scsi_device *sdev;
++	int ret = 0;
 +
- 	if ((forced < 2) && (retval == -ENODEV)) {
- 		/* Unwind aac_send_shutdown() IOP_RESET unsupported/disabled */
- 		struct fib * fibctx = aac_fib_alloc(aac);
++	shost_for_each_device(sdev, shost) {
++		ret = scsi_internal_device_block(sdev);
++		if (ret)
++			break;
++	}
++	return ret;
++}
++EXPORT_SYMBOL_GPL(scsi_host_block);
++
++int
++scsi_host_unblock(struct Scsi_Host *shost, int new_state)
++{
++	struct scsi_device *sdev;
++	int ret = 0;
++
++	shost_for_each_device(sdev, shost) {
++		ret = scsi_internal_device_unblock(sdev, new_state);
++		if (ret)
++			break;
++	}
++	return ret;
++}
++EXPORT_SYMBOL_GPL(scsi_host_unblock);
++
+ /**
+  * scsi_kmap_atomic_sg - find and atomically map an sg-elemnt
+  * @sgl:	scatter-gather list
+diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
+index 25bef781cbe1..613c3820028e 100644
+--- a/include/scsi/scsi_host.h
++++ b/include/scsi/scsi_host.h
+@@ -758,6 +758,8 @@ static inline int scsi_host_scan_allowed(struct Scsi_Host *shost)
+ 
+ extern void scsi_unblock_requests(struct Scsi_Host *);
+ extern void scsi_block_requests(struct Scsi_Host *);
++extern int scsi_host_block(struct Scsi_Host *shost);
++extern int scsi_host_unblock(struct Scsi_Host *shost, int new_state);
+ 
+ struct class_container;
+ 
 -- 
 2.16.4
 
