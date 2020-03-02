@@ -2,52 +2,32 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB60175228
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2020 04:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6753E175230
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2020 04:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726811AbgCBDaj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 1 Mar 2020 22:30:39 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:36547 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726785AbgCBDaj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 1 Mar 2020 22:30:39 -0500
-Received: by mail-pj1-f68.google.com with SMTP id d7so842762pjw.1
-        for <linux-scsi@vger.kernel.org>; Sun, 01 Mar 2020 19:30:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=S1yjC6I1Kb75fIsqwmlGyIPSwytqDsk2VjMG9lR8OxU=;
-        b=UGnfJJCbGnpd4xlmeYHeP8qledsSoFIC7eBciWoDDt4iELx5QoNOIljwawHI2F0Zxz
-         U1SjHfoWz3rxnVBFD9Li7jo2WnAEwpnBuuyX8wEdGoZgHomaK0G4FTfByYXFKaSMeaX9
-         jaqvgIepIxAALpiYmtCSYkvbBcyiU+KQilMkIRNhiTJYedkZEfarjKLZikgLig4YtVYW
-         JwccqOoendNi57pQoey2qDbEn8xqym9MTJE08Ef5Fs18SDlIVBfPg/AdYR6pLFnoObyE
-         sufPFmvDIPiuuJSR13xjhj+JhBMnSzN+oD7TMqiKDG6sunbx7aPPtmTDHTxIqDRV/ftt
-         kBsA==
-X-Gm-Message-State: APjAAAWnD8enWq0j0ggquPS+m8J7dIPa5fl/WZNyowPzrhUgKlx6jRT5
-        QdsqYDp2CHJ9H27skA0cmg8=
-X-Google-Smtp-Source: ADFU+vtBydldMXX0xoso7aYQy9RqsfR8K4GBW+oqsvOchtJYkXuIymeB142R0AxK2QsBsx9nV5+/3w==
-X-Received: by 2002:a17:902:8603:: with SMTP id f3mr13739023plo.235.1583119837777;
-        Sun, 01 Mar 2020 19:30:37 -0800 (PST)
-Received: from asus.hsd1.ca.comcast.net ([2601:647:4000:d7:7869:cc6e:b1f7:9f7d])
-        by smtp.gmail.com with ESMTPSA id z3sm18782254pfz.155.2020.03.01.19.30.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Mar 2020 19:30:37 -0800 (PST)
-From:   Bart Van Assche <bvanassche@acm.org>
-To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Martin Wilck <mwilck@suse.com>,
-        Daniel Wagner <dwagner@suse.de>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: [PATCH 4/4] qla2xxx: Fix the code that reads from mailbox registers
-Date:   Sun,  1 Mar 2020 19:30:23 -0800
-Message-Id: <20200302033023.27718-5-bvanassche@acm.org>
+        id S1726876AbgCBDdE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 1 Mar 2020 22:33:04 -0500
+Received: from smtp.infotech.no ([82.134.31.41]:60506 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726764AbgCBDdD (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 1 Mar 2020 22:33:03 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id CE3E120426C;
+        Mon,  2 Mar 2020 04:33:01 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fv80GrZZ9Biy; Mon,  2 Mar 2020 04:32:54 +0100 (CET)
+Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 54FDD20414E;
+        Mon,  2 Mar 2020 04:32:53 +0100 (CET)
+From:   Douglas Gilbert <dgilbert@interlog.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de
+Subject: [PATCH v8 00/38] sg: add v4 interface
+Date:   Sun,  1 Mar 2020 22:32:11 -0500
+Message-Id: <20200302033249.4515-1-dgilbert@interlog.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200302033023.27718-1-bvanassche@acm.org>
-References: <20200302033023.27718-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -55,276 +35,151 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make the MMIO accessors stronly typed such that the compiler checks whether
-the accessor function is used that matches the register width. Fix those
-MMIO reads where another number of bits was read or written than the size
-of the register.
+This patchset is the first stage of a two stage rewrite of the scsi
+generic (sg) driver. The main goal of the first stage is to
+introduce the sg v4 interface that uses 'struct sg_io_v4' as well
+as keeping and modernizing the sg v3 interface (based on 'struct
+sg_io_hdr'). The async interface formerly requiring the use of
+write() and read() system calls now have ioctl(SG_IOSUBMIT) and
+ioctl(SG_IORECEIVE) replacements. See:
+    http://sg.danny.cz/sg/sg_v40.html
+for more details.
 
-Cc: Himanshu Madhani <hmadhani@marvell.com>
-Cc: Quinn Tran <qutran@marvell.com>
-Cc: Martin Wilck <mwilck@suse.com>
-Cc: Daniel Wagner <dwagner@suse.de>
-Cc: Roman Bolshakov <r.bolshakov@yadro.com>
-Signed-off-by: Bart Van Assche <bvanassche@acm.org>
----
- drivers/scsi/qla2xxx/qla_def.h  | 53 +++++++++++++++++++++++++++------
- drivers/scsi/qla2xxx/qla_init.c |  6 ++--
- drivers/scsi/qla2xxx/qla_iocb.c |  2 +-
- drivers/scsi/qla2xxx/qla_isr.c  |  4 +--
- drivers/scsi/qla2xxx/qla_mbx.c  |  2 +-
- drivers/scsi/qla2xxx/qla_mr.c   | 26 ++++++++--------
- drivers/scsi/qla2xxx/qla_nx.c   |  4 +--
- drivers/scsi/qla2xxx/qla_os.c   |  2 +-
- 8 files changed, 67 insertions(+), 32 deletions(-)
+Due to changes in the production sg driver (mainly due to
+compat_ioctl() work) there are many changes in this patchset just
+keeping up. Significant changes appeared in lk 5.5.3 with more
+in lk 5.6.0-rc1. This patchset is build on the latter.
 
-diff --git a/drivers/scsi/qla2xxx/qla_def.h b/drivers/scsi/qla2xxx/qla_def.h
-index ebb22c1a9df7..7e5677c69bed 100644
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -128,15 +128,50 @@ static inline uint32_t make_handle(uint16_t x, uint16_t y)
-  * I/O register
- */
- 
--#define RD_REG_BYTE(addr)		readb(addr)
--#define RD_REG_WORD(addr)		readw(addr)
--#define RD_REG_DWORD(addr)		readl(addr)
--#define RD_REG_BYTE_RELAXED(addr)	readb_relaxed(addr)
--#define RD_REG_WORD_RELAXED(addr)	readw_relaxed(addr)
--#define RD_REG_DWORD_RELAXED(addr)	readl_relaxed(addr)
--#define WRT_REG_BYTE(addr, data)	writeb(data, addr)
--#define WRT_REG_WORD(addr, data)	writew(data, addr)
--#define WRT_REG_DWORD(addr, data)	writel(data, addr)
-+static inline u8 RD_REG_BYTE(const volatile u8 __iomem *addr)
-+{
-+	return readb(addr);
-+}
-+
-+static inline u16 RD_REG_WORD(const volatile __le16 __iomem *addr)
-+{
-+	return readw(addr);
-+}
-+
-+static inline u32 RD_REG_DWORD(const volatile __le32 __iomem *addr)
-+{
-+	return readl(addr);
-+}
-+
-+static inline u8 RD_REG_BYTE_RELAXED(const volatile u8 __iomem *addr)
-+{
-+	return readb_relaxed(addr);
-+}
-+
-+static inline u16 RD_REG_WORD_RELAXED(const volatile __le16 __iomem *addr)
-+{
-+	return readw_relaxed(addr);
-+}
-+
-+static inline u32 RD_REG_DWORD_RELAXED(const volatile __le32 __iomem *addr)
-+{
-+	return readl_relaxed(addr);
-+}
-+
-+static inline void WRT_REG_BYTE(volatile u8 __iomem *addr, u8 data)
-+{
-+	return writeb(data, addr);
-+}
-+
-+static inline void WRT_REG_WORD(volatile __le16 __iomem *addr, u16 data)
-+{
-+	return writew(data, addr);
-+}
-+
-+static inline void WRT_REG_DWORD(volatile __le32 __iomem *addr, u32 data)
-+{
-+	return writel(data, addr);
-+}
- 
- /*
-  * ISP83XX specific remote register addresses
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index b5cca8f0974f..d096dc058824 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -2219,7 +2219,7 @@ qla2x00_initialize_adapter(scsi_qla_host_t *vha)
- 
- 	/* Check for secure flash support */
- 	if (IS_QLA28XX(ha)) {
--		if (RD_REG_DWORD(&reg->mailbox12) & BIT_0)
-+		if (RD_REG_WORD(&reg->mailbox12) & BIT_0)
- 			ha->flags.secure_adapter = 1;
- 		ql_log(ql_log_info, vha, 0xffff, "Secure Adapter: %s\n",
- 		    (ha->flags.secure_adapter) ? "Yes" : "No");
-@@ -2780,7 +2780,7 @@ qla24xx_reset_risc(scsi_qla_host_t *vha)
- 	ql_dbg(ql_dbg_init + ql_dbg_verbose, vha, 0x017f,
- 	    "HCCR: 0x%x, MailBox0 Status 0x%x\n",
- 	    RD_REG_DWORD(&reg->hccr),
--	    RD_REG_DWORD(&reg->mailbox0));
-+	    RD_REG_WORD(&reg->mailbox0));
- 
- 	/* Wait for soft-reset to complete. */
- 	RD_REG_DWORD(&reg->ctrl_status);
-@@ -4096,7 +4096,7 @@ qla24xx_config_rings(struct scsi_qla_host *vha)
- 	}
- 
- 	/* PCI posting */
--	RD_REG_DWORD(&ioreg->hccr);
-+	RD_REG_WORD(&ioreg->hccr);
- }
- 
- /**
-diff --git a/drivers/scsi/qla2xxx/qla_iocb.c b/drivers/scsi/qla2xxx/qla_iocb.c
-index 6345e5d2a9ac..7f59c1a50f5c 100644
---- a/drivers/scsi/qla2xxx/qla_iocb.c
-+++ b/drivers/scsi/qla2xxx/qla_iocb.c
-@@ -2268,7 +2268,7 @@ __qla2x00_alloc_iocbs(struct qla_qpair *qpair, srb_t *sp)
- 		    IS_QLA28XX(ha))
- 			cnt = RD_REG_DWORD(&reg->isp25mq.req_q_out);
- 		else if (IS_P3P_TYPE(ha))
--			cnt = RD_REG_DWORD(&reg->isp82.req_q_out);
-+			cnt = RD_REG_DWORD(reg->isp82.req_q_out);
- 		else if (IS_FWI2_CAPABLE(ha))
- 			cnt = RD_REG_DWORD(&reg->isp24.req_q_out);
- 		else if (IS_QLAFX00(ha))
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index 50c0d77fcf2d..9d4084cd2acb 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -452,7 +452,7 @@ qla81xx_idc_event(scsi_qla_host_t *vha, uint16_t aen, uint16_t descr)
- 	int rval;
- 	struct device_reg_24xx __iomem *reg24 = &vha->hw->iobase->isp24;
- 	struct device_reg_82xx __iomem *reg82 = &vha->hw->iobase->isp82;
--	uint16_t __iomem *wptr;
-+	__le16 __iomem *wptr;
- 	uint16_t cnt, timeout, mb[QLA_IDC_ACK_REGS];
- 
- 	/* Seed data -- mailbox1 -> mailbox7. */
-@@ -3141,7 +3141,7 @@ qla24xx_mbx_completion(scsi_qla_host_t *vha, uint16_t mb0)
- {
- 	uint16_t	cnt;
- 	uint32_t	mboxes;
--	uint16_t __iomem *wptr;
-+	__le16 __iomem *wptr;
- 	struct qla_hw_data *ha = vha->hw;
- 	struct device_reg_24xx __iomem *reg = &ha->iobase->isp24;
- 
-diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
-index 0927952d5d99..6dfb6aca5960 100644
---- a/drivers/scsi/qla2xxx/qla_mbx.c
-+++ b/drivers/scsi/qla2xxx/qla_mbx.c
-@@ -106,7 +106,7 @@ qla2x00_mailbox_command(scsi_qla_host_t *vha, mbx_cmd_t *mcp)
- 	uint8_t		io_lock_on;
- 	uint16_t	command = 0;
- 	uint16_t	*iptr;
--	uint16_t __iomem *optr;
-+	__le16 __iomem  *optr;
- 	uint32_t	cnt;
- 	uint32_t	mboxes;
- 	unsigned long	wait_time;
-diff --git a/drivers/scsi/qla2xxx/qla_mr.c b/drivers/scsi/qla2xxx/qla_mr.c
-index 8b02a2c0f0c2..6df48494b2b3 100644
---- a/drivers/scsi/qla2xxx/qla_mr.c
-+++ b/drivers/scsi/qla2xxx/qla_mr.c
-@@ -46,7 +46,7 @@ qlafx00_mailbox_command(scsi_qla_host_t *vha, struct mbx_cmd_32 *mcp)
- 	uint8_t		io_lock_on;
- 	uint16_t	command = 0;
- 	uint32_t	*iptr;
--	uint32_t __iomem *optr;
-+	__le32 __iomem *optr;
- 	uint32_t	cnt;
- 	uint32_t	mboxes;
- 	unsigned long	wait_time;
-@@ -109,7 +109,7 @@ qlafx00_mailbox_command(scsi_qla_host_t *vha, struct mbx_cmd_32 *mcp)
- 	spin_lock_irqsave(&ha->hardware_lock, flags);
- 
- 	/* Load mailbox registers. */
--	optr = (uint32_t __iomem *)&reg->ispfx00.mailbox0;
-+	optr = &reg->ispfx00.mailbox0;
- 
- 	iptr = mcp->mb;
- 	command = mcp->mb[0];
-@@ -2846,13 +2846,13 @@ qlafx00_async_event(scsi_qla_host_t *vha)
- 		break;
- 
- 	default:
--		ha->aenmb[1] = RD_REG_WORD(&reg->aenmailbox1);
--		ha->aenmb[2] = RD_REG_WORD(&reg->aenmailbox2);
--		ha->aenmb[3] = RD_REG_WORD(&reg->aenmailbox3);
--		ha->aenmb[4] = RD_REG_WORD(&reg->aenmailbox4);
--		ha->aenmb[5] = RD_REG_WORD(&reg->aenmailbox5);
--		ha->aenmb[6] = RD_REG_WORD(&reg->aenmailbox6);
--		ha->aenmb[7] = RD_REG_WORD(&reg->aenmailbox7);
-+		ha->aenmb[1] = RD_REG_DWORD(&reg->aenmailbox1);
-+		ha->aenmb[2] = RD_REG_DWORD(&reg->aenmailbox2);
-+		ha->aenmb[3] = RD_REG_DWORD(&reg->aenmailbox3);
-+		ha->aenmb[4] = RD_REG_DWORD(&reg->aenmailbox4);
-+		ha->aenmb[5] = RD_REG_DWORD(&reg->aenmailbox5);
-+		ha->aenmb[6] = RD_REG_DWORD(&reg->aenmailbox6);
-+		ha->aenmb[7] = RD_REG_DWORD(&reg->aenmailbox7);
- 		ql_dbg(ql_dbg_async, vha, 0x5078,
- 		    "AEN:%04x %04x %04x %04x :%04x %04x %04x %04x\n",
- 		    ha->aenmb[0], ha->aenmb[1], ha->aenmb[2], ha->aenmb[3],
-@@ -2872,7 +2872,7 @@ static void
- qlafx00_mbx_completion(scsi_qla_host_t *vha, uint32_t mb0)
- {
- 	uint16_t	cnt;
--	uint32_t __iomem *wptr;
-+	__le32 __iomem *wptr;
- 	struct qla_hw_data *ha = vha->hw;
- 	struct device_reg_fx00 __iomem *reg = &ha->iobase->ispfx00;
- 
-@@ -2882,7 +2882,7 @@ qlafx00_mbx_completion(scsi_qla_host_t *vha, uint32_t mb0)
- 	/* Load return mailbox registers. */
- 	ha->flags.mbox_int = 1;
- 	ha->mailbox_out32[0] = mb0;
--	wptr = (uint32_t __iomem *)&reg->mailbox17;
-+	wptr = &reg->mailbox17;
- 
- 	for (cnt = 1; cnt < ha->mbx_count; cnt++) {
- 		ha->mailbox_out32[cnt] = RD_REG_DWORD(wptr);
-@@ -2939,13 +2939,13 @@ qlafx00_intr_handler(int irq, void *dev_id)
- 			break;
- 
- 		if (stat & QLAFX00_INTR_MB_CMPLT) {
--			mb[0] = RD_REG_WORD(&reg->mailbox16);
-+			mb[0] = RD_REG_DWORD(&reg->mailbox16);
- 			qlafx00_mbx_completion(vha, mb[0]);
- 			status |= MBX_INTERRUPT;
- 			clr_intr |= QLAFX00_INTR_MB_CMPLT;
- 		}
- 		if (intr_stat & QLAFX00_INTR_ASYNC_CMPLT) {
--			ha->aenmb[0] = RD_REG_WORD(&reg->aenmailbox0);
-+			ha->aenmb[0] = RD_REG_DWORD(&reg->aenmailbox0);
- 			qlafx00_async_event(vha);
- 			clr_intr |= QLAFX00_INTR_ASYNC_CMPLT;
- 		}
-diff --git a/drivers/scsi/qla2xxx/qla_nx.c b/drivers/scsi/qla2xxx/qla_nx.c
-index b295a5308646..c04150110417 100644
---- a/drivers/scsi/qla2xxx/qla_nx.c
-+++ b/drivers/scsi/qla2xxx/qla_nx.c
-@@ -1997,11 +1997,11 @@ void
- qla82xx_mbx_completion(scsi_qla_host_t *vha, uint16_t mb0)
- {
- 	uint16_t	cnt;
--	uint16_t __iomem *wptr;
-+	__le16 __iomem *wptr;
- 	struct qla_hw_data *ha = vha->hw;
- 	struct device_reg_82xx __iomem *reg = &ha->iobase->isp82;
- 
--	wptr = (uint16_t __iomem *)&reg->mailbox_out[1];
-+	wptr = &reg->mailbox_out[1];
- 
- 	/* Load return mailbox registers. */
- 	ha->flags.mbox_int = 1;
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index 29654a6fef5b..3e13526490ce 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -7574,7 +7574,7 @@ qla2xxx_pci_mmio_enabled(struct pci_dev *pdev)
- 
- 	spin_lock_irqsave(&ha->hardware_lock, flags);
- 	if (IS_QLA2100(ha) || IS_QLA2200(ha)){
--		stat = RD_REG_DWORD(&reg->hccr);
-+		stat = RD_REG_WORD(&reg->hccr);
- 		if (stat & HCCR_RISC_PAUSE)
- 			risc_paused = 1;
- 	} else if (IS_QLA23XX(ha)) {
+The complete patchset, whose second stage has an additional 25 patches
+(i.e. 63 patches in all), can be found soon at the above link.
+
+Changes since v7 (sent to linux-scsi list on 20200227)
+  - improve direct IO code, remove the SG_FRQ_DIO_IN_USE
+    sg_request::frq_bm flag as it is no longer needed
+  - simplify state changing code. Many state changes (rq_st) do not
+    need changes to the xarray "marks"; only lock those that do
+    (reviewer queried the locking)
+  - remove some misplaced likely()/unlikely() macros. They are gathered
+    together in a separate patch (in a second patchset)
+  - change a cast that the kbuild robot complained about. It also
+    flagged a stack size problem in sg_ioctl_common() for reasons not
+    given nor obvious. That function (and its parents) declare only
+    simple scalars on the stack.
+  - add 'Reviewed-by' where appropriate
+
+Changes since v6 (sent to linux-scsi list on 20200112)
+  - based on Martin Petersen's 5.7/scsi-queue branch in his
+    linux-scsi repository
+  - major work on mmap support: when mmap(2) is used the reserve
+    request scatter gather list is rebuilt to have order=0
+    elements (i.e. each is PAGE_SIZE bytes).
+  - address one kbuild robot issue: add include defining size_t
+  - nearly all patches that have been reviewed have been changed,
+    usually in minor ways. Those patches have "***" before the
+    "Reviewed-by" line.
+
+Changes since v5 (sent to linux-scsi list on 20191008)
+  - replace linked lists with xarray mechanism
+  - use the locking in the xarray implementation to
+    replace several discrete locks
+  - some patches that were previously reviewed by
+    Hannes Reinecke have had small changes made to
+    them usually associated with xarrays. Those have
+    been marked with "***" prepended to the
+    "Reviewed-by" line
+  - bump the driver version number to 4.0.08
+
+Changes since v4 (sent to linux-scsi list on 20190829)
+  - remove much of the logic in the previous patchset
+    series from and including:
+        [PATCH v4 11/22] sg: replace rq array with lists
+    to
+        [PATCH v4 22/22] sg: bump version to 4.0.03
+  - bump the driver version number from 3.5.36 to 3.9.01
+    [20190606] reflecting that the v4 interface has not
+    been implemented (in this patchset)
+  - patches 13/23 through to 22/23 reduce the complexity
+    of "[PATCH v4 11/22] sg: replace rq array with lists"
+    measured in KiloBytes from about 130 KB to 80 KB.
+  - various changes suggested by reviewers of the v4
+    patchset have been implemented
+  - change all %p descriptors (mainly in SG_LOG() macros)
+    to %pK so that the debug output remains useful in
+    recent kernels. Evidently sys admins can selectively
+    turn on pointer obfuscation on %pK as required on
+    secure systems.
+
+Changes since v3 (sent to linux-scsi list on 20190807):
+  - move __must_hold attributes into separate patch
+  - move procfs and debugfs file scope definitions toward
+    the end of sg.c to avoid forward declarations
+  - move module_param* and MODULE_* macros to end of sg.c
+  - expand debugfs support with snapshot_devs which allows
+    filtering of snapshot output by sg device(s)
+  - add a WARN_ONCE when write(2) is used with the sg v3
+    interface. Suggest using SG_IOSUBMIT_V3 instead.
+  - address more of the review comments from Hannes Reinecke
+    and Christoph Hellwig
+  - add various reviewed-by tags where appropriate
+
+Changes since v2 (sent to linux-scsi list on 20190727):
+  - address issues "Reported-by: kbuild test robot <lkp@intel.com>".
+    The main one was to change the bsg header included to:
+    include/uapi/linux/bsg.h rather than include/linux/bsg.h
+  - address some of the review comments from Hannes Reinecke;
+    email responses have been sent for review comments that
+    did not result in code changes
+
+Changes since v1 (sent to linux-scsi list on 20190616):
+  - change ktime_get_boot_ns() to ktime_get_boottime_ns() to reflect
+    kernel API change first seen in lk 5.3.0-rc1
+
+Douglas Gilbert (38):
+  sg: move functions around
+  sg: remove typedefs, type+formatting cleanup
+  sg: sg_log and is_enabled
+  sg: rework sg_poll(), minor changes
+  sg: bitops in sg_device
+  sg: make open count an atomic
+  sg: move header to uapi section
+  sg: speed sg_poll and sg_get_num_waiting
+  sg: sg_allow_if_err_recovery and renames
+  sg: improve naming
+  sg: change rwlock to spinlock
+  sg: ioctl handling
+  sg: split sg_read
+  sg: sg_common_write add structure for arguments
+  sg: rework sg_vma_fault
+  sg: rework sg_mmap
+  sg: replace sg_allow_access
+  sg: rework scatter gather handling
+  sg: introduce request state machine
+  sg: sg_find_srp_by_id
+  sg: sg_fill_request_element
+  sg: printk change %p to %pK
+  sg: xarray for fds in device
+  sg: xarray for reqs in fd
+  sg: replace rq array with lists
+  sg: sense buffer rework
+  sg: add sg v4 interface support
+  sg: rework debug info
+  sg: add 8 byte SCSI LUN to sg_scsi_id
+  sg: expand sg_comm_wr_t
+  sg: add sg_iosubmit_v3 and sg_ioreceive_v3 ioctls
+  sg: add some __must_hold macros
+  sg: move procfs objects to avoid forward decls
+  sg: protect multiple receivers
+  sg: first debugfs support
+  sg: rework mmap support
+  sg: warn v3 write system call users
+  sg: bump version to 4.0.08
+
+ drivers/scsi/sg.c      | 5173 +++++++++++++++++++++++++++-------------
+ include/scsi/sg.h      |  270 +--
+ include/uapi/scsi/sg.h |  374 +++
+ 3 files changed, 3909 insertions(+), 1908 deletions(-)
+ create mode 100644 include/uapi/scsi/sg.h
+
+-- 
+2.25.1
+
