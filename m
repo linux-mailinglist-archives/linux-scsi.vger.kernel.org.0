@@ -2,41 +2,41 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB131755A0
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2020 09:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F58F1755B7
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2020 09:18:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727507AbgCBISE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Mar 2020 03:18:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57096 "EHLO mail.kernel.org"
+        id S1727852AbgCBISg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Mar 2020 03:18:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57084 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727159AbgCBIQV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1727142AbgCBIQV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Mon, 2 Mar 2020 03:16:21 -0500
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D4C1246C4;
+        by mail.kernel.org (Postfix) with ESMTPSA id 312FE246CD;
         Mon,  2 Mar 2020 08:16:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1583136979;
-        bh=dfDnmwYQtS1gFi80gMuISybB4qFpZBjZOytk4JVftMk=;
+        bh=whC7giiFv+Yk442YMgup2KDESn5/o/XkEA6JPZfKSOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U3dqy1GBWYTMWEr+6/9djJgRBZi7E1BL2xpFwK2LFKQvdRpJMGIxPuJi7JkLir3OK
-         0Kf21wAfY4RPpnKypPGaNiekB79xOE4sn7Ztyr3Fwm/1J4lMogLjKWqP78qlq2PsJq
-         rLUeoL04vnHazZFWddFPAI8ECBm2lGiLr2x+ZcbI=
+        b=wGk3J5HlEheZ32y/4VOv0ANHBoVnpC05frr3DIwvRXZyMmDIdC7yWr9SHgNk+J0ss
+         Ziq3Li+N9118FzjH3EvwYeM8aNw2l4EGJMhV8Q3E0xgJ8DY/1VOJYa63K+ZxehW3J2
+         BwCPBBxU4+Y8Pk9YLVyLA2FucY+fYzPPggD1BARY=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1j8gFN-0003xD-6x; Mon, 02 Mar 2020 09:16:17 +0100
+        id 1j8gFN-0003xQ-9b; Mon, 02 Mar 2020 09:16:17 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Hannes Reinecke <hare@suse.com>,
+        Khalid Aziz <khalid@gonehiking.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-scsi@vger.kernel.org
-Subject: [PATCH 08/42] docs: scsi: convert aic7xxx.txt to ReST
-Date:   Mon,  2 Mar 2020 09:15:41 +0100
-Message-Id: <dc2b1ffe4bf64cfc4b32328740704a30e8d38a79.1583136624.git.mchehab+huawei@kernel.org>
+Subject: [PATCH 11/42] docs: scsi: convert BusLogic.txt to ReST
+Date:   Mon,  2 Mar 2020 09:15:44 +0100
+Message-Id: <750629b6a5233c85c5391c44d126606b8aabefc8.1583136624.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.21.1
 In-Reply-To: <cover.1583136624.git.mchehab+huawei@kernel.org>
 References: <cover.1583136624.git.mchehab+huawei@kernel.org>
@@ -49,667 +49,335 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../scsi/{aic7xxx.txt => aic7xxx.rst}         | 446 ++++++++++--------
- Documentation/scsi/index.rst                  |   1 +
- Documentation/scsi/scsi-parameters.txt        |   2 +-
- drivers/scsi/aic7xxx/Kconfig.aic7xxx          |   2 +-
- 4 files changed, 258 insertions(+), 193 deletions(-)
- rename Documentation/scsi/{aic7xxx.txt => aic7xxx.rst} (49%)
+ .../scsi/{BusLogic.txt => BusLogic.rst}       | 89 +++++++++++++------
+ Documentation/scsi/index.rst                  |  1 +
+ drivers/scsi/BusLogic.c                       |  2 +-
+ drivers/scsi/Kconfig                          |  2 +-
+ 4 files changed, 67 insertions(+), 27 deletions(-)
+ rename Documentation/scsi/{BusLogic.txt => BusLogic.rst} (93%)
 
-diff --git a/Documentation/scsi/aic7xxx.txt b/Documentation/scsi/aic7xxx.rst
-similarity index 49%
-rename from Documentation/scsi/aic7xxx.txt
-rename to Documentation/scsi/aic7xxx.rst
-index 7c5d0223d444..bad0e5567b21 100644
---- a/Documentation/scsi/aic7xxx.txt
-+++ b/Documentation/scsi/aic7xxx.rst
-@@ -1,8 +1,11 @@
--====================================================================
--=    Adaptec Aic7xxx Fast -> Ultra160 Family Manager Set v7.0      =
--=                            README for                            =
--=                     The Linux Operating System                   =
--====================================================================
+diff --git a/Documentation/scsi/BusLogic.txt b/Documentation/scsi/BusLogic.rst
+similarity index 93%
+rename from Documentation/scsi/BusLogic.txt
+rename to Documentation/scsi/BusLogic.rst
+index 48e982cd6fe7..b60169812358 100644
+--- a/Documentation/scsi/BusLogic.txt
++++ b/Documentation/scsi/BusLogic.rst
+@@ -1,6 +1,11 @@
+-	   BusLogic MultiMaster and FlashPoint SCSI Driver for Linux
 +.. SPDX-License-Identifier: GPL-2.0
-+.. include:: <isonum.txt>
 +
-+========================================================
-+Adaptec Aic7xxx Fast -> Ultra160 Family Manager Set v7.0
-+========================================================
++=========================================================
++BusLogic MultiMaster and FlashPoint SCSI Driver for Linux
++=========================================================
+ 
+ 			 Version 2.0.15 for Linux 2.0
 +
-+README for The Linux Operating System
+ 			 Version 2.1.15 for Linux 2.1
  
- The following information is available in this file:
+ 			      PRODUCTION RELEASE
+@@ -8,13 +13,16 @@
+ 				17 August 1998
  
-@@ -12,13 +15,15 @@ The following information is available in this file:
-   4. Contacting Adaptec
- 
- 1. Supported Hardware
-+=====================
- 
-    The following Adaptec SCSI Chips and Host Adapters are supported by
--   the aic7xxx driver. 
-+   the aic7xxx driver.
- 
--   Chip    MIPS  Host Bus  MaxSync  MaxWidth  SCBs  Notes
--   ---------------------------------------------------------------
--   aic7770  10    EISA/VL   10MHz    16Bit      4   1
-+   ======== ===== ========= ======== ========= ===== ===============
-+   Chip     MIPS  Host Bus  MaxSync  MaxWidth  SCBs  Notes
-+   ======== ===== ========= ======== ========= ===== ===============
-+   aic7770  10    EISA/VL   10MHz    16Bit      4    1
-    aic7850  10    PCI/32    10MHz    8Bit       3
-    aic7855  10    PCI/32    10MHz    8Bit       3
-    aic7856  10    PCI/32    10MHz    8Bit       3
-@@ -28,12 +33,13 @@ The following information is available in this file:
-    aic7880  10    PCI/32    20MHz    16Bit      16
-    aic7890  20    PCI/32    40MHz    16Bit      16      3 4 5 6 7 8
-    aic7891  20    PCI/64    40MHz    16Bit      16      3 4 5 6 7 8
--   aic7892  20   PCI/64-66  80MHz    16Bit      16      3 4 5 6 7 8
-+   aic7892  20    PCI/64-66 80MHz    16Bit      16      3 4 5 6 7 8
-    aic7895  15    PCI/32    20MHz    16Bit      16    2 3 4 5
-    aic7895C 15    PCI/32    20MHz    16Bit      16    2 3 4 5     8
-    aic7896  20    PCI/32    40MHz    16Bit      16    2 3 4 5 6 7 8
-    aic7897  20    PCI/64    40MHz    16Bit      16    2 3 4 5 6 7 8
--   aic7899  20   PCI/64-66  80MHz    16Bit      16    2 3 4 5 6 7 8
-+   aic7899  20    PCI/64-66 80MHz    16Bit      16    2 3 4 5 6 7 8
-+   ======== ===== ========= ======== ========= ===== ===============
- 
-    1.   Multiplexed Twin Channel Device - One controller servicing two
-         busses.
-@@ -44,15 +50,16 @@ The following information is available in this file:
-         for all possible target/lun combinations.
-    5.   Block Move Instruction Support - Doubles the speed of certain
-         sequencer operations.
--   6.   `Bayonet' style Scatter Gather Engine - Improves S/G prefetch
-+   6.   'Bayonet' style Scatter Gather Engine - Improves S/G prefetch
-         performance.
-    7.   Queuing Registers - Allows queuing of new transactions without
-         pausing the sequencer.
-    8.   Multiple Target IDs - Allows the controller to respond to selection
-         as a target on multiple SCSI IDs.
- 
-+   ============== ======= =========== =============== =============== =========
-    Controller      Chip   Host-Bus    Int-Connectors  Ext-Connectors  Notes
--   --------------------------------------------------------------------------
-+   ============== ======= =========== =============== =============== =========
-    AHA-274X[A]    aic7770   EISA         SE-50M         SE-HD50F
-    AHA-274X[A]W   aic7770   EISA         SE-HD68F       SE-HD68F
-                                          SE-50M
-@@ -73,7 +80,7 @@ The following information is available in this file:
-    AHA-2915C      aic7860   PCI/32       SE-50M
-    AHA-2940AU/CN  aic7860   PCI/32       SE-50M         SE-HD50F
-    AHA-2944W      aic7870   PCI/32     HVD-HD68F        HVD-HD68F
--                                        HVD-50M
-+                                       HVD-50M
-    AHA-3940W      aic7870   PCI/32     2 X SE-HD68F     SE-HD68F        2
-    AHA-2940UW     aic7880   PCI/32       SE-HD68F
-                                          SE-50M         SE-HD68F
-@@ -85,12 +92,12 @@ The following information is available in this file:
-    AHA-3940UWD    aic7880   PCI/32     2 X SE-HD68F   2 X SE-VHD68F       3
-    AHA-3940U      aic7880   PCI/32     2 X SE-50M       SE-HD50F          3
-    AHA-2944UW     aic7880   PCI/32      HVD-HD68F       HVD-HD68F
--                                         HVD-50M
-+                                        HVD-50M
-    AHA-3944UWD    aic7880   PCI/32     2 X HVD-HD68F  2 X HVD-VHD68F      3
-    AHA-4944UW     aic7880   PCI/32
-    AHA-2930UW     aic7880   PCI/32
-    AHA-2940UW Pro aic7880   PCI/32      SE-HD68F        SE-HD68F            4
--                                         SE-50M
-+                                        SE-50M
-    AHA-2940UW/CN  aic7880   PCI/32
-    AHA-2940UDual  aic7895   PCI/32
-    AHA-2940UWDual aic7895   PCI/32
-@@ -102,27 +109,28 @@ The following information is available in this file:
-    AHA-2940U2B    aic7890   PCI/32      LVD-HD68F       LVD-HD68F
-    AHA-2940U2 OEM aic7891   PCI/64
-    AHA-2940U2W    aic7890   PCI/32      LVD-HD68F       LVD-HD68F
--                                        SE-HD68F 
--                                         SE-50M
-+                                        SE-HD68F
-+                                        SE-50M
-    AHA-2950U2B    aic7891   PCI/64      LVD-HD68F       LVD-HD68F
-    AHA-2930U2     aic7890   PCI/32      LVD-HD68F       SE-HD50F
--                                         SE-50M 
-+                                        SE-50M
-    AHA-3950U2B    aic7897   PCI/64
-    AHA-3950U2D    aic7897   PCI/64
-    AHA-29160      aic7892   PCI/64-66
-    AHA-29160 CPQ  aic7892   PCI/64-66
-    AHA-29160N     aic7892   PCI/32      LVD-HD68F       SE-HD50F
--                                         SE-50M
-+                                        SE-50M
-    AHA-29160LP    aic7892   PCI/64-66
-    AHA-19160      aic7892   PCI/64-66
-    AHA-29150LP    aic7892   PCI/64-66
-    AHA-29130LP    aic7892   PCI/64-66
-    AHA-3960D      aic7899   PCI/64-66  2 X LVD-HD68F  2 X LVD-VHD68F
--                                         LVD-50M
-+                                       LVD-50M
-    AHA-3960D CPQ  aic7899   PCI/64-66  2 X LVD-HD68F  2 X LVD-VHD68F
--                                         LVD-50M
-+                                       LVD-50M
-    AHA-39160      aic7899   PCI/64-66  2 X LVD-HD68F  2 X LVD-VHD68F
--                                         LVD-50M
-+                                       LVD-50M
-+   ============== ======= =========== =============== =============== =========
- 
-    1. No BIOS support
-    2. DEC21050 PCI-PCI bridge with multiple controller chips on secondary bus
-@@ -131,11 +139,14 @@ The following information is available in this file:
-       SCSI "stub" effects.
- 
- 2. Version History
--   7.0	  (4th August, 2005)
-+==================
+ 			       Leonard N. Zubkoff
 +
-+   * 7.0	  (4th August, 2005)
- 	- Updated driver to use SCSI transport class infrastructure
- 	- Upported sequencer and core fixes from last adaptec released
- 	  version of the driver.
--   6.2.36 (June 3rd, 2003)
+ 			       Dandelion Digital
 +
-+   * 6.2.36 (June 3rd, 2003)
-         - Correct code that disables PCI parity error checking.
-         - Correct and simplify handling of the ignore wide residue
-           message.  The previous code would fail to report a residual
-@@ -153,18 +164,18 @@ The following information is available in this file:
-           by some other driver probe that occurred before we
-           claimed the controller.
+ 			       lnz@dandelion.com
  
--   6.2.35 (May 14th, 2003)
-+   * 6.2.35 (May 14th, 2003)
-         - Fix a few GCC 3.3 compiler warnings.
-         - Correct operation on EISA Twin Channel controller.
-         - Add support for 2.5.X's scsi_report_device_reset().
+ 	 Copyright 1995-1998 by Leonard N. Zubkoff <lnz@dandelion.com>
  
--   6.2.34 (May 5th, 2003)
-+   * 6.2.34 (May 5th, 2003)
-         - Fix locking regression introduced in 6.2.29 that
-           could cause a lock order reversal between the io_request_lock
-           and our per-softc lock.  This was only possible on RH9,
-           SuSE, and kernel.org 2.4.X kernels.
  
--   6.2.33 (April 30th, 2003)
-+   * 6.2.33 (April 30th, 2003)
-         - Dynamically disable PCI parity error reporting after
-           10 errors are reported to the user.  These errors are
-           the result of some other device issuing PCI transactions
-@@ -172,172 +183,224 @@ The following information is available in this file:
-           problem, continuing to report the errors just degrades
-           our performance.
+-				 INTRODUCTION
++Introduction
++============
  
--   6.2.32 (March 28th, 2003)
-+   * 6.2.32 (March 28th, 2003)
-         - Dynamically sized S/G lists to avoid SCSI malloc
-           pool fragmentation and SCSI mid-layer deadlock.
+ BusLogic, Inc. designed and manufactured a variety of high performance SCSI
+ host adapters which share a common programming interface across a diverse
+@@ -86,9 +94,11 @@ Contact information for offices in Europe and Japan is available on the Web
+ site.
  
--   6.2.28 (January 20th, 2003)
-+   * 6.2.28 (January 20th, 2003)
-         - Domain Validation Fixes
-         - Add ability to disable PCI parity error checking.
-         - Enhanced Memory Mapped I/O probe
  
--   6.2.20 (November 7th, 2002)
-+   * 6.2.20 (November 7th, 2002)
-         - Added Domain Validation.
+-				DRIVER FEATURES
++Driver Features
++===============
  
- 3. Command Line Options
+-o Configuration Reporting and Testing
++Configuration Reporting and Testing
++-----------------------------------
+ 
+   During system initialization, the driver reports extensively on the host
+   adapter hardware configuration, including the synchronous transfer parameters
+@@ -130,7 +140,8 @@ o Configuration Reporting and Testing
+     The status of Wide Negotiation, Disconnect/Reconnect, and Tagged Queuing
+     are reported as "Enabled", Disabled", or a sequence of "Y" and "N" letters.
+ 
+-o Performance Features
++Performance Features
++--------------------
+ 
+   BusLogic SCSI Host Adapters directly implement SCSI-2 Tagged Queuing, and so
+   support has been included in the driver to utilize tagged queuing with any
+@@ -150,7 +161,8 @@ o Performance Features
+   queue depth of 1 is selected.  Tagged queuing is also disabled for individual
+   target devices if disconnect/reconnect is disabled for that device.
+ 
+-o Robustness Features
++Robustness Features
++-------------------
+ 
+   The driver implements extensive error recovery procedures.  When the higher
+   level parts of the SCSI subsystem request that a timed out command be reset,
+@@ -174,7 +186,8 @@ o Robustness Features
+   lock up or crash, and thereby allowing a clean shutdown and restart after the
+   offending component is removed.
+ 
+-o PCI Configuration Support
++PCI Configuration Support
++-------------------------
+ 
+   On PCI systems running kernels compiled with PCI BIOS support enabled, this
+   driver will interrogate the PCI configuration space and use the I/O port
+@@ -184,19 +197,22 @@ o PCI Configuration Support
+   used to disable the ISA compatible I/O port entirely as it is not necessary.
+   The ISA compatible I/O port is disabled by default on the BT-948/958/958D.
+ 
+-o /proc File System Support
++/proc File System Support
++-------------------------
+ 
+   Copies of the host adapter configuration information together with updated
+   data transfer and error recovery statistics are available through the
+   /proc/scsi/BusLogic/<N> interface.
+ 
+-o Shared Interrupts Support
++Shared Interrupts Support
++-------------------------
+ 
+   On systems that support shared interrupts, any number of BusLogic Host
+   Adapters may share the same interrupt request channel.
+ 
+ 
+-			    SUPPORTED HOST ADAPTERS
++Supported Host Adapters
 +=======================
  
--        WARNING: ALTERING OR ADDING THESE DRIVER PARAMETERS
-+
-+    .. Warning::
-+
-+                 ALTERING OR ADDING THESE DRIVER PARAMETERS
-                  INCORRECTLY CAN RENDER YOUR SYSTEM INOPERABLE.
--                 USE THEM WITH CAUTION. 
-+                 USE THEM WITH CAUTION.
+ The following list comprises the supported BusLogic SCSI Host Adapters as of
+ the date of this document.  It is recommended that anyone purchasing a BusLogic
+@@ -205,6 +221,7 @@ that it is or will be supported.
  
-    Put a .conf file in the /etc/modprobe.d directory and add/edit a
--   line containing 'options aic7xxx aic7xxx=[command[,command...]]' where
--   'command' is one or more of the following:
--   -----------------------------------------------------------------
--              Option: verbose
--          Definition: enable additional informative messages during
--                      driver operation.
--     Possible Values: This option is a flag
--       Default Value: disabled
--   -----------------------------------------------------------------
--              Option: debug:[value]
--          Definition: Enables various levels of debugging information
--     Possible Values: 0x0000 = no debugging, 0xffff = full debugging
--       Default Value: 0x0000
--   -----------------------------------------------------------------
--              Option: no_probe
--              Option: probe_eisa_vl
--          Definition: Do not probe for EISA/VLB controllers.
--                      This is a toggle.  If the driver is compiled
--                      to not probe EISA/VLB controllers by default,
--                      specifying "no_probe" will enable this probing.
--                      If the driver is compiled to probe EISA/VLB
--                      controllers by default, specifying "no_probe"
--                      will disable this probing.
--     Possible Values: This option is a toggle
--       Default Value: EISA/VLB probing is disabled by default.
--   -----------------------------------------------------------------
--              Option: pci_parity
--          Definition: Toggles the detection of PCI parity errors.
--                      On many motherboards with VIA chipsets,
--                      PCI parity is not generated correctly on the
--                      PCI bus.  It is impossible for the hardware to
--                      differentiate between these "spurious" parity
--                      errors and real parity errors.  The symptom of
--                      this problem is a stream of the message:
--    "scsi0: Data Parity Error Detected during address or write data phase"
--                      output by the driver.
--     Possible Values: This option is a toggle
--       Default Value: PCI Parity Error reporting is disabled
--   -----------------------------------------------------------------
--              Option: no_reset
--          Definition: Do not reset the bus during the initial probe
--                      phase
--     Possible Values: This option is a flag
--       Default Value: disabled
--   -----------------------------------------------------------------
--              Option: extended
--          Definition: Force extended translation on the controller
--     Possible Values: This option is a flag
--       Default Value: disabled
--   -----------------------------------------------------------------
--              Option: periodic_otag
--          Definition: Send an ordered tag periodically to prevent
--                      tag starvation.  Needed for some older devices
--     Possible Values: This option is a flag
--       Default Value: disabled
--   -----------------------------------------------------------------
--              Option: reverse_scan
--          Definition: Probe the scsi bus in reverse order, starting
--                      with target 15
--     Possible Values: This option is a flag
--       Default Value: disabled
--   -----------------------------------------------------------------
--              Option: global_tag_depth:[value]
--          Definition: Global tag depth for all targets on all busses.
--                      This option sets the default tag depth which
--                      may be selectively overridden vi the tag_info
--                      option.
--     Possible Values: 1 - 253
--       Default Value: 32
--   -----------------------------------------------------------------
--              Option: tag_info:{{value[,value...]}[,{value[,value...]}...]}
--          Definition: Set the per-target tagged queue depth on a
--                      per controller basis.  Both controllers and targets
--                      may be omitted indicating that they should retain
--                      the default tag depth.
--            Examples: tag_info:{{16,32,32,64,8,8,,32,32,32,32,32,32,32,32,32}
--                        On Controller 0
--                          specifies a tag depth of 16 for target 0
--                          specifies a tag depth of 64 for target 3
--                          specifies a tag depth of 8 for targets 4 and 5
--                          leaves target 6 at the default
--                          specifies a tag depth of 32 for targets 1,2,7-15
--                        All other targets retain the default depth.
--
--                      tag_info:{{},{32,,32}}
--                        On Controller 1
--                          specifies a tag depth of 32 for targets 0 and 2
--                        All other targets retain the default depth.
--                        
--     Possible Values: 1 - 253
--       Default Value: 32
--   -----------------------------------------------------------------
--              Option: seltime:[value]
--          Definition: Specifies the selection timeout value
--     Possible Values: 0 = 256ms, 1 = 128ms, 2 = 64ms, 3 = 32ms
--       Default Value: 0
--   -----------------------------------------------------------------
--              Option: dv: {value[,value...]} 
--          Definition: Set Domain Validation Policy on a per-controller basis.
--                      Controllers may be omitted indicating that
--                      they should retain the default read streaming setting.
--             Example: dv:{-1,0,,1,1,0}
--                        On Controller 0 leave DV at its default setting.
--                        On Controller 1 disable DV.
--                        Skip configuration on Controller 2.
--                        On Controllers 3 and 4 enable DV.
--                        On Controller 5 disable DV.
--
--     Possible Values: < 0 Use setting from serial EEPROM.
--                      0 Disable DV
--                      > 0 Enable DV
--
--       Default Value: SCSI-Select setting on controllers with a SCSI Select
--                      option for DV.  Otherwise, on for controllers supporting
--                      U160 speeds and off for all other controller types.
--   -----------------------------------------------------------------
--
--   Example:
--   'options aic7xxx aic7xxx=verbose,no_probe,tag_info:{{},{,,10}},seltime:1'
--        enables verbose logging, Disable EISA/VLB probing,
--        and set tag depth on Controller 1/Target 2 to 10 tags.
-+   line containing ``options aic7xxx aic7xxx=[command[,command...]]`` where
-+   ``command`` is one or more of the following:
-+
-+verbose
-+
-+    :Definition: enable additional informative messages during driver operation.
-+    :Possible Values: This option is a flag
-+    :Default Value: disabled
-+
-+
-+debug:[value]
-+
-+    :Definition: Enables various levels of debugging information
-+    :Possible Values: 0x0000 = no debugging, 0xffff = full debugging
-+    :Default Value: 0x0000
-+
-+no_probe
-+
-+probe_eisa_vl
-+
-+    :Definition: Do not probe for EISA/VLB controllers.
-+		 This is a toggle.  If the driver is compiled
-+		 to not probe EISA/VLB controllers by default,
-+		 specifying "no_probe" will enable this probing.
-+		 If the driver is compiled to probe EISA/VLB
-+		 controllers by default, specifying "no_probe"
-+		 will disable this probing.
-+
-+    :Possible Values: This option is a toggle
-+    :Default Value: EISA/VLB probing is disabled by default.
-+
-+pci_parity
-+
-+    :Definition: Toggles the detection of PCI parity errors.
-+		 On many motherboards with VIA chipsets,
-+		 PCI parity is not generated correctly on the
-+		 PCI bus.  It is impossible for the hardware to
-+		 differentiate between these "spurious" parity
-+		 errors and real parity errors.  The symptom of
-+		 this problem is a stream of the message::
-+
-+		    "scsi0:	Data Parity Error Detected during address or write data phase"
-+
-+		 output by the driver.
-+
-+    :Possible Values: This option is a toggle
-+    :Default Value: PCI Parity Error reporting is disabled
-+
-+no_reset
-+
-+    :Definition: Do not reset the bus during the initial probe
-+		 phase
-+
-+    :Possible Values: This option is a flag
-+    :Default Value: disabled
-+
-+extended
-+
-+    :Definition: Force extended translation on the controller
-+    :Possible Values: This option is a flag
-+    :Default Value: disabled
-+
-+periodic_otag
-+
-+    :Definition: Send an ordered tag periodically to prevent
-+		 tag starvation.  Needed for some older devices
-+
-+    :Possible Values: This option is a flag
-+    :Default Value: disabled
-+
-+reverse_scan
-+
-+    :Definition: Probe the scsi bus in reverse order, starting
-+		with target 15
-+
-+    :Possible Values: This option is a flag
-+    :Default Value: disabled
-+
-+global_tag_depth:[value]
-+
-+    :Definition: Global tag depth for all targets on all busses.
-+		 This option sets the default tag depth which
-+		 may be selectively overridden vi the tag_info
-+		 option.
-+
-+    :Possible Values: 1 - 253
-+    :Default Value: 32
-+
-+tag_info:{{value[,value...]}[,{value[,value...]}...]}
-+
-+    :Definition: Set the per-target tagged queue depth on a
-+		 per controller basis.  Both controllers and targets
-+		 may be omitted indicating that they should retain
-+		 the default tag depth.
-+
-+    :Possible Values: 1 - 253
-+    :Default Value: 32
-+
-+    Examples:
-+
-+	    ::
-+
-+	        tag_info:{{16,32,32,64,8,8,,32,32,32,32,32,32,32,32,32}
-+
-+	    On Controller 0:
-+
-+		- specifies a tag depth of 16 for target 0
-+		- specifies a tag depth of 64 for target 3
-+		- specifies a tag depth of 8 for targets 4 and 5
-+		- leaves target 6 at the default
-+		- specifies a tag depth of 32 for targets 1,2,7-15
-+		- All other targets retain the default depth.
-+
-+	    ::
-+
-+                tag_info:{{},{32,,32}}
-+
-+	    On Controller 1:
-+
-+		- specifies a tag depth of 32 for targets 0 and 2
-+		- All other targets retain the default depth.
-+
-+seltime:[value]
-+
-+    :Definition: Specifies the selection timeout value
-+    :Possible Values: 0 = 256ms, 1 = 128ms, 2 = 64ms, 3 = 32ms
-+    :Default Value: 0
-+
-+dv: {value[,value...]}
-+
-+    :Definition: Set Domain Validation Policy on a per-controller basis.
-+		 Controllers may be omitted indicating that
-+		 they should retain the default read streaming setting.
-+
-+    :Possible Values:
-+
-+		      ==== ===============================
-+		       < 0 Use setting from serial EEPROM.
-+                         0 Disable DV
-+		       > 0 Enable DV
-+		      ==== ===============================
-+
-+
-+    :Default Value: SCSI-Select setting on controllers with a SCSI Select
-+		    option for DV.  Otherwise, on for controllers supporting
-+		    U160 speeds and off for all other controller types.
-+
-+    Example:
-+
-+	    ::
-+
-+		dv:{-1,0,,1,1,0}
-+
-+	   - On Controller 0 leave DV at its default setting.
-+	   - On Controller 1 disable DV.
-+	   - Skip configuration on Controller 2.
-+	   - On Controllers 3 and 4 enable DV.
-+	   - On Controller 5 disable DV.
-+
-+Example::
-+
-+    options aic7xxx aic7xxx=verbose,no_probe,tag_info:{{},{,,10}},seltime:1
-+
-+enables verbose logging, Disable EISA/VLB probing,
-+and set tag depth on Controller 1/Target 2 to 10 tags.
+ FlashPoint Series PCI Host Adapters:
  
- 4. Adaptec Customer Support
-+===========================
++=======================	=============================================
+ FlashPoint LT (BT-930)	Ultra SCSI-3
+ FlashPoint LT (BT-930R)	Ultra SCSI-3 with RAIDPlus
+ FlashPoint LT (BT-920)	Ultra SCSI-3 (BT-930 without BIOS)
+@@ -214,15 +231,19 @@ FlashPoint LW (BT-950)	Wide Ultra SCSI-3
+ FlashPoint LW (BT-950R)	Wide Ultra SCSI-3 with RAIDPlus
+ FlashPoint DW (BT-952)	Dual Channel Wide Ultra SCSI-3
+ FlashPoint DW (BT-952R)	Dual Channel Wide Ultra SCSI-3 with RAIDPlus
++=======================	=============================================
  
--   A Technical Support Identification (TSID) Number is required for 
-+   A Technical Support Identification (TSID) Number is required for
-    Adaptec technical support.
-+
-     - The 12-digit TSID can be found on the white barcode-type label
--      included inside the box with your product.  The TSID helps us 
--      provide more efficient service by accurately identifying your 
-+      included inside the box with your product.  The TSID helps us
-+      provide more efficient service by accurately identifying your
-       product and support status.
+ MultiMaster "W" Series Host Adapters:
  
-    Support Options
-     - Search the Adaptec Support Knowledgebase (ASK) at
-       http://ask.adaptec.com for articles, troubleshooting tips, and
-       frequently asked questions about your product.
--    - For support via Email, submit your question to Adaptec's 
-+    - For support via Email, submit your question to Adaptec's
-       Technical Support Specialists at http://ask.adaptec.com/.
--     
-+
-    North America
-     - Visit our Web site at http://www.adaptec.com/.
-     - For information about Adaptec's support options, call
-       408-957-2550, 24 hours a day, 7 days a week.
-     - To speak with a Technical Support Specialist,
-+
-       * For hardware products, call 408-934-7274,
-         Monday to Friday, 3:00 am to 5:00 pm, PDT.
-       * For RAID and Fibre Channel products, call 321-207-2000,
-         Monday to Friday, 3:00 am to 5:00 pm, PDT.
-+
-       To expedite your service, have your computer with you.
-     - To order Adaptec products, including accessories and cables,
-       call 408-957-7274.  To order cables online go to
-@@ -346,49 +409,50 @@ The following information is available in this file:
-    Europe
-     - Visit our Web site at http://www.adaptec.com/en-US/_common/world_index.
-     - To speak with a Technical Support Specialist, call, or email,
-+
-       * German:  +49 89 4366 5522, Monday-Friday, 9:00-17:00 CET,
-         http://ask-de.adaptec.com/.
-       * French:  +49 89 4366 5533, Monday-Friday, 9:00-17:00 CET,
- 	http://ask-fr.adaptec.com/.
-       * English: +49 89 4366 5544, Monday-Friday, 9:00-17:00 GMT,
- 	http://ask.adaptec.com/.
-+
-     - You can order Adaptec cables online at
-       http://www.adaptec.com/buy-cables/.
++=======     ===		==============================
+ BT-948	    PCI		Ultra SCSI-3
+ BT-958	    PCI		Wide Ultra SCSI-3
+ BT-958D	    PCI		Wide Differential Ultra SCSI-3
++=======     ===		==============================
  
-    Japan
-     - Visit our web site at http://www.adaptec.co.jp/.
--    - To speak with a Technical Support Specialist, call 
-+    - To speak with a Technical Support Specialist, call
-       +81 3 5308 6120, Monday-Friday, 9:00 a.m. to 12:00 p.m.,
-       1:00 p.m. to 6:00 p.m.
+ MultiMaster "C" Series Host Adapters:
  
---------------------------------------------------------------------
--/*
-- * Copyright (c) 2003 Adaptec Inc. 691 S. Milpitas Blvd., Milpitas CA 95035 USA.
-- * All rights reserved.
-- *
-- * You are permitted to redistribute, use and modify this README file in whole
-- * or in part in conjunction with redistribution of software governed by the
-- * General Public License, provided that the following conditions are met:
-- * 1. Redistributions of README file must retain the above copyright
-- *    notice, this list of conditions, and the following disclaimer,
-- *    without modification.
-- * 2. The name of the author may not be used to endorse or promote products
-- *    derived from this software without specific prior written permission.
-- * 3. Modifications or new contributions must be attributed in a copyright
-- *    notice identifying the author ("Contributor") and added below the
-- *    original copyright notice. The copyright notice is for purposes of
-- *    identifying contributors and should not be deemed as permission to alter
-- *    the permissions given by Adaptec.
-- *
-- * THIS README FILE IS PROVIDED BY ADAPTEC AND CONTRIBUTORS ``AS IS'' AND
-- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, ANY
-- * WARRANTIES OF NON-INFRINGEMENT OR THE IMPLIED WARRANTIES OF MERCHANTABILITY
-- * AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-- * ADAPTEC OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
-- * TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS README
-- * FILE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-- */
-+Copyright |copy| 2003 Adaptec Inc. 691 S. Milpitas Blvd., Milpitas CA 95035 USA.
++========    ====	==============================
+ BT-946C	    PCI		Fast SCSI-2
+ BT-956C	    PCI		Wide Fast SCSI-2
+ BT-956CD    PCI		Wide Differential Fast SCSI-2
+@@ -232,9 +253,11 @@ BT-757C	    EISA	Wide Fast SCSI-2
+ BT-757CD    EISA	Wide Differential Fast SCSI-2
+ BT-545C	    ISA		Fast SCSI-2
+ BT-540CF    ISA		Fast SCSI-2
++========    ====	==============================
+ 
+ MultiMaster "S" Series Host Adapters:
+ 
++=======     ====	==============================
+ BT-445S	    VLB		Fast SCSI-2
+ BT-747S	    EISA	Fast SCSI-2
+ BT-747D	    EISA	Differential Fast SCSI-2
+@@ -244,11 +267,14 @@ BT-545S	    ISA		Fast SCSI-2
+ BT-542D	    ISA		Differential Fast SCSI-2
+ BT-742A	    EISA	SCSI-2 (742A revision H)
+ BT-542B	    ISA		SCSI-2 (542B revision H)
++=======     ====	==============================
+ 
+ MultiMaster "A" Series Host Adapters:
+ 
++=======     ====	==============================
+ BT-742A	    EISA	SCSI-2 (742A revisions A - G)
+ BT-542B	    ISA		SCSI-2 (542B revisions A - G)
++=======     ====	==============================
+ 
+ AMI FastDisk Host Adapters that are true BusLogic MultiMaster clones are also
+ supported by this driver.
+@@ -260,9 +286,11 @@ list.  The retail kit includes the bare board and manual as well as cabling and
+ driver media and documentation that are not provided with bare boards.
+ 
+ 
+-			 FLASHPOINT INSTALLATION NOTES
++FlashPoint Installation Notes
++=============================
+ 
+-o RAIDPlus Support
++RAIDPlus Support
++----------------
+ 
+   FlashPoint Host Adapters now include RAIDPlus, Mylex's bootable software
+   RAID.  RAIDPlus is not supported on Linux, and there are no plans to support
+@@ -273,7 +301,8 @@ o RAIDPlus Support
+   than RAIDPlus, so there is little impetus to include RAIDPlus support in the
+   BusLogic driver.
+ 
+-o Enabling UltraSCSI Transfers
++Enabling UltraSCSI Transfers
++----------------------------
+ 
+   FlashPoint Host Adapters ship with their configuration set to "Factory
+   Default" settings that are conservative and do not allow for UltraSCSI speed
+@@ -287,12 +316,14 @@ o Enabling UltraSCSI Transfers
+   the "Optimum Performance" settings are loaded.
+ 
+ 
+-		      BT-948/958/958D INSTALLATION NOTES
++BT-948/958/958D Installation Notes
++==================================
+ 
+ The BT-948/958/958D PCI Ultra SCSI Host Adapters have some features which may
+ require attention in some circumstances when installing Linux.
+ 
+-o PCI I/O Port Assignments
++PCI I/O Port Assignments
++------------------------
+ 
+   When configured to factory default settings, the BT-948/958/958D will only
+   recognize the PCI I/O port assignments made by the motherboard's PCI BIOS.
+@@ -312,7 +343,8 @@ o PCI I/O Port Assignments
+   possible future I/O port conflicts.  The older BT-946C/956C/956CD also have
+   this configuration option, but the factory default setting is "Primary".
+ 
+-o PCI Slot Scanning Order
++PCI Slot Scanning Order
++-----------------------
+ 
+   In systems with multiple BusLogic PCI Host Adapters, the order in which the
+   PCI slots are scanned may appear reversed with the BT-948/958/958D as
+@@ -339,7 +371,8 @@ o PCI Slot Scanning Order
+   so as to recognize the host adapters in the same order as they are enumerated
+   by the host adapter's BIOS.
+ 
+-o Enabling UltraSCSI Transfers
++Enabling UltraSCSI Transfers
++----------------------------
+ 
+   The BT-948/958/958D ship with their configuration set to "Factory Default"
+   settings that are conservative and do not allow for UltraSCSI speed to be
+@@ -353,7 +386,8 @@ o Enabling UltraSCSI Transfers
+   "Optimum Performance" settings are loaded.
+ 
+ 
+-				DRIVER OPTIONS
++Driver Options
++==============
+ 
+ BusLogic Driver Options may be specified either via the Linux Kernel Command
+ Line or via the Loadable Kernel Module Installation Facility.  Driver Options
+@@ -520,30 +554,34 @@ The following examples demonstrate setting the Queue Depth for Target Devices
+ Devices on the second host adapter to 31, and the Bus Settle Time on the
+ second host adapter to 30 seconds.
+ 
+-Linux Kernel Command Line:
++Linux Kernel Command Line::
+ 
+   linux BusLogic=QueueDepth:[,7,15];QueueDepth:31,BusSettleTime:30
+ 
+-LILO Linux Boot Loader (in /etc/lilo.conf):
++LILO Linux Boot Loader (in /etc/lilo.conf)::
+ 
+   append = "BusLogic=QueueDepth:[,7,15];QueueDepth:31,BusSettleTime:30"
+ 
+-INSMOD Loadable Kernel Module Installation Facility:
++INSMOD Loadable Kernel Module Installation Facility::
+ 
+   insmod BusLogic.o \
+       'BusLogic="QueueDepth:[,7,15];QueueDepth:31,BusSettleTime:30"'
+ 
+-NOTE: Module Utilities 2.1.71 or later is required for correct parsing
 +
-+All rights reserved.
++.. Note::
 +
-+You are permitted to redistribute, use and modify this README file in whole
-+or in part in conjunction with redistribution of software governed by the
-+General Public License, provided that the following conditions are met:
-+
-+1. Redistributions of README file must retain the above copyright
-+   notice, this list of conditions, and the following disclaimer,
-+   without modification.
-+2. The name of the author may not be used to endorse or promote products
-+   derived from this software without specific prior written permission.
-+3. Modifications or new contributions must be attributed in a copyright
-+   notice identifying the author ("Contributor") and added below the
-+   original copyright notice. The copyright notice is for purposes of
-+   identifying contributors and should not be deemed as permission to alter
-+   the permissions given by Adaptec.
-+
-+THIS README FILE IS PROVIDED BY ADAPTEC AND CONTRIBUTORS ``AS IS`` AND
-+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, ANY
-+WARRANTIES OF NON-INFRINGEMENT OR THE IMPLIED WARRANTIES OF MERCHANTABILITY
-+AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
-+ADAPTEC OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
-+TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS README
-+FILE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++      Module Utilities 2.1.71 or later is required for correct parsing
+       of driver options containing commas.
+ 
+ 
+-			      DRIVER INSTALLATION
++Driver Installation
++===================
+ 
+ This distribution was prepared for Linux kernel version 2.0.35, but should be
+ compatible with 2.0.4 or any later 2.0 series kernel.
+ 
+ To install the new BusLogic SCSI driver, you may use the following commands,
+-replacing "/usr/src" with wherever you keep your Linux kernel source tree:
++replacing "/usr/src" with wherever you keep your Linux kernel source tree::
+ 
+   cd /usr/src
+   tar -xvzf BusLogic-2.0.15.tar.gz
+@@ -557,7 +595,8 @@ Then install "arch/x86/boot/zImage" as your standard kernel, run lilo if
+ appropriate, and reboot.
+ 
+ 
+-		      BUSLOGIC ANNOUNCEMENTS MAILING LIST
++BusLogic Announcements Mailing List
++===================================
+ 
+ The BusLogic Announcements Mailing List provides a forum for informing Linux
+ users of new driver releases and other announcements regarding Linux support
 diff --git a/Documentation/scsi/index.rst b/Documentation/scsi/index.rst
-index b7fdfc0cb956..c0b66763515f 100644
+index d453fb3f1f7d..6bb2428c1d56 100644
 --- a/Documentation/scsi/index.rst
 +++ b/Documentation/scsi/index.rst
-@@ -12,5 +12,6 @@ Linux SCSI Subsystem
-    advansys
-    aha152x
-    aic79xx
-+   aic7xxx
+@@ -15,5 +15,6 @@ Linux SCSI Subsystem
+    aic7xxx
+    bfa
+    bnx2fc
++   BusLogic
  
     scsi_transport_srp/figures
-diff --git a/Documentation/scsi/scsi-parameters.txt b/Documentation/scsi/scsi-parameters.txt
-index 8ed9c662a1d4..266fd3b2398a 100644
---- a/Documentation/scsi/scsi-parameters.txt
-+++ b/Documentation/scsi/scsi-parameters.txt
-@@ -22,7 +22,7 @@ parameters may be changed at runtime by the command
- 			Format: <portbase>[,<buson>,<busoff>[,<dmaspeed>]]
+diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+index 3170b295a5da..9b8be4f0da19 100644
+--- a/drivers/scsi/BusLogic.c
++++ b/drivers/scsi/BusLogic.c
+@@ -3652,7 +3652,7 @@ static bool __init blogic_parse(char **str, char *keyword)
+   selected host adapter.
  
- 	aic7xxx=	[HW,SCSI]
--			See Documentation/scsi/aic7xxx.txt.
-+			See Documentation/scsi/aic7xxx.rst.
+   The BusLogic Driver Probing Options are described in
+-  <file:Documentation/scsi/BusLogic.txt>.
++  <file:Documentation/scsi/BusLogic.rst>.
+ */
  
- 	aic79xx=	[HW,SCSI]
- 			See Documentation/scsi/aic79xx.rst.
-diff --git a/drivers/scsi/aic7xxx/Kconfig.aic7xxx b/drivers/scsi/aic7xxx/Kconfig.aic7xxx
-index 3546b8cc401f..9d027549d698 100644
---- a/drivers/scsi/aic7xxx/Kconfig.aic7xxx
-+++ b/drivers/scsi/aic7xxx/Kconfig.aic7xxx
-@@ -37,7 +37,7 @@ config AIC7XXX_CMDS_PER_DEVICE
- 	on some devices.  The upper bound is 253.  0 disables tagged queueing.
- 
- 	Per device tag depth can be controlled via the kernel command line
--	"tag_info" option.  See Documentation/scsi/aic7xxx.txt for details.
-+	"tag_info" option.  See Documentation/scsi/aic7xxx.rst for details.
- 
- config AIC7XXX_RESET_DELAY_MS
- 	int "Initial bus reset delay in milli-seconds"
+ static int __init blogic_parseopts(char *options)
+diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
+index 18af62594bc0..5ec7330f82b6 100644
+--- a/drivers/scsi/Kconfig
++++ b/drivers/scsi/Kconfig
+@@ -502,7 +502,7 @@ config SCSI_BUSLOGIC
+ 	  This is support for BusLogic MultiMaster and FlashPoint SCSI Host
+ 	  Adapters. Consult the SCSI-HOWTO, available from
+ 	  <http://www.tldp.org/docs.html#howto>, and the files
+-	  <file:Documentation/scsi/BusLogic.txt> and
++	  <file:Documentation/scsi/BusLogic.rst> and
+ 	  <file:Documentation/scsi/FlashPoint.txt> for more information.
+ 	  Note that support for FlashPoint is only available for 32-bit
+ 	  x86 configurations.
 -- 
 2.21.1
 
