@@ -2,41 +2,43 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F58F1755B7
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2020 09:18:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA0A1755B2
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2020 09:18:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727852AbgCBISg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Mar 2020 03:18:36 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57084 "EHLO mail.kernel.org"
+        id S1727481AbgCBISR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Mar 2020 03:18:17 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56974 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727142AbgCBIQV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1727190AbgCBIQV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Mon, 2 Mar 2020 03:16:21 -0500
 Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 312FE246CD;
+        by mail.kernel.org (Postfix) with ESMTPSA id 58489246DF;
         Mon,  2 Mar 2020 08:16:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1583136979;
-        bh=whC7giiFv+Yk442YMgup2KDESn5/o/XkEA6JPZfKSOU=;
+        bh=VSYlwxOgcKmsJPmO9XgVB01Y5bYH9oETiiWJbAEWE84=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wGk3J5HlEheZ32y/4VOv0ANHBoVnpC05frr3DIwvRXZyMmDIdC7yWr9SHgNk+J0ss
-         Ziq3Li+N9118FzjH3EvwYeM8aNw2l4EGJMhV8Q3E0xgJ8DY/1VOJYa63K+ZxehW3J2
-         BwCPBBxU4+Y8Pk9YLVyLA2FucY+fYzPPggD1BARY=
+        b=JTaAzv8GDPNJB9SZmyvkuXFZp6FGwMbRh9WqXyiH4E0IDZ+9bZGG5c2i4hLdrV1K7
+         IHZglUKa4yJNEJZsXbrtei6xps1TWy6UkIRbGqZL+DOeSwJufLF4o9IJ2rF3zFgJ8P
+         CGDL6Ug7jHKYRFYBSa5RnG3EFa3l578T2trEhrg0=
 Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
         (envelope-from <mchehab@kernel.org>)
-        id 1j8gFN-0003xQ-9b; Mon, 02 Mar 2020 09:16:17 +0100
+        id 1j8gFN-0003xa-BB; Mon, 02 Mar 2020 09:16:17 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Khalid Aziz <khalid@gonehiking.org>,
+        Oliver Neukum <oliver@neukum.org>,
+        Ali Akcaagac <aliakc@web.de>,
+        Jamie Lenehan <lenehan@twibble.org>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH 11/42] docs: scsi: convert BusLogic.txt to ReST
-Date:   Mon,  2 Mar 2020 09:15:44 +0100
-Message-Id: <750629b6a5233c85c5391c44d126606b8aabefc8.1583136624.git.mchehab+huawei@kernel.org>
+        dc395x@twibble.org, linux-scsi@vger.kernel.org
+Subject: [PATCH 13/42] docs: scsi: convert dc395x.txt to ReST
+Date:   Mon,  2 Mar 2020 09:15:46 +0100
+Message-Id: <3c0876df0045695185f922a0404c497a69de36a9.1583136624.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.21.1
 In-Reply-To: <cover.1583136624.git.mchehab+huawei@kernel.org>
 References: <cover.1583136624.git.mchehab+huawei@kernel.org>
@@ -49,335 +51,185 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- .../scsi/{BusLogic.txt => BusLogic.rst}       | 89 +++++++++++++------
+ Documentation/scsi/{dc395x.txt => dc395x.rst} | 75 +++++++++++--------
  Documentation/scsi/index.rst                  |  1 +
- drivers/scsi/BusLogic.c                       |  2 +-
+ MAINTAINERS                                   |  2 +-
  drivers/scsi/Kconfig                          |  2 +-
- 4 files changed, 67 insertions(+), 27 deletions(-)
- rename Documentation/scsi/{BusLogic.txt => BusLogic.rst} (93%)
+ 4 files changed, 48 insertions(+), 32 deletions(-)
+ rename Documentation/scsi/{dc395x.txt => dc395x.rst} (64%)
 
-diff --git a/Documentation/scsi/BusLogic.txt b/Documentation/scsi/BusLogic.rst
-similarity index 93%
-rename from Documentation/scsi/BusLogic.txt
-rename to Documentation/scsi/BusLogic.rst
-index 48e982cd6fe7..b60169812358 100644
---- a/Documentation/scsi/BusLogic.txt
-+++ b/Documentation/scsi/BusLogic.rst
-@@ -1,6 +1,11 @@
--	   BusLogic MultiMaster and FlashPoint SCSI Driver for Linux
+diff --git a/Documentation/scsi/dc395x.txt b/Documentation/scsi/dc395x.rst
+similarity index 64%
+rename from Documentation/scsi/dc395x.txt
+rename to Documentation/scsi/dc395x.rst
+index 88219f96633d..d779e782b1cb 100644
+--- a/Documentation/scsi/dc395x.txt
++++ b/Documentation/scsi/dc395x.rst
+@@ -1,5 +1,8 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+=========================================================
-+BusLogic MultiMaster and FlashPoint SCSI Driver for Linux
-+=========================================================
++======================================
+ README file for the dc395x SCSI driver
+-==========================================
++======================================
  
- 			 Version 2.0.15 for Linux 2.0
+ Status
+ ------
+@@ -18,14 +21,14 @@ http://lists.twibble.org/mailman/listinfo/dc395x/
+ 
+ Parameters
+ ----------
+-The driver uses the settings from the EEPROM set in the SCSI BIOS 
++The driver uses the settings from the EEPROM set in the SCSI BIOS
+ setup. If there is no EEPROM, the driver uses default values.
+ Both can be overridden by command line parameters (module or kernel
+ parameters).
+ 
+ The following parameters are available:
+ 
+- - safe
++safe
+    Default: 0, Acceptable values: 0 or 1
+ 
+    If safe is set to 1 then the adapter will use conservative
+@@ -33,52 +36,63 @@ The following parameters are available:
+ 
+ 		shortcut for dc395x=7,4,9,15,2,10
+ 
+- - adapter_id
++adapter_id
+    Default: 7, Acceptable values: 0 to 15
+ 
+    Sets the host adapter SCSI ID.
+ 
+- - max_speed
++max_speed
+    Default: 1, Acceptable value: 0 to 7
+-   0 = 20   Mhz
+-   1 = 12.2 Mhz
+-   2 = 10   Mhz
+-   3 = 8    Mhz
+-   4 = 6.7  Mhz
+-   5 = 5.8  Hhz
+-   6 = 5    Mhz
+-   7 = 4    Mhz
+ 
+- - dev_mode
++   ==  ========
++   0   20   Mhz
++   1   12.2 Mhz
++   2   10   Mhz
++   3   8    Mhz
++   4   6.7  Mhz
++   5   5.8  Hhz
++   6   5    Mhz
++   7   4    Mhz
++   ==  ========
 +
- 			 Version 2.1.15 for Linux 2.1
++dev_mode
+    Bitmap for device configuration
  
- 			      PRODUCTION RELEASE
-@@ -8,13 +13,16 @@
- 				17 August 1998
- 
- 			       Leonard N. Zubkoff
+    DevMode bit definition:
 +
- 			       Dandelion Digital
++      === ======== ========  =========================================
+       Bit Val(hex) Val(dec)  Meaning
+-      *0    0x01       1     Parity check
+-      *1    0x02       2     Synchronous Negotiation
+-      *2    0x04       4     Disconnection
+-      *3    0x08       8     Send Start command on startup. (Not used)
+-      *4    0x10      16     Tagged Command Queueing
+-      *5    0x20      32     Wide Negotiation
++      === ======== ========  =========================================
++       0    0x01       1     Parity check
++       1    0x02       2     Synchronous Negotiation
++       2    0x04       4     Disconnection
++       3    0x08       8     Send Start command on startup. (Not used)
++       4    0x10      16     Tagged Command Queueing
++       5    0x20      32     Wide Negotiation
++      === ======== ========  =========================================
+ 
+- - adapter_mode
++adapter_mode
+    Bitmap for adapter configuration
+ 
+    AdaptMode bit definition
 +
- 			       lnz@dandelion.com
++    ===== ======== ========  ====================================================
+       Bit Val(hex) Val(dec)  Meaning
+-      *0    0x01       1     Support more than two drives. (Not used)
+-      *1    0x02       2     Use DOS compatible mapping for HDs greater than 1GB.
+-      *2    0x04       4     Reset SCSI Bus on startup.
+-      *3    0x08       8     Active Negation: Improves SCSI Bus noise immunity.
++    ===== ======== ========  ====================================================
++       0    0x01       1     Support more than two drives. (Not used)
++       1    0x02       2     Use DOS compatible mapping for HDs greater than 1GB.
++       2    0x04       4     Reset SCSI Bus on startup.
++       3    0x08       8     Active Negation: Improves SCSI Bus noise immunity.
+        4    0x10      16     Immediate return on BIOS seek command. (Not used)
+     (*)5    0x20      32     Check for LUNs >= 1.
++    ===== ======== ========  ====================================================
  
- 	 Copyright 1995-1998 by Leonard N. Zubkoff <lnz@dandelion.com>
- 
- 
--				 INTRODUCTION
-+Introduction
-+============
- 
- BusLogic, Inc. designed and manufactured a variety of high performance SCSI
- host adapters which share a common programming interface across a diverse
-@@ -86,9 +94,11 @@ Contact information for offices in Europe and Japan is available on the Web
- site.
- 
- 
--				DRIVER FEATURES
-+Driver Features
-+===============
- 
--o Configuration Reporting and Testing
-+Configuration Reporting and Testing
-+-----------------------------------
- 
-   During system initialization, the driver reports extensively on the host
-   adapter hardware configuration, including the synchronous transfer parameters
-@@ -130,7 +140,8 @@ o Configuration Reporting and Testing
-     The status of Wide Negotiation, Disconnect/Reconnect, and Tagged Queuing
-     are reported as "Enabled", Disabled", or a sequence of "Y" and "N" letters.
- 
--o Performance Features
-+Performance Features
-+--------------------
- 
-   BusLogic SCSI Host Adapters directly implement SCSI-2 Tagged Queuing, and so
-   support has been included in the driver to utilize tagged queuing with any
-@@ -150,7 +161,8 @@ o Performance Features
-   queue depth of 1 is selected.  Tagged queuing is also disabled for individual
-   target devices if disconnect/reconnect is disabled for that device.
- 
--o Robustness Features
-+Robustness Features
-+-------------------
- 
-   The driver implements extensive error recovery procedures.  When the higher
-   level parts of the SCSI subsystem request that a timed out command be reset,
-@@ -174,7 +186,8 @@ o Robustness Features
-   lock up or crash, and thereby allowing a clean shutdown and restart after the
-   offending component is removed.
- 
--o PCI Configuration Support
-+PCI Configuration Support
-+-------------------------
- 
-   On PCI systems running kernels compiled with PCI BIOS support enabled, this
-   driver will interrogate the PCI configuration space and use the I/O port
-@@ -184,19 +197,22 @@ o PCI Configuration Support
-   used to disable the ISA compatible I/O port entirely as it is not necessary.
-   The ISA compatible I/O port is disabled by default on the BT-948/958/958D.
- 
--o /proc File System Support
-+/proc File System Support
-+-------------------------
- 
-   Copies of the host adapter configuration information together with updated
-   data transfer and error recovery statistics are available through the
-   /proc/scsi/BusLogic/<N> interface.
- 
--o Shared Interrupts Support
-+Shared Interrupts Support
-+-------------------------
- 
-   On systems that support shared interrupts, any number of BusLogic Host
-   Adapters may share the same interrupt request channel.
- 
- 
--			    SUPPORTED HOST ADAPTERS
-+Supported Host Adapters
-+=======================
- 
- The following list comprises the supported BusLogic SCSI Host Adapters as of
- the date of this document.  It is recommended that anyone purchasing a BusLogic
-@@ -205,6 +221,7 @@ that it is or will be supported.
- 
- FlashPoint Series PCI Host Adapters:
- 
-+=======================	=============================================
- FlashPoint LT (BT-930)	Ultra SCSI-3
- FlashPoint LT (BT-930R)	Ultra SCSI-3 with RAIDPlus
- FlashPoint LT (BT-920)	Ultra SCSI-3 (BT-930 without BIOS)
-@@ -214,15 +231,19 @@ FlashPoint LW (BT-950)	Wide Ultra SCSI-3
- FlashPoint LW (BT-950R)	Wide Ultra SCSI-3 with RAIDPlus
- FlashPoint DW (BT-952)	Dual Channel Wide Ultra SCSI-3
- FlashPoint DW (BT-952R)	Dual Channel Wide Ultra SCSI-3 with RAIDPlus
-+=======================	=============================================
- 
- MultiMaster "W" Series Host Adapters:
- 
-+=======     ===		==============================
- BT-948	    PCI		Ultra SCSI-3
- BT-958	    PCI		Wide Ultra SCSI-3
- BT-958D	    PCI		Wide Differential Ultra SCSI-3
-+=======     ===		==============================
- 
- MultiMaster "C" Series Host Adapters:
- 
-+========    ====	==============================
- BT-946C	    PCI		Fast SCSI-2
- BT-956C	    PCI		Wide Fast SCSI-2
- BT-956CD    PCI		Wide Differential Fast SCSI-2
-@@ -232,9 +253,11 @@ BT-757C	    EISA	Wide Fast SCSI-2
- BT-757CD    EISA	Wide Differential Fast SCSI-2
- BT-545C	    ISA		Fast SCSI-2
- BT-540CF    ISA		Fast SCSI-2
-+========    ====	==============================
- 
- MultiMaster "S" Series Host Adapters:
- 
-+=======     ====	==============================
- BT-445S	    VLB		Fast SCSI-2
- BT-747S	    EISA	Fast SCSI-2
- BT-747D	    EISA	Differential Fast SCSI-2
-@@ -244,11 +267,14 @@ BT-545S	    ISA		Fast SCSI-2
- BT-542D	    ISA		Differential Fast SCSI-2
- BT-742A	    EISA	SCSI-2 (742A revision H)
- BT-542B	    ISA		SCSI-2 (542B revision H)
-+=======     ====	==============================
- 
- MultiMaster "A" Series Host Adapters:
- 
-+=======     ====	==============================
- BT-742A	    EISA	SCSI-2 (742A revisions A - G)
- BT-542B	    ISA		SCSI-2 (542B revisions A - G)
-+=======     ====	==============================
- 
- AMI FastDisk Host Adapters that are true BusLogic MultiMaster clones are also
- supported by this driver.
-@@ -260,9 +286,11 @@ list.  The retail kit includes the bare board and manual as well as cabling and
- driver media and documentation that are not provided with bare boards.
- 
- 
--			 FLASHPOINT INSTALLATION NOTES
-+FlashPoint Installation Notes
-+=============================
- 
--o RAIDPlus Support
-+RAIDPlus Support
-+----------------
- 
-   FlashPoint Host Adapters now include RAIDPlus, Mylex's bootable software
-   RAID.  RAIDPlus is not supported on Linux, and there are no plans to support
-@@ -273,7 +301,8 @@ o RAIDPlus Support
-   than RAIDPlus, so there is little impetus to include RAIDPlus support in the
-   BusLogic driver.
- 
--o Enabling UltraSCSI Transfers
-+Enabling UltraSCSI Transfers
-+----------------------------
- 
-   FlashPoint Host Adapters ship with their configuration set to "Factory
-   Default" settings that are conservative and do not allow for UltraSCSI speed
-@@ -287,12 +316,14 @@ o Enabling UltraSCSI Transfers
-   the "Optimum Performance" settings are loaded.
- 
- 
--		      BT-948/958/958D INSTALLATION NOTES
-+BT-948/958/958D Installation Notes
-+==================================
- 
- The BT-948/958/958D PCI Ultra SCSI Host Adapters have some features which may
- require attention in some circumstances when installing Linux.
- 
--o PCI I/O Port Assignments
-+PCI I/O Port Assignments
-+------------------------
- 
-   When configured to factory default settings, the BT-948/958/958D will only
-   recognize the PCI I/O port assignments made by the motherboard's PCI BIOS.
-@@ -312,7 +343,8 @@ o PCI I/O Port Assignments
-   possible future I/O port conflicts.  The older BT-946C/956C/956CD also have
-   this configuration option, but the factory default setting is "Primary".
- 
--o PCI Slot Scanning Order
-+PCI Slot Scanning Order
-+-----------------------
- 
-   In systems with multiple BusLogic PCI Host Adapters, the order in which the
-   PCI slots are scanned may appear reversed with the BT-948/958/958D as
-@@ -339,7 +371,8 @@ o PCI Slot Scanning Order
-   so as to recognize the host adapters in the same order as they are enumerated
-   by the host adapter's BIOS.
- 
--o Enabling UltraSCSI Transfers
-+Enabling UltraSCSI Transfers
-+----------------------------
- 
-   The BT-948/958/958D ship with their configuration set to "Factory Default"
-   settings that are conservative and do not allow for UltraSCSI speed to be
-@@ -353,7 +386,8 @@ o Enabling UltraSCSI Transfers
-   "Optimum Performance" settings are loaded.
- 
- 
--				DRIVER OPTIONS
-+Driver Options
-+==============
- 
- BusLogic Driver Options may be specified either via the Linux Kernel Command
- Line or via the Loadable Kernel Module Installation Facility.  Driver Options
-@@ -520,30 +554,34 @@ The following examples demonstrate setting the Queue Depth for Target Devices
- Devices on the second host adapter to 31, and the Bus Settle Time on the
- second host adapter to 30 seconds.
- 
--Linux Kernel Command Line:
-+Linux Kernel Command Line::
- 
-   linux BusLogic=QueueDepth:[,7,15];QueueDepth:31,BusSettleTime:30
- 
--LILO Linux Boot Loader (in /etc/lilo.conf):
-+LILO Linux Boot Loader (in /etc/lilo.conf)::
- 
-   append = "BusLogic=QueueDepth:[,7,15];QueueDepth:31,BusSettleTime:30"
- 
--INSMOD Loadable Kernel Module Installation Facility:
-+INSMOD Loadable Kernel Module Installation Facility::
- 
-   insmod BusLogic.o \
-       'BusLogic="QueueDepth:[,7,15];QueueDepth:31,BusSettleTime:30"'
- 
--NOTE: Module Utilities 2.1.71 or later is required for correct parsing
+- - tags
++tags
+    Default: 3, Acceptable values: 0-5
+-   
 +
-+.. Note::
+    The number of tags is 1<<x, if x has been specified
+ 
+- - reset_delay
++reset_delay
+    Default: 1, Acceptable values: 0-180
+ 
+    The seconds to not accept commands after a SCSI Reset
+@@ -95,8 +109,9 @@ License (GPL). Please read it, before using this driver. It should be
+ included in your kernel sources and with your distribution. It carries the
+ filename COPYING. If you don't have it, please ask me to send you one by
+ email.
+-Note: The GNU GPL says also something about warranty and liability. 
 +
-+      Module Utilities 2.1.71 or later is required for correct parsing
-       of driver options containing commas.
- 
- 
--			      DRIVER INSTALLATION
-+Driver Installation
-+===================
- 
- This distribution was prepared for Linux kernel version 2.0.35, but should be
- compatible with 2.0.4 or any later 2.0 series kernel.
- 
- To install the new BusLogic SCSI driver, you may use the following commands,
--replacing "/usr/src" with wherever you keep your Linux kernel source tree:
-+replacing "/usr/src" with wherever you keep your Linux kernel source tree::
- 
-   cd /usr/src
-   tar -xvzf BusLogic-2.0.15.tar.gz
-@@ -557,7 +595,8 @@ Then install "arch/x86/boot/zImage" as your standard kernel, run lilo if
- appropriate, and reboot.
- 
- 
--		      BUSLOGIC ANNOUNCEMENTS MAILING LIST
-+BusLogic Announcements Mailing List
-+===================================
- 
- The BusLogic Announcements Mailing List provides a forum for informing Linux
- users of new driver releases and other announcements regarding Linux support
++Note: The GNU GPL says also something about warranty and liability.
+ Please be aware the following: While we do my best to provide a working and
+-reliable driver, there is a chance, that it will kill your valuable data. 
++reliable driver, there is a chance, that it will kill your valuable data.
+ We refuse to take any responsibility for that. The driver is provided as-is
+ and YOU USE IT AT YOUR OWN RESPONSIBILITY.
 diff --git a/Documentation/scsi/index.rst b/Documentation/scsi/index.rst
-index d453fb3f1f7d..6bb2428c1d56 100644
+index 3809213b83da..6fe00709cbce 100644
 --- a/Documentation/scsi/index.rst
 +++ b/Documentation/scsi/index.rst
-@@ -15,5 +15,6 @@ Linux SCSI Subsystem
-    aic7xxx
-    bfa
+@@ -17,5 +17,6 @@ Linux SCSI Subsystem
     bnx2fc
-+   BusLogic
+    BusLogic
+    cxgb3i
++   dc395x
  
     scsi_transport_srp/figures
-diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-index 3170b295a5da..9b8be4f0da19 100644
---- a/drivers/scsi/BusLogic.c
-+++ b/drivers/scsi/BusLogic.c
-@@ -3652,7 +3652,7 @@ static bool __init blogic_parse(char **str, char *keyword)
-   selected host adapter.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index aac8ef48dc08..1e2ab816fe66 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4690,7 +4690,7 @@ L:	dc395x@twibble.org
+ W:	http://twibble.org/dist/dc395x/
+ W:	http://lists.twibble.org/mailman/listinfo/dc395x/
+ S:	Maintained
+-F:	Documentation/scsi/dc395x.txt
++F:	Documentation/scsi/dc395x.rst
+ F:	drivers/scsi/dc395x.*
  
-   The BusLogic Driver Probing Options are described in
--  <file:Documentation/scsi/BusLogic.txt>.
-+  <file:Documentation/scsi/BusLogic.rst>.
- */
- 
- static int __init blogic_parseopts(char *options)
+ DCCP PROTOCOL
 diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index 18af62594bc0..5ec7330f82b6 100644
+index 5ec7330f82b6..9f5b2ddec6e0 100644
 --- a/drivers/scsi/Kconfig
 +++ b/drivers/scsi/Kconfig
-@@ -502,7 +502,7 @@ config SCSI_BUSLOGIC
- 	  This is support for BusLogic MultiMaster and FlashPoint SCSI Host
- 	  Adapters. Consult the SCSI-HOWTO, available from
- 	  <http://www.tldp.org/docs.html#howto>, and the files
--	  <file:Documentation/scsi/BusLogic.txt> and
-+	  <file:Documentation/scsi/BusLogic.rst> and
- 	  <file:Documentation/scsi/FlashPoint.txt> for more information.
- 	  Note that support for FlashPoint is only available for 32-bit
- 	  x86 configurations.
+@@ -1187,7 +1187,7 @@ config SCSI_DC395x
+ 	  This driver works, but is still in experimental status. So better
+ 	  have a bootable disk and a backup in case of emergency.
+ 
+-	  Documentation can be found in <file:Documentation/scsi/dc395x.txt>.
++	  Documentation can be found in <file:Documentation/scsi/dc395x.rst>.
+ 
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called dc395x.
 -- 
 2.21.1
 
