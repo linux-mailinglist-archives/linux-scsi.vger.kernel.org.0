@@ -2,76 +2,178 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B66217583F
-	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2020 11:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 734B21758CE
+	for <lists+linux-scsi@lfdr.de>; Mon,  2 Mar 2020 11:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727146AbgCBKWT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Mar 2020 05:22:19 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:36374 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726654AbgCBKWS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 2 Mar 2020 05:22:18 -0500
-Received: by mail-io1-f68.google.com with SMTP id d15so10911514iog.3
-        for <linux-scsi@vger.kernel.org>; Mon, 02 Mar 2020 02:22:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xnV8ZDlKP2yetMvLfdTqe+r9TDDfPttNH6k8cmc2BHE=;
-        b=eNSWN22MW9/lnppHR01m2Nz7J61h/XkEQv8zcrK/e0U0SXsTV4+UB7gMMKstn21cIa
-         6bylI33mhncjg9bKrl7dQyEKTZU85mrWs+LpdoNS67pFRCHoBwP7qPOWYvzkwsQ5DRyu
-         rdcwe9k+tjFxUS7StN1xm6qcdeJyKM7ilmMK4pSMbXb0wT31Eq5637/jULRbEihvjUG0
-         GRiMJj5jMHzbSH290Li6bSyle3p6UCOcX0KhfpnbQtiaFYD5gmtZN9BCVpaDZs1eHqEM
-         X/srDjuG9q7Z2PYd5Vd4aTze9Tu9DNXy+v7vbFogps1EmNfsL6RRJnnkVXhG4gtWDMOV
-         SsKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xnV8ZDlKP2yetMvLfdTqe+r9TDDfPttNH6k8cmc2BHE=;
-        b=YBX/l0UfsY8pjOFVfsgsQYGzAK6iAH4MNC/xo73K+Uj2pkRXP0iEy4R8ma4AYbMqS4
-         braDFYW4+53hKXyvsucwWyGfhKBIWWFdH5u7M4QEYrg7lFifGoa2xvIQbvOP1jw40cDT
-         R7loZ9330e9d4vKOaXWBe0pwwo78DQ6V54ittvg9sfMF9EKYoGfvOGIlmb1er7HHt8vT
-         JGlOaLxGyYfnMgvX2MTb8gRsXvmVdgL8Pz3olC+G6Bewgcgqs7JlrWzM+uCvVFpd7yxc
-         PhEA4/SSSeZz9ZQuOuZv52N8ue3UJ/64/sHsIcFe2b5lvJnpX8Xetp/krRmoDffMNt4j
-         Rmvg==
-X-Gm-Message-State: ANhLgQ1gkgKeiUVZXPNuLQfgY4+1sYTR7v6dvmOxRDlZTRv6IgiBOfC8
-        1Va01IuSZUVIXwGQaDRYE273RH7ciWmJhZPbx4g=
-X-Google-Smtp-Source: ADFU+vuZ00ahX4sKbTtLrj6HdfJbVtoO3nl0fSxdWLo790V31hffPMDGBrIpXZWphlL+mcLDFkjQjGUC3DmmIw+cen4=
-X-Received: by 2002:a6b:b705:: with SMTP id h5mr4018690iof.130.1583144538129;
- Mon, 02 Mar 2020 02:22:18 -0800 (PST)
+        id S1727593AbgCBK66 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Mar 2020 05:58:58 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2487 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727027AbgCBK66 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 2 Mar 2020 05:58:58 -0500
+Received: from LHREML714-CAH.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id AB272627DB1C52721B3B;
+        Mon,  2 Mar 2020 10:58:56 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ LHREML714-CAH.china.huawei.com (10.201.108.37) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Mon, 2 Mar 2020 10:58:56 +0000
+Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 2 Mar 2020
+ 10:58:56 +0000
+Subject: Re: [PATCH] scsi: avoid to fetch scsi host template instance in IO
+ path
+To:     Ming Lei <ming.lei@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Sumanesh Samanta <sumanesh.samanta@broadcom.com>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bart.vanassche@wdc.com>,
+        Christoph Hellwig <hch@lst.de>
+References: <20200228093346.31213-1-ming.lei@redhat.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <f23daab7-7aa0-1c34-8137-7abead09016c@huawei.com>
+Date:   Mon, 2 Mar 2020 10:58:55 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Received: by 2002:ad5:4c11:0:0:0:0:0 with HTTP; Mon, 2 Mar 2020 02:22:17 -0800 (PST)
-Reply-To: ubanivincent@yandex.com
-From:   UBANI VINCENT <samanthafredrick44@gmail.com>
-Date:   Mon, 2 Mar 2020 10:22:17 +0000
-Message-ID: <CAJvWNgd0N6UpEnEdOn9036yJbjo4LxNnE_mk8H5yZA38nJbXsg@mail.gmail.com>
-Subject: Happy New Month???
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200228093346.31213-1-ming.lei@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.45]
+X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We bring to your attention if you are still interested, then I think
-that we can start good dialogue that will make joyful both us, In our
-department we discovered an abandoned sum of 15 million dollars. In an
-account that belongs to one of our foreign customer who died along
-with all his family in the disaster leaving nobody behind for the
-claim. I want you stand as next of kin to the deceased. I agree 40% of
-this money will be for you as foreign partner. I will not fail to
-bring to your notice that this transaction is hitch free and that you
-should not entertain any atom of fear as all required arrangements
-have been made for the transfer.
+On 28/02/2020 09:33, Ming Lei wrote:
+> scsi host template struct is quite big, and the following three
+> fields are needed in SCSI IO path:
+> 
+> - queuecommand
+> - commit_rqs
+> - cmd_size
 
-Fill this form bellow and resend it back to me.
+Would it have been nearly as good to reorganise Scsi host template 
+structure to ensure that these are adjacent?
 
-Your Full Name;
-Your Age;
-Your Cell Phone Number;
-Your Occupation;
+I say nearly, as it avoids the shost->hostt read.
 
-I am waiting for your immediate response as you receive this mail.
+> 
+> Cache them into scsi host intance, so that we can avoid to fetch
+> big scsi host template instance in IO path.
+> 
+> 40% IOPS boost can be observed in my scsi_debug performance test after
+> applying this change.
+> 
+> Cc: Sumanesh Samanta <sumanesh.samanta@broadcom.com>
+> Cc: Ewan D . Milne <emilne@redhat.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Cc: Bart Van Assche <bart.vanassche@wdc.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>   drivers/scsi/hosts.c     |  4 ++++
+>   drivers/scsi/scsi_lib.c  | 10 +++++-----
+>   include/scsi/scsi_host.h | 11 ++++++++++-
+>   3 files changed, 19 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
+> index 1d669e47b692..8012c1db092e 100644
+> --- a/drivers/scsi/hosts.c
+> +++ b/drivers/scsi/hosts.c
+> @@ -466,6 +466,10 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
+>   	if (sht->virt_boundary_mask)
+>   		shost->virt_boundary_mask = sht->virt_boundary_mask;
+>   
+> +	shost->cmd_size = sht->cmd_size;
+> +	shost->queuecommand = sht->queuecommand;
+> +	shost->commit_rqs = sht->commit_rqs;
+> +
+>   	device_initialize(&shost->shost_gendev);
+>   	dev_set_name(&shost->shost_gendev, "host%d", shost->host_no);
+>   	shost->shost_gendev.bus = &scsi_bus_type;
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index e7fbf3a9a6aa..f4243ae1d4a9 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -1148,7 +1148,7 @@ void scsi_init_command(struct scsi_device *dev, struct scsi_cmnd *cmd)
+>   	in_flight = test_bit(SCMD_STATE_INFLIGHT, &cmd->state);
+>   	/* zero out the cmd, except for the embedded scsi_request */
+>   	memset((char *)cmd + sizeof(cmd->req), 0,
+> -		sizeof(*cmd) - sizeof(cmd->req) + dev->host->hostt->cmd_size);
+> +		sizeof(*cmd) - sizeof(cmd->req) + dev->host->cmd_size);
+>   
+>   	cmd->device = dev;
+>   	cmd->sense_buffer = buf;
+> @@ -1547,7 +1547,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
+>   	}
+>   
+>   	trace_scsi_dispatch_cmd_start(cmd);
+> -	rtn = host->hostt->queuecommand(host, cmd);
+> +	rtn = host->queuecommand(host, cmd);
+>   	if (rtn) {
+>   		trace_scsi_dispatch_cmd_error(cmd, rtn);
+>   		if (rtn != SCSI_MLQUEUE_DEVICE_BUSY &&
+> @@ -1584,7 +1584,7 @@ static blk_status_t scsi_mq_prep_fn(struct request *req)
+>   	cmd->tag = req->tag;
+>   	cmd->prot_op = SCSI_PROT_NORMAL;
+>   
+> -	sg = (void *)cmd + sizeof(struct scsi_cmnd) + shost->hostt->cmd_size;
+> +	sg = (void *)cmd + sizeof(struct scsi_cmnd) + shost->cmd_size;
+>   	cmd->sdb.table.sgl = sg;
+>   
+>   	if (scsi_host_get_prot(shost)) {
+> @@ -1752,7 +1752,7 @@ static int scsi_mq_init_request(struct blk_mq_tag_set *set, struct request *rq,
+>   
+>   	if (scsi_host_get_prot(shost)) {
+>   		sg = (void *)cmd + sizeof(struct scsi_cmnd) +
+> -			shost->hostt->cmd_size;
+> +			shost->cmd_size;
+>   		cmd->prot_sdb = (void *)sg + scsi_mq_inline_sgl_size(shost);
+>   	}
+>   
+> @@ -1844,7 +1844,7 @@ static void scsi_commit_rqs(struct blk_mq_hw_ctx *hctx)
+>   	struct scsi_device *sdev = q->queuedata;
+>   	struct Scsi_Host *shost = sdev->host;
+>   
+> -	shost->hostt->commit_rqs(shost, hctx->queue_num);
+> +	shost->commit_rqs(shost, hctx->queue_num);
+>   }
+>   
+>   static const struct blk_mq_ops scsi_mq_ops = {
+> diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
+> index f577647bf5f2..ccd5b9a5de2a 100644
+> --- a/include/scsi/scsi_host.h
+> +++ b/include/scsi/scsi_host.h
+> @@ -522,7 +522,16 @@ struct Scsi_Host {
+>   	 */
+>   	struct list_head	__devices;
+>   	struct list_head	__targets;
+> -	
+> +
+> +	/*
+> +	 * cacahe the three fields from scsi_host_template, so that
+> +	 * the big host template  instance needn't to be fetched in
+> +	 * IO path. Big IOPS boost can be observed by this way.
+> +	 */
+> +	unsigned int cmd_size;
 
-My best regards,
-Mr,Vincent
+any reason not to add cacheline alignment? And I think function pointers 
+will be at least same size as unsigned int, so it may make more sense to 
+put cmd_size last.
+
+> +	int (*queuecommand)(struct Scsi_Host *, struct scsi_cmnd *);
+> +	void (*commit_rqs)(struct Scsi_Host *, u16);
+> +
+>   	struct list_head	starved_list;
+>   
+>   	spinlock_t		default_lock;
+> 
+
