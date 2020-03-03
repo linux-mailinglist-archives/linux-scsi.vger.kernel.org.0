@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2119176CC4
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Mar 2020 03:59:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA195176C40
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Mar 2020 03:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728105AbgCCC6y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 2 Mar 2020 21:58:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43344 "EHLO mail.kernel.org"
+        id S1726876AbgCCCza (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 2 Mar 2020 21:55:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45108 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728231AbgCCCr7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 2 Mar 2020 21:47:59 -0500
+        id S1728651AbgCCCtF (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 2 Mar 2020 21:49:05 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D8BBE246D6;
-        Tue,  3 Mar 2020 02:47:57 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5B81924699;
+        Tue,  3 Mar 2020 02:49:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583203678;
-        bh=m3/5GV8iND6nq+ZvNW2PfXvQ5eZR+5DVF27T+hS7AB4=;
+        s=default; t=1583203745;
+        bh=D1KMiHMo8Ls72ihrKfQhp1my5vwtKsTTszaB8nmbRHY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OT/96ng/nGYJPcu4xo0hlDfLhygu3zDj24+aqKX8RC8FW0UQAzJ5sgoF//XTmdeLU
-         3/c8XW9/FTdJKeRSMANGJQ4u/O51HAZWzM06ynuNhhTFqyR8Cf/lr78WnQgOQTmuRJ
-         RPUtVahyc0xeCE3DrYFWT8KCQNd8N/hZA6TLbJ+U=
+        b=D+ak5+aW6s6yz4JbIDzdyfAZd32vUuW0Xyq4Dyo2L3rO7kOYMhwk/anVzyGURmtFU
+         UF9vAyWFsxmO9pTP0kcG3CL7epLW1urmAtK0MQRAsU1Tsg1p31cWWiUqwB1pEV6aJZ
+         uZ+LmzxEmwcgmNTj/IbR3CJs6FARpebmKTmFEpf0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Tomas Henzl <thenzl@redhat.com>,
@@ -31,12 +31,12 @@ Cc:     Tomas Henzl <thenzl@redhat.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>,
         megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 15/58] scsi: megaraid_sas: silence a warning
-Date:   Mon,  2 Mar 2020 21:46:57 -0500
-Message-Id: <20200303024740.9511-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 10/32] scsi: megaraid_sas: silence a warning
+Date:   Mon,  2 Mar 2020 21:48:29 -0500
+Message-Id: <20200303024851.10054-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200303024740.9511-1-sashal@kernel.org>
-References: <20200303024740.9511-1-sashal@kernel.org>
+In-Reply-To: <20200303024851.10054-1-sashal@kernel.org>
+References: <20200303024851.10054-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -75,10 +75,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index 46bc062d873ef..d868388018053 100644
+index b094a4e55c32f..81bd824bb9d99 100644
 --- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
 +++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -594,7 +594,8 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
+@@ -530,7 +530,8 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
  
  	fusion->io_request_frames =
  			dma_pool_alloc(fusion->io_request_frames_pool,
@@ -88,7 +88,7 @@ index 46bc062d873ef..d868388018053 100644
  	if (!fusion->io_request_frames) {
  		if (instance->max_fw_cmds >= (MEGASAS_REDUCE_QD_COUNT * 2)) {
  			instance->max_fw_cmds -= MEGASAS_REDUCE_QD_COUNT;
-@@ -632,7 +633,7 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
+@@ -568,7 +569,7 @@ megasas_alloc_request_fusion(struct megasas_instance *instance)
  
  		fusion->io_request_frames =
  			dma_pool_alloc(fusion->io_request_frames_pool,
