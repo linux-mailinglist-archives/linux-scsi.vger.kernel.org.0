@@ -2,79 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE16F176F93
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Mar 2020 07:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6F2177000
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Mar 2020 08:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727426AbgCCGjT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Mar 2020 01:39:19 -0500
-Received: from mail-io1-f66.google.com ([209.85.166.66]:32855 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbgCCGjS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Mar 2020 01:39:18 -0500
-Received: by mail-io1-f66.google.com with SMTP id r15so2390097iog.0
-        for <linux-scsi@vger.kernel.org>; Mon, 02 Mar 2020 22:39:17 -0800 (PST)
+        id S1727702AbgCCHWy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Mar 2020 02:22:54 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:46803 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727565AbgCCHWy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Mar 2020 02:22:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1583220190; x=1614756190;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Pc6+4J49PN+F1vvVg2OLQRpRbHQbulJ/KzpHKRjX/a8=;
+  b=Joq4xiF3Q0Ddi2CtDfTAcm+JDl+pMXdJcH2buG0Um1bh+BVPArGKiOVH
+   mCWNqawcZb6/WKmg1Uc4Upj2MuK+sFA7OBTfQGHtuP3d58d0b71Z5mLr0
+   rkmxw+Cv6ufWvUa2DpB4+zU7Q5FrQuOFx9JQK27PIciPw32u9FONWStNu
+   ZqjnV4fhLzNVOuQXs7kxsFMEs9q11hT2rwTkbEDUD0bbRIhjsvqp3kOnY
+   yP3/uHYHkejha6yt4hcebxIY/u5QQrwHFEZZYi2BIIlYnufpxeItDetyp
+   Vjx4yM/SHTeej+uqgbou8THtVnlOikK+h9aDfyFy+Kc2kgFHBleV4mNXP
+   w==;
+IronPort-SDR: At82wve4fBmXH+oeWlL2u55JpNtce17+qrfzkDz0Soi/7C0i6odMkEtHpc1KxOPav4Y9bxDfLt
+ Ews6+AXGMRWZzq2x4FaI6G15RD4nej5qAQyrcD9gKcvdJTlZBiaDQqpzCdSrojGUzgACefE05i
+ RoGhq8Ek1a/AAQr2xAjKhi4thkc1CEH8b1xOMySX09u7pH2eIT01w38EDoAD/sY2TAZaDIDk2+
+ m7x36tvqcUo+ADCE2mOh6C4DU2yHANrfW1LXzDK04bh5+gX72ObUGxYFCNaygDX/Y6u9chqLqr
+ hiI=
+X-IronPort-AV: E=Sophos;i="5.70,510,1574092800"; 
+   d="scan'208";a="233191584"
+Received: from mail-co1nam04lp2051.outbound.protection.outlook.com (HELO NAM04-CO1-obe.outbound.protection.outlook.com) ([104.47.45.51])
+  by ob1.hgst.iphmx.com with ESMTP; 03 Mar 2020 15:23:08 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ioMWZwmimXpqxqly4+p9nZb87yquL4u4UxIYRS6GtzBNqv1Hlf8nljHyYblzIRaHq9ZV4nrFZITakp6zAQl6TU9ljfHE9ZV9KRKWAYPcTqjbLuD8u5JgB+VOZcm1mdDKofElQjuXjqUepegLaX71LYX75pQG0BrNuyDRaYzUWNsBrlFPzL2GCfEWj7LiWRf2v9V1KsJV1cPfD0UKtj7dPHl45rFz+mXkjORpAfuc121KEDQGL74rSh1zJcczI2uZ4N7P3gbf9UvPSrnlw4T37LUKhkMjaCzI4VrMtEO/oGqDKXObEXVYvxxIswmu8LCULMxZxD+ByKvETNYcIvJy3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pc6+4J49PN+F1vvVg2OLQRpRbHQbulJ/KzpHKRjX/a8=;
+ b=TdoxgZLK0g/oBug+vYeb2TUalTqPXwoXcF4cVOGpZQmxwwBgUCQSA70gBIYdRk9LweeI2VwyKrvbyCACj+BLLuSpyBlnBNAQiQ7TuIVWI+pJlBhLFWFVrLlQVs8+AD67kypAgLEOWT3QxhC93fWmuXuhP6xbDneAU0SZQDJ+EPh4Qiw4wPIo3jnbvjrX69m/+3Wgs4YlKbA6zF50JRUAX9wkE07eE/+KZ0NiURwLEW4X7mpHUtIZBUbrx5h8PZWy+9QBtF34iwHgFo//QVUwqINDFm22p/iW03bCzqQlNo1GLSwxDXo0FP9ga3mWQPYHEVMHX6aOWW7LaEaoGzX/Xg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=tc1wa4UN4Ph/eXyA+xklM2q8VGTILW896ODKnpAVCBM=;
-        b=u0SlM2vg40AbTQeOKvNSVH8t+5C5Px4hF4Dw1z8Q+05ON+eoLP8/XcUwDbZxoBYmtY
-         pAcPTqxRQcSfeY0odG6fpQXrhD0np1jYPIgKgdhqTyM22n0KDoq86tETlosxup6tzHXn
-         +CGs8VdL8dMfVJY5iAxIXI8fmn8htFkC3Ic9j0udP23112wjvfv21cvbTSeScK7iQ9Sk
-         ZI+ju5opcFtXXQjX8rMwKghj40WeeU8RP8Cnz0sZzsgDubfJPCJbQ6NTWDNGjjQ1va8z
-         zz9tTFTHGTqLGdMZ2bHxKXAmgmScmJ8JmNoYm0YYs9qjhXWMs9w17D0Ic69Yd8+04z0c
-         BbTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=tc1wa4UN4Ph/eXyA+xklM2q8VGTILW896ODKnpAVCBM=;
-        b=lIauQLwuolh5LKSZsqMbg3Bibv4guR4xTzQk1Dcs+Tp3b+penbpy8twYhKZls9xXco
-         I78WpRMfK2uc4fI5EnKw2J2pQKFy4Yjwl7nD/t0y05DxNggB817wtzPS26wqTDv78H1G
-         ZmpxXE17j0N6IJx1xWgIPovL9rQKkMybKXWX2QDuKgo5aMBeXBn63KJsM1bo0jk7zg+r
-         7aBLnOc3ERMFDkrn7oFdfe2+CbqB/3w3k9jP2hjQULHntxs9dr+ltF71MOEZ/WzWHLKG
-         ZucMgIeuBdpfj9IynshnmySENKG1szhYEwrJrfwIxFX+rEwbB11TQo5Prkr+9d9ScDyb
-         leLg==
-X-Gm-Message-State: ANhLgQ0b1x77r1Lhl73CPwdiSgF1jHCBEFCQi1jIs7Lq8+4cvEDxoWXv
-        HT72FYE4pDsCyArA1HZq4LhNzl13xhmP/T8WUXw=
-X-Google-Smtp-Source: ADFU+vslCgtuHc5VC2WB0xKcoOOsVgVhtDbbmNVS/M5QP/wq8vdhK6Ey0DiVcBcSEzqnV/jO74WMchu7cfeTyY6lvi8=
-X-Received: by 2002:a6b:fe1a:: with SMTP id x26mr2727564ioh.74.1583217556862;
- Mon, 02 Mar 2020 22:39:16 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:ac0:93e9:0:0:0:0:0 with HTTP; Mon, 2 Mar 2020 22:39:16 -0800 (PST)
-Reply-To: abdoul.hassan01@gmail.com
-From:   Mr Abdoul Hassan <mahoisa22@gmail.com>
-Date:   Mon, 2 Mar 2020 22:39:16 -0800
-Message-ID: <CAEqLBY7xZtTCUvJpdqM5ORGs11n1KYi8XGvem1_9iWU7UGiJLw@mail.gmail.com>
-Subject: I want to seek your assistance
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Pc6+4J49PN+F1vvVg2OLQRpRbHQbulJ/KzpHKRjX/a8=;
+ b=k55NTSMOTARWByw8zTc2q7h/Xwo7ZTdJHtvL9EGBFmI6AoUuw01Dba+XeCf2krxbp6Dn9LWRyo88aBuRTW4Mcc66iMdfZI6OJMnYsF4wlQfscVX63Y7xnm9mIxPD7pvphAMzVy1mN7WctVgWJk02utZIXUUiaFKgi355JcxVeng=
+Received: from MN2PR04MB6991.namprd04.prod.outlook.com (2603:10b6:208:1e1::17)
+ by MN2PR04MB6912.namprd04.prod.outlook.com (2603:10b6:208:19e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2772.15; Tue, 3 Mar
+ 2020 07:22:51 +0000
+Received: from MN2PR04MB6991.namprd04.prod.outlook.com
+ ([fe80::3885:5fac:44af:5de7]) by MN2PR04MB6991.namprd04.prod.outlook.com
+ ([fe80::3885:5fac:44af:5de7%7]) with mapi id 15.20.2772.019; Tue, 3 Mar 2020
+ 07:22:51 +0000
+From:   Avri Altman <Avri.Altman@wdc.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: RE: [PATCH 40/42] docs: scsi: convert ufs.txt to ReST
+Thread-Topic: [PATCH 40/42] docs: scsi: convert ufs.txt to ReST
+Thread-Index: AQHV8GrfdZ3FrJEOdkuChcE//woOQKg2eAYA
+Date:   Tue, 3 Mar 2020 07:22:51 +0000
+Message-ID: <MN2PR04MB699177B6CD676EC86D52DA3AFCE40@MN2PR04MB6991.namprd04.prod.outlook.com>
+References: <cover.1583136624.git.mchehab+huawei@kernel.org>
+ <052d45576e342a217185e91a83793b384b1592a4.1583136624.git.mchehab+huawei@kernel.org>
+In-Reply-To: <052d45576e342a217185e91a83793b384b1592a4.1583136624.git.mchehab+huawei@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Avri.Altman@wdc.com; 
+x-originating-ip: [212.25.79.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 4300bb6f-96ab-4ca1-3b2e-08d7bf43af32
+x-ms-traffictypediagnostic: MN2PR04MB6912:
+x-microsoft-antispam-prvs: <MN2PR04MB691272422899369A18E3249BFCE40@MN2PR04MB6912.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:400;
+x-forefront-prvs: 03319F6FEF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(346002)(366004)(39860400002)(396003)(136003)(199004)(189003)(55016002)(9686003)(33656002)(5660300002)(316002)(7696005)(2906002)(6506007)(66946007)(66476007)(66556008)(76116006)(64756008)(558084003)(66446008)(26005)(186003)(4326008)(8936002)(71200400001)(86362001)(8676002)(52536014)(81166006)(478600001)(81156014)(110136005)(54906003);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR04MB6912;H:MN2PR04MB6991.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VceNtpI2a0n+T0Ud+i3HcmpctHVGwQEMCMk7HlmyNdFOo9hGlFSRi+o7C7a2WDa2GwZYNWmKO09jRSIGDIG6Fc6P8NmEsQhED/HugkpvCK/M9OrCN3tVVWSdaZYHPkwLzaW8lTMAHFnHyw6qToHXVZxWSxpzK1xp7B7rI+K85PQ8xk3PcIaHs6Pu/WPrZqS8VB7AUCzhO5oEEAsDp/mN6S0Fk8xMWS6nVcShVM3Y1qy8MJKv5J996CfU923x+Y4hj8+FxrWtgY2qMRjKuhftEaVe894H44trWOoTNKAkBd95HfUERdLatykiPHABZ2Wn3KocTxHrNei6f1chLjSxqpqv6WlBcFmAxNwpf8geBI3GyzNzlQq35mmquo/M/QGYpXf8xqVtnN0ERKkuJfSvIcVY6HTwUJXIVjHVHwOzxSA3QjNWl0N+17Z3lDiCHOSo
+x-ms-exchange-antispam-messagedata: ekZ+okmHTqJjgcF6Q6WxrMhSK6446qnt5KpLXfUncXJ+yYhB1Qc04ei9B0o8GuekpKpagz2r6Rr13aCrDuHoSxUBX9INQbNJ42N0K6nwZZGTx3+rHc+OjiW+sM9W+ejXGmdjjr5BTTZAzfJITFSpPQ==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4300bb6f-96ab-4ca1-3b2e-08d7bf43af32
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Mar 2020 07:22:51.7939
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JCdeiSgXvdXbvMWf5e48NmLJeGRHwfKo3X0g9CfrVTVVi4TyPzN9REnG5f7XN9Fl9lGi/TYeay8RwEoFz918Bg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6912
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
---=20
-Dear Friend,
-I am Mr Abdoul Hassan. I am working with one of the prime banks in
-Burkina Faso. I have a business proposal which concerns the transfer
-of.of Twenty Two Million and Five Hundred Thousand united state
-dollars ($22.500 000mUSD).into a foreign account. Everything about
-this transaction shall be legally done without any problem. If you are
-interested to help me, I will give you more details as soon as I
-receive your positive response.If you are willing to work with me,
-send me immediately the information listed below.
+=20
+>=20
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Acked-by: Avri Altman <avri.altman@wdc.com>
 
-Your   Name=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your   Nationality=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your  Age=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=
-=80=A6
-Your  Occupation=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your Mobile Telephone Line=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6
-Your Address=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=E2=80=A6=
-=E2=80=A6=E2=80=A6=E2=80=A6
-Thanks
-Best regards,
-Mr Abdoul Hassan
-abdoul.hassan01@gmail.com
