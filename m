@@ -2,69 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF98177536
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Mar 2020 12:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA087177584
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Mar 2020 12:53:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728329AbgCCLXZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Mar 2020 06:23:25 -0500
-Received: from sonic302-20.consmr.mail.ir2.yahoo.com ([87.248.110.83]:37271
-        "EHLO sonic302-20.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728157AbgCCLXZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Mar 2020 06:23:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1583234601; bh=eg3qZapD09VJqj25AUJW5s1BYxWsWc1QdQQ9ZvAlPmk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=ughNi3J4cDTFMWQnkRgo21rkHzTHo+JMCqFQbQ9f9W7HpRGdeVlWd0SZG9CtXb/AbANkV9mM3ud0UfY3dlhQnD/zKJUpXqMNrqv8qIjKh0PQO1ZmzUSC4E5hMyFGOqjFlx9w9LckDZ9arGRx835MFAlYTxiQOFcbl1KPNisI9dn9+LqnHjQd1riHWndk4+WCxWhUZ4DNN6JlJBKlRhC6Rd9ruTF9efvYZDpNPJW9dCqxybYne1LkUFsfRs1+PrHTrbrpcrDroSPXlbSbWgt4i0h68g50b6lCQT9df1x75b+1GVOcE9QKRXB/+IWWIlvNDBCSK18uXHYVTMHGnUHdZA==
-X-YMail-OSG: wKp3dy4VM1mUvqFrOqPQygmRhvH4yNyzutUN17WPplY6YtOHpDSIKW7BODw_I9e
- jeG1QC1R_KDPT22KQvENJcIN2_6jGWQJacXo56wUIyb7bqJfDSRY4_ynUgJmU0bQTDDwtkKZf9b5
- Ke_8XElj8qdZaO_EEA1jCeEOsoIjFeBanxVN.dpDMXvc.5.UsVDZQWm2ov.grflQ0Zbqh2Pa1hrC
- 3h7Vgx1_2IvVuxxPT6Nl9BICNTFybygQ4wM6m6bNuYg3lPVdAz2staXoM2rImNkKTjYGQXV1ssPj
- uyp_1ZATv8BmN7P_r1h6maq7rAsXsJMYjSkERX85vi6yehjq0GNMOxzCOJh9nINV_LBY1ib1P6zk
- u.GGwJLSzFAFsDi7DO9dFk32nbhNXog1NWGq8ECHOri.TAk7.KtCKf9.Su3Of4QbDrGFfHBlgEZB
- NVFrKT7gP9gAFTnjLxlqlr6bGPcR50Xh516Le03a8pTow4qHqRwTN515gujMCkZPvCGyoj.o1Yhg
- NlAOOCbK.d35Ce5XA3XRUaxiGlPxvmXLeYNCYZAAMfHaXdylSvP7UKUJdESQZI4EUYOqMt6OYuIt
- Ocu.XMrHwJFm9bhafbadpOP2C_Ub3WK_U_CPhzLtRmGeP_a0sgDe0xQgCrXrcKjsgYVoVHwU9.gb
- qTtgDSQnT0qSLF8US5VE5YyjMrvVeb8dssDiUI6h1KbGWXYEazYqoYrRg72wGqBgh8XbYkDmBtwq
- DNSmAHAMwAaPcukmihUY33mgx_fYA0MH4y2h3a698sRC68AoSLk8_.36YCoX_.021liJQFcPV6XR
- AgVf.szqM8QCeTAq7msp28jDYZRUzJP9HC6lH3niEow26V3OayK.XG1d7Zgt.7A7sFN_xOoGfSsz
- 2Z5Ijg4_8fEx6PhPGUhF7B.Xg4EM9lZPNkGiQp.FbmxLHpDYylGPk_PtQtl8ZzvXjqIaQkJlwr1D
- PVJa.jrxzT3bP2ahvcCFFogNUup7vpQQ0kGYv.h2_g7eMOcpgU6trzSDXigCCBNii6pTPRBWDUEM
- nMf7_C1cupswJCk9ZhA1hMsouiqTaClhjAvyoj__sonh9RKTrOoWgt.H3Hx6I3GBsK3OfXG2tzCq
- HJ2Dcxvz9PP_Yi3D_8lK7kxXZBRiemN3XYYHSOWSjaUXqyMQ2zqOvqf1xaMnK672bbPZrZZD5ghB
- s4mG970QA59VXeTLc.xvGsbSzKBEprcnsXO6cpFKXx615aN2I9Rv42n2z7Kn4T7BD1XOdT_SBd1Y
- Gt5jb1evqxVhjxI6CWYFEavy0UT6Guuy3hSpuvvdeHNfmKmy6Jw1JRBivVbx.BUU0dOw-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ir2.yahoo.com with HTTP; Tue, 3 Mar 2020 11:23:21 +0000
-Date:   Tue, 3 Mar 2020 11:23:19 +0000 (UTC)
-From:   Ms Lisa Hugh <lisa.hugh111@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <1827864370.5549752.1583234599364@mail.yahoo.com>
-Subject: BUSINESS CO-OPERATION.
+        id S1729099AbgCCLxe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Mar 2020 06:53:34 -0500
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2503 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729032AbgCCLxe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 3 Mar 2020 06:53:34 -0500
+Received: from LHREML712-CAH.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 307A0BC06ED2D4470BDE;
+        Tue,  3 Mar 2020 11:53:33 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ LHREML712-CAH.china.huawei.com (10.201.108.35) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 3 Mar 2020 11:53:32 +0000
+Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Tue, 3 Mar 2020
+ 11:53:32 +0000
+Subject: Re: [PATCH v2 10/11] megaraid_sas: Use Block layer API to check SCSI
+ device in-flight IO requests
+To:     Sumit Saxena <sumit.saxena@broadcom.com>
+CC:     Hannes Reinecke <hare@suse.de>,
+        Anand Lodnoor <anand.lodnoor@broadcom.com>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        Kashyap Desai <kashyap.desai@broadcom.com>,
+        Kiran Kumar Kasturi <kiran-kumar.kasturi@broadcom.com>,
+        Sankar Patra <sankar.patra@broadcom.com>,
+        Sasikumar PC <sasikumar.pc@broadcom.com>,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>,
+        Chandrakanth Patil <chandrakanth.patil@broadcom.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+References: <1579000882-20246-1-git-send-email-anand.lodnoor@broadcom.com>
+ <1579000882-20246-11-git-send-email-anand.lodnoor@broadcom.com>
+ <7ca1562c-7a7a-17c5-2429-9725d465a4a8@suse.de>
+ <b5ab348d98b790578325140226f741c8@mail.gmail.com>
+ <d7119a15-8be8-9fb2-3c50-8b0a6605982d@huawei.com>
+ <CAAO+jF-P3MkB2mo6pmYH1ihjRGpfjkkgXZg9dAZ29nYmU6T2=A@mail.gmail.com>
+ <93deab34-53a3-afcf-4862-6b168a9f60cc@huawei.com>
+ <79fe7843-9d71-bdde-957c-32dde22437d9@suse.de>
+ <5ac6fd4f-eef8-700b-89d2-c8b3cd6e12ca@huawei.com>
+ <CAL2rwxqfo1_Wnea=4xb1K+OQTQ4aMd0GjOQG9tkc+E7V-5toqw@mail.gmail.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <aa0d2c4c-b54b-8d68-1a18-d7449f46962b@huawei.com>
+Date:   Tue, 3 Mar 2020 11:53:31 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <CAL2rwxqfo1_Wnea=4xb1K+OQTQ4aMd0GjOQG9tkc+E7V-5toqw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-References: <1827864370.5549752.1583234599364.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15302 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:73.0) Gecko/20100101 Firefox/73.0
-To:     unlisted-recipients:; (no To-header on input)
+X-Originating-IP: [10.202.226.45]
+X-ClientProxiedBy: lhreml725-chm.china.huawei.com (10.201.108.76) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+>> And for these low-latency queues, I figure that the issue is not just
+>> polling vs interrupt, but indeed how fast the HW queue can consume SQEs.
+>> A HW queue may only be able to consume at a limited rate - that's why we
+>> segregate.
+> Yes, there is no polling in any of HW queues. High IOPs queues have
+> interrupt coalescing enabled whereas
+> low latency queues does not have interrupt coalescing. megaraid_sas
+> driver would choose which set of queues	
+> among these two has to be used depending on workload. For latency
+> oriented workload, driver would use low
+> latency queues and for IOPs profile, driver would use High IOPs queues.
+>>
+>> As an aside, that is actually an issue for blk-mq. For 1 to many HW
+>> queue-to-CPU mapping, limiting many CPUs a single queue can limit IOPs
+>> since HW queues can only consume at a limited rate.
+> We were able to achieve performance target for MegaRAID latest gen
+> controller with this model of few set
+>   of HW queues mapped to local numa CPUs and low latency queues has one
+> to one mapping to CPUs.
+> This is default behavior of queues segregation in megaraid_sas driver
+> to satisfy our IOPs and latency requirements altogether.
+> However we have given module parameter- "perf_mode" to tune queues
+> behavior. i.e turning on/off interrupt
+> coalescing on all HW queues where this one to many queues to CPU
+> mapping would not happen.
 
+Hi Sumit,
 
-Dear Friend,
+OK, I have a rough idea of the concept. And again I'd say megaraid sas 
+may not be a good candidate to expose > 1 HW queues, as we hide HW 
+queues and don't maintain the symmetry with blk-mq layer.
 
-I am Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank,
+Indeed, I do not even expect a performance increase in exposing > 1 HW 
+queues since the driver already uses the reply map + managed interrupts.
 
-Please i need your assistance for the transferring of this abandon (US$4.5M DOLLARS) to your bank account for both of us benefit.
+The main reason for that change in some drivers - apart from losing the 
+duplicated ugliness of the reply map - is to leverage the blk-mq feature 
+to drain a hctx for CPU hotplug [0] - is this something which megaraid 
+sas is vulnerable to and would benefit from?
 
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
+Thanks,
+John
 
-Below information that is needed from you.
-
-1)Private telephone number...
-2)Age...
-3)Nationality...
-4)Occupation ...
-5)Full Name....
-Thanks.
-
-
-Ms Lisa Hugh
+[0] 
+https://lore.kernel.org/linux-block/20200115114409.28895-1-ming.lei@redhat.com/
