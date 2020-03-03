@@ -2,87 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 419B617724D
-	for <lists+linux-scsi@lfdr.de>; Tue,  3 Mar 2020 10:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF98177536
+	for <lists+linux-scsi@lfdr.de>; Tue,  3 Mar 2020 12:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728041AbgCCJYI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 3 Mar 2020 04:24:08 -0500
-Received: from mx2.suse.de ([195.135.220.15]:39000 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725818AbgCCJYI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 3 Mar 2020 04:24:08 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 8A86BB195;
-        Tue,  3 Mar 2020 09:24:06 +0000 (UTC)
-Date:   Tue, 3 Mar 2020 10:24:05 +0100
-From:   Daniel Wagner <dwagner@suse.de>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org,
-        Himanshu Madhani <hmadhani@marvell.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Martin Wilck <mwilck@suse.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-Subject: Re: [PATCH 3/4] qla2xxx: Fix endianness annotations in source files
-Message-ID: <20200303092405.uzrzfekvmd7ceajs@beryllium.lan>
-References: <20200302033023.27718-1-bvanassche@acm.org>
- <20200302033023.27718-4-bvanassche@acm.org>
- <20200302184055.dtjktj4sbsyysk5m@beryllium.lan>
- <08d14c58-d8bb-b0ff-d81b-91373ab6a09c@acm.org>
+        id S1728329AbgCCLXZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 3 Mar 2020 06:23:25 -0500
+Received: from sonic302-20.consmr.mail.ir2.yahoo.com ([87.248.110.83]:37271
+        "EHLO sonic302-20.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728157AbgCCLXZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 3 Mar 2020 06:23:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1583234601; bh=eg3qZapD09VJqj25AUJW5s1BYxWsWc1QdQQ9ZvAlPmk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=ughNi3J4cDTFMWQnkRgo21rkHzTHo+JMCqFQbQ9f9W7HpRGdeVlWd0SZG9CtXb/AbANkV9mM3ud0UfY3dlhQnD/zKJUpXqMNrqv8qIjKh0PQO1ZmzUSC4E5hMyFGOqjFlx9w9LckDZ9arGRx835MFAlYTxiQOFcbl1KPNisI9dn9+LqnHjQd1riHWndk4+WCxWhUZ4DNN6JlJBKlRhC6Rd9ruTF9efvYZDpNPJW9dCqxybYne1LkUFsfRs1+PrHTrbrpcrDroSPXlbSbWgt4i0h68g50b6lCQT9df1x75b+1GVOcE9QKRXB/+IWWIlvNDBCSK18uXHYVTMHGnUHdZA==
+X-YMail-OSG: wKp3dy4VM1mUvqFrOqPQygmRhvH4yNyzutUN17WPplY6YtOHpDSIKW7BODw_I9e
+ jeG1QC1R_KDPT22KQvENJcIN2_6jGWQJacXo56wUIyb7bqJfDSRY4_ynUgJmU0bQTDDwtkKZf9b5
+ Ke_8XElj8qdZaO_EEA1jCeEOsoIjFeBanxVN.dpDMXvc.5.UsVDZQWm2ov.grflQ0Zbqh2Pa1hrC
+ 3h7Vgx1_2IvVuxxPT6Nl9BICNTFybygQ4wM6m6bNuYg3lPVdAz2staXoM2rImNkKTjYGQXV1ssPj
+ uyp_1ZATv8BmN7P_r1h6maq7rAsXsJMYjSkERX85vi6yehjq0GNMOxzCOJh9nINV_LBY1ib1P6zk
+ u.GGwJLSzFAFsDi7DO9dFk32nbhNXog1NWGq8ECHOri.TAk7.KtCKf9.Su3Of4QbDrGFfHBlgEZB
+ NVFrKT7gP9gAFTnjLxlqlr6bGPcR50Xh516Le03a8pTow4qHqRwTN515gujMCkZPvCGyoj.o1Yhg
+ NlAOOCbK.d35Ce5XA3XRUaxiGlPxvmXLeYNCYZAAMfHaXdylSvP7UKUJdESQZI4EUYOqMt6OYuIt
+ Ocu.XMrHwJFm9bhafbadpOP2C_Ub3WK_U_CPhzLtRmGeP_a0sgDe0xQgCrXrcKjsgYVoVHwU9.gb
+ qTtgDSQnT0qSLF8US5VE5YyjMrvVeb8dssDiUI6h1KbGWXYEazYqoYrRg72wGqBgh8XbYkDmBtwq
+ DNSmAHAMwAaPcukmihUY33mgx_fYA0MH4y2h3a698sRC68AoSLk8_.36YCoX_.021liJQFcPV6XR
+ AgVf.szqM8QCeTAq7msp28jDYZRUzJP9HC6lH3niEow26V3OayK.XG1d7Zgt.7A7sFN_xOoGfSsz
+ 2Z5Ijg4_8fEx6PhPGUhF7B.Xg4EM9lZPNkGiQp.FbmxLHpDYylGPk_PtQtl8ZzvXjqIaQkJlwr1D
+ PVJa.jrxzT3bP2ahvcCFFogNUup7vpQQ0kGYv.h2_g7eMOcpgU6trzSDXigCCBNii6pTPRBWDUEM
+ nMf7_C1cupswJCk9ZhA1hMsouiqTaClhjAvyoj__sonh9RKTrOoWgt.H3Hx6I3GBsK3OfXG2tzCq
+ HJ2Dcxvz9PP_Yi3D_8lK7kxXZBRiemN3XYYHSOWSjaUXqyMQ2zqOvqf1xaMnK672bbPZrZZD5ghB
+ s4mG970QA59VXeTLc.xvGsbSzKBEprcnsXO6cpFKXx615aN2I9Rv42n2z7Kn4T7BD1XOdT_SBd1Y
+ Gt5jb1evqxVhjxI6CWYFEavy0UT6Guuy3hSpuvvdeHNfmKmy6Jw1JRBivVbx.BUU0dOw-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ir2.yahoo.com with HTTP; Tue, 3 Mar 2020 11:23:21 +0000
+Date:   Tue, 3 Mar 2020 11:23:19 +0000 (UTC)
+From:   Ms Lisa Hugh <lisa.hugh111@gmail.com>
+Reply-To: ms.lisahugh000@gmail.com
+Message-ID: <1827864370.5549752.1583234599364@mail.yahoo.com>
+Subject: BUSINESS CO-OPERATION.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <08d14c58-d8bb-b0ff-d81b-91373ab6a09c@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1827864370.5549752.1583234599364.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15302 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:73.0) Gecko/20100101 Firefox/73.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Mar 02, 2020 at 10:36:05PM -0800, Bart Van Assche wrote:
-> On 2020-03-02 10:40, Daniel Wagner wrote:
-> > On Sun, Mar 01, 2020 at 07:30:22PM -0800, Bart Van Assche wrote:
-> >> Fix all endianness complaints reported by sparse (C=2).
-> > 
-> > [...]
-> > 
-> >>  int
-> >> -qla24xx_dump_ram(struct qla_hw_data *ha, uint32_t addr, uint32_t *ram,
-> >> -    uint32_t ram_dwords, void **nxt)
-> >> +qla24xx_dump_ram(struct qla_hw_data *ha, uint32_t addr, __be32 *ram,
-> >> +		 uint32_t ram_dwords, void **nxt)
-> >>  {
-> >>  	int rval = QLA_FUNCTION_FAILED;
-> >>  	struct device_reg_24xx __iomem *reg = &ha->iobase->isp24;
-> >>  	dma_addr_t dump_dma = ha->gid_list_dma;
-> >> -	uint32_t *chunk = (void *)ha->gid_list;
-> >> +	uint32_t *chunk = (uint32_t *)ha->gid_list;
-> >>  	uint32_t dwords = qla2x00_gid_list_size(ha) / 4;
-> >>  	uint32_t stat;
-> >>  	ulong i, j, timer = 6000000;
-> >> @@ -252,9 +252,9 @@ qla24xx_dump_ram(struct qla_hw_data *ha, uint32_t addr, uint32_t *ram,
-> >>  			return rval;
-> >>  		}
-> >>  		for (j = 0; j < dwords; j++) {
-> >> -			ram[i + j] =
-> >> -			    (IS_QLA27XX(ha) || IS_QLA28XX(ha)) ?
-> >> -			    chunk[j] : swab32(chunk[j]);
-> >> +			ram[i + j] = (__force __be32)
-> >> +				((IS_QLA27XX(ha) || IS_QLA28XX(ha)) ?
-> >> +				 chunk[j] : swab32(chunk[j]));
-> > 
-> > Isn't this assuming the host runs in little endian mode? Because later down...
-> 
-> My goal was not to change the behavior of the code on x86. Bugs on big
-> endian systems can be fixed later on (my guess is that this driver does
-> not work reliably on big endian), and searching through the code for
-> __force casts probably provides some good starting points.
 
-Got it. I was just a bit confused that you are going through the pain
-to fix many endianess problems and than leave these ones out. But you
-are right, we should fix them later and trying to avoid introducing
-regressions in this big patch.
 
-Thans,
-Daniel
+Dear Friend,
+
+I am Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank,
+
+Please i need your assistance for the transferring of this abandon (US$4.5M DOLLARS) to your bank account for both of us benefit.
+
+I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
+
+Below information that is needed from you.
+
+1)Private telephone number...
+2)Age...
+3)Nationality...
+4)Occupation ...
+5)Full Name....
+Thanks.
+
+
+Ms Lisa Hugh
