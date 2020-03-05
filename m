@@ -2,119 +2,92 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 175FA179F77
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 06:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D280017A1AD
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 09:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgCEFp7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Mar 2020 00:45:59 -0500
-Received: from mail26.static.mailgun.info ([104.130.122.26]:61650 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725880AbgCEFp6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 00:45:58 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1583387158; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=xJc+7Bp3FwZ9FEajchA9Dd3Tszwww0y5sCjNNZKDRO0=;
- b=q10U0i6D5v3zTmSJDSuf5WD8O8dJ5QE8gvk25KAkgJaZuVPjOEoeIoD7t1bHn9oa3OpRUCFL
- kP5MULLLw1ihWRMpNuCMCmjMRC1ESrPGq3lC699Senkq/Im8hXHrk/krNynagMlyzYf4Sh8U
- yDVMGkU+eGae/P9IvCCX2L1N/4Q=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5e609211.7f6d2737ee30-smtp-out-n03;
- Thu, 05 Mar 2020 05:45:53 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E1998C4479F; Thu,  5 Mar 2020 05:45:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: cang)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 03824C43383;
-        Thu,  5 Mar 2020 05:45:50 +0000 (UTC)
+        id S1725944AbgCEItM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Mar 2020 03:49:12 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:42258 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725866AbgCEItL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 03:49:11 -0500
+Received: by mail-ot1-f66.google.com with SMTP id 66so4891439otd.9
+        for <linux-scsi@vger.kernel.org>; Thu, 05 Mar 2020 00:49:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=lfp18ybhnrGHD4YQIwl0oqM7SV//eTSDWwNuyv39omE=;
+        b=bMXqNFJqrdQtAjM6/q3vZFeIqGd3Em0c0MRSniiU21kTUP0ErnoPHZUAgMuI3H8jEp
+         EDgNELihi2XNcQhhs9jLYp/wnbQY6N5XdTeKxAH83tnNg0ON8TzdIy77D2M6c8SKGWCK
+         a8qhzdzidyn7BPRRc89uXcAhHQ58BEAVoGAEMfcKj3skBJ/EHSxwSXvp4UTWwXW3xxdH
+         nltq+kS6vfjfC2DD/M871vu3wVCNkUNsVwmjGnjQ0lnOxWSV0/2sUWjT6cmmxt79T3jh
+         6d/aUr3Chibnoa5N5R6NzEa+Jid0Kp78MHDY6bL4yAqjsV/DDedeuNEgPuCM6EKYKu2Q
+         PTbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=lfp18ybhnrGHD4YQIwl0oqM7SV//eTSDWwNuyv39omE=;
+        b=ih+8DIS7tnxkSn+DMU4E6v36df0p6SsKB9W6w9Wsjeh1Fkz4jZfACBYIjk0wu2BSzd
+         PkkcAvWuBtBk/+kVnHuEmMBLGLRzH+0onCqx2xkGBWdl6llZhNl0FfHY7kSdBKfddad9
+         XJDWHfqt1YrcgaLmeXvbfiNIxT4qdYkL2So5CA55BVeNigErXa0tBrNgVqe6y0XGLxF7
+         ctPxdtEAne0RoMAUfadSMEXJQR+bJi05VBbXENI+YrxAjzaPbVkucxbgugBjXYXav/Wk
+         tEP/CSGVy4G/cmIvehBs9BeJhoTbBKAx4wOlw3ttkiRxRRRLW7Ua1QWyC8JdArGdle4/
+         YBfQ==
+X-Gm-Message-State: ANhLgQ2PuROSavrQCjc7EfGtNNT3HXLTr9KAcJCVs3acpDQQ/ntND8bT
+        RKKlcJRR1NKmXuu2PJ44by3f9ZjkKiXagkvpKUw=
+X-Google-Smtp-Source: ADFU+vu6f30087Eoea/pphjQWNwdoE4/lucPXH6uos+apKqH0wnkfWRnTwMNcsQvuFocYwAW/bdcVrkYJmpDZRUH0pI=
+X-Received: by 2002:a9d:12b4:: with SMTP id g49mr6134428otg.50.1583398150982;
+ Thu, 05 Mar 2020 00:49:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 05 Mar 2020 13:45:49 +0800
-From:   Can Guo <cang@codeaurora.org>
-To:     Stanley Chu <stanley.chu@mediatek.com>
-Cc:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com,
-        beanhuo@micron.com, asutoshd@codeaurora.org,
-        matthias.bgg@gmail.com, bvanassche@acm.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kuohong.wang@mediatek.com, peter.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, andy.teng@mediatek.com
-Subject: Re: [PATCH v1 3/4] scsi: ufs: allow customized delay for host
- enabling
-In-Reply-To: <20200305040704.10645-4-stanley.chu@mediatek.com>
-References: <20200305040704.10645-1-stanley.chu@mediatek.com>
- <20200305040704.10645-4-stanley.chu@mediatek.com>
-Message-ID: <1d7964c76ceb218529f0101499fabbea@codeaurora.org>
-X-Sender: cang@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Received: by 2002:a4a:a384:0:0:0:0:0 with HTTP; Thu, 5 Mar 2020 00:49:10 -0800 (PST)
+Reply-To: mrs.suzanmark12@yahoo.com
+From:   Mr David Nicholas <dhldepartmen2744@gmail.com>
+Date:   Thu, 5 Mar 2020 09:49:10 +0100
+Message-ID: <CAE7iwnzt0h5pO1jJZ5zt_eAAEdJ+3=fOHCuG8TNOQDxz_E8kKQ@mail.gmail.com>
+Subject: ATTN: My Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Stanley,
+ATTN: My Dear
 
-On 2020-03-05 12:07, Stanley Chu wrote:
-> Currently a 1 ms delay is applied before polling CONTROLLER_ENABLE
-> bit. This delay may not be required or can be changed in different
-> controllers. Make the delay as a changeable value in struct ufs_hba to
-> allow it customized by vendors.
-> 
-> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+Good news,The BRITISH HIGH COMMISSION has actually verified and discovered
+that your payment has been unnecessarily Delayed by corrupt officials of the
+Company who are Trying to divert your fund of $4,700.000.00 Million
+into their private
+accounts. Therefore we have obtained an irrevocable payment guarantee on your
+Payment with the Bank to make your payment through our new ATM VISA CARD
+system which you can use to withdraw your money in any ATM MACHINE around your
+area.
 
-Reviewed-by: Can Guo <cang@codeaurora.org>
+So we are here by inviting you to our office to pick up your ATM VISA CARD but
+if you cannot be able to come down here in our office in person be inform that
+you are going to pay for shipping fee of your ATM visa CARD, so if you are
+unable to come down here then you are required to update us so that we will
+proceed with the necessary arrangement for the delivery of your ATM VISA CARD.
 
-> ---
->  drivers/scsi/ufs/ufshcd.c | 6 +++++-
->  drivers/scsi/ufs/ufshcd.h | 1 +
->  2 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index ed61ecb98b2d..39cae907abd0 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -4282,7 +4282,10 @@ int ufshcd_hba_enable(struct ufs_hba *hba)
->  	 * instruction might be read back.
->  	 * This delay can be changed based on the controller.
->  	 */
-> -	usleep_range(1000, 1100);
-> +	if (hba->hba_enable_delay_us) {
-> +		usleep_range(hba->hba_enable_delay_us,
-> +			     hba->hba_enable_delay_us + 100);
-> +	}
-> 
->  	/* wait for the host controller to complete initialization */
->  	retry = 10;
-> @@ -8402,6 +8405,7 @@ int ufshcd_init(struct ufs_hba *hba, void
-> __iomem *mmio_base, unsigned int irq)
-> 
->  	hba->mmio_base = mmio_base;
->  	hba->irq = irq;
-> +	hba->hba_enable_delay_us = 1000;
-> 
->  	err = ufshcd_hba_init(hba);
->  	if (err)
-> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
-> index 49ade1bfd085..baf1143d4839 100644
-> --- a/drivers/scsi/ufs/ufshcd.h
-> +++ b/drivers/scsi/ufs/ufshcd.h
-> @@ -662,6 +662,7 @@ struct ufs_hba {
->  	u32 eh_flags;
->  	u32 intr_mask;
->  	u16 ee_ctrl_mask;
-> +	u16 hba_enable_delay_us;
->  	bool is_powered;
-> 
->  	/* Work Queues */
+As of now be informed that all arrangement has been done and the ATM VISA CARD
+has be in your name, but to RE-ACTIVATE the ATM Card you have to forward your
+current information as requested below to the bank for the ATM Card re-
+activcation, then we will send you the ATM CARD for your immediate use.
+
+Here are the information you have to forward to the bank:
+1. Your Full Names:______
+2. Postal Address:_______
+3. Direct Cell Numbers:_______
+4. Sex:_____
+5.Age:_____
+6. Occupation:________
+7.Nationality:________
+8.whatsapp Number______
+
+Therefore you are advised to contact Bank accountant Manager Mrs.Susan Mark
+
+CONTACT PERSON: Mrs.Susan Mark
+E-mail:( mrs.suzanmark22@gmail.com )
+
+Mr David Nicholas
