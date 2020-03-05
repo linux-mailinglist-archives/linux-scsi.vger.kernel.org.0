@@ -2,99 +2,98 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A559C17AB03
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 17:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DCCB17AC3D
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 18:19:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbgCEQ4d (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Mar 2020 11:56:33 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38848 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725990AbgCEQ4d (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 11:56:33 -0500
-Received: by mail-pf1-f195.google.com with SMTP id g21so379354pfb.5
-        for <linux-scsi@vger.kernel.org>; Thu, 05 Mar 2020 08:56:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1wUY0RDF3MMASgLEnkNdnYSFzMpxRmDzZ17GQ6stlW4=;
-        b=iaCbgN2bM3J+CFmzZCzh3YmYWc2Z2Pq9EpGBUeHOEPHSVoIbmeEp1ppnD5XBAG8JB0
-         aMPsS3Tf8vHScf2XPsidBdGj6b82Qtvkfpeuuvv6xTuxNaXE2Aos8kJlkoDdS7+jDPpO
-         qJJhttlOkMZyKrfyaRMof0HLEjAqrlwA+p2p7ysj7weYRAlmhDoXDwnyDh/qknEPlheN
-         tWyF3xGP04qaV4e/WbnVUf9uwESBeW5EUMNgoVOyj35rj9cwSIMI1erzqSJrPG/n3rZY
-         g+p3MiWDqm55aXw4UKPoYLYkuSIx6Hbuq0VnYs5SzB54obM9dCTdGNQtPnarM/DfT54H
-         SywQ==
-X-Gm-Message-State: ANhLgQ2G8W+Qjq21sZl9UtQNbLmnbqslh9ChaWGyt1YkesPZMZwvhH2y
-        g0VqLVijWLWCQ/qowbeMuGw=
-X-Google-Smtp-Source: ADFU+vve6MFoc5e7+M3FrnQSgx6y4M1zVnAmFHKqSGIdgU3c1TOyRjTYmjwCIawEj8/zJN1YqP16gA==
-X-Received: by 2002:a63:ed16:: with SMTP id d22mr8896214pgi.314.1583427390398;
-        Thu, 05 Mar 2020 08:56:30 -0800 (PST)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id b9sm3660345pgi.75.2020.03.05.08.56.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Mar 2020 08:56:29 -0800 (PST)
-Subject: Re: [PATCH v2] iscsi: Report connection state on sysfs
-To:     open-iscsi@googlegroups.com,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        lduncan@suse.com
-Cc:     cleech@redhat.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, kernel@collabora.com,
-        Khazhismel Kumykov <khazhy@google.com>,
-        Junho Ryu <jayr@google.com>
-References: <20200305153521.1374259-1-krisman@collabora.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <bc70bd6d-6d13-4d1c-8559-140411e361d9@acm.org>
-Date:   Thu, 5 Mar 2020 08:56:26 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200305153521.1374259-1-krisman@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1727982AbgCERTO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Mar 2020 12:19:14 -0500
+Received: from labrats.qualcomm.com ([199.106.110.90]:1437 "EHLO
+        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727669AbgCERPL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 12:15:11 -0500
+IronPort-SDR: XuA4+RAW8bgZWyzJMYTe3vh0ha9IHBzmH3ZJqao3xLZZ5MIw/tfGRoQaoTaupZAYNmjnRlN3YC
+ 0wqb9aSnMknGCJlhEG09JvYrbZfVIf580g7hvqmMF8Nx1O5SWATsunGAMNaInFjFhuD3fuyeTK
+ oXPHb5heAFg5qwbXm+c5j13I25Jq0N+F3LHaMzgquDvqANroeTBi6jNLmx1YFwreRcNdk50sE6
+ XXcBSz1+odzI0eCiAxj70LrYkg1crpsrM2aNQ1W2HBA/hK7PpvTIgoTJA/MSHm4Ku7eXgWOkrt
+ wEk=
+X-IronPort-AV: E=Sophos;i="5.70,517,1574150400"; 
+   d="scan'208";a="28542843"
+Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
+  by labrats.qualcomm.com with ESMTP; 05 Mar 2020 00:53:15 -0800
+Received: from pacamara-linux.qualcomm.com ([192.168.140.135])
+  by ironmsg01-sd.qualcomm.com with ESMTP; 05 Mar 2020 00:53:14 -0800
+Received: by pacamara-linux.qualcomm.com (Postfix, from userid 359480)
+        id 76BE139CE; Thu,  5 Mar 2020 00:53:14 -0800 (PST)
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v1 1/1] scsi: ufs: Fix possible unclocked access to auto hibern8 timer register
+Date:   Thu,  5 Mar 2020 00:53:07 -0800
+Message-Id: <1583398391-14273-1-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 3/5/20 7:35 AM, Gabriel Krisman Bertazi wrote:
-> +static const struct {
-> +	int value;
-> +	char *name;
-> +} connection_state_names[] = {
-> +	{ISCSI_CONN_UP, "up"},
-> +	{ISCSI_CONN_DOWN, "down"},
-> +	{ISCSI_CONN_FAILED, "failed"}
-> +};
-> +
-> +static const char *connection_state_name(int state)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(connection_state_names); i++) {
-> +		if (connection_state_names[i].value == state)
-> +			return connection_state_names[i].name;
-> +	}
-> +	return NULL;
-> +}
-> +
-> +static ssize_t show_conn_state(struct device *dev,
-> +			       struct device_attribute *attr, char *buf)
-> +{
-> +	struct iscsi_cls_conn *conn = iscsi_dev_to_conn(dev->parent);
-> +
-> +	return sprintf(buf, "%s\n", connection_state_name(conn->state));
-> +}
-> +static ISCSI_CLASS_ATTR(conn, state, S_IRUGO, show_conn_state,
-> +			NULL);
+Before access auto hibner8 timer register, make sure power and clock are
+properly configured to avoid unclocked register access.
 
-What has been changed in v2 compared to v1? Please always include a 
-changelog when posting a new version.
+Fixes: ba7af5ec5126 ("scsi: ufs: export ufshcd_auto_hibern8_update for vendor usage")
+Signed-off-by: Can Guo <cang@codeaurora.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-Additionally, it seems like the comment I posted on v1 has not been 
-addressed?
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index e987fa3a..5698f11 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -3914,18 +3914,25 @@ int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
+ void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
+ {
+ 	unsigned long flags;
++	bool update = false;
+ 
+-	if (!(hba->capabilities & MASK_AUTO_HIBERN8_SUPPORT))
++	if (!ufshcd_is_auto_hibern8_supported(hba))
+ 		return;
+ 
+ 	spin_lock_irqsave(hba->host->host_lock, flags);
+-	if (hba->ahit == ahit)
+-		goto out_unlock;
+-	hba->ahit = ahit;
+-	if (!pm_runtime_suspended(hba->dev))
+-		ufshcd_writel(hba, hba->ahit, REG_AUTO_HIBERNATE_IDLE_TIMER);
+-out_unlock:
++	if (hba->ahit != ahit) {
++		hba->ahit = ahit;
++		update = true;
++	}
+ 	spin_unlock_irqrestore(hba->host->host_lock, flags);
++
++	if (update && !pm_runtime_suspended(hba->dev)) {
++		pm_runtime_get_sync(hba->dev);
++		ufshcd_hold(hba, false);
++		ufshcd_auto_hibern8_enable(hba);
++		ufshcd_release(hba);
++		pm_runtime_put(hba->dev);
++	}
+ }
+ EXPORT_SYMBOL_GPL(ufshcd_auto_hibern8_update);
+ 
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
-Thanks,
-
-Bart.
