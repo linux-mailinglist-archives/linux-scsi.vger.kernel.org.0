@@ -2,86 +2,119 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED2C17A3E1
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 12:16:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBEC17A4B4
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 12:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727407AbgCELQS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Mar 2020 06:16:18 -0500
-Received: from ulan.pagasa.dost.gov.ph ([202.90.128.205]:47754 "EHLO
-        mailgw.pagasa.dost.gov.ph" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725880AbgCELQQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 06:16:16 -0500
-X-Greylist: delayed 1274 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Mar 2020 06:16:06 EST
-Received: from webmail.pagasa.dost.int ([10.10.11.8])
-        by mailgw.pagasa.dost.gov.ph  with ESMTP id 025AseSK006737-025AseSM006737
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Thu, 5 Mar 2020 18:54:40 +0800
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2FB4F2981A90;
-        Thu,  5 Mar 2020 18:46:49 +0800 (PST)
-Received: from webmail.pagasa.dost.int ([127.0.0.1])
-        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id r7J1A0N3aHYl; Thu,  5 Mar 2020 18:46:48 +0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 2232C2981A4C;
-        Thu,  5 Mar 2020 18:46:48 +0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 webmail.pagasa.dost.int 2232C2981A4C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pagasa.dost.gov.ph;
-        s=96B9A03E-48B0-11EA-A7E8-92F42F537CE2; t=1583405208;
-        bh=RC75T5p3JPNk7JUNB+lH0UfaFQO1Ac584gPL3SIL6h8=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=vwxX3L8Z7uHnDJPZBIix9IBQi0XMBiY4sLQTc/9+h6pT2FHeTz61v6B+3f3w6WhXh
-         jUdnW3+FuZCvkf1pcG3LkjpsYvCQO7zO587a10BanpMqFFL6zPGTaTUsrqnCnsqpAd
-         CtN8Atz3iXBEFHZeiXsfNfnWSfk0n7tqEffbmBy8=
-X-Virus-Scanned: amavisd-new at pagasa.dost.int
-Received: from webmail.pagasa.dost.int ([127.0.0.1])
-        by localhost (webmail.pagasa.dost.int [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id WT2tTJV-1oie; Thu,  5 Mar 2020 18:46:47 +0800 (PST)
-Received: from webmail.pagasa.dost.int (webmail.pagasa.dost.int [10.11.1.8])
-        by webmail.pagasa.dost.int (Postfix) with ESMTP id 5119729819D2;
-        Thu,  5 Mar 2020 18:46:46 +0800 (PST)
-Date:   Thu, 5 Mar 2020 18:46:46 +0800 (PST)
-From:   "Juanito S. Galang" <juanito.galang@pagasa.dost.gov.ph>
-Message-ID: <1980644409.3575157.1583405206290.JavaMail.zimbra@pagasa.dost.gov.ph>
-Subject: 
+        id S1727403AbgCEL7E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Mar 2020 06:59:04 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:11151 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726990AbgCEL7E (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 5 Mar 2020 06:59:04 -0500
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id CE80E29236B20E110CB8;
+        Thu,  5 Mar 2020 19:58:59 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.439.0; Thu, 5 Mar 2020 19:58:52 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <ming.lei@redhat.com>,
+        <bvanassche@acm.org>, <hare@suse.de>, <don.brace@microsemi.com>,
+        <sumit.saxena@broadcom.com>, <hch@infradead.org>,
+        <kashyap.desai@broadcom.com>,
+        <shivasharan.srikanteshwara@broadcom.com>
+CC:     <chenxiang66@hisilicon.com>, <linux-block@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <esc.storagedev@microsemi.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH RFC v6 00/10] blk-mq/scsi: Provide hostwide shared tags for SCSI HBAs
+Date:   Thu, 5 Mar 2020 19:54:30 +0800
+Message-ID: <1583409280-158604-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - GC79 (Win)/8.8.15_GA_3895)
-Thread-Index: lWYDQbv6QI/eIWKrWUD3NPCXqIIr9A==
-Thread-Topic: 
-X-FEAS-DKIM: Valid
-Authentication-Results: mailgw.pagasa.dost.gov.ph;
-        dkim=pass header.i=@pagasa.dost.gov.ph
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi all,
 
+Here is v6 of the patchset.
 
-Herzlichen Gl=C3=BCckwunsch Lieber Beg=C3=BCnstigter,Sie erhalten diese E-M=
-ail von der Robert Bailey Foundation. Ich bin ein pensionierter Regierungsa=
-ngestellter aus Harlem und ein Gewinner des Powerball Lottery Jackpot im We=
-rt von 343,8 Millionen US-Dollar. Ich bin der gr=C3=B6=C3=9Fte Jackpot-Gewi=
-nner in der Geschichte der New Yorker Lotterie im US-Bundesstaat Amerika. I=
-ch habe diese Lotterie am 27. Oktober 2018 gewonnen und m=C3=B6chte Sie dar=
-=C3=BCber informieren, dass Google in Zusammenarbeit mit Microsoft Ihre "E-=
-Mail-Adresse" auf meine Bitte, einen Spendenbetrag von 3.000.000,00 Million=
-en Euro zu erhalten, =C3=BCbermittelt hat. Ich spende diese 3 Millionen Eur=
-o an Sie, um den Wohlt=C3=A4tigkeitsheimen und armen Menschen in Ihrer Geme=
-inde zu helfen, damit wir die Welt f=C3=BCr alle verbessern k=C3=B6nnen.Wei=
-tere Informationen finden Sie auf der folgenden Website, damit Sie nicht sk=
-eptisch sind
-Diese Spende von 3 Mio. EUR.https://nypost.com/2018/11/14/meet-the-winner-o=
-f-the-biggest-lottery-jackpot-in-new-york-history/Sie k=C3=B6nnen auch mein=
- YouTube f=C3=BCr mehr Best=C3=A4tigung aufpassen:
-https://www.youtube.com/watch?v=3DH5vT18Ysavc
-Bitte beachten Sie, dass alle Antworten an (robertdonation7@gmail.com=C2=A0=
- ) gesendet werden, damit wir das k=C3=B6nnen
-Fahren Sie fort, um das gespendete Geld an Sie zu =C3=BCberweisen.E-Mail: r=
-obertdonation7@gmail.comFreundliche Gr=C3=BC=C3=9Fe,
-Robert Bailey
-* * * * * * * * * * * * * * * *
-Powerball Jackpot Gewinner
+In this version of the series, we keep the shared sbitmap for driver tags,
+but omit the shared scheduler tags for now - I did not think that this was
+an essential feature and the premise was somewhat in doubt.
+
+Comments welcome, thanks!
+
+A copy of the patches can be found here:
+https://github.com/hisilicon/kernel-dev/tree/private-topic-blk-mq-shared-tags-rfc-v6-upstream
+
+Differences to v5:
+- For now, drop the shared scheduler tags
+- Fix megaraid SAS queue selection and rebase
+- Omit minor unused arguments patch, which has now been merged
+- Add separate patch to introduce sbitmap pointer
+- Fixed hctx_tags_bitmap_show() for shared sbitmap
+- Various tidying
+
+Differences to v4:
+- Rework scheduler tag allocations
+- Revert back to the original implementation from John
+
+Differences to v3:
+- Include reviews from Ming Lei
+
+Differences to v2:
+- Drop embedded tag bitmaps
+- Do not share scheduling tags
+- Add patches for hpsa and smartpqi
+
+Differences to v1:
+- Use a shared sbitmap, and not a separate shared tags (a big change!)
+	- Drop request.shared_tag
+- Add RB tags
+
+Hannes Reinecke (5):
+  blk-mq: rename blk_mq_update_tag_set_depth()
+  scsi: Add template flag 'host_tagset'
+  megaraid_sas: switch fusion adapters to MQ
+  smartpqi: enable host tagset
+  hpsa: enable host_tagset and switch to MQ
+
+John Garry (4):
+  blk-mq: Use pointers for blk_mq_tags bitmap tags
+  blk-mq: Facilitate a shared sbitmap per tagset
+  blk-mq: Add support in hctx_tags_bitmap_show() for a shared sbitmap
+  scsi: hisi_sas: Switch v3 hw to MQ
+
+Ming Lei (1):
+  blk-mq: rename BLK_MQ_F_TAG_SHARED as BLK_MQ_F_TAG_QUEUE_SHARED
+
+ block/bfq-iosched.c                         |  4 +-
+ block/blk-mq-debugfs.c                      | 65 ++++++++++++--
+ block/blk-mq-tag.c                          | 97 ++++++++++++++-------
+ block/blk-mq-tag.h                          | 21 +++--
+ block/blk-mq.c                              | 60 +++++++++----
+ block/blk-mq.h                              |  5 ++
+ block/kyber-iosched.c                       |  4 +-
+ drivers/scsi/hisi_sas/hisi_sas.h            |  3 +-
+ drivers/scsi/hisi_sas/hisi_sas_main.c       | 36 ++++----
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c      | 87 ++++++++----------
+ drivers/scsi/hpsa.c                         | 44 ++--------
+ drivers/scsi/hpsa.h                         |  1 -
+ drivers/scsi/megaraid/megaraid_sas.h        |  1 -
+ drivers/scsi/megaraid/megaraid_sas_base.c   | 59 ++++---------
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 24 ++---
+ drivers/scsi/scsi_lib.c                     |  2 +
+ drivers/scsi/smartpqi/smartpqi_init.c       | 38 +++++---
+ include/linux/blk-mq.h                      |  5 +-
+ include/scsi/scsi_host.h                    |  3 +
+ 19 files changed, 325 insertions(+), 234 deletions(-)
+
+-- 
+2.17.1
+
