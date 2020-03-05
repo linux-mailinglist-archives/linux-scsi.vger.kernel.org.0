@@ -2,98 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCCB17AC3D
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 18:19:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9833617ACE2
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 18:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727982AbgCERTO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Mar 2020 12:19:14 -0500
-Received: from labrats.qualcomm.com ([199.106.110.90]:1437 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727669AbgCERPL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 12:15:11 -0500
-IronPort-SDR: XuA4+RAW8bgZWyzJMYTe3vh0ha9IHBzmH3ZJqao3xLZZ5MIw/tfGRoQaoTaupZAYNmjnRlN3YC
- 0wqb9aSnMknGCJlhEG09JvYrbZfVIf580g7hvqmMF8Nx1O5SWATsunGAMNaInFjFhuD3fuyeTK
- oXPHb5heAFg5qwbXm+c5j13I25Jq0N+F3LHaMzgquDvqANroeTBi6jNLmx1YFwreRcNdk50sE6
- XXcBSz1+odzI0eCiAxj70LrYkg1crpsrM2aNQ1W2HBA/hK7PpvTIgoTJA/MSHm4Ku7eXgWOkrt
- wEk=
-X-IronPort-AV: E=Sophos;i="5.70,517,1574150400"; 
-   d="scan'208";a="28542843"
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by labrats.qualcomm.com with ESMTP; 05 Mar 2020 00:53:15 -0800
-Received: from pacamara-linux.qualcomm.com ([192.168.140.135])
-  by ironmsg01-sd.qualcomm.com with ESMTP; 05 Mar 2020 00:53:14 -0800
-Received: by pacamara-linux.qualcomm.com (Postfix, from userid 359480)
-        id 76BE139CE; Thu,  5 Mar 2020 00:53:14 -0800 (PST)
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 1/1] scsi: ufs: Fix possible unclocked access to auto hibern8 timer register
-Date:   Thu,  5 Mar 2020 00:53:07 -0800
-Message-Id: <1583398391-14273-1-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
+        id S1728078AbgCERW5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Mar 2020 12:22:57 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39440 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727381AbgCERNq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 5 Mar 2020 12:13:46 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6A28D207FD;
+        Thu,  5 Mar 2020 17:13:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583428426;
+        bh=N3h6q8tCGOh4BWQmsC7dtfhBTXK5drPci7XihK3wjb4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=j6aBP/V0agNKztaFyOrJ4W8wEe0ADwtKwcOgctjcwH0uDyEVuoQyIJuQl5vGc0zam
+         ubr8rRg9BIU6E9ojjYdrMK5KuiiJSs3X0YabSdlTo9JL4MpER05tlyZcegiBwaUygK
+         3rx5i8/Rdww+R3RKt2hZE14B6mmAsUame5Tz30EQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Igor Druzhinin <igor.druzhinin@citrix.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 27/67] scsi: libfc: free response frame from GPN_ID
+Date:   Thu,  5 Mar 2020 12:12:28 -0500
+Message-Id: <20200305171309.29118-27-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200305171309.29118-1-sashal@kernel.org>
+References: <20200305171309.29118-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Before access auto hibner8 timer register, make sure power and clock are
-properly configured to avoid unclocked register access.
+From: Igor Druzhinin <igor.druzhinin@citrix.com>
 
-Fixes: ba7af5ec5126 ("scsi: ufs: export ufshcd_auto_hibern8_update for vendor usage")
-Signed-off-by: Can Guo <cang@codeaurora.org>
+[ Upstream commit ff6993bb79b9f99bdac0b5378169052931b65432 ]
+
+fc_disc_gpn_id_resp() should be the last function using it so free it here
+to avoid memory leak.
+
+Link: https://lore.kernel.org/r/1579013000-14570-2-git-send-email-igor.druzhinin@citrix.com
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Igor Druzhinin <igor.druzhinin@citrix.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufshcd.c | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+ drivers/scsi/libfc/fc_disc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index e987fa3a..5698f11 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -3914,18 +3914,25 @@ int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
- void ufshcd_auto_hibern8_update(struct ufs_hba *hba, u32 ahit)
- {
- 	unsigned long flags;
-+	bool update = false;
- 
--	if (!(hba->capabilities & MASK_AUTO_HIBERN8_SUPPORT))
-+	if (!ufshcd_is_auto_hibern8_supported(hba))
- 		return;
- 
- 	spin_lock_irqsave(hba->host->host_lock, flags);
--	if (hba->ahit == ahit)
--		goto out_unlock;
--	hba->ahit = ahit;
--	if (!pm_runtime_suspended(hba->dev))
--		ufshcd_writel(hba, hba->ahit, REG_AUTO_HIBERNATE_IDLE_TIMER);
--out_unlock:
-+	if (hba->ahit != ahit) {
-+		hba->ahit = ahit;
-+		update = true;
-+	}
- 	spin_unlock_irqrestore(hba->host->host_lock, flags);
-+
-+	if (update && !pm_runtime_suspended(hba->dev)) {
-+		pm_runtime_get_sync(hba->dev);
-+		ufshcd_hold(hba, false);
-+		ufshcd_auto_hibern8_enable(hba);
-+		ufshcd_release(hba);
-+		pm_runtime_put(hba->dev);
-+	}
+diff --git a/drivers/scsi/libfc/fc_disc.c b/drivers/scsi/libfc/fc_disc.c
+index 9c5f7c9178c66..2b865c6423e29 100644
+--- a/drivers/scsi/libfc/fc_disc.c
++++ b/drivers/scsi/libfc/fc_disc.c
+@@ -628,6 +628,8 @@ static void fc_disc_gpn_id_resp(struct fc_seq *sp, struct fc_frame *fp,
+ 	}
+ out:
+ 	kref_put(&rdata->kref, fc_rport_destroy);
++	if (!IS_ERR(fp))
++		fc_frame_free(fp);
  }
- EXPORT_SYMBOL_GPL(ufshcd_auto_hibern8_update);
  
+ /**
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+2.20.1
 
