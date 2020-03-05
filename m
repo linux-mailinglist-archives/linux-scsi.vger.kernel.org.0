@@ -2,120 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E5817A20A
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 10:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B8717A33A
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 11:34:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbgCEJKS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Mar 2020 04:10:18 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:46349 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725816AbgCEJKS (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 04:10:18 -0500
-Received: by mail-oi1-f195.google.com with SMTP id a22so5188045oid.13
-        for <linux-scsi@vger.kernel.org>; Thu, 05 Mar 2020 01:10:18 -0800 (PST)
+        id S1727131AbgCEKen (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Mar 2020 05:34:43 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:37173 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726968AbgCEKem (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 05:34:42 -0500
+Received: by mail-lf1-f67.google.com with SMTP id j11so4173141lfg.4
+        for <linux-scsi@vger.kernel.org>; Thu, 05 Mar 2020 02:34:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JVw9rq/rix9MBoNWQR01CSPHCMCR9vj00qyZgw+bZRw=;
-        b=GAVNfr4ekJN/rAAq8AWXuomRPw+LQAG5q3V6xV35njOQwNvr1sbzvpii96PKcV+oew
-         iYExUUmUBPi6Rw4rKxZi37AkNT0BjYqRhhJfOEq48F6lZJj8X6oWq8cAnKgwn7rVAEZW
-         hRcq119am4x8UEodZTxXYP4rBjBz2Xkr5KxfQ=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=fz2DAL/hCVOBzgx+g45rdprPzuuFcQsUW1ZHNo4nDuWKCX/fmtcJFi6lbSs9P/RfJA
+         lAVCHt1fNQbO92SbHey4yazD8D+BRVnEqK7PVKp1rcMy40FqhDMG89bJ58GSzMbwvj8U
+         zAnHbCvHz8cMGM9KEggtHMrJgl6JBjlHSjxVfYCRhwYPKx+Jjq/D+Io2Qn9ywDnb1vG6
+         OscJGDR+ktAt1dSFKcBwqG0UklQUo5kR+xK1xD7ZN4ey+k79Dp/cQzpwPp4ZcFKOa/hp
+         HQXr9qb2tQ0y+avLLK+wgv/3Axz+CmJlkglRa4MPyv4tObLkJ7AkbgA7LI04c8TOXAVI
+         wgbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JVw9rq/rix9MBoNWQR01CSPHCMCR9vj00qyZgw+bZRw=;
-        b=mqgfgUFheRGvjBkelfsaFchY2AoJ6xUp0vXyma9kk1VUhhso3UbnTEFhwcc3iAmZ4B
-         uZJD0O7Ep9QV5aA1BWBLtBZJZ+/vukw7kb5dSmzgYgHJjQuaXH/SjCCy7IQIDOWOFPCG
-         3bTd8rNVjhjg5xA8dbeqnCq9W8agR3y7hFB/jjRkkSaw5uxTHs8hmhWr5aGD9AXDHot3
-         4by8vpYGQ4QjjGiAoHLDzTn6dBVhZ7VxzByMdlKYIdoLaXLP6ap9dtPBeW54Uy3M/+Vw
-         odxakZRvxeZ8mgkqDIi2rBHNMTLo+EItwNASnllG34OsYOdFJAX7Yf8Gkj/5PqYfB72L
-         7Upw==
-X-Gm-Message-State: ANhLgQ0NjNmCvq9Oj4z6r2uLt3C+aiKznW+X07zZp/wZWhJU0MZEeD5j
-        TNb+N1PDlihTVq9CWRoC25TIJN/xVV01oHj7WiSfz7LX
-X-Google-Smtp-Source: ADFU+vvbCXlixGAai/SlKqe/UdGMohjajpDdFJPED4W//juxvv3g4nijsRomM7wOTpZHn93aekZnhkzFXTN5R8V31E4=
-X-Received: by 2002:a05:6808:251:: with SMTP id m17mr4895207oie.15.1583399417700;
- Thu, 05 Mar 2020 01:10:17 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zdxUWMWXTEs/zs0LJh1bxLoOHpDg1k5nkLimqXptzik=;
+        b=myM/AkBa2RR0YkHdsKXeTxpmtLk5BdIuPLmMtAdFZnPMigAUCWvySAGnp2En80z8pb
+         XlR9ECO4TWPVS+uAaF1/81n4q1tV6+MoHBphpjR4n2PxXxyUf+k4xkoKJ0f+W1A8cIB6
+         INfswnSquJGdF9BXeUjX5aVowdaEJ8aE6zGEriG6MqINyQTZxh/PL+czfba8EwIYZcw+
+         PUEAyGGjWXo507554BxgurZYLqZ4vlKkEEzUrMbcHX0Gnbg7EzoXf5UZPPTd9P6yO2W4
+         +ttNMmqNIThU2ZcqOW6R6GNz1HjoS/U2byAlyj4A4+HuSj7WuGdgM6rqFlE1gSl13XPC
+         4drA==
+X-Gm-Message-State: ANhLgQ09MOU1hb/jKreJiaoFf0gqYICLLkPnP192vcOgKBSP+np7IEFs
+        Ee83zh+Z3EiY96CVHUabKYpktrPzO+YTi1V7470=
+X-Google-Smtp-Source: ADFU+vt4p78g3SCPLp2SkhMI2bIlerfed0N6TLid+L8CMxk399v6WJ1kSPdTuUyeuRHmX7GoHE72hDaaexbZ9WYxFUU=
+X-Received: by 2002:a19:c714:: with SMTP id x20mr5096973lff.107.1583404479393;
+ Thu, 05 Mar 2020 02:34:39 -0800 (PST)
 MIME-Version: 1.0
-References: <1581416293-41610-1-git-send-email-suganath-prabu.subramani@broadcom.com>
- <1581416293-41610-5-git-send-email-suganath-prabu.subramani@broadcom.com>
- <20200225184202.GC6261@infradead.org> <CAK=zhgoR0k+eoEMNznMGCF21eQMKT2UJ5vufCho4dXfHNFFV3g@mail.gmail.com>
-In-Reply-To: <CAK=zhgoR0k+eoEMNznMGCF21eQMKT2UJ5vufCho4dXfHNFFV3g@mail.gmail.com>
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Date:   Thu, 5 Mar 2020 14:40:06 +0530
-Message-ID: <CAK=zhgpXF=qcwhwpzsx44GDEJxFXLcZFSgO9cAXL8p2GjU0KoQ@mail.gmail.com>
-Subject: Re: [PATCH 4/5] mpt3sas: Handle RDPQ DMA allocation in same 4g region
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Suganath Prabu Subramani <suganath-prabu.subramani@broadcom.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
+Received: by 2002:ab3:5d10:0:0:0:0:0 with HTTP; Thu, 5 Mar 2020 02:34:38 -0800 (PST)
+Reply-To: ayishagddafio@mail.ru
+From:   AISHA GADDAFI <mahasaliou4444@gmail.com>
+Date:   Thu, 5 Mar 2020 02:34:38 -0800
+Message-ID: <CAKHB8qf7CPHeUuxPD-D07960Jx9qxdLt6hBH1AJUj0AYDreUzA@mail.gmail.com>
+Subject: Lieber Freund (Assalamu Alaikum),?
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+--=20
+Lieber Freund (Assalamu Alaikum),
 
-Any update over my previous reply?
+Ich bin vor einer privaten Suche auf Ihren E-Mail-Kontakt gesto=C3=9Fen
+Ihre Hilfe. Mein Name ist Aisha Al-Qaddafi, eine alleinerziehende
+Mutter und eine Witwe
+mit drei Kindern. Ich bin die einzige leibliche Tochter des Sp=C3=A4tlibysc=
+hen
+Pr=C3=A4sident (verstorbener Oberst Muammar Gaddafi).
 
-Thanks,
-Sreekanth
+Ich habe Investmentfonds im Wert von siebenundzwanzig Millionen
+f=C3=BCnfhunderttausend
+United State Dollar ($ 27.500.000.00) und ich brauche eine
+vertrauensw=C3=BCrdige Investition
+Manager / Partner aufgrund meines aktuellen Fl=C3=BCchtlingsstatus bin ich =
+jedoch
+M=C3=B6glicherweise interessieren Sie sich f=C3=BCr die Unterst=C3=BCtzung =
+von
+Investitionsprojekten in Ihrem Land
+Von dort aus k=C3=B6nnen wir in naher Zukunft Gesch=C3=A4ftsbeziehungen auf=
+bauen.
 
-On Thu, Feb 27, 2020 at 6:11 PM Sreekanth Reddy
-<sreekanth.reddy@broadcom.com> wrote:
->
-> On Wed, Feb 26, 2020 at 12:12 AM Christoph Hellwig <hch@infradead.org> wrote:
-> >
-> > On Tue, Feb 11, 2020 at 05:18:12AM -0500, suganath-prabu.subramani@broadcom.com wrote:
-> > > From: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-> > >
-> > > For INVADER_SERIES each set of 8 reply queues (0 - 7, 8 - 15,..)and
-> > > VENTURA_SERIES each set of 16 reply queues (0 - 15, 16 - 31,..)should
-> > > be within 4 GB boundary.Driver uses limitation of VENTURA_SERIES
-> > > to manage INVADER_SERIES as well. So here driver is allocating the DMA
-> > > able memory for RDPQ's accordingly.
-> > >
-> > > For RDPQ buffers, driver creates two separate pci pool.
-> > > "reply_post_free_dma_pool" and "reply_post_free_dma_pool_align"
-> > > First driver tries allocating memory from the pool
-> > > "reply_post_free_dma_pool", if the requested allocation are
-> > > within same 4gb region then proceeds for next allocations.
-> > > If not, allocates from reply_post_free_dma_pool_align which is
-> > > size aligned and if success, it will always meet same 4gb region
-> > > requirement
-> >
-> > I don't fully understand the changelog here, and how having two
-> > dma pools including one aligned is all that good.
->
-> The requirement is that driver needs a set of memory blocks of size
-> ~106 KB and this block should not cross the 4gb boundary (i.e.
-> starting & end address of this block should have the same higher 32
-> bit address). So what we are doing is that first we allocate a block
-> from generic pool 'reply_post_free_dma_pool' and we check whether this
-> block cross the 4gb boundary or not, if it is yes then we free this
-> block and we try to allocate block once gain from pool
-> 'reply_post_free_dma_pool_align' where we alignment of this pool is
-> set to power of two from block size. Hoping that second time
-> allocation block will not cross the 4 gb boundary.
->
-> Is there any interface or API which make sures that it always
-> allocates the required size memory block and also satisfies 4bg
-> boundary condtion?
->
-> >
-> > Why not do a single dma_alloc_coherent and then subdvide it given
-> > that all the allocations from the DMA pool seem to happen at HBA
-> > initialization time anyway, invalidating the need for the dynamic
-> > nature of the dma pools.
->
-> we need 8 blocks of block size ~106 KB, so total will be ~848 KB and
-> most of the times we may not get this much size continuous single
-> block memory and also this block should satisfy the 4gb boundary
-> requirement. And hence driver is allocating each block individually.
->
-> Regards,
-> Sreekanth
+Ich bin bereit, mit Ihnen =C3=BCber das Verh=C3=A4ltnis zwischen Investitio=
+n und
+Unternehmensgewinn zu verhandeln
+Basis f=C3=BCr die zuk=C3=BCnftige Investition Gewinne zu erzielen.
+
+Wenn Sie bereit sind, dieses Projekt in meinem Namen zu bearbeiten,
+antworten Sie bitte dringend
+Damit ich Ihnen mehr Informationen =C3=BCber die Investmentfonds geben kann=
+.
+
+Ihre dringende Antwort wird gesch=C3=A4tzt. schreibe mir an diese email adr=
+esse (
+ayishagddafio@mail.ru ) zur weiteren Diskussion.
+
+Freundliche Gr=C3=BC=C3=9Fe
+Frau Aisha Al-Qaddafi
