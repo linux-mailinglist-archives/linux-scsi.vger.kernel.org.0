@@ -2,92 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D280017A1AD
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 09:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CF517A208
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 10:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725944AbgCEItM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Mar 2020 03:49:12 -0500
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42258 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgCEItL (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 03:49:11 -0500
-Received: by mail-ot1-f66.google.com with SMTP id 66so4891439otd.9
-        for <linux-scsi@vger.kernel.org>; Thu, 05 Mar 2020 00:49:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=lfp18ybhnrGHD4YQIwl0oqM7SV//eTSDWwNuyv39omE=;
-        b=bMXqNFJqrdQtAjM6/q3vZFeIqGd3Em0c0MRSniiU21kTUP0ErnoPHZUAgMuI3H8jEp
-         EDgNELihi2XNcQhhs9jLYp/wnbQY6N5XdTeKxAH83tnNg0ON8TzdIy77D2M6c8SKGWCK
-         a8qhzdzidyn7BPRRc89uXcAhHQ58BEAVoGAEMfcKj3skBJ/EHSxwSXvp4UTWwXW3xxdH
-         nltq+kS6vfjfC2DD/M871vu3wVCNkUNsVwmjGnjQ0lnOxWSV0/2sUWjT6cmmxt79T3jh
-         6d/aUr3Chibnoa5N5R6NzEa+Jid0Kp78MHDY6bL4yAqjsV/DDedeuNEgPuCM6EKYKu2Q
-         PTbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=lfp18ybhnrGHD4YQIwl0oqM7SV//eTSDWwNuyv39omE=;
-        b=ih+8DIS7tnxkSn+DMU4E6v36df0p6SsKB9W6w9Wsjeh1Fkz4jZfACBYIjk0wu2BSzd
-         PkkcAvWuBtBk/+kVnHuEmMBLGLRzH+0onCqx2xkGBWdl6llZhNl0FfHY7kSdBKfddad9
-         XJDWHfqt1YrcgaLmeXvbfiNIxT4qdYkL2So5CA55BVeNigErXa0tBrNgVqe6y0XGLxF7
-         ctPxdtEAne0RoMAUfadSMEXJQR+bJi05VBbXENI+YrxAjzaPbVkucxbgugBjXYXav/Wk
-         tEP/CSGVy4G/cmIvehBs9BeJhoTbBKAx4wOlw3ttkiRxRRRLW7Ua1QWyC8JdArGdle4/
-         YBfQ==
-X-Gm-Message-State: ANhLgQ2PuROSavrQCjc7EfGtNNT3HXLTr9KAcJCVs3acpDQQ/ntND8bT
-        RKKlcJRR1NKmXuu2PJ44by3f9ZjkKiXagkvpKUw=
-X-Google-Smtp-Source: ADFU+vu6f30087Eoea/pphjQWNwdoE4/lucPXH6uos+apKqH0wnkfWRnTwMNcsQvuFocYwAW/bdcVrkYJmpDZRUH0pI=
-X-Received: by 2002:a9d:12b4:: with SMTP id g49mr6134428otg.50.1583398150982;
- Thu, 05 Mar 2020 00:49:10 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a4a:a384:0:0:0:0:0 with HTTP; Thu, 5 Mar 2020 00:49:10 -0800 (PST)
-Reply-To: mrs.suzanmark12@yahoo.com
-From:   Mr David Nicholas <dhldepartmen2744@gmail.com>
-Date:   Thu, 5 Mar 2020 09:49:10 +0100
-Message-ID: <CAE7iwnzt0h5pO1jJZ5zt_eAAEdJ+3=fOHCuG8TNOQDxz_E8kKQ@mail.gmail.com>
-Subject: ATTN: My Dear
-To:     undisclosed-recipients:;
+        id S1725900AbgCEJKC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Mar 2020 04:10:02 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:41311 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725816AbgCEJKC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 04:10:02 -0500
+X-UUID: 49dc4ff74c7643aa9c70799fe0c93137-20200305
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lb8cJIrdrjqVwgkadpjFpgOFoiVn2GTpdvZVTRhG89U=;
+        b=EF6LLhF61AymTFvSM0TxDMZgRMHD5Q6q2bgGM8pMvNVlYeBLEgpmvDV//bbRqUqlDrp+RygCDVaIIgDbwKMIZnQehhMrzcofCsPNrd9ApcWQbvrIvCjtzY2Wx3ZxyizAf4XbdpdAubDqj516ZVwMuGcbH69JuhnSJcL6HUo2A4M=;
+X-UUID: 49dc4ff74c7643aa9c70799fe0c93137-20200305
+Received: from mtkcas09.mediatek.inc [(172.21.101.178)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 822943832; Thu, 05 Mar 2020 17:09:55 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by mtkexhb02.mediatek.inc
+ (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 5 Mar
+ 2020 17:08:31 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 5 Mar 2020 17:09:07 +0800
+Message-ID: <1583399393.14250.5.camel@mtksdccf07>
+Subject: Re: [PATCH v1 1/1] scsi: ufs: Fix possible unclocked access to auto
+ hibern8 timer register
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     Can Guo <cang@codeaurora.org>
+CC:     <asutoshd@codeaurora.org>, <nguyenb@codeaurora.org>,
+        <hongwus@codeaurora.org>, <rnayak@codeaurora.org>,
+        <linux-scsi@vger.kernel.org>, <kernel-team@android.com>,
+        <saravanak@google.com>, <salyzyn@google.com>,
+        "Alim Akhtar" <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "Bart Van Assche" <bvanassche@acm.org>,
+        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        "open list" <linux-kernel@vger.kernel.org>
+Date:   Thu, 5 Mar 2020 17:09:53 +0800
+In-Reply-To: <1583398391-14273-1-git-send-email-cang@codeaurora.org>
+References: <1583398391-14273-1-git-send-email-cang@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-ATTN: My Dear
+SGkgQ2FuLA0KDQpPbiBUaHUsIDIwMjAtMDMtMDUgYXQgMDA6NTMgLTA4MDAsIENhbiBHdW8gd3Jv
+dGU6DQo+IEJlZm9yZSBhY2Nlc3MgYXV0byBoaWJuZXI4IHRpbWVyIHJlZ2lzdGVyLCBtYWtlIHN1
+cmUgcG93ZXIgYW5kIGNsb2NrIGFyZQ0KPiBwcm9wZXJseSBjb25maWd1cmVkIHRvIGF2b2lkIHVu
+Y2xvY2tlZCByZWdpc3RlciBhY2Nlc3MuDQo+IA0KPiBGaXhlczogYmE3YWY1ZWM1MTI2ICgic2Nz
+aTogdWZzOiBleHBvcnQgdWZzaGNkX2F1dG9faGliZXJuOF91cGRhdGUgZm9yIHZlbmRvciB1c2Fn
+ZSIpDQo+IFNpZ25lZC1vZmYtYnk6IENhbiBHdW8gPGNhbmdAY29kZWF1cm9yYS5vcmc+DQoNClRo
+YW5rcyBmb3IgZml4aW5nIHRoaXMhDQoNClJldmlld2VkLWJ5OiBTdGFubGV5IENodSA8c3Rhbmxl
+eS5jaHVAbWVkaWF0ZWsuY29tPg0KDQo=
 
-Good news,The BRITISH HIGH COMMISSION has actually verified and discovered
-that your payment has been unnecessarily Delayed by corrupt officials of the
-Company who are Trying to divert your fund of $4,700.000.00 Million
-into their private
-accounts. Therefore we have obtained an irrevocable payment guarantee on your
-Payment with the Bank to make your payment through our new ATM VISA CARD
-system which you can use to withdraw your money in any ATM MACHINE around your
-area.
-
-So we are here by inviting you to our office to pick up your ATM VISA CARD but
-if you cannot be able to come down here in our office in person be inform that
-you are going to pay for shipping fee of your ATM visa CARD, so if you are
-unable to come down here then you are required to update us so that we will
-proceed with the necessary arrangement for the delivery of your ATM VISA CARD.
-
-As of now be informed that all arrangement has been done and the ATM VISA CARD
-has be in your name, but to RE-ACTIVATE the ATM Card you have to forward your
-current information as requested below to the bank for the ATM Card re-
-activcation, then we will send you the ATM CARD for your immediate use.
-
-Here are the information you have to forward to the bank:
-1. Your Full Names:______
-2. Postal Address:_______
-3. Direct Cell Numbers:_______
-4. Sex:_____
-5.Age:_____
-6. Occupation:________
-7.Nationality:________
-8.whatsapp Number______
-
-Therefore you are advised to contact Bank accountant Manager Mrs.Susan Mark
-
-CONTACT PERSON: Mrs.Susan Mark
-E-mail:( mrs.suzanmark22@gmail.com )
-
-Mr David Nicholas
