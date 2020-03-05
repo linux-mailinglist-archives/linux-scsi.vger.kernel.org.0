@@ -2,77 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FEE17ABC6
-	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 18:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 365AC17AEDF
+	for <lists+linux-scsi@lfdr.de>; Thu,  5 Mar 2020 20:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728301AbgCERPy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 5 Mar 2020 12:15:54 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42766 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728289AbgCERPy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 5 Mar 2020 12:15:54 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C484E2146E;
-        Thu,  5 Mar 2020 17:15:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583428553;
-        bh=rQtpOupHwYghPhu9ux5RH9W43MapO5C+KildPvDQBqQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x2z3SBLNM8HobRstAUAriSD5qzukeHmpNNAQvj+CYqf5Wc0/L5W5iO6Kt20M0TBc6
-         vFhi5U2t7i76HQN7f5wOmePMky2PJHtOOUa6oVgRavrF9YBvDaUOHnegXQeLPL705Y
-         6Dpslf55a+ajNnyJD4saxH4watRDnfAL5lWhPles=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Igor Druzhinin <igor.druzhinin@citrix.com>,
-        Hannes Reinecke <hare@suse.de>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 10/19] scsi: libfc: free response frame from GPN_ID
-Date:   Thu,  5 Mar 2020 12:15:31 -0500
-Message-Id: <20200305171540.30250-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200305171540.30250-1-sashal@kernel.org>
-References: <20200305171540.30250-1-sashal@kernel.org>
+        id S1725963AbgCETUz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 5 Mar 2020 14:20:55 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:58716 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbgCETUz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 5 Mar 2020 14:20:55 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: krisman)
+        with ESMTPSA id 7CDEA29376E
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     open-iscsi@googlegroups.com, lduncan@suse.com, cleech@redhat.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        kernel@collabora.com, Khazhismel Kumykov <khazhy@google.com>,
+        Junho Ryu <jayr@google.com>
+Subject: Re: [PATCH v2] iscsi: Report connection state on sysfs
+Organization: Collabora
+References: <20200305153521.1374259-1-krisman@collabora.com>
+        <bc70bd6d-6d13-4d1c-8559-140411e361d9@acm.org>
+Date:   Thu, 05 Mar 2020 14:20:50 -0500
+In-Reply-To: <bc70bd6d-6d13-4d1c-8559-140411e361d9@acm.org> (Bart Van Assche's
+        message of "Thu, 5 Mar 2020 08:56:26 -0800")
+Message-ID: <854kv2bobx.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Igor Druzhinin <igor.druzhinin@citrix.com>
+Bart Van Assche <bvanassche@acm.org> writes:
 
-[ Upstream commit ff6993bb79b9f99bdac0b5378169052931b65432 ]
+> On 3/5/20 7:35 AM, Gabriel Krisman Bertazi wrote:
+>> +static const struct {
+>> +	int value;
+>> +	char *name;
+>> +} connection_state_names[] = {
+>> +	{ISCSI_CONN_UP, "up"},
+>> +	{ISCSI_CONN_DOWN, "down"},
+>> +	{ISCSI_CONN_FAILED, "failed"}
+>> +};
+>> +
+>> +static const char *connection_state_name(int state)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < ARRAY_SIZE(connection_state_names); i++) {
+>> +		if (connection_state_names[i].value == state)
+>> +			return connection_state_names[i].name;
+>> +	}
+>> +	return NULL;
+>> +}
+>> +
+>> +static ssize_t show_conn_state(struct device *dev,
+>> +			       struct device_attribute *attr, char *buf)
+>> +{
+>> +	struct iscsi_cls_conn *conn = iscsi_dev_to_conn(dev->parent);
+>> +
+>> +	return sprintf(buf, "%s\n", connection_state_name(conn->state));
+>> +}
+>> +static ISCSI_CLASS_ATTR(conn, state, S_IRUGO, show_conn_state,
+>> +			NULL);
+>
+> What has been changed in v2 compared to v1? Please always include a
+> changelog when posting a new version.
+>
+> Additionally, it seems like the comment I posted on v1 has not been
+> addressed?
 
-fc_disc_gpn_id_resp() should be the last function using it so free it here
-to avoid memory leak.
+Hi Bart,
 
-Link: https://lore.kernel.org/r/1579013000-14570-2-git-send-email-igor.druzhinin@citrix.com
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Signed-off-by: Igor Druzhinin <igor.druzhinin@citrix.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/libfc/fc_disc.c | 2 ++
- 1 file changed, 2 insertions(+)
+v2 no longer has the dependency for specific values for the state, as
+you requested.  It follows the pattern in similar places in the iscsi
+code.  Why would designated initializers be better than my solution?
 
-diff --git a/drivers/scsi/libfc/fc_disc.c b/drivers/scsi/libfc/fc_disc.c
-index bb9c1c0166439..28b50ab2fbb01 100644
---- a/drivers/scsi/libfc/fc_disc.c
-+++ b/drivers/scsi/libfc/fc_disc.c
-@@ -652,6 +652,8 @@ static void fc_disc_gpn_id_resp(struct fc_seq *sp, struct fc_frame *fp,
- 	}
- out:
- 	kref_put(&rdata->kref, fc_rport_destroy);
-+	if (!IS_ERR(fp))
-+		fc_frame_free(fp);
- }
- 
- /**
 -- 
-2.20.1
-
+Gabriel Krisman Bertazi
