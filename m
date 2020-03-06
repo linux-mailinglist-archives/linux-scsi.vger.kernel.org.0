@@ -2,204 +2,157 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E541D17C154
-	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2020 16:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6272517C42D
+	for <lists+linux-scsi@lfdr.de>; Fri,  6 Mar 2020 18:21:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727089AbgCFPKc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 6 Mar 2020 10:10:32 -0500
-Received: from mailout2.samsung.com ([203.254.224.25]:43626 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727085AbgCFPKb (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Mar 2020 10:10:31 -0500
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200306151030epoutp027068554ca263aee2feffe931e9084ef4~5v54wDYv71874718747epoutp02s
-        for <linux-scsi@vger.kernel.org>; Fri,  6 Mar 2020 15:10:30 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200306151030epoutp027068554ca263aee2feffe931e9084ef4~5v54wDYv71874718747epoutp02s
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1583507430;
-        bh=Uv4cai3N/6iGiG+frqpXISdvuE4Q8SV0BV8u68PjRt8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kq00mnAmiD9l5aDJ5ccZR+Vs23eWp7KCyLgmVwP0dtZ3mJBn3+aO3S+zhQmFiIW64
-         34M1JmtFt6wzk+XBEhgQeo8aHE26ErPy11+Mh4/UzfzIsIYKLPYZBlFSkvRgpjPPmB
-         CEpkTseasmVYmSqpuMeDmyOKYJzMZJ5RCDtwKqZw=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-        20200306151028epcas5p3d69f1b1620a40b2f7212e02e8c875574~5v53gmdVe2035720357epcas5p32;
-        Fri,  6 Mar 2020 15:10:28 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E1.14.20197.4E7626E5; Sat,  7 Mar 2020 00:10:28 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20200306151028epcas5p25ec9ccacedf49fa47ebb94bcdff42c54~5v53IuP8v2890128901epcas5p2K;
-        Fri,  6 Mar 2020 15:10:28 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200306151028epsmtrp25864d648bdb966e92e8102eb7bc59ca5~5v53H-DSy3206832068epsmtrp2g;
-        Fri,  6 Mar 2020 15:10:28 +0000 (GMT)
-X-AuditID: b6c32a4a-781ff70000014ee5-0a-5e6267e496ed
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        50.32.10238.4E7626E5; Sat,  7 Mar 2020 00:10:28 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200306151026epsmtip1e2fe9ac0d6c97df9c3a1f53f7a38116a~5v51p22VU0060400604epsmtip1V;
-        Fri,  6 Mar 2020 15:10:26 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Cc:     krzk@kernel.org, avri.altman@wdc.com, martin.petersen@oracle.com,
-        kwmad.kim@samsung.com, stanley.chu@mediatek.com,
-        cang@codeaurora.org, Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH 5/5] arm64: dts: Add node for ufs exynos7
-Date:   Fri,  6 Mar 2020 20:35:29 +0530
-Message-Id: <20200306150529.3370-6-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200306150529.3370-1-alim.akhtar@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrNIsWRmVeSWpSXmKPExsWy7bCmuu6T9KQ4g0+3tC0ezNvGZvHy51U2
-        i0/rl7FazD9yjtXi/PkN7BY3txxlsei+voPNYvnxf0wWrXuPsFss3XqT0YHL43JfL5PHplWd
-        bB4tJ/ezeHx8eovFo2/LKkaPz5vkPNoPdDMFsEdx2aSk5mSWpRbp2yVwZZxoOspasFO64ljT
-        OtYGxjeiXYycHBICJhJfv61i62Lk4hAS2M0oMW3mbnYI5xOjxMEZr5khnG+MEveur2GCafly
-        oYkVxBYS2Mso8XVqMURRC5PE8y+b2UESbALaEnenbwFrEBEIkLj0/iDYDmaBrYwSrdeWABVx
-        cAgLWErs++INUsMioCqx6MQkVpAwr4C1xMNuR4hd8hKrNxxgBrE5BWwkfiy6BXaQhMABNonZ
-        vyezQhS5SMx/vYAdwhaWeHV8C5QtJfH53V42kJkSAtkSPbuMIcI1EkvnHWOBsO0lDlyZwwJS
-        wiygKbF+lz5ImFmAT6L39xMmiE5eiY42IYhqVYnmd1ehOqUlJnZ3Qx3gIbH6/WI2SIj0M0rM
-        PSY9gVF2FsLQBYyMqxglUwuKc9NTi00LjPJSy/WKE3OLS/PS9ZLzczcxgpOEltcOxmXnfA4x
-        CnAwKvHwOlgnxQmxJpYVV+YeYpTgYFYS4RU2jY8T4k1JrKxKLcqPLyrNSS0+xCjNwaIkzjuJ
-        9WqMkEB6YklqdmpqQWoRTJaJg1OqgXH+VK7T6/+zV3VNSf9y6W/LhPBpNitbi7WqHO/zPjCf
-        zmTQKBh41qC9wvCd2rz+81HshquWHIt+smTPBXHr/wf0hE4WBHXprD+1ecu8jyfk5ZMuNBzm
-        /H2h5JjKDpZFjw99WKawzEJgjmfBixsNDK0TPMtCU1fKnvxRLi9w+NLXS0kd3N7Rhz4qsRRn
-        JBpqMRcVJwIAH12Hpw4DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDLMWRmVeSWpSXmKPExsWy7bCSnO6T9KQ4g/5DQhYP5m1js3j58yqb
-        xaf1y1gt5h85x2px/vwGdoubW46yWHRf38Fmsfz4PyaL1r1H2C2Wbr3J6MDlcbmvl8lj06pO
-        No+Wk/tZPD4+vcXi0bdlFaPH501yHu0HupkC2KO4bFJSczLLUov07RK4Mk40HWUt2Cldcaxp
-        HWsD4xvRLkZODgkBE4kvF5pYuxi5OIQEdjNKvF/fxAKRkJa4vnECO4QtLLHy33N2iKImJokf
-        U68xgiTYBLQl7k7fwgRiiwgESdxbsxZsErPAXkaJzUePATkcHMIClhL7vniD1LAIqEosOjEJ
-        LMwrYC3xsNsRYr68xOoNB5hBbE4BG4kfi26B2UJAJednbWCfwMi3gJFhFaNkakFxbnpusWGB
-        YV5quV5xYm5xaV66XnJ+7iZGcJhqae5gvLwk/hCjAAejEg/vDNukOCHWxLLiytxDjBIczEoi
-        vMKm8XFCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeZ/mHYsUEkhPLEnNTk0tSC2CyTJxcEo1MDKw
-        aq68tuLifalXRqmGte5WC7fGLRG62lHenxtp4L4xQ6Ng+aHDCbarMyR27b0dc+8C74LJLi2z
-        v1XlmTK8eausofVrjnZELfsTXtM/R4U/M3NsTX/te+2aVG+QwkE9n4V5aUn5uy6ULL6/6Mrx
-        BlOTWS/YWxgMbxxrDLm14ibfCx3O/9amIkosxRmJhlrMRcWJADQw0yJPAgAA
-X-CMS-MailID: 20200306151028epcas5p25ec9ccacedf49fa47ebb94bcdff42c54
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20200306151028epcas5p25ec9ccacedf49fa47ebb94bcdff42c54
-References: <20200306150529.3370-1-alim.akhtar@samsung.com>
-        <CGME20200306151028epcas5p25ec9ccacedf49fa47ebb94bcdff42c54@epcas5p2.samsung.com>
+        id S1727123AbgCFRVC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 6 Mar 2020 12:21:02 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16242 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727030AbgCFRVC (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 6 Mar 2020 12:21:02 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 026GtB83022411;
+        Fri, 6 Mar 2020 12:20:57 -0500
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ykk059c8c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Mar 2020 12:20:57 -0500
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 026HKXKg031418;
+        Fri, 6 Mar 2020 17:20:56 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma02wdc.us.ibm.com with ESMTP id 2yffk7cxkw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Mar 2020 17:20:56 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 026HKu7952691392
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 Mar 2020 17:20:56 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 52D72B2065;
+        Fri,  6 Mar 2020 17:20:56 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D934BB2066;
+        Fri,  6 Mar 2020 17:20:55 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.40.195.89])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Fri,  6 Mar 2020 17:20:55 +0000 (GMT)
+From:   wenxiong@linux.vnet.ibm.com
+To:     linux-scsi@vger.kernel.org
+Cc:     James.Bottomley@hansenpartnership.com, martin.petersen@oracle.com,
+        brking@linux.vnet.ibm.com, wenxiong@us.ibm.com,
+        Wen Xiong <wenxiong@linux.vnet.ibm.com>
+Subject: [PATCH] ipr: Kernel panic - not syncing:softlockup when rescan devices in petitboot shell
+Date:   Fri,  6 Mar 2020 09:57:28 -0600
+Message-Id: <1583510248-23672-1-git-send-email-wenxiong@linux.vnet.ibm.com>
+X-Mailer: git-send-email 1.6.0.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-06_05:2020-03-06,2020-03-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
+ adultscore=0 mlxlogscore=999 suspectscore=1 spamscore=0 impostorscore=0
+ phishscore=0 priorityscore=1501 clxscore=1011 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003060111
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Adding dt node foe UFS and UFS-PHY for exynos7 SoC.
+From: Wen Xiong <wenxiong@linux.vnet.ibm.com>
 
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+When trying to rescan disks in petitboot shell, hitting the following
+softlockup stacktrace:
+
+Kernel panic - not syncing: System is deadlocked on memory
+[  241.223394] CPU: 32 PID: 693 Comm: sh Not tainted 5.4.16-openpower1 #1
+[  241.223406] Call Trace:
+[  241.223415] [c0000003f07c3180] [c000000000493fc4] dump_stack+0xa4/0xd8 (unreliable)
+[  241.223432] [c0000003f07c31c0] [c00000000007d4ac] panic+0x148/0x3cc
+[  241.223446] [c0000003f07c3260] [c000000000114b10] out_of_memory+0x468/0x4c4
+[  241.223461] [c0000003f07c3300] [c0000000001472b0] __alloc_pages_slowpath+0x594/0x6d8
+[  241.223476] [c0000003f07c3420] [c00000000014757c] __alloc_pages_nodemask+0x188/0x1a4
+[  241.223492] [c0000003f07c34a0] [c000000000153e10] alloc_pages_current+0xcc/0xd8
+[  241.223508] [c0000003f07c34e0] [c0000000001577ac] alloc_slab_page+0x30/0x98
+[  241.223524] [c0000003f07c3520] [c0000000001597fc] new_slab+0x138/0x40c
+[  241.223538] [c0000003f07c35f0] [c00000000015b204] ___slab_alloc+0x1e4/0x404
+[  241.223552] [c0000003f07c36c0] [c00000000015b450] __slab_alloc+0x2c/0x48
+[  241.223566] [c0000003f07c36f0] [c00000000015b754] kmem_cache_alloc_node+0x9c/0x1b4
+[  241.223582] [c0000003f07c3760] [c000000000218c48] blk_alloc_queue_node+0x34/0x270
+[  241.223599] [c0000003f07c37b0] [c000000000226574] blk_mq_init_queue+0x2c/0x78
+[  241.223615] [c0000003f07c37e0] [c0000000002ff710] scsi_mq_alloc_queue+0x28/0x70
+[  241.223631] [c0000003f07c3810] [c0000000003005b8] scsi_alloc_sdev+0x184/0x264
+[  241.223647] [c0000003f07c38a0] [c000000000300ba0] scsi_probe_and_add_lun+0x288/0xa3c
+[  241.223663] [c0000003f07c3a00] [c000000000301768] __scsi_scan_target+0xcc/0x478
+[  241.223679] [c0000003f07c3b20] [c000000000301c64] scsi_scan_channel.part.9+0x74/0x7c
+[  241.223696] [c0000003f07c3b70] [c000000000301df4] scsi_scan_host_selected+0xe0/0x158
+[  241.223712] [c0000003f07c3bd0] [c000000000303f04] store_scan+0x104/0x114
+[  241.223727] [c0000003f07c3cb0] [c0000000002d5ac4] dev_attr_store+0x30/0x4c
+[  241.223741] [c0000003f07c3cd0] [c0000000001dbc34] sysfs_kf_write+0x64/0x78
+[  241.223756] [c0000003f07c3cf0] [c0000000001da858] kernfs_fop_write+0x170/0x1b8
+[  241.223773] [c0000003f07c3d40] [c0000000001621fc] __vfs_write+0x34/0x60
+[  241.223787] [c0000003f07c3d60] [c000000000163c2c] vfs_write+0xa8/0xcc
+[  241.223802] [c0000003f07c3db0] [c000000000163df4] ksys_write+0x70/0xbc
+[  241.223816] [c0000003f07c3e20] [c00000000000b40c] system_call+0x5c/0x68
+
+As a part of the scan process Linux will allocate and configure a scsi_device
+for each target to be scanned. If the device is not present, then the scsi_device
+is torn down. As a part of scsi_device teardown a workqueue item will be scheduled
+and the lockups we see are because there's 250k workqueue items to be processed.
+Accoding to the specification of SIS-64 sas controller, max_channel could be
+decreased on SIS-64 adapters to 4.
+
+The patch fixes softlock issue.
+
+Thanks for Oliver Halloran's help with debugging and explanation!
+
+Signed-off-by: Wen Xiong <wenxiong@linux.vnet.ibm.com>
 ---
- .../boot/dts/exynos/exynos7-espresso.dts      | 16 ++++++
- arch/arm64/boot/dts/exynos/exynos7.dtsi       | 56 ++++++++++++++++++-
- 2 files changed, 70 insertions(+), 2 deletions(-)
+ drivers/scsi/ipr.c |    3 ++-
+ drivers/scsi/ipr.h |    1 +
+ 2 files changed, 3 insertions(+), 1 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
-index 7af288fa9475..dee5a3ae7de3 100644
---- a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
-+++ b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
-@@ -410,3 +410,19 @@
- 	vbus-supply = <&usb30_vbus_reg>;
- 	vbus-boost-supply = <&usb3drd_boost_5v>;
- };
-+
-+&ufs {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ufs_rst_n &ufs_refclk_out>;
-+	ufs,pwr-attr-mode = "FAST";
-+	ufs,pwr-attr-lane = <2>;
-+	ufs,pwr-attr-gear = <2>;
-+	ufs,pwr-attr-hs-series = "HS_rate_b";
-+	ufs-rx-adv-fine-gran-sup_en = <1>;
-+	ufs-rx-adv-fine-gran-step = <3>;
-+	ufs-rx-adv-min-activate-time-cap = <9>;
-+	ufs-pa-granularity = <6>;
-+	ufs-pa-tacctivate = <3>;
-+	ufs-pa-hibern8time = <20>;
-+};
-diff --git a/arch/arm64/boot/dts/exynos/exynos7.dtsi b/arch/arm64/boot/dts/exynos/exynos7.dtsi
-index 5558045637ac..3edf63d18873 100644
---- a/arch/arm64/boot/dts/exynos/exynos7.dtsi
-+++ b/arch/arm64/boot/dts/exynos/exynos7.dtsi
-@@ -220,9 +220,14 @@
- 			#clock-cells = <1>;
- 			clocks = <&fin_pll>, <&clock_top1 DOUT_ACLK_FSYS1_200>,
- 				 <&clock_top1 DOUT_SCLK_MMC0>,
--				 <&clock_top1 DOUT_SCLK_MMC1>;
-+				 <&clock_top1 DOUT_SCLK_MMC1>,
-+				 <&clock_top1 DOUT_SCLK_UFSUNIPRO20>,
-+				 <&clock_top1 DOUT_SCLK_PHY_FSYS1>,
-+				 <&clock_top1 DOUT_SCLK_PHY_FSYS1_26M>;
- 			clock-names = "fin_pll", "dout_aclk_fsys1_200",
--				      "dout_sclk_mmc0", "dout_sclk_mmc1";
-+				      "dout_sclk_mmc0", "dout_sclk_mmc1",
-+				      "dout_sclk_ufsunipro20", "dout_sclk_phy_fsys1",
-+				      "dout_sclk_phy_fsys1_26m";
- 		};
+diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+index ae45cbe..cd8db13 100644
+--- a/drivers/scsi/ipr.c
++++ b/drivers/scsi/ipr.c
+@@ -9950,6 +9950,7 @@ static void ipr_init_ioa_cfg(struct ipr_ioa_cfg *ioa_cfg,
+ 	ioa_cfg->max_devs_supported = ipr_max_devs;
  
- 		serial_0: serial@13630000 {
-@@ -634,6 +639,53 @@
- 				phy-names = "usb2-phy", "usb3-phy";
- 			};
- 		};
-+
-+		ufs: ufs@15570000 {
-+			compatible ="samsung,exynos7-ufs";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges;
-+			reg =
-+				<0x15570000 0x100>,  /* 0: HCI standard */
-+				<0x15570100 0x100>,  /* 1: Vendor specificed */
-+				<0x15571000 0x200>,  /* 2: UNIPRO */
-+				<0x15572000 0x300>;  /* 3: UFS protector */
-+			reg-names = "hci", "vs_hci", "unipro", "ufsp";
-+			interrupts = <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks =
-+				/* core clock */
-+				<&clock_fsys1 ACLK_UFS20_LINK>,
-+				/* unipro clocks */
-+				<&clock_fsys1 SCLK_UFSUNIPRO20_USER>;
-+			clock-names =
-+				/* core clocks */
-+				"core_clk",
-+				/* unipro clocks */
-+				"sclk_unipro_main";
-+			freq-table-hz = <0 0>, <0 0>;
-+			pclk-freq-avail-range = <70000000 133000000>;
-+			ufs,pwr-local-l2-timer = <8000 28000 20000>;
-+			ufs,pwr-remote-l2-timer = <12000 32000 16000>;
-+			phys = <&ufs_phy>;
-+			phy-names = "ufs-phy";
-+			status = "disabled";
-+		};
-+
-+		ufs_phy: ufs-phy@0x15571800 {
-+			compatible = "samsung,exynos7-ufs-phy";
-+			reg = <0x15571800 0x240>;
-+			reg-names = "phy-pma";
-+			samsung,pmu-syscon = <&pmu_system_controller>;
-+			#phy-cells = <0>;
-+			clocks =
-+				/* refclk clocks */
-+				<&clock_fsys1 MOUT_FSYS1_PHYCLK_SEL1>,
-+				<&clock_top1 CLK_SCLK_PHY_FSYS1_26M>;
-+			clock-names =
-+				/* refclk clocks */
-+				"ref_clk_parent",
-+				"ref_clk";
-+		};
- 	};
+ 	if (ioa_cfg->sis64) {
++		host->max_channel = IPR_MAX_SIS64_BUSES;
+ 		host->max_id = IPR_MAX_SIS64_TARGETS_PER_BUS;
+ 		host->max_lun = IPR_MAX_SIS64_LUNS_PER_TARGET;
+ 		if (ipr_max_devs > IPR_MAX_SIS64_DEVS)
+@@ -9958,6 +9959,7 @@ static void ipr_init_ioa_cfg(struct ipr_ioa_cfg *ioa_cfg,
+ 					   + ((sizeof(struct ipr_config_table_entry64)
+ 					       * ioa_cfg->max_devs_supported)));
+ 	} else {
++		host->max_channel = IPR_VSET_BUS;
+ 		host->max_id = IPR_MAX_NUM_TARGETS_PER_BUS;
+ 		host->max_lun = IPR_MAX_NUM_LUNS_PER_TARGET;
+ 		if (ipr_max_devs > IPR_MAX_PHYSICAL_DEVS)
+@@ -9967,7 +9969,6 @@ static void ipr_init_ioa_cfg(struct ipr_ioa_cfg *ioa_cfg,
+ 					       * ioa_cfg->max_devs_supported)));
+ 	}
  
- 	timer {
+-	host->max_channel = IPR_VSET_BUS;
+ 	host->unique_id = host->host_no;
+ 	host->max_cmd_len = IPR_MAX_CDB_LEN;
+ 	host->can_queue = ioa_cfg->max_cmds;
+diff --git a/drivers/scsi/ipr.h b/drivers/scsi/ipr.h
+index a67baeb..b97aa9a 100644
+--- a/drivers/scsi/ipr.h
++++ b/drivers/scsi/ipr.h
+@@ -1300,6 +1300,7 @@ struct ipr_resource_entry {
+ #define IPR_ARRAY_VIRTUAL_BUS			0x1
+ #define IPR_VSET_VIRTUAL_BUS			0x2
+ #define IPR_IOAFP_VIRTUAL_BUS			0x3
++#define IPR_MAX_SIS64_BUSES			0x4
+ 
+ #define IPR_GET_RES_PHYS_LOC(res) \
+ 	(((res)->bus << 24) | ((res)->target << 8) | (res)->lun)
 -- 
-2.17.1
+1.6.0.2
 
