@@ -2,151 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE1617E458
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Mar 2020 17:11:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D113B17E477
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Mar 2020 17:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727174AbgCIQLS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Mar 2020 12:11:18 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:35466 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727193AbgCIQLR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Mar 2020 12:11:17 -0400
-Received: by mail-wm1-f65.google.com with SMTP id m3so113506wmi.0;
-        Mon, 09 Mar 2020 09:11:15 -0700 (PDT)
+        id S1727174AbgCIQRP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Mar 2020 12:17:15 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:38363 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727070AbgCIQRO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Mar 2020 12:17:14 -0400
+Received: by mail-pf1-f193.google.com with SMTP id z5so145781pfn.5
+        for <linux-scsi@vger.kernel.org>; Mon, 09 Mar 2020 09:17:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Xun5inmSt0p8/3AqSHJwkgCG5OoazJFfQobHNuz3kAY=;
-        b=Jjlu8YJyTqfdUdFXfoYZJeoOd0NJZ6KHvXfpqFClpBhlOPPA5CSC5X1C3PFtd5ANPR
-         Qm8TBLIoNoosAZ1slMHvh0HAtiDTBJ72bxI++u+DAzOMVbx1FYY2rPY5voKLKylTyoK3
-         oCkOVtrfF3hEv4dZFL9hnol34k85rVRCo8dkZgSfbYCpqFY5JjR9uOMT0W1CW7ywtJzC
-         RcakjDqDnLl5ZBD+rxWzVeK6M7VSobm7R7Mayxtvq5pKGekQD6VQ6IyVxDDA/WbhhmVe
-         i50+RolhUxZB0XOWgfG9YpF83T7RvoB6FSn1/xtNLTFL3Iek4pK6yyrZmLPdzcWJ7VjQ
-         Cajw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ach1ug4HnQhBRQgwelQXzdDvGo1MBpH4vwjQjnj3OV8=;
+        b=P1K/Clw0j4yQjl9bANVv+1u0p8x4dC1ggm/ZPm3xPYNHOTOQ44Uv+zmjZI99zCj2mg
+         6tcbOzKJxB9d7mlwqRGGmhX2jO5DVylLOKiLVbUpbLF1AbooQyNQdCzSprjC5HsGfS+s
+         8uvPMIaR7HvIqL3f4pqG9pb7eyyx2kryyopsM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Xun5inmSt0p8/3AqSHJwkgCG5OoazJFfQobHNuz3kAY=;
-        b=LXK5XmucPcPbuF2pwrNAkNOOvDfBubuyIBrn41r+9QTG91EifTsvjyzhku+4wVXan8
-         MTenv7t2zIO7d3lJlr1coBsYZMBdiidqR1nQqQUKCVElxZT7t40G2yZ3DhHibiVCTYL6
-         /PSTHtqM0/dp2emGj2UGOAvJz6dwfP6LsV5Q8v444xx8ovLRdojck33U7pwtK0HhQY+r
-         kvHw3RVVJDkWkUwHaUqJmB0VdyzRtKH3pbYepk54oS3o+gNdxEQLU9t99O/ztGyC24uB
-         i+/Se1enxnxPPddKnrW9V/EfGKdu35Dj7mnclfEWw9kpiDlkMNJN/NvwW4ysdFgdVo1p
-         U+OA==
-X-Gm-Message-State: ANhLgQ037jQ3hwY6nj42We2udaetYM8bDkCktPrpiVH9EzzugVyBJ8N/
-        KyYs29Na/ep5nZz++aG2uSI=
-X-Google-Smtp-Source: ADFU+vus+HoTa9bUQCpqaYb5BvtifqGEuUA/zX2pe3bNXXliTpzv3Rra2aycdm+orpXIdHaZWWv1Ig==
-X-Received: by 2002:a1c:25c1:: with SMTP id l184mr55026wml.122.1583770275271;
-        Mon, 09 Mar 2020 09:11:15 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5bee49.dynamic.kabel-deutschland.de. [95.91.238.73])
-        by smtp.gmail.com with ESMTPSA id s14sm50104932wrv.44.2020.03.09.09.11.14
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ach1ug4HnQhBRQgwelQXzdDvGo1MBpH4vwjQjnj3OV8=;
+        b=cQjAYyfHg5z/lEhHHcO6GubChNgNk6vPdKyI/HUXCVBJgkRA45itOVUU1Pe7sl0BbW
+         LRMAZxOGFCZXs8+S4vRe+4WJJn83r0qZu0DTowruILNPwco5kq3lKrAC9/ExaFwkxWZI
+         W8lKv1v5fo6zptiIhZNvDg7YaOMXUCHhKMVcsZBV0rzvirYKKl+/kSMXXJkwBbewDSa7
+         cHVTNFN0+2jRtnik3WPFr8E9LCLMZyXZ3kwd8ibU2XhWlNURBST+92n0yhJ5uXQLsllL
+         TxlaDx+x+txSInHsCnPF/HEC8AYl+VB44ml1ykM2hTSrSpJevqrvCUEiUs8Z/UROUeUL
+         oKDQ==
+X-Gm-Message-State: ANhLgQ3NPk7LFl6JGT3yodMRFFMacTXxDlBgLIzonC72tMedqvxHBXHR
+        bqJAWuFxlmpn61lzRWKx1DS7Vg==
+X-Google-Smtp-Source: ADFU+vsoPPUv1U4ocsflojRddWHb1IxRbaKL5licxEdJanMiBKUpvfzu+p0hZqzasAgtIJ+7HwJNeQ==
+X-Received: by 2002:a63:f757:: with SMTP id f23mr17032725pgk.223.1583770633861;
+        Mon, 09 Mar 2020 09:17:13 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 64sm45559100pfd.48.2020.03.09.09.17.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 09:11:14 -0700 (PDT)
-From:   huobean@gmail.com
-X-Google-Original-From: beanhuo@micron.com
-To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
-        asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/1] scsi: ufs: fix LRB pointer incorrect initialization issue
-Date:   Mon,  9 Mar 2020 17:10:57 +0100
-Message-Id: <20200309161057.9897-2-beanhuo@micron.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200309161057.9897-1-beanhuo@micron.com>
-References: <20200309161057.9897-1-beanhuo@micron.com>
+        Mon, 09 Mar 2020 09:17:13 -0700 (PDT)
+Date:   Mon, 9 Mar 2020 09:17:12 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Phong Tran <tranmanphong@gmail.com>
+Cc:     john.garry@huawei.com, aacraid@microsemi.com, bvanassche@acm.org,
+        jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com
+Subject: Re: [PATCH v3] scsi: aacraid: cleanup warning cast-function-type
+Message-ID: <202003090917.A3B8294@keescook>
+References: <9a0e6373-b4a3-0822-3b65-e3b326266832@huawei.com>
+ <20200309155319.12658-1-tranmanphong@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200309155319.12658-1-tranmanphong@gmail.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+On Mon, Mar 09, 2020 at 10:53:19PM +0700, Phong Tran wrote:
+> Make the aacraid driver -Wcast-function-type clean
+> Report by: https://github.com/KSPP/linux/issues/20
+> 
+> drivers/scsi/aacraid/aachba.c:813:23:
+> warning: cast between incompatible function types from
+> 'int (*)(struct scsi_cmnd *)' to 'void (*)(struct scsi_cmnd *)'
+> [-Wcast-function-type]
+> 
+> Reviewed-by: Bart van Assche <bvanassche@acm.org>
+> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
 
-There are two issues with the ufshcd_init_lrb() call in
-ufshcd_init_cmd_priv():
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-- cmd->tag is set from inside scsi_mq_prep_fn() and hence is not yet set
-  when ufshcd_init_cmd_priv() is set.
-- Inside ufshcd_init_cmd_priv() the tag can only be derived from the SCSI
-  command pointer if no scheduler has been associated with the UFS block
-  device. If no scheduler is associated with a block device, the
-  relationship between hctx->tags->static_rqs[] and rq->tag is static.
-  If a scheduler has been configured, a single tag can be associated
-  with a different struct request if a request is reallocated.
+-Kees
 
-Fixes: 34656dda81ac ("ufs: Let the SCSI core allocate per-command UFS data")
+> ---
+>  drivers/scsi/aacraid/aachba.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
+> index 33dbc051bff9..ebfb42af67f5 100644
+> --- a/drivers/scsi/aacraid/aachba.c
+> +++ b/drivers/scsi/aacraid/aachba.c
+> @@ -798,6 +798,11 @@ static int aac_probe_container_callback1(struct scsi_cmnd * scsicmd)
+>  	return 0;
+>  }
+>  
+> +static void aac_probe_container_scsi_done(struct scsi_cmnd *scsi_cmnd)
+> +{
+> +	aac_probe_container_callback1(scsi_cmnd);
+> +}
+> +
+>  int aac_probe_container(struct aac_dev *dev, int cid)
+>  {
+>  	struct scsi_cmnd *scsicmd = kmalloc(sizeof(*scsicmd), GFP_KERNEL);
+> @@ -810,7 +815,7 @@ int aac_probe_container(struct aac_dev *dev, int cid)
+>  		return -ENOMEM;
+>  	}
+>  	scsicmd->list.next = NULL;
+> -	scsicmd->scsi_done = (void (*)(struct scsi_cmnd*))aac_probe_container_callback1;
+> +	scsicmd->scsi_done = aac_probe_container_scsi_done;
+>  
+>  	scsicmd->device = scsidev;
+>  	scsidev->sdev_state = 0;
+> -- 
+> 2.20.1
+> 
 
-v2-v3:
-    - delete ufshcd_init_cmd_priv()
-    - change commit message
-
-Signed-off-by: Bean Huo <beanhuo@micron.com>
----
- drivers/scsi/ufs/ufshcd.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index e987fa3a77c7..dfb44e8cc9dd 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -2471,6 +2471,8 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
- 		BUG();
- 	}
- 
-+	ufshcd_init_lrb(hba, lrbp, tag);
-+
- 	WARN_ON_ONCE(!ufshcd_is_scsi(cmd->request));
- 
- 	if (!down_read_trylock(&hba->clk_scaling_lock))
-@@ -2707,6 +2709,7 @@ static int ufshcd_exec_dev_cmd(struct ufs_hba *hba,
- 
- 	init_completion(&wait);
- 	lrbp = ufshcd_req_to_lrb(req);
-+	ufshcd_init_lrb(hba, lrbp, tag);
- 	err = ufshcd_compose_dev_cmd(hba, lrbp, cmd_type, tag);
- 	if (unlikely(err))
- 		goto out_put_tag;
-@@ -3504,14 +3507,6 @@ static void ufshcd_host_memory_configure(struct ufs_hba *hba)
- 	}
- }
- 
--static int ufshcd_init_cmd_priv(struct Scsi_Host *shost, struct scsi_cmnd *cmd)
--{
--	struct ufs_hba *hba = shost_priv(shost);
--
--	ufshcd_init_lrb(hba, scsi_cmd_priv(cmd), cmd->tag);
--	return 0;
--}
--
- /**
-  * ufshcd_dme_link_startup - Notify Unipro to perform link startup
-  * @hba: per adapter instance
-@@ -4834,6 +4829,7 @@ static void __ufshcd_transfer_req_compl(struct ufs_hba *hba,
- 			continue;
- 		cmd = blk_mq_rq_to_pdu(req);
- 		lrbp = scsi_cmd_priv(cmd);
-+		ufshcd_init_lrb(hba, lrbp, index);
- 		if (ufshcd_is_scsi(req)) {
- 			ufshcd_add_command_trace(hba, req, "complete");
- 			result = ufshcd_transfer_rsp_status(hba, lrbp);
-@@ -5900,6 +5896,7 @@ static int ufshcd_issue_devman_upiu_cmd(struct ufs_hba *hba,
- 
- 	init_completion(&wait);
- 	lrbp = ufshcd_req_to_lrb(req);
-+	ufshcd_init_lrb(hba, lrbp, tag);
- 	lrbp->sense_bufflen = 0;
- 	lrbp->sense_buffer = NULL;
- 	lrbp->task_tag = tag;
-@@ -7180,7 +7177,6 @@ static struct scsi_host_template ufshcd_driver_template = {
- 	.module			= THIS_MODULE,
- 	.name			= UFSHCD,
- 	.proc_name		= UFSHCD,
--	.init_cmd_priv		= ufshcd_init_cmd_priv,
- 	.queuecommand		= ufshcd_queuecommand,
- 	.slave_alloc		= ufshcd_slave_alloc,
- 	.slave_configure	= ufshcd_slave_configure,
 -- 
-2.17.1
-
+Kees Cook
