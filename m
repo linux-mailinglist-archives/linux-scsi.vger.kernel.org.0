@@ -2,96 +2,60 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CC617DC58
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Mar 2020 10:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B5F17DE99
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Mar 2020 12:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726383AbgCIJXx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Mar 2020 05:23:53 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2518 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725956AbgCIJXx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 9 Mar 2020 05:23:53 -0400
-Received: from lhreml709-cah.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id DA1F5627232FA6AA24A9;
-        Mon,  9 Mar 2020 09:23:51 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml709-cah.china.huawei.com (10.201.108.32) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 9 Mar 2020 09:23:51 +0000
-Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 9 Mar 2020
- 09:23:51 +0000
-Subject: Re: [PATCH v2] scsi: aacraid: fix -Wcast-function-type
-To:     Phong Tran <tranmanphong@gmail.com>, <aacraid@microsemi.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <bvanassche@acm.org>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <keescook@chromium.org>
-References: <20200307132103.4687-1-tranmanphong@gmail.com>
- <20200308020143.9351-1-tranmanphong@gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <9a0e6373-b4a3-0822-3b65-e3b326266832@huawei.com>
-Date:   Mon, 9 Mar 2020 09:23:50 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1726402AbgCILUP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Mar 2020 07:20:15 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:40914 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726384AbgCILUP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Mar 2020 07:20:15 -0400
+Received: by mail-lj1-f194.google.com with SMTP id 19so6651128ljj.7
+        for <linux-scsi@vger.kernel.org>; Mon, 09 Mar 2020 04:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=7t8iddbb9VV9a2sHO1Qgk4VikfKp7yuh0uO5M12RquQ=;
+        b=bOcC7VWz1auzajA9E8Q3zWjjpYFEDbW2wjUpd4bTafA3JOv6M+psa1RVqD06C4t3lY
+         JP/m3dZMdgINAzTMNrBoVUbf+3/EgjZzkSxQKwRbyZBA8GbXvgbJN3F3s9eSkPinZt50
+         ry+tatL3x4okHQVQy15H7/cZYp+qWFgVOXjgPB7Q0eciQcwUZXwg1UcgbaVeCUBwagfS
+         kHQ2vXtsTUbDQwhxpoI+8knufVB4A+J3bFn1M1gj+cOdTTWFWxe7uAoWbZrnbH1sySr/
+         2CZvOgvKtSjnl8Nx+bHS3GOSISgq7ZUR3zQgBE0DOfcivm1M/1LbnWNnjI5baSr9CxQC
+         aaYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=7t8iddbb9VV9a2sHO1Qgk4VikfKp7yuh0uO5M12RquQ=;
+        b=rEYBD7x1OY3fglqVtsS3mO3KmWNb5Vlz4Myo9LJeJgPP11WSVuOp8F9PWa+2JDEt+4
+         1m7WR0qQtyF8HslFSu/MdfmyjBoxGuQdEqICG3D6N3sw8qFGpRsxBEQH/py6Cxss9LjU
+         4ka1r3pqghNGUaG5a1Xu9yNCw9e92wRIsQCsXmi2NAupGtC45+tFz7SWzuQ4X2d8Q6E+
+         MJ908DUqV+4+zIhYewbU9DqDsgYdGruewrxmGgNTxXmm9mPR+ZPqLdjjv/7HuQp/Qts2
+         GdbjSoOS1H0VMZfYuAiBSZcG/2IP7xG9C5ZJUzu61QOvI79abqTZuvrlnov890kGiXq6
+         WLjg==
+X-Gm-Message-State: ANhLgQ0TyH87f9DrpL+Z1JHl4cxKU2gSCK6OG1d9eslXcmN+2yl8uh7v
+        bYZyslEz6fmB1FmN7sPraYDQFlIbC/IzamuW7Zk=
+X-Google-Smtp-Source: ADFU+vvDh6jI6uiz3RwKlvgxu1XlSvNrNyoDhTbVL8R3U9EWjp1e6e5MOk686wA3OQeG9tVSwMy8pr9U7ZkGagNc7kE=
+X-Received: by 2002:a2e:890b:: with SMTP id d11mr9864873lji.79.1583752813203;
+ Mon, 09 Mar 2020 04:20:13 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200308020143.9351-1-tranmanphong@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.226.45]
-X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Received: by 2002:a2e:7218:0:0:0:0:0 with HTTP; Mon, 9 Mar 2020 04:20:12 -0700 (PDT)
+Reply-To: umhk62@gmail.com
+From:   Halvorson Kertes <martinahenning69@gmail.com>
+Date:   Mon, 9 Mar 2020 13:20:12 +0200
+Message-ID: <CAN77ts=D=3N7Xx1uGdnMgBGnxJ0J5Tk5Zvo8GMKPRE9qcgbNzA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 08/03/2020 02:01, Phong Tran wrote:
-> correct usage prototype of callback scsi_cmnd.scsi_done()
-> Report by: https://github.com/KSPP/linux/issues/20
-> 
-
-no harm to add:
-
-drivers/scsi/aacraid/aachba.c:813:23: warning: cast between incompatible 
-function types from ‘int (*)(struct scsi_cmnd *)’ to ‘void (*)(struct 
-scsi_cmnd *)’ [-Wcast-function-type]
-
-
-> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
-> ---
->   drivers/scsi/aacraid/aachba.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-> index 33dbc051bff9..20ca3647d211 100644
-> --- a/drivers/scsi/aacraid/aachba.c
-> +++ b/drivers/scsi/aacraid/aachba.c
-> @@ -798,6 +798,11 @@ static int aac_probe_container_callback1(struct scsi_cmnd * scsicmd)
->   	return 0;
->   }
->   
-> +static void  aac_probe_container_scsi_done(struct scsi_cmnd *scsi_cmnd)
-
-supernit: double whitespace
-
-> +{
-> +	aac_probe_container_callback1(scsi_cmnd);
-> +}
-> +
->   int aac_probe_container(struct aac_dev *dev, int cid)
->   {
->   	struct scsi_cmnd *scsicmd = kmalloc(sizeof(*scsicmd), GFP_KERNEL);
-> @@ -810,7 +815,7 @@ int aac_probe_container(struct aac_dev *dev, int cid)
->   		return -ENOMEM;
->   	}
->   	scsicmd->list.next = NULL;
-> -	scsicmd->scsi_done = (void (*)(struct scsi_cmnd*))aac_probe_container_callback1;
-> +	scsicmd->scsi_done = aac_probe_container_scsi_done;
->   
->   	scsicmd->device = scsidev;
->   	scsidev->sdev_state = 0;
-> 
-
+Good day ,
+ I contacted you in regard to $6.3M of a deceased client which my bank
+wants to Confiscate. Could you act as the beneficiary in the equity of
+60% 40%. If interested do get back.
+Thanks.
+Halvorson Kertes
