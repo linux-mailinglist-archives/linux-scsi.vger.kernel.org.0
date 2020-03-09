@@ -2,60 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B5F17DE99
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Mar 2020 12:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB57C17E07E
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Mar 2020 13:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgCILUP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Mar 2020 07:20:15 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40914 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726384AbgCILUP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Mar 2020 07:20:15 -0400
-Received: by mail-lj1-f194.google.com with SMTP id 19so6651128ljj.7
-        for <linux-scsi@vger.kernel.org>; Mon, 09 Mar 2020 04:20:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=7t8iddbb9VV9a2sHO1Qgk4VikfKp7yuh0uO5M12RquQ=;
-        b=bOcC7VWz1auzajA9E8Q3zWjjpYFEDbW2wjUpd4bTafA3JOv6M+psa1RVqD06C4t3lY
-         JP/m3dZMdgINAzTMNrBoVUbf+3/EgjZzkSxQKwRbyZBA8GbXvgbJN3F3s9eSkPinZt50
-         ry+tatL3x4okHQVQy15H7/cZYp+qWFgVOXjgPB7Q0eciQcwUZXwg1UcgbaVeCUBwagfS
-         kHQ2vXtsTUbDQwhxpoI+8knufVB4A+J3bFn1M1gj+cOdTTWFWxe7uAoWbZrnbH1sySr/
-         2CZvOgvKtSjnl8Nx+bHS3GOSISgq7ZUR3zQgBE0DOfcivm1M/1LbnWNnjI5baSr9CxQC
-         aaYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=7t8iddbb9VV9a2sHO1Qgk4VikfKp7yuh0uO5M12RquQ=;
-        b=rEYBD7x1OY3fglqVtsS3mO3KmWNb5Vlz4Myo9LJeJgPP11WSVuOp8F9PWa+2JDEt+4
-         1m7WR0qQtyF8HslFSu/MdfmyjBoxGuQdEqICG3D6N3sw8qFGpRsxBEQH/py6Cxss9LjU
-         4ka1r3pqghNGUaG5a1Xu9yNCw9e92wRIsQCsXmi2NAupGtC45+tFz7SWzuQ4X2d8Q6E+
-         MJ908DUqV+4+zIhYewbU9DqDsgYdGruewrxmGgNTxXmm9mPR+ZPqLdjjv/7HuQp/Qts2
-         GdbjSoOS1H0VMZfYuAiBSZcG/2IP7xG9C5ZJUzu61QOvI79abqTZuvrlnov890kGiXq6
-         WLjg==
-X-Gm-Message-State: ANhLgQ0TyH87f9DrpL+Z1JHl4cxKU2gSCK6OG1d9eslXcmN+2yl8uh7v
-        bYZyslEz6fmB1FmN7sPraYDQFlIbC/IzamuW7Zk=
-X-Google-Smtp-Source: ADFU+vvDh6jI6uiz3RwKlvgxu1XlSvNrNyoDhTbVL8R3U9EWjp1e6e5MOk686wA3OQeG9tVSwMy8pr9U7ZkGagNc7kE=
-X-Received: by 2002:a2e:890b:: with SMTP id d11mr9864873lji.79.1583752813203;
- Mon, 09 Mar 2020 04:20:13 -0700 (PDT)
+        id S1726402AbgCIMso (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Mar 2020 08:48:44 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2526 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725956AbgCIMsn (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 9 Mar 2020 08:48:43 -0400
+Received: from LHREML711-CAH.china.huawei.com (unknown [172.18.7.108])
+        by Forcepoint Email with ESMTP id 6D07181F16F24DB3B6A6;
+        Mon,  9 Mar 2020 12:48:42 +0000 (GMT)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ LHREML711-CAH.china.huawei.com (10.201.108.34) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Mon, 9 Mar 2020 12:48:42 +0000
+Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1713.5; Mon, 9 Mar 2020
+ 12:48:41 +0000
+Subject: Re: [PATCH RFC 00/24] scsi: enable reserved commands for LLDDs
+From:   John Garry <john.garry@huawei.com>
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        <linux-scsi@vger.kernel.org>, "Ming Lei" <ming.lei@redhat.com>
+References: <20190529132901.27645-1-hare@suse.de>
+ <e5c2b01a-71d9-ef94-3bf6-0830d866e4cf@huawei.com>
+Message-ID: <801604cd-d51f-2a4a-0e68-b6fcff9c9974@huawei.com>
+Date:   Mon, 9 Mar 2020 12:48:41 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Received: by 2002:a2e:7218:0:0:0:0:0 with HTTP; Mon, 9 Mar 2020 04:20:12 -0700 (PDT)
-Reply-To: umhk62@gmail.com
-From:   Halvorson Kertes <martinahenning69@gmail.com>
-Date:   Mon, 9 Mar 2020 13:20:12 +0200
-Message-ID: <CAN77ts=D=3N7Xx1uGdnMgBGnxJ0J5Tk5Zvo8GMKPRE9qcgbNzA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <e5c2b01a-71d9-ef94-3bf6-0830d866e4cf@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.202.226.45]
+X-ClientProxiedBy: lhreml720-chm.china.huawei.com (10.201.108.71) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Good day ,
- I contacted you in regard to $6.3M of a deceased client which my bank
-wants to Confiscate. Could you act as the beneficiary in the equity of
-60% 40%. If interested do get back.
-Thanks.
-Halvorson Kertes
+On 23/08/2019 14:26, John Garry wrote:
+>>
+>> quite some drivers use internal commands for various purposes, most
+>> commonly sending TMFs or querying the HBA status.
+>> While these commands use the same submission mechanism than normal
+>> I/O commands, they will not be counted as outstanding commands,
+>> requiring those drivers to implement their own mechanism to figure
+>> out outstanding commands.
+>> This patchset enables the use of reserved tags for the SCSI midlayer,
+>> enabling LLDDs to rely on the block layer for tracking outstanding
+>> commands.
+>> More importantly, it allows LLDD to request a valid tag from the block
+>> layer without having to implement some tracking mechanism within the
+>> driver. This removes quite some hacks which were required for some
+>> drivers (eg. fnic or snic).
+>>
+>> As usual, comments and reviews are welcome.
+>>
+> 
+Hi Hannes,
+
+JFYI, I have rebased this series to 5.6-rc4 here:
+
+https://github.com/hisilicon/kernel-dev/tree/private-topic-sas-5.6-resv-commands-v1
+
+I am interested in enabling this for libsas and associated HBAs, so 
+there are some patches on top for that.
+
+No review comments have been addressed, apart from removing "block: 
+disable elevator for reserved tags"
+
+Please let me know your plan for this series.
+
+Thanks,
+John
+
+> 
+> I was wondering if you have any plans to progress this series?
+> 
+> I don't mind helping out...
+> 
+> Cheers,
+> John
+> 
+>> Hannes Reinecke (24):
+>>   block: disable elevator for reserved tags
+>>   scsi: add scsi_{get,put}_reserved_cmd()
+>>   scsi: add 'nr_reserved_cmds' field to the SCSI host template
+>>   csiostor: use reserved command for LUN reset
+>>   scsi: add scsi_cmd_from_priv()
+>>   virtio_scsi: use reserved commands for TMF
+>>   scsi: add host tagset busy iterator
+>>   fnic: use reserved commands
+>>   fnic: use scsi_host_tagset_busy_iter() to traverse commands
+>>   scsi: allocate separate queue for reserved commands
+>>   scsi: add scsi_host_get_reserved_cmd()
+>>   hpsa: move hpsa_hba_inquiry after scsi_add_host()
+>>   hpsa: use reserved commands 
+
