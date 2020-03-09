@@ -2,106 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FD117E40D
-	for <lists+linux-scsi@lfdr.de>; Mon,  9 Mar 2020 16:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7696017E457
+	for <lists+linux-scsi@lfdr.de>; Mon,  9 Mar 2020 17:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbgCIPxg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 9 Mar 2020 11:53:36 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:47015 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726973AbgCIPxg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Mar 2020 11:53:36 -0400
-Received: by mail-pg1-f196.google.com with SMTP id y30so4867961pga.13;
-        Mon, 09 Mar 2020 08:53:34 -0700 (PDT)
+        id S1727180AbgCIQLQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 9 Mar 2020 12:11:16 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:36629 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726990AbgCIQLQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 9 Mar 2020 12:11:16 -0400
+Received: by mail-wm1-f65.google.com with SMTP id g62so1675wme.1;
+        Mon, 09 Mar 2020 09:11:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0QOwGWZDroTuYZKUvEz4ThZBE28k0R9BlVBpj2B89t4=;
-        b=Y5wSdA1sUAyKXpPWRphvCWwfduXynvra+u0WNhAfzkPhfNscROVbGY1S/bkaVAtR0d
-         DWMvs8OIREJ2zcLq4NdG0hahwt1OzZt2yRnkl7O5eDMvo3y7kE/ujGZIGHRI7Tdp844p
-         PBvypNHY1xNK/dsjrSC5IB/6EysRnW3R9ehUfxBd8dbMeyyS6mcs+V5dZYdnDZfV0SCY
-         60WQA2j3zEZQ9Sv9UYyTU/rf4JJRqKbPXsvRewmszm/qQgtdpewpwyyvdysdb8ROXcVj
-         Ti4UFYqV1Xp5vL87P/TG+TtI1QU22yrhdESprjAPQyapSkpHbXI+Ea4QsO5OxvEphEEg
-         Gwkg==
+        h=from:to:cc:subject:date:message-id;
+        bh=uWD6OmCc/Giz/7rKVyMfrzR5IhxZKcEZvTGrG7yLYLs=;
+        b=gfBo7b1Ffo9O4U5qquVVpcT52aKU2dNihOMsEcGR/9alUJ+yXukzI49SQExLztLQOx
+         ooo5hobvn2aVB9mvCknptB+IECv0XR18G3TKMF2cFnZH6+foWGfQZ6MsbnNawdEM7YtF
+         MXAZdKvDstdVslGORA27sEf1UFYFryx9X48S2WqzpfPO4poQzLVTpVT3FbhVxw97NOv0
+         YhgA0hkX1HbIgPBnpjD7AmCVIRFUp5pOzRI4WQTXltzJ9t5wjNHpUDirjWj14YXnCoGn
+         tB4Kv3ovJbVuySgHeHEQaNgRoFyb7aeoBkxEn1ugLS1ya37rFlX//EdHGOzwEBh7FO/G
+         uPPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0QOwGWZDroTuYZKUvEz4ThZBE28k0R9BlVBpj2B89t4=;
-        b=iqu/wZSi/w3IsN//BSOcRQJNz/Up/UoNNwAjqHd86lFJcrOfLNchLKLycgGGQHK2za
-         AKiKpYnkTOptXWUQVWqrY771FJ50zwVgpD7k4/CjdwXxOl5q7gKYHOfO6RcNFbxiCQTA
-         Gzw/mM6bQnvgcU5epJc9QXVFwvkEalRtUcxOzwiWmbpHTx1sDe+lVKbaWxm1s8Csb+zz
-         DeWmTFeH6+pdcTO17QEo8HcYFasO81IVShLiaU1RVTyjGNIZeO1v/UEpp7Ak9plnDO62
-         wi+j3Ze6ADZ7UkrMhOF30RfCT2ZqJrIuPfuGHCJAAR5pcJsqLCVw6SbZb/LE86nwbGDV
-         A8wg==
-X-Gm-Message-State: ANhLgQ0gDNnx0Ys2fo4nxK43NdSWTwTikPIuG66TreEpXFN7op7r1Hbz
-        vVpGm4traA1u5XF+X3KTSHQ=
-X-Google-Smtp-Source: ADFU+vuQluF3zszB7MLftbqie/sqdqSHh8ucl+t/SkIiqtpGEtE4K7yJ2sP012gDBJrIwKyGUerv9w==
-X-Received: by 2002:a63:1862:: with SMTP id 34mr13988788pgy.191.1583769214024;
-        Mon, 09 Mar 2020 08:53:34 -0700 (PDT)
-Received: from debian.net.fpt ([2405:4800:58c7:2b5b:996c:8b3a:a70f:c38a])
-        by smtp.gmail.com with ESMTPSA id w31sm19138587pgl.84.2020.03.09.08.53.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=uWD6OmCc/Giz/7rKVyMfrzR5IhxZKcEZvTGrG7yLYLs=;
+        b=WhPk5U+c3N44dwoTf+47cAEu3qvSuV3NUywf7lPTFkq0WJCsxe8Cn48ylCphLe+U9O
+         v0wn3yoWGYCBeeX/0hChM3Q9aBozlNcir+0GjctfPFeyXPQblXNZSvupDgJmrOdVcy2K
+         +uzbL5Vc0qylXvJI3siphk00xjuxHn/6BoCOTmRArdKJrm+34NxxQVXppe5w8pD8czZQ
+         5smp7BmQj9Y2OPD+2FJOX4wRo5cQKmUG0zsTTUW3XnOoKkA2u5l8rj2rV56LIEEgVZ2H
+         B5NXPD7dssPU0aIiOdmd4XO4QdEklO1hFa9SaI4E7p93ijRPFb/qPFLFVl4w4FQcUheW
+         OUmg==
+X-Gm-Message-State: ANhLgQ1FZ6QvfOguZ5p6UYWybbCNYC7jCSB6egGOaEvlD1KcttNGiJfV
+        cZMdxJLQjGsxU7p4ppMJqGc=
+X-Google-Smtp-Source: ADFU+vuw1Gn/gxv91C8ZwB+oVwi9gMsS2phal1+uxIjUXty+KwUa7GLLvqosl4RNPBebPvsCgW33Ug==
+X-Received: by 2002:a7b:c944:: with SMTP id i4mr29675wml.77.1583770273978;
+        Mon, 09 Mar 2020 09:11:13 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5bee49.dynamic.kabel-deutschland.de. [95.91.238.73])
+        by smtp.gmail.com with ESMTPSA id s14sm50104932wrv.44.2020.03.09.09.11.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Mar 2020 08:53:33 -0700 (PDT)
-From:   Phong Tran <tranmanphong@gmail.com>
-To:     john.garry@huawei.com
-Cc:     aacraid@microsemi.com, bvanassche@acm.org, jejb@linux.ibm.com,
-        keescook@chromium.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        tranmanphong@gmail.com
-Subject: [PATCH v3] scsi: aacraid: cleanup warning cast-function-type
-Date:   Mon,  9 Mar 2020 22:53:19 +0700
-Message-Id: <20200309155319.12658-1-tranmanphong@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <9a0e6373-b4a3-0822-3b65-e3b326266832@huawei.com>
-References: <9a0e6373-b4a3-0822-3b65-e3b326266832@huawei.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 09 Mar 2020 09:11:12 -0700 (PDT)
+From:   huobean@gmail.com
+X-Google-Original-From: beanhuo@micron.com
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/1] scsi: ufs: fix LRB pointer incorrect initialization issue
+Date:   Mon,  9 Mar 2020 17:10:56 +0100
+Message-Id: <20200309161057.9897-1-beanhuo@micron.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Make the aacraid driver -Wcast-function-type clean
-Report by: https://github.com/KSPP/linux/issues/20
+From: Bean Huo <beanhuo@micron.com>
 
-drivers/scsi/aacraid/aachba.c:813:23:
-warning: cast between incompatible function types from
-'int (*)(struct scsi_cmnd *)' to 'void (*)(struct scsi_cmnd *)'
-[-Wcast-function-type]
+Hi, Martin and Bart
 
-Reviewed-by: Bart van Assche <bvanassche@acm.org>
-Signed-off-by: Phong Tran <tranmanphong@gmail.com>
----
- drivers/scsi/aacraid/aachba.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Based on the Bart's suggestion, delete ufshcd_init_lrb(), and update the patch
+to v3. This version patch passed stress test.
+Thanks,
 
-diff --git a/drivers/scsi/aacraid/aachba.c b/drivers/scsi/aacraid/aachba.c
-index 33dbc051bff9..ebfb42af67f5 100644
---- a/drivers/scsi/aacraid/aachba.c
-+++ b/drivers/scsi/aacraid/aachba.c
-@@ -798,6 +798,11 @@ static int aac_probe_container_callback1(struct scsi_cmnd * scsicmd)
- 	return 0;
- }
- 
-+static void aac_probe_container_scsi_done(struct scsi_cmnd *scsi_cmnd)
-+{
-+	aac_probe_container_callback1(scsi_cmnd);
-+}
-+
- int aac_probe_container(struct aac_dev *dev, int cid)
- {
- 	struct scsi_cmnd *scsicmd = kmalloc(sizeof(*scsicmd), GFP_KERNEL);
-@@ -810,7 +815,7 @@ int aac_probe_container(struct aac_dev *dev, int cid)
- 		return -ENOMEM;
- 	}
- 	scsicmd->list.next = NULL;
--	scsicmd->scsi_done = (void (*)(struct scsi_cmnd*))aac_probe_container_callback1;
-+	scsicmd->scsi_done = aac_probe_container_scsi_done;
- 
- 	scsicmd->device = scsidev;
- 	scsidev->sdev_state = 0;
+//Bean
+
+Bean Huo (1):
+  scsi: ufs: fix LRB pointer incorrect initialization issue
+
+ drivers/scsi/ufs/ufshcd.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
+
 -- 
-2.20.1
+2.17.1
 
