@@ -2,81 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 755601805A6
-	for <lists+linux-scsi@lfdr.de>; Tue, 10 Mar 2020 18:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A95180686
+	for <lists+linux-scsi@lfdr.de>; Tue, 10 Mar 2020 19:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726621AbgCJR6G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 10 Mar 2020 13:58:06 -0400
-Received: from ms.lwn.net ([45.79.88.28]:44510 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726271AbgCJR6F (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 10 Mar 2020 13:58:05 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 1AB579B2;
-        Tue, 10 Mar 2020 17:58:04 +0000 (UTC)
-Date:   Tue, 10 Mar 2020 11:58:03 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
-        Kai =?UTF-8?B?TcOka2lzYXJh?= <Kai.Makisara@kolumbus.fi>,
-        linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        YOKOTA Hiroshi <yokota@netlab.is.tsukuba.ac.jp>,
-        megaraidlinux.pdl@broadcom.com,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        esc.storagedev@microsemi.com, Doug Gilbert <dgilbert@interlog.com>,
-        HighPoint Linux Team <linux@highpoint-tech.com>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Hannes Reinecke <hare@suse.com>, dc395x@twibble.org,
-        Oliver Neukum <oliver@neukum.org>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        "Juergen E. Fischer" <fischer@norbit.de>,
-        Khalid Aziz <khalid@gonehiking.org>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Jamie Lenehan <lenehan@twibble.org>,
-        Ali Akcaagac <aliakc@web.de>,
-        Don Brace <don.brace@microsemi.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Avri Altman <avri.altman@wdc.com>,
-        GOTO Masanori <gotom@debian.or.jp>
-Subject: Re: [PATCH 00/42] Manually convert SCSI documentation to ReST
- format
-Message-ID: <20200310115803.5b51c6bc@lwn.net>
-In-Reply-To: <yq1zhco14ln.fsf@oracle.com>
-References: <cover.1583136624.git.mchehab+huawei@kernel.org>
-        <20200310114328.6354cffb@lwn.net>
-        <yq1zhco14ln.fsf@oracle.com>
-Organization: LWN.net
+        id S1727386AbgCJScx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 10 Mar 2020 14:32:53 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:33126 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727071AbgCJScx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 10 Mar 2020 14:32:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BM1rOj2mhNiPAl7HQ9Dqr15pnyhMXu6TgEmfxY4G2dE=; b=ed6zJKUMN0NHTWgGMZZSTBEMDJ
+        ZDwYVpOOtBbWFiUHnmoG6GaShnCVBNtgLFdocdwwRDKj4qutRI2XnmiCFY3FvYu0H6LTim5ZMYG7l
+        er2Lg68TxUnu7dgmzliLVYHYuWZlDRVJZnXxTrNbeyTmFNxMT/4eKfoklcs5lYKYFagBDGM3D1DXQ
+        Mfob/seec8sdaZisq4mZffAyZUetOdUKq7p7SqhAx2aZ6sX/rk12t8fIAlAmkmzXB/Fu5MVzj1oNr
+        3IDqAJiLb2d029n6cYMi7pHsO0hMT85id6WaFxFPrLWgXPuuRoplFfqkZd8EvysaP2+Sgd06AOwkD
+        QGZb4vxQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jBjgJ-0005Yb-SK; Tue, 10 Mar 2020 18:32:43 +0000
+Date:   Tue, 10 Mar 2020 11:32:43 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     John Garry <john.garry@huawei.com>
+Cc:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        hare@suse.de, ming.lei@redhat.com, bvanassche@acm.org,
+        hch@infradead.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        esc.storagedev@microsemi.com, chenxiang66@hisilicon.com,
+        Hannes Reinecke <hare@suse.com>
+Subject: Re: [PATCH RFC v2 02/24] scsi: allocate separate queue for reserved
+ commands
+Message-ID: <20200310183243.GA14549@infradead.org>
+References: <1583857550-12049-1-git-send-email-john.garry@huawei.com>
+ <1583857550-12049-3-git-send-email-john.garry@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1583857550-12049-3-git-send-email-john.garry@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 10 Mar 2020 13:50:44 -0400
-"Martin K. Petersen" <martin.petersen@oracle.com> wrote:
-
-> > Any thoughts from the SCSI maintainers on this series?  Assuming
-> > you're favorable, would you like to carry it or should I?  
+On Wed, Mar 11, 2020 at 12:25:28AM +0800, John Garry wrote:
+> From: Hannes Reinecke <hare@suse.com>
 > 
-> I'm fine with this series and was going to queue it up. Unless you guys
-> prefer to take it through docs?
+> Allocate a separate 'reserved_cmd_q' for sending reserved commands.
 
-No, don't stop now, it's all yours :)
-
-Someday I'd like to discuss moving that stuff out of the top level, but
-that can be another day.
-
-Thanks,
-
-jon
+Why?  Reserved command specifically are not in any way tied to queues.
