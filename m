@@ -2,146 +2,151 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2304180F80
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2020 06:12:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 307DD18102E
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2020 06:42:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726044AbgCKFMs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Mar 2020 01:12:48 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:40643 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726032AbgCKFMr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Mar 2020 01:12:47 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id A451C204237;
-        Wed, 11 Mar 2020 06:12:44 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NECRFvxzq774; Wed, 11 Mar 2020 06:12:37 +0100 (CET)
-Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 0F862204153;
-        Wed, 11 Mar 2020 06:12:36 +0100 (CET)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH] scsi: avoid repetitive logging of device offline messages
-To:     Bart Van Assche <bvanassche@acm.org>,
-        "Ewan D. Milne" <emilne@redhat.com>, linux-scsi@vger.kernel.org
-References: <20200309181416.10665-1-emilne@redhat.com>
- <b7f3c0d1-0f08-83e2-6df5-8b6a02201ba6@acm.org>
- <c9ebe5ecaff898c848402413d9404b23dfe999e6.camel@redhat.com>
- <ccbaa97a-c946-f235-c7c3-3d9d6bf319c0@acm.org>
- <e13d0e51e83fd2fc5d653633a9cfb74e2b24b5a6.camel@redhat.com>
- <789f1dc7-38bf-eced-85b1-ad22e7d69757@acm.org>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <70f8c1ab-878c-3574-da10-7b488a772e64@interlog.com>
-Date:   Wed, 11 Mar 2020 01:12:32 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726472AbgCKFmj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Mar 2020 01:42:39 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:62501 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725813AbgCKFmj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Mar 2020 01:42:39 -0400
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200311054237epoutp0293a04320dab8eda3114c64e2c5b34281~7KYfTBrAr0599005990epoutp02N
+        for <linux-scsi@vger.kernel.org>; Wed, 11 Mar 2020 05:42:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200311054237epoutp0293a04320dab8eda3114c64e2c5b34281~7KYfTBrAr0599005990epoutp02N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1583905357;
+        bh=URTHxXXLdSOI3IYjX5rBfJl3mt+HD+35gyGMY9ctq7o=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=NNYP+gTTFacTMUMkdbNqEtGiAf/hb1DH2+CpWOLqA5BRCZsd4a2xRPiZuyD4Co7/a
+         aDP5vKIq1T/5OedI+TIFz+WOUH/5t9s+gUa42V1IYnYuO8fkUK89aigT7T95gk0g0o
+         3/05hqU7UDlx6JkcxW5LpE1dqAHE/a3RdVuHhhkA=
+Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20200311054237epcas5p42858581c843557b89e0f5f1bf0b0d4f7~7KYfB3eNn1294512945epcas5p4D;
+        Wed, 11 Mar 2020 05:42:37 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B3.B8.19726.C4A786E5; Wed, 11 Mar 2020 14:42:36 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+        20200311054236epcas5p2b0c96fbf447a118332a09fd4801e6e95~7KYeUkDbF1698416984epcas5p2N;
+        Wed, 11 Mar 2020 05:42:36 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200311054236epsmtrp1cc5e50f06f3151443da1d3b7a1a17014~7KYeTlPLE0046300463epsmtrp1a;
+        Wed, 11 Mar 2020 05:42:36 +0000 (GMT)
+X-AuditID: b6c32a49-7c1ff70000014d0e-db-5e687a4c6c6b
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4F.58.10238.C4A786E5; Wed, 11 Mar 2020 14:42:36 +0900 (KST)
+Received: from alimakhtar02 (unknown [107.111.84.32]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200311054234epsmtip1ca2906d51d31d6d3120b3c4ea6221d66~7KYcQGY3N2720927209epsmtip1R;
+        Wed, 11 Mar 2020 05:42:33 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Rob Herring'" <robh@kernel.org>
+Cc:     <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>, <krzk@kernel.org>,
+        <avri.altman@wdc.com>, <martin.petersen@oracle.com>,
+        <kwmad.kim@samsung.com>, <stanley.chu@mediatek.com>,
+        <cang@codeaurora.org>
+In-Reply-To: <20200309181035.GA23663@bogus>
+Subject: RE: [PATCH 1/5] dt-bindings: phy: Document Samsung UFS PHY bindings
+Date:   Wed, 11 Mar 2020 11:12:32 +0530
+Message-ID: <000001d5f767$de478960$9ad69c20$@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <789f1dc7-38bf-eced-85b1-ad22e7d69757@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
 Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGcomJoogAapdSxIIuFJfiljU0eNAEtLKvsAhEOsP8Bi2EW5qiPPYAA
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SbUhTYRTHe7Z7d6/DzduUPKlkDsRUfCuja4ZG9LJgH4TogyLa0MsUnY5d
+        X9JKxHzLqTM/1dRUhqYGGuLL0Mxxc4pRGtRMJTRMw7fELAopNOed5LffOef/f875w0MKZVbc
+        g0zNyGJ0Gap0uUiM9b3y9wtS5qckhHZORdIr2zYRvdXVitONIxM4PTn5nKBneqwYrf9oFtFP
+        x3YEdMnQCEHvvjATdEvvDLooVryvrhIoujseiBTF48OY4vvSLKao7ulAih/dJxRlFr0ghogT
+        X0hm0lNzGF1I1C1xylZ7H6Y1SW8XL5uIQlTrXIGcSKDCYafhHVaBxKSMGkRgGGhAfLGFYLnD
+        QPDFLwTcmoU4sMytcQJ+MISg+tO8Q7WKoI3TC+wqERUEZlOpyM5ulC8UGT9jdhZSGwjm6grs
+        7EQFAjfci9vZlVLCV5tp34vt6We5QaGdJVQEtL0dFfB8FMYfLzre8Yb+b/VC/qKTsL3UivO7
+        rsJwZ5ND4w7W7Uqh/TigDAQMtS0g3nAZftfvOMyusDrW44jmASuG0j0m9zgNKgfO8O270PJk
+        FOM5Giwf6jG7REj5Q9dACL9KClV/FgW8UwLlpTJe7Qv3N2wOpyc81OtxnhWgnx4napCP8VAw
+        46FgxkMBjP+XNSGsAx1ntKxGzbBntWEZTG4wq9Kw2Rnq4KRMTTfa/1wB183IOKHkEEUiubNk
+        uUCdIMNVOWyehkNACuVukkTvvZYkWZWXz+gyE3XZ6QzLIU8Sk7tLanFbvIxSq7KYNIbRMrqD
+        qYB08ihEVmmxy6nypDuztiXc02sLU+rVsxGJUpeJUEvy6Ud0XxZb09i0bjpi7F/30siniwrg
+        WFTTQvw98wiVMBDbXFOTovnpX1a22eyxHjf95nzs/JW51M5Iv2devcrG0GBs92Z40Gvp1MuS
+        5UvXuC+T524YfAJjVjLxv9bcwOi6zXZ/OcamqMIChDpW9Q+oklMMWAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBIsWRmVeSWpSXmKPExsWy7bCSnK5PVUacQVcHh8XLn1fZLD6tX8Zq
+        Mf/IOVaL8+c3sFvc3HKUxaL7+g42i+XH/zFZtO49wm7xf88OdoulW28yOnB5XO7rZfLYtKqT
+        zaPl5H4Wj49Pb7F49G1ZxejxeZOcR/uBbqYA9igum5TUnMyy1CJ9uwSujE8rt7EULOaraHmx
+        mL2BcRJPFyMnh4SAicS914eYuhi5OIQEdjNKLNm3kAUiIS1xfeMEdghbWGLlv+fsEEUvGCU+
+        fJ/BBpJgE9CV2LG4DcwWEVCVaJr1AKyZWeAHo8SPaUYQDXcYJU4v72cESXAKaEsc2r+VFcQW
+        FvCReHZ1MROIzQLUfOvQbmYQm1fAUmLF2WNMELagxMmZT4CGcgAN1ZNo28gIMV9eYvvbOcwQ
+        xylI/Hy6jBXiBjeJ/esWQN0gLnH0Zw/zBEbhWUgmzUKYNAvJpFlIOhYwsqxilEwtKM5Nzy02
+        LDDMSy3XK07MLS7NS9dLzs/dxAiOPy3NHYyXl8QfYhTgYFTi4X1Rlx4nxJpYVlyZe4hRgoNZ
+        SYQ3Xh4oxJuSWFmVWpQfX1Sak1p8iFGag0VJnPdp3rFIIYH0xJLU7NTUgtQimCwTB6dUA6O8
+        pUTOurPWMrz8S0REWmfyHrj9SHThPOn4CfZvHNSsNXfqR+qJb9h70W+JaKi35OlTane+b97T
+        +fKv8fQtqfZBGysu/QlVmHQ8yu6nWsbuX5M/BiSsWTqjPHqivt0SD7/C6LUXP9XflnLmk2Aq
+        1G0+3rhM+fyO9ltPj6tsXrv55IWDl79OXbxciaU4I9FQi7moOBEAjuRbQrsCAAA=
+X-CMS-MailID: 20200311054236epcas5p2b0c96fbf447a118332a09fd4801e6e95
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200306151021epcas5p40139bc39ddabb00f054f872c2b77db8f
+References: <20200306150529.3370-1-alim.akhtar@samsung.com>
+        <CGME20200306151021epcas5p40139bc39ddabb00f054f872c2b77db8f@epcas5p4.samsung.com>
+        <20200306150529.3370-2-alim.akhtar@samsung.com>
+        <20200309181035.GA23663@bogus>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-03-11 12:01 a.m., Bart Van Assche wrote:
-> On 2020-03-10 09:44, Ewan D. Milne wrote:
->> On Mon, 2020-03-09 at 19:02 -0700, Bart Van Assche wrote:
->>> On 2020-03-09 13:54, Ewan D. Milne wrote:
->>>> The only purpose of the flag is to try to suppress duplicate messages,
->>>> in the common case it is a single thread submitting the queued I/O which
->>>> is going to get rejected.  If multiple threads submit I/O there might
->>>> be duplicated messages but that is not all that critical.  Hence the
->>>> lack of locking on the flag.
->>>
->>> My concern is that scsi_prep_state_check() may be called from more than
->>> one thread at the same time and that bitfield changes are not thread-safe.
->>
->> Yes, I agree that the flag is not thread-safe, but I don't think that
->> is a concern.  Because if we get multiple rejecting I/O messages until
->> the other threads see the flag change we are no worse off than before,
->> and once the sdev state changes back to SDEV_RUNNING we won't call
->> scsi_prep_state_check() and examine the flag.
-> 
-> Hi Ewan,
-> 
-> This is the entire list of bitfields in struct scsi_device:
-> 
-> 	unsigned removable:1;
-> 	unsigned changed:1;
-> 	unsigned busy:1;
-> 	unsigned lockable:1;
-> 	unsigned locked:1;
-> 	unsigned borken:1;
-> 	unsigned disconnect:1;
-> 	unsigned soft_reset:1;
-> 	unsigned sdtr:1;
-> 	unsigned wdtr:1;
-> 	unsigned ppr:1;
-> 	unsigned tagged_supported:1;
-> 	unsigned simple_tags:1;
-> 	unsigned was_reset:1;
-> 	unsigned expecting_cc_ua:1;
-> 	unsigned use_10_for_rw:1;
-> 	unsigned use_10_for_ms:1;
-> 	unsigned set_dbd_for_ms:1;
-> 	unsigned no_report_opcodes:1;
-> 	unsigned no_write_same:1;
-> 	unsigned use_16_for_rw:1;
-> 	unsigned skip_ms_page_8:1;
-> 	unsigned skip_ms_page_3f:1;
-> 	unsigned skip_vpd_pages:1;
-> 	unsigned try_vpd_pages:1;
-> 	unsigned use_192_bytes_for_3f:1;
-> 	unsigned no_start_on_add:1;
-> 	unsigned allow_restart:1;
-> 	unsigned manage_start_stop:1;
-> 	unsigned start_stop_pwr_cond:1;
-> 	unsigned no_uld_attach:1;
-> 	unsigned select_no_atn:1;
-> 	unsigned fix_capacity:1;
-> 	unsigned guess_capacity:1;
-> 	unsigned retry_hwerror:1;
-> 	unsigned last_sector_bug:1;
-> 	unsigned no_read_disc_info:1;
-> 	unsigned no_read_capacity_16:1;
-> 	unsigned try_rc_10_first:1;
-> 	unsigned security_supported:1;
-> 	unsigned is_visible:1;
-> 	unsigned wce_default_on:1;
-> 	unsigned no_dif:1;
-> 	unsigned broken_fua:1;
-> 	unsigned lun_in_cdb:1;
-> 	unsigned unmap_limit_for_ws:1;
-> 	unsigned rpm_autosuspend:1;
-> 
-> If any thread modifies any of these existing bitfields concurrently with
-> scsi_prep_state_check(), one of the two modifications will be lost. That
-> is because compilers implement bitfield changes as follows:
-> 
-> new_value = (old_value & ~(1 << ...)) | (1 << ...);
-> 
-> If two such assignment statements are executed concurrently, both start
-> from the same 'old_value' and only one of the two changes will happen.
-> I'm concerned that this patch introduces a maintenance problem in the
-> long term. Has it been considered to make 'offline_already' a 32-bits
-> integer variable or a boolean instead of a bitfield? I think such
-> variables can be modified without discarding values written from another
-> thread.
+Hi Rob,
 
-Most of the stuff there is slow moving data, typically set once at device
-creation time. The design predates atomic bitops. I can't see why the
-addition of an extra bitfield, whose overwriting is not going to cause
-a calamity ***, warrants the proposer having the rewrite this patch.
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: 09 March 2020 23:41
+> To: Alim Akhtar <alim.akhtar@samsung.com>
+> Cc: robh+dt@kernel.org; devicetree@vger.kernel.org; linux-
+> scsi@vger.kernel.org; krzk@kernel.org; avri.altman@wdc.com;
+> martin.petersen@oracle.com; kwmad.kim@samsung.com;
+> stanley.chu@mediatek.com; cang@codeaurora.org; Alim Akhtar
+> <alim.akhtar@samsung.com>
+> Subject: Re: [PATCH 1/5] dt-bindings: phy: Document Samsung UFS PHY
+bindings
+> 
+> On Fri,  6 Mar 2020 20:35:25 +0530, Alim Akhtar wrote:
+> > This patch documents Samsung UFS PHY device tree bindings
+> >
+> > Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> > ---
+> >  .../bindings/phy/samsung,ufs-phy.yaml         | 60 +++++++++++++++++++
+> >  1 file changed, 60 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/phy/samsung,ufs-phy.yaml
+> >
+> 
+> My bot found errors running 'make dt_binding_check' on your patch:
+> 
+> Error: Documentation/devicetree/bindings/phy/samsung,ufs-
+> phy.example.dts:23.36-37 syntax error FATAL ERROR: Unable to parse input
+tree
+> scripts/Makefile.lib:311: recipe for target
+> 'Documentation/devicetree/bindings/phy/samsung,ufs-phy.example.dt.yaml'
+> failed
+> make[1]: *** [Documentation/devicetree/bindings/phy/samsung,ufs-
+> phy.example.dt.yaml] Error 1
+> Makefile:1262: recipe for target 'dt_binding_check' failed
+> make: *** [dt_binding_check] Error 2
+> 
+> See https://protect2.fireeye.com/url?k=872f213d-dafc7db2-872eaa72-
+> 0cc47a31ce52-
+> 327f14918e272963&u=https://patchwork.ozlabs.org/patch/1250378
+> Please check and re-submit.
+Sure will run "'make dt_binding_check" and fix this, just waiting for some
+more review comments on other patches in this series.
+Thanks for feedback.
 
-Doug Gilbert
-
-
-*** setting offline_already effectively invalidates a lot of other bitfields.
-     Still, if the offline_already fails to be set, due to a clash
-     (with what?), then at worst the warning message is repeated and the
-     patch code tries again to set that bitfield.
-
+Regards,
+Alim
 
