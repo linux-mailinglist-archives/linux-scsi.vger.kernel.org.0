@@ -2,132 +2,78 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C0E1816CA
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2020 12:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B8E1816DA
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2020 12:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729057AbgCKL0K (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Mar 2020 07:26:10 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:42114 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726387AbgCKL0J (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Mar 2020 07:26:09 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l12so1485059oil.9
-        for <linux-scsi@vger.kernel.org>; Wed, 11 Mar 2020 04:26:09 -0700 (PDT)
+        id S1729058AbgCKL3l (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Mar 2020 07:29:41 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:41400 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbgCKL3k (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Mar 2020 07:29:40 -0400
+Received: by mail-wr1-f66.google.com with SMTP id s14so2110298wrt.8;
+        Wed, 11 Mar 2020 04:29:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FxkJtNIXCSiI2XNWfZip0t37PKxo+QgDChOHA/S1Th4=;
-        b=IJVA0QpVl4ICq9SVsC6H658vhVbX8VVlJWuOl/ra3jdBqt5Erril023m1NyRQ9CS4K
-         ORx/ySPf5OsvxI/UqYKqcEybKmltuIHMiPzrSusOMuMFhMQtfclUg67FAfqPdF/Vk/VM
-         xLVFZMnbdvsoTWWW6YzTkz+1tPiG9DHXLB1zo=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=F/1IjY74pBxnbZAUC/tSx+RiXpp/LVmOLwLIf85D7FY=;
+        b=d0lRn6ABE5qWra0CLlK2bhJ/dlNno9C070G9gKL/LsIXVl0vow/djfBBj5+/fDJNuW
+         HTLqJMr5dlBP9j4eZJvLfi+yQ6O257cWRfx2+O7EvG/C85kKtA/38VDPwWdXKciT6AW6
+         nFUWBzmX1pUvInpxQ3IcOGzuK1w5FGznEnIQoc1ir4VdhACggCqn1sOMw0HC96a4GjXZ
+         ND/z8JjYThiFyGrMdSeDpljZQQIw8zWLvX9KIy3natqYmdBtz7HoHruqB+QPmsywytwU
+         +LHR1rZ30tyqwA1PPNWNp+6/AoIjkBAe2+RfdnIdY4FWbT0uv7gqz+4YIXjpbZEG/8TW
+         8nSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FxkJtNIXCSiI2XNWfZip0t37PKxo+QgDChOHA/S1Th4=;
-        b=bDuMz7qVWdo4F6h2y4f31wEEMHViJLx4bpFBnz8glTultSBsjsB87Ksty4ZHJrriht
-         kjiVExUH1QL4Ke6YrsCnZu2V6ANoa46toE4HKKMUqQnTdWS1YaATjX0ZabHU5NxX/wQX
-         bjwrMXnaeOxkq+a2B0FTMQIBrQCGjC7r37QGtWb1sU0tVS5f+VRvJpBwp38o0HkYGAw2
-         7+kH1ROUOr0eXPWxxTymvRn6HBpS2Tq9PE0dgaQDOlvTDaHfyquHcco0WE7oaG4pl7Ko
-         YJRPy+a75aT7EBDxvgeW5mpeGIHRMSoP1qddRBW4eTN7S4mtRGixB7E4khjBVsNFZEBx
-         dkIg==
-X-Gm-Message-State: ANhLgQ3zdmnpIdzzDyBbrfpiWvp5aMwmdjM9Z1HrUScBAxHdOKsmmxbX
-        w2IJo83r5MDHo09+cRky8AX49nQ1qrfqE23HuVhRJw==
-X-Google-Smtp-Source: ADFU+vtNzWvaA+Q5lzg9R0u5J09epei7cWBuS1Vdz9xPbwdYGQS0/u4fCzXxx5ODeOrXlJFwpcm7g6cJA3o0wcPPPc0=
-X-Received: by 2002:aca:80e:: with SMTP id 14mr1492361oii.143.1583925968963;
- Wed, 11 Mar 2020 04:26:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <1583923013-3935-1-git-send-email-sreekanth.reddy@broadcom.com> <5d68479b9a852cc8c29b36eaa76c45cbd4fdd39a.camel@kernel.org>
-In-Reply-To: <5d68479b9a852cc8c29b36eaa76c45cbd4fdd39a.camel@kernel.org>
-From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Date:   Wed, 11 Mar 2020 16:55:57 +0530
-Message-ID: <CAK=zhgrpov8=MkJVVhyr2O6zcJHaR3B-2h2TcRbyCXBx9i8GCQ@mail.gmail.com>
-Subject: Re: [PATCH] mpt3sas: Fix kernel panic observed on soft HBA unplug
-To:     Amit Shah <amit@kernel.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=F/1IjY74pBxnbZAUC/tSx+RiXpp/LVmOLwLIf85D7FY=;
+        b=GDwYLGcHaNmMKd32wZgLnfvms8WZ2wSy9hcc9ZBk9NrvsfSE281VYrpw78+G4QXTiA
+         FjRbPzRXh3iMrvuPTquR5rLgnmCSRjTU6boRbFG2vnN3YwFKyw98LpDlpNFnTPqJMD3t
+         rsBz3gch+70wGAP71nXEzrFqgDQ+sjG1JNXBUHR2hp3PZltwqJ0Omf6Y8oNQHFLd/X4u
+         sRuOpFr8Cvg8KiNLvIYgKLvNLAfAfgaoHwDnXkPkdHaCUY51Ow1wCM2g+KxkRu+VB4sY
+         rvZuZfKN80S6MucA7OwucpBGKQZPKoDDQdjH4WJ+Rqiy+n1FHMrr8GC5s2Ma7E50Q32o
+         scoQ==
+X-Gm-Message-State: ANhLgQ3hVjLryL3OF7bOpwKytogLWzqLKI2nVvTO3njBqQ9NmhZdccti
+        gOOsE5LkZwR8th5Q2EasUpY=
+X-Google-Smtp-Source: ADFU+vu94/0g3Ai+2NOGtniTLjXfMqe4XX0B950G1NhcTNpERstbQBnS7eidIwjhblo7ehgQWM7WUw==
+X-Received: by 2002:adf:c40e:: with SMTP id v14mr3992518wrf.408.1583926176989;
+        Wed, 11 Mar 2020 04:29:36 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5bee49.dynamic.kabel-deutschland.de. [95.91.238.73])
+        by smtp.gmail.com with ESMTPSA id l64sm8190735wmf.30.2020.03.11.04.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Mar 2020 04:29:36 -0700 (PDT)
+From:   huobean@gmail.com
+X-Google-Original-From: beanhuo@micron.com
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] Revert "scsi: ufs: Let the SCSI core allocate per-command UFS data"
+Date:   Wed, 11 Mar 2020 12:29:20 +0100
+Message-Id: <20200311112921.29031-1-beanhuo@micron.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, Mar 11, 2020 at 4:35 PM Amit Shah <amit@kernel.org> wrote:
->
-> On Wed, 2020-03-11 at 06:36 -0400, Sreekanth Reddy wrote:
-> > Generic protection fault type kernel panic is observed when user
-> > performs soft(ordered) HBA unplug operation while IOs are running
-> > on drives connected to HBA.
-> >
-> > When user performs ordered HBA removal operation then kernel calls
-> > PCI device's .remove() call back function where driver is flushing
-> > out
-> > all the outstanding SCSI IO commands with DID_NO_CONNECT host byte
-> > and
-> > also un-maps sg buffers allocated for these IO commands.
-> > But in the ordered HBA removal case (unlike of real HBA hot unplug)
-> > HBA device is still alive and hence HBA hardware is performing the
-> > DMA operations to those buffers on the system memory which are
-> > already
-> > unmapped while flushing out the outstanding SCSI IO commands
-> > and this leads to Kernel panic.
-> >
-> > Fix:
-> > Don't flush out the outstanding IOs from .remove() path in case of
-> > ordered HBA removal since HBA will be still alive in this case and
-> > it can complete the outstanding IOs. Flush out the outstanding IOs
-> > only in case physical HBA hot unplug where their won't be any
-> > communication with the HBA.
->
-> Can you please point to the commit that introduces the bug?
+From: Bean Huo <beanhuo@micron.com>
 
-Sure I will add the commit ID which introduced this bug in the next patch.
+Hi, Martin
 
->
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> > ---
-> >  drivers/scsi/mpt3sas/mpt3sas_scsih.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> > b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> > index 778d5e6..04a40af 100644
-> > --- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> > +++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-> > @@ -9908,8 +9908,8 @@ static void scsih_remove(struct pci_dev *pdev)
-> >
-> >       ioc->remove_host = 1;
-> >
-> > -     mpt3sas_wait_for_commands_to_complete(ioc);
-> > -     _scsih_flush_running_cmds(ioc);
-> > +     if (!pci_device_is_present(pdev))
-> > +             _scsih_flush_running_cmds(ioc);
-> >
-> >       _scsih_fw_event_cleanup_queue(ioc);
-> >
-> > @@ -9992,8 +9992,8 @@ static void scsih_remove(struct pci_dev *pdev)
->
-> Just a note: this function is scsih_shutdown().  Doesn't block
-> application of the patch, though.  Just wondering how the patch was
-> created.
+Based on Bart's feedack, the less risky way is to revert commit:
 
-Sorry I didn't get you. Can you please elaborate your query?
+34656dda81ac "scsi: ufs: Let the SCSI core allocate per-command UFS data"
 
->
-> >
-> >       ioc->remove_host = 1;
-> >
-> > -     mpt3sas_wait_for_commands_to_complete(ioc);
-> > -     _scsih_flush_running_cmds(ioc);
-> > +     if (!pci_device_is_present(pdev))
-> > +             _scsih_flush_running_cmds(ioc);
-> >
-> >       _scsih_fw_event_cleanup_queue(ioc);
-> >
->
+Bean Huo (1):
+  Revert "scsi: ufs: Let the SCSI core allocate per-command UFS data"
+
+ drivers/scsi/ufs/ufshcd.c | 198 ++++++++++++++------------------------
+ drivers/scsi/ufs/ufshcd.h |   5 +
+ 2 files changed, 75 insertions(+), 128 deletions(-)
+
+-- 
+2.17.1
+
