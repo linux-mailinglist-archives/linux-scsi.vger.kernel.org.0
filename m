@@ -2,64 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E164181C1A
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2020 16:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E00B181C44
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2020 16:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729810AbgCKPMq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Mar 2020 11:12:46 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35981 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729521AbgCKPMq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Mar 2020 11:12:46 -0400
-Received: by mail-pg1-f193.google.com with SMTP id c7so1384470pgw.3
-        for <linux-scsi@vger.kernel.org>; Wed, 11 Mar 2020 08:12:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XrusJYJp9iBD9reRS50wQ1J3cISwwLSD/U91nbiIDzE=;
-        b=Y95BtmqsptFvYXgtv2vCzaToHLyjBh2ff+TwBzy5cE8TTyPu8/BTuK/DpzNensMKQh
-         UIY36f3PAizv+UqgZh6cHY2Lr1Enjnxn9M+kAQKkksty5ULHdE5GFjk9zGfvfNGIbcO6
-         49BBZ/gLPU1taoGDI4lt0+c8T4UPPmlDYhW+bM/6/bD/3ScitbB1JFBbZX3glAziE50I
-         gkOsgXYKhS4yQBRte6AsA2lh8h+HNKvbTD0LsHbKpmZz7c53DRBow2GGYdkR8T91Tofc
-         nHd2jrifziOwZ43Er6fvXj5exZW4h0uv8NRDGNKJvqnlpykW+/GM0+A3f9J17PSb4PIz
-         S69w==
-X-Gm-Message-State: ANhLgQ2dL3qwWbeW399Yfi+R8LvfG+hwsq8z7wlIZqquKEnZZ1ebDEcG
-        h3R+OC6Dg45jPXQZHEWxydwUoKrI
-X-Google-Smtp-Source: ADFU+vsWtx1+6VL1l8NNxZipZrAUfvTRFNIeUpkwX7nw4a6M8HraGULbYBwoW1kIovxOIugsY25Law==
-X-Received: by 2002:a63:715:: with SMTP id 21mr3261570pgh.234.1583939564573;
-        Wed, 11 Mar 2020 08:12:44 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id m11sm5856547pjl.18.2020.03.11.08.12.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Mar 2020 08:12:43 -0700 (PDT)
-Subject: Re: [PATCH 7/8] scsi: core: Use scnprintf() for avoiding potential
- buffer overflow
-To:     Takashi Iwai <tiwai@suse.de>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org
-References: <20200311091630.22565-1-tiwai@suse.de>
- <20200311091630.22565-8-tiwai@suse.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <facacb36-2f60-e1ee-b3df-b66a2ba76744@acm.org>
-Date:   Wed, 11 Mar 2020 08:12:42 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729680AbgCKP0n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Mar 2020 11:26:43 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:11628 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729100AbgCKP0n (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 11 Mar 2020 11:26:43 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id CE1AC8C30EC35FF521E6;
+        Wed, 11 Mar 2020 23:26:30 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.58) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.487.0; Wed, 11 Mar 2020 23:26:23 +0800
+From:   John Garry <john.garry@huawei.com>
+To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, Luo Jiaxing <luojiaxing@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: [PATCH] scsi: hisi_sas: Use dev_err() in read_iost_itct_cache_v3_hw()
+Date:   Wed, 11 Mar 2020 23:22:24 +0800
+Message-ID: <1583940144-230800-1-git-send-email-john.garry@huawei.com>
+X-Mailer: git-send-email 2.8.1
 MIME-Version: 1.0
-In-Reply-To: <20200311091630.22565-8-tiwai@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.69.192.58]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 3/11/20 2:16 AM, Takashi Iwai wrote:
-> Since snprintf() returns the would-be-output size instead of the
-> actual output size, the succeeding calls may go beyond the given
-> buffer limit.  Fix it by replacing with scnprintf().
+From: Luo Jiaxing <luojiaxing@huawei.com>
 
-Reviewed-by: Bart van Assche <bvanassche@acm.org>
+The print of pr_err() does not come with device information, so replace
+it with dev_err(). Also improve the grammar in the message.
+
+Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
+Signed-off-by: John Garry <john.garry@huawei.com>
+
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index a2debe0c8185..374885aa8d77 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -2938,6 +2938,7 @@ static void read_iost_itct_cache_v3_hw(struct hisi_hba *hisi_hba,
+ {
+ 	u32 cache_dw_size = HISI_SAS_IOST_ITCT_CACHE_DW_SZ *
+ 			    HISI_SAS_IOST_ITCT_CACHE_NUM;
++	struct device *dev = hisi_hba->dev;
+ 	u32 *buf = cache;
+ 	u32 i, val;
+ 
+@@ -2950,7 +2951,7 @@ static void read_iost_itct_cache_v3_hw(struct hisi_hba *hisi_hba,
+ 	}
+ 
+ 	if (val != 0xffffffff) {
+-		pr_err("Issue occur when reading IOST/ITCT cache!\n");
++		dev_err(dev, "Issue occurred in reading IOST/ITCT cache!\n");
+ 		return;
+ 	}
+ 
+-- 
+2.17.1
+
