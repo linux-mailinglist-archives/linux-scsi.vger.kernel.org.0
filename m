@@ -2,68 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E00B181C44
-	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2020 16:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19712181EC7
+	for <lists+linux-scsi@lfdr.de>; Wed, 11 Mar 2020 18:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729680AbgCKP0n (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 11 Mar 2020 11:26:43 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:11628 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729100AbgCKP0n (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 11 Mar 2020 11:26:43 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id CE1AC8C30EC35FF521E6;
-        Wed, 11 Mar 2020 23:26:30 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
- 14.3.487.0; Wed, 11 Mar 2020 23:26:23 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, Luo Jiaxing <luojiaxing@huawei.com>,
-        John Garry <john.garry@huawei.com>
-Subject: [PATCH] scsi: hisi_sas: Use dev_err() in read_iost_itct_cache_v3_hw()
-Date:   Wed, 11 Mar 2020 23:22:24 +0800
-Message-ID: <1583940144-230800-1-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
+        id S1730197AbgCKRIY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 11 Mar 2020 13:08:24 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:44789 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730055AbgCKRIY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 11 Mar 2020 13:08:24 -0400
+Received: by mail-il1-f194.google.com with SMTP id j69so2702953ila.11
+        for <linux-scsi@vger.kernel.org>; Wed, 11 Mar 2020 10:08:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloud.ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LEC5FP8mgBmFOtl8eI8FiHus35miS8R5/z+CCBwwGLo=;
+        b=fGg1o5wANBQVIAqKSyWhyR4Ad4Zj56/g03T7j68Crvvpw3ixcFiJugESFTQc+LUWey
+         2/1bjkM3C5V1/4q7sSY4mXn602Mw4iJjhbK2JqArV7r/MZSAA7d5SO8dlJZ2pm/NoNM9
+         XBSo16KPvflI/C1MJU6PpmQcwZqNFINVz8IFuH/eoOASMWpZ6Ffl0cYpmNEKVwottOQo
+         FFgIaxmSIofkXAwzjhTE8z5wRd5sY0zOWV99x1uZVynVxWfedX16n7l6h9V6tXLJCb8l
+         FEXTVddlvrJ0pdwi2pDulQEioJBuyA/Q7w20OxbCb+jSxPyUd8sV4Jmtlvmn+q87/Kz5
+         8Z3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LEC5FP8mgBmFOtl8eI8FiHus35miS8R5/z+CCBwwGLo=;
+        b=oZNNp8Kd7WzxzWdsJK7tAn9gKOfmCZ56mFqI6glSohRYSCmoPIt6Y32gTr7mU+10qe
+         UQ1p6Ii6a8hWaqjEY5YHbr9fo1xIHETZhEj6Bi1I5Ld3uGSfViVn/FwitrbsbYp/UWg/
+         8K4NvOH0B+Mj4SKXwwKWZSv/oygWTbwjbxY1m7EBC2FaRVi4EpvXoOeP1ut3Cclh97rb
+         3+68IIHE5BrL6rueJmDW9X3y5UQDSS2qEoVj4VzqfhXpvC0U9v/kuuDVJ2r798YaF5vc
+         ftAXYMbOVHAT+zKUFigleSbM2rf6KSogaB+AX0kSHSMvep3WeJH6W14dHd2w3Xygnhuu
+         8OyQ==
+X-Gm-Message-State: ANhLgQ2G+UZLyNqg/6QipUfZoeaM6PPt9hwIF/TAZt5EEiYKxXthC6/p
+        Vs4dTimq85QSOR9AFniEnlfjKaDEts8YOzyI5WjCLw==
+X-Google-Smtp-Source: ADFU+vvhQgs0uL0Osu06t/R9n+xfJNWRNx9fQMqqBSwua+1ZTKf9cQ6DsNebymmPfO0rMIIJ9U6CAL+DenaSn2ZJ/dk=
+X-Received: by 2002:a92:670f:: with SMTP id b15mr4081570ilc.71.1583946503296;
+ Wed, 11 Mar 2020 10:08:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+References: <20200117071923.7445-1-deepak.ukey@microchip.com>
+ <20200117071923.7445-6-deepak.ukey@microchip.com> <CAMGffEnc1sWgOB7PENtbBQUzJ6iRORHrJe4Y5FV1+WkgrhAwOg@mail.gmail.com>
+ <yq17e1lk666.fsf@oracle.com> <MN2PR11MB3550E72F0521F873F52AF671EF0D0@MN2PR11MB3550.namprd11.prod.outlook.com>
+ <68e52d06-1fd2-770d-627a-7e8c79067282@huawei.com> <MN2PR11MB35509B0042BEE7BFBB707CA8EF0C0@MN2PR11MB3550.namprd11.prod.outlook.com>
+ <3e76b6e1-9c3d-2e5c-896e-f1af9a785fe5@huawei.com> <MN2PR11MB35505927EB38FFD749E535CBEF0A0@MN2PR11MB3550.namprd11.prod.outlook.com>
+In-Reply-To: <MN2PR11MB35505927EB38FFD749E535CBEF0A0@MN2PR11MB3550.namprd11.prod.outlook.com>
+From:   Jinpu Wang <jinpu.wang@cloud.ionos.com>
+Date:   Wed, 11 Mar 2020 18:08:11 +0100
+Message-ID: <CAMGffEnHim9GD2F+7ueyoMWuYpdqghGGYqfLrWcAcN3WfXm_Ng@mail.gmail.com>
+Subject: Re: [PATCH V2 05/13] pm80xx : Support for char device.
+To:     Deepak Ukey <Deepak.Ukey@microchip.com>
+Cc:     John Garry <john.garry@huawei.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>,
+        Vasanthalakshmi.Tharmarajan@microchip.com,
+        Viswas G <Viswas.G@microchip.com>,
+        Jack Wang <jinpu.wang@profitbricks.com>, yuuzheng@google.com,
+        Vikram Auradkar <auradkar@google.com>, vishakhavc@google.com,
+        bjashnani@google.com, Radha Ramachandran <radha@google.com>,
+        akshatzen@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Luo Jiaxing <luojiaxing@huawei.com>
+On Tue, Jan 28, 2020 at 10:43 AM <Deepak.Ukey@microchip.com> wrote:
+>
+>
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e content is safe
+>
+> On 22/01/2020 08:50, Deepak.Ukey@microchip.com wrote:
+> > -r--r--r-- 1 root root 4096 Jan 21 12:05 running_disparity_error_count
+> > ***
+> > -r--r--r-- 1 root root 4096 Jan 21 12:05 sas_address
+> > lrwxrwxrwx 1 root root    0 Jan 21 11:45 subsystem ->
+> > ../../../../../../../class/sas_phy
+> > -r--r--r-- 1 root root 4096 Jan 21 12:05 target_port_protocols
+> > -rw-r--r-- 1 root root 4096 Jan 21 11:45 uevent
+> >
+> > Maybe the other stuff provided in the patches are useful, I don't know.
+> > But debugfs seems better for that.
+> >
+> >       - 0006-pm80xx-sysfs-attribute-for-number-of-phys
+> >       - 0007-pm80xx-IOCTL-functionality-to-get-phy-status gets things l=
+ike Programmed Link Rate, Negotiated Link Rate, PHY Identifier
+> >       - 0008-pm80xx-IOCTL-functionality-to-get-phy-error provides other=
+ things like Invalid Dword Error Count, Disparity Error Count
+> >       - Thanks for addressing it. We can get this info from /sys/class/=
+sas_phy and /sys/class/sas_port so we will drop these above mentioned three=
+ patches from the next              - patch series.
+> >
 
-The print of pr_err() does not come with device information, so replace
-it with dev_err(). Also improve the grammar in the message.
+> >
+> >       - 0009-pm80xx-IOCTL-functionality-for-GPIO
+> >       - 0013-pm80xx-IOCTL-functionality-for-TWI-device
+> >       - For the above patches management utility passes command specifi=
+c information to driver through IOCTL structure, which used by driver to fr=
+ame the command and         - send to FW.  We are using the IOCTL interface=
+ for the same. Please let us know your thought.
+>
+> So I specifically questioned the SGPIO patch and why it would have an IOC=
+TL, as this function is supported in kernel libsas/SAS transport code as an=
+ SMP function.
+> >  Thank you for your suggestions. We will make use of function supported=
+ in libsas.
 
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
-Signed-off-by: John Garry <john.garry@huawei.com>
+So basically you only need IOCTL for GPIO and TWI devices, others can
+implement via libsas interface or from sysfs directly.
 
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index a2debe0c8185..374885aa8d77 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2938,6 +2938,7 @@ static void read_iost_itct_cache_v3_hw(struct hisi_hba *hisi_hba,
- {
- 	u32 cache_dw_size = HISI_SAS_IOST_ITCT_CACHE_DW_SZ *
- 			    HISI_SAS_IOST_ITCT_CACHE_NUM;
-+	struct device *dev = hisi_hba->dev;
- 	u32 *buf = cache;
- 	u32 i, val;
- 
-@@ -2950,7 +2951,7 @@ static void read_iost_itct_cache_v3_hw(struct hisi_hba *hisi_hba,
- 	}
- 
- 	if (val != 0xffffffff) {
--		pr_err("Issue occur when reading IOST/ITCT cache!\n");
-+		dev_err(dev, "Issue occurred in reading IOST/ITCT cache!\n");
- 		return;
- 	}
- 
--- 
-2.17.1
+I would like to suggest you do send out other changes without the
+IOCTL parts first, and consider again Is it really needed by the user
+to control GPIO and TWI, and if there is other way to do it?
 
+Sorry, I don't have a better suggestion!
+
+Regards,
+Jack Wang
