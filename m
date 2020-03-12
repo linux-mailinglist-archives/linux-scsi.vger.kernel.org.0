@@ -2,91 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87899182EA0
-	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2020 12:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16F0182F66
+	for <lists+linux-scsi@lfdr.de>; Thu, 12 Mar 2020 12:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgCLLJR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 12 Mar 2020 07:09:17 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:35775 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726000AbgCLLJQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 12 Mar 2020 07:09:16 -0400
-X-UUID: 461e0c2315674da0a5e2500458926cc9-20200312
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Uk2XDwY8UpUa34jOh1gmZh106hPeM2dU3/2C5J19+W8=;
-        b=Se2jnFt9fqzF3D/rREdZxA+RqLBuAY67IHthXjKeSppqy8DlUlIoXXgDjUjURek0yHbRyiKKqodwE6x8Uk77bLeJy+9wnNmvHIdZNVnE4hJnEGN9w2n6FpjZKINALhznK7perd1pp7wvSZGOphzjMqIS3jzbYI/VV1JLgCKmboI=;
-X-UUID: 461e0c2315674da0a5e2500458926cc9-20200312
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 112562526; Thu, 12 Mar 2020 19:09:12 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Thu, 12 Mar 2020 19:07:57 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 12 Mar 2020 19:08:51 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 8/8] scsi: ufs-mediatek: customize the delay for host enabling
-Date:   Thu, 12 Mar 2020 19:09:08 +0800
-Message-ID: <20200312110908.14895-9-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200312110908.14895-1-stanley.chu@mediatek.com>
-References: <20200312110908.14895-1-stanley.chu@mediatek.com>
+        id S1726986AbgCLLjr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 12 Mar 2020 07:39:47 -0400
+Received: from mga03.intel.com ([134.134.136.65]:19045 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725268AbgCLLjq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 12 Mar 2020 07:39:46 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Mar 2020 04:39:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,544,1574150400"; 
+   d="scan'208";a="266305925"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Mar 2020 04:39:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 978B8193; Thu, 12 Mar 2020 13:39:41 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        linux-nvme@lists.infradead.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1] asm-generic: Provide generic {get,put}_unaligned_{l,b}e24()
+Date:   Thu, 12 Mar 2020 13:39:41 +0200
+Message-Id: <20200312113941.81162-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-TWVkaWFUZWsgcGxhdGZvcm0gYW5kIFVGUyBjb250cm9sbGVyIGNhbiBkeW5hbWljYWxseSBjdXN0
-b21pemUNCnRoZSBkZWxheSBmb3IgaG9zdCBlbmFibGluZyBhY2NvcmRpbmcgdG8gZGlmZmVyZW50
-IHNjZW5hcmlvcy4NCg0KRm9yIGV4YW1wbGUsIGZvciBob3N0IGluaXRpYWxpemF0aW9uIHdpdGgg
-bG93LWxldmVsIE1QSFkgY2FsaWJyYXRpb24NCnJlcXVpcmVkLCBsb25nZXIgZGVsYXkgc2hhbGwg
-YmUgZXhwZWN0ZWQuIEJ1dCB0aGUgZGVsYXkgY291bGQgYmUgcmVtb3ZlZA0KaWYgc3VjaCBNUEhZ
-IGNhbGlicmF0aW9uIGNhbiBiZSBza2lwcGVkLCBsaWtlIHJlc3VtZSBmbG93Lg0KDQpTaWduZWQt
-b2ZmLWJ5OiBTdGFubGV5IENodSA8c3RhbmxleS5jaHVAbWVkaWF0ZWsuY29tPg0KLS0tDQogYXJj
-aC9hcm02NC9jb25maWdzL2RlZmNvbmZpZyAgICB8ICAxICsNCiBkcml2ZXJzL3Njc2kvdWZzL3Vm
-cy1tZWRpYXRlay5jIHwgMTQgKysrKysrKysrKysrKysNCiAyIGZpbGVzIGNoYW5nZWQsIDE1IGlu
-c2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL2FyY2gvYXJtNjQvY29uZmlncy9kZWZjb25maWcg
-Yi9hcmNoL2FybTY0L2NvbmZpZ3MvZGVmY29uZmlnDQppbmRleCAwYThhMmFkOTRiZWYuLjkzMDZm
-NjU4YTZjZCAxMDA2NDQNCi0tLSBhL2FyY2gvYXJtNjQvY29uZmlncy9kZWZjb25maWcNCisrKyBi
-L2FyY2gvYXJtNjQvY29uZmlncy9kZWZjb25maWcNCkBAIC0yMzUsNiArMjM1LDcgQEAgQ09ORklH
-X1NDU0lfTVBUM1NBUz1tDQogQ09ORklHX1NDU0lfVUZTSENEPXkNCiBDT05GSUdfU0NTSV9VRlNI
-Q0RfUExBVEZPUk09eQ0KIENPTkZJR19TQ1NJX1VGU19RQ09NPW0NCitDT05GSUdfU0NTSV9VRlNf
-TUVESUFURUs9bQ0KIENPTkZJR19TQ1NJX1VGU19ISVNJPXkNCiBDT05GSUdfQVRBPXkNCiBDT05G
-SUdfU0FUQV9BSENJPXkNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRl
-ay5jIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnMtbWVkaWF0ZWsuYw0KaW5kZXggMGZmNjc4MTY1NGZk
-Li42ZjQzN2YwMDkxYmYgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRl
-ay5jDQorKysgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jDQpAQCAtNzEsNiArNzEs
-MTkgQEAgc3RhdGljIHZvaWQgdWZzX210a19jZmdfdW5pcHJvX2NnKHN0cnVjdCB1ZnNfaGJhICpo
-YmEsIGJvb2wgZW5hYmxlKQ0KIAl9DQogfQ0KIA0KK3N0YXRpYyBpbnQgdWZzX210a19oY2VfZW5h
-YmxlX25vdGlmeShzdHJ1Y3QgdWZzX2hiYSAqaGJhLA0KKwkJCQkgICAgIGVudW0gdWZzX25vdGlm
-eV9jaGFuZ2Vfc3RhdHVzIHN0YXR1cykNCit7DQorCWlmIChzdGF0dXMgPT0gUFJFX0NIQU5HRSkg
-ew0KKwkJaWYgKGhiYS0+cG1fb3BfaW5fcHJvZ3Jlc3MpDQorCQkJaGJhLT5oYmFfZW5hYmxlX2Rl
-bGF5X3VzID0gMDsNCisJCWVsc2UNCisJCQloYmEtPmhiYV9lbmFibGVfZGVsYXlfdXMgPSAxMDA7
-DQorCX0NCisNCisJcmV0dXJuIDA7DQorfQ0KKw0KIHN0YXRpYyBpbnQgdWZzX210a19iaW5kX21w
-aHkoc3RydWN0IHVmc19oYmEgKmhiYSkNCiB7DQogCXN0cnVjdCB1ZnNfbXRrX2hvc3QgKmhvc3Qg
-PSB1ZnNoY2RfZ2V0X3ZhcmlhbnQoaGJhKTsNCkBAIC01NTIsNiArNTY1LDcgQEAgc3RhdGljIHN0
-cnVjdCB1ZnNfaGJhX3ZhcmlhbnRfb3BzIHVmc19oYmFfbXRrX3ZvcHMgPSB7DQogCS5uYW1lICAg
-ICAgICAgICAgICAgID0gIm1lZGlhdGVrLnVmc2hjaSIsDQogCS5pbml0ICAgICAgICAgICAgICAg
-ID0gdWZzX210a19pbml0LA0KIAkuc2V0dXBfY2xvY2tzICAgICAgICA9IHVmc19tdGtfc2V0dXBf
-Y2xvY2tzLA0KKwkuaGNlX2VuYWJsZV9ub3RpZnkgICA9IHVmc19tdGtfaGNlX2VuYWJsZV9ub3Rp
-ZnksDQogCS5saW5rX3N0YXJ0dXBfbm90aWZ5ID0gdWZzX210a19saW5rX3N0YXJ0dXBfbm90aWZ5
-LA0KIAkucHdyX2NoYW5nZV9ub3RpZnkgICA9IHVmc19tdGtfcHdyX2NoYW5nZV9ub3RpZnksDQog
-CS5hcHBseV9kZXZfcXVpcmtzICAgID0gdWZzX210a19hcHBseV9kZXZfcXVpcmtzLA0KLS0gDQoy
-LjE4LjANCg==
+There are users in kernel that duplicate {get,put}_unaligned_{l,b}e24()
+implementation. Provide generic helpers once for all.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/nvme/host/rdma.c                     |  8 -------
+ drivers/nvme/target/rdma.c                   |  6 -----
+ drivers/usb/gadget/function/storage_common.h |  5 ----
+ include/asm-generic/unaligned.h              | 25 ++++++++++++++++++++
+ include/target/target_core_backend.h         |  6 -----
+ 5 files changed, 25 insertions(+), 25 deletions(-)
+
+diff --git a/drivers/nvme/host/rdma.c b/drivers/nvme/host/rdma.c
+index 3e85c5cacefd..2845118e6e40 100644
+--- a/drivers/nvme/host/rdma.c
++++ b/drivers/nvme/host/rdma.c
+@@ -142,14 +142,6 @@ static void nvme_rdma_recv_done(struct ib_cq *cq, struct ib_wc *wc);
+ static const struct blk_mq_ops nvme_rdma_mq_ops;
+ static const struct blk_mq_ops nvme_rdma_admin_mq_ops;
+ 
+-/* XXX: really should move to a generic header sooner or later.. */
+-static inline void put_unaligned_le24(u32 val, u8 *p)
+-{
+-	*p++ = val;
+-	*p++ = val >> 8;
+-	*p++ = val >> 16;
+-}
+-
+ static inline int nvme_rdma_queue_idx(struct nvme_rdma_queue *queue)
+ {
+ 	return queue - queue->ctrl->queues;
+diff --git a/drivers/nvme/target/rdma.c b/drivers/nvme/target/rdma.c
+index 37d262a65877..8fcede75e02a 100644
+--- a/drivers/nvme/target/rdma.c
++++ b/drivers/nvme/target/rdma.c
+@@ -143,12 +143,6 @@ static int num_pages(int len)
+ 	return 1 + (((len - 1) & PAGE_MASK) >> PAGE_SHIFT);
+ }
+ 
+-/* XXX: really should move to a generic header sooner or later.. */
+-static inline u32 get_unaligned_le24(const u8 *p)
+-{
+-	return (u32)p[0] | (u32)p[1] << 8 | (u32)p[2] << 16;
+-}
+-
+ static inline bool nvmet_rdma_need_data_in(struct nvmet_rdma_rsp *rsp)
+ {
+ 	return nvme_is_write(rsp->req.cmd) &&
+diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+index e5e3a2553aaa..bdeb1e233fc9 100644
+--- a/drivers/usb/gadget/function/storage_common.h
++++ b/drivers/usb/gadget/function/storage_common.h
+@@ -172,11 +172,6 @@ enum data_direction {
+ 	DATA_DIR_NONE
+ };
+ 
+-static inline u32 get_unaligned_be24(u8 *buf)
+-{
+-	return 0xffffff & (u32) get_unaligned_be32(buf - 1);
+-}
+-
+ static inline struct fsg_lun *fsg_lun_from_dev(struct device *dev)
+ {
+ 	return container_of(dev, struct fsg_lun, dev);
+diff --git a/include/asm-generic/unaligned.h b/include/asm-generic/unaligned.h
+index 374c940e9be1..dd9f9695d1ba 100644
+--- a/include/asm-generic/unaligned.h
++++ b/include/asm-generic/unaligned.h
+@@ -33,4 +33,29 @@
+ # error need to define endianess
+ #endif
+ 
++/* 24-bit unaligned access is special for now, that's why explicitly here */
++static inline u32 get_unaligned_le24(const u8 *p)
++{
++	return (u32)p[0] | (u32)p[1] << 8 | (u32)p[2] << 16;
++}
++
++static inline void put_unaligned_le24(const u32 val, u8 *p)
++{
++	*p++ = val;
++	*p++ = val >> 8;
++	*p++ = val >> 16;
++}
++
++static inline u32 get_unaligned_be24(const u8 *buf)
++{
++	return (u32)p[0] << 16 | (u32)p[1] << 8 | (u32)p[2];
++}
++
++static inline void put_unaligned_be24(const u32 val, u8 *p)
++{
++	*p++ = val >> 16;
++	*p++ = val >> 8;
++	*p++ = val;
++}
++
+ #endif /* __ASM_GENERIC_UNALIGNED_H */
+diff --git a/include/target/target_core_backend.h b/include/target/target_core_backend.h
+index 51b6f50eabee..1b752d8ea529 100644
+--- a/include/target/target_core_backend.h
++++ b/include/target/target_core_backend.h
+@@ -116,10 +116,4 @@ static inline bool target_dev_configured(struct se_device *se_dev)
+ 	return !!(se_dev->dev_flags & DF_CONFIGURED);
+ }
+ 
+-/* Only use get_unaligned_be24() if reading p - 1 is allowed. */
+-static inline uint32_t get_unaligned_be24(const uint8_t *const p)
+-{
+-	return get_unaligned_be32(p - 1) & 0xffffffU;
+-}
+-
+ #endif /* TARGET_CORE_BACKEND_H */
+-- 
+2.25.1
 
