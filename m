@@ -2,118 +2,184 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A41D184315
-	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2020 10:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BFE184337
+	for <lists+linux-scsi@lfdr.de>; Fri, 13 Mar 2020 10:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbgCMJBd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 13 Mar 2020 05:01:33 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:47666 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726477AbgCMJBa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Mar 2020 05:01:30 -0400
-X-UUID: 595db0c9b32647f89175d7b12988628d-20200313
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=QqYl5LbBQOmFjlV2531kF8pt73Ft9iKLdEjT8hrrzj0=;
-        b=KJBEab5id3u03qcVueQav1dvRvsp8vT2uH28Q/gQ1iMfcRD0j9LeM81YFGU4LTVbm7O6OILDES6Qv/ocRZIXJwXrDsBCn0ysDAgzXGgayv2Vd2778/zhgzgD9Ng5vJeSEEMQAQn1nSeCvNp5iVARkApc4YtGLNVTAeX48REmvdI=;
-X-UUID: 595db0c9b32647f89175d7b12988628d-20200313
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 385964533; Fri, 13 Mar 2020 17:01:23 +0800
-Received: from mtkcas09.mediatek.inc (172.21.101.178) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Fri, 13 Mar 2020 16:59:10 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas09.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 13 Mar 2020 17:00:33 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v4 8/8] scsi: ufs-mediatek: customize the delay for host enabling
-Date:   Fri, 13 Mar 2020 17:01:03 +0800
-Message-ID: <20200313090103.15390-9-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200313090103.15390-1-stanley.chu@mediatek.com>
-References: <20200313090103.15390-1-stanley.chu@mediatek.com>
+        id S1726426AbgCMJFj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 13 Mar 2020 05:05:39 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:38001 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726300AbgCMJFj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 13 Mar 2020 05:05:39 -0400
+Received: by mail-ed1-f67.google.com with SMTP id h5so11004702edn.5;
+        Fri, 13 Mar 2020 02:05:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g2JDRt2yUCaKJR+LJgonz8WYOGVSR0jklbXODmQG85o=;
+        b=gNbtj6e6xB484Vw+FCUMcu+ukXx6jeQLCAjpRFWCU/6jz2tv0Hwe35DRCNiWL2Meww
+         YyYehoP655MIMsjYulSoj9GJFSjl12TYp4TXva7Cz6tAxLGTCdgcTudBiCNQ+j0gzJ1k
+         ilzQHcJyD5LAPkd1LwYA0avLUmn8RIzfwid1KKBxD9q5kjRin4weoo9Ve/u456++ehSQ
+         vs5DS8hH2FynwDylHC8ZN5bwtjHp0AQGP2Sbw2VBvLwqTWFSXM5TuwFbhfmwMhfyCW/s
+         wzuh/vUm/qQN7AL3SyTtl6T08h4x5rcSibOMr6uknLnJ8x8gE2nsaikVHBBR6G3/i76q
+         /ceA==
+X-Gm-Message-State: ANhLgQ0A2HbMIeTb7XPj4KZVOMZQLjJf0DX8CD5o1NeTAOBxIjC0BWYx
+        o/GZYN6dt9vrWa6hknP991k=
+X-Google-Smtp-Source: ADFU+vv9kZJ9NcTtH+qwonxAqQU7Lfq9PDb93XF2tGG3Pb8J2fKMcq9pPUdVYy0XX1/6H5ZFybDd/g==
+X-Received: by 2002:a17:906:34db:: with SMTP id h27mr10252423ejb.111.1584090336754;
+        Fri, 13 Mar 2020 02:05:36 -0700 (PDT)
+Received: from pi3 ([194.230.155.125])
+        by smtp.googlemail.com with ESMTPSA id l9sm1149281edt.93.2020.03.13.02.05.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Mar 2020 02:05:36 -0700 (PDT)
+Date:   Fri, 13 Mar 2020 10:05:34 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-scsi@vger.kernel.org, avri.altman@wdc.com,
+        martin.petersen@oracle.com, kwmad.kim@samsung.com,
+        stanley.chu@mediatek.com, cang@codeaurora.org
+Subject: Re: [PATCH 5/5] arm64: dts: Add node for ufs exynos7
+Message-ID: <20200313090534.GC7416@pi3>
+References: <20200306150529.3370-1-alim.akhtar@samsung.com>
+ <CGME20200306151028epcas5p25ec9ccacedf49fa47ebb94bcdff42c54@epcas5p2.samsung.com>
+ <20200306150529.3370-6-alim.akhtar@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200306150529.3370-6-alim.akhtar@samsung.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-TWVkaWFUZWsgcGxhdGZvcm0gYW5kIFVGUyBjb250cm9sbGVyIGNhbiBkeW5hbWljYWxseSBjdXN0
-b21pemUNCnRoZSBkZWxheSBmb3IgaG9zdCBlbmFibGluZyBhY2NvcmRpbmcgdG8gZGlmZmVyZW50
-IHNjZW5hcmlvcy4NCg0KRm9yIGV4YW1wbGUsIGlmIFVuaVBybyBlbnRlcnMgbG93ZXItcG93ZXIg
-bW9kZSwgc3VjaCBkZWxheSBjYW4NCmJlIG1pbmltaXplZCwgb3RoZXJ3aXNlIGxvbmdlciBkZWxh
-eSBzaGFsbCBiZSBleHBlY3RlZC4NCg0KU2lnbmVkLW9mZi1ieTogU3RhbmxleSBDaHUgPHN0YW5s
-ZXkuY2h1QG1lZGlhdGVrLmNvbT4NCi0tLQ0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVr
-LmMgfCA0MyArKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0NCiBkcml2ZXJzL3Njc2kv
-dWZzL3Vmcy1tZWRpYXRlay5oIHwgIDEgKw0KIDIgZmlsZXMgY2hhbmdlZCwgMzUgaW5zZXJ0aW9u
-cygrKSwgOSBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZz
-LW1lZGlhdGVrLmMgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jDQppbmRleCAwZmY2
-NzgxNjU0ZmQuLmMwZmQ3ZDJlNGQwZCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZz
-LW1lZGlhdGVrLmMNCisrKyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMNCkBAIC0z
-MCwxMSArMzAsNiBAQA0KICNkZWZpbmUgdWZzX210a19kZXZpY2VfcmVzZXRfY3RybChoaWdoLCBy
-ZXMpIFwNCiAJdWZzX210a19zbWMoVUZTX01US19TSVBfREVWSUNFX1JFU0VULCBoaWdoLCByZXMp
-DQogDQotI2RlZmluZSB1ZnNfbXRrX3VuaXByb19wb3dlcmRvd24oaGJhLCBwb3dlcmRvd24pIFwN
-Ci0JdWZzaGNkX2RtZV9zZXQoaGJhLCBcDQotCQkgICAgICAgVUlDX0FSR19NSUJfU0VMKFZTX1VO
-SVBST1BPV0VSRE9XTkNPTlRST0wsIDApLCBcDQotCQkgICAgICAgcG93ZXJkb3duKQ0KLQ0KIHN0
-YXRpYyB2b2lkIHVmc19tdGtfY2ZnX3VuaXByb19jZyhzdHJ1Y3QgdWZzX2hiYSAqaGJhLCBib29s
-IGVuYWJsZSkNCiB7DQogCXUzMiB0bXA7DQpAQCAtNzEsNiArNjYsMjEgQEAgc3RhdGljIHZvaWQg
-dWZzX210a19jZmdfdW5pcHJvX2NnKHN0cnVjdCB1ZnNfaGJhICpoYmEsIGJvb2wgZW5hYmxlKQ0K
-IAl9DQogfQ0KIA0KK3N0YXRpYyBpbnQgdWZzX210a19oY2VfZW5hYmxlX25vdGlmeShzdHJ1Y3Qg
-dWZzX2hiYSAqaGJhLA0KKwkJCQkgICAgIGVudW0gdWZzX25vdGlmeV9jaGFuZ2Vfc3RhdHVzIHN0
-YXR1cykNCit7DQorCXN0cnVjdCB1ZnNfbXRrX2hvc3QgKmhvc3QgPSB1ZnNoY2RfZ2V0X3Zhcmlh
-bnQoaGJhKTsNCisNCisJaWYgKHN0YXR1cyA9PSBQUkVfQ0hBTkdFKSB7DQorCQlpZiAoaG9zdC0+
-dW5pcHJvX2xwbSkNCisJCQloYmEtPmhiYV9lbmFibGVfZGVsYXlfdXMgPSAwOw0KKwkJZWxzZQ0K
-KwkJCWhiYS0+aGJhX2VuYWJsZV9kZWxheV91cyA9IDYwMDsNCisJfQ0KKw0KKwlyZXR1cm4gMDsN
-Cit9DQorDQogc3RhdGljIGludCB1ZnNfbXRrX2JpbmRfbXBoeShzdHJ1Y3QgdWZzX2hiYSAqaGJh
-KQ0KIHsNCiAJc3RydWN0IHVmc19tdGtfaG9zdCAqaG9zdCA9IHVmc2hjZF9nZXRfdmFyaWFudCho
-YmEpOw0KQEAgLTMyNCwxMiArMzM0LDI2IEBAIHN0YXRpYyBpbnQgdWZzX210a19wd3JfY2hhbmdl
-X25vdGlmeShzdHJ1Y3QgdWZzX2hiYSAqaGJhLA0KIAlyZXR1cm4gcmV0Ow0KIH0NCiANCitzdGF0
-aWMgaW50IHVmc19tdGtfdW5pcHJvX3NldF9wbShzdHJ1Y3QgdWZzX2hiYSAqaGJhLCB1MzIgbHBt
-KQ0KK3sNCisJaW50IHJldDsNCisJc3RydWN0IHVmc19tdGtfaG9zdCAqaG9zdCA9IHVmc2hjZF9n
-ZXRfdmFyaWFudChoYmEpOw0KKw0KKwlyZXQgPSB1ZnNoY2RfZG1lX3NldChoYmEsDQorCQkJICAg
-ICBVSUNfQVJHX01JQl9TRUwoVlNfVU5JUFJPUE9XRVJET1dOQ09OVFJPTCwgMCksDQorCQkJICAg
-ICBscG0pOw0KKwlpZiAoIXJldCkNCisJCWhvc3QtPnVuaXByb19scG0gPSBscG07DQorDQorCXJl
-dHVybiByZXQ7DQorfQ0KKw0KIHN0YXRpYyBpbnQgdWZzX210a19wcmVfbGluayhzdHJ1Y3QgdWZz
-X2hiYSAqaGJhKQ0KIHsNCiAJaW50IHJldDsNCiAJdTMyIHRtcDsNCiANCi0JdWZzX210a191bmlw
-cm9fcG93ZXJkb3duKGhiYSwgMCk7DQorCXVmc19tdGtfdW5pcHJvX3NldF9wbShoYmEsIDApOw0K
-IA0KIAkvKg0KIAkgKiBTZXR0aW5nIFBBX0xvY2FsX1RYX0xDQ19FbmFibGUgdG8gMCBiZWZvcmUg
-bGluayBzdGFydHVwDQpAQCAtNDM3LDcgKzQ2MSw3IEBAIHN0YXRpYyBpbnQgdWZzX210a19saW5r
-X3NldF9ocG0oc3RydWN0IHVmc19oYmEgKmhiYSkNCiAJaWYgKGVycikNCiAJCXJldHVybiBlcnI7
-DQogDQotCWVyciA9IHVmc19tdGtfdW5pcHJvX3Bvd2VyZG93bihoYmEsIDApOw0KKwllcnIgPSB1
-ZnNfbXRrX3VuaXByb19zZXRfcG0oaGJhLCAwKTsNCiAJaWYgKGVycikNCiAJCXJldHVybiBlcnI7
-DQogDQpAQCAtNDU4LDEwICs0ODIsMTAgQEAgc3RhdGljIGludCB1ZnNfbXRrX2xpbmtfc2V0X2xw
-bShzdHJ1Y3QgdWZzX2hiYSAqaGJhKQ0KIHsNCiAJaW50IGVycjsNCiANCi0JZXJyID0gdWZzX210
-a191bmlwcm9fcG93ZXJkb3duKGhiYSwgMSk7DQorCWVyciA9IHVmc19tdGtfdW5pcHJvX3NldF9w
-bShoYmEsIDEpOw0KIAlpZiAoZXJyKSB7DQogCQkvKiBSZXN1bWUgVW5pUHJvIHN0YXRlIGZvciBm
-b2xsb3dpbmcgZXJyb3IgcmVjb3ZlcnkgKi8NCi0JCXVmc19tdGtfdW5pcHJvX3Bvd2VyZG93biho
-YmEsIDApOw0KKwkJdWZzX210a191bmlwcm9fc2V0X3BtKGhiYSwgMCk7DQogCQlyZXR1cm4gZXJy
-Ow0KIAl9DQogDQpAQCAtNTUyLDYgKzU3Niw3IEBAIHN0YXRpYyBzdHJ1Y3QgdWZzX2hiYV92YXJp
-YW50X29wcyB1ZnNfaGJhX210a192b3BzID0gew0KIAkubmFtZSAgICAgICAgICAgICAgICA9ICJt
-ZWRpYXRlay51ZnNoY2kiLA0KIAkuaW5pdCAgICAgICAgICAgICAgICA9IHVmc19tdGtfaW5pdCwN
-CiAJLnNldHVwX2Nsb2NrcyAgICAgICAgPSB1ZnNfbXRrX3NldHVwX2Nsb2NrcywNCisJLmhjZV9l
-bmFibGVfbm90aWZ5ICAgPSB1ZnNfbXRrX2hjZV9lbmFibGVfbm90aWZ5LA0KIAkubGlua19zdGFy
-dHVwX25vdGlmeSA9IHVmc19tdGtfbGlua19zdGFydHVwX25vdGlmeSwNCiAJLnB3cl9jaGFuZ2Vf
-bm90aWZ5ICAgPSB1ZnNfbXRrX3B3cl9jaGFuZ2Vfbm90aWZ5LA0KIAkuYXBwbHlfZGV2X3F1aXJr
-cyAgICA9IHVmc19tdGtfYXBwbHlfZGV2X3F1aXJrcywNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Nj
-c2kvdWZzL3Vmcy1tZWRpYXRlay5oIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnMtbWVkaWF0ZWsuaA0K
-aW5kZXggNGM3ODdiOTlmZTQxLi41YmJkM2U5Y2JhZTIgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Nj
-c2kvdWZzL3Vmcy1tZWRpYXRlay5oDQorKysgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRl
-ay5oDQpAQCAtOTEsNiArOTEsNyBAQCBlbnVtIHsNCiBzdHJ1Y3QgdWZzX210a19ob3N0IHsNCiAJ
-c3RydWN0IHVmc19oYmEgKmhiYTsNCiAJc3RydWN0IHBoeSAqbXBoeTsNCisJYm9vbCB1bmlwcm9f
-bHBtOw0KIAlib29sIHJlZl9jbGtfZW5hYmxlZDsNCiAJdTE2IHJlZl9jbGtfdW5nYXRpbmdfd2Fp
-dF91czsNCiAJdTE2IHJlZl9jbGtfZ2F0aW5nX3dhaXRfdXM7DQotLSANCjIuMTguMA0K
+On Fri, Mar 06, 2020 at 08:35:29PM +0530, Alim Akhtar wrote:
+> Adding dt node foe UFS and UFS-PHY for exynos7 SoC.
+> 
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  .../boot/dts/exynos/exynos7-espresso.dts      | 16 ++++++
+>  arch/arm64/boot/dts/exynos/exynos7.dtsi       | 56 ++++++++++++++++++-
+>  2 files changed, 70 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> index 7af288fa9475..dee5a3ae7de3 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> +++ b/arch/arm64/boot/dts/exynos/exynos7-espresso.dts
+> @@ -410,3 +410,19 @@
+>  	vbus-supply = <&usb30_vbus_reg>;
+>  	vbus-boost-supply = <&usb3drd_boost_5v>;
+>  };
+> +
+> +&ufs {
 
+Let's keep it in alphabetical order, so before usbdrd_phy.
+
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&ufs_rst_n &ufs_refclk_out>;
+> +	ufs,pwr-attr-mode = "FAST";
+> +	ufs,pwr-attr-lane = <2>;
+> +	ufs,pwr-attr-gear = <2>;
+> +	ufs,pwr-attr-hs-series = "HS_rate_b";
+> +	ufs-rx-adv-fine-gran-sup_en = <1>;
+> +	ufs-rx-adv-fine-gran-step = <3>;
+> +	ufs-rx-adv-min-activate-time-cap = <9>;
+> +	ufs-pa-granularity = <6>;
+> +	ufs-pa-tacctivate = <3>;
+> +	ufs-pa-hibern8time = <20>;
+> +};
+> diff --git a/arch/arm64/boot/dts/exynos/exynos7.dtsi b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+> index 5558045637ac..3edf63d18873 100644
+> --- a/arch/arm64/boot/dts/exynos/exynos7.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/exynos7.dtsi
+> @@ -220,9 +220,14 @@
+>  			#clock-cells = <1>;
+>  			clocks = <&fin_pll>, <&clock_top1 DOUT_ACLK_FSYS1_200>,
+>  				 <&clock_top1 DOUT_SCLK_MMC0>,
+> -				 <&clock_top1 DOUT_SCLK_MMC1>;
+> +				 <&clock_top1 DOUT_SCLK_MMC1>,
+> +				 <&clock_top1 DOUT_SCLK_UFSUNIPRO20>,
+> +				 <&clock_top1 DOUT_SCLK_PHY_FSYS1>,
+> +				 <&clock_top1 DOUT_SCLK_PHY_FSYS1_26M>;
+>  			clock-names = "fin_pll", "dout_aclk_fsys1_200",
+> -				      "dout_sclk_mmc0", "dout_sclk_mmc1";
+> +				      "dout_sclk_mmc0", "dout_sclk_mmc1",
+> +				      "dout_sclk_ufsunipro20", "dout_sclk_phy_fsys1",
+> +				      "dout_sclk_phy_fsys1_26m";
+>  		};
+>  
+>  		serial_0: serial@13630000 {
+> @@ -634,6 +639,53 @@
+>  				phy-names = "usb2-phy", "usb3-phy";
+>  			};
+>  		};
+> +
+> +		ufs: ufs@15570000 {
+> +			compatible ="samsung,exynos7-ufs";
+
+Space after =.
+
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +			reg =
+
+No new line after =
+
+> +				<0x15570000 0x100>,  /* 0: HCI standard */
+> +				<0x15570100 0x100>,  /* 1: Vendor specificed */
+> +				<0x15571000 0x200>,  /* 2: UNIPRO */
+> +				<0x15572000 0x300>;  /* 3: UFS protector */
+> +			reg-names = "hci", "vs_hci", "unipro", "ufsp";
+> +			interrupts = <GIC_SPI 200 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks =
+> +				/* core clock */
+
+Ditto here and further, no new liine after =
+
+Rest looks good. I will need DT's ack on bindings before I will take the
+DTS to samsung-soc.
+
+Best regards,
+Krzysztof
+
+> +				<&clock_fsys1 ACLK_UFS20_LINK>,
+> +				/* unipro clocks */
+> +				<&clock_fsys1 SCLK_UFSUNIPRO20_USER>;
+> +			clock-names =
+> +				/* core clocks */
+> +				"core_clk",
+> +				/* unipro clocks */
+> +				"sclk_unipro_main";
+> +			freq-table-hz = <0 0>, <0 0>;
+> +			pclk-freq-avail-range = <70000000 133000000>;
+> +			ufs,pwr-local-l2-timer = <8000 28000 20000>;
+> +			ufs,pwr-remote-l2-timer = <12000 32000 16000>;
+> +			phys = <&ufs_phy>;
+> +			phy-names = "ufs-phy";
+> +			status = "disabled";
+> +		};
+> +
+> +		ufs_phy: ufs-phy@0x15571800 {
+> +			compatible = "samsung,exynos7-ufs-phy";
+> +			reg = <0x15571800 0x240>;
+> +			reg-names = "phy-pma";
+> +			samsung,pmu-syscon = <&pmu_system_controller>;
+> +			#phy-cells = <0>;
+> +			clocks =
+> +				/* refclk clocks */
+> +				<&clock_fsys1 MOUT_FSYS1_PHYCLK_SEL1>,
+> +				<&clock_top1 CLK_SCLK_PHY_FSYS1_26M>;
+> +			clock-names =
+> +				/* refclk clocks */
+> +				"ref_clk_parent",
+> +				"ref_clk";
+> +		};
+>  	};
+>  
+>  	timer {
+> -- 
+> 2.17.1
+> 
