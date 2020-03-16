@@ -2,120 +2,180 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E843A186702
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2020 09:53:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0D518672A
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2020 09:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730328AbgCPIxU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Mar 2020 04:53:20 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:1469 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730277AbgCPIxR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Mar 2020 04:53:17 -0400
-X-UUID: ace90d782242437786ff3c09407688aa-20200316
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=dj5KB99V4jIFByooAmxz5JbekKkRboIPOi1U6PTrprM=;
-        b=pMQsVMxdxXBoSGgsGifUgiyLVMSQJ5LXrM39gnvn0HNOwMd/53nGKIr7UZOWOH1iYrcjRskzssFerNy/IdI3Asebtqoof2wgGgXeZ1WAz/h4oZRNWKWsPYJ2Z0C4IbYb5g9UXShLW4F8rVgrr0xAXAOqLINoXEnls15Fqv5h3lY=;
-X-UUID: ace90d782242437786ff3c09407688aa-20200316
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 2074507101; Mon, 16 Mar 2020 16:53:07 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1395.4; Mon, 16 Mar 2020 16:52:30 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 16 Mar 2020 16:53:53 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.peter~sen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v6 7/7] scsi: ufs-mediatek: customize the delay for host enabling
-Date:   Mon, 16 Mar 2020 16:53:03 +0800
-Message-ID: <20200316085303.20350-8-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200316085303.20350-1-stanley.chu@mediatek.com>
-References: <20200316085303.20350-1-stanley.chu@mediatek.com>
+        id S1730247AbgCPI5L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Mar 2020 04:57:11 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:36208 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730152AbgCPI5K (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 16 Mar 2020 04:57:10 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1584349029; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=ijq3uor9SMJb3ExZBsPo87hwudJNjl8YhdOh+sCNnWA=;
+ b=KQmPVVAkFqnuXQR1/vIqhLmiYOQOlpWfxKG0/ErcyD+/PTo4hwZyiDa2wpB8e3LAzsDwFeH+
+ XF5wCMxZu+ioXaF1O2BEqdDb31/wO9M6SFZvd1Rf71MpBi6XmH51I8AKAjoFPsQYRyIgcYoJ
+ lP3Z5RNx5jFxx2Rve0MX1Y2JxbE=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e6f3f56.7fe344735f80-smtp-out-n04;
+ Mon, 16 Mar 2020 08:56:54 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 6E05EC4478F; Mon, 16 Mar 2020 08:56:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 37B92C433CB;
+        Mon, 16 Mar 2020 08:56:51 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 229F34FA95F0E0E18D30ACB4FEF427FDA1533AD8857E28584637E9A378D5A12D2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 16 Mar 2020 16:56:51 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Stanley Chu <stanley.chu@mediatek.com>
+Cc:     linux-scsi@vger.kernel.org, martin.peter~sen@oracle.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com,
+        beanhuo@micron.com, asutoshd@codeaurora.org,
+        matthias.bgg@gmail.com, bvanassche@acm.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kuohong.wang@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, andy.teng@mediatek.com
+Subject: Re: [PATCH v6 3/7] scsi: ufs: introduce common delay function
+In-Reply-To: <20200316085303.20350-4-stanley.chu@mediatek.com>
+References: <20200316085303.20350-1-stanley.chu@mediatek.com>
+ <20200316085303.20350-4-stanley.chu@mediatek.com>
+Message-ID: <19f7e050d992c67e363d6d582393c5a0@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-TWVkaWFUZWsgcGxhdGZvcm0gYW5kIFVGUyBjb250cm9sbGVyIGNhbiBkeW5hbWljYWxseSBjdXN0
-b21pemUNCnRoZSBkZWxheSBmb3IgaG9zdCBlbmFibGluZyBhY2NvcmRpbmcgdG8gZGlmZmVyZW50
-IHNjZW5hcmlvcy4NCg0KRm9yIGV4YW1wbGUsIGlmIFVuaVBybyBlbnRlcnMgbG93ZXItcG93ZXIg
-bW9kZSwgc3VjaCBkZWxheSBjYW4NCmJlIG1pbmltaXplZCwgb3RoZXJ3aXNlIGxvbmdlciBkZWxh
-eSBzaGFsbCBiZSBleHBlY3RlZC4NCg0KU2lnbmVkLW9mZi1ieTogU3RhbmxleSBDaHUgPHN0YW5s
-ZXkuY2h1QG1lZGlhdGVrLmNvbT4NClJldmlld2VkLWJ5OiBBdnJpIEFsdG1hbiA8YXZyaS5hbHRt
-YW5Ad2RjLmNvbT4NCi0tLQ0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMgfCA0MyAr
-KysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1t
-ZWRpYXRlay5oIHwgIDEgKw0KIDIgZmlsZXMgY2hhbmdlZCwgMzUgaW5zZXJ0aW9ucygrKSwgOSBk
-ZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVr
-LmMgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jDQppbmRleCAwZmY2NzgxNjU0ZmQu
-LmMwZmQ3ZDJlNGQwZCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVr
-LmMNCisrKyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMNCkBAIC0zMCwxMSArMzAs
-NiBAQA0KICNkZWZpbmUgdWZzX210a19kZXZpY2VfcmVzZXRfY3RybChoaWdoLCByZXMpIFwNCiAJ
-dWZzX210a19zbWMoVUZTX01US19TSVBfREVWSUNFX1JFU0VULCBoaWdoLCByZXMpDQogDQotI2Rl
-ZmluZSB1ZnNfbXRrX3VuaXByb19wb3dlcmRvd24oaGJhLCBwb3dlcmRvd24pIFwNCi0JdWZzaGNk
-X2RtZV9zZXQoaGJhLCBcDQotCQkgICAgICAgVUlDX0FSR19NSUJfU0VMKFZTX1VOSVBST1BPV0VS
-RE9XTkNPTlRST0wsIDApLCBcDQotCQkgICAgICAgcG93ZXJkb3duKQ0KLQ0KIHN0YXRpYyB2b2lk
-IHVmc19tdGtfY2ZnX3VuaXByb19jZyhzdHJ1Y3QgdWZzX2hiYSAqaGJhLCBib29sIGVuYWJsZSkN
-CiB7DQogCXUzMiB0bXA7DQpAQCAtNzEsNiArNjYsMjEgQEAgc3RhdGljIHZvaWQgdWZzX210a19j
-ZmdfdW5pcHJvX2NnKHN0cnVjdCB1ZnNfaGJhICpoYmEsIGJvb2wgZW5hYmxlKQ0KIAl9DQogfQ0K
-IA0KK3N0YXRpYyBpbnQgdWZzX210a19oY2VfZW5hYmxlX25vdGlmeShzdHJ1Y3QgdWZzX2hiYSAq
-aGJhLA0KKwkJCQkgICAgIGVudW0gdWZzX25vdGlmeV9jaGFuZ2Vfc3RhdHVzIHN0YXR1cykNCit7
-DQorCXN0cnVjdCB1ZnNfbXRrX2hvc3QgKmhvc3QgPSB1ZnNoY2RfZ2V0X3ZhcmlhbnQoaGJhKTsN
-CisNCisJaWYgKHN0YXR1cyA9PSBQUkVfQ0hBTkdFKSB7DQorCQlpZiAoaG9zdC0+dW5pcHJvX2xw
-bSkNCisJCQloYmEtPmhiYV9lbmFibGVfZGVsYXlfdXMgPSAwOw0KKwkJZWxzZQ0KKwkJCWhiYS0+
-aGJhX2VuYWJsZV9kZWxheV91cyA9IDYwMDsNCisJfQ0KKw0KKwlyZXR1cm4gMDsNCit9DQorDQog
-c3RhdGljIGludCB1ZnNfbXRrX2JpbmRfbXBoeShzdHJ1Y3QgdWZzX2hiYSAqaGJhKQ0KIHsNCiAJ
-c3RydWN0IHVmc19tdGtfaG9zdCAqaG9zdCA9IHVmc2hjZF9nZXRfdmFyaWFudChoYmEpOw0KQEAg
-LTMyNCwxMiArMzM0LDI2IEBAIHN0YXRpYyBpbnQgdWZzX210a19wd3JfY2hhbmdlX25vdGlmeShz
-dHJ1Y3QgdWZzX2hiYSAqaGJhLA0KIAlyZXR1cm4gcmV0Ow0KIH0NCiANCitzdGF0aWMgaW50IHVm
-c19tdGtfdW5pcHJvX3NldF9wbShzdHJ1Y3QgdWZzX2hiYSAqaGJhLCB1MzIgbHBtKQ0KK3sNCisJ
-aW50IHJldDsNCisJc3RydWN0IHVmc19tdGtfaG9zdCAqaG9zdCA9IHVmc2hjZF9nZXRfdmFyaWFu
-dChoYmEpOw0KKw0KKwlyZXQgPSB1ZnNoY2RfZG1lX3NldChoYmEsDQorCQkJICAgICBVSUNfQVJH
-X01JQl9TRUwoVlNfVU5JUFJPUE9XRVJET1dOQ09OVFJPTCwgMCksDQorCQkJICAgICBscG0pOw0K
-KwlpZiAoIXJldCkNCisJCWhvc3QtPnVuaXByb19scG0gPSBscG07DQorDQorCXJldHVybiByZXQ7
-DQorfQ0KKw0KIHN0YXRpYyBpbnQgdWZzX210a19wcmVfbGluayhzdHJ1Y3QgdWZzX2hiYSAqaGJh
-KQ0KIHsNCiAJaW50IHJldDsNCiAJdTMyIHRtcDsNCiANCi0JdWZzX210a191bmlwcm9fcG93ZXJk
-b3duKGhiYSwgMCk7DQorCXVmc19tdGtfdW5pcHJvX3NldF9wbShoYmEsIDApOw0KIA0KIAkvKg0K
-IAkgKiBTZXR0aW5nIFBBX0xvY2FsX1RYX0xDQ19FbmFibGUgdG8gMCBiZWZvcmUgbGluayBzdGFy
-dHVwDQpAQCAtNDM3LDcgKzQ2MSw3IEBAIHN0YXRpYyBpbnQgdWZzX210a19saW5rX3NldF9ocG0o
-c3RydWN0IHVmc19oYmEgKmhiYSkNCiAJaWYgKGVycikNCiAJCXJldHVybiBlcnI7DQogDQotCWVy
-ciA9IHVmc19tdGtfdW5pcHJvX3Bvd2VyZG93bihoYmEsIDApOw0KKwllcnIgPSB1ZnNfbXRrX3Vu
-aXByb19zZXRfcG0oaGJhLCAwKTsNCiAJaWYgKGVycikNCiAJCXJldHVybiBlcnI7DQogDQpAQCAt
-NDU4LDEwICs0ODIsMTAgQEAgc3RhdGljIGludCB1ZnNfbXRrX2xpbmtfc2V0X2xwbShzdHJ1Y3Qg
-dWZzX2hiYSAqaGJhKQ0KIHsNCiAJaW50IGVycjsNCiANCi0JZXJyID0gdWZzX210a191bmlwcm9f
-cG93ZXJkb3duKGhiYSwgMSk7DQorCWVyciA9IHVmc19tdGtfdW5pcHJvX3NldF9wbShoYmEsIDEp
-Ow0KIAlpZiAoZXJyKSB7DQogCQkvKiBSZXN1bWUgVW5pUHJvIHN0YXRlIGZvciBmb2xsb3dpbmcg
-ZXJyb3IgcmVjb3ZlcnkgKi8NCi0JCXVmc19tdGtfdW5pcHJvX3Bvd2VyZG93bihoYmEsIDApOw0K
-KwkJdWZzX210a191bmlwcm9fc2V0X3BtKGhiYSwgMCk7DQogCQlyZXR1cm4gZXJyOw0KIAl9DQog
-DQpAQCAtNTUyLDYgKzU3Niw3IEBAIHN0YXRpYyBzdHJ1Y3QgdWZzX2hiYV92YXJpYW50X29wcyB1
-ZnNfaGJhX210a192b3BzID0gew0KIAkubmFtZSAgICAgICAgICAgICAgICA9ICJtZWRpYXRlay51
-ZnNoY2kiLA0KIAkuaW5pdCAgICAgICAgICAgICAgICA9IHVmc19tdGtfaW5pdCwNCiAJLnNldHVw
-X2Nsb2NrcyAgICAgICAgPSB1ZnNfbXRrX3NldHVwX2Nsb2NrcywNCisJLmhjZV9lbmFibGVfbm90
-aWZ5ICAgPSB1ZnNfbXRrX2hjZV9lbmFibGVfbm90aWZ5LA0KIAkubGlua19zdGFydHVwX25vdGlm
-eSA9IHVmc19tdGtfbGlua19zdGFydHVwX25vdGlmeSwNCiAJLnB3cl9jaGFuZ2Vfbm90aWZ5ICAg
-PSB1ZnNfbXRrX3B3cl9jaGFuZ2Vfbm90aWZ5LA0KIAkuYXBwbHlfZGV2X3F1aXJrcyAgICA9IHVm
-c19tdGtfYXBwbHlfZGV2X3F1aXJrcywNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvdWZzL3Vm
-cy1tZWRpYXRlay5oIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnMtbWVkaWF0ZWsuaA0KaW5kZXggNGM3
-ODdiOTlmZTQxLi41YmJkM2U5Y2JhZTIgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vm
-cy1tZWRpYXRlay5oDQorKysgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5oDQpAQCAt
-OTEsNiArOTEsNyBAQCBlbnVtIHsNCiBzdHJ1Y3QgdWZzX210a19ob3N0IHsNCiAJc3RydWN0IHVm
-c19oYmEgKmhiYTsNCiAJc3RydWN0IHBoeSAqbXBoeTsNCisJYm9vbCB1bmlwcm9fbHBtOw0KIAli
-b29sIHJlZl9jbGtfZW5hYmxlZDsNCiAJdTE2IHJlZl9jbGtfdW5nYXRpbmdfd2FpdF91czsNCiAJ
-dTE2IHJlZl9jbGtfZ2F0aW5nX3dhaXRfdXM7DQotLSANCjIuMTguMA0K
+On 2020-03-16 16:52, Stanley Chu wrote:
+> Introduce common delay function to collect all delay requirements
+> to simplify driver and take choices of udelay and usleep_range into
+> consideration.
+> 
+> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+> Reviewed-by: Avri Altman <avri.altman@wdc.com>
 
+Reviewed-by: Can Guo <cang@codeaurora.org>
+
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 27 ++++++++++++++++++---------
+>  drivers/scsi/ufs/ufshcd.h |  1 +
+>  2 files changed, 19 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 314e808b0d4e..9fea346f7d22 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -597,6 +597,18 @@ static void ufshcd_print_pwr_info(struct ufs_hba 
+> *hba)
+>  		 hba->pwr_info.hs_rate);
+>  }
+> 
+> +void ufshcd_wait_us(unsigned long us, unsigned long tolerance, bool 
+> can_sleep)
+> +{
+> +	if (!us)
+> +		return;
+> +
+> +	if (us < 10 || !can_sleep)
+> +		udelay(us);
+> +	else
+> +		usleep_range(us, us + tolerance);
+> +}
+> +EXPORT_SYMBOL_GPL(ufshcd_wait_us);
+> +
+>  /*
+>   * ufshcd_wait_for_register - wait for register value to change
+>   * @hba - per-adapter interface
+> @@ -620,10 +632,7 @@ int ufshcd_wait_for_register(struct ufs_hba *hba,
+> u32 reg, u32 mask,
+>  	val = val & mask;
+> 
+>  	while ((ufshcd_readl(hba, reg) & mask) != val) {
+> -		if (can_sleep)
+> -			usleep_range(interval_us, interval_us + 50);
+> -		else
+> -			udelay(interval_us);
+> +		ufshcd_wait_us(interval_us, 50, can_sleep);
+>  		if (time_after(jiffies, timeout)) {
+>  			if ((ufshcd_readl(hba, reg) & mask) != val)
+>  				err = -ETIMEDOUT;
+> @@ -3565,7 +3574,7 @@ static inline void
+> ufshcd_add_delay_before_dme_cmd(struct ufs_hba *hba)
+>  	}
+> 
+>  	/* allow sleep for extra 50us if needed */
+> -	usleep_range(min_sleep_time_us, min_sleep_time_us + 50);
+> +	ufshcd_wait_us(min_sleep_time_us, 50, true);
+>  }
+> 
+>  /**
+> @@ -4289,7 +4298,7 @@ int ufshcd_hba_enable(struct ufs_hba *hba)
+>  	 * instruction might be read back.
+>  	 * This delay can be changed based on the controller.
+>  	 */
+> -	usleep_range(1000, 1100);
+> +	ufshcd_wait_us(1000, 100, true);
+> 
+>  	/* wait for the host controller to complete initialization */
+>  	retry = 10;
+> @@ -4301,7 +4310,7 @@ int ufshcd_hba_enable(struct ufs_hba *hba)
+>  				"Controller enable failed\n");
+>  			return -EIO;
+>  		}
+> -		usleep_range(5000, 5100);
+> +		ufshcd_wait_us(5000, 100, true);
+>  	}
+> 
+>  	/* enable UIC related interrupts */
+> @@ -6224,7 +6233,7 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
+>  			reg = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
+>  			if (reg & (1 << tag)) {
+>  				/* sleep for max. 200us to stabilize */
+> -				usleep_range(100, 200);
+> +				ufshcd_wait_us(100, 100, true);
+>  				continue;
+>  			}
+>  			/* command completed already */
+> @@ -7786,7 +7795,7 @@ static void ufshcd_vreg_set_lpm(struct ufs_hba 
+> *hba)
+>  	 */
+>  	if (!ufshcd_is_link_active(hba) &&
+>  	    hba->dev_quirks & UFS_DEVICE_QUIRK_DELAY_BEFORE_LPM)
+> -		usleep_range(2000, 2100);
+> +		ufshcd_wait_us(2000, 100, true);
+> 
+>  	/*
+>  	 * If UFS device is either in UFS_Sleep turn off VCC rail to save 
+> some
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+> index 52425371082a..842f0223f5e5 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -792,6 +792,7 @@ int ufshcd_init(struct ufs_hba * , void __iomem *
+> , unsigned int);
+>  int ufshcd_make_hba_operational(struct ufs_hba *hba);
+>  void ufshcd_remove(struct ufs_hba *);
+>  int ufshcd_uic_hibern8_exit(struct ufs_hba *hba);
+> +void ufshcd_wait_us(unsigned long us, unsigned long tolerance, bool 
+> can_sleep);
+>  int ufshcd_wait_for_register(struct ufs_hba *hba, u32 reg, u32 mask,
+>  				u32 val, unsigned long interval_us,
+>  				unsigned long timeout_ms, bool can_sleep);
