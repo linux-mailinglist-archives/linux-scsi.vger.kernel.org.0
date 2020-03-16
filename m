@@ -2,49 +2,49 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8E21865C6
-	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2020 08:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BC31865C8
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2020 08:40:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729857AbgCPHkF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 16 Mar 2020 03:40:05 -0400
-Received: from esa4.microchip.iphmx.com ([68.232.154.123]:17652 "EHLO
-        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729582AbgCPHkE (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Mar 2020 03:40:04 -0400
-Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
-  viswas.g@microsemi.com designates 208.19.100.23 as permitted
-  sender) identity=mailfrom; client-ip=208.19.100.23;
-  receiver=esa4.microchip.iphmx.com;
+        id S1729923AbgCPHkI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 16 Mar 2020 03:40:08 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:52664 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729582AbgCPHkH (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 16 Mar 2020 03:40:07 -0400
+Received-SPF: Pass (esa5.microchip.iphmx.com: domain of
+  viswas.g@microsemi.com designates 208.19.100.21 as permitted
+  sender) identity=mailfrom; client-ip=208.19.100.21;
+  receiver=esa5.microchip.iphmx.com;
   envelope-from="viswas.g@microsemi.com";
   x-sender="viswas.g@microsemi.com"; x-conformance=spf_only;
   x-record-type="v=spf1"; x-record-text="v=spf1
   ip4:208.19.100.20 ip4:208.19.100.21 ip4:208.19.100.22
   ip4:208.19.100.23 ip4:208.19.99.221 ip4:208.19.99.222
   ip4:208.19.99.223 ip4:208.19.99.225 -all"
-Received-SPF: None (esa4.microchip.iphmx.com: no sender
+Received-SPF: None (esa5.microchip.iphmx.com: no sender
   authenticity information available from domain of
   postmaster@smtp.microsemi.com) identity=helo;
-  client-ip=208.19.100.23; receiver=esa4.microchip.iphmx.com;
+  client-ip=208.19.100.21; receiver=esa5.microchip.iphmx.com;
   envelope-from="viswas.g@microsemi.com";
   x-sender="postmaster@smtp.microsemi.com";
   x-conformance=spf_only
-Authentication-Results: esa4.microchip.iphmx.com; spf=Pass smtp.mailfrom=viswas.g@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com; dkim=none (message not signed) header.i=none; dmarc=fail (p=none dis=none) d=microchip.com
-IronPort-SDR: uQnl8LaxAE/m91/3VJ6AQ9DA8xxlBpIs96r80sJMMBmSupBe4smPtC2ScusRoltimLGzNxf0fz
- ffYEYww8QvFtU0eLDr1usY5v1VGNCRT9rbs4ntVCKFrlkrRii/MSXtr2zP1uycsZqrslhrQbgW
- eBLHxDCuDuGUE2M8UYsnv0u7Y+hW0qKlbG2UV1csi/H2VR9u3PJNwVsKpmnAZ6iEKZcnfNLksO
- 8PRCWyZWUN4LI+UogwzX3A7f0lYXQg+vL7w4mdJUHO2YliOclLssZ3Ef8+7V7UvWML33gCR7R0
- 2sw=
+Authentication-Results: esa5.microchip.iphmx.com; spf=Pass smtp.mailfrom=viswas.g@microsemi.com; spf=None smtp.helo=postmaster@smtp.microsemi.com; dkim=none (message not signed) header.i=none; dmarc=fail (p=none dis=none) d=microchip.com
+IronPort-SDR: 380byJwVRkHbldx2nkFyOKsirtBGf0k0IXHIkhUA8fIO1gVDVoteB8UWLkY8xMMRczke5sEgY2
+ 2NAGDD9Y8mUgwoXXpi4H2oMjBSSSNfIv2+IbTQNxBKKXulNy7kSYGm0JMRQMkmC6lDBbkNAuY5
+ l/SS+wr91ICZa8jjcW6KTnSgT6qFDY1pqoej1iX0mjDzDYabLi7D3lr4uQRQmLs7clLH1+qllH
+ K5QUITetU0q85va3C8nHiX2Fei4djUYJLcxYEi82594c5hZApVWcnQSUE1K1o4bD87gHqCLB3U
+ +BY=
 X-IronPort-AV: E=Sophos;i="5.70,559,1574146800"; 
-   d="scan'208";a="67282752"
-Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.23])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Mar 2020 00:39:59 -0700
-Received: from AVMBX3.microsemi.net (10.100.34.33) by AVMBX3.microsemi.net
- (10.100.34.33) with Microsoft SMTP Server (version=TLS1_2,
+   d="scan'208";a="68990099"
+Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.21])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Mar 2020 00:40:02 -0700
+Received: from AVMBX1.microsemi.net (10.100.34.31) by AVMBX1.microsemi.net
+ (10.100.34.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1847.3; Mon, 16 Mar
- 2020 00:39:58 -0700
-Received: from localhost (10.41.130.51) by avmbx3.microsemi.net (10.100.34.33)
+ 2020 00:40:00 -0700
+Received: from localhost (10.41.130.51) by avmbx1.microsemi.net (10.100.34.31)
  with Microsoft SMTP Server id 15.1.1847.3 via Frontend Transport; Mon, 16 Mar
- 2020 00:39:57 -0700
+ 2020 00:40:00 -0700
 From:   Deepak Ukey <deepak.ukey@microchip.com>
 To:     <linux-scsi@vger.kernel.org>
 CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
@@ -53,9 +53,9 @@ CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
         <yuuzheng@google.com>, <auradkar@google.com>,
         <vishakhavc@google.com>, <bjashnani@google.com>,
         <radha@google.com>, <akshatzen@google.com>
-Subject: [PATCH V3 3/6]  pm80xx : Free the tag when mpi_set_phy_profile_resp is received.
-Date:   Mon, 16 Mar 2020 13:19:03 +0530
-Message-ID: <20200316074906.9119-4-deepak.ukey@microchip.com>
+Subject: [PATCH V3 4/6] pm80xx : Cleanup initialization loading fail path.
+Date:   Mon, 16 Mar 2020 13:19:04 +0530
+Message-ID: <20200316074906.9119-5-deepak.ukey@microchip.com>
 X-Mailer: git-send-email 2.19.0-rc1
 In-Reply-To: <20200316074906.9119-1-deepak.ukey@microchip.com>
 References: <20200316074906.9119-1-deepak.ukey@microchip.com>
@@ -67,69 +67,83 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: yuuzheng <yuuzheng@google.com>
+From: Peter Chang <dpf@google.com>
 
-In pm80xx driver, the command mpi_set_phy_profile_req is sent by host
-during boot to configure the phy profile such as analog setting page,
-rate control page. However, the tag is not freed when its response is
-received. As a result, 16 tags are missing for each HBA after boot.
-When NCQ is enabled with queue depth 16, it needs at least, 15 * 16 =
-240 tags for each HBA to achieve the best performance. In current
-pm80xx driver with setting CCB_MAX = 256, the total number of tags in
-each HBA is 255 for data IO. Hence, without returning those tags to the
-pool after boot, some device will finally be forced to non-ncq mode by
-ATA layer due to excessive errors (i.e. LLDD cannot allocate tag for
-queued task).
+1)Move the instance tracking down after we think the instance is
+good to go. avoids having a use-after free.
+2)There are goto targets for trying to cleanup if the hw fails to
+initialize, but there's some overlap depending on who thinks they
+own the sub-structures.
 
-Signed-off-by: yuuzheng <yuuzheng@google.com>
+Signed-off-by: Peter Chang <dpf@google.com>
 Signed-off-by: Deepak Ukey <deepak.ukey@microchip.com>
 Signed-off-by: Viswas G <Viswas.G@microchip.com>
 Signed-off-by: Radha Ramachandran <radha@google.com>
 Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/scsi/pm8001/pm8001_init.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index d805fd036ddf..37b82d7aa3d7 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -3715,28 +3715,32 @@ static int mpi_flash_op_ext_resp(struct pm8001_hba_info *pm8001_ha, void *piomb)
- static int mpi_set_phy_profile_resp(struct pm8001_hba_info *pm8001_ha,
- 			void *piomb)
- {
-+	u32 tag;
- 	u8 page_code;
-+	int rc = 0;
- 	struct set_phy_profile_resp *pPayload =
- 		(struct set_phy_profile_resp *)(piomb + 4);
- 	u32 ppc_phyid = le32_to_cpu(pPayload->ppc_phyid);
- 	u32 status = le32_to_cpu(pPayload->status);
+diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
+index a002eb5a3fe4..775517f9b39d 100644
+--- a/drivers/scsi/pm8001/pm8001_init.c
++++ b/drivers/scsi/pm8001/pm8001_init.c
+@@ -1016,6 +1016,7 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
+ 	struct pm8001_hba_info *pm8001_ha;
+ 	struct Scsi_Host *shost = NULL;
+ 	const struct pm8001_chip_info *chip;
++	struct sas_ha_struct *sha;
  
-+	tag = le32_to_cpu(pPayload->tag);
- 	page_code = (u8)((ppc_phyid & 0xFF00) >> 8);
- 	if (status) {
- 		/* status is FAILED */
- 		PM8001_FAIL_DBG(pm8001_ha,
- 			pm8001_printk("PhyProfile command failed  with status "
- 			"0x%08X \n", status));
--		return -1;
-+		rc = -1;
- 	} else {
- 		if (page_code != SAS_PHY_ANALOG_SETTINGS_PAGE) {
- 			PM8001_FAIL_DBG(pm8001_ha,
- 				pm8001_printk("Invalid page code 0x%X\n",
- 					page_code));
--			return -1;
-+			rc = -1;
- 		}
+ 	dev_printk(KERN_INFO, &pdev->dev,
+ 		"pm80xx: driver version %s\n", DRV_VERSION);
+@@ -1044,12 +1045,12 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
+ 		goto err_out_regions;
  	}
--	return 0;
-+	pm8001_tag_free(pm8001_ha, tag);
-+	return rc;
- }
+ 	chip = &pm8001_chips[ent->driver_data];
+-	SHOST_TO_SAS_HA(shost) =
+-		kzalloc(sizeof(struct sas_ha_struct), GFP_KERNEL);
+-	if (!SHOST_TO_SAS_HA(shost)) {
++	sha = kzalloc(sizeof(struct sas_ha_struct), GFP_KERNEL);
++	if (!sha) {
+ 		rc = -ENOMEM;
+ 		goto err_out_free_host;
+ 	}
++	SHOST_TO_SAS_HA(shost) = sha;
  
- /**
+ 	rc = pm8001_prep_sas_ha_init(shost, chip);
+ 	if (rc) {
+@@ -1070,7 +1071,7 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
+ 			"pm8001_setup_irq failed [ret: %d]\n", rc));
+ 		goto err_out_shost;
+ 	}
+-	list_add_tail(&pm8001_ha->list, &hba_list);
++
+ 	PM8001_CHIP_DISP->chip_soft_rst(pm8001_ha);
+ 	rc = PM8001_CHIP_DISP->chip_init(pm8001_ha);
+ 	if (rc) {
+@@ -1105,8 +1106,12 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
+ 
+ 	pm8001_post_sas_ha_init(shost, chip);
+ 	rc = sas_register_ha(SHOST_TO_SAS_HA(shost));
+-	if (rc)
++	if (rc) {
++		PM8001_FAIL_DBG(pm8001_ha, pm8001_printk(
++			"sas_register_ha failed [ret: %d]\n", rc));
+ 		goto err_out_shost;
++	}
++	list_add_tail(&pm8001_ha->list, &hba_list);
+ 	scsi_scan_host(pm8001_ha->shost);
+ 	pm8001_ha->flags = PM8001F_RUN_TIME;
+ 	return 0;
+@@ -1116,7 +1121,7 @@ static int pm8001_pci_probe(struct pci_dev *pdev,
+ err_out_ha_free:
+ 	pm8001_free(pm8001_ha);
+ err_out_free:
+-	kfree(SHOST_TO_SAS_HA(shost));
++	kfree(sha);
+ err_out_free_host:
+ 	scsi_host_put(shost);
+ err_out_regions:
 -- 
 2.16.3
 
