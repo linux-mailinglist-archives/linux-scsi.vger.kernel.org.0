@@ -2,522 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11371186021
-	for <lists+linux-scsi@lfdr.de>; Sun, 15 Mar 2020 22:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39B21863DE
+	for <lists+linux-scsi@lfdr.de>; Mon, 16 Mar 2020 04:43:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729255AbgCOV4Y (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 15 Mar 2020 17:56:24 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:45233 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729216AbgCOV4X (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 15 Mar 2020 17:56:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584309383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T2puM7tKcmprAwi0ZcU+sCMTrNycBtB/udqZe6RA8xA=;
-        b=Pb3kI9koTfXYHl1nNKLPRi92wV2CGKRLnizAcYb4rBPy+UHwat5LzY60RbRj4fhtCou0n4
-        khjIqWJxzwYATcrhPU8TNQp/YEq1d6FjQlKSi0QtE9plSBnn/jbamsfK87vsVejEUhoNYx
-        Z+hCMl83BbB9xDe0l/xYtlSN/UG0SbM=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-139-C7XtmKVAO4WaZs4C3Gvtpw-1; Sun, 15 Mar 2020 17:56:21 -0400
-X-MC-Unique: C7XtmKVAO4WaZs4C3Gvtpw-1
-Received: by mail-qk1-f199.google.com with SMTP id o14so11571309qke.23
-        for <linux-scsi@vger.kernel.org>; Sun, 15 Mar 2020 14:56:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=T2puM7tKcmprAwi0ZcU+sCMTrNycBtB/udqZe6RA8xA=;
-        b=pwMC2T+Tvy7dGtEvNTJ+wTTmqaSS90R9LqQfwayVUoWFOwLlgo2EK2KMHgCnYD3/Cx
-         85n7zK9AEuzr8gTZlpYHtySMiGLjDax/otdwx/xh192CWcLzk708hL2Xjiy/p5rbwGP1
-         6/ccKFBhR/vBdRaI2/J8z7p5Ia6sBdC4e9mZtDZb/bweVFDfXd7x5ykbuv/gG2FYhWbV
-         M/HYgzB2gqvyn515LCwgcXG+ki1phxSX0hSj1DnbOJELkagB1zqRB9Cd89hbfaNi124w
-         hugrbycE14nrtsJir710iT8jVkzz8oKMhHJ02eVhx0P1zHynde2l1CHLh3h8Ie4iXw0/
-         kJHA==
-X-Gm-Message-State: ANhLgQ3WBdnQOgA+Wz8Dm6NY0Mj191jvHv3Vut0wtBW+ntGtNIqPeh0p
-        Kr/VPpfHVEW42yGwq0xfINSfhhe6aFLo25ofTtyZ61Rb789PGeHVsr9vxVNMmJMpDM/f0k/d0Xl
-        24W/HiKTHNJYG55Onin8zbg==
-X-Received: by 2002:ac8:4895:: with SMTP id i21mr15044572qtq.55.1584309380323;
-        Sun, 15 Mar 2020 14:56:20 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vuBskzxf9/XCY/AGDtFLMxT2lRRFSsij9BIHRhUY5rRAOGck8UJOqw0xxoW3jOKKIXnLY09rw==
-X-Received: by 2002:ac8:4895:: with SMTP id i21mr15044547qtq.55.1584309379875;
-        Sun, 15 Mar 2020 14:56:19 -0700 (PDT)
-Received: from loberhel7laptop ([2600:6c64:4e80:f1:2941:4bf6:8ce7:6ce9])
-        by smtp.gmail.com with ESMTPSA id o81sm8744802qke.24.2020.03.15.14.56.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 15 Mar 2020 14:56:19 -0700 (PDT)
-Message-ID: <327df8af71afab4a2f9b6da804218d5a94cf6020.camel@redhat.com>
-Subject: Re: commit ab118da4c10a70b8437f5c90ab77adae1835963e causes ib_srpt
- to fail connections served by target LIO
-From:   Laurence Oberman <loberman@redhat.com>
-To:     Max Gurtovoy <maxg@mellanox.com>,
-        rdmadev <rdma-dev-team@redhat.com>, linux-rdma@vger.kernel.org,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        "Van Assche, Bart" <bvanassche@acm.org>,
-        Leon Romanovsky <leonro@mellanox.com>
-Cc:     Rupesh Girase <rgirase@redhat.com>
-Date:   Sun, 15 Mar 2020 17:56:17 -0400
-In-Reply-To: <2a04cd1d66e6bc2edb96231b47499f4c1450e592.camel@redhat.com>
-References: <88bab94d2fd72f3145835b4518bc63dda587add6.camel@redhat.com>
-         <0bef0089-0c46-8fb7-9e44-61654c641cbd@mellanox.com>
-         <e57c1763dd99ea958c9834a53ae5688a775c9444.camel@redhat.com>
-         <6d5415e3-9314-331a-fade-7593c6a27290@mellanox.com>
-         <8695fb0f34588616aded629127cc3fa2799fa7cb.camel@redhat.com>
-         <918bc803-41d6-6eea-34e2-9e40f959a982@mellanox.com>
-         <2a04cd1d66e6bc2edb96231b47499f4c1450e592.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-5.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1729914AbgCPDms (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 15 Mar 2020 23:42:48 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:32774 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729748AbgCPDmb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 15 Mar 2020 23:42:31 -0400
+X-UUID: 1807d8a27bc54aaba5cca9e5308764a6-20200316
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=vi8sUp7wfNGzry+oc6hx+6Yugm6avGTPSPtWm++c2Ic=;
+        b=TDw1Gam3EYLq+TB+byGWj26q52Sk2NuFxGEfWbvrn6XJTkfFbMoQ6fmxhHpn3kP77Aca9sRlAUoN2J0cRBi+gT6Ue45OSB38jN1RdZE8f2rxLSOsqYYnZiKvhPbBW8+LjnywPS3bpjBM5s0G4u0zfw4OKqXyX22RU0yt7A0e7uc=;
+X-UUID: 1807d8a27bc54aaba5cca9e5308764a6-20200316
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1358447519; Mon, 16 Mar 2020 11:42:21 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Mon, 16 Mar 2020 11:39:27 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Mon, 16 Mar 2020 11:39:22 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.peter~sen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v5 0/8] scsi: ufs: some cleanups and make the delay for host enabling customizable
+Date:   Mon, 16 Mar 2020 11:42:10 +0800
+Message-ID: <20200316034218.11914-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 2894A1BF0F52B2EA31AD88934CEC3761E565330CEFDA4095AACD5209D52A5C982000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 2020-03-15 at 17:01 -0400, Laurence Oberman wrote:
-> On Sun, 2020-03-15 at 22:40 +0200, Max Gurtovoy wrote:
-> > On 3/15/2020 8:36 PM, Laurence Oberman wrote:
-> > > On Sun, 2020-03-15 at 20:20 +0200, Max Gurtovoy wrote:
-> > > > On 3/15/2020 7:59 PM, Laurence Oberman wrote:
-> > > > > On Sun, 2020-03-15 at 18:47 +0200, Max Gurtovoy wrote:
-> > > > > > On 3/14/2020 11:30 PM, Laurence Oberman wrote:
-> > > > > > > Hello Bart, Leon and Max
-> > > > > > 
-> > > > > > Hi Laurence,
-> > > > > > 
-> > > > > > thanks for the great analysis and the fast response !!
-> > > > > > 
-> > > > > > > Max had reached out to me to test a new set of patches
-> > > > > > > for
-> > > > > > > SRQ.
-> > > > > > > I had not tested upstream ib_srpt on an LIO target for
-> > > > > > > quite a
-> > > > > > > while,
-> > > > > > > only ib_srp client tests had been run of late.
-> > > > > > > During a baseline test before applying Max's patches it
-> > > > > > > was
-> > > > > > > apparent
-> > > > > > > that something had broken ib_srpt connections within LIO
-> > > > > > > target
-> > > > > > > since
-> > > > > > > 5.5.
-> > > > > > > 
-> > > > > > > Note thet ib_srp client connectivity with the commit
-> > > > > > > functions
-> > > > > > > fine,
-> > > > > > > it's just the target that breaks with this commit.
-> > > > > > > 
-> > > > > > > After a long bisect this is the commit that seems to
-> > > > > > > break
-> > > > > > > it.
-> > > > > > > While it's not directly code in ib_srpt, its code in mlx5
-> > > > > > > vport
-> > > > > > > ethernet connectivity that then breaks ib_srpt
-> > > > > > > connectivity
-> > > > > > > over
-> > > > > > > mlx5
-> > > > > > > IB RDMA with LIO.
-> > > > > > 
-> > > > > > I was able to connect in loopback and also from remote
-> > > > > > initiator
-> > > > > > with
-> > > > > > this commit.
-> > > > > > 
-> > > > > > So I'm not sure that this commit is broken.
-> > > > > > 
-> > > > > > I used Bart's scripts to configure the target and to
-> > > > > > connect
-> > > > > > to
-> > > > > > it
-> > > > > > in
-> > > > > > loopback (after some modifications for the updated
-> > > > > > kernel/sysfs/configfs
-> > > > > > interface).
-> > > > > > 
-> > > > > > I did see an issue to connect from remote initiator, but
-> > > > > > after
-> > > > > > reloading
-> > > > > > openibd in the initiator side I was able to connect.
-> > > > > > 
-> > > > > > So I suspect you had the same issue - that also should be
-> > > > > > debugged.
-> > > > > > 
-> > > > > > > I will let Leon and others decide but reverting the below
-> > > > > > > commit
-> > > > > > > allows
-> > > > > > > SRP connectivity to an LIO target to work again.
-> > > > > > 
-> > > > > > I added prints to "mlx5_core_modify_hca_vport_context"
-> > > > > > function
-> > > > > > and
-> > > > > > found that we don't call it in "pure" mlx5 mode with PFs.
-> > > > > > 
-> > > > > > Maybe you can try it too...
-> > > > > > 
-> > > > > > I was able to check my patches on my system and I'll send
-> > > > > > them
-> > > > > > soon.
-> > > > > > 
-> > > > > > Thanks again Laurence and Bart.
-> > > > > > 
-> > > > > > > Max, I will test your new patches once we have a decision
-> > > > > > > on
-> > > > > > > this.
-> > > > > > > 
-> > > > > > > Client
-> > > > > > > Linux ibclient.lab.eng.bos.redhat.com 5.6.0-rc5+ #1 SMP
-> > > > > > > Thu
-> > > > > > > Mar
-> > > > > > > 12
-> > > > > > > 16:58:19 EDT 2020 x86_64 x86_64 x86_64 GNU/Linux
-> > > > > > > 
-> > > > > > > Server with reverted commit
-> > > > > > > Linux fedstorage.bos.redhat.com 5.6.0-rc5+ #1 SMP Sat Mar
-> > > > > > > 14
-> > > > > > > 16:39:35
-> > > > > > > EDT 2020 x86_64 x86_64 x86_64 GNU/Linux
-> > > > > > > 
-> > > > > > > commit ab118da4c10a70b8437f5c90ab77adae1835963e
-> > > > > > > Author: Leon Romanovsky <leonro@mellanox.com>
-> > > > > > > Date:   Wed Nov 13 12:03:47 2019 +0200
-> > > > > > > 
-> > > > > > >        net/mlx5: Don't write read-only fields in
-> > > > > > > MODIFY_HCA_VPORT_CONTEXT
-> > > > > > > command
-> > > > > > >        
-> > > > > > >        The MODIFY_HCA_VPORT_CONTEXT uses field_selector
-> > > > > > > to
-> > > > > > > mask
-> > > > > > > fields
-> > > > > > > needed
-> > > > > > >        to be written, other fields are required to be
-> > > > > > > zero
-> > > > > > > according
-> > > > > > > to
-> > > > > > > the
-> > > > > > >        HW specification. The supported fields are
-> > > > > > > controlled by
-> > > > > > > bitfield
-> > > > > > >        and limited to vport state, node and port GUIDs.
-> > > > > > >        
-> > > > > > >        Signed-off-by: Leon Romanovsky <
-> > > > > > > leonro@mellanox.com>
-> > > > > > >        Signed-off-by: Saeed Mahameed <saeedm@mellanox.com
-> > > > > > > >
-> > > > > > > 
-> > > > > > > diff --git
-> > > > > > > a/drivers/net/ethernet/mellanox/mlx5/core/vport.c
-> > > > > > > b/drivers/net/ethernet/mellanox/mlx5
-> > > > > > > index 30f7848..1faac31f 100644
-> > > > > > > --- a/drivers/net/ethernet/mellanox/mlx5/core/vport.c
-> > > > > > > +++ b/drivers/net/ethernet/mellanox/mlx5/core/vport.c
-> > > > > > > @@ -1064,26 +1064,13 @@ int
-> > > > > > > mlx5_core_modify_hca_vport_context(struct
-> > > > > > > mlx5_core_dev *dev,
-> > > > > > >     
-> > > > > > >            ctx =
-> > > > > > > MLX5_ADDR_OF(modify_hca_vport_context_in,
-> > > > > > > in,
-> > > > > > > hca_vport_context);
-> > > > > > >            MLX5_SET(hca_vport_context, ctx, field_select,
-> > > > > > > req-
-> > > > > > > > field_select);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, sm_virt_aware,
-> > > > > > > req-
-> > > > > > > > sm_virt_aware);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, has_smi, req-
-> > > > > > > > has_smi);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, has_raw, req-
-> > > > > > > > has_raw);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx,
-> > > > > > > vport_state_policy,
-> > > > > > > req-
-> > > > > > > > policy);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx,
-> > > > > > > port_physical_state,
-> > > > > > > req-
-> > > > > > > > phys_state);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, vport_state,
-> > > > > > > req-
-> > > > > > > > vport_state);
-> > > > > > > 
-> > > > > > > -       MLX5_SET64(hca_vport_context, ctx, port_guid,
-> > > > > > > req-
-> > > > > > > > port_guid);
-> > > > > > > 
-> > > > > > > -       MLX5_SET64(hca_vport_context, ctx, node_guid,
-> > > > > > > req-
-> > > > > > > > node_guid);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, cap_mask1, req-
-> > > > > > > > cap_mask1);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx,
-> > > > > > > cap_mask1_field_select,
-> > > > > > > req-
-> > > > > > > > cap_mask1_perm);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, cap_mask2, req-
-> > > > > > > > cap_mask2);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx,
-> > > > > > > cap_mask2_field_select,
-> > > > > > > req-
-> > > > > > > > cap_mask2_perm);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, lid, req->lid);
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, init_type_reply,
-> > > > > > > req-
-> > > > > > > > init_type_reply);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, lmc, req->lmc);
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, subnet_timeout,
-> > > > > > > req-
-> > > > > > > > subnet_timeout);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, sm_lid, req-
-> > > > > > > > sm_lid);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx, sm_sl, req-
-> > > > > > > > sm_sl);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx,
-> > > > > > > qkey_violation_counter,
-> > > > > > > req-
-> > > > > > > > qkey_violation_counter);
-> > > > > > > 
-> > > > > > > -       MLX5_SET(hca_vport_context, ctx,
-> > > > > > > pkey_violation_counter,
-> > > > > > > req-
-> > > > > > > > pkey_violation_counter);
-> > > > > > > 
-> > > > > > > +       if (req->field_select &
-> > > > > > > MLX5_HCA_VPORT_SEL_STATE_POLICY)
-> > > > > > > +               MLX5_SET(hca_vport_context, ctx,
-> > > > > > > vport_state_policy,
-> > > > > > > +                        req->policy);
-> > > > > > > +       if (req->field_select &
-> > > > > > > MLX5_HCA_VPORT_SEL_PORT_GUID)
-> > > > > > > +               MLX5_SET64(hca_vport_context, ctx,
-> > > > > > > port_guid,
-> > > > > > > req-
-> > > > > > > > port_guid);
-> > > > > > > 
-> > > > > > > +       if (req->field_select &
-> > > > > > > MLX5_HCA_VPORT_SEL_NODE_GUID)
-> > > > > > > +               MLX5_SET64(hca_vport_context, ctx,
-> > > > > > > node_guid,
-> > > > > > > req-
-> > > > > > > > node_guid);
-> > > > > > > 
-> > > > > > >            err = mlx5_cmd_exec(dev, in, in_sz, out,
-> > > > > > > sizeof(out));
-> > > > > > >     ex:
-> > > > > > >            kfree(in);
-> > > > > > >     
-> > > > > > > 
-> > > > > 
-> > > > > Hi Max
-> > > > > Re:
-> > > > > 
-> > > > > "
-> > > > > So I'm not sure that this commit is broken.
-> > > > > ..
-> > > > > ..
-> > > > > I added prints to "mlx5_core_modify_hca_vport_context"
-> > > > > function
-> > > > > and
-> > > > > found that we don't call it in "pure" mlx5 mode with PFs.
-> > > > > 
-> > > > > Maybe you can try it too...
-> > > > > "
-> > > > > 
-> > > > > The thing is without this commit we connect immediately, no
-> > > > > delay
-> > > > > no
-> > > > > issue and I am changing nothing else other than reverting
-> > > > > here.
-> > > > > 
-> > > > > So this clearly has a bearing directly on the functionality.
-> > > > > 
-> > > > > I will look at adding more debug, but with this commit in
-> > > > > there
-> > > > > is
-> > > > > nor
-> > > > > evidence even of an attempt to connect and fail.
-> > > > > 
-> > > > > Its silently faling.
-> > > > 
-> > > > please send me all the configuration steps you run after
-> > > > booting
-> > > > the
-> > > > target + steps in the initiator (can be also in attached file).
-> > > > 
-> > > > I'll try to follow this.
-> > > > 
-> > > > Btw, did you try loopback initiator ?
-> > > > 
-> > > > -Max.
-> > > > 
-> > > > 
-> > > > > Regards
-> > > > > Laurence
-> > > > > 
-> > > > > 
-> > > > > 
-> > > > > 
-> > > 
-> > > Hi Max
-> > > 
-> > > Did not try loopback because here we have actual physical
-> > > connectity as
-> > > that is what our customers use.
-> > > 
-> > > Connected back to back with MLX5 cx4 HCA dual ports at EDR 100
-> > > Thi sis my standard configuration used for all upstream and Red
-> > > Hat
-> > > kernel testing.
-> > > 
-> > > Reboot server and client and then first prepare server
-> > > 
-> > > Server
-> > > ----------
-> > > 
-> > > the prepare.sh script run is after boot on the server
-> > > 
-> > > 
-> > > #!/bin/bash
-> > > ./load_modules.sh
-> > > ./create_ramdisk.sh
-> > > targetcli restoreconfig
-> > > # Set the srp_sq_size
-> > > for i in
-> > > /sys/kernel/config/target/srpt/0xfe800000000000007cfe900300726e4e
-> > > /sys/kernel/config/target/srpt/0xfe800000000000007cfe900300726e4f
-> > > do
-> > > 	echo 16384 > $i/tpgt_1/attrib/srp_sq_size
-> > > done
-> > > 
-> > > [root@fedstorage ~]# cat load_modules.sh
-> > > #!/bin/bash
-> > > modprobe mlx5_ib
-> > > modprobe ib_srpt
-> > > modprobe ib_srp
-> > > modprobe ib_umad
-> > > 
-> > > [root@fedstorage ~]# cat ./create_ramdisk.sh
-> > > #!/bin/bash
-> > > mount -t tmpfs -o size=130g tmpfs /mnt
-> > > cd /mnt
-> > > for i in `seq 1 30`; do dd if=/dev/zero of=block-$i bs=1024k
-> > > count=4000
-> > > ; done
-> > > 
-> > > 
-> > > 
-> > > Client
-> > > --------
-> > > 
-> > > Once server is ready
-> > > 
-> > > Run ./start_opensm.sh on client (I sont use the SM on a switch as
-> > > we
-> > > are back to back)
-> > > 
-> > > [root@ibclient ~]# cat ./start_opensm.sh
-> > > #!/bin/bash
-> > > rmmod ib_srpt
-> > > opensm -F opensm.1.conf &
-> > > opensm -F opensm.2.conf &
-> > > 
-> > > I will semail the conf only to you as well as the targecli config
-> > > as th
-> > > eout is long.
-> > > 
-> > > 
-> > > Then run start_srp.sh
-> > > 
-> > > [root@ibclient ~]# cat ./start_srp.sh
-> > > run_srp_daemon  -V -f /etc/ddn/srp_daemon.conf -R 30 -T 10 -t
-> > > 7000
-> > > -ance -i mlx5_0 -p 1 1>/root/srp1.log 2>&1 &
-> > > run_srp_daemon  -V -f /etc/ddn/srp_daemon.conf -R 30 -T 10 -t
-> > > 7000
-> > > -ance -i mlx5_1 -p 1 1>/root/srp2.log 2>&1 &
-> > > 
-> > > [root@ibclient ~]# cat /etc/ddn/srp_daemon.conf
-> > > a      queue_size=128,max_cmd_per_lun=32,max_sect=32768
-> > > 
-> > > 
-> > 
-> > I see that you're link is IB.
-> > 
-> > I was working on RoCE link layer with rdma_cm.
-> > 
-> > I'll try to find some free IB setup tomorrow in my lab..
-> > 
-> > Can you try login using rdma_cm ? need to load ib_ipoib for that in
-> > IB 
-> > network.
-> > 
-> > I'm trying to understand whether it's related to the link layer.
-> > 
-> > p.s. I think the target configuration file didn't arrive.
-> > 
-> > > 
-> > > 
-> > 
-> > 
-> 
-> Max,
-> 
-> Yes, I am, working primarily with SCSI over RDMA Protocol with
-> Infiniband HCA's in IB mode.
-> I am not using ROCE.
-> 
-> Also lets not forget this is a target only issue, the latest 5.6
-> kernel
-> runs untouched with no issues on the initiator when the target runs
-> either 5.4 or 5.6 with the revert.
-> It would run fine with the target on 5.5 as well if I reverted the
-> commit on 5.5 too.
-> 
-> I am not able at this time to switch these adapters to Ethernet mode
-> and ROCE
-> 
-> The weird thing is the failure is completely silent so something in
-> the
-> Link layer with IB has to failing early.
-> Thje other strange observation is that the IB interfaces come up with
-> no issue.
-> I will try add some debug after reboot into the failing kernel.
-> 
-> Regards
-> Laurence
-> 
-> 
-> 
-
-Max,
-Rupesh in cc here will be testing latest upstream on a client/server
-configuration with ROCE and report back here on if he sees a similar
-issue with the LIO target with that commit.
-
-I will continue working on the IB srpt issue by adding some debug.
-
-If you think about anything related to the commit let me know.
-
-Regards
-Laurence
+SGksDQoNClRoaXMgcGF0Y2hzZXQgYXBwbGllcyBzb21lIGRyaXZlciBjbGVhbnVwcyBhbmQgcGVy
+Zm9ybWFuY2UgaW1wcm92ZW1lbnQNCmluIHVmcyBob3N0IGRyaXZlcnMgYnkgbWFraW5nIHRoZSBk
+ZWxheSBmb3IgaG9zdCBlbmFibGluZyBjdXN0b21pemFibGUNCmFjY29yZGluZyB0byB2ZW5kb3Jz
+JyByZXF1aXJlbWVudHMuDQoNCnY0IC0+IHY1DQoJLSBDb2xsZWN0IHJldmlldyB0YWdzIGluIHY0
+DQoJLSBGaXggcGF0Y2ggIzc6IEZpeCB0eXBvICJpbml0aWFsaXphdG9pbiIgaW4gdGl0bGUNCg0K
+djMgLT4gdjQNCgktIENvbGxlY3QgcmV2aWV3IHRhZ3MgaW4gdjINCgktIEluIHBhdGNoICM4LCBm
+aXggaW5jb3JyZWN0IGNvbmRpdGlvbiBvZiBjdXN0b21pemVkIGRlbGF5IGZvciBob3N0IGVuYWJs
+aW5nDQoNCnYyIC0+IHYzDQoJLSBSZW1vdmUgL2FyY2gvYXJtNjQvY29uZmlncy9kZWZjb25maWcg
+Y2huYWdlIGJlY2F1c2UgaXQgaXMgZm9yIGxvY2FsIHRlc3Qgb25seQ0KDQp2MSAtPiB2Mg0KCS0g
+QWRkIHBhdGNoICMxICJzY3NpOiB1ZnM6IGZpeCB1bmluaXRpYWxpemVkIHR4X2xhbmVzIGluIHVm
+c2hjZF9kaXNhYmxlX3R4X2xjYyINCgktIFJlbW92ZSBzdHJ1Y3QgdWZzX2luaXRfcHJlZmV0Y2gg
+aW4gcGF0Y2ggIzIgInNjc2k6IHVmczogcmVtb3ZlIGluaXRfcHJlZmV0Y2hfZGF0YSBpbiBzdHJ1
+Y3QgdWZzX2hiYSINCgktIEludHJvZHVjZSBjb21tb24gZGVsYXkgZnVuY3Rpb24gaW4gcGF0Y2gg
+IzQNCgktIFJlcGxhY2UgYWxsIGRlbGF5IHBsYWNlcyBieSBjb21tb24gZGVsYXkgZnVuY3Rpb24g
+aW4gdWZzLW1lZGlhdGVrIGluIHBhdGNoICM1DQoJLSBVc2UgY29tbW9uIGRlbGF5IGZ1bmN0aW9u
+IGluc3RlYWQgZm9yIGhvc3QgZW5hYmxpbmcgZGVsYXkgaW4gcGF0Y2ggIzYNCgktIEFkZCBwYXRj
+aCAjNyAic2NzaTogdWZzOiBtYWtlIEhDRSBwb2xsaW5nIG1vcmUgY29tcGFjdCB0byBpbXByb3Zl
+IGluaXRpYWxpemF0b2luIGxhdGVuY3kiDQoJLSBJbiBwYXRjaCAjOCwgY3VzdG9taXplIHRoZSBk
+ZWxheSBpbiB1ZnNfbXRrX2hjZV9lbmFibGVfbm90aWZ5IGNhbGxiYWNrIGluc3RlYWQgb2YgdWZz
+X210a19pbml0IChBdnJpKQ0KDQpTdGFubGV5IENodSAoOCk6DQogIHNjc2k6IHVmczogZml4IHVu
+aW5pdGlhbGl6ZWQgdHhfbGFuZXMgaW4gdWZzaGNkX2Rpc2FibGVfdHhfbGNjKCkNCiAgc2NzaTog
+dWZzOiByZW1vdmUgaW5pdF9wcmVmZXRjaF9kYXRhIGluIHN0cnVjdCB1ZnNfaGJhDQogIHNjc2k6
+IHVmczogdXNlIGFuIGVudW0gZm9yIGhvc3QgY2FwYWJpbGl0aWVzDQogIHNjc2k6IHVmczogaW50
+cm9kdWNlIGNvbW1vbiBkZWxheSBmdW5jdGlvbg0KICBzY3NpOiB1ZnMtbWVkaWF0ZWs6IHJlcGxh
+Y2UgYWxsIGRlbGF5IHBsYWNlcyBieSBjb21tb24gZGVsYXkgZnVuY3Rpb24NCiAgc2NzaTogdWZz
+OiBhbGxvdyBjdXN0b21pemVkIGRlbGF5IGZvciBob3N0IGVuYWJsaW5nDQogIHNjc2k6IHVmczog
+bWFrZSBIQ0UgcG9sbGluZyBtb3JlIGNvbXBhY3QgdG8gaW1wcm92ZSBpbml0aWFsaXphdGlvbg0K
+ICAgIGxhdGVuY3kNCiAgc2NzaTogdWZzLW1lZGlhdGVrOiBjdXN0b21pemUgdGhlIGRlbGF5IGZv
+ciBob3N0IGVuYWJsaW5nDQoNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jIHwgNjQg
+KysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnMtbWVkaWF0
+ZWsuaCB8ICAxICsNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jICAgICAgIHwgNDcgKysrKysr
+KysrKystLS0tLS0tLS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5oICAgICAgIHwgNzggKysr
+KysrKysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tDQogNCBmaWxlcyBjaGFuZ2VkLCAxMDYgaW5z
+ZXJ0aW9ucygrKSwgODQgZGVsZXRpb25zKC0pDQoNCi0tIA0KMi4xOC4wDQo=
 
