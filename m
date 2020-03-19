@@ -2,141 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F0218B036
-	for <lists+linux-scsi@lfdr.de>; Thu, 19 Mar 2020 10:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6975B18B100
+	for <lists+linux-scsi@lfdr.de>; Thu, 19 Mar 2020 11:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbgCSJ3a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 19 Mar 2020 05:29:30 -0400
-Received: from mail3-relais-sop.national.inria.fr ([192.134.164.104]:10943
-        "EHLO mail3-relais-sop.national.inria.fr" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725767AbgCSJ3a (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 19 Mar 2020 05:29:30 -0400
-X-IronPort-AV: E=Sophos;i="5.70,571,1574118000"; 
-   d="scan'208";a="342902958"
-Received: from abo-173-121-68.mrs.modulonet.fr (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Mar 2020 10:29:26 +0100
-Date:   Thu, 19 Mar 2020 10:29:26 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] scsi: ufs-exynos: add UFS host support for Exynos
- SoCs
-Message-ID: <alpine.DEB.2.21.2003191028360.3010@hadrien>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        id S1726934AbgCSKQ7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 19 Mar 2020 06:16:59 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34658 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725601AbgCSKQ7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 19 Mar 2020 06:16:59 -0400
+Received: by mail-oi1-f195.google.com with SMTP id j5so2118675oij.1
+        for <linux-scsi@vger.kernel.org>; Thu, 19 Mar 2020 03:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=5YLgrmmw9m+sKzPxDNVWcpKGfVmpcHCuvOPpLM6AIJg=;
+        b=PQaLXWlTCfgsBx5bjrQQoydaB6bkdJFWAZKQHfAyOIv1S1DxcDG77KXTxAKSOaeHzy
+         hCkJFqv9sKtQ8ME4wokxsVLLnHrGZKh+OpS8dAlycaxQk6rXOIP58CvYZQs0fM4PoyEx
+         Cvt/Sav9Fs9MEIg0T/5ElhozqwCx4m+lM58Y06pxEzC3R2PEvOmrI9qEBmqULUL5GFiS
+         9mrKcrwimhFpfvu0r9bHETAmqkgrLT1BmX9ydvhQ8qfT4oeF3W254DngTYZZBZKOfMe0
+         cDKEkLAPzgZrauaAUaQ9/xfZO/N3AsdCMPKD1c78akGO2MAxreUvn5k3QTTPAIuwuWXT
+         fEiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=5YLgrmmw9m+sKzPxDNVWcpKGfVmpcHCuvOPpLM6AIJg=;
+        b=nVtiOXq8w+KHDUZSkwIEHyU3MjSIdDK/6qseRgKGsK63RVXMyUbSNfJJoNTZhsiuxA
+         IK66kcFZvcfWGPEgbakiw0UgTcNuoFbEUl/VAjstjFK8gAs62lgckpTqh3hqGfZ+uO2w
+         Vl6W3AbRYdCFrnYcfLK5qBL2uPD2KPLpVkH1DpcyC6FwPZ5b8oDhbodcZkMPiVFFRxdG
+         lebN+mBvDt9OXuOIdU5frxF6HB1v+Oqz4XF3VPrUzE68AehptJBG+dQbgWkcqwLaPQhA
+         cD3cv1POJNbclMCUiphJG7kVMILHQcjEFpTrqbSuag570oLtw9uTSczzJD+1qvgnIsFS
+         koIA==
+X-Gm-Message-State: ANhLgQ2aKd0K2MvHF1ACdJrM7FHdfmVxsiHUdf3yKouwAmTuKnuGHCRN
+        REyF6N1QEl/s/UdTIocLwZ7y2jzQGAlQyKKA74k=
+X-Google-Smtp-Source: ADFU+vsOd4ZkpDoyySU+7FgcpofylO/vfM8OLqY/X3ej9TJpu1MQx6AsQ9AncdGEdYO0Z4z9nR7mf34j5ZHK6lDf4Ts=
+X-Received: by 2002:aca:abcd:: with SMTP id u196mr1766296oie.86.1584613018935;
+ Thu, 19 Mar 2020 03:16:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Received: by 2002:a4a:9507:0:0:0:0:0 with HTTP; Thu, 19 Mar 2020 03:16:58
+ -0700 (PDT)
+Reply-To: sodikamond@yahoo.com
+From:   Sodik Amond <mraboubacar.2017@gmail.com>
+Date:   Wed, 18 Mar 2020 22:16:58 -1200
+Message-ID: <CAKRxyJXzocx2VJwkfXds7bN3jy7dNKV9ucy_ehXH3x4MndTfsA@mail.gmail.com>
+Subject: Gooday To You
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Perhaps this is intentional, but please check lines 931-935.
-
-julia
-
----------- Forwarded message ----------
-Date: Thu, 19 Mar 2020 09:31:14 +0800
-From: kbuild test robot <lkp@intel.com>
-To: kbuild@lists.01.org
-Cc: Julia Lawall <julia.lawall@lip6.fr>
-Subject: Re: [PATCH v2 4/5] scsi: ufs-exynos: add UFS host support for Exynos
-    SoCs
-
-CC: kbuild-all@lists.01.org
-In-Reply-To: <20200318111144.39525-5-alim.akhtar@samsung.com>
-References: <20200318111144.39525-5-alim.akhtar@samsung.com>
-TO: Alim Akhtar <alim.akhtar@samsung.com>
-CC: robh+dt@kernel.org, devicetree@vger.kernel.org, linux-scsi@vger.kernel.org
-
-Hi Alim,
-
-I love your patch! Perhaps something to improve:
-
-[auto build test WARNING on phy/next]
-[also build test WARNING on scsi/for-next robh/for-next mkp-scsi/for-next v5.6-rc6 next-20200318]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-
-url:    https://github.com/0day-ci/linux/commits/Alim-Akhtar/exynos-ufs-Add-support-for-UFS-HCI/20200319-022156
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kishon/linux-phy.git next
-:::::: branch date: 7 hours ago
-:::::: commit date: 7 hours ago
-
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Julia Lawall <julia.lawall@lip6.fr>
-
->> drivers/scsi/ufs/ufs-exynos.c:931:8-10: WARNING: possible condition with no effect (if == else)
-
-# https://github.com/0day-ci/linux/commit/a0a2731081dba4edfad146c501203adb97d5947b
-git remote add linux-review https://github.com/0day-ci/linux
-git remote update linux-review
-git checkout a0a2731081dba4edfad146c501203adb97d5947b
-vim +931 drivers/scsi/ufs/ufs-exynos.c
-
-a0a2731081dba4 Alim Akhtar 2020-03-18  898
-a0a2731081dba4 Alim Akhtar 2020-03-18  899  static void exynos_ufs_specify_pwr_mode(struct device_node *np,
-a0a2731081dba4 Alim Akhtar 2020-03-18  900  				struct exynos_ufs *ufs)
-a0a2731081dba4 Alim Akhtar 2020-03-18  901  {
-a0a2731081dba4 Alim Akhtar 2020-03-18  902  	struct uic_pwr_mode *pwr = &ufs->pwr_req;
-a0a2731081dba4 Alim Akhtar 2020-03-18  903  	const char *str = NULL;
-a0a2731081dba4 Alim Akhtar 2020-03-18  904
-a0a2731081dba4 Alim Akhtar 2020-03-18  905  	if (!of_property_read_string(np, "ufs,pwr-attr-mode", &str)) {
-a0a2731081dba4 Alim Akhtar 2020-03-18  906  		if (!strncmp(str, "FAST", sizeof("FAST")))
-a0a2731081dba4 Alim Akhtar 2020-03-18  907  			pwr->mode = FAST_MODE;
-a0a2731081dba4 Alim Akhtar 2020-03-18  908  		else if (!strncmp(str, "SLOW", sizeof("SLOW")))
-a0a2731081dba4 Alim Akhtar 2020-03-18  909  			pwr->mode = SLOW_MODE;
-a0a2731081dba4 Alim Akhtar 2020-03-18  910  		else if (!strncmp(str, "FAST_auto", sizeof("FAST_auto")))
-a0a2731081dba4 Alim Akhtar 2020-03-18  911  			pwr->mode = FASTAUTO_MODE;
-a0a2731081dba4 Alim Akhtar 2020-03-18  912  		else if (!strncmp(str, "SLOW_auto", sizeof("SLOW_auto")))
-a0a2731081dba4 Alim Akhtar 2020-03-18  913  			pwr->mode = SLOWAUTO_MODE;
-a0a2731081dba4 Alim Akhtar 2020-03-18  914  		else
-a0a2731081dba4 Alim Akhtar 2020-03-18  915  			pwr->mode = FAST_MODE;
-a0a2731081dba4 Alim Akhtar 2020-03-18  916  	} else {
-a0a2731081dba4 Alim Akhtar 2020-03-18  917  		pwr->mode = FAST_MODE;
-a0a2731081dba4 Alim Akhtar 2020-03-18  918  	}
-a0a2731081dba4 Alim Akhtar 2020-03-18  919
-a0a2731081dba4 Alim Akhtar 2020-03-18  920  	if (of_property_read_u32(np, "ufs,pwr-attr-lane", &pwr->lane))
-a0a2731081dba4 Alim Akhtar 2020-03-18  921  		pwr->lane = 1;
-a0a2731081dba4 Alim Akhtar 2020-03-18  922
-a0a2731081dba4 Alim Akhtar 2020-03-18  923  	if (of_property_read_u32(np, "ufs,pwr-attr-gear", &pwr->gear))
-a0a2731081dba4 Alim Akhtar 2020-03-18  924  		pwr->gear = 1;
-a0a2731081dba4 Alim Akhtar 2020-03-18  925
-a0a2731081dba4 Alim Akhtar 2020-03-18  926  	if (IS_UFS_PWR_MODE_HS(pwr->mode)) {
-a0a2731081dba4 Alim Akhtar 2020-03-18  927  		if (!of_property_read_string(np,
-a0a2731081dba4 Alim Akhtar 2020-03-18  928  					"ufs,pwr-attr-hs-series", &str)) {
-a0a2731081dba4 Alim Akhtar 2020-03-18  929  			if (!strncmp(str, "HS_rate_b", sizeof("HS_rate_b")))
-a0a2731081dba4 Alim Akhtar 2020-03-18  930  				pwr->hs_series = PA_HS_MODE_B;
-a0a2731081dba4 Alim Akhtar 2020-03-18 @931  			else if (!strncmp(str, "HS_rate_a",
-a0a2731081dba4 Alim Akhtar 2020-03-18  932  					sizeof("HS_rate_a")))
-a0a2731081dba4 Alim Akhtar 2020-03-18  933  				pwr->hs_series = PA_HS_MODE_A;
-a0a2731081dba4 Alim Akhtar 2020-03-18  934  			else
-a0a2731081dba4 Alim Akhtar 2020-03-18  935  				pwr->hs_series = PA_HS_MODE_A;
-a0a2731081dba4 Alim Akhtar 2020-03-18  936  		} else {
-a0a2731081dba4 Alim Akhtar 2020-03-18  937  			pwr->hs_series = PA_HS_MODE_A;
-a0a2731081dba4 Alim Akhtar 2020-03-18  938  		}
-a0a2731081dba4 Alim Akhtar 2020-03-18  939  	}
-a0a2731081dba4 Alim Akhtar 2020-03-18  940
-a0a2731081dba4 Alim Akhtar 2020-03-18  941  	if (of_property_read_u32_array(
-a0a2731081dba4 Alim Akhtar 2020-03-18  942  		np, "ufs,pwr-local-l2-timer", pwr->l_l2_timer, 3)) {
-a0a2731081dba4 Alim Akhtar 2020-03-18  943  		pwr->l_l2_timer[0] = FC0PROTTIMEOUTVAL;
-a0a2731081dba4 Alim Akhtar 2020-03-18  944  		pwr->l_l2_timer[1] = TC0REPLAYTIMEOUTVAL;
-a0a2731081dba4 Alim Akhtar 2020-03-18  945  		pwr->l_l2_timer[2] = AFC0REQTIMEOUTVAL;
-a0a2731081dba4 Alim Akhtar 2020-03-18  946  	}
-a0a2731081dba4 Alim Akhtar 2020-03-18  947
-a0a2731081dba4 Alim Akhtar 2020-03-18  948  	if (of_property_read_u32_array(
-a0a2731081dba4 Alim Akhtar 2020-03-18  949  		np, "ufs,pwr-remote-l2-timer", pwr->r_l2_timer, 3)) {
-a0a2731081dba4 Alim Akhtar 2020-03-18  950  		pwr->r_l2_timer[0] = FC0PROTTIMEOUTVAL;
-a0a2731081dba4 Alim Akhtar 2020-03-18  951  		pwr->r_l2_timer[1] = TC0REPLAYTIMEOUTVAL;
-a0a2731081dba4 Alim Akhtar 2020-03-18  952  		pwr->r_l2_timer[2] = AFC0REQTIMEOUTVAL;
-a0a2731081dba4 Alim Akhtar 2020-03-18  953  	}
-a0a2731081dba4 Alim Akhtar 2020-03-18  954  }
-a0a2731081dba4 Alim Akhtar 2020-03-18  955
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Please i need your kind Assistance. I will be very glad if you can
+assist me to receive this sum of ( $22. Million US dollars.) into your
+bank account for the benefit of our both families, reply me if you are
+ready to receive this fund.
