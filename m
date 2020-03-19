@@ -2,72 +2,46 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB2318E301
-	for <lists+linux-scsi@lfdr.de>; Sat, 21 Mar 2020 17:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C2518E567
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Mar 2020 00:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727730AbgCUQuq (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 21 Mar 2020 12:50:46 -0400
-Received: from mga11.intel.com ([192.55.52.93]:45121 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726192AbgCUQup (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 21 Mar 2020 12:50:45 -0400
-IronPort-SDR: 1Ir5hf/6lfE31PxXiveI16rgsQnAMJGmv+Whkh5a9YCinKj5FDwQO/ueLgafIeMXrzmcdzleP4
- 9nwPy2ZDUiWg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Mar 2020 09:50:45 -0700
-IronPort-SDR: gGMm3tTt3ufh8UE9crFA7mOExzVBeQQQ4RoOjfKF0l3xcDkCaOTdSEFxxmTp0hM64JiRdt01E0
- 1uQtTKW8vdhA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,289,1580803200"; 
-   d="scan'208";a="280746322"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Mar 2020 09:50:41 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1jFhKa-0003Ku-W2; Sun, 22 Mar 2020 00:50:40 +0800
-Date:   Sun, 22 Mar 2020 00:50:21 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     huobean@gmail.com
-Cc:     kbuild-all@lists.01.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, asutoshd@codeaurora.org, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, stanley.chu@mediatek.com,
-        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
-        cang@codeaurora.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ymhungry.lee@samsung.com,
-        j-young.choi@samsung.com
-Subject: [RFC PATCH] scsi: ufs: alloc_mctx can be static
-Message-ID: <20200321165021.GA39745@9de2199640c6>
-References: <20200321004156.23364-6-beanhuo@micron.com>
+        id S1728200AbgCUXIn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 21 Mar 2020 19:08:43 -0400
+Received: from static-dsl-170.87-197-152.telecom.sk ([87.197.152.170]:36790
+        "EHLO sldom.sldom" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726997AbgCUXIm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 21 Mar 2020 19:08:42 -0400
+Received: from Shop01 (localhost [127.0.0.1])
+        by sldom.sldom (Postfix) with SMTP id 93F8B1DDC15;
+        Fri, 20 Mar 2020 03:19:18 +0100 (CET)
+Received: from [118.228.18.94] by Shop01 id v0K1p2F3M1eH; Thu, 19 Mar 2020 20:11:16 -0700
+Message-ID: <2kwcclu8-70k18---$j20@kw62c>
+From:   "Jean Marie" <tbryant6@woh.rr.com>
+Reply-To: "Jean Marie" <tbryant6@woh.rr.com>
+To:     linux-arch@vger.kernel.org
+Subject: RESPOND BACK  FOR DISCUSSION
+Date:   Thu, 19 Mar 20 20:11:16 GMT
+X-Mailer: Microsoft Outlook, Build 10.0.2627
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200321004156.23364-6-beanhuo@micron.com>
-X-Patchwork-Hint: ignore
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/alternative;
+        boundary="_C9._9373.."
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
-Fixes: 161f01e2ffea ("scsi: ufs: UFS Host Performance Booster(HPB) driver")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- ufshpb.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--_C9._9373..
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
-index 137d0e3cf7261..ee77c7db668e7 100644
---- a/drivers/scsi/ufs/ufshpb.c
-+++ b/drivers/scsi/ufs/ufshpb.c
-@@ -29,7 +29,7 @@
- /*
-  * debug variables
-  */
--int alloc_mctx;
-+static int alloc_mctx;
- 
- /*
-  * define global constants
+I am a private financial consultant,  I have a client who is interested to=
+ invest millions dollar in your country. Get back to me privately for disc=
+ussion hence you have investment experience to manage the above funds.
+Regards
+Mr. Jean Marie .B
+
+--_C9._9373..--
+
