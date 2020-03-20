@@ -2,330 +2,278 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F7218D27A
-	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2020 16:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB24118D6F8
+	for <lists+linux-scsi@lfdr.de>; Fri, 20 Mar 2020 19:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727426AbgCTPLI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Mar 2020 11:11:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56054 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727401AbgCTPLH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 20 Mar 2020 11:11:07 -0400
-Received: from mail.kernel.org (ip5f5ad4e9.dynamic.kabel-deutschland.de [95.90.212.233])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A4A622076E;
-        Fri, 20 Mar 2020 15:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584717066;
-        bh=wPIgZHlHXIpvX7rbWR9bBXdthfipdOWJrHs3flWe2dg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tdeBs9eHiGwMvjF82a2CVzT9xi8PtrAbwc5pkRONZ3Z5ptdlWgjU1n4VkU7m49VX0
-         r2w+CcJcrLX2XFku9R2PhaMoyhuCFiy/QlcAdojG9ypNIBN+s0jJ0YQ9Ta9uoPRRuC
-         zthMoq13v0KsDaQDfceTTfODcKCAHBeB+I/WUKKM=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jFJIe-000ukg-JM; Fri, 20 Mar 2020 16:11:04 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Vinod Koul <vkoul@kernel.org>, Tyler Hicks <code@tyhicks.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Harry Wei <harryxiyou@gmail.com>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Johannes Berg <johannes.berg@intel.com>,
-        Madhuparna Bhowmik <madhuparnabhowmik04@gmail.com>,
-        Matthias Maennich <maennich@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Ricardo Ribalda Delgado <ribalda@kernel.org>,
-        Jacopo Mondi <jacopo@jmondi.org>, dmaengine@vger.kernel.org,
-        ecryptfs@vger.kernel.org, netdev@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [PATCH v2 1/2] docs: prevent warnings due to autosectionlabel
-Date:   Fri, 20 Mar 2020 16:11:02 +0100
-Message-Id: <2bffb91e4a63d41bf5fae1c23e1e8b3bba0b8806.1584716446.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <cover.1584716446.git.mchehab+huawei@kernel.org>
-References: <cover.1584716446.git.mchehab+huawei@kernel.org>
+        id S1726897AbgCTS0Z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Mar 2020 14:26:25 -0400
+Received: from esa3.microchip.iphmx.com ([68.232.153.233]:23734 "EHLO
+        esa3.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726851AbgCTS0Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Mar 2020 14:26:25 -0400
+IronPort-SDR: y2V49u56GcKqaKxOHwJoZDh62s4BG7wXjf6pOjpjXabTzzyX/mZIp6AJoZJMjFwNs+dDKx4c5y
+ liRQhkGeyMJ3e5DSucIqnV45zQHzNYYoNKa1J1LwuKqZxSQQiav74yHCAPtBl4ZfM0bK8YFpjI
+ tvMFdZTHxryZRzyaHSV95AGkjF1t4VudXGHT5WJqP8Sv5/JfYEDRKQTcpg0zSWtENdmwJCG7Gz
+ u2IqkytsHZPYjyiNlj7lAEeHhc6cJ6pXyoa2DiqQEq7PXkKgRvvl784ae6vPTI0bl3vkbckAAa
+ eoo=
+X-IronPort-AV: E=Sophos;i="5.72,285,1580799600"; 
+   d="scan'208";a="70713479"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Mar 2020 11:26:23 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Fri, 20 Mar 2020 11:26:25 -0700
+Received: from [127.0.1.1] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.1713.5 via Frontend
+ Transport; Fri, 20 Mar 2020 11:26:22 -0700
+Subject: [PATCH] hpsa: correct race condition in offload enabled
+From:   Don Brace <don.brace@microsemi.com>
+To:     <Kevin.Barnett@microchip.com>, <scott.teel@microchip.com>,
+        <Justin.Lindley@microchip.com>, <scott.benesh@microchip.com>,
+        <bader.alisaleh@microchip.com>, <gerry.morong@microchip.com>,
+        <mahesh.rajashekhara@microchip.com>, <hch@infradead.org>,
+        <jejb@linux.vnet.ibm.com>, <joseph.szczypek@hpe.com>,
+        <POSWALD@suse.com>, <shunyong.yang@hxt-semitech.com>
+CC:     <linux-scsi@vger.kernel.org>
+Date:   Fri, 20 Mar 2020 13:26:18 -0500
+Message-ID: <158472877894.14200.7077843399036368335.stgit@brunhilda>
+User-Agent: StGit/0.21-58-ga79f
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Changeset 58ad30cf91f0 ("docs: fix reference to core-api/namespaces.rst")
-enabled a new feature at Sphinx: it will now generate index for each
-document title, plus to each chapter inside it.
+- correct race condition where ioaccel is re-enabled before the
+  raid_map is updated. For RAID_1, RAID_1ADM, and RAID 5/6 there
+  is a BUG_ON called which is bad.
+  - change event thread to disable ioaccel only.
+    - send all requests down the RAID path instead.
+  - Have rescan thread handle offload_enable.
+  - Since there is only one rescan allowed at a time, turning
+    offload_enabled on/off should not be racy. Each handler
+    queues up a rescan if one is already in progress.
+  - For timing diagram, offload_enabled is initially off due
+    to a change (transformation: splitmirror/remirror), ...
 
-There's a drawback, though: one document cannot have two sections
-with the same name anymore.
+  otbe = offload_to_be_enabled
+  oe   = offload_enabled
 
-A followup patch will change the logic of autosectionlabel to
-avoid most creating references for every single section title,
-but still we need to be able to reference the chapters inside
-a document.
+  Time Event         Rescan              Completion     Request
+       Worker        Worker              Thread         Thread
+  ---- ------        ------              ----------     -------
+   T0   |             |                       + UA      |
+   T1   |             + rescan started        | 0x3f    |
+   T2   + Event       |                       | 0x0e    |
+   T3   + Ack msg     |                       |         |
+   T4   |             + if (!dev[i]->oe &&    |         |
+   T5   |             |     dev[i]->otbe)     |         |
+   T6   |             |      get_raid_map     |         |
+   T7   + otbe = 1    |                       |         |
+   T8   |             |                       |         |
+   T9   |             + oe = otbe             |         |
+   T10  |             |                       |         + ioaccel request
+   T11                                                  * BUG_ON
 
-There are a few places where there are two chapters with the
-same name. This patch renames one of the chapters, in order to
-avoid symbol conflict within the same document.
+  T0 - I/O completion with UA 0x3f 0x0e sets rescan flag.
+  T1 - rescan worker thread starts a rescan.
+  T2 - event comes in
+  T3 - event thread starts and issues "Acknowledge" message
+  ...
+  T6 - rescan thread has bypassed code to reload new raid map.
+  ...
+  T7 - event thread runs and sets offload_to_be_enabled
+  ...
+  T9 - rescan thread turns on offload_enabled.
+  T10- request comes in and goes down ioaccel path.
+  T11- BUG_ON.
 
-PS.: as I don't speach Chinese, I had some help from a friend
-(Wen Liu) at the Chinese translation for "publishing patches"
-for this document:
 
-	Documentation/translations/zh_CN/process/5.Posting.rst
+  - After the patch is applied, ioaccel_enabled can only be re-enabled
+    in the re-scan thread.
 
-Fixes: 58ad30cf91f0 ("docs: fix reference to core-api/namespaces.rst")
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reviewed-by: Scott Benesh <scott.benesh@microsemi.com>
+Reviewed-by: Scott Teel <scott.teel@microsemi.com>
+Reviewed-by: Matt Perricone <matt.perricone@microsemi.com>
+Signed-off-by: Don Brace <don.brace@microsemi.com>
 ---
- Documentation/driver-api/80211/mac80211-advanced.rst  |  8 ++++----
- Documentation/driver-api/dmaengine/index.rst          |  4 ++--
- Documentation/filesystems/ecryptfs.rst                | 11 +++++------
- Documentation/kernel-hacking/hacking.rst              |  4 ++--
- Documentation/media/kapi/v4l2-controls.rst            |  8 ++++----
- Documentation/networking/snmp_counter.rst             |  4 ++--
- Documentation/powerpc/ultravisor.rst                  |  4 ++--
- Documentation/security/siphash.rst                    |  8 ++++----
- Documentation/target/tcmu-design.rst                  |  6 +++---
- .../translations/zh_CN/process/5.Posting.rst          |  2 +-
- Documentation/x86/intel-iommu.rst                     |  3 ++-
- 11 files changed, 31 insertions(+), 31 deletions(-)
+ drivers/scsi/hpsa.c |   80 ++++++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 57 insertions(+), 23 deletions(-)
 
-diff --git a/Documentation/driver-api/80211/mac80211-advanced.rst b/Documentation/driver-api/80211/mac80211-advanced.rst
-index 9f1c5bb7ac35..24cb64b3b715 100644
---- a/Documentation/driver-api/80211/mac80211-advanced.rst
-+++ b/Documentation/driver-api/80211/mac80211-advanced.rst
-@@ -272,8 +272,8 @@ STA information lifetime rules
- .. kernel-doc:: net/mac80211/sta_info.c
-    :doc: STA information lifetime rules
+diff --git a/drivers/scsi/hpsa.c b/drivers/scsi/hpsa.c
+index 1a4ddfacb458..1e9302e99d05 100644
+--- a/drivers/scsi/hpsa.c
++++ b/drivers/scsi/hpsa.c
+@@ -504,6 +504,12 @@ static ssize_t host_store_rescan(struct device *dev,
+ 	return count;
+ }
  
--Aggregation
--===========
-+Aggregation Functions
-+=====================
++static void hpsa_turn_off_ioaccel_for_device(struct hpsa_scsi_dev_t *device)
++{
++	device->offload_enabled = 0;
++	device->offload_to_be_enabled = 0;
++}
++
+ static ssize_t host_show_firmware_revision(struct device *dev,
+ 	     struct device_attribute *attr, char *buf)
+ {
+@@ -1738,8 +1744,7 @@ static void hpsa_figure_phys_disk_ptrs(struct ctlr_info *h,
+ 				__func__,
+ 				h->scsi_host->host_no, logical_drive->bus,
+ 				logical_drive->target, logical_drive->lun);
+-			logical_drive->offload_enabled = 0;
+-			logical_drive->offload_to_be_enabled = 0;
++			hpsa_turn_off_ioaccel_for_device(logical_drive);
+ 			logical_drive->queue_depth = 8;
+ 		}
+ 	}
+@@ -2499,8 +2504,7 @@ static void process_ioaccel2_completion(struct ctlr_info *h,
+ 			IOACCEL2_SERV_RESPONSE_FAILURE) {
+ 		if (c2->error_data.status ==
+ 			IOACCEL2_STATUS_SR_IOACCEL_DISABLED) {
+-			dev->offload_enabled = 0;
+-			dev->offload_to_be_enabled = 0;
++			hpsa_turn_off_ioaccel_for_device(dev);
+ 		}
  
- .. kernel-doc:: net/mac80211/sta_info.h
-    :functions: sta_ampdu_mlme
-@@ -284,8 +284,8 @@ Aggregation
- .. kernel-doc:: net/mac80211/sta_info.h
-    :functions: tid_ampdu_rx
+ 		if (dev->in_reset) {
+@@ -3670,10 +3674,17 @@ static void hpsa_get_ioaccel_status(struct ctlr_info *h,
+ 	this_device->offload_config =
+ 		!!(ioaccel_status & OFFLOAD_CONFIGURED_BIT);
+ 	if (this_device->offload_config) {
+-		this_device->offload_to_be_enabled =
++		bool offload_enabled =
+ 			!!(ioaccel_status & OFFLOAD_ENABLED_BIT);
+-		if (hpsa_get_raid_map(h, scsi3addr, this_device))
+-			this_device->offload_to_be_enabled = 0;
++		/*
++		 * Check to see if offload can be enabled.
++		 */
++		if (offload_enabled) {
++			rc = hpsa_get_raid_map(h, scsi3addr, this_device);
++			if (rc) /* could not load raid_map */
++				goto out;
++			this_device->offload_to_be_enabled = 1;
++		}
+ 	}
  
--Synchronisation
--===============
-+Synchronisation Functions
-+=========================
+ out:
+@@ -3996,8 +4007,7 @@ static int hpsa_update_device_info(struct ctlr_info *h,
+ 	} else {
+ 		this_device->raid_level = RAID_UNKNOWN;
+ 		this_device->offload_config = 0;
+-		this_device->offload_enabled = 0;
+-		this_device->offload_to_be_enabled = 0;
++		hpsa_turn_off_ioaccel_for_device(this_device);
+ 		this_device->hba_ioaccel_enabled = 0;
+ 		this_device->volume_offline = 0;
+ 		this_device->queue_depth = h->nr_cmds;
+@@ -5230,8 +5240,12 @@ static int hpsa_scsi_ioaccel_raid_map(struct ctlr_info *h,
+ 		/* Handles load balance across RAID 1 members.
+ 		 * (2-drive R1 and R10 with even # of drives.)
+ 		 * Appropriate for SSDs, not optimal for HDDs
++		 * Ensure we have the correct raid_map.
+ 		 */
+-		BUG_ON(le16_to_cpu(map->layout_map_count) != 2);
++		if (le16_to_cpu(map->layout_map_count) != 2) {
++			hpsa_turn_off_ioaccel_for_device(dev);
++			return IO_ACCEL_INELIGIBLE;
++		}
+ 		if (dev->offload_to_mirror)
+ 			map_index += le16_to_cpu(map->data_disks_per_row);
+ 		dev->offload_to_mirror = !dev->offload_to_mirror;
+@@ -5239,8 +5253,12 @@ static int hpsa_scsi_ioaccel_raid_map(struct ctlr_info *h,
+ 	case HPSA_RAID_ADM:
+ 		/* Handles N-way mirrors  (R1-ADM)
+ 		 * and R10 with # of drives divisible by 3.)
++		 * Ensure we have the correct raid_map.
+ 		 */
+-		BUG_ON(le16_to_cpu(map->layout_map_count) != 3);
++		if (le16_to_cpu(map->layout_map_count) != 3) {
++			hpsa_turn_off_ioaccel_for_device(dev);
++			return IO_ACCEL_INELIGIBLE;
++		}
  
- TBD
+ 		offload_to_mirror = dev->offload_to_mirror;
+ 		raid_map_helper(map, offload_to_mirror,
+@@ -5265,7 +5283,10 @@ static int hpsa_scsi_ioaccel_raid_map(struct ctlr_info *h,
+ 		r5or6_blocks_per_row =
+ 			le16_to_cpu(map->strip_size) *
+ 			le16_to_cpu(map->data_disks_per_row);
+-		BUG_ON(r5or6_blocks_per_row == 0);
++		if (r5or6_blocks_per_row == 0) {
++			hpsa_turn_off_ioaccel_for_device(dev);
++			return IO_ACCEL_INELIGIBLE;
++		}
+ 		stripesize = r5or6_blocks_per_row *
+ 			le16_to_cpu(map->layout_map_count);
+ #if BITS_PER_LONG == 32
+@@ -8285,7 +8306,7 @@ static int detect_controller_lockup(struct ctlr_info *h)
+  *
+  * Called from monitor controller worker (hpsa_event_monitor_worker)
+  *
+- * A Volume (or Volumes that comprise an Array set may be undergoing a
++ * A Volume (or Volumes that comprise an Array set) may be undergoing a
+  * transformation, so we will be turning off ioaccel for all volumes that
+  * make up the Array.
+  */
+@@ -8308,6 +8329,9 @@ static void hpsa_set_ioaccel_status(struct ctlr_info *h)
+ 	 * Run through current device list used during I/O requests.
+ 	 */
+ 	for (i = 0; i < h->ndevices; i++) {
++		int offload_to_be_enabled = 0;
++		int offload_config = 0;
++
+ 		device = h->dev[i];
  
-diff --git a/Documentation/driver-api/dmaengine/index.rst b/Documentation/driver-api/dmaengine/index.rst
-index b9df904d0a79..bdc45d8b4cfb 100644
---- a/Documentation/driver-api/dmaengine/index.rst
-+++ b/Documentation/driver-api/dmaengine/index.rst
-@@ -5,8 +5,8 @@ DMAEngine documentation
- DMAEngine documentation provides documents for various aspects of DMAEngine
- framework.
+ 		if (!device)
+@@ -8325,25 +8349,35 @@ static void hpsa_set_ioaccel_status(struct ctlr_info *h)
+ 			continue;
  
--DMAEngine documentation
-------------------------
-+DMAEngine development documentation
-+-----------------------------------
+ 		ioaccel_status = buf[IOACCEL_STATUS_BYTE];
+-		device->offload_config =
++
++		/*
++		 * Check if offload is still configured on
++		 */
++		offload_config =
+ 				!!(ioaccel_status & OFFLOAD_CONFIGURED_BIT);
+-		if (device->offload_config)
+-			device->offload_to_be_enabled =
++		/*
++		 * If offload is configured on, check to see if ioaccel
++		 * needs to be enabled.
++		 */
++		if (offload_config)
++			offload_to_be_enabled =
+ 				!!(ioaccel_status & OFFLOAD_ENABLED_BIT);
  
- This book helps with DMAengine internal APIs and guide for DMAEngine device
- driver writers.
-diff --git a/Documentation/filesystems/ecryptfs.rst b/Documentation/filesystems/ecryptfs.rst
-index 7236172300ef..1f2edef4c57a 100644
---- a/Documentation/filesystems/ecryptfs.rst
-+++ b/Documentation/filesystems/ecryptfs.rst
-@@ -30,13 +30,12 @@ Userspace requirements include:
- - Libgcrypt
++		/*
++		 * If ioaccel is to be re-enabled, re-enable later during the
++		 * scan operation so the driver can get a fresh raidmap
++		 * before turning ioaccel back on.
++		 */
++		if (offload_to_be_enabled)
++			continue;
++
+ 		/*
+ 		 * Immediately turn off ioaccel for any volume the
+ 		 * controller tells us to. Some of the reasons could be:
+ 		 *    transformation - change to the LVs of an Array.
+ 		 *    degraded volume - component failure
+-		 *
+-		 * If ioaccel is to be re-enabled, re-enable later during the
+-		 * scan operation so the driver can get a fresh raidmap
+-		 * before turning ioaccel back on.
+-		 *
+ 		 */
+-		if (!device->offload_to_be_enabled)
+-			device->offload_enabled = 0;
++		hpsa_turn_off_ioaccel_for_device(device);
+ 	}
  
- 
--Notes
--=====
-+.. note::
- 
--In the beta/experimental releases of eCryptfs, when you upgrade
--eCryptfs, you should copy the files to an unencrypted location and
--then copy the files back into the new eCryptfs mount to migrate the
--files.
-+   In the beta/experimental releases of eCryptfs, when you upgrade
-+   eCryptfs, you should copy the files to an unencrypted location and
-+   then copy the files back into the new eCryptfs mount to migrate the
-+   files.
- 
- 
- Mount-wide Passphrase
-diff --git a/Documentation/kernel-hacking/hacking.rst b/Documentation/kernel-hacking/hacking.rst
-index d707a0a61cc9..eed2136d847f 100644
---- a/Documentation/kernel-hacking/hacking.rst
-+++ b/Documentation/kernel-hacking/hacking.rst
-@@ -601,7 +601,7 @@ Defined in ``include/linux/export.h``
- 
- This is the variant of `EXPORT_SYMBOL()` that allows specifying a symbol
- namespace. Symbol Namespaces are documented in
--:ref:`Documentation/core-api/symbol-namespaces.rst <Symbol Namespaces>`
-+:doc:`../core-api/symbol-namespaces`
- 
- :c:func:`EXPORT_SYMBOL_NS_GPL()`
- --------------------------------
-@@ -610,7 +610,7 @@ Defined in ``include/linux/export.h``
- 
- This is the variant of `EXPORT_SYMBOL_GPL()` that allows specifying a symbol
- namespace. Symbol Namespaces are documented in
--:ref:`Documentation/core-api/symbol-namespaces.rst <Symbol Namespaces>`
-+:doc:`../core-api/symbol-namespaces`
- 
- Routines and Conventions
- ========================
-diff --git a/Documentation/media/kapi/v4l2-controls.rst b/Documentation/media/kapi/v4l2-controls.rst
-index b20800cae3f2..5129019afb49 100644
---- a/Documentation/media/kapi/v4l2-controls.rst
-+++ b/Documentation/media/kapi/v4l2-controls.rst
-@@ -291,8 +291,8 @@ and QUERYMENU. And G/S_CTRL as well as G/TRY/S_EXT_CTRLS are automatically suppo
-    In practice the basic usage as described above is sufficient for most drivers.
- 
- 
--Inheriting Controls
---------------------
-+Inheriting Sub-device Controls
-+------------------------------
- 
- When a sub-device is registered with a V4L2 driver by calling
- v4l2_device_register_subdev() and the ctrl_handler fields of both v4l2_subdev
-@@ -757,8 +757,8 @@ attempting to find another control from the same handler will deadlock.
- It is recommended not to use this function from inside the control ops.
- 
- 
--Inheriting Controls
---------------------
-+Preventing Controls inheritance
-+-------------------------------
- 
- When one control handler is added to another using v4l2_ctrl_add_handler, then
- by default all controls from one are merged to the other. But a subdev might
-diff --git a/Documentation/networking/snmp_counter.rst b/Documentation/networking/snmp_counter.rst
-index 38a4edc4522b..10e11099e74a 100644
---- a/Documentation/networking/snmp_counter.rst
-+++ b/Documentation/networking/snmp_counter.rst
-@@ -908,8 +908,8 @@ A TLP probe packet is sent.
- 
- A packet loss is detected and recovered by TLP.
- 
--TCP Fast Open
--=============
-+TCP Fast Open description
-+=========================
- TCP Fast Open is a technology which allows data transfer before the
- 3-way handshake complete. Please refer the `TCP Fast Open wiki`_ for a
- general description.
-diff --git a/Documentation/powerpc/ultravisor.rst b/Documentation/powerpc/ultravisor.rst
-index 363736d7fd36..df136c8f91fa 100644
---- a/Documentation/powerpc/ultravisor.rst
-+++ b/Documentation/powerpc/ultravisor.rst
-@@ -8,8 +8,8 @@ Protected Execution Facility
- .. contents::
-     :depth: 3
- 
--Protected Execution Facility
--############################
-+Introduction
-+############
- 
-     Protected Execution Facility (PEF) is an architectural change for
-     POWER 9 that enables Secure Virtual Machines (SVMs). DD2.3 chips
-diff --git a/Documentation/security/siphash.rst b/Documentation/security/siphash.rst
-index 9965821ab333..4eba68cdf0a1 100644
---- a/Documentation/security/siphash.rst
-+++ b/Documentation/security/siphash.rst
-@@ -128,8 +128,8 @@ then when you can be absolutely certain that the outputs will never be
- transmitted out of the kernel. This is only remotely useful over `jhash` as a
- means of mitigating hashtable flooding denial of service attacks.
- 
--Generating a key
--================
-+Generating a HalfSipHash key
-+============================
- 
- Keys should always be generated from a cryptographically secure source of
- random numbers, either using get_random_bytes or get_random_once:
-@@ -139,8 +139,8 @@ get_random_bytes(&key, sizeof(key));
- 
- If you're not deriving your key from here, you're doing it wrong.
- 
--Using the functions
--===================
-+Using the HalfSipHash functions
-+===============================
- 
- There are two variants of the function, one that takes a list of integers, and
- one that takes a buffer::
-diff --git a/Documentation/target/tcmu-design.rst b/Documentation/target/tcmu-design.rst
-index a7b426707bf6..e47047e32e27 100644
---- a/Documentation/target/tcmu-design.rst
-+++ b/Documentation/target/tcmu-design.rst
-@@ -5,7 +5,7 @@ TCM Userspace Design
- 
- .. Contents:
- 
--   1) TCM Userspace Design
-+   1) Design
-      a) Background
-      b) Benefits
-      c) Design constraints
-@@ -23,8 +23,8 @@ TCM Userspace Design
-    3) A final note
- 
- 
--TCM Userspace Design
--====================
-+Design
-+======
- 
- TCM is another name for LIO, an in-kernel iSCSI target (server).
- Existing TCM targets run in the kernel.  TCMU (TCM in Userspace)
-diff --git a/Documentation/translations/zh_CN/process/5.Posting.rst b/Documentation/translations/zh_CN/process/5.Posting.rst
-index 41aba21ff050..9ff9945f918c 100644
---- a/Documentation/translations/zh_CN/process/5.Posting.rst
-+++ b/Documentation/translations/zh_CN/process/5.Posting.rst
-@@ -5,7 +5,7 @@
- 
- .. _cn_development_posting:
- 
--发送补丁
-+发布补丁
- ========
- 
- 迟早，当您的工作准备好提交给社区进行审查，并最终包含到主线内核中时。不出所料，
-diff --git a/Documentation/x86/intel-iommu.rst b/Documentation/x86/intel-iommu.rst
-index 9dae6b47e398..099f13d51d5f 100644
---- a/Documentation/x86/intel-iommu.rst
-+++ b/Documentation/x86/intel-iommu.rst
-@@ -95,9 +95,10 @@ and any RMRR's processed::
- When DMAR is enabled for use, you will notice..
- 
- PCI-DMA: Using DMAR IOMMU
-+-------------------------
- 
- Fault reporting
-----------------
-+^^^^^^^^^^^^^^^
- 
- ::
- 
--- 
-2.24.1
+ 	kfree(buf);
 
