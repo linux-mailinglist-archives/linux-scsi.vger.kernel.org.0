@@ -2,28 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CED8218DCC0
-	for <lists+linux-scsi@lfdr.de>; Sat, 21 Mar 2020 01:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C590D18DCC2
+	for <lists+linux-scsi@lfdr.de>; Sat, 21 Mar 2020 01:48:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727856AbgCUAsj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Mar 2020 20:48:39 -0400
+        id S1727865AbgCUAsk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Mar 2020 20:48:40 -0400
 Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:50318 "EHLO
         alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
         by vger.kernel.org with ESMTP id S1726773AbgCUAsj (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 20 Mar 2020 20:48:39 -0400
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
   by alexa-out-sd-01.qualcomm.com with ESMTP; 20 Mar 2020 17:48:38 -0700
 Received: from asutoshd-linux1.qualcomm.com ([10.46.160.39])
-  by ironmsg04-sd.qualcomm.com with ESMTP; 20 Mar 2020 17:48:38 -0700
+  by ironmsg-SD-alpha.qualcomm.com with ESMTP; 20 Mar 2020 17:48:38 -0700
 Received: by asutoshd-linux1.qualcomm.com (Postfix, from userid 92687)
-        id 5C62E2003B; Fri, 20 Mar 2020 17:48:37 -0700 (PDT)
+        id 93C431FF97; Fri, 20 Mar 2020 17:48:37 -0700 (PDT)
 From:   Asutosh Das <asutoshd@codeaurora.org>
 To:     asutoshd@qti.qualcomm.com, linux-scsi@vger.kernel.org
 Subject: [<RFC PATCH v2> 0/3] WriteBooster Feature Support
-Date:   Fri, 20 Mar 2020 17:48:33 -0700
+Date:   Fri, 20 Mar 2020 17:48:34 -0700
 Message-Id: <cover.1584750888.git.asutoshd@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1584750888.git.asutoshd@codeaurora.org>
+References: <cover.1584750888.git.asutoshd@codeaurora.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -34,8 +36,6 @@ on the design.
 
 v1 -> v2:
 - Addressed comments on v1
-
-- Supports shared buffer mode only
 
 - Didn't use exception event as suggested.
   The reason being while testing I saw that the WriteBooster
