@@ -2,70 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F00B18DB8D
-	for <lists+linux-scsi@lfdr.de>; Sat, 21 Mar 2020 00:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 482F718DC9C
+	for <lists+linux-scsi@lfdr.de>; Sat, 21 Mar 2020 01:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727586AbgCTXKk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 20 Mar 2020 19:10:40 -0400
-Received: from ms.lwn.net ([45.79.88.28]:44012 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726955AbgCTXKk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 20 Mar 2020 19:10:40 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 5F6412D6;
-        Fri, 20 Mar 2020 23:10:38 +0000 (UTC)
-Date:   Fri, 20 Mar 2020 17:10:20 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Madhuparna Bhowmik <madhuparnabhowmik04@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ricardo Ribalda Delgado <ribalda@kernel.org>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        dmaengine@vger.kernel.org, Matthias Maennich <maennich@google.com>,
-        Harry Wei <harryxiyou@gmail.com>, x86@kernel.org,
-        ecryptfs@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        target-devel@vger.kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Tyler Hicks <code@tyhicks.com>, Vinod Koul <vkoul@kernel.org>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-scsi@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxppc-dev@lists.ozlabs.org, Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v2 0/2] Don't generate thousands of new warnings when
- building docs
-Message-ID: <20200320171020.78f045c5@lwn.net>
-In-Reply-To: <cover.1584716446.git.mchehab+huawei@kernel.org>
-References: <cover.1584716446.git.mchehab+huawei@kernel.org>
-Organization: LWN.net
+        id S1727781AbgCUAmK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 20 Mar 2020 20:42:10 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:38146 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727197AbgCUAmK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 20 Mar 2020 20:42:10 -0400
+Received: by mail-wr1-f65.google.com with SMTP id s1so9583847wrv.5;
+        Fri, 20 Mar 2020 17:42:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BYu1AxfdPUTqAQZFe1sqtfUo8jvdQdN79PgYT3yueg8=;
+        b=CPPpAagJz4RFvFmupDJbXcBMhoaLg35p7vVB6OyOzCMZ4i+XHvObnMIkG1+GEaQtUs
+         Qxhedai4lchDX7aHyVtmhrn2d5tnRMEaB/7GnqQe/2bX92EqkhjqraT8gKmdZrno+y+j
+         ZdZf9y4HDDiwVfgdhDy1w81arm6RVeOjVXWZE5kJYkrEQDJ65//3pPNZ6QF2/w+fbeEa
+         y1K3VcmIE4Hv7AMDRZLRbdAQm4Z89eCu4vLGnwzRHej+xj1inJtmZZX3npsI0V77Cn5d
+         jSQ8Vt1FvRX//w20w07ehHtBduR+a8UxqvVc+mzWk6CxHavn4tu3Xqfx1cnf+mjxfeEc
+         qndQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BYu1AxfdPUTqAQZFe1sqtfUo8jvdQdN79PgYT3yueg8=;
+        b=bTDloQf0uMEaRa4DO63bbRK39Y1tplzHKgkB6hRiN9WrBcsv6v29T5KD05YBd8o9le
+         VC0UuN3jJPjRetfK8JXpoijgtvhSPB6Ztzad3V/nkGaZoshAeG+dANxzNC9SBicXGXWa
+         Rp4lsSgG6qxYg4zu36vKVWI2D7qB/Qjtpht07hfRAFNySaGH/40UuX4xrva9frRt5k/v
+         lE/d8zPpCWWad335AvVt6U+AN5pgyvOa8F7LEQ7cF7AQj10MDImflaLpPa9Qw1nbu8yC
+         lnl/Xl91iuV35LCtkilTvKSuSbZET7eat/86WyBl2dPBzNHFCqlZxwbFDGoE8fJBxNM5
+         6vZg==
+X-Gm-Message-State: ANhLgQ2aIu2AmmIfOQE1AVGKyW6/w+JxzXBQQRTPblSMn+7apdeRQSwp
+        TTu7o1U6s+STQrIoQ7OXoms=
+X-Google-Smtp-Source: ADFU+vsa24cXkwKWAZlSST+P+ep6fZlFncbOF+1C0E8DWeyg0juZJ5j11JS2xZDlSLHjY15HvHROYQ==
+X-Received: by 2002:adf:ce8e:: with SMTP id r14mr14441120wrn.415.1584751327365;
+        Fri, 20 Mar 2020 17:42:07 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5bee49.dynamic.kabel-deutschland.de. [95.91.238.73])
+        by smtp.gmail.com with ESMTPSA id j6sm8194982wrb.4.2020.03.20.17.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2020 17:42:06 -0700 (PDT)
+From:   huobean@gmail.com
+X-Google-Original-From: beanhuo@micron.com
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ymhungry.lee@samsung.com, j-young.choi@samsung.com
+Subject: [PATCH v1 0/5] scsi: ufs: add UFS Host Performance Booster(HPB) driver
+Date:   Sat, 21 Mar 2020 01:41:51 +0100
+Message-Id: <20200321004156.23364-1-beanhuo@micron.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 20 Mar 2020 16:11:01 +0100
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+From: Bean Huo <beanhuo@micron.com>
 
-> This small series address a regression caused by a new patch at
-> docs-next (and at linux-next).
+I disclose my development/changes on UFS HPB (UFS Host Performance Booster) to the
+community, as this would enable more UFS developers to test and start an iterative
+review and update process.                                                         
+                                                                                   
+The HPB is defined in Jedec Standard Universal Flash (UFS) Host Performance        
+Booster(HPB) Extension Version 1.0, which is designed to improve a read performance
+by utilizing the host side memory. Based on our testing, the HPB can increase the
+random read performance by up to about 46% in random read.                         
+                                                                                   
+The original HPB driver is from [1]. Based on it, I did some                       
+optimizations, simplications, fixed several reliability issues, implemented HPB 
+host control mode and make it much more readable. There are still some FIXME need
+to do, but this doesn't stop disclosure of patches to community to let you review.
+                                                                                   
+To avoid touching the traditional SCSI core, the HPB driver in this version series
+HPB patch chooses to develop under SCSI, and sits the same layer with UFSHCD. At the
+same time, in order to minimize changes on UFSHCD driver, the HPB driver inserts
+HPB READ BUFFER and HPB WRITE BUFFER requests into the scsi_device->request_queueu
+to execute, rather than that directly go through raw UPIU request path.            
+                                                                                   
+                                                                                   
+[1] https://github.com/OpenMPDK/HPBDriver 
 
-I don't know how I missed that mess, sorry.  I plead distracting times or
-something like that.  Heck, I think I'll blame everything on the plague
-for at least the next few weeks.
+Bean Huo (5):
+  scsi; ufs: add device descriptor for Host Performance Booster
+  scsi: ufs: make ufshcd_read_unit_desc_param() non-static func
+  scsi: ufs: add ufs_features parameter in structure ufs_dev_info
+  scsi: ufs: add unit and geometry parameters for HPB
+  scsi: ufs: UFS Host Performance Booster(HPB) driver
 
-Anyway, I've applied this, thanks for cleaning it up.
+ drivers/scsi/ufs/Kconfig  |   34 +
+ drivers/scsi/ufs/Makefile |    1 +
+ drivers/scsi/ufs/ufs.h    |   19 +
+ drivers/scsi/ufs/ufshcd.c |   66 +-
+ drivers/scsi/ufs/ufshcd.h |   14 +-
+ drivers/scsi/ufs/ufshpb.c | 3322 +++++++++++++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufshpb.h |  421 +++++
+ 7 files changed, 3870 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/scsi/ufs/ufshpb.c
+ create mode 100644 drivers/scsi/ufs/ufshpb.h
 
-jon
+-- 
+2.17.1
+
