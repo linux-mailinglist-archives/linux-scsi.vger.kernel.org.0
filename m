@@ -2,83 +2,108 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1102718EB6F
-	for <lists+linux-scsi@lfdr.de>; Sun, 22 Mar 2020 19:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C88C18EC01
+	for <lists+linux-scsi@lfdr.de>; Sun, 22 Mar 2020 20:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgCVSN2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 22 Mar 2020 14:13:28 -0400
-Received: from mail-pl1-f174.google.com ([209.85.214.174]:33750 "EHLO
-        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726869AbgCVSN2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 22 Mar 2020 14:13:28 -0400
-Received: by mail-pl1-f174.google.com with SMTP id g18so4892761plq.0
-        for <linux-scsi@vger.kernel.org>; Sun, 22 Mar 2020 11:13:27 -0700 (PDT)
+        id S1726710AbgCVTpe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 22 Mar 2020 15:45:34 -0400
+Received: from mail-wm1-f51.google.com ([209.85.128.51]:40399 "EHLO
+        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbgCVTpe (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 22 Mar 2020 15:45:34 -0400
+Received: by mail-wm1-f51.google.com with SMTP id a81so6591516wmf.5
+        for <linux-scsi@vger.kernel.org>; Sun, 22 Mar 2020 12:45:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=MKNpqwXPnZjbvT23Ks0JWvpzrv1CDKNpSRKwVFjt/zM=;
-        b=qmj2j/WCHxIZpY1vhidBvo2CM8QxXcu1HElOSTfZDIdShCIaLCusB5BR5FMVh90Iiq
-         d59E/w1VkK0PmvJSP2m2aLU+/or0yGHGZ6ZrFZPPBQQFWQeTFjYYLTHtudkyTMyyMwok
-         E/6CMsQzmFCkxCLTMu4g+qd6NQrTgXrnxho050CIx0NxD6bo07kxB6p5SE9HwgRjSQzm
-         IsO3KfmiNPbhGlhkqqXH3BC7ubu10STGMcukcMdApsYxbOyT4fav97EGRquZun4ejjXl
-         Yu4MCtOVpyqOxWzUqvxH2s2a22ZAXXPUsJUqnkWClv3upn6tMBxLdr//HQGYLnNjKHXJ
-         ECrQ==
+        h=subject:to:references:cc:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=YHrGFzzsOtst6yc/sBRhUb3pRpwcF9AlxtJsYrak3Ac=;
+        b=RFem7Y9POtmFEHbrmqUURUW5CEx8KLKL0+ArklN7xIQ6BzjluleawaaPsWRrZKdSmC
+         785npWIZyFJuoFVv3bK3SBzmwIPOVcxBWZdb/kRXyBQZh9SYY8XG/MVeePQbwohZYGDV
+         4wl50ZHRh5JjzorgeMPamSjU5tNaw8KmEN4iXzsnxY/gHXEUVqFMlQmhE/XL7dWKgvOM
+         jmguh7nsh60CE7X1Ql4oBI98FME5IZMZp1bhwcEC5eqeJP8nuFLgYOXFA1Qqwqap4GYQ
+         rB3H6SIgYCRNszSUz/4ijr2ZhlP8cwd/wrIykzzQvk6fddZoNanJODzhfJbScXvU8NSe
+         Hh8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=MKNpqwXPnZjbvT23Ks0JWvpzrv1CDKNpSRKwVFjt/zM=;
-        b=d9z3rGRdsjNxmoxyItb+qmDldwjOAtUqDCFtvU9ffS40BFJ+Qs0QimIDY8ix9Ln230
-         /H6VPUKn+v5Fkkz+IwUtVD1dB/PSdRUcH7a54sne1dljbBD6r9r4oyik6YRA5UGqjo0m
-         4y1nLjnPjBFCc4sfsLc17MX3dJTsn6hQQLsBJ5ks8PMFwZknXyxBAsTBMfL6D/xmI6Rz
-         dvECq3C6UysekIVP/D8cggwWRY4S1JWboGmgjorwcYtJ/knw2CeLRXFkMVz8l0D73bnA
-         cOFKgomvem2fkbs7Gg/XpLEeCbWDpBehDhmGPLTN4pXqOA+Nl6brN8adPDjTZHScSUZa
-         Qdxg==
-X-Gm-Message-State: ANhLgQ22C93EBwae3ixupj+ZWRDMBhOB2S1mMBAQCok65eaGZXB5krHw
-        2J2Z+EH/IuzHF9wlEYvga36mo0X6
-X-Google-Smtp-Source: ADFU+vsYjaXJ2+m/0ofiZ/UXhvo/J5YrJiSnMVXefF7w71jmuOpEDcqD8RyRU9xeLWcGNsdjWRESTg==
-X-Received: by 2002:a17:902:b187:: with SMTP id s7mr18791230plr.84.1584900806775;
-        Sun, 22 Mar 2020 11:13:26 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (ip68-5-146-102.oc.oc.cox.net. [68.5.146.102])
-        by smtp.gmail.com with ESMTPSA id bt19sm1331657pjb.3.2020.03.22.11.13.25
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 22 Mar 2020 11:13:25 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH 12/12] lpfc: Update lpfc version to 12.8.0.0
-Date:   Sun, 22 Mar 2020 11:13:04 -0700
-Message-Id: <20200322181304.37655-13-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200322181304.37655-1-jsmart2021@gmail.com>
-References: <20200322181304.37655-1-jsmart2021@gmail.com>
+        h=x-gm-message-state:subject:to:references:cc:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=YHrGFzzsOtst6yc/sBRhUb3pRpwcF9AlxtJsYrak3Ac=;
+        b=g4w5beJJ9Jka27oCtMHE2Vc+pzpMflfIzHP0xuLDMtQ5ig3meRtu08ISY9vWledkTx
+         nK7oC88RvYyjXeugo81vg0+HIXrfc9hv3ASx/IrupkTRzvk5DAvO0FIn+J6VkZ4VRQL7
+         kAeC/za5AKgUGvrAg03CCrc8r7mkJ27y1ZPfew9G6EKp9fJxUOMCTrtQWRaLS2gz8dfL
+         KvkJkaue1WFbb7NmfbZcNRDdNYy2o+2ofEh/U1mhT3C/VeKwab+Pk/HowEzbV5aGHhDw
+         v8ZMSL4zKBECQ3JRD0PzVYwatFTsHgcs3VeeE4mTZynablCdOytAhhS6UpfHmbMDnp00
+         aLsA==
+X-Gm-Message-State: ANhLgQ1wpmMY1WqkgzPwnZAWPJzz3BkZy5DZHg+txdtq9TAOwUuLj0wi
+        l+KOQXBUUfL2w+VZdVaNmazTdFzV
+X-Google-Smtp-Source: ADFU+vubEocEEhIWB+ihDaXgwD8AgeFPkohiBTK4BtSFHkkiOsCX985rf+lU6Bh4wUSa6rElbvDDbw==
+X-Received: by 2002:a1c:f60d:: with SMTP id w13mr23731639wmc.171.1584906332623;
+        Sun, 22 Mar 2020 12:45:32 -0700 (PDT)
+Received: from ?IPv6:2001:871:25b:80aa:d968:6ff0:1ba6:31eb? (dynamic-2jo7hd4gpbva0jmajv-pd01.res.v6.highway.a1.net. [2001:871:25b:80aa:d968:6ff0:1ba6:31eb])
+        by smtp.gmail.com with ESMTPSA id t12sm3227651wrm.0.2020.03.22.12.45.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 22 Mar 2020 12:45:31 -0700 (PDT)
+Subject: Re: Invalid optimal transfer size 33553920 accepted when
+ physical_block_size 512
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+References: <33fb522e-4f61-1b76-914f-c9e6a3553c9b@gmail.com>
+ <yq1o8sowfzn.fsf@oracle.com> <accd7d25-ee35-11b9-e49b-76e20d9550f2@gmail.com>
+ <yq1pnd4tbxm.fsf@oracle.com>
+Cc:     linux-scsi@vger.kernel.org
+From:   Bernhard Sulzer <micraft.b@gmail.com>
+Message-ID: <1eb896cd-2be1-4225-88d8-5ee590fe063b@gmail.com>
+Date:   Sun, 22 Mar 2020 20:45:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <yq1pnd4tbxm.fsf@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Update lpfc version to 12.8.0.0
+>>      # sg_readcap -l /dev/sdc
+>>      Read Capacity results:
+>>         Protection: prot_en=0, p_type=0, p_i_exponent=0
+>>         Logical block provisioning: lbpme=0, lbprz=0
+>>         Last LBA=15628053166 (0x3a3812aae), Number of logical
+>> blocks=15628053167
+>>         Logical block length=512 bytes
+>>         Logical blocks per physical block exponent=3 [so physical block
+>> length=4096 bytes]
+>>         Lowest aligned LBA=0
+>>      Hence:
+>>         Device size: 8001563221504 bytes, 7630885.3 MiB, 8001.56 GB, 8.00 TB
+> Please send me the output of:
+>
+> # sg_readcap /dev/sdc
+>
+> (i.e. without the -l from the previous run).
+>
+> I am very puzzled as to why we end up in the older capacity code for a
+> device this big (8TB).
+>
 
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc_version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Here you go:
 
-diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
-index c4ab006e6ecc..ca40c47cfbe0 100644
---- a/drivers/scsi/lpfc/lpfc_version.h
-+++ b/drivers/scsi/lpfc/lpfc_version.h
-@@ -20,7 +20,7 @@
-  * included with this package.                                     *
-  *******************************************************************/
- 
--#define LPFC_DRIVER_VERSION "12.6.0.4"
-+#define LPFC_DRIVER_VERSION "12.8.0.0"
- #define LPFC_DRIVER_NAME		"lpfc"
- 
- /* Used for SLI 2/3 */
--- 
-2.16.4
+# sg_readcap /dev/sdc
+READ CAPACITY (10) indicates device capacity too large
+   now trying 16 byte cdb variant
+Read Capacity results:
+    Protection: prot_en=0, p_type=0, p_i_exponent=0
+    Logical block provisioning: lbpme=0, lbprz=0
+    Last LBA=15628053166 (0x3a3812aae), Number of logical blocks=15628053167
+    Logical block length=512 bytes
+    Logical blocks per physical block exponent=3 [so physical block 
+length=4096 bytes]
+    Lowest aligned LBA=0
+Hence:
+    Device size: 8001563221504 bytes, 7630885.3 MiB, 8001.56 GB, 8.00 TB
+
+Hope this helps to solve it
 
