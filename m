@@ -2,156 +2,181 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8651B193508
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Mar 2020 01:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43901193578
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Mar 2020 02:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727560AbgCZAkY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 Mar 2020 20:40:24 -0400
-Received: from mx.sdf.org ([205.166.94.20]:64235 "EHLO mx.sdf.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727540AbgCZAkY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 25 Mar 2020 20:40:24 -0400
-Received: from sdf.org (IDENT:lkml@faeroes.freeshell.org [205.166.94.9])
-        by mx.sdf.org (8.15.2/8.14.5) with ESMTPS id 02Q0eGLb017052
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits) verified NO);
-        Thu, 26 Mar 2020 00:40:16 GMT
-Received: (from lkml@localhost)
-        by sdf.org (8.15.2/8.12.8/Submit) id 02Q0eDmr014871;
-        Thu, 26 Mar 2020 00:40:13 GMT
-Date:   Thu, 26 Mar 2020 00:40:13 +0000
-From:   George Spelvin <lkml@SDF.ORG>
-To:     linux-scsi@vger.kernel.org
-Cc:     Ching Huang <ching2048@areca.com.tw>,
+        id S1727593AbgCZB5x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 Mar 2020 21:57:53 -0400
+Received: from labrats.qualcomm.com ([199.106.110.90]:22961 "EHLO
+        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727595AbgCZB5x (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Mar 2020 21:57:53 -0400
+IronPort-SDR: yZMJ6JjWQeGjfBCABy+Mg6DVJ764FG52ODPBJkbYnHraKNtEFvS856oOvJZjeH2dcWncTAr2Ep
+ GTZ6cjf7NqfdT3wvzW8ZtkkUgC/sAFNoo/pdj6QwbakHh94+gF6oo/5Lvxb8J0O/RrXL5jqKAq
+ 4lU/7nXepRcyFB37dofXjLc2egmEUxP+wu54a2gQIf3mzTZJ6r0t1YbRWSNfPiGBroXK/wdN5F
+ 7QX4Rc7ld2tRUxzCXcYavUsz1lpjWwERRiG493Pwi3f8YBe7tRjMuMTu9KCLX284WWqgWJGaM4
+ 0Sc=
+X-IronPort-AV: E=Sophos;i="5.72,303,1580803200"; 
+   d="scan'208";a="28615552"
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by labrats.qualcomm.com with ESMTP; 25 Mar 2020 02:25:00 -0700
+Received: from pacamara-linux.qualcomm.com ([192.168.140.135])
+  by ironmsg05-sd.qualcomm.com with ESMTP; 25 Mar 2020 02:24:59 -0700
+Received: by pacamara-linux.qualcomm.com (Postfix, from userid 359480)
+        id A873A3A9C; Wed, 25 Mar 2020 02:24:59 -0700 (PDT)
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>, lkml@sdf.org
-Subject: [PATCH] drivers/scsi/arcmsr/armsr_hba.c: fix "msecs_to_jiffies(6 *
-Message-ID: <20200326004013.GA15115@SDF.ORG>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support),
+        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support)
+Subject: [PATCH v5 2/2] scsi: ufs: Do not rely on prefetched data
+Date:   Wed, 25 Mar 2020 02:23:39 -0700
+Message-Id: <1585128220-26128-3-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1585128220-26128-1-git-send-email-cang@codeaurora.org>
+References: <1585128220-26128-1-git-send-email-cang@codeaurora.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-That's a nonsensical thing, because HZ is already in jiffies.
+We were setting bActiveICCLevel attribute for UFS device only once but
+type of this attribute has changed from persistent to volatile since UFS
+device specification v2.1. This attribute is set to the default value after
+power cycle or hardware reset event. It isn't safe to rely on prefetched
+data (only used for bActiveICCLevel attribute now). Hence this change
+removes the code related to data prefetching and set this parameter on
+every attempt to probe the UFS device.
 
-Presumably it's meant to be a 6s timeout, not a 0.6/1.5/1.8/6 second
-timeout (depending on HZ).
-
-Because this is a behaviour change, it needs testing by someone with the
-relevant hardware.
-
-There's a second, minor fix: in arcmsr_set_iop_datetime(), let
-msecs_to_jiffies() be evaluated at compile time.
-
-That section of code deserves two levels of attention from someone
-who understands what it's doing.  First, you might might want to
-reword that whole thing in terms of HZ.  And the constant names
-are confusing.  ARCMSR_MINUTES is 1 hour, while ARCMSR_HOURS is
-4 hours.  E.g.
-
-	next_time = HZ * 60 * 60;	/* 1 hour */
-	if (sys_tz.tz_minuteswest)
-		next_time *= 4;
-	mod_timer(&pacb->refresh_timer, jiffies + next_time);)
-
-Level two would be considering why there are two different timeouts
-depending on whether the time zone is GMT or not and whether that's
-really justified.
-
-Signed-off-by: George Spelvin <lkml@sdf.org>
-Cc: Ching Huang <ching2048@areca.com.tw>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: linux-scsi@vger.kernel.org
+Signed-off-by: Can Guo <cang@codeaurora.org>
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+Tested-by: Stanley Chu <stanley.chu@mediatek.com>
+Reviewed-by: Avri Altman <avri.altman@wdc.com>
 ---
- drivers/scsi/arcmsr/arcmsr_hba.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
+ drivers/scsi/ufs/ufshcd.c | 26 +++++++++++++++-----------
+ drivers/scsi/ufs/ufshcd.h | 11 -----------
+ 2 files changed, 15 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/scsi/arcmsr/arcmsr_hba.c b/drivers/scsi/arcmsr/arcmsr_hba.c
-index db687ef8a99ec..c3a8dbe51b75b 100644
---- a/drivers/scsi/arcmsr/arcmsr_hba.c
-+++ b/drivers/scsi/arcmsr/arcmsr_hba.c
-@@ -916,14 +916,14 @@ static void arcmsr_init_get_devmap_timer(struct AdapterControlBlock *pacb)
- 	atomic_set(&pacb->ante_token_value, 16);
- 	pacb->fw_flag = FW_NORMAL;
- 	timer_setup(&pacb->eternal_timer, arcmsr_request_device_map, 0);
--	pacb->eternal_timer.expires = jiffies + msecs_to_jiffies(6 * HZ);
-+	pacb->eternal_timer.expires = jiffies + 6 * HZ;
- 	add_timer(&pacb->eternal_timer);
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 9c26f82..b747c17 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6458,11 +6458,12 @@ static u32 ufshcd_find_max_sup_active_icc_level(struct ufs_hba *hba,
+ 	return icc_level;
  }
  
- static void arcmsr_init_set_datetime_timer(struct AdapterControlBlock *pacb)
+-static void ufshcd_init_icc_levels(struct ufs_hba *hba)
++static void ufshcd_set_active_icc_lvl(struct ufs_hba *hba)
  {
- 	timer_setup(&pacb->refresh_timer, arcmsr_set_iop_datetime, 0);
--	pacb->refresh_timer.expires = jiffies + msecs_to_jiffies(60 * 1000);
-+	pacb->refresh_timer.expires = jiffies + 60 * HZ;
- 	add_timer(&pacb->refresh_timer);
- }
+ 	int ret;
+ 	int buff_len = hba->desc_size.pwr_desc;
+ 	u8 *desc_buf;
++	u32 icc_level;
  
-@@ -3746,10 +3746,10 @@ static void arcmsr_set_iop_datetime(struct timer_list *t)
+ 	desc_buf = kmalloc(buff_len, GFP_KERNEL);
+ 	if (!desc_buf)
+@@ -6477,20 +6478,17 @@ static void ufshcd_init_icc_levels(struct ufs_hba *hba)
+ 		goto out;
+ 	}
+ 
+-	hba->init_prefetch_data.icc_level =
+-			ufshcd_find_max_sup_active_icc_level(hba,
+-			desc_buf, buff_len);
+-	dev_dbg(hba->dev, "%s: setting icc_level 0x%x",
+-			__func__, hba->init_prefetch_data.icc_level);
++	icc_level = ufshcd_find_max_sup_active_icc_level(hba, desc_buf,
++							 buff_len);
++	dev_dbg(hba->dev, "%s: setting icc_level 0x%x", __func__, icc_level);
+ 
+ 	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_WRITE_ATTR,
+-		QUERY_ATTR_IDN_ACTIVE_ICC_LVL, 0, 0,
+-		&hba->init_prefetch_data.icc_level);
++		QUERY_ATTR_IDN_ACTIVE_ICC_LVL, 0, 0, &icc_level);
+ 
+ 	if (ret)
+ 		dev_err(hba->dev,
+ 			"%s: Failed configuring bActiveICCLevel = %d ret = %d",
+-			__func__, hba->init_prefetch_data.icc_level , ret);
++			__func__, icc_level, ret);
+ 
+ out:
+ 	kfree(desc_buf);
+@@ -6996,8 +6994,6 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ {
+ 	int ret;
+ 
+-	ufshcd_init_icc_levels(hba);
+-
+ 	/* Add required well known logical units to scsi mid layer */
+ 	ret = ufshcd_scsi_add_wlus(hba);
+ 	if (ret)
+@@ -7095,6 +7091,14 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool async)
  		}
  	}
- 	if (sys_tz.tz_minuteswest)
--		next_time = ARCMSR_HOURS;
-+		next_time = msecs_to_jiffies(ARCMSR_HOURS);
- 	else
--		next_time = ARCMSR_MINUTES;
--	mod_timer(&pacb->refresh_timer, jiffies + msecs_to_jiffies(next_time));
-+		next_time = msecs_to_jiffies(ARCMSR_MINUTES);
-+	mod_timer(&pacb->refresh_timer, jiffies + next_time);
- }
  
- static int arcmsr_iop_confirm(struct AdapterControlBlock *acb)
-@@ -3968,8 +3968,7 @@ static void arcmsr_request_device_map(struct timer_list *t)
- 	if (unlikely(atomic_read(&acb->rq_map_token) == 0) ||
- 		(acb->acb_flags & ACB_F_BUS_RESET) ||
- 		(acb->acb_flags & ACB_F_ABORT)) {
--		mod_timer(&acb->eternal_timer,
--			jiffies + msecs_to_jiffies(6 * HZ));
-+		mod_timer(&acb->eternal_timer, jiffies + 6 * HZ);
- 	} else {
- 		acb->fw_flag = FW_NORMAL;
- 		if (atomic_read(&acb->ante_token_value) ==
-@@ -3979,8 +3978,7 @@ static void arcmsr_request_device_map(struct timer_list *t)
- 		atomic_set(&acb->ante_token_value,
- 			atomic_read(&acb->rq_map_token));
- 		if (atomic_dec_and_test(&acb->rq_map_token)) {
--			mod_timer(&acb->eternal_timer, jiffies +
--				msecs_to_jiffies(6 * HZ));
-+			mod_timer(&acb->eternal_timer, jiffies + 6 * HZ);
- 			return;
- 		}
- 		switch (acb->adapter_type) {
-@@ -4016,7 +4014,7 @@ static void arcmsr_request_device_map(struct timer_list *t)
- 			return;
- 		}
- 		acb->acb_flags |= ACB_F_MSG_GET_CONFIG;
--		mod_timer(&acb->eternal_timer, jiffies + msecs_to_jiffies(6 * HZ));
-+		mod_timer(&acb->eternal_timer, jiffies + 6 * HZ);
- 	}
- }
++	/*
++	 * bActiveICCLevel is volatile for UFS device (as per latest v2.1 spec)
++	 * and for removable UFS card as well, hence always set the parameter.
++	 * Note: Error handler may issue the device reset hence resetting
++	 * bActiveICCLevel as well so it is always safe to set this here.
++	 */
++	ufshcd_set_active_icc_lvl(hba);
++
+ 	/* set the state as operational after switching to desired gear */
+ 	hba->ufshcd_state = UFSHCD_STATE_OPERATIONAL;
  
-@@ -4405,8 +4403,7 @@ static int arcmsr_bus_reset(struct scsi_cmnd *cmd)
- 		atomic_set(&acb->rq_map_token, 16);
- 		atomic_set(&acb->ante_token_value, 16);
- 		acb->fw_flag = FW_NORMAL;
--		mod_timer(&acb->eternal_timer, jiffies +
--			msecs_to_jiffies(6 * HZ));
-+		mod_timer(&acb->eternal_timer, jiffies + 6 * HZ);
- 		acb->acb_flags &= ~ACB_F_BUS_RESET;
- 		rtn = SUCCESS;
- 		pr_notice("arcmsr: scsi bus reset eh returns with success\n");
-@@ -4415,8 +4412,7 @@ static int arcmsr_bus_reset(struct scsi_cmnd *cmd)
- 		atomic_set(&acb->rq_map_token, 16);
- 		atomic_set(&acb->ante_token_value, 16);
- 		acb->fw_flag = FW_NORMAL;
--		mod_timer(&acb->eternal_timer, jiffies +
--			msecs_to_jiffies(6 * HZ));
-+		mod_timer(&acb->eternal_timer, jiffies + 6 * HZ);
- 		rtn = SUCCESS;
- 	}
- 	return rtn;
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index d45a044..5652d39 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -404,15 +404,6 @@ struct ufs_clk_scaling {
+ 	bool is_suspended;
+ };
+ 
+-/**
+- * struct ufs_init_prefetch - contains data that is pre-fetched once during
+- * initialization
+- * @icc_level: icc level which was read during initialization
+- */
+-struct ufs_init_prefetch {
+-	u32 icc_level;
+-};
+-
+ #define UFS_ERR_REG_HIST_LENGTH 8
+ /**
+  * struct ufs_err_reg_hist - keeps history of errors
+@@ -544,7 +535,6 @@ enum ufshcd_quirks {
+  * @intr_mask: Interrupt Mask Bits
+  * @ee_ctrl_mask: Exception event control mask
+  * @is_powered: flag to check if HBA is powered
+- * @init_prefetch_data: data pre-fetched during initialization
+  * @eh_work: Worker to handle UFS errors that require s/w attention
+  * @eeh_work: Worker to handle exception events
+  * @errors: HBA errors
+@@ -632,7 +622,6 @@ struct ufs_hba {
+ 	u32 intr_mask;
+ 	u16 ee_ctrl_mask;
+ 	bool is_powered;
+-	struct ufs_init_prefetch init_prefetch_data;
+ 
+ 	/* Work Queues */
+ 	struct work_struct eh_work;
 -- 
-2.26.0
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+
