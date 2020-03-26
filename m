@@ -2,240 +2,325 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86882193556
-	for <lists+linux-scsi@lfdr.de>; Thu, 26 Mar 2020 02:44:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F6C193648
+	for <lists+linux-scsi@lfdr.de>; Thu, 26 Mar 2020 04:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727598AbgCZBoP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 25 Mar 2020 21:44:15 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:40889 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727575AbgCZBoP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 25 Mar 2020 21:44:15 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 2337B20418E;
-        Thu, 26 Mar 2020 02:44:12 +0100 (CET)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id L7oZ6p0MtNvF; Thu, 26 Mar 2020 02:44:05 +0100 (CET)
-Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 20089204179;
-        Thu, 26 Mar 2020 02:44:04 +0100 (CET)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH v2] scsi: core: Make MODE SENSE DBD a boolean
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-References: <116e8e24-d442-6239-b401-dd3145f4e8e8@acm.org>
- <20200325222416.5094-1-martin.petersen@oracle.com>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <257ddb5a-87f3-9e27-8f9a-d647483528ab@interlog.com>
-Date:   Wed, 25 Mar 2020 21:44:00 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200325222416.5094-1-martin.petersen@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
+        id S1727641AbgCZDIK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 25 Mar 2020 23:08:10 -0400
+Received: from mail-vk1-f201.google.com ([209.85.221.201]:51238 "EHLO
+        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727600AbgCZDIK (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 25 Mar 2020 23:08:10 -0400
+Received: by mail-vk1-f201.google.com with SMTP id c127so1665881vkh.18
+        for <linux-scsi@vger.kernel.org>; Wed, 25 Mar 2020 20:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=w8DLJscJ/jn1U0/abNods4jHFwsI3lgyNRrAVQNvovs=;
+        b=QPWLoNuFvjiPgoMacetfzl6s0fmRlAvtQf81RcsEWAChVGPM5frc9irm2NQ/fNtfzu
+         i2Dutqk/aWIqsFy+/YrKabqVGjwcCdJCsPzKQvDfW3uM7zZ7HctP74ys4U/bTGe8EOCK
+         giIP/X3M/2gpYOUADl7ltdGxRMKRsYNGG5GG9HrkX4zkht1bMQ6ZjpFKEknAhDDNHEaE
+         jqgGNZ1Bqjz/roXhe+3yZsXvIP+eEIKdnjPYGVrDY1YGy4q1hyEC+8N06HzdWgjNy4tH
+         qnamc99aT6xIEfBXAYr1rgM/fZM44YPmdI8pmaOw7dPtJ4nvDOw98+O3g5+zMdXh4flT
+         on/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=w8DLJscJ/jn1U0/abNods4jHFwsI3lgyNRrAVQNvovs=;
+        b=fIXL/YbOUO+c82rtCM2AyHquUrhit4wiEaoOs3ELMvTIbE+iZR7W3OCzumF/O+aeoJ
+         FyPN7DbLwa6cWoXHJmOGGXXvwLObiF4f9o8kyolesmeG+CJVXysVMtPRcCKYzuXZp252
+         RkCSzcyPkhX1pcpJVTTr5tLwucCOpvM0funohY+0jebfIEQSOC2iWBOLTfpRtzd6hQy8
+         MHOs/vOGWn0kzfLlWO1lnf9SlKD5E16OBkuXjYE5EDoeowexd6+MJqsvhJAzot20q0kX
+         Vjw6GAuqmTCoUvfQsb96LURY3Kq2Z58UbX9D/SEjpAYYvs5CTNMXkJnJknbyRwj91FNV
+         Qvng==
+X-Gm-Message-State: ANhLgQ2JqeM5xpvUDvgH9hZBzGN2fHMoWVGtpvvNFoIQMDZWCHsefkqP
+        r83GLCBGv4JmysJr5jnKHnWjTbpPmog=
+X-Google-Smtp-Source: ADFU+vtoMWjTFrEWgWNwbV9tAUwpNJ5O9gWATdhShKa8nJCf9wifAMwhmcIHQBWsDRvKXjtOjlWH3+dN1jw=
+X-Received: by 2002:a67:eb12:: with SMTP id a18mr5042631vso.58.1585192088788;
+ Wed, 25 Mar 2020 20:08:08 -0700 (PDT)
+Date:   Wed, 25 Mar 2020 20:06:51 -0700
+Message-Id: <20200326030702.223233-1-satyat@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.1.696.g5e7596f4ac-goog
+Subject: [PATCH v9 00/11] Inline Encryption Support
+From:   Satya Tangirala <satyat@google.com>
+To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org
+Cc:     Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
+        Kuohong Wang <kuohong.wang@mediatek.com>,
+        Kim Boojin <boojin.kim@samsung.com>,
+        Satya Tangirala <satyat@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-03-25 6:24 p.m., Martin K. Petersen wrote:
-> The scsi_mode_sense() function has an argument called 'dbd' but
-> confusingly this is used to specify the entire second byte of the CDB
-> and not just the DBD bit.
-> 
-> Several callers assumed that 'dbd' was a flag and passed in a value of
-> 1 instead of the required 8 to disable fetching block descriptors.
-> The invalid value of 1 was subsequently masked off by the function and
-> was not actually passed on to the device.
-> 
-> Turn the 'dbd' argument into a boolean and fix all callers.
-> 
-> Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-> 
-> ---
-> 
-> v2:	Fix conversion error spotted by Bart
-> ---
->   drivers/scsi/scsi_lib.c           |  7 ++++---
->   drivers/scsi/scsi_transport_sas.c |  2 +-
->   drivers/scsi/sd.c                 | 14 +++++++-------
->   drivers/scsi/sr.c                 |  2 +-
->   include/scsi/scsi_device.h        |  2 +-
->   5 files changed, 14 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index 47835c4b4ee0..acbbdb022a45 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -2085,7 +2085,7 @@ EXPORT_SYMBOL_GPL(scsi_mode_select);
->    *	issued) if successful.
->    */
->   int
-> -scsi_mode_sense(struct scsi_device *sdev, int dbd, int modepage,
-> +scsi_mode_sense(struct scsi_device *sdev, bool dbd, int modepage,
->   		  unsigned char *buffer, int len, int timeout, int retries,
->   		  struct scsi_mode_data *data, struct scsi_sense_hdr *sshdr)
->   {
-> @@ -2098,8 +2098,9 @@ scsi_mode_sense(struct scsi_device *sdev, int dbd, int modepage,
->   	memset(data, 0, sizeof(*data));
->   	memset(&cmd[0], 0, 12);
->   
-> -	dbd = sdev->set_dbd_for_ms ? 8 : dbd;
-> -	cmd[1] = dbd & 0x18;	/* allows DBD and LLBA bits */
-> +	dbd = sdev->set_dbd_for_ms ? true : dbd;
-> +	if (dbd)
-> +		cmd[1] = 1 << 3; /* DBD bit */
->   	cmd[2] = modepage;
->   
->   	/* caller might not be interested in sense, but we need it */
+This patch series adds support for Inline Encryption to the block layer,
+UFS, fscrypt, f2fs and ext4.
 
-I think scsi_mode_sense() needs looking at. It says this in its header:
+Note that the patches in this series for the block layer (i.e. patches 1, 2,
+3 and 4) can be applied independently of the subsequent patches in this
+series.
 
-*      @dbd:   set if mode sense will allow block descriptors to be returned
+Inline Encryption hardware allows software to specify an encryption context
+(an encryption key, crypto algorithm, data unit num, data unit size, etc.)
+along with a data transfer request to a storage device, and the inline
+encryption hardware will use that context to en/decrypt the data. The
+inline encryption hardware is part of the storage device, and it
+conceptually sits on the data path between system memory and the storage
+device. Inline Encryption hardware has become increasingly common, and we
+want to support it in the kernel.
 
-which is a worry when you consider that DBD bit means "DISABLE block
-descriptors" [spc6r01.pdf chapter 6.14.1]. If the caller wants block
-descriptors (i.e. dbd=0 (or false)) then they really should set the
-LLBA bit or they will be truncating any LBAs (in the returned block
-descriptors) greater than 2**32-1 to the lower 32 bits. However only
-the MODE SENSE(10) command has the LLBA bit. So if MODE SENSE(10)
-fails and you leave the LLBA bit set and switch to MODE SENSE(6) then
-the device server is within its rights to say: WTF is bit 4 in
-byte 1 set? Hence ==> illegal request.
+Inline Encryption hardware implementations often function around the
+concept of a limited number of "keyslots", which can hold an encryption
+context each. The storage device can be directed to en/decrypt any
+particular request with the encryption context stored in any particular
+keyslot.
 
-Assuming MODE SENSE(10) is supported and DBD=0, then setting
-the LLBA bit in the cdb should be okay, because the caller should be
-looking at the LONGLBA bit in the "mode parameter header(10)"
-[chapter 7.5.6 in the same document] that tells them how to decode
-the returned block descriptors.
-If MODE SENSE(10) is not supported and the code falls back to
-MODE SENSE(6) then a heuristic is needed by the caller to work out
-how to decode the response. And that comment about the return
-value doesn't help.
+Patch 1 introduces a Keyslot Manager to efficiently manage keyslots.
+The keyslot manager also functions as the interface that blk-crypto
+(introduced in Patch 2), will use to program keys into inline encryption
+hardware. For more information on the Keyslot Manager, refer to
+documentation found in block/keyslot-manager.c and linux/keyslot-manager.h.
 
-That function is just badly designed and does not allow for subpages.
-Can it be thrown out?
-The caller should be told which MODE SENSE command worked (if any)
-and be given the whole data-in buffer. Then another function that
-calls the the first one and implies DBD=1 could return the part of
-the data-in buffer that contains one or more mode pages. Plural
-because modepage could be 0x3f and/or subpage could be 0xff which
-are wildcards.
+Patch 2 adds the block layer changes for inline encryption support. It
+introduces struct bio_crypt_ctx, and a ptr to one in struct bio, which
+allows struct bio to represent an encryption context that can be passed
+down the storage stack from the filesystem layer to the storage driver.
 
-Suggestion:
+Patch 3 precludes inline encryption support in a device whenever it
+supports blk-integrity, because there is currently no known hardware that
+supports both features, and it is not completely straightfoward to support
+both of them properly, and doing it improperly might result in leaks of
+information about the plaintext.
 
-int
-scsi_mode_sense10_6(struct scsi_device *sdev, bool dbd, int modepage,
-		int subpage, u8 *b, int len, int timeout, int retries,
-                 bool *did_ms10, bool *truncated,
-		struct scsi_mode_data *data, struct scsi_sense_hdr *sshdr);
+Patch 4 introduces blk-crypto-fallback - a kernel crypto API fallback for
+blk-crypto to use when inline encryption hardware isn't present. This
+allows filesystems to specify encryption contexts for bios without
+having to worry about whether the underlying hardware has inline
+encryption support, and allows for testing without real hardware inline
+encryption support. This fallback is separately configurable from
+blk-crypto, and can be disabled if desired while keeping inline
+encryption support. It may also be possible to remove file content
+en/decryption from fscrypt and simply use blk-crypto-fallback in a future
+patch. For more details on blk-crypto and the fallback, refer to
+Documentation/block/inline-encryption.rst.
 
-int
-scsi_get_mode_pages(struct scsi_device *sdev, int modepage, int subpage,
-		u8 *b, int len, bool *truncated);
+Patches 5-7 add support for inline encryption into the UFS driver according
+to the JEDEC UFS HCI v2.1 specification. Inline encryption support for
+other drivers (like eMMC) may be added in the same way - the device driver
+should set up a Keyslot Manager in the device's request_queue (refer to
+the UFS crypto additions in ufshcd-crypto.c and ufshcd.c for an example).
 
-Doug Gilbert
+Patch 8 adds the SB_INLINECRYPT mount flag to the fs layer, which filesystems
+must set to indicate that they want to use blk-crypto for en/decryption of
+file contents.
 
-> diff --git a/drivers/scsi/scsi_transport_sas.c b/drivers/scsi/scsi_transport_sas.c
-> index 182fd25c7c43..0547ccd81e84 100644
-> --- a/drivers/scsi/scsi_transport_sas.c
-> +++ b/drivers/scsi/scsi_transport_sas.c
-> @@ -1234,7 +1234,7 @@ int sas_read_port_mode_page(struct scsi_device *sdev)
->   	if (!buffer)
->   		return -ENOMEM;
->   
-> -	res = scsi_mode_sense(sdev, 1, 0x19, buffer, BUF_SIZE, 30*HZ, 3,
-> +	res = scsi_mode_sense(sdev, true, 0x19, buffer, BUF_SIZE, 30*HZ, 3,
->   			      &mode_data, NULL);
->   
->   	error = -EINVAL;
-> diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
-> index 8ca9299ffd36..7f7b0ba8c3d8 100644
-> --- a/drivers/scsi/sd.c
-> +++ b/drivers/scsi/sd.c
-> @@ -193,7 +193,7 @@ cache_type_store(struct device *dev, struct device_attribute *attr,
->   		return count;
->   	}
->   
-> -	if (scsi_mode_sense(sdp, 0x08, 8, buffer, sizeof(buffer), SD_TIMEOUT,
-> +	if (scsi_mode_sense(sdp, true, 8, buffer, sizeof(buffer), SD_TIMEOUT,
->   			    SD_MAX_RETRIES, &data, NULL))
->   		return -EINVAL;
->   	len = min_t(size_t, sizeof(buffer), data.length - data.header_length -
-> @@ -2561,7 +2561,7 @@ sd_print_capacity(struct scsi_disk *sdkp,
->   
->   /* called with buffer of length 512 */
->   static inline int
-> -sd_do_mode_sense(struct scsi_device *sdp, int dbd, int modepage,
-> +sd_do_mode_sense(struct scsi_device *sdp, bool dbd, int modepage,
->   		 unsigned char *buffer, int len, struct scsi_mode_data *data,
->   		 struct scsi_sense_hdr *sshdr)
->   {
-> @@ -2639,7 +2639,7 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
->   	int len = 0, res;
->   	struct scsi_device *sdp = sdkp->device;
->   
-> -	int dbd;
-> +	bool dbd;
->   	int modepage;
->   	int first_len;
->   	struct scsi_mode_data data;
-> @@ -2662,14 +2662,14 @@ sd_read_cache_type(struct scsi_disk *sdkp, unsigned char *buffer)
->   			modepage = 0x3F;
->   			if (sdp->use_192_bytes_for_3f)
->   				first_len = 192;
-> -			dbd = 0;
-> +			dbd = false;
->   		}
->   	} else if (sdp->type == TYPE_RBC) {
->   		modepage = 6;
-> -		dbd = 8;
-> +		dbd = true;
->   	} else {
->   		modepage = 8;
-> -		dbd = 0;
-> +		dbd = false;
->   	}
->   
->   	/* cautiously ask */
-> @@ -2823,7 +2823,7 @@ static void sd_read_app_tag_own(struct scsi_disk *sdkp, unsigned char *buffer)
->   	if (sdkp->protection_type == 0)
->   		return;
->   
-> -	res = scsi_mode_sense(sdp, 1, 0x0a, buffer, 36, SD_TIMEOUT,
-> +	res = scsi_mode_sense(sdp, true, 0x0a, buffer, 36, SD_TIMEOUT,
->   			      SD_MAX_RETRIES, &data, &sshdr);
->   
->   	if (!scsi_status_is_good(res) || !data.header_length ||
-> diff --git a/drivers/scsi/sr.c b/drivers/scsi/sr.c
-> index fe0e1c721a99..f31a946b7cd5 100644
-> --- a/drivers/scsi/sr.c
-> +++ b/drivers/scsi/sr.c
-> @@ -936,7 +936,7 @@ static void get_capabilities(struct scsi_cd *cd)
->   	scsi_test_unit_ready(cd->device, SR_TIMEOUT, MAX_RETRIES, &sshdr);
->   
->   	/* ask for mode page 0x2a */
-> -	rc = scsi_mode_sense(cd->device, 0, 0x2a, buffer, ms_len,
-> +	rc = scsi_mode_sense(cd->device, false, 0x2a, buffer, ms_len,
->   			     SR_TIMEOUT, 3, &data, NULL);
->   
->   	if (!scsi_status_is_good(rc) || data.length > ms_len ||
-> diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-> index c3cba2aaf934..853082b7bcf6 100644
-> --- a/include/scsi/scsi_device.h
-> +++ b/include/scsi/scsi_device.h
-> @@ -397,7 +397,7 @@ extern int scsi_track_queue_full(struct scsi_device *, int);
->   
->   extern int scsi_set_medium_removal(struct scsi_device *, char);
->   
-> -extern int scsi_mode_sense(struct scsi_device *sdev, int dbd, int modepage,
-> +extern int scsi_mode_sense(struct scsi_device *sdev, bool dbd, int modepage,
->   			   unsigned char *buffer, int len, int timeout,
->   			   int retries, struct scsi_mode_data *data,
->   			   struct scsi_sense_hdr *);
-> 
+Patch 9 adds support to fscrypt - to use inline encryption with fscrypt,
+the filesystem must be mounted with '-o inlinecrypt' - when this option is
+specified, the contents of any AES-256-XTS encrypted file will be
+encrypted using blk-crypto.
+
+Patches 10 and 11 add support to f2fs and ext4 respectively, so that we have
+a complete stack that can make use of inline encryption.
+
+The patches were tested running kvm-xfstests, by specifying the introduced
+"inlinecrypt" mount option, so that en/decryption happens with the
+blk-crypto fallback. The patches were also tested on a Pixel 4 with UFS
+hardware that has support for inline encryption.
+
+There have been a few patch sets addressing Inline Encryption Support in
+the past. Briefly, this patch set differs from those as follows:
+
+1) "crypto: qce: ice: Add support for Inline Crypto Engine"
+is specific to certain hardware, while our patch set's Inline
+Encryption support for UFS is implemented according to the JEDEC UFS
+specification.
+
+2) "scsi: ufs: UFS Host Controller crypto changes" registers inline
+encryption support as a kernel crypto algorithm. Our patch views inline
+encryption as being fundamentally different from a generic crypto
+provider (in that inline encryption is tied to a device), and so does
+not use the kernel crypto API to represent inline encryption hardware.
+
+3) "scsi: ufs: add real time/inline crypto support to UFS HCD" requires
+the device mapper to work - our patch does not.
+
+Changes v8 => v9:
+ - Don't open code bio_has_crypt_ctx into callers of blk-crypto functions.
+ - Lots of cleanups
+
+Changes v7 => v8:
+ - Pass a struct blk_ksm_keyslot * around instead of slot numbers which
+   simplifies some functions and passes around arguments with better types
+ - Make bios with no encryption context avoid making calls into blk-crypto
+   by checking for the presence of bi_crypt_context before making the call
+ - Make blk-integrity preclude inline encryption support at probe time
+ - Many many cleanups
+
+Changes v6 => v7:
+ - Keyslot management is now done on a per-request basis rather than a
+   per-bio basis.
+ - Storage drivers can now specify the maximum number of bytes they
+   can accept for the data unit number (DUN) for each crypto algorithm,
+   and upper layers can specify the minimum number of bytes of DUN they
+   want with the blk_crypto_key they send with the bio - a driver is
+   only considered to support a blk_crypto_key if the driver supports at
+   least as many DUN bytes as the upper layer wants. This is necessary
+   because storage drivers may not support as many bytes as the
+   algorithm specification dictates (for e.g. UFS only supports 8 byte
+   DUNs for AES-256-XTS, even though the algorithm specification
+   says DUNs are 16 bytes long).
+ - Introduce SB_INLINECRYPT to keep track of whether inline encryption
+   is enabled for a filesystem (instead of using an fscrypt_operation).
+ - Expose keyslot manager declaration and embed it within ufs_hba to
+   clean up code.
+ - Make blk-crypto preclude blk-integrity.
+ - Some bug fixes
+ - Introduce UFSHCD_QUIRK_BROKEN_CRYPTO for UFS drivers that don't
+   support inline encryption (yet)
+
+Changes v5 => v6:
+ - Blk-crypto's kernel crypto API fallback is no longer restricted to
+   8-byte DUNs. It's also now separately configurable from blk-crypto, and
+   can be disabled entirely, while still allowing the kernel to use inline
+   encryption hardware. Further, struct bio_crypt_ctx takes up less space,
+   and no longer contains the information needed by the crypto API
+   fallback - the fallback allocates the required memory when necessary.
+ - Blk-crypto now supports all file content encryption modes supported by
+   fscrypt.
+ - Fixed bio merging logic in blk-merge.c
+ - Fscrypt now supports inline encryption with the direct key policy, since
+   blk-crypto now has support for larger DUNs.
+ - Keyslot manager now uses a hashtable to lookup which keyslot contains
+   any particular key (thanks Eric!)
+ - Fscrypt support for inline encryption now handles filesystems with
+   multiple underlying block devices (thanks Eric!)
+ - Numerous cleanups
+
+Changes v4 => v5:
+ - The fscrypt patch has been separated into 2. The first adds support
+   for the IV_INO_LBLK_64 policy (which was called INLINE_CRYPT_OPTIMIZED
+   in past versions of this series). This policy is now purely an on disk
+   format, and doesn't dictate whether blk-crypto is used for file content
+   encryption or not. Instead, this is now decided based on the
+   "inlinecrypt" mount option.
+ - Inline crypto key eviction is now handled by blk-crypto instead of
+   fscrypt.
+ - More refactoring.
+
+Changes v3 => v4:
+ - Fixed the issue with allocating crypto_skcipher in
+   blk_crypto_keyslot_program.
+ - bio_crypto_alloc_ctx is now mempool backed.
+ - In f2fs, a bio's bi_crypt_context is now set up when the
+   bio is allocated, rather than just before the bio is
+   submitted - this fixes bugs in certain cases, like when an
+   encrypted block is being moved without decryption.
+ - Lots of refactoring and cleanup of blk-crypto - thanks Eric!
+
+Changes v2 => v3:
+ - Overhauled keyslot manager's get keyslot logic and optimized LRU.
+ - Block crypto en/decryption fallback now supports data unit sizes
+   that divide the bvec length (instead of requiring each bvec's length
+   to be the same as the data unit size).
+ - fscrypt master key is now keyed additionally by super_block and
+   ci_ctfm != NULL.
+ - all references of "hw encryption" are replaced by inline encryption.
+ - address various other review comments from Eric.
+
+Changes v1 => v2:
+ - Block layer and UFS changes are split into 3 patches each.
+ - We now only have a ptr to a struct bio_crypt_ctx in struct bio, instead
+   of the struct itself.
+ - struct bio_crypt_ctx no longer has flags.
+ - blk-crypto now correctly handles the case when it fails to init
+   (because of insufficient memory), but kernel continues to boot.
+ - ufshcd-crypto now works on big endian cpus.
+ - Many cleanups.
+
+
+Eric Biggers (1):
+  ext4: add inline encryption support
+
+Satya Tangirala (10):
+  block: Keyslot Manager for Inline Encryption
+  block: Inline encryption support for blk-mq
+  block: Make blk-integrity preclude hardware inline encryption
+  block: blk-crypto-fallback for Inline Encryption
+  scsi: ufs: UFS driver v2.1 spec crypto additions
+  scsi: ufs: UFS crypto API
+  scsi: ufs: Add inline encryption support to UFS
+  fs: introduce SB_INLINECRYPT
+  fscrypt: add inline encryption support
+  f2fs: add inline encryption support
+
+ Documentation/admin-guide/ext4.rst        |   6 +
+ Documentation/block/index.rst             |   1 +
+ Documentation/block/inline-encryption.rst | 195 +++++++
+ Documentation/filesystems/f2fs.txt        |   6 +
+ block/Kconfig                             |  17 +
+ block/Makefile                            |   2 +
+ block/bio-integrity.c                     |   3 +
+ block/bio.c                               |   6 +
+ block/blk-core.c                          |  20 +-
+ block/blk-crypto-fallback.c               | 666 ++++++++++++++++++++++
+ block/blk-crypto-internal.h               | 197 +++++++
+ block/blk-crypto.c                        | 408 +++++++++++++
+ block/blk-integrity.c                     |   7 +
+ block/blk-map.c                           |   1 +
+ block/blk-merge.c                         |  11 +
+ block/blk-mq.c                            |  12 +
+ block/blk.h                               |   4 +
+ block/bounce.c                            |   2 +
+ block/keyslot-manager.c                   | 396 +++++++++++++
+ drivers/md/dm.c                           |   3 +
+ drivers/scsi/ufs/Kconfig                  |   9 +
+ drivers/scsi/ufs/Makefile                 |   1 +
+ drivers/scsi/ufs/ufshcd-crypto.c          | 226 ++++++++
+ drivers/scsi/ufs/ufshcd-crypto.h          |  62 ++
+ drivers/scsi/ufs/ufshcd.c                 |  46 +-
+ drivers/scsi/ufs/ufshcd.h                 |  23 +
+ drivers/scsi/ufs/ufshci.h                 |  67 ++-
+ fs/buffer.c                               |   7 +-
+ fs/crypto/Kconfig                         |   6 +
+ fs/crypto/Makefile                        |   1 +
+ fs/crypto/bio.c                           |  51 ++
+ fs/crypto/crypto.c                        |   2 +-
+ fs/crypto/fname.c                         |   4 +-
+ fs/crypto/fscrypt_private.h               | 120 +++-
+ fs/crypto/inline_crypt.c                  | 328 +++++++++++
+ fs/crypto/keyring.c                       |   4 +-
+ fs/crypto/keysetup.c                      |  92 ++-
+ fs/crypto/keysetup_v1.c                   |  16 +-
+ fs/ext4/inode.c                           |   4 +-
+ fs/ext4/page-io.c                         |   6 +-
+ fs/ext4/readpage.c                        |  11 +-
+ fs/ext4/super.c                           |   9 +
+ fs/f2fs/compress.c                        |   2 +-
+ fs/f2fs/data.c                            |  68 ++-
+ fs/f2fs/super.c                           |  32 ++
+ fs/proc_namespace.c                       |   1 +
+ include/linux/blk-crypto.h                | 129 +++++
+ include/linux/blk_types.h                 |   6 +
+ include/linux/blkdev.h                    |  41 ++
+ include/linux/fs.h                        |   1 +
+ include/linux/fscrypt.h                   |  57 ++
+ include/linux/keyslot-manager.h           | 107 ++++
+ 52 files changed, 3413 insertions(+), 89 deletions(-)
+ create mode 100644 Documentation/block/inline-encryption.rst
+ create mode 100644 block/blk-crypto-fallback.c
+ create mode 100644 block/blk-crypto-internal.h
+ create mode 100644 block/blk-crypto.c
+ create mode 100644 block/keyslot-manager.c
+ create mode 100644 drivers/scsi/ufs/ufshcd-crypto.c
+ create mode 100644 drivers/scsi/ufs/ufshcd-crypto.h
+ create mode 100644 fs/crypto/inline_crypt.c
+ create mode 100644 include/linux/blk-crypto.h
+ create mode 100644 include/linux/keyslot-manager.h
+
+-- 
+2.25.1.696.g5e7596f4ac-goog
 
