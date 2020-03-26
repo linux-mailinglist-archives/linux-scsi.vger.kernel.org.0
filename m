@@ -2,83 +2,210 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E11D8194E4F
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 02:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A7C194EAA
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 02:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727702AbgC0BOW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 26 Mar 2020 21:14:22 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:35104 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727547AbgC0BOW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Mar 2020 21:14:22 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02R1AHAX057146;
-        Fri, 27 Mar 2020 01:14:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2020-01-29;
- bh=6s3AOLNIIg0oz6YOWQ14NEebEdTLo08QFpDiKkufNnU=;
- b=aLOnc6z0/MUwTfKLwR9RlJTyGtlb1/Z0KPK95dGib7vFyxsguy1VmHrwOcQRq3/RIsFZ
- TRZzJ56kWL2it6ieDyG4uzUBAKoNCE+rCy21jEmI7PUvztYbA3EUuuwj9tnDGPe3kFlj
- 9o3o3ap/Iz4gfiu6V6d+ibMgc0oBOzC92Jp7Tteywf5cAzgtMg+wo3oy2raPvM6KSAM1
- DuZ1JYnPir0mZ/uNJRHGZnUJZhCK3trGmRRyMiRYzYmPqQ7TrG1Injyja8/kiiVDnmDR
- ZB/+qTW88Ex5aL/TFRt13rCC++jnbKdLMaC84/1eE7IzCEvo+vYPu13iPEVP/Xqu+wwX PQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2ywavmjtus-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 Mar 2020 01:14:19 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02R16eah071109;
-        Fri, 27 Mar 2020 01:12:19 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 30073f1v13-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 27 Mar 2020 01:12:19 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 02R1CIFN020611;
-        Fri, 27 Mar 2020 01:12:18 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 26 Mar 2020 18:12:18 -0700
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] scsi: aha1740: Fix an errro handling path in 'aha1740_probe()'
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20200228215948.7473-1-christophe.jaillet@wanadoo.fr>
-Date:   Thu, 26 Mar 2020 21:12:15 -0400
-In-Reply-To: <20200228215948.7473-1-christophe.jaillet@wanadoo.fr> (Christophe
-        JAILLET's message of "Fri, 28 Feb 2020 22:59:48 +0100")
-Message-ID: <yq1k136fvo0.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9572 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=912 adultscore=0
- suspectscore=0 mlxscore=0 phishscore=0 bulkscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003270008
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9572 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1011 impostorscore=0
- phishscore=0 suspectscore=0 mlxlogscore=989 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2003270008
+        id S1727740AbgC0B7L (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 26 Mar 2020 21:59:11 -0400
+Received: from labrats.qualcomm.com ([199.106.110.90]:12695 "EHLO
+        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727607AbgC0B7L (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 26 Mar 2020 21:59:11 -0400
+IronPort-SDR: sceStHUxbTExeoMoi3X1XquwHPh1T9zG3OG+7wxL5o2k0kmfKdCWQWNesjUgHoPgZ/yAE9H3Co
+ V3oKxvnY07z14QYfjtp7Uk2RFt+qGBnslg7XKoH5a9Gfh5t8qLJclqs9+IJriyKUUgusHxVpBz
+ 7yIXTavOlaIstujGkUO6lVlynJUdAPKjOJkDn4aXOgTCvQRf09lVtD3QCqOrEErJw+gaDxQIG0
+ GRX/xjcGVW4I49BDUdTcjbjG+7kVRMGyUoUfD7WVI63GMdPrGI0xZmv+lDdSlN8I29SPUbdWIU
+ cSc=
+X-IronPort-AV: E=Sophos;i="5.72,307,1580803200"; 
+   d="scan'208";a="28616316"
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by labrats.qualcomm.com with ESMTP; 26 Mar 2020 02:26:06 -0700
+Received: from pacamara-linux.qualcomm.com ([192.168.140.135])
+  by ironmsg03-sd.qualcomm.com with ESMTP; 26 Mar 2020 02:26:05 -0700
+Received: by pacamara-linux.qualcomm.com (Postfix, from userid 359480)
+        id C69FF3AA6; Thu, 26 Mar 2020 02:26:05 -0700 (PDT)
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
+Cc:     Subhash Jadavani <subhashj@codeaurora.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v6 1/2] scsi: ufs: Clean up ufshcd_scale_clks() and clock scaling error out path
+Date:   Thu, 26 Mar 2020 02:25:40 -0700
+Message-Id: <1585214742-5466-2-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1585214742-5466-1-git-send-email-cang@codeaurora.org>
+References: <1585214742-5466-1-git-send-email-cang@codeaurora.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+From: Subhash Jadavani <subhashj@codeaurora.org>
 
-Christophe,
+This change introduces a func ufshcd_set_clk_freq() to explicitly
+set clock frequency so that it can be used in reset_and_resotre path and
+in ufshcd_scale_clks(). Meanwhile, this change cleans up the clock scaling
+error out path.
 
-> If 'dma_map_single()' fails, the ref counted 'shpnt' will be decremented
-> twice because 'scsi_host_put()' is called in the if block, and in the
-> error handling path.
+Fixes: a3cd5ec55f6c ("scsi: ufs: add load based scaling of UFS gear")
+Signed-off-by: Subhash Jadavani <subhashj@codeaurora.org>
+Signed-off-by: Can Guo <cang@codeaurora.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 65 ++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 44 insertions(+), 21 deletions(-)
 
-Applied to 5.7/scsi-queue, thanks!
-
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 2a2a63b..148e73a 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -855,28 +855,29 @@ static bool ufshcd_is_unipro_pa_params_tuning_req(struct ufs_hba *hba)
+ 		return false;
+ }
+ 
+-static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
++/**
++ * ufshcd_set_clk_freq - set UFS controller clock frequencies
++ * @hba: per adapter instance
++ * @scale_up: If True, set max possible frequency othewise set low frequency
++ *
++ * Returns 0 if successful
++ * Returns < 0 for any other errors
++ */
++static int ufshcd_set_clk_freq(struct ufs_hba *hba, bool scale_up)
+ {
+ 	int ret = 0;
+ 	struct ufs_clk_info *clki;
+ 	struct list_head *head = &hba->clk_list_head;
+-	ktime_t start = ktime_get();
+-	bool clk_state_changed = false;
+ 
+ 	if (list_empty(head))
+ 		goto out;
+ 
+-	ret = ufshcd_vops_clk_scale_notify(hba, scale_up, PRE_CHANGE);
+-	if (ret)
+-		return ret;
+-
+ 	list_for_each_entry(clki, head, list) {
+ 		if (!IS_ERR_OR_NULL(clki->clk)) {
+ 			if (scale_up && clki->max_freq) {
+ 				if (clki->curr_freq == clki->max_freq)
+ 					continue;
+ 
+-				clk_state_changed = true;
+ 				ret = clk_set_rate(clki->clk, clki->max_freq);
+ 				if (ret) {
+ 					dev_err(hba->dev, "%s: %s clk set rate(%dHz) failed, %d\n",
+@@ -895,7 +896,6 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
+ 				if (clki->curr_freq == clki->min_freq)
+ 					continue;
+ 
+-				clk_state_changed = true;
+ 				ret = clk_set_rate(clki->clk, clki->min_freq);
+ 				if (ret) {
+ 					dev_err(hba->dev, "%s: %s clk set rate(%dHz) failed, %d\n",
+@@ -914,11 +914,37 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
+ 				clki->name, clk_get_rate(clki->clk));
+ 	}
+ 
++out:
++	return ret;
++}
++
++/**
++ * ufshcd_scale_clks - scale up or scale down UFS controller clocks
++ * @hba: per adapter instance
++ * @scale_up: True if scaling up and false if scaling down
++ *
++ * Returns 0 if successful
++ * Returns < 0 for any other errors
++ */
++static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up)
++{
++	int ret = 0;
++	ktime_t start = ktime_get();
++
++	ret = ufshcd_vops_clk_scale_notify(hba, scale_up, PRE_CHANGE);
++	if (ret)
++		goto out;
++
++	ret = ufshcd_set_clk_freq(hba, scale_up);
++	if (ret)
++		goto out;
++
+ 	ret = ufshcd_vops_clk_scale_notify(hba, scale_up, POST_CHANGE);
++	if (ret)
++		ufshcd_set_clk_freq(hba, !scale_up);
+ 
+ out:
+-	if (clk_state_changed)
+-		trace_ufshcd_profile_clk_scaling(dev_name(hba->dev),
++	trace_ufshcd_profile_clk_scaling(dev_name(hba->dev),
+ 			(scale_up ? "up" : "down"),
+ 			ktime_to_us(ktime_sub(ktime_get(), start)), ret);
+ 	return ret;
+@@ -1106,35 +1132,32 @@ static int ufshcd_devfreq_scale(struct ufs_hba *hba, bool scale_up)
+ 
+ 	ret = ufshcd_clock_scaling_prepare(hba);
+ 	if (ret)
+-		return ret;
++		goto out;
+ 
+ 	/* scale down the gear before scaling down clocks */
+ 	if (!scale_up) {
+ 		ret = ufshcd_scale_gear(hba, false);
+ 		if (ret)
+-			goto out;
++			goto out_unprepare;
+ 	}
+ 
+ 	ret = ufshcd_scale_clks(hba, scale_up);
+ 	if (ret) {
+ 		if (!scale_up)
+ 			ufshcd_scale_gear(hba, true);
+-		goto out;
++		goto out_unprepare;
+ 	}
+ 
+ 	/* scale up the gear after scaling up clocks */
+ 	if (scale_up) {
+ 		ret = ufshcd_scale_gear(hba, true);
+-		if (ret) {
++		if (ret)
+ 			ufshcd_scale_clks(hba, false);
+-			goto out;
+-		}
+ 	}
+ 
+-	ret = ufshcd_vops_clk_scale_notify(hba, scale_up, POST_CHANGE);
+-
+-out:
++out_unprepare:
+ 	ufshcd_clock_scaling_unprepare(hba);
++out:
+ 	ufshcd_release(hba);
+ 	return ret;
+ }
+@@ -6251,7 +6274,7 @@ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba)
+ 	spin_unlock_irqrestore(hba->host->host_lock, flags);
+ 
+ 	/* scale up clocks to max frequency before full reinitialization */
+-	ufshcd_scale_clks(hba, true);
++	ufshcd_set_clk_freq(hba, true);
+ 
+ 	err = ufshcd_hba_enable(hba);
+ 	if (err)
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+
