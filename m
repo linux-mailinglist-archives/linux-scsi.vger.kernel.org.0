@@ -2,59 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F361950CA
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 06:49:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440D71950D0
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 07:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbgC0FtD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Mar 2020 01:49:03 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:7776 "EHLO
+        id S1726002AbgC0GCL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Mar 2020 02:02:11 -0400
+Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:28938 "EHLO
         mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725942AbgC0FtC (ORCPT
+        by vger.kernel.org with ESMTP id S1725857AbgC0GCL (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 27 Mar 2020 01:49:02 -0400
+        Fri, 27 Mar 2020 02:02:11 -0400
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02R5idPu003459
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Mar 2020 22:49:02 -0700
+        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02R60ffO020368
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Mar 2020 23:02:11 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=pfpt0818; bh=CEVvSXM7dK4DjRZLfw8KioyiLljk9ICB8Bj8fjmB+48=;
- b=g/fL+eQOOa3ak5VfLIvhef45y1cOKlH4Kb85zntroURaCeb2r48ZqunU+DHe0Gw0WnbJ
- 8KKSqJQF/Vx+AuhDZ0qudNlerK/APSdrVhskITvUedVJn1moa+tP/0D5E+89czS+V8JZ
- PFTISwbBYDvXDyLcOtdzE6KLuCtMu2R/CMWppKr4ncYXoOHX5gyAhkG8cmLYPScT1jsg
- u1CwwNsMTu8JDlTCBD0ytwAfJTHvFT5tDUaE8yz/u8quIAVJMiNXHLciNfGdM5hvHTf9
- cc7k61LjD7rxmnYn8zSMdGZcgOyKU/Hnf2M4wh9qdlvL1Rm2OCmbAHYrkRlPyiEvv0HO CQ== 
-Received: from sc-exch01.marvell.com ([199.233.58.181])
-        by mx0a-0016f401.pphosted.com with ESMTP id 2ywg9p1dg6-1
+ subject : date : message-id : mime-version : content-type; s=pfpt0818;
+ bh=Pt4iescZ97GPEFL8hGnDACS8l5y1YXrgDag6FfjQyhM=;
+ b=ZY+zkvHD6hxKQimEYKA6qDKtjmlj5WE4Jp5WezVkzg+sbtMD1KcLpttPLv1y1YgwLqSl
+ qlqgoeLWIukPmUO6887jv7/+216/MPl2ZDrMonE7uszc+JDR1pwjvnWbYOTmVUuybPMy
+ qF+bb5jz0HrZj/n7EgjgkdExhsUV881Ht4Xn/J++G0Q1wO7JHs/FyiyM48w9gFBkLCeY
+ zkrESFjYziyefQ4hszEVUy73kJbVqDUmWDyqPQXBZR5RVPNqxkrePib+IHaOWEGgw4ii
+ OFq3FCI7KybwDY7TUgoaa0iXuBa7ODR+rPt3VGTeQmOQ1p5TYViNf4ECW1wmeIPq+mzF eg== 
+Received: from sc-exch03.marvell.com ([199.233.58.183])
+        by mx0a-0016f401.pphosted.com with ESMTP id 2ywg9p1f12-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
-        for <linux-scsi@vger.kernel.org>; Thu, 26 Mar 2020 22:49:02 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 26 Mar
- 2020 22:49:00 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 26 Mar
- 2020 22:48:59 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 26 Mar 2020 22:48:59 -0700
+        for <linux-scsi@vger.kernel.org>; Thu, 26 Mar 2020 23:02:10 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 26 Mar
+ 2020 23:02:09 -0700
+Received: from SC-EXCH03.marvell.com (10.93.176.83) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 26 Mar
+ 2020 23:02:09 -0700
+Received: from maili.marvell.com (10.93.176.43) by SC-EXCH03.marvell.com
+ (10.93.176.83) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 26 Mar 2020 23:02:08 -0700
 Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
-        by maili.marvell.com (Postfix) with ESMTP id 8C1543F703F;
-        Thu, 26 Mar 2020 22:48:59 -0700 (PDT)
+        by maili.marvell.com (Postfix) with ESMTP id C1B323F7040;
+        Thu, 26 Mar 2020 23:02:08 -0700 (PDT)
 Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 02R5mxan015994;
-        Thu, 26 Mar 2020 22:48:59 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 02R628AX017139;
+        Thu, 26 Mar 2020 23:02:08 -0700
 Received: (from root@localhost)
-        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 02R5mxK7015993;
-        Thu, 26 Mar 2020 22:48:59 -0700
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 02R628gI017138;
+        Thu, 26 Mar 2020 23:02:08 -0700
 From:   Saurav Kashyap <skashyap@marvell.com>
 To:     <martin.petersen@oracle.com>
 CC:     <GR-QLogic-Storage-Upstream@marvell.com>,
-        <linux-scsi@vger.kernel.org>
-Subject: [PATCH 3/3] bnx2fc: Update the driver version to 2.12.13.
-Date:   Thu, 26 Mar 2020 22:48:49 -0700
-Message-ID: <20200327054849.15947-4-skashyap@marvell.com>
+        <linux-scsi@vger.kernel.org>, <jhasan@marvell.com>
+Subject: [PATCH 0/2] libfc: Move to PLOGI state on RJT and retry exhaustion. 
+Date:   Thu, 26 Mar 2020 23:02:06 -0700
+Message-ID: <20200327060208.17104-1-skashyap@marvell.com>
 X-Mailer: git-send-email 2.12.0
-In-Reply-To: <20200327054849.15947-1-skashyap@marvell.com>
-References: <20200327054849.15947-1-skashyap@marvell.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
@@ -64,26 +62,20 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-- Update version to 2.12.13.
+Hi Martin,
 
-Signed-off-by: Saurav Kashyap <skashyap@marvell.com>
----
- drivers/scsi/bnx2fc/bnx2fc.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Kindly apply this series to scsi tree at your earliest convenience.
 
-diff --git a/drivers/scsi/bnx2fc/bnx2fc.h b/drivers/scsi/bnx2fc/bnx2fc.h
-index 15fa8e2..b6e8ed7 100644
---- a/drivers/scsi/bnx2fc/bnx2fc.h
-+++ b/drivers/scsi/bnx2fc/bnx2fc.h
-@@ -66,7 +66,7 @@
- #include "bnx2fc_constants.h"
- 
- #define BNX2FC_NAME		"bnx2fc"
--#define BNX2FC_VERSION		"2.12.10"
-+#define BNX2FC_VERSION		"2.12.13"
- 
- #define PFX			"bnx2fc: "
- 
+Thanks,
+~Saurav
+
+Javed Hasan (2):
+  libfc: If PRLI rejected, move rport to PLOGI state.
+  libfc: rport state move to PLOGI if all PRLI retry exhausted.
+
+ drivers/scsi/libfc/fc_rport.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
 -- 
 1.8.3.1
 
