@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C1E195B5F
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 17:47:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0349195B61
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 17:47:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727706AbgC0Qrw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Mar 2020 12:47:52 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41726 "EHLO mx2.suse.de"
+        id S1727749AbgC0Qrx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Mar 2020 12:47:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41770 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727549AbgC0Qrw (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 27 Mar 2020 12:47:52 -0400
+        id S1727549AbgC0Qrx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 27 Mar 2020 12:47:53 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 3B04EADE3;
+        by mx2.suse.de (Postfix) with ESMTP id 92A2AAE2D;
         Fri, 27 Mar 2020 16:47:51 +0000 (UTC)
 From:   mwilck@suse.com
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
@@ -25,9 +25,9 @@ Cc:     Roman Bolshakov <r.bolshakov@yadro.com>,
         James Bottomley <jejb@linux.vnet.ibm.com>,
         Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org,
         Martin Wilck <mwilck@suse.com>
-Subject: [PATCH v3 2/5] scsi: qla2xxx: check UNLOADING before posting async work
-Date:   Fri, 27 Mar 2020 17:47:08 +0100
-Message-Id: <20200327164711.5358-3-mwilck@suse.com>
+Subject: [PATCH v3 3/5] Revert "scsi: qla2xxx: Fix unbound sleep in fcport delete path."
+Date:   Fri, 27 Mar 2020 17:47:09 +0100
+Message-Id: <20200327164711.5358-4-mwilck@suse.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200327164711.5358-1-mwilck@suse.com>
 References: <20200327164711.5358-1-mwilck@suse.com>
@@ -40,38 +40,42 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Martin Wilck <mwilck@suse.com>
 
-qlt_free_session_done() tries to post async PRLO / LOGO, and
-waits for the completion of these async commands. If UNLOADING
-is set, this is doomed to timeout, because the async logout
-command will never complete.
+This reverts commit c3b6a1d397420a0fdd97af2f06abfb78adc370df.
+Aborting the sleep was risky, because after return from
+qlt_free_session_done() the driver starts freeing resources,
+which is dangerous while we know that there's pending IO.
 
-The only way to avoid waiting pointlessly is to fail posting
-these commands in the first place if the driver is in UNLOADING state.
-In general, posting any command should be avoided when the driver
-is UNLOADING.
+The previous patch "scsi: qla2xxx: check UNLOADING before posting async
+work" avoids sending this IO in the first place, and thus obsoletes
+the dangerous timeout.
 
-With this patch, "rmmod qla2xxx" completes without noticeable delay.
-
-Fixes: 45235022da99 ("scsi: qla2xxx: Fix driver unload by shutting down chip")
 Signed-off-by: Martin Wilck <mwilck@suse.com>
 ---
- drivers/scsi/qla2xxx/qla_os.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/qla2xxx/qla_target.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/scsi/qla2xxx/qla_os.c b/drivers/scsi/qla2xxx/qla_os.c
-index ce0dabb..eb25cf5 100644
---- a/drivers/scsi/qla2xxx/qla_os.c
-+++ b/drivers/scsi/qla2xxx/qla_os.c
-@@ -4933,6 +4933,9 @@ int qla2x00_post_async_##name##_work(		\
- {						\
- 	struct qla_work_evt *e;			\
- 						\
-+	if (test_bit(UNLOADING, &vha->dpc_flags)) \
-+		return QLA_FUNCTION_FAILED;	\
-+						\
- 	e = qla2x00_alloc_work(vha, type);	\
- 	if (!e)					\
- 		return QLA_FUNCTION_FAILED;	\
+diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
+index 622e733..eec1338 100644
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -1019,7 +1019,6 @@ void qlt_free_session_done(struct work_struct *work)
+ 
+ 	if (logout_started) {
+ 		bool traced = false;
+-		u16 cnt = 0;
+ 
+ 		while (!READ_ONCE(sess->logout_completed)) {
+ 			if (!traced) {
+@@ -1029,9 +1028,6 @@ void qlt_free_session_done(struct work_struct *work)
+ 				traced = true;
+ 			}
+ 			msleep(100);
+-			cnt++;
+-			if (cnt > 200)
+-				break;
+ 		}
+ 
+ 		ql_dbg(ql_dbg_disc, vha, 0xf087,
 -- 
 2.25.1
 
