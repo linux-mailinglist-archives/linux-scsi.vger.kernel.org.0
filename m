@@ -2,132 +2,156 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCAD195BE5
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 18:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F16195C1B
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 18:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727677AbgC0RFg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Mar 2020 13:05:36 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:44206 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727254AbgC0RFf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Mar 2020 13:05:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=nQwtzNXpf86itTjaB1edkzN5h3XvovjaCziQk9DtCjM=; b=tJHUKbZBjsey04PmV3H0dCje7e
-        bYKkkq6017QpkZgT1ElJKViJOrTCd7UCVOEZRVRF6tPwwlnll/gKoVxqCy/1XMb/AHQaUrLBj/NC3
-        tBw4POPUFD3N/CFouNP73J5J5wYWrOGmz+YqLJ3hKO5+/AhYSOTmdJvvjogLQxzbSLqpgAoASBzgI
-        QqiQJeYh+w/7R4WbwSgVu5ZYKTZyajcVh058adQbz/pv1GRD16BS0VUde8wkrh3+gCs0MZljoIzIM
-        GJQRxIF3ZihKK2bgZ2ln/osQrAbO/suKfl6oWss51RtXITpHhUsGodIPRNRreKE0Y8uC8VX9l0j3a
-        LhqGwHBg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jHsQI-0002G0-5a; Fri, 27 Mar 2020 17:05:34 +0000
-Date:   Fri, 27 Mar 2020 10:05:34 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Satya Tangirala <satyat@google.com>, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
-        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>,
-        Kim Boojin <boojin.kim@samsung.com>
-Subject: Re: [PATCH v9 02/11] block: Inline encryption support for blk-mq
-Message-ID: <20200327170534.GB24682@infradead.org>
-References: <20200326030702.223233-1-satyat@google.com>
- <20200326030702.223233-3-satyat@google.com>
- <20200326200511.GA186343@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200326200511.GA186343@gmail.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+        id S1726698AbgC0ROP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Mar 2020 13:14:15 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:47564 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727473AbgC0ROP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Mar 2020 13:14:15 -0400
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200327171413epoutp0365e0cf89981d226704024e4d1563abdf~AOI6OBmlk1864018640epoutp03V
+        for <linux-scsi@vger.kernel.org>; Fri, 27 Mar 2020 17:14:13 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200327171413epoutp0365e0cf89981d226704024e4d1563abdf~AOI6OBmlk1864018640epoutp03V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1585329253;
+        bh=HUdcqKZsLPveKDiPJtPprbc+ufYhRwknzSlEiKJ+2+Y=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=GeUZKv4uyeH2fqUYVVysQoj5uXMLHn2MYEc3pM+RwnEDGuNwx0cYMBhO7h7rsrYki
+         yGugSf1eyiePnNpcLN7GAogwoNYBb5GMWZf3/d2UUP2sLwpv+xeRwyTCB/TG1fzqKC
+         pAnOleWWyc+5N99J76vf2K/fsdIvYQNb6yk/PDfw=
+Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
+        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+        20200327171413epcas5p244d575053adb248b70ef41362404a8b7~AOI5m6gOH1294012940epcas5p2h;
+        Fri, 27 Mar 2020 17:14:13 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A6.4F.04778.4643E7E5; Sat, 28 Mar 2020 02:14:12 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200327171411epcas5p17f4457f9fd61800257607059b9506fb2~AOI4bOrYF3139031390epcas5p1s;
+        Fri, 27 Mar 2020 17:14:11 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200327171411epsmtrp1cfa33d9a0beee8ebaac5dc1f3d715a61~AOI4aXG_r0124901249epsmtrp1J;
+        Fri, 27 Mar 2020 17:14:11 +0000 (GMT)
+X-AuditID: b6c32a4a-353ff700000012aa-b6-5e7e3464e4bc
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        FD.3E.04158.3643E7E5; Sat, 28 Mar 2020 02:14:11 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200327171409epsmtip11bf4df68a2f039d21812dc58c656a1f4~AOI2lVx3V0050600506epsmtip1i;
+        Fri, 27 Mar 2020 17:14:09 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Cc:     krzk@kernel.org, avri.altman@wdc.com, martin.petersen@oracle.com,
+        kwmad.kim@samsung.com, stanley.chu@mediatek.com,
+        cang@codeaurora.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH v4 0/5] exynos-ufs: Add support for UFS HCI
+Date:   Fri, 27 Mar 2020 22:36:33 +0530
+Message-Id: <20200327170638.17670-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpileLIzCtJLcpLzFFi42LZdlhTXTfFpC7OYG2LrcWDedvYLF7+vMpm
+        8Wn9MlaL+UfOsVqcP7+B3eLmlqMsFpseX2O1uLxrDpvFjPP7mCy6r+9gs1h+/B+TReveI+wW
+        S7feZHTg9bjc18vksWlVJ5vH5iX1Hi0n97N4fHx6i8Wjb8sqRo/Pm+Q82g90MwVwRHHZpKTm
+        ZJalFunbJXBlzO+azlYwS6Ti5uZnzA2MB/m7GDk5JARMJLasWcPexcjFISSwm1Hi8YubjCAJ
+        IYFPjBKzHqhBJL4xSuw78pwdpmP1753sEEV7GSU6rqRDFLUwSRz784YZJMEmoC1xd/oWJhBb
+        RCBA4tL7g2wgRcwC85gkFj3qAUsIC1hL9B/6wAZiswioStw8/h9sNa+AjcS8H3dYIbbJS6ze
+        cIAZpFlC4AibxPFfV4CaOYAcF4nT84whaoQlXh3fAnWdlMTL/jZ2iJJsiZ5dUCU1EkvnHWOB
+        sO0lDlyZwwJSwiygKbF+lz5ImFmAT6L39xOo4bwSHW1CENWqEs3vrkJ1SktM7O6GOsxD4vi/
+        l8yQYIiV2LvjJcsERplZCEMXMDKuYpRMLSjOTU8tNi0wykst1ytOzC0uzUvXS87P3cQIThla
+        XjsYl53zOcQowMGoxMO74mptnBBrYllxZe4hRgkOZiUR3qeRNXFCvCmJlVWpRfnxRaU5qcWH
+        GKU5WJTEeSexXo0REkhPLEnNTk0tSC2CyTJxcEo1ME41SfcIXZN0zITzhoX6nC8tM0407e12
+        e6kYKJVnYMin62r2pPxOQpbzh2TZ4vywt0ZxzQ1fnGT4v++eeyB5ckLxs7tdr45eff5g1Z7M
+        61F8XJEz7ffeXql469futuIH0Vt+bmV7duu86fMtjHZdP7amzQidsLPjdUu95Y/7M+X1PzcZ
+        1rg9mqLEUpyRaKjFXFScCAD1WVKuFQMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJLMWRmVeSWpSXmKPExsWy7bCSnG6ySV2cwekL+hYP5m1js3j58yqb
+        xaf1y1gt5h85x2px/vwGdoubW46yWGx6fI3V4vKuOWwWM87vY7Lovr6DzWL58X9MFq17j7Bb
+        LN16k9GB1+NyXy+Tx6ZVnWwem5fUe7Sc3M/i8fHpLRaPvi2rGD0+b5LzaD/QzRTAEcVlk5Ka
+        k1mWWqRvl8CVMb9rOlvBLJGKm5ufMTcwHuTvYuTkkBAwkVj9eyd7FyMXh5DAbkaJP3tvMUEk
+        pCWub5zADmELS6z89xyqqIlJYvX0x2BFbALaEnenbwGzRQSCJO6tWcsKUsQssIpJorP3LCNI
+        QljAWqL/0Ac2EJtFQFXi5vH/YHFeARuJeT/usEJskJdYveEA8wRGngWMDKsYJVMLinPTc4sN
+        C4zyUsv1ihNzi0vz0vWS83M3MYIDVEtrB+OJE/GHGAU4GJV4eFdcrY0TYk0sK67MPcQowcGs
+        JML7NLImTog3JbGyKrUoP76oNCe1+BCjNAeLkjivfP6xSCGB9MSS1OzU1ILUIpgsEwenVAOj
+        8izNLPbt56LfNE5gm+Kx4uIfcf7nfgmBP030lL5dzr9b+75KYY2ogAJTvEZwbbfYu+aEG7mS
+        Aiuub2g6tXQ+T8VfB77I/4ofZ9+6e8HR79AtBs3emiymhIr3CRvDpvulRQteVjsb7JivMc/g
+        t+Z2k+0r0xVOeQQoZwl+fLrh/LcfjEdZc3yUWIozEg21mIuKEwEBvsv+TAIAAA==
+X-CMS-MailID: 20200327171411epcas5p17f4457f9fd61800257607059b9506fb2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200327171411epcas5p17f4457f9fd61800257607059b9506fb2
+References: <CGME20200327171411epcas5p17f4457f9fd61800257607059b9506fb2@epcas5p1.samsung.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 01:05:11PM -0700, Eric Biggers wrote:
-> > +{
-> > +	int i = 0;
-> > +	unsigned int inc = bytes >> bc->bc_key->data_unit_size_bits;
-> > +
-> > +	while (i < BLK_CRYPTO_DUN_ARRAY_SIZE) {
-> > +		if (bc->bc_dun[i] + inc != next_dun[i])
-> > +			return false;
-> > +		/*
-> > +		 * If addition of inc to the current entry caused an overflow,
-> > +		 * then we have to carry "1" for the next entry - so inc
-> > +		 * needs to be "1" for the next loop iteration). Otherwise,
-> > +		 * we need inc to be 0 for the next loop iteration. Since
-> > +		 * overflow can be determined by (bc->bc_dun[i] + inc)  < inc
-> > +		 * we can do the following.
-> > +		 */
-> > +		inc = ((bc->bc_dun[i] + inc)  < inc);
-> > +		i++;
-> > +	}
-> 
-> This comment is verbose but doesn't really explain what's going on.
-> I think it would be much more useful to add comments like:
+This patch-set introduces UFS (Universal Flash Storage) host controller support
+for Samsung family SoC. Mostly, it consists of UFS PHY and host specific driver.
 
-Also the code is still weird.  Odd double whitespaces, expression that
-evaluate to bool.
+- Changes since v3:
+* Addressed Kishon's and Avir's review comments
+* fixed make dt_binding_check error as pointed by Rob 
 
-> 
-> 		/*
-> 		 * If the addition in this limb overflowed, then the carry bit
-> 		 * into the next limb is 1.  Else the carry bit is 0.
-> 		 */
-> 		inc = ((bc->bc_dun[i] + inc)  < inc);
+- Changes since v2:
+* fixed build warning by kbuild test robot 
+* Added Reported-by tags
 
-		if (bc->bc_dun[i] + carry < carry)
-			carry = 1;
-		else
-			carry = 0;
+- Changes since v1:
+* fixed make dt_binding_check error as pointed by Rob
+* Addressed Krzysztof's review comments
+* Added Reviewed-by tags
 
-> 
-> > +blk_status_t __blk_crypto_init_request(struct request *rq,
-> > +				       const struct blk_crypto_key *key)
-> > +{
-> > +	return blk_ksm_get_slot_for_key(rq->q->ksm, key, &rq->crypt_keyslot);
-> > +}
-> 
-> The comment of this function seems outdated.  All it does it get a keyslot, but
-> the comment talks about initializing "crypto fields" (plural).
+ 
+patch 1/5: define devicetree bindings for UFS PHY
+patch 2/5: Adds UFS PHY driver
+patch 3/5: define devicetree bindings for UFS HCI 
+patch 4/5: Adds Samsung UFS HCI driver
+patch 5/5: Enabled UFS on exynos7 platform
 
-This is a classic case where I think the top of the function comment
-is entirely useless. If there is a single caller in core code and the
-function is completely trivial, there really is no point in a multi-line
-comment.  Comment should explain something unexpected or non-trivial,
-while much of the comments in this series are just boilerplate making
-the code harder to read.
+Note: This series is based on Linux-5.6-rc6 (commit: fb33c6510d55)
 
-> >  	blk_queue_bounce(q, &bio);
-> >  	__blk_queue_split(q, &bio, &nr_segs);
-> > @@ -2002,6 +2006,14 @@ static blk_qc_t blk_mq_make_request(struct request_queue *q, struct bio *bio)
-> >  
-> >  	cookie = request_to_qc_t(data.hctx, rq);
-> >  
-> > +	ret = blk_crypto_init_request(rq, bio_crypt_key(bio));
-> > +	if (ret != BLK_STS_OK) {
-> > +		bio->bi_status = ret;
-> > +		bio_endio(bio);
-> > +		blk_mq_free_request(rq);
-> > +		return BLK_QC_T_NONE;
-> > +	}
-> > +
-> >  	blk_mq_bio_to_request(rq, bio, nr_segs);
-> 
-> Wouldn't it make a lot more sense to do blk_crypto_init_request() after
-> blk_mq_bio_to_request() rather than before?
-> 
-> I.e., initialize request::crypt_ctx first, *then* get the keyslot.  Not the
-> other way around.
-> 
-> That would allow removing the second argument to blk_crypto_init_request() and
-> removing bio_crypt_key().  blk_crypto_init_request() would only need to take in
-> the struct request.
 
-And we can fail just the request on an error, so yes this doesn't
-seem too bad.
+Alim Akhtar (5):
+  dt-bindings: phy: Document Samsung UFS PHY bindings
+  phy: samsung-ufs: add UFS PHY driver for samsung SoC
+  Documentation: devicetree: ufs: Add DT bindings for exynos UFS host
+    controller
+  scsi: ufs-exynos: add UFS host support for Exynos SoCs
+  arm64: dts: Add node for ufs exynos7
+
+ .../bindings/phy/samsung,ufs-phy.yaml         |   62 +
+ .../devicetree/bindings/ufs/ufs-exynos.txt    |  104 ++
+ .../boot/dts/exynos/exynos7-espresso.dts      |   16 +
+ arch/arm64/boot/dts/exynos/exynos7.dtsi       |   44 +-
+ drivers/phy/samsung/Kconfig                   |    9 +
+ drivers/phy/samsung/Makefile                  |    1 +
+ drivers/phy/samsung/phy-exynos7-ufs.h         |   85 +
+ drivers/phy/samsung/phy-samsung-ufs.c         |  311 ++++
+ drivers/phy/samsung/phy-samsung-ufs.h         |  100 ++
+ drivers/scsi/ufs/Kconfig                      |   12 +
+ drivers/scsi/ufs/Makefile                     |    1 +
+ drivers/scsi/ufs/ufs-exynos.c                 | 1399 +++++++++++++++++
+ drivers/scsi/ufs/ufs-exynos.h                 |  268 ++++
+ drivers/scsi/ufs/unipro.h                     |   41 +
+ include/linux/phy/phy-samsung-ufs.h           |   70 +
+ 15 files changed, 2521 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/samsung,ufs-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/ufs/ufs-exynos.txt
+ create mode 100644 drivers/phy/samsung/phy-exynos7-ufs.h
+ create mode 100644 drivers/phy/samsung/phy-samsung-ufs.c
+ create mode 100644 drivers/phy/samsung/phy-samsung-ufs.h
+ create mode 100644 drivers/scsi/ufs/ufs-exynos.c
+ create mode 100644 drivers/scsi/ufs/ufs-exynos.h
+ create mode 100644 include/linux/phy/phy-samsung-ufs.h
+
+-- 
+2.17.1
+
