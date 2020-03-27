@@ -2,152 +2,152 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27784195252
-	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 08:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B57971953B9
+	for <lists+linux-scsi@lfdr.de>; Fri, 27 Mar 2020 10:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbgC0HtL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 27 Mar 2020 03:49:11 -0400
-Received: from esa4.hgst.iphmx.com ([216.71.154.42]:37026 "EHLO
-        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbgC0HtK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 27 Mar 2020 03:49:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1585295350; x=1616831350;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=3So4KQElf8n6iZiDQZl0yB+pEwm0dJL4dFu3ybCXiHc=;
-  b=gRttRzhLhluEcjyTHZaNEuyVEl+iNsdN8bhoRz6cW/WDhjPgN4K905xq
-   a9DO+07G+9bb3nSmhKZs5tKIZtc1JHKqMTWgiMYqFaxwEV/5aOJZRgtkF
-   x6rOaLvlwOiYY0R2PvPYL5rkLkImibuDVIxPWsMBW/65ErcriiXLewBpD
-   xbqrTd91ds6h+mpkVEafbGz5+lwYEVlzA9SBV3o47RmVGrhYqwFwBVrQv
-   nFMQpQn6svA86zQbt4CIpJxeIIp4zvqPTN8dVqJXlUvxo1U/ZKFL/tQPO
-   yUDyRMC/NGJ0rAQ/A3TSogWQowD4PpYA0w9Ecl8/Q4U8hCxTrhDp/FjEj
-   Q==;
-IronPort-SDR: vCJzssId70WsgZUQRz4GGkFsBDr2OGOIqee/oFsSrIUXqYyGt7jl8nccCOal88pnils4ExUTyS
- Y4g9B/z174BMfbyDiyjFpBbFSNXBpIYmKYdmPjKPwzl1+ro7NRNtqNlfoky72+LVGqoX54iJil
- GnXeCnOoB4xLDOhKitB/ss/yg0Npy2s6Rku5eTUtUtRrfD0kW3RL+RaURhYyJduqnIu3vF0o2F
- SKyk08pMoZN0xJXB27RmJ/GvT/rfbCHN2pG2zKgcyT2bi+niSR5jtUupFRqcTr0xD2C5QCR/g9
- uJ0=
-X-IronPort-AV: E=Sophos;i="5.72,311,1580745600"; 
-   d="scan'208";a="133661378"
-Received: from mail-dm6nam10lp2106.outbound.protection.outlook.com (HELO NAM10-DM6-obe.outbound.protection.outlook.com) ([104.47.58.106])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Mar 2020 15:49:07 +0800
+        id S1726275AbgC0JUL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 27 Mar 2020 05:20:11 -0400
+Received: from mail-eopbgr1300084.outbound.protection.outlook.com ([40.107.130.84]:63273
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725946AbgC0JUL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 27 Mar 2020 05:20:11 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jaY2ERPWZhRYodwlNIviTx9OF4pSLI4Pu9B/gh98LA53aNAkdtkShNhzD13BstHP56+SgDXUFSndq5COD5SzNMzJX17LoUDmF9jtMpxp2ik1hfMN1bAXp0pDIWR7lqryQNwBOvt/yliLltyTaae6bdMMFmvIaASgiiW2LYlYeJMURZMziyuEYBSmJ2Xvylo7ijcqtiZxwNjz6AI74x6FA2pbATRXEqHZWPPLRL7Weq/Bkb7BSule4V1esov9D5Ma0KWaELQNplIb3nz9PVWoHe7kovfEX4BoEehiqJb39d9q8wsbpGT93mcqUGFZ7e4vTHLqJn5eRblmO0iWSpJ+xA==
+ b=eP0wRE2qoI9ZW4dyummDtMSh/AgGm1kZ+SKmXFOrZ5K913Bb4gFmDBbhdukw5iz4u2i/fUKEe4VRWc0rRZSYkgkRvBQzljX6vbnlKdFuMiGQFB5mJMqE6bwiAQ0+YzdNAnetBTuCFk76fSQNuZ/plHwH+z9E5pxdE75/gFMwJh0VREiG9qP6C1Jni1jZtC9BTD/eiMKe5U6eXCqnz+wTtaYpe1hv39Q0sZSLRrpikIYg9FNboqX4kESYzbXae7F9O0NKiNJSvkpT/juPOxiXxT0fPpw6BMnm7WMNPeTU6xzJ+L8SU0yzH0ZWhmeq27IBGPn2Q/z8839s2dQWyL2Y+w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JaVdG8BfpUVk+asPQi8jPX6PCq6mY33ZMSKuN47pNOw=;
- b=jUA++6EY2i8VIJ/bPfBK7Q0tVT8U/aQLc4gakORB1kvScfxo+eZ0d+aoCi0sEJgpcztG9QdPM5Vxd5kDuZmu5YVw0WQ7lXsB3yOkR3Fes+Ftre1h3CcPE9ZxZHxt2mN3TX/UPVGqmKZzzR4lTmQbr/EmVk8Tn1yQc799JYSwcJWHzrl/2hu+QoYG1zpkFYXJcPrmji6erkfAgVQYUZMQY++tRAAGcNt1LM+lYLLu2XWBiJeZsB7yh/pwfKzSD3sW6Y4x1dYGIyqyG6rCDD5h/Rsm4UcotWGUAR+ntsRHcdKvxX00A+galMNN+JvdO7s2Iq4p7/Ykwy+f7iEfULwodA==
+ bh=Ors8Y6esGbrtbsRquYSvz+tU/XN4lHc2ms16inOSiuA=;
+ b=S22lFIUCJXl1cwXdXOljy0hI18fxppYLBWctqg2sTup8GNTeEiBovjoSe0SOZykJYwjSwefFEXtYMvYGF0axl3OElQbr3oWl7DOyi87Vze6jA0BvS+mH3XO4FcjHlFcgusjevECl8ckRDtnu1b3DeRfz8q2dwNigQY2C+HCsS5kajnVymUg6V4z4FiOSW2MYUn3CEZ5O9kfy3mZ1JSVG9IG9OQk4eR6umlosf99BNnqJMa/Ka6CffHWrbRjDVQEMr9b5+XhkyRmWG8iVjr1T+oDbaQOT8eEGekWoXcxZr5FNUR/RVqcroYGilBHzFH05ix+pGepciVx1legLgmKsqw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ d=oppoglobal.onmicrosoft.com; s=selector1-oppoglobal-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JaVdG8BfpUVk+asPQi8jPX6PCq6mY33ZMSKuN47pNOw=;
- b=J2ihjdL7T/zsUzH9OA9wDREtaXsUoBoB1NnpBMFR5VQSqPTufy29WH2UPUM3WDrNldIdzpo4+Ob5YHz1MEHXO8aHxeXFYdWCGCrUA5YEcRHhKDXD75bNJfUc+HMM2P54imNRjLal+L/+s7ujhcuaP0yIgeiG0mLnj14im6dSyo4=
-Received: from SN6PR04MB4640.namprd04.prod.outlook.com (2603:10b6:805:a4::19)
- by SN6PR04MB4656.namprd04.prod.outlook.com (2603:10b6:805:aa::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2835.20; Fri, 27 Mar
- 2020 07:49:04 +0000
-Received: from SN6PR04MB4640.namprd04.prod.outlook.com
- ([fe80::3877:5e49:6cdd:c8b]) by SN6PR04MB4640.namprd04.prod.outlook.com
- ([fe80::3877:5e49:6cdd:c8b%5]) with mapi id 15.20.2856.019; Fri, 27 Mar 2020
- 07:49:04 +0000
-From:   Avri Altman <Avri.Altman@wdc.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Can Guo <cang@codeaurora.org>
-CC:     "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "nguyenb@codeaurora.org" <nguyenb@codeaurora.org>,
-        "hongwus@codeaurora.org" <hongwus@codeaurora.org>,
-        "rnayak@codeaurora.org" <rnayak@codeaurora.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "saravanak@google.com" <saravanak@google.com>,
-        "salyzyn@google.com" <salyzyn@google.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Subject: RE: [PATCH v6 2/2] scsi: ufs: Do not rely on prefetched data
-Thread-Topic: [PATCH v6 2/2] scsi: ufs: Do not rely on prefetched data
-Thread-Index: AQHWA+Pw3UJgJmAzSE+5Ajw5XEBLVqhcEGrw
-Date:   Fri, 27 Mar 2020 07:49:04 +0000
-Message-ID: <SN6PR04MB46402B83E0E69E2309A9EDA8FCCC0@SN6PR04MB4640.namprd04.prod.outlook.com>
-References: <1585214742-5466-1-git-send-email-cang@codeaurora.org>
-        <1585214742-5466-3-git-send-email-cang@codeaurora.org>
- <yq1lfnmcxmc.fsf@oracle.com>
-In-Reply-To: <yq1lfnmcxmc.fsf@oracle.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Avri.Altman@wdc.com; 
-x-originating-ip: [2a00:a040:188:9054:1046:30ec:e40a:caed]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 4d4d0431-8c08-4baa-7fdb-08d7d22352b7
-x-ms-traffictypediagnostic: SN6PR04MB4656:
-x-microsoft-antispam-prvs: <SN6PR04MB46567256E7C05186E66119FFFCCC0@SN6PR04MB4656.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0355F3A3AE
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR04MB4640.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(136003)(366004)(396003)(346002)(39860400002)(376002)(478600001)(86362001)(66446008)(52536014)(186003)(33656002)(64756008)(4326008)(8936002)(55016002)(9686003)(66556008)(66476007)(2906002)(76116006)(316002)(4744005)(7696005)(7416002)(81156014)(6506007)(66946007)(110136005)(8676002)(5660300002)(81166006)(71200400001)(54906003);DIR:OUT;SFP:1102;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: NTvsK5IfrDzvWu5TNzsmykLGuO0p7tSTmDBd1f4o3ikhT0t9hDLbi0uB5YwACOiBQaS9mQe9ZMil6PyQaCAA/bhrmJCZtBnedHwnyr5ieo5+1Y5RapZybNvMka/8fcaN/R+fi3ME4iJyRPqdf/2j/zm4x3R69UofYTT+eibqpCOCyDuFZi5ih6JE3PRNUqzAy7i5BLhMphT9y7aifOhgZMd9AwLuGFbX3kQlMCNZmxAVcYpwBMGp9nGrYqWkhs/gr/qhyCenxEbdharh3lPAjl9ujq8KXQL0kCTrYsxiZZ2OwdcSilmRLCFSimclKfxMDucRcEf5rsVkxrgdAABzY3427iBHXVtYZpnOVFveTLHxhuIxTQwrN8SAVcxCZOS9syeas8QNko4jTjzItU+SznPMeOW5FY285YIq9K0bnuXr2U0d6Lq/faFO82nhsoIf
-x-ms-exchange-antispam-messagedata: 7f+PGzVqIQ7xkTOc9KTpRNUcRGY5PgRKbiz7xRqEIJW2oOgUIM9VEV08Od2XOzYJ19VUZmpCIBEbbZEtJl8DtFhxMoscUuZ4UubtdnIk66cNZlhgUsAy1hEwJkie9Qk6LEYtsx5xlAqMZezPqDDuJRnlQkBaka4n6g/9XkH4R57GvY8ODA61CJYAbj77I9qc6RNgFsmo2a4yqrUIk+rgEA==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
+ bh=Ors8Y6esGbrtbsRquYSvz+tU/XN4lHc2ms16inOSiuA=;
+ b=UUtMhka0PfTnoJ1HlUEqWVEQ3C/+OtSA4DYd7h0jDUAmDKEOV9O6nflAkVmHGmg16hlzx4JSl3jGaShMzvqNt0bfTXLPmdTXZGX9T74HSQUSWHOQfJXvXauxO3h8uhDvikgWR0xQLVDJWnhhZWwGUDEWNDBbpLD/+Tw7MVMSiOc=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=chenanqing@oppo.com; 
+Received: from HK0PR02MB2563.apcprd02.prod.outlook.com (52.133.210.11) by
+ HK0PR02MB3393.apcprd02.prod.outlook.com (20.177.69.83) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2835.19; Fri, 27 Mar 2020 09:20:06 +0000
+Received: from HK0PR02MB2563.apcprd02.prod.outlook.com
+ ([fe80::4078:fbe4:9043:d61e]) by HK0PR02MB2563.apcprd02.prod.outlook.com
+ ([fe80::4078:fbe4:9043:d61e%2]) with mapi id 15.20.2835.023; Fri, 27 Mar 2020
+ 09:20:06 +0000
+Date:   Fri, 27 Mar 2020 05:20:03 -0400
+From:   chenanqing@oppo.com
+To:     chenanqing@oppo.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
+        ceph-devel@vger.kernel.org, martin.petersen@oracle.com,
+        jejb@linux.ibm.com, cleech@redhat.com, lduncan@suse.com
+Message-ID: <5e7dc543.vYG3wru8B/me1sOV%chenanqing@oppo.com>
+User-Agent: Heirloom mailx 12.5 7/5/10
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: HKAPR04CA0008.apcprd04.prod.outlook.com
+ (2603:1096:203:d0::18) To HK0PR02MB2563.apcprd02.prod.outlook.com
+ (2603:1096:203:25::11)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d4d0431-8c08-4baa-7fdb-08d7d22352b7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Mar 2020 07:49:04.7661
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from master (58.252.5.69) by HKAPR04CA0008.apcprd04.prod.outlook.com (2603:1096:203:d0::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.19 via Frontend Transport; Fri, 27 Mar 2020 09:20:04 +0000
+X-Originating-IP: [58.252.5.69]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8238515b-22cf-4369-6d93-08d7d23009bf
+X-MS-TrafficTypeDiagnostic: HK0PR02MB3393:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <HK0PR02MB3393BC7C71EBBE23EF7BFBA2ABCC0@HK0PR02MB3393.apcprd02.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:513;
+X-Forefront-PRVS: 0355F3A3AE
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR02MB2563.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10009020)(396003)(346002)(376002)(39860400002)(366004)(136003)(316002)(5660300002)(186003)(26005)(16526019)(36756003)(9686003)(956004)(2616005)(86362001)(81166006)(81156014)(8936002)(2906002)(66946007)(478600001)(52116002)(6496006)(66556008)(6486002)(66476007)(1670200006)(25626001)(11606004);DIR:OUT;SFP:1101;
+Received-SPF: None (protection.outlook.com: oppo.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oMe2c6UfTB6phpnbQ3JBdCCUhWeaejQVrHFl9SPfn2IIFR/ay6vW3Pz3sOFYAV2NAWPV2XasaQuqiGgmqnFH2hsPDUZkOessiFs7VVLVKjm/j0BgeZ/qZHm9uh+F36bRR43RTF2k4TF7Wt7uvKhO8Eobb4NrVE2rkGG6OPiHoor5kSOVUVc5BPASx1bxtPutUod+jazRLlKFEmmGHMEEEuo5qyXeugDRaLM0R4X6AX8AM+onXyhgwoaIYdlSZqPXqOdEu1nEI7zWuNcfZ8nJqCIo+rsDp10gw7aYtIWI0zdZt+BC7+B8izLdhBCkZt/PSpcyDYpIgFZ7ZgeoiEZwLqMsYACgMw1Lha2aND+8dmqJc54Nk2bzAGL7xcsRaCwpw1AU9TOSoE/1XbZ7+mAPbeVMZ+y1Y//wN+Vov0ZG9286zwWHJ6UapdG7zGlZTEDxvQx/XiEADOrubhm/qoZ0rXHClXIq08K0h0yDbylju6iJ8wP2UyCxnDNKY5GWBSXD6zCo+2s7OtOWbk+6wR03mognibp3kOWaIwQAP/FXdhc=
+X-MS-Exchange-AntiSpam-MessageData: ezZ4vsxAPhSF0cK+F+Ihb50vVFCS9gPP9BQW/glPhuDoJVkxb9BuIQxDjzA4kktr+8qez4Zgvz52dUAbU2DdhEVIPQLXYM824FTPB5rT/Eud2Z93Wjtvzx8kdfaRY1Tu6bauNVYFJ8nYP29iaPLcgA==
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8238515b-22cf-4369-6d93-08d7d23009bf
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Mar 2020 09:20:06.2246
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KxJMQGJiTGeW8tlZpMMi7ea7/Gq/gbGothmX58lPz5WT1kQrv36xb/lpV7YcDKXFlCxSbPORbsxpkDrRBe7tYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR04MB4656
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7alaUVwRQ5dAsv6piV9e3YPbOWkiNef2/K48MpfvYcjGEisMlRx3JwEVeGCYILURiKz55kzrq9ySCCER8egx6Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR02MB3393
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+From: Chen Anqing <chenanqing@oppo.com>
+To: Lee Duncan <lduncan@suse.com>
+Cc: Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        ceph-devel@vger.kernel.org,
+        open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        chenanqing@oppo.com
+Subject: [PATCH] scsi: libiscsi: we should take compound page into account =
+also
+Date: Fri, 27 Mar 2020 05:20:01 -0400
+Message-Id: <20200327092001.56879-1-chenanqing@oppo.com>
+X-Mailer: git-send-email 2.18.2
 
+the patch is occur at a real crash,which slab is
+come from a compound page,so we need take the compound page
+into account also.
+fixed commit 08b11eaccfcf ("scsi: libiscsi: fall back to
+sendmsg for slab pages").
 
->=20
-> Can,
->=20
-> > We were setting bActiveICCLevel attribute for UFS device only once but
-> > type of this attribute has changed from persistent to volatile since
-> > UFS device specification v2.1. This attribute is set to the default
-> > value after power cycle or hardware reset event. It isn't safe to rely
-> > on prefetched data (only used for bActiveICCLevel attribute
-> > now). Hence this change removes the code related to data prefetching
-> > and set this parameter on every attempt to probe the UFS device.
->=20
-> Applied patch #2 to 5.7/scsi-queue. Awaiting Avri's feedback on patch
-> #1. Thanks!
-It looks fine.
-Thanks,
-Avri
+Signed-off-by: Chen Anqing <chenanqing@oppo.com>
+---
+ drivers/scsi/libiscsi_tcp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
->=20
-> --
-> Martin K. Petersen      Oracle Linux Engineering
+diff --git a/drivers/scsi/libiscsi_tcp.c b/drivers/scsi/libiscsi_tcp.c
+index 6ef93c7af954..98304e5e1f6f 100644
+--- a/drivers/scsi/libiscsi_tcp.c
++++ b/drivers/scsi/libiscsi_tcp.c
+@@ -128,7 +128,8 @@ static void iscsi_tcp_segment_map(struct iscsi_segment =
+*segment, int recv)
+         * coalescing neighboring slab objects into a single frag which
+         * triggers one of hardened usercopy checks.
+         */
+-       if (!recv && page_count(sg_page(sg)) >=3D 1 && !PageSlab(sg_page(sg=
+)))
++       if (!recv && page_count(sg_page(sg)) >=3D 1 &&
++           !PageSlab(compound_head(sg_page(sg))))
+                return;
+
+        if (recv) {
+--
+2.18.2
+
+________________________________
+OPPO
+
+=E6=9C=AC=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=
+=BB=B6=E5=90=AB=E6=9C=89OPPO=E5=85=AC=E5=8F=B8=E7=9A=84=E4=BF=9D=E5=AF=86=
+=E4=BF=A1=E6=81=AF=EF=BC=8C=E4=BB=85=E9=99=90=E4=BA=8E=E9=82=AE=E4=BB=B6=E6=
+=8C=87=E6=98=8E=E7=9A=84=E6=94=B6=E4=BB=B6=E4=BA=BA=E4=BD=BF=E7=94=A8=EF=BC=
+=88=E5=8C=85=E5=90=AB=E4=B8=AA=E4=BA=BA=E5=8F=8A=E7=BE=A4=E7=BB=84=EF=BC=89=
+=E3=80=82=E7=A6=81=E6=AD=A2=E4=BB=BB=E4=BD=95=E4=BA=BA=E5=9C=A8=E6=9C=AA=E7=
+=BB=8F=E6=8E=88=E6=9D=83=E7=9A=84=E6=83=85=E5=86=B5=E4=B8=8B=E4=BB=A5=E4=BB=
+=BB=E4=BD=95=E5=BD=A2=E5=BC=8F=E4=BD=BF=E7=94=A8=E3=80=82=E5=A6=82=E6=9E=9C=
+=E6=82=A8=E9=94=99=E6=94=B6=E4=BA=86=E6=9C=AC=E9=82=AE=E4=BB=B6=EF=BC=8C=E8=
+=AF=B7=E7=AB=8B=E5=8D=B3=E4=BB=A5=E7=94=B5=E5=AD=90=E9=82=AE=E4=BB=B6=E9=80=
+=9A=E7=9F=A5=E5=8F=91=E4=BB=B6=E4=BA=BA=E5=B9=B6=E5=88=A0=E9=99=A4=E6=9C=AC=
+=E9=82=AE=E4=BB=B6=E5=8F=8A=E5=85=B6=E9=99=84=E4=BB=B6=E3=80=82
+
+This e-mail and its attachments contain confidential information from OPPO,=
+ which is intended only for the person or entity whose address is listed ab=
+ove. Any use of the information contained herein in any way (including, but=
+ not limited to, total or partial disclosure, reproduction, or disseminatio=
+n) by persons other than the intended recipient(s) is prohibited. If you re=
+ceive this e-mail in error, please notify the sender by phone or email imme=
+diately and delete it!
