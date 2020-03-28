@@ -2,68 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71FE319853B
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Mar 2020 22:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4B6199B03
+	for <lists+linux-scsi@lfdr.de>; Tue, 31 Mar 2020 18:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728626AbgC3UPv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Mar 2020 16:15:51 -0400
-Received: from mx2.suse.de ([195.135.220.15]:53422 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728441AbgC3UPv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 30 Mar 2020 16:15:51 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id BB247AD60;
-        Mon, 30 Mar 2020 20:15:49 +0000 (UTC)
-Message-ID: <05c22eab75d1eefb5c76d85200770bce8d791563.camel@suse.com>
-Subject: Re: [PATCH v3 5/5] scsi: qla2xxx: only send certain mailbox
- commands to stopped firmware
-From:   Martin Wilck <mwilck@suse.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Arun Easi <aeasi@marvell.com>, Quinn Tran <qutran@marvell.com>,
-        Himanshu Madhani <hmadhani@marvell.com>
-Cc:     Roman Bolshakov <r.bolshakov@yadro.com>,
-        Daniel Wagner <dwagner@suse.de>,
-        Bart Van Assche <Bart.VanAssche@sandisk.com>,
-        James Bottomley <jejb@linux.vnet.ibm.com>,
-        Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org
-Date:   Mon, 30 Mar 2020 22:15:48 +0200
-In-Reply-To: <20200327164711.5358-6-mwilck@suse.com>
-References: <20200327164711.5358-1-mwilck@suse.com>
-         <20200327164711.5358-6-mwilck@suse.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-User-Agent: Evolution 3.34.4 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1731149AbgCaQKP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 31 Mar 2020 12:10:15 -0400
+Received: from labrats.qualcomm.com ([199.106.110.90]:36630 "EHLO
+        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730562AbgCaQKO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 31 Mar 2020 12:10:14 -0400
+IronPort-SDR: 4cDDdotfZSrOFGqJiolPY42RKaKNCZFWr+ijJBDeoMtBy5Dvxkom/Sj9Tm1Vy0v8fUM5QpbtW2
+ fh+lXzG4U4cBb2L6v3R2JsTKQ6HElj/+RsxEcVODq4Vw1f/o6PHjLU5FHMiZP57Z0OjtAQW740
+ fzO+bAQAnm7VCYkyJM4kYtyJXCuuSO2dNCN+B9vXz5XL8YMlGz5auQ2TyUapusc0RrGtEf4bNS
+ 76/z7o9dMoHFwGyTf79UQKW+wat6IGc2zB/wwX6eA4x37t85uwzIhcAAfyISfdJcwQTDguBjqK
+ NJo=
+X-IronPort-AV: E=Sophos;i="5.72,314,1580803200"; 
+   d="scan'208";a="28621129"
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by labrats.qualcomm.com with ESMTP; 27 Mar 2020 19:27:37 -0700
+Received: from pacamara-linux.qualcomm.com ([192.168.140.135])
+  by ironmsg03-sd.qualcomm.com with ESMTP; 27 Mar 2020 19:27:36 -0700
+Received: by pacamara-linux.qualcomm.com (Postfix, from userid 359480)
+        id AF31C3ABE; Fri, 27 Mar 2020 19:27:36 -0700 (PDT)
+From:   Can Guo <cang@codeaurora.org>
+To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, rnayak@codeaurora.org,
+        linux-scsi@vger.kernel.org, kernel-team@android.com,
+        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v1 1/1] scsi: ufs: full reinit upon resume if link was off
+Date:   Fri, 27 Mar 2020 19:27:31 -0700
+Message-Id: <1585362454-5413-1-git-send-email-cang@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 2020-03-27 at 17:47 +0100, mwilck@suse.com wrote:
-> From: Martin Wilck <mwilck@suse.com>
-> 
-> Since commit 45235022da99 ("scsi: qla2xxx: Fix driver unload by
-> shutting
-> down chip"), it is possible that FC commands are scheduled after the
-> adapter firmware has been shut down. IO sent to the firmware in this
-> situation may hang. Only certain mailbox commands should be sent in
-> this situation.
-> 
-> This patch identifies the mailbox commands sent during adapter
-> initialization (before QLA_FW_STARTED() is called) and allows only
-> these to be sent to the firmware in stopped state.
-> 
-> Signed-off-by: Martin Wilck <mwilck@suse.com>
-> ---
->  drivers/scsi/qla2xxx/qla_mbx.c | 46
-> ++++++++++++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
+From: Asutosh Das <asutoshd@codeaurora.org>
 
-Testing with different HW revealed that the list of allowed commands
-needs to be extended. Forget this patch for now, please.
+During suspend, if the link is put to off, it would require
+a full initialization during resume. This patch resets and
+restores both the hba and the card during initialization.
 
-Regards
-Martin
+Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
+Signed-off-by: Can Guo <cang@codeaurora.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index f19a11e..21e41e5 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -8007,9 +8007,13 @@ static int ufshcd_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 		else
+ 			goto vendor_suspend;
+ 	} else if (ufshcd_is_link_off(hba)) {
+-		ret = ufshcd_host_reset_and_restore(hba);
+ 		/*
+-		 * ufshcd_host_reset_and_restore() should have already
++		 * A full initialization of the host and the device is required
++		 * since the link was put to off during suspend.
++		 */
++		ret = ufshcd_reset_and_restore(hba);
++		/*
++		 * ufshcd_reset_and_restore() should have already
+ 		 * set the link state as active
+ 		 */
+ 		if (ret || !ufshcd_is_link_active(hba))
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
