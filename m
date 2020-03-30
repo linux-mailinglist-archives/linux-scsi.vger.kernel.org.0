@@ -2,85 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2886C197736
-	for <lists+linux-scsi@lfdr.de>; Mon, 30 Mar 2020 10:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2D11979C3
+	for <lists+linux-scsi@lfdr.de>; Mon, 30 Mar 2020 12:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729870AbgC3I7m (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 30 Mar 2020 04:59:42 -0400
-Received: from mout.kundenserver.de ([212.227.17.24]:45789 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728759AbgC3I7m (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Mar 2020 04:59:42 -0400
-Received: from mail-qk1-f172.google.com ([209.85.222.172]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1ML9ds-1jb3sM2qQs-00IDHy for <linux-scsi@vger.kernel.org>; Mon, 30 Mar
- 2020 10:59:40 +0200
-Received: by mail-qk1-f172.google.com with SMTP id q188so18102857qke.8
-        for <linux-scsi@vger.kernel.org>; Mon, 30 Mar 2020 01:59:40 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ0tQ4G+arUdOamP+SkCCnAeLDfqIdVLo3Atmm3M0tqlUQQShrqq
-        +xinIH5pvo5a7L+E1OVLnJvZiXqi62vGrChKVIQ=
-X-Google-Smtp-Source: ADFU+vuGH2p5NuBrJxjWUq870mLAthjAyrCUUSB5e/GMRajawG/zHX2eT4Bv7S2Y2Ep+GlzjOqBmL1bUPwfVifeT8ZU=
-X-Received: by 2002:a37:d85:: with SMTP id 127mr3562476qkn.3.1585558779548;
- Mon, 30 Mar 2020 01:59:39 -0700 (PDT)
+        id S1729698AbgC3Kwr (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Mar 2020 06:52:47 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:39876 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729715AbgC3Kwq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Mar 2020 06:52:46 -0400
+Received: by mail-vs1-f66.google.com with SMTP id j128so10661176vsd.6
+        for <linux-scsi@vger.kernel.org>; Mon, 30 Mar 2020 03:52:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=I2bZK+Edwp7f1bl38ZDsYZ8gkHoLOp7N+SgwKjOSdbsqnWhmYlKKFyWTTwwdBuA4Vg
+         rwBHnP7ed1EksF/Uo6wi0daOtai1jA53B5b9RrMCwInP8fTj6xlf+N87Jxy7Sxa+QbUF
+         l2GP0Lv6JzwuZiPJAzgKXNfvaR6mAHzPBfBvakflfZ8B4h5bL4zPFQy+qXgn4TFvbTXz
+         A1ohkR077EumDiarvC1dhS/fXXyUHKbnnxfkdMVlwSlZiAQJvL50ZQklv05R+GT0yrBC
+         3q/4vjuGZ1FGpK3Ogg0O4Ce18OqauZECfFoMpKCzkd0qt9LKtlmIkWUwZqPjuntycFFN
+         I7DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=82B0OONv9gwbZlPp43NzThDz2fRV+KRFwafOQ16joDw=;
+        b=Bzhl/IALks1d4PqbjvWThQUuHFj6rd3W8edjmPETrp4QwJHy+j2WX3mMmazpzMAc4z
+         vsZIRwJjDHH1RcHpaVGflfgpLoiGEDK2Tn5vUDWTznPOBSRTI28VKNh7o2K9xCf2NQfH
+         5FYpZhGYS4VIkASCs3GmPYEbcdKUNhS7qLZlpRAF6JWAcZfVtputCAS95ZY81ibq3K99
+         7pNTyTTNQVr654OUlTMPGoOxnoQyGtozTFyqr2/JcOWLkI0nQsKL+WGTQ5TtyCI+M+vx
+         ZCXMYyKb3KJmp2lyKIv+ZgugSg/gwuw6aZe/x0zDADlC+sZPkTMeY9mclq7jrbVfRGh9
+         mRaw==
+X-Gm-Message-State: AGi0PuZ3/eCph2kLuiN4MuJcYs/HmNlUB4l/cnZV3ssSAEKF48bPH3LU
+        S1r5v0I1SXQlJ9LdQZNtz8zC5o36s+buEwtqAnivTKGl
+X-Google-Smtp-Source: APiQypIWKERkhJyfw3nllppwlKx4Kg5tACX7YV91IKVmdYpKGJw8tan3l05zjbxOy64C+jzvYjD6e0YtF987t4KsIjw=
+X-Received: by 2002:a67:e24c:: with SMTP id w12mr8442912vse.153.1585565563772;
+ Mon, 30 Mar 2020 03:52:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200330025304.10743-1-bvanassche@acm.org> <1585537587.4510.6.camel@linux.vnet.ibm.com>
-In-Reply-To: <1585537587.4510.6.camel@linux.vnet.ibm.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 30 Mar 2020 10:59:23 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2oWs4g+qzQkKJ7LZH9W8zk3762YYk3mLH_q0_dxJQ1gw@mail.gmail.com>
-Message-ID: <CAK8P3a2oWs4g+qzQkKJ7LZH9W8zk3762YYk3mLH_q0_dxJQ1gw@mail.gmail.com>
-Subject: Re: [PATCH] sr: Fix a recently introduced W=1 compiler warning
-To:     James Bottomley <jejb@linux.vnet.ibm.com>
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>
+Received: by 2002:a67:c005:0:0:0:0:0 with HTTP; Mon, 30 Mar 2020 03:52:43
+ -0700 (PDT)
+Reply-To: maryalice00.12@postribe.com
+From:   Maryalice Williams <maryalicewilliams730@gmail.com>
+Date:   Mon, 30 Mar 2020 08:52:43 -0200
+Message-ID: <CAKwdjsr+YKgJk7z-UHX7Zo55cx5RUN3-bw03sWcArP4vbM2B5g@mail.gmail.com>
+Subject: Reply For More Details.
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:poC6lTnHhKSERPrGv65wmrs7Cmfw8BPfhcwaXZLe/PxOMdxIygR
- 8ZukLf8FqCwAz9hV0wlPtbjFZjRwPYbtMYXNPL+ckDMlSfNrfSM4TOOaRcGM7uyfy8/7C4z
- NOdfCfsdzldVZutyvINU0CjFWacqDSDOJ2xDfqmcYGEE/tnUAdcX2eyUuMAfa1PlbWp7ljG
- RAmmLBG0kNmGJta1svV9A==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:etHD84NRoko=:xN4zRg3cP1ImbwF/JOW8gJ
- 5R9uq2o3u5Xp4xYTYjuqbGgze+2AniG4BBmXEaQ0NQ/zxMgnF9/uS4ywgPKDYIeXQ8V9T1b19
- cwT5eLXIW7tMd7ouX2sZXztIUVnFzOtiSinHXSZBgCFrf5VTfos4wZj8qzKO0aW1huw9iWs74
- 8n2bKHyuQgBdiiJwiGIuVWdzN34habXk/yyqfqyiHVbZYt59zt9MTxAxXFbV2uFzRNbeQBNCM
- 6ITARIHNwo701jKhG/Zxxb/uBcrQAichdVyE4w0Mp7qNk61xdmScWti6Cy5RlTYIIlIqnDzG/
- 6haYeWtB5NTv8z2cGjo1mrAfNAfNj9iTVsffFiZn/ox8gEmn/yhVx3POt5xd7H43u0yw1UHqT
- L1wD02ir1or0C5pNsLWScJtidiSTLy/GRPnVJA3Md5b7JcDiKoK/jwoMULXd/vrHNi5/pvYkp
- WsE9GK9iLcfeMs5Gd6LnTo3n9LD0+1IYtTDp1N4ItqBcpJjM/gPEk6pJFQiXfltIsMHyGMFSq
- HeF57ocvPcE2l2oSv7Dw+u0kyxZSZ/Er/U1EyPsbIfh+eWMqTX7yg4s2WMew3Ql0xWSGxG5zm
- jlw46+9b1xHBzQtB/j/ZJK/vvPFJf+SL2YaKv+Jc4YMSLXS+niZMmN1v+Ei8nFEAtU/+/lvTU
- cR/0AP4ARkrUngE/v6Ml2SNPZWhSw89Zo6KUeb1I6pB9wauwzaG0ahPVYuJ/WmhjY6/OiWyui
- AjVTNJS98tHHWWpyI8fyrz84CgZH8po8SUmbgNd/uxYGCq90DGaVih8coYceIhuWhgaW7HoTC
- PhZ/7VzoSSxY33yNHxPQPkAyHUp56252V5IW/aZBTY2N+GF6BA=
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 5:06 AM James Bottomley <jejb@linux.vnet.ibm.com> wrote:
->
-> On Sun, 2020-03-29 at 19:53 -0700, Bart Van Assche wrote:
-> >  static unsigned int sr_block_check_events(struct gendisk *disk,
-> >                                         unsigned int clearing)
-> > @@ -685,8 +685,9 @@ static const struct block_device_operations
-> > sr_bdops =
-> >       .owner          = THIS_MODULE,
-> >       .open           = sr_block_open,
-> >       .release        = sr_block_release,
-> > +#ifndef CONFIG_COMPAT
-> >       .ioctl          = sr_block_ioctl,
-> > -#ifdef CONFIG_COMPAT
-> > +#else
-> >       .ioctl          = sr_block_compat_ioctl,
->
-> Well, this is obviously incorrect: we need the compat ioctl for 32 on
-> 64 bit and the real for native 64 bit, so both have to be defined.
-> What you propose would work if we were only ever 32 on 64.  I think
-> what you want to do is change the second .ioctl to .compat_ioctl.
+-- 
+My dear,
 
-The correct fix was merged into v5.6-rc4, see commit 03264ddde245 ("scsi:
-compat_ioctl: cdrom: Replace .ioctl with .compat_ioctl in four appropriate
-places").
+I am Mrs Maryalice Williams, I want to send you donation of two
+million seven hundred thousand Dollars ($2.7M) for volunteer projects
+in your country due to my ill health that could not permit me. Kindly
+reply for more details, and also send me the following details, as per
+below, your full Name ..........,  Address...........,
+Age...............,  Occupation ...............
 
-        Arnd
+Remain blessed,
+Mrs. Maryalice Williams.
