@@ -2,82 +2,181 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA8B19A07E
-	for <lists+linux-scsi@lfdr.de>; Tue, 31 Mar 2020 23:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DB819A29A
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Apr 2020 01:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728245AbgCaVNW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 31 Mar 2020 17:13:22 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:35602 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727937AbgCaVNV (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 31 Mar 2020 17:13:21 -0400
-Received: by mail-qt1-f195.google.com with SMTP id e14so19791112qts.2
-        for <linux-scsi@vger.kernel.org>; Tue, 31 Mar 2020 14:13:21 -0700 (PDT)
+        id S1731438AbgCaXvQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 31 Mar 2020 19:51:16 -0400
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:44545 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731407AbgCaXvQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 31 Mar 2020 19:51:16 -0400
+Received: by mail-ua1-f67.google.com with SMTP id r47so8380925uad.11
+        for <linux-scsi@vger.kernel.org>; Tue, 31 Mar 2020 16:51:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=BDLu4BCkm+Jnqc5zSIvTfuz2SxsHBrDYB6DXZhzD3Mk=;
-        b=Ub4NV8m3Rx25iqO/Z3yhB1mH9VEs/w86Gt5+V9DGUjvJCgCV5zZILBtzwMfDbEistH
-         EJ3wMKsPDRpSqKbPqLBFIk2KkTO3hAtn8YSITUJibUrDe3nxFLBUY42FkdggNUzn9KdS
-         nGZVXLGHdt4ANke3uzUbASywVakxRuAdtIm+Yi6krqGq+BfWehBKmQW7EOAt+Lf4VRkE
-         o9S4WWF5LhwVEVAAhUl+HKdvlWvzS9T50hMbX1DEMnvOXKwHooKoW3w6UTEA4v2asxZ+
-         6m2OSpMKIu7vQ0/J6JoVqBLjKV4EM2RnJD4Ji/tNE7tLygWEZ44lGhxbXS5+TJZ3tbD5
-         Gfqw==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=i3kbyuaqIyOFQsd2iubBBVHZHoxyTbaS96NRfym2U00=;
+        b=iwNbd13N3E/CfwF2vKNkgFZfc4Fa5dCuu1IgKs6zdXfKgxFtpVgrG6iA4rZSp1Cfjo
+         QsMCMZhzAklhDzgtnuMO0GXlzBjYcJY3/LtSfKy9nFwCQWk2OyWR/xHEa9gjPswtNRcF
+         jjG6UaOgs6NtJDBn34PPljtQS2gDhv1vI+qk4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=BDLu4BCkm+Jnqc5zSIvTfuz2SxsHBrDYB6DXZhzD3Mk=;
-        b=RkTWfsI5+4eB+epHL0DNWmZhNK2BSFp89IVhWM5FxBd0WHgTigK5Y1E6aPXnE7NLg9
-         B76bE56sOPgx0U+w1WDJ2IPiRnzAyuK/4CMbmBhc5+lU+ZzgFYcTVzj5yFR+stD0bvDj
-         7eUsHFFnMvXuf1KVVi60Tf+dCtZf+OpxmlMSuFKTR2GbfyeTLDKX79fFYFxt9cHB97bl
-         4T7KIiWgXk2wIC6wsg6MKjboP9Xt/TTyJEbk1jkJ/xqdjjrgmCbVbYjSM/2iQP042JCQ
-         WqhkoG1EgWzQ/0pMl1qVsO6HadXLGGus/ypWlHKZt9O4LXpyzwiRK+hLHBsjg7QdIfjA
-         rIww==
-X-Gm-Message-State: ANhLgQ0KkJ4/FYtwoBKm1NCkJQ3LQH3HiGQboRkpDLcGS4JpkKVp5eI5
-        mQejm64WJ1aD72O1LxtSiAvrXa8bDXmQRyn1qow=
-X-Google-Smtp-Source: ADFU+vvEaWvl4dTQqZ0UkrkQx6+IcQrxpx/jPlviBoDLJMJr4Nmix7CXa9a7/HUhjtUh3KTQaGHtZUGxEDifOX5uSo8=
-X-Received: by 2002:ac8:4603:: with SMTP id p3mr7340590qtn.78.1585689200631;
- Tue, 31 Mar 2020 14:13:20 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=i3kbyuaqIyOFQsd2iubBBVHZHoxyTbaS96NRfym2U00=;
+        b=AEveUNNYFeSGy7EvctfenaWSOzJsJmiWWZZR2I6OMmruL1DlNIm1UJiaK5DwNb9a3s
+         LqimbWCMh9XTqmrH9OZxo2vqOaLw4aDXByM6zAUMUwoJsrEMcQWhMbo7CfY82D7joRUh
+         cFt9Y8rkqbK8dKr0WnfbeMRLOK2T5mvoHvhRCW0oplIusWLxE2DkTWICKSXacsFr5rq0
+         9MvpXi7hVfPi7BD8NyBNX+qCswIcglDR4SGbxxZ4uzI93ydBvD7a7sjdBWhqilDPPOIW
+         SdDkBNrNhVBqMXUNHIOnTX8ac6PLXx6YHRff1zkiUPIEvMGY+sodGm/YjuUGDpyDhDDc
+         w7dA==
+X-Gm-Message-State: AGi0PuZi1o+tZtKvG11G0CU2OuYjqTfp2qVafriRLFprZxczwUtHdqPM
+        ddU432RGGcNSbnAoJ+TAfY/uDeOxph4=
+X-Google-Smtp-Source: APiQypL245gr5xXDmJpHjbt9rkwPhy/IJnY5uoyqy+pe8b/M/U4xSS3FHY/9UzhxrshhpyO3QGuz6w==
+X-Received: by 2002:ab0:2b0b:: with SMTP id e11mr13582722uar.136.1585698673882;
+        Tue, 31 Mar 2020 16:51:13 -0700 (PDT)
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
+        by smtp.gmail.com with ESMTPSA id o133sm111140vka.37.2020.03.31.16.51.12
+        for <linux-scsi@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 31 Mar 2020 16:51:13 -0700 (PDT)
+Received: by mail-ua1-f42.google.com with SMTP id r47so8380907uad.11
+        for <linux-scsi@vger.kernel.org>; Tue, 31 Mar 2020 16:51:12 -0700 (PDT)
+X-Received: by 2002:ab0:7406:: with SMTP id r6mr5058110uap.22.1585698672345;
+ Tue, 31 Mar 2020 16:51:12 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a0c:9e59:0:0:0:0:0 with HTTP; Tue, 31 Mar 2020 14:13:20
- -0700 (PDT)
-Reply-To: akainkarim1@gmail.com
-From:   Mr Akain Karim <mrnyamenemedimafo@gmail.com>
-Date:   Tue, 31 Mar 2020 14:13:20 -0700
-Message-ID: <CACs4+1016YfnvPFXmXvjaeHyT1o+WsdZf9NDd7iyWw5WUwQNCQ@mail.gmail.com>
-Subject: COMPLIMENT OF THE DAY
-To:     undisclosed-recipients:;
+References: <20200330144907.13011-1-dianders@chromium.org> <20200330074856.2.I28278ef8ea27afc0ec7e597752a6d4e58c16176f@changeid>
+ <20200331014109.GA20230@ming.t460p> <D38AB98D-7F6A-4C61-8A8F-C22C53671AC8@linaro.org>
+ <d6af2344-11f7-5862-daed-e21cbd496d92@kernel.dk>
+In-Reply-To: <d6af2344-11f7-5862-daed-e21cbd496d92@kernel.dk>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 31 Mar 2020 16:51:00 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WHYFDoUKLnwMCm-o=gEQDCzZFeMAvia3wpJzm9XX7Bow@mail.gmail.com>
+Message-ID: <CAD=FV=WHYFDoUKLnwMCm-o=gEQDCzZFeMAvia3wpJzm9XX7Bow@mail.gmail.com>
+Subject: Re: [PATCH 2/2] scsi: core: Fix stall if two threads request budget
+ at the same time
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Paolo Valente <paolo.valente@linaro.org>,
+        Ming Lei <ming.lei@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        linux-scsi@vger.kernel.org, Salman Qazi <sqazi@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Compliment of the day,
+Hi,
 
-I am Mr Akain Karim, Product Development Head Private Banking & Wealth
-Management at the foreign remittance department, I Have a Business
-Proposal of $10.5million For You and I  was compelled to use this
-medium due to the nature of this project, I have access to very vital
-information that can be used to transfer this huge amount of money,
-which may culminate into the investment of the said funds into your
-company or any lucrative venture such as business ventures in Medical
-and Health care projects, Real estate projects, mining projects,
-agricultural projects renewable energy projects, Oil and Gas, start-up
-projects and business expansions / Loan with lower rate. in your
-country, If you will like to assist me as a partner then indicate your
-interest, after which we shall both discuss the modalities and the
-sharing percentage.
+On Tue, Mar 31, 2020 at 11:26 AM Jens Axboe <axboe@kernel.dk> wrote:
+>
+> On 3/31/20 12:07 PM, Paolo Valente wrote:
+> >> Il giorno 31 mar 2020, alle ore 03:41, Ming Lei <ming.lei@redhat.com> ha scritto:
+> >>
+> >> On Mon, Mar 30, 2020 at 07:49:06AM -0700, Douglas Anderson wrote:
+> >>> It is possible for two threads to be running
+> >>> blk_mq_do_dispatch_sched() at the same time with the same "hctx".
+> >>> This is because there can be more than one caller to
+> >>> __blk_mq_run_hw_queue() with the same "hctx" and hctx_lock() doesn't
+> >>> prevent more than one thread from entering.
+> >>>
+> >>> If more than one thread is running blk_mq_do_dispatch_sched() at the
+> >>> same time with the same "hctx", they may have contention acquiring
+> >>> budget.  The blk_mq_get_dispatch_budget() can eventually translate
+> >>> into scsi_mq_get_budget().  If the device's "queue_depth" is 1 (not
+> >>> uncommon) then only one of the two threads will be the one to
+> >>> increment "device_busy" to 1 and get the budget.
+> >>>
+> >>> The losing thread will break out of blk_mq_do_dispatch_sched() and
+> >>> will stop dispatching requests.  The assumption is that when more
+> >>> budget is available later (when existing transactions finish) the
+> >>> queue will be kicked again, perhaps in scsi_end_request().
+> >>>
+> >>> The winning thread now has budget and can go on to call
+> >>> dispatch_request().  If dispatch_request() returns NULL here then we
+> >>> have a potential problem.  Specifically we'll now call
+> >>
+> >> I guess this problem should be BFQ specific. Now there is definitely
+> >> requests in BFQ queue wrt. this hctx. However, looks this request is
+> >> only available from another loser thread, and it won't be retrieved in
+> >> the winning thread via e->type->ops.dispatch_request().
+> >>
+> >> Just wondering why BFQ is implemented in this way?
+> >>
+> >
+> > BFQ inherited this powerful non-working scheme from CFQ, some age ago.
+> >
+> > In more detail: if BFQ has at least one non-empty internal queue, then
+> > is says of course that there is work to do.  But if the currently
+> > in-service queue is empty, and is expected to receive new I/O, then
+> > BFQ plugs I/O dispatch to enforce service guarantees for the
+> > in-service queue, i.e., BFQ responds NULL to a dispatch request.
+>
+> What BFQ is doing is fine, IFF it always ensures that the queue is run
+> at some later time, if it returns "yep I have work" yet returns NULL
+> when attempting to retrieve that work. Generally this should happen from
+> subsequent IO completion, or whatever else condition will resolve the
+> issue that is currently preventing dispatch of that request. Last resort
+> would be a timer, but that can happen if you're slicing your scheduling
+> somehow.
 
-Upon receipt of your reply on your expression of Interest I will give
-you full details on how the business will be executed I am open for
-negotiation.
+I've been poking more at this today trying to understand why the idle
+timer that Paolo says is in BFQ isn't doing what it should be doing.
+I've been continuing to put most of my stream-of-consciousness at
+<https://crbug.com/1061950> to avoid so much spamming of this thread.
+In the trace I looked at most recently it looks like BFQ does try to
+ensure that the queue is run at a later time, but at least in this
+trace the later time is not late enough.  Specifically the quick
+summary of my recent trace:
 
-Note you might receive this message in your inbox or spam or junk
-folder, depends on your web host or server network.
+28977309us - PID 2167 got the budget.
+28977518us - BFQ told PID 2167 that there was nothing to dispatch.
+28977702us - BFQ idle timer fires.
+28977725us - We start to try to dispatch as a result of BFQ's idle timer.
+28977732us - Dispatching that was a result of BFQ's idle timer can't get
+             budget and thus does nothing.
+28977780us - PID 2167 put the budget and exits since there was nothing
+             to dispatch.
 
-Your swift response is highly needed.
-Thanks for your anticipated cooperation.
-Best Regards
-Mr. Akain Karim
+This is only one particular trace, but in this case BFQ did attempt to
+rerun the queue after it returned NULL, but that ran almost
+immediately after it returned NULL and thus ran into the race.  :(
+
+
+> > It would be very easy to change bfq_has_work so that it returns false
+> > in case the in-service queue is empty, even if there is I/O
+> > backlogged.  My only concern is: since everything has worked with the
+> > current scheme for probably 15 years, are we sure that everything is
+> > still ok after we change this scheme?
+>
+> You're comparing apples to oranges, CFQ never worked within the blk-mq
+> scheduling framework.
+>
+> That said, I don't think such a change is needed. If we currently have a
+> hang due to this discrepancy between has_work and gets_work, then it
+> sounds like we're not always re-running the queue as we should. From the
+> original patch, the budget putting is not something the scheduler is
+> involved with. Do we just need to ensure that if we put budget without
+> having dispatched a request, we need to kick off dispatching again?
+
+By this you mean a change like this in blk_mq_do_dispatch_sched()?
+
+  if (!rq) {
+    blk_mq_put_dispatch_budget(hctx);
++    ret = true;
+    break;
+  }
+
+I'm pretty sure that would fix the problems and I'd be happy to test,
+but it feels like a heavy hammer.  IIUC we're essentially going to go
+into a polling loop and keep calling has_work() and dispatch_request()
+over and over again until has_work() returns false or we manage to
+dispatch something...
+
+-Doug
