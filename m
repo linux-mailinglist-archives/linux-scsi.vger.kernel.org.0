@@ -2,122 +2,136 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 375D31999DE
-	for <lists+linux-scsi@lfdr.de>; Tue, 31 Mar 2020 17:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFD2199B16
+	for <lists+linux-scsi@lfdr.de>; Tue, 31 Mar 2020 18:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730548AbgCaPhZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 31 Mar 2020 11:37:25 -0400
-Received: from esa2.hgst.iphmx.com ([68.232.143.124]:48351 "EHLO
-        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727703AbgCaPhZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 31 Mar 2020 11:37:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1585669057; x=1617205057;
-  h=from:to:cc:subject:date:message-id:references:
-   content-transfer-encoding:mime-version;
-  bh=l1JZLlYlQM+LfA0sU+avRDubSNNoLI3yE/4diRSZo74=;
-  b=ZevmLLHdAU0zvES9DdKSq12+Ofvtk4iFRODvW07L8nvQfDdR6zBOsO5P
-   FJgj6Zu3IemEYpIco5arOL7gztHOGbL3PDUxeYYHse4nN+A3Ncbx/VoLg
-   Ij7TWvghHiP9c08viHK6slbAfJ6EYIehNwBmzmVoQHvPRFOybzH3DqKik
-   NhrEP4pjAq7MESCStcVtudMYW3JigN6Fqu8JLE+u82U1QLYhKyaMaCk82
-   w6223H9gHN7H9vtt46zolx5Ap8so8iDNRHMnJKBlqULfcsMZII1gYSJ8v
-   m4KU8GaMBzaDbSC/VZJ6cSPfYeEdU//LI+y+8qoZAjo/3mxhOrfaO3JwQ
-   g==;
-IronPort-SDR: NK77ScrXXdp/KjiTHuNaGKwyi7xs2Ef2jsOVQJwNW5BjR1mvS07SG/jgg3ZMJKojtqvXBqn2d7
- kY3pw2oLgqnPqmsAm8ZmIF3ZMZw3zgryaF5v5ibORlnRiQvGYayl6UiJWPjis9KKfV3OZpdDkW
- cWVOhJSF8rE/igCChuj5VXUUiNpvoodNqsM1ygemRFIYLXQhH+3IR8YEQlZqNbZ8gbtwkgyQLE
- fKslOuIg6oK5CI6g34ulDGCpIZfeFI2MQRJ3Vsf6gy8L6Jr/IC5jIx2SwqQNcK47mz8+C316j5
- 1GA=
-X-IronPort-AV: E=Sophos;i="5.72,328,1580745600"; 
-   d="scan'208";a="236345087"
-Received: from mail-co1nam11lp2176.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.176])
-  by ob1.hgst.iphmx.com with ESMTP; 31 Mar 2020 23:36:05 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gh0uoWx9wU7ynQxFujrTgA08SYT/ywwbSsVSTTDjQGwyacyPoIboA5accJ6GcTu/tKOSmKuCQFhhaU9C3fj8p/Tpe6MWXwYRhEw1a5YvW95HBmmUipWq2IRvcOPKnfv0Q8gGCUycf4Mn8i8AHYawSauF56BGdvmJeq/RCenGNZd88D1Jz/tT3F3JPfKislCqsYrE5jI1E5l03GZhMZoQ7/0EUxkDsblwUhBko+zlAvITlhKVp7zaTaexoySfmGiSWj88OMED4wHztqtuK5WUaYpGF6czM8APrMSv0cB0PWL8eOUTjPqBJu4U0/Utnj6lxrEBBdCvNnQLfyMUXquY0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l1JZLlYlQM+LfA0sU+avRDubSNNoLI3yE/4diRSZo74=;
- b=mOKf0JaW1nfJIi+A+COVefbOW8ofLUov0T9sGF/VULqKIRxXRQ0coQpZkDAST6emTmzYri+B2LLeL4oB9vs2OIR2F5rieQsfgKaQ8aAVX6IfWEsPzIrhqPzs/N0fOlOBXRjevIHSgGp4u79BQsPLhopjNHYpoH9pjTqNFaemfFZa30n01rYl28LN8o258D4D0FW2Tn1/akWx0J7xDRW/uz3DsMMOVBK8VdfndReCCgh0zmXywdyAR/b4jkZMyC8XtKniOr0KFmd9qnV5EzJgDXtLOq2/OseKtwOfstnmi6EYT4TAjNhRtdS6GIlcDgP0tWq5pMVOcuWLOpB4WafssQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l1JZLlYlQM+LfA0sU+avRDubSNNoLI3yE/4diRSZo74=;
- b=eYixsITaDxHDjYE8WIFR0SUutawgBLIRUrNYoXcfGlITUUtgEh7eqr5I2vXhiFpex4870CQRyRK6KoVSNdIa8XdlmUyhu2H2iS6ib9xkxJ2pAy4ATy64gihZYb5qNWvr6ahWva/Z9r9M6Q7Vp0oDU7mcPhLMs46LCaVDPXiuGWg=
-Received: from SN4PR0401MB3598.namprd04.prod.outlook.com
- (2603:10b6:803:47::21) by SN4PR0401MB3598.namprd04.prod.outlook.com
- (2603:10b6:803:47::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2856.19; Tue, 31 Mar
- 2020 15:35:37 +0000
-Received: from SN4PR0401MB3598.namprd04.prod.outlook.com
- ([fe80::9854:2bc6:1ad2:f655]) by SN4PR0401MB3598.namprd04.prod.outlook.com
- ([fe80::9854:2bc6:1ad2:f655%4]) with mapi id 15.20.2856.019; Tue, 31 Mar 2020
- 15:35:37 +0000
-From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-To:     Keith Busch <kbusch@kernel.org>
-CC:     Jens Axboe <axboe@kernel.dk>,
-        "hch@infradead.org" <hch@infradead.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "linux-scsi @ vger . kernel . org" <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-fsdevel @ vger . kernel . org" <linux-fsdevel@vger.kernel.org>
-Subject: Re: [PATCH v3 02/10] block: Introduce REQ_OP_ZONE_APPEND
-Thread-Topic: [PATCH v3 02/10] block: Introduce REQ_OP_ZONE_APPEND
-Thread-Index: AQHWBFfQotoH4NJ6H0WQq9clRZuQ5w==
-Date:   Tue, 31 Mar 2020 15:35:37 +0000
-Message-ID: <SN4PR0401MB3598942843F94886422759989BC80@SN4PR0401MB3598.namprd04.prod.outlook.com>
-References: <20200327165012.34443-1-johannes.thumshirn@wdc.com>
- <20200327165012.34443-3-johannes.thumshirn@wdc.com>
- <20200331152317.GB30875@redsun51.ssa.fujisawa.hgst.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Johannes.Thumshirn@wdc.com; 
-x-originating-ip: [129.253.240.72]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 6f6c8f99-3150-460e-acf8-08d7d5892942
-x-ms-traffictypediagnostic: SN4PR0401MB3598:
-x-ld-processed: b61c8803-16f3-4c35-9b17-6f65f441df86,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <SN4PR0401MB3598BFA94C3AC80EFB4549009BC80@SN4PR0401MB3598.namprd04.prod.outlook.com>
-wdcipoutbound: EOP-TRUE
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 0359162B6D
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0401MB3598.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(10019020)(4636009)(366004)(396003)(39860400002)(376002)(346002)(136003)(86362001)(33656002)(9686003)(71200400001)(6506007)(4744005)(54906003)(52536014)(4326008)(55016002)(76116006)(81156014)(316002)(64756008)(8936002)(81166006)(53546011)(5660300002)(478600001)(6916009)(66476007)(7696005)(66946007)(66556008)(8676002)(26005)(2906002)(91956017)(186003)(66446008);DIR:OUT;SFP:1102;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GKOL5QSSqilLCcXCcpsckSuiNGKZP7fLlf3Yh3ZOvECnzIFoOJJ5VmD10qFohEMogucribm9tGS5W1Ysh0wH8ZmLqU6za0yzwFlITeXkJqDKl4vf97gtF9ZI5SJy22+yPl8EN7dRaX6mjCtCB09J2BUJIiamfE6jX3jMjQ59aFO7d7pEmiyOzthZzB0SKsKRT5cVdckymGPk2h3aejCd+xA7QoRfSvXig9kmpnpvcCX8jZP0ThwiKYfajz++PTsx3Peysyh/E5nYN0aRfmMuGkW03/2ZiPgJ4X19dCYDduz7YphCgmNfBEjyoUJwc4Jt1+taCW+B1UVEL7qJbanKtZW7fZHnrpcZmrCv0PVt7Nts6yRH3BvVjRG4ZwZkXRp2hysIXiPPqFR+75UfLCJlBZaR6LwbVeUQEXjwpk2gmfx/m9+8nbZwg29awR9l6/ws
-x-ms-exchange-antispam-messagedata: 0fZM+ldLgS37hD4YPrYWECkPrGI4HYy4zs22eToFzowxO3oVBjEu18Wd+Xyfsi5C1IlB5DEKFtKFT+QAB/A7g0QfwJzH0e5ZHJ0LkpaILutrFoC4TAt85o1euCV0OlNLdjJEZV4O7LZP3EQNTzaKww==
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1730672AbgCaQNb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 31 Mar 2020 12:13:31 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34274 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730706AbgCaQNb (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 31 Mar 2020 12:13:31 -0400
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02VG88n0120574
+        for <linux-scsi@vger.kernel.org>; Tue, 31 Mar 2020 12:13:29 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3047vqjd32-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Tue, 31 Mar 2020 12:13:29 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-scsi@vger.kernel.org> from <bblock@linux.ibm.com>;
+        Tue, 31 Mar 2020 17:13:25 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 31 Mar 2020 17:13:22 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02VGCJo630605624
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 31 Mar 2020 16:12:19 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D4040A4060;
+        Tue, 31 Mar 2020 16:13:22 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1C09A4054;
+        Tue, 31 Mar 2020 16:13:22 +0000 (GMT)
+Received: from t480-pf1aa2c2 (unknown [9.145.63.31])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 31 Mar 2020 16:13:22 +0000 (GMT)
+Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92.3)
+        (envelope-from <bblock@linux.ibm.com>)
+        id 1jJJVx-001K14-VF; Tue, 31 Mar 2020 18:13:21 +0200
+Date:   Tue, 31 Mar 2020 18:13:21 +0200
+From:   Benjamin Block <bblock@linux.ibm.com>
+To:     George Spelvin <lkml@sdf.org>, Steffen Maier <maier@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-s390@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v1 27/50] drivers/s390/scsi/zcsp_fc.c: Use
+ prandom_u32_max() for backoff
+References: <202003281643.02SGhHN7015213@sdf.org>
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f6c8f99-3150-460e-acf8-08d7d5892942
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Mar 2020 15:35:37.4006
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: eAADsSbzEOn6Keg1MAk9Cl3Z8fn98PYkZJkT7Ocnpl/vkDDI2NLmKJPoxnfIcNrFg5YeJRnyg9h/dyl0eGzrdB3RKlImuFznIDNT8rk1WlU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0401MB3598
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202003281643.02SGhHN7015213@sdf.org>
+X-TM-AS-GCONF: 00
+x-cbid: 20033116-0028-0000-0000-000003EF75E8
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20033116-0029-0000-0000-000024B4F913
+Message-Id: <20200331161321.GB17507@t480-pf1aa2c2>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-03-31_05:2020-03-31,2020-03-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 priorityscore=1501
+ clxscore=1015 mlxlogscore=999 mlxscore=0 bulkscore=0 phishscore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2003310141
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 31/03/2020 17:23, Keith Busch wrote:=0A=
-> The generic block layer doesn't set chunk_sectors until after this,=0A=
-> so unless the driver happened to set it earlier, this check would fail.=
-=0A=
-> We don't want to rely on the driver doing this, so I'll fix it up for=0A=
-> the next version.=0A=
-=0A=
-I'll take care of this, it's a change I made to the patch.=0A=
+On Fri, Nov 29, 2019 at 03:39:41PM -0500, George Spelvin wrote:
+> We don't need crypto-grade random numbers for randomized backoffs.
+> 
+> (We could skip the if() if we wanted to rely on the undocumented fact
+> that prandom_u32_max(0) always returns 0.  That would be a net time
+> saving it port_scan_backoff == 0 is rare; if it's common, the if()
+> is false often enough to pay for itself. Not sure which applies here.)
+> 
+> Signed-off-by: George Spelvin <lkml@sdf.org>
+> Cc: Heiko Carstens <heiko.carstens@de.ibm.com>
+> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> Cc: Christian Borntraeger <borntraeger@de.ibm.com>
+> Cc: linux-s390@vger.kernel.org
+> ---
+>  drivers/s390/scsi/zfcp_fc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Hello George,
+
+it would be nice, if you could address the mails to the
+driver-maintainers (`scripts/get_maintainer.pl drivers/s390/scsi/zfcp_fc.c`
+will tell you that this is me and Steffen); I'd certainly have noticed
+it earlier then :-).
+
+> 
+> diff --git a/drivers/s390/scsi/zfcp_fc.c b/drivers/s390/scsi/zfcp_fc.c
+> index b018b61bd168e..d24cafe02708f 100644
+> --- a/drivers/s390/scsi/zfcp_fc.c
+> +++ b/drivers/s390/scsi/zfcp_fc.c
+> @@ -48,7 +48,7 @@ unsigned int zfcp_fc_port_scan_backoff(void)
+>  {
+>  	if (!port_scan_backoff)
+>  		return 0;
+> -	return get_random_int() % port_scan_backoff;
+> +	return prandom_u32_max(port_scan_backoff);
+
+I think the change is fine. You are right, we don't need a crypto nonce
+here.
+
+I think I'd let the zero-check stand as is, because the internal
+behaviour of prandom_u32_max() is, as you say, undocumented. This is not
+a performance critical code-path for us anyway.
+
+>  }
+>  
+>  static void zfcp_fc_port_scan_time(struct zfcp_adapter *adapter)
+> -- 
+> 2.26.0
+> 
+
+Steffen, do you have any objections? Otherwise I can queue this up -
+minus the somewhat mangled subject - for when we send something next time.
+
+-- 
+Best Regards, Benjamin Block  / Linux on IBM Z Kernel Development / IBM Systems
+IBM Deutschland Research & Development GmbH    /    https://www.ibm.com/privacy
+Vorsitz. AufsR.: Gregor Pillen         /        Geschäftsführung: Dirk Wittkopp
+Sitz der Gesellschaft: Böblingen / Registergericht: AmtsG Stuttgart, HRB 243294
+
