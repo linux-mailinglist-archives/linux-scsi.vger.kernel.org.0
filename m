@@ -2,84 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4B6199B03
-	for <lists+linux-scsi@lfdr.de>; Tue, 31 Mar 2020 18:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7C1198966
+	for <lists+linux-scsi@lfdr.de>; Tue, 31 Mar 2020 03:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731149AbgCaQKP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 31 Mar 2020 12:10:15 -0400
-Received: from labrats.qualcomm.com ([199.106.110.90]:36630 "EHLO
-        labrats.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730562AbgCaQKO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 31 Mar 2020 12:10:14 -0400
-IronPort-SDR: 4cDDdotfZSrOFGqJiolPY42RKaKNCZFWr+ijJBDeoMtBy5Dvxkom/Sj9Tm1Vy0v8fUM5QpbtW2
- fh+lXzG4U4cBb2L6v3R2JsTKQ6HElj/+RsxEcVODq4Vw1f/o6PHjLU5FHMiZP57Z0OjtAQW740
- fzO+bAQAnm7VCYkyJM4kYtyJXCuuSO2dNCN+B9vXz5XL8YMlGz5auQ2TyUapusc0RrGtEf4bNS
- 76/z7o9dMoHFwGyTf79UQKW+wat6IGc2zB/wwX6eA4x37t85uwzIhcAAfyISfdJcwQTDguBjqK
- NJo=
-X-IronPort-AV: E=Sophos;i="5.72,314,1580803200"; 
-   d="scan'208";a="28621129"
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by labrats.qualcomm.com with ESMTP; 27 Mar 2020 19:27:37 -0700
-Received: from pacamara-linux.qualcomm.com ([192.168.140.135])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 27 Mar 2020 19:27:36 -0700
-Received: by pacamara-linux.qualcomm.com (Postfix, from userid 359480)
-        id AF31C3ABE; Fri, 27 Mar 2020 19:27:36 -0700 (PDT)
-From:   Can Guo <cang@codeaurora.org>
-To:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
-        hongwus@codeaurora.org, rnayak@codeaurora.org,
-        linux-scsi@vger.kernel.org, kernel-team@android.com,
-        saravanak@google.com, salyzyn@google.com, cang@codeaurora.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        Bean Huo <beanhuo@micron.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Venkat Gopalakrishnan <venkatg@codeaurora.org>,
-        Tomas Winkler <tomas.winkler@intel.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v1 1/1] scsi: ufs: full reinit upon resume if link was off
-Date:   Fri, 27 Mar 2020 19:27:31 -0700
-Message-Id: <1585362454-5413-1-git-send-email-cang@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
+        id S1729426AbgCaBHT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 30 Mar 2020 21:07:19 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42610 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729129AbgCaBHT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 30 Mar 2020 21:07:19 -0400
+Received: by mail-pg1-f193.google.com with SMTP id h8so9546395pgs.9;
+        Mon, 30 Mar 2020 18:07:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZhOw+cmsFZegzfDW5fDINEwsMjwUxjfPEvGqp7eI5u4=;
+        b=bo5ZEfa9Nxm/Fx6IjrFKls3j31XopQ7j2KdR/RslF+/FzrvFKfNyoKdQt5zMTLf8wo
+         dYMt2gS1N53NJQmGFn1OskJLB62NTkqENx05UauPOkBUI+wFhGkuBnkLX0xO6CrtGwMX
+         nMX6zxzK7R5LvbIHiBKtroRnNKQGqnuEg0H6EqdKghvbBrqKAiQvbvvTsoJM1whg9bKB
+         MJx8ge9CyZtKstluw2PvYae8P/aIfbizv15JHD7Ro86XLnFZmM1KlDD6TlzgnYeo+eN3
+         VUS8MhPRxIAWX54CVUgeID43waS3G+CjT4C+YhFDrU+sbzCIfrp/w/mUFMUnjKn8Sryz
+         AXmw==
+X-Gm-Message-State: AGi0PuafC6oghmkh/9jb2828EMxgjiN0EWtbI8/3V0ZLTfp1E9aUPy4K
+        om+FW2dJ0xriC11IIHUtwhc=
+X-Google-Smtp-Source: APiQypJIdVuKuKZ7Aa3Vg7gQq1G9lVCm+lr+jCVHNNN8BOlt4XPlTODgILTRDlepSvF3t5O1Nic12A==
+X-Received: by 2002:a62:7d4e:: with SMTP id y75mr1984803pfc.32.1585616836680;
+        Mon, 30 Mar 2020 18:07:16 -0700 (PDT)
+Received: from ?IPv6:2601:647:4802:9070:b015:431e:549a:54d? ([2601:647:4802:9070:b015:431e:549a:54d])
+        by smtp.gmail.com with ESMTPSA id a3sm600490pjq.36.2020.03.30.18.07.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 Mar 2020 18:07:15 -0700 (PDT)
+Subject: Re: Data corruption in kernel 5.1+ with iSER attached ramdisk
+To:     Stephen Rust <srust@blockbridge.com>
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        Rob Townley <rob.townley@gmail.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        target-devel@vger.kernel.org, Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Max Gurtovoy <maxg@mellanox.com>
+References: <CAAFE1beMkvyRctGqpffd3o_QtDH0CrmQSb=fV4GzqMUXWzPyOw@mail.gmail.com>
+ <20191203005849.GB25002@ming.t460p>
+ <CAAFE1bcG8c1Q3iwh-LUjruBMAuFTJ4qWxNGsnhfKvGWHNLAeEQ@mail.gmail.com>
+ <20191203031444.GB6245@ming.t460p>
+ <CAAFE1besnb=HV4C_buORYpWbkXecmtybwX8d_Ka2NsKmiym53w@mail.gmail.com>
+ <CAAFE1bfpUWCZrtR8v3S++0-+gi8DJ79X3e0XqDe93i8nuGTnNg@mail.gmail.com>
+ <20191203124558.GA22805@ming.t460p>
+ <CAAFE1bfB2Km+e=T0ahwq0r9BQrBMnSguQQ+y=yzYi3tursS+TQ@mail.gmail.com>
+ <20191204010529.GA3910@ming.t460p>
+ <CAAFE1bcJmRP5OSu=5asNTpvkF=kjEZu=GafaS9h52776tVgpPA@mail.gmail.com>
+ <20191204230225.GA26189@ming.t460p>
+ <d9d39d10-d3f3-f2d8-b32e-96896ba0cdb2@grimberg.me>
+ <CAAFE1beqFBQS_zVYEXFTD2qu8PAF9hBSW4j1k9ZD6MhU_gWg5Q@mail.gmail.com>
+ <d2f633f1-57ef-4618-c3a6-c5ff0afead5b@grimberg.me>
+ <CAAFE1bdAbKfqbf05pKBcMUj+58fijDMT-8WBSuwiKk2Bmm4v2w@mail.gmail.com>
+From:   Sagi Grimberg <sagi@grimberg.me>
+Message-ID: <82bbbdf2-cf61-d523-29e0-d756b7f208f4@grimberg.me>
+Date:   Mon, 30 Mar 2020 18:07:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAAFE1bdAbKfqbf05pKBcMUj+58fijDMT-8WBSuwiKk2Bmm4v2w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Asutosh Das <asutoshd@codeaurora.org>
 
-During suspend, if the link is put to off, it would require
-a full initialization during resume. This patch resets and
-restores both the hba and the card during initialization.
+>> Can you try attached patch and see if it solves your issue?
+>> WARNING: very lightly tested...
+> 
+> I have run our tests against this patch and it is working well for our
+> "basic" testing as well. The test case that previously failed, now
+> passes with this patch. So that's encouraging! Thanks for the quick
+> response and quick patch.
 
-Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
-Signed-off-by: Can Guo <cang@codeaurora.org>
----
- drivers/scsi/ufs/ufshcd.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Good to know..
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index f19a11e..21e41e5 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -8007,9 +8007,13 @@ static int ufshcd_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 		else
- 			goto vendor_suspend;
- 	} else if (ufshcd_is_link_off(hba)) {
--		ret = ufshcd_host_reset_and_restore(hba);
- 		/*
--		 * ufshcd_host_reset_and_restore() should have already
-+		 * A full initialization of the host and the device is required
-+		 * since the link was put to off during suspend.
-+		 */
-+		ret = ufshcd_reset_and_restore(hba);
-+		/*
-+		 * ufshcd_reset_and_restore() should have already
- 		 * set the link state as active
- 		 */
- 		if (ret || !ufshcd_is_link_active(hba))
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+> One question we had is regarding the hard coded header length: What
+> happens if the initiator sends an extended CDB, like a WRITE32? Are
+> there any concerns with an additional header segment (AHS)?
 
+You are absolutely correct! t10-dif is broken with this patch as
+32 byte cdb would break into two buffers which is not expected
+by the target core...
+
+I take back this patch, I guess we should keep contiguous allocation but
+just make the recv wr such that the data is aligned for 16 bytes cdbs,
+and for 32-byte cdbs we never support immediate data anyways...
