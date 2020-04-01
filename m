@@ -2,123 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBE119B48F
-	for <lists+linux-scsi@lfdr.de>; Wed,  1 Apr 2020 19:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B51D19B5E0
+	for <lists+linux-scsi@lfdr.de>; Wed,  1 Apr 2020 20:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732491AbgDARM5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 1 Apr 2020 13:12:57 -0400
-Received: from mx0a-0016f401.pphosted.com ([67.231.148.174]:47630 "EHLO
-        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726445AbgDARM4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Apr 2020 13:12:56 -0400
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031H9adh030504;
-        Wed, 1 Apr 2020 10:12:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=pfpt0818; bh=JtyEZ8KPf7pW3KsuhyczQJ2ndYqR/DLwexHAjuvJ8GM=;
- b=SO9XJ0cce92I05An+afR/Dv8EO866EMcHGIvhnge/cnhgkW9cf7a8P6ZIvYgUpohDkjr
- 0wx/WcfYJzUOxClqIOX4lrbfFuUWiPUoy2vn4LQPC0QSmpiRwU8lA/C3aREIfa7Dq9KN
- HHVBOPb7IFYTmr/+0qhTmxgqngt84IiMOFoofsckcC98Tt6iFvL8wS1K8Jo2SUpwmNsA
- wopQcugzsy6L2FX3FLptJuyDV+tdyUox6ZnvQtEcc5amerMlnwFpWw3CbSyCJf6DbTCg
- 5IlSWWNgYxDGDkrmflll1Zj74bDD/S1VdlM8dLdEFi7LhcRjbwdbBJF3bZoEHM7I3KZa zg== 
-Received: from sc-exch03.marvell.com ([199.233.58.183])
-        by mx0a-0016f401.pphosted.com with ESMTP id 304855nyep-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 01 Apr 2020 10:12:44 -0700
-Received: from SC-EXCH01.marvell.com (10.93.176.81) by SC-EXCH03.marvell.com
- (10.93.176.83) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 1 Apr
- 2020 10:12:42 -0700
-Received: from maili.marvell.com (10.93.176.43) by SC-EXCH01.marvell.com
- (10.93.176.81) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 1 Apr 2020 10:12:42 -0700
-Received: from irv1user01.caveonetworks.com (unknown [10.104.116.179])
-        by maili.marvell.com (Postfix) with ESMTP id E13883F703F;
-        Wed,  1 Apr 2020 10:12:42 -0700 (PDT)
-Received: from localhost (aeasi@localhost)
-        by irv1user01.caveonetworks.com (8.14.4/8.14.4/Submit) with ESMTP id 031HCgPv014016;
-        Wed, 1 Apr 2020 10:12:42 -0700
-X-Authentication-Warning: irv1user01.caveonetworks.com: aeasi owned process doing -bs
-Date:   Wed, 1 Apr 2020 10:12:42 -0700
-From:   Arun Easi <aeasi@marvell.com>
-X-X-Sender: aeasi@irv1user01.caveonetworks.com
-To:     Martin Wilck <mwilck@suse.com>
-CC:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Roman Bolshakov <r.bolshakov@yadro.com>,
-        Daniel Wagner <dwagner@suse.de>,
-        Bart Van Assche <Bart.VanAssche@sandisk.com>,
-        "James Bottomley" <jejb@linux.vnet.ibm.com>,
-        Hannes Reinecke <hare@suse.de>, <linux-scsi@vger.kernel.org>
-Subject: Re: [EXT] [PATCH v3 3/5] Revert "scsi: qla2xxx: Fix unbound sleep
- in fcport delete path."
-In-Reply-To: <20200327164711.5358-4-mwilck@suse.com>
-Message-ID: <alpine.LRH.2.21.9999.2004011007350.12727@irv1user01.caveonetworks.com>
-References: <20200327164711.5358-1-mwilck@suse.com>
- <20200327164711.5358-4-mwilck@suse.com>
-User-Agent: Alpine 2.21.9999 (LRH 334 2019-03-29)
+        id S1727386AbgDASqp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 1 Apr 2020 14:46:45 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:39190 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726640AbgDASqp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 1 Apr 2020 14:46:45 -0400
+Received: by mail-oi1-f194.google.com with SMTP id d63so439598oig.6
+        for <linux-scsi@vger.kernel.org>; Wed, 01 Apr 2020 11:46:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=unF2unMsxCZVe/f5t/n0I/7DAWwIvZiTovJ0QrFX2u0=;
+        b=l34+aHATYXp/WHzy7V7P/6M0/OXy99runnhK9gVtKyBlZ2Ix/GnlOwQdymZisQCo3l
+         qlju5S0DAHIlIHi1s4W7D/FLSH7FqU6gNOuV8ULAG5pKBLPFMQQwzO5pRHO4ek1N5YSo
+         8I0qhLg1iSkBkop8srqlkSZXS168xvpG8OvqeW/gcYKm6A6PUE5TkLERo5WZcFfuk8mG
+         DKMRicui9Adp2hvCwEyqx7OCrioq5b+hxWsPgtihfm/RQ0uuF2v2smVglceM8TJc18l4
+         LitLbJxYxy6edgKNp+AMCpiHMGAaYN8SvnWRu4iC2n2YnVeojwIpY2yIycmQb/WK8N52
+         hVlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=unF2unMsxCZVe/f5t/n0I/7DAWwIvZiTovJ0QrFX2u0=;
+        b=V6WZhB14hfy7ATqNfRV+XKGt9FoTcXADfym9lzWEpXMrCzC5W/ZJjh/iC1hlfluzfa
+         pIXfZ9k8UGwwDvytM/eLNkR9DT9Sgjo5Eev2UbTFCkol/XefMC7Dx5S6rCvnxtLYs8eW
+         eUmF5OwfVTDV8ECChyoNuJ88FlQPdb3GjtEYqhbtK3ALIy5IcP/drU7DZjljpbC7Kvsx
+         DMQ/+7ZsaldmGqH26V68ADQqlejjXdmS/+6kro6KZqLhHS+0nNpPpfhylRiic/LneEV4
+         UMaXdwm5jVINKEwjnxemXwL5hRWH7op5kUODgluOq42whwzHS76R6nq458vIW0RwSTUV
+         93HA==
+X-Gm-Message-State: AGi0PuaAfM2ekBeoUCCmMfe0jXCCw5kBBihpg0fZ2n5LA03Ycdp8JqpG
+        N7ccFw4VZGqB3480qMdiF0HBmOJNCTQUK103x1M=
+X-Google-Smtp-Source: APiQypLnNVv9tadHj0Db5yxz8d0JuHjUm7/7vi17QFIShJdI20fLBSZ8PmLKNoGbFLWH/bv5XzbBkShGnRoH08wPeaM=
+X-Received: by 2002:aca:5f8a:: with SMTP id t132mr3944910oib.132.1585766804723;
+ Wed, 01 Apr 2020 11:46:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-01_03:2020-03-31,2020-04-01 signatures=0
+Received: by 2002:ac9:5a4f:0:0:0:0:0 with HTTP; Wed, 1 Apr 2020 11:46:44 -0700 (PDT)
+Reply-To: prestigehonor079@gmail.com
+From:   FLORA GABRIEL <victoryoks1@gmail.com>
+Date:   Wed, 1 Apr 2020 11:46:44 -0700
+Message-ID: <CAMBYta5QR5scg3o6wopvmouHKiiCFZCrBnTC=FAeN3d=J2-Jqg@mail.gmail.com>
+Subject: GREETINGS
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 27 Mar 2020, 9:47am, mwilck@suse.com wrote:
+-- 
+Dear,
+Good day, how are you doing today? I got your contact from a
+directory and picked interest to communicate you by faith, though we
+have not met before, I believe we can achieve something together. My
+husband died few years ago after battling with brain cancer, before
+his death, he deposited ($10.5 Million) in one of the financial
+institution. He wanted to establish cocoa processing factory and also
+real estate business.
 
-> External Email
-> 
-> ----------------------------------------------------------------------
-> From: Martin Wilck <mwilck@suse.com>
-> 
-> This reverts commit c3b6a1d397420a0fdd97af2f06abfb78adc370df.
-> Aborting the sleep was risky, because after return from
-> qlt_free_session_done() the driver starts freeing resources,
-> which is dangerous while we know that there's pending IO.
-> 
-> The previous patch "scsi: qla2xxx: check UNLOADING before posting async
-> work" avoids sending this IO in the first place, and thus obsoletes
-> the dangerous timeout.
-> 
-> Signed-off-by: Martin Wilck <mwilck@suse.com>
-> ---
->  drivers/scsi/qla2xxx/qla_target.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/qla_target.c b/drivers/scsi/qla2xxx/qla_target.c
-> index 622e733..eec1338 100644
-> --- a/drivers/scsi/qla2xxx/qla_target.c
-> +++ b/drivers/scsi/qla2xxx/qla_target.c
-> @@ -1019,7 +1019,6 @@ void qlt_free_session_done(struct work_struct *work)
->  
->  	if (logout_started) {
->  		bool traced = false;
-> -		u16 cnt = 0;
->  
->  		while (!READ_ONCE(sess->logout_completed)) {
->  			if (!traced) {
-> @@ -1029,9 +1028,6 @@ void qlt_free_session_done(struct work_struct *work)
->  				traced = true;
->  			}
->  			msleep(100);
-> -			cnt++;
-> -			if (cnt > 200)
-> -				break;
+After the death of my husband, I have been receiving all manner of
+life threats from the family members, now the pressure is getting more
+severe I decided to leave this country. Please can you partner with me
+and receive the fund in your account while I come over there with my
+son for investment. If you agree, get back for more details and what
+will be your commission for the assistance. I wait for your reply,
+my number is: +22963056570
 
-By taking this code out, it would leave a stuck FC target delete thread 
-and thus preventing the module unload itself, in case of a bug in this 
-logic (which was seen in some instances).
-
-How about increasing the wait time to say 25 seconds (typical worst case 
-is 2 * RA_TOV = 20 seconds) and then alerting user with a "WARN", but 
-still break out?
-
-Regards,
--Arun
-
->  		}
->  
->  		ql_dbg(ql_dbg_disc, vha, 0xf087,
-> 
+Thanks,
+Flora Gabriel.
