@@ -2,61 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6326A19D0BC
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2020 09:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B5BE19D26A
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2020 10:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389552AbgDCHD0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 3 Apr 2020 03:03:26 -0400
-Received: from pmg.slemankab.go.id ([103.71.191.178]:51206 "EHLO
-        pmg.slemankab.go.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730550AbgDCHD0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Apr 2020 03:03:26 -0400
-Received: from pmg.slemankab.go.id (localhost.localdomain [127.0.0.1])
-        by pmg.slemankab.go.id (Proxmox) with ESMTP id 8AD51343B93;
-        Fri,  3 Apr 2020 13:29:32 +0700 (WIB)
-Received: from mailserver.slemankab.go.id (unknown [192.168.90.92])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by pmg.slemankab.go.id (Proxmox) with ESMTPS id 725F1343B91;
-        Fri,  3 Apr 2020 13:29:17 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mailserver.slemankab.go.id (Postfix) with ESMTP id 634AA3443F3;
-        Fri,  3 Apr 2020 13:29:12 +0700 (WIB)
-Received: from mailserver.slemankab.go.id ([127.0.0.1])
-        by localhost (mailserver.slemankab.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 0-GcojS8CbXG; Fri,  3 Apr 2020 13:29:12 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mailserver.slemankab.go.id (Postfix) with ESMTP id 22B483443EA;
-        Fri,  3 Apr 2020 13:29:12 +0700 (WIB)
-X-Virus-Scanned: amavisd-new at mailserver.slemankab.go.id
-Received: from mailserver.slemankab.go.id ([127.0.0.1])
-        by localhost (mailserver.slemankab.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id PJxD2vFyr9Sp; Fri,  3 Apr 2020 13:29:12 +0700 (WIB)
-Received: from [100.92.181.183] (unknown [223.180.202.82])
-        by mailserver.slemankab.go.id (Postfix) with ESMTPSA id 2C9AD344346;
-        Fri,  3 Apr 2020 13:29:04 +0700 (WIB)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S2389015AbgDCIkW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Apr 2020 04:40:22 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:18818 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727868AbgDCIkW (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Apr 2020 04:40:22 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0338ZpXn025091
+        for <linux-scsi@vger.kernel.org>; Fri, 3 Apr 2020 01:40:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0818;
+ bh=s/X4rulBGHrdwi/Vt5JbwaKWuBqVWQsEyx6H46zX4eA=;
+ b=SBE8VPIJaRJXmmC5Qz/LK+96IQ34px4kyZVIB84ztFCVL5hqt+hZoT08E5mLiI1jWNX4
+ Oc8PjVssmfHDwv/eMwMQd30i7xIAjq30cJRSXUgBLzr90171Pn7+06k75mPh/Er72G0D
+ DxirRdFfyRFdRbWeHyVQjd9DlrzLqcNT4FpXBfRfckHlYFHhe2TEuxl1ADCKsw9/j80l
+ 9l/aNdq1wHAG0nQJo3xOG6+Fqt3fLAfKD+1uOSiMYheF2J9vljGBUIGMAhNqVnQUJAhe
+ BjdPWkggve6De445zFH6UgItpM2RiOO4uZqyvv/M5zqeAK3GkWTlIfXrVZj5soR06RNu Ew== 
+Received: from sc-exch04.marvell.com ([199.233.58.184])
+        by mx0b-0016f401.pphosted.com with ESMTP id 3046h6656k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT)
+        for <linux-scsi@vger.kernel.org>; Fri, 03 Apr 2020 01:40:21 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by SC-EXCH04.marvell.com
+ (10.93.176.84) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Apr
+ 2020 01:40:19 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 3 Apr 2020 01:40:19 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id 217D23F7041;
+        Fri,  3 Apr 2020 01:40:19 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 0338eIdd030801;
+        Fri, 3 Apr 2020 01:40:18 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 0338eIew030800;
+        Fri, 3 Apr 2020 01:40:18 -0700
+From:   Nilesh Javali <njavali@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        <GR-QLogic-Storage-Upstream@marvell.com>
+Subject: [PATCH 0/2] Update qla2xxx driver bug fixes
+Date:   Fri, 3 Apr 2020 01:40:16 -0700
+Message-ID: <20200403084018.30766-1-njavali@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Att
-To:     Recipients <admin@astutelighting.co.uk>
-From:   admin@astutelighting.co.uk
-Date:   Fri, 03 Apr 2020 11:58:51 +0530
-Reply-To: emmaamelia964@gmail.com
-Message-Id: <20200403062904.2C9AD344346@mailserver.slemankab.go.id>
-X-SPAM-LEVEL: Spam detection results:  2
-        ALL_TRUSTED                -1 Passed through trusted hosts only via SMTP
-        AWL                    -0.278 Adjusted score from AWL reputation of From: address
-        BAYES_50                  0.8 Bayes spam probability is 40 to 60%
-        FREEMAIL_FORGED_REPLYTO  2.095 Freemail in Reply-To, but not From
-        FREEMAIL_REPLYTO_END_DIGIT   0.25 Reply-To freemail username ends in digit
-        KAM_COUK                 0.85 Scoring .co.uk emails higher due to poor registry security.
-        KAM_DMARC_STATUS         0.01 Test Rule for DKIM or SPF Failure with Strict Alignment
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-03_05:2020-04-02,2020-04-03 signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-I need your help?
+Hi Martin,
+
+Please apply the qla2xxx driver bug fixes to the scsi tree at your earliest
+convenience.
+
+Thanks,
+Nilesh
+
+Nilesh Javali (2):
+  qla2xxx: Fix regression warnings
+  MAINTAINERS: Update qla2xxx FC-SCSI driver maintainer
+
+ MAINTAINERS                     | 3 ++-
+ drivers/scsi/qla2xxx/qla_dbg.c  | 2 +-
+ drivers/scsi/qla2xxx/qla_init.c | 2 --
+ drivers/scsi/qla2xxx/qla_isr.c  | 1 -
+ drivers/scsi/qla2xxx/qla_mbx.c  | 2 --
+ 5 files changed, 3 insertions(+), 7 deletions(-)
+
+
+base-commit: 9b88984658fbe14dae7597070a45e3668d1b6ffb
+prerequisite-patch-id: badce7907d85dab5d9a908f18471eed24d41400c
+prerequisite-patch-id: 580e27c186ebb36974da4a6d2ed96c54757137db
+prerequisite-patch-id: 590954e09fa5fcf70cad3ad5842d3c25dab32761
+-- 
+2.19.0.rc0
 
