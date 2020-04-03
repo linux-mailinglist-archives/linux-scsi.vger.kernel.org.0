@@ -2,73 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA67519CE66
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2020 03:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6326A19D0BC
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2020 09:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390268AbgDCBzf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 2 Apr 2020 21:55:35 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:55226 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2389366AbgDCBze (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 2 Apr 2020 21:55:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585878933;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6UVH/bl3Y/P5P1Dx58QAUYpAkcmQtr6lMSzOobeDRtQ=;
-        b=BUIuowfYLv8EGZ5zL6K8ldiAbOjah/0MHnBAuci4kdMKHkKpGGXyDHO1ca1IEE2Y590tjF
-        FM8RtHqapDsnC8rDm+cfbMx+PWOMjdi4jzLRzvl00ZHTDJC7pwJvLpb6P1BvAkWTz87SY8
-        1JDOckPBINzLoTc6XE1DnXPIm6Y0pr0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-443-MV1UBRw7NqyIiZlPvzOJag-1; Thu, 02 Apr 2020 21:55:31 -0400
-X-MC-Unique: MV1UBRw7NqyIiZlPvzOJag-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        id S2389552AbgDCHD0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Fri, 3 Apr 2020 03:03:26 -0400
+Received: from pmg.slemankab.go.id ([103.71.191.178]:51206 "EHLO
+        pmg.slemankab.go.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730550AbgDCHD0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Apr 2020 03:03:26 -0400
+Received: from pmg.slemankab.go.id (localhost.localdomain [127.0.0.1])
+        by pmg.slemankab.go.id (Proxmox) with ESMTP id 8AD51343B93;
+        Fri,  3 Apr 2020 13:29:32 +0700 (WIB)
+Received: from mailserver.slemankab.go.id (unknown [192.168.90.92])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CE885107ACC4;
-        Fri,  3 Apr 2020 01:55:29 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-30.pek2.redhat.com [10.72.8.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E981F5C290;
-        Fri,  3 Apr 2020 01:55:21 +0000 (UTC)
-Date:   Fri, 3 Apr 2020 09:55:16 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com,
-        paolo.valente@linaro.org, sqazi@google.com,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        groeck@chromium.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] blk-mq: In blk_mq_dispatch_rq_list() "no budget"
- is a reason to kick
-Message-ID: <20200403015516.GC6987@ming.t460p>
-References: <20200402155130.8264-1-dianders@chromium.org>
- <20200402085050.v2.1.I1f95c459e51962b8d2c83e869913b6befda2255c@changeid>
+        by pmg.slemankab.go.id (Proxmox) with ESMTPS id 725F1343B91;
+        Fri,  3 Apr 2020 13:29:17 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mailserver.slemankab.go.id (Postfix) with ESMTP id 634AA3443F3;
+        Fri,  3 Apr 2020 13:29:12 +0700 (WIB)
+Received: from mailserver.slemankab.go.id ([127.0.0.1])
+        by localhost (mailserver.slemankab.go.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 0-GcojS8CbXG; Fri,  3 Apr 2020 13:29:12 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mailserver.slemankab.go.id (Postfix) with ESMTP id 22B483443EA;
+        Fri,  3 Apr 2020 13:29:12 +0700 (WIB)
+X-Virus-Scanned: amavisd-new at mailserver.slemankab.go.id
+Received: from mailserver.slemankab.go.id ([127.0.0.1])
+        by localhost (mailserver.slemankab.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id PJxD2vFyr9Sp; Fri,  3 Apr 2020 13:29:12 +0700 (WIB)
+Received: from [100.92.181.183] (unknown [223.180.202.82])
+        by mailserver.slemankab.go.id (Postfix) with ESMTPSA id 2C9AD344346;
+        Fri,  3 Apr 2020 13:29:04 +0700 (WIB)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200402085050.v2.1.I1f95c459e51962b8d2c83e869913b6befda2255c@changeid>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Att
+To:     Recipients <admin@astutelighting.co.uk>
+From:   admin@astutelighting.co.uk
+Date:   Fri, 03 Apr 2020 11:58:51 +0530
+Reply-To: emmaamelia964@gmail.com
+Message-Id: <20200403062904.2C9AD344346@mailserver.slemankab.go.id>
+X-SPAM-LEVEL: Spam detection results:  2
+        ALL_TRUSTED                -1 Passed through trusted hosts only via SMTP
+        AWL                    -0.278 Adjusted score from AWL reputation of From: address
+        BAYES_50                  0.8 Bayes spam probability is 40 to 60%
+        FREEMAIL_FORGED_REPLYTO  2.095 Freemail in Reply-To, but not From
+        FREEMAIL_REPLYTO_END_DIGIT   0.25 Reply-To freemail username ends in digit
+        KAM_COUK                 0.85 Scoring .co.uk emails higher due to poor registry security.
+        KAM_DMARC_STATUS         0.01 Test Rule for DKIM or SPF Failure with Strict Alignment
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, Apr 02, 2020 at 08:51:29AM -0700, Douglas Anderson wrote:
-> In blk_mq_dispatch_rq_list(), if blk_mq_sched_needs_restart() returns
-> true and the driver returns BLK_STS_RESOURCE then we'll kick the
-> queue.  However, there's another case where we might need to kick it.
-> If we were unable to get budget we can be in much the same state as
-> when the driver returns BLK_STS_RESOURCE, so we should treat it the
-> same.
-
-The situation is really similar, especially the restart handler may
-not see the request which may not be added to hctx->dispatch, so
-
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
-
-
-Thanks, 
-Ming
+I need your help?
 
