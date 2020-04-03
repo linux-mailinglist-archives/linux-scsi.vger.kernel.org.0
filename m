@@ -2,58 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B9519D5FD
-	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2020 13:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433E119D666
+	for <lists+linux-scsi@lfdr.de>; Fri,  3 Apr 2020 14:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390814AbgDCLon (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 3 Apr 2020 07:44:43 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:39189 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390784AbgDCLok (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Apr 2020 07:44:40 -0400
-Received: by mail-vs1-f66.google.com with SMTP id u9so4708952vsp.6
-        for <linux-scsi@vger.kernel.org>; Fri, 03 Apr 2020 04:44:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5YLgrmmw9m+sKzPxDNVWcpKGfVmpcHCuvOPpLM6AIJg=;
-        b=AV/8YJcQySuPBSeOKfT5lJbIvqAHcCe0GjWuNia6Ys2aM5IPjiy57MOcuCF4JbZt3O
-         3Xuy4wQSYOqTmxCBeckPEKlx3dIXo5lZj/IW8X87G1t3ouLTRX0oHqLI1/1H3jmLeWRq
-         g4e7OEhhddEuo2DoRCUHxc00fwqgFi6LWD+qp6oK8Kobbe7f6nBmtNhknqu05ritoZvL
-         TF/UfDu6+RI8HGqtYSq2jR/JkPeVisg3UO37Edw1ao8jG1R/Dl6i8emJPtisjSGLYctb
-         7ThGhwv76w1EL3CWh0hbb93/ZnsL+JagrM/QPeaENlcZWTL56ykcosivQaL0v6GDgqGs
-         9MHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5YLgrmmw9m+sKzPxDNVWcpKGfVmpcHCuvOPpLM6AIJg=;
-        b=FaCx3n2XmEXeIvuVtr3eE0ljE+Zrt0p1sGWJtJhKMdoZIxyiIh2dO40gmT/k2tl6th
-         No2It/ewhzQ06B98eJ/qSiid/6/22iYMScf+PR2etem0CRZ0wzkXylv2NLnkoGdGY8Y5
-         N89eSYSIRtjWXBCQhrk7DLtHe5BmFwtIiGQvcnaQiFEOHSXJ1WiYA7oVYfbzO4+ydvTO
-         T/W5Q8bgZqE8iyrYvnJ3Ik4J/ZN7XqkJiGj/nsnleIpEVadPu2kaZJ4JydKb8cEThAxd
-         jM073PqMuNqfCz6ukSBYZiAbZIZYmAeiLbXYRTnDc1c76e5/kDrJeRZqr74MWjJQ07ic
-         jvXg==
-X-Gm-Message-State: AGi0PuZsE2CnmYfAdsD71UfJZxCIYzhCFGWin8jN01guIr24i/Bv4eX7
-        raoq9UJZ7lqg7pKQPW/s6QsSfEEMc9vXisL1efU=
-X-Google-Smtp-Source: APiQypJY2WLG2wbYiB15JPz2dA9DzHdX4rXUp/owfsP9J1zGhAlKlcAGgZRC6ZBx1L6bz2ogDKqTTpKdSVME5Iuojxw=
-X-Received: by 2002:a67:2d55:: with SMTP id t82mr6147575vst.215.1585914279656;
- Fri, 03 Apr 2020 04:44:39 -0700 (PDT)
+        id S2390880AbgDCMKB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 3 Apr 2020 08:10:01 -0400
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:13194 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728149AbgDCMKB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 3 Apr 2020 08:10:01 -0400
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 033C1IgD019931;
+        Fri, 3 Apr 2020 05:10:00 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=pfpt0818;
+ bh=fRaZruGGDWLtejOLJXgU2iAFBH6q0SkL+iIka5gHwjE=;
+ b=iUPrG7K62Z7UM7wMunKC/jaJTLB1Op7g985Uw9qN+g75hcZvi7b2l0LR/hNj6C5s9zuc
+ ldarRBP/59ISB5uumROfEdLDtF8gYcRTpebfLfawwoz+UN7HzsDPRjg0fZ74UiaplG2h
+ FtaaBTb5CvN/6jBwLwsS6XjMa12uO7onCKeh74xIeaPJyYFFD83qmxgsgyKXGq/7y6Cv
+ G1rb5pQXaT5e10gGgcAS/v+/dja4emkiBQ6O1OBYSJy9O0OYq+FQmKBV67nWGGmcWpdY
+ HWjYDcQj/gg6ZQ4aeTo1zstnQs3L9RzgNwyTj6bMzQAyT3UhfRPyZMqU+DaaUyxkxj2R vA== 
+Received: from sc-exch01.marvell.com ([199.233.58.181])
+        by mx0b-0016f401.pphosted.com with ESMTP id 3046h66swt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 03 Apr 2020 05:09:59 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by SC-EXCH01.marvell.com
+ (10.93.176.81) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 3 Apr
+ 2020 05:09:57 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 3 Apr 2020 05:09:58 -0700
+Received: from dut1171.mv.qlogic.com (unknown [10.112.88.18])
+        by maili.marvell.com (Postfix) with ESMTP id A67A43F703F;
+        Fri,  3 Apr 2020 05:09:57 -0700 (PDT)
+Received: from dut1171.mv.qlogic.com (localhost [127.0.0.1])
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7) with ESMTP id 033C9vWv002466;
+        Fri, 3 Apr 2020 05:09:57 -0700
+Received: (from root@localhost)
+        by dut1171.mv.qlogic.com (8.14.7/8.14.7/Submit) id 033C9vnO002465;
+        Fri, 3 Apr 2020 05:09:57 -0700
+From:   Saurav Kashyap <skashyap@marvell.com>
+To:     <martin.petersen@oracle.com>
+CC:     <GR-QLogic-Storage-Upstream@marvell.com>,
+        <linux-scsi@vger.kernel.org>, <jhasan@marvell.com>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH v3 0/7] qed/qedf: Firmware recovery, bw update and misc fixes.
+Date:   Fri, 3 Apr 2020 05:09:50 -0700
+Message-ID: <20200403120957.2431-1-skashyap@marvell.com>
+X-Mailer: git-send-email 2.12.0
 MIME-Version: 1.0
-Received: by 2002:a67:e11c:0:0:0:0:0 with HTTP; Fri, 3 Apr 2020 04:44:39 -0700 (PDT)
-Reply-To: sodikamond@yahoo.com
-From:   Sodik Amond <paulmradams777@gmail.com>
-Date:   Thu, 2 Apr 2020 23:44:39 -1200
-Message-ID: <CAMLU2_ezX+Ztv07wqk6q7b24Xs3aP+65DWw2FHO4_YwCn8mp1w@mail.gmail.com>
-Subject: Gooday To You
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-03_07:2020-04-02,2020-04-03 signatures=0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Please i need your kind Assistance. I will be very glad if you can
-assist me to receive this sum of ( $22. Million US dollars.) into your
-bank account for the benefit of our both families, reply me if you are
-ready to receive this fund.
+Hi Martin,
+
+Kindly apply this series to scsi tree at your earliest convenience.
+
+v2->v3
+ - Removed version update patch.
+
+v1->v2
+ - Function qedf_schedule_recovery_handler marked static
+ - Function qedf_recovery_handler marked static
+
+Thanks,
+~Saurav 
+
+Chad Dupuis (2):
+  qedf: Add schedule recovery handler.
+  qedf: Fix crash when MFW calls for protocol stats while function is
+    still probing.
+
+Javed Hasan (1):
+  qedf: Fix for the deviations from the SAM-4 spec.
+
+Saurav Kashyap (3):
+  qedf: Keep track of num of pending flogi.
+  qedf: Implement callback for bw_update.
+  qedf: Get dev info after updating the params.
+
+Sudarsana Reddy Kalluru (1):
+  qed: Send BW update notifications to the protocol drivers.
+
+ drivers/net/ethernet/qlogic/qed/qed.h      |   1 +
+ drivers/net/ethernet/qlogic/qed/qed_main.c |   9 ++
+ drivers/scsi/qedf/qedf.h                   |   6 +-
+ drivers/scsi/qedf/qedf_io.c                |  47 +++++++---
+ drivers/scsi/qedf/qedf_main.c              | 135 ++++++++++++++++++++++++++++-
+ include/linux/qed/qed_if.h                 |   1 +
+ 6 files changed, 184 insertions(+), 15 deletions(-)
+
+-- 
+1.8.3.1
+
