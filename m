@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4545A1A0A21
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Apr 2020 11:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3444A1A0A23
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Apr 2020 11:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbgDGJaO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Apr 2020 05:30:14 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12620 "EHLO huawei.com"
+        id S1726767AbgDGJan (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Apr 2020 05:30:43 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:35592 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726637AbgDGJaN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 7 Apr 2020 05:30:13 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 5FD67679D7ADC9F97289;
+        id S1726716AbgDGJan (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 7 Apr 2020 05:30:43 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 88D00879BDBBB93E2E5B;
         Tue,  7 Apr 2020 17:30:03 +0800 (CST)
 Received: from huawei.com (10.175.124.28) by DGGEMS404-HUB.china.huawei.com
  (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Tue, 7 Apr 2020
- 17:29:55 +0800
+ 17:29:56 +0800
 From:   Jason Yan <yanaijie@huawei.com>
 To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
         <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <megaraidlinux.pdl@broadcom.com>,
         <linux-scsi@vger.kernel.org>
 CC:     Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH 3/4] scsi: megaraid: make some symbols static in megaraid_sas_fusion.c
-Date:   Tue, 7 Apr 2020 17:28:26 +0800
-Message-ID: <20200407092827.18074-4-yanaijie@huawei.com>
+Subject: [PATCH 4/4] scsi: megaraid: make two symbols static in megaraid_sas_base.c
+Date:   Tue, 7 Apr 2020 17:28:27 +0800
+Message-ID: <20200407092827.18074-5-yanaijie@huawei.com>
 X-Mailer: git-send-email 2.17.2
 In-Reply-To: <20200407092827.18074-1-yanaijie@huawei.com>
 References: <20200407092827.18074-1-yanaijie@huawei.com>
@@ -40,50 +40,39 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fix the following sparse warning:
 
-drivers/scsi/megaraid/megaraid_sas_fusion.c:180:1: warning: symbol
-'megasas_enable_intr_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:202:1: warning: symbol
-'megasas_disable_intr_fusion' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_sas_fusion.c:4233:6: warning: symbol
-'megasas_refire_mgmt_cmd' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_base.c:84:5: warning: symbol
+'rdpq_enable' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_base.c:92:14: warning: symbol
+'scmd_timeout' was not declared. Should it be static?
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: Jason Yan <yanaijie@huawei.com>
 ---
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas_base.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index b2ad96564484..bec3d4cca74f 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -176,7 +176,7 @@ static inline bool megasas_check_same_4gb_region
-  * megasas_enable_intr_fusion -	Enables interrupts
-  * @regs:			MFI register set
-  */
--void
-+static void
- megasas_enable_intr_fusion(struct megasas_instance *instance)
- {
- 	struct megasas_register_set __iomem *regs;
-@@ -198,7 +198,7 @@ megasas_enable_intr_fusion(struct megasas_instance *instance)
-  * megasas_disable_intr_fusion - Disables interrupt
-  * @regs:			 MFI register set
-  */
--void
-+static void
- megasas_disable_intr_fusion(struct megasas_instance *instance)
- {
- 	u32 mask = 0xFFFFFFFF;
-@@ -4230,7 +4230,7 @@ void  megasas_reset_reply_desc(struct megasas_instance *instance)
-  * megasas_refire_mgmt_cmd :	Re-fire management commands
-  * @instance:				Controller's soft instance
- */
--void megasas_refire_mgmt_cmd(struct megasas_instance *instance,
-+static void megasas_refire_mgmt_cmd(struct megasas_instance *instance,
- 			     bool return_ioctl)
- {
- 	int j;
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index babe85d7b537..fb9c3ceed508 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -81,7 +81,7 @@ int smp_affinity_enable = 1;
+ module_param(smp_affinity_enable, int, 0444);
+ MODULE_PARM_DESC(smp_affinity_enable, "SMP affinity feature enable/disable Default: enable(1)");
+ 
+-int rdpq_enable = 1;
++static int rdpq_enable = 1;
+ module_param(rdpq_enable, int, 0444);
+ MODULE_PARM_DESC(rdpq_enable, "Allocate reply queue in chunks for large queue depth enable/disable Default: enable(1)");
+ 
+@@ -89,7 +89,7 @@ unsigned int dual_qdepth_disable;
+ module_param(dual_qdepth_disable, int, 0444);
+ MODULE_PARM_DESC(dual_qdepth_disable, "Disable dual queue depth feature. Default: 0");
+ 
+-unsigned int scmd_timeout = MEGASAS_DEFAULT_CMD_TIMEOUT;
++static unsigned int scmd_timeout = MEGASAS_DEFAULT_CMD_TIMEOUT;
+ module_param(scmd_timeout, int, 0444);
+ MODULE_PARM_DESC(scmd_timeout, "scsi command timeout (10-90s), default 90s. See megasas_reset_timer.");
+ 
 -- 
 2.17.2
 
