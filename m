@@ -2,64 +2,97 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DC81A04AC
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Apr 2020 03:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5591E1A04BE
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Apr 2020 04:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgDGBzK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 6 Apr 2020 21:55:10 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:33550 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726310AbgDGBzK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Apr 2020 21:55:10 -0400
-Received: by mail-ed1-f67.google.com with SMTP id z65so2056238ede.0
-        for <linux-scsi@vger.kernel.org>; Mon, 06 Apr 2020 18:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KRU1fUgJ9mq/2EmmX91pd4664Jbd7pOskrgtWur3uVw=;
-        b=bqiDlA3C9o4YLVhBSNxIsAgtPP6zwn2iHA/LGr5/A4wVwSOFzqqwoeMiVVrb9vitK1
-         o8zzvmgcqstnFZw6ThWOIBaQUHve4CKT21SaTzBZd50FTqHmSJM79a1ReaHPe8eHRDNR
-         /rClhsaLuUVxqg64l1glyh3RvpoFYLfQVS3VaNTj3jTe1SVZcX2+J3vK8S6pLf48cKEV
-         1ryouG/L09K0hG1rWDiss6RJAaaPsynltLuW2mkurIFA8dkh1OlmlLc8bjAabSIHCYvb
-         ngsf5ZoPVBQiNRjNZOOcE7uSlJWmvEms9KZYEmr1rxRHL5GFUSXAL/SteL1qUi9XGiKA
-         8eHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KRU1fUgJ9mq/2EmmX91pd4664Jbd7pOskrgtWur3uVw=;
-        b=ifx2BwhVglF6wXB+6CzrTTsREGfiQxFF3Ez/usGJIfM2Dp33zEa89oXDt76QI8NKLh
-         yRLb80ppmWMiieDWuz1WChJYxDoWF0+m3W+CveTwSKJPyOpUW3cylXMYbpwSdngpU2UV
-         cEnYt0L+1dC6CzBMGlO5dmirOoXyYPq7vnwWQ8e+2WR6k5+W+R+SmwNETzE0cpqqiTbQ
-         zjpiJfdOGO+92ukb4c60SH7WKZ+z7kCGQfJL2HDemXkZI8/7XQGZPjG+Q86r0ept2hLR
-         y165OtnOUKl7td+N5hfFCnK4IleFERDz5Qq/tIv3j4ayRLhKrpa3aOHLnBVzpfOZRmnC
-         UYMw==
-X-Gm-Message-State: AGi0PuYYeFrN1zS3fBwyGDb1grWpsATEWsJrMiC9yYTXz3T/BjEZJw63
-        K6kWA2/x1exR0hZVPrufvGLex1BNulrwggxO+zY=
-X-Google-Smtp-Source: APiQypKdqA2fyUEeoN7aOI2mbnY/T0lCZvgplImhxrqmDzfQTrr/KQ4eHosXUu4dPrQESoEWVU7U8nCIlmi2G8JC78M=
-X-Received: by 2002:a05:6402:b7b:: with SMTP id cb27mr52684edb.343.1586224508665;
- Mon, 06 Apr 2020 18:55:08 -0700 (PDT)
+        id S1726393AbgDGCO0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 6 Apr 2020 22:14:26 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:30754 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726287AbgDGCO0 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 6 Apr 2020 22:14:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586225665;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=44SXGZt0xPbhcRSOYKE7iKipjDa+yIoa6ofEFx4YQKU=;
+        b=fi9LOrKgg3xcteECVExZJqnk9L1JY2P2hZQ09+shqQoJhSeKHsRtYUeh6dMWdDxcKlcOml
+        TBlqup3JAlePQlB5tSQVnda4dMoZFtYcBvU6NigPqYhuIw9Q1i4MBgQc2kITBFj63OsvHa
+        WtumAo+maw7hXm5hxN0RNA/gyXlO+sY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-24-5WYMe6t2MHiYUIN2w1VJzA-1; Mon, 06 Apr 2020 22:14:23 -0400
+X-MC-Unique: 5WYMe6t2MHiYUIN2w1VJzA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 958A5107ACCC;
+        Tue,  7 Apr 2020 02:14:20 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-8-35.pek2.redhat.com [10.72.8.35])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 191301001B28;
+        Tue,  7 Apr 2020 02:14:08 +0000 (UTC)
+Date:   Tue, 7 Apr 2020 10:14:03 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Paolo Valente <paolo.valente@linaro.org>,
+        Salman Qazi <sqazi@google.com>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-scsi@vger.kernel.org, Guenter Roeck <groeck@chromium.org>,
+        Ajay Joshi <ajay.joshi@wdc.com>, Arnd Bergmann <arnd@arndb.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Hou Tao <houtao1@huawei.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] blk-mq: Rerun dispatching in the case of budget
+ contention
+Message-ID: <20200407021403.GB5779@localhost.localdomain>
+References: <20200402155130.8264-1-dianders@chromium.org>
+ <20200402085050.v2.2.I28278ef8ea27afc0ec7e597752a6d4e58c16176f@changeid>
+ <20200403013356.GA6987@ming.t460p>
+ <CAD=FV=Ub6zhVvTj79SWPUv19RDvD0gt5EjJV-FZSbYxUy_T1OA@mail.gmail.com>
+ <CAD=FV=Vsk0SjkA+DbUwJxvO6NFcr0CO9=H1FD7okJ2PxMt5pYA@mail.gmail.com>
+ <20200405091446.GA3421@localhost.localdomain>
+ <CAD=FV=WQZA7PGEbv_fKikGOEijP+qEEZgYXWifgjDzV6BVOUMQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:aa7:d887:0:0:0:0:0 with HTTP; Mon, 6 Apr 2020 18:55:07 -0700 (PDT)
-Reply-To: flavbenz@gmail.com
-From:   Flavor Benz <morgansalami@gmail.com>
-Date:   Tue, 7 Apr 2020 02:55:07 +0100
-Message-ID: <CAPncyG5zEru5BsVzWLGEy77KcS2Gpxg_fj9g-=CVvpo47kO7hg@mail.gmail.com>
-Subject: Good day
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=WQZA7PGEbv_fKikGOEijP+qEEZgYXWifgjDzV6BVOUMQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello my dear Friend,
+On Sun, Apr 05, 2020 at 09:26:39AM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Sun, Apr 5, 2020 at 2:15 AM Ming Lei <ming.lei@redhat.com> wrote:
+> >
+> > @@ -103,6 +104,9 @@ static void blk_mq_do_dispatch_sched(struct blk_mq_hw_ctx *hctx)
+> >                 rq = e->type->ops.dispatch_request(hctx);
+> >                 if (!rq) {
+> >                         blk_mq_put_dispatch_budget(hctx);
+> > +
+> > +                       if (e->type->ops.has_work && e->type->ops.has_work(hctx))
+> > +                               blk_mq_delay_run_hw_queue(hctx, BLK_MQ_BUDGET_DELAY);
+> 
+> To really close the race, don't we need to run all the queues
+> associated with the hctx?  I haven't traced it through, but I've been
+> assuming that the multiple "hctx"s associated with the same queue will
+> have the same budget associated with them and thus they can block each
+> other out.
 
-I sent you an email a month ago, but I'm not sure if you get the
-message, and this is the reason why I repeat it again.
+Yeah, we should run all hctxs which share the same budget space.
 
-I urgently looking forward to hear from you as soon as you read my message.
+Also, in theory, we don't have to add the delay, however BFQ may plug the
+dispatch for 9 ms, so looks delay run queue is required.
 
-Thanks.
+thanks,
+Ming
 
-Mr.Flavour Benz.(Esq)
