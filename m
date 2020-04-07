@@ -2,30 +2,30 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 703711A0A20
-	for <lists+linux-scsi@lfdr.de>; Tue,  7 Apr 2020 11:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A6811A0A22
+	for <lists+linux-scsi@lfdr.de>; Tue,  7 Apr 2020 11:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728091AbgDGJaJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 7 Apr 2020 05:30:09 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:12619 "EHLO huawei.com"
+        id S1728097AbgDGJaP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 7 Apr 2020 05:30:15 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:35594 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726637AbgDGJaJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 7 Apr 2020 05:30:09 -0400
-Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 597CA9DB787C0BBBCC12;
+        id S1728092AbgDGJaO (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 7 Apr 2020 05:30:14 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 8FD3BE39F893B674DDD2;
         Tue,  7 Apr 2020 17:30:03 +0800 (CST)
 Received: from huawei.com (10.175.124.28) by DGGEMS404-HUB.china.huawei.com
  (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Tue, 7 Apr 2020
- 17:29:54 +0800
+ 17:29:55 +0800
 From:   Jason Yan <yanaijie@huawei.com>
 To:     <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
         <shivasharan.srikanteshwara@broadcom.com>, <jejb@linux.ibm.com>,
         <martin.petersen@oracle.com>, <megaraidlinux.pdl@broadcom.com>,
         <linux-scsi@vger.kernel.org>
 CC:     Jason Yan <yanaijie@huawei.com>
-Subject: [PATCH 1/4] scsi: megaraid: make two symbols static in megaraid_mbox.c
-Date:   Tue, 7 Apr 2020 17:28:24 +0800
-Message-ID: <20200407092827.18074-2-yanaijie@huawei.com>
+Subject: [PATCH 2/4] scsi: megaraid: make some symbols static in megaraid_sas_fp.c
+Date:   Tue, 7 Apr 2020 17:28:25 +0800
+Message-ID: <20200407092827.18074-3-yanaijie@huawei.com>
 X-Mailer: git-send-email 2.17.2
 In-Reply-To: <20200407092827.18074-1-yanaijie@huawei.com>
 References: <20200407092827.18074-1-yanaijie@huawei.com>
@@ -40,41 +40,83 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Fix the following sparse warning:
 
-drivers/scsi/megaraid/megaraid_mbox.c:305:5: warning: symbol
-'dev_attr_megaraid_mbox_app_hndl' was not declared. Should it be static?
-drivers/scsi/megaraid/megaraid_mbox.c:315:5: warning: symbol
-'dev_attr_megaraid_mbox_ld' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fp.c:88:5: warning: symbol
+'mega_div64_32' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fp.c:370:5: warning: symbol
+'MR_GetSpanBlock' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fp.c:420:5: warning: symbol
+'mr_spanset_get_span_block' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fp.c:645:4: warning: symbol 'get_arm'
+was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fp.c:788:4: warning: symbol
+'MR_GetPhyParams' was not declared. Should it be static?
+drivers/scsi/megaraid/megaraid_sas_fp.c:1345:4: warning: symbol
+'megasas_get_best_arm_pd' was not declared. Should it be static?
 
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: Jason Yan <yanaijie@huawei.com>
 ---
- drivers/scsi/megaraid/megaraid_mbox.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas_fp.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_mbox.c b/drivers/scsi/megaraid/megaraid_mbox.c
-index 8443f2f35be2..8f918df631bf 100644
---- a/drivers/scsi/megaraid/megaraid_mbox.c
-+++ b/drivers/scsi/megaraid/megaraid_mbox.c
-@@ -302,8 +302,8 @@ static struct pci_driver megaraid_pci_driver = {
- // definitions for the device attributes for exporting logical drive number
- // for a scsi address (Host, Channel, Id, Lun)
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fp.c b/drivers/scsi/megaraid/megaraid_sas_fp.c
+index 89c3685f5163..3b3d04d7671f 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fp.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fp.c
+@@ -85,7 +85,7 @@ u32 mega_mod64(u64 dividend, u32 divisor)
+  *
+  * @return quotient
+  **/
+-u64 mega_div64_32(uint64_t dividend, uint32_t divisor)
++static u64 mega_div64_32(uint64_t dividend, uint32_t divisor)
+ {
+ 	u32 remainder;
+ 	u64 d;
+@@ -367,7 +367,7 @@ u8 MR_ValidateMapInfo(struct megasas_instance *instance, u64 map_id)
+ 	return 1;
+ }
  
--DEVICE_ATTR(megaraid_mbox_app_hndl, S_IRUSR, megaraid_sysfs_show_app_hndl,
--		NULL);
-+static DEVICE_ATTR(megaraid_mbox_app_hndl, S_IRUSR, megaraid_sysfs_show_app_hndl,
-+		   NULL);
+-u32 MR_GetSpanBlock(u32 ld, u64 row, u64 *span_blk,
++static u32 MR_GetSpanBlock(u32 ld, u64 row, u64 *span_blk,
+ 		    struct MR_DRV_RAID_MAP_ALL *map)
+ {
+ 	struct MR_SPAN_BLOCK_INFO *pSpanBlock = MR_LdSpanInfoGet(ld, map);
+@@ -417,7 +417,7 @@ u32 MR_GetSpanBlock(u32 ld, u64 row, u64 *span_blk,
+ *    div_error	   - Devide error code.
+ */
  
- // Host template initializer for megaraid mbox sysfs device attributes
- static struct device_attribute *megaraid_shost_attrs[] = {
-@@ -312,7 +312,7 @@ static struct device_attribute *megaraid_shost_attrs[] = {
- };
+-u32 mr_spanset_get_span_block(struct megasas_instance *instance,
++static u32 mr_spanset_get_span_block(struct megasas_instance *instance,
+ 		u32 ld, u64 row, u64 *span_blk, struct MR_DRV_RAID_MAP_ALL *map)
+ {
+ 	struct fusion_context *fusion = instance->ctrl_context;
+@@ -642,7 +642,7 @@ static u32 get_arm_from_strip(struct megasas_instance *instance,
+ }
  
+ /* This Function will return Phys arm */
+-u8 get_arm(struct megasas_instance *instance, u32 ld, u8 span, u64 stripe,
++static u8 get_arm(struct megasas_instance *instance, u32 ld, u8 span, u64 stripe,
+ 		struct MR_DRV_RAID_MAP_ALL *map)
+ {
+ 	struct MR_LD_RAID  *raid = MR_LdRaidGet(ld, map);
+@@ -785,7 +785,7 @@ static u8 mr_spanset_get_phy_params(struct megasas_instance *instance, u32 ld,
+ *    span          - Span number
+ *    block         - Absolute Block number in the physical disk
+ */
+-u8 MR_GetPhyParams(struct megasas_instance *instance, u32 ld, u64 stripRow,
++static u8 MR_GetPhyParams(struct megasas_instance *instance, u32 ld, u64 stripRow,
+ 		u16 stripRef, struct IO_REQUEST_INFO *io_info,
+ 		struct RAID_CONTEXT *pRAID_Context,
+ 		struct MR_DRV_RAID_MAP_ALL *map)
+@@ -1342,7 +1342,7 @@ void mr_update_load_balance_params(struct MR_DRV_RAID_MAP_ALL *drv_map,
+ 	}
+ }
  
--DEVICE_ATTR(megaraid_mbox_ld, S_IRUSR, megaraid_sysfs_show_ldnum, NULL);
-+static DEVICE_ATTR(megaraid_mbox_ld, S_IRUSR, megaraid_sysfs_show_ldnum, NULL);
- 
- // Host template initializer for megaraid mbox sysfs device attributes
- static struct device_attribute *megaraid_sdev_attrs[] = {
+-u8 megasas_get_best_arm_pd(struct megasas_instance *instance,
++static u8 megasas_get_best_arm_pd(struct megasas_instance *instance,
+ 			   struct LD_LOAD_BALANCE_INFO *lbInfo,
+ 			   struct IO_REQUEST_INFO *io_info,
+ 			   struct MR_DRV_RAID_MAP_ALL *drv_map)
 -- 
 2.17.2
 
