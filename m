@@ -2,97 +2,194 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1701C1A22E5
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2020 15:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AA91A2360
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2020 15:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729132AbgDHN02 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Apr 2020 09:26:28 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.116]:34813 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727928AbgDHN00 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Apr 2020 09:26:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1586352382; i=@ts.fujitsu.com;
-        bh=hj3KyWtrKww1tJ63UWW4tST618c2ILSBLf2oQGL2vxY=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        b=cHq0hHnChdc7MauLVhuGn6Cs7oJEvWrlNBVE668DJLhXU9/m5sX1IO9cT3MySusP3
-         VkffPBrUwwGCCQWx+8qiJJQX1upaExr+YgcjVnkqyFfZHHjD3CIEaN5DnRowtnrtpL
-         M6OgXcZqTLpzVzWpuxiLN9mXD85hB0XO0aJKbIvOw8BpDPGKEissDay0B3fsFj8duv
-         NDwKofBh/nxIe/fRmCKrDVI1OcWgk0/2nI5f+hKYs6ol9ST+D1UO03XUnkrIcrPwch
-         0hH9IDw3TnjpkUUZuajIKQlN3Zvc2LtVWqpkJw64lGf+FLBiudMv10P7nFMzDr3dQL
-         dBO1MiukV8XHw==
-Received: from [100.113.5.217] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-5.bemta.az-b.eu-central-1.aws.symcld.net id 15/ED-46447-EF0DD8E5; Wed, 08 Apr 2020 13:26:22 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPLMWRWlGSWpSXmKPExsViZ8MRovvvQm+
-  cwYcDghbd13ewWSw//o/JYv2RDYwWrUvfMjmweHx8eovF4/2+q2wenzfJBTBHsWbmJeVXJLBm
-  vP90na3gAXtFS9tGtgbGw2xdjFwcQgKTGCUOLJrIDuFMZ5R4OO84SxcjJwebgIHEikn3wWwRA
-  RuJvsNLmUBsZoF0iY3r25hBbGEBB4nre6cDTeLgYBFQlbg9PRIkzCtgJ7H86kOwEgkBeYmOA5
-  PBxnAK2Eucv/KFDcQWAqpZufwG2wRG7gWMDKsYLZKKMtMzSnITM3N0DQ0MdA0NjXVNdE0t9RK
-  rdJP0Ukt1k1PzSooSgZJ6ieXFesWVuck5KXp5qSWbGIHhklLIYr2D8fLa93qHGCU5mJREef+e
-  7I0T4kvKT6nMSCzOiC8qzUktPsQow8GhJME7ExiAQoJFqempFWmZOcDQhUlLcPAoifCKg7TyF
-  hck5hZnpkOkTjEqSonzrgHpEwBJZJTmwbXB4uUSo6yUMC8jAwODEE9BalFuZgmq/CtGcQ5GJW
-  HeE2eBpvBk5pXATX8FtJgJaPG1pG6QxSWJCCmpBibbWLPZh5/uce6tmuBzzIenMzxJwGRRzME
-  PTqv2S90LXW7k+m31sxNN6ac0bs7f4rh230PRif66Pm7975WN3894OCFj8r99V+TMtxXUH55a
-  PL/U5pkGR25/DfOCwxfz1rXOqMr20nkitdFg4oJn37RvOq29Uphgmqg5c1PXFmUeqUB5ybfvv
-  GR6r6reSTnxdtLrWxPS/wgkGD+sqpsgv2yBl5vCGj69mu4L4hYV1t8y2HKyNd+f6Iv6v8jIz2
-  CO2aO/NzJChA5/qPmwMH7lE7+URK32D8XcJxQavLZHaC/bWz3/enlU9AvpRScNC6RvvF9W+3Z
-  FcuaaFaJf6ho5BWzfduwydq14mb7uvErGixIlluKMREMt5qLiRABLy3qDEgMAAA==
-X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-33.tower-238.messagelabs.com!1586352381!2417026!1
-X-Originating-IP: [62.60.8.84]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.50.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 8387 invoked from network); 8 Apr 2020 13:26:22 -0000
-Received: from unknown (HELO mailhost3.uk.fujitsu.com) (62.60.8.84)
-  by server-33.tower-238.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 8 Apr 2020 13:26:22 -0000
-Received: from x-serv01 ([172.17.38.52])
-        by mailhost3.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 038DQFvf025515;
-        Wed, 8 Apr 2020 14:26:15 +0100
-Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id 511ED206B2;
-        Wed,  8 Apr 2020 15:26:14 +0200 (CEST)
-From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
-To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Cc:     mchristi@redhat.com, martin.petersen@oracle.com,
-        Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Subject: [PATCH 2/2] target: fix PR IN / READ FULL STATUS for FC
-Date:   Wed,  8 Apr 2020 15:26:10 +0200
-Message-Id: <20200408132610.14623-3-bstroesser@ts.fujitsu.com>
-X-Mailer: git-send-email 2.12.3
-In-Reply-To: <20200408132610.14623-1-bstroesser@ts.fujitsu.com>
-References: <20200408132610.14623-1-bstroesser@ts.fujitsu.com>
+        id S1727706AbgDHNrh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Apr 2020 09:47:37 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:28358 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729266AbgDHNrg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Apr 2020 09:47:36 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1586353656; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=DslXPf5pjYfWLJo/qreZEBdWGoHpjeFCF0E2+e8EWKY=; b=nYbm4n2kUxbELWCbJt3TZalnp5G8lgDfynzIQ04ghzCz3wyKANiodndZ8kP8FeH8C7gixoar
+ ULprwCHg5eRpwT17qaia/EA/5/KV1t71+7MYI45EQycm9FSlI8gYxBSy75FIAW3CS/cCrwun
+ 8+LA2B8b/1OPu37HI8WTosRs8Gg=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e8dd5f8.7f9ddcd40618-smtp-out-n01;
+ Wed, 08 Apr 2020 13:47:36 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id B1CA8C58A2E; Wed,  8 Apr 2020 13:47:34 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from blr-ubuntu-173.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: rnayak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 24CAAC4478C;
+        Wed,  8 Apr 2020 13:47:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 24CAAC4478C
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=rnayak@codeaurora.org
+From:   Rajendra Nayak <rnayak@codeaurora.org>
+To:     viresh.kumar@linaro.org, sboyd@kernel.org,
+        bjorn.andersson@linaro.org, agross@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        Subhash Jadavani <subhashj@codeaurora.org>,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH 06/21] scsi: ufs: Add support to manage multiple power domains in ufshcd-pltfrm
+Date:   Wed,  8 Apr 2020 19:16:32 +0530
+Message-Id: <1586353607-32222-7-git-send-email-rnayak@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1586353607-32222-1-git-send-email-rnayak@codeaurora.org>
+References: <1586353607-32222-1-git-send-email-rnayak@codeaurora.org>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Creation of the response to READ FULL STATUS fails for FC
-based reservations. Reason is the too high loop limit (< 24)
-in fc_get_pr_transport_id(). The string representation of FC
-WWPN is 23 chars long only ("11:22:33:44:55:66:77:88"). So
-when i is 23, the loop body is executed a last time for the
-ending '\0' of the string and thus hex2bin() reports an error.
+Some UFS devices need to manage multiple powerdomains. Add support for
+it as part of the ufshcd-pltfrm driver.
 
-Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Can Guo <cang@codeaurora.org>
+Cc: Asutosh Das <asutoshd@codeaurora.org>
+Cc: Subhash Jadavani <subhashj@codeaurora.org>
+Cc: linux-scsi@vger.kernel.org
 ---
- drivers/target/target_core_fabric_lib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/ufs/ufshcd-pltfrm.c | 58 ++++++++++++++++++++++++++++++++++++++--
+ drivers/scsi/ufs/ufshcd.h        |  3 +++
+ 2 files changed, 59 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/target/target_core_fabric_lib.c b/drivers/target/target_core_fabric_lib.c
-index f5f673e128ef..1e031d81e59e 100644
---- a/drivers/target/target_core_fabric_lib.c
-+++ b/drivers/target/target_core_fabric_lib.c
-@@ -63,7 +63,7 @@ static int fc_get_pr_transport_id(
- 	 * encoded TransportID.
- 	 */
- 	ptr = &se_nacl->initiatorname[0];
--	for (i = 0; i < 24; ) {
-+	for (i = 0; i < 23; ) {
- 		if (!strncmp(&ptr[i], ":", 1)) {
- 			i++;
- 			continue;
+diff --git a/drivers/scsi/ufs/ufshcd-pltfrm.c b/drivers/scsi/ufs/ufshcd-pltfrm.c
+index 76f9be7..d40b4a7 100644
+--- a/drivers/scsi/ufs/ufshcd-pltfrm.c
++++ b/drivers/scsi/ufs/ufshcd-pltfrm.c
+@@ -34,8 +34,10 @@
+  */
+ 
+ #include <linux/platform_device.h>
++#include <linux/pm_domain.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/of.h>
++#include <linux/pm_opp.h>
+ 
+ #include "ufshcd.h"
+ #include "ufshcd-pltfrm.h"
+@@ -282,6 +284,44 @@ static void ufshcd_init_lanes_per_dir(struct ufs_hba *hba)
+ 	}
+ }
+ 
++static int ufshcd_attach_pds(struct device *dev, struct ufs_hba *hba, int num_pds)
++{
++	struct opp_table *opp;
++	struct device **opp_virt_dev;
++	const char *opp_pds[] = { "rpmh_pd", NULL };
++
++	if (num_pds > 2)
++		return -EINVAL;
++
++	/* Attach the power domain for on/off control */
++	hba->gdsc_virt_dev = dev_pm_domain_attach_by_name(dev, "gdsc_pd");
++	if (IS_ERR(hba->gdsc_virt_dev))
++		return PTR_ERR(hba->gdsc_virt_dev);
++
++	device_link_add(dev, hba->gdsc_virt_dev, DL_FLAG_RPM_ACTIVE |
++			DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
++
++
++	/* Attach the power domain for setting performance state */
++	opp = dev_pm_opp_attach_genpd(dev, opp_pds, &opp_virt_dev);
++	if (IS_ERR(opp))
++		return PTR_ERR(opp);
++	else if (opp_virt_dev) {
++		hba->opp_virt_dev = *opp_virt_dev;
++
++		device_link_add(dev, hba->opp_virt_dev, DL_FLAG_RPM_ACTIVE |
++				DL_FLAG_PM_RUNTIME | DL_FLAG_STATELESS);
++	}
++
++	return 0;
++}
++
++static void ufshcd_detach_pds(struct ufs_hba *hba)
++{
++	dev_pm_domain_detach(hba->gdsc_virt_dev, false);
++	dev_pm_domain_detach(hba->opp_virt_dev, false);
++}
++
+ /**
+  * ufshcd_get_pwr_dev_param - get finally agreed attributes for
+  *                            power mode change
+@@ -391,7 +431,7 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ {
+ 	struct ufs_hba *hba;
+ 	void __iomem *mmio_base;
+-	int irq, err;
++	int irq, err, num_pds;
+ 	struct device *dev = &pdev->dev;
+ 
+ 	mmio_base = devm_platform_ioremap_resource(pdev, 0);
+@@ -429,10 +469,21 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ 
+ 	ufshcd_init_lanes_per_dir(hba);
+ 
++	num_pds = of_count_phandle_with_args(dev->of_node, "power-domains",
++					     "#power-domain-cells");
++	if (num_pds > 1) {
++		err = ufshcd_attach_pds(&pdev->dev, hba, num_pds);
++		if (err) {
++			dev_err(&pdev->dev, "%s: attach of power domains failed %d\n",
++				__func__, err);
++			goto dealloc_host;
++		}
++	}
++
+ 	err = ufshcd_init(hba, mmio_base, irq);
+ 	if (err) {
+ 		dev_err(dev, "Initialization failed\n");
+-		goto dealloc_host;
++		goto detach_pds;
+ 	}
+ 
+ 	platform_set_drvdata(pdev, hba);
+@@ -442,6 +493,9 @@ int ufshcd_pltfrm_init(struct platform_device *pdev,
+ 
+ 	return 0;
+ 
++detach_pds:
++	if (num_pds > 1)
++		ufshcd_detach_pds(hba);
+ dealloc_host:
+ 	ufshcd_dealloc_host(hba);
+ out:
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index dd1ee27..ed3fbad 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -612,6 +612,9 @@ struct ufs_hba {
+ 	struct Scsi_Host *host;
+ 	struct device *dev;
+ 	struct request_queue *cmd_queue;
++	struct device *gdsc_virt_dev;
++	struct device *opp_virt_dev;
++
+ 	/*
+ 	 * This field is to keep a reference to "scsi_device" corresponding to
+ 	 * "UFS device" W-LU.
 -- 
-2.12.3
-
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
