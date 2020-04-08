@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E52E51A24B8
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2020 17:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7034C1A248E
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2020 17:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729454AbgDHPMd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Apr 2020 11:12:33 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37748 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729287AbgDHPMc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Apr 2020 11:12:32 -0400
-Received: by mail-pf1-f195.google.com with SMTP id u65so2526592pfb.4
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Apr 2020 08:12:31 -0700 (PDT)
+        id S1728533AbgDHPEg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Apr 2020 11:04:36 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:34097 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727800AbgDHPEg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Apr 2020 11:04:36 -0400
+Received: by mail-pl1-f195.google.com with SMTP id a23so2608663plm.1
+        for <linux-scsi@vger.kernel.org>; Wed, 08 Apr 2020 08:04:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ykBFVrZ5VqErlxdGxaznASIr1DPALx6cRNBKHC8zE+4=;
-        b=WeIoaF6VGX20BswqY9TqTj+Q4BN5xdWpQNb+lBxDFRLRQmKlLnHtyLEo9szLuaaWmL
-         uXpXqkrjLeFDrSpJb/pE3XsdBUYkCYg2TKiL8z75XbapAgBEJhKQqHfqot+Y6/AjHT6p
-         PqyW+Y65GrBglvA1WkUvjpo7Yk5AoZ2kfXZMs=
+        bh=99bGb9kPLJIKPGAYnWeUQM+upQBOmhTKAuXfLDA02as=;
+        b=aL8VsGjuULtKfOLQ4xJAOYPOZmY0Fm4LmPDtmN2EaK+l6PCc9odZkH+cahGM56TX7V
+         RRRVicea4VeZOdbhSkDKFRCH58KpGUJ7CNOXzRWeuJNXr7aH2Mg1BkRpLSkVcDhAuWap
+         3QS1w5M7oxl5CLQ+/jYNLGia4XietUIz9CYHU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ykBFVrZ5VqErlxdGxaznASIr1DPALx6cRNBKHC8zE+4=;
-        b=iuQTfY5DU5JFMcujQI9/TB2KnW+9qSPp6YwoFYeyonGYHY6kn3VZJYqRif3ztN0kcf
-         wU4m8okr7KUF/lerUMLYpXqdRL1HYvig/wLXB39150cwhBGY0ArOjv+1MP2t4P+ugF5Y
-         NRAS13Bmzob60PRDfb4Fj/pGx4Lhoh1NRSPu+gkuLftd76pjhGR18CzgDm2mRb6Upjxm
-         sqsw9p4ewMUn7ExMC/Bl1RzVnd1iafx168lsbnBQ8TphqTrPY7lFzfdcvNzsFDv4qLpz
-         GoV9HdpP9ofi0blu81AhIviaIISeKyTuIU9ARoKY74aRND05MLy15LlaGY3CPrDzsYJ6
-         52yw==
-X-Gm-Message-State: AGi0Pub5MtCIK+PxxdXstXZR9OFA/7cKNZKOlg0cn8+JORTcf6juQLgD
-        jLlR/yFAxI1xSdBuFgwdMD0szMKxWtZObw==
-X-Google-Smtp-Source: APiQypKEWc3MCkral5p3jzK3p9lOhhJpdLJZpPnwPUwZmxycNIYMNVYj0LsS1r4g9XYOgoQikNcQMw==
-X-Received: by 2002:a63:7a07:: with SMTP id v7mr6385580pgc.302.1586358272199;
-        Wed, 08 Apr 2020 08:04:32 -0700 (PDT)
+        bh=99bGb9kPLJIKPGAYnWeUQM+upQBOmhTKAuXfLDA02as=;
+        b=MwgQxqBq7deci+MpWpQQS0oiIqPnH4+mmzMWkMcLBi1c4esQ70U4NpiGUyhAwLjou7
+         tWcJod/nxDWeCmYcNzbs/lwfgubi8hnbVnWi4UZpWb4hg/0TZsO46Gq+YXgau5ywNkWP
+         hoZ0olBnENoqUbvl34FMN3v6ZEOGu9/xFUarvvTsm3O2j8jqcMzyLgXIpu2cF5n7RANU
+         FmnV9c3KJnXEJxz8Br1zNqVwaiwBvPJ/CKNjWS3AtqZ/BXBs8JHBFKpgdCZ//qgQMjJ1
+         HiB707Z7hDI3w8jTwyD5iKVXW48MXOyQdL8KNgkfP/UKTMQXil+kUkfiz/N0nMgH8zqk
+         foyA==
+X-Gm-Message-State: AGi0PubIadf6jHcEujrjkKfzfioxaUyb3nSmKBedBHmnJieni3ZCEkpF
+        DIJIpZtcjxrMCZwLh0pLaaUeJA==
+X-Google-Smtp-Source: APiQypLwTROlMgk5kYCTxCFF56//DDLXDI3u7/I38vnrWOWWHtwiZKkjylcUiWynghi29M6bg7W1mQ==
+X-Received: by 2002:a17:90a:178e:: with SMTP id q14mr208304pja.132.1586358273435;
+        Wed, 08 Apr 2020 08:04:33 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id d85sm1468083pfd.157.2020.04.08.08.04.31
+        by smtp.gmail.com with ESMTPSA id d85sm1468083pfd.157.2020.04.08.08.04.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Apr 2020 08:04:31 -0700 (PDT)
+        Wed, 08 Apr 2020 08:04:32 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com
 Cc:     paolo.valente@linaro.org, groeck@chromium.org,
@@ -48,10 +48,15 @@ Cc:     paolo.valente@linaro.org, groeck@chromium.org,
         linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
         Ming Lei <ming.lei@redhat.com>, sqazi@google.com,
         Douglas Anderson <dianders@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/4] blk-mq: In blk_mq_dispatch_rq_list() "no budget" is a reason to kick
-Date:   Wed,  8 Apr 2020 08:03:59 -0700
-Message-Id: <20200408080255.v4.1.I1f95c459e51962b8d2c83e869913b6befda2255c@changeid>
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        John Garry <john.garry@huawei.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 2/4] blk-mq: Add blk_mq_delay_run_hw_queues() API call
+Date:   Wed,  8 Apr 2020 08:04:00 -0700
+Message-Id: <20200408080255.v4.2.I4c665d70212a5b33e103fec4d5019a59b4c05577@changeid>
 X-Mailer: git-send-email 2.26.0.292.g33ef6b2f38-goog
 In-Reply-To: <20200408150402.21208-1-dianders@chromium.org>
 References: <20200408150402.21208-1-dianders@chromium.org>
@@ -62,75 +67,70 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In blk_mq_dispatch_rq_list(), if blk_mq_sched_needs_restart() returns
-true and the driver returns BLK_STS_RESOURCE then we'll kick the
-queue.  However, there's another case where we might need to kick it.
-If we were unable to get budget we can be in much the same state as
-when the driver returns BLK_STS_RESOURCE, so we should treat it the
-same.
+We have:
+* blk_mq_run_hw_queue()
+* blk_mq_delay_run_hw_queue()
+* blk_mq_run_hw_queues()
 
-It should be noted that even if we add a whole bunch of extra kicking
-to the queue in other patches this patch is still important.
-Specifically any kicking that happened before we re-spliced leftover
-requests into 'hctx->dispatch' wouldn't have found any work, so we
-really need to make sure we kick ourselves after we've done the
-splicing.
+...but not blk_mq_delay_run_hw_queues(), presumably because nobody
+needed it before now.  Since we need it for a later patch in this
+series, add it.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
 ---
 
 Changes in v4: None
 Changes in v3:
-- Note why blk_mq_dispatch_rq_list() change is needed.
+- ("blk-mq: Add blk_mq_delay_run_hw_queues() API call") new for v3
 
 Changes in v2: None
 
- block/blk-mq.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ block/blk-mq.c         | 19 +++++++++++++++++++
+ include/linux/blk-mq.h |  1 +
+ 2 files changed, 20 insertions(+)
 
 diff --git a/block/blk-mq.c b/block/blk-mq.c
-index d92088dec6c3..2cd8d2b49ff4 100644
+index 2cd8d2b49ff4..ea0cd970a3ff 100644
 --- a/block/blk-mq.c
 +++ b/block/blk-mq.c
-@@ -1189,6 +1189,7 @@ bool blk_mq_dispatch_rq_list(struct request_queue *q, struct list_head *list,
- 	bool no_tag = false;
- 	int errors, queued;
- 	blk_status_t ret = BLK_STS_OK;
-+	bool no_budget_avail = false;
+@@ -1537,6 +1537,25 @@ void blk_mq_run_hw_queues(struct request_queue *q, bool async)
+ }
+ EXPORT_SYMBOL(blk_mq_run_hw_queues);
  
- 	if (list_empty(list))
- 		return false;
-@@ -1205,8 +1206,10 @@ bool blk_mq_dispatch_rq_list(struct request_queue *q, struct list_head *list,
- 		rq = list_first_entry(list, struct request, queuelist);
- 
- 		hctx = rq->mq_hctx;
--		if (!got_budget && !blk_mq_get_dispatch_budget(hctx))
-+		if (!got_budget && !blk_mq_get_dispatch_budget(hctx)) {
-+			no_budget_avail = true;
- 			break;
-+		}
- 
- 		if (!blk_mq_get_driver_tag(rq)) {
- 			/*
-@@ -1311,13 +1314,15 @@ bool blk_mq_dispatch_rq_list(struct request_queue *q, struct list_head *list,
- 		 *
- 		 * If driver returns BLK_STS_RESOURCE and SCHED_RESTART
- 		 * bit is set, run queue after a delay to avoid IO stalls
--		 * that could otherwise occur if the queue is idle.
-+		 * that could otherwise occur if the queue is idle.  We'll do
-+		 * similar if we couldn't get budget and SCHED_RESTART is set.
- 		 */
- 		needs_restart = blk_mq_sched_needs_restart(hctx);
- 		if (!needs_restart ||
- 		    (no_tag && list_empty_careful(&hctx->dispatch_wait.entry)))
- 			blk_mq_run_hw_queue(hctx, true);
--		else if (needs_restart && (ret == BLK_STS_RESOURCE))
-+		else if (needs_restart && (ret == BLK_STS_RESOURCE ||
-+					   no_budget_avail))
- 			blk_mq_delay_run_hw_queue(hctx, BLK_MQ_RESOURCE_DELAY);
- 
- 		blk_mq_update_dispatch_busy(hctx, true);
++/**
++ * blk_mq_delay_run_hw_queues - Run all hardware queues asynchronously.
++ * @q: Pointer to the request queue to run.
++ * @msecs: Microseconds of delay to wait before running the queues.
++ */
++void blk_mq_delay_run_hw_queues(struct request_queue *q, unsigned long msecs)
++{
++	struct blk_mq_hw_ctx *hctx;
++	int i;
++
++	queue_for_each_hw_ctx(q, hctx, i) {
++		if (blk_mq_hctx_stopped(hctx))
++			continue;
++
++		blk_mq_delay_run_hw_queue(hctx, msecs);
++	}
++}
++EXPORT_SYMBOL(blk_mq_delay_run_hw_queues);
++
+ /**
+  * blk_mq_queue_stopped() - check whether one or more hctxs have been stopped
+  * @q: request queue.
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index 11cfd6470b1a..405f8c196517 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -503,6 +503,7 @@ void blk_mq_unquiesce_queue(struct request_queue *q);
+ void blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, unsigned long msecs);
+ void blk_mq_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async);
+ void blk_mq_run_hw_queues(struct request_queue *q, bool async);
++void blk_mq_delay_run_hw_queues(struct request_queue *q, unsigned long msecs);
+ void blk_mq_tagset_busy_iter(struct blk_mq_tag_set *tagset,
+ 		busy_tag_iter_fn *fn, void *priv);
+ void blk_mq_tagset_wait_completed_request(struct blk_mq_tag_set *tagset);
 -- 
 2.26.0.292.g33ef6b2f38-goog
 
