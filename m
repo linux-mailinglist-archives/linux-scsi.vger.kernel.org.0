@@ -2,278 +2,286 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A34201A2560
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2020 17:37:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4551F1A261C
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2020 17:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729279AbgDHPhX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Apr 2020 11:37:23 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:40601 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726924AbgDHPhW (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Apr 2020 11:37:22 -0400
-Received: by mail-pl1-f194.google.com with SMTP id h11so2629418plk.7
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Apr 2020 08:37:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Qlg9Ha7asmk8AhqzsRXiS93vnym8sH9wWiw8n5ZGpI8=;
-        b=TFCVjp3NyxUDXYfxyTrQn6Y3MAbIAXApObNanywuEmB2+bhRrgAd98Z9CYZWnoa8K2
-         jp+NUisf0n29IpSR4wlmB7HFBzhDlC99CnvjlS3QyoczNwcZTD3jVzF1Cad8kBrmxD3i
-         BzaOa6m3kFwmJ8FgNVmMENSkd4iwhyq5HYVPE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qlg9Ha7asmk8AhqzsRXiS93vnym8sH9wWiw8n5ZGpI8=;
-        b=Gki/kX09AixcQbCQ28jZgksl3LzIU7j60NaXzepDTQOFWEgL+pNs9Ft1zyywCsM9A/
-         V+C0IO1InZgaYDwC2Zb4bNNOEXOMvPMAKeNZ4g2tu545D6gNpj4ehyeiIHsoJL3NVGoG
-         qzYV0knnF2YluPVTqwUj0mO+fUDDhyIoRloqcacvgv+86/JK/e0//OiJn0kj10zW/vGS
-         BYOzPlyyCFV5tKQuArUMraOykDJ690+SwaJYDmB7NpkavO3ekix3eL50cGtLwdmtzsYX
-         wriZkDmuYpGSQgLb0/NIH/YiGJ5BXSox8bcXKvWePM+Q2F+/feewkRU08SVbf17b2u1K
-         k6AA==
-X-Gm-Message-State: AGi0PuajiSONTKYQcSPto84IcGM1unLStIo19RZ1Vu8P5KKu1liFZHAG
-        5XluwAaetuquJDVQre10OR5rJVIdExI=
-X-Google-Smtp-Source: APiQypINs+GZ6Kd8PTrq3hpc0cshtDPiTJo/qDKkvg1Dt16VEQVvDyHA1anAclE99Hchx4+UT0KJGg==
-X-Received: by 2002:a17:902:a504:: with SMTP id s4mr7803897plq.10.1586360240302;
-        Wed, 08 Apr 2020 08:37:20 -0700 (PDT)
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com. [209.85.210.169])
-        by smtp.gmail.com with ESMTPSA id k14sm16842136pfg.15.2020.04.08.08.37.19
-        for <linux-scsi@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Apr 2020 08:37:20 -0700 (PDT)
-Received: by mail-pf1-f169.google.com with SMTP id c21so2568282pfo.5
-        for <linux-scsi@vger.kernel.org>; Wed, 08 Apr 2020 08:37:19 -0700 (PDT)
-X-Received: by 2002:a67:6583:: with SMTP id z125mr5025097vsb.198.1586358348960;
- Wed, 08 Apr 2020 08:05:48 -0700 (PDT)
+        id S1729959AbgDHPsA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Apr 2020 11:48:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48894 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729567AbgDHPqd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 8 Apr 2020 11:46:33 -0400
+Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E436F20769;
+        Wed,  8 Apr 2020 15:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586360791;
+        bh=NGLDDtyN8RZKYu/2cTSKBLZPkCz8Mr0c9YVBRHz1zys=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I3LVCc26/VdF24AsOrt+PHJ6A8shQrFjca47izBLXO8vl1fetOmpTsay+HfFnjRDn
+         ELpq2el4OVbLL0QQpHim4bJ4r72BlEiJ9tHPbEFlZ/E6g9CVUSW9fzJZn0GNpSqQLs
+         eoPTB+ArHDBqNWFtK9BnG7DerSf9cD29j4b39qq4=
+Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
+        (envelope-from <mchehab@kernel.org>)
+        id 1jMCuK-000cAH-Vl; Wed, 08 Apr 2020 17:46:28 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Rob Herring <robh@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Yuti Amonkar <yamonkar@cadence.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-ppc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-mm@kvack.org, linux-rdma@vger.kernel.org,
+        kvmarm@lists.cs.columbia.edu, linux-crypto@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-afs@lists.infradead.org,
+        ecryptfs@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        ocfs2-devel@oss.oracle.com, linux-pci@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-ide@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-spi@vger.kernel.org,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-usb@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Matthias Brugger <mbrugger@suse.com>, netdev@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Subject: [PATCH 00/35] Documentation fixes for Kernel 5.8
+Date:   Wed,  8 Apr 2020 17:45:52 +0200
+Message-Id: <cover.1586359676.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.25.2
 MIME-Version: 1.0
-References: <20200407220005.119540-1-dianders@chromium.org>
- <20200407145906.v3.3.I28278ef8ea27afc0ec7e597752a6d4e58c16176f@changeid>
- <20200408020936.GB337494@localhost.localdomain> <CAD=FV=WY8sTZQq3NtNe4Ux-C0Q0JOR4V1Z+cjVvj791rFDL+=Q@mail.gmail.com>
- <20200408030625.GC337494@localhost.localdomain> <CAD=FV=VUAyuMnvVwz7OGoe03o4ty1S=44sjkGsFaDR5OJbeCPg@mail.gmail.com>
- <20200408073618.GA352827@localhost.localdomain>
-In-Reply-To: <20200408073618.GA352827@localhost.localdomain>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 8 Apr 2020 08:05:37 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WkyB-7v6zhiHtn=eHX27JC9g3j3gp_EyFh-y7rxPfrtQ@mail.gmail.com>
-Message-ID: <CAD=FV=WkyB-7v6zhiHtn=eHX27JC9g3j3gp_EyFh-y7rxPfrtQ@mail.gmail.com>
-Subject: Re: [PATCH v3 3/4] blk-mq: Rerun dispatching in the case of budget contention
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Salman Qazi <sqazi@google.com>,
-        Gwendal Grignou <gwendal@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Paolo Valente <paolo.valente@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi,
+Hi Jon,
 
-On Wed, Apr 8, 2020 at 12:36 AM Ming Lei <ming.lei@redhat.com> wrote:
->
-> On Tue, Apr 07, 2020 at 09:11:28PM -0700, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Tue, Apr 7, 2020 at 8:06 PM Ming Lei <ming.lei@redhat.com> wrote:
-> > >
-> > > On Tue, Apr 07, 2020 at 07:17:49PM -0700, Doug Anderson wrote:
-> > > > Hi,
-> > > >
-> > > > On Tue, Apr 7, 2020 at 7:09 PM Ming Lei <ming.lei@redhat.com> wrote:
-> > > > >
-> > > > > On Tue, Apr 07, 2020 at 03:00:04PM -0700, Douglas Anderson wrote:
-> > > > > > If ever a thread running blk-mq code tries to get budget and fails it
-> > > > > > immediately stops doing work and assumes that whenever budget is freed
-> > > > > > up that queues will be kicked and whatever work the thread was trying
-> > > > > > to do will be tried again.
-> > > > > >
-> > > > > > One path where budget is freed and queues are kicked in the normal
-> > > > > > case can be seen in scsi_finish_command().  Specifically:
-> > > > > > - scsi_finish_command()
-> > > > > >   - scsi_device_unbusy()
-> > > > > >     - # Decrement "device_busy", AKA release budget
-> > > > > >   - scsi_io_completion()
-> > > > > >     - scsi_end_request()
-> > > > > >       - blk_mq_run_hw_queues()
-> > > > > >
-> > > > > > The above is all well and good.  The problem comes up when a thread
-> > > > > > claims the budget but then releases it without actually dispatching
-> > > > > > any work.  Since we didn't schedule any work we'll never run the path
-> > > > > > of finishing work / kicking the queues.
-> > > > > >
-> > > > > > This isn't often actually a problem which is why this issue has
-> > > > > > existed for a while and nobody noticed.  Specifically we only get into
-> > > > > > this situation when we unexpectedly found that we weren't going to do
-> > > > > > any work.  Code that later receives new work kicks the queues.  All
-> > > > > > good, right?
-> > > > > >
-> > > > > > The problem shows up, however, if timing is just wrong and we hit a
-> > > > > > race.  To see this race let's think about the case where we only have
-> > > > > > a budget of 1 (only one thread can hold budget).  Now imagine that a
-> > > > > > thread got budget and then decided not to dispatch work.  It's about
-> > > > > > to call put_budget() but then the thread gets context switched out for
-> > > > > > a long, long time.  While in this state, any and all kicks of the
-> > > > > > queue (like the when we received new work) will be no-ops because
-> > > > > > nobody can get budget.  Finally the thread holding budget gets to run
-> > > > > > again and returns.  All the normal kicks will have been no-ops and we
-> > > > > > have an I/O stall.
-> > > > > >
-> > > > > > As you can see from the above, you need just the right timing to see
-> > > > > > the race.  To start with, the only case it happens if we thought we
-> > > > > > had work, actually managed to get the budget, but then actually didn't
-> > > > > > have work.  That's pretty rare to start with.  Even then, there's
-> > > > > > usually a very small amount of time between realizing that there's no
-> > > > > > work and putting the budget.  During this small amount of time new
-> > > > > > work has to come in and the queue kick has to make it all the way to
-> > > > > > trying to get the budget and fail.  It's pretty unlikely.
-> > > > > >
-> > > > > > One case where this could have failed is illustrated by an example of
-> > > > > > threads running blk_mq_do_dispatch_sched():
-> > > > > >
-> > > > > > * Threads A and B both run has_work() at the same time with the same
-> > > > > >   "hctx".  Imagine has_work() is exact.  There's no lock, so it's OK
-> > > > > >   if Thread A and B both get back true.
-> > > > > > * Thread B gets interrupted for a long time right after it decides
-> > > > > >   that there is work.  Maybe its CPU gets an interrupt and the
-> > > > > >   interrupt handler is slow.
-> > > > > > * Thread A runs, get budget, dispatches work.
-> > > > > > * Thread A's work finishes and budget is released.
-> > > > > > * Thread B finally runs again and gets budget.
-> > > > > > * Since Thread A already took care of the work and no new work has
-> > > > > >   come in, Thread B will get NULL from dispatch_request().  I believe
-> > > > > >   this is specifically why dispatch_request() is allowed to return
-> > > > > >   NULL in the first place if has_work() must be exact.
-> > > > > > * Thread B will now be holding the budget and is about to call
-> > > > > >   put_budget(), but hasn't called it yet.
-> > > > > > * Thread B gets interrupted for a long time (again).  Dang interrupts.
-> > > > > > * Now Thread C (maybe with a different "hctx" but the same queue)
-> > > > > >   comes along and runs blk_mq_do_dispatch_sched().
-> > > > > > * Thread C won't do anything because it can't get budget.
-> > > > >
-> > > > > Thread C will re-run queue in this case:
-> > > > >
-> > > > > Just thought scsi_mq_get_budget() does handle the case via re-run queue:
-> > > > >
-> > > > >         if (atomic_read(&sdev->device_busy) == 0 && !scsi_device_blocked(sdev))
-> > > > >                 blk_mq_delay_run_hw_queue(hctx, SCSI_QUEUE_DELAY);
-> > > > >
-> > > > > So looks no such race.
-> > > >
-> > > > Thread B is holding budget and hasn't released it yet, right?  In the
-> > > > context of scsi, that means "device_busy >= 1", right?  So how can the
-> > > > code you point at help us?  When Thread C reads "device_busy" it will
-> > > > be 1 and that code won't run.  What did I miss?
-> > >
-> > > Oh, this is my fault, sorry for the noise.
-> > >
-> > > >
-> > > >
-> > > > > > * Finally Thread B will run again and put the budget without kicking
-> > > > > >   any queues.
-> > > > > >
-> > > > > > Even though the example above is with blk_mq_do_dispatch_sched() I
-> > > > > > believe the race is possible any time someone is holding budget but
-> > > > > > doesn't do work.
-> > > > > >
-> > > > > > Unfortunately, the unlikely has become more likely if you happen to be
-> > > > > > using the BFQ I/O scheduler.  BFQ, by design, sometimes returns "true"
-> > > > > > for has_work() but then NULL for dispatch_request() and stays in this
-> > > > > > state for a while (currently up to 9 ms).  Suddenly you only need one
-> > > > > > race to hit, not two races in a row.  With my current setup this is
-> > > > > > easy to reproduce in reboot tests and traces have actually shown that
-> > > > > > we hit a race similar to the one describe above.
-> > > > > >
-> > > > > > In theory we could choose to just fix blk_mq_do_dispatch_sched() to
-> > > > > > kick the queues when it puts budget.  That would fix the BFQ case and
-> > > > > > one could argue that all the other cases are just theoretical.  While
-> > > > > > that is true, for all the other cases it should be very uncommon to
-> > > > > > run into the case where we need put_budget().  Having an extra queue
-> > > > > > kick for safety there shouldn't affect much and keeps the race at bay.
-> > > > > >
-> > > > > > One last note is that (at least in the SCSI case) budget is shared by
-> > > > > > all "hctx"s that have the same queue.  Thus we need to make sure to
-> > > > > > kick the whole queue, not just re-run dispatching on a single "hctx".
-> > > > > >
-> > > > > > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > > > > > ---
-> > > > > >
-> > > > > > Changes in v3:
-> > > > > > - Always kick when putting the budget.
-> > > > > > - Delay blk_mq_do_dispatch_sched() kick by 3 ms for inexact has_work().
-> > > > > > - Totally rewrote commit message.
-> > > > > >
-> > > > > > Changes in v2:
-> > > > > > - Replace ("scsi: core: Fix stall...") w/ ("blk-mq: Rerun dispatch...")
-> > > > > >
-> > > > > >  block/blk-mq.h | 14 +++++++++++++-
-> > > > > >  1 file changed, 13 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/block/blk-mq.h b/block/blk-mq.h
-> > > > > > index 10bfdfb494fa..1270505367ab 100644
-> > > > > > --- a/block/blk-mq.h
-> > > > > > +++ b/block/blk-mq.h
-> > > > > > @@ -180,12 +180,24 @@ unsigned int blk_mq_in_flight(struct request_queue *q, struct hd_struct *part);
-> > > > > >  void blk_mq_in_flight_rw(struct request_queue *q, struct hd_struct *part,
-> > > > > >                        unsigned int inflight[2]);
-> > > > > >
-> > > > > > +#define BLK_MQ_BUDGET_DELAY  3               /* ms units */
-> > > > > > +
-> > > > > >  static inline void blk_mq_put_dispatch_budget(struct blk_mq_hw_ctx *hctx)
-> > > > > >  {
-> > > > > >       struct request_queue *q = hctx->queue;
-> > > > > >
-> > > > > > -     if (q->mq_ops->put_budget)
-> > > > > > +     if (q->mq_ops->put_budget) {
-> > > > > >               q->mq_ops->put_budget(hctx);
-> > > > > > +
-> > > > > > +             /*
-> > > > > > +              * The only time we call blk_mq_put_dispatch_budget() is if
-> > > > > > +              * we released the budget without dispatching.  Holding the
-> > > > > > +              * budget could have blocked any "hctx"s with the same queue
-> > > > > > +              * and if we didn't dispatch then there's no guarantee anyone
-> > > > > > +              * will kick the queue.  Kick it ourselves.
-> > > > > > +              */
-> > > > > > +             blk_mq_delay_run_hw_queues(q, BLK_MQ_BUDGET_DELAY);
-> > > > >
-> > > > > No, please don't do that un-conditionally we just need to re-run queue
-> > > > > when there has work to do.
-> > > >
-> > > > ...what function would you like me to call to check?  The code you
-> > >
-> > > At least we only need to call it in blk_mq_do_dispatch_sched() and
-> > > blk_mq_do_dispatch_ctx(), in which no request is dequeued yet. Other
-> > > callers can handle the run queue cause request has been there.
-> >
-> > Sure, I can move it so it's only in blk_mq_do_dispatch_sched() and
-> > blk_mq_do_dispatch_ctx().  That would definitely make it so that I
-> > can't reproduce problems anymore, at least.
-> >
-> > The one thing that worries me is that I couldn't come up with a
-> > convincing argument about why the race wasn't possible when we put the
-> > budget in blk_mq_dispatch_rq_list() and __blk_mq_try_issue_directly().
-> > Perhaps you can explain.  In blk_mq_dispatch_rq_list() I can see that
-> > we will call blk_mq_run_hw_queue() or blk_mq_delay_run_hw_queue(), but
-> > I guess I'm at least slightly worried that we'd also need to kick the
-> > other "hctx"s on the same queue.  In theory holding budget could have
->
-> No, if there is one request from any one hctx, when this request is
-> dispatched and completed, all hctxs will be run again from
-> scsi_end_request().
+I have a large list of patches this time for the Documentation/. So, I'm
+starting sending them a little earier. Yet, those are meant to be applied
+after the end of the merge window. They're based on today's linux-next,
+with has only 49 patches pending to be applied upstream touching
+Documentation/, so I don't expect much conflicts if applied early at
+-rc cycle.
 
-Ah, of course!  That makes sense to me.  Thanks for explaining.  So in
-these contexts we know for sure that there is more work to do on our
-"hctx" and we re-kick our own work.  If we happened to have blocked
-some other "hctx" then at least it will get kicked again when we
-finish our work just like in the normal case where we had budget and
-blocked someone else.
+Most of the patches here were already submitted, but weren't
+merged yet at next. So, it seems that nobody picked them yet.
 
-I've updated the comments and I'm uploading a v4.  I hope it looks good now.
+In any case, most of those patches here are independent from 
+the others.
 
--Doug
+The number of doc build warnings have been rising with time.
+The main goal with this series is to get rid of most Sphinx warnings
+and other errors.
+
+Patches 1 to 5: fix broken references detected by this tool:
+
+        ./scripts/documentation-file-ref-check
+
+The other patches fix other random errors due to tags being
+mis-interpreted or mis-used.
+
+You should notice that several patches touch kernel-doc scripts.
+IMHO, some of the warnings are actually due to kernel-doc being
+too pedantic. So, I ended by improving some things at the toolset,
+in order to make it smarter. That's the case of those patches:
+
+	docs: scripts/kernel-doc: accept blank lines on parameter description
+	scripts: kernel-doc: accept negation like !@var
+	scripts: kernel-doc: proper handle @foo->bar()
+
+The last 4 patches address problems with PDF building.
+
+The first one address a conflict that will rise during the merge
+window: Documentation/media will be removed. Instead of
+just drop it from the list of PDF documents, I opted to drop the
+entire list, as conf.py will auto-generate from the sources:
+
+	docs: LaTeX/PDF: drop list of documents
+
+Also, right now, PDF output is broken due to a namespace conflict 
+at I2c (two pdf outputs there will have the same name).
+
+	docs: i2c: rename i2c.svg to i2c_bus.svg
+
+The third PDF patch is not really a fix, but it helps a lot to identify
+if the build succeeded or not, by placing the final PDF output on
+a separate dir:
+
+	docs: Makefile: place final pdf docs on a separate dir
+
+Finally, the last one solves a bug since the first supported Sphinx
+version, with also impacts PDF output: basically while nested tables
+are valid with ReST notation, the toolset only started supporting
+it on PDF output since version 2.4:
+
+	docs: update recommended Sphinx version to 2.4.4
+
+PS.: Due to the large number of C/C, I opted to keep a smaller
+set of C/C at this first e-mail (only e-mails with "L:" tag from
+MAINTAINERS file).
+
+Mauro Carvalho Chehab (35):
+  MAINTAINERS: dt: update display/allwinner file entry
+  docs: dt: fix broken reference to phy-cadence-torrent.yaml
+  docs: fix broken references to text files
+  docs: fix broken references for ReST files that moved around
+  docs: filesystems: fix renamed references
+  docs: amu: supress some Sphinx warnings
+  docs: arm64: booting.rst: get rid of some warnings
+  docs: pci: boot-interrupts.rst: improve html output
+  futex: get rid of a kernel-docs build warning
+  firewire: firewire-cdev.hL get rid of a docs warning
+  scripts: kernel-doc: proper handle @foo->bar()
+  lib: bitmap.c: get rid of some doc warnings
+  ata: libata-core: fix a doc warning
+  fs: inode.c: get rid of docs warnings
+  docs: ras: get rid of some warnings
+  docs: ras: don't need to repeat twice the same thing
+  docs: watch_queue.rst: supress some Sphinx warnings
+  scripts: kernel-doc: accept negation like !@var
+  docs: infiniband: verbs.c: fix some documentation warnings
+  docs: scripts/kernel-doc: accept blank lines on parameter description
+  docs: spi: spi.h: fix a doc building warning
+  docs: drivers: fix some warnings at base/platform.c when building docs
+  docs: fusion: mptbase.c: get rid of a doc build warning
+  docs: mm: slab.h: fix a broken cross-reference
+  docs mm: userfaultfd.rst: use ``foo`` for literals
+  docs: mm: userfaultfd.rst: use a cross-reference for a section
+  docs: vm: index.rst: add an orphan doc to the building system
+  docs: dt: qcom,dwc3.txt: fix cross-reference for a converted file
+  MAINTAINERS: dt: fix pointers for ARM Integrator, Versatile and
+    RealView
+  docs: dt: fix a broken reference for a file converted to json
+  powerpc: docs: cxl.rst: mark two section titles as such
+  docs: LaTeX/PDF: drop list of documents
+  docs: i2c: rename i2c.svg to i2c_bus.svg
+  docs: Makefile: place final pdf docs on a separate dir
+  docs: update recommended Sphinx version to 2.4.4
+
+ Documentation/ABI/stable/sysfs-devices-node   |   2 +-
+ Documentation/ABI/testing/procfs-smaps_rollup |   2 +-
+ Documentation/Makefile                        |   6 +-
+ Documentation/PCI/boot-interrupts.rst         |  34 +--
+ Documentation/admin-guide/cpu-load.rst        |   2 +-
+ Documentation/admin-guide/mm/userfaultfd.rst  | 209 +++++++++---------
+ Documentation/admin-guide/nfs/nfsroot.rst     |   2 +-
+ Documentation/admin-guide/ras.rst             |  18 +-
+ Documentation/arm64/amu.rst                   |   5 +
+ Documentation/arm64/booting.rst               |  36 +--
+ Documentation/conf.py                         |  38 ----
+ .../bindings/net/qualcomm-bluetooth.txt       |   2 +-
+ .../bindings/phy/ti,phy-j721e-wiz.yaml        |   2 +-
+ .../devicetree/bindings/usb/qcom,dwc3.txt     |   4 +-
+ .../doc-guide/maintainer-profile.rst          |   2 +-
+ .../driver-api/driver-model/device.rst        |   4 +-
+ .../driver-api/driver-model/overview.rst      |   2 +-
+ Documentation/filesystems/dax.txt             |   2 +-
+ Documentation/filesystems/dnotify.txt         |   2 +-
+ .../filesystems/ramfs-rootfs-initramfs.rst    |   2 +-
+ Documentation/filesystems/sysfs.rst           |   2 +-
+ Documentation/i2c/{i2c.svg => i2c_bus.svg}    |   2 +-
+ Documentation/i2c/summary.rst                 |   2 +-
+ Documentation/memory-barriers.txt             |   2 +-
+ Documentation/powerpc/cxl.rst                 |   2 +
+ .../powerpc/firmware-assisted-dump.rst        |   2 +-
+ Documentation/process/adding-syscalls.rst     |   2 +-
+ Documentation/process/submit-checklist.rst    |   2 +-
+ Documentation/sphinx/requirements.txt         |   2 +-
+ .../it_IT/process/adding-syscalls.rst         |   2 +-
+ .../it_IT/process/submit-checklist.rst        |   2 +-
+ .../translations/ko_KR/memory-barriers.txt    |   2 +-
+ .../translations/zh_CN/filesystems/sysfs.txt  |   8 +-
+ .../zh_CN/process/submit-checklist.rst        |   2 +-
+ Documentation/virt/kvm/arm/pvtime.rst         |   2 +-
+ Documentation/virt/kvm/devices/vcpu.rst       |   2 +-
+ Documentation/virt/kvm/hypercalls.rst         |   4 +-
+ Documentation/virt/kvm/mmu.rst                |   2 +-
+ Documentation/virt/kvm/review-checklist.rst   |   2 +-
+ Documentation/vm/index.rst                    |   1 +
+ Documentation/watch_queue.rst                 |  34 ++-
+ MAINTAINERS                                   |   7 +-
+ arch/powerpc/include/uapi/asm/kvm_para.h      |   2 +-
+ arch/x86/kvm/mmu/mmu.c                        |   2 +-
+ drivers/ata/libata-core.c                     |   2 +-
+ drivers/base/core.c                           |   2 +-
+ drivers/base/platform.c                       |   6 +-
+ .../allwinner/sun8i-ce/sun8i-ce-cipher.c      |   2 +-
+ .../crypto/allwinner/sun8i-ce/sun8i-ce-core.c |   2 +-
+ .../allwinner/sun8i-ss/sun8i-ss-cipher.c      |   2 +-
+ .../crypto/allwinner/sun8i-ss/sun8i-ss-core.c |   2 +-
+ drivers/gpu/drm/Kconfig                       |   2 +-
+ drivers/gpu/drm/drm_ioctl.c                   |   2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.h       |   2 +-
+ drivers/hwtracing/coresight/Kconfig           |   2 +-
+ drivers/infiniband/core/verbs.c               |   7 +-
+ drivers/media/v4l2-core/v4l2-fwnode.c         |   2 +-
+ drivers/message/fusion/mptbase.c              |   8 +-
+ fs/Kconfig                                    |   2 +-
+ fs/Kconfig.binfmt                             |   2 +-
+ fs/adfs/Kconfig                               |   2 +-
+ fs/affs/Kconfig                               |   2 +-
+ fs/afs/Kconfig                                |   6 +-
+ fs/bfs/Kconfig                                |   2 +-
+ fs/cramfs/Kconfig                             |   2 +-
+ fs/ecryptfs/Kconfig                           |   2 +-
+ fs/fat/Kconfig                                |   8 +-
+ fs/fuse/Kconfig                               |   2 +-
+ fs/fuse/dev.c                                 |   2 +-
+ fs/hfs/Kconfig                                |   2 +-
+ fs/hpfs/Kconfig                               |   2 +-
+ fs/inode.c                                    |   6 +-
+ fs/isofs/Kconfig                              |   2 +-
+ fs/namespace.c                                |   2 +-
+ fs/notify/inotify/Kconfig                     |   2 +-
+ fs/ntfs/Kconfig                               |   2 +-
+ fs/ocfs2/Kconfig                              |   2 +-
+ fs/overlayfs/Kconfig                          |   6 +-
+ fs/proc/Kconfig                               |   4 +-
+ fs/romfs/Kconfig                              |   2 +-
+ fs/sysfs/dir.c                                |   2 +-
+ fs/sysfs/file.c                               |   2 +-
+ fs/sysfs/mount.c                              |   2 +-
+ fs/sysfs/symlink.c                            |   2 +-
+ fs/sysv/Kconfig                               |   2 +-
+ fs/udf/Kconfig                                |   2 +-
+ include/linux/kobject.h                       |   2 +-
+ include/linux/kobject_ns.h                    |   2 +-
+ include/linux/mm.h                            |   4 +-
+ include/linux/relay.h                         |   2 +-
+ include/linux/slab.h                          |   2 +-
+ include/linux/spi/spi.h                       |   1 +
+ include/linux/sysfs.h                         |   2 +-
+ include/uapi/linux/ethtool_netlink.h          |   2 +-
+ include/uapi/linux/firewire-cdev.h            |   2 +-
+ include/uapi/linux/kvm.h                      |   4 +-
+ include/uapi/rdma/rdma_user_ioctl_cmds.h      |   2 +-
+ kernel/futex.c                                |   3 +
+ kernel/relay.c                                |   2 +-
+ lib/bitmap.c                                  |  27 +--
+ lib/kobject.c                                 |   4 +-
+ mm/gup.c                                      |  12 +-
+ scripts/kernel-doc                            |  41 ++--
+ tools/include/uapi/linux/kvm.h                |   4 +-
+ virt/kvm/arm/vgic/vgic-mmio-v3.c              |   2 +-
+ virt/kvm/arm/vgic/vgic.h                      |   4 +-
+ 106 files changed, 373 insertions(+), 338 deletions(-)
+ rename Documentation/i2c/{i2c.svg => i2c_bus.svg} (99%)
+
+-- 
+2.25.2
+
+
