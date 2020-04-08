@@ -2,80 +2,51 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2694F1A25FB
-	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2020 17:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4361A264B
+	for <lists+linux-scsi@lfdr.de>; Wed,  8 Apr 2020 17:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729816AbgDHPrM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 8 Apr 2020 11:47:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49552 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729693AbgDHPqd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 8 Apr 2020 11:46:33 -0400
-Received: from mail.kernel.org (ip5f5ad4d8.dynamic.kabel-deutschland.de [95.90.212.216])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C974821D90;
-        Wed,  8 Apr 2020 15:46:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586360792;
-        bh=LQ1AB7uAXbAwFOOYknVy0Mvjy9Vm+u/u7LD9snOopLU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cd2++O+WPIQWFWzi8C0poVO/bZNC2rrB1Y06Qb7ZKqBsuGrywoWYrfNUziy9DE4Mv
-         H4SugkdldKynJUxyN+2f/1/fJbktC4rVzMYvybF1QMnMnNztxFl9af9mrswoyyY5EH
-         vlINSaxLC5cU0m7lL5hFizDba9y5It4XAMZKBSow=
-Received: from mchehab by mail.kernel.org with local (Exim 4.92.3)
-        (envelope-from <mchehab@kernel.org>)
-        id 1jMCuL-000cC6-UW; Wed, 08 Apr 2020 17:46:29 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Chaitra P B <chaitra.basappa@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH 23/35] docs: fusion: mptbase.c: get rid of a doc build warning
-Date:   Wed,  8 Apr 2020 17:46:15 +0200
-Message-Id: <9ca049c2d25689c56448afddf4f0d1e619fa87f7.1586359676.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.25.2
-In-Reply-To: <cover.1586359676.git.mchehab+huawei@kernel.org>
-References: <cover.1586359676.git.mchehab+huawei@kernel.org>
+        id S1729613AbgDHPvB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Apr 2020 11:51:01 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:42912 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729176AbgDHPvB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Apr 2020 11:51:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3TVQ8OuCOqm5u7QKIVuMFaQ6Kl80j1kU+GJpUrmQSYw=; b=O+Ik7Sos0/y1kNJXRJYyD5cPo+
+        6WG1mou84xehUfjuoD5fzcKyA/u+8mXpUE9wexoieq3Wt9jOuO/HL4cjfme196967buYKUzc6RDJs
+        tKQL5SrY8H9ldiaaVYCtau9JggCoTXAtPgevVW85dc5rn+Hvn2JLCfLg1RCKcIQKs7WDn/6UdJugC
+        67rfoRMoD7sf8Yc4Hjft6u4jozi5LVARVfa0sUxWxB5VmD6way6TIsB41ZKfrvxF+xp80dezYUV1z
+        IpH0BPWoMA1ZFgKvIH9iBLlSqBbSiVFXChh6aQFj1Tyay5eC9KLdVuhcEivLDR5slcZy1S4yPT8wY
+        EOy5T/VA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jMCyi-00030t-Ef; Wed, 08 Apr 2020 15:51:00 +0000
+Date:   Wed, 8 Apr 2020 08:51:00 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Keith Busch <kbusch@kernel.org>,
+        "linux-scsi @ vger . kernel . org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-fsdevel @ vger . kernel . org" <linux-fsdevel@vger.kernel.org>
+Subject: Re: [PATCH v4 02/10] block: Introduce REQ_OP_ZONE_APPEND
+Message-ID: <20200408155100.GA29029@infradead.org>
+References: <20200403101250.33245-1-johannes.thumshirn@wdc.com>
+ <20200403101250.33245-3-johannes.thumshirn@wdc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200403101250.33245-3-johannes.thumshirn@wdc.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use a table for the enum list, to avoid this warning:
-
-	./drivers/message/fusion/mptbase.c:5058: WARNING: Definition list ends without a blank line; unexpected unindent.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/message/fusion/mptbase.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/message/fusion/mptbase.c b/drivers/message/fusion/mptbase.c
-index c2dd322691d1..2ef6506a3bc5 100644
---- a/drivers/message/fusion/mptbase.c
-+++ b/drivers/message/fusion/mptbase.c
-@@ -5052,9 +5052,11 @@ GetLanConfigPages(MPT_ADAPTER *ioc)
-  *	@ioc: Pointer to MPT_ADAPTER structure
-  *	@persist_opcode: see below
-  *
-- *	MPI_SAS_OP_CLEAR_NOT_PRESENT - Free all persist TargetID mappings for
-- *		devices not currently present.
-- *	MPI_SAS_OP_CLEAR_ALL_PERSISTENT - Clear al persist TargetID mappings
-+ * 	===============================  ======================================
-+ *	MPI_SAS_OP_CLEAR_NOT_PRESENT     Free all persist TargetID mappings for
-+ *					 devices not currently present.
-+ *	MPI_SAS_OP_CLEAR_ALL_PERSISTENT  Clear al persist TargetID mappings
-+ * 	===============================  ======================================
-  *
-  *	NOTE: Don't use not this function during interrupt time.
-  *
--- 
-2.25.2
-
+Another nitpick - op is only used once in __bio_iov_iter_get_pages,
+we can just call bio_op there directly.
