@@ -2,69 +2,112 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F081A388D
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Apr 2020 19:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6081E1A3891
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Apr 2020 19:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727982AbgDIRFK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Apr 2020 13:05:10 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:38000 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727865AbgDIRFK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Apr 2020 13:05:10 -0400
-Received: by mail-io1-f68.google.com with SMTP id f19so299575iog.5
-        for <linux-scsi@vger.kernel.org>; Thu, 09 Apr 2020 10:05:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kORrfissAlRiSynksuvFrjS8SHz5Z08fOKEsd8QKjm0=;
-        b=omG8e/XmuHpeXAAEeroemaj5RwtxpCOOv+mRXTu1Mmj45CJZ2WMIui6HslGrJM7ikp
-         PEPfyZpeWi1uWrhOc62cTehvU3j3thpJgxQ2ys2uPwt018NDDK45loHEmZiyGJQgQddw
-         hGOxGL80mYdprgk4l/uHZ2mrYLidlGUzYzncGLTbnFDmqHWAqFQkMfskG1/Tcx0wi3TM
-         FtkYlopTH7AGT2mYBPuRR9bUG1eDTcuVAhzQzWpf7PpkLoxzc2P8iOVf2mSCSOQtMYvL
-         X+BB+YrGBFcpjd6yANWMuRUOreE+pb0MDEM8GqrUK5GJfOeicEtezDGVkLsbFNTY+Z3B
-         SHlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kORrfissAlRiSynksuvFrjS8SHz5Z08fOKEsd8QKjm0=;
-        b=riyixDB+RLZRdsPI7UKIcTKUXihW8/qFXlI3uWuHNmaqD6nfwo5rlQjbSJx3AE3pdU
-         3HovlOeK4RxbZTt0ysz+r0F2pZEeYTJ3i6nyokhMsflLyhfrRrLJ2DQ2DbxzTKLKzfsG
-         subkNcBz1pD08uuKadgduP+/MaWEn37r1V8aJI04xPuRasdSXbf5NWmH317Ad0zhDTWe
-         gpA8FlNHm/HDozXbixnAG2nnIdpdftX6No7pLF2+Pn73ZGttj3phYeQGn9JSSW+cKR0S
-         qqdRBw5Is25SClL/PNHcAKImdL3edzSuBNkLKO2h3NYQPta4bco4RUKvYbRl4bfyLI2P
-         vdfg==
-X-Gm-Message-State: AGi0PuZssh5aIc6pafq9DwyvzqJ2MPzt6Dava0YEfAxLa7M705pYrMYV
-        4SfLyzNQuV3Sy9XxR1yxYxNSgp+Z6/Ez4pGuj5I=
-X-Google-Smtp-Source: APiQypLswZSDmfjxORpR6iZfIrHrXFf4GcptnJZCLRCoA5iqHnE1G5pBr7wCHzdnX7i3RytqljV1I0pT34Y7b7rlOF0=
-X-Received: by 2002:a02:bb91:: with SMTP id g17mr423791jan.88.1586451909930;
- Thu, 09 Apr 2020 10:05:09 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a4f:f0f:0:0:0:0:0 with HTTP; Thu, 9 Apr 2020 10:05:09 -0700 (PDT)
-Reply-To: habibprivatemail@gmail.com
-From:   Mr Habib Kone <asareakuffo5email@gmail.com>
-Date:   Thu, 9 Apr 2020 17:05:09 +0000
-Message-ID: <CAMNT2aaSRAwZpZpCWvKp4YL-kAenYdHMGXDRv3qrHHMu2hH1Yg@mail.gmail.com>
-Subject: Attention / Very Urgent Message
-To:     undisclosed-recipients:;
+        id S1728035AbgDIRHM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Apr 2020 13:07:12 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:52112 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728028AbgDIRHM (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Apr 2020 13:07:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586452031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f8hRg5EYNwvd8gy24wDwcLfYiAk7Uf7td7X5fprQc0g=;
+        b=W4cuyUmnrHIGL3v2T9+u7YjyI2N0E7dDj9UAjfXkAVupOKjOvhzjxP78BVzp35bEnwjo2X
+        atER6l5c+XRCh+qriqYFdtYK3kMByKXZksy1BclT4GtTNizEE8MsGF92bTQhBj4wAEaorY
+        vb4FNbRvJ3ghFis2lcBTZ1G2g6lDp8s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-226-wbcQ8QmgNVGmmCDUvSS3tA-1; Thu, 09 Apr 2020 13:07:08 -0400
+X-MC-Unique: wbcQ8QmgNVGmmCDUvSS3tA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0D58F18AB2CF;
+        Thu,  9 Apr 2020 17:07:07 +0000 (UTC)
+Received: from ovpn-113-89.phx2.redhat.com (ovpn-113-89.phx2.redhat.com [10.3.113.89])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 626165D9CA;
+        Thu,  9 Apr 2020 17:07:06 +0000 (UTC)
+Message-ID: <1b1be267b80404dc8ca5a14b3e26710c53f50fb4.camel@redhat.com>
+Subject: Re: [PATCH] scsi: core: Rate limit "rejecting I/O" messages
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     Joe Perches <joe@perches.com>, Daniel Wagner <dwagner@suse.de>,
+        linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Date:   Thu, 09 Apr 2020 13:07:05 -0400
+In-Reply-To: <2de69a35463317f5eca2ce665b0ee8b90b8c717b.camel@perches.com>
+References: <20200408171012.76890-1-dwagner@suse.de>
+         <120ce7f4cd1fd070e1f7c353223c21b8e4f29337.camel@redhat.com>
+         <2de69a35463317f5eca2ce665b0ee8b90b8c717b.camel@perches.com>
 Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Good Day,
+On Wed, 2020-04-08 at 12:49 -0700, Joe Perches wrote:
+> 
+> Could add a ratelimit_state to struct scsi_device.
+> 
+> Something like:
+> ---
+>  drivers/scsi/scsi_scan.c   | 2 ++
+>  include/scsi/scsi_device.h | 2 ++
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index f2437a..938c83f 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -279,6 +279,8 @@ static struct scsi_device *scsi_alloc_sdev(struct
+> scsi_target *starget,
+>  	scsi_change_queue_depth(sdev, sdev->host->cmd_per_lun ?
+>  					sdev->host->cmd_per_lun : 1);
+>  
+> +	ratelimit_state_init(&sdev->rs, DEFAULT_RATELIMIT_INTERVAL,
+> +			     DEFAULT_RATELIMIT_BURST);
+>  	scsi_sysfs_device_initialize(sdev);
+>  
+>  	if (shost->hostt->slave_alloc) {
+> diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
+> index c3cba2..2600de7 100644
+> --- a/include/scsi/scsi_device.h
+> +++ b/include/scsi/scsi_device.h
+> @@ -8,6 +8,7 @@
+>  #include <linux/blkdev.h>
+>  #include <scsi/scsi.h>
+>  #include <linux/atomic.h>
+> +#include <linux/ratelimit.h>
+>  
+>  struct device;
+>  struct request_queue;
+> @@ -233,6 +234,7 @@ struct scsi_device {
+>  	struct mutex		state_mutex;
+>  	enum scsi_device_state sdev_state;
+>  	struct task_struct	*quiesced_by;
+> +	struct ratelimit_state	rs;
+>  	unsigned long		sdev_data[];
+>  } __attribute__((aligned(sizeof(unsigned long))));
+>  
 
-I Am Habib Kone.A Banker,I have something very Important to Discuss
-with you about an Unpaid Inheritance fund left in my bank for a long
-time now by A late customer who have the-same last name with you,I
-will wait for your urgent responds,Note that I am the one that stop
-the payment because The Lawyer that contacted you at past want to play
-the fast one on me, Or you can add me on MOBILE/WHATSAPP : ( +228
-9688-6703 ) For more details.
+We could but in our experience this may not work well enough.  We do
+wants to see the message when the device goes offline, so we can look
+at logs from SAN failures to see when that happened, but logging more
+than one message per device is worthless.  And there can be *LOTS*
+of LUNs behind targets that go away.  Hundreds.  Thousands, even.
 
-Regards,
+I keep getting crash dumps with nothing useful in the dmesg buffer.
+And we see a lot of serial console lockups.
 
-Mr Habib Kone
-Director Of Operation
-GOD BLESS
+-Ewan
+
