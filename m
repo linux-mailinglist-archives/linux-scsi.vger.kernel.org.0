@@ -2,68 +2,81 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 811561A310C
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Apr 2020 10:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F1921A304C
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Apr 2020 09:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726521AbgDIIir (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 9 Apr 2020 04:38:47 -0400
-Received: from mail.bauru.sp.gov.br ([177.11.224.11]:62267 "EHLO
-        bauru.sp.gov.br" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726137AbgDIIiq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 9 Apr 2020 04:38:46 -0400
-X-Greylist: delayed 7759 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 Apr 2020 04:38:45 EDT
-Received: by bauru.sp.gov.br (Postfix, from userid 80)
-        id 2FFD894966; Thu,  9 Apr 2020 03:18:56 -0300 (BRT)
-To:     undisclosed-recipients:;
-Subject: tarvitaan =?UTF-8?Q?kiireellisi=C3=A4=20vastauksia?=
-X-PHP-Script: webmail.bauru.sp.gov.br/roundcube/index.php for 197.211.61.143
-X-PHP-Originating-Script: 0:main.inc
+        id S1726654AbgDIHgg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 9 Apr 2020 03:36:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:57642 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726082AbgDIHgg (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 9 Apr 2020 03:36:36 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 37471ADA3;
+        Thu,  9 Apr 2020 07:36:35 +0000 (UTC)
+Date:   Thu, 9 Apr 2020 09:36:34 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     "Ewan D. Milne" <emilne@redhat.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] scsi: core: Rate limit "rejecting I/O" messages
+Message-ID: <20200409073634.t2xgdhoyb4jmidnp@beryllium.lan>
+References: <20200408171012.76890-1-dwagner@suse.de>
+ <120ce7f4cd1fd070e1f7c353223c21b8e4f29337.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Wed, 08 Apr 2020 23:18:56 -0700
-From:   Aspire Money Loan <silvanaoro@bauru.sp.gov.br>
-Organization: Aspire Money Loan
-Reply-To: <aspire.offer1989@gmail.com>
-Mail-Reply-To: <aspire.offer1989@gmail.com>
-Message-ID: <7db5e0d9893f11de997f7946367cf567@bauru.sp.gov.br>
-X-Sender: silvanaoro@bauru.sp.gov.br
-User-Agent: RoundCube Webmail/0.8.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <120ce7f4cd1fd070e1f7c353223c21b8e4f29337.camel@redhat.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi Ewan,
 
+On Wed, Apr 08, 2020 at 03:16:27PM -0400, Ewan D. Milne wrote:
+> On Wed, 2020-04-08 at 19:10 +0200, Daniel Wagner wrote:
+> > --- a/drivers/scsi/scsi_lib.c
+> > +++ b/drivers/scsi/scsi_lib.c
+> > @@ -1217,7 +1217,7 @@ scsi_prep_state_check(struct scsi_device *sdev,
+> > struct request *req)
+> >  		 */
+> >  		if (!sdev->offline_already) {
+> >  			sdev->offline_already = true;
+> > -			sdev_printk(KERN_ERR, sdev,
+> > +			sdev_printk_ratelimited(KERN_ERR, sdev,
+> >  				    "rejecting I/O to offline
+> > device\n");
+> 
+> I would really prefer we not do it this way if at all possible.
+> It loses information we may need to debug SAN outage problems.
 
--- 
-Hyvää päivää,
-Olen rouva Annie Ethan yksityisestä luotonantajayrityksestä, joka 
-tunnetaan nimellä Aspire Money Loan®. Tarjoamme kaikentyyppisiä lainoja 
-2%: n korolla. Onko sinulla huonoa luottoa vai tarvitsetko leipää
-n maksaaksesi laskujasi tai perustaaksesi yrityksen?
-Jos tarvitset lainaa, ota meihin yhteyttä alla olevilla tiedoilla
-Koko nimi:
-sukupuoli:
-Maa:
-Osoite:
-Lainan määrä:
-Kesto:
-Puh:
-Odotamme vastausta, jos olet kiinnostunut
-Kiitos
-Rouva Annie Ethan
-Vastata:
-aspire.offer1989@gmail.com
-...........
-As informacoes contidas nesta mensagem podem ser de natureza reservada 
-e confidencial e sao enderecadas unicamente ao destinatario.
-No caso de nao ser o destinatario da mesma, e proibido utilizar, 
-copiar, divulgar ou tomar qualquer acao baseada nesta mensagem ou nas 
-informacoes nela contidas.
-Favor comunicar imediatamente o remetente, caso esta mensagem tenha 
-sido recebida por engano.
-<b>SPAM:</b> Se esta conta estiver fazendo spam, comunicar o 
-abuse@bauru.sp.gov.br
+Understood.
 
+> The reason I didn't use ratelimit is that the ratelimit structure is
+> per-instance of the ratelimit call here, not per-device.  So this
+> doesn't work right -- it will drop messages for other devices.
+
+I didn't really think this through. Sorry.
+
+> > -		sdev_printk(KERN_ERR, sdev,
+> > +		sdev_printk_ratelimited(KERN_ERR, sdev,
+> >  			    "rejecting I/O to dead device\n");
+> 
+> I practice I hardly see this message, do you actually have a case
+> where this happens?  If so perhaps add another flag similar to
+> offline_already?
+> 
+> The offline message happens a *lot*, we get a ton of them for each
+> active device when the queues are unblocked when a target goes away.
+
+I've missed commit b0962c53bde9 ("scsi: core: avoid repetitive logging
+of device offline messages") which should address the report I got in
+our enterprise kernel. I was over eager to rate limit the 'dead
+device' as well. It seem no need for this patch. Let me backport the
+commit and see what our customer has to say.
+
+Thanks for the help!
+Daniel
