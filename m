@@ -2,50 +2,135 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9788D1A2D76
-	for <lists+linux-scsi@lfdr.de>; Thu,  9 Apr 2020 03:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A90D1A2D3A
+	for <lists+linux-scsi@lfdr.de>; Thu,  9 Apr 2020 03:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbgDIB5k convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-scsi@lfdr.de>); Wed, 8 Apr 2020 21:57:40 -0400
-Received: from mail.ac.gov.br ([179.252.114.240]:45691 "EHLO
-        srvifs070.ac.gov.br" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726521AbgDIB5k (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Apr 2020 21:57:40 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by srvifs070.ac.gov.br (Postfix) with ESMTP id 00BC93428010;
-        Wed,  8 Apr 2020 17:56:08 -0500 (ACT)
-Received: from srvifs070.ac.gov.br ([127.0.0.1])
-        by localhost (srvifs070.ac.gov.br [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id kLhTyrkvYQRY; Wed,  8 Apr 2020 17:56:08 -0500 (ACT)
-Received: from srvifs070.ac.gov.br (localhost [127.0.0.1])
-        by srvifs070.ac.gov.br (Postfix) with ESMTP id 72CA33440F3A;
-        Wed,  8 Apr 2020 17:44:32 -0500 (ACT)
-Received: from [172.20.10.4] (unknown [129.205.113.142])
-        by srvifs070.ac.gov.br (Postfix) with ESMTPSA id BD38A34411AD;
-        Wed,  8 Apr 2020 17:40:18 -0500 (ACT)
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1726638AbgDIBNZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 8 Apr 2020 21:13:25 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:39974 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726510AbgDIBNZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 8 Apr 2020 21:13:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586394805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r0cI23rv/CRPi00YuUefPu43DYEx/C8dlX+V/+YaZOc=;
+        b=RNI22t0cIgBe+sU/YrYJVafxbmF9mvC8w6e6CG+qEv2bzj0CMUxuiKk9ItEOegP8ev3kM+
+        CCzb/TNn0q20ReBhuYz/CKBMuSE+YLT9V33U8hipXGBtyzj/Go7gIzHXKx5X3cJIBXgjXu
+        5aAH9ojeUF4jLabLikuScDBcxQa39JI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-87-XL7i7sUJOZCEc2DQIPo8NQ-1; Wed, 08 Apr 2020 21:13:20 -0400
+X-MC-Unique: XL7i7sUJOZCEc2DQIPo8NQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 191C218AB2CF;
+        Thu,  9 Apr 2020 01:13:17 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-8-27.pek2.redhat.com [10.72.8.27])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 102B952735;
+        Thu,  9 Apr 2020 01:13:05 +0000 (UTC)
+Date:   Thu, 9 Apr 2020 09:13:01 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     axboe@kernel.dk, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        paolo.valente@linaro.org, groeck@chromium.org,
+        Gwendal Grignou <gwendal@chromium.org>,
+        linux-scsi@vger.kernel.org, linux-block@vger.kernel.org,
+        sqazi@google.com,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@collabora.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        John Garry <john.garry@huawei.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] blk-mq: Add blk_mq_delay_run_hw_queues() API call
+Message-ID: <20200409011301.GA369792@localhost.localdomain>
+References: <20200408150402.21208-1-dianders@chromium.org>
+ <20200408080255.v4.2.I4c665d70212a5b33e103fec4d5019a59b4c05577@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: @ For You!
-To:     Recipients <richard@mail.ac.gov.br>
-From:   richard@mail.ac.gov.br
-Date:   Wed, 08 Apr 2020 15:39:09 -0700
-Reply-To: richard.wahl9804@gmail.com
-X-Antivirus: Avast (VPS 200408-4, 04/08/2020), Outbound message
-X-Antivirus-Status: Clean
-Message-Id: <20200408224020.BD38A34411AD@srvifs070.ac.gov.br>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200408080255.v4.2.I4c665d70212a5b33e103fec4d5019a59b4c05577@changeid>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-A Donation of $500,000.00 has been made in your Name by Richard Wahl Foundation contact us, for more details. EMAIL: richard.wahl9804@gmail.com
+On Wed, Apr 08, 2020 at 08:04:00AM -0700, Douglas Anderson wrote:
+> We have:
+> * blk_mq_run_hw_queue()
+> * blk_mq_delay_run_hw_queue()
+> * blk_mq_run_hw_queues()
+> 
+> ...but not blk_mq_delay_run_hw_queues(), presumably because nobody
+> needed it before now.  Since we need it for a later patch in this
+> series, add it.
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+> Changes in v4: None
+> Changes in v3:
+> - ("blk-mq: Add blk_mq_delay_run_hw_queues() API call") new for v3
+> 
+> Changes in v2: None
+> 
+>  block/blk-mq.c         | 19 +++++++++++++++++++
+>  include/linux/blk-mq.h |  1 +
+>  2 files changed, 20 insertions(+)
+> 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index 2cd8d2b49ff4..ea0cd970a3ff 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -1537,6 +1537,25 @@ void blk_mq_run_hw_queues(struct request_queue *q, bool async)
+>  }
+>  EXPORT_SYMBOL(blk_mq_run_hw_queues);
+>  
+> +/**
+> + * blk_mq_delay_run_hw_queues - Run all hardware queues asynchronously.
+> + * @q: Pointer to the request queue to run.
+> + * @msecs: Microseconds of delay to wait before running the queues.
+> + */
+> +void blk_mq_delay_run_hw_queues(struct request_queue *q, unsigned long msecs)
+> +{
+> +	struct blk_mq_hw_ctx *hctx;
+> +	int i;
+> +
+> +	queue_for_each_hw_ctx(q, hctx, i) {
+> +		if (blk_mq_hctx_stopped(hctx))
+> +			continue;
+> +
+> +		blk_mq_delay_run_hw_queue(hctx, msecs);
+> +	}
+> +}
+> +EXPORT_SYMBOL(blk_mq_delay_run_hw_queues);
+> +
+>  /**
+>   * blk_mq_queue_stopped() - check whether one or more hctxs have been stopped
+>   * @q: request queue.
+> diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+> index 11cfd6470b1a..405f8c196517 100644
+> --- a/include/linux/blk-mq.h
+> +++ b/include/linux/blk-mq.h
+> @@ -503,6 +503,7 @@ void blk_mq_unquiesce_queue(struct request_queue *q);
+>  void blk_mq_delay_run_hw_queue(struct blk_mq_hw_ctx *hctx, unsigned long msecs);
+>  void blk_mq_run_hw_queue(struct blk_mq_hw_ctx *hctx, bool async);
+>  void blk_mq_run_hw_queues(struct request_queue *q, bool async);
+> +void blk_mq_delay_run_hw_queues(struct request_queue *q, unsigned long msecs);
+>  void blk_mq_tagset_busy_iter(struct blk_mq_tag_set *tagset,
+>  		busy_tag_iter_fn *fn, void *priv);
+>  void blk_mq_tagset_wait_completed_request(struct blk_mq_tag_set *tagset);
+> -- 
+> 2.26.0.292.g33ef6b2f38-goog
+> 
 
-Thanks,
-Richard Wahl.
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
 
 -- 
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
+Ming
 
