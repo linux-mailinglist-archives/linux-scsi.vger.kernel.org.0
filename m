@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E081A5839
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 01:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3841A580E
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 01:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729811AbgDKXLL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Apr 2020 19:11:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50508 "EHLO mail.kernel.org"
+        id S1729940AbgDKXLe (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 11 Apr 2020 19:11:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51234 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728310AbgDKXLK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:11:10 -0400
+        id S1729933AbgDKXLd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:11:33 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9E1BC2166E;
-        Sat, 11 Apr 2020 23:11:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2C48920708;
+        Sat, 11 Apr 2020 23:11:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646670;
-        bh=QeVkQ9vL7fT5+pYOxnaIpbRPBlAX41usk9DD4YPEeJ0=;
+        s=default; t=1586646692;
+        bh=wOm6rMiOMk63monrsQgu+88dDlJcauWZEKzEvhYOGQ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vvo1GZGZHUuPe9iesKzQGvfs9ymYDA+2Axw31MHFs9hqsdP5pTOjWmpfI+lG1zeIa
-         yi1cyD2T1SM+6OeUB3eLArjJycaKstBF8CCrSwN019VG51hIF89hHD5HfcP2h6+Yjn
-         1nbctZ01oyqPQwXoxIx/L1N5AFoTA8NkN8GuU08E=
+        b=Z/IZwAjHBYxzxAZ9I/GQKSYj1gx/HU26X7bzR8eOhU2CnkBcTuoaKGzPiIehG40EI
+         fs75X5J3SuJETQcic1VBLy2TG77tb6enFSzvoxoBOrrGsfKQZfPGIKmDBwn5hqzUmz
+         kowJJHwAM7Ll75R7xQf5y7jzBS+h+taIqK6+QMoE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sagar Biradar <Sagar.Biradar@microchip.com>,
-        Balsundar P <balsundar.p@microsemi.com>,
+Cc:     Michael Hernandez <mhernandez@marvell.com>,
+        Himanshu Madhani <hmadhani@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 069/108] scsi: aacraid: Disabling TM path and only processing IOP reset
-Date:   Sat, 11 Apr 2020 19:09:04 -0400
-Message-Id: <20200411230943.24951-69-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 087/108] scsi: qla2xxx: Return appropriate failure through BSG Interface
+Date:   Sat, 11 Apr 2020 19:09:22 -0400
+Message-Id: <20200411230943.24951-87-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200411230943.24951-1-sashal@kernel.org>
 References: <20200411230943.24951-1-sashal@kernel.org>
@@ -44,124 +44,88 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Sagar Biradar <Sagar.Biradar@microchip.com>
+From: Michael Hernandez <mhernandez@marvell.com>
 
-[ Upstream commit bef18d308a2215eff8c3411a23d7f34604ce56c3 ]
+[ Upstream commit 1b81e7f3019d632a707e07927e946ffbbc102910 ]
 
-Fixes the occasional adapter panic when sg_reset is issued with -d, -t, -b
-and -H flags.  Removal of command type HBA_IU_TYPE_SCSI_TM_REQ in
-aac_hba_send since iu_type, request_id and fib_flags are not populated.
-Device and target reset handlers are made to send TMF commands only when
-reset_state is 0.
+This patch ensures flash updates API calls return possible failure
+status through BSG interface to the application.
 
-Link: https://lore.kernel.org/r/1581553771-25796-1-git-send-email-Sagar.Biradar@microchip.com
-Reviewed-by: Sagar Biradar <Sagar.Biradar@microchip.com>
-Signed-off-by: Sagar Biradar <Sagar.Biradar@microchip.com>
-Signed-off-by: Balsundar P <balsundar.p@microsemi.com>
+Link: https://lore.kernel.org/r/20200226224022.24518-7-hmadhani@marvell.com
+Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
+Signed-off-by: Michael Hernandez <mhernandez@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/aacraid/commsup.c |  2 +-
- drivers/scsi/aacraid/linit.c   | 34 +++++++++++++++++++++++++---------
- 2 files changed, 26 insertions(+), 10 deletions(-)
+ drivers/scsi/qla2xxx/qla_bsg.c |  9 +++++++--
+ drivers/scsi/qla2xxx/qla_sup.c | 13 ++++++++-----
+ 2 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
-index 2142a649e865b..90fb17c5dd69c 100644
---- a/drivers/scsi/aacraid/commsup.c
-+++ b/drivers/scsi/aacraid/commsup.c
-@@ -728,7 +728,7 @@ int aac_hba_send(u8 command, struct fib *fibptr, fib_callback callback,
- 		hbacmd->request_id =
- 			cpu_to_le32((((u32)(fibptr - dev->fibs)) << 2) + 1);
- 		fibptr->flags |= FIB_CONTEXT_FLAG_SCSI_CMD;
--	} else if (command != HBA_IU_TYPE_SCSI_TM_REQ)
-+	} else
- 		return -EINVAL;
+diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
+index cbaf178fc9796..f06e499796976 100644
+--- a/drivers/scsi/qla2xxx/qla_bsg.c
++++ b/drivers/scsi/qla2xxx/qla_bsg.c
+@@ -1505,10 +1505,15 @@ qla2x00_update_optrom(struct bsg_job *bsg_job)
+ 	    bsg_job->request_payload.sg_cnt, ha->optrom_buffer,
+ 	    ha->optrom_region_size);
  
+-	ha->isp_ops->write_optrom(vha, ha->optrom_buffer,
++	rval = ha->isp_ops->write_optrom(vha, ha->optrom_buffer,
+ 	    ha->optrom_region_start, ha->optrom_region_size);
  
-diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
-index 4a858789e6c5e..514aed38b5afe 100644
---- a/drivers/scsi/aacraid/linit.c
-+++ b/drivers/scsi/aacraid/linit.c
-@@ -723,7 +723,11 @@ static int aac_eh_abort(struct scsi_cmnd* cmd)
- 		status = aac_hba_send(HBA_IU_TYPE_SCSI_TM_REQ, fib,
- 				  (fib_callback) aac_hba_callback,
- 				  (void *) cmd);
--
-+		if (status != -EINPROGRESS) {
-+			aac_fib_complete(fib);
-+			aac_fib_free(fib);
-+			return ret;
-+		}
- 		/* Wait up to 15 secs for completion */
- 		for (count = 0; count < 15; ++count) {
- 			if (cmd->SCp.sent_command) {
-@@ -902,11 +906,11 @@ static int aac_eh_dev_reset(struct scsi_cmnd *cmd)
- 
- 	info = &aac->hba_map[bus][cid];
- 
--	if (info->devtype != AAC_DEVTYPE_NATIVE_RAW &&
--	    info->reset_state > 0)
-+	if (!(info->devtype == AAC_DEVTYPE_NATIVE_RAW &&
-+	 !(info->reset_state > 0)))
- 		return FAILED;
- 
--	pr_err("%s: Host adapter reset request. SCSI hang ?\n",
-+	pr_err("%s: Host device reset request. SCSI hang ?\n",
- 	       AAC_DRIVERNAME);
- 
- 	fib = aac_fib_alloc(aac);
-@@ -921,7 +925,12 @@ static int aac_eh_dev_reset(struct scsi_cmnd *cmd)
- 	status = aac_hba_send(command, fib,
- 			      (fib_callback) aac_tmf_callback,
- 			      (void *) info);
--
-+	if (status != -EINPROGRESS) {
-+		info->reset_state = 0;
-+		aac_fib_complete(fib);
-+		aac_fib_free(fib);
-+		return ret;
+-	bsg_reply->result = DID_OK;
++	if (rval) {
++		bsg_reply->result = -EINVAL;
++		rval = -EINVAL;
++	} else {
++		bsg_reply->result = DID_OK;
 +	}
- 	/* Wait up to 15 seconds for completion */
- 	for (count = 0; count < 15; ++count) {
- 		if (info->reset_state == 0) {
-@@ -960,11 +969,11 @@ static int aac_eh_target_reset(struct scsi_cmnd *cmd)
- 
- 	info = &aac->hba_map[bus][cid];
- 
--	if (info->devtype != AAC_DEVTYPE_NATIVE_RAW &&
--	    info->reset_state > 0)
-+	if (!(info->devtype == AAC_DEVTYPE_NATIVE_RAW &&
-+	 !(info->reset_state > 0)))
- 		return FAILED;
- 
--	pr_err("%s: Host adapter reset request. SCSI hang ?\n",
-+	pr_err("%s: Host target reset request. SCSI hang ?\n",
- 	       AAC_DRIVERNAME);
- 
- 	fib = aac_fib_alloc(aac);
-@@ -981,6 +990,13 @@ static int aac_eh_target_reset(struct scsi_cmnd *cmd)
- 			      (fib_callback) aac_tmf_callback,
- 			      (void *) info);
- 
-+	if (status != -EINPROGRESS) {
-+		info->reset_state = 0;
-+		aac_fib_complete(fib);
-+		aac_fib_free(fib);
-+		return ret;
-+	}
-+
- 	/* Wait up to 15 seconds for completion */
- 	for (count = 0; count < 15; ++count) {
- 		if (info->reset_state <= 0) {
-@@ -1033,7 +1049,7 @@ static int aac_eh_bus_reset(struct scsi_cmnd* cmd)
- 		}
+ 	vfree(ha->optrom_buffer);
+ 	ha->optrom_buffer = NULL;
+ 	ha->optrom_state = QLA_SWAITING;
+diff --git a/drivers/scsi/qla2xxx/qla_sup.c b/drivers/scsi/qla2xxx/qla_sup.c
+index bbe90354f49b0..07f0d8669806d 100644
+--- a/drivers/scsi/qla2xxx/qla_sup.c
++++ b/drivers/scsi/qla2xxx/qla_sup.c
+@@ -2686,7 +2686,7 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, uint32_t *dwptr, uint32_t faddr,
+ 	uint32_t sec_mask, rest_addr, fdata;
+ 	void *optrom = NULL;
+ 	dma_addr_t optrom_dma;
+-	int rval;
++	int rval, ret;
+ 	struct secure_flash_update_block *sfub;
+ 	dma_addr_t sfub_dma;
+ 	uint32_t offset = faddr << 2;
+@@ -2942,11 +2942,12 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, uint32_t *dwptr, uint32_t faddr,
+ write_protect:
+ 	ql_log(ql_log_warn + ql_dbg_verbose, vha, 0x7095,
+ 	    "Protect flash...\n");
+-	rval = qla24xx_protect_flash(vha);
+-	if (rval) {
++	ret = qla24xx_protect_flash(vha);
++	if (ret) {
+ 		qla81xx_fac_semaphore_access(vha, FAC_SEMAPHORE_UNLOCK);
+ 		ql_log(ql_log_warn, vha, 0x7099,
+ 		    "Failed protect flash\n");
++		rval = QLA_COMMAND_ERROR;
  	}
  
--	pr_err("%s: Host adapter reset request. SCSI hang ?\n", AAC_DRIVERNAME);
-+	pr_err("%s: Host bus reset request. SCSI hang ?\n", AAC_DRIVERNAME);
+ 	if (reset_to_rom == true) {
+@@ -2954,10 +2955,12 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, uint32_t *dwptr, uint32_t faddr,
+ 		set_bit(ISP_ABORT_NEEDED, &vha->dpc_flags);
+ 		qla2xxx_wake_dpc(vha);
  
- 	/*
- 	 * Check the health of the controller
+-		rval = qla2x00_wait_for_hba_online(vha);
+-		if (rval != QLA_SUCCESS)
++		ret = qla2x00_wait_for_hba_online(vha);
++		if (ret != QLA_SUCCESS) {
+ 			ql_log(ql_log_warn, vha, 0xffff,
+ 			    "Adapter did not come out of reset\n");
++			rval = QLA_COMMAND_ERROR;
++		}
+ 	}
+ 
+ done:
 -- 
 2.20.1
 
