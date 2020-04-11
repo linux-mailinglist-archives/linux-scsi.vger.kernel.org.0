@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CC981A57A7
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 01:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFDF1A577B
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 01:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730626AbgDKXXu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Apr 2020 19:23:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53278 "EHLO mail.kernel.org"
+        id S1730493AbgDKXX0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 11 Apr 2020 19:23:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53678 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730251AbgDKXMs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:12:48 -0400
+        id S1729288AbgDKXM5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:12:57 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D8DB21835;
-        Sat, 11 Apr 2020 23:12:47 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 136712166E;
+        Sat, 11 Apr 2020 23:12:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646768;
-        bh=aPR6JnV80W6jMfT+P0tgcfXPTc+gmbOeuqux2AaIGuw=;
+        s=default; t=1586646777;
+        bh=PQqtnbp5qUAkfc8PiIsECN0aQG6tr/+c68pEp+7GFyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ejIxKBhqhBFFyX0LiRr7h7i29gRGzLhjUCbEnXIppj1zw9938XnNhKZ8BAZplCiWg
-         QLj0BC1r+h4kb6lAyjS427TC4WKHJyDvrdRLUJsoTWaKlcgc23Lv11PD1bpuh9jA01
-         tpT5Mco10TsDyrc4Fg2UT28BuKufD9wu7wYPU/ic=
+        b=w2X4+s4K61EZuxNYU/VJYZQ5XrNbl2uv3vJH9QFv7E6oo8+FifBBSYT4pE0Mqb2Ik
+         zJycWU4FppHAFQaa4eWZqaZWQGMtFPMHl/Vw+bcTFgbPdcaHdy7/VzZzNxZa6v2UUR
+         uku21wXMvGbqyyj+n5NXHzXGYDwgUWeD/IJAhNBI=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
+Cc:     Sagar Biradar <Sagar.Biradar@microchip.com>,
+        Balsundar P <balsundar.p@microsemi.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 37/66] scsi: lpfc: Fix RQ buffer leakage when no IOCBs available
-Date:   Sat, 11 Apr 2020 19:11:34 -0400
-Message-Id: <20200411231203.25933-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 44/66] scsi: aacraid: Disabling TM path and only processing IOP reset
+Date:   Sat, 11 Apr 2020 19:11:41 -0400
+Message-Id: <20200411231203.25933-44-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200411231203.25933-1-sashal@kernel.org>
 References: <20200411231203.25933-1-sashal@kernel.org>
@@ -44,56 +44,124 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Sagar Biradar <Sagar.Biradar@microchip.com>
 
-[ Upstream commit 39c4f1a965a9244c3ba60695e8ff8da065ec6ac4 ]
+[ Upstream commit bef18d308a2215eff8c3411a23d7f34604ce56c3 ]
 
-The driver is occasionally seeing the following SLI Port error, requiring
-reset and reinit:
+Fixes the occasional adapter panic when sg_reset is issued with -d, -t, -b
+and -H flags.  Removal of command type HBA_IU_TYPE_SCSI_TM_REQ in
+aac_hba_send since iu_type, request_id and fib_flags are not populated.
+Device and target reset handlers are made to send TMF commands only when
+reset_state is 0.
 
- Port Status Event: ... error 1=0x52004a01, error 2=0x218
-
-The failure means an RQ timeout. That is, the adapter had received
-asynchronous receive frames, ran out of buffer slots to place the frames,
-and the driver did not replenish the buffer slots before a timeout
-occurred. The driver should not be so slow in replenishing buffers that a
-timeout can occur.
-
-When the driver received all the frames of a sequence, it allocates an IOCB
-to put the frames in. In a situation where there was no IOCB available for
-the frame of a sequence, the RQ buffer corresponding to the first frame of
-the sequence was not returned to the FW. Eventually, with enough traffic
-encountering the situation, the timeout occurred.
-
-Fix by releasing the buffer back to firmware whenever there is no IOCB for
-the first frame.
-
-[mkp: typo]
-
-Link: https://lore.kernel.org/r/20200128002312.16346-2-jsmart2021@gmail.com
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
+Link: https://lore.kernel.org/r/1581553771-25796-1-git-send-email-Sagar.Biradar@microchip.com
+Reviewed-by: Sagar Biradar <Sagar.Biradar@microchip.com>
+Signed-off-by: Sagar Biradar <Sagar.Biradar@microchip.com>
+Signed-off-by: Balsundar P <balsundar.p@microsemi.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/scsi/aacraid/commsup.c |  2 +-
+ drivers/scsi/aacraid/linit.c   | 34 +++++++++++++++++++++++++---------
+ 2 files changed, 26 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index a801917d3c193..c7ba7ea93eed0 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -17411,6 +17411,10 @@ lpfc_prep_seq(struct lpfc_vport *vport, struct hbq_dmabuf *seq_dmabuf)
- 			list_add_tail(&iocbq->list, &first_iocbq->list);
+diff --git a/drivers/scsi/aacraid/commsup.c b/drivers/scsi/aacraid/commsup.c
+index b7588de4484e5..4cb6ee6e1212e 100644
+--- a/drivers/scsi/aacraid/commsup.c
++++ b/drivers/scsi/aacraid/commsup.c
+@@ -743,7 +743,7 @@ int aac_hba_send(u8 command, struct fib *fibptr, fib_callback callback,
+ 		hbacmd->request_id =
+ 			cpu_to_le32((((u32)(fibptr - dev->fibs)) << 2) + 1);
+ 		fibptr->flags |= FIB_CONTEXT_FLAG_SCSI_CMD;
+-	} else if (command != HBA_IU_TYPE_SCSI_TM_REQ)
++	} else
+ 		return -EINVAL;
+ 
+ 
+diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
+index 1046947064a0b..0142547aaadd2 100644
+--- a/drivers/scsi/aacraid/linit.c
++++ b/drivers/scsi/aacraid/linit.c
+@@ -736,7 +736,11 @@ static int aac_eh_abort(struct scsi_cmnd* cmd)
+ 		status = aac_hba_send(HBA_IU_TYPE_SCSI_TM_REQ, fib,
+ 				  (fib_callback) aac_hba_callback,
+ 				  (void *) cmd);
+-
++		if (status != -EINPROGRESS) {
++			aac_fib_complete(fib);
++			aac_fib_free(fib);
++			return ret;
++		}
+ 		/* Wait up to 15 secs for completion */
+ 		for (count = 0; count < 15; ++count) {
+ 			if (cmd->SCp.sent_command) {
+@@ -915,11 +919,11 @@ static int aac_eh_dev_reset(struct scsi_cmnd *cmd)
+ 
+ 	info = &aac->hba_map[bus][cid];
+ 
+-	if (info->devtype != AAC_DEVTYPE_NATIVE_RAW &&
+-	    info->reset_state > 0)
++	if (!(info->devtype == AAC_DEVTYPE_NATIVE_RAW &&
++	 !(info->reset_state > 0)))
+ 		return FAILED;
+ 
+-	pr_err("%s: Host adapter reset request. SCSI hang ?\n",
++	pr_err("%s: Host device reset request. SCSI hang ?\n",
+ 	       AAC_DRIVERNAME);
+ 
+ 	fib = aac_fib_alloc(aac);
+@@ -934,7 +938,12 @@ static int aac_eh_dev_reset(struct scsi_cmnd *cmd)
+ 	status = aac_hba_send(command, fib,
+ 			      (fib_callback) aac_tmf_callback,
+ 			      (void *) info);
+-
++	if (status != -EINPROGRESS) {
++		info->reset_state = 0;
++		aac_fib_complete(fib);
++		aac_fib_free(fib);
++		return ret;
++	}
+ 	/* Wait up to 15 seconds for completion */
+ 	for (count = 0; count < 15; ++count) {
+ 		if (info->reset_state == 0) {
+@@ -973,11 +982,11 @@ static int aac_eh_target_reset(struct scsi_cmnd *cmd)
+ 
+ 	info = &aac->hba_map[bus][cid];
+ 
+-	if (info->devtype != AAC_DEVTYPE_NATIVE_RAW &&
+-	    info->reset_state > 0)
++	if (!(info->devtype == AAC_DEVTYPE_NATIVE_RAW &&
++	 !(info->reset_state > 0)))
+ 		return FAILED;
+ 
+-	pr_err("%s: Host adapter reset request. SCSI hang ?\n",
++	pr_err("%s: Host target reset request. SCSI hang ?\n",
+ 	       AAC_DRIVERNAME);
+ 
+ 	fib = aac_fib_alloc(aac);
+@@ -994,6 +1003,13 @@ static int aac_eh_target_reset(struct scsi_cmnd *cmd)
+ 			      (fib_callback) aac_tmf_callback,
+ 			      (void *) info);
+ 
++	if (status != -EINPROGRESS) {
++		info->reset_state = 0;
++		aac_fib_complete(fib);
++		aac_fib_free(fib);
++		return ret;
++	}
++
+ 	/* Wait up to 15 seconds for completion */
+ 	for (count = 0; count < 15; ++count) {
+ 		if (info->reset_state <= 0) {
+@@ -1046,7 +1062,7 @@ static int aac_eh_bus_reset(struct scsi_cmnd* cmd)
  		}
  	}
-+	/* Free the sequence's header buffer */
-+	if (!first_iocbq)
-+		lpfc_in_buf_free(vport->phba, &seq_dmabuf->dbuf);
-+
- 	return first_iocbq;
- }
  
+-	pr_err("%s: Host adapter reset request. SCSI hang ?\n", AAC_DRIVERNAME);
++	pr_err("%s: Host bus reset request. SCSI hang ?\n", AAC_DRIVERNAME);
+ 
+ 	/*
+ 	 * Check the health of the controller
 -- 
 2.20.1
 
