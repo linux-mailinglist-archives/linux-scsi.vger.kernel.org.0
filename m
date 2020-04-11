@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C58281A5494
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 01:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0053A1A5A70
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 01:43:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728171AbgDKXFx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Apr 2020 19:05:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40620 "EHLO mail.kernel.org"
+        id S1728362AbgDKXGU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 11 Apr 2020 19:06:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728162AbgDKXFx (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 11 Apr 2020 19:05:53 -0400
+        id S1728358AbgDKXGU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 11 Apr 2020 19:06:20 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ABFC920CC7;
-        Sat, 11 Apr 2020 23:05:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8AA24215A4;
+        Sat, 11 Apr 2020 23:06:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586646353;
-        bh=uNaYKRqofACkx4pbgLvm7Di+W4B87DTqrRdNFyHkkVE=;
+        s=default; t=1586646380;
+        bh=KgLVOBxRtNk4qSh8UnsL52RisIKhLDwYWPx0SaLH0RQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d2mxoqOgGUHgfEoKAsHzGOfvImatIY3DJKlfRI9mqSTDZLnZTl8ZMc+PvMZwZYLcs
-         zi1l1MhENh+ThgOPLLq7kUL3PEgsC6WXgDsdb90oXaORUZvx3t+27Ra6RgD08XXaqA
-         AlGkrqQGl0Cey5StUDLFqYHdh1ejJEx+wzrNrSiQ=
+        b=c3SZmeVPjt09rl/pg7XXPq7d4nbL4VcYDkgt3fTcnGSlRXmTlMVtHJuwuDW/UkOmx
+         ysPffEderlmKSq1bJiCtFFiQVIkAFfRuJk7YwhZYiJ/36/VJEa60mqq5PTN4KwGdVF
+         idqT52TTQ1TIqpNm0UUU6pGdWSLTww/SJnryZBLY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Ewan D. Milne" <emilne@redhat.com>,
-        Bart van Assche <bvanassche@acm.org>,
+Cc:     Michael Hernandez <mhernandez@marvell.com>,
+        Himanshu Madhani <hmadhani@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 100/149] scsi: core: avoid repetitive logging of device offline messages
-Date:   Sat, 11 Apr 2020 19:02:57 -0400
-Message-Id: <20200411230347.22371-100-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.6 121/149] scsi: qla2xxx: Return appropriate failure through BSG Interface
+Date:   Sat, 11 Apr 2020 19:03:18 -0400
+Message-Id: <20200411230347.22371-121-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200411230347.22371-1-sashal@kernel.org>
 References: <20200411230347.22371-1-sashal@kernel.org>
@@ -44,70 +44,88 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: "Ewan D. Milne" <emilne@redhat.com>
+From: Michael Hernandez <mhernandez@marvell.com>
 
-[ Upstream commit b0962c53bde9a485c8ebc401fa1dbe821a76bc3e ]
+[ Upstream commit 1b81e7f3019d632a707e07927e946ffbbc102910 ]
 
-Large queues of I/O to offline devices that are eventually submitted when
-devices are unblocked result in a many repeated "rejecting I/O to offline
-device" messages.  These messages can fill up the dmesg buffer in crash
-dumps so no useful prior messages remain.  In addition, if a serial console
-is used, the flood of messages can cause a hard lockup in the console code.
+This patch ensures flash updates API calls return possible failure
+status through BSG interface to the application.
 
-Introduce a flag indicating the message has already been logged for the
-device, and reset the flag when scsi_device_set_state() changes the device
-state.
-
-Link: https://lore.kernel.org/r/20200311143930.20674-1-emilne@redhat.com
-Reviewed-by: Bart van Assche <bvanassche@acm.org>
-Signed-off-by: Ewan D. Milne <emilne@redhat.com>
+Link: https://lore.kernel.org/r/20200226224022.24518-7-hmadhani@marvell.com
+Signed-off-by: Himanshu Madhani <hmadhani@marvell.com>
+Signed-off-by: Michael Hernandez <mhernandez@marvell.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_lib.c    | 8 ++++++--
- include/scsi/scsi_device.h | 3 +++
- 2 files changed, 9 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_bsg.c |  9 +++++++--
+ drivers/scsi/qla2xxx/qla_sup.c | 13 ++++++++-----
+ 2 files changed, 15 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 610ee41fa54cb..a45e7289dbbe7 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1240,8 +1240,11 @@ scsi_prep_state_check(struct scsi_device *sdev, struct request *req)
- 		 * commands.  The device must be brought online
- 		 * before trying any recovery commands.
- 		 */
--		sdev_printk(KERN_ERR, sdev,
--			    "rejecting I/O to offline device\n");
-+		if (!sdev->offline_already) {
-+			sdev->offline_already = true;
-+			sdev_printk(KERN_ERR, sdev,
-+				    "rejecting I/O to offline device\n");
-+		}
- 		return BLK_STS_IOERR;
- 	case SDEV_DEL:
- 		/*
-@@ -2340,6 +2343,7 @@ scsi_device_set_state(struct scsi_device *sdev, enum scsi_device_state state)
- 		break;
+diff --git a/drivers/scsi/qla2xxx/qla_bsg.c b/drivers/scsi/qla2xxx/qla_bsg.c
+index d7169e43f5e18..d6f814aa94aba 100644
+--- a/drivers/scsi/qla2xxx/qla_bsg.c
++++ b/drivers/scsi/qla2xxx/qla_bsg.c
+@@ -1506,10 +1506,15 @@ qla2x00_update_optrom(struct bsg_job *bsg_job)
+ 	    bsg_job->request_payload.sg_cnt, ha->optrom_buffer,
+ 	    ha->optrom_region_size);
  
+-	ha->isp_ops->write_optrom(vha, ha->optrom_buffer,
++	rval = ha->isp_ops->write_optrom(vha, ha->optrom_buffer,
+ 	    ha->optrom_region_start, ha->optrom_region_size);
+ 
+-	bsg_reply->result = DID_OK;
++	if (rval) {
++		bsg_reply->result = -EINVAL;
++		rval = -EINVAL;
++	} else {
++		bsg_reply->result = DID_OK;
++	}
+ 	vfree(ha->optrom_buffer);
+ 	ha->optrom_buffer = NULL;
+ 	ha->optrom_state = QLA_SWAITING;
+diff --git a/drivers/scsi/qla2xxx/qla_sup.c b/drivers/scsi/qla2xxx/qla_sup.c
+index 76a38bf86cbc3..3da79ee1d88e4 100644
+--- a/drivers/scsi/qla2xxx/qla_sup.c
++++ b/drivers/scsi/qla2xxx/qla_sup.c
+@@ -2683,7 +2683,7 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, uint32_t *dwptr, uint32_t faddr,
+ 	uint32_t sec_mask, rest_addr, fdata;
+ 	void *optrom = NULL;
+ 	dma_addr_t optrom_dma;
+-	int rval;
++	int rval, ret;
+ 	struct secure_flash_update_block *sfub;
+ 	dma_addr_t sfub_dma;
+ 	uint32_t offset = faddr << 2;
+@@ -2939,11 +2939,12 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, uint32_t *dwptr, uint32_t faddr,
+ write_protect:
+ 	ql_log(ql_log_warn + ql_dbg_verbose, vha, 0x7095,
+ 	    "Protect flash...\n");
+-	rval = qla24xx_protect_flash(vha);
+-	if (rval) {
++	ret = qla24xx_protect_flash(vha);
++	if (ret) {
+ 		qla81xx_fac_semaphore_access(vha, FAC_SEMAPHORE_UNLOCK);
+ 		ql_log(ql_log_warn, vha, 0x7099,
+ 		    "Failed protect flash\n");
++		rval = QLA_COMMAND_ERROR;
  	}
-+	sdev->offline_already = false;
- 	sdev->sdev_state = state;
- 	return 0;
  
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index f8312a3e5b429..cd9656ff3c43c 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -204,6 +204,9 @@ struct scsi_device {
- 	unsigned unmap_limit_for_ws:1;	/* Use the UNMAP limit for WRITE SAME */
- 	unsigned rpm_autosuspend:1;	/* Enable runtime autosuspend at device
- 					 * creation time */
-+
-+	bool offline_already;		/* Device offline message logged */
-+
- 	atomic_t disk_events_disable_depth; /* disable depth for disk events */
+ 	if (reset_to_rom == true) {
+@@ -2951,10 +2952,12 @@ qla28xx_write_flash_data(scsi_qla_host_t *vha, uint32_t *dwptr, uint32_t faddr,
+ 		set_bit(ISP_ABORT_NEEDED, &vha->dpc_flags);
+ 		qla2xxx_wake_dpc(vha);
  
- 	DECLARE_BITMAP(supported_events, SDEV_EVT_MAXBITS); /* supported events */
+-		rval = qla2x00_wait_for_hba_online(vha);
+-		if (rval != QLA_SUCCESS)
++		ret = qla2x00_wait_for_hba_online(vha);
++		if (ret != QLA_SUCCESS) {
+ 			ql_log(ql_log_warn, vha, 0xffff,
+ 			    "Adapter did not come out of reset\n");
++			rval = QLA_COMMAND_ERROR;
++		}
+ 	}
+ 
+ done:
 -- 
 2.20.1
 
