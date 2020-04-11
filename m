@@ -2,54 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B30DC1A4B4C
-	for <lists+linux-scsi@lfdr.de>; Fri, 10 Apr 2020 22:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E371A4CDC
+	for <lists+linux-scsi@lfdr.de>; Sat, 11 Apr 2020 02:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbgDJUkd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 10 Apr 2020 16:40:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47864 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726690AbgDJUkc (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 10 Apr 2020 16:40:32 -0400
-Subject: Re: [GIT PULL] final round of SCSI updates for the 5.6+ merge window
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586551232;
-        bh=UKehqYH0jwSXHXbwhE6DMiYSwP6eu4/Bu+uliwUKjH8=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=NACs1Fz6UBNHGWye6MdhTCnBqTZuJxvG7vNvPE4UAVwuLXpmCKOQIuwt1pR9kzf63
-         tA/POr66+KAvoANWnjb7WhLa4ObSiJ/h69bKkXquiwrJCUraSy6hpBp5PlEmpYr/K5
-         WhgiG/viuOeoqxZ8zsN+QYi8f9y7VOvs1ppsYUh4=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1586542752.4129.55.camel@HansenPartnership.com>
-References: <1586542752.4129.55.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1586542752.4129.55.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
-X-PR-Tracked-Commit-Id: 1b55940b9bcc64acb7336224b0e49203ff7987c6
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 93f3321f650c5e700478ee8ed2e118d8255095cd
-Message-Id: <158655123244.24997.6752350097309620095.pr-tracker-bot@kernel.org>
-Date:   Fri, 10 Apr 2020 20:40:32 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1726979AbgDKAUl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 10 Apr 2020 20:20:41 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:51310 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726860AbgDKAUV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 10 Apr 2020 20:20:21 -0400
+Received: by mail-wm1-f66.google.com with SMTP id x4so4083055wmj.1;
+        Fri, 10 Apr 2020 17:20:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VFyLS6TU6TdGoqvb1Y1UQYTyXeqkxGElWzmZo9z0wbQ=;
+        b=kG0j/5lPIT0wJJbhcgxc2dAl5Tfl7e6TeAD92/k91AO7exflpxnjlMyFxWfTt22woD
+         YTghdxJFHYMRVGc9PL+QAUtRBuKCP179vQl8/xRkvGHH0KQ6w5Qg7bNKEqYaNK/C2fm4
+         uD/r6LIS+wPazGLVF5KwYFAfs11SJjhaNNXC6cWEmDklSEwCbILlSgumjlkUmWH76q2J
+         Hn45t6Yr8j/nr9tlKcP9zhU+JoQItYx+rJuDiN+LVVqHQIYJvh6qgX6jJsNGIEYxQ0Y5
+         a0l4Qs7N2P3PZp5Ur0L57bfzLdmtvNew3pjEx8/tU2b4gni9Ct76HIU2nETqYQ89uL5M
+         JsNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VFyLS6TU6TdGoqvb1Y1UQYTyXeqkxGElWzmZo9z0wbQ=;
+        b=JdEhMEr+FN/ly6cMwpR+GBm7F62hXcthDfmkhq2AQyYtK/WeJi2Hy4F+R5qV/yM/+1
+         G9la3nzeQKMlfR9uiB0hcsbx4GmePq9PTZ6dcxMrk7E1b4G/SZ2CMlOJFcOBqI6VKdRY
+         NHxgfr2O44k6CQJaIfw+Wytt3Icj8rJPAdmbpYmw0cAOIvaCCmpngY3gkSv7Vuprm5nR
+         RquB5spZE0AtPqnuyQTd//LcQSa66G53h3rAA7CBH1lV/9zyKpfyeQQWfWRpHlGH5g9r
+         65eXrBzE86sJX5xeBbGOy8+rXSljujc5axRTU+hZ2JTHjE4siBoZEfVzeCiUldJSP/A9
+         DoeQ==
+X-Gm-Message-State: AGi0Pub6furBzWqkdt2a2d86F+2lIsLQ+Qhv1bbG6fWiwE1wOU5aNPF4
+        pSNyQQtijnAUOCOXpIcw+dIFsbPPW2hE
+X-Google-Smtp-Source: APiQypJgJDkE0YaOts1yUmpKnMHB1M/0Hl9bmGgzG2H6enzHHMuISK4pa38etdgxOUfRh7X8meJFxg==
+X-Received: by 2002:a05:600c:1:: with SMTP id g1mr1804343wmc.49.1586564420198;
+        Fri, 10 Apr 2020 17:20:20 -0700 (PDT)
+Received: from ninjahost.lan (host-2-102-14-153.as13285.net. [2.102.14.153])
+        by smtp.gmail.com with ESMTPSA id b191sm5091594wmd.39.2020.04.10.17.20.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Apr 2020 17:20:19 -0700 (PDT)
+From:   Jules Irenge <jbi.octave@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     boqun.feng@gmail.com, "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        John Garry <john.garry@huawei.com>,
+        Allison Randal <allison@lohutok.net>,
+        Hannes Reinecke <hare@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-scsi@vger.kernel.org (open list:SCSI SUBSYSTEM)
+Subject: [PATCH 6/9] scsi: libsas: Add missing annotation for sas_ata_qc_issue()
+Date:   Sat, 11 Apr 2020 01:19:30 +0100
+Message-Id: <20200411001933.10072-7-jbi.octave@gmail.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200411001933.10072-1-jbi.octave@gmail.com>
+References: <0/9>
+ <20200411001933.10072-1-jbi.octave@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Fri, 10 Apr 2020 11:19:12 -0700:
+Sparse reports a warning at sas_ata_qc_issue()
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-misc
+warning: context imbalance in sas_ata_qc_issue() - unexpected unlock
+The root cause is the missing annotation at sas_ata_qc_issue()
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/93f3321f650c5e700478ee8ed2e118d8255095cd
+Add the missing __must_hold(ap->lock) annotation
 
-Thank you!
+Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+---
+ drivers/scsi/libsas/sas_ata.c | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
+index c5a828a041e0..5d716d388707 100644
+--- a/drivers/scsi/libsas/sas_ata.c
++++ b/drivers/scsi/libsas/sas_ata.c
+@@ -160,6 +160,7 @@ static void sas_ata_task_done(struct sas_task *task)
+ }
+ 
+ static unsigned int sas_ata_qc_issue(struct ata_queued_cmd *qc)
++	__must_hold(ap->lock)
+ {
+ 	struct sas_task *task;
+ 	struct scatterlist *sg;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.24.1
+
