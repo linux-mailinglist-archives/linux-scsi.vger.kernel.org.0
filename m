@@ -2,23 +2,23 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC6E1A5F36
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 17:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 844391A5F3A
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 17:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbgDLPpG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 12 Apr 2020 11:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:45030 "EHLO
+        id S1727080AbgDLPuG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 12 Apr 2020 11:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.18]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726843AbgDLPpF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Apr 2020 11:45:05 -0400
+        with ESMTP id S1727068AbgDLPuF (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Apr 2020 11:50:05 -0400
 Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9017C0A3BF0
-        for <linux-scsi@vger.kernel.org>; Sun, 12 Apr 2020 08:39:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4660FC02A1A2
+        for <linux-scsi@vger.kernel.org>; Sun, 12 Apr 2020 08:40:24 -0700 (PDT)
 X-IronPort-AV: E=Sophos;i="5.72,374,1580770800"; 
-   d="scan'208";a="345718601"
+   d="scan'208";a="345718631"
 Received: from abo-173-121-68.mrs.modulonet.fr (HELO hadrien) ([85.68.121.173])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 17:39:18 +0200
-Date:   Sun, 12 Apr 2020 17:39:17 +0200 (CEST)
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Apr 2020 17:40:22 +0200
+Date:   Sun, 12 Apr 2020 17:40:22 +0200 (CEST)
 From:   Julia Lawall <julia.lawall@inria.fr>
 X-X-Sender: jll@hadrien
 To:     James Smart <jsmart2021@gmail.com>
@@ -28,7 +28,7 @@ cc:     linux-scsi@vger.kernel.org, dwagner@suse.de, maier@linux.ibm.com,
         James Smart <jsmart2021@gmail.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>, kbuild-all@lists.01.org
 Subject: [PATCH] elx: efct: fix zalloc-simple.cocci warnings
-Message-ID: <alpine.DEB.2.21.2004121738150.2419@hadrien>
+Message-ID: <alpine.DEB.2.21.2004121739210.2419@hadrien>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -36,6 +36,8 @@ Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
+
+From: kbuild test robot <lkp@intel.com>
 
 Use zeroing allocator rather than allocator followed by memset with 0
 
@@ -51,47 +53,35 @@ base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
 :::::: branch date: 4 hours ago
 :::::: commit date: 4 hours ago
 
- efct_lio.c |    9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ efct_xport.c |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
---- a/drivers/scsi/elx/efct/efct_lio.c
-+++ b/drivers/scsi/elx/efct/efct_lio.c
-@@ -262,11 +262,10 @@ static int efct_debugfs_session_open(str
- 		return EFC_SUCCESS;
- 	}
+--- a/drivers/scsi/elx/efct/efct_xport.c
++++ b/drivers/scsi/elx/efct/efct_xport.c
+@@ -41,11 +41,10 @@ efct_xport_alloc(struct efct *efct)
+ {
+ 	struct efct_xport *xport;
 
--	filp->private_data = kmalloc(size, GFP_KERNEL);
-+	filp->private_data = kzalloc(size, GFP_KERNEL);
- 	if (!filp->private_data)
- 		return -ENOMEM;
+-	xport = kmalloc(sizeof(*xport), GFP_KERNEL);
++	xport = kzalloc(sizeof(*xport), GFP_KERNEL);
+ 	if (!xport)
+ 		return xport;
 
--	memset(filp->private_data, 0, size);
- 	efct_lio_tgt_session_data(sport->efct, sport->wwpn, filp->private_data,
- 				  size);
- 	return EFC_SUCCESS;
-@@ -300,11 +299,10 @@ static int efct_npiv_debugfs_session_ope
- 		return EFC_SUCCESS;
- 	}
+-	memset(xport, 0, sizeof(*xport));
+ 	xport->efct = efct;
+ 	return xport;
+ }
+@@ -685,12 +684,10 @@ efct_xport_control(struct efct_xport *xp
+ 		context = va_arg(argp, void *);
+ 		va_end(argp);
 
--	filp->private_data = kmalloc(size, GFP_KERNEL);
-+	filp->private_data = kzalloc(size, GFP_KERNEL);
- 	if (!filp->private_data)
- 		return -ENOMEM;
+-		payload = kmalloc(sizeof(*payload), GFP_KERNEL);
++		payload = kzalloc(sizeof(*payload), GFP_KERNEL);
+ 		if (!payload)
+ 			return EFC_FAIL;
 
--	memset(filp->private_data, 0, size);
- 	efct_lio_tgt_session_data(sport->efct, sport->npiv_wwpn,
- 				  filp->private_data, size);
- 	return EFC_SUCCESS;
-@@ -1459,11 +1457,10 @@ int efct_scsi_del_initiator(struct efc *
- 	if (reason == EFCT_SCSI_INITIATOR_MISSING)
- 		return EFCT_SCSI_CALL_COMPLETE;
+-		memset(payload, 0, sizeof(*payload));
+-
+ 		efct = node->efc->base;
+ 		hw = &efct->hw;
 
--	wq_data = kmalloc(sizeof(*wq_data), GFP_ATOMIC);
-+	wq_data = kzalloc(sizeof(*wq_data), GFP_ATOMIC);
- 	if (!wq_data)
- 		return EFCT_SCSI_CALL_COMPLETE;
-
--	memset(wq_data, 0, sizeof(*wq_data));
- 	wq_data->ptr = node;
- 	wq_data->efct = efct;
- 	INIT_WORK(&wq_data->work, efct_lio_remove_session);
