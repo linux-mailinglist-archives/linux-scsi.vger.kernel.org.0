@@ -2,100 +2,174 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A551A5C58
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 05:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E611A5CDC
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 06:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727035AbgDLDeH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 11 Apr 2020 23:34:07 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:33987 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726837AbgDLDeF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Apr 2020 23:34:05 -0400
-Received: by mail-pf1-f194.google.com with SMTP id v23so3006786pfm.1
-        for <linux-scsi@vger.kernel.org>; Sat, 11 Apr 2020 20:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=iXCriI9UNfyPknMKRh+gL/erVdk1xHZUT03YG/h+oL4=;
-        b=IN5KQ1tOM23P0gUEEOudEK2IB4b7dHitpi1MHpWJya8eHY1ZRkz3taQONor7ryuTZ5
-         sYTm5omfMAjKIOeiTQqHruJ6jajqqWfEd06P2YEmn+UCuPV0ruVs89L0Bb4NqyFi2YAb
-         POv1P2AEBa3dMWIKklvk7tofUTHwh7aPNKncD6VVrJ/vU4R0KjtYyAUK2uJSBlk9Eipn
-         Ha0pjmnhUBWenR+BDea4H3yK6SevJo8znbYsm0iSjNnp8QrVg5J0gEBU0U8W68MvuBoq
-         DY+mjNXsCVPhZQz5IF2RpSI5AqrE/FAJUHDjrzlGkADspRAivyyCn0USloQexe+g7BCJ
-         kIcA==
+        id S1725832AbgDLE5u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 12 Apr 2020 00:57:50 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39487 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725812AbgDLE5u (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Apr 2020 00:57:50 -0400
+Received: by mail-pl1-f194.google.com with SMTP id k18so2210791pll.6
+        for <linux-scsi@vger.kernel.org>; Sat, 11 Apr 2020 21:57:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=iXCriI9UNfyPknMKRh+gL/erVdk1xHZUT03YG/h+oL4=;
-        b=p6Y7jqx7EUQnRY713ihENY57xXQJM1Btn/m6R7EXl51xpscTgCKv0CImXdAe+RjfdK
-         3jMXrDl+esEIllhSfcHdVT/Y8hxcXPtEYS7VHGtxPf1CUsLruvh6BhqmjN/yY49hT5tm
-         lRWmQ7o9ww/PJeUQV/lIRUWSTS0GBEKbYjYLPmH2ph3PlGPNy5ipez2dYN068WuRW8QS
-         Re1uv3nGxmHekFtIAP3qWuPIBI3jyWC45gPx2K2yaD7Oy0pJ9C/8ZdQp4vuI6VL7DP6v
-         uFlF6C5sBaUF/n3hns53abPafH15PDCNcc+/0py2/GkY3KVhc3idoarmjdTi2YYRrOwE
-         wo1w==
-X-Gm-Message-State: AGi0PuavYsTm8M79S0LMK0BwLdG5sBscxtZyqevyYQFH3RAFcNMbL/ae
-        I8EXZK5CwIUM23U8MTW79y6185z6
-X-Google-Smtp-Source: APiQypLO39BIM4NDQ6z+Vr0YbxowI2JzWXSwTyhaPzrDBwRcGJUTmnxJGGfAC8asBN31O4lBiwY/uQ==
-X-Received: by 2002:a63:a70b:: with SMTP id d11mr11408991pgf.358.1586662444615;
-        Sat, 11 Apr 2020 20:34:04 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (ip68-5-146-102.oc.oc.cox.net. [68.5.146.102])
-        by smtp.gmail.com with ESMTPSA id i4sm5614694pjg.4.2020.04.11.20.34.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 11 Apr 2020 20:34:03 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     dwagner@suse.de, maier@linux.ibm.com, bvanassche@acm.org,
-        herbszt@gmx.de, natechancellor@gmail.com, rdunlap@infradead.org,
-        hare@suse.de, James Smart <jsmart2021@gmail.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=8kubA89XCTfqZN3MKeEKs33DADLOnZsGllbO5q/tZLI=;
+        b=Xc6GRQRQpF4Twj3FSij5zIlG9HVxRLMF17LkQK2R77FMdQqHViVdM8aDpTgXxFtZ56
+         NSSyTEkPHkPObm4BQwIkjAXp96yibv9P8v8ziqBAonEIJkHGr5O5EqmU7j7/wtXYIAu/
+         khrPSWweGlnqFQKhvL7HRXQm3ZyjjNrvkzl6WRi7tZa3to9lt2Cka+1waETvjEZWJC77
+         nMct7pGUgLN/l2VS98AqsTKRK6ifph6issUxmPGnd/2F88MpYyz9V84HDGPQMQQT6j/v
+         TL+8WY7KjFipVuzS2lTIzrJaE2HHn534WXH5ZrbjnCSuVWS3TB3jpoQmA02ow6JnrVxX
+         JHwg==
+X-Gm-Message-State: AGi0PuYgICdHQ3SsSS5l3cD+gnfDEkVNiAoRx7X77itzxHE6Nxbv+WHh
+        g0omAYhhWNVtAVKgy5Ph/M8=
+X-Google-Smtp-Source: APiQypLpI63wcun08ofogok1dMN03w0O/nKT/u3sgLTOekc+/XDdlCsy5vKNBSh9otF9VmVqv0ho4g==
+X-Received: by 2002:a17:90a:640d:: with SMTP id g13mr14085777pjj.67.1586667467701;
+        Sat, 11 Apr 2020 21:57:47 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:c9fa:49a8:1701:9c75? ([2601:647:4000:d7:c9fa:49a8:1701:9c75])
+        by smtp.gmail.com with ESMTPSA id p1sm5616717pjr.40.2020.04.11.21.57.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Apr 2020 21:57:46 -0700 (PDT)
+Subject: Re: [PATCH v3 24/31] elx: efct: LIO backend interface routines
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+Cc:     dwagner@suse.de, maier@linux.ibm.com, herbszt@gmx.de,
+        natechancellor@gmail.com, rdunlap@infradead.org, hare@suse.de,
         Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH v3 31/31] elx: efct: Tie into kernel Kconfig and build process
-Date:   Sat, 11 Apr 2020 20:33:03 -0700
-Message-Id: <20200412033303.29574-32-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200412033303.29574-1-jsmart2021@gmail.com>
 References: <20200412033303.29574-1-jsmart2021@gmail.com>
+ <20200412033303.29574-25-jsmart2021@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <dc132a7c-0d82-7439-dad0-c35a6acab1f7@acm.org>
+Date:   Sat, 11 Apr 2020 21:57:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20200412033303.29574-25-jsmart2021@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This final patch ties the efct driver into the kernel Kconfig
-and build linkages in the drivers/scsi directory.
+On 2020-04-11 20:32, James Smart wrote:
+> +	return EFC_SUCCESS;
+> +}
 
-Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/Kconfig  | 2 ++
- drivers/scsi/Makefile | 1 +
- 2 files changed, 3 insertions(+)
+Redefining 0 is unusual in the Linux kernel. I prefer to see "return 0;"
+instead of "return ${DRIVER_NAME}_SUCCESS;".
 
-diff --git a/drivers/scsi/Kconfig b/drivers/scsi/Kconfig
-index b5be6f43ec3f..e476eaad6f49 100644
---- a/drivers/scsi/Kconfig
-+++ b/drivers/scsi/Kconfig
-@@ -1168,6 +1168,8 @@ config SCSI_LPFC_DEBUG_FS
- 	  This makes debugging information from the lpfc driver
- 	  available via the debugfs filesystem.
- 
-+source "drivers/scsi/elx/Kconfig"
-+
- config SCSI_SIM710
- 	tristate "Simple 53c710 SCSI support (Compaq, NCR machines)"
- 	depends on EISA && SCSI
-diff --git a/drivers/scsi/Makefile b/drivers/scsi/Makefile
-index c00e3dd57990..844db573283c 100644
---- a/drivers/scsi/Makefile
-+++ b/drivers/scsi/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SCSI_QLOGIC_1280)	+= qla1280.o
- obj-$(CONFIG_SCSI_QLA_FC)	+= qla2xxx/
- obj-$(CONFIG_SCSI_QLA_ISCSI)	+= libiscsi.o qla4xxx/
- obj-$(CONFIG_SCSI_LPFC)		+= lpfc/
-+obj-$(CONFIG_SCSI_EFCT)		+= elx/
- obj-$(CONFIG_SCSI_BFA_FC)	+= bfa/
- obj-$(CONFIG_SCSI_CHELSIO_FCOE)	+= csiostor/
- obj-$(CONFIG_SCSI_DMX3191D)	+= dmx3191d.o
--- 
-2.16.4
+> +static int  efct_lio_tgt_session_data(struct efct *efct, u64 wwpn,
+> +				      char *buf, int size)
+> +{
+> +	struct efc_sli_port *sport = NULL;
+> +	struct efc_node *node = NULL;
+> +	struct efc *efc = efct->efcport;
+> +	u16 loop_id = 0;
+> +	int off = 0, rc = 0;
+> +
+> +	if (!efc->domain) {
+> +		efc_log_err(efct, "failed to find efct/domain\n");
+> +		return EFC_FAIL;
+> +	}
+> +
+> +	list_for_each_entry(sport, &efc->domain->sport_list, list_entry) {
+> +		if (sport->wwpn != wwpn)
+> +			continue;
+> +		list_for_each_entry(node, &sport->node_list,
+> +				    list_entry) {
+> +			/* Dump only remote NPORT sessions */
+> +			if (!efct_lio_node_is_initiator(node))
+> +				continue;
+> +
+> +			rc = snprintf(buf + off, size - off,
+> +				"0x%016llx,0x%08x,0x%04x\n",
+> +				get_unaligned_be64(node->wwpn),
+> +				node->rnode.fc_id, loop_id);
+> +			if (rc < 0)
+> +				break;
+> +			off += rc;
+> +		}
+> +	}
+> +
+> +	return EFC_SUCCESS;
+> +}
 
+This is one of the most unfriendly debugfs data formats I have seen so
+far: information about all sessions is dumped into one huge debugfs
+attribute.
+
+Is information about active sessions useful for other LIO target
+drivers? Wasn't it promised that this functionality would be moved into
+the LIO core instead of defining it for the efct driver only?
+
+> +static int efct_debugfs_session_open(struct inode *inode, struct file *filp)
+> +{
+> +	struct efct_lio_sport *sport = inode->i_private;
+> +	int size = 17 * PAGE_SIZE; /* 34 byte per session*2048 sessions */
+> +
+> +	if (!(filp->f_mode & FMODE_READ)) {
+> +		filp->private_data = sport;
+> +		return EFC_SUCCESS;
+> +	}
+> +
+> +	filp->private_data = kmalloc(size, GFP_KERNEL);
+> +	if (!filp->private_data)
+> +		return -ENOMEM;
+> +
+> +	memset(filp->private_data, 0, size);
+> +	efct_lio_tgt_session_data(sport->efct, sport->wwpn, filp->private_data,
+> +				  size);
+> +	return EFC_SUCCESS;
+> +}
+
+kmalloc() + memset() can be changed into kzalloc().
+
+The above code allocates 68 KB physically contiguous memory? Kernel code
+should not rely on higher order page allocations unless there is no
+other choice.
+
+Additionally, I see that the amount of memory allocated is independent
+of the number of sessions. I think there are better approaches.
+
+> +
+> +	lio_wq = create_singlethread_workqueue("efct_lio_worker");
+> +	if (!lio_wq) {
+> +		efc_log_err(efct, "workqueue create failed\n");
+> +		return -ENOMEM;
+> +	}
+
+Is any work queued onto lio_wq that needs to be serialized against other
+work queued onto the same queue? If not, can one of the system
+workqueues be used, e.g. system_wq?
+
+Thanks,
+
+Bart.
