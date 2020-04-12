@@ -2,63 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8021B1A5C52
+	by mail.lfdr.de (Postfix) with ESMTP id 065481A5C51
 	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 05:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbgDLDd4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1727018AbgDLDd4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Sat, 11 Apr 2020 23:33:56 -0400
-Received: from mail-pf1-f173.google.com ([209.85.210.173]:34034 "EHLO
-        mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726997AbgDLDd4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Apr 2020 23:33:56 -0400
-Received: by mail-pf1-f173.google.com with SMTP id v23so3006667pfm.1
-        for <linux-scsi@vger.kernel.org>; Sat, 11 Apr 2020 20:33:54 -0700 (PDT)
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38904 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727016AbgDLDdz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 11 Apr 2020 23:33:55 -0400
+Received: by mail-pg1-f193.google.com with SMTP id p8so2938828pgi.5
+        for <linux-scsi@vger.kernel.org>; Sat, 11 Apr 2020 20:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=vpMSaUnT6NPJJYFXNlOiq3y6S7ZMI9PctKnVPVaJecE=;
-        b=PDb+UadeEUmd5OL5AkVDT/eUl1mLChAn5kz0Gmczh4BDINPiZFZI/y7Sh2MQe0R7kj
-         BVft2untPvDGdUcrSj9pJHEpzm/nH0kMhAe9JKjcf7y60udWJZbUxpZWBI5iDnNi1D1N
-         2OZiGdROB4i65jPW3MDp6F0AtwfMp9+eC/LI+6Do83tGRRfbII4zhtvhcRRjOtSn38ED
-         XgmEWqEAGonMwCgIPFPmy3UTlEmEqKogtbeACxitsK3Bg5Gvbqoxs/RFM3FFkCW/DRQ2
-         ztQ4mBR+vfMpMssqEwMsDDeNIfI5xrXo1HLSzzeaJOJoFrQ8wqBuvZ97AsO7afFRCeHy
-         FexQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=MDKJzcvc0oYDlBkNkVa2opH8tVN3CS9QpLuilh16KwY=;
+        b=hjeKkchTn2tP2S+GWtSs7PtptZgoRWCa1z6G/Hgt7eXuT0c+aGJ5bkWM9kpr1lSuOp
+         6GtPY1Tq+E4OzuwubZb3BsWck8j+PTW0WKztF7hi6d5NQMgsSmYn+zoIK5C1DH345C8y
+         3Xn+KqxQNR1i9Lb+os8i/5SsxkesUuXZlNR5+f2fV4ds2cfQkHJK+7sXowtETFg4EFKs
+         R7fpA3L28COwKZXvjnUQVi5R51XtPf49Lwii2eqPtz0Hedn/sy5FiqTu87c8qaDn3kMP
+         ikXav66YxLdYk0J7wqQptsziPa4f7TkaNeT6jhnGjbJfc945gdWDTDlsiw1zMZII+OW0
+         nhTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=vpMSaUnT6NPJJYFXNlOiq3y6S7ZMI9PctKnVPVaJecE=;
-        b=HQmJx7nY7k7aIMwbSfqMMi4oW1/tubO6DJj3Y2GfeL038uQwRToIURRAQvBBi09rAB
-         12uIece6NERgFkGtifdFp1ybOXFJhCXbxoWygOArutoG52uaDCaYhX/yEPOtNnK5/0tX
-         m6lAXSv+3Wy6AO+CLp1wTp41hVCJpGnOJG9Q/N8fsK6zP1antucKAK4V0P2BvuSCVUcz
-         loe+mwzn+d+b2H43KfcJ2hpgQZFb2xQU/HMSAxLWuk/oZY9oHO5FXNugMdgQ4sRssSK/
-         tU7gvfYy7uzGfeiyhMJh1INHgGxNw4J+UjOB2/qhAuLWL6cLes+4vrRgE/eJBPWr6s9U
-         tNaQ==
-X-Gm-Message-State: AGi0PuaBmyy5LwRJmAh1fiyblt39rkKpfuibB9Judh3vYp85D5II7NPX
-        1WZcpPzsoNNKGa89x2O74msmd6JL
-X-Google-Smtp-Source: APiQypLQOzEEB0unSl5si3oMSYfveLHjMAbZV+FRnM/YGP5lgM6ayGlTcbYxZPw/aaHlm8dYqtzGuw==
-X-Received: by 2002:a62:1dd5:: with SMTP id d204mr11970746pfd.314.1586662432282;
-        Sat, 11 Apr 2020 20:33:52 -0700 (PDT)
+         :references;
+        bh=MDKJzcvc0oYDlBkNkVa2opH8tVN3CS9QpLuilh16KwY=;
+        b=NPl5arBtPeebGkQRAPrUitXupfXGtwQh+iXCSiUXKjOcSPpStjPDH/8Zji40P0Y7kt
+         GJjfVMYORyihScWTVmUa7xcfDSBazlWVKLTudOO9XVIvGLNMAUvXO4//jnT6ybG6Ehu9
+         c/tFtTWFlMtPv19D+0JwTveb9OdN7EMPpzx9vLvVPeh3ptGnc21LOnnQf1ojbe+e4Si/
+         983zkP5B445Pz3XvCliaQfLT0sibrdcGyqMpsHRq7Ndis6bn6l3wETuXJA/b3IvT4iRm
+         zmgtRm0O6JMrG48UT1+PHrXPX4YZmG0KJToLxAFD8NoNcGtrOaXpzkSNakuP87IV5ZNl
+         HidQ==
+X-Gm-Message-State: AGi0PuaJO2yS8yzan1y0O1ops4PV84RsLYCwPpjN1eF44hWRMSsZNm4Z
+        S4ZqpQuLEx5Qbn6HAschm5al1UPw
+X-Google-Smtp-Source: APiQypLGDSAmhG0v3ZQvVpOjwqlZu7Kpf+9ewQtm+paerhAXyNdf12BsfcQwyarr1KwFRkXI57Ha9w==
+X-Received: by 2002:a62:1dc2:: with SMTP id d185mr8419733pfd.67.1586662433983;
+        Sat, 11 Apr 2020 20:33:53 -0700 (PDT)
 Received: from localhost.localdomain.localdomain (ip68-5-146-102.oc.oc.cox.net. [68.5.146.102])
-        by smtp.gmail.com with ESMTPSA id i4sm5614694pjg.4.2020.04.11.20.33.50
+        by smtp.gmail.com with ESMTPSA id i4sm5614694pjg.4.2020.04.11.20.33.52
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 11 Apr 2020 20:33:51 -0700 (PDT)
+        Sat, 11 Apr 2020 20:33:53 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     dwagner@suse.de, maier@linux.ibm.com, bvanassche@acm.org,
         herbszt@gmx.de, natechancellor@gmail.com, rdunlap@infradead.org,
         hare@suse.de, James Smart <jsmart2021@gmail.com>,
         Ram Vegesna <ram.vegesna@broadcom.com>
-Subject: [PATCH v3 24/31] elx: efct: LIO backend interface routines
-Date:   Sat, 11 Apr 2020 20:32:56 -0700
-Message-Id: <20200412033303.29574-25-jsmart2021@gmail.com>
+Subject: [PATCH v3 25/31] elx: efct: Hardware IO submission routines
+Date:   Sat, 11 Apr 2020 20:32:57 -0700
+Message-Id: <20200412033303.29574-26-jsmart2021@gmail.com>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200412033303.29574-1-jsmart2021@gmail.com>
 References: <20200412033303.29574-1-jsmart2021@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -67,2053 +63,575 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 This patch continues the efct driver population.
 
 This patch adds driver definitions for:
-LIO backend template registration and template functions.
+Routines that write IO to Work queue, send SRRs and raw frames.
 
 Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 Signed-off-by: James Smart <jsmart2021@gmail.com>
 
 ---
 v3:
-  Fixed as per the review comments.
-  Removed vport pend list. Pending list is tracked based on the sport
-    assigned to vport.
+  Reduced arguments for sli_fcp_tsend64_wqe(), sli_fcp_trsp64_wqe(),
+  sli_fcp_treceive64_wqe() calls
 ---
- drivers/scsi/elx/efct/efct_lio.c | 1840 ++++++++++++++++++++++++++++++++++++++
- drivers/scsi/elx/efct/efct_lio.h |  178 ++++
- 2 files changed, 2018 insertions(+)
- create mode 100644 drivers/scsi/elx/efct/efct_lio.c
- create mode 100644 drivers/scsi/elx/efct/efct_lio.h
+ drivers/scsi/elx/efct/efct_hw.c | 519 ++++++++++++++++++++++++++++++++++++++++
+ drivers/scsi/elx/efct/efct_hw.h |  19 ++
+ 2 files changed, 538 insertions(+)
 
-diff --git a/drivers/scsi/elx/efct/efct_lio.c b/drivers/scsi/elx/efct/efct_lio.c
-new file mode 100644
-index 000000000000..c784ef9dbbee
---- /dev/null
-+++ b/drivers/scsi/elx/efct/efct_lio.c
-@@ -0,0 +1,1840 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
-+ * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
-+ */
+diff --git a/drivers/scsi/elx/efct/efct_hw.c b/drivers/scsi/elx/efct/efct_hw.c
+index fd3c2dec3ef6..26dd9bd1eeef 100644
+--- a/drivers/scsi/elx/efct/efct_hw.c
++++ b/drivers/scsi/elx/efct/efct_hw.c
+@@ -2516,3 +2516,522 @@ efct_hw_flush(struct efct_hw *hw)
+ 
+ 	return EFC_SUCCESS;
+ }
 +
-+#include <target/target_core_base.h>
-+#include <target/target_core_fabric.h>
-+#include "efct_driver.h"
-+#include "efct_lio.h"
-+
-+static struct workqueue_struct *lio_wq;
-+
-+static int
-+efct_format_wwn(char *str, size_t len, const char *pre, u64 wwn)
++int
++efct_hw_wq_write(struct hw_wq *wq, struct efct_hw_wqe *wqe)
 +{
-+	u8 a[8];
++	int rc = 0;
++	unsigned long flags = 0;
 +
-+	put_unaligned_be64(wwn, a);
-+	return snprintf(str, len, "%s%8phC", pre, a);
-+}
-+
-+static int
-+efct_lio_parse_wwn(const char *name, u64 *wwp, u8 npiv)
-+{
-+	int num;
-+	u8 b[8];
-+
-+	if (npiv) {
-+		num = sscanf(name,
-+			     "%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx%02hhx",
-+			     &b[0], &b[1], &b[2], &b[3], &b[4], &b[5], &b[6],
-+			     &b[7]);
-+	} else {
-+		num = sscanf(name,
-+		      "%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx:%02hhx",
-+			     &b[0], &b[1], &b[2], &b[3], &b[4], &b[5], &b[6],
-+			     &b[7]);
-+	}
-+
-+	if (num != 8)
-+		return -EINVAL;
-+
-+	*wwp = get_unaligned_be64(b);
-+	return EFC_SUCCESS;
-+}
-+
-+static int
-+efct_lio_parse_npiv_wwn(const char *name, size_t size, u64 *wwpn, u64 *wwnn)
-+{
-+	unsigned int cnt = size;
-+	int rc;
-+
-+	*wwpn = *wwnn = 0;
-+	if (name[cnt - 1] == '\n' || name[cnt - 1] == 0)
-+		cnt--;
-+
-+	/* validate we have enough characters for WWPN */
-+	if ((cnt != (16 + 1 + 16)) || (name[16] != ':'))
-+		return -EINVAL;
-+
-+	rc = efct_lio_parse_wwn(&name[0], wwpn, 1);
-+	if (rc)
-+		return rc;
-+
-+	rc = efct_lio_parse_wwn(&name[17], wwnn, 1);
-+	if (rc)
-+		return rc;
-+
-+	return EFC_SUCCESS;
-+}
-+
-+static ssize_t
-+efct_lio_tpg_enable_show(struct config_item *item, char *page)
-+{
-+	struct se_portal_group *se_tpg = to_tpg(item);
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return snprintf(page, PAGE_SIZE, "%d\n", atomic_read(&tpg->enabled));
-+}
-+
-+static ssize_t
-+efct_lio_tpg_enable_store(struct config_item *item, const char *page,
-+			  size_t count)
-+{
-+	struct se_portal_group *se_tpg = to_tpg(item);
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+	struct efct *efct;
-+	struct efc *efc;
-+	unsigned long op;
-+	int ret;
-+
-+	if (!tpg->sport || !tpg->sport->efct) {
-+		pr_err("%s: Unable to find EFCT device\n", __func__);
-+		return -EINVAL;
-+	}
-+
-+	efct = tpg->sport->efct;
-+	efc = efct->efcport;
-+
-+	if (kstrtoul(page, 0, &op) < 0)
-+		return -EINVAL;
-+
-+	if (op == 1) {
-+		atomic_set(&tpg->enabled, 1);
-+		efc_log_debug(efct, "enable portal group %d\n", tpg->tpgt);
-+
-+		ret = efct_xport_control(efct->xport, EFCT_XPORT_PORT_ONLINE);
-+		if (ret) {
-+			efct->tgt_efct.lio_sport = NULL;
-+			efc_log_test(efct, "cannot bring port online\n");
-+			return ret;
-+		}
-+	} else if (op == 0) {
-+		efc_log_debug(efct, "disable portal group %d\n", tpg->tpgt);
-+
-+		if (efc->domain && efc->domain->sport)
-+			efct_scsi_tgt_del_sport(efc, efc->domain->sport);
-+
-+		atomic_set(&tpg->enabled, 0);
-+	} else {
-+		return -EINVAL;
-+	}
-+
-+	return count;
-+}
-+
-+static ssize_t
-+efct_lio_npiv_tpg_enable_show(struct config_item *item, char *page)
-+{
-+	struct se_portal_group *se_tpg = to_tpg(item);
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return snprintf(page, PAGE_SIZE, "%d\n", atomic_read(&tpg->enabled));
-+}
-+
-+static ssize_t
-+efct_lio_npiv_tpg_enable_store(struct config_item *item, const char *page,
-+			       size_t count)
-+{
-+	struct se_portal_group *se_tpg = to_tpg(item);
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+	struct efct_lio_vport *lio_vport = tpg->vport;
-+	struct efct *efct;
-+	struct efc *efc;
-+	int ret;
-+	unsigned long op;
-+
-+	if (kstrtoul(page, 0, &op) < 0)
-+		return -EINVAL;
-+
-+	if (!lio_vport) {
-+		pr_err("Unable to find vport\n");
-+		return -EINVAL;
-+	}
-+
-+	efct = lio_vport->efct;
-+	efc = efct->efcport;
-+
-+	if (op == 1) {
-+		atomic_set(&tpg->enabled, 1);
-+		efc_log_debug(efct, "enable portal group %d\n", tpg->tpgt);
-+
-+		if (efc->domain) {
-+			ret = efc_sport_vport_new(efc->domain,
-+						  lio_vport->npiv_wwpn,
-+						  lio_vport->npiv_wwnn,
-+						  U32_MAX, false, true,
-+						  NULL, NULL);
-+			if (ret != 0) {
-+				efc_log_err(efct, "Failed to create Vport\n");
-+				return ret;
-+			}
-+			return count;
-+		}
-+
-+		if (!(efc_vport_create_spec(efc, lio_vport->npiv_wwnn,
-+					    lio_vport->npiv_wwpn, U32_MAX,
-+					    false, true, NULL, NULL)))
-+			return -ENOMEM;
-+
-+	} else if (op == 0) {
-+		efc_log_debug(efct, "disable portal group %d\n", tpg->tpgt);
-+
-+		atomic_set(&tpg->enabled, 0);
-+		/* only physical sport should exist, free lio_sport
-+		 * allocated in efct_lio_make_sport
-+		 */
-+		if (efc->domain) {
-+			efc_sport_vport_del(efct->efcport, efc->domain,
-+					    lio_vport->npiv_wwpn,
-+					    lio_vport->npiv_wwnn);
-+			return count;
-+		}
-+	} else {
-+		return -EINVAL;
-+	}
-+	return count;
-+}
-+
-+static bool efct_lio_node_is_initiator(struct efc_node *node)
-+{
-+	if (!node)
-+		return false;
-+
-+	if (node->rnode.fc_id && node->rnode.fc_id != FC_FID_FLOGI &&
-+	    node->rnode.fc_id != FC_FID_DIR_SERV &&
-+	    node->rnode.fc_id != FC_FID_FCTRL) {
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static int  efct_lio_tgt_session_data(struct efct *efct, u64 wwpn,
-+				      char *buf, int size)
-+{
-+	struct efc_sli_port *sport = NULL;
-+	struct efc_node *node = NULL;
-+	struct efc *efc = efct->efcport;
-+	u16 loop_id = 0;
-+	int off = 0, rc = 0;
-+
-+	if (!efc->domain) {
-+		efc_log_err(efct, "failed to find efct/domain\n");
-+		return EFC_FAIL;
-+	}
-+
-+	list_for_each_entry(sport, &efc->domain->sport_list, list_entry) {
-+		if (sport->wwpn != wwpn)
-+			continue;
-+		list_for_each_entry(node, &sport->node_list,
-+				    list_entry) {
-+			/* Dump only remote NPORT sessions */
-+			if (!efct_lio_node_is_initiator(node))
-+				continue;
-+
-+			rc = snprintf(buf + off, size - off,
-+				"0x%016llx,0x%08x,0x%04x\n",
-+				get_unaligned_be64(node->wwpn),
-+				node->rnode.fc_id, loop_id);
++	spin_lock_irqsave(&wq->queue->lock, flags);
++	if (!list_empty(&wq->pending_list)) {
++		INIT_LIST_HEAD(&wqe->list_entry);
++		list_add_tail(&wqe->list_entry, &wq->pending_list);
++		wq->wq_pending_count++;
++		while ((wq->free_count > 0) &&
++		       ((wqe = list_first_entry(&wq->pending_list,
++					struct efct_hw_wqe, list_entry))
++			 != NULL)) {
++			list_del(&wqe->list_entry);
++			rc = _efct_hw_wq_write(wq, wqe);
 +			if (rc < 0)
 +				break;
-+			off += rc;
-+		}
-+	}
-+
-+	return EFC_SUCCESS;
-+}
-+
-+static int efct_debugfs_session_open(struct inode *inode, struct file *filp)
-+{
-+	struct efct_lio_sport *sport = inode->i_private;
-+	int size = 17 * PAGE_SIZE; /* 34 byte per session*2048 sessions */
-+
-+	if (!(filp->f_mode & FMODE_READ)) {
-+		filp->private_data = sport;
-+		return EFC_SUCCESS;
-+	}
-+
-+	filp->private_data = kmalloc(size, GFP_KERNEL);
-+	if (!filp->private_data)
-+		return -ENOMEM;
-+
-+	memset(filp->private_data, 0, size);
-+	efct_lio_tgt_session_data(sport->efct, sport->wwpn, filp->private_data,
-+				  size);
-+	return EFC_SUCCESS;
-+}
-+
-+static int efct_debugfs_session_close(struct inode *inode, struct file *filp)
-+{
-+	if (filp->f_mode & FMODE_READ)
-+		kfree(filp->private_data);
-+
-+	return EFC_SUCCESS;
-+}
-+
-+static ssize_t efct_debugfs_session_read(struct file *filp, char __user *buf,
-+					 size_t count, loff_t *ppos)
-+{
-+	if (!(filp->f_mode & FMODE_READ))
-+		return -EPERM;
-+	return simple_read_from_buffer(buf, count, ppos, filp->private_data,
-+				       strlen(filp->private_data));
-+}
-+
-+static int efct_npiv_debugfs_session_open(struct inode *inode,
-+					  struct file *filp)
-+{
-+	struct efct_lio_vport *sport = inode->i_private;
-+	int size = 17 * PAGE_SIZE; /* 34 byte per session*2048 sessions */
-+
-+	if (!(filp->f_mode & FMODE_READ)) {
-+		filp->private_data = sport;
-+		return EFC_SUCCESS;
-+	}
-+
-+	filp->private_data = kmalloc(size, GFP_KERNEL);
-+	if (!filp->private_data)
-+		return -ENOMEM;
-+
-+	memset(filp->private_data, 0, size);
-+	efct_lio_tgt_session_data(sport->efct, sport->npiv_wwpn,
-+				  filp->private_data, size);
-+	return EFC_SUCCESS;
-+}
-+
-+static const struct file_operations efct_debugfs_session_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= efct_debugfs_session_open,
-+	.release	= efct_debugfs_session_close,
-+	.read		= efct_debugfs_session_read,
-+	.llseek		= default_llseek,
-+};
-+
-+static const struct file_operations efct_npiv_debugfs_session_fops = {
-+	.owner		= THIS_MODULE,
-+	.open		= efct_npiv_debugfs_session_open,
-+	.release	= efct_debugfs_session_close,
-+	.read		= efct_debugfs_session_read,
-+	.llseek		= default_llseek,
-+};
-+
-+static char *efct_lio_get_fabric_wwn(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return tpg->sport->wwpn_str;
-+}
-+
-+static char *efct_lio_get_npiv_fabric_wwn(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return tpg->vport->wwpn_str;
-+}
-+
-+static u16 efct_lio_get_tag(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return tpg->tpgt;
-+}
-+
-+static u16 efct_lio_get_npiv_tag(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return tpg->tpgt;
-+}
-+
-+static int efct_lio_check_demo_mode(struct se_portal_group *se_tpg)
-+{
-+	return 1;
-+}
-+
-+static int efct_lio_check_demo_mode_cache(struct se_portal_group *se_tpg)
-+{
-+	return 1;
-+}
-+
-+static int efct_lio_check_demo_write_protect(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return tpg->tpg_attrib.demo_mode_write_protect;
-+}
-+
-+static int
-+efct_lio_npiv_check_demo_write_protect(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return tpg->tpg_attrib.demo_mode_write_protect;
-+}
-+
-+static int efct_lio_check_prod_write_protect(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return tpg->tpg_attrib.prod_mode_write_protect;
-+}
-+
-+static int
-+efct_lio_npiv_check_prod_write_protect(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	return tpg->tpg_attrib.prod_mode_write_protect;
-+}
-+
-+static u32 efct_lio_tpg_get_inst_index(struct se_portal_group *se_tpg)
-+{
-+	return EFC_SUCCESS;
-+}
-+
-+static int efct_lio_check_stop_free(struct se_cmd *se_cmd)
-+{
-+	struct efct_scsi_tgt_io *ocp = container_of(se_cmd,
-+						     struct efct_scsi_tgt_io,
-+						     cmd);
-+	struct efct_io *io = container_of(ocp, struct efct_io, tgt_io);
-+
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_TFO_CHK_STOP_FREE);
-+	return target_put_sess_cmd(se_cmd);
-+}
-+
-+static int
-+efct_lio_abort_tgt_cb(struct efct_io *io,
-+		      enum efct_scsi_io_status scsi_status,
-+		      u32 flags, void *arg)
-+{
-+	efct_lio_io_printf(io, "%s\n", __func__);
-+	return EFC_SUCCESS;
-+}
-+
-+/* command has been aborted, cleanup here */
-+static void efct_lio_aborted_task(struct se_cmd *se_cmd)
-+{
-+	struct efct_scsi_tgt_io *ocp = container_of(se_cmd,
-+						     struct efct_scsi_tgt_io,
-+						     cmd);
-+	struct efct_io *io = container_of(ocp, struct efct_io, tgt_io);
-+
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_TFO_ABORTED_TASK);
-+
-+	if (!(se_cmd->transport_state & CMD_T_ABORTED) || ocp->rsp_sent)
-+		return;
-+
-+	ocp->aborting = true;
-+	ocp->err = EFCT_SCSI_STATUS_ABORTED;
-+	/* terminate the exchange */
-+	efct_scsi_tgt_abort_io(io, efct_lio_abort_tgt_cb, NULL);
-+}
-+
-+/* Called when se_cmd's ref count goes to 0 */
-+static void efct_lio_release_cmd(struct se_cmd *se_cmd)
-+{
-+	struct efct_scsi_tgt_io *ocp = container_of(se_cmd,
-+						     struct efct_scsi_tgt_io,
-+						     cmd);
-+	struct efct_io *io = container_of(ocp, struct efct_io, tgt_io);
-+	struct efct *efct = io->efct;
-+
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_TFO_RELEASE_CMD);
-+	efct_scsi_io_complete(io);
-+	atomic_sub_return(1, &efct->tgt_efct.ios_in_use);
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_SCSI_CMPL_CMD);
-+}
-+
-+static void efct_lio_close_session(struct se_session *se_sess)
-+{
-+	struct efc_node *node = se_sess->fabric_sess_ptr;
-+	struct efct *efct = NULL;
-+	int rc;
-+
-+	pr_debug("se_sess=%p node=%p", se_sess, node);
-+
-+	if (!node) {
-+		pr_debug("node is NULL");
-+		return;
-+	}
-+
-+	efct = node->efc->base;
-+	rc = efct_xport_control(efct->xport,
-+				EFCT_XPORT_POST_NODE_EVENT, node,
-+		EFCT_XPORT_SHUTDOWN, NULL);
-+	if (rc != 0) {
-+		efc_log_test(efct,
-+			      "Failed to shutdown session %p node %p\n",
-+			     se_sess, node);
-+		return;
-+	}
-+}
-+
-+static u32 efct_lio_sess_get_index(struct se_session *se_sess)
-+{
-+	return EFC_SUCCESS;
-+}
-+
-+static void efct_lio_set_default_node_attrs(struct se_node_acl *nacl)
-+{
-+}
-+
-+static int efct_lio_get_cmd_state(struct se_cmd *se_cmd)
-+{
-+	return EFC_SUCCESS;
-+}
-+
-+static int
-+efct_lio_sg_map(struct efct_io *io)
-+{
-+	struct efct_scsi_tgt_io *ocp = &io->tgt_io;
-+	struct se_cmd *cmd = &ocp->cmd;
-+
-+	ocp->seg_map_cnt = pci_map_sg(io->efct->pcidev, cmd->t_data_sg,
-+				      cmd->t_data_nents, cmd->data_direction);
-+	if (ocp->seg_map_cnt == 0)
-+		return -EFAULT;
-+	return EFC_SUCCESS;
-+}
-+
-+static void
-+efct_lio_sg_unmap(struct efct_io *io)
-+{
-+	struct efct_scsi_tgt_io *ocp = &io->tgt_io;
-+	struct se_cmd *cmd = &ocp->cmd;
-+
-+	if (WARN_ON(!ocp->seg_map_cnt || !cmd->t_data_sg))
-+		return;
-+
-+	pci_unmap_sg(io->efct->pcidev, cmd->t_data_sg,
-+		     ocp->seg_map_cnt, cmd->data_direction);
-+	ocp->seg_map_cnt = 0;
-+}
-+
-+static int
-+efct_lio_status_done(struct efct_io *io,
-+		     enum efct_scsi_io_status scsi_status,
-+		     u32 flags, void *arg)
-+{
-+	struct efct_scsi_tgt_io *ocp = &io->tgt_io;
-+
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_SCSI_RSP_DONE);
-+	if (scsi_status != EFCT_SCSI_STATUS_GOOD) {
-+		efct_lio_io_printf(io, "callback completed with error=%d\n",
-+				   scsi_status);
-+		ocp->err = scsi_status;
-+	}
-+	if (ocp->seg_map_cnt)
-+		efct_lio_sg_unmap(io);
-+
-+	efct_lio_io_printf(io, "status=%d, err=%d flags=0x%x, dir=%d\n",
-+				scsi_status, ocp->err, flags, ocp->ddir);
-+
-+	transport_generic_free_cmd(&io->tgt_io.cmd, 0);
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_TGT_GENERIC_FREE);
-+	return EFC_SUCCESS;
-+}
-+
-+static int
-+efct_lio_datamove_done(struct efct_io *io, enum efct_scsi_io_status scsi_status,
-+		       u32 flags, void *arg);
-+
-+static int
-+efct_lio_write_pending(struct se_cmd *cmd)
-+{
-+	struct efct_scsi_tgt_io *ocp = container_of(cmd,
-+						     struct efct_scsi_tgt_io,
-+						     cmd);
-+	struct efct_io *io = container_of(ocp, struct efct_io, tgt_io);
-+	struct efct_scsi_sgl *sgl = io->sgl;
-+	struct scatterlist *sg;
-+	u32 flags = 0, cnt, curcnt;
-+	u64 length = 0;
-+	int rc = 0;
-+
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_TFO_WRITE_PENDING);
-+	efct_lio_io_printf(io, "trans_state=0x%x se_cmd_flags=0x%x\n",
-+			  cmd->transport_state, cmd->se_cmd_flags);
-+
-+	if (ocp->seg_cnt == 0) {
-+		ocp->seg_cnt = cmd->t_data_nents;
-+		ocp->cur_seg = 0;
-+		if (efct_lio_sg_map(io)) {
-+			efct_lio_io_printf(io, "efct_lio_sg_map failed\n");
-+			return -EFAULT;
-+		}
-+	}
-+	curcnt = (ocp->seg_map_cnt - ocp->cur_seg);
-+	curcnt = (curcnt < io->sgl_allocated) ? curcnt : io->sgl_allocated;
-+	/* find current sg */
-+	for (cnt = 0, sg = cmd->t_data_sg; cnt < ocp->cur_seg; cnt++,
-+	     sg = sg_next(sg))
-+		;
-+
-+	for (cnt = 0; cnt < curcnt; cnt++, sg = sg_next(sg)) {
-+		sgl[cnt].addr = sg_dma_address(sg);
-+		sgl[cnt].dif_addr = 0;
-+		sgl[cnt].len = sg_dma_len(sg);
-+		length += sgl[cnt].len;
-+		ocp->cur_seg++;
-+	}
-+	if (ocp->cur_seg == ocp->seg_cnt)
-+		flags = EFCT_SCSI_LAST_DATAPHASE;
-+	rc = efct_scsi_recv_wr_data(io, flags, sgl, curcnt, length,
-+				    efct_lio_datamove_done, NULL);
-+	return rc;
-+}
-+
-+static int
-+efct_lio_queue_data_in(struct se_cmd *cmd)
-+{
-+	struct efct_scsi_tgt_io *ocp = container_of(cmd,
-+						     struct efct_scsi_tgt_io,
-+						     cmd);
-+	struct efct_io *io = container_of(ocp, struct efct_io, tgt_io);
-+	struct efct_scsi_sgl *sgl = io->sgl;
-+	struct scatterlist *sg = NULL;
-+	uint flags = 0, cnt = 0, curcnt = 0;
-+	u64 length = 0;
-+	int rc = 0;
-+
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_TFO_QUEUE_DATA_IN);
-+
-+	if (ocp->seg_cnt == 0) {
-+		if (cmd->data_length) {
-+			ocp->seg_cnt = cmd->t_data_nents;
-+			ocp->cur_seg = 0;
-+			if (efct_lio_sg_map(io)) {
-+				efct_lio_io_printf(io,
-+						   "efct_lio_sg_map failed\n");
-+				return -EAGAIN;
++			if (wqe->abort_wqe_submit_needed) {
++				wqe->abort_wqe_submit_needed = false;
++				sli_abort_wqe(&wq->hw->sli,
++					      wqe->wqebuf,
++					      wq->hw->sli.wqe_size,
++					      SLI_ABORT_XRI,
++					      wqe->send_abts, wqe->id,
++					      0, wqe->abort_reqtag,
++					      SLI4_CQ_DEFAULT);
++
++				INIT_LIST_HEAD(&wqe->list_entry);
++				list_add_tail(&wqe->list_entry,
++					      &wq->pending_list);
++				wq->wq_pending_count++;
 +			}
-+		} else {
-+			/* If command length is 0, send the response status */
-+			struct efct_scsi_cmd_resp rsp;
-+
-+			memset(&rsp, 0, sizeof(rsp));
-+			efct_lio_io_printf(io,
-+					   "cmd : %p length 0, send status\n",
-+					   cmd);
-+			return efct_scsi_send_resp(io, 0, &rsp,
-+						  efct_lio_status_done, NULL);
-+		}
-+	}
-+	curcnt = min(ocp->seg_map_cnt - ocp->cur_seg, io->sgl_allocated);
-+
-+	while (cnt < curcnt) {
-+		sg = &cmd->t_data_sg[ocp->cur_seg];
-+		sgl[cnt].addr = sg_dma_address(sg);
-+		sgl[cnt].dif_addr = 0;
-+		if (ocp->transferred_len + sg_dma_len(sg) >= cmd->data_length)
-+			sgl[cnt].len = cmd->data_length - ocp->transferred_len;
-+		else
-+			sgl[cnt].len = sg_dma_len(sg);
-+
-+		ocp->transferred_len += sgl[cnt].len;
-+		length += sgl[cnt].len;
-+		ocp->cur_seg++;
-+		cnt++;
-+		if (ocp->transferred_len == cmd->data_length)
-+			break;
-+	}
-+
-+	if (ocp->transferred_len == cmd->data_length) {
-+		flags = EFCT_SCSI_LAST_DATAPHASE;
-+		ocp->seg_cnt = ocp->cur_seg;
-+	}
-+
-+	/* If there is residual, disable Auto Good Response */
-+	if (cmd->residual_count)
-+		flags |= EFCT_SCSI_NO_AUTO_RESPONSE;
-+
-+	rc = efct_scsi_send_rd_data(io, flags, sgl, curcnt, length,
-+				    efct_lio_datamove_done, NULL);
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_SCSI_SEND_RD_DATA);
-+	return rc;
-+}
-+
-+static int
-+efct_lio_datamove_done(struct efct_io *io,
-+		       enum efct_scsi_io_status scsi_status,
-+		      u32 flags, void *arg)
-+{
-+	struct efct_scsi_tgt_io *ocp = &io->tgt_io;
-+	struct se_cmd *cmd = &io->tgt_io.cmd;
-+	int rc;
-+
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_SCSI_DATA_DONE);
-+	if (scsi_status != EFCT_SCSI_STATUS_GOOD) {
-+		efct_lio_io_printf(io, "callback completed with error=%d\n",
-+				   scsi_status);
-+		ocp->err = scsi_status;
-+	}
-+	efct_lio_io_printf(io, "seg_map_cnt=%d\n", ocp->seg_map_cnt);
-+	if (ocp->seg_map_cnt) {
-+		if (ocp->err == EFCT_SCSI_STATUS_GOOD &&
-+		    ocp->cur_seg < ocp->seg_cnt) {
-+			efct_lio_io_printf(io, "continuing cmd at segm=%d\n",
-+					  ocp->cur_seg);
-+			if (ocp->ddir == DMA_TO_DEVICE)
-+				rc = efct_lio_write_pending(&ocp->cmd);
-+			else
-+				rc = efct_lio_queue_data_in(&ocp->cmd);
-+			if (rc == 0)
-+				return EFC_SUCCESS;
-+			ocp->err = EFCT_SCSI_STATUS_ERROR;
-+			efct_lio_io_printf(io, "could not continue command\n");
-+		}
-+		efct_lio_sg_unmap(io);
-+	}
-+
-+	if (io->tgt_io.aborting) {
-+		efct_lio_io_printf(io, "IO done aborted\n");
-+		return EFC_SUCCESS;
-+	}
-+
-+	if (ocp->ddir == DMA_TO_DEVICE) {
-+		efct_lio_io_printf(io, "Write done, trans_state=0x%x\n",
-+				  io->tgt_io.cmd.transport_state);
-+		if (scsi_status != EFCT_SCSI_STATUS_GOOD) {
-+			transport_generic_request_failure(&io->tgt_io.cmd,
-+					TCM_CHECK_CONDITION_ABORT_CMD);
-+			efct_set_lio_io_state(io,
-+				EFCT_LIO_STATE_TGT_GENERIC_REQ_FAILURE);
-+		} else {
-+			efct_set_lio_io_state(io,
-+						EFCT_LIO_STATE_TGT_EXECUTE_CMD);
-+			target_execute_cmd(&io->tgt_io.cmd);
 +		}
 +	} else {
-+		if ((flags & EFCT_SCSI_IO_CMPL_RSP_SENT) == 0) {
-+			struct efct_scsi_cmd_resp rsp;
-+			/* send check condition if an error occurred */
-+			memset(&rsp, 0, sizeof(rsp));
-+			rsp.scsi_status = cmd->scsi_status;
-+			rsp.sense_data = (uint8_t *)io->tgt_io.sense_buffer;
-+			rsp.sense_data_length = cmd->scsi_sense_length;
-+
-+			/* Check for residual underrun or overrun */
-+			if (cmd->se_cmd_flags & SCF_OVERFLOW_BIT)
-+				rsp.residual = -cmd->residual_count;
-+			else if (cmd->se_cmd_flags & SCF_UNDERFLOW_BIT)
-+				rsp.residual = cmd->residual_count;
-+
-+			rc = efct_scsi_send_resp(io, 0, &rsp,
-+						 efct_lio_status_done, NULL);
-+			efct_set_lio_io_state(io,
-+						EFCT_LIO_STATE_SCSI_SEND_RSP);
-+			if (rc != 0) {
-+				efct_lio_io_printf(io,
-+						   "Read done, failed to send rsp, rc=%d\n",
-+				      rc);
-+				transport_generic_free_cmd(&io->tgt_io.cmd, 0);
-+				efct_set_lio_io_state(io,
-+					EFCT_LIO_STATE_TGT_GENERIC_FREE);
-+			} else {
-+				ocp->rsp_sent = true;
-+			}
++		if (wq->free_count > 0) {
++			rc = _efct_hw_wq_write(wq, wqe);
 +		} else {
-+			ocp->rsp_sent = true;
-+			transport_generic_free_cmd(&io->tgt_io.cmd, 0);
-+			efct_set_lio_io_state(io,
-+					EFCT_LIO_STATE_TGT_GENERIC_FREE);
++			INIT_LIST_HEAD(&wqe->list_entry);
++			list_add_tail(&wqe->list_entry, &wq->pending_list);
++			wq->wq_pending_count++;
 +		}
 +	}
-+	return EFC_SUCCESS;
-+}
 +
-+static int
-+efct_lio_tmf_done(struct efct_io *io, enum efct_scsi_io_status scsi_status,
-+		  u32 flags, void *arg)
-+{
-+	efct_lio_tmfio_printf(io, "cmd=%p status=%d, flags=0x%x\n",
-+			      &io->tgt_io.cmd, scsi_status, flags);
-+
-+	transport_generic_free_cmd(&io->tgt_io.cmd, 0);
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_TGT_GENERIC_FREE);
-+	return EFC_SUCCESS;
-+}
-+
-+static int
-+efct_lio_null_tmf_done(struct efct_io *tmfio,
-+		       enum efct_scsi_io_status scsi_status,
-+		      u32 flags, void *arg)
-+{
-+	efct_lio_tmfio_printf(tmfio, "cmd=%p status=%d, flags=0x%x\n",
-+			      &tmfio->tgt_io.cmd, scsi_status, flags);
-+
-+	/* free struct efct_io only, no active se_cmd */
-+	efct_scsi_io_complete(tmfio);
-+	return EFC_SUCCESS;
-+}
-+
-+static int
-+efct_lio_queue_status(struct se_cmd *cmd)
-+{
-+	struct efct_scsi_cmd_resp rsp;
-+	struct efct_scsi_tgt_io *ocp = container_of(cmd,
-+						     struct efct_scsi_tgt_io,
-+						     cmd);
-+	struct efct_io *io = container_of(ocp, struct efct_io, tgt_io);
-+	int rc = 0;
-+
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_TFO_QUEUE_STATUS);
-+	efct_lio_io_printf(io,
-+		"status=0x%x trans_state=0x%x se_cmd_flags=0x%x sns_len=%d\n",
-+		cmd->scsi_status, cmd->transport_state, cmd->se_cmd_flags,
-+		cmd->scsi_sense_length);
-+
-+	memset(&rsp, 0, sizeof(rsp));
-+	rsp.scsi_status = cmd->scsi_status;
-+	rsp.sense_data = (u8 *)io->tgt_io.sense_buffer;
-+	rsp.sense_data_length = cmd->scsi_sense_length;
-+
-+	/* Check for residual underrun or overrun, mark negitive value for
-+	 * underrun to recognize in HW
-+	 */
-+	if (cmd->se_cmd_flags & SCF_OVERFLOW_BIT)
-+		rsp.residual = -cmd->residual_count;
-+	else if (cmd->se_cmd_flags & SCF_UNDERFLOW_BIT)
-+		rsp.residual = cmd->residual_count;
-+
-+	rc = efct_scsi_send_resp(io, 0, &rsp, efct_lio_status_done, NULL);
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_SCSI_SEND_RSP);
-+	if (rc == 0)
-+		ocp->rsp_sent = true;
-+	return rc;
-+}
-+
-+static void efct_lio_queue_tm_rsp(struct se_cmd *cmd)
-+{
-+	struct efct_scsi_tgt_io *ocp = container_of(cmd,
-+						     struct efct_scsi_tgt_io,
-+						     cmd);
-+	struct efct_io *tmfio = container_of(ocp, struct efct_io, tgt_io);
-+	struct se_tmr_req *se_tmr = cmd->se_tmr_req;
-+	u8 rspcode;
-+
-+	efct_lio_tmfio_printf(tmfio, "cmd=%p function=0x%x tmr->response=%d\n",
-+			      cmd, se_tmr->function, se_tmr->response);
-+	switch (se_tmr->response) {
-+	case TMR_FUNCTION_COMPLETE:
-+		rspcode = EFCT_SCSI_TMF_FUNCTION_COMPLETE;
-+		break;
-+	case TMR_TASK_DOES_NOT_EXIST:
-+		rspcode = EFCT_SCSI_TMF_FUNCTION_IO_NOT_FOUND;
-+		break;
-+	case TMR_LUN_DOES_NOT_EXIST:
-+		rspcode = EFCT_SCSI_TMF_INCORRECT_LOGICAL_UNIT_NUMBER;
-+		break;
-+	case TMR_FUNCTION_REJECTED:
-+	default:
-+		rspcode = EFCT_SCSI_TMF_FUNCTION_REJECTED;
-+		break;
-+	}
-+	efct_scsi_send_tmf_resp(tmfio, rspcode, NULL, efct_lio_tmf_done, NULL);
-+}
-+
-+static struct efct *efct_find_wwpn(u64 wwpn)
-+{
-+	int efctidx;
-+	struct efct *efct;
-+
-+	 /* Search for the HBA that has this WWPN */
-+	for (efctidx = 0; efctidx < MAX_EFCT_DEVICES; efctidx++) {
-+
-+		efct = efct_devices[efctidx];
-+		if (!efct)
-+			continue;
-+
-+		if (wwpn == efct_get_wwpn(&efct->hw))
-+			break;
-+	}
-+
-+	if (efctidx == MAX_EFCT_DEVICES)
-+		return NULL;
-+
-+	return efct_devices[efctidx];
-+}
-+
-+static struct dentry *
-+efct_create_dfs_session(struct efct *efct, void *data, u8 npiv)
-+{
-+	char name[16];
-+
-+	if (!efct->sess_debugfs_dir)
-+		return NULL;
-+
-+	if (!npiv) {
-+		snprintf(name, sizeof(name), "efct-sessions-%d",
-+			 efct->instance_index);
-+		return debugfs_create_file(name, 0644, efct->sess_debugfs_dir,
-+					data, &efct_debugfs_session_fops);
-+	}
-+
-+	snprintf(name, sizeof(name), "sessions-npiv-%d", efct->instance_index);
-+
-+	return debugfs_create_file(name, 0644, efct->sess_debugfs_dir, data,
-+					&efct_npiv_debugfs_session_fops);
-+}
-+
-+static struct se_wwn *
-+efct_lio_make_sport(struct target_fabric_configfs *tf,
-+		    struct config_group *group, const char *name)
-+{
-+	struct efct_lio_sport *lio_sport;
-+	struct efct *efct;
-+	int ret;
-+	u64 wwpn;
-+
-+	ret = efct_lio_parse_wwn(name, &wwpn, 0);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	efct = efct_find_wwpn(wwpn);
-+	if (!efct) {
-+		pr_err("cannot find EFCT for base wwpn %s\n", name);
-+		return ERR_PTR(-ENXIO);
-+	}
-+
-+	lio_sport = kzalloc(sizeof(*lio_sport), GFP_KERNEL);
-+	if (!lio_sport)
-+		return ERR_PTR(-ENOMEM);
-+
-+	lio_sport->efct = efct;
-+	lio_sport->wwpn = wwpn;
-+	efct_format_wwn(lio_sport->wwpn_str, sizeof(lio_sport->wwpn_str),
-+			"naa.", wwpn);
-+	efct->tgt_efct.lio_sport = lio_sport;
-+
-+	lio_sport->sessions = efct_create_dfs_session(efct, lio_sport, 0);
-+	return &lio_sport->sport_wwn;
-+}
-+
-+static struct se_wwn *
-+efct_lio_npiv_make_sport(struct target_fabric_configfs *tf,
-+			 struct config_group *group, const char *name)
-+{
-+	struct efct_lio_vport *lio_vport;
-+	struct efct *efct;
-+	int ret = -1;
-+	u64 p_wwpn, npiv_wwpn, npiv_wwnn;
-+	char *p, *pbuf, tmp[128];
-+	struct efct_lio_vport_list_t *vport_list;
-+	struct fc_vport *new_fc_vport;
-+	struct fc_vport_identifiers vport_id;
-+	unsigned long flags = 0;
-+
-+	snprintf(tmp, sizeof(tmp), "%s", name);
-+	pbuf = &tmp[0];
-+
-+	p = strsep(&pbuf, "@");
-+
-+	if (!p || !pbuf) {
-+		pr_err("Unable to find separator operator(@)\n");
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	ret = efct_lio_parse_wwn(p, &p_wwpn, 0);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	ret = efct_lio_parse_npiv_wwn(pbuf, strlen(pbuf), &npiv_wwpn,
-+				      &npiv_wwnn);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	efct = efct_find_wwpn(p_wwpn);
-+	if (!efct) {
-+		pr_err("cannot find EFCT for base wwpn %s\n", name);
-+		return ERR_PTR(-ENXIO);
-+	}
-+
-+	lio_vport = kzalloc(sizeof(*lio_vport), GFP_KERNEL);
-+	if (!lio_vport)
-+		return ERR_PTR(-ENOMEM);
-+
-+	lio_vport->efct = efct;
-+	lio_vport->wwpn = p_wwpn;
-+	lio_vport->npiv_wwpn = npiv_wwpn;
-+	lio_vport->npiv_wwnn = npiv_wwnn;
-+
-+	efct_format_wwn(lio_vport->wwpn_str, sizeof(lio_vport->wwpn_str),
-+			"naa.", npiv_wwpn);
-+
-+	vport_list = kmalloc(sizeof(*vport_list), GFP_KERNEL);
-+	if (!vport_list) {
-+		kfree(lio_vport);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	memset(vport_list, 0, sizeof(struct efct_lio_vport_list_t));
-+	vport_list->lio_vport = lio_vport;
-+	spin_lock_irqsave(&efct->tgt_efct.efct_lio_lock, flags);
-+	INIT_LIST_HEAD(&vport_list->list_entry);
-+	list_add_tail(&vport_list->list_entry, &efct->tgt_efct.vport_list);
-+	spin_unlock_irqrestore(&efct->tgt_efct.efct_lio_lock, flags);
-+
-+	lio_vport->sessions = efct_create_dfs_session(efct, lio_vport, 1);
-+
-+	memset(&vport_id, 0, sizeof(vport_id));
-+	vport_id.port_name = npiv_wwpn;
-+	vport_id.node_name = npiv_wwnn;
-+	vport_id.roles = FC_PORT_ROLE_FCP_INITIATOR;
-+	vport_id.vport_type = FC_PORTTYPE_NPIV;
-+	vport_id.disable = false;
-+
-+	new_fc_vport = fc_vport_create(efct->shost, 0, &vport_id);
-+	if (!new_fc_vport) {
-+		efc_log_err(efct, "fc_vport_create failed\n");
-+		kfree(lio_vport);
-+		kfree(vport_list);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	lio_vport->fc_vport = new_fc_vport;
-+
-+	return &lio_vport->vport_wwn;
-+}
-+
-+static void
-+efct_lio_drop_sport(struct se_wwn *wwn)
-+{
-+	struct efct_lio_sport *lio_sport = container_of(wwn,
-+					    struct efct_lio_sport, sport_wwn);
-+	struct efct *efct = lio_sport->efct;
-+
-+	/* only physical sport should exist, free lio_sport allocated
-+	 * in efct_lio_make_sport.
-+	 */
-+
-+	debugfs_remove(lio_sport->sessions);
-+	lio_sport->sessions = NULL;
-+
-+	kfree(efct->tgt_efct.lio_sport);
-+	efct->tgt_efct.lio_sport = NULL;
-+}
-+
-+static void
-+efct_lio_npiv_drop_sport(struct se_wwn *wwn)
-+{
-+	struct efct_lio_vport *lio_vport = container_of(wwn,
-+			struct efct_lio_vport, vport_wwn);
-+	struct efct_lio_vport_list_t *vport, *next_vport;
-+	struct efct *efct = lio_vport->efct;
-+	unsigned long flags = 0;
-+
-+	spin_lock_irqsave(&efct->tgt_efct.efct_lio_lock, flags);
-+
-+	debugfs_remove(lio_vport->sessions);
-+
-+	if (lio_vport->fc_vport)
-+		fc_vport_terminate(lio_vport->fc_vport);
-+
-+	lio_vport->sessions = NULL;
-+
-+	list_for_each_entry_safe(vport, next_vport, &efct->tgt_efct.vport_list,
-+				 list_entry) {
-+		if (vport->lio_vport == lio_vport) {
-+			list_del(&vport->list_entry);
-+			kfree(vport->lio_vport);
-+			kfree(vport);
-+			break;
-+		}
-+	}
-+	spin_unlock_irqrestore(&efct->tgt_efct.efct_lio_lock, flags);
-+}
-+
-+static struct se_portal_group *
-+efct_lio_make_tpg(struct se_wwn *wwn, const char *name)
-+{
-+	struct efct_lio_sport *lio_sport = container_of(wwn,
-+					    struct efct_lio_sport, sport_wwn);
-+	struct efct_lio_tpg *tpg;
-+	struct efct *efct;
-+	unsigned long n;
-+	int ret;
-+
-+	if (strstr(name, "tpgt_") != name)
-+		return ERR_PTR(-EINVAL);
-+	if (kstrtoul(name + 5, 10, &n) || n > USHRT_MAX)
-+		return ERR_PTR(-EINVAL);
-+
-+	tpg = kzalloc(sizeof(*tpg), GFP_KERNEL);
-+	if (!tpg)
-+		return ERR_PTR(-ENOMEM);
-+
-+	tpg->sport = lio_sport;
-+	tpg->tpgt = n;
-+	atomic_set(&tpg->enabled, 0);
-+
-+	tpg->tpg_attrib.generate_node_acls = 1;
-+	tpg->tpg_attrib.demo_mode_write_protect = 1;
-+	tpg->tpg_attrib.cache_dynamic_acls = 1;
-+	tpg->tpg_attrib.demo_mode_login_only = 1;
-+	tpg->tpg_attrib.session_deletion_wait = 1;
-+
-+	ret = core_tpg_register(wwn, &tpg->tpg, SCSI_PROTOCOL_FCP);
-+	if (ret < 0) {
-+		kfree(tpg);
-+		return NULL;
-+	}
-+	efct = lio_sport->efct;
-+	efct->tgt_efct.tpg = tpg;
-+	efc_log_debug(efct, "create portal group %d\n", tpg->tpgt);
-+
-+	return &tpg->tpg;
-+}
-+
-+static void
-+efct_lio_drop_tpg(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	efc_log_debug(tpg->sport->efct, "drop portal group %d\n", tpg->tpgt);
-+	tpg->sport->efct->tgt_efct.tpg = NULL;
-+	core_tpg_deregister(se_tpg);
-+	kfree(tpg);
-+}
-+
-+static struct se_portal_group *
-+efct_lio_npiv_make_tpg(struct se_wwn *wwn, const char *name)
-+{
-+	struct efct_lio_vport *lio_vport = container_of(wwn,
-+			struct efct_lio_vport, vport_wwn);
-+	struct efct_lio_tpg *tpg;
-+	struct efct *efct;
-+	unsigned long n;
-+	int ret;
-+
-+	efct = lio_vport->efct;
-+	if (strstr(name, "tpgt_") != name)
-+		return ERR_PTR(-EINVAL);
-+	if (kstrtoul(name + 5, 10, &n) || n > USHRT_MAX)
-+		return ERR_PTR(-EINVAL);
-+
-+	if (n != 1) {
-+		efc_log_err(efct, "Invalid tpgt index: %ld provided\n", n);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	tpg = kzalloc(sizeof(*tpg), GFP_KERNEL);
-+	if (!tpg)
-+		return ERR_PTR(-ENOMEM);
-+
-+	tpg->vport = lio_vport;
-+	tpg->tpgt = n;
-+	atomic_set(&tpg->enabled, 0);
-+
-+	tpg->tpg_attrib.generate_node_acls = 1;
-+	tpg->tpg_attrib.demo_mode_write_protect = 1;
-+	tpg->tpg_attrib.cache_dynamic_acls = 1;
-+	tpg->tpg_attrib.demo_mode_login_only = 1;
-+	tpg->tpg_attrib.session_deletion_wait = 1;
-+
-+	ret = core_tpg_register(wwn, &tpg->tpg, SCSI_PROTOCOL_FCP);
-+
-+	if (ret < 0) {
-+		kfree(tpg);
-+		return NULL;
-+	}
-+	lio_vport->tpg = tpg;
-+	efc_log_debug(efct, "create vport portal group %d\n", tpg->tpgt);
-+
-+	return &tpg->tpg;
-+}
-+
-+static void
-+efct_lio_npiv_drop_tpg(struct se_portal_group *se_tpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,
-+						struct efct_lio_tpg, tpg);
-+
-+	efc_log_debug(tpg->vport->efct, "drop npiv portal group %d\n",
-+		       tpg->tpgt);
-+	core_tpg_deregister(se_tpg);
-+	kfree(tpg);
-+}
-+
-+static int
-+efct_lio_init_nodeacl(struct se_node_acl *se_nacl, const char *name)
-+{
-+	struct efct_lio_nacl *nacl;
-+	u64 wwnn;
-+
-+	if (efct_lio_parse_wwn(name, &wwnn, 0) < 0)
-+		return -EINVAL;
-+
-+	nacl = container_of(se_nacl, struct efct_lio_nacl, se_node_acl);
-+	nacl->nport_wwnn = wwnn;
-+
-+	efct_format_wwn(nacl->nport_name, sizeof(nacl->nport_name), "", wwnn);
-+	return EFC_SUCCESS;
-+}
-+
-+static int efct_lio_check_demo_mode_login_only(struct se_portal_group *stpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(stpg, struct efct_lio_tpg, tpg);
-+
-+	return tpg->tpg_attrib.demo_mode_login_only;
-+}
-+
-+static int
-+efct_lio_npiv_check_demo_mode_login_only(struct se_portal_group *stpg)
-+{
-+	struct efct_lio_tpg *tpg = container_of(stpg, struct efct_lio_tpg, tpg);
-+
-+	return tpg->tpg_attrib.demo_mode_login_only;
-+}
-+
-+static struct efct_lio_tpg *
-+efct_get_vport_tpg(struct efc_node *node)
-+{
-+	struct efct *efct;
-+	u64 wwpn = node->sport->wwpn;
-+	struct efct_lio_vport_list_t *vport, *next;
-+	struct efct_lio_vport *lio_vport = NULL;
-+	struct efct_lio_tpg *tpg = NULL;
-+	unsigned long flags = 0;
-+
-+	efct = node->efc->base;
-+	spin_lock_irqsave(&efct->tgt_efct.efct_lio_lock, flags);
-+	list_for_each_entry_safe(vport, next, &efct->tgt_efct.vport_list,
-+				 list_entry) {
-+		lio_vport = vport->lio_vport;
-+		if (wwpn && lio_vport &&
-+		    lio_vport->npiv_wwpn == wwpn) {
-+			efc_log_test(efct, "found tpg on vport\n");
-+			tpg = lio_vport->tpg;
-+			break;
-+		}
-+	}
-+	spin_unlock_irqrestore(&efct->tgt_efct.efct_lio_lock, flags);
-+	return tpg;
-+}
-+
-+static int efct_session_cb(struct se_portal_group *se_tpg,
-+			   struct se_session *se_sess, void *private)
-+{
-+	struct efc_node *node = private;
-+	struct efct_scsi_tgt_node *tgt_node = NULL;
-+
-+	tgt_node = kzalloc(sizeof(*tgt_node), GFP_KERNEL);
-+	if (!tgt_node)
-+		return EFC_FAIL;
-+
-+	tgt_node->session = se_sess;
-+	node->tgt_node = tgt_node;
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int efct_scsi_tgt_new_device(struct efct *efct)
-+{
-+	int rc = 0;
-+	u32 total_ios;
-+
-+	/* Get the max settings */
-+	efct->tgt_efct.max_sge = sli_get_max_sge(&efct->hw.sli);
-+	efct->tgt_efct.max_sgl = sli_get_max_sgl(&efct->hw.sli);
-+
-+	/* initialize IO watermark fields */
-+	atomic_set(&efct->tgt_efct.ios_in_use, 0);
-+	total_ios = efct->hw.config.n_io;
-+	efc_log_debug(efct, "total_ios=%d\n", total_ios);
-+	efct->tgt_efct.watermark_min =
-+			(total_ios * EFCT_WATERMARK_LOW_PCT) / 100;
-+	efct->tgt_efct.watermark_max =
-+			(total_ios * EFCT_WATERMARK_HIGH_PCT) / 100;
-+	atomic_set(&efct->tgt_efct.io_high_watermark,
-+		   efct->tgt_efct.watermark_max);
-+	atomic_set(&efct->tgt_efct.watermark_hit, 0);
-+	atomic_set(&efct->tgt_efct.initiator_count, 0);
-+
-+	lio_wq = create_singlethread_workqueue("efct_lio_worker");
-+	if (!lio_wq) {
-+		efc_log_err(efct, "workqueue create failed\n");
-+		return -ENOMEM;
-+	}
-+
-+	spin_lock_init(&efct->tgt_efct.efct_lio_lock);
-+	INIT_LIST_HEAD(&efct->tgt_efct.vport_list);
++	spin_unlock_irqrestore(&wq->queue->lock, flags);
 +
 +	return rc;
 +}
 +
-+int efct_scsi_tgt_del_device(struct efct *efct)
-+{
-+	flush_workqueue(lio_wq);
-+
-+	return EFC_SUCCESS;
-+}
-+
-+int
-+efct_scsi_tgt_new_domain(struct efc *efc, struct efc_domain *domain)
-+{
-+	return 0;
-+}
-+
-+void
-+efct_scsi_tgt_del_domain(struct efc *efc, struct efc_domain *domain)
-+{
-+}
-+
-+/* Called by the libefc when new sli port (sport) is discovered */
-+int
-+efct_scsi_tgt_new_sport(struct efc *efc, struct efc_sli_port *sport)
-+{
-+	struct efct *efct = sport->efc->base;
-+
-+	efc_log_debug(efct, "New SPORT: %s bound to %s\n", sport->display_name,
-+		       efct->tgt_efct.lio_sport->wwpn_str);
-+
-+	return EFC_SUCCESS;
-+}
-+
-+/* Called by the libefc when a sport goes away. */
-+void
-+efct_scsi_tgt_del_sport(struct efc *efc, struct efc_sli_port *sport)
-+{
-+	efc_log_debug(efc, "Del SPORT: %s\n",
-+		       sport->display_name);
-+}
-+/* Called by libefc to validate node. */
-+int
-+efct_scsi_validate_initiator(struct efc *efc, struct efc_node *node)
-+{
-+	return 1;
-+}
-+
-+static void efct_lio_setup_session(struct work_struct *work)
-+{
-+	struct efct_lio_wq_data *wq_data = container_of(work,
-+					   struct efct_lio_wq_data, work);
-+	struct efct *efct = wq_data->efct;
-+	struct efc_node *node = wq_data->ptr;
-+	char wwpn[WWN_NAME_LEN];
-+	struct efct_lio_tpg *tpg = NULL;
-+	struct se_portal_group *se_tpg;
-+	struct se_session *se_sess;
-+	int watermark;
-+	int initiator_count;
-+
-+	/* Check to see if it's belongs to vport,
-+	 * if not get physical port
-+	 */
-+	tpg = efct_get_vport_tpg(node);
-+	if (tpg) {
-+		se_tpg = &tpg->tpg;
-+	} else if (efct->tgt_efct.tpg) {
-+		tpg = efct->tgt_efct.tpg;
-+		se_tpg = &tpg->tpg;
-+	} else {
-+		efc_log_err(efct, "failed to init session\n");
-+		return;
-+	}
-+
-+	/*
-+	 * Format the FCP Initiator port_name into colon
-+	 * separated values to match the format by our explicit
-+	 * ConfigFS NodeACLs.
-+	 */
-+	efct_format_wwn(wwpn, sizeof(wwpn), "",
-+			efc_node_get_wwpn(node));
-+
-+	se_sess = target_setup_session(se_tpg, 0, 0,
-+				       TARGET_PROT_NORMAL,
-+				       wwpn, node,
-+				       efct_session_cb);
-+	if (IS_ERR(se_sess)) {
-+		efc_log_err(efct, "failed to setup session\n");
-+		return;
-+	}
-+
-+	efc_log_debug(efct, "new initiator se_sess=%p node=%p\n",
-+		      se_sess, node);
-+
-+	/* update IO watermark: increment initiator count */
-+	initiator_count =
-+	atomic_add_return(1, &efct->tgt_efct.initiator_count);
-+	watermark = (efct->tgt_efct.watermark_max -
-+	     initiator_count * EFCT_IO_WATERMARK_PER_INITIATOR);
-+	watermark = (efct->tgt_efct.watermark_min > watermark) ?
-+		efct->tgt_efct.watermark_min : watermark;
-+	atomic_set(&efct->tgt_efct.io_high_watermark,
-+		   watermark);
-+
-+	kfree(wq_data);
-+}
-+
-+/* Called by the libefc when new a new remote initiator is discovered */
-+int efct_scsi_new_initiator(struct efc *efc, struct efc_node *node)
-+{
-+	struct efct *efct = node->efc->base;
-+	struct efct_lio_wq_data *wq_data;
-+
-+	/*
-+	 * Since LIO only supports initiator validation at thread level,
-+	 * we are open minded and accept all callers.
-+	 */
-+	wq_data = kzalloc(sizeof(*wq_data), GFP_ATOMIC);
-+	if (!wq_data)
-+		return -ENOMEM;
-+
-+	wq_data->ptr = node;
-+	wq_data->efct = efct;
-+	INIT_WORK(&wq_data->work, efct_lio_setup_session);
-+	queue_work(lio_wq, &wq_data->work);
-+	return EFC_SUCCESS;
-+}
-+
-+static void efct_lio_remove_session(struct work_struct *work)
-+{
-+	struct efct_lio_wq_data *wq_data = container_of(work,
-+					   struct efct_lio_wq_data, work);
-+	struct efct *efct = wq_data->efct;
-+	struct efc_node *node = wq_data->ptr;
-+	struct efct_scsi_tgt_node *tgt_node = NULL;
-+	struct se_session *se_sess;
-+
-+	tgt_node = node->tgt_node;
-+	se_sess = tgt_node->session;
-+
-+	if (!se_sess) {
-+		/* base driver has sent back-to-back requests
-+		 * to unreg session with no intervening
-+		 * register
-+		 */
-+		efc_log_test(efct,
-+			      "unreg session for NULL session\n");
-+		efc_scsi_del_initiator_complete(node->efc,
-+						node);
-+		return;
-+	}
-+
-+	efc_log_debug(efct, "unreg session se_sess=%p node=%p\n",
-+		       se_sess, node);
-+
-+	/* first flag all session commands to complete */
-+	target_sess_cmd_list_set_waiting(se_sess);
-+
-+	/* now wait for session commands to complete */
-+	target_wait_for_sess_cmds(se_sess);
-+	target_remove_session(se_sess);
-+
-+	kfree(node->tgt_node);
-+
-+	node->tgt_node = NULL;
-+	efc_scsi_del_initiator_complete(node->efc, node);
-+
-+	kfree(wq_data);
-+}
-+
-+/* Called by the libefc when an initiator goes away. */
-+int efct_scsi_del_initiator(struct efc *efc, struct efc_node *node,
-+			int reason)
-+{
-+	struct efct *efct = node->efc->base;
-+	struct efct_lio_wq_data *wq_data;
-+	int watermark;
-+	int initiator_count;
-+
-+	if (reason == EFCT_SCSI_INITIATOR_MISSING)
-+		return EFCT_SCSI_CALL_COMPLETE;
-+
-+	wq_data = kmalloc(sizeof(*wq_data), GFP_ATOMIC);
-+	if (!wq_data)
-+		return EFCT_SCSI_CALL_COMPLETE;
-+
-+	memset(wq_data, 0, sizeof(*wq_data));
-+	wq_data->ptr = node;
-+	wq_data->efct = efct;
-+	INIT_WORK(&wq_data->work, efct_lio_remove_session);
-+	queue_work(lio_wq, &wq_data->work);
-+
-+	/*
-+	 * update IO watermark: decrement initiator count
-+	 */
-+	initiator_count =
-+		atomic_sub_return(1, &efct->tgt_efct.initiator_count);
-+	watermark = (efct->tgt_efct.watermark_max -
-+			initiator_count * EFCT_IO_WATERMARK_PER_INITIATOR);
-+	watermark = (efct->tgt_efct.watermark_min > watermark) ?
-+			efct->tgt_efct.watermark_min : watermark;
-+	atomic_set(&efct->tgt_efct.io_high_watermark, watermark);
-+
-+	return EFCT_SCSI_CALL_ASYNC;
-+}
-+
-+int efct_scsi_recv_cmd(struct efct_io *io, uint64_t lun, u8 *cdb,
-+		       u32 cdb_len, u32 flags)
-+{
-+	struct efct_scsi_tgt_io *ocp = &io->tgt_io;
-+	struct efct *efct = io->efct;
-+	char *ddir;
-+	struct efct_scsi_tgt_node *tgt_node = NULL;
-+	struct se_session *se_sess;
-+	int rc = 0;
-+
-+	memset(ocp, 0, sizeof(struct efct_scsi_tgt_io));
-+	efct_set_lio_io_state(io, EFCT_LIO_STATE_SCSI_RECV_CMD);
-+	atomic_add_return(1, &efct->tgt_efct.ios_in_use);
-+
-+	/* set target timeout */
-+	io->timeout = efct->target_io_timer_sec;
-+
-+	if (flags & EFCT_SCSI_CMD_SIMPLE)
-+		ocp->task_attr = TCM_SIMPLE_TAG;
-+	else if (flags & EFCT_SCSI_CMD_HEAD_OF_QUEUE)
-+		ocp->task_attr = TCM_HEAD_TAG;
-+	else if (flags & EFCT_SCSI_CMD_ORDERED)
-+		ocp->task_attr = TCM_ORDERED_TAG;
-+	else if (flags & EFCT_SCSI_CMD_ACA)
-+		ocp->task_attr = TCM_ACA_TAG;
-+
-+	switch (flags & (EFCT_SCSI_CMD_DIR_IN | EFCT_SCSI_CMD_DIR_OUT)) {
-+	case EFCT_SCSI_CMD_DIR_IN:
-+		ddir = "FROM_INITIATOR";
-+		ocp->ddir = DMA_TO_DEVICE;
-+		break;
-+	case EFCT_SCSI_CMD_DIR_OUT:
-+		ddir = "TO_INITIATOR";
-+		ocp->ddir = DMA_FROM_DEVICE;
-+		break;
-+	case EFCT_SCSI_CMD_DIR_IN | EFCT_SCSI_CMD_DIR_OUT:
-+		ddir = "BIDIR";
-+		ocp->ddir = DMA_BIDIRECTIONAL;
-+		break;
-+	default:
-+		ddir = "NONE";
-+		ocp->ddir = DMA_NONE;
-+		break;
-+	}
-+
-+	ocp->lun = lun;
-+	efct_lio_io_printf(io, "new cmd=0x%x ddir=%s dl=%u\n",
-+			  cdb[0], ddir, io->exp_xfer_len);
-+
-+	tgt_node = io->node->tgt_node;
-+	se_sess = tgt_node->session;
-+	if (se_sess) {
-+		efct_set_lio_io_state(io, EFCT_LIO_STATE_TGT_SUBMIT_CMD);
-+		rc = target_submit_cmd(&io->tgt_io.cmd, se_sess,
-+				       cdb, &io->tgt_io.sense_buffer[0],
-+				       ocp->lun, io->exp_xfer_len,
-+				       ocp->task_attr, ocp->ddir,
-+				       TARGET_SCF_ACK_KREF);
-+		if (rc) {
-+			efc_log_err(efct, "failed to submit cmd se_cmd: %p\n",
-+				    &ocp->cmd);
-+			efct_scsi_io_free(io);
-+		}
-+	}
-+
-+	return rc;
-+}
-+
-+int
-+efct_scsi_recv_tmf(struct efct_io *tmfio, u32 lun,
-+		   enum efct_scsi_tmf_cmd cmd,
-+		  struct efct_io *io_to_abort, u32 flags)
-+{
-+	unsigned char tmr_func;
-+	struct efct *efct = tmfio->efct;
-+	struct efct_scsi_tgt_io *ocp = &tmfio->tgt_io;
-+	struct efct_scsi_tgt_node *tgt_node = NULL;
-+	struct se_session *se_sess;
-+	int rc;
-+
-+	memset(ocp, 0, sizeof(struct efct_scsi_tgt_io));
-+	efct_set_lio_io_state(tmfio, EFCT_LIO_STATE_SCSI_RECV_TMF);
-+	atomic_add_return(1, &efct->tgt_efct.ios_in_use);
-+	efct_lio_tmfio_printf(tmfio, "%s: new tmf %x lun=%u\n",
-+			      tmfio->display_name, cmd, lun);
-+
-+	switch (cmd) {
-+	case EFCT_SCSI_TMF_ABORT_TASK:
-+		tmr_func = TMR_ABORT_TASK;
-+		break;
-+	case EFCT_SCSI_TMF_ABORT_TASK_SET:
-+		tmr_func = TMR_ABORT_TASK_SET;
-+		break;
-+	case EFCT_SCSI_TMF_CLEAR_TASK_SET:
-+		tmr_func = TMR_CLEAR_TASK_SET;
-+		break;
-+	case EFCT_SCSI_TMF_LOGICAL_UNIT_RESET:
-+		tmr_func = TMR_LUN_RESET;
-+		break;
-+	case EFCT_SCSI_TMF_CLEAR_ACA:
-+		tmr_func = TMR_CLEAR_ACA;
-+		break;
-+	case EFCT_SCSI_TMF_TARGET_RESET:
-+		tmr_func = TMR_TARGET_WARM_RESET;
-+		break;
-+	case EFCT_SCSI_TMF_QUERY_ASYNCHRONOUS_EVENT:
-+	case EFCT_SCSI_TMF_QUERY_TASK_SET:
-+	default:
-+		goto tmf_fail;
-+	}
-+
-+	tmfio->tgt_io.tmf = tmr_func;
-+	tmfio->tgt_io.lun = lun;
-+	tmfio->tgt_io.io_to_abort = io_to_abort;
-+
-+	tgt_node = tmfio->node->tgt_node;
-+
-+	se_sess = tgt_node->session;
-+	if (!se_sess)
-+		return EFC_SUCCESS;
-+
-+	rc = target_submit_tmr(&ocp->cmd, se_sess, NULL, lun, ocp, tmr_func,
-+			GFP_ATOMIC, tmfio->init_task_tag, TARGET_SCF_ACK_KREF);
-+
-+	efct_set_lio_io_state(tmfio, EFCT_LIO_STATE_TGT_SUBMIT_TMR);
-+	if (rc)
-+		goto tmf_fail;
-+
-+	return EFC_SUCCESS;
-+
-+tmf_fail:
-+	efct_scsi_send_tmf_resp(tmfio, EFCT_SCSI_TMF_FUNCTION_REJECTED,
-+				NULL, efct_lio_null_tmf_done, NULL);
-+	return EFC_SUCCESS;
-+}
-+
-+/* Start items for efct_lio_tpg_attrib_cit */
-+
-+#define DEF_EFCT_TPG_ATTRIB(name)					  \
-+									  \
-+static ssize_t efct_lio_tpg_attrib_##name##_show(			  \
-+		struct config_item *item, char *page)			  \
-+{									  \
-+	struct se_portal_group *se_tpg = to_tpg(item);			  \
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,			  \
-+			struct efct_lio_tpg, tpg);			  \
-+									  \
-+	return sprintf(page, "%u\n", tpg->tpg_attrib.name);		  \
-+}									  \
-+									  \
-+static ssize_t efct_lio_tpg_attrib_##name##_store(			  \
-+		struct config_item *item, const char *page, size_t count) \
-+{									  \
-+	struct se_portal_group *se_tpg = to_tpg(item);			  \
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,			  \
-+					struct efct_lio_tpg, tpg);	  \
-+	struct efct_lio_tpg_attrib *a = &tpg->tpg_attrib;		  \
-+	unsigned long val;						  \
-+	int ret;							  \
-+									  \
-+	ret = kstrtoul(page, 0, &val);					  \
-+	if (ret < 0) {							  \
-+		pr_err("kstrtoul() failed with ret: %d\n", ret);	  \
-+		return ret;						  \
-+	}								  \
-+									  \
-+	if (val != 0 && val != 1) {					  \
-+		pr_err("Illegal boolean value %lu\n", val);		  \
-+		return -EINVAL;						  \
-+	}								  \
-+									  \
-+	a->name = val;							  \
-+									  \
-+	return count;							  \
-+}									  \
-+CONFIGFS_ATTR(efct_lio_tpg_attrib_, name)
-+
-+DEF_EFCT_TPG_ATTRIB(generate_node_acls);
-+DEF_EFCT_TPG_ATTRIB(cache_dynamic_acls);
-+DEF_EFCT_TPG_ATTRIB(demo_mode_write_protect);
-+DEF_EFCT_TPG_ATTRIB(prod_mode_write_protect);
-+DEF_EFCT_TPG_ATTRIB(demo_mode_login_only);
-+DEF_EFCT_TPG_ATTRIB(session_deletion_wait);
-+
-+static struct configfs_attribute *efct_lio_tpg_attrib_attrs[] = {
-+	&efct_lio_tpg_attrib_attr_generate_node_acls,
-+	&efct_lio_tpg_attrib_attr_cache_dynamic_acls,
-+	&efct_lio_tpg_attrib_attr_demo_mode_write_protect,
-+	&efct_lio_tpg_attrib_attr_prod_mode_write_protect,
-+	&efct_lio_tpg_attrib_attr_demo_mode_login_only,
-+	&efct_lio_tpg_attrib_attr_session_deletion_wait,
-+	NULL,
-+};
-+
-+#define DEF_EFCT_NPIV_TPG_ATTRIB(name)					   \
-+									   \
-+static ssize_t efct_lio_npiv_tpg_attrib_##name##_show(			   \
-+		struct config_item *item, char *page)			   \
-+{									   \
-+	struct se_portal_group *se_tpg = to_tpg(item);			   \
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,			   \
-+			struct efct_lio_tpg, tpg);			   \
-+									   \
-+	return sprintf(page, "%u\n", tpg->tpg_attrib.name);		   \
-+}									   \
-+									   \
-+static ssize_t efct_lio_npiv_tpg_attrib_##name##_store(			   \
-+		struct config_item *item, const char *page, size_t count)  \
-+{									   \
-+	struct se_portal_group *se_tpg = to_tpg(item);			   \
-+	struct efct_lio_tpg *tpg = container_of(se_tpg,			   \
-+			struct efct_lio_tpg, tpg);			   \
-+	struct efct_lio_tpg_attrib *a = &tpg->tpg_attrib;		   \
-+	unsigned long val;						   \
-+	int ret;							   \
-+									   \
-+	ret = kstrtoul(page, 0, &val);					   \
-+	if (ret < 0) {							   \
-+		pr_err("kstrtoul() failed with ret: %d\n", ret);	   \
-+		return ret;						   \
-+	}								   \
-+									   \
-+	if (val != 0 && val != 1) {					   \
-+		pr_err("Illegal boolean value %lu\n", val);		   \
-+		return -EINVAL;						   \
-+	}								   \
-+									   \
-+	a->name = val;							   \
-+									   \
-+	return count;							   \
-+}									   \
-+CONFIGFS_ATTR(efct_lio_npiv_tpg_attrib_, name)
-+
-+DEF_EFCT_NPIV_TPG_ATTRIB(generate_node_acls);
-+DEF_EFCT_NPIV_TPG_ATTRIB(cache_dynamic_acls);
-+DEF_EFCT_NPIV_TPG_ATTRIB(demo_mode_write_protect);
-+DEF_EFCT_NPIV_TPG_ATTRIB(prod_mode_write_protect);
-+DEF_EFCT_NPIV_TPG_ATTRIB(demo_mode_login_only);
-+DEF_EFCT_NPIV_TPG_ATTRIB(session_deletion_wait);
-+
-+static struct configfs_attribute *efct_lio_npiv_tpg_attrib_attrs[] = {
-+	&efct_lio_npiv_tpg_attrib_attr_generate_node_acls,
-+	&efct_lio_npiv_tpg_attrib_attr_cache_dynamic_acls,
-+	&efct_lio_npiv_tpg_attrib_attr_demo_mode_write_protect,
-+	&efct_lio_npiv_tpg_attrib_attr_prod_mode_write_protect,
-+	&efct_lio_npiv_tpg_attrib_attr_demo_mode_login_only,
-+	&efct_lio_npiv_tpg_attrib_attr_session_deletion_wait,
-+	NULL,
-+};
-+
-+CONFIGFS_ATTR(efct_lio_tpg_, enable);
-+static struct configfs_attribute *efct_lio_tpg_attrs[] = {
-+				&efct_lio_tpg_attr_enable, NULL };
-+CONFIGFS_ATTR(efct_lio_npiv_tpg_, enable);
-+static struct configfs_attribute *efct_lio_npiv_tpg_attrs[] = {
-+				&efct_lio_npiv_tpg_attr_enable, NULL };
-+
-+static const struct target_core_fabric_ops efct_lio_ops = {
-+	.module				= THIS_MODULE,
-+	.fabric_name			= "efct",
-+	.node_acl_size			= sizeof(struct efct_lio_nacl),
-+	.max_data_sg_nents		= 65535,
-+	.tpg_get_wwn			= efct_lio_get_fabric_wwn,
-+	.tpg_get_tag			= efct_lio_get_tag,
-+	.fabric_init_nodeacl		= efct_lio_init_nodeacl,
-+	.tpg_check_demo_mode		= efct_lio_check_demo_mode,
-+	.tpg_check_demo_mode_cache      = efct_lio_check_demo_mode_cache,
-+	.tpg_check_demo_mode_write_protect = efct_lio_check_demo_write_protect,
-+	.tpg_check_prod_mode_write_protect = efct_lio_check_prod_write_protect,
-+	.tpg_get_inst_index		= efct_lio_tpg_get_inst_index,
-+	.check_stop_free		= efct_lio_check_stop_free,
-+	.aborted_task			= efct_lio_aborted_task,
-+	.release_cmd			= efct_lio_release_cmd,
-+	.close_session			= efct_lio_close_session,
-+	.sess_get_index			= efct_lio_sess_get_index,
-+	.write_pending			= efct_lio_write_pending,
-+	.set_default_node_attributes	= efct_lio_set_default_node_attrs,
-+	.get_cmd_state			= efct_lio_get_cmd_state,
-+	.queue_data_in			= efct_lio_queue_data_in,
-+	.queue_status			= efct_lio_queue_status,
-+	.queue_tm_rsp			= efct_lio_queue_tm_rsp,
-+	.fabric_make_wwn		= efct_lio_make_sport,
-+	.fabric_drop_wwn		= efct_lio_drop_sport,
-+	.fabric_make_tpg		= efct_lio_make_tpg,
-+	.fabric_drop_tpg		= efct_lio_drop_tpg,
-+	.tpg_check_demo_mode_login_only = efct_lio_check_demo_mode_login_only,
-+	.tpg_check_prot_fabric_only	= NULL,
-+	.sess_get_initiator_sid		= NULL,
-+	.tfc_tpg_base_attrs		= efct_lio_tpg_attrs,
-+	.tfc_tpg_attrib_attrs           = efct_lio_tpg_attrib_attrs,
-+};
-+
-+static const struct target_core_fabric_ops efct_lio_npiv_ops = {
-+	.module				= THIS_MODULE,
-+	.fabric_name			= "efct_npiv",
-+	.node_acl_size			= sizeof(struct efct_lio_nacl),
-+	.max_data_sg_nents		= 65535,
-+	.tpg_get_wwn			= efct_lio_get_npiv_fabric_wwn,
-+	.tpg_get_tag			= efct_lio_get_npiv_tag,
-+	.fabric_init_nodeacl		= efct_lio_init_nodeacl,
-+	.tpg_check_demo_mode		= efct_lio_check_demo_mode,
-+	.tpg_check_demo_mode_cache      = efct_lio_check_demo_mode_cache,
-+	.tpg_check_demo_mode_write_protect =
-+					efct_lio_npiv_check_demo_write_protect,
-+	.tpg_check_prod_mode_write_protect =
-+					efct_lio_npiv_check_prod_write_protect,
-+	.tpg_get_inst_index		= efct_lio_tpg_get_inst_index,
-+	.check_stop_free		= efct_lio_check_stop_free,
-+	.aborted_task			= efct_lio_aborted_task,
-+	.release_cmd			= efct_lio_release_cmd,
-+	.close_session			= efct_lio_close_session,
-+	.sess_get_index			= efct_lio_sess_get_index,
-+	.write_pending			= efct_lio_write_pending,
-+	.set_default_node_attributes	= efct_lio_set_default_node_attrs,
-+	.get_cmd_state			= efct_lio_get_cmd_state,
-+	.queue_data_in			= efct_lio_queue_data_in,
-+	.queue_status			= efct_lio_queue_status,
-+	.queue_tm_rsp			= efct_lio_queue_tm_rsp,
-+	.fabric_make_wwn		= efct_lio_npiv_make_sport,
-+	.fabric_drop_wwn		= efct_lio_npiv_drop_sport,
-+	.fabric_make_tpg		= efct_lio_npiv_make_tpg,
-+	.fabric_drop_tpg		= efct_lio_npiv_drop_tpg,
-+	.tpg_check_demo_mode_login_only =
-+				efct_lio_npiv_check_demo_mode_login_only,
-+	.tpg_check_prot_fabric_only	= NULL,
-+	.sess_get_initiator_sid		= NULL,
-+	.tfc_tpg_base_attrs		= efct_lio_npiv_tpg_attrs,
-+	.tfc_tpg_attrib_attrs		= efct_lio_npiv_tpg_attrib_attrs,
-+};
-+
-+int efct_scsi_tgt_driver_init(void)
-+{
-+	int rc;
-+
-+	/* Register the top level struct config_item_type with TCM core */
-+	rc = target_register_template(&efct_lio_ops);
-+	if (rc < 0) {
-+		pr_err("target_fabric_configfs_register failed with %d\n", rc);
-+		return rc;
-+	}
-+	rc = target_register_template(&efct_lio_npiv_ops);
-+	if (rc < 0) {
-+		pr_err("target_fabric_configfs_register failed with %d\n", rc);
-+		target_unregister_template(&efct_lio_ops);
-+		return rc;
-+	}
-+	return EFC_SUCCESS;
-+}
-+
-+int efct_scsi_tgt_driver_exit(void)
-+{
-+	target_unregister_template(&efct_lio_ops);
-+	target_unregister_template(&efct_lio_npiv_ops);
-+	return EFC_SUCCESS;
-+}
-diff --git a/drivers/scsi/elx/efct/efct_lio.h b/drivers/scsi/elx/efct/efct_lio.h
-new file mode 100644
-index 000000000000..f884bcd3b240
---- /dev/null
-+++ b/drivers/scsi/elx/efct/efct_lio.h
-@@ -0,0 +1,178 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
-+ * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
++/**
++ * This routine supports communication sequences consisting of a single
++ * request and single response between two endpoints. Examples include:
++ *  - Sending an ELS request.
++ *  - Sending an ELS response - To send an ELS response, the caller must provide
++ * the OX_ID from the received request.
++ *  - Sending a FC Common Transport (FC-CT) request - To send a FC-CT request,
++ * the caller must provide the R_CTL, TYPE, and DF_CTL
++ * values to place in the FC frame header.
 + */
++enum efct_hw_rtn
++efct_hw_srrs_send(struct efct_hw *hw, enum efct_hw_io_type type,
++		  struct efct_hw_io *io,
++		  struct efc_dma *send, u32 len,
++		  struct efc_dma *receive, struct efc_remote_node *rnode,
++		  union efct_hw_io_param_u *iparam,
++		  efct_hw_srrs_cb_t cb, void *arg)
++{
++	struct sli4_sge	*sge = NULL;
++	enum efct_hw_rtn	rc = EFCT_HW_RTN_SUCCESS;
++	u16	local_flags = 0;
++	u32 sge0_flags;
++	u32 sge1_flags;
 +
-+#ifndef __EFCT_LIO_H__
-+#define __EFCT_LIO_H__
++	if (!io || !rnode || !iparam) {
++		pr_err("bad parm hw=%p io=%p s=%p r=%p rn=%p iparm=%p\n",
++			hw, io, send, receive, rnode, iparam);
++		return EFCT_HW_RTN_ERROR;
++	}
 +
-+#include "efct_scsi.h"
-+#include <target/target_core_base.h>
++	if (hw->state != EFCT_HW_STATE_ACTIVE) {
++		efc_log_test(hw->os,
++			      "cannot send SRRS, HW state=%d\n", hw->state);
++		return EFCT_HW_RTN_ERROR;
++	}
 +
-+#define efct_lio_io_printf(io, fmt, ...) \
-+	efc_log_debug(io->efct, \
-+		"[%s] [%04x][i:%04x t:%04x h:%04x][c:%02x]" fmt, \
-+		io->node->display_name, io->instance_index, \
-+		io->init_task_tag, io->tgt_task_tag, io->hw_tag, \
-+		io->tgt_io.cmd.t_task_cdb[0], ##__VA_ARGS__)
++	io->rnode = rnode;
++	io->type  = type;
++	io->done = cb;
++	io->arg  = arg;
 +
-+#define efct_lio_tmfio_printf(io, fmt, ...) \
-+	efc_log_debug(io->efct, \
-+		"[%s] [%04x][i:%04x t:%04x h:%04x][f:%02x]" fmt, \
-+		io->node->display_name, io->instance_index, \
-+		io->init_task_tag, io->tgt_task_tag, io->hw_tag, \
-+		io->tgt_io.tmf,  ##__VA_ARGS__)
++	sge = io->sgl->virt;
 +
-+#define efct_set_lio_io_state(io, value) (io->tgt_io.state |= value)
++	/* clear both SGE */
++	memset(io->sgl->virt, 0, 2 * sizeof(struct sli4_sge));
 +
-+struct efct_lio_wq_data {
-+	struct efct		*efct;
-+	void			*ptr;
-+	struct work_struct	work;
-+};
++	sge0_flags = le32_to_cpu(sge[0].dw2_flags);
++	sge1_flags = le32_to_cpu(sge[1].dw2_flags);
++	if (send) {
++		sge[0].buffer_address_high =
++			cpu_to_le32(upper_32_bits(send->phys));
++		sge[0].buffer_address_low  =
++			cpu_to_le32(lower_32_bits(send->phys));
 +
-+/* Target private efct structure */
-+struct efct_scsi_tgt {
-+	u32			max_sge;
-+	u32			max_sgl;
++		sge0_flags |= (SLI4_SGE_TYPE_DATA << SLI4_SGE_TYPE_SHIFT);
++
++		sge[0].buffer_length = cpu_to_le32(len);
++	}
++
++	if (type == EFCT_HW_ELS_REQ || type == EFCT_HW_FC_CT) {
++		sge[1].buffer_address_high =
++			cpu_to_le32(upper_32_bits(receive->phys));
++		sge[1].buffer_address_low  =
++			cpu_to_le32(lower_32_bits(receive->phys));
++
++		sge1_flags |= (SLI4_SGE_TYPE_DATA << SLI4_SGE_TYPE_SHIFT);
++		sge1_flags |= SLI4_SGE_LAST;
++
++		sge[1].buffer_length = cpu_to_le32(receive->size);
++	} else {
++		sge0_flags |= SLI4_SGE_LAST;
++	}
++
++	sge[0].dw2_flags = cpu_to_le32(sge0_flags);
++	sge[1].dw2_flags = cpu_to_le32(sge1_flags);
++
++	switch (type) {
++	case EFCT_HW_ELS_REQ:
++		if (!send ||
++		    sli_els_request64_wqe(&hw->sli, io->wqe.wqebuf,
++					  hw->sli.wqe_size, io->sgl,
++					*((u8 *)send->virt),
++					len, receive->size,
++					iparam->els.timeout,
++					io->indicator, io->reqtag,
++					SLI4_CQ_DEFAULT, rnode->indicator,
++					rnode->sport->indicator,
++					rnode->attached, rnode->fc_id,
++					rnode->sport->fc_id)) {
++			efc_log_err(hw->os, "REQ WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	case EFCT_HW_ELS_RSP:
++		if (!send ||
++		    sli_xmit_els_rsp64_wqe(&hw->sli, io->wqe.wqebuf,
++					   hw->sli.wqe_size, send, len,
++					io->indicator, io->reqtag,
++					SLI4_CQ_DEFAULT, iparam->els.ox_id,
++					rnode->indicator,
++					rnode->sport->indicator,
++					rnode->attached, rnode->fc_id,
++					local_flags, U32_MAX)) {
++			efc_log_err(hw->os, "RSP WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	case EFCT_HW_ELS_RSP_SID:
++		if (!send ||
++		    sli_xmit_els_rsp64_wqe(&hw->sli, io->wqe.wqebuf,
++					   hw->sli.wqe_size, send, len,
++					io->indicator, io->reqtag,
++					SLI4_CQ_DEFAULT,
++					iparam->els.ox_id,
++					rnode->indicator,
++					rnode->sport->indicator,
++					rnode->attached, rnode->fc_id,
++					local_flags, iparam->els.s_id)) {
++			efc_log_err(hw->os, "RSP (SID) WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	case EFCT_HW_FC_CT:
++		if (!send ||
++		    sli_gen_request64_wqe(&hw->sli, io->wqe.wqebuf, io->sgl,
++					len, receive->size, io->indicator,
++					io->reqtag, SLI4_CQ_DEFAULT,
++					rnode->fc_id, rnode->indicator,
++					&iparam->fc_ct)) {
++			efc_log_err(hw->os, "GEN WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	case EFCT_HW_FC_CT_RSP:
++		if (!send ||
++		    sli_xmit_sequence64_wqe(&hw->sli, io->wqe.wqebuf,
++					    io->sgl, len, io->indicator,
++					    io->reqtag, rnode->fc_id,
++					    rnode->indicator, &iparam->fc_ct)) {
++			efc_log_err(hw->os, "XMIT SEQ WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	case EFCT_HW_BLS_ACC:
++	case EFCT_HW_BLS_RJT:
++	{
++		struct sli_bls_payload	bls;
++
++		if (type == EFCT_HW_BLS_ACC) {
++			bls.type = SLI4_SLI_BLS_ACC;
++			memcpy(&bls.u.acc, iparam->bls.payload,
++			       sizeof(bls.u.acc));
++		} else {
++			bls.type = SLI4_SLI_BLS_RJT;
++			memcpy(&bls.u.rjt, iparam->bls.payload,
++			       sizeof(bls.u.rjt));
++		}
++
++		bls.ox_id = cpu_to_le16(iparam->bls.ox_id);
++		bls.rx_id = cpu_to_le16(iparam->bls.rx_id);
++
++		if (sli_xmit_bls_rsp64_wqe(&hw->sli, io->wqe.wqebuf,
++					   hw->sli.wqe_size, &bls,
++					io->indicator, io->reqtag,
++					SLI4_CQ_DEFAULT,
++					rnode->attached,
++					rnode->indicator,
++					rnode->sport->indicator,
++					rnode->fc_id, rnode->sport->fc_id,
++					U32_MAX)) {
++			efc_log_err(hw->os, "XMIT_BLS_RSP64 WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	}
++	case EFCT_HW_BLS_ACC_SID:
++	{
++		struct sli_bls_payload	bls;
++
++		bls.type = SLI4_SLI_BLS_ACC;
++		memcpy(&bls.u.acc, iparam->bls.payload,
++		       sizeof(bls.u.acc));
++
++		bls.ox_id = cpu_to_le16(iparam->bls.ox_id);
++		bls.rx_id = cpu_to_le16(iparam->bls.rx_id);
++
++		if (sli_xmit_bls_rsp64_wqe(&hw->sli, io->wqe.wqebuf,
++					   hw->sli.wqe_size, &bls,
++					io->indicator, io->reqtag,
++					SLI4_CQ_DEFAULT,
++					rnode->attached,
++					rnode->indicator,
++					rnode->sport->indicator,
++					rnode->fc_id, rnode->sport->fc_id,
++					iparam->bls.s_id)) {
++			efc_log_err(hw->os, "XMIT_BLS_RSP64 WQE SID error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	}
++	default:
++		efc_log_err(hw->os, "bad SRRS type %#x\n", type);
++		rc = EFCT_HW_RTN_ERROR;
++	}
++
++	if (rc == EFCT_HW_RTN_SUCCESS) {
++
++		io->xbusy = true;
++
++		/*
++		 * Add IO to active io wqe list before submitting, in case the
++		 * wcqe processing preempts this thread.
++		 */
++		io->wq->use_count++;
++		rc = efct_hw_wq_write(io->wq, &io->wqe);
++		if (rc >= 0) {
++			/* non-negative return is success */
++			rc = 0;
++		} else {
++			/* failed to write wqe, remove from active wqe list */
++			efc_log_err(hw->os,
++				     "sli_queue_write failed: %d\n", rc);
++			io->xbusy = false;
++		}
++	}
++
++	return rc;
++}
++
++/**
++ * Send a read, write, or response IO.
++ *
++ * This routine supports sending a higher-level IO (for example, FCP) between
++ * two endpoints as a target or initiator. Examples include:
++ *  - Sending read data and good response (target).
++ *  - Sending a response (target with no data or after receiving write data).
++ *  .
++ * This routine assumes all IOs use the SGL associated with the HW IO. Prior to
++ * calling this routine, the data should be loaded using efct_hw_io_add_sge().
++ */
++enum efct_hw_rtn
++efct_hw_io_send(struct efct_hw *hw, enum efct_hw_io_type type,
++		struct efct_hw_io *io,
++		u32 len, union efct_hw_io_param_u *iparam,
++		struct efc_remote_node *rnode, void *cb, void *arg)
++{
++	enum efct_hw_rtn	rc = EFCT_HW_RTN_SUCCESS;
++	u32	rpi;
++	bool send_wqe = true;
++
++	if (!io || !rnode || !iparam) {
++		pr_err("bad parm hw=%p io=%p iparam=%p rnode=%p\n",
++			hw, io, iparam, rnode);
++		return EFCT_HW_RTN_ERROR;
++	}
++
++	if (hw->state != EFCT_HW_STATE_ACTIVE) {
++		efc_log_err(hw->os, "cannot send IO, HW state=%d\n",
++			     hw->state);
++		return EFCT_HW_RTN_ERROR;
++	}
++
++	rpi = rnode->indicator;
 +
 +	/*
-+	 * Variables used to send task set full. We are using a high watermark
-+	 * method to send task set full. We will reserve a fixed number of IOs
-+	 * per initiator plus a fudge factor. Once we reach this number,
-+	 * then the target will start sending task set full/busy responses.
++	 * Save state needed during later stages
 +	 */
-+	atomic_t		initiator_count;
-+	atomic_t		ios_in_use;
-+	atomic_t		io_high_watermark;
++	io->rnode = rnode;
++	io->type  = type;
++	io->done  = cb;
++	io->arg   = arg;
 +
-+	atomic_t		watermark_hit;
-+	int			watermark_min;
-+	int			watermark_max;
++	/*
++	 * Format the work queue entry used to send the IO
++	 */
++	switch (type) {
++	case EFCT_HW_IO_TARGET_WRITE: {
++		u16 flags = iparam->fcp_tgt.flags;
++		struct fcp_txrdy *xfer = io->xfer_rdy.virt;
 +
-+	struct efct_lio_sport	*lio_sport;
-+	struct efct_lio_tpg	*tpg;
++		/*
++		 * Fill in the XFER_RDY for IF_TYPE 0 devices
++		 */
++		xfer->ft_data_ro = cpu_to_be32(iparam->fcp_tgt.offset);
++		xfer->ft_burst_len = cpu_to_be32(len);
 +
-+	struct list_head	vport_list;
-+	/* Protects vport list*/
-+	spinlock_t		efct_lio_lock;
++		if (io->xbusy)
++			flags |= SLI4_IO_CONTINUATION;
++		else
++			flags &= ~SLI4_IO_CONTINUATION;
 +
-+	u64			wwnn;
-+};
++		io->tgt_wqe_timeout = iparam->fcp_tgt.timeout;
 +
-+struct efct_scsi_tgt_sport {
-+	struct efct_lio_sport	*lio_sport;
-+};
++		if (sli_fcp_treceive64_wqe(&hw->sli, io->wqe.wqebuf,
++					   &io->def_sgl, io->first_data_sge,
++					   len, io->indicator, io->reqtag,
++					   SLI4_CQ_DEFAULT, rpi, rnode->fc_id,
++					   0, 0, &iparam->fcp_tgt)) {
++			efc_log_err(hw->os, "TRECEIVE WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	}
++	case EFCT_HW_IO_TARGET_READ: {
++		u16 flags = iparam->fcp_tgt.flags;
 +
-+struct efct_scsi_tgt_node {
-+	struct se_session	*session;
-+};
++		if (io->xbusy)
++			flags |= SLI4_IO_CONTINUATION;
++		else
++			flags &= ~SLI4_IO_CONTINUATION;
 +
-+#define EFCT_LIO_STATE_SCSI_RECV_CMD		(1 << 0)
-+#define EFCT_LIO_STATE_TGT_SUBMIT_CMD		(1 << 1)
-+#define EFCT_LIO_STATE_TFO_QUEUE_DATA_IN	(1 << 2)
-+#define EFCT_LIO_STATE_TFO_WRITE_PENDING	(1 << 3)
-+#define EFCT_LIO_STATE_TGT_EXECUTE_CMD		(1 << 4)
-+#define EFCT_LIO_STATE_SCSI_SEND_RD_DATA	(1 << 5)
-+#define EFCT_LIO_STATE_TFO_CHK_STOP_FREE	(1 << 6)
-+#define EFCT_LIO_STATE_SCSI_DATA_DONE		(1 << 7)
-+#define EFCT_LIO_STATE_TFO_QUEUE_STATUS		(1 << 8)
-+#define EFCT_LIO_STATE_SCSI_SEND_RSP		(1 << 9)
-+#define EFCT_LIO_STATE_SCSI_RSP_DONE		(1 << 10)
-+#define EFCT_LIO_STATE_TGT_GENERIC_FREE		(1 << 11)
-+#define EFCT_LIO_STATE_SCSI_RECV_TMF		(1 << 12)
-+#define EFCT_LIO_STATE_TGT_SUBMIT_TMR		(1 << 13)
-+#define EFCT_LIO_STATE_TFO_WRITE_PEND_STATUS	(1 << 14)
-+#define EFCT_LIO_STATE_TGT_GENERIC_REQ_FAILURE  (1 << 15)
++		io->tgt_wqe_timeout = iparam->fcp_tgt.timeout;
 +
-+#define EFCT_LIO_STATE_TFO_ABORTED_TASK		(1 << 29)
-+#define EFCT_LIO_STATE_TFO_RELEASE_CMD		(1 << 30)
-+#define EFCT_LIO_STATE_SCSI_CMPL_CMD		(1 << 31)
++		if (sli_fcp_tsend64_wqe(&hw->sli, io->wqe.wqebuf,
++					&io->def_sgl, io->first_data_sge,
++					len, io->indicator, io->reqtag,
++					SLI4_CQ_DEFAULT, rpi, rnode->fc_id,
++					0, 0, &iparam->fcp_tgt)) {
++			efc_log_err(hw->os, "TSEND WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
++		break;
++	}
++	case EFCT_HW_IO_TARGET_RSP: {
++		u16 flags = iparam->fcp_tgt.flags;
 +
-+struct efct_scsi_tgt_io {
-+	struct se_cmd		cmd;
-+	unsigned char		sense_buffer[TRANSPORT_SENSE_BUFFER];
-+	enum dma_data_direction	ddir;
-+	int			task_attr;
-+	u64			lun;
++		if (io->xbusy)
++			flags |= SLI4_IO_CONTINUATION;
++		else
++			flags &= ~SLI4_IO_CONTINUATION;
 +
-+	u32			state;
-+	u8			tmf;
-+	struct efct_io		*io_to_abort;
-+	u32			seg_map_cnt;
-+	u32			seg_cnt;
-+	u32			cur_seg;
-+	enum efct_scsi_io_status err;
-+	bool			aborting;
-+	bool			rsp_sent;
-+	uint32_t		transferred_len;
-+};
++		io->tgt_wqe_timeout = iparam->fcp_tgt.timeout;
 +
-+/* Handler return codes */
-+enum {
-+	SCSI_HANDLER_DATAPHASE_STARTED = 1,
-+	SCSI_HANDLER_RESP_STARTED,
-+	SCSI_HANDLER_VALIDATED_DATAPHASE_STARTED,
-+	SCSI_CMD_NOT_SUPPORTED,
-+};
++		if (sli_fcp_trsp64_wqe(&hw->sli, io->wqe.wqebuf,
++				       &io->def_sgl, len, io->indicator,
++				       io->reqtag, SLI4_CQ_DEFAULT, rpi,
++				       rnode->fc_id, 0, &iparam->fcp_tgt)) {
++			efc_log_err(hw->os, "TRSP WQE error\n");
++			rc = EFCT_HW_RTN_ERROR;
++		}
 +
-+#define WWN_NAME_LEN		32
-+struct efct_lio_vport {
-+	u64			wwpn;
-+	u64			npiv_wwpn;
-+	u64			npiv_wwnn;
-+	unsigned char		wwpn_str[WWN_NAME_LEN];
-+	struct se_wwn		vport_wwn;
-+	struct efct_lio_tpg	*tpg;
-+	struct efct		*efct;
-+	struct dentry		*sessions;
-+	struct Scsi_Host	*shost;
-+	struct fc_vport		*fc_vport;
-+	atomic_t		enable;
-+};
++		break;
++	}
++	default:
++		efc_log_err(hw->os, "unsupported IO type %#x\n", type);
++		rc = EFCT_HW_RTN_ERROR;
++	}
 +
-+struct efct_lio_sport {
-+	u64			wwpn;
-+	unsigned char		wwpn_str[WWN_NAME_LEN];
-+	struct se_wwn		sport_wwn;
-+	struct efct_lio_tpg	*tpg;
-+	struct efct		*efct;
-+	struct dentry		*sessions;
-+	atomic_t		enable;
-+};
++	if (send_wqe && rc == EFCT_HW_RTN_SUCCESS) {
 +
-+struct efct_lio_tpg_attrib {
-+	int			generate_node_acls;
-+	int			cache_dynamic_acls;
-+	int			demo_mode_write_protect;
-+	int			prod_mode_write_protect;
-+	int			demo_mode_login_only;
-+	bool			session_deletion_wait;
-+};
++		io->xbusy = true;
 +
-+struct efct_lio_tpg {
-+	struct se_portal_group	tpg;
-+	struct efct_lio_sport	*sport;
-+	struct efct_lio_vport	*vport;
-+	struct efct_lio_tpg_attrib tpg_attrib;
-+	unsigned short		tpgt;
-+	atomic_t		enabled;
-+};
++		/*
++		 * Add IO to active io wqe list before submitting, in case the
++		 * wcqe processing preempts this thread.
++		 */
++		hw->tcmd_wq_submit[io->wq->instance]++;
++		io->wq->use_count++;
++		rc = efct_hw_wq_write(io->wq, &io->wqe);
++		if (rc >= 0) {
++			/* non-negative return is success */
++			rc = 0;
++		} else {
++			/* failed to write wqe, remove from active wqe list */
++			efc_log_err(hw->os,
++				     "sli_queue_write failed: %d\n", rc);
++			io->xbusy = false;
++		}
++	}
 +
-+struct efct_lio_nacl {
-+	u64			nport_wwnn;
-+	char			nport_name[WWN_NAME_LEN];
-+	struct se_session	*session;
-+	struct se_node_acl	se_node_acl;
-+};
++	return rc;
++}
 +
-+struct efct_lio_vport_list_t {
-+	struct list_head	list_entry;
-+	struct efct_lio_vport	*lio_vport;
-+};
++/**
++ * Send a raw frame
++ *
++ * Using the SEND_FRAME_WQE, a frame consisting of header and payload is sent.
++ */
++enum efct_hw_rtn
++efct_hw_send_frame(struct efct_hw *hw, struct fc_frame_header *hdr,
++		   u8 sof, u8 eof, struct efc_dma *payload,
++		   struct efct_hw_send_frame_context *ctx,
++		   void (*callback)(void *arg, u8 *cqe, int status),
++		   void *arg)
++{
++	int rc;
++	struct efct_hw_wqe *wqe;
++	u32 xri;
++	struct hw_wq *wq;
 +
-+int efct_scsi_tgt_driver_init(void);
-+int efct_scsi_tgt_driver_exit(void);
++	wqe = &ctx->wqe;
 +
-+#endif /*__EFCT_LIO_H__ */
++	/* populate the callback object */
++	ctx->hw = hw;
++
++	/* Fetch and populate request tag */
++	ctx->wqcb = efct_hw_reqtag_alloc(hw, callback, arg);
++	if (!ctx->wqcb) {
++		efc_log_err(hw->os, "can't allocate request tag\n");
++		return EFCT_HW_RTN_NO_RESOURCES;
++	}
++
++	wq = hw->hw_wq[0];
++
++	/* Set XRI and RX_ID in the header based on which WQ, and which
++	 * send_frame_io we are using
++	 */
++	xri = wq->send_frame_io->indicator;
++
++	/* Build the send frame WQE */
++	rc = sli_send_frame_wqe(&hw->sli, wqe->wqebuf,
++				hw->sli.wqe_size, sof, eof,
++				(u32 *)hdr, payload, payload->len,
++				EFCT_HW_SEND_FRAME_TIMEOUT, xri,
++				ctx->wqcb->instance_index);
++	if (rc) {
++		efc_log_err(hw->os, "sli_send_frame_wqe failed: %d\n",
++			     rc);
++		return EFCT_HW_RTN_ERROR;
++	}
++
++	/* Write to WQ */
++	rc = efct_hw_wq_write(wq, wqe);
++	if (rc) {
++		efc_log_err(hw->os, "efct_hw_wq_write failed: %d\n", rc);
++		return EFCT_HW_RTN_ERROR;
++	}
++
++	wq->use_count++;
++
++	return EFCT_HW_RTN_SUCCESS;
++}
++
++u32
++efct_hw_io_get_count(struct efct_hw *hw,
++		     enum efct_hw_io_count_type io_count_type)
++{
++	struct efct_hw_io *io = NULL;
++	u32 count = 0;
++	unsigned long flags = 0;
++
++	spin_lock_irqsave(&hw->io_lock, flags);
++
++	switch (io_count_type) {
++	case EFCT_HW_IO_INUSE_COUNT:
++		list_for_each_entry(io, &hw->io_inuse, list_entry) {
++			count = count + 1;
++		}
++		break;
++	case EFCT_HW_IO_FREE_COUNT:
++		list_for_each_entry(io, &hw->io_free, list_entry) {
++			count = count + 1;
++		}
++		break;
++	case EFCT_HW_IO_WAIT_FREE_COUNT:
++		list_for_each_entry(io, &hw->io_wait_free, list_entry) {
++			count = count + 1;
++		}
++		break;
++	case EFCT_HW_IO_N_TOTAL_IO_COUNT:
++		count = hw->config.n_io;
++		break;
++	}
++
++	spin_unlock_irqrestore(&hw->io_lock, flags);
++
++	return count;
++}
+diff --git a/drivers/scsi/elx/efct/efct_hw.h b/drivers/scsi/elx/efct/efct_hw.h
+index b427a4eda5a3..36a832f32616 100644
+--- a/drivers/scsi/elx/efct/efct_hw.h
++++ b/drivers/scsi/elx/efct/efct_hw.h
+@@ -714,4 +714,23 @@ efct_hw_process(struct efct_hw *hw, u32 vector, u32 max_isr_time_msec);
+ extern int
+ efct_hw_queue_hash_find(struct efct_queue_hash *hash, u16 id);
+ 
++int efct_hw_wq_write(struct hw_wq *wq, struct efct_hw_wqe *wqe);
++enum efct_hw_rtn
++efct_hw_send_frame(struct efct_hw *hw, struct fc_frame_header *hdr,
++		   u8 sof, u8 eof, struct efc_dma *payload,
++		struct efct_hw_send_frame_context *ctx,
++		void (*callback)(void *arg, u8 *cqe, int status),
++		void *arg);
++typedef int(*efct_hw_srrs_cb_t)(struct efct_hw_io *io,
++				struct efc_remote_node *rnode, u32 length,
++				int status, u32 ext_status, void *arg);
++extern enum efct_hw_rtn
++efct_hw_srrs_send(struct efct_hw *hw, enum efct_hw_io_type type,
++		  struct efct_hw_io *io,
++		  struct efc_dma *send, u32 len,
++		  struct efc_dma *receive, struct efc_remote_node *rnode,
++		  union efct_hw_io_param_u *iparam,
++		  efct_hw_srrs_cb_t cb,
++		  void *arg);
++
+ #endif /* __EFCT_H__ */
 -- 
 2.16.4
 
