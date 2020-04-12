@@ -2,97 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A88D1A5DE1
-	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 11:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 973DB1A5E25
+	for <lists+linux-scsi@lfdr.de>; Sun, 12 Apr 2020 12:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726924AbgDLJko (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 12 Apr 2020 05:40:44 -0400
-Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:48804 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgDLJko (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Apr 2020 05:40:44 -0400
-Received: from localhost.localdomain ([90.126.162.40])
-        by mwinf5d55 with ME
-        id Rlgg2200K0scBcy03lghJr; Sun, 12 Apr 2020 11:40:42 +0200
-X-ME-Helo: localhost.localdomain
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 12 Apr 2020 11:40:42 +0200
-X-ME-IP: 90.126.162.40
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     aacraid@microsemi.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] scsi: aacraid: Fix some error handling paths in 'aac_probe_one()'
-Date:   Sun, 12 Apr 2020 11:40:39 +0200
-Message-Id: <20200412094039.8822-1-christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.20.1
+        id S1726990AbgDLK5K convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-scsi@lfdr.de>); Sun, 12 Apr 2020 06:57:10 -0400
+Received: from mail.lintas.net.id ([103.242.106.93]:38332 "EHLO
+        mail.lintas.net.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726043AbgDLK5J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 12 Apr 2020 06:57:09 -0400
+X-Greylist: delayed 1219 seconds by postgrey-1.27 at vger.kernel.org; Sun, 12 Apr 2020 06:57:06 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.lintas.net.id (Postfix) with ESMTP id 7511530599B66;
+        Sun, 12 Apr 2020 17:34:13 +0700 (WIB)
+Received: from mail.lintas.net.id ([127.0.0.1])
+        by localhost (mail.lintas.net.id [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 2c5Y4A-LHVja; Sun, 12 Apr 2020 17:34:12 +0700 (WIB)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.lintas.net.id (Postfix) with ESMTP id 91AE930565B74;
+        Sun, 12 Apr 2020 17:34:12 +0700 (WIB)
+X-Virus-Scanned: amavisd-new at lintas.net.id
+Received: from mail.lintas.net.id ([127.0.0.1])
+        by localhost (mail.lintas.net.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id yo1wP-9uoIfC; Sun, 12 Apr 2020 17:34:12 +0700 (WIB)
+Received: from mail.lintas.net.id (mail.lintas.net.id [103.242.106.93])
+        by mail.lintas.net.id (Postfix) with ESMTP id A2BB23059AB01;
+        Sun, 12 Apr 2020 17:34:11 +0700 (WIB)
+Date:   Sun, 12 Apr 2020 17:34:11 +0700 (WIB)
+From:   =?utf-8?B?0KHQuNGB0YLQtdC80L3Ri9C5INCw0LTQvNC40L3QuNGB0YLRgNCw0YLQvtGA?= 
+        <ricky@lintas.net.id>
+Reply-To: mailsss@mail2world.com
+Message-ID: <1436105409.24276.1586687651609.JavaMail.zimbra@lintas.net.id>
+Subject: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+X-Originating-IP: [103.242.106.93]
+X-Mailer: Zimbra 8.8.15_GA_3888 (zclient/8.8.15_GA_3888)
+Thread-Index: pu96ZTRMa+3UnuH9nFxOe5WEAO4RzA==
+Thread-Topic: 
+Content-Transfer-Encoding: 8BIT
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-If 'scsi_host_alloc()' or 'kcalloc()' fail, 'error' is known to be 0. Set
-it explicitly to -ENOMEM instead before branching to the error handling
-path.
+ВНИМАНИЕ;
 
-While at it, axe 2 useless assignments to 'error'. These values are
-overwridden a few lines later.
+В вашем почтовом ящике превышен лимит хранилища, который составляет 5 ГБ, как определено администратором, который в настоящее время работает на 10,9 ГБ. Возможно, вы не сможете отправлять или получать новую почту, пока вы не подтвердите свою почту. Чтобы подтвердить свой почтовый ящик, отправьте следующую информацию ниже:
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/scsi/aacraid/linit.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+название:
+Имя пользователя: 
+пароль:
+Подтвердите Пароль: 
+Эл. адрес:
+Телефон: 
 
-diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
-index 83a60b0a8cd8..a0a2b3abc512 100644
---- a/drivers/scsi/aacraid/linit.c
-+++ b/drivers/scsi/aacraid/linit.c
-@@ -1632,7 +1632,7 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
- 	struct Scsi_Host *shost;
- 	struct aac_dev *aac;
- 	struct list_head *insert = &aac_devices;
--	int error = -ENODEV;
-+	int error;
- 	int unique_id = 0;
- 	u64 dmamask;
- 	int mask_bits = 0;
-@@ -1657,7 +1657,6 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
- 	error = pci_enable_device(pdev);
- 	if (error)
- 		goto out;
--	error = -ENODEV;
- 
- 	if (!(aac_drivers[index].quirks & AAC_QUIRK_SRC)) {
- 		error = pci_set_dma_mask(pdev, DMA_BIT_MASK(32));
-@@ -1689,8 +1688,10 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
- 	pci_set_master(pdev);
- 
- 	shost = scsi_host_alloc(&aac_driver_template, sizeof(struct aac_dev));
--	if (!shost)
-+	if (!shost) {
-+		error = -ENOMEM;
- 		goto out_disable_pdev;
-+	}
- 
- 	shost->irq = pdev->irq;
- 	shost->unique_id = unique_id;
-@@ -1714,8 +1715,11 @@ static int aac_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
- 	aac->fibs = kcalloc(shost->can_queue + AAC_NUM_MGT_FIB,
- 			    sizeof(struct fib),
- 			    GFP_KERNEL);
--	if (!aac->fibs)
-+	if (!aac->fibs) {
-+		error = -ENOMEM;
- 		goto out_free_host;
-+	}
-+
- 	spin_lock_init(&aac->fib_lock);
- 
- 	mutex_init(&aac->ioctl_mutex);
--- 
-2.20.1
+Если вы не сможете подтвердить свой почтовый ящик, ваш почтовый ящик будет отключен!
 
+Приносим извинения за неудобства.
+Код подтверждения: en: 006,524.RU
+Техническая поддержка почты © 2020
+
+благодарю вас
+Системный администратор
