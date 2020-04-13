@@ -2,121 +2,203 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E66EF1A6C91
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Apr 2020 21:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94691A6E23
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Apr 2020 23:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387938AbgDMTgL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Apr 2020 15:36:11 -0400
-Received: from mout.web.de ([212.227.17.12]:45527 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387935AbgDMTgJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 13 Apr 2020 15:36:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1586806545;
-        bh=sfjeNUJSAHB6UblCAyo4311HvX2lPDH7++QNKLb3Hts=;
-        h=X-UI-Sender-Class:To:Cc:Subject:From:Date;
-        b=MeX7ncz736jnMZZqaoQUrcuQWhh1/+jbeWAAFEQIPCV3L73Jl1rXbdbgV5u7M3tg7
-         aR1uu3tmFMs4QbHr6zUiLI0KkDIKHNHvp8JHJrVUDWW9N0a/h48d1GT8wKUEvyWa1S
-         25TjX//3w9Mg/Q4S7kGzDuINVJhN/mDClQKl82aQ=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.3] ([93.133.146.177]) by smtp.web.de (mrweb103
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0LqlWY-1iksEN2sWA-00ePyz; Mon, 13
- Apr 2020 21:35:45 +0200
-To:     Li Bin <huawei.libin@huawei.com>, linux-scsi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Doug Gilbert <dgilbert@interlog.com>,
-        "James E. J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>
-Subject: Re: [PATCH] scsi: sg: fix memory leak in sg_build_indirect
-From:   Markus Elfring <Markus.Elfring@web.de>
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <8b5551e6-46e2-9def-8ab6-ec5ba252c5ea@web.de>
-Date:   Mon, 13 Apr 2020 21:35:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:WuWFgBw9do6DDIja6MdXQVYPnzFgETFNsuH6q5LfvWsUV0LCPUI
- HrAFyfn6UL/PtJW/hQXNfq6WZaMqdlpNZzhGzi6YoSAP/lhFcv8DEL/2aLNChvwEdJslT8B
- D6b+B3RWteliVRONyhDVLkjtwAmtGrKNsUyINzDrK+U0FKOns6SG1cgXMdH8YQUIuL7sqkx
- FLjs2PTUbb962NiWyWayg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:rL8dmkqrfIw=:KOeNg6+NnCU+ezQrSNEada
- z31G2wWUI0zM1uqf5oA0B+CwFXAWKwXEcgeJDSo+oSSB5JZzfb4jt8R5/a9BdtldXvZNNbhnl
- a1krATOu7Vo4uIej5lMA5z9j6gOUZstp4/E6KV6HE/z3aPeMgQ6wwIJ51mDI7tGerpUXTjVpp
- 3Gx+cM4xt/pc+gGqUZH4pJhzjgEDmzzSNqz+5kd4pD4J+wV5sdFbJJt7luNFeFBs03HBA6os0
- o42r45oCvXomiiBefvBVfC8JUMttvKicrkMjVFBa1wj4ZM6e1l5C5hWuKWiBvsxGAvH7GE+M3
- BHo97eqv7hivTpoR4Xyb0OMgximoX9F2VgGzZ4+xlZsly6qVkSeFXZjdWgL7LcWnEzknkT9Xt
- 3z0ZelYKBoEsKHMkxtRB1QXkLHHSQfZdEk4OTBBFCsPxgWdVFM4p0TOR8SOlI/6Wtp86HIeDX
- BWe4SQo0V/nUzRER1Cgy7xpnXzRA2hzTCiBNPGHp2wPwXGSKg+qe4caIzJ3xx4mG5ZiQnvEbV
- 6A+21dBBANBcqLyuXKi8rn8+ufm/v69fHR0gjbkDNfaY1tfbaTGWu2H0AZ9k1nLFfEdZ/O3Xd
- XL8NtWJBMf7jMnB/1BU9QHqEPMLPxZfp0G0EppVwV1CYBQPrOY5p45VDCJ1tLVbwFd9cMOhUR
- pN4c/w7AK3Ttzf9psgzEK9g7L/WFz/vSR4+bjf8aLKcqkhV9FI/kqQwZFnuK63EpIbfUsfJ0c
- zvZb/4iv/BO1YYoj+amciaTnTQwz531zmBJK0ohvEWjuFYbVnHORS0mqdPB5SiLwjqdbq+jdV
- PkDHbWyMpYiPVqGB9m5sRahbPC2ILnHs8oJKr3nfvIVuAvE7e+N8cVBOLnocgWJzuoI2k3LJd
- ZT4hclA8xyHOKlt8NL2Vzj+e2UXyHsVRYuXPXfw6vQMCj2GlefX+7syOWQ46Guy+pQr0lWAe0
- wM5m0G1E1UzkT5V2e0pcP0dRZTdpcEtiaj1rZ5xOScfZ3E+qclsIDbeLf89WIl2jyv8I9KHSc
- AeAUudyYq3o4dmr/jqwlOuQ4OArSs1oIVJkdZVYSKvCt0qZKuZ0fhTc1i3Sz27Z5VwuLi4Pp5
- eYwzdH4gB0FD9MQSdw5+kuTjWwXNHWx+GJYEjY4Hu7rZihUCmQ5tzop/QY0QiQ1gqKJAZykO+
- Gizi9BhZxTe+cIwcVZvLFLY3S5LD9LBS5ox8fhg/epRTyEBjRYx/YEeO/G+zoL0ptHGbnwEYH
- pzyQEi1PUxy3uK5r4
+        id S2388947AbgDMVR4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Apr 2020 17:17:56 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:25891 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388814AbgDMVQq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 Apr 2020 17:16:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586812604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=aZ6g7e8BD4k4NsjW61IF0M2p6EBHyF5yVO1v4ZHY2zM=;
+        b=QwJ2OBrKWwunEWeJ4hLMYVHhHCc9SoC2lcLY6AiU7klUcxbdH33lR8ddlGiwAzL+Wi3nk/
+        g53mqMTgOgEvYoLX66VMvuF+/DopUoBPA2P0GnWG2Ekuq7r8Fjv0ZX+m3kDxxlvEp4OxD5
+        SK7eAGDOINax2g3CF7fsvoxpB97ZaPE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-458-MoXmhvmhO8yN4Fv14szuWw-1; Mon, 13 Apr 2020 17:16:40 -0400
+X-MC-Unique: MoXmhvmhO8yN4Fv14szuWw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DA0F08018A1;
+        Mon, 13 Apr 2020 21:16:33 +0000 (UTC)
+Received: from llong.com (ovpn-115-28.rdu2.redhat.com [10.10.115.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D8C9C11D2DD;
+        Mon, 13 Apr 2020 21:16:23 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>
+Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
+        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
+        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, Waiman Long <longman@redhat.com>
+Subject: [PATCH 0/2] mm, treewide: Rename kzfree() to kfree_sensitive()
+Date:   Mon, 13 Apr 2020 17:15:48 -0400
+Message-Id: <20200413211550.8307-1-longman@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> Fix a memory leak when there have failed, that we should free the pages
-> under the condition rem_sz > 0.
+This patchset makes a global rename of the kzfree() to kfree_sensitive()
+to highlight the fact buffer clearing is only needed if the data objects
+contain sensitive information like encrpytion key. The fact that kzfree()
+uses memset() to do the clearing isn't totally safe either as compiler
+may compile out the clearing in their optimizer. Instead, the new
+kfree_sensitive() uses memzero_explicit() which won't get compiled out.
 
-I suggest to improve the change description.
+Waiman Long (2):
+  mm, treewide: Rename kzfree() to kfree_sensitive()
+  crypto: Remove unnecessary memzero_explicit()
 
-* Please use an imperative wording.
+ arch/s390/crypto/prng.c                       |  4 +--
+ arch/x86/power/hibernate.c                    |  2 +-
+ crypto/adiantum.c                             |  2 +-
+ crypto/ahash.c                                |  4 +--
+ crypto/api.c                                  |  2 +-
+ crypto/asymmetric_keys/verify_pefile.c        |  4 +--
+ crypto/deflate.c                              |  2 +-
+ crypto/drbg.c                                 | 10 +++---
+ crypto/ecc.c                                  |  8 ++---
+ crypto/ecdh.c                                 |  2 +-
+ crypto/gcm.c                                  |  2 +-
+ crypto/gf128mul.c                             |  4 +--
+ crypto/jitterentropy-kcapi.c                  |  2 +-
+ crypto/rng.c                                  |  2 +-
+ crypto/rsa-pkcs1pad.c                         |  6 ++--
+ crypto/seqiv.c                                |  2 +-
+ crypto/shash.c                                |  2 +-
+ crypto/skcipher.c                             |  2 +-
+ crypto/testmgr.c                              |  6 ++--
+ crypto/zstd.c                                 |  2 +-
+ .../allwinner/sun8i-ce/sun8i-ce-cipher.c      | 17 +++-------
+ .../allwinner/sun8i-ss/sun8i-ss-cipher.c      | 18 +++-------
+ drivers/crypto/amlogic/amlogic-gxl-cipher.c   | 14 +++-----
+ drivers/crypto/atmel-ecc.c                    |  2 +-
+ drivers/crypto/caam/caampkc.c                 | 28 +++++++--------
+ drivers/crypto/cavium/cpt/cptvf_main.c        |  6 ++--
+ drivers/crypto/cavium/cpt/cptvf_reqmanager.c  | 12 +++----
+ drivers/crypto/cavium/nitrox/nitrox_lib.c     |  4 +--
+ drivers/crypto/cavium/zip/zip_crypto.c        |  6 ++--
+ drivers/crypto/ccp/ccp-crypto-rsa.c           |  6 ++--
+ drivers/crypto/ccree/cc_aead.c                |  4 +--
+ drivers/crypto/ccree/cc_buffer_mgr.c          |  4 +--
+ drivers/crypto/ccree/cc_cipher.c              |  6 ++--
+ drivers/crypto/ccree/cc_hash.c                |  8 ++---
+ drivers/crypto/ccree/cc_request_mgr.c         |  2 +-
+ drivers/crypto/inside-secure/safexcel_hash.c  |  3 +-
+ drivers/crypto/marvell/cesa/hash.c            |  2 +-
+ .../crypto/marvell/octeontx/otx_cptvf_main.c  |  6 ++--
+ .../marvell/octeontx/otx_cptvf_reqmgr.h       |  2 +-
+ drivers/crypto/mediatek/mtk-aes.c             |  2 +-
+ drivers/crypto/nx/nx.c                        |  4 +--
+ drivers/crypto/virtio/virtio_crypto_algs.c    | 12 +++----
+ drivers/crypto/virtio/virtio_crypto_core.c    |  2 +-
+ drivers/md/dm-crypt.c                         | 34 +++++++++----------
+ drivers/md/dm-integrity.c                     |  6 ++--
+ drivers/misc/ibmvmc.c                         |  6 ++--
+ .../hisilicon/hns3/hns3pf/hclge_mbx.c         |  2 +-
+ .../net/ethernet/intel/ixgbe/ixgbe_ipsec.c    |  6 ++--
+ drivers/net/ppp/ppp_mppe.c                    |  6 ++--
+ drivers/net/wireguard/noise.c                 |  4 +--
+ drivers/net/wireguard/peer.c                  |  2 +-
+ drivers/net/wireless/intel/iwlwifi/pcie/rx.c  |  2 +-
+ .../net/wireless/intel/iwlwifi/pcie/tx-gen2.c |  6 ++--
+ drivers/net/wireless/intel/iwlwifi/pcie/tx.c  |  6 ++--
+ drivers/net/wireless/intersil/orinoco/wext.c  |  4 +--
+ drivers/s390/crypto/ap_bus.h                  |  4 +--
+ drivers/staging/ks7010/ks_hostif.c            |  2 +-
+ drivers/staging/rtl8723bs/core/rtw_security.c |  2 +-
+ drivers/staging/wlan-ng/p80211netdev.c        |  2 +-
+ drivers/target/iscsi/iscsi_target_auth.c      |  2 +-
+ fs/btrfs/ioctl.c                              |  2 +-
+ fs/cifs/cifsencrypt.c                         |  2 +-
+ fs/cifs/connect.c                             | 10 +++---
+ fs/cifs/dfs_cache.c                           |  2 +-
+ fs/cifs/misc.c                                |  8 ++---
+ fs/crypto/keyring.c                           |  6 ++--
+ fs/crypto/keysetup_v1.c                       |  4 +--
+ fs/ecryptfs/keystore.c                        |  4 +--
+ fs/ecryptfs/messaging.c                       |  2 +-
+ include/crypto/aead.h                         |  2 +-
+ include/crypto/akcipher.h                     |  2 +-
+ include/crypto/gf128mul.h                     |  2 +-
+ include/crypto/hash.h                         |  2 +-
+ include/crypto/internal/acompress.h           |  2 +-
+ include/crypto/kpp.h                          |  2 +-
+ include/crypto/skcipher.h                     |  2 +-
+ include/linux/slab.h                          |  2 +-
+ lib/mpi/mpiutil.c                             |  6 ++--
+ lib/test_kasan.c                              |  6 ++--
+ mm/slab_common.c                              | 10 +++---
+ net/atm/mpoa_caches.c                         |  4 +--
+ net/bluetooth/ecdh_helper.c                   |  6 ++--
+ net/bluetooth/smp.c                           | 24 ++++++-------
+ net/core/sock.c                               |  2 +-
+ net/ipv4/tcp_fastopen.c                       |  2 +-
+ net/mac80211/aead_api.c                       |  4 +--
+ net/mac80211/aes_gmac.c                       |  2 +-
+ net/mac80211/key.c                            |  2 +-
+ net/mac802154/llsec.c                         | 20 +++++------
+ net/sctp/auth.c                               |  2 +-
+ net/sctp/socket.c                             |  2 +-
+ net/sunrpc/auth_gss/gss_krb5_crypto.c         |  4 +--
+ net/sunrpc/auth_gss/gss_krb5_keys.c           |  6 ++--
+ net/sunrpc/auth_gss/gss_krb5_mech.c           |  2 +-
+ net/tipc/crypto.c                             | 10 +++---
+ net/wireless/core.c                           |  2 +-
+ net/wireless/ibss.c                           |  4 +--
+ net/wireless/lib80211_crypt_tkip.c            |  2 +-
+ net/wireless/lib80211_crypt_wep.c             |  2 +-
+ net/wireless/nl80211.c                        | 24 ++++++-------
+ net/wireless/sme.c                            |  6 ++--
+ net/wireless/util.c                           |  2 +-
+ net/wireless/wext-sme.c                       |  2 +-
+ scripts/coccinelle/free/devm_free.cocci       |  4 +--
+ scripts/coccinelle/free/ifnullfree.cocci      |  4 +--
+ scripts/coccinelle/free/kfree.cocci           |  6 ++--
+ scripts/coccinelle/free/kfreeaddr.cocci       |  2 +-
+ security/apparmor/domain.c                    |  4 +--
+ security/apparmor/include/file.h              |  2 +-
+ security/apparmor/policy.c                    | 24 ++++++-------
+ security/apparmor/policy_ns.c                 |  6 ++--
+ security/apparmor/policy_unpack.c             | 14 ++++----
+ security/keys/big_key.c                       |  6 ++--
+ security/keys/dh.c                            | 14 ++++----
+ security/keys/encrypted-keys/encrypted.c      | 14 ++++----
+ security/keys/trusted-keys/trusted_tpm1.c     | 34 +++++++++----------
+ security/keys/user_defined.c                  |  6 ++--
+ 117 files changed, 332 insertions(+), 358 deletions(-)
 
-* Will the tag =E2=80=9CFixes=E2=80=9D become relevant?
+-- 
+2.18.1
 
-Regards,
-Markus
