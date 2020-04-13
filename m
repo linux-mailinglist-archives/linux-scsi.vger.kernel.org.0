@@ -2,243 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3351A6F2A
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2020 00:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 191451A70F0
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2020 04:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389578AbgDMW3a (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Apr 2020 18:29:30 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:38117 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2389560AbgDMW31 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Apr 2020 18:29:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586816965;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:in-reply-to:in-reply-to:references:references;
-        bh=xENEjcmhPGwc2y5vLor/EJ6DRudCRi6D5WVSWBMRKcI=;
-        b=a2qwqlIcjP8lL2vgPnpktyZwxQJ3Gd8V799zI1IUP4hWTClZUbXZ7IPVt41XBZekaJ1cPz
-        JEkivVeYCabn0j9j1E4/d1K0J6VRG2By3j5kqgfg8x4IdE/P1X82aDPN4bpmhLR/JqzxFJ
-        9BTw5wYu52FL9ORzJX5cBeNfcl2diUc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-285-8AaFvKVINBm7IlQx6B5FDA-1; Mon, 13 Apr 2020 18:29:20 -0400
-X-MC-Unique: 8AaFvKVINBm7IlQx6B5FDA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CC5481005513;
-        Mon, 13 Apr 2020 22:29:15 +0000 (UTC)
-Received: from llong.com (ovpn-115-28.rdu2.redhat.com [10.10.115.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3589D100164D;
-        Mon, 13 Apr 2020 22:29:07 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Rientjes <rientjes@google.com>
-Cc:     linux-mm@kvack.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-crypto@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-ppp@vger.kernel.org,
-        wireguard@lists.zx2c4.com, linux-wireless@vger.kernel.org,
-        devel@driverdev.osuosl.org, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
-        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
-        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        cocci@systeme.lip6.fr, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, Waiman Long <longman@redhat.com>
-Subject: [PATCH v2 2/2] crypto: Remove unnecessary memzero_explicit()
-Date:   Mon, 13 Apr 2020 18:28:46 -0400
-Message-Id: <20200413222846.24240-1-longman@redhat.com>
-In-Reply-To: <20200413211550.8307-1-longman@redhat.com>
-References: <20200413211550.8307-1-longman@redhat.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+        id S2404078AbgDNCW3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Apr 2020 22:22:29 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:53620 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404055AbgDNCW2 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Apr 2020 22:22:28 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03DMEgQG131163;
+        Mon, 13 Apr 2020 22:36:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=PoPnIdPI1aO4rszZJsXedsxdG/LSFz7LdVajhT7BURg=;
+ b=u178Z9/L+VB1FBUcVh98boSUsoLW3U5R7C/vFDgyBNa1QV7pimVp3Bu3we9O+qCQiCnM
+ GbWVzd+A8OEpGmlNv2gYNNXfOeY6LEoyFmco9GoqjKOwXGuxtcESwoMARqWSr+bRMRIk
+ wcDcTqx5f5lP90Z0N69GyoJtB/oBTgHqoY6HYKaaDXNopV3pzdvQsZXSCBT5rUdiNdH1
+ IdoXvqO5rz69zs/Nikm8CWQj/oW+z4RlgOL/RT1/bt+5fsVG5OU2l9EFH3EeX/kfUmkH
+ 2UEKctKsjy6+lnM9hQftxQWj8fo1T5XBul4C1lriL9mmqp6JhGfVd6xrlVEJv4sI4wR/ cQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 30b5ar1879-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Apr 2020 22:36:55 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03DMD50q114691;
+        Mon, 13 Apr 2020 22:36:55 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 30cta8974j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Apr 2020 22:36:54 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03DMar7F023224;
+        Mon, 13 Apr 2020 22:36:53 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 13 Apr 2020 15:36:52 -0700
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
+        jejb@linux.vnet.ibm.com, hare@suse.de, Damien.LeMoal@wdc.com
+Subject: Re: [PATCH v4 02/14] scsi_debug: add doublestore option
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20200225062351.21267-1-dgilbert@interlog.com>
+        <20200225062351.21267-3-dgilbert@interlog.com>
+Date:   Mon, 13 Apr 2020 18:36:50 -0400
+In-Reply-To: <20200225062351.21267-3-dgilbert@interlog.com> (Douglas Gilbert's
+        message of "Tue, 25 Feb 2020 01:23:39 -0500")
+Message-ID: <yq1tv1nvwql.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9590 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ spamscore=0 adultscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004130163
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9590 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 impostorscore=0
+ clxscore=1015 priorityscore=1501 malwarescore=0 phishscore=0 spamscore=0
+ mlxlogscore=999 suspectscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004130163
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Since kfree_sensitive() will do an implicit memzero_explicit(), there
-is no need to call memzero_explicit() before it. Eliminate those
-memzero_explicit() and simplify the call sites. For better correctness,
-the setting of keylen is also moved down after the key pointer check.
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- .../allwinner/sun8i-ce/sun8i-ce-cipher.c      | 19 +++++-------------
- .../allwinner/sun8i-ss/sun8i-ss-cipher.c      | 20 +++++--------------
- drivers/crypto/amlogic/amlogic-gxl-cipher.c   | 12 +++--------
- drivers/crypto/inside-secure/safexcel_hash.c  |  3 +--
- 4 files changed, 14 insertions(+), 40 deletions(-)
+Doug,
 
-diff --git a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-index aa4e8fdc2b32..8358fac98719 100644
---- a/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ce/sun8i-ce-cipher.c
-@@ -366,10 +366,7 @@ void sun8i_ce_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- 	pm_runtime_put_sync_suspend(op->ce->dev);
- }
-@@ -391,14 +388,11 @@ int sun8i_ce_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(ce->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
- 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
-@@ -416,14 +410,11 @@ int sun8i_ce_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 	if (err)
- 		return err;
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
- 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-index 5246ef4f5430..0495fbc27fcc 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-cipher.c
-@@ -249,7 +249,6 @@ static int sun8i_ss_cipher(struct skcipher_request *areq)
- 			offset = areq->cryptlen - ivsize;
- 			if (rctx->op_dir & SS_DECRYPTION) {
- 				memcpy(areq->iv, backup_iv, ivsize);
--				memzero_explicit(backup_iv, ivsize);
- 				kfree_sensitive(backup_iv);
- 			} else {
- 				scatterwalk_map_and_copy(areq->iv, areq->dst, offset,
-@@ -367,10 +366,7 @@ void sun8i_ss_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct sun8i_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- 	pm_runtime_put_sync(op->ss->dev);
- }
-@@ -392,14 +388,11 @@ int sun8i_ss_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(ss->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
- 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
-@@ -418,14 +411,11 @@ int sun8i_ss_des3_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		return -EINVAL;
- 	}
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	crypto_sync_skcipher_clear_flags(op->fallback_tfm, CRYPTO_TFM_REQ_MASK);
- 	crypto_sync_skcipher_set_flags(op->fallback_tfm, tfm->base.crt_flags & CRYPTO_TFM_REQ_MASK);
-diff --git a/drivers/crypto/amlogic/amlogic-gxl-cipher.c b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-index fd1269900d67..6aa9ce7bbbd4 100644
---- a/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-+++ b/drivers/crypto/amlogic/amlogic-gxl-cipher.c
-@@ -341,10 +341,7 @@ void meson_cipher_exit(struct crypto_tfm *tfm)
- {
- 	struct meson_cipher_tfm_ctx *op = crypto_tfm_ctx(tfm);
- 
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
-+	kfree_sensitive(op->key);
- 	crypto_free_sync_skcipher(op->fallback_tfm);
- }
- 
-@@ -368,14 +365,11 @@ int meson_aes_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 		dev_dbg(mc->dev, "ERROR: Invalid keylen %u\n", keylen);
- 		return -EINVAL;
- 	}
--	if (op->key) {
--		memzero_explicit(op->key, op->keylen);
--		kfree(op->key);
--	}
--	op->keylen = keylen;
-+	kfree_sensitive(op->key);
- 	op->key = kmemdup(key, keylen, GFP_KERNEL | GFP_DMA);
- 	if (!op->key)
- 		return -ENOMEM;
-+	op->keylen = keylen;
- 
- 	return crypto_sync_skcipher_setkey(op->fallback_tfm, key, keylen);
- }
-diff --git a/drivers/crypto/inside-secure/safexcel_hash.c b/drivers/crypto/inside-secure/safexcel_hash.c
-index 43962bc709c6..4a2d162914de 100644
---- a/drivers/crypto/inside-secure/safexcel_hash.c
-+++ b/drivers/crypto/inside-secure/safexcel_hash.c
-@@ -1081,8 +1081,7 @@ static int safexcel_hmac_init_pad(struct ahash_request *areq,
- 		}
- 
- 		/* Avoid leaking */
--		memzero_explicit(keydup, keylen);
--		kfree(keydup);
-+		kfree_sensitive(keydup);
- 
- 		if (ret)
- 			return ret;
+> The scsi_debug driver has always been restricted to using one (or
+> none) ramdisk image for its storage. This means that thousands of
+> scsi_debug devices can be created without exhausting the host
+> machine's RAM. The downside is that all scsi_debug devices share the
+> same ramdisk image. This option doubles the amount of ramdisk storage
+> space with the first, third, fifth (etc) created scsi_debug devices
+> using the first ramdisk image while the second, fourth, sixth (etc)
+> created scsi_debug devices using the second ramdisk image.
+
+I don't particularly like the idea that one has to know what first,
+third, fifth, etc. are sharing backing storage and second, 24th, and
+108th share a different backing.
+
+I appreciate that % 2 is super simple. But I would much prefer to have
+the backing store option be tied to a logical entity. Something like the
+host, as we discussed a while back.
+
+The default would be that all hosts share the same backing store like
+they do now. And then add module parameter which allows each host to
+have its own backing store. This allows greater flexibility in
+configuring test setups and isn't substantially more complex than the
+odd/even flip flop game, although it obviously means a bit of
+fake_storep shuffling.
+
 -- 
-2.18.1
-
+Martin K. Petersen	Oracle Linux Engineering
