@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7021A65A0
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Apr 2020 13:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98DE71A65A5
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Apr 2020 13:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729003AbgDMLeI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Apr 2020 07:34:08 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2307 "EHLO huawei.com"
+        id S1729049AbgDMLfS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Apr 2020 07:35:18 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:58936 "EHLO huawei.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727781AbgDMLeH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 13 Apr 2020 07:34:07 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id AFCC094B43E8D0143BAE;
-        Mon, 13 Apr 2020 19:34:04 +0800 (CST)
-Received: from huawei.com (10.175.102.37) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.487.0; Mon, 13 Apr 2020
- 19:33:55 +0800
+        id S1728960AbgDMLfR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 13 Apr 2020 07:35:17 -0400
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id E76FF3C5A2E54BFF94E0;
+        Mon, 13 Apr 2020 19:35:11 +0800 (CST)
+Received: from huawei.com (10.175.102.37) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.487.0; Mon, 13 Apr 2020
+ 19:35:03 +0800
 From:   Li Bin <huawei.libin@huawei.com>
 To:     <dgilbert@interlog.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hare@suse.com>, <jthumshirn@suse.de>
+        <martin.petersen@oracle.com>
 CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <huawei.libin@huawei.com>, <xiexiuqi@huawei.com>
 Subject: [PATCH] scsi: sg: add sg_remove_request in sg_common_write
-Date:   Mon, 13 Apr 2020 19:28:10 +0800
-Message-ID: <1586777290-17271-1-git-send-email-huawei.libin@huawei.com>
+Date:   Mon, 13 Apr 2020 19:29:21 +0800
+Message-ID: <1586777361-17339-1-git-send-email-huawei.libin@huawei.com>
 X-Mailer: git-send-email 1.7.12.4
 MIME-Version: 1.0
 Content-Type: text/plain
