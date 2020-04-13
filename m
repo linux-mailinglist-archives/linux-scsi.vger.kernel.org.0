@@ -2,70 +2,70 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 191451A70F0
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2020 04:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE881A6F6B
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2020 00:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404078AbgDNCW3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Apr 2020 22:22:29 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:53620 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404055AbgDNCW2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Apr 2020 22:22:28 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03DMEgQG131163;
-        Mon, 13 Apr 2020 22:36:55 GMT
+        id S2389726AbgDMWr6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Apr 2020 18:47:58 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:48796 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389723AbgDMWrL (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Apr 2020 18:47:11 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03DMm3ei021420;
+        Mon, 13 Apr 2020 22:48:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
  from : references : date : in-reply-to : message-id : mime-version :
  content-type; s=corp-2020-01-29;
- bh=PoPnIdPI1aO4rszZJsXedsxdG/LSFz7LdVajhT7BURg=;
- b=u178Z9/L+VB1FBUcVh98boSUsoLW3U5R7C/vFDgyBNa1QV7pimVp3Bu3we9O+qCQiCnM
- GbWVzd+A8OEpGmlNv2gYNNXfOeY6LEoyFmco9GoqjKOwXGuxtcESwoMARqWSr+bRMRIk
- wcDcTqx5f5lP90Z0N69GyoJtB/oBTgHqoY6HYKaaDXNopV3pzdvQsZXSCBT5rUdiNdH1
- IdoXvqO5rz69zs/Nikm8CWQj/oW+z4RlgOL/RT1/bt+5fsVG5OU2l9EFH3EeX/kfUmkH
- 2UEKctKsjy6+lnM9hQftxQWj8fo1T5XBul4C1lriL9mmqp6JhGfVd6xrlVEJv4sI4wR/ cQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 30b5ar1879-1
+ bh=4q0GRATtG4CE8PB+NwKzL361UFO5K3PXtj41EFRm+eE=;
+ b=ng2utCRxQlV7wlCxnyZkOV5MnXzpfVxEClIejW1EbcXWkfeehuFpDmKGcSgMNs7monh6
+ lQ32QaqFdNtpSnKOwh6XnfbkQ4hLGXSwfFTf9vh6skLzEYvEkSuhpMz9HXgtGl3LzE78
+ W7aDny0IqJ/XlPt1B3wojoyfVvCc8pY1VyWa8ZH5ySDHM0/7XmmVctyvD2fwOhAGbCTa
+ rkF0ZQB7QNS/f0srdZJx3KVV1YPUm8a10lWCXpX/sspVdR5v3UykSnXtqXgXhXON3B2l
+ oZ9xue8dzzGEUFI0LfZFal6COVECQro7Gt6d+BfNHjxuQeljaWQpa+1SOAyXBBdxFKrm qg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 30b5um194p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Apr 2020 22:36:55 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03DMD50q114691;
-        Mon, 13 Apr 2020 22:36:55 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 30cta8974j-1
+        Mon, 13 Apr 2020 22:48:05 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03DMftKd080900;
+        Mon, 13 Apr 2020 22:48:05 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 30bqpdqdej-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Apr 2020 22:36:54 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03DMar7F023224;
-        Mon, 13 Apr 2020 22:36:53 GMT
+        Mon, 13 Apr 2020 22:48:05 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03DMm45x016876;
+        Mon, 13 Apr 2020 22:48:04 GMT
 Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 13 Apr 2020 15:36:52 -0700
+        with ESMTP ; Mon, 13 Apr 2020 15:48:04 -0700
 To:     Douglas Gilbert <dgilbert@interlog.com>
 Cc:     linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
         jejb@linux.vnet.ibm.com, hare@suse.de, Damien.LeMoal@wdc.com
-Subject: Re: [PATCH v4 02/14] scsi_debug: add doublestore option
+Subject: Re: [PATCH v4 03/14] scsi_debug: implement verify(10), add verify(16)
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
 Organization: Oracle Corporation
 References: <20200225062351.21267-1-dgilbert@interlog.com>
-        <20200225062351.21267-3-dgilbert@interlog.com>
-Date:   Mon, 13 Apr 2020 18:36:50 -0400
-In-Reply-To: <20200225062351.21267-3-dgilbert@interlog.com> (Douglas Gilbert's
-        message of "Tue, 25 Feb 2020 01:23:39 -0500")
-Message-ID: <yq1tv1nvwql.fsf@oracle.com>
+        <20200225062351.21267-4-dgilbert@interlog.com>
+Date:   Mon, 13 Apr 2020 18:48:02 -0400
+In-Reply-To: <20200225062351.21267-4-dgilbert@interlog.com> (Douglas Gilbert's
+        message of "Tue, 25 Feb 2020 01:23:40 -0500")
+Message-ID: <yq1mu7fvw7x.fsf@oracle.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9590 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- spamscore=0 adultscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004130163
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=940 malwarescore=0
+ adultscore=0 bulkscore=0 spamscore=0 suspectscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004130165
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9590 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 impostorscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 phishscore=0 spamscore=0
- mlxlogscore=999 suspectscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 bulkscore=0 mlxscore=0
+ mlxlogscore=999 lowpriorityscore=0 impostorscore=0 adultscore=0
+ phishscore=0 spamscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2004130163
+ definitions=main-2004130165
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -74,29 +74,16 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 Doug,
 
-> The scsi_debug driver has always been restricted to using one (or
-> none) ramdisk image for its storage. This means that thousands of
-> scsi_debug devices can be created without exhausting the host
-> machine's RAM. The downside is that all scsi_debug devices share the
-> same ramdisk image. This option doubles the amount of ramdisk storage
-> space with the first, third, fifth (etc) created scsi_debug devices
-> using the first ramdisk image while the second, fourth, sixth (etc)
-> created scsi_debug devices using the second ramdisk image.
+> With the addition of the doublestore option, the ability to check
+> whether the two different ramdisk images are the same or not becomes
+> useful. Prior to this patch VERIFY(10) always returned true (i.e. the
+> SCSI GOOD status) without checking. This option adds support for
+> BYTCHK equal to 1 and 3 . If the comparison fails then a sense key of
+> MISCOMPARE is returned as per the T10 standards. Add support for the
+> VERIFY(16).
 
-I don't particularly like the idea that one has to know what first,
-third, fifth, etc. are sharing backing storage and second, 24th, and
-108th share a different backing.
-
-I appreciate that % 2 is super simple. But I would much prefer to have
-the backing store option be tied to a logical entity. Something like the
-host, as we discussed a while back.
-
-The default would be that all hosts share the same backing store like
-they do now. And then add module parameter which allows each host to
-have its own backing store. This allows greater flexibility in
-configuring test setups and isn't substantially more complex than the
-odd/even flip flop game, although it obviously means a bit of
-fake_storep shuffling.
+This looks OK in general. There are many cans of worms in the PI and LBP
+department wrt. verify operations but we can deal with those later.
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
