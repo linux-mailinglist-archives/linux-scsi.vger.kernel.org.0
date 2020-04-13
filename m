@@ -2,66 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02C571A643F
-	for <lists+linux-scsi@lfdr.de>; Mon, 13 Apr 2020 10:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8032F1A64C3
+	for <lists+linux-scsi@lfdr.de>; Mon, 13 Apr 2020 11:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727829AbgDMIfY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 13 Apr 2020 04:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.18]:40852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727123AbgDMIK5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Apr 2020 04:10:57 -0400
-Received: from huawei.com (szxga07-in.huawei.com [45.249.212.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C33C008749;
-        Mon, 13 Apr 2020 01:02:06 -0700 (PDT)
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 6DA2B36F7FB45CCDE9FA;
-        Mon, 13 Apr 2020 16:02:04 +0800 (CST)
-Received: from huawei.com (10.175.124.28) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Mon, 13 Apr 2020
- 16:01:54 +0800
-From:   Jason Yan <yanaijie@huawei.com>
-To:     <brking@us.ibm.com>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Jason Yan <yanaijie@huawei.com>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH] scsi: ipr: remove unneeded semicolon
-Date:   Mon, 13 Apr 2020 16:28:22 +0800
-Message-ID: <20200413082822.24356-1-yanaijie@huawei.com>
-X-Mailer: git-send-email 2.21.1
+        id S1728418AbgDMJkU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 13 Apr 2020 05:40:20 -0400
+Received: from esa5.microchip.iphmx.com ([216.71.150.166]:60650 "EHLO
+        esa5.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728138AbgDMJkT (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 13 Apr 2020 05:40:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1586770820; x=1618306820;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=6z7ZtJ8SrUeQXRcjWC+ap3OqVBnVDcWbrXqm0qHsltQ=;
+  b=maaLNqetCCb/RZuywfn8jzHjkx8Mdq0pqs4f4ihFE87JyCIhk/qq93E8
+   tsc4hXd31kXQOFKB5UBpxSpoc6tBb1hge254GKubxUz91Ic06SQOd9x4f
+   RYRZhv2gsOUHBPpZH9xh+IZO3JuP9fAvzUBbrrUrfOCRuL88wlZHdAYXW
+   +QRgtS6AA8KaGrJEz5tuTYEuhyMaCk9vm55Uvi0ia+LmgPyJGGVFweNU+
+   J2PzjiOoHDZ9zpysPFOjmTlBzJDsj/9n99qXVNCRtAyh1k+0TUdwlLJbx
+   YOf8vxfUXukthGu9h/bKz+K3No+2zlAygnTs3djkjQ0NPEnkbvYJIfCWU
+   Q==;
+IronPort-SDR: PDayw4jJOY3/hkQq2GO4Ao6wzMHyt7d0RIGNUoOr08j4kcOVjmay798FhnsR/Gg450scRY3rbP
+ 8VQOAnNMGaFRnV6GdvoEVXkOeCkeQRw9z4gNHMIkUK2sBfQ3wwpq6PMivBORjtOEl3+q5pj0KJ
+ njHPJmX/1UcBc1T1bWWvGaEoWsUl3zQylTM+AF0EAaIB4eLwMwsZjyeXDHtxgn2ABOsFXimEgD
+ NjMscIhAwolt0KrNb/TEfYIYbSclzoldT/YlJSdT3V8TthhF6pE8cuMgJdxfCOZTN1K44nJKfq
+ +Mg=
+X-IronPort-AV: E=Sophos;i="5.72,378,1580799600"; 
+   d="scan'208";a="72253067"
+Received: from unknown (HELO smtp.microsemi.com) ([208.19.100.23])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Apr 2020 02:40:19 -0700
+Received: from AVMBX1.microsemi.net (10.100.34.31) by AVMBX3.microsemi.net
+ (10.100.34.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Mon, 13 Apr
+ 2020 02:40:18 -0700
+Received: from localhost (10.41.130.51) by avmbx1.microsemi.net (10.100.34.31)
+ with Microsoft SMTP Server id 15.1.1979.3 via Frontend Transport; Mon, 13 Apr
+ 2020 02:40:17 -0700
+From:   Deepak Ukey <deepak.ukey@microchip.com>
+To:     <linux-scsi@vger.kernel.org>
+CC:     <Vasanthalakshmi.Tharmarajan@microchip.com>,
+        <Viswas.G@microchip.com>, <deepak.ukey@microchip.com>,
+        <jinpu.wang@profitbricks.com>, <martin.petersen@oracle.com>,
+        <dpf@google.com>, <yuuzheng@google.com>, <auradkar@google.com>,
+        <vishakhavc@google.com>, <bjashnani@google.com>,
+        <radha@google.com>, <akshatzen@google.com>
+Subject: [PATCH 0/3] pm80xx : Updates for the driver version 0.1.39.
+Date:   Mon, 13 Apr 2020 15:19:35 +0530
+Message-ID: <20200413094938.6182-1-deepak.ukey@microchip.com>
+X-Mailer: git-send-email 2.19.0-rc1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.28]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Fix the following coccicheck warning:
+From: Deepak Ukey <Deepak.Ukey@microchip.com>
 
-drivers/scsi/ipr.c:1167:2-3: Unneeded semicolon
+This patch set includes some bug fixes and features for pm80xx driver.
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Jason Yan <yanaijie@huawei.com>
----
- drivers/scsi/ipr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Viswas G (2):
+  pm80xx : Support for get phy profile functionality.
+  pm80xx : Staggered spin up support.
 
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index d48a8fa997b9..0db37b4f7265 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -1164,7 +1164,7 @@ static void ipr_update_ata_class(struct ipr_resource_entry *res, unsigned int pr
- 	default:
- 		res->ata_class = ATA_DEV_UNKNOWN;
- 		break;
--	};
-+	}
- }
- 
- /**
+peter chang (1):
+  pm80xx : Wait for PHY startup before draining libsas queue.
+
+ drivers/scsi/pm8001/pm8001_ctl.c  |  36 ++++++
+ drivers/scsi/pm8001/pm8001_ctl.h  |  27 ++++
+ drivers/scsi/pm8001/pm8001_defs.h |   9 +-
+ drivers/scsi/pm8001/pm8001_hwi.c  |  14 ++-
+ drivers/scsi/pm8001/pm8001_init.c |  79 +++++++++++-
+ drivers/scsi/pm8001/pm8001_sas.c  |  99 ++++++++++++++-
+ drivers/scsi/pm8001/pm8001_sas.h  |  22 ++++
+ drivers/scsi/pm8001/pm80xx_hwi.c  | 252 +++++++++++++++++++++++++++++++++++---
+ drivers/scsi/pm8001/pm80xx_hwi.h  |   2 +
+ 9 files changed, 509 insertions(+), 31 deletions(-)
+
 -- 
-2.21.1
+2.16.3
 
