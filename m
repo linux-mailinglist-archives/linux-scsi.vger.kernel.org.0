@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E0B1A72E0
-	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2020 07:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 683F41A72E4
+	for <lists+linux-scsi@lfdr.de>; Tue, 14 Apr 2020 07:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405436AbgDNFPc (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 14 Apr 2020 01:15:32 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:50537 "EHLO
+        id S2405437AbgDNFPi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 14 Apr 2020 01:15:38 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48081 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2405427AbgDNFP2 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Apr 2020 01:15:28 -0400
+        with ESMTP id S2405430AbgDNFP1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 14 Apr 2020 01:15:27 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586841324;
+        s=mimecast20190719; t=1586841326;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Uuao9zgEPWFyQw5rj4zc0mzrEKJABFj3exdUDkPZYDQ=;
-        b=E7KInWjnEOGMvmjAUE+YQKI9OORR+9QTGKlf/bseHR6NwAVm+W8kmlQjPQk7LHoNBk8fwo
-        AzrQwhg3jLPdVq11Yzkos3rzJosWtprKRf92DZtxJZBkGDFEnAZxct1sPTw8jOH+jqMoa4
-        vja1WT8jHEFen0BJJ52vx49JYBGFwic=
+        bh=HgylyiXuCyaASLokyVSMljvarr8J73Mrn4Pi2Q7txUc=;
+        b=VDIp57gc7ZUJ/OnORWZsSRej9PQA2CpO7roNRKbpkKSCzXLdS0h8madEQ2WqK16G7fmOzm
+        UmAE5OA5mMbHt7l225ly4TADNyOcL8MO2kx6lCWHMNR3qnZz9PaV6WcMkgyTyI5pzr11JD
+        NurFmtEfZSz9sCVZMgBL99WbYXuHFs0=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-23-4FYLYNtqNu-9sJUqhAeW6A-1; Tue, 14 Apr 2020 01:15:21 -0400
-X-MC-Unique: 4FYLYNtqNu-9sJUqhAeW6A-1
+ us-mta-240-iUdCFH_dNtmF2hMJ9kXc8w-1; Tue, 14 Apr 2020 01:15:22 -0400
+X-MC-Unique: iUdCFH_dNtmF2hMJ9kXc8w-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 137701005510;
-        Tue, 14 Apr 2020 05:15:20 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1DA49800D53;
+        Tue, 14 Apr 2020 05:15:21 +0000 (UTC)
 Received: from rh2.redhat.com (ovpn-112-105.rdu2.redhat.com [10.10.112.105])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2E1E91001DDE;
-        Tue, 14 Apr 2020 05:15:19 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3BBD51000325;
+        Tue, 14 Apr 2020 05:15:20 +0000 (UTC)
 From:   Mike Christie <mchristi@redhat.com>
 To:     jsmart2021@gmail.com, martin.petersen@oracle.com,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
         nab@linux-iscsi.org
 Cc:     Mike Christie <mchristi@redhat.com>
-Subject: [RFC PATCH 3/5] target: add target_setup_session sysfs support
-Date:   Tue, 14 Apr 2020 00:15:12 -0500
-Message-Id: <20200414051514.7296-4-mchristi@redhat.com>
+Subject: [RFC PATCH 4/5] iscsi target: use session sysfs helpers
+Date:   Tue, 14 Apr 2020 00:15:13 -0500
+Message-Id: <20200414051514.7296-5-mchristi@redhat.com>
 In-Reply-To: <20200414051514.7296-1-mchristi@redhat.com>
 References: <20200414051514.7296-1-mchristi@redhat.com>
 MIME-Version: 1.0
@@ -51,354 +51,193 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This adds a session dir per session for users of target_setup_session.
-
-TODO: drivers like tcm_qla2xxx allocate resources in the
-target_setup_session setup callback. I added a second callback
-to release those resources in the error path or when all users
-have drop their references.
-
-I have not implemented the free_cb for tcm_qlaxxx, vhost, etc.
-
-Drivers like elx that will want to export session level attrs
-can also use the new callback to release their session resources
-when all references have been dropped.
+The iscsi target login process breaks up session allocation and
+registration, so it does not use target_setup_session like every one
+else. This converts iscsi to use the session sysfs helpers and drops its
+session id to use the common one.
 
 Signed-off-by: Mike Christie <mchristi@redhat.com>
 ---
- drivers/infiniband/ulp/srpt/ib_srpt.c    |  8 +++--
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c |  4 +--
- drivers/scsi/qla2xxx/tcm_qla2xxx.c       |  3 +-
- drivers/target/Makefile                  |  1 +
- drivers/target/loopback/tcm_loop.c       |  3 +-
- drivers/target/sbp/sbp_target.c          |  4 +--
- drivers/target/target_core_transport.c   | 57 ++++++++++++++++++++++++++=
-------
- drivers/target/tcm_fc/tfc_sess.c         |  2 +-
- drivers/usb/gadget/function/f_tcm.c      |  3 +-
- drivers/vhost/scsi.c                     |  4 +--
- drivers/xen/xen-scsiback.c               |  4 ++-
- include/target/target_core_base.h        |  1 +
- include/target/target_core_fabric.h      |  7 ++--
- 13 files changed, 73 insertions(+), 28 deletions(-)
+ drivers/target/iscsi/iscsi_target.c          |  4 ++--
+ drivers/target/iscsi/iscsi_target_configfs.c |  4 +---
+ drivers/target/iscsi/iscsi_target_login.c    | 16 ++--------------
+ drivers/target/iscsi/iscsi_target_nego.c     | 20 ++++++++++++++++----
+ drivers/target/iscsi/iscsi_target_stat.c     |  3 +--
+ include/target/iscsi/iscsi_target_core.h     |  2 --
+ 6 files changed, 22 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/infiniband/ulp/srpt/ib_srpt.c b/drivers/infiniband/u=
-lp/srpt/ib_srpt.c
-index 9855274..a4f4a55 100644
---- a/drivers/infiniband/ulp/srpt/ib_srpt.c
-+++ b/drivers/infiniband/ulp/srpt/ib_srpt.c
-@@ -2320,7 +2320,8 @@ static int srpt_cm_req_recv(struct srpt_device *con=
-st sdev,
- 			break;
- 		ch->sess =3D target_setup_session(&stpg->tpg, tag_num,
- 						tag_size, TARGET_PROT_NORMAL,
--						ch->sess_name, ch, NULL);
-+						ch->sess_name, NULL, ch, NULL,
-+						NULL);
- 	}
- 	mutex_unlock(&sport->port_guid_id.mutex);
+diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/i=
+scsi_target.c
+index 59379d6..e8ea597 100644
+--- a/drivers/target/iscsi/iscsi_target.c
++++ b/drivers/target/iscsi/iscsi_target.c
+@@ -49,7 +49,6 @@
+ static DEFINE_MUTEX(np_lock);
 =20
-@@ -2330,13 +2331,14 @@ static int srpt_cm_req_recv(struct srpt_device *c=
-onst sdev,
- 			break;
- 		ch->sess =3D target_setup_session(&stpg->tpg, tag_num,
- 					tag_size, TARGET_PROT_NORMAL, i_port_id,
--					ch, NULL);
-+					NULL, ch, NULL, NULL);
- 		if (!IS_ERR_OR_NULL(ch->sess))
- 			break;
- 		/* Retry without leading "0x" */
- 		ch->sess =3D target_setup_session(&stpg->tpg, tag_num,
- 						tag_size, TARGET_PROT_NORMAL,
--						i_port_id + 2, ch, NULL);
-+						i_port_id + 2, NULL, ch, NULL,
-+						NULL);
- 	}
- 	mutex_unlock(&sport->port_gid_id.mutex);
+ static struct idr tiqn_idr;
+-DEFINE_IDA(sess_ida);
+ struct mutex auth_id_lock;
 =20
-diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmv=
-scsi_tgt/ibmvscsi_tgt.c
-index d9e94e8..bf5dd4c 100644
---- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-+++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-@@ -2223,8 +2223,8 @@ static int ibmvscsis_make_nexus(struct ibmvscsis_tp=
-ort *tport)
- 	}
-=20
- 	nexus->se_sess =3D target_setup_session(&tport->se_tpg, 0, 0,
--					      TARGET_PROT_NORMAL, name, nexus,
--					      NULL);
-+					      TARGET_PROT_NORMAL, name, NULL,
-+					      nexus, NULL, NULL);
- 	if (IS_ERR(nexus->se_sess)) {
- 		rc =3D PTR_ERR(nexus->se_sess);
- 		goto transport_init_fail;
-diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tc=
-m_qla2xxx.c
-index 1f0a185..27f968f 100644
---- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-+++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
-@@ -1484,7 +1484,8 @@ static int tcm_qla2xxx_check_initiator_node_acl(
- 	se_sess =3D target_setup_session(&tpg->se_tpg, num_tags,
- 				       sizeof(struct qla_tgt_cmd),
- 				       TARGET_PROT_ALL, port_name,
--				       qlat_sess, tcm_qla2xxx_session_cb);
-+				       NULL, qlat_sess, tcm_qla2xxx_session_cb,
-+				       NULL);
- 	if (IS_ERR(se_sess))
- 		return PTR_ERR(se_sess);
-=20
-diff --git a/drivers/target/Makefile b/drivers/target/Makefile
-index 4a7246e..1b7949d 100644
---- a/drivers/target/Makefile
-+++ b/drivers/target/Makefile
-@@ -5,6 +5,7 @@ target_core_mod-y		:=3D target_core_configfs.o \
- 				   target_core_device.o \
- 				   target_core_fabric_configfs.o \
- 				   target_core_fabric_lib.o \
-+				   target_core_sysfs.o \
- 				   target_core_hba.o \
- 				   target_core_pr.o \
- 				   target_core_alua.o \
-diff --git a/drivers/target/loopback/tcm_loop.c b/drivers/target/loopback=
-/tcm_loop.c
-index 3305b47..6e2ebe9 100644
---- a/drivers/target/loopback/tcm_loop.c
-+++ b/drivers/target/loopback/tcm_loop.c
-@@ -742,7 +742,8 @@ static int tcm_loop_make_nexus(
-=20
- 	tl_nexus->se_sess =3D target_setup_session(&tl_tpg->tl_se_tpg, 0, 0,
- 					TARGET_PROT_DIN_PASS | TARGET_PROT_DOUT_PASS,
--					name, tl_nexus, tcm_loop_alloc_sess_cb);
-+					name, NULL, tl_nexus, tcm_loop_alloc_sess_cb,
-+					NULL);
- 	if (IS_ERR(tl_nexus->se_sess)) {
- 		ret =3D PTR_ERR(tl_nexus->se_sess);
- 		kfree(tl_nexus);
-diff --git a/drivers/target/sbp/sbp_target.c b/drivers/target/sbp/sbp_tar=
-get.c
-index e4a9b9f..43aaf35 100644
---- a/drivers/target/sbp/sbp_target.c
-+++ b/drivers/target/sbp/sbp_target.c
-@@ -198,8 +198,8 @@ static struct sbp_session *sbp_session_create(
-=20
- 	sess->se_sess =3D target_setup_session(&tpg->se_tpg, 128,
- 					     sizeof(struct sbp_target_request),
--					     TARGET_PROT_NORMAL, guid_str,
--					     sess, NULL);
-+					     TARGET_PROT_NORMAL, guid_str, NULL,
-+					     sess, NULL, NULL);
- 	if (IS_ERR(sess->se_sess)) {
- 		pr_err("failed to init se_session\n");
- 		ret =3D PTR_ERR(sess->se_sess);
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/targ=
-et_core_transport.c
-index fba059c..2462eca 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -414,15 +414,35 @@ void transport_register_session(
- }
- EXPORT_SYMBOL(transport_register_session);
-=20
-+/**
-+ * target_setup_session - alloc and add a session to lio core
-+ * @tpg: parent tpg
-+ * @tag_num: if non-zero max num in-flight commands.
-+ * @tag_size: if tag_num is non-zero, fabric driver's per cmd data in by=
-tes.
-+ * @sup_prot_ops: bitmask that defines which T10-PI modes are supported.
-+ * @fabric_attrs: opt fabric driver session level attrs.
-+ * @private: if setup_cb is non-NULL private will be passed to setup_cb.
-+ * @setup_cb: opt function called before session has been added to lio c=
-ore.
-+ * @free_cb: function called during removal when all user refs have drop=
-ped.
-+ *
-+ * If the caller passes in a setup_cb that allocates resource a free_cb =
-is
-+ * required to free those resource during session removal.
-+ *
-+ * If the caller passes in fabric_attrs a free_cb is required, so resour=
-ces
-+ * it may access are freed when all users have dropped their references.
-+ */
- struct se_session *
- target_setup_session(struct se_portal_group *tpg,
- 		     unsigned int tag_num, unsigned int tag_size,
- 		     enum target_prot_op prot_op,
--		     const char *initiatorname, void *private,
--		     int (*callback)(struct se_portal_group *,
--				     struct se_session *, void *))
-+		     const char *initiatorname,
-+		     struct attribute_group *fabric_attrs, void *private,
-+		     int (*setup_cb)(struct se_portal_group *,
-+				     struct se_session *, void *),
-+		     void (*free_cb)(struct se_session *))
- {
- 	struct se_session *sess;
-+	int rc;
-=20
- 	/*
- 	 * If the fabric driver is using percpu-ida based pre allocation
-@@ -439,23 +459,35 @@ struct se_session *
- 	sess->se_node_acl =3D core_tpg_check_initiator_node_acl(tpg,
- 					(unsigned char *)initiatorname);
- 	if (!sess->se_node_acl) {
--		transport_free_session(sess);
--		return ERR_PTR(-EACCES);
-+		rc =3D -EACCES;
-+		goto free_session;
- 	}
-+
- 	/*
- 	 * Go ahead and perform any remaining fabric setup that is
- 	 * required before transport_register_session().
- 	 */
--	if (callback !=3D NULL) {
--		int rc =3D callback(tpg, sess, private);
--		if (rc) {
--			transport_free_session(sess);
--			return ERR_PTR(rc);
--		}
-+	if (setup_cb) {
-+		rc =3D setup_cb(tpg, sess, private);
-+		if (rc)
-+			goto free_session;
- 	}
-=20
- 	transport_register_session(tpg, sess->se_node_acl, sess, private);
-+
-+	rc =3D target_sysfs_add_session(tpg, sess, fabric_attrs);
-+	if (rc)
-+		goto fabric_free_session;
-+	sess->fabric_free_cb =3D free_cb;
-+
- 	return sess;
-+
-+fabric_free_session:
-+	if (free_cb)
-+		free_cb(sess);
-+free_session:
-+	transport_free_session(sess);
-+	return ERR_PTR(rc);
- }
- EXPORT_SYMBOL(target_setup_session);
-=20
-@@ -549,6 +581,8 @@ void __target_free_session(struct se_session *se_sess=
+ struct iscsit_global *iscsit_global;
+@@ -4359,6 +4358,8 @@ int iscsit_close_session(struct iscsi_session *sess=
 )
- {
- 	struct se_node_acl *se_nacl =3D se_sess->se_node_acl;
+ 	iscsit_stop_time2retain_timer(sess);
+ 	spin_unlock_bh(&se_tpg->session_lock);
 =20
-+	if (se_sess->fabric_free_cb)
-+		se_sess->fabric_free_cb(se_sess);
++	target_sysfs_remove_session(sess->se_sess);
++
  	/*
- 	 * Drop the se_node_acl->nacl_kref obtained from within
- 	 * core_tpg_get_initiator_node_acl().
-@@ -639,6 +673,7 @@ void transport_deregister_session(struct se_session *=
-se_sess)
+ 	 * transport_deregister_session_configfs() will clear the
+ 	 * struct se_node_acl->nacl_sess pointer now as a iscsi_np process cont=
+ext
+@@ -4403,7 +4404,6 @@ int iscsit_close_session(struct iscsi_session *sess=
+)
+ 	pr_debug("Decremented number of active iSCSI Sessions on"
+ 		" iSCSI TPG: %hu to %u\n", tpg->tpgt, tpg->nsessions);
 =20
- void target_remove_session(struct se_session *se_sess)
+-	ida_free(&sess_ida, sess->session_index);
+ 	kfree(sess->sess_ops);
+ 	sess->sess_ops =3D NULL;
+ 	spin_unlock_bh(&se_tpg->session_lock);
+diff --git a/drivers/target/iscsi/iscsi_target_configfs.c b/drivers/targe=
+t/iscsi/iscsi_target_configfs.c
+index 0fa1d57..e9e06bb 100644
+--- a/drivers/target/iscsi/iscsi_target_configfs.c
++++ b/drivers/target/iscsi/iscsi_target_configfs.c
+@@ -1344,9 +1344,7 @@ static int iscsi_get_cmd_state(struct se_cmd *se_cm=
+d)
+=20
+ static u32 lio_sess_get_index(struct se_session *se_sess)
  {
-+	target_sysfs_remove_session(se_sess);
- 	transport_deregister_session_configfs(se_sess);
- 	transport_deregister_session(se_sess);
+-	struct iscsi_session *sess =3D se_sess->fabric_sess_ptr;
+-
+-	return sess->session_index;
++	return se_sess->sid;
  }
-diff --git a/drivers/target/tcm_fc/tfc_sess.c b/drivers/target/tcm_fc/tfc=
-_sess.c
-index 4fd6a1d..4973052 100644
---- a/drivers/target/tcm_fc/tfc_sess.c
-+++ b/drivers/target/tcm_fc/tfc_sess.c
-@@ -230,7 +230,7 @@ static struct ft_sess *ft_sess_create(struct ft_tport=
- *tport, u32 port_id,
- 	sess->se_sess =3D target_setup_session(se_tpg, TCM_FC_DEFAULT_TAGS,
- 					     sizeof(struct ft_cmd),
- 					     TARGET_PROT_NORMAL, &initiatorname[0],
--					     sess, ft_sess_alloc_cb);
-+					     NULL, sess, ft_sess_alloc_cb, NULL);
- 	if (IS_ERR(sess->se_sess)) {
- 		int rc =3D PTR_ERR(sess->se_sess);
- 		kfree(sess);
-diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/fun=
-ction/f_tcm.c
-index 3650493..9363130 100644
---- a/drivers/usb/gadget/function/f_tcm.c
-+++ b/drivers/usb/gadget/function/f_tcm.c
-@@ -1583,7 +1583,8 @@ static int tcm_usbg_make_nexus(struct usbg_tpg *tpg=
-, char *name)
- 						     USB_G_DEFAULT_SESSION_TAGS,
- 						     sizeof(struct usbg_cmd),
- 						     TARGET_PROT_NORMAL, name,
--						     tv_nexus, usbg_alloc_sess_cb);
-+						     NULL, tv_nexus,
-+						     usbg_alloc_sess_cb, NULL);
- 	if (IS_ERR(tv_nexus->tvn_se_sess)) {
- #define MAKE_NEXUS_MSG "core_tpg_check_initiator_node_acl() failed for %=
-s\n"
- 		pr_debug(MAKE_NEXUS_MSG, name);
-diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
-index 7653667..d3db74c 100644
---- a/drivers/vhost/scsi.c
-+++ b/drivers/vhost/scsi.c
-@@ -1964,8 +1964,8 @@ static int vhost_scsi_make_nexus(struct vhost_scsi_=
-tpg *tpg,
- 					VHOST_SCSI_DEFAULT_TAGS,
- 					sizeof(struct vhost_scsi_cmd),
- 					TARGET_PROT_DIN_PASS | TARGET_PROT_DOUT_PASS,
--					(unsigned char *)name, tv_nexus,
--					vhost_scsi_nexus_cb);
-+					(unsigned char *)name, NULL, tv_nexus,
-+					vhost_scsi_nexus_cb, NULL);
- 	if (IS_ERR(tv_nexus->tvn_se_sess)) {
- 		mutex_unlock(&tpg->tv_tpg_mutex);
- 		kfree(tv_nexus);
-diff --git a/drivers/xen/xen-scsiback.c b/drivers/xen/xen-scsiback.c
-index 75c0a2e..057d8a1 100644
---- a/drivers/xen/xen-scsiback.c
-+++ b/drivers/xen/xen-scsiback.c
-@@ -1531,7 +1531,9 @@ static int scsiback_make_nexus(struct scsiback_tpg =
-*tpg,
- 						     VSCSI_DEFAULT_SESSION_TAGS,
- 						     sizeof(struct vscsibk_pend),
- 						     TARGET_PROT_NORMAL, name,
--						     tv_nexus, scsiback_alloc_sess_cb);
-+						     NULL, tv_nexus,
-+						     scsiback_alloc_sess_cb,
-+						     NULL);
- 	if (IS_ERR(tv_nexus->tvn_se_sess)) {
- 		kfree(tv_nexus);
- 		ret =3D -ENOMEM;
-diff --git a/include/target/target_core_base.h b/include/target/target_co=
-re_base.h
-index 3bc2498..783cca2 100644
---- a/include/target/target_core_base.h
-+++ b/include/target/target_core_base.h
-@@ -628,6 +628,7 @@ struct se_session {
- 	struct kobject		kobj;
- 	int			sid;
- 	struct attribute_group	*fabric_attrs;
-+	void (*fabric_free_cb)(struct se_session *);
- };
 =20
- struct se_device;
-diff --git a/include/target/target_core_fabric.h b/include/target/target_=
-core_fabric.h
-index 5948b87..9815dbf 100644
---- a/include/target/target_core_fabric.h
-+++ b/include/target/target_core_fabric.h
-@@ -127,9 +127,10 @@ struct target_core_fabric_ops {
+ static u32 lio_sess_get_initiator_sid(
+diff --git a/drivers/target/iscsi/iscsi_target_login.c b/drivers/target/i=
+scsi/iscsi_target_login.c
+index 731ee67..619ea09 100644
+--- a/drivers/target/iscsi/iscsi_target_login.c
++++ b/drivers/target/iscsi/iscsi_target_login.c
+@@ -257,7 +257,6 @@ static int iscsi_login_zero_tsih_s1(
+ {
+ 	struct iscsi_session *sess =3D NULL;
+ 	struct iscsi_login_req *pdu =3D (struct iscsi_login_req *)buf;
+-	int ret;
 =20
- struct se_session *target_setup_session(struct se_portal_group *,
- 		unsigned int, unsigned int, enum target_prot_op prot_op,
--		const char *, void *,
--		int (*callback)(struct se_portal_group *,
--				struct se_session *, void *));
-+		const char *, struct attribute_group *, void *,
-+		int (*setup_cb)(struct se_portal_group *,
-+				struct se_session *, void *),
-+		void (*free_cb)(struct se_session *));
- void target_remove_session(struct se_session *);
+ 	sess =3D kzalloc(sizeof(struct iscsi_session), GFP_KERNEL);
+ 	if (!sess) {
+@@ -291,15 +290,6 @@ static int iscsi_login_zero_tsih_s1(
+ 	timer_setup(&sess->time2retain_timer,
+ 		    iscsit_handle_time2retain_timeout, 0);
 =20
- int transport_init_session(struct se_session *se_sess);
+-	ret =3D ida_alloc(&sess_ida, GFP_KERNEL);
+-	if (ret < 0) {
+-		pr_err("Session ID allocation failed %d\n", ret);
+-		iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
+-				ISCSI_LOGIN_STATUS_NO_RESOURCES);
+-		goto free_sess;
+-	}
+-
+-	sess->session_index =3D ret;
+ 	sess->creation_time =3D get_jiffies_64();
+ 	/*
+ 	 * The FFP CmdSN window values will be allocated from the TPG's
+@@ -313,7 +303,7 @@ static int iscsi_login_zero_tsih_s1(
+ 				ISCSI_LOGIN_STATUS_NO_RESOURCES);
+ 		pr_err("Unable to allocate memory for"
+ 				" struct iscsi_sess_ops.\n");
+-		goto free_id;
++		goto free_ops;
+ 	}
+=20
+ 	sess->se_sess =3D transport_alloc_session(TARGET_PROT_NORMAL);
+@@ -327,8 +317,6 @@ static int iscsi_login_zero_tsih_s1(
+=20
+ free_ops:
+ 	kfree(sess->sess_ops);
+-free_id:
+-	ida_free(&sess_ida, sess->session_index);
+ free_sess:
+ 	kfree(sess);
+ 	conn->sess =3D NULL;
+@@ -1183,8 +1171,8 @@ void iscsi_target_login_sess_out(struct iscsi_conn =
+*conn,
+ 	if (!zero_tsih || !conn->sess)
+ 		goto old_sess_out;
+=20
++	target_sysfs_remove_session(conn->sess->se_sess);
+ 	transport_free_session(conn->sess->se_sess);
+-	ida_free(&sess_ida, conn->sess->session_index);
+ 	kfree(conn->sess->sess_ops);
+ 	kfree(conn->sess);
+ 	conn->sess =3D NULL;
+diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/is=
+csi/iscsi_target_nego.c
+index 685d771..17e12f3 100644
+--- a/drivers/target/iscsi/iscsi_target_nego.c
++++ b/drivers/target/iscsi/iscsi_target_nego.c
+@@ -1260,11 +1260,23 @@ int iscsi_target_locate_portal(
+ 	tag_size =3D sizeof(struct iscsi_cmd) + conn->conn_transport->priv_size=
+;
+=20
+ 	ret =3D transport_alloc_session_tags(sess->se_sess, tag_num, tag_size);
+-	if (ret < 0) {
+-		iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
+-				    ISCSI_LOGIN_STATUS_NO_RESOURCES);
+-		ret =3D -1;
++	if (ret < 0)
++		goto return_oom;
++
++	if (conn->tpg !=3D iscsit_global->discovery_tpg) {
++		ret =3D target_sysfs_add_session(&conn->tpg->tpg_se_tpg,
++						sess->se_sess, NULL);
++		if (ret)
++			/* tags and nacl released when session is freed */
++			goto return_oom;
+ 	}
++
++	goto out;
++
++return_oom:
++	iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
++			    ISCSI_LOGIN_STATUS_NO_RESOURCES);
++	ret =3D -1;
+ out:
+ 	kfree(tmpbuf);
+ 	return ret;
+diff --git a/drivers/target/iscsi/iscsi_target_stat.c b/drivers/target/is=
+csi/iscsi_target_stat.c
+index 35e75a3..8167fdc 100644
+--- a/drivers/target/iscsi/iscsi_target_stat.c
++++ b/drivers/target/iscsi/iscsi_target_stat.c
+@@ -630,8 +630,7 @@ static ssize_t iscsi_stat_sess_indx_show(struct confi=
+g_item *item, char *page)
+ 	if (se_sess) {
+ 		sess =3D se_sess->fabric_sess_ptr;
+ 		if (sess)
+-			ret =3D snprintf(page, PAGE_SIZE, "%u\n",
+-					sess->session_index);
++			ret =3D snprintf(page, PAGE_SIZE, "%u\n", se_sess->sid);
+ 	}
+ 	spin_unlock_bh(&se_nacl->nacl_sess_lock);
+=20
+diff --git a/include/target/iscsi/iscsi_target_core.h b/include/target/is=
+csi/iscsi_target_core.h
+index 591cd9e..443c5af 100644
+--- a/include/target/iscsi/iscsi_target_core.h
++++ b/include/target/iscsi/iscsi_target_core.h
+@@ -657,8 +657,6 @@ struct iscsi_session {
+ 	/* LIO specific session ID */
+ 	u32			sid;
+ 	char			auth_type[8];
+-	/* unique within the target */
+-	int			session_index;
+ 	/* Used for session reference counting */
+ 	int			session_usage_count;
+ 	int			session_waiting_on_uc;
 --=20
 1.8.3.1
 
