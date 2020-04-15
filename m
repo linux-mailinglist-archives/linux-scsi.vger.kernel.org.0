@@ -2,48 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2296B1AA298
-	for <lists+linux-scsi@lfdr.de>; Wed, 15 Apr 2020 14:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5056E1A9F05
+	for <lists+linux-scsi@lfdr.de>; Wed, 15 Apr 2020 14:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505625AbgDOM57 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 15 Apr 2020 08:57:59 -0400
-Received: from baliza.dreformarra.com ([134.73.232.212]:3820 "HELO
-        elitetorrent1.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with SMTP id S2897166AbgDOLgr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 15 Apr 2020 07:36:47 -0400
-X-Greylist: delayed 77226 seconds by postgrey-1.27 at vger.kernel.org; Wed, 15 Apr 2020 07:36:39 EDT
-Received: from [167.246.193.81] by smtp18.yenddx.com with ESMTP; Wed, 15 Apr 2020 07:17:38 -0400
-Message-ID: <40F3F15E.3B966872@elitetorrent1.com>
-Date:   Wed, 15 Apr 2020 07:09:50 -0400
-Reply-To: "elitetorrent1.com" <info@elitetorrent1.com>
-From:   "elitetorrent1.com" <info@elitetorrent1.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; de; rv:1.8.1.21) Gecko/20090302 Thunderbird/2.0.0.21
-X-Accept-Language: en-us
+        id S368406AbgDOMGO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 15 Apr 2020 08:06:14 -0400
+Received: from mx2.suse.de ([195.135.220.15]:38626 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S368401AbgDOMGJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 15 Apr 2020 08:06:09 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 93FC9ABB2;
+        Wed, 15 Apr 2020 12:06:07 +0000 (UTC)
+Subject: Re: [PATCH v3 01/31] elx: libefc_sli: SLI-4 register offsets and
+ field definitions
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+Cc:     dwagner@suse.de, maier@linux.ibm.com, bvanassche@acm.org,
+        herbszt@gmx.de, natechancellor@gmail.com, rdunlap@infradead.org,
+        Ram Vegesna <ram.vegesna@broadcom.com>
+References: <20200412033303.29574-1-jsmart2021@gmail.com>
+ <20200412033303.29574-2-jsmart2021@gmail.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <65589867-a8f8-f15f-4aba-3f670dea2bba@suse.de>
+Date:   Wed, 15 Apr 2020 14:06:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-To:     <linux-msdos@vger.kernel.org>
-Subject: Download latest movies from elitetorrent1.com
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200412033303.29574-2-jsmart2021@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 4/12/20 5:32 AM, James Smart wrote:
+> This is the initial patch for the new Emulex target mode SCSI
+> driver sources.
+> 
+> This patch:
+> - Creates the new Emulex source level directory drivers/scsi/elx
+>    and adds the directory to the MAINTAINERS file.
+> - Creates the first library subdirectory drivers/scsi/elx/libefc_sli.
+>    This library is a SLI-4 interface library.
+> - Starts the population of the libefc_sli library with definitions
+>    of SLI-4 hardware register offsets and definitions.
+> 
+> Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
+> Signed-off-by: James Smart <jsmart2021@gmail.com>
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-While sitting home during the lock out, why not watch some nice movies. 
+Cheers,
 
-All for free, makes sense?
-
-visit us now
-https://elitetorrent1.com/
-
-
-
-
-
-Unsubscribe from our database here
-https://forms.icann.org/en/resources/compliance/complaints/registrars/stand
-ards-complaint-form
-
-
+Hannes
+-- 
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                               +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
