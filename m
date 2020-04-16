@@ -2,343 +2,917 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C081ABC87
-	for <lists+linux-scsi@lfdr.de>; Thu, 16 Apr 2020 11:18:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A160D1ABB1E
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Apr 2020 10:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503792AbgDPJPN (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 16 Apr 2020 05:15:13 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48070 "EHLO mx2.suse.de"
+        id S2440757AbgDPI0J (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Apr 2020 04:26:09 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53120 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2441145AbgDPIKs (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 16 Apr 2020 04:10:48 -0400
+        id S2441395AbgDPIZQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Apr 2020 04:25:16 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 29698AD1E;
-        Thu, 16 Apr 2020 08:10:21 +0000 (UTC)
-Subject: Re: [PATCH v3 25/31] elx: efct: Hardware IO submission routines
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
-Cc:     dwagner@suse.de, maier@linux.ibm.com, bvanassche@acm.org,
-        herbszt@gmx.de, natechancellor@gmail.com, rdunlap@infradead.org,
+        by mx2.suse.de (Postfix) with ESMTP id 10F3EACD8;
+        Thu, 16 Apr 2020 08:24:13 +0000 (UTC)
+Date:   Thu, 16 Apr 2020 10:24:12 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     James Smart <jsmart2021@gmail.com>
+Cc:     linux-scsi@vger.kernel.org, maier@linux.ibm.com,
+        bvanassche@acm.org, herbszt@gmx.de, natechancellor@gmail.com,
+        rdunlap@infradead.org, hare@suse.de,
         Ram Vegesna <ram.vegesna@broadcom.com>
+Subject: Re: [PATCH v3 17/31] elx: efct: Hardware queues creation and deletion
+Message-ID: <20200416082412.i3z5dswnsgmrximd@carbon>
 References: <20200412033303.29574-1-jsmart2021@gmail.com>
- <20200412033303.29574-26-jsmart2021@gmail.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <1af2f44d-ede4-bdd8-5812-9d4526a1f9b5@suse.de>
-Date:   Thu, 16 Apr 2020 10:10:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ <20200412033303.29574-18-jsmart2021@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200412033303.29574-26-jsmart2021@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200412033303.29574-18-jsmart2021@gmail.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/12/20 5:32 AM, James Smart wrote:
+On Sat, Apr 11, 2020 at 08:32:49PM -0700, James Smart wrote:
 > This patch continues the efct driver population.
 > 
 > This patch adds driver definitions for:
-> Routines that write IO to Work queue, send SRRs and raw frames.
+> Routines for queue creation, deletion, and configuration.
 > 
 > Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
 > Signed-off-by: James Smart <jsmart2021@gmail.com>
 > 
 > ---
 > v3:
->    Reduced arguments for sli_fcp_tsend64_wqe(), sli_fcp_trsp64_wqe(),
->    sli_fcp_treceive64_wqe() calls
+>   Removed all Queue topology parsing code
+>   Reworked queue creation code.
 > ---
->   drivers/scsi/elx/efct/efct_hw.c | 519 ++++++++++++++++++++++++++++++++++++++++
->   drivers/scsi/elx/efct/efct_hw.h |  19 ++
->   2 files changed, 538 insertions(+)
+>  drivers/scsi/elx/efct/efct_hw_queues.c | 765 +++++++++++++++++++++++++++++++++
+>  1 file changed, 765 insertions(+)
+>  create mode 100644 drivers/scsi/elx/efct/efct_hw_queues.c
 > 
-> diff --git a/drivers/scsi/elx/efct/efct_hw.c b/drivers/scsi/elx/efct/efct_hw.c
-> index fd3c2dec3ef6..26dd9bd1eeef 100644
-> --- a/drivers/scsi/elx/efct/efct_hw.c
-> +++ b/drivers/scsi/elx/efct/efct_hw.c
-> @@ -2516,3 +2516,522 @@ efct_hw_flush(struct efct_hw *hw)
->   
->   	return EFC_SUCCESS;
->   }
+> diff --git a/drivers/scsi/elx/efct/efct_hw_queues.c b/drivers/scsi/elx/efct/efct_hw_queues.c
+> new file mode 100644
+> index 000000000000..c343e7c5b20d
+> --- /dev/null
+> +++ b/drivers/scsi/elx/efct/efct_hw_queues.c
+> @@ -0,0 +1,765 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
+> + * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
+> + */
 > +
-> +int
-> +efct_hw_wq_write(struct hw_wq *wq, struct efct_hw_wqe *wqe)
+> +#include "efct_driver.h"
+> +#include "efct_hw.h"
+> +#include "efct_unsol.h"
+> +
+> +/**
+> + * SLI queues are created and initialized
+> + */
+> +enum efct_hw_rtn
+> +efct_hw_init_queues(struct efct_hw *hw)
 > +{
-> +	int rc = 0;
-> +	unsigned long flags = 0;
+> +	struct hw_eq *eq = NULL;
+> +	struct hw_cq *cq = NULL;
+> +	struct hw_wq *wq = NULL;
+> +	struct hw_rq *rq = NULL;
+> +	struct hw_mq *mq = NULL;
 > +
-> +	spin_lock_irqsave(&wq->queue->lock, flags);
-> +	if (!list_empty(&wq->pending_list)) {
-> +		INIT_LIST_HEAD(&wqe->list_entry);
-> +		list_add_tail(&wqe->list_entry, &wq->pending_list);
-> +		wq->wq_pending_count++;
-> +		while ((wq->free_count > 0) &&
-> +		       ((wqe = list_first_entry(&wq->pending_list,
-> +					struct efct_hw_wqe, list_entry))
-> +			 != NULL)) {
-> +			list_del(&wqe->list_entry);
-> +			rc = _efct_hw_wq_write(wq, wqe);
-> +			if (rc < 0)
-> +				break;
-> +			if (wqe->abort_wqe_submit_needed) {
-> +				wqe->abort_wqe_submit_needed = false;
-> +				sli_abort_wqe(&wq->hw->sli,
-> +					      wqe->wqebuf,
-> +					      wq->hw->sli.wqe_size,
-> +					      SLI_ABORT_XRI,
-> +					      wqe->send_abts, wqe->id,
-> +					      0, wqe->abort_reqtag,
-> +					      SLI4_CQ_DEFAULT);
+> +	hw->eq_count = 0;
+> +	hw->cq_count = 0;
+> +	hw->mq_count = 0;
+> +	hw->wq_count = 0;
+> +	hw->rq_count = 0;
+> +	hw->hw_rq_count = 0;
+> +	INIT_LIST_HEAD(&hw->eq_list);
 > +
-> +				INIT_LIST_HEAD(&wqe->list_entry);
-> +				list_add_tail(&wqe->list_entry,
-> +					      &wq->pending_list);
-> +				wq->wq_pending_count++;
-> +			}
-> +		}
-> +	} else {
-> +		if (wq->free_count > 0) {
-> +			rc = _efct_hw_wq_write(wq, wqe);
-> +		} else {
-> +			INIT_LIST_HEAD(&wqe->list_entry);
-> +			list_add_tail(&wqe->list_entry, &wq->pending_list);
-> +			wq->wq_pending_count++;
-> +		}
+> +	/* Create EQ */
+> +	eq = efct_hw_new_eq(hw, EFCT_HW_EQ_DEPTH);
+> +	if (!eq) {
+> +		efct_hw_queue_teardown(hw);
+> +		return EFCT_HW_RTN_NO_MEMORY;
+
+Not sure if it's worth to intorduce EFCT_HW_RTN_NO_MEMORY, because
+ENOMEM is pretty good match and ENOMEM is used in other places
+already.
+
 > +	}
 > +
-> +	spin_unlock_irqrestore(&wq->queue->lock, flags);
+> +	/* Create RQ*/
+> +	cq = efct_hw_new_cq(eq, hw->num_qentries[SLI_QTYPE_CQ]);
+> +	if (!cq) {
+> +		efct_hw_queue_teardown(hw);
+> +		return EFCT_HW_RTN_NO_MEMORY;
+> +	}
 > +
-> +	return rc;
+> +	rq = efct_hw_new_rq(cq, EFCT_HW_RQ_ENTRIES_DEF);
+> +	if (!rq) {
+> +		efct_hw_queue_teardown(hw);
+> +		return EFCT_HW_RTN_NO_MEMORY;
+> +	}
+> +
+> +	/* Create MQ*/
+> +	cq = efct_hw_new_cq(eq, hw->num_qentries[SLI_QTYPE_CQ]);
+> +	if (!cq) {
+> +		efct_hw_queue_teardown(hw);
+> +		return EFCT_HW_RTN_NO_MEMORY;
+> +	}
+> +
+> +	mq = efct_hw_new_mq(cq, EFCT_HW_MQ_DEPTH);
+> +	if (!mq) {
+> +		efct_hw_queue_teardown(hw);
+> +		return EFCT_HW_RTN_NO_MEMORY;
+> +	}
+> +
+> +	/* Create WQ */
+> +	cq = efct_hw_new_cq(eq, hw->num_qentries[SLI_QTYPE_CQ]);
+> +	if (!cq) {
+> +		efct_hw_queue_teardown(hw);
+> +		return EFCT_HW_RTN_NO_MEMORY;
+> +	}
+> +
+> +	wq = efct_hw_new_wq(cq, hw->num_qentries[SLI_QTYPE_WQ]);
+> +	if (!wq) {
+> +		efct_hw_queue_teardown(hw);
+> +		return EFCT_HW_RTN_NO_MEMORY;
+> +	}
+> +
+> +	return EFCT_HW_RTN_SUCCESS;
+> +}
+> +
+> +/* Allocate a new EQ object */
+> +struct hw_eq *
+> +efct_hw_new_eq(struct efct_hw *hw, u32 entry_count)
+> +{
+> +	struct hw_eq *eq = kmalloc(sizeof(*eq), GFP_KERNEL);
+> +
+> +	if (eq) {
+
+	if (!eq)
+		return NULL;
+
+> +		memset(eq, 0, sizeof(*eq));
+
+kzalloc instead kmalloc + memset
+
+> +		eq->type = SLI_QTYPE_EQ;
+> +		eq->hw = hw;
+> +		eq->entry_count = entry_count;
+> +		eq->instance = hw->eq_count++;
+> +		eq->queue = &hw->eq[eq->instance];
+> +		INIT_LIST_HEAD(&eq->cq_list);
+> +
+> +		if (sli_queue_alloc(&hw->sli, SLI_QTYPE_EQ,
+> +					eq->queue,
+> +					entry_count, NULL)) {
+> +			efc_log_err(hw->os,
+> +					"EQ[%d] allocation failure\n",
+> +					eq->instance);
+> +			kfree(eq);
+> +			eq = NULL;
+			return NULL;
+> +		} else {
+> +			sli_eq_modify_delay(&hw->sli, eq->queue,
+> +					1, 0, 8);
+> +			hw->hw_eq[eq->instance] = eq;
+> +			INIT_LIST_HEAD(&eq->list_entry);
+> +			list_add_tail(&eq->list_entry, &hw->eq_list);
+> +			efc_log_debug(hw->os,
+> +					"create eq[%2d] id %3d len %4d\n",
+> +					eq->instance, eq->queue->id,
+> +					eq->entry_count);
+> +		}
+> +	}
+> +	return eq;
+> +}
+> +
+> +/* Allocate a new CQ object */
+> +struct hw_cq *
+> +efct_hw_new_cq(struct hw_eq *eq, u32 entry_count)
+> +{
+> +	struct efct_hw *hw = eq->hw;
+> +	struct hw_cq *cq = kmalloc(sizeof(*cq), GFP_KERNEL);
+> +
+> +	if (cq) {
+
+	if (!cq)
+		return NULL;
+
+> +		memset(cq, 0, sizeof(*cq));
+
+kzalloc instead of kmalloc + memset
+
+
+> +		cq->eq = eq;
+> +		cq->type = SLI_QTYPE_CQ;
+> +		cq->instance = eq->hw->cq_count++;
+> +		cq->entry_count = entry_count;
+> +		cq->queue = &hw->cq[cq->instance];
+> +
+> +		INIT_LIST_HEAD(&cq->q_list);
+> +
+> +		if (sli_queue_alloc(&hw->sli, SLI_QTYPE_CQ, cq->queue,
+> +				    cq->entry_count, eq->queue)) {
+> +			efc_log_err(hw->os,
+> +				     "CQ[%d] allocation failure len=%d\n",
+> +				    eq->instance,
+> +				    eq->entry_count);
+> +			kfree(cq);
+> +			cq = NULL;
+
+			return NULL;
+
+> +		} else {
+> +			hw->hw_cq[cq->instance] = cq;
+> +			INIT_LIST_HEAD(&cq->list_entry);
+> +			list_add_tail(&cq->list_entry, &eq->cq_list);
+> +			efc_log_debug(hw->os,
+> +				       "create cq[%2d] id %3d len %4d\n",
+> +				      cq->instance, cq->queue->id,
+> +				      cq->entry_count);
+> +		}
+> +	}
+> +	return cq;
+> +}
+> +
+> +/* Allocate a new CQ Set of objects */
+> +u32
+> +efct_hw_new_cq_set(struct hw_eq *eqs[], struct hw_cq *cqs[],
+> +		   u32 num_cqs, u32 entry_count)
+> +{
+> +	u32 i;
+> +	struct efct_hw *hw = eqs[0]->hw;
+> +	struct sli4 *sli4 = &hw->sli;
+> +	struct hw_cq *cq = NULL;
+> +	struct sli4_queue *qs[SLI_MAX_CQ_SET_COUNT];
+> +	struct sli4_queue *assefct[SLI_MAX_CQ_SET_COUNT];
+> +
+> +	/* Initialise CQS pointers to NULL */
+> +	for (i = 0; i < num_cqs; i++)
+> +		cqs[i] = NULL;
+> +
+> +	for (i = 0; i < num_cqs; i++) {
+> +		cq = kmalloc(sizeof(*cq), GFP_KERNEL);
+> +		if (!cq)
+> +			goto error;
+> +
+> +		memset(cq, 0, sizeof(*cq));
+
+kzalloc()
+
+> +		cqs[i]          = cq;
+> +		cq->eq          = eqs[i];
+> +		cq->type        = SLI_QTYPE_CQ;
+> +		cq->instance    = hw->cq_count++;
+> +		cq->entry_count = entry_count;
+> +		cq->queue       = &hw->cq[cq->instance];
+> +		qs[i]           = cq->queue;
+> +		assefct[i]       = eqs[i]->queue;
+> +		INIT_LIST_HEAD(&cq->q_list);
+> +	}
+> +
+> +	if (!sli_cq_alloc_set(sli4, qs, num_cqs, entry_count, assefct)) {
+> +		efc_log_err(hw->os, "Failed to create CQ Set.\n");
+> +		goto error;
+> +	}
+> +
+> +	for (i = 0; i < num_cqs; i++) {
+> +		hw->hw_cq[cqs[i]->instance] = cqs[i];
+> +		INIT_LIST_HEAD(&cqs[i]->list_entry);
+> +		list_add_tail(&cqs[i]->list_entry, &cqs[i]->eq->cq_list);
+> +	}
+> +
+> +	return EFC_SUCCESS;
+> +
+> +error:
+> +	for (i = 0; i < num_cqs; i++) {
+> +		kfree(cqs[i]);
+
+		if (cqs[i])
+			kfree(cqs[i]);
+
+> +		cqs[i] = NULL;
+> +	}
+> +	return EFC_FAIL;
+> +}
+> +
+> +/* Allocate a new MQ object */
+> +struct hw_mq *
+> +efct_hw_new_mq(struct hw_cq *cq, u32 entry_count)
+> +{
+> +	struct efct_hw *hw = cq->eq->hw;
+> +	struct hw_mq *mq = kmalloc(sizeof(*mq), GFP_KERNEL);
+> +
+> +	if (mq) {
+
+if (!mq)
+	return
+
+> +		memset(mq, 0, sizeof(*mq));
+
+kzalloc
+
+> +		mq->cq = cq;
+> +		mq->type = SLI_QTYPE_MQ;
+> +		mq->instance = cq->eq->hw->mq_count++;
+> +		mq->entry_count = entry_count;
+> +		mq->entry_size = EFCT_HW_MQ_DEPTH;
+> +		mq->queue = &hw->mq[mq->instance];
+> +
+> +		if (sli_queue_alloc(&hw->sli, SLI_QTYPE_MQ,
+> +				    mq->queue,
+> +				    mq->entry_size,
+> +				    cq->queue)) {
+> +			efc_log_err(hw->os, "MQ allocation failure\n");
+> +			kfree(mq);
+> +			mq = NULL;
+> +		} else {
+> +			hw->hw_mq[mq->instance] = mq;
+> +			INIT_LIST_HEAD(&mq->list_entry);
+> +			list_add_tail(&mq->list_entry, &cq->q_list);
+> +			efc_log_debug(hw->os,
+> +				       "create mq[%2d] id %3d len %4d\n",
+> +				      mq->instance, mq->queue->id,
+> +				      mq->entry_count);
+> +		}
+> +	}
+> +	return mq;
+> +}
+> +
+> +/* Allocate a new WQ object */
+> +struct hw_wq *
+> +efct_hw_new_wq(struct hw_cq *cq, u32 entry_count)
+> +{
+> +	struct efct_hw *hw = cq->eq->hw;
+> +	struct hw_wq *wq = kmalloc(sizeof(*wq), GFP_KERNEL);
+> +
+> +	if (wq) {
+> +		memset(wq, 0, sizeof(*wq));
+
+same above
+
+
+> +		wq->hw = cq->eq->hw;
+> +		wq->cq = cq;
+> +		wq->type = SLI_QTYPE_WQ;
+> +		wq->instance = cq->eq->hw->wq_count++;
+> +		wq->entry_count = entry_count;
+> +		wq->queue = &hw->wq[wq->instance];
+> +		wq->wqec_set_count = EFCT_HW_WQEC_SET_COUNT;
+> +		wq->wqec_count = wq->wqec_set_count;
+> +		wq->free_count = wq->entry_count - 1;
+> +		INIT_LIST_HEAD(&wq->pending_list);
+> +
+> +		if (sli_queue_alloc(&hw->sli, SLI_QTYPE_WQ, wq->queue,
+> +				    wq->entry_count, cq->queue)) {
+> +			efc_log_err(hw->os, "WQ allocation failure\n");
+> +			kfree(wq);
+> +			wq = NULL;
+
+return NULL;
+
+> +		} else {
+> +			hw->hw_wq[wq->instance] = wq;
+> +			INIT_LIST_HEAD(&wq->list_entry);
+> +			list_add_tail(&wq->list_entry, &cq->q_list);
+> +			efc_log_debug(hw->os,
+> +				       "create wq[%2d] id %3d len %4d cls %d\n",
+> +				wq->instance, wq->queue->id,
+> +				wq->entry_count, wq->class);
+> +		}
+> +	}
+> +	return wq;
+> +}
+> +
+> +/* Allocate an RQ object, which encapsulates 2 SLI queues (for rq pair) */
+> +struct hw_rq *
+> +efct_hw_new_rq(struct hw_cq *cq, u32 entry_count)
+> +{
+> +	struct efct_hw *hw = cq->eq->hw;
+> +	struct hw_rq *rq = kmalloc(sizeof(*rq), GFP_KERNEL);
+> +
+> +	if (rq) {
+> +		memset(rq, 0, sizeof(*rq));
+
+and again :)
+
+> +		rq->instance = hw->hw_rq_count++;
+> +		rq->cq = cq;
+> +		rq->type = SLI_QTYPE_RQ;
+> +		rq->entry_count = entry_count;
+> +
+> +		/* Create the header RQ */
+> +		rq->hdr = &hw->rq[hw->rq_count];
+> +		rq->hdr_entry_size = EFCT_HW_RQ_HEADER_SIZE;
+> +
+> +		if (sli_fc_rq_alloc(&hw->sli, rq->hdr,
+> +				    rq->entry_count,
+> +				    rq->hdr_entry_size,
+> +				    cq->queue,
+> +				    true)) {
+> +			efc_log_err(hw->os,
+> +				     "RQ allocation failure - header\n");
+> +			kfree(rq);
+> +			return NULL;
+> +		}
+> +		/* Update hw_rq_lookup[] */
+> +		hw->hw_rq_lookup[hw->rq_count] = rq->instance;
+> +		hw->rq_count++;
+> +		efc_log_debug(hw->os,
+> +			      "create rq[%2d] id %3d len %4d hdr  size %4d\n",
+> +			      rq->instance, rq->hdr->id, rq->entry_count,
+> +			      rq->hdr_entry_size);
+> +
+> +		/* Create the default data RQ */
+> +		rq->data = &hw->rq[hw->rq_count];
+> +		rq->data_entry_size = hw->config.rq_default_buffer_size;
+> +
+> +		if (sli_fc_rq_alloc(&hw->sli, rq->data,
+> +				    rq->entry_count,
+> +				    rq->data_entry_size,
+> +				    cq->queue,
+> +				    false)) {
+> +			efc_log_err(hw->os,
+> +				     "RQ allocation failure - first burst\n");
+> +			kfree(rq);
+> +			return NULL;
+> +		}
+> +		/* Update hw_rq_lookup[] */
+> +		hw->hw_rq_lookup[hw->rq_count] = rq->instance;
+> +		hw->rq_count++;
+> +		efc_log_debug(hw->os,
+> +			       "create rq[%2d] id %3d len %4d data size %4d\n",
+> +			 rq->instance, rq->data->id, rq->entry_count,
+> +			 rq->data_entry_size);
+> +
+> +		hw->hw_rq[rq->instance] = rq;
+> +		INIT_LIST_HEAD(&rq->list_entry);
+> +		list_add_tail(&rq->list_entry, &cq->q_list);
+> +
+> +		rq->rq_tracker = kmalloc_array(rq->entry_count,
+> +					sizeof(struct efc_hw_sequence *),
+> +					GFP_ATOMIC);
+> +		if (!rq->rq_tracker)
+> +			return NULL;
+> +
+> +		memset(rq->rq_tracker, 0,
+> +		       rq->entry_count * sizeof(struct efc_hw_sequence *));
+> +	}
+> +	return rq;
 > +}
 > +
 > +/**
-> + * This routine supports communication sequences consisting of a single
-> + * request and single response between two endpoints. Examples include:
-> + *  - Sending an ELS request.
-> + *  - Sending an ELS response - To send an ELS response, the caller must provide
-> + * the OX_ID from the received request.
-> + *  - Sending a FC Common Transport (FC-CT) request - To send a FC-CT request,
-> + * the caller must provide the R_CTL, TYPE, and DF_CTL
-> + * values to place in the FC frame header.
+> + * Allocate an RQ object SET, where each element in set
+> + * encapsulates 2 SLI queues (for rq pair)
 > + */
-> +enum efct_hw_rtn
-> +efct_hw_srrs_send(struct efct_hw *hw, enum efct_hw_io_type type,
-> +		  struct efct_hw_io *io,
-> +		  struct efc_dma *send, u32 len,
-> +		  struct efc_dma *receive, struct efc_remote_node *rnode,
-> +		  union efct_hw_io_param_u *iparam,
-> +		  efct_hw_srrs_cb_t cb, void *arg)
+> +u32
+> +efct_hw_new_rq_set(struct hw_cq *cqs[], struct hw_rq *rqs[],
+> +		   u32 num_rq_pairs, u32 entry_count)
 > +{
-> +	struct sli4_sge	*sge = NULL;
-> +	enum efct_hw_rtn	rc = EFCT_HW_RTN_SUCCESS;
-> +	u16	local_flags = 0;
-> +	u32 sge0_flags;
-> +	u32 sge1_flags;
+> +	struct efct_hw *hw = cqs[0]->eq->hw;
+> +	struct hw_rq *rq = NULL;
+> +	struct sli4_queue *qs[SLI_MAX_RQ_SET_COUNT * 2] = { NULL };
+> +	u32 i, q_count, size;
 > +
-> +	if (!io || !rnode || !iparam) {
-> +		pr_err("bad parm hw=%p io=%p s=%p r=%p rn=%p iparm=%p\n",
-> +			hw, io, send, receive, rnode, iparam);
+> +	/* Initialise RQS pointers */
+> +	for (i = 0; i < num_rq_pairs; i++)
+> +		rqs[i] = NULL;
+> +
+> +	for (i = 0, q_count = 0; i < num_rq_pairs; i++, q_count += 2) {
+> +		rq = kmalloc(sizeof(*rq), GFP_KERNEL);
+> +		if (!rq)
+> +			goto error;
+> +
+> +		memset(rq, 0, sizeof(*rq));
+
+kzalloc
+
+> +		rqs[i] = rq;
+> +		rq->instance = hw->hw_rq_count++;
+> +		rq->cq = cqs[i];
+> +		rq->type = SLI_QTYPE_RQ;
+> +		rq->entry_count = entry_count;
+> +
+> +		/* Header RQ */
+> +		rq->hdr = &hw->rq[hw->rq_count];
+> +		rq->hdr_entry_size = EFCT_HW_RQ_HEADER_SIZE;
+> +		hw->hw_rq_lookup[hw->rq_count] = rq->instance;
+> +		hw->rq_count++;
+> +		qs[q_count] = rq->hdr;
+> +
+> +		/* Data RQ */
+> +		rq->data = &hw->rq[hw->rq_count];
+> +		rq->data_entry_size = hw->config.rq_default_buffer_size;
+> +		hw->hw_rq_lookup[hw->rq_count] = rq->instance;
+> +		hw->rq_count++;
+> +		qs[q_count + 1] = rq->data;
+> +
+> +		rq->rq_tracker = NULL;
+> +	}
+> +
+> +	if (!sli_fc_rq_set_alloc(&hw->sli, num_rq_pairs, qs,
+> +				cqs[0]->queue->id,
+> +			    rqs[0]->entry_count,
+> +			    rqs[0]->hdr_entry_size,
+> +			    rqs[0]->data_entry_size)) {
+> +		efc_log_err(hw->os,
+> +			     "RQ Set allocation failure for base CQ=%d\n",
+> +			    cqs[0]->queue->id);
+> +		goto error;
+> +	}
+> +
+> +	for (i = 0; i < num_rq_pairs; i++) {
+> +		hw->hw_rq[rqs[i]->instance] = rqs[i];
+> +		INIT_LIST_HEAD(&rqs[i]->list_entry);
+> +		list_add_tail(&rqs[i]->list_entry, &cqs[i]->q_list);
+> +		size = sizeof(struct efc_hw_sequence *) * rqs[i]->entry_count;
+> +		rqs[i]->rq_tracker = kmalloc(size, GFP_KERNEL);
+> +		if (!rqs[i]->rq_tracker)
+> +			goto error;
+> +	}
+> +
+> +	return EFC_SUCCESS;
+> +
+> +error:
+> +	for (i = 0; i < num_rq_pairs; i++) {
+> +		if (rqs[i]) {
+> +			kfree(rqs[i]->rq_tracker);
+
+Is rq_tracker always a valid pointer?
+
+> +			kfree(rqs[i]);
+> +		}
+> +	}
+> +
+> +	return EFC_FAIL;
+> +}
+> +
+> +void
+> +efct_hw_del_eq(struct hw_eq *eq)
+> +{
+> +	if (eq) {
+> +		struct hw_cq *cq;
+> +		struct hw_cq *cq_next;
+> +
+> +		list_for_each_entry_safe(cq, cq_next, &eq->cq_list, list_entry)
+> +			efct_hw_del_cq(cq);
+> +		list_del(&eq->list_entry);
+> +		eq->hw->hw_eq[eq->instance] = NULL;
+> +		kfree(eq);
+> +	}
+> +}
+> +
+> +void
+> +efct_hw_del_cq(struct hw_cq *cq)
+> +{
+> +	if (cq) {
+
+if (!cq)
+	return;
+
+> +		struct hw_q *q;
+> +		struct hw_q *q_next;
+> +
+> +		list_for_each_entry_safe(q, q_next, &cq->q_list, list_entry) {
+> +			switch (q->type) {
+> +			case SLI_QTYPE_MQ:
+> +				efct_hw_del_mq((struct hw_mq *)q);
+> +				break;
+> +			case SLI_QTYPE_WQ:
+> +				efct_hw_del_wq((struct hw_wq *)q);
+> +				break;
+> +			case SLI_QTYPE_RQ:
+> +				efct_hw_del_rq((struct hw_rq *)q);
+> +				break;
+> +			default:
+> +				break;
+> +			}
+> +		}
+> +		list_del(&cq->list_entry);
+> +		cq->eq->hw->hw_cq[cq->instance] = NULL;
+> +		kfree(cq);
+> +	}
+> +}
+> +
+> +void
+> +efct_hw_del_mq(struct hw_mq *mq)
+> +{
+> +	if (mq) {
+
+if (!mq)
+	return;
+
+> +		list_del(&mq->list_entry);
+> +		mq->cq->eq->hw->hw_mq[mq->instance] = NULL;
+> +		kfree(mq);
+> +	}
+> +}
+> +
+> +void
+> +efct_hw_del_wq(struct hw_wq *wq)
+> +{
+> +	if (wq) {
+
+if (!wq)
+	return;
+
+> +		list_del(&wq->list_entry);
+> +		wq->cq->eq->hw->hw_wq[wq->instance] = NULL;
+> +		kfree(wq);
+> +	}
+> +}
+> +
+> +void
+> +efct_hw_del_rq(struct hw_rq *rq)
+> +{
+> +	struct efct_hw *hw = NULL;
+> +
+> +	if (rq) {
+
+if (!rq)
+	return;
+
+> +		/* Free RQ tracker */
+> +		kfree(rq->rq_tracker);
+> +		rq->rq_tracker = NULL;
+> +		list_del(&rq->list_entry);
+> +		hw = rq->cq->eq->hw;
+> +		hw->hw_rq[rq->instance] = NULL;
+> +		kfree(rq);
+> +	}
+> +}
+> +
+> +void
+> +efct_hw_queue_dump(struct efct_hw *hw)
+> +{
+> +	struct hw_eq *eq;
+> +	struct hw_cq *cq;
+> +	struct hw_q *q;
+> +	struct hw_mq *mq;
+> +	struct hw_wq *wq;
+> +	struct hw_rq *rq;
+> +
+> +	list_for_each_entry(eq, &hw->eq_list, list_entry) {
+> +		efc_log_debug(hw->os, "eq[%d] id %2d\n",
+> +			       eq->instance, eq->queue->id);
+> +		list_for_each_entry(cq, &eq->cq_list, list_entry) {
+> +			efc_log_debug(hw->os, "cq[%d] id %2d current\n",
+> +				       cq->instance, cq->queue->id);
+> +			list_for_each_entry(q, &cq->q_list, list_entry) {
+> +				switch (q->type) {
+> +				case SLI_QTYPE_MQ:
+> +					mq = (struct hw_mq *)q;
+> +					efc_log_debug(hw->os,
+> +						       "    mq[%d] id %2d\n",
+> +					       mq->instance, mq->queue->id);
+> +					break;
+> +				case SLI_QTYPE_WQ:
+> +					wq = (struct hw_wq *)q;
+> +					efc_log_debug(hw->os,
+> +						       "    wq[%d] id %2d\n",
+> +						wq->instance, wq->queue->id);
+> +					break;
+> +				case SLI_QTYPE_RQ:
+> +					rq = (struct hw_rq *)q;
+> +					efc_log_debug(hw->os,
+> +						       "    rq[%d] hdr id %2d\n",
+> +					       rq->instance, rq->hdr->id);
+> +					break;
+> +				default:
+> +					break;
+> +				}
+> +			}
+> +		}
+
+Maybe move inner loop into function.
+
+> +	}
+> +}
+> +
+> +void
+> +efct_hw_queue_teardown(struct efct_hw *hw)
+> +{
+> +	struct hw_eq *eq;
+> +	struct hw_eq *eq_next;
+> +
+> +	if (hw->eq_list.next) {
+
+	if (!hw->eq_list.next)
+		return;
+
+
+
+> +		list_for_each_entry_safe(eq, eq_next, &hw->eq_list,
+> +					 list_entry) {
+> +			efct_hw_del_eq(eq);
+> +		}
+> +	}
+> +}
+> +
+> +static inline int
+> +efct_hw_rqpair_find(struct efct_hw *hw, u16 rq_id)
+> +{
+> +	return efct_hw_queue_hash_find(hw->rq_hash, rq_id);
+> +}
+> +
+> +static struct efc_hw_sequence *
+> +efct_hw_rqpair_get(struct efct_hw *hw, u16 rqindex, u16 bufindex)
+> +{
+> +	struct sli4_queue *rq_hdr = &hw->rq[rqindex];
+> +	struct efc_hw_sequence *seq = NULL;
+> +	struct hw_rq *rq = hw->hw_rq[hw->hw_rq_lookup[rqindex]];
+> +	unsigned long flags = 0;
+> +
+> +	if (bufindex >= rq_hdr->length) {
+> +		efc_log_err(hw->os,
+> +				"RQidx %d bufidx %d exceed ring len %d for id %d\n",
+> +				rqindex, bufindex, rq_hdr->length, rq_hdr->id);
+> +		return NULL;
+> +	}
+> +
+> +	/* rq_hdr lock also covers rqindex+1 queue */
+> +	spin_lock_irqsave(&rq_hdr->lock, flags);
+> +
+> +	seq = rq->rq_tracker[bufindex];
+> +	rq->rq_tracker[bufindex] = NULL;
+> +
+> +	if (!seq) {
+> +		efc_log_err(hw->os,
+> +			     "RQbuf NULL, rqidx %d, bufidx %d, cur q idx = %d\n",
+> +			     rqindex, bufindex, rq_hdr->index);
+> +	}
+> +
+> +	spin_unlock_irqrestore(&rq_hdr->lock, flags);
+> +	return seq;
+> +}
+> +
+> +int
+> +efct_hw_rqpair_process_rq(struct efct_hw *hw, struct hw_cq *cq,
+> +			  u8 *cqe)
+> +{
+> +	u16 rq_id;
+> +	u32 index;
+> +	int rqindex;
+> +	int	 rq_status;
+> +	u32 h_len;
+> +	u32 p_len;
+> +	struct efc_hw_sequence *seq;
+> +	struct hw_rq *rq;
+
+the alignemnt of the variables is inconsistent
+
+> +
+> +	rq_status = sli_fc_rqe_rqid_and_index(&hw->sli, cqe,
+> +					      &rq_id, &index);
+> +	if (rq_status != 0) {
+> +		switch (rq_status) {
+> +		case SLI4_FC_ASYNC_RQ_BUF_LEN_EXCEEDED:
+> +		case SLI4_FC_ASYNC_RQ_DMA_FAILURE:
+> +			/* just get RQ buffer then return to chip */
+> +			rqindex = efct_hw_rqpair_find(hw, rq_id);
+> +			if (rqindex < 0) {
+> +				efc_log_test(hw->os,
+> +					      "status=%#x: lookup fail id=%#x\n",
+> +					     rq_status, rq_id);
+> +				break;
+> +			}
+> +
+> +			/* get RQ buffer */
+> +			seq = efct_hw_rqpair_get(hw, rqindex, index);
+> +
+> +			/* return to chip */
+> +			if (efct_hw_rqpair_sequence_free(hw, seq)) {
+> +				efc_log_test(hw->os,
+> +					      "status=%#x,fail rtrn buf to RQ\n",
+> +					     rq_status);
+> +				break;
+> +			}
+> +			break;
+> +		case SLI4_FC_ASYNC_RQ_INSUFF_BUF_NEEDED:
+> +		case SLI4_FC_ASYNC_RQ_INSUFF_BUF_FRM_DISC:
+> +			/*
+> +			 * since RQ buffers were not consumed, cannot return
+> +			 * them to chip
+> +			 * fall through
+> +			 */
+> +			efc_log_debug(hw->os, "Warning: RCQE status=%#x,\n",
+> +				       rq_status);
+> +		default:
+> +			break;
+> +		}
+> +		return EFC_FAIL;
+> +	}
+> +
+> +	rqindex = efct_hw_rqpair_find(hw, rq_id);
+> +	if (rqindex < 0) {
+> +		efc_log_test(hw->os, "Error: rq_id lookup failed for id=%#x\n",
+> +			      rq_id);
+> +		return EFC_FAIL;
+> +	}
+> +
+> +	rq = hw->hw_rq[hw->hw_rq_lookup[rqindex]];
+> +	rq->use_count++;
+> +
+> +	seq = efct_hw_rqpair_get(hw, rqindex, index);
+> +	if (WARN_ON(!seq))
+> +		return EFC_FAIL;
+> +
+> +	seq->hw = hw;
+> +	seq->auto_xrdy = 0;
+> +	seq->out_of_xris = 0;
+> +	seq->hio = NULL;
+> +
+> +	sli_fc_rqe_length(&hw->sli, cqe, &h_len, &p_len);
+> +	seq->header->dma.len = h_len;
+> +	seq->payload->dma.len = p_len;
+> +	seq->fcfi = sli_fc_rqe_fcfi(&hw->sli, cqe);
+> +	seq->hw_priv = cq->eq;
+> +
+> +	efct_unsolicited_cb(hw->os, seq);
+> +
+> +	return EFC_SUCCESS;
+> +}
+> +
+> +static int
+> +efct_hw_rqpair_put(struct efct_hw *hw, struct efc_hw_sequence *seq)
+> +{
+> +	struct sli4_queue *rq_hdr = &hw->rq[seq->header->rqindex];
+> +	struct sli4_queue *rq_payload = &hw->rq[seq->payload->rqindex];
+> +	u32 hw_rq_index = hw->hw_rq_lookup[seq->header->rqindex];
+> +	struct hw_rq *rq = hw->hw_rq[hw_rq_index];
+> +	u32     phys_hdr[2];
+> +	u32     phys_payload[2];
+> +	int      qindex_hdr;
+> +	int      qindex_payload;
+> +	unsigned long flags = 0;
+
+the alignemnt of the variables is inconsistent
+
+> +
+> +	/* Update the RQ verification lookup tables */
+> +	phys_hdr[0] = upper_32_bits(seq->header->dma.phys);
+> +	phys_hdr[1] = lower_32_bits(seq->header->dma.phys);
+> +	phys_payload[0] = upper_32_bits(seq->payload->dma.phys);
+> +	phys_payload[1] = lower_32_bits(seq->payload->dma.phys);
+> +
+> +	/* rq_hdr lock also covers payload / header->rqindex+1 queue */
+> +	spin_lock_irqsave(&rq_hdr->lock, flags);
+> +
+> +	/*
+> +	 * Note: The header must be posted last for buffer pair mode because
+> +	 *       posting on the header queue posts the payload queue as well.
+> +	 *       We do not ring the payload queue independently in RQ pair mode.
+> +	 */
+> +	qindex_payload = sli_rq_write(&hw->sli, rq_payload,
+> +				      (void *)phys_payload);
+> +	qindex_hdr = sli_rq_write(&hw->sli, rq_hdr, (void *)phys_hdr);
+> +	if (qindex_hdr < 0 ||
+> +	    qindex_payload < 0) {
+> +		efc_log_err(hw->os, "RQ_ID=%#x write failed\n", rq_hdr->id);
+> +		spin_unlock_irqrestore(&rq_hdr->lock, flags);
 > +		return EFCT_HW_RTN_ERROR;
 > +	}
 > +
-> +	if (hw->state != EFCT_HW_STATE_ACTIVE) {
-> +		efc_log_test(hw->os,
-> +			      "cannot send SRRS, HW state=%d\n", hw->state);
-> +		return EFCT_HW_RTN_ERROR;
-> +	}
+> +	/* ensure the indexes are the same */
+> +	WARN_ON(qindex_hdr != qindex_payload);
 > +
-> +	io->rnode = rnode;
-> +	io->type  = type;
-> +	io->done = cb;
-> +	io->arg  = arg;
-> +
-> +	sge = io->sgl->virt;
-> +
-> +	/* clear both SGE */
-> +	memset(io->sgl->virt, 0, 2 * sizeof(struct sli4_sge));
-> +
-> +	sge0_flags = le32_to_cpu(sge[0].dw2_flags);
-> +	sge1_flags = le32_to_cpu(sge[1].dw2_flags);
-> +	if (send) {
-> +		sge[0].buffer_address_high =
-> +			cpu_to_le32(upper_32_bits(send->phys));
-> +		sge[0].buffer_address_low  =
-> +			cpu_to_le32(lower_32_bits(send->phys));
-> +
-> +		sge0_flags |= (SLI4_SGE_TYPE_DATA << SLI4_SGE_TYPE_SHIFT);
-> +
-> +		sge[0].buffer_length = cpu_to_le32(len);
-> +	}
-> +
-> +	if (type == EFCT_HW_ELS_REQ || type == EFCT_HW_FC_CT) {
-> +		sge[1].buffer_address_high =
-> +			cpu_to_le32(upper_32_bits(receive->phys));
-> +		sge[1].buffer_address_low  =
-> +			cpu_to_le32(lower_32_bits(receive->phys));
-> +
-> +		sge1_flags |= (SLI4_SGE_TYPE_DATA << SLI4_SGE_TYPE_SHIFT);
-> +		sge1_flags |= SLI4_SGE_LAST;
-> +
-> +		sge[1].buffer_length = cpu_to_le32(receive->size);
+> +	/* Update the lookup table */
+> +	if (!rq->rq_tracker[qindex_hdr]) {
+> +		rq->rq_tracker[qindex_hdr] = seq;
 > +	} else {
-> +		sge0_flags |= SLI4_SGE_LAST;
+> +		efc_log_test(hw->os,
+> +			      "expected rq_tracker[%d][%d] buffer to be NULL\n",
+> +			     hw_rq_index, qindex_hdr);
 > +	}
 > +
-> +	sge[0].dw2_flags = cpu_to_le32(sge0_flags);
-> +	sge[1].dw2_flags = cpu_to_le32(sge1_flags);
+> +	spin_unlock_irqrestore(&rq_hdr->lock, flags);
+> +	return EFCT_HW_RTN_SUCCESS;
+> +}
 > +
-> +	switch (type) {
-> +	case EFCT_HW_ELS_REQ:
-> +		if (!send ||
-> +		    sli_els_request64_wqe(&hw->sli, io->wqe.wqebuf,
-> +					  hw->sli.wqe_size, io->sgl,
-> +					*((u8 *)send->virt),
-> +					len, receive->size,
-> +					iparam->els.timeout,
-> +					io->indicator, io->reqtag,
-> +					SLI4_CQ_DEFAULT, rnode->indicator,
-> +					rnode->sport->indicator,
-> +					rnode->attached, rnode->fc_id,
-> +					rnode->sport->fc_id)) {
-> +			efc_log_err(hw->os, "REQ WQE error\n");
-> +			rc = EFCT_HW_RTN_ERROR;
-> +		}
-> +		break;
-
-I did mention several times that I'm not a big fan of overly long 
-argument lists.
-Can't you pass in 'io' and 'rnode' directly and cut down on the number 
-of arguments?
-
-> +	case EFCT_HW_ELS_RSP:
-> +		if (!send ||
-> +		    sli_xmit_els_rsp64_wqe(&hw->sli, io->wqe.wqebuf,
-> +					   hw->sli.wqe_size, send, len,
-> +					io->indicator, io->reqtag,
-> +					SLI4_CQ_DEFAULT, iparam->els.ox_id,
-> +					rnode->indicator,
-> +					rnode->sport->indicator,
-> +					rnode->attached, rnode->fc_id,
-> +					local_flags, U32_MAX)) {
-
-Same here.
-
-> +			efc_log_err(hw->os, "RSP WQE error\n");
-> +			rc = EFCT_HW_RTN_ERROR;
-> +		}
-> +		break;
-> +	case EFCT_HW_ELS_RSP_SID:
-> +		if (!send ||
-> +		    sli_xmit_els_rsp64_wqe(&hw->sli, io->wqe.wqebuf,
-> +					   hw->sli.wqe_size, send, len,
-> +					io->indicator, io->reqtag,
-> +					SLI4_CQ_DEFAULT,
-> +					iparam->els.ox_id,
-> +					rnode->indicator,
-> +					rnode->sport->indicator,
-> +					rnode->attached, rnode->fc_id,
-> +					local_flags, iparam->els.s_id)) {
-
-And here.
-
-> +			efc_log_err(hw->os, "RSP (SID) WQE error\n");
-> +			rc = EFCT_HW_RTN_ERROR;
-> +		}
-> +		break;
-> +	case EFCT_HW_FC_CT:
-> +		if (!send ||
-> +		    sli_gen_request64_wqe(&hw->sli, io->wqe.wqebuf, io->sgl,
-> +					len, receive->size, io->indicator,
-> +					io->reqtag, SLI4_CQ_DEFAULT,
-> +					rnode->fc_id, rnode->indicator,
-> +					&iparam->fc_ct)) {
-
-And here.
-
-> +			efc_log_err(hw->os, "GEN WQE error\n");
-> +			rc = EFCT_HW_RTN_ERROR;
-> +		}
-> +		break;
-> +	case EFCT_HW_FC_CT_RSP:
-> +		if (!send ||
-> +		    sli_xmit_sequence64_wqe(&hw->sli, io->wqe.wqebuf,
-> +					    io->sgl, len, io->indicator,
-> +					    io->reqtag, rnode->fc_id,
-> +					    rnode->indicator, &iparam->fc_ct)) {
-
-And here.
-
-> +			efc_log_err(hw->os, "XMIT SEQ WQE error\n");
-> +			rc = EFCT_HW_RTN_ERROR;
-> +		}
-> +		break;
-> +	case EFCT_HW_BLS_ACC:
-> +	case EFCT_HW_BLS_RJT:
-> +	{
-> +		struct sli_bls_payload	bls;
+> +enum efct_hw_rtn
+> +efct_hw_rqpair_sequence_free(struct efct_hw *hw,
+> +			     struct efc_hw_sequence *seq)
+> +{
+> +	enum efct_hw_rtn   rc = EFCT_HW_RTN_SUCCESS;
 > +
-> +		if (type == EFCT_HW_BLS_ACC) {
-> +			bls.type = SLI4_SLI_BLS_ACC;
-> +			memcpy(&bls.u.acc, iparam->bls.payload,
-> +			       sizeof(bls.u.acc));
-> +		} else {
-> +			bls.type = SLI4_SLI_BLS_RJT;
-> +			memcpy(&bls.u.rjt, iparam->bls.payload,
-> +			       sizeof(bls.u.rjt));
-> +		}
-> +
-> +		bls.ox_id = cpu_to_le16(iparam->bls.ox_id);
-> +		bls.rx_id = cpu_to_le16(iparam->bls.rx_id);
-> +
-> +		if (sli_xmit_bls_rsp64_wqe(&hw->sli, io->wqe.wqebuf,
-> +					   hw->sli.wqe_size, &bls,
-> +					io->indicator, io->reqtag,
-> +					SLI4_CQ_DEFAULT,
-> +					rnode->attached,
-> +					rnode->indicator,
-> +					rnode->sport->indicator,
-> +					rnode->fc_id, rnode->sport->fc_id,
-> +					U32_MAX)) {
-
-This simply cries out for doing so ...
-
-> +			efc_log_err(hw->os, "XMIT_BLS_RSP64 WQE error\n");
-> +			rc = EFCT_HW_RTN_ERROR;
-> +		}
-> +		break;
+> +	/*
+> +	 * Post the data buffer first. Because in RQ pair mode, ringing the
+> +	 * doorbell of the header ring will post the data buffer as well.
+> +	 */
+> +	if (efct_hw_rqpair_put(hw, seq)) {
+> +		efc_log_err(hw->os, "error writing buffers\n");
+> +		return EFCT_HW_RTN_ERROR;
 > +	}
-> +	case EFCT_HW_BLS_ACC_SID:
-> +	{
-> +		struct sli_bls_payload	bls;
 > +
-> +		bls.type = SLI4_SLI_BLS_ACC;
-> +		memcpy(&bls.u.acc, iparam->bls.payload,
-> +		       sizeof(bls.u.acc));
-> +
-> +		bls.ox_id = cpu_to_le16(iparam->bls.ox_id);
-> +		bls.rx_id = cpu_to_le16(iparam->bls.rx_id);
-> +
-> +		if (sli_xmit_bls_rsp64_wqe(&hw->sli, io->wqe.wqebuf,
-> +					   hw->sli.wqe_size, &bls,
-> +					io->indicator, io->reqtag,
-> +					SLI4_CQ_DEFAULT,
-> +					rnode->attached,
-> +					rnode->indicator,
-> +					rnode->sport->indicator,
-> +					rnode->fc_id, rnode->sport->fc_id,
-> +					iparam->bls.s_id)) {
+> +	return rc;
+> +}
+> -- 
+> 2.16.4
+> 
 
-...
-
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                               +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Thanks,
+Daniel
