@@ -2,55 +2,193 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 420FC1AE99D
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 05:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34341AB830
+	for <lists+linux-scsi@lfdr.de>; Thu, 16 Apr 2020 08:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725849AbgDRDYo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 17 Apr 2020 23:24:44 -0400
-Received: from [104.248.214.7] ([104.248.214.7]:43948 "EHLO narrain.in"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725320AbgDRDYo (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 17 Apr 2020 23:24:44 -0400
-Received: from 127.0.0.1 (localhost [127.0.0.1])
-        by narrain.in (Postfix) with SMTP id 7DC18B0996A;
-        Thu, 16 Apr 2020 05:53:09 +0000 (UTC)
-Received: from [45.113.206.166] by 127.0.0.1 with ESMTP id <408157-77619> for <linux-scsi@vger.kernel.org>; Thu, 16 Apr 2020 05:51:27 -0400
-Message-ID: <1ousr-pi--7-hup5b@7n25ft1.jr>
-From:   "JAK ADBULLAH FRAAM." <jak4@sozimail.com>
-Reply-To: "JAK ADBULLAH FRAAM." <jak4@sozimail.com>
-To:     linux-scsi@vger.kernel.org
-Subject: HELLO.
-Date:   Thu, 16 Apr 20 05:51:27 GMT
-X-Mailer: MIME-tools 5.503 (Entity 5.501)
+        id S2408200AbgDPGiY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 16 Apr 2020 02:38:24 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55908 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2408188AbgDPGiP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 16 Apr 2020 02:38:15 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 41DCCACCA;
+        Thu, 16 Apr 2020 06:37:14 +0000 (UTC)
+Subject: Re: [PATCH v3 13/31] elx: libefc: Fabric node state machine
+ interfaces
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
+Cc:     dwagner@suse.de, maier@linux.ibm.com, bvanassche@acm.org,
+        herbszt@gmx.de, natechancellor@gmail.com, rdunlap@infradead.org,
+        Ram Vegesna <ram.vegesna@broadcom.com>
+References: <20200412033303.29574-1-jsmart2021@gmail.com>
+ <20200412033303.29574-14-jsmart2021@gmail.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <86cf1199-b29e-4955-1027-e3c2ba5056c4@suse.de>
+Date:   Thu, 16 Apr 2020 08:37:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="1EFA237D8AF"
-X-Priority: 3
-X-MSMail-Priority: Normal
+In-Reply-To: <20200412033303.29574-14-jsmart2021@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 4/12/20 5:32 AM, James Smart wrote:
+> This patch continues the libefc library population.
+> 
+> This patch adds library interface definitions for:
+> - Fabric node initialization and logins.
+> - Name/Directory Services node.
+> - Fabric Controller node to process rscn events.
+> 
+> These are all interactions with remote ports that correspond
+> to well-known fabric entities
+> 
+> Signed-off-by: Ram Vegesna <ram.vegesna@broadcom.com>
+> Signed-off-by: James Smart <jsmart2021@gmail.com>
+> 
+> ---
+> v3:
+>    Replace efc_assert with WARN_ON
+>    Return defined return values
+> ---
+>   drivers/scsi/elx/libefc/efc_fabric.c | 1759 ++++++++++++++++++++++++++++++++++
+>   drivers/scsi/elx/libefc/efc_fabric.h |  116 +++
+>   2 files changed, 1875 insertions(+)
+>   create mode 100644 drivers/scsi/elx/libefc/efc_fabric.c
+>   create mode 100644 drivers/scsi/elx/libefc/efc_fabric.h
+> 
+> diff --git a/drivers/scsi/elx/libefc/efc_fabric.c b/drivers/scsi/elx/libefc/efc_fabric.c
+> new file mode 100644
+> index 000000000000..251f8702dbc5
+> --- /dev/null
+> +++ b/drivers/scsi/elx/libefc/efc_fabric.c
+> @@ -0,0 +1,1759 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2019 Broadcom. All Rights Reserved. The term
+> + * “Broadcom” refers to Broadcom Inc. and/or its subsidiaries.
+> + */
+> +
+> +/*
+> + * This file implements remote node state machines for:
+> + * - Fabric logins.
+> + * - Fabric controller events.
+> + * - Name/directory services interaction.
+> + * - Point-to-point logins.
+> + */
+> +
+> +/*
+> + * fabric_sm Node State Machine: Fabric States
+> + * ns_sm Node State Machine: Name/Directory Services States
+> + * p2p_sm Node State Machine: Point-to-Point Node States
+> + */
+> +
+> +#include "efc.h"
+> +
+> +static void
+> +efc_fabric_initiate_shutdown(struct efc_node *node)
+> +{
+> +	int rc;
+> +	struct efc *efc = node->efc;
+> +
+> +	efc->tt.scsi_io_alloc_disable(efc, node);
+> +
+> +	if (node->attached) {
+> +		/* issue hw node free; don't care if succeeds right away
+> +		 * or sometime later, will check node->attached later in
+> +		 * shutdown process
+> +		 */
+> +		rc = efc->tt.hw_node_detach(efc, &node->rnode);
+> +		if (rc != EFC_HW_RTN_SUCCESS &&
+> +		    rc != EFC_HW_RTN_SUCCESS_SYNC) {
+> +			node_printf(node, "Failed freeing HW node, rc=%d\n",
+> +				    rc);
+> +		}
+> +	}
+> +	/*
+> +	 * node has either been detached or is in the process of being detached,
+> +	 * call common node's initiate cleanup function
+> +	 */
+> +	efc_node_initiate_cleanup(node);
+> +}
+> +
+> +static void *
+> +__efc_fabric_common(const char *funcname, struct efc_sm_ctx *ctx,
+> +		    enum efc_sm_event evt, void *arg)
+> +{
+> +	struct efc_node *node = NULL;
+> +
+> +	node = ctx->app;
+> +
+> +	switch (evt) {
+> +	case EFC_EVT_DOMAIN_ATTACH_OK:
+> +		break;
+> +	case EFC_EVT_SHUTDOWN:
+> +		node->shutdown_reason = EFC_NODE_SHUTDOWN_DEFAULT;
+> +		efc_fabric_initiate_shutdown(node);
+> +		break;
+> +
+> +	default:
+> +		/* call default event handler common to all nodes */
+> +		__efc_node_common(funcname, ctx, evt, arg);
+> +		break;
+> +	}
+> +	return NULL;
+> +}
+> +
+> +void *
+> +__efc_fabric_init(struct efc_sm_ctx *ctx, enum efc_sm_event evt,
+> +		  void *arg)
+> +{
+> +	struct efc_node *node = ctx->app;
+> +	struct efc *efc = node->efc;
+> +
+> +	efc_node_evt_set(ctx, evt, __func__);
+> +
+> +	node_sm_trace();
+> +
+> +	switch (evt) {
+> +	case EFC_EVT_REENTER:	/* not sure why we're getting these ... */
+> +		efc_log_debug(efc, ">>> reenter !!\n");
+> +		/* fall through */
+> +	case EFC_EVT_ENTER:
+> +		/*  sm: / send FLOGI */
+> +		efc->tt.els_send(efc, node, ELS_FLOGI,
+> +				EFC_FC_FLOGI_TIMEOUT_SEC,
+> +				EFC_FC_ELS_DEFAULT_RETRIES);
+> +		efc_node_transition(node, __efc_fabric_flogi_wait_rsp, NULL);
+> +		break;
+> +
+> +	default:
+> +		__efc_fabric_common(__func__, ctx, evt, arg);
+> +		break;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+What is going on here?
+Why do you declare all function as 'void *', but then continue to return 
+only NULL pointer?
 
---1EFA237D8AF
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+Is this some weird API logic or are these functions being fleshed out in 
+later patches to return something else but NULL?
 
-Asalam walekum ramatulilah wobarukutuh,
-Greetings to you in the name of Almighy Allah,
+But as it stands I would recommend to move all of these functions to 
+simple 'void' functions, and updating the function prototypes once they 
+can return anything else than 'NULL'.
 
+Cheers,
 
-Hello friend,
-
-I have a business proposal that I want to share with you, is lucrative and=
- it is going to benefit you and me. And I do need you to advise me on your=
- position.
-Please contact me via email address: (jakaf2525@scurelmail.com) for more i=
-nformationa.
-
-Regards,
-MR. JAK ABDULLAH FRAAM.
-
---1EFA237D8AF--
-
+Hannes
+-- 
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                               +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
