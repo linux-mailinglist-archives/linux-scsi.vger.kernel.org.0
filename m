@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B04A21AF04A
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 16:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A441AEF7D
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 16:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726903AbgDROnf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 Apr 2020 10:43:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54762 "EHLO mail.kernel.org"
+        id S1728640AbgDROnl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 Apr 2020 10:43:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728606AbgDROne (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 18 Apr 2020 10:43:34 -0400
+        id S1728634AbgDROnj (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 18 Apr 2020 10:43:39 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9EE472072B;
-        Sat, 18 Apr 2020 14:43:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6F9D122251;
+        Sat, 18 Apr 2020 14:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587221013;
-        bh=idX8PmflZUNNSTk/f1mwjwKr28IodT3JvA4+evJUmNk=;
+        s=default; t=1587221019;
+        bh=FtfC7Z9l+PF/gQBBs9jNp4cGmr4oyYE08j4RqK3c2XQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kGcsDg2D7lpO0p9uBmpYIpZ0AqrVazSYX5Fdl18ByeIofQiCNzuZ3MFThjGTZPnyB
-         R1fMnN+X7tb3+UvWv6NAhjWe68I6RbGR5gZlpR3+5fRjlJIxrq0jU2c9ObIcMTvHgt
-         bztkEjlhyPHoEHEQFy6ekNa8mrqTg2RF+WrYzNgQ=
+        b=DVF4ZtUU1EZ6Y6kTxAwhA0jaMc99VuF6otFLFeAjZrIs3yTFYRsle7Es9a4QAKdG8
+         55/MoXqJH22oBojFI7hvftggeFYbEhI2pofTyHGKtQh0PqR+gprGXkeGUHuYF9yd6D
+         KFYEO5vdJ2RfP2bQaN9OlSrpVv5Z2ud6nZxdVZPQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
+Cc:     Wu Bo <wubo40@huawei.com>, Lee Duncan <lduncan@suse.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 04/28] scsi: lpfc: Fix kasan slab-out-of-bounds error in lpfc_unreg_login
-Date:   Sat, 18 Apr 2020 10:43:04 -0400
-Message-Id: <20200418144328.10265-4-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 09/28] scsi: iscsi: Report unbind session event when the target has been removed
+Date:   Sat, 18 Apr 2020 10:43:09 -0400
+Message-Id: <20200418144328.10265-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200418144328.10265-1-sashal@kernel.org>
 References: <20200418144328.10265-1-sashal@kernel.org>
@@ -44,60 +44,58 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: James Smart <jsmart2021@gmail.com>
+From: Wu Bo <wubo40@huawei.com>
 
-[ Upstream commit 38503943c89f0bafd9e3742f63f872301d44cbea ]
+[ Upstream commit 13e60d3ba287d96eeaf1deaadba51f71578119a3 ]
 
-The following kasan bug was called out:
+If the daemon is restarted or crashes while logging out of a session, the
+unbind session event sent by the kernel is not processed and is lost.  When
+the daemon starts again, the session can't be unbound because the daemon is
+waiting for the event message. However, the kernel has already logged out
+and the event will not be resent.
 
- BUG: KASAN: slab-out-of-bounds in lpfc_unreg_login+0x7c/0xc0 [lpfc]
- Read of size 2 at addr ffff889fc7c50a22 by task lpfc_worker_3/6676
- ...
- Call Trace:
- dump_stack+0x96/0xe0
- ? lpfc_unreg_login+0x7c/0xc0 [lpfc]
- print_address_description.constprop.6+0x1b/0x220
- ? lpfc_unreg_login+0x7c/0xc0 [lpfc]
- ? lpfc_unreg_login+0x7c/0xc0 [lpfc]
- __kasan_report.cold.9+0x37/0x7c
- ? lpfc_unreg_login+0x7c/0xc0 [lpfc]
- kasan_report+0xe/0x20
- lpfc_unreg_login+0x7c/0xc0 [lpfc]
- lpfc_sli_def_mbox_cmpl+0x334/0x430 [lpfc]
- ...
+When iscsid restart is complete, logout session reports error:
 
-When processing the completion of a "Reg Rpi" login mailbox command in
-lpfc_sli_def_mbox_cmpl, a call may be made to lpfc_unreg_login. The vpi is
-extracted from the completing mailbox context and passed as an input for
-the next. However, the vpi stored in the mailbox command context is an
-absolute vpi, which for SLI4 represents both base + offset.  When used with
-a non-zero base component, (function id > 0) this results in an
-out-of-range access beyond the allocated phba->vpi_ids array.
+Logging out of session [sid: 6, target: iqn.xxxxx, portal: xx.xx.xx.xx,3260]
+iscsiadm: Could not logout of [sid: 6, target: iscsiadm -m node iqn.xxxxx, portal: xx.xx.xx.xx,3260].
+iscsiadm: initiator reported error (9 - internal error)
+iscsiadm: Could not logout of all requested sessions
 
-Fix by subtracting the function's base value to get an accurate vpi number.
+Make sure the unbind event is emitted.
 
-Link: https://lore.kernel.org/r/20200322181304.37655-2-jsmart2021@gmail.com
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+[mkp: commit desc and applied by hand since patch was mangled]
+
+Link: https://lore.kernel.org/r/4eab1771-2cb3-8e79-b31c-923652340e99@huawei.com
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Signed-off-by: Wu Bo <wubo40@huawei.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/lpfc/lpfc_sli.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/scsi_transport_iscsi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_sli.c b/drivers/scsi/lpfc/lpfc_sli.c
-index d8e0ba68879c3..480d2d467f7a6 100644
---- a/drivers/scsi/lpfc/lpfc_sli.c
-+++ b/drivers/scsi/lpfc/lpfc_sli.c
-@@ -2271,6 +2271,8 @@ lpfc_sli_def_mbox_cmpl(struct lpfc_hba *phba, LPFC_MBOXQ_t *pmb)
- 	    !pmb->u.mb.mbxStatus) {
- 		rpi = pmb->u.mb.un.varWords[0];
- 		vpi = pmb->u.mb.un.varRegLogin.vpi;
-+		if (phba->sli_rev == LPFC_SLI_REV4)
-+			vpi -= phba->sli4_hba.max_cfg_param.vpi_base;
- 		lpfc_unreg_login(phba, vpi, rpi, pmb);
- 		pmb->vport = vport;
- 		pmb->mbox_cmpl = lpfc_sli_def_mbox_cmpl;
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index aecb563a2b4e3..9589015234693 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2010,7 +2010,7 @@ static void __iscsi_unbind_session(struct work_struct *work)
+ 	if (session->target_id == ISCSI_MAX_TARGET) {
+ 		spin_unlock_irqrestore(&session->lock, flags);
+ 		mutex_unlock(&ihost->mutex);
+-		return;
++		goto unbind_session_exit;
+ 	}
+ 
+ 	target_id = session->target_id;
+@@ -2022,6 +2022,8 @@ static void __iscsi_unbind_session(struct work_struct *work)
+ 		ida_simple_remove(&iscsi_sess_ida, target_id);
+ 
+ 	scsi_remove_target(&session->dev);
++
++unbind_session_exit:
+ 	iscsi_session_event(session, ISCSI_KEVENT_UNBIND_SESSION);
+ 	ISCSI_DBG_TRANS_SESSION(session, "Completed target removal\n");
+ }
 -- 
 2.20.1
 
