@@ -2,52 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C501AE9BC
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 06:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 850771AEA35
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 08:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725914AbgDREJk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 Apr 2020 00:09:40 -0400
-Received: from baliza.dreformarra.com ([134.73.232.212]:3346 "HELO
-        elitetorrent1.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with SMTP id S1725862AbgDREJk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Apr 2020 00:09:40 -0400
-Received: from unknown (57.211.134.16)
-        by rly04.hottestmile.com with SMTP; Sat, 18 Apr 2020 09:57:49 +0600
-Received: from mailout.endmonthnow.com ([Sat, 18 Apr 2020 09:39:28 +0600])
-        by mxs.perenter.com with LOCAL; Sat, 18 Apr 2020 09:39:28 +0600
-Received: from qrx.quickslick.com [169.213.144.146] by smtp.mixedthings.net with ESMTP; Sat, 18 Apr 2020 09:35:35 +0600
-Received: from [54.1.148.92] by rly04.hottestmile.com with SMTP; Sat, 18 Apr 2020 09:35:25 +0600
-Received: from [169.243.157.15] by qrx.quickslick.com with SMTP; Sat, 18 Apr 2020 09:23:26 +0600
-Message-ID: <73692679.3287C729@elitetorrent1.com>
-Date:   Sat, 18 Apr 2020 09:17:03 +0600
-From:   "elitetorrent1.com" <info@elitetorrent1.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6) Gecko/20050317 Thunderbird/1.0.2
-X-Accept-Language: en-us
+        id S1725983AbgDRGjk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 Apr 2020 02:39:40 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:2405 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725856AbgDRGjk (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 18 Apr 2020 02:39:40 -0400
+Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id E465CA996F4E359CCD46;
+        Sat, 18 Apr 2020 14:39:36 +0800 (CST)
+Received: from huawei.com (10.175.124.28) by DGGEMS408-HUB.china.huawei.com
+ (10.3.19.208) with Microsoft SMTP Server id 14.3.487.0; Sat, 18 Apr 2020
+ 14:39:27 +0800
+From:   Jason Yan <yanaijie@huawei.com>
+To:     <anil.gurumurthy@qlogic.com>, <sudarsana.kalluru@qlogic.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <tglx@linutronix.de>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Jason Yan <yanaijie@huawei.com>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH] scsi: bfa: remove unneeded semicolon in bfa_fcs_lport_ns_sm_online()
+Date:   Sat, 18 Apr 2020 15:05:53 +0800
+Message-ID: <20200418070553.11262-1-yanaijie@huawei.com>
+X-Mailer: git-send-email 2.21.1
 MIME-Version: 1.0
-To:     <linux-scsi@vger.kernel.org>, <linux-smp@vger.kernel.org>
-Subject: Download latest movies from elitetorrent1.com
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.28]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Fix the following coccicheck warning:
 
-While sitting home during the lock out, why not watch some nice movies. 
+drivers/scsi/bfa/bfa_fcs_lport.c:4361:3-4: Unneeded semicolon
 
-All for free, makes sense?
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Jason Yan <yanaijie@huawei.com>
+---
+ drivers/scsi/bfa/bfa_fcs_lport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-visit us now
-https://elitetorrent1.com/
-
-
-
-
-
-Unsubscribe from our database here
-https://forms.icann.org/en/resources/compliance/complaints/registrars/stand
-ards-complaint-form
-
+diff --git a/drivers/scsi/bfa/bfa_fcs_lport.c b/drivers/scsi/bfa/bfa_fcs_lport.c
+index e09bf0729deb..297a77f5806c 100644
+--- a/drivers/scsi/bfa/bfa_fcs_lport.c
++++ b/drivers/scsi/bfa/bfa_fcs_lport.c
+@@ -4358,7 +4358,7 @@ bfa_fcs_lport_ns_sm_online(struct bfa_fcs_lport_ns_s *ns,
+ 			bfa_sm_set_state(ns,
+ 				bfa_fcs_lport_ns_sm_sending_gid_ft);
+ 			bfa_fcs_lport_ns_send_gid_ft(ns, NULL);
+-		};
++		}
+ 		break;
+ 
+ 	default:
+-- 
+2.21.1
 
