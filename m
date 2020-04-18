@@ -2,100 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4CD81AEFC4
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 16:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE2D1AF1D6
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 17:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728890AbgDROor (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 Apr 2020 10:44:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56672 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728122AbgDROop (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 18 Apr 2020 10:44:45 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4CE9322272;
-        Sat, 18 Apr 2020 14:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587221085;
-        bh=J/Vduuc6K4oG5QaPbPv+hZlHI7uJ73AU87b85d0RVSg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1r0mxCMixgyag5T/lkldo6N+PdebxCsVYHvonmOuzboWHEzwguVrgH7ptkW7ejDYZ
-         +vidBPyrk1ysKTA9xJP7N1PFydwkp10v1WF5+BgmYElSUqCN1gSv7yGxO8CX/ZyIQS
-         v/jqKRdvv9ciEustcsoD4gbvgIwu8cI7DzB3spks=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wu Bo <wubo40@huawei.com>, Lee Duncan <lduncan@suse.com>,
+        id S1726738AbgDRP4x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 Apr 2020 11:56:53 -0400
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:56012 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725879AbgDRP4w (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Apr 2020 11:56:52 -0400
+Received: by mail-pj1-f65.google.com with SMTP id a32so2519421pje.5;
+        Sat, 18 Apr 2020 08:56:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=HnN+4R9VnGvVtFRaSn9immSfu526GuFnV34NPuc3GJ4=;
+        b=FgYy+wT1Ser6GDI8gBVjfFmegC/sMorPV9TSU0pIowGot5Ct+OjQ6LbWxK8K0EMjwY
+         Vvy7yqyqh8CrPruPezePLxC64VJGwDm9JPJp2aWVorcfKENUM32p0+Q219BnwG7nxDSD
+         YfnkQySlxHdcvrC3IYvolq2SxhfN5RQnara3I10/FUIDvubBqviEDe9s0CszcsnhvZ0K
+         FA5yO/b4AM6WqDCurCRON8crDbaQgJ1Sebv3ow/2FRoHvGksoOmIW4GjuSnmgkEOMgB2
+         jOaCLnilHAzF/v1ZVyn9hjYEohKg4k+vV6Q8OU9pV2SGwZi8peVT1OqLHXFi8W0GdsOf
+         rl9A==
+X-Gm-Message-State: AGi0PuYSSJn99JxwcE5P8VU0msbnveSn6+Z0BpxkX/x/zWAqTqSuj2rV
+        9+OnygSVTGTQ/x6zgfishqw=
+X-Google-Smtp-Source: APiQypJQm7KDxqeoXzsUCOSRwsfZZCKF62wDEpEX9w3v38O0ZeIERlSVUTpFH4OkBtpVHSsww5t6fg==
+X-Received: by 2002:a17:902:b418:: with SMTP id x24mr585768plr.260.1587225411195;
+        Sat, 18 Apr 2020 08:56:51 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:551:c132:d476:f445? ([2601:647:4000:d7:551:c132:d476:f445])
+        by smtp.gmail.com with ESMTPSA id 23sm7632557pjb.11.2020.04.18.08.56.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Apr 2020 08:56:50 -0700 (PDT)
+Subject: Re: [PATCH v7 00/11] Introduce Zone Append for writing to zoned block
+ devices
+To:     Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Keith Busch <kbusch@kernel.org>,
+        "linux-scsi @ vger . kernel . org" <linux-scsi@vger.kernel.org>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 07/19] scsi: iscsi: Report unbind session event when the target has been removed
-Date:   Sat, 18 Apr 2020 10:44:24 -0400
-Message-Id: <20200418144436.10818-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200418144436.10818-1-sashal@kernel.org>
-References: <20200418144436.10818-1-sashal@kernel.org>
+        "linux-fsdevel @ vger . kernel . org" <linux-fsdevel@vger.kernel.org>,
+        Daniel Wagner <dwagner@suse.de>
+References: <20200417121536.5393-1-johannes.thumshirn@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <afefece2-3016-8b58-fda4-1fbd7fcac75c@acm.org>
+Date:   Sat, 18 Apr 2020 08:56:48 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200417121536.5393-1-johannes.thumshirn@wdc.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Wu Bo <wubo40@huawei.com>
+On 2020-04-17 05:15, Johannes Thumshirn wrote:
+> In order to reduce memory consumption, the only cached item is the offset
+> of the write pointer from the start of the zone, everything else can be
+> calculated. On an example drive with 52156 zones, the additional memory
+> consumption of the cache is thus 52156 * 4 = 208624 Bytes or 51 4k Byte
+> pages. The performance impact is neglectable for a spinning drive.
 
-[ Upstream commit 13e60d3ba287d96eeaf1deaadba51f71578119a3 ]
+What will happen if e.g. syzkaller mixes write() system calls with SG_IO
+writes? Can that cause a mismatch between the cached write pointer and
+the write pointer maintained by the drive? If so, should SG_IO perhaps
+be disallowed if the write pointer is cached?
 
-If the daemon is restarted or crashes while logging out of a session, the
-unbind session event sent by the kernel is not processed and is lost.  When
-the daemon starts again, the session can't be unbound because the daemon is
-waiting for the event message. However, the kernel has already logged out
-and the event will not be resent.
+Thanks,
 
-When iscsid restart is complete, logout session reports error:
-
-Logging out of session [sid: 6, target: iqn.xxxxx, portal: xx.xx.xx.xx,3260]
-iscsiadm: Could not logout of [sid: 6, target: iscsiadm -m node iqn.xxxxx, portal: xx.xx.xx.xx,3260].
-iscsiadm: initiator reported error (9 - internal error)
-iscsiadm: Could not logout of all requested sessions
-
-Make sure the unbind event is emitted.
-
-[mkp: commit desc and applied by hand since patch was mangled]
-
-Link: https://lore.kernel.org/r/4eab1771-2cb3-8e79-b31c-923652340e99@huawei.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Wu Bo <wubo40@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/scsi_transport_iscsi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 20cf01d6ded7e..de10b461ec7ef 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -2014,7 +2014,7 @@ static void __iscsi_unbind_session(struct work_struct *work)
- 	if (session->target_id == ISCSI_MAX_TARGET) {
- 		spin_unlock_irqrestore(&session->lock, flags);
- 		mutex_unlock(&ihost->mutex);
--		return;
-+		goto unbind_session_exit;
- 	}
- 
- 	target_id = session->target_id;
-@@ -2026,6 +2026,8 @@ static void __iscsi_unbind_session(struct work_struct *work)
- 		ida_simple_remove(&iscsi_sess_ida, target_id);
- 
- 	scsi_remove_target(&session->dev);
-+
-+unbind_session_exit:
- 	iscsi_session_event(session, ISCSI_KEVENT_UNBIND_SESSION);
- 	ISCSI_DBG_TRANS_SESSION(session, "Completed target removal\n");
- }
--- 
-2.20.1
-
+Bart.
