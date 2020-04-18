@@ -2,54 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A93621AF51B
-	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 23:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58881AF538
+	for <lists+linux-scsi@lfdr.de>; Sat, 18 Apr 2020 23:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728155AbgDRVPY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 18 Apr 2020 17:15:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41326 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726459AbgDRVPV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 18 Apr 2020 17:15:21 -0400
-Subject: Re: [GIT PULL] SCSI fixes for 5.7-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587244521;
-        bh=xIaK/BViQ7a2I1TjAuY+cso2dtWt3+gb9K0xVBcET68=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=UvGvC1GsPNdBc+rt4zYxKwqhkNunGKAkQNlSh0hIsprIoOGZfGCzZhGfw6zMThGFL
-         HZcFMLdxFjuVjswIwAkqdPw78tUPTM3HY2+FN+tkvm7YLaEI3ekiqiwQou0hqe3GTm
-         Dxss3LQvcmbL2B2OyMDDhYtt4m+zXXsVFrp9UmHI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1587240636.7897.11.camel@HansenPartnership.com>
-References: <1587240636.7897.11.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1587240636.7897.11.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: 849f8583e955dbe3a1806e03ecacd5e71cce0a08
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 50cc09c18985eacbbd666acfd7be2391394733f5
-Message-Id: <158724452141.32136.9772790566639255244.pr-tracker-bot@kernel.org>
-Date:   Sat, 18 Apr 2020 21:15:21 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1728097AbgDRVpj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 18 Apr 2020 17:45:39 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:38158 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726734AbgDRVpi (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 18 Apr 2020 17:45:38 -0400
+Received: by mail-pf1-f195.google.com with SMTP id y25so2989933pfn.5;
+        Sat, 18 Apr 2020 14:45:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2AAPHCGhMy5VItzDoJpxjkkLgCbtnvq0NCPyMd1E3BM=;
+        b=tb9w/aQcuIm+0H/4IB8P1JfP8dzvcMYzC2nTShSWZbbymfI5hwqylHw3zUyz7hMOU9
+         BhDRRZxAW3DiYaC0Mv/77BqJTDOCHg1Nbdyznm70qb1w0G/zGJb16c/jdb0qXp32BhU8
+         sEMPVuN2Rr/bGMCpTHVqBAAjdyhnDfQ05AO0TDqRUA87sJ5tYvekuonYc3aa93Qo5ktb
+         8IWry/hGxr/++//XND9hisg75fnNBZn9TCwjy5JLO/G3pG0Eh+vq3Pmq4VIo817x0E/R
+         NeJaJeGxrADRAIrcc03aWXFC3XfHSiL/MkSjzyiAUYSCBka1LFHSz4Dhrj78moVEqELg
+         Kjfw==
+X-Gm-Message-State: AGi0PubeOUT9PDcKto4lxHx4CMMyxd+q5x1GXfPdvMIE0nsPUGMLS6e9
+        07nfeQn89axrEnS5wMgwdCY=
+X-Google-Smtp-Source: APiQypLlj3kmCKoHewkm1Hz+20vdn1A4jy5H9lZfMxh2Nxs40ZEubwdTcclJQ0Z2AlahHID9agkJEg==
+X-Received: by 2002:aa7:9a52:: with SMTP id x18mr9614111pfj.139.1587246336719;
+        Sat, 18 Apr 2020 14:45:36 -0700 (PDT)
+Received: from [100.124.15.238] ([104.129.198.228])
+        by smtp.gmail.com with ESMTPSA id i73sm13635656pfe.80.2020.04.18.14.45.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Apr 2020 14:45:35 -0700 (PDT)
+Subject: Re: [PATCH v7 11/11] zonefs: use REQ_OP_ZONE_APPEND for sync DIO
+To:     Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Keith Busch <kbusch@kernel.org>,
+        "linux-scsi @ vger . kernel . org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-fsdevel @ vger . kernel . org" <linux-fsdevel@vger.kernel.org>,
+        Daniel Wagner <dwagner@suse.de>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>
+References: <20200417121536.5393-1-johannes.thumshirn@wdc.com>
+ <20200417121536.5393-12-johannes.thumshirn@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <8d7c021f-d518-b6e4-7308-daaf9a1c7992@acm.org>
+Date:   Sat, 18 Apr 2020 14:45:32 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20200417121536.5393-12-johannes.thumshirn@wdc.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Sat, 18 Apr 2020 13:10:36 -0700:
+On 4/17/20 5:15 AM, Johannes Thumshirn wrote:
+> Synchronous direct I/O to a sequential write only zone can be issued using
+> the new REQ_OP_ZONE_APPEND request operation. As dispatching multiple
+> BIOs can potentially result in reordering, we cannot support asynchronous
+> IO via this interface.
+> 
+> We also can only dispatch up to queue_max_zone_append_sectors() via the
+> new zone-append method and have to return a short write back to user-space
+> in case an IO larger than queue_max_zone_append_sectors() has been issued.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+Is this patch the only patch that adds a user space interface through 
+which REQ_OP_ZONE_APPEND operations can be submitted? Has it been 
+considered to make it possible to submit REQ_OP_ZONE_APPEND operations 
+through the asynchronous I/O mechanism?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/50cc09c18985eacbbd666acfd7be2391394733f5
+Thanks,
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Bart.
