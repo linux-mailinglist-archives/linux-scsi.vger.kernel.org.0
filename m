@@ -2,84 +2,82 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE291AFC42
-	for <lists+linux-scsi@lfdr.de>; Sun, 19 Apr 2020 18:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCA91AFCF2
+	for <lists+linux-scsi@lfdr.de>; Sun, 19 Apr 2020 20:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726211AbgDSQ5p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 19 Apr 2020 12:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48258 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725970AbgDSQ5p (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 19 Apr 2020 12:57:45 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83F1C061A0C
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Apr 2020 09:57:44 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id w18so3094177qvs.3
-        for <linux-scsi@vger.kernel.org>; Sun, 19 Apr 2020 09:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=MqOMeOfh/48FsVSsyMgeXqp70KgEB5yGLGhrWomD/KA=;
-        b=MsizYA8Za5SMWP8gNbgy40ym+b1RJqGkt+emUV0RkeSH1auRTnzuSmww8BZaoEOPIc
-         5vc+SOTN9lLQdJvfAbuefXyxBujGj+6EwhySfcMg08vMrkfHL75Qh6wfzjcJC0eyDoA5
-         3Ca4aMBlev8q4C9eGNmvNNN+B+IixJCL5GDEALThkOk+4Qp7NXdGLg8a39qHddVKKfGU
-         mYN9/syjezMOt455Bx94f53qED+A9Md/NjUhSZ53ZVT1ie7/Li2rgHlVfveFGfKFOGYU
-         vPMOeyAG0n/y14EnEpUHJTcyhcA2XSkO9DJDhrIGEWe8y8BES3w6dtU2tDacD+djeVGJ
-         QclA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=MqOMeOfh/48FsVSsyMgeXqp70KgEB5yGLGhrWomD/KA=;
-        b=hJ52G6Mfjprzo/Nf4F1v6kpG9zpKyeWNgelfIvFkvqvduZdxz7bSNGCz32sYp0XkyO
-         H02KIMfGSOJhSti0nyrWfvHr09X2QFGbjwR/PdS2M3fr/QA3sCbXIYemv2+iNMqEKllO
-         7lCK8agg4jtvMFU0JASCvOaADbYbePde8H06NTO7pzBxTcYbn+t5URWZIM+xS113xucc
-         3RoQ+V04t706UGSESrJBqLUvP8NneqvJaTi+x6Zck8V+lfga1SYQKWxiNie7a/AmNkwj
-         Wsum82bXwYA0QvFzMJb5TKZIAxqLM/9er/SpRWuTpFLsl90kKg0iooKGFCmn7jb3eG2p
-         Pfqg==
-X-Gm-Message-State: AGi0PuZMqudi36o4gLgx12kbV1OKaorCa0aXX9X99LnkBZvSDYOY0qK8
-        Od4iw56ZzmISu/zQSkxCPWzYCmHWCEqrSNQsVg==
-X-Google-Smtp-Source: APiQypJb8pjRXI6qk4G4/CkQsJN6y4Iv7Vx5DvbQsyHlRSGKF/7j9f8nX8O1uUSZo3xaIwqXhmyEySJvKyhKUAuUEJQ=
-X-Received: by 2002:a05:6214:7e1:: with SMTP id bp1mr11332888qvb.208.1587315463991;
- Sun, 19 Apr 2020 09:57:43 -0700 (PDT)
+        id S1726515AbgDSSBv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 19 Apr 2020 14:01:51 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:35032 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725793AbgDSSBu (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 19 Apr 2020 14:01:50 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id D1619204164;
+        Sun, 19 Apr 2020 20:01:47 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id CxqvCaVlaS1L; Sun, 19 Apr 2020 20:01:41 +0200 (CEST)
+Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 3C687204150;
+        Sun, 19 Apr 2020 20:01:39 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH v4 06/14] scsi_debug: implement pre-fetch commands
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, jejb@linux.vnet.ibm.com, hare@suse.de,
+        Damien.LeMoal@wdc.com
+References: <20200225062351.21267-1-dgilbert@interlog.com>
+ <20200225062351.21267-7-dgilbert@interlog.com> <yq1eesrvvrk.fsf@oracle.com>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <045764e7-277c-d81c-9e73-dc9fa9ab22b5@interlog.com>
+Date:   Sun, 19 Apr 2020 14:01:37 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Received: by 2002:a0c:cb87:0:0:0:0:0 with HTTP; Sun, 19 Apr 2020 09:57:42
- -0700 (PDT)
-Reply-To: isaacckwesii@gmail.com
-From:   Mrs Rebecca <thomsonnana1@gmail.com>
-Date:   Sun, 19 Apr 2020 09:57:42 -0700
-Message-ID: <CAM3E=Mf0Nfh3=gxAZv3UP=j33Fx7TwxEOUVnrfkg8AssXFmSBA@mail.gmail.com>
-Subject: Yes
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <yq1eesrvvrk.fsf@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
+On 2020-04-13 6:57 p.m., Martin K. Petersen wrote:
+> 
+> Doug,
+> 
+>> Many disks implement the SCSI PRE-FETCH commands. One use case might
+>> be a disk-to-disk compare, say between disks A and B.  Then this
+>> sequence of commands might be used: PRE-FETCH(from B, IMMED),
+>> READ(from A), VERIFY (BYTCHK=1 on B with data returned from READ). The
+>> PRE-FETCH (which returns quickly due to the IMMED) fetches the data
+>> from the media into B's cache which should speed the trailing VERIFY
+>> command.  The next chunk of the compare might be done in parallel,
+>> with A and B reversed.
+> 
+> Minor nit: I agree with the code and the use case. But the commit
+> description should reflect what the code actually does (not much in the
+> absence of cache, etc.)
+
+On reflection, there is no reason why the implementation of PRE-FETCH
+for a scsi_debug ramdisk can't do what it implies. IOWs get those blocks
+into (say) the machine's L3 cache. This is to speed a following
+VERIFY(BYTCHK=1) [or NVMe Compare ***] that will use those blocks. The
+question is, how?
+
+I have added this to resp_pre_fetch():
+    memcpm(ramdisk_ptr, ramdisk_ptr, num_blks*blk_sz);
+
+Will that be optimized out? If so, is there a better/faster way to
+encourage a machine to populate its cache?
+
+Doug Gilbert
 
 
--- 
-Writing from Hospital
+*** I have a recent WD SN550 SSD whose sequential read speed (after
+     data (zeros) written) is around 1200 MB/sec. Its read speed _before_
+     data was written was around 25 KB/sec !! And its compare speed
+     (with random data written) is a very disappointing 25 MB/sec.
 
-Beloved in Christ.
 
-I am  Mrs. Mrs.Rebecca Thomson undergoing medical treatment in hospital.
-Recently, My Doctor told me that I may not last for the next seven
-months due to cancer problem, though what disturbs me most is my
-stroke and deaf problem. Haven known my condition I decided to Serve
-God with our wealth.I'm a widow and a servant of the Lord for the past
-38 years
-
-When my late husband was alive we kept the sum of ($ 800,000 U.S.
-Dollars)I have decided to give out this fund to a church or an
-individual or better still a God fearing person who will utilize this
-fund the way I am going to instruct herein.I want an individual that
-will use this fund to provide succor to the poor, an indigent person
-to help orphanages, widows around him or her and Schools etc.
-
-Hope to receive your reply soon.
-Remain Blessed.
-Mrs.Rebecca Thomson.
