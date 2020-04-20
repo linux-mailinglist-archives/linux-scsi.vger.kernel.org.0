@@ -2,76 +2,71 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D891B11AA
-	for <lists+linux-scsi@lfdr.de>; Mon, 20 Apr 2020 18:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01EED1B1356
+	for <lists+linux-scsi@lfdr.de>; Mon, 20 Apr 2020 19:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726482AbgDTQg0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 20 Apr 2020 12:36:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726532AbgDTQgZ (ORCPT
+        id S1727001AbgDTRkv (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 20 Apr 2020 13:40:51 -0400
+Received: from mail1.bemta25.messagelabs.com ([195.245.230.5]:46892 "EHLO
+        mail1.bemta25.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726294AbgDTRku (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:36:25 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D09C025492
-        for <linux-scsi@vger.kernel.org>; Mon, 20 Apr 2020 09:36:25 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id s10so9682870iln.11
-        for <linux-scsi@vger.kernel.org>; Mon, 20 Apr 2020 09:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HFUgOWKf4w0+Py7DhiUyoQr4H+s4BKeAe5WdiAFlPfs=;
-        b=VHLDWqIoEkcCixWyPK//br6mkLWACHyOLTnwLSW/hdEJbBu9OFINE2gwgj/AM6Dfk2
-         zsrqUkeJ7zeFiQco3kYWvIe3ppxTjKTba9QKxzfesh3GyJaPQfep3iKZxs8vRFTcU+7O
-         scdKaqHOw/cJ43JNuFWjxqQ5niVFhQXknBt+70QNJ2W4VCekk32r3MKToU+2FFdhlPTN
-         73u/W5b0Muf813GvMGSm1S2tE+PpueqXvMMY+MhUY5e7WQOO99LfzINdMgKxuUk/POA6
-         BfpQupW8cu/TEThz3BTGcbaWfGtKR6agESCM/O3F+LRPaLuvS1mU7lCie/jLdnlncvyY
-         C+0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=HFUgOWKf4w0+Py7DhiUyoQr4H+s4BKeAe5WdiAFlPfs=;
-        b=DzDLkmT1DWmC+qBoHvn5rWZZq7POixaAg45ueWW5fQFpqHs+VFkTbJR9vfBrNSGXtQ
-         lawY598YEQv95XIc8VkGN1OTZGEYSyp7JbjX+PA8NKE3LvHMOLSxC9er/rIAoCzikt0k
-         W8C2OGhLe80QePeYfw5Tm52PQUanNrBsHgFKpUQk5QT7vUS+oDuOXdqlxy0x3HfhFZNg
-         ONFyc0Tbt5E9COsiI9xPvA1l4TqApL0gAmzr3boHus+NraddEy50M9cdxFVvUDmFF34N
-         RfuSr1qdAEEqwAo0WrlrR3ABh9AkUelt2fQBvwgOjjS+EANywbFShQfsNmhuQ+2vPIHO
-         Mmfg==
-X-Gm-Message-State: AGi0PuYZyXemhumuQxEJ7Mod6KvS4RJPYI6ezTZn0IMavrloeYaFHGhf
-        l1Yc7NKsBGlO6/Bkf818WHojlg==
-X-Google-Smtp-Source: APiQypJWxZK3Z97CRGtXAd/5AvKBg6SWr+l25Skb33HnkR4R+0ebhHdkEhSj8wdnSlQaZ24bKOuu5Q==
-X-Received: by 2002:a92:ba51:: with SMTP id o78mr16831897ili.290.1587400583686;
-        Mon, 20 Apr 2020 09:36:23 -0700 (PDT)
-Received: from [192.168.1.159] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id f1sm423114iog.46.2020.04.20.09.36.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Apr 2020 09:36:23 -0700 (PDT)
-Subject: Re: [PATCH v5 0/4] blk-mq: Fix two causes of IO stalls found in
- reboot testing
-To:     Douglas Anderson <dianders@chromium.org>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Gwendal Grignou <gwendal@chromium.org>,
-        sqazi@google.com, groeck@chromium.org,
-        Ming Lei <ming.lei@redhat.com>, linux-block@vger.kernel.org,
-        paolo.valente@linaro.org,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        John Garry <john.garry@huawei.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>, linux-kernel@vger.kernel.org
-References: <20200420162454.48679-1-dianders@chromium.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <3f9a5e9d-4485-aa46-be31-f561ba5363c8@kernel.dk>
-Date:   Mon, 20 Apr 2020 10:36:22 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 20 Apr 2020 13:40:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
+        s=200619tsfj; t=1587404448; i=@ts.fujitsu.com;
+        bh=OuSpmpLx2M+buYaUsY9Us0sNH0iuHhN4pO/gMTPW3ao=;
+        h=Subject:To:References:From:Message-ID:Date:MIME-Version:
+         In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        b=KO8UWit8zRjzeaGUFO6HVrSR5tJWwa6NUI5cUopsDS1Lv+kPKGRLOeo9YDLPJRoLL
+         3M48QaUNChMwg4tT5oi8DenSeLfesxz6yFyr0B1VqhLagYQd0bovlatLojd1XG2lM1
+         FeColh2WdwnypbyxPJpcHfo6xgUMLHiFfOSRxMuiSB+OSBSEGN96FT4Gy6JqWH0Px7
+         UDvIVFBDZ2ZuA6Nho1u86e6bsYxL1WjAKDPZznlqUogU4iro621h9JjDxKOZCgPkZc
+         yU5JdbR3dEc+F2O0NSYDP4+PZ+Q/NgL9hnrJhD/krYW+j6KQQVpt+gpV1MYx3L1zmV
+         /2pTr8yCCBcsw==
+Received: from [100.112.195.143] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-5.bemta.az-a.eu-west-1.aws.symcld.net id 5D/F7-46089-F9EDD9E5; Mon, 20 Apr 2020 17:40:47 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRWlGSWpSXmKPExsViZ8MxVXf+vbl
+  xBj1z1C1WLHjPaNF9fQebxfLj/5gs1h/ZwGjRtvoMo0Xr0rdMDmweO2fdZfe4v/0Ik8fHp7dY
+  PN7vu8rm8XmTXABrFGtmXlJ+RQJrxsH3r5gLzrBWLNq5hbWB8QBLFyMXh5DALEaJiQ0fmLoYO
+  TmEBdwlpn7fwwaSEBHYwShxZOUXFpCEkECKxJPO12wgNpuAgcSKSffB4rwCjhIvHm9kB7FZBF
+  QlVj6+BhYXFQiXeLHlDytEjaDEyZlPwOKcAhYS27b/BatnFjCTmLf5ITOELS5x68l8JghbXmL
+  72znMExh5ZyFpn4WkZRaSlllIWhYwsqxitEgqykzPKMlNzMzRNTQw0DU0NNI1tDTSNTI11Uus
+  0k3USy3VLU8tLtE11EssL9YrrsxNzknRy0st2cQIDPSUggP/dzCeWPte7xCjJAeTkihvX8rcO
+  CG+pPyUyozE4oz4otKc1OJDjDIcHEoSvBl3gXKCRanpqRVpmTnAqINJS3DwKInwvgRJ8xYXJO
+  YWZ6ZDpE4xKkqJ82qDJARAEhmleXBtsEi/xCgrJczLyMDAIMRTkFqUm1mCKv+KUZyDUUmYtwp
+  kCk9mXgnc9FdAi5mAFuebzgZZXJKIkJJqYFp1YG+hgUCy4Lymk/fMrFdqze6drSyqxrOo7OLX
+  6yuTpTV+v1bg/ublLy70nIPn1V09I+VHWh0neOeddbib72mXsemrfsyUB/NMWvIX2jfqJOgtf
+  q9XdavqUK293FHLfhXn8tXVvA/MTD48uGp5ysIpImXTtNw7U7+mdMxVzzkYU+HanxDu49ch/H
+  qSz9c1bQtcWs5cDviTHPxGbVZU0forNRNV7Bt+pm4MX/zx1QyJvG8qPWum/vrbu4/1rl3GAY0
+  cyxKlJP89ro6iogbrFY0v1P3KXvSodOe/y6ZT9H0UwlmjOH7+PPLS4W4Je/faz9Jv+eJd1V+v
+  udvKYc9f9T5kkY5yzx2Zhdo8lUHflFiKMxINtZiLihMBwQk99m8DAAA=
+X-Env-Sender: bstroesser@ts.fujitsu.com
+X-Msg-Ref: server-13.tower-265.messagelabs.com!1587404447!466355!1
+X-Originating-IP: [62.60.8.149]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.50.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 4084 invoked from network); 20 Apr 2020 17:40:47 -0000
+Received: from unknown (HELO mailhost2.uk.fujitsu.com) (62.60.8.149)
+  by server-13.tower-265.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 20 Apr 2020 17:40:47 -0000
+Received: from [172.17.80.59] ([172.17.80.59])
+        by mailhost2.uk.fujitsu.com (8.14.5/8.14.5) with ESMTP id 03KHe4cp024644;
+        Mon, 20 Apr 2020 18:40:25 +0100
+Subject: Re: [RFC PATCH 2/5] target: add sysfs session helper functions
+To:     Mike Christie <mchristi@redhat.com>, jsmart2021@gmail.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, nab@linux-iscsi.org
+References: <20200414051514.7296-1-mchristi@redhat.com>
+ <20200414051514.7296-3-mchristi@redhat.com>
+From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Message-ID: <4416ba8f-5eae-9dfd-7e39-0f91d37d62e3@ts.fujitsu.com>
+Date:   Mon, 20 Apr 2020 19:39:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.1.0
 MIME-Version: 1.0
-In-Reply-To: <20200420162454.48679-1-dianders@chromium.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200414051514.7296-3-mchristi@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -79,112 +74,32 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/20/20 10:24 AM, Douglas Anderson wrote:
-> While doing reboot testing, I found that occasionally my device would
-> trigger the hung task detector.  Many tasks were stuck waiting for the
-> a blkdev mutex, but at least one task in the system was always sitting
-> waiting for IO to complete (and holding the blkdev mutex).  One
-> example of a task that was just waiting for its IO to complete on one
-> reboot:
-> 
->  udevd           D    0  2177    306 0x00400209
->  Call trace:
->   __switch_to+0x15c/0x17c
->   __schedule+0x6e0/0x928
->   schedule+0x8c/0xbc
->   schedule_timeout+0x9c/0xfc
->   io_schedule_timeout+0x24/0x48
->   do_wait_for_common+0xd0/0x160
->   wait_for_completion_io_timeout+0x54/0x74
->   blk_execute_rq+0x9c/0xd8
->   __scsi_execute+0x104/0x198
->   scsi_test_unit_ready+0xa0/0x154
->   sd_check_events+0xb4/0x164
->   disk_check_events+0x58/0x154
->   disk_clear_events+0x74/0x110
->   check_disk_change+0x28/0x6c
->   sd_open+0x5c/0x130
->   __blkdev_get+0x20c/0x3d4
->   blkdev_get+0x74/0x170
->   blkdev_open+0x94/0xa8
->   do_dentry_open+0x268/0x3a0
->   vfs_open+0x34/0x40
->   path_openat+0x39c/0xdf4
->   do_filp_open+0x90/0x10c
->   do_sys_open+0x150/0x3c8
->   ...
-> 
-> I've reproduced this on two systems: one boots from an internal UFS
-> disk and one from eMMC.  Each has a card reader attached via USB with
-> an SD card plugged in.  On the USB-attached SD card is a disk with 12
-> partitions (a Chrome OS test image), if it matters.  The system
-> doesn't do much with the USB disk other than probe it (it's plugged in
-> my system to help me recover).
-> 
-> From digging, I believe that there are two separate but related
-> issues.  Both issues relate to the SCSI code saying that there is no
-> budget.
-> 
-> I have done testing with only one or the other of the two patches in
-> this series and found that I could still encounter hung tasks if only
-> one of the two patches was applied.  This deserves a bit of
-> explanation.  To me, it's fairly obvious that the first fix wouldn't
-> fix the problems talked about in the second patch.  However, it's less
-> obvious why the second patch doesn't fix the problems in
-> blk_mq_dispatch_rq_list().  It turns out that it _almost_ does
-> (problems become much more rare), but I did manage to get a single
-> trace where the "kick" scheduled by the second patch happened really
-> quickly.  The scheduled kick then ran and found nothing to do.  This
-> happened in parallel to a task running in blk_mq_dispatch_rq_list()
-> which hadn't gotten around to splicing the list back into
-> hctx->dispatch.  This is why we need both fixes.
-> 
-> Most of my testing has been atop Chrome OS 5.4's kernel tree which
-> currently has v5.4.30 merged in.  The Chrome OS 5.4 tree also has a
-> patch by Salman Qazi, namely ("block: Limit number of items taken from
-> the I/O scheduler in one go").  Reverting that patch didn't make the
-> hung tasks go away, so I kept it in for most of my testing.
-> 
-> I have also done some testing on mainline Linux (most on what git
-> describe calls v5.6-rc7-227-gf3e69428b5e2) even without Salman's
-> patch.  I found that I could reproduce the problems there and that
-> traces looked about the same as I saw on the downstream branch.  These
-> patches were also confirmed to fix the problems on mainline.
-> 
-> Chrome OS is currently setup to use the BFQ scheduler and I found that
-> I couldn't reproduce the problems without BFQ.  As discussed in the
-> second patch this is believed to be because BFQ sometimes returns
-> "true" from has_work() but then NULL from dispatch_request().
-> 
-> I'll insert my usual caveat that I'm sending patches to code that I
-> know very little about.  If I'm making a total bozo patch here, please
-> help me figure out how I should fix the problems I found in a better
-> way.
-> 
-> If you want to see a total ridiculous amount of chatter where I
-> stumbled around a whole bunch trying to figure out what was wrong and
-> how to fix it, feel free to read <https://crbug.com/1061950>.  I
-> promise it will make your eyes glaze over right away if this cover
-> letter didn't already do that.  Specifically comment 79 in that bug
-> includes a link to my ugly prototype of making BFQ's has_work() more
-> exact (I only managed it by actually defining _both_ an exact and
-> inexact function to avoid circular locking problems when it was called
-> directly from blk_mq_hctx_has_pending()).  Comment 79 also has more
-> thoughts about alternatives considered.
-> 
-> I don't know if these fixes represent a regression of some sort or are
-> new.  As per above I could only reproduce with BFQ enabled which makes
-> it nearly impossible to go too far back with this.  I haven't listed
-> any "Fixes" tags here, but if someone felt it was appropriate to
-> backport this to some stable trees that seems like it'd be nice.
-> Presumably at least 5.4 stable would make sense.
-> 
-> Thanks to Salman Qazi, Paolo Valente, and Guenter Roeck who spent a
-> bunch of time helping me trawl through some of this code and reviewing
-> early versions of this patch.
 
-Applied, thanks.
 
--- 
-Jens Axboe
+On 04/14/20 07:15, Mike Christie wrote:
+> +static ssize_t session_acl_show(struct se_session *se_sess, char *page)
+> +{
+> +	struct se_node_acl *acl;
+> +	ssize_t len;
+> +
+> +	acl = se_sess->se_node_acl;
+> +	if (!acl)
+> +		return -ENOTCONN;
+> +
+> +	if (acl->dynamic_node_acl) {
+> +		page[0] = '\0';
+> +		len = 0;
+> +	} else {
+> +		len = snprintf(page, PAGE_SIZE, "%s\n", acl->initiatorname);
+> +	}
+> +
+> +	return len;
+> +}
+
+Would it be a good idea to provide more info about initiators using
+dynamic acl?
+
+For example the file could be named "initiatorname" instead of "acl" and
+always provide the initiatorname, while a boolean file "acl" could 
+return "Y" or "1" for explicit acls, but "N" or "0" for dynamic acls.
 
