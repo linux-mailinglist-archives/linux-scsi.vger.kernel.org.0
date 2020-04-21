@@ -2,53 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDD21B2872
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2020 15:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964201B2887
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2020 15:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728904AbgDUNvs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Apr 2020 09:51:48 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:38111 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728879AbgDUNvr (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Apr 2020 09:51:47 -0400
+        id S1729119AbgDUNws (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Apr 2020 09:52:48 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:53147 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726018AbgDUNwr (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 21 Apr 2020 09:52:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587477105;
+        s=mimecast20190719; t=1587477166;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IInilyB2ckeUfP1pJZsdQY8G2HWtqy1MvibEpjmv5kQ=;
-        b=KNC/ni2WYJIw8Kd0XOuWOF2dh4Wv0E367hQgJ1UUDo+00e+/UjZXUs6M9l9vV0rxPnxabE
-        KHA4qIAOhbokgfYNu5GraE3gk6E9VLkOHNcgnD/TtxQopPG+goAWxQjNynrcJbJXbwPcRt
-        keG31Kav8SytRk9xufhZWJiBy60TVSc=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-193-fK8L5JocNCSyPtO3mwxEIw-1; Tue, 21 Apr 2020 09:51:41 -0400
-X-MC-Unique: fK8L5JocNCSyPtO3mwxEIw-1
-Received: by mail-wr1-f72.google.com with SMTP id f15so7560314wrj.2
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Apr 2020 06:51:41 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ctzOqm9dtwbhRf44FvKp72RdNODJeokpu4mABLVWWLc=;
+        b=HfUMLZrTsjJZ5MTWakU6Ip/201mGT2WMl9QcFjlTe7A6HddnNMDK6nP8DbQiHilQZFLO7H
+        MSr0IMDYxDVsPl6FsG8MICACavx314Be1Z0M4Z4mTVXsAQOSCIbIvuQqXqCqpDp+m0khtM
+        MNs339MOGa196tWdeqdCnYlgi6Q5iow=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-411-cxI5wA78NOecVC8zStXncg-1; Tue, 21 Apr 2020 09:52:43 -0400
+X-MC-Unique: cxI5wA78NOecVC8zStXncg-1
+Received: by mail-wm1-f72.google.com with SMTP id b203so1392314wmd.6
+        for <linux-scsi@vger.kernel.org>; Tue, 21 Apr 2020 06:52:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IInilyB2ckeUfP1pJZsdQY8G2HWtqy1MvibEpjmv5kQ=;
-        b=qUZS39dl+7sEgKGlJT341IrKc9gYSEtM+d87v9LEcksdU0Jl3wr3noPsRRWTicmruj
-         Zps6ZIHdFG/2lJhbcecsX0FOYGFccWabtWVYFTDRDvjJcrDnUGKeV9AngGPhiSZ39s4R
-         BT6i3M7wA0myYttuTpbHDjIDS6e11Eg7gb6/2gNTB91n6GWqa7c3LZgeJq7e5sVWBp//
-         +t0Ixm6RRDpUaZZUJYVwbUPr31eVWe9EwZ9g4stAuBwhDVZ7zoycEJN4/h9uE2kZ9PlC
-         Ekmricc/umNOtqTeFiNWXFlbPK0q+vggWWHxANckYSrxkapVcnw+4/JqOHOuCsP5b2y/
-         nJNw==
-X-Gm-Message-State: AGi0PuaLOefpxYx9PzbwoymXqIYMb25aLJMZbnDXZl9fjh3AhQdCiL/X
-        TBqIl9sWShPbFO+qdvezVvFbZW9LRFmbfDfsAEx9YVxJvwM/0ps0Z5lWwsl7zXsvZPjMQf6AxID
-        FaPzVhQ6fGxGksEq04IFEoA==
-X-Received: by 2002:a1c:bd89:: with SMTP id n131mr4916139wmf.3.1587477100745;
-        Tue, 21 Apr 2020 06:51:40 -0700 (PDT)
-X-Google-Smtp-Source: APiQypL9ml34u2SXsT4cym73Fj9YcZ5gNZl/Vlb+iTik+1IYxflheOGQshudBA/kLdh/qIi+ct+15w==
-X-Received: by 2002:a1c:bd89:: with SMTP id n131mr4916110wmf.3.1587477100572;
-        Tue, 21 Apr 2020 06:51:40 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ctzOqm9dtwbhRf44FvKp72RdNODJeokpu4mABLVWWLc=;
+        b=HN35cKR7mvp9R60ir5cRj329xIi/H/mBOqsoYgdSrKe/hyU0jQm9vyD1tn3+EQ7l1u
+         nAxW+5WuDckwnZXFZ/sVV+5dpcYFc9KNG7/mv8SUgkz/pY4TAf1ckxHakGeEwArMKE3f
+         F1z/q3oJoIB3YGSWsCohnT9LJgLE38+vMZtx8DDiNshIGrdNZiKKvWfu9Kz8g1lKt1la
+         X+ukSiGqQqDBUgmn6WkXxxKLU/6MKIMHaRyOlCcFVy+qRjKPkhA2+ndHDPtm9FxSpyXt
+         fFU4ejx2FFfFkrokEgAuzs7o4a2IoHDS3m43z9Zy39ib4ms2klJeuWUZhkF+u18kntZZ
+         0gyQ==
+X-Gm-Message-State: AGi0PubS3oVYw7gCZP15XZ4bJg16c4Z+LLeEA7UZO6XaUS1zzM9Iktlb
+        tr8Il2iC0vtBCg6YrKnm9H88+iDAoVkewqKJ0hOk0N7AdHIwS+Hes9pTba8/jK63OQf6t8uhW+Z
+        YTBuuJPVDEHRz6FD3F1Xijg==
+X-Received: by 2002:adf:fd0a:: with SMTP id e10mr23759627wrr.160.1587477102566;
+        Tue, 21 Apr 2020 06:51:42 -0700 (PDT)
+X-Google-Smtp-Source: APiQypKYYb14rVpuN5IdJGjcztA4u7H/3dUDNtMGXdL7LsdIhh9n0qcoiv0NvYygrC3tIbBHwPH97A==
+X-Received: by 2002:adf:fd0a:: with SMTP id e10mr23759618wrr.160.1587477102414;
+        Tue, 21 Apr 2020 06:51:42 -0700 (PDT)
 Received: from localhost.localdomain.com ([194.230.155.194])
-        by smtp.gmail.com with ESMTPSA id a187sm3565830wmh.40.2020.04.21.06.51.38
+        by smtp.gmail.com with ESMTPSA id a187sm3565830wmh.40.2020.04.21.06.51.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2020 06:51:40 -0700 (PDT)
+        Tue, 21 Apr 2020 06:51:41 -0700 (PDT)
 From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
 To:     linux-fsdevel@vger.kernel.org
 Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -77,10 +79,12 @@ Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         linux-security-module@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
         Emanuele Giuseppe Esposito <eesposit@redhat.com>
-Subject: [PATCH v2 0/7] libfs: group and simplify linux fs code
-Date:   Tue, 21 Apr 2020 15:51:12 +0200
-Message-Id: <20200421135119.30007-1-eesposit@redhat.com>
+Subject: [PATCH v2 1/7] apparmor: just use vfs_kern_mount to make .null
+Date:   Tue, 21 Apr 2020 15:51:13 +0200
+Message-Id: <20200421135119.30007-2-eesposit@redhat.com>
 X-Mailer: git-send-email 2.25.2
+In-Reply-To: <20200421135119.30007-1-eesposit@redhat.com>
+References: <20200421135119.30007-1-eesposit@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -88,57 +92,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-libfs.c has many functions that are useful to implement dentry and inode
-operations, but not many at the filesystem level.  As a result, code to
-create files and inodes has a lot of duplication, to the point that
-tracefs has copied several hundred lines from debugfs.
+aa_mk_null_file is using simple_pin_fs/simple_release_fs with local
+variables as arguments, for what would amount to a simple
+vfs_kern_mount/mntput pair if everything was inlined.  Just use
+the normal filesystem API since the reference counting is not needed
+here (it is a local variable and always 0 on entry and on exit).
 
-The main two libfs.c functions for filesystems are simple_pin_fs and
-simple_release_fs, which hide a somewhat complicated locking sequence
-that is needed to serialize vfs_kern_mount and mntget.  In this series,
-my aim is to add functions that create dentries and inodes of various
-kinds (either anonymous inodes, or directory/file/symlink).  These
-functions take the code that was duplicated across debugfs and tracefs
-and move it to libfs.c.
-
-In order to limit the number of arguments to the new functions, the
-series first creates a data type that is passed to both
-simple_pin_fs/simple_release_fs and the new creation functions.  The new
-struct, introduced in patch 2, simply groups the "mount" and "count"
-arguments to simple_pin_fs and simple_release_fs.
-
-Patches 1-4 are preparations to introduce the new simple_fs struct and
-new functions that are useful in the remainder of the series.  Patch 5
-introduces the dentry and inode creation functions.  Patch 6-7 can then
-adopt them in debugfs and tracefs.
+There is no functional change intended.
 
 Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+---
+ security/apparmor/apparmorfs.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-v1->v2: rename simple_new_inode in new_inode_current_time,
-more detailed explanations, put all common code in fs/libfs.c
-
-Emanuele Giuseppe Esposito (7):
-  apparmor: just use vfs_kern_mount to make .null
-  libfs: wrap simple_pin_fs/simple_release_fs arguments in a struct
-  libfs: introduce new_inode_current_time
-  libfs: add alloc_anon_inode wrapper
-  libfs: add file creation functions
-  debugfs: switch to simplefs inode creation API
-  tracefs: switch to simplefs inode creation API
-
- drivers/gpu/drm/drm_drv.c       |  11 +-
- drivers/misc/cxl/api.c          |  13 +-
- drivers/scsi/cxlflash/ocxl_hw.c |  14 +-
- fs/binfmt_misc.c                |   9 +-
- fs/configfs/mount.c             |  10 +-
- fs/debugfs/inode.c              | 158 +++--------------
- fs/libfs.c                      | 299 ++++++++++++++++++++++++++++++--
- fs/tracefs/inode.c              |  96 ++--------
- include/linux/fs.h              |  31 +++-
- security/apparmor/apparmorfs.c  |  38 ++--
- security/inode.c                |  11 +-
- 11 files changed, 399 insertions(+), 291 deletions(-)
-
+diff --git a/security/apparmor/apparmorfs.c b/security/apparmor/apparmorfs.c
+index 280741fc0f5f..36f848734902 100644
+--- a/security/apparmor/apparmorfs.c
++++ b/security/apparmor/apparmorfs.c
+@@ -2525,14 +2525,15 @@ struct path aa_null;
+ 
+ static int aa_mk_null_file(struct dentry *parent)
+ {
+-	struct vfsmount *mount = NULL;
++	struct file_system_type *type = parent->d_sb->s_type;
++	struct vfsmount *mount;
+ 	struct dentry *dentry;
+ 	struct inode *inode;
+-	int count = 0;
+-	int error = simple_pin_fs(parent->d_sb->s_type, &mount, &count);
++	int error;
+ 
+-	if (error)
+-		return error;
++	mount = vfs_kern_mount(type, SB_KERNMOUNT, type->name, NULL);
++	if (IS_ERR(mount))
++		return PTR_ERR(mount);
+ 
+ 	inode_lock(d_inode(parent));
+ 	dentry = lookup_one_len(NULL_FILE_NAME, parent, strlen(NULL_FILE_NAME));
+@@ -2561,7 +2562,7 @@ static int aa_mk_null_file(struct dentry *parent)
+ 	dput(dentry);
+ out:
+ 	inode_unlock(d_inode(parent));
+-	simple_release_fs(&mount, &count);
++	mntput(mount);
+ 	return error;
+ }
+ 
 -- 
 2.25.2
 
