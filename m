@@ -2,154 +2,89 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 904C71B3143
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2020 22:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2081B3168
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2020 22:47:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbgDUUeF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Apr 2020 16:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbgDUUeF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Apr 2020 16:34:05 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F520C0610D5
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Apr 2020 13:34:03 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id t63so4848720wmt.3
-        for <linux-scsi@vger.kernel.org>; Tue, 21 Apr 2020 13:34:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=dMhy4XhiaOE9F6l2AbqQKjFrndmPnIE3rO6F1lB/E6g=;
-        b=B6gZ0zqQeraknsdm1bJ2y+IK0QjLXmUpJblAxn2FisGa3ca2aO4ZRLYthD7xL9tLr7
-         /alBIiqd66Gpz7f5A6dH8UVxcYtbwAYrU2FJG7UthfCtBK54S1EGzj5I3+zJ2roMEhsY
-         J0eQikvQx3DFPQMM6lf/TxUAuLp/Bvr73Qra8AWvL2S2j/uGkZV5vCH0YJG8v5uMUyj4
-         vvnMUXqwW5hiK8X2JzLhX4b5JA2P16N8yEc/BqCB7itC5M8k9s23yX5U1rj1iiAnHp9D
-         YHFn469QN0fKgJmpXsSynOe7JsLZT465sIu2YGUstQA3VaBgEATqYx3/Bx34QRWzVXqk
-         n0fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=dMhy4XhiaOE9F6l2AbqQKjFrndmPnIE3rO6F1lB/E6g=;
-        b=N3U1VzXcGLgJsq5XFW71GrmmhIHFl1IBshqDCw4XYCh+mAH3GnV7SwIoj9Lx+CXwSC
-         B1pyAMccvH2TM0Cu1lZLm8cCv7cs0qJgC6mFr4y6X42NyAkH5KFmiGwMUJhdjt3w2er6
-         6KoG9hSyB497s66vFKazpAOVaRf6fVYV6Vv8se2UZVeeMg4FsifJ0LcQCNJHPqsoWYb8
-         S7tG7NpmLSQ/Y0Di/h2gnjxQ8akNHN8IsN2seWmJZfWW2Pp2cVg95iEcMEPRu2p0YnqV
-         VCE0Ggi5Si7sWs3Ea+/AUw7KHzANrLOB4gWGFprItNT0XayBD3+UltWjnxPJ8I7Ssu1k
-         HEXA==
-X-Gm-Message-State: AGi0PuYsZ4ftLbgqQJb5lMN9R1vCgkDtlGQsYNl/6dAxXdqghnsrCohd
-        33fZw63BgepJka4dHG7J8JKn5Pi+
-X-Google-Smtp-Source: APiQypKZuhyRuIJ6jpjVGMoqKX4jIsuUwByhJdIk2mC4Rr9u7fe6pErdnUVFoDbg2luKX83Zn+tzVw==
-X-Received: by 2002:a1c:bb08:: with SMTP id l8mr7315015wmf.168.1587501241937;
-        Tue, 21 Apr 2020 13:34:01 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (ip68-5-146-102.oc.oc.cox.net. [68.5.146.102])
-        by smtp.gmail.com with ESMTPSA id m1sm5194205wro.64.2020.04.21.13.33.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 21 Apr 2020 13:34:01 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>
-Subject: [PATCH v2] lpfc: remove duplicate unloading checks
-Date:   Tue, 21 Apr 2020 13:33:54 -0700
-Message-Id: <20200421203354.49420-1-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.16.4
+        id S1726100AbgDUUq7 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Apr 2020 16:46:59 -0400
+Received: from mx2.suse.de ([195.135.220.15]:41884 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726024AbgDUUq6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 21 Apr 2020 16:46:58 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 0EEE6AE48;
+        Tue, 21 Apr 2020 20:46:55 +0000 (UTC)
+From:   mwilck@suse.com
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Arun Easi <aeasi@marvell.com>, Quinn Tran <qutran@marvell.com>
+Cc:     Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Bart Van Assche <Bart.VanAssche@sandisk.com>,
+        James Bottomley <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, Martin Wilck <mwilck@suse.com>
+Subject: [PATCH v4 0/2] scsi: qla2xxx: fixes for driver unloading
+Date:   Tue, 21 Apr 2020 22:46:19 +0200
+Message-Id: <20200421204621.19228-1-mwilck@suse.com>
+X-Mailer: git-send-email 2.26.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-During code reviews several instances of duplicate module unloading checks
-were found.
+From: Martin Wilck <mwilck@suse.com>
 
-Remove the duplicate checks.
+Hello Martin, Arun, Himanshu, all,
 
-Signed-off-by: James Smart <jsmart2021@gmail.com>
+here is v4 of the little series I first submitted on Nov 29, 2019.
+I dropped the more controversial part, hoping to get the actual fix
+for the issue merged.
 
----
-v2: reworked lpfc_els.c mod to keep check prior to locks
----
- drivers/scsi/lpfc/lpfc_els.c   | 10 ++--------
- drivers/scsi/lpfc/lpfc_nvme.c  |  5 -----
- drivers/scsi/lpfc/lpfc_nvmet.c | 11 -----------
- 3 files changed, 2 insertions(+), 24 deletions(-)
+Reviews welcome.
+Martin
 
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 80d1e661b0d4..565a21401660 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -7936,19 +7936,13 @@ lpfc_els_timeout_handler(struct lpfc_vport *vport)
- 	if (unlikely(!pring))
- 		return;
- 
--	if ((phba->pport->load_flag & FC_UNLOADING))
-+	if (phba->pport->load_flag & FC_UNLOADING)
- 		return;
-+
- 	spin_lock_irq(&phba->hbalock);
- 	if (phba->sli_rev == LPFC_SLI_REV4)
- 		spin_lock(&pring->ring_lock);
- 
--	if ((phba->pport->load_flag & FC_UNLOADING)) {
--		if (phba->sli_rev == LPFC_SLI_REV4)
--			spin_unlock(&pring->ring_lock);
--		spin_unlock_irq(&phba->hbalock);
--		return;
--	}
--
- 	list_for_each_entry_safe(piocb, tmp_iocb, &pring->txcmplq, list) {
- 		cmd = &piocb->iocb;
- 
-diff --git a/drivers/scsi/lpfc/lpfc_nvme.c b/drivers/scsi/lpfc/lpfc_nvme.c
-index a45936e08031..12d2b2775773 100644
---- a/drivers/scsi/lpfc/lpfc_nvme.c
-+++ b/drivers/scsi/lpfc/lpfc_nvme.c
-@@ -1491,11 +1491,6 @@ lpfc_nvme_fcp_io_submit(struct nvme_fc_local_port *pnvme_lport,
- 
- 	phba = vport->phba;
- 
--	if (vport->load_flag & FC_UNLOADING) {
--		ret = -ENODEV;
--		goto out_fail;
--	}
--
- 	if (unlikely(vport->load_flag & FC_UNLOADING)) {
- 		lpfc_printf_vlog(vport, KERN_INFO, LOG_NVME_IOERR,
- 				 "6124 Fail IO, Driver unload\n");
-diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
-index 565419bf8d74..5f5aecea5b55 100644
---- a/drivers/scsi/lpfc/lpfc_nvmet.c
-+++ b/drivers/scsi/lpfc/lpfc_nvmet.c
-@@ -841,9 +841,6 @@ lpfc_nvmet_xmt_ls_rsp(struct nvmet_fc_target_port *tgtport,
- 	struct ulp_bde64 bpl;
- 	int rc;
- 
--	if (phba->pport->load_flag & FC_UNLOADING)
--		return -ENODEV;
--
- 	if (phba->pport->load_flag & FC_UNLOADING)
- 		return -ENODEV;
- 
-@@ -938,11 +935,6 @@ lpfc_nvmet_xmt_fcp_op(struct nvmet_fc_target_port *tgtport,
- 		goto aerr;
- 	}
- 
--	if (phba->pport->load_flag & FC_UNLOADING) {
--		rc = -ENODEV;
--		goto aerr;
--	}
--
- #ifdef CONFIG_SCSI_LPFC_DEBUG_FS
- 	if (ctxp->ts_cmd_nvme) {
- 		if (rsp->op == NVMET_FCOP_RSP)
-@@ -1062,9 +1054,6 @@ lpfc_nvmet_xmt_fcp_abort(struct nvmet_fc_target_port *tgtport,
- 	struct lpfc_queue *wq;
- 	unsigned long flags;
- 
--	if (phba->pport->load_flag & FC_UNLOADING)
--		return;
--
- 	if (phba->pport->load_flag & FC_UNLOADING)
- 		return;
- 
+Changes since v3:
+ - In patch 2, moved check from qla2x00_post_async_XYZ_work() to
+   qla2x00_alloc_work() as suggested by Arun
+ - Dropped patch 3-5. With 1 and 2 applied, I haven't been able to reproduce
+   shutdown hangs any more.
+
+Changes since v2:
+ - Removed "scsi: qla2xxx: avoid sending mailbox commands if firmware is
+   stopped", because the first hunk is obsoleted by the (new) 1/3, and Arun
+   suggested to use a different approach (which is now in 4/3) for the second
+   hunk.
+ - Removed "scsi: qla2xxx: don't shut down firmware before closing sessions"
+   (nak'd by Arun).
+ - Former 3/3 is now 1/5
+ - Added "scsi: qla2xxx: check UNLOADING before posting async work". This one
+   is key for avoiding lags when qla2xxx is unloaded.
+ - Added revert of "scsi: qla2xxx: Fix unbound sleep in fcport delete path.",
+   as I believe it's now obsolete.
+   If we ever encounter unbound sleep there again, we should rather figure
+   out the reason than simply abort waiting.
+ - Added patch 4 and 5, a new attempt at avoiding mailbox and HW request queue
+   access at low level. 4/5 was motivated by Arun's comments on my v2 series.
+   5/5 is obviously similar in spirit to 77ddb94a4853 ("scsi: qla2xxx: Only
+   allow operational MBX to proceed during RESET."), but I found that the
+   rom_cmds list contains commands that would hang when the FW is stopped,
+   so I created a new list. Perhaps some day the two can be consolidated.
+
+Changes since v1:
+ - Added patch 3 to set the UNLOADING flag before waiting for sessions
+   to end (Roman)
+ - Use test_and_set_bit() for UNLOADING (Hannes)
+
+Martin Wilck (2):
+  scsi: qla2xxx: set UNLOADING before waiting for session deletion
+  scsi: qla2xxx: check UNLOADING before posting async work
+
+ drivers/scsi/qla2xxx/qla_os.c | 35 +++++++++++++++++------------------
+ 1 file changed, 17 insertions(+), 18 deletions(-)
+
 -- 
-2.16.4
+2.26.0
 
