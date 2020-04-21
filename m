@@ -2,104 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8F21B28B7
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2020 15:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7471B2926
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2020 16:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729083AbgDUN6G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Apr 2020 09:58:06 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:32779 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729100AbgDUN6F (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 21 Apr 2020 09:58:05 -0400
-Received: (qmail 21373 invoked by uid 500); 21 Apr 2020 09:58:02 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 21 Apr 2020 09:58:02 -0400
-Date:   Tue, 21 Apr 2020 09:58:02 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     NeilBrown <neilb@suse.de>
-cc:     Matthew Wilcox <willy@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        <linux-fsdevel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        <linux-input@vger.kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        <linux-nfs@vger.kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, <linux-nvdimm@lists.01.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>, <target-devel@vger.kernel.org>,
-        Zzy Wysm <zzy@zzywysm.com>
-Subject: Re: [PATCH 5/9] usb: fix empty-body warning in sysfs.c
-In-Reply-To: <87368xskga.fsf@notabene.neil.brown.name>
-Message-ID: <Pine.LNX.4.44L0.2004210956590.20254-100000@netrider.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1728846AbgDUONP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Apr 2020 10:13:15 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:53687 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726018AbgDUONO (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 21 Apr 2020 10:13:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587478393;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eCasCSXyuw3cZD5Bgdqi0OZxWkZ8ndQkJgxLYujMGkA=;
+        b=W7aPJ3I4CGtgWqaF4740BfCAyF3v8UlREvKOCh/RTjEpT9qnBS30afyWdIsV4jZU5DDJ37
+        xc1ZF9U99yI8PIPEqZ9Jh2/jV/SMpD+eCqrOrG5+nL3OT4lW6RQ8wNxEhUzLwj0RLuHHPK
+        DTVBe0VblNtP4GSRdmO1MuMSPezE00U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-163-Qefmna4FPgWhB5T2c_9g4g-1; Tue, 21 Apr 2020 10:13:11 -0400
+X-MC-Unique: Qefmna4FPgWhB5T2c_9g4g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7937A8017FD;
+        Tue, 21 Apr 2020 14:13:10 +0000 (UTC)
+Received: from ovpn-114-228.phx2.redhat.com (ovpn-114-228.phx2.redhat.com [10.3.114.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 28D085C1B2;
+        Tue, 21 Apr 2020 14:13:10 +0000 (UTC)
+Message-ID: <4939f52dd4b2335da7878034436584d0045e32df.camel@redhat.com>
+Subject: Re: [PATCH] scsi: core: Allow the state change from SDEV_QUIESCE to
+ SDEV_BLOCK
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     decui@microsoft.com, linux-scsi@vger.kernel.org
+Date:   Tue, 21 Apr 2020 10:13:09 -0400
+In-Reply-To: <1587170445-50013-1-git-send-email-decui@microsoft.com>
+References: <1587170445-50013-1-git-send-email-decui@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 21 Apr 2020, NeilBrown wrote:
+On Fri, 2020-04-17 at 17:40 -0700, Dexuan Cui wrote:
+> The APIs scsi_host_block()/scsi_host_unblock() are recently added by:
+> 2bb955840c1d ("scsi: core: add scsi_host_(block,unblock) helper
+> function")
+> and so far the APIs are only used by:
+> 3d3ca53b1639 ("scsi: aacraid: use scsi_host_(block,unblock) to block
+> I/O")
+> 
+> However, from reading the code, I think the APIs don't really work
+> for
+> aacraid, because, in the resume path of hibernation, when
+> aac_suspend() ->
+> scsi_host_block() is called, scsi_device_quiesce() has set the state
+> to
+> SDEV_QUIESCE, so aac_suspend() -> scsi_host_block() returns -EINVAL.
+> 
+> Fix the issue by allowing the state change.
+> 
+> Fixes: 2bb955840c1d ("scsi: core: add scsi_host_(block,unblock)
+> helper function")
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> ---
+>  drivers/scsi/scsi_lib.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index 47835c4b4ee0..06c260f6cdae 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -2284,6 +2284,7 @@ scsi_device_set_state(struct scsi_device *sdev,
+> enum scsi_device_state state)
+>  		switch (oldstate) {
+>  		case SDEV_RUNNING:
+>  		case SDEV_CREATED_BLOCK:
+> +		case SDEV_QUIESCE:
+>  		case SDEV_OFFLINE:
+>  			break;
+>  		default:
 
-> On Sat, Apr 18 2020, Alan Stern wrote:
-> 
-> > On Sat, 18 Apr 2020, Matthew Wilcox wrote:
-> >
-> >> On Sat, Apr 18, 2020 at 11:41:07AM -0700, Randy Dunlap wrote:
-> >> > +++ linux-next-20200327/drivers/usb/core/sysfs.c
-> >> > @@ -1263,7 +1263,7 @@ void usb_create_sysfs_intf_files(struct
-> >> >  	if (!alt->string && !(udev->quirks & USB_QUIRK_CONFIG_INTF_STRINGS))
-> >> >  		alt->string = usb_cache_string(udev, alt->desc.iInterface);
-> >> >  	if (alt->string && device_create_file(&intf->dev, &dev_attr_interface))
-> >> > -		;	/* We don't actually care if the function fails. */
-> >> > +		do_empty(); /* We don't actually care if the function fails. */
-> >> >  	intf->sysfs_files_created = 1;
-> >> >  }
-> >> 
-> >> Why not just?
-> >> 
-> >> +	if (alt->string)
-> >> +		device_create_file(&intf->dev, &dev_attr_interface);
-> >
-> > This is another __must_check function call.
-> >
-> > The reason we don't care if the call fails is because the file
-> > being created holds the USB interface string descriptor, something
-> > which is purely informational and hardly ever gets set (and no doubt
-> > gets used even less often).
-> >
-> > Is this another situation where the comment should be expanded and the 
-> > code modified to include a useless test and cast-to-void?
-> >
-> > Or should device_create_file() not be __must_check after all?
-> 
-> One approach to dealing with __must_check function that you don't want
-> to check is to cause failure to call
->    pr_debug("usb: interface descriptor file not created");
-> or similar.  It silences the compiler, serves as documentation, and
-> creates a message that is almost certainly never seen.
-> 
-> This is what I did in drivers/md/md.c...
-> 
-> 	if (mddev->kobj.sd &&
-> 	    sysfs_create_group(&mddev->kobj, &md_bitmap_group))
-> 		pr_debug("pointless warning\n");
-> 
-> (I give better warnings elsewhere - I must have run out of patience by
->  this point).
+I think this should be OK.
 
-That's a decent idea.  I'll do something along those lines.
+Reviewed-by: Ewan D. Milne <emilne@redhat.com>
 
-Alan Stern
 
