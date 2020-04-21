@@ -2,77 +2,170 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 947161B2AD1
-	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2020 17:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2951B2AF2
+	for <lists+linux-scsi@lfdr.de>; Tue, 21 Apr 2020 17:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726136AbgDUPOs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 21 Apr 2020 11:14:48 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:41975 "EHLO smtp.infotech.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726105AbgDUPOq (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 21 Apr 2020 11:14:46 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 7ADA920424C;
-        Tue, 21 Apr 2020 17:14:45 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pc4g6jvMP5H9; Tue, 21 Apr 2020 17:14:43 +0200 (CEST)
-Received: from xtwo70.bingwo.ca (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id 6CE1F204170;
-        Tue, 21 Apr 2020 17:14:40 +0200 (CEST)
-From:   Douglas Gilbert <dgilbert@interlog.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     martin.petersen@oracle.com, jejb@linux.vnet.ibm.com, hare@suse.de,
-        Damien.LeMoal@wdc.com
-Subject: [PATCH v5 8/8] scsi_debug: bump to version 1.89
-Date:   Tue, 21 Apr 2020 11:14:24 -0400
-Message-Id: <20200421151424.32668-9-dgilbert@interlog.com>
-X-Mailer: git-send-email 2.26.1
-In-Reply-To: <20200421151424.32668-1-dgilbert@interlog.com>
-References: <20200421151424.32668-1-dgilbert@interlog.com>
+        id S1725987AbgDUPR3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 21 Apr 2020 11:17:29 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2076 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725870AbgDUPR3 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 21 Apr 2020 11:17:29 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.106])
+        by Forcepoint Email with ESMTP id E1CC71CC61834FD3D317;
+        Tue, 21 Apr 2020 16:17:26 +0100 (IST)
+Received: from [127.0.0.1] (10.210.168.25) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Tue, 21 Apr
+ 2020 16:17:26 +0100
+Subject: Re: [PATCH] scsi: put hot fields of scsi_host_template into one
+ cacheline
+To:     Ming Lei <ming.lei@redhat.com>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>,
+        <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+CC:     Bart Van Assche <bvanassche@acm.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <20200421124952.297448-1-ming.lei@redhat.com>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <367d58f7-722d-16db-3e90-50dc9fd4e078@huawei.com>
+Date:   Tue, 21 Apr 2020 16:16:52 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200421124952.297448-1-ming.lei@redhat.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.210.168.25]
+X-ClientProxiedBy: lhreml719-chm.china.huawei.com (10.201.108.70) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The scsi_debug driver version is visible in:
-   /sys/modules/scsi_debug/version
-and can thus be used by user space programs to alter the features they
-try to use. Since the per_host_store and zbc/zone options are
-significant additions, bump the version number to 1.89 .
+On 21/04/2020 13:49, Ming Lei wrote:
+> The following three fields of scsi_host_template are referenced in
+> scsi IO submission path, so put them together into one cacheline:
+> 
+> - cmd_size
+> - queuecommand
+> - commit_rqs
+> 
+> Cc: Bart Van Assche <bvanassche@acm.org>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: John Garry <john.garry@huawei.com>
+> Signed-off-by: Ming Lei <ming.lei@redhat.com>
+> ---
+>   include/scsi/scsi_host.h | 67 +++++++++++++++++++++-------------------
+>   1 file changed, 35 insertions(+), 32 deletions(-)
+> 
+> diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
+> index 822e8cda8d9b..959dc5160f72 100644
+> --- a/include/scsi/scsi_host.h
+> +++ b/include/scsi/scsi_host.h
+> @@ -33,37 +33,12 @@ struct scsi_host_template {
+>   	struct module *module;
+>   	const char *name;
+>   
+> -	/*
+> -	 * The info function will return whatever useful information the
+> -	 * developer sees fit.  If not provided, then the name field will
+> -	 * be used instead.
+> -	 *
+> -	 * Status: OPTIONAL
+> -	 */
+> -	const char *(* info)(struct Scsi_Host *);
+> +	/* Put hot fields together in same cacheline */
+>   
+>   	/*
+> -	 * Ioctl interface
+> -	 *
+> -	 * Status: OPTIONAL
+> -	 */
+> -	int (*ioctl)(struct scsi_device *dev, unsigned int cmd,
+> -		     void __user *arg);
+> -
+> -
+> -#ifdef CONFIG_COMPAT
+> -	/*
+> -	 * Compat handler. Handle 32bit ABI.
+> -	 * When unknown ioctl is passed return -ENOIOCTLCMD.
+> -	 *
+> -	 * Status: OPTIONAL
+> +	 * Additional per-command data allocated for the driver.
+>   	 */
+> -	int (*compat_ioctl)(struct scsi_device *dev, unsigned int cmd,
+> -			    void __user *arg);
+> -#endif
+> -
+> -	int (*init_cmd_priv)(struct Scsi_Host *shost, struct scsi_cmnd *cmd);
+> -	int (*exit_cmd_priv)(struct Scsi_Host *shost, struct scsi_cmnd *cmd);
 
-Signed-off-by: Douglas Gilbert <dgilbert@interlog.com>
----
- drivers/scsi/scsi_debug.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Should new member .init_cmd_priv be included also in the "hot" group? 
+Even if NULL generally, we still have to load that from memory to know 
+it (is NULL) in scsi_mq_init_request() and scsi_init_command() [which 
+are fastpath, right?]
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 4b15f3f93c7c..0eede06fc66c 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -7,7 +7,7 @@
-  *  anything out of the ordinary is seen.
-  * ^^^^^^^^^^^^^^^^^^^^^^^ Original ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  *
-- * Copyright (C) 2001 - 2018 Douglas Gilbert
-+ * Copyright (C) 2001 - 2020 Douglas Gilbert
-  *
-  *  For documentation see http://sg.danny.cz/sg/sdebug26.html
-  */
-@@ -60,8 +60,8 @@
- #include "scsi_logging.h"
- 
- /* make sure inq_product_rev string corresponds to this version */
--#define SDEBUG_VERSION "0188"	/* format to fit INQUIRY revision field */
--static const char *sdebug_version_date = "20190125";
-+#define SDEBUG_VERSION "0189"	/* format to fit INQUIRY revision field */
-+static const char *sdebug_version_date = "20200421";
- 
- #define MY_NAME "scsi_debug"
- 
--- 
-2.26.1
+Cheers,
+John
+
+
+> +	unsigned int cmd_size;
+>   
+>   	/*
+>   	 * The queuecommand function is used to queue up a scsi
+> @@ -111,6 +86,38 @@ struct scsi_host_template {
+>   	 */
+>   	void (*commit_rqs)(struct Scsi_Host *, u16);
+>   
+> +	/*
+> +	 * The info function will return whatever useful information the
+> +	 * developer sees fit.  If not provided, then the name field will
+> +	 * be used instead.
+> +	 *
+> +	 * Status: OPTIONAL
+> +	 */
+> +	const char *(* info)(struct Scsi_Host *);
+> +
+> +	/*
+> +	 * Ioctl interface
+> +	 *
+> +	 * Status: OPTIONAL
+> +	 */
+> +	int (*ioctl)(struct scsi_device *dev, unsigned int cmd,
+> +		     void __user *arg);
+> +
+> +
+> +#ifdef CONFIG_COMPAT
+> +	/*
+> +	 * Compat handler. Handle 32bit ABI.
+> +	 * When unknown ioctl is passed return -ENOIOCTLCMD.
+> +	 *
+> +	 * Status: OPTIONAL
+> +	 */
+> +	int (*compat_ioctl)(struct scsi_device *dev, unsigned int cmd,
+> +			    void __user *arg);
+> +#endif
+> +
+> +	int (*init_cmd_priv)(struct Scsi_Host *shost, struct scsi_cmnd *cmd);
+> +	int (*exit_cmd_priv)(struct Scsi_Host *shost, struct scsi_cmnd *cmd);
+> +
+>   	/*
+>   	 * This is an error handling strategy routine.  You don't need to
+>   	 * define one of these if you don't want to - there is a default
+> @@ -468,10 +475,6 @@ struct scsi_host_template {
+>   	 */
+>   	u64 vendor_id;
+>   
+> -	/*
+> -	 * Additional per-command data allocated for the driver.
+> -	 */
+> -	unsigned int cmd_size;
+>   	struct scsi_host_cmd_pool *cmd_pool;
+>   
+>   	/* Delay for runtime autosuspend */
+> 
 
