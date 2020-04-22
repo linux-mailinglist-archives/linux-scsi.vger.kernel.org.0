@@ -2,86 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA951B4ACB
-	for <lists+linux-scsi@lfdr.de>; Wed, 22 Apr 2020 18:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6CE1B4AE1
+	for <lists+linux-scsi@lfdr.de>; Wed, 22 Apr 2020 18:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbgDVQq0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 22 Apr 2020 12:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726584AbgDVQq0 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 22 Apr 2020 12:46:26 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9974EC03C1AA
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Apr 2020 09:46:24 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id s10so2562219iln.11
-        for <linux-scsi@vger.kernel.org>; Wed, 22 Apr 2020 09:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1cV4OuPmkRZ6+zxhfjx8VUKHzAPPELWDKUnr+i1Zl2E=;
-        b=vxrw4X12UbXuE8+hKgIRfqbehXZCbT3g1S5XxQ+LVjc5pBkTlst1hlpCAKpWhhZuRu
-         veFMvmN+TdYJoobKQlAcPw6JABkRX/KE0oY7sokc0O3Ubt/H9HZmiPyMcH7mA95pj6Mv
-         hsbcYkcLl9TIpZJkeOuziDN9U6KahUNlKAIvHBxipbOf4/3GY6HNpcM5h/0atEYHfS1J
-         5TnA8z0aXlRNGp/PDhj068qQJeSm366/rYglsOfDgkjlAbyg23I3BhZcaQGv49KdWiYT
-         nagOCmHMaULGJBLasMsxEUo6OJAP6KBFFCvGx1AX1CdYZDUtp8pnaisywCFpPZkRJfya
-         i9Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1cV4OuPmkRZ6+zxhfjx8VUKHzAPPELWDKUnr+i1Zl2E=;
-        b=VqhbMxEwcE7TTKmWuLWVOBdcLXoAPMmpEc+HHHVOP7sSVzxQSyQKgSJnSEHi4dcN2E
-         jvoweuf5XA2HzJOJS7waYn43iUzAtzypqOnW/Qq5dhbU/vfXclNPYBZsUkprM3NEL9dv
-         IcaNEA1wyx3z9SuT/74X8+5wXbqf5cu7lpyHSDlV0jHPTocKfLgobBt33lreXAIIQgnA
-         jr0GkG5NLKnXgs3SBmcT5IvW7oRmfBpXZHW0RANcCND2tGmDJXBRJvUS3f5viN5QJLjH
-         HzX17CF/EPq6QDd7C/e3Y1Bgsyo6foMhji/eygKbhkdminbJuNHcitURpppWDKyDf3vZ
-         msxA==
-X-Gm-Message-State: AGi0PuYyE3jpysWcRMNGlinE5mix+Cul6bWE9Kfpcv5T5d43GjeYH+JD
-        zVO2zgLRPARp5Jzi6Cxptxb/M80JUK+/Xg==
-X-Google-Smtp-Source: APiQypIBWtVOQSTuiObuI0NSKLZhoSwUm3Bnp61Fd89wZTmPr1Njs/VncynYhJfgmsOlad6tANPNUA==
-X-Received: by 2002:a92:cece:: with SMTP id z14mr26155375ilq.147.1587573983733;
-        Wed, 22 Apr 2020 09:46:23 -0700 (PDT)
-Received: from [192.168.1.159] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id c18sm2251436ilr.37.2020.04.22.09.46.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Apr 2020 09:46:23 -0700 (PDT)
-Subject: Re: clean up DMA draining
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20200414074225.332324-1-hch@lst.de>
- <20200422064151.GA23271@lst.de>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <f969685b-6547-2e93-f288-d2b1d5ec4dc4@kernel.dk>
-Date:   Wed, 22 Apr 2020 10:46:22 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1726741AbgDVQvH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 22 Apr 2020 12:51:07 -0400
+Received: from namei.org ([65.99.196.166]:52046 "EHLO namei.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726006AbgDVQvG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 22 Apr 2020 12:51:06 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by namei.org (8.14.4/8.14.4) with ESMTP id 03MGo4UJ013061;
+        Wed, 22 Apr 2020 16:50:04 GMT
+Date:   Thu, 23 Apr 2020 02:50:04 +1000 (AEST)
+From:   James Morris <jmorris@namei.org>
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>
+cc:     linux-fsdevel@vger.kernel.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Manoj N. Kumar" <manoj@linux.ibm.com>,
+        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
+        Uma Krishnan <ukrishn@linux.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        John Johansen <john.johansen@canonical.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-scsi@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH v2 2/7] libfs: wrap simple_pin_fs/simple_release_fs
+ arguments in a struct
+In-Reply-To: <20200421135119.30007-3-eesposit@redhat.com>
+Message-ID: <alpine.LRH.2.21.2004230246380.12318@namei.org>
+References: <20200421135119.30007-1-eesposit@redhat.com> <20200421135119.30007-3-eesposit@redhat.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <20200422064151.GA23271@lst.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/22/20 12:41 AM, Christoph Hellwig wrote:
-> On Tue, Apr 14, 2020 at 09:42:20AM +0200, Christoph Hellwig wrote:
->> Hi all,
->>
->> currently the dma draining and alignining specific to ATA CDROMs
->> and the UFS driver has its ugly hooks in core block code.  Move
->> this out into the scsi and ide drivers instead.
-> 
-> Any commens?
+On Tue, 21 Apr 2020, Emanuele Giuseppe Esposito wrote:
 
-Looks OK to me, and I think the idea is sound.
+> Simplify passing the count and mount to simple_pin_fs and
+> simple_release_fs by wrapping them in the simple_fs struct,
+> in preparation for adding more high level operations to
+> fs/libfs.c
+> 
+> There is no functional change intended.
+> 
+> Signed-off-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+
+
+Reviewed-by: James Morris <jamorris@linux.microsoft.com>
 
 
 -- 
-Jens Axboe
+James Morris
+<jmorris@namei.org>
 
