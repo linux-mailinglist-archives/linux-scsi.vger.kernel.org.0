@@ -2,48 +2,43 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 541FA1B774E
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2020 15:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1B4F1B7751
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2020 15:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgDXNpF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Apr 2020 09:45:05 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:45434 "EHLO
+        id S1727863AbgDXNpQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Apr 2020 09:45:16 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:45458 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726806AbgDXNpE (ORCPT
+        by vger.kernel.org with ESMTP id S1727039AbgDXNpE (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
         Fri, 24 Apr 2020 09:45:04 -0400
 Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 16AFF404B8;
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 2424E404BA;
         Fri, 24 Apr 2020 13:45:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1587735904; bh=ydPoZRUelRe6CU9Hp1tIyZfCVvTrM8j0ovTLVduK/no=;
+        t=1587735904; bh=t1u/b9URLHxzkXkdDqsLLKlZ2VysHQq+blYp3IVJB48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
          References:From;
-        b=CcR/fbO+1ynLZ+XgLl9RKEwMBPx3k2p+IozSw0SuIipGu7/WSWhsSetuXK4B/J3Px
-         6PMVkh0O6dlv+7IDAwcl0pw03IytWG4dvGybSv/8zvMuaEWtM1w+f/8sc+q/7Z6Vdf
-         flJMUOqywAlxpBX2WThzcKVQS0Pfa7oRB86eI/6ocA8mj+u6Lr2NKw891yQS6JO6AI
-         lqmItRU/XhIboGanh2n3/gowCnldmkn7UuUXm1LcIMLuZyZDvru2Ozhnt88a3DrfAD
-         1VRN5yNJaK6ErApH4tQwgvxrIljPZexHJMJgJ3qNHVRP7y1XKEzc3PM5YrVA8B9HrJ
-         Ha3ZtWrPrIf7w==
+        b=OTA05kRrzzsVQQxWr7A0imT0RKZK8GWjYnRZxzkYHZp+W57Wo+jfPyRZ4JKYqHk5w
+         vL/ExVV0pr3HiAo/+7y/ovocBqGtRc4aF8V0P8uMtjwWtRbzNELCJ8ixvwCsuZpccj
+         Y5Z1w04GDVx17DTJHjBWn5FxF9pVnjnowLwnRU5CPrxSHZGmWpjqEZpq573aKbkc81
+         U8cgjcSO197f2daKtlMcFFEbP9BP+YgQP+DhXEC1VKEAG3fXk4e9Dzz7QLoAzT4iLf
+         3I3/DgVjN6s0RPxUOhkxwfmQAoDVPkEXuY0GlOaf+a0WLKcupCXmQ4KWd6KQ7o5q7e
+         mttiyz7GnAqIg==
 Received: from de02dwia024.internal.synopsys.com (de02dwia024.internal.synopsys.com [10.225.19.81])
-        by mailhost.synopsys.com (Postfix) with ESMTP id D1994A006C;
+        by mailhost.synopsys.com (Postfix) with ESMTP id D7DA1A0070;
         Fri, 24 Apr 2020 13:45:02 +0000 (UTC)
 From:   Jose Abreu <Jose.Abreu@synopsys.com>
 To:     linux-scsi@vger.kernel.org
 Cc:     Joao Pinto <Joao.Pinto@synopsys.com>,
         Jose Abreu <Jose.Abreu@synopsys.com>,
-        "Winkler, Tomas" <tomas.winkler@intel.com>,
         Joao Lima <Joao.Lima@synopsys.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/5] scsi: ufs: tc-dwc-pci: Allow for MSI interrupt type
-Date:   Fri, 24 Apr 2020 15:44:48 +0200
-Message-Id: <05ba98b7a98520e3ac3884037ee481da460d0dcc.1587735561.git.Jose.Abreu@synopsys.com>
+Subject: [PATCH v2 5/5] MAINTAINERS: Change Maintainers for SCSI UFS DWC Drivers
+Date:   Fri, 24 Apr 2020 15:44:49 +0200
+Message-Id: <87a6895ad799438b96682f18756b50ab081cf00d.1587735561.git.Jose.Abreu@synopsys.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1587735561.git.Jose.Abreu@synopsys.com>
 References: <cover.1587735561.git.Jose.Abreu@synopsys.com>
@@ -54,63 +49,34 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Newer Test Chips boards have MSI support. It does no harm to try to
-request it as the function will fallback to legacy interrupts if MSI is
-not supported.
+Pedro Sousa is no longer with Synopsys. Joao Lima and me have been
+working internally with our UFS Controller so we are able to help and
+we are volunteering as Maintainers for UFS DWC Drivers.
 
 Signed-off-by: Jose Abreu <Jose.Abreu@synopsys.com>
 
 ---
-
-Changes from v1:
-- Do not try to request MSIX vectors (Tomas)
-- Add missing call to pci_free_irq_vectors() (Tomas)
-
-Cc: "Winkler, Tomas" <tomas.winkler@intel.com>
 Cc: Joao Lima <Joao.Lima@synopsys.com>
 Cc: Jose Abreu <Jose.Abreu@synopsys.com>
-Cc: Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Avri Altman <avri.altman@wdc.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/scsi/ufs/tc-dwc-pci.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ MAINTAINERS | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/ufs/tc-dwc-pci.c b/drivers/scsi/ufs/tc-dwc-pci.c
-index 74a2d80d32bd..78dc6c484e84 100644
---- a/drivers/scsi/ufs/tc-dwc-pci.c
-+++ b/drivers/scsi/ufs/tc-dwc-pci.c
-@@ -88,6 +88,7 @@ static void tc_dwc_pci_remove(struct pci_dev *pdev)
- 	pm_runtime_forbid(&pdev->dev);
- 	pm_runtime_get_noresume(&pdev->dev);
- 	ufshcd_remove(hba);
-+	pci_free_irq_vectors(pdev);
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e64e5db31497..61c6579e7d80 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17307,7 +17307,8 @@ F:	Documentation/scsi/ufs.rst
+ F:	drivers/scsi/ufs/
  
- /**
-@@ -136,11 +137,18 @@ tc_dwc_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 		return -ENOENT;
- 	}
- 
-+	err = pci_alloc_irq_vectors(pdev, 1, 1, PCI_IRQ_LEGACY | PCI_IRQ_MSI);
-+	if (err < 0) {
-+		dev_err(&pdev->dev, "Allocation failed\n");
-+		return err;
-+	}
-+
- 	hba->vops = &data->ops;
- 
--	err = ufshcd_init(hba, mmio_base, pdev->irq);
-+	err = ufshcd_init(hba, mmio_base, pci_irq_vector(pdev, 0));
- 	if (err) {
- 		dev_err(&pdev->dev, "Initialization failed\n");
-+		pci_free_irq_vectors(pdev);
- 		return err;
- 	}
- 
+ UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER DWC HOOKS
+-M:	Pedro Sousa <pedrom.sousa@synopsys.com>
++M:	Joao Lima <Joao.Lima@synopsys.com>
++M:	Jose Abreu <Jose.Abreu@synopsys.com>
+ L:	linux-scsi@vger.kernel.org
+ S:	Supported
+ F:	drivers/scsi/ufs/*dwc*
 -- 
 2.7.4
 
