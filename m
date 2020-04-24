@@ -2,81 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C311B743D
-	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2020 14:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5C61B757C
+	for <lists+linux-scsi@lfdr.de>; Fri, 24 Apr 2020 14:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728645AbgDXMZJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Apr 2020 08:25:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56240 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728637AbgDXMZJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 24 Apr 2020 08:25:09 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0064821BE5;
-        Fri, 24 Apr 2020 12:25:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587731108;
-        bh=ySL282Fl7aUcXPkzqQzibkmlNVMn1FzT4+uJENDy+Do=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r3Q+EHUZxIH32dqdILcjtVHovwmQ54ikSWcLhwHouhOnee3NK3coDcyHo/1HiKD5N
-         JSzapU9bBWLg1mrsDjTJMhi3+JGHhPfrVyyClNzfps/mWlKWZzm1Wy3poslfjuKps3
-         i10GniK8cUBpzqbfphDt/DOQNyRx2zlZhLaA/Puw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li Bin <huawei.libin@huawei.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 4/8] scsi: sg: add sg_remove_request in sg_common_write
-Date:   Fri, 24 Apr 2020 08:24:59 -0400
-Message-Id: <20200424122503.11046-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200424122503.11046-1-sashal@kernel.org>
-References: <20200424122503.11046-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1726848AbgDXMf6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 24 Apr 2020 08:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726489AbgDXMf5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 24 Apr 2020 08:35:57 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6B9C09B045
+        for <linux-scsi@vger.kernel.org>; Fri, 24 Apr 2020 05:35:56 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id z1so3049474pfn.3
+        for <linux-scsi@vger.kernel.org>; Fri, 24 Apr 2020 05:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id;
+        bh=zBWMTRVBR12LwdUWmT+crYPA7058E9M5+oph2NaiToo=;
+        b=k0Ai8YSZGBT1Y36K2pzwlj2v+2zNsoH1EwNuURr+1uPAyFqraRB7pWOmOjwaQrHN1U
+         JpI6WNzz6UYz+lVfE6LjX4RlIwquwfonjn9TJnevbKRvWXDPgs5btqYxmaq6ZXOvK1uu
+         wkmvjxlhn9annh/2Pq6FE6rbMX6Y9Dx+dZDAgS1adRJ7KWCVmU89YefL017P2lfDahuL
+         OcCUpCW5ZlHs7c3zIn9+DUbeErpflzFJI9hcwKtM2pKCAhagZXukhCRzisGkO4wDawuI
+         HEgfmxcIcqJuzMkUK6pWKIOIEic5idA1LvtX/eiNDUqhjfzsA+SZAoZqU1JX9T5zx8V1
+         fcBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=zBWMTRVBR12LwdUWmT+crYPA7058E9M5+oph2NaiToo=;
+        b=YHzdiiiAGe9qDeAN28d4UoG79p6g8caMOZnTHwdKvREUzBE5CxgIGk/BaQDbq0V6mm
+         QgIseUJgocl/qNelofqL8Q98HaCviqpyY8wl2e8DXlhZg+DJsGA2MZTJz+E8W8naf4lN
+         sO+lh6kJL4Q9jp+fhttOF2BuEWzd7Qcx0b7zhDX7QTwAbRCBuGzOekOSgHUtIUxF7Fie
+         fsIOc9OUlRfJFAePrsXYUbMw9yE8EPDCE3jlmXCLHWQI5KUbJy4z3StEpFPVbJ070f04
+         4V2eks/g6cIzUMBMdwsOdw6UioE4Y1krl/V1u85HyrMkIpVAIil5G2nAPSPL1BP/pAP8
+         Q7OA==
+X-Gm-Message-State: AGi0PuZ0spBjD2cObj38aY5rNW23HsDuVrKB4J65vEJOKdcTUzRSWoc/
+        AmWLpQ1SmS/TN54b0TCcuR5vwg==
+X-Google-Smtp-Source: APiQypIvYlJkpUXOf3UjQIkO/0K9Vet1Cl7S/3lGW/Icb14R9NbeAWMqeHWnuof/BP/x6WmdtnHNpg==
+X-Received: by 2002:a63:5a5f:: with SMTP id k31mr9188117pgm.109.1587731755534;
+        Fri, 24 Apr 2020 05:35:55 -0700 (PDT)
+Received: from debian.bytedance.net ([61.120.150.75])
+        by smtp.gmail.com with ESMTPSA id 128sm5510851pfy.5.2020.04.24.05.35.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 24 Apr 2020 05:35:54 -0700 (PDT)
+From:   Hou Pu <houpu@bytedance.com>
+To:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Cc:     mchristi@redhat.com, Hou Pu <houpu@bytedance.com>
+Subject: [PATCH v3 0/2] iscsi-target: fix login error when receiving is too fast
+Date:   Fri, 24 Apr 2020 08:35:26 -0400
+Message-Id: <20200424123528.17627-1-houpu@bytedance.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Li Bin <huawei.libin@huawei.com>
+Hi,
+We encountered "iSCSI Login negotiation failed" several times.
+After enable debug log in iscsi_target_nego.c of iSCSI target.
+Error shows:
+  "Got LOGIN_FLAGS_READ_ACTIVE=1, conn: xxxxxxxxxx >>>>"
 
-[ Upstream commit 849f8583e955dbe3a1806e03ecacd5e71cce0a08 ]
+Patch 1 is trying to fix this problem. Please see comment in patch 1
+for details.
 
-If the dxfer_len is greater than 256M then the request is invalid and we
-need to call sg_remove_request in sg_common_write.
+Changes from v3:
+* Fix style problem found by checkpatch.pl.
 
-Link: https://lore.kernel.org/r/1586777361-17339-1-git-send-email-huawei.libin@huawei.com
-Fixes: f930c7043663 ("scsi: sg: only check for dxfer_len greater than 256M")
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
-Signed-off-by: Li Bin <huawei.libin@huawei.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/sg.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Changes from v2:
+* Improve comments in patch #1.
+* Change bit possition of login_flags in patch #1.
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index e1639e80db536..63e21ca538f19 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -820,8 +820,10 @@ sg_common_write(Sg_fd * sfp, Sg_request * srp,
- 			"sg_common_write:  scsi opcode=0x%02x, cmd_size=%d\n",
- 			(int) cmnd[0], (int) hp->cmd_len));
- 
--	if (hp->dxfer_len >= SZ_256M)
-+	if (hp->dxfer_len >= SZ_256M) {
-+		sg_remove_request(sfp, srp);
- 		return -EINVAL;
-+	}
- 
- 	k = sg_start_req(srp, cmnd);
- 	if (k) {
+Hou Pu (2):
+  iscsi-target: fix login error when receiving is too fast
+  iscsi-target: Fix inconsistent debug message in
+    __iscsi_target_sk_check_close
+
+ drivers/target/iscsi/iscsi_target_nego.c | 31 ++++++++++++++++++++++++++-----
+ include/target/iscsi/iscsi_target_core.h |  9 +++++----
+ 2 files changed, 31 insertions(+), 9 deletions(-)
+
 -- 
-2.20.1
+2.11.0
 
