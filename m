@@ -2,54 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 55DA51B8276
-	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2020 01:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE851B8471
+	for <lists+linux-scsi@lfdr.de>; Sat, 25 Apr 2020 09:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbgDXXaT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 24 Apr 2020 19:30:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40996 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725932AbgDXXaT (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 24 Apr 2020 19:30:19 -0400
-Subject: Re: [GIT PULL] SCSI fixes for 5.7-rc2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587771019;
-        bh=ISuRq13IYKhDPE2J7pCl085V6rP+LvrWMY2++avaavU=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=WnxUJX2dqkZvTLg1jZRkVxAMJMwjip+RCJhbjP3lYM9p2q5MY5glrMJ2mJA780Abt
-         qAIhAd3Qt8+690wq0UTcDr7qJKylAWzDXfGbVpjfMRuUmdf1j9K1B1TJ+G/gLXvVhB
-         zPl5lHuil6xmW3HFg7LGYjFOg9NDYrIAeequQjcU=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <1587766958.4513.19.camel@HansenPartnership.com>
-References: <1587766958.4513.19.camel@HansenPartnership.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <1587766958.4513.19.camel@HansenPartnership.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
-X-PR-Tracked-Commit-Id: fa17a6dc84d1eb6b62bcf981a4ddcc966b1a2c04
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 5ef58e29078261ef5195c7fee74768546b863182
-Message-Id: <158777101896.26626.5023469776276987063.pr-tracker-bot@kernel.org>
-Date:   Fri, 24 Apr 2020 23:30:18 +0000
-To:     James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        id S1726386AbgDYH5z (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 25 Apr 2020 03:57:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36726 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726132AbgDYH5Z (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Sat, 25 Apr 2020 03:57:25 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10164C09B04B;
+        Sat, 25 Apr 2020 00:57:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=m05S9ckcfqH+AsAeGfxl4bDUEgO09heXqe8WR8G0tyI=; b=pqwaL8EpVLFjH3rNRBkUNo0a9b
+        PvakZp1T7jgMNPzEcMO1UdOlXGeznQ57/53/W+yvbLT7aKOQvf8z8XfaT7W5glWXhYbZfmOsvCH0A
+        7P+iMSCurR1mZ6aSed1Z4yrqoKPzGO+5o0MID26a3fBVb6DpR0y5K9utEIZJ/NfnGZjIH4rVLrSWH
+        G6sRDFa66M93X7Sehbqm/ce09XmKHR2CTAMPNvcOH535RsBJPLjgv0Ni9SvD7iXMMnfFXLlVHWaKz
+        OaNxZTuEr+BGUW/AkSI3b9bd3CuRf1fTpqIfLal/TnBJ/sFVruQKI8GVIeQT4UjICpP0Xc3oGAuqF
+        S846XK5Q==;
+Received: from [2001:4bb8:193:f203:c70:4a89:bc61:2] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jSFgS-00021F-KA; Sat, 25 Apr 2020 07:57:08 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Tim Waugh <tim@cyberelk.net>, Borislav Petkov <bp@alien8.de>,
+        Jan Kara <jack@suse.com>, linux-block@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: stop using ioctl_by_bdev for file system access to CDROMs v2
+Date:   Sat, 25 Apr 2020 09:56:59 +0200
+Message-Id: <20200425075706.721917-1-hch@lst.de>
+X-Mailer: git-send-email 2.26.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The pull request you sent on Fri, 24 Apr 2020 15:22:38 -0700:
+Hi Jens,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+except for the DASD case under discussion the last users of ioctl_by_bdev
+are the file system drivers that want to query CDROM information using
+ioctls.  This series switches them to use function calls directly into
+the CDROM midlayer instead, which implies:
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/5ef58e29078261ef5195c7fee74768546b863182
+ - adding a cdrom_device_info pointer to the gendisk, so that file systems
+   can find it without going to the low-level driver first
+ - ensuring that the CDROM midlayer (which isn't a lot of code) is built
+   in if the file systems are built in so that they can actually call the
+   exported functions
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+Changes since v1:
+ - fix up the no-CDROM error case in isofs_get_last_session to return 0
+   instead of -EINVAL.
