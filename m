@@ -2,82 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 877901BAF45
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Apr 2020 22:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6D11BAF5B
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Apr 2020 22:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbgD0UVk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Apr 2020 16:21:40 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:56864 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726654AbgD0UVj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Apr 2020 16:21:39 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03RKIxlL007768;
-        Mon, 27 Apr 2020 20:21:34 GMT
+        id S1726976AbgD0UXn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Apr 2020 16:23:43 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:56722 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726942AbgD0UXm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Apr 2020 16:23:42 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03RKNZI3146115;
+        Mon, 27 Apr 2020 20:23:35 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=Fws9Ngq7eUEIp37zcQ03w/49nH+NTWXsBsv5Ody5mmI=;
- b=FYRBJC/ltHcn81Wuis25poyTIAtcjIJkhjzr9+skbY+G0Sv5HqA1I3+a3VEv+yHKFwx9
- mwLPPFKAwQ29RBARsTnXBssVjSTDdBDX9jrO377WZQwwo7cK4bHOCXoDPYr5wNpI07gp
- BzSt2Ae71Etgu+YJOraLAu03MXdNsWe272AEwP2OmsTihep4HqKmvzVDuPFHJf2lJld2
- mlW1kyariPywXWAVrIBViM0bvrjlrTbzaT+yPelS5VPDgz+FvpU2/ZnD1kffD1Fjpmv4
- 33QV03j9QsJ+lLjHxrgXeX3KdLFfquf9C01qdQ+Y1Uc77aoj4aCoV2rc3ZwIrEKwTIis 2g== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 30nucfuw0e-1
+ bh=gJg86o4qkIqkS+1E64wnRb83FVark41cnwWmAjm6xus=;
+ b=rf906eRbxnkMrg0shfSwKv1IyDXd58Tuku1eKgQw+ZIBU6QpU4P6xeXzykEpGQZd5Ko5
+ OfSFaxGkFsWzH6N6MspNeakRx5+iOzPgEjVHbyLLtfR3tvZqbn7FlnhHfbQUZQemfQH7
+ irI9QsGWfgwPWwSTX1zmkAHGtfIMRppTR9Byns0ktPdCqXbliw3OPzWExIBjqnK9oexm
+ e9lrKiD640CXUX5LZ+HMxlYcXnFWtYQriLwQ6bHy/W3LwSNIO3aSSZajevEcxzOnZrKv
+ 6tc02p2SwpBTQnAqtzekF4nj6GxvE2gtUD9CUL2t+UP8b5xHDPzisidBSk9rMNt2p26K GA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 30p01nje6k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 27 Apr 2020 20:23:35 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03RKBpYv060342;
+        Mon, 27 Apr 2020 20:21:35 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 30mxwwwfx3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Mon, 27 Apr 2020 20:21:34 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03RKCtUu104225;
-        Mon, 27 Apr 2020 20:21:34 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 30my0agkb6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Apr 2020 20:21:33 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03RKLWCW006422;
-        Mon, 27 Apr 2020 20:21:32 GMT
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03RKLXDU006431;
+        Mon, 27 Apr 2020 20:21:33 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 27 Apr 2020 13:21:32 -0700
+        with ESMTP ; Mon, 27 Apr 2020 13:21:33 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     jejb@linux.ibm.com, Jason Yan <yanaijie@huawei.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: sgiwd93: remove unneeded semicolon in sgiwd93.c
-Date:   Mon, 27 Apr 2020 16:21:21 -0400
-Message-Id: <158777063305.4076.8101834754472414433.b4-ty@oracle.com>
+To:     linux-kernel@vger.kernel.org, sebaddel@cisco.com,
+        jejb@linux.ibm.com, linux-scsi@vger.kernel.org, kartilak@cisco.com,
+        Jason Yan <yanaijie@huawei.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH] scsi: snic: make snic_io_exch_ver_cmpl_handler() void
+Date:   Mon, 27 Apr 2020 16:21:22 -0400
+Message-Id: <158777063304.4076.1514687099923506496.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200421034029.28030-1-yanaijie@huawei.com>
-References: <20200421034029.28030-1-yanaijie@huawei.com>
+In-Reply-To: <20200418070615.11603-1-yanaijie@huawei.com>
+References: <20200418070615.11603-1-yanaijie@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9604 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0
- suspectscore=0 adultscore=0 mlxlogscore=928 bulkscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004270164
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=635 phishscore=0 malwarescore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004270164
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9604 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 priorityscore=1501
- mlxlogscore=999 impostorscore=0 suspectscore=0 malwarescore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004270164
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 clxscore=1015
+ phishscore=0 mlxlogscore=690 adultscore=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004270165
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 21 Apr 2020 11:40:29 +0800, Jason Yan wrote:
+On Sat, 18 Apr 2020 15:06:15 +0800, Jason Yan wrote:
 
-> Fix the following coccicheck warning:
+> This function do not need a return value and no users use it's return
+> value. So we can make it void.
 > 
-> drivers/scsi/sgiwd93.c:190:2-3: Unneeded semicolon
+> This also fixes the coccicheck warning:
+> 
+> drivers/scsi/snic/snic_ctl.c:163:5-8: Unneeded variable: "ret". Return
+> "0" on line 228
+> 
+> [...]
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/1] scsi: sgiwd93: Remove unneeded semicolon in sgiwd93.c
-      https://git.kernel.org/mkp/scsi/c/f371d5345377
+[1/1] scsi: snic: Make snic_io_exch_ver_cmpl_handler() return void
+      https://git.kernel.org/mkp/scsi/c/6942d531e2d2
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
