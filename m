@@ -2,212 +2,115 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A401BA756
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Apr 2020 17:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4059C1BA7AE
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Apr 2020 17:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728154AbgD0PIh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Apr 2020 11:08:37 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.114]:44634 "EHLO
-        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726539AbgD0PIh (ORCPT
+        id S1727947AbgD0PPo (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Apr 2020 11:15:44 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:52986 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728148AbgD0PPi (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 27 Apr 2020 11:08:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1588000110; i=@ts.fujitsu.com;
-        bh=Rq9kKJvJ+KUnaBACdIqakOgXHaMKu+Gez2U2aQLL1ME=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        b=l516sYEGIkEbfuxnNt/fu0YTQwI2dG5RbsTKZ+WomcygrsR0l+xX+DQi78PPiXdJ2
-         U3OIo+pJgALlpP11O2jphM1Xen8gbyhGxrNtzQBFeKpivcvoUUfiXG3XXKwqXsLOMK
-         ATbz9KQVRmbDgFD3cvs0dbh3BzHRZCpoHCHj7aCGRjCkCjQVdWKlvwkVVjMu0i5oTj
-         u7rZemaVQX3+lvvhYFxpANmQra2dmbXABBghOr8QpNnzgJgnAEc2eLI2egXUB8hspd
-         1/AQyqqoYRdF5J1tPt7vLF/ThXdG+a6sxSFqUiVs/cuXDlY3b/Ml3VRHnp5+ySaDYW
-         RjvZerwriW1Aw==
-Received: from [100.113.6.103] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-3.bemta.az-b.eu-central-1.aws.symcld.net id 45/00-40390-E65F6AE5; Mon, 27 Apr 2020 15:08:30 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRWlGSWpSXmKPExsViZ8MxVTfv67I
-  4g31veSy+/p/OYrFy9VEmi+7rO9gslh//x2Sx/sgGRovWpW+ZHNg8dt9sYPP4+PQWi8f7fVfZ
-  PDafrvb4vEkugDWKNTMvKb8igTVj+adzbAVH1CoePLzB3MDYr9jFyMUhJDCZUaKhfQIThDOdU
-  eLvv4XMXYycHGwCBhIrJt1nAbFFBGwk+g4vBStiFmhilLj1aj0bSEJYIELi2KN3QAkODhYBVY
-  nN3+tBwrwCdhKzN35nBbElBOQlOg5MBpvDKWAvcebidTaQciGgmo8P9CYwci9gZFjFaJFUlJm
-  eUZKbmJmja2hgoGtoaKxromtkpJdYpZukl1qqm5yaV1KUCJTUSywv1iuuzE3OSdHLSy3ZxAgM
-  qpRCFrEdjLPWvtc7xCjJwaQkynty9bI4Ib6k/JTKjMTijPii0pzU4kOMMhwcShK8Uz8D5QSLU
-  tNTK9Iyc4ABDpOW4OBREuFN+AKU5i0uSMwtzkyHSJ1iVJQS57UDSQiAJDJK8+DaYFF1iVFWSp
-  iXkYGBQYinILUoN7MEVf4VozgHo5Iw7yyQ7TyZeSVw018BLWYCWlwlvxhkcUkiQkqqgcn977l
-  WhphdJQq5X2Sn39Pe94Nhx+l3H41kF9obVGpL177eIyj65cdrK4PUfb80GDwimayKV2s/fX32
-  M7NDQ8XkH/enrDwm8PHb3zDmGSK/TeOf3fzspNeRdK9o97TjWSGcWcmXloosbVyXV2z0bIfUD
-  ebkmH0Ru8+27etTTOb4d9Pp+Nf1551WnfmTpdH140v3pPSoOZFB8572dYhFqVutPpeS9uZl6m
-  Tj38cNNDvc7UJrjl09cOZy/AerIzf3pZ/5IcyU633rjU5huftfpWduRduU3ByK54tr8mdzO/f
-  Ea2cfc9l9tvfAFa8D7jqTMzP47h/Nk7p3JGXqhVdiL/8Ufr/67Hb2i+Kv7aXH18QqsRRnJBpq
-  MRcVJwIADf/LmCUDAAA=
-X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-18.tower-238.messagelabs.com!1588000109!62717!1
-X-Originating-IP: [62.60.8.149]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.50.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 20793 invoked from network); 27 Apr 2020 15:08:30 -0000
-Received: from unknown (HELO mailhost2.uk.fujitsu.com) (62.60.8.149)
-  by server-18.tower-238.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Apr 2020 15:08:30 -0000
-Received: from x-serv01 ([172.17.38.52])
-        by mailhost2.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 03RF8Qji013128;
-        Mon, 27 Apr 2020 16:08:26 +0100
-Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id 124A7208E4;
-        Mon, 27 Apr 2020 17:08:26 +0200 (CEST)
-From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
-To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Cc:     mchristi@redhat.com, ddiss@suse.de, hch@lst.de,
-        martin.petersen@oracle.com,
-        Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Subject: [PATCH 4/4] target: tcmu: make pgr_support and alua_support attributes writable
-Date:   Mon, 27 Apr 2020 17:08:23 +0200
-Message-Id: <20200427150823.15350-5-bstroesser@ts.fujitsu.com>
-X-Mailer: git-send-email 2.12.3
-In-Reply-To: <20200427150823.15350-1-bstroesser@ts.fujitsu.com>
-References: <20200427150823.15350-1-bstroesser@ts.fujitsu.com>
+        Mon, 27 Apr 2020 11:15:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1588000536;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eSpYzJ8vruskzw1ixWuPTFKODIOCb1DdC0Y5Ypx1fB0=;
+        b=Ixjl1U9ZxAd7CT3hUfVBj4OC3cNpxodUZOfnDT/R+PiEaqt/AILrKzUj5Eo/rzHioy9Oln
+        cvJLzIAKJ6wHxC5CCF4L4yKtPq/EaBFl8TJ9vWTotACZe3HuIK/3lALMrWYOMCjppl2WFY
+        7T3/PCaVB0U3AZ/R1FovAdsEF10h418=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-24-ooq-R3UWMF6ZxHTaZ8aGuw-1; Mon, 27 Apr 2020 11:15:34 -0400
+X-MC-Unique: ooq-R3UWMF6ZxHTaZ8aGuw-1
+Received: by mail-wm1-f70.google.com with SMTP id h22so31924wml.1
+        for <linux-scsi@vger.kernel.org>; Mon, 27 Apr 2020 08:15:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eSpYzJ8vruskzw1ixWuPTFKODIOCb1DdC0Y5Ypx1fB0=;
+        b=Gmxd45WdzEJP8DZImbfAVpiX3qeUn+mLgs3hofJr6mw/J4BvmDx2pAFW5LV3Uta8iO
+         fGTtJbp8HprKZhykpstIbNKF8B8UFXcFC2XlEfAl91+fJRqVvkiZMjmvBppfkTim9CYy
+         p0TUe/QvDPOepSPKNWLwnSLhrgJqKlR6b8yRmn6oSOR06NjZAiPqOtKFzpxN+5Xw04Jp
+         rOGjNNVTXziPYVwHR/jXDpKNsxyiM/jwzfhM8uC+XS9Xkk5AxDdk83NKZ+zgFf2wIHJg
+         OMNJkEdvzOdqyW0DIXuHNMaX8NZ9mjikIcyRZ5VbbdpEMe4S5E/UJmQ0zByik2d/SYKr
+         4gGA==
+X-Gm-Message-State: AGi0Pua7pEy53ZudA2AramJBtm/XAPnDdj6vG9PuuM4t9V5eK9uFvdyw
+        z5UXbeqRjDTzjw78ET2BfYDu7/GLNCP18cBj+1AOl02SJ2D1sOBTNBq/JKJJEexb2/gwBWxwdh6
+        u47TRBRupMtz/Ttvz/zXrrg==
+X-Received: by 2002:a5d:670d:: with SMTP id o13mr29924461wru.29.1588000533358;
+        Mon, 27 Apr 2020 08:15:33 -0700 (PDT)
+X-Google-Smtp-Source: APiQypK+T+6Aj+dLlxq4HhKDwXzdqmOqUdriVVov3jgAPiPujwYcHZ4fNtTJwlwzd9NWqPh44afp5Q==
+X-Received: by 2002:a5d:670d:: with SMTP id o13mr29924444wru.29.1588000533150;
+        Mon, 27 Apr 2020 08:15:33 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:ac19:d1fb:3f5f:d54f? ([2001:b07:6468:f312:ac19:d1fb:3f5f:d54f])
+        by smtp.gmail.com with ESMTPSA id n6sm23226378wrs.81.2020.04.27.08.15.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Apr 2020 08:15:32 -0700 (PDT)
+Subject: Re: [PATCH v2 6/7] debugfs: switch to simplefs inode creation API
+To:     Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        linux-fsdevel@vger.kernel.org
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Manoj N. Kumar" <manoj@linux.ibm.com>,
+        "Matthew R. Ochs" <mrochs@linux.ibm.com>,
+        Uma Krishnan <ukrishn@linux.ibm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Joel Becker <jlbec@evilplan.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-scsi@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20200421135119.30007-1-eesposit@redhat.com>
+ <20200421135741.30657-4-eesposit@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <167ebece-2e50-5186-3a42-2fa491fcb8a5@redhat.com>
+Date:   Mon, 27 Apr 2020 17:15:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20200421135741.30657-4-eesposit@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Currently in tcmu reservation commands are handled by core's
-pr implementation (default) or completely rejected (emulate_pr
-set to 0). We additionally want to be able to do full
-reservation handling in userspace. Therefore we need a way to
-set the TRANSPORT_FLAG_PASSTHROUGH_PGR.
-The inverted flag is displayed by attribute pgr_support.
-Since we moved the flag from transport/backend to se_device in
-the previous patch, we now can make it changeable per device by
-allowing to write the attribute.
-The new field transport_flags_changeable in transport/backend
-is used to reject writing if not allowed for a backend.
+On 21/04/20 15:57, Emanuele Giuseppe Esposito wrote:
+> -	inode = debugfs_get_inode(dentry->d_sb);
 
-Regarding ALUA we also want to be able to passthrough commands
-to userspace in tcmu. Therefore we need
-TRANSPORT_FLAG_PASSTHROUGH_ALUA to be changeable, because
-by setting it we can switch off all ALUA checks in core. So we
-also set TRANSPORT_FLAG_PASSTHROUGH_ALUA in tcmu's
-transport_flags_changeable.
+You're not removing debugfs_get_inode so I think you're going to get a
+warning (same in tracefs)?
 
-Of course, ALUA and reservation handling in userspace will work
-only, if session/nexus information is sent to userspace along with
-every command. This will be object of a patch series announced
-by Mike Christie.
+You can wait a few more days for reviews and/or Acked-bys (especially
+for patches 6 and 7) and then post v3.
 
-Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
----
- drivers/target/target_core_configfs.c | 56 +++++++++++++++++++++++++++++++++--
- drivers/target/target_core_user.c     |  2 ++
- include/target/target_core_backend.h  |  1 +
- 3 files changed, 57 insertions(+), 2 deletions(-)
+Since the touch-everything patch (#2) has already been reviewed, and
+it's mechanical and not introducing any semantic change, you can
+probably reduce the To/Cc list to filesystem, debugfs and tracefs
+maintainers.
 
-diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index 279989e32e64..f04352285155 100644
---- a/drivers/target/target_core_configfs.c
-+++ b/drivers/target/target_core_configfs.c
-@@ -1105,6 +1105,32 @@ static ssize_t alua_support_show(struct config_item *item, char *page)
- 			flags & TRANSPORT_FLAG_PASSTHROUGH_ALUA ? 0 : 1);
- }
- 
-+static ssize_t alua_support_store(struct config_item *item,
-+		const char *page, size_t count)
-+{
-+	struct se_dev_attrib *da = to_attrib(item);
-+	struct se_device *dev = da->da_dev;
-+	bool flag;
-+	int ret;
-+
-+	if (!(dev->transport->transport_flags_changeable &
-+	      TRANSPORT_FLAG_PASSTHROUGH_ALUA)) {
-+		pr_err("dev[%p]: Unable to change SE Device alua_support:"
-+			" alua_support has fixed value\n", dev);
-+		return -EINVAL;
-+	}
-+
-+	ret = strtobool(page, &flag);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (flag)
-+		dev->transport_flags &= ~TRANSPORT_FLAG_PASSTHROUGH_ALUA;
-+	else
-+		dev->transport_flags |= TRANSPORT_FLAG_PASSTHROUGH_ALUA;
-+	return count;
-+}
-+
- static ssize_t pgr_support_show(struct config_item *item, char *page)
- {
- 	struct se_dev_attrib *da = to_attrib(item);
-@@ -1114,6 +1140,32 @@ static ssize_t pgr_support_show(struct config_item *item, char *page)
- 			flags & TRANSPORT_FLAG_PASSTHROUGH_PGR ? 0 : 1);
- }
- 
-+static ssize_t pgr_support_store(struct config_item *item,
-+		const char *page, size_t count)
-+{
-+	struct se_dev_attrib *da = to_attrib(item);
-+	struct se_device *dev = da->da_dev;
-+	bool flag;
-+	int ret;
-+
-+	if (!(dev->transport->transport_flags_changeable &
-+	      TRANSPORT_FLAG_PASSTHROUGH_PGR)) {
-+		pr_err("dev[%p]: Unable to change SE Device pgr_support:"
-+			" pgr_support has fixed value\n", dev);
-+		return -EINVAL;
-+	}
-+
-+	ret = strtobool(page, &flag);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (flag)
-+		dev->transport_flags &= ~TRANSPORT_FLAG_PASSTHROUGH_PGR;
-+	else
-+		dev->transport_flags |= TRANSPORT_FLAG_PASSTHROUGH_PGR;
-+	return count;
-+}
-+
- CONFIGFS_ATTR(, emulate_model_alias);
- CONFIGFS_ATTR(, emulate_dpo);
- CONFIGFS_ATTR(, emulate_fua_write);
-@@ -1146,8 +1198,8 @@ CONFIGFS_ATTR(, unmap_granularity);
- CONFIGFS_ATTR(, unmap_granularity_alignment);
- CONFIGFS_ATTR(, unmap_zeroes_data);
- CONFIGFS_ATTR(, max_write_same_len);
--CONFIGFS_ATTR_RO(, alua_support);
--CONFIGFS_ATTR_RO(, pgr_support);
-+CONFIGFS_ATTR(, alua_support);
-+CONFIGFS_ATTR(, pgr_support);
- 
- /*
-  * dev_attrib attributes for devices using the target core SBC/SPC
-diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
-index 264f19ba8453..b02760b2e9c0 100644
---- a/drivers/target/target_core_user.c
-+++ b/drivers/target/target_core_user.c
-@@ -2618,6 +2618,8 @@ static struct target_backend_ops tcmu_ops = {
- 	.name			= "user",
- 	.owner			= THIS_MODULE,
- 	.transport_flags_default = TRANSPORT_FLAG_PASSTHROUGH,
-+	.transport_flags_changeable = TRANSPORT_FLAG_PASSTHROUGH_PGR |
-+	                              TRANSPORT_FLAG_PASSTHROUGH_ALUA,
- 	.attach_hba		= tcmu_attach_hba,
- 	.detach_hba		= tcmu_detach_hba,
- 	.alloc_device		= tcmu_alloc_device,
-diff --git a/include/target/target_core_backend.h b/include/target/target_core_backend.h
-index 959163504f82..f51452e3b984 100644
---- a/include/target/target_core_backend.h
-+++ b/include/target/target_core_backend.h
-@@ -24,6 +24,7 @@ struct target_backend_ops {
- 	struct module *owner;
- 
- 	u8 transport_flags_default;
-+	u8 transport_flags_changeable;
- 
- 	int (*attach_hba)(struct se_hba *, u32);
- 	void (*detach_hba)(struct se_hba *);
--- 
-2.12.3
+Thanks,
+
+Paolo
 
