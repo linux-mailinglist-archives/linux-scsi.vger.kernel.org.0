@@ -2,67 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669F31BA753
-	for <lists+linux-scsi@lfdr.de>; Mon, 27 Apr 2020 17:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7201BA75B
+	for <lists+linux-scsi@lfdr.de>; Mon, 27 Apr 2020 17:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727932AbgD0PId (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Apr 2020 11:08:33 -0400
-Received: from mail1.bemta26.messagelabs.com ([85.158.142.113]:61000 "EHLO
+        id S1728162AbgD0PIk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Apr 2020 11:08:40 -0400
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.112]:45014 "EHLO
         mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726539AbgD0PIc (ORCPT
+        by vger.kernel.org with ESMTP id S1727010AbgD0PIj (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 27 Apr 2020 11:08:32 -0400
+        Mon, 27 Apr 2020 11:08:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1588000110; i=@ts.fujitsu.com;
-        bh=kMG0yUaaspA//KQ9VSeFJDQKXrDiLpr0wGyQrmXds5g=;
+        s=200619tsfj; t=1588000116; i=@ts.fujitsu.com;
+        bh=hhdndVHek54RMTdFxOSkrFch+MGToNeHqu/zEHcd718=;
         h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
-        b=IuAhspuPuBp/FEeqcbD/+FKqdSLwZY8cZysdADvUQsWxc5zbfJfjw8XaN3yMPYfcS
-         fbh9p8XbLJSLzl96WUauPesfGTiQDdreBuH4WwIBTDcJaVxs5co97wg4Hfq30d4YBP
-         BdVYtrcXff+tsypdLV/FJKWGVgqnICwHtoXIznoNlq26X1EwnKyRRmzghaMn+XGvgL
-         LwkNso8GoVTYZAlvRqRGwi+OTEebCnDT8aU1UFDMflMaXXt2yKkc12ts1tn2tBl4ID
-         kxd00j1YQh/OA6A4HYYk8WGgiyorp9e48ZoDf1DvigZWzKyskz79C1nssc7773Fojg
-         R4JguR7+7Ajeg==
+        b=RICz3GlQBKo+7Vdw1+8OBF0vp9Y4jauNnyuHkxyesoozcqeRuxdS7DU1jLwK8/zWm
+         e8RnRVPBAflS7EvfHSdEgt/hsT9kgljvcmZF+2hSDnxLa4ohVG1AgFeaTEVeG3qR3U
+         72rfiASEM0qVbKvm3joeSPlhHkrrT4tTTj9WQi6g+6roLX7M3v4aLaMErElQf9KXUc
+         1rwmbMs4q/U35O+UuvyByPYrVb7pllhAwZy14c+IUVbK3GiqIIq8Ve/+7CbvWSpfii
+         iAMkoDjoGX23QHMOjVGqjQGFdRg6fYvrmTS3lV4ZjmZkh/fYU2uxb0hb8HZYq/MG2H
+         z7mm3agBiWwDA==
 Received: from [100.113.6.103] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-2.bemta.az-b.eu-central-1.aws.symcld.net id 2F/E7-40482-D65F6AE5; Mon, 27 Apr 2020 15:08:29 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrPIsWRWlGSWpSXmKPExsViZ8MRopv7dVm
-  cwYpWHYuv/6ezWKxcfZTJovv6DjaL5cf/MVmsP7KB0aJ16VsmBzaP3Tcb2Dw+Pr3F4vF+31U2
-  j82nqz0+b5ILYI1izcxLyq9IYM2YdXw6a8Fj9oqT7U2sDYwf2LoYuTiEBCYzShz+O5kRwpnOK
-  HHjwRL2LkZODjYBA4kVk+6zgNgiAjYSfYeXMoEUMQs0MUrcerUeqJ2DQ1ggVOLRb3eQGhYBVY
-  lTi86zgIR5BewkPpzKAglLCMhLdByYDDaGU8Be4szF62CdQkAlHx/oTWDkXsDIsIrRIqkoMz2
-  jJDcxM0fX0MBA19DQWNdE18JcL7FKN0kvtVQ3OTWvpCgRKKmXWF6sV1yZm5yTopeXWrKJERhS
-  KYUs4TsYdy5/r3eIUZKDSUmU9+TqZXFCfEn5KZUZicUZ8UWlOanFhxhlODiUJHinfgbKCRalp
-  qdWpGXmAMMbJi3BwaMkwpvwBSjNW1yQmFucmQ6ROsVoz/Fm7ZJFzBxt9+4CyZkLDq5m5rjffm
-  g1sxBLXn5eqpQ4rx1ImwBIW0ZpHtxQWDxeYpSVEuZlZGBgEOIpSC3KzSxBlX/FKM7BqCTMOwv
-  kNp7MvBK43a+AzmICOqtKfjHIWSWJCCmpBqaDixecZZn9UOtw7Vq7bpnAlQ/6Tmiw/+marrJt
-  0Q8z25x/XZcvnr+1U/RYvuDde4aTaz+LLvaTtVrE8PVo9nSjx8udlRWPLah5ynFa+0Wg37bl0
-  9oE/nnIWkhm5m82j+djDuV7df57/2oR52UTVjqckD9dFpZwTTXI/2LytadsAULTq97zl/Wy7L
-  eefO/yxsc2HdoXl/Lufn8ht6jygMLjnotqxzvrf3ed74uvSEzxqLmT+kTStP7+rLhbMW3sWyI
-  2vrxZqca+Yd08y+uXU/Wu3SuMvi6694VAtu+f5gr511075S5wb/rSYtkc3x3WHPz1TeJyx3ru
-  mewsL24GhG1dmOJ8/m+xQIX2r+JVctuVWIozEg21mIuKEwFkanI/QgMAAA==
+        by server-1.bemta.az-b.eu-central-1.aws.symcld.net id FD/77-39489-475F6AE5; Mon, 27 Apr 2020 15:08:36 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMIsWRWlGSWpSXmKPExsViZ8MRqlv8dVm
+  cwZJFqhZf/09nsVi5+iiTRff1HWwWy4//Y7JYf2QDo0Xr0rdMDmweu282sHl8fHqLxeP9vqts
+  HptPV3t83iQXwBrFmpmXlF+RwJqx8fdD1oKjkhUH/jexNDAuFOti5OIQEpjMKDHx10pWCGc6o
+  8SCZ6eYuxg5OdgEDCRWTLrPAmKLCNhI9B1eygRSxCzQxChx69V6NpCEsECIRN/q42BFLAKqEv
+  Me/QWzeQXsJA4eu8IOYksIyEt0HJgMFucUsJc4c/E6UC8H0DY7iY8P9CYwci9gZFjFaJFUlJm
+  eUZKbmJmja2hgoGtoaKxromtkpJdYpZukl1qqm5yaV1KUCJTUSywv1iuuzE3OSdHLSy3ZxAgM
+  q5RCFrEdjLPWvtc7xCjJwaQkynty9bI4Ib6k/JTKjMTijPii0pzU4kOMMhwcShK8Uz8D5QSLU
+  tNTK9Iyc4AhDpOW4OBREuFN+AKU5i0uSMwtzkyHSJ1iVJQS57UDSQiAJDJK8+DaYHF1iVFWSp
+  iXkYGBQYinILUoN7MEVf4VozgHo5Iw7yyQ7TyZeSVw018BLWYCWlwlvxhkcUkiQkqqgUn11Tu
+  35q5zNrUOtZJzrz6cO0sm3O8Q8xTNp8F3+dKeLJi5Vnn1vH93T21vv3Zn4rMzEnHPzi8WWvq9
+  x+LXN9u8PyJnuXYdON5+VOB53NSfspfSgmYzC4WdaGn5Wf8reW3wQbVPm7xm77wYlFnDv+LAV
+  +WNHxPz3rw169JaKPz4mg/Hrqkbm3dpmlgu/3qN6eOOxg9/ZCLi921Jip3Tnbf48//vlxbzKJ
+  slmKan73fznb4v68zLEqcXQa9fVmn9eGB8uHS2wdy2a1yOXmulXvHtkuTQTS/6H6lYaqSuUr3
+  toWjgC7Ha1pTdu/lqOj3CDqlGn29cqpQw/zt7mLlh6BxJx+2hyT5/uBYotS8JSLNVYinOSDTU
+  Yi4qTgQArlRA2iYDAAA=
 X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-13.tower-245.messagelabs.com!1588000109!51129!1
-X-Originating-IP: [62.60.8.84]
+X-Msg-Ref: server-23.tower-245.messagelabs.com!1588000115!1029317!1
+X-Originating-IP: [62.60.8.85]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
 X-StarScan-Version: 9.50.1; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 15394 invoked from network); 27 Apr 2020 15:08:29 -0000
-Received: from unknown (HELO mailhost3.uk.fujitsu.com) (62.60.8.84)
-  by server-13.tower-245.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Apr 2020 15:08:29 -0000
+Received: (qmail 9044 invoked from network); 27 Apr 2020 15:08:35 -0000
+Received: from unknown (HELO mailhost4.uk.fujitsu.com) (62.60.8.85)
+  by server-23.tower-245.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Apr 2020 15:08:35 -0000
 Received: from x-serv01 ([172.17.38.52])
-        by mailhost3.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 03RF8QuV031886;
-        Mon, 27 Apr 2020 16:08:26 +0100
+        by mailhost4.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 03RF8XOS025009;
+        Mon, 27 Apr 2020 16:08:33 +0100
 Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id E863D20708;
-        Mon, 27 Apr 2020 17:08:25 +0200 (CEST)
+        by x-serv01 (Postfix) with ESMTP id 01D7420722;
+        Mon, 27 Apr 2020 17:08:26 +0200 (CEST)
 From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
 To:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     mchristi@redhat.com, ddiss@suse.de, hch@lst.de,
         martin.petersen@oracle.com,
         Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Subject: [PATCH 1/4] target: add missing emulate_pr attribute to passthrough backends
-Date:   Mon, 27 Apr 2020 17:08:20 +0200
-Message-Id: <20200427150823.15350-2-bstroesser@ts.fujitsu.com>
+Subject: [PATCH 2/4] target: tcmu: add attrbutes enforce_pr_isids and force_pr_aptpl
+Date:   Mon, 27 Apr 2020 17:08:21 +0200
+Message-Id: <20200427150823.15350-3-bstroesser@ts.fujitsu.com>
 X-Mailer: git-send-email 2.12.3
 In-Reply-To: <20200427150823.15350-1-bstroesser@ts.fujitsu.com>
 References: <20200427150823.15350-1-bstroesser@ts.fujitsu.com>
@@ -71,31 +71,91 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-In commit b49d6f7885306ee636d5c1af52170f3069ccf5f7 the new attribute
-emulate_pr was added.
-passthrough_parse_cdb() uses the attribute's value to distinguish,
-whether reservation commands should be rejected or not.
-But the new attribute was not added to passthrough_attrib_attrs, so in
-pscsi and tcmu - the users of passthrough_parse_cdb() - the attribute
-is not available to change parser's behavior.
+tcmu has not set TRANSPORT_FLAG_PASSTHROUGH_PGR. Therefore the
+in core pr emulation is active by default, but there are some
+attributes for configuration missing. So we add them now.
 
 Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
 ---
- drivers/target/target_core_configfs.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/target/target_core_configfs.c | 11 +++++++++++
+ drivers/target/target_core_user.c     | 19 +++++++++----------
+ include/target/target_core_backend.h  |  1 +
+ 3 files changed, 21 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index ff82b21fdcce..d8589bb39c53 100644
+index d8589bb39c53..efa92d836946 100644
 --- a/drivers/target/target_core_configfs.c
 +++ b/drivers/target/target_core_configfs.c
-@@ -1203,6 +1203,7 @@ struct configfs_attribute *passthrough_attrib_attrs[] = {
- 	&attr_hw_block_size,
- 	&attr_hw_max_sectors,
- 	&attr_hw_queue_depth,
-+	&attr_emulate_pr,
- 	&attr_alua_support,
- 	&attr_pgr_support,
- 	NULL,
+@@ -1210,6 +1210,17 @@ struct configfs_attribute *passthrough_attrib_attrs[] = {
+ };
+ EXPORT_SYMBOL(passthrough_attrib_attrs);
+ 
++/*
++ * pr related dev_attrib attributes for devices passing through CDBs,
++ * but allowing in core pr emulation.
++ */
++struct configfs_attribute *passthrough_pr_attrib_attrs[] = {
++	&attr_enforce_pr_isids,
++	&attr_force_pr_aptpl,
++	NULL,
++};
++EXPORT_SYMBOL(passthrough_pr_attrib_attrs);
++
+ TB_CIT_SETUP_DRV(dev_attrib, NULL, NULL);
+ TB_CIT_SETUP_DRV(dev_action, NULL, NULL);
+ 
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index f769bb1e3735..8adde343182f 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -2753,12 +2753,12 @@ static int __init tcmu_module_init(void)
+ 		goto out_unreg_device;
+ 	}
+ 
+-	for (i = 0; passthrough_attrib_attrs[i] != NULL; i++) {
++	for (i = 0; passthrough_attrib_attrs[i] != NULL; i++)
+ 		len += sizeof(struct configfs_attribute *);
+-	}
+-	for (i = 0; tcmu_attrib_attrs[i] != NULL; i++) {
++	for (i = 0; passthrough_pr_attrib_attrs[i] != NULL; i++)
++		len += sizeof(struct configfs_attribute *);
++	for (i = 0; tcmu_attrib_attrs[i] != NULL; i++)
+ 		len += sizeof(struct configfs_attribute *);
+-	}
+ 	len += sizeof(struct configfs_attribute *);
+ 
+ 	tcmu_attrs = kzalloc(len, GFP_KERNEL);
+@@ -2767,13 +2767,12 @@ static int __init tcmu_module_init(void)
+ 		goto out_unreg_genl;
+ 	}
+ 
+-	for (i = 0; passthrough_attrib_attrs[i] != NULL; i++) {
++	for (i = 0; passthrough_attrib_attrs[i] != NULL; i++)
+ 		tcmu_attrs[i] = passthrough_attrib_attrs[i];
+-	}
+-	for (k = 0; tcmu_attrib_attrs[k] != NULL; k++) {
+-		tcmu_attrs[i] = tcmu_attrib_attrs[k];
+-		i++;
+-	}
++	for (k = 0; passthrough_pr_attrib_attrs[k] != NULL; k++)
++		tcmu_attrs[i++] = passthrough_pr_attrib_attrs[k];
++	for (k = 0; tcmu_attrib_attrs[k] != NULL; k++)
++		tcmu_attrs[i++] = tcmu_attrib_attrs[k];
+ 	tcmu_ops.tb_dev_attrib_attrs = tcmu_attrs;
+ 
+ 	ret = transport_backend_register(&tcmu_ops);
+diff --git a/include/target/target_core_backend.h b/include/target/target_core_backend.h
+index 1b752d8ea529..8177667eba6d 100644
+--- a/include/target/target_core_backend.h
++++ b/include/target/target_core_backend.h
+@@ -94,6 +94,7 @@ int	transport_set_vpd_ident(struct t10_vpd *, unsigned char *);
+ 
+ extern struct configfs_attribute *sbc_attrib_attrs[];
+ extern struct configfs_attribute *passthrough_attrib_attrs[];
++extern struct configfs_attribute *passthrough_pr_attrib_attrs[];
+ 
+ /* core helpers also used by command snooping in pscsi */
+ void	*transport_kmap_data_sg(struct se_cmd *);
 -- 
 2.12.3
 
