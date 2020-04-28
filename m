@@ -2,136 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87AF01BB1AE
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2020 00:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA9BE1BB283
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2020 02:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726253AbgD0WuJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 27 Apr 2020 18:50:09 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:22864 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726233AbgD0WuJ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 27 Apr 2020 18:50:09 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03RM3nUC143868;
-        Mon, 27 Apr 2020 18:50:02 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30mhr64j65-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Apr 2020 18:50:02 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03RMZ9wT027047;
-        Mon, 27 Apr 2020 22:50:01 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma03dal.us.ibm.com with ESMTP id 30mcu74m71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 27 Apr 2020 22:50:01 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03RMnx7624314230
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Apr 2020 22:50:00 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E493078060;
-        Mon, 27 Apr 2020 22:49:59 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 147137805E;
-        Mon, 27 Apr 2020 22:49:57 +0000 (GMT)
-Received: from oc6857751186.ibm.com (unknown [9.160.64.115])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 27 Apr 2020 22:49:57 +0000 (GMT)
-From:   Tyrel Datwyler <tyreld@linux.ibm.com>
-To:     james.bottomley@hansenpartnership.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, brking@linux.ibm.com,
-        Tyrel Datwyler <tyreld@linux.ibm.com>
-Subject: [PATCH] ibmvscsi: fix WARN_ON during event pool release
-Date:   Mon, 27 Apr 2020 15:49:53 -0700
-Message-Id: <1588027793-17952-1-git-send-email-tyreld@linux.ibm.com>
-X-Mailer: git-send-email 1.8.3.1
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-27_17:2020-04-27,2020-04-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 spamscore=0 mlxscore=0 suspectscore=3 clxscore=1015
- priorityscore=1501 adultscore=0 phishscore=0 mlxlogscore=651
- impostorscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2003020000 definitions=main-2004270180
+        id S1726399AbgD1AFJ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 27 Apr 2020 20:05:09 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:53400 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbgD1AFJ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 27 Apr 2020 20:05:09 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03S02hbS005593
+        for <linux-scsi@vger.kernel.org>; Tue, 28 Apr 2020 00:05:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=wve4IxxI+gHT33a9fQHr5iG6L8KLhtH8AGU/s0ckWtQ=;
+ b=wTtu/8oTWGq85EQIXsKUuQwftitZRvMyQWiBZgbG/Mep5rfNZcTo4Bpz6xbKxHjJvtH4
+ ts45E4sriIDPY3eRhQxyzzJ8lKjP6SiZ5GeANIkkxHRISBEBKbHvUjO4tBGpgbi3Bv4Q
+ R48h94suyKRp63G/rLkoCztrgidb+VOTa81sc4SBZrlQmIApDgKZk4VERWebUpmk98RU
+ Gd41GYbaVH11CcJA73r6UwCbNr+lx6bN3ag0OPccNXrqRGDaPmDAVB58i1jf/YMJLXt/
+ Gi+k5ZWOwD1M6JzswgDFuWAidP9x4KrHrGwy+EgsFEpyUxCmu1njimboFbIaP/eyiBU9 FQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 30nucfvpp9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-scsi@vger.kernel.org>; Tue, 28 Apr 2020 00:05:08 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03RNwDpc120704
+        for <linux-scsi@vger.kernel.org>; Tue, 28 Apr 2020 00:03:08 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 30mxrra9ng-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-scsi@vger.kernel.org>; Tue, 28 Apr 2020 00:03:08 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 03S037fD002292
+        for <linux-scsi@vger.kernel.org>; Tue, 28 Apr 2020 00:03:07 GMT
+Received: from [10.191.31.22] (/10.191.31.22)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 27 Apr 2020 17:03:07 -0700
+Subject: Re: [PATCH v2] scsi: iscsi: register sysfs for iscsi workqueue
+To:     linux-scsi@vger.kernel.org
+Cc:     martin.petersen@oracle.com
+References: <20200417111545.30437-1-bob.liu@oracle.com>
+From:   Bob Liu <bob.liu@oracle.com>
+Message-ID: <f4051cbe-0bdf-badb-5b00-0d875fa03261@oracle.com>
+Date:   Tue, 28 Apr 2020 08:02:59 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20200417111545.30437-1-bob.liu@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9604 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=3
+ mlxlogscore=999 malwarescore=0 bulkscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004270195
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9604 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=999 impostorscore=0 suspectscore=3 malwarescore=0
+ lowpriorityscore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004270196
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-While removing an ibmvscsi client adapter a WARN_ON like the following
-is seen in the kernel log:
+Friendly ping..
 
-drmgr: drmgr: -r -c slot -s U9080.M9S.783AEC8-V11-C11 -w 5 -d 1
-WARNING: CPU: 9 PID: 24062 at ../kernel/dma/mapping.c:311 dma_free_attrs+0x78/0x110
-Supported: No, Unreleased kernel
-CPU: 9 PID: 24062 Comm: drmgr Kdump: loaded Tainted: G               X 5.3.18-12-default
-NIP:  c0000000001fa758 LR: c0000000001fa744 CTR: c0000000001fa6e0
-REGS: c0000002173375d0 TRAP: 0700   Tainted: G               X (5.3.18-12-default)
-MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 28088282  XER: 20000000
-CFAR: c0000000001fbf0c IRQMASK: 1
-GPR00: c0000000001fa744 c000000217337860 c00000000161ab00 0000000000000000
-GPR04: 0000000000000000 c000011e12250000 0000000018010000 0000000000000000
-GPR08: 0000000000000000 0000000000000001 0000000000000001 c0080000190f4fa8
-GPR12: c0000000001fa6e0 c000000007fc2a00 0000000000000000 0000000000000000
-GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
-GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
-GPR24: 000000011420e310 0000000000000000 0000000000000000 0000000018010000
-GPR28: c00000000159de50 c000011e12250000 0000000000006600 c000011e5c994848
-NIP [c0000000001fa758] dma_free_attrs+0x78/0x110
-LR [c0000000001fa744] dma_free_attrs+0x64/0x110
-Call Trace:
-[c000000217337860] [000000011420e310] 0x11420e310 (unreliable)
-[c0000002173378b0] [c0080000190f0280] release_event_pool+0xd8/0x120 [ibmvscsi]
-[c000000217337930] [c0080000190f3f74] ibmvscsi_remove+0x6c/0x160 [ibmvscsi]
-[c000000217337960] [c0000000000f3cac] vio_bus_remove+0x5c/0x100
-[c0000002173379a0] [c00000000087a0a4] device_release_driver_internal+0x154/0x280
-[c0000002173379e0] [c0000000008777cc] bus_remove_device+0x11c/0x220
-[c000000217337a60] [c000000000870fc4] device_del+0x1c4/0x470
-[c000000217337b10] [c0000000008712a0] device_unregister+0x30/0xa0
-[c000000217337b80] [c0000000000f39ec] vio_unregister_device+0x2c/0x60
-[c000000217337bb0] [c00800001a1d0964] dlpar_remove_slot+0x14c/0x250 [rpadlpar_io]
-[c000000217337c50] [c00800001a1d0bcc] remove_slot_store+0xa4/0x110 [rpadlpar_io]
-[c000000217337cd0] [c000000000c091a0] kobj_attr_store+0x30/0x50
-[c000000217337cf0] [c00000000057c934] sysfs_kf_write+0x64/0x90
-[c000000217337d10] [c00000000057be10] kernfs_fop_write+0x1b0/0x290
-[c000000217337d60] [c000000000488c4c] __vfs_write+0x3c/0x70
-[c000000217337d80] [c00000000048c648] vfs_write+0xd8/0x260
-[c000000217337dd0] [c00000000048ca8c] ksys_write+0xdc/0x130
-[c000000217337e20] [c00000000000b488] system_call+0x5c/0x70
-Instruction dump:
-7c840074 f8010010 f821ffb1 20840040 eb830218 7c8407b4 48002019 60000000
-2fa30000 409e003c 892d0988 792907e0 <0b090000> 2fbd0000 419e0028 2fbc0000
----[ end trace 5955b3c0cc079942 ]---
-rpadlpar_io: slot U9080.M9S.783AEC8-V11-C11 removed
-
-This is tripped as a result of irqs being disabled during the call to
-dma_free_coherent() by release_event_pool(). At this point in the code
-path we have quiesced the adapter and its overly paranoid anyways to
-be holding the host lock.
-
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
----
- drivers/scsi/ibmvscsi/ibmvscsi.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/scsi/ibmvscsi/ibmvscsi.c b/drivers/scsi/ibmvscsi/ibmvscsi.c
-index 7f66a77..126b242 100644
---- a/drivers/scsi/ibmvscsi/ibmvscsi.c
-+++ b/drivers/scsi/ibmvscsi/ibmvscsi.c
-@@ -2326,10 +2326,7 @@ static int ibmvscsi_remove(struct vio_dev *vdev)
- 	scsi_remove_host(hostdata->host);
- 
- 	purge_requests(hostdata, DID_ERROR);
--
--	spin_lock_irqsave(hostdata->host->host_lock, flags);
- 	release_event_pool(&hostdata->pool, hostdata);
--	spin_unlock_irqrestore(hostdata->host->host_lock, flags);
- 
- 	ibmvscsi_release_crq_queue(&hostdata->queue, hostdata,
- 					max_events);
--- 
-1.8.3.1
+On 4/17/20 7:15 PM, Bob Liu wrote:
+> Then users can set cpu affinity through "cpumask" for iscsi workqueues, so
+> as to get performance isolation.
+> 
+> This patch changes the max number of active worker form 1 to 2,
+> since ordered workqueue wont' be allowed to change "cpumask".
+> 
+> Signed-off-by: Bob Liu <bob.liu@oracle.com>
+> ---
+>  drivers/scsi/libiscsi.c             | 4 +++-
+>  drivers/scsi/scsi_transport_iscsi.c | 4 +++-
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/libiscsi.c b/drivers/scsi/libiscsi.c
+> index 70b99c0..adf9bb4 100644
+> --- a/drivers/scsi/libiscsi.c
+> +++ b/drivers/scsi/libiscsi.c
+> @@ -2627,7 +2627,9 @@ struct Scsi_Host *iscsi_host_alloc(struct scsi_host_template *sht,
+>  	if (xmit_can_sleep) {
+>  		snprintf(ihost->workq_name, sizeof(ihost->workq_name),
+>  			"iscsi_q_%d", shost->host_no);
+> -		ihost->workq = create_singlethread_workqueue(ihost->workq_name);
+> +		ihost->workq = alloc_workqueue("%s",
+> +			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
+> +			2, ihost->workq_name);
+>  		if (!ihost->workq)
+>  			goto free_host;
+>  	}
+> diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+> index dfc726f..bdbc4a2 100644
+> --- a/drivers/scsi/scsi_transport_iscsi.c
+> +++ b/drivers/scsi/scsi_transport_iscsi.c
+> @@ -4602,7 +4602,9 @@ static __init int iscsi_transport_init(void)
+>  		goto unregister_flashnode_bus;
+>  	}
+>  
+> -	iscsi_eh_timer_workq = create_singlethread_workqueue("iscsi_eh");
+> +	iscsi_eh_timer_workq = alloc_workqueue("%s",
+> +			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
+> +			2, "iscsi_eh");
+>  	if (!iscsi_eh_timer_workq) {
+>  		err = -ENOMEM;
+>  		goto release_nls;
+> 
 
