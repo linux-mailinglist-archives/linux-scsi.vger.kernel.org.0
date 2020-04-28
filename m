@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFBF1BB63E
-	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2020 08:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1B61BB640
+	for <lists+linux-scsi@lfdr.de>; Tue, 28 Apr 2020 08:11:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbgD1GL0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1726424AbgD1GL0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Tue, 28 Apr 2020 02:11:26 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:21609 "EHLO
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:47603 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726423AbgD1GLX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Apr 2020 02:11:23 -0400
+        with ESMTP id S1726453AbgD1GLZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 28 Apr 2020 02:11:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588054281;
+        s=mimecast20190719; t=1588054284;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gwahiG6giDSOCHGuB2P5B+5dYlCl8FKEb6/pL2iIexg=;
-        b=LGEatN/P3D/jz2fweGtZ/+eaXKrUIjsIWdKLwkp8iSPTOKbs9aar1swOch1R5olst38b+3
-        p6OeNtziUDzlTazhGbZtfiFI1KYNToeDhm9GuLu2oQTv1qg2xQp/oPdTPky6yeTKCHb7TS
-        06aLF6Z5gNdnMD/Hom64g1Wjw2hRwzc=
+        bh=a7CGUahcxXkgqnWckHyziBroYR9jevjwgpqBwe42zSo=;
+        b=JIER9uUzaY8vVlGhfzbOJZvSgwdpL0Ij136U+OD2qvvUfPXim/wxpveIDOh6i7V+a08qE/
+        KtZ72ZGRXTSLZvVvxD62uvBlnUWHV2qKzIgx2/CttgfUMGR0t11FzPTjPeuEaFaPA0mAtG
+        vHEoxZ02BNbBisPeIxXxe34AGoaaRog=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-446-oIbbm3TlNkS3Q1wN-r2oww-1; Tue, 28 Apr 2020 02:11:18 -0400
-X-MC-Unique: oIbbm3TlNkS3Q1wN-r2oww-1
+ us-mta-191-K1AHXl62O9qa4a6Sf5WHtg-1; Tue, 28 Apr 2020 02:11:19 -0400
+X-MC-Unique: K1AHXl62O9qa4a6Sf5WHtg-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2050B835B52;
-        Tue, 28 Apr 2020 06:11:17 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 56CC9107ACF6;
+        Tue, 28 Apr 2020 06:11:18 +0000 (UTC)
 Received: from rh2.redhat.com (ovpn-116-120.rdu2.redhat.com [10.10.116.120])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0375A10001B2;
-        Tue, 28 Apr 2020 06:11:15 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 55BAB10013D9;
+        Tue, 28 Apr 2020 06:11:17 +0000 (UTC)
 From:   Mike Christie <mchristi@redhat.com>
 To:     bvanassche@acm.org, bstroesser@ts.fujitsu.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
 Cc:     Mike Christie <mchristi@redhat.com>
-Subject: [PATCH 03/11] iscsi target: setup transport_id
-Date:   Tue, 28 Apr 2020 01:11:01 -0500
-Message-Id: <20200428061109.3042-4-mchristi@redhat.com>
+Subject: [PATCH 04/11] target: use tpid in target_stat_iport_port_ident_show
+Date:   Tue, 28 Apr 2020 01:11:02 -0500
+Message-Id: <20200428061109.3042-5-mchristi@redhat.com>
 In-Reply-To: <20200428061109.3042-1-mchristi@redhat.com>
 References: <20200428061109.3042-1-mchristi@redhat.com>
 MIME-Version: 1.0
@@ -51,73 +51,53 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The iscsi target does its own session setup. This patch updates the
-driver so it sets up the transport id.
+Use the tpid session id instead of sess_get_initiator_sid.
+
+Note that for userspace compat this patch continues the behavior:
+
+1. Still add the "+i+" even if there is no session_id.
+2. Use the acl initiatorname instead of the transportID port/addr/name.
 
 Signed-off-by: Mike Christie <mchristi@redhat.com>
 ---
- drivers/target/iscsi/iscsi_target_nego.c | 37 ++++++++++++++++++++++++++=
-++----
- 1 file changed, 33 insertions(+), 4 deletions(-)
+ drivers/target/target_core_stat.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target_nego.c b/drivers/target/is=
-csi/iscsi_target_nego.c
-index 685d771..dce2fe2 100644
---- a/drivers/target/iscsi/iscsi_target_nego.c
-+++ b/drivers/target/iscsi/iscsi_target_nego.c
-@@ -1032,6 +1032,25 @@ static void iscsi_initiatorname_tolower(
- 	}
- }
+diff --git a/drivers/target/target_core_stat.c b/drivers/target/target_co=
+re_stat.c
+index 237309d..69ba7c3 100644
+--- a/drivers/target/target_core_stat.c
++++ b/drivers/target/target_core_stat.c
+@@ -1308,9 +1308,7 @@ static ssize_t target_stat_iport_port_ident_show(st=
+ruct config_item *item,
+ 	struct se_lun_acl *lacl =3D iport_to_lacl(item);
+ 	struct se_node_acl *nacl =3D lacl->se_lun_nacl;
+ 	struct se_session *se_sess;
+-	struct se_portal_group *tpg;
+ 	ssize_t ret;
+-	unsigned char buf[64];
 =20
-+static int iscsi_setup_i_tpid(struct iscsi_session *sess, char *iname)
-+{
-+	struct t10_transport_id tpid;
-+	char isid_buf[13];
-+
-+	sprintf(isid_buf, "%6phN", sess->isid);
-+
-+	memset(&tpid, 0, sizeof(tpid));
-+	tpid.proto =3D SCSI_PROTOCOL_ISCSI;
-+	tpid.name =3D iname;
-+	tpid.session_id =3D isid_buf;
-+
-+	sess->se_sess->tpid =3D target_cp_transport_id(&tpid);
-+	if (!sess->se_sess->tpid)
-+		return -ENOMEM;
-+
-+	return 0;
-+}
-+
- /*
-  * Processes the first Login Request..
-  */
-@@ -1260,11 +1279,21 @@ int iscsi_target_locate_portal(
- 	tag_size =3D sizeof(struct iscsi_cmd) + conn->conn_transport->priv_size=
-;
-=20
- 	ret =3D transport_alloc_session_tags(sess->se_sess, tag_num, tag_size);
--	if (ret < 0) {
--		iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
--				    ISCSI_LOGIN_STATUS_NO_RESOURCES);
--		ret =3D -1;
-+	if (ret < 0)
-+		goto return_oom;
-+
-+	if (conn->tpg !=3D iscsit_global->discovery_tpg) {
-+		if (iscsi_setup_i_tpid(sess, i_buf))
-+			/* tags and nacl released when session is freed */
-+			goto return_oom;
+ 	spin_lock_irq(&nacl->nacl_sess_lock);
+ 	se_sess =3D nacl->nacl_sess;
+@@ -1319,13 +1317,9 @@ static ssize_t target_stat_iport_port_ident_show(s=
+truct config_item *item,
+ 		return -ENODEV;
  	}
-+
-+	goto out;
-+
-+return_oom:
-+	iscsit_tx_login_rsp(conn, ISCSI_STATUS_CLS_TARGET_ERR,
-+			    ISCSI_LOGIN_STATUS_NO_RESOURCES);
-+	ret =3D -1;
- out:
- 	kfree(tmpbuf);
+=20
+-	tpg =3D nacl->se_tpg;
+-	/* scsiAttIntrPortName+scsiAttIntrPortIdentifier */
+-	memset(buf, 0, 64);
+-	if (tpg->se_tpg_tfo->sess_get_initiator_sid !=3D NULL)
+-		tpg->se_tpg_tfo->sess_get_initiator_sid(se_sess, buf, 64);
+-
+-	ret =3D snprintf(page, PAGE_SIZE, "%s+i+%s\n", nacl->initiatorname, buf=
+);
++	ret =3D snprintf(page, PAGE_SIZE, "%s+i+%s\n", nacl->initiatorname,
++		       se_sess->tpid->session_id ? se_sess->tpid->session_id :
++		       "");
+ 	spin_unlock_irq(&nacl->nacl_sess_lock);
  	return ret;
+ }
 --=20
 1.8.3.1
 
