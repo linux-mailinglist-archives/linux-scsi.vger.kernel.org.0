@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0BE1BF92A
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC431BF93D
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727080AbgD3NUT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Apr 2020 09:20:19 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60974 "EHLO mx2.suse.de"
+        id S1726924AbgD3NUf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Apr 2020 09:20:35 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60868 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726965AbgD3NUL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 Apr 2020 09:20:11 -0400
+        id S1726935AbgD3NUI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 Apr 2020 09:20:08 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id B588CAF72;
+        by mx2.suse.de (Postfix) with ESMTP id 81212AF4C;
         Thu, 30 Apr 2020 13:20:02 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -23,9 +23,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Ming Lei <ming.lei@redhat.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH RFC v3 21/41] megaraid_sas: megaraid_sas: reshuffle SCSI host allocation
-Date:   Thu, 30 Apr 2020 15:18:44 +0200
-Message-Id: <20200430131904.5847-22-hare@suse.de>
+Subject: [PATCH RFC v3 22/41] block: implement persistent commands
+Date:   Thu, 30 Apr 2020 15:18:45 +0200
+Message-Id: <20200430131904.5847-23-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200430131904.5847-1-hare@suse.de>
 References: <20200430131904.5847-1-hare@suse.de>
@@ -34,163 +34,89 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Reshuffle SCSI host allocation such that the scsi host device
-can be allocated prior to the first command being sent.
+Some LLDDs implement event handling by sending a command to the
+firmware, which then will be completed once the firmware wants
+to register an event.
+So worst case a command is being sent to the firmware then the
+driver initializes, and will be returned once the driver unloads.
+To avoid these commands to block the queues during freezing or
+quiescing this patch implements support for 'persistent' commands,
+which will be excluded from blk_queue_enter() and blk_queue_exit()
+calls.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/megaraid/megaraid_sas.h        |  3 +++
- drivers/scsi/megaraid/megaraid_sas_base.c   | 36 ++++++++++++++++++++---------
- drivers/scsi/megaraid/megaraid_sas_fusion.c |  5 ++++
- 3 files changed, 33 insertions(+), 11 deletions(-)
+ block/blk-mq.c            | 12 +++++++++---
+ include/linux/blk-mq.h    |  2 ++
+ include/linux/blk_types.h |  4 ++++
+ 3 files changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
-index d295a2036588..b47306a66650 100644
---- a/drivers/scsi/megaraid/megaraid_sas.h
-+++ b/drivers/scsi/megaraid/megaraid_sas.h
-@@ -2677,6 +2677,9 @@ int megasas_set_crash_dump_params(struct megasas_instance *instance,
- 	u8 crash_buf_state);
- void megasas_free_host_crash_buffer(struct megasas_instance *instance);
- 
-+int megasas_io_attach(struct megasas_instance *instance);
-+void megasas_io_detach(struct megasas_instance *instance);
-+
- void megasas_return_cmd_fusion(struct megasas_instance *instance,
- 	struct megasas_cmd_fusion *cmd);
- int megasas_issue_blocked_cmd(struct megasas_instance *instance,
-diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
-index 00a1d5caf7d5..ddb8df03481f 100644
---- a/drivers/scsi/megaraid/megaraid_sas_base.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_base.c
-@@ -5468,6 +5468,13 @@ megasas_init_adapter_mfi(struct megasas_instance *instance)
- 		goto fail_reply_queue;
- 	}
- 
-+	/*
-+	 * Notify the mid-layer about the new controller; do this
-+	 * early so that we can allocate internal commands
-+	 */
-+	if (megasas_io_attach(instance))
-+		goto fail_io_attach;
-+
- 	if (megasas_issue_init_mfi(instance))
- 		goto fail_fw_init;
- 
-@@ -5490,7 +5497,8 @@ megasas_init_adapter_mfi(struct megasas_instance *instance)
- 	return 0;
- 
- fail_fw_init:
--
-+	megasas_io_detach(instance);
-+fail_io_attach:
- 	dma_free_coherent(&instance->pdev->dev, reply_q_sz,
- 			    instance->reply_queue, instance->reply_queue_h);
- fail_reply_queue:
-@@ -6340,6 +6348,8 @@ static int megasas_init_fw(struct megasas_instance *instance)
- 	if (tmp_sectors && (instance->max_sectors_per_req > tmp_sectors))
- 		instance->max_sectors_per_req = tmp_sectors;
- 
-+	megasas_set_max_sectors(instance);
-+
- 	/* Check for valid throttlequeuedepth module parameter */
- 	if (throttlequeuedepth &&
- 			throttlequeuedepth <= instance->max_scsi_cmds)
-@@ -6757,7 +6767,7 @@ static int megasas_start_aen(struct megasas_instance *instance)
-  * megasas_io_attach -	Attaches this driver to SCSI mid-layer
-  * @instance:		Adapter soft state
-  */
--static int megasas_io_attach(struct megasas_instance *instance)
-+int megasas_io_attach(struct megasas_instance *instance)
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 44482aaed11e..402cf104d183 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -402,9 +402,14 @@ struct request *blk_mq_alloc_request(struct request_queue *q, unsigned int op,
  {
- 	struct Scsi_Host *host = instance->host;
+ 	struct blk_mq_alloc_data alloc_data = { .flags = flags, .cmd_flags = op };
+ 	struct request *rq;
+-	int ret;
++	int ret = 0;
  
-@@ -6767,7 +6777,8 @@ static int megasas_io_attach(struct megasas_instance *instance)
- 	host->can_queue = instance->max_scsi_cmds;
- 	host->sg_tablesize = instance->max_num_sge;
+-	ret = blk_queue_enter(q, flags);
++	if (flags & BLK_MQ_REQ_PERSISTENT) {
++		if (blk_queue_dying(q))
++			ret = -ENODEV;
++		alloc_data.cmd_flags |= REQ_PERSISTENT;
++	} else
++		ret = blk_queue_enter(q, flags);
+ 	if (ret)
+ 		return ERR_PTR(ret);
  
--	megasas_set_max_sectors(instance);
-+	/* Will be adjusted later */
-+	host->max_sectors = MEGASAS_MAX_SECTORS_IEEE;
- 
- 	host->cmd_per_lun = MEGASAS_DEFAULT_CMD_PER_LUN;
- 	host->max_channel = MEGASAS_MAX_CHANNELS - 1;
-@@ -6788,6 +6799,15 @@ static int megasas_io_attach(struct megasas_instance *instance)
- 	return 0;
+@@ -481,7 +486,8 @@ static void __blk_mq_free_request(struct request *rq)
+ 	if (sched_tag != -1)
+ 		blk_mq_put_tag(hctx->sched_tags, ctx, sched_tag);
+ 	blk_mq_sched_restart(hctx);
+-	blk_queue_exit(q);
++	if (!(rq->cmd_flags & REQ_PERSISTENT))
++		blk_queue_exit(q);
  }
  
-+/**
-+ * megasas_io_detach -	Detaches this driver from the SCSI mid-layer
-+ * @instance:		Adapter soft state
-+ */
-+void megasas_io_detach(struct megasas_instance *instance)
-+{
-+	scsi_remove_host(instance->host);
-+}
+ void blk_mq_free_request(struct request *rq)
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index c186dc25fc1c..a4b02196810c 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -441,6 +441,8 @@ enum {
+ 	BLK_MQ_REQ_INTERNAL	= (__force blk_mq_req_flags_t)(1 << 2),
+ 	/* set RQF_PREEMPT */
+ 	BLK_MQ_REQ_PREEMPT	= (__force blk_mq_req_flags_t)(1 << 3),
++	/* mark request as persistent */
++	BLK_MQ_REQ_PERSISTENT	= (__force blk_mq_req_flags_t)(1 << 4),
+ };
+ 
+ struct request *blk_mq_alloc_request(struct request_queue *q, unsigned int op,
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index 70254ae11769..898e75e2e8b0 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -336,6 +336,9 @@ enum req_flag_bits {
+ 	/* command specific flags for REQ_OP_WRITE_ZEROES: */
+ 	__REQ_NOUNMAP,		/* do not free blocks when zeroing */
+ 
++	/* Persistent firmware command, ignore for q_usage_counter */
++	__REQ_PERSISTENT,
 +
- /**
-  * megasas_set_dma_mask -	Set DMA mask for supported controllers
-  *
-@@ -7373,12 +7393,6 @@ static int megasas_probe_one(struct pci_dev *pdev,
- 	megasas_mgmt_info.instance[megasas_mgmt_info.max_index] = instance;
- 	megasas_mgmt_info.max_index++;
+ 	__REQ_HIPRI,
  
--	/*
--	 * Register with SCSI mid-layer
--	 */
--	if (megasas_io_attach(instance))
--		goto fail_io_attach;
--
- 	instance->unload = 0;
- 	/*
- 	 * Trigger SCSI to scan our drives
-@@ -7404,7 +7418,6 @@ static int megasas_probe_one(struct pci_dev *pdev,
- 	return 0;
+ 	/* for driver use */
+@@ -362,6 +365,7 @@ enum req_flag_bits {
+ #define REQ_CGROUP_PUNT		(1ULL << __REQ_CGROUP_PUNT)
  
- fail_start_aen:
--fail_io_attach:
- 	megasas_mgmt_info.count--;
- 	megasas_mgmt_info.max_index--;
- 	megasas_mgmt_info.instance[megasas_mgmt_info.max_index] = NULL;
-@@ -7802,7 +7815,6 @@ static void megasas_detach_one(struct pci_dev *pdev)
+ #define REQ_NOUNMAP		(1ULL << __REQ_NOUNMAP)
++#define REQ_PERSISTENT		(1ULL << __REQ_PERSISTENT)
+ #define REQ_HIPRI		(1ULL << __REQ_HIPRI)
  
- 	if (instance->fw_crash_state != UNAVAILABLE)
- 		megasas_free_host_crash_buffer(instance);
--	scsi_remove_host(instance->host);
- 	instance->unload = 1;
- 
- 	if (megasas_wait_for_adapter_operational(instance))
-@@ -7812,6 +7824,8 @@ static void megasas_detach_one(struct pci_dev *pdev)
- 	megasas_shutdown_controller(instance, MR_DCMD_CTRL_SHUTDOWN);
- 
- skip_firing_dcmds:
-+	megasas_io_detach(instance);
-+
- 	/* cancel the delayed work if this work still in queue*/
- 	if (instance->ev != NULL) {
- 		struct megasas_aen_event *ev = instance->ev;
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index bec3d4cca74f..483146051957 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -1857,6 +1857,9 @@ megasas_init_adapter_fusion(struct megasas_instance *instance)
- 	if (megasas_alloc_cmds_fusion(instance))
- 		goto fail_alloc_cmds;
- 
-+	if (megasas_io_attach(instance))
-+		goto fail_io_attach;
-+
- 	if (megasas_ioc_init_fusion(instance)) {
- 		status_reg = instance->instancet->read_fw_status_reg(instance);
- 		if (((status_reg & MFI_STATE_MASK) == MFI_STATE_FAULT) &&
-@@ -1895,6 +1898,8 @@ megasas_init_adapter_fusion(struct megasas_instance *instance)
- 	return 0;
- 
- fail_ioc_init:
-+	megasas_io_detach(instance);
-+fail_io_attach:
- 	megasas_free_cmds_fusion(instance);
- fail_alloc_cmds:
- 	megasas_free_cmds(instance);
+ #define REQ_DRV			(1ULL << __REQ_DRV)
 -- 
 2.16.4
 
