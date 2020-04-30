@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A9E31BF918
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1C61BF91A
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726782AbgD3NUE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Apr 2020 09:20:04 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60578 "EHLO mx2.suse.de"
+        id S1726809AbgD3NUF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Apr 2020 09:20:05 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60560 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726743AbgD3NUE (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        id S1726683AbgD3NUE (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
         Thu, 30 Apr 2020 09:20:04 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id BAD9AAF01;
+        by mx2.suse.de (Postfix) with ESMTP id BC9B3AF0C;
         Thu, 30 Apr 2020 13:20:01 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -24,9 +24,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
         Hannes Reinecke <hare@suse.com>
-Subject: [PATCH RFC v3 02/41] scsi: add scsi_{get,put}_reserved_cmd()
-Date:   Thu, 30 Apr 2020 15:18:25 +0200
-Message-Id: <20200430131904.5847-3-hare@suse.de>
+Subject: [PATCH RFC v3 03/41] scsi: Implement scsi_cmd_is_reserved()
+Date:   Thu, 30 Apr 2020 15:18:26 +0200
+Message-Id: <20200430131904.5847-4-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200430131904.5847-1-hare@suse.de>
 References: <20200430131904.5847-1-hare@suse.de>
@@ -35,75 +35,99 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Add helper functions to retrieve SCSI commands from the reserved
-tag pool.
+Add function to check if a SCSI command originates from the reserved
+tag pool and update scsi_put_reserved_cmd() to only free commands if
+they originate from the reserved tag pool.
 
 Signed-off-by: Hannes Reinecke <hare@suse.com>
 ---
- drivers/scsi/scsi_lib.c    | 35 +++++++++++++++++++++++++++++++++++
- include/scsi/scsi_device.h |  3 +++
- 2 files changed, 38 insertions(+)
+ block/blk-mq.c           | 15 +++++++++++++++
+ drivers/scsi/scsi_lib.c  |  7 +++++--
+ include/linux/blk-mq.h   |  1 +
+ include/scsi/scsi_cmnd.h | 13 +++++++++++++
+ 4 files changed, 34 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 5358f553f526..d0972744ea7f 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1901,6 +1901,41 @@ void scsi_mq_destroy_tags(struct Scsi_Host *shost)
- 	blk_mq_free_tag_set(&shost->tag_set);
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 8e56884fd2e9..44482aaed11e 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -604,6 +604,21 @@ static void __blk_mq_complete_request(struct request *rq)
+ 	put_cpu();
  }
  
 +/**
-+ * scsi_get_reserved_cmd - allocate a SCSI command from reserved tags
-+ * @sdev: SCSI device from which to allocate the command
-+ * @data_direction: Data direction for the allocated command
++ * blk_mq_rq_is_reserved - Check for reserved request
++ *
++ * @rq: Request to check
++ *
++ * Returns true if the request originates from the reserved tag pool.
 + */
-+struct scsi_cmnd *scsi_get_reserved_cmd(struct scsi_device *sdev,
-+					int data_direction)
++bool blk_mq_rq_is_reserved(struct request *rq)
 +{
-+	struct request *rq;
-+	struct scsi_cmnd *scmd;
++	struct blk_mq_hw_ctx *hctx = rq->mq_hctx;
 +
-+	rq = blk_mq_alloc_request(sdev->request_queue,
-+				  data_direction == DMA_TO_DEVICE ?
-+				  REQ_OP_SCSI_OUT : REQ_OP_SCSI_IN | REQ_NOWAIT,
-+				  BLK_MQ_REQ_RESERVED);
-+	if (IS_ERR(rq))
-+		return NULL;
-+	scmd = blk_mq_rq_to_pdu(rq);
-+	scmd->request = rq;
-+	return scmd;
++	return blk_mq_tag_is_reserved(hctx->tags, rq->tag);
 +}
-+EXPORT_SYMBOL_GPL(scsi_get_reserved_cmd);
++EXPORT_SYMBOL_GPL(blk_mq_rq_is_reserved);
 +
+ static void hctx_unlock(struct blk_mq_hw_ctx *hctx, int srcu_idx)
+ 	__releases(hctx->srcu)
+ {
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index d0972744ea7f..30f9ca9fce22 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -1930,9 +1930,12 @@ EXPORT_SYMBOL_GPL(scsi_get_reserved_cmd);
+  */
+ void scsi_put_reserved_cmd(struct scsi_cmnd *scmd)
+ {
+-	struct request *rq = blk_mq_rq_from_pdu(scmd);
++	struct request *rq;
+ 
+-	blk_mq_free_request(rq);
++	if (scmd && scsi_cmd_is_reserved(scmd)) {
++		rq = blk_mq_rq_from_pdu(scmd);
++		blk_mq_free_request(rq);
++	}
+ }
+ EXPORT_SYMBOL_GPL(scsi_put_reserved_cmd);
+ 
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index f389d7c724bd..c186dc25fc1c 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -494,6 +494,7 @@ void blk_mq_requeue_request(struct request *rq, bool kick_requeue_list);
+ void blk_mq_kick_requeue_list(struct request_queue *q);
+ void blk_mq_delay_kick_requeue_list(struct request_queue *q, unsigned long msecs);
+ bool blk_mq_complete_request(struct request *rq);
++bool blk_mq_rq_is_reserved(struct request *rq);
+ bool blk_mq_bio_list_merge(struct request_queue *q, struct list_head *list,
+ 			   struct bio *bio, unsigned int nr_segs);
+ bool blk_mq_queue_stopped(struct request_queue *q);
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 80ac89e47b47..2cd894fbdcfa 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -159,6 +159,19 @@ static inline struct scsi_driver *scsi_cmd_to_driver(struct scsi_cmnd *cmd)
+ 	return *(struct scsi_driver **)cmd->request->rq_disk->private_data;
+ }
+ 
 +/**
-+ * scsi_put_reserved_cmd - free a SCSI command allocated from reserved tags
-+ * @scmd: SCSI command to be freed
++ * scsi_cmd_is_reserved - check for reserved scsi command
++ * @scmd: command to check
++ *
++ * Returns true if @scmd originates from the reserved tag pool.
 + */
-+void scsi_put_reserved_cmd(struct scsi_cmnd *scmd)
++static inline bool scsi_cmd_is_reserved(struct scsi_cmnd *scmd)
 +{
 +	struct request *rq = blk_mq_rq_from_pdu(scmd);
 +
-+	blk_mq_free_request(rq);
++	return blk_mq_rq_is_reserved(rq);
 +}
-+EXPORT_SYMBOL_GPL(scsi_put_reserved_cmd);
 +
- /**
-  * scsi_device_from_queue - return sdev associated with a request_queue
-  * @q: The request queue to return the sdev from
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index c3cba2aaf934..e74c7e671aa0 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -457,6 +457,9 @@ static inline int scsi_execute_req(struct scsi_device *sdev,
- 	return scsi_execute(sdev, cmd, data_direction, buffer,
- 		bufflen, NULL, sshdr, timeout, retries,  0, 0, resid);
- }
-+struct scsi_cmnd *scsi_get_reserved_cmd(struct scsi_device *sdev,
-+					int data_direction);
-+void scsi_put_reserved_cmd(struct scsi_cmnd *scmd);
- extern void sdev_disable_disk_events(struct scsi_device *sdev);
- extern void sdev_enable_disk_events(struct scsi_device *sdev);
- extern int scsi_vpd_lun_id(struct scsi_device *, char *, size_t);
+ extern void scsi_finish_command(struct scsi_cmnd *cmd);
+ 
+ extern void *scsi_kmap_atomic_sg(struct scatterlist *sg, int sg_count,
 -- 
 2.16.4
 
