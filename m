@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAF31BF937
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A1791BF934
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgD3NUb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Apr 2020 09:20:31 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60764 "EHLO mx2.suse.de"
+        id S1726782AbgD3NU2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Apr 2020 09:20:28 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60868 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726951AbgD3NUK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 Apr 2020 09:20:10 -0400
+        id S1727044AbgD3NUQ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 Apr 2020 09:20:16 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id A890EAF6C;
+        by mx2.suse.de (Postfix) with ESMTP id CDA4CAF7F;
         Thu, 30 Apr 2020 13:20:02 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -22,10 +22,10 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         John Garry <john.garry@huawei.com>,
         Ming Lei <ming.lei@redhat.com>,
         Bart van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH RFC v3 37/41] libsas: add tag to struct sas_task
-Date:   Thu, 30 Apr 2020 15:19:00 +0200
-Message-Id: <20200430131904.5847-38-hare@suse.de>
+        linux-scsi@vger.kernel.org
+Subject: [PATCH RFC v3 38/41] scsi: hisi_sas: Use libsas slow task SCSI command
+Date:   Thu, 30 Apr 2020 15:19:01 +0200
+Message-Id: <20200430131904.5847-39-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200430131904.5847-1-hare@suse.de>
 References: <20200430131904.5847-1-hare@suse.de>
@@ -34,78 +34,57 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-All block layer commands now have a tag, so we should be storing
-it in the sas_task structure for easier lookup.
+From: John Garry <john.garry@huawei.com>
 
-Signed-off-by: Hannes Reinecke <hare@suse.de>
+Now that a SCSI command can be allocated for a libsas slow tasks, make the
+task prep code use it.
+
+Signed-off-by: John Garry <john.garry@huawei.com>
 ---
- drivers/scsi/libsas/sas_ata.c       | 4 ++++
- drivers/scsi/libsas/sas_init.c      | 2 ++
- drivers/scsi/libsas/sas_scsi_host.c | 2 +-
- include/scsi/libsas.h               | 2 ++
- 4 files changed, 9 insertions(+), 1 deletion(-)
+ drivers/scsi/hisi_sas/hisi_sas_main.c  | 5 ++++-
+ drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 5 +++--
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/libsas/sas_ata.c b/drivers/scsi/libsas/sas_ata.c
-index 5d716d388707..897007343b3d 100644
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -211,6 +211,10 @@ static unsigned int sas_ata_qc_issue(struct ata_queued_cmd *qc)
- 
- 	task->data_dir = qc->dma_dir;
- 	task->scatter = qc->sg;
-+	if (qc->scsicmd)
-+		task->tag = qc->scsicmd->request->tag;
-+	else
-+		task->tag = qc->tag;
- 	task->ata_task.retry_count = 1;
- 	task->task_state_flags = SAS_TASK_STATE_PENDING;
- 	qc->lldd_task = task;
-diff --git a/drivers/scsi/libsas/sas_init.c b/drivers/scsi/libsas/sas_init.c
-index 5aa8593b88b5..0d32cb49d0af 100644
---- a/drivers/scsi/libsas/sas_init.c
-+++ b/drivers/scsi/libsas/sas_init.c
-@@ -53,6 +53,7 @@ struct sas_task *sas_alloc_slow_task(struct sas_ha_struct *ha,
- 	if (!slow)
- 		goto out_err_slow;
- 
-+	task->tag = -1;
- 	if (shost->nr_reserved_cmds) {
- 		struct scsi_device *sdev;
- 
-@@ -66,6 +67,7 @@ struct sas_task *sas_alloc_slow_task(struct sas_ha_struct *ha,
- 		slow->scmd = scsi_get_reserved_cmd(sdev, DMA_NONE, false);
- 		if (!slow->scmd)
- 			goto out_err_scmd;
-+		task->tag = slow->scmd->request->tag;
- 		ASSIGN_SAS_TASK(slow->scmd, task);
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c b/drivers/scsi/hisi_sas/hisi_sas_main.c
+index 991241ab87d1..2aa8a4124cfb 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_main.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+@@ -477,8 +477,10 @@ static int hisi_sas_task_prep(struct sas_task *task,
+ 			} else {
+ 				scsi_cmnd = task->uldd_task;
+ 			}
++		} else if (task->slow_task) {
++			scsi_cmnd = task->slow_task->scmd;
+ 		}
+-		rc  = hisi_sas_slot_index_alloc(hisi_hba, scsi_cmnd);
++		rc = hisi_sas_slot_index_alloc(hisi_hba, scsi_cmnd);
+ 	}
+ 	if (rc < 0)
+ 		goto err_out_dif_dma_unmap;
+@@ -2670,6 +2672,7 @@ int hisi_sas_probe(struct platform_device *pdev,
+ 	} else {
+ 		shost->can_queue = HISI_SAS_UNRESERVED_IPTT;
+ 		shost->cmd_per_lun = HISI_SAS_UNRESERVED_IPTT;
++		shost->nr_reserved_cmds = HISI_SAS_RESERVED_IPTT;
  	}
  
-diff --git a/drivers/scsi/libsas/sas_scsi_host.c b/drivers/scsi/libsas/sas_scsi_host.c
-index c5a430e3fa2d..585e0df5fce2 100644
---- a/drivers/scsi/libsas/sas_scsi_host.c
-+++ b/drivers/scsi/libsas/sas_scsi_host.c
-@@ -149,7 +149,7 @@ static struct sas_task *sas_create_task(struct scsi_cmnd *cmd,
- 	memcpy(task->ssp_task.LUN, &lun.scsi_lun, 8);
- 	task->ssp_task.task_attr = TASK_ATTR_SIMPLE;
- 	task->ssp_task.cmd = cmd;
--
-+	task->tag = cmd->request->tag;
- 	task->scatter = scsi_sglist(cmd);
- 	task->num_scatter = scsi_sg_count(cmd);
- 	task->total_xfer_len = scsi_bufflen(cmd);
-diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
-index c927228019c9..af864f68b5cc 100644
---- a/include/scsi/libsas.h
-+++ b/include/scsi/libsas.h
-@@ -594,6 +594,8 @@ struct sas_task {
- 	u32    total_xfer_len;
- 	u8     data_dir:2;	  /* Use PCI_DMA_... */
+ 	sha->sas_ha_name = DRV_NAME;
+diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+index 374885aa8d77..9c691c9a09f1 100644
+--- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
++++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
+@@ -3238,8 +3238,9 @@ hisi_sas_v3_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	shost->max_lun = ~0;
+ 	shost->max_channel = 1;
+ 	shost->max_cmd_len = 16;
+-	shost->can_queue = HISI_SAS_UNRESERVED_IPTT;
+-	shost->cmd_per_lun = HISI_SAS_UNRESERVED_IPTT;
++	shost->can_queue = HISI_SAS_MAX_COMMANDS;
++	shost->cmd_per_lun = HISI_SAS_MAX_COMMANDS;
++	shost->nr_reserved_cmds = HISI_SAS_RESERVED_IPTT;
  
-+	u32    tag;
-+
- 	struct task_status_struct task_status;
- 	void   (*task_done)(struct sas_task *);
- 
+ 	sha->sas_ha_name = DRV_NAME;
+ 	sha->dev = dev;
 -- 
 2.16.4
 
