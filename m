@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7716E1BF92C
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1221BF928
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727084AbgD3NUV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Apr 2020 09:20:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60778 "EHLO mx2.suse.de"
+        id S1726971AbgD3NUS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Apr 2020 09:20:18 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60960 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727052AbgD3NUR (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 Apr 2020 09:20:17 -0400
+        id S1726937AbgD3NUL (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 Apr 2020 09:20:11 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 19B61AF9F;
+        by mx2.suse.de (Postfix) with ESMTP id 61991AF3B;
         Thu, 30 Apr 2020 13:20:02 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -22,10 +22,10 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         John Garry <john.garry@huawei.com>,
         Ming Lei <ming.lei@redhat.com>,
         Bart van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-Subject: [PATCH RFC v3 30/41] snic: use tagset iter for traversing commands
-Date:   Thu, 30 Apr 2020 15:18:53 +0200
-Message-Id: <20200430131904.5847-31-hare@suse.de>
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [PATCH RFC v3 31/41] mv_sas: kill mvsas_debug_issue_ssp_tmf()
+Date:   Thu, 30 Apr 2020 15:18:54 +0200
+Message-Id: <20200430131904.5847-32-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200430131904.5847-1-hare@suse.de>
 References: <20200430131904.5847-1-hare@suse.de>
@@ -34,373 +34,118 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Hannes Reinecke <hare@suse.com>
+Just a wrapper around mvs_exec_internal_tmf_task(), so call
+it directly and kill the wrapper.
 
-Use the tagset iter to traverse active commands during device and
-hba reset.
-
-Signed-off-by: Hannes Reinecke <hare@suse.com>
+Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/snic/snic_scsi.c | 246 +++++++++++++++++++++---------------------
- 1 file changed, 124 insertions(+), 122 deletions(-)
+ drivers/scsi/mvsas/mv_sas.c | 33 +++++++++++----------------------
+ 1 file changed, 11 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/scsi/snic/snic_scsi.c b/drivers/scsi/snic/snic_scsi.c
-index d42e178bfab3..01bec9d773ef 100644
---- a/drivers/scsi/snic/snic_scsi.c
-+++ b/drivers/scsi/snic/snic_scsi.c
-@@ -1648,84 +1648,87 @@ snic_abort_cmd(struct scsi_cmnd *sc)
- 	return ret;
+diff --git a/drivers/scsi/mvsas/mv_sas.c b/drivers/scsi/mvsas/mv_sas.c
+index a920eced92ec..937c27777ab9 100644
+--- a/drivers/scsi/mvsas/mv_sas.c
++++ b/drivers/scsi/mvsas/mv_sas.c
+@@ -1277,11 +1277,14 @@ static void mvs_tmf_timedout(struct timer_list *t)
+ 
+ #define MVS_TASK_TIMEOUT 20
+ static int mvs_exec_internal_tmf_task(struct domain_device *dev,
+-			void *parameter, u32 para_len, struct mvs_tmf_task *tmf)
++				      u8 *lun, struct mvs_tmf_task *tmf)
+ {
+ 	int res, retry;
+ 	struct sas_task *task = NULL;
+ 
++	if (!(dev->tproto & SAS_PROTOCOL_SSP))
++		return TMF_RESP_FUNC_ESUPP;
++
+ 	for (retry = 0; retry < 3; retry++) {
+ 		task = sas_alloc_slow_task(GFP_KERNEL);
+ 		if (!task)
+@@ -1290,7 +1293,7 @@ static int mvs_exec_internal_tmf_task(struct domain_device *dev,
+ 		task->dev = dev;
+ 		task->task_proto = dev->tproto;
+ 
+-		memcpy(&task->ssp_task, parameter, para_len);
++		memcpy(task->ssp_task.LUN, lun, 8);
+ 		task->task_done = mvs_task_done;
+ 
+ 		task->slow_task->timer.function = mvs_tmf_timedout;
+@@ -1351,20 +1354,6 @@ static int mvs_exec_internal_tmf_task(struct domain_device *dev,
+ 	return res;
  }
  
-+struct snic_cmd_pending_iter_data {
-+	struct snic *snic;
-+	struct scsi_device *sdev;
-+	int ret;
-+};
- 
+-static int mvs_debug_issue_ssp_tmf(struct domain_device *dev,
+-				u8 *lun, struct mvs_tmf_task *tmf)
+-{
+-	struct sas_ssp_task ssp_task;
+-	if (!(dev->tproto & SAS_PROTOCOL_SSP))
+-		return TMF_RESP_FUNC_ESUPP;
 -
--static int
--snic_is_abts_pending(struct snic *snic, struct scsi_cmnd *lr_sc)
-+static bool
-+snic_is_abts_pending_iter(struct scsi_cmnd *sc, void *data, bool reserved)
- {
-+	struct snic_cmd_pending_iter_data *iter_data = data;
- 	struct snic_req_info *rqi = NULL;
--	struct scsi_cmnd *sc = NULL;
--	struct scsi_device *lr_sdev = NULL;
- 	spinlock_t *io_lock = NULL;
--	u32 tag;
- 	unsigned long flags;
- 
--	if (lr_sc)
--		lr_sdev = lr_sc->device;
-+	if (reserved)
-+		return true;
- 
--	/* walk through the tag map, an dcheck if IOs are still pending in fw*/
--	for (tag = 0; tag < snic->max_tag_id; tag++) {
--		io_lock = snic_io_lock_tag(snic, tag);
-+	if (iter_data->sdev && iter_data->sdev != sc->device)
-+		return true;
- 
--		spin_lock_irqsave(io_lock, flags);
--		sc = scsi_host_find_tag(snic->shost, tag);
+-	memcpy(ssp_task.LUN, lun, 8);
 -
--		if (!sc || (lr_sc && (sc->device != lr_sdev || sc == lr_sc))) {
--			spin_unlock_irqrestore(io_lock, flags);
+-	return mvs_exec_internal_tmf_task(dev, &ssp_task,
+-				sizeof(ssp_task), tmf);
+-}
 -
--			continue;
--		}
-+	io_lock = snic_io_lock_tag(iter_data->snic, sc->request->tag);
-+	spin_lock_irqsave(io_lock, flags);
- 
--		rqi = (struct snic_req_info *) CMD_SP(sc);
--		if (!rqi) {
--			spin_unlock_irqrestore(io_lock, flags);
-+	rqi = (struct snic_req_info *) CMD_SP(sc);
-+	if (!rqi) {
-+		spin_unlock_irqrestore(io_lock, flags);
-+		return true;
-+	}
- 
--			continue;
--		}
-+	/*
-+	 * Found IO that is still pending w/ firmware and belongs to
-+	 * the LUN that is under reset, if lr_sc != NULL
-+	 */
-+	SNIC_SCSI_DBG(iter_data->snic->shost, "Found IO in %s on LUN\n",
-+		      snic_ioreq_state_to_str(CMD_STATE(sc)));
- 
--		/*
--		 * Found IO that is still pending w/ firmware and belongs to
--		 * the LUN that is under reset, if lr_sc != NULL
--		 */
--		SNIC_SCSI_DBG(snic->shost, "Found IO in %s on LUN\n",
--			      snic_ioreq_state_to_str(CMD_STATE(sc)));
-+	if (CMD_STATE(sc) == SNIC_IOREQ_ABTS_PENDING)
-+		iter_data->ret = 1;
-+	spin_unlock_irqrestore(io_lock, flags);
- 
--		if (CMD_STATE(sc) == SNIC_IOREQ_ABTS_PENDING) {
--			spin_unlock_irqrestore(io_lock, flags);
-+	return true;
-+}
- 
--			return 1;
--		}
-+static int
-+snic_is_abts_pending(struct snic *snic, struct scsi_device *lr_sdev)
-+{
-+	struct snic_cmd_pending_iter_data iter_data = {
-+		.snic = snic,
-+		.sdev = lr_sdev,
-+		.ret = 0,
-+	};
- 
--		spin_unlock_irqrestore(io_lock, flags);
--	}
-+	/* walk through the tag map, an dcheck if IOs are still pending in fw*/
-+	scsi_host_busy_iter(snic->shost,
-+			    snic_is_abts_pending_iter, &iter_data);
- 
--	return 0;
-+	return iter_data.ret;
- } /* end of snic_is_abts_pending */
- 
--static int
--snic_dr_clean_single_req(struct snic *snic,
--			 u32 tag,
--			 struct scsi_device *lr_sdev)
-+static bool
-+snic_dr_clean_single_req(struct scsi_cmnd *sc, void *data, bool reserved)
- {
- 	struct snic_req_info *rqi = NULL;
- 	struct snic_tgt *tgt = NULL;
--	struct scsi_cmnd *sc = NULL;
- 	spinlock_t *io_lock = NULL;
- 	u32 sv_state = 0, tmf = 0;
- 	DECLARE_COMPLETION_ONSTACK(tm_done);
- 	unsigned long flags;
- 	int ret = 0;
-+	struct snic_cmd_pending_iter_data *iter_data = data;
-+	struct snic *snic = iter_data->snic;
- 
--	io_lock = snic_io_lock_tag(snic, tag);
--	spin_lock_irqsave(io_lock, flags);
--	sc = scsi_host_find_tag(snic->shost, tag);
-+	if (reserved)
-+		return true;
- 
--	/* Ignore Cmd that don't belong to Lun Reset device */
--	if (!sc || sc->device != lr_sdev)
--		goto skip_clean;
-+	if (sc->device != iter_data->sdev)
-+		return true;
- 
-+	io_lock = snic_io_lock_tag(snic, sc->request->tag);
-+	spin_lock_irqsave(io_lock, flags);
- 	rqi = (struct snic_req_info *) CMD_SP(sc);
 -
- 	if (!rqi)
- 		goto skip_clean;
+ /*  Standard mandates link reset for ATA  (type 0)
+     and hard reset for SSP (type 1) , only for RECOVERY */
+ static int mvs_debug_I_T_nexus_reset(struct domain_device *dev)
+@@ -1390,7 +1379,7 @@ int mvs_lu_reset(struct domain_device *dev, u8 *lun)
  
-@@ -1784,7 +1787,7 @@ snic_dr_clean_single_req(struct snic *snic,
- 	if (ret) {
- 		SNIC_HOST_ERR(snic->shost,
- 			      "clean_single_req_err:sc %p, tag %d abt failed. tm_tag %d flags 0x%llx\n",
--			      sc, tag, rqi->tm_tag, CMD_FLAGS(sc));
-+			      sc, sc->request->tag, rqi->tm_tag, CMD_FLAGS(sc));
+ 	tmf_task.tmf = TMF_LU_RESET;
+ 	mvi_dev->dev_status = MVS_DEV_EH;
+-	rc = mvs_debug_issue_ssp_tmf(dev, lun, &tmf_task);
++	rc = mvs_exec_internal_tmf_task(dev, lun, &tmf_task);
+ 	if (rc == TMF_RESP_FUNC_COMPLETE) {
+ 		spin_lock_irqsave(&mvi->lock, flags);
+ 		mvs_release_task(mvi, dev);
+@@ -1447,7 +1436,7 @@ int mvs_query_task(struct sas_task *task)
+ 		tmf_task.tmf = TMF_QUERY_TASK;
+ 		tmf_task.tag_of_task_to_be_managed = cpu_to_le16(tag);
  
- 		spin_lock_irqsave(io_lock, flags);
- 		rqi = (struct snic_req_info *) CMD_SP(sc);
-@@ -1795,7 +1798,7 @@ snic_dr_clean_single_req(struct snic *snic,
- 		if (CMD_STATE(sc) == SNIC_IOREQ_ABTS_PENDING)
- 			CMD_STATE(sc) = sv_state;
+-		rc = mvs_debug_issue_ssp_tmf(dev, lun.scsi_lun, &tmf_task);
++		rc = mvs_exec_internal_tmf_task(dev, lun.scsi_lun, &tmf_task);
+ 		switch (rc) {
+ 		/* The task is still in Lun, release it then */
+ 		case TMF_RESP_FUNC_SUCC:
+@@ -1502,7 +1491,7 @@ int mvs_abort_task(struct sas_task *task)
+ 		tmf_task.tmf = TMF_ABORT_TASK;
+ 		tmf_task.tag_of_task_to_be_managed = cpu_to_le16(tag);
  
--		ret = 1;
-+		iter_data->ret = 1;
- 		goto skip_clean;
- 	}
+-		rc = mvs_debug_issue_ssp_tmf(dev, lun.scsi_lun, &tmf_task);
++		rc = mvs_exec_internal_tmf_task(dev, lun.scsi_lun, &tmf_task);
  
-@@ -1821,56 +1824,49 @@ snic_dr_clean_single_req(struct snic *snic,
- 	if (CMD_ABTS_STATUS(sc) == SNIC_INVALID_CODE) {
- 		SNIC_HOST_ERR(snic->shost,
- 			      "clean_single_req_err:sc %p tag %d abt still pending w/ fw, tm_tag %d flags 0x%llx\n",
--			      sc, tag, rqi->tm_tag, CMD_FLAGS(sc));
-+			      sc, sc->request->tag, rqi->tm_tag, CMD_FLAGS(sc));
+ 		/* if successful, clear the task and callback forwards.*/
+ 		if (rc == TMF_RESP_FUNC_COMPLETE) {
+@@ -1545,7 +1534,7 @@ int mvs_abort_task_set(struct domain_device *dev, u8 *lun)
+ 	struct mvs_tmf_task tmf_task;
  
- 		CMD_FLAGS(sc) |= SNIC_IO_ABTS_TERM_DONE;
--		ret = 1;
--
--		goto skip_clean;
--	}
--
--	CMD_STATE(sc) = SNIC_IOREQ_ABTS_COMPLETE;
--	CMD_SP(sc) = NULL;
--	spin_unlock_irqrestore(io_lock, flags);
--
--	snic_release_req_buf(snic, rqi, sc);
--
--	sc->result = (DID_ERROR << 16);
--	sc->scsi_done(sc);
-+		iter_data->ret = 1;
-+	} else {
-+		CMD_STATE(sc) = SNIC_IOREQ_ABTS_COMPLETE;
-+		CMD_SP(sc) = NULL;
-+		spin_unlock_irqrestore(io_lock, flags);
+ 	tmf_task.tmf = TMF_ABORT_TASK_SET;
+-	rc = mvs_debug_issue_ssp_tmf(dev, lun, &tmf_task);
++	rc = mvs_exec_internal_tmf_task(dev, lun, &tmf_task);
  
--	ret = 0;
-+		snic_release_req_buf(snic, rqi, sc);
+ 	return rc;
+ }
+@@ -1556,7 +1545,7 @@ int mvs_clear_aca(struct domain_device *dev, u8 *lun)
+ 	struct mvs_tmf_task tmf_task;
  
--	return ret;
-+		sc->result = (DID_ERROR << 16);
-+		sc->scsi_done(sc);
-+	}
-+	return true;
+ 	tmf_task.tmf = TMF_CLEAR_ACA;
+-	rc = mvs_debug_issue_ssp_tmf(dev, lun, &tmf_task);
++	rc = mvs_exec_internal_tmf_task(dev, lun, &tmf_task);
  
- skip_clean:
- 	spin_unlock_irqrestore(io_lock, flags);
--
--	return ret;
-+	return true;
- } /* end of snic_dr_clean_single_req */
+ 	return rc;
+ }
+@@ -1567,7 +1556,7 @@ int mvs_clear_task_set(struct domain_device *dev, u8 *lun)
+ 	struct mvs_tmf_task tmf_task;
  
- static int
--snic_dr_clean_pending_req(struct snic *snic, struct scsi_cmnd *lr_sc)
-+snic_dr_clean_pending_req(struct snic *snic, struct scsi_device *lr_sdev)
- {
--	struct scsi_device *lr_sdev = lr_sc->device;
--	u32 tag = 0;
- 	int ret = FAILED;
-+	struct snic_cmd_pending_iter_data iter_data = {
-+		.snic = snic,
-+		.sdev = lr_sdev,
-+		.ret = 0,
-+	};
+ 	tmf_task.tmf = TMF_CLEAR_TASK_SET;
+-	rc = mvs_debug_issue_ssp_tmf(dev, lun, &tmf_task);
++	rc = mvs_exec_internal_tmf_task(dev, lun, &tmf_task);
  
--	for (tag = 0; tag < snic->max_tag_id; tag++) {
--		if (tag == snic_cmd_tag(lr_sc))
--			continue;
--
--		ret = snic_dr_clean_single_req(snic, tag, lr_sdev);
--		if (ret) {
--			SNIC_HOST_ERR(snic->shost, "clean_err:tag = %d\n", tag);
-+	scsi_host_busy_iter(snic->shost,
-+			    snic_dr_clean_single_req, &iter_data);
-+	if (iter_data.ret) {
-+		SNIC_HOST_ERR(snic->shost, "clean_err = %d\n", iter_data.ret);
- 
--			goto clean_err;
--		}
-+		goto clean_err;
- 	}
- 
- 	schedule_timeout(msecs_to_jiffies(100));
- 
- 	/* Walk through all the cmds and check abts status. */
--	if (snic_is_abts_pending(snic, lr_sc)) {
-+	if (snic_is_abts_pending(snic, lr_sdev)) {
- 		ret = FAILED;
- 
- 		goto clean_err;
-@@ -1957,7 +1953,7 @@ snic_dr_finish(struct snic *snic, struct scsi_cmnd *sc)
- 	 * succeeds.
- 	 */
- 
--	ret = snic_dr_clean_pending_req(snic, sc);
-+	ret = snic_dr_clean_pending_req(snic, sc->device);
- 	if (ret) {
- 		spin_lock_irqsave(io_lock, flags);
- 		SNIC_SCSI_DBG(snic->shost,
-@@ -2581,6 +2577,40 @@ snic_internal_abort_io(struct snic *snic, struct scsi_cmnd *sc, int tmf)
- 	return ret;
- } /* end of snic_internal_abort_io */
- 
-+struct snic_tgt_scsi_abort_io_iter_data {
-+	struct snic *snic;
-+	struct snic_tgt *tgt;
-+	int tmf;
-+	int abt_cnt;
-+};
-+
-+static bool
-+snic_tgt_scsi_abort_io_iter(struct scsi_cmnd *sc, void *data, bool reserved)
-+{
-+	struct snic_tgt_scsi_abort_io_iter_data *iter_data = data;
-+	struct snic_tgt *sc_tgt = NULL;
-+	int ret;
-+
-+	if (reserved)
-+		return true;
-+
-+	sc_tgt = starget_to_tgt(scsi_target(sc->device));
-+	if (sc_tgt != iter_data->tgt)
-+		return true;
-+
-+	ret = snic_internal_abort_io(iter_data->snic, sc, iter_data->tmf);
-+	if (ret < 0) {
-+		SNIC_HOST_ERR(iter_data->snic->shost,
-+			      "tgt_abt_io: Tag %x, Failed w err = %d\n",
-+			      snic_cmd_tag(sc), ret);
-+		return true;
-+	}
-+
-+	if (ret == SUCCESS)
-+		iter_data->abt_cnt++;
-+	return true;
-+}
-+
- /*
-  * snic_tgt_scsi_abort_io : called by snic_tgt_del
-  */
-@@ -2588,11 +2618,10 @@ int
- snic_tgt_scsi_abort_io(struct snic_tgt *tgt)
- {
- 	struct snic *snic = NULL;
--	struct scsi_cmnd *sc = NULL;
--	struct snic_tgt *sc_tgt = NULL;
--	spinlock_t *io_lock = NULL;
--	unsigned long flags;
--	int ret = 0, tag, abt_cnt = 0, tmf = 0;
-+	struct snic_tgt_scsi_abort_io_iter_data iter_data = {
-+		.tgt = tgt,
-+		.abt_cnt = 0,
-+	};
- 
- 	if (!tgt)
- 		return -1;
-@@ -2601,43 +2630,16 @@ snic_tgt_scsi_abort_io(struct snic_tgt *tgt)
- 	SNIC_SCSI_DBG(snic->shost, "tgt_abt_io: Cleaning Pending IOs.\n");
- 
- 	if (tgt->tdata.typ == SNIC_TGT_DAS)
--		tmf = SNIC_ITMF_ABTS_TASK;
-+		iter_data.tmf = SNIC_ITMF_ABTS_TASK;
- 	else
--		tmf = SNIC_ITMF_ABTS_TASK_TERM;
--
--	for (tag = 0; tag < snic->max_tag_id; tag++) {
--		io_lock = snic_io_lock_tag(snic, tag);
--
--		spin_lock_irqsave(io_lock, flags);
--		sc = scsi_host_find_tag(snic->shost, tag);
--		if (!sc) {
--			spin_unlock_irqrestore(io_lock, flags);
-+		iter_data.tmf = SNIC_ITMF_ABTS_TASK_TERM;
-+	iter_data.snic = snic;
- 
--			continue;
--		}
--
--		sc_tgt = starget_to_tgt(scsi_target(sc->device));
--		if (sc_tgt != tgt) {
--			spin_unlock_irqrestore(io_lock, flags);
--
--			continue;
--		}
--		spin_unlock_irqrestore(io_lock, flags);
--
--		ret = snic_internal_abort_io(snic, sc, tmf);
--		if (ret < 0) {
--			SNIC_HOST_ERR(snic->shost,
--				      "tgt_abt_io: Tag %x, Failed w err = %d\n",
--				      tag, ret);
--
--			continue;
--		}
--
--		if (ret == SUCCESS)
--			abt_cnt++;
--	}
-+	scsi_host_busy_iter(snic->shost,
-+			    snic_tgt_scsi_abort_io_iter, &iter_data);
- 
--	SNIC_SCSI_DBG(snic->shost, "tgt_abt_io: abt_cnt = %d\n", abt_cnt);
-+	SNIC_SCSI_DBG(snic->shost, "tgt_abt_io: abt_cnt = %d\n",
-+		      iter_data.abt_cnt);
- 
- 	return 0;
- } /* end of snic_tgt_scsi_abort_io */
+ 	return rc;
+ }
 -- 
 2.16.4
 
