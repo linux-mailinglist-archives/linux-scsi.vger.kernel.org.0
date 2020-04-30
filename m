@@ -2,18 +2,18 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C81B61BF91E
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827C01BF932
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726950AbgD3NUK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Apr 2020 09:20:10 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60754 "EHLO mx2.suse.de"
+        id S1727061AbgD3NUR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Apr 2020 09:20:17 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60864 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726683AbgD3NUG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 Apr 2020 09:20:06 -0400
+        id S1726930AbgD3NUI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 Apr 2020 09:20:08 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 2624CAF17;
+        by mx2.suse.de (Postfix) with ESMTP id 50D7EAF33;
         Thu, 30 Apr 2020 13:20:02 +0000 (UTC)
 From:   Hannes Reinecke <hare@suse.de>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -23,9 +23,9 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         Ming Lei <ming.lei@redhat.com>,
         Bart van Assche <bvanassche@acm.org>,
         linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH RFC v3 16/41] aacraid: use scsi_host_busy_iter() to traverse commands
-Date:   Thu, 30 Apr 2020 15:18:39 +0200
-Message-Id: <20200430131904.5847-17-hare@suse.de>
+Subject: [PATCH RFC v3 17/41] megaraid_sas: kill this_id and init_id
+Date:   Thu, 30 Apr 2020 15:18:40 +0200
+Message-Id: <20200430131904.5847-18-hare@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20200430131904.5847-1-hare@suse.de>
 References: <20200430131904.5847-1-hare@suse.de>
@@ -34,225 +34,77 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Now that the block layer manages all commands we can use
-scsi_host_busy_iter() to traverse outstanding commands.
+Unused.
 
 Signed-off-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/scsi/aacraid/linit.c | 137 ++++++++++++++++++++-----------------------
- 1 file changed, 62 insertions(+), 75 deletions(-)
+ drivers/scsi/megaraid/megaraid_sas.h      |  2 --
+ drivers/scsi/megaraid/megaraid_sas_base.c | 10 +++-------
+ 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/scsi/aacraid/linit.c b/drivers/scsi/aacraid/linit.c
-index 91a4780d9815..e3f8eac6cebe 100644
---- a/drivers/scsi/aacraid/linit.c
-+++ b/drivers/scsi/aacraid/linit.c
-@@ -680,7 +680,7 @@ static int aac_eh_abort(struct scsi_cmnd* cmd)
- 	struct scsi_device * dev = cmd->device;
- 	struct Scsi_Host * host = dev->host;
- 	struct aac_dev * aac = (struct aac_dev *)host->hostdata;
--	int count, found;
-+	int count;
- 	u32 bus, cid;
- 	int ret = FAILED;
+diff --git a/drivers/scsi/megaraid/megaraid_sas.h b/drivers/scsi/megaraid/megaraid_sas.h
+index 83d8c4cb1ad5..d295a2036588 100644
+--- a/drivers/scsi/megaraid/megaraid_sas.h
++++ b/drivers/scsi/megaraid/megaraid_sas.h
+@@ -2323,7 +2323,6 @@ struct megasas_instance {
+ 	struct megasas_pd_list          pd_list[MEGASAS_MAX_PD];
+ 	struct megasas_pd_list          local_pd_list[MEGASAS_MAX_PD];
+ 	u8 ld_ids[MEGASAS_MAX_LD_IDS];
+-	s8 init_id;
  
-@@ -699,17 +699,13 @@ static int aac_eh_abort(struct scsi_cmnd* cmd)
- 		 AAC_DRIVERNAME,
- 		 host->host_no, sdev_channel(dev), sdev_id(dev), (int)dev->lun);
+ 	u16 max_num_sge;
+ 	u16 max_fw_cmds;
+@@ -2359,7 +2358,6 @@ struct megasas_instance {
+ 	wait_queue_head_t abort_cmd_wait_q;
  
--		found = 0;
--		for (count = 0; count < host->can_queue; ++count) {
--			fib = &aac->fibs[count];
--			if (*(u8 *)fib->hw_fib_va != 0 &&
--				(fib->flags & FIB_CONTEXT_FLAG_NATIVE_HBA) &&
--				(fib->callback_data == cmd)) {
--				found = 1;
--				break;
--			}
--		}
--		if (!found)
-+		if (cmd->request->tag >= host->can_queue)
-+			return ret;
-+
-+		fib = &aac->fibs[cmd->request->tag];
-+		if (*(u8 *)fib->hw_fib_va == 0 ||
-+		    !(fib->flags & FIB_CONTEXT_FLAG_NATIVE_HBA) ||
-+		    (fib->callback_data != cmd))
- 			return ret;
+ 	struct pci_dev *pdev;
+-	u32 unique_id;
+ 	u32 fw_support_ieee;
+ 	u32 threshold_reply_count;
  
- 		/* start a HBA_TMF_ABORT_TASK TMF request */
-@@ -767,12 +763,13 @@ static int aac_eh_abort(struct scsi_cmnd* cmd)
- 			/* fall through */
- 		case INQUIRY:
- 		case READ_CAPACITY:
-+		case TEST_UNIT_READY:
- 			/*
- 			 * Mark associated FIB to not complete,
- 			 * eh handler does this
- 			 */
--			for (count = 0; count < host->can_queue; ++count) {
--				struct fib *fib = &aac->fibs[count];
-+			if (cmd->request->tag < host->can_queue) {
-+				struct fib *fib = &aac->fibs[cmd->request->tag];
- 
- 				if (fib->hw_fib_va->header.XferState &&
- 				(fib->flags & FIB_CONTEXT_FLAG) &&
-@@ -785,32 +782,6 @@ static int aac_eh_abort(struct scsi_cmnd* cmd)
- 				}
- 			}
- 			break;
--		case TEST_UNIT_READY:
--			/*
--			 * Mark associated FIB to not complete,
--			 * eh handler does this
--			 */
--			for (count = 0; count < host->can_queue; ++count) {
--				struct scsi_cmnd *command;
--				struct fib *fib = &aac->fibs[count];
--
--				command = fib->callback_data;
--
--				if ((fib->hw_fib_va->header.XferState &
--					cpu_to_le32
--					(Async | NoResponseExpected)) &&
--					(fib->flags & FIB_CONTEXT_FLAG) &&
--					((command)) &&
--					(command->device == cmd->device)) {
--					fib->flags |=
--						FIB_CONTEXT_FLAG_TIMED_OUT;
--					command->SCp.phase =
--						AAC_OWNER_ERROR_HANDLER;
--					if (command == cmd)
--						ret = SUCCESS;
--				}
--			}
--			break;
- 		}
- 	}
- 	return ret;
-@@ -1016,6 +987,36 @@ static int aac_eh_target_reset(struct scsi_cmnd *cmd)
- 	return ret;
- }
- 
-+struct aac_abort_fibs_iter_data {
-+	struct aac_dev *aac;
-+	u32 bus;
-+};
-+
-+static bool aac_abort_fibs_iter(struct scsi_cmnd *scmd, void *data, bool rsvd)
-+{
-+	struct aac_abort_fibs_iter_data *iter_data = data;
-+	struct aac_dev *aac = iter_data->aac;
-+	struct fib *fib = &aac->fibs[scmd->request->tag];
-+
-+	if (fib->hw_fib_va->header.XferState &&
-+	    (fib->flags & FIB_CONTEXT_FLAG) &&
-+	    (fib->flags & FIB_CONTEXT_FLAG_SCSI_CMD)) {
-+		struct aac_hba_map_info *info;
-+		u32 bus, cid;
-+
-+		bus = aac_logical_to_phys(scmd_channel(scmd));
-+		if (bus != iter_data->bus)
-+			return true;
-+		cid = scmd_id(scmd);
-+		info = &aac->hba_map[bus][cid];
-+		if (bus >= AAC_MAX_BUSES || cid >= AAC_MAX_TARGETS ||
-+		    info->devtype != AAC_DEVTYPE_NATIVE_RAW) {
-+			fib->flags |= FIB_CONTEXT_FLAG_EH_RESET;
-+			scmd->SCp.phase = AAC_OWNER_ERROR_HANDLER;
-+		}
-+	}
-+	return true;
-+}
- /*
-  *	aac_eh_bus_reset	- Bus reset command handling
-  *	@scsi_cmd:	SCSI command block causing the reset
-@@ -1027,34 +1028,13 @@ static int aac_eh_bus_reset(struct scsi_cmnd* cmd)
- 	struct Scsi_Host * host = dev->host;
- 	struct aac_dev * aac = (struct aac_dev *)host->hostdata;
- 	int count;
--	u32 cmd_bus;
- 	int status = 0;
-+	struct aac_abort_fibs_iter_data data = {
-+		.aac = aac,
-+		.bus = aac_logical_to_phys(scmd_channel(cmd)),
-+	};
- 
--
--	cmd_bus = aac_logical_to_phys(scmd_channel(cmd));
--	/* Mark the assoc. FIB to not complete, eh handler does this */
--	for (count = 0; count < host->can_queue; ++count) {
--		struct fib *fib = &aac->fibs[count];
--
--		if (fib->hw_fib_va->header.XferState &&
--		    (fib->flags & FIB_CONTEXT_FLAG) &&
--		    (fib->flags & FIB_CONTEXT_FLAG_SCSI_CMD)) {
--			struct aac_hba_map_info *info;
--			u32 bus, cid;
--
--			cmd = (struct scsi_cmnd *)fib->callback_data;
--			bus = aac_logical_to_phys(scmd_channel(cmd));
--			if (bus != cmd_bus)
--				continue;
--			cid = scmd_id(cmd);
--			info = &aac->hba_map[bus][cid];
--			if (bus >= AAC_MAX_BUSES || cid >= AAC_MAX_TARGETS ||
--			    info->devtype != AAC_DEVTYPE_NATIVE_RAW) {
--				fib->flags |= FIB_CONTEXT_FLAG_EH_RESET;
--				cmd->SCp.phase = AAC_OWNER_ERROR_HANDLER;
--			}
--		}
--	}
-+	scsi_host_busy_iter(host, aac_abort_fibs_iter, &data);
- 
- 	pr_err("%s: Host bus reset request. SCSI hang ?\n", AAC_DRIVERNAME);
- 
-@@ -1558,23 +1538,28 @@ static struct scsi_host_template aac_driver_template = {
- 	.no_write_same			= 1,
+diff --git a/drivers/scsi/megaraid/megaraid_sas_base.c b/drivers/scsi/megaraid/megaraid_sas_base.c
+index fb9c3ceed508..949ae49a6967 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_base.c
++++ b/drivers/scsi/megaraid/megaraid_sas_base.c
+@@ -3425,6 +3425,7 @@ static struct scsi_host_template megasas_template = {
+ 	.bios_param = megasas_bios_param,
+ 	.change_queue_depth = scsi_change_queue_depth,
+ 	.max_segment_size = 0xffffffff,
++	.this_id = -1,
  };
  
--static void __aac_shutdown(struct aac_dev * aac)
-+static bool __aac_shutdown_iter(struct scsi_cmnd *scmd, void *data, bool rsvd)
- {
--	int i;
-+	struct aac_dev *aac = data;
-+	struct fib *fib = &aac->fibs[scmd->request->tag];
-+
-+	if (!(fib->hw_fib_va->header.XferState &
-+	      cpu_to_le32(NoResponseExpected | Async)) &&
-+	    (fib->hw_fib_va->header.XferState & cpu_to_le32(ResponseExpected)))
-+		complete(&fib->event_wait);
-+	return true;
-+}
+ /**
+@@ -5494,9 +5495,7 @@ megasas_init_adapter_mfi(struct megasas_instance *instance)
+ 		goto fail_fw_init;
  
-+static void __aac_shutdown(struct aac_dev * aac)
-+{
- 	mutex_lock(&aac->ioctl_mutex);
- 	aac->adapter_shutdown = 1;
- 	mutex_unlock(&aac->ioctl_mutex);
- 
- 	if (aac->aif_thread) {
--		int i;
- 		/* Clear out events first */
--		for (i = 0; i < aac->scsi_host_ptr->can_queue; i++) {
--			struct fib *fib = &aac->fibs[i];
--			if (!(fib->hw_fib_va->header.XferState & cpu_to_le32(NoResponseExpected | Async)) &&
--			    (fib->hw_fib_va->header.XferState & cpu_to_le32(ResponseExpected)))
--				complete(&fib->event_wait);
--		}
-+		scsi_host_busy_iter(aac->scsi_host_ptr,
-+				    __aac_shutdown_iter, aac);
- 		kthread_stop(aac->thread);
- 		aac->thread = NULL;
+ 	if (megasas_get_ctrl_info(instance)) {
+-		dev_err(&instance->pdev->dev, "(%d): Could get controller info "
+-			"Fail from %s %d\n", instance->unique_id,
+-			__func__, __LINE__);
++		dev_err(&instance->pdev->dev, "Couldn't get controller info\n");
+ 		goto fail_fw_init;
  	}
-@@ -1585,6 +1570,8 @@ static void __aac_shutdown(struct aac_dev * aac)
  
- 	if (aac_is_src(aac)) {
- 		if (aac->max_msix > 1) {
-+			int i;
-+
- 			for (i = 0; i < aac->max_msix; i++) {
- 				free_irq(pci_irq_vector(aac->pdev, i),
- 					 &(aac->aac_msix[i]));
+@@ -6758,9 +6757,7 @@ static int megasas_io_attach(struct megasas_instance *instance)
+ 	/*
+ 	 * Export parameters required by SCSI mid-layer
+ 	 */
+-	host->unique_id = instance->unique_id;
+ 	host->can_queue = instance->max_scsi_cmds;
+-	host->this_id = instance->init_id;
+ 	host->sg_tablesize = instance->max_num_sge;
+ 
+ 	if (instance->fw_support_ieee)
+@@ -7346,8 +7343,7 @@ static int megasas_probe_one(struct pci_dev *pdev,
+ 	 */
+ 	instance->pdev = pdev;
+ 	instance->host = host;
+-	instance->unique_id = pdev->bus->number << 8 | pdev->devfn;
+-	instance->init_id = MEGASAS_DEFAULT_INIT_ID;
++	host->unique_id = pdev->bus->number << 8 | pdev->devfn;
+ 
+ 	megasas_set_adapter_type(instance);
+ 
 -- 
 2.16.4
 
