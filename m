@@ -2,161 +2,118 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADF31BF85F
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 14:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F15201BF933
+	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 15:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726809AbgD3Mpp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Apr 2020 08:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726808AbgD3Mpo (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 30 Apr 2020 08:45:44 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4D7C035494;
-        Thu, 30 Apr 2020 05:45:44 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id d15so6746233wrx.3;
-        Thu, 30 Apr 2020 05:45:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nTelbWge7w+/UEuocO2uUnURIuxUwZKm7wDXXQqaeMw=;
-        b=VGyEvoSILzN3pCvWFpscfa7jp4vFjoeWc0e5mpjAylmg+ja4ODabRLpT+LVrdVwYFT
-         mguw/PEM+HKrxEphD38GAMxLu7CDAlaMEm92/091sxO+FMXzvEOPYjZdbYDsistHp7TK
-         LlYgwzbwVRBZCDd9u5i2uIvuT/Gmp2Wlsmy3Mo77jCYNpJY1eJd/41X1tj1ypySGNlUE
-         K7syk2kytKk39aJYWkcqIQE2gEK/97zKaId66vNJlpdq4STH6MEhV+P0kTAliHha0T0e
-         4+V4vkitY2dVn6c8Oi9KxvLHgaiFHjziTDv8QCjo4YBBy6kEtglig+fGY7gZ1DbJ4dcj
-         WDvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nTelbWge7w+/UEuocO2uUnURIuxUwZKm7wDXXQqaeMw=;
-        b=DQr5uDwh/2fNtI/M/lDgn4YndjwgSuzJqQM0/aWNBSwVwqdWWDIMYnncivvEcOuRIw
-         Kb9c4jCYDZV49tEZV4w8tQfohONzHmNOoQFFbylPXrPALDai593xMYYucs18rUtai+cG
-         g6C3dCqxojO8LJpdagzjdwjsnGEe4myMISO385O7k3MShE+Z6at4MjQzAp5V/P/xzXrT
-         +VgWI3QZ1J1p5UD+pP5nLJlFfhsIx3TyHWWVtwZR5GI1tJ4HwKg0JF8/+D8I4imUmi1p
-         oE8cfdpdukvtL4yRqRPXJ8c+wJ9ryoqg0CIxjz0spOCshtdDiI3iHCgtSztW/VbEa14m
-         DWxA==
-X-Gm-Message-State: AGi0Puac1s5F/1X+hhTU06f+W9vbC06m3OLSDT1Dkjek+FR6xAGPPGSi
-        XvLxLw415/etAdDppvNy4SS7Ce2SZxc=
-X-Google-Smtp-Source: APiQypJGUJirvshsvajkCVQFbP0RO3lE77GpsE/ZwA8WZNBPaAZkiayWTQwQ+4mvYVLIQcvMCxESJA==
-X-Received: by 2002:adf:9793:: with SMTP id s19mr3482561wrb.147.1588250743269;
-        Thu, 30 Apr 2020 05:45:43 -0700 (PDT)
-Received: from ubuntu-G3 (ip5f5bfcc8.dynamic.kabel-deutschland.de. [95.91.252.200])
-        by smtp.googlemail.com with ESMTPSA id l16sm3700287wrp.91.2020.04.30.05.45.41
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 30 Apr 2020 05:45:42 -0700 (PDT)
-Message-ID: <79278fe0f4e0ce820484386a72bc6044d3c66822.camel@gmail.com>
-Subject: Re: [PATCH v2 5/5] scsi: ufs: UFS Host Performance Booster(HPB)
- driver
-From:   Bean Huo <huobean@gmail.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Thu, 30 Apr 2020 14:45:40 +0200
-In-Reply-To: <BYAPR04MB4629393BA60AF5E5898FB304FCAA0@BYAPR04MB4629.namprd04.prod.outlook.com>
-References: <20200416203126.1210-1-beanhuo@micron.com>
-         <20200416203126.1210-6-beanhuo@micron.com>
-         <8921adc3-0c1e-eb16-4a22-1a2a583fc8b3@acm.org>
-         <SN6PR04MB4640851C163648C54EB274C5FCD00@SN6PR04MB4640.namprd04.prod.outlook.com>
-         <SN6PR04MB4640ABB2BB5D2CE5AA2C3778FCD10@SN6PR04MB4640.namprd04.prod.outlook.com>
-         <12e8ad61-caa4-3d28-c1d7-febe99a488fb@acm.org>
-         <SN6PR04MB4640A33BBE0CD58107D7FC69FCAF0@SN6PR04MB4640.namprd04.prod.outlook.com>
-         <b2584ba8-3542-1aae-5802-e59d218e1553@acm.org>
-         <SN6PR04MB464009AFAC8F7EFC04184826FCAC0@SN6PR04MB4640.namprd04.prod.outlook.com>
-         <15eca4dd2ec8a4ba210ce0844e9f5027251fa6f2.camel@gmail.com>
-         <BYAPR04MB4629393BA60AF5E5898FB304FCAA0@BYAPR04MB4629.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
+        id S1727058AbgD3NUR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Apr 2020 09:20:17 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:57372 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726917AbgD3NUI (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Apr 2020 09:20:08 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03UDJLxg114097;
+        Thu, 30 Apr 2020 13:19:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=xy/1qwI9qxwIfg0g+daxb1BAP6f5f0orcFwzrnuEKeM=;
+ b=R+EyU5hQ6Z1iWZncsaPASQfN7CjWDX0os5GShUuFAO4ielQ3zlmcKTKbnhOGV8PTp+CP
+ J50h9B5SGMPy13rBnRGmCxQ6UWpwoziRlUCUmkju51eERgS2+hhGj6lRieycPyLA6usY
+ lF2Z8ly7anYyuvfDHk834tdaWulES4AZn8xcnwjhmIS0FPRiqhELeK4VUqJYArvMN1Hv
+ /KhXIERtNBVnmGWgYScuSQ+Gm6GrvduxBvMfxL/U/fnB7Fgk0PLle1cLFKnuOX/IpuDu
+ ygvFQ0swGAGNNrxybQ0v9h4hwWh9TFHOktQ/3o35Cc48RIq3xS/7S/r49GTuc+Z4JZAZ iA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 30p01p1x7h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Apr 2020 13:19:55 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03UDGsYb038508;
+        Thu, 30 Apr 2020 13:17:54 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 30qtf775gf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 30 Apr 2020 13:17:54 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03UDHqoS020254;
+        Thu, 30 Apr 2020 13:17:53 GMT
+Received: from [10.154.112.177] (/10.154.112.177)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 30 Apr 2020 06:17:52 -0700
+Subject: Re: [PATCH] scsi: qla2xxx: use true,false for need_mpi_reset
+To:     Jason Yan <yanaijie@huawei.com>, njavali@marvell.com,
+        GR-QLogic-Storage-Upstream@marvell.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, aeasi@marvell.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200430121751.15232-1-yanaijie@huawei.com>
+From:   himanshu.madhani@oracle.com
+Organization: Oracle Corporation
+Message-ID: <59d50953-cebe-3dd4-e48e-d3283da923f5@oracle.com>
+Date:   Thu, 30 Apr 2020 08:17:51 -0500
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <20200430121751.15232-1-yanaijie@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9606 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 phishscore=0
+ malwarescore=0 mlxlogscore=999 bulkscore=0 adultscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004300108
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9606 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 clxscore=1011
+ phishscore=0 mlxlogscore=999 adultscore=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004300108
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 2020-04-30 at 07:23 +0000, Avri Altman wrote:
-> Hi Bean,
-> 
-> > > By now we've read the device HPB configuration, and we are
-> > > ready  to
-> > > attach a scsi device to our HPB luns.  A perfect timing might be
-> > > while
-> > > scsi is performing its .slave_alloc() or .slave_configure().
-> > > 
-> > 
-> > hi, Avri
-> > That means HPB memory allocation done in .scan_finished() ?
-> 
-> The specifics of this feature are yet to be determined.
-> 
-> Among those, yes - we need to discuss how to handle the memory
-> allocation.
-> Statically allocating the required cache for the entire max-active-
-> subregions,
-> Which may sum-up to a hundreds of MB, has its obvious downsize. 
-> We need to discuss this further.
-> 
-> > and sd_init_command() needs to change as well, add a new request
-> > type REQ_OP_HPB_READ?
-> 
-> Again, this is an implementation issue.
-> We need to figure it out in the sequel.
-> E.g. we might want to make use of the combination of a valid handler
-> and blk_op_is_private.
-> 
-> I think it would be more constructive, if we can decide first on the
-> module layout,
-> And figure out the other details as we go?
-> 
-> Can you provide the pros and cons for the Samsung approach -
-> implementing all HPB functionalities using a single LLD?
-> 
-> Thanks,
-> Avri
-> 
-Hi Avri
 
-Samsung approach is a flat design and the HPB functions are embedded in
-the UFSHBA driver, looks ugly.  Each LU has its own HPB cache, which
-statically allocated in HPB initialization stage.  If one LU runs out
-of its HPB cache, it is impossbile to borrow HPB cache from its
-neighbour LU. Also, HPB requests are enqueued to the scsi_device
-request_queue and then fly back to SCSI layer. This unavoidably
-lengthens the latency of HPB entry update. 
-For the HPB host control mode, the predictability of HPB region
-activation of this design is lower, since HPB driver doesn't know which
-Region exactly should be activated in advance.
 
-Regarding its pros, exactly I don't know, maybe it is relatively
-simple, work, and there are already customers who are using it now.
-also, we don't need to argue with SCSI layers and maintenance is
-easier.
-
-To me, hierarchical design sounds good, and move the implementation of
-HPB manager module to SCSI layer is nice. but what is opinion of
-others? and which way they prefer. or they want us to continue current
-Samsung approach and solve its cons further.
-
-thanks,
-
-Bean
-
-> > 
-> > 
-> > Bean
-> > 
+On 4/30/20 7:17 AM, Jason Yan wrote:
+> Fix the following coccicheck warning:
 > 
+> drivers/scsi/qla2xxx/qla_tmpl.c:1031:6-20: WARNING: Assignment of 0/1 to
+> bool variable
+> drivers/scsi/qla2xxx/qla_tmpl.c:1062:3-17: WARNING: Assignment of 0/1 to
+> bool variable
+> 
+> Signed-off-by: Jason Yan <yanaijie@huawei.com>
+> ---
+>   drivers/scsi/qla2xxx/qla_tmpl.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/qla2xxx/qla_tmpl.c b/drivers/scsi/qla2xxx/qla_tmpl.c
+> index 819c46f31c05..281973b317a8 100644
+> --- a/drivers/scsi/qla2xxx/qla_tmpl.c
+> +++ b/drivers/scsi/qla2xxx/qla_tmpl.c
+> @@ -1028,7 +1028,7 @@ void
+>   qla27xx_mpi_fwdump(scsi_qla_host_t *vha, int hardware_locked)
+>   {
+>   	ulong flags = 0;
+> -	bool need_mpi_reset = 1;
+> +	bool need_mpi_reset = true;
+>   
+>   #ifndef __CHECKER__
+>   	if (!hardware_locked)
+> @@ -1059,7 +1059,7 @@ qla27xx_mpi_fwdump(scsi_qla_host_t *vha, int hardware_locked)
+>   			       "-> fwdt1 fwdump residual=%+ld\n",
+>   			       fwdt->dump_size - len);
+>   		} else {
+> -			need_mpi_reset = 0;
+> +			need_mpi_reset = false;
+>   		}
+>   
+>   		vha->hw->mpi_fw_dump_len = len;
 > 
 
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+
+-- 
+Himanshu Madhani
+Oracle Linux Engineering
