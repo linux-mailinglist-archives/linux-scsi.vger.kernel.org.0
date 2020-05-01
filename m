@@ -2,112 +2,162 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA5B1C0974
-	for <lists+linux-scsi@lfdr.de>; Thu, 30 Apr 2020 23:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB191C0B9D
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 May 2020 03:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728107AbgD3VeK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 30 Apr 2020 17:34:10 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:58935 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727124AbgD3VeI (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 30 Apr 2020 17:34:08 -0400
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.129]) with ESMTPA (Nemesis) id
- 1MekrN-1iw23r0YOj-00apFq; Thu, 30 Apr 2020 23:33:54 +0200
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     linux-kernel@vger.kernel.org,
-        Intel SCU Linux support <intel-linux-scu@intel.com>,
-        Artur Paszkiewicz <artur.paszkiewicz@intel.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-scsi@vger.kernel.org
-Subject: [PATCH 14/15] isci: avoid gcc-10 zero-length-bounds warning
-Date:   Thu, 30 Apr 2020 23:30:56 +0200
-Message-Id: <20200430213101.135134-15-arnd@arndb.de>
-X-Mailer: git-send-email 2.26.0
-In-Reply-To: <20200430213101.135134-1-arnd@arndb.de>
-References: <20200430213101.135134-1-arnd@arndb.de>
+        id S1728010AbgEABTy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 30 Apr 2020 21:19:54 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:50156 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728025AbgEABTy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 30 Apr 2020 21:19:54 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1588295993; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=T52XjBMRa795mkQixIuPfXttq+DeeUPrNOtA5L+BOUs=;
+ b=lxiC7tlAF6mtzft64T/VIQHweU9HvVzboXGoXgkSwaXMVW6YIGXKvWgg//lg7Nd2RJwzSpJR
+ q8J43hWCXzKgzS1r2c3hZ7u/Ke+ZbF+8nCXTol0SeIXUz6sEk8ONIag/9raPaQQbbHfW5Y7v
+ BS8lNYKMgt6rULcYCTMYHz8aFm8=
+X-Mailgun-Sending-Ip: 104.130.122.27
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5eab791e.7fcd1355bc38-smtp-out-n03;
+ Fri, 01 May 2020 01:19:26 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D5C21C43636; Fri,  1 May 2020 01:19:26 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: cang)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C1942C433CB;
+        Fri,  1 May 2020 01:19:25 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:7STMyUCnzNFORsOTFhBk+QO1wMd0aCQREYl9i/6g5djgitDUpZ6
- d1Cx+C01pHvqZt+aQoS8ab5L853K/yBtfnhyeugGSlvh7HKQ0PL0VPWymc4AUUryftBYEso
- OUGbikus/NGt12kseU7xwabsGAmxqrTKLyaGQy3cjPJ43HXWsVNNnuwv8J52mfRiGUTqkiy
- p2VouWvfbNWfatj6Qx9KA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bSMgVGjYJbk=:e3OoHoNyVrETSsb4hMOhs/
- AS0ivt9Xcb53jajnQRqZgv28gM4KSUsPE4/o60hKXktudnmPzwv7RW8Kj4AuCquc4xriwDklb
- xKB4Dxt0vhsg9WTFIyTiatKW/x6/E+2Nk8pLmNKGMItbeiWHT43Hwq6qvUgQzpoxRSAtI8K+c
- AbFuuj3Oam60e+HhGtj5h/CXSHXFlomhGukqvM1te61faABhg4P98Ria19e5qoPauXLU31Ir7
- uyL1FS3S/Pki/1dKyCc7sM6Ze1PWMD8JL99fDJsTBP/GpBfhDzFTAdNrCaOkVW4p63C2XUS1b
- csL4aTU4V1v07Popcn2+JRSVN/QvEmL1z9z+73jfAP3H4oshS/HrD1Ttx26cgkbqiV823bAPX
- ZhkZbjdTbcPzcEB/fsZEHN5B27L5aSM9MkkOVUbub1Ihc+pylki8sChmoY4/67R7FSVVwByPd
- J8Nz/BCBgevzfXFncJ4UPzc9CbgwT3Cbu8rokQWb9XVFywpOkgnas+iJg2fL949baMrHLRuV8
- xV3WIiGzMWBZQFDW8Ac3Ix3EbrfgS1K01zPWZNZFeF+3kf+l8QQ9HsgqFXQbOQ6mx+3uwTYYx
- /ol12IcZtrb7B6wpmHD1NPPwpwrDydQTJ8Dn+CHU4DYt3/OjzXb/4/KvoKwHe3/tLjE7iM6pt
- hrd1WgsjuRO9ZM5+aPlpnjsWOH/mx90oUd8XFgynTRngF97dbGjgqqiobJW+pvbZIV5+ZTjc4
- PM8Qk89cI6yabSO1NdqEAs9oCr5xwcoXbbP27xCCOsgQ1TG8rKyt8vvnm4wbtXZwD607vZvx2
- zUHvdw7DVW21QES1ntvMt/CqXvDLFzW6Q3TYBwZKF6Xm0K41d4=
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 01 May 2020 09:19:25 +0800
+From:   Can Guo <cang@codeaurora.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     asutoshd@codeaurora.org, nguyenb@codeaurora.org,
+        hongwus@codeaurora.org, rnayak@codeaurora.org,
+        stanley.chu@mediatek.com, alim.akhtar@samsung.com,
+        beanhuo@micron.com, Avri.Altman@wdc.com,
+        bjorn.andersson@linaro.org, linux-scsi@vger.kernel.org,
+        kernel-team@android.com, saravanak@google.com, salyzyn@google.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/1] scsi: pm: Balance pm_only counter of request queue
+ during system resume
+In-Reply-To: <ef23a815-118a-52fe-4880-19e7fc4fcd10@acm.org>
+References: <1588219805-25794-1-git-send-email-cang@codeaurora.org>
+ <9e15123e-4315-15cd-3d23-2df6144bd376@acm.org>
+ <1ef85ee212bee679f7b2927cbbc79cba@codeaurora.org>
+ <ef23a815-118a-52fe-4880-19e7fc4fcd10@acm.org>
+Message-ID: <0d9a1e88b0477e8a04b091b9532923f5@codeaurora.org>
+X-Sender: cang@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-gcc-10 warns about accesses to zero-length arrays:
+On 2020-05-01 04:32, Bart Van Assche wrote:
+> On 2020-04-29 22:40, Can Guo wrote:
+>> On 2020-04-30 13:08, Bart Van Assche wrote:
+>>> On 2020-04-29 21:10, Can Guo wrote:
+>>>> During system resume, scsi_resume_device() decreases a request 
+>>>> queue's
+>>>> pm_only counter if the scsi device was quiesced before. But after 
+>>>> that,
+>>>> if the scsi device's RPM status is RPM_SUSPENDED, the pm_only 
+>>>> counter is
+>>>> still held (non-zero). Current scsi resume hook only sets the RPM 
+>>>> status
+>>>> of the scsi device and its request queue to RPM_ACTIVE, but leaves 
+>>>> the
+>>>> pm_only counter unchanged. This may make the request queue's pm_only
+>>>> counter remain non-zero after resume hook returns, hence those who 
+>>>> are
+>>>> waiting on the mq_freeze_wq would never be woken up. Fix this by 
+>>>> calling
+>>>> blk_post_runtime_resume() if pm_only is non-zero to balance the 
+>>>> pm_only
+>>>> counter which is held by the scsi device's RPM ops.
+>>> 
+>>> How was this issue discovered? How has this patch been tested?
+>> 
+>> As the issue was found after system resumes, so the issue was 
+>> discovered
+>> during system suspend/resume test, and it is very easy to be 
+>> replicated.
+>> After system resumes, if this issue hits some scsi devices, all bios 
+>> sent
+>> to their request queues are blocked, which may cause a system hang if 
+>> the
+>> scsi devices are vital to system functionality.
+>> 
+>> To make sure the patch work well, we have tested system suspend/resume
+>> and made sure no system hang happen due to request queues got blocked
+>> by imbalanced pm_only counter.
+> 
+> Thanks, that's very interesting information. My concern with this patch
+> is that the power management code is not the only caller of
+> blk_set_pm_only() / blk_clear_pm_only(). E.g. the SCSI SPI code also
+> calls scsi_device_quiesce() and scsi_device_resume(). These last
+> functions call blk_set_pm_only() and blk_clear_pm_only(). More calls of
+> scsi_device_quiesce() and scsi_device_resume() might be added in the 
+> future.
+> 
+> Has it been considered to test directly whether a SCSI device has been
+> runtime suspended instead of relying on blk_queue_pm_only()? How about
+> using pm_runtime_status_suspended() or adding a function in
+> block/blk-pm.h that checks whether q->rpm_status == RPM_SUSPENDED?
+> 
+> Thanks,
+> 
+> Bart.
 
-drivers/scsi/isci/task.h:125:31: error: array subscript 0 is outside the bounds of an interior zero-length array 'u8[0]' {aka 'unsigned char[0]'} [-Werror=zero-length-bounds]
-  125 |    tmf->resp.resp_iu.resp_data[0],
-      |    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
-include/linux/dynamic_debug.h:143:2: note: in expansion of macro '__dynamic_func_call'
-  143 |  __dynamic_func_call(__UNIQUE_ID(ddebug), fmt, func, ##__VA_ARGS__)
-      |  ^~~~~~~~~~~~~~~~~~~
-include/linux/dynamic_debug.h:157:2: note: in expansion of macro '_dynamic_func_call'
-  157 |  _dynamic_func_call(fmt,__dynamic_dev_dbg,   \
-      |  ^~~~~~~~~~~~~~~~~~
-include/linux/dev_printk.h:115:2: note: in expansion of macro 'dynamic_dev_dbg'
-  115 |  dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-      |  ^~~~~~~~~~~~~~~
-drivers/scsi/isci/task.h:111:3: note: in expansion of macro 'dev_dbg'
-  111 |   dev_dbg(&ihost->pdev->dev,
-      |   ^~~~~~~
-In file included from include/scsi/libsas.h:15,
-                 from drivers/scsi/isci/task.c:59:
-include/scsi/sas.h:326:9: note: while referencing 'resp_data'
-  326 |  u8     resp_data[0];
-      |         ^~~~~~~~~
+Hi Bart,
 
-This instance is not a bug, so just work around the warning by
-adding a temporary pointer.
+Please let me address your concern.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/scsi/isci/task.h | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+First of all, it is allowed to call scsi_device_quiesce() multiple 
+times,
+but one sdev's request queue's pm_only counter can only be increased 
+once
+by scsi_device_quiesce(), because if a sdev has already been quiesced,
+in scsi_device_quiesce(), scsi_device_set_state(sdev, SDEV_QUIESCE) 
+would
+return -ENIVAL (illegal state transform), then blk_clear_pm_only() shall
+be called to decrease pm_only once, so no matter how many times
+scsi_device_quiesce() is called, it can only increase pm_only once.
 
-diff --git a/drivers/scsi/isci/task.h b/drivers/scsi/isci/task.h
-index 8f4531f22ac2..2d556d7b5292 100644
---- a/drivers/scsi/isci/task.h
-+++ b/drivers/scsi/isci/task.h
-@@ -98,6 +98,8 @@ struct isci_tmf {
- 
- static inline void isci_print_tmf(struct isci_host *ihost, struct isci_tmf *tmf)
- {
-+	u8 *resp = tmf->resp.resp_iu.resp_data;
-+
- 	if (SAS_PROTOCOL_SATA == tmf->proto)
- 		dev_dbg(&ihost->pdev->dev,
- 			"%s: status = %x\n"
-@@ -122,10 +124,7 @@ static inline void isci_print_tmf(struct isci_host *ihost, struct isci_tmf *tmf)
- 			tmf->resp.resp_iu.datapres,
- 			tmf->resp.resp_iu.status,
- 			be32_to_cpu(tmf->resp.resp_iu.response_data_len),
--			tmf->resp.resp_iu.resp_data[0],
--			tmf->resp.resp_iu.resp_data[1],
--			tmf->resp.resp_iu.resp_data[2],
--			tmf->resp.resp_iu.resp_data[3]);
-+			resp[0], resp[1], resp[2], resp[3]);
- }
- 
- 
--- 
-2.26.0
+scsi_device_resume() is same, it calls blk_clear_pm_only only once and
+only if the sdev was quiesced().
 
+So, in a word, after scsi_device_resume() returns in 
+scsi_dev_type_resume(),
+pm_only counter should be 1 (if the sdev's runtime power status is
+RPM_SUSPENDED) or 0 (if the sdev's runtime power status is RPM_ACTIVE).
+
+> Has it been considered to test directly whether a SCSI device has been
+> runtime suspended instead of relying on blk_queue_pm_only()? How about
+> using pm_runtime_status_suspended() or adding a function in
+> block/blk-pm.h that checks whether q->rpm_status == RPM_SUSPENDED?
+
+Yes, I used to make the patch like that way, and it also worked well, as
+both ways are equal actually. I kinda like the current code because we
+should be confident that after scsi_dev_type_resume() returns, pm_only
+must be 0. Different reviewers may have different opionions, either way
+works well anyways.
+
+Thanks,
+
+Can Guo.
