@@ -2,81 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 178641C1284
-	for <lists+linux-scsi@lfdr.de>; Fri,  1 May 2020 15:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFB51C1815
+	for <lists+linux-scsi@lfdr.de>; Fri,  1 May 2020 16:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728586AbgEANBV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 1 May 2020 09:01:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52778 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728443AbgEANBV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 1 May 2020 09:01:21 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id DD29DADAB;
-        Fri,  1 May 2020 13:01:19 +0000 (UTC)
-Subject: Re: [PATCH RFC v3 04/41] csiostor: use reserved command for LUN reset
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Christoph Hellwig <hch@lst.de>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        John Garry <john.garry@huawei.com>,
-        Bart van Assche <bvanassche@acm.org>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.com>
-References: <20200430131904.5847-1-hare@suse.de>
- <20200430131904.5847-5-hare@suse.de> <20200430151546.GB1005453@T590>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <cd0f88db-96ec-d69f-f33e-b10a1cb3756d@suse.de>
-Date:   Fri, 1 May 2020 15:01:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1729112AbgEAOoT (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 1 May 2020 10:44:19 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:65377 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728916AbgEAOoS (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 1 May 2020 10:44:18 -0400
+X-UUID: ba1aafaed5cc4401a081e101100872b4-20200501
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=76OLCwfX6Gu9wxMlwzFdygqKRZ9AvkGO+i5uev8RfB0=;
+        b=oYTqZP5ogRhcen8vD/zje7xCWAjRNo/j7nsSNUDGSMUCvQYXJ4erAb6yqZD3+lHQMsEKrTtbDJvsrcleSozmtpkJExeCw/J5glPFHyMnqmNyq7moOUqfC+2YQbA9TGN6qHsde+v8rSxVm9WwT8bxZs3Ro1wpyXJSor1pm2jTfhY=;
+X-UUID: ba1aafaed5cc4401a081e101100872b4-20200501
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1616754347; Fri, 01 May 2020 22:38:38 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 1 May 2020 22:38:34 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 1 May 2020 22:38:33 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <asutoshd@codeaurora.org>
+CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v3 0/5] scsi: ufs: support LU Dedicated buffer type for WriteBooster
+Date:   Fri, 1 May 2020 22:38:30 +0800
+Message-ID: <20200501143835.26032-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <20200430151546.GB1005453@T590>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 75152929AB62C60A90DD79E3896054B044F54FEB05576F22D2B5529405A9B3A82000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 4/30/20 5:15 PM, Ming Lei wrote:
-> On Thu, Apr 30, 2020 at 03:18:27PM +0200, Hannes Reinecke wrote:
->> When issuing a LUN reset we should be using a reserved command
->> to avoid overwriting the original command.
->>
->> Signed-off-by: Hannes Reinecke <hare@suse.com>
->> ---
->>   drivers/scsi/csiostor/csio_init.c |  1 +
->>   drivers/scsi/csiostor/csio_scsi.c | 48 +++++++++++++++++++++++----------------
->>   2 files changed, 30 insertions(+), 19 deletions(-)
->>
->> diff --git a/drivers/scsi/csiostor/csio_init.c b/drivers/scsi/csiostor/csio_init.c
->> index 8dea7d53788a..5e1b0a24caf6 100644
->> --- a/drivers/scsi/csiostor/csio_init.c
->> +++ b/drivers/scsi/csiostor/csio_init.c
->> @@ -622,6 +622,7 @@ csio_shost_init(struct csio_hw *hw, struct device *dev,
->>   	ln->dev_num = (shost->host_no << 16);
->>   
->>   	shost->can_queue = CSIO_MAX_QUEUE;
->> +	shost->nr_reserved_cmds = 1;
-> 
-> ->can_queue isn't increased by 1 given CSIO_MAX_QUEUE isn't changed, so
-> setting shost->nr_reserved_cmds as 1 will cause io queue depth reduced by 1,
-> that is supposed to not happen.
-> 
-We cannot increase MAX_QUEUE arbitrarily as this is a compile time 
-variable, which seems to relate to a hardware setting.
+SGksDQoNClRoaXMgcGF0Y2hzZXQgYWRkcyBMVSBkZWRpY2F0ZWQgYnVmZmVyIG1vZGUgc3VwcG9y
+dCBmb3IgV3JpdGVCb29zdGVyLg0KDQpJbiB0aGUgbWVhbndoaWxlLCBlbmFibGUgV3JpdGVCb29z
+dGVyIGNhcGFiaWxpdHkgb24gTWVkaWFUZWsgVUZTIHBsYXRmb3Jtcy4NCg0KdjIgLT4gdjM6DQog
+IC0gSW50cm9kdWNlIGEgZGV2aWNlIHF1aXJrIHRvIHN1cHBvcnQgV3JpdGVCb29zdGVyIGluIHBy
+ZS0zLjEgVUZTIGRldmljZXMgKEF2cmkgQWx0bWFuKQ0KICAtIEZpeCBXcml0ZUJvb3N0ZXIgcmVs
+YXRlZCBzeXNmcyBub2Rlcy4gTm93IGFsbCBXcml0ZUJvb3N0ZXIgcmVsYXRlZCBzeXNmcyBub2Rl
+cyBhcmUgc3BlY2lmaWNhbGx5IG1hcHBlZCB0byB0aGUgTFVOIHdpdGggV3JpdGVCb29zdGVyIGVu
+YWJsZWQgaW4gTFUgRGVkaWNhdGVkIGJ1ZmZlciBtb2RlIChBdnJpIEFsdG1hbikNCg0KdjEgLT4g
+djI6DQogIC0gQ2hhbmdlIHRoZSBkZWZpbml0aW9uIG5hbWUgb2YgV3JpdGVCb29zdGVyIGJ1ZmZl
+ciBtb2RlIHRvIGNvcnJlc3BvbmQgdG8gc3BlY2lmaWNhdGlvbiAoQmVhbiBIdW8pDQogIC0gQWRk
+IHBhdGNoICM1OiAic2NzaTogdWZzOiBjbGVhbnVwIFdyaXRlQm9vc3RlciBmZWF0dXJlIg0KDQpT
+dGFubGV5IENodSAoNSk6DQogIHNjc2k6IHVmczogZW5hYmxlIFdyaXRlQm9vc3RlciBvbiBzb21l
+IHByZS0zLjEgVUZTIGRldmljZXMNCiAgc2NzaTogdWZzOiBhZGQgImluZGV4IiBpbiBwYXJhbWV0
+ZXIgbGlzdCBvZiB1ZnNoY2RfcXVlcnlfZmxhZygpDQogIHNjc2k6IHVmczogYWRkIExVIERlZGlj
+YXRlZCBidWZmZXIgbW9kZSBzdXBwb3J0IGZvciBXcml0ZUJvb3N0ZXINCiAgc2NzaTogdWZzLW1l
+ZGlhdGVrOiBlbmFibGUgV3JpdGVCb29zdGVyIGNhcGFiaWxpdHkNCiAgc2NzaTogdWZzOiBjbGVh
+bnVwIFdyaXRlQm9vc3RlciBmZWF0dXJlDQoNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRl
+ay5jIHwgICAzICsNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1zeXNmcy5jICAgIHwgIDE0ICsrLQ0K
+IGRyaXZlcnMvc2NzaS91ZnMvdWZzLmggICAgICAgICAgfCAgIDcgKysNCiBkcml2ZXJzL3Njc2kv
+dWZzL3Vmc19xdWlya3MuaCAgIHwgICA3ICsrDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYyAg
+ICAgICB8IDE1NiArKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLQ0KIGRyaXZlcnMvc2Nz
+aS91ZnMvdWZzaGNkLmggICAgICAgfCAgIDMgKy0NCiA2IGZpbGVzIGNoYW5nZWQsIDEzNSBpbnNl
+cnRpb25zKCspLCA1NSBkZWxldGlvbnMoLSkNCg0KLS0gDQoyLjE4LjANCg==
 
-But I can see to update the reserved command functionality for allowing 
-to fetch commands from the normal I/O tag pool; in the case of LUN reset 
-it shouldn't make much of a difference as the all I/O is quiesced anyway.
-
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                               +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
