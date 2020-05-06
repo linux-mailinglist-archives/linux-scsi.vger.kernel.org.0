@@ -2,79 +2,95 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8594D1C628E
-	for <lists+linux-scsi@lfdr.de>; Tue,  5 May 2020 23:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A7B1C6605
+	for <lists+linux-scsi@lfdr.de>; Wed,  6 May 2020 04:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729186AbgEEVBz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 5 May 2020 17:01:55 -0400
-Received: from sonic314-14.consmr.mail.bf2.yahoo.com ([74.6.132.124]:44804
-        "EHLO sonic314-14.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728969AbgEEVBz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 May 2020 17:01:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1588712514; bh=TYgdp/zNeW9P5rVjVpFopjba7a+Fm8hxyemx2bQVZd8=; h=Date:From:Reply-To:Subject:References:From:Subject; b=TZcybDLxX4dkZhvXjiufsU35A4MzMOsgjFXidE50enOkCjQXvUuHcmWlJOBbJw3nmcARIQNrWiT9reS6H/GLVmr8B3BOGUHmjb9CaZFk1+QXxIt8jIOu+f5B19BnJUPgcSp2r1vVEL3BBMuyp0ydLdlUSf044b+5PW2flSGCWyhs+eKCXr5DYbHUoaQjhag55TFXJHBfVFsila22X/N6eC5OPTR8xK9zgOuppqBzyxdzSjYF57VOgs7tqlqiw7IgzqOBE9F8ZbNgE1wbKQP80Gsgeieed9S/iT22PKv/v92FCl+WjNwnBjtbeNZxbhKadb5efp8DEin2MQZAepv5eg==
-X-YMail-OSG: tGpajZEVM1nzAsv3uVnqTQgVa0tyz.Km7Zh92hzC2kou0zYoAbYvv8bVBdK2wwb
- J.b72zI2OqMvCp4tlcAoTQ0meVT4vxPpYs7l_ZWvdWD6V4._Gjvawk1bXr9K7oLlPmMmH2r0LVps
- 21fNpXnB64ANppoOCSF3R9KoSQnBHwV3UasL2hJga44MBot4Bbnrj5KIDR.QjbMxbXcgS0Ph2XIX
- j56OH6kO1RLvEzvMVqbLsNqbNTFzu5KUqjeFsU.HgS9iIXYfQjwnrRIB1LFG2WoPzTLMshMElXnw
- xT.3oijGyPJXtP58CPUjjinmbc6QlZNirMdXzTxZ4xD776hTfUmKHL1NNoQje2gyv2udojFZpKY4
- lWJFIUudsOCvVbb32tYwBhKr6T5UiisJr.6LvcSfQSsCnhANNcRjYRpF_3eVeH4quCgTPu3UqO9X
- HNLOogNbncOrsUf4DWzAFBBW2wSLiu6bqP1MIeB5_2F9UzCliV6e_6xb4zivKj6RNiZ7zDcmLdqi
- 5NFQg2_yuGwzIe6t3nDuoL5ZYOW.eMqPKlJoOa3fGB13RImGIUuPy2D51cm4Ww5dobAb4llIp_Yz
- Ona4kOaOcxQFh.hTgjC3Oos6wz4HyUbz9sHLq8kK6tiw7T_ofne2PO0FtVNogbQFQ8w7AdKa1qka
- 0IUga1HbgAVCVqqfzChR_KuOxaL4EjCK8y3AEd06h12BTlXVQUg4HNZz_VyXjPBwk9TgpvJoBY4A
- t1hjp6KMq5OCsxkH8rVwZqfZW11hY4w4InpiHQ7YueqDIa2WMcyqmsLV1UaetsNaT5xJ3BJsfZOJ
- BRGmktwna2JublBhkp1LIbbRCBVMAC9BWTVOpNw.O2OP7Yh2d83HsDIBXrCUHJ_vTjL4hMEFbuDk
- vAu3.NztL.JWyOlr8WYx1rwMR_avHF7CsvRo67WxymPEvxu4SVffP_bC7284IBwuM7mgUmTn8CEy
- dM2QlBhrolO4x9bFZexMfeyP40XRpGbq0grAwdI4R2lD2.qFYe1BBk0q.TBtpAP6j4TQ8B9p0_Yn
- qd8kCHjEuz9j2ZM9_eE4ZJFr7TwEcKomXd1qJOjWjAsmDOtgUMypZxiHaffIGtH_u_V1Op8m_HGO
- p2rodbVmJm4XQ2En09G2GTJMhHI0_nr4Szgm8rEb8e5jMOWvFhpP3oCt2b9Psz9ibkZVewVPlKiA
- R2Au91POdNXoATC3Eo8OQrV4Wqhh44d7RKmKcdGK9peq1PNz.dax71MYwJ9KSRA1dIG96uf0.kTT
- 5X3w1JMwQ6o4QDXWdZjXRgegzBtCKgpeOCima5rFf..a_.erKXqnGZs4mtbD1dwn63SuOhnEz6C_
- RECWKj0dm1wZKeKePhGbTm8D4TiP_
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.bf2.yahoo.com with HTTP; Tue, 5 May 2020 21:01:54 +0000
-Date:   Tue, 5 May 2020 21:01:53 +0000 (UTC)
-From:   Mrs m compola <mmrsgrorvinte@gmail.com>
-Reply-To: mcompola444@gmail.com
-Message-ID: <1871545299.1235281.1588712513516@mail.yahoo.com>
-Subject: Dear Friend, My present internet connection is very slow in case
- you
+        id S1726580AbgEFCvy (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 5 May 2020 22:51:54 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:33344 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726129AbgEFCvx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 5 May 2020 22:51:53 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0462lltK077198;
+        Wed, 6 May 2020 02:51:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=jCqqKgpM8asHKf+svhKFWSe81G8Bv13YBWGByFY+J9M=;
+ b=ZcTHlLcLIT5vNoDNCTaKg7hDbZqQWylFMqWFn6f9RlozbO0/OdUUAl7UKRkQxMPwNolW
+ G8HxwJcZ8+Ht63DTGn5jUzatth1PZSNoJK5r5yVAXJnB9XspqLzA7xusMrZ/5LOYT1wq
+ +eKfqQPs/tGv4jtD06/CeG4Zzu9pvIapOmIi0voH3wISGwZqjkgOgZ3/9BYWEV+lKXmA
+ iLh0zPvxj+glCbMjMYw0qdrV1nYT31bchQnslNdHorvaiKsVGypIOJDI7XvCNpOe+CZ5
+ G2ru7Z1fTdelOJMusrwQ5Tgc4ZJkH/u0WgXg8tTdHzY2Xo6H+Q75h6x/88pQPgV4fNoJ ag== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 30s1gn7s4j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 May 2020 02:51:34 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0462pQTN005223;
+        Wed, 6 May 2020 02:51:34 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 30sjngpdy4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 May 2020 02:51:33 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0462pPFb000300;
+        Wed, 6 May 2020 02:51:25 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 05 May 2020 19:51:25 -0700
+To:     Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Keith Busch <kbusch@kernel.org>,
+        "linux-scsi @ vger . kernel . org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-fsdevel @ vger . kernel . org" <linux-fsdevel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.de>
+Subject: Re: [PATCH v9 02/11] block: provide fallbacks for
+ blk_queue_zone_is_seq and blk_queue_zone_no
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20200428104605.8143-1-johannes.thumshirn@wdc.com>
+        <20200428104605.8143-3-johannes.thumshirn@wdc.com>
+Date:   Tue, 05 May 2020 22:51:22 -0400
+In-Reply-To: <20200428104605.8143-3-johannes.thumshirn@wdc.com> (Johannes
+        Thumshirn's message of "Tue, 28 Apr 2020 19:45:56 +0900")
+Message-ID: <yq1pnbhai8l.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.0.91 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1871545299.1235281.1588712513516.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15756 YMailNodin Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9612 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 adultscore=0 phishscore=0
+ mlxlogscore=922 bulkscore=0 malwarescore=0 spamscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005060021
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9612 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 mlxscore=0
+ spamscore=0 clxscore=1015 priorityscore=1501 bulkscore=0 phishscore=0
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=967
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005060020
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
 
+Johannes,
 
-Dear Friend, My present internet connection is very slow in case you
-received my email in your spam
+> blk_queue_zone_is_seq() and blk_queue_zone_no() have not been called
+> with CONFIG_BLK_DEV_ZONED disabled until now.
+>
+> The introduction of REQ_OP_ZONE_APPEND will change this, so we need to
+> provide noop fallbacks for the !CONFIG_BLK_DEV_ZONED case.
 
-How are you today?.With due respect to your person and much sincerity
-of purpose,Well it is a pleasure to contact you on this regard and i
-pray that this will turn out to be everlasting relationship for both
-of us. However it's just my urgent need for a Foreign partner that
-made me to contact you for this Transaction,I got your contact from
-internet, while searching for a reliable someone that I can go into
-partnership with. I am Mrs.mcompola, from BURKINA FASO, West
-Africa .Presently i work in the Bank as bill and exchange manager.
+Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
 
-I have the opportunity of transferring the left over fund $5.4 Million
-us dollars of one of my Bank clients who died in the collapsing of the
-world trade center on september 11th 2001.I have placed this fund to
-and escrow account without name of beneficiary.i will use my position
-here in the bank to effect a hitch free transfer of the fund to your
-bank account and there will be no trace.
-
-I agree that 40% of this money will be for you as my foriegn
-partner,50% for me while 10% will be for the expenses that will occur
-in this transaction .If you are really interested in my proposal
-further details of the Transfer will be forwarded unto you as soon as
-I receive your willingness mail for successful transfer.
-
-Yours Faithfully,
-Mrs.mcompola444@gmail.com
+-- 
+Martin K. Petersen	Oracle Linux Engineering
