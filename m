@@ -2,89 +2,84 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF121C8ED0
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 May 2020 16:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B393A1C9500
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 May 2020 17:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728680AbgEGO3t (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 May 2020 10:29:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58004 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728670AbgEGO3t (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 7 May 2020 10:29:49 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA9AA208D6;
-        Thu,  7 May 2020 14:29:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588861788;
-        bh=06ndIgCZI4ggrsVfN2LGTIb2q7MnraO4TFqut1b1ySg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bdkgS+74VBvwOCfa5Ya4QTsI8rIdcLXhaWhSjzfoaiatCScGzu5uWxRMiyS60Tdb6
-         wrw1W0nFhZJ6bl3jjX2QPyKMQDj7GguqYGhm82YO72YZ29wSn4b7owW78ARAVxZRNN
-         gWlrmnlo6SSJgiIEGrJ3O2aU22d1a8tkrMtIOyoo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Disseldorp <ddiss@suse.de>,
-        Bart Van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 04/16] scsi: target/iblock: fix WRITE SAME zeroing
-Date:   Thu,  7 May 2020 10:29:31 -0400
-Message-Id: <20200507142943.26848-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200507142943.26848-1-sashal@kernel.org>
-References: <20200507142943.26848-1-sashal@kernel.org>
+        id S1726029AbgEGP0J (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 May 2020 11:26:09 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:42422 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725914AbgEGP0J (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 May 2020 11:26:09 -0400
+Received: by mail-pg1-f173.google.com with SMTP id n11so2637725pgl.9
+        for <linux-scsi@vger.kernel.org>; Thu, 07 May 2020 08:26:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=AEETiEBUw4pUXT7g/pwmwKpSZoy+QrekaScjtjsdDNs=;
+        b=uSINnphWtG8z5AQc7240hM0lGyuHp5c8LU9jAkEe2cf40aw8ggBH2IW2UZJscp4GvI
+         RocW9rgMPJO5X5l6BxWDUGovua5Fs3eB+L7Ohkv6HZhLphuKnoDFc5bNK6nDYjsSRiKw
+         vbDKcRiw5aYjfmY5lc0UsMSxo3AW2rkSO697hJWC+9/HOUtWiOylQcu81ACch5y+x662
+         liCzUOnJnYD9N4RTLzXwkKdN5aAGfnfeLdNdeIZmZ5Uc2aVSYUh3S+id1M2VZWBX2XvA
+         B5b3WhenaB0Ij3HOk81vwCHmsQkK7Vplm91+6Iu64I1Matfd+m9wTCHho+MPw3faCxH0
+         MIPw==
+X-Gm-Message-State: AGi0PuYUVv7qlYGJETr4BXnejskXIF8ki2YjLqD7t8xzV3OwKmTVdRf+
+        XRlbS48ObBezgSXbJt3RHFdIw3oaUhY=
+X-Google-Smtp-Source: APiQypLaw0AM7GujdDOSoUHfuFF44GI21JgwiT1gRaiuAieGUoPhCU8/qlzJwqmTXXnGYj2xCresXg==
+X-Received: by 2002:a05:6a00:d:: with SMTP id h13mr14715724pfk.254.1588865166718;
+        Thu, 07 May 2020 08:26:06 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:8ce8:d4c:1f4f:21e0? ([2601:647:4000:d7:8ce8:d4c:1f4f:21e0])
+        by smtp.gmail.com with ESMTPSA id i25sm5068709pfo.196.2020.05.07.08.26.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 May 2020 08:26:05 -0700 (PDT)
+Subject: Re: [PATCH] scsi: remove 'list' entry from struct scsi_cmnd
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org
+References: <20200507062642.100612-1-hare@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <1ca6052e-10c7-cb7b-968e-26289ddb4e59@acm.org>
+Date:   Thu, 7 May 2020 08:26:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200507062642.100612-1-hare@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: David Disseldorp <ddiss@suse.de>
+On 2020-05-06 23:26, Hannes Reinecke wrote:
+> Leftover from commandlist removal.
 
-[ Upstream commit 1d2ff149b263c9325875726a7804a0c75ef7112e ]
-
-SBC4 specifies that WRITE SAME requests with the UNMAP bit set to zero
-"shall perform the specified write operation to each LBA specified by the
-command".  Commit 2237498f0b5c ("target/iblock: Convert WRITE_SAME to
-blkdev_issue_zeroout") modified the iblock backend to call
-blkdev_issue_zeroout() when handling WRITE SAME requests with UNMAP=0 and a
-zero data segment.
-
-The iblock blkdev_issue_zeroout() call incorrectly provides a flags
-parameter of 0 (bool false), instead of BLKDEV_ZERO_NOUNMAP.  The bool
-false parameter reflects the blkdev_issue_zeroout() API prior to commit
-ee472d835c26 ("block: add a flags argument to (__)blkdev_issue_zeroout")
-which was merged shortly before 2237498f0b5c.
-
-Link: https://lore.kernel.org/r/20200419163109.11689-1-ddiss@suse.de
-Fixes: 2237498f0b5c ("target/iblock: Convert WRITE_SAME to blkdev_issue_zeroout")
 Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: David Disseldorp <ddiss@suse.de>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/target/target_core_iblock.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/target/target_core_iblock.c b/drivers/target/target_core_iblock.c
-index 60429011292a2..2a9e023f54291 100644
---- a/drivers/target/target_core_iblock.c
-+++ b/drivers/target/target_core_iblock.c
-@@ -447,7 +447,7 @@ iblock_execute_zero_out(struct block_device *bdev, struct se_cmd *cmd)
- 				target_to_linux_sector(dev, cmd->t_task_lba),
- 				target_to_linux_sector(dev,
- 					sbc_get_write_same_sectors(cmd)),
--				GFP_KERNEL, false);
-+				GFP_KERNEL, BLKDEV_ZERO_NOUNMAP);
- 	if (ret)
- 		return TCM_LOGICAL_UNIT_COMMUNICATION_FAILURE;
- 
--- 
-2.20.1
-
