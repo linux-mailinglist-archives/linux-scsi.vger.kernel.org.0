@@ -2,34 +2,34 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 767901C9AB8
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 May 2020 21:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D39C1C9ADE
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 May 2020 21:21:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727904AbgEGTRW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 May 2020 15:17:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40362 "EHLO mail.kernel.org"
+        id S1728743AbgEGTVZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 May 2020 15:21:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42994 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726367AbgEGTRV (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 7 May 2020 15:17:21 -0400
+        id S1728309AbgEGTVY (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 7 May 2020 15:21:24 -0400
 Received: from embeddedor (unknown [189.207.59.248])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCCBD208E4;
-        Thu,  7 May 2020 19:17:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CB1AA208D6;
+        Thu,  7 May 2020 19:21:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588879041;
-        bh=jCoTy5MqBatp+N4A2hyv+CcwMbeePmBG8iZQJXgFJyk=;
+        s=default; t=1588879284;
+        bh=LzS3WkLEkY5cS9HhYedg7dL8hIWbzOpus+g7yFKnoSg=;
         h=Date:From:To:Cc:Subject:From;
-        b=Si6p6NGivshUDV6cBs2VzvsOg7asKsaSfn/Wf4UUkPHAoSp9Ku+0Rs0uUbBBoFFYt
-         cyBxz+gNCsMd6ZDc8ALgWrupc7wZweRCZTHD3k7Uu4aYBDsjLaba/FV0nzglcnl63j
-         7EuWj4JiyJn6xmqXk/YCO4JKUxuIj1trtIjiHo6s=
-Date:   Thu, 7 May 2020 14:21:47 -0500
+        b=Kg8Ub230vZM5el8GxJinpdLe5+WYA+dyaY2jtwqzGtR5MG1v6hlsnhV4rsqkXE/Qi
+         EXp7+48CRJneGlH0ejE09Dful5Jy8MKRyZQju0qEsyrdbUVlP+gQtQ92VYZ13Ba43q
+         e01X+EEvPW+MnMfy44PfdsrXfxvlEod7W1fb1fcw=
+Date:   Thu, 7 May 2020 14:25:50 -0500
 From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: libsas: Replace zero-length array with flexible-array
-Message-ID: <20200507192147.GA16206@embeddedor>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>, linux-scsi@vger.kernel.org
+Subject: [PATCH] scsi: ufs: Replace zero-length array with flexible-array
+Message-ID: <20200507192550.GA16683@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -76,112 +76,20 @@ This issue was found with the help of Coccinelle.
 
 Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/scsi/aic94xx/aic94xx_sds.c |   14 +++++++-------
- include/scsi/sas.h                 |    8 ++++----
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ drivers/scsi/ufs/ufshcd.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/aic94xx/aic94xx_sds.c b/drivers/scsi/aic94xx/aic94xx_sds.c
-index 3ddc8852bc32..105adba559a1 100644
---- a/drivers/scsi/aic94xx/aic94xx_sds.c
-+++ b/drivers/scsi/aic94xx/aic94xx_sds.c
-@@ -406,7 +406,7 @@ struct asd_manuf_sec {
- 	u8    sas_addr[SAS_ADDR_SIZE];
- 	u8    pcba_sn[ASD_PCBA_SN_SIZE];
- 	/* Here start the other segments */
--	u8    linked_list[0];
-+	u8    linked_list[];
- } __attribute__ ((packed));
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 698e8d20b4ba..cd34a7873623 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -3223,7 +3223,7 @@ static inline int ufshcd_read_desc(struct ufs_hba *hba,
+ struct uc_string_id {
+ 	u8 len;
+ 	u8 type;
+-	wchar_t uc[0];
++	wchar_t uc[];
+ } __packed;
  
- struct asd_manuf_phy_desc {
-@@ -449,7 +449,7 @@ struct asd_ms_sb_desc {
- 	u8    type;
- 	u8    node_desc_index;
- 	u8    conn_desc_index;
--	u8    _recvd[0];
-+	u8    _recvd[];
- } __attribute__ ((packed));
- 
- #if 0
-@@ -478,12 +478,12 @@ struct asd_ms_conn_desc {
- 	u8    size_sideband_desc;
- 	u32   _resvd;
- 	u8    name[16];
--	struct asd_ms_sb_desc sb_desc[0];
-+	struct asd_ms_sb_desc sb_desc[];
- } __attribute__ ((packed));
- 
- struct asd_nd_phy_desc {
- 	u8    vp_attch_type;
--	u8    attch_specific[0];
-+	u8    attch_specific[];
- } __attribute__ ((packed));
- 
- #if 0
-@@ -503,7 +503,7 @@ struct asd_ms_node_desc {
- 	u8    size_phy_desc;
- 	u8    _resvd;
- 	u8    name[16];
--	struct asd_nd_phy_desc phy_desc[0];
-+	struct asd_nd_phy_desc phy_desc[];
- } __attribute__ ((packed));
- 
- struct asd_ms_conn_map {
-@@ -518,7 +518,7 @@ struct asd_ms_conn_map {
- 	u8    usage_model_id;
- 	u32   _resvd;
- 	struct asd_ms_conn_desc conn_desc[0];
--	struct asd_ms_node_desc node_desc[0];
-+	struct asd_ms_node_desc node_desc[];
- } __attribute__ ((packed));
- 
- struct asd_ctrla_phy_entry {
-@@ -542,7 +542,7 @@ struct asd_ll_el {
- 	u8   id0;
- 	u8   id1;
- 	__le16  next;
--	u8   something_here[0];
-+	u8   something_here[];
- } __attribute__ ((packed));
- 
- static int asd_poll_flash(struct asd_ha_struct *asd_ha)
-diff --git a/include/scsi/sas.h b/include/scsi/sas.h
-index a5d8ae49198c..4726c1bbec65 100644
---- a/include/scsi/sas.h
-+++ b/include/scsi/sas.h
-@@ -324,7 +324,7 @@ struct ssp_response_iu {
- 	__be32 response_data_len;
- 
- 	u8     resp_data[0];
--	u8     sense_data[0];
-+	u8     sense_data[];
- } __attribute__ ((packed));
- 
- struct ssp_command_iu {
-@@ -346,7 +346,7 @@ struct ssp_command_iu {
- 	u8    add_cdb_len:6;
- 
- 	u8    cdb[16];
--	u8    add_cdb[0];
-+	u8    add_cdb[];
- } __attribute__ ((packed));
- 
- struct xfer_rdy_iu {
-@@ -555,7 +555,7 @@ struct ssp_response_iu {
- 	__be32 response_data_len;
- 
- 	u8     resp_data[0];
--	u8     sense_data[0];
-+	u8     sense_data[];
- } __attribute__ ((packed));
- 
- struct ssp_command_iu {
-@@ -577,7 +577,7 @@ struct ssp_command_iu {
- 	u8    _r_c:2;
- 
- 	u8    cdb[16];
--	u8    add_cdb[0];
-+	u8    add_cdb[];
- } __attribute__ ((packed));
- 
- struct xfer_rdy_iu {
+ /* replace non-printable or non-ASCII characters with spaces */
 
