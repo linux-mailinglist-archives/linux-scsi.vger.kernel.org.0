@@ -2,70 +2,63 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9B51C8623
-	for <lists+linux-scsi@lfdr.de>; Thu,  7 May 2020 11:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7601C8ADA
+	for <lists+linux-scsi@lfdr.de>; Thu,  7 May 2020 14:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbgEGJvV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 May 2020 05:51:21 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59290 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725893AbgEGJvU (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 7 May 2020 05:51:20 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 6BD77AFFD;
-        Thu,  7 May 2020 09:51:22 +0000 (UTC)
-Subject: Re: [PATCH 9/9] lpfc: Update lpfc version to 12.8.0.1
-To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
-Cc:     Dick Kennedy <dick.kennedy@broadcom.com>
-References: <20200501214310.91713-1-jsmart2021@gmail.com>
- <20200501214310.91713-10-jsmart2021@gmail.com>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <9d099c6d-2e81-6d19-f4c2-4c28013081cb@suse.de>
-Date:   Thu, 7 May 2020 11:51:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        id S1725939AbgEGMdz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 May 2020 08:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59346 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725947AbgEGMdy (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 May 2020 08:33:54 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E1BC05BD09
+        for <linux-scsi@vger.kernel.org>; Thu,  7 May 2020 05:33:54 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id v10so2498452qvr.2
+        for <linux-scsi@vger.kernel.org>; Thu, 07 May 2020 05:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=2g85G5ybwBY9F8qs92fdTgNM3lOP1yok0XGVaoE6J+k=;
+        b=rVheal11Tr2vCpMlj+L+fGl+I5zYmR74GjRa3Hib+BHV9eAvjPUtNARXalEEn6otSP
+         GvAok1/oRnqLEi0rFCfbRePxhPDMJKCRX5SqRPqKPCKTJxPv9ey7GXxc+ikKce/vOy1T
+         lAVCF/DNOJPmKQoqsgbBQjLXYqQ6yZkNG0FR3x62c1bUpBynYau0sUxMPh+8SBpkzlQ0
+         N022zxxttJy8vR2diR7HMhVJijMBDBrYxfu2UpQpupzv/igqe9OTfSYprMW/DWmRo3l2
+         6S9OBD4j7m6A8LO5WIuOx5Y3zHb9xp7LrObzV2oEBZ5AG0V4dSpYF59g1jPxkNs8BGZI
+         lVQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=2g85G5ybwBY9F8qs92fdTgNM3lOP1yok0XGVaoE6J+k=;
+        b=ti0CU+Yk4BrxHBgz3xAQgxmD6qWK45Qt6JlimzECcxTzBQewnHInFxfP0U2s9QDJb+
+         NO1sgFT39kxWuWJgDmHK7w5d77/2QerTp2yg4mEDw6EggNP65MO+1Bfk2A/myu9U5JkT
+         j2LpsXJWWRzzbO3J4Fmi6lBDz4Ora/aDVvG0RYjrflQVeWhEeX5EU8p7u+NCnHqvo9Nn
+         fWxjJ2uFV/CcjTLpCvVb5E9Up2WagJdSscIXfqGQwTckYeb6DBXcg2bI5b1Vq3sebDEH
+         5G9Y8ysmqzvC8zdD7bksRu+yjZBub/NJm1yqByUaK+OJiSoRvl8chzRkn65M3etwRopr
+         P5jQ==
+X-Gm-Message-State: AGi0PuYYQkLpCpjNcy4TnCxVKPtCckDsvWakJOgAn+8Z4hzziaukS0Qh
+        gNSYtCRTSyT48u3J82XkKpV0KtYtqiilRt+kOd0=
+X-Google-Smtp-Source: APiQypKDUt4YBlqN321fIghuGillMzVdeSkKnMS8ol4XuSLr9Su6fWV88rZrIOam/O0KjwVQmcU1uXkgwG+mAbs6zbQ=
+X-Received: by 2002:a05:6214:9ce:: with SMTP id dp14mr13306160qvb.142.1588854833589;
+ Thu, 07 May 2020 05:33:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200501214310.91713-10-jsmart2021@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a0c:e98a:0:0:0:0:0 with HTTP; Thu, 7 May 2020 05:33:53 -0700 (PDT)
+Reply-To: mf.barbrafred@gmail.com
+From:   BarbraAfiFred BENSON <barbraafifred@gmail.com>
+Date:   Thu, 7 May 2020 12:33:53 +0000
+Message-ID: <CAB9FVvuVF=SDOQmMuZJwghnOvkHCKwD_jJZdn00Yg5kUWfD96A@mail.gmail.com>
+Subject: hi
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/1/20 11:43 PM, James Smart wrote:
-> Update lpfc version to 12.8.0.1
-> 
-> Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-> Signed-off-by: James Smart <jsmart2021@gmail.com>
-> ---
->   drivers/scsi/lpfc/lpfc_version.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/scsi/lpfc/lpfc_version.h b/drivers/scsi/lpfc/lpfc_version.h
-> index ca40c47cfbe0..ab0bc26c098d 100644
-> --- a/drivers/scsi/lpfc/lpfc_version.h
-> +++ b/drivers/scsi/lpfc/lpfc_version.h
-> @@ -20,7 +20,7 @@
->    * included with this package.                                     *
->    *******************************************************************/
->   
-> -#define LPFC_DRIVER_VERSION "12.8.0.0"
-> +#define LPFC_DRIVER_VERSION "12.8.0.1"
->   #define LPFC_DRIVER_NAME		"lpfc"
->   
->   /* Used for SLI 2/3 */
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-
-Cheers,
-
-Hannes
-
--- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                               +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Good day to you,  this is the second times which I am sending this
+same message to you , I have good news for you but I will like us to
+know each other a little  first of all before I will tell you all
+about the good news which I have to share with you,
+With love from.
+Barbra
