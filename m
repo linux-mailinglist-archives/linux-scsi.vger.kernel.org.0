@@ -2,45 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 934821CB5CB
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 19:23:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 005481CB5CE
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 19:23:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727935AbgEHRXt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 May 2020 13:23:49 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18865 "EHLO
+        id S1727950AbgEHRXw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 May 2020 13:23:52 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1928 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727832AbgEHRXs (ORCPT
+        by vger.kernel.org with ESMTP id S1727896AbgEHRXs (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 May 2020 13:23:48 -0400
 Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048H4EvU149900;
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048H4F8f149939;
         Fri, 8 May 2020 13:23:45 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30vtw5umae-1
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30vtw5umaf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 08 May 2020 13:23:45 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 048H54PW009643;
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 048H4x37028623;
         Fri, 8 May 2020 17:23:43 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 30s0g65kd0-1
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 30s0g5wuk8-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 08 May 2020 17:23:43 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 048HNe4u56295434
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 048HNeB98782162
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Fri, 8 May 2020 17:23:40 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 87DB3A405B;
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D70E1A404D;
         Fri,  8 May 2020 17:23:40 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 74252A4054;
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C4696A4040;
         Fri,  8 May 2020 17:23:40 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.145.54.185])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
         Fri,  8 May 2020 17:23:40 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92.3)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1jX6ip-002wro-Kv; Fri, 08 May 2020 19:23:39 +0200
+        id 1jX6ip-002wrt-VD; Fri, 08 May 2020 19:23:39 +0200
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -52,9 +52,9 @@ Cc:     Benjamin Block <bblock@linux.ibm.com>,
         Fedor Loshakov <loshakov@linux.ibm.com>,
         Julian Wiedmann <jwi@linux.ibm.com>,
         linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH 6/8] zfcp: fence adapter status propagation for common statuses
-Date:   Fri,  8 May 2020 19:23:33 +0200
-Message-Id: <f51fe5f236a1e3d1ce53379c308777561bfe35e1.1588956679.git.bblock@linux.ibm.com>
+Subject: [PATCH 7/8] zfcp: fence early sysfs interfaces for accesses of shost objects
+Date:   Fri,  8 May 2020 19:23:34 +0200
+Message-Id: <ef65366d309993ca91b6917727590ca7ca166c8f.1588956679.git.bblock@linux.ibm.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <cover.1588956679.git.bblock@linux.ibm.com>
 References: <cover.1588956679.git.bblock@linux.ibm.com>
@@ -74,67 +74,76 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Common status flags that all main objects - adapter, port, and unit -
-support are propagated to sub-objects when set or cleared. For instance,
-when setting the status ZFCP_STATUS_COMMON_ERP_INUSE for an adapter
-object, we will propagate this to all its child ports and units - same
-for when clearing a common status flag.
+When setting an adapter online for the first time, we also create a
+couple of entries for it in the sysfs device tree. This is also true
+even if the adapter has not yet ever gone successfully through exchange
+config and exchange port data.
 
-Units of an adapter object are enumerated via __shost_for_each_device()
-over the scsi host object of the corresponding adapter.
+When moving the scsi host object allocation and registration to after
+the first exchange config and exchange port data, this make
+the `port_rescan` attribute susceptible to invalid pointer-dereferences
+of the shost field before the adapter is fully initialized.
 
-Once we move the scsi host object allocation and registration to after
-the first exchange config and exchange port data, this won't be possible
-for cases where we set or clear common statuses during the very first
-adapter recovery.
+When written to, it schedules a `scan_work` item that will in turn make
+use of the associated fibre channel host object to check the topology
+used for this FCP device.
 
-But since we won't have any port or unit objects yet at that point of
-time, we can just fence the status propagation for cases where the scsi
-host object is not yet set in the adapter object. It won't change any
-effective status propagations, but will prevent us from dereferencing
-invalid pointers.
+Because scanning for remote ports can't be done successfully without
+completing exchange config and exchange port data first, we can simply
+fence `port_rescan`, and so prevent the illegal access.
 
-For any later point in the work flow the scsi host object will be set
-and thus nothing is changed then.
+As with cases where we can't get a reference to the adapter, we also
+return -ENODEV here. Applications need to handle that errno today
+already.
+
+After a successful allocation of the scsi host object nothing changes in
+the work flow.
 
 Reviewed-by: Steffen Maier <maier@linux.ibm.com>
 Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
 ---
- drivers/s390/scsi/zfcp_erp.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ drivers/s390/scsi/zfcp_sysfs.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/s390/scsi/zfcp_erp.c b/drivers/s390/scsi/zfcp_erp.c
-index 356f51d2bbee..283bcb985655 100644
---- a/drivers/s390/scsi/zfcp_erp.c
-+++ b/drivers/s390/scsi/zfcp_erp.c
-@@ -1642,6 +1642,13 @@ void zfcp_erp_set_adapter_status(struct zfcp_adapter *adapter, u32 mask)
- 		atomic_or(common_mask, &port->status);
- 	read_unlock_irqrestore(&adapter->port_list_lock, flags);
+diff --git a/drivers/s390/scsi/zfcp_sysfs.c b/drivers/s390/scsi/zfcp_sysfs.c
+index 7ec30ded0169..8d9662e8b717 100644
+--- a/drivers/s390/scsi/zfcp_sysfs.c
++++ b/drivers/s390/scsi/zfcp_sysfs.c
+@@ -216,10 +216,22 @@ static ssize_t zfcp_sysfs_port_rescan_store(struct device *dev,
+ {
+ 	struct ccw_device *cdev = to_ccwdev(dev);
+ 	struct zfcp_adapter *adapter = zfcp_ccw_adapter_by_cdev(cdev);
++	int retval = 0;
+ 
+ 	if (!adapter)
+ 		return -ENODEV;
  
 +	/*
-+	 * if `scsi_host` is missing, xconfig/xport data has never completed
-+	 * yet, so we can't access it, but there are also no SDEVs yet
++	 * If `scsi_host` is missing, we can't schedule `scan_work`, as it
++	 * makes use of the corresponding fc_host object. But this state is
++	 * only possible if xconfig/xport data has never completed yet,
++	 * and we couldn't successfully scan for ports anyway.
 +	 */
-+	if (adapter->scsi_host == NULL)
-+		return;
++	if (adapter->scsi_host == NULL) {
++		retval = -ENODEV;
++		goto out;
++	}
 +
- 	spin_lock_irqsave(adapter->scsi_host->host_lock, flags);
- 	__shost_for_each_device(sdev, adapter->scsi_host)
- 		atomic_or(common_mask, &sdev_to_zfcp(sdev)->status);
-@@ -1679,6 +1686,13 @@ void zfcp_erp_clear_adapter_status(struct zfcp_adapter *adapter, u32 mask)
- 	}
- 	read_unlock_irqrestore(&adapter->port_list_lock, flags);
- 
-+	/*
-+	 * if `scsi_host` is missing, xconfig/xport data has never completed
-+	 * yet, so we can't access it, but there are also no SDEVs yet
-+	 */
-+	if (adapter->scsi_host == NULL)
-+		return;
-+
- 	spin_lock_irqsave(adapter->scsi_host->host_lock, flags);
- 	__shost_for_each_device(sdev, adapter->scsi_host) {
- 		atomic_andnot(common_mask, &sdev_to_zfcp(sdev)->status);
+ 	/*
+ 	 * Users wish is our command: immediately schedule and flush a
+ 	 * worker to conduct a synchronous port scan, that is, neither
+@@ -227,9 +239,9 @@ static ssize_t zfcp_sysfs_port_rescan_store(struct device *dev,
+ 	 */
+ 	queue_delayed_work(adapter->work_queue, &adapter->scan_work, 0);
+ 	flush_delayed_work(&adapter->scan_work);
++out:
+ 	zfcp_ccw_adapter_put(adapter);
+-
+-	return (ssize_t) count;
++	return retval ? retval : (ssize_t) count;
+ }
+ static ZFCP_DEV_ATTR(adapter, port_rescan, S_IWUSR, NULL,
+ 		     zfcp_sysfs_port_rescan_store);
 -- 
 2.17.1
 
