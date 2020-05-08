@@ -2,66 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DE61CA139
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 04:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888CF1CA12E
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 04:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726756AbgEHC4o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 7 May 2020 22:56:44 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:44864 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726661AbgEHC4o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 May 2020 22:56:44 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0482sxeW011525;
-        Fri, 8 May 2020 02:56:42 GMT
+        id S1727111AbgEHCy5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 7 May 2020 22:54:57 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:33670 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbgEHCyx (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 7 May 2020 22:54:53 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0482rnIM085497;
+        Fri, 8 May 2020 02:54:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=HlPDdRmgiCr33lpJZfIf+4xKLettL1tpIW2BHVtvg0A=;
- b=H6msYh0cWMTL2yUwQiXJ4UrUqgEDUbgasa1Q7kt8UNI+Fc55Go86OnfttW1Nie7ZneEk
- S7iuOGM8o5A8F8S/4+s/LX00xrrRtuKdTBjzOOjvTLAfEpIasoMFYkz/ZWriIw/9bZ4A
- Lq6Lp4JCRmM3BNadUZphGcA8yxUyFwMKhq5mCyYtwZB6D0Uv9lciFNQlVOQwVogQo+Ac
- Z2rQCqh4tvNMOCm1dFIkTLSycxbNi+wJ82cz4PgP0o0hFLwss/aixNUGs1CSza66AIq1
- 5+iDRmCb3PYEuLmalc0iU0BMrgD9JgIoFT5uSMGEMr0OkkmD7lg+864fPX7bthQq5uhj MQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 30vtewrrun-1
+ bh=Sq+mU1qvjVw5dKRhuurPqz36df4d8wnd3ANBxDpyJRc=;
+ b=VAJnvqbTKxGnQ/NAjhCEVryhwkbvDVAgxnerkWsJKIFBWQY5hLd3WK4xVXv568mCcIhm
+ GF8IKP2EM9MoDA1ivVB9lXz4l7BdvYcW5jmp6MSFzpinBQsTai5nBNcWb0H2kMH/xziv
+ dfHDhAFxRM34DPib2O5u/x6zAi0W/1uy65TKHqqviKpGFt5LuYIx211vZYsh4SiyDP7A
+ BEq+IXVXmWuKl9xZzCj1vVMEWNImDE6WW2ioktbffi8SCD22psExA24ertJPANOLO9DQ
+ aTCm7TPvSFP/Vh2fLDXQE2wuReKYy4CQSgKolII1664/HItkFiqAZKzjB5ALZU91xDcN nA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 30vtexrrku-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 08 May 2020 02:56:42 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0482ppb6138435;
-        Fri, 8 May 2020 02:54:41 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 30vtebgpbc-1
+        Fri, 08 May 2020 02:54:44 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0482qutg138303;
+        Fri, 8 May 2020 02:54:43 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 30vtdmp58a-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 08 May 2020 02:54:41 +0000
+        Fri, 08 May 2020 02:54:43 +0000
 Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0482sem7006356;
-        Fri, 8 May 2020 02:54:41 GMT
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0482sf0T028792;
+        Fri, 8 May 2020 02:54:42 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 07 May 2020 19:54:40 -0700
+        with ESMTP ; Thu, 07 May 2020 19:54:41 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org,
-        Suganath Prabu <suganath-prabu.subramani@broadcom.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        sreekanth.reddy@broadcom.com, Sathya.Prakash@broadcom.com
-Subject: Re: [PATCH] mpt3sas: Update maintainers list.
-Date:   Thu,  7 May 2020 22:54:27 -0400
-Message-Id: <158890633246.6466.4856164788512428768.b4-ty@oracle.com>
+To:     jejb@linux.ibm.com, Jason Yan <yanaijie@huawei.com>,
+        kartilak@cisco.com, sebaddel@cisco.com, satishkh@cisco.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] scsi: fnic: use true,false for fnic->internal_reset_inprogress
+Date:   Thu,  7 May 2020 22:54:28 -0400
+Message-Id: <158890633245.6466.4414588807706254361.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <1588056428-29369-1-git-send-email-suganath-prabu.subramani@broadcom.com>
-References: <1588056428-29369-1-git-send-email-suganath-prabu.subramani@broadcom.com>
+In-Reply-To: <20200430121718.14970-1-yanaijie@huawei.com>
+References: <20200430121718.14970-1-yanaijie@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9614 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=793 phishscore=0 mlxscore=0 adultscore=0 suspectscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005080022
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 mlxlogscore=999 bulkscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005080022
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9614 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 mlxlogscore=853
- malwarescore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0
- impostorscore=0 suspectscore=0 adultscore=0 clxscore=1015 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 adultscore=0
+ spamscore=0 suspectscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ phishscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
  definitions=main-2005080022
 Sender: linux-scsi-owner@vger.kernel.org
@@ -69,14 +69,17 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 28 Apr 2020 02:47:08 -0400, Suganath Prabu wrote:
+On Thu, 30 Apr 2020 20:17:18 +0800, Jason Yan wrote:
 
-> Updated maintainers list for MPT DRIVERS
+> Fix the following coccicheck warning:
+> 
+> drivers/scsi/fnic/fnic_scsi.c:2627:5-36: WARNING: Comparison of 0/1 to
+> bool variable
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/1] scsi: mpt3sas: Update maintainers
-      https://git.kernel.org/mkp/scsi/c/4778069ccf54
+[1/1] scsi: fnic: Use true, false for fnic->internal_reset_inprogress
+      https://git.kernel.org/mkp/scsi/c/b91857a5ca13
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
