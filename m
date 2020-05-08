@@ -2,42 +2,45 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9379B1CB5C6
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 19:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5678D1CB5D1
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 19:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727929AbgEHRXs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 May 2020 13:23:48 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:52332 "EHLO
+        id S1727952AbgEHRXw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 May 2020 13:23:52 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57222 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727830AbgEHRXr (ORCPT
+        by vger.kernel.org with ESMTP id S1727893AbgEHRXr (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 May 2020 13:23:47 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048H22bd091279;
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 048H1fg3116373;
         Fri, 8 May 2020 13:23:45 -0400
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30vtseufqn-1
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30vts7stn6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 08 May 2020 13:23:44 -0400
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 048H5Ukg014059;
+        Fri, 08 May 2020 13:23:45 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 048H57Jx000345;
         Fri, 8 May 2020 17:23:42 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma03fra.de.ibm.com with ESMTP id 30s0g5nkb3-1
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma02fra.de.ibm.com with ESMTP id 30s0g5dnek-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 08 May 2020 17:23:42 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 048HNdmf56295668
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 048HMTV459769136
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 8 May 2020 17:23:39 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 902095204E;
+        Fri, 8 May 2020 17:22:29 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2544A4057;
+        Fri,  8 May 2020 17:23:39 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CE6ADA404D;
         Fri,  8 May 2020 17:23:39 +0000 (GMT)
 Received: from t480-pf1aa2c2 (unknown [9.145.54.185])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 7A72552051;
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
         Fri,  8 May 2020 17:23:39 +0000 (GMT)
 Received: from bblock by t480-pf1aa2c2 with local (Exim 4.92.3)
         (envelope-from <bblock@linux.ibm.com>)
-        id 1jX6io-002wrZ-Mb; Fri, 08 May 2020 19:23:38 +0200
+        id 1jX6io-002wre-W3; Fri, 08 May 2020 19:23:39 +0200
 From:   Benjamin Block <bblock@linux.ibm.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>
@@ -49,9 +52,9 @@ Cc:     Benjamin Block <bblock@linux.ibm.com>,
         Fedor Loshakov <loshakov@linux.ibm.com>,
         Julian Wiedmann <jwi@linux.ibm.com>,
         linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [PATCH 3/8] zfcp: move fc_host updates during xport data handling into fenced function
-Date:   Fri,  8 May 2020 19:23:30 +0200
-Message-Id: <ae454c2dc6da0b02907c489af91d0b211d331825.1588956679.git.bblock@linux.ibm.com>
+Subject: [PATCH 4/8] zfcp: fence fc_host updates during link-down handling
+Date:   Fri,  8 May 2020 19:23:31 +0200
+Message-Id: <f841f2cda61dcd7b8549910c44e1831927459edf.1588956679.git.bblock@linux.ibm.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <cover.1588956679.git.bblock@linux.ibm.com>
 References: <cover.1588956679.git.bblock@linux.ibm.com>
@@ -61,132 +64,78 @@ Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
  definitions=2020-05-08_15:2020-05-08,2020-05-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=2 phishscore=0
- bulkscore=0 impostorscore=0 malwarescore=0 clxscore=1015 mlxscore=0
- lowpriorityscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005080142
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ clxscore=1015 mlxscore=0 mlxlogscore=999 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 phishscore=0 adultscore=0 priorityscore=1501 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005080142
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-When executing exchange port data for a FCP device for the first time, or
-after an adapter recovery, we update several properties of the fibre
-channel host object which represents that FCP device.
+When receiving a notification that a FCP device lost its local link we
+usually update the fibre channel host object which represents that FCP
+device to reflect that.
 
-When moving the scsi host object allocation and registration - and thus
+This notification/information can also surface when the FCP device is
+running through adapter recovery (exchange config and exchange port data
+return incomplete).
+
+When moving the scsi host object allocation and registration  - and thus
 also the fibre channel host object allocation - to after the first
-exchange config and exchange port data, this is not possible for the
-former case.
+exchange config and exchange port data, and this happens during the very
+first adapter recovery, these updates can not be done until after the
+scsi host object is allocated.
 
-Move all these update into separate, and fenced function that first
-checks whether the scsi host object already exists or not, before making
-the updates.
+Reorder the fc_host updates in zfcp_fsf_fc_host_link_down() so that they
+only happen after a check of whether the scsi host object is already
+allocated or not.
 
-During the first ever exchange port data in the adapter life cycle
-this will make the exchange port data handler skip over this update
-step, but we can repeat it later, after we allocated the scsi host
-object.
+During the first adapter recovery this will cause the skip of these
+updates if a link-down condition is detected, but we can repeat them
+after we allocated the scsi host object, if necessary.
 
-For any further recovery of that adapter the work flow is only changed
-slightly because then the scsi host object already exists and we don't
-free it until we release the adapter completely at the end of its life
-cycle.
+For any further link-down handling the only changes in the work flow are
+the slightly reordered assignments in zfcp_fsf_fc_host_link_down().
 
 Reviewed-by: Steffen Maier <maier@linux.ibm.com>
 Signed-off-by: Benjamin Block <bblock@linux.ibm.com>
 ---
- drivers/s390/scsi/zfcp_ext.h  |  3 +++
- drivers/s390/scsi/zfcp_fsf.c  | 12 +++---------
- drivers/s390/scsi/zfcp_scsi.c | 19 +++++++++++++++++++
- 3 files changed, 25 insertions(+), 9 deletions(-)
+ drivers/s390/scsi/zfcp_fsf.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/s390/scsi/zfcp_ext.h b/drivers/s390/scsi/zfcp_ext.h
-index 4c4be754cf6e..5dc9bdc5803f 100644
---- a/drivers/s390/scsi/zfcp_ext.h
-+++ b/drivers/s390/scsi/zfcp_ext.h
-@@ -176,6 +176,9 @@ extern void zfcp_scsi_shost_update_config_data(
- 	struct zfcp_adapter *const adapter,
- 	const struct fsf_qtcb_bottom_config *const bottom,
- 	const bool bottom_incomplete);
-+extern void zfcp_scsi_shost_update_port_data(
-+	struct zfcp_adapter *const adapter,
-+	const struct fsf_qtcb_bottom_port *const bottom);
- 
- /* zfcp_sysfs.c */
- extern const struct attribute_group *zfcp_unit_attr_groups[];
 diff --git a/drivers/s390/scsi/zfcp_fsf.c b/drivers/s390/scsi/zfcp_fsf.c
-index 54edfcbe84ce..bfb567a1d7bf 100644
+index bfb567a1d7bf..8c4b690e329e 100644
 --- a/drivers/s390/scsi/zfcp_fsf.c
 +++ b/drivers/s390/scsi/zfcp_fsf.c
-@@ -725,19 +725,10 @@ static void zfcp_fsf_exchange_port_evaluate(struct zfcp_fsf_req *req)
+@@ -124,17 +124,21 @@ static void zfcp_fsf_fc_host_link_down(struct zfcp_adapter *adapter)
  {
- 	struct zfcp_adapter *adapter = req->adapter;
- 	struct fsf_qtcb_bottom_port *bottom = &req->qtcb->bottom.port;
--	struct Scsi_Host *shost = adapter->scsi_host;
+ 	struct Scsi_Host *shost = adapter->scsi_host;
  
- 	if (req->data)
- 		memcpy(req->data, bottom, sizeof(*bottom));
- 
--	fc_host_permanent_port_name(shost) = bottom->wwpn;
--	fc_host_maxframe_size(shost) = bottom->maximum_frame_size;
--	fc_host_supported_speeds(shost) =
--		zfcp_fsf_convert_portspeed(bottom->supported_speed);
--	memcpy(fc_host_supported_fc4s(shost), bottom->supported_fc4_types,
--	       FC_FC4_LIST_SIZE);
--	memcpy(fc_host_active_fc4s(shost), bottom->active_fc4_types,
--	       FC_FC4_LIST_SIZE);
- 	if (adapter->adapter_features & FSF_FEATURE_FC_SECURITY)
- 		adapter->fc_security_algorithms =
- 			bottom->fc_security_algorithms;
-@@ -764,6 +755,7 @@ static void zfcp_fsf_exchange_port_data_handler(struct zfcp_fsf_req *req)
- 		 */
- 		zfcp_diag_update_xdata(diag_hdr, bottom, false);
- 
-+		zfcp_scsi_shost_update_port_data(req->adapter, bottom);
- 		zfcp_fsf_exchange_port_evaluate(req);
- 		break;
- 	case FSF_EXCHANGE_CONFIG_DATA_INCOMPLETE:
-@@ -772,6 +764,8 @@ static void zfcp_fsf_exchange_port_data_handler(struct zfcp_fsf_req *req)
- 
- 		zfcp_fsf_link_down_info_eval(req,
- 			&qtcb->header.fsf_status_qual.link_down_info);
++	adapter->hydra_version = 0;
++	adapter->peer_wwpn = 0;
++	adapter->peer_wwnn = 0;
++	adapter->peer_d_id = 0;
 +
-+		zfcp_scsi_shost_update_port_data(req->adapter, bottom);
- 		zfcp_fsf_exchange_port_evaluate(req);
- 		break;
- 	}
-diff --git a/drivers/s390/scsi/zfcp_scsi.c b/drivers/s390/scsi/zfcp_scsi.c
-index e1281a1ce488..f98e4015a0ed 100644
---- a/drivers/s390/scsi/zfcp_scsi.c
-+++ b/drivers/s390/scsi/zfcp_scsi.c
-@@ -911,6 +911,25 @@ void zfcp_scsi_shost_update_config_data(
- 	}
- }
- 
-+void zfcp_scsi_shost_update_port_data(
-+	struct zfcp_adapter *const adapter,
-+	const struct fsf_qtcb_bottom_port *const bottom)
-+{
-+	struct Scsi_Host *const shost = adapter->scsi_host;
-+
++	/* if there is no shost yet, we have nothing to zero-out */
 +	if (shost == NULL)
 +		return;
 +
-+	fc_host_permanent_port_name(shost) = bottom->wwpn;
-+	fc_host_maxframe_size(shost) = bottom->maximum_frame_size;
-+	fc_host_supported_speeds(shost) =
-+		zfcp_fsf_convert_portspeed(bottom->supported_speed);
-+	memcpy(fc_host_supported_fc4s(shost), bottom->supported_fc4_types,
-+	       FC_FC4_LIST_SIZE);
-+	memcpy(fc_host_active_fc4s(shost), bottom->active_fc4_types,
-+	       FC_FC4_LIST_SIZE);
-+}
-+
- struct fc_function_template zfcp_transport_functions = {
- 	.show_starget_port_id = 1,
- 	.show_starget_port_name = 1,
+ 	fc_host_port_id(shost) = 0;
+ 	fc_host_fabric_name(shost) = 0;
+ 	fc_host_speed(shost) = FC_PORTSPEED_UNKNOWN;
+ 	fc_host_port_type(shost) = FC_PORTTYPE_UNKNOWN;
+-	adapter->hydra_version = 0;
+ 	snprintf(fc_host_model(shost), FC_SYMBOLIC_NAME_SIZE, "0x%04x", 0);
+ 	memset(fc_host_active_fc4s(shost), 0, FC_FC4_LIST_SIZE);
+-
+-	adapter->peer_wwpn = 0;
+-	adapter->peer_wwnn = 0;
+-	adapter->peer_d_id = 0;
+ }
+ 
+ static void zfcp_fsf_link_down_info_eval(struct zfcp_fsf_req *req,
 -- 
 2.17.1
 
