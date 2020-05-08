@@ -2,112 +2,79 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 743A81CAA65
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 14:16:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1431CB128
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 15:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726883AbgEHMQD (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 May 2020 08:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55242 "EHLO
+        id S1727978AbgEHNz0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 May 2020 09:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726627AbgEHMQD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 May 2020 08:16:03 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EDAC05BD43;
-        Fri,  8 May 2020 05:16:01 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id j5so1604839wrq.2;
-        Fri, 08 May 2020 05:16:01 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1726904AbgEHNzZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 May 2020 09:55:25 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF784C05BD43
+        for <linux-scsi@vger.kernel.org>; Fri,  8 May 2020 06:55:25 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id n11so1469790ilj.4
+        for <linux-scsi@vger.kernel.org>; Fri, 08 May 2020 06:55:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p022wi7eOZ/mGn1ToBo+V56FcvhDPdcFh/MpymQ6w34=;
-        b=vdy5gWLvmv4WW60B+MSjZYY0aEofZ1J9SFJ2Zl3QjbUu0gGnVQyJ31nDFWiM9PPRtQ
-         MlSTkL2AZ0qfIZEolIG6QsQwfKPm2k5CnCs+WvwzBmI+3W4NE2PKX0NtZw15J7rB5bjo
-         dXmUh7EW1n7vTefA/bv+SKmac0NXb96aZ3fu0jD8ciE+xUuyFGZdnkOyoxX59evb6Eax
-         boX9OhA/WzJ0UuJsPdAegkG4JzL6nBmxmlRK2D99p32UpZNUzbE+E3Xp+9PmN4p//agV
-         lTUuTrcvTAFeemOZtQ4FkuTZ4iDSCoNJs3EcOkkGc+Umd24P6LfPz0CRFkYhR/Cmbc5Y
-         Nj8w==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Y9qeYS77awcXKXnbUv+cj5nzUb83V6esqPketlEQr3o=;
+        b=sXt08uyT0I7OOE76XwRQpSo71S7RU2x+zvSjiWcvSy3ZHWw6WMIHRVuJyA0UqImiOd
+         S+vk3I02j72c/nYJa39Bj8YQ8W0L579RNM/R6QT2qfM1Y0j+O2mKKaUA5krL+CbiDZQB
+         H+tshRXO97pXb9hndAK3VXT2B5g5iKRQvbAB9lHdm9h9s93yRR9QnCeplRucZt3/a3cL
+         MWIrkwyb5oMnaRrjGZSKjnGQBlHZ9/kEacbkPKNUWB24JsxFD1b9W4QB3ci6wYgbVjT7
+         mI7Z8FpDnmqo2Ym3ovl3yVCEwPPvrVXA83RgiaTO8RNF1Vn3aTdbO2V6YZBXgF1h0Yuk
+         SJPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p022wi7eOZ/mGn1ToBo+V56FcvhDPdcFh/MpymQ6w34=;
-        b=Lg6Gpbpq8krDdP5FRJWJGY1DH3JJMrSCGA79epMfEb/VHGBdbvbdGKiYRUa0bNfFle
-         lqZkiFTBonJTaQVi83qmAFl/sW077VeMclcdXtngcRaHn0Jqg9qoG9/Z54lSQiSvJHap
-         8uZXUKg/KF+UVGhjc0dcmeeoksqzan8ycxzPoVWaHVuuORrhxtwzkZaUP1pZ90V2hUaP
-         zfH5EdsmYTQ1deKAPspc3EOruPSPZKJeL9buw8+ytRgklNWl1OjIwK/QK9/afWgJYAJ+
-         Ncl+qobwxd8gdvDFZgAlWj/aGmpAWpJb62DbzMDpeWyKN8OfsXB/KZuxBuFvai+0fHME
-         44QQ==
-X-Gm-Message-State: AGi0PuanU6IE1dr3ZZdPOtEs63pICSfXmo/aUNqvX9ZbQvY4njm5TYl7
-        Fj50hjVDU0CJroJyZIoF7loPWLxXhZ8=
-X-Google-Smtp-Source: APiQypKQU3XDMt2+QtR6u6sPyGZk8FmmD0FXgCIHUio+Q83GS6nn6Uuz7ZrQwJsUcKFtfiGStoCvIA==
-X-Received: by 2002:adf:fe90:: with SMTP id l16mr2647798wrr.222.1588940160456;
-        Fri, 08 May 2020 05:16:00 -0700 (PDT)
-Received: from ubuntu-G3 (ip5f5bfcc8.dynamic.kabel-deutschland.de. [95.91.252.200])
-        by smtp.googlemail.com with ESMTPSA id r20sm12168431wmh.26.2020.05.08.05.15.59
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 08 May 2020 05:16:00 -0700 (PDT)
-Message-ID: <12cf335dc86f6eafa1f090dc0b150796532da3e1.camel@gmail.com>
-Subject: Re: [RESENT PATCH RFC v3 5/5] scsi: ufs: UFS Host Performance
- Booster(HPB) driver
-From:   Bean Huo <huobean@gmail.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hch@infradead.org" <hch@infradead.org>
-Date:   Fri, 08 May 2020 14:15:58 +0200
-In-Reply-To: <BYAPR04MB462904DA704A8FD42436BA9FFCA20@BYAPR04MB4629.namprd04.prod.outlook.com>
-References: <20200504142032.16619-1-beanhuo@micron.com>
-         <20200504142032.16619-6-beanhuo@micron.com>
-         <BYAPR04MB462904DA704A8FD42436BA9FFCA20@BYAPR04MB4629.namprd04.prod.outlook.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Y9qeYS77awcXKXnbUv+cj5nzUb83V6esqPketlEQr3o=;
+        b=OPZZNuWv5V0rpXcca11N3jzZNzplhAnIT3R0Bu0LKYSQWonrK99onWrvLEiOunKowE
+         dzeuLwmCfQCLP8cpSKP9Ah4hm8zHjwQsIENH2yi1jxGUCATJ2XiR9oq6FshUb3WQSync
+         e5i1vHjxcKMee0rQHYl6aAC1EFVmPJdXwRSu9AN7F9xRdGvmNi1jQU4ZP5XU4v/1KLt5
+         BNX7b8nhuNsdGVnFuVfurUDraW7C2MMxCOG2RSsxoy3/mi33DRpv5YUUS/bon2E0roEp
+         dmPMyjHpjCMw1sFQRpnhe06bOd4JNiVkvtu3u9Isx6u6ca5+8niUxs+bMiR4owNylWzp
+         AMlA==
+X-Gm-Message-State: AGi0PuYoN/D4Mjso672B83TW2JkVftz2QwkxK6nNspiUNf3yF3fmlssP
+        mUxLC1z6IV69k/FjbJXpqnUCMSGBKxK3UZqKI9A=
+X-Google-Smtp-Source: APiQypLA0PBCeIi7MeAytiLgMr9Sxt7Rm5LezsdvDtbqscEuycqh8SzIt9+ta8lrWeRAUcnjpffh8jH9ZZeTRCxHn9Y=
+X-Received: by 2002:a92:d443:: with SMTP id r3mr2945687ilm.293.1588946124318;
+ Fri, 08 May 2020 06:55:24 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a02:1783:0:0:0:0:0 with HTTP; Fri, 8 May 2020 06:55:23 -0700 (PDT)
+Reply-To: mrsannabruun111@gmail.com
+From:   "Mrs. Anna H. Bruun " <mrs.kishmichael18@gmail.com>
+Date:   Fri, 8 May 2020 13:55:23 +0000
+Message-ID: <CAKWzOLzMK08ieQ=kyiT-pVdpq=fLyh70gQEo8bM58_2+mcT9SA@mail.gmail.com>
+Subject: GOOD DAY
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 2020-05-08 at 11:38 +0000, Avri Altman wrote:
-> Hi Bean,
-> This patch is ~3,000 lines long.
-> Is it possible to divide it into a series of a smaller, more
-> reviewable patches?
-> E.g. it can be something like:
-> 1) Init part I - Read HPB config
-> 2) Init part II - prepare for L2P cache management (introduce here
-> all the new data structures, memory allocation, etc.)
-> 3) L2P cache management - activation / inactivation / eviction
-> handlers
-> 4) Add response API
-> 5) Add prep_fn handler - the flows that contruct HPB-READ command.
-> Or any other division that makes sense to you.
-> 
-> Also, Is there a way to avoid all those #ifdefs everywhere?
-> 
-> Thanks,
-> Avri
-> 
+Hello Dear,
 
-Hi, Avri
+Am Mrs. Anna H. Bruun I know that this message will be a surprise to
+you. Firstly, I am married to Mr. Patrick Bruun, A gold merchant who
+owns a small gold mine in Burkina Faso; He died of Cardiovascular
+Disease in mid-March 2011. During his lifetime, he deposited the sum
+of Eight million, Five hundred thousand Euros. in a bank in
+Ouagadougou the capital city of Burkina Faso in West Africa. The
+deposited money was from the sale of the shares, death benefits
+payment and entitlements of my deceased husband by his company.
 
-Thanks. I will split it in the next version based on each different
-funcitonality.
+I am sending this message to you praying that it will reach you in
+good health since I am not in good health condition in which I sleep
+every night without knowing if I may be alive to see the next day. I
+am suffering from long time cancer and presently I am partially
+suffering from a stroke illness which has become almost impossible for
+me to move around. I need your urgent answer to know if you will be
+able to execute this project, and I will give you more information on
+how the fund will be transferred to your bank account.
 
-thanks,
-
-Bean
-
-
-
+Thanks
+Mrs. Anna H.
