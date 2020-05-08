@@ -2,139 +2,177 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9C891CB2C5
-	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 17:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1DA1CB4DA
+	for <lists+linux-scsi@lfdr.de>; Fri,  8 May 2020 18:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbgEHP1b (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 8 May 2020 11:27:31 -0400
-Received: from sonic305-21.consmr.mail.ne1.yahoo.com ([66.163.185.147]:46359
-        "EHLO sonic305-21.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726689AbgEHP1b (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 May 2020 11:27:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1588951650; bh=Uv9Il0GvVfNf8ySja/n2kkVJo04KZ3nX+ejOBNQOQ/8=; h=Date:From:Reply-To:Subject:References:From:Subject; b=tVOG8QYlvOE/p0Vyi4dNQPujQ4eAZrqVui3KgAhyy2uld8XizQg/h4Xm+AwwTA2FSspTpyTUa5oQuOg9e+rp1HIgOj7/mbFuqykTyvSLvDbbXfsT6vgQ/G137FMd/BYW/z2XWyF3nVYUtAxp8bL5PSve9CweyOC6iznit6L56OBmDi6m2QxpWzA43ftt0//bedVuX56wt1PVrf6FTnGGxAbFlt27fazV3mXFuH9S2TuZR7cfWEdOtb9vB+6dE2ULQdM0DaHFmRdJj5Mv6zys7lvefegMDcswAI12UDXRtg1DzJAk3q3UYOUpykM6vA5eAJPOxLs5nq9aRv3QierTxQ==
-X-YMail-OSG: LbLwM.EVM1nXcjz9oQZkfZFueAKnCgz0ze42WAWWg5AtNyOl8dQY5Vqjz_ufdJi
- 1uEYXhF5skGPXSDSW5r8b3lkUVo4EcRMVUP4xTqIqS_usd2ehFzEA.ivTDnXcjHoz6uZ5vgCAv21
- PN9VwBcF.gHSwukXv2H_GOEmwlZXFO0915WhXrQvwuZXHlnS.2HsFxDXrgitf6H1LW2a4kK8L0cE
- vAMtVkr5mrWL2EQ4dJT5i.0NugBR4BIaBs3CRc.kSTBhNSEjQaCKqowf_UtHiOZPzlc9jVjavEcE
- 1OZl3_QanmoZDiiSh.kPNoIpu4qoFFuEWZiW39jzDOCN4fJYV0oqpqF72poM1D07KCsIXnYLL5Ii
- L_TU9aMJYw6RzGjDmBStZqfOcpnsNqnYShPeHclDvzgYEzrgzIR2YGY7kgMnSbv7uBjNavy3chgx
- P6Eae0rXArcT5Tl_MFsIqOrlrHZYaQcXaeIzqEY.JnT6cHoGreGd83NJxj7INlwXu21.0d2M0yXH
- q17vDeFWQkmG97lo2aKL5uO8xRwldpbUt4.ReNWp0CqV9X2X4k9cpwy4so9hRzLfKC48jEY_D3tn
- xNq43hNCZUoibmXP0jS1Wt7VJSUJh4KiKrUZDiTdBV3wZBcidyrr3oKpdZSzB.y9P4B4F2eegoq9
- _0bPv1oKbrATwnazUjl.fNAFy8h51WVGroHG8A5Vm_Y9_ry2iCuadU2vlT5ILA7ALhYQp_c6roNG
- xcbowemSwkzcx2zXlOFJ6o5QB0bBDVb0A2QtuqmOdJjfvgZeg450goFaz6lPtN0tHDlIoDiVoz2n
- oyl2_O3usODyV7Pgaa2SN3Jr_4CuEv1M_1QVMcHKfORvu8VQajThj0K3YepPrRPaPxRJzsjppCIg
- Jm45hOvqIwpbJZF6ixgbFG2vCrSEvyS2owgMBDnoifVeXbkpE1goqGPOIWCEIBSxyZU5Zf1azmIl
- 7c5zU35I28X2V9JKnfR2TSePYWKl_EsdIT2TimCaUCKJIl1UIrRxZG4U2iaPsQMjwQsc11R4q3pL
- QoZ7mpdcagg6aUjHc3IFSZUc2IyvbKZ1_hnpQneEjLnrD2PJbM4HRnUhBE_ZQ.HbvuZaklz.bngx
- klqHK0GtLkH90EyBPocy6QhG9x70r6D4cdTuU_az8b25Nym6YqGXMn.rXPpOv8ONGzVCQE_zXk9Y
- 6PucOTSPTfR9i5Xh7fc8wRwXPGQeE2zPx93lquob0.MhD07R_kON45QdKCMC_6PvwzssDFP2cnBt
- L0cK1tUNnEGm16F4urjp1DzFoK_zkzt7PrfVr5uPJvwHMVsFY0Kxhqks7hWQtGRrmkufGm0j6UL9
- puwklBxKRWtwwdZFusbhuqeHoIXeQVBXJPYmJ
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.ne1.yahoo.com with HTTP; Fri, 8 May 2020 15:27:30 +0000
-Date:   Fri, 8 May 2020 15:27:29 +0000 (UTC)
-From:   Barr Kummar Faso <barrkummarfaso@gmail.com>
-Reply-To: wu.paymentofic@fastservice.com
-Message-ID: <503273029.194580.1588951649225@mail.yahoo.com>
-Subject: YOUR GIFT WESTERN UNION PAYMENT
+        id S1727860AbgEHQTh (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 8 May 2020 12:19:37 -0400
+Received: from mail26.static.mailgun.info ([104.130.122.26]:48280 "EHLO
+        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726817AbgEHQTh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 8 May 2020 12:19:37 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1588954776; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=Sehda5KYpri+SgmjTuPUNWxcMIV/yX17URV1EJd8KjM=; b=qHevvyz9xVCx1scueDOSy7Smpq/PN3P2w9Kbg/BsMWSUXglGdCHMvF7lkBHBitUvSwSo9IW2
+ jrBhIoLC1B7h9eCzFNftL5NYJn8ri4f7e8jQ5xiU1fZqgtpqT6tufnfJ4FZ/UUpafPbiqgjX
+ SD+Aib2KHaH9fqjJ0H5HKWHcatE=
+X-Mailgun-Sending-Ip: 104.130.122.26
+X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5eb5868d.7f72e02193e8-smtp-out-n03;
+ Fri, 08 May 2020 16:19:25 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 2139BC433D2; Fri,  8 May 2020 16:19:25 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.8.176] (cpe-70-95-149-85.san.res.rr.com [70.95.149.85])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: asutoshd)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CCDF0C433D2;
+        Fri,  8 May 2020 16:19:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CCDF0C433D2
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=asutoshd@codeaurora.org
+Subject: Re: [PATCH v8 8/8] scsi: ufs: cleanup WriteBooster feature
+To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
+        martin.petersen@oracle.com, avri.altman@wdc.com,
+        alim.akhtar@samsung.com, jejb@linux.ibm.com
+Cc:     beanhuo@micron.com, cang@codeaurora.org, matthias.bgg@gmail.com,
+        bvanassche@acm.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kuohong.wang@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, andy.teng@mediatek.com
+References: <20200508080115.24233-1-stanley.chu@mediatek.com>
+ <20200508080115.24233-9-stanley.chu@mediatek.com>
+From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
+Message-ID: <ca589cd1-bf28-7227-02d7-1c7789f6f6e9@codeaurora.org>
+Date:   Fri, 8 May 2020 09:19:22 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <503273029.194580.1588951649225.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15902 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:76.0) Gecko/20100101 Firefox/76.0
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <20200508080115.24233-9-stanley.chu@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 5/8/2020 1:01 AM, Stanley Chu wrote:
+> Small cleanup as below items,
+> 
+> 1. Use ufshcd_is_wb_allowed() directly instead of ufshcd_wb_sup()
+>     since ufshcd_wb_sup() just returns the result of
+>     ufshcd_is_wb_allowed().
+> 
+> 2. In ufshcd_suspend(), "else if (!ufshcd_is_runtime_pm(pm_op))
+>     can be simplified to "else" since both have the same meaning.
+> 
+> This patch does not change any functionality.
+> 
+> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+> Reviewed-by: Avri Altman <avri.altman@wdc.com>
+> ---
+
+The whole series looks good to me.
+
+Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
+
+>   drivers/scsi/ufs/ufshcd.c | 20 +++++++-------------
+>   1 file changed, 7 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index b6a0d77d47ac..426073a518ef 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -253,7 +253,6 @@ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up);
+>   static irqreturn_t ufshcd_intr(int irq, void *__hba);
+>   static int ufshcd_change_power_mode(struct ufs_hba *hba,
+>   			     struct ufs_pa_layer_attr *pwr_mode);
+> -static bool ufshcd_wb_sup(struct ufs_hba *hba);
+>   static int ufshcd_wb_buf_flush_enable(struct ufs_hba *hba);
+>   static int ufshcd_wb_buf_flush_disable(struct ufs_hba *hba);
+>   static int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable);
+> @@ -285,7 +284,7 @@ static inline void ufshcd_wb_config(struct ufs_hba *hba)
+>   {
+>   	int ret;
+>   
+> -	if (!ufshcd_wb_sup(hba))
+> +	if (!ufshcd_is_wb_allowed(hba))
+>   		return;
+>   
+>   	ret = ufshcd_wb_ctrl(hba, true);
+> @@ -5197,18 +5196,13 @@ static void ufshcd_bkops_exception_event_handler(struct ufs_hba *hba)
+>   				__func__, err);
+>   }
+>   
+> -static bool ufshcd_wb_sup(struct ufs_hba *hba)
+> -{
+> -	return ufshcd_is_wb_allowed(hba);
+> -}
+> -
+>   static int ufshcd_wb_ctrl(struct ufs_hba *hba, bool enable)
+>   {
+>   	int ret;
+>   	u8 index;
+>   	enum query_opcode opcode;
+>   
+> -	if (!ufshcd_wb_sup(hba))
+> +	if (!ufshcd_is_wb_allowed(hba))
+>   		return 0;
+>   
+>   	if (!(enable ^ hba->wb_enabled))
+> @@ -5264,7 +5258,7 @@ static int ufshcd_wb_buf_flush_enable(struct ufs_hba *hba)
+>   	int ret;
+>   	u8 index;
+>   
+> -	if (!ufshcd_wb_sup(hba) || hba->wb_buf_flush_enabled)
+> +	if (!ufshcd_is_wb_allowed(hba) || hba->wb_buf_flush_enabled)
+>   		return 0;
+>   
+>   	index = ufshcd_wb_get_flag_index(hba);
+> @@ -5286,7 +5280,7 @@ static int ufshcd_wb_buf_flush_disable(struct ufs_hba *hba)
+>   	int ret;
+>   	u8 index;
+>   
+> -	if (!ufshcd_wb_sup(hba) || !hba->wb_buf_flush_enabled)
+> +	if (!ufshcd_is_wb_allowed(hba) || !hba->wb_buf_flush_enabled)
+>   		return 0;
+>   
+>   	index = ufshcd_wb_get_flag_index(hba);
+> @@ -5336,7 +5330,7 @@ static bool ufshcd_wb_keep_vcc_on(struct ufs_hba *hba)
+>   	int ret;
+>   	u32 avail_buf;
+>   
+> -	if (!ufshcd_wb_sup(hba))
+> +	if (!ufshcd_is_wb_allowed(hba))
+>   		return false;
+>   	/*
+>   	 * The ufs device needs the vcc to be ON to flush.
+> @@ -8235,12 +8229,12 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+>   		 * configured WB type is 70% full, keep vcc ON
+>   		 * for the device to flush the wb buffer
+>   		 */
+> -		if ((hba->auto_bkops_enabled && ufshcd_wb_sup(hba)) ||
+> +		if ((hba->auto_bkops_enabled && ufshcd_is_wb_allowed(hba)) ||
+>   		    ufshcd_wb_keep_vcc_on(hba))
+>   			hba->dev_info.keep_vcc_on = true;
+>   		else
+>   			hba->dev_info.keep_vcc_on = false;
+> -	} else if (!ufshcd_is_runtime_pm(pm_op)) {
+> +	} else {
+>   		hba->dev_info.keep_vcc_on = false;
+>   	}
+>   
+> 
 
 
-ATTN;BENEFICIARY:
-
-
-
-
-
-You are welcome to Western UNION office Burkina Faso.
-
-
-
-Am Barr Kummar Faso by name, The new director of Western Union Foreign Oper=
-ation.
-
-
-I resumed work today and your daily transfer file was submitted as pending =
-payment in our Western union Bank and after my verification, I called the f=
-ormal Accountant Officer in-charge of your payment to find out the reason w=
-hy they are delaying your daily transfer and he explained that you was unab=
-le to activate your daily installment account fully.
-
-
-However, I don't know your financial capability at this moment and it was t=
-he reason why I decided to help in this matter just to make it easy for you=
- to start receiving your daily transfer because I know that when you receiv=
-e the total sum $900.000.00 usd that you will definitely compensate me.
-
-
-
-I don't want you to lose this fund at this stage after all your efforts. Mo=
-st wise people prefer to use this medium western union money transfer now a=
-s the best and reliable means of transfer,Kindly take control of yourself a=
-nd leave everything to God because I know that from now on, you will be the=
- one to say that our lord is good, so I will advice you to send me your dir=
-ect phone number your address,country,Pass port because I will text you the=
- MTCN through SMS and attach other information and send to you through your=
- email box, Sender name Sender=E2=80=99s address with including all documen=
-ts involve in the transaction.
-
-
-For this moment I will be very glad for your quick response by sending sum =
-of $25.00 so that I will quickly do the needful and finalize everything wit=
-hin 1:43pm our local time here, I am giving you every assurance that as soo=
-n as I receive the $25.00 that I will activate your daily installment accou=
-nt and proceed with your first transfer of $7,000.00 before 1:43pm our loca=
-l time because I will close once its 6:30pm.
-
-
-Contact person Barr Faso Kummar
-contact Email: wu.paymentofic@fastservice.com
-
-
-
-Be aware that all verification's and arrangement involve in this transfer h=
-as being made in your favour. So I need your maximum co-operation to ensure=
- that strictest confidence is maintained to avoid any further delay.
-
-
-Send the $25.00 through Western Union Money Transfer to below following inf=
-ormation and get back to me with copy of the Western Union slip OK?
-
-
-Receiver's Name...
-Country.... Burkina Faso
-Text Question..........Good
-Answer.............News
-Amount .......$25 USD
-MTCN............
-
-
-I felt pains after going through your payment file and found the reason why=
- you have not start receiving your fund from this department and ready to d=
-o my utmost to make sure you receive it all OK?
-
-
-Be rest assured that I will activate your daily installment account and pos=
-t your first $7,000 USD for you to pick-up today as soon as we receive the =
-fee from you.
-
-
-Please do not hesitate to contact us again should you require additional in=
-formation or call +226 74 43 41 61 for further urgent attention, as we are =
-here to serve you the best.
-
-
-Regard's
-Barrister Kummar Faso
-New Director Western Union Foreign Operation
-Our:Code of conduct:1000%
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+Linux Foundation Collaborative Project
