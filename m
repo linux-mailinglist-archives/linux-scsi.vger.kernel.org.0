@@ -2,59 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B811CCB96
-	for <lists+linux-scsi@lfdr.de>; Sun, 10 May 2020 16:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E731CCCF1
+	for <lists+linux-scsi@lfdr.de>; Sun, 10 May 2020 20:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728683AbgEJOmM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 10 May 2020 10:42:12 -0400
-Received: from mail3.ujk.edu.pl ([81.26.8.176]:45932 "EHLO mail3.ujk.edu.pl"
+        id S1728385AbgEJSc5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 10 May 2020 14:32:57 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:54913 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728340AbgEJOmM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Sun, 10 May 2020 10:42:12 -0400
-X-Greylist: delayed 935 seconds by postgrey-1.27 at vger.kernel.org; Sun, 10 May 2020 10:42:11 EDT
-Received: from ujk.edu.pl (www.ujk.edu.pl [81.26.8.12])
-        by mail3.ujk.edu.pl  with ESMTP id 04AEPQ8k012187-04AEPQ8m012187
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-SHA256 bits=256 verify=NO);
-        Sun, 10 May 2020 16:25:26 +0200
-Received: from www.ujk.edu.pl ([81.26.8.12]:10590 helo=ujk.edu.pl)
-        by ujk.edu.pl with esmtpa (Exim 4.80)
-        (envelope-from <tivikelis@teilar.gr>)
-        id 1jXmtS-0005lh-8Q; Sun, 10 May 2020 16:25:26 +0200
-Received: from 8h6ul9W3YM29eBqTo748ua94lH1nHFvEscAZXN8D89s=
- (m5K4Tdu2fnqKxaHXeVWxsSS73WF553zm)
- via NEKoo0OOMUmMRB0ZnKJpFJvU5AjkrORQ
- (dsGFrdcB6i327dek2kYv27oFew6JZkwA)
- by www.ujk.edu.pl
- with HTTP (HTTP/1.1 POST); Sun, 10 May 2020 16:25:26 +0200
+        id S1728123AbgEJSc5 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Sun, 10 May 2020 14:32:57 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id CD7DF20423B
+        for <linux-scsi@vger.kernel.org>; Sun, 10 May 2020 20:32:54 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zmTAaIx2yt9K for <linux-scsi@vger.kernel.org>;
+        Sun, 10 May 2020 20:32:48 +0200 (CEST)
+Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 9601C204165
+        for <linux-scsi@vger.kernel.org>; Sun, 10 May 2020 20:32:48 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+To:     SCSI development list <linux-scsi@vger.kernel.org>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Subject: scsi_alloc_target: parent of the target (need not be a scsi host)
+Message-ID: <59d462c4-ceab-041a-bbb5-5b509f13a123@interlog.com>
+Date:   Sun, 10 May 2020 14:32:46 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Sun, 10 May 2020 07:25:26 -0700
-From:   Jackson Loan Firm <tivikelis@teilar.gr>
-To:     undisclosed-recipients:;
-Subject: =?UTF-8?Q?Z=C5=82=C3=B3=C5=BC_wniosek_o_po=C5=BCyczk=C4=99?=
-Reply-To: charlesdickson094@outlook.com
-Mail-Reply-To: charlesdickson094@outlook.com
-Message-ID: <fa7caa67c3581df2278193fa3b98dffb@ujk.edu.pl>
-X-Sender: tivikelis@teilar.gr
-User-Agent: UJK Webmail 2013
-X-Debug-ACL: acl-check-data
-X-Scan-Signature: 3bbefa40fdceec072ec0015d6b912b6a
-X-Authenticated-Sender: 85C02545B4BFE364CBA030DE03AB6931E88CBA7D
-X-Authenticated-IP: www.ujk.edu.pl:10590
-X-Authenticated-Version: 1.0.1
-X-FEAS-SPF: spf-result=soft-fail, ip=81.26.8.12, helo=ujk.edu.pl, mailFrom=tivikelis@teilar.gr
-Authentication-Results: mail3.ujk.edu.pl;
-        spf=softfail (ujk.edu.pl: domain of tivikelis@teilar.gr does not designate 81.26.8.12 as permitted sender) smtp.mailfrom=tivikelis@teilar.gr
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+This gem is in scsi_scan.c in the documentation of that function's first
+argument.
+"need not be a scsi host" should read "it damn well better be a scsi host"
+otherwise that function will crash and burn!
 
+I'm trying to work out why the function: starget_for_each_device() in scsi.c
+does _not_ use that collection right in front of it (i.e.
+scsi_target::devices). Instead, it step up to the host level, and iterates
+over all devices (LUs) on that host and only calls the given function for
+those devices that match the channel and target numbers. That is bizarrely
+wasteful if scsi_target::devices could be iterated over instead.
 
--- 
-Dzień dobry, czy potrzebujesz pożyczki? Dziękuję.
+Anyone know why this is?
 
-Pan Charles Dickson
+Doug Gilbert
