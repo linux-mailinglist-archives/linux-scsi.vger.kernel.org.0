@@ -2,85 +2,111 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 579EF1CE2B2
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 May 2020 20:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8F61CE020
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 May 2020 18:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731212AbgEKS1t (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 May 2020 14:27:49 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:35532 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731208AbgEKS1r (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 14:27:47 -0400
-Received: by mail-oi1-f196.google.com with SMTP id o7so15979571oif.2;
-        Mon, 11 May 2020 11:27:46 -0700 (PDT)
+        id S1730016AbgEKQLw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 May 2020 12:11:52 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:38051 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729550AbgEKQLw (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 12:11:52 -0400
+Received: by mail-pl1-f193.google.com with SMTP id m7so4131633plt.5
+        for <linux-scsi@vger.kernel.org>; Mon, 11 May 2020 09:11:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=AF44SBQidL/1nuTUY00MQnDKIQPVWNPKZOL9w+D+Z08=;
-        b=FaKTCDNNDI1JSfVVpva2xLUavzYmsOE8PZUPprG9yotpAsnhR9leOm2KeCT6Byczef
-         hzndFH39S7cBlOHbIOnywrPtKtikS4G6gqnygFqleV07Ut4bgF9EgK5LNahV8+/ZMlSB
-         ATbuXolqj+yBEhvNsjfkezI+E9ltvZxGeypD3ZwPTtLjEdwmIhAl6IN3bme4K0Woq/z6
-         LIldXWsGuBdNnHI+ALV2BnJL1pMbu9rP92u+pZlTStUi2UEYJMBtcxwrDeW+ysx/p5iG
-         z4xnt7+BjcAPO0uZLN4gh8ACluEx2gl93gaEnQOhS3oOcuz+2qeFe+RUViJFDg8iIFsd
-         Cthw==
-X-Gm-Message-State: AGi0PuZrkgRqPVteCJUMOrGI6Gl6u8LppYCyjMt7gMBmrY7JXu9iLTqs
-        R368qOWGicFeAhYAKU97yA==
-X-Google-Smtp-Source: APiQypJZp8K7ZKYFivbdUWwWOufHVF5HSbqXoCMZfWZ7Fhk4i9srELxLj+oi9ZKacSVH9aLLafe8xQ==
-X-Received: by 2002:a05:6808:b36:: with SMTP id t22mr21158774oij.121.1589221665737;
-        Mon, 11 May 2020 11:27:45 -0700 (PDT)
-Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id x5sm3322995oif.29.2020.05.11.11.27.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 May 2020 11:27:45 -0700 (PDT)
-Received: (nullmailer pid 20642 invoked by uid 1000);
-        Mon, 11 May 2020 16:10:23 -0000
-Date:   Mon, 11 May 2020 11:10:23 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     devicetree@vger.kernel.org, krzk@kernel.org,
-        stanley.chu@mediatek.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, cang@codeaurora.org,
-        linux-arm-kernel@lists.infradead.org, martin.petersen@oracle.com,
-        kwmad.kim@samsung.com, linux-samsung-soc@vger.kernel.org,
-        avri.altman@wdc.com
-Subject: Re: [PATCH v8 08/10] dt-bindings: ufs: Add DT binding documentation
- for ufs
-Message-ID: <20200511161023.GA20124@bogus>
-References: <20200511020031.25730-1-alim.akhtar@samsung.com>
- <CGME20200511021406epcas5p229fb46815d3c29ae06709fa6160e0308@epcas5p2.samsung.com>
- <20200511020031.25730-9-alim.akhtar@samsung.com>
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=sErqUs0vhXwvlzUk5Qm/vY6u1XrZRa3tkjbjJjEjN1Y=;
+        b=WiyYweE0/D+KmLXgem8gA7nzHAK+PPc0cISSyb1Iq5A9mre6007tr84q/m3qXx6nWr
+         EnWFc/h3b/d5gzyH/FgX6cTCzNG98wTIzt7Y1gymYqilUd1GOJ9gBPauw0xGqJR9eZ4k
+         hGf+jPvq7VG3Y2GHVNRdh6Ai/gxANm4lAP7vQw2UUGbatKlcGJ3wwhbpVSVyZyQ/rzVG
+         bLUBnJNJcmVDmd2zayUk4Apukw/mBjtag3vbGgfIlEWW9D9H+Z4t6c1gicvtrmdIfbeq
+         nu3tQ2GORSxhzyjgsp1zZidYph9+KB/wjAEnTjz1mNpdG/6935go/25HIf0kRsW6He8W
+         LpJQ==
+X-Gm-Message-State: AGi0PuYDbngiirtBStDk3AviggX2tSjrDcaPYRNpKqqBRRz70e9yKUC9
+        lM1ZKho8sWW4z8sM+z1Lo8I=
+X-Google-Smtp-Source: APiQypJ85td6HFuySLFa+CzqnEKSY9yxjZgo/dfS5wzhumem7+D1cn1lVJM1di2OGXkjaxpKE8noNA==
+X-Received: by 2002:a17:90a:246c:: with SMTP id h99mr19339682pje.125.1589213511473;
+        Mon, 11 May 2020 09:11:51 -0700 (PDT)
+Received: from ?IPv6:2601:647:4000:d7:c4e5:b27b:830d:5d6e? ([2601:647:4000:d7:c4e5:b27b:830d:5d6e])
+        by smtp.gmail.com with ESMTPSA id j32sm8328722pgb.55.2020.05.11.09.11.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 May 2020 09:11:50 -0700 (PDT)
+Subject: Re: [PATCH v4 09/11] qla2xxx: Change {RD,WRT}_REG_*() function names
+ from upper case into lower case
+To:     Arun Easi <aeasi@marvell.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        linux-scsi@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Martin Wilck <mwilck@suse.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+References: <20200427030310.19687-1-bvanassche@acm.org>
+ <20200427030310.19687-10-bvanassche@acm.org>
+ <alpine.LRH.2.21.9999.2005110039430.23618@irv1user01.caveonetworks.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <8667a46c-631e-a00c-2a1a-ac97c5fd0fd0@acm.org>
+Date:   Mon, 11 May 2020 09:11:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200511020031.25730-9-alim.akhtar@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <alpine.LRH.2.21.9999.2005110039430.23618@irv1user01.caveonetworks.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, 11 May 2020 07:30:29 +0530, Alim Akhtar wrote:
-> This patch adds DT binding for samsung ufs hci
+On 2020-05-11 00:40, Arun Easi wrote:
+> On Sun, 26 Apr 2020, 8:03pm, Bart Van Assche wrote:
+>> @@ -258,8 +258,8 @@ static inline void WRT_REG_DWORD(volatile __le32 __iomem *addr, u32 data)
+>>   * The ISP2312 v2 chip cannot access the FLASH/GPIO registers via MMIO in an
+>>   * 133Mhz slot.
+>>   */
+>> -#define RD_REG_WORD_PIO(addr)		(inw((unsigned long)addr))
+>> -#define WRT_REG_WORD_PIO(addr, data)	(outw(data, (unsigned long)addr))
+>> +#define rd_reg_word_PIO(addr)		(inw((unsigned long)addr))
+>> +#define wrt_reg_word_PIO(addr, data)	(outw(data, (unsigned long)addr))
 > 
-> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
-> ---
->  .../bindings/ufs/samsung,exynos-ufs.yaml      | 92 +++++++++++++++++++
->  1 file changed, 92 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+> Why mix case for PIO? Might as well do it here too. Anyway,
 > 
+> Reviewed-by: Arun Easi <aeasi@marvell.com>
 
+Hi Arun,
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Please trim emails when replying. It was hard for me to find your reply.
 
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.example.dt.yaml: ufs@15570000: 'pclk-freq-avail-range' does not match any of the regexes: 'pinctrl-[0-9]+'
+Anyway, I will make the proposed change.
 
-See https://patchwork.ozlabs.org/patch/1287439
+Thanks,
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure dt-schema is up to date:
-
-pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
-
-Please check and re-submit.
-
+Bart.
