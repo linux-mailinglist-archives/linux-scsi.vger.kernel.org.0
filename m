@@ -2,118 +2,85 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 178691CE013
-	for <lists+linux-scsi@lfdr.de>; Mon, 11 May 2020 18:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579EF1CE2B2
+	for <lists+linux-scsi@lfdr.de>; Mon, 11 May 2020 20:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730665AbgEKQIC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 May 2020 12:08:02 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:50926 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730612AbgEKQIB (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 12:08:01 -0400
-Received: by mail-pj1-f67.google.com with SMTP id t9so8141922pjw.0
-        for <linux-scsi@vger.kernel.org>; Mon, 11 May 2020 09:07:59 -0700 (PDT)
+        id S1731212AbgEKS1t (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 May 2020 14:27:49 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:35532 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731208AbgEKS1r (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 14:27:47 -0400
+Received: by mail-oi1-f196.google.com with SMTP id o7so15979571oif.2;
+        Mon, 11 May 2020 11:27:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=inMeMFW1trvPQKioCVVtm4GtjAqhIxmuCda3l3GaVe0=;
-        b=nnHoZXBYkbf0DTeXH8T0xBpOt5L5WDLnFE5t0r5+6oQ5eh3xyz1Hsl6wQHJvdAZzg7
-         GZXP65e0EWD/qSyKPTxtcqpILEy1ZxfTvkHLw933W0wKrcrL+KW4TnZv1ngPz3uKOe8N
-         gEUpvj+eUM+oS9ylo+41qQeMbnjeP5E2IYUkHKcOtZdpegIcOah+q2hLu2fOXMkYQ83g
-         0uhOoqmXxSXufYJ3UxvjK2PAyDrJjFo5wESmBpiLmokqD2aQZlA3CNq6thzv9EMDL11C
-         ynNb0Co/MYVUi/QNH2qVDjEezXVKFfOmQJuubcM9ZjiEZyuz1XRxj6LewbDOj2737/sj
-         YykQ==
-X-Gm-Message-State: AGi0PuakoncHr2nbkrhluoUL3QBv43FxPG41dSTUSMhHbrGf0MOL4Mf8
-        wPLdakQco3+cisbZZ0D46tA=
-X-Google-Smtp-Source: APiQypKfWZK4/yovBGuwe+hA5Rm3OWLFYj23dqbQH5aCSNC5LYqg5yf4E+LM8I6c0PNxpBf4bSpdzw==
-X-Received: by 2002:a17:90b:3547:: with SMTP id lt7mr17168533pjb.14.1589213279325;
-        Mon, 11 May 2020 09:07:59 -0700 (PDT)
-Received: from ?IPv6:2601:647:4000:d7:c4e5:b27b:830d:5d6e? ([2601:647:4000:d7:c4e5:b27b:830d:5d6e])
-        by smtp.gmail.com with ESMTPSA id g25sm9347863pfo.150.2020.05.11.09.07.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 May 2020 09:07:58 -0700 (PDT)
-Subject: Re: [PATCH v4 08/11] qla2xxx: Fix the code that reads from mailbox
- registers
-To:     Arun Easi <aeasi@marvell.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        linux-scsi@vger.kernel.org, Nilesh Javali <njavali@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Quinn Tran <qutran@marvell.com>,
-        Martin Wilck <mwilck@suse.com>,
-        Daniel Wagner <dwagner@suse.de>,
-        Roman Bolshakov <r.bolshakov@yadro.com>
-References: <20200427030310.19687-1-bvanassche@acm.org>
- <20200427030310.19687-9-bvanassche@acm.org>
- <alpine.LRH.2.21.9999.2005110037000.23618@irv1user01.caveonetworks.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <0eae3a14-6ffd-b637-e753-3f0d684bd267@acm.org>
-Date:   Mon, 11 May 2020 09:07:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=AF44SBQidL/1nuTUY00MQnDKIQPVWNPKZOL9w+D+Z08=;
+        b=FaKTCDNNDI1JSfVVpva2xLUavzYmsOE8PZUPprG9yotpAsnhR9leOm2KeCT6Byczef
+         hzndFH39S7cBlOHbIOnywrPtKtikS4G6gqnygFqleV07Ut4bgF9EgK5LNahV8+/ZMlSB
+         ATbuXolqj+yBEhvNsjfkezI+E9ltvZxGeypD3ZwPTtLjEdwmIhAl6IN3bme4K0Woq/z6
+         LIldXWsGuBdNnHI+ALV2BnJL1pMbu9rP92u+pZlTStUi2UEYJMBtcxwrDeW+ysx/p5iG
+         z4xnt7+BjcAPO0uZLN4gh8ACluEx2gl93gaEnQOhS3oOcuz+2qeFe+RUViJFDg8iIFsd
+         Cthw==
+X-Gm-Message-State: AGi0PuZrkgRqPVteCJUMOrGI6Gl6u8LppYCyjMt7gMBmrY7JXu9iLTqs
+        R368qOWGicFeAhYAKU97yA==
+X-Google-Smtp-Source: APiQypJZp8K7ZKYFivbdUWwWOufHVF5HSbqXoCMZfWZ7Fhk4i9srELxLj+oi9ZKacSVH9aLLafe8xQ==
+X-Received: by 2002:a05:6808:b36:: with SMTP id t22mr21158774oij.121.1589221665737;
+        Mon, 11 May 2020 11:27:45 -0700 (PDT)
+Received: from rob-hp-laptop (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x5sm3322995oif.29.2020.05.11.11.27.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2020 11:27:45 -0700 (PDT)
+Received: (nullmailer pid 20642 invoked by uid 1000);
+        Mon, 11 May 2020 16:10:23 -0000
+Date:   Mon, 11 May 2020 11:10:23 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Alim Akhtar <alim.akhtar@samsung.com>
+Cc:     devicetree@vger.kernel.org, krzk@kernel.org,
+        stanley.chu@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, cang@codeaurora.org,
+        linux-arm-kernel@lists.infradead.org, martin.petersen@oracle.com,
+        kwmad.kim@samsung.com, linux-samsung-soc@vger.kernel.org,
+        avri.altman@wdc.com
+Subject: Re: [PATCH v8 08/10] dt-bindings: ufs: Add DT binding documentation
+ for ufs
+Message-ID: <20200511161023.GA20124@bogus>
+References: <20200511020031.25730-1-alim.akhtar@samsung.com>
+ <CGME20200511021406epcas5p229fb46815d3c29ae06709fa6160e0308@epcas5p2.samsung.com>
+ <20200511020031.25730-9-alim.akhtar@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.21.9999.2005110037000.23618@irv1user01.caveonetworks.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200511020031.25730-9-alim.akhtar@samsung.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-05-11 00:39, Arun Easi wrote:
-> On Sun, 26 Apr 2020, 8:03pm, Bart Van Assche wrote:
->>  	default:
->> -		ha->aenmb[1] = RD_REG_WORD(&reg->aenmailbox1);
->> -		ha->aenmb[2] = RD_REG_WORD(&reg->aenmailbox2);
->> -		ha->aenmb[3] = RD_REG_WORD(&reg->aenmailbox3);
->> -		ha->aenmb[4] = RD_REG_WORD(&reg->aenmailbox4);
->> -		ha->aenmb[5] = RD_REG_WORD(&reg->aenmailbox5);
->> -		ha->aenmb[6] = RD_REG_WORD(&reg->aenmailbox6);
->> -		ha->aenmb[7] = RD_REG_WORD(&reg->aenmailbox7);
->> +		ha->aenmb[1] = RD_REG_DWORD(&reg->aenmailbox1);
->> +		ha->aenmb[2] = RD_REG_DWORD(&reg->aenmailbox2);
->> +		ha->aenmb[3] = RD_REG_DWORD(&reg->aenmailbox3);
->> +		ha->aenmb[4] = RD_REG_DWORD(&reg->aenmailbox4);
->> +		ha->aenmb[5] = RD_REG_DWORD(&reg->aenmailbox5);
->> +		ha->aenmb[6] = RD_REG_DWORD(&reg->aenmailbox6);
->> +		ha->aenmb[7] = RD_REG_DWORD(&reg->aenmailbox7);
+On Mon, 11 May 2020 07:30:29 +0530, Alim Akhtar wrote:
+> This patch adds DT binding for samsung ufs hci
 > 
-> Please leave the older access as is. The way you did is right, but
-> these adapters are not frequently qualified, so please leave it the
-> tested way.
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
+> ---
+>  .../bindings/ufs/samsung,exynos-ufs.yaml      | 92 +++++++++++++++++++
+>  1 file changed, 92 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+> 
 
-The current code silently truncates 32-bit values into 16-bit values on
-little endian architectures. The current code is totally broken on big
-endian architectures. So I think the above changes are an important bug
-fix. If these changes would introduce a regression, these changes are
-easy to revert.
 
-Thanks,
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Bart.
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.example.dt.yaml: ufs@15570000: 'pclk-freq-avail-range' does not match any of the regexes: 'pinctrl-[0-9]+'
+
+See https://patchwork.ozlabs.org/patch/1287439
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure dt-schema is up to date:
+
+pip3 install git+https://github.com/devicetree-org/dt-schema.git@master --upgrade
+
+Please check and re-submit.
+
