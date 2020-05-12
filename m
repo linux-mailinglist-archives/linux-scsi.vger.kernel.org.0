@@ -2,147 +2,96 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C7C01CEF1E
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 10:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845451CECD7
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 08:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729209AbgELI2u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 May 2020 04:28:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57256 "EHLO mail.kernel.org"
+        id S1726032AbgELGLz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 May 2020 02:11:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51022 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725987AbgELI2u (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 12 May 2020 04:28:50 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF7E5206A3;
-        Tue, 12 May 2020 08:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589272129;
-        bh=xic9Wa4tqu8MQopJT18weegGL8B8WOphD+KWExBuHy4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Thw2OguQ0Roa5JQgz17PW9AC4NeRdMJaeQKNU47bRqCeeMWOAHVzbwtpfTCQ+2LTE
-         h8nyzVDOoQIjIExpo+8oPNg4rCjJOCSLUH/JFTJPRe3LLgAfP75JSvBEOQbWDSNMCd
-         pegQ4oNR5bYrjNJoJvu/pMSWzoZV2Fg4yTbflL6s=
-Date:   Tue, 12 May 2020 07:54:42 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mike Christie <mchristi@redhat.com>
-Cc:     bvanassche@acm.org, bstroesser@ts.fujitsu.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: Re: [PATCH 11/15] target: add sysfs support
-Message-ID: <20200512055442.GA3505885@kroah.com>
-References: <20200510215744.21999-1-mchristi@redhat.com>
- <20200510215744.21999-12-mchristi@redhat.com>
- <20200511063002.GA1260895@kroah.com>
- <aad8269e-f9ee-ebc7-6e54-aa4b5b6021b8@redhat.com>
+        id S1725933AbgELGLy (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 12 May 2020 02:11:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id C4D0FAC84;
+        Tue, 12 May 2020 06:11:55 +0000 (UTC)
+Subject: Re: [PATCH v5 09/15] qla2xxx: Use register names instead of register
+ offsets
+To:     Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
+Cc:     linux-scsi@vger.kernel.org, Arun Easi <aeasi@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Martin Wilck <mwilck@suse.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+References: <20200511200946.7675-1-bvanassche@acm.org>
+ <20200511200946.7675-10-bvanassche@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <e20d1dc7-5c93-16f9-ddb6-b37f8a5c0aad@suse.de>
+Date:   Tue, 12 May 2020 08:11:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aad8269e-f9ee-ebc7-6e54-aa4b5b6021b8@redhat.com>
+In-Reply-To: <20200511200946.7675-10-bvanassche@acm.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Mon, May 11, 2020 at 12:15:12PM -0500, Mike Christie wrote:
-> On 5/11/20 1:30 AM, Greg Kroah-Hartman wrote:
-> > On Sun, May 10, 2020 at 04:57:40PM -0500, Mike Christie wrote:
-> >> These next two patches add a sysfs interface that reports the target
-> >> layer's I_T nexuses/sessions. For the non-SCSI people cc'd, this just means
-> >> we are reporting a server's connections to remote clients.
-> >>
-> >> This patch adds the upper level dirs which shows/organizes our local port
-> >> (tpgts below) and the connection (session below). The next patch will then
-> >> add the dirs/files for each connection/session which exports info like
-> >> ACL/permissions and SCSI port values.
-> >>
-> >> Here is the general layout:
-> >>
-> >> [sys]# tree scsi_target/
-> >> scsi_target/
-> >> |-- fabric/target module
-> >> |   `-- target name
-> >> |       `-- tpgt_$target_port_group_number
-> >> |           `-- sessions
-> >> |               `-- initiator name - session ID number
-> >> |                   |-- acl
-> >> |                   `-- transport_id
-> >> |                       |-- name
-> >> |                       |-- proto
-> >> |                       `-- session_id
-> >>
-> >> Here is an example with the scsi target layer's iSCSI driver:
-> >>
-> >> scsi_target/
-> >> |-- iscsi
-> >> |   `-- iqn.1999-09.com.tcmu:minna
-> >> |       `-- tpgt_1
-> >> |           `-- sessions
-> >> |               `-- iqn.2005-03.com.ceph:ini1-1
-> >> |                   |-- acl
-> >> |                   `-- transport_id
-> >> |                       |-- name
-> >> |                       |-- proto
-> >> |                       `-- session_id
-> >> |-- fc
-> >> |-- loopback
-> >> |-- qla2xxx_tcm
-> >>
-> >>
-> >> Note/Question for Greg:
-> >>
-> >> We are not exporting info in the upper level dirs like "fabric/target
-> >> module", "target name", tpgt, etc and just need those dirs to be able to
-> >> organize/view the endpoints of the session. So, in this patch I made a new
-> >> top level dir scsi_target and made the other dirs with
-> >> kobject_create_and_add. It looks like we could also add device structs in
-> >> the target related structs, use classes, and build the tree/hierarchy that
-> >> way too. It was not clear to me when to use one or the other.
-> > 
-> > Never use kobject calls in a driver subsystem like you have here, as
-> > those objects will not be seen by userspace tools that get uevents.
-> > Just use real 'struct devices' if you really really need a deep
-> > directory tree.
-> > 
-> > But I would push back here, why do you feel you want such a deep tree?
-> > What are you getting from this?  Why do you need that "sessions"
-> > directory at all?
+On 5/11/20 10:09 PM, Bart Van Assche wrote:
+> Make qla27xx_write_remote_reg() easier to read by using register names
+> instead of register offsets. The 'pahole' tool has been used to convert
+> register offsets into register names. See also commit cbb01c2f2f63
+> ("scsi: qla2xxx: Fix MPI failure AEN (8200) handling").
 > 
-> I do not need the sessions under the tpgt dir and will drop it. The
-> target subsystem does not have a bus or use device structs at all right
-> now.
+> Cc: Arun Easi <aeasi@marvell.com>
+> Cc: Nilesh Javali <njavali@marvell.com>
+> Cc: Daniel Wagner <dwagner@suse.de>
+> Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
+> Cc: Hannes Reinecke <hare@suse.de>
+> Cc: Martin Wilck <mwilck@suse.com>
+> Cc: Roman Bolshakov <r.bolshakov@yadro.com>
+> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+> ---
+>   drivers/scsi/qla2xxx/qla_tmpl.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/scsi/qla2xxx/qla_tmpl.c b/drivers/scsi/qla2xxx/qla_tmpl.c
+> index 4a4d92046cbf..645496091186 100644
+> --- a/drivers/scsi/qla2xxx/qla_tmpl.c
+> +++ b/drivers/scsi/qla2xxx/qla_tmpl.c
+> @@ -17,14 +17,14 @@ static void
+>   qla27xx_write_remote_reg(struct scsi_qla_host *vha,
+>   			 u32 addr, u32 data)
+>   {
+> -	char *reg = (char *)ISPREG(vha);
+> +	struct device_reg_24xx __iomem *reg = &vha->hw->iobase->isp24;
+>   
+>   	ql_dbg(ql_dbg_misc, vha, 0xd300,
+>   	       "%s: addr/data = %xh/%xh\n", __func__, addr, data);
+>   
+> -	WRT_REG_DWORD(reg + IOBASE(vha), 0x40);
+> -	WRT_REG_DWORD(reg + 0xc4, data);
+> -	WRT_REG_DWORD(reg + 0xc0, addr);
+> +	WRT_REG_DWORD(&reg->iobase_addr, 0x40);
+> +	WRT_REG_DWORD(&reg->iobase_c4, data);
+> +	WRT_REG_DWORD(&reg->iobase_window, addr);
+>   }
+>   
+>   void
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Then fix that and everything shows up automatically "for free".
+Cheers,
 
-> And, I saw how other code that does not have a bus like btrfs/ext4
-> use kobject_create_and_add() to group/organize objects and went wild
-> with dirs :)
-
-file systems are not devices with busses and drivers :)
-
-> And, I can move the code to device structs, but had a question about the
-> deep tree question.
-
-Don't do it.
-
-> A common operation will be that userspace knows the names of the objects
-> above the session in the tree already. Apps then want to read in a
-> specific session or scan the specific sessions in a target or a tpgt.
-> The deep tree makes it easy to build the sysfs path and scan/read the
-> specific object/objects.
-
-Again, a "deep tree" with raw kobjects will be invisible to the normal
-userspace tools that monitor changes in sysfs for devices because they
-will not notice them at all.
-
-> I wanted to avoid the issue where apps have with the flat layout where
-> they have to scan every session when they just want something specific.
-
-There should not be any difference in "speed" for something like that,
-it's an in-ram filesystem with no i/o times.
-
-> Will a deep tree be ok for this type of reason?
-
-Nope :(
-
-greg k-h
+Hannes
+-- 
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                               +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
