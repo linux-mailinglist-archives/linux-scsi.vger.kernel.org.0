@@ -2,29 +2,29 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 432461CFB8D
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 19:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E03F1CFCDC
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 20:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728850AbgELREK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 May 2020 13:04:10 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:29951 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725938AbgELREK (ORCPT
+        id S1730761AbgELSLC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 May 2020 14:11:02 -0400
+Received: from mail27.static.mailgun.info ([104.130.122.27]:30901 "EHLO
+        mail27.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725987AbgELSLB (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 12 May 2020 13:04:10 -0400
+        Tue, 12 May 2020 14:11:01 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1589303048; h=Content-Transfer-Encoding: Content-Type:
+ s=smtp; t=1589307061; h=Content-Transfer-Encoding: Content-Type:
  In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=MvIowFXMVRWW92MBumCeSgKBVatOORx4VcJ2L/BKTSQ=; b=O6w13hkB3QvcjjkzC4FKAg3aKDqDWXivxCkZ3/ptkcmZq6gXh1znkCeEtD6I9Wt3Nkkrl9ze
- YNTeOnD0cX14k5yED0QnbLwnRqSAC9m1d5VtOKPCGKdtpSrp/d8/IGxWWhy+HMX7zqSKC/99
- oHE2fxbCYl24pbql8yixccho6Rw=
-X-Mailgun-Sending-Ip: 104.130.122.26
+ Subject: Sender; bh=OO3R9jYg4r1wAHoA8hhGY1+VCtV/dK//JXy3OK5Qw9E=; b=X9yzDJ5w+uANXT+L0o2HIQlXUvsmNWzlgT6jU82S+P7kKsBNoTKhd66cdZAwY7/rteL0gINH
+ rDZ4TE3ZFIi7C6CJR70/e9MEUgg0tc/p6AmznY7L91o8aW6ZPuM0Pp+YL7Q3ejPkgOAKQOrq
+ Aki8pSI2ojxQZbVTMdVDF0BwEpI=
+X-Mailgun-Sending-Ip: 104.130.122.27
 X-Mailgun-Sid: WyJlNmU5NiIsICJsaW51eC1zY3NpQHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
 Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5ebad707.7f5e9628cd88-smtp-out-n02;
- Tue, 12 May 2020 17:04:07 -0000 (UTC)
+ by mxa.mailgun.org with ESMTP id 5ebae6b4.7ffa4cc7b810-smtp-out-n02;
+ Tue, 12 May 2020 18:11:00 -0000 (UTC)
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 785F4C433F2; Tue, 12 May 2020 17:04:06 +0000 (UTC)
+        id 9100AC4478F; Tue, 12 May 2020 18:10:58 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -34,30 +34,32 @@ Received: from [192.168.8.150] (cpe-70-95-149-85.san.res.rr.com [70.95.149.85])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: asutoshd)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 83576C433CB;
-        Tue, 12 May 2020 17:04:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 83576C433CB
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1684BC433F2;
+        Tue, 12 May 2020 18:10:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1684BC433F2
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=asutoshd@codeaurora.org
-Subject: Re: [PATCH v1 4/4] scsi: ufs: Fix WriteBooster flush during runtime
- suspend
-To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
-        martin.petersen@oracle.com, avri.altman@wdc.com,
-        alim.akhtar@samsung.com, jejb@linux.ibm.com
-Cc:     beanhuo@micron.com, cang@codeaurora.org, matthias.bgg@gmail.com,
+Subject: Re: [PATCH v2 4/4] scsi: ufs-mediatek: customize WriteBooster flush
+ policy
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
+        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com,
+        beanhuo@micron.com, cang@codeaurora.org, matthias.bgg@gmail.com,
         bvanassche@acm.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         kuohong.wang@mediatek.com, peter.wang@mediatek.com,
         chun-hung.wu@mediatek.com, andy.teng@mediatek.com
-References: <20200512104750.8711-1-stanley.chu@mediatek.com>
- <20200512104750.8711-5-stanley.chu@mediatek.com>
+References: <20200509093716.21010-1-stanley.chu@mediatek.com>
+ <20200509093716.21010-5-stanley.chu@mediatek.com>
+ <635f91f6-3a27-ffdd-4021-67705d4063fc@codeaurora.org>
+ <yq1v9l115us.fsf@oracle.com>
 From:   "Asutosh Das (asd)" <asutoshd@codeaurora.org>
-Message-ID: <3740c6fa-77f1-53eb-ec8e-8f9d09f2646f@codeaurora.org>
-Date:   Tue, 12 May 2020 10:04:03 -0700
+Message-ID: <7d5f53eb-f642-3c8b-edf6-d4693ecb49a4@codeaurora.org>
+Date:   Tue, 12 May 2020 11:10:56 -0700
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200512104750.8711-5-stanley.chu@mediatek.com>
+In-Reply-To: <yq1v9l115us.fsf@oracle.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -66,123 +68,25 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Stanley,
-
-On 5/12/2020 3:47 AM, Stanley Chu wrote:
-> Currently UFS host driver promises VCC supply if UFS device
-> needs to do WriteBooster flush during runtime suspend.
+On 5/12/2020 9:21 AM, Martin K. Petersen wrote:
 > 
-> However the UFS specification mentions,
+> Hi Asutosh!
 > 
-> "While the flushing operation is in progress, the device is
-> in Active power mode."
+>> Patchset looks good to me.
+>>
+>> Reviewed-by: Asutosh Das <asutoshd@codeaurora.org>
 > 
-> Therefore UFS host driver needs to promise more: Keep UFS
-> device as "Active power mode", otherwise UFS device shall not
-> do any flush if device enters Sleep or PowerDown power mode.
-> 
-> Fix this by not changing device power mode if WriteBooster
-> flush is required in ufshcd_suspend().
-> 
-> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
-> ---
->   drivers/scsi/ufs/ufs.h    |  1 -
->   drivers/scsi/ufs/ufshcd.c | 39 +++++++++++++++++++--------------------
->   2 files changed, 19 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-> index b3135344ab3f..9e4bc2e97ada 100644
-> --- a/drivers/scsi/ufs/ufs.h
-> +++ b/drivers/scsi/ufs/ufs.h
-> @@ -577,7 +577,6 @@ struct ufs_dev_info {
->   	u32 d_ext_ufs_feature_sup;
->   	u8 b_wb_buffer_type;
->   	u32 d_wb_alloc_units;
-> -	bool keep_vcc_on;
->   	u8 b_presrv_uspc_en;
->   };
->   
-> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-> index 169a3379e468..2d0aff8ac260 100644
-> --- a/drivers/scsi/ufs/ufshcd.c
-> +++ b/drivers/scsi/ufs/ufshcd.c
-> @@ -8101,8 +8101,7 @@ static void ufshcd_vreg_set_lpm(struct ufs_hba *hba)
->   	    !hba->dev_info.is_lu_power_on_wp) {
->   		ufshcd_setup_vreg(hba, false);
->   	} else if (!ufshcd_is_ufs_dev_active(hba)) {
-> -		if (!hba->dev_info.keep_vcc_on)
-> -			ufshcd_toggle_vreg(hba->dev, hba->vreg_info.vcc, false);
-> +		ufshcd_toggle_vreg(hba->dev, hba->vreg_info.vcc, false);
->   		if (!ufshcd_is_link_active(hba)) {
->   			ufshcd_config_vreg_lpm(hba, hba->vreg_info.vccq);
->   			ufshcd_config_vreg_lpm(hba, hba->vreg_info.vccq2);
-> @@ -8172,6 +8171,7 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
->   	enum ufs_pm_level pm_lvl;
->   	enum ufs_dev_pwr_mode req_dev_pwr_mode;
->   	enum uic_link_state req_link_state;
-> +	bool keep_curr_dev_pwr_mode = false;
->   
->   	hba->pm_op_in_progress = 1;
->   	if (!ufshcd_is_shutdown_pm(pm_op)) {
-> @@ -8226,28 +8226,27 @@ static int ufshcd_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
->   			/* make sure that auto bkops is disabled */
->   			ufshcd_disable_auto_bkops(hba);
->   		}
-> +
->   		/*
-> -		 * With wb enabled, if the bkops is enabled or if the
-> -		 * configured WB type is 70% full, keep vcc ON
-> -		 * for the device to flush the wb buffer
-> +		 * If device needs to do BKOP or WB buffer flush, keep device
-> +		 * power mode as "active power mode" and its VCC supply.
->   		 */
-> -		if ((hba->auto_bkops_enabled && ufshcd_is_wb_allowed(hba)) ||
-> -		    ufshcd_wb_keep_vcc_on(hba))
-> -			hba->dev_info.keep_vcc_on = true;
-> -		else
-> -			hba->dev_info.keep_vcc_on = false;
-> -	} else {
-> -		hba->dev_info.keep_vcc_on = false;
-> +		keep_curr_dev_pwr_mode = hba->auto_bkops_enabled ||
-> +			ufshcd_wb_keep_vcc_on(hba);
->   	}
->   
-> -	if ((req_dev_pwr_mode != hba->curr_dev_pwr_mode) &&
-> -	    ((ufshcd_is_runtime_pm(pm_op) && !hba->auto_bkops_enabled) ||
-> -	    !ufshcd_is_runtime_pm(pm_op))) {
-> -		/* ensure that bkops is disabled */
-> -		ufshcd_disable_auto_bkops(hba);
-> -		ret = ufshcd_set_dev_pwr_mode(hba, req_dev_pwr_mode);
-> -		if (ret)
-> -			goto enable_gating;
-> +	if (req_dev_pwr_mode != hba->curr_dev_pwr_mode) {
-> +		if ((ufshcd_is_runtime_pm(pm_op) && !hba->auto_bkops_enabled) ||
-> +		    !ufshcd_is_runtime_pm(pm_op)) {
-> +			/* ensure that bkops is disabled */
-> +			ufshcd_disable_auto_bkops(hba);
-> +		}
-> +
-> +		if (!keep_curr_dev_pwr_mode) {
-> +			ret = ufshcd_set_dev_pwr_mode(hba, req_dev_pwr_mode);
-> +			if (ret)
-> +				goto enable_gating;
-> +		}
->   	}
->   
->   	flush_work(&hba->eeh_work);
+> When you want to approve an entire series, please respond to the cover
+> letter email. Otherwise the kernel.org tooling will only record the tag
+> for the individual patch you are responding to. In this case only patch
+> 4 got tagged as reviewed in patchwork.
 > 
 
-Can you please confirm that you've tested and found that with the 
-previous code, the flush operation in the device was not happening.
+Hi Martin
+Sure - I'll keep this in mind.
 
-If so, please can you let me know the test-case that you ran to figure 
-this out.
-
-I'd like to verify this at my end.
-
---
 Thanks,
--asd
+Asutosh
 
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
