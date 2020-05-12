@@ -2,68 +2,62 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A741CEB5B
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 05:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AABC1CEB6C
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 05:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728640AbgELD2p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 May 2020 23:28:45 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:40658 "EHLO
+        id S1728828AbgELD3U (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 May 2020 23:29:20 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:41102 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727942AbgELD2o (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 23:28:44 -0400
+        with ESMTP id S1728820AbgELD3S (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 23:29:18 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3N1U3130524;
-        Tue, 12 May 2020 03:28:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=EvhwvSUMvUb7X/M6iVF7L84Qav9leBAoaFDl0rRegxc=;
- b=NDNT41abgOxhRsAULc5g2j8oxTQlR7cK864x0S6aBjjoK0s6fH2d0NLWu0e5gIMkSJuL
- 6TQtgOp7xLLUjJRkhbArUVlsSYLiwsaqhQe5dnJo4oCsmuBVBX8nLVGYn7sTJdeQS8KP
- 2eIdDGahSkgH7XV4jbglTTkvcuJfPUHEXM8j8qbHMedYXGhMAb+fkdcM80gYCAZ1l5vc
- jGc69e+LETywGK0U/LjF0Lf7Dk09S5MA7a1OHfX9GwpWBM7MFXg+xgMKanU3yxp1cEHt
- 8a5NQSDaieXF5GKGVDTM3t6iq1A9aGLiGrE1Ntf0Pn0RGnY0gjShF8sdmice+uiJR83v Pg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 30x3gsggnq-1
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3N1eQ130551;
+        Tue, 12 May 2020 03:29:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
+ message-id : date : from : to : cc : subject : references : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=Dh8mcI1FRbOqvThp8JBTTIWPo7UnuPp94mhHgvE9ml4=;
+ b=AXlgQxqho9s76F2hV/dhN50fd8nbl07sqQQgYbjjC39V3hnlwU722G1ai8Kf2GYFtOtM
+ iF1IDrNxnNmXt0WL6gZwjzB/PAODNkYis9X1sNhuKbuoNldcdM1G7K7BAhPgLIs8ooOM
+ My2gmz/iYBsGBNvWFVynocQKmBLqCm1DHNees0h+QTlY/Qoov0KAIW6BL+jRdgC3Bn7w
+ qrND9EbYawfWzu/XbCO2KBgV0QywevsAtkTCM5EfzuwoGm0WP+CPt5I8oADYOtDecCDQ
+ 756wfeVYeECAteR19ViJ+Y7UH7a1lNKWrGLjb3eEhtguZaU/vnOFNUB1d20VL5mWVfDK Eg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 30x3gsggpx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 May 2020 03:28:42 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3PDsR095766;
-        Tue, 12 May 2020 03:28:41 GMT
+        Tue, 12 May 2020 03:29:12 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3MUdf015978;
+        Tue, 12 May 2020 03:29:12 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 30x69s9rwx-1
+        by aserp3020.oracle.com with ESMTP id 30xbggtnjq-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 May 2020 03:28:41 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04C3Sev2007114;
-        Tue, 12 May 2020 03:28:40 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 11 May 2020 20:28:38 -0700
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Benjamin Block <bblock@linux.ibm.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Steffen Maier <maier@linux.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Fedor Loshakov <loshakov@linux.ibm.com>,
-        linux-scsi@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Julian Wiedmann <jwi@linux.ibm.com>
-Subject: Re: [PATCH 0/8] zfcp: fix DIF/DIX support with scsi-mq host-wide tag-set
-Date:   Mon, 11 May 2020 23:28:26 -0400
-Message-Id: <158925392374.17325.3358760553480361613.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1588956679.git.bblock@linux.ibm.com>
-References: <cover.1588956679.git.bblock@linux.ibm.com>
+        Tue, 12 May 2020 03:29:12 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04C3TAdD007328;
+        Tue, 12 May 2020 03:29:11 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201) by default (Oracle
+ Beehive Gateway v4.0) with ESMTP ; Mon, 11 May 2020 20:28:40 -0700
 MIME-Version: 1.0
+Message-ID: <158925392373.17325.9006412341355835743.b4-ty@oracle.com>
+Date:   Tue, 12 May 2020 03:28:27 +0000 (UTC)
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     nab@linux-iscsi.org, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH] target: loopback: fix READ with data and sensebytes
+References: <20200428182617.32726-1-bstroesser@ts.fujitsu.com>
+In-Reply-To: <20200428182617.32726-1-bstroesser@ts.fujitsu.com>
+X-Mailer: git-send-email 2.26.2
+Content-Type: text/plain; charset=ascii
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 adultscore=0
- spamscore=0 suspectscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2005120029
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ spamscore=0 suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005120029
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
  malwarescore=0 adultscore=0 mlxscore=0 priorityscore=1501
@@ -75,36 +69,21 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 8 May 2020 19:23:27 +0200, Benjamin Block wrote:
+On Tue, 28 Apr 2020 20:26:17 +0200, Bodo Stroesser wrote:
 
-> some time ago we noticed - Fedor did - that our DIV and DIX support in
-> zfcp broke at some point. I tracked that down to a commit made for v5.4
-> (737eb78e82d5), but we didn't notice it back than, because our CI
-> doesn't currently run with either DIV, nor DIX enabled (time allowing
-> this is something we want to improve so we catch stuff like this
-> earlier). It also turned out that the commit in v5.4 was not really the
-> root-cause, and was only making the problem visible more easy.
+> We use tcm_loop with tape emulations running on tcmu.
+> In case application reads a short tape block with a longer READ,
+> or a long tape block with a short READ, according to SCC spec
+> data has to be tranferred _and_ sensebytes with ILI set and
+> information field containing the residual count.
+> Similar problem also exists when using fixed block size in READ.
 > 
 > [...]
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/8] scsi: zfcp: Move shost modification after QDIO (re-)open into fenced function
-      https://git.kernel.org/mkp/scsi/c/978857c7e367
-[2/8] scsi: zfcp: Move shost updates during xconfig data handling into fenced function
-      https://git.kernel.org/mkp/scsi/c/bd1684817d7d
-[3/8] scsi: zfcp: Move fc_host updates during xport data handling into fenced function
-      https://git.kernel.org/mkp/scsi/c/52e61fde5ec9
-[4/8] scsi: zfcp: Fence fc_host updates during link-down handling
-      https://git.kernel.org/mkp/scsi/c/990486f3a850
-[5/8] scsi: zfcp: Move p-t-p port allocation to after xport data
-      https://git.kernel.org/mkp/scsi/c/ac007adc4d2d
-[6/8] scsi: zfcp: Fence adapter status propagation for common statuses
-      https://git.kernel.org/mkp/scsi/c/971f2abb4ca4
-[7/8] scsi: zfcp: Fence early sysfs interfaces for accesses of shost objects
-      https://git.kernel.org/mkp/scsi/c/71159b6ecb06
-[8/8] scsi: zfcp: Move allocation of the shost object to after xconf- and xport-data
-      https://git.kernel.org/mkp/scsi/c/d0dff2ac98dd
+[1/1] scsi: target: loopback: Fix READ with data and sensebytes
+      https://git.kernel.org/mkp/scsi/c/c68a56736c12
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
