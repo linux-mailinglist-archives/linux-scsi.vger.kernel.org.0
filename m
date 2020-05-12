@@ -2,88 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AABC1CEB6C
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 05:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 644971CEB7C
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 05:31:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728828AbgELD3U (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 May 2020 23:29:20 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:41102 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728820AbgELD3S (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 23:29:18 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3N1eQ130551;
-        Tue, 12 May 2020 03:29:12 GMT
+        id S1728858AbgELDbX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 May 2020 23:31:23 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:35382 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728455AbgELDbU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 23:31:20 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3N3Np072963;
+        Tue, 12 May 2020 03:31:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
  message-id : date : from : to : cc : subject : references : in-reply-to :
  content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=Dh8mcI1FRbOqvThp8JBTTIWPo7UnuPp94mhHgvE9ml4=;
- b=AXlgQxqho9s76F2hV/dhN50fd8nbl07sqQQgYbjjC39V3hnlwU722G1ai8Kf2GYFtOtM
- iF1IDrNxnNmXt0WL6gZwjzB/PAODNkYis9X1sNhuKbuoNldcdM1G7K7BAhPgLIs8ooOM
- My2gmz/iYBsGBNvWFVynocQKmBLqCm1DHNees0h+QTlY/Qoov0KAIW6BL+jRdgC3Bn7w
- qrND9EbYawfWzu/XbCO2KBgV0QywevsAtkTCM5EfzuwoGm0WP+CPt5I8oADYOtDecCDQ
- 756wfeVYeECAteR19ViJ+Y7UH7a1lNKWrGLjb3eEhtguZaU/vnOFNUB1d20VL5mWVfDK Eg== 
+ bh=4bAuAI6MNYAXc//k73oPqBbwpdcjw/L0xcodzJz3lMw=;
+ b=RPeJmGzxh2P4GuzVH5aIZ+Hk7deq5f+CCeCG16647QardtoQ6iqRCcSuNysqh6PaAjsu
+ dSnhmIyXdhBKJ0KfSAvEcnTFVgI66+f1kVFj9H+qv9RanMCfUw+qLB+oKYZpb++orJ0S
+ erXhCCNjhUhWypmJl3HxCmsFvWEzw6Ez3bHk1qIhAlKNkNXjWe+SrZSF+U868EuAj/pN
+ CkoN0tIz0ypvpsRX5Nl3AncWD4GjRXssMz6t5VxQiSC6M/yl1ehll+Uj3BK3sjVAnKHO
+ CTWAPRrTpNAhSMvK4SSVb2/nmSE4Do/p1p0WUR2wPv8elNO4saroHMQXlzY5CeIRKqxd Hw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 30x3gsggpx-1
+        by userp2120.oracle.com with ESMTP id 30x3mbrgkg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 May 2020 03:29:12 +0000
+        Tue, 12 May 2020 03:31:14 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3MUdf015978;
-        Tue, 12 May 2020 03:29:12 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 30xbggtnjq-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3MVoH016085;
+        Tue, 12 May 2020 03:29:13 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 30xbggtnp4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 May 2020 03:29:12 +0000
+        Tue, 12 May 2020 03:29:13 +0000
 Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04C3TAdD007328;
-        Tue, 12 May 2020 03:29:11 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04C3TCY2019111;
+        Tue, 12 May 2020 03:29:12 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201) by default (Oracle
- Beehive Gateway v4.0) with ESMTP ; Mon, 11 May 2020 20:28:40 -0700
+ Beehive Gateway v4.0) with ESMTP ; Mon, 11 May 2020 20:28:41 -0700
 MIME-Version: 1.0
-Message-ID: <158925392373.17325.9006412341355835743.b4-ty@oracle.com>
-Date:   Tue, 12 May 2020 03:28:27 +0000 (UTC)
+Message-ID: <158925392374.17325.12424804060546822236.b4-ty@oracle.com>
+Date:   Tue, 12 May 2020 03:28:28 +0000 (UTC)
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     nab@linux-iscsi.org, target-devel@vger.kernel.org,
-        linux-scsi@vger.kernel.org,
-        Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] target: loopback: fix READ with data and sensebytes
-References: <20200428182617.32726-1-bstroesser@ts.fujitsu.com>
-In-Reply-To: <20200428182617.32726-1-bstroesser@ts.fujitsu.com>
+To:     linux-scsi@vger.kernel.org, James Smart <james.smart@broadcom.com>,
+        Colin King <colin.king@canonical.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] scsi: lpfc: remove redundant initialization to variable
+ rc
+References: <20200507203111.64709-1-colin.king@canonical.com>
+In-Reply-To: <20200507203111.64709-1-colin.king@canonical.com>
 X-Mailer: git-send-email 2.26.2
 Content-Type: text/plain; charset=ascii
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=967
  spamscore=0 suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2005120029
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- malwarescore=0 adultscore=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 clxscore=1011 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005120029
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 impostorscore=0
+ mlxscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005120029
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 28 Apr 2020 20:26:17 +0200, Bodo Stroesser wrote:
+On Thu, 7 May 2020 21:31:11 +0100, Colin King wrote:
 
-> We use tcm_loop with tape emulations running on tcmu.
-> In case application reads a short tape block with a longer READ,
-> or a long tape block with a short READ, according to SCC spec
-> data has to be tranferred _and_ sensebytes with ILI set and
-> information field containing the residual count.
-> Similar problem also exists when using fixed block size in READ.
-> 
-> [...]
+> The variable rc is being initialized with a value that is never read
+> and it is being updated later with a new value.  The initialization is
+> redundant and can be removed.
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/1] scsi: target: loopback: Fix READ with data and sensebytes
-      https://git.kernel.org/mkp/scsi/c/c68a56736c12
+[1/1] scsi: lpfc: Remove redundant initialization to variable rc
+      https://git.kernel.org/mkp/scsi/c/6e27a86aed97
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
