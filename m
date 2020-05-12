@@ -2,85 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2001CEB64
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 05:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA0E41CEBAF
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 05:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728786AbgELD3E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 May 2020 23:29:04 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:38872 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728709AbgELD3D (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 23:29:03 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3RLxY105406;
-        Tue, 12 May 2020 03:28:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=Ul1MQ9V/DIgV6pt2ygn/L2NqNfjK8CMuQ9o1DGGXPHc=;
- b=Bpthnbw0LWJDqfpRI3aStgG9H+2vFx3GquljTwNuzhCq8GO+verXEkBYeAStXMuSqYgu
- fvVtYaobhqLE+n6YK2XSVwyuTjlk61UdYqp6Bw50/3Qjf/716oryffHJba9589XyEJ45
- Ta46wyvbbzt1K0hel2onR0ltM27sM4qMXlNqW6Pmc+VJTWISIxwzVNQkEr34uW+8gYeW
- 2V64vf0vzM7n3NS0USHQwGiUpkDZphXypby514oBU00nwNd/dZg648HIDEQLMij53kw2
- KF2+wxwzMppfe3pt6+hgnmSpHILuqIE6Vy07cwnFKZjuP5mNSf+hq7Ao0oEbA/nVOwuA WQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 30x3gmghsu-1
+        id S1728568AbgELDs6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 May 2020 23:48:58 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:45924 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbgELDs5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 23:48:57 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3hM6b100525;
+        Tue, 12 May 2020 03:48:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=PKTVe55m4PB3nZDCl/fZlAPDZjFgKXFhjS0gmg4pNOc=;
+ b=F4OVv/W9Sxd8LgU2ns91kc3O+Z7HwdkaKyXuqC/qAeb4QyMJ9aFTK+lRQ4wiurTOPpnR
+ mdisSlsDKUS6uKakSOJLCR3uXiZJI2w8Z5CuSONyGQ03ivgxNVaH5jOEpA+0gPHH8KwM
+ II6A2+XWCy9D8+Dg8GdyUz/JQqaI7iHaCqf7tysQUheee8lVWye593Rqk/PhRXf6X8MP
+ 8GyHy2GY0Ji5FTiIGsOWxdqGSj3jd3BnjAD0CJj5oC3iZr8/YEVtxWgkDwhMFRjHWFPB
+ +JaLYGwImKx1CU3YzwBBY9eKR5NuGnh3tCGCghpgqa93TSzbuPLs+wL8qr1S6ulsu659 7g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 30x3mbrhyx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 May 2020 03:28:54 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3NsMC044088;
-        Tue, 12 May 2020 03:28:54 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 30ydspj6ac-1
+        Tue, 12 May 2020 03:48:54 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3ldWR136198;
+        Tue, 12 May 2020 03:48:53 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 30x63ny1bx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 May 2020 03:28:54 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04C3Sre1004039;
-        Tue, 12 May 2020 03:28:53 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        Tue, 12 May 2020 03:48:53 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04C3mqCR017777;
+        Tue, 12 May 2020 03:48:53 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 11 May 2020 20:28:52 -0700
+        with ESMTP ; Mon, 11 May 2020 20:48:52 -0700
+To:     Chandrakanth Patil <chandrakanth.patil@broadcom.com>
+Cc:     linux-scsi@vger.kernel.org, kashyap.desai@broadcom.com,
+        sumit.saxena@broadcom.com, kiran-kumar.kasturi@broadcom.com,
+        sankar.patra@broadcom.com, sasikumar.pc@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, anand.lodnoor@broadcom.com
+Subject: Re: [PATCH 0/5] megaraid_sas: driver updates for 07.714.04.00-rc1
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Zou Wei <zou_wei@huawei.com>, aacraid@microsemi.com,
-        jejb@linux.ibm.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
-Subject: Re: [PATCH -next v2] scsi: aacraid: Use memdup_user() as a cleanup
-Date:   Mon, 11 May 2020 23:28:37 -0400
-Message-Id: <158925392372.17325.1168480334838921553.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <1587868964-75969-1-git-send-email-zou_wei@huawei.com>
-References: <1587868964-75969-1-git-send-email-zou_wei@huawei.com>
+Organization: Oracle Corporation
+References: <20200508083838.22778-1-chandrakanth.patil@broadcom.com>
+Date:   Mon, 11 May 2020 23:48:50 -0400
+In-Reply-To: <20200508083838.22778-1-chandrakanth.patil@broadcom.com>
+        (Chandrakanth Patil's message of "Fri, 8 May 2020 14:08:33 +0530")
+Message-ID: <yq1lflx3ja5.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.0.91 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 mlxscore=0
- adultscore=0 mlxlogscore=846 malwarescore=0 bulkscore=0 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 suspectscore=0
+ malwarescore=0 phishscore=0 adultscore=0 mlxlogscore=999 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2005120029
+ definitions=main-2005120033
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=900
- clxscore=1015 spamscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
- malwarescore=0 priorityscore=1501 mlxscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005120029
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 impostorscore=0
+ mlxscore=0 suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
+ malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2005120032
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sun, 26 Apr 2020 10:42:44 +0800, Zou Wei wrote:
 
-> Fix coccicheck warning which recommends to use memdup_user().
-> 
-> This patch fixes the following coccicheck warning:
-> 
-> drivers/scsi/aacraid/commctrl.c:516:15-22: WARNING opportunity for memdup_user
+Hi Chandrakanth!
 
-Applied to 5.8/scsi-queue, thanks!
+> This patchset contains few critical driver fixes.
+>
+> Chandrakanth Patil (5):
+>   megaraid_sas: Limit device qd to controller qd when device qd is
+>     greater than controller qd
+>   megaraid_sas: Remove IO buffer hole detection logic
+>   megaraid_sas: Replace undefined MFI_BIG_ENDIAN macro with
+>     __BIG_ENDIAN_BITFIELD macro
+>   megaraid_sas: TM command refire leads to controller firmware crash
+>   megaraid_sas: Update driver version to 07.714.04.00-rc1
 
-[1/1] scsi: aacraid: Use memdup_user() as a cleanup
-      https://git.kernel.org/mkp/scsi/c/8d925b1f00e6
+The threading was messed up in this series and both patchwork and b4
+failed to grok it as a single patch set. It looks like your mail system
+somehow broke it up into multiple submissions, each with their own
+threading and cover letter.
+
+Also, several patches had incorrect attribution. If a patch was not
+authored by you it needs to have a From: identifying the original author
+(Sumit, Kashyap, etc.) as identified in the first Signed-off-by: tag.
+
+I fixed things up and applied to 5.8/scsi-queue. But please look into
+what went wrong when mailing this series. While I can edit my way out of
+incorrectly threaded submissions, the build robots and code checkers can
+get stumped when something is broken up. And therefore there is a chance
+that the patches didn't get full build and code analysis coverage.
+
+Thanks!
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
