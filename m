@@ -2,111 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE701CEB7B
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 05:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D8191CEB61
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 05:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728699AbgELDbU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 11 May 2020 23:31:20 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:35386 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728073AbgELDbU (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 23:31:20 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3N2vI072886;
-        Tue, 12 May 2020 03:30:51 GMT
+        id S1728773AbgELD2x (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 11 May 2020 23:28:53 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:38660 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727942AbgELD2w (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 11 May 2020 23:28:52 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3RKVm105259;
+        Tue, 12 May 2020 03:28:50 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=MUBSiWVQtghSeYGKdUfODIsM/8mICmZoZz5eTdHLjdY=;
- b=G4jxhVjRE8F3SYvnsq5Z66JVXSD2YZ80qMzCvufL/wZ/IrGa06NcMCZ4RIRh0WBJGF/F
- ihPe3rHKgljBGso8c1SHumqPoQ+glcm9vjUh608fisY7FK5+dHq+XSMuNjfa4XnEYFoN
- pYvFzuJAQbavg/xPCqqAg6S/miQfiWGwGZQaPXJdjSdsFys5hEkxHB/uyT/bB9+xTqvV
- tM6kAXQ1MyZGDYjvNT1Krp9rrvaK5HkEhDJZ+LScv16Xs4+wG0zYZbvHCdrk26JMjQcf
- 6gMXL0LBq9dX4317rUhkZKdblbGGDylQVy6Br6J6G21//4mBMVGfCKZXLq2zHh6cFN1w Ug== 
+ bh=dA6Oeud2F4cRc543OO5Veb1/Pt6WtgBUIO8gFviymxk=;
+ b=SAL856Bq7IMxNQnybEd3Vuggfnb/SnzyM2XqXh+7dlX5mhwMUtftMpcSPxXG/DkDIqGD
+ wl8kdRKZ4kEGqm7CnJCxbisy6h/hvewURSrWWLx9yBmhDZf/QP0PfDPXxHy86Pyh224v
+ PjB12teFxDxNySisiIgNpOouRJ+cAdOv6EHQvujEEkXPMHACvZWDdvWzMMG7fHMTgXB4
+ 2DjiUHxf0Nqm3bD2QisWaRMr5gninahs2dIUi4WQtWR2dmsqgZN191t4R8BDxlnJ4Hlu
+ oWzgfbF6TQ+fE9lWWWnxf4sjdCBDFSSl6pwIaEGI6cCD05DS/drB9XPHNdzyaMwrpmrm fA== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 30x3mbrgj8-1
+        by userp2130.oracle.com with ESMTP id 30x3gmghsh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 May 2020 03:30:51 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3MU8Q016039;
-        Tue, 12 May 2020 03:28:50 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 30xbggtm6r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Tue, 12 May 2020 03:28:50 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04C3Skk4004003;
-        Tue, 12 May 2020 03:28:47 GMT
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C3Mnfl016267;
+        Tue, 12 May 2020 03:28:49 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 30xbggtm4e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 12 May 2020 03:28:49 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04C3SlSe004004;
+        Tue, 12 May 2020 03:28:48 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 11 May 2020 20:28:46 -0700
+        with ESMTP ; Mon, 11 May 2020 20:28:47 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, Stanley Chu <stanley.chu@mediatek.com>,
-        jejb@linux.ibm.com, alim.akhtar@samsung.com,
-        asutoshd@codeaurora.org, avri.altman@wdc.com
+To:     linux-scsi@vger.kernel.org,
+        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        andy.teng@mediatek.com, linux-mediatek@lists.infradead.org,
-        bvanassche@acm.org, linux-arm-kernel@lists.infradead.org,
-        chun-hung.wu@mediatek.com, kuohong.wang@mediatek.com,
-        cang@codeaurora.org, linux-kernel@vger.kernel.org,
-        matthias.bgg@gmail.com, beanhuo@micron.com, peter.wang@mediatek.com
-Subject: Re: [PATCH v8 0/8] scsi: ufs: support LU Dedicated buffer mode for WriteBooster
-Date:   Mon, 11 May 2020 23:28:32 -0400
-Message-Id: <158925392374.17325.4875533206353375605.b4-ty@oracle.com>
+        sreekanth.reddy@broadcom.com, Sathya.Prakash@broadcom.com,
+        dan.carpenter@oracle.com, Johannes.Thumshirn@wdc.com
+Subject: Re: [v1] mpt3sas: Fix double free warnings
+Date:   Mon, 11 May 2020 23:28:33 -0400
+Message-Id: <158925392374.17325.12960314431033073561.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200508080115.24233-1-stanley.chu@mediatek.com>
-References: <20200508080115.24233-1-stanley.chu@mediatek.com>
+In-Reply-To: <20200508110738.30732-1-suganath-prabu.subramani@broadcom.com>
+References: <20200508110738.30732-1-suganath-prabu.subramani@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=889
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=813
  spamscore=0 suspectscore=0 phishscore=0 bulkscore=0 mlxscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2003020000 definitions=main-2005120029
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 impostorscore=0
- mlxscore=0 suspectscore=0 bulkscore=0 mlxlogscore=918 phishscore=0
- malwarescore=0 lowpriorityscore=0 spamscore=0 adultscore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2005120029
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=855
+ clxscore=1015 spamscore=0 lowpriorityscore=0 phishscore=0 bulkscore=0
+ malwarescore=0 priorityscore=1501 mlxscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005120029
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 8 May 2020 16:01:07 +0800, Stanley Chu wrote:
+On Fri, 8 May 2020 07:07:38 -0400, Suganath Prabu S wrote:
 
-> This patchset adds LU dedicated buffer mode support for WriteBooster.
-> In the meanwhile, enable WriteBooster capability on MediaTek UFS platforms.
+> Fix below warnings from Smatch static analyser:
 > 
-> v7 -> v8:
->   - In exported funtion ufshcd_fixup_dev_quirks(), add null checking for parameter "fixups" (Avri Altman)
+> drivers/scsi/mpt3sas/mpt3sas_base.c:5256 _base_allocate_memory_pools()
+> warn: 'ioc->hpr_lookup' double freed
 > 
-> v6 -> v7:
->   - Add device descriptor length check in ufshcd_wb_probe() back to prevent out-of-boundary access in ufshcd_wb_probe()
->   - Fix the check of device descriptor length (Avri Altman)
->   - Provide a new ufs_fixup_device_setup() function to pack both device fixup methods by general quirk table and vendor-specific way (Avri Altman)
-> 
-> [...]
+> drivers/scsi/mpt3sas/mpt3sas_base.c:5256 _base_allocate_memory_pools()
+> warn: 'ioc->internal_lookup' double freed
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/8] scsi: ufs: Enable WriteBooster on some pre-3.1 UFS devices
-      https://git.kernel.org/mkp/scsi/c/817d7e140283
-[2/8] scsi: ufs: Introduce fixup_dev_quirks vops
-      https://git.kernel.org/mkp/scsi/c/c28c00ba4f06
-[3/8] scsi: ufs: Export ufs_fixup_device_setup() function
-      https://git.kernel.org/mkp/scsi/c/8db269a5102e
-[4/8] scsi: ufs-mediatek: Add fixup_dev_quirks vops
-      https://git.kernel.org/mkp/scsi/c/62c2f503b54c
-[5/8] scsi: ufs: Add "index" in parameter list of ufshcd_query_flag()
-      https://git.kernel.org/mkp/scsi/c/1f34eedf9bc1
-[6/8] scsi: ufs: Add LU Dedicated buffer mode support for WriteBooster
-      https://git.kernel.org/mkp/scsi/c/6f8d5a6a78cf
-[7/8] scsi: ufs-mediatek: Enable WriteBooster capability
-      https://git.kernel.org/mkp/scsi/c/29060a629135
-[8/8] scsi: ufs: Cleanup WriteBooster feature
-      https://git.kernel.org/mkp/scsi/c/79e3520f82cb
+[1/1] scsi: mpt3sas: Fix double free warnings
+      https://git.kernel.org/mkp/scsi/c/cbbfdb2a2416
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
