@@ -2,152 +2,253 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B181CEF6C
-	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 10:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74FA1CEFA6
+	for <lists+linux-scsi@lfdr.de>; Tue, 12 May 2020 10:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729047AbgELIqg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 12 May 2020 04:46:36 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:59490 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725776AbgELIqg (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 May 2020 04:46:36 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C8h2JH052096;
-        Tue, 12 May 2020 08:46:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=sUcWufXYK5jH9Tzpw8fNYnpiSXb1JjxD6fHu5JAYX4A=;
- b=jYXGq5v6HaWmfa+e5Rm2azZobLfYterxKYV3jprEkNmKUnJqvufL7s7CIOhDHiy90uJw
- Ye/TG2qaUEOIUV4fy/kZetWJecTsRNEu21Am0U95ji97hrQHMLR1Q/K1nkXzJFv2D8kw
- iSxj02LPzFU8uyP03A4dpfgpclG056H6WoekHYXHM7WseCpfT2nta7cgP9jZqlWJtmOk
- L0lprbS5kLNsKwsTsVGjpJE9h/zaiO+MWNI6E2p9VOASoHVkXuNKqsE4nndRrre1E1KX
- UIGKy/Uho3dLYLhREzBwCWjPbtPdbp6zheXs4zy7z/xvS7YK3sK16CoswqiZy4s31i97 yw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 30x3gshnut-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 12 May 2020 08:46:33 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04C8cX85095532;
-        Tue, 12 May 2020 08:46:33 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 30xbghrd95-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 May 2020 08:46:33 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04C8kWAJ026252;
-        Tue, 12 May 2020 08:46:32 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 12 May 2020 01:46:31 -0700
-Date:   Tue, 12 May 2020 11:46:26 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     jsmart2021@gmail.com
-Cc:     linux-scsi@vger.kernel.org
-Subject: [bug report] lpfc: Refactor Send LS Abort support
-Message-ID: <20200512084626.GA252662@mwanda>
+        id S1729359AbgELI4G (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 12 May 2020 04:56:06 -0400
+Received: from esa3.hgst.iphmx.com ([216.71.153.141]:16012 "EHLO
+        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgELI4F (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 12 May 2020 04:56:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1589273766; x=1620809766;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LHQEHPaUiHfVRysBykCaP6M5igmziC3Qg8od0bxMdrg=;
+  b=AHXTnTTHbeaqdujAUnqmtpRvtvU+8dqaAtI2tdwvpBna4UPcWj9p6zPs
+   DdsUYG0dqp5RSvNQnH3Wtrdtox3QNlLbBDtjs1sEhhz0Sm9qDF6h1wtzU
+   Fhb5Uve/0KkqJMKKrXQ75a6dMuMYQEkyKF1UcFEMy5Zn2wu5YVBtMEQBe
+   rBTSs9NnHvLPUz4+xtqbhS/kStcEMTVzxGfQ2atE6R+SjBcPmSM6W9wWJ
+   10rZ2A16DjFvjiGnFpjGcV0BzrlLvM5EUePgmjexAnNrPepZrDKlIZBx2
+   t11Xp4PPwEj8FNIt/0ZVtJ1Hybx4wiU2kSf0B61EHTovWXcbcNKeAZCTA
+   A==;
+IronPort-SDR: xM5cCQ1WDzVn8eNdL8eVyYaGeJCPWrG51tj7/dWDB7ZIJHXi+E39h8SZk6pinyD6hTACKp2z93
+ 0uCVp4dHMAMxUYADeeH98g/NrSMtcS93TSyJ9fKvusrUynUU/kWgCTZEzMbKydiknTy74JGbYr
+ WRSUwQjbowopdhLU3l0gU3aIEeY60QrEqobxuO7AHAYzc5rJRoMA9UQfDUINlsAuML3v4qx5wN
+ ueUnYCdKNSIAwG1WtmPRKpdmhnQL4Hr/z4ahdShQb4dMdoOuVjLbDbYA/VMoJ7m7mPDuWusC+E
+ npA=
+X-IronPort-AV: E=Sophos;i="5.73,383,1583164800"; 
+   d="scan'208";a="141823523"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 12 May 2020 16:56:03 +0800
+IronPort-SDR: mMDITHC6xIP3pUV1qjl9htzY2L6Bbb7j/SlhLvJxlMOoVa3JdFS+DOkto5fRZyProzHarSuY6i
+ t3sg5cMz51Ygl2hd829k0hZixyBso+kGk=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2020 01:45:45 -0700
+IronPort-SDR: bwctbWHUXmBQ/JXlxyHBs5idA8uzGg5nCS/xjBlmsfe1ykgj0aDKowr78p+GQkc3daMIB+ygQe
+ wW02lYO4tdAQ==
+WDCIronportException: Internal
+Received: from unknown (HELO redsun60.ssa.fujisawa.hgst.com) ([10.149.66.36])
+  by uls-op-cesaip01.wdc.com with ESMTP; 12 May 2020 01:56:01 -0700
+From:   Johannes Thumshirn <johannes.thumshirn@wdc.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Keith Busch <kbusch@kernel.org>,
+        "linux-scsi @ vger . kernel . org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-fsdevel @ vger . kernel . org" <linux-fsdevel@vger.kernel.org>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: [PATCH v11 00/10] Introduce Zone Append for writing to zoned block devices
+Date:   Tue, 12 May 2020 17:55:44 +0900
+Message-Id: <20200512085554.26366-1-johannes.thumshirn@wdc.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
- spamscore=0 suspectscore=3 phishscore=0 bulkscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005120072
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9618 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- malwarescore=0 adultscore=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 clxscore=1011 bulkscore=0 phishscore=0
- suspectscore=3 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2005120072
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello James Smart,
+The upcoming NVMe ZNS Specification will define a new type of write
+command for zoned block devices, zone append.
 
-The patch e96a22b0b7c2: "lpfc: Refactor Send LS Abort support" from
-Mar 31, 2020, leads to the following static checker warning:
+When when writing to a zoned block device using zone append, the start
+sector of the write is pointing at the start LBA of the zone to write to.
+Upon completion the block device will respond with the position the data
+has been placed in the zone. This from a high level perspective can be
+seen like a file system's block allocator, where the user writes to a
+file and the file-system takes care of the data placement on the device.
 
-	drivers/scsi/lpfc/lpfc_nvmet.c:1366 lpfc_nvmet_ls_abort()
-	warn: 'ret' can be either negative or positive
+In order to fully exploit the new zone append command in file-systems and
+other interfaces above the block layer, we choose to emulate zone append
+in SCSI and null_blk. This way we can have a single write path for both
+file-systems and other interfaces above the block-layer, like io_uring on
+zoned block devices, without having to care too much about the underlying
+characteristics of the device itself.
 
-drivers/scsi/lpfc/lpfc_nvmet.c
-   832  /**
-   833   * __lpfc_nvme_ls_abort - Generic service routine to abort a prior
-   834   *         NVME LS request
-   835   * @vport: The local port that issued the LS
-   836   * @ndlp: The remote port the LS was sent to
-   837   * @pnvme_lsreq: Pointer to LS request structure from the transport
-   838   *
-   839   * The driver validates the ndlp, looks for the LS, and aborts the
-   840   * LS if found.
-   841   *
-   842   * Returns:
-   843   * 0 : if LS found and aborted
-   844   * non-zero: various error conditions in form -Exxx
+The emulation works by providing a cache of each zone's write pointer, so
+zone append issued to the disk can be translated to a write with a
+starting LBA of the write pointer. This LBA is used as input zone number
+for the write pointer lookup in the zone write pointer offset cache and
+the cached offset is then added to the LBA to get the actual position to
+write the data. In SCSI we then turn the REQ_OP_ZONE_APPEND request into a
+WRITE(16) command. Upon successful completion of the WRITE(16), the cache
+will be updated to the new write pointer location and the written sector
+will be noted in the request. On error the cache entry will be marked as
+invalid and on the next write an update of the write pointer will be
+scheduled, before issuing the actual write.
 
-This is an unpublished Smatch check where negatives and positives are
-both treated as errors.  I think the code is correct.  But the comment
-describing the returns needs to be updated.
+In order to reduce memory consumption, the only cached item is the offset
+of the write pointer from the start of the zone, everything else can be
+calculated. On an example drive with 52156 zones, the additional memory
+consumption of the cache is thus 52156 * 4 = 208624 Bytes or 51 4k Byte
+pages. The performance impact is neglectable for a spinning drive.
 
-   845   **/
-   846  int
-   847  __lpfc_nvme_ls_abort(struct lpfc_vport *vport, struct lpfc_nodelist *ndlp,
-   848                          struct nvmefc_ls_req *pnvme_lsreq)
-   849  {
-   850          struct lpfc_hba *phba = vport->phba;
-   851          struct lpfc_sli_ring *pring;
-   852          struct lpfc_iocbq *wqe, *next_wqe;
-   853          bool foundit = false;
-   854  
-   855          if (!ndlp) {
-   856                  lpfc_printf_log(phba, KERN_ERR,
-   857                                  LOG_NVME_DISC | LOG_NODE |
-   858                                          LOG_NVME_IOERR | LOG_NVME_ABTS,
-   859                                  "6049 NVMEx LS REQ Abort: Bad NDLP x%px DID "
-   860                                  "x%06x, Failing LS Req\n",
-   861                                  ndlp, ndlp ? ndlp->nlp_DID : 0);
-   862                  return -EINVAL;
-   863          }
-   864  
-   865          lpfc_printf_vlog(vport, KERN_INFO, LOG_NVME_DISC | LOG_NVME_ABTS,
-   866                           "6040 NVMEx LS REQ Abort: Issue LS_ABORT for lsreq "
-   867                           "x%p rqstlen:%d rsplen:%d %pad %pad\n",
-   868                           pnvme_lsreq, pnvme_lsreq->rqstlen,
-   869                           pnvme_lsreq->rsplen, &pnvme_lsreq->rqstdma,
-   870                           &pnvme_lsreq->rspdma);
-   871  
-   872          /*
-   873           * Lock the ELS ring txcmplq and look for the wqe that matches
-   874           * this ELS. If found, issue an abort on the wqe.
-   875           */
-   876          pring = phba->sli4_hba.nvmels_wq->pring;
-   877          spin_lock_irq(&phba->hbalock);
-   878          spin_lock(&pring->ring_lock);
-   879          list_for_each_entry_safe(wqe, next_wqe, &pring->txcmplq, list) {
-   880                  if (wqe->context2 == pnvme_lsreq) {
-   881                          wqe->iocb_flag |= LPFC_DRIVER_ABORTED;
-   882                          foundit = true;
-   883                          break;
-   884                  }
-   885          }
-   886          spin_unlock(&pring->ring_lock);
-   887  
-   888          if (foundit)
-   889                  lpfc_sli_issue_abort_iotag(phba, pring, wqe);
-   890          spin_unlock_irq(&phba->hbalock);
-   891  
-   892          if (foundit)
-   893                  return 0;
-   894  
-   895          lpfc_printf_vlog(vport, KERN_INFO, LOG_NVME_DISC | LOG_NVME_ABTS,
-   896                           "6213 NVMEx LS REQ Abort: Unable to locate req x%p\n",
-   897                           pnvme_lsreq);
-   898          return 1;
-                ^^^^^^^^
+For null_blk the emulation is way simpler, as null_blk's zoned block
+device emulation support already caches the write pointer position, so we
+only need to report the position back to the upper layers. Additional
+caching is not needed here.
 
-   899  }
+Furthermore we have converted zonefs to run use ZONE_APPEND for synchronous
+direct I/Os. Asynchronous I/O still uses the normal path via iomap.
 
-regards,
-dan carpenter
+Performance testing with zonefs sync writes on a 14 TB SMR drive and nullblk
+shows good results. On the SMR drive we're not regressing (the performance
+improvement is within noise), on nullblk we could drastically improve specific
+workloads:
+
+* nullblk:
+
+Single Thread Multiple Zones
+				kIOPS	MiB/s	MB/s	% delta
+mq-deadline REQ_OP_WRITE	10.1	631	662
+mq-deadline REQ_OP_ZONE_APPEND	13.2	828	868	+31.12
+none REQ_OP_ZONE_APPEND		15.6	978	1026	+54.98
+
+
+Multiple Threads Multiple Zones
+				kIOPS	MiB/s	MB/s	% delta
+mq-deadline REQ_OP_WRITE	10.2	640	671
+mq-deadline REQ_OP_ZONE_APPEND	10.4	650	681	+1.49
+none REQ_OP_ZONE_APPEND		16.9	1058	1109	+65.28
+
+* 14 TB SMR drive
+
+Single Thread Multiple Zones
+				IOPS	MiB/s	MB/s	% delta
+mq-deadline REQ_OP_WRITE	797	49.9	52.3
+mq-deadline REQ_OP_ZONE_APPEND	806	50.4	52.9	+1.15
+
+Multiple Threads Multiple Zones
+				kIOPS	MiB/s	MB/s	% delta
+mq-deadline REQ_OP_WRITE	745	46.6	48.9
+mq-deadline REQ_OP_ZONE_APPEND	768	48	50.3	+2.86
+
+The %-delta is against the baseline of REQ_OP_WRITE using mq-deadline as I/O
+scheduler.
+
+The series is based on Jens' for-5.8/block branch with HEAD:
+ae979182ebb3 ("bdi: fix up for "remove the name field in struct backing_dev_info"")
+
+As Christoph asked for a branch I pushed it to a git repo at:
+git://git.kernel.org/pub/scm/linux/kernel/git/jth/linux.git zone-append.v11
+https://git.kernel.org/pub/scm/linux/kernel/git/jth/linux.git/log/?h=zone-append.v11
+
+Changes to v10:
+- Added Reviews from Hannes
+- Added Performance Numbers to cover letter
+
+Changes to v9:
+- Renamed zone_wp_ofst to zone_wp_offset (Hannes/Martin)
+- Colledted Reviews
+- Dropped already merged patches
+
+Changes to v8:
+- Added kerneldoc for bio_add_hw_page (Hannes)
+- Simplified calculation of zone-boundary cross checking (Bart)
+- Added safety nets for max_appen_sectors setting
+- Added Reviews from Hannes
+- Added Damien's Ack on the zonefs change
+
+Changes to v7:
+- Rebased on Jens' for-5.8/block
+- Fixed up stray whitespace change (Bart)
+- Added Reviews from Bart and Christoph
+
+Changes to v6:
+- Added Daniel's Reviewed-by's
+- Addressed Christoph's comment on whitespace changes in 4/11
+- Renamed driver_cb in 6/11
+- Fixed lines over 80 characters in 8/11
+- Damien simplified sd_zbc_revalidate_zones() in 8/11
+
+Changes to v5:
+- Added patch to fix the memleak on failed scsi command setup
+- Added prep patch from Christoph for bio_add_hw_page
+- Added Christoph's suggestions for adding append pages to bios
+- Fixed compile warning with !CONFIG_BLK_DEV_ZONED
+- Damien re-worked revalidate zone
+- Added Christoph's suggestions for rescanning write pointers to update cache
+
+Changes to v4:
+- Added page merging for zone-append bios (Christoph)
+- Removed different locking schmes for zone management operations (Christoph)
+- Changed wp_ofst assignment from blk_revalidate_zones (Christoph)
+- Smaller nitpicks (Christoph)
+- Documented my changes to Keith's patch so it's clear where I messed up so he
+  doesn't get blamed
+- Added Damien as a Co-developer to the sd emulation patch as he wrote as much
+  code for it as I did (if not more)
+
+Changes since v3:
+- Remove impact of zone-append from bio_full() and bio_add_page()
+  fast-path (Christoph)
+- All of the zone write pointer offset caching is handled in SCSI now
+  (Christoph) 
+- Drop null_blk pathces that damien sent separately (Christoph)
+- Use EXPORT_SYMBOL_GPL for new exports (Christoph)	
+
+Changes since v2:
+- Remove iomap implementation and directly issue zone-appends from within
+  zonefs (Christoph)
+- Drop already merged patch
+- Rebase onto new for-next branch
+
+Changes since v1:
+- Too much to mention, treat as a completely new series.
+
+
+Christoph Hellwig (1):
+  block: rename __bio_add_pc_page to bio_add_hw_page
+
+Damien Le Moal (2):
+  block: Modify revalidate zones
+  null_blk: Support REQ_OP_ZONE_APPEND
+
+Johannes Thumshirn (6):
+  block: provide fallbacks for blk_queue_zone_is_seq and
+    blk_queue_zone_no
+  block: introduce blk_req_zone_write_trylock
+  scsi: sd_zbc: factor out sanity checks for zoned commands
+  scsi: sd_zbc: emulate ZONE_APPEND commands
+  block: export bio_release_pages and bio_iov_iter_get_pages
+  zonefs: use REQ_OP_ZONE_APPEND for sync DIO
+
+Keith Busch (1):
+  block: Introduce REQ_OP_ZONE_APPEND
+
+ block/bio.c                    | 129 ++++++++---
+ block/blk-core.c               |  52 +++++
+ block/blk-map.c                |   5 +-
+ block/blk-mq.c                 |  27 +++
+ block/blk-settings.c           |  31 +++
+ block/blk-sysfs.c              |  13 ++
+ block/blk-zoned.c              |  23 +-
+ block/blk.h                    |   4 +-
+ drivers/block/null_blk_zoned.c |  37 ++-
+ drivers/scsi/scsi_lib.c        |   1 +
+ drivers/scsi/sd.c              |  16 +-
+ drivers/scsi/sd.h              |  43 +++-
+ drivers/scsi/sd_zbc.c          | 399 ++++++++++++++++++++++++++++++---
+ fs/zonefs/super.c              |  80 ++++++-
+ include/linux/blk_types.h      |  14 ++
+ include/linux/blkdev.h         |  25 ++-
+ 16 files changed, 807 insertions(+), 92 deletions(-)
+
+-- 
+2.24.1
+
