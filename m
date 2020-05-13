@@ -2,83 +2,93 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E84F1D0A45
-	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2020 09:51:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875321D0C63
+	for <lists+linux-scsi@lfdr.de>; Wed, 13 May 2020 11:37:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729160AbgEMHv5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 May 2020 03:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbgEMHv5 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 May 2020 03:51:57 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011B0C061A0C
-        for <linux-scsi@vger.kernel.org>; Wed, 13 May 2020 00:51:57 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id b26so12791449lfa.5
-        for <linux-scsi@vger.kernel.org>; Wed, 13 May 2020 00:51:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=Xffk6qTMzffmrGaiiKnKBpa/Baffy18/mM3jz9NlBfI=;
-        b=RVsYo5jbkZWa8YQ4mOmXbgDwbmYPPGwxBy/QXr6MR9n9U8+bI2y0a3dOMTIXKcuVj7
-         u2A+wlMB/z4d56zOkS5TZn9UhXnVPs5dQrMRxutfmHRCFrgQelseUQylnVMzmD79MVBD
-         e9S4PXKJSVA9YhNmoG317yemoaeECU7BJkwR0aabTAWdl/6k2NaL7Bxb8OpM8cwSF719
-         l/s8xRWRoEcBJMchJZyqHPW9foNkyGZBGWjDiZVyNqurEQDxYhgu9gGIyYLzwc05w6y7
-         gy/valhIEum2no/gfrP162WJUcTsP1rABfZyiofx6IOfPvlKmxb2jJVl8ZJ3U8jVEe3s
-         xcmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=Xffk6qTMzffmrGaiiKnKBpa/Baffy18/mM3jz9NlBfI=;
-        b=OOgkb1BRMi9md8Mb6Es9INLkopAKpIlYRMDx/AKOMQN4jafNfWp3UfMJdF5smAuH6D
-         EqPbiHzFugVmGQk7RW47kc0Wht8r9NJ5ud8JBO496iFQk7npFcN7YM9bX6CxWtcKUMOt
-         /1Pqvr5cNszxAF2gdEjZ63uzN50rYnTKnzD8FI3H192TT1UuTj1VrpYMXhLQpn3MkpSF
-         xMyJUIz4lXJHeJUUZjjhW8LVtbWtA2zfr+LCDYIfh+W/j5cpqxiVTHUgulRuJsjO/VL9
-         1/0kYT0mTaahriVXwhtfMfNRyHSda2rER1seQ6U8MMZsP7i4TszUbAPNx+0RsO2n1krz
-         N2Eg==
-X-Gm-Message-State: AOAM5325YdTMEIIxYnQWRbnjfcBDTNMu0gJ+LzwTLt7WBrSmgvH80/1e
-        6VK0QhYiLwgsXOPVUi0OospdpAOnYeFq/EPx+xM=
-X-Google-Smtp-Source: ABdhPJz84ARKis7l23/pb01VlBh7Vzkw4hnFYhOYTfywyFmJp9S8h6qCTY9o1MVp9QuCpVQUhwgA7ntvaW5fK47/xGg=
-X-Received: by 2002:ac2:5691:: with SMTP id 17mr17524323lfr.128.1589356315328;
- Wed, 13 May 2020 00:51:55 -0700 (PDT)
+        id S1729194AbgEMJh1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 May 2020 05:37:27 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:36574 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728684AbgEMJh1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 May 2020 05:37:27 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04D9bJes016181;
+        Wed, 13 May 2020 09:37:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=MeY7UEwws+nUZj742E+tUlYvuDD2IWvPTxv7x8obghM=;
+ b=BZ2Ylcx0kRlpFyOp8yUqzU5ER0xZTdv8ZQINuwUBZkD4KnrWEu6dX+A4036fXEi60nTO
+ XwVdW18VJQvCbogQ8neEWysCo7Hd/d38UWCKpJXYyiboAZB2UYeDMyEDkI00LjKqYyCo
+ r/QoA+T17WT4OaQ4LEvyVJPxqxINyD2tT5v9omF2vJ6dcpRSKUeM+PHKosNFsdRLdWku
+ 5PKLuazmvt8Ko+txka/TAjYY0xwG8gjQRRDZ2xZln9Se0dTDfHPj0cQ+mcYyaLZ4FrKG
+ QhtBN8eRmGM5CK6WU8vgjWgwnQxRphTwL8v/+nEyT9jSqryeICnSrd8NPRp2yCO6q9Jk hA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 3100xwk4um-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 May 2020 09:37:19 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04D9IaXc041860;
+        Wed, 13 May 2020 09:37:11 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 3100yr0j1y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 May 2020 09:37:11 +0000
+Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04D9b9nV020973;
+        Wed, 13 May 2020 09:37:09 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 13 May 2020 02:37:09 -0700
+Date:   Wed, 13 May 2020 12:37:03 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Adaptec OEM Raid Solutions <aacraid@microsemi.com>,
+        Zou Wei <zou_wei@huawei.com>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH] scsi: aacraid: Fix an Oops in error handling
+Message-ID: <20200513093703.GB347693@mwanda>
 MIME-Version: 1.0
-Received: by 2002:a2e:b0c1:0:0:0:0:0 with HTTP; Wed, 13 May 2020 00:51:55
- -0700 (PDT)
-Reply-To: aishagnnnn@gmail.com
-From:   Aisha Gaddafi <edwardben25@gmail.com>
-Date:   Wed, 13 May 2020 00:51:55 -0700
-Message-ID: <CAM7wDq_dqO6ObYtvUebBZ6BEErBonEpjBUyjfpoXivgVnpzSiA@mail.gmail.com>
-Subject: Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9619 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0
+ malwarescore=0 mlxscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2005130086
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9619 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 cotscore=-2147483648 bulkscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
+ impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
+ suspectscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005130087
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Dear Friend,
+If the memdup_user() function fails then it results in an Oops in the
+error handling code when we try to kfree() and error pointer.
 
-I came across your e-mail contact prior a private search while in need of
-your assistance. My name is Aisha  Gaddafi a single Mother and a Widow with
-three Children. I am the only biological Daughter of late Libyan President
-(Late Colonel Muammar Gaddafi).
+Fixes: 8d925b1f00e6 ("scsi: aacraid: Use memdup_user() as a cleanup")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/scsi/aacraid/commctrl.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I have investment funds worth Twenty Seven Million Five Hundred Thousand
-United State Dollar ($27.500.000.00 ) and i need a trusted investment
-Manager/Partner because of my current refugee status, however, I am
-interested in you for investment project assistance in your country, may be
-from there, we can build business relationship in the nearest future.
+diff --git a/drivers/scsi/aacraid/commctrl.c b/drivers/scsi/aacraid/commctrl.c
+index 102658bdc15a..34e65dea992e 100644
+--- a/drivers/scsi/aacraid/commctrl.c
++++ b/drivers/scsi/aacraid/commctrl.c
+@@ -516,6 +516,7 @@ static int aac_send_raw_srb(struct aac_dev* dev, void __user * arg)
+ 	user_srbcmd = memdup_user(user_srb, fibsize);
+ 	if (IS_ERR(user_srbcmd)) {
+ 		rcode = PTR_ERR(user_srbcmd);
++		user_srbcmd = NULL;
+ 		goto cleanup;
+ 	}
+ 
+-- 
+2.26.2
 
-I am willing to negotiate investment/business profit sharing ratio with you
-base on the future investment earning profits.
-
-If you are willing to handle this project on my behalf kindly reply urgent
-to enable me provide you more information about the investment funds.
-
-Your Urgent Reply Will Be appreciated and all email should be at the
-email below;
-
-Best Regards
-Mrs Aisha Gaddafi
-(aishag6p777@gmail.com)
