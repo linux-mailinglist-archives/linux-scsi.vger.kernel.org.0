@@ -2,280 +2,191 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFA21D23E3
-	for <lists+linux-scsi@lfdr.de>; Thu, 14 May 2020 02:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 355FF1D2438
+	for <lists+linux-scsi@lfdr.de>; Thu, 14 May 2020 02:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387418AbgENAiB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 13 May 2020 20:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1733278AbgENAh6 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 13 May 2020 20:37:58 -0400
-Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE85C05BD15
-        for <linux-scsi@vger.kernel.org>; Wed, 13 May 2020 17:37:54 -0700 (PDT)
-Received: by mail-qt1-x849.google.com with SMTP id e43so1715253qtc.3
-        for <linux-scsi@vger.kernel.org>; Wed, 13 May 2020 17:37:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=jSH7/AmnzXrjgmk8lWSfcMe95UKbUVGwx5FdmlnTcp0=;
-        b=CorCHbEFaLqJG2qA/D/PokRtWRhWo+coWB8NaWQJ1bAWjoLm06zA7m0y8Cp1XLhRc0
-         NVeVqomTQam+/sFarFFPZPG+qA16/UD2UGQKxxEQEdEOp0ErWKBYBVHIwZNDIwfwuqyG
-         HCEcc82IWPZbfHFjRPiknYcPI3MYB8q7DmdmFRwtjZHS/yI7WZ2z5lH0lvGLqHuqnWmN
-         PYTQXyDIlNRLyHQylhNGvgbUwfJ/MamBjWALFb16uCgHjaHcs/GFWnN3PHHhkSinzjfy
-         fPqqnrCrpG3t612wNzZQCRasSBR79DD1Chv/QGZLXTfs8NjGl4rbcyNj1qJyQv6t/BJD
-         Gm9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=jSH7/AmnzXrjgmk8lWSfcMe95UKbUVGwx5FdmlnTcp0=;
-        b=riGL5pTuKDtE+e1pujfgUDCyvd4HlYQ3o4kC1Pgmtg8MyosnWxmyQLtX6G2+QKF4ab
-         aMGUNFad4PpTyI1i3ZN8hL6actYli9aqilFM9eYSoFVPpHOSEBHUkyby+0ZfBsdhFXB0
-         q91GfoQd3a3qjQtFe/bQxjMBTFOtyDj5bcJPgHfh8HSuwZxFmPsDzvVj+izftagcmCe5
-         KEK3cBJ5qnY/MjlOThLLgYj7NfGrmYwQpk8br+s+5J5MDLd1zPX3OlL6NZYFub/+mew9
-         dcnn9eSiuHbARLgoQdXuBULjYT7NylGYU+oFQFamEayG86SSPFYdNZWXiKvMvOLw+t4n
-         6qyg==
-X-Gm-Message-State: AOAM531ZylWz2PGgancDTamRC3ncRHWU4JOgvjQg4daoUg6GJP07dKh9
-        kyms+JhXWhKWM55+VdOugqQB2RwpDU0=
-X-Google-Smtp-Source: ABdhPJwBh/wsrSWYEhc6NNS3EHG+XSrYPjs2uFKQe/vehOe++1uwzxxsIf9e+FGuRNVP5YpF4CANHGHKo0g=
-X-Received: by 2002:ad4:4b6b:: with SMTP id m11mr2296448qvx.130.1589416673786;
- Wed, 13 May 2020 17:37:53 -0700 (PDT)
-Date:   Thu, 14 May 2020 00:37:27 +0000
-In-Reply-To: <20200514003727.69001-1-satyat@google.com>
-Message-Id: <20200514003727.69001-13-satyat@google.com>
-Mime-Version: 1.0
-References: <20200514003727.69001-1-satyat@google.com>
-X-Mailer: git-send-email 2.26.2.645.ge9eca65c58-goog
-Subject: [PATCH v13 12/12] ext4: add inline encryption support
-From:   Satya Tangirala <satyat@google.com>
-To:     linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org
-Cc:     Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>,
-        Kim Boojin <boojin.kim@samsung.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Satya Tangirala <satyat@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726031AbgENAw6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 13 May 2020 20:52:58 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:45922 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726190AbgENAw4 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 13 May 2020 20:52:56 -0400
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200514005252epoutp02238086e9c69202bebcb27834657173e3~OvtyLiDCF1745417454epoutp029
+        for <linux-scsi@vger.kernel.org>; Thu, 14 May 2020 00:52:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200514005252epoutp02238086e9c69202bebcb27834657173e3~OvtyLiDCF1745417454epoutp029
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1589417572;
+        bh=GhMRsS1h/gD9h5aE/zmh63UKJ+NWU3Qir1xA7Z3zSwY=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=uzEqmuQXjutqfckyyXJzN7DP+tG/y6AaXKCQvvaxinL+AGN/vjONY+dARfQR4h1Rf
+         mKbLiWArUKpASFX+T7Is8m3CL9cTsDzorIpIxaqRzWZIcf7YGqzcyhOOjd4e/lV8Ht
+         S0vh5ekZOFnPLk8iVFa5g68yl4+q00n3PV4RundM=
+Received: from epsmges5p1new.samsung.com (unknown [182.195.42.73]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20200514005252epcas5p47992066d410ead3bcfbfb70f7dad3000~OvtxqEXLj1638216382epcas5p4k;
+        Thu, 14 May 2020 00:52:52 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        04.45.10010.4669CBE5; Thu, 14 May 2020 09:52:52 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20200514005251epcas5p39ff05e1b6f4f8735f1516fbb670d6810~OvtxN7VTu1578415784epcas5p3a;
+        Thu, 14 May 2020 00:52:51 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200514005251epsmtrp289194194f5f358b119e5dd00d2367c7a~OvtxNChb91517815178epsmtrp2L;
+        Thu, 14 May 2020 00:52:51 +0000 (GMT)
+X-AuditID: b6c32a49-71fff7000000271a-e8-5ebc9664b9b9
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        CA.C3.18461.3669CBE5; Thu, 14 May 2020 09:52:51 +0900 (KST)
+Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
+        [107.108.73.139]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200514005249epsmtip247c895e5b14e5827c766988a33db237b~OvtvTC5tu2487624876epsmtip2j;
+        Thu, 14 May 2020 00:52:49 +0000 (GMT)
+From:   Alim Akhtar <alim.akhtar@samsung.com>
+To:     robh@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-scsi@vger.kernel.org,
+        krzk@kernel.org, avri.altman@wdc.com, martin.petersen@oracle.com,
+        kwmad.kim@samsung.com, stanley.chu@mediatek.com,
+        cang@codeaurora.org, linux-samsung-soc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH v9 00/10] exynos-ufs: Add support for UFS HCI
+Date:   Thu, 14 May 2020 06:09:04 +0530
+Message-Id: <20200514003914.26052-1-alim.akhtar@samsung.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGKsWRmVeSWpSXmKPExsWy7bCmlm7KtD1xBodPCVk8mLeNzeLlz6ts
+        Fp/WL2O1mH/kHKvF+fMb2C1ubjnKYrHp8TVWi8u75rBZzDi/j8mi+/oONovlx/8xWfzfs4Pd
+        YunWm4wOvB6X+3qZPDat6mTz2Lyk3qPl5H4Wj49Pb7F49G1ZxejxeZOcR/uBbqYAjigum5TU
+        nMyy1CJ9uwSujIO9bxgLWmQqPrRvZW5gPCbaxcjJISFgIvHp3mmWLkYuDiGB3YwSW9+9h3I+
+        MUrsm/EcyvnGKPHm9XY2mJbPz9ugEnsZJRp+vmeGcFqYJLo/3WQHqWIT0Ja4O30LE4gtIiAs
+        ceRbGyOIzSxwg0niwUoXEFtYwFZizpupLCA2i4CqxL9Pr5lBbF4BG4nHx09CbZOXWL3hAFRc
+        UOLkzCcsEHPkJZq3zgZbLCEwl0Ni2tkPLBANLhInp/yDahaWeHV8CzuELSXx+d1eoDgHkJ0t
+        0bPLGCJcI7F03jGoVnuJA1fmsICUMAtoSqzfpQ+xik+i9/cTJohOXomONiGIalWJ5ndXoTql
+        JSZ2d7NClHhIrLkODl0hgViJvX/Wsk5glJuF5P5ZSO6fhbBrASPzKkbJ1ILi3PTUYtMCw7zU
+        cr3ixNzi0rx0veT83E2M4KSk5bmD8e6DD3qHGJk4GA8xSnAwK4nw+q3fHSfEm5JYWZValB9f
+        VJqTWnyIUZqDRUmc93TaljghgfTEktTs1NSC1CKYLBMHp1QDk8aZC1/a3TkV593UdLFf+Xdn
+        41+fHFl73R/+m/SZ89y/6vlUi6bFaelbLLjSWStemZpqFLTzwHSpSnfnUxuXhr9r75FZmSSW
+        FqxTHjjttcPryb7Fnl+S+bY9e9H9raHxfnDKwf+9LxtXbe22qb1v1xVhfbBl8xL2u3qfj/Oy
+        cbryFNn3tVyusS514dASFo9O/TtX+8O7zQVz76wve/aNv2Buy+GrblM2TF22W0jldPmWVWcj
+        cw9+KhKVCMwriGQ/Zp7aG70lu9zo5rGXf/Ivrpv9cZ0fn9FXO6kjX+y9fnxY27LOuvyqWE/z
+        45f918OWr8mzeDHnf2TfrPMvpI8sL5mpnG38dWlX/KyKpxlHlFiKMxINtZiLihMBXukWdbkD
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrILMWRmVeSWpSXmKPExsWy7bCSvG7ytD1xBqsmG1o8mLeNzeLlz6ts
+        Fp/WL2O1mH/kHKvF+fMb2C1ubjnKYrHp8TVWi8u75rBZzDi/j8mi+/oONovlx/8xWfzfs4Pd
+        YunWm4wOvB6X+3qZPDat6mTz2Lyk3qPl5H4Wj49Pb7F49G1ZxejxeZOcR/uBbqYAjigum5TU
+        nMyy1CJ9uwSujIO9bxgLWmQqPrRvZW5gPCbaxcjJISFgIvH5eRtLFyMXh5DAbkaJh183sEAk
+        pCWub5zADmELS6z895wdoqiJSeJZyzc2kASbgLbE3elbmEBsEaCiI9/aGEFsZoFnTBKnHpaC
+        2MICthJz3kwFG8oioCrx79NrZhCbV8BG4vHxk2wQC+QlVm84ABUXlDg58wlQPQfQHHWJ9fOE
+        IEbKSzRvnc08gZF/FpKqWQhVs5BULWBkXsUomVpQnJueW2xYYJiXWq5XnJhbXJqXrpecn7uJ
+        ERwrWpo7GLev+qB3iJGJg/EQowQHs5IIr9/63XFCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeW8U
+        LowTEkhPLEnNTk0tSC2CyTJxcEo1MLHamJ7/8Fgq/ejxH+7vtt+OUnPaG3BBoi3nnYdWw6wL
+        +Z/V370/um25id+s9I/dSXvUj0xszon3bIhY2Lxv17zEf5qrP0ZN3MNv+j3p1I17Bje081bt
+        jN91dJpA/8M/ekqflPdrTHdKTp5VU31rt8b2NHVZV47oNtaHCkZ7TDhbrnT9LbsbEL+nz8hw
+        RfrWxbMbMqo97Fjc5j5zvpI5OZOP+1DHHIYT5l7h4VenXOP8n630sHjGs1ef3zBuOKLa/7Wb
+        6b1a0sZIk3erHLlijGczPnrtxqt1lPvw3k922SvktrfU73PepO/qXrfAW/6ED+/d+348CopL
+        UtbGpgntFb1VPjNvxuEyRiXmn186uJVYijMSDbWYi4oTAb6u2sEEAwAA
+X-CMS-MailID: 20200514005251epcas5p39ff05e1b6f4f8735f1516fbb670d6810
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200514005251epcas5p39ff05e1b6f4f8735f1516fbb670d6810
+References: <CGME20200514005251epcas5p39ff05e1b6f4f8735f1516fbb670d6810@epcas5p3.samsung.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Eric Biggers <ebiggers@google.com>
+This patch-set introduces UFS (Universal Flash Storage) host controller support
+for Samsung family SoC. Mostly, it consists of UFS PHY and host specific driver.
 
-Wire up ext4 to support inline encryption via the helper functions which
-fs/crypto/ now provides.  This includes:
+- Changes since v8
+* fixed make dt_binding_check error as pointed by Rob
+* Addressed review comments from Randy Dunlap
 
-- Adding a mount option 'inlinecrypt' which enables inline encryption
-  on encrypted files where it can be used.
+- Changes since v7:
+* fixed review comments from Rob and Kishon
+* Addeded reviwed-by tags
+* rebased on top of v5.7-rc4
+ 
+- Changes since v6:
+* Addressed review comments from Avri and Christoph
+* Added Reviewed-by tags of Avri and Can on various patches
 
-- Setting the bio_crypt_ctx on bios that will be submitted to an
-  inline-encrypted file.
+- Changes since v5:
+* re-introduce various quicks which was removed because of no driver
+* consumer of those quirks, initial 4 patches does the same.
+* Added Reviewed-by tags
+* rebased on top of v5.7-rc1
+* included Kiwoong's patch in this series, which this driver needs
 
-  Note: submit_bh_wbc() in fs/buffer.c also needed to be patched for
-  this part, since ext4 sometimes uses ll_rw_block() on file data.
+- Changes since v4:
+* Addressed review comments from Avir and Rob 
+* Minor improvment on the ufs phy and ufshc drivers
+* Added Tested-by from Pawel
+* Change UFS binding to DT schema format
 
-- Not adding logically discontiguous data to bios that will be submitted
-  to an inline-encrypted file.
 
-- Not doing filesystem-layer crypto on inline-encrypted files.
+- Changes since v3:
+* Addressed Kishon's and Avir's review comments
+* fixed make dt_binding_check error as pointed by Rob 
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Co-developed-by: Satya Tangirala <satyat@google.com>
-Signed-off-by: Satya Tangirala <satyat@google.com>
----
- Documentation/admin-guide/ext4.rst |  6 ++++++
- fs/buffer.c                        |  7 ++++---
- fs/ext4/inode.c                    |  4 ++--
- fs/ext4/page-io.c                  |  6 ++++--
- fs/ext4/readpage.c                 | 11 ++++++++---
- fs/ext4/super.c                    |  9 +++++++++
- 6 files changed, 33 insertions(+), 10 deletions(-)
+- Changes since v2:
+* fixed build warning by kbuild test robot 
+* Added Reported-by tags
 
-diff --git a/Documentation/admin-guide/ext4.rst b/Documentation/admin-guide/ext4.rst
-index 9443fcef18760..ed997e3766781 100644
---- a/Documentation/admin-guide/ext4.rst
-+++ b/Documentation/admin-guide/ext4.rst
-@@ -395,6 +395,12 @@ When mounting an ext4 filesystem, the following option are accepted:
-         Documentation/filesystems/dax.txt.  Note that this option is
-         incompatible with data=journal.
- 
-+  inlinecrypt
-+        Encrypt/decrypt the contents of encrypted files using the blk-crypto
-+        framework rather than filesystem-layer encryption. This allows the use
-+        of inline encryption hardware. The on-disk format is unaffected. For
-+        more details, see Documentation/block/inline-encryption.rst.
-+
- Data Mode
- =========
- There are 3 different data modes:
-diff --git a/fs/buffer.c b/fs/buffer.c
-index a60f60396cfa0..33827a55b5952 100644
---- a/fs/buffer.c
-+++ b/fs/buffer.c
-@@ -328,9 +328,8 @@ static void decrypt_bh(struct work_struct *work)
- static void end_buffer_async_read_io(struct buffer_head *bh, int uptodate)
- {
- 	/* Decrypt if needed */
--	if (uptodate && IS_ENABLED(CONFIG_FS_ENCRYPTION) &&
--	    IS_ENCRYPTED(bh->b_page->mapping->host) &&
--	    S_ISREG(bh->b_page->mapping->host->i_mode)) {
-+	if (uptodate &&
-+	    fscrypt_inode_uses_fs_layer_crypto(bh->b_page->mapping->host)) {
- 		struct decrypt_bh_ctx *ctx = kmalloc(sizeof(*ctx), GFP_ATOMIC);
- 
- 		if (ctx) {
-@@ -3047,6 +3046,8 @@ static int submit_bh_wbc(int op, int op_flags, struct buffer_head *bh,
- 	 */
- 	bio = bio_alloc(GFP_NOIO, 1);
- 
-+	fscrypt_set_bio_crypt_ctx_bh(bio, bh, GFP_NOIO);
-+
- 	bio->bi_iter.bi_sector = bh->b_blocknr * (bh->b_size >> 9);
- 	bio_set_dev(bio, bh->b_bdev);
- 	bio->bi_write_hint = write_hint;
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 2a4aae6acdcb9..ac20b65766ece 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1088,7 +1088,7 @@ static int ext4_block_write_begin(struct page *page, loff_t pos, unsigned len,
- 	}
- 	if (unlikely(err)) {
- 		page_zero_new_buffers(page, from, to);
--	} else if (IS_ENCRYPTED(inode) && S_ISREG(inode->i_mode)) {
-+	} else if (fscrypt_inode_uses_fs_layer_crypto(inode)) {
- 		for (i = 0; i < nr_wait; i++) {
- 			int err2;
- 
-@@ -3738,7 +3738,7 @@ static int __ext4_block_zero_page_range(handle_t *handle,
- 		/* Uhhuh. Read error. Complain and punt. */
- 		if (!buffer_uptodate(bh))
- 			goto unlock;
--		if (S_ISREG(inode->i_mode) && IS_ENCRYPTED(inode)) {
-+		if (fscrypt_inode_uses_fs_layer_crypto(inode)) {
- 			/* We expect the key to be set. */
- 			BUG_ON(!fscrypt_has_encryption_key(inode));
- 			err = fscrypt_decrypt_pagecache_blocks(page, blocksize,
-diff --git a/fs/ext4/page-io.c b/fs/ext4/page-io.c
-index de6fe969f7737..defd2e10dfd10 100644
---- a/fs/ext4/page-io.c
-+++ b/fs/ext4/page-io.c
-@@ -402,6 +402,7 @@ static void io_submit_init_bio(struct ext4_io_submit *io,
- 	 * __GFP_DIRECT_RECLAIM is set, see comments for bio_alloc_bioset().
- 	 */
- 	bio = bio_alloc(GFP_NOIO, BIO_MAX_PAGES);
-+	fscrypt_set_bio_crypt_ctx_bh(bio, bh, GFP_NOIO);
- 	bio->bi_iter.bi_sector = bh->b_blocknr * (bh->b_size >> 9);
- 	bio_set_dev(bio, bh->b_bdev);
- 	bio->bi_end_io = ext4_end_bio;
-@@ -418,7 +419,8 @@ static void io_submit_add_bh(struct ext4_io_submit *io,
- {
- 	int ret;
- 
--	if (io->io_bio && bh->b_blocknr != io->io_next_block) {
-+	if (io->io_bio && (bh->b_blocknr != io->io_next_block ||
-+			   !fscrypt_mergeable_bio_bh(io->io_bio, bh))) {
- submit_and_retry:
- 		ext4_io_submit(io);
- 	}
-@@ -506,7 +508,7 @@ int ext4_bio_write_page(struct ext4_io_submit *io,
- 	 * (e.g. holes) to be unnecessarily encrypted, but this is rare and
- 	 * can't happen in the common case of blocksize == PAGE_SIZE.
- 	 */
--	if (IS_ENCRYPTED(inode) && S_ISREG(inode->i_mode) && nr_to_submit) {
-+	if (fscrypt_inode_uses_fs_layer_crypto(inode) && nr_to_submit) {
- 		gfp_t gfp_flags = GFP_NOFS;
- 		unsigned int enc_bytes = round_up(len, i_blocksize(inode));
- 
-diff --git a/fs/ext4/readpage.c b/fs/ext4/readpage.c
-index c1769afbf7995..68eac0aeffad3 100644
---- a/fs/ext4/readpage.c
-+++ b/fs/ext4/readpage.c
-@@ -195,7 +195,7 @@ static void ext4_set_bio_post_read_ctx(struct bio *bio,
- {
- 	unsigned int post_read_steps = 0;
- 
--	if (IS_ENCRYPTED(inode) && S_ISREG(inode->i_mode))
-+	if (fscrypt_inode_uses_fs_layer_crypto(inode))
- 		post_read_steps |= 1 << STEP_DECRYPT;
- 
- 	if (ext4_need_verity(inode, first_idx))
-@@ -232,6 +232,7 @@ int ext4_mpage_readpages(struct address_space *mapping,
- 	const unsigned blkbits = inode->i_blkbits;
- 	const unsigned blocks_per_page = PAGE_SIZE >> blkbits;
- 	const unsigned blocksize = 1 << blkbits;
-+	sector_t next_block;
- 	sector_t block_in_file;
- 	sector_t last_block;
- 	sector_t last_block_in_file;
-@@ -264,7 +265,8 @@ int ext4_mpage_readpages(struct address_space *mapping,
- 		if (page_has_buffers(page))
- 			goto confused;
- 
--		block_in_file = (sector_t)page->index << (PAGE_SHIFT - blkbits);
-+		block_in_file = next_block =
-+			(sector_t)page->index << (PAGE_SHIFT - blkbits);
- 		last_block = block_in_file + nr_pages * blocks_per_page;
- 		last_block_in_file = (ext4_readpage_limit(inode) +
- 				      blocksize - 1) >> blkbits;
-@@ -364,7 +366,8 @@ int ext4_mpage_readpages(struct address_space *mapping,
- 		 * This page will go to BIO.  Do we need to send this
- 		 * BIO off first?
- 		 */
--		if (bio && (last_block_in_bio != blocks[0] - 1)) {
-+		if (bio && (last_block_in_bio != blocks[0] - 1 ||
-+			    !fscrypt_mergeable_bio(bio, inode, next_block))) {
- 		submit_and_realloc:
- 			submit_bio(bio);
- 			bio = NULL;
-@@ -376,6 +379,8 @@ int ext4_mpage_readpages(struct address_space *mapping,
- 			 */
- 			bio = bio_alloc(GFP_KERNEL,
- 				min_t(int, nr_pages, BIO_MAX_PAGES));
-+			fscrypt_set_bio_crypt_ctx(bio, inode, next_block,
-+						  GFP_KERNEL);
- 			ext4_set_bio_post_read_ctx(bio, inode, page->index);
- 			bio_set_dev(bio, bdev);
- 			bio->bi_iter.bi_sector = blocks[0] << (blkbits - 9);
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index bf5fcb477f667..fb4a293cac0c3 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1509,6 +1509,7 @@ enum {
- 	Opt_journal_path, Opt_journal_checksum, Opt_journal_async_commit,
- 	Opt_abort, Opt_data_journal, Opt_data_ordered, Opt_data_writeback,
- 	Opt_data_err_abort, Opt_data_err_ignore, Opt_test_dummy_encryption,
-+	Opt_inlinecrypt,
- 	Opt_usrjquota, Opt_grpjquota, Opt_offusrjquota, Opt_offgrpjquota,
- 	Opt_jqfmt_vfsold, Opt_jqfmt_vfsv0, Opt_jqfmt_vfsv1, Opt_quota,
- 	Opt_noquota, Opt_barrier, Opt_nobarrier, Opt_err,
-@@ -1606,6 +1607,7 @@ static const match_table_t tokens = {
- 	{Opt_noinit_itable, "noinit_itable"},
- 	{Opt_max_dir_size_kb, "max_dir_size_kb=%u"},
- 	{Opt_test_dummy_encryption, "test_dummy_encryption"},
-+	{Opt_inlinecrypt, "inlinecrypt"},
- 	{Opt_nombcache, "nombcache"},
- 	{Opt_nombcache, "no_mbcache"},	/* for backward compatibility */
- 	{Opt_removed, "check=none"},	/* mount option from ext2/3 */
-@@ -1893,6 +1895,13 @@ static int handle_mount_opt(struct super_block *sb, char *opt, int token,
- 	case Opt_nolazytime:
- 		sb->s_flags &= ~SB_LAZYTIME;
- 		return 1;
-+	case Opt_inlinecrypt:
-+#ifdef CONFIG_FS_ENCRYPTION_INLINE_CRYPT
-+		sb->s_flags |= SB_INLINECRYPT;
-+#else
-+		ext4_msg(sb, KERN_ERR, "inline encryption not supported");
-+#endif
-+		return 1;
- 	}
- 
- 	for (m = ext4_mount_opts; m->token != Opt_err; m++)
+- Changes since v1:
+* fixed make dt_binding_check error as pointed by Rob
+* Addressed Krzysztof's review comments
+* Added Reviewed-by tags
+
+Note: This series is based on Linux-5.7-rc4 (commit: 0e698dfa2822)
+
+Alim Akhtar (9):
+  scsi: ufs: add quirk to fix mishandling utrlclr/utmrlclr
+  scsi: ufs: add quirk to disallow reset of interrupt aggregation
+  scsi: ufs: add quirk to enable host controller without hce
+  scsi: ufs: introduce UFSHCD_QUIRK_PRDT_BYTE_GRAN quirk
+  dt-bindings: phy: Document Samsung UFS PHY bindings
+  phy: samsung-ufs: add UFS PHY driver for samsung SoC
+  dt-bindings: ufs: Add DT binding documentation for ufs
+  scsi: ufs-exynos: add UFS host support for Exynos SoCs
+  arm64: dts: Add node for ufs exynos7
+
+Kiwoong Kim (1):
+  scsi: ufs: add quirk to fix abnormal ocs fatal error
+
+ .../bindings/phy/samsung,ufs-phy.yaml         |   75 +
+ .../bindings/ufs/samsung,exynos-ufs.yaml      |   91 ++
+ .../boot/dts/exynos/exynos7-espresso.dts      |    4 +
+ arch/arm64/boot/dts/exynos/exynos7.dtsi       |   43 +-
+ drivers/phy/samsung/Kconfig                   |    9 +
+ drivers/phy/samsung/Makefile                  |    1 +
+ drivers/phy/samsung/phy-exynos7-ufs.h         |   86 ++
+ drivers/phy/samsung/phy-samsung-ufs.c         |  380 +++++
+ drivers/phy/samsung/phy-samsung-ufs.h         |  143 ++
+ drivers/scsi/ufs/Kconfig                      |   12 +
+ drivers/scsi/ufs/Makefile                     |    1 +
+ drivers/scsi/ufs/ufs-exynos.c                 | 1292 +++++++++++++++++
+ drivers/scsi/ufs/ufs-exynos.h                 |  287 ++++
+ drivers/scsi/ufs/ufshcd.c                     |  126 +-
+ drivers/scsi/ufs/ufshcd.h                     |   29 +
+ drivers/scsi/ufs/unipro.h                     |   33 +
+ 16 files changed, 2598 insertions(+), 14 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/samsung,ufs-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/ufs/samsung,exynos-ufs.yaml
+ create mode 100644 drivers/phy/samsung/phy-exynos7-ufs.h
+ create mode 100644 drivers/phy/samsung/phy-samsung-ufs.c
+ create mode 100644 drivers/phy/samsung/phy-samsung-ufs.h
+ create mode 100644 drivers/scsi/ufs/ufs-exynos.c
+ create mode 100644 drivers/scsi/ufs/ufs-exynos.h
+
+
+base-commit: 0e698dfa282211e414076f9dc7e83c1c288314fd
 -- 
-2.26.2.645.ge9eca65c58-goog
+2.17.1
 
