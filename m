@@ -2,246 +2,66 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E77F81D5036
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2020 16:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE321D5203
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2020 16:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726249AbgEOORx (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 15 May 2020 10:17:53 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:4794 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726246AbgEOORv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 15 May 2020 10:17:51 -0400
-Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id B7A7AD2CF962CFDD3BB1;
-        Fri, 15 May 2020 22:17:48 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.58) by
- DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 15 May 2020 22:17:38 +0800
-From:   John Garry <john.garry@huawei.com>
-To:     <jejb@linux.vnet.ibm.com>, <martin.petersen@oracle.com>
-CC:     <linuxarm@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, John Garry <john.garry@huawei.com>
-Subject: [PATCH 4/4] scsi: hisi_sas: Stop returning error code from slot_complete_vX_hw()
-Date:   Fri, 15 May 2020 22:13:45 +0800
-Message-ID: <1589552025-165012-5-git-send-email-john.garry@huawei.com>
-X-Mailer: git-send-email 2.8.1
-In-Reply-To: <1589552025-165012-1-git-send-email-john.garry@huawei.com>
-References: <1589552025-165012-1-git-send-email-john.garry@huawei.com>
+        id S1726252AbgEOOm0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 15 May 2020 10:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726197AbgEOOmZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 15 May 2020 10:42:25 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9584CC05BD0A;
+        Fri, 15 May 2020 07:42:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3iIrLwrSNZL+S3txYZ5ooYztJBCNqoUdcfH+RABdtvQ=; b=UR/nOTlnhIjsUEaBJZCcE3BngJ
+        mfu05i2j+WxKcr7aadUXmtCEMRqOGo8WlZiQcx/CF8O8Rt7VlltOFibGIiO9P22FMxwIm7yBF8pe9
+        eEuctwJJMTPdOLuB8TUsI66Z8LbJfV8pRhC6x0MIbl2R5sDpGINXt46eX1O7UBNhHMd1KH7QjKpiZ
+        /5Zl8grCV+zYizEQ8IUVoKnDv4so/Q+I9YBcJP6FHitob64xgOTqY8THukAMIu6SoYdmnPlFrqER/
+        Sz/OPP9samLEqnBB+HoFo8cCU8Zk0RqWmPgXOuI9l/9nOTkQMdZWW+2MZHgH6F/gb7Upu6y68wMpy
+        mKCQoBMg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jZbXc-00040w-57; Fri, 15 May 2020 14:42:24 +0000
+Date:   Fri, 15 May 2020 07:42:24 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Satya Tangirala <satyat@google.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Eric Biggers <ebiggers@kernel.org>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, linux-ext4@vger.kernel.org,
+        Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
+        Kuohong Wang <kuohong.wang@mediatek.com>,
+        Kim Boojin <boojin.kim@samsung.com>
+Subject: Re: [PATCH v13 00/12] Inline Encryption Support
+Message-ID: <20200515144224.GA12040@infradead.org>
+References: <20200514003727.69001-1-satyat@google.com>
+ <20200514051053.GA14829@sol.localdomain>
+ <8fa1aafe-1725-e586-ede3-a3273e674470@kernel.dk>
+ <20200515074127.GA13926@infradead.org>
+ <20200515122540.GA143740@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.69.192.58]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200515122540.GA143740@google.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The error codes are never checked, so stop returning them.
+On Fri, May 15, 2020 at 12:25:40PM +0000, Satya Tangirala wrote:
+> One of the nice things about the current design is that regardless of what
+> request queue an FS sends an encrypted bio to, blk-crypto will be able to handle
+> the encryption (whether by using hardware inline encryption, or using the
+> blk-crypto-fallback). The FS itself does not need to worry about what the
+> request queue is.
 
-Signed-off-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 12 ++++--------
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 16 ++++++----------
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 16 ++++++----------
- 3 files changed, 16 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index c205bff20943..2e1718f9ade2 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -1175,15 +1175,14 @@ static void slot_err_v1_hw(struct hisi_hba *hisi_hba,
- 
- }
- 
--static int slot_complete_v1_hw(struct hisi_hba *hisi_hba,
--			       struct hisi_sas_slot *slot)
-+static void slot_complete_v1_hw(struct hisi_hba *hisi_hba,
-+				struct hisi_sas_slot *slot)
- {
- 	struct sas_task *task = slot->task;
- 	struct hisi_sas_device *sas_dev;
- 	struct device *dev = hisi_hba->dev;
- 	struct task_status_struct *ts;
- 	struct domain_device *device;
--	enum exec_status sts;
- 	struct hisi_sas_complete_v1_hdr *complete_queue =
- 			hisi_hba->complete_hdr[slot->cmplt_queue];
- 	struct hisi_sas_complete_v1_hdr *complete_hdr;
-@@ -1194,7 +1193,7 @@ static int slot_complete_v1_hw(struct hisi_hba *hisi_hba,
- 	cmplt_hdr_data = le32_to_cpu(complete_hdr->data);
- 
- 	if (unlikely(!task || !task->lldd_task || !task->dev))
--		return -EINVAL;
-+		return;
- 
- 	ts = &task->task_status;
- 	device = task->dev;
-@@ -1260,7 +1259,7 @@ static int slot_complete_v1_hw(struct hisi_hba *hisi_hba,
- 
- 		slot_err_v1_hw(hisi_hba, task, slot);
- 		if (unlikely(slot->abort))
--			return ts->stat;
-+			return;
- 		goto out;
- 	}
- 
-@@ -1309,12 +1308,9 @@ static int slot_complete_v1_hw(struct hisi_hba *hisi_hba,
- 
- out:
- 	hisi_sas_slot_task_free(hisi_hba, task, slot);
--	sts = ts->stat;
- 
- 	if (task->task_done)
- 		task->task_done(task);
--
--	return sts;
- }
- 
- /* Interrupts */
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index c725cffe141e..e7e7849a4c14 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -2318,8 +2318,8 @@ static void slot_err_v2_hw(struct hisi_hba *hisi_hba,
- 	}
- }
- 
--static int
--slot_complete_v2_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
-+static void slot_complete_v2_hw(struct hisi_hba *hisi_hba,
-+				struct hisi_sas_slot *slot)
- {
- 	struct sas_task *task = slot->task;
- 	struct hisi_sas_device *sas_dev;
-@@ -2327,7 +2327,6 @@ slot_complete_v2_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 	struct task_status_struct *ts;
- 	struct domain_device *device;
- 	struct sas_ha_struct *ha;
--	enum exec_status sts;
- 	struct hisi_sas_complete_v2_hdr *complete_queue =
- 			hisi_hba->complete_hdr[slot->cmplt_queue];
- 	struct hisi_sas_complete_v2_hdr *complete_hdr =
-@@ -2337,7 +2336,7 @@ slot_complete_v2_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 	u32 dw0;
- 
- 	if (unlikely(!task || !task->lldd_task || !task->dev))
--		return -EINVAL;
-+		return;
- 
- 	ts = &task->task_status;
- 	device = task->dev;
-@@ -2406,7 +2405,7 @@ slot_complete_v2_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 				 error_info[2], error_info[3]);
- 
- 		if (unlikely(slot->abort))
--			return ts->stat;
-+			return;
- 		goto out;
- 	}
- 
-@@ -2456,12 +2455,11 @@ slot_complete_v2_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 	}
- 
- out:
--	sts = ts->stat;
- 	spin_lock_irqsave(&task->task_state_lock, flags);
- 	if (task->task_state_flags & SAS_TASK_STATE_ABORTED) {
- 		spin_unlock_irqrestore(&task->task_state_lock, flags);
- 		dev_info(dev, "slot complete: task(%pK) aborted\n", task);
--		return SAS_ABORTED_TASK;
-+		return;
- 	}
- 	task->task_state_flags |= SAS_TASK_STATE_DONE;
- 	spin_unlock_irqrestore(&task->task_state_lock, flags);
-@@ -2473,15 +2471,13 @@ slot_complete_v2_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 			spin_unlock_irqrestore(&device->done_lock, flags);
- 			dev_info(dev, "slot complete: task(%pK) ignored\n",
- 				 task);
--			return sts;
-+			return;
- 		}
- 		spin_unlock_irqrestore(&device->done_lock, flags);
- 	}
- 
- 	if (task->task_done)
- 		task->task_done(task);
--
--	return sts;
- }
- 
- static void prep_ata_v2_hw(struct hisi_hba *hisi_hba,
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index df9f06224f8f..9acb67cae49c 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -2156,8 +2156,8 @@ slot_err_v3_hw(struct hisi_hba *hisi_hba, struct sas_task *task,
- 	}
- }
- 
--static int
--slot_complete_v3_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
-+static void slot_complete_v3_hw(struct hisi_hba *hisi_hba,
-+				struct hisi_sas_slot *slot)
- {
- 	struct sas_task *task = slot->task;
- 	struct hisi_sas_device *sas_dev;
-@@ -2165,7 +2165,6 @@ slot_complete_v3_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 	struct task_status_struct *ts;
- 	struct domain_device *device;
- 	struct sas_ha_struct *ha;
--	enum exec_status sts;
- 	struct hisi_sas_complete_v3_hdr *complete_queue =
- 			hisi_hba->complete_hdr[slot->cmplt_queue];
- 	struct hisi_sas_complete_v3_hdr *complete_hdr =
-@@ -2175,7 +2174,7 @@ slot_complete_v3_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 	u32 dw0, dw1, dw3;
- 
- 	if (unlikely(!task || !task->lldd_task || !task->dev))
--		return -EINVAL;
-+		return;
- 
- 	ts = &task->task_status;
- 	device = task->dev;
-@@ -2237,7 +2236,7 @@ slot_complete_v3_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 				 error_info[0], error_info[1],
- 				 error_info[2], error_info[3]);
- 		if (unlikely(slot->abort))
--			return ts->stat;
-+			return;
- 		goto out;
- 	}
- 
-@@ -2282,12 +2281,11 @@ slot_complete_v3_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 	}
- 
- out:
--	sts = ts->stat;
- 	spin_lock_irqsave(&task->task_state_lock, flags);
- 	if (task->task_state_flags & SAS_TASK_STATE_ABORTED) {
- 		spin_unlock_irqrestore(&task->task_state_lock, flags);
- 		dev_info(dev, "slot complete: task(%pK) aborted\n", task);
--		return SAS_ABORTED_TASK;
-+		return;
- 	}
- 	task->task_state_flags |= SAS_TASK_STATE_DONE;
- 	spin_unlock_irqrestore(&task->task_state_lock, flags);
-@@ -2299,15 +2297,13 @@ slot_complete_v3_hw(struct hisi_hba *hisi_hba, struct hisi_sas_slot *slot)
- 			spin_unlock_irqrestore(&device->done_lock, flags);
- 			dev_info(dev, "slot complete: task(%pK) ignored\n ",
- 				 task);
--			return sts;
-+			return;
- 		}
- 		spin_unlock_irqrestore(&device->done_lock, flags);
- 	}
- 
- 	if (task->task_done)
- 		task->task_done(task);
--
--	return sts;
- }
- 
- static irqreturn_t  cq_thread_v3_hw(int irq_no, void *p)
--- 
-2.16.4
-
+True.  Which just makes me despise that design with the pointless
+fallback even more..
