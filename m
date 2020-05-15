@@ -2,66 +2,67 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3071D42BC
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2020 03:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67791D42C5
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2020 03:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727779AbgEOBKk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 14 May 2020 21:10:40 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:37152 "EHLO
+        id S1728100AbgEOBK6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 14 May 2020 21:10:58 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:37608 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726216AbgEOBKk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 May 2020 21:10:40 -0400
+        with ESMTP id S1726216AbgEOBK5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 May 2020 21:10:57 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04F13BTU130944;
-        Fri, 15 May 2020 01:10:33 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04F13BTV130944;
+        Fri, 15 May 2020 01:10:36 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=jxxby5iUD46yjAC399mm0IUPNoJCIBV3YoDAubY5aWk=;
- b=WpL+j7PDVHRMbo0q2ePpew+llQMO6OVc9IChPHEXUp47CL2/b/bxMpiFZuVx9494QvjI
- 4S4dpLqvthTYOWAEgkHvM3Pg/zG/FuwxyPa905owbOb9/w1KVzXTln4XPXIJ5uGuMuBv
- MV4/uMmEOXHXrMwlEfwyYvsspbMTQedFmKvCR8udZE0mEZ4yT6fB0Mw86LRxRQkCELiB
- zjK6BTzpJVCqhqUHb8CGumGt9CptagWaLD5hTiXHj4jk2QEbpMURVgKCGm+0A1BeONvZ
- /zhvvwpTBRQRc97aiuv9sEzUHM+HqRzix3Hh0u6wneOd0h3YKyJCuirACoqERgJw5EUM Wg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 3100xwxp8x-1
+ bh=uzWUKK8WSe769UBEv6C+kY5NI1d1U8HUxPG8v/sJW80=;
+ b=gU+howcSEUQ7AlT/CKnH5zts96yW/9T/6okbxANBpEgaYAy6lETJYL039gJGC+5szh6R
+ 1iRaFQfzYswZymyfLsB+gONFIPVEhPYCSNenayNga0lWsuOfSjx/WVMDnqQCNzWG8rym
+ 8ueWDwnsxoWGndqYheBAcuEQqXUQq144hw5LSXB5zNQVpyZZTTtR9bj/3rPz8VwEE0X4
+ J4b69sV+R+rWji7GiPfaB5m5BEZHX+Hq8K/phzXi4+ITlA/HmbJDNy1R/BnJnresKZrp
+ gkhRTgQdaVxjkvoSdsaqx37uIytL0pfFBxx8kkS7UQHpv9nEaidjhbEVrPBNk1f5JJ3F 0A== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 3100xwxp99-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 15 May 2020 01:10:33 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04F148KU003572;
-        Fri, 15 May 2020 01:10:33 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 3100yhw4re-1
+        Fri, 15 May 2020 01:10:35 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04F12kqR161267;
+        Fri, 15 May 2020 01:10:35 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 3100yqf3x0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 May 2020 01:10:32 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04F1AV3W013992;
-        Fri, 15 May 2020 01:10:31 GMT
+        Fri, 15 May 2020 01:10:35 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04F1AWJC017962;
+        Fri, 15 May 2020 01:10:33 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 14 May 2020 18:10:31 -0700
+        with ESMTP ; Thu, 14 May 2020 18:10:32 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     mchristi@redhat.com, linux-scsi@vger.kernel.org,
-        target-devel@vger.kernel.org, bly@catalogicsoftware.com,
-        Bodo Stroesser <bstroesser@ts.fujitsu.com>, bvanassche@acm.org
+To:     jejb@linux.ibm.com, matthias.bgg@gmail.com,
+        ChenTao <chentao107@huawei.com>, stanley.chu@mediatek.com
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] scsi: target: put lun_ref at end of tmr processing
-Date:   Thu, 14 May 2020 21:10:25 -0400
-Message-Id: <158950481363.8120.6288768454257707610.b4-ty@oracle.com>
+        linux-scsi@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] scsi: ufs-mediatek: Make ufs_mtk_fixup_dev_quirks static
+Date:   Thu, 14 May 2020 21:10:26 -0400
+Message-Id: <158950485295.8169.16456174061063737853.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200513153443.3554-1-bstroesser@ts.fujitsu.com>
-References: <20200513153443.3554-1-bstroesser@ts.fujitsu.com>
+In-Reply-To: <20200514012655.127202-1-chentao107@huawei.com>
+References: <20200514012655.127202-1-chentao107@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9621 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 bulkscore=0
- phishscore=0 suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=921
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005150007
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=941 adultscore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2005150007
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9621 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 cotscore=-2147483648 bulkscore=0
- phishscore=0 adultscore=0 mlxlogscore=950 lowpriorityscore=0
+ phishscore=0 adultscore=0 mlxlogscore=970 lowpriorityscore=0
  impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
  suspectscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2004280000 definitions=main-2005150007
@@ -70,21 +71,17 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, 13 May 2020 17:34:43 +0200, Bodo Stroesser wrote:
+On Thu, 14 May 2020 09:26:55 +0800, ChenTao wrote:
 
-> Testing with Loopback I found, that after a Loopback LUN
-> has executed a TMR, I can no longer unlink the LUN.
-> The rm command hangs in transport_clear_lun_ref() at
-> wait_for_completion(&lun->lun_shutdown_comp)
-> The reason is, that transport_lun_remove_cmd() is not
-> called at the end of target_tmr_work().
+> Fix the following warning:
 > 
-> [...]
+> drivers/scsi/ufs/ufs-mediatek.c:585:6: warning:
+> symbol 'ufs_mtk_fixup_dev_quirks' was not declared. Should it be static?
 
-Applied to 5.7/scsi-fixes, thanks!
+Applied to 5.8/scsi-queue, thanks!
 
-[1/1] scsi: target: Put lun_ref at end of tmr processing
-      https://git.kernel.org/mkp/scsi/c/f2e6b75f6ee8
+[1/1] scsi: ufs-mediatek: Make ufs_mtk_fixup_dev_quirks static
+      https://git.kernel.org/mkp/scsi/c/21d2b76831fd
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
