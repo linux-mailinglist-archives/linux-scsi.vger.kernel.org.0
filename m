@@ -2,90 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFE61D42C0
-	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2020 03:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 659701D42CC
+	for <lists+linux-scsi@lfdr.de>; Fri, 15 May 2020 03:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727882AbgEOBKz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 14 May 2020 21:10:55 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:37544 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726216AbgEOBKy (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 May 2020 21:10:54 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04F13Bi0130937;
-        Fri, 15 May 2020 01:10:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=TyrYiqH+VfGA6jGGAeVFMBRZ9nDOnNrJysU+L3STKvo=;
- b=pDGciFm9XOhkzHLEKW1j3p8x0Cw91o2/496QHQaynWPmEbodkGb3VQuJSRo5cMmsayEV
- 8z31eISIGPglK+S/ydF66IVQoczDO6JQWd71LlGHcpsK1Wu0Y1dfhpku4XhiXBOWk546
- PKQLBOH4rykfTavleSX0gnfwCSMcblEA6oMzyqC7EKp81YtC5FlEGHdW6NTXMNkeLxzC
- 7owIfQjpnkeHjIHPcEKjSRBScP/T3DDPyaWFB7P5I6JxSagzKO3/X2a3LEf4Dx/Pw1US
- J9yVpDL15ZiNT1t5wM8nEKkJy9zUtTNTuTfdS3fTyfn3lLrwToQfc7nnMK/dw6VOoaFP wQ== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 3100xwxpb4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 15 May 2020 01:10:41 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04F12l2s161327;
-        Fri, 15 May 2020 01:10:41 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 3100yqf440-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 15 May 2020 01:10:41 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 04F1AcA0014071;
-        Fri, 15 May 2020 01:10:40 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 14 May 2020 18:10:37 -0700
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     john.garry@huawei.com, Jason Yan <yanaijie@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        jejb@linux.ibm.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Xiang Chen <chenxiang66@hisilicon.com>
-Subject: Re: [PATCH v2] scsi: hisi_sas: display proc_name in sysfs
-Date:   Thu, 14 May 2020 21:10:30 -0400
-Message-Id: <158932946186.30297.18353935418962789564.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200512113258.30781-1-yanaijie@huawei.com>
-References: <20200512113258.30781-1-yanaijie@huawei.com>
+        id S1727084AbgEOBQE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 14 May 2020 21:16:04 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:48216 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726168AbgEOBQE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 14 May 2020 21:16:04 -0400
+X-UUID: 5de6b4e699d9465bb1c78656af68d4ec-20200515
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=fqRhhH59jTJIvLK90VopqKiASNWrF23G1ykGc4EPhlE=;
+        b=npz3Blg4aa1IlPD0nrV+b36oFGbaJo9n4E1wAGASNNpJ/AFraajOUrj8cPciHxutWyhWrLBGZj2hy8G/fWuIvgBfTQifnAC+x2UYjPt4dTugy61losQlmuXTKoWym/xMHdg7nc9QVGpFuUc+xSdOSU7gvbGLEo1Ot8iVRr+8t/E=;
+X-UUID: 5de6b4e699d9465bb1c78656af68d4ec-20200515
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1113867943; Fri, 15 May 2020 09:16:00 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 May 2020 09:15:58 +0800
+Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 May 2020 09:15:58 +0800
+Message-ID: <1589505358.3197.101.camel@mtkswgap22>
+Subject: Re: [PATCH v2 0/4] scsi: ufs: allow customizable WriteBooster flush
+ policy
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     <jejb@linux.ibm.com>, <linux-scsi@vger.kernel.org>,
+        <alim.akhtar@samsung.com>, <asutoshd@codeaurora.org>,
+        <avri.altman@wdc.com>, <chun-hung.wu@mediatek.com>,
+        <kuohong.wang@mediatek.com>, <linux-mediatek@lists.infradead.org>,
+        <peter.wang@mediatek.com>, <beanhuo@micron.com>,
+        <matthias.bgg@gmail.com>, <andy.teng@mediatek.com>,
+        <bvanassche@acm.org>, <cang@codeaurora.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Date:   Fri, 15 May 2020 09:15:58 +0800
+In-Reply-To: <158950485295.8169.36549719949053326.b4-ty@oracle.com>
+References: <20200509093716.21010-1-stanley.chu@mediatek.com>
+         <158950485295.8169.36549719949053326.b4-ty@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9621 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=931 adultscore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005150007
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9621 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 cotscore=-2147483648 bulkscore=0
- phishscore=0 adultscore=0 mlxlogscore=974 lowpriorityscore=0
- impostorscore=0 spamscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
- suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005150007
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 12 May 2020 19:32:58 +0800, Jason Yan wrote:
+SGkgTWFydGluLA0KDQpPbiBUaHUsIDIwMjAtMDUtMTQgYXQgMjE6MTAgLTA0MDAsIE1hcnRpbiBL
+LiBQZXRlcnNlbiB3cm90ZToNCj4gT24gU2F0LCA5IE1heSAyMDIwIDE3OjM3OjEyICswODAwLCBT
+dGFubGV5IENodSB3cm90ZToNCj4gDQo+ID4gVGhpcyBwYXRjaCBzZXQgdHJpZXMgdG8gYWxsb3cg
+dmVuZG9ycyB0byBtb2RpZnkgdGhlIFdyaXRlQm9vc3RlciBmbHVzaCBwb2xpY3kuDQo+ID4gDQo+
+ID4gSW4gdGhlIHNhbWUgdGltZSwgY29sbGVjdCBhbGwgY3VzdG9taXphYmxlIHBhcmFtZXRlcnMg
+dG8gYW4gdW5pZmllZCBzdHJ1Y3R1cmUgdG8gbWFrZSBVRlMgZHJpdmVyIG1vcmUgY2xlYW4uDQo+
+ID4gDQo+ID4gdjEgLT4gdjI6DQo+ID4gICAtIFNxdWFzaCBwYXRjaCBbM10gYW5kIFs0XQ0KPiA+
+ICAgLSBSZW1vdmUgYSBkdW1teSAibmV3IGxpbmUiIGluIHBhdGNoIFszXQ0KPiA+ICAgLSBGaXgg
+Y29tbWl0IG1lc3NhZ2UgaW4gcGF0Y2ggWzNdDQo+ID4gDQo+ID4gWy4uLl0NCj4gDQo+IEFwcGxp
+ZWQgdG8gNS44L3Njc2ktcXVldWUsIHRoYW5rcyENCj4gDQo+IEkgaGFkIHRvIGNvbWJpbmUgcGF0
+Y2hlcyAxIGFuZCAyLiBPdGhlcndpc2UgeW91J2QgZ2V0IGNvbXBpbGUNCj4gZmFpbHVyZXMgZHVl
+IHRvIHRoZSBmaWVsZHMgbW92aW5nIGluc2lkZSB0aGUgc3RydWN0Lg0KPiANCj4gWzEvNF0gc2Nz
+aTogdWZzOiBJbnRyb2R1Y2UgdWZzX2hiYV92YXJpYW50X3BhcmFtcyB0byBncm91cCBjdXN0b21p
+emFibGUgcGFyYW1ldGVycw0KPiAgICAgICBodHRwczovL2dpdC5rZXJuZWwub3JnL21rcC9zY3Np
+L2MvOTBiODQ5MWMwMDMzDQo+IFszLzRdIHNjc2k6IHVmczogQ3VzdG9taXplIGZsdXNoIHRocmVz
+aG9sZCBmb3IgV3JpdGVCb29zdGVyDQo+ICAgICAgIGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvbWtw
+L3Njc2kvYy9kMTQ3MzRhZTNhZTcNCj4gWzQvNF0gc2NzaTogdWZzLW1lZGlhdGVrOiBDdXN0b21p
+emUgV3JpdGVCb29zdGVyIGZsdXNoIHBvbGljeQ0KPiAgICAgICBodHRwczovL2dpdC5rZXJuZWwu
+b3JnL21rcC9zY3NpL2MvZjQ4YjI4NWFlNjU4DQo+IA0KDQpUaGFua3Mgc28gbXVjaCBmb3IgaGVs
+cGluZyB0aGUgcGF0Y2ggc3F1YXNoLg0KDQpUaGFua3MsDQpTdGFubGV5IENodQ0K
 
-> The 'proc_name' entry in sysfs for hisi_sas is 'null' now becuase it is
-> not initialized in scsi_host_template. It looks like:
-> 
-> [root@localhost ~]# cat /sys/class/scsi_host/host2/proc_name
-> (null)
-> 
-> While the other driver's entry looks like:
-> 
-> [...]
-
-Applied to 5.8/scsi-queue, thanks!
-
-[1/1] scsi: hisi_sas: Display proc_name in sysfs
-      https://git.kernel.org/mkp/scsi/c/55ce24b3bfd7
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
