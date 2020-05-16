@@ -2,119 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 602C61D62EB
-	for <lists+linux-scsi@lfdr.de>; Sat, 16 May 2020 19:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B21B1D6333
+	for <lists+linux-scsi@lfdr.de>; Sat, 16 May 2020 19:46:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbgEPROS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 16 May 2020 13:14:18 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39997 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726242AbgEPROR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 16 May 2020 13:14:17 -0400
-Received: by mail-pg1-f193.google.com with SMTP id j21so2557747pgb.7;
-        Sat, 16 May 2020 10:14:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=/MV9WcXQv0+4wZLOKsDXnPVuUYGVfdhe+QBIyAhTTT8=;
-        b=P0DSRhjcsLF2j9KB5SRmUsPVnNJN9SmCbF3o5lQy2PG3OnxUmqRbIIAYD0lTIRVtVr
-         Xl92GYBBHqDwVnmPRfFlbP5Lnzhu1EHjcWc/rACLl1nCLg3q9KVpfzBWZjPH1rYotCRO
-         ucfzcPKMm+JZWL5GqOkVXo7hA1u3tjLJb6z770ML130Utv+YRfEKw4upNnlhot4Gaq7h
-         Ii9mRvGY0ysakRQV9pEPwhQTX2jXo1gRN1y3f47Gkjod2d/nWQyIPcIAax8y09JZarrh
-         2SZtypXut2XFTCeSzBHGvyE5YbtKCtR2HhhNgx4Q5ZdwHCRSW2Xu1fPOP+qbl+nnT01u
-         xtTA==
-X-Gm-Message-State: AOAM533XHQ5Jsr1GR3zUuD2tEqQuHdAjRs7mQTq8r0xsz+X/8N3bhVJo
-        2dswPj5/3R+ZqLN9TRWt4XU=
-X-Google-Smtp-Source: ABdhPJw/MzKN74At9Ms8VObjIfKeXq4vKnwZuzlWXZecBeaeph2yHO1uFyAMHS1GoOl86uybifKFqg==
-X-Received: by 2002:a62:6485:: with SMTP id y127mr8977880pfb.11.1589649256677;
-        Sat, 16 May 2020 10:14:16 -0700 (PDT)
-Received: from ?IPv6:2601:647:4000:d7:97a:fd5b:e2c1:c090? ([2601:647:4000:d7:97a:fd5b:e2c1:c090])
-        by smtp.gmail.com with ESMTPSA id v17sm4849010pfc.190.2020.05.16.10.14.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 May 2020 10:14:15 -0700 (PDT)
-Subject: Re: [RFC PATCH 00/13] scsi: ufs: Add HPB Support
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        Zang Leigang <zangleigang@hisilicon.com>,
-        Avi Shchislowski <Avi.Shchislowski@wdc.com>,
-        Bean Huo <beanhuo@micron.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        MOHAMMED RAFIQ KAMAL BASHA <md.rafiq@samsung.com>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>
-References: <1589538614-24048-1-git-send-email-avri.altman@wdc.com>
- <d10b27f1-49ec-d092-b252-2bb8cdc4c66e@acm.org>
- <SN6PR04MB46408050B71E3A6225D6C495FCBA0@SN6PR04MB4640.namprd04.prod.outlook.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <835c57b9-f792-2460-c3cc-667031969d63@acm.org>
-Date:   Sat, 16 May 2020 10:14:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726659AbgEPRqk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 16 May 2020 13:46:40 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:20465 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726407AbgEPRqY (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 16 May 2020 13:46:24 -0400
+X-UUID: be12eaa8158047eda95f7e0694b10794-20200517
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=smxDr4bDqkE0WeFbg5czyt0T5/ZlATJAURAS2eLOh2c=;
+        b=JGZBlk/L4DzWpESEXgjO/WytXBz+AnfEYA5JcWagqa9pnKHruznaANIpIjeQM3M5ahkItJicvVlDY5o/NzgA68DSzriIwt9QHKodoosmCfSNL8+MZcpLzIPqQryuJGSwISMCD9k+ILsSjDbYYeyr/wfwDJC4uiF8QEWc3e9OILI=;
+X-UUID: be12eaa8158047eda95f7e0694b10794-20200517
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 343474321; Sun, 17 May 2020 01:46:18 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sun, 17 May 2020 01:46:13 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sun, 17 May 2020 01:46:13 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <asutoshd@codeaurora.org>
+CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v3 0/5] scsi: ufs: Fix WriteBooster and cleanup UFS driver
+Date:   Sun, 17 May 2020 01:46:10 +0800
+Message-ID: <20200516174615.15445-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <SN6PR04MB46408050B71E3A6225D6C495FCBA0@SN6PR04MB4640.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: D1FFA3E32EA32E77CA68C80B76F405815EBCEA9C03532CCC767E5BDCDA7D90CF2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-05-16 02:14, Avri Altman wrote:
->> Thank you for having taken the time to publish your work. The way this
->> series has been split into individual patches makes reviewing easy.
->> Additionally, the cover letter and patch descriptions are very
->> informative, insightful and well written. However, I'm concerned about a
->> key aspect of the implementation, namely relying on a device handler to
->> alter the meaning of a block layer request. My concern about this
->> approach is that at most one device handler can be associated with a
->> SCSI LLD. If in the future more functionality would be added to the UFS
->> spec and if it would be desirable to implement that functionality as a
->> new kernel module, it won't be possible to implement that functionality
->> as a new device handler. So I think that not relying on the device
->> handler infrastructure is more future proof because that removes the
->> restrictions we have to deal with when using the device handler framework.
->
-> So should we keep perusing this direction, or leave it, and concentrate in Bean's RFC?
-> Or maybe come up with a 3rd way?
+SGksDQoNClRoaXMgcGF0Y2ggc2V0IGZpeGVzIHNvbWUgV3JpdGVCb29zdGVyIGlzc3VlcyBhbmQg
+ZG8gc21hbGwgY2xlYW51cCBpbiBVRlMgZHJpdmVyDQoNCnYyIC0+IHYzDQogIC0gSW50cm9kdWNl
+IHBhdGNoIFs1XSB0byBmaXggcG9zc2libGUgVkNDIHBvd2VyIGRyYWluIGR1cmluZyBydW50aW1l
+IHN1c3BlbmQgKEFzdXRvc2gpDQoNCnYxIC0+IHYyDQogIC0gUmVtb3ZlIGR1bW15IG5ldyBsaW5l
+IGluIHBhdGNoIFs0XSAoQXN1dG9zaCkNCiAgLSBBZGQgbW9yZSBsaW1pdGF0aW9uIHRvIGFsbG93
+IFdyaXRlQm9vc3RlciBmbHVzaCBkdXJpbmcgSGliZXJuOCBpbiBydW50aW1lLXN1c3BlbmQuIE5v
+dyB0aGUgZGV2aWNlIHBvd2VyIG1vZGUgaXMga2VwdCBhcyBBY3RpdmUgcG93ZXIgbW9kZSBvbmx5
+IGlmIGxpbmsgaXMgcHV0IGluIEhpYmVybjggb3IgQXV0by1IaWJlcm44IGlzIGVuYWJsZWQgZHVy
+aW5nIHJ1bnRpbWUtc3VzcGVuZCAoQXN1dG9zaCkNCg0KU3RhbmxleSBDaHUgKDUpOg0KICBzY3Np
+OiB1ZnM6IFJlbW92ZSB1bm5lY2Vzc2FyeSBtZW1zZXQgZm9yIGRldl9pbmZvDQogIHNjc2k6IHVm
+czogQWxsb3cgV3JpdGVCb29zdGVyIG9uIFVGUyAyLjIgZGV2aWNlcw0KICBzY3NpOiB1ZnM6IEZp
+eCBpbmRleCBvZiBhdHRyaWJ1dGVzIHF1ZXJ5IGZvciBXcml0ZUJvb3N0ZXIgZmVhdHVyZQ0KICBz
+Y3NpOiB1ZnM6IEZpeCBXcml0ZUJvb3N0ZXIgZmx1c2ggZHVyaW5nIHJ1bnRpbWUgc3VzcGVuZA0K
+ICBzY3NpOiB1ZnM6IEZpeCBwb3NzaWJsZSBWQ0MgcG93ZXIgZHJhaW4gZHVyaW5nIHJ1bnRpbWUg
+c3VzcGVuZA0KDQogZHJpdmVycy9zY3NpL3Vmcy91ZnMtc3lzZnMuYyB8IDEzICsrKystDQogZHJp
+dmVycy9zY3NpL3Vmcy91ZnMuaCAgICAgICB8ICAyICstDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNo
+Y2QuYyAgICB8IDk5ICsrKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLQ0KIGRyaXZl
+cnMvc2NzaS91ZnMvdWZzaGNkLmggICAgfCAgMyArLQ0KIDQgZmlsZXMgY2hhbmdlZCwgODIgaW5z
+ZXJ0aW9ucygrKSwgMzUgZGVsZXRpb25zKC0pDQoNCi0tIA0KMi4xOC4wDQo=
 
-Hi Avri,
-
-I prefer to proceed with reviewing Bean's patch series. If someone
-prefers a different approach, I think this is a good time to bring that up.
-
-Thanks,
-
-Bart.
