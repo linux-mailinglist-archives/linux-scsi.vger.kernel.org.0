@@ -2,106 +2,123 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AF61D64AD
-	for <lists+linux-scsi@lfdr.de>; Sun, 17 May 2020 01:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4971D64AF
+	for <lists+linux-scsi@lfdr.de>; Sun, 17 May 2020 01:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726779AbgEPXRi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 16 May 2020 19:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S1726726AbgEPX3s (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 16 May 2020 19:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726717AbgEPXRh (ORCPT
+        by vger.kernel.org with ESMTP id S1726660AbgEPX3s (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Sat, 16 May 2020 19:17:37 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08D3C05BD09
-        for <linux-scsi@vger.kernel.org>; Sat, 16 May 2020 16:17:37 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id h10so6681787iob.10
-        for <linux-scsi@vger.kernel.org>; Sat, 16 May 2020 16:17:37 -0700 (PDT)
+        Sat, 16 May 2020 19:29:48 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DCAC061A0C;
+        Sat, 16 May 2020 16:29:46 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id d21so6001076ljg.9;
+        Sat, 16 May 2020 16:29:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=sHKDXXFmKLefk7ouUJEbUpV3R1SbP7mtwMpt76UA+DA=;
-        b=s8E5zFCoME+AWnWQ1J4M3VSxmCJML8PXYlskJWbHdGKlryZT/CilMcPRbZZIz2ARMv
-         L3eVktEB+jXyOM9Xy7sKOJaiGSnHZ7c1YJvHua0xd2DQ2m7SL9TODGnW27DhmyOuucEP
-         JA7ZLTwQtvot4TPOSnLIUeHBQ4Oxs5t7L2R5Nd4D1gUMe2bg1TFoXKrubyZ2xOMpNGiI
-         4Wvjbx9fsSfxZ8E7yptyEmWHpsGiE3EMOdedCU/oMpVXbyo2JpAc/EeH1FnVTWVNDhr+
-         M1t75/CZ1h2xewJ4VdZ5Flf+UQK7DNFHeJil4NMvqVZ0TfR6V0C5nMcR0bqsBzlK0sJ2
-         BYkg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VsIGqmQYU9B1hFiVmj/6ksJDLb/9MQhxyITf5iqCEAU=;
+        b=CAxm0r3bkWmXjkeiCzLPuKYnFKjmYcTMlB211VAPCdb2e0rDkYvjgKujtHQo5YnQtR
+         WYhrUreg7ADZxvFKkuBOju+THp+1gYsGi9JRt/ejoHugqQ4Lt4ZAXR+GRw0L0A+66/UM
+         aT52BE/bEQrnitmXPtcIktSrpJmQpc7TJEMrOI75rNNhQB37g9VgqnacNxAKPZzWKTyC
+         t5lEVHc9351QfxtHaytLZpm6wG6w9yCKQ6BfTZJuXdw3BjiOXq0PASbRavhsXMe4v5m7
+         e6iGVuXlEwtLZbH1wQsJO1JSDfci6337NAg2ZQm4a6IpeQIYHn+TtN7fx0LsK8LP8LjF
+         lWxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=sHKDXXFmKLefk7ouUJEbUpV3R1SbP7mtwMpt76UA+DA=;
-        b=NdKX3inU043PgEV8G8UDluvQDnHzoNYzgB2TRraiH3udUYc3aR2Ikk33+VXh4fSJGz
-         IgVmA0zGkIBM4IXFqbJeqaf8HRjGXfqJ77nhvkY9QeA344TsPUyisx7A+51OWp7oh6Xx
-         emlw4cxEycFQwQzxYRIZ8hx5ybfxEGbNxT0JRCF6BcePmk/Djb/7ANbenbFtMnxXtzPw
-         4HujEW3oDccLqry7MhBj49Tc0w1Ykg2g2Qh7OIXKZVMEYF21/YHQ6lWOtKfh4mJCH/mD
-         AVpvJ9K+9HzmZZbh9sBxh4Mlhws7Ta7J/A7zVghfm1oS0qntPLCe8JL3g9RNdwPJ/C78
-         jeXg==
-X-Gm-Message-State: AOAM531T4HvnPceADATi2Y0dIUa4SSBKOAeoe2yz6p8OOizLeC7oeATb
-        BePRMphc4nlMc+401sw4kUzo3MsaxnsbwBsOIQ4=
-X-Google-Smtp-Source: ABdhPJxeP/3wcUU1wntaTSC/EHKwepqrnr9o1DhSp8wPnBWXWbVGlKjL68FWet+gfdELxviwBhpPbm58FhHaBijyEzw=
-X-Received: by 2002:a6b:8e15:: with SMTP id q21mr4044955iod.107.1589671056846;
- Sat, 16 May 2020 16:17:36 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VsIGqmQYU9B1hFiVmj/6ksJDLb/9MQhxyITf5iqCEAU=;
+        b=MAg9pFOhYzriAxZ871VKtOgkLjY5lbZ+AWH01z4/vDbK1PAq8EKlZvBiBgJH0jjULr
+         fbjEtKp6TmKp95hBSP5RRzMjhwDgKtonkKsUKTD+p4rdHYPyn5lHX9eJJsOYP2gD55tn
+         +ff1EEMghmloDuJqNNuS5ajbzuq4okQqwv5GHN89TfOn3jXAK5onOwzklHc5XiDBervm
+         F54BoSETgF56gbC2bXgMkQuD3NPwi5aqnbJVhuu5wQAI4Gkc48DLQcL+O850R8Y+nEC+
+         TDo8VNcDztOC2zgjVq4nOsLR4I5FVP7L3+GHwdTwrko/8hpnW86aT3DErCmpqmUefGNn
+         DltA==
+X-Gm-Message-State: AOAM533avlE1crr8Mc++AtLc6QULDDBy4TbR7XJBNukXxJKAPOcSqq+L
+        RxFRGlKgNA8O99mNNI2VZtiAnovjpuBN4gG0HtE=
+X-Google-Smtp-Source: ABdhPJwMEerA6PY5MC+s0R6rodZvVntL+CV0Pe2OuKYU6/n9FN6gEnBajSh8QBi/2P6CtuqIJdRTr7gER99hj/E+DNQ=
+X-Received: by 2002:a2e:a545:: with SMTP id e5mr6015544ljn.271.1589671784750;
+ Sat, 16 May 2020 16:29:44 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a02:dc5:0:0:0:0:0 with HTTP; Sat, 16 May 2020 16:17:36 -0700 (PDT)
-From:   Hannah Wilson <hannahwilson192@gmail.com>
-Date:   Sat, 16 May 2020 23:17:36 +0000
-X-Google-Sender-Auth: FY3GASFWyZAZUH0ETaL754ggMG0
-Message-ID: <CAEB4LwtuecRWiE7D-e1dquEv2hm8w40foTJUkpOdiCkGzL5Psw@mail.gmail.com>
-Subject: please i really need your urgent assistance.
-To:     undisclosed-recipients:;
+References: <cd119ce943d9ec62ef1bff237ebb49e35a337c3b.1589407872.git.lance.digby@gmail.com>
+ <93c437ce-f881-9f54-5e39-afa8afd96141@redhat.com>
+In-Reply-To: <93c437ce-f881-9f54-5e39-afa8afd96141@redhat.com>
+From:   Lance Digby <lance.digby@gmail.com>
+Date:   Sun, 17 May 2020 09:29:38 +1000
+Message-ID: <CAHh6B+poeCFeZjCt04QT2c12bgvCf9UN+5vdx5EeK6PcgD2y3g@mail.gmail.com>
+Subject: Re: [PATCH target] target: Add initiatorname to NON_EXISTENT_LUN error
+To:     Mike Christie <mchristi@redhat.com>
+Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hello My Dear.
+Mike,  Thanks for the review!
+  The pr_err  Detected NON_EXISTENT_LUN is the error messages issued
+for the TCM_NON_EXISTENT_LUN retcode so I believe they are the same.
+  Simply scanning for the wrong lun on an initiator will generate this
+error on the target but not generate an error on the initiator. And I
+have seen installs, with a lot of initiators, automate the scanning of
+such luns incorrectly deemed missing.
+  While this looks like a simple problem it can take days to get
+access or the tcp traces to sort it out.
 
-Please do not feel disturbed for contacting =C2=A0you in this regards, It
-was based on the critical health condition I find mine self. =C2=A0My names
- are Mrs. Hannah Wilson David, a widow and I=E2=80=99m suffering from brain
-tumor disease and this illness has gotten to a very bad stage, I
- married my husband for Ten years without any family members and no
-child. =C2=A0My husband died after a brief illness that lasted for few
-days.
+   Within the same routine there is another pr_err for
+TCM_WRITE_PROTECTED that I did not add the initiatorname to as I
+thought this would leave a heavy footprint on the initiator. If you
+believe this should be changed for consistency please let me know and
+I will add this and change to nacl->initiatorname.
 
-Since the death of my husband, I decided not to remarry again, When my
-late husband was alive he deposited the sum of =C2=A0($  11,450,000.00,
-Nine Million Four Hundred and Fifty Thousand Dollars) with the Bank.
-Presently this money is still in bank. And My  Doctor told me that I
-don't have much time to live because my illness has gotten to a very
-bad stage, Having known my condition I  decided to entrust over the
-deposited fund under your custody to take care of the less-privileged
-ones therein your country or position,
-which i believe that you will utilize this money the way I am going to
-instruct herein.
 
-However all I need and required from you is your sincerity and ability
-to carry out the transaction successfully and fulfill my final wish in
-implementing the charitable project as it requires absolute trust and
-devotion without any failure and I will be glad to see that the bank
-finally release and transfer the fund into your bank account in your
-country even before I die here in the hospital, because my present
-health condition is very critical at the moment everything needs to be
-process rapidly as soon as possible.
 
-It will be my pleasure to compensate you as my Investment
-Manager/Partner with 35 % percent of the total fund for your effort in
- handling the transaction, 5 % percent for any expenses or processing
-charges fee that will involve during this process while 60% of the
-fund will be Invested into the charity project there in your country
-for the mutual benefit of the orphans and the less privileges ones.
 
-Meanwhile I am waiting for your prompt respond, if only you are
-interested for further details of the transaction and execution of
-this  humanitarian project for the glory and honor of God the merciful
-compassionate.
 
-May bless you and your family.
-Regards,
-Mrs. Hannah Wilson David.
-written from Hospital.
+
+
+
+
+On Sat, May 16, 2020 at 9:50 AM Mike Christie <mchristi@redhat.com> wrote:
+>
+> On 5/13/20 11:01 PM, Lance Digby wrote:
+> > The NON_EXISTENT_LUN error can be written without an error condition
+> >  on the initiator responsible. Adding the initiatorname to this message
+> >  will reduce the effort required to fix this when many initiators are
+> > supported by a target.
+> >
+> > Signed-off-by: Lance Digby <lance.digby@gmail.com>
+> > ---
+> >  drivers/target/target_core_device.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+> > index 4cee113..604dea0 100644
+> > --- a/drivers/target/target_core_device.c
+> > +++ b/drivers/target/target_core_device.c
+> > @@ -100,9 +100,10 @@
+> >                */
+> >               if (unpacked_lun != 0) {
+> >                       pr_err("TARGET_CORE[%s]: Detected NON_EXISTENT_LUN"
+> > -                             " Access for 0x%08llx\n",
+> > +                             " Access for 0x%08llx from %s\n",
+> >                               se_cmd->se_tfo->fabric_name,
+> > -                             unpacked_lun);
+> > +                             unpacked_lun,
+> > +                             se_sess->se_node_acl->initiatorname);
+>
+> You can do nacl->initiatorname.
+>
+> Do you also want add the name to the tmr case? It's probably not common,
+> but the error message would be consistent.
+>
+> >                       return TCM_NON_EXISTENT_LUN;
+> >               }
+> >
+>
