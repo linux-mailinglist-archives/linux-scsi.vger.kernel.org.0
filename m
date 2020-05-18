@@ -2,92 +2,55 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6821D7236
-	for <lists+linux-scsi@lfdr.de>; Mon, 18 May 2020 09:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 631F11D75F4
+	for <lists+linux-scsi@lfdr.de>; Mon, 18 May 2020 13:08:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727772AbgERHsb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 18 May 2020 03:48:31 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:53578 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726489AbgERHsb (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 18 May 2020 03:48:31 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id E54FF4B9C4C949C3B0D2;
-        Mon, 18 May 2020 15:48:27 +0800 (CST)
-Received: from huawei.com (10.175.124.28) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.487.0; Mon, 18 May 2020
- 15:48:17 +0800
-From:   Ye Bin <yebin10@huawei.com>
-To:     <martin.petersen@oracle.com>, <jejb@linux.ibm.com>
-CC:     <yebin10@huawei.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] scsi: Refactor scsi_mq_setup_tags function
-Date:   Mon, 18 May 2020 15:47:32 +0800
-Message-ID: <20200518074732.39679-1-yebin10@huawei.com>
-X-Mailer: git-send-email 2.21.3
+        id S1727006AbgERLIf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 18 May 2020 07:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726279AbgERLIf (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 18 May 2020 07:08:35 -0400
+X-Greylist: delayed 300 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 May 2020 04:08:34 PDT
+Received: from vps.dvp24.com (unknown [IPv6:2a02:348:36:5b8c::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCE1C061A0C;
+        Mon, 18 May 2020 04:08:34 -0700 (PDT)
+Received: from localhost ([127.0.0.1] helo=dvp24.com)
+        by vps.dvp24.com with esmtpa (Exim 4.77)
+        (envelope-from <abhay@dvp24.com>)
+        id 1jadYS-0006r4-97; Mon, 18 May 2020 13:03:32 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.28]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Mon, 18 May 2020 12:03:32 +0100
+From:   pedro hills <abhay@dvp24.com>
+To:     undisclosed-recipients:;
+Subject: (DONATION) $2 Million Has Been Donated
+Reply-To: <pedrohills@outlook.es>
+Mail-Reply-To: <pedrohills@outlook.es>
+Message-ID: <4f8b251c274cf8e27d8c41dd4ed99b52@dvp24.com>
+X-Sender: abhay@dvp24.com
+User-Agent: Roundcube Webmail/0.7.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-  "shost->tag_set" is used too many times, introduce temporary parameter
-"tag_set" instead of "&shost->tag_set".
 
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- drivers/scsi/scsi_lib.c | 23 ++++++++++++-----------
- 1 file changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 47835c4b4ee0..be1a4a9a5fca 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1870,6 +1870,7 @@ struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev)
- int scsi_mq_setup_tags(struct Scsi_Host *shost)
- {
- 	unsigned int cmd_size, sgl_size;
-+	struct blk_mq_tag_set *tag_set = &shost->tag_set;
- 
- 	sgl_size = max_t(unsigned int, sizeof(struct scatterlist),
- 				scsi_mq_inline_sgl_size(shost));
-@@ -1878,21 +1879,21 @@ int scsi_mq_setup_tags(struct Scsi_Host *shost)
- 		cmd_size += sizeof(struct scsi_data_buffer) +
- 			sizeof(struct scatterlist) * SCSI_INLINE_PROT_SG_CNT;
- 
--	memset(&shost->tag_set, 0, sizeof(shost->tag_set));
-+	memset(tag_set, 0, sizeof(*tag_set));
- 	if (shost->hostt->commit_rqs)
--		shost->tag_set.ops = &scsi_mq_ops;
-+		tag_set->ops = &scsi_mq_ops;
- 	else
--		shost->tag_set.ops = &scsi_mq_ops_no_commit;
--	shost->tag_set.nr_hw_queues = shost->nr_hw_queues ? : 1;
--	shost->tag_set.queue_depth = shost->can_queue;
--	shost->tag_set.cmd_size = cmd_size;
--	shost->tag_set.numa_node = NUMA_NO_NODE;
--	shost->tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
--	shost->tag_set.flags |=
-+		tag_set->ops = &scsi_mq_ops_no_commit;
-+	tag_set->nr_hw_queues = shost->nr_hw_queues ? : 1;
-+	tag_set->queue_depth = shost->can_queue;
-+	tag_set->cmd_size = cmd_size;
-+	tag_set->numa_node = NUMA_NO_NODE;
-+	tag_set->flags = BLK_MQ_F_SHOULD_MERGE;
-+	tag_set->flags |=
- 		BLK_ALLOC_POLICY_TO_MQ_FLAG(shost->hostt->tag_alloc_policy);
--	shost->tag_set.driver_data = shost;
-+	tag_set->driver_data = shost;
- 
--	return blk_mq_alloc_tag_set(&shost->tag_set);
-+	return blk_mq_alloc_tag_set(tag_set);
- }
- 
- void scsi_mq_destroy_tags(struct Scsi_Host *shost)
 -- 
-2.21.3
+$2 Million Has Been Donated To You,By PEDRO this is Real For More Info
+  Contact PEDRO immediately for your clame This Email:
+  pedrohills@outlook.es
 
+  Contact phone number +34632232897
+  Send Your Response To: pedrohills@outlook.es
+
+  2 Millionen US-Dollar wurden an Sie gespendet. Von PEDRO ist dies für
+weitere Informationen real
+  Wenden Sie sich umgehend an PEDRO. Diese E-Mail:
+  pedrohills@outlook.es
+
+  Kontakttelefonnummer +34632232897
+  Senden Sie Ihre Antwort an: pedrohills@outlook.es
