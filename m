@@ -2,95 +2,76 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E72131DBC00
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2020 19:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52AC91DBC12
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2020 19:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgETRxk (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 May 2020 13:53:40 -0400
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:49198 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726747AbgETRxj (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 20 May 2020 13:53:39 -0400
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 20 May 2020 10:53:39 -0700
-Received: from asutoshd-linux1.qualcomm.com ([10.46.160.39])
-  by ironmsg03-sd.qualcomm.com with ESMTP; 20 May 2020 10:53:38 -0700
-Received: by asutoshd-linux1.qualcomm.com (Postfix, from userid 92687)
-        id 779F120B90; Wed, 20 May 2020 10:53:38 -0700 (PDT)
-From:   Asutosh Das <asutoshd@codeaurora.org>
-To:     cang@codeaurora.org, martin.petersen@oracle.com,
-        PedroM.Sousa@synopsys.com, linux-scsi@vger.kernel.org
-Cc:     Asutosh Das <asutoshd@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 2/2] scsi: ufs-qcom: enter and exit hibern8 during clock scaling
-Date:   Wed, 20 May 2020 10:53:17 -0700
-Message-Id: <9b67c25eb7c0bf80075b36660aebdb3788207353.1589997078.git.asutoshd@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <186237103353b5a79c3496e619fca894dbc78600.1589997078.git.asutoshd@codeaurora.org>
-References: <186237103353b5a79c3496e619fca894dbc78600.1589997078.git.asutoshd@codeaurora.org>
-In-Reply-To: <186237103353b5a79c3496e619fca894dbc78600.1589997078.git.asutoshd@codeaurora.org>
-References: <186237103353b5a79c3496e619fca894dbc78600.1589997078.git.asutoshd@codeaurora.org>
+        id S1726775AbgETR4E (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 May 2020 13:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726576AbgETR4D (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 May 2020 13:56:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48B1C061A0E;
+        Wed, 20 May 2020 10:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=4Am3TfCV9FAMwHU97EGrfWs3Wf0K8DZDEI58r+TwL5Q=; b=AsjQ2Q0XLd+qkzPdxqGGc0Wzxv
+        gcVC7Y+3vxkTI6lT8c6eYvH/RdOZCJXPBCEbAwhv15VXN7iLfgkChlmSdsMOU9uO2jJUAX4pUO3Z1
+        BEDsSfENhTS7VRbNIqWT09DEBtWNZzqCcnv895v0/3qTo6f8oDGwevgZ5ZYSPHsnAMSnOzvJPDWGj
+        BwfFOFbL5NAwRTibe5fKVzAEXkJoGpVH/7unEe2Jjom6Bc9jOmJ9Hfmu+I54gDk33cRMCs43N3VTE
+        8QKc/l/QhwLBMYrSU8qAIGik1ZCclU74FdxROtbitNMN4pzWGw+zT6eyBMdUNG5Lg/L0tCiTNfFPi
+        msogt3kA==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jbSwd-0003Jq-4U; Wed, 20 May 2020 17:55:55 +0000
+Date:   Wed, 20 May 2020 10:55:55 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     yongmyung lee <ymhungry.lee@samsung.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Avri Altman <Avri.Altman@wdc.com>,
+        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        Zang Leigang <zangleigang@hisilicon.com>,
+        Avi Shchislowski <Avi.Shchislowski@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        MOHAMMED RAFIQ KAMAL BASHA <md.rafiq@samsung.com>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>
+Subject: Re: Another approach of UFSHPB
+Message-ID: <20200520175555.GA27975@infradead.org>
+References: <835c57b9-f792-2460-c3cc-667031969d63@acm.org>
+ <1589538614-24048-1-git-send-email-avri.altman@wdc.com>
+ <d10b27f1-49ec-d092-b252-2bb8cdc4c66e@acm.org>
+ <SN6PR04MB46408050B71E3A6225D6C495FCBA0@SN6PR04MB4640.namprd04.prod.outlook.com>
+ <CGME20200516171420epcas2p108c570904c5117c3654d71e0a2842faa@epcms2p7>
+ <231786897.01589928601376.JavaMail.epsvc@epcpadp1>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <231786897.01589928601376.JavaMail.epsvc@epcpadp1>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Qualcomm controller needs to be in hibern8 before scaling clocks.
-This change puts the controller in hibern8 state before scaling
-and brings it out after scaling of clocks.
+Serious,
 
-Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
----
- drivers/scsi/ufs/ufs-qcom.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
-index 00ce8d6..3a4ed64 100644
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -1418,18 +1418,27 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
- 	int err = 0;
- 
- 	if (status == PRE_CHANGE) {
-+		err = ufshcd_uic_hibern8_enter(hba);
-+		if (err)
-+			return err;
- 		if (scale_up)
- 			err = ufs_qcom_clk_scale_up_pre_change(hba);
- 		else
- 			err = ufs_qcom_clk_scale_down_pre_change(hba);
-+		if (err)
-+			ufshcd_uic_hibern8_exit(hba);
-+
- 	} else {
- 		if (scale_up)
- 			err = ufs_qcom_clk_scale_up_post_change(hba);
- 		else
- 			err = ufs_qcom_clk_scale_down_post_change(hba);
- 
--		if (err || !dev_req_params)
-+
-+		if (err || !dev_req_params) {
-+			ufshcd_uic_hibern8_exit(hba);
- 			goto out;
-+		}
- 
- 		ufs_qcom_cfg_timers(hba,
- 				    dev_req_params->gear_rx,
-@@ -1437,6 +1446,7 @@ static int ufs_qcom_clk_scale_notify(struct ufs_hba *hba,
- 				    dev_req_params->hs_rate,
- 				    false);
- 		ufs_qcom_update_bus_bw_vote(host);
-+		err = ufshcd_uic_hibern8_exit(hba);
- 	}
- 
- out:
--- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-
+HPB is a completely fucked up concept and we shoud not merge it at all.
+Especially not with a crazy bullshit vendor extension layer that makes
+it even easier for vendors to implement even worse things than the
+already horrible spec says.  Just stop this crap and implement sane
+interfaces for the next generation hardware instead of wasting your
+time on this idiotic idea.
