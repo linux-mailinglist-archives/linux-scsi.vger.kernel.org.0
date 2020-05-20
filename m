@@ -2,95 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E696E1DBBF0
-	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2020 19:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6E331DBC02
+	for <lists+linux-scsi@lfdr.de>; Wed, 20 May 2020 19:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726806AbgETRvz (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 20 May 2020 13:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726576AbgETRvz (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 20 May 2020 13:51:55 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8B2C061A0F
-        for <linux-scsi@vger.kernel.org>; Wed, 20 May 2020 10:51:54 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id u188so3828903wmu.1
-        for <linux-scsi@vger.kernel.org>; Wed, 20 May 2020 10:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=6/K2r2mMGNXC0hjZP/edQuVZv9WqLKDECwgj0t5H2CI=;
-        b=IGPX9L4k9Ivw+STA53YDbcHe/jWijBpChsxcqfoVM4H3g1XLSmcioRjHcCKLrrVXn/
-         IvwXg4tS7GDt1kk9mgVwwD9zNxTRVsi4QdEtLK9WkvVz3kiTGOpAkUs+thETBXohhIbT
-         jW+Ce0eAKMXAgHEZGKFtO3eooAOAnY3uy70m0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=6/K2r2mMGNXC0hjZP/edQuVZv9WqLKDECwgj0t5H2CI=;
-        b=Si6Vq1L/wyTzEiAUikc6CtaVkiIyqD1G8uj1P2QX4bhOIZxFswLinA5JmwpnqLebt3
-         CtPveZdvdIXV4SnfF0A/PxZgaHAlnndeop7CW0Lt+kaJONWbIXI5Cs2WCFkjtmAt3PRt
-         eDS9kHA7sCtAzHS7JP/ZDwKk3SkkgoMtg2VwqfKxzbGZCVoKJrKWqdnEI8vVoirVDhqF
-         ss85CpzzPGCbykgUXKoZagmOxjolQmpaQOlLnQmTXXQTSBlbhz+eqWL9K8jbP3kuxmIs
-         CV8sg2PMlpXJEkq3DZHBa1nQqeePloghQw2+7b5OhqsBkfx829zt1KXR/iwp6jurvmY/
-         jXYQ==
-X-Gm-Message-State: AOAM531RRQO13sbRSztR5MXW1FnWzZZbxp0aYsUARZk9InjRTBaPG5IM
-        Q0iT3xEVEwozJ9Uz669pwg3LnQ==
-X-Google-Smtp-Source: ABdhPJwUu6hTVJnqQMkiiZojWCHHXZqLpYI4Ef1FWPqKJaOiKZnv/kYPTv56XL9GKNQQAczOtcdHlg==
-X-Received: by 2002:a05:600c:2109:: with SMTP id u9mr5386234wml.75.1589997113302;
-        Wed, 20 May 2020 10:51:53 -0700 (PDT)
-Received: from [192.168.1.237] (ip68-5-85-189.oc.oc.cox.net. [68.5.85.189])
-        by smtp.gmail.com with ESMTPSA id q9sm3646293wmb.34.2020.05.20.10.51.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 May 2020 10:51:52 -0700 (PDT)
-Subject: Re: [PATCH resend] scsi: lpfc: Fix a use after free in
- lpfc_nvme_unsol_ls_handler()
-To:     Christoph Hellwig <hch@infradead.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        linux-scsi@vger.kernel.org,
+        id S1726964AbgETRxn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 20 May 2020 13:53:43 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:3932 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726729AbgETRxj (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 20 May 2020 13:53:39 -0400
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 20 May 2020 10:53:39 -0700
+Received: from asutoshd-linux1.qualcomm.com ([10.46.160.39])
+  by ironmsg05-sd.qualcomm.com with ESMTP; 20 May 2020 10:53:38 -0700
+Received: by asutoshd-linux1.qualcomm.com (Postfix, from userid 92687)
+        id 6325420B91; Wed, 20 May 2020 10:53:38 -0700 (PDT)
+From:   Asutosh Das <asutoshd@codeaurora.org>
+To:     cang@codeaurora.org, martin.petersen@oracle.com,
+        PedroM.Sousa@synopsys.com, linux-scsi@vger.kernel.org
+Cc:     Asutosh Das <asutoshd@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        kernel-janitors@vger.kernel.org, linux-nvme@lists.infradead.org,
-        Paul Ely <paul.ely@broadcom.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <yq1y2purqt1.fsf@oracle.com> <20200515101903.GJ3041@kadam>
- <20200520165557.GA9700@infradead.org> <20200520172433.GD30374@kadam>
- <20200520172844.GA21006@infradead.org> <yq1y2pmtsv7.fsf@ca-mkp.ca.oracle.com>
- <20200520173752.GA13546@infradead.org> <yq1sgfutsjd.fsf@ca-mkp.ca.oracle.com>
- <20200520174800.GA13253@infradead.org>
-From:   James Smart <james.smart@broadcom.com>
-Message-ID: <4693662b-60de-388e-d67f-722eabbba475@broadcom.com>
-Date:   Wed, 20 May 2020 10:51:48 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200520174800.GA13253@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+        Stanley Chu <stanley.chu@mediatek.com>,
+        Bean Huo <beanhuo@micron.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v4 1/2] scsi: ufs: export hibern8 entry
+Date:   Wed, 20 May 2020 10:53:16 -0700
+Message-Id: <186237103353b5a79c3496e619fca894dbc78600.1589997078.git.asutoshd@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 5/20/2020 10:48 AM, Christoph Hellwig wrote:
-> On Wed, May 20, 2020 at 01:39:55PM -0400, Martin K. Petersen wrote:
->> Christoph,
->>
->>> I'll pick it up.  Can you give me an ACK for it to show Jens you are
->>> ok with that?
->> Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
-> Thanks,
->
-> applied to nvme-5.8.
+Qualcomm controllers need to be in hibern8 before scaling up
+or down the clocks. Hence, export the hibern8 entry function.
 
-Guess you didn't see Dan's response - we had replied, and Dick rejected 
-it. Dick has created a new patch that I'll be posting shortly.
+Signed-off-by: Asutosh Das <asutoshd@codeaurora.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 4 ++--
+ drivers/scsi/ufs/ufshcd.h | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
--- james
-
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index c3389c9..aaf4adf 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -243,7 +243,6 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool async);
+ static int __ufshcd_setup_clocks(struct ufs_hba *hba, bool on,
+ 				 bool skip_ref_clk);
+ static int ufshcd_setup_clocks(struct ufs_hba *hba, bool on);
+-static int ufshcd_uic_hibern8_enter(struct ufs_hba *hba);
+ static inline void ufshcd_add_delay_before_dme_cmd(struct ufs_hba *hba);
+ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba);
+ static void ufshcd_resume_clkscaling(struct ufs_hba *hba);
+@@ -3877,7 +3876,7 @@ static int __ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
+ 	return ret;
+ }
+ 
+-static int ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
++int ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
+ {
+ 	int ret = 0, retries;
+ 
+@@ -3889,6 +3888,7 @@ static int ufshcd_uic_hibern8_enter(struct ufs_hba *hba)
+ out:
+ 	return ret;
+ }
++EXPORT_SYMBOL_GPL(ufshcd_uic_hibern8_enter);
+ 
+ int ufshcd_uic_hibern8_exit(struct ufs_hba *hba)
+ {
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index 88d4202..defc12c 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -835,6 +835,7 @@ int ufshcd_wait_for_register(struct ufs_hba *hba, u32 reg, u32 mask,
+ void ufshcd_parse_dev_ref_clk_freq(struct ufs_hba *hba, struct clk *refclk);
+ void ufshcd_update_reg_hist(struct ufs_err_reg_hist *reg_hist,
+ 			    u32 reg);
++int ufshcd_uic_hibern8_enter(struct ufs_hba *hba);
+ 
+ static inline void check_upiu_size(void)
+ {
+-- 
+Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
