@@ -2,150 +2,142 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 220661DDA06
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 00:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714501DDDD1
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 05:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730639AbgEUWNi (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 21 May 2020 18:13:38 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:52034 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730454AbgEUWNh (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 21 May 2020 18:13:37 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04LMBpgt088651;
-        Thu, 21 May 2020 22:13:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=wCIsyyLwDZAPXKxBz08awx1T9AIEcQ1NtANpUNu2B60=;
- b=IrjA0pAqAa7gNgWpj1FCW9h1tqPJ4owSMRVs67NaMHvRwALTBt4B4Ev8rL2vfP6mo1t1
- XVx82bLt3Y4tka0bIGqO4rEbp+BzpbgpDPVzKVIZt9jRGCMxrIyekJY9dICOOJym2hrz
- DKYzLvT9aLWIsFbN8msrrBVTEeIcSf6HRJSU0ojcI7HXg2NGxpuaJzMBt+WstXp/hMve
- aa/GZj1aM42kCLleEBcUphKQVITlUi+p8Oo+eHypZ0C9vLwtlUhit7HRfi2aGPMqZo8M
- GM1pCdi6m4ghQA/rjS677R6ywEKpJ9JOh8/RzyXtvjbp6X0JTXK/ySgqXRWQoJLUz/9E Ew== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 3127krk01p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 21 May 2020 22:13:34 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04LMDDJJ149069;
-        Thu, 21 May 2020 22:13:33 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 312t3cgj5s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 May 2020 22:13:33 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04LMDWPW005381;
-        Thu, 21 May 2020 22:13:32 GMT
-Received: from supannee-devvm-ol7.osdevelopmeniad.oraclevcn.com (/100.100.231.179)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 21 May 2020 15:13:32 -0700
-From:   Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>
-To:     martin.petersen@oracle.com, mchristi@redhat.com,
-        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org
-Cc:     shirley.ma@oracle.com
-Subject: [PATCH v2 3/3] target: rename target_setup_cmd_from_cdb() to target_cmd_parse_cdb()
-Date:   Thu, 21 May 2020 22:13:25 +0000
-Message-Id: <1590099205-7997-4-git-send-email-sudhakar.panneerselvam@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1590099205-7997-1-git-send-email-sudhakar.panneerselvam@oracle.com>
-References: <1590099205-7997-1-git-send-email-sudhakar.panneerselvam@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 mlxlogscore=999
- phishscore=0 mlxscore=0 malwarescore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005210165
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 spamscore=0
- bulkscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=999 malwarescore=0 cotscore=-2147483648
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005210165
+        id S1727954AbgEVDXO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 21 May 2020 23:23:14 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:43218 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727024AbgEVDXN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 21 May 2020 23:23:13 -0400
+Received: from DGGEMS404-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 517CBD1F1133380F4DBE;
+        Fri, 22 May 2020 11:23:11 +0800 (CST)
+Received: from [127.0.0.1] (10.74.219.194) by DGGEMS404-HUB.china.huawei.com
+ (10.3.19.204) with Microsoft SMTP Server id 14.3.487.0; Fri, 22 May 2020
+ 11:23:02 +0800
+Subject: Re: [PATCH v2] ata: libata: Remove unused parameter in function
+ ata_sas_port_alloc()
+To:     John Garry <john.garry@huawei.com>, <tj@kernel.org>,
+        <martin.petersen@oracle.com>, <brking@us.ibm.com>
+References: <1590023852-47302-1-git-send-email-chenxiang66@hisilicon.com>
+ <2174ba8a-065e-4bc6-b0a0-f8394a9e7563@huawei.com>
+CC:     <linux-ide@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>
+From:   "chenxiang (M)" <chenxiang66@hisilicon.com>
+Message-ID: <4dfda592-d5cc-59cf-7f27-5fcc71e59671@hisilicon.com>
+Date:   Fri, 22 May 2020 11:23:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.2.0
+MIME-Version: 1.0
+In-Reply-To: <2174ba8a-065e-4bc6-b0a0-f8394a9e7563@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.74.219.194]
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This commit also removes the unused argument, cdb that was passed
-to this function.
 
-Signed-off-by: Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>
----
- drivers/target/iscsi/iscsi_target.c    | 2 +-
- drivers/target/target_core_transport.c | 6 +++---
- drivers/target/target_core_xcopy.c     | 2 +-
- include/target/target_core_fabric.h    | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index 1110ea507b83..d89983b2e8d6 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -1185,7 +1185,7 @@ int iscsit_setup_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
- 
- 	/* only used for printks or comparing with ->ref_task_tag */
- 	cmd->se_cmd.tag = (__force u32)cmd->init_task_tag;
--	cmd->sense_reason = target_setup_cmd_from_cdb(&cmd->se_cmd, hdr->cdb);
-+	cmd->sense_reason = target_cmd_parse_cdb(&cmd->se_cmd, hdr->cdb);
- 	if (cmd->sense_reason)
- 		goto attach_cmd;
- 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 67bfac1081c1..74ef89c1e7fb 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -1450,7 +1450,7 @@ void transport_init_se_cmd(
- EXPORT_SYMBOL(target_cmd_init_cdb);
- 
- sense_reason_t
--target_setup_cmd_from_cdb(struct se_cmd *cmd, unsigned char *cdb)
-+target_cmd_parse_cdb(struct se_cmd *cmd, unsigned char *cdb)
- {
- 	struct se_device *dev = cmd->se_dev;
- 	sense_reason_t ret;
-@@ -1472,7 +1472,7 @@ void transport_init_se_cmd(
- 	atomic_long_inc(&cmd->se_lun->lun_stats.cmd_pdus);
- 	return 0;
- }
--EXPORT_SYMBOL(target_setup_cmd_from_cdb);
-+EXPORT_SYMBOL(target_cmd_parse_cdb);
- 
- /*
-  * Used by fabric module frontends to queue tasks directly.
-@@ -1636,7 +1636,7 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
- 		return 0;
- 	}
- 
--	rc = target_setup_cmd_from_cdb(se_cmd, cdb);
-+	rc = target_cmd_parse_cdb(se_cmd, cdb);
- 	if (rc != 0) {
- 		transport_generic_request_failure(se_cmd, rc);
- 		return 0;
-diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
-index fdd8234906b6..ed43086bf965 100644
---- a/drivers/target/target_core_xcopy.c
-+++ b/drivers/target/target_core_xcopy.c
-@@ -530,7 +530,7 @@ static int target_xcopy_setup_pt_cmd(
- 		return -EINVAL;
- 
- 	cmd->tag = 0;
--	if (target_setup_cmd_from_cdb(cmd, cdb))
-+	if (target_cmd_parse_cdb(cmd, cdb))
- 		return -EINVAL;
- 
- 	if (transport_generic_map_mem_to_cmd(cmd, xop->xop_data_sg,
-diff --git a/include/target/target_core_fabric.h b/include/target/target_core_fabric.h
-index 6a2bfcca0c98..65496b2a7ad6 100644
---- a/include/target/target_core_fabric.h
-+++ b/include/target/target_core_fabric.h
-@@ -153,7 +153,7 @@ void	transport_init_se_cmd(struct se_cmd *,
- 		struct se_session *, u32, int, int, unsigned char *);
- sense_reason_t transport_lookup_cmd_lun(struct se_cmd *, u64);
- sense_reason_t target_cmd_init_cdb(struct se_cmd *, unsigned char *);
--sense_reason_t target_setup_cmd_from_cdb(struct se_cmd *, unsigned char *);
-+sense_reason_t target_cmd_parse_cdb(struct se_cmd *, unsigned char *);
- int	target_submit_cmd_map_sgls(struct se_cmd *, struct se_session *,
- 		unsigned char *, unsigned char *, u64, u32, int, int, int,
- 		struct scatterlist *, u32, struct scatterlist *, u32,
--- 
-1.8.3.1
+在 2020/5/21 15:23, John Garry 写道:
+> On 21/05/2020 02:17, chenxiang wrote:
+>> From: Xiang Chen <chenxiang66@hisilicon.com>
+>>
+>> Input Parameter shost in function ata_sas_port_alloc() is not used, so
+>> remove it.
+>>
+>> Signed-off-by: Xiang Chen <chenxiang66@hisilicon.com>
+>> ---
+>>   drivers/ata/libata-sata.c     | 4 +---
+>>   drivers/scsi/ipr.c            | 2 +-
+>>   drivers/scsi/libsas/sas_ata.c | 2 +-
+>>   include/linux/libata.h        | 2 +-
+>>   4 files changed, 4 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/ata/libata-sata.c b/drivers/ata/libata-sata.c
+>> index c16423e..a3c83fe 100644
+>> --- a/drivers/ata/libata-sata.c
+>> +++ b/drivers/ata/libata-sata.c
+>> @@ -1070,7 +1070,6 @@ EXPORT_SYMBOL_GPL(ata_scsi_change_queue_depth);
+>>    *    port_alloc - Allocate port for a SAS attached SATA device
+>>    *    @host: ATA host container for all SAS ports
+>>    *    @port_info: Information from low-level host driver
+>> - *    @shost: SCSI host that the scsi device is attached to
+>>    *
+>>    *    LOCKING:
+>>    *    PCI/etc. bus probe sem.
+>> @@ -1080,8 +1079,7 @@ EXPORT_SYMBOL_GPL(ata_scsi_change_queue_depth);
+>>    */
+>>     struct ata_port *ata_sas_port_alloc(struct ata_host *host,
+>> -                    struct ata_port_info *port_info,
+>> -                    struct Scsi_Host *shost)
+>> +                    struct ata_port_info *port_info)
+>>   {
+>>       struct ata_port *ap;
+>
+> A better change could be to add the following, instead of removing the 
+> argument:
+>
+>     ap->scsi_host = shost;
+>
+> And remove the setting from the callsites, upon successful return. But 
+> then we would need to pass shost=NULL for ipr, as it does not seem to 
+> set ap->shost - but that may be an oversight.
+
+OK, i will update it in next version.
+
+>
+> Thanks,
+> John
+>
+>>   diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
+>> index 7d77997..331c41c 100644
+>> --- a/drivers/scsi/ipr.c
+>> +++ b/drivers/scsi/ipr.c
+>> @@ -4816,7 +4816,7 @@ static int ipr_target_alloc(struct scsi_target 
+>> *starget)
+>>           if (!sata_port)
+>>               return -ENOMEM;
+>>   -        ap = ata_sas_port_alloc(&ioa_cfg->ata_host, 
+>> &sata_port_info, shost);
+>> +        ap = ata_sas_port_alloc(&ioa_cfg->ata_host, &sata_port_info);
+>>           if (ap) {
+>>               spin_lock_irqsave(ioa_cfg->host->host_lock, lock_flags);
+>>               sata_port->ioa_cfg = ioa_cfg;
+>> diff --git a/drivers/scsi/libsas/sas_ata.c 
+>> b/drivers/scsi/libsas/sas_ata.c
+>> index 5d716d3..0cdfae9 100644
+>> --- a/drivers/scsi/libsas/sas_ata.c
+>> +++ b/drivers/scsi/libsas/sas_ata.c
+>> @@ -549,7 +549,7 @@ int sas_ata_init(struct domain_device *found_dev)
+>>         ata_host_init(ata_host, ha->dev, &sas_sata_ops);
+>>   -    ap = ata_sas_port_alloc(ata_host, &sata_port_info, shost);
+>> +    ap = ata_sas_port_alloc(ata_host, &sata_port_info);
+>>       if (!ap) {
+>>           pr_err("ata_sas_port_alloc failed.\n");
+>>           rc = -ENODEV;
+>> diff --git a/include/linux/libata.h b/include/linux/libata.h
+>> index 8bf5e59..5a6fb80 100644
+>> --- a/include/linux/libata.h
+>> +++ b/include/linux/libata.h
+>> @@ -1228,7 +1228,7 @@ extern int sata_link_scr_lpm(struct ata_link 
+>> *link, enum ata_lpm_policy policy,
+>>   extern int ata_slave_link_init(struct ata_port *ap);
+>>   extern void ata_sas_port_destroy(struct ata_port *);
+>>   extern struct ata_port *ata_sas_port_alloc(struct ata_host *,
+>> -                       struct ata_port_info *, struct Scsi_Host *);
+>> +                       struct ata_port_info *);
+>>   extern void ata_sas_async_probe(struct ata_port *ap);
+>>   extern int ata_sas_sync_probe(struct ata_port *ap);
+>>   extern int ata_sas_port_init(struct ata_port *);
+>>
+>
+>
+> .
+>
+
 
