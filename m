@@ -2,91 +2,105 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF711DE699
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 14:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5349E1DEAAE
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 16:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729535AbgEVMS2 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 May 2020 08:18:28 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:42410 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728889AbgEVMSY (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 May 2020 08:18:24 -0400
-X-UUID: 95ef12c71ef1453685c344ff69309885-20200522
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ckHEM7GVI4e4nimxXTABhbmcvCORVQbBj1jfInkgoAg=;
-        b=n81B/JDEMXzSi0diDNXDhCFgfIYXJp3X+8YMHa2xMVSdwxEmbSUOkp0CBaez8Ex/nmQBnNcjWMNjqyb9+b5pNfOCmGZ3GMVCxjXbL9NqcBeQisT1cOATNBKlF2exr9PJfrZ9/BjoNceCbHvtX4g56CdpXG9Lq9CBTZUNuwf4TOo=;
-X-UUID: 95ef12c71ef1453685c344ff69309885-20200522
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 669861996; Fri, 22 May 2020 20:18:19 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 May 2020 20:18:15 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 May 2020 20:18:15 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>
-CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
-        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
-        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <pengshun.zhao@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 3/3] scsi: ufs-mediatek: Introduce low-power mode for device power supply
-Date:   Fri, 22 May 2020 20:18:14 +0800
-Message-ID: <20200522121814.9100-4-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200522121814.9100-1-stanley.chu@mediatek.com>
-References: <20200522121814.9100-1-stanley.chu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+        id S1731371AbgEVOzt (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 May 2020 10:55:49 -0400
+Received: from mail-dm6nam12on2041.outbound.protection.outlook.com ([40.107.243.41]:62977
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731365AbgEVOzr (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 22 May 2020 10:55:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jm0Fnz3/Gwg27rKxxXTtLWvId4FXocRzzrPdQ4cNIE67sGOF3HjWYWbb2i/IPgrvo5dmTB+wMJayrIvlb8kNmb1uXjduhhcfVSbQLuR08LnRTJ34h+6GcTjJcDb0+WhPEAjJd0INaIB2KLdgR2bkZ6MMVLFYwm92cuvoQwqUeHnsbPzKQ7GK3CQEY0rypFeB6RASx0AdNxXi6RsAQIMpmIFCVTMUmPrhYNn1QMRw7YW4szwQdEfwkyjZrVvPXLqUnmSTw6r3DvTBnMuagp9uSkR4mY8NIp+WGRC6vytQBLmVOOO233SJEBGb70luU8mL84k+P+80iCRsuGI9g5l9xg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Aa8OfpbX5JGsjxlkBvH58TN+EspF9dos4LaIks6SASA=;
+ b=hTzarp75GWIOb4ZJKeMXRPBo2Sixqz1cBdS9+83eqUHTf6Ve+8XoIX1QzQ0yP14QyZjFU1vbl0fk9jujz0i7V8bv3ZMtOen4lD1AAZ0H0FI5bGjXmGzU3d7xnxiWw6Bih8sYgT5yG1+MQoZ0mFcM1WXQQN9m9W9+4QvQsnGyVWptlaBlNwsUlWGTw6rMQ9ZJIOvSWoun2oJCVoc286KluSnBJAeGd9eUh7qwtomzsNhfBxIGYOdfpRU/npx9EiCOIkpGTIIVEdcTz5HKx3vKuMWXXZUHrXhB+vH6Z577Iqq00dKaRLZ9ShdXZYNV+IzNC2h22oRXO3VvnuAzJsKLyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=micron.com; dmarc=pass action=none header.from=micron.com;
+ dkim=pass header.d=micron.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=micron.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Aa8OfpbX5JGsjxlkBvH58TN+EspF9dos4LaIks6SASA=;
+ b=5x6/QOtgimNmqSljn0wYpYedjZOKne0PP2GS2dqJOKeOxV7BYKg9zVzn80nRhU9gKeCa+UWuLD0s0qxqxh5qswE525fhEws7ZQlNU7eJ00p3XmhxWEcBaic4TDy79kh0Cp7/UcchwmqTgpYW61r4xMcT28POM21oN9gmhpN+DOA=
+Received: from SN6PR08MB5693.namprd08.prod.outlook.com (2603:10b6:805:f8::33)
+ by SN6PR08MB3920.namprd08.prod.outlook.com (2603:10b6:805:1f::27) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3021.27; Fri, 22 May
+ 2020 14:55:44 +0000
+Received: from SN6PR08MB5693.namprd08.prod.outlook.com
+ ([fe80::d5fe:2ead:9b9a:c340]) by SN6PR08MB5693.namprd08.prod.outlook.com
+ ([fe80::d5fe:2ead:9b9a:c340%4]) with mapi id 15.20.3021.020; Fri, 22 May 2020
+ 14:55:44 +0000
+From:   "Bean Huo (beanhuo)" <beanhuo@micron.com>
+To:     "dinghao.liu@zju.edu.cn" <dinghao.liu@zju.edu.cn>
+CC:     "kjlu@umn.edu" <kjlu@umn.edu>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Can Guo <cang@codeaurora.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: RE: [EXT] [PATCH] scsi: ufs-bsg: Fix runtime PM imbalance on
+ error
+Thread-Topic: RE: [EXT] [PATCH] scsi: ufs-bsg: Fix runtime PM imbalance on
+ error
+Thread-Index: AQHWL/XSkL9YvKr2Y0+njmc4MiuIK6izvNjggAAQhwCAAGAPUA==
+Date:   Fri, 22 May 2020 14:55:43 +0000
+Message-ID: <SN6PR08MB5693D06B4B30D0A76824D2BBDBB40@SN6PR08MB5693.namprd08.prod.outlook.com>
+References: <20200522045932.31795-1-dinghao.liu@zju.edu.cn>
+ <SN6PR08MB56932A6D579AFB4E28AFD001DBB40@SN6PR08MB5693.namprd08.prod.outlook.com>
+ <4a6ba414.bf5c4.1723b9792df.Coremail.dinghao.liu@zju.edu.cn>
+In-Reply-To: <4a6ba414.bf5c4.1723b9792df.Coremail.dinghao.liu@zju.edu.cn>
+Accept-Language: en-150, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: zju.edu.cn; dkim=none (message not signed)
+ header.d=none;zju.edu.cn; dmarc=none action=none header.from=micron.com;
+x-originating-ip: [165.225.81.101]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2a855cc2-1da5-4be0-b52e-08d7fe60341b
+x-ms-traffictypediagnostic: SN6PR08MB3920:
+x-microsoft-antispam-prvs: <SN6PR08MB3920224845BC93B8D53FEC07DBB40@SN6PR08MB3920.namprd08.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 04111BAC64
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WVXau2LPn6e7fptyYuIb/Iv+8SUC4VDUjO+uqItpa8QCrUq63rZ3+dvD9WLdLlydpestMXbVUkxD627VIXHHHSC9tUIfWEV0ANXLtABQxchx+ldk95bPeD53cGLxF55IoYo1155TtQ4e5lL+SfGmp2auBHhAW7qdqRrtDV7Wno8NxllAOBhlOC0yAeNxoVYZPgpQdl/27UoxbQmgj+0guumUXLiMiyc82xiqlG7RoPTApOgwC2ZFcYCLpS8vsHVjCMdhhMidvJllSoy8E5ajTNBK6GEzWfJq1r+2icd+BZG3hCCcPRl859jeOUfCGWgOhv5Js0SYnEeDPovX8XQKSw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR08MB5693.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(366004)(396003)(136003)(346002)(39860400002)(376002)(4326008)(8676002)(54906003)(9686003)(8936002)(5660300002)(71200400001)(316002)(76116006)(4744005)(7416002)(33656002)(186003)(55016002)(86362001)(66946007)(26005)(6916009)(2906002)(66476007)(66556008)(66446008)(64756008)(6506007)(52536014)(55236004)(7696005)(478600001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: GZqJzNma6V0edxZwvAdU4szGd2AfuGnJTFhc1/OjVKpovPuG/OBMtFX02Dt4880c2P+LDUdUcroaOSUyZqpVBpfSGs4ALG3F17pNgu4TjO62hbyOcdFbgTcpaNu0vWenX0bnI7LiHDTse48KQlO7q9DaKf6oBphP+grHkp0ThKSeoawlA8ZuGC+xSB0j1Uq9YejKE1Nk8KkEOumTPskB6lDlWlPyzVVuKdD+9o5bddbGM9IBoY5GVYtDvpKgEyPfRG2ewGW8J/lA6uqHS7ZSty96RALLt9uoaoCa09oPgcb1iebRhw1TREt+KngQo1nsDNQzJ31DJ/OdtMtXdkA1d7mFpMIDvqcwHj275xxypPcrHDpwp65bU0TpN2+MrS1uhhuLvHZu4Bh9z1yii66uE6j6Pqgu4S76ZgZQE9gsxJi9BdsqS8syO/Kj3TKFmG0w5eM5accQuSbY6OLhCgL7wKGFsxUbP2n6V3g/tWVdVTojTSyxR3mgsMPyaIpOSBiy
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: micron.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a855cc2-1da5-4be0-b52e-08d7fe60341b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2020 14:55:43.8395
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f38a5ecd-2813-4862-b11b-ac1d563c806f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JqJx4iTHQEUQV08Pla/Gk7euoGrL+IVX7pLsQUUpcZXGb8VW/NYHaND7JEKoZpLeYhtCDBbWf67CVXP+sMlAYg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR08MB3920
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-QWxsb3cgZGV2aWNlIHBvd2VyIHN1cHBseSB0byBlbnRlciBsb3ctcG93ZXIgbW9kZSBpZiBkZXZp
-Y2Ugd2lsbA0KZG8gbm90aGluZyB0byBzYXZlIG1vcmUgcG93ZXIuDQoNClNpZ25lZC1vZmYtYnk6
-IFN0YW5sZXkgQ2h1IDxzdGFubGV5LmNodUBtZWRpYXRlay5jb20+DQpSZXZpZXdlZC1ieTogUGVu
-Z3NodW4gWmhhbyA8cGVuZ3NodW4uemhhb0BtZWRpYXRlay5jb20+DQotLS0NCiBkcml2ZXJzL3Nj
-c2kvdWZzL3Vmcy1tZWRpYXRlay5jIHwgMjEgKysrKysrKysrKysrKysrKysrKysrDQogMSBmaWxl
-IGNoYW5nZWQsIDIxIGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91
-ZnMvdWZzLW1lZGlhdGVrLmMgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRlay5jDQppbmRl
-eCAzYzg1ZjVlOTdkZWEuLjVmNDFiN2I3ZGI4ZiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91
-ZnMvdWZzLW1lZGlhdGVrLmMNCisrKyBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMN
-CkBAIC0xMiw2ICsxMiw3IEBADQogI2luY2x1ZGUgPGxpbnV4L29mX2FkZHJlc3MuaD4NCiAjaW5j
-bHVkZSA8bGludXgvcGh5L3BoeS5oPg0KICNpbmNsdWRlIDxsaW51eC9wbGF0Zm9ybV9kZXZpY2Uu
-aD4NCisjaW5jbHVkZSA8bGludXgvcmVndWxhdG9yL2NvbnN1bWVyLmg+DQogI2luY2x1ZGUgPGxp
-bnV4L3NvYy9tZWRpYXRlay9tdGtfc2lwX3N2Yy5oPg0KIA0KICNpbmNsdWRlICJ1ZnNoY2QuaCIN
-CkBAIC01MjEsNiArNTIyLDE5IEBAIHN0YXRpYyBpbnQgdWZzX210a19saW5rX3NldF9scG0oc3Ry
-dWN0IHVmc19oYmEgKmhiYSkNCiAJcmV0dXJuIDA7DQogfQ0KIA0KK3N0YXRpYyB2b2lkIHVmc19t
-dGtfdnJlZ19zZXRfbHBtKHN0cnVjdCB1ZnNfaGJhICpoYmEsIGJvb2wgbHBtKQ0KK3sNCisJaWYg
-KCFoYmEtPnZyZWdfaW5mby52Y2NxMikNCisJCXJldHVybjsNCisNCisJaWYgKGxwbSAmICFoYmEt
-PnZyZWdfaW5mby52Y2MtPmVuYWJsZWQpDQorCQlyZWd1bGF0b3Jfc2V0X21vZGUoaGJhLT52cmVn
-X2luZm8udmNjcTItPnJlZywNCisJCQkJICAgUkVHVUxBVE9SX01PREVfSURMRSk7DQorCWVsc2Ug
-aWYgKCFscG0pDQorCQlyZWd1bGF0b3Jfc2V0X21vZGUoaGJhLT52cmVnX2luZm8udmNjcTItPnJl
-ZywNCisJCQkJICAgUkVHVUxBVE9SX01PREVfTk9STUFMKTsNCit9DQorDQogc3RhdGljIGludCB1
-ZnNfbXRrX3N1c3BlbmQoc3RydWN0IHVmc19oYmEgKmhiYSwgZW51bSB1ZnNfcG1fb3AgcG1fb3Ap
-DQogew0KIAlpbnQgZXJyOw0KQEAgLTUzNyw2ICs1NTEsMTIgQEAgc3RhdGljIGludCB1ZnNfbXRr
-X3N1c3BlbmQoc3RydWN0IHVmc19oYmEgKmhiYSwgZW51bSB1ZnNfcG1fb3AgcG1fb3ApDQogCQkJ
-dWZzaGNkX3NldF9saW5rX29mZihoYmEpOw0KIAkJCXJldHVybiAtRUFHQUlOOw0KIAkJfQ0KKwkJ
-LyoNCisJCSAqIE1ha2Ugc3VyZSBubyBlcnJvciB3aWxsIGJlIHJldHVybmVkIHRvIHByZXZlbnQN
-CisJCSAqIHVmc2hjZF9zdXNwZW5kKCkgcmUtZW5hYmxpbmcgcmVndWxhdG9ycyB3aGlsZSB2cmVn
-IGlzIHN0aWxsDQorCQkgKiBpbiBsb3ctcG93ZXIgbW9kZS4NCisJCSAqLw0KKwkJdWZzX210a192
-cmVnX3NldF9scG0oaGJhLCB0cnVlKTsNCiAJfQ0KIA0KIAlpZiAoIXVmc2hjZF9pc19saW5rX2Fj
-dGl2ZShoYmEpKQ0KQEAgLTU1NCw2ICs1NzQsNyBAQCBzdGF0aWMgaW50IHVmc19tdGtfcmVzdW1l
-KHN0cnVjdCB1ZnNfaGJhICpoYmEsIGVudW0gdWZzX3BtX29wIHBtX29wKQ0KIAkJcGh5X3Bvd2Vy
-X29uKGhvc3QtPm1waHkpOw0KIA0KIAlpZiAodWZzaGNkX2lzX2xpbmtfaGliZXJuOChoYmEpKSB7
-DQorCQl1ZnNfbXRrX3ZyZWdfc2V0X2xwbShoYmEsIGZhbHNlKTsNCiAJCWVyciA9IHVmc19tdGtf
-bGlua19zZXRfaHBtKGhiYSk7DQogCQlpZiAoZXJyKSB7DQogCQkJZXJyID0gdWZzaGNkX2xpbmtf
-cmVjb3ZlcnkoaGJhKTsNCi0tIA0KMi4xOC4wDQo=
-
+SGksIERpbmdoYW8NCg0KPiBUaGFuayB5b3UgZm9yIHlvdXIgYWR2aWNlISBNb3Zpbmcgb3JpZ2lu
+YWwgcG1fcnVudGltZV9wdXRfc3luYygpIHRvIGFmdGVyDQo+ICJvdXQiIGxhYmVsIHdpbGwgaW5m
+bHVlbmNlIGFuIGVycm9yIHBhdGggYnJhbmNoZWQgZnJvbQ0KPiB1cHNfYnNnX3ZlcmlmeV9xdWVy
+eV9zaXplKCkuIFNvIEkgdGhpbmsgY2hhbmdpbmcgImdvdG8gb3V0IiB0byAiYnJlYWsiIGlzIGEg
+Z29vZA0KPiBpZGVhLiBCdXQgaW4gdGhpcyBjYXNlIHdlIG1heSBleGVjdXRlIGFuIGV4dHJhDQo+
+IHNnX2NvcHlfZnJvbV9idWZmZXIoKSBhbmQgYW4gZXh0cmEga2ZyZWUoKSBjb21wYXJlZCB3aXRo
+IHVucGF0Y2hlZCB2ZXJzaW9uLg0KPiBEb2VzIHRoaXMgbWF0dGVyPw0KPiANCldoYXQgZG8geW91
+IG1lYW4gIiB1bnBhdGNoZWQgdmVyc2lvbiAiPyANCg0KSSBzZWUsIGJlbG93IGdvdG8gd2lsbCBi
+eXBhc3Mgc2dfY29weV9mcm9tX2J1ZmZlcigpIGFuZCBhbiBleHRyYSBrZnJlZSgpDQpJbiBjYXNl
+IHVmc19ic2dfYWxsb2NfZGVzY19idWZmZXIoKSBmYWlscy4gDQoNCkJlYW4NCg0K
