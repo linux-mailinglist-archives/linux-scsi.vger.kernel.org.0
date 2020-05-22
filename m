@@ -2,193 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C73281DE1DF
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 10:32:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66F6A1DE264
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 10:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729382AbgEVIc1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 May 2020 04:32:27 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:3530 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729068AbgEVIcZ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 May 2020 04:32:25 -0400
-X-UUID: 5805bc3dc3dd4051a42359bc4857b178-20200522
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=GB2siZ1aCshncN85D71R5V/xJ8ZgYKphiAMj7ygmguo=;
-        b=TOhoowSb/WFg70kkRFJzpEp1n+CAu1bOU+b+e7HNXVnoleBxi8UdKHrpTeStOwhoYpVfJl3Mij/ojhwpAN1HzINMizw1MT87f2HPJepb+AwDaqdkFiVFUz57eFOxlUDnrjwbrOyRUR5tVN+BN7XA6iIGvM3D2fR1ybMlBNuCQJw=;
-X-UUID: 5805bc3dc3dd4051a42359bc4857b178-20200522
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1221867080; Fri, 22 May 2020 16:32:16 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 22 May 2020 16:32:15 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 22 May 2020 16:32:14 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>, <asutoshd@codeaurora.org>
-CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
-        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Virtual_Global_UFS_Upstream@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v4 4/4] scsi: ufs: Fix WriteBooster flush during runtime suspend
-Date:   Fri, 22 May 2020 16:32:12 +0800
-Message-ID: <20200522083212.4008-5-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200522083212.4008-1-stanley.chu@mediatek.com>
-References: <20200522083212.4008-1-stanley.chu@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1729090AbgEVIsm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 May 2020 04:48:42 -0400
+Received: from fgw20-4.mail.saunalahti.fi ([62.142.5.107]:24064 "EHLO
+        fgw20-4.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728959AbgEVIsm (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Fri, 22 May 2020 04:48:42 -0400
+Received: from imac.makisara.private (85-131-115-176.bb.dnainternet.fi [85.131.115.176])
+        by fgw20.mail.saunalahti.fi (Halon) with ESMTPSA
+        id ca2c9ed3-9c06-11ea-ba22-005056bd6ce9;
+        Fri, 22 May 2020 11:32:36 +0300 (EEST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
+Subject: Re: [PATCH] scsi: st: convert convert get_user_pages() -->
+ pin_user_pages()
+From:   =?utf-8?B?IkthaSBNw6RraXNhcmEgKEtvbHVtYnVzKSI=?= 
+        <kai.makisara@kolumbus.fi>
+In-Reply-To: <494478b6-9a8c-5271-fc9f-fd758af850c0@acm.org>
+Date:   Fri, 22 May 2020 11:32:36 +0300
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Message-Id: <C1CFE522-CEA6-4130-9433-73243BC00782@kolumbus.fi>
+References: <20200519045525.2446851-1-jhubbard@nvidia.com>
+ <494478b6-9a8c-5271-fc9f-fd758af850c0@acm.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+X-Mailer: Apple Mail (2.3608.80.23.2.2)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Q3VycmVudGx5IFVGUyBob3N0IGRyaXZlciBwcm9taXNlcyBWQ0Mgc3VwcGx5IGlmIFVGUyBkZXZp
-Y2UNCm5lZWRzIHRvIGRvIFdyaXRlQm9vc3RlciBmbHVzaCBkdXJpbmcgcnVudGltZSBzdXNwZW5k
-Lg0KDQpIb3dldmVyIHRoZSBVRlMgc3BlY2lmaWNhdGlvbiBtZW50aW9ucywNCg0KIldoaWxlIHRo
-ZSBmbHVzaGluZyBvcGVyYXRpb24gaXMgaW4gcHJvZ3Jlc3MsIHRoZSBkZXZpY2UgaXMNCmluIEFj
-dGl2ZSBwb3dlciBtb2RlLiINCg0KVGhlcmVmb3JlIFVGUyBob3N0IGRyaXZlciBuZWVkcyB0byBw
-cm9taXNlIG1vcmU6IEtlZXAgVUZTDQpkZXZpY2UgYXMgIkFjdGl2ZSBwb3dlciBtb2RlIiwgb3Ro
-ZXJ3aXNlIFVGUyBkZXZpY2Ugc2hhbGwgbm90DQpkbyBhbnkgZmx1c2ggaWYgZGV2aWNlIGVudGVy
-cyBTbGVlcCBvciBQb3dlckRvd24gcG93ZXIgbW9kZS4NClNpbWlsYXJseSwgdGhlIHNhbWUgcHJv
-bWlzZXMgc2hhbGwgYmUgYXBwbGllZCBpZiBkZXZpY2UgbmVlZHMNCnVyZ2VudCBCS09QIGR1cmlu
-ZyBydW50aW1lIHN1c3BlbmQuDQoNCkZpeCB0aGlzIGJ5IG5vdCBjaGFuZ2luZyBkZXZpY2UgcG93
-ZXIgbW9kZSBpZiBXcml0ZUJvb3N0ZXINCmZsdXNoIG9yIHVyZ2VudCBCS09QIGlzIHJlcXVpcmVk
-IGluIHVmc2hjZF9zdXNwZW5kKCkuDQoNCk5vdywgaWYgZGV2aWNlIGZpbmlzaGVzIGl0cyBqb2Ig
-YnV0IG5vdCByZXN1bWVkIGZvciBhIHZlcnkNCmxvbmcgdGltZSwgc3lzdGVtIHdpbGwgaGF2ZSB1
-bm5lY2Vzc2FyeSBwb3dlciBkcmFpbiBiZWNhdXNlDQpWQ0MgaXMgc3RpbGwgc3VwcGxpZWQuIEEg
-bWV0aG9kIHRvIHJlLWNoZWNrIHRoZSB0aHJlc2hvbGQgb2YNCmtlZXBpbmcgVkNDIHN1cHBseSBp
-cyByZXF1aXJlZCB0byBmaXggdGhlIHBvd2VyIGRyYWluLiBIb3dldmVyLA0KdGhlIHRocmVzaG9s
-ZCByZS1jaGVjayBuZWVkcyB0byByZS1hY3RpdmF0ZSB0aGUgbGluayBmaXJzdA0KYmVjYXVzZSB0
-aGUgZGVjaXNpb24gZGVwZW5kcyBvbiB0aGUgbGF0ZXN0IGRldmljZSBzdGF0dXMuDQoNClNvLCBh
-bHNvIGludHJvZHVjZSBhIGRlbGF5ZWQgd29yayB0byBmb3JjZSBydW50aW1lIHJlc3VtZQ0KYWZ0
-ZXIgYSBjZXJ0YWluIGRlbGF5IGR1cmluZyBydW50aW1lIHN1c3BlbmQuIFRoaXMgbWFrZXMNCnRo
-cmVzaG9sZCByZS1jaGVjayBoYXBwZW4gbmF0dWFsbHkgaW4gdGhlIGVudHJhbmNlIG9mIG5leHQN
-CnJ1bnRpbWUtc3VzcGVuZC4gVGhlIGRldmljZSBjYW4gY29udGludWUgaXRzIFdyaXRlQm9vc3Rl
-ciBmbHVzaA0Kb3IgdXJnZW50IEJLT1Agam9icyBzb29uIGFmdGVyIHJlc3VtZWQgaWYgZGV2aWNl
-IGhhcyBubyB1cGNvbWluZw0KcmVxdWVzdHMgYW5kIGxpbmsgZW50ZXJzIGhpYmVybjggc3RhdGUg
-ZWl0aGVyIGJ5IEF1dG8tSGliZXJuOA0Kb3IgaGliZXJuOCBkdXJpbmcgY2xrLWdhdGluZyBzY2hl
-bWUuIFRoaXMgc29sdXRpb24gbm90IG9ubHkNCnByZXZlbnRzIHBvd2VyIGRyYWluIGJ1dCBhbHNv
-IG1ha2VzIGFzIG11Y2ggdXNlIG9mIHRpbWUgYXMNCnBvc3NpYmxlIGZvciBkZXZpY2UncyBiYWNr
-Z3JvdW5kIGpvYnMuDQoNClNpZ25lZC1vZmYtYnk6IFN0YW5sZXkgQ2h1IDxzdGFubGV5LmNodUBt
-ZWRpYXRlay5jb20+DQotLS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy5oICAgIHwgIDIgKy0NCiBk
-cml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jIHwgNzkgKysrKysrKysrKysrKysrKysrKysrKysrKysr
-Ky0tLS0tLS0tLS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuaCB8ICAxICsNCiAzIGZpbGVz
-IGNoYW5nZWQsIDU5IGluc2VydGlvbnMoKyksIDIzIGRlbGV0aW9ucygtKQ0KDQpkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9zY3NpL3Vmcy91ZnMuaCBiL2RyaXZlcnMvc2NzaS91ZnMvdWZzLmgNCmluZGV4
-IGZhZGJhM2EzYmJjZC4uYzcwODQ1ZDQxNDQ5IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9zY3NpL3Vm
-cy91ZnMuaA0KKysrIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnMuaA0KQEAgLTU3NCw3ICs1NzQsNyBA
-QCBzdHJ1Y3QgdWZzX2Rldl9pbmZvIHsNCiAJdTMyIGRfZXh0X3Vmc19mZWF0dXJlX3N1cDsNCiAJ
-dTggYl93Yl9idWZmZXJfdHlwZTsNCiAJdTMyIGRfd2JfYWxsb2NfdW5pdHM7DQotCWJvb2wga2Vl
-cF92Y2Nfb247DQorCWJvb2wgYl9ycG1fZGV2X2ZsdXNoX2NhcGFibGU7DQogCXU4IGJfcHJlc3J2
-X3VzcGNfZW47DQogfTsNCiANCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5j
-IGIvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYw0KaW5kZXggMzI2MmFjMGUzOWQ0Li45NDc4MmI5
-YjMzYzEgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQorKysgYi9kcml2
-ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQpAQCAtOTQsNiArOTQsOSBAQA0KIC8qIGRlZmF1bHQgZGVs
-YXkgb2YgYXV0b3N1c3BlbmQ6IDIwMDAgbXMgKi8NCiAjZGVmaW5lIFJQTV9BVVRPU1VTUEVORF9E
-RUxBWV9NUyAyMDAwDQogDQorLyogRGVmYXVsdCBkZWxheSBvZiBSUE0gZGV2aWNlIGZsdXNoIGRl
-bGF5ZWQgd29yayAqLw0KKyNkZWZpbmUgUlBNX0RFVl9GTFVTSF9SRUNIRUNLX1dPUktfREVMQVlf
-TVMgNTAwMA0KKw0KIC8qIERlZmF1bHQgdmFsdWUgb2Ygd2FpdCB0aW1lIGJlZm9yZSBnYXRpbmcg
-ZGV2aWNlIHJlZiBjbG9jayAqLw0KICNkZWZpbmUgVUZTSENEX1JFRl9DTEtfR0FUSU5HX1dBSVRf
-VVMgMHhGRiAvKiBtaWNyb3NlY3MgKi8NCiANCkBAIC01MzE0LDcgKzUzMTcsNyBAQCBzdGF0aWMg
-Ym9vbCB1ZnNoY2Rfd2JfcHJlc3J2X3VzcnNwY19rZWVwX3ZjY19vbihzdHJ1Y3QgdWZzX2hiYSAq
-aGJhLA0KIAlyZXR1cm4gZmFsc2U7DQogfQ0KIA0KLXN0YXRpYyBib29sIHVmc2hjZF93Yl9rZWVw
-X3ZjY19vbihzdHJ1Y3QgdWZzX2hiYSAqaGJhKQ0KK3N0YXRpYyBib29sIHVmc2hjZF93Yl9uZWVk
-X2ZsdXNoKHN0cnVjdCB1ZnNfaGJhICpoYmEpDQogew0KIAlpbnQgcmV0Ow0KIAl1MzIgYXZhaWxf
-YnVmOw0KQEAgLTUzNTIsNiArNTM1NSwyMSBAQCBzdGF0aWMgYm9vbCB1ZnNoY2Rfd2Jfa2VlcF92
-Y2Nfb24oc3RydWN0IHVmc19oYmEgKmhiYSkNCiAJcmV0dXJuIHVmc2hjZF93Yl9wcmVzcnZfdXNy
-c3BjX2tlZXBfdmNjX29uKGhiYSwgYXZhaWxfYnVmKTsNCiB9DQogDQorc3RhdGljIHZvaWQgdWZz
-aGNkX3JwbV9kZXZfZmx1c2hfcmVjaGVja193b3JrKHN0cnVjdCB3b3JrX3N0cnVjdCAqd29yaykN
-Cit7DQorCXN0cnVjdCB1ZnNfaGJhICpoYmEgPSBjb250YWluZXJfb2YodG9fZGVsYXllZF93b3Jr
-KHdvcmspLA0KKwkJCQkJICAgc3RydWN0IHVmc19oYmEsDQorCQkJCQkgICBycG1fZGV2X2ZsdXNo
-X3JlY2hlY2tfd29yayk7DQorCS8qDQorCSAqIFRvIHByZXZlbnQgdW5uZWNlc3NhcnkgVkNDIHBv
-d2VyIGRyYWluIGFmdGVyIGRldmljZSBmaW5pc2hlcw0KKwkgKiBXcml0ZUJvb3N0ZXIgYnVmZmVy
-IGZsdXNoIG9yIEF1dG8gQktPUHMsIGZvcmNlIHJ1bnRpbWUgcmVzdW1lDQorCSAqIGFmdGVyIGEg
-Y2VydGFpbiBkZWxheSB0byByZWNoZWNrIHRoZSB0aHJlc2hvbGQgYnkgbmV4dCBydW50aW1lDQor
-CSAqIHN1cHNlbmQuDQorCSAqLw0KKwlwbV9ydW50aW1lX2dldF9zeW5jKGhiYS0+ZGV2KTsNCisJ
-cG1fcnVudGltZV9wdXRfc3luYyhoYmEtPmRldik7DQorfQ0KKw0KIC8qKg0KICAqIHVmc2hjZF9l
-eGNlcHRpb25fZXZlbnRfaGFuZGxlciAtIGhhbmRsZSBleGNlcHRpb25zIHJhaXNlZCBieSBkZXZp
-Y2UNCiAgKiBAd29yazogcG9pbnRlciB0byB3b3JrIGRhdGENCkBAIC04MDk5LDggKzgxMTcsNyBA
-QCBzdGF0aWMgdm9pZCB1ZnNoY2RfdnJlZ19zZXRfbHBtKHN0cnVjdCB1ZnNfaGJhICpoYmEpDQog
-CSAgICAhaGJhLT5kZXZfaW5mby5pc19sdV9wb3dlcl9vbl93cCkgew0KIAkJdWZzaGNkX3NldHVw
-X3ZyZWcoaGJhLCBmYWxzZSk7DQogCX0gZWxzZSBpZiAoIXVmc2hjZF9pc191ZnNfZGV2X2FjdGl2
-ZShoYmEpKSB7DQotCQlpZiAoIWhiYS0+ZGV2X2luZm8ua2VlcF92Y2Nfb24pDQotCQkJdWZzaGNk
-X3RvZ2dsZV92cmVnKGhiYS0+ZGV2LCBoYmEtPnZyZWdfaW5mby52Y2MsIGZhbHNlKTsNCisJCXVm
-c2hjZF90b2dnbGVfdnJlZyhoYmEtPmRldiwgaGJhLT52cmVnX2luZm8udmNjLCBmYWxzZSk7DQog
-CQlpZiAoIXVmc2hjZF9pc19saW5rX2FjdGl2ZShoYmEpKSB7DQogCQkJdWZzaGNkX2NvbmZpZ192
-cmVnX2xwbShoYmEsIGhiYS0+dnJlZ19pbmZvLnZjY3EpOw0KIAkJCXVmc2hjZF9jb25maWdfdnJl
-Z19scG0oaGJhLCBoYmEtPnZyZWdfaW5mby52Y2NxMik7DQpAQCAtODIyNSwyNyArODI0MiwzMCBA
-QCBzdGF0aWMgaW50IHVmc2hjZF9zdXNwZW5kKHN0cnVjdCB1ZnNfaGJhICpoYmEsIGVudW0gdWZz
-X3BtX29wIHBtX29wKQ0KIAkJCXVmc2hjZF9kaXNhYmxlX2F1dG9fYmtvcHMoaGJhKTsNCiAJCX0N
-CiAJCS8qDQotCQkgKiBXaXRoIHdiIGVuYWJsZWQsIGlmIHRoZSBia29wcyBpcyBlbmFibGVkIG9y
-IGlmIHRoZQ0KLQkJICogY29uZmlndXJlZCBXQiB0eXBlIGlzIDcwJSBmdWxsLCBrZWVwIHZjYyBP
-Tg0KLQkJICogZm9yIHRoZSBkZXZpY2UgdG8gZmx1c2ggdGhlIHdiIGJ1ZmZlcg0KKwkJICogSWYg
-ZGV2aWNlIG5lZWRzIHRvIGRvIEJLT1Agb3IgV0IgYnVmZmVyIGZsdXNoIGR1cmluZw0KKwkJICog
-SGliZXJuOCwga2VlcCBkZXZpY2UgcG93ZXIgbW9kZSBhcyAiYWN0aXZlIHBvd2VyIG1vZGUiDQor
-CQkgKiBhbmQgVkNDIHN1cHBseS4NCiAJCSAqLw0KLQkJaWYgKChoYmEtPmF1dG9fYmtvcHNfZW5h
-YmxlZCAmJiB1ZnNoY2RfaXNfd2JfYWxsb3dlZChoYmEpKSB8fA0KLQkJICAgIHVmc2hjZF93Yl9r
-ZWVwX3ZjY19vbihoYmEpKQ0KLQkJCWhiYS0+ZGV2X2luZm8ua2VlcF92Y2Nfb24gPSB0cnVlOw0K
-LQkJZWxzZQ0KLQkJCWhiYS0+ZGV2X2luZm8ua2VlcF92Y2Nfb24gPSBmYWxzZTsNCi0JfSBlbHNl
-IHsNCi0JCWhiYS0+ZGV2X2luZm8ua2VlcF92Y2Nfb24gPSBmYWxzZTsNCi0JfQ0KKwkJaGJhLT5k
-ZXZfaW5mby5iX3JwbV9kZXZfZmx1c2hfY2FwYWJsZSA9DQorCQkJaGJhLT5hdXRvX2Jrb3BzX2Vu
-YWJsZWQgfHwNCisJCQkoKChyZXFfbGlua19zdGF0ZSA9PSBVSUNfTElOS19ISUJFUk44X1NUQVRF
-KSB8fA0KKwkJCSgocmVxX2xpbmtfc3RhdGUgPT0gVUlDX0xJTktfQUNUSVZFX1NUQVRFKSAmJg0K
-KwkJCXVmc2hjZF9pc19hdXRvX2hpYmVybjhfZW5hYmxlZChoYmEpKSkgJiYNCisJCQl1ZnNoY2Rf
-d2JfbmVlZF9mbHVzaChoYmEpKTsNCisJfQ0KKw0KKwlpZiAocmVxX2Rldl9wd3JfbW9kZSAhPSBo
-YmEtPmN1cnJfZGV2X3B3cl9tb2RlKSB7DQorCQlpZiAoKHVmc2hjZF9pc19ydW50aW1lX3BtKHBt
-X29wKSAmJiAhaGJhLT5hdXRvX2Jrb3BzX2VuYWJsZWQpIHx8DQorCQkgICAgIXVmc2hjZF9pc19y
-dW50aW1lX3BtKHBtX29wKSkgew0KKwkJCS8qIGVuc3VyZSB0aGF0IGJrb3BzIGlzIGRpc2FibGVk
-ICovDQorCQkJdWZzaGNkX2Rpc2FibGVfYXV0b19ia29wcyhoYmEpOw0KKwkJfQ0KIA0KLQlpZiAo
-KHJlcV9kZXZfcHdyX21vZGUgIT0gaGJhLT5jdXJyX2Rldl9wd3JfbW9kZSkgJiYNCi0JICAgICgo
-dWZzaGNkX2lzX3J1bnRpbWVfcG0ocG1fb3ApICYmICFoYmEtPmF1dG9fYmtvcHNfZW5hYmxlZCkg
-fHwNCi0JICAgICF1ZnNoY2RfaXNfcnVudGltZV9wbShwbV9vcCkpKSB7DQotCQkvKiBlbnN1cmUg
-dGhhdCBia29wcyBpcyBkaXNhYmxlZCAqLw0KLQkJdWZzaGNkX2Rpc2FibGVfYXV0b19ia29wcyho
-YmEpOw0KLQkJcmV0ID0gdWZzaGNkX3NldF9kZXZfcHdyX21vZGUoaGJhLCByZXFfZGV2X3B3cl9t
-b2RlKTsNCi0JCWlmIChyZXQpDQotCQkJZ290byBlbmFibGVfZ2F0aW5nOw0KKwkJaWYgKCFoYmEt
-PmRldl9pbmZvLmJfcnBtX2Rldl9mbHVzaF9jYXBhYmxlKSB7DQorCQkJcmV0ID0gdWZzaGNkX3Nl
-dF9kZXZfcHdyX21vZGUoaGJhLCByZXFfZGV2X3B3cl9tb2RlKTsNCisJCQlpZiAocmV0KQ0KKwkJ
-CQlnb3RvIGVuYWJsZV9nYXRpbmc7DQorCQl9DQogCX0NCiANCiAJZmx1c2hfd29yaygmaGJhLT5l
-ZWhfd29yayk7DQpAQCAtODI5OCw5ICs4MzE4LDE2IEBAIHN0YXRpYyBpbnQgdWZzaGNkX3N1c3Bl
-bmQoc3RydWN0IHVmc19oYmEgKmhiYSwgZW51bSB1ZnNfcG1fb3AgcG1fb3ApDQogCWlmIChoYmEt
-PmNsa19zY2FsaW5nLmlzX2FsbG93ZWQpDQogCQl1ZnNoY2RfcmVzdW1lX2Nsa3NjYWxpbmcoaGJh
-KTsNCiAJaGJhLT5jbGtfZ2F0aW5nLmlzX3N1c3BlbmRlZCA9IGZhbHNlOw0KKwloYmEtPmRldl9p
-bmZvLmJfcnBtX2Rldl9mbHVzaF9jYXBhYmxlID0gZmFsc2U7DQogCXVmc2hjZF9yZWxlYXNlKGhi
-YSk7DQogb3V0Og0KKwlpZiAoaGJhLT5kZXZfaW5mby5iX3JwbV9kZXZfZmx1c2hfY2FwYWJsZSkg
-ew0KKwkJc2NoZWR1bGVfZGVsYXllZF93b3JrKCZoYmEtPnJwbV9kZXZfZmx1c2hfcmVjaGVja193
-b3JrLA0KKwkJCW1zZWNzX3RvX2ppZmZpZXMoUlBNX0RFVl9GTFVTSF9SRUNIRUNLX1dPUktfREVM
-QVlfTVMpKTsNCisJfQ0KKw0KIAloYmEtPnBtX29wX2luX3Byb2dyZXNzID0gMDsNCisNCiAJaWYg
-KHJldCkNCiAJCXVmc2hjZF91cGRhdGVfcmVnX2hpc3QoJmhiYS0+dWZzX3N0YXRzLnN1c3BlbmRf
-ZXJyLCAodTMyKXJldCk7DQogCXJldHVybiByZXQ7DQpAQCAtODM4OSw2ICs4NDE2LDExIEBAIHN0
-YXRpYyBpbnQgdWZzaGNkX3Jlc3VtZShzdHJ1Y3QgdWZzX2hiYSAqaGJhLCBlbnVtIHVmc19wbV9v
-cCBwbV9vcCkNCiAJLyogRW5hYmxlIEF1dG8tSGliZXJuYXRlIGlmIGNvbmZpZ3VyZWQgKi8NCiAJ
-dWZzaGNkX2F1dG9faGliZXJuOF9lbmFibGUoaGJhKTsNCiANCisJaWYgKGhiYS0+ZGV2X2luZm8u
-Yl9ycG1fZGV2X2ZsdXNoX2NhcGFibGUpIHsNCisJCWhiYS0+ZGV2X2luZm8uYl9ycG1fZGV2X2Zs
-dXNoX2NhcGFibGUgPSBmYWxzZTsNCisJCWNhbmNlbF9kZWxheWVkX3dvcmsoJmhiYS0+cnBtX2Rl
-dl9mbHVzaF9yZWNoZWNrX3dvcmspOw0KKwl9DQorDQogCS8qIFNjaGVkdWxlIGNsb2NrIGdhdGlu
-ZyBpbiBjYXNlIG9mIG5vIGFjY2VzcyB0byBVRlMgZGV2aWNlIHlldCAqLw0KIAl1ZnNoY2RfcmVs
-ZWFzZShoYmEpOw0KIA0KQEAgLTg4NjIsNiArODg5NCw5IEBAIGludCB1ZnNoY2RfaW5pdChzdHJ1
-Y3QgdWZzX2hiYSAqaGJhLCB2b2lkIF9faW9tZW0gKm1taW9fYmFzZSwgdW5zaWduZWQgaW50IGly
-cSkNCiAJCQkJCQlVRlNfU0xFRVBfUFdSX01PREUsDQogCQkJCQkJVUlDX0xJTktfSElCRVJOOF9T
-VEFURSk7DQogDQorCUlOSVRfREVMQVlFRF9XT1JLKCZoYmEtPnJwbV9kZXZfZmx1c2hfcmVjaGVj
-a193b3JrLA0KKwkJCSAgdWZzaGNkX3JwbV9kZXZfZmx1c2hfcmVjaGVja193b3JrKTsNCisNCiAJ
-LyogU2V0IHRoZSBkZWZhdWx0IGF1dG8taGliZXJhdGUgaWRsZSB0aW1lciB2YWx1ZSB0byAxNTAg
-bXMgKi8NCiAJaWYgKHVmc2hjZF9pc19hdXRvX2hpYmVybjhfc3VwcG9ydGVkKGhiYSkgJiYgIWhi
-YS0+YWhpdCkgew0KIAkJaGJhLT5haGl0ID0gRklFTERfUFJFUChVRlNIQ0lfQUhJQkVSTjhfVElN
-RVJfTUFTSywgMTUwKSB8DQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuaCBi
-L2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmgNCmluZGV4IDlhY2FlYWY5NGQyOS4uYmY5N2Q2MTZl
-NTk3IDEwMDY0NA0KLS0tIGEvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuaA0KKysrIGIvZHJpdmVy
-cy9zY3NpL3Vmcy91ZnNoY2QuaA0KQEAgLTc0NSw2ICs3NDUsNyBAQCBzdHJ1Y3QgdWZzX2hiYSB7
-DQogCXN0cnVjdCByZXF1ZXN0X3F1ZXVlCSpic2dfcXVldWU7DQogCWJvb2wgd2JfYnVmX2ZsdXNo
-X2VuYWJsZWQ7DQogCWJvb2wgd2JfZW5hYmxlZDsNCisJc3RydWN0IGRlbGF5ZWRfd29yayBycG1f
-ZGV2X2ZsdXNoX3JlY2hlY2tfd29yazsNCiB9Ow0KIA0KIC8qIFJldHVybnMgdHJ1ZSBpZiBjbG9j
-a3MgY2FuIGJlIGdhdGVkLiBPdGhlcndpc2UgZmFsc2UgKi8NCi0tIA0KMi4xOC4wDQo=
+
+
+> On 21. May 2020, at 22.47, Bart Van Assche <bvanassche@acm.org> wrote:
+> 
+> On 2020-05-18 21:55, John Hubbard wrote:
+>> This code was using get_user_pages*(), in a "Case 2" scenario
+>> (DMA/RDMA), using the categorization from [1]. That means that it's
+>> time to convert the get_user_pages*() + put_page() calls to
+>> pin_user_pages*() + unpin_user_pages() calls.
+>> 
+>> There is some helpful background in [2]: basically, this is a small
+>> part of fixing a long-standing disconnect between pinning pages, and
+>> file systems' use of those pages.
+>> 
+>> Note that this effectively changes the code's behavior as well: it now
+>> ultimately calls set_page_dirty_lock(), instead of SetPageDirty().This
+>> is probably more accurate.
+>> 
+>> As Christoph Hellwig put it, "set_page_dirty() is only safe if we are
+>> dealing with a file backed page where we have reference on the inode it
+>> hangs off." [3]
+>> 
+>> Also, this deletes one of the two FIXME comments (about refcounting),
+>> because there is nothing wrong with the refcounting at this point.
+>> 
+>> [1] Documentation/core-api/pin_user_pages.rst
+>> 
+>> [2] "Explicit pinning of user-space pages":
+>>    https://lwn.net/Articles/807108/
+>> 
+>> [3] https://lore.kernel.org/r/20190723153640.GB720@lst.de
+> 
+> Kai, why is the st driver calling get_user_pages_fast() directly instead
+> of calling blk_rq_map_user()? blk_rq_map_user() is already used in
+> st_scsi_execute(). I think that the blk_rq_map_user() implementation is
+> also based on get_user_pages_fast(). See also iov_iter_get_pages_alloc()
+> in lib/iov_iter.c.
+> 
+The reason is that the blk_ functions were not available when that part
+of the code was done. Nobody has converted that to use the more
+modern functions because the old method still works.
+
+Thanks,
+Kai
 
