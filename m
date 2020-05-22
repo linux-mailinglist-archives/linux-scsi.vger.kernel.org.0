@@ -2,93 +2,72 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C51B1DE10D
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 09:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC891DE1E2
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 10:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728468AbgEVHdI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 May 2020 03:33:08 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:57240 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728214AbgEVHdG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 May 2020 03:33:06 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04M7RiMI099138;
-        Fri, 22 May 2020 07:31:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=FHKudRAmfJMTmkL5lBhr9gMRqVNot+ZGcY+gLOKSPWQ=;
- b=zr8ftTxmN8djMVNxsfauxHijqmQZJ27JNYNzSbiwZV1H4No0xKEXcoTBytv3PDJSvcrp
- /Nyramp0bw+dLsKfAey75XBoOuEv6PhQEYKJ3fSf3n1UF81MxbM2guQfVP9qMNYBHSff
- 0IBWTd1TSwN4MLhOwVoRqfipf6RiOQW0ZCK7XL0FAcRfHgkHtQjUaJ+5Ssh5CBYpXINY
- 19VERK0I4Y44f8lhzUIpFleEzhe1ducy/y6uezF+0Px3K3Lqe7sK49O1DZqJJPuH2L+p
- jIo5SWG9s0WsYzgwXQcbaKu7YC1xheaXy9TBqY2v9S5VpftJZIi8oHvInJOIZ0c/DQKw 9g== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 31501rjt8p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 22 May 2020 07:31:24 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04M7TICY165649;
-        Fri, 22 May 2020 07:29:24 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 315023u8fy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 22 May 2020 07:29:24 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04M7TJnm022187;
-        Fri, 22 May 2020 07:29:19 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 22 May 2020 00:29:18 -0700
-Date:   Fri, 22 May 2020 10:29:11 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     James Smart <jsmart2021@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, paul.ely@broadcom.com,
-        hare@suse.de, jejb@linux.ibm.com, axboe@kernel.dk,
-        martin.petersen@oracle.com, hch@infradead.org
-Subject: Re: [PATCH 0/3] lpfc: Fix errors in LS receive refactoring
-Message-ID: <20200522072911.GA22511@kadam>
-References: <20200520185929.48779-1-jsmart2021@gmail.com>
+        id S1729187AbgEVIcV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 May 2020 04:32:21 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:4907 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729055AbgEVIcU (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 May 2020 04:32:20 -0400
+X-UUID: 37baac7ac2b04b75a9d8e9be32737cbf-20200522
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=CeRdUazTRZ6Q4UL/01a41bh8OpjiO6wKwUAXb2WuqdM=;
+        b=KM38vZCs3L7nB88xu/BGflp6r00GI5kWsTrb31dLpxdGIcYnQr1KUryCugVG0EA2+k9g3gzYY5tjqLPu1nf6Bo4iP9MYAnJwzZbyH87L+Elgn3IxmPC6MDCEK++wIqc4JqTTxojSxaKN5Ur1bRZEOvhTLMyahduQOkQ/ckVNkVo=;
+X-UUID: 37baac7ac2b04b75a9d8e9be32737cbf-20200522
+Received: from mtkcas08.mediatek.inc [(172.21.101.126)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 262690937; Fri, 22 May 2020 16:32:15 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 22 May 2020 16:32:14 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 May 2020 16:32:13 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <asutoshd@codeaurora.org>
+CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Virtual_Global_UFS_Upstream@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v4 0/4] scsi: ufs: Fix WriteBooster and cleanup UFS driver
+Date:   Fri, 22 May 2020 16:32:08 +0800
+Message-ID: <20200522083212.4008-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200520185929.48779-1-jsmart2021@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 bulkscore=0 suspectscore=0 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005220060
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9628 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 spamscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 cotscore=-2147483648
- impostorscore=0 bulkscore=0 adultscore=0 malwarescore=0 phishscore=0
- mlxscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005220060
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Wed, May 20, 2020 at 11:59:26AM -0700, James Smart wrote:
-> A prior patch set refactored lpfc to create common routines for NVME LS
-> handling for use by both the initiator and target paths.  The refactoring
-> introduced several errors spotted by additional testing and static checker
-> reporting.
-> 
-> This patch set corrects those errors.
-> 
-> The patches should enter via the nvme tree, as the lpfc modifications were
-> in support of nvme-fc transport api deltas merged via the nvme tree.
-> 
-> -- james
-
-Thanks!
-
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-
-regards,
-dan carpenter
-
+SGksDQoNClRoaXMgcGF0Y2ggc2V0IGZpeGVzIHNvbWUgV3JpdGVCb29zdGVyIGlzc3VlcyBhbmQg
+ZG8gc21hbGwgY2xlYW51cCBpbiBVRlMgZHJpdmVyDQoNCnYzIC0+IHY0DQogIC0gU3F1YXNoIHBh
+dGNoIFs0XSBhbmQgWzVdIChBc3V0b3NoKQ0KICAtIEZpeCBjb21taXQgbWVzc2FnZSBpbiBwYXRj
+aCBbNF0NCg0KdjIgLT4gdjMNCiAgLSBJbnRyb2R1Y2UgcGF0Y2ggWzVdIHRvIGZpeCBwb3NzaWJs
+ZSBWQ0MgcG93ZXIgZHJhaW4gZHVyaW5nIHJ1bnRpbWUgc3VzcGVuZCAoQXN1dG9zaCkNCg0KdjEg
+LT4gdjINCiAgLSBSZW1vdmUgZHVtbXkgbmV3IGxpbmUgaW4gcGF0Y2ggWzRdIChBc3V0b3NoKQ0K
+ICAtIEFkZCBtb3JlIGxpbWl0YXRpb24gdG8gYWxsb3cgV3JpdGVCb29zdGVyIGZsdXNoIGR1cmlu
+ZyBIaWJlcm44IGluIHJ1bnRpbWUtc3VzcGVuZC4gTm93IHRoZSBkZXZpY2UgcG93ZXIgbW9kZSBp
+cyBrZXB0IGFzIEFjdGl2ZSBwb3dlciBtb2RlIG9ubHkgaWYgbGluayBpcyBwdXQgaW4gSGliZXJu
+OCBvciBBdXRvLUhpYmVybjggaXMgZW5hYmxlZCBkdXJpbmcgcnVudGltZS1zdXNwZW5kIChBc3V0
+b3NoKQ0KDQpTdGFubGV5IENodSAoNCk6DQogIHNjc2k6IHVmczogUmVtb3ZlIHVubmVjZXNzYXJ5
+IG1lbXNldCBmb3IgZGV2X2luZm8NCiAgc2NzaTogdWZzOiBBbGxvdyBXcml0ZUJvb3N0ZXIgb24g
+VUZTIDIuMiBkZXZpY2VzDQogIHNjc2k6IHVmczogRml4IGluZGV4IG9mIGF0dHJpYnV0ZXMgcXVl
+cnkgZm9yIFdyaXRlQm9vc3RlciBmZWF0dXJlDQogIHNjc2k6IHVmczogRml4IFdyaXRlQm9vc3Rl
+ciBmbHVzaCBkdXJpbmcgcnVudGltZSBzdXNwZW5kDQoNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1z
+eXNmcy5jIHwgMTMgKysrKy0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy5oICAgICAgIHwgIDIgKy0N
+CiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jICAgIHwgOTkgKysrKysrKysrKysrKysrKysrKysr
+KysrKy0tLS0tLS0tLS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuaCAgICB8ICAzICstDQog
+NCBmaWxlcyBjaGFuZ2VkLCA4MiBpbnNlcnRpb25zKCspLCAzNSBkZWxldGlvbnMoLSkNCg0KLS0g
+DQoyLjE4LjANCg==
 
