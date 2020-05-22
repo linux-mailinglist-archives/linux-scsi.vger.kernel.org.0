@@ -2,128 +2,64 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7071DE48D
-	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 12:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439211DE697
+	for <lists+linux-scsi@lfdr.de>; Fri, 22 May 2020 14:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728489AbgEVKgR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 May 2020 06:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728362AbgEVKgQ (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 May 2020 06:36:16 -0400
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD3CC061A0E
-        for <linux-scsi@vger.kernel.org>; Fri, 22 May 2020 03:36:16 -0700 (PDT)
-Received: by mail-wm1-x344.google.com with SMTP id w64so9314126wmg.4
-        for <linux-scsi@vger.kernel.org>; Fri, 22 May 2020 03:36:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=IvYd5IGFvqlYeq7XsQzsVXg/xWFw1hytqQS5q0XQBmQ=;
-        b=TI6qrINxXM1+VOg6AjQt+WD1UMKn5pfK/wAQZ8iZJwDyu6K2NUbtO59zXkf8F35cMM
-         IIEbgp8402k+hHQB8h5LwYO5RIkIoucW5Njf14V9v9pqlf6hJ1MWY1LeMC7g7qqX9jgO
-         wBYSyORo9LyXnFbAj4SkdcX5SjoyxZ4R5P8Bs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=IvYd5IGFvqlYeq7XsQzsVXg/xWFw1hytqQS5q0XQBmQ=;
-        b=Vz9bKm7vTgJ6GgALnUgYsumxadoEybiyTZBStiMAJamAldiBB7fm/ugNipD7HKTgu8
-         CDD7ZD9Lp/qImateF9JqAd9fVUk7lwV0ypmCA7b1os8CGd+eKbWuyas3d2MTEgui9ocv
-         MvsmYHljzykA/HTrJ8lN0xrd7T173aqLNKRYITs9HgsFIZMxjMigRSSncOfNN+GZPpaj
-         ousgS8wBdpr2Q4bhtsQiyzFf7xx7jGOSoFLFEl2fbOWV4+vycJ2WbMb3pcYhIyPJBLnO
-         W+5a7p4cwb/RotI5BtMD+8/3lUXO9Q0a6fvH5YC/Fy3Xs/zDP35hVhFVdthRdaxDx+C6
-         gAXQ==
-X-Gm-Message-State: AOAM530/QpyWIcMGLpuB5kL1rO6x0fDllO3BuedINbACcMse7KF6L290
-        zVDHaLt4+ClKXt3ZZZefs7R7GUWViIUodt9sp55RRAXDwYoxJxGLVQOdOmJt6CXi0OoNqCknepK
-        nUhqwl5HpSuYrcE+5d4ZD9hXayj5WyN7Wch51VM6pUDJkv5p8a4LjANb1OkD3PR045RN39xt2qK
-        q/w3ix3fLBThfIHnuF2HEo
-X-Google-Smtp-Source: ABdhPJzsQJ/7EZ5ay9ZsACBMgvXSS7nhE9w8498/bKwAs9uOD9mcyt0gJfdeTCase3holAgumegbgA==
-X-Received: by 2002:a1c:2e41:: with SMTP id u62mr13490113wmu.91.1590143774475;
-        Fri, 22 May 2020 03:36:14 -0700 (PDT)
-Received: from dhcp-10-123-20-28.dhcp.broadcom.net ([192.19.234.250])
-        by smtp.gmail.com with ESMTPSA id z10sm9188648wmi.2.2020.05.22.03.36.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 03:36:13 -0700 (PDT)
-From:   Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     sreekanth.reddy@broadcom.com, thenzl@redhat.com,
-        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
-Subject: [PATCH] mpt3sas: Fix reply queue count in non RDPQ mode.
-Date:   Fri, 22 May 2020 06:35:58 -0400
-Message-Id: <20200522103558.5710-1-suganath-prabu.subramani@broadcom.com>
-X-Mailer: git-send-email 2.18.4
+        id S1728938AbgEVMSY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 May 2020 08:18:24 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42410 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728544AbgEVMSX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 22 May 2020 08:18:23 -0400
+X-UUID: e4e428a023904e49a502d2f6531881e9-20200522
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=kQDziwgP0hgrh7T+hQAa+vHSi/RDRfa4EIfd/mEUOpk=;
+        b=XLRi9by/dY/LSjDXfILlZsNEn2E7XYx1Rq+2gfTMocFjLUnlzj7TaJTjOvWoTywM18XGTzyf+P67saTUdDbEpbcSFWj3MKDHvKd/AfZp91uCXINrkeq3sxw/RS48nQfh+YfnkfhIOiMNb6DCY0ZDaErJeDLS3uPX6iloxFrRfAU=;
+X-UUID: e4e428a023904e49a502d2f6531881e9-20200522
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1596963198; Fri, 22 May 2020 20:18:19 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 22 May 2020 20:18:15 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 22 May 2020 20:18:15 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <pengshun.zhao@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v1 0/3] scsi: ufs-mediatek: Fix clk-gating and introduce low-power mode for vccq2
+Date:   Fri, 22 May 2020 20:18:11 +0800
+Message-ID: <20200522121814.9100-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-For non RDPQ mode, Driver allocates a single contiguous block of
-memory pool for all reply descriptor post queues and passes down a
-single address in the ReplyDescriptorPostQueueAddress field of the IOC
-Init Request Message to the firmware. So reply_post queue will have
-only one entry which holds the address of this single contiguous block
-of memory pool.
-
-So while allocating the reply descriptor post queue pool driver should
-loop for only one time in non-RDPQ mode. But due to a bug in below
-patch driver is looping for ioc->reply_queue_count number of times
-even though reply_post queue's queue depth is only one in non-RDPQ
-mode. This leads to 'BUG: KASAN: use-after-free in
-base_alloc_rdpq_dma_pool'.
-
-commit 8012209eb26b7819385a6ec6eae4b1d0a0dbe585 ("scsi: mpt3sas:
-Handle RDPQ DMA allocation in same 4G region")
-
-Fix is to loop over only one time while allocating the memory for the
-reply descriptor post queue in non-RDPQ mode
-
-Reported-by: Tomas Henzl <thenzl@redhat.com>
-Signed-off-by: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
----
- drivers/scsi/mpt3sas/mpt3sas_base.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index dc260fe..beaea19 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -4809,6 +4809,7 @@ _base_release_memory_pools(struct MPT3SAS_ADAPTER *ioc)
- 	int j = 0;
- 	int dma_alloc_count = 0;
- 	struct chain_tracker *ct;
-+	int count = ioc->rdpq_array_enable ? ioc->reply_queue_count : 1;
- 
- 	dexitprintk(ioc, ioc_info(ioc, "%s\n", __func__));
- 
-@@ -4850,9 +4851,9 @@ _base_release_memory_pools(struct MPT3SAS_ADAPTER *ioc)
- 	}
- 
- 	if (ioc->reply_post) {
--		dma_alloc_count = DIV_ROUND_UP(ioc->reply_queue_count,
-+		dma_alloc_count = DIV_ROUND_UP(count,
- 				RDPQ_MAX_INDEX_IN_ONE_CHUNK);
--		for (i = 0; i < ioc->reply_queue_count; i++) {
-+		for (i = 0; i < count; i++) {
- 			if (i % RDPQ_MAX_INDEX_IN_ONE_CHUNK == 0
- 			    && dma_alloc_count) {
- 				if (ioc->reply_post[i].reply_post_free) {
-@@ -4973,14 +4974,14 @@ base_alloc_rdpq_dma_pool(struct MPT3SAS_ADAPTER *ioc, int sz)
- 	 *  Driver uses limitation of
- 	 *  VENTURA_SERIES to manage INVADER_SERIES as well.
- 	 */
--	dma_alloc_count = DIV_ROUND_UP(ioc->reply_queue_count,
-+	dma_alloc_count = DIV_ROUND_UP(count,
- 				RDPQ_MAX_INDEX_IN_ONE_CHUNK);
- 	ioc->reply_post_free_dma_pool =
- 		dma_pool_create("reply_post_free pool",
- 		    &ioc->pdev->dev, sz, 16, 0);
- 	if (!ioc->reply_post_free_dma_pool)
- 		return -ENOMEM;
--	for (i = 0; i < ioc->reply_queue_count; i++) {
-+	for (i = 0; i < count; i++) {
- 		if ((i % RDPQ_MAX_INDEX_IN_ONE_CHUNK == 0) && dma_alloc_count) {
- 			ioc->reply_post[i].reply_post_free =
- 			    dma_pool_alloc(ioc->reply_post_free_dma_pool,
--- 
-1.8.3.1
+SGksDQpUaGlzIHBhdGNoc2V0IGZpeGVzIGEgY2xrLWdhdGluZyBpc3N1ZSBhbmQgaW50cm9kdWNl
+cyBsb3ctcG93ZXIgbW9kZSBmb3IgdmNjcTIgaW4gTWVkaWFUZWsgcGxhdGZvcm1zLg0KDQpTdGFu
+bGV5IENodSAoMyk6DQogIHNjc2k6IHVmcy1tZWRpYXRlazogRml4IGltcHJlY2lzZSB3YWl0aW5n
+IHRpbWUgZm9yIHJlZi1jbGsgY29udHJvbA0KICBzY3NpOiB1ZnMtbWVkaWF0ZWs6IERvIG5vdCBn
+YXRlIGNsb2NrcyBpZiBhdXRvLWhpYmVybjggaXMgbm90IGVudGVyZWQNCiAgICB5ZXQNCiAgc2Nz
+aTogdWZzLW1lZGlhdGVrOiBJbnRyb2R1Y2UgbG93LXBvd2VyIG1vZGUgZm9yIGRldmljZSBwb3dl
+ciBzdXBwbHkNCg0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzLW1lZGlhdGVrLmMgfCA2NCArKysrKysr
+KysrKysrKysrKysrKysrKysrKy0tLS0tLS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmcy1tZWRpYXRl
+ay5oIHwgIDIgKy0NCiAyIGZpbGVzIGNoYW5nZWQsIDUzIGluc2VydGlvbnMoKyksIDEzIGRlbGV0
+aW9ucygtKQ0KDQotLSANCjIuMTguMA0K
 
