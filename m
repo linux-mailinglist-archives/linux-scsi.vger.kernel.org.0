@@ -2,141 +2,90 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 551DC1DF39E
-	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2020 02:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA3A1DF3A4
+	for <lists+linux-scsi@lfdr.de>; Sat, 23 May 2020 02:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387427AbgEWAnn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 22 May 2020 20:43:43 -0400
-Received: from bedivere.hansenpartnership.com ([66.63.167.143]:36310 "EHLO
-        bedivere.hansenpartnership.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731169AbgEWAnm (ORCPT
+        id S2387433AbgEWAyS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 22 May 2020 20:54:18 -0400
+Received: from sonic308-10.consmr.mail.ne1.yahoo.com ([66.163.187.33]:43714
+        "EHLO sonic308-10.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387413AbgEWAyS (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 22 May 2020 20:43:42 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 5D41E8EE453;
-        Fri, 22 May 2020 17:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1590194622;
-        bh=sOKAHK5PnU0iTCaOEaYRSCMn48ivVogoeleYthdNfTc=;
-        h=Subject:From:To:Cc:Date:From;
-        b=fDckYlRXI/G85hpFaGc1llC/BHjHEncGJpR8sSBiOpEmpYxD+lR/M4DfkcU9gSx1T
-         3EIneb9x5t7iv/Pr5yFQCiJxNqspUmDhiOYmUNVGf1ig19PiO617RhSIuP5eVUlDuM
-         sYQ4zd1LP1J4SOnG0UYMFgZb8+n+H4MXMUkbDw20=
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
-        by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IT1oRr35ZQsY; Fri, 22 May 2020 17:43:42 -0700 (PDT)
-Received: from [153.66.254.194] (unknown [50.35.76.230])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id DF7048EE116;
-        Fri, 22 May 2020 17:43:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=hansenpartnership.com;
-        s=20151216; t=1590194622;
-        bh=sOKAHK5PnU0iTCaOEaYRSCMn48ivVogoeleYthdNfTc=;
-        h=Subject:From:To:Cc:Date:From;
-        b=fDckYlRXI/G85hpFaGc1llC/BHjHEncGJpR8sSBiOpEmpYxD+lR/M4DfkcU9gSx1T
-         3EIneb9x5t7iv/Pr5yFQCiJxNqspUmDhiOYmUNVGf1ig19PiO617RhSIuP5eVUlDuM
-         sYQ4zd1LP1J4SOnG0UYMFgZb8+n+H4MXMUkbDw20=
-Message-ID: <1590194620.14721.28.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 5.7-rc6
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 22 May 2020 17:43:40 -0700
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        Fri, 22 May 2020 20:54:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1590195257; bh=/TJiIzIIuce6D2+HRnkGz5JeLRmuoukM3R4ut1a7FUg=; h=Date:From:Reply-To:Subject:References:From:Subject; b=LgYGSVB4+HO9vh28aYMowhkV6OQMiKx+2YrlfeCp1u0wexsxV0KlU/lCTBTzJC4kTweg3uFtMpFJe24+I7EEoA1VA/227pL1d9GRrJY9bMXRpn+deb/mIPD2DuLXVQkZk5N08QMhO+d+k1Djx0qFQLHkXz95L5KJj3vYaeZSIy72N0vDAT4f90QJT6Zd/Ke2J5LDC0ckUVUS9SLwntoyb6hLYNBZoJn3v+HHF0SpvpnYlI8mOzg/hlm6crxq8pfTaeVkpCdLx7osWpIW15qOMFyaGEwvqDedO+aAC+zIJ5JZovCAExdzlUfYx1OEvCqp68b5L1I7TPhlwJBfeQSogA==
+X-YMail-OSG: FFhi3dsVM1n.cXyPNd4J0RVXLPZ.3NoHIPluIVkuGQec8kSMYuhxmYzqCl5pZ5u
+ 1TpwKyN4rxtc_S.vHLQlAk4._NDsy.xu4fMhmZo4cYDaVR1ZEk5dJ8Tn.0Ctu07s.QkdRi0OLcAQ
+ CitDRXnYfzSHsbfgcox8rw3lmS1NV8U6WYY8HdghEcDnZmc6i6pia40s4HK4YRxrnd_PMeqqUOdn
+ jERJfvc9eiBVq2fXPS0zEOgi7Rra0Ve.GIJ0CstMbUBfXa99LQxrVsUFPh2Hw4KzvU0eClulmbYO
+ VEwoKVvsjOHgzoNz8KINDTlYmg2ewq3lapWzDU.FnO9b23R6lze3Fz6nn6enDW97M7lkco8V8zpY
+ JYVJ_9qrf2wnx.rpqkwUh5PwVxoFAOnEIax6Ft3sagFf5.NlDsGa5Bm4yOHl7sAxjNX44L6kRz7I
+ 5tSzK4TvtcvA2yMvQeU.QNEuqZuFrHUkkkpIVXG9xgmKmRVPXW30Gdj8AvtG4hJrZUmTDdYdlUlF
+ jgk.t52u9CHKPFSJUczfvFdnKitAPv1.UhsdKwD8Z7dU2sbTOmzlhCxnItQo9TSX__RwzMSnbJZ3
+ QwsuwYK6VSQem0LScZVL7w2c_LeMkkvG6WEH1WiQBUIJEi3ztSSdPOwBJ3pXoxWBTQQVRltCcI9m
+ oU49_.ok5PdEDhv9hZv.sYQNqgJK9VQHv.zNECEeEaIEyRjQ0nu572r0TYLzl4b0VIhlVSOoFJpT
+ WykEqzLjhRnNGcjHG1TJizYmX2aj4eN9eKVyZzSb1lDSZ2TyGT59xdl6PN6EFGsv_1dV0cAZ_iSe
+ K.nq1lZjDmH2vlkT2wf0nSaUf.zuRxHJh5vkHkSpsY9PteYYhNeBwMe6VQZl04C_Lelg8G1D0fIa
+ hawo2hpxHN5kQUMldTvF2j9K8sNJf90jjQRK5hvO4oaohjBQWLoCnAIF7U39rP1TsK1C9IrJxZga
+ TmqNZYI0v7G3nnOr2GvPsTT8p6JEuUErE6rpo150nxRpBo0snRIeVQQhnLEOCE.Mqv3U21fqEEk5
+ YCz0QIyr0TBinbc1.WEo4KdwWNft0DoPSHJCLLPvU_4R9WvKrcnqz7y.ZdPddmiFSQMWAAMFrvKM
+ _BZDv54oIMX7X3Hq3qoi8uNcprSL4XE3SgblhvllPKC..eOzPzIYYZV8LeLZjqsm9ADX_LeJJ2q9
+ ypvIK0l1KUMYce7X9AR5lgCBjbnqn.iGhJpCnrOD_QFcIA1ziARsB6BXIPNj2Gwj8nCP.lGAwB1F
+ 1n6oNp.eFk5.Pw1hLbTkKDaruklc0sv.x_9v0j4KOQAGWu5nUAZQbQKmZ5PZIsKlsrKDgHuVrXqF
+ MK1ugSPGzl9eVdzdQAfIfzQS9ySpyfJ_0oL_zvA_f9SfHjLodtIe4UZvhRUVOPYqDOxjuoERK9Pn
+ ZFrY-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Sat, 23 May 2020 00:54:17 +0000
+Date:   Sat, 23 May 2020 00:54:11 +0000 (UTC)
+From:   Mohaiyani Binti <mohaiyanibintis100@gmail.com>
+Reply-To: mohaiyanibintis100@gmail.com
+Message-ID: <567257572.136224.1590195251917@mail.yahoo.com>
+Subject:  Dear Sir or Madam
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+References: <567257572.136224.1590195251917.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15960 YMailNodin Mozilla/5.0 (Windows NT 6.1; rv:76.0) Gecko/20100101 Firefox/76.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Three minor fixes, two in drivers, one to fix a hang after reset with
-iSCSI, and one to avoid a spurious log message; and the final core one
-to correct a suspend/resume miscount with quiesced devices.
 
-The patch is available here:
+Dear Sir or Madam
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+I am Mohaiyani binti Shamsudin, who works in ADB (BURKINA FASO) as a
+non-independent non-executive Director and President of AFRICAN
+DEVELOPMENT BANK.
+During our last banking audits, we discovered that an account
+abandoned belongs to one of our deceased foreign clients, the Mr. Wang
+Jian, co-founder and co-chair of the HNA Group, a conglomerate Chinese
+with important real estate properties throughout the US UU. in a
+accident during a business trip in France on Tuesday.
 
-The short changelog is:
+Go to this link:
+https://observer.com/2018/07/wang-jian-hna-founder-dies-tragic-fall/
 
-Bodo Stroesser (1):
-      scsi: target: Put lun_ref at end of tmr processing
+I am writing to request your assistance to transfer the sum of $
+15,000,000.00 (fifteen million United States dollars) at its counts as
+Wang Jian's last foreign business partner, which I plan use the fund
+to invest in public benefit as follows
 
-Can Guo (1):
-      scsi: pm: Balance pm_only counter of request queue during system resume
+1. Establish an orphanage home to help orphaned children.
+2. Build a hospital to help the poor.
+3. Build an asylum for the elderly and homeless.
 
-Ewan D. Milne (1):
-      scsi: qla2xxx: Do not log message when reading port speed via sysfs
+Meanwhile, before contacting you, I did an investigation staff to
+locate one of the relatives of the late Mr. Wang Jian who knows the
+account, but I didn't succeed. However, I took this decision to
+support orphans and less privileged children with this fund, because I
+don't want this fund transferred to our Account of Government treasury
+as unclaimed fund. I am willing to offer you the 40% of the fund for
+your support and assistant to transfer the fund to your account.
 
-And the diffstat:
+More detailed information will be sent to the disaggregation
+explaining how The fund will be transferred to you. Please continue to
+achieve the purpose.
 
- drivers/scsi/qla2xxx/qla_attr.c        |  3 ---
- drivers/scsi/scsi_pm.c                 | 10 ++++++++--
- drivers/target/target_core_transport.c |  1 +
- 3 files changed, 9 insertions(+), 5 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/scsi/qla2xxx/qla_attr.c b/drivers/scsi/qla2xxx/qla_attr.c
-index 33255968f03a..2c9e5ac24692 100644
---- a/drivers/scsi/qla2xxx/qla_attr.c
-+++ b/drivers/scsi/qla2xxx/qla_attr.c
-@@ -1850,9 +1850,6 @@ qla2x00_port_speed_show(struct device *dev, struct device_attribute *attr,
- 		return -EINVAL;
- 	}
- 
--	ql_log(ql_log_info, vha, 0x70d6,
--	    "port speed:%d\n", ha->link_data_rate);
--
- 	return scnprintf(buf, PAGE_SIZE, "%s\n", spd[ha->link_data_rate]);
- }
- 
-diff --git a/drivers/scsi/scsi_pm.c b/drivers/scsi/scsi_pm.c
-index 3717eea37ecb..5f0ad8b32e3a 100644
---- a/drivers/scsi/scsi_pm.c
-+++ b/drivers/scsi/scsi_pm.c
-@@ -80,6 +80,10 @@ static int scsi_dev_type_resume(struct device *dev,
- 	dev_dbg(dev, "scsi resume: %d\n", err);
- 
- 	if (err == 0) {
-+		bool was_runtime_suspended;
-+
-+		was_runtime_suspended = pm_runtime_suspended(dev);
-+
- 		pm_runtime_disable(dev);
- 		err = pm_runtime_set_active(dev);
- 		pm_runtime_enable(dev);
-@@ -93,8 +97,10 @@ static int scsi_dev_type_resume(struct device *dev,
- 		 */
- 		if (!err && scsi_is_sdev_device(dev)) {
- 			struct scsi_device *sdev = to_scsi_device(dev);
--
--			blk_set_runtime_active(sdev->request_queue);
-+			if (was_runtime_suspended)
-+				blk_post_runtime_resume(sdev->request_queue, 0);
-+			else
-+				blk_set_runtime_active(sdev->request_queue);
- 		}
- 	}
- 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 594b724bbf79..264a822c0bfa 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -3350,6 +3350,7 @@ static void target_tmr_work(struct work_struct *work)
- 
- 	cmd->se_tfo->queue_tm_rsp(cmd);
- 
-+	transport_lun_remove_cmd(cmd);
- 	transport_cmd_check_stop_to_fabric(cmd);
- 	return;
- 
+Waiting for your urgent response.
+Attentively
+Mohaiyani Binti Shamsudin.
