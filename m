@@ -2,178 +2,103 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FCF31E1432
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2020 20:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEEF61E154A
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2020 22:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389867AbgEYS0k (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 25 May 2020 14:26:40 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:45603 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389535AbgEYS01 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 May 2020 14:26:27 -0400
-Received: by mail-ed1-f66.google.com with SMTP id s19so15690606edt.12;
-        Mon, 25 May 2020 11:26:24 -0700 (PDT)
+        id S2390530AbgEYUlb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 25 May 2020 16:41:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390437AbgEYUla (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 May 2020 16:41:30 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA6DC061A0E;
+        Mon, 25 May 2020 13:41:30 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id m1so2792740pgk.1;
+        Mon, 25 May 2020 13:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=RkZMhQLldIOys7nQpzJNFew5Ei3EG4rJ9hOJdxzbwfk=;
+        b=krPQWD30ZCtO95s7MF8vMdQ5C1OlfmYMp3uv9JE2P3gqz+WkE/Hbqek1HDoCGzgJ6j
+         of2+bh9iipH3npWs6AxtnHUYMK15Rl6mQfvW0I2GlbLBGz/0WWcKz2OkQpHaAjw+k0NM
+         FFxi0fyinbgIdGgaAhPkfvSkkoYb1z8HBbHCJEdmvYkgZyQRjbo1n2AWYyeqISe7746T
+         upgkB1/bvDOBPcAbVmegmYlKs6nZ/+OGxe2GskW3ihEddLjlv1buOzHSchSrwbivLv72
+         qaALbI9W9/uOH8mZO5mj1SfnN5lLr47j77idBRYkx+uC2UW4fQCGTY/kSh3zGB+TUi8b
+         wV+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6WamrPQShgiTsDFapEcmGDUQvC5yr09yE8HLsYvPPjk=;
-        b=XQxb+DxHoOZ+c+GE3Accdn0tG1U77du9BRJk0S1niL7Zw1/bmI+igGUL9xpFbZMftY
-         UgMF6BZREB4LxwHDyUQkKKyvqJJJfONDQtj4+Tsw4sQQKb+htO0P+E3id+ocuumkoJUH
-         0odrF+vB0H/vVm2tweoBH0GVc3mb0wxMwKDDzrRh5eDrgYa4T8RWo+g/u290PJL0NVNT
-         te3SFvExCXyML1Wb+Wiv4mzwj6dVivWH0CYsGExr9/Vwm0cmXmpbKIdNJp5Y/hLt40wi
-         mbbQifDQm212bAcaRZH9jbjWVAsXV+DUKJTiAA5eahsng6G+zlLGrgtujSPrn7UsJ1PI
-         wrAw==
-X-Gm-Message-State: AOAM530t8X8PqBtw7DmbEdymLbm6v97fl+BAAv3ew9pyqII2aAm0HEL/
-        dyob+DKgvi4o4qJsGSKuIsU=
-X-Google-Smtp-Source: ABdhPJwaQ1a3PQrLYUo66G+JvtCe5bgBlAK3z2hUCsbaw6NsBbigY5hyn9hKVKSVUbo33mXU0BIe7w==
-X-Received: by 2002:aa7:cf12:: with SMTP id a18mr11182818edy.193.1590431183421;
-        Mon, 25 May 2020 11:26:23 -0700 (PDT)
-Received: from workstation.lan ([95.155.85.46])
-        by smtp.gmail.com with ESMTPSA id n15sm15555707ejs.10.2020.05.25.11.26.21
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=RkZMhQLldIOys7nQpzJNFew5Ei3EG4rJ9hOJdxzbwfk=;
+        b=SitZCAyF+RKclLN9zwBCqUr2LIZ68fquQyCfXNpibwKIRDqzXn1DRreZuEu2TVm+yN
+         pdb/i+PUOwWmMRVESlRMJqxgwA8QCfT1VTJb0yrAK0Odyhd/ZVyi6MUYdVzQPLZQTGto
+         XwhNTtkXiryq1cAKVjaeZiQfzW0+3/56wm1KVJAf4TdS7UG2B7zw9x2pD9orBSw9kooh
+         L428kziYJIhklkvxAkxyzk4ysw1FxFM35zg+/oBkNALvnqCjijCZJ6j56UzcQUFsYSkP
+         BcOsD7mJOv4X60iUXwbxZnEC/E4uokvKKh0BEzblqPZp54sGfjpoPM1XmMPj4jKnoIsf
+         pegw==
+X-Gm-Message-State: AOAM533H5bQcwya7TKnQZDgSESQZFYfm1FdxLSUMVHwu7Il+AVqP9gVz
+        J24bkHh6QfK4liD1l5g8fYx+mLv3
+X-Google-Smtp-Source: ABdhPJy18biZE6cpZtxmd7gPtm4MkApYXoZPl+nTvYgRXICZkwMwsscr+L+DR42ER3/ctduP0LdmeA==
+X-Received: by 2002:a05:6a00:1490:: with SMTP id v16mr18061272pfu.173.1590439290104;
+        Mon, 25 May 2020 13:41:30 -0700 (PDT)
+Received: from aw-bldr-10.qualcomm.com (i-global254.qualcomm.com. [199.106.103.254])
+        by smtp.gmail.com with ESMTPSA id d2sm13632095pfc.7.2020.05.25.13.41.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 May 2020 11:26:22 -0700 (PDT)
-From:   =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Ursula Braun <ubraun@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        greybus-dev@lists.linaro.org, netdev@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH 8/8] net/iucv: Use the new device_to_pm() helper to access struct dev_pm_ops
-Date:   Mon, 25 May 2020 18:26:08 +0000
-Message-Id: <20200525182608.1823735-9-kw@linux.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200525182608.1823735-1-kw@linux.com>
-References: <20200525182608.1823735-1-kw@linux.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Mon, 25 May 2020 13:41:29 -0700 (PDT)
+From:   Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+To:     agross@kernel.org, bjorn.andersson@linaro.org,
+        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, subhashj@codeaurora.org,
+        venkatg@codeaurora.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
+Subject: [PATCH] scsi: ufs-qcom: Fix scheduling while atomic issue
+Date:   Mon, 25 May 2020 13:41:25 -0700
+Message-Id: <20200525204125.46171-1-jeffrey.l.hugo@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the new device_to_pm() helper to access Power Management callbacs
-(struct dev_pm_ops) for a particular device (struct device_driver).
+ufs_qcom_dump_dbg_regs() uses usleep_range, a sleeping function, but can
+be called from atomic context in the following flow:
 
-No functional change intended.
+ufshcd_intr -> ufshcd_sl_intr -> ufshcd_check_errors ->
+ufshcd_print_host_regs -> ufshcd_vops_dbg_register_dump ->
+ufs_qcom_dump_dbg_regs
 
-Signed-off-by: Krzysztof Wilczyński <kw@linux.com>
+This causes a boot crash on the Lenovo Miix 630 when the interrupt is
+handled on the idle thread.
+
+Fix the issue by switching to udelay().
+
+Fixes: 9c46b8676271 ("scsi: ufs-qcom: dump additional testbus registers")
+Signed-off-by: Jeffrey Hugo <jeffrey.l.hugo@gmail.com>
 ---
- net/iucv/iucv.c | 30 ++++++++++++++++++------------
- 1 file changed, 18 insertions(+), 12 deletions(-)
+ drivers/scsi/ufs/ufs-qcom.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/iucv/iucv.c b/net/iucv/iucv.c
-index 9a2d023842fe..1a3029ab7c1f 100644
---- a/net/iucv/iucv.c
-+++ b/net/iucv/iucv.c
-@@ -1836,23 +1836,23 @@ static void iucv_external_interrupt(struct ext_code ext_code,
+diff --git a/drivers/scsi/ufs/ufs-qcom.c b/drivers/scsi/ufs/ufs-qcom.c
+index 19aa5c44e0da..f938867301a0 100644
+--- a/drivers/scsi/ufs/ufs-qcom.c
++++ b/drivers/scsi/ufs/ufs-qcom.c
+@@ -1658,11 +1658,11 @@ static void ufs_qcom_dump_dbg_regs(struct ufs_hba *hba)
  
- static int iucv_pm_prepare(struct device *dev)
- {
--	int rc = 0;
-+	const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
- 
- #ifdef CONFIG_PM_DEBUG
- 	printk(KERN_INFO "iucv_pm_prepare\n");
- #endif
--	if (dev->driver && dev->driver->pm && dev->driver->pm->prepare)
--		rc = dev->driver->pm->prepare(dev);
--	return rc;
-+	return pm && pm->prepare ? pm->prepare(dev) : 0;
- }
- 
- static void iucv_pm_complete(struct device *dev)
- {
-+	const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
-+
- #ifdef CONFIG_PM_DEBUG
- 	printk(KERN_INFO "iucv_pm_complete\n");
- #endif
--	if (dev->driver && dev->driver->pm && dev->driver->pm->complete)
--		dev->driver->pm->complete(dev);
-+	if (pm && pm->complete)
-+		pm->complete(dev);
+ 	/* sleep a bit intermittently as we are dumping too much data */
+ 	ufs_qcom_print_hw_debug_reg_all(hba, NULL, ufs_qcom_dump_regs_wrapper);
+-	usleep_range(1000, 1100);
++	udelay(1000);
+ 	ufs_qcom_testbus_read(hba);
+-	usleep_range(1000, 1100);
++	udelay(1000);
+ 	ufs_qcom_print_unipro_testbus(hba);
+-	usleep_range(1000, 1100);
++	udelay(1000);
  }
  
  /**
-@@ -1883,6 +1883,7 @@ static int iucv_path_table_empty(void)
- static int iucv_pm_freeze(struct device *dev)
- {
- 	int cpu;
-+	const struct dev_pm_ops *pm;
- 	struct iucv_irq_list *p, *n;
- 	int rc = 0;
- 
-@@ -1902,8 +1903,9 @@ static int iucv_pm_freeze(struct device *dev)
- 		}
- 	}
- 	iucv_pm_state = IUCV_PM_FREEZING;
--	if (dev->driver && dev->driver->pm && dev->driver->pm->freeze)
--		rc = dev->driver->pm->freeze(dev);
-+	pm = driver_to_pm(dev->driver);
-+	if (pm && pm->freeze)
-+		rc = pm->freeze(dev);
- 	if (iucv_path_table_empty())
- 		iucv_disable();
- 	return rc;
-@@ -1919,6 +1921,7 @@ static int iucv_pm_freeze(struct device *dev)
-  */
- static int iucv_pm_thaw(struct device *dev)
- {
-+	const struct dev_pm_ops *pm;
- 	int rc = 0;
- 
- #ifdef CONFIG_PM_DEBUG
-@@ -1938,8 +1941,9 @@ static int iucv_pm_thaw(struct device *dev)
- 			/* enable interrupts on all cpus */
- 			iucv_setmask_mp();
- 	}
--	if (dev->driver && dev->driver->pm && dev->driver->pm->thaw)
--		rc = dev->driver->pm->thaw(dev);
-+	pm = driver_to_pm(dev->driver);
-+	if (pm && pm->thaw)
-+		rc = pm->thaw(dev);
- out:
- 	return rc;
- }
-@@ -1954,6 +1958,7 @@ static int iucv_pm_thaw(struct device *dev)
-  */
- static int iucv_pm_restore(struct device *dev)
- {
-+	const struct dev_pm_ops *pm;
- 	int rc = 0;
- 
- #ifdef CONFIG_PM_DEBUG
-@@ -1968,8 +1973,9 @@ static int iucv_pm_restore(struct device *dev)
- 		if (rc)
- 			goto out;
- 	}
--	if (dev->driver && dev->driver->pm && dev->driver->pm->restore)
--		rc = dev->driver->pm->restore(dev);
-+	pm = driver_to_pm(dev->driver);
-+	if (pm && pm->restore)
-+		rc = pm->restore(dev);
- out:
- 	return rc;
- }
 -- 
-2.26.2
+2.17.1
 
