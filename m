@@ -2,136 +2,137 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA181E13C8
-	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2020 20:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2456E1E144C
+	for <lists+linux-scsi@lfdr.de>; Mon, 25 May 2020 20:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389771AbgEYSEw (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 25 May 2020 14:04:52 -0400
-Received: from mta-02.yadro.com ([89.207.88.252]:53652 "EHLO mta-01.yadro.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388621AbgEYSEv (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 25 May 2020 14:04:51 -0400
-Received: from localhost (unknown [127.0.0.1])
-        by mta-01.yadro.com (Postfix) with ESMTP id 8982B4C83B;
-        Mon, 25 May 2020 18:04:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=yadro.com; h=
-        in-reply-to:content-disposition:content-type:content-type
-        :mime-version:references:message-id:subject:subject:from:from
-        :date:date:received:received:received; s=mta-01; t=1590429886;
-         x=1592244287; bh=0MPK7U6EchTSXx7IGC4GJwjCPcvLvNQV3oRmGK9pT1Q=; b=
-        T0ZWSfWP7jl28PaFOT0b+vohxh0D4JWAg/leGEeawdvEPboi4G+UvbItfs8n8o9N
-        biJU3YkBo3WvQoGiLTa+0H4dzkoIMOvo/fbVwaVrQKRqKoLMRawDy1EkxihDEpJJ
-        Jq0i4LOmFnFzmDuceqqyDLeSTVRVZA5hHLn1ClA6jyY=
-X-Virus-Scanned: amavisd-new at yadro.com
-Received: from mta-01.yadro.com ([127.0.0.1])
-        by localhost (mta-01.yadro.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3WKaihlw6kla; Mon, 25 May 2020 21:04:46 +0300 (MSK)
-Received: from T-EXCH-02.corp.yadro.com (t-exch-02.corp.yadro.com [172.17.10.102])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mta-01.yadro.com (Postfix) with ESMTPS id 41A54404CF;
-        Mon, 25 May 2020 21:04:45 +0300 (MSK)
-Received: from localhost (172.17.204.212) by T-EXCH-02.corp.yadro.com
- (172.17.10.102) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P384) id 15.1.669.32; Mon, 25
- May 2020 21:04:46 +0300
-Date:   Mon, 25 May 2020 21:04:46 +0300
-From:   Roman Bolshakov <r.bolshakov@yadro.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-CC:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>,
-        <linux-scsi@vger.kernel.org>, Arun Easi <aeasi@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Daniel Wagner <dwagner@suse.de>, Martin Wilck <mwilck@suse.com>
-Subject: Re: [PATCH] qla2xxx: Remove an unused function
-Message-ID: <20200525180446.GA64430@SPB-NB-133.local>
-References: <20200520040738.1017-1-bvanassche@acm.org>
+        id S2389264AbgEYS0N (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 25 May 2020 14:26:13 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:37236 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387644AbgEYS0N (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 25 May 2020 14:26:13 -0400
+Received: by mail-ej1-f66.google.com with SMTP id l21so21340052eji.4;
+        Mon, 25 May 2020 11:26:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1qikXNcYuPEp2SbYrhq3PIeLmdf37Vp6toU2hryNiAU=;
+        b=UmCbsIdwmg0jEmX4PliEuAzxbhnr++enG6DM+5PuammxCnBstbdR/KQuR+PQ0y42pB
+         fELpWJdXAh9RRdvCdWiH9zJBGAFpDDjj9hVcqgZRFsmp+QEJ3TaWFO9YfkzBGYJJHvAw
+         o4Q+ZpiNqa5bc5+55Ii/p9IZQV6zI7wmnkKzetFoTXnND07uZfTbO0xCl/Lq513bMTAH
+         5Wh8pwjGqrxPUiH1SErSegLkfEqMhFcnq8ekW5Ri//s16Av17xL3ey9iqTng4x6xVtNd
+         6L3rIuXUbnfs+yEY4cuwJJkqbYguGR9w4bl6PHVt3r2SZMgjF5r8gFw3XllbqpAHOW39
+         eTGQ==
+X-Gm-Message-State: AOAM530wgjA9f4C4bbwoAhVYMprvnaEiCXOn5aEnfXakvXVCvKmo8Wih
+        B7R6u9qx8iVPnxwLifqJiBg=
+X-Google-Smtp-Source: ABdhPJxkEBfJS/XXtSSCnmQUkO84UroYhCAKuA4jbTqreWDo9ErA8dsQuCsf23LSLacMkksSHFqFeg==
+X-Received: by 2002:a17:906:4bc1:: with SMTP id x1mr19051208ejv.13.1590431170704;
+        Mon, 25 May 2020 11:26:10 -0700 (PDT)
+Received: from workstation.lan ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id n15sm15555707ejs.10.2020.05.25.11.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 May 2020 11:26:09 -0700 (PDT)
+From:   =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Ursula Braun <ubraun@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        greybus-dev@lists.linaro.org, netdev@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH 0/8] Add helper for accessing Power Management callbacs
+Date:   Mon, 25 May 2020 18:26:00 +0000
+Message-Id: <20200525182608.1823735-1-kw@linux.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20200520040738.1017-1-bvanassche@acm.org>
-X-Originating-IP: [172.17.204.212]
-X-ClientProxiedBy: T-EXCH-01.corp.yadro.com (172.17.10.101) To
- T-EXCH-02.corp.yadro.com (172.17.10.102)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, May 19, 2020 at 09:07:38PM -0700, Bart Van Assche wrote:
-> This was detected by building the qla2xxx driver with clang. See also
-> commit a9083016a531 ("[SCSI] qla2xxx: Add ISP82XX support").
-> 
-> Cc: Arun Easi <aeasi@marvell.com>
-> Cc: Nilesh Javali <njavali@marvell.com>
-> Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
-> Cc: Hannes Reinecke <hare@suse.de>
-> Cc: Daniel Wagner <dwagner@suse.de>
-> Cc: Martin Wilck <mwilck@suse.com>
-> Cc: Roman Bolshakov <r.bolshakov@yadro.com>
-> Signed-off-by: Bart Van Assche <bvanassche@acm.org>
-> ---
->  drivers/scsi/qla2xxx/qla_nx.c | 41 -----------------------------------
->  1 file changed, 41 deletions(-)
-> 
-> diff --git a/drivers/scsi/qla2xxx/qla_nx.c b/drivers/scsi/qla2xxx/qla_nx.c
-> index 21f968e4a584..0baf55b7e88f 100644
-> --- a/drivers/scsi/qla2xxx/qla_nx.c
-> +++ b/drivers/scsi/qla2xxx/qla_nx.c
-> @@ -380,47 +380,6 @@ qla82xx_pci_set_crbwindow_2M(struct qla_hw_data *ha, ulong off_in,
->  	*off_out = (off_in & MASK(16)) + CRB_INDIRECT_2M + ha->nx_pcibase;
->  }
->  
-> -static inline unsigned long
-> -qla82xx_pci_set_crbwindow(struct qla_hw_data *ha, u64 off)
-> -{
-> -	scsi_qla_host_t *vha = pci_get_drvdata(ha->pdev);
-> -	/* See if we are currently pointing to the region we want to use next */
-> -	if ((off >= QLA82XX_CRB_PCIX_HOST) && (off < QLA82XX_CRB_DDR_NET)) {
-> -		/* No need to change window. PCIX and PCIEregs are in both
-> -		 * regs are in both windows.
-> -		 */
-> -		return off;
-> -	}
-> -
-> -	if ((off >= QLA82XX_CRB_PCIX_HOST) && (off < QLA82XX_CRB_PCIX_HOST2)) {
-> -		/* We are in first CRB window */
-> -		if (ha->curr_window != 0)
-> -			WARN_ON(1);
-> -		return off;
-> -	}
-> -
-> -	if ((off > QLA82XX_CRB_PCIX_HOST2) && (off < QLA82XX_CRB_MAX)) {
-> -		/* We are in second CRB window */
-> -		off = off - QLA82XX_CRB_PCIX_HOST2 + QLA82XX_CRB_PCIX_HOST;
-> -
-> -		if (ha->curr_window != 1)
-> -			return off;
-> -
-> -		/* We are in the QM or direct access
-> -		 * register region - do nothing
-> -		 */
-> -		if ((off >= QLA82XX_PCI_DIRECT_CRB) &&
-> -			(off < QLA82XX_PCI_CAMQM_MAX))
-> -			return off;
-> -	}
-> -	/* strange address given */
-> -	ql_dbg(ql_dbg_p3p, vha, 0xb001,
-> -	    "%s: Warning: unm_nic_pci_set_crbwindow "
-> -	    "called with an unknown address(%llx).\n",
-> -	    QLA2XXX_DRIVER_NAME, off);
-> -	return off;
-> -}
-> -
->  static int
->  qla82xx_pci_get_crb_addr_2M(struct qla_hw_data *ha, ulong off_in,
->  			    void __iomem **off_out)
+This series aims to add a new driver_to_pm() helper allowing for
+accessing the Power Management callbacs for a particular device.
 
-Hi Bart,
+Access to the callbacs (struct dev_pm_ops) is normally done through
+using the pm pointer that is embedded within the device_driver struct.
 
-Reviewed-by: Roman Bolshakov <r.bolshakov@yadro.com>
+This new helper allows for the code required to reference the pm pointer
+and access Power Management callbas to be simplified.  Changing the
+following:
 
-Thanks,
-Roman
+  struct device_driver *drv = dev->driver;
+  if (dev->driver && dev->driver->pm && dev->driver->pm->prepare) {
+      int ret = dev->driver->pm->prepare(dev);
+
+To:
+
+  const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+  if (pm && pm->prepare) {
+      int ret = pm->prepare(dev);
+
+Or, changing the following:
+
+     const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+
+To:
+     const struct dev_pm_ops *pm = driver_to_pm(dev->driver);
+
+This series builds on top of the previous commit 6da2f2ccfd2d ("PCI/PM:
+Make power management op coding style consistent") that had an aim to
+make accessing the Power Managemnet callbacs more consistent.
+
+No functional change intended.
+
+Links:
+  https://lore.kernel.org/driverdev-devel/20191014230016.240912-6-helgaas@kernel.org/
+  https://lore.kernel.org/driverdev-devel/8592302.r4xC6RIy69@kreacher/
+  https://lore.kernel.org/driverdev-devel/20191016135002.GA24678@kadam/
+
+Krzysztof Wilczyński (8):
+  driver core: Add helper for accessing Power Management callbacs
+  ACPI: PM: Use the new device_to_pm() helper to access struct
+    dev_pm_ops
+  greybus: Use the new device_to_pm() helper to access struct dev_pm_ops
+  scsi: pm: Use the new device_to_pm() helper to access struct
+    dev_pm_ops
+  usb: phy: fsl: Use the new device_to_pm() helper to access struct
+    dev_pm_ops
+  PCI/PM: Use the new device_to_pm() helper to access struct dev_pm_ops
+  PM: Use the new device_to_pm() helper to access struct dev_pm_ops
+  net/iucv: Use the new device_to_pm() helper to access struct
+    dev_pm_ops
+
+ drivers/acpi/device_pm.c         |  5 ++-
+ drivers/base/power/domain.c      | 12 ++++--
+ drivers/base/power/generic_ops.c | 65 ++++++++++++++------------------
+ drivers/base/power/main.c        | 48 +++++++++++++++--------
+ drivers/base/power/runtime.c     |  7 ++--
+ drivers/greybus/bundle.c         |  4 +-
+ drivers/pci/pci-driver.c         | 32 ++++++++--------
+ drivers/scsi/scsi_pm.c           |  8 ++--
+ drivers/usb/phy/phy-fsl-usb.c    | 11 ++++--
+ include/linux/device/driver.h    | 15 ++++++++
+ net/iucv/iucv.c                  | 30 +++++++++------
+ 11 files changed, 138 insertions(+), 99 deletions(-)
+
+-- 
+2.26.2
+
