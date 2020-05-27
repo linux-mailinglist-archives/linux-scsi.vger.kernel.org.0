@@ -2,51 +2,74 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 966CB1E44B6
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2020 15:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FA81E456D
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2020 16:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389001AbgE0Nzd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 May 2020 09:55:33 -0400
-Received: from msa14.plala.or.jp ([60.36.166.14]:32912 "EHLO msa14.plala.or.jp"
+        id S2387696AbgE0OOM (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 May 2020 10:14:12 -0400
+Received: from mx2.suse.de ([195.135.220.15]:51218 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388906AbgE0Nzd (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 27 May 2020 09:55:33 -0400
-Received: from mwebp13 ([172.23.13.133]) by msa14.plala.or.jp with ESMTP
-          id <20200527135531.WGVA3566.msa14.plala.or.jp@mwebp13>;
-          Wed, 27 May 2020 22:55:31 +0900
-Date:   Wed, 27 May 2020 22:55:31 +0900
-From:   "Mrs.Judith Rice" <hamurafujimi@tmail.plala.or.jp>
-Reply-To: jonesevansje@gmail.com
-Message-ID: <20200527225531.YQK7M.1012.root@mwebp13>
-Subject: Spende
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-2022-jp
-Content-Transfer-Encoding: 7bit
-X-Priority: 3 (Normal)
-Sensitivity: Normal
-X-VirusScan: Outbound; mvir-ac14; Wed, 27 May 2020 22:55:31 +0900
-To:     unlisted-recipients:; (no To-header on input)
+        id S1730098AbgE0OOM (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 27 May 2020 10:14:12 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id B31FEABBD;
+        Wed, 27 May 2020 14:14:13 +0000 (UTC)
+From:   Hannes Reinecke <hare@suse.de>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
+Subject: [RFC PATCH 0/4] scsi: use xarray for devices and targets
+Date:   Wed, 27 May 2020 16:13:56 +0200
+Message-Id: <20200527141400.58087-1-hare@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Attn:
+Hi all,
 
-Es tut uns leid, dass wir Sie aufgrund eines Mismanagent of Beneficaries-Fonds von unseren ernannten Zonal Managern versp&#228;tet kontaktiert haben. Bitte beachten Sie, dass Sie qualifiziert sind, die Zahlung von 900.000,00 USD an der ATM-Karte mit neunhunderttausend Dollar zu erhalten.
+based on the ideas from Doug Gilbert here's now my take on using
+xarrays for devices and targets.
+It revolves around two ideas:
+- 'channel' and 'id' are never ever used to the full 32 bit range;
+  'channels' are well below 10, and no driver is using more than
+  16 bits for the id. So we can reduce the type of 'channel' and
+  'id' to 16 bits, and use the 32 bit value 'channel << 16 | id'
+  as the index into the target xarray.
+- Most SCSI LUNs are below 256 (to ensure compability with older
+  systems). So there we can use the LUN number as the index into
+  the xarray; for larger LUN numbers we'll allocate a separate
+  index.
 
-Als Entsch&#228;digung von WORLD BANK / IWF (Internationaler W&#228;hrungsfonds) f&#252;r die automatisch &#252;ber einen E-Mail-Wahlautomaten gezogenen, die in der Vergangenheit noch nicht abgeschlossene Transaktionen hatten.
+With these change we can implement an efficient lookup mechanism,
+devolving into direct lookup for most cases.
+And iteration should be as efficient as the current, list-based,
+approach.
 
-F&#252;r weitere Informationen kontaktieren Sie bitte Rev.EVANS JONES ( jonesevansje@gmail.com )
+This is compile-tested only, to give you an impression of the
+overall idea and to get the discussion rolling.
 
-Bitte senden Sie ihm Ihre pers&#246;nlichen Daten wie:
+Hannes Reinecke (4):
+  scsi: convert target lookup to xarray
+  target_core_pscsi: use __scsi_device_lookup()
+  scsi: move target device list to xarray
+  scsi: remove direct device lookup per host
 
-Vollst&#228;ndiger Name:
-Wohnanschrift:
-Telefonnummer:
-Herkunftsland:
+ drivers/scsi/hosts.c               |   3 +-
+ drivers/scsi/scsi.c                | 129 ++++++++++++++++++++++++++++---------
+ drivers/scsi/scsi_lib.c            |   8 +--
+ drivers/scsi/scsi_scan.c           |  66 +++++++++----------
+ drivers/scsi/scsi_sysfs.c          |  39 +++++++----
+ drivers/target/target_core_pscsi.c |   8 +--
+ include/scsi/scsi_device.h         |  21 +++---
+ include/scsi/scsi_host.h           |   5 +-
+ 8 files changed, 175 insertions(+), 104 deletions(-)
 
-Gr&#252;&#223;e,
-Mrs. Judith Rice
+-- 
+2.16.4
 
-Spende
