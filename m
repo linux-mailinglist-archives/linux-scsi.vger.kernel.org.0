@@ -2,90 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3E941E354F
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2020 04:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8655F1E3551
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2020 04:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbgE0CNV (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 26 May 2020 22:13:21 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:45914 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgE0CNT (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 May 2020 22:13:19 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04R2CpWr165328;
-        Wed, 27 May 2020 02:13:16 GMT
+        id S1726974AbgE0CNW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 26 May 2020 22:13:22 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:49968 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726482AbgE0CNV (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 26 May 2020 22:13:21 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04R2Bbvj092013;
+        Wed, 27 May 2020 02:13:17 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=cgNhwBL0YxsJOuzda5stp0OuW/YIWB10RY3uXefOsj0=;
- b=joKUyMLQ54tlB5puXcZGVEJ/OJR/ObY0xhlTWIz11DE9Cd157j+WlfBfNH8MIbZ8Grbf
- iVm/KT0gElWDUszkQyWJf3eQwm7tU3QB/jqxySZMY6foV6JU5aFta4ObtXiew4z2y/NQ
- 7lehI37yw8XlztPyNb11QzSkXxvsPqt4jrOTashkLPksjEhturRYr/VC01YPqEpSsl/M
- zm9VzQFqAFPenz0hNEaPobXtQmTvVA2SaUdF3pNCh+chrZbmb2UJ5/fFzVJUbXv1/B7C
- mnTFeZ64LdvdrRKUYG/PLBtKRFFHzP/8WzuChwenetU5B9rBp/jevsbWrYaMiIEjYi2I PQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 318xe1cxvd-1
+ bh=bkxdgMXnQsFkc/GlabFElXptbPZB2QodVCWZ/poltOI=;
+ b=jGfagUdhSzFkBTVjWsuupq3CuCx3md4yMFKUIV96tsRgdJ6ofdbGUj62ExhT1v+SZnkD
+ 91k4xJ+aE2ysGrXiWngYmiWWPD9jPBYJkJAOKEgyZgNtpGYDgRaIUdVheLrce7zhLYWV
+ 4wV4LKKUW04NvjR/3N1WHxNgMbIJuPZqklLbCAvCzFlzfMWionjQx/0/w3dnGYaEDZw7
+ jZy36z1OML4q/Vb/lnALctjFxh5h2mQn+HYkhm607SjaOm6KtOgHsFQ8aL/zvwdheKyX
+ lHWcH0fDOkK+YllRMOhc7A0G4eCIx9U1Q+SAegbmaZvll7pNMh8xP4SQUGGhkJiA/DMY SA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 316u8qvxhe-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 27 May 2020 02:13:16 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04R27XJO133227;
-        Wed, 27 May 2020 02:13:16 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 317j5q908t-1
+        Wed, 27 May 2020 02:13:17 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04R27Ziw190059;
+        Wed, 27 May 2020 02:13:17 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 317dktheh7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 27 May 2020 02:13:15 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04R2DFe9017249;
-        Wed, 27 May 2020 02:13:15 GMT
+        Wed, 27 May 2020 02:13:17 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04R2DGhD020388;
+        Wed, 27 May 2020 02:13:16 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 26 May 2020 19:13:15 -0700
+        with ESMTP ; Tue, 26 May 2020 19:13:16 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+To:     linux-scsi@vger.kernel.org,
+        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        jasowang@redhat.com, shirley.ma@oracle.com, mst@redhat.com,
-        pbonzini@redhat.com, stefanha@redhat.com
-Subject: Re: [PATCH 1/1] vhost: scsi: notify TCM about the maximum sg entries supported per command.
-Date:   Tue, 26 May 2020 22:13:00 -0400
-Message-Id: <159054550934.12032.480617639517233845.b4-ty@oracle.com>
+        sreekanth.reddy@broadcom.com, thenzl@redhat.com
+Subject: Re: [PATCH] mpt3sas: Fix reply queue count in non RDPQ mode.
+Date:   Tue, 26 May 2020 22:13:01 -0400
+Message-Id: <159054550934.12032.9460216996686926621.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <1590166317-953-1-git-send-email-sudhakar.panneerselvam@oracle.com>
-References: <1590166317-953-1-git-send-email-sudhakar.panneerselvam@oracle.com>
+In-Reply-To: <20200522103558.5710-1-suganath-prabu.subramani@broadcom.com>
+References: <20200522103558.5710-1-suganath-prabu.subramani@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9633 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 spamscore=0 suspectscore=0
- mlxlogscore=978 mlxscore=0 adultscore=0 phishscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 bulkscore=0
+ spamscore=0 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2005270012
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9633 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- adultscore=0 cotscore=-2147483648 mlxscore=0 bulkscore=0
- priorityscore=1501 phishscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1011 impostorscore=0 suspectscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005270013
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
+ priorityscore=1501 spamscore=0 cotscore=-2147483648 suspectscore=0
+ phishscore=0 clxscore=1011 mlxlogscore=999 bulkscore=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005270013
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 22 May 2020 16:51:57 +0000, Sudhakar Panneerselvam wrote:
+On Fri, 22 May 2020 06:35:58 -0400, Suganath Prabu S wrote:
 
-> vhost-scsi pre-allocates the maximum sg entries per command and if a
-> command requires more than VHOST_SCSI_PREALLOC_SGLS entries, then that
-> command is failed by it. This patch lets vhost communicate the max sg limit
-> when it registers vhost_scsi_ops with TCM. With this change, TCM would
-> report the max sg entries through "Block Limits" VPD page which will be
-> typically queried by the SCSI initiator during device discovery. By knowing
-> this limit, the initiator could ensure the maximum transfer length is less
-> than or equal to what is reported by vhost-scsi.
+> For non RDPQ mode, Driver allocates a single contiguous block of
+> memory pool for all reply descriptor post queues and passes down a
+> single address in the ReplyDescriptorPostQueueAddress field of the IOC
+> Init Request Message to the firmware. So reply_post queue will have
+> only one entry which holds the address of this single contiguous block
+> of memory pool.
+> 
+> [...]
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/1] scsi: vhost: Notify TCM about the maximum sg entries supported per command
-      https://git.kernel.org/mkp/scsi/c/5ae6a6a91503
+[1/1] scsi: mpt3sas: Fix reply queue count in non RDPQ mode
+      https://git.kernel.org/mkp/scsi/c/f56577e8c7d0
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
