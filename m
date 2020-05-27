@@ -2,63 +2,54 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0338F1E4071
-	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2020 13:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB6A1E430D
+	for <lists+linux-scsi@lfdr.de>; Wed, 27 May 2020 15:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728126AbgE0Lww (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 27 May 2020 07:52:52 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:57742 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbgE0Lwt (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 May 2020 07:52:49 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1jduby-0002aZ-Sb; Wed, 27 May 2020 11:52:42 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     QLogic-Storage-Upstream@cavium.com,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: qedf: remove redundant initialization of variable rc
-Date:   Wed, 27 May 2020 12:52:42 +0100
-Message-Id: <20200527115242.172344-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        id S2387706AbgE0NNb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 27 May 2020 09:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387581AbgE0NNa (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 27 May 2020 09:13:30 -0400
+X-Greylist: delayed 347 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 27 May 2020 06:13:30 PDT
+Received: from msa12.plala.or.jp (msa12.plala.or.jp [IPv6:2400:7800:0:502e::12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03899C08C5C1;
+        Wed, 27 May 2020 06:13:29 -0700 (PDT)
+Received: from mwebp13 ([172.23.13.133]) by msa12.plala.or.jp with ESMTP
+          id <20200527130743.MHTA4246.msa12.plala.or.jp@mwebp13>;
+          Wed, 27 May 2020 22:07:43 +0900
+Date:   Wed, 27 May 2020 22:07:42 +0900
+From:   "Mrs.Judith Rice" <hamurafujimi@tmail.plala.or.jp>
+Reply-To: jonesevansje@gmail.com
+Message-ID: <20200527220743.YHFYN.789.root@mwebp13>
+Subject: Spende
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-Priority: 3 (Normal)
+Sensitivity: Normal
+X-VirusScan: Outbound; mvir-ac12; Wed, 27 May 2020 22:07:43 +0900
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Attn:
 
-The variable rc is being initialized with a value that is never read
-and it is being updated later with a new value.  The initialization is
-redundant and can be removed.
+Es tut uns leid, dass wir Sie aufgrund eines Mismanagent of Beneficaries-Fonds von unseren ernannten Zonal Managern versp&#228;tet kontaktiert haben. Bitte beachten Sie, dass Sie qualifiziert sind, die Zahlung von 900.000,00 USD an der ATM-Karte mit neunhunderttausend Dollar zu erhalten.
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/scsi/qedf/qedf_fip.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Als Entsch&#228;digung von WORLD BANK / IWF (Internationaler W&#228;hrungsfonds) f&#252;r die automatisch &#252;ber einen E-Mail-Wahlautomaten gezogenen, die in der Vergangenheit noch nicht abgeschlossene Transaktionen hatten.
 
-diff --git a/drivers/scsi/qedf/qedf_fip.c b/drivers/scsi/qedf/qedf_fip.c
-index bb82f0875eca..ad6a56ce72a8 100644
---- a/drivers/scsi/qedf/qedf_fip.c
-+++ b/drivers/scsi/qedf/qedf_fip.c
-@@ -20,7 +20,7 @@ void qedf_fcoe_send_vlan_req(struct qedf_ctx *qedf)
- #define MY_FIP_ALL_FCF_MACS        ((__u8[6]) { 1, 0x10, 0x18, 1, 0, 2 })
- 	static u8 my_fcoe_all_fcfs[ETH_ALEN] = MY_FIP_ALL_FCF_MACS;
- 	unsigned long flags = 0;
--	int rc = -1;
-+	int rc;
- 
- 	skb = dev_alloc_skb(sizeof(struct fip_vlan));
- 	if (!skb) {
--- 
-2.25.1
+F&#252;r weitere Informationen kontaktieren Sie bitte Rev.EVANS JONES ( jonesevansje@gmail.com )
+
+Bitte senden Sie ihm Ihre pers&#246;nlichen Daten wie:
+
+Vollst&#228;ndiger Name:
+Wohnanschrift:
+Telefonnummer:
+Herkunftsland:
+
+Gr&#252;&#223;e,
+Mrs. Judith Rice
 
