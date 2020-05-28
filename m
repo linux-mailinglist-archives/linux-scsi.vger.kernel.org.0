@@ -2,302 +2,117 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CCAC1E5B38
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2020 10:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9AB1E5B4A
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2020 10:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728003AbgE1IyB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 May 2020 04:54:01 -0400
-Received: from mx2.suse.de ([195.135.220.15]:49642 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727786AbgE1Ix6 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 28 May 2020 04:53:58 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 9C9ADB33D;
-        Thu, 28 May 2020 08:53:54 +0000 (UTC)
-From:   Hannes Reinecke <hare@suse.de>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
+        id S1728072AbgE1I5t (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 May 2020 04:57:49 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:32963 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728054AbgE1I5t (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 May 2020 04:57:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1590656268; x=1622192268;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=h/I/9xZjkFRtVfje3pdXs9BhFKosta3CEFdwxVvq5M8=;
+  b=C709W4BTnzCCjSvVOhp5IzEBA/ImUUXKpRyZgT6qtGoYyX+980pRy2C8
+   FrX9kU4MCRaLG293tJpAQM8M9joR/7MsqDN6CLkP50tNL89lWUxrmu18I
+   ULzJfsX9lPwcvIj2X8HNKD3pWcZDlg2c19pzzCETPN5YxH0H7BKh26Mdp
+   KEfO6nEDkN1DclycoDjp3HcZv0PQTAnUVAb6MZEibFn0Xj/H8pms+1Lk7
+   8GeRhVPxYV6m3rFFH6ZZqFhjsEDE//RL1Nek4DB5CHEsgoFd2ofzVbEIn
+   dZd1UyaEkyPUmj/Ffrx85VmY2pOBxSaPamxqvLijb6ClzJGxxZ2O+Q47d
+   Q==;
+IronPort-SDR: 0PijYfsGqGIV5TcDLhNgVM0e5lXjlsFXKYHDkmh+7yIA6JY7DWQVEykQycPUxrMIA2w7zvEijt
+ uah2+jLb167PyvpnhlvM7Zc7WqfyO68417Q77KF8WCYboYz8vTPYYyUwRMi9IyzC7yUZk7jT6+
+ 06jk1IV6N6uoiJffkwb4Qe+FfPVYYF8dfsOz+7z5AhZWewKCpNHl2tJzcY+bfhjEDVTFQsCRAX
+ apiEBePTBILjrg9OIbGDkqRbJMyVYN0jVKXqunDCBkqL/8X5VXAx5HQ6/kDj25GafFZP79DH1w
+ Nlg=
+X-IronPort-AV: E=Sophos;i="5.73,444,1583164800"; 
+   d="scan'208";a="138688878"
+Received: from mail-bn8nam12lp2172.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.172])
+  by ob1.hgst.iphmx.com with ESMTP; 28 May 2020 16:57:47 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Fcik9Uw8ecWxanBp1Fi90mNBr+ElVE3zuqNt1ELHRIatMSGL9P7bCwPMbFZYhmZmN2mf8w4FkMrlj/AxIXwi9PSryicRXq4B10ZOELnNa3oAx8JlUMR/Uog4cSfcrBBlRu4lyOoYl6a7+GLk1fMghuaCg0+MUnq3u0jGxB30aWZAqfMhh16+WACmXMqjbkUWmfnjAXoMKCr/Zh+VTNo4TxRrRj2N9WIPvEycyRfXcrzM98gOeQ5Eh0pGMPd9Csy6ziRDH9yV+Dm2O6JXyDz5h0pfSUMuKTGCeLsQwhGGYWPoeSwbj49uL2ANQyRy41MZ9395YQyrRE6nZofObsnV3w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tmkthvyAFz2wZxbjwyZsblKMDLRt04Vg0RkUqRZGXos=;
+ b=GcvYPn9Z07/HbfVIdnDKgcxYmHJNrKv2WGjVl0GyQgVHNlHnA0uF0exe/fmN9DaiCRvQcECc9D5L6rssYT+BcUkBFvh8yrorlCbIPJ3buF4uHawQHDE6krUQ4qpUP6rww3yOPVS1eAxttlIvHawJVz+wbBEKo+7x2evVD8/b0pPCQr6pCBEEtUY7ntQ3dlHlNSiX83Jv4vukopx0nNKzvRUBZLiv+vFHtqKkaEvK0/sa5dhKVIM6zy40XiNk7aTQBm+0qfPKD9+gwxgmoIRX254tOBTBrKo7ORVneV1HLxGPXpwfZFpC6IM1WWmS8xc3GDIWXgdNKvXElTJAJmfFdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tmkthvyAFz2wZxbjwyZsblKMDLRt04Vg0RkUqRZGXos=;
+ b=FAYB6APwmbO0MaN1u7aAgtS/A6i/2/glrvJEQqaYeczZAf6wsuAeewGxZaJdt9XYTCxHJATRRusW1M2vsdjpzoF2t9H9iM905lBFopLw8iWUSjiRkgxSSREpfx1J2i7xag0yywXas7MvjTLQUeT3eKYnVOsrftCFnaQaRPu0Qc0=
+Received: from SN4PR0401MB3598.namprd04.prod.outlook.com
+ (2603:10b6:803:47::21) by SN4PR0401MB3550.namprd04.prod.outlook.com
+ (2603:10b6:803:46::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3045.19; Thu, 28 May
+ 2020 08:57:45 +0000
+Received: from SN4PR0401MB3598.namprd04.prod.outlook.com
+ ([fe80::1447:186c:326e:30b2]) by SN4PR0401MB3598.namprd04.prod.outlook.com
+ ([fe80::1447:186c:326e:30b2%7]) with mapi id 15.20.3021.030; Thu, 28 May 2020
+ 08:57:45 +0000
+From:   Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+To:     Hannes Reinecke <hare@suse.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+CC:     Christoph Hellwig <hch@lst.de>,
         Doug Gilbert <dgilbert@interlog.com>,
-        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
         Daniel Wagner <daniel.wagner@suse.com>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-scsi@vger.kernel.org, Hannes Reinecke <hare@suse.de>
-Subject: [PATCH 4/4] scsi: remove direct device lookup per host
-Date:   Thu, 28 May 2020 10:42:27 +0200
-Message-Id: <20200528084227.122885-5-hare@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20200528084227.122885-1-hare@suse.de>
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH 1/4] scsi: convert target lookup to xarray
+Thread-Topic: [PATCH 1/4] scsi: convert target lookup to xarray
+Thread-Index: AQHWNM2GW0LN5YtayEuY3Usabhqz/w==
+Date:   Thu, 28 May 2020 08:57:45 +0000
+Message-ID: <SN4PR0401MB3598F50F2A783DCE68DF92839B8E0@SN4PR0401MB3598.namprd04.prod.outlook.com>
 References: <20200528084227.122885-1-hare@suse.de>
+ <20200528084227.122885-2-hare@suse.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: suse.de; dkim=none (message not signed)
+ header.d=none;suse.de; dmarc=none action=none header.from=wdc.com;
+x-originating-ip: [129.253.240.72]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 30dd4f67-a20d-40e0-a2bd-08d802e5307d
+x-ms-traffictypediagnostic: SN4PR0401MB3550:
+x-microsoft-antispam-prvs: <SN4PR0401MB3550D1BDDEE196DEF6367BB99B8E0@SN4PR0401MB3550.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:2657;
+x-forefront-prvs: 0417A3FFD2
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6ej2RN/wfxHNmifOy+I0Y8NPAWeueFOkF4/tN/Ire9WKmYUOxAWSCB0ndY/psaW8z134wem2nnriEDcSZsZ025ErmBLeT3gctnAI7BE4koouQN66sw5W/zR2Y1EOUgFAVskNRuoLY8NncnarvtB8z6Pm+xRb4LOEUbRebAP5oDbO1I7DXFu/n2BCsVljRsCU+xAoi69/Hy0dNfwswdtVk9nPY36gIZ/UQTK80CYUAgWaxvZyVxeGwj6mhAvIp6Szoc5OKjTI64KQNpByJ6tIvt5gCd7sRwIlKgvIBTXWBv0YYSd45r7Z2tuFkUL71kWK
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR0401MB3598.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(376002)(39860400002)(396003)(366004)(346002)(8936002)(5660300002)(8676002)(52536014)(55016002)(9686003)(86362001)(71200400001)(478600001)(558084003)(4326008)(316002)(186003)(33656002)(53546011)(7696005)(6506007)(110136005)(26005)(2906002)(66476007)(54906003)(76116006)(66946007)(91956017)(66446008)(66556008)(64756008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: Sh2Vud5kAI/Of7CJuSnQqBWiDa4rYBzYdicFkKT0NYUmn0SHW68okjHzYwlvbUdklMyLLFHWhORj1JpC3ltg2IynBP7lBLDEPxZDGDdmdLIxshzAqIM1KVAOBpiTpLVZ1wQXYB5O+e42pBx16RJB8Waup7lA5GE9OZbtSnua5QPShbArdOJVMNx2mqbKybw1QwIwwM3NNyNPrJTQXmx4dscx8eIXVOVUM4KUXiKLLZuxALXvH5PPMCe09lITvZIj2EOIYCdykY0lUrZwsRu9XI7VKJGSqLAyz3nNkkPc1Dp0PY23XLSbnmaL3nc+rt7ZprDZAQMjIjz9eeWqDLJWRu2h8LRyEAVNdVyPUuA4JBgjnyZXv+XAcsoBjTx4UvKulXDP3JU2j9jQE9LthP+gWJG5CB1QHgrp3JDuKwJzw+AHTU3XnNiZrc7Nf9NUGwF6REWI62n3LkYvZDMExyThEJ1JNzmJuZtTBk+LyYRqQiS11x7bqu9uc7DaXYZo8AiS
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30dd4f67-a20d-40e0-a2bd-08d802e5307d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 May 2020 08:57:45.5932
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LHvnr8UGgOh3S7EgB8OWtOrmZ1zxau4E9pqUdCmTgdnxvBzN5Kz0HDE/DFQpkIJ7rFYfZuomHsA+8PUUEQYJXqCNRInK7twNzF449jTJo5A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0401MB3550
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Drop the per-host device list for direct lookup and iterate
-over the targets and devices xarrays instead.
-As both are now using xarrays the lookup is more efficient
-as we can use the provided indices based on the HCTL id
-to do a direct lookup instead of traversing lists.
-
-Signed-off-by: Hannes Reinecke <hare@suse.de>
----
- drivers/scsi/hosts.c       |  1 -
- drivers/scsi/scsi.c        | 67 +++++++++++++++++++++++++++++++++++++++++-----
- drivers/scsi/scsi_scan.c   | 20 ++++++++------
- drivers/scsi/scsi_sysfs.c  | 10 ++-----
- include/scsi/scsi_device.h | 13 +++++----
- include/scsi/scsi_host.h   |  3 +--
- 6 files changed, 84 insertions(+), 30 deletions(-)
-
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index 7109afad0183..004a50a95560 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -382,7 +382,6 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_template *sht, int privsize)
- 	shost->host_lock = &shost->default_lock;
- 	spin_lock_init(shost->host_lock);
- 	shost->shost_state = SHOST_CREATED;
--	INIT_LIST_HEAD(&shost->__devices);
- 	xa_init(&shost->__targets);
- 	INIT_LIST_HEAD(&shost->eh_cmd_q);
- 	INIT_LIST_HEAD(&shost->starved_list);
-diff --git a/drivers/scsi/scsi.c b/drivers/scsi/scsi.c
-index 9dbbc51a1eb5..eac505a169a7 100644
---- a/drivers/scsi/scsi.c
-+++ b/drivers/scsi/scsi.c
-@@ -554,18 +554,40 @@ EXPORT_SYMBOL(scsi_device_put);
- struct scsi_device *__scsi_iterate_devices(struct Scsi_Host *shost,
- 					   struct scsi_device *prev)
- {
--	struct list_head *list = (prev ? &prev->siblings : &shost->__devices);
-+	struct scsi_target *starget;
- 	struct scsi_device *next = NULL;
- 	unsigned long flags;
-+	unsigned long tid = 0, lun_idx = 0;
- 
- 	spin_lock_irqsave(shost->host_lock, flags);
--	while (list->next != &shost->__devices) {
--		next = list_entry(list->next, struct scsi_device, siblings);
--		/* skip devices that we can't get a reference to */
-+	if (!prev) {
-+		starget = xa_find(&shost->__targets, &tid,
-+				       ULONG_MAX, XA_PRESENT);
-+		if (starget) {
-+			next = xa_find(&starget->devices, &lun_idx,
-+				       ULONG_MAX, XA_PRESENT);
-+			if (!scsi_device_get(next)) {
-+				spin_unlock_irqrestore(shost->host_lock, flags);
-+				return next;
-+			}
-+		}
-+	} else {
-+		starget = prev->sdev_target;
-+		tid = (starget->channel << 16) | starget->id;
-+		lun_idx = prev->lun_idx;
-+	}
-+	while (starget) {
-+		next = xa_find_after(&starget->devices, &lun_idx,
-+				     ULONG_MAX, XA_PRESENT);
-+		if (!next) {
-+			/* No more LUNs on this target, switch to the next */
-+			lun_idx = 0;
-+			starget = xa_find_after(&shost->__targets, &tid,
-+						ULONG_MAX, XA_PRESENT);
-+			continue;
-+		}
- 		if (!scsi_device_get(next))
- 			break;
--		next = NULL;
--		list = list->next;
- 	}
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- 
-@@ -575,6 +597,39 @@ struct scsi_device *__scsi_iterate_devices(struct Scsi_Host *shost,
- }
- EXPORT_SYMBOL(__scsi_iterate_devices);
- 
-+/* helper for __shost_for_each_device, see that for documentation */
-+struct scsi_device *__scsi_iterate_devices_unlocked(struct Scsi_Host *shost,
-+						    struct scsi_device *prev)
-+{
-+	struct scsi_target *starget;
-+	struct scsi_device *next = NULL;
-+	unsigned long tid = 0, lun_idx = 0;
-+
-+	if (!prev) {
-+		starget = xa_find(&shost->__targets, &tid,
-+				       ULONG_MAX, XA_PRESENT);
-+		if (starget)
-+			return xa_find(&starget->devices, &lun_idx,
-+				       ULONG_MAX, XA_PRESENT);
-+	} else {
-+		starget = prev->sdev_target;
-+		tid = (starget->channel << 16) | starget->id;
-+		lun_idx = prev->lun_idx;
-+	}
-+	while (starget) {
-+		next = xa_find_after(&starget->devices, &lun_idx,
-+				     ULONG_MAX, XA_PRESENT);
-+		if (next)
-+			return next;
-+		/* No more LUNs on this target, switch to the next */
-+		lun_idx = 0;
-+		starget = xa_find_after(&shost->__targets, &tid,
-+					ULONG_MAX, XA_PRESENT);
-+	}
-+	return NULL;
-+}
-+EXPORT_SYMBOL(__scsi_iterate_devices_unlocked);
-+
- /**
-  * __scsi_target_lookup  -  find a target based on channel and target id
-  * @shost:	SCSI host pointer
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index c7aba9ba5c0c..e75e7f93f8f6 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -234,7 +234,6 @@ static struct scsi_device *scsi_alloc_sdev(struct scsi_target *starget,
- 	sdev->channel = starget->channel;
- 	mutex_init(&sdev->state_mutex);
- 	sdev->sdev_state = SDEV_CREATED;
--	INIT_LIST_HEAD(&sdev->siblings);
- 	INIT_LIST_HEAD(&sdev->starved_entry);
- 	INIT_LIST_HEAD(&sdev->event_list);
- 	spin_lock_init(&sdev->list_lock);
-@@ -1847,17 +1846,22 @@ EXPORT_SYMBOL(scsi_scan_host);
- 
- void scsi_forget_host(struct Scsi_Host *shost)
- {
-+	struct scsi_target *starget;
- 	struct scsi_device *sdev;
- 	unsigned long flags;
-+	unsigned long tid = 0;
- 
-- restart:
- 	spin_lock_irqsave(shost->host_lock, flags);
--	list_for_each_entry(sdev, &shost->__devices, siblings) {
--		if (sdev->sdev_state == SDEV_DEL)
--			continue;
--		spin_unlock_irqrestore(shost->host_lock, flags);
--		__scsi_remove_device(sdev);
--		goto restart;
-+	xa_for_each(&shost->__targets, tid, starget) {
-+		unsigned long lun_id = 0;
-+
-+		xa_for_each(&starget->devices, lun_id, sdev) {
-+			if (sdev->sdev_state == SDEV_DEL)
-+				continue;
-+			spin_unlock_irqrestore(shost->host_lock, flags);
-+			__scsi_remove_device(sdev);
-+			spin_lock_irqsave(shost->host_lock, flags);
-+		}
- 	}
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- }
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 27c19232f175..63fa57684782 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -449,7 +449,6 @@ static void scsi_device_dev_release_usercontext(struct work_struct *work)
- 	parent = sdev->sdev_gendev.parent;
- 
- 	spin_lock_irqsave(sdev->host->host_lock, flags);
--	list_del(&sdev->siblings);
- 	xa_erase(&starget->devices, sdev->lun_idx);
- 	list_del(&sdev->starved_entry);
- 	spin_unlock_irqrestore(sdev->host->host_lock, flags);
-@@ -1476,19 +1475,16 @@ static void __scsi_remove_target(struct scsi_target *starget)
- 	struct Scsi_Host *shost = dev_to_shost(starget->dev.parent);
- 	unsigned long flags;
- 	struct scsi_device *sdev;
-+	unsigned long lun_idx = 0;
- 
- 	spin_lock_irqsave(shost->host_lock, flags);
-- restart:
--	list_for_each_entry(sdev, &shost->__devices, siblings) {
-+	xa_for_each(&starget->devices, lun_idx, sdev) {
- 		/*
- 		 * We cannot call scsi_device_get() here, as
- 		 * we might've been called from rmmod() causing
- 		 * scsi_device_get() to fail the module_is_live()
- 		 * check.
- 		 */
--		if (sdev->channel != starget->channel ||
--		    sdev->id != starget->id)
--			continue;
- 		if (sdev->sdev_state == SDEV_DEL ||
- 		    sdev->sdev_state == SDEV_CANCEL ||
- 		    !get_device(&sdev->sdev_gendev))
-@@ -1497,7 +1493,6 @@ static void __scsi_remove_target(struct scsi_target *starget)
- 		scsi_remove_device(sdev);
- 		put_device(&sdev->sdev_gendev);
- 		spin_lock_irqsave(shost->host_lock, flags);
--		goto restart;
- 	}
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- }
-@@ -1635,7 +1630,6 @@ void scsi_sysfs_device_initialize(struct scsi_device *sdev)
- 		WARN_ON(xa_alloc(&starget->devices, &sdev->lun_idx,
- 				  sdev, scsi_lun_limit, GFP_KERNEL) < 0);
- 	}
--	list_add_tail(&sdev->siblings, &shost->__devices);
- 	spin_unlock_irqrestore(shost->host_lock, flags);
- 	/*
- 	 * device can now only be removed via __scsi_remove_device() so hold
-diff --git a/include/scsi/scsi_device.h b/include/scsi/scsi_device.h
-index 2c6b9d8bc40e..b811b5e3adfe 100644
---- a/include/scsi/scsi_device.h
-+++ b/include/scsi/scsi_device.h
-@@ -102,9 +102,6 @@ struct scsi_device {
- 	struct Scsi_Host *host;
- 	struct request_queue *request_queue;
- 
--	/* the next two are protected by the host->host_lock */
--	struct list_head    siblings;   /* list of all devices on this host */
--
- 	atomic_t device_busy;		/* commands actually active on LLDD */
- 	atomic_t device_blocked;	/* Device returned QUEUE_FULL. */
- 
-@@ -376,6 +373,10 @@ extern struct scsi_device *__scsi_iterate_devices(struct Scsi_Host *,
- 	     (sdev); \
- 	     (sdev) = __scsi_iterate_devices((shost), (sdev)))
- 
-+/* only exposed to implement shost_for_each_device */
-+struct scsi_device *__scsi_iterate_devices_unlocked(struct Scsi_Host *,
-+						    struct scsi_device *);
-+
- /**
-  * __shost_for_each_device - iterate over all devices of a host (UNLOCKED)
-  * @sdev: the &struct scsi_device to use as a cursor
-@@ -389,8 +390,10 @@ extern struct scsi_device *__scsi_iterate_devices(struct Scsi_Host *,
-  * device list in interrupt context.  Otherwise you really want to use
-  * shost_for_each_device instead.
-  */
--#define __shost_for_each_device(sdev, shost) \
--	list_for_each_entry((sdev), &((shost)->__devices), siblings)
-+#define __shost_for_each_device(sdev, shost)				\
-+	for((sdev) = __scsi_iterate_devices_unlocked((shost), NULL);	\
-+	    (sdev);							\
-+	    (sdev) = __scsi_iterate_devices_unlocked((shost),(sdev)))
- 
- extern int scsi_change_queue_depth(struct scsi_device *, int);
- extern int scsi_track_queue_full(struct scsi_device *, int);
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index b9395676c75b..ee0b72075e9f 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -520,9 +520,8 @@ struct Scsi_Host {
- 	 * their __ prefixed variants with the lock held. NEVER
- 	 * access this list directly from a driver.
- 	 */
--	struct list_head	__devices;
- 	struct xarray		__targets;
--	
-+
- 	struct list_head	starved_list;
- 
- 	spinlock_t		default_lock;
--- 
-2.16.4
-
+On 28/05/2020 10:53, Hannes Reinecke wrote:=0A=
+> +	sdev =3D __scsi_device_lookup_by_target(starget, lun);=0A=
+> +	if (sdev && sdev->sdev_state =3D=3D SDEV_DEL)=0A=
+> +		sdev =3D NULL;=0A=
+=0A=
+Nope, still there.=0A=
