@@ -2,49 +2,50 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F27B1E602A
-	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2020 14:09:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309421E5FDD
+	for <lists+linux-scsi@lfdr.de>; Thu, 28 May 2020 14:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388780AbgE1MIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 28 May 2020 08:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
+        id S2388812AbgE1L4q (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 28 May 2020 07:56:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388784AbgE1L4h (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 May 2020 07:56:37 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEA7C08C5C5;
-        Thu, 28 May 2020 04:56:36 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id d128so1732728wmc.1;
-        Thu, 28 May 2020 04:56:36 -0700 (PDT)
+        with ESMTP id S2388797AbgE1L4l (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 28 May 2020 07:56:41 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E14C05BD1E;
+        Thu, 28 May 2020 04:56:41 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id j10so11989546wrw.8;
+        Thu, 28 May 2020 04:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=tq+q++/frST5N5CKETYuRqUnrOlaPvf/ODtcvH07zHM=;
-        b=eE7jAjL8k8KesdXQ8UHRMzDquL2AN+NiiE5Ao/ztSJTqX/49+V4QyMgvpYLstoGEui
-         l/9NgM3PVhu2Y3RghbdJcM/kPsQSce/RVVcZ/RZraP8e4lrmVuq9oINYYaYltQ2oPM9G
-         4OM1YDfwzsgPmp5l+ILk4RyiaP4aeSqEoib0C6VrpSiG4V+kOtz0Lpfwis0zu3ryBhRh
-         9u+5lodqjSz9NGOeF+fhnjH+/T0BWzMy0m4iqDaMWlsL+/n7PnNunIyfDi493W+SYApR
-         WS8Y4A9L4lgZntMs/NfU8tAkEWHE/JCQI9wa4qAFmOI8qsIY67lDiwfHkTUdArIFu+xK
-         DHMw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=VqNPYxcU61E3GnlH8hcaNPEopADGrQrIHtoRm3vT2B0=;
+        b=LTw1j5U9ak1ZTUN5UhfX6jsE6PRvPnyDu+bHcns9ELHJw/EJNA3juKzE342NAOD2aS
+         r1CT2AYX356oH1TS0g/Pp0JId88gR6yuYstCrnAEzYxnGm3p+F2WT+8vv9Y5iayeje+r
+         L48cRbhxn4Y6Z2ZY8AqjIQgKrGDe63xBAoH6cgrH3Mda9JUaStZ2CULvnbwYAATYOzzu
+         L+Js6tXikhT8vielmdjEbfLJgrUNx3cRxAho5q0R2hUDa0+khVd2mii1sEAsV5bfdk8b
+         vA6xFV5nFF3QHmo38cZ/T65/zcY1A0BHfcIZDBeOoUxW5H6DyKCBOE3JJGJo8cjc+NNv
+         ag7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=tq+q++/frST5N5CKETYuRqUnrOlaPvf/ODtcvH07zHM=;
-        b=Y5LMQ1/sRKIwUcEoY+exfXUdWmheyRAjWUCFKQscx+u9+tNSR3uQX0uREe3RcnGDyG
-         QG+aWjc+Xm9E5DLAKU/IfodkZReXfwTq6OvU3BKXYarkag26qZwk9pKwm+4tsPi/wXDs
-         L2RK0ElaiQTGM91gYE/vQggigTWDkxBphRkutjNdQvbyaI8bX9k2nbXPUw1aYc3tlMYB
-         eX5ZXDCb98x6NEgWsx0rLjRT+4w38m07an0LBrfaKuNDogS/M7kZFjiQeUmbmPAfyJqk
-         N1hozLGl4kNWOKLux8pO89AGAJzS2fZqOaRM98R6vNA0KgRS3WFSsA4YsIa/adtZQXnm
-         PWyQ==
-X-Gm-Message-State: AOAM5325ZI87Q13BAEWTXpI3f6TO2q4JzhJZqVGnxN5KCSA1ManUSeAQ
-        cGhqFEjL8SU6aDZ5g+qTBqw=
-X-Google-Smtp-Source: ABdhPJxWIov3wIHFYf08Dxe/mGLEPx1E1mLIZwJgbqV2sS3UN5RUfoXpV0uTQjt2XBqLEIbdmRbWbA==
-X-Received: by 2002:a1c:7c02:: with SMTP id x2mr3204327wmc.183.1590666995753;
-        Thu, 28 May 2020 04:56:35 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=VqNPYxcU61E3GnlH8hcaNPEopADGrQrIHtoRm3vT2B0=;
+        b=LXnTETb1thjq47XCeTCuYNoJFwmW69+OXVY1jrQqgewwsyR8GM6u7cJR+0MkRJdD1n
+         D3jkaXUp1EDaxUOnJyPa0DU/xgK9ZEVBmezU/eI0DVXTnwiFFUDjr3N/hsc3IXrfeDIZ
+         5KETy3ZYorW+wxCmS92BUV4gz5pv/htDZ2sHQ0m2hYQzsXRlE4W1gUjalIyenoRZcyNU
+         1tw0o17ZMC0shIj6EMjrPJKH7/70Pu2oIAeZuHjY0TwVI9iPm2j6dJ8rYc8DX0z5W0HK
+         Bv9Odhn0Y1ctA4zdDv289k2iNlWoyaO0ryP4lgdgX4OqGkuvVDWTxP9o5Wk8HYPQYRMj
+         Fhhw==
+X-Gm-Message-State: AOAM531QEQDaiJ9yAeTlFVyjXL2S6HozDFAAEjewqUKquAAW+PxWdWhe
+        ibBjNb+po9+i//RDGDfFFTM=
+X-Google-Smtp-Source: ABdhPJwy/sFWpTSzSSkV4rUegQazAk7efoLZrxui/23L4zWO2Str/dGKG/z8sT/PBSgrbU/SzwzR7g==
+X-Received: by 2002:adf:82f8:: with SMTP id 111mr578870wrc.257.1590666999891;
+        Thu, 28 May 2020 04:56:39 -0700 (PDT)
 Received: from ubuntu-laptop.micron.com ([165.225.203.62])
-        by smtp.gmail.com with ESMTPSA id y37sm6589178wrd.55.2020.05.28.04.56.32
+        by smtp.gmail.com with ESMTPSA id y37sm6589178wrd.55.2020.05.28.04.56.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 04:56:35 -0700 (PDT)
+        Thu, 28 May 2020 04:56:38 -0700 (PDT)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -52,10 +53,12 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         cang@codeaurora.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/3] scsi: ufs: cleanup ufs initialization
-Date:   Thu, 28 May 2020 13:56:13 +0200
-Message-Id: <20200528115616.9949-1-huobean@gmail.com>
+Subject: [PATCH v2 1/3] scsi: ufs: remove max_t in ufs_get_device_desc
+Date:   Thu, 28 May 2020 13:56:14 +0200
+Message-Id: <20200528115616.9949-2-huobean@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200528115616.9949-1-huobean@gmail.com>
+References: <20200528115616.9949-1-huobean@gmail.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -63,24 +66,28 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-This patchset is to cleanup UFS descriptor access, and delete some
-unnecessary code.
+For the UFS device, the maximum descriptor size is 255, max_t called in
+ufs_get_device_desc() is useless.
 
-Changelog:
+Signed-off-by: Bean Huo <beanhuo@micron.com>
+---
+ drivers/scsi/ufs/ufshcd.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-v1 - v2:
-    1. split patch
-    2. fix one compiling WARNING (Reported-by: kbuild test robot <lkp@intel.com>)
-
-Bean Huo (3):
-  scsi: ufs: remove max_t in ufs_get_device_desc
-  scsi: ufs: delete ufshcd_read_desc()
-  scsi: ufs: cleanup ufs initialization path
-
- drivers/scsi/ufs/ufshcd.c | 166 ++++++++------------------------------
- drivers/scsi/ufs/ufshcd.h |  12 +--
- 2 files changed, 34 insertions(+), 144 deletions(-)
-
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index aca50ed39844..0f8c7e05df29 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -6881,8 +6881,7 @@ static int ufs_get_device_desc(struct ufs_hba *hba)
+ 	u8 *desc_buf;
+ 	struct ufs_dev_info *dev_info = &hba->dev_info;
+ 
+-	buff_len = max_t(size_t, hba->desc_size.dev_desc,
+-			 QUERY_DESC_MAX_SIZE + 1);
++	buff_len = QUERY_DESC_MAX_SIZE + 1;
+ 	desc_buf = kmalloc(buff_len, GFP_KERNEL);
+ 	if (!desc_buf) {
+ 		err = -ENOMEM;
 -- 
 2.17.1
 
