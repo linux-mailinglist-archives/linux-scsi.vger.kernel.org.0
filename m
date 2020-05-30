@@ -2,95 +2,77 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DB71E90FC
-	for <lists+linux-scsi@lfdr.de>; Sat, 30 May 2020 13:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C7971E91F0
+	for <lists+linux-scsi@lfdr.de>; Sat, 30 May 2020 16:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728964AbgE3LxK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sat, 30 May 2020 07:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728897AbgE3LxK (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sat, 30 May 2020 07:53:10 -0400
-Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F186C03E969
-        for <linux-scsi@vger.kernel.org>; Sat, 30 May 2020 04:53:10 -0700 (PDT)
-Received: by mail-oi1-x244.google.com with SMTP id m67so5046194oif.4
-        for <linux-scsi@vger.kernel.org>; Sat, 30 May 2020 04:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=IkNfPqPICQnr7qMx3wVy4G+Jw2YNKBgQX78AINamtFI=;
-        b=huJ99EcqfB+qfjzT5vt7IMl4nRKOkWbaweyr7gdadu6JhvgKLlJtLv43x7H9N/s9Nk
-         1TY5oz5ub5MqRMA/xJmObou80AjPKu63RT94EtLIqaCVL/y+1krYO2RgceGDxAnclisQ
-         1f8r3S0G4zaBxdE0ld62kYxA13kg2txHWVOEAfZ7z8IVuVPTKCsRqttRg6XroE8BmC07
-         b/UoRbbCqzLcB9nOba4MN00WjhOEDeL6yR91h+EzD3bDrGvr/6n71sU/khxJe8hf7D1V
-         lYt7H0S8QwPXRef4y93FpEyB2U4s3BxJlrEDKXI7mqWelnN9ytZZELIqoMB7xx7XWzmJ
-         S/pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=IkNfPqPICQnr7qMx3wVy4G+Jw2YNKBgQX78AINamtFI=;
-        b=QWg7rsF5w3nln6qWpCCK3j8Lk7C5jd2dDUZIG53LQlVGanRBEobTXbKsE1e+MXr02Y
-         0dFyRI0c9OsNKj2eZfOKNRP2YR/vF7gQzMIgoWpAlLAiiN1S5oAeOJ/DEhhrMnxq60Cx
-         xYg4Vqzhjd7V6Ro6BjkhdW4D7NbIqNCaGIpKja99tdw8OKTk75mWPFcJDeSahTQa3PHr
-         2y2puDf7nGlWGXrqECqIwfd5renRM/grX/7sy78MGJfk487v/up6fkhm4xtofT03HibO
-         F7TjciuDoIVAU8sM0Fm4EP9MxAXeW9S0pTD8tfNFLm8+SPw7wcSadgpRpdirRe5OqedS
-         xhuQ==
-X-Gm-Message-State: AOAM532qiZswwBiHWTWTVO1nGJUiNkH6zNJtU/VOjZ8TmxhsAC9WC7yL
-        1lHHSKl8z/Ru7CRahJ00Z0U788SgYYiYHIXRB6Q=
-X-Google-Smtp-Source: ABdhPJwcyndfaOyA6zww+OxGO6lKdyMjpsLFDz+fyOgNM9BQdWny2sBUxUCJYt8H7Q7XElelMI7KU7Bcws6o55mFW6I=
-X-Received: by 2002:aca:4d4f:: with SMTP id a76mr9529104oib.65.1590839589575;
- Sat, 30 May 2020 04:53:09 -0700 (PDT)
+        id S1728999AbgE3OMQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sat, 30 May 2020 10:12:16 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:35429 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727851AbgE3OMP (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sat, 30 May 2020 10:12:15 -0400
+X-UUID: bc985702018f46eab8c0b9337d50acf1-20200530
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=TRzfygmbM6NOVfxuTVlVW0qLZCaDk7UZJHKfhhCZMfw=;
+        b=ex6dMNgxPYq09qpGuR9BDb8y2mJoJFeWUB/6CmSgFdp3HOknvoRzVUG0rVnzp89T+0B2rXks8f0nbLqY1d9+r6BmmlLDsnDH5sTlpC6SiIY3fIMFWjJSyF7ipLeRmEWkMrHdvNUbC35vyyxGu/kxORGvMzz3Zg3WO6vXP4NPT7M=;
+X-UUID: bc985702018f46eab8c0b9337d50acf1-20200530
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1778315157; Sat, 30 May 2020 22:12:11 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Sat, 30 May 2020 22:12:03 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Sat, 30 May 2020 22:12:02 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>
+CC:     <beanhuo@micron.com>, <asutoshd@codeaurora.org>,
+        <cang@codeaurora.org>, <matthias.bgg@gmail.com>,
+        <bvanassche@acm.org>, <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH] scsi: ufs: Remove redundant urgent_bkop_lvl initialization
+Date:   Sat, 30 May 2020 22:12:00 +0800
+Message-ID: <20200530141200.4616-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Received: by 2002:aca:dad4:0:0:0:0:0 with HTTP; Sat, 30 May 2020 04:53:07
- -0700 (PDT)
-From:   "Mrs. Nicole Marois Benoite" <maroisbenoitemrsnicole@gmail.com>
-Date:   Sat, 30 May 2020 04:53:07 -0700
-X-Google-Sender-Auth: imLe5X2GnOkmQ7kS4aCCNRa2fnY
-Message-ID: <CA+S-DxCdF8M3qpN-HCsDeKFsD1+UVNm+WOxsc9LSYXyV8zyW2w@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-TM-SNTS-SMTP: A7F479A583566983861BC99DC4B0FA8CC3DA554407449841405341448573BA832000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-My Beloved!
+SW4gdWZzaGNkX3Byb2JlX2hiYSgpLCBhbGwgQktPUCBTVyB0cmFja2luZyB2YXJpYWJsZXMgY2Fu
+IGJlIHJlc2V0DQp0b2dldGhlciBpbiB1ZnNoY2RfZm9yY2VfcmVzZXRfYXV0b19ia29wcygpLCB0
+aHVzIHVyZ2VudF9ia29wX2x2bA0KaW5pdGlhbGl6YXRpb24gaW4gdGhlIGJlZ2lubmluZyBvZiB1
+ZnNoY2RfcHJvYmVfaGJhKCkgY2FuIGJlIG1lcmdlZA0KaW50byB1ZnNoY2RfZm9yY2VfcmVzZXRf
+YXV0b19ia29wcygpLg0KDQpTaWduZWQtb2ZmLWJ5OiBTdGFubGV5IENodSA8c3RhbmxleS5jaHVA
+bWVkaWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYyB8IDUgKy0tLS0N
+CiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDQgZGVsZXRpb25zKC0pDQoNCmRpZmYg
+LS1naXQgYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnNo
+Y2QuYw0KaW5kZXggNWRiMThmNDQ0ZWE5Li5mMTFiZTY5ZTUwZTkgMTAwNjQ0DQotLS0gYS9kcml2
+ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQorKysgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQpA
+QCAtNTA3Niw2ICs1MDc2LDcgQEAgc3RhdGljIHZvaWQgdWZzaGNkX2ZvcmNlX3Jlc2V0X2F1dG9f
+YmtvcHMoc3RydWN0IHVmc19oYmEgKmhiYSkNCiAJCWhiYS0+ZWVfY3RybF9tYXNrICY9IH5NQVNL
+X0VFX1VSR0VOVF9CS09QUzsNCiAJCXVmc2hjZF9kaXNhYmxlX2F1dG9fYmtvcHMoaGJhKTsNCiAJ
+fQ0KKwloYmEtPnVyZ2VudF9ia29wc19sdmwgPSBCS09QU19TVEFUVVNfUEVSRl9JTVBBQ1Q7DQog
+CWhiYS0+aXNfdXJnZW50X2Jrb3BzX2x2bF9jaGVja2VkID0gZmFsc2U7DQogfQ0KIA0KQEAgLTcz
+NzMsMTAgKzczNzQsNiBAQCBzdGF0aWMgaW50IHVmc2hjZF9wcm9iZV9oYmEoc3RydWN0IHVmc19o
+YmEgKmhiYSwgYm9vbCBhc3luYykNCiAJaWYgKHJldCkNCiAJCWdvdG8gb3V0Ow0KIA0KLQkvKiBz
+ZXQgdGhlIGRlZmF1bHQgbGV2ZWwgZm9yIHVyZ2VudCBia29wcyAqLw0KLQloYmEtPnVyZ2VudF9i
+a29wc19sdmwgPSBCS09QU19TVEFUVVNfUEVSRl9JTVBBQ1Q7DQotCWhiYS0+aXNfdXJnZW50X2Jr
+b3BzX2x2bF9jaGVja2VkID0gZmFsc2U7DQotDQogCS8qIERlYnVnIGNvdW50ZXJzIGluaXRpYWxp
+emF0aW9uICovDQogCXVmc2hjZF9jbGVhcl9kYmdfdWZzX3N0YXRzKGhiYSk7DQogDQotLSANCjIu
+MTguMA0K
 
-Peace be Upon You
-
-I am glad to know you, but God knows you better and he knows why he
-has directed me to you at this point in time so do not be afraid.
-
-I am Mrs. Nicole Marois Benoite, and i have been suffering from
-ovarian cancer disease and the doctor says that i have just few days
-to leave. I am from (Paris) France but based in Africa Burkina Faso
-since eleven years ago as a business woman dealing with gold
-exportation.
-
-Now that i am about to end the race like this, without any family
-members and no child. I have $3 Million US DOLLARS in Africa
-Development Bank (A.D.B) Burkina Faso which i instructed the bank to
-give St Andrews Missionary Home in Burkina Faso. But my mind is not at
-rest because i am writing this letter now through the help of my
-computer beside me sick bed.
-
-I also have $8.5 Million US Dollars at Bank of Africa (B.O.A), and i
-instructed the bank to transfer the fund to you as foreigner that will
-apply to the bank after i have gone, that they should release the fund
-to him/her, but you will assure me that you will take 50% of the fund
-and give 50% to the orphanages home in your country for my heart to
-rest.
-
-Respond to me immediately through this my private email address
-(mrsnicolemaroisbenoite92@aol.com) for further details since I have
-just few days to end my life due to the ovarian cancer disease, hoping
-you will understand my point.
-
-Please respond.
-
-Yours Dying Sister
-
-Mrs Nicole Marois
