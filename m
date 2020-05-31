@@ -2,99 +2,99 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C1B21E97E5
-	for <lists+linux-scsi@lfdr.de>; Sun, 31 May 2020 15:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F001E985C
+	for <lists+linux-scsi@lfdr.de>; Sun, 31 May 2020 17:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727914AbgEaNpO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 31 May 2020 09:45:14 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:10927 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725889AbgEaNpO (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 31 May 2020 09:45:14 -0400
-X-UUID: ce8f87bc10e640a5a15414cd2f69966b-20200531
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=NUfLG++y2OF2sag9fIFGPyEX1N9v5Lg5oAIif4rz+nA=;
-        b=DeG67wRgP5p9PUM6J6PIhKsottl98o9v3E5asT9gq7s8BAmaT1LwMHiik39BejvmqIzo8nDmNO0BivZTnP0tY8vOAxVXuPp25Swi7YEGpXtdyZNj3Tytdtg9vcDK4C/6cUChvdHtJZnLB9hckb4Sq08XLLeI1X7zWPysEg38xLY=;
-X-UUID: ce8f87bc10e640a5a15414cd2f69966b-20200531
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 115503061; Sun, 31 May 2020 21:45:07 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Sun, 31 May 2020 21:45:02 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Sun, 31 May 2020 21:45:02 +0800
-Message-ID: <1590932706.25636.14.camel@mtkswgap22>
-Subject: RE: [PATCH v2 1/5] scsi: ufs-mediatek: Fix imprecise waiting time
- for ref-clk control
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Avri Altman <Avri.Altman@wdc.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
-        "cc.chou@mediatek.com" <cc.chou@mediatek.com>,
-        "chaotian.jing@mediatek.com" <chaotian.jing@mediatek.com>,
-        "pengshun.zhao@mediatek.com" <pengshun.zhao@mediatek.com>
-Date:   Sun, 31 May 2020 21:45:06 +0800
-In-Reply-To: <SN6PR04MB464015BDF84DF7A9779BEB41FC8D0@SN6PR04MB4640.namprd04.prod.outlook.com>
-References: <20200529092310.1106-1-stanley.chu@mediatek.com>
-         <20200529092310.1106-2-stanley.chu@mediatek.com>
-         <SN6PR04MB464015BDF84DF7A9779BEB41FC8D0@SN6PR04MB4640.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1728071AbgEaPIp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 31 May 2020 11:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727781AbgEaPIp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 31 May 2020 11:08:45 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B211BC061A0E;
+        Sun, 31 May 2020 08:08:44 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id g9so5338454edw.10;
+        Sun, 31 May 2020 08:08:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=cSx9zeRQDNEgHX3X5I2ozAXJomME/x9VxcUo23d79NA=;
+        b=P7izPgsBaNvXpJvZqn/UcLhIRav5PZZbRGgyZdrhc5GWsUyyJXNQZP16UhzbcCL4HZ
+         DhMImo8g27E/edm5gqQmo33KG1oh/cZ4cOT7cKwKjXlPdxZf8AWG3AqOArRK1Y6L8RLJ
+         MX8Fs7TgtpdWjsfTZRDGEdGhGjnGcIE0lvRaR0RKZ3zsCimikhFVXTCAoiR4k4v87vqR
+         zbGx3yR6gpw6nYMrZS2y5ZKcnKllYxYyu5Iz1zeN4BCciH+kNIyU0Bx/j+ibdV2mSSHX
+         vrhoGcNUO/X080C8XQrBM27sqSSEz+lrUmvEV44TIMcqk3B8ST3qGvMi+CcUGITE5Cj2
+         GXcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=cSx9zeRQDNEgHX3X5I2ozAXJomME/x9VxcUo23d79NA=;
+        b=YS1qFPPOB+HV2AfgnyzfltVwc9lGNgasv79YDBiRXI3OjyIgXywD9+YO4peZ06ZCim
+         xggrHerGkDh7gLYLDZO9WGczuPHvH/udPyTdWzrqqwVgfQ9Uw25VNc1k4pUAxF6K7so9
+         umaQjXdzEZqSYunpAOZpziuZ/F9iUxha84E/SuelPcWPbVfGn9IHfervkg9cbEGLrWDU
+         lJt9eeODKOib1Fo8gJ5roYbNoUopU7bcDfor6fUGPk8bZnvrlgMIwmGCPTXg5MuE97Y6
+         6JqgmU98HfVvElGfkhne90Dq7W2q/b75I4lcIWrihReuyhIWp4aYO/ZIHu4wLIj5/WHK
+         IAGw==
+X-Gm-Message-State: AOAM531sz+gyTqiadZw95WFBZRglhu7aHmZAE4OBjsD/UhfCA5T6+h+b
+        VUjL4t1ljjkO/QNE3sz2R88=
+X-Google-Smtp-Source: ABdhPJw8p+v7/xy3NDXGBC6pAR5tmFC3KXHHpI40gNpjwb41XKl0dd3LouExjZlPL13FgJSW1zMctQ==
+X-Received: by 2002:a05:6402:c99:: with SMTP id cm25mr17106007edb.2.1590937723328;
+        Sun, 31 May 2020 08:08:43 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5bfcfd.dynamic.kabel-deutschland.de. [95.91.252.253])
+        by smtp.gmail.com with ESMTPSA id a62sm9564928edf.38.2020.05.31.08.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 31 May 2020 08:08:42 -0700 (PDT)
+From:   Bean Huo <huobean@gmail.com>
+To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
+        asutoshd@codeaurora.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, stanley.chu@mediatek.com,
+        beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
+        cang@codeaurora.org
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/5] scsi: ufs: cleanup ufs initialization
+Date:   Sun, 31 May 2020 17:08:26 +0200
+Message-Id: <20200531150831.9946-1-huobean@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgQXZyaSwNCg0KT24gU3VuLCAyMDIwLTA1LTMxIGF0IDA3OjEwICswMDAwLCBBdnJpIEFsdG1h
-biB3cm90ZToNCj4gPiANCj4gPiBDdXJyZW50bHkgcmVmLWNsayBjb250cm9sIHRpbWVvdXQgaXMg
-aW1wbGVtZW50ZWQgYnkgSmlmZmllcy4gSG93ZXZlcg0KPiA+IGppZmZpZXMgaXMgbm90IGFjY3Vy
-YXRlIGVub3VnaCB0aHVzICJmYWxzZSB0aW1lb3V0IiBtYXkgaGFwcGVuLg0KPiA+IA0KPiA+IFVz
-ZSBtb3JlIGFjY3VyYXRlIGRlbGF5IG1lY2hhbmlzbSBpbnN0ZWFkLCBmb3IgZXhhbXBsZSwga3Rp
-bWUuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogU3RhbmxleSBDaHUgPHN0YW5sZXkuY2h1QG1l
-ZGlhdGVrLmNvbT4NCj4gPiBSZXZpZXdlZC1ieTogQW5keSBUZW5nIDxhbmR5LnRlbmdAbWVkaWF0
-ZWsuY29tPg0KPiBSZXZpZXdlZC1ieTogQXZyaSBBbHRtYW4gPGF2cmkuYWx0bWFuQHdkYy5jb20+
-DQo+IA0KDQpUaGFua3MgZm9yIHlvdXIgcmV2aWV3Lg0KDQo+ID4gDQo+ID4gICAgICAgICAvKiBX
-YWl0IGZvciBhY2sgKi8NCj4gPiAtICAgICAgIHRpbWVvdXQgPSBqaWZmaWVzICsgbXNlY3NfdG9f
-amlmZmllcyhSRUZDTEtfUkVRX1RJTUVPVVRfTVMpOw0KPiA+ICsgICAgICAgdGltZW91dCA9IGt0
-aW1lX2FkZF91cyhrdGltZV9nZXQoKSwgUkVGQ0xLX1JFUV9USU1FT1VUX1VTKTsNCj4gPiAgICAg
-ICAgIGRvIHsNCj4gPiArICAgICAgICAgICAgICAgdGltZV9jaGVja2VkID0ga3RpbWVfZ2V0KCk7
-DQo+ID4gICAgICAgICAgICAgICAgIHZhbHVlID0gdWZzaGNkX3JlYWRsKGhiYSwgUkVHX1VGU19S
-RUZDTEtfQ1RSTCk7DQo+ID4gDQo+ID4gICAgICAgICAgICAgICAgIC8qIFdhaXQgdW50aWwgYWNr
-IGJpdCBlcXVhbHMgdG8gcmVxIGJpdCAqLw0KPiA+IEBAIC0xNDQsNyArMTQ1LDcgQEAgc3RhdGlj
-IGludCB1ZnNfbXRrX3NldHVwX3JlZl9jbGsoc3RydWN0IHVmc19oYmEgKmhiYSwNCj4gPiBib29s
-IG9uKQ0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgIGdvdG8gb3V0Ow0KPiA+IA0KPiA+ICAg
-ICAgICAgICAgICAgICB1c2xlZXBfcmFuZ2UoMTAwLCAyMDApOw0KPiA+IC0gICAgICAgfSB3aGls
-ZSAodGltZV9iZWZvcmUoamlmZmllcywgdGltZW91dCkpOw0KPiA+ICsgICAgICAgfSB3aGlsZSAo
-a3RpbWVfYmVmb3JlKHRpbWVfY2hlY2tlZCwgdGltZW91dCkpOw0KPiBOaXQ6IHlvdSBjb3VsZCBn
-ZXQgcmlkIG9mIHRpbWVfY2hlY2tlZCBpZiB5b3Ugd291bGQgdXNlIGt0aW1lX2NvbXBhcmUoa3Rp
-bWVfZ2V0KCksIHRpbWVvdXQpID4gMA0KPiANCj4gVGhhbmtzLA0KPiBBdnJpDQoNCklmIHRoaXMg
-Y29udGV4dCBpcyBwcmVlbXB0ZWQgYW5kIHNjaGVkdWxlZCBvdXQgYmV0d2VlbiB1ZnNoY2RfcmVh
-ZGwoKQ0KYW5kIGt0aW1lX2NvbXBhcmUoa3RpbWVfZ2V0KCksIHRpbWVvdXQpLCB0aGVuIHRoZSBr
-dGltZV9nZXQoKSBtYXkgZ2V0IGENCiJ0aW1lZC1vdXQiIHRpbWUgZXZlbiB0aG91Z2ggdGhlIGxh
-c3QgdWZzaGNkX3JlYWRsKCkgaXMgYWN0dWFsbHkNCmV4ZWN1dGVkIGJlZm9yZSB0aGUgInRpbWVk
-LW91dCIgdGltZS4gSW4gdGhpcyBjYXNlLCBmYWxzZSBhbGFybSB3aWxsDQpzaG93IHVwLiBVc2lu
-ZyAidGltZV9jaGVja2VkIiBoZXJlIGNvdWxkIHNvbHZlIGFib3ZlIGlzc3VlLg0KDQpUaGFua3Ms
-DQpTdGFubGV5IENodQ0KDQoNCg==
+From: Bean Huo <beanhuo@micron.com>
+
+Cleanup UFS descriptor length initialization, and delete some unnecessary code.
+
+Changelog:
+
+v3 - v4:
+    1. add desc_id >= QUERY_DESC_IDN_MAX check in patch 4/5 (Avri Altman)
+    2. update buff_len to hold the true descriptor size in 4/5 (Avri Altman)
+    3. add new patch 3/5
+
+v2 - v3:
+    1. Fix typo in the commit message (Avri Altman & Bart van Assche)
+    2. Delete ufshcd_init_desc_sizes() in patch 3/4 (Stanley Chu)
+    3. Remove max_t() and buff_len in patch 1/4 (Bart van Assche)
+    4. Add patch 4/4 to compatable with 3.1 UFS unit descriptor length
+
+v1 - v2:
+    1. split patch
+    2. fix one compiling WARNING (Reported-by: kbuild test robot <lkp@intel.com>)
+
+Bean Huo (5):
+  scsi: ufs: remove max_t in ufs_get_device_desc
+  scsi: ufs: delete ufshcd_read_desc()
+  scsi: ufs: fix potential access NULL pointer while memcpy
+  scsi: ufs: cleanup ufs initialization path
+  scsi: ufs: add compatibility with 3.1 UFS unit descriptor length
+
+ drivers/scsi/ufs/ufs.h     |  11 +-
+ drivers/scsi/ufs/ufs_bsg.c |   5 +-
+ drivers/scsi/ufs/ufshcd.c  | 205 +++++++++----------------------------
+ drivers/scsi/ufs/ufshcd.h  |  16 +--
+ 4 files changed, 53 insertions(+), 184 deletions(-)
+
+-- 
+2.17.1
 
