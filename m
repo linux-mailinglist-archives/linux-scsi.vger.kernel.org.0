@@ -2,150 +2,194 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 750AF1EC1D7
-	for <lists+linux-scsi@lfdr.de>; Tue,  2 Jun 2020 20:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7DE1EC4C0
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 00:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726606AbgFBSeE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Jun 2020 14:34:04 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:42740 "EHLO
+        id S1728247AbgFBWA0 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Jun 2020 18:00:26 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:39522 "EHLO
         userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726162AbgFBSeD (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jun 2020 14:34:03 -0400
+        with ESMTP id S1726174AbgFBWAZ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jun 2020 18:00:25 -0400
 Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 052IWvO5016183;
-        Tue, 2 Jun 2020 18:34:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=4FzlDQq2SX1nQ00+Y8nfejo7LEk087HZedlKKBiKN/E=;
- b=e631SW8HkUSoXZ5WBd/WYuxvPp3si3XPu9MqFRre054jnrN+ouSTyQ1jOYjcj7V6zCPA
- OWZ+OennA19OOWIDmlBQx9v0VAn1XKU1XzqMtfCSnTxPnKcGNsaDoSG9pkP1HVvyxnwU
- USE4bfhufGsM+OYtkntgLuVsXRkAPVyOBSuM8ENEhqNxdz900YOynOJTmur3AkyWHCpu
- vVrSU/jIpQ2FeMLrX+2VEDQpOI1Z7T0WyTI1/yZqK1UYbt0gZfuY89w7PcQYn4gIetMs
- /aGHXI2ta09EQPDmwBYTTtuY/00hn9dW/0fbuvMhGicOzmlZiyV+s0v2fpt6dmbhY3aK tQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 31bewqwkp2-1
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 052LptUL158476;
+        Tue, 2 Jun 2020 22:00:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=4c/+SW0QfIBdBOMpN+6arQLMEHQuWxRtaKBXSbyk/EE=;
+ b=iXqCzy0coPRr25i/3RqiN7VpzQzqeeBNM8oxBUwhVVaZZ2rzbhUxniRcdODpvQmIbmNh
+ iEWT8cxOW4yjmWZLZ8GwWtsT8z+GYHylpeY8M96K25jQ4fq+yR5LZXNS5bCJHb6l7x77
+ vqDrYqJXWZ0gB+IygVsUbll0zvohD8OtZ+i7W2IsNpFttGzH+aDdKW2o74kcjqj9NAsE
+ fTrMYGHoKQRO7MXCWqysWDA6jE8Nlez7IbPwDP5R5GE8+S2XMhtCbtIa+IfosP72Iqwq
+ bCvhZAfqd7xZcZ7gwgByMtzgRMYRWmoube0KWnv3qwf6Hj+dbPWrRiudPfI7QpaZZmMl 4A== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 31bewqxb8n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 02 Jun 2020 18:34:02 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 052IXxMF106664;
-        Tue, 2 Jun 2020 18:34:01 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 31c25ppp7h-1
+        Tue, 02 Jun 2020 22:00:24 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 052LrIOJ171283;
+        Tue, 2 Jun 2020 22:00:24 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 31c1dxy3c7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 02 Jun 2020 18:34:00 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 052IXr5D027079;
-        Tue, 2 Jun 2020 18:33:53 GMT
-Received: from supannee-devvm-ol7.osdevelopmeniad.oraclevcn.com (/100.100.231.179)
+        Tue, 02 Jun 2020 22:00:24 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 052M0NkO014468;
+        Tue, 2 Jun 2020 22:00:23 GMT
+Received: from [20.15.0.202] (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 02 Jun 2020 11:33:53 -0700
-From:   Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>
-To:     martin.petersen@oracle.com, michael.christie@oracle.com,
-        target-devel@vger.kernel.org, linux-scsi@vger.kernel.org
+        with ESMTP ; Tue, 02 Jun 2020 15:00:23 -0700
+Subject: Re: [PATCH v3 2/3] target: fix NULL pointer dereference
+To:     Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>,
+        martin.petersen@oracle.com, target-devel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
 Cc:     shirley.ma@oracle.com
-Subject: [PATCH v3 3/3] target: rename target_setup_cmd_from_cdb() to target_cmd_parse_cdb()
-Date:   Tue,  2 Jun 2020 18:33:45 +0000
-Message-Id: <1591122825-2652-4-git-send-email-sudhakar.panneerselvam@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1591122825-2652-1-git-send-email-sudhakar.panneerselvam@oracle.com>
 References: <1591122825-2652-1-git-send-email-sudhakar.panneerselvam@oracle.com>
+ <1591122825-2652-3-git-send-email-sudhakar.panneerselvam@oracle.com>
+From:   Mike Christie <michael.christie@oracle.com>
+Message-ID: <58f5ec86-2791-a3c6-2c0d-94b717030c42@oracle.com>
+Date:   Tue, 2 Jun 2020 17:00:23 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <1591122825-2652-3-git-send-email-sudhakar.panneerselvam@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
- malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006020134
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
+ spamscore=0 bulkscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006020155
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 bulkscore=0
  phishscore=0 suspectscore=0 impostorscore=0 cotscore=-2147483648
  lowpriorityscore=0 mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=999
  malwarescore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006020134
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006020155
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This commit also removes the unused argument, cdb that was passed
-to this function.
 
-Signed-off-by: Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>
----
- drivers/target/iscsi/iscsi_target.c    | 2 +-
- drivers/target/target_core_transport.c | 6 +++---
- drivers/target/target_core_xcopy.c     | 2 +-
- include/target/target_core_fabric.h    | 2 +-
- 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/target/iscsi/iscsi_target.c b/drivers/target/iscsi/iscsi_target.c
-index 1110ea507b83..c0966dd4937c 100644
---- a/drivers/target/iscsi/iscsi_target.c
-+++ b/drivers/target/iscsi/iscsi_target.c
-@@ -1185,7 +1185,7 @@ int iscsit_setup_scsi_cmd(struct iscsi_conn *conn, struct iscsi_cmd *cmd,
- 
- 	/* only used for printks or comparing with ->ref_task_tag */
- 	cmd->se_cmd.tag = (__force u32)cmd->init_task_tag;
--	cmd->sense_reason = target_setup_cmd_from_cdb(&cmd->se_cmd, hdr->cdb);
-+	cmd->sense_reason = target_cmd_parse_cdb(&cmd->se_cmd);
- 	if (cmd->sense_reason)
- 		goto attach_cmd;
- 
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 4282fa98ff35..a55a8aaae6b3 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -1461,7 +1461,7 @@ void transport_init_se_cmd(
- EXPORT_SYMBOL(target_cmd_init_cdb);
- 
- sense_reason_t
--target_setup_cmd_from_cdb(struct se_cmd *cmd, unsigned char *cdb)
-+target_cmd_parse_cdb(struct se_cmd *cmd)
- {
- 	struct se_device *dev = cmd->se_dev;
- 	sense_reason_t ret;
-@@ -1483,7 +1483,7 @@ void transport_init_se_cmd(
- 	atomic_long_inc(&cmd->se_lun->lun_stats.cmd_pdus);
- 	return 0;
- }
--EXPORT_SYMBOL(target_setup_cmd_from_cdb);
-+EXPORT_SYMBOL(target_cmd_parse_cdb);
- 
- /*
-  * Used by fabric module frontends to queue tasks directly.
-@@ -1645,7 +1645,7 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
- 		return 0;
- 	}
- 
--	rc = target_setup_cmd_from_cdb(se_cmd, cdb);
-+	rc = target_cmd_parse_cdb(se_cmd);
- 	if (rc != 0) {
- 		transport_generic_request_failure(se_cmd, rc);
- 		return 0;
-diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
-index fdd8234906b6..842563ba10f6 100644
---- a/drivers/target/target_core_xcopy.c
-+++ b/drivers/target/target_core_xcopy.c
-@@ -530,7 +530,7 @@ static int target_xcopy_setup_pt_cmd(
- 		return -EINVAL;
- 
- 	cmd->tag = 0;
--	if (target_setup_cmd_from_cdb(cmd, cdb))
-+	if (target_cmd_parse_cdb(cmd))
- 		return -EINVAL;
- 
- 	if (transport_generic_map_mem_to_cmd(cmd, xop->xop_data_sg,
-diff --git a/include/target/target_core_fabric.h b/include/target/target_core_fabric.h
-index 6a2bfcca0c98..1e7ea57d0463 100644
---- a/include/target/target_core_fabric.h
-+++ b/include/target/target_core_fabric.h
-@@ -153,7 +153,7 @@ void	transport_init_se_cmd(struct se_cmd *,
- 		struct se_session *, u32, int, int, unsigned char *);
- sense_reason_t transport_lookup_cmd_lun(struct se_cmd *, u64);
- sense_reason_t target_cmd_init_cdb(struct se_cmd *, unsigned char *);
--sense_reason_t target_setup_cmd_from_cdb(struct se_cmd *, unsigned char *);
-+sense_reason_t target_cmd_parse_cdb(struct se_cmd *);
- int	target_submit_cmd_map_sgls(struct se_cmd *, struct se_session *,
- 		unsigned char *, unsigned char *, u64, u32, int, int, int,
- 		struct scatterlist *, u32, struct scatterlist *, u32,
--- 
-1.8.3.1
+On 6/2/20 1:33 PM, Sudhakar Panneerselvam wrote:
+> diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
+> index f2f7c5b818cc..4282fa98ff35 100644
+> --- a/drivers/target/target_core_transport.c
+> +++ b/drivers/target/target_core_transport.c
+> @@ -1412,6 +1412,9 @@ void transport_init_se_cmd(
+>   sense_reason_t
+>   target_cmd_init_cdb(struct se_cmd *cmd, unsigned char *cdb)
+>   {
+> +	sense_reason_t ret;
+> +
+> +	cmd->t_task_cdb = &cmd->__t_task_cdb[0];
+>   	/*
+>   	 * Ensure that the received CDB is less than the max (252 + 8) bytes
+>   	 * for VARIABLE_LENGTH_CMD
+> @@ -1420,7 +1423,8 @@ void transport_init_se_cmd(
+>   		pr_err("Received SCSI CDB with command_size: %d that"
+>   			" exceeds SCSI_MAX_VARLEN_CDB_SIZE: %d\n",
+>   			scsi_command_size(cdb), SCSI_MAX_VARLEN_CDB_SIZE);
+> -		return TCM_INVALID_CDB_FIELD;
+> +		ret = TCM_INVALID_CDB_FIELD;
+> +		goto err;
+>   	}
+>   	/*
+>   	 * If the received CDB is larger than TCM_MAX_COMMAND_SIZE,
+> @@ -1435,10 +1439,10 @@ void transport_init_se_cmd(
+>   				" %u > sizeof(cmd->__t_task_cdb): %lu ops\n",
+>   				scsi_command_size(cdb),
+>   				(unsigned long)sizeof(cmd->__t_task_cdb));
+> -			return TCM_OUT_OF_RESOURCES;
+> +			ret = TCM_OUT_OF_RESOURCES;
+> +			goto err;
+>   		}
+> -	} else
+> -		cmd->t_task_cdb = &cmd->__t_task_cdb[0];
+> +	}
+>   	/*
+>   	 * Copy the original CDB into cmd->
+>   	 */
+> @@ -1446,6 +1450,13 @@ void transport_init_se_cmd(
+>   
+>   	trace_target_sequencer_start(cmd);
+>   	return 0;
+> +
+> +err:
+> +	/* Copy the CDB here to allow trace_target_cmd_complete() to
 
+You should follow the coding style in the rest of the code. Do "/*" then 
+start your text or do it all on one line if it fits:
+
+/*
+  * Copy the CDB here to allow trace_target_cmd_complete() to
+
+
+> +	 * print the cdb to the trace buffers.
+> +	 */
+> +	memcpy(cmd->t_task_cdb, cdb, min(scsi_command_size(cdb), (unsigned int)TCM_MAX_COMMAND_SIZE));
+
+Use 80 char cols like you did in the rest of the patch and the other code.
+
+> +	return ret;
+>   }
+>   EXPORT_SYMBOL(target_cmd_init_cdb);
+>   
+> @@ -1455,8 +1466,6 @@ void transport_init_se_cmd(
+>   	struct se_device *dev = cmd->se_dev;
+>   	sense_reason_t ret;
+>   
+> -	target_cmd_init_cdb(cmd, cdb);
+> -
+>   	ret = dev->transport->parse_cdb(cmd);
+>   	if (ret == TCM_UNSUPPORTED_SCSI_OPCODE)
+>   		pr_warn_ratelimited("%s/%s: Unsupported SCSI Opcode 0x%02x, sending CHECK_CONDITION.\n",
+> @@ -1598,6 +1607,13 @@ int target_submit_cmd_map_sgls(struct se_cmd *se_cmd, struct se_session *se_sess
+>   	transport_init_se_cmd(se_cmd, se_tpg->se_tpg_tfo, se_sess,
+>   				data_length, data_dir, task_attr, sense);
+>   
+
+This should maybe be in transport_init_se_cmd. It might be useful there 
+for the tmr case, if we wanted to add a trace point there too.
+
+At least a comment and some cleanup, because it's not obvious why we set 
+it here then also set it again in transport_lookup_cmd_lun.
+
+
+> +	se_cmd->orig_fe_lun = unpacked_lun; > +	rc = target_cmd_init_cdb(se_cmd, cdb);
+> +	if (rc) {
+> +		transport_send_check_condition_and_sense(se_cmd, rc, 0);
+
+Can we do this before doing a get() on the cmd? If the fabric module is 
+such that it does a put() on the cmd (the callers using SCF_ACK_KREF) in 
+its cmd clean up path, then we would end up with unbalanced 
+sess->cmd_count and cmd refcounts.
+
+Maybe move this to after target_get_sess_cmd().
+
+
+> +		return 0;
+> +	}
+> +
+>   	if (flags & TARGET_SCF_USE_CPUID)
+>   		se_cmd->se_cmd_flags |= SCF_USE_CPUID;
+>   	else
+> diff --git a/drivers/target/target_core_xcopy.c b/drivers/target/target_core_xcopy.c
+> index bd3ed6ce7571..fdd8234906b6 100644
+> --- a/drivers/target/target_core_xcopy.c
+> +++ b/drivers/target/target_core_xcopy.c
+> @@ -526,6 +526,9 @@ static int target_xcopy_setup_pt_cmd(
+>   	}
+>   	cmd->se_cmd_flags |= SCF_SE_LUN_CMD;
+>   
+> +	if (target_cmd_init_cdb(cmd, cdb))
+> +		return -EINVAL;
+> +
+>   	cmd->tag = 0;
+>   	if (target_setup_cmd_from_cdb(cmd, cdb))
+>   		return -EINVAL;
+> 
