@@ -2,91 +2,94 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C0F31EC760
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 04:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 794D01EC76B
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 04:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725888AbgFCCc1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Jun 2020 22:32:27 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:59266 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725866AbgFCCc1 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jun 2020 22:32:27 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532QVmr187569;
-        Wed, 3 Jun 2020 02:31:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=cJZJ6Aemad1d2VN1fwzQIoXZHDszWIODTXRnH8VAsQo=;
- b=kcVvjWPAJ4lmtKEbJXD+WlDXIVCFMMHnjWMAO6LbG0h+AsBi+iHosXwow+Ac7fWNgRtH
- LGIDm/tsI3QaGrU+s1pTAZ5BS52SdYDAKtefH2iULK7Y6p/fRRLlhN3KVXiPutLHHbJB
- NxYz37iXvjvQM3qQj90k86lHeKRjQfzdxhm5Zk60uoYZDAFPmoeqpImzq7yXEVarbRI3
- k5/fm4mDP5Am47EXUpBwRh6djaRHjPyf4VxodjkqRbFHOUzQj4sPScyDR+iiPXHFHcWm
- x6L25QNWabEyMA7weqqS/gbiehUR3nyK0F1QBy8wE1sel0BCHaLG3eucBAIXcUylBjUv 0Q== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 31bfem6s9k-1
+        id S1725855AbgFCCee (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Jun 2020 22:34:34 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:42518 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725810AbgFCCee (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jun 2020 22:34:34 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532SsfC186047;
+        Wed, 3 Jun 2020 02:34:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
+ message-id : date : from : to : cc : subject : references : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=5GmeQZysT7OXDXCPVrq0Gz+WWUQybEphX3DXqlt8Mzw=;
+ b=RkoCDwANhsH+H214bP7SVpmxInV9sD+FYb5O4fWYPamRVZyNdb+3yBBNDYHX6Dn0Zn+d
+ 2sI57lunXJ6fYSkTzueHHYSRhTnrJ4+5PeTupmLhwvcYuGnaq3UcK+tOVG8bA94hcd3L
+ uH0huQIJwriSGGaYxgMEEYAmwqbAJUA7yCkkK4aDhhs//NVIZ5//HsdahkYtDFYtNXbs
+ hmuZOHpnCufn3/BeTGgaclxuFI5whUOpjCK/i2GLG1Arh7EEEWthFAcGM4SCzqvpBki/
+ spNJKk4p8XPQmH2JrFdAIeS772qhdTYbwZsQKp/jo2B+aNu9GHODKFTk5YEwBQhEfeZQ /g== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 31dkrukvy6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 03 Jun 2020 02:31:50 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532TQZP164353;
-        Wed, 3 Jun 2020 02:31:50 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 31c12q5cuf-1
+        Wed, 03 Jun 2020 02:34:30 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532TG6o131916;
+        Wed, 3 Jun 2020 02:32:29 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 31c1dy84db-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Jun 2020 02:31:50 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0532Vlbq032618;
-        Wed, 3 Jun 2020 02:31:47 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 02 Jun 2020 19:31:46 -0700
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     avri.altman@wdc.com, linux-scsi@vger.kernel.org,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        alim.akhtar@samsung.com, jejb@linux.ibm.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        chun-hung.wu@mediatek.com, asutoshd@codeaurora.org,
-        matthias.bgg@gmail.com, beanhuo@micron.com,
-        kuohong.wang@mediatek.com, bvanassche@acm.org,
-        linux-arm-kernel@lists.infradead.org, andy.teng@mediatek.com,
-        chaotian.jing@mediatek.com, cc.chou@mediatek.com,
-        cang@codeaurora.org, linux-mediatek@lists.infradead.org,
-        peter.wang@mediatek.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: ufs: Remove redundant urgent_bkop_lvl initialization
-Date:   Tue,  2 Jun 2020 22:31:36 -0400
-Message-Id: <159114947917.26776.10217919465331125285.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200530141200.4616-1-stanley.chu@mediatek.com>
-References: <20200530141200.4616-1-stanley.chu@mediatek.com>
+        Wed, 03 Jun 2020 02:32:29 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0532WLuD023670;
+        Wed, 3 Jun 2020 02:32:26 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201) by default (Oracle
+ Beehive Gateway v4.0) with ESMTP ; Tue, 02 Jun 2020 19:31:47 -0700
 MIME-Version: 1.0
+Message-ID: <159114947917.26776.13243682219428913589.b4-ty@oracle.com>
+Date:   Tue, 2 Jun 2020 19:31:37 -0700 (PDT)
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-scsi@vger.kernel.org,
+        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        sreekanth.reddy@broadcom.com, thenzl@redhat.com
+Subject: Re: [PATCH] mpt3sas: Fix memset in non-rdpq mode.
+References: <20200528145617.27252-1-suganath-prabu.subramani@broadcom.com>
+In-Reply-To: <20200528145617.27252-1-suganath-prabu.subramani@broadcom.com>
+X-Mailer: git-send-email 2.26.2
+Content-Type: text/plain; charset=ascii
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 malwarescore=0
- adultscore=0 suspectscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006030018
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
+ spamscore=0 bulkscore=0 adultscore=0 suspectscore=0 mlxscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006030017
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1011
- impostorscore=0 adultscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 priorityscore=1501
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ adultscore=0 mlxlogscore=999 cotscore=-2147483648 phishscore=0 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2006030017
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Sat, 30 May 2020 22:12:00 +0800, Stanley Chu wrote:
+On Thu, 28 May 2020 10:56:17 -0400, Suganath Prabu S wrote:
 
-> In ufshcd_probe_hba(), all BKOP SW tracking variables can be reset
-> together in ufshcd_force_reset_auto_bkops(), thus urgent_bkop_lvl
-> initialization in the beginning of ufshcd_probe_hba() can be merged
-> into ufshcd_force_reset_auto_bkops().
+> Replace dma_pool_alloc and memset with dma_pool_zalloc.
+> This fixes memset accessing out of range address when reply_queue
+> count is less than RDPQ_MAX_INDEX_IN_ONE_CHUNK (i.e. 16) in non-RDPQ
+> mode.
+> 
+> In non-RDPQ mode, the driver allocates a single contiguous pool of
+> size reply_queue's count * reqly_post_free_sz. But here the driver is
+> always memsetting this pool with size 16 *  reqly_post_free_sz. so if
+> reply queue count is less then 16 (i.e. when msix vectors enabled is
+> less then 16) then the driver is accessing out of range address and
+> this results in 'BUG: unable to handle kernel paging request at
+> fff0x...x' bug.
+> 
+> [...]
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/1] scsi: ufs: Remove redundant urgent_bkop_lvl initialization
-      https://git.kernel.org/mkp/scsi/c/7b6668d8b806
+[1/1] scsi: mpt3sas: Fix memset() in non-RDPQ mode
+      https://git.kernel.org/mkp/scsi/c/61e6ba03ea26
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
