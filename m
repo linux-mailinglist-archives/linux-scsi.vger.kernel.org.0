@@ -2,98 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B28221ED0EA
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 15:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD551ED145
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 15:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725905AbgFCNek (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jun 2020 09:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47826 "EHLO
+        id S1725995AbgFCNtC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Jun 2020 09:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgFCNej (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jun 2020 09:34:39 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847C3C08C5C0
-        for <linux-scsi@vger.kernel.org>; Wed,  3 Jun 2020 06:34:39 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id l27so2210009ejc.1
-        for <linux-scsi@vger.kernel.org>; Wed, 03 Jun 2020 06:34:39 -0700 (PDT)
+        with ESMTP id S1726074AbgFCNsv (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jun 2020 09:48:51 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41A1C0085C5
+        for <linux-scsi@vger.kernel.org>; Wed,  3 Jun 2020 06:48:49 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id j10so2440961wrw.8
+        for <linux-scsi@vger.kernel.org>; Wed, 03 Jun 2020 06:48:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:references:in-reply-to:mime-version:thread-index:date
-         :message-id:subject:to:cc;
-        bh=JhoMw3YkQpCseFSsh/lVmeFHj2TYb955rgd4sIpGDw4=;
-        b=dRwvImIdqP196cKPZv0g9rBkpfV6Yf6mwGv20iBgvLuMc1StUpUhgTRBKvMpxOKzkq
-         MDlm0rXRugI/E1j84RRRZNT+qardRrxBTaMTXsL/zJWlkbCmWNcn4fH9ybBObQk+vHHW
-         r3sLTlz+xWYM33r/XfdAJTgSSiNS62wPN/vbo=
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=LImzFWfFZ5MGhzJT1qzCsgEXVo7xW37sUIdrDLCKiXHQE0/Tq0rYX6Af/ld5dvlhmE
+         opFt8B8vUrhAfyxGIRs7eIQZmnu+cHCt7Dz4gEu/fnBWHDlMa8iVHDbM7XgqJUtNcgor
+         I4Oj1yGJ3ygOniFn6Dr+FHDS5BV48N/ldz+eBwWbR5/ADnYCL6KuztRZu9mrKJOxMODU
+         fmVICwwGmTYXXsgICTxE6unupuMdGq6+YZvkWKysZVLYK3Wwxrg7U2ecMo3WGycHWcU1
+         w35jxyjuynpm30G3kj/I18A4vO2Y2WN0kfTajUkGc1Xe9t84eQuWhnB4AGlAS8dbrawc
+         iC3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:references:in-reply-to:mime-version
-         :thread-index:date:message-id:subject:to:cc;
-        bh=JhoMw3YkQpCseFSsh/lVmeFHj2TYb955rgd4sIpGDw4=;
-        b=fB0yLvJraVhTH2wZA+H/PZBAg1JmP9wlnz87hGGE+oN0OGLpyjB7MYRfHu6sPkNvgp
-         jE9AVlj1onPf0z+HnjOq1h6R17NqKxa7e+z/cQOwxePBWK757eNStjJcSL465MXCUtW0
-         2rgNMJl0QIuHhrkTvWyiC3NK+b2rWigutuKBA1xAaBKpPJPn9ddrK6EBAyflfUHKdU7r
-         CauuQrHx/JNgiGVx9NOPzNA8sWGQ4WY3SRvLQjZ2UAjvYNPtFbrvIM9lDqLwjz8nqV70
-         /px8Jr7zkBlluc9vaS2C2Eia4uUFHh3ABrtdu6UfaR60q3RvlZUg6657rpzA4U2nqimg
-         XlFA==
-X-Gm-Message-State: AOAM531W6OQ56sCdyLoiLVRX3Y36Or2gr23P/aePy++NYPo+HXpAa87J
-        zFEJDX1KwW47F6xOucdfG1bJKU3fDrEoCF0f80ZnRw==
-X-Google-Smtp-Source: ABdhPJwKKAgiK1gE/ZW8FEEq6vj7DAUATxy+ips4f8JzLgMIh//phQkBGbaQKVR8QGqMH7Vk+glpPxWCbEa3pmFOWhs=
-X-Received: by 2002:a17:906:5645:: with SMTP id v5mr11075782ejr.533.1591191278202;
- Wed, 03 Jun 2020 06:34:38 -0700 (PDT)
-From:   Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-References: <1590651115-9619-1-git-send-email-newtongao@tencent.com> <yq17dwp9bss.fsf@ca-mkp.ca.oracle.com>
-In-Reply-To: <yq17dwp9bss.fsf@ca-mkp.ca.oracle.com>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
+        b=kfOsysT8/UcGr5gXpHKLyRHpTLg6A8RXv7E2NH/ZXkE8qF0ZqbBTj+I3woiM/WEG7p
+         lBJfAt3h3yM5DFsMzdi3tCwNxa/3GBaQLftuCmbmQ+gpFOxlLfMJ6nATKd5rXeb7Be3n
+         gJR+bx366GaqUAt4gukYjDCxGN+rvcILe/cN+27CUzvBfwduzM0KT96iB1uiRDzA3D1L
+         5RHETm64Ro/pe4Zd0RRqhRKzsNwdVjANxhX5B+fmZwxv7paK2PH839vOBXUA7639aaG1
+         /+ufj662qptOxPmi1874CzQnIm1EtNOX3ve2e+fwaRa48yiarR8OzibtC78lL0S8Y98s
+         aA1Q==
+X-Gm-Message-State: AOAM530CQzQdNfXbUogLy8DbOa8umKwMY1VYhQk4BDxA1nTcd5JBDzZt
+        3XTTt1VFkNTh+/MG3wXw3jiPGAsEjCYcf3ytlVkLUZM+85k=
+X-Google-Smtp-Source: ABdhPJzc66PsPJ7uf2JiXrqj7zfh07Ra5BpBms0TPKeexmxkWkfXYY+ch/Os+E85wJbdOE6Lm+0ANdybV/7KRG4HAcU=
+X-Received: by 2002:a05:6512:308e:: with SMTP id z14mr2566308lfd.29.1591192127287;
+ Wed, 03 Jun 2020 06:48:47 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQJb9Wzm0098wwdcUnfhuPbO5i84ZwGnJavmp64zHeA=
-Date:   Wed, 3 Jun 2020 19:04:35 +0530
-Message-ID: <08525d33fafb0a10c427838621fb571f@mail.gmail.com>
-Subject: RE: [PATCH] scsi: megaraid_sas: fix kdump kernel boot hung caused by JBOD
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan Srikanteshwara 
-        <shivasharan.srikanteshwara@broadcom.com>
-Cc:     xiakaixu1987@gmail.com, jejb@linux.ibm.com,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xiaoming Gao <newtongao@tencent.com>
+Reply-To: susanjones.wife@gmail.com
+Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:46 -0700 (PDT)
+From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
+Date:   Wed, 3 Jun 2020 14:48:46 +0100
+X-Google-Sender-Auth: aH2vam-ZraP3yG1gz3ryctMgTE4
+Message-ID: <CALBhdBfusXWup1N4iFuTS3D1AZxWbZbTDS_qa-wA3FkbkE7MrQ@mail.gmail.com>
+Subject: HELLO: I AM MRS SUSAN JONES
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
->Subject: Re: [PATCH] scsi: megaraid_sas: fix kdump kernel boot hung
-caused by JBOD
->
->
->> when kernel crash, and kexec into kdump kernel, megaraid_sas will hung
->> and print follow error logs
->>
->> 24.1485901 sd 0:0:G:0: [sda 1 tag809 BRCfl Debug mfi stat 0x2(1, data
->> len requested/conpleted 0X100 0/0x0)]
->> 24.1867171 sd 0:0:G :9: [sda I tag861 BRCfl Debug mfft stat 0x2d, data
->> len reques ted/conp1e Led 0X100 0/0x0]
->> 24.2054191 sd 0:O:6:O: [sda 1 tag861 FAILED Result: hustbyte=DIDGK
->> drioerbyte-DRIUCR SENSE]
->> 24.2549711 bik_update_ request ! 1/0 error , dev sda, sector 937782912
->> op 0x0:(READ) flags 0x0 phys_seg 1 prio class
->> 21.2752791 buffer_io_error 2 callbacks suppressed
->> 21.2752731 Duffer IO error an dev sda, logical block 117212064, async
->> page read
->>
->> this bug is caused by commit '59db5a931bbe73f ("scsi: megaraid_sas:
->> Handle sequence JBOD map failure at driver level ")' and can be fixed
->> by not set JOB when reset_devices on
->
->Broadcom: Please review.
->
->Thanks!
->
->--
->Martin K. Petersen	Oracle Linux Engineering
+-- 
+OUR GOLDEN OPPORTUNITY
 
-We are working on it and will update you at the earliest.
+Hello Dear Friend,
 
-Thanks,
-Chandrakanth Patil
+Complement of the day, i hope you are doing great today. However, I am
+Mrs.Susan Jones, an auditor with one of the new generation banks here
+in Burkina Faso.
+
+I am writing you this letter based on the latest development at my
+Department. i discovered some abandoned huge amount of money, Ten
+Million, Five hundred thousand  United States Dollars.($10.500.000).
+Now I am only contacting you as a foreigner because this money cannot
+be approved to a local bank account here, but can only be approved to
+any foreign account and foreign beneficiary because the money is in US
+dollars
+
+This will be  a legitimate transaction once you accept to build trust
+with me and follow simple instruction doing the transfer process,
+until the total sum transfer out of the bank here to your own bank
+account any where in the world, and I agreed to share the total money
+50/50 with you once you successful confirmed it in your bank account.
+But any expenses doing the transfer process will be deduct from the
+amount before sharing, If you are interested to work with me and
+provide a good receiving bank account, get back to me as soon as
+possible with the following details below.
+
+Your full name
+Your Profession
+Your direct mobile phone number
+Your Scanned International passport or any of your identity
+
+NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
+AVOID TIME WASTED.
+
+As soon as I receive these data's, I will forward to you the
+application form which you will send to the bank for the claim and
+transfer of the fund into your bank account as the  new beneficial.
+
+I am waiting to hear from you soon
+
+Yours
+Mrs.Susan Jones
