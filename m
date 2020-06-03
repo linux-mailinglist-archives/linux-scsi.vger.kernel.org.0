@@ -2,64 +2,75 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A571EC756
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 04:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1094E1EC75F
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 04:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725888AbgFCCbu (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Jun 2020 22:31:50 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:40982 "EHLO
+        id S1725967AbgFCCcQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Jun 2020 22:32:16 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:41250 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgFCCbu (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jun 2020 22:31:50 -0400
+        with ESMTP id S1725888AbgFCCcQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jun 2020 22:32:16 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532S5tV185727;
-        Wed, 3 Jun 2020 02:31:44 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532S5Yg185677;
+        Wed, 3 Jun 2020 02:31:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=wTAHXXa0EyWEas0pGztCxaujO0q6c7ui61QKlcPS1Hg=;
- b=JNyoW3TGBa63StE4l3BZtbBk5S9HsHJ3dXNWVNYvmeFszazZFzs3eDKQOLN2tCt/3HSc
- 8F1EyMhjavhqVBOIWXOyB48W4H/ZZO8ebx/XZ7GnCm/30rNIiMLdzDMIp0OUZztgGgNv
- FoOBynjK8yi8TVBwD5YpHL0n0kiz1BbscpOs24hCyJA2O/+hX9spLXQK/bEz/ZbfPt0W
- 2oOtbLr6ZbSfmi867i79iT2E6iHvxofgDWQIKdG/I82aVI8gLIPGOG0REAYVZ/n7fteT
- ine7v3klvQCjsnA8SRF2VjlzbblAsRBQz+Z5/P6qI5bKqezeO8xwQBv5JVvUIOwWM8SA +A== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 31dkrukvrc-1
+ bh=Zl0+nJeXbVl6u+zbUzG7Al+pOb28DJU1KHOuBGmYr1Q=;
+ b=MWw5V8RBlTaTao1dWycuNKyPvd4EyatPGmd13VGjmcyLOq+unQc9w0pBq7gyFlzzPs6T
+ C3ZbBsCRiaNPL00dnf+fLCYWDSMYzPS+Sso2rQEBq9H+g6JvYUlGlomOYFZkMuYiq30A
+ 2TWTfAnoMUgRWsW3tk8A1/WLCJyXDMRGfTiMLL2UkLlFyvRjWi4xFd8NNz+BljmuLAy2
+ HwIR5tk/CJmAeHy5nLE5lASp83Od1VBYnRToPjQpcn1hbtAGkqGy9RbrU0J4qTPKceuj
+ KFajytKGbbT48Y9u+p1EN73/zKTn+F6NgvSWbsFyyC6RPMOvodeTMGKbaRZCLu0b7Krf CA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 31dkrukvre-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 03 Jun 2020 02:31:44 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532S0SA087059;
-        Wed, 3 Jun 2020 02:31:44 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 31dju2f0bb-1
+        Wed, 03 Jun 2020 02:31:47 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532RvoP063125;
+        Wed, 3 Jun 2020 02:31:46 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 31c25qpmf5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Jun 2020 02:31:44 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0532VgYQ023454;
-        Wed, 3 Jun 2020 02:31:42 GMT
+        Wed, 03 Jun 2020 02:31:46 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0532VisS032607;
+        Wed, 3 Jun 2020 02:31:44 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 02 Jun 2020 19:31:42 -0700
+        with ESMTP ; Tue, 02 Jun 2020 19:31:44 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     target-devel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mchristi@redhat.com, Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>
-Subject: Re: [PATCH] scsi: target: tcmu: fix size in calls to tcmu_flush_dcache_range
-Date:   Tue,  2 Jun 2020 22:31:33 -0400
-Message-Id: <159114947916.26776.943125808891892721.b4-ty@oracle.com>
+To:     hongwus@codeaurora.org, saravanak@google.com,
+        rnayak@codeaurora.org, kernel-team@android.com,
+        linux-scsi@vger.kernel.org, nguyenb@codeaurora.org,
+        asutoshd@codeaurora.org, salyzyn@google.com,
+        Can Guo <cang@codeaurora.org>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Bean Huo <beanhuo@micron.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: Re: [PATCH v1 1/1] scsi: ufs: Don't update urgent bkops level when toggle auto bkops
+Date:   Tue,  2 Jun 2020 22:31:34 -0400
+Message-Id: <159114947916.26776.2254304120169408842.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200528193108.9085-1-bstroesser@ts.fujitsu.com>
-References: <20200528193108.9085-1-bstroesser@ts.fujitsu.com>
+In-Reply-To: <1590632686-17866-1-git-send-email-cang@codeaurora.org>
+References: <1590632686-17866-1-git-send-email-cang@codeaurora.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- phishscore=0 malwarescore=0 mlxscore=0 adultscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006030017
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 mlxscore=0 phishscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006030017
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 priorityscore=1501
- mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1011
  adultscore=0 mlxlogscore=999 cotscore=-2147483648 phishscore=0 bulkscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2006030017
@@ -68,37 +79,19 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 28 May 2020 21:31:08 +0200, Bodo Stroesser wrote:
+On Wed, 27 May 2020 19:24:42 -0700, Can Guo wrote:
 
-> 1) If remaining ring space before the end of the ring is
->    smaller then the next cmd to write, tcmu writes a padding
->    entry which fills the remaining space at the end of the
->    ring.
->    Then tcmu calls tcmu_flush_dcache_range() with the size
->    of struct tcmu_cmd_entry as data length to flush.
->    If the space filled by the padding was smaller then
->    tcmu_cmd_entry, tcmu_flush_dcache_range() is called for
->    an address range reaching behind the end of the vmalloc'ed
->    ring.
->    tcmu_flush_dcache_range() in a loop calls
->       flush_dcache_page(virt_to_page(start));
->    for every page being part of the range. On x86 the line is
->    optimized out by the compiler, as flush_dcache_page() is
->    empty on x86.
->    But I assume the above can cause trouble on other
->    architectures that really have a flush_dcache_page().
->    For paddings only the header part of an entry is relevant
->    Due to alignment rules the header always fits in the
->    remaining space, if padding is needed.
->    So tcmu_flush_dcache_range() can safely be called with
->    sizeof(entry->hdr) as the length here.
-> 
-> [...]
+> Urgent bkops level is used to compare against actual bkops status read
+> from UFS device. Urgent bkops level is set during initialization and might
+> be updated in exception event handler during runtime, but it should not be
+> updated to the actual bkops status every time when auto bkops is toggled.
+> Otherwise, if urgent bkops level is updated to 0, auto bkops shall always
+> be kept enabled.
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/1] scsi: target: tcmu: Fix size in calls to tcmu_flush_dcache_range
-      https://git.kernel.org/mkp/scsi/c/8c4e0f212398
+[1/1] scsi: ufs: Don't update urgent bkops level when toggling auto bkops
+      https://git.kernel.org/mkp/scsi/c/be32acff4380
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
