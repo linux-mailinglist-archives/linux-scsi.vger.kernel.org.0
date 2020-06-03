@@ -2,101 +2,146 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD551ED145
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 15:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F4C1ED614
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 20:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725995AbgFCNtC (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 3 Jun 2020 09:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726074AbgFCNsv (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 3 Jun 2020 09:48:51 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41A1C0085C5
-        for <linux-scsi@vger.kernel.org>; Wed,  3 Jun 2020 06:48:49 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id j10so2440961wrw.8
-        for <linux-scsi@vger.kernel.org>; Wed, 03 Jun 2020 06:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
-        b=LImzFWfFZ5MGhzJT1qzCsgEXVo7xW37sUIdrDLCKiXHQE0/Tq0rYX6Af/ld5dvlhmE
-         opFt8B8vUrhAfyxGIRs7eIQZmnu+cHCt7Dz4gEu/fnBWHDlMa8iVHDbM7XgqJUtNcgor
-         I4Oj1yGJ3ygOniFn6Dr+FHDS5BV48N/ldz+eBwWbR5/ADnYCL6KuztRZu9mrKJOxMODU
-         fmVICwwGmTYXXsgICTxE6unupuMdGq6+YZvkWKysZVLYK3Wwxrg7U2ecMo3WGycHWcU1
-         w35jxyjuynpm30G3kj/I18A4vO2Y2WN0kfTajUkGc1Xe9t84eQuWhnB4AGlAS8dbrawc
-         iC3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=H8rDQEJouwBJIElP/Vpqq+PrvTZxQQy2H7A/MvyMMB0=;
-        b=kfOsysT8/UcGr5gXpHKLyRHpTLg6A8RXv7E2NH/ZXkE8qF0ZqbBTj+I3woiM/WEG7p
-         lBJfAt3h3yM5DFsMzdi3tCwNxa/3GBaQLftuCmbmQ+gpFOxlLfMJ6nATKd5rXeb7Be3n
-         gJR+bx366GaqUAt4gukYjDCxGN+rvcILe/cN+27CUzvBfwduzM0KT96iB1uiRDzA3D1L
-         5RHETm64Ro/pe4Zd0RRqhRKzsNwdVjANxhX5B+fmZwxv7paK2PH839vOBXUA7639aaG1
-         /+ufj662qptOxPmi1874CzQnIm1EtNOX3ve2e+fwaRa48yiarR8OzibtC78lL0S8Y98s
-         aA1Q==
-X-Gm-Message-State: AOAM530CQzQdNfXbUogLy8DbOa8umKwMY1VYhQk4BDxA1nTcd5JBDzZt
-        3XTTt1VFkNTh+/MG3wXw3jiPGAsEjCYcf3ytlVkLUZM+85k=
-X-Google-Smtp-Source: ABdhPJzc66PsPJ7uf2JiXrqj7zfh07Ra5BpBms0TPKeexmxkWkfXYY+ch/Os+E85wJbdOE6Lm+0ANdybV/7KRG4HAcU=
-X-Received: by 2002:a05:6512:308e:: with SMTP id z14mr2566308lfd.29.1591192127287;
- Wed, 03 Jun 2020 06:48:47 -0700 (PDT)
+        id S1725985AbgFCSYE (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 3 Jun 2020 14:24:04 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:47315 "EHLO smtp.infotech.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725821AbgFCSYE (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 3 Jun 2020 14:24:04 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id DF08F2041E3;
+        Wed,  3 Jun 2020 20:24:01 +0200 (CEST)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id BaqSqbBBw73T; Wed,  3 Jun 2020 20:23:59 +0200 (CEST)
+Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 3F68C204172;
+        Wed,  3 Jun 2020 20:23:57 +0200 (CEST)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCHv4 0/6] scsi: use xarray for devices and targets
+To:     Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org
+References: <20200602113311.121513-1-hare@suse.de>
+ <20200603125359.GA12995@lst.de>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <03657a10-0941-c866-ce0c-ee92635279a9@interlog.com>
+Date:   Wed, 3 Jun 2020 14:23:55 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Reply-To: susanjones.wife@gmail.com
-Received: by 2002:a19:a405:0:0:0:0:0 with HTTP; Wed, 3 Jun 2020 06:48:46 -0700 (PDT)
-From:   "Mrs.Susan Jones" <joneswife.susan@gmail.com>
-Date:   Wed, 3 Jun 2020 14:48:46 +0100
-X-Google-Sender-Auth: aH2vam-ZraP3yG1gz3ryctMgTE4
-Message-ID: <CALBhdBfusXWup1N4iFuTS3D1AZxWbZbTDS_qa-wA3FkbkE7MrQ@mail.gmail.com>
-Subject: HELLO: I AM MRS SUSAN JONES
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200603125359.GA12995@lst.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
--- 
-OUR GOLDEN OPPORTUNITY
+On 2020-06-03 8:53 a.m., Christoph Hellwig wrote:
+> On Tue, Jun 02, 2020 at 01:33:05PM +0200, Hannes Reinecke wrote:
+>> Hi all,
+>>
+>> based on the ideas from Doug Gilbert here's now my take on using
+>> xarrays for devices and targets.
+>> It revolves around two ideas:
+>>
+>> - The scsi target 'channel' and 'id' numbers are never ever used
+>>    to the full 32 bit range; channels are well below 10, and no
+>>    driver is using more than 16 bits for the id. So we can reduce
+>>    the type of 'channel' and 'id' to 16 bits, and use the 32 bit
+>>    value 'channel << 16 | id' as the index into the target xarray.
+>> - Nearly every target only ever uses the first two levels of the
+>>    4-level SCSI LUN structure, which means that we can use the
+>>    linearized SCSI LUN id as an index into the xarray.
+>>    If we ever come across targets utilizing more that 2 levels of
+>>    the LUN structure we'll allocate the first unused index and have
+>>    to resort to a less efficient lookup instead of direct indexing.
+>>
+>> With these changes we can implement an efficient lookup mechanism,
+>> devolving into direct lookup for most cases. It also allows us to
+>> detect duplicate entries or accidental overwrites of existing elements
+>> by using xa_cmpxchg().
+>> And iteration over targets and devices should be as efficient as the
+>> current, list-based, approach.
+>>
+>> As usual, comments and reviews are welcome.
+> 
+> I see absolutely no argument for what the point of this series.  It adds
+> more code, and I don't really see any indications for it fixing bugs,
+> speeding up workloads, or reducing memory usage.
 
-Hello Dear Friend,
+Lets take memory usage first. The legacy design (part of which may have
+been a later add-on) has three collections where two are needed:
+    1) all targets in a host
+    2) all sdev_s in a target
+    3) all sdev_s in a host
 
-Complement of the day, i hope you are doing great today. However, I am
-Mrs.Susan Jones, an auditor with one of the new generation banks here
-in Burkina Faso.
+So the third one is redundant and now removed (together with the
+complexity of making sure those 3 collections are always in sync, seen
+from the users' viewpoint). Each doubly linked collection on 64
+bit machines uses 16 bytes (2 eight byte pointers). So that is a
+32 byte reduction in each sdev object. The proposed solution adds 0
+bytes because it uses the LUN as an index which is already there.
+Similar but smaller win in scsi_target objects.
 
-I am writing you this letter based on the latest development at my
-Department. i discovered some abandoned huge amount of money, Ten
-Million, Five hundred thousand  United States Dollars.($10.500.000).
-Now I am only contacting you as a foreigner because this money cannot
-be approved to a local bank account here, but can only be approved to
-any foreign account and foreign beneficiary because the money is in US
-dollars
+There are also some locks and mutexes in the three level object
+tree (host-target-sdev[LU]) that can probably be dispensed with
+as xarrays come with their own locks. That has not been done yet
+making both my earlier proposal and this one "overlocked". And
+locks and mutexes take up space in objects and slow things down.
 
-This will be  a legitimate transaction once you accept to build trust
-with me and follow simple instruction doing the transfer process,
-until the total sum transfer out of the bank here to your own bank
-account any where in the world, and I agreed to share the total money
-50/50 with you once you successful confirmed it in your bank account.
-But any expenses doing the transfer process will be deduct from the
-amount before sharing, If you are interested to work with me and
-provide a good receiving bank account, get back to me as soon as
-possible with the following details below.
 
-Your full name
-Your Profession
-Your direct mobile phone number
-Your Scanned International passport or any of your identity
+The speeding up will come in big machine startup and shutdown and
+its reaction time to disruptions (e.g. cable disconnected to a disk
+array) IMO. xarray and explicit parent pointers give us a faster
+way to navigate up and down the object tree. With this patchset we
+have an O(ln(n)) lookup in the downward direction where currently we
+only have O(n). Very little use is made of the "lookup" functions in
+the API because users could see that it was just an iteration
+(i.e. O(n)). Hopefully transports will take advantage of faster
+lookups and perhaps implement their own xarrays. Even the upward
+navigation can be complicated by transports inserting levels between
+the host and the target. This is what the SCSI mid-layer object tree
+looks like moving upwards from a SAS SSD, connected to an
+SAS expander, moving up to its host (a HBA):
+     scsi_device, ptr=ffff99d23f513960
+     scsi_target, ptr=ffff99d241595c28
+     sas_rphy, ptr=ffff99d242519c00
+     sas_port, ptr=ffff99d24251ec00
+     sas_expander_device, ptr=ffff99d23f4c6438
+     sas_port, ptr=ffff99d23f4c7400
+     Scsi_Host, ptr=ffff99d2425261f8
 
-NOTE: PLEASE IT YOU ARE NOT INTERESTED DON'T BORDER TO RESPOND BACK TO
-AVOID TIME WASTED.
+There already is a scsi_device::host redundant pointer to bypass the
+oft-called and slow-walking dev_to_shost(). I'm proposing another
+redundant scsi_target::parent_shost pointer that will bypass seven
+dev_to_shost() invocations.
 
-As soon as I receive these data's, I will forward to you the
-application form which you will send to the bank for the claim and
-transfer of the fund into your bank account as the  new beneficial.
+Currently all iterations are done under the host_lock as that is
+required for doubly linked list safety. xarray uses rcu read locks
+on all non-modifying operations including iterations and if we can
+safely rely on them, that will increase the available parallelism
+within one host.
 
-I am waiting to hear from you soon
+Finally the SCSI fast path will usually require the presence the
+corresponding sdev object, preferably cached. So making it smaller
+will help.
 
-Yours
-Mrs.Susan Jones
+Doug Gilbert
+
+
+P.S. I sidestepped the "bugs" issue. Surely we will add some but
+it is hard to believe when you wade into the complexity of the
+currently linked collections and their myriad of locks, that there
+aren't subtle bugs in the existing code. I have been working with
+xarrays for about 1 year and finding locking issues is easier
+with xarrays compared to "roll your own" linked list locking, IMO.
+
