@@ -2,94 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 794D01EC76B
-	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 04:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3236D1EC75C
+	for <lists+linux-scsi@lfdr.de>; Wed,  3 Jun 2020 04:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725855AbgFCCee (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 2 Jun 2020 22:34:34 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:42518 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgFCCee (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jun 2020 22:34:34 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532SsfC186047;
-        Wed, 3 Jun 2020 02:34:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
- message-id : date : from : to : cc : subject : references : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=5GmeQZysT7OXDXCPVrq0Gz+WWUQybEphX3DXqlt8Mzw=;
- b=RkoCDwANhsH+H214bP7SVpmxInV9sD+FYb5O4fWYPamRVZyNdb+3yBBNDYHX6Dn0Zn+d
- 2sI57lunXJ6fYSkTzueHHYSRhTnrJ4+5PeTupmLhwvcYuGnaq3UcK+tOVG8bA94hcd3L
- uH0huQIJwriSGGaYxgMEEYAmwqbAJUA7yCkkK4aDhhs//NVIZ5//HsdahkYtDFYtNXbs
- hmuZOHpnCufn3/BeTGgaclxuFI5whUOpjCK/i2GLG1Arh7EEEWthFAcGM4SCzqvpBki/
- spNJKk4p8XPQmH2JrFdAIeS772qhdTYbwZsQKp/jo2B+aNu9GHODKFTk5YEwBQhEfeZQ /g== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 31dkrukvy6-1
+        id S1725948AbgFCCcG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 2 Jun 2020 22:32:06 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:59074 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725794AbgFCCcG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 2 Jun 2020 22:32:06 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532Rlek188123;
+        Wed, 3 Jun 2020 02:31:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=zzVHRLOiQYXnYFpDFmw0PZpsKu82bGLV3htgEoTFfZg=;
+ b=OBqT39h6c9yfr0rXQsvTEvI+Hegp4MputnxHqQ+as6oadEciK+Yyz1ugGd98JvAeYYK8
+ xyLDx+1cUyGm7RGfq23qrAdUdzuw6hcOz+MzNS5quTVVwBtAhx8rHqlF5ddVs0G7i3Ql
+ u+zE/pgtQnm7q9ZzPNQiE3SQ5PzWO00ttrUt3Q/ZvwlV4Infbn0XHLcZ0iMF87j1liN4
+ KgS8q/vs40ev/mQqpFA3PAf9PAy561LU1UU8O1KUS0ISb1QKa0lXNSNwBF8nDsuXWC9R
+ FDpMaRiO+xfcas8FikwXFWwKtaSSfxl9lqee84YDsZNugYt06V1vW9DZ1AjmPOI0wHDu Tw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 31bfem6s9r-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 03 Jun 2020 02:34:30 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532TG6o131916;
-        Wed, 3 Jun 2020 02:32:29 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3030.oracle.com with ESMTP id 31c1dy84db-1
+        Wed, 03 Jun 2020 02:31:57 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0532TPrb164237;
+        Wed, 3 Jun 2020 02:31:56 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 31c12q5d4v-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 03 Jun 2020 02:32:29 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0532WLuD023670;
-        Wed, 3 Jun 2020 02:32:26 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201) by default (Oracle
- Beehive Gateway v4.0) with ESMTP ; Tue, 02 Jun 2020 19:31:47 -0700
-MIME-Version: 1.0
-Message-ID: <159114947917.26776.13243682219428913589.b4-ty@oracle.com>
-Date:   Tue, 2 Jun 2020 19:31:37 -0700 (PDT)
+        Wed, 03 Jun 2020 02:31:56 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0532Vnnm015051;
+        Wed, 3 Jun 2020 02:31:54 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 02 Jun 2020 19:31:49 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org,
-        Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+To:     kjlu@umn.edu, "wu000273@umn.edu" <wu000273@umn.edu>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        sreekanth.reddy@broadcom.com, thenzl@redhat.com
-Subject: Re: [PATCH] mpt3sas: Fix memset in non-rdpq mode.
-References: <20200528145617.27252-1-suganath-prabu.subramani@broadcom.com>
-In-Reply-To: <20200528145617.27252-1-suganath-prabu.subramani@broadcom.com>
+        Lee Duncan <lduncan@suse.com>, open-iscsi@googlegroups.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-scsi@vger.kernel.org, Chris Leech <cleech@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: Fix reference count leak in iscsi_boot_create_kobj.
+Date:   Tue,  2 Jun 2020 22:31:38 -0400
+Message-Id: <159114947917.26776.6215710664403797046.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-Content-Type: text/plain; charset=ascii
+In-Reply-To: <20200528201353.14849-1-wu000273@umn.edu>
+References: <20200528201353.14849-1-wu000273@umn.edu>
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 mlxlogscore=999
- spamscore=0 bulkscore=0 adultscore=0 suspectscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006030017
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006030018
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 priorityscore=1501
- mlxscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1015
- adultscore=0 mlxlogscore=999 cotscore=-2147483648 phishscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1011
+ impostorscore=0 adultscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2004280000 definitions=main-2006030017
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 28 May 2020 10:56:17 -0400, Suganath Prabu S wrote:
+On Thu, 28 May 2020 15:13:53 -0500, wu000273@umn.edu wrote:
 
-> Replace dma_pool_alloc and memset with dma_pool_zalloc.
-> This fixes memset accessing out of range address when reply_queue
-> count is less than RDPQ_MAX_INDEX_IN_ONE_CHUNK (i.e. 16) in non-RDPQ
-> mode.
-> 
-> In non-RDPQ mode, the driver allocates a single contiguous pool of
-> size reply_queue's count * reqly_post_free_sz. But here the driver is
-> always memsetting this pool with size 16 *  reqly_post_free_sz. so if
-> reply queue count is less then 16 (i.e. when msix vectors enabled is
-> less then 16) then the driver is accessing out of range address and
-> this results in 'BUG: unable to handle kernel paging request at
-> fff0x...x' bug.
-> 
-> [...]
+> kobject_init_and_add() should be handled when it return an error,
+> because kobject_init_and_add() takes reference even when it fails.
+> If this function returns an error, kobject_put() must be called to
+> properly clean up the memory associated with the object. Previous
+> commit "b8eb718348b8" fixed a similar problem. Thus replace calling
+> kfree() by calling kobject_put().
 
 Applied to 5.8/scsi-queue, thanks!
 
-[1/1] scsi: mpt3sas: Fix memset() in non-RDPQ mode
-      https://git.kernel.org/mkp/scsi/c/61e6ba03ea26
+[1/1] scsi: iscsi: Fix reference count leak in iscsi_boot_create_kobj
+      https://git.kernel.org/mkp/scsi/c/0267ffce562c
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
