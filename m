@@ -2,75 +2,59 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D686E1F6390
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2020 10:27:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59ED81F64AB
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2020 11:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726653AbgFKI1u (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jun 2020 04:27:50 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2297 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726623AbgFKI1u (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 11 Jun 2020 04:27:50 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.108])
-        by Forcepoint Email with ESMTP id E48EA95E10717449BC20;
-        Thu, 11 Jun 2020 09:27:48 +0100 (IST)
-Received: from [127.0.0.1] (10.210.169.30) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Thu, 11 Jun
- 2020 09:27:47 +0100
-Subject: Re: [PATCH RFC v7 02/12] blk-mq: rename blk_mq_update_tag_set_depth()
-To:     Ming Lei <ming.lei@redhat.com>
-CC:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <don.brace@microsemi.com>,
-        <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
-        <bvanassche@acm.org>, <hare@suse.com>, <hch@lst.de>,
-        <shivasharan.srikanteshwara@broadcom.com>,
-        <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <esc.storagedev@microsemi.com>, <chenxiang66@hisilicon.com>,
-        <megaraidlinux.pdl@broadcom.com>, Hannes Reinecke <hare@suse.de>
-References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
- <1591810159-240929-3-git-send-email-john.garry@huawei.com>
- <20200611025759.GA453671@T590>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <6ef76cdf-2fb3-0ce8-5b5a-0d7af0145901@huawei.com>
-Date:   Thu, 11 Jun 2020 09:26:29 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1727031AbgFKJYZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jun 2020 05:24:25 -0400
+Received: from 116293.cloudwaysapps.com ([46.101.3.131]:38788 "EHLO
+        116293.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726817AbgFKJYX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Jun 2020 05:24:23 -0400
+X-Greylist: delayed 106357 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Jun 2020 05:24:23 EDT
+Received: from Shop01 (116293.cloudwaysapps.com [127.0.0.1])
+        by 116293.cloudwaysapps.com (Postfix) with SMTP id 60C80629D0;
+        Thu,  4 Jun 2020 12:41:50 +0000 (UTC)
+Received: from (HELO j0pxbg7) [104.170.227.196] by Shop01 id LVf8R5GMp03n; Thu, 04 Jun 2020 17:31:57 +0400
+Message-ID: <4$c4p8b42r$ybg$0s61$r$pz7e47@glh1.02.b.v19>
+From:   "Mrs. Janet Olsen " <mrs.janetolse@gmail.com>
+Reply-To: "Mrs. Janet Olsen " <mrs.janetolse@gmail.com>
+To:     southsidecheerderekbray@gmail.com
+Subject: Your response 
+Date:   Thu, 04 Jun 20 17:31:57 GMT
+X-Mailer: MIME-tools 5.503 (Entity 5.501)
 MIME-Version: 1.0
-In-Reply-To: <20200611025759.GA453671@T590>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.210.169.30]
-X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/alternative;
+        boundary="CFA__89C7AB7BB"
+X-Priority: 5
+X-MSMail-Priority: Low
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 11/06/2020 03:57, Ming Lei wrote:
-> On Thu, Jun 11, 2020 at 01:29:09AM +0800, John Garry wrote:
->> From: Hannes Reinecke <hare@suse.de>
->>
->> The function does not set the depth, but rather transitions from
->> shared to non-shared queues and vice versa.
->> So rename it to blk_mq_update_tag_set_shared() to better reflect
->> its purpose.
-> 
-> It is fine to rename it for me, however:
-> 
-> This patch claims to rename blk_mq_update_tag_set_shared(), but also
-> change blk_mq_init_bitmap_tags's signature.
 
-I was going to update the commit message here, but forgot again...
+--CFA__89C7AB7BB
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> So suggest to split this patch into two or add comment log on changing
-> blk_mq_init_bitmap_tags().
+Hello, 
 
-I think I'll just split into 2x commits.
+Greetings from Mrs. Janet Olsen, from Norway.
+ 
+Please i will like to establish some investments over there, such as Orpha=
+nage home and Hospital for Cancer patients but i don't have anyone, Who ca=
+n handle the contracts for me over there.
 
-Thanks,
-John
+So, I am contacting to ask you and to know if you will be able of handling=
+ the contracts for me over there and you will be rewarded bountifully.
+
+Thanks and remain good, till i hear from you soon, for the full details.
+
+Regards, 
+
+Mrs. Janet Olsen.=20
+
+--CFA__89C7AB7BB--
+
