@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9047C1F0FCE
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jun 2020 22:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C87C1F0FC5
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jun 2020 22:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbgFGUiY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Jun 2020 16:38:24 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:52502 "EHLO
+        id S1727886AbgFGUgY (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Jun 2020 16:36:24 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:51716 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726993AbgFGUiX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Jun 2020 16:38:23 -0400
+        with ESMTP id S1727972AbgFGUgX (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Jun 2020 16:36:23 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KcImt139768;
-        Sun, 7 Jun 2020 20:38:19 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KYLHW137503;
+        Sun, 7 Jun 2020 20:36:16 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=XfWhIYFwEimVuj47/9jv8D1/OxnCuX9y0dJxP64x0b4=;
- b=BwehrBtkJdrP2Sq0aFlP8UWD/0oK+amM23PrVlUtD6lfaRrZgZGkEDgq37jLsq1eaQ1U
- +VJd1n+cMKV0EmMP13/h6xDCPVukaWRet4B7ghthT/LPbasYxYm4Bj1toHqAC4PsjoRU
- OFPhiuMJrlNiMPP8ISNpY0l+QGmaEqF+9d8XCmPC3BmA4r9XWGCu1SNCK+Q87PjmoDjx
- 6dcWIGwcfqIVIV4/gfSAbTGvtF/q69iGUo0rr99iSmLICmJMz+kTOQk3Y/D4/OsJtvSd
- zjQ2CCOCp5+qd9W5mHQm0n+TyzXviJIJjoVnIrfFKICqr2HtrTT0HHdXVTvrln1Oex91 iA== 
+ bh=G+Png8uTl+OmiwQUfZgc/hn2TpO+61jKbR8PL8aMweU=;
+ b=d/P3aeztRtU+nuHWytG4b71JrUEzP30wtbm8zEBoFLGELNZbOid371WMvHwmBd4qqy9W
+ m244vtiHAzIrLxXG55nfYBimsq/3WKXOaglZnC9EeTD957WeultSyYbm8B74+y55FTYG
+ tPcojO47lQzSETuAihSzi/JmBWzh3xs9L92Jt06+eDfHzr5TkZodKTJVQirHeoQiu8Ni
+ Q0dU3EtxfTiI0Zem9t5fiQz5v8BaRj2AbP3LnGXoLJUhjg+m8kQcXvxJLzorAtWUKJJW
+ E0DNR2lDAcsk0pw4DczW83cUmHi2/pJ8+X0qf/l+WLqQyOi+N987GNurA5EJ8QV3N9Nr Fw== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 31g3smkxhb-1
+        by userp2120.oracle.com with ESMTP id 31g3smkxfu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 07 Jun 2020 20:38:18 +0000
+        Sun, 07 Jun 2020 20:36:16 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KSHFN020325;
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KSFmk020050;
         Sun, 7 Jun 2020 20:36:15 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 31gn205ncn-1
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 31gn205ncw-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
         Sun, 07 Jun 2020 20:36:15 +0000
 Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 057KaEBI003652;
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 057KaEs5024005;
         Sun, 7 Jun 2020 20:36:14 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
@@ -43,121 +43,172 @@ From:   Mike Christie <michael.christie@oracle.com>
 To:     bvanassche@acm.org, bstroesser@ts.fujitsu.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
-Subject: [PATCH 09/17] target: drop sess_get_initiator_sid from PR code
-Date:   Sun,  7 Jun 2020 15:35:56 -0500
-Message-Id: <1591562164-9766-10-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 10/17] target: drop sess_get_initiator_sid
+Date:   Sun,  7 Jun 2020 15:35:57 -0500
+Message-Id: <1591562164-9766-11-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1591562164-9766-1-git-send-email-michael.christie@oracle.com>
 References: <1591562164-9766-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=0 mlxscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 suspectscore=2 mlxscore=0
  phishscore=0 adultscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006070161
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 cotscore=-2147483648 suspectscore=0
+ lowpriorityscore=0 impostorscore=0 cotscore=-2147483648 suspectscore=2
  spamscore=0 bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0
  mlxlogscore=999 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2006070163
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006070161
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Use the transport id session id in the PR related code.
+sess_get_initiator_sid is no longer used. Drop it.
 
 Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 ---
- drivers/target/target_core_pr.c        | 23 ++++-------------------
- drivers/target/target_core_transport.c | 11 ++++-------
- 2 files changed, 8 insertions(+), 26 deletions(-)
+ drivers/infiniband/ulp/srpt/ib_srpt.c        |  1 -
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c           |  2 --
+ drivers/target/iscsi/iscsi_target_configfs.c | 13 -------------
+ drivers/target/tcm_fc/tfc_conf.c             |  1 -
+ drivers/usb/gadget/function/f_tcm.c          |  1 -
+ drivers/vhost/scsi.c                         |  1 -
+ drivers/xen/xen-scsiback.c                   |  1 -
+ include/target/target_core_fabric.h          |  6 ------
+ 8 files changed, 26 deletions(-)
 
-diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
-index cd2d32f..fbe3638 100644
---- a/drivers/target/target_core_pr.c
-+++ b/drivers/target/target_core_pr.c
-@@ -1204,17 +1204,7 @@ static struct t10_pr_registration *core_scsi3_locate_pr_reg(
- 	struct se_node_acl *nacl,
- 	struct se_session *sess)
- {
--	struct se_portal_group *tpg = nacl->se_tpg;
--	unsigned char buf[PR_REG_ISID_LEN], *isid_ptr = NULL;
--
--	if (tpg->se_tpg_tfo->sess_get_initiator_sid != NULL) {
--		memset(&buf[0], 0, PR_REG_ISID_LEN);
--		tpg->se_tpg_tfo->sess_get_initiator_sid(sess, &buf[0],
--					PR_REG_ISID_LEN);
--		isid_ptr = &buf[0];
--	}
--
--	return __core_scsi3_locate_pr_reg(dev, nacl, isid_ptr);
-+	return __core_scsi3_locate_pr_reg(dev, nacl, sess->tpt_id->session_id);
+diff --git a/drivers/infiniband/ulp/srpt/ib_srpt.c b/drivers/infiniband/ulp/srpt/ib_srpt.c
+index d107f63..3cda73c 100644
+--- a/drivers/infiniband/ulp/srpt/ib_srpt.c
++++ b/drivers/infiniband/ulp/srpt/ib_srpt.c
+@@ -3844,7 +3844,6 @@ static ssize_t srpt_wwn_version_show(struct config_item *item, char *buf)
+ 	.check_stop_free		= srpt_check_stop_free,
+ 	.close_session			= srpt_close_session,
+ 	.sess_get_index			= srpt_sess_get_index,
+-	.sess_get_initiator_sid		= NULL,
+ 	.write_pending			= srpt_write_pending,
+ 	.set_default_node_attributes	= srpt_set_default_node_attrs,
+ 	.get_cmd_state			= srpt_get_tcm_cmd_state,
+diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+index 7b21809..fff695a 100644
+--- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
++++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+@@ -1852,7 +1852,6 @@ static ssize_t tcm_qla2xxx_wwn_version_show(struct config_item *item,
+ 	.release_cmd			= tcm_qla2xxx_release_cmd,
+ 	.close_session			= tcm_qla2xxx_close_session,
+ 	.sess_get_index			= tcm_qla2xxx_sess_get_index,
+-	.sess_get_initiator_sid		= NULL,
+ 	.write_pending			= tcm_qla2xxx_write_pending,
+ 	.set_default_node_attributes	= tcm_qla2xxx_set_default_node_attrs,
+ 	.get_cmd_state			= tcm_qla2xxx_get_cmd_state,
+@@ -1892,7 +1891,6 @@ static ssize_t tcm_qla2xxx_wwn_version_show(struct config_item *item,
+ 	.release_cmd			= tcm_qla2xxx_release_cmd,
+ 	.close_session			= tcm_qla2xxx_close_session,
+ 	.sess_get_index			= tcm_qla2xxx_sess_get_index,
+-	.sess_get_initiator_sid		= NULL,
+ 	.write_pending			= tcm_qla2xxx_write_pending,
+ 	.set_default_node_attributes	= tcm_qla2xxx_set_default_node_attrs,
+ 	.get_cmd_state			= tcm_qla2xxx_get_cmd_state,
+diff --git a/drivers/target/iscsi/iscsi_target_configfs.c b/drivers/target/iscsi/iscsi_target_configfs.c
+index 0fa1d57..4513740 100644
+--- a/drivers/target/iscsi/iscsi_target_configfs.c
++++ b/drivers/target/iscsi/iscsi_target_configfs.c
+@@ -1349,18 +1349,6 @@ static u32 lio_sess_get_index(struct se_session *se_sess)
+ 	return sess->session_index;
  }
  
- static void core_scsi3_put_pr_reg(struct t10_pr_registration *pr_reg)
-@@ -1592,7 +1582,7 @@ static void core_scsi3_lunacl_undepend_item(struct se_dev_entry *se_deve)
- 			 * SCSI Intiatior TransportID w/ ISIDs is enforced
- 			 * for fabric modules (iSCSI) requiring them.
- 			 */
--			if (tpg->se_tpg_tfo->sess_get_initiator_sid &&
-+			if (se_sess->tpt_id->session_id &&
-                             dev->dev_attrib.enforce_pr_isids &&
- 			    !iport_ptr) {
- 				pr_warn("SPC-PR: enforce_pr_isids is set but a isid has not been sent in the SPEC_I_PT data for %s.",
-@@ -2057,7 +2047,7 @@ static sense_reason_t core_scsi3_update_and_write_aptpl(struct se_device *dev, b
- 	struct se_portal_group *se_tpg;
- 	struct t10_pr_registration *pr_reg, *pr_reg_p, *pr_reg_tmp;
- 	struct t10_reservation *pr_tmpl = &dev->t10_pr;
--	unsigned char isid_buf[PR_REG_ISID_LEN], *isid_ptr = NULL;
-+	unsigned char *isid_ptr = NULL;
- 	sense_reason_t ret = TCM_NO_SENSE;
- 	int pr_holder = 0, type;
- 
-@@ -2067,12 +2057,7 @@ static sense_reason_t core_scsi3_update_and_write_aptpl(struct se_device *dev, b
- 	}
- 	se_tpg = se_sess->se_tpg;
- 
--	if (se_tpg->se_tpg_tfo->sess_get_initiator_sid) {
--		memset(&isid_buf[0], 0, PR_REG_ISID_LEN);
--		se_tpg->se_tpg_tfo->sess_get_initiator_sid(se_sess, &isid_buf[0],
--				PR_REG_ISID_LEN);
--		isid_ptr = &isid_buf[0];
--	}
-+	isid_ptr = se_sess->tpt_id->session_id;
- 	/*
- 	 * Follow logic from spc4r17 Section 5.7.7, Register Behaviors Table 47
- 	 */
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index c1b0d15..5d6d736 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -343,7 +343,7 @@ void __transport_register_session(
- 	void *fabric_sess_ptr)
+-static u32 lio_sess_get_initiator_sid(
+-	struct se_session *se_sess,
+-	unsigned char *buf,
+-	u32 size)
+-{
+-	struct iscsi_session *sess = se_sess->fabric_sess_ptr;
+-	/*
+-	 * iSCSI Initiator Session Identifier from RFC-3720.
+-	 */
+-	return snprintf(buf, size, "%6phN", sess->isid);
+-}
+-
+ static int lio_queue_data_in(struct se_cmd *se_cmd)
  {
- 	const struct target_core_fabric_ops *tfo = se_tpg->se_tpg_tfo;
--	unsigned char buf[PR_REG_ISID_LEN];
-+	unsigned char *sid;
- 	unsigned long flags;
- 
- 	se_sess->se_tpg = se_tpg;
-@@ -374,12 +374,9 @@ void __transport_register_session(
- 		 * If the fabric module supports an ISID based TransportID,
- 		 * save this value in binary from the fabric I_T Nexus now.
- 		 */
--		if (se_tpg->se_tpg_tfo->sess_get_initiator_sid != NULL) {
--			memset(&buf[0], 0, PR_REG_ISID_LEN);
--			se_tpg->se_tpg_tfo->sess_get_initiator_sid(se_sess,
--					&buf[0], PR_REG_ISID_LEN);
--			se_sess->sess_bin_isid = get_unaligned_be64(&buf[0]);
--		}
-+		sid = se_sess->tpt_id->session_id;
-+		if (sid)
-+			se_sess->sess_bin_isid = get_unaligned_be64(sid);
- 
- 		spin_lock_irqsave(&se_nacl->nacl_sess_lock, flags);
- 		/*
+ 	struct iscsi_cmd *cmd = container_of(se_cmd, struct iscsi_cmd, se_cmd);
+@@ -1545,7 +1533,6 @@ static void lio_release_cmd(struct se_cmd *se_cmd)
+ 	.release_cmd			= lio_release_cmd,
+ 	.close_session			= lio_tpg_close_session,
+ 	.sess_get_index			= lio_sess_get_index,
+-	.sess_get_initiator_sid		= lio_sess_get_initiator_sid,
+ 	.write_pending			= lio_write_pending,
+ 	.set_default_node_attributes	= lio_set_default_node_attributes,
+ 	.get_cmd_state			= iscsi_get_cmd_state,
+diff --git a/drivers/target/tcm_fc/tfc_conf.c b/drivers/target/tcm_fc/tfc_conf.c
+index 1a38c98..870b7bb 100644
+--- a/drivers/target/tcm_fc/tfc_conf.c
++++ b/drivers/target/tcm_fc/tfc_conf.c
+@@ -427,7 +427,6 @@ static u32 ft_tpg_get_inst_index(struct se_portal_group *se_tpg)
+ 	.release_cmd =			ft_release_cmd,
+ 	.close_session =		ft_sess_close,
+ 	.sess_get_index =		ft_sess_get_index,
+-	.sess_get_initiator_sid =	NULL,
+ 	.write_pending =		ft_write_pending,
+ 	.set_default_node_attributes =	ft_set_default_node_attr,
+ 	.get_cmd_state =		ft_get_cmd_state,
+diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+index cab3036..e81bdbd 100644
+--- a/drivers/usb/gadget/function/f_tcm.c
++++ b/drivers/usb/gadget/function/f_tcm.c
+@@ -1716,7 +1716,6 @@ static int usbg_check_stop_free(struct se_cmd *se_cmd)
+ 	.tpg_get_inst_index		= usbg_tpg_get_inst_index,
+ 	.release_cmd			= usbg_release_cmd,
+ 	.sess_get_index			= usbg_sess_get_index,
+-	.sess_get_initiator_sid		= NULL,
+ 	.write_pending			= usbg_send_write_request,
+ 	.set_default_node_attributes	= usbg_set_default_node_attrs,
+ 	.get_cmd_state			= usbg_get_cmd_state,
+diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
+index 37f66f8..d7c9bfc 100644
+--- a/drivers/vhost/scsi.c
++++ b/drivers/vhost/scsi.c
+@@ -2245,7 +2245,6 @@ static void vhost_scsi_drop_tport(struct se_wwn *wwn)
+ 	.release_cmd			= vhost_scsi_release_cmd,
+ 	.check_stop_free		= vhost_scsi_check_stop_free,
+ 	.sess_get_index			= vhost_scsi_sess_get_index,
+-	.sess_get_initiator_sid		= NULL,
+ 	.write_pending			= vhost_scsi_write_pending,
+ 	.set_default_node_attributes	= vhost_scsi_set_default_node_attrs,
+ 	.get_cmd_state			= vhost_scsi_get_cmd_state,
+diff --git a/drivers/xen/xen-scsiback.c b/drivers/xen/xen-scsiback.c
+index f70b6da..883b15c 100644
+--- a/drivers/xen/xen-scsiback.c
++++ b/drivers/xen/xen-scsiback.c
+@@ -1769,7 +1769,6 @@ static int scsiback_check_false(struct se_portal_group *se_tpg)
+ 	.check_stop_free		= scsiback_check_stop_free,
+ 	.release_cmd			= scsiback_release_cmd,
+ 	.sess_get_index			= scsiback_sess_get_index,
+-	.sess_get_initiator_sid		= NULL,
+ 	.write_pending			= scsiback_write_pending,
+ 	.set_default_node_attributes	= scsiback_set_default_node_attrs,
+ 	.get_cmd_state			= scsiback_get_cmd_state,
+diff --git a/include/target/target_core_fabric.h b/include/target/target_core_fabric.h
+index 0113e1c..ced377f 100644
+--- a/include/target/target_core_fabric.h
++++ b/include/target/target_core_fabric.h
+@@ -67,12 +67,6 @@ struct target_core_fabric_ops {
+ 	void (*release_cmd)(struct se_cmd *);
+ 	void (*close_session)(struct se_session *);
+ 	u32 (*sess_get_index)(struct se_session *);
+-	/*
+-	 * Used only for SCSI fabrics that contain multi-value TransportIDs
+-	 * (like iSCSI).  All other SCSI fabrics should set this to NULL.
+-	 */
+-	u32 (*sess_get_initiator_sid)(struct se_session *,
+-				      unsigned char *, u32);
+ 	int (*write_pending)(struct se_cmd *);
+ 	void (*set_default_node_attributes)(struct se_node_acl *);
+ 	int (*get_cmd_state)(struct se_cmd *);
 -- 
 1.8.3.1
 
