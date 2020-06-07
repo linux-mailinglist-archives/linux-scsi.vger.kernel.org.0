@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD9E1F0FAB
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jun 2020 22:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E301F0FCB
+	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jun 2020 22:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727804AbgFGUgR (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Jun 2020 16:36:17 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:51634 "EHLO
+        id S1727826AbgFGUiS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Jun 2020 16:38:18 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:52442 "EHLO
         userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727779AbgFGUgR (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Jun 2020 16:36:17 -0400
+        with ESMTP id S1726993AbgFGUiR (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Jun 2020 16:38:17 -0400
 Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KWwRc125872;
-        Sun, 7 Jun 2020 20:36:11 GMT
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KYLHX137503;
+        Sun, 7 Jun 2020 20:38:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : subject :
- date : message-id; s=corp-2020-01-29;
- bh=4PUeBeGfK3iwPJSDxtgfUQoB/Xujvg8+bqox1gdv1dg=;
- b=VFlHUdqj3QSMv0sa5v9MS+U6ikOePOYhnILPTf9tpH0hIh4Vwue7V2eQlmSHeT9FzM4O
- BXJgtvQ06bd1c1gxMucrDFrGDjzX2Wl+2dBxb102bccma8HQvwZ5d2u2T4+rHvhllJVS
- 02l/y/BvharAVLen7E8pP/siYkk0XTlsjTC/s/E9WqhzQ14PE+iHYxrayxgjlQmcAVRv
- o1OdirJUi2WxPTSEmaqOCQ6Q6dX5VhqZ6+DdNWzRvuwUBK+r1j8BwijcRLFzBf6PD4D4
- xJz9zkVy62UPPjtODBR3HsDIkI/lqU94GGDKMktL8CH67caDUpqp9QbLRADdJ9qkt0EJ zA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 31g3smkxfn-1
+ date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=n8tKsegJVHzMwlJSyWtcV4KKJq000xk2NaH/m2BBKPQ=;
+ b=EX310bzcDdoJg7KKC/gIEGTin7Mvm8ReT5zoBCftCYaiPtSAMPUu3WllDpxjGuGu45oN
+ bFroGRL/UJ85l5qzezkjlLf8ZRD60bGlkXGn++7Rg9fcHLm4k9ZCkCyCeY/+k0Qv1/LC
+ dHDG3Uy94hI+pidQleTtW8jWCUX1gqYhkYHSzdwiROxfi16yabY1H50bezQMPr2IaQcW
+ Wlndbbob6ErBqaROxEdRxf2XsBaEHrq3K1qPLQC5GrU/RJ6jhdXNTlcJS5omPmHMmULU
+ IAXARno4YOQm1R//sE7/2IAulaaX8IRcHxnFvEIYaERpz4dNf6qzKDbIy+GILFAmkHuv Hg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 31g3smkxh9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 07 Jun 2020 20:36:11 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KSGwp057077;
+        Sun, 07 Jun 2020 20:38:11 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KRjqN075772;
         Sun, 7 Jun 2020 20:36:11 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 31gmwnynm6-1
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 31gmqk8a5m-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 07 Jun 2020 20:36:11 +0000
+        Sun, 07 Jun 2020 20:36:10 +0000
 Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 057Ka9FP023937;
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 057Ka9sg003531;
         Sun, 7 Jun 2020 20:36:09 GMT
 Received: from ol2.localdomain (/73.88.28.6)
         by default (Oracle Beehive Gateway v4.0)
@@ -43,92 +43,90 @@ From:   Mike Christie <michael.christie@oracle.com>
 To:     bvanassche@acm.org, bstroesser@ts.fujitsu.com,
         martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
         target-devel@vger.kernel.org
-Subject: [PATCH v6 00/17] target: add sysfs support
-Date:   Sun,  7 Jun 2020 15:35:47 -0500
-Message-Id: <1591562164-9766-1-git-send-email-michael.christie@oracle.com>
+Subject: [PATCH 01/17] target: check enforce_pr_isids during registration
+Date:   Sun,  7 Jun 2020 15:35:48 -0500
+Message-Id: <1591562164-9766-2-git-send-email-michael.christie@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1591562164-9766-1-git-send-email-michael.christie@oracle.com>
+References: <1591562164-9766-1-git-send-email-michael.christie@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 spamscore=0 adultscore=0
- mlxscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 phishscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 suspectscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
  definitions=main-2006070161
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 cotscore=-2147483648 suspectscore=2
+ lowpriorityscore=0 impostorscore=0 cotscore=-2147483648 suspectscore=0
  spamscore=0 bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0
- mlxlogscore=999 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=999 clxscore=1015 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2004280000 definitions=main-2006070161
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-The following patches made over Martin's for-next branch allow lio to
-export info about structs like the se_session that the kernel initiates
-creation of via events like initiator login where there is no local user
-interaction like a mkdir.
+Move the check for enforce_pr_isids to the registration code where we
+can fail at the time an initiator tries to register a path without an
+isid. In its current place in __core_scsi3_locate_pr_reg, it is too
+late because it can be registered and be reported in PR in commands and
+it is stuck in this state because we cannot unregister it.
 
-Why sysfs when we have configfs?
+Note.
+I am including in this patchset, because the 9th patch is built on top.
 
-I started with configfs and hit bugs like:
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+---
+ drivers/target/target_core_pr.c | 24 +++++++++++++++---------
+ 1 file changed, 15 insertions(+), 9 deletions(-)
 
-commit cc57c07343bd071cdf1915a91a24ab7d40c9b590
-Author: Mike Christie <mchristi@redhat.com>
-Date:   Sun Jul 15 18:16:17 2018 -0500
-
-    configfs: fix registered group removal
-
-and it turns out that bug was not really a bug and was just how configfs
-was meant to work. It seems it was not meant to be used where the kernel
-initiates creation of dirs/files as a result of some internal action. It's
-more geared to the user initiating the creation, and my patch just lead
-to other bugs and was reverted:
-
-commit f19e4ed1e1edbfa3c9ccb9fed17759b7d6db24c6
-Author: Al Viro <viro@zeniv.linux.org.uk>
-Date:   Thu Aug 29 23:13:30 2019 -0400
-
-    configfs_register_group() shouldn't be (and isn't) called in
-rmdirable parts
-
-
-
-
-V5:
-- In previous versions we went wild and used kobjects directly and
-made dirs and symlinks like crazy. This version just uses the
-standard struct class and device interfaces and standard naming.
-- Added fabric specific driver session attrs example using the iscsi
-target driver to make sure the interface will work for the
-broadcom driver.
-
-V4:
-- Don't drop const char use in fabric drivers.
-- add Documentation/ABI
-- use initaitor port prefix instead of generic "session"
-- only make session_id file if iSCSI format=1 is being used.
-
-V3:
-- drop format field
-- delay tpg deletion to allow fabric modules time to remove their
-  sessions.
-- Added root sessions dir for easier lookup if userspace has the
-  session id.
-- add session symlink
-- use simple ida.
-- Fix goto use. Actually moved sysfs addition call to after nego
-  to avoid sysfs additions when login ends up failing.
-- Dropped target_setup_session callback fixups and dropped the
-  init/free session callback for now. It's not immediately needed
-  for this base session sysfs info support.
-
-V2:
-- rename top level dir to scsi_target
-- Fix extra newline
-- Copy data that's exported to sysfs so we do not have to worry about
-configfs and sysfs refcounts.
-- Export session info needed for tracking sessions in userspace and
-handling commands like PGRs there (still needs a way to notify userspace
-when sessions are added/deleted, but that will be a different set since
-the focus is different).
+diff --git a/drivers/target/target_core_pr.c b/drivers/target/target_core_pr.c
+index 5e93169..cd2d32f 100644
+--- a/drivers/target/target_core_pr.c
++++ b/drivers/target/target_core_pr.c
+@@ -1176,15 +1176,6 @@ static struct t10_pr_registration *__core_scsi3_locate_pr_reg(
+ 		 * ISID, then we have found a match.
+ 		 */
+ 		if (!pr_reg->isid_present_at_reg) {
+-			/*
+-			 * Determine if this SCSI device server requires that
+-			 * SCSI Intiatior TransportID w/ ISIDs is enforced
+-			 * for fabric modules (iSCSI) requiring them.
+-			 */
+-			if (tpg->se_tpg_tfo->sess_get_initiator_sid != NULL) {
+-				if (dev->dev_attrib.enforce_pr_isids)
+-					continue;
+-			}
+ 			atomic_inc_mb(&pr_reg->pr_res_holders);
+ 			spin_unlock(&pr_tmpl->registration_lock);
+ 			return pr_reg;
+@@ -1591,10 +1582,25 @@ static void core_scsi3_lunacl_undepend_item(struct se_dev_entry *se_deve)
+ 				continue;
+ 			dest_rtpi = tmp_lun->lun_rtpi;
+ 
++			iport_ptr = NULL;
+ 			i_str = target_parse_pr_out_transport_id(tmp_tpg,
+ 					ptr, &tid_len, &iport_ptr);
+ 			if (!i_str)
+ 				continue;
++			/*
++			 * Determine if this SCSI device server requires that
++			 * SCSI Intiatior TransportID w/ ISIDs is enforced
++			 * for fabric modules (iSCSI) requiring them.
++			 */
++			if (tpg->se_tpg_tfo->sess_get_initiator_sid &&
++                            dev->dev_attrib.enforce_pr_isids &&
++			    !iport_ptr) {
++				pr_warn("SPC-PR: enforce_pr_isids is set but a isid has not been sent in the SPEC_I_PT data for %s.",
++					i_str);
++				ret = TCM_INVALID_PARAMETER_LIST;
++				spin_unlock(&dev->se_port_lock);
++				goto out_unmap;
++			}
+ 
+ 			atomic_inc_mb(&tmp_tpg->tpg_pr_ref_count);
+ 			spin_unlock(&dev->se_port_lock);
+-- 
+1.8.3.1
 
