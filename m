@@ -2,71 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D98C1F0FC7
-	for <lists+linux-scsi@lfdr.de>; Sun,  7 Jun 2020 22:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12BA1F1175
+	for <lists+linux-scsi@lfdr.de>; Mon,  8 Jun 2020 04:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727788AbgFGUhl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 7 Jun 2020 16:37:41 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:60204 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726993AbgFGUhk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Jun 2020 16:37:40 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057KXdsc078670;
-        Sun, 7 Jun 2020 20:37:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=90kTUCK1qC+e98zuwmkqDaBLU53z4m/bKu+7xv7WMXA=;
- b=NDDVoIBbzN4SKLTwF0KdnGlz2P5vTk0umP200UsMWkPm7bSKGOCgBUQZhRrbwGCA7tZI
- VJzlOvmDugBpOM1OYwJlC4WOD5fxhzgL90lJDjB5F/aK7Jwqf0CQVF4VKs3SLBKxDDua
- dOMFrEZTs1bn3wJTAgoCBc6plPhrSqTsb18yQwCHTifj4kGsqcbK8Zi8AlQLpfEr0o3q
- AEftyR3umHS5qrdq5+W1Ra4w2lUDRCdhxBULwH4pR/mRvWfiZCWeIQxQG6hOg2mOl2nV
- nedG6BV3dPVUT0izdWq+BNLInRU5urkQRsVkgLS/+n7boM36hod1g3vvV2u9NIpL8M+Z Eg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 31g2jqv29v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 07 Jun 2020 20:37:39 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 057Kbd2M027961;
-        Sun, 7 Jun 2020 20:37:39 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 31gn2u86mw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 07 Jun 2020 20:37:39 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 057KbcLN024630;
-        Sun, 7 Jun 2020 20:37:38 GMT
-Received: from [20.15.0.202] (/73.88.28.6)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sun, 07 Jun 2020 13:37:38 -0700
-Subject: Re: [PATCH v4 0/4] target: fix NULL pointer dereference
-To:     Sudhakar Panneerselvam <sudhakar.panneerselvam@oracle.com>,
-        martin.petersen@oracle.com, target-devel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Cc:     shirley.ma@oracle.com
-References: <1591559913-8388-1-git-send-email-sudhakar.panneerselvam@oracle.com>
-From:   Mike Christie <michael.christie@oracle.com>
-Message-ID: <c0aab764-c787-a888-2cce-ff94f8fab949@oracle.com>
-Date:   Sun, 7 Jun 2020 15:37:40 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1728763AbgFHCp6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 7 Jun 2020 22:45:58 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:50240 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728501AbgFHCp5 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 7 Jun 2020 22:45:57 -0400
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200608024554epoutp04055c96706fa47155d979ca614b9d2636~WcYmUYvXW0149101491epoutp04c
+        for <linux-scsi@vger.kernel.org>; Mon,  8 Jun 2020 02:45:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200608024554epoutp04055c96706fa47155d979ca614b9d2636~WcYmUYvXW0149101491epoutp04c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1591584354;
+        bh=C6kwEPVrZicQMVqPRY7G0nedp5JPKJuMGfwc+qpyuwA=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=KvqwU7fMbbAyxQmaB0nq6GE23hGELJQG+OFDXmz5F1jBV9oU/JvyEvwfTyewPBDw3
+         io2uL1uF1fKnCmrzp6/8NKge26qpTkVFsVwx5iDZxMALZxA/NdS6L2gkFYleYBE8RF
+         8/KfSle/yfI+yYe8SMvSvQC6aV1Np2Bu4v0IajX4=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+        20200608024553epcas5p3e04e585e4600019179baa620f295bad9~WcYl3-Llg0786907869epcas5p3C;
+        Mon,  8 Jun 2020 02:45:53 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        32.1E.09475.166ADDE5; Mon,  8 Jun 2020 11:45:53 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+        20200608024553epcas5p31ec99c061aee14aa8362dcd8c110efc2~WcYllvBRC1438514385epcas5p3G;
+        Mon,  8 Jun 2020 02:45:53 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200608024553epsmtrp1fb2b062906712c143df9d0b6797046dd~WcYlgPQbI1169511695epsmtrp1-;
+        Mon,  8 Jun 2020 02:45:53 +0000 (GMT)
+X-AuditID: b6c32a4b-389ff70000002503-89-5edda6619c7b
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        ED.E6.08303.066ADDE5; Mon,  8 Jun 2020 11:45:53 +0900 (KST)
+Received: from alimakhtar02 (unknown [107.108.234.165]) by
+        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200608024549epsmtip2a0a64a9e6e85eb65ccb898cdea3fba22~WcYidqe4w2506325063epsmtip2Y;
+        Mon,  8 Jun 2020 02:45:49 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Martin K. Petersen'" <martin.petersen@oracle.com>,
+        <robh@kernel.org>, "'Kishon Vijay Abraham I'" <kishon@ti.com>
+Cc:     <krzk@kernel.org>, <linux-samsung-soc@vger.kernel.org>,
+        <avri.altman@wdc.com>, <stanley.chu@mediatek.com>,
+        <linux-scsi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <cang@codeaurora.org>,
+        <devicetree@vger.kernel.org>, <kwmad.kim@samsung.com>,
+        <linux-kernel@vger.kernel.org>, "'Vinod Koul'" <vkoul@kernel.org>
+In-Reply-To: <159114947915.26776.12485309894552696104.b4-ty@oracle.com>
+Subject: RE: [PATCH v10 00/10] exynos-ufs: Add support for UFS HCI
+Date:   Mon, 8 Jun 2020 08:15:47 +0530
+Message-ID: <013a01d63d3e$ecf404d0$c6dc0e70$@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <1591559913-8388-1-git-send-email-sudhakar.panneerselvam@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 malwarescore=0
- bulkscore=0 adultscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006070162
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9645 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 impostorscore=0
- cotscore=-2147483648 priorityscore=1501 spamscore=0 suspectscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0
- phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006070161
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQNA14zZ9KpC6NxovY65uGX80LQ4kgIpylB3AdlmWUOl2LNuQA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrIKsWRmVeSWpSXmKPExsWy7bCmlm7isrtxBrM/yFm8/HmVzeLT+mWs
+        FvOPnGO1uPC0h83i/PkN7BY3txxlsdj0+BqrxeVdc9gsZpzfx2TRfX0Hm8Xy4/+YLP7v2cFu
+        sXTrTUaLnXdOMDvweVzu62Xy2LSqk81j85J6j5aT+1k8Pj69xeLRt2UVo8fxG9uZPD5vkvNo
+        P9DNFMAZxWWTkpqTWZZapG+XwJVx5l8Xc0EjZ8XfE9/YGhgPsncxcnJICJhILJ79nRXEFhLY
+        zShx4oBwFyMXkP2JUeLw+qeMEM5nRonvnztYYDouNe5ngUjsYpT4dewpK4TzhlFi3b5rYFVs
+        AroSOxa3sXUxcnCICFRIrFgmAVLDLHCOSWLeh23sIHFOAXeJr79jQcqFBZwkXq/YwwQSZhFQ
+        kfg3IxAkzCtgKdHVsZUJwhaUODnzCdh0ZgF5ie1v5zBD3KMg8fPpMrAPRIDGfP1xBapGXOLo
+        zx5mkLUSAi84JLa8Pgz1sovEpMt3WCFsYYlXx7dAxaUkXva3gZ0mIZAt0bPLGCJcI7F03jGo
+        3+0lDlyZwwJSwiygKbF+lz7EKj6J3t9PmCA6eSU62oQgqlUlmt9dheqUlpjY3c0KUeIh0dck
+        OoFRcRaSv2Yh+WsWkvtnIexawMiyilEytaA4Nz212LTAOC+1XK84Mbe4NC9dLzk/dxMjONVp
+        ee9gfPTgg94hRiYOxkOMEhzMSiK81Q/uxAnxpiRWVqUW5ccXleakFh9ilOZgURLnVfpxJk5I
+        ID2xJDU7NbUgtQgmy8TBKdXAxDZJpEV/hW7fgeL70f17uLiCqxJ33LBhv/Hq3NG5DZbTQ1ki
+        Z063k0+ac/zlHO45+589+rq8dMLv3BcORYnOIZz2mtn20zpyTm4Mf2f87Kp84tOUa1mTRL/b
+        yC8qig9iVpC5lBYzaUL1jv+Ck+Rl1Hc6nd2QUbksYkXqdl6xff29ESsZ4r5V6CYuPce26EWs
+        QEDN7OcCYtaL/0zTPXa2L/7P78j5a6bOlFGwspf8teV48bT9YTbKvufO21lzp6jX23j8vPd5
+        YW+GGp9OjO3fk4IPa8vj2vPs3jlfzd/qJjR7i8I7w2lBDwVzFV6Hxnmp3lrU/UemPSci/ZPr
+        pf9cscFrj0m8+Xxg2+bLhxsUlViKMxINtZiLihMBkily0+QDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBIsWRmVeSWpSXmKPExsWy7bCSvG7isrtxBit3Mlu8/HmVzeLT+mWs
+        FvOPnGO1uPC0h83i/PkN7BY3txxlsdj0+BqrxeVdc9gsZpzfx2TRfX0Hm8Xy4/+YLP7v2cFu
+        sXTrTUaLnXdOMDvweVzu62Xy2LSqk81j85J6j5aT+1k8Pj69xeLRt2UVo8fxG9uZPD5vkvNo
+        P9DNFMAZxWWTkpqTWZZapG+XwJVx5l8Xc0EjZ8XfE9/YGhgPsncxcnJICJhIXGrcz9LFyMUh
+        JLCDUeL7ogMsEAlpiesbJ0AVCUus/PcczBYSeMUo8W+mO4jNJqArsWNxGxuILSJQJfHvyHt2
+        kEHMAjeYJK73roGaepJR4vTs+0xdjBwcnALuEl9/x4I0CAs4SbxesQcszCKgIvFvRiBImFfA
+        UqKrYysThC0ocXLmE7B7mAX0JNavn8MIYctLbH87hxniNgWJn0+XsULc4CTx9ccVqHpxiaM/
+        e5gnMArPQjJqFpJRs5CMmoWkZQEjyypGydSC4tz03GLDAqO81HK94sTc4tK8dL3k/NxNjODI
+        1dLawbhn1Qe9Q4xMHIyHGCU4mJVEeKsf3IkT4k1JrKxKLcqPLyrNSS0+xCjNwaIkzvt11sI4
+        IYH0xJLU7NTUgtQimCwTB6dUA9O635bbZs88s1Xvwiljh9aE5Y2lYnETHu2/paX5ev02lxbm
+        7ZVt7S4le9g2FeR7+J+uO+At4uWowHqq/++aK3/ehn+cJseW/UtFX36f9vd9B46az+Zn3iz7
+        6aLYjUu75P/Mk5/veOp0WYYIQ2Ti65n7Z6h5dLvXLKlc+P+0AqO0wQGdYLfbjgF7RdeuMdll
+        Epmkat8x6Uxv9vGYh79NNzlv0hc6pzbj/d/jCvlmgjPLHQPOlSaZOVmedC/Oqw8X2vJyjtap
+        iOmX/RZv9n+yPDTOy8ugyv/6u4SMDa6J9veUOk72Pdncu+bK9t+7m6Qc73F0rNn7am+GO3t8
+        1SSfDLO2K9Zhk/+2z8xwMVvU0qfEUpyRaKjFXFScCAACFD+lSwMAAA==
+X-CMS-MailID: 20200608024553epcas5p31ec99c061aee14aa8362dcd8c110efc2
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200528013223epcas5p2be85fa8803326b49a905fb7225992cad
+References: <CGME20200528013223epcas5p2be85fa8803326b49a905fb7225992cad@epcas5p2.samsung.com>
+        <20200528011658.71590-1-alim.akhtar@samsung.com>
+        <159114947915.26776.12485309894552696104.b4-ty@oracle.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -74,35 +110,36 @@ X-Mailing-List: linux-scsi@vger.kernel.org
 
 
 
-On 6/7/20 2:58 PM, Sudhakar Panneerselvam wrote:
-> The following set of commits address a NULL pointer dereference and some
-> refactoring around this issue.
+> -----Original Message-----
+> From: Martin K. Petersen <martin.petersen@oracle.com>
+> Sent: 03 June 2020 08:02
+> To: robh@kernel.org; Alim Akhtar <alim.akhtar@samsung.com>
+> Cc: Martin K . Petersen <martin.petersen@oracle.com>; krzk@kernel.org;
+linux-
+> samsung-soc@vger.kernel.org; avri.altman@wdc.com;
+> stanley.chu@mediatek.com; linux-scsi@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; cang@codeaurora.org;
+devicetree@vger.kernel.org;
+> kwmad.kim@samsung.com; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v10 00/10] exynos-ufs: Add support for UFS HCI
 > 
-> v4:
->   - initialize the LUN in transport_init_se_cmd()
+> On Thu, 28 May 2020 06:46:48 +0530, Alim Akhtar wrote:
 > 
-> v3:
->   - fix NULL pointer dereference when cdb initialization fails
+> > This patch-set introduces UFS (Universal Flash Storage) host
+> > controller support for Samsung family SoC. Mostly, it consists of UFS
+> > PHY and host specific driver.
+> > [...]
 > 
-> v2:
->   - new helper is named as target_cmd_init_cdb()
->   - existing function, target_setup_cmd_from_cdb is renamed as
->     target_cmd_parse_cdb()
+> Applied [1,2,3,4,5,9] to 5.9/scsi-queue. The series won't show up in my
+public
+> tree until shortly after -rc1 is released.
 > 
-> Sudhakar Panneerselvam (4):
->    target: factor out a new helper, target_cmd_init_cdb()
->    target: initialize LUN in transport_init_se_cmd().
->    target: fix NULL pointer dereference
->    target: rename target_setup_cmd_from_cdb() to target_cmd_parse_cdb()
-> 
->   drivers/target/iscsi/iscsi_target.c    | 29 ++++++++++--------
->   drivers/target/target_core_device.c    | 19 +++++-------
->   drivers/target/target_core_tmr.c       |  4 +--
->   drivers/target/target_core_transport.c | 55 ++++++++++++++++++++++++++--------
->   drivers/target/target_core_xcopy.c     |  9 ++++--
->   drivers/usb/gadget/function/f_tcm.c    |  6 ++--
->   include/target/target_core_fabric.h    |  9 +++---
->   7 files changed, 83 insertions(+), 48 deletions(-)
-> 
+Thanks Martin,
+Hi Rob and Kishon/Vinod
+Can you please pickup dt-bindings and PHY driver respectively?
 
-Reviewed-by: Mike Christie <michael.christie@oracle.com>
+> Thanks!
+> 
+> --
+> Martin K. Petersen	Oracle Linux Engineering
+
