@@ -2,107 +2,120 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C06E1F2D56
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jun 2020 02:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55C81F304E
+	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jun 2020 02:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730156AbgFIAcd (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 8 Jun 2020 20:32:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35912 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729992AbgFHXPJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Mon, 8 Jun 2020 19:15:09 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 424DA214F1;
-        Mon,  8 Jun 2020 23:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1591658109;
-        bh=gFlnimGPxJ+s6PY8h4JgH9me7qMFxTl/ShAZ/q4Lzfs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wdfWIR8hh9ISmHTc6Pwyz++ESxW9phyeE0q/SNfJf9SGm3wO02Ib769vkHrMgUzLc
-         f+h2sK0oC8St66xW3AiehgW4IXC8+1mWsyHWsJhenOuIY7Iw1KlBsOxphfVk/Z9SmB
-         DqgxaSBjsACVTyV2iHmNgaiT4oSA5e33U9ssy5bA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>,
-        "Bryant G . Ly" <bryangly@gmail.com>,
-        Bart van Assche <bvanassche@acm.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.6 148/606] scsi: target: Put lun_ref at end of tmr processing
-Date:   Mon,  8 Jun 2020 19:04:33 -0400
-Message-Id: <20200608231211.3363633-148-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200608231211.3363633-1-sashal@kernel.org>
-References: <20200608231211.3363633-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1728076AbgFIA6H (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 8 Jun 2020 20:58:07 -0400
+Received: from mailout2.samsung.com ([203.254.224.25]:27011 "EHLO
+        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731026AbgFIA6F (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 8 Jun 2020 20:58:05 -0400
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200609005803epoutp0226c150f86b2b88ab0d5be6340aa879d4~Wujt_gn5B0345903459epoutp02O
+        for <linux-scsi@vger.kernel.org>; Tue,  9 Jun 2020 00:58:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200609005803epoutp0226c150f86b2b88ab0d5be6340aa879d4~Wujt_gn5B0345903459epoutp02O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1591664283;
+        bh=53LlOopkFAZwy0SS08Z6bbyhmIN5aDKJdXm2yAPy/ss=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=HW2Z9q9s7KS8h3n/1PyyLMBs8vzZxffPhmW5KyPyejQLxQs7WKnQDlYEqOgZ290If
+         mtrsp6rq/rs+JmOTl9YH6YGcMUxsyJkLPCDKPvmn5ECK7i1XglpQjiWMqg8FW/IJj+
+         keicX7VO76/sS2wdkuZXbOOi52CI3/iHoCF0/mEY=
+Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p4.samsung.com
+        (KnoxPortal) with ESMTP id
+        20200609005802epcas1p4ee83ccf3c1fdee73406a94a473a013ea~WujtqKQBx1777417774epcas1p41;
+        Tue,  9 Jun 2020 00:58:02 +0000 (GMT)
+Mime-Version: 1.0
+Subject: RE: RE: [RFC PATCH 0/5] scsi: ufs: Add Host Performance Booster
+ Support
+Reply-To: daejun7.park@samsung.com
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <SN6PR04MB4640DC01229F2073C2BD3103FC870@SN6PR04MB4640.namprd04.prod.outlook.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <336371513.41591664282662.JavaMail.epsvc@epcpadp2>
+Date:   Tue, 09 Jun 2020 09:49:34 +0900
+X-CMS-MailID: 20200609004934epcms2p4709b3121e78abd3e2595e1a532227e5d
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20200605011604epcms2p8bec8ef6682583d7248dc7d9dc1bfc882
+References: <SN6PR04MB4640DC01229F2073C2BD3103FC870@SN6PR04MB4640.namprd04.prod.outlook.com>
+        <231786897.01591320001492.JavaMail.epsvc@epcpadp1>
+        <CGME20200605011604epcms2p8bec8ef6682583d7248dc7d9dc1bfc882@epcms2p4>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Hi,
 
-commit f2e6b75f6ee82308ef7b00f29e71e5f1c6b3d52a upstream.
+I appreciate your insightful comments.
+ =20
+> we propose  --> jedec spec XXX proposes =E2=80=A6
+> and here you also disclose what version of the spec are you supporting
+I will change to "JESD220-3 (HPB v1.0) proposes".
+This patch supports HPB version 1.0.
 
-Testing with Loopback I found that, after a Loopback LUN has executed a
-TMR, I can no longer unlink the LUN.  The rm command hangs in
-transport_clear_lun_ref() at wait_for_completion(&lun->lun_shutdown_comp)
-The reason is, that transport_lun_remove_cmd() is not called at the end of
-target_tmr_work().
+> Like Bart, I am not sure that this extra module is needed.
+> It only makes sense if indeed there are some common calls that can be sha=
+red by several features.
+> There are up to now 10 extended features defined, but none of them can sh=
+are a common api.
+> What other features can share this additional layer?  And how those ops c=
+an be reused?
+> If you have some future implementations in mind, you should add this api =
+once you'll add those.
+We added UFS feature layer with several callbacks to important parts of the=
+ UFS control flow.
+Other extended features can also be implemented using the proposed APIs.
+For example, in WB, "prep_fn" can be used to guarantee the lifetime of UFS =
+by updating the amount of write IO used as WB.
+And reset/reset_host/suspend/resume can be used to manage the kernel task f=
+or checking lifetime of UFS.
 
-It seems, that in other fabrics this call happens implicitly when the
-fabric drivers call transport_generic_free_cmd() during their
-->queue_tm_rsp().
+> This 2017 study, is being cited by everyone, but does not really describe=
+s it's test setup to its details.
+> It  does say however that they used a 16MB subregions over a range of 1GB=
+,
+> which can be covered by a 64 active regions, Even for a single subregion =
+per region.
+> Meaning no eviction should take place, thus HPB overhead is minimized.
+> Do we have a more recent public studies that supports those impressive fi=
+gures?
+There are no other public studies currently.
+However, when using HPB, there is an internal report that read latency is i=
+mproved in android=20
+user-case scenarios, as well as in the benchmarks.
 
-Unfortunately Loopback seems to not comply to the common way
-of calling transport_generic_free_cmd() from ->queue_*().
-Instead it calls transport_generic_free_cmd() from its
-  ->check_stop_free() only.
-
-But the ->check_stop_free() is called by
-transport_cmd_check_stop_to_fabric() after it has reset the se_cmd->se_lun
-pointer.  Therefore the following transport_generic_free_cmd() skips the
-transport_lun_remove_cmd().
-
-So this patch re-adds the transport_lun_remove_cmd() at the end of
-target_tmr_work(), which was removed during commit 2c9fa49e100f ("scsi:
-target/core: Make ABORT and LUN RESET handling synchronous").
-
-For fabrics using transport_generic_free_cmd() in the usual way the double
-call to transport_lun_remove_cmd() doesn't harm, as
-transport_lun_remove_cmd() checks for this situation and does not release
-lun_ref twice.
-
-Link: https://lore.kernel.org/r/20200513153443.3554-1-bstroesser@ts.fujitsu.com
-Fixes: 2c9fa49e100f ("scsi: target/core: Make ABORT and LUN RESET handling synchronous")
-Cc: stable@vger.kernel.org
-Tested-by: Bryant G. Ly <bryangly@gmail.com>
-Reviewed-by: Bart van Assche <bvanassche@acm.org>
-Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/target/target_core_transport.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/target/target_core_transport.c b/drivers/target/target_core_transport.c
-index 0ae9e60fc4d5..61486e5abee4 100644
---- a/drivers/target/target_core_transport.c
-+++ b/drivers/target/target_core_transport.c
-@@ -3349,6 +3349,7 @@ static void target_tmr_work(struct work_struct *work)
- 
- 	cmd->se_tfo->queue_tm_rsp(cmd);
- 
-+	transport_lun_remove_cmd(cmd);
- 	transport_cmd_check_stop_to_fabric(cmd);
- 	return;
- 
--- 
-2.25.1
+Thanks,
+Daejun
 
