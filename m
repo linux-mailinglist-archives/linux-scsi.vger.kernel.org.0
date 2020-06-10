@@ -2,57 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 194C31F490A
-	for <lists+linux-scsi@lfdr.de>; Tue,  9 Jun 2020 23:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03BB61F4B1E
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2020 04:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728204AbgFIVod (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 9 Jun 2020 17:44:33 -0400
-Received: from rrcs-72-43-215-122.nys.biz.rr.com ([72.43.215.122]:43258 "EHLO
-        localhost.localdomain" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728061AbgFIVoc (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Jun 2020 17:44:32 -0400
-Received: from Shop01 (localhost [127.0.0.1])
-        by localhost.localdomain (Postfix) with SMTP id 0179E247DE8;
-        Tue,  9 Jun 2020 05:10:53 -0400 (EDT)
-Received: from [170.1.161.117] by Shop01; Tue, 09 Jun 2020 05:04:59 -0500
-Message-ID: <8--hg-$s$rzr2zy4ey--x@4ftz.t.u2>
-From:   "Mrs. Janet Olsen " <mrs.janetolse@gmail.com>
-Reply-To: "Mrs. Janet Olsen " <mrs.janetolse@gmail.com>
-To:     casteyde.christian@free.fr
-Subject: Your response 
-Date:   Tue, 09 Jun 20 05:04:59 GMT
-X-Mailer: Microsoft Outlook Express 5.50.4522.1200
+        id S1726084AbgFJCDO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 9 Jun 2020 22:03:14 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:51404 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725798AbgFJCDN (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Jun 2020 22:03:13 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05A22rRC028473;
+        Wed, 10 Jun 2020 02:02:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=corp-2020-01-29;
+ bh=OyjqTL3RFU3qhRhjl1q+nR+l4wbwyQdM/xh+BDHyC/Q=;
+ b=A890azgFkB3wqpRI89CnZldQ8yTmMpDXaWngJiW8JTxbsqhLe1M8vVoG7Ngl8bxMTt/+
+ 0pD/DFFXcmw1uMnwDqc91EaTouHiO54UexWUGwF3B302GLRFcEG5l0vOUBVc0p9UMDVk
+ hC0V8Zc5nFToM02wRMEqFEOwQtIlwrkGgrHNL/MGAlI4XwDeHfUk5msexZj6equoRBqX
+ BB3aAEfIKXn70IsL01jJFDJZTACI6GZfUpQ+0VIh9ZzqIV77+80Aaiky1uXZaGW7qqdJ
+ VaO7JFUrxja9Uxaa3vnK4OcXKZ+C8mAqaxf0V4zwAORLtTL7v30bpOdRyKVV0i4Scycq Xw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 31jepnsq8u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 Jun 2020 02:02:53 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05A1wPNd020921;
+        Wed, 10 Jun 2020 02:02:52 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 31gmwsbn7t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Jun 2020 02:02:52 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05A22pcH004447;
+        Wed, 10 Jun 2020 02:02:51 GMT
+Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 09 Jun 2020 19:02:50 -0700
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     "Matthew R. Ochs" <mrochs@linux.vnet.ibm.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        "Manoj N. Kumar" <manoj@linux.ibm.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        kernel-janitors@vger.kernel.org,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, Uma Krishnan <ukrishn@linux.ibm.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH] cxlflash: remove an unnecessary NULL check
+Date:   Tue,  9 Jun 2020 22:02:44 -0400
+Message-Id: <159175452258.16072.8552277193377320754.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20200605110258.GD978434@mwanda>
+References: <20200605110258.GD978434@mwanda>
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="C.9.8A.110."
-X-Priority: 5
-X-MSMail-Priority: Low
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9647 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=941 bulkscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006100013
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9647 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 bulkscore=0 clxscore=1011 phishscore=0 impostorscore=0
+ malwarescore=0 mlxscore=0 cotscore=-2147483648 adultscore=0 spamscore=0
+ mlxlogscore=980 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006100013
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On Fri, 5 Jun 2020 14:02:58 +0300, Dan Carpenter wrote:
 
---C.9.8A.110.
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+> The "cmd" pointer was already dereferenced a couple lines earlier so
+> this NULL check is too late.  Fortunately, the pointer can never be NULL
+> and the check can be removed.
 
-Hello, 
+Applied to 5.8/scsi-queue, thanks!
 
-Greetings from Mrs. Janet Olsen, from Norway.
- 
-Please i will like to establish some investments over there, such as Orpha=
-nage home and Hospital for Cancer patients but i don't have anyone, Who ca=
-n handle the contracts for me over there.
+[1/1] scsi: cxlflash: Remove an unnecessary NULL check
+      https://git.kernel.org/mkp/scsi/c/89dd9ce784fb
 
-So, I am contacting to ask you and to know if you will be able of handling=
- the contracts for me over there and you will be rewarded bountifully.
-
-Thanks and remain good, till i hear from you soon, for the full details.
-
-Regards, 
-
-Mrs. Janet Olsen.=20
-
---C.9.8A.110.--
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
