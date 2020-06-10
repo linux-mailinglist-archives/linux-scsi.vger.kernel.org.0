@@ -2,37 +2,41 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E6D1F4D00
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2020 07:36:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358BE1F4CFD
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2020 07:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726123AbgFJFgA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        id S1726051AbgFJFgA (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
         Wed, 10 Jun 2020 01:36:00 -0400
-Received: from ciao.gmane.io ([159.69.161.202]:57980 "EHLO ciao.gmane.io"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725999AbgFJFf7 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 10 Jun 2020 01:35:59 -0400
-Received: from list by ciao.gmane.io with local (Exim 4.92)
-        (envelope-from <lnx-linux-scsi@m.gmane-mx.org>)
-        id 1jitP3-000Xg9-H8
-        for linux-scsi@vger.kernel.org; Wed, 10 Jun 2020 07:35:57 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To:     linux-scsi@vger.kernel.org
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Received: from smtp10.smtpout.orange.fr ([80.12.242.132]:27626 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725908AbgFJFf7 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Jun 2020 01:35:59 -0400
+Received: from [192.168.1.41] ([92.140.207.208])
+        by mwinf5d88 with ME
+        id pHbt220024WJoZY03HbtKV; Wed, 10 Jun 2020 07:35:57 +0200
+X-ME-Helo: [192.168.1.41]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 10 Jun 2020 07:35:57 +0200
+X-ME-IP: 92.140.207.208
 Subject: Re: [PATCH] scsi: powertec: Fix different dev_id between
  'request_irq()' and 'free_irq()'
-Date:   Wed, 10 Jun 2020 07:35:49 +0200
-Message-ID: <08f63617-03df-71cf-70c4-00f08a9f51d8@wanadoo.fr>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        jejb@linux.ibm.com, linux@armlinux.org.uk
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org
+Newsgroups: gmane.linux.scsi,gmane.linux.kernel,gmane.linux.kernel.janitors,gmane.linux.ports.arm.kernel
 References: <20200530072933.576851-1-christophe.jaillet@wanadoo.fr>
  <159175686974.7062.8526082970785072740.b4-ty@oracle.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <08f63617-03df-71cf-70c4-00f08a9f51d8@wanadoo.fr>
+Date:   Wed, 10 Jun 2020 07:35:49 +0200
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
+MIME-Version: 1.0
 In-Reply-To: <159175686974.7062.8526082970785072740.b4-ty@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
@@ -57,5 +61,4 @@ I'll try to send the correct fix by this week-end.
 CJ
 
 [1]: https://marc.info/?l=linux-scsi&m=159083184215730&w=4
-
 
