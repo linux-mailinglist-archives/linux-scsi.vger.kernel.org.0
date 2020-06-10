@@ -2,90 +2,107 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A781F4BFA
-	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2020 06:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2771F4BCF
+	for <lists+linux-scsi@lfdr.de>; Wed, 10 Jun 2020 05:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726108AbgFJEAH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 10 Jun 2020 00:00:07 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:47623 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725268AbgFJEAF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 10 Jun 2020 00:00:05 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200610040003epoutp02d4d137f0827883e8c490de7189baabbb~XEr7AX6H61741017410epoutp02b
-        for <linux-scsi@vger.kernel.org>; Wed, 10 Jun 2020 04:00:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200610040003epoutp02d4d137f0827883e8c490de7189baabbb~XEr7AX6H61741017410epoutp02b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1591761603;
-        bh=S1lNTGTwft1rHKlGBBhm/z8ha0dAATf801dKovrWqlQ=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=tkOUYuvCpPnAyCNJ4Kaq8QLciCkJNgQcvfhAmtVypkqTIwpNIlIjHE/m4iwwWVWu6
-         8HwbNF72pzr/fYEJDvjeceoXIBrp4tv0Hm/fQDo6NJFnDFEeQLwO8NM65TMa5gqvoR
-         OPVEBK2jl2Zd4+n1MD3CSV4bDFMdwWK2NconAacY=
-Received: from epcpadp1 (unknown [182.195.40.11]) by epcas1p4.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200610040002epcas1p46125676dd84ab042413fbbcb32eb6b7a~XEr54rpCe0290302903epcas1p4V;
-        Wed, 10 Jun 2020 04:00:02 +0000 (GMT)
-Mime-Version: 1.0
-Subject: RE: [RFC PATCH 4/5] scsi: ufs: L2P map management for HPB read
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Avri Altman <Avri.Altman@wdc.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <SN6PR04MB46407A85C194D2D8F03A01B3FC820@SN6PR04MB4640.namprd04.prod.outlook.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <231786897.01591761602548.JavaMail.epsvc@epcpadp1>
-Date:   Wed, 10 Jun 2020 11:49:14 +0900
-X-CMS-MailID: 20200610024914epcms2p570190ab8b6cc3188e84c728f01391cba
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200605011604epcms2p8bec8ef6682583d7248dc7d9dc1bfc882
-References: <SN6PR04MB46407A85C194D2D8F03A01B3FC820@SN6PR04MB4640.namprd04.prod.outlook.com>
-        <SN6PR04MB46409E16CCF95A0AA9FFE944FC870@SN6PR04MB4640.namprd04.prod.outlook.com>
-        <231786897.01591322101492.JavaMail.epsvc@epcpadp1>
-        <336371513.41591320902369.JavaMail.epsvc@epcpadp1>
-        <963815509.21591320301642.JavaMail.epsvc@epcpadp1>
-        <231786897.01591320001492.JavaMail.epsvc@epcpadp1>
-        <963815509.21591323002276.JavaMail.epsvc@epcpadp1>
-        <1776409896.101591664283293.JavaMail.epsvc@epcpadp2>
-        <CGME20200605011604epcms2p8bec8ef6682583d7248dc7d9dc1bfc882@epcms2p5>
+        id S1726144AbgFJDgj (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 9 Jun 2020 23:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47388 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725988AbgFJDgh (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 9 Jun 2020 23:36:37 -0400
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7927DC05BD1E;
+        Tue,  9 Jun 2020 20:36:36 -0700 (PDT)
+Received: by mail-vk1-xa44.google.com with SMTP id s192so233476vkh.3;
+        Tue, 09 Jun 2020 20:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rtx/ri9gwjpUSoBaV9ZRHZGtBga6dLCRzzoB3qYcsG8=;
+        b=YFfzJMw6CEHy6iYS376b/KrMjw0qQOTW+nCJ4XkQpANdnQc9Ym8WsRlhboJMu9kVMV
+         pe5Jt9hA5VvDDGhTfwtkIB6ueUbW1918gu26533cSKHOmpaxEw/QgIyCiDVwqRQURDGn
+         oWg+OEAlrUYVVBjuK2lBEzN68QwZzGjLbZMyx7Vd7hPewbqk/HYa+2v+hk3nNBQIfmSm
+         PqYVS5xGe2GotvVwmtLo/0juJbNbq71gQ/M+bK8hs28pZA0qOYnnuPFFC6h0qJW8XqMq
+         pRNrlBY4HxtQOvjaZSYtJUUYTVwQHf2HOkrmm9wEwVnrKberVUPobmKkjcybi+a7q6hd
+         uvJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rtx/ri9gwjpUSoBaV9ZRHZGtBga6dLCRzzoB3qYcsG8=;
+        b=NZUCe1SteOWJgGKjkWwN5XXr5QV0Xkl/BjTp1Y1A8tS7zYqCvbccQ3AGbLOeC7qaha
+         PLK+cfS3c5ZRF+mTgVN1gbdsWeADOswha6gKdydhtAUaqDKzb3vlt/e9/+tN82+jHZUt
+         VWQK89bn8EcSvYBLf6xDJz37FbMnQ9gRAPm1DGnaU2piXptfXNeEmfYi3T8eEq6Reiv+
+         A8+Ta0aYU4P70JVkLRpwOOXZEWm7G7cLycaRSDJO2o6QMbIMmwNR1P9ZLyjsGJ2rXo2O
+         dZ1vsxdFsge9J4h5t0uRTgCRgNvL0aqpddZEvI51QDQfjgYP8q4UD2r+YYzd8hffrIiy
+         bnMA==
+X-Gm-Message-State: AOAM531SVqYLTlAXAF2NJ691iMyUQmTnswTCvs2x3OXE2Im8dZhMSGOX
+        Mi1fECJMbXkG/HoydNhfITIcLMWQTGMmHkHXihg=
+X-Google-Smtp-Source: ABdhPJxGHm16dEC5JJMhDXsdFVIDQUW2MIT15A11XgThFQis58lrynuF9GiRAHrOwsEGSqo0JTdqb83g1T7v1yBEhdo=
+X-Received: by 2002:ac5:c94b:: with SMTP id s11mr932901vkm.8.1591760195582;
+ Tue, 09 Jun 2020 20:36:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200604063559.18080-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20200604063559.18080-1-manivannan.sadhasivam@linaro.org>
+From:   Alim Akhtar <alim.akhtar@gmail.com>
+Date:   Wed, 10 Jun 2020 09:05:59 +0530
+Message-ID: <CAGOxZ505Zq=VDhG-S2h5yVRSqpUQmzYi=iYGTGgHAqZm0uOqRQ@mail.gmail.com>
+Subject: Re: [PATCH] scsi: ufs: Bump supported UFS HCI version to 3.0
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, amit.kucheria@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> The spec does not define what the host should do in this case,
-> e.g. when the device informs it that the entire db is no longer valid.
-> What are you planning to do?
-In Jedec spec, there is no decription about what the driver should do.
-So, I will just inform to user about the "HPB reset" happening with kernel message.
+HI Manivannan
 
-Thanks,
-Daejun
+On Thu, Jun 4, 2020 at 12:08 PM Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
+>
+> UFS HCI 3.0 versions are being used in Qcom SM8250 based boards. Hence,
+> adding it to the list of supported versions.
+>
+> I don't have the exact information of the additional registers supported
+> in version 3.0. Hence the change just adds 0x300 to the list of supported
+> versions to remove the below warning:
+>
+> "ufshcd-qcom 1d84000.ufshc: invalid UFS version 0x300"
+>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/scsi/ufs/ufshci.h | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/scsi/ufs/ufshci.h b/drivers/scsi/ufs/ufshci.h
+> index c2961d37cc1c..f2ee81669b00 100644
+> --- a/drivers/scsi/ufs/ufshci.h
+> +++ b/drivers/scsi/ufs/ufshci.h
+> @@ -104,6 +104,7 @@ enum {
+>         UFSHCI_VERSION_11 = 0x00010100, /* 1.1 */
+>         UFSHCI_VERSION_20 = 0x00000200, /* 2.0 */
+>         UFSHCI_VERSION_21 = 0x00000210, /* 2.1 */
+> +       UFSHCI_VERSION_30 = 0x00000300, /* 3.0 */
+
+See the current discussion on this https://lkml.org/lkml/2020/4/27/192
+
+>  };
+>
+>  /*
+> --
+> 2.17.1
+>
+
+
+-- 
+Regards,
+Alim
