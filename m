@@ -2,59 +2,88 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ED81F64AB
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2020 11:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7FE21F64D7
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2020 11:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727031AbgFKJYZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jun 2020 05:24:25 -0400
-Received: from 116293.cloudwaysapps.com ([46.101.3.131]:38788 "EHLO
-        116293.cloudwaysapps.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726817AbgFKJYX (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 11 Jun 2020 05:24:23 -0400
-X-Greylist: delayed 106357 seconds by postgrey-1.27 at vger.kernel.org; Thu, 11 Jun 2020 05:24:23 EDT
-Received: from Shop01 (116293.cloudwaysapps.com [127.0.0.1])
-        by 116293.cloudwaysapps.com (Postfix) with SMTP id 60C80629D0;
-        Thu,  4 Jun 2020 12:41:50 +0000 (UTC)
-Received: from (HELO j0pxbg7) [104.170.227.196] by Shop01 id LVf8R5GMp03n; Thu, 04 Jun 2020 17:31:57 +0400
-Message-ID: <4$c4p8b42r$ybg$0s61$r$pz7e47@glh1.02.b.v19>
-From:   "Mrs. Janet Olsen " <mrs.janetolse@gmail.com>
-Reply-To: "Mrs. Janet Olsen " <mrs.janetolse@gmail.com>
-To:     southsidecheerderekbray@gmail.com
-Subject: Your response 
-Date:   Thu, 04 Jun 20 17:31:57 GMT
-X-Mailer: MIME-tools 5.503 (Entity 5.501)
+        id S1727021AbgFKJgZ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jun 2020 05:36:25 -0400
+Received: from lhrrgout.huawei.com ([185.176.76.210]:2299 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726907AbgFKJgZ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 11 Jun 2020 05:36:25 -0400
+Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.107])
+        by Forcepoint Email with ESMTP id 6033969D0A898C07E451;
+        Thu, 11 Jun 2020 10:36:24 +0100 (IST)
+Received: from [127.0.0.1] (10.210.169.30) by lhreml724-chm.china.huawei.com
+ (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Thu, 11 Jun
+ 2020 10:36:22 +0100
+Subject: Re: [PATCH RFC v7 00/12] blk-mq/scsi: Provide hostwide shared tags
+ for SCSI HBAs
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <don.brace@microsemi.com>,
+        <kashyap.desai@broadcom.com>, <sumit.saxena@broadcom.com>,
+        <bvanassche@acm.org>, <hare@suse.com>, <hch@lst.de>,
+        <shivasharan.srikanteshwara@broadcom.com>,
+        <linux-block@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <esc.storagedev@microsemi.com>, <chenxiang66@hisilicon.com>,
+        <megaraidlinux.pdl@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <20200611030708.GB453671@T590>
+From:   John Garry <john.garry@huawei.com>
+Message-ID: <c033f445-97fd-6dc9-c270-9890681b39d9@huawei.com>
+Date:   Thu, 11 Jun 2020 10:35:05 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: multipart/alternative;
-        boundary="CFA__89C7AB7BB"
-X-Priority: 5
-X-MSMail-Priority: Low
+In-Reply-To: <20200611030708.GB453671@T590>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.210.169.30]
+X-ClientProxiedBy: lhreml713-chm.china.huawei.com (10.201.108.64) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+On 11/06/2020 04:07, Ming Lei wrote:
+>> Using 12x SAS SSDs on hisi_sas v3 hw. mq-deadline results are included,
+>> but it is not always an appropriate scheduler to use.
+>>
+>> Tag depth 		4000 (default)			260**
+>>
+>> Baseline:
+>> none sched:		2290K IOPS			894K
+>> mq-deadline sched:	2341K IOPS			2313K
+>>
+>> Final, host_tagset=0 in LLDD*
+>> none sched:		2289K IOPS			703K
+>> mq-deadline sched:	2337K IOPS			2291K
+>>
+>> Final:
+>> none sched:		2281K IOPS			1101K
+>> mq-deadline sched:	2322K IOPS			1278K
+>>
+>> * this is relevant as this is the performance in supporting but not
+>>    enabling the feature
+>> ** depth=260 is relevant as some point where we are regularly waiting for
+>>     tags to be available. Figures were are a bit unstable here for testing.
+>>
+>> A copy of the patches can be found here:
+>> https://github.com/hisilicon/kernel-dev/commits/private-topic-blk-mq-shared-tags-rfc-v7
+>>
+>> And to progress this series, we the the following to go in first, when ready:
+>> https://lore.kernel.org/linux-scsi/20200430131904.5847-1-hare@suse.de/
+> I'd suggest to add options to enable shared tags for null_blk & scsi_debug in V8, so
+> that it is easier to verify the changes without real hardware.
+> 
 
---CFA__89C7AB7BB
-Content-Type: text/plain;
-Content-Transfer-Encoding: quoted-printable
+ok, fine, I can look at including that. To stop the series getting too 
+large, I might spin off the early patches, which are not strictly related.
 
-Hello, 
-
-Greetings from Mrs. Janet Olsen, from Norway.
- 
-Please i will like to establish some investments over there, such as Orpha=
-nage home and Hospital for Cancer patients but i don't have anyone, Who ca=
-n handle the contracts for me over there.
-
-So, I am contacting to ask you and to know if you will be able of handling=
- the contracts for me over there and you will be rewarded bountifully.
-
-Thanks and remain good, till i hear from you soon, for the full details.
-
-Regards, 
-
-Mrs. Janet Olsen.=20
-
---CFA__89C7AB7BB--
-
+Thanks,
+John
