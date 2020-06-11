@@ -2,83 +2,122 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D4481F64FA
-	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2020 11:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4A31F6579
+	for <lists+linux-scsi@lfdr.de>; Thu, 11 Jun 2020 12:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbgFKJw5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jun 2020 05:52:57 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:39491 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726560AbgFKJw4 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jun 2020 05:52:56 -0400
-X-UUID: d125a9e89e874c09a2af91ffd9c34a03-20200611
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=CJcfxCu5zDRpr2vZfB1Tc+UVD9m/FFKMEZgs43bapM4=;
-        b=RaBBlggYi7uLe+U5eUAnTHjBINaRfqjWZLew/mB/kJXw6o7PQHLXsYxAbaicIOMyIy4jfjnSQgvkWeOdJ9eUXDKigTo/w+RSRnydNdRQD6tvfdax+QdbOmHBavbc/gLk5+rIkiBDJQbTdsEj0frBFSqNU+rifp9wNZqZcz88U/8=;
-X-UUID: d125a9e89e874c09a2af91ffd9c34a03-20200611
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 366576131; Thu, 11 Jun 2020 17:52:54 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 11 Jun 2020 17:52:50 +0800
-Received: from [172.21.77.33] (172.21.77.33) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 11 Jun 2020 17:52:51 +0800
-Message-ID: <1591869173.25636.39.camel@mtkswgap22>
-Subject: RE: [PATCH v4] scsi: ufs: Fix imprecise load calculation in devfreq
- window
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     Avri Altman <Avri.Altman@wdc.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "alim.akhtar@samsung.com" <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kuohong.wang@mediatek.com" <kuohong.wang@mediatek.com>,
-        "peter.wang@mediatek.com" <peter.wang@mediatek.com>,
-        "chun-hung.wu@mediatek.com" <chun-hung.wu@mediatek.com>,
-        "andy.teng@mediatek.com" <andy.teng@mediatek.com>,
-        "chaotian.jing@mediatek.com" <chaotian.jing@mediatek.com>,
-        "cc.chou@mediatek.com" <cc.chou@mediatek.com>
-Date:   Thu, 11 Jun 2020 17:52:53 +0800
-In-Reply-To: <SN6PR04MB46405CE4B375BA3134D64A99FC800@SN6PR04MB4640.namprd04.prod.outlook.com>
-References: <20200611052109.22700-1-stanley.chu@mediatek.com>
-         <SN6PR04MB46405CE4B375BA3134D64A99FC800@SN6PR04MB4640.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
-MIME-Version: 1.0
-X-TM-SNTS-SMTP: 7CBC375DE8EB4263FB517B24417907279B35FCD9CE7FF744E8B9862B97D052252000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+        id S1727036AbgFKKMG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 11 Jun 2020 06:12:06 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:60602 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726708AbgFKKMG (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jun 2020 06:12:06 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05BA6r4m013263;
+        Thu, 11 Jun 2020 10:12:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2020-01-29;
+ bh=2QDDI0kD5A5seujqkA0+fH9fCS9E1vDtyTv8AY1OlxM=;
+ b=jiIaxZjQOgR3WBG/J3MJXa+JJiHeHi6CS23vv3RTlANm1Anv824jmkgU2bMQ98y6KNlM
+ vx1N3/zAA44DU3twDQGGxqB9u7Mgq4SqNyRCGfvUO5X6y1Zhqwd2bmBQ7NHzkJRK8CpI
+ YwhBRleFNPk0SgA5XnviJbXG856i/TNGdSuAGa45zEr6m3mRg67E3XVlRIMfuZn8AoNy
+ w5Nyu7wCyk67IXC6uzY6N6vYxxYlKSSlab9qcRUY2hGubuQ6sX6d297XVrCEXAPPRKtU
+ 7JrRgVu4k0YCyb1v3YbSmjRUV+1Hp46BBBoRRReM0kVIkOTPB96TbFhqRNlNvRfo45kg LQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 31jepp0vhy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 11 Jun 2020 10:12:00 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05BA8VL7136609;
+        Thu, 11 Jun 2020 10:10:00 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 31gmwuyx23-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 Jun 2020 10:10:00 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05BA9xwe018737;
+        Thu, 11 Jun 2020 10:09:59 GMT
+Received: from localhost.localdomain (/183.246.144.78)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 11 Jun 2020 03:09:55 -0700
+From:   Bob Liu <bob.liu@oracle.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     tj@kernel.org, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
+        lduncan@suse.com, michael.christie@oracle.com,
+        Bob Liu <bob.liu@oracle.com>
+Subject: [PATCH 1/2] workqueue: don't always set __WQ_ORDERED implicitly
+Date:   Thu, 11 Jun 2020 18:07:16 +0800
+Message-Id: <20200611100717.27506-1-bob.liu@oracle.com>
+X-Mailer: git-send-email 2.9.5
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9648 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 spamscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 bulkscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006110078
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9648 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 suspectscore=1
+ priorityscore=1501 bulkscore=0 clxscore=1015 phishscore=0 impostorscore=0
+ malwarescore=0 mlxscore=0 cotscore=-2147483648 adultscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006110078
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGkgQXZyaSwNCg0KVGhhbmtzIGZvciB0aGUgcmV2aWV3Lg0KDQpPbiBUaHUsIDIwMjAtMDYtMTEg
-YXQgMDg6MDMgKzAwMDAsIEF2cmkgQWx0bWFuIHdyb3RlOg0KPiA+IA0KPiA+IEZpeGVzOiBhM2Nk
-NWVjNTVmNmMgKCJzY3NpOiB1ZnM6IGFkZCBsb2FkIGJhc2VkIHNjYWxpbmcgb2YgVUZTIGdlYXIi
-KQ0KPiA+IFNpZ25lZC1vZmYtYnk6IFN0YW5sZXkgQ2h1IDxzdGFubGV5LmNodUBtZWRpYXRlay5j
-b20+DQo+IFJldmlld2VkLWJ5OiBBdnJpIEFsdG1hbiA8YXZyaS5hbHRtYW5Ad2RjLmNvbT4NCj4g
-DQo+IEp1c3QgYSBzbWFsbCBuaXQuDQo+IA0KPiA+IC0gICAgICAgc3RhdC0+dG90YWxfdGltZSA9
-IGppZmZpZXNfdG9fdXNlY3MoKGxvbmcpamlmZmllcyAtDQo+ID4gLSAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAobG9uZylzY2FsaW5nLT53aW5kb3dfc3RhcnRfdCk7DQo+ID4gKyAgICAg
-ICBzdGF0LT50b3RhbF90aW1lID0ga3RpbWVfdG9fdXMoY3Vycl90KSAtIHNjYWxpbmctPndpbmRv
-d19zdGFydF90Ow0KPiBrdGltZV9zdWIgPw0KDQpzY2FsaW5nLT53aW5kb3dfc3RhcnRfdCBpcyBh
-bHJlYWR5IGluICJ1cyIgdGh1cyBrdGltZV9zdWIoKSBpcyBub3QNCnN1aXRhYmxlIGhlcmUuDQoN
-CkFub3RoZXIgd2F5IGlzIGNoYW5naW5nIHNjYWxpbmctPndpbmRvd19zdGFydF90IGFzIHR5cGUg
-Imt0aW1lX3QiLiBUaGlzDQppcyB3b3J0aCB0byBkbyBiZWNhdXNlIG9mIGEgbGl0dGxlIHBlcmZv
-cm1hbmNlIGdhaW4uDQoNCkkgd2lsbCBjaGFuZ2UgaXQgaW4gbmV4dCB2ZXJzaW9uLg0KDQpUaGFu
-a3MsDQpTdGFubGV5IENodQ0KDQo=
+Current code always set 'Unbound && max_active == 1' workqueues to ordered
+implicitly, while this may be not an expected behaviour for some use cases.
+
+E.g some scsi and iscsi workqueues(unbound && max_active = 1) want to be bind
+to different cpu so as to get better isolation, but their cpumask can't be
+changed because WQ_ORDERED is set implicitly.
+
+This patch adds a flag __WQ_ORDERED_DISABLE and also
+create_singlethread_workqueue_noorder() to offer an new option.
+
+Signed-off-by: Bob Liu <bob.liu@oracle.com>
+---
+ include/linux/workqueue.h | 4 ++++
+ kernel/workqueue.c        | 4 +++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index e48554e..4c86913 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -344,6 +344,7 @@ enum {
+ 	__WQ_ORDERED		= 1 << 17, /* internal: workqueue is ordered */
+ 	__WQ_LEGACY		= 1 << 18, /* internal: create*_workqueue() */
+ 	__WQ_ORDERED_EXPLICIT	= 1 << 19, /* internal: alloc_ordered_workqueue() */
++	__WQ_ORDERED_DISABLE	= 1 << 20, /* internal: don't set __WQ_ORDERED implicitly */
+ 
+ 	WQ_MAX_ACTIVE		= 512,	  /* I like 512, better ideas? */
+ 	WQ_MAX_UNBOUND_PER_CPU	= 4,	  /* 4 * #cpus for unbound wq */
+@@ -433,6 +434,9 @@ struct workqueue_struct *alloc_workqueue(const char *fmt,
+ #define create_singlethread_workqueue(name)				\
+ 	alloc_ordered_workqueue("%s", __WQ_LEGACY | WQ_MEM_RECLAIM, name)
+ 
++#define create_singlethread_workqueue_noorder(name)			\
++	alloc_workqueue("%s", WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | \
++			WQ_UNBOUND | __WQ_ORDERED_DISABLE, 1, (name))
+ extern void destroy_workqueue(struct workqueue_struct *wq);
+ 
+ struct workqueue_attrs *alloc_workqueue_attrs(void);
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 4e01c44..2167013 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -4237,7 +4237,9 @@ struct workqueue_struct *alloc_workqueue(const char *fmt,
+ 	 * on NUMA.
+ 	 */
+ 	if ((flags & WQ_UNBOUND) && max_active == 1)
+-		flags |= __WQ_ORDERED;
++		/* the caller may don't want __WQ_ORDERED to be set implicitly. */
++		if (!(flags & __WQ_ORDERED_DISABLE))
++			flags |= __WQ_ORDERED;
+ 
+ 	/* see the comment above the definition of WQ_POWER_EFFICIENT */
+ 	if ((flags & WQ_POWER_EFFICIENT) && wq_power_efficient)
+-- 
+2.9.5
 
