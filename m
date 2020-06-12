@@ -2,123 +2,166 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9EC1F7A5F
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2020 17:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E91F1F7B90
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2020 18:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbgFLPKO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 12 Jun 2020 11:10:14 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:29623 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726366AbgFLPKN (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jun 2020 11:10:13 -0400
-X-UUID: 969f7aa8454b4ddabc62278aaea843a9-20200612
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=+0KA0dOhmw5UB0xe1wGnzSeL3/LIui1ay1wP2Ey5MGg=;
-        b=eaID3cTvZCfa59n34eaUV9pwbbuVl/oZfmdU8lesH8Q0YYxMvpcppJJSc/FeyrVNCZXNyBVJKYgC2vxLXgG3y5P+17R08PXpdQ7u5OZM5bwCIp95xqptRHSXskb1WSy8cSaRsnqSRebpZieZIzZDvl7FX3nWHW/8tkEGa0MvruA=;
-X-UUID: 969f7aa8454b4ddabc62278aaea843a9-20200612
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1554280324; Fri, 12 Jun 2020 23:10:08 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 12 Jun 2020 23:10:02 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 12 Jun 2020 23:10:01 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>, <asutoshd@codeaurora.org>
-CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
+        id S1726349AbgFLQW4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jun 2020 12:22:56 -0400
+Received: from mailout3.samsung.com ([203.254.224.33]:10390 "EHLO
+        mailout3.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726089AbgFLQWz (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jun 2020 12:22:55 -0400
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20200612162253epoutp03d879e34f4ae4174595c4bdcae28aee7a~X2HEHo0Qw2102521025epoutp031
+        for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2020 16:22:53 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20200612162253epoutp03d879e34f4ae4174595c4bdcae28aee7a~X2HEHo0Qw2102521025epoutp031
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1591978973;
+        bh=odVw2pPAyWLK5Z88W0uV7CR8eVQ6niomkBGBqsSTZqA=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=GtDn19y6HmsaNaNrT/PC+2WFlvr6GtJ5LdncDqtRLqicTWEZVBPLFFCtdPAmzId9D
+         +LpUTBjz9qukVI+USpEvBsGnglzVlYPmLyax066zqC+8MpNjyw3T4xFGTqg+EbqNAO
+         4DNILR68AQgBWguFGMmP8ZqhqOQRiq3h2dUTZz7s=
+Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
+        epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+        20200612162252epcas5p4a0b01a59989e95ff9002b927bdbecb7e~X2HDOVABo3159931599epcas5p4q;
+        Fri, 12 Jun 2020 16:22:52 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        3E.93.09475.CDBA3EE5; Sat, 13 Jun 2020 01:22:52 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200612162251epcas5p17799db495a306a323dc0e1740c8397d0~X2HCYsCZi1956119561epcas5p17;
+        Fri, 12 Jun 2020 16:22:51 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20200612162251epsmtrp1c4f39db4ff9e0fc924aa272f813a0dac~X2HCXzRRN1965319653epsmtrp1g;
+        Fri, 12 Jun 2020 16:22:51 +0000 (GMT)
+X-AuditID: b6c32a4b-389ff70000002503-84-5ee3abdc2a6a
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        76.E4.08382.BDBA3EE5; Sat, 13 Jun 2020 01:22:51 +0900 (KST)
+Received: from alimakhtar02 (unknown [107.108.234.165]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20200612162246epsmtip1cef97bb576d7a094db111ff37787dfcb~X2G_Pyzcr3056430564epsmtip1G;
+        Fri, 12 Jun 2020 16:22:46 +0000 (GMT)
+From:   "Alim Akhtar" <alim.akhtar@samsung.com>
+To:     "'Stanley Chu'" <stanley.chu@mediatek.com>,
+        <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <jejb@linux.ibm.com>,
+        <asutoshd@codeaurora.org>
+Cc:     <beanhuo@micron.com>, <cang@codeaurora.org>,
         <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
         <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <andy.teng@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <cc.chou@mediatek.com>, Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v1 2/2] scsi: ufs: Add trace event for UIC commands
-Date:   Fri, 12 Jun 2020 23:10:00 +0800
-Message-ID: <20200612151000.27639-3-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200612151000.27639-1-stanley.chu@mediatek.com>
-References: <20200612151000.27639-1-stanley.chu@mediatek.com>
+        <cc.chou@mediatek.com>
+In-Reply-To: <20200612151000.27639-2-stanley.chu@mediatek.com>
+Subject: RE: [PATCH v1 1/2] scsi: ufs: Remove unused field in struct
+ uic_command
+Date:   Fri, 12 Jun 2020 21:52:45 +0530
+Message-ID: <002801d640d5$b7ba7430$272f5c90$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 59D9D01AB4EC54D1F10C739C554AC979AC81CEAF602D64FA508FA0139328F5D72000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQDXcguafoUh6qhsLNKe8uQEpk41JwIvpsOBAO+mpQSqucyfkA==
+Content-Language: en-in
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPKsWRmVeSWpSXmKPExsWy7bCmhu6d1Y/jDHr281icnneV2WJv2wl2
+        i5c/r7JZHHzYyWIx7cNPZotP65exWvw//5vd4tqt+WwWq97sYLNYdGMbk0Xr/1fMFpseX2O1
+        uLxrDpvF5eaLjBbd14Gyy4//Y7JoajG22PrpN6vF0q03GR2EPS5f8fa43NfL5LFz1l12jwmL
+        DjB6bF5S79Fycj+Lx/f1HWweH5/eYvH4vEnOo/1AN1MAVxSXTUpqTmZZapG+XQJXxvF30QUb
+        eCsWt29ga2Cczt3FyMkhIWAi8frCb8YuRi4OIYHdjBIrv/WwQDifGCU2bN4D5XxjlHj3+TU7
+        TMuT5ROgWvYySvz9cRHKecMoMXnPRjaQKjYBXYkdi9vAbBGBbYwSR975ghQxC/xhktjRPAFo
+        LgcHp4CdxOeHSSA1wgJBEm9Pf2IFsVkEVCX6Z7SA9fIKWEpM/nGHCcIWlDg58wkLiM0sIC+x
+        /e0cZoiLFCR+Pl3GCjJSRMBJYlGnCESJuMTRnz3MIGslBKZzSsxpPcICUe8iseTvFlYIW1ji
+        1fEtUJ9JSbzsb2MHmSMhkC3Rs8sYIlwjsXTeMahWe4kDV+aAXc8soCmxfpc+xCo+id7fT5gg
+        OnklOtqEIKpVJZrfXYXqlJaY2N0NtdRDov/ZOrYJjIqzkPw1C8lfs5A8MAth2QJGllWMkqkF
+        xbnpqcWmBcZ5qeV6xYm5xaV56XrJ+bmbGMFpUst7B+OjBx/0DjEycTAeYpTgYFYS4RUUfxgn
+        xJuSWFmVWpQfX1Sak1p8iFGag0VJnFfpx5k4IYH0xJLU7NTUgtQimCwTB6dUA1Ni4M4W3hfL
+        JwjHyj+4tu4E99QZN66veePXVRdrLMXyVGexRq9m9/Q9925PuHemQil3tvnWs5fW7z+jqF+z
+        tyfdeFPklEfS5Y/e337sllZnP7Xu/0aTNmH+o44ntWTipbee9LDabzW1RXzD0Tohxk6Dsx4e
+        jldF7/X6rNpbspprgRgHX9Xkyr6rYQ8MO3o2zpC96nrsI/eeYsat+/e0b+ednX3nypX3jVbu
+        XaG3r8T2umXpF+pPbDFl/mMYvfDKHs5TawuDv3Uc5ew2sJwsethL1k287+h06U3uNz0utvEZ
+        bT+QuF1mWdL+T8s+7eo0DH9ilLNt6czpmntsThj2VWkbX5TKkTjiLmk9a12j0RUlluKMREMt
+        5qLiRAAM0mXoAgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMIsWRmVeSWpSXmKPExsWy7bCSnO7t1Y/jDD5s5bM4Pe8qs8XethPs
+        Fi9/XmWzOPiwk8Vi2oefzBaf1i9jtfh//je7xbVb89ksVr3ZwWax6MY2JovW/6+YLTY9vsZq
+        cXnXHDaLy80XGS26rwNllx//x2TR1GJssfXTb1aLpVtvMjoIe1y+4u1xua+XyWPnrLvsHhMW
+        HWD02Lyk3qPl5H4Wj+/rO9g8Pj69xeLxeZOcR/uBbqYArigum5TUnMyy1CJ9uwSujOPvogs2
+        8FYsbt/A1sA4nbuLkZNDQsBE4snyCYxdjFwcQgK7GSWOnl7FCJGQlri+cQI7hC0ssfLfc3aI
+        oleMEisebWIGSbAJ6ErsWNzGBpIQEdjDKPF92X2wKmaBLmaJrwf/sEG0HGSUmNB9F2guBwen
+        gJ3E54dJIN3CAgES83bOAVvHIqAq0T+jhQ3E5hWwlJj84w4ThC0ocXLmExaQVmYBPYm2jWDl
+        zALyEtvfzmGGuE5B4ufTZawgJSICThKLOkUgSsQljv7sYZ7AKDwLyaBZCINmIRk0C0nHAkaW
+        VYySqQXFuem5xYYFhnmp5XrFibnFpXnpesn5uZsYwfGupbmDcfuqD3qHGJk4GA8xSnAwK4nw
+        Coo/jBPiTUmsrEotyo8vKs1JLT7EKM3BoiTOe6NwYZyQQHpiSWp2ampBahFMlomDU6qB6drM
+        MKXSj0euuiocrhfYNlH1Q/2amTPcjZ3T/af0ri1XXOMSOetNUeY0kWWFvh9SWAq8Zj8UNlra
+        NtPWqCNq2bQWG/aJtw77H2w3e+iknXn5cnlt+cMjq3eknHXW1z+mHxTfu3G3DMO6+IlbfxlU
+        3G09oHj2604/rSD3Wn/u20cYTkUV9LBEXdsnf9VVT+ol8/nZx+XtFA5sv7XBO+z5nZXLN7Q2
+        3rx5r8s7hutmYri1+j//k7t/26zTWNrpXnxF/SPTh7yerRvu9//dNP9dzpW1UbO3rbryRC0o
+        uCBjVtSkM2+WJ+959iuQ91LeiQ2Sj/KaRG6fORLgvk/yxd69T+60HZglvWzT6eNRMapBYRxK
+        LMUZiYZazEXFiQDOPU4uZgMAAA==
+X-CMS-MailID: 20200612162251epcas5p17799db495a306a323dc0e1740c8397d0
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20200612151010epcas5p3f667305eeef2d3ce5c05e0e87482ae7c
+References: <20200612151000.27639-1-stanley.chu@mediatek.com>
+        <CGME20200612151010epcas5p3f667305eeef2d3ce5c05e0e87482ae7c@epcas5p3.samsung.com>
+        <20200612151000.27639-2-stanley.chu@mediatek.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-VXNlIHRoZSBmdHJhY2UgaW5mcmFzdHJ1Y3R1cmUgdG8gY29uZGl0aW9uYWxseSB0cmFjZSBVRlMg
-VUlDIGNvbW1hbmQNCmV2ZW50cy4NCg0KTmV3IHRyYWNlIGV2ZW50ICJ1ZnNoY2RfdWljX2NvbW1h
-bmQiIGlzIGNyZWF0ZWQsIHdoaWNoIHNhbXBsZXMgdGhlDQpmb2xsb3dpbmcgVUZTIFVJQyBjb21t
-YW5kIGRhdGE6DQotIERldmljZSBuYW1lDQotIE9wdGlvbmFsIGlkZW50aWZpY2F0aW9uIHN0cmlu
-Zw0KLSBVSUMgY29tbWFuZCBvcGNvZGUNCi0gVUlDIGNvbW1hbmQgYXJndW1lbnQxDQotIFVJQyBj
-b21tYW5kIGFyZ3VtZW50Mg0KLSBVSUMgY29tbWFuZCBhcmdlbWVudDMNCi0gVUlDIGNvbW1hbmQg
-ZXhlY3V0aW9uIHJlc3VsdA0KDQpVc2FnZToNCgllY2hvIDEgPiAvc3lzL2tlcm5lbC9kZWJ1Zy90
-cmFjaW5nL2V2ZW50cy91ZnMvZW5hYmxlDQoJY2F0IC9zeXMva2VybmVsL2RlYnVnL3RyYWNpbmcv
-dHJhY2VfcGlwZQ0KDQpTaWduZWQtb2ZmLWJ5OiBTdGFubGV5IENodSA8c3RhbmxleS5jaHVAbWVk
-aWF0ZWsuY29tPg0KLS0tDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYyAgfCAyOSArKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKw0KIGluY2x1ZGUvdHJhY2UvZXZlbnRzL3Vmcy5oIHwgMzMg
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQogMiBmaWxlcyBjaGFuZ2VkLCA2MiBp
-bnNlcnRpb25zKCspDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jIGIv
-ZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuYw0KaW5kZXggYzE5N2EzMzE1ZDIxLi4xODE2MTc5NjY2
-NTggMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQorKysgYi9kcml2ZXJz
-L3Njc2kvdWZzL3Vmc2hjZC5jDQpAQCAtMzM5LDYgKzMzOSwyNyBAQCBzdGF0aWMgdm9pZCB1ZnNo
-Y2RfYWRkX3RtX3VwaXVfdHJhY2Uoc3RydWN0IHVmc19oYmEgKmhiYSwgdW5zaWduZWQgaW50IHRh
-ZywNCiAJCQkmZGVzY3AtPmlucHV0X3BhcmFtMSk7DQogfQ0KIA0KK3N0YXRpYyB2b2lkIHVmc2hj
-ZF9hZGRfdWljX2NvbW1hbmRfdHJhY2Uoc3RydWN0IHVmc19oYmEgKmhiYSwNCisJCQkJCSBzdHJ1
-Y3QgdWljX2NvbW1hbmQgKnVjbWQsDQorCQkJCQkgY29uc3QgY2hhciAqc3RyKQ0KK3sNCisJdTMy
-IGNtZDsNCisNCisJaWYgKCF0cmFjZV91ZnNoY2RfdWljX2NvbW1hbmRfZW5hYmxlZCgpKQ0KKwkJ
-cmV0dXJuOw0KKw0KKwlpZiAoIXN0cmNtcChzdHIsICJ1aWNfc2VuZCIpKQ0KKwkJY21kID0gdWNt
-ZC0+Y29tbWFuZDsNCisJZWxzZQ0KKwkJY21kID0gdWZzaGNkX3JlYWRsKGhiYSwgUkVHX1VJQ19D
-T01NQU5EKTsNCisNCisJdHJhY2VfdWZzaGNkX3VpY19jb21tYW5kKGRldl9uYW1lKGhiYS0+ZGV2
-KSwgc3RyLCBjbWQsDQorCQkJCSB1Y21kLT5yZXN1bHQsDQorCQkJCSB1ZnNoY2RfcmVhZGwoaGJh
-LCBSRUdfVUlDX0NPTU1BTkRfQVJHXzEpLA0KKwkJCQkgdWZzaGNkX3JlYWRsKGhiYSwgUkVHX1VJ
-Q19DT01NQU5EX0FSR18yKSwNCisJCQkJIHVmc2hjZF9yZWFkbChoYmEsIFJFR19VSUNfQ09NTUFO
-RF9BUkdfMykpOw0KK30NCisNCiBzdGF0aWMgdm9pZCB1ZnNoY2RfYWRkX2NvbW1hbmRfdHJhY2Uo
-c3RydWN0IHVmc19oYmEgKmhiYSwNCiAJCXVuc2lnbmVkIGludCB0YWcsIGNvbnN0IGNoYXIgKnN0
-cikNCiB7DQpAQCAtMjA1NCw2ICsyMDc1LDggQEAgdWZzaGNkX2Rpc3BhdGNoX3VpY19jbWQoc3Ry
-dWN0IHVmc19oYmEgKmhiYSwgc3RydWN0IHVpY19jb21tYW5kICp1aWNfY21kKQ0KIAkvKiBXcml0
-ZSBVSUMgQ21kICovDQogCXVmc2hjZF93cml0ZWwoaGJhLCB1aWNfY21kLT5jb21tYW5kICYgQ09N
-TUFORF9PUENPREVfTUFTSywNCiAJCSAgICAgIFJFR19VSUNfQ09NTUFORCk7DQorDQorCXVmc2hj
-ZF9hZGRfdWljX2NvbW1hbmRfdHJhY2UoaGJhLCB1aWNfY21kLCAidWljX3NlbmQiKTsNCiB9DQog
-DQogLyoqDQpAQCAtMjA4MCw2ICsyMTAzLDkgQEAgdWZzaGNkX3dhaXRfZm9yX3VpY19jbWQoc3Ry
-dWN0IHVmc19oYmEgKmhiYSwgc3RydWN0IHVpY19jb21tYW5kICp1aWNfY21kKQ0KIAloYmEtPmFj
-dGl2ZV91aWNfY21kID0gTlVMTDsNCiAJc3Bpbl91bmxvY2tfaXJxcmVzdG9yZShoYmEtPmhvc3Qt
-Pmhvc3RfbG9jaywgZmxhZ3MpOw0KIA0KKwl1aWNfY21kLT5yZXN1bHQgPSByZXQ7DQorCXVmc2hj
-ZF9hZGRfdWljX2NvbW1hbmRfdHJhY2UoaGJhLCB1aWNfY21kLCAidWljX2NvbXBsZXRlIik7DQor
-DQogCXJldHVybiByZXQ7DQogfQ0KIA0KQEAgLTM3NjAsNiArMzc4Niw5IEBAIHN0YXRpYyBpbnQg
-dWZzaGNkX3VpY19wd3JfY3RybChzdHJ1Y3QgdWZzX2hiYSAqaGJhLCBzdHJ1Y3QgdWljX2NvbW1h
-bmQgKmNtZCkNCiAJCXJldCA9IChzdGF0dXMgIT0gUFdSX09LKSA/IHN0YXR1cyA6IC0xOw0KIAl9
-DQogb3V0Og0KKwljbWQtPnJlc3VsdCA9IHJldDsNCisJdWZzaGNkX2FkZF91aWNfY29tbWFuZF90
-cmFjZShoYmEsIGNtZCwgInVpY19jb21wbGV0ZSIpOw0KKw0KIAlpZiAocmV0KSB7DQogCQl1ZnNo
-Y2RfcHJpbnRfaG9zdF9zdGF0ZShoYmEpOw0KIAkJdWZzaGNkX3ByaW50X3B3cl9pbmZvKGhiYSk7
-DQpkaWZmIC0tZ2l0IGEvaW5jbHVkZS90cmFjZS9ldmVudHMvdWZzLmggYi9pbmNsdWRlL3RyYWNl
-L2V2ZW50cy91ZnMuaA0KaW5kZXggNWYzMDA3MzkyNDBkLi5jZjhkNTY4ZDVhMTMgMTAwNjQ0DQot
-LS0gYS9pbmNsdWRlL3RyYWNlL2V2ZW50cy91ZnMuaA0KKysrIGIvaW5jbHVkZS90cmFjZS9ldmVu
-dHMvdWZzLmgNCkBAIC0yNDksNiArMjQ5LDM5IEBAIFRSQUNFX0VWRU5UKHVmc2hjZF9jb21tYW5k
-LA0KIAkpDQogKTsNCiANCitUUkFDRV9FVkVOVCh1ZnNoY2RfdWljX2NvbW1hbmQsDQorCVRQX1BS
-T1RPKGNvbnN0IGNoYXIgKmRldl9uYW1lLCBjb25zdCBjaGFyICpzdHIsIHUzMiBjbWQsIGludCBy
-ZXN1bHQsDQorCQkgdTMyIGFyZzEsIHUzMiBhcmcyLCB1MzIgYXJnMyksDQorDQorCVRQX0FSR1Mo
-ZGV2X25hbWUsIHN0ciwgY21kLCByZXN1bHQsIGFyZzEsIGFyZzIsIGFyZzMpLA0KKw0KKwlUUF9T
-VFJVQ1RfX2VudHJ5KA0KKwkJX19zdHJpbmcoZGV2X25hbWUsIGRldl9uYW1lKQ0KKwkJX19zdHJp
-bmcoc3RyLCBzdHIpDQorCQlfX2ZpZWxkKHUzMiwgY21kKQ0KKwkJX19maWVsZChpbnQsIHJlc3Vs
-dCkNCisJCV9fZmllbGQodTMyLCBhcmcxKQ0KKwkJX19maWVsZCh1MzIsIGFyZzIpDQorCQlfX2Zp
-ZWxkKHUzMiwgYXJnMykNCisJKSwNCisNCisJVFBfZmFzdF9hc3NpZ24oDQorCQlfX2Fzc2lnbl9z
-dHIoZGV2X25hbWUsIGRldl9uYW1lKTsNCisJCV9fYXNzaWduX3N0cihzdHIsIHN0cik7DQorCQlf
-X2VudHJ5LT5jbWQgPSBjbWQ7DQorCQlfX2VudHJ5LT5yZXN1bHQgPSByZXN1bHQ7DQorCQlfX2Vu
-dHJ5LT5hcmcxID0gYXJnMTsNCisJCV9fZW50cnktPmFyZzIgPSBhcmcyOw0KKwkJX19lbnRyeS0+
-YXJnMyA9IGFyZzM7DQorCSksDQorDQorCVRQX3ByaW50aygNCisJCSIlczogJXM6IGNtZDogMHgl
-eCwgYXJnMTogMHgleCwgYXJnMjogMHgleCwgYXJnMzogMHgleCwgcmVzdWx0OiAlZCIsDQorCQlf
-X2dldF9zdHIoc3RyKSwgX19nZXRfc3RyKGRldl9uYW1lKSwgX19lbnRyeS0+Y21kLA0KKwkJX19l
-bnRyeS0+YXJnMSwgX19lbnRyeS0+YXJnMiwgX19lbnRyeS0+YXJnMywgX19lbnRyeS0+cmVzdWx0
-DQorCSkNCispOw0KKw0KIFRSQUNFX0VWRU5UKHVmc2hjZF91cGl1LA0KIAlUUF9QUk9UTyhjb25z
-dCBjaGFyICpkZXZfbmFtZSwgY29uc3QgY2hhciAqc3RyLCB2b2lkICpoZHIsIHZvaWQgKnRzZiks
-DQogDQotLSANCjIuMTguMA0K
+Hi Stanley
+
+> -----Original Message-----
+> From: Stanley Chu <stanley.chu@mediatek.com>
+> Sent: 12 June 2020 20:40
+> To: linux-scsi@vger.kernel.org; martin.petersen@oracle.com;
+> avri.altman@wdc.com; alim.akhtar@samsung.com; jejb@linux.ibm.com;
+> asutoshd@codeaurora.org
+> Cc: beanhuo@micron.com; cang@codeaurora.org; matthias.bgg@gmail.com;
+> bvanassche@acm.org; linux-mediatek@lists.infradead.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
+> kuohong.wang@mediatek.com; peter.wang@mediatek.com; chun-
+> hung.wu@mediatek.com; andy.teng@mediatek.com;
+> chaotian.jing@mediatek.com; cc.chou@mediatek.com; Stanley Chu
+> <stanley.chu@mediatek.com>
+> Subject: [PATCH v1 1/2] scsi: ufs: Remove unused field in struct
+uic_command
+> 
+> Remove unused field "cmd_active" in struct ufs_command.
+> 
+> Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+> ---
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+
+>  drivers/scsi/ufs/ufshcd.h | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h index
+> bf97d616e597..814e44871ff0 100644
+> --- a/drivers/scsi/ufs/ufshcd.h
+> +++ b/drivers/scsi/ufs/ufshcd.h
+> @@ -88,7 +88,6 @@ enum dev_cmd_type {
+>   * @argument1: UIC command argument 1
+>   * @argument2: UIC command argument 2
+>   * @argument3: UIC command argument 3
+> - * @cmd_active: Indicate if UIC command is outstanding
+>   * @result: UIC command result
+>   * @done: UIC command completion
+>   */
+> @@ -97,7 +96,6 @@ struct uic_command {
+>  	u32 argument1;
+>  	u32 argument2;
+>  	u32 argument3;
+> -	int cmd_active;
+>  	int result;
+>  	struct completion done;
+>  };
+> --
+> 2.18.0
 
