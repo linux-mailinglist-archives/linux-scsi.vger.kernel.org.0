@@ -2,38 +2,40 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2C91F729B
-	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2020 05:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13771F7304
+	for <lists+linux-scsi@lfdr.de>; Fri, 12 Jun 2020 06:28:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726444AbgFLDxG (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 11 Jun 2020 23:53:06 -0400
-Received: from mailout2.samsung.com ([203.254.224.25]:54333 "EHLO
-        mailout2.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726327AbgFLDxG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Thu, 11 Jun 2020 23:53:06 -0400
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20200612035302epoutp02a671a82b7462d6f14a2adb8f77cb2750~Xr4W7SET-1753117531epoutp02X
-        for <linux-scsi@vger.kernel.org>; Fri, 12 Jun 2020 03:53:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20200612035302epoutp02a671a82b7462d6f14a2adb8f77cb2750~Xr4W7SET-1753117531epoutp02X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1591933982;
-        bh=5tLF6fdYvXuQ+oWURL9o4gFqdlrIDs0SFbyH+UiH4HA=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=S8UMwwygyudO/7/ritdt9TDR0Kr+VbZnbnCfqkq2Np/qOxpTBM8FhGyRJMazFHxpI
-         DFb85jluzgun5VSsRKPyZf1I4l3Ec7fSFhcUIENQDL5x2H/goj4d7xjkJQWzetx58L
-         LD7jICDgoS9MA3cjDd0t9eIrrIyDHJVTFEWuEU6Q=
-Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p1.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200612035301epcas1p1670632461b5acc152457d38ae6aeca32~Xr4WivTyW0502605026epcas1p1i;
-        Fri, 12 Jun 2020 03:53:01 +0000 (GMT)
-Mime-Version: 1.0
-Subject: Re: [RFC PATCH 5/5] scsi: ufs: Prepare HPB read for cached
- sub-region
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Daejun Park <daejun7.park@samsung.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        id S1726327AbgFLE2i (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 12 Jun 2020 00:28:38 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40545 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725809AbgFLE2i (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 12 Jun 2020 00:28:38 -0400
+Received: by mail-pf1-f195.google.com with SMTP id s23so3713707pfh.7;
+        Thu, 11 Jun 2020 21:28:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=7FHd7ZEofWmIKV3Vjvxv3qh2Z1UvkaKjplL+2txj47M=;
+        b=WkaYAghFoDyfthQ27QZVpctLKNZw6ENkEPdDNodUUx4ccvX4gBX1scuAn8rRClYcWb
+         srNhjWzFhAAByFSnZm8o+LVX4npJ2iK0GPYl6ogVtHAlfgQCqBcCYjTZMpMADH/7bX+P
+         9c+JGeHAKFXWEwC5GUCPlKpnPAXGFP6/Hn20pAXnAcjjDNVIkIlf0YkcM/PDUVo1JIER
+         KuwgFn9gtSfhmFzAnzPEcUT8s296THbZNXpxRJ4KX2aHBBF+mNZvWfx4Y9ZG85YqeTzj
+         Gdan8Ej8mnj/TGF9DrStNZUa4cJadFiZKMAS/B2jzzOf4JJN9HoSZEECSyJ7FvP6ndf+
+         +7YA==
+X-Gm-Message-State: AOAM531oCD4KRGvA3TM2R3WF6L8CzIprmFA72TsV3rECZ5aHfk54JOxy
+        Y3Hg7cNrYzycPW/R/F7eYXM2WCmc
+X-Google-Smtp-Source: ABdhPJwNRN31QbwBE/HjFTZmaD6FLUvogfMml2ZjqNVAfCWe6impYXKcDxVSiAWonUVNVcVnXJ0HNA==
+X-Received: by 2002:a62:3785:: with SMTP id e127mr10235922pfa.210.1591936117373;
+        Thu, 11 Jun 2020 21:28:37 -0700 (PDT)
+Received: from [192.168.50.147] (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
+        by smtp.gmail.com with ESMTPSA id i5sm4549593pfd.5.2020.06.11.21.28.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jun 2020 21:28:36 -0700 (PDT)
+Subject: Re: [RFC PATCH 2/5] scsi: ufs: Add UFS-feature layer
+To:     daejun7.park@samsung.com, ALIM AKHTAR <alim.akhtar@samsung.com>,
         "avri.altman@wdc.com" <avri.altman@wdc.com>,
         "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
         "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
@@ -42,7 +44,7 @@ To:     Bart Van Assche <bvanassche@acm.org>,
         "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
         "cang@codeaurora.org" <cang@codeaurora.org>,
         "tomas.winkler@intel.com" <tomas.winkler@intel.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Sang-yoon Oh <sangyoon.oh@samsung.com>,
         Sung-Jun Park <sungjun07.park@samsung.com>,
@@ -50,247 +52,71 @@ CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
         Jinyoung CHOI <j-young.choi@samsung.com>,
         Adel Choi <adel.choi@samsung.com>,
         BoRam Shin <boram.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <bdc420e4-3f2e-cf52-eb42-f85e747b2fb1@acm.org>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <963815509.21591933981778.JavaMail.epsvc@epcpadp2>
-Date:   Fri, 12 Jun 2020 12:39:11 +0900
-X-CMS-MailID: 20200612033911epcms2p8dee9ef9f42a622ab1f5921ded4ca589d
+References: <1319810e-a323-c022-5e27-902f88cefe8f@acm.org>
+ <963815509.21591320301642.JavaMail.epsvc@epcpadp1>
+ <231786897.01591320001492.JavaMail.epsvc@epcpadp1>
+ <336371513.41591320902369.JavaMail.epsvc@epcpadp1>
+ <CGME20200605011604epcms2p8bec8ef6682583d7248dc7d9dc1bfc882@epcms2p4>
+ <20200612022759epcms2p47929b76eb2e809240f415c19f9383f92@epcms2p4>
+From:   Bart Van Assche <bvanassche@acm.org>
+Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
+ mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
+ LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
+ fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
+ AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
+ 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
+ AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
+ igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
+ Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
+ jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
+ macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
+ CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
+ RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
+ PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
+ eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
+ lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
+ T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
+ ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
+ CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
+ oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
+ //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
+ mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
+ goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
+Message-ID: <cf01e1d2-50e9-7fa8-b2ee-88a900231304@acm.org>
+Date:   Thu, 11 Jun 2020 21:28:34 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
+MIME-Version: 1.0
+In-Reply-To: <20200612022759epcms2p47929b76eb2e809240f415c19f9383f92@epcms2p4>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200605011604epcms2p8bec8ef6682583d7248dc7d9dc1bfc882
-References: <bdc420e4-3f2e-cf52-eb42-f85e747b2fb1@acm.org>
-        <963815509.21591323002276.JavaMail.epsvc@epcpadp1>
-        <231786897.01591322101492.JavaMail.epsvc@epcpadp1>
-        <336371513.41591320902369.JavaMail.epsvc@epcpadp1>
-        <963815509.21591320301642.JavaMail.epsvc@epcpadp1>
-        <231786897.01591320001492.JavaMail.epsvc@epcpadp1>
-        <336371513.41591323603173.JavaMail.epsvc@epcpadp1>
-        <CGME20200605011604epcms2p8bec8ef6682583d7248dc7d9dc1bfc882@epcms2p8>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 2020-06-04 18:38, Daejun Park wrote:
-> > +  if (total_srgn_cnt != 0) {
-> > +    dev_err(hba->dev, "ufshpb(%d) error total_subregion_count %d",
-> > +      hpb->lun, total_srgn_cnt);
-> > +    goto release_srgn_table;
-> > +  }
-> > +
-> > +  return 0;
-> > +release_srgn_table:
-> > +  for (i = 0; i < rgn_idx; i++) {
-> > +    rgn = rgn_table + i;
-> > +    if (rgn->srgn_tbl)
-> > +      kvfree(rgn->srgn_tbl);
-> > +  }
+On 2020-06-11 19:27, Daejun Park wrote:
+>>> @@ -2525,6 +2525,8 @@ static int ufshcd_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *cmd)
+>>>  
+>>>    ufshcd_comp_scsi_upiu(hba, lrbp);
+>>>  
+>>> +  ufsf_ops_prep_fn(hba, lrbp);
+>>> +
+>>>    err = ufshcd_map_sg(hba, lrbp);
+>>>    if (err) {
+>>>      lrbp->cmd = NULL;
+> 
+>> What happens if a SCSI command is retried and hence ufsf_ops_prep_fn()
+>> is called multiple times for the same SCSI command?
+>
+> Developers of UFS features should implement it so that prep_fn does not have
+> any problems even if it processes the same SCSI command multiple times.
+> In HPB feature, prep_fn modifies only upiu  structure. So it is ok to call
+> it multiple times because the upiu is rebuilt from ufshcd_comp_scsi_upiu().
 
-> Please insert a blank line above goto labels as is done in most of the
-> kernel code.
-OK, I will fix it.
-
-> > +static struct device_attribute ufshpb_sysfs_entries[] = {
-> > +  __ATTR(hit_count, 0444, ufshpb_sysfs_show_hit_cnt, NULL),
-> > +  __ATTR(miss_count, 0444, ufshpb_sysfs_show_miss_cnt, NULL),
-> > +  __ATTR(rb_noti_count, 0444, ufshpb_sysfs_show_rb_noti_cnt, NULL),
-> > +  __ATTR(rb_active_count, 0444, ufshpb_sysfs_show_rb_active_cnt, NULL),
-> > +  __ATTR(rb_inactive_count, 0444, ufshpb_sysfs_show_rb_inactive_cnt,
-> > +         NULL),
-> > +  __ATTR(map_req_count, 0444, ufshpb_sysfs_show_map_req_cnt, NULL),
-> > +  __ATTR_NULL
-> > +};
-
-> Please use __ATTR_RO() where appropriate.
-They are only readable attributes. So I changed the code to use __ATTR_RO.
-
-> > +static int ufshpb_create_sysfs(struct ufs_hba *hba, struct ufshpb_lu *hpb)
-> > +{
-> > +  struct device_attribute *attr;
-> > +  int ret;
-> > +
-> > +  device_initialize(&hpb->hpb_lu_dev);
-> > +
-> > +  ufshpb_stat_init(hpb);
-> > +
-> > +  hpb->hpb_lu_dev.parent = get_device(&hba->ufsf.hpb_dev);
-> > +  hpb->hpb_lu_dev.release = ufshpb_dev_release;
-> > +  dev_set_name(&hpb->hpb_lu_dev, "ufshpb_lu%d", hpb->lun);
-> > +
-> > +  ret = device_add(&hpb->hpb_lu_dev);
-> > +  if (ret) {
-> > +    dev_err(hba->dev, "ufshpb(%d) device_add failed",
-> > +      hpb->lun);
-> > +    return -ENODEV;
-> > +  }
-> > +
-> > +  for (attr = ufshpb_sysfs_entries; attr->attr.name != NULL; attr++) {
-> > +    if (device_create_file(&hpb->hpb_lu_dev, attr))
-> > +      dev_err(hba->dev, "ufshpb(%d) %s create file error\n",
-> > +        hpb->lun, attr->attr.name);
-> > +  }
-> > +
-> > +  return 0;
-> > +}
-
-> This is the wrong way to create sysfs attributes. Please set the
-> 'groups' member of struct device instead of using a loop to create sysfs
-> attributes. The former approach is compatible with udev but the latter
-> approach is not.
-OK, I changed to create attributes without loop.
-
-> > +static void ufshpb_probe_async(void *data, async_cookie_t cookie)
-> > +{
-> > +  struct ufshpb_dev_info hpb_dev_info = { 0 };
-> > +  struct ufs_hba *hba = data;
-> > +  char *desc_buf;
-> > +  int ret;
-> > +
-> > +  desc_buf = kzalloc(QUERY_DESC_MAX_SIZE, GFP_KERNEL);
-> > +  if (!desc_buf)
-> > +    goto release_desc_buf;
-> > +
-> > +  ret = ufshpb_get_dev_info(hba, &hpb_dev_info, desc_buf);
-> > +  if (ret)
-> > +    goto release_desc_buf;
-> > +
-> > +  /*
-> > +   * Because HPB driver uses scsi_device data structure,
-> > +   * we should wait at this point until finishing initialization of all
-> > +   * scsi devices. Even if timeout occurs, HPB driver will search
-> > +   * the scsi_device list on struct scsi_host (shost->__host list_head)
-> > +   * and can find out HPB logical units in all scsi_devices
-> > +   */
-> > +  wait_event_timeout(hba->ufsf.sdev_wait,
-> > +         (atomic_read(&hba->ufsf.slave_conf_cnt)
-> > +        == hpb_dev_info.num_lu),
-> > +         SDEV_WAIT_TIMEOUT);
-> > +
-> > +  dev_dbg(hba->dev, "ufshpb: slave count %d, lu count %d\n",
-> > +    atomic_read(&hba->ufsf.slave_conf_cnt), hpb_dev_info.num_lu);
-> > +
-> > +  ufshpb_scan_hpb_lu(hba, &hpb_dev_info, desc_buf);
-> > +release_desc_buf:
-> > +  kfree(desc_buf);
-> > +}
-
-> What happens if two LUNs are added before the above code is woken up?
-> Will that perhaps cause the wait_event_timeout() call to wait forever?
-I don't think it is problem. I think that the wait_event_timeout() will
-check the condition before waiting.
-
-> > +static int ufshpb_probe(struct device *dev)
-> > +{
-> > +  struct ufs_hba *hba;
-> > +  struct ufsf_feature_info *ufsf;
-> > +
-> > +  if (dev->type != &ufshpb_dev_type)
-> > +    return -ENODEV;
-> > +
-> > +  ufsf = container_of(dev, struct ufsf_feature_info, hpb_dev);
-> > +  hba = container_of(ufsf, struct ufs_hba, ufsf);
-> > +
-> > +  async_schedule(ufshpb_probe_async, hba);
-> > +  return 0;
-> > +}
-
-> So this is an asynchronous probe that is not visible to the device
-> driver core? Could the PROBE_PREFER_ASYNCHRONOUS flag have been used
-> instead to make device probing asynchronous?
-I added the PROBE_PREFER_ASYNCHRONOUS flag to code and changed it to probe
-synchronously.
- 
-> > +static int ufshpb_remove(struct device *dev)
-> > +{
-> > +  struct ufshpb_lu *hpb, *n_hpb;
-> > +  struct ufsf_feature_info *ufsf;
-> > +  struct scsi_device *sdev;
-> > +
-> > +  ufsf = container_of(dev, struct ufsf_feature_info, hpb_dev);
-> > +
-> > +  dev_set_drvdata(&ufsf->hpb_dev, NULL);
-> > +
-> > +  list_for_each_entry_safe(hpb, n_hpb, &ufshpb_drv.lh_hpb_lu,
-> > +         list_hpb_lu) {
-> > +    ufshpb_set_state(hpb, HPB_FAILED);
-> > +
-> > +    sdev = hpb->sdev_ufs_lu;
-> > +    sdev->hostdata = NULL;
-> > +
-> > +    device_del(&hpb->hpb_lu_dev);
-> > +
-> > +    dev_info(&hpb->hpb_lu_dev, "hpb_lu_dev refcnt %d\n",
-> > +       kref_read(&hpb->hpb_lu_dev.kobj.kref));
-> > +    put_device(&hpb->hpb_lu_dev);
-> > +  }
-> > +  dev_info(dev, "ufshpb: remove success\n");
-> > +
-> > +  return 0;
-> > +}
-
-> Where is the code that waits for the asynchronously scheduled probe
-> calls to finish?
-I changed it to probe without async_schedule.
-
-> > diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
-> > new file mode 100644
-> > index 000000000000..c6dd88e00849
-> > --- /dev/null
-> > +++ b/drivers/scsi/ufs/ufshpb.h
-> > @@ -0,0 +1,185 @@
-> > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > +/*
-> > + * Universal Flash Storage Host Performance Booster
-> > + *
-> > + * Copyright (C) 2017-2018 Samsung Electronics Co., Ltd.
-> > + *
-> > + * Authors:
-> > + *  Yongmyung Lee <ymhungry.lee@samsung.com>
-> > + *  Jinyoung Choi <j-young.choi@samsung.com>
-> > + *
-> > + * This program is free software; you can redistribute it and/or
-> > + * modify it under the terms of the GNU General Public License
-> > + * as published by the Free Software Foundation; either version 2
-> > + * of the License, or (at your option) any later version.
-> > + * See the COPYING file in the top-level directory or visit
-> > + * <http://www.gnu.org/licenses/gpl-2.0.html>
-> > + *
-> > + * This program is distributed in the hope that it will be useful,
-> > + * but WITHOUT ANY WARRANTY; without even the implied warranty of
-> > + * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-> > + * GNU General Public License for more details.
-> > + *
-> > + * This program is provided "AS IS" and "WITH ALL FAULTS" and
-> > + * without warranty of any kind. You are solely responsible for
-> > + * determining the appropriateness of using and distributing
-> > + * the program and assume all risks associated with your exercise
-> > + * of rights with respect to the program, including but not limited
-> > + * to infringement of third party rights, the risks and costs of
-> > + * program errors, damage to or loss of data, programs or equipment,
-> > + * and unavailability or interruption of operations. Under no
-> > + * circumstances will the contributor of this Program be liable for
-> > + * any damages of any kind arising from your use or distribution of
-> > + * this program.
-> > + *
-> > + * The Linux Foundation chooses to take subject only to the GPLv2
-> > + * license terms, and distributes only under these terms.
-> > + */
-
-> Please use an SPDX declaration instead of the full GPLv2 text.
-OK, I will.
+Please make sure that this expectation is documented somewhere.
 
 Thanks,
 
-Daejun.
-
-
+Bart.
