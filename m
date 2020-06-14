@@ -2,45 +2,53 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B05D81F8B29
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 00:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD1B1F8B2A
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 00:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727936AbgFNWj3 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Sun, 14 Jun 2020 18:39:29 -0400
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:53989 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727924AbgFNWj3 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Jun 2020 18:39:29 -0400
-Received: by mail-pj1-f66.google.com with SMTP id i12so5933173pju.3
-        for <linux-scsi@vger.kernel.org>; Sun, 14 Jun 2020 15:39:28 -0700 (PDT)
+        id S1727963AbgFNWja (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Sun, 14 Jun 2020 18:39:30 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42931 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727924AbgFNWja (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Sun, 14 Jun 2020 18:39:30 -0400
+Received: by mail-pg1-f195.google.com with SMTP id e9so6768047pgo.9
+        for <linux-scsi@vger.kernel.org>; Sun, 14 Jun 2020 15:39:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EpBTtbBaf7wtpU9OxifXf5Xkacb6UHtUVJCfFlf7yKc=;
-        b=Rt9iwJu9LNJnBmG7nMS/g4wB4MdOwdpWwKw6X1EnwstNOaA7xW08+OEs7R5sVHdjt3
-         rKZJrIFmyX3RbDkjSWS9kDuMJZpQxX4anjb7AenHnBKH82HQakdUX2Rex+VBbf2PGinh
-         PwF0+X7n1p3cSrDUdH4VZT46xRmsy4wjeMjTZ9MuJl6B7j5NJAbzNFfnWq2Cpr/O1XZp
-         ZgefczgnFwkAqfMW1uWF59zouOYFXSYgVa8Cp37hvNcK+gNDkafSgCaELGCu8/7jiaHt
-         8PVUqRaImS4JjsdrObENF9qobZ1FaueAeVrphg0VsijGPjniFT96CZxmC+Vvh2xe7x03
-         FajQ==
-X-Gm-Message-State: AOAM531O2Ce0iZ8lFhVd+Qruq/BS+Z98cL4OW7Y9gcyqL3QTS1wtMD7v
-        fvQt7buY/mJ5U1yf0xCr3OI=
-X-Google-Smtp-Source: ABdhPJztJLkZIATlAXkiZHi+zFQrGXV8b4DlB+k13+rdJJD2tMIzMgfuUZFVM8z98/sRQQwlaBj0hw==
-X-Received: by 2002:a17:90a:62ca:: with SMTP id k10mr9575245pjs.87.1592174368188;
-        Sun, 14 Jun 2020 15:39:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3rcGI+lv/GbDLHyVBFGFYQmwCj9Q/jOfgKgD1DKG3V0=;
+        b=jDWAFj4DzdnVvhC/0E4rmj6Bmcw7lT7FlrKLNJpEuD3xxCQO6a6MpOyE/FAi4s4j5A
+         zlRQoRwv0sZON7nrcEodJHJQ9I6eFpVU9KanNmnfTzvaD/Z6GmZ6L5sOZG2WGlTpVH7Y
+         rxCvfYRyeaovDKqCHMiAPr6yOPydaLXWWZ1lQpDeGScpJKlcXNYThbDrUdG+s/ze6Fvp
+         AXXebVnqRACuvQT3/lonMT9BJc0Yn7OPaqUvDRrMEWjljjTrMZo7WsFXXv7vA70pInLo
+         95v3UwsPO1QC4DryBk65EQni6XBSU0edG3S6nwAyXSaC/XiVrJMjIiQbWV15Q9WkN87J
+         ZCfA==
+X-Gm-Message-State: AOAM533085NbpRZUCgtHOZqowuFU3XIPs7Y7fBbQo/y6jKUKz2dY0lJQ
+        xCCqYjCFvI5re5CcruGqeOk=
+X-Google-Smtp-Source: ABdhPJwfoRpGNdwQJWUpkU+FYRH7/3RXlygYw9d61/ayQuqajQ5aDMy5SzulJbVMf/pB7CDjzvCKTg==
+X-Received: by 2002:a63:e314:: with SMTP id f20mr6123589pgh.116.1592174369589;
+        Sun, 14 Jun 2020 15:39:29 -0700 (PDT)
 Received: from localhost.localdomain (c-73-241-217-19.hsd1.ca.comcast.net. [73.241.217.19])
-        by smtp.gmail.com with ESMTPSA id u25sm11768711pfm.115.2020.06.14.15.39.26
+        by smtp.gmail.com with ESMTPSA id u25sm11768711pfm.115.2020.06.14.15.39.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jun 2020 15:39:27 -0700 (PDT)
+        Sun, 14 Jun 2020 15:39:28 -0700 (PDT)
 From:   Bart Van Assche <bvanassche@acm.org>
 To:     "Martin K . Petersen" <martin.petersen@oracle.com>,
         "James E . J . Bottomley" <jejb@linux.vnet.ibm.com>
-Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH 0/9] qla2xxx patches for kernel v5.9
-Date:   Sun, 14 Jun 2020 15:39:12 -0700
-Message-Id: <20200614223921.5851-1-bvanassche@acm.org>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Nilesh Javali <njavali@marvell.com>,
+        Quinn Tran <qutran@marvell.com>,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Daniel Wagner <dwagner@suse.de>,
+        Martin Wilck <mwilck@suse.com>,
+        Roman Bolshakov <r.bolshakov@yadro.com>
+Subject: [PATCH 1/9] qla2xxx: Check the size of struct fcp_hdr at compile time
+Date:   Sun, 14 Jun 2020 15:39:13 -0700
+Message-Id: <20200614223921.5851-2-bvanassche@acm.org>
 X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20200614223921.5851-1-bvanassche@acm.org>
+References: <20200614223921.5851-1-bvanassche@acm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
@@ -48,34 +56,29 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Martin,
+Since struct fcp_hdr is used to exchange data with the firmware, check its
+size at compile time.
 
-Please consider these patches for kernel v5.9.
+Cc: Nilesh Javali <njavali@marvell.com>
+Cc: Quinn Tran <qutran@marvell.com>
+Cc: Himanshu Madhani <himanshu.madhani@oracle.com>
+Cc: Daniel Wagner <dwagner@suse.de>
+Cc: Martin Wilck <mwilck@suse.com>
+Cc: Roman Bolshakov <r.bolshakov@yadro.com>
+Signed-off-by: Bart Van Assche <bvanassche@acm.org>
+---
+ drivers/scsi/qla2xxx/tcm_qla2xxx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-
-Bart.
-
-Bart Van Assche (9):
-  qla2xxx: Check the size of struct fcp_hdr at compile time
-  qla2xxx: Remove the __packed annotation from struct fcp_hdr and
-    fcp_hdr_le
-  qla2xxx: Make qla82xx_flash_wait_write_finish() easier to read
-  qla2xxx: Initialize 'n' before using it
-  qla2xxx: Remove several superfluous casts
-  qla2xxx: Make __qla2x00_alloc_iocbs() initialize 32 bits of
-    request_t.handle
-  qla2xxx: Fix a Coverity complaint in qla2100_fw_dump()
-  qla2xxx: Make qla2x00_restart_isp() easier to read
-  qla2xxx: Introduce a function for computing the debug message prefix
-
- drivers/scsi/qla2xxx/qla_bsg.c     |  3 +-
- drivers/scsi/qla2xxx/qla_dbg.c     | 98 +++++++++++-------------------
- drivers/scsi/qla2xxx/qla_init.c    | 39 ++++++------
- drivers/scsi/qla2xxx/qla_iocb.c    |  4 +-
- drivers/scsi/qla2xxx/qla_mr.c      |  3 +-
- drivers/scsi/qla2xxx/qla_nx.c      | 20 +++---
- drivers/scsi/qla2xxx/qla_target.h  |  4 +-
- drivers/scsi/qla2xxx/tcm_qla2xxx.c |  1 +
- 8 files changed, 71 insertions(+), 101 deletions(-)
-
+diff --git a/drivers/scsi/qla2xxx/tcm_qla2xxx.c b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+index 188aa5f02c01..f7e9b5bc0b26 100644
+--- a/drivers/scsi/qla2xxx/tcm_qla2xxx.c
++++ b/drivers/scsi/qla2xxx/tcm_qla2xxx.c
+@@ -1971,6 +1971,7 @@ static int __init tcm_qla2xxx_init(void)
+ 	BUILD_BUG_ON(sizeof(struct ctio_crc2_to_fw) != 64);
+ 	BUILD_BUG_ON(sizeof(struct ctio_crc_from_fw) != 64);
+ 	BUILD_BUG_ON(sizeof(struct ctio_to_2xxx) != 64);
++	BUILD_BUG_ON(sizeof(struct fcp_hdr) != 24);
+ 	BUILD_BUG_ON(sizeof(struct fcp_hdr_le) != 24);
+ 	BUILD_BUG_ON(sizeof(struct nack_to_isp) != 64);
+ 
