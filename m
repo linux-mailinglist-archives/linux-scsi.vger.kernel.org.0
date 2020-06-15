@@ -2,144 +2,69 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 515301F8F63
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 09:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A0881F8F5B
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 09:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728541AbgFOHXH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jun 2020 03:23:07 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:62901 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728380AbgFOHXG (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 03:23:06 -0400
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200615072304epoutp01128fe7f131c1fa8bca423336f5663d00~YprmMLoGi2565725657epoutp01I
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Jun 2020 07:23:04 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200615072304epoutp01128fe7f131c1fa8bca423336f5663d00~YprmMLoGi2565725657epoutp01I
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1592205784;
-        bh=q16fNkxdF6WvQtIMVDHHO9Q+D9jqMqIJ4OFGZj0vF64=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=fqMer2uMlvslNlN7qPRnuKuqu8aTrUnXJqVyZcUXyaI3uEG7lrF2/DZwgQs/dyWtF
-         KxXirmXEciaxyKo4Q+WazOw4MA5/PKgpZc/U3hecPBCqsGAcC7m1cMUlspaRMiDBZN
-         zD+f/bh9xS+SCt2i9xgEGejH04ejPKyyC0Zqk1XM=
-Received: from epcpadp2 (unknown [182.195.40.12]) by epcas1p3.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200615072303epcas1p398eaedd8598e3a37d391491f6943c55e~Yprlun-Rc1374213742epcas1p3C;
-        Mon, 15 Jun 2020 07:23:03 +0000 (GMT)
-Mime-Version: 1.0
-Subject: [RFC PATCH v2 1/5] scsi: ufs: Add UFS feature related parameter
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Daejun Park <daejun7.park@samsung.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "avri.altman@wdc.com" <avri.altman@wdc.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <231786897.01592205482200.JavaMail.epsvc@epcpadp2>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <336371513.41592205783606.JavaMail.epsvc@epcpadp2>
-Date:   Mon, 15 Jun 2020 16:21:27 +0900
-X-CMS-MailID: 20200615072127epcms2p50292cefb5aa41ac033e29f6a9fad8681
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200615062708epcms2p19a7fbc051bcd5e843c29dcd58fff4210
-References: <231786897.01592205482200.JavaMail.epsvc@epcpadp2>
-        <CGME20200615062708epcms2p19a7fbc051bcd5e843c29dcd58fff4210@epcms2p5>
+        id S1728570AbgFOHWs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Jun 2020 03:22:48 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:35754 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728539AbgFOHWq (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 03:22:46 -0400
+X-UUID: 9ac8135d0b454283a9699f8891fa5f2f-20200615
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=KsPHsP0hYhfA7edmMoOs0ziWrUu4La3/8ekhuF/RrAI=;
+        b=HTg6bLLhj1mM1icr2cokZE8n6tUa/5PACZhwfvKJbhqmGIuQ4MjVA1h6lF49SBKeTSRttbM40hHLymr4eJYozETOSE9gVoZWQzkDMlzR9XtVsMP6IFf609JWU6haGNthcGak+yBnOl8e5iHWYyGo2GRS3vzvvTWggj6oABOF0Ss=;
+X-UUID: 9ac8135d0b454283a9699f8891fa5f2f-20200615
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1313003693; Mon, 15 Jun 2020 15:22:37 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 15 Jun 2020 15:22:34 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 15 Jun 2020 15:22:36 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <asutoshd@codeaurora.org>
+CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v3 0/2] scsi: ufs: Add trace event for UIC commands and cleanup UIC struct
+Date:   Mon, 15 Jun 2020 15:22:33 +0800
+Message-ID: <20200615072235.23042-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This is a patch for parameters to be used for UFS features layer and HPB
-module.
-
-Signed-off-by: Daejun Park <daejun7.park@samsung.com>
----
- drivers/scsi/ufs/ufs.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/scsi/ufs/ufs.h b/drivers/scsi/ufs/ufs.h
-index c70845d41449..f3efa3424fc0 100644
---- a/drivers/scsi/ufs/ufs.h
-+++ b/drivers/scsi/ufs/ufs.h
-@@ -146,6 +146,7 @@ enum flag_idn {
- 	QUERY_FLAG_IDN_WB_EN                            = 0x0E,
- 	QUERY_FLAG_IDN_WB_BUFF_FLUSH_EN                 = 0x0F,
- 	QUERY_FLAG_IDN_WB_BUFF_FLUSH_DURING_HIBERN8     = 0x10,
-+	QUERY_FLAG_IDN_HPB_RESET                        = 0x11,
- };
- 
- /* Attribute idn for Query requests */
-@@ -229,6 +230,9 @@ enum unit_desc_param {
- 	UNIT_DESC_PARAM_PHY_MEM_RSRC_CNT	= 0x18,
- 	UNIT_DESC_PARAM_CTX_CAPABILITIES	= 0x20,
- 	UNIT_DESC_PARAM_LARGE_UNIT_SIZE_M1	= 0x22,
-+	UNIT_DESC_HPB_LU_MAX_ACTIVE_REGIONS	= 0x23,
-+	UNIT_DESC_HPB_LU_PIN_REGION_START_OFFSET	= 0x25,
-+	UNIT_DESC_HPB_LU_NUM_PIN_REGIONS	= 0x27,
- 	UNIT_DESC_PARAM_WB_BUF_ALLOC_UNITS	= 0x29,
- };
- 
-@@ -269,6 +273,8 @@ enum device_desc_param {
- 	DEVICE_DESC_PARAM_PSA_MAX_DATA		= 0x25,
- 	DEVICE_DESC_PARAM_PSA_TMT		= 0x29,
- 	DEVICE_DESC_PARAM_PRDCT_REV		= 0x2A,
-+	DEVICE_DESC_PARAM_HPB_VER		= 0x40,
-+	DEVICE_DESC_PARAM_HPB_CONTROL		= 0x42,
- 	DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP	= 0x4F,
- 	DEVICE_DESC_PARAM_WB_PRESRV_USRSPC_EN	= 0x53,
- 	DEVICE_DESC_PARAM_WB_TYPE		= 0x54,
-@@ -317,6 +323,10 @@ enum geometry_desc_param {
- 	GEOMETRY_DESC_PARAM_ENM4_MAX_NUM_UNITS	= 0x3E,
- 	GEOMETRY_DESC_PARAM_ENM4_CAP_ADJ_FCTR	= 0x42,
- 	GEOMETRY_DESC_PARAM_OPT_LOG_BLK_SIZE	= 0x44,
-+	GEOMETRY_DESC_HPB_REGION_SIZE		= 0x48,
-+	GEOMETRY_DESC_HPB_NUMBER_LU		= 0x49,
-+	GEOMETRY_DESC_HPB_SUBREGION_SIZE	= 0x4A,
-+	GEOMETRY_DESC_HPB_DEVICE_MAX_ACTIVE_REGIONS	= 0x4B,
- 	GEOMETRY_DESC_PARAM_WB_MAX_ALLOC_UNITS	= 0x4F,
- 	GEOMETRY_DESC_PARAM_WB_MAX_WB_LUNS	= 0x53,
- 	GEOMETRY_DESC_PARAM_WB_BUFF_CAP_ADJ	= 0x54,
-@@ -361,6 +371,7 @@ enum {
- 
- /* Possible values for dExtendedUFSFeaturesSupport */
- enum {
-+	UFS_DEV_HPB_SUPPORT		= BIT(7),
- 	UFS_DEV_WRITE_BOOSTER_SUP	= BIT(8),
- };
- 
-@@ -571,6 +582,7 @@ struct ufs_dev_info {
- 	u8 *model;
- 	u16 wspecversion;
- 	u32 clk_gating_wait_us;
-+	u8 b_ufs_feature_sup;
- 	u32 d_ext_ufs_feature_sup;
- 	u8 b_wb_buffer_type;
- 	u32 d_wb_alloc_units;
--- 
-2.17.1
+SGksDQpUaGlzIHNlcmllcyBhZGRzIHRyYWNlIGV2ZW50IGZvciBVSUMgY29tbWFuZHMgYW5kIGRv
+IGEgc21hbGwgY2xlYW51cCBpbiBzdHJ1Y3QgdWljX2NvbW1hbmQuDQoNCnYyIC0+IHYzOg0KICAt
+IFJlZmFjdG9yICJjb21wbGV0ZSIgZXZlbnQgaG9va3MgaW4gdWZzaGNkX3VpY19jbWRfY29tcGwo
+KSAoQXZyaSBBbHRtYW4pDQoNCnYxIC0+IHYyOg0KICAtIFJlbmFtZSAidWljX3NlbmQiIHRvICJz
+ZW5kIiBhbmQgInVpY19jb21wbGV0ZSIgdG8gImNvbXBsZXRlIg0KICAtIE1vdmUgInNlbmQiIHRy
+YWNlIGJlZm9yZSBVSUMgY29tbWFuZCBpcyBzZW50IG90aGVyd2lzZSAic2VuZCIgdHJhY2UgbWF5
+IGxvZyBpbmNvcnJlY3QgYXJndW1lbnRzDQogIC0gTW92ZSAiY29tcGxldGUiIHRyYWNlIHRvIFVJ
+QyBpbnRlcnJ1cHQgaGFuZGxlciB0byBtYWtlIGxvZ2dpbmcgdGltZSBwcmVjaXNlDQoNClN0YW5s
+ZXkgQ2h1ICgyKToNCiAgc2NzaTogdWZzOiBSZW1vdmUgdW51c2VkIGZpZWxkIGluIHN0cnVjdCB1
+aWNfY29tbWFuZA0KICBzY3NpOiB1ZnM6IEFkZCB0cmFjZSBldmVudCBmb3IgVUlDIGNvbW1hbmRz
+DQoNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jICB8IDI2ICsrKysrKysrKysrKysrKysrKysr
+KysrKysrDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuaCAgfCAgNCAtLS0tDQogaW5jbHVkZS90
+cmFjZS9ldmVudHMvdWZzLmggfCAzMSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQog
+MyBmaWxlcyBjaGFuZ2VkLCA1NyBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KDQotLSAN
+CjIuMTguMA0K
 
