@@ -2,167 +2,68 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A1D1F8E05
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 08:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A7B1F8E3A
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 08:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728284AbgFOGqm (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jun 2020 02:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51140 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728180AbgFOGqk (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 02:46:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0CD0C03E97C;
-        Sun, 14 Jun 2020 23:46:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=cqXSPP4zZpW5SVurE/Ck5YyoT09UupiEIInhvdxSYjI=; b=uZgAo0iG2h1g1JlhHAyw366H0G
-        A99kmrM0U+ZJWvqhSPhM0Uvokz2CoWKMmZMKKNMilotlYnlTKeT5VtSATYf3g5d6OFe8PGMXyKDY7
-        XA6pLFMn96PMBY6hrCWtRmey9NWMITwcrIxRlsD6QdMaBDWDlorp4KJic7iL6Hxw2mly1EBmDJZ1a
-        nRkro3I54qzBizXlH1Bv2CLTbfR1jdOVIImU+mI/90CnrHGwZtPnl01VF3/gPuoEZHNQV/C/HguUi
-        +Y6ay6Rwj+//WsBcpRTo313CDjuPss6f1+YET1uR+GBQSd2WAtUgCDuMBCd7oT7LbEecxJ3kCUPW0
-        NB4m/4Kw==;
-Received: from 195-192-102-148.dyn.cablelink.at ([195.192.102.148] helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jkit6-0001WL-Rs; Mon, 15 Jun 2020 06:46:33 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     martin.petersen@oracle.com
-Cc:     brking@us.ibm.com, jinpu.wang@cloud.ionos.com,
-        John Garry <john.garry@huawei.com>, mpe@ellerman.id.au,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org
-Subject: [PATCH 2/2] scsi: wire up ata_scsi_dma_need_drain for SAS HBA drivers
-Date:   Mon, 15 Jun 2020 08:46:24 +0200
-Message-Id: <20200615064624.37317-3-hch@lst.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200615064624.37317-1-hch@lst.de>
-References: <20200615064624.37317-1-hch@lst.de>
+        id S1728618AbgFOGsI (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Jun 2020 02:48:08 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:48941 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728603AbgFOGsA (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 02:48:00 -0400
+X-UUID: 9ad64165efe149da81586e718ebcd412-20200615
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=6sskvS9E8A91kA1DIsgQnE7Mcroj4DNNwvI11p317Kg=;
+        b=pfynxBDm5eu4j6Km9k3s09pLNgy4vcncQBh+ce9dnMaTBNmJWGGfsOgrPmIeZSh3vS7I5+uhWmPlaMG6tekSFJLffFZ6jaTTTV5WfmZQee0FoVP7Zl97FkZdZ5zxnCbUgp2WD3fF5AkJcr7ycZrUvU0bYCt5NunEP0xookaDEg4=;
+X-UUID: 9ad64165efe149da81586e718ebcd412-20200615
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1057754218; Mon, 15 Jun 2020 14:47:56 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs02n2.mediatek.inc (172.21.101.101) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 15 Jun 2020 14:47:54 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 15 Jun 2020 14:47:53 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
+        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
+        <jejb@linux.ibm.com>, <asutoshd@codeaurora.org>
+CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
+        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
+        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <andy.teng@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>
+Subject: [PATCH v2 0/2] scsi: ufs: Add trace event for UIC commands and cleanup UIC struct
+Date:   Mon, 15 Jun 2020 14:47:51 +0800
+Message-ID: <20200615064753.20935-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 8D5C5DFC44D1CCFA7C459F1F145365925C51A8DB378C958FCB620F0E9436551A2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-We need ata_scsi_dma_need_drain for all drivers wired up to drive ATAPI
-devices through libata.  That also includes the SAS HBA drivers in
-addition to native libata HBA drivers.
-
-Fixes: cc97923a5bcc ("block: move dma drain handling to scsi")
-Reported-by: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Tested-by: Michael Ellerman <mpe@ellerman.id.au>
-Acked-by: Jack Wang <jinpu.wang@cloud.ionos.com>
-Acked-by: John Garry <john.garry@huawei.com>
----
- drivers/scsi/aic94xx/aic94xx_init.c    | 1 +
- drivers/scsi/hisi_sas/hisi_sas_v1_hw.c | 1 +
- drivers/scsi/hisi_sas/hisi_sas_v2_hw.c | 1 +
- drivers/scsi/hisi_sas/hisi_sas_v3_hw.c | 1 +
- drivers/scsi/ipr.c                     | 1 +
- drivers/scsi/isci/init.c               | 1 +
- drivers/scsi/mvsas/mv_init.c           | 1 +
- drivers/scsi/pm8001/pm8001_init.c      | 1 +
- 8 files changed, 8 insertions(+)
-
-diff --git a/drivers/scsi/aic94xx/aic94xx_init.c b/drivers/scsi/aic94xx/aic94xx_init.c
-index d022407e5645c7..bef47f38dd0dbc 100644
---- a/drivers/scsi/aic94xx/aic94xx_init.c
-+++ b/drivers/scsi/aic94xx/aic94xx_init.c
-@@ -40,6 +40,7 @@ static struct scsi_host_template aic94xx_sht = {
- 	/* .name is initialized */
- 	.name			= "aic94xx",
- 	.queuecommand		= sas_queuecommand,
-+	.dma_need_drain		= ata_scsi_dma_need_drain,
- 	.target_alloc		= sas_target_alloc,
- 	.slave_configure	= sas_slave_configure,
- 	.scan_finished		= asd_scan_finished,
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-index 2e1718f9ade218..09a7669dad4c67 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v1_hw.c
-@@ -1756,6 +1756,7 @@ static struct scsi_host_template sht_v1_hw = {
- 	.proc_name		= DRV_NAME,
- 	.module			= THIS_MODULE,
- 	.queuecommand		= sas_queuecommand,
-+	.dma_need_drain		= ata_scsi_dma_need_drain,
- 	.target_alloc		= sas_target_alloc,
- 	.slave_configure	= hisi_sas_slave_configure,
- 	.scan_finished		= hisi_sas_scan_finished,
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-index e7e7849a4c14e2..968d3870235359 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v2_hw.c
-@@ -3532,6 +3532,7 @@ static struct scsi_host_template sht_v2_hw = {
- 	.proc_name		= DRV_NAME,
- 	.module			= THIS_MODULE,
- 	.queuecommand		= sas_queuecommand,
-+	.dma_need_drain		= ata_scsi_dma_need_drain,
- 	.target_alloc		= sas_target_alloc,
- 	.slave_configure	= hisi_sas_slave_configure,
- 	.scan_finished		= hisi_sas_scan_finished,
-diff --git a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-index 3e6b78a1f993b9..55e2321a65bc5f 100644
---- a/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-+++ b/drivers/scsi/hisi_sas/hisi_sas_v3_hw.c
-@@ -3075,6 +3075,7 @@ static struct scsi_host_template sht_v3_hw = {
- 	.proc_name		= DRV_NAME,
- 	.module			= THIS_MODULE,
- 	.queuecommand		= sas_queuecommand,
-+	.dma_need_drain		= ata_scsi_dma_need_drain,
- 	.target_alloc		= sas_target_alloc,
- 	.slave_configure	= hisi_sas_slave_configure,
- 	.scan_finished		= hisi_sas_scan_finished,
-diff --git a/drivers/scsi/ipr.c b/drivers/scsi/ipr.c
-index 7d77997d26d457..7d86f4ca266c86 100644
---- a/drivers/scsi/ipr.c
-+++ b/drivers/scsi/ipr.c
-@@ -6731,6 +6731,7 @@ static struct scsi_host_template driver_template = {
- 	.compat_ioctl = ipr_ioctl,
- #endif
- 	.queuecommand = ipr_queuecommand,
-+	.dma_need_drain = ata_scsi_dma_need_drain,
- 	.eh_abort_handler = ipr_eh_abort,
- 	.eh_device_reset_handler = ipr_eh_dev_reset,
- 	.eh_host_reset_handler = ipr_eh_host_reset,
-diff --git a/drivers/scsi/isci/init.c b/drivers/scsi/isci/init.c
-index 974c3b9116d5ba..085e285f427d93 100644
---- a/drivers/scsi/isci/init.c
-+++ b/drivers/scsi/isci/init.c
-@@ -153,6 +153,7 @@ static struct scsi_host_template isci_sht = {
- 	.name				= DRV_NAME,
- 	.proc_name			= DRV_NAME,
- 	.queuecommand			= sas_queuecommand,
-+	.dma_need_drain			= ata_scsi_dma_need_drain,
- 	.target_alloc			= sas_target_alloc,
- 	.slave_configure		= sas_slave_configure,
- 	.scan_finished			= isci_host_scan_finished,
-diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
-index 5973eed9493820..b0de3bdb01db06 100644
---- a/drivers/scsi/mvsas/mv_init.c
-+++ b/drivers/scsi/mvsas/mv_init.c
-@@ -33,6 +33,7 @@ static struct scsi_host_template mvs_sht = {
- 	.module			= THIS_MODULE,
- 	.name			= DRV_NAME,
- 	.queuecommand		= sas_queuecommand,
-+	.dma_need_drain		= ata_scsi_dma_need_drain,
- 	.target_alloc		= sas_target_alloc,
- 	.slave_configure	= sas_slave_configure,
- 	.scan_finished		= mvs_scan_finished,
-diff --git a/drivers/scsi/pm8001/pm8001_init.c b/drivers/scsi/pm8001/pm8001_init.c
-index a8f5344fdfda2a..9e99262a2b9dd3 100644
---- a/drivers/scsi/pm8001/pm8001_init.c
-+++ b/drivers/scsi/pm8001/pm8001_init.c
-@@ -87,6 +87,7 @@ static struct scsi_host_template pm8001_sht = {
- 	.module			= THIS_MODULE,
- 	.name			= DRV_NAME,
- 	.queuecommand		= sas_queuecommand,
-+	.dma_need_drain		= ata_scsi_dma_need_drain,
- 	.target_alloc		= sas_target_alloc,
- 	.slave_configure	= sas_slave_configure,
- 	.scan_finished		= pm8001_scan_finished,
--- 
-2.26.2
+SGksDQpUaGlzIHNlcmllcyBhZGRzIHRyYWNlIGV2ZW50IGZvciBVSUMgY29tbWFuZHMgYW5kIGRv
+IGEgc21hbGwgY2xlYW51cCBpbiBzdHJ1Y3QgdWljX2NvbW1hbmQuDQoNCnYxIC0+IHYyOg0KICAt
+IFJlbmFtZSAidWljX3NlbmQiIHRvICJzZW5kIiBhbmQgInVpY19jb21wbGV0ZSIgdG8gImNvbXBs
+ZXRlIg0KICAtIE1vdmUgInNlbmQiIHRyYWNlIGJlZm9yZSBVSUMgY29tbWFuZCBpcyBzZW50IG90
+aGVyd2lzZSAic2VuZCIgdHJhY2UgbWF5IGxvZyBpbmNvcnJlY3QgYXJndW1lbnRzDQogIC0gTW92
+ZSAiY29tcGxldGUiIHRyYWNlIHRvIFVJQyBpbnRlcnJ1cHQgaGFuZGxlciB0byBtYWtlIGxvZ2dp
+bmcgdGltZSBwcmVjaXNlDQoNClN0YW5sZXkgQ2h1ICgyKToNCiAgc2NzaTogdWZzOiBSZW1vdmUg
+dW51c2VkIGZpZWxkIGluIHN0cnVjdCB1aWNfY29tbWFuZA0KICBzY3NpOiB1ZnM6IEFkZCB0cmFj
+ZSBldmVudCBmb3IgVUlDIGNvbW1hbmRzDQoNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jICB8
+IDI2ICsrKysrKysrKysrKysrKysrKysrKysrKysrDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2Qu
+aCAgfCAgNCAtLS0tDQogaW5jbHVkZS90cmFjZS9ldmVudHMvdWZzLmggfCAzMSArKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrDQogMyBmaWxlcyBjaGFuZ2VkLCA1NyBpbnNlcnRpb25zKCsp
+LCA0IGRlbGV0aW9ucygtKQ0KDQotLSANCjIuMTguMA0K
 
