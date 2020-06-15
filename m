@@ -2,27 +2,27 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0881F8F5B
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 09:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A1F1F8F5A
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 09:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728570AbgFOHWs (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jun 2020 03:22:48 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:35754 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728539AbgFOHWq (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 03:22:46 -0400
-X-UUID: 9ac8135d0b454283a9699f8891fa5f2f-20200615
+        id S1728426AbgFOHWp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Jun 2020 03:22:45 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:46905 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726299AbgFOHWp (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 03:22:45 -0400
+X-UUID: be4ec450c7d549fa946d6fe0ef257d23-20200615
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=KsPHsP0hYhfA7edmMoOs0ziWrUu4La3/8ekhuF/RrAI=;
-        b=HTg6bLLhj1mM1icr2cokZE8n6tUa/5PACZhwfvKJbhqmGIuQ4MjVA1h6lF49SBKeTSRttbM40hHLymr4eJYozETOSE9gVoZWQzkDMlzR9XtVsMP6IFf609JWU6haGNthcGak+yBnOl8e5iHWYyGo2GRS3vzvvTWggj6oABOF0Ss=;
-X-UUID: 9ac8135d0b454283a9699f8891fa5f2f-20200615
-Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=NX2+h82NMuVzjAxKBumSAQWD3ozofhPE4z0/RVmqYDE=;
+        b=XwnOwAmErxMPdUEoCNDrSmNa79Dh81cJiK8isOYNCWsAU70fm/5SqH4BlbeGSdJ78Ivw79hYNOHZ2ZW2qwOMA4beGKRP6u9ZMWS7SPSPtYfkL/F+zluuxroKjKPPgnAGL1T8TbcmX2btzPb2LQRohjGWxVR52FQeHtlltQhpoVA=;
+X-UUID: be4ec450c7d549fa946d6fe0ef257d23-20200615
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1313003693; Mon, 15 Jun 2020 15:22:37 +0800
+        with ESMTP id 12070985; Mon, 15 Jun 2020 15:22:37 +0800
 Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 15 Jun 2020 15:22:34 +0800
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 15 Jun 2020 15:22:36 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by MTKCAS06.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Mon, 15 Jun 2020 15:22:36 +0800
@@ -39,10 +39,12 @@ CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
         <andy.teng@mediatek.com>, <cc.chou@mediatek.com>,
         <chaotian.jing@mediatek.com>,
         Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v3 0/2] scsi: ufs: Add trace event for UIC commands and cleanup UIC struct
-Date:   Mon, 15 Jun 2020 15:22:33 +0800
-Message-ID: <20200615072235.23042-1-stanley.chu@mediatek.com>
+Subject: [PATCH v3 1/2] scsi: ufs: Remove unused field in struct uic_command
+Date:   Mon, 15 Jun 2020 15:22:34 +0800
+Message-ID: <20200615072235.23042-2-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20200615072235.23042-1-stanley.chu@mediatek.com>
+References: <20200615072235.23042-1-stanley.chu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-MTK:  N
@@ -52,19 +54,21 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-SGksDQpUaGlzIHNlcmllcyBhZGRzIHRyYWNlIGV2ZW50IGZvciBVSUMgY29tbWFuZHMgYW5kIGRv
-IGEgc21hbGwgY2xlYW51cCBpbiBzdHJ1Y3QgdWljX2NvbW1hbmQuDQoNCnYyIC0+IHYzOg0KICAt
-IFJlZmFjdG9yICJjb21wbGV0ZSIgZXZlbnQgaG9va3MgaW4gdWZzaGNkX3VpY19jbWRfY29tcGwo
-KSAoQXZyaSBBbHRtYW4pDQoNCnYxIC0+IHYyOg0KICAtIFJlbmFtZSAidWljX3NlbmQiIHRvICJz
-ZW5kIiBhbmQgInVpY19jb21wbGV0ZSIgdG8gImNvbXBsZXRlIg0KICAtIE1vdmUgInNlbmQiIHRy
-YWNlIGJlZm9yZSBVSUMgY29tbWFuZCBpcyBzZW50IG90aGVyd2lzZSAic2VuZCIgdHJhY2UgbWF5
-IGxvZyBpbmNvcnJlY3QgYXJndW1lbnRzDQogIC0gTW92ZSAiY29tcGxldGUiIHRyYWNlIHRvIFVJ
-QyBpbnRlcnJ1cHQgaGFuZGxlciB0byBtYWtlIGxvZ2dpbmcgdGltZSBwcmVjaXNlDQoNClN0YW5s
-ZXkgQ2h1ICgyKToNCiAgc2NzaTogdWZzOiBSZW1vdmUgdW51c2VkIGZpZWxkIGluIHN0cnVjdCB1
-aWNfY29tbWFuZA0KICBzY3NpOiB1ZnM6IEFkZCB0cmFjZSBldmVudCBmb3IgVUlDIGNvbW1hbmRz
-DQoNCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jICB8IDI2ICsrKysrKysrKysrKysrKysrKysr
-KysrKysrDQogZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuaCAgfCAgNCAtLS0tDQogaW5jbHVkZS90
-cmFjZS9ldmVudHMvdWZzLmggfCAzMSArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQog
-MyBmaWxlcyBjaGFuZ2VkLCA1NyBpbnNlcnRpb25zKCspLCA0IGRlbGV0aW9ucygtKQ0KDQotLSAN
-CjIuMTguMA0K
+UmVtb3ZlIHVudXNlZCBmaWVsZCAiY21kX2FjdGl2ZSIgYW5kICJyZXN1bHQiIGluIHN0cnVjdCB1
+ZnNfY29tbWFuZC4NCg0KU2lnbmVkLW9mZi1ieTogU3RhbmxleSBDaHUgPHN0YW5sZXkuY2h1QG1l
+ZGlhdGVrLmNvbT4NClJldmlld2VkLWJ5OiBBbGltIEFraHRhciA8YWxpbS5ha2h0YXJAc2Ftc3Vu
+Zy5jb20+DQotLS0NCiBkcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5oIHwgNCAtLS0tDQogMSBmaWxl
+IGNoYW5nZWQsIDQgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3Njc2kvdWZz
+L3Vmc2hjZC5oIGIvZHJpdmVycy9zY3NpL3Vmcy91ZnNoY2QuaA0KaW5kZXggYmY5N2Q2MTZlNTk3
+Li43ZmEzNWM3ODM0MmIgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5oDQor
+KysgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5oDQpAQCAtODgsOCArODgsNiBAQCBlbnVtIGRl
+dl9jbWRfdHlwZSB7DQogICogQGFyZ3VtZW50MTogVUlDIGNvbW1hbmQgYXJndW1lbnQgMQ0KICAq
+IEBhcmd1bWVudDI6IFVJQyBjb21tYW5kIGFyZ3VtZW50IDINCiAgKiBAYXJndW1lbnQzOiBVSUMg
+Y29tbWFuZCBhcmd1bWVudCAzDQotICogQGNtZF9hY3RpdmU6IEluZGljYXRlIGlmIFVJQyBjb21t
+YW5kIGlzIG91dHN0YW5kaW5nDQotICogQHJlc3VsdDogVUlDIGNvbW1hbmQgcmVzdWx0DQogICog
+QGRvbmU6IFVJQyBjb21tYW5kIGNvbXBsZXRpb24NCiAgKi8NCiBzdHJ1Y3QgdWljX2NvbW1hbmQg
+ew0KQEAgLTk3LDggKzk1LDYgQEAgc3RydWN0IHVpY19jb21tYW5kIHsNCiAJdTMyIGFyZ3VtZW50
+MTsNCiAJdTMyIGFyZ3VtZW50MjsNCiAJdTMyIGFyZ3VtZW50MzsNCi0JaW50IGNtZF9hY3RpdmU7
+DQotCWludCByZXN1bHQ7DQogCXN0cnVjdCBjb21wbGV0aW9uIGRvbmU7DQogfTsNCiANCi0tIA0K
+Mi4xOC4wDQo=
 
