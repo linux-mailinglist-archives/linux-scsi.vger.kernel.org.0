@@ -2,122 +2,252 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 803101F8E37
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 08:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 530991F8EDA
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 08:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728608AbgFOGsB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jun 2020 02:48:01 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:56022 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728481AbgFOGr7 (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 02:47:59 -0400
-X-UUID: 8c0a850e63794cb1b6cd3ce60b21e96e-20200615
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=aIi/Cvo5z+NELDxxEWG3ffiIsJ6CjwE2XAnl7RAvFVQ=;
-        b=IxtW4/gOFeGN11XY2j81ASvLROsflJAMbKF4w7cAtzmUUvQiBEPxt1c1jDB/JSP8wBtjgzfxUi8Zo/ZrMDRAMiA6xP3xzsL/lZ1OdmmdAPcQ6terWlCSJWkPeTMOs1LIF/iV2Y6q0AE0itubT9o6yakTt4QzelHbv49zZbxUYvo=;
-X-UUID: 8c0a850e63794cb1b6cd3ce60b21e96e-20200615
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 1647051466; Mon, 15 Jun 2020 14:47:56 +0800
-Received: from mtkcas08.mediatek.inc (172.21.101.126) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 15 Jun 2020 14:47:54 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas08.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 15 Jun 2020 14:47:53 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <martin.petersen@oracle.com>,
-        <avri.altman@wdc.com>, <alim.akhtar@samsung.com>,
-        <jejb@linux.ibm.com>, <asutoshd@codeaurora.org>
-CC:     <beanhuo@micron.com>, <cang@codeaurora.org>,
-        <matthias.bgg@gmail.com>, <bvanassche@acm.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <kuohong.wang@mediatek.com>,
-        <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <andy.teng@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Subject: [PATCH v2 2/2] scsi: ufs: Add trace event for UIC commands
-Date:   Mon, 15 Jun 2020 14:47:53 +0800
-Message-ID: <20200615064753.20935-3-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20200615064753.20935-1-stanley.chu@mediatek.com>
-References: <20200615064753.20935-1-stanley.chu@mediatek.com>
+        id S1728507AbgFOG5f (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Jun 2020 02:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728445AbgFOG5e (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 02:57:34 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE00BC061A0E
+        for <linux-scsi@vger.kernel.org>; Sun, 14 Jun 2020 23:57:33 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id w1so14784164qkw.5
+        for <linux-scsi@vger.kernel.org>; Sun, 14 Jun 2020 23:57:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=from:references:in-reply-to:mime-version:thread-index:date
+         :message-id:subject:to:cc;
+        bh=sAlar1NihVVApceAMxEoWLgMWkjXJ9kYnLmHd1yzj9A=;
+        b=ZKAvCXrSYsY/bqiE4rb6UG3lU4Er7hCdeWESRBZVBkTpdNUCJZhhLRayMf0GSHzKnK
+         8pT4Uf31J4hRgir/hQ4qBLDXIWZC95lrgbSv4fK0KuGQMTXsU8J24kl0P5qsQ+T2m9LG
+         9q087jqb1sm60Or+h3H2YFhqTQFqQywCdFi0Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:references:in-reply-to:mime-version
+         :thread-index:date:message-id:subject:to:cc;
+        bh=sAlar1NihVVApceAMxEoWLgMWkjXJ9kYnLmHd1yzj9A=;
+        b=peDuJwJRSpi05EifYOHLzpWgXeQpXEZQOWg6rQZ8QlsmS4zThh0d2dqyXtTKb6T9Nh
+         0AEQUlss4sk6rjhV532h+TnNFDjUbLKvcTtdhHLKViwvnzYuYo+tLFbtbJJnsX/gq/AT
+         XvBmEyUd4EAfYFNKU2Km9Bedx1WikWFqkCKWWBp3SJ5gr77UnkfgFAKdz6Ngq+Jw9O0r
+         pl2PukYoP4zrAsXcqwrE/CwbhX3x+WE4OuS3fTNr8/lSQK0a/WuzdhtviOeDHL7MJ7w+
+         oUC1Wp3gTz2sMehgsbradF8ug2LBDcv5r10sihnunsG/x2j5jv8MVVoSccgC8AM3aHSt
+         TN5g==
+X-Gm-Message-State: AOAM531W7AxCm/uvI40BflM/7gsLRlFJmXLocaL+vCHLt5cJ0YRDvtmb
+        9f+vWKieu9g5Zql7RBtyG1r6oVtUcKYTQ7MLDp8h8A==
+X-Google-Smtp-Source: ABdhPJzBHtqx5pr6g2UkSRht7mswIlfn8JqOJ+c4w/7aV4xJstGn6XyTlfTktLt/3s2lpUPPiR9GA33ejCpTG/VTZtY=
+X-Received: by 2002:ae9:e813:: with SMTP id a19mr13897734qkg.264.1592204252936;
+ Sun, 14 Jun 2020 23:57:32 -0700 (PDT)
+From:   Kashyap Desai <kashyap.desai@broadcom.com>
+References: <1591810159-240929-1-git-send-email-john.garry@huawei.com>
+ <20200611030708.GB453671@T590> <c033f445-97fd-6dc9-c270-9890681b39d9@huawei.com>
+ <bbdec3b3fbeb9907d2ec66a2afa56c29@mail.gmail.com> <20200615021355.GA4012@T590>
+In-Reply-To: <20200615021355.GA4012@T590>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-Content-Transfer-Encoding: base64
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQBVjmvxAE7FMYb7GtMRWGcwtMcECgGaerxUAVTJvjECMFFU0QGrq6Usq6RLEnA=
+Date:   Mon, 15 Jun 2020 12:27:30 +0530
+Message-ID: <e49f164d867b53fd4495f1e05a85df03@mail.gmail.com>
+Subject: RE: [PATCH RFC v7 00/12] blk-mq/scsi: Provide hostwide shared tags
+ for SCSI HBAs
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        don.brace@microsemi.com, Sumit Saxena <sumit.saxena@broadcom.com>,
+        bvanassche@acm.org, hare@suse.com, hch@lst.de,
+        Shivasharan Srikanteshwara 
+        <shivasharan.srikanteshwara@broadcom.com>,
+        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
+        esc.storagedev@microsemi.com, chenxiang66@hisilicon.com,
+        "PDL,MEGARAIDLINUX" <megaraidlinux.pdl@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-VXNlIHRoZSBmdHJhY2UgaW5mcmFzdHJ1Y3R1cmUgdG8gY29uZGl0aW9uYWxseSB0cmFjZSBVRlMg
-VUlDIGNvbW1hbmQNCmV2ZW50cy4NCg0KTmV3IHRyYWNlIGV2ZW50ICJ1ZnNoY2RfdWljX2NvbW1h
-bmQiIGlzIGNyZWF0ZWQsIHdoaWNoIHNhbXBsZXMgdGhlDQpmb2xsb3dpbmcgVUZTIFVJQyBjb21t
-YW5kIGRhdGE6DQotIERldmljZSBuYW1lDQotIE9wdGlvbmFsIGlkZW50aWZpY2F0aW9uIHN0cmlu
-Zw0KLSBVSUMgY29tbWFuZCBvcGNvZGUNCi0gVUlDIGNvbW1hbmQgYXJndW1lbnQxDQotIFVJQyBj
-b21tYW5kIGFyZ3VtZW50Mg0KLSBVSUMgY29tbWFuZCBhcmdlbWVudDMNCg0KVXNhZ2U6DQoJZWNo
-byAxID4gL3N5cy9rZXJuZWwvZGVidWcvdHJhY2luZy9ldmVudHMvdWZzL2VuYWJsZQ0KCWNhdCAv
-c3lzL2tlcm5lbC9kZWJ1Zy90cmFjaW5nL3RyYWNlX3BpcGUNCg0KU2lnbmVkLW9mZi1ieTogU3Rh
-bmxleSBDaHUgPHN0YW5sZXkuY2h1QG1lZGlhdGVrLmNvbT4NCkFja2VkLWJ5OiBBdnJpIEFsdG1h
-biA8YXZyaS5hbHRtYW5Ad2RjLmNvbT4NCi0tLQ0KIGRyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMg
-IHwgMjYgKysrKysrKysrKysrKysrKysrKysrKysrKysNCiBpbmNsdWRlL3RyYWNlL2V2ZW50cy91
-ZnMuaCB8IDMxICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysNCiAyIGZpbGVzIGNoYW5n
-ZWQsIDU3IGluc2VydGlvbnMoKykNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvc2NzaS91ZnMvdWZz
-aGNkLmMgYi9kcml2ZXJzL3Njc2kvdWZzL3Vmc2hjZC5jDQppbmRleCBhZDRmYzgyOWNiYjIuLjFm
-ZDJmZDUyNmM2OCAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMNCisrKyBi
-L2RyaXZlcnMvc2NzaS91ZnMvdWZzaGNkLmMNCkBAIC0zNDAsNiArMzQwLDI2IEBAIHN0YXRpYyB2
-b2lkIHVmc2hjZF9hZGRfdG1fdXBpdV90cmFjZShzdHJ1Y3QgdWZzX2hiYSAqaGJhLCB1bnNpZ25l
-ZCBpbnQgdGFnLA0KIAkJCSZkZXNjcC0+aW5wdXRfcGFyYW0xKTsNCiB9DQogDQorc3RhdGljIHZv
-aWQgdWZzaGNkX2FkZF91aWNfY29tbWFuZF90cmFjZShzdHJ1Y3QgdWZzX2hiYSAqaGJhLA0KKwkJ
-CQkJIHN0cnVjdCB1aWNfY29tbWFuZCAqdWNtZCwNCisJCQkJCSBjb25zdCBjaGFyICpzdHIpDQor
-ew0KKwl1MzIgY21kOw0KKw0KKwlpZiAoIXRyYWNlX3Vmc2hjZF91aWNfY29tbWFuZF9lbmFibGVk
-KCkpDQorCQlyZXR1cm47DQorDQorCWlmICghc3RyY21wKHN0ciwgInNlbmQiKSkNCisJCWNtZCA9
-IHVjbWQtPmNvbW1hbmQ7DQorCWVsc2UNCisJCWNtZCA9IHVmc2hjZF9yZWFkbChoYmEsIFJFR19V
-SUNfQ09NTUFORCk7DQorDQorCXRyYWNlX3Vmc2hjZF91aWNfY29tbWFuZChkZXZfbmFtZShoYmEt
-PmRldiksIHN0ciwgY21kLA0KKwkJCQkgdWZzaGNkX3JlYWRsKGhiYSwgUkVHX1VJQ19DT01NQU5E
-X0FSR18xKSwNCisJCQkJIHVmc2hjZF9yZWFkbChoYmEsIFJFR19VSUNfQ09NTUFORF9BUkdfMiks
-DQorCQkJCSB1ZnNoY2RfcmVhZGwoaGJhLCBSRUdfVUlDX0NPTU1BTkRfQVJHXzMpKTsNCit9DQor
-DQogc3RhdGljIHZvaWQgdWZzaGNkX2FkZF9jb21tYW5kX3RyYWNlKHN0cnVjdCB1ZnNfaGJhICpo
-YmEsDQogCQl1bnNpZ25lZCBpbnQgdGFnLCBjb25zdCBjaGFyICpzdHIpDQogew0KQEAgLTIwNTIs
-NiArMjA3Miw4IEBAIHVmc2hjZF9kaXNwYXRjaF91aWNfY21kKHN0cnVjdCB1ZnNfaGJhICpoYmEs
-IHN0cnVjdCB1aWNfY29tbWFuZCAqdWljX2NtZCkNCiAJdWZzaGNkX3dyaXRlbChoYmEsIHVpY19j
-bWQtPmFyZ3VtZW50MiwgUkVHX1VJQ19DT01NQU5EX0FSR18yKTsNCiAJdWZzaGNkX3dyaXRlbCho
-YmEsIHVpY19jbWQtPmFyZ3VtZW50MywgUkVHX1VJQ19DT01NQU5EX0FSR18zKTsNCiANCisJdWZz
-aGNkX2FkZF91aWNfY29tbWFuZF90cmFjZShoYmEsIHVpY19jbWQsICJzZW5kIik7DQorDQogCS8q
-IFdyaXRlIFVJQyBDbWQgKi8NCiAJdWZzaGNkX3dyaXRlbChoYmEsIHVpY19jbWQtPmNvbW1hbmQg
-JiBDT01NQU5EX09QQ09ERV9NQVNLLA0KIAkJICAgICAgUkVHX1VJQ19DT01NQU5EKTsNCkBAIC00
-ODI1LDExICs0ODQ3LDE1IEBAIHN0YXRpYyBpcnFyZXR1cm5fdCB1ZnNoY2RfdWljX2NtZF9jb21w
-bChzdHJ1Y3QgdWZzX2hiYSAqaGJhLCB1MzIgaW50cl9zdGF0dXMpDQogCQkJdWZzaGNkX2dldF91
-aWNfY21kX3Jlc3VsdChoYmEpOw0KIAkJaGJhLT5hY3RpdmVfdWljX2NtZC0+YXJndW1lbnQzID0N
-CiAJCQl1ZnNoY2RfZ2V0X2RtZV9hdHRyX3ZhbChoYmEpOw0KKwkJdWZzaGNkX2FkZF91aWNfY29t
-bWFuZF90cmFjZShoYmEsIGhiYS0+YWN0aXZlX3VpY19jbWQsDQorCQkJCQkgICAgICJjb21wbGV0
-ZSIpOw0KIAkJY29tcGxldGUoJmhiYS0+YWN0aXZlX3VpY19jbWQtPmRvbmUpOw0KIAkJcmV0dmFs
-ID0gSVJRX0hBTkRMRUQ7DQogCX0NCiANCiAJaWYgKChpbnRyX3N0YXR1cyAmIFVGU0hDRF9VSUNf
-UFdSX01BU0spICYmIGhiYS0+dWljX2FzeW5jX2RvbmUpIHsNCisJCXVmc2hjZF9hZGRfdWljX2Nv
-bW1hbmRfdHJhY2UoaGJhLCBoYmEtPmFjdGl2ZV91aWNfY21kLA0KKwkJCQkJICAgICAiY29tcGxl
-dGUiKTsNCiAJCWNvbXBsZXRlKGhiYS0+dWljX2FzeW5jX2RvbmUpOw0KIAkJcmV0dmFsID0gSVJR
-X0hBTkRMRUQ7DQogCX0NCmRpZmYgLS1naXQgYS9pbmNsdWRlL3RyYWNlL2V2ZW50cy91ZnMuaCBi
-L2luY2x1ZGUvdHJhY2UvZXZlbnRzL3Vmcy5oDQppbmRleCA1ZjMwMDczOTI0MGQuLjg0ODQxYjNh
-N2ZmZCAxMDA2NDQNCi0tLSBhL2luY2x1ZGUvdHJhY2UvZXZlbnRzL3Vmcy5oDQorKysgYi9pbmNs
-dWRlL3RyYWNlL2V2ZW50cy91ZnMuaA0KQEAgLTI0OSw2ICsyNDksMzcgQEAgVFJBQ0VfRVZFTlQo
-dWZzaGNkX2NvbW1hbmQsDQogCSkNCiApOw0KIA0KK1RSQUNFX0VWRU5UKHVmc2hjZF91aWNfY29t
-bWFuZCwNCisJVFBfUFJPVE8oY29uc3QgY2hhciAqZGV2X25hbWUsIGNvbnN0IGNoYXIgKnN0ciwg
-dTMyIGNtZCwNCisJCSB1MzIgYXJnMSwgdTMyIGFyZzIsIHUzMiBhcmczKSwNCisNCisJVFBfQVJH
-UyhkZXZfbmFtZSwgc3RyLCBjbWQsIGFyZzEsIGFyZzIsIGFyZzMpLA0KKw0KKwlUUF9TVFJVQ1Rf
-X2VudHJ5KA0KKwkJX19zdHJpbmcoZGV2X25hbWUsIGRldl9uYW1lKQ0KKwkJX19zdHJpbmcoc3Ry
-LCBzdHIpDQorCQlfX2ZpZWxkKHUzMiwgY21kKQ0KKwkJX19maWVsZCh1MzIsIGFyZzEpDQorCQlf
-X2ZpZWxkKHUzMiwgYXJnMikNCisJCV9fZmllbGQodTMyLCBhcmczKQ0KKwkpLA0KKw0KKwlUUF9m
-YXN0X2Fzc2lnbigNCisJCV9fYXNzaWduX3N0cihkZXZfbmFtZSwgZGV2X25hbWUpOw0KKwkJX19h
-c3NpZ25fc3RyKHN0ciwgc3RyKTsNCisJCV9fZW50cnktPmNtZCA9IGNtZDsNCisJCV9fZW50cnkt
-PmFyZzEgPSBhcmcxOw0KKwkJX19lbnRyeS0+YXJnMiA9IGFyZzI7DQorCQlfX2VudHJ5LT5hcmcz
-ID0gYXJnMzsNCisJKSwNCisNCisJVFBfcHJpbnRrKA0KKwkJIiVzOiAlczogY21kOiAweCV4LCBh
-cmcxOiAweCV4LCBhcmcyOiAweCV4LCBhcmczOiAweCV4IiwNCisJCV9fZ2V0X3N0cihzdHIpLCBf
-X2dldF9zdHIoZGV2X25hbWUpLCBfX2VudHJ5LT5jbWQsDQorCQlfX2VudHJ5LT5hcmcxLCBfX2Vu
-dHJ5LT5hcmcyLCBfX2VudHJ5LT5hcmczDQorCSkNCispOw0KKw0KIFRSQUNFX0VWRU5UKHVmc2hj
-ZF91cGl1LA0KIAlUUF9QUk9UTyhjb25zdCBjaGFyICpkZXZfbmFtZSwgY29uc3QgY2hhciAqc3Ry
-LCB2b2lkICpoZHIsIHZvaWQgKnRzZiksDQogDQotLSANCjIuMTguMA0K
+> >
+> > John -
+> >
+> > I tried V7 series and debug further on mq-deadline interface. This
+> > time I have used another setup since HDD based setup is not readily
+> > available for me.
+> > In fact, I was able to simulate issue very easily using single
+> > scsi_device as well. BTW, this is not an issue with this RFC, but
+generic issue.
+> > Since I have converted nr_hw_queue > 1 for Broadcom product using this
+> > RFC, It becomes noticeable now.
+> >
+> > Problem - Using below command  I see heavy CPU utilization on "
+> > native_queued_spin_lock_slowpath". This is because kblockd work queue
+> > is submitting IO from all the CPUs even though fio is bound to single
+CPU.
+> > Lock contention from " dd_dispatch_request" is causing this issue.
+> >
+> > numactl -C 13  fio
+> > single.fio --iodepth=32 --bs=4k --rw=randread --ioscheduler=none
+> > --numjobs=1  --cpus_allowed_policy=split --ioscheduler=mq-deadline
+> > --group_reporting --filename=/dev/sdd
+> >
+> > While running above command, ideally we expect only kworker/13 to be
+> active.
+> > But you can see below - All the CPU is attempting submission and lots
+> > of CPU consumption is due to lock contention.
+> >
+> >   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+
+COMMAND
+> >  2726 root       0 -20       0      0      0 R  56.5  0.0   0:53.20
+> > kworker/13:1H-k
+> >  7815 root      20   0  712404  15536   2228 R  43.2  0.0   0:05.03
+fio
+> >  2792 root       0 -20       0      0      0 I  26.6  0.0   0:22.19
+> > kworker/18:1H-k
+> >  2791 root       0 -20       0      0      0 I  19.9  0.0   0:17.17
+> > kworker/19:1H-k
+> >  1419 root       0 -20       0      0      0 I  19.6  0.0   0:17.03
+> > kworker/20:1H-k
+> >  2793 root       0 -20       0      0      0 I  18.3  0.0   0:15.64
+> > kworker/21:1H-k
+> >  1424 root       0 -20       0      0      0 I  17.3  0.0   0:14.99
+> > kworker/22:1H-k
+> >  2626 root       0 -20       0      0      0 I  16.9  0.0   0:14.68
+> > kworker/26:1H-k
+> >  2794 root       0 -20       0      0      0 I  16.9  0.0   0:14.87
+> > kworker/23:1H-k
+> >  2795 root       0 -20       0      0      0 I  16.9  0.0   0:14.81
+> > kworker/24:1H-k
+> >  2797 root       0 -20       0      0      0 I  16.9  0.0   0:14.62
+> > kworker/27:1H-k
+> >  1415 root       0 -20       0      0      0 I  16.6  0.0   0:14.44
+> > kworker/30:1H-k
+> >  2669 root       0 -20       0      0      0 I  16.6  0.0   0:14.38
+> > kworker/31:1H-k
+> >  2796 root       0 -20       0      0      0 I  16.6  0.0   0:14.74
+> > kworker/25:1H-k
+> >  2799 root       0 -20       0      0      0 I  16.6  0.0   0:14.56
+> > kworker/28:1H-k
+> >  1425 root       0 -20       0      0      0 I  16.3  0.0   0:14.21
+> > kworker/34:1H-k
+> >  2746 root       0 -20       0      0      0 I  16.3  0.0   0:14.33
+> > kworker/32:1H-k
+> >  2798 root       0 -20       0      0      0 I  16.3  0.0   0:14.50
+> > kworker/29:1H-k
+> >  2800 root       0 -20       0      0      0 I  16.3  0.0   0:14.27
+> > kworker/33:1H-k
+> >  1423 root       0 -20       0      0      0 I  15.9  0.0   0:14.10
+> > kworker/54:1H-k
+> >  1784 root       0 -20       0      0      0 I  15.9  0.0   0:14.03
+> > kworker/55:1H-k
+> >  2801 root       0 -20       0      0      0 I  15.9  0.0   0:14.15
+> > kworker/35:1H-k
+> >  2815 root       0 -20       0      0      0 I  15.9  0.0   0:13.97
+> > kworker/56:1H-k
+> >  1484 root       0 -20       0      0      0 I  15.6  0.0   0:13.90
+> > kworker/57:1H-k
+> >  1485 root       0 -20       0      0      0 I  15.6  0.0   0:13.82
+> > kworker/59:1H-k
+> >  1519 root       0 -20       0      0      0 I  15.6  0.0   0:13.64
+> > kworker/62:1H-k
+> >  2315 root       0 -20       0      0      0 I  15.6  0.0   0:13.87
+> > kworker/58:1H-k
+> >  2627 root       0 -20       0      0      0 I  15.6  0.0   0:13.69
+> > kworker/61:1H-k
+> >  2816 root       0 -20       0      0      0 I  15.6  0.0   0:13.75
+> > kworker/60:1H-k
+> >
+> >
+> > I root cause this issue -
+> >
+> > Block layer always queue IO on hctx context mapped to CPU-13, but hw
+> > queue run from all the hctx context.
+> > I noticed in my test hctx48 has queued all the IOs. No other hctx has
+> > queued IO. But all the hctx is counting for "run".
+> >
+> > # cat hctx48/queued
+> > 2087058
+> >
+> > #cat hctx*/run
+> > 151318
+> > 30038
+> > 83110
+> > 50680
+> > 69907
+> > 60391
+> > 111239
+> > 18036
+> > 33935
+> > 91648
+> > 34582
+> > 22853
+> > 61286
+> > 19489
+> >
+> > Below patch has fix - "Run the hctx queue for which request was
+> > completed instead of running all the hardware queue."
+> > If this looks valid fix, please include in V8 OR I can post separate
+> > patch for this. Just want to have some level of review from this
+discussion.
+> >
+> > diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c index
+> > 0652acd..f52118f 100644
+> > --- a/drivers/scsi/scsi_lib.c
+> > +++ b/drivers/scsi/scsi_lib.c
+> > @@ -554,6 +554,7 @@ static bool scsi_end_request(struct request *req,
+> > blk_status_t error,
+> >         struct scsi_cmnd *cmd = blk_mq_rq_to_pdu(req);
+> >         struct scsi_device *sdev = cmd->device;
+> >         struct request_queue *q = sdev->request_queue;
+> > +       struct blk_mq_hw_ctx *mq_hctx = req->mq_hctx;
+> >
+> >         if (blk_update_request(req, error, bytes))
+> >                 return true;
+> > @@ -595,7 +596,8 @@ static bool scsi_end_request(struct request *req,
+> > blk_status_t error,
+> >             !list_empty(&sdev->host->starved_list))
+> >                 kblockd_schedule_work(&sdev->requeue_work);
+> >         else
+> > -               blk_mq_run_hw_queues(q, true);
+> > +               blk_mq_run_hw_queue(mq_hctx, true);
+> > +               //blk_mq_run_hw_queues(q, true);
+>
+> This way may cause IO hang because ->device_busy is shared by all hctxs.
 
+From SCSI stack, if we attempt to run all h/w queue, is it possible that
+block layer actually run hw_queue which has really not queued any IO.
+Currently, in case of mq-deadline, IOS are inserted using
+"dd_insert_request". This function will add IOs on elevator data which is
+per request queue and not per hctx.
+When there is an attempt to run hctx, "blk_mq_sched_has_work" will check
+pending work which is per request queue and not per hctx.
+Because of this, IOs queued on only one hctx will be run from all the hctx
+and this will create unnecessary lock contention.
+
+How about below patch - ?
+
+diff --git a/block/blk-mq-sched.h b/block/blk-mq-sched.h
+index 126021f..1d30bd3 100644
+--- a/block/blk-mq-sched.h
++++ b/block/blk-mq-sched.h
+@@ -74,6 +74,13 @@ static inline bool blk_mq_sched_has_work(struct
+blk_mq_hw_ctx *hctx)
+ {
+        struct elevator_queue *e = hctx->queue->elevator;
+
++       /* If current hctx has not queued any request, there is no need to
+run.
++        * blk_mq_run_hw_queue() on hctx which has queued IO will handle
++        * running specific hctx.
++        */
++       if (!hctx->queued)
++               return false;
++
+        if (e && e->type->ops.has_work)
+                return e->type->ops.has_work(hctx);
+
+Kashyap
+
+>
+> Thanks,
+> Ming
