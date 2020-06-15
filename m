@@ -2,144 +2,73 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C69201F9D45
-	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 18:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 417DE1F9E8D
+	for <lists+linux-scsi@lfdr.de>; Mon, 15 Jun 2020 19:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731008AbgFOQYU (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Mon, 15 Jun 2020 12:24:20 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:26469 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730795AbgFOQYP (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Mon, 15 Jun 2020 12:24:15 -0400
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200615162410epoutp01a8848fe5d891ad431f0fad337fe4a907~YxEC2rrox1537515375epoutp01Z
-        for <linux-scsi@vger.kernel.org>; Mon, 15 Jun 2020 16:24:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200615162410epoutp01a8848fe5d891ad431f0fad337fe4a907~YxEC2rrox1537515375epoutp01Z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1592238250;
-        bh=BEyEvCjpVeZ0zAtPUpZTgBK+qidw68l28PlKRvrd7jk=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=nk+CrK+qc0f8ji52XtUiNy90799GBidX1zYiF7LTklutrm0zGDpEyzSPXGwyUWWR4
-         F1Lam81jeItu+474IkdKRH+cdqULbjtQG8n/ZIpeL9SFFwSQt7nAV4Rz93uWIwaGwP
-         VlkY2NPWF0m8uzb6JmQqydo6Dl9SyBzNPKAtnj4E=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-        epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-        20200615162409epcas5p1076dad5980246b4ed9585b73bdd7d4d6~YxECOMLhF0740907409epcas5p1h;
-        Mon, 15 Jun 2020 16:24:09 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        47.26.09475.9A0A7EE5; Tue, 16 Jun 2020 01:24:09 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200615162408epcas5p3c8bfc7f248fa72fd01156d39851e628d~YxEBRa4iD0964309643epcas5p30;
-        Mon, 15 Jun 2020 16:24:08 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20200615162408epsmtrp1a573006830526845280bb8711ad00873~YxEBQlGE12292522925epsmtrp1F;
-        Mon, 15 Jun 2020 16:24:08 +0000 (GMT)
-X-AuditID: b6c32a4b-389ff70000002503-c3-5ee7a0a9c69e
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9E.2E.08382.8A0A7EE5; Tue, 16 Jun 2020 01:24:08 +0900 (KST)
-Received: from alimakhtar02 (unknown [107.108.234.165]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200615162405epsmtip19e7d7fb67d9663b3e7591a2ca5be9e08~YxD_UUEA-2560325603epsmtip1s;
-        Mon, 15 Jun 2020 16:24:05 +0000 (GMT)
-From:   "Alim Akhtar" <alim.akhtar@samsung.com>
-To:     <kishon@ti.com>
-Cc:     <kbuild-all@lists.01.org>, <clang-built-linux@googlegroups.com>,
-        <devicetree@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <krzk@kernel.org>, <avri.altman@wdc.com>,
-        <martin.petersen@oracle.com>, <kwmad.kim@samsung.com>,
-        <stanley.chu@mediatek.com>, <cang@codeaurora.org>,
-        <linux-samsung-soc@vger.kernel.org>,
-        "'kernel test robot'" <lkp@intel.com>
-In-Reply-To: <202006131334.EEnoEaXS%lkp@intel.com>
-Subject: RE: [RESEND PATCH v10 07/10] phy: samsung-ufs: add UFS PHY driver
- for samsung SoC
-Date:   Mon, 15 Jun 2020 21:54:03 +0530
-Message-ID: <000101d64331$65230260$2f690720$@samsung.com>
+        id S1731183AbgFORcg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Mon, 15 Jun 2020 13:32:36 -0400
+Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:33825 "EHLO
+        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731196AbgFORcg (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Mon, 15 Jun 2020 13:32:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592242354; bh=NajTNMrfMLb6UXcjRhYpYerQX8PtVBLz0oFgaMINSWY=; h=Date:From:Reply-To:Subject:References:From:Subject; b=a1qPeJnsgR5d6Xf2FeiK+qLxCdL2WXC40YTXT8A9hy9X+YRUkqNtQBo3aI2GWCpg6EkHz6MG61bCMUh+iwjMPDq7Tlx22WIOwZ9II76tEfUTd2S95p0gScShqw9d/sPw8j0dV+swHMzMPS/PE/WqeuTAKQB75rK7N1Q0LiV1/+UphRVXkG+iIWZkdnCdlFPc6wOW2WGt8AB+E/5DMELOtXqnd4ocNtzRZ2k76VzTtAojFE7/oT7O6EsCtP+G56+8K69t5fwAcTX765BoCYuy1qEVdFfbUh4i9YmS6J6Tbbc6gl62mbmfZn8e7znWax0mLgKepOuAgrFBPKFkyfnS8Q==
+X-YMail-OSG: AjE6pkEVM1kNHBgCKC6tIuRaPfOX9h2SF7fkvjvAmN8bkpnIVLOkLZUc0LfLfr9
+ bRNvuL3DCjpbasAw8jkZ0q1sr_SxgQ5L4_NKII2.ymXI2dWo.kVwcpmn.dyCCn_LceW5GcDgNjoa
+ XIayuBMHhbwoPQJX3XeWEJaHvvU3fcykcu_zG_tL9QYtJa9weHhGd9hUrI0zgL7tF70mpbRabS2W
+ 8EHmstrQOc037EkiYAKhWThI4lZtVT.46AZ_bcrv_MZc8pZopnqwOaZgq2P2boPWdQ14XlBfbQsx
+ bf4YCxBxZJCsuzEJzJLv8ZXMu.ncmDBOnntP_73sr61kvAD.LygezY8LynMAahcH8C1bXON8CipZ
+ wgTDqlUXrFNRcmrc5SFJHnxf.N4OPsCwt.s4w_gBAdynQ8bwydqSv8nxqU1TnJpe4LREs51Djz2R
+ 4ckdJMOiZO5amNqxWz.2_h61grILpfC.CmtJv9Ws.0iU9mfU98q8FCtwxBV2Jq.w9seSofrONecj
+ 5dB1OKbhRalJFNPnihJSOl8X08dKEtE6v8yh.SaLkVyelte7EP24xFn9xmK5MyTqUC4MEmuh5ty1
+ sJAxGLkPTSufPR5v.Y3vD.gtxyrnrzTBV8UD1H2H3ul8l.s2yZrUuBK_79c8I3SpUEIlh8xCo3rQ
+ ifES63ImS1QAkspkrHAK91WXkOEjAsOBQAAda8C7RroAzw6C94RRD4LTSPOG8BGHw6D5XPAXp8mF
+ c8nBzcyzlbFdgGRjgD90PfkMJxUKqNpU8Typb7_SiBWBxAsHiu4AkLI3wfOsGPvex7pNJZvjF8m3
+ rFeEAqeb0vJsRHR6Xn3pUgRRTw2f0lUsZi.UpTsWamlmJhmvG9hnd_a4OOrx4EuwELV7plZOwVRN
+ 61Eh7K8o3JNN7LwQrrPzOTQysXGLewaopus2gcBPIuq6aBLzeU8s5CLzl4W0JDfY_ZXo5XIQdjRz
+ 8VfpK26_gLDvcFrAeKv0WQvoCzebSh6mltu2CCnSHjgc3i9OQ9MtkwVYecPku__axSMYJmBELK8g
+ npGNZBmuc7hJQ2JF_DHAM9weFvqPHEnEyT7ITwVK6qoyDBdgPKEERhFTQS3wJ_CiUpXWHR5aCEJv
+ lFSRc8ihpWjejG1BraRpDp77GybrfXfqJZ2Hu2JKZj2zpeEt0DzhJaj2XaEwlEyVLS7EOZw0HdG8
+ 9TNiVnnoZuBA_1giiIpqwti3dkmNZYH1w5jIrNq9zBuLCWpl76AwO5a2qxGkQ3qpyjnC5oi8Ue2Q
+ wE624C45621PL38mw0JeDw9LRzzKWuPLIEX4GNMtgmQM1RHnRYwJrI9Vxgp6crUA9g1w-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Mon, 15 Jun 2020 17:32:34 +0000
+Date:   Mon, 15 Jun 2020 17:32:33 +0000 (UTC)
+From:   Ms lisa Hugh <lisahugh531@gmail.com>
+Reply-To: ms.lisahugh000@gmail.com
+Message-ID: <1271891906.798134.1592242353602@mail.yahoo.com>
+Subject: BUSINESS FROM(Ms Lisa hugh).
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQJxKJl1qzUofIPujdEacJl88XyIuwGkdPiqAy1Y4e2nfYD4sA==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNKsWRmVeSWpSXmKPExsWy7bCmuu7KBc/jDK6c1bJ4+fMqm8Wn9ctY
-        LR68mc1mMf/IOVaLs93XGC0uPO1hszh/fgO7xc0tR1ksZpzfx2TRfX0Hm8Wr5kdsFsuP/2Oy
-        WLr1JqMDr8flvl4mjz0TT7J5LN7zkslj06pONo/u2f9YPFpO7mfx+Pj0FotH35ZVjB7Hb2xn
-        8vi8Sc6j/UA3UwB3FJdNSmpOZllqkb5dAlfGm7sLWAo6eSp2nnnF1MC4jKuLkYNDQsBE4t9d
-        6y5GLg4hgd2MEt0nZjBCOJ8YJW5vPssM4XxjlNi1YD9LFyMnWMfVKW+hEnsZJS41b2eDcN4w
-        Spw82cEMUsUmoCuxY3EbG4gtIiAssXnfW7AiZoHnTBLTnr5jAklwChhJvNrdwgpiCwvESOxs
-        fAzWzCKgKtH4bT2YzStgKXGv8QWULShxcuYTsDOYBeQltr+dwwxxkoLEz6fLWCGWOUmc3L2G
-        DaJGXOLozx6wUyUEvnBILP24jh2iwUXi+9wfUP8IS7w6vgUqLiXxsr+NHRIy2RI9u4whwjUS
-        S+cdgyq3lzhwZQ4LSAmzgKbE+l36EKv4JHp/P2GC6OSV6GgTgqhWlWh+dxWqU1piYnc3K4Tt
-        IbHp3jb2CYyKs5A8NgvJY7OQPDALYdkCRpZVjJKpBcW56anFpgXGeanlesWJucWleel6yfm5
-        mxjB6U/Lewfjowcf9A4xMnEwHmKU4GBWEuE9JP88Tog3JbGyKrUoP76oNCe1+BCjNAeLkjiv
-        0o8zcUIC6YklqdmpqQWpRTBZJg5OqQamQyffFsQIMrx4+vho23v5KzqOzB6vztp1fVlZLxl0
-        X/Nve0nRfpUilyL3fzumKBbHqWVOvlNvXX6bXWLv5tP27tdfnncq6ujiYY1bN2WGgI/Kef0c
-        Ycm96XcPs2RzHapYv+bg7G/lCfNnywuqGuqEu6UvjDY4MPexhqnah03KBtd23/S7FRFx3jss
-        d0pTAsM0ifA10ze2dwZovvRdv7WUJ/pdfdIhM72ij3MEW/1u/6+relC/NH3h+lP2V1R6jLss
-        /q0SWFJ4XjevaIGXyabcn0/FkkP7uZrvm8y+JCVbInAywcPv04I92eJ+t09ZG7ef+PdR8fq3
-        0zUpxr55Obuqn72r+dGuucr2WGryd0YlluKMREMt5qLiRAALl04q7gMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPIsWRmVeSWpSXmKPExsWy7bCSnO6KBc/jDDp3aFm8/HmVzeLT+mWs
-        Fg/ezGazmH/kHKvF2e5rjBYXnvawWZw/v4Hd4uaWoywWM87vY7Lovr6DzeJV8yM2i+XH/zFZ
-        LN16k9GB1+NyXy+Tx56JJ9k8Fu95yeSxaVUnm0f37H8sHi0n97N4fHx6i8Wjb8sqRo/jN7Yz
-        eXzeJOfRfqCbKYA7issmJTUnsyy1SN8ugSvjzd0FLAWdPBU7z7xiamBcxtXFyMkhIWAicXXK
-        W+YuRi4OIYHdjBIHXrxggkhIS1zfOIEdwhaWWPnvOTtE0StGid3LnzKCJNgEdCV2LG5jA7FF
-        gIo273vLBlLELPCVSWLisr+MEB1bGCXaPuxiBqniFDCSeLW7hRXEFhaIkmib+xFsHYuAqkTj
-        t/VgNbwClhL3Gl9A2YISJ2c+Yeli5ACaqifRthFsMbOAvMT2t3OYIa5TkPj5dBkrxBFOEid3
-        r2GDqBGXOPqzh3kCo/AsJJNmIUyahWTSLCQdCxhZVjFKphYU56bnFhsWGOallusVJ+YWl+al
-        6yXn525iBMexluYOxu2rPugdYmTiYDzEKMHBrCTCe0j+eZwQb0piZVVqUX58UWlOavEhRmkO
-        FiVx3huFC+OEBNITS1KzU1MLUotgskwcnFINTOfqeOY/EUhj+jbdVCjr3OQvTyP/5pelzf26
-        oVdz61H37Ovf2w/n89zlNm/+IRe280v6n8S+LV4bbh9LPcS3IbPT+yTL2T9lJTP/9F2W2dN9
-        WbuHZ5/46i8zPyuIPbh5+EOC+ZbT0nLWF7bPSC/Z7Hq77oJFnHkK0+szgt5Juow79aa5LShm
-        +MWg2rfO4GNqccrxzQef2779upQ/+8KNCT4zP/TGr9WNTJni7Lixsv/XqdaF3NO+BIlM65rP
-        nup7Pv+pyJmtO25vSNLV365/48N83fCTdzcqRP/OWq17/gLHg2114l9ffV3z++veyyd3bhfb
-        vylJeYPax8vvN52dfa7pWFbC3VkvFcsPB+hpd1nvUmIpzkg01GIuKk4EAJd1RTVSAwAA
-X-CMS-MailID: 20200615162408epcas5p3c8bfc7f248fa72fd01156d39851e628d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20200613052521epcas5p140d979df19fae20c858c485409596a7a
-References: <20200613024706.27975-8-alim.akhtar@samsung.com>
-        <CGME20200613052521epcas5p140d979df19fae20c858c485409596a7a@epcas5p1.samsung.com>
-        <202006131334.EEnoEaXS%lkp@intel.com>
+References: <1271891906.798134.1592242353602.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.16119 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-Hi Kishon,
 
-> -----Original Message-----
-> From: kernel test robot <lkp@intel.com>
-> All warnings (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> drivers/phy/samsung/phy-samsung-ufs.c:47:5: warning: no previous
-> >> prototype for function 'samsung_ufs_phy_wait_for_lock_acq'
-> >> [-Wmissing-prototypes]
-> int samsung_ufs_phy_wait_for_lock_acq(struct phy *phy) ^
-> drivers/phy/samsung/phy-samsung-ufs.c:47:1: note: declare 'static' if the
-> function is not intended to be used outside of this translation unit int
-> samsung_ufs_phy_wait_for_lock_acq(struct phy *phy) ^ static
-> >> drivers/phy/samsung/phy-samsung-ufs.c:77:5: warning: no previous
-> >> prototype for function 'samsung_ufs_phy_calibrate'
-> >> [-Wmissing-prototypes]
-> int samsung_ufs_phy_calibrate(struct phy *phy) ^
-> drivers/phy/samsung/phy-samsung-ufs.c:77:1: note: declare 'static' if the
-> function is not intended to be used outside of this translation unit int
-> samsung_ufs_phy_calibrate(struct phy *phy) ^ static
-> 2 warnings generated.
-> 
-Not sure, how to handle this here, is this something that you can take care
-while applying this patch? Or
-Shell in send another patch to fix this warning reported by test robot?
-(Other patches in this series is already taken in respective tree)
 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://protect2.fireeye.com/url?k=9d5936bf-c0c2cadc-9d58bdf0-
-> 0cc47a31cdbc-
-> 6ed890c1e74d92a7&q=1&u=https%3A%2F%2Flists.01.org%2Fhyperkitty%2Flist
-> %2Fkbuild-all%40lists.01.org
+Dear Friend,
 
+I am Ms Lisa hugh, work with the department of Audit and accounting manager here in the Bank(B.O.A).
+
+Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment, amount (US$4.5M DOLLARS).
+
+I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me for success.
+
+Note/ 50% for you why 50% for me after success of the transfer to your bank account.
+
+Below information is what i need from you so will can be reaching each other
+
+1)Full name ...
+2)Private telephone number...
+3)Age...
+4)Nationality...
+5)Occupation ...
+
+
+Thanks.
+
+Ms Lisa hugh.
