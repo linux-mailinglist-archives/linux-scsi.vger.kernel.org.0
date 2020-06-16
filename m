@@ -2,98 +2,87 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 302DF1FA743
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2020 06:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED231FA7F4
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2020 06:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgFPEAg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Jun 2020 00:00:36 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:41484 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726593AbgFPEAf (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Jun 2020 00:00:35 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G3x7Hk195261;
-        Tue, 16 Jun 2020 04:00:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=WCUhN94eoOku1+k3rSNEpLPDTZnjBYL2UylmBfw0T1s=;
- b=NrEF6i/WPI6mRZlBtiSuc80dJEZ8fMw8uud9MG/3nLfqrX7LqZJS4U1a4qso/A/oPt4N
- V/NXy7NNTZZqrsh6omloaDD8SD6POTRaxTKyAckG75SIi/o3pc42BgiEmsG/3jg/zgNQ
- brXy7hecxgguL8oMWf0CnfLy894rfQPLYE0kJ+YwCDDk5D0xpADI6/QgQqkMSyYbbW3K
- 8cG9oOOWevdtW1Qx9siqtD/7jbR8CRrckYS2R9rpxV2VugnDXxoE5rvglvxABYRaqoiX
- jFqOcLrY3vI9KO+quzwEQ5xi8cBah2vX+sGfmfj5L1zLepAXOvYFPh6qPIxNgR6NjBnf bQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 31p6e5vdan-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 Jun 2020 04:00:22 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G3x2a6020916;
-        Tue, 16 Jun 2020 04:00:21 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 31p6s6hmcu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 04:00:21 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05G40KmY001266;
-        Tue, 16 Jun 2020 04:00:20 GMT
-Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 15 Jun 2020 21:00:20 -0700
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
-        avri.altman@wdc.com, Stanley Chu <stanley.chu@mediatek.com>,
-        asutoshd@codeaurora.org, alim.akhtar@samsung.com
-Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        peter.wang@mediatek.com, beanhuo@micron.com,
-        matthias.bgg@gmail.com, bvanassche@acm.org,
-        linux-kernel@vger.kernel.org, andy.teng@mediatek.com,
-        cc.chou@mediatek.com, cang@codeaurora.org,
-        linux-arm-kernel@lists.infradead.org, kuohong.wang@mediatek.com,
-        chaotian.jing@mediatek.com, chun-hung.wu@mediatek.com,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v5] scsi: ufs: Fix imprecise load calculation in devfreq window
-Date:   Mon, 15 Jun 2020 23:59:59 -0400
-Message-Id: <159227986423.24883.5364281872549678357.b4-ty@oracle.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200611101043.6379-1-stanley.chu@mediatek.com>
-References: <20200611101043.6379-1-stanley.chu@mediatek.com>
+        id S1726569AbgFPEvl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Jun 2020 00:51:41 -0400
+Received: from smtprelay0061.hostedemail.com ([216.40.44.61]:59226 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725306AbgFPEvl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>);
+        Tue, 16 Jun 2020 00:51:41 -0400
+X-Greylist: delayed 555 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Jun 2020 00:51:40 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave08.hostedemail.com (Postfix) with ESMTP id 529FD182D3EC5
+        for <linux-scsi@vger.kernel.org>; Tue, 16 Jun 2020 04:42:26 +0000 (UTC)
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 1AC321260;
+        Tue, 16 Jun 2020 04:42:25 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:69:152:355:379:599:800:960:967:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2525:2560:2563:2682:2685:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3352:3622:3865:3866:3868:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4605:5007:9025:10004:10400:10848:11026:11232:11658:11914:12043:12048:12297:12438:12740:12895:13069:13255:13311:13357:13894:14181:14659:14721:21080:21451:21627:30054:30064:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:3,LUA_SUMMARY:none
+X-HE-Tag: song81_2704b2626dfc
+X-Filterd-Recvd-Size: 2406
+Received: from XPS-9350.home (unknown [47.151.136.130])
+        (Authenticated sender: joe@perches.com)
+        by omf02.hostedemail.com (Postfix) with ESMTPA;
+        Tue, 16 Jun 2020 04:42:23 +0000 (UTC)
+Message-ID: <4c9323077204a22683cd3ed92fea303a1a8b67fc.camel@perches.com>
+Subject: Re: [PATCH][next] scsi: fnic: Replace vmalloc() + memset() with
+ vzalloc() and use array_size()
+From:   Joe Perches <joe@perches.com>
+To:     "Satish Kharat (satishkh)" <satishkh@cisco.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "Sesidhar Baddela (sebaddel)" <sebaddel@cisco.com>,
+        "Karan Tilak Kumar (kartilak)" <kartilak@cisco.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Date:   Mon, 15 Jun 2020 21:42:22 -0700
+In-Reply-To: <873653F8-8FBB-4A9B-9380-B476674ECADE@cisco.com>
+References: <20200615225428.GA14959@embeddedor>
+         <873653F8-8FBB-4A9B-9380-B476674ECADE@cisco.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.2-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 mlxlogscore=999 phishscore=0 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006160027
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 adultscore=0
- mlxscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 clxscore=1015
- suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006160027
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Thu, 11 Jun 2020 18:10:43 +0800, Stanley Chu wrote:
-
-> The UFS load calculation is based on "total_time" and "busy_time" in a
-> devfreq window. However, the source of time is different for both
-> parameters: "busy_time" is assigned from "jiffies" thus has different
-> accuracy from "total_time" which is assigned from ktime_get().
+On Tue, 2020-06-16 at 00:19 +0000, Satish Kharat (satishkh) wrote:
+> Reviewed-by: Satish Kharat <satishkh@cisco.com>
+> ﻿
 > 
-> Besides, the time of window boundary is not exactly the same as
-> the starting busy time in this window if UFS is actually busy
-> in the beginning of the window. A similar accuracy error may also
-> happen for the end of busy time in current window.
+> On 6/15/20, 3:49 PM, "Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
 > 
-> [...]
+>     Use vzalloc() instead of the vmalloc() and memset. Also, use array_size()
+>     instead of the open-coded version.
+>     
+>     This issue was found with the help of Coccinelle and, audited and fixed
+>     manually.
+>     
+>     Addresses-KSPP-ID: https://github.com/KSPP/linux/issues/83
+>     Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+>     ---
+>      drivers/scsi/fnic/fnic_trace.c | 16 ++++------------
+>      1 file changed, 4 insertions(+), 12 deletions(-)
+>     
+>     diff --git a/drivers/scsi/fnic/fnic_trace.c b/drivers/scsi/fnic/fnic_trace.c
+[]
+>     @@ -488,7 +488,7 @@ int fnic_trace_buf_init(void)
+>      	}
+>      
+>      	fnic_trace_entries.page_offset =
+>     -		vmalloc(array_size(fnic_max_trace_entries,
+>     +		vzalloc(array_size(fnic_max_trace_entries,
+>      				   sizeof(unsigned long)));
 
-Applied to 5.9/scsi-queue, thanks!
+Perhaps better as
+		kvcalloc(fnic_max_trace_entries, sizeof(unsigned long),
+			 GFP_KERNEL);
 
-[1/1] scsi: ufs: Fix imprecise load calculation in devfreq window
-      https://git.kernel.org/mkp/scsi/c/b1bf66d1d5a8
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
