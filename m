@@ -2,95 +2,197 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BAB1FB5FA
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2020 17:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F2A1FB61B
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2020 17:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729223AbgFPPV5 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Jun 2020 11:21:57 -0400
-Received: from sonic301-31.consmr.mail.ne1.yahoo.com ([66.163.184.200]:45610
-        "EHLO sonic301-31.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728809AbgFPPV5 (ORCPT
+        id S1729128AbgFPP03 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Jun 2020 11:26:29 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4528 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728919AbgFPP02 (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 16 Jun 2020 11:21:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1592320916; bh=+NKq2YP/4c3bLm2HmGhxa/KCZOXr0NIUKHs/ECuC0yk=; h=Date:From:Reply-To:Subject:References:From:Subject; b=aymRjPg3PeNLTGIAno02I/WarFLs7D4WiilXkq12YhRaPJZnfPmKHHOE1sZD8sYleBAgDF0ka7s1exogGR38jl7Q7hXL3cpZDXnIHxV7Tc46Nb44UtCX/a7b+5Qw3dbCzG4uLcNWSShRFzlkCsT6zvxmkHoBDECfjYrXJDdnI14ihaYucC4YQiQ+pq2Ovy6Xis2WZMX3TNcTM6Q+OiXBmiGvPtNHxwZb3rk+MRQ5vKixTxKWkKELPXDRU9w7HuEpz0rQCJLDgkSYwIXs8yXZZGu70MYH/uZaoUYKacWLx6vwVtEVmtQ3LcWvG+WRspuJcEAjrQaxG3/kUvUrguGHiw==
-X-YMail-OSG: IiCeQA0VM1nRlcQuSCu92URqXFp_QwVquW1cdz_oG4ub7gbyhxNVi3M3W5rUAM_
- 2IQOXYaZK21WsETPbS8E9_HGxD9TC78TtsYKchtskFxmde0hMX4S6Mbo58iK_grX6qRWMR1sDSFv
- XtIVKqDXCb7WVjY6zsJ1WomBAWkfCjMhdva6ql_9CCvmBDr4LeNqaMoN_fsBd1XV04.PY0QpGVVU
- 5ycz2ySjSaNrGsVBZTdu08kemKNKGdOoBPYgifbzf88wIGyk_UtqwHm1.DWfq8xiYDwSDbB5jDDc
- D8JNUK1HkhvmdI4oVQRuUusrJWdy.uN4GbvmvTEg2YqU88y9xCd4S514hB0EwerldxeleSsjVgf7
- gSBaWvYpPV9opv_8nUxizvFElmnm2gyUgHJIZDkfNWr.kCiIxpfhH__riDQlhNHJAP9JoIxHksEj
- xdfcqP0C_84PzMApZbNJEkBZnbAFg1IXwkkC2muxJ51jqn8vUvjJmIRqj5uO.Cn34LFdDPRibliz
- EXINiGz4EF.Nhdt7t_7QT1sLcj3XwMPz5XMDQh4c0KKH6v40nFD8.FC2UstTq2U0EdtV106ADLTs
- Yk6WFrHoetOhOWSSECw0t1tduk3XwJ457QFFdjetu.h929zRdp0yVjQG4L5dyYWmsvgAt6sGom9o
- 17UFGNoDb0hP3iqF7.JB6Zj8nq0cO1yHXf8Wlv9TOOlqwbLh_L8QIcqc6i.HF0HaIjrHbAa0bZbe
- .jV2S1hBiQ7C1RouvwSTb98dI7WL6d0qRfungR8XjA1jV.hRchKtkJ_.cyhhbPnFRdPFw71QUbyJ
- wyzz2lgaoyESTKIRjJdJFMc1q5Xy5PaFnZuOA5uYpO9J_gjDS6Uug0GUf7FeME7TFcyn4cQ6ggsQ
- _8t5242LRVf6Hd4DUWB3tA4WoIqFcjJm_sA8DMt7zD3wzU_Jds.EncMTXQDOv7ep8ZPwkMZzVSvn
- 5eEN567IpsGX8kaTlngkTHW6S7cYUntIQv.MEYSLMbRMXKOBixsMCiMfTGYoLGfX8xE9iCKaK7Bf
- FFuFXUU66X7ypQLm9Z4Mw5lXcqKwIYnPJleYYiH.Ps3TfVV4V_.YCqfqr0C6.eZ6x.VbLbpKp0rY
- RyyFh16LwWNnuC5nby4JsvIAHKbfhspc4ourt_p9Y4V1KFx3qy3rbEcNz4Mey63zp6M1LF74IW_G
- jtkNHAdNyNiJx_GgZuwwWKdTiBPOrTdIzIz3WX6Yn12XR6isieP64FqwKp7Qd4YRRkDBWmbZNg7E
- 32C3Mrh6Tryo9i2WvfQIMG0MH.Rv_LjurDuYryZML.0mCc8J4PXOvvBZy3tPCfJmQCxRHXg2j
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.ne1.yahoo.com with HTTP; Tue, 16 Jun 2020 15:21:56 +0000
-Date:   Tue, 16 Jun 2020 15:21:54 +0000 (UTC)
-From:   "Mrs. Mina A. Brunel" <mrsminaabrunel224@gmail.com>
-Reply-To: mrs.minaabrunel2021@aol.com
-Message-ID: <1988505819.1652546.1592320914939@mail.yahoo.com>
-Subject: My Dear in the lord
+        Tue, 16 Jun 2020 11:26:28 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05GF1e4I076629;
+        Tue, 16 Jun 2020 11:26:25 -0400
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31ptqknbvm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Jun 2020 11:26:25 -0400
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05GFKaQj017382;
+        Tue, 16 Jun 2020 15:26:24 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma01dal.us.ibm.com with ESMTP id 31pckfwug1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 16 Jun 2020 15:26:24 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05GFQOfl55050652
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 16 Jun 2020 15:26:24 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 13BBA112061;
+        Tue, 16 Jun 2020 15:26:24 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 66073112062;
+        Tue, 16 Jun 2020 15:26:21 +0000 (GMT)
+Received: from kashyyyk (unknown [9.85.142.192])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Tue, 16 Jun 2020 15:26:20 +0000 (GMT)
+Date:   Tue, 16 Jun 2020 12:26:14 -0300
+From:   "Mauro S. M. Rodrigues" <maurosr@linux.vnet.ibm.com>
+To:     Saurav Kashyap <skashyap@marvell.com>
+Cc:     Saurav Kashyap <skashyap@marvell.com>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        Arun Easi <aeasi@marvell.com>,
+        Girish Basrur <gbasrur@marvell.com>,
+        Nilesh Javali <njavali@marvell.com>, maurosr@linux.ibm.com
+Subject: Re: Regarding - Patch - Fix crash on qla2x00_mailbox_command
+Message-ID: <20200616152614.GA2645171@kashyyyk>
+References: <DM6PR18MB30346814DE1F5807188A844CD2B80@DM6PR18MB3034.namprd18.prod.outlook.com>
+ <DM6PR18MB3034B8373D1AF280C18593CCD2B60@DM6PR18MB3034.namprd18.prod.outlook.com>
+ <CALJn8nNv3pEF2G3AfukziYZ2W8Hb94iguY=TUfxnKYsbjBrBiA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <1988505819.1652546.1592320914939.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.16119 YMailNodin Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:77.0) Gecko/20100101 Firefox/77.0
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALJn8nNv3pEF2G3AfukziYZ2W8Hb94iguY=TUfxnKYsbjBrBiA@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-16_04:2020-06-16,2020-06-16 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ cotscore=-2147483648 suspectscore=1 phishscore=0 priorityscore=1501
+ mlxlogscore=999 spamscore=0 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1011 adultscore=0 mlxscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006160107
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
+Hi Saurav,
 
+I've reopened the internal bugzilla so we can check what's going on.
 
-My Dear in the lord
+Do you have a script to reproduce the issue you're seeing so our team can try to
+reproduce it?
 
+From what I've read at the internal bz, this issue was quite consistent to
+reproduce on our boxes, I suspect that you might not be able to reproduce it
+because it was related to EEH mechanism in power architecture, I'm sorry that
+information isn't mentioned in the commit message. 
 
-My name is Mrs. Mina A. Brunel I am a Norway Citizen who is living in Burki=
-na Faso, I am married to Mr. Brunel Patrice, a politician who owns a small =
-gold company in Burkina Faso; He died of Leprosy and Radesyge, in the year =
-February 2010, During his lifetime he deposited the sum of =E2=82=AC 8.5 Mi=
-llion Euro) Eight million, Five hundred thousand Euros in a bank in Ouagado=
-ugou the capital city of Burkina Faso in West Africa. The money was from th=
-e sale of his company and death benefits payment and entitlements of my dec=
-eased husband by his company.
+The trace seen at the time was:
 
-I am sending you this message with heavy tears in my eyes and great sorrow =
-in my heart, and also praying that it will reach you in good health because=
- I am not in good health, I sleep every night without knowing if I may be a=
-live to see the next day. I am suffering from long time cancer and presentl=
-y I am partially suffering from Leprosy, which has become difficult for me =
-to move around. I was married to my late husband for more than 6 years with=
-out having a child and my doctor confided that I have less chance to live, =
-having to know when the cup of death will come, I decided to contact you to=
- claim the fund since I don't have any relation I grew up from an orphanage=
- home.
+38:mon> e
+cpu 0x38: Vector: 300 (Data Access) at [c000003fe22872f0]
+pc: c00800001382727c: qla2x00_mailbox_command+0x93c/0x1520 [qla2xxx]
+lr: c0080000138272cc: qla2x00_mailbox_command+0x98c/0x1520 [qla2xxx]
+sp: c000003fe2287570
+msr: 9000000000009033
+dar: 0
+dsisr: 40000000
+current = 0xc000003fe2241700
+paca    = 0xc000000007a46800	 softe: 0	 irq_happened: 0x01
+pid   = 779, comm = eehd
+Linux version 4.14.0-49.1.1.el7a.ppc64le
+(mockbuild@ppc-048.build.eng.bos.redhat.com) (gcc version 4.8.5 20150623
+(Red Hat 4.8.5-28) (GCC)) #1 SMP Tue Apr 10 08:31:02 UTC 2018
+38:mon> t
+[c000003fe22876c0] c008000013834bb4 qla2x00_dump_ram+0xf4/0x220 [qla2xxx]
+[c000003fe22877b0] c00800001389e280 qla25xx_read_optrom_data+0x230/0x390 [qla2xxx]
+[c000003fe2287880] c008000013824da0 qla81xx_nvram_config+0xb0/0xb60 [qla2xxx]
+[c000003fe2287930] c0080000138222f4 qla2x00_abort_isp+0x204/0x900 [qla2xxx]
+[c000003fe2287a20] c0080000138023bc qla2xxx_pci_slot_reset+0x21c/0x600 [qla2xxx]
+[c000003fe2287ab0] c00000000004b724 eeh_report_reset+0x184/0x1c0
+[c000003fe2287af0] c000000000048f18 eeh_pe_dev_traverse+0x98/0x170
+[c000003fe2287b80] c00000000004bcc4 eeh_handle_normal_event+0x564/0x650
+[c000003fe2287c60] c00000000004bf74 eeh_handle_event+0x54/0x380
+[c000003fe2287d10] c00000000004c69c eeh_event_handler+0x14c/0x210
+[c000003fe2287dc0] c000000000171c88 kthread+0x168/0x1b0
+[c000003fe2287e30] c00000000000b528 ret_from_kernel_thread+0x5c/0xb4
 
-I have decided to donate this money for the support of helping Motherless b=
-abies/Less privileged/Widows and churches also to build the house of God be=
-cause I am dying and diagnosed with cancer for about 3 years ago. I have de=
-cided to donate from what I have inherited from my late husband to you for =
-the good work of Almighty God; I will be going in for an operation surgery =
-soon.
+I'll see if our team can get more information on the specific data structure.
 
-Now I want you to stand as my next of kin to claim the funds for charity pu=
-rposes. Because of this money remains unclaimed after my death, the bank ex=
-ecutives or the government will take the money as unclaimed fund and maybe =
-use it for selfishness and worthless ventures, I need a very honest person =
-who can claim this money and use it for Charity works, for orphanages, wido=
-ws and also build schools and churches for less privilege that will be name=
-d after my late husband and my name.
+Thank you,
 
-I need your urgent answer to know if you will be able to execute this proje=
-ct, and I will give you more information on how the fund will be transferre=
-d to your bank account or online banking.
+Mauro
 
-Thanks
-Mrs. Mina A. Brunel
+On Wed, Jun 03, 2020 at 12:24:22AM -0300, Guilherme G. Piccoli wrote:
+> IIRC Rodrigo's email does not work anymore...looping Mauro, he should
+> be able to forward to appropriate folks at IBM.
+> Cheers,
+> 
+> 
+> Guilherme
+> 
+> 
+> On Wed, May 20, 2020 at 3:33 AM Saurav Kashyap <skashyap@marvell.com> wrote:
+> >
+> > Hi Rodrigo,
+> > Any updates on this?
+> >
+> > Thanks,
+> > ~Saurav
+> >
+> > > -----Original Message-----
+> > > From: Saurav Kashyap
+> > > Sent: Monday, May 18, 2020 12:20 PM
+> > > To: rosattig@linux.vnet.ibm.com
+> > > Cc: linux-scsi@vger.kernel.org; Arun Easi <aeasi@marvell.com>; Girish Basrur
+> > > <gbasrur@marvell.com>; Nilesh Javali <njavali@marvell.com>
+> > > Subject: Regarding - Patch - Fix crash on qla2x00_mailbox_command
+> > >
+> > > Hi  Rodrigo,
+> > > We are seen regression introduced by below patch for QLA 82XX HBAs. On
+> > > unload, the disable interrupt, mailbox command (MBX 0x10) fails because of
+> > > this patch and leaves the FW/HW in unstable state. The next load fails with
+> > > initialization FW timing out.
+> > > The only way out of this is to reboot the server. I  and  test team have tried to
+> > > reproduce an original problem that is fixed by below patch but we don't have
+> > > any luck.
+> > >
+> > > We would like to revert the below patch but would like to address original
+> > > problem as well. Can you share more details about the NULL pointer
+> > > dereference? Which data structure was NULL and what was the test case?
+> > >
+> > > ==============================
+> > > git show 3cb182b3fa8b7a61f05c671525494697cba39c6a
+> > > commit 3cb182b3fa8b7a61f05c671525494697cba39c6a
+> > > Author: Rodrigo R. Galvao <rosattig@linux.vnet.ibm.com>
+> > > Date:   Mon May 28 14:58:44 2018 -0300
+> > >
+> > >     scsi: qla2xxx: Fix crash on qla2x00_mailbox_command
+> > >
+> > >     This patch fixes a crash on qla2x00_mailbox_command caused when the
+> > > driver
+> > >     is on UNLOADING state and tries to call qla2x00_poll, which triggers a
+> > >     NULL pointer dereference.
+> > >
+> > >     Signed-off-by: Rodrigo R. Galvao <rosattig@linux.vnet.ibm.com>
+> > >     Signed-off-by: Mauro S. M. Rodrigues <maurosr@linux.vnet.ibm.com>
+> > >     Acked-by: Himanshu Madhani <himanshu.madhani@cavium.com>
+> > >     Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+> > >
+> > > diff --git a/drivers/scsi/qla2xxx/qla_mbx.c b/drivers/scsi/qla2xxx/qla_mbx.c
+> > > index d8a36c1..7e875f5 100644
+> > > --- a/drivers/scsi/qla2xxx/qla_mbx.c
+> > > +++ b/drivers/scsi/qla2xxx/qla_mbx.c
+> > > @@ -292,6 +292,14 @@ static int is_rom_cmd(uint16_t cmd)
+> > >                         if (time_after(jiffies, wait_time))
+> > >                                 break;
+> > >
+> > > +                       /*
+> > > +                        * Check if it's UNLOADING, cause we cannot poll in
+> > > +                        * this case, or else a NULL pointer dereference
+> > > +                        * is triggered.
+> > > +                        */
+> > > +                       if (unlikely(test_bit(UNLOADING, &base_vha->dpc_flags)))
+> > > +                               return QLA_FUNCTION_TIMEOUT;
+> > > +
+> > >                         /* Check for pending interrupts. */
+> > >                         qla2x00_poll(ha->rsp_q_map[0]);
+> > > ====================
+> > >
+> > > Thanks,
+> > > ~Saurav
