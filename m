@@ -2,87 +2,121 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ED231FA7F4
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2020 06:51:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B506B1FA8F7
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2020 08:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726569AbgFPEvl (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Jun 2020 00:51:41 -0400
-Received: from smtprelay0061.hostedemail.com ([216.40.44.61]:59226 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725306AbgFPEvl (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>);
-        Tue, 16 Jun 2020 00:51:41 -0400
-X-Greylist: delayed 555 seconds by postgrey-1.27 at vger.kernel.org; Tue, 16 Jun 2020 00:51:40 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave08.hostedemail.com (Postfix) with ESMTP id 529FD182D3EC5
-        for <linux-scsi@vger.kernel.org>; Tue, 16 Jun 2020 04:42:26 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 1AC321260;
-        Tue, 16 Jun 2020 04:42:25 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 50,0,0,,d41d8cd98f00b204,joe@perches.com,,RULES_HIT:41:69:152:355:379:599:800:960:967:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2525:2560:2563:2682:2685:2859:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3352:3622:3865:3866:3868:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4321:4605:5007:9025:10004:10400:10848:11026:11232:11658:11914:12043:12048:12297:12438:12740:12895:13069:13255:13311:13357:13894:14181:14659:14721:21080:21451:21627:30054:30064:30091,0,RBL:none,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:,MSBL:0,DNSBL:none,Custom_rules:0:0:0,LFtime:3,LUA_SUMMARY:none
-X-HE-Tag: song81_2704b2626dfc
-X-Filterd-Recvd-Size: 2406
-Received: from XPS-9350.home (unknown [47.151.136.130])
-        (Authenticated sender: joe@perches.com)
-        by omf02.hostedemail.com (Postfix) with ESMTPA;
-        Tue, 16 Jun 2020 04:42:23 +0000 (UTC)
-Message-ID: <4c9323077204a22683cd3ed92fea303a1a8b67fc.camel@perches.com>
-Subject: Re: [PATCH][next] scsi: fnic: Replace vmalloc() + memset() with
- vzalloc() and use array_size()
-From:   Joe Perches <joe@perches.com>
-To:     "Satish Kharat (satishkh)" <satishkh@cisco.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "Sesidhar Baddela (sebaddel)" <sebaddel@cisco.com>,
-        "Karan Tilak Kumar (kartilak)" <kartilak@cisco.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Date:   Mon, 15 Jun 2020 21:42:22 -0700
-In-Reply-To: <873653F8-8FBB-4A9B-9380-B476674ECADE@cisco.com>
-References: <20200615225428.GA14959@embeddedor>
-         <873653F8-8FBB-4A9B-9380-B476674ECADE@cisco.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.2-0ubuntu1 
+        id S1726793AbgFPGmS (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Jun 2020 02:42:18 -0400
+Received: from mail-ej1-f66.google.com ([209.85.218.66]:34150 "EHLO
+        mail-ej1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbgFPGmQ (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Jun 2020 02:42:16 -0400
+Received: by mail-ej1-f66.google.com with SMTP id l27so20291324ejc.1;
+        Mon, 15 Jun 2020 23:42:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8yT+7Ta/B3BUGUR35Fz/0p22bghMwTUAxgTnwepounI=;
+        b=CrqjoVKTD3f3KdvDGIeuUsz+tApuK+psSd/zZznBL+PvDQ9kr/y3NysJrLCUvijZ0W
+         D1lMJFJjDjxCjK+3vtuSUx88E4FI/icqqmCPzoYqFy6r+CX7+frVJXkQBTdJvOi0k2H8
+         BQWo08oG78S63Nmuvi83IANQL4LNBYWwNm3J2aXU7+GGmL071iftqMsCEIxqPKRgxnoO
+         l2aRKff/cldTmTKB1sX4cPbWqW005Wxuza/3URs7J0zQObIlg8c0OKxW9NsQzskaJNhs
+         WYN8j8RMnmY+IrXoBKVYXvhwDHpIj4QOYGkzsnxSvMv3OoF06DPJymcAuYl6IFpm70uf
+         LBaQ==
+X-Gm-Message-State: AOAM531HP4eO0zbWwLMfP5GDnN825+ONW2qq1LmJWzlrQRrQ9tLmHjV1
+        pUaK0iSgeht2xDq1+zJMRIs=
+X-Google-Smtp-Source: ABdhPJwG7kr4DUIGgc4iCDEeodlEq5kx0AY8+Z/EURP92P+0Zf4E0UWpXqDGfffbUz9uBG+pBru51g==
+X-Received: by 2002:a17:906:ce2f:: with SMTP id sd15mr1306745ejb.445.1592289731375;
+        Mon, 15 Jun 2020 23:42:11 -0700 (PDT)
+Received: from localhost (ip-37-188-174-201.eurotel.cz. [37.188.174.201])
+        by smtp.gmail.com with ESMTPSA id j10sm9734428edf.97.2020.06.15.23.42.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jun 2020 23:42:10 -0700 (PDT)
+Date:   Tue, 16 Jun 2020 08:42:08 +0200
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Rientjes <rientjes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        David Sterba <dsterba@suse.cz>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mm@kvack.org,
+        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-ppp@vger.kernel.org, wireguard@lists.zx2c4.com,
+        linux-wireless@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, ecryptfs@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-bluetooth@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-nfs@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] mm/slab: Use memzero_explicit() in kzfree()
+Message-ID: <20200616064208.GA9499@dhcp22.suse.cz>
+References: <20200616015718.7812-1-longman@redhat.com>
+ <20200616015718.7812-2-longman@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200616015718.7812-2-longman@redhat.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, 2020-06-16 at 00:19 +0000, Satish Kharat (satishkh) wrote:
-> Reviewed-by: Satish Kharat <satishkh@cisco.com>
-> ﻿
+On Mon 15-06-20 21:57:16, Waiman Long wrote:
+> The kzfree() function is normally used to clear some sensitive
+> information, like encryption keys, in the buffer before freeing it back
+> to the pool. Memset() is currently used for the buffer clearing. However,
+> it is entirely possible that the compiler may choose to optimize away the
+> memory clearing especially if LTO is being used. To make sure that this
+> optimization will not happen, memzero_explicit(), which is introduced
+> in v3.18, is now used in kzfree() to do the clearing.
 > 
-> On 6/15/20, 3:49 PM, "Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
+> Fixes: 3ef0e5ba4673 ("slab: introduce kzfree()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Waiman Long <longman@redhat.com>
+
+Acked-by: Michal Hocko <mhocko@suse.com>
+
+Although I am not really sure this is a stable material. Is there any
+known instance where the memset was optimized out from kzfree?
+
+> ---
+>  mm/slab_common.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->     Use vzalloc() instead of the vmalloc() and memset. Also, use array_size()
->     instead of the open-coded version.
->     
->     This issue was found with the help of Coccinelle and, audited and fixed
->     manually.
->     
->     Addresses-KSPP-ID: https://github.com/KSPP/linux/issues/83
->     Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->     ---
->      drivers/scsi/fnic/fnic_trace.c | 16 ++++------------
->      1 file changed, 4 insertions(+), 12 deletions(-)
->     
->     diff --git a/drivers/scsi/fnic/fnic_trace.c b/drivers/scsi/fnic/fnic_trace.c
-[]
->     @@ -488,7 +488,7 @@ int fnic_trace_buf_init(void)
->      	}
->      
->      	fnic_trace_entries.page_offset =
->     -		vmalloc(array_size(fnic_max_trace_entries,
->     +		vzalloc(array_size(fnic_max_trace_entries,
->      				   sizeof(unsigned long)));
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 9e72ba224175..37d48a56431d 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1726,7 +1726,7 @@ void kzfree(const void *p)
+>  	if (unlikely(ZERO_OR_NULL_PTR(mem)))
+>  		return;
+>  	ks = ksize(mem);
+> -	memset(mem, 0, ks);
+> +	memzero_explicit(mem, ks);
+>  	kfree(mem);
+>  }
+>  EXPORT_SYMBOL(kzfree);
+> -- 
+> 2.18.1
+> 
 
-Perhaps better as
-		kvcalloc(fnic_max_trace_entries, sizeof(unsigned long),
-			 GFP_KERNEL);
-
-
+-- 
+Michal Hocko
+SUSE Labs
