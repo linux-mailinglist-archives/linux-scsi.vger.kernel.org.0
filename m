@@ -2,99 +2,86 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2EEF1FA738
-	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2020 06:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811A21FA765
+	for <lists+linux-scsi@lfdr.de>; Tue, 16 Jun 2020 06:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726807AbgFPEAb (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Tue, 16 Jun 2020 00:00:31 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:50812 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726593AbgFPEAa (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Jun 2020 00:00:30 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G3upAV054158;
-        Tue, 16 Jun 2020 04:00:16 GMT
+        id S1727041AbgFPEC1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Tue, 16 Jun 2020 00:02:27 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:39920 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726466AbgFPEC1 (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Tue, 16 Jun 2020 00:02:27 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G41gx5016996;
+        Tue, 16 Jun 2020 04:02:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2020-01-29;
- bh=6gt66nmNkN8e5xAv4On8mJpvQuFVMs7mSPf10c7iWbI=;
- b=nPdg4EU7JQvgPCbaC5hwzhb/sju3oUhOfTmJ4Lj1CrR9EExJU2mhU0UG3QlBhbj9EuQp
- gLePJyZ4y+AfQq+Luk+GTqxAwyR85a2M4Ojxus4dm0/Oor6eRhTnPSkOngB/mNHDEf8K
- ARaZ0yoszniFfLG/9xprTB8z9zlr3vWxUwNySnob7vjQIAvlJt/lUwo16c2w6sQxXITF
- WfJp81aWa7JdPlqR275UDSO39ltrsyH/1oY3JqI/JsJByjbYuqWHjVMmKaFAtCUSUARc
- u0+k+9B8TLTrEOckkjNNJShc592wX3dtPPgl0Uy84ASOHikrWMBoJbhHB1mL5pgdRRdK ww== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 31p6e7vdky-1
+ bh=jf4K3b2mj36ace3/HKbHB2zxU1z0DgDzozyu9Fhfiek=;
+ b=YaYPXYOQImKzKKS1Hh2cI0sLMUd6MssrW5YLx5ZPdMuMbcErFa9Sk94vCJFvapU8s+y8
+ RqYWiaDZW5bBMjHMb4vvFFNIv8AcGiW8w11PZgaxLitDfN32HW/wmPaNBU45RCUB50mK
+ Zu7oV9bHi+HqqB3OGiG6XG0rExAwD9/GZfIP4eKOETPkV2WoVMiw3aYbD+ERA4vRAxvo
+ kFOnKLILyGgnP6LXpk9zleqtZZh66etBzK6mNWqeYgTlp3rSL8mQCix7RPSSFh4r4hzx
+ PXh4cU6ygLUWLsBUXNTsnnr/lUGK5vuL59e31t22pp2V9gMpLjjRrRcLYrJ/LdzSArJ2 yw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 31p6s24ajr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 16 Jun 2020 04:00:15 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G3xQB5131356;
-        Tue, 16 Jun 2020 04:00:15 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 31p6dcae0p-1
+        Tue, 16 Jun 2020 04:02:09 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05G3w8O4171588;
+        Tue, 16 Jun 2020 04:00:09 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 31p6s6mhqa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 16 Jun 2020 04:00:15 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05G40DVJ021424;
-        Tue, 16 Jun 2020 04:00:13 GMT
+        Tue, 16 Jun 2020 04:00:09 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05G401OF022224;
+        Tue, 16 Jun 2020 04:00:02 GMT
 Received: from ca-mkp.ca.oracle.com (/10.156.108.201)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 15 Jun 2020 21:00:13 -0700
+        with ESMTP ; Mon, 15 Jun 2020 21:00:01 -0700
 From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-To:     linux-scsi@vger.kernel.org, jejb@linux.ibm.com,
-        avri.altman@wdc.com, Stanley Chu <stanley.chu@mediatek.com>,
-        asutoshd@codeaurora.org, alim.akhtar@samsung.com
+To:     Flavio Suligoi <f.suligoi@asem.it>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>
 Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
-        peter.wang@mediatek.com, beanhuo@micron.com,
-        matthias.bgg@gmail.com, chaotian.jing@mediatek.com,
-        bvanassche@acm.org, linux-arm-kernel@lists.infradead.org,
-        kuohong.wang@mediatek.com, linux-kernel@vger.kernel.org,
-        andy.teng@mediatek.com, cang@codeaurora.org, cc.chou@mediatek.com,
-        chun-hung.wu@mediatek.com, linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 0/2] scsi: ufs: Fix and cleanup device quirks
-Date:   Mon, 15 Jun 2020 23:59:56 -0400
-Message-Id: <159227986422.24883.11135974078256491088.b4-ty@oracle.com>
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] scsi: mpt3sas: fix spelling mistake
+Date:   Mon, 15 Jun 2020 23:59:52 -0400
+Message-Id: <159227986422.24883.10063566960810373634.b4-ty@oracle.com>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200612012625.6615-1-stanley.chu@mediatek.com>
-References: <20200612012625.6615-1-stanley.chu@mediatek.com>
+In-Reply-To: <20200609161313.32098-1-f.suligoi@asem.it>
+References: <20200609161313.32098-1-f.suligoi@asem.it>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 suspectscore=0
- mlxlogscore=999 mlxscore=0 phishscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006160028
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 adultscore=0 phishscore=0 bulkscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006160027
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9653 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0
- impostorscore=0 bulkscore=0 clxscore=1015 malwarescore=0 suspectscore=0
- mlxscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
- cotscore=-2147483648 priorityscore=1501 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006160027
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 impostorscore=0
+ clxscore=1011 mlxscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
+ malwarescore=0 suspectscore=0 spamscore=0 cotscore=-2147483648 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006160028
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Fri, 12 Jun 2020 09:26:23 +0800, Stanley Chu wrote:
+On Tue, 9 Jun 2020 18:13:13 +0200, Flavio Suligoi wrote:
 
-> this series provides some device quirk fixes and cleanups.
-> 
-> v1 -> v2:
->   - Sort device quirks in alphabetical order (Alim Akhtar)
-> 
-> Stanley Chu (2):
->   scsi: ufs: Add DELAY_BEFORE_LPM quirk for Micron devices
->   scsi: ufs: Cleanup device vendor name and device quirk table
-> 
-> [...]
+> Fix typo: "tigger" --> "trigger"
 
 Applied to 5.9/scsi-queue, thanks!
 
-[1/2] scsi: ufs: Add DELAY_BEFORE_LPM quirk for Micron devices
-      https://git.kernel.org/mkp/scsi/c/c0a18ee0ce78
-[2/2] scsi: ufs: Clean up device vendor name and device quirk table
-      https://git.kernel.org/mkp/scsi/c/ed0b40ffa364
+[1/1] scsi: mpt3sas: Fix spelling mistake
+      https://git.kernel.org/mkp/scsi/c/896c9b4907c5
 
 -- 
 Martin K. Petersen	Oracle Linux Engineering
