@@ -2,73 +2,61 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9D031FC8DD
-	for <lists+linux-scsi@lfdr.de>; Wed, 17 Jun 2020 10:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084B51FC934
+	for <lists+linux-scsi@lfdr.de>; Wed, 17 Jun 2020 10:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgFQIf4 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 04:35:56 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52108 "EHLO mx2.suse.de"
+        id S1726308AbgFQIsO (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 04:48:14 -0400
+Received: from mx2.suse.de ([195.135.220.15]:59810 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726519AbgFQIfz (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Jun 2020 04:35:55 -0400
+        id S1725894AbgFQIsN (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 17 Jun 2020 04:48:13 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id A5381AC46;
-        Wed, 17 Jun 2020 08:35:57 +0000 (UTC)
-From:   mwilck@suse.com
-To:     Don Brace <don.brace@microsemi.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     esc.storagedev@microsemi.com, linux-scsi@vger.kernel.org,
-        shane.seymour@hpe.com, Martin Wilck <mwilck@suse.com>
-Subject: [PATCH v2 3/3] scsi: smartpqi: remove conditional before pqi_remove_device()
-Date:   Wed, 17 Jun 2020 10:35:14 +0200
-Message-Id: <20200617083514.19174-4-mwilck@suse.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20200617083514.19174-1-mwilck@suse.com>
-References: <20200617083514.19174-1-mwilck@suse.com>
+        by mx2.suse.de (Postfix) with ESMTP id DA738AC9F;
+        Wed, 17 Jun 2020 08:48:16 +0000 (UTC)
+Subject: Re: [PATCH 1/4] gdth: reindent and whitespace cleanup
+From:   Hannes Reinecke <hare@suse.de>
+To:     Daniel Wagner <dwagner@suse.de>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Christoph Hellwig <hch@lst.de>,
+        James Bottomley <james.bottomley@hansenpartnership.com>,
+        linux-scsi@vger.kernel.org
+References: <20200616121821.99113-1-hare@suse.de>
+ <20200616121821.99113-2-hare@suse.de>
+ <20200617082145.mdsu56bclo3p3dg4@beryllium.lan>
+ <2a7473b3-62af-f7d2-f73a-adcabe21701e@suse.de>
+Message-ID: <72827be0-a44a-0163-acb8-04ff3bde86ce@suse.de>
+Date:   Wed, 17 Jun 2020 10:48:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
+In-Reply-To: <2a7473b3-62af-f7d2-f73a-adcabe21701e@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Martin Wilck <mwilck@suse.com>
+On 6/17/20 10:34 AM, Hannes Reinecke wrote:
+> On 6/17/20 10:21 AM, Daniel Wagner wrote:
+>> On Tue, Jun 16, 2020 at 02:18:18PM +0200, Hannes Reinecke wrote:
+>>> Long overdue. No functional change.
+>>
+>> Did you test if compiler generates the same output? I don't think anyone
+>> wants to review this patch :)
+>>
+> Hmm. No. Lemme check what happens...
+> 
+Phew. Just checked, and the disassembly is indeed identical.
 
-pqi_remove_device() checks if there's anything to remove, for both
-logical and SAS devices. So these conditionals are redundant.
-They may actually be wrong, because they would skip removing pysical
-devices which are not SMP expanders.
+Cheers,
 
-Signed-off-by: Martin Wilck <mwilck@suse.com>
----
- drivers/scsi/smartpqi/smartpqi_init.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
-index 87089b67ff74..7e4d5c5ea2b0 100644
---- a/drivers/scsi/smartpqi/smartpqi_init.c
-+++ b/drivers/scsi/smartpqi/smartpqi_init.c
-@@ -1879,8 +1879,7 @@ static void pqi_update_device_list(struct pqi_ctrl_info *ctrl_info,
- 		} else {
- 			pqi_dev_info(ctrl_info, "removed", device);
- 		}
--		if (pqi_is_device_added(device))
--			pqi_remove_device(ctrl_info, device);
-+		pqi_remove_device(ctrl_info, device);
- 		list_del(&device->delete_list_entry);
- 		pqi_free_device(device);
- 	}
-@@ -2223,8 +2222,7 @@ static void pqi_remove_all_scsi_devices(struct pqi_ctrl_info *ctrl_info)
- 		if (!device)
- 			break;
- 
--		if (pqi_is_device_added(device))
--			pqi_remove_device(ctrl_info, device);
-+		pqi_remove_device(ctrl_info, device);
- 		pqi_free_device(device);
- 	}
- }
+Hannes
 -- 
-2.26.2
-
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                               +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
