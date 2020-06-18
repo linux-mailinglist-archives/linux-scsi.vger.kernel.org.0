@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4621FE34E
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A93C1FE30F
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730673AbgFRCIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 22:08:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54932 "EHLO mail.kernel.org"
+        id S1730786AbgFRBWg (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 21:22:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55666 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730650AbgFRBWG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:22:06 -0400
+        id S1730775AbgFRBWf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:22:35 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 91E7A20776;
-        Thu, 18 Jun 2020 01:22:05 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 88F7F20776;
+        Thu, 18 Jun 2020 01:22:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443326;
-        bh=tvECZ2BnrTzp+1yK+4AAGwqVP4cziadaM0SPFe/jfbM=;
+        s=default; t=1592443355;
+        bh=x6Jt4u/AbNqqCP3lAECzhXP1uii5dlx4/WV6Cw+sor0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jKGHpHO5a7f+0VkCQsHwlxsjiwL/Civ+jLbjkf8/NTKaKq8aHblXFk07unBRVwTjU
-         JMGBGGn/DqUd3oIe7ppqTSCv302ZMzl1HhZyr8+Tie/J8D9twfXJylJJLuzhdKzLT4
-         uuYIf3hPa1ZniRrN052m0bzZicFoYx2CRVvhtE+4=
+        b=0nxhdy7FJuYZl64B+l/YwWojeOcjlEtBugJNT3AOU9m7Or+Ux5/hslHm/M/PsL9ZD
+         vpdp+YApJEzQHfMl0Rpb/+GBW+YnNEoHAtDj+qInYTP3HPfIXFe6CX4v99Bl4jijsO
+         nfrdYAOrDgrAahG3Ko7F7Kccz9zoDGovuaX9Q0YE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 259/266] scsi: acornscsi: Fix an error handling path in acornscsi_probe()
-Date:   Wed, 17 Jun 2020 21:16:24 -0400
-Message-Id: <20200618011631.604574-259-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 013/172] scsi: qedi: Check for buffer overflow in qedi_set_path()
+Date:   Wed, 17 Jun 2020 21:19:39 -0400
+Message-Id: <20200618012218.607130-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
-References: <20200618011631.604574-1-sashal@kernel.org>
+In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
+References: <20200618012218.607130-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,38 +44,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 42c76c9848e13dbe0538d7ae0147a269dfa859cb ]
+[ Upstream commit 4a4c0cfb4be74e216dd4446b254594707455bfc6 ]
 
-'ret' is known to be 0 at this point.  Explicitly return -ENOMEM if one of
-the 'ecardm_iomap()' calls fail.
+Smatch complains that the "path_data->handle" variable is user controlled.
+It comes from iscsi_set_path() so that seems possible.  It's harmless to
+add a limit check.
 
-Link: https://lore.kernel.org/r/20200530081622.577888-1-christophe.jaillet@wanadoo.fr
-Fixes: e95a1b656a98 ("[ARM] rpc: acornscsi: update to new style ecard driver")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+The qedi->ep_tbl[] array has qedi->max_active_conns elements (which is
+always ISCSI_MAX_SESS_PER_HBA (4096) elements).  The array is allocated in
+the qedi_cm_alloc_mem() function.
+
+Link: https://lore.kernel.org/r/20200428131939.GA696531@mwanda
+Fixes: ace7f46ba5fd ("scsi: qedi: Add QLogic FastLinQ offload iSCSI driver framework.")
+Acked-by: Manish Rangankar <mrangankar@marvell.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/arm/acornscsi.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/scsi/qedi/qedi_iscsi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/scsi/arm/acornscsi.c b/drivers/scsi/arm/acornscsi.c
-index d12dd89538df..deab66598910 100644
---- a/drivers/scsi/arm/acornscsi.c
-+++ b/drivers/scsi/arm/acornscsi.c
-@@ -2911,8 +2911,10 @@ static int acornscsi_probe(struct expansion_card *ec, const struct ecard_id *id)
+diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
+index 1b7049dce169..d59473d1679f 100644
+--- a/drivers/scsi/qedi/qedi_iscsi.c
++++ b/drivers/scsi/qedi/qedi_iscsi.c
+@@ -1217,6 +1217,10 @@ static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
+ 	}
  
- 	ashost->base = ecardm_iomap(ec, ECARD_RES_MEMC, 0, 0);
- 	ashost->fast = ecardm_iomap(ec, ECARD_RES_IOCFAST, 0, 0);
--	if (!ashost->base || !ashost->fast)
-+	if (!ashost->base || !ashost->fast) {
-+		ret = -ENOMEM;
- 		goto out_put;
+ 	iscsi_cid = (u32)path_data->handle;
++	if (iscsi_cid >= qedi->max_active_conns) {
++		ret = -EINVAL;
++		goto set_path_exit;
 +	}
- 
- 	host->irq = ec->irq;
- 	ashost->host = host;
+ 	qedi_ep = qedi->ep_tbl[iscsi_cid];
+ 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_INFO,
+ 		  "iscsi_cid=0x%x, qedi_ep=%p\n", iscsi_cid, qedi_ep);
 -- 
 2.25.1
 
