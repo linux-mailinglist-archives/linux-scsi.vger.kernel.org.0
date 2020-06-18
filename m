@@ -2,134 +2,378 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6491FE012
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 03:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66ADB1FE22D
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732667AbgFRBpH (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 21:45:07 -0400
-Received: from mailout1.samsung.com ([203.254.224.24]:27877 "EHLO
-        mailout1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733131AbgFRBpF (ORCPT
-        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Jun 2020 21:45:05 -0400
-Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20200618014503epoutp01649e82bf254d50a6eb906b771bf3dce1~ZgAVBAhbh1482214822epoutp01E
-        for <linux-scsi@vger.kernel.org>; Thu, 18 Jun 2020 01:45:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20200618014503epoutp01649e82bf254d50a6eb906b771bf3dce1~ZgAVBAhbh1482214822epoutp01E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1592444703;
-        bh=LHnFRCa4HDOWm0RYymVWN7YfXGnU6fTOFZfK3I3tHJw=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=CvHGAf1yR63wrrquyBdw2Lpy0+bi+SpSQ1HYg5ZS0b6T2BoMjNAfM1xbn+VSaxZki
-         vCMdtuGTpJzdLIQfQ6IrXQUZEwH4vLsLWFvjZ1+mwdWHWnEEZ2MpTHrqMLFWOCV1+K
-         VVs/vE5aLkZEPXl8yzjSdIqcNv5JwUOMSn+H8IzM=
-Received: from epcpadp1 (unknown [182.195.40.11]) by epcas1p4.samsung.com
-        (KnoxPortal) with ESMTP id
-        20200618014502epcas1p456f39db093eac2a257a8b443772238d9~ZgAUS8Bj62175421754epcas1p4e;
-        Thu, 18 Jun 2020 01:45:02 +0000 (GMT)
-Mime-Version: 1.0
-Subject: Re: [RFC PATCH v2 3/5] scsi: ufs: Introduce HPB module
-Reply-To: daejun7.park@samsung.com
-From:   Daejun Park <daejun7.park@samsung.com>
-To:     Bean Huo <huobean@gmail.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        Avri Altman <Avri.Altman@wdc.com>,
-        ALIM AKHTAR <alim.akhtar@samsung.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
-        "cang@codeaurora.org" <cang@codeaurora.org>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "tomas.winkler@intel.com" <tomas.winkler@intel.com>
-CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Sang-yoon Oh <sangyoon.oh@samsung.com>,
-        Sung-Jun Park <sungjun07.park@samsung.com>,
-        yongmyung lee <ymhungry.lee@samsung.com>,
-        Jinyoung CHOI <j-young.choi@samsung.com>,
-        Adel Choi <adel.choi@samsung.com>,
-        BoRam Shin <boram.shin@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <3d5748ce4481c789000979f9831a5ae681cd9d34.camel@gmail.com>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <717176949.41592444702525.JavaMail.epsvc@epcpadp1>
-Date:   Thu, 18 Jun 2020 10:06:04 +0900
-X-CMS-MailID: 20200618010604epcms2p324800aa16fc9de874116c27b00b07c54
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Hop-Count: 3
-X-CMS-RootMailID: 20200615062708epcms2p19a7fbc051bcd5e843c29dcd58fff4210
-References: <3d5748ce4481c789000979f9831a5ae681cd9d34.camel@gmail.com>
-        <SN6PR04MB46405EC52240E00F5D634E2AFC9A0@SN6PR04MB4640.namprd04.prod.outlook.com>
-        <231786897.01592212081335.JavaMail.epsvc@epcpadp2>
-        <336371513.41592205783606.JavaMail.epsvc@epcpadp2>
-        <231786897.01592205482200.JavaMail.epsvc@epcpadp2>
-        <231786897.01592213402355.JavaMail.epsvc@epcpadp1>
-        <231786897.01592395081831.JavaMail.epsvc@epcpadp2>
-        <CGME20200615062708epcms2p19a7fbc051bcd5e843c29dcd58fff4210@epcms2p3>
+        id S1732902AbgFRB7p (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 21:59:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59134 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731245AbgFRBYe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:24:34 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B38F621927;
+        Thu, 18 Jun 2020 01:24:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592443473;
+        bh=TdiYnjajw3wO5BFajtKDvBXETq0eq3F8VxdZgt6V9hI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=R8jzDN+hEr+wEhMV7Cv8owUI6B1xo2+oZz2k6Oe/nwaI376Ps2tp/PB9YSOMPo7Pn
+         W74NnjxhFZ9ttTt01R3hSibn2tsn9hKRKwH34X1I+gWGRvtLSJITXOO5oI4U6Gb3ta
+         lK67gK4/OxgL7vKZUMghlhV95WnPOiIl/bYYlbys=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Bodo Stroesser <bstroesser@ts.fujitsu.com>,
+        Mike Christie <mchristi@redhat.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 104/172] scsi: target: tcmu: Userspace must not complete queued commands
+Date:   Wed, 17 Jun 2020 21:21:10 -0400
+Message-Id: <20200618012218.607130-104-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
+References: <20200618012218.607130-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-> > > implemented
-> > > > as a module parameter, so that it can be configurable by the
-> > > > user.
-> > > > 
-> > > > To gurantee a minimum memory pool size of 4MB:
-> > > > $ insmod ufshpb.ko ufshpb_host_map_kbytes=4096
-> > > 
-> > > You are going through a lot of troubles to make it a loadable
-> > > module.
-> > > What are, in your opinion, the pros and cons of this design
-> > > decision?
-> > 
-> > In my opinion...
-> > 
-> > pros:
-> > 1. A user can unload an unnecessary module when there is an
-> > insufficient
-> > memory situation (HPB case).
-> > 2. Since each UFS vendor has a different way of implementing UFS
-> > features,
-> > it can be supported as a separate module. Otherwise, many quirks must
-> > be attached to module, which is not desirable way.
-> > 3. It is possible to distinguish parts that are not necessary for
-> > essential
-> > ufs operation.
-> > 4. It is advantageous to implement the latest functions according to
-> > the
-> > development speed of UFS.
-> > 
-> > cons:
-> > 1. It is difficult work to be implemented as a module.
-> > 2. Modifying "ufsfeature.c" is required to implement the feature that
-> > can
-> > not supported by the exsiting "ufsf_operation".
-> > 
-> > Thanks,
-> > Daejun
-> 
-> Dear Avri, Daejun, Bart
-> 
-> It is true that it is very difficult to make everyone happy.
-> We now have three HPB drivers in the patchwork, but I still didn't see
-> a final agreement. Please tell me which one do you want to focus on?
-The HPB driver has been greatly improved in the process of being applied to
-mobile devices since the release of the first HPB version in openMPDK. We
-want to contribute to the linux mainline with the knowledge obtained
-through the experience.
-I find it difficult to make everyone happy, but I think it is possible that
-everyone can accept the HPB driver through several revisions.
+From: Bodo Stroesser <bstroesser@ts.fujitsu.com>
 
-Thanks,
-Daejun
+[ Upstream commit 61fb2482216679b9e1e797440c148bb143a5040a ]
+
+When tcmu queues a new command - no matter whether in command ring or in
+qfull_queue - a cmd_id from IDR udev->commands is assigned to the command.
+
+If userspace sends a wrong command completion containing the cmd_id of a
+command on the qfull_queue, tcmu_handle_completions() finds the command in
+the IDR and calls tcmu_handle_completion() for it. This might do some nasty
+things because commands in qfull_queue do not have a valid dbi list.
+
+To fix this bug, we no longer add queued commands to the idr.  Instead the
+cmd_id is assign when a command is written to the command ring.
+
+Due to this change I had to adapt the source code at several places where
+up to now an idr_for_each had been done.
+
+[mkp: fix checkpatch warnings]
+
+Link: https://lore.kernel.org/r/20200518164833.12775-1-bstroesser@ts.fujitsu.com
+Acked-by: Mike Christie <mchristi@redhat.com>
+Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/target/target_core_user.c | 154 ++++++++++++++----------------
+ 1 file changed, 71 insertions(+), 83 deletions(-)
+
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index eff1e36ca03c..ac523f247a9c 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -893,41 +893,24 @@ static inline size_t tcmu_cmd_get_cmd_size(struct tcmu_cmd *tcmu_cmd,
+ 	return command_size;
+ }
+ 
+-static int tcmu_setup_cmd_timer(struct tcmu_cmd *tcmu_cmd, unsigned int tmo,
+-				struct timer_list *timer)
++static void tcmu_setup_cmd_timer(struct tcmu_cmd *tcmu_cmd, unsigned int tmo,
++				 struct timer_list *timer)
+ {
+-	struct tcmu_dev *udev = tcmu_cmd->tcmu_dev;
+-	int cmd_id;
+-
+-	if (tcmu_cmd->cmd_id)
+-		goto setup_timer;
+-
+-	cmd_id = idr_alloc(&udev->commands, tcmu_cmd, 1, USHRT_MAX, GFP_NOWAIT);
+-	if (cmd_id < 0) {
+-		pr_err("tcmu: Could not allocate cmd id.\n");
+-		return cmd_id;
+-	}
+-	tcmu_cmd->cmd_id = cmd_id;
+-
+-	pr_debug("allocated cmd %u for dev %s tmo %lu\n", tcmu_cmd->cmd_id,
+-		 udev->name, tmo / MSEC_PER_SEC);
+-
+-setup_timer:
+ 	if (!tmo)
+-		return 0;
++		return;
+ 
+ 	tcmu_cmd->deadline = round_jiffies_up(jiffies + msecs_to_jiffies(tmo));
+ 	if (!timer_pending(timer))
+ 		mod_timer(timer, tcmu_cmd->deadline);
+ 
+-	return 0;
++	pr_debug("Timeout set up for cmd %p, dev = %s, tmo = %lu\n", tcmu_cmd,
++		 tcmu_cmd->tcmu_dev->name, tmo / MSEC_PER_SEC);
+ }
+ 
+ static int add_to_qfull_queue(struct tcmu_cmd *tcmu_cmd)
+ {
+ 	struct tcmu_dev *udev = tcmu_cmd->tcmu_dev;
+ 	unsigned int tmo;
+-	int ret;
+ 
+ 	/*
+ 	 * For backwards compat if qfull_time_out is not set use
+@@ -942,13 +925,11 @@ static int add_to_qfull_queue(struct tcmu_cmd *tcmu_cmd)
+ 	else
+ 		tmo = TCMU_TIME_OUT;
+ 
+-	ret = tcmu_setup_cmd_timer(tcmu_cmd, tmo, &udev->qfull_timer);
+-	if (ret)
+-		return ret;
++	tcmu_setup_cmd_timer(tcmu_cmd, tmo, &udev->qfull_timer);
+ 
+ 	list_add_tail(&tcmu_cmd->queue_entry, &udev->qfull_queue);
+-	pr_debug("adding cmd %u on dev %s to ring space wait queue\n",
+-		 tcmu_cmd->cmd_id, udev->name);
++	pr_debug("adding cmd %p on dev %s to ring space wait queue\n",
++		 tcmu_cmd, udev->name);
+ 	return 0;
+ }
+ 
+@@ -970,7 +951,7 @@ static int queue_cmd_ring(struct tcmu_cmd *tcmu_cmd, sense_reason_t *scsi_err)
+ 	struct tcmu_mailbox *mb;
+ 	struct tcmu_cmd_entry *entry;
+ 	struct iovec *iov;
+-	int iov_cnt, ret;
++	int iov_cnt, cmd_id;
+ 	uint32_t cmd_head;
+ 	uint64_t cdb_off;
+ 	bool copy_to_data_area;
+@@ -1071,14 +1052,21 @@ static int queue_cmd_ring(struct tcmu_cmd *tcmu_cmd, sense_reason_t *scsi_err)
+ 	}
+ 	entry->req.iov_bidi_cnt = iov_cnt;
+ 
+-	ret = tcmu_setup_cmd_timer(tcmu_cmd, udev->cmd_time_out,
+-				   &udev->cmd_timer);
+-	if (ret) {
+-		tcmu_cmd_free_data(tcmu_cmd, tcmu_cmd->dbi_cnt);
++	cmd_id = idr_alloc(&udev->commands, tcmu_cmd, 1, USHRT_MAX, GFP_NOWAIT);
++	if (cmd_id < 0) {
++		pr_err("tcmu: Could not allocate cmd id.\n");
+ 
++		tcmu_cmd_free_data(tcmu_cmd, tcmu_cmd->dbi_cnt);
+ 		*scsi_err = TCM_OUT_OF_RESOURCES;
+ 		return -1;
+ 	}
++	tcmu_cmd->cmd_id = cmd_id;
++
++	pr_debug("allocated cmd id %u for cmd %p dev %s\n", tcmu_cmd->cmd_id,
++		 tcmu_cmd, udev->name);
++
++	tcmu_setup_cmd_timer(tcmu_cmd, udev->cmd_time_out, &udev->cmd_timer);
++
+ 	entry->hdr.cmd_id = tcmu_cmd->cmd_id;
+ 
+ 	/*
+@@ -1290,50 +1278,39 @@ static unsigned int tcmu_handle_completions(struct tcmu_dev *udev)
+ 	return handled;
+ }
+ 
+-static int tcmu_check_expired_cmd(int id, void *p, void *data)
++static void tcmu_check_expired_ring_cmd(struct tcmu_cmd *cmd)
+ {
+-	struct tcmu_cmd *cmd = p;
+-	struct tcmu_dev *udev = cmd->tcmu_dev;
+-	u8 scsi_status;
+ 	struct se_cmd *se_cmd;
+-	bool is_running;
+-
+-	if (test_bit(TCMU_CMD_BIT_EXPIRED, &cmd->flags))
+-		return 0;
+ 
+ 	if (!time_after(jiffies, cmd->deadline))
+-		return 0;
++		return;
+ 
+-	is_running = test_bit(TCMU_CMD_BIT_INFLIGHT, &cmd->flags);
++	set_bit(TCMU_CMD_BIT_EXPIRED, &cmd->flags);
++	list_del_init(&cmd->queue_entry);
+ 	se_cmd = cmd->se_cmd;
++	cmd->se_cmd = NULL;
+ 
+-	if (is_running) {
+-		/*
+-		 * If cmd_time_out is disabled but qfull is set deadline
+-		 * will only reflect the qfull timeout. Ignore it.
+-		 */
+-		if (!udev->cmd_time_out)
+-			return 0;
++	pr_debug("Timing out inflight cmd %u on dev %s.\n",
++		 cmd->cmd_id, cmd->tcmu_dev->name);
+ 
+-		set_bit(TCMU_CMD_BIT_EXPIRED, &cmd->flags);
+-		/*
+-		 * target_complete_cmd will translate this to LUN COMM FAILURE
+-		 */
+-		scsi_status = SAM_STAT_CHECK_CONDITION;
+-		list_del_init(&cmd->queue_entry);
+-		cmd->se_cmd = NULL;
+-	} else {
+-		list_del_init(&cmd->queue_entry);
+-		idr_remove(&udev->commands, id);
+-		tcmu_free_cmd(cmd);
+-		scsi_status = SAM_STAT_TASK_SET_FULL;
+-	}
++	target_complete_cmd(se_cmd, SAM_STAT_CHECK_CONDITION);
++}
+ 
+-	pr_debug("Timing out cmd %u on dev %s that is %s.\n",
+-		 id, udev->name, is_running ? "inflight" : "queued");
++static void tcmu_check_expired_queue_cmd(struct tcmu_cmd *cmd)
++{
++	struct se_cmd *se_cmd;
+ 
+-	target_complete_cmd(se_cmd, scsi_status);
+-	return 0;
++	if (!time_after(jiffies, cmd->deadline))
++		return;
++
++	list_del_init(&cmd->queue_entry);
++	se_cmd = cmd->se_cmd;
++	tcmu_free_cmd(cmd);
++
++	pr_debug("Timing out queued cmd %p on dev %s.\n",
++		  cmd, cmd->tcmu_dev->name);
++
++	target_complete_cmd(se_cmd, SAM_STAT_TASK_SET_FULL);
+ }
+ 
+ static void tcmu_device_timedout(struct tcmu_dev *udev)
+@@ -1418,16 +1395,15 @@ static struct se_device *tcmu_alloc_device(struct se_hba *hba, const char *name)
+ 	return &udev->se_dev;
+ }
+ 
+-static bool run_qfull_queue(struct tcmu_dev *udev, bool fail)
++static void run_qfull_queue(struct tcmu_dev *udev, bool fail)
+ {
+ 	struct tcmu_cmd *tcmu_cmd, *tmp_cmd;
+ 	LIST_HEAD(cmds);
+-	bool drained = true;
+ 	sense_reason_t scsi_ret;
+ 	int ret;
+ 
+ 	if (list_empty(&udev->qfull_queue))
+-		return true;
++		return;
+ 
+ 	pr_debug("running %s's cmdr queue forcefail %d\n", udev->name, fail);
+ 
+@@ -1436,11 +1412,10 @@ static bool run_qfull_queue(struct tcmu_dev *udev, bool fail)
+ 	list_for_each_entry_safe(tcmu_cmd, tmp_cmd, &cmds, queue_entry) {
+ 		list_del_init(&tcmu_cmd->queue_entry);
+ 
+-	        pr_debug("removing cmd %u on dev %s from queue\n",
+-		         tcmu_cmd->cmd_id, udev->name);
++		pr_debug("removing cmd %p on dev %s from queue\n",
++			 tcmu_cmd, udev->name);
+ 
+ 		if (fail) {
+-			idr_remove(&udev->commands, tcmu_cmd->cmd_id);
+ 			/*
+ 			 * We were not able to even start the command, so
+ 			 * fail with busy to allow a retry in case runner
+@@ -1455,10 +1430,8 @@ static bool run_qfull_queue(struct tcmu_dev *udev, bool fail)
+ 
+ 		ret = queue_cmd_ring(tcmu_cmd, &scsi_ret);
+ 		if (ret < 0) {
+-		        pr_debug("cmd %u on dev %s failed with %u\n",
+-			         tcmu_cmd->cmd_id, udev->name, scsi_ret);
+-
+-			idr_remove(&udev->commands, tcmu_cmd->cmd_id);
++			pr_debug("cmd %p on dev %s failed with %u\n",
++				 tcmu_cmd, udev->name, scsi_ret);
+ 			/*
+ 			 * Ignore scsi_ret for now. target_complete_cmd
+ 			 * drops it.
+@@ -1473,13 +1446,11 @@ static bool run_qfull_queue(struct tcmu_dev *udev, bool fail)
+ 			 * the queue
+ 			 */
+ 			list_splice_tail(&cmds, &udev->qfull_queue);
+-			drained = false;
+ 			break;
+ 		}
+ 	}
+ 
+ 	tcmu_set_next_deadline(&udev->qfull_queue, &udev->qfull_timer);
+-	return drained;
+ }
+ 
+ static int tcmu_irqcontrol(struct uio_info *info, s32 irq_on)
+@@ -1663,6 +1634,8 @@ static void tcmu_dev_kref_release(struct kref *kref)
+ 		if (tcmu_check_and_free_pending_cmd(cmd) != 0)
+ 			all_expired = false;
+ 	}
++	if (!list_empty(&udev->qfull_queue))
++		all_expired = false;
+ 	idr_destroy(&udev->commands);
+ 	WARN_ON(!all_expired);
+ 
+@@ -2031,9 +2004,6 @@ static void tcmu_reset_ring(struct tcmu_dev *udev, u8 err_level)
+ 	mutex_lock(&udev->cmdr_lock);
+ 
+ 	idr_for_each_entry(&udev->commands, cmd, i) {
+-		if (!test_bit(TCMU_CMD_BIT_INFLIGHT, &cmd->flags))
+-			continue;
+-
+ 		pr_debug("removing cmd %u on dev %s from ring (is expired %d)\n",
+ 			  cmd->cmd_id, udev->name,
+ 			  test_bit(TCMU_CMD_BIT_EXPIRED, &cmd->flags));
+@@ -2071,6 +2041,8 @@ static void tcmu_reset_ring(struct tcmu_dev *udev, u8 err_level)
+ 
+ 	del_timer(&udev->cmd_timer);
+ 
++	run_qfull_queue(udev, false);
++
+ 	mutex_unlock(&udev->cmdr_lock);
+ }
+ 
+@@ -2692,6 +2664,7 @@ static void find_free_blocks(void)
+ static void check_timedout_devices(void)
+ {
+ 	struct tcmu_dev *udev, *tmp_dev;
++	struct tcmu_cmd *cmd, *tmp_cmd;
+ 	LIST_HEAD(devs);
+ 
+ 	spin_lock_bh(&timed_out_udevs_lock);
+@@ -2702,9 +2675,24 @@ static void check_timedout_devices(void)
+ 		spin_unlock_bh(&timed_out_udevs_lock);
+ 
+ 		mutex_lock(&udev->cmdr_lock);
+-		idr_for_each(&udev->commands, tcmu_check_expired_cmd, NULL);
+ 
+-		tcmu_set_next_deadline(&udev->inflight_queue, &udev->cmd_timer);
++		/*
++		 * If cmd_time_out is disabled but qfull is set deadline
++		 * will only reflect the qfull timeout. Ignore it.
++		 */
++		if (udev->cmd_time_out) {
++			list_for_each_entry_safe(cmd, tmp_cmd,
++						 &udev->inflight_queue,
++						 queue_entry) {
++				tcmu_check_expired_ring_cmd(cmd);
++			}
++			tcmu_set_next_deadline(&udev->inflight_queue,
++					       &udev->cmd_timer);
++		}
++		list_for_each_entry_safe(cmd, tmp_cmd, &udev->qfull_queue,
++					 queue_entry) {
++			tcmu_check_expired_queue_cmd(cmd);
++		}
+ 		tcmu_set_next_deadline(&udev->qfull_queue, &udev->qfull_timer);
+ 
+ 		mutex_unlock(&udev->cmdr_lock);
+-- 
+2.25.1
+
