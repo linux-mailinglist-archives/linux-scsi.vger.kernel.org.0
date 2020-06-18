@@ -2,89 +2,163 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B681FF28F
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 15:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293A51FF293
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 15:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730051AbgFRNDP (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jun 2020 09:03:15 -0400
-Received: from mail1.bemta25.messagelabs.com ([195.245.230.65]:35655 "EHLO
-        mail1.bemta25.messagelabs.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730041AbgFRNDO (ORCPT
+        id S1730066AbgFRNDW (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jun 2020 09:03:22 -0400
+Received: from mail1.bemta26.messagelabs.com ([85.158.142.114]:60439 "EHLO
+        mail1.bemta26.messagelabs.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730054AbgFRNDS (ORCPT
         <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 18 Jun 2020 09:03:14 -0400
+        Thu, 18 Jun 2020 09:03:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ts.fujitsu.com;
-        s=200619tsfj; t=1592485392; i=@ts.fujitsu.com;
-        bh=oYumhRJxkWCfO0i7c/hvuANQHDicGRWYDiS67PXa1VI=;
-        h=From:To:Cc:Subject:Date:Message-Id;
-        b=nI7WjRcm43mniDoOGabfjJWNrFkSNxKMEbJcN5pKG9Nq8CQho8LAZITVTGqRkVWRW
-         CRZnji6Pj2a7E6mFP03nDZSEqZa8ZtafpFhxblRtdEKm/Dr6OJ1cbxYmmstdHQlqf0
-         QC6bp8hJOZ57Ug236d3/c+MRyDPH9vh8LApM0Oi9vG4Z7YDQRUOrVFoPdnnDj54dvT
-         yPzK8qRZo7d9nJy5H9kakpKPDsC0vyVhuq1ZtDlQqq9hHx6J3bCaGNWqg5U8tf9I39
-         dtW3HxQMlLg92q/YnQcU4pb5OCLRByWfCmnEI1Jqd9j+840FSHTgD+badOzkeOctdK
-         vNVpcoacaXd7g==
-Received: from [100.112.196.81] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
-        by server-1.bemta.az-b.eu-west-1.aws.symcld.net id 2F/50-63843-F066BEE5; Thu, 18 Jun 2020 13:03:11 +0000
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplkeJIrShJLcpLzFFi42Kxs+EI1eVPex1
-  nsGyLosXhhW+YLLqv72CzmNEWZrH8+D8mi7+TbrBatC59y+TA5rFz1l12j8c9Z9g8Pj69xeLx
-  eZNcAEsUa2ZeUn5FAmvGiqszmQoeslbs2HaDrYHxOUsXIyeHkMBkRok751kh7OmMEtNuJYPYb
-  AIGEism3Qeq4eIQEVjDKLHyzjxmkASzQKXE7a3TwWxhAU6JTd3n2UFsFgFViYPHt4AN5RWwk/
-  j4YBrYUAkBeYmOA5NZJjByLmBkWMVokVSUmZ5RkpuYmaNraGCga2hopGtoaaFraGGml1ilm6S
-  XWqpbnlpcomuol1herFdcmZuck6KXl1qyiREYGikFx3btYHz7+oPeIUZJDiYlUd7wxNdxQnxJ
-  +SmVGYnFGfFFpTmpxYcYZTg4lCR4XyYD5QSLUtNTK9Iyc4BhCpOW4OBREuHlSwFK8xYXJOYWZ
-  6ZDpE4xWnKcPjpvETPHi6uLgeSqA9NXMQux5OXnpUqJ8+aDzBMAacgozYMbB4ulS4yyUsK8jA
-  wMDEI8BalFuZklqPKvGMU5GJWEeeeATOHJzCuB2/oK6CAmoIO0wl+BHFSSiJCSamB6pHg8wiR
-  LOOB3bHXhr+pPTFMbuLIMf1nOfZax2OiQGV/JRZeJh+O1DacHVyoe1Z68vTb/EfM9/2cZMto3
-  ajQKVpzxeXPBx/Te1/tFtzoNPGtVjx6t19r+6MjW0L27QmNOnQrewbHBwu8mQ7v+Hh+nhAUOU
-  7wY3fUcjpfFlVTP31XKdC0pYO6DWJO7QXqWM30VnFMZ3oX5xoYWSzWeyQ8p/LMxdxMfz58LL3
-  bd9709d+m89dvmHQw+WL2dP4AtIfuezaeLs21+/7s/jzk29cBze/6jMXGVb2XnKTbtyDQyub+
-  8/32vdG+7nePtg1Hqv1gL625NYvrsyrHvxp8zN5lTjgv8015iZTbz0SmFj1ZKLMUZiYZazEXF
-  iQCp080+IAMAAA==
+        s=200619tsfj; t=1592485395; i=@ts.fujitsu.com;
+        bh=3FytLXG031tgejGRCpdGC+1ovLDdctaqeMEE7HvgEXY=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
+        b=jmGO7D+m0iqchiFYSsoFHV+46DoDQD6PO48XRJbxRfimrplbC3DzMGis78t7WJgft
+         JP9ZaSprUo9574bEBbFIHNaA1+KWpkNv/0coAMh6OKHhZ2nNC9857rUvYODsuJ8Y+/
+         kqJpu+KPWODmT91ulkKZFf2k3ImN7WQQ/bbSlhoqXTfJUjqKt1VCkbDdyfARZNC+LN
+         Jgn4+4tU6mEcny4VsSbnHpscLA8z22ilkjfo+iyp1AMzQ74YzQMjxxR1Dx+hwPN+Jk
+         BRn7LAAVP+jM1+XYLcaG7NP7oa2+3knEaQDhdT7neBS/16pRbGoRviVs3YNlTk/0Fq
+         RjAnt6Xp5NS+Q==
+Received: from [100.113.6.202] (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256 bits))
+        by server-3.bemta.az-b.eu-central-1.aws.symcld.net id 5A/CF-28811-2166BEE5; Thu, 18 Jun 2020 13:03:14 +0000
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRWlGSWpSXmKPExsViZ8MxRVco7XW
+  cwa42ZYvDC98wWXRf38FmMaMtzGL58X9MFn8n3WC1aF36lsmBzWPnrLvsHo97zrB5fHx6i8Xj
+  8ya5AJYo1sy8pPyKBNaM1ke9bAXXxCt6dl9ga2DcLtzFyMUhJDCZUWLaxIXMEM50Rokn+/ezd
+  TFycrAJGEismHSfBSQhIrCGUWLlnXnMIAlmgUqJ21ung9nCAl4Sn39vYwexWQRUJSbM3MAIYv
+  MK2EmcejWbBcSWEJCX6DgwGczmFLCX2P5sOROILQRUs3flJrYJjNwLGBlWMVomFWWmZ5TkJmb
+  m6BoaGOgaGhrrmuoamRjqJVbpJumlluomp+aVFCUCZfUSy4v1iitzk3NS9PJSSzYxAgMqpZD1
+  4w7GQ68/6B1ilORgUhLlDU98HSfEl5SfUpmRWJwRX1Sak1p8iFGGg0NJgvdlMlBOsCg1PbUiL
+  TMHGNwwaQkOHiURXr4UoDRvcUFibnFmOkTqFKOilDjvaZCEAEgiozQPrg0WUZcYZaWEeRkZGB
+  iEeApSi3IzS1DlXzGKczAqCfOeBJnCk5lXAjf9FdBiJqDFWuGvQBaXJCKkpBqYNrSuFtsTKGn
+  EFBsadfX9pAte+U+ObDBay1LbwrCOZeXuhYsWS1cdPv1nW/wrE78AbxYP5YTgP+2Fbj8DJ20R
+  eyyk+aTvb47gbK7pTlP61t6L332SP65TgUtha9G1Xv2YyV1/Mjl17oax3buziN+Hb1f4I7WqD
+  5NYK+Q3PP9+2HDPdwluFuOz/8NMbNkDA2N/X9liHp5cEz9DPdLt94LDs+bPOlecxCVSsuLEZ/
+  FPvziPy3e18kqsqo/1ct7SM19X7Ux59PytK/V/v/YtYDvub9h23HjPAh99lkUnwxW+s3cxsOm
+  GXkk1jOS/JyAZERXbbGiglOpdwcz7ZmGG+MGX9nu+lExsLtwdds3hXKUSS3FGoqEWc1FxIgAL
+  3JKQIwMAAA==
 X-Env-Sender: bstroesser@ts.fujitsu.com
-X-Msg-Ref: server-59.tower-291.messagelabs.com!1592485390!424327!1
-X-Originating-IP: [62.60.8.85]
+X-Msg-Ref: server-26.tower-248.messagelabs.com!1592485393!191676!1
+X-Originating-IP: [62.60.8.148]
 X-SYMC-ESS-Client-Auth: outbound-route-from=pass
 X-StarScan-Received: 
 X-StarScan-Version: 9.50.2; banners=-,-,-
 X-VirusChecked: Checked
-Received: (qmail 25008 invoked from network); 18 Jun 2020 13:03:11 -0000
-Received: from unknown (HELO mailhost4.uk.fujitsu.com) (62.60.8.85)
-  by server-59.tower-291.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 18 Jun 2020 13:03:11 -0000
+Received: (qmail 23601 invoked from network); 18 Jun 2020 13:03:14 -0000
+Received: from unknown (HELO mailhost1.uk.fujitsu.com) (62.60.8.148)
+  by server-26.tower-248.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 18 Jun 2020 13:03:14 -0000
 Received: from x-serv01 ([172.17.38.52])
-        by mailhost4.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 05ID34SY017661;
-        Thu, 18 Jun 2020 14:03:04 +0100
+        by mailhost1.uk.fujitsu.com (8.14.5/8.14.5) with SMTP id 05ID353P025552;
+        Thu, 18 Jun 2020 14:03:05 +0100
 Received: from VTC.emeia.fujitsu.local (unknown [172.17.38.7])
-        by x-serv01 (Postfix) with ESMTP id 2F72120300;
-        Thu, 18 Jun 2020 15:03:04 +0200 (CEST)
+        by x-serv01 (Postfix) with ESMTP id 2E02320524;
+        Thu, 18 Jun 2020 15:03:05 +0200 (CEST)
 From:   Bodo Stroesser <bstroesser@ts.fujitsu.com>
 To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Mike Christie <michael.christie@oracle.com>,
         linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
 Cc:     JiangYu <lnsyyj@hotmail.com>, Daniel Meyerholt <dxm523@gmail.com>,
         Bodo Stroesser <bstroesser@ts.fujitsu.com>
-Subject: 
-Date:   Thu, 18 Jun 2020 15:02:58 +0200
-Message-Id: <20200618130300.31094-1-bstroesser@ts.fujitsu.com>
+Subject: [PATCH 1/2] scsi: target: tcmu: Optimize use of flush_dcache_page
+Date:   Thu, 18 Jun 2020 15:02:59 +0200
+Message-Id: <20200618130300.31094-2-bstroesser@ts.fujitsu.com>
 X-Mailer: git-send-email 2.12.3
+In-Reply-To: <20200618130300.31094-1-bstroesser@ts.fujitsu.com>
+References: <20200618130300.31094-1-bstroesser@ts.fujitsu.com>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-This small series of patches consists of:
-   [PATCH 1/2] scsi: target: tcmu: Optimize use of flush_dcache_page
-   [PATCH 2/2] scsi: target: tcmu: Fix crash in tcmu_flush_dcache_range
+(scatter|gather)_data_area() need to flush dcache after
+writing data to or before reading data from a page in
+uio data area.
+The two routines are able to handle data transfer to/from
+such a page in fragments and flush the cache after each
+fragment was copied by calling the wrapper
+tcmu_flush_dcache_range().
 
-Together with commit
-   8c4e0f212398 scsi: target: tcmu: Fix size in calls to tcmu_flush_dcache_range
-these patches fix crashes in tcmu on ARM.
+That means:
+1) flush_dcache_page() can be called multiple times for
+   the same page.
+2) Calling flush_dcache_page() indirectly using the
+   wrapper does not make sense, because each call of the
+   wrapper is for one single page only and the calling
+   routine already has the correct page pointer.
 
-The first patch of this series already was sent some weeks ago
-as "PATCH RFC", since it was untested at that time.
+Therefore I changed (scatter|gather)_data_area() such,
+that instead of calling tcmu_flush_dcache_range()
+before/after each memcpy, it now calls flush_dcache_page()
+before unmapping a page (when writing is complete for
+that page) or after mapping a page (when starting to read
+the page).
 
-Meanwhile I added patch 2 of the series to fix the crash reported in:
-   https://github.com/open-iscsi/tcmu-runner/issues/627
-   https://bugzilla.kernel.org/show_bug.cgi?id=208045
+After this change only calls to tcmu_flush_dcache_range()
+for addresses in vmalloc'ed command ring are left over.
+This is a good preparation for the second patch of the series.
 
-All three patches together were tested on ARM with kernel
-4.19.118 and 5.7.2 (see github issue and bugzilla).
+The patch was tested on ARM with kernel 4.19.118 and 5.7.2
+
+Signed-off-by: Bodo Stroesser <bstroesser@ts.fujitsu.com>
+Tested-by: JiangYu <lnsyyj@hotmail.com>
+Tested-by: Daniel Meyerholt <dxm523@gmail.com>
+---
+ drivers/target/target_core_user.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index 560bfec933bc..a65e9671ae7a 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -676,8 +676,10 @@ static void scatter_data_area(struct tcmu_dev *udev,
+ 		from = kmap_atomic(sg_page(sg)) + sg->offset;
+ 		while (sg_remaining > 0) {
+ 			if (block_remaining == 0) {
+-				if (to)
++				if (to) {
++					flush_dcache_page(page);
+ 					kunmap_atomic(to);
++				}
+ 
+ 				block_remaining = DATA_BLOCK_SIZE;
+ 				dbi = tcmu_cmd_get_dbi(tcmu_cmd);
+@@ -722,7 +724,6 @@ static void scatter_data_area(struct tcmu_dev *udev,
+ 				memcpy(to + offset,
+ 				       from + sg->length - sg_remaining,
+ 				       copy_bytes);
+-				tcmu_flush_dcache_range(to, copy_bytes);
+ 			}
+ 
+ 			sg_remaining -= copy_bytes;
+@@ -731,8 +732,10 @@ static void scatter_data_area(struct tcmu_dev *udev,
+ 		kunmap_atomic(from - sg->offset);
+ 	}
+ 
+-	if (to)
++	if (to) {
++		flush_dcache_page(page);
+ 		kunmap_atomic(to);
++	}
+ }
+ 
+ static void gather_data_area(struct tcmu_dev *udev, struct tcmu_cmd *cmd,
+@@ -778,13 +781,13 @@ static void gather_data_area(struct tcmu_dev *udev, struct tcmu_cmd *cmd,
+ 				dbi = tcmu_cmd_get_dbi(cmd);
+ 				page = tcmu_get_block_page(udev, dbi);
+ 				from = kmap_atomic(page);
++				flush_dcache_page(page);
+ 			}
+ 			copy_bytes = min_t(size_t, sg_remaining,
+ 					block_remaining);
+ 			if (read_len < copy_bytes)
+ 				copy_bytes = read_len;
+ 			offset = DATA_BLOCK_SIZE - block_remaining;
+-			tcmu_flush_dcache_range(from, copy_bytes);
+ 			memcpy(to + sg->length - sg_remaining, from + offset,
+ 					copy_bytes);
+ 
+-- 
+2.12.3
 
