@@ -2,35 +2,38 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 553F21FE71A
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126B21FE6A1
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:36:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387727AbgFRCi1 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 22:38:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42566 "EHLO mail.kernel.org"
+        id S1729290AbgFRBOL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 21:14:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43734 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729108AbgFRBNX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:13:23 -0400
+        id S1727813AbgFRBOK (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:14:10 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7EDE821974;
-        Thu, 18 Jun 2020 01:13:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BE99720EDD;
+        Thu, 18 Jun 2020 01:14:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442803;
-        bh=o7HWOg7d4ZD/pc/7wRN0L2pGlvAuNr+3UrYtOB7V8MI=;
+        s=default; t=1592442849;
+        bh=Wrjt8XoJ7Bhht6hDHZeSg1rAz+D9ShRe3k4VcfYD4KE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PD3a/+gMo6zM2CdoV4Wyl3bBxBJkYbtTsK/44iSxn09pOYu+hYRM5JnBUbUoSdreF
-         GMXSlLEwdzwfrzornzEsDU48CcKTaeiuZuu1yHxE6WBqGHhw2qm6FXzPHxX2xqEW9u
-         Z4UYfKxKI9E9WOaFd8845FKgeRyZDRAS1L51vID8=
+        b=dxWnCAnABZbTEUhDZKd5+qcmGNaxePNT/gpwcbHBCXXk1jiyeUY2sblyNE6oPk8BW
+         hxveDOd8C2n+ljG+ex/kEqUhYJVXvfvQ7/vtgIrvleBNSDjKz7cXR+CnGFqPdT5ume
+         8UFOgs/8C8vSJxZ82rL45Wkn3SlazDyFpJeVv8Rk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ye Bin <yebin10@huawei.com>, Bart Van Assche <bvanassche@acm.org>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Mike Christie <mchristi@redhat.com>,
+        David Disseldorp <ddiss@suse.de>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.7 243/388] scsi: core: Fix incorrect usage of shost_for_each_device
-Date:   Wed, 17 Jun 2020 21:05:40 -0400
-Message-Id: <20200618010805.600873-243-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
+        target-devel@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 281/388] scsi: target: tcmu: Fix a use after free in tcmu_check_expired_queue_cmd()
+Date:   Wed, 17 Jun 2020 21:06:18 -0400
+Message-Id: <20200618010805.600873-281-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
 References: <20200618010805.600873-1-sashal@kernel.org>
@@ -43,65 +46,45 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 4dea170f4fb225984b4f2f1cf0a41d485177b905 ]
+[ Upstream commit 9d7464b18892332e35ff37f0b024429a1a9835e6 ]
 
-shost_for_each_device(sdev, shost) \
-	for ((sdev) = __scsi_iterate_devices((shost), NULL); \
-	     (sdev); \
-	     (sdev) = __scsi_iterate_devices((shost), (sdev)))
+The pr_debug() dereferences "cmd" after we already freed it by calling
+tcmu_free_cmd(cmd).  The debug printk needs to be done earlier.
 
-When terminating shost_for_each_device() iteration with break or return,
-scsi_device_put() should be used to prevent stale scsi device references
-from being left behind.
-
-Link: https://lore.kernel.org/r/20200518074420.39275-1-yebin10@huawei.com
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Ye Bin <yebin10@huawei.com>
+Link: https://lore.kernel.org/r/20200523101129.GB98132@mwanda
+Fixes: 61fb24822166 ("scsi: target: tcmu: Userspace must not complete queued commands")
+Reviewed-by: Mike Christie <mchristi@redhat.com>
+Reviewed-by: David Disseldorp <ddiss@suse.de>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_error.c | 2 ++
- drivers/scsi/scsi_lib.c   | 4 +++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ drivers/target/target_core_user.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 978be1602f71..927b1e641842 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -1412,6 +1412,7 @@ static int scsi_eh_stu(struct Scsi_Host *shost,
- 				sdev_printk(KERN_INFO, sdev,
- 					    "%s: skip START_UNIT, past eh deadline\n",
- 					    current->comm));
-+			scsi_device_put(sdev);
- 			break;
- 		}
- 		stu_scmd = NULL;
-@@ -1478,6 +1479,7 @@ static int scsi_eh_bus_device_reset(struct Scsi_Host *shost,
- 				sdev_printk(KERN_INFO, sdev,
- 					    "%s: skip BDR, past eh deadline\n",
- 					     current->comm));
-+			scsi_device_put(sdev);
- 			break;
- 		}
- 		bdr_scmd = NULL;
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 3ecdae18597d..b8b4366f1200 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -2865,8 +2865,10 @@ scsi_host_unblock(struct Scsi_Host *shost, int new_state)
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index 517570e47958..b63a1e0c4aa6 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -1292,13 +1292,13 @@ static void tcmu_check_expired_queue_cmd(struct tcmu_cmd *cmd)
+ 	if (!time_after(jiffies, cmd->deadline))
+ 		return;
  
- 	shost_for_each_device(sdev, shost) {
- 		ret = scsi_internal_device_unblock(sdev, new_state);
--		if (ret)
-+		if (ret) {
-+			scsi_device_put(sdev);
- 			break;
-+		}
- 	}
- 	return ret;
++	pr_debug("Timing out queued cmd %p on dev %s.\n",
++		  cmd, cmd->tcmu_dev->name);
++
+ 	list_del_init(&cmd->queue_entry);
+ 	se_cmd = cmd->se_cmd;
+ 	tcmu_free_cmd(cmd);
+ 
+-	pr_debug("Timing out queued cmd %p on dev %s.\n",
+-		  cmd, cmd->tcmu_dev->name);
+-
+ 	target_complete_cmd(se_cmd, SAM_STAT_TASK_SET_FULL);
  }
+ 
 -- 
 2.25.1
 
