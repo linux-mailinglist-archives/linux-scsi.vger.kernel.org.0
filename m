@@ -2,83 +2,113 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5D81FE65C
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:33:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780201FE84D
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728625AbgFRCc6 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 22:32:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729422AbgFRBPB (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:15:01 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B63A0221EA;
-        Thu, 18 Jun 2020 01:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592442900;
-        bh=wrZIAq9fTJ3Dp9QQKIdlPNcKPKFcJ2C93L8OCBXtUY0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QXAstZZ32zyB4Ric27htcX0hbTVvbr2STrlrhF3YHDYDG9IWcz/KtR7yAUZuYHXmj
-         nPeIMndQJKg1ayGKGcHrpEJXVglTRXW08cw06LKynvsHFBYXaei9/COEfxearpckm6
-         srRxvK2Qu2XqsGOs2HhKgdjxrrNV/6GR0acWAIRI=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Can Guo <cang@codeaurora.org>,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.7 321/388] scsi: ufs: Don't update urgent bkops level when toggling auto bkops
-Date:   Wed, 17 Jun 2020 21:06:58 -0400
-Message-Id: <20200618010805.600873-321-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
-References: <20200618010805.600873-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S2387931AbgFRCrp (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 22:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733105AbgFRCrl (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Jun 2020 22:47:41 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEDCBC06174E
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Jun 2020 19:47:39 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id a188so4908788ybg.20
+        for <linux-scsi@vger.kernel.org>; Wed, 17 Jun 2020 19:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Lz9OqytQOx62YvB3/35dUDFEfoZf6bezxgXAiKQpDjE=;
+        b=E0TzlHVOJfeEyCi4ZEM1EjuuNWtv8se7A/RToTfeTHit4MHRImn0+1VoUYb4XO7yf6
+         1t7eaZB+q+vpIQrRJXrHWzPSKDEUSMOB1VFIzOKoRvqeu9vklD8e0TaDJs3+05jlgzep
+         hta5/EiuiFd9jf8uO7WQIqqHpD5Y3Iw929rk+c7kku77PINJnRjbpASjiUJsTNtE2qm3
+         vNsv10RgYwbpGiH09o4LbpsauOXv+rNGqkVYSf9popC2XBsEpg1C8GwNCF427LYkuU5z
+         p8XrBaqbxAI8kawPX4I9HbL63OLe5l5g7S3FgHlt1vEBhyAMFR5QYfAASu7Lp3w8YvDe
+         fneQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Lz9OqytQOx62YvB3/35dUDFEfoZf6bezxgXAiKQpDjE=;
+        b=USK17EJPHkJrTS3x/+4C3OXLUpZyR45NGhgPcFNc8aUQzbNdbeU11W3FKiG2Ezh0EV
+         juqZBZoB0LXscx06Fa71iynYsxiODudhjbYpphmvEeLawa0GGCPeKkUcGAx4l78pYr56
+         MCNSU/Tc+C9b/duG3ftmoOyXiYzlNRZj4i7spPYCPqPHYUxgp6hDB1GyhlkIqFjbQbbq
+         aMWSSSBAzPAU0Gbo7MXa89gijMeodN3lTaoRU+Wh7xoMuWTdVLl6cLEVHDITe9m/iRKY
+         i8989uz4Booe44F/wMM+uX0CJiuGON1tRmGqzgpMWybaKX51wbmKOoiIxqfeQKIIKJvo
+         XsfQ==
+X-Gm-Message-State: AOAM531jQLAmbyjOqhC9PoKpOTfYVeBSF0PU/YNmMZ8D1YrOTyXYKiIv
+        GVwl705BFy8J6Sr+lWDzpPdGWzG1oUWdk5hf2xDe6+Ys9ajchIrcdUnziWMXRJb9KDuyrYEidXK
+        fWlvuTRNGSEeVjJPp3GuW7pjhBaZMV05fgwUp8DL2rup+32cl6+cJgaIPqDoz+wxjpxY=
+X-Google-Smtp-Source: ABdhPJwUaM/Eg2UXQN52yXfqp10Qg46MXbbQTNcwIPf65PoXcchFjt4/EvQZoAY1aOkvg5r+ROnZ4d5BvOo=
+X-Received: by 2002:a25:ac1b:: with SMTP id w27mr3295676ybi.378.1592448458905;
+ Wed, 17 Jun 2020 19:47:38 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 02:47:33 +0000
+Message-Id: <20200618024736.97207-1-satyat@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.27.0.290.gba653c62da-goog
+Subject: [PATCH v2 0/3] Inline Encryption support for UFS
+From:   Satya Tangirala <satyat@google.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     Barani Muthukumaran <bmuthuku@qti.qualcomm.com>,
+        Kuohong Wang <kuohong.wang@mediatek.com>,
+        Kim Boojin <boojin.kim@samsung.com>,
+        Satya Tangirala <satyat@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Can Guo <cang@codeaurora.org>
+This patch series adds support for inline encryption to UFS using
+the inline encryption support in the block layer. It follows the JEDEC
+UFSHCI v2.1 specification, which defines inline encryption for UFS.
 
-[ Upstream commit be32acff43800c87dc5c707f5d47cc607b76b653 ]
+This patch series previously went through a number of iterations as
+part of the "Inline Encryption Support" patchset (last version was v13:
+https://lkml.kernel.org/r/20200514003727.69001-1-satyat@google.com).
+There aren't any significant changes here from that version.
+This patch series is based on v5.8-rc1.
 
-Urgent bkops level is used to compare against actual bkops status read from
-UFS device. Urgent bkops level is set during initialization and might be
-updated in exception event handler during runtime. But it should not be
-updated to the actual bkops status every time when auto bkops is toggled.
-Otherwise, if urgent bkops level is updated to 0, auto bkops shall always
-be kept enabled.
+Patch 1 introduces the crypto registers and struct definitions defined
+in the UFSHCI v2.1 spec.
 
-Link: https://lore.kernel.org/r/1590632686-17866-1-git-send-email-cang@codeaurora.org
-Fixes: 24366c2afbb0 ("scsi: ufs: Recheck bkops level if bkops is disabled")
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Can Guo <cang@codeaurora.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/ufs/ufshcd.c | 1 -
- 1 file changed, 1 deletion(-)
+Patch 2 introduces functions to manipulate the UFS inline encryption
+hardware (again in line with the UFSHCI v2.1 spec) via the block
+layer keyslot manager. Device specific drivers must set the
+UFSHCD_CAP_CRYPTO in hba->caps before ufshcd_hba_init_crypto is called
+to opt-in to inline encryption support.
 
-diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
-index 698e8d20b4ba..52740b60d786 100644
---- a/drivers/scsi/ufs/ufshcd.c
-+++ b/drivers/scsi/ufs/ufshcd.c
-@@ -5098,7 +5098,6 @@ static int ufshcd_bkops_ctrl(struct ufs_hba *hba,
- 		err = ufshcd_enable_auto_bkops(hba);
- 	else
- 		err = ufshcd_disable_auto_bkops(hba);
--	hba->urgent_bkops_lvl = curr_status;
- out:
- 	return err;
- }
+Patch 3 wires up ufshcd.c with the UFS crypto API introduced in Patch 2.
+
+This patch series has been tested on some Qualcomm chipsets (on the
+db845c, sm8150-mtp and sm8250-mtp) using some additional patches at
+https://lkml.kernel.org/linux-scsi/20200501045111.665881-1-ebiggers@kernel.org/
+and on some Mediatek chipsets using the additional patch in
+https://lkml.kernel.org/linux-scsi/20200304022101.14165-1-stanley.chu@mediatek.com/.
+These additional patches are required because these chipsets need certain
+additional behaviour not specified within the UFSHCI v2.1 spec.
+
+Thanks a lot to all the folks who tested this out!
+
+Changes v1 => v2
+ - handle OCS_DEVICE_FATAL_ERROR explicitly in ufshcd_transfer_rsp_status
+
+Satya Tangirala (3):
+  scsi: ufs: UFS driver v2.1 spec crypto additions
+  scsi: ufs: UFS crypto API
+  scsi: ufs: Add inline encryption support to UFS
+
+ drivers/scsi/ufs/Kconfig         |   9 ++
+ drivers/scsi/ufs/Makefile        |   1 +
+ drivers/scsi/ufs/ufshcd-crypto.c | 226 +++++++++++++++++++++++++++++++
+ drivers/scsi/ufs/ufshcd-crypto.h |  60 ++++++++
+ drivers/scsi/ufs/ufshcd.c        |  47 ++++++-
+ drivers/scsi/ufs/ufshcd.h        |  24 ++++
+ drivers/scsi/ufs/ufshci.h        |  67 ++++++++-
+ 7 files changed, 427 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/scsi/ufs/ufshcd-crypto.c
+ create mode 100644 drivers/scsi/ufs/ufshcd-crypto.h
+
 -- 
-2.25.1
+2.27.0.290.gba653c62da-goog
 
