@@ -2,40 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1871FE270
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A5E1FE8F7
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387469AbgFRCBa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 22:01:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58378 "EHLO mail.kernel.org"
+        id S1728379AbgFRCwa (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 22:52:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34468 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731129AbgFRBYH (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:24:07 -0400
+        id S1727850AbgFRBIi (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:08:38 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5AA5E20B1F;
-        Thu, 18 Jun 2020 01:24:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 073F021D7B;
+        Thu, 18 Jun 2020 01:08:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443447;
-        bh=XjLwWG3ywh1AX4F0gMD1EW1r5Nwmn6q/j0s9sHz7G34=;
+        s=default; t=1592442517;
+        bh=62UpoBMOicIDb08JuJpbBMu5XKtfAtF6zirRNTmWJvc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cbNboTuf65VIRcQo2HO/MV2rEzfR2zkDojhCBwViJNeTS4ICvpaKNh1Irdca3qPrS
-         Oh52O15pQNY7Ayzq6jmq9vF02fMwlEObo9oXfsGS6Kw4xjTn3w5UYivbhZa6LDM2Xe
-         n3biIOSszQhMx8cjbyoh49KrksDThekTNvxlEtQA=
+        b=t5PIg5ezNWEHrEcrUPkusT9OO11yf+chj8AgqpxXWqN+1KLHq32fTfDbSB3cmBg5s
+         339NebfBmtIwy2Knne4ipLlNrPGREwiNwV4/BDLtFu6IBjjdOACSh6680QEkrLtMmi
+         P4tJykqfsSEEdXoqy/SpULU1IhdtdX6lfrnK036Y=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Suganath Prabu S <suganath-prabu.subramani@broadcom.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Manish Rangankar <mrangankar@marvell.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 083/172] scsi: mpt3sas: Fix double free warnings
-Date:   Wed, 17 Jun 2020 21:20:49 -0400
-Message-Id: <20200618012218.607130-83-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.7 023/388] scsi: qedi: Check for buffer overflow in qedi_set_path()
+Date:   Wed, 17 Jun 2020 21:02:00 -0400
+Message-Id: <20200618010805.600873-23-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012218.607130-1-sashal@kernel.org>
-References: <20200618012218.607130-1-sashal@kernel.org>
+In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
+References: <20200618010805.600873-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,41 +44,43 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit cbbfdb2a2416c9f0cde913cf09670097ac281282 ]
+[ Upstream commit 4a4c0cfb4be74e216dd4446b254594707455bfc6 ]
 
-Fix following warning from Smatch static analyser:
+Smatch complains that the "path_data->handle" variable is user controlled.
+It comes from iscsi_set_path() so that seems possible.  It's harmless to
+add a limit check.
 
-drivers/scsi/mpt3sas/mpt3sas_base.c:5256 _base_allocate_memory_pools()
-warn: 'ioc->hpr_lookup' double freed
+The qedi->ep_tbl[] array has qedi->max_active_conns elements (which is
+always ISCSI_MAX_SESS_PER_HBA (4096) elements).  The array is allocated in
+the qedi_cm_alloc_mem() function.
 
-drivers/scsi/mpt3sas/mpt3sas_base.c:5256 _base_allocate_memory_pools()
-warn: 'ioc->internal_lookup' double freed
-
-Link: https://lore.kernel.org/r/20200508110738.30732-1-suganath-prabu.subramani@broadcom.com
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Suganath Prabu S <suganath-prabu.subramani@broadcom.com>
+Link: https://lore.kernel.org/r/20200428131939.GA696531@mwanda
+Fixes: ace7f46ba5fd ("scsi: qedi: Add QLogic FastLinQ offload iSCSI driver framework.")
+Acked-by: Manish Rangankar <mrangankar@marvell.com>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_base.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/qedi/qedi_iscsi.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
-index 2c556c7fcf0d..9fbe20e38ad0 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_base.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
-@@ -4284,7 +4284,9 @@ _base_release_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+diff --git a/drivers/scsi/qedi/qedi_iscsi.c b/drivers/scsi/qedi/qedi_iscsi.c
+index 1f4a5fb00a05..d2e5b485afeb 100644
+--- a/drivers/scsi/qedi/qedi_iscsi.c
++++ b/drivers/scsi/qedi/qedi_iscsi.c
+@@ -1218,6 +1218,10 @@ static int qedi_set_path(struct Scsi_Host *shost, struct iscsi_path *path_data)
  	}
  
- 	kfree(ioc->hpr_lookup);
-+	ioc->hpr_lookup = NULL;
- 	kfree(ioc->internal_lookup);
-+	ioc->internal_lookup = NULL;
- 	if (ioc->chain_lookup) {
- 		for (i = 0; i < ioc->scsiio_depth; i++) {
- 			for (j = ioc->chains_per_prp_buffer;
+ 	iscsi_cid = (u32)path_data->handle;
++	if (iscsi_cid >= qedi->max_active_conns) {
++		ret = -EINVAL;
++		goto set_path_exit;
++	}
+ 	qedi_ep = qedi->ep_tbl[iscsi_cid];
+ 	QEDI_INFO(&qedi->dbg_ctx, QEDI_LOG_INFO,
+ 		  "iscsi_cid=0x%x, qedi_ep=%p\n", iscsi_cid, qedi_ep);
 -- 
 2.25.1
 
