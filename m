@@ -2,39 +2,39 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BC81FDE65
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 03:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7091FE5F0
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732766AbgFRBbX (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 21:31:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42066 "EHLO mail.kernel.org"
+        id S1730118AbgFRC3o (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 22:29:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46480 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732760AbgFRBbX (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:31:23 -0400
+        id S1729548AbgFRBQI (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:16:08 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1BE442224B;
-        Thu, 18 Jun 2020 01:31:22 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1CB28221F1;
+        Thu, 18 Jun 2020 01:16:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443882;
-        bh=i77N/US4sl25BCnif63wW5G4Cm8Q8CCwdpW65jgwKP8=;
+        s=default; t=1592442967;
+        bh=AIM68VyQmCJv9NVAjJep09xySiU1PdQUeWOx6nIZLZU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EoGhXezUQkG3Z227OOtSL8FdFE34M3ypqrIfSn2ewYbIVJGu2jUTSdiRdJnjkmrOP
-         p6rKC/B8cn/h0SgRJMpNP0dCCjzXkwyg8b0CiJePEzuNlXolqE926d+RlK4tb1zC5u
-         YrVBwNRNvVKnbLZy/BbMem92MkUcdy6zG3fW8WmI=
+        b=U8txIk0hou5UswgieO/yHeKqkjMK5EzuRww/hSx5uVbtaSUu7mcEqp3xkl4UrjAT2
+         Jk+rKi6LNl79Xek7yV1DNQo5NNHekDeiDp5FGKk62J6TvF55db/rzykX6wIR7Ct3Kg
+         eHDI8MDYbQ+aIHV9gL9xK3gFvTyJZIPQG9CUIZGE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 60/60] scsi: acornscsi: Fix an error handling path in acornscsi_probe()
-Date:   Wed, 17 Jun 2020 21:30:04 -0400
-Message-Id: <20200618013004.610532-60-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.7 372/388] scsi: acornscsi: Fix an error handling path in acornscsi_probe()
+Date:   Wed, 17 Jun 2020 21:07:49 -0400
+Message-Id: <20200618010805.600873-372-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618013004.610532-1-sashal@kernel.org>
-References: <20200618013004.610532-1-sashal@kernel.org>
+In-Reply-To: <20200618010805.600873-1-sashal@kernel.org>
+References: <20200618010805.600873-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,10 +61,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/arm/acornscsi.c b/drivers/scsi/arm/acornscsi.c
-index deaaf84989cd..be595add8026 100644
+index ddb52e7ba622..9a912fd0f70b 100644
 --- a/drivers/scsi/arm/acornscsi.c
 +++ b/drivers/scsi/arm/acornscsi.c
-@@ -2912,8 +2912,10 @@ static int acornscsi_probe(struct expansion_card *ec, const struct ecard_id *id)
+@@ -2911,8 +2911,10 @@ static int acornscsi_probe(struct expansion_card *ec, const struct ecard_id *id)
  
  	ashost->base = ecardm_iomap(ec, ECARD_RES_MEMC, 0, 0);
  	ashost->fast = ecardm_iomap(ec, ECARD_RES_IOCFAST, 0, 0);
