@@ -2,78 +2,106 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 828B21FDDBB
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 03:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12C31FE011
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 03:46:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731992AbgFRB15 (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 21:27:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36312 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731982AbgFRB14 (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:27:56 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8D8DB22200;
-        Thu, 18 Jun 2020 01:27:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443675;
-        bh=PUQJ+8bqGqzjz+y7Oq/eHD+478RlUH0lRCqGWqYDAzU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JZbH0lbijoiJwrssWgkFz+GOkPXNQPsh2bOBJjui9UQyETddpsw+9rlNY3fkT7iic
-         smPSc0r0q32gmVe5pNmZ/QFlR9Kwaz73Q49R5lFnWiI4ej6Q7YvidMDihjN+YBko71
-         LDMEdVfJ8OP2PC69MW6qxgmo2aiAF/7Ay8M5bxCw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiushi Wu <wu000273@umn.edu>, Lee Duncan <lduncan@suse.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 091/108] scsi: iscsi: Fix reference count leak in iscsi_boot_create_kobj
-Date:   Wed, 17 Jun 2020 21:25:43 -0400
-Message-Id: <20200618012600.608744-91-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200618012600.608744-1-sashal@kernel.org>
-References: <20200618012600.608744-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1732458AbgFRBpF (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 21:45:05 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:21412 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732149AbgFRBpE (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Wed, 17 Jun 2020 21:45:04 -0400
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200618014502epoutp04f1cdcd4ec8b87fb98451f07f805fe3d8~ZgAUP0jdp0372703727epoutp04b
+        for <linux-scsi@vger.kernel.org>; Thu, 18 Jun 2020 01:45:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200618014502epoutp04f1cdcd4ec8b87fb98451f07f805fe3d8~ZgAUP0jdp0372703727epoutp04b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1592444702;
+        bh=twolrlHaZZVZpdlkPRS2+xEnnvzq2S5IOwmKy67vMX4=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=uDsBhGjrRXcjR4JP5mreRbiUTAIHbmetXQVUyxbABdCZoVN2pS1504A7XnEDvfRNp
+         mVEgxHecrMRIl6QFvDdqk9NH0vYPdzq4qnfoh1oxLG2+IxFHz69HBPrm+0bDa/Cmpq
+         HL2Rc3/wdobv8Ow9b37LF1/7U5HyLeMW48w84ujc=
+Received: from epcpadp1 (unknown [182.195.40.11]) by epcas1p4.samsung.com
+        (KnoxPortal) with ESMTP id
+        20200618014501epcas1p41a295123d2f95e6df8415d2e04975748~ZgATuq7Dp1323913239epcas1p4q;
+        Thu, 18 Jun 2020 01:45:01 +0000 (GMT)
+Mime-Version: 1.0
+Subject: RE: [RFC PATCH v2 3/5] scsi: ufs: Introduce HPB module
+Reply-To: daejun7.park@samsung.com
+From:   Daejun Park <daejun7.park@samsung.com>
+To:     Avri Altman <Avri.Altman@wdc.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        ALIM AKHTAR <alim.akhtar@samsung.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "asutoshd@codeaurora.org" <asutoshd@codeaurora.org>,
+        "beanhuo@micron.com" <beanhuo@micron.com>,
+        "stanley.chu@mediatek.com" <stanley.chu@mediatek.com>,
+        "cang@codeaurora.org" <cang@codeaurora.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "tomas.winkler@intel.com" <tomas.winkler@intel.com>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Sang-yoon Oh <sangyoon.oh@samsung.com>,
+        Sung-Jun Park <sungjun07.park@samsung.com>,
+        yongmyung lee <ymhungry.lee@samsung.com>,
+        Jinyoung CHOI <j-young.choi@samsung.com>,
+        Adel Choi <adel.choi@samsung.com>,
+        BoRam Shin <boram.shin@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <SN6PR04MB4640350209C30F578945492CFC9A0@SN6PR04MB4640.namprd04.prod.outlook.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <231786897.01592444701916.JavaMail.epsvc@epcpadp1>
+Date:   Thu, 18 Jun 2020 09:53:44 +0900
+X-CMS-MailID: 20200618005344epcms2p506001ce6c5958d65980bc9414d411695
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+X-Hop-Count: 3
+X-CMS-RootMailID: 20200615062708epcms2p19a7fbc051bcd5e843c29dcd58fff4210
+References: <SN6PR04MB4640350209C30F578945492CFC9A0@SN6PR04MB4640.namprd04.prod.outlook.com>
+        <231786897.01592212081335.JavaMail.epsvc@epcpadp2>
+        <336371513.41592205783606.JavaMail.epsvc@epcpadp2>
+        <231786897.01592205482200.JavaMail.epsvc@epcpadp2>
+        <231786897.01592213402355.JavaMail.epsvc@epcpadp1>
+        <CGME20200615062708epcms2p19a7fbc051bcd5e843c29dcd58fff4210@epcms2p5>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+> +static int ufshpb_lu_hpb_init(struct ufs_hba *hba, struct ufshpb_lu *hpb,
+> > +                             struct ufshpb_dev_info *hpb_dev_info)
+> > +{
+> > +       int ret;
+> > +
+> > +       spin_lock_init(&hpb->hpb_state_lock);
+> > +
+> > +       ret = ufshpb_alloc_region_tbl(hba, hpb);
+> > +       if (ret)
+> > +               goto release_m_page_cache;
+> This label is added only on 4/5
+> 
+> > +static int __init ufshpb_init(void)
+> > +{
+> > +       unsigned int pool_size;
+> Unused variable
+> 
+> > +       int ret;
+> > +
+> > +       ret = driver_register(&ufshpb_drv.drv);
+> > +       if (ret)
+> > +               pr_err("ufshpb: driver register failed\n");
+> > +
+> > +       return ret;
+> > +}
 
-[ Upstream commit 0267ffce562c8bbf9b57ebe0e38445ad04972890 ]
-
-kobject_init_and_add() takes reference even when it fails. If this
-function returns an error, kobject_put() must be called to properly
-clean up the memory associated with the object.
-
-Link: https://lore.kernel.org/r/20200528201353.14849-1-wu000273@umn.edu
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/iscsi_boot_sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/iscsi_boot_sysfs.c b/drivers/scsi/iscsi_boot_sysfs.c
-index d453667612f8..15d64f96e623 100644
---- a/drivers/scsi/iscsi_boot_sysfs.c
-+++ b/drivers/scsi/iscsi_boot_sysfs.c
-@@ -360,7 +360,7 @@ iscsi_boot_create_kobj(struct iscsi_boot_kset *boot_kset,
- 	boot_kobj->kobj.kset = boot_kset->kset;
- 	if (kobject_init_and_add(&boot_kobj->kobj, &iscsi_boot_ktype,
- 				 NULL, name, index)) {
--		kfree(boot_kobj);
-+		kobject_put(&boot_kobj->kobj);
- 		return NULL;
- 	}
- 	boot_kobj->data = data;
--- 
-2.25.1
-
+OK, I will fix it.
