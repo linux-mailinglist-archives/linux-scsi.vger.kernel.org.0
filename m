@@ -2,36 +2,36 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D8261FE3B5
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4621FE34E
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 04:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730472AbgFRBVQ (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Wed, 17 Jun 2020 21:21:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53548 "EHLO mail.kernel.org"
+        id S1730673AbgFRCIL (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Wed, 17 Jun 2020 22:08:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54932 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729046AbgFRBVP (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Wed, 17 Jun 2020 21:21:15 -0400
+        id S1730650AbgFRBWG (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Wed, 17 Jun 2020 21:22:06 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6CC8E20CC7;
-        Thu, 18 Jun 2020 01:21:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 91E7A20776;
+        Thu, 18 Jun 2020 01:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592443275;
-        bh=tTYjXOD8oHPGv57EVtZqi6gCt2pfErDoIHKj/yUv3Ng=;
+        s=default; t=1592443326;
+        bh=tvECZ2BnrTzp+1yK+4AAGwqVP4cziadaM0SPFe/jfbM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U0IC52wJIbYONqY0i5oKZ2CkEqB7Qy47/T9mkGxM16hK//8Y5xnTzKUEtuIdNUMTF
-         cZwyWSh1Fep/w5Pao/Z2z1FaTN4sDcZnhgsuSQb+WQ9dRuGSdZ78603tUwqi7BsjMU
-         hgZ9hUwKBTqxFKnlm9PSKcYq0ovFG8wZaFt6gUBU=
+        b=jKGHpHO5a7f+0VkCQsHwlxsjiwL/Civ+jLbjkf8/NTKaKq8aHblXFk07unBRVwTjU
+         JMGBGGn/DqUd3oIe7ppqTSCv302ZMzl1HhZyr8+Tie/J8D9twfXJylJJLuzhdKzLT4
+         uuYIf3hPa1ZniRrN052m0bzZicFoYx2CRVvhtE+4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiushi Wu <wu000273@umn.edu>, Lee Duncan <lduncan@suse.com>,
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>, open-iscsi@googlegroups.com,
-        linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 220/266] scsi: iscsi: Fix reference count leak in iscsi_boot_create_kobj
-Date:   Wed, 17 Jun 2020 21:15:45 -0400
-Message-Id: <20200618011631.604574-220-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 259/266] scsi: acornscsi: Fix an error handling path in acornscsi_probe()
+Date:   Wed, 17 Jun 2020 21:16:24 -0400
+Message-Id: <20200618011631.604574-259-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200618011631.604574-1-sashal@kernel.org>
 References: <20200618011631.604574-1-sashal@kernel.org>
@@ -44,36 +44,38 @@ Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-From: Qiushi Wu <wu000273@umn.edu>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 0267ffce562c8bbf9b57ebe0e38445ad04972890 ]
+[ Upstream commit 42c76c9848e13dbe0538d7ae0147a269dfa859cb ]
 
-kobject_init_and_add() takes reference even when it fails. If this
-function returns an error, kobject_put() must be called to properly
-clean up the memory associated with the object.
+'ret' is known to be 0 at this point.  Explicitly return -ENOMEM if one of
+the 'ecardm_iomap()' calls fail.
 
-Link: https://lore.kernel.org/r/20200528201353.14849-1-wu000273@umn.edu
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Qiushi Wu <wu000273@umn.edu>
+Link: https://lore.kernel.org/r/20200530081622.577888-1-christophe.jaillet@wanadoo.fr
+Fixes: e95a1b656a98 ("[ARM] rpc: acornscsi: update to new style ecard driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/iscsi_boot_sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/arm/acornscsi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/iscsi_boot_sysfs.c b/drivers/scsi/iscsi_boot_sysfs.c
-index e4857b728033..a64abe38db2d 100644
---- a/drivers/scsi/iscsi_boot_sysfs.c
-+++ b/drivers/scsi/iscsi_boot_sysfs.c
-@@ -352,7 +352,7 @@ iscsi_boot_create_kobj(struct iscsi_boot_kset *boot_kset,
- 	boot_kobj->kobj.kset = boot_kset->kset;
- 	if (kobject_init_and_add(&boot_kobj->kobj, &iscsi_boot_ktype,
- 				 NULL, name, index)) {
--		kfree(boot_kobj);
-+		kobject_put(&boot_kobj->kobj);
- 		return NULL;
- 	}
- 	boot_kobj->data = data;
+diff --git a/drivers/scsi/arm/acornscsi.c b/drivers/scsi/arm/acornscsi.c
+index d12dd89538df..deab66598910 100644
+--- a/drivers/scsi/arm/acornscsi.c
++++ b/drivers/scsi/arm/acornscsi.c
+@@ -2911,8 +2911,10 @@ static int acornscsi_probe(struct expansion_card *ec, const struct ecard_id *id)
+ 
+ 	ashost->base = ecardm_iomap(ec, ECARD_RES_MEMC, 0, 0);
+ 	ashost->fast = ecardm_iomap(ec, ECARD_RES_IOCFAST, 0, 0);
+-	if (!ashost->base || !ashost->fast)
++	if (!ashost->base || !ashost->fast) {
++		ret = -ENOMEM;
+ 		goto out_put;
++	}
+ 
+ 	host->irq = ec->irq;
+ 	ashost->host = host;
 -- 
 2.25.1
 
