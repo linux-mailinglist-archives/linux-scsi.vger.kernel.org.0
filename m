@@ -2,43 +2,57 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5356C1FED3F
-	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 10:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A47091FED4B
+	for <lists+linux-scsi@lfdr.de>; Thu, 18 Jun 2020 10:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728472AbgFRIKn (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Thu, 18 Jun 2020 04:10:43 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48612 "EHLO mx2.suse.de"
+        id S1728420AbgFRIOK (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Thu, 18 Jun 2020 04:14:10 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50626 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728465AbgFRIJf (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Thu, 18 Jun 2020 04:09:35 -0400
+        id S1728391AbgFRIOJ (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
+        Thu, 18 Jun 2020 04:14:09 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id A451DAD3A;
-        Thu, 18 Jun 2020 08:09:33 +0000 (UTC)
-Date:   Thu, 18 Jun 2020 10:09:33 +0200
+        by mx2.suse.de (Postfix) with ESMTP id CC7EEAD3A;
+        Thu, 18 Jun 2020 08:14:07 +0000 (UTC)
+Date:   Thu, 18 Jun 2020 10:14:07 +0200
 From:   Daniel Wagner <dwagner@suse.de>
 To:     Hannes Reinecke <hare@suse.de>
 Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Christoph Hellwig <hch@lst.de>,
         James Bottomley <james.bottomley@hansenpartnership.com>,
         linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 4/4] gdth: stop abusing ->request pointer for completion
-Message-ID: <20200618080933.m2n5h4mmqbon7iyh@beryllium.lan>
+Subject: Re: [PATCH 1/4] gdth: reindent and whitespace cleanup
+Message-ID: <20200618081407.qsm4otp2w2bmcuil@beryllium.lan>
 References: <20200616121821.99113-1-hare@suse.de>
- <20200616121821.99113-5-hare@suse.de>
+ <20200616121821.99113-2-hare@suse.de>
+ <20200617082145.mdsu56bclo3p3dg4@beryllium.lan>
+ <2a7473b3-62af-f7d2-f73a-adcabe21701e@suse.de>
+ <72827be0-a44a-0163-acb8-04ff3bde86ce@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200616121821.99113-5-hare@suse.de>
+In-Reply-To: <72827be0-a44a-0163-acb8-04ff3bde86ce@suse.de>
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On Tue, Jun 16, 2020 at 02:18:21PM +0200, Hannes Reinecke wrote:
-> Do not overload the request point for completion but rather use
-> a dedicated field in the cmndinfo structure.
-> 
-> Signed-off-by: Hannes Reinecke <hare@suse.de>
+On Wed, Jun 17, 2020 at 10:48:10AM +0200, Hannes Reinecke wrote:
+> On 6/17/20 10:34 AM, Hannes Reinecke wrote:
+> > On 6/17/20 10:21 AM, Daniel Wagner wrote:
+> > > On Tue, Jun 16, 2020 at 02:18:18PM +0200, Hannes Reinecke wrote:
+> > > > Long overdue. No functional change.
+> > > 
+> > > Did you test if compiler generates the same output? I don't think anyone
+> > > wants to review this patch :)
+> > > 
+> > Hmm. No. Lemme check what happens...
+> > 
+> Phew. Just checked, and the disassembly is indeed identical.
 
-Reviewed-by: Daniel Wagner <dwagner@suse.de>
+I am not really convienced it is a good idea to reformat the whole
+driver at this point. Sure, checkpatch.pl & friends will be more
+happy with new changes. Though, in 10 years there were only 44
+changes and I don't think there will be a lot more in the coming
+years. Just my thoughts.
