@@ -2,91 +2,101 @@ Return-Path: <linux-scsi-owner@vger.kernel.org>
 X-Original-To: lists+linux-scsi@lfdr.de
 Delivered-To: lists+linux-scsi@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2682200B08
-	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2020 16:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D725200B92
+	for <lists+linux-scsi@lfdr.de>; Fri, 19 Jun 2020 16:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733169AbgFSOJf (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
-        Fri, 19 Jun 2020 10:09:35 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44360 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733205AbgFSOJe (ORCPT <rfc822;linux-scsi@vger.kernel.org>);
-        Fri, 19 Jun 2020 10:09:34 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id CACBEAD2A;
-        Fri, 19 Jun 2020 14:09:31 +0000 (UTC)
-Subject: Re: [PATCH 2/2] block: only return started requests from
- blk_mq_tag_to_rq()
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christoph Hellwig <hch@lst.de>,
+        id S1733276AbgFSOdB (ORCPT <rfc822;lists+linux-scsi@lfdr.de>);
+        Fri, 19 Jun 2020 10:33:01 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:35970 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733089AbgFSOdB (ORCPT
+        <rfc822;linux-scsi@vger.kernel.org>); Fri, 19 Jun 2020 10:33:01 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05JEVYcK140893;
+        Fri, 19 Jun 2020 14:32:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
+ bh=0a0jfa6ndZYP4+GPbWa68eEdOsgS9W5sVAeMAk3I0v4=;
+ b=o1+Q0KlZH3M2mRp3tG+vYQ2FJaRCyzH4TEyKGTCVngzWD/SQ5U70/YDW29uG+ZhmBtrW
+ u9RW0LpiZF6vp1UhtId4T/rt5ivsqxLy9k0evoxi86YpArxqckKciyYO5QndIAxLvajV
+ b/Bt377CRr7I8BO0xMwv2vUVOV9z2v0ihYzc4lKG5UbT9DhSJGBQBTD3/NwIQynH7dpo
+ 7nHuycfpsq60NBWavK99AtUJ9PgXuR7pkdBBpN3+cWeppam5B9UhDwogeH86Lw2g2KaY
+ lWwRUuQ7UdS7lqbyOOw90ZKvrTU1y+zNub4H3DHxK/IM5HMc0RJW5PYuHPCmOo9ndK5s YQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 31qg35d03s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 19 Jun 2020 14:32:51 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05JE9P1Y111498;
+        Fri, 19 Jun 2020 14:30:51 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 31q66vm3ga-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 Jun 2020 14:30:51 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 05JEUnOp008628;
+        Fri, 19 Jun 2020 14:30:49 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 19 Jun 2020 07:30:48 -0700
+Date:   Fri, 19 Jun 2020 17:30:41 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        Darren Trapp <darren.trapp@cavium.com>
+Cc:     GR-QLogic-Storage-Upstream@marvell.com,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Keith Busch <keith.busch@wdc.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        James Bottomley <james.bottomley@hansenpartnership.com>,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org
-References: <20200619140159.141905-1-hare@suse.de>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <60e34dce-aea4-311f-22da-4cb130c5ba88@suse.de>
-Date:   Fri, 19 Jun 2020 16:09:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        Hannes Reinecke <hare@suse.com>, linux-scsi@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] scsi: qla2xxx: Fix a condition in
+ qla2x00_find_all_fabric_devs()
+Message-ID: <20200619143041.GD267142@mwanda>
 MIME-Version: 1.0
-In-Reply-To: <20200619140159.141905-1-hare@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9656 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ bulkscore=0 adultscore=0 phishscore=0 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006190106
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9656 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 mlxscore=0
+ clxscore=1011 malwarescore=0 impostorscore=0 adultscore=0
+ cotscore=-2147483648 lowpriorityscore=0 mlxlogscore=999 spamscore=0
+ suspectscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006190107
 Sender: linux-scsi-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-scsi.vger.kernel.org>
 X-Mailing-List: linux-scsi@vger.kernel.org
 
-On 6/19/20 4:01 PM, Hannes Reinecke wrote:
-> blk_mq_tag_to_rq() is used from within the driver to map a tag
-> to a request. As such it should only return requests which are
-> already started (ie passed to the driver); otherwise the driver
-> might trip over requests which it has never seen and random
-> crashes will occur.
-> 
-> Signed-off-by: Hannes Reinecke <hare@suse.de>
-> ---
->   block/blk-mq.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/block/blk-mq.c b/block/blk-mq.c
-> index 4f57d27bfa73..f02d18113f9e 100644
-> --- a/block/blk-mq.c
-> +++ b/block/blk-mq.c
-> @@ -815,9 +815,13 @@ EXPORT_SYMBOL(blk_mq_delay_kick_requeue_list);
->   
->   struct request *blk_mq_tag_to_rq(struct blk_mq_tags *tags, unsigned int tag)
->   {
-> +	struct request *rq;
-> +
->   	if (tag < tags->nr_tags) {
->   		prefetch(tags->rqs[tag]);
-> -		return tags->rqs[tag];
-> +		rq = tags->rqs[tag];
-> +		if (blk_mq_request_started(rq))
-> +			return rq;
->   	}
->   
->   	return NULL;
-> 
-This becomes particularly obnoxious for SCSI drivers using 
-scsi_host_find_tag() for cleaning up stale commands (ie drivers like 
-qla4xxx, fnic, and snic).
-All other drivers use it from the completion routine, so one can expect 
-a valid (and started) tag here. So for those it shouldn't matter.
+This code doesn't make sense unless the correct "fcport" was found.
 
-But still, if there are objections I could look at fixing it within the 
-SCSI stack; although that would most likely mean I'll have to implement 
-the above patch as an additional function.
+Fixes: 9dd9686b1419 ("scsi: qla2xxx: Add changes for devloss timeout in driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+This is from static analysis and review.  I'm not super familiar with
+the code and I can't test it.  Please review it extra carefully.
 
-Cheers,
+ drivers/scsi/qla2xxx/qla_init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hannes
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index 4576d3ae9937..2436a17f5cd9 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -5944,7 +5944,7 @@ qla2x00_find_all_fabric_devs(scsi_qla_host_t *vha)
+ 			break;
+ 		}
+ 
+-		if (NVME_TARGET(vha->hw, fcport)) {
++		if (found && NVME_TARGET(vha->hw, fcport)) {
+ 			if (fcport->disc_state == DSC_DELETE_PEND) {
+ 				qla2x00_set_fcport_disc_state(fcport, DSC_GNL);
+ 				vha->fcport_count--;
 -- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                               +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+2.27.0
+
